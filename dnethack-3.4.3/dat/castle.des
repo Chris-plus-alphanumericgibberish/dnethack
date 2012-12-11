@@ -1,0 +1,1505 @@
+#	SCCS Id: @(#)castle.des	3.4	2002/05/02
+#	Copyright (c) 1989 by Jean-Christophe Collet
+# NetHack may be freely redistributed.  See license for details.
+#
+# This is the stronghold level :
+# there are several ways to enter it :
+#	- opening the drawbridge (wand of opening, knock spell, playing
+#	  the appropriate tune)
+#
+#	- enter via the back entry (this suppose a ring of levitation, boots
+#	  of water walking, etc.)
+#
+# Note : If you don't play the right tune, you get indications like in the
+#	 MasterMind game...
+#
+# To motivate the player : there are 4 storerooms (armors, weapons, food and
+# gems) and a wand of wishing in one of the 4 towers...
+
+MAZE:"castle-1",random
+FLAGS: noteleport
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0}}}}}}}}}.............................................}}}}}}}}}
+1}-------}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}-------}
+2}|.....|-----------------------------------------------|.....|}
+3}|.....+...............................................+.....|}
+4}-------------------------------+-----------------------------}
+5}}}}}}|........|..........+...........|.......S.S.......|}}}}}}
+6.....}|........|..........|...........|.......|.|.......|}.....
+7.....}|........------------...........---------S---------}.....
+8.....}|...{....+..........+.........\.S.................+......
+9.....}|........------------...........---------S---------}.....
+0.....}|........|..........|...........|.......|.|.......|}.....
+1}}}}}}|........|..........+...........|.......S.S.......|}}}}}}
+2}-------------------------------+-----------------------------}
+3}|.....+...............................................+.....|}
+4}|.....|-----------------------------------------------|.....|}
+5}-------}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}-------}
+6}}}}}}}}}.............................................}}}}}}}}}
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
+
+# Random registers initialisation
+RANDOM_OBJECTS:'[',')','*','%'
+RANDOM_PLACES:(04,02),(58,02),(04,14),(58,14)
+RANDOM_MONSTERS:'L','N','E','H','M','O','R','T','X','Z'
+
+TELEPORT_REGION:levregion(01,00,10,20),(1,1,61,15),down
+TELEPORT_REGION:levregion(69,00,79,20),(1,1,61,15),up
+STAIR:levregion(01,00,10,20),(0,0,62,16),up
+FOUNTAIN:(10,08)
+# Doors
+DOOR:closed,(07,03)
+DOOR:closed,(55,03)
+DOOR:locked,(32,04)
+DOOR:locked,(26,05)
+DOOR:locked,(46,05)
+DOOR:locked,(48,05)
+DOOR:locked,(47,07)
+DOOR:closed,(15,08)
+DOOR:closed,(26,08)
+DOOR:locked,(38,08)
+DOOR:locked,(56,08)
+DOOR:locked,(47,09)
+DOOR:locked,(26,11)
+DOOR:locked,(46,11)
+DOOR:locked,(48,11)
+DOOR:locked,(32,12)
+DOOR:closed,(07,13)
+DOOR:closed,(55,13)
+# The drawbridge
+DRAWBRIDGE:(05,08),east,closed
+# Storeroom number 1
+OBJECT:object[0],random,(39,05)
+OBJECT:object[0],random,(40,05)
+OBJECT:object[0],random,(41,05)
+OBJECT:object[0],random,(42,05)
+OBJECT:object[0],random,(43,05)
+OBJECT:object[0],random,(44,05)
+OBJECT:object[0],random,(45,05)
+OBJECT:object[0],random,(39,06)
+OBJECT:object[0],random,(40,06)
+OBJECT:object[0],random,(41,06)
+OBJECT:object[0],random,(42,06)
+OBJECT:object[0],random,(43,06)
+OBJECT:object[0],random,(44,06)
+OBJECT:object[0],random,(45,06)
+# Storeroom number 2
+OBJECT:object[1],random,(49,05)
+OBJECT:object[1],random,(50,05)
+OBJECT:object[1],random,(51,05)
+OBJECT:object[1],random,(52,05)
+OBJECT:object[1],random,(53,05)
+OBJECT:object[1],random,(54,05)
+OBJECT:object[1],random,(55,05)
+OBJECT:object[1],random,(49,06)
+OBJECT:object[1],random,(50,06)
+OBJECT:object[1],random,(51,06)
+OBJECT:object[1],random,(52,06)
+OBJECT:object[1],random,(53,06)
+OBJECT:object[1],random,(54,06)
+OBJECT:object[1],random,(55,06)
+# Storeroom number 3
+OBJECT:object[2],random,(39,10)
+OBJECT:object[2],random,(40,10)
+OBJECT:object[2],random,(41,10)
+OBJECT:object[2],random,(42,10)
+OBJECT:object[2],random,(43,10)
+OBJECT:object[2],random,(44,10)
+OBJECT:object[2],random,(45,10)
+OBJECT:object[2],random,(39,11)
+OBJECT:object[2],random,(40,11)
+OBJECT:object[2],random,(41,11)
+OBJECT:object[2],random,(42,11)
+OBJECT:object[2],random,(43,11)
+OBJECT:object[2],random,(44,11)
+OBJECT:object[2],random,(45,11)
+# Storeroom number 4
+OBJECT:object[3],random,(49,10)
+OBJECT:object[3],random,(50,10)
+OBJECT:object[3],random,(51,10)
+OBJECT:object[3],random,(52,10)
+OBJECT:object[3],random,(53,10)
+OBJECT:object[3],random,(54,10)
+OBJECT:object[3],random,(55,10)
+OBJECT:object[3],random,(49,11)
+OBJECT:object[3],random,(50,11)
+OBJECT:object[3],random,(51,11)
+OBJECT:object[3],random,(52,11)
+OBJECT:object[3],random,(53,11)
+OBJECT:object[3],random,(54,11)
+OBJECT:object[3],random,(55,11)
+# THE WAND OF WISHING in 1 of the 4 towers
+CONTAINER:'(',"chest",place[0]
+OBJECT:'/',"wishing",contained
+# Prevent monsters from eating it.  (@'s never eat objects)
+OBJECT:'?',"scare monster",place[0]
+ENGRAVING:place[0],burn,"Elbereth"
+# The treasure of the lord
+OBJECT:'(',"chest",(37,08)
+# Traps
+TRAP:"trap door",(40,08)
+TRAP:"trap door",(44,08)
+TRAP:"trap door",(48,08)
+TRAP:"trap door",(52,08)
+TRAP:"trap door",(55,08)
+# Soldiers guarding the entry hall
+MONSTER:'@',"soldier",(08,06)
+MONSTER:'@',"soldier",(09,05)
+MONSTER:'@',"soldier",(11,05)
+MONSTER:'@',"soldier",(12,06)
+MONSTER:'@',"soldier",(08,10)
+MONSTER:'@',"soldier",(09,11)
+MONSTER:'@',"soldier",(11,11)
+MONSTER:'@',"soldier",(12,10)
+MONSTER:'@',"lieutenant",(09,08)
+# Soldiers guarding the towers
+MONSTER:'@',"soldier",(03,02)
+MONSTER:'@',"soldier",(05,02)
+MONSTER:'@',"soldier",(57,02)
+MONSTER:'@',"soldier",(59,02)
+MONSTER:'@',"soldier",(03,14)
+MONSTER:'@',"soldier",(05,14)
+MONSTER:'@',"soldier",(57,14)
+MONSTER:'@',"soldier",(59,14)
+# The four dragons that are guarding the storerooms
+MONSTER:'D',random,(47,05)
+MONSTER:'D',random,(47,06)
+MONSTER:'D',random,(47,10)
+MONSTER:'D',random,(47,11)
+# Sea monsters in the moat
+MONSTER:';',"giant eel",(05,07)
+MONSTER:';',"giant eel",(05,09)
+MONSTER:';',"giant eel",(57,07)
+MONSTER:';',"giant eel",(57,09)
+MONSTER:';',"shark",(05,00)
+MONSTER:';',"shark",(05,16)
+MONSTER:';',"shark",(57,00)
+MONSTER:';',"shark",(57,16)
+# The throne room and the court monsters
+MONSTER:monster[0],random,(27,05)
+MONSTER:monster[1],random,(30,05)
+MONSTER:monster[2],random,(33,05)
+MONSTER:monster[3],random,(36,05)
+MONSTER:monster[4],random,(28,06)
+MONSTER:monster[5],random,(31,06)
+MONSTER:monster[6],random,(34,06)
+MONSTER:monster[7],random,(37,06)
+MONSTER:monster[8],random,(27,07)
+MONSTER:monster[9],random,(30,07)
+MONSTER:monster[0],random,(33,07)
+MONSTER:monster[1],random,(36,07)
+MONSTER:monster[2],random,(28,08)
+MONSTER:monster[3],random,(31,08)
+MONSTER:monster[4],random,(34,08)
+MONSTER:monster[5],random,(27,09)
+MONSTER:monster[6],random,(30,09)
+MONSTER:monster[7],random,(33,09)
+MONSTER:monster[8],random,(36,09)
+MONSTER:monster[9],random,(28,10)
+MONSTER:monster[0],random,(31,10)
+MONSTER:monster[1],random,(34,10)
+MONSTER:monster[2],random,(37,10)
+MONSTER:monster[3],random,(27,11)
+MONSTER:monster[4],random,(30,11)
+MONSTER:monster[5],random,(33,11)
+MONSTER:monster[6],random,(36,11)
+# MazeWalks
+MAZEWALK:(00,10),west
+MAZEWALK:(62,06),east
+# Non diggable walls
+NON_DIGGABLE:(00,00,62,16)
+# Subrooms:
+#   Entire castle area
+REGION:(00,00,62,16),unlit,"ordinary"
+#   Courtyards
+REGION:(00,05,05,11),lit,"ordinary"
+REGION:(57,05,62,11),lit,"ordinary"
+#   Throne room
+REGION:(27,05,37,11),lit,"throne",unfilled
+#   Antechamber
+REGION:(07,05,14,11),lit,"ordinary"
+#   Storerooms
+REGION:(39,05,45,06),lit,"ordinary"
+REGION:(39,10,45,11),lit,"ordinary"
+REGION:(49,05,55,06),lit,"ordinary"
+REGION:(49,10,55,11),lit,"ordinary"
+#   Corners
+REGION:(02,02,06,03),lit,"ordinary"
+REGION:(56,02,60,03),lit,"ordinary"
+REGION:(02,13,06,14),lit,"ordinary"
+REGION:(56,13,60,14),lit,"ordinary"
+#   Barracks
+REGION:(16,05,25,06),lit,"barracks"
+REGION:(16,10,25,11),lit,"barracks"
+#   Hallways
+REGION:(08,03,54,03),unlit,"ordinary"
+REGION:(08,13,54,13),unlit,"ordinary"
+REGION:(16,08,25,08),unlit,"ordinary"
+REGION:(39,08,55,08),unlit,"ordinary"
+#   Storeroom alcoves
+REGION:(47,05,47,06),unlit,"ordinary"
+REGION:(47,10,47,11),unlit,"ordinary"
+
+
+##
+##Castle 2
+##
+
+MAZE: "castle-2",random
+FLAGS: noteleport
+GEOMETRY:center,center
+
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+1}-------------------------------------------------------------}
+2}|.....+...............................................+.....|}
+3}|.....|-----------------+-----------------------------|.....|}
+4}|.....|................|.|............................|.....|}
+5}-------.......----------+--+------------------........-------}
+6}}}}|.|........|..........|...|.......|....|..|.........|.|}}}}
+7...}|.|........|..........|...|.......|....|..|.........+.|}...
+8...}|.|........----------+|...|.......----+-..|.........|.|}...
+9...}|.+........+..........|.{.+.....\.S..S.+..|.........|.+}...
+0...}|.|........----------+|...|.......|..-+----.........|.|}...
+1...}|.|........|..........|...|.......|..|....|.........+.|}...
+2}}}}|.|........|..........|...|.......|..|....|.........|.|}}}}
+3}-------.......-------------+-------------+----........-------}
+4}|.....|.................................|.|...........|.....|}
+5}|.....|----------------------------------+------------|.....|}
+6}|.....+...............................................+.....|}
+7}|------------------------------------------------------------}
+8}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
+
+# Random registers initialisation
+RANDOM_OBJECTS:'[',')','*','%'
+RANDOM_PLACES:(03,03),(59,03),(03,15),(59,15)
+RANDOM_MONSTERS:'L','N','E','H','M','O','R','T','X','Z'
+
+TELEPORT_REGION:levregion(01,00,10,20),(1,1,61,15),down
+TELEPORT_REGION:levregion(69,00,79,20),(1,1,61,15),up
+STAIR:levregion(01,00,10,20),(0,0,62,16),up
+# Doors
+DOOR:closed,(06,09)
+DOOR:closed,(07,16)
+DOOR:closed,(07,02)
+
+DOOR:closed,(15,09)
+
+DOOR:locked,(25,03)
+DOOR:closed,(25,05)
+DOOR:closed,(25,08)
+DOOR:closed,(25,10)
+
+DOOR:locked,(30,09)
+
+DOOR:closed,(42,08)
+DOOR:closed,(43,09)
+DOOR:closed,(42,10)
+DOOR:closed,(42,13)
+DOOR:closed,(42,15)
+
+DOOR:closed,(55,16)
+DOOR:closed,(55,02)
+DOOR:closed,(56,11)
+DOOR:closed,(56,07)
+DOOR:closed,(58,09)
+
+# The drawbridge
+DRAWBRIDGE:(03,09),east,closed
+# Storeroom number 1
+OBJECT:object[0],random,(39,06)
+OBJECT:object[0],random,(40,06)
+OBJECT:object[0],random,(41,06)
+OBJECT:object[0],random,(42,06)
+OBJECT:object[0],random,(39,06)
+OBJECT:object[0],random,(40,06)
+OBJECT:object[0],random,(41,06)
+OBJECT:object[0],random,(39,07)
+OBJECT:object[0],random,(40,07)
+OBJECT:object[0],random,(41,07)
+OBJECT:object[0],random,(42,07)
+OBJECT:object[0],random,(40,07)
+OBJECT:object[0],random,(41,07)
+OBJECT:object[0],random,(42,07)
+# Storeroom number 2
+OBJECT:object[1],random,(39,09)
+OBJECT:object[1],random,(39,10)
+OBJECT:object[1],random,(39,11)
+OBJECT:object[1],random,(39,12)
+OBJECT:object[1],random,(39,09)
+OBJECT:object[1],random,(39,10)
+OBJECT:object[1],random,(39,11)
+OBJECT:object[1],random,(40,09)
+OBJECT:object[1],random,(40,10)
+OBJECT:object[1],random,(40,11)
+OBJECT:object[1],random,(40,12)
+OBJECT:object[1],random,(40,10)
+OBJECT:object[1],random,(40,11)
+OBJECT:object[1],random,(40,12)
+# Storeroom number 3
+OBJECT:object[2],random,(44,06)
+OBJECT:object[2],random,(44,07)
+OBJECT:object[2],random,(44,08)
+OBJECT:object[2],random,(44,09)
+OBJECT:object[2],random,(44,06)
+OBJECT:object[2],random,(44,07)
+OBJECT:object[2],random,(44,08)
+OBJECT:object[2],random,(45,06)
+OBJECT:object[2],random,(45,07)
+OBJECT:object[2],random,(45,08)
+OBJECT:object[2],random,(45,09)
+OBJECT:object[2],random,(45,07)
+OBJECT:object[2],random,(45,08)
+OBJECT:object[2],random,(45,09)
+# Storeroom number 4
+OBJECT:object[3],random,(42,11)
+OBJECT:object[3],random,(43,11)
+OBJECT:object[3],random,(44,11)
+OBJECT:object[3],random,(45,11)
+OBJECT:object[3],random,(42,11)
+OBJECT:object[3],random,(43,11)
+OBJECT:object[3],random,(44,11)
+OBJECT:object[3],random,(42,12)
+OBJECT:object[3],random,(43,12)
+OBJECT:object[3],random,(44,12)
+OBJECT:object[3],random,(45,12)
+OBJECT:object[3],random,(43,12)
+OBJECT:object[3],random,(44,12)
+OBJECT:object[3],random,(45,12)
+# THE WAND OF WISHING in 1 of the 4 towers
+CONTAINER:'(',"chest",place[0]
+OBJECT:'/',"wishing",contained
+# Prevent monsters from eating it.  (@'s never eat objects)
+OBJECT:'?',"scare monster",place[0]
+ENGRAVING:place[0],burn,"Elbereth"
+# The treasure of the lord
+OBJECT:'(',"chest",(37,09)
+# Traps
+TRAP:"trap door",(57,07)
+TRAP:"trap door",(57,08)
+TRAP:"trap door",(57,09)
+TRAP:"trap door",(57,10)
+TRAP:"trap door",(57,11)
+# Soldiers guarding the entry hall
+MONSTER:'@',"soldier",(08,06)
+MONSTER:'@',"soldier",(09,05)
+MONSTER:'@',"soldier",(11,05)
+MONSTER:'@',"soldier",(12,06)
+MONSTER:'@',"soldier",(08,10)
+MONSTER:'@',"soldier",(09,11)
+MONSTER:'@',"soldier",(11,11)
+MONSTER:'@',"soldier",(12,10)
+MONSTER:'@',"lieutenant",(09,08)
+
+MONSTER:'@',"soldier",(27,07)
+MONSTER:'@',"soldier",(28,11)
+MONSTER:'@',"soldier",(27,07)
+MONSTER:'@',"soldier",(28,11)
+MONSTER:'@',"lieutenant",(27,09)
+# Soldiers guarding the towers
+MONSTER:'@',"soldier",(03,03)
+MONSTER:'@',"soldier",(05,03)
+MONSTER:'@',"soldier",(57,03)
+MONSTER:'@',"soldier",(59,03)
+MONSTER:'@',"soldier",(03,15)
+MONSTER:'@',"soldier",(05,15)
+MONSTER:'@',"soldier",(57,15)
+MONSTER:'@',"soldier",(59,15)
+# The four dragons that are guarding the storerooms
+MONSTER:'D',random,(44,06)
+MONSTER:'D',random,(39,09)
+MONSTER:'D',random,(39,06)
+MONSTER:'D',random,(42,11)
+# Sea monsters in the moat
+MONSTER:';',"giant eel",(05,00)
+MONSTER:';',"giant eel",(07,18)
+MONSTER:';',"giant eel",(57,00)
+MONSTER:';',"giant eel",(57,18)
+MONSTER:';',"shark",(05,18)
+MONSTER:';',"shark",(05,00)
+MONSTER:';',"shark",(57,18)
+MONSTER:';',"shark",(57,00)
+# The throne room and the court monsters 31-37 06-12
+MONSTER:monster[0],random,(37,06)
+MONSTER:monster[1],random,(31,06)
+MONSTER:monster[2],random,(33,06)
+MONSTER:monster[3],random,(36,06)
+MONSTER:monster[4],random,(28,07)
+MONSTER:monster[5],random,(31,07)
+MONSTER:monster[6],random,(34,07)
+MONSTER:monster[7],random,(37,07)
+MONSTER:monster[8],random,(32,08)
+MONSTER:monster[9],random,(31,08)
+MONSTER:monster[0],random,(33,08)
+MONSTER:monster[1],random,(36,08)
+MONSTER:monster[2],random,(32,09)
+MONSTER:monster[3],random,(31,09)
+MONSTER:monster[4],random,(34,09)
+MONSTER:monster[5],random,(32,10)
+MONSTER:monster[6],random,(31,10)
+MONSTER:monster[7],random,(33,10)
+MONSTER:monster[8],random,(36,10)
+MONSTER:monster[9],random,(32,11)
+MONSTER:monster[0],random,(31,11)
+MONSTER:monster[1],random,(34,11)
+MONSTER:monster[2],random,(37,11)
+MONSTER:monster[3],random,(37,12)
+MONSTER:monster[4],random,(31,12)
+MONSTER:monster[5],random,(33,12)
+MONSTER:monster[6],random,(36,12)
+# MazeWalks
+MAZEWALK:(00,10),west
+MAZEWALK:(62,08),east
+# Non diggable walls
+NON_DIGGABLE:(00,00,62,18)
+# Subrooms:
+#   Entire castle area
+REGION:(00,00,62,18),unlit,"ordinary"
+
+#   Courtyards
+REGION:(00,07,02,11),lit,"ordinary"
+REGION:(60,07,62,11),lit,"ordinary"
+#   Throne room
+REGION:(31,06,37,12),lit,"throne",unfilled
+#   Antechamber
+REGION:(08,07,14,12),lit,"ordinary"
+REGION:(09,05,14,14),lit,"ordinary"
+
+REGION:(15,05,17,05),lit,"ordinary"
+REGION:(15,14,17,14),lit,"ordinary"
+
+REGION:(27,06,29,12),lit,"ordinary"
+
+REGION:(47,07,55,12),lit,"ordinary"
+REGION:(47,05,54,14),lit,"ordinary"
+
+REGION:(44,05,46,05),lit,"ordinary"
+REGION:(44,14,46,14),lit,"ordinary"
+#   Storerooms
+REGION:(39,06,42,07),lit,"ordinary"
+REGION:(39,09,40,12),lit,"ordinary"
+REGION:(44,06,45,09),lit,"ordinary"
+REGION:(42,11,45,12),lit,"ordinary"
+#   Corners
+REGION:(02,02,06,04),lit,"ordinary"
+REGION:(56,02,60,04),lit,"ordinary"
+REGION:(02,14,06,16),lit,"ordinary"
+REGION:(56,14,60,16),lit,"ordinary"
+#   Barracks
+REGION:(16,06,25,07),lit,"barracks"
+REGION:(16,11,25,12),lit,"barracks"
+
+
+
+#
+#	Pleaseant Valley.
+#
+#	Green hills, trees, sheep, nymphs and people.
+#	Oh, and some of Vlad's minions.
+#
+MAZE: "castle-3",' '
+FLAGS: noteleport
+GEOMETRY:center,center
+#          1         2         3         4         5         6         7    7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                   }  }    ## ##     }-----------------     ####           
+1 ....            ..}T}}T.   ###      }|...|...|...|...|    ######    ....  
+2......    T....T..T}}}...T.  H  .T..}}--.---.---.---.--.  H ####   ##..{.. 
+3 ...    .....T......}T......T......}}....................T.      ###  ...  
+4 #      .  T....T...}|...T....T...}}..T.........T.............   H         
+5 ##    .T....T.....T}T.T..T......}}T...............T............ ..        
+6  #   ....T.....T...}}T......T..}}.}.....T..............T...........       
+7....##.  ....T.....}T}..T..T....}.}.}...........T.............T.......|---|
+8....  .. T..   ...}}}}}}}}}}}}}}..}.}T......T.......................T.....|
+9     ......  }}}}}}}}}}}}}}}}}}}}}}}.................T................|---|
+0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}........................T..........|
+1}}}}}}}}}}}}}}}}}}..........}}}}}}}}}}}}}}.}....T.......T.............|---|
+2}}}}}...........}..............}}}}}}}}}}.}.}.}.}..................T......|
+3-----+----------....................}}}}.}.}.}.}}.}.............T.....|---|
+4 |.......|..+..|........................}.}.}}}}.}.}.}....T...............|
+5 |.......|----.|..........----............}.}.}.}.}.}}................|---|
+6 |.......+.....|----------|..|.............}.}.}.}.}..T......T............|
+7 |.......|----.|.+........+..|............. }}}}}}}}  ............T...|---|
+8 |...\...|..+....|   H    ----...........    }}}}}}     ............  H### 
+9 -----------------#######                     }}}}                    #### 
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#          1         2         3         4         5         6         7    7
+# Randomize some monsters
+# Random registers initialisation
+RANDOM_OBJECTS:'[',')','*','%'
+RANDOM_PLACES:(10,14),(10,18),(27,16),(28,18)
+RANDOM_MONSTERS:'L','N','E','H','M','O','R','T','X','Z'
+
+TELEPORT_REGION:(00,00,06,03),(0,0,00,00),down
+TELEPORT_REGION:(69,01,73,03),(0,0,00,00),up
+# Regions
+# Entry Caves
+REGION:(00,01,05,03),unlit,"ordinary"
+REGION:(00,07,03,08),unlit,"ordinary"
+# The wild wood
+REGION:(06,01,30,09),lit,"ordinary"
+# North Eastern Fields
+REGION:(31,02,69,18),lit,"ordinary"
+# Fountain
+REGION:(65,01,73,05),unlit,"ordinary"
+# South Western Fields
+REGION:(00,10,31,18),lit,"ordinary"
+REGION:(31,13,39,18),lit,"ordinary"
+# Northern huts
+REGION:(39,01,41,01),unlit,"ordinary"
+REGION:(43,01,45,01),unlit,"ordinary"
+REGION:(47,01,49,01),unlit,"ordinary"
+REGION:(51,01,53,01),unlit,"ordinary"
+# Eastern Huts
+REGION:(71,08,73,08),unlit,"ordinary"
+REGION:(71,10,73,10),unlit,"ordinary"
+REGION:(71,12,73,12),unlit,"ordinary"
+REGION:(71,14,73,14),unlit,"ordinary"
+REGION:(71,16,73,16),unlit,"ordinary"
+# Tower
+REGION:(02,14,08,18),unlit,"ordinary"
+REGION:(10,14,14,18),unlit,"ordinary"
+REGION:(15,17,16,18),unlit,"ordinary"
+REGION:(17,17,26,17),unlit,"ordinary"
+REGION:(27,16,28,17),unlit,"ordinary"
+# Stairs
+STAIR:(02,02),up
+# The drawbridge
+DRAWBRIDGE:(20,04),east,closed
+# Doors
+DOOR:locked,(12,14)
+DOOR:locked,(12,18)
+DOOR:locked,(17,17)
+DOOR:locked,(26,17)
+DOOR:locked,(09,16)
+DOOR:locked,(05,13)
+# THE WAND OF WISHING in 1 of the 3 towers
+CONTAINER:'(',"chest",place[0]
+OBJECT:'/',"wishing",contained
+# Prevent monsters from eating it.  (@'s never eat objects)
+OBJECT:'?',"scare monster",place[0]
+ENGRAVING:place[0],burn,"Elbereth"
+# Storecave number 1
+OBJECT:object[0],random,(27,00)
+OBJECT:object[0],random,(28,00)
+OBJECT:object[0],random,(28,01)
+OBJECT:object[0],random,(29,01)
+OBJECT:object[0],random,(30,01)
+OBJECT:object[0],random,(30,00)
+OBJECT:object[0],random,(31,00)
+OBJECT:object[0],random,(27,00)
+OBJECT:object[0],random,(28,00)
+OBJECT:object[0],random,(28,01)
+OBJECT:object[0],random,(29,01)
+OBJECT:object[0],random,(30,01)
+OBJECT:object[0],random,(30,00)
+OBJECT:object[0],random,(31,00)
+# Storecave number 2
+OBJECT:object[1],random,(18,19)
+OBJECT:object[1],random,(19,19)
+OBJECT:object[1],random,(20,19)
+OBJECT:object[1],random,(21,19)
+OBJECT:object[1],random,(22,19)
+OBJECT:object[1],random,(23,19)
+OBJECT:object[1],random,(24,19)
+OBJECT:object[1],random,(18,19)
+OBJECT:object[1],random,(19,19)
+OBJECT:object[1],random,(20,19)
+OBJECT:object[1],random,(21,19)
+OBJECT:object[1],random,(22,19)
+OBJECT:object[1],random,(23,19)
+OBJECT:object[1],random,(24,19)
+# Storeroom number 3
+OBJECT:object[2],random,(60,00)
+OBJECT:object[2],random,(61,00)
+OBJECT:object[2],random,(62,00)
+OBJECT:object[2],random,(63,00)
+OBJECT:object[2],random,(59,01)
+OBJECT:object[2],random,(60,01)
+OBJECT:object[2],random,(61,01)
+OBJECT:object[2],random,(62,01)
+OBJECT:object[2],random,(63,01)
+OBJECT:object[2],random,(64,01)
+OBJECT:object[2],random,(62,02)
+OBJECT:object[2],random,(63,02)
+OBJECT:object[2],random,(60,02)
+OBJECT:object[2],random,(61,02)
+# Storeroom number 4
+OBJECT:object[3],random,(73,19)
+OBJECT:object[3],random,(70,19)
+OBJECT:object[3],random,(71,19)
+OBJECT:object[3],random,(72,19)
+OBJECT:object[3],random,(73,18)
+OBJECT:object[3],random,(71,18)
+OBJECT:object[3],random,(72,18)
+OBJECT:object[3],random,(73,19)
+OBJECT:object[3],random,(70,19)
+OBJECT:object[3],random,(71,19)
+OBJECT:object[3],random,(72,19)
+OBJECT:object[3],random,(73,18)
+OBJECT:object[3],random,(71,18)
+OBJECT:object[3],random,(72,18)
+# Sea monsters for the river
+MONSTER:';',random,(02,11)
+MONSTER:';',random,(10,11)
+MONSTER:';',random,(20,09)
+MONSTER:';',random,(29,10)
+MONSTER:';',random,(35,11)
+MONSTER:';',random,(41,13)
+MONSTER:';',random,(46,14)
+MONSTER:';',random,(48,17)
+# An assortment of nymphs
+MONSTER:'n',random,(36,04)
+MONSTER:'n',random,(41,07)
+MONSTER:'n',random,(40,09)
+MONSTER:'n',random,(46,13)
+MONSTER:'n',random,(50,16)
+MONSTER:'n',random,(30,06)
+MONSTER:'n',random,(53,13)
+MONSTER:'n',random,(30,07)
+MONSTER:'n',random,(24,03)
+MONSTER:'n',random,(19,02)
+MONSTER:'n',random,(17,06)
+MONSTER:'n',random,(12,04)
+# A few people
+MONSTER:'@',"healer",(40,01),peaceful
+MONSTER:'@',"rogue",(45,01),peaceful
+MONSTER:'@',"barbarian",(48,01),peaceful
+MONSTER:'@',"ranger",(52,01),peaceful
+MONSTER:'@',"wizard",(72,08),peaceful
+MONSTER:'@',"samurai",(72,10),peaceful
+MONSTER:'@',"knight",(72,14),peaceful
+MONSTER:'@',"valkyrie",(72,16),peaceful
+# A few sheep and and a couple of goats
+#MONSTER:'q',"sheep",(46,05),peaceful
+#MONSTER:'q',"lamb",(47,06),peaceful
+#MONSTER:'q',"sheep",(47,04),peaceful
+#MONSTER:'q',"sheep",(54,06),peaceful
+#MONSTER:'q',"lamb",(53,05),peaceful
+#MONSTER:'q',"sheep",(56,04),peaceful
+#MONSTER:'q',"sheep",(57,05),peaceful
+#MONSTER:'q',"sheep",(55,06),peaceful
+#MONSTER:'q',"lamb",(57,08),peaceful
+#MONSTER:'q',"goat",(59,17),peaceful
+#MONSTER:'q',"goat",(63,16),peaceful
+#MONSTER:'c',"chicken",(62,12),peaceful
+#MONSTER:'c',"chicken",(64,11),peaceful
+#MONSTER:'c',"chicken",(63,09),peaceful
+# Watch Dogs
+MONSTER:'d',"winter wolf",(11,14),asleep,hostile
+MONSTER:'d',"winter wolf",(11,14),asleep,hostile
+MONSTER:'d',"winter wolf",(11,16),asleep,hostile
+MONSTER:'@',"werewolf",(10,14),asleep,hostile
+# Monsters in the Throne Room
+MONSTER:monster[0],random,(02,14),asleep
+MONSTER:monster[1],random,(02,15),asleep
+MONSTER:monster[2],random,(02,16),asleep
+MONSTER:monster[3],random,(02,17),asleep
+MONSTER:monster[4],random,(03,14),asleep
+MONSTER:monster[5],random,(03,15),asleep
+MONSTER:monster[6],random,(03,16),asleep
+MONSTER:monster[7],random,(03,17),asleep
+MONSTER:monster[8],random,(04,14),asleep
+MONSTER:monster[9],random,(04,15),asleep
+MONSTER:monster[0],random,(04,16),asleep
+MONSTER:monster[1],random,(04,17),asleep
+MONSTER:monster[2],random,(05,14),asleep
+MONSTER:monster[3],random,(05,15),asleep
+MONSTER:monster[4],random,(05,16),asleep
+MONSTER:monster[5],random,(05,17),asleep
+MONSTER:monster[6],random,(06,14),asleep
+MONSTER:monster[7],random,(06,15),asleep
+MONSTER:monster[8],random,(06,16),asleep
+MONSTER:monster[9],random,(06,17),asleep
+MONSTER:monster[0],random,(07,14),asleep
+MONSTER:monster[1],random,(07,15),asleep
+MONSTER:monster[2],random,(07,16),asleep
+MONSTER:monster[3],random,(07,17),asleep
+MONSTER:monster[4],random,(08,14),asleep
+MONSTER:monster[5],random,(08,15),asleep
+MONSTER:monster[6],random,(08,16),asleep
+MONSTER:monster[7],random,(08,17),asleep
+# Custodians
+MONSTER:'L',"master lich",(05,18),asleep,hostile
+OBJECT:'?',random,(05,18)
+OBJECT:'=',"free action",(05,18)
+MONSTER:''',"iron golem",(03,18),asleep,hostile
+MONSTER:''',"iron golem",(08,18),asleep,hostile
+# Musicians (should only be present on Sundays)
+MONSTER:'Y',"monkey",(14,02)
+OBJECT:'(',"wooden harp",(14,02)
+MONSTER:'Y',"monkey",(24,03)
+OBJECT:'(',"bugle",(24,03)
+MONSTER:'Y',"monkey",(18,06)
+OBJECT:'(',"leather drum",(18,06)
+MONSTER:'Y',"monkey",(28,04)
+OBJECT:'(',"tooled horn",(28,04)
+# Loot
+OBJECT:'(',"chest",(59,11)
+OBJECT:'%',random,random
+OBJECT:'%',random,random
+OBJECT:'%',random,random
+OBJECT:'%',random,random
+OBJECT:'%',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+# Traps outside the door
+TRAP:"spiked pit",(16,14)
+TRAP:"spiked pit",(17,14)
+TRAP:"spiked pit",(19,15)
+TRAP:"magic",(20,14)
+TRAP:"magic",(28,16)
+TRAP:"magic",(18,12)
+TRAP:"magic",(24,13)
+TRAP:"magic",random
+TRAP:"magic",random
+TRAP:"magic",random
+TRAP:"anti magic",random
+TRAP:"anti magic",random
+TRAP:"anti magic",random
+TRAP:"hole",random
+TRAP:"hole",random
+TRAP:"hole",random
+TRAP:"hole",random
+TRAP:"board",(18,03)
+
+
+MAZE: "tomb",' '
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#1234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+                    --------
+                    |......|
+                    |......|
+                    |---.--|
+                        # 
+                        # 
+                   |----S---|           --------|
+       |------|    |........|           |.......|
+       |......------........|------------.......|
+       |......+.............+...........+.......|
+       |......+.............+...........+.......|
+       |......------........|------------.......|
+       |------|    |........|           |.......|
+                   |---S----|           --------|
+                       #  
+                       #  
+                    |--.---|
+                    |......|
+                    |......|
+                    --------
+ENDMAP
+RANDOM_MONSTERS: 'Z','M'
+STAIR:(08,09),up
+BRANCH:(08,09,08,09),(0,0,0,0)
+DOOR: locked,(14,09)
+DOOR: locked,(14,10)
+DOOR: locked,(28,09)
+DOOR: locked,(28,10)
+DOOR: locked,(40,09)
+DOOR: locked,(40,10)
+TRAP: "spiked pit",random
+TRAP: "spiked pit",random
+TRAP: "spiked pit",random
+TRAP: "spiked pit",random
+TRAP: "spiked pit",random
+OBJECT:'(',"chest",(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+GOLD: random,(47,9)
+OBJECT: '?', random, (47,9)
+OBJECT: '?', random, (47,9)
+OBJECT: '?', random, (47,9)
+OBJECT: '?', random, (47,9)
+OBJECT: '!', random, (47,9)
+OBJECT: '!', random, (47,9)
+OBJECT: '!', random, (47,9)
+OBJECT: random, random, (47,9)
+OBJECT: random, random, (47,9)
+OBJECT: random, random, random
+OBJECT:'(',"chest",(23,1)
+OBJECT: random, random, (23,1)
+OBJECT: random, random, (23,1)
+OBJECT: random, random, (23,1)
+OBJECT:'(',"chest",(24,18)
+OBJECT: random, random, (24,18)
+OBJECT: random, random, (24,18)
+OBJECT: random, random, (24,18)
+OBJECT:'(',"chest",(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+GOLD: random,(47,10)
+OBJECT: '?', random, (47,10)
+OBJECT: '?', random, (47,10)
+OBJECT: '?', random, (47,10)
+OBJECT: '?', random, (47,10)
+OBJECT: '+', random, (47,10)
+OBJECT: '+', random, (47,10)
+OBJECT: '+', random, (47,10)
+OBJECT: '+', random, (47,10)
+OBJECT: random, random, (47,10)
+OBJECT: random, random, (47,10)
+OBJECT: random, random, (47,10)
+OBJECT: random, random, (47,10)
+OBJECT: random, random, (47,10)
+MONSTER: 'L', "lich", (47,9)
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: ' ',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'Z',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+MONSTER: 'M',random,random
+
+
+# This is the Temple of Moloch.
+# Within lie priests, demons, and, most importantly.... candles!
+#
+#
+MAZE: "mtemple",' '
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#1234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+            ----- ----- ----- ----- -----
+            |...| |...| |...| |...| |...|
+   ----------...---...---...---...---...|-|        -----
+   |...|..................................|        |...|
+   |...+..................................S########S...|
+   |...|..................................|        |...|
+   ----------...---...---...---...---...|-|        -----
+            |...| |...| |...| |...| |...|
+            ----- ----- ----- ----- -----
+ENDMAP
+RANDOM_MONSTERS: '&','Z'
+REGION:(00,00,55,08),unlit,"ordinary"
+#REGION:(39,03,41,05),unlit,"temple"
+REGION:(08,01,41,07),unlit,"temple"
+STAIR:(05,04),up
+BRANCH:(05,04,05,04),(0,0,0,0)
+DOOR: locked,(07,04)
+# the altar of Moloch
+ALTAR:(40,04),noalign,shrine
+#ALTAR:(40,04),noalign,shrine
+#ALTAR:(40,04),noalign,shrine
+#ALTAR:(40,04),noalign,shrine
+MONSTER:'@',"aligned priest",(40,03),noalign,hostile
+MONSTER:'@',"aligned priest",(40,05),noalign,hostile
+MONSTER:'@',"aligned priest",(39,04),noalign,hostile
+# flanking the doorway....
+TRAP: "spiked pit",(06,03)
+TRAP: "spiked pit",(06,05)
+# the treasure chamber!  There were more than enough candles for the Candelabrum here
+OBJECT[50%]:'(',"wax candle",(52,3)
+CONTAINER:'(',"chest",(52,3)
+GOLD: random, (52,3) GOLD: random, (52,3) OBJECT: random, random,contained
+OBJECT: random, random,contained
+OBJECT: random, random,contained
+#OBJECT:'(',"wax candle",(53,3)
+CONTAINER:'(',"chest",(53,3)
+GOLD: random, (53,3)
+GOLD: random, (53,3)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT[50%]:'(',"wax candle",(54,3)
+CONTAINER:'(',"chest",(54,3)
+GOLD: random, (54,3)
+GOLD: random, (54,3)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+#OBJECT:'(',"wax candle",(52,4)
+CONTAINER:'(',"chest",(52,4)
+GOLD: random, (52,4)
+GOLD: random, (52,4)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT:'(',"wax candle",(53,4)
+CONTAINER:'(',"chest",(53,4)
+GOLD: random, (53,4)
+GOLD: random, (53,4)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+#OBJECT:'(',"wax candle",(54,4)
+CONTAINER:'(',"chest",(54,4)
+GOLD: random, (54,4)
+GOLD: random, (54,4)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+#OBJECT:'(',"wax candle",(52,5)
+CONTAINER:'(',"chest",(52,5)
+GOLD: random, (52,5)
+GOLD: random, (52,5)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT[50%]:'(',"wax candle",(53,5)
+CONTAINER:'(',"chest",(53,5)
+GOLD: random, (53,5)
+GOLD: random, (53,5)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+#OBJECT:'(',"wax candle",(54,5)
+CONTAINER:'(',"chest",(54,5)
+GOLD: random, (54,5)
+GOLD: random, (54,5)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+# five gargoyles on either side, in the niches of the temple
+MONSTER: 'g',"gargoyle",(14,1),hostile,asleep
+MONSTER: 'g',"gargoyle",(20,1),hostile,asleep
+MONSTER: 'g',"gargoyle",(26,1),hostile,asleep
+MONSTER: 'g',"gargoyle",(32,1),hostile,asleep
+MONSTER: 'g',"gargoyle",(38,1),hostile,asleep
+MONSTER: 'g',"gargoyle",(14,7),hostile,asleep
+MONSTER: 'g',"gargoyle",(20,7),hostile,asleep
+MONSTER: 'g',"gargoyle",(26,7),hostile,asleep
+MONSTER: 'g',"gargoyle",(32,7),hostile,asleep
+MONSTER: 'g',"gargoyle",(38,7),hostile,asleep
+# demons down by the altar...
+MONSTER: '&',"bone devil",(37,2),hostile,asleep
+MONSTER: '&',"barbed devil",(38,2),hostile,asleep
+MONSTER: '&',"barbed devil",(39,2),hostile,asleep
+MONSTER: '&',"vrock",(37,6),hostile,asleep
+MONSTER: '&',"horned devil",(38,6),hostile,asleep
+MONSTER: '&',"hezrou",(39,6),hostile,asleep
+# a horde of zombies is also inside....
+MONSTER: 'Z',random,(17,3),hostile,asleep
+MONSTER: 'Z',random,(18,3),hostile,asleep
+MONSTER: 'Z',random,(19,3),hostile,asleep
+MONSTER: 'Z',random,(20,3),hostile,asleep
+MONSTER: 'Z',random,(21,3),hostile,asleep
+MONSTER: 'Z',random,(22,3),hostile,asleep
+MONSTER: 'Z',random,(23,3),hostile,asleep
+MONSTER: 'Z',random,(17,4),hostile,asleep
+MONSTER: 'Z',random,(18,4),hostile,asleep
+MONSTER: 'Z',random,(19,4),hostile,asleep
+MONSTER: 'Z',random,(20,4),hostile,asleep
+MONSTER: 'Z',random,(21,4),hostile,asleep
+MONSTER: 'Z',random,(22,4),hostile,asleep
+MONSTER: 'Z',random,(23,4),hostile,asleep
+MONSTER: 'Z',random,(17,5),hostile,asleep
+MONSTER: 'Z',random,(18,5),hostile,asleep
+MONSTER: 'Z',random,(19,5),hostile,asleep
+MONSTER: 'Z',random,(20,5),hostile,asleep
+MONSTER: 'Z',random,(21,5),hostile,asleep
+MONSTER: 'Z',random,(22,5),hostile,asleep
+MONSTER: 'Z',random,(23,5),hostile,asleep
+ENGRAVING:(06,04),burn,"Those Not of Moloch, Begone!"
+
+# This is the Sunless Sea... home of sharks, squids, and underwater
+# treasure. Hope you brought your amulet of magical breathing!
+#
+#
+MAZE: "sea",' '
+MESSAGE:"You hear the roar of the sea. That can't be right...."
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+0                            .}}}}}}.        ..}}}}}}..             
+1                       ..}}}}}}}}}}}}}.   .}}}}}}}}}}}.}}}}..      
+2      .......}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}..    
+3   ...}}}}}.}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+4  ..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}  
+5  .}}}} }}}}}}}} }}}}}}}}}}}}}}}}}}}}}}}}}}}.}.}}}}}}}}}}}}}}}}}   
+6  }.}}}}}.}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.... }}}}}}}}}}}}}}}}}}}
+7    .}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}. }}}}}}}}}}}}}}}}}}
+8   ..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.}.}}}}}}}}}}}}}}}   
+9     .}}} }}}}}.}}}}}} }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}  
+0     ..}}}}}}}}}}}}}} }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}  
+1       .}}}}} }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}} 
+2     .....}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.}}}}}}}}}}}}}}}}}}}  
+3      ...}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.     .}}}}}}}}}}}}}}}}     
+4         ....}}}}}}}}  }}}  ..}}}}}}}}.       }}}.}}}}}}}}}}}}     
+5                             .}}}}..              ..}}}}.          
+ENDMAP
+#1234567890123456789012345678901234567890123456789012345678901234567890
+#0        1         2         3         4         5         6
+RANDOM_PLACES:(40,06),(49,05),(46,10),(30,07)
+RANDOM_MONSTERS: ';',':'
+REGION:(00,00,66,15),unlit,"ordinary"
+STAIR:(05,12),up
+BRANCH:(05,12,05,12),(0,0,0,0)
+# the treasure island!
+CONTAINER:'(',"chest",(45,6)
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: random, random, contained
+OBJECT: '/', random, contained
+OBJECT: '/', random, contained
+OBJECT: '"', random, contained
+OBJECT: '"', random, contained
+OBJECT: '=', random, contained
+OBJECT: '=', random, contained
+OBJECT: '*', random, contained
+OBJECT: '*', random, contained
+OBJECT: '*', random, contained
+# beach junk...
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+# the missing magic lamp!
+OBJECT:'(',"magic lamp",place[0]
+# the beach-combing committee
+#MONSTER: ';',"giant crab",(10,6),hostile
+#MONSTER: ';',"giant crab",(11,7),hostile
+#MONSTER: ';',"giant crab",(10,8),hostile
+#MONSTER: ';',"giant crab",(12,9),hostile
+#MONSTER: ';',"giant crab",(10,11),hostile
+# lurking offshore...
+MONSTER: ';',"shark",(26,05),hostile
+MONSTER: ';',"shark",(28,05),hostile
+MONSTER: ';',"shark",(30,06),hostile
+MONSTER: ';',"shark",(27,07),hostile
+MONSTER: ';',"shark",(26,09),hostile
+MONSTER: ';',"shark",(30,09),hostile
+MONSTER: ';',"shark",(31,11),hostile
+MONSTER: ';',"shark",random,hostile
+MONSTER: ';',"shark",random,hostile
+MONSTER: ';',"shark",random,hostile
+MONSTER: ';',"shark",random,hostile
+MONSTER: ';',"shark",random,hostile
+MONSTER: ';',"shark",random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+ENGRAVING:(11,03),burn,"The lamp washed into the sea while I slept! Woe and damnnation!"
+OBJECT: random,random,(11,03)
+
+#
+# Storage level (#1)
+#
+
+LEVEL: "stor-1"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'"',random,contained
+OBJECT:'=',random,contained
+ENGRAVING:(2,2),burn,"Begone! Keep Off! Shoo!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#2)
+#
+
+LEVEL: "stor-2"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'=',random,contained
+OBJECT:'=',"regeneration",contained
+OBJECT:'*',random,contained
+ENGRAVING:(2,2),burn,"Danger! Cursed Items! Do Not Touch!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#3)
+#
+
+LEVEL: "stor-3"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'/',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'=',random,contained
+ENGRAVING:(2,2),burn,"Property of the Wizard! Do Not Touch!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#4)
+#
+
+LEVEL: "stor-4"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:'/',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+ENGRAVING:(2,2),burn,"Ord Yendor armory annex. Trespassers will be shot."
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+
+#
+# Storage level (#5)
+#
+
+LEVEL: "stor-5"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'/',random,contained
+OBJECT:')',random,contained
+OBJECT:')',random,contained
+OBJECT:'%',random,contained
+OBJECT:'%',random,contained
+OBJECT:'%',random,contained
+OBJECT:'%',random,contained
+ENGRAVING:(2,2), burn,"Mine, not yours.  You touch, you're dead!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#6)
+#
+
+LEVEL: "stor-6"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'+',random,contained
+OBJECT:'+',random,contained
+OBJECT:'?',random,contained
+OBJECT:'?',random,contained
+OBJECT:'?',random,contained
+ENGRAVING:(2,2),burn,"Property of the Dungeons of Doom municipal library.  Do not remove."
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+
+#
+# Storage level (#7)
+#
+
+LEVEL: "stor-7"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:')',"elven broadsword",contained
+OBJECT:')',"elven dagger",contained
+OBJECT:')',"elven spear",contained
+OBJECT:')',"elven bow",contained
+OBJECT:')',"elven arrow",contained
+OBJECT:')',"elven arrow",contained
+OBJECT:'[',"elven leather helm", contained
+OBJECT:'[',"elven mithril-coat", contained
+OBJECT:'[',"elven cloak", contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+ENGRAVING:(2,2),burn,"A Elbereth Gilthoniel, silivren penna miriel, o menel aglar elenath!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+
+

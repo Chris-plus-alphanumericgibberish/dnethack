@@ -1,0 +1,246 @@
+/*	SCCS Id: @(#)artifact.h 3.4	1995/05/31	*/
+/* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
+/* NetHack may be freely redistributed.  See license for details. */
+
+#ifndef ARTIFACT_H
+#define ARTIFACT_H
+
+#define SPFX_NONE   0x0000000L	/* no special effects, just a bonus */
+#define SPFX_NOGEN  0x0000001L	/* item is special, bequeathed by gods */
+#define SPFX_RESTR  0x0000002L	/* item is restricted - can't be named */
+#define SPFX_INTEL  0x0000004L	/* item is self-willed - intelligent */
+#define SPFX_SPEAK  0x0000008L	/* item can speak (not implemented) */
+#define SPFX_SEEK   0x0000010L	/* item helps you search for things, ie, adds enhancement bonus to attempts */
+#define SPFX_WARN   0x0000020L	/* item warns you of danger */
+#define SPFX_ATTK   0x0000040L	/* item has a special attack (attk) */
+#define SPFX_DEFN   0x0000080L	/* item has a special defence (defn) */
+#define SPFX_DRLI   0x0000100L	/* drains a level from monsters */
+#define SPFX_SEARCH 0x0000200L	/* automatic searching */
+#define SPFX_BEHEAD 0x0000400L	/* beheads monsters */
+#define SPFX_HALRES 0x0000800L	/* blocks hallucinations */
+#define SPFX_ESP    0x0001000L	/* ESP (like amulet of ESP) */
+#define SPFX_DISPL  0x0002000L	/* Displacement */
+#define SPFX_REGEN  0x0004000L	/* Regeneration */
+#define SPFX_EREGEN 0x0008000L	/* Energy Regeneration */
+#define SPFX_HSPDAM 0x0010000L	/* 1/2 spell damage (on player) in combat */
+#define SPFX_HPHDAM 0x0020000L	/* 1/2 physical damage (on player) in combat */
+#define SPFX_TCTRL  0x0040000L	/* Teleportation Control */
+#define SPFX_LUCK   0x0080000L	/* Increase Luck (like Luckstone) */
+#define SPFX_DMONS  0x0100000L	/* attack bonus on one monster type */
+#define SPFX_DCLAS  0x0200000L	/* attack bonus on monsters w/ symbol mtype */
+#define SPFX_DFLAG1 0x0400000L	/* attack bonus on monsters w/ mflags1 flag */
+#define SPFX_DFLAG2 0x0800000L	/* attack bonus on monsters w/ mflags2 flag */
+#define SPFX_DALIGN 0x1000000L	/* attack bonus on non-aligned monsters  */
+#define SPFX_DBONUS 0x1F00000L	/* attack bonus mask */
+#define SPFX_XRAY   0x2000000L	/* gives X-RAY vision to player */
+#define SPFX_REFLECT 0x4000000L /* Reflection */
+#define SPFX_CONFL  0x8000000L  /* Conflict */
+#define SPFX_AGGRM  0x10000000L /* Aggravate monster */
+/* expanded special effects*/
+#define SPFX2_NONE		0x0000000L	/* nothing special */
+#define SPFX2_DIG		0x0000001L	/* Can dig with artifact, as if it were a pick. Clarent Patch (GreyKnight)*/
+#define SPFX2_DEMIBANE  0x0000002L	/* +1d20 damage vs is_demihuman() mon types */
+#define SPFX2_BLIND		0x0000004L	/* causes blindness */
+
+#define SPFX2_FIRE		0x0000010L	/* Fireball strike (1/4) */
+#define SPFX2_COLD		0x0000020L	/* Cold blast strike (1/4 */
+#define SPFX2_ELEC		0x0000040L	/* Lightning bolt strike (1/4) */
+#define SPFX2_RAM		0x0000080L	/* Causes knockback (1/4) */
+#define SPFX2_FIRE2		0x0000100L	/* Fireball strike (always) */
+#define SPFX2_COLD2		0x0000200L	/* Cold blast strike (always) */
+#define SPFX2_ELEC2		0x0000400L	/* Lightning bolt strike (always) */
+#define SPFX2_RAM2		0x0000800L	/* Always causes knockback */
+#define SPFX2_NOCALL	0x0001000L	/* Blocks Demon-minion-summoning when wielded */
+#define SPFX2_NOWERE	0x0002000L	/* Protects agains lycathropy when wielded */
+#define SPFX2_POISONED	0x0004000L	/* permanently poisoned weapon */
+
+#define SPFX2_BLDTHRST	0x0010000L	/* bloodthirsty weapon (primary wielded only) */
+#define SPFX2_BRIGHT	0x0020000L	/* turns trolls to stone, dusts gremlins */
+
+#define SPFX2_DANCER	0x0080000L	/* extra movement points for attacking */
+#define SPFX2_SILVERED	0x0100000L	/* weapon is silvered  */
+#define SPFX2_STLTH		0x0200000L	/* gives stealth when wielded or worn */
+#define SPFX2_SHATTER	0x0400000L	/* breaks opponents weapons */
+#define SPFX2_DISARM	0x0800000L	/* disarms opponents */
+#define SPFX2_SPELLUP	0x1000000L	/* disarms opponents */
+
+#define SPFX3_ENGRV		0x0000001L	/* Allows fast engraving (as for Athame) */
+#define SPFX3_PCTRL		0x0000002L	/* grants polymorph control (caried or wielded) */
+#define SPFX3_FEAR		0x0000004L  /* as dropped scroll of scare monster */
+#define SPFX3_NOCNT		0x0000008L  /* doesn't count towards  created artifact total */
+#define SPFX3_MANDALA	0x0000010L	/* (r)ead object to benifit as from unihorn ONLY CHECKED FOR SHIRTS */
+
+#define	WSFX_LIGHTEN	0x0000001L	/* when worn, increases the weight you can haul. Currently only includes
+										Shirts, Cloaks, and body armor.  See do_wear.c and hack.c */
+#define	WSFX_WCATRIB	0x0000002L	/* when worn above armor, increases Cha.  Under armor, increases Wis. */
+#define	WSFX_PLUSSEV	0x0000004L	/* Enchant to +7 max. */
+
+///////////////////
+//To be implemented
+#define SPFX2_NINJA		0x0000008L	/* throws from 1-your skill level ninja stars after each attack */
+#define SPFX2_STEAL		0x0040000L  /* steals stuff */
+
+
+/*Necronomicon flags*/
+//	-Summon 
+#define	S_BYAKHEE		0x0000001L
+#define	S_NIGHTGAUNT	0x0000002L
+#define	S_SHOGGOTH		0x0000004L
+#define	S_OOZE			0x0000008L
+//	-Spells
+#define	SP_PROTECTION	0x0000010L
+#define	SP_TURN_UNDEAD	0x0000020L
+
+#define	SP_FORCE_BOLT	0x0000040L
+#define	SP_DRAIN_LIFE	0x0000080L
+#define	SP_DEATH		0x0000100L
+
+#define	SP_DETECT_MNSTR	0x0000200L
+#define	SP_CLAIRVOYANCE	0x0000400L
+#define	SP_DETECT_UNSN	0x0000800L
+#define	SP_IDENTIFY		0x0001000L
+
+#define	SP_CONFUSE		0x0002000L
+#define	SP_CAUSE_FEAR	0x0004000L
+
+#define	SP_LEVITATION	0x0008000L
+
+#define	SP_STONE_FLESH	0x0010000L
+
+#define	SP_CANCELLATION	0x0020000L
+
+#define	SP_COMBAT	0x0040000L
+#define	SP_HEALTH	0x0080000L
+
+#define	SUM_DEMON	0x0100000L
+#define	S_DEVIL		0x0200000L
+
+#define	R_SIGN		0x0400000L
+#define	R_EYE		0x0800000L
+#define	R_CIRCLE	0x1000000L
+
+#define	LAST_PAGE	0x2000000L
+
+//	-Summon 
+#define	SELECT_BYAKHEE		1
+#define	SELECT_NIGHTGAUNT	SELECT_BYAKHEE + 1
+#define	SELECT_SHOGGOTH		SELECT_NIGHTGAUNT + 1
+#define	SELECT_OOZE			SELECT_SHOGGOTH + 1
+#define	SELECT_DEMON		SELECT_OOZE + 1
+#define	SELECT_DEVIL		SELECT_DEMON + 1
+//	-Spells
+#define	SELECTED_SPELL		SELECT_DEVIL + 1
+#define	SELECT_PROTECTION	SELECTED_SPELL
+#define	SELECT_TURN_UNDEAD	SELECT_PROTECTION + 1
+
+#define	SELECT_FORCE_BOLT	SELECT_TURN_UNDEAD + 1
+#define	SELECT_DRAIN_LIFE	SELECT_FORCE_BOLT + 1
+#define	SELECT_DEATH		SELECT_DRAIN_LIFE + 1
+
+#define	SELECT_DETECT_MNSTR	SELECT_DEATH + 1
+#define	SELECT_CLAIRVOYANCE	SELECT_DETECT_MNSTR + 1
+#define	SELECT_DETECT_UNSN	SELECT_CLAIRVOYANCE + 1
+#define	SELECT_IDENTIFY		SELECT_DETECT_UNSN + 1
+
+#define	SELECT_CONFUSE		SELECT_IDENTIFY + 1
+#define	SELECT_CAUSE_FEAR	SELECT_CONFUSE + 1
+
+#define	SELECT_LEVITATION	SELECT_CAUSE_FEAR + 1
+
+#define	SELECT_STONE_FLESH	SELECT_LEVITATION + 1
+
+#define	SELECT_CANCELLATION	SELECT_STONE_FLESH + 1
+
+#define	SELECTED_SPECIAL	SELECT_CANCELLATION + 1
+#define	SELECT_COMBAT		SELECTED_SPECIAL
+#define	SELECT_HEALTH		SELECT_COMBAT + 1
+
+
+#define SELECT_STUDY		SELECT_HEALTH + 1
+
+#define SELECT_WHISTLE		1
+#define SELECT_LEASH		SELECT_WHISTLE + 1
+#define SELECT_SADDLE		SELECT_LEASH + 1
+#define SELECT_TRIPE		SELECT_SADDLE + 1
+#define SELECT_APPLE		SELECT_TRIPE + 1
+#define SELECT_BANANA		SELECT_APPLE + 1
+
+struct artifact {
+	short	    otyp;
+	const char  *name;
+	unsigned long spfx;	/* special effect from wielding/wearing */
+	unsigned long cspfx;	/* special effect just from carrying obj */
+	unsigned long mtype;	/* monster type, symbol, or flag */
+	struct attack attk, defn, cary;
+	uchar	    inv_prop;	/* property obtained by invoking artifact */
+	aligntyp    alignment;	/* alignment of bequeathing gods */
+	short	    role;	/* character role associated with */
+	short	    race;	/* character race associated with */
+	long        cost;	/* price when sold to hero (default 100 x base cost) */
+	unsigned long spfx2;	/* special effect from wielding/wearing (expanded list) */
+	unsigned long cspfx3;	/* special effect just from carrying obj (expanded list)*/
+	unsigned long wpfx;		/* special effect from wearing obj (expanded list)*/
+};
+
+/* invoked properties with special powers */
+#define TAMING		(LAST_PROP+1)
+#define HEALING		(LAST_PROP+2)
+#define ENERGY_BOOST	(LAST_PROP+3)
+#define UNTRAP		(LAST_PROP+4)
+#define CHARGE_OBJ	(LAST_PROP+5)
+#define LEV_TELE	(LAST_PROP+6)
+#define CREATE_PORTAL	(LAST_PROP+7)
+#define ENLIGHTENING	(LAST_PROP+8)
+#define CREATE_AMMO	(LAST_PROP+9)
+#define SMOKE_CLOUD    (LAST_PROP+10)
+#define CANNONADE	(LAST_PROP+11)
+#define MAGICALDEVICE	(LAST_PROP+12)
+#define SHADOW_FLARE	(LAST_PROP+13)
+#define BLIZAGA	(LAST_PROP+14)
+#define FIRAGA	(LAST_PROP+15)
+#define THUNDAGA	(LAST_PROP+16)
+#define QUAKE	(LAST_PROP+17)
+#define PETMASTER	(LAST_PROP+18)
+#define LEADERSHIP	(LAST_PROP+19)//from GreyKnight's Clarent mod
+#define BLESS	(LAST_PROP+20)
+#define SEVENFOLD	(LAST_PROP+21)
+#define SATURN	(LAST_PROP+22)
+#define PLUTO	(LAST_PROP+23)
+#define SPEED_BANKAI	(LAST_PROP+24)
+#define ICE_SHIKAI	(LAST_PROP+25)
+#define FIRE_SHIKAI	(LAST_PROP+26)
+#define MANDALA	(LAST_PROP+27)
+#define DRAIN_MEMORIES	(LAST_PROP+28)
+#define SLAY_LIVING	(LAST_PROP+29)
+#define NECRONOMICON	(LAST_PROP+30)
+#define DANCE_DAGGER	(LAST_PROP+31)
+#define SING_SPEAR	(LAST_PROP+32)
+
+#define CountsAgainstGifts(x)	!(artilist[x].cspfx3 & SPFX3_NOCNT)
+							/*(x != ART_WATER_CRYSTAL && \
+								x != ART_FIRE_CRYSTAL && \
+								x != ART_EARTH_CRYSTAL && \
+								x != ART_AIR_CRYSTAL && \
+								x != ART_WEREBUSTER && \
+								!(x >= ART_FIRST_KEY_OF_LAW && x <= ART_THIRD_KEY_OF_NEUTRALITY) && \
+								x != ART_CARESS && \
+								x != ART_ICONOCLAST \
+								) //checks to make sure x isn't the index of an artifact that doesn't count against
+									//the odds of getting a sac gift.  These are the alignment keys and a few
+									//auto-generated artifacts of dubious worth.
+									*/
+#define is_nameable_artifact(a) (\
+			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\
+			|| (a == &artilist[ART_SNICKERSNEE] && Role_if(PM_TOURIST) && (u.ulevel > 18 || u.uevent.qcompleted) )\
+			|| (a == &artilist[ART_KUSANAGI_NO_TSURUGI] && Role_if(PM_SAMURAI) && u.ulevel >= 22 )\
+			|| (a == &artilist[ART_GRANDMASTER_S_ROBE] && P_SKILL(P_MARTIAL_ARTS) >= P_GRAND_MASTER )\
+			|| (a == &artilist[ART_STAFF_OF_THE_ARCHMAGI] && Role_if(PM_WIZARD) && u.ulevel == 30 )\
+			|| (a == &artilist[ART_ROBE_OF_THE_ARCHMAGI] && Role_if(PM_WIZARD) && u.ulevel == 30 )\
+			|| (a == &artilist[ART_HAT_OF_THE_ARCHMAGI] && Role_if(PM_WIZARD) && u.ulevel == 30 )\
+			|| (a == &artilist[ART_FIRST_KEY_OF_CHAOS] && \
+							(exist_artifact(SKELETON_KEY,artilist[ART_THIRD_KEY_OF_CHAOS].name) \
+							||  u.ualign.type == A_CHAOTIC ) \
+				)\
+)
+
+#endif /* ARTIFACT_H */

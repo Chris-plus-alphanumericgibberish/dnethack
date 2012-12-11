@@ -1,0 +1,226 @@
+#	SCCS Id: @(#)tower.des	3.4	1990/02/26
+#	Copyright (c) 1989 by Jean-Christophe Collet
+# NetHack may be freely redistributed.  See license for details.
+#
+# Upper stage of Vlad's tower
+MAZE:"tower1",' '
+FLAGS: noteleport,hardfloor
+GEOMETRY:half-left,center
+MAP
+  --- --- ---  
+  |.| |.| |.|  
+---S---S---S---
+|.......+.+...|
+---+-----.-----
+|.....\.|.+.|  
+---+-----.-----
+|.......+.+...|
+---S---S---S---
+  |.| |.| |.|  
+  --- --- ---  
+ENDMAP
+LADDER:(11,05),down
+# The lord and his court
+MONSTER:'V',"Vlad the Impaler",(06,05)
+MONSTER:'V',"Carmilla",(01,05)
+MONSTER:'V',"Mina Harker",(02,05)
+MONSTER:'V',"Ilona Szilagy",(07,05)
+MONSTER:'V',random,(03,09)
+MONSTER:'V',random,(07,09)
+MONSTER:'V',random,(11,09)
+MONSTER:'V',random,(03,01)
+MONSTER:'V',random,(07,01)
+MONSTER:'V',random,(11,01)
+# The doors
+DOOR:closed,(08,03)
+DOOR:closed,(10,03)
+DOOR:closed,(03,04)
+DOOR:locked,(10,05)
+DOOR:locked,(08,07)
+DOOR:locked,(10,07)
+DOOR:closed,(03,06)
+# treasures
+OBJECT:'(',"chest",(07,05)
+OBJECT:'(',"chest",(03,09)
+OBJECT:'(',"chest",(07,09)
+OBJECT:'(',"chest",(11,09)
+OBJECT:'(',"chest",(03,01)
+OBJECT:'(',"chest",(07,01)
+OBJECT:'(',"chest",(11,01)
+# We have to protect the tower against outside attacks
+NON_DIGGABLE:(00,00,14,10)
+
+
+# Intermediate stage of Vlad's tower
+MAZE:"tower2",' '
+FLAGS: noteleport,hardfloor
+GEOMETRY:half-left,center
+MAP
+  --- --- ---  
+  |.| |.| |.|  
+---S---S---S---
+|.S.........S.|
+-S-.------+----
+|.|......|..|  
+-S------.------
+|.S......+..S.|
+---S---S---S---
+  |.| |.| |.|  
+  --- --- ---  
+ENDMAP
+# Random places are the 10 niches
+RANDOM_PLACES:(03,01),(07,01),(11,01),(01,03),(13,03),
+	      (01,07),(13,07),(03,09),(07,09),(11,09)
+LADDER:(11,05),up
+LADDER:(03,07),down
+DOOR:locked,(10,04)
+DOOR:locked,(09,07)
+MONSTER:'&',random,place[0]
+MONSTER:'&',random,place[1]
+MONSTER:'d',"hell hound pup",place[2]
+MONSTER:'d',"hell hound pup",place[3]
+MONSTER:'d',"winter wolf",place[4]
+CONTAINER:'(',"chest",place[5]
+OBJECT:'"',"amulet of life saving",contained
+CONTAINER:'(',"chest",place[6]
+OBJECT:'"',"amulet of strangulation",contained
+OBJECT:'[',"water walking boots",place[7]
+OBJECT:'[',"crystal plate mail",place[8]
+OBJECT:'+',"invisibility",place[9]
+OBJECT:'!',"water",(01,05),blessed,0
+# Walls in the tower are non diggable
+NON_DIGGABLE:(00,00,14,10)
+
+
+# Bottom most stage of Vlad's tower
+MAZE:"tower3",' '
+FLAGS: noteleport,hardfloor
+GEOMETRY:half-left,center
+MAP
+    --- --- ---  
+    |.| |.| |.|    
+  ---S---S---S---
+  |.S.........S.|  
+-----.........-----
+|...|.........+...|
+|.---.........---.|
+|.|.S.........S.|.|
+|.---S---S---S---.|
+|...|.|.|.|.|.|...|
+---.---.---.---.---
+  |.............|  
+  ---------------  
+ENDMAP
+# Random places are the 10 niches
+RANDOM_PLACES:(05,01),(09,01),(13,01),(03,03),(15,03),
+	      (03,07),(15,07),(05,09),(09,09),(13,09)
+LADDER:(02,05),down
+LADDER:(05,07),up
+# Entry door is, of course, locked
+DOOR:locked,(14,05)
+# Let's put cerberus behind the door, just for the fun...
+# He was meant to go in hell, but fits the semi-Castlevania theme OK.
+MONSTER:'d',"Cerberus",(13,05), hostile
+MONSTER:random,random,(12,04)
+MONSTER:random,random,(12,06)
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+OBJECT:')',"long sword",place[0]
+TRAP:random,place[0]
+OBJECT:'(',"lock pick",place[1]
+TRAP:random,place[1]
+OBJECT:'[',"elven cloak",place[2]
+TRAP:random,place[2]
+OBJECT:'(',"blindfold",place[3]
+TRAP:random,place[3]
+# Walls in the tower are non diggable
+NON_DIGGABLE:(00,00,18,12)
+
+
+# Grounds and entrance to Vlad's tower
+MAZE:"tower4",' '
+FLAGS: noteleport,hardfloor
+MESSAGE:"You are standing on the surface, albeit at the bottom of a shear ravine.  You hear ravens croaking in the trees, beyond which rise a windowless tower."
+
+GEOMETRY:center,center
+#          1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1                              .......................PPPPPP.......          
+2                            ..T.......T..T.....T..T.PPPPPP..........        
+3                          .....T...................PPPPPP......T......      
+4  ---------------       ....T.......T....T...T......PPPPP.T.............    
+5  |.............|     .....T....T.....T....T.........PPPPP....T...T.......  
+6---.-----------.---  ..........................T......PPPPPT............... 
+7|...|. ..... .|...| ..T..T...T..T......T..T.........T...PPPPP.............. 
+8|.---.........---.| ..............T..T........T..........PPPPP..T.......... 
+9|.|#+. ..... .S#|.| .......T........................T.....PPPPP............ 
+0|.-----------+-S-.|....T......T.....T....T....T.......T..PPPPP..T.......... 
+1|...|#########|...|......T.T....T......T.................##P#P##........... 
+2---S|#-------------..T............T........T..T......T...#P#P###..T...T.... 
+3}}|.F#########+|}}|......T..T....T....T.............T......PPPPP........... 
+4}}---+---+---+--FFF.....T......T...........T..............PPPPP..T...T..... 
+5 }}|..| |.| |..|}}    ....T.........T..........T........T.PPPPP......T....  
+6 }}-SF---F---F--}}     ........T........T...T....T.....T..PPPPP.T.......    
+7  }}}}}}}}}}}}}}}.      B...T.....T...........T..........PPPPPP...T...      
+8   }}}}}}}}}}}}}. . . ..   .....T...T....T.........T..T.PPPPPP.T....        
+9     ....  ..... . . .       .................T........PPPPPP.....          
+0         ..                                                                 
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#          1         2         3         4         5         6         7
+
+NON_DIGGABLE:(00,00,75,20)
+
+DRAWBRIDGE:(16,13),west,closed
+DRAWBRIDGE:(17,13),east,open
+DOOR:closed,(14,13)
+
+DOOR:locked,(13,14)
+DOOR:locked,(09,14)
+DOOR:locked,(05,14)
+
+DOOR:locked,(13,10)
+DOOR:locked,(04,09)
+
+REGION:(40,10,40,10),  lit,"ordinary",unfilled,true
+REGION:(68,10,68,10),  lit,"ordinary",unfilled,true
+
+BRANCH:(73,10,73,10),(00,00,00,00)
+LADDER:(03,11),up
+
+MONSTER:'@',"maid",(09,08), hostile, "Persephone"
+MONSTER:'@',"nurse",(08,08), hostile, "Nyx"
+MONSTER:'@',"werewolf",(10,08), hostile
+
+MONSTER:'i',"legion devil grunt",(03,13), hostile
+
+MONSTER:'Z',"elf zombie",(05,15), hostile
+MONSTER:'Z',"elf zombie",(04,15), hostile
+MONSTER:'Z',"skeleton",(09,15), hostile
+MONSTER:'Z',"skeleton",(13,15), hostile
+MONSTER:'Z',"gnome zombie",(14,15), hostile
+
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',"human zombie",random, hostile
