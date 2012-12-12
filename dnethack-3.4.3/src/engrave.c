@@ -1058,8 +1058,10 @@ int
 doengward()
 {
     char c = 'n';
-	c = yn_function("Do you want to scribe a warding sign?",
-					ynqchars, 'q');
+	if(u.wardsknown){
+		c = yn_function("Do you want to scribe a warding sign?",
+						ynqchars, 'q');
+	}
 	if(c == 'y') doward();
 	else if(c=='n') doengrave();
 	else return 0;
