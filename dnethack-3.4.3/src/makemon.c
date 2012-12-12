@@ -926,6 +926,7 @@ register struct	monst	*mtmp;
 //			switch(monsndx(ptr)) {
 //			case 
 //			}
+//		break;
 	    case S_NYMPH:
 		if(!rn2(2)) (void) mongets(mtmp, MIRROR);
 		if(!rn2(2)) (void) mongets(mtmp, POT_OBJECT_DETECTION);

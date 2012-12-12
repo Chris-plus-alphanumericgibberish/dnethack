@@ -2725,7 +2725,7 @@ struct permonst _mons2[] = {
 	M1_BREATHLESS|M1_FLY|M1_HUMANOID|M1_UNSOLID,
 	M2_UNDEAD|M2_STALK|M2_HOSTILE, 0, CLR_BLACK),
     MON("phantasm", S_WRAITH,//13 //needs quote
-	LVL(10, 12, 0, 30, -10), (G_NOCORPSE|G_LGROUP|1),
+	LVL(10, 12, 0, 30, -10), (G_HELL|G_NOCORPSE|G_LGROUP|3),
 	A(ATTK(AT_TUCH, AD_SLEE, 1, 1),
 	  ATTK(AT_TUCH, AD_CURS, 1, 1),
 	  ATTK(AT_TUCH, AD_SEDU, 1, 1), 
@@ -3378,7 +3378,7 @@ is a red right hand
  * (major) demons
  */
     MON("water demon", S_DEMON,//11
-	LVL(8, 12,-4, 30, -7), (G_NOCORPSE|G_NOGEN),//needs citation
+	LVL(8, 12,-4, 30, -7), (G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_WEAP, AD_PHYS, 1, 3), ATTK(AT_CLAW, AD_PHYS, 1, 3),
 	  ATTK(AT_BITE, AD_PHYS, 1, 3), NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_HUMAN, 400, 0, MS_DJINNI, MZ_HUMAN), MR_FIRE|MR_POISON, 0,

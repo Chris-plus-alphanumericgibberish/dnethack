@@ -752,7 +752,7 @@ skip_invent_check:
 			    if (canseemon(mtmp)) pline("%s shoots at you!", Monnam(mtmp));
 				m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
 					BOLT_LIM + rngmod, qvr);
-			    nomul(0);
+			    /*nomul(0);*/ //Copy paste error?
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		}
 	}

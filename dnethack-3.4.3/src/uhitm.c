@@ -240,8 +240,13 @@ struct monst *mtmp;
 	if (Role_if(PM_KNIGHT) && u.ualign.type == A_LAWFUL &&
 	    (!mtmp->mcanmove || mtmp->msleeping ||
 		(mtmp->mflee && !mtmp->mavenge))){
-			if(u.ualign.record > -10) {
-			    You("caitiff!");
+		    You("caitiff!");
+			if(u.ualign.record > 10) {
+			    adjalign(-2); //slightly stiffer penalty
+				u.ualign.sins++;
+				u.hod++;
+			}
+			else if(u.ualign.record > -10) {
 			    adjalign(-2); //slightly stiffer penalty
 			}
 			else{
@@ -1013,11 +1018,13 @@ int thrown;
 	    if(nopoison < 2) nopoison = 2;
 	    if Role_if(PM_SAMURAI) {
 			You("dishonorably use a poisoned weapon!");
-//			adjalign(-sgn(u.ualign.type));
 			adjalign(-sgn(u.ualign.type)*5); //stiffer penalty
+			u.ualign.sins++;
+			u.hod++;
 	    } else if ((u.ualign.type == A_LAWFUL) && (u.ualign.record > -10)) {
 			You_feel("like an evil coward for using a poisoned weapon.");
 			adjalign(-2);//stiffer penalty
+			if(rn2(2)) u.hod++;
 	    }
 	    if (obj && !rn2(nopoison) && !arti_poisoned(obj)) {
 			obj->opoisoned = FALSE;

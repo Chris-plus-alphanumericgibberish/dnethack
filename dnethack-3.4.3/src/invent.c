@@ -577,6 +577,20 @@ register struct obj *obj;
 		 */
 		return;
 	}
+
+	if (obj == uwep) uwepgone();
+	else if (obj == uswapwep) uswapwepgone();
+	else if (obj == uquiver) uqwepgone();
+	else if (obj == uarm) setnotworn(obj);
+	else if (obj == uarmc) setnotworn(obj);
+	else if (obj == uarmh) setnotworn(obj);
+	else if (obj == uarms) setnotworn(obj);
+	else if (obj == uarmg) setnotworn(obj);
+#ifdef TOURIST
+	else if (obj == uarmu) setnotworn(obj);
+#endif
+	else if (obj == uarmf) setnotworn(obj);
+
 	update_map = (obj->where == OBJ_FLOOR);
 	obj_extract_self(obj);
 	if (update_map) newsym(obj->ox, obj->oy);

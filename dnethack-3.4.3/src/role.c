@@ -501,7 +501,6 @@ const struct Align aligns[] = {
 	{"balance",	"neutral",	"Neu",	ROLE_NEUTRAL,	A_NEUTRAL},
 	{"chaos",	"chaotic",	"Cha",	ROLE_CHAOTIC,	A_CHAOTIC},
 	{"evil",	"unaligned",	"Una",	0,		A_NONE}
-//	{"lost",	"unknown",	"Old",	0,		A_UNKNOWN},
 };
 
 STATIC_DCL char * FDECL(promptsep, (char *, int));

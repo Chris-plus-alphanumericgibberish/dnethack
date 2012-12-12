@@ -30,8 +30,10 @@ stoned_dialogue()
 {
 	register long i = (Stoned & TIMEOUT);
 
-	if (i > 0L && i <= SIZE(stoned_texts))
+	if (i > 0L && i <= SIZE(stoned_texts)) {
 		pline(stoned_texts[SIZE(stoned_texts) - i]);
+		nomul(0); /* fix for C343-74 */
+	}
 	if (i == 5L)
 		HFast = 0L;
 	if (i == 3L)
@@ -213,7 +215,7 @@ nh_timeout()
 	    	pline("%s stops galloping.", Monnam(u.usteed));
 	}
 #endif
-//	pline("ping");
+
 	for(upp = u.uprops; upp < u.uprops+SIZE(u.uprops); upp++)
 	    if((upp->intrinsic & TIMEOUT) && !(--upp->intrinsic & TIMEOUT)) {
 		switch(upp - u.uprops){

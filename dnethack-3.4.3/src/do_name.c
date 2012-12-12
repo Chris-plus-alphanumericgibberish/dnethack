@@ -926,7 +926,7 @@ static const char * const bogusmons[] = {
 	"andalite",					/* Animorphs */
 	"yithian", "elder thing", "old one", "great old one", "outer god", "other god", "elder god", /* Lovecraft */
 	"eyeless albino penguin", /* More Lovecraft */
-	"shadow girl",		/* Shadowgirls */
+	"shadowgirl",		/* Shadowgirls */
 	"Luggage",				/* Discworld */
 	"Ent",					/* Lord of the Rings */
 	"tangle tree", "nickelpede", "wiggle",	/* Xanth */
@@ -969,7 +969,105 @@ static const char * const bogusmons[] = {
 	"mother-in-law", 		/* common pests */
 	"visible stalker",		/* occupational hazard */
 	"Minosaur", "vestigal virgin", "octagenarian", "Mary of the Immaculate Contraption", /*non campus mentus*/
-	"arsassin"				/* Psych */
+	"arsassin",				/* Psych */
+        "one-winged dewinged stab-bat",  /* KoL */
+        "praying mantis",
+        "arch-pedant",
+        "beluga whale",
+        "bluebird of happiness",
+        "bouncing eye", "floating nose",
+        "buffer overflow", "dangling pointer", "walking disk drive",
+        "cacodemon", "scrag",
+        "cardboard golem", "duct tape golem",
+        "chess pawn",
+        "chicken",
+        "chocolate pudding",
+        "coelacanth",
+        "corpulent porpoise",
+        "Crow T. Robot",
+        "diagonally moving grid bug",
+        "dropbear",
+        "Dudley",
+        "El Pollo Diablo",
+        "evil overlord",
+        "existential angst",
+        "figment of your imagination", "flash of insight",
+        "flying pig",
+        "gazebo",
+        "gonzo journalist",
+        "gray goo", "magnetic monopole",
+        "heisenbug",
+        "lag monster",
+        "loan shark",
+        "Lord British",
+        "newsgroup troll",
+        "ninja pirate zombie robot",
+        "octarine dragon",
+        "particle man",
+        "possessed waffle iron",
+        "poultrygeist",
+        "raging nerd",
+        "roomba",
+        "sea cucumber",
+        "spelling bee",
+        "Strong Bad",
+        "stuffed raccoon puppet",
+        "tapeworm",
+        "liger",
+        "velociraptor",
+        "vermicious knid",
+        "viking",
+        "voluptuous ampersand",
+        "wee green blobbie",
+        "wereplatypus",
+        "zergling",
+	"hag of bolding",
+	"blancmange",
+	"killer beet",
+	"land octopus",
+	"frog prince",
+	"slow loris",
+	"dust speck",
+	"kitten prospecting robot",
+	"angry mariachi",
+	"manbearpig",
+	"star-nosed mole",
+	"acid blog",
+	"guillemet",
+	"solidus",
+	"obelus",
+
+        "apostrophe golem", "Bob the angry flower",
+        "bonsai-kitten", "Boxxy", "lonelygirl15",
+        "tie-thulu", "Domo-kun",
+        "looooooooooooong cat",                 /* internet memes */
+        "bohrbug", "mandelbug", "schroedinbug", /* bugs */
+        "Gerbenok",                             /* Monty Python killer rabbit */
+        "doenertier",                           /* Erkan & Stefan */
+        "Invisible Pink Unicorn",
+        "Flying Spaghetti Monster",             /* deities */
+        "Bluebear", "Professor Abdullah Nightingale",
+        "Qwerty Uiop", "troglotroll",           /* Zamonien */
+        "wolpertinger", "elwedritsche", "skvader",
+        "Nessie", "tatzelwurm", "dahu",         /* european cryptids */
+        "three-headed monkey",                  /* Monkey Island */
+        "little green man",                     /* modern folklore */
+        "weighted Companion Cube",              /* Portal */
+        "/b/tard",                              /* /b/ */
+        "manbearpig",                           /* South Park */
+        "ceiling cat", "basement cat",
+        "monorail cat",                         /* the Internet is made for cat pix */
+        "rape golem",                           /* schnippi */
+        "tridude",                              /* POWDER */
+        "orcus cosmicus",                       /* Radomir Dopieralski */
+        "yeek", "quylthulg",
+        "Greater Hell Beast",                   /* Angband */
+        "Vendor of Yizard",                     /* Souljazz */
+        "Sigmund", "lernaean hydra", "Ijyb",
+        "Gloorx Vloq", "Blork the orc",         /* Dungeon Crawl Stone Soup */
+        "unicorn pegasus kitten",               /* Wil Wheaton, John Scalzi */
+
+	"nyan cat"
 };
 
 

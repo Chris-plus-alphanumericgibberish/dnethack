@@ -56,7 +56,7 @@ d_level *dlev;
 
 	for(j = 0; j < 9-lev/3; j++)
 		objects[first+j].oc_prob = 0;
-	j=0;//turned off gem limitation by dungeon level. Then turned it back on.
+	/*j=0;*/ //turned off gem limitation by dungeon level. Then turned it back on.
 	first += j;
 	if (first > LAST_GEM || objects[first].oc_class != GEM_CLASS ||
 	    OBJ_NAME(objects[first]) == (char *)0) {

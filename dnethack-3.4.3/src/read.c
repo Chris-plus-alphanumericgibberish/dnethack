@@ -959,8 +959,10 @@ register struct obj	*sobj;
 		otmp = some_armor(&youmonst);
 		if(confused) {
 			if(!otmp) {
-//				strange_feeling(sobj,"Your %s itch.",body_part(BONES));
-				strange_feeling(sobj,"Your bones itch.");
+				char tempBuff[BUFSZ];
+				Sprintf(tempBuff, "Your %s itch.", body_part(BONES));
+				strange_feeling(sobj,tempBuff);
+//				strange_feeling(sobj,"Your bones itch.");
 				exercise(A_STR, FALSE);
 				exercise(A_CON, FALSE);
 				return(1);

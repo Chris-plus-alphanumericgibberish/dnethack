@@ -2075,7 +2075,6 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    case PM_ARGENTUM_GOLEM:
 			    case PM_IRON_GOLEM:
 			    case PM_CENTER_OF_ALL:
-//			    case PM_SAURON_THE_IMPRISONED:
 			    case PM_CHAOS:
 			    case PM_GREAT_CTHULHU:
 			    case PM_DEMOGORGON:
@@ -2748,7 +2747,6 @@ register boolean force, here, forcelethe;
 			&& (!uarmc->cursed || rn2(3))) {
 		    continue;
 		} else {
-//			pline("ping!");
 		    /* The Lethe strips blessed and cursed status... */
 		    if (is_lethe) {
 				uncurse(obj);

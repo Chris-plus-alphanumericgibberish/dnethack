@@ -768,8 +768,9 @@ cast_protection()
 			      hgolden);
 		else
 		    pline_The("%s around you begins to shimmer with %s haze.",
-			/*[ what about being inside solid rock while polyd? ]*/
-			(Underwater || Is_waterlevel(&u.uz)) ? "water" : "air",
+			      (Underwater || Is_waterlevel(&u.uz)) ? "water" :
+			       u.uswallow ? mbodypart(u.ustuck, STOMACH) :
+			       IS_STWALL(levl[u.dx][u.dy].typ) ? "stone" : "air",
 			      an(hgolden));
 	    }
 	    u.uspellprot += gain;
@@ -931,7 +932,6 @@ boolean atme;
 	case SPE_CONE_OF_COLD:
 	case SPE_FIREBALL:
 	    if (role_skill >= P_SKILLED) { //if you're skilled, do meteor storm version of spells
-//		  Sprintf(confirm, "Cast advanced spell?");
 		  if(yn("Cast advanced spell?") == 'y'){
 	        if (throwspell()) {
 			    cc.x=u.dx;cc.y=u.dy;

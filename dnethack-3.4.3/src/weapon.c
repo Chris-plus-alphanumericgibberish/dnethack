@@ -234,9 +234,6 @@ struct monst *mon;
 		case TWO_HANDED_SWORD:	tmp += d(2,6); break;
 		case LONG_SWORD:	
 			if(otmp->oartifact == ART_TOBIUME) tmp -= 3; 
-//			else if(otmp->oartifact == ART_VORPAL_BLADE){
-//				tmp += rnd(12) + 1;
-//			}
 		break;
 		case WAR_HAMMER:
 			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4); break;
@@ -260,9 +257,6 @@ struct monst *mon;
 
 		case LONG_SWORD:	
 			if(otmp->oartifact == ART_TOBIUME) tmp -= 2;
-//			else if(otmp->oartifact == ART_VORPAL_BLADE){
-//				tmp += rnd(8) + 1;
-//			}
 		break;
 		case BATTLE_AXE:
 		case BARDICHE:

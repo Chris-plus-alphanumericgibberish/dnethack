@@ -265,24 +265,19 @@ register boolean mod;
 		    if(otmp->otyp == RIN_INCREASE_DAMAGE) otmp->spe = 0;
 		    artiexist[m] = mod;
 			if(otmp->oartifact == ART_DRAGON_PLATE){
-//				pline("Platinum Dragon Plate detected");
 				otmp->owt = (int)(otmp->owt * 1.5); //450
 			}
 			if(otmp->oartifact == ART_EARTH_CRYSTAL){
-//				pline("Earth crystal detected");
 				otmp->owt = (int)(otmp->owt * 2); //300
 			}
 			if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS){
-//				pline("rod of seven parts detected");
 				u.RoSPkills = 7;//number of hits untill you gain a +
 				u.RoSPflights = 0;//number of flights remaining
 			}
 			if(get_artifact(otmp)->inv_prop == SPEED_BANKAI){
-//				pline("sode no shirayuki detected");
 				u.ZangetsuSafe = u.ulevel;//turns for which you can use Zangetsu safely
 			}
 			if(get_artifact(otmp)->inv_prop == ICE_SHIKAI){
-//				pline("sode no shirayuki detected");
 				u.SnSd1 = 0;//turn on which you can reuse the first dance
 				u.SnSd2 = 0;//turn on which you can reuse the second dance
 				u.SnSd3 = 0;//turn on which you can reuse the third dance
@@ -1633,7 +1628,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 							  mbodypart(mdef,NECK));
 						pline("It blows apart in the wind.");
 						*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
-//						pline("%s cuts %s in half!", wepdesc, mon_nam(mdef));
 						otmp->dknown = TRUE;
 						return TRUE;
 					}
@@ -2526,7 +2520,7 @@ arti_invoke(obj)
 //Ruat Coelum, Fiat Justitia.  Ecce!  Lex Rex!:  Though heaven falls, let justice be done.  See!  Law is King!  Heals you fully, calls pets, casts charm monster.  Fourteen charges.
 		getlin("Speak your incantation:", buf);
 			if(!*buf || *buf == '\033'){
-				if( rn2(2) ){
+				if( (d(1,20)-10) > 0 ){
 					exercise(A_WIS, FALSE);
 					obj->spe--;//lose charge for false invoke
 					pline("Your weapon has become more flawed.");

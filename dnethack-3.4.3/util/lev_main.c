@@ -517,10 +517,8 @@ char c;
 		  case '}'  : return(MOAT);
 		  case 'P'  : return(POOL);
 		  case 'L'  : return(LAVAPOOL);
-//		  case 'N'  : return(NIMBUS);
 		  case 'I'  : return(ICE);
 		  case 'W'  : return(WATER);
-//		  case 'Y'	: return (SKY);
 		  case 'T'	: return (TREE);
 		  case 'F'	: return (IRONBARS);	/* Fe = iron */
 	    }

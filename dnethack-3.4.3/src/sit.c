@@ -436,6 +436,7 @@ attrcurse()			/* remove a random INTRINSIC ability */
 		}
 	case 10: if (HProtection & INTRINSIC) {
 			HProtection &= ~INTRINSIC;
+			u.ublessed = 0; /* fix for C343-189 */
 			You_feel("vulnerable.");
 			break;
 		}
