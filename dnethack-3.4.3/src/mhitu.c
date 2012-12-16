@@ -4652,6 +4652,8 @@ register struct monst *mon;
 	boolean helpless = FALSE;
 	char qbuf[QBUFSZ];
 
+	if((ward_at(u.ux,u.uy) == ELDER_SIGN && num_wards_at(u.ux, u.uy) == 6)) return 0;
+	
 	if (unconscious()) {/*Note: is probably not going to be possible to be unconscious and enter this function*/
 		You("are having a horrible dream.");
 		boolean helpless = TRUE;

@@ -44,7 +44,10 @@ Note: max of 3 Gorgoneia on a square
 Note: max of 4 circles of acheron per square. Makes it a good emergency ward but a poor combat ward.
 Note: max of 6 hamsa on the square. Hamsa after the first two must be drawn in pairs
 Note: max of 6 elder signs per square. They form a more detailed, star shaped sign.
-Note: elder elemental eye becomes more potent at 5 and 7 copies
+Note: elder sign becomes more potent at 6 copies.
+Note: elder elemental eye becomes more potent at 5 and 7 copies.
+Note: Gorgoneia become more potent with each copy.
+Note: cartouche of the cat lord becomes more potent at 7 and 9 glyphs.
 */
 	xchar complete_wards; // functional
 	xchar scuffed_wards; // 90%

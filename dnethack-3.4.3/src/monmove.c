@@ -192,9 +192,10 @@ struct monst *mtmp;
 	if(complete <= 0) return FALSE;
 	else if(mtmp->isshk || mtmp->iswiz || 
 			is_rider(mtmp->data)) return FALSE;
-	else if(mtmp->data->mlet == S_FELINE &&
-			mvitals[PM_KITTEN].died == 0){
+	else if(mtmp->data->mlet == S_FELINE
+			){ /* && mvitals[PM_KITTEN].died == 0*/
 				mtmp->mpeaceful = TRUE;
+				mtmp->mhp = mtmp->mhpmax;
 			}
 	return 	mtmp->data == &mons[PM_BAT] ||
 			mtmp->data == &mons[PM_GIANT_BAT] ||
@@ -285,8 +286,15 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_MIND_FLAYER] ||
 			(mtmp->data == &mons[PM_MASTER_MIND_FLAYER] && complete == 6) ||
 			mtmp->data == &mons[PM_DEEP_ONE] ||
-			(mtmp->data == &mons[PM_DEEPER_ONE] && complete == 3) ||
-			(mtmp->data == &mons[PM_DEEPEST_ONE] && complete == 5) ||
+			mtmp->data == &mons[PM_DEEPER_ONE] ||
+			(mtmp->data == &mons[PM_DEEPEST_ONE] && complete == 6) ||
+			(mtmp->data == &mons[PM_JUIBLEX] && complete == 6) ||
+			(mtmp->data == &mons[PM_ZUGGTMOY] && complete == 6) ||
+			(mtmp->data == &mons[PM_PALE_NIGHT] && complete == 6) ||
+			(mtmp->data == &mons[PM_LEVIATHAN] && complete == 6) ||
+			(mtmp->data == &mons[PM_BAALPHEGOR] && complete == 6) ||
+			(mtmp->data == &mons[PM_VERIER] && complete == 6) ||
+			(mtmp->data == &mons[PM_DAGON] && complete == 6) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && complete == 6 && !rn2(3)) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU] && complete == 6) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST] && complete == 6) ||
@@ -322,11 +330,8 @@ struct monst *mtmp;
 		) return FALSE;
 	return 	(mtmp->data == &mons[PM_HELL_HOUND] || 
 			mtmp->data == &mons[PM_HELL_HOUND_PUP] ||
-			mtmp->data == &mons[PM_GARGOYLE] || 
-			mtmp->data == &mons[PM_WINGED_GARGOYLE] ||
 			is_golem(mtmp->data) ||
 			mtmp->data->mlet == S_ANGEL ||
-			mtmp->data->mlet == S_ELEMENTAL ||
 			mtmp->data->mlet == S_KETER ||
 			mtmp->data->mlet == S_QUANTMECH ||
 			mtmp->data->mlet == S_IMP ||
@@ -350,6 +355,12 @@ struct monst *mtmp;
 		) return FALSE;
 	return 	(mtmp->data == &mons[PM_HELL_HOUND] || 
 			mtmp->data == &mons[PM_HELL_HOUND_PUP] ||
+			mtmp->data == &mons[PM_GARGOYLE] || 
+			mtmp->data == &mons[PM_WINGED_GARGOYLE] ||
+			mtmp->data == &mons[PM_DJINNI] ||
+			mtmp->data == &mons[PM_SANDESTIN] ||
+			mtmp->data == &mons[PM_SALAMANDER] ||
+			mtmp->data->mlet == S_ELEMENTAL ||
 			mtmp->data->mlet == S_KETER ||
 			mtmp->data->mlet == S_IMP ||
 			is_demon(mtmp->data));
@@ -1228,7 +1239,7 @@ not_special:
 	/* unicorn may not be able to avoid hero on a noteleport level */
 	if ((is_unicorn(ptr) || ptr == &mons[PM_UVUUDAUM]) && !level.flags.noteleport) flag |= NOTONL;
 	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
-	if (passes_bars(ptr)) flag |= ALLOW_BARS;
+	if (passes_bars(ptr) && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz)) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
 	if (is_human(ptr) || ptr == &mons[PM_MINOTAUR]) flag |= ALLOW_SSM;
 	if (is_undead(ptr) && ptr->mlet != S_GHOST) flag |= NOGARLIC;
@@ -1464,7 +1475,7 @@ postmov:
 			if (*in_rooms(mtmp->mx, mtmp->my, SHOPBASE))
 			    add_damage(mtmp->mx, mtmp->my, 0L);
 		    }
-		} else if (levl[mtmp->mx][mtmp->my].typ == IRONBARS) {
+		} else if (levl[mtmp->mx][mtmp->my].typ == IRONBARS && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz))) {
 		    if ( (dmgtype(ptr,AD_RUST) && ptr != &mons[PM_NAIAD]) || dmgtype(ptr,AD_CORR)) {
 				if (canseemon(mtmp)) {
 					pline("%s eats through the iron bars.", 

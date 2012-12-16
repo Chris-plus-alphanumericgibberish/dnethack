@@ -183,7 +183,7 @@ const int wardStrokes[][7] = {
 	{6,10,8, 8,8,8, 8},
 	{5,5,5, 5,5,5, 5},
 	{8,8,8, 8,8,8, 8},
-	{7,7,7, 7,7,7, 7},
+	{7,5,6, 7,5,4, 7},
 	{10,10,10, 10,10,10, 10}
 };
 
@@ -232,12 +232,13 @@ const char * wardText[][7] =  {
 		"a quadruply reinforced sign of the Scion Queen Mother",
 		"a quintuply reinforced sign of the Scion Queen Mother", 
 		"a sextuply reinforced sign of the Scion Queen Mother"},
-	{"a cartouche of the Cat Lord", "a reinforced cartouche of the Cat Lord", 
-		"a doubly reinforced cartouche of the Cat Lord", 
-		"a triply reinforced cartouche of the Cat Lord", 
-		"a quadruply reinforced cartouche of the Cat Lord",
-		"a quintuply reinforced cartouche of the Cat Lord", 
-		"a sextuply reinforced cartouche of the Cat Lord"},
+	{"a one-hieroglyph partial cartouche of the Cat Lord", 
+		"a two-hieroglyph partial cartouche of the Cat Lord", 
+		"a three-hieroglyph partial cartouche of the Cat Lord", 
+		"a five-hieroglyph partial cartouche of the Cat Lord", 
+		"a six-hieroglyph partial cartouche of the Cat Lord",
+		"a seven-hieroglyph partial cartouche of the Cat Lord", 
+		"a nine-hieroglyph completed cartouche of the Cat Lord"},
 	{"a rudamentary rendition of the wings of Garuda",
 		"a almost passable rendition of the wings of Garuda", 
 		"a passable rendition of the wings of Garuda",
@@ -257,10 +258,10 @@ const char * wardNames[][2] = {
 	{"elder sign", "elder signs"},
 	{"elder elemental eye", "elder elemental eyes"},
 	{"sign of the Scion Queen Mother", "signs of the Scion Queen Mother"},
-	{"a cartouche of the Cat Lord", "cartouches of the Cat Lord"},
+	{"a hieroglyph", "hieroglyphs"},
 	{"wing of Garuda", "wings of Garuda"},
 };
-
+/* There is %s drawn here */
 const char * haluWard[] =  {
 	"", /* 0 index */
 	"a series of disconected lines", /* nondescript*/
@@ -318,11 +319,11 @@ const char * haluWard[] =  {
 	"a symbol of torment",
 	"a circle enclosing two colliding arrows",
 	"a pair of triangles, drawn tip to tip,",
-	"a stylized animal",
+	"a stylized beast",
 	"a triangle crowned by a single line",
 	"a simple image of many mountains",
 	"a sketch of a shining diamond",
-	"a tree rune",
+	"a tree-rune",
 	"an eight-toothed gear",
 	"a random scribble",
 	"a square with two small handles on opposite sides",
@@ -361,9 +362,9 @@ const char * haluWard[] =  {
 	"a running man", /* Exit */
 	"a one-and-zero", /* Power toggle */
 	"a thick soup of mist", "a pattern of squared circles", 
-	"a void", "a notable lack of images",
+	"a void", "a notable lack of images", "a stark absence of pictures", "nothing much",
 	"a convergence of parallel lines", "a sphere", /* How did you manage that? */
-	"a yin-yang", /* Taoist */
+	"a yin-yang", "a taijitu",/* Taoist */
 	"a hand of Eris", /* Discordian */
 	"an ichthus", "a Cross", /* Christian*/
 	"a fish with legs", "a fat fish", "a fish with tentacles, legs, and wings",
@@ -374,6 +375,8 @@ const char * haluWard[] =  {
 	"a wheel with eight spokes", /* Budhism */
 	"a rough circle enclosing an A", /* Anarchy */
 	"a Tree of Life", /* Kabbalah */
+	"a winged oak",
+	"a wheel cross", "a labyrinth",
 	"an Eye of Providence", "a pyramid surmounted by an eye", /* Christian */
 	"a one-way staircase",
 	"an a encircled by its own tail" /* meta */

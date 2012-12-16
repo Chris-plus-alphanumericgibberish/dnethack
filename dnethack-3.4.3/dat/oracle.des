@@ -4967,14 +4967,14 @@ ENDMAP
 
 MONSTER: '@', "werejackal", (03,01)
 MONSTER: '@', "wererat", (05,01)
-OBJECT:'`',"boulder",(05,02)
+#OBJECT:'`',"boulder",(05,02)
 MONSTER: '@', "werewolf", (07,01)
 #OBJECT:'`',"statue",(09,01),"darkness given hunger",1
 MONSTER: 'P', "darkness given hunger", (09,01)
-OBJECT:'`',"boulder",(09,02)
+#OBJECT:'`',"boulder",(09,02)
 #OBJECT:'`',"statue",(11,01),"shoggoth",1
 MONSTER: 'b', "shoggoth", (11,01)
-OBJECT:'`',"boulder",(11,02)
+#OBJECT:'`',"boulder",(11,02)
 MONSTER: 'd', "warg", (13,01)
 MONSTER: 'd', "anuban jackal", (15,01)
 MONSTER: 'e', "beholder", (17,01)

@@ -2787,7 +2787,7 @@ struct obj *obj;			/* object tossed/used */
 
 	    typ = levl[bhitpos.x][bhitpos.y].typ;
 	    if (typ == IRONBARS){
-		 if(obj->otyp==SPE_FORCE_BOLT || obj->otyp==WAN_STRIKING){
+		 if((obj->otyp==SPE_FORCE_BOLT || obj->otyp==WAN_STRIKING) && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz))){
 			char numbars;
 			struct obj *obj;
 			You_hear("a sharp crack!");
@@ -2804,8 +2804,8 @@ struct obj *obj;			/* object tossed/used */
 	    /* iron bars will block anything big enough */
 	    if ((weapon == THROWN_WEAPON || weapon == KICKED_WEAPON) &&
 		    typ == IRONBARS &&
-		    hits_bars(&obj, x - ddx, y - ddy,
-			      point_blank ? 0 : !rn2(5), 1)) {
+		    ((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&obj, x - ddx, y - ddy,
+			      point_blank ? 0 : !rn2(5), 1))) {
 		/* caveat: obj might now be null... */
 		bhitpos.x -= ddx;
 		bhitpos.y -= ddy;

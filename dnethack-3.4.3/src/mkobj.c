@@ -1598,7 +1598,7 @@ maid_clean(mon, obj)
 			obj->owornmask = (long)MIGR_RANDOM;
 			if(!oep){
 				make_engr_at(mon->mx, mon->my,
-			     "", 0L, DUST);
+			     "U G I EI A", 0L, MARK);
 				oep = engr_at(mon->mx,mon->my);
 			}
 			oep->ward_id = PENTAGRAM;

@@ -53,7 +53,8 @@
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
 #define Poison_resistance	(HPoison_resistance || EPoison_resistance || \
-				 resists_poison(&youmonst))
+				 resists_poison(&youmonst) || \
+				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) > rn2(7)))
 
 #define HAcid_resistance	u.uprops[POISON_RES].intrinsic
 #define EAcid_resistance	u.uprops[ACID_RES].extrinsic
@@ -62,14 +63,16 @@
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
 #define Drain_resistance	(HDrain_resistance || EDrain_resistance || \
-				 resists_drli(&youmonst))
+				 resists_drli(&youmonst) || \
+				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) >=5 ))
 
 /* Intrinsics only */
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic
 #define Sick_resistance		(HSick_resistance || \
 				 youmonst.data->mlet == S_FUNGUS || \
 				 youmonst.data == &mons[PM_GHOUL] || \
-				 defends(AD_DISE,uwep))
+				 defends(AD_DISE,uwep) || \
+				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) == 7))
 #define Invulnerable		u.uprops[INVULNERABLE].intrinsic    /* [Tom] */
 
 /* Extrinsics only */

@@ -311,7 +311,8 @@ m_throw(mon, x, y, dx, dy, range, obj)
 	    || IS_ROCK(levl[bhitpos.x+dx][bhitpos.y+dy].typ)
 	    || closed_door(bhitpos.x+dx, bhitpos.y+dy)
 	    || (levl[bhitpos.x + dx][bhitpos.y + dy].typ == IRONBARS &&
-		hits_bars(&singleobj, bhitpos.x, bhitpos.y, 0, 0))) {
+			((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, 0, 0)))
+		) {
 	    (void) drop_throw(singleobj, 0, bhitpos.x, bhitpos.y);
 	    return;
 	}
@@ -439,7 +440,7 @@ m_throw(mon, x, y, dx, dy, range, obj)
 			|| closed_door(bhitpos.x+dx, bhitpos.y+dy)
 			/* missile might hit iron bars */
 			|| (levl[bhitpos.x+dx][bhitpos.y+dy].typ == IRONBARS &&
-			hits_bars(&singleobj, bhitpos.x, bhitpos.y, !rn2(5), 0))
+				((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, !rn2(5), 0)))
 #ifdef SINKS
 			/* Thrown objects "sink" */
 			|| IS_SINK(levl[bhitpos.x][bhitpos.y].typ)
