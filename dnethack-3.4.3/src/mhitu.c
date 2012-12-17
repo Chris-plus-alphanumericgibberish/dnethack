@@ -1152,6 +1152,35 @@ hitmu(mtmp, mattk)
 		if (!diseasemu(mdat)) dmg = 0;
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_CHRN:{
+			long lcount = (long) rnd(100);
+
+			switch (rn2(6)) {
+				case 0:
+					make_sick(Sick ? Sick/3L + 1L : (long)rn1(ACURR(A_CON),20),
+					"cursed unicorn's horn", TRUE, SICK_NONVOMITABLE);
+				break;
+				case 1:
+					make_blinded(Blinded + lcount, TRUE);
+				break;
+				case 2: if (!Confusion)
+					You("suddenly feel %s.",
+						Hallucination ? "trippy" : "confused");
+					make_confused(HConfusion + lcount, TRUE);
+				break;
+				case 3:
+					make_stunned(HStun + lcount, TRUE);
+				break;
+				case 4:
+					(void) adjattrib(rn2(A_MAX), -1, FALSE);
+				break;
+				case 5: 
+					(void) make_hallucinated(HHallucination + lcount, TRUE, 0L);
+				break;
+			}
+		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_FIRE:
 		hitmsg(mtmp, mattk);
 		if (uncancelled) {

@@ -571,68 +571,66 @@ boolean artif;
 		 case 0:
 		 break;
 		 case 1:
-			if( !(rn2(4)) ) otmp->ovar1 = WARD_ACHERON;
-			else if( !(rn2(12)) ){
+			if( (rn2(3)) ) otmp->ovar1 = WARD_ACHERON;
+			else if( !(rn2(3)) ){
 				if( rn2(2) ) otmp->ovar1 = WARD_QUEEN;
 				else otmp->ovar1 = WARD_GARUDA;
 			}
 		 break;
 		 case 2:
-			if( !(rn2(6)) ){
+			if( rn2(2) ){
 				if( !(rn2(8)) ) otmp->ovar1 = WARD_EYE;
 				else if( rn2(2) ) otmp->ovar1 = WARD_QUEEN;
 				else otmp->ovar1 = WARD_GARUDA;
 			}
-			else if( !(rn2(3)) ) otmp->ovar1 = WARD_ACHERON;
+			else if( rn2(3) ) otmp->ovar1 = WARD_ACHERON;
 		 break;
 		 case 3:
-			if( !(rn2(6)) ){
-				if( !(rn2(4)) ) otmp->ovar1 = WARD_EYE;
-				else if( rn2(4) ) otmp->ovar1 = WARD_QUEEN;
-				else if( rn2(3) )otmp->ovar1 = WARD_GARUDA;
+			if( rn2(2) ){
+				if( !(rn2(5)) ) otmp->ovar1 = WARD_EYE;
+				else if( !(rn2(4)) ) otmp->ovar1 = WARD_QUEEN;
+				else if( !(rn2(3)) )otmp->ovar1 = WARD_GARUDA;
 				else if( rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
 				else otmp->ovar1 = WARD_CAT_LORD;
 			}
-			else if( !(rn2(3)) ) otmp->ovar1 = WARD_ACHERON;
+			else if( rn2(3) ) otmp->ovar1 = WARD_ACHERON;
 		 break;
 		 case 4:
-			if( !(rn2(4)) ){
-				if( !(rn2(4)) ) otmp->ovar1 = WARD_EYE;
+			if( rn2(4) ){
+				if( !(rn2(5)) ) otmp->ovar1 = WARD_EYE;
 				else if( !rn2(4) ) otmp->ovar1 = WARD_QUEEN;
 				else if( !rn2(3) )otmp->ovar1 = WARD_GARUDA;
 				else if( !rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
 				else otmp->ovar1 = WARD_CAT_LORD;
 			}
-			else if( !(rn2(3)) ) otmp->ovar1 = WARD_ACHERON;
+			else otmp->ovar1 = WARD_ACHERON;
 		 break;
 		 case 5:
 			if( !(rn2(4)) ){
 				if( !(rn2(2)) ) otmp->ovar1 = WARD_PENTAGRAM;
 				else otmp->ovar1 = WARD_HAMSA;
 			}
-			else if( !(rn2(6)) ){
-				if( !(rn2(4)) ) otmp->ovar1 = WARD_EYE;
-				else if( !rn2(4) ) otmp->ovar1 = WARD_QUEEN;
+			else if( (rn2(3)) ){
+				if( !(rn2(4)) ) otmp->ovar1 = WARD_QUEEN;
 				else if( !rn2(3) )otmp->ovar1 = WARD_GARUDA;
 				else if( !rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
 				else otmp->ovar1 = WARD_CAT_LORD;
 			}
-			else if( !(rn2(2)) ) otmp->ovar1 = WARD_ACHERON;
+			else otmp->ovar1 = WARD_EYE;
 		 break;
 		 case 6:
-			if( !(rn2(4)) ){
+			if( !(rn2(3)) ){
 				if( !(rn2(3)) ) otmp->ovar1 = WARD_PENTAGRAM;
 				else if( !rn2(2) )otmp->ovar1 = WARD_HEXAGRAM;
 				else otmp->ovar1 = WARD_HAMSA;
 			}
-			else if( !(rn2(6)) ){
-				if( !(rn2(4)) ) otmp->ovar1 = WARD_EYE;
-				else if( !rn2(4) ) otmp->ovar1 = WARD_QUEEN;
+			else if( (rn2(6)) ){
+				if( !(rn2(4)) ) otmp->ovar1 = WARD_QUEEN;
 				else if( !rn2(3) )otmp->ovar1 = WARD_GARUDA;
 				else if( !rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
 				else otmp->ovar1 = WARD_CAT_LORD;
 			}
-			else if( !(rn2(2)) ) otmp->ovar1 = WARD_ACHERON;
+			else otmp->ovar1 = WARD_EYE;
 		 break;
 		 case 7:
 			if( !(rn2(4)) ){

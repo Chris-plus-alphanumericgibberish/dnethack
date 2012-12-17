@@ -50,8 +50,8 @@ const char * wardDecode[] = {
 	"elder sign",
 	"elder elemental eye",
 	"sign of the Scion Queen Mother",
-	"a cartouche of the Cat Lord",
-	"wing of Garuda",
+	"cartouche of the Cat Lord",
+	"sketch of the wings of Garuda",
 };
 /* The roles[] table lists the role-specific values for tuning
  * percent_success().

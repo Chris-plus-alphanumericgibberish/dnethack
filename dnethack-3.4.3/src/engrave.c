@@ -163,6 +163,7 @@ static const char *haluMesg[] = {
 	"I SAW THE EYE. Over the horizon, like a rising sun!",
 	"That's Science, isn't it? The perpetual horizon.\nBut we found a way, haha, we found a way around that!",
 	"What would YOU give up to... to see it through?",
+	"Don't trust the skull.",
 	"Fall in a more hardboiled manner.",
 	"Since you are reading this, chances are you have already installed this game on your computer. If this is true, you have just participated in bringing about the end of the world. But don't beat yourself up about it.",
 	"YOU HATE TIME TRAVEL YOU HATE TIME TRAVEL YOU HATE....",
@@ -258,7 +259,7 @@ const char * wardNames[][2] = {
 	{"elder sign", "elder signs"},
 	{"elder elemental eye", "elder elemental eyes"},
 	{"sign of the Scion Queen Mother", "signs of the Scion Queen Mother"},
-	{"a hieroglyph", "hieroglyphs"},
+	{"hieroglyph", "hieroglyphs"},
 	{"wing of Garuda", "wings of Garuda"},
 };
 /* There is %s drawn here */
@@ -281,11 +282,10 @@ const char * haluWard[] =  {
 	"a yellow sign", /* The King in Yellow */
 	"a triangle enclosing a circle and bisected by a line", /* Harry Potter */
 	"a set of three trefoils, the lower most inverted", /* describes the three of clubs. Too Many Magicians*/
-	"a Trump of Doom", "a Sign of Chaos", "a Pattern of Amber",
+	"a Trump of Doom", "a Sign of Chaos", "a Pattern of Amber", "a Ghostwheel",
 	
 	/* Not quite */
 	"a heptagenarian",
-	"a mimir",
 	"an octogram",
 	"a pentagrain",
 	"a circle of da Vinci",
@@ -314,8 +314,9 @@ const char * haluWard[] =  {
 	"a screw attack symbol",
 	"more dakka",
 	
-	/* Planescape */
 	"a symbol of pain",
+	/* Planescape */
+	"a mimir",
 	"a symbol of torment",
 	"a circle enclosing two colliding arrows",
 	"a pair of triangles, drawn tip to tip,",
@@ -333,6 +334,20 @@ const char * haluWard[] =  {
 	"a set of four nested triangles",
 	"a watchful eye blocking an upward arrow",
 	"a pitchfork stabbing the ground",
+	
+	/* Zodiac */
+	"an Aries sign",
+	"a Taurus sign",
+	"a Gemini sign",
+	"a Cancer sign",
+	"a Leo sign",
+	"a Virgo sign",
+	"a Libra sign",
+	"a Scorpio sign",
+	"a Sagittarius sign",
+	"a Capricorn sign",
+	"an Aquarius sign",
+	"a Pisces sign",
 	
 	"a heart pierced through with an arrow",
 	"a broken heart",
@@ -360,6 +375,7 @@ const char * haluWard[] =  {
 	"a Swoosh mark",
 	"a set of five interlocked rings",
 	"a running man", /* Exit */
+	"a running man holding a cane",
 	"a one-and-zero", /* Power toggle */
 	"a thick soup of mist", "a pattern of squared circles", 
 	"a void", "a notable lack of images", "a stark absence of pictures", "nothing much",
@@ -376,7 +392,8 @@ const char * haluWard[] =  {
 	"a rough circle enclosing an A", /* Anarchy */
 	"a Tree of Life", /* Kabbalah */
 	"a winged oak",
-	"a wheel cross", "a labyrinth",
+	"a wheel cross", "a labyrinth", "sign of Shamash", 
+	"a naudh rune", /* misery */
 	"an Eye of Providence", "a pyramid surmounted by an eye", /* Christian */
 	"a one-way staircase",
 	"an a encircled by its own tail" /* meta */
