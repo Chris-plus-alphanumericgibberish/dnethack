@@ -2712,7 +2712,7 @@ arti_invoke(obj)
 					pseudo2->blessed = pseudo2->cursed = 0;
 					pseudo2->quan = 20L;			/* do not let useup get it */
 					pseudo3 = mksobj(SPE_CAUSE_FEAR, FALSE, FALSE);
-					pseudo3->blessed = pseudo->cursed = 0;
+					pseudo3->blessed = pseudo3->cursed = 0;
 					pseudo3->quan = 20L;			/* do not let useup get it */
 					if(u.ulevel > 13) pseudo3->blessed = TRUE;
 					if (!getdir((char *)0)) { //Oh, getdir must set the .d_ variables below.

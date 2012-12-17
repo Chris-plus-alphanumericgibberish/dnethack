@@ -1472,7 +1472,6 @@ register struct obj *o1, *o2;
 
 		swp = o1; o1 = o2; o2 = swp;
 	}
-
 	switch (o1->otyp) {
 		case POT_HEALING:
 			switch (o2->otyp) {
@@ -1551,7 +1550,6 @@ register struct obj *o1, *o2;
 
 	if (o2->otyp == POT_ACID && o1->oclass == GEM_CLASS) {
 	  char *potion_descr = NULL;
-
 	  /* Note: you can't create smoky, milky or clear potions */
 
 	  switch (o1->otyp) {
@@ -2306,7 +2304,7 @@ dodip()
 	}
 
 	potion->in_use = FALSE;		/* didn't go poof */
-	if ((obj->otyp == UNICORN_HORN || obj->otyp == GEM_CLASS) &&
+	if ((obj->otyp == UNICORN_HORN || obj->oclass == GEM_CLASS) &&
 	    (mixture = mixtype(obj, potion)) != 0) {
 		char oldbuf[BUFSZ], newbuf[BUFSZ];
 		short old_otyp = potion->otyp;
@@ -2335,7 +2333,6 @@ dodip()
 		  if (potion->otyp == POT_ACID && 
 		      (obj->otyp == DILITHIUM_CRYSTAL || 
 		       potion->cursed || !rn2(10))) {
-		    
 		    /* Just to keep them on their toes */
 			
 		    if (Hallucination && obj->otyp == DILITHIUM_CRYSTAL) {
@@ -2343,6 +2340,7 @@ dodip()
 		      pline("Warning, Captain! The warp core has been breached!");
 		    }
 		    pline("BOOM! %s explodes!", The(xname(singlegem)));
+			if(obj->otyp == DILITHIUM_CRYSTAL) tele();
 		    exercise(A_STR, FALSE);
 		    if (!breathless(youmonst.data) || haseyes(youmonst.data))
 		      potionbreathe(singlepotion);

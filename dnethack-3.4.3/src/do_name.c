@@ -964,6 +964,7 @@ static const char * const bogusmons[] = {
 	"Cylon",				/* Battlestar Galactica */
 	"Vorlon",				/* Babylon 5 */
 	"Mondoshawan",			/* Fifth Element */
+	"Tralfamadorian",		/* Slaghterhous 5 */
 	"questing beast",		/* King Arthur */
 	"Predator",				/* Movie */
 	"mother-in-law", 		/* common pests */
