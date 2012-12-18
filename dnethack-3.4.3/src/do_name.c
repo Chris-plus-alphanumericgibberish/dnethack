@@ -938,6 +938,7 @@ static const char * const bogusmons[] = {
 	"Totoro",				/* Tonari no Totoro */
 	"ohmu",					/* Nausicaa */
 	"youma",				/* Sailor Moon */
+	"Lone Power", 			/* So you want to be a Wizard? */
 	"electric boid", "feral waffle-iron", "Bowman's wolf", "worried machine", "omniquantalist", 
 		"squid in a space-suit", /* Freefall */
 	"carbosilicate amorph", "debatably-sapient kreely", "viral boy-band", /* Schlock Mercenary */
@@ -964,7 +965,8 @@ static const char * const bogusmons[] = {
 	"Cylon",				/* Battlestar Galactica */
 	"Vorlon",				/* Babylon 5 */
 	"Mondoshawan",			/* Fifth Element */
-	"Tralfamadorian",		/* Slaghterhous 5 */
+	"Tralfamadorian",		/* Slaghterhouse 5 */
+	"RIME", "Ch'Thone","palaeotech","wheeler","spindle king", "kung", "shand", /* Strata */
 	"questing beast",		/* King Arthur */
 	"Predator",				/* Movie */
 	"mother-in-law", 		/* common pests */
