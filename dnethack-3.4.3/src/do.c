@@ -996,17 +996,19 @@ boolean at_stairs, falling, portal;
 	 * up a set of stairs sometimes does some very strange things!
 	 * Biased against law and towards chaos, but not nearly as strongly
 	 * as it used to be (prior to 3.2.0).
-	 * Odds:	    old				    new
-	 *	"up"    L      N      C		"up"    L      N      C
-	 *	 +1   75.0   75.0   75.0	 +1   75.0   75.0   75.0
-	 *	  0    0.0   12.5   25.0	  0    6.25   8.33  12.5
-	 *	 -1    8.33   4.17   0.0	 -1    6.25   8.33  12.5
-	 *	 -2    8.33   4.17   0.0	 -2    6.25   8.33   0.0
-	 *	 -3    8.33   4.17   0.0	 -3    6.25   0.0    0.0
+	 * Odds:	    old				    nethack				         dnethack
+	 *	"up"    L      N      C		"up"    L      N      C		"up"    L      N      C 
+	 *	 +1   75.0   75.0   75.0	 +1   75.0   75.0   75.0	 +1   66.66  66.66  66.6
+	 *	  0    0.0   12.5   25.0	  0    0.0   12.5   25.0	  0    8.33  11.11  16.6
+	 *	 -1    8.33   4.17   0.0	 -1    8.33   4.17   0.0	 -1    8.33  11.11  16.6
+	 *	 -2    8.33   4.17   0.0	 -2    8.33   4.17   0.0	 -2    8.33  11.11   0.0
+	 *	 -3    8.33   4.17   0.0	 -3    8.33   4.17   0.0	 -3    8.33   0.0    0.0
 	 */
 	if (Inhell && up && u.uhave.amulet && !newdungeon && !portal &&
-				(dunlev(&u.uz) < dunlevs_in_dungeon(&u.uz)-3)) {
-		if (!rn2(4)) {
+				(dunlev(&u.uz) < dunlevs_in_dungeon(&u.uz)-3) &&
+				(u.uz.dlevel < wiz1_level.dlevel) &&
+				(u.uz.dlevel > valley_level.dlevel) ) {
+		if (!rn2(3)) {
 		    int odds = 3 + (int)u.ualign.type,		/* 2..4 */
 			diff = odds <= 1 ? 0 : rn2(odds);	/* paranoia */
 

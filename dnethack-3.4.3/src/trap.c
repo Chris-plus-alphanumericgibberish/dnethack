@@ -15,6 +15,8 @@ STATIC_DCL void FDECL(move_into_trap, (struct trap *));
 STATIC_DCL int FDECL(try_disarm, (struct trap *,BOOLEAN_P));
 STATIC_DCL void FDECL(reward_untrap, (struct trap *, struct monst *));
 STATIC_DCL int FDECL(disarm_holdingtrap, (struct trap *));
+STATIC_DCL int FDECL(disarm_rust_trap, (struct trap *));
+STATIC_DCL int FDECL(disarm_fire_trap, (struct trap *));
 STATIC_DCL int FDECL(disarm_landmine, (struct trap *));
 STATIC_DCL int FDECL(disarm_squeaky_board, (struct trap *));
 STATIC_DCL int FDECL(disarm_shooting_trap, (struct trap *, int));
@@ -352,9 +354,12 @@ boolean td;	/* td == TRUE : trap door or hole */
 	    ;	/* KMH -- You can't escape the Sokoban level traps */
 	else if(Levitation || u.ustuck || !Can_fall_thru(&u.uz)
 	   || Flying || is_clinger(youmonst.data)
+	   || (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP)
 	   || (Inhell && !u.uevent.invoked &&
 					newlevel == dunlevs_in_dungeon(&u.uz))
 		) {
+		if (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP)            
+		pline("But thanks to your trusty whip ...");
 	    dont_fall = "don't fall in.";
 	} else if (youmonst.data->msize >= MZ_HUGE) {
 	    dont_fall = "don't fit through.";
@@ -813,6 +818,14 @@ unsigned trflags;
 		    You("are covered with rust!");
 		    if (Half_physical_damage) dam = (dam+1) / 2;
 		    losehp(dam, "rusting away", KILLED_BY);
+		    break;
+		} else if (u.umonnum == PM_FLAMING_SPHERE) {
+		    int dam = u.mhmax;
+
+		    pline("%s you!", A_gush_of_water_hits);
+		    You("are extinguished!");
+		    if (Half_physical_damage) dam = (dam+1) / 2;
+		    losehp(dam, "drenching", KILLED_BY);
 		    break;
 		} else if (u.umonnum == PM_GREMLIN && rn2(3)) {
 		    pline("%s you!", A_gush_of_water_hits);
@@ -1415,8 +1428,11 @@ int style;
 		if ((mtmp = m_at(bhitpos.x, bhitpos.y)) != 0) {
 			if (otyp == BOULDER && throws_rocks(mtmp->data)) {
 			    if (rn2(3)) {
+				if (cansee(bhitpos.x, bhitpos.y))
 				pline("%s snatches the boulder.",
 					Monnam(mtmp));
+				else
+				    You_hear("a rumbling stop abruptly.");
 				singleobj->otrapped = 0;
 				(void) mpickobj(mtmp, singleobj);
 				used_up = TRUE;
@@ -1895,6 +1911,12 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 				mondied(mtmp);
 				if (mtmp->mhp <= 0)
 					trapkilled = TRUE;
+			} else if (mptr == &mons[PM_FLAMING_SPHERE]) {
+				if (in_sight)
+				    pline("%s is extinguished!", Monnam(mtmp));
+				mondied(mtmp);
+				if (mtmp->mhp <= 0)
+					trapkilled = TRUE;
 			} else if (mptr == &mons[PM_GREMLIN] && rn2(3)) {
 				(void)split_mon(mtmp, (struct monst *)0);
 			}
@@ -1909,6 +1931,10 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			else if (see_it)  /* evidently `mtmp' is invisible */
 			    You("see a %s erupt from the %s!",
 				tower_of_flame, surface(mtmp->mx,mtmp->my));
+			if (Slimed) {
+				pline("The slime that covers you is burned away!");
+				Slimed = 0;
+			}
 
 			if (resists_fire(mtmp)) {
 			    if (in_sight) {
@@ -2470,6 +2496,10 @@ struct obj *box;	/* null for floor trap */
 	pline("A %s %s from %s!", tower_of_flame,
 	      box ? "bursts" : "erupts",
 	      the(box ? xname(box) : surface(u.ux,u.uy)));
+	if (Slimed) {        
+	      pline("The slime that covers you is burned away!");
+	      Slimed = 0;
+	}
 	if (Fire_resistance) {
 	    shieldeff(u.ux, u.uy);
 	    num = rn2(2);
@@ -2719,7 +2749,7 @@ register boolean force, here, forcelethe;
 	   pieces of armor may get affected by the water */
 	for (; obj; obj = otmp) {
 		otmp = here ? obj->nexthere : obj->nobj;
-//		pline("loop");
+
 		(void) snuff_lit(obj);
 
 		if(obj->otyp == CAN_OF_GREASE && obj->spe > 0) {
@@ -2737,7 +2767,6 @@ register boolean force, here, forcelethe;
 			 *	awful luck (Luck<-4):  100%
 			 *  If this is the Lethe, things are much worse.
 			 */
-//			pline("ping3");
 			continue;
 		/* An oil skin cloak protects your body armor  */
 		} else if( obj->oclass == ARMOR_CLASS
@@ -3361,8 +3390,59 @@ struct trap *ttmp;
 	return 1;
 }
 
+STATIC_OVL int
+disarm_rust_trap(ttmp) /* Paul Sonier */
+struct trap *ttmp;
+{
+	xchar trapx = ttmp->tx, trapy = ttmp->ty;
+	int fails = try_disarm(ttmp, FALSE);
+
+	if (fails < 2) return fails;
+	You("disarm the water trap!");
+	deltrap(ttmp);
+	levl[trapx][trapy].typ = FOUNTAIN;
+	newsym(trapx, trapy);
+	level.flags.nfountains++;
+	return 1;
+}
+
 /* getobj will filter down to cans of grease and known potions of oil */
 static NEARDATA const char oil[] = { ALL_CLASSES, TOOL_CLASS, POTION_CLASS, 0 };
+static NEARDATA const char disarmpotion[] = { ALL_CLASSES, POTION_CLASS, 0 };
+
+/* water disarms, oil will explode */
+STATIC_OVL int
+disarm_fire_trap(ttmp) /* Paul Sonier */
+struct trap *ttmp;
+{
+	int fails;
+	struct obj *obj;
+	boolean bad_tool;
+
+	obj = getobj(disarmpotion, "untrap with");
+	if (!obj) return 0;
+
+	if (obj->otyp == POT_OIL)
+	{
+		Your("potion of oil explodes!");
+		splatter_burning_oil(ttmp->tx,ttmp->ty);
+		delobj(obj);
+		return 1;
+	}
+
+	bad_tool = (obj->cursed ||
+				(obj->otyp != POT_WATER));
+	fails = try_disarm(ttmp, bad_tool);
+	if (fails < 2) return fails;
+
+	useup(obj);
+	makeknown(POT_WATER);
+	You("manage to extinguish the pilot light!");
+	cnv_trap_obj(POT_OIL, 4 - rnl(4), ttmp);
+	more_experienced(1, 5);
+	newexplevel();
+	return 1;
+}
 
 /* it may not make much sense to use grease on floor boards, but so what? */
 STATIC_OVL int
@@ -3627,6 +3707,10 @@ boolean force;
 				return disarm_shooting_trap(ttmp, DART);
 			case ARROW_TRAP:
 				return disarm_shooting_trap(ttmp, ARROW);
+			case RUST_TRAP:
+				return disarm_rust_trap(ttmp);
+			case FIRE_TRAP:
+				return disarm_fire_trap(ttmp);
 			case PIT:
 			case SPIKED_PIT:
 				if (!u.dx && !u.dy) {

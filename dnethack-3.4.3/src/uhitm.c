@@ -247,7 +247,7 @@ struct monst *mtmp;
 				u.hod++;
 			}
 			else if(u.ualign.record > -10) {
-			    adjalign(-2); //slightly stiffer penalty
+			    adjalign(-5); //slightly stiffer penalty
 			}
 			else{
 				u.ualign.sins++;//if your alignment is low, it will stay low

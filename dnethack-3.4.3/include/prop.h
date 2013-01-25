@@ -74,7 +74,8 @@
 #define WARN_OF_MON		65
 #define DETECT_MONSTERS		66
 #define SPELLBOOST		67
-#define LAST_PROP		(SPELLBOOST)
+#define CARCAP		68
+#define LAST_PROP		(CARCAP)
 
 /*** Where the properties come from ***/
 /* Definitions were moved here from obj.h and you.h */

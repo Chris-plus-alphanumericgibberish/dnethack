@@ -97,7 +97,7 @@ A("Grimtooth",			ORCISH_DAGGER, //needs quote
 	0, A_CHAOTIC, NON_PM, PM_ORC, 300L, 
 	0,0,0),
 
-A("Slave to Armok",			DWARVISH_MATTOCK, /* Amber Evil that destroys other evils */ /*two handed, so no twoweaponing.*/
+A("Slave to Armok",			DWARVISH_MATTOCK, /*two handed, so no twoweaponing.*/
 	(SPFX_DFLAG2), 0, (M2_ELF|M2_LORD|M2_PEACEFUL|M2_ORC), /*DF Dwarves can be a nasty lot.*/
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	0, A_LAWFUL, NON_PM, PM_DWARF, 2500L, 
@@ -130,20 +130,20 @@ A("Giantslayer",		AXE, //needs quote
 	0, A_NONE, NON_PM, NON_PM, 2000L, 
 	0,0,0),
 
-A("Vampire Killer",			BULLWHIP, //needs quote
+A("Vampire Killer",			BULLWHIP,
 	(SPFX_RESTR|SPFX_DFLAG2), 0, (M2_UNDEAD|M2_DEMON|M2_WERE), /* some standard castlevainia enemy types*/
 	PHYS(10,20),	DRLI(0,0),	NO_CARY,	/*is given extra damage in weapon.c, since whip damage is so low*/
 	BLESS, A_LAWFUL, NON_PM, NON_PM, 2500L, /*Bless: no timeout, bless weapon, set fixed, repair erosion,*/
 	SPFX2_NOWERE,0,0),									/* and raise enchantment to +3. */
 
-A("Kingslayer",		STILETTO, //needs quote
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_DISPL|SPFX_WARN), 0, (M2_LORD|M2_PRINCE), /* works against just about all the late game badies */
+A("Kingslayer",		STILETTO,
+	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, (M2_LORD|M2_PRINCE), /* works against just about all the late game badies */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, NON_PM, 2500L, 
 	SPFX2_POISONED,0,0),
 
 A("Peace Keeper",		ATHAME, 
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_DISPL|SPFX_WARN), 0, (M2_HOSTILE), /* speaks for itself */
+	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, (M2_HOSTILE), /* speaks for itself */
 	PHYS(5,10),	NO_DFNS,	NO_CARY,	/*Weaker attack and damage */
 	0, A_NONE, NON_PM, NON_PM, 2500L, 
 	0,0,0),
@@ -176,17 +176,17 @@ A("Mjollnir",			WAR_HAMMER,		/* Mjo:llnir */
 	0, A_NEUTRAL, PM_VALKYRIE, NON_PM, 4000L, 
 	SPFX2_ELEC,0,0),
 
-A("Cleaver",			BATTLE_AXE, /* quote... sorta */
+A("Cleaver",			BATTLE_AXE,
 	SPFX_RESTR, 0, 0,
 	PHYS(3,0),	NO_DFNS,	NO_CARY,	
 	0, A_NEUTRAL, PM_BARBARIAN, NON_PM, 1500L, 
 	SPFX2_SHATTER,0,0),
 
 /*	Need a way to convert era times to Japanese luni-solar months.*/
-A("Kiku-ichimonji",		KATANA, /*quote (sorta) */
+A("Kiku-ichimonji",		KATANA,
 	SPFX_RESTR, 0, 0,
 	PHYS(1,12),	NO_DFNS,	NO_CARY,
-	0, A_LAWFUL, PM_SAMURAI, NON_PM, 1200L, /*Now this is the Samurai gift*/
+	0, A_LAWFUL, PM_SAMURAI, NON_PM, 1200L,
 	0,0,0), 
 
 /* Clarent patch (Greyknight): Note that Clarent's SPFX2_DIG gives it another +2 to hit against thick-skinned
@@ -219,7 +219,7 @@ A("Grayswandir",		SILVER_SABER,
 	0, A_LAWFUL, NON_PM, NON_PM, 8000L, 
 	0,0,0),
 
-A("Frost Brand",		LONG_SWORD, //needs quote
+A("Frost Brand",		LONG_SWORD,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN), 0, 0,
 	COLD(1,0),	COLD(0,0),	NO_CARY,	
 	0, A_NONE, NON_PM, NON_PM, 3000L, 
@@ -231,7 +231,7 @@ A("Fire Brand",			LONG_SWORD,
 	0, A_NONE, NON_PM, NON_PM, 3000L, 
 	0,0,0),
 
-A("Mirror Brand",	LONG_SWORD,		//needs quote
+A("Mirror Brand",	LONG_SWORD,	
 	(SPFX_ATTK|SPFX_RESTR|SPFX_DALIGN|SPFX_REFLECT), 0,0,
 	STUN(1,0),	NO_DFNS,	NO_CARY,
 	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
@@ -289,11 +289,11 @@ A("Lancea Longini",			SILVER_SPEAR,
 	WWALKING, A_LAWFUL, NON_PM, NON_PM, 1500L, 
 	0,SPFX3_ENGRV,0),
 
-A("The Arkenstone", DIAMOND,  /*by Aardvark Joe*/
-    SPFX_RESTR, (SPFX_CONFL|SPFX_REFLECT|SPFX_AGGRM), 0,//needs quote
+A("The Arkenstone", DIAMOND,
+    SPFX_RESTR, SPFX_AGGRM, 0,
     NO_ATTK, NO_DFNS, NO_CARY, 
-	0, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
-	0,0,0),
+	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
+	0,SPFX3_LIGHT,0),
 
 A("The Silence Glaive",		GLAIVE,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_DRLI), 0, 0, //needs quote
@@ -343,7 +343,7 @@ A("Lash of the Cold Waste",		BULLWHIP,
 	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
 	SPFX2_COLD2,0,0),
 
-A("Ramiel",			PARTISAN, /* Greg Landsman */
+A("Ramiel",			PARTISAN,
 	(SPFX_RESTR|SPFX_ATTK), 0, 0,
 	ELEC(4,1),	NO_DFNS,	NO_CARY,	/*Ramiel's ranged attack is far more useful than the lash and the limb*/
 	0, A_LAWFUL, NON_PM, NON_PM, 3000L, /*So it's your job to use it right!*/
@@ -398,7 +398,19 @@ A("Beastmaster's Duster",			LEATHER_JACKET, //needs quote
 A("Mirrorbright",			SHIELD_OF_REFLECTION,/*adapted from Slash'em*/
 	(SPFX_RESTR|SPFX_HALRES), 0, 0, //needs quote
 	NO_ATTK,	NO_DFNS,	NO_CARY,
-	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
+	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message
+	0,0,WSFX_PLUSSEV),
+
+A("Shield of the All-Seeing", ORCISH_SHIELD, //needs quote
+	(SPFX_RESTR|SPFX_SEEK|SPFX_SEARCH|SPFX_WARN), 0, M2_ELF,
+     NO_ATTK, DFNS(AD_FIRE), NO_CARY,
+	 PROT_FROM_SHAPE_CHANGERS, A_NONE, NON_PM, NON_PM, 3000L,//needs message
+	 0,0,WSFX_PLUSSEV),
+
+A("Shield of Yggdrasil", ELVEN_SHIELD, //needs quote
+	(SPFX_RESTR|SPFX_REGEN), 0, 0,
+     NO_ATTK, DFNS(AD_DRST), NO_CARY,
+	 HEALING, A_NONE, NON_PM, NON_PM, 3000L,
 	0,0,WSFX_PLUSSEV),
 
 A("Whisperfeet",			SPEED_BOOTS,/*adapted from Slash'em*/
@@ -406,6 +418,18 @@ A("Whisperfeet",			SPEED_BOOTS,/*adapted from Slash'em*/
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	INVIS, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
 	SPFX2_STLTH,0,WSFX_PLUSSEV),
+
+A("Water Flowers", WATER_WALKING_BOOTS,
+	(SPFX_RESTR|SPFX_DISPL), 0, 0, //needs quote
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	TELEPORT, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message
+	SPFX2_SILVERED,0,WSFX_PLUSSEV),
+
+A("Hammerfeet", KICKING_BOOTS,
+	(SPFX_RESTR), 0, 0, //needs quote
+	PHYS(1,0),	NO_DFNS,	NO_CARY,
+	0, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
+	SPFX2_RAM2,0,WSFX_PLUSSEV),
 
 A("Shield of the Resolute Heart",		GAUNTLETS_OF_DEXTERITY,
 	(SPFX_RESTR|SPFX_HPHDAM), 0, 0, //needs quote
@@ -426,15 +450,6 @@ A("Hellrider's Saddle",			SADDLE,
 	INVIS, A_NONE, NON_PM, NON_PM, 4000L, 
 	0,0),
  */
-	//A("Shield of the All-Seeing", ORCISH_SHIELD,
-//	(SPFX_RESTR), (SPFX_SEEK|SPFX_SEARCH|SPFX_WARN), M2_ELF,
-//     NO_ATTK, NO_DFNS, CARY(AD_FIRE),
-//	 PROT_FROM_SHAPE_CHANGERS, A_NONE, NON_PM, NON_PM, 3000L ),
-
-	//A("Grond", WAR_HAMMER,
-//  (SPFX_RESTR), 0, 0,
-//  (), NO_DFNS, NO_CARY, 0, A_CHAOTIC, NON_PM, NON_PM, 1500L),
-
 /*
  *	The artifacts for the quest dungeon, all self-willed.
  */
@@ -447,7 +462,7 @@ A("The Rod of Seven Parts",	SILVER_SPEAR, /*From D&D*/
 	SEVENFOLD,	A_LAWFUL, NON_PM, NON_PM, 7777L, 
 	0,0,0),
 
-A("Field Marshal's Baton",	MACE, //needs quote
+A("Field Marshal's Baton",	MACE,
 	(SPFX_NOGEN|SPFX_RESTR), SPFX_WARN, M2_MERC,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CANNONADE,	A_LAWFUL, NON_PM, NON_PM, 5000L, 
@@ -468,31 +483,31 @@ A("Masamune",			TSURUGI, //needs quote
 	SPFX2_SILVERED,SPFX3_NOCNT,0), /*does not count against artifacts generated*/
 
 A("The Black Crystal", CRYSTAL_BALL, /*from Final Fantasy*/
-        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_DALIGN|SPFX_WARN), 0, 0, //needs quote
+        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_DALIGN|SPFX_WARN), 0, 0,
         PHYS(3,0), NO_DFNS, CARY(AD_MAGM), 
 		SHADOW_FLARE, A_CHAOTIC, NON_PM, NON_PM, 100L, 
 		0,0,0), /*The crystals are generated together.  The Black Crystal counts, and the others don't.*/
 
 A("The Water Crystal", CRYSTAL_BALL,
-        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), 0, 0, //needs quote
+        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), 0, 0,
         NO_ATTK, NO_DFNS, COLD(0,0), 
 		BLIZAGA, A_NONE, NON_PM, NON_PM, 100L, 
 		0,SPFX3_NOCNT,0), /*does not count against artifacts generated*/
 
 A("The Fire Crystal", CRYSTAL_BALL,
-        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), 0, 0, //needs quote
+        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), 0, 0,
         NO_ATTK, NO_DFNS, FIRE(0,0), 
 		FIRAGA, A_NONE, NON_PM, NON_PM, 100L, 
 		0,SPFX3_NOCNT,0),
 
 A("The Earth Crystal", CRYSTAL_BALL,
-        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), SPFX_HPHDAM, 0, //needs quote
+        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), SPFX_HPHDAM, 0,
         NO_ATTK, NO_DFNS, NO_CARY, 
 		QUAKE, A_NONE, NON_PM, NON_PM, 100L, 
 		0,SPFX3_NOCNT,0),
 
 A("The Air Crystal", CRYSTAL_BALL,
-        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), 0, 0, //needs quote
+        (SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN), 0, 0,
         NO_ATTK, NO_DFNS, ELEC(0,0), 
 		THUNDAGA, A_NONE, NON_PM, NON_PM, 100L, 
 		0,SPFX3_NOCNT,0),
@@ -563,14 +578,14 @@ A("The Third Key of Neutrality", SKELETON_KEY, /*must be last*/
 /*//////////Neutral Quest Artifacts//////////*/
 
 A("The Necronomicon", SPE_SECRETS, /*from the works of HP Lovecraft*/
-	(SPFX_NOGEN|SPFX_RESTR), 0,0, //needs quote
+	(SPFX_NOGEN|SPFX_RESTR), 0,0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	NECRONOMICON,	A_NONE, NON_PM, NON_PM, 5000L, 
-	0,0,0),  /*polymorph control*/
+	0,0,0),
 
 A("The Silver Key", UNIVERSAL_KEY, /*from the works of HP Lovecraft*/
 	(SPFX_NOGEN|SPFX_RESTR), (SPFX_EREGEN|SPFX_SEARCH|SPFX_TCTRL),0,
-	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM), //needs quote
+	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	CREATE_PORTAL,	A_NEUTRAL, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_PCTRL,0),  /*polymorph control*/
 
@@ -638,7 +653,7 @@ A("The Longbow of Diana", BOW,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_REFLECT), SPFX_ESP, 0,
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	CREATE_AMMO, A_CHAOTIC, PM_RANGER, NON_PM, 4000L, 
-	SPFX2_SILVERED,0,0), /*silver is the moon's metal... bows don't enter this code...*/
+	SPFX2_SILVERED,0,0), /*silver is the moon's metal... but bows don't enter this code...*/
 
 A("The Master Key of Thievery", SKELETON_KEY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SPEAK),

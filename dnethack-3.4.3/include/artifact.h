@@ -62,13 +62,14 @@
 #define SPFX2_STLTH		0x0200000L	/* gives stealth when wielded or worn */
 #define SPFX2_SHATTER	0x0400000L	/* breaks opponents weapons */
 #define SPFX2_DISARM	0x0800000L	/* disarms opponents */
-#define SPFX2_SPELLUP	0x1000000L	/* disarms opponents */
+#define SPFX2_SPELLUP	0x1000000L	/* increases spell power */
 
 #define SPFX3_ENGRV		0x0000001L	/* Allows fast engraving (as for Athame) */
 #define SPFX3_PCTRL		0x0000002L	/* grants polymorph control (caried or wielded) */
 #define SPFX3_FEAR		0x0000004L  /* as dropped scroll of scare monster */
 #define SPFX3_NOCNT		0x0000008L  /* doesn't count towards  created artifact total */
 #define SPFX3_MANDALA	0x0000010L	/* (r)ead object to benifit as from unihorn ONLY CHECKED FOR SHIRTS */
+#define SPFX3_LIGHT		0x0000040L	/* always lit lightsource */
 
 #define	WSFX_LIGHTEN	0x0000001L	/* when worn, increases the weight you can haul. Currently only includes
 										Shirts, Cloaks, and body armor.  See do_wear.c and hack.c */
@@ -79,6 +80,7 @@
 //To be implemented
 #define SPFX2_NINJA		0x0000008L	/* throws from 1-your skill level ninja stars after each attack */
 #define SPFX2_STEAL		0x0040000L  /* steals stuff */
+#define SPFX3_CARCAP	0x0000020L	/* increases carrying capacity when carried */
 
 
 /*Necronomicon flags*/

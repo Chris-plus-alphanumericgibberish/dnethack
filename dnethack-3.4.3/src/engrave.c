@@ -170,6 +170,7 @@ static const char *haluMesg[] = {
 	"It begins to dawn on you that everything you just did may have been a colossal waste of time.",
 	"We will BUILD heroes!",
 	"If you replace the working parts, you get a different machine.",
+	"Never tell me the odds!",
 	"If you destroy the working parts, what you get is a broken machine."
 };
 
@@ -369,8 +370,10 @@ const char * haluWard[] =  {
 	"a work of modern art",
 	"a flag of Neverland",
 	"a hyped-up duck dressed in a sailor's shirt and hat",
+	"a mouse with 2d ears",
 	"a set of three circles in the shape of a mouse's head",
-	"a stylized fan-shaped seashell",
+	"a meaningless coincidence",
+	"a stylized, fan-shaped seashell",
 	"a pair of arches meeting to form an \"M\"",
 	"a Swoosh mark",
 	"a set of five interlocked rings",

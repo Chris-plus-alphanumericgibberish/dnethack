@@ -30,11 +30,13 @@ kickdmg(mon, clumsy)
 register struct monst *mon;
 register boolean clumsy;
 {
-	register int mdx, mdy;
-	register int dmg = ( ACURRSTR + ACURR(A_DEX) + ACURR(A_CON) )/ 15;
+	int mdx, mdy;
+	struct permonst *mdat = mon->data;
+	int dmg = ( ACURRSTR + ACURR(A_DEX) + ACURR(A_CON) )/ 15;
 	int kick_skill = P_NONE;
 	int blessed_foot_damage = 0;
 	boolean trapkilled = FALSE;
+	boolean silvermsg = FALSE, silverobj = FALSE;
 
 	if (uarmf && uarmf->otyp == KICKING_BOOTS)
 	    dmg += 5;
@@ -53,7 +55,12 @@ register boolean clumsy;
 		uarmf->blessed)
 	    blessed_foot_damage = 1;
 
-	if (mon->data == &mons[PM_SHADE] && !blessed_foot_damage) {
+	if (uarmf && (objects[uarmf->otyp].oc_material == SILVER || arti_silvered(uarmf) )
+		&& hates_silver(mdat)) {
+			dmg += rnd(20);
+			silvermsg = TRUE; silverobj = TRUE;
+	}
+	if (mon->data == &mons[PM_SHADE] && !blessed_foot_damage && !silverobj) {
 	    pline_The("%s.", kick_passes_thru);
 	    /* doesn't exercise skill or abuse alignment or frighten pet,
 	       and shades have no passive counterattack */
@@ -79,6 +86,7 @@ register boolean clumsy;
 		if (martial()) {
 		    if (dmg > 1) kick_skill = P_MARTIAL_ARTS;
 		    dmg += rn2(ACURR(A_DEX)/2 + 1);
+			if(uarmf && uarmf->oartifact) artifact_hit(&youmonst, mon, uarmf, &dmg, d(1,20));
 		}
 		/* a good kick exercises your dex */
 		exercise(A_DEX, TRUE);
@@ -88,6 +96,22 @@ register boolean clumsy;
 	dmg += u.udaminc;	/* add ring(s) of increase damage */
 	if (dmg > 0)
 		mon->mhp -= dmg;
+	if (silvermsg) {
+		const char *fmt;
+		char *whom = mon_nam(mon);
+		char silverobjbuf[BUFSZ];
+
+		if (canspotmon(mon)) {
+			fmt = "Your silver shoes sear %s!";
+		} else {
+		    *whom = highc(*whom);	/* "it" -> "It" */
+		    fmt = "%s is seared!";
+		}
+		/* note: s_suffix returns a modifiable buffer */
+		if (!noncorporeal(mdat))
+		    whom = strcat(s_suffix(whom), " flesh");
+		pline(fmt, whom);
+	}
 	if (mon->mhp > 0 && martial() && !bigmonst(mon->data) && !rn2(3) &&
 	    mon->mcanmove && mon != u.ustuck && !mon->mtrapped) {
 		/* see if the monster has a place to move into */

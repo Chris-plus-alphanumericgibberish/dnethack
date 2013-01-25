@@ -240,6 +240,7 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_FLAMING_SPHERE] ||
 			mtmp->data == &mons[PM_SHOCKING_SPHERE] ||
 			mtmp->data->mlet == S_FUNGUS ||
+			mtmp->data == &mons[PM_ZUGGTMOY] ||
 			mtmp->data->mlet == S_VORTEX ||
 			mtmp->data->mlet == S_ELEMENTAL ||
 			mtmp->data->mlet == S_XORN ||
@@ -289,7 +290,6 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_DEEPER_ONE] ||
 			(mtmp->data == &mons[PM_DEEPEST_ONE] && complete == 6) ||
 			(mtmp->data == &mons[PM_JUIBLEX] && complete == 6) ||
-			(mtmp->data == &mons[PM_ZUGGTMOY] && complete == 6) ||
 			(mtmp->data == &mons[PM_PALE_NIGHT] && complete == 6) ||
 			(mtmp->data == &mons[PM_LEVIATHAN] && complete == 6) ||
 			(mtmp->data == &mons[PM_BAALPHEGOR] && complete == 6) ||

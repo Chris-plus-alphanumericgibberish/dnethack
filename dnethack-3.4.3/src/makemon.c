@@ -1146,7 +1146,7 @@ register struct	monst	*mtmp;
 				(void) mongets(mtmp, SCR_GOLD_DETECTION);
 				(void) mongets(mtmp, POT_EXTRA_HEALING);
 			break;
-			case PM_FIRENNA:
+			case PM_FIERNA:
 				(void)mongets(mtmp, WAN_DIGGING);
 				(void) mongets(mtmp, POT_EXTRA_HEALING);
 			break;
@@ -1944,6 +1944,9 @@ register int	mmflags;
 			else if(mndx == PM_DEMOGORGON){ 
 				mtmp->mhpmax = 2*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
+			}
+			else if(mndx == PM_PALE_NIGHT){ 
+				mtmp->mextra[0] = 0;
 			}
 			if(mndx == PM_ANCIENT_OF_DEATH){
 			    mtmp->minvis = TRUE;

@@ -54,7 +54,7 @@
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
 #define Poison_resistance	(HPoison_resistance || EPoison_resistance || \
 				 resists_poison(&youmonst) || \
-				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) > rn2(7)))
+				 (ward_at(u.ux,u.uy) == WINGS_OF_GARUDA && num_wards_at(u.ux, u.uy) > rn2(7)))
 
 #define HAcid_resistance	u.uprops[POISON_RES].intrinsic
 #define EAcid_resistance	u.uprops[ACID_RES].extrinsic

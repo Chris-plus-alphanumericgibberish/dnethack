@@ -284,9 +284,16 @@ register boolean mod;
 				u.SnSd3duration = 0;//turn until which the weapon does full damage
 			}
 			if(get_artifact(otmp)->inv_prop == NECRONOMICON){
-//				pline("necronomicon detected");
 				otmp->ovar1 = 0;//ovar1 will be used to track special powers, via flags
 				otmp->spestudied = 0;//use to track number of powers discovered
+			}
+			if( arti_light(otmp) ){
+				if (otmp->where == OBJ_FREE){
+					place_object(otmp, u.ux, u.uy);  /* make it viable light source */
+					begin_burn(otmp, FALSE);
+					obj_extract_self(otmp);	 /* now release it for caller's use */
+				}
+				else begin_burn(otmp, FALSE);
 			}
 		    break;
 		}
@@ -3956,6 +3963,17 @@ artifact_light(obj)
 				 (obj->oartifact >= ART_SWORD_OF_ERATHAOL &&
 				  obj->oartifact <= ART_HAMMER_OF_BARQUIEL)
 				)
+			);
+}
+
+/* return TRUE if artifact is permanently lit */
+boolean
+arti_light(obj)
+    struct obj *obj;
+{
+	const struct artifact *arti = get_artifact(obj);
+    return	(arti && 
+				(arti->cspfx3 & SPFX3_LIGHT)
 			);
 }
 

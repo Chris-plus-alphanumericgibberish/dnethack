@@ -1634,7 +1634,7 @@ dopois:
 				steal(mtmp, buf);
 				return 1;
 			}
-			if ( (mdat == &mons[PM_FIRENNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
+			if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
 			if (is_animal(mtmp->data)) {
 				hitmsg(mtmp, mattk);
 					if (mtmp->mcan) break;
@@ -2687,7 +2687,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					steal(mtmp, buf);
 					return 1;
 				}
-				if ( (mdat == &mons[PM_FIRENNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
+				if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
 				if (is_animal(mtmp->data)) {
 					hitmsg(mtmp, mattk);
 						if (mtmp->mcan) break;
@@ -3316,7 +3316,7 @@ struct attack *mattk;
 		if(genagr == 1 - gendef) return 1;
 		else return 0;
 	}
-	else if(pagr == &mons[PM_FIRENNA]) return 2;
+	else if(pagr == &mons[PM_FIERNA]) return 2;
 	else if(pagr == &mons[PM_MALCANTHET] || pagr == &mons[PM_GRAZ_ZT]
 		 || pagr == &mons[PM_PALE_NIGHT]) return 1;
 	else return 0;
@@ -4688,7 +4688,7 @@ register struct monst *mon;
 		boolean helpless = TRUE;
 	}
 
-	if(mon->mextra[1]){
+	if(mon->mextra[0] == 1){
 		if (Blind) You_feel("cloth against your skin...");
 		else{
 			pline("The shroud dances as if in the wind. The %s figure beneath is almost exposed!", fem ? "shapely feminine" : "shapely masculine");
@@ -4696,31 +4696,29 @@ register struct monst *mon;
 		}
 	}
 	else{
-		mon->mextra[1] = 1;
+		mon->mextra[0] = 1;
 		if (Blind) You_feel("the brush of cloth...");
 		else{
 			You("see a %s form behind the shroud. It beckons you forwards.", fem ? "lithe, feminine," : "toned, masculine,");
-			if(rnd(ACURR(A_WIS)) > 10) You_feel("that it would be wise to stay away.");
+			if(rnd(10) + ACURR(A_WIS) - 10 > 6) You_feel("that it would be wise to stay away.");
 		}
 		return 0;
 	}
 
+	if (rn2(66) < 2*ACURR(A_WIS) - ACURR(A_INT) || helpless) {
+		int lifesaved = 0;
+		int wdmg = (int)(d(1,10)) + 1;
 	palemayberem(uarmc, cloak_simple_name(uarmc), helpless);
 	if(!uarmc)
 		palemayberem(uarm, "suit", helpless);
 	palemayberem(uarmf, "boots", helpless);
-	if(!uwep || !welded(uwep))
 		palemayberem(uarmg, "gloves", helpless);
 	palemayberem(uarms, "shield", helpless);
 	palemayberem(uarmh, "helmet", helpless);
-#ifdef TOURIST
+	#ifdef TOURIST
 	if(!uarmc && !uarm)
 		palemayberem(uarmu, "shirt", helpless);
-#endif
-
-	if (rn2(66) > 2*ACURR(A_WIS) - ACURR(A_INT)) {
-		int lifesaved = 0;
-		int wdmg = (int)(d(1,10)) + 1;
+	#endif
 		You("move to embrace %s, brushing aside the gossamer shroud hiding %s body from you.",
 			noit_Monnam(mon), fem ? "her" : "his");
 		if(rn2( (int)(ACURR(A_WIS)/2))){
@@ -4760,10 +4758,10 @@ register struct monst *mon;
 			exercise(A_WIS, FALSE);
 		}
 		if(AMAX(A_WIS) > ABASE(A_WIS)) AMAX(A_WIS) = (int)((AMAX(A_WIS) - ABASE(A_WIS))/2 + 1); //permanently drain wisdom
-		forget_levels(25);	/* lose memory of 10% of levels */
-		forget_objects(25);	/* lose memory of 10% of objects */
+		forget_levels(25);	/* lose memory of 25% of levels */
+		forget_objects(25);	/* lose memory of 25% of objects */
 	} else {
-		You("hang back from the %s form beneath the shroud. It poses enticingly.", fem ? "voluptuous feminine," : "muscular masculine,");
+		You("hang back from the %s form beneath the shroud. It poses enticingly.", fem ? "voluptuous feminine" : "muscular masculine");
 	}
 	return 1;
 }

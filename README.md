@@ -77,8 +77,13 @@ Some items get special bonuses based on appearance
 (...Dungeons and Extra-Terrestrial hack)
 ________________________________
 __Changes to Existing Monsters__
--I thought a few existing monsters changed colors, but I can’t find them now. If you notice any that did, let me know ;-)
+-Trappers changed color, to brown t
+----there is a new monster identified by the dark green t
+-Vampire bats are now gray. Ravens are still black.
+-Master liches are now orange, and arch-liches are bright magenta.
+----There is no plain magenta Lich.
 -Removed Keystone Kops
+-Nurse behavior altered. Hostile nurses will heal enemies. Tame nurses will heal you.
 
 
 (...DnEThack. dnethack.)

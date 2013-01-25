@@ -1107,7 +1107,7 @@ begin_burn(obj, already_lit)
 	long turns = 0;
 	boolean do_timer = TRUE;
 
-	if (obj->age == 0 && obj->otyp != MAGIC_LAMP && !artifact_light(obj))
+	if (obj->age == 0 && obj->otyp != MAGIC_LAMP && !artifact_light(obj) && !arti_light(obj))
 	    return;
 
 	switch (obj->otyp) {
@@ -1161,7 +1161,7 @@ begin_burn(obj, already_lit)
 
 	    default:
                 /* [ALI] Support artifact light sources */
-                if (artifact_light(obj)) {
+        if (artifact_light(obj) || arti_light(obj)) {
 		    obj->lamplit = 1;
 		    do_timer = FALSE;
 			radius = (obj->blessed ? 3 : (obj->cursed ? 1 : 2));

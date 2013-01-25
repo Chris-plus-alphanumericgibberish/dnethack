@@ -3472,6 +3472,7 @@ register int dx,dy,range;
     save_bhitpos = bhitpos;
 
     tmp_at(DISP_BEAM, zapdir_to_glyph(dx, dy, abstype));
+	////////////////////////////////////////////////////////////////////////////////////////
     while(range-- > 0) {
 	lsx = sx; sx += dx;
 	lsy = sy; sy += dy;
@@ -3501,9 +3502,9 @@ register int dx,dy,range;
 	if (mon) {
 	    if (type == ZT_SPELL(ZT_FIRE)) break;
 	    if (type >= 0) mon->mstrategy &= ~STRAT_WAITMASK;
-#ifdef STEED
+	#ifdef STEED
 	    buzzmonst:
-#endif
+	#endif
 	    if (zap_hit(find_mac(mon), spell_type)) {
 		if (mon_reflects(mon, (char *)0)) {
 		    if(cansee(mon->mx,mon->my)) {
@@ -3555,12 +3556,12 @@ register int dx,dy,range;
 			    else
 				hit(fltxt, mon, "!");
 			}
-#ifndef GOLDOBJ
+		#ifndef GOLDOBJ
 			mon->mgold = 0L;
-#endif
+		#endif
 
-/* note: worn amulet of life saving must be preserved in order to operate */
-#define oresist_disintegration(obj) \
+	/* note: worn amulet of life saving must be preserved in order to operate */
+	#define oresist_disintegration(obj) \
 		(objects[obj->otyp].oc_oprop == DISINT_RES || \
 		 obj_resists(obj, 5, 50) || is_quest_artifact(obj) || \
 		 obj == m_amulet)
@@ -3604,12 +3605,12 @@ register int dx,dy,range;
 	    }
 	} else if (sx == u.ux && sy == u.uy && range >= 0) {
 	    nomul(0);
-#ifdef STEED
+	#ifdef STEED
 	    if (u.usteed && !rn2(3) && !mon_reflects(u.usteed, (char *)0)) {
 		    mon = u.usteed;
 		    goto buzzmonst;
 	    } else
-#endif
+	#endif
 	    if (zap_hit((int) u.uac, 0)) {
 		range -= 2;
 		pline("%s hits you!", The(fltxt));
@@ -3675,6 +3676,7 @@ register int dx,dy,range;
 	    }
 	}
     }
+	////////////////////////////////////////////////////////////////////////////////////////
     tmp_at(DISP_END,0);
     if (type == ZT_SPELL(ZT_FIRE))
 	explode(sx, sy, type, d(12,6), 0, EXPL_FIERY);

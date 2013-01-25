@@ -391,7 +391,7 @@ MONSTER:'h',"deep one", (52,11), asleep
 
 MAZE: "chalev",' '
 FLAGS: nommap, shortsighted
-INIT_MAP: '.' , ' ' , true , true , unlit , true
+INIT_MAP: '.' , ' ' , true , true , unlit , false
 
 NOMAP
 
@@ -399,6 +399,9 @@ OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
+
+OBJECT: random, random, random
+OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
 
@@ -417,62 +420,83 @@ MONSTER: 'b', "acid blob", random
 MONSTER: 'b', "acid blob", random
 MONSTER: 'b', "acid blob", random
 
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
+TRAP: "anti magic", random
 
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
 
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random 
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
+TRAP: "level teleport", random
 
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
-TRAP: random, random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
+TRAP: "teleport", random
 
-GEOMETRY:center,center
+GEOMETRY:center,top
+#0         1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-.....
-..-..
+0.  |.|...                         ...|.|  .
+1.  |.|.-...-...             ...-...-.|.|  .
+2.  |.|...............................|.|  .
+3.--|.|-------------------------------|.|--.
+4.||.....................................||.
+5.||.-|------------|-|.|-|------------|-.||.
+6.|---|            |-...-|            |---|.
+7..........................................
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	  3	      4	    5		  6	      7
+
+BRANCH:(21,05,21,05),(0,0,0,0)
+
+#STAIR: levregion(01,01,74,19), up
+#STAIR: levregion(01,01,74,19), down
+
+GEOMETRY:center,bottom
+MAP
 .---.
 ..-..
 .....
@@ -481,10 +505,10 @@ ENDMAP
 MAZEWALK:(00,02),west
 MAZEWALK:(04,02),east
 
-STAIR: (04,02), up
-STAIR: (00,02), down
+STAIR: (04,00), up
+STAIR: (00,00), down
 
-WALLIFY
+#WALLIFY
 
 #	SCCS Id: @(#)oracle.des	3.4	1995/10/07
 # NetHack may be freely redistributed.  See license for details.
