@@ -1931,10 +1931,6 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			else if (see_it)  /* evidently `mtmp' is invisible */
 			    You("see a %s erupt from the %s!",
 				tower_of_flame, surface(mtmp->mx,mtmp->my));
-			if (Slimed) {
-				pline("The slime that covers you is burned away!");
-				Slimed = 0;
-			}
 
 			if (resists_fire(mtmp)) {
 			    if (in_sight) {
@@ -2496,10 +2492,6 @@ struct obj *box;	/* null for floor trap */
 	pline("A %s %s from %s!", tower_of_flame,
 	      box ? "bursts" : "erupts",
 	      the(box ? xname(box) : surface(u.ux,u.uy)));
-	if (Slimed) {        
-	      pline("The slime that covers you is burned away!");
-	      Slimed = 0;
-	}
 	if (Fire_resistance) {
 	    shieldeff(u.ux, u.uy);
 	    num = rn2(2);
@@ -2521,10 +2513,9 @@ struct obj *box;	/* null for floor trap */
 	    if (u.uhpmax > u.ulevel)
 		u.uhpmax -= rn2(min(u.uhpmax,num + 1)), flags.botl = 1;
 	}
-	if (!num)
-	    You("are uninjured.");
-	else
-	    losehp(num, tower_of_flame, KILLED_BY_AN);
+	if (!num) You("are uninjured.");
+	else losehp(num, tower_of_flame, KILLED_BY_AN);
+	
 	burn_away_slime();
 
 	if (burnarmor(&youmonst) || rn2(3)) {
