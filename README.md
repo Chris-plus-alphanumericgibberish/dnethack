@@ -1,8 +1,8 @@
-dnethack
+dNetHack
 ========
-A varient of nethack 3.4.4
+A variant of nethack 3.4.4
 
-In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash’em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, probably others (wasn’t always good about documenting who’s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was addapted from Legend of Zelda, a Link to the Past.
+In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash’em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, probably others (wasn’t always good about documenting who’s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past.
 
 Implemented YANI's from rec.games.roguelike.nethack and the nethack wiki, including several of Jonadab the Unsightly One's suggestions.
 
@@ -31,7 +31,7 @@ __Player Character Changes__
 -Priests get special treatment w/ regards to artifacts
 -----Can attack more effectively with artifacts
 -----The probability of receiving an artifact after sacrificing is based only on prior gifts given, not on found artifacts.
--Priests and Knights can expend 30 energy to turn undead in 1 turn instead of 5.
+-Priests and Knights can expend 30 energy to turn undead in 1 turn instead of 5 turns.
 -Samurai, Archeologist, and Knight special alignment penalties made harsher.
 -Tourist quest monsters revised to better reflect Ank-Morpork
 -Gnomes begin with Gnomish hats and a small pile of tallow candles
@@ -99,7 +99,7 @@ Only your quest Nemeses will deliberately steal your quest artifact, other monst
 ______________
 __Known Bugs__
 SPFX_RAM: if the thrown target goes over a land mine and is killed, it gives an error message?
-Messed up some compile-time options. The game will not complile without TOURIST set, probably others.
+Messed up some compile-time options. The game will not compile without TOURIST set, probably others.
 
 Not bugs so much as incomplete features:
 -Most new monster attacks are coded solely for monster vs. player, not monster vs. monster or player vs. monster.
