@@ -2,7 +2,7 @@ dnethack
 ========
 A varient of nethack 3.4.4
 
-In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash’em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, probably others (wasn’t always good about documenting who’s code I was stealing...)
+In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash’em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, probably others (wasn’t always good about documenting who’s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was addapted from Legend of Zelda, a Link to the Past.
 
 Implemented YANI's from rec.games.roguelike.nethack and the nethack wiki, including several of Jonadab the Unsightly One's suggestions.
 
