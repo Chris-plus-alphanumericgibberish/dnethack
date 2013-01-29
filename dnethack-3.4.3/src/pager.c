@@ -592,6 +592,7 @@ static const char * const bogusobjects[] = {
 		
 		
        "blessed greased +5 silly object of hilarity",
+	   "kinda lame joke",
 # ifdef TOURIST
        /* Modern */
        "polo mallet",
@@ -665,7 +666,6 @@ static const char * const bogusobjects[] = {
 	   "scroll of oxygen-destroyer plans", /* Godzilla */
 	   "hologram of Death Star plans",
 	   "sonic screwdriver", /* Dr. Who */
-	   "lost copy of The Nice and Accurate Prophecies of Anges Nutter", /* Good Omens */
 
 	   /* British goodness */
        "bum bag",
@@ -692,10 +692,11 @@ static const char * const bogusobjects[] = {
 	   "crown of swords",
 
 	   /* Books */
-	   "Codex of the Infinite Planes",		   /* DnD */
+	   "The Codex of the Infinite Planes",	   /* DnD */
 	   "Non-Conduit Transdimensional Fabric Fluxes and Real-Time Inter-dimensional Matrix Transformations", /* Maldin's Greyhawk */
        "The Book of Sand",                     /* Jorge Luis Borges */
        "spellbook called Octavo",          /* Discworld */
+	   "lost copy of The Nice and Accurate Prophecies of Anges Nutter", /* Good Omens */
 	   "Addition Made Simple",
 	   "Noncommutative Hyperdimensional Geometry Made (Merely!) Complicated",
 	   "heavily obfuscated spellbook",
@@ -757,6 +758,9 @@ static const char * const bogusobjects[] = {
 	   "scroll of apocalypse",
 	   "scroll of profits",
 	   "scroll of stupidity",
+	   "spellbook of firebear",
+	   "spellbook of dip",
+	   "spellbook of cone of cord",
        "helm of telemetry",
        "helm of head-butting",
        "blue suede boots of charisma",

@@ -2620,6 +2620,10 @@ STATIC_VAR NEARDATA const char *names[] = { 0,
 };
 
 STATIC_VAR NEARDATA const char *bogusclasses[] = {
+	"Illegal objects", "Weapons", "Armor", "Rings", "Amulets",
+	"Tools", "Comestibles", "Potions", "Scrolls", "Spellbooks",
+	"Wands", "Coins", "Gems", "Boulders/Statues", "Iron balls",
+	"Chains", "Venoms",
 	"Filler","Useless Objects", "Artifacts", "Ascension Kit Items",
 	"Staves", "Songs", "Drinks", "Grimoires", "Gears", "Cogs",
 	"Marmosets", "Bugs", "Easter Eggs", "Tiny Monuments","Consumables",
