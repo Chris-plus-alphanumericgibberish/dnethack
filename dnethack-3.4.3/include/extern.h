@@ -846,6 +846,7 @@ E int NDECL(doprtool);
 E int NDECL(doprinuse);
 E void FDECL(useupf, (struct obj *,long));
 E char *FDECL(let_to_name, (CHAR_P,BOOLEAN_P));
+E char *NDECL(rand_class_name);
 E void NDECL(free_invbuf);
 E void NDECL(reassign);
 E int NDECL(doorganize);
@@ -1464,11 +1465,11 @@ E void NDECL(free_autopickup_exceptions);
 #endif /* AUTOPICKUP_EXCEPTIONS */
 
 /* ### pager.c ### */
-
 E int NDECL(dowhatis);
 E int NDECL(doquickwhatis);
 E int NDECL(doidtrap);
 E int NDECL(dowhatdoes);
+E const char *NDECL(rndobjnam);
 E char *FDECL(dowhatdoes_core,(CHAR_P, char *));
 E int NDECL(dohelp);
 E int NDECL(dohistory);

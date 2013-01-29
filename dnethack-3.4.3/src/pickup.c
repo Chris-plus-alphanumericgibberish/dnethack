@@ -750,7 +750,7 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 		    if (qflags & INVORDER_SORT && !printed_type_name) {
 			any.a_obj = (struct obj *) 0;
 			add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
-					let_to_name(*pack, FALSE), MENU_UNSELECTED);
+						Hallucination ? rand_class_name() : let_to_name(*pack, FALSE), MENU_UNSELECTED);
 			printed_type_name = TRUE;
 		    }
 
@@ -758,7 +758,7 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 		    add_menu(win, obj_to_glyph(curr), &any,
 			    qflags & USE_INVLET ? curr->invlet : 0,
 			    def_oc_syms[(int)objects[curr->otyp].oc_class],
-			    ATR_NONE, doname(curr), MENU_UNSELECTED);
+			    ATR_NONE, Hallucination ? rndobjnam() : doname(curr), MENU_UNSELECTED);
 		}
 	    }
 	    pack++;

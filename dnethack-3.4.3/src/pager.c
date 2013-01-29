@@ -624,7 +624,6 @@ static const char * const bogusobjects[] = {
 	   "leather shorts",
        "first class one-way ticket to Albuquerque", /* Weird Al */
        "yellow spandex dragon scale mail", /* X-Men */
-	   "spellbook of sub-formal introtransreductive logic [for Dummies!]",
 
        /* Musical Instruments */
        "grand piano",
@@ -678,12 +677,10 @@ static const char * const bogusobjects[] = {
        "black pudding corpse",
 # endif
        /* Fantasy */
-       "Book of Sand",                     /* Jorge Luis Borges */
        "pipe weed",                        /* LOTR */
        "knife missile",                    /* Iain M. Banks */
        "large gem",                        /* Valhalla */
        "monster manual",                   /* D&D */
-       "spellbook called Octavo",          /* Discworld */
        "ring of power",                    /* LOTR */
        "lightsaber",
        "not tea","no tea here!", "no tea", /* HGttG */
@@ -693,11 +690,40 @@ static const char * const bogusobjects[] = {
        "pentagram of protection",          /* Quake */
 	   "crown of swords",
 
-       /* Historical */
+	   /* Books */
+	   "Non-Conduit Transdimensional Fabric Fluxes and Real-Time Inter-dimensional Matrix Transformations", /* Maldin's Greyhawk */
+       "The Book of Sand",                     /* Jorge Luis Borges */
+       "spellbook called Octavo",          /* Discworld */
+	   "Codex of the Infinite Planes",	   /* DnD */
+	   "Addition Made Simple",
+	   "Noncommutative Hyperdimensional Geometry Made (Merely!) Complicated",
+	   "heavily obfuscated spellbook",
+	   "scroll of abstruse logic",
+	   "spellbook of sub-formal introtransreductive logic [for Dummies!]",
+	   "A Brief History of Time",
+	   "The Book of Eibon", 					/* Clark Ashton Smith */
+	   "The King in Yellow", 					/* Robert W. Chambers */
+	   "De Vermis Mysteriis",					/* Robert Bloch */
+	   "Necronomicon",							/* HP Lovecraft */
+	   "Al Azif",								/* HP Lovecraft */
+	   "Unaussprechlichen Kulten",				/*  Robert E. Howard; Lovecraft and Derleth */
+	   "Nameless Cults",						/*  (the original name) */
+	   "Unspeakable Cults",						/*  One of the two things "Unaussprechlichen" translates to */
+	   "The Diary of Drenicus the Wise",		/*  Dicefreaks, The Gates of Hell */
+	   "Clavicula Salomonis Regis",				/* ie, The Lesser Key of Solomon */
+	   "The Five Books of Moses",				/* aka the Torah */
+	   "The Six and Seventh Books of Moses",	/* 18th- or 19th-century magical text allegedly written by Moses */
+	   "The Book of Coming Forth by Day", "The Book of emerging forth into the Light",
+	   "Sefer Raziel HaMalakh",
+	   "The Testament of Solomon",
+	   "The Book of Enoch",
+	   "The Uruk Tablets",
        "dead sea scroll",
+	   "mayan codex",
+
+       /* Historical */
 	   "Amarna letter",
 	   "lost ark of the covenant",
-	   "mayan codex",
        "cat o'nine tails",
        "pieces of eight",
        "codpiece",
@@ -762,10 +788,6 @@ static const char * const bogusobjects[] = {
 	   "wand of renewal",
 	   
 	   "little piece of home",
-	   "Addition Made Simple",
-	   "Noncommutative Hyperdimensional Geometry Made Complicated",
-	   "heavily obfuscated spellbook",
-	   "scroll of abstruse logic",
 
 # ifdef MAIL
        "brand new, all time lowest introductory rate special offer",

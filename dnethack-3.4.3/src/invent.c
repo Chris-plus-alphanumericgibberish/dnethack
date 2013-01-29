@@ -2278,7 +2278,7 @@ boolean picked_some;
 #ifdef INVISIBLE_OBJECTS
 	    if (otmp->oinvis && !See_invisible) verb = "feel";
 #endif
-	    You("%s here %s.", verb, doname(otmp));
+	    You("%s here %s.", verb, Hallucination ? rndobjnam() : doname(otmp));
 	    if (otmp->otyp == CORPSE) feel_cockatrice(otmp, FALSE);
 	} else {
 	    display_nhwindow(WIN_MESSAGE, FALSE);
@@ -2293,12 +2293,12 @@ boolean picked_some;
 		if (otmp->otyp == CORPSE && will_feel_cockatrice(otmp, FALSE)) {
 			char buf[BUFSZ];
 			felt_cockatrice = TRUE;
-			Strcpy(buf, doname(otmp));
+			Strcpy(buf, Hallucination ? rndobjnam() : doname(otmp));
 			Strcat(buf, "...");
 			putstr(tmpwin, 0, buf);
 			break;
 		}
-		putstr(tmpwin, 0, doname(otmp));
+		putstr(tmpwin, 0, Hallucination ? rndobjnam() : doname(otmp));
 	    }
 	    display_nhwindow(tmpwin, TRUE);
 	    destroy_nhwindow(tmpwin);
@@ -2619,6 +2619,13 @@ STATIC_VAR NEARDATA const char *names[] = { 0,
 	"Chains", "Venoms"
 };
 
+STATIC_VAR NEARDATA const char *bogusclasses[] = {
+	"Filler","Useless Objects", "Artifacts", "Ascension Kit Items",
+	"Staves", "Songs", "Drinks", "Grimoires", "Gears", "Cogs",
+	"Marmosets", "Bugs", "Easter Eggs", "Tiny Monuments","Consumables",
+	"Junk", "Foos"
+};
+
 static NEARDATA const char oth_symbols[] = {
 	CONTAINED_SYM,
 	'\0'
@@ -2659,6 +2666,24 @@ boolean unpaid;
 	else
 	    Strcpy(invbuf, class_name);
 	return invbuf;
+}
+
+char *
+rand_class_name()
+{
+       int name;
+       const char *class_name;
+ 	   unsigned len;
+       name = rn2(SIZE(bogusclasses));
+	   class_name = bogusclasses[name];
+	   len = strlen(class_name);
+	   if (len > invbufsiz) {
+			if (invbuf) free((genericptr_t)invbuf);
+			invbufsiz = len + 10; /* add slop to reduce incremental realloc */
+			invbuf = (char *) alloc(invbufsiz);
+	   }
+	   Strcpy(invbuf, class_name);
+	   return invbuf;
 }
 
 void
