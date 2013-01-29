@@ -4173,17 +4173,11 @@ MONSTER:'g',"nightgaunt",(55,17),asleep,hostile
 
 # Landing Guards
 MONSTER:'H',"deepest one",(56,08),asleep,hostile, "Father Dagon"
-OBJECT:'!',random,(56,08), blessed, 0
-OBJECT:'!',random,(56,08), blessed, 0
-OBJECT:')',random,(56,08), cursed, +9
-MONSTER:'h',"deeper one",(61,08),asleep,hostile
-OBJECT:'/',random,(61,08)
+MONSTER:'h',"deeper one",(61,06),asleep,hostile
+MONSTER:'h',"deeper one",(64,07),asleep,hostile
 MONSTER:'H',"deepest one",(56,11),asleep,hostile, "Mother Hydra"
-OBJECT:'!',random,(56,08), blessed, 0
-OBJECT:'!',random,(56,08), blessed, 0
-OBJECT:')',random,(56,08), cursed, +9
 MONSTER:'h',"deeper one",(61,13),asleep,hostile
-OBJECT:'/',random,(61,13)
+MONSTER:'h',"deeper one",(64,12),asleep,hostile
 
 # Northern barracks
 MONSTER:'h',"deep one",(67,01),asleep,hostile
@@ -4207,6 +4201,7 @@ MONSTER:'h',"deep one",(67,18),asleep,hostile
 OBJECT:'(',"chest",(68,18)
 MONSTER:'h',"deep one",(69,18),asleep,hostile
 OBJECT:'(',"chest",(70,18)
+MONSTER:'h',"deep one",(71,18),asleep,hostile
 
 # Traps on the landing
 TRAP:"board",(65,08)
@@ -4219,6 +4214,17 @@ TRAP:"board",(63,02)
 TRAP:"board",(63,17)
 TRAP:"board",(55,02)
 TRAP:"board",(55,17)
+
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
 
 # Guardians one the inner temples
 MONSTER:'h',"master mind flayer",(47,09),asleep,hostile

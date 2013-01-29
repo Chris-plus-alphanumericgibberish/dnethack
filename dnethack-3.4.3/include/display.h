@@ -40,9 +40,19 @@
  * vicinity, and a glyph representing the warning level is displayed.
  */
 
-#define mon_warning(mon) (Warning && !(mon)->mpeaceful && 				\
+/*old
+ define mon_warning(mon) (Warning && !(mon)->mpeaceful && 				\
 			 (distu((mon)->mx, (mon)->my) < 100) &&				\
 			 (((int) ((mon)->m_lev / 4)) >= flags.warnlevel))
+*/
+
+#define mon_warning(mon) ((Warning && !(mon)->mpeaceful &&         \
+         (distu((mon)->mx, (mon)->my) < 100) &&        \
+         (((int) ((mon)->m_lev / 4)) >= flags.warnlevel))    \
+        || ((mon)->data == &mons[PM_GREAT_CTHULHU] && \
+		    (distu((mon)->mx, (mon)->my) < 2*BOLT_LIM * 2*BOLT_LIM) \
+			) \
+		)
 
 /*
  * mon_visible()

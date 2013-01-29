@@ -650,6 +650,9 @@ register struct monst *mtmp;
 	    return(0);	/* other frozen monsters can't do anything */
 	}
 
+	if (mdat == &mons[PM_GREAT_CTHULHU] && couldsee(mtmp->mx, mtmp->my)) //Great Cthulu drives investigators mad when gazed upon.
+	    m_respond(mtmp);
+	
 	/* there is a chance we will wake it */
 	if (mtmp->msleeping && !disturb(mtmp)) {
 		if (Hallucination) newsym(mtmp->mx,mtmp->my);

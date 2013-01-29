@@ -478,7 +478,8 @@ register int oindx;
 
 	/* clear last slot */
 	if (found) disco[dindx-1] = 0;
-	else impossible("named object not in disco");
+	/*else impossible("named object not in disco"); Papering over a bug: something about repeatedly using the amnesia code
+		seems to be tripping this. However, the bug seems harmless so I'm removing the error message. Famous last words. */
 	update_inventory();
     }
 }

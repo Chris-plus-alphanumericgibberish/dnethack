@@ -594,6 +594,133 @@ register struct monst *mtmp;
 			    (void)mongets(mtmp, DWARVISH_IRON_HELM);
  			if (!rn2(3))
 			    (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
+		}else if(mm == PM_DEEP_ONE || mm == PM_DEEPER_ONE) {
+		 if(!on_level(&rlyeh_level,&u.uz)){
+		    switch (rn2(3)) {
+				case 0:
+					(void)mongets(mtmp, LEATHER_JACKET);
+				break;
+				case 1:
+					(void)mongets(mtmp, LEATHER_ARMOR);
+				break;
+				case 2:
+					otmp = mksobj(CHAIN_MAIL, TRUE, FALSE);
+					otmp->oeroded = 2;
+					(void) mpickobj(mtmp, otmp);
+				break;
+			}
+		    switch (rn2(6)) {
+				case 0:
+					otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 1:
+					otmp = mksobj(SCIMITAR, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 2:
+					otmp = mksobj(TRIDENT, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 3:
+					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 4:
+					otmp = mksobj(DAGGER, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 5:
+					otmp = mksobj(SPEAR, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+			}
+		 }else{
+			otmp = mksobj(TRIDENT, TRUE, FALSE);
+			otmp->oerodeproof = 1;
+			otmp->spe = mm==PM_DEEPER_ONE ? 6 : 3;
+			otmp->blessed = FALSE;
+			otmp->cursed = FALSE;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(RANSEUR, TRUE, FALSE);
+			otmp->oerodeproof = 1;
+			otmp->spe = mm==PM_DEEPER_ONE ? 6 : 3;
+			otmp->blessed = FALSE;
+			otmp->cursed = FALSE;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(JAVELIN, TRUE, FALSE);
+			otmp->oeroded = 3;
+			otmp->quan = mm==PM_DEEPER_ONE ? 6 : 3;
+			otmp->spe = mm==PM_DEEPER_ONE ? 6 : 3;
+			otmp->blessed = FALSE;
+			otmp->cursed = FALSE;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(BRONZE_PLATE_MAIL, TRUE, FALSE);
+			otmp->spe = mm==PM_DEEPER_ONE ? 6 : 3;
+			otmp->blessed = FALSE;
+			otmp->cursed = TRUE;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(OILSKIN_CLOAK, TRUE, FALSE);
+			otmp->spe = mm==PM_DEEPER_ONE ? 6 : 3;
+			otmp->blessed = FALSE;
+			otmp->cursed = FALSE;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(ORCISH_SHIELD, TRUE, FALSE);
+			otmp->oeroded = 3;
+			otmp->spe = mm==PM_DEEPER_ONE ? 6 : 3;
+			otmp->blessed = FALSE;
+			otmp->cursed = FALSE;
+			(void) mpickobj(mtmp, otmp);
+			
+			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+			if(mm == PM_DEEPER_ONE){
+				otmp = mksobj(rnd_attack_wand(mtmp), TRUE, FALSE);
+				otmp->spe = 1;
+				otmp->blessed = FALSE;
+				otmp->cursed = FALSE;
+				(void) mpickobj(mtmp, otmp);
+			}
+		 }
+		}else if((mm == PM_MIND_FLAYER || mm == PM_MASTER_MIND_FLAYER) && on_level(&rlyeh_level,&u.uz)){
+			otmp = mksobj(BULLWHIP, TRUE, FALSE);
+			otmp->oerodeproof = 1;
+			otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 0;
+			otmp->blessed = FALSE;
+			otmp->cursed = 1;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(SCALE_MAIL, TRUE, FALSE);
+			otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 1;
+			otmp->blessed = FALSE;
+			otmp->cursed = TRUE;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(OILSKIN_CLOAK, TRUE, FALSE);
+			otmp->blessed = FALSE;
+			otmp->cursed = TRUE;
+			(void) mpickobj(mtmp, otmp);
+			
+			(void) mongets(mtmp, rnd_attack_wand(mtmp));
+			(void) mongets(mtmp, rnd_utility_wand(mtmp));
+			
+			(void) mongets(mtmp, rnd_utility_potion(mtmp));
+			(void) mongets(mtmp, rnd_utility_potion(mtmp));
+			
+			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+			(void) mongets(mtmp, rnd_attack_potion(mtmp));
 		}
 		break;
 	    case S_KETER:
@@ -1003,6 +1130,65 @@ register struct	monst	*mtmp;
 			otmp->owt = weight(otmp);
 			(void) mpickobj(mtmp, otmp);
 		    }
+		} else if(monsndx(ptr) == PM_DEEPEST_ONE) {
+		 if(!on_level(&rlyeh_level,&u.uz)){
+		    switch (rn2(6)) {
+				case 0:
+					otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+					otmp->oerodeproof = 1;
+					otmp->spe = 9;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 1:
+					otmp = mksobj(SCIMITAR, TRUE, FALSE);
+					otmp->oerodeproof = 1;
+					otmp->spe = 9;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 2:
+					otmp = mksobj(TRIDENT, TRUE, FALSE);
+					otmp->oerodeproof = 1;
+					otmp->spe = 9;
+					(void) mpickobj(mtmp, otmp);
+				break;
+			}
+		 }else{
+			otmp = mksobj(TRIDENT, TRUE, FALSE);
+			otmp->oerodeproof = 1;
+			otmp->spe = 18;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(RANSEUR, TRUE, FALSE);
+			otmp->oerodeproof = 1;
+			otmp->spe = 18;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(CROSSBOW, TRUE, FALSE);
+			(void) mpickobj(mtmp, otmp);
+			otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+			otmp->oerodeproof = 1;
+			otmp->quan = 18;
+			otmp->spe = 18;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(SHIELD_OF_REFLECTION, TRUE, FALSE);
+			otmp->oerodeproof = 1;
+			otmp->spe = 9;
+			(void) mpickobj(mtmp, otmp);
+			
+			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+			
+			otmp = mksobj(rnd_utility_potion(mtmp), TRUE, FALSE);
+			otmp->blessed = FALSE;
+			otmp->cursed = FALSE;
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(rnd_utility_potion(mtmp), TRUE, FALSE);
+			otmp->blessed = FALSE;
+			otmp->cursed = FALSE;
+			(void) mpickobj(mtmp, otmp);
+		 }
 		}
 		break;
 	    case S_WRAITH:
@@ -2180,7 +2366,7 @@ rndmonst()
 	if (u.uz.dnum == neutral_dnum && 
 		(on_level(&rlyeh_level,&u.uz) ||  on_level(&sum_of_all_level,&u.uz) || on_level(&gatetown_level,&u.uz)))
 	    if(!in_mklev) return neutral_montype();
-		else return (struct permonst *)0;/*NOTE: ugly method to stop monster generation durning level creation, since I cant find a better way*/
+		else return (struct permonst *)0;/*NOTE: ugly method to stop monster generation durning level creation, since I can't find a better way*/
 
 	if (u.uz.dnum == chaos_dnum)
 	    return chaos_montype();

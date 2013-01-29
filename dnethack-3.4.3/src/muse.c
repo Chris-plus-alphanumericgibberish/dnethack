@@ -1558,6 +1558,97 @@ struct monst *mtmp;
 	return 0;
 }
 
+int
+rnd_attack_wand(mtmp)
+struct monst *mtmp;
+{
+	struct permonst *pm = mtmp->data;
+	int difficulty = monstr[(monsndx(pm))];
+
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+		) return 0;
+	if (difficulty > 7 && !rn2(35)) return WAN_DEATH;
+	switch (rnd(8)) {
+		case 1: return WAN_STRIKING;
+		case 2: case 3:
+			return WAN_MAGIC_MISSILE;
+		case 4: return WAN_SLEEP;
+		case 5: return WAN_FIRE;
+		case 6: return WAN_COLD;
+		case 7: return WAN_LIGHTNING;
+		case 8: return WAN_CREATE_MONSTER;
+	}
+	/*NOTREACHED*/
+	return 0;
+}
+
+int
+rnd_utility_wand(mtmp)
+struct monst *mtmp;
+{
+	struct permonst *pm = mtmp->data;
+	int difficulty = monstr[(monsndx(pm))];
+
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+		) return 0;
+	switch (rnd(6)) {
+		case 1: return WAN_SPEED_MONSTER;
+		case 2: case 3:
+			return WAN_MAKE_INVISIBLE;
+		case 4: return WAN_TELEPORTATION;
+		case 5: return WAN_DIGGING;
+		case 6: return WAN_CREATE_MONSTER;
+	}
+	/*NOTREACHED*/
+	return 0;
+}
+
+int
+rnd_attack_potion(mtmp)
+struct monst *mtmp;
+{
+	struct permonst *pm = mtmp->data;
+	int difficulty = monstr[(monsndx(pm))];
+
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+		) return 0;
+	switch (rnd(6)) {
+		case 1:	case 2: 
+			return POT_ACID;
+		case 3: return POT_CONFUSION;
+		case 4: return POT_BLINDNESS;
+		case 5: return POT_SLEEPING;
+		case 6: return POT_PARALYSIS;
+	}
+	/*NOTREACHED*/
+	return 0;
+}
+
+int
+rnd_utility_potion(mtmp)
+struct monst *mtmp;
+{
+	struct permonst *pm = mtmp->data;
+	int difficulty = monstr[(monsndx(pm))];
+
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+		) return 0;
+	switch (rnd(6)) {
+		case 1:	return POT_INVISIBILITY;
+		case 2: return POT_SPEED;
+		case 3: return POT_CONFUSION;
+		case 4: return POT_GAIN_LEVEL;
+		case 5: return POT_EXTRA_HEALING;
+		case 6: return POT_FULL_HEALING;
+	}
+	/*NOTREACHED*/
+	return 0;
+}
+
 #define MUSE_POT_GAIN_LEVEL 1
 #define MUSE_WAN_MAKE_INVISIBLE 2
 #define MUSE_POT_INVISIBILITY 3

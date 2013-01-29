@@ -3129,7 +3129,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		break;
 */
 		case AD_WISD:{ //Cthulhu's attack
-//			if(canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my)) {
+			if(canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my)) {
 				int dmg = d((int)mattk->damn, (int)mattk->damd);
 				if(!couldsee(mtmp->mx, mtmp->my)) dmg /= 10;
 				if(!dmg) break;
@@ -3150,6 +3150,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				}
 				succeeded=1;
 			}
+		}
 		break;
 /*		case AD_SUMMON:
 			int count;

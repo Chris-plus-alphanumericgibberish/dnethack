@@ -1339,6 +1339,10 @@ E int FDECL(mbhitm, (struct monst *,struct obj *));
 #endif
 E int FDECL(use_offensive, (struct monst *));
 E int FDECL(rnd_offensive_item, (struct monst *));
+E int FDECL(rnd_attack_wand, (struct monst *));
+E int FDECL(rnd_attack_potion, (struct monst *));
+E int FDECL(rnd_utility_wand, (struct monst *));
+E int FDECL(rnd_utility_potion, (struct monst *));
 E boolean FDECL(find_misc, (struct monst *));
 E int FDECL(use_misc, (struct monst *));
 E int FDECL(rnd_misc_item, (struct monst *));
