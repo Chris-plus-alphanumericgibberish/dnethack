@@ -823,6 +823,12 @@ A("The Iconoclast", SILVER_SABER,  /*Weapon of Lixer, Prince of Hell, from Dicef
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	0,SPFX3_NOCNT,0),
 
+A("Sting of the Poison Queen", FLAIL,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_DEFN), 0, 0,
+	PHYS(4,12),	DFNS(AD_MAGM),	NO_CARY,
+	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
+	SPFX2_POISONED,SPFX3_NOCNT,0),
+
 A("Doomscreamer", TWO_HANDED_SWORD,  /*Weapon of Graz'zt, from Gord the Rogue*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_DEFN), 0, 0,
 	ACID(1,0),	ACID(0,0),	NO_CARY,

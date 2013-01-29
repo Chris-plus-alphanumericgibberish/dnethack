@@ -1434,7 +1434,7 @@ TELEPORT_REGION:(00,00,19,17),(0,0,0,0),down
 TELEPORT_REGION:(48,08,70,10),(0,0,0,0),up
 
 MONSTER:'&', "Belial", (36,09)
-MONSTER:'&', "Firenna", (37,09)
+MONSTER:'&', "Fierna", (37,09)
 MONSTER:'&', "pit fiend", (36,10), "Gazra", hostile
 MONSTER:'&', "pit fiend", (36,08), "Naome", hostile
 
@@ -2717,21 +2717,12 @@ CONTAINER:   '`', "statue" ,place[4], cursed, "marilith", 1, "Shaktari"
 OBJECT:'/', random, contained, blessed, 1
 OBJECT:'/', random, contained, blessed, 1
 OBJECT:'/', random, contained, blessed, 1
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
-OBJECT:'!', "gain level", contained, blessed, 0
 OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:'"', "amulet of life saving", contained, blessed, 0
+OBJECT:')', "flail", contained, cursed, 3, "Sting of the Poison Queen"
 OBJECT:')', "runesword", contained, blessed, 3
 OBJECT:')', "runesword", contained, blessed, 3
 OBJECT:')', "halberd", contained, blessed, 3
@@ -2867,8 +2858,8 @@ MAP
 4WW|           |WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW----W|    ||    ||    |W----W
 5 W|-         -|W W W W W W W W W W W W WWWWW W||  |||    |||  |||    |||  ||
 6WWW|-|     |-|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|    |||  ||W-WW-W||  |||    |
-7 W WW|-W W-|WW W W W W W W W W W W W W WWW W W     | - --WW----WW- --W|    |
-8WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||  ||WWWWWW||..||WWWWWW||  ||
+7 W WW|-W.W-|WW W W W W W W W W W W W W WWW W W     | - --WW----WW- --W|    |
+8WWWWWWWW.WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||  ||WWWWWW||..||WWWWWW||  ||
 9 W W W W W W W W W W W W W W W W W W W WWW W W - --W WWW W.....|WW W W - --W
 0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW----WWWWWWW|....|WWWWWWW----W
 1 W W W W W W W W W W W W W W W W W W WWWWW W W||  ||WW W W||. ||WW W W||  ||
@@ -2882,6 +2873,8 @@ MAP
 9 W W W W W W W W W W W W W W W W WWWWWWWWWWW W W W W W W WWW     W W W . . .
 0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW        WWW...W
 ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2		   3	     4		   5		 6		   7
 
 
 STAIR: (08,01), down
@@ -2892,6 +2885,7 @@ TELEPORT_REGION:(00,00,46,20),(0,0,0,0),up
 
 MAZEWALK:(58,09), west
 MAZEWALK:(60,11), south
+MAZEWALK:(08,07), north
 
 MONSTER:';',"jellyfish",random
 MONSTER:';',"jellyfish",random

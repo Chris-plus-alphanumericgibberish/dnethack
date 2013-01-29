@@ -3304,7 +3304,7 @@ static const char *epitaphs[] = {
         "Ya really had me going baby, but now I'm gone.",
         "Yes Dear, just a few more minutes...",
         "You said it wasn't poisonous!",
-        "You set my heart aflame. You gave me heartburn."
+        "You set my heart aflame.... You gave me heartburn."
 };
 
 /* Create a headstone at the given location.

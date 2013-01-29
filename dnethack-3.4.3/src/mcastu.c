@@ -236,7 +236,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 						spellnum=MGC_CURE_SELF;
 					break;
 					case 1:
-						spellnum=MGC_PSI_BOLT;
+						spellnum=CLC_OPEN_WOUNDS;
 					break;
 					case 2:
 						spellnum=CLC_CURSE_ITEMS;
