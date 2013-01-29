@@ -650,6 +650,7 @@ static const char * const bogusobjects[] = {
        "named pipe",                       /* UNIX */
        "kernel trap",
        "copy of nethack 3.4.4",            /* recursion... */
+	   "YAAP", "YANI", "malevolent RNG",
        "cursed smooth manifold",           /* Topology */
        "vi clone",
        "maximally subsentient emacs mode",
@@ -664,7 +665,7 @@ static const char * const bogusobjects[] = {
 	   "scroll of oxygen-destroyer plans", /* Godzilla */
 	   "hologram of Death Star plans",
 	   "sonic screwdriver", /* Dr. Who */
-	   "lost copy of The Nice and Accurate Prophecies of Anges Nutter",
+	   "lost copy of The Nice and Accurate Prophecies of Anges Nutter", /* Good Omens */
 
 	   /* British goodness */
        "bum bag",
@@ -682,8 +683,8 @@ static const char * const bogusobjects[] = {
        "large gem",                        /* Valhalla */
        "monster manual",                   /* D&D */
        "ring of power",                    /* LOTR */
-       "lightsaber",
-       "not tea","no tea here!", "no tea", /* HGttG */
+       "lightsaber",	                   /* Star Wars */
+       "thing that is not tea","no tea here!", "no tea, sadly", /* HGttG */
 	   "potion almost, but not quite, entirely unlike tea",
 /*       "pan-galactic gargle blaster",      /* HGttG */
        "silmaril",                         /* LOTR */
@@ -691,10 +692,10 @@ static const char * const bogusobjects[] = {
 	   "crown of swords",
 
 	   /* Books */
+	   "Codex of the Infinite Planes",		   /* DnD */
 	   "Non-Conduit Transdimensional Fabric Fluxes and Real-Time Inter-dimensional Matrix Transformations", /* Maldin's Greyhawk */
        "The Book of Sand",                     /* Jorge Luis Borges */
        "spellbook called Octavo",          /* Discworld */
-	   "Codex of the Infinite Planes",	   /* DnD */
 	   "Addition Made Simple",
 	   "Noncommutative Hyperdimensional Geometry Made (Merely!) Complicated",
 	   "heavily obfuscated spellbook",
@@ -704,11 +705,12 @@ static const char * const bogusobjects[] = {
 	   "The Book of Eibon", 					/* Clark Ashton Smith */
 	   "The King in Yellow", 					/* Robert W. Chambers */
 	   "De Vermis Mysteriis",					/* Robert Bloch */
-	   "Necronomicon",							/* HP Lovecraft */
-	   "Al Azif",								/* HP Lovecraft */
+	   "Necronomicon",							/* HP Lovecraft (yes, I know there is a game artifact of this name) */
+	   "Al Azif",								/* "Arabic" name for the Necronomicon, HP Lovecraft */
 	   "Unaussprechlichen Kulten",				/*  Robert E. Howard; Lovecraft and Derleth */
 	   "Nameless Cults",						/*  (the original name) */
 	   "Unspeakable Cults",						/*  One of the two things "Unaussprechlichen" translates to */
+	   "Unpronouncable Cults",					/*  The other thing "Unaussprechlichen" translates to */
 	   "The Diary of Drenicus the Wise",		/*  Dicefreaks, The Gates of Hell */
 	   "Clavicula Salomonis Regis",				/* ie, The Lesser Key of Solomon */
 	   "The Five Books of Moses",				/* aka the Torah */
@@ -765,6 +767,7 @@ static const char * const bogusobjects[] = {
        "amulet of instadeath",
        "amulet of bad luck",
        "amulet of refraction",
+       "amulet of deflection",
        "amulet of rarefaction",
        "O-ring",
        "ring named Frost Band",
