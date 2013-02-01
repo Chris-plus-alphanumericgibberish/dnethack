@@ -298,6 +298,16 @@ register struct monst *mtmp;
 	if (is_orc(mtmp->data) && maybe_polyd(is_elf(youmonst.data),
 			Race_if(PM_ELF)))
 	    tmp++;
+#ifdef CONVICT
+    /* Adding iron ball as a weapon skill gives a -4 penalty for
+    unskilled vs no penalty for non-weapon objects.  Add 4 to
+    compensate. */
+    if (uwep && (uwep->otyp == HEAVY_IRON_BALL)) {
+        tmp += 4;   /* Compensate for iron ball weapon skill -4
+                    penalty for unskilled vs no penalty for non-
+                    weapon objects. */
+    }
+#endif /* CONVICT */
 	if(Role_if(PM_MONK) && !Upolyd) {
 	    if (uarm) {
 		Your("armor is rather cumbersome...");

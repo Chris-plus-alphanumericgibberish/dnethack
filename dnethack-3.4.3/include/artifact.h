@@ -217,6 +217,7 @@ struct artifact {
 #define NECRONOMICON	(LAST_PROP+30)
 #define DANCE_DAGGER	(LAST_PROP+31)
 #define SING_SPEAR	(LAST_PROP+32)
+#define PHASING		(LAST_PROP+33)
 
 #define CountsAgainstGifts(x)	!(artilist[x].cspfx3 & SPFX3_NOCNT)
 							/*(x != ART_WATER_CRYSTAL && \

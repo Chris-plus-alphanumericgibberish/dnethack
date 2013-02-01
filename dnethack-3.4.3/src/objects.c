@@ -408,6 +408,10 @@ ARMOR("Hawaiian shirt", "flowery shirt",
 	1, 0, 0, 0,	 10, 0,	 5,   3, 10, 0, ARM_SHIRT, CLOTH, CLR_MAGENTA),
 ARMOR("T-shirt", (char *)0,
 	1, 0, 0, 0,	 5, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_WHITE),
+# ifdef CONVICT
+ARMOR("striped shirt", (char *)0,
+	1, 0, 0, 0,	 0, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_GRAY),
+# endif /* CONVICT */
 #endif
 
 /* cloaks */
@@ -981,7 +985,11 @@ OBJECT(OBJ("bed",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,WOOD), 0,
 OBJECT(OBJ("knapsack",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,PLASTIC), 0,
 		BED_CLASS,   900, 0, 60,  100, 20, 20, 0, 0, 2000, CLR_GREEN),
 */
+#ifdef CONVICT
+OBJECT(OBJ("heavy iron ball", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_FLAIL,IRON), 0,
+#else
 OBJECT(OBJ("heavy iron ball", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
+#endif /* CONVICT */
 		BALL_CLASS,  1000, 0,  480, 10, 25, 25, 0, 0,  200, HI_METAL),
 						/* +d4 when "very heavy" */
 OBJECT(OBJ("iron chain", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,

@@ -90,6 +90,13 @@
 				 (ptr) == &mons[PM_GIANT_BAT] || \
 				 (ptr) == &mons[PM_VAMPIRE_BAT])
 #define is_social_insect(ptr) ((ptr)->mlet == S_ANT && (ptr)->maligntyp > 0)
+#ifdef CONVICT
+# define is_rat(ptr)		((ptr) == &mons[PM_SEWER_RAT] || \
+				 (ptr) == &mons[PM_GIANT_RAT] || \
+				 (ptr) == &mons[PM_RABID_RAT] || \
+				 (ptr) == &mons[PM_ENORMOUS_RAT] || \
+				 (ptr) == &mons[PM_RODENT_OF_UNUSUAL_SIZE])
+#endif /* CONVICT */
 #define is_bird(ptr)		((ptr)->mlet == S_BAT && !is_bat(ptr) && (ptr) != &mons[PM_BYAKHEE])
 #define is_giant(ptr)		(((ptr)->mflags2 & M2_GIANT) != 0L)
 #define is_gnoll(ptr)		((ptr) == &mons[PM_GNOLL] || \
@@ -249,7 +256,12 @@
 				 (ptr) != &mons[PM_BLACK_PUDDING] && \
 				 (ptr) != &mons[PM_DARKNESS_GIVEN_HUNGER]))
 
+#ifdef CONVICT
+#define befriend_with_obj(ptr, obj) ((obj)->oclass == FOOD_CLASS && \
+				     (is_domestic(ptr) || (is_rat(ptr) && Role_if(PM_CONVICT))))
+#else
 #define befriend_with_obj(ptr, obj) ((obj)->oclass == FOOD_CLASS && \
 				     is_domestic(ptr))
+#endif
 
 #endif /* MONDATA_H */

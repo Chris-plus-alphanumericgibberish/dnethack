@@ -523,8 +523,7 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/caveman.des $(DAT)/healer.des   $(DAT)/knight.des \
 	 $(DAT)/monk.des    $(DAT)/priest.des   $(DAT)/ranger.des \
 	 $(DAT)/rogue.des   $(DAT)/samurai.des  $(DAT)/sokoban.des \
-	 $(DAT)/tourist.des $(DAT)/valkyrie.des $(DAT)/wizard.des \
-	 $(DAT)/convict.des
+	 $(DAT)/tourist.des $(DAT)/valkyrie.des $(DAT)/wizard.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/endgame.des)
@@ -549,7 +548,6 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/tourist.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/valkyrie.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/wizard.des)
-	$(subst /,\,$(U)lev_comp $(DAT)/convict.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)
 	$(subst /,\,echo sp_levs done > $(O)sp_lev.tag)

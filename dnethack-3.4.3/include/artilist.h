@@ -176,6 +176,13 @@ A("Mjollnir",			WAR_HAMMER,		/* Mjo:llnir */
 	0, A_NEUTRAL, PM_VALKYRIE, NON_PM, 4000L, 
 	SPFX2_ELEC,0,0),
 
+#ifdef CONVICT
+A("Luck Blade",			BROADSWORD,
+	(SPFX_RESTR|SPFX_LUCK|SPFX_INTEL),0,0,
+	PHYS(5,6),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
+	0,0,0 ),
+#endif /* CONVICT */
+
 A("Cleaver",			BATTLE_AXE,
 	SPFX_RESTR, 0, 0,
 	PHYS(3,0),	NO_DFNS,	NO_CARY,	
@@ -616,6 +623,14 @@ A("The Sceptre of Might",	MACE,
 	PHYS(5,0),	NO_DFNS,	CARY(AD_MAGM),
 	CONFLICT,	A_LAWFUL, PM_CAVEMAN, NON_PM, 2500L, 
 	SPFX2_RAM,0,0),
+#ifdef CONVICT
+A("The Iron Ball of Liberation", HEAVY_IRON_BALL,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),
+		(SPFX_SEARCH|SPFX_SEEK|SPFX_WARN), 0,
+	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
+	PHASING,	A_NEUTRAL, PM_PRISONER, NON_PM, 5000L,
+	SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
+#endif	/* CONVICT */
 
 #if 0	/* OBSOLETE */
 A("The Palantir of Westernesse",	CRYSTAL_BALL,

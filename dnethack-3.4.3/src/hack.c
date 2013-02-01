@@ -662,6 +662,9 @@ int mode;
 	}
 	if (invent && (inv_weight() + weight_cap() > 600)) {
 	    if (mode == DO_MOVE)
+#ifdef CONVICT
+        if (!Passes_walls)
+#endif /* CONVICT */
 		You("are carrying too much to get through.");
 	    return FALSE;
 	}

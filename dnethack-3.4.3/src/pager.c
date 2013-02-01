@@ -597,7 +597,6 @@ static const char * const bogusobjects[] = {
        /* Modern */
        "polo mallet",
        "string vest",
-       "YAFM",                             /* rgrn */
        "applied theology textbook",        /* AFutD */
        "handbag",
        "onion ring",
@@ -651,7 +650,7 @@ static const char * const bogusobjects[] = {
        "named pipe",                       /* UNIX */
        "kernel trap",
        "copy of nethack 3.4.4",            /* recursion... */
-	   "YAAP", "YANI", "malevolent RNG",
+       "YAFM", "YAAP", "YANI", "YAAD", "YASD", "YAFAP", "malevolent RNG", /* rgrn */
        "cursed smooth manifold",           /* Topology */
        "vi clone",
        "maximally subsentient emacs mode",

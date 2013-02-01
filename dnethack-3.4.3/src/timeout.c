@@ -6,6 +6,9 @@
 #include "lev.h"	/* for checking save modes */
 
 STATIC_DCL void NDECL(stoned_dialogue);
+#ifdef CONVICT
+STATIC_DCL void NDECL(phasing_dialogue);
+#endif /* CONVICT */
 STATIC_DCL void NDECL(vomiting_dialogue);
 STATIC_DCL void NDECL(choke_dialogue);
 STATIC_DCL void NDECL(slime_dialogue);
@@ -40,6 +43,28 @@ stoned_dialogue()
 		nomul(-3);
 	exercise(A_DEX, FALSE);
 }
+
+#ifdef CONVICT
+STATIC_OVL void
+phasing_dialogue()
+{
+    if (Phasing == 15) {
+        if (!Hallucination) {
+            Your("body is beginning to feel more solid.");
+        } else {
+            You_feel("more distant from the spirit world.");
+        }
+        stop_occupation();
+    } else if (Phasing == 1) {
+        if (!Hallucination) {
+            Your("body is solid again.");
+        } else {
+            You_feel("totally separated from the spirit world.");
+        }
+        stop_occupation();
+    }
+}
+#endif /* CONVICT */
 
 /* He is getting sicker and sicker prior to vomiting */
 static NEARDATA const char * const vomiting_texts[] = {
