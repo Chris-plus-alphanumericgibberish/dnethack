@@ -4215,6 +4215,12 @@ TRAP:"board",(63,17)
 TRAP:"board",(55,02)
 TRAP:"board",(55,17)
 
+
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+
 TRAP:"board",random
 TRAP:"board",random
 TRAP:"board",random
