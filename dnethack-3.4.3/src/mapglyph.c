@@ -130,7 +130,27 @@ unsigned *ospecial;
 		color = CLR_WHITE;
 	    else
 #endif
-	    cmap_color(offset);
+		/* Special colours for special dungeon areas */
+		if (iflags.use_color && offset >= S_vwall && offset <= S_hcdoor) {
+				if (*in_rooms(x,y,BEEHIVE))
+				color = CLR_YELLOW;
+				else if (In_W_tower(x, y, &u.uz))
+				color = CLR_MAGENTA;
+				else if (In_mines(&u.uz) /*&& !Is_minetown_level(&u.uz)*/)
+				color = CLR_BROWN;
+				else if (Is_astralevel(&u.uz))
+				color = CLR_WHITE;
+			} else if (iflags.use_color && offset == S_room) {
+				if (*in_rooms(x,y,BEEHIVE))
+				color = CLR_YELLOW;
+//				else if (*in_rooms(x,y,GARDEN))
+//				color = CLR_GREEN;
+				else if (Is_juiblex_level(&u.uz))
+				color = CLR_BRIGHT_GREEN;
+			} else if (iflags.use_color && offset == S_altar) {
+				color = CLR_WHITE;
+			}
+			if (color == NO_COLOR) cmap_color(offset);
     } else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
 	if (offset == BOULDER && iflags.bouldersym) ch = iflags.bouldersym;
 	else ch = oc_syms[(int)objects[offset].oc_class];
