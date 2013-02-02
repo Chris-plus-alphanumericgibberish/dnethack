@@ -626,7 +626,11 @@ int thrown;
 	} else {
 	    Strcpy(saved_oname, cxname(obj));
 	    if(obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
+#ifdef CONVICT
+	       obj->oclass == GEM_CLASS || obj->otyp == HEAVY_IRON_BALL) {
+#else
 	       obj->oclass == GEM_CLASS) {
+#endif /* CONVICT */
 
 		/* is it not a melee weapon? */
 		if (/* if you strike with a bow... */
