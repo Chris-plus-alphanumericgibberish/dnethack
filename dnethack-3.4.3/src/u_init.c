@@ -684,6 +684,8 @@ u_init()
         knows_object(SKELETON_KEY);
         knows_object(GRAPPLING_HOOK);
         skill_init(Skill_Con);
+		u.hod = 6;
+		u.ualign.sins = 16; /* You have sinned */
         u.uhunger = 200;  /* On the verge of hungry */
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
         u.ualign.type = A_CHAOTIC; /* Override racial alignment */
