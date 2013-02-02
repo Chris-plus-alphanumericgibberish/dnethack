@@ -260,7 +260,28 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 						spellnum=MGC_DEATH_TOUCH;
 					break;
 				}
-		    else spellnum = choose_magic_spell(spellnum);
+/*			else if(mtmp->data==&mons[PM_CHAOS])
+				switch(rn2(10)){
+					case 0:
+						spellnum=MGC_CURE_SELF;
+					break;
+					case 1:
+					case 2:
+					case 3:
+						spellnum=CLC_LIGHTNING;
+					break;
+					case 4:
+					case 5:
+					case 6:
+						spellnum=CLC_FIRE_PILLAR;
+					break;
+					case 7:
+					case 8:
+					case 9:
+						spellnum=CLC_GEYSER;
+					break;
+				}
+*/		    else spellnum = choose_magic_spell(spellnum);
 		}
 //		else if(mattk->adtyp == AD_PSON){
 //			spellnum = choose_magic_spell(1);

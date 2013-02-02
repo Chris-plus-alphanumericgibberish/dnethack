@@ -759,6 +759,8 @@ register int n;
 	if(n < 0) {
 		if(newalign < u.ualign.record)
 			u.ualign.record = newalign;
+			if(u.ualign.record > ALIGNLIM)
+				u.ualign.record = ALIGNLIM;
 	} else
 		if(newalign > u.ualign.record) {
 			u.ualign.record = newalign;

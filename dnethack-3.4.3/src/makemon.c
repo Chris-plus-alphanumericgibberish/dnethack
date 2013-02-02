@@ -2073,6 +2073,16 @@ register int	mmflags;
 				mtmp->mhpmax = u.chokhmah*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
+			if(mndx != PM_MALKUTH_SEPHIRAH){
+				coord mm;
+				mm.x = xdnstair;
+				mm.y = ydnstair;
+				makeketer(&mm);
+				
+				mm.x = xupstair;
+				mm.y = yupstair;
+				makeketer(&mm);
+			}
 		break;
 
 		case S_EEL:
@@ -2371,6 +2381,13 @@ rndmonst()
 {
 	register struct permonst *ptr;
 	register int mndx, ct;
+	int zlevel, minmlev, maxmlev;
+	
+	zlevel = level_difficulty();
+	/* determine the level of the weakest monster to make. */
+	minmlev = zlevel / 6;
+	/* determine the level of the strongest monster to make. */
+	maxmlev = (zlevel + u.ulevel) / 2;
 
 	if((u.uevent.sum_entered || !rn2(100)) && !(mvitals[PM_CENTER_OF_ALL].mvflags & G_EXTINCT) && !rn2(100)){
 	    return &mons[PM_CENTER_OF_ALL]; /*center of all may be created at any time, but is much more likely after
@@ -2400,6 +2417,27 @@ rndmonst()
 		}
 	}
 
+	if(u.hod && !rn2(10) && rn2(40+u.hod) > 50){
+		u.hod-=10;
+		if(!tooweak(PM_HOD_SEPHIRAH, minmlev)){
+			return &mons[PM_HOD_SEPHIRAH];
+		}
+		else u.keter++;
+	}
+	if(u.gevurah && rn2(1000) < max(u.gevurah/4 + 1, 50)){
+		if(!tooweak(PM_GEVURAH_SEPHIRAH, minmlev)){
+			return &mons[PM_GEVURAH_SEPHIRAH];
+		}
+		else{
+			u.gevurah -= 4;
+			u.keter++;
+			return &mons[PM_CHOKHMAH_SEPHIRAH];
+		}
+	}
+	if(u.keter && rn2(1000) < max(u.keter, 100)){
+		u.chokhmah++;
+		return &mons[PM_CHOKHMAH_SEPHIRAH];
+	}
 	if (u.uz.dnum == tower_dnum)
 		return rn2(10) ? mkclass(S_ZOMBIE, 0) : mkclass(S_VAMPIRE, 0);
 
@@ -2413,7 +2451,7 @@ rndmonst()
 		return rn2(3) ? &mons[PM_JELLYFISH] : rn2(2) ? &mons[PM_SHARK] : &mons[PM_GIANT_EEL];
 
 	if (rndmonst_state.choice_count < 0) {	/* need to recalculate */
-	    int zlevel, minmlev, maxmlev;
+	    
 	    boolean elemlevel;
 #ifdef REINCARNATION
 	    boolean upper;
@@ -2432,37 +2470,11 @@ rndmonst()
 #endif
 		return (struct permonst *)0;
 	    } /* else `mndx' now ready for use below */
-	    zlevel = level_difficulty();
-	    /* determine the level of the weakest monster to make. */
-	    minmlev = zlevel / 6;
-	    /* determine the level of the strongest monster to make. */
-	    maxmlev = (zlevel + u.ulevel) / 2;
 #ifdef REINCARNATION
 	    upper = Is_rogue_level(&u.uz);
 #endif
 	    elemlevel = In_endgame(&u.uz) && !Is_astralevel(&u.uz);
 
-		if(u.hod && !rn2(10) && rn2(50+u.hod) > 50){
-			u.hod--;
-			if(!tooweak(PM_HOD_SEPHIRAH, minmlev)){
-				return &mons[PM_HOD_SEPHIRAH];
-			}
-			else u.keter++;
-		}
-		if(u.gevurah && rn2(1000) < max(u.gevurah/4 + 1, 50)){
-			if(!tooweak(PM_GEVURAH_SEPHIRAH, minmlev)){
-				return &mons[PM_GEVURAH_SEPHIRAH];
-			}
-			else{
-				u.gevurah -= 4;
-				u.keter++;
-				return &mons[PM_CHOKHMAH_SEPHIRAH];
-			}
-		}
-		if(u.keter && rn2(1000) < max(u.keter, 100)){
-			u.chokhmah++;
-			return &mons[PM_CHOKHMAH_SEPHIRAH];
-		}
 /*
  *	Find out how many monsters exist in the range we have selected.
  */

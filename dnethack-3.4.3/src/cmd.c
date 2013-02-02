@@ -863,6 +863,18 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (wizard) {
 		Sprintf(buf, " %d", u.ualign.record);
 		enl_msg("Your alignment ", "is", "was", buf);
+		Sprintf(buf, " %d sins", u.ualign.sins);
+		enl_msg("You ", "carry", "carried", buf);
+		Sprintf(buf, " %d", (int) ALIGNLIM);
+		enl_msg("Your max alignment ", "is", "was", buf);
+		Sprintf(buf, "a hod wantedness of %d", u.hod);
+		you_have(buf);
+		Sprintf(buf, "a gevurah wantedness of %d", u.gevurah);
+		you_have(buf);
+		Sprintf(buf, "a chokhmah wantedness of %d", u.keter);
+		you_have(buf);
+		Sprintf(buf, "%d chokhmah sephiroth ", u.chokhmah);
+		enl_msg(buf, "are", "were", " deployed.");
 	}
 #endif
 

@@ -1895,6 +1895,7 @@ E boolean FDECL(block_door, (XCHAR_P,XCHAR_P));
 E boolean FDECL(block_entry, (XCHAR_P,XCHAR_P));
 E char *FDECL(shk_your, (char *,struct obj *));
 E char *FDECL(Shk_Your, (char *,struct obj *));
+E void FDECL(makeketer, (coord *));
 
 /* ### shknam.c ### */
 

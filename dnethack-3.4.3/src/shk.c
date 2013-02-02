@@ -13,7 +13,6 @@
 #define PAY_SKIP  (-1)
 #define PAY_BROKE (-2)
 
-STATIC_DCL void FDECL(makeketer, (coord *));
 STATIC_DCL void FDECL(call_keter, (struct monst *,BOOLEAN_P));
 # ifdef OVLB
 STATIC_DCL void FDECL(keter_gone, (BOOLEAN_P));
@@ -523,8 +522,10 @@ struct monst *shkp;
 	if (!Role_if(PM_ROGUE)) {     /* stealing is unlawful */
 	    adjalign(-sgn(u.ualign.type));
 	    You("feel like an evil rogue.");
-		u.ualign.sins++;
-		u.hod++; /* It is deliberate that non-rogues increment hod twice*/
+		if(u.ualign.type < 0){
+			u.ualign.sins++;
+			u.hod++; /* It is deliberate that non-rogues increment hod twice*/
+		}
 	}
 
 	u.hod++;
@@ -3619,7 +3620,7 @@ register int fall;
     }
 }
 
-STATIC_OVL void
+void
 makeketer(mm)
 coord *mm;
 {
