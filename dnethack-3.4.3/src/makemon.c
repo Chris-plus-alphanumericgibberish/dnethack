@@ -2246,11 +2246,11 @@ register int	mmflags;
 	}
 	if(anymon) {
 	    if ((ptr->geno & G_SGROUP) && rn2(2)) {
-		m_initsgrp(mtmp, mtmp->mx, mtmp->my);
+			m_initsgrp(mtmp, mtmp->mx, mtmp->my);
 	    } else if (ptr->geno & G_LGROUP) {
 			if(mndx != PM_MALKUTH_SEPHIRAH){ /* Malkuths are tough, but are generated in large numbers by shopkeeper code */
-		if(rn2(3))  m_initlgrp(mtmp, mtmp->mx, mtmp->my);
-		else	    m_initsgrp(mtmp, mtmp->mx, mtmp->my);
+				if(rn2(3))  m_initlgrp(mtmp, mtmp->mx, mtmp->my);
+				else	    m_initsgrp(mtmp, mtmp->mx, mtmp->my);
 			}else{
 				if(!rn2(3)) m_initsgrp(mtmp, mtmp->mx, mtmp->my);
 			}
@@ -2428,7 +2428,9 @@ rndmonst()
 		}
 		else u.keter++;
 	}
-	if(u.gevurah && rn2(1000) < max(u.gevurah/4 + 1, 50)){
+	if(u.gevurah && rn2(20) && rn2(u.gevurah + 94) > 100)){
+		/* Notes on frequency: cheating death via lifesaving counts as +4
+			cheating death via rehumanization counts as +1*/
 		if(!tooweak(PM_GEVURAH_SEPHIRAH, minmlev)){
 			return &mons[PM_GEVURAH_SEPHIRAH];
 		}
@@ -2438,7 +2440,7 @@ rndmonst()
 			return &mons[PM_CHOKHMAH_SEPHIRAH];
 		}
 	}
-	if(u.keter && rn2(1000) < max(u.keter, 100)){
+	if(u.keter && !rn2(100) && rn2(u.keter+10) > 10){
 		u.chokhmah++;
 		return &mons[PM_CHOKHMAH_SEPHIRAH];
 	}
