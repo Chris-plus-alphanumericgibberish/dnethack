@@ -2248,8 +2248,12 @@ register int	mmflags;
 	    if ((ptr->geno & G_SGROUP) && rn2(2)) {
 		m_initsgrp(mtmp, mtmp->mx, mtmp->my);
 	    } else if (ptr->geno & G_LGROUP) {
+			if(mndx != PM_MALKUTH_SEPHIRAH){ /* Malkuths are tough, but are generated in large numbers by shopkeeper code */
 		if(rn2(3))  m_initlgrp(mtmp, mtmp->mx, mtmp->my);
 		else	    m_initsgrp(mtmp, mtmp->mx, mtmp->my);
+			}else{
+				if(!rn2(3)) m_initsgrp(mtmp, mtmp->mx, mtmp->my);
+			}
 	    }
 	}
 
