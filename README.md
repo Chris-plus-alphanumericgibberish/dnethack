@@ -2,7 +2,7 @@ dNetHack
 ========
 A variant of nethack 3.4.4
 
-In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash’em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, probably others (wasn’t always good about documenting who’s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past.
+In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash’em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, Bulwersator, Karl Garrison, probably others (wasn’t always good about documenting who’s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past. The Chokhmah Sephirah is based on the Recoudut, an epic inevitable posted to some message board by someone, years ago, somewhere out there on the internet. That original source has long since vanished. The other Keter Sephiroth are based on the DnD inevitables.
 
 Implemented YANI's from rec.games.roguelike.nethack and the nethack wiki, including several of Jonadab the Unsightly One's suggestions.
 
@@ -22,6 +22,9 @@ __Player Character Changes__
 -----Wards and engravings may be of different types (ie, you can have a burned ward and a dust-engraved message in the same square)
 -----Altering the ward or the engraving obscures the ward, making you vulnerable until you finish the alteration.
 -Barbarians can reach expert in Broadsword and Trident
+-Merged in the Convict patch.
+--Convicts will find they are unable to raise their alignment record as fast as other roles can.
+--Convicts will find a slightly alter
 -Valks can reach expert in spear but only skilled in longsword
 -Valks start with a +1 spear instead of a +1 longsword (as in Slash'em).
 -Valks start with leather armor and +1 small shields
@@ -49,6 +52,7 @@ __Player Character Changes__
 (...)
 _____________________________
 __Changes to Existing Items__
+
 Tweaked armor
 -Crystal plate mail is very heavy but allows extremely low AC.  It is MC2, can be enchanted to +14, and enchants at twice the normal rate.
 -Plate mails of other varieties give MC3 and low AC. All plate mails can be enchanted to +7.
@@ -77,6 +81,7 @@ Some items get special bonuses based on appearance
 (...Dungeons and Extra-Terrestrial hack)
 ________________________________
 __Changes to Existing Monsters__
+
 -Trappers changed color, to brown t
 ----there is a new monster identified by the dark green t
 -Vampire bats are now gray. Ravens are still black.
@@ -89,6 +94,7 @@ __Changes to Existing Monsters__
 (...DnEThack. dnethack.)
 ___________________________
 __Changes to Existing Artifacts__
+
 BANNED wishing for quest artifacts
 Only your quest Nemeses will deliberately steal your quest artifact, other monsters may steal the amulet and invocation items. The quest artifact may of course be randomly stolen by nymphs and the like.
 	-Makes QA a dependable source of extrinsics, deepening differences between classes.
@@ -98,8 +104,10 @@ Only your quest Nemeses will deliberately steal your quest artifact, other monst
 (ha. ha.)
 ______________
 __Known Bugs__
+
 SPFX_RAM: if the thrown target goes over a land mine and is killed, it gives an error message?
 Messed up some compile-time options. The game will not compile without TOURIST set, probably others.
+Memmory draining attacks will attempt to remove the memmory of objects or levels that the character doesn't know. This seems to be harmless. As such I have commented out the error message.
 
 Not bugs so much as incomplete features:
 -Most new monster attacks are coded solely for monster vs. player, not monster vs. monster or player vs. monster.
