@@ -2756,7 +2756,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			   }
 			break;
 		case AD_CNCL:
-			if(mtmp->mcansee){
+			if(mtmp->mcansee && couldsee(mtmp->mx, mtmp->my)){
 				pline("Your magic fades.");
 				(void) cancel_monst(&youmonst, mksobj(SPE_CANCELLATION, FALSE, FALSE), FALSE, TRUE, FALSE,!rn2(4) ? rnd(mtmp->m_lev) : 0);
 				succeeded=1;
