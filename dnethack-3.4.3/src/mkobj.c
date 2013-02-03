@@ -380,6 +380,7 @@ boolean artif;
 	otmp->otyp = otyp;
 	otmp->where = OBJ_FREE;
 	otmp->dknown = index(dknowns, let) ? 0 : 1;
+	otmp->corpsenm = 0; /* BUGFIX: Where does this get set? shouldn't it be given a default during initilation? */
 	otmp->ovar1 = 0;
 	otmp->gifted = A_NONE;
 	otmp->lifted = 0;

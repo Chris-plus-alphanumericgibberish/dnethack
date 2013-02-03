@@ -3641,6 +3641,9 @@ read_necro(VOID_ARGS)
 	}
 	else if(necro_effect == SELECT_STUDY){
 		int chance = 0;
+//		pline("learned %d abilities",artiptr->spestudied);
+		if(!(artiptr->ovar1)) artiptr->spestudied = 0; /* Sanity enforcement. Something wierd is going on with the artifact creation code.*/
+//		pline("learned %d abilities",artiptr->spestudied);
 		if(d(1,10) * 10  - artiptr->spestudied * 10 - 150 + ACURR(A_INT) * 10 > 0){
 			if(!(artiptr->ovar1 & LAST_PAGE)){
 				chance = d(1,22);
