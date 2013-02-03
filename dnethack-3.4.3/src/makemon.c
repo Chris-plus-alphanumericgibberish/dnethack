@@ -2428,7 +2428,7 @@ rndmonst()
 		}
 		else u.keter++;
 	}
-	if(u.gevurah && rn2(20) && rn2(u.gevurah + 94) > 100)){
+	if(u.gevurah && !rn2(20) && rn2(u.gevurah + 94) > 100){
 		/* Notes on frequency: cheating death via lifesaving counts as +4
 			cheating death via rehumanization counts as +1*/
 		if(!tooweak(PM_GEVURAH_SEPHIRAH, minmlev)){
