@@ -57,8 +57,8 @@ remove_monster(x,y)
 int x,y;
 {
     if (level.monsters[x][y] &&
-	(level.monsters[x][y]->data == &mons[PM_GIANT_TURTLE] &&
-	 (!level.monsters[x][y]->minvis || See_invisible)))
+	opaque(level.monsters[x][y]->data) &&
+	 (!level.monsters[x][y]->minvis || See_invisible))
 	unblock_point(x,y);
     level.monsters[x][y] = (struct monst *)0;
 }
@@ -2873,6 +2873,11 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 		wormgone(mtmp);
 		place_monster(mtmp, mtmp->mx, mtmp->my);
 	}
+	
+	/* Possibly Unblock  */
+	if(!opaque(mdat) && opaque(mtmp->data)) unblock_point(mtmp->mx, mtmp->my);
+	/* Possibly Block  */
+	if(opaque(mdat) && !opaque(mtmp->data)) block_point(mtmp->mx, mtmp->my);
 
 	hpn = mtmp->mhp;
 	hpd = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev)*8 : mdat->mlevel;
