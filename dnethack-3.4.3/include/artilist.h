@@ -403,7 +403,7 @@ A("Beastmaster's Duster",			LEATHER_JACKET, //needs quote
 	0,0,WSFX_PLUSSEV),
 
 A("Mirrorbright",			SHIELD_OF_REFLECTION,/*adapted from Slash'em*/
-	(SPFX_RESTR|SPFX_HALRES), 0, 0, //needs quote
+	(SPFX_RESTR|SPFX_HALRES), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message
 	0,0,WSFX_PLUSSEV),
