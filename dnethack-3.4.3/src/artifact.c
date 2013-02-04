@@ -2966,7 +2966,6 @@ arti_invoke(obj)
 			}
 			if(!u.uevent.uread_necronomicon){
 				if(obj->ovar1) You("find notes scribbled the margins!  These will come in handy!");
-				pline("spells: %d",obj->ovar1);
 				u.uevent.uread_necronomicon = 1;
 			    discover_artifact(ART_NECRONOMICON);
 				identify(obj);

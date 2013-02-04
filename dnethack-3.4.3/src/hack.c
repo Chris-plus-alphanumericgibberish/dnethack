@@ -2184,7 +2184,7 @@ boolean k_format;
 int
 weight_cap()
 {
-	register long carrcap;
+	long carrcap = 0;
 
 	carrcap = 25*(ACURRSTR + ACURR(A_CON)) + 50;
 	if (Upolyd) {
@@ -2218,14 +2218,20 @@ weight_cap()
 		if (carrcap < 0) carrcap = 0;
 	}
 	if(arti_lighten(uarm)){
-		carrcap = (long)(carrcap * uarm->blessed ? 1.5 : uarm->cursed ? .75 : 1.25);
+		if(uarm->blessed) carrcap += carrcap * 1.5;
+		else if(uarm->cursed) carrcap += carrcap * 1.25;
+		else carrcap += carrcap * .75;
 	}
 	if(arti_lighten(uarmc)){
-		carrcap = (long)(carrcap * uarmc->blessed ? 1.5 : uarmc->cursed ? .75 : 1.25);
+		if(uarmc->blessed) carrcap += carrcap * 1.5;
+		else if(uarmc->cursed) carrcap += carrcap * 1.25;
+		else carrcap += carrcap * .75;
 	}
 #ifdef TOURIST
 	if(arti_lighten(uarmu)){
-		carrcap = (long)(carrcap * uarmu->blessed ? 1.5 : uarmu->cursed ? .75 : 1.25);
+		if(uarmu->blessed) carrcap += carrcap * 1.5;
+		else if(uarmu->cursed) carrcap += carrcap * 1.25;
+		else carrcap += carrcap * .75;
 	}
 #endif	/* TOURIST */
 
