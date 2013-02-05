@@ -3092,10 +3092,10 @@ CONTAINER:'`',"statue",(62,01),"hobbit",1
 CONTAINER:'`',"statue",(62,03),"mind flayer",1
 # Final Room
 CONTAINER:'`',"statue",(71,02),"high priest",1
-CONTAINER:'`',"statue",(72,01),"Archon",1
+CONTAINER:'`',"statue",(72,01),"high priest",1
 CONTAINER:'`',"statue",(72,03),"high priest",1
 CONTAINER:'`',"statue",(74,02),"elder priest",1
-OBJECT:'%',"fortune cookie",(71,02)
+OBJECT:'%',"fortune cookie",(72,02)
 # A few traps
 TRAP:"pit",(21,02)
 TRAP:"pit",(30,02)
@@ -3296,7 +3296,7 @@ MONSTER:'h',"deep one",(20,09),asleep
 MONSTER:'h',"deep one",(21,09),asleep
 MONSTER:'h',"deep one",(22,09),asleep
 MONSTER:'h',"deeper one",(20,07),asleep
-OBJECT:')',"long sword",(20,07),cursed,+7,"The Sword of the Deeps"
+OBJECT:')',"long sword",(20,07),cursed,+12,"The Sword of the Deeps"
 # Garrison 2
 MONSTER:'h',"deep one",(19,11),asleep 
 MONSTER:'h',"deep one",(21,12),asleep 
@@ -3318,8 +3318,8 @@ MONSTER:'h',"deep one",(15,11),asleep
 MONSTER:'h',"deep one",(15,12),asleep 
 MONSTER:'h',"deep one",(16,10),asleep
 # A statue for the entrance area
-CONTAINER:'`',"statue",(01,08),"purple worm",1
-OBJECT:'=',"slow digestion",contained,cursed,0
+CONTAINER:'`',"statue",(01,08),"purple worm",1, "Shudde M'ell"
+OBJECT:'(',"drum of earthquake",contained,cursed,8
 # A little still life 
 CONTAINER:'`',"statue",(59,10),"knight",1
 OBJECT:')',"long sword",contained,blessed,+2
