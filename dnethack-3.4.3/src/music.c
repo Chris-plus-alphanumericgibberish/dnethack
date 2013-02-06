@@ -33,7 +33,6 @@ STATIC_DCL void FDECL(put_monsters_to_sleep,(int));
 STATIC_DCL void FDECL(charm_snakes,(int));
 STATIC_DCL void FDECL(calm_nymphs,(int));
 STATIC_DCL void FDECL(charm_monsters,(int));
-STATIC_DCL void FDECL(do_earthquake,(int));
 STATIC_DCL int FDECL(do_improvisation,(struct obj *));
 
 #ifdef UNIX386MUSIC
@@ -210,13 +209,18 @@ int distance;
 
 /* Generate earthquake :-) of desired force.
  * That is:  create random chasms (pits).
+ * Also a monster wizard spell.
+ * cursed drums (and spells) unleash monsters
+ * mon indicates which monster cast the spell
  */
 
-STATIC_OVL void
-do_earthquake(force)
+void
+do_earthquake(force, cursed, mon)
 int force;
+boolean cursed;
+struct monst *mon;
 {
-	register int x,y;
+    register int x,y, horrors = 0;
 	struct monst *mtmp;
 	struct obj *otmp;
 	struct trap *chasm;
@@ -232,7 +236,7 @@ int force;
 	if (end_y >= ROWNO) end_y = ROWNO - 1;
 	for (x=start_x; x<=end_x; x++) for (y=start_y; y<=end_y; y++) {
 	    if ((mtmp = m_at(x,y)) != 0) {
-		wakeup(mtmp);	/* peaceful monster will become hostile */
+               if (!mon) wakeup(mtmp); /* peaceful monster will become hostile */
 		if (mtmp->mundetected && is_hider(mtmp->data)) {
 		    mtmp->mundetected = 0;
 		    if (cansee(x,y))
@@ -246,7 +250,8 @@ int force;
 		    newsym(x,y);
 		}
 	    }
-	    if (!rn2(14 - force)) switch (levl[x][y].typ) {
+           if ((!rn2(14 - force) || (cursed && x == u.ux && y == u.uy)) && m_at(x,y) != mon)
+           switch (levl[x][y].typ) {
 		  case FOUNTAIN : /* Make the fountain disappear */
 			if (cansee(x,y))
 				pline_The("fountain falls into a chasm.");
@@ -305,15 +310,19 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 			    mselftouch(mtmp, "Falling, ", TRUE);
 			    if (mtmp->mhp > 0)
 				if ((mtmp->mhp -= rnd(6)) <= 0) {
-				    if(!cansee(x,y))
-					pline("It is destroyed!");
+                                   if(!cansee(x,y) || mon)
+                                       pline("%s is %sed!",
+                                               cansee(x,y) ? "It" : Monnam(mtmp),
+                                              nonliving(mtmp->data) ? "destroy" : "kill");
 				    else {
-					You("destroy %s!", mtmp->mtame ?
+                                       You("%s %s!", nonliving(mtmp->data) ? "destroy" :
+                                           "kill", mtmp->mtame ?
 					    x_monnam(mtmp, ARTICLE_THE, "poor",
 				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE):
 					    mon_nam(mtmp));
 				    }
-				    xkilled(mtmp,0);
+                                   if (!mon) xkilled(mtmp,0);
+                                   else mondied(mtmp);
 				}
 			}
 		    } else if (x == u.ux && y == u.uy) {
@@ -329,6 +338,18 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 					NO_KILLER_PREFIX);
 				    selftouch("Falling, you");
 			    }
+                   } else if ((mon || cursed) && !rn2(2)) {
+                       /* make some chthonic nasties */
+                       switch(rn2(In_hell(&u.uz) ? 7 : 5)) {
+                      case 2:(void) makemon(&mons[PM_ROCK_MOLE], x, y, NO_MM_FLAGS);
+                       case 3:(void) makemon(&mons[PM_EARTH_ELEMENTAL], x, y, NO_MM_FLAGS);
+                       case 4:(void) makemon(mkclass(S_XORN, 0), x, y, NO_MM_FLAGS);
+                       case 5:(void) makemon(mkclass(S_DEMON, 0), x, y, NO_MM_FLAGS);
+                      case 6:(void) makemon(&mons[PM_UMBER_HULK], x, y, NO_MM_FLAGS);
+                       default:(void) makemon(mkclass(S_ZOMBIE, 0), x, y, NO_MM_FLAGS);
+                       }
+                       mtmp = m_at(x,y);
+                       if (mtmp && canseemon(mtmp)) horrors++;
 		    } else newsym(x,y);
 		    break;
 		  case DOOR : /* Make the door collapse */
@@ -345,6 +366,10 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 		    break;
 	    }
 	}
+       if (horrors > 1)
+           pline("Monsters emerge from the chasms!");
+       else if (horrors)
+           pline("A monster emerges from a chasm!");
 }
 
 /*
@@ -452,7 +477,7 @@ struct obj *instr;
 
 		You("produce a heavy, thunderous rolling!");
 		pline_The("entire dungeon is shaking around you!");
-		do_earthquake((u.ulevel - 1) / 3 + 1);
+               do_earthquake((u.ulevel - 1) / 3 + 1, instr->cursed, (struct monst *)0);
 		/* shake up monsters in a much larger radius... */
 		awaken_monsters(ROWNO * COLNO);
 		makeknown(DRUM_OF_EARTHQUAKE);
