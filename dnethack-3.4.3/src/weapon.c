@@ -204,7 +204,8 @@ struct monst *mon;
 	if (otyp == CREAM_PIE) return 0;
 
 	if (bigmonst(ptr)) {
-		if(otmp->oartifact == ART_VORPAL_BLADE) exploding_d(2,objects[otyp].oc_wldam,1);
+		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wldam,1);
+		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = lucky_exploding_d(1,objects[otyp].oc_wldam,0);
 	    else if (objects[otyp].oc_wldam) tmp = rnd(objects[otyp].oc_wldam);
 	    switch (otyp) {
 		case IRON_CHAIN:
@@ -241,7 +242,8 @@ struct monst *mon;
 			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += d(1,10); break;
 	    }
 	} else {
-		if(otmp->oartifact == ART_VORPAL_BLADE) exploding_d(2,objects[otyp].oc_wsdam,1);
+		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wsdam,1);
+		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = lucky_exploding_d(1,objects[otyp].oc_wsdam,0);
 	    else if (objects[otyp].oc_wsdam) tmp = rnd(objects[otyp].oc_wsdam);
 	    switch (otyp) {
 		case IRON_CHAIN:

@@ -196,6 +196,9 @@
 				 (ptr) == &mons[PM_GNOLL_MATRIARCH] || \
 				 (ptr) == &mons[PM_MIND_FLAYER] || \
 				 (ptr) == &mons[PM_MASTER_MIND_FLAYER] || \
+				 (ptr) == &mons[PM_DEEP_ONE] || \
+				 (ptr) == &mons[PM_DEEPER_ONE] || \
+				 (ptr) == &mons[PM_DEEPEST_ONE] || \
 				 (ptr) == &mons[PM_MEDUSA] || \
 				 (ptr) == &mons[PM_MOUNTAIN_CENTAUR] || \
 				 (ptr) == &mons[PM_FOREST_CENTAUR] || \

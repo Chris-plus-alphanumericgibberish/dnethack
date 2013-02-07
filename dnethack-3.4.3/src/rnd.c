@@ -61,6 +61,7 @@ register int x;	/* good luck approaches 0, bad luck approaches (x-1) */
 	return i;
 }
 
+
 #endif /* OVLB */
 #ifdef OVL0
 
@@ -135,6 +136,33 @@ register int n, x, m;
 					The minimum value is n + n*m, and the maximum is unbounded
 					-CM */
 }
+
+int
+lucky_exploding_d(n,x,m)
+register int n, x, m;
+{
+	register int tmp=0, cur;
+	if(x < 2) return d(n,x) + m*n; //A die of size 1 or 0 would always explode.
+#ifdef DEBUG
+	if (x < 0 || n < 0 || (x == 0 && n != 0)) {
+		impossible("exploding d(%d,%d) attempted", n, x);
+		return(1);
+	}
+#endif
+	while(n--){
+		cur = x-rnl(x);
+//		pline("damage %d",cur);
+		while(cur == x){
+			tmp += cur+m;
+			cur = x-rnl(x);
+//			pline("looping %d",cur);
+		}
+		tmp += cur+m;
+	}
+//	pline("damage total %d",tmp);
+	return(tmp);
+}
+
 #endif /* OVL1 */
 #ifdef OVLB
 

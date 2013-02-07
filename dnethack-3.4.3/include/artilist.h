@@ -106,13 +106,13 @@ A("Slave to Armok",			DWARVISH_MATTOCK, /*two handed, so no twoweaponing.*/
 /*//////////The Banes//////////*/
 /*banes can be twoweaponed, look in obj.h*/
 
-A("Dragonlance",			LANCE, /*  */
-	(SPFX_RESTR|SPFX_DCLAS|SPFX_REFLECT), 0, S_DRAGON, /* also makes a handy weapon for knights, since it can't break */
+A("Dragonlance",			LANCE,
+	(SPFX_RESTR|SPFX_DCLAS|SPFX_REFLECT|SPFX_WARN), 0, S_DRAGON, /* also makes a handy weapon for knights, since it can't break */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,				/* plus, reflection */
 	0, A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
-A("Demonbane",			SILVER_SABER,//needs quote
+A("Demonbane",			SILVER_SABER,
 	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, M2_DEMON, /* blocks summoning and is a silver saber. */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,			/* Plus, demons are nasty. */
 	0, A_LAWFUL, NON_PM, NON_PM, 2500L, 
@@ -177,9 +177,9 @@ A("Mjollnir",			WAR_HAMMER,		/* Mjo:llnir */
 	SPFX2_ELEC,0,0),
 
 #ifdef CONVICT
-A("Luck Blade",			BROADSWORD,
-	(SPFX_RESTR|SPFX_LUCK|SPFX_INTEL),0,0,
-	PHYS(5,6),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
+A("Luck Blade",			SHORT_SWORD,
+	(SPFX_RESTR|SPFX_INTEL), SPFX_LUCK,0,
+	PHYS(1, 4),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
 	0,0,0 ),
 #endif /* CONVICT */
 
@@ -192,7 +192,7 @@ A("Cleaver",			BATTLE_AXE,
 /*	Need a way to convert era times to Japanese luni-solar months.*/
 A("Kiku-ichimonji",		KATANA,
 	SPFX_RESTR, 0, 0,
-	PHYS(1,12),	NO_DFNS,	NO_CARY,
+	PHYS(4,12),	NO_DFNS,	NO_CARY,
 	0, A_LAWFUL, PM_SAMURAI, NON_PM, 1200L,
 	0,0,0), 
 
@@ -710,13 +710,13 @@ A("The Eye of the Aethiopica",	AMULET_OF_ESP,
 
 A("Staff of the Archmagi",			QUARTERSTAFF,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_SEARCH|SPFX_LUCK|SPFX_DISPL|SPFX_INTEL), 0, 0,
-	STUN(20,4),	DFNS(AD_MAGM),	NO_CARY,	
+	STUN(20,4),	NO_DFNS,	NO_CARY,	
 	ENERGY_BOOST, A_NONE, PM_WIZARD, NON_PM, 9000L, 
 	SPFX2_DIG|SPFX2_FIRE|SPFX2_COLD|SPFX2_ELEC|SPFX2_RAM2,0,0),
 
 A("Robe of the Archmagi",			ROBE,
 	(SPFX_RESTR|SPFX_REFLECT|SPFX_INTEL), 0, 0,
-	NO_ATTK,	NO_DFNS,	NO_CARY,	
+	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,	
 	ENERGY_BOOST, A_NONE, PM_WIZARD, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
