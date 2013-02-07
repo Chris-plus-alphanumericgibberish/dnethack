@@ -1310,14 +1310,14 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			int deltay = u.uy-magr->my;
 			if((abs(deltax) > 1 || abs(deltay) > 1) && otmp->oartifact == ART_RAMIEL){
 				explode(u.ux, u.uy,
-					-30 - WAN_LIGHTNING - WAN_MAGIC_MISSILE,
+					-30 - (WAN_LIGHTNING - WAN_MAGIC_MISSILE),
 					d(6,6), 0,
 					EXPL_MAGICAL);
 			}
 			else{
 				deltax = deltax > 1 ? 1 : deltax < -1 ? -1 : deltax;
 				deltay = deltay > 1 ? 1 : deltay < -1 ? -1 : deltay;
-				buzz( -30 - WAN_LIGHTNING - WAN_MAGIC_MISSILE,
+				buzz( -30 - (WAN_LIGHTNING - WAN_MAGIC_MISSILE),
 			     6, u.ux, u.uy, deltax, deltay,0);
 			}
 		}
