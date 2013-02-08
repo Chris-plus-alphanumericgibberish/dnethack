@@ -2619,7 +2619,7 @@ struct permonst _mons2[] = {
 	M2_STRONG|M2_STALK|M2_HOSTILE, M3_INFRAVISIBLE|M3_INFRAVISION,
 	CLR_GREEN),
 /*
- * Umber hulk
+ * Unknown abominations
  */
     MON("umber hulk", S_UMBER,//12
 	LVL(9, 6, 2, 25, 0), (G_GENO|2),
@@ -3911,7 +3911,7 @@ is a red right hand
     MON("Asmodeus", S_DEMON,//56
 	LVL(99, 12, -99, 99, 20), (G_HELL|G_NOCORPSE|G_NOGEN|G_UNIQ), //quote needed
 	A(ATTK(AT_WEAP, AD_PHYS, 9, 1), ATTK(AT_WEAP, AD_PHYS, 9, 1),
-	  ATTK(AT_MAGC, AD_SPEL, 9, 9),
+	  ATTK(AT_MAGC, AD_CLRC, 9, 9),
 	  ATTK(AT_MAGC, AD_FIRE, 9, 9), ATTK(AT_MAGC, AD_COLD, 9, 9),
 	  ATTK(AT_NONE, AD_HLBD, 0, 0)),
 	SIZ(1500, 500, 0, MS_BRIBE, MZ_HUGE), MR_FIRE|MR_COLD|MR_POISON|MR_STONE, 0,
