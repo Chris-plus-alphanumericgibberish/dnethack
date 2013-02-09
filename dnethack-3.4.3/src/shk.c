@@ -1601,13 +1601,14 @@ shk_other_services()
 	         "Uncurse", MENU_UNSELECTED);
   
   	/* Weapon appraisals.  Weapon & general stores can do this. */
-	if ((ESHK(shkp)->services & (SHK_UNCURSE)) &&
+		/* Disabled due to being potentially misleading */
+/*	if ((ESHK(shkp)->services & (SHK_UNCURSE)) &&
 			(shk_class_match(WEAPON_CLASS, shkp))) {
 		any.a_int = 3;
 		add_menu(tmpwin, NO_GLYPH, &any , 'a', 0, ATR_NONE,
 				"Appraise", MENU_UNSELECTED);
 	}
-  
+*/
   	/* Weapon-works!  Only a weapon store. */
 	if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B|SHK_SPECIAL_C))
 			&& (shk_class_match(WEAPON_CLASS, shkp) == SHK_MATCH)) {
