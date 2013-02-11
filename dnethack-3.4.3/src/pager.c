@@ -590,6 +590,10 @@ static const char * const bogusobjects[] = {
        "buckled boots",
        "riding boots",
 		
+	   "can of grease",
+	   "can of crease",
+	   "can of Grease",
+	   "can of greaser",
 		
        "blessed greased +5 silly object of hilarity",
 	   "kinda lame joke",

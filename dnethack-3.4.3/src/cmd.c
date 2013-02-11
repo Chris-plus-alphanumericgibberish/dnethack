@@ -143,6 +143,7 @@ STATIC_PTR int NDECL(enter_explore_mode);
 STATIC_PTR int NDECL(doattributes);
 STATIC_PTR int NDECL(doconduct); /**/
 STATIC_PTR boolean NDECL(minimal_enlightenment);
+STATIC_PTR void NDECL(resistances_enlightenment);
 
 #ifdef OVLB
 STATIC_DCL void FDECL(enlght_line, (const char *,const char *,const char *));
@@ -450,6 +451,10 @@ domonability(VOID_ARGS)
 {
 	if (can_breathe(youmonst.data)) return dobreathe();
 	else if (attacktype(youmonst.data, AT_SPIT)) return dospit();
+	else if (attacktype(youmonst.data, AT_MAGC))
+	    return castum((struct monst *)0,
+	                   &youmonst.data->mattk[attacktype(youmonst.data, 
+			                         AT_MAGC)]);
 	else if (youmonst.data->mlet == S_NYMPH) return doremove();
 	else if (attacktype(youmonst.data, AT_GAZE)) return dogaze();
 	else if (is_were(youmonst.data)) return dosummon();
@@ -1148,6 +1153,50 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	return;
 }
 
+void
+resistances_enlightenment()
+{
+	int ltmp;
+	char buf[BUFSZ];
+
+	en_win = create_nhwindow(NHW_MENU);
+	putstr(en_win, 0, "Current Status:");
+	putstr(en_win, 0, "");
+
+	/*** Resistances to troubles ***/
+	if (Fire_resistance && Cold_resistance) putstr(en_win, 0, "You feel comfortable.");
+	else{
+		if (Fire_resistance) putstr(en_win, 0, "You feel chilly.");
+		if (Cold_resistance) putstr(en_win, 0, "You feel warm inside.");
+	}
+	if (Sleep_resistance) putstr(en_win, 0, "You feel wide awake.");
+	if (Disint_resistance) putstr(en_win, 0, "You feel very firm.");
+	if (Shock_resistance) putstr(en_win, 0, "You feel well grounded.");
+	if (Poison_resistance) putstr(en_win, 0, "You feel well healthy.");
+/*	if (Drain_resistance) you_are("level-drain resistant");
+	if (Sick_resistance) you_are("immune to sickness");
+	if (Antimagic) you_are("magic-protected");
+	if (Stone_resistance)
+		you_are("petrification resistant");
+	if (Invulnerable) you_are("invulnerable");
+	if (u.uedibility) you_can("recognize detrimental food");
+	if (Halluc_resistance)
+		enl_msg("You resist", "", "ed", " hallucinations");
+*/
+	/*** Troubles ***/
+	if (Wounded_legs
+#ifdef STEED
+	    && !u.usteed
+#endif
+			  ) {
+		Sprintf(buf, "You have wounded %s", makeplural(body_part(LEG)));
+		putstr(en_win, 0, buf);
+	}
+	display_nhwindow(en_win, TRUE);
+	destroy_nhwindow(en_win);
+	return;
+}
+
 /*
  * Courtesy function for non-debug, non-explorer mode players
  * to help refresh them about who/what they are.
@@ -1259,6 +1308,7 @@ doattributes(VOID_ARGS)
 		return 0;
 	if (wizard || discover)
 		enlightenment(0);
+	else resistances_enlightenment();
 	return 0;
 }
 

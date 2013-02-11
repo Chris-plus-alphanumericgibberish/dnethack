@@ -728,7 +728,7 @@ unsigned short nutval;
 	else if (ptr->mlevel < 15) multiplier = 6;
 	else multiplier = 10;
 	if(ptr->geno & G_UNIQ) multiplier = 20;
-	if(ptr->geno & G_UNIQ && ptr->mlevel > 30) permanent = 1;
+	if(ptr->geno & G_UNIQ && ptr->mlevel > 14) permanent = 1;
 	switch (type) {
 	    case FIRE_RES:
 #ifdef DEBUG
@@ -805,9 +805,9 @@ unsigned short nutval;
 #endif
 		if( !(HShock_resistance) ) {
 			if (Hallucination)
-				You_feel("grounded in reality.");
+				rn2(2) ? You_feel("grounded in reality.") : Your("health currently feels amplified!");
 			else
-				Your("health currently feels amplified!");
+				You_feel("well grounded.");
 		}
 		if( (HShock_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
 			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));

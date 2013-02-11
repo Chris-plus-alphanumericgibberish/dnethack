@@ -130,7 +130,7 @@ cursed_book(bp)
 {
 	int lev = objects[bp->otyp].oc_level;
 
-	if(RoSbook == STUDY_WARD) lev -= 1; //The wardings paritally protect you from the magic contianed within the book.
+	if(RoSbook == STUDY_WARD) lev -= 1; //The wardings paritally protect you from the magic contained within the book.
 	
 	switch(rn2(lev)) {
 	case 0:
