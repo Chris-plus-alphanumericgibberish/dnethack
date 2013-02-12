@@ -139,6 +139,12 @@ struct attack *mattk;
 	    /* "Foo's attack was poisoned." is pretty lame, but at least
 	       it's better than "sting" when not a stinging attack... */
 	    return (!mwep || !mwep->opoisoned) ? "attack" : "weapon";
+	} 
+	else if(mattk->aatyp == AT_HODS){
+	    struct obj *mwep = uwep;
+	    /* "Foo's attack was poisoned." is pretty lame, but at least
+	       it's better than "sting" when not a stinging attack... */
+	    return (!mwep || !mwep->opoisoned) ? "attack" : "weapon";
 	} else {
 	    return (mattk->aatyp == AT_TUCH) ? "contact" :
 		   (mattk->aatyp == AT_GAZE) ? "gaze" :
@@ -743,6 +749,28 @@ mattacku(mtmp)
 					wildmiss(mtmp, mattk);
 			}
 			break;
+		case AT_HODS:
+			if(!range2){
+			    int hittmp = 0;
+
+			    if (foundyou) {
+					otmp = uwep;
+					if(otmp) {
+						hittmp = hitval(otmp, &youmonst);
+						tmp += hittmp;
+						mswings(mtmp, otmp);
+					}
+					if(tmp > (j = dieroll = rnd(20+i)))
+						sum[i] = hitmu(mtmp, mattk);
+					else
+						missmu(mtmp, (tmp == j), mattk);
+					/* KMH -- Don't accumulate to-hit bonuses */
+					if (otmp)
+						tmp -= hittmp;
+			    } else
+					wildmiss(mtmp, mattk);
+			}
+		break;
 		case AT_MAGC:{
 			int temp=0;
 			if( mdat == &mons[PM_ASMODEUS] ) mtmp->mspec_used = 0;
@@ -1038,6 +1066,41 @@ hitmu(mtmp, mattk)
 	switch(mattk->adtyp) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_HODS:
+		 if(uwep){
+			if (uwep->otyp == CORPSE
+				&& touch_petrifies(&mons[uwep->corpsenm])) {
+			    dmg = 1;
+			    pline("%s hits you with the %s corpse.",
+				Monnam(mtmp), mons[uwep->corpsenm].mname);
+			    if (!Stoned)
+				goto do_stone;
+			}
+			dmg += dmgval(uwep, &youmonst);
+			if (dmg <= 0) dmg = 1;
+			if (!(uwep->oartifact &&
+				artifact_hit(mtmp, &youmonst, uwep, &dmg,dieroll)))
+			     hitmsg(mtmp, mattk);
+			if (!dmg) break;
+			if (u.mh > 1 && u.mh > ((u.uac>0) ? dmg : dmg+u.uac) &&
+				   objects[uwep->otyp].oc_material == IRON &&
+					(u.umonnum==PM_BLACK_PUDDING
+					|| u.umonnum==PM_BROWN_PUDDING)) {
+			    /* This redundancy necessary because you have to
+			     * take the damage _before_ being cloned.
+			     */
+			    if (u.uac < 0) dmg += u.uac;
+			    if (dmg < 1) dmg = 1;
+			    if (dmg > 1) exercise(A_STR, FALSE);
+			    u.mh -= dmg;
+			    flags.botl = 1;
+			    dmg = 0;
+			    if(cloneu())
+			    You("divide as %s hits you!",mon_nam(mtmp));
+			}
+			hitmsg(mtmp, mattk);
+		 }
+		break;
 	    case AD_PHYS:
 		if (mattk->aatyp == AT_HUGS && !sticks(youmonst.data)) {
 		    if(!u.ustuck && rn2(2)) {
