@@ -696,6 +696,7 @@ register struct obj *obj;
 			return POISON;
 		    return (carni ? CADAVER : MANFOOD);
 		case CORPSE:
+rock:
 		   if ((peek_at_iced_corpse_age(obj) + 50L <= monstermoves
 					    && obj->corpsenm != PM_LIZARD
 					    && obj->corpsenm != PM_LICHEN
@@ -705,7 +706,9 @@ register struct obj *obj;
 			(freezing(&mons[obj->corpsenm]) && !resists_cold(mon)) ||
 			(burning(&mons[obj->corpsenm]) && !resists_fire(mon)) ||
 			(poisonous(&mons[obj->corpsenm]) &&
-						!resists_poison(mon)))
+						!resists_poison(mon))||
+			 (touch_petrifies(&mons[obj->corpsenm]) &&
+			  !resists_ston(mon)))
 			return POISON;
 		    else if (vegan(fptr))
 			return (herbi ? CADAVER : MANFOOD);
@@ -721,6 +724,19 @@ register struct obj *obj;
 		case BANANA:
 		    return ((mon->data->mlet == S_YETI) ? DOGFOOD :
 			    ((herbi || starving) ? ACCFOOD : MANFOOD));
+
+                case K_RATION:
+		case C_RATION:
+                case CRAM_RATION:
+		case LEMBAS_WAFER:
+		case FOOD_RATION:
+		    if (is_human(mon->data) ||
+		        is_elf(mon->data) ||
+			is_dwarf(mon->data) ||
+			is_gnome(mon->data) ||
+			is_orc(mon->data))
+		        return ACCFOOD; 
+
 		default:
 		    if (starving) return ACCFOOD;
 		    return (obj->otyp > SLIME_MOLD ?
@@ -809,9 +825,22 @@ register struct obj *obj;
 			  !big_corpse ? "." : ", or vice versa!");
 		} else if (cansee(mtmp->mx,mtmp->my))
 		    pline("%s.", Tobjnam(obj, "stop"));
+
+		/* Don't stuff ourselves if we know better */
+		if (is_animal(mtmp->data) || mindless(mtmp->data))
+		{
 		/* dog_eat expects a floor object */
 		place_object(obj, mtmp->mx, mtmp->my);
-		(void) dog_eat(mtmp, obj, mtmp->mx, mtmp->my, FALSE);
+		    if (dog_eat(mtmp, obj, mtmp->mx, mtmp->my, FALSE) == 2
+		        && rn2(4))
+		    {
+		        /* You choked your pet, you cruel, cruel person! */
+		        You_feel("guilty about losing your pet like this.");
+				u.ugangr++;
+				adjalign(-15);
+				u.hod += 5;
+		    }
+		}
 		/* eating might have killed it, but that doesn't matter here;
 		   a non-null result suppresses "miss" message for thrown
 		   food and also implies that the object has been deleted */

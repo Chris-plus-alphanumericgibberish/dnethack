@@ -987,6 +987,8 @@ E void FDECL(mapglyph, (int, int *, int *, unsigned *, int, int));
 
 E int FDECL(castmu, (struct monst *,struct attack *,BOOLEAN_P,BOOLEAN_P));
 E int FDECL(buzzmu, (struct monst *,struct attack *));
+E int FDECL(castmm, (struct monst *,struct monst *,struct attack *));
+E int FDECL(castum, (struct monst *,struct attack *));
 
 /* ### mhitm.c ### */
 
@@ -1157,6 +1159,7 @@ E int FDECL(curr_mon_load, (struct monst *));
 E int FDECL(max_mon_load, (struct monst *));
 E boolean FDECL(can_carry, (struct monst *,struct obj *));
 E int FDECL(mfndpos, (struct monst *,coord *,long *,long));
+E long FDECL(mm_aggression, (struct monst *,struct monst *));
 E boolean FDECL(monnear, (struct monst *,int,int));
 E void NDECL(dmonsfree);
 E int FDECL(mcalcmove, (struct monst*));
@@ -1319,14 +1322,20 @@ E int FDECL(set_destroy_thrown, (int));
 E int FDECL(thitu, (int,int,struct obj *,const char *));
 E int FDECL(ohitmon, (struct monst *,struct obj *,int,BOOLEAN_P));
 E void FDECL(thrwmu, (struct monst *));
+E void FDECL(thrwmm, (struct monst *, struct monst *));
 E int FDECL(spitmu, (struct monst *,struct attack *));
 E int FDECL(firemu, (struct monst *,struct attack *));
+/*E int FDECL(firemm, (struct monst *,struct attack *));*/
+E int FDECL(spitmm, (struct monst *,struct monst *,struct attack *));
 E int FDECL(breamu, (struct monst *,struct attack *));
+E int FDECL(breamm, (struct monst *,struct monst *,struct attack *));
+E struct monst *FDECL(mfind_target, (struct monst *));
 E boolean FDECL(linedup, (XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P));
 E boolean FDECL(lined_up, (struct monst *));
+E boolean FDECL(mlined_up, (struct monst *,struct monst *,BOOLEAN_P));
 E struct obj *FDECL(m_carrying, (struct monst *,int));
 E void FDECL(m_useup, (struct monst *,struct obj *));
-E void FDECL(m_throw, (struct monst *,int,int,int,int,int,struct obj *));
+E void FDECL(m_throw, (struct monst *,int,int,int,int,int,struct obj *,BOOLEAN_P));
 E boolean FDECL(hits_bars, (struct obj **,int,int,int,int));
 
 /* ### muse.c ### */
@@ -1909,6 +1918,7 @@ E int FDECL(get_shop_item, (int));
 E void NDECL(take_gold);
 E int NDECL(dosit);
 E void NDECL(rndcurse);
+E void FDECL(mrndcurse, (struct monst *));
 E void NDECL(attrcurse);
 
 /* ### sounds.c ### */
@@ -2398,6 +2408,7 @@ E int FDECL(find_mac, (struct monst *));
 E void FDECL(m_dowear, (struct monst *,BOOLEAN_P));
 E struct obj *FDECL(which_armor, (struct monst *,long));
 E void FDECL(mon_break_armor, (struct monst *,BOOLEAN_P));
+E int FDECL(extra_pref, (struct monst *, struct obj *));
 E void FDECL(bypass_obj, (struct obj *));
 E void NDECL(clear_bypasses);
 E int FDECL(racial_exception, (struct monst *, struct obj *));

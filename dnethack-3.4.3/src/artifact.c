@@ -2427,7 +2427,7 @@ arti_invoke(obj)
 				}
 				set_destroy_thrown(1); //state variable referenced in drop_throw
 					m_throw(&youmonst, u.ux + xadj, u.uy + yadj, u.dx, u.dy,
-						2*BOLT_LIM, otmp);
+						2*BOLT_LIM, otmp,TRUE);
 					nomul(0);
 				set_destroy_thrown(0);  //state variable referenced in drop_throw
 			}

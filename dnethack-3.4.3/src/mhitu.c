@@ -5497,7 +5497,7 @@ boolean helpless;
 	
 	its_cha = rn2(40);
 	if (helpless || its_cha >= ACURR(A_CHA)) {
-		if(!obj->oartifact || !rn2(4)){
+		if(!obj->oartifact || !rn2(10)){
 			destroy_arm(obj);
 		}
 	}

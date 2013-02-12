@@ -115,7 +115,8 @@
 #define AD_UNKNWN	119	/* Priest of an unknown God */
 #define AD_SOLR		120	/* Solar's silver arrow attack */
 #define AD_CHKH		121 /* Chokhmah Sephirah's escalating damage attack */
-#define AD_CHRN		122 /* Nightmare's horn attack */
+#define AD_HODS		122 /* Hod Sephirah's mirror attack */
+#define AD_CHRN		123 /* Nightmare's horn attack */
 
 
 //#define AD_VMSL		180 //Vorlon missile: elect, disintegration, blast.  Triple damage.

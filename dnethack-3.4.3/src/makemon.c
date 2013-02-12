@@ -10,7 +10,7 @@
 #include <ctype.h>
 #endif
 
-STATIC_VAR NEARDATA struct monst zeromonst;
+struct monst zeromonst;
 
 /* this assumes that a human quest leader or nemesis is an archetype
    of the corresponding role; that isn't so for some roles (tourist
@@ -588,10 +588,10 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, DAGGER);
 			}
 			/* note: you can't use a mattock with a shield */
-			if (!rn2(4)) (void)mongets(mtmp, DWARVISH_MATTOCK);
+			if (rn2(2)) (void)mongets(mtmp, DWARVISH_MATTOCK);
 			else {
 				(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
-				if(!rn2(3)) (void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
+				(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
 			}
 			if (In_mines(&u.uz)) {
 			/* MRKR: Dwarves in dark mines have their lamps on. */
@@ -1235,7 +1235,6 @@ register struct	monst	*mtmp;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
 			}
-
 		break;
 	    case S_MUMMY:
 		if (rn2(7)) (void)mongets(mtmp, MUMMY_WRAPPING);

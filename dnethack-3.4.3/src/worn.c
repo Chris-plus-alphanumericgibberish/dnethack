@@ -6,7 +6,6 @@
 
 STATIC_DCL void FDECL(m_lose_armor, (struct monst *,struct obj *));
 STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P));
-STATIC_DCL int FDECL(extra_pref, (struct monst *, struct obj *));
 
 const struct worn {
 	long w_mask;
@@ -339,11 +338,22 @@ register struct monst *mon;
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
-	for (obj = mon->minvent; obj; obj = obj->nobj) {
+	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
+		if(uarm) armac += ARM_BONUS(uarm);
+		if(uarmf) armac += ARM_BONUS(uarmf);
+		if(uarmg) armac += ARM_BONUS(uarmg);
+		if(uarmu) armac += ARM_BONUS(uarmu);
+		if(uarms) armac += ARM_BONUS(uarms);
+		if(uarmh) armac += ARM_BONUS(uarmh);
+		if(uarmc) armac += ARM_BONUS(uarmc);
+		
+		if(armac < 0) armac *= -1;
+	}
+	else for (obj = mon->minvent; obj; obj = obj->nobj) {
 	    if (obj->owornmask & mwflags)
 		armac += ARM_BONUS(obj);
 	}
-	if(armac > 10) armac = rnd(armac-10) + 10; /* high armor ac values act like player ac values */
+	if(armac > 11) armac = rnd(armac-10) + 10; /* high armor ac values act like player ac values */
 
 	base -= armac;
 	/* since ARM_BONUS is positive, subtracting it increases AC */
@@ -765,7 +775,7 @@ boolean polyspot;
 /* bias a monster's preferences towards armor that has special benefits. */
 /* currently only does speed boots, but might be expanded if monsters get to
    use more armor abilities */
-static int
+int
 extra_pref(mon, obj)
 struct monst *mon;
 struct obj *obj;

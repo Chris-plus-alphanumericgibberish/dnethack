@@ -4,10 +4,13 @@
 
 #include "hack.h"
 
+extern const int monstr[];
+extern void demonpet();
+
 /* tactics() may call for a specific spell */
 /* 0 = no spell */
        /* attack spells */
-#define DAMAGE                 1
+//define DAMAGE                 1
 #define MAGIC_MISSILE          2  /* magic missile */
 #define DRAIN_LIFE             3  /* drain life */
 #define ARROW_RAIN             4
@@ -59,6 +62,7 @@
 #define PSI_BOLT				43
 #define WEAKEN_STATS			44
 
+extern void you_aggravate(struct monst *);
 
 STATIC_DCL void FDECL(cursetxt,(struct monst *,BOOLEAN_P));
 STATIC_DCL int FDECL(choose_magic_spell, (int));
@@ -66,6 +70,9 @@ STATIC_DCL int FDECL(choose_clerical_spell, (int));
 STATIC_DCL void FDECL(cast_spell,(struct monst *, int,int));
 STATIC_DCL boolean FDECL(is_undirected_spell,(unsigned int,int));
 STATIC_DCL boolean FDECL(spell_would_be_useless,(struct monst *,int));
+STATIC_DCL boolean FDECL(mspell_would_be_useless,(struct monst *,struct monst *,int));
+STATIC_DCL boolean FDECL(uspell_would_be_useless,(int));
+STATIC_DCL void FDECL(ucast_spell,(struct monst *,struct monst *,int,int));
 
 #ifdef OVL0
 
@@ -239,8 +246,9 @@ unsigned int type;
            return (rn2(2) ? CURSE_ITEMS : (rn2(2) ? DESTRY_WEPN : DROP_BOULDER));
 
        case PM_TITAN:
+           return (rn2(2) ? DROP_BOULDER : LIGHTNING);
        case PM_ARCHON:
-           return (rn2(2) ? EARTHQUAKE : LIGHTNING);
+           return (rn2(2) ? SUMMON_ANGEL : LIGHTNING);
        case PM_KI_RIN:
            return FIRE_PILLAR;
 
@@ -1447,7 +1455,209 @@ int spellnum;
 	    return TRUE;
     return FALSE;
 }
+/* return values:
+ * 2: target died
+ * 1: successful spell
+ * 0: unsuccessful spell
+ */
+int
+castmm(mtmp, mdef, mattk)
+	register struct monst *mtmp;
+	register struct monst *mdef;
+	register struct attack *mattk;
+{
+	int	dmg, ml = mtmp->m_lev;
+	int ret;
+	int spellnum = 0;
 
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
+	    int cnt = 40;
+
+	    if (!spellnum) do {
+               spellnum = choose_magic_special(mtmp, mattk->adtyp);
+				if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
+		/* not trying to attack?  don't allow directed spells */
+	    } while(--cnt > 0 &&
+		    mspell_would_be_useless(mtmp, mdef, spellnum));
+	    if (cnt == 0) return 0;
+	}
+
+	/* monster unable to cast spells? */
+	if(mtmp->mcan || mtmp->mspec_used || !ml) {
+	    if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my))
+	    {
+                char buf[BUFSZ];
+		Sprintf(buf, Monnam(mtmp));
+
+		if (is_undirected_spell(mattk->adtyp, spellnum))
+	            pline("%s points all around, then curses.", buf);
+		else
+	            pline("%s points at %s, then curses.",
+		          buf, mon_nam(mdef));
+
+	    } else if ((!(moves % 4) || !rn2(4))) {
+	        if (flags.soundok) Norep("You hear a mumbled curse.");
+	    }
+	    return(0);
+	}
+
+	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
+	    mtmp->mspec_used = 10 - mtmp->m_lev;
+	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
+	}
+
+	if(rn2(ml*10) < (mtmp->mconf ? 100 : 20)) {	/* fumbled attack */
+	    if (canseemon(mtmp) && flags.soundok)
+		pline_The("air crackles around %s.", mon_nam(mtmp));
+	    return(0);
+	}
+	if (cansee(mtmp->mx, mtmp->my) ||
+	    canseemon(mtmp) ||
+	    (!is_undirected_spell(mattk->adtyp, spellnum) &&
+	     (cansee(mdef->mx, mdef->my) || canseemon(mdef)))) {
+            char buf[BUFSZ];
+	    Sprintf(buf, " at ");
+	    Strcat(buf, mon_nam(mdef));
+	    pline("%s casts a spell%s!",
+		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
+		  is_undirected_spell(mattk->adtyp, spellnum) ? "" : buf);
+	}
+
+	if (mattk->damd)
+	    dmg = d((int)((ml/2) + mattk->damn), (int)mattk->damd);
+	else dmg = d((int)((ml/2) + 1), 6);
+
+	ret = 1;
+
+	switch (mattk->adtyp) {
+
+		case AD_ELEC:
+	        if (canspotmon(mdef))
+		    pline("Lightning crackles around %s.", Monnam(mdef));
+		if(resists_elec(mdef)) {
+			shieldeff(mdef->mx, mdef->my);
+	        if (canspotmon(mdef))
+			   pline("But %s resists the effects.",
+			        mhe(mdef));
+			dmg = 0;
+		}
+	    case AD_FIRE:
+	        if (canspotmon(mdef))
+		    pline("%s is enveloped in flames.", Monnam(mdef));
+		if(resists_fire(mdef)) {
+			shieldeff(mdef->mx, mdef->my);
+	                if (canspotmon(mdef))
+			    pline("But %s resists the effects.",
+			        mhe(mdef));
+			dmg = 0;
+		}
+		break;
+	    case AD_COLD:
+	        if (canspotmon(mdef))
+		    pline("%s is covered in frost.", Monnam(mdef));
+		if(resists_fire(mdef)) {
+			shieldeff(mdef->mx, mdef->my);
+	                if (canspotmon(mdef))
+			    pline("But %s resists the effects.",
+			        mhe(mdef));
+			dmg = 0;
+		}
+		break;
+	    case AD_MAGM:
+	        if (canspotmon(mdef))
+		    pline("%s is hit by a shower of missiles!", Monnam(mdef));
+		if(resists_magm(mdef)) {
+			shieldeff(mdef->mx, mdef->my);
+	                if (canspotmon(mdef))
+			    pline_The("missiles bounce off!");
+			dmg = 0;
+		} else dmg = d((int)mtmp->m_lev/2 + 1,6);
+		break;
+	    default:
+		{
+	    /*aggravation is a special case;*/
+		/*it's undirected but should still target the*/
+		/*victim so as to aggravate you*/
+	        if (is_undirected_spell(mattk->adtyp, spellnum)
+		&& (spellnum != AGGRAVATION &&
+		      spellnum != SUMMON_MONS))
+		    cast_spell(mtmp, dmg, spellnum);
+		else
+		    ucast_spell(mtmp, mdef, dmg, spellnum);
+		dmg = 0; /* done by the spell casting functions */
+		break;
+	    }
+	}
+	if (dmg > 0 && mdef->mhp > 0)
+	{
+	    mdef->mhp -= dmg;
+	    if (mdef->mhp < 1) monkilled(mdef, "", mattk->adtyp);
+	}
+	if (mdef && mdef->mhp < 1) return 2;
+	return(ret);
+}
+
+STATIC_DCL
+boolean
+mspell_would_be_useless(mtmp, mdef, spellnum)
+struct monst *mtmp;
+struct monst *mdef;
+int spellnum;
+{
+ 	/* haste self when already fast */
+	if (mtmp->permspeed == MFAST && spellnum == HASTE_SELF)
+	    return TRUE;
+	/* invisibility when already invisible */
+	if ((mtmp->minvis || mtmp->invis_blkd) && spellnum == DISAPPEAR)
+	    return TRUE;
+	/* healing when already healed */
+	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
+	    return TRUE;
+	/* don't summon monsters if it doesn't think you're around */
+	if ((!mtmp->iswiz || flags.no_of_wizards > 1)
+						&& spellnum == CLONE_WIZ)
+	    return TRUE;
+#ifndef TAME_SUMMONING
+        if (spellnum == SUMMON_MONS)
+	    return TRUE;
+        if (spellnum == SUMMON_ANGEL)
+	    return TRUE;
+        if (spellnum == INSECTS)
+	    return TRUE;
+#endif
+ 	/* healing when already healed */
+	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
+	    return TRUE;
+	/* blindness spell on blinded player */
+	if ((!haseyes(mdef->data) || mdef->mblinded) && spellnum == BLIND_YOU)
+	    return TRUE;
+    return FALSE;
+}
+
+
+STATIC_DCL
+boolean
+uspell_would_be_useless(spellnum)
+int spellnum;
+{
+	/* aggravate monsters, etc. won't be cast by peaceful monsters */
+	if (spellnum == CLONE_WIZ)
+	    return TRUE;
+	/* haste self when already fast */
+	if (Fast && spellnum == HASTE_SELF)
+	    return TRUE;
+	/* invisibility when already invisible */
+	if ((HInvis & INTRINSIC) && spellnum == DISAPPEAR)
+	    return TRUE;
+	/* healing when already healed */
+	if (u.mh == u.mhmax && spellnum == CURE_SELF)
+	    return TRUE;
+#ifndef TAME_SUMMONING
+        if (spellnum == SUMMON_MONS)
+	    return TRUE;
+#endif
+    return FALSE;
+}
 #endif /* OVLB */
 #ifdef OVL0
 
@@ -1479,6 +1689,667 @@ buzzmu(mtmp, mattk)		/* monster uses spell (ranged) */
 	    } else impossible("Monster spell %d cast", mattk->adtyp-1);
 	}
 	return(1);
+}
+
+/* return values:
+ * 2: target died
+ * 1: successful spell
+ * 0: unsuccessful spell
+ */
+int
+castum(mtmp, mattk)
+        register struct monst *mtmp; 
+	register struct attack *mattk;
+{
+	int dmg, ml = mons[u.umonnum].mlevel;
+	int ret;
+	int spellnum = 0;
+	boolean directed = FALSE;
+
+	/* Three cases:
+	 * -- monster is attacking you.  Search for a useful spell.
+	 * -- monster thinks it's attacking you.  Search for a useful spell,
+	 *    without checking for undirected.  If the spell found is directed,
+	 *    it fails with cursetxt() and loss of mspec_used.
+	 * -- monster isn't trying to attack.  Select a spell once.  Don't keep
+	 *    searching; if that spell is not useful (or if it's directed),
+	 *    return and do something else. 
+	 * Since most spells are directed, this means that a monster that isn't
+	 * attacking casts spells only a small portion of the time that an
+	 * attacking monster does.
+	 */
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
+	    int cnt = 40;
+
+	    if (!spellnum) do {
+	        spellnum = choose_magic_special(&youmonst, mattk->adtyp);
+             if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
+		/* not trying to attack?  don't allow directed spells */
+		if (!mtmp || mtmp->mhp < 1) {
+//		    if (is_undirected_spell(mattk->adtyp, spellnum) && 
+//			!uspell_would_be_useless(spellnum)) {
+//		        break;
+//		    }
+		}
+	    } while(--cnt > 0 &&
+	            ((!mtmp && !is_undirected_spell(mattk->adtyp, spellnum))
+		    || uspell_would_be_useless(spellnum)));
+	    if (cnt == 0) {
+	        You("have no spells to cast right now!");
+		return 0;
+	    }
+	}
+
+	if (spellnum == AGGRAVATION && !mtmp)
+	{
+	    /* choose a random monster on the level */
+	    int j = 0, k = 0;
+	    for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+	        if (!mtmp->mtame && !mtmp->mpeaceful) j++;
+	    if (j > 0)
+	    {
+	        k = rn2(j); 
+	        for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+	            if (!mtmp->mtame && !mtmp->mpeaceful)
+		        if (--k < 0) break;
+	    }
+	}
+
+	directed = mtmp && !is_undirected_spell(mattk->adtyp, spellnum);
+
+	/* unable to cast spells? */
+	if(u.uen < ml) {
+	    if (directed)
+	        You("point at %s, then curse.", mon_nam(mtmp));
+	    else
+	        You("point all around, then curse.");
+	    return(0);
+	}
+
+	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
+	    u.uen -= ml;
+	}
+
+	if(rn2(ml*10) < (Confusion ? 100 : 20)) {	/* fumbled attack */
+	    pline_The("air crackles around you.");
+	    return(0);
+	}
+
+        You("cast a spell%s%s!",
+	      directed ? " at " : "",
+	      directed ? mon_nam(mtmp) : "");
+
+/*
+ *	As these are spells, the damage is related to the level
+ *	of the monster casting the spell.
+ */
+	if (mattk->damd)
+	    dmg = d((int)((ml/2) + mattk->damn), (int)mattk->damd);
+	else dmg = d((int)((ml/2) + 1), 6);
+
+	ret = 1;
+
+	switch (mattk->adtyp) {
+		case AD_ELEC:
+	        if (canspotmon(mtmp))
+		    pline("Lightning crackles around %s.", Monnam(mtmp));
+		if(resists_elec(mtmp)) {
+			shieldeff(mtmp->mx, mtmp->my);
+	        if (canspotmon(mtmp))
+			   pline("But %s resists the effects.",
+			        mhe(mtmp));
+			dmg = 0;
+		}
+	    case AD_FIRE:
+		pline("%s is enveloped in flames.", Monnam(mtmp));
+		if(resists_fire(mtmp)) {
+			shieldeff(mtmp->mx, mtmp->my);
+			pline("But %s resists the effects.",
+			    mhe(mtmp));
+			dmg = 0;
+		}
+		break;
+	    case AD_COLD:
+		pline("%s is covered in frost.", Monnam(mtmp));
+		if(resists_fire(mtmp)) {
+			shieldeff(mtmp->mx, mtmp->my);
+			pline("But %s resists the effects.",
+			    mhe(mtmp));
+			dmg = 0;
+		}
+		break;
+	    case AD_MAGM:
+		pline("%s is hit by a shower of missiles!", Monnam(mtmp));
+		if(resists_magm(mtmp)) {
+			shieldeff(mtmp->mx, mtmp->my);
+			pline_The("missiles bounce off!");
+			dmg = 0;
+		} else dmg = d((int)ml/2 + 1,6);
+		break;
+	    default:
+	    {
+		ucast_spell(&youmonst, mtmp, dmg, spellnum);
+		dmg = 0; /* done by the spell casting functions */
+		break;
+	    }
+	}
+
+	if (mtmp && dmg > 0 && mtmp->mhp > 0)
+	{
+	    mtmp->mhp -= dmg;
+	    if (mtmp->mhp < 1) killed(mtmp);
+	}
+	if (mtmp && mtmp->mhp < 1) return 2;
+
+	return(ret);
+}
+
+extern NEARDATA const int nasties[];
+
+/* monster wizard and cleric spellcasting functions */
+/*
+   If dmg is zero, then the monster is not casting at you.
+   If the monster is intentionally not casting at you, we have previously
+   called spell_would_be_useless() and spellnum should always be a valid
+   undirected spell.
+   If you modify either of these, be sure to change is_undirected_spell()
+   and spell_would_be_useless().
+ */
+STATIC_OVL
+void
+ucast_spell(mattk, mtmp, dmg, spellnum)
+struct monst *mattk;
+struct monst *mtmp;
+int dmg;
+int spellnum;
+{
+    boolean resisted = FALSE;
+    boolean yours = (mattk == &youmonst);
+
+    if (dmg == 0 && !is_undirected_spell(AD_SPEL, spellnum)) {
+	impossible("cast directed wizard spell (%d) with dmg=0?", spellnum);
+	return;
+    }
+
+    if (mtmp && mtmp->mhp < 1)
+    {
+        impossible("monster already dead?");
+	return;
+    }
+	if(spellnum == RAISE_DEAD) spellnum = CURE_SELF;
+	else if(spellnum == SUMMON_ANGEL) spellnum = CURE_SELF;
+    switch (spellnum) {
+    case DEATH_TOUCH:
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("touch of death with no mtmp");
+	    return;
+	}
+	if (yours)
+	    pline("You're using the touch of death!");
+	else if (canseemon(mattk))
+	{
+	    char buf[BUFSZ];
+	    Sprintf(buf, "%s%s", mtmp->mtame ? "Oh no, " : "",
+	                         mhe(mattk));
+	    if (!mtmp->mtame)
+	        *buf = highc(*buf);
+
+	    pline("%s's using the touch of death!", buf);
+	}
+
+	if (nonliving(mtmp->data) || is_demon(mtmp->data)) {
+	    if (yours || canseemon(mtmp))
+	        pline("%s seems no deader than before.", Monnam(mtmp));
+	} else if (!(resisted = resist(mtmp, 0, 0, FALSE)) ||
+	           rn2(mons[u.umonnum].mlevel) > 12) {
+            mtmp->mhp = -1;
+	    if (yours) killed(mtmp);
+	    else monkilled(mtmp, "", AD_SPEL);
+	    return;
+	} else {
+	    if (resisted) shieldeff(mtmp->mx, mtmp->my);
+	    if (yours || canseemon(mtmp))
+	    {
+	        if (mtmp->mtame)
+		    pline("Lucky for %s, it didn't work!", mon_nam(mtmp));
+		else
+	            pline("That didn't work...");
+            }
+	}
+	dmg = 0;
+	break;
+    case SUMMON_SPHERE:
+    {
+       /* For a change, let's not assume the spheres are together. : ) */
+       int sphere = (!rn2(3) ? PM_FLAMING_SPHERE : (!rn2(2) ?
+                             PM_FREEZING_SPHERE : PM_SHOCKING_SPHERE));
+       boolean created = FALSE;
+       struct monst *mon;
+       if (!(mvitals[sphere].mvflags & G_GONE) &&
+		(mon = makemon(&mons[sphere],
+			u.ux, u.uy, NO_MINVENT)) != 0){
+				if (canspotmon(mon)) created++;
+				initedog(mon);
+		}
+       if (created)
+           pline("%s is created!",
+                      Hallucination ? rndmonnam() : Amonnam(mon));
+       dmg = 0;
+       break;
+    }
+    case SUMMON_MONS:
+    {
+	int count = 0;
+        register struct monst *mpet;
+
+        if (!rn2(10) && Inhell) {
+	    if (yours) demonpet();
+	    else msummon(mattk);
+	} else {
+	    register int i, j;
+            int makeindex, tmp = (u.ulevel > 3) ? u.ulevel / 3 : 1;
+	    coord bypos;
+
+	    if (mtmp)
+	        bypos.x = mtmp->mx, bypos.y = mtmp->my;
+	    else if (yours)
+	        bypos.x = u.ux, bypos.y = u.uy;
+            else
+	        bypos.x = mattk->mx, bypos.y = mattk->my;
+
+	    for (i = rnd(tmp); i > 0; --i)
+	        for(j=0; j<20; j++) {
+
+	            do {
+	                makeindex = pick_nasty();
+	            } while (attacktype(&mons[makeindex], AT_MAGC) &&
+	                     monstr[makeindex] >= monstr[u.umonnum]);
+                    if (yours &&
+		        !enexto(&bypos, u.ux, u.uy, &mons[makeindex]))
+		        continue;
+                    if (!yours &&
+		        !enexto(&bypos, mattk->mx, mattk->my, &mons[makeindex]))
+		        continue;
+		    if ((mpet = makemon(&mons[makeindex], 
+                          bypos.x, bypos.y, 
+			  (yours || mattk->mtame) ? MM_EDOG :
+			                            NO_MM_FLAGS)) != 0) {
+                        mpet->msleeping = 0;
+                        if (yours || mattk->mtame)
+			    initedog(mpet);
+			else if (mattk->mpeaceful)
+			    mpet->mpeaceful = 1;
+			else mpet->mpeaceful = mpet->mtame = 0;
+
+                        set_malign(mpet);
+                    } else /* GENOD? */
+                        mpet = makemon((struct permonst *)0,
+                                            bypos.x, bypos.y, NO_MM_FLAGS);
+                    if(mpet && (u.ualign.type == 0 ||
+		        mpet->data->maligntyp == 0 || 
+                        sgn(mpet->data->maligntyp) == sgn(u.ualign.type)) ) {
+                        count++;
+                        break;
+                    }
+                }
+
+	    const char *mappear =
+		    (count == 1) ? "A monster appears" : "Monsters appear";
+
+	    if (yours || canseemon(mtmp))
+	        pline("%s from nowhere!", mappear);
+	}
+
+	dmg = 0;
+	break;
+    }
+    case AGGRAVATION:
+	if (!mtmp || mtmp->mhp < 1) {
+	    You_feel("lonely.");
+	    return;
+	}
+	you_aggravate(mtmp);
+	dmg = 0;
+	break;
+    case CURSE_ITEMS:
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("curse spell with no mtmp");
+	    return;
+	}
+	if (yours || canseemon(mtmp))
+	    You_feel("as though %s needs some help.", mon_nam(mtmp));
+	mrndcurse(mtmp);
+	dmg = 0;
+	break;
+    case DESTRY_ARMR:
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("destroy spell with no mtmp");
+	    return;
+	}
+	if (resist(mtmp, 0, 0, FALSE)) { 
+	    shieldeff(mtmp->mx, mtmp->my);
+	    if (yours || canseemon(mtmp))
+	        pline("A field of force surrounds %s!",
+	               mon_nam(mtmp));
+	} else {
+            register struct obj *otmp = some_armor(mtmp), *otmp2;
+
+#define oresist_disintegration(obj) \
+		(objects[obj->otyp].oc_oprop == DISINT_RES || \
+		 obj_resists(obj, 0, 90) || is_quest_artifact(obj))
+
+	    if (otmp &&
+	        !oresist_disintegration(otmp))
+	    {
+	        pline("%s %s %s!",
+		      s_suffix(Monnam(mtmp)),
+		      xname(otmp),
+		      is_cloak(otmp)  ? "crumbles and turns to dust" :
+		      is_shirt(otmp)  ? "crumbles into tiny threads" :
+		      is_helmet(otmp) ? "turns to dust and is blown away" :
+		      is_gloves(otmp) ? "vanish" :
+		      is_boots(otmp)  ? "disintegrate" :
+		      is_shield(otmp) ? "crumbles away" :
+		                        "turns to dust"
+		      );
+		obj_extract_self(otmp);
+		obfree(otmp, (struct obj *)0);
+ 	    }
+	    else if (yours || canseemon(mtmp))
+	        pline("%s looks itchy.", Monnam(mtmp)); 
+	}
+	dmg = 0;
+	break;
+    case WEAKEN_YOU:		/* drain strength */
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("weaken spell with no mtmp");
+	    return;
+	}
+	if (resist(mtmp, 0, 0, FALSE)) { 
+	    shieldeff(mtmp->mx, mtmp->my);
+	    pline("%s looks momentarily weakened.", Monnam(mtmp));
+	} else {
+	    if (mtmp->mhp < 1)
+	    {
+	        impossible("trying to drain monster that's already dead");
+		return;
+	    }
+	    if (yours || canseemon(mtmp))
+	        pline("%s suddenly seems weaker!", Monnam(mtmp));
+            /* monsters don't have strength, so drain max hp instead */
+	    mtmp->mhpmax -= dmg;
+	    if ((mtmp->mhp -= dmg) <= 0) {
+	        if (yours) killed(mtmp);
+		else monkilled(mtmp, "", AD_SPEL);
+            }
+	}
+	dmg = 0;
+	break;
+    case DISAPPEAR:		/* makes self invisible */
+        if (!yours) {
+	    impossible("ucast disappear but not yours?");
+	    return;
+	}
+	if (!(HInvis & INTRINSIC)) {
+	    HInvis |= FROMOUTSIDE;
+	    if (!Blind && !BInvis) self_invis_message();
+	    dmg = 0;
+	} else
+	    impossible("no reason for player to cast disappear spell?");
+	break;
+    case STUN_YOU:
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("stun spell with no mtmp");
+	    return;
+	}
+	if (resist(mtmp, 0, 0, FALSE)) { 
+	    shieldeff(mtmp->mx, mtmp->my);
+	    if (yours || canseemon(mtmp))
+	        pline("%s seems momentarily disoriented.", Monnam(mtmp));
+	} else {
+	    
+	    if (yours || canseemon(mtmp)) {
+	        if (mtmp->mstun)
+	            pline("%s struggles to keep %s balance.",
+	 	          Monnam(mtmp), mhis(mtmp));
+                else
+	            pline("%s reels...", Monnam(mtmp));
+	    }
+	    mtmp->mstun = 1;
+	}
+	dmg = 0;
+	break;
+    case HASTE_SELF:
+        if (!yours) {
+	    impossible("ucast haste but not yours?");
+	    return;
+	}
+        if (!(HFast & INTRINSIC))
+	    You("are suddenly moving faster.");
+	HFast |= INTRINSIC;
+	dmg = 0;
+	break;
+    case CURE_SELF:
+        if (!yours) impossible("ucast healing but not yours?");
+	else if (u.mh < u.mhmax) {
+	    You("feel better.");
+	    if ((u.mh += d(3,6)) > u.mhmax)
+		u.mh = u.mhmax;
+	    flags.botl = 1;
+	}
+	dmg = 0;
+	break;
+    case PSI_BOLT:
+	default:
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("psibolt spell with no mtmp");
+	    return;
+	}
+	if (resist(mtmp, 0, 0, FALSE)) { 
+	    shieldeff(mtmp->mx, mtmp->my);
+	    dmg = (dmg + 1) / 2;
+	}
+	if (canseemon(mtmp))
+	    pline("%s winces%s", Monnam(mtmp), (dmg <= 5) ? "." : "!");
+	break;
+    case GEYSER:
+	/* this is physical damage, not magical damage */
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("geyser spell with no mtmp");
+	    return;
+	}
+	if (yours || canseemon(mtmp))
+	    pline("A sudden geyser slams into %s from nowhere!", mon_nam(mtmp));
+	dmg = d(8, 6);
+	break;
+    case FIRE_PILLAR:
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("firepillar spell with no mtmp");
+	    return;
+	}
+	if (yours || canseemon(mtmp))
+	    pline("A pillar of fire strikes all around %s!", mon_nam(mtmp));
+	if (resists_fire(mtmp)) {
+	    shieldeff(mtmp->mx, mtmp->my);
+	    dmg = 0;
+	} else
+	    dmg = d(8, 6);
+	(void) burnarmor(mtmp);
+	destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
+	destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+	destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+	(void) burn_floor_paper(mtmp->mx, mtmp->my, TRUE, FALSE);
+	break;
+    case LIGHTNING:
+    {
+	boolean reflects;
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("lightning spell with no mtmp");
+	    return;
+	}
+
+	if (yours || canseemon(mtmp))
+	    pline("A bolt of lightning strikes down at %s from above!",
+	          mon_nam(mtmp));
+	reflects = mon_reflects(mtmp, "It bounces off %s %s.");
+	if (reflects || resists_elec(mtmp)) {
+	    shieldeff(u.ux, u.uy);
+	    dmg = 0;
+	    if (reflects)
+		break;
+	} else
+	    dmg = d(8, 6);
+	destroy_mitem(mtmp, WAND_CLASS, AD_ELEC);
+	destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
+	break;
+    }
+    case INSECTS:
+      {
+	/* Try for insects, and if there are none
+	   left, go for (sticks to) snakes.  -3. */
+	struct permonst *pm = mkclass(S_ANT,0);
+	struct monst *mtmp2 = (struct monst *)0;
+	char let = (pm ? S_ANT : S_SNAKE);
+	boolean success;
+	int i;
+	coord bypos;
+	int quan;
+        
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("insect spell with no mtmp");
+	    return;
+	}
+
+	quan = (mons[u.umonnum].mlevel < 2) ? 1 : 
+	       rnd(mons[u.umonnum].mlevel / 2);
+	if (quan < 3) quan = 3;
+	success = pm ? TRUE : FALSE;
+	for (i = 0; i <= quan; i++) {
+	    if (!enexto(&bypos, mtmp->mx, mtmp->my, mtmp->data))
+		break;
+	    if ((pm = mkclass(let,0)) != 0 &&
+		    (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
+		success = TRUE;
+		mtmp2->msleeping = 0;
+		if (yours || mattk->mtame)
+		    (void) tamedog(mtmp2, (struct obj *)0);
+		else if (mattk->mpeaceful)
+		    mattk->mpeaceful = 1;
+		else mattk->mpeaceful = 0;
+
+		set_malign(mtmp2);
+	    }
+	}
+
+        if (yours)
+	{
+	    if (!success)
+	        You("cast at a clump of sticks, but nothing happens.");
+	    else if (let == S_SNAKE)
+	        You("transforms a clump of sticks into snakes!");
+	    else
+	        You("summon insects!");
+        } else if (canseemon(mtmp)) {
+	    if (!success)
+	        pline("%s casts at a clump of sticks, but nothing happens.",
+		      Monnam(mattk));
+	    else if (let == S_SNAKE)
+	        pline("%s transforms a clump of sticks into snakes!",
+		      Monnam(mattk));
+	    else
+	        pline("%s summons insects!", Monnam(mattk));
+	}
+	dmg = 0;
+	break;
+      }
+    case BLIND_YOU:
+        if (!mtmp || mtmp->mhp < 1) {
+	    impossible("blindness spell with no mtmp");
+	    return;
+	}
+	/* note: resists_blnd() doesn't apply here */
+	if (!mtmp->mblinded &&
+	    haseyes(mtmp->data)) {
+	    if (!resists_blnd(mtmp)) {
+	        int num_eyes = eyecount(mtmp->data);
+	        pline("Scales cover %s %s!",
+	          s_suffix(mon_nam(mtmp)),
+		  (num_eyes == 1) ? "eye" : "eyes");
+
+		  mtmp->mblinded = 127;
+	    }
+	    dmg = 0;
+
+	} else
+	    impossible("no reason for monster to cast blindness spell?");
+	break;
+    case PARALYZE:
+        if (!mtmp || mtmp->mhp < 1) {
+	    impossible("paralysis spell with no mtmp");
+	    return;
+	}
+	if (resist(mtmp, 0, 0, FALSE)) { 
+	    shieldeff(mtmp->mx, mtmp->my);
+	    if (yours || canseemon(mtmp))
+	        pline("%s stiffens briefly.", Monnam(mtmp));
+	} else {
+	    if (yours || canseemon(mtmp))
+	        pline("%s is frozen in place!", Monnam(mtmp));
+	    dmg = 4 + mons[u.umonnum].mlevel;
+	    mtmp->mcanmove = 0;
+	    mtmp->mfrozen = dmg;
+	}
+	dmg = 0;
+	break;
+    case CONFUSE_YOU:
+        if (!mtmp || mtmp->mhp < 1) {
+	    impossible("confusion spell with no mtmp");
+	    return;
+	}
+	if (resist(mtmp, 0, 0, FALSE)) { 
+	    shieldeff(mtmp->mx, mtmp->my);
+	    if (yours || canseemon(mtmp))
+	        pline("%s seems momentarily dizzy.", Monnam(mtmp));
+	} else {
+	    if (yours || canseemon(mtmp))
+	        pline("%s seems %sconfused!", Monnam(mtmp),
+	              mtmp->mconf ? "more " : "");
+	    mtmp->mconf = 1;
+	}
+	dmg = 0;
+	break;
+    case OPEN_WOUNDS:
+        if (!mtmp || mtmp->mhp < 1) {
+	    impossible("wound spell with no mtmp");
+	    return;
+	}
+	if (resist(mtmp, 0, 0, FALSE)) { 
+	    shieldeff(mtmp->mx, mtmp->my);
+	    dmg = (dmg + 1) / 2;
+	}
+	/* not canseemon; if you can't see it you don't know it was wounded */
+	if (yours)
+	{
+	    if (dmg <= 5)
+	        pline("%s looks itchy!", Monnam(mtmp));
+	    else if (dmg <= 10)
+	        pline("Wounds appear on %s!", mon_nam(mtmp));
+	    else if (dmg <= 20)
+	        pline("Severe wounds appear on %s!", mon_nam(mtmp));
+	    else
+	        pline("%s is covered in wounds!", Monnam(mtmp));
+	}
+	break;
+    }
+
+    if (dmg > 0 && mtmp->mhp > 0)
+    {
+        mtmp->mhp -= dmg;
+        if (mtmp->mhp < 1) {
+	    if (yours) killed(mtmp);
+	    else monkilled(mtmp, "", AD_CLRC);
+	}
+    }
 }
 
 #endif /* OVL0 */

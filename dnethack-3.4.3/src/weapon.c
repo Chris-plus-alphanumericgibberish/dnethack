@@ -28,6 +28,8 @@
 
 STATIC_DCL void FDECL(give_may_advance_msg, (int));
 
+extern struct monst zeromonst;
+
 #ifndef OVLB
 
 STATIC_DCL NEARDATA const short skill_names_indices[];
@@ -201,6 +203,8 @@ struct monst *mon;
 	struct permonst *ptr = mon->data;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
 
+	if (!ptr) ptr = &mons[NUMMONS];
+
 	if (otyp == CREAM_PIE) return 0;
 
 	if (bigmonst(ptr)) {
@@ -343,7 +347,7 @@ oselect(mtmp, x)
 struct monst *mtmp;
 int x;
 {
-	struct obj *otmp;
+	struct obj *otmp, *obest = 0;
 
 	for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 	    if (otmp->otyp == x &&
@@ -351,9 +355,13 @@ int x;
 		    !((x == CORPSE || x == EGG) &&
 			!touch_petrifies(&mons[otmp->corpsenm])) &&
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
-		return otmp;
+            {
+	        if (!obest ||
+		    dmgval(otmp, &zeromonst) > dmgval(obest, &zeromonst))
+		    obest = otmp;
 	}
-	return (struct obj *)0;
+	}
+	return obest;
 }
 
 static NEARDATA const int rwep[] =
@@ -369,7 +377,58 @@ static NEARDATA const int pwep[] =
 	GLAIVE, LUCERN_HAMMER, BEC_DE_CORBIN, FAUCHARD, PARTISAN, LANCE
 };
 
-static struct obj *propellor;
+boolean
+would_prefer_rwep(mtmp, otmp)
+struct monst *mtmp;
+struct obj *otmp;
+{
+    struct obj *wep = select_rwep(mtmp);
+
+    int i = 0;
+    
+    if (wep)
+    {
+        if (wep == otmp) return TRUE;
+
+        if (wep->oartifact) return FALSE;
+
+        if (throws_rocks(mtmp->data) &&  wep->otyp == BOULDER) return FALSE;
+        if (throws_rocks(mtmp->data) && otmp->otyp == BOULDER) return TRUE;
+    }
+    
+    if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
+	    || !objects[pwep[i]].oc_bimanual) &&
+        (objects[pwep[i]].oc_material != SILVER
+ 	    || !hates_silver(mtmp->data)))
+    {
+        for (i = 0; i < SIZE(pwep); i++)
+        {
+            if ( wep &&
+	         wep->otyp == pwep[i] &&
+               !(otmp->otyp == pwep[i] &&
+	         dmgval(otmp, &zeromonst) > dmgval(wep, &zeromonst)))
+	        return FALSE;
+            if (otmp->otyp == pwep[i]) return TRUE;
+        }
+    }
+
+    if (is_pole(otmp)) return FALSE; /* If we get this far,
+                                        we failed the polearm strength check */
+
+    for (i = 0; i < SIZE(rwep); i++)
+    {
+        if ( wep &&
+             wep->otyp == rwep[i] &&
+           !(otmp->otyp == rwep[i] &&
+	     dmgval(otmp, &zeromonst) > dmgval(wep, &zeromonst)))
+	    return FALSE;
+        if (otmp->otyp == rwep[i]) return TRUE;
+    }
+
+    return FALSE;
+}
+
+struct obj *propellor;
 
 struct obj *
 select_rwep(mtmp)	/* select a ranged weapon for the monster */
@@ -378,14 +437,12 @@ register struct monst *mtmp;
 	register struct obj *otmp;
 	int i;
 
+	struct obj *tmpprop = &zeroobj;
+
 	char mlet = mtmp->data->mlet;
 	
 	propellor = &zeroobj;
 	Oselect(EGG); /* cockatrice egg */
-
-//	if(mlet == S_KETER)	/*  */
-//	    Oselect(CREAM_PIE);
-
 	if(throws_rocks(mtmp->data))	/* ...boulders for giants */
 	    Oselect(BOULDER);
 
@@ -395,7 +452,10 @@ register struct monst *mtmp;
 	 * one direction and 1 in another; one space beyond that would be 3 in
 	 * one direction and 2 in another; 3^2+2^2=13.
 	 */
-	if (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 13 && couldsee(mtmp->mx, mtmp->my)) {
+	/* This check is disabled, as it's targeted towards attacking you
+	   and not any arbitrary target. */
+	/* if (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 13 && couldsee(mtmp->mx, mtmp->my)) */
+	{
 	    for (i = 0; i < SIZE(pwep); i++) {
 		/* Only strong monsters can wield big (esp. long) weapons.
 		 * Big weapon is basically the same as bimanual.
@@ -450,6 +510,7 @@ register struct monst *mtmp;
 		case P_CROSSBOW:
 		  propellor = (oselect(mtmp, CROSSBOW));
 		}
+		if (!tmpprop) tmpprop = propellor;
 		if ((otmp = MON_WEP(mtmp)) && otmp->cursed && otmp != propellor
 				&& mtmp->weapon_check == NO_WEAPON_WANTED)
 			propellor = 0;
@@ -476,6 +537,7 @@ register struct monst *mtmp;
 	  }
 
 	/* failure */
+	if (tmpprop) propellor = tmpprop;
 	return (struct obj *)0;
 }
 
@@ -492,6 +554,41 @@ static const NEARDATA short hwep[] = {
 	  WAR_HAMMER, SILVER_DAGGER, ELVEN_DAGGER, STILETTO, DAGGER, ORCISH_DAGGER,
 	  ATHAME, SCALPEL, KNIFE, WORM_TOOTH
 	};
+
+boolean
+would_prefer_hwep(mtmp, otmp)
+struct monst *mtmp;
+struct obj *otmp;
+{
+    struct obj *wep = select_hwep(mtmp);
+
+    int i = 0;
+    
+    if (wep)
+    { 
+        if (wep == otmp) return TRUE;
+    
+        if (wep->oartifact) return FALSE;
+
+        if (is_giant(mtmp->data) &&  wep->otyp == CLUB) return FALSE;
+        if (is_giant(mtmp->data) && otmp->otyp == CLUB) return TRUE;
+    }
+    
+    for (i = 0; i < SIZE(hwep); i++)
+    {
+	if (hwep[i] == CORPSE && !(mtmp->misc_worn_check & W_ARMG))
+	    continue;
+
+        if ( wep &&
+	     wep->otyp == hwep[i] &&
+           !(otmp->otyp == hwep[i] &&
+	     dmgval(otmp, &zeromonst) > dmgval(wep, &zeromonst)))
+	    return FALSE;
+        if (otmp->otyp == hwep[i]) return TRUE;
+    }
+
+    return FALSE;
+}
 
 struct obj *
 select_hwep(mtmp)	/* select a hand to hand weapon for the monster */
@@ -633,7 +730,7 @@ register struct monst *mon;
 	if (obj && obj != &zeroobj) {
 		struct obj *mw_tmp = MON_WEP(mon);
 		if (mw_tmp && mw_tmp->otyp == obj->otyp) {
-		/* already wielding it */
+		/* already wielding one similar to it */
 			mon->weapon_check = NEED_WEAPON;
 			return 0;
 		}
@@ -674,7 +771,8 @@ register struct monst *mon;
 		setmnotwielded(mon, mw_tmp);
 		mon->weapon_check = NEED_WEAPON;
 		if (canseemon(mon)) {
-		    pline("%s wields %s!", Monnam(mon), doname(obj));
+		    pline("%s wields %s%s", Monnam(mon), doname(obj),
+		          mon->mtame ? "." : "!");
 		    if (obj->cursed && obj->otyp != CORPSE) {
 			pline("%s %s to %s %s!",
 			    Tobjnam(obj, "weld"),
@@ -735,7 +833,7 @@ struct obj *otmp;
 
 	if (Upolyd) return(0);
 
-	if (str < 6) bonus = -1;
+	if (str < 6) bonus = -6+str;
 	else if (str < 16) bonus = 0;
 	else if (str < 18) bonus = 1;
 	else if (str == 18) bonus = 2;		/* up to 18 */
@@ -1208,7 +1306,7 @@ struct obj *weapon;
 	switch (P_SKILL(type)) {
 	    default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type));
 		     /* fall through */
-	    case P_ISRESTRICTED:
+	    case P_ISRESTRICTED:	bonus = -5; break;
 	    case P_UNSKILLED:	bonus = -2; break;
 	    case P_BASIC:	bonus =  0; break;
 	    case P_SKILLED:	bonus =  1; break;

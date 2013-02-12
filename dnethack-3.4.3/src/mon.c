@@ -13,7 +13,6 @@
 #include <ctype.h>
 
 STATIC_DCL boolean FDECL(restrap,(struct monst *));
-STATIC_DCL long FDECL(mm_aggression, (struct monst *,struct monst *));
 #ifdef OVL2
 STATIC_DCL int NDECL(pick_animal);
 STATIC_DCL int FDECL(select_newcham_form, (struct monst *));
@@ -1331,7 +1330,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
    in the absence of Conflict.  There is no provision for targetting
    other monsters; just hand to hand fighting when they happen to be
    next to each other. */
-STATIC_OVL long
+long
 mm_aggression(magr, mdef)
 struct monst *magr,	/* monster that is currently deciding where to move */
 	     *mdef;	/* another monster which is next to it */
@@ -1347,7 +1346,18 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		md == &mons[PM_SHRIEKER])
 			return ALLOW_M|ALLOW_TM;
 
-	/* Gugs and ghouls fight each other. The gugs are afraid of the
+#ifdef ATTACK_PETS
+        /* pets attack hostile monsters */
+	if (magr->mtame && !mdef->mpeaceful)
+	    return ALLOW_M|ALLOW_TM;
+	
+        /* and vice versa */
+	if (mdef->mtame && !magr->mpeaceful)
+	    return ALLOW_M|ALLOW_TM;
+#endif /* ATTACK_PETS */
+
+	/* Gugs and ghouls fight each other. 
+		Gugs are afraid of
 		Ghouls, so they won't attack first. */
 	if (ma == &mons[PM_GHOUL] &&
 		md == &mons[PM_GUG])
@@ -2280,7 +2290,8 @@ cleanup:
 		HTelepat &= ~INTRINSIC;
 		change_luck(-2);
 		You("murderer!");
-		u.hod += 5;
+		if(u.ualign.type == A_LAWFUL){u.hod += 10; u.ualign.sins += 5;}
+		else{u.hod += 5; u.ualign.sins += 2;}
 		if (Blind && !Blind_telepat)
 		    see_monsters(); /* Can't sense monsters any more. */
 	}
@@ -2288,6 +2299,7 @@ cleanup:
 	if (is_unicorn(mdat) &&
 				sgn(u.ualign.type) == sgn(mdat->maligntyp)) {
 		change_luck(-5);
+		u.hod += 10;
 		You_feel("guilty...");
 	}
 

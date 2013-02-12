@@ -513,6 +513,10 @@ int	mntmp;
 	if (flags.verbose) {
 	    static const char use_thec[] = "Use the command #%s to %s.";
 	    static const char monsterc[] = "monster";
+#ifdef YOUMONST_SPELL
+	    if (attacktype(youmonst.data, AT_MAGC))
+		pline(use_thec,monsterc,"cast monster spells");
+#endif /* YOUMONST_SPELL */
 	    if (can_breathe(youmonst.data))
 		pline(use_thec,monsterc,"use your breath weapon");
 	    if (attacktype(youmonst.data, AT_SPIT))
@@ -731,6 +735,7 @@ rehumanize()
 		killer = "killed while stuck in creature form";
 		done(DIED);
 	}
+
 	if (emits_light(youmonst.data))
 	    del_light_source(LS_MONSTER, (genericptr_t)&youmonst);
 	polyman("return to %s form!", urace.adj);

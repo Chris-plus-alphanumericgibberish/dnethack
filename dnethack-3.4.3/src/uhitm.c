@@ -12,7 +12,7 @@ STATIC_DCL boolean FDECL(hmon_hitmon, (struct monst *,struct obj *,int));
 #ifdef STEED
 STATIC_DCL int FDECL(joust, (struct monst *,struct obj *));
 #endif
-STATIC_DCL void NDECL(demonpet);
+void NDECL(demonpet);
 STATIC_DCL boolean FDECL(m_slips_free, (struct monst *mtmp,struct attack *mattk));
 STATIC_DCL int FDECL(explum, (struct monst *,struct attack *));
 STATIC_DCL void FDECL(start_engulf, (struct monst *));
@@ -242,8 +242,8 @@ struct monst *mtmp;
 		(mtmp->mflee && !mtmp->mavenge))){
 		    You("caitiff!");
 			if(u.ualign.record > 10) {
-			    adjalign(-2); //slightly stiffer penalty
 				u.ualign.sins++;
+			    adjalign(-2); //slightly stiffer penalty
 				u.hod++;
 			}
 			else if(u.ualign.record > -10) {
@@ -271,12 +271,13 @@ register struct monst *mtmp;
 /*	attacking peaceful creatures is bad for the samurai's giri */
 	if (Role_if(PM_SAMURAI) && mtmp->mpeaceful){
 		You("dishonorably attack the innocent!");
-		if(u.ualign.record > -10) {
-			adjalign(-5);
-		}
 		u.ualign.sins++;
 		u.ualign.sins++;
 		u.hod++;
+		adjalign(-1);
+		if(u.ualign.record > -10) {
+			adjalign(-4);
+		}
 	}
 
 /*	Adjust vs. (and possibly modify) monster state.		*/
@@ -741,7 +742,7 @@ int thrown;
 				if(u.dx || u.dy){
 					You("toss it away.");
 					m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy,
-							(int)((ACURRSTR)/2 - monwep->owt/40 + obj->spe) , monwep);
+							(int)((ACURRSTR)/2 - monwep->owt/40 + obj->spe) , monwep,TRUE);
 				}
 				else{
 					You("drop it at your feet.");
@@ -1290,7 +1291,7 @@ struct obj *obj;	/* weapon */
  * (DR4 and DR4.5) screws up with an internal error 5 "Expression Too Complex."
  * Pulling it out makes it work.
  */
-STATIC_OVL void
+void
 demonpet()
 {
 	int i;
@@ -1298,7 +1299,8 @@ demonpet()
 	struct monst *dtmp;
 
 	pline("Some hell-p has arrived!");
-	i = !rn2(6) ? ndemon(u.ualign.type) : NON_PM;
+	i = (!is_demon(youmonst.data) || !rn2(6)) 
+	     ? ndemon(u.ualign.type) : NON_PM;
 	pm = i != NON_PM ? &mons[i] : youmonst.data;
 	if ((dtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS)) != 0)
 	    (void)tamedog(dtmp, (struct obj *)0);
@@ -2235,14 +2237,20 @@ use_weapon:
 				missum(mon, mattk);
 			break;
 
+#ifdef YOUMONST_SPELL
 		case AT_MAGC:
 			/* No check for uwep; if wielding nothing we want to
 			 * do the normal 1-2 points bare hand damage...
 			 */
+			/*
 			if (i==0 && (youmonst.data->mlet==S_KOBOLD
 				|| youmonst.data->mlet==S_ORC
 				|| youmonst.data->mlet==S_GNOME
 				)) goto use_weapon;
+			*/
+			sum[i] = castum(mon, mattk);
+			continue;
+#endif /* YOUMONST_SPELL */
 
 		case AT_NONE:
 		case AT_BOOM:
