@@ -27,6 +27,7 @@
 #define AT_ARRW		17	/* fire silver arrows from internal reservour.  Other ammo created as needed. */
 #define AT_WHIP		18	/* Whips you */
 #define AT_LRCH		19	/* Reach attack */
+#define AT_HODS		20  /* Hod Sephirah's mirror attack */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */
