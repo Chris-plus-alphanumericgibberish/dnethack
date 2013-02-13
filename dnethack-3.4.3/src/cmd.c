@@ -453,8 +453,8 @@ domonability(VOID_ARGS)
 	else if (attacktype(youmonst.data, AT_SPIT)) return dospit();
 	else if (attacktype(youmonst.data, AT_MAGC))
 	    return castum((struct monst *)0,
-	                   &youmonst.data->mattk[attacktype(youmonst.data, 
-			                         AT_MAGC)]);
+	                   &youmonst.data->mattk[attackindex(youmonst.data, 
+			                         AT_MAGC,AD_ANY)]);
 	else if (youmonst.data->mlet == S_NYMPH) return doremove();
 	else if (attacktype(youmonst.data, AT_GAZE)) return dogaze();
 	else if (is_were(youmonst.data)) return dosummon();

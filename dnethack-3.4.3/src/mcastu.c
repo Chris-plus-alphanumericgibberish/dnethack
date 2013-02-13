@@ -449,7 +449,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;
 
-           if (!spellnum) do {
+           do {
                spellnum = choose_magic_special(mtmp, mattk->adtyp);
 				if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
 		/* not trying to attack?  don't allow directed spells */
@@ -1473,7 +1473,7 @@ castmm(mtmp, mdef, mattk)
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;
 
-	    if (!spellnum) do {
+	    do {
                spellnum = choose_magic_special(mtmp, mattk->adtyp);
 				if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
 		/* not trying to attack?  don't allow directed spells */
@@ -1924,16 +1924,16 @@ int spellnum;
        int sphere = (!rn2(3) ? PM_FLAMING_SPHERE : (!rn2(2) ?
                              PM_FREEZING_SPHERE : PM_SHOCKING_SPHERE));
        boolean created = FALSE;
-       struct monst *mon;
+       struct monst *mpet;
        if (!(mvitals[sphere].mvflags & G_GONE) &&
-		(mon = makemon(&mons[sphere],
-			u.ux, u.uy, NO_MINVENT)) != 0){
-				if (canspotmon(mon)) created++;
-				initedog(mon);
+		(mpet = makemon(&mons[sphere],
+			u.ux, u.uy, MM_EDOG|NO_MINVENT)) != 0){
+				if (canspotmon(mpet)) created++;
+				initedog(mpet);
 		}
        if (created)
            pline("%s is created!",
-                      Hallucination ? rndmonnam() : Amonnam(mon));
+                      Hallucination ? rndmonnam() : Amonnam(mpet));
        dmg = 0;
        break;
     }

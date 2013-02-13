@@ -1205,6 +1205,7 @@ E void NDECL(pacify_guards);
 E void FDECL(set_mon_data, (struct monst *,struct permonst *,int));
 E struct attack *FDECL(attacktype_fordmg, (struct permonst *,int,int));
 E boolean FDECL(attacktype, (struct permonst *,int));
+E int FDECL(attackindex, (struct permonst *,int,int));
 E boolean FDECL(poly_when_stoned, (struct permonst *));
 E boolean FDECL(resists_drli, (struct monst *));
 E boolean FDECL(resists_magm, (struct monst *));

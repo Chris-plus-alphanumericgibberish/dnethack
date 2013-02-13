@@ -51,6 +51,19 @@ int atyp;
     return attacktype_fordmg(ptr, atyp, AD_ANY) ? TRUE : FALSE;
 }
 
+int
+attackindex(ptr, atyp, dtyp)
+struct permonst *ptr;
+int atyp, dtyp;
+{
+	int i;
+    for (i = 0; i < NATTK; i++)
+	if ((&ptr->mattk[i])->aatyp == atyp && (
+		dtyp == AD_ANY || (&ptr->mattk[i])->adtyp == dtyp))
+	    return i;
+    return -1;
+}
+
 #endif /* OVL0 */
 #ifdef OVLB
 
