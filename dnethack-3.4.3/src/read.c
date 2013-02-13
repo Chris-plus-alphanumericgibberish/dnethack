@@ -1297,12 +1297,14 @@ register struct obj	*sobj;
 			pline("Thinking of Maud you forget everything else.");
 		exercise(A_WIS, FALSE);
 		break;
-	case SCR_FIRE:
+	case SCR_FIRE:{
 		/*
 		 * Note: Modifications have been made as of 3.0 to allow for
 		 * some damage under all potential cases.
 		 */
+		int damlevel = max(3, u.ulevel);
 		cval = bcsign(sobj);
+		if(Fire_resistance) cval *= -1;//if you resist fire, blessed does more damage than cursed
 		if(!objects[sobj->otyp].oc_name_known) more_experienced(0,10);
 		useup(sobj);
 		makeknown(SCR_FIRE);
@@ -1327,9 +1329,10 @@ register struct obj	*sobj;
 		    pline_The("scroll erupts in a tower of flame!");
 		    burn_away_slime();
 		}
-		explode(u.ux, u.uy, 11, (2*(rn1(3, 3) + 2 * cval) + 1)/3,
+		explode(u.ux, u.uy, 11, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
 							SCROLL_CLASS, EXPL_FIERY);
 		return(1);
+	}
 	case SCR_EARTH:
 	    /* TODO: handle steeds */
 	    if (
