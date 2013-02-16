@@ -221,7 +221,7 @@ const char * wardText[][7] =  {
 	{"a hexagram", "a two-fold hexagram", "a three-fold hexagram", "a four-fold hexagram", 
 		"a five-fold hexagram","a six-fold hexagram", "a seven-fold hexagram"},
 	{"a hamsa mark", "a pair of hamsa marks", "a three-handed hamsa mark", 
-		"a four-handed hamsa mark", "a seven-handed hamsa mark","a six-handed hamsa mark", 
+		"a four-handed hamsa mark", "a five-handed hamsa mark","a six-handed hamsa mark", 
 		"an overabundance of hamsa marks"},
 	{"an elder sign", "a one-armed elder sign", "a two-armed elder sign", "a three-armed elder sign", 
 		"a four-armed elder sign","a five-armed elder sign", "an extra-dimensional elder sign"},
