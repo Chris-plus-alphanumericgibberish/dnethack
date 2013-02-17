@@ -1429,8 +1429,8 @@ int style;
 			if (otyp == BOULDER && throws_rocks(mtmp->data)) {
 			    if (rn2(3)) {
 				if (cansee(bhitpos.x, bhitpos.y))
-				pline("%s snatches the boulder.",
-					Monnam(mtmp));
+					pline("%s snatches the boulder.",
+						Monnam(mtmp));
 				else
 				    You_hear("a rumbling stop abruptly.");
 				singleobj->otrapped = 0;
@@ -2726,7 +2726,8 @@ xchar x, y;
     return retval;
 }
 
-void
+/* returns TRUE if obj is destroyed */
+boolean
 water_damage(obj, force, here, forcelethe)
 register struct obj *obj;
 register boolean force, here, forcelethe;
@@ -2734,6 +2735,8 @@ register boolean force, here, forcelethe;
 	/* Dips in the Lethe are a very poor idea Lethe patch*/
 	int luckpenalty = level.flags.lethe? 7 : 0;
 	struct obj *otmp;
+	struct obj *obj_original = obj;
+	boolean obj_destroyed = FALSE;
 	int is_lethe = level.flags.lethe || forcelethe;
 
 	/* Scrolls, spellbooks, potions, weapons and
@@ -2797,6 +2800,7 @@ register boolean force, here, forcelethe;
 				/* damage player/monster? */
 				pline("A potion explodes!");
 				delobj(obj);
+				obj_destroyed = (obj == obj_original);
 				continue;
 			} else
 			/* Potions turn to water or amnesia... */
@@ -2888,7 +2892,9 @@ register boolean force, here, forcelethe;
 			    obj->oerodeproof = FALSE;
 		    }
 		}
+		obj_destroyed = FALSE;
 	}
+	return obj_destroyed;
 }
 
 /*
