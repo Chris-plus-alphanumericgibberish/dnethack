@@ -657,7 +657,8 @@ mhurtle(mon, dx, dy, range)
     coord mc, cc;
 
 	/* At the very least, debilitate the monster */
-	mon->movement = 0;
+//	mon->movement = 0;
+	mon->movement -= 10;
 	mon->mstun = 1;
 
 	/* Is the monster stuck or too heavy to push?
