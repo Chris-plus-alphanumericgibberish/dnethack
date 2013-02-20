@@ -143,10 +143,10 @@ unsigned *ospecial;
 			} else if (iflags.use_color && offset == S_room) {
 				if (*in_rooms(x,y,BEEHIVE))
 				color = CLR_YELLOW;
-//				else if (*in_rooms(x,y,GARDEN))
-//				color = CLR_GREEN;
-				else if (Is_juiblex_level(&u.uz))
-				color = CLR_BRIGHT_GREEN;
+				else if (*in_rooms(x,y,SWAMP)){
+					if (Is_juiblex_level(&u.uz)) color = CLR_BRIGHT_GREEN;
+					else color = CLR_GREEN;
+				}
 			} else if (iflags.use_color && offset == S_altar) {
 				color = CLR_WHITE;
 			}

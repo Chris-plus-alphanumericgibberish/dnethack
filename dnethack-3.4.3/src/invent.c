@@ -2627,7 +2627,7 @@ STATIC_VAR NEARDATA const char *bogusclasses[] = {
 	"Filler","Useless Objects", "Artifacts", "Ascension Kit Items",
 	"Staves", "Songs", "Drinks", "Grimoires", "Gears", "Cogs",
 	"Marmosets", "Bugs", "Easter Eggs", "Tiny Monuments","Consumables",
-	"Junk", "Foos", "Spoilers"
+	"Junk", "Foos", "Spoilers", "YANIs"
 };
 
 static NEARDATA const char oth_symbols[] = {

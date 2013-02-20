@@ -618,11 +618,15 @@ struct level_map {
 #endif
 	{ "medusa",	&medusa_level },
 	/*Gehennom*/
-	{ "asmodeus",	&asmodeus_level },
-	{ "baalz",	&baalzebub_level },
+//	{ "asmodeus",	&asmodeus_level },
+	{ "hell3",	&asmodeus_level },
+//	{ "baalz",	&baalzebub_level },
+	{ "hell2",	&baalzebub_level },
 	{ "fakewiz1",	&portal_level },
+//	{ "juiblex",	&juiblex_level },
 	{ "juiblex",	&juiblex_level },
-	{ "orcus",	&orcus_level },
+//	{ "orcus",	&orcus_level },
+	{ "abys2",	&orcus_level },
 	{ "sanctum",	&sanctum_level },
 	{ "valley",	&valley_level },
 	{ "wizard1",	&wiz1_level },
