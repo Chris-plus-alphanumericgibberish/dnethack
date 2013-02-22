@@ -58,11 +58,20 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_stronghold_level;
 	/*Gehennom*/
     d_level	d_valley_level;
+    d_level	d_stair1_level;
+    d_level	d_stair2_level;
+    d_level	d_stair3_level;
     d_level	d_wiz1_level;
     d_level	d_wiz2_level;
     d_level	d_wiz3_level;
     d_level	d_juiblex_level;
     d_level	d_orcus_level;
+    d_level	d_hell1_level;
+    d_level	d_hell2_level;
+    d_level	d_hell3_level;
+    d_level	d_abyss_level;
+    d_level	d_abys2_level;
+    d_level	d_brine_level;
     d_level	d_baalzebub_level;	/* unused */
     d_level	d_asmodeus_level;	/* unused */
     d_level	d_portal_level;		/* only in goto_level() [do.c] */
