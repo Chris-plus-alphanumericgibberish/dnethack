@@ -65,8 +65,8 @@ extern void demonpet();
 extern void you_aggravate(struct monst *);
 
 STATIC_DCL void FDECL(cursetxt,(struct monst *,BOOLEAN_P));
-STATIC_DCL int FDECL(choose_magic_spell, (int));
-STATIC_DCL int FDECL(choose_clerical_spell, (int));
+STATIC_DCL int FDECL(choose_magic_spell, (int,int,boolean));
+STATIC_DCL int FDECL(choose_clerical_spell, (int,int,boolean));
 STATIC_DCL void FDECL(cast_spell,(struct monst *, int,int));
 STATIC_DCL boolean FDECL(is_undirected_spell,(unsigned int,int));
 STATIC_DCL boolean FDECL(spell_would_be_useless,(struct monst *,int));
@@ -112,9 +112,12 @@ boolean undirected;
 
 /* default spell selection for mages */
 STATIC_OVL int
-choose_magic_spell(spellval)
+choose_magic_spell(spellval,mid,hostile)
 int spellval;
+int mid;
+boolean hostile;
 {
+	if(!hostile || mid % 10 < 5){
     switch (spellval % 24) {
     case 23:
     case 22:
@@ -155,12 +158,139 @@ int spellval;
     default:
 	return PSI_BOLT;
     }
+	}else if(mid % 10 < 7){
+     switch (spellval % 24) {
+   case 23:
+    case 22:
+    return DRAIN_LIFE;
+    case 21:
+    case 20:
+	return DRAIN_ENERGY;
+    case 19:
+    case 18:
+	return CLONE_WIZ;
+    case 17:
+    case 16:
+    case 15:
+	return WEAKEN_STATS;
+    case 14:
+    case 13:
+	return CONFUSE_YOU;
+    case 12:
+    case 11:
+    case 10:
+	return DRAIN_LIFE;
+    case 9:
+    case 8:
+	return DESTRY_WEPN;
+    case 7:
+    case 6:
+	return WEAKEN_YOU;
+    case 5:
+    case 4:
+	return DARKNESS;
+    case 3:
+	return STUN_YOU;
+    case 2:
+	return MAKE_WEB;
+    case 1:
+	return CURE_SELF;
+    case 0:
+    default:
+	return PSI_BOLT;
+	}
+	}else if(mid % 10 < 9){
+    switch (spellval % 24) {
+    case 23:
+    case 22:
+    return CURE_SELF;
+    case 21:
+    case 20:
+	return ARROW_RAIN;
+    case 19:
+    case 18:
+	return CLONE_WIZ;
+    case 17:
+    case 16:
+    case 15:
+	return SUMMON_MONS;
+    case 14:
+    case 13:
+	return SUMMON_SPHERE;
+    case 12:
+    case 11:
+    case 10:
+	return DROP_BOULDER;
+    case 9:
+    case 8:
+	return DESTRY_ARMR;
+    case 7:
+    case 6:
+	return WEAKEN_YOU;
+    case 5:
+    case 4:
+	return MAKE_VISIBLE;
+    case 3:
+	return SUMMON_SPHERE;
+    case 2:
+	return HASTE_SELF;
+    case 1:
+	return CURE_SELF;
+    case 0:
+    default:
+	return SUMMON_SPHERE;
+	}
+	}else{
+    switch (spellval % 24) {
+    case 23:
+    case 22:
+    case 21:
+    case 20:
+    case 19:
+	return DRAIN_LIFE;
+    case 18:
+	return CLONE_WIZ;
+    case 17:
+    case 16:
+    case 15:
+	return SUMMON_MONS;
+    case 14:
+    case 13:
+	return AGGRAVATION;
+    case 12:
+    case 11:
+    case 10:
+	return CURSE_ITEMS;
+    case 9:
+	return DESTRY_WEPN;
+    case 8:
+	return DESTRY_ARMR;
+    case 7:
+    case 6:
+	return WEAKEN_YOU;
+    case 5:
+	return MAKE_VISIBLE;
+    case 4:
+	return DISAPPEAR;
+    case 3:
+	return STUN_YOU;
+    case 2:
+	return HASTE_SELF;
+    case 1:
+	return CONFUSE_YOU;
+    case 0:
+    default:
+	return PSI_BOLT;
+	}
+	}
 }
 
 /* default spell selection for priests/monks */
 STATIC_OVL int
-choose_clerical_spell(spellnum)
+choose_clerical_spell(spellnum,mid,hostile)
 int spellnum;
+int mid;
+boolean hostile;
 {
      switch (spellnum %18) {
      case 17:
@@ -415,8 +545,8 @@ unsigned int type;
 				}
 			}
     if (type == AD_CLRC)
-        return choose_clerical_spell(rn2(mtmp->m_lev));
-    return choose_magic_spell(rn2(mtmp->m_lev));
+        return choose_clerical_spell(rn2(mtmp->m_lev),mtmp->mnum,!(mtmp->mpeaceful));
+    return choose_magic_spell(rn2(mtmp->m_lev),mtmp->mnum,!(mtmp->mpeaceful));
 }
 
 /* return values:
