@@ -529,9 +529,9 @@ aligntyp resp_god;
 	    if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) {
 		/* one more try for high altars */
 		verbalize("Thou cannot escape my wrath, mortal!");
-		summon_minion(resp_god, FALSE);
-		summon_minion(resp_god, FALSE);
-		summon_minion(resp_god, FALSE);
+		(void) summon_minion(resp_god, FALSE, FALSE);
+		(void) summon_minion(resp_god, FALSE, FALSE);
+		(void) summon_minion(resp_god, FALSE, FALSE);
 		verbalize("Destroy %s, my servants!", uhim());
 	    }
 	}
@@ -606,7 +606,7 @@ aligntyp resp_god;
 				  "scorn":"call upon");
 			pline("\"Then die, %s!\"",
 			      youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
-			summon_minion(resp_god, FALSE);
+			(void) summon_minion(resp_god, FALSE, FALSE);
 			break;
 
 	    default:	gods_angry(resp_god);
@@ -1401,7 +1401,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 
 		    if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
 		       rnd(u.ualign.record) > (3*ALIGNLIM)/4)
-			summon_minion(altaralign, TRUE);
+			(void) summon_minion(altaralign, TRUE, FALSE);
 		    /* anger priest; test handles bones files */
 		    if((pri = findpriest(temple_occupied(u.urooms))) &&
 		       !p_coaligned(pri))
@@ -1413,7 +1413,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    exercise(A_WIS, FALSE);
 		    if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
 		       rnd(u.ualign.record) > (7*ALIGNLIM)/8)
-			summon_minion(altaralign, TRUE);
+			(void) summon_minion(altaralign, TRUE, FALSE);
 		}
 		return(1);
 	    }

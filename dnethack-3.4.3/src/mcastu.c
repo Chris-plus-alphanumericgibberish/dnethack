@@ -32,7 +32,7 @@ extern void demonpet();
 #define BLIND_YOU              17
 #define SLEEP                  18 /* sleep */
 #define DRAIN_ENERGY           19
-#define WEAKEN_YOU             20
+#define WEAKEN_STATS           20
 #define DESTRY_ARMR            21
 #define DESTRY_WEPN            22
        /* clerical spells */
@@ -56,11 +56,14 @@ extern void demonpet();
 #define FILTH                  37
 #define CLONE_WIZ              38
 #define STRANGLE               39
+		/* legacy monster spells */
 #define DEATH_TOUCH				40
 #define AGGRAVATION				41
 #define OPEN_WOUNDS				42
 #define PSI_BOLT				43
-#define WEAKEN_STATS			44
+#define WEAKEN_YOU				44
+		/* more monster spells */
+#define SUMMON_DEVIL            45
 
 extern void you_aggravate(struct monst *);
 
@@ -292,7 +295,8 @@ int spellnum;
 int mid;
 boolean hostile;
 {
-     switch (spellnum %18) {
+	if(!hostile){
+     switch (spellnum % 18) {
      case 17:
        return PUNISH;
      case 16:
@@ -322,9 +326,42 @@ boolean hostile;
     case 1:
 	return OPEN_WOUNDS;
     case 0:
-    default:
+    default:/*5,10,15,18+*/
 	return CURE_SELF;
     }
+	}else{
+		 spellnum = spellnum % 18;
+		//case "17"
+		if(spellnum == ((mid+3)%4)+14) return PUNISH;
+		//case "16"
+		if(spellnum == ((mid+2)%4)+14) return (mid % 2) ? SUMMON_ANGEL : SUMMON_DEVIL;
+		//case "14"
+		if(spellnum == ((mid+0)%4)+14) return PLAGUE;
+		//case "13"
+		if(spellnum == ((mid+4)%5)+9) return EARTHQUAKE;
+		//case "12"
+		if(spellnum == ((mid+3)%5)+9) return (mid % 2) ? GEYSER : ACID_RAIN;
+		//case "11"
+		if(spellnum == ((mid+2)%5)+9) return FIRE_PILLAR;
+		//case "9"
+		if(spellnum == ((mid+0)%5)+9) return LIGHTNING;
+		//case "8"
+		if(spellnum == ((mid+3)%4)+5) return DRAIN_LIFE;
+		//case "7"
+		if(spellnum == ((mid+2)%4)+5) return CURSE_ITEMS;
+		//case "6"
+		if(spellnum == ((mid+1)%4)+5) return INSECTS;
+		//case "4"
+		if(spellnum == ((mid+2)%3)+2) return BLIND_YOU;
+		//case "3"
+		if(spellnum == ((mid+1)%3)+2) return PARALYZE;
+		//case "2"
+		if(spellnum == ((mid+0)%3)+2) return CONFUSE_YOU;
+		//case "1"
+		if(spellnum == ((mid+1)%2)+0) return ( (mid+1) % 2) ? CURE_SELF : OPEN_WOUNDS;
+		//case "0", "5", "10", "15", "18+"
+		return (mid % 2) ? CURE_SELF : OPEN_WOUNDS;
+	}
 }
 
 /* ...but first, check for monster-specific spells */
@@ -417,133 +454,133 @@ unsigned int type;
 		if(!rn2(3)) return WEAKEN_YOU;
 		else return DESTRY_ARMR;
 	case PM_CRONE_LILITH:
-				switch(rn2(6)){
-					case 0:
-					case 1:
-					case 2:
+		switch(rn2(6)){
+			case 0:
+			case 1:
+			case 2:
 				return CURSE_ITEMS;
-					break;
-					case 3:
+			break;
+			case 3:
 				return WEAKEN_STATS;
-					break;
-					case 4:
+			break;
+			case 4:
 				return CURE_SELF;
-					break;
-					case 5:
+			break;
+			case 5:
 				return DEATH_TOUCH;
-					break;
-				}
+			break;
+		}
 	case PM_PALE_NIGHT:
-				switch(rn2(5)){
-					case 0:
+		switch(rn2(5)){
+			case 0:
 				return OPEN_WOUNDS;
-					break;
-					case 1:
+			break;
+			case 1:
 				return WEAKEN_YOU;
-					break;
-					case 2:
+			break;
+			case 2:
 				return PSI_BOLT;
-					break;
-					case 3:
+			break;
+			case 3:
 				return CURSE_ITEMS;
-					break;
-					case 4:
+			break;
+			case 4:
 				return DEATH_TOUCH;
-					break;
-				}
+			break;
+		}
 	case PM_ASMODEUS:
-				switch(rn2(9)){
-					case 0:
+		switch(rn2(9)){
+			case 0:
 				return CURE_SELF;
-					break;
-					case 1:
+			break;
+			case 1:
 				return OPEN_WOUNDS;
-					break;
-					case 2:
+			break;
+			case 2:
 				return ACID_RAIN;
-					break;
-					case 3:
+			break;
+			case 3:
 				return LIGHTNING;
-					break;
-					case 4:
+			break;
+			case 4:
 				return FIRE_PILLAR;
-					break;
-					case 5:
+			break;
+			case 5:
 				return GEYSER;
-					break;
-					case 6:
+			break;
+			case 6:
 				return SUMMON_MONS;
-					break;
-					case 7:
+			break;
+			case 7:
 				return PARALYZE;
-					break;
-					case 8:
+			break;
+			case 8:
 				return DEATH_TOUCH;
-					break;
-				}
+			break;
+		}
 /*	case PM_CHAOS:
-				switch(rn2(10)){
-					case 0:
+		switch(rn2(10)){
+			case 0:
 				return CURE_SELF;
-					break;
-					case 1:
-					case 2:
-					case 3:
+			break;
+			case 1:
+			case 2:
+			case 3:
 				return LIGHTNING;
-					break;
-					case 4:
-					case 5:
-					case 6:
+			break;
+			case 4:
+			case 5:
+			case 6:
 				return FIRE_PILLAR;
-					break;
-					case 7:
-					case 8:
-					case 9:
+			break;
+			case 7:
+			case 8:
+			case 9:
 				return GEYSER;
-					break;
-				}
+			break;
+		}
 */
 	case PM_MINOTAUR_PRIESTESS:
-				switch (d(1,5)+8) {
-					case 13:
+		switch (d(1,5)+8) {
+			case 13:
 			return GEYSER;
-					break;
-					case 12:
+			break;
+			case 12:
 			return FIRE_PILLAR;
-					break;
-					case 11:
+			break;
+			case 11:
 			return LIGHTNING;
-					break;
-					case 10:
-					case 9:
+			break;
+			case 10:
+			case 9:
 			return CURSE_ITEMS;
-					break;
-					default:
+			break;
+			default:
 			return OPEN_WOUNDS;
-					break;
-				}
+			break;
+		}
 	case PM_GNOLL_MATRIARCH:
-				switch (d(1,10)-4) {
-					case 6:
+		switch (d(1,10)-4) {
+			case 6:
 				return BLIND_YOU;
-					break;
-					case 5:
-					case 4:
+			break;
+			case 5:
+			case 4:
 				return PARALYZE;
-					break;
-					case 3:
-					case 2:
+			break;
+			case 3:
+			case 2:
 				return CONFUSE_YOU;
-					break;
-					case 1:
+			break;
+			case 1:
 				return CURE_SELF;
-					break;
-					case 0:
-					default:
+			break;
+			case 0:
+			default:
 				return OPEN_WOUNDS;
-					break;
-				}
-			}
+			break;
+		}
+	}
     if (type == AD_CLRC)
         return choose_clerical_spell(rn2(mtmp->m_lev),mtmp->mnum,!(mtmp->mpeaceful));
     return choose_magic_spell(rn2(mtmp->m_lev),mtmp->mnum,!(mtmp->mpeaceful));
@@ -799,7 +836,7 @@ int spellnum;
        vomit();
        dmg = rnd(Half_physical_damage ? 5 : 10);
 	break;
-    }
+	}
     case STRANGLE:
     {
        struct obj *otmp;
@@ -826,7 +863,7 @@ int spellnum;
                pline("%s appears around your %s!",An(xname(otmp)),body_part(NECK));
                setworn(otmp,W_AMUL);
                Amulet_on();
-	}
+           }
 	}
 	dmg = 0;
 	break;
@@ -874,7 +911,7 @@ int spellnum;
 	}
         do_earthquake(((int)mtmp->m_lev - 1) / 6, TRUE, mtmp);
         aggravate(); /* wake up without scaring */
-	dmg = 0;
+       dmg = 0;
 	break;
     case ACID_RAIN: /* as seen in the Lethe patch */
        pline("A torrent of burning acid rains down on you!");
@@ -882,8 +919,8 @@ int spellnum;
        if (Acid_resistance) {
 	    shieldeff(u.ux, u.uy);
            pline("It feels mildly uncomfortable.");
-	    dmg = 0;
-	}
+	dmg = 0;
+    }
        erode_obj(uwep, TRUE, FALSE);
        erode_obj(uswapwep, TRUE, FALSE);
        erode_armor(&youmonst, TRUE);
@@ -892,9 +929,9 @@ int spellnum;
                  body_part(EYE) : makeplural(body_part(EYE)));
            make_blinded((long)rnd(Acid_resistance ? 10 : 50),FALSE);
            if (!Blind) Your(vision_clears);
-	}
+    }
        /* TODO: corrode floor objects */
-	break;
+       break;
     case AGGRAVATION:
 	You_feel("that monsters are aware of your presence.");
 	aggravate();
@@ -963,7 +1000,21 @@ int spellnum;
                        an(Hallucination ? rndmonnam() : "hostile angel"));
        }
        dmg = 0;
-	break;
+       break;
+    }
+    case SUMMON_DEVIL: /* cleric only */
+    {
+       struct monst *mtmp2 = summon_minion(mtmp->data->maligntyp, FALSE, TRUE);
+       if (mtmp2) {
+           if (canspotmon(mtmp2))
+               pline("%s ascends from below!",
+                       An(Hallucination ? rndmonnam() : "fiend"));
+           else
+               You("sense the arrival of %s.",
+                       an(Hallucination ? rndmonnam() : "hostile fiend"));
+       }
+       dmg = 0;
+       break;
     }
     case SUMMON_MONS:
     {
@@ -1388,7 +1439,7 @@ ray:
 		pline("%s looks better.", Monnam(mtmp));
 	    /* note: player healing does 6d4; this used to do 1d8; then it did 3d6 */
 	    if ((mtmp->mhp += min(d(mtmp->m_lev/3+1,8), 10)) > mtmp->mhpmax)
-		mtmp->mhp = mtmp->mhpmax;
+			mtmp->mhp = mtmp->mhpmax;
 	    dmg = 0;
 	}
 	break;
@@ -1398,14 +1449,14 @@ ray:
 	    dmg = (dmg + 1) / 2;
 	}
 	if(dmg < (Upolyd ? u.mh : u.uhp)){
-	if (dmg <= 5)
-	    Your("skin itches badly for a moment.");
+		if (dmg <= 5)
+		    Your("skin itches badly for a moment.");
 		else if (dmg <= 15)
-	    pline("Wounds appear on your body!");
+		    pline("Wounds appear on your body!");
 		else if (dmg <= 30)
-	    pline("Severe wounds appear on your body!");
-	else
-	    Your("body is covered with painful wounds!");
+		    pline("Severe wounds appear on your body!");
+		else
+		    Your("body is covered with painful wounds!");
 	}
 	else{
 		Your("body is covered with deadly wounds!");
@@ -2250,7 +2301,7 @@ int spellnum;
 	dmg = 0;
 	break;
     case HASTE_SELF:
-        if (!yours) {
+    if (!yours) {
 	    impossible("ucast haste but not yours?");
 	    return;
 	}
@@ -2261,13 +2312,13 @@ int spellnum;
 	break;
     case CURE_SELF:
         if (!yours) impossible("ucast healing but not yours?");
-	else if (u.mh < u.mhmax) {
-	    You("feel better.");
-	    if ((u.mh += d(3,6)) > u.mhmax)
-		u.mh = u.mhmax;
-	    flags.botl = 1;
-	}
-	dmg = 0;
+		else if (u.mh < u.mhmax) {
+			You("feel better.");
+			if ((u.mh += d(3,6)) > u.mhmax)
+			u.mh = u.mhmax;
+			flags.botl = 1;
+		}
+		dmg = 0;
 	break;
     case PSI_BOLT:
 	default:

@@ -90,17 +90,18 @@ struct monst *mon;
 	}
 }
 
-void
-summon_minion(alignment, talk)
+struct monst *
+summon_minion(alignment, talk, devils)
 aligntyp alignment;
 boolean talk;
+boolean devils;
 {
     register struct monst *mon;
     int mnum;
 
     switch ((int)alignment) {
 	case A_LAWFUL:
-	    mnum = lminion();
+	    mnum = devils ? ndemon(alignment) : lminion();
 	    break;
 	case A_NEUTRAL:
 	    mnum = PM_AIR_ELEMENTAL + rn2(4);
@@ -141,6 +142,7 @@ boolean talk;
 	mon->mpeaceful = FALSE;
 	/* don't call set_malign(); player was naughty */
     }
+	return mon;
 }
 
 #define Athome	(Inhell && !mtmp->cham)
