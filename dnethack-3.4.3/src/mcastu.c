@@ -120,6 +120,11 @@ int spellval;
 int mid;
 boolean hostile;
 {
+	/* Alternative spell lists: since the alternative lists contain spells that aren't
+		yet implemented for m vs m combat, non-hostile monsters always use the vanilla 
+		list. Alternate list slection is based on the monster's ID number, which is
+		annotated as staying constant.
+	*/
 	if(!hostile || mid % 10 < 5){
     switch (spellval % 24) {
     case 23:
@@ -295,6 +300,15 @@ int spellnum;
 int mid;
 boolean hostile;
 {
+	/* Alternative spell lists: since the alternative lists contain spells that aren't
+		yet implemented for m vs m combat, non-hostile monsters always use the vanilla 
+		list. Alternate list slection is based on the monster's ID number, which is
+		annotated as staying constant. Priests are divided up into constructive and
+		destructive casters (constructives favor heal self, destructives favor 
+		inflict wounds). Their spell list is divided into blocks. The order that
+		they recieve spells from each block is radomized based on their monster
+		ID.
+	*/
 	if(!hostile){
      switch (spellnum % 18) {
      case 17:
