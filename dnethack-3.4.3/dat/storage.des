@@ -1,0 +1,363 @@
+#	SCCS Id: @(#)storage.des	3.4	2013/05/02
+#	Copyright (c) 1989 by Jean-Christophe Collet
+# NetHack may be freely redistributed.  See license for details.
+#
+
+#
+# Storage level (#1)
+#
+
+LEVEL: "stor-1"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'"',random,contained
+OBJECT:'=',random,contained
+ENGRAVING:(2,2),burn,"Begone! Keep Off! Shoo!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#2)
+#
+
+LEVEL: "stor-2"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'=',random,contained
+OBJECT:'=',"regeneration",contained
+OBJECT:'*',random,contained
+ENGRAVING:(2,2),burn,"Danger! Cursed Items! Do Not Touch!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#3)
+#
+
+LEVEL: "stor-3"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'/',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'(',random,contained
+OBJECT:'=',random,contained
+ENGRAVING:(2,2),burn,"Property of the Wizard! Do Not Touch!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#4)
+#
+
+LEVEL: "stor-4"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:'/',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+OBJECT:')',random,contained
+OBJECT:'[',"flack helmet",contained
+ENGRAVING:(2,2),burn,"Army of Yendor armory annex. Trespassers will be shot."
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+
+#
+# Storage level (#5)
+#
+
+LEVEL: "stor-5"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'/',random,contained
+OBJECT:'/',random,contained
+OBJECT:')',random,contained
+OBJECT:')',random,contained
+OBJECT:'%',random,contained
+OBJECT:'%',random,contained
+OBJECT:'%',random,contained
+OBJECT:'%',random,contained
+ENGRAVING:(2,2), burn,"Mine, not yours.  You touch, you're dead!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+#
+# Storage level (#6)
+#
+
+LEVEL: "stor-6"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:'+',random,contained
+OBJECT:'+',random,contained
+OBJECT:'?',random,contained
+OBJECT:'?',random,contained
+OBJECT:'?',random,contained
+ENGRAVING:(2,2),burn,"Property of the Dungeons of Doom municipal library.  Do not remove."
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+
+#
+# Storage level (#7)
+#
+
+LEVEL: "stor-7"
+
+ROOM: "ordinary", unlit, random, random, (4,4)
+NAME: "central"
+CONTAINER:'(',"chest",(2,2)
+OBJECT:')',"elven broadsword",contained
+OBJECT:')',"elven dagger",contained
+OBJECT:')',"elven spear",contained
+OBJECT:')',"elven bow",contained
+OBJECT:')',"elven arrow",contained
+OBJECT:')',"elven arrow",contained
+OBJECT:'[',"elven leather helm", contained
+OBJECT:'[',"elven mithril-coat", contained
+OBJECT:'[',"elven cloak", contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+ENGRAVING:(2,2),burn,"A Elbereth Gilthoniel, silivren penna miriel, o menel aglar elenath!"
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+  
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random, hostile
+
+RANDOM_CORRIDORS
+
+
+

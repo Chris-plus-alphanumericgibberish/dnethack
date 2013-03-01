@@ -63,10 +63,10 @@ endif
 
 ifeq  "$(GRAPHICAL)" "Y"
 # Game Name
-GAME    = NetHackW
+GAME    = dNetHackW
 else
 # Game Name
-GAME    = NetHack
+GAME    = dNetHack
 endif
 # Game directory
 GAMEDIR = ../binary
@@ -525,6 +525,8 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/rogue.des   $(DAT)/samurai.des  $(DAT)/sokoban.des \
 	 $(DAT)/tourist.des $(DAT)/valkyrie.des $(DAT)/wizard.des \
 	 $(DAT)/law.des     $(DAT)/chaos.des    $(DAT)/neutrality.des \
+	 $(DAT)/tomb.des    $(DAT)/blacktemple.des $(DAT)/sunlesssea.des \
+	 $(DAT)/storage.des \
 	 $(DAT)/convict.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
@@ -553,6 +555,10 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/law.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/chaos.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/neutrality.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/tomb.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/blacktemple.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/sunlesssea.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/storage.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/convict.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)
