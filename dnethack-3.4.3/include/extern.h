@@ -1023,7 +1023,7 @@ E int FDECL(dotent, (struct monst *, int));
 /* ### minion.c ### */
 
 E void FDECL(msummon, (struct monst *));
-E void FDECL(summon_minion, (ALIGNTYP_P,BOOLEAN_P));
+E struct monst * FDECL(summon_minion, (ALIGNTYP_P,BOOLEAN_P,BOOLEAN_P));
 E int FDECL(demon_talk, (struct monst *));
 E long FDECL(bribe, (struct monst *));
 E int FDECL(dprince, (ALIGNTYP_P));
