@@ -188,7 +188,10 @@
 #define EInvis			u.uprops[INVIS].extrinsic
 #define BInvis			u.uprops[INVIS].blocked
 #define Invis			((HInvis || EInvis || Underwater || \
-						 pm_invisible(youmonst.data)) && !BInvis)
+						 pm_invisible(youmonst.data) || \
+						 (ward_at(u.ux,u.uy) == HAMSA \
+							&& num_wards_at(u.ux, u.uy) == 6 ) \
+						  ) && !BInvis)
 #define Invisible		(Invis && !See_invisible)
 		/* Note: invisibility also hides inventory and steed */
 
