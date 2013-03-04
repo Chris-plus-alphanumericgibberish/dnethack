@@ -3505,7 +3505,7 @@ register struct monst *mon;
 			mayberem(uarmu, "shirt");
 	#endif
 
-		if (uarm || uarmc) {
+		if (uarm || uarmc || (uweap && uweap->oartifact==ART_TENSA_ZANGETSU)) {
 			verbalize("You're such a %s; I wish...",
 					flags.female ? "sweet lady" : "nice guy");
 			if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
