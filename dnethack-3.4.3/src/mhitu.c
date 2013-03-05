@@ -3505,7 +3505,7 @@ register struct monst *mon;
 			mayberem(uarmu, "shirt");
 	#endif
 
-		if (uarm || uarmc || (uweap && uweap->oartifact==ART_TENSA_ZANGETSU)) {
+		if (uarm || uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 			verbalize("You're such a %s; I wish...",
 					flags.female ? "sweet lady" : "nice guy");
 			if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
@@ -3704,7 +3704,7 @@ struct monst *mon;
 		lrdmayberem(uarmu, "shirt");
 #endif
 
-	if (uarm || uarmc) {
+	if (uarm || uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 		verbalize("You're such a %s; I wish...",
 				flags.female ? "sweet lady" : "nice guy");
 		if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
@@ -3877,7 +3877,7 @@ struct monst *mon;
 		lrdmayberem(uarmu, "shirt");
 #endif
 
-	if (uarm || uarmc) {
+	if (uarm || uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 		verbalize("You're such a %s; I wish...",
 				flags.female ? "sweet lady" : "nice guy");
 		if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
@@ -4096,7 +4096,7 @@ register struct monst *mon;
 		mlcmayberem(uarmu, "shirt", helpless);
 #endif
 
-	if (uarm || uarmc) {
+	if (uarm || uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 		verbalize("How dare you refuse me!");
 		pline("She claws at you!");
 		losehp(d(4, 4), "a jilted paramour", KILLED_BY);
@@ -4382,7 +4382,7 @@ register struct monst *mon;
 		mlcmayberem(uarmu, "shirt", helpless);
 #endif
 
-	if (uarm || uarmc) {
+	if (uarm || uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 		verbalize("How dare you refuse me!");
 		pline("He punches you!");
 		losehp(d(3, 8), "an enraged paramour", KILLED_BY);
@@ -4706,7 +4706,7 @@ register struct monst *mon;
 		sflmayberem(uarmu, "shirt", helpless);
 #endif
 
-	if (uarm || uarmc) {
+	if (uarm || uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 		verbalize("You can't resist forever!");
 		pline("She claws at you!");
 		losehp(d(4, 10), "a jilted paramour", KILLED_BY);
@@ -5070,7 +5070,7 @@ int dmg;
  * These attacks are likely to be useless untill it gets rid of some armor.
  */
 	#ifdef TOURIST
-		if(!uarmc && !uarm)
+		if(!uarmc && !uarm && (!uwep || uwep->oartifact!=ART_TENSA_ZANGETSU))
 			if(uarmu && n){
 				n--;
 				if(!u_slip_free(mon, &bodyblow)){
@@ -5100,7 +5100,10 @@ int dmg;
 			
 #endif
 			if(!uarmc){
-			 if(uarm && n){
+		 if(uwep && uwep->oartifact==ART_TENSA_ZANGETSU){
+			You_feel("the tentacles tear uselessly at your regenerating shihakusho.");
+		 }
+		 else if(uarm && n){
 				 n--;
 				 if(!u_slip_free(mon, &bodyblow)){
 					You_feel("the tentacles squirm under your armor.");
@@ -5284,7 +5287,7 @@ int dmg;
 				if(u.uenmax == 0) 
 			break;
 				n--; //else commit to the attack.
-				if(uarmc || uarm || uarmu){
+				if(uarmc || uarm || uarmu || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)){
 					You_feel("the tentacles sucking on your %s", uarm ? "armor" : "clothes");
 			break;  //blocked
 				} //else
@@ -5344,8 +5347,8 @@ int dmg;
 			break;
 			case 8:
 				n--;
-				if(uarmc || uarm){
-					You_feel("the tentacles squirm over your %s", uarmc ? "cloak" : "armor");
+				if(uarmc || uarm || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)){
+					You_feel("a tentacle squirm over your %s.", uarmc ? "cloak" : (uwep && uwep->oartifact==ART_TENSA_ZANGETSU) ? "shihakusho" : "armor");
 			break;  //blocked
 				} //else
 				You_feel("the tentacles drill through your unprotected %s and into your soul!",body_part(BODY_FLESH));
@@ -5370,8 +5373,8 @@ int dmg;
 			break;
 			case 9:
 				n--;
-				if(uarmc || uarm){
-					You_feel("the tentacles press into your %s", uarmc ? "cloak" : "armor");
+				if(uarmc || uarm  || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)){
+					You_feel("the tentacles press into your %s", uarmc ? "cloak" : (uwep && uwep->oartifact==ART_TENSA_ZANGETSU) ? "shihakusho" : "armor");
 			break; //blocked
 				} //else
 				You_feel("the tentacles spear into your unarmored body!");
@@ -5383,9 +5386,9 @@ int dmg;
 			case 10:
 			case 11:
 			case 12:
-				if(uarmc) {
+				if(uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 					n--;//while you have your cloak, this burns attacks at a high rate.
-					You_feel("the tentacles writhe over your cloak.");
+					You_feel("the tentacles writhe over your %s.", uarmc ? "cloak" : "shihakusho");
 			break;
 				} //else
 				if(invent && !uarmc && !uarm && !uarmu && !uarmf && !uarmg && !uarms && !uarmh && !uwep
