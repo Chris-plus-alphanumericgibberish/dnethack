@@ -998,6 +998,7 @@ struct monst *mon;
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
 #endif
+	if(uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
 
 	return armpro;
 }
@@ -1502,6 +1503,9 @@ dopois:
 				freeinv(optr);
 				(void) dropy(optr);
 			}
+		}
+		else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+			You_feel("horrible fingers tug at your shihakusho.");
 		}
 		else{
 			if(uarm){
@@ -4744,7 +4748,7 @@ register struct monst *mon;
 	boolean fem = !poly_gender(); /* male = 0, fem = 1, neuter = 2 */
 	boolean helpless = FALSE;
 	char qbuf[QBUFSZ];
-
+	
 	if((ward_at(u.ux,u.uy) == ELDER_SIGN && num_wards_at(u.ux, u.uy) == 6)) return 0;
 	
 	if (unconscious()) {/*Note: is probably not going to be possible to be unconscious and enter this function*/
@@ -4772,16 +4776,16 @@ register struct monst *mon;
 	if (rn2(66) < 2*ACURR(A_WIS) - ACURR(A_INT) || helpless) {
 		int lifesaved = 0;
 		int wdmg = (int)(d(1,10)) + 1;
-	palemayberem(uarmc, cloak_simple_name(uarmc), helpless);
-	if(!uarmc)
-		palemayberem(uarm, "suit", helpless);
-	palemayberem(uarmf, "boots", helpless);
+		palemayberem(uarmc, cloak_simple_name(uarmc), helpless);
+		if(!uarmc)
+			palemayberem(uarm, "suit", helpless);
+		palemayberem(uarmf, "boots", helpless);
 		palemayberem(uarmg, "gloves", helpless);
-	palemayberem(uarms, "shield", helpless);
-	palemayberem(uarmh, "helmet", helpless);
+		palemayberem(uarms, "shield", helpless);
+		palemayberem(uarmh, "helmet", helpless);
 	#ifdef TOURIST
-	if(!uarmc && !uarm)
-		palemayberem(uarmu, "shirt", helpless);
+		if(!uarmc && !uarm)
+			palemayberem(uarmu, "shirt", helpless);
 	#endif
 		You("move to embrace %s, brushing aside the gossamer shroud hiding %s body from you.",
 			noit_Monnam(mon), fem ? "her" : "his");
@@ -5099,64 +5103,64 @@ int dmg;
 			}
 			
 #endif
-			if(!uarmc){
+		if(!uarmc){
 		 if(uwep && uwep->oartifact==ART_TENSA_ZANGETSU){
 			You_feel("the tentacles tear uselessly at your regenerating shihakusho.");
 		 }
 		 else if(uarm && n){
-				 n--;
-				 if(!u_slip_free(mon, &bodyblow)){
-					You_feel("the tentacles squirm under your armor.");
-					if( d(1,100) > 25){
-						pline("The tentacles begin to tear at your armor!");
-						 if(uarm->spe > 1){
-							int i = rn2(4);
-							for(i; i>=0; i--)
-								drain_item(uarm);
-							Your("%s less effective.", aobjnam(uarm, "seem"));
-						 }
-						 else{
-							tent_destroy_arm(uarm);
-						 }
-					}
-					else{
-						pline("The tentacles shuck you out of your armor!");
-						otmp = uarm;
-						if (donning(otmp)) cancel_don();
-						(void) Armor_gone();
-						freeinv(otmp);
-						(void) mpickobj(mon,otmp);
-					}
-			  }
-			 }
-			}
-			if(uarmc && n){
-				n--;
-				if(!u_slip_free(mon, &bodyblow)){
-					You_feel("the tentacles work their way under your cloak.");
-					if( d(1,100) > 66){
-						pline("The tentacles begin to tear at the cloak!");
-						 if(uarmc->spe > 1){
-							int i = rn2(4);
-							for(i; i>=0; i--)
-								drain_item(uarmc);
-							Your("%s less effective.", aobjnam(uarmc, "seem"));
-						 }
-						 else{
-							tent_destroy_arm(uarmc);
-						 }
-					}
-					else{
-						pline("The tentacles strip off your cloak!");
-						otmp = uarmc;
-						if (donning(otmp)) cancel_don();
-						(void) Cloak_off();
-						freeinv(otmp);
-						(void) mpickobj(mon,otmp);
-					}
+			 n--;
+			 if(!u_slip_free(mon, &bodyblow)){
+				You_feel("the tentacles squirm under your armor.");
+				if( d(1,100) > 25){
+					pline("The tentacles begin to tear at your armor!");
+					 if(uarm->spe > 1){
+						int i = rn2(4);
+						for(i; i>=0; i--)
+							drain_item(uarm);
+						Your("%s less effective.", aobjnam(uarm, "seem"));
+					 }
+					 else{
+						tent_destroy_arm(uarm);
+					 }
+				}
+				else{
+					pline("The tentacles shuck you out of your armor!");
+					otmp = uarm;
+					if (donning(otmp)) cancel_don();
+					(void) Armor_gone();
+					freeinv(otmp);
+					(void) mpickobj(mon,otmp);
+				}
+		  }
+		 }
+		}
+		if(uarmc && n){
+			n--;
+			if(!u_slip_free(mon, &bodyblow)){
+				You_feel("the tentacles work their way under your cloak.");
+				if( d(1,100) > 66){
+					pline("The tentacles begin to tear at the cloak!");
+					 if(uarmc->spe > 1){
+						int i = rn2(4);
+						for(i; i>=0; i--)
+							drain_item(uarmc);
+						Your("%s less effective.", aobjnam(uarmc, "seem"));
+					 }
+					 else{
+						tent_destroy_arm(uarmc);
+					 }
+				}
+				else{
+					pline("The tentacles strip off your cloak!");
+					otmp = uarmc;
+					if (donning(otmp)) cancel_don();
+					(void) Cloak_off();
+					freeinv(otmp);
+					(void) mpickobj(mon,otmp);
 				}
 			}
-		  while(n > 0){
+		}
+	  while(n > 0){
 		   if(n < ln && (d(1,100) > 85)){ //it's useless to struggle, but...
 			   yn("Struggle against the tentacles' grasp?");
 			   ln = n;
