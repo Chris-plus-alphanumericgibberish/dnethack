@@ -998,7 +998,8 @@ struct monst *mon;
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
 #endif
-	if(uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
+	if(mon == &youmonst && !uarmc && 
+		uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
 
 	return armpro;
 }
