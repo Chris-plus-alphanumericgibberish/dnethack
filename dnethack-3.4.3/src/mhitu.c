@@ -1699,7 +1699,7 @@ dopois:
 //pline("test string!");
 			if(mdat == &mons[PM_DEMOGORGON]){
 				buf[0] = '\0';
-				steal(mtmp, buf);
+				steal(mtmp, buf,FALSE);
 				return 1;
 			}
 			if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
@@ -1731,7 +1731,7 @@ dopois:
 			    break;
 			}
 			buf[0] = '\0';
-			switch (steal(mtmp, buf)) {
+		switch (steal(mtmp, buf, FALSE)) {
 			  case -1:
 				return 2;
 			  case 0:
@@ -2752,7 +2752,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				//else
 				if(mdat == &mons[PM_DEMOGORGON]){
 					buf[0] = '\0';
-					steal(mtmp, buf);
+					steal(mtmp, buf,FALSE);
 					return 1;
 				}
 				if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
@@ -2784,7 +2784,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				    break;
 				}
 				buf[0] = '\0';
-				switch (steal(mtmp, buf)) {
+				switch (steal(mtmp, buf,FALSE)) {
 				  case -1:
 					return 2;
 				  case 0:
@@ -4406,17 +4406,17 @@ register struct monst *mon;
 		switch (rn2(6)) {
 			case 0: verbalize("Surely you don't need all this junk?!");
 				buf[0] = '\0';
-				steal(mon, buf);
+				steal(mon, buf,FALSE);
 				buf[0] = '\0';
-				steal(mon, buf);
+				steal(mon, buf,FALSE);
 				buf[0] = '\0';
-				steal(mon, buf);
+				steal(mon, buf,FALSE);
 				buf[0] = '\0';
-				steal(mon, buf);
+				steal(mon, buf,FALSE);
 				buf[0] = '\0';
-				steal(mon, buf);
+				steal(mon, buf,FALSE);
 				buf[0] = '\0';
-				steal(mon, buf);
+				steal(mon, buf,FALSE);
 			break;
 			case 1:
 				if(u.twoweap){
@@ -4441,7 +4441,7 @@ register struct monst *mon;
 				}
 				if(!uwep){
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 					optr = mksobj(IRON_BAR, TRUE, FALSE);		
 					curse(optr);
 					optr->spe = -6;
@@ -4468,7 +4468,7 @@ register struct monst *mon;
 				if(!uarmh){
 					verbalize("This should greatly improve your intellect.");
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 					optr = mksobj(DUNCE_CAP, TRUE, FALSE);		
 					curse(optr);
 					optr->spe = -6;
@@ -4497,7 +4497,7 @@ register struct monst *mon;
 				if(!uarmf){
 					verbalize("These boots will improve your looks.");
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 					optr = mksobj(FUMBLE_BOOTS, TRUE, FALSE);		
 					curse(optr);
 					optr->spe = -6;
@@ -4525,7 +4525,7 @@ register struct monst *mon;
 				if(!uamul){
 					verbalize("You need to take things more slowly.");
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 					optr = mksobj(AMULET_OF_RESTFUL_SLEEP, TRUE, FALSE);		
 					curse(optr);
 					(void) hold_another_object(optr, u.uswallow ?
@@ -5401,13 +5401,13 @@ int dmg;
 					n--;
 					You_feel("the tentacles pick through your remaining possessions.");
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 					buf[0] = '\0';
-					steal(mon, buf);
+					steal(mon, buf,FALSE);
 				}
 			break;
 		}

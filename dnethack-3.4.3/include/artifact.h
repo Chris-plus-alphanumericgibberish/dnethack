@@ -218,6 +218,7 @@ struct artifact {
 #define DANCE_DAGGER	(LAST_PROP+31)
 #define SING_SPEAR	(LAST_PROP+32)
 #define PHASING		(LAST_PROP+33)
+#define OBJECT_DET	(LAST_PROP+34)
 
 #define CountsAgainstGifts(x)	!(artilist[x].cspfx3 & SPFX3_NOCNT)
 							/*(x != ART_WATER_CRYSTAL && \

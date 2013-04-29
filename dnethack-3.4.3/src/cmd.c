@@ -842,16 +842,24 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	putstr(en_win, 0, final ? "Final Attributes:" : "Current Attributes:");
 	putstr(en_win, 0, "");
 
-#ifdef ELBERETH
 	if (u.uevent.uhand_of_elbereth) {
+#ifdef ELBERETH
 	    static const char * const hofe_titles[3] = {
 				"the Hand of Elbereth",
 				"the Envoy of Balance",
 				"the Glory of Arioch"
 	    };
-	    you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
-	}
+#else
+	    static const char * const hofe_titles[3] = {
+				"the Arm of the Law",
+				"the Envoy of Balance",
+				"the Glory of Arioch"
+	    };
 #endif
+	    if(Role_if(PM_PIRATE)) you_are("the Pirate King");
+		else you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
+	}
+	
 
 	/* note: piousness 20 matches MIN_QUEST_ALIGN (quest.h) */
 	if (u.ualign.record >= 20)	you_are("piously aligned");

@@ -56,6 +56,10 @@ A("Stormbringer",		RUNESWORD,
 	DRLI(5,2),	DRLI(0,0),	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
 	SPFX2_BLDTHRST,0,0),
+A("Reaver",			SCIMITAR,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,0,
+	PHYS(4,8),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_PIRATE, NON_PM, 6000L,
+	0, 0, 0 ),
 /*
  *	Two problems:  1) doesn't let trolls regenerate heads,
  *	2) doesn't give unusual message for 2-headed monsters (but
@@ -66,6 +70,12 @@ A("Vorpal Blade",		LONG_SWORD,
 	PHYS(5,1),	NO_DFNS,	NO_CARY, /*Special code in weapon.c throws an extra die, so 2d8+2 vs small, 2d12+2 vs large*/	
 	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, 
 	0,0,0),
+
+A("The Marauder's Map", SCR_MAGIC_MAPPING,
+	(SPFX_RESTR), 0, 0, NO_ATTK,	NO_DFNS,	NO_CARY,
+	OBJECT_DET,	A_CHAOTIC, PM_PIRATE, NON_PM, 2000L,
+	0,0,0),
+
 
 /*//////////Namable Artifacts//////////*/
 /*most namables can be twoweaponed, look in obj.h */
@@ -411,13 +421,13 @@ A("Mirrorbright",			SHIELD_OF_REFLECTION,/*adapted from Slash'em*/
 A("Shield of the All-Seeing", ORCISH_SHIELD, //needs quote
 	(SPFX_RESTR|SPFX_SEEK|SPFX_SEARCH|SPFX_WARN), 0, M2_ELF,
      NO_ATTK, DFNS(AD_FIRE), NO_CARY,
-	 PROT_FROM_SHAPE_CHANGERS, A_NONE, NON_PM, NON_PM, 3000L,//needs message
+	 PROT_FROM_SHAPE_CHANGERS, A_NONE, NON_PM, PM_ORC, 3000L,//needs message
 	 0,0,WSFX_PLUSSEV),
 
 A("Shield of Yggdrasil", ELVEN_SHIELD, //needs quote
 	(SPFX_RESTR|SPFX_REGEN), 0, 0,
      NO_ATTK, DFNS(AD_DRST), NO_CARY,
-	 HEALING, A_NONE, NON_PM, NON_PM, 3000L,
+	 HEALING, A_NONE, NON_PM, PM_ELF, 3000L,
 	0,0,WSFX_PLUSSEV),
 
 A("Whisperfeet",			SPEED_BOOTS,/*adapted from Slash'em*/
@@ -663,6 +673,12 @@ A("The Mitre of Holiness",	HELM_OF_BRILLIANCE,
 	NO_ATTK,	NO_DFNS,	CARY(AD_FIRE),
 	ENERGY_BOOST,	A_LAWFUL, PM_PRIEST, NON_PM, 2000L, 
 	0,0,0),
+
+A("The Treasury of Proteus",	CHEST,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_LUCK), 0,
+	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
+	0,	A_CHAOTIC,	 PM_PIRATE, NON_PM, 2500L,
+	0,0,0 ),
 
 A("The Longbow of Diana", BOW,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_REFLECT), SPFX_ESP, 0,

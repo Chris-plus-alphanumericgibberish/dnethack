@@ -41,6 +41,14 @@ pet_type()
 	    return (PM_KITTEN);
 	else if (preferred_pet == 'd')
 	    return (PM_LITTLE_DOG);
+	else if (Role_if(PM_PIRATE)) {
+		if (preferred_pet == 'B')
+			return (PM_PARROT);
+		else if(preferred_pet == 'Y')
+			return PM_MONKEY;
+		else
+			return (rn2(2) ? PM_PARROT : PM_MONKEY);
+	}
 	else
 	    return (rn2(2) ? PM_KITTEN : PM_LITTLE_DOG);
 }

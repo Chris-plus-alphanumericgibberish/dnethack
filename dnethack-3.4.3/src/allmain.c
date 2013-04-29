@@ -22,6 +22,7 @@ moveloop()
 #if defined(MICRO) || defined(WIN32)
     char ch;
     int abort_lev;
+	struct obj *pobj;
 #endif
     int moveamt = 0, wtcap = 0, change = 0;
     boolean didmove = FALSE, monscanmove = FALSE;
@@ -177,6 +178,21 @@ moveloop()
 		    if (u.ublesscnt)  u.ublesscnt--;
 		    if(flags.time && !flags.run)
 			flags.botl = 1;
+
+			if(u.ukinghill){
+				if(u.protean > 0) u.protean--;
+				else{
+					for(pobj = invent; pobj; pobj=pobj->nobj)
+						if(pobj->oartifact == ART_TREASURY_OF_PROTEUS)
+							break;
+					if(!pobj) pline("Treasury not actually in inventory??");
+					else if(pobj->cobj){
+						arti_poly_contents(pobj);
+					}
+					u.protean = rnz(100)+d(3,10);
+					update_inventory();
+				}
+			}
 
 		    /* One possible result of prayer is healing.  Whether or
 		     * not you get healed depends on your current hit points.

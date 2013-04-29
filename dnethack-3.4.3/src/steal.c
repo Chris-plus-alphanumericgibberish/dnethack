@@ -230,9 +230,10 @@ boolean unchain_ball;	/* whether to unpunish or just unwield */
  * Avoid stealing the object stealoid
  */
 int
-steal(mtmp, objnambuf)
+steal(mtmp, objnambuf, artifact)
 struct monst *mtmp;
 char *objnambuf;
+boolean artifact;
 {
 	struct obj *otmp;
 	int tmp, could_petrify, named = 0, armordelay;
@@ -250,11 +251,12 @@ char *objnambuf;
 	if (!invent || (inv_cnt() == 1 && uskin)) {
 nothing_to_steal:
 	    /* Not even a thousand men in armor can strip a naked man. */
-	    if(Blind)
-	      pline("Somebody tries to rob you, but finds nothing to steal.");
-	    else
-	      pline("%s tries to rob you, but there is nothing to steal!",
-		Monnam(mtmp));
+	    if(Blind){
+	      if(!artifact) pline("Somebody tries to rob you, but finds nothing to steal.");
+		}
+	    else{
+	      if(!artifact) pline("%s tries to rob you, but there is nothing to steal!", Monnam(mtmp));
+		}
 	    return(1);	/* let her flee */
 	}
 
@@ -353,7 +355,7 @@ gotobj:
 		    if (donning(otmp)) {
 			remove_worn_item(otmp, TRUE);
 			break;
-		    } else if (monkey_business) {
+		    } else if (monkey_business || artifact) {
 			/* animals usually don't have enough patience
 			   to take off items which require extra time */
 			if (armordelay >= 1 && rn2(10)) goto cant_take;
@@ -368,6 +370,7 @@ gotobj:
 			/* can't charm you without first waking you */
 			if (multi < 0 && is_fainted()) unmul((char *)0);
 			slowly = (armordelay >= 1 || multi < 0);
+			if(!artifact){
 			if(mtmp->data == &mons[PM_DEMOGORGON])
 				pline("%s compels you.  You gladly %s your %s.",
 				  Monnam(mtmp),
@@ -387,6 +390,7 @@ gotobj:
 				  slowly ? "you start taking" : "you take",
 				  equipname(otmp));
 			named++;
+			}
 			/* the following is to set multi for later on */
 			nomul(-armordelay);
 			remove_worn_item(otmp, TRUE);

@@ -2691,7 +2691,7 @@ xchar x, y;
 	     */
 	    continue;
 	} else if (obj->oclass == SCROLL_CLASS || obj->oclass == SPBOOK_CLASS) {
-	    if (obj->otyp == SCR_FIRE || obj->otyp == SPE_FIREBALL)
+	    if (obj->otyp == SCR_FIRE || obj->otyp == SPE_FIREBALL || obj->oartifact)
 		continue;
 	    if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 		if (in_sight) pline("Smoke rises from %s.", the(xname(obj)));
@@ -2778,6 +2778,7 @@ register boolean force, here, forcelethe;
 
 		    switch (obj->oclass) {
 		    case SCROLL_CLASS:
+			if(obj->oartifact) break;
 #ifdef MAIL
 		    if (obj->otyp != SCR_MAIL)
 #endif

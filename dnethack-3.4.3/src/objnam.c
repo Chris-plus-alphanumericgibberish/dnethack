@@ -32,6 +32,7 @@ struct Jitem {
 #ifndef OVLB
 
 STATIC_DCL struct Jitem Japanese_items[];
+STATIC_OVL struct Jitem Pirate_items[];
 
 #else /* OVLB */
 
@@ -68,9 +69,19 @@ STATIC_OVL struct Jitem Japanese_items[] = {
 	{0, "" }
 };
 
+STATIC_OVL struct Jitem Pirate_items[] = {
+	{ POT_BOOZE, "rum" },
+	{ CRAM_RATION, "sea biscuit" },
+	{ SCIMITAR, "cutlass" },
+	{ SMALL_SHIELD, "buckler" },
+	{ SACK, "ditty bag" },
+	{ LARGE_BOX, "foot locker" },
+	{ CLUB, "belaying pin" },
+	{0, "" }
+};
 #endif /* OVLB */
 
-STATIC_DCL const char *FDECL(Japanese_item_name,(int i));
+STATIC_DCL const char *FDECL(Alternate_item_name,(int i, struct Jitem * ));
 
 #ifdef OVL1
 
@@ -115,8 +126,10 @@ register int otyp;
 	register const char *un = ocl->oc_uname;
 	register int nn = ocl->oc_name_known;
 
-	if (Role_if(PM_SAMURAI) && Japanese_item_name(otyp))
-		actualn = Japanese_item_name(otyp);
+	if (Role_if(PM_SAMURAI) && Alternate_item_name(otyp,Japanese_items))
+		actualn = Alternate_item_name(otyp,Japanese_items);
+	if (Role_if(PM_PIRATE) && Alternate_item_name(otyp,Pirate_items))
+		actualn = Alternate_item_name(otyp,Pirate_items);
 	switch(ocl->oc_class) {
 	case COIN_CLASS:
 		Strcpy(buf, "coin");
@@ -260,8 +273,10 @@ register struct obj *obj;
 	register const char *un = ocl->oc_uname;
 
 	buf = nextobuf() + PREFIX;	/* leave room for "17 -3 " */
-	if (Role_if(PM_SAMURAI) && Japanese_item_name(typ))
-		actualn = Japanese_item_name(typ);
+	if (Role_if(PM_SAMURAI) && Alternate_item_name(typ,Japanese_items))
+		actualn = Alternate_item_name(typ,Japanese_items);
+	if (Role_if(PM_PIRATE) && Alternate_item_name(typ,Pirate_items))
+		actualn = Alternate_item_name(typ,Pirate_items);
 
 	buf[0] = '\0';
 	/*
@@ -1121,6 +1136,11 @@ register const char *verb;
 	 * special case: allow null sobj to get the singular 3rd person
 	 * present tense form so we don't duplicate this code elsewhere.
 	 */
+	if(Role_if(PM_PIRATE) && !strcmp(verb,"are")) {
+		Strcpy(buf,"be");
+		return buf;
+	}
+
 	if (subj) {
 	    if (!strncmpi(subj, "a ", 2) || !strncmpi(subj, "an ", 3))
 		goto sing;
@@ -2243,13 +2263,16 @@ srch:
 		i++;
 	}
 	if (actualn) {
-		struct Jitem *j = Japanese_items;
-		while(j->item) {
-			if (actualn && !strcmpi(actualn, j->name)) {
-				typ = j->item;
+		struct Jitem *j[] = {Japanese_items,Pirate_items};
+		for(i=0;i<sizeof(j)/sizeof(j[0]);i++)
+		{
+		while(j[i]->item) {
+			if (actualn && !strcmpi(actualn, j[i]->name)) {
+				typ = j[i]->item;
 				goto typfnd;
 			}
-			j++;
+			j[i]++;
+		}
 		}
 	}
 	if (!strcmpi(bp, "spinach")) {
@@ -2714,7 +2737,8 @@ typfnd:
 		 (otmp->oartifact >= ART_ROD_OF_SEVEN_PARTS && otmp->oartifact <= ART_SILVER_KEY) || //no wishing for alignment quest artifacts
 		 (otmp->oartifact >= ART_SWORD_OF_ERATHAOL && otmp->oartifact <= ART_HAMMER_OF_BARQUIEL) || //no wishing for angel artifacts
 		 (otmp->oartifact >= ART_GENOCIDE && otmp->oartifact <= ART_DOOMSCREAMER) || //no wishing for demon artifacts
-		 (otmp->oartifact == ART_KUSANAGI_NO_TSURUGI))
+		 (otmp->oartifact == ART_KUSANAGI_NO_TSURUGI) ||
+		 (Role_if(PM_PIRATE) && otmp->oartifact == ART_REAVER))
 #ifdef WIZARD
 	    && !wizard
 #endif
@@ -2760,15 +2784,14 @@ int first,last;
 }
 
 STATIC_OVL const char *
-Japanese_item_name(i)
+Alternate_item_name(i,alternate_items)
 int i;
+struct Jitem *alternate_items;
 {
-	struct Jitem *j = Japanese_items;
-
-	while(j->item) {
-		if (i == j->item)
-			return j->name;
-		j++;
+	while(alternate_items->item) {
+		if (i == alternate_items->item)
+			return alternate_items->name;
+		alternate_items++;
 	}
 	return (const char *)0;
 }

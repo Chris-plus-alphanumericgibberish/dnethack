@@ -381,6 +381,34 @@ register struct monst *mtmp;
 			if(!rn2(2)) curse(otmp);
 			(void) mpickobj(mtmp, otmp);
 		    }
+		} else if (mm == PM_PIRATE_BROTHER){
+			(void)mongets(mtmp, SCIMITAR);
+			(void)mongets(mtmp, LEATHER_ARMOR);
+			(void)mongets(mtmp, HIGH_BOOTS);
+		} else if (mm == PM_MAYOR_CUMMERBUND){
+			int spe2;
+		    otmp = mksobj(SCIMITAR, FALSE, FALSE);
+		    curse(otmp);
+		    otmp->oerodeproof = TRUE;
+		    spe2 = d(1,3);
+		    otmp->spe = max(otmp->spe, spe2);
+		    (void) mpickobj(mtmp, otmp);
+			
+		    otmp = mksobj(LEATHER_JACKET, FALSE, FALSE);
+		    otmp->oerodeproof = TRUE;
+		    spe2 = d(2,3);
+		    otmp->spe = max(otmp->spe, spe2);
+		    (void) mpickobj(mtmp, otmp);
+			
+		    otmp = mksobj(SMALL_SHIELD, FALSE, FALSE);
+		    otmp->oerodeproof = TRUE;
+		    spe2 = d(1,3);
+		    otmp->spe = max(otmp->spe, spe2);
+		    (void) mpickobj(mtmp, otmp);
+
+			(void)mongets(mtmp, LEATHER_CLOAK);
+			(void)mongets(mtmp, HIGH_BOOTS);
+			(void)mongets(mtmp, LEATHER_GLOVES);
 		}
 #ifdef CONVICT
 		else if (mm == PM_MINER) {
@@ -437,6 +465,19 @@ register struct monst *mtmp;
 		}
 		break;
 
+		break;
+		case S_GHOST:
+		if(mm == PM_BLACKBEARD_S_GHOST){
+			int spe2;
+		    otmp = mksobj(SCIMITAR, FALSE, FALSE);
+		    curse(otmp);
+		    otmp->oerodeproof = TRUE;
+			otmp->oeroded = 1;
+		    spe2 = d(2,3);
+		    otmp->spe = max(otmp->spe, spe2);
+		    (void) mpickobj(mtmp, otmp);
+		}
+		break;
 	    case S_ANGEL:
 		{
 /*			if(ptr == &mons[PM_DESTROYER]){
@@ -732,6 +773,11 @@ register struct monst *mtmp;
 			(void) mongets(mtmp, rnd_attack_potion(mtmp));
 			(void) mongets(mtmp, rnd_attack_potion(mtmp));
 			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+		} else if(mm == PM_GITHYANKI_PIRATE){
+			(void)mongets(mtmp, TWO_HANDED_SWORD);
+			(void)mongets(mtmp, BRONZE_PLATE_MAIL);
+			(void)mongets(mtmp, LEATHER_GLOVES);
+			(void)mongets(mtmp, HIGH_BOOTS);
 		}
 		break;
 	    case S_KETER:
@@ -810,6 +856,18 @@ register struct monst *mtmp;
 		(void)mongets(mtmp, LONG_SWORD);
 		break;
 	    case S_ZOMBIE:
+		if(mm == PM_SKELETAL_PIRATE){
+		    otmp = rn2(2) ? mksobj(SCIMITAR, FALSE, FALSE) : mksobj(KNIFE, FALSE, FALSE);
+		    curse(otmp);
+			otmp->oeroded = 1;
+		    (void) mpickobj(mtmp, otmp);
+			
+		    otmp = rn2(2) ? mksobj(HIGH_BOOTS, FALSE, FALSE) : mksobj(LEATHER_JACKET, FALSE, FALSE);
+		    curse(otmp);
+			otmp->oeroded2 = 1;
+		    (void) mpickobj(mtmp, otmp);
+			break;
+		}
 		if (!rn2(4)) (void)mongets(mtmp, LEATHER_ARMOR);
 		if (!rn2(4))
 			(void)mongets(mtmp, (rn2(3) ? KNIFE : SHORT_SWORD));
@@ -823,6 +881,17 @@ register struct monst *mtmp;
 
 		if(mm>PM_NESSIAN_PIT_FIEND) return; //Lords handled above, no random cursed stuff!
 		switch (mm) {
+			case PM_DAMNED_PIRATE:
+				otmp = mksobj(SCIMITAR, FALSE, FALSE);
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(LEATHER_ARMOR, FALSE, FALSE);
+				curse(otmp);
+				otmp->oeroded = 1;
+				(void) mpickobj(mtmp, otmp);
+				return; //bypass general weapons
+			break;
 		    case PM_BALROG:
 				(void)mongets(mtmp, BULLWHIP);
 				(void)mongets(mtmp, BROADSWORD);
@@ -881,7 +950,7 @@ register struct monst *mtmp;
 		/* prevent djinnis and mail daemons from leaving objects when
 		 * they vanish
 		 */
-		if (!is_demon(ptr)) break;
+		if (!is_demon(ptr) && mm != PM_DAMNED_PIRATE) break;
 		/* fall thru */
 /*
  *	Now the general case, Some chance of getting some type
@@ -2391,6 +2460,14 @@ rndmonst()
 	minmlev = zlevel / 6;
 	/* determine the level of the strongest monster to make. */
 	maxmlev = (zlevel + u.ulevel) / 2;
+
+	if(u.ukinghill){ /* You have pirate quest artifact in open inventory */
+		if(rnd(100)>80){
+			if(In_endgame(&u.uz)) return &mons[PM_GITHYANKI_PIRATE];
+			else if(Inhell) return &mons[PM_DAMNED_PIRATE];
+			else return &mons[PM_SKELETAL_PIRATE];
+		}
+	}
 
 	if((u.uevent.sum_entered || !rn2(100)) && !(mvitals[PM_CENTER_OF_ALL].mvflags & G_EXTINCT) && !rn2(100)){
 	    return &mons[PM_CENTER_OF_ALL]; /*center of all may be created at any time, but is much more likely after

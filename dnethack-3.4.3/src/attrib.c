@@ -66,6 +66,12 @@ const struct innate {
 		     {  17, &(HTeleport_control), "controlled","uncontrolled" },
 		     {   0, 0, 0, 0 } },
 
+	pir_abil[] = {	{1, &(HSwimming), "", ""  },
+			 {	7, &(HStealth), "stealthy", ""  },	/* with cat-like tread ... */
+		     {  11, &(HFast), "quick", "slow" },
+		     {	 0, 0, 0, 0 } },
+
+			 
 	pri_abil[] = { {	15, &(HWarning), "sensitive", "" },
 		     {  20, &(HFire_resistance), "cool", "warmer" },
 		     {	 0, 0, 0, 0 } },
@@ -561,6 +567,7 @@ int oldlevel, newlevel;
 	case PM_HEALER:         abil = hea_abil;	break;
 	case PM_KNIGHT:         abil = kni_abil;	break;
 	case PM_MONK:           abil = mon_abil;	break;
+	case PM_PIRATE:         abil = pir_abil;	break;
 	case PM_PRIEST:         abil = pri_abil;	break;
 	case PM_RANGER:         abil = ran_abil;	break;
 	case PM_ROGUE:          abil = rog_abil;	break;

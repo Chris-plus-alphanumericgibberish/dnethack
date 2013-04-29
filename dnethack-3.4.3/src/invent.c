@@ -271,6 +271,9 @@ struct obj *obj;
 		    u.uhave.questart = 1;
 		    artitouch();
 		}
+		if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
+			u.ukinghill = TRUE;
+		}
 		set_artifact_intrinsic(obj, 1, W_ART);
 	}
 }
@@ -515,6 +518,9 @@ struct obj *obj;
 		    if (!u.uhave.questart)
 			impossible("don't have quest artifact?");
 		    u.uhave.questart = 0;
+		}
+		if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
+			u.ukinghill = FALSE;
 		}
 		set_artifact_intrinsic(obj, 0, W_ART);
 	}

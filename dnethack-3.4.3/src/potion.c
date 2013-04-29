@@ -966,7 +966,7 @@ register const char *txt;
 	if(obj->dknown && !objects[obj->otyp].oc_name_known &&
 						!objects[obj->otyp].oc_uname)
 		docall(obj);
-	useup(obj);
+	if(!(obj->oartifact)) useup(obj);
 }
 
 const char *bottlenames[] = {
@@ -1780,7 +1780,7 @@ boolean amnesia;
 		used = TRUE;
 		break;
 	    case SCROLL_CLASS:
-		if (obj->otyp != SCR_BLANK_PAPER
+		if (obj->otyp != SCR_BLANK_PAPER  && !obj->oartifact
 #ifdef MAIL
 		    && obj->otyp != SCR_MAIL
 #endif

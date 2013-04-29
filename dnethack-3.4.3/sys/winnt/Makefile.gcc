@@ -527,7 +527,8 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/law.des     $(DAT)/chaos.des    $(DAT)/neutrality.des \
 	 $(DAT)/tomb.des    $(DAT)/blacktemple.des $(DAT)/sunlesssea.des \
 	 $(DAT)/storage.des \
-	 $(DAT)/convict.des
+	 $(DAT)/convict.des \
+	 $(DAT)/pirate.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/endgame.des)
@@ -560,6 +561,7 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/sunlesssea.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/storage.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/convict.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/pirate.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)
 	$(subst /,\,echo sp_levs done > $(O)sp_lev.tag)

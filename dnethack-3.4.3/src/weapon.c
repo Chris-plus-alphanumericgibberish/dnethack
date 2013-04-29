@@ -237,6 +237,8 @@ struct monst *mon;
 		case TSURUGI:
 		case DWARVISH_MATTOCK:
 		case TWO_HANDED_SWORD:	tmp += d(2,6); break;
+		case SCIMITAR:
+			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
 		case LONG_SWORD:	
 			if(otmp->oartifact == ART_TOBIUME) tmp -= 3; 
 		break;
@@ -278,6 +280,8 @@ struct monst *mon;
 			tmp += rnd(4);
 		break;
 		case ACID_VENOM:	tmp += rnd(6); break;
+		case SCIMITAR:
+			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
 	    }
 	}
 	if (Is_weapon) {

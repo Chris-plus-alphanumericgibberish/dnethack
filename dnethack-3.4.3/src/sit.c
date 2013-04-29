@@ -320,6 +320,20 @@ rndcurse()			/* curse a few inventory items at random! */
 	    You(mal_aura, "the magic-absorbing blade");
 	    return;
 	}
+	else if(u.ukinghill && rn2(20)){
+	    You(mal_aura, "the cursed treasure chest");
+		otmp = 0;
+		for(otmp = invent; otmp; otmp=otmp->nobj)
+			if(otmp->oartifact == ART_TREASURY_OF_PROTEUS)
+				break;
+		if(!otmp) pline("Treasury not actually in inventory??");
+		else if(otmp->blessed)
+			unbless(otmp);
+		else
+			curse(otmp);
+	    update_inventory();		
+		return;
+	}
 
 	if(Antimagic) {
 	    shieldeff(u.ux, u.uy);
@@ -398,6 +412,21 @@ register struct monst *mtmp;
 	    You(mal_aura, "the magic-absorbing blade");
 	    return;
 	}
+	else if(u.ukinghill && rn2(20)){
+	    You(mal_aura, "the cursed treasure chest");
+		otmp = 0;
+		for(otmp = invent; otmp; otmp=otmp->nobj)
+			if(otmp->oartifact == ART_TREASURY_OF_PROTEUS)
+				break;
+		if(!otmp) pline("Treasury not actually in inventory??");
+		else if(otmp->blessed)
+			unbless(otmp);
+		else
+			curse(otmp);
+	    update_inventory();		
+		return;
+	}
+
 
 	if(resists) {
 	    shieldeff(mtmp->mx, mtmp->my);

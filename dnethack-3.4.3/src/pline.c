@@ -19,6 +19,7 @@ static char *FDECL(You_buf, (int));
 /* Note that these declarations rely on knowledge of the internals
  * of the variable argument handling stuff in "tradstdc.h"
  */
+char * FDECL(replace, (const char *, const char *, const char *));
 
 #if defined(USE_STDARG) || defined(USE_VARARGS)
 static void FDECL(vpline, (const char *, va_list));
@@ -54,6 +55,55 @@ pline VA_DECL(const char *, line)
 	if (index(line, '%')) {
 	    Vsprintf(pbuf,line,VA_ARGS);
 	    line = pbuf;
+	}
+	if(Role_if(PM_PIRATE)){
+		line = replace(line,"You","Ye");
+		line = replace(line,"you","ye");
+		line = replace(line,"His","'is");
+		line = replace(line," his"," 'is");
+		line = replace(line,"Her","'er");
+		line = replace(line," her"," 'er");
+		line = replace(line,"Are","Be");
+		line = replace(line," are"," be");
+		line = replace(line,"Is ","Be");
+		line = replace(line," is "," be ");
+		line = replace(line," is."," be.");
+		line = replace(line," is,"," be,");
+		line = replace(line,"Is ","Be ");
+		line = replace(line,"Of ","O' ");
+		line = replace(line," of "," o' ");
+		line = replace(line,"Of.","O'.");
+		line = replace(line," of."," o'.");
+		line = replace(line,"Of,","O',");
+		line = replace(line," of,"," o',");
+		line = replace(line," ear"," lug");
+		line = replace(line,"Ear"," Lug");
+		line = replace(line,"eye","deadlight");
+		line = replace(line,"Eye","Deadlight");
+		line = replace(line,"zorkmids ","doubloons ");
+		line = replace(line,"Zorkmids ","Doubloons ");
+		line = replace(line,"zorkmids.","doubloons.");
+		line = replace(line,"Zorkmids.","Doubloons.");
+		line = replace(line,"zorkmids,","doubloons,");
+		line = replace(line,"Zorkmids,","Doubloons,");
+		line = replace(line,"zorkmids)","doubloons)");
+		line = replace(line,"Zorkmids)","Doubloons)");
+		line = replace(line,"zorkmid ","doubloon ");
+		line = replace(line,"Zorkmid ","Doubloon ");
+		line = replace(line,"zorkmid.","doubloon.");
+		line = replace(line,"Zorkmid.","Doubloon.");
+		line = replace(line,"zorkmid,","doubloon,");
+		line = replace(line,"Zorkmid,","Doubloon,");
+		line = replace(line,"zorkmid)","doubloon)");
+		line = replace(line,"Zorkmid)","Doubloon)");
+		line = replace(line,"gold coins","pieces of eight");
+		line = replace(line,"Gold coins","Pieces of eight");
+		line = replace(line,"gold coin","piece of eight");
+		line = replace(line,"Gold coin","Piece of eight");
+		line = replace(line,"gold pieces","pieces of eight");
+		line = replace(line,"Gold pieces","Pieces of eight");
+		line = replace(line,"gold piece","piece of eight");
+		line = replace(line,"Gold piece","Piece of eight");
 	}
 	if (!iflags.window_inited) {
 	    raw_print(line);
@@ -433,10 +483,31 @@ ustatusline()
 void
 self_invis_message()
 {
+	if(Role_if(PM_PIRATE)){
+	pline("%s %s.",
+	    Hallucination ? "Arr, Matey!  Ye" : "Avast!  All of a sudden, ye",
+	    See_invisible ? "can see right through yerself" :
+		"can't see yerself");
+	}
+	else{
 	pline("%s %s.",
 	    Hallucination ? "Far out, man!  You" : "Gee!  All of a sudden, you",
 	    See_invisible ? "can see right through yourself" :
 		"can't see yourself");
+	}
+}
+
+char *replace(st, orig, repl)
+const char *st, *orig, *repl;
+{
+	static char buffer[BUFSZ];
+	char *ch;
+	if (!(ch = strstr(st, orig)))
+		return st;
+	strncpy(buffer, st, ch-st);  
+	buffer[ch-st] = 0;
+	sprintf(buffer+(ch-st), "%s%s", repl, ch+strlen(orig));
+	return buffer;
 }
 
 #endif /* OVLB */

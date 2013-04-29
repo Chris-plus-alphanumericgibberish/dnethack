@@ -777,6 +777,7 @@ register struct obj *obj, *otmp;	/* obj *is* a box */
 	    break;
 	case WAN_POLYMORPH:
 	case SPE_POLYMORPH:
+	default: /*default behavior is to rest picking and clear old context*/
 	    /* maybe start unlocking chest, get interrupted, then zap it;
 	       we must avoid any attempt to resume unlocking it */
 	    if (xlock.box == obj)

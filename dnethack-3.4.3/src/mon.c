@@ -1404,6 +1404,41 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(ma == &mons[PM_NURSE] && mdef->mhp < mdef->mhpmax && magr->mpeaceful == mdef->mpeaceful)
 		return ALLOW_M|ALLOW_TM;
 
+	else if (magr->data == &mons[PM_SKELETAL_PIRATE] &&
+		mdef->data == &mons[PM_SOLDIER])
+	    return ALLOW_M|ALLOW_TM;
+	else if (mdef->data == &mons[PM_SKELETAL_PIRATE] &&
+		magr->data == &mons[PM_SOLDIER])
+	    return ALLOW_M|ALLOW_TM;
+	else if (magr->data == &mons[PM_SKELETAL_PIRATE] &&
+		mdef->data == &mons[PM_SERGEANT])
+	    return ALLOW_M|ALLOW_TM;
+	else if (mdef->data == &mons[PM_SKELETAL_PIRATE] &&
+		magr->data == &mons[PM_SERGEANT])
+	    return ALLOW_M|ALLOW_TM;
+
+	else if (magr->data == &mons[PM_DAMNED_PIRATE] &&
+		mdef->data == &mons[PM_SOLDIER])
+	    return ALLOW_M|ALLOW_TM;
+	else if (mdef->data == &mons[PM_DAMNED_PIRATE] &&
+		magr->data == &mons[PM_SOLDIER])
+	    return ALLOW_M|ALLOW_TM;
+	else if (magr->data == &mons[PM_DAMNED_PIRATE] &&
+		mdef->data == &mons[PM_SERGEANT])
+	    return ALLOW_M|ALLOW_TM;
+	else if (mdef->data == &mons[PM_DAMNED_PIRATE] &&
+		magr->data == &mons[PM_SERGEANT])
+	    return ALLOW_M|ALLOW_TM;
+
+	else if (magr->data == &mons[PM_DAMNED_PIRATE] &&
+		u.ukinghill)
+	    return ALLOW_M|ALLOW_TM;
+	else if (magr->data == &mons[PM_DAMNED_PIRATE] &&
+		u.ukinghill)
+	    return ALLOW_M|ALLOW_TM;
+	else if (magr->data == &mons[PM_GITHYANKI_PIRATE] &&
+		u.ukinghill)
+	    return ALLOW_M|ALLOW_TM;
 	/* Various other combinations such as dog vs cat, cat vs rat, and
 	   elf vs orc have been suggested.  For the time being we don't
 	   support those. */
