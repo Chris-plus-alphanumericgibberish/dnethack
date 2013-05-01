@@ -100,10 +100,18 @@ pline VA_DECL(const char *, line)
 		line = replace(line,"Gold coins","Pieces of eight");
 		line = replace(line,"gold coin","piece of eight");
 		line = replace(line,"Gold coin","Piece of eight");
-		line = replace(line,"gold pieces","pieces of eight");
-		line = replace(line,"Gold pieces","Pieces of eight");
-		line = replace(line,"gold piece","piece of eight");
-		line = replace(line,"Gold piece","Piece of eight");
+		line = replace(line,"gold pieces.","pieces of eight.");
+		line = replace(line,"Gold pieces.","Pieces of eight.");
+		line = replace(line,"gold pieces,","pieces of eight,");
+		line = replace(line,"Gold pieces,","Pieces of eight,");
+		line = replace(line,"gold pieces ","pieces of eight ");
+		line = replace(line,"Gold pieces ","Pieces of eight ");
+		line = replace(line,"gold piece.","piece of eight.");
+		line = replace(line,"Gold piece.","Piece of eight.");
+		line = replace(line,"gold piece,","piece of eight,");
+		line = replace(line,"Gold piece,","Piece of eight,");
+		line = replace(line,"gold piece ","piece of eight ");
+		line = replace(line,"Gold piece ","Piece of eight ");
 	}
 	if (!iflags.window_inited) {
 	    raw_print(line);

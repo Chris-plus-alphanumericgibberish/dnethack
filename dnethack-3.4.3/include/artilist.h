@@ -58,7 +58,7 @@ A("Stormbringer",		RUNESWORD,
 	SPFX2_BLDTHRST,0,0),
 A("Reaver",			SCIMITAR,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,0,
-	PHYS(4,8),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_PIRATE, NON_PM, 6000L,
+	PHYS(5,8),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_PIRATE, NON_PM, 6000L,
 	0, 0, 0 ),
 /*
  *	Two problems:  1) doesn't let trolls regenerate heads,
@@ -68,9 +68,9 @@ A("Reaver",			SCIMITAR,
 A("Vorpal Blade",		LONG_SWORD,
 	(SPFX_RESTR|SPFX_BEHEAD), 0, 0,
 	PHYS(5,1),	NO_DFNS,	NO_CARY, /*Special code in weapon.c throws an extra die, so 2d8+2 vs small, 2d12+2 vs large*/	
-	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, 
-	0,0,0),
-
+	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, /*Vorpal Blade also uses exploading dice (roll again if maximum number is rolled)*/
+	0,0,0),							 /*According to an article on 1d4Chan, the average of an exploading die is roughly that of a die one size larger*/
+									 /*So vorpal sword is effectively 2d10+2/2d14+2*/
 A("The Marauder's Map", SCR_MAGIC_MAPPING,
 	(SPFX_RESTR), 0, 0, NO_ATTK,	NO_DFNS,	NO_CARY,
 	OBJECT_DET,	A_CHAOTIC, PM_PIRATE, NON_PM, 2000L,
