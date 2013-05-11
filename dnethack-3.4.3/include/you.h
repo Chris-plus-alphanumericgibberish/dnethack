@@ -385,8 +385,88 @@ struct you {
 #define WARD_CAT_LORD		0x0000400L
 #define WARD_GARUDA			0x0000800L
 
+	long	sealsKnown;	/* seals known independently of the Binder's intrinsic knowledge */
+#define SEAL_AHAZU					0x0000001L
+	long	ahazu;	//turn on which spirit will be again eligible for binding.
+#define SEAL_AMON					0x0000002L
+	long	amon;
+#define SEAL_ANDREALPHUS			0x0000004L
+	long	andrealphus;
+#define SEAL_ANDROMALIUS			0x0000008L
+	long	andromalius;
+#define SEAL_ASTAROTH				0x0000010L
+	long	astaroth;
+#define SEAL_BALAM					0x0000020L
+	long	balam;
+#define SEAL_BERITH					0x0000040L
+	long	berith;
+#define SEAL_BUER					0x0000080L
+	long	buer;
+#define SEAL_CATALHOYUK				0x0000100L
+	long	catalhoyuk;
+#define SEAL_CHUPOCLOPS				0x0000200L
+	long	chupoclops;
+#define SEAL_DANTALION				0x0000400L
+	long	dantalion;
+#define SEAL_DUNSTAN				0x0000800L
+	long	dunstan;
+#define SEAL_ECHIDNA				0x0001000L
+	long	echidna;
+#define SEAL_EDEN					0x0002000L
+	long	eden;
+#define SEAL_EURYNOME				0x0004000L
+	long	eurynome;
+#define SEAL_EVE					0x0008000L
+	long	eve;
+#define SEAL_FAFNIR					0x0010000L
+	long	fafnir;
+#define SEAL_HUGINN_MUNINN			0x0020000L
+	long	huginn_muninn;
+#define SEAL_IRIS					0x0040000L
+	long	iris;
+#define SEAL_JACK					0x0080000L
+	long	jack;
+#define SEAL_MALPHAS				0x0100000L
+	long	malphas;
+#define SEAL_MARIONETTE				0x0200000L
+	long	marionette;
+#define SEAL_MOTHER					0x0400000L
+	long	mother;
+#define SEAL_NABERIUS				0x0800000L
+	long	naberius;
+#define SEAL_ORTHOS					0x1000000L
+	long	orthos;
+#define SEAL_OSE					0x2000000L
+	long	ose;
+#define SEAL_OTIAX					0x4000000L
+	long	otiax;
+#define SEAL_PAIMON					0x8000000L
+	long	paimon;
+#define SEAL_SIMURGH				0x10000000L
+	long	simurgh;
+#define SEAL_TENEBROUS				0x20000000L
+	long	tenebrous;
+#define SEAL_YMIR					0x40000000L
+	long	ymir;
+
+//The remaining seals (Dahlver-Nar, Acererak, and the Numina) can't be learned in any way other than binder class features
+#define SEAL_DAHLVER_NAR			0x0000001L
+	long	dahlver_nar;
+#define SEAL_ACERERAK				0x0000002L
+	long	acererak;
+#define SEAL_NUMINA					0x0000004L
+//	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
+	
+	long sealsActive;
+	long specialSealsActive;
+	
+	//Spirits in order bound:
+	long spirit1,spirit2,spirit3,spirit4,spirit5,spiritQuest,spiritsQuill,spiritTineA,spiritTineB;
+	//Corresponding timeouts (turn on which binding expires):
+	long spiritT1,spiritT2,spiritT3,spiritT4,spiritT5,spiritQuestT,spiritsQuillT,spiritTineTA,spiritTineTB;
+
 	/* 	variable that keeps track of summoning in your vicinity.
-		Only allow 1 per turn, to keep down cascades. */
+		Only allow 1 per turn, to help reduce summoning cascades. */
 	boolean summonMonster;
 	/*Ugly extra artifact variables workaround.  Spaghetti code alert!*/
 	long SnSd1, SnSd2, SnSd3, SnSd3duration;
