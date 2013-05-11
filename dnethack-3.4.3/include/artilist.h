@@ -186,6 +186,12 @@ A("Mjollnir",			WAR_HAMMER,		/* Mjo:llnir */
 	0, A_NEUTRAL, PM_VALKYRIE, NON_PM, 4000L, 
 	SPFX2_ELEC,0,0),
 
+A("the Pen of the Void",	ATHAME,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK), 0, 0,
+	PHYS(5,0),	NO_DFNS,	CARY(AD_MAGM),
+	0,	A_NEUTRAL, PM_EXILE, NON_PM, 2500L, 
+	0,0,0),
+
 #ifdef CONVICT
 A("Luck Blade",			SHORT_SWORD,
 	(SPFX_RESTR|SPFX_INTEL), SPFX_LUCK,0,
@@ -626,6 +632,12 @@ A("The Heart of Ahriman",	LUCKSTONE,
 	/* this stone does double damage if used as a projectile weapon */
 	PHYS(10,0),	NO_DFNS,	NO_CARY,
 	LEVITATION,	A_NEUTRAL, PM_BARBARIAN, NON_PM, 2500L, 
+	0,0,0),
+
+A("the Gates of Teeth",	CRYSKNIFE,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DALIGN), 0, 0,
+	PHYS(5,0),	NO_DFNS,	CARY(AD_MAGM),
+	0,	A_NEUTRAL, PM_EXILE, NON_PM, 2500L, 
 	0,0,0),
 
 A("The Sceptre of Might",	MACE,

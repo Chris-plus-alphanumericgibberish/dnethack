@@ -33,6 +33,43 @@ struct engr {
 #define CARTOUCHE_OF_THE_CAT_LORD	10
 #define WINGS_OF_GARUDA				11
 #define NUMBER_OF_WARDS				11
+#define LAST_WARD					11
+
+#define FIRST_SEAL					LAST_WARD+1
+#define AHAZU						LAST_WARD+1
+#define AMON						LAST_WARD+2
+#define ANDREALPHUS					LAST_WARD+3
+#define ANDROMALIUS					LAST_WARD+4
+#define ASTAROTH					LAST_WARD+5
+#define BALAM						LAST_WARD+6
+#define BERITH						LAST_WARD+7
+#define BUER						LAST_WARD+8
+#define CHUPOCLOPS					LAST_WARD+9
+#define DANTALION					LAST_WARD+10
+#define DUNSTAN						LAST_WARD+11
+#define ECHIDNA						LAST_WARD+12
+#define EDEN						LAST_WARD+13
+#define ERIDU						LAST_WARD+14
+#define EURYNOME					LAST_WARD+15
+#define EVE							LAST_WARD+16
+#define FAFNIR						LAST_WARD+17
+#define HUGINN_MUNINN				LAST_WARD+18
+#define IRIS						LAST_WARD+19
+#define JACK						LAST_WARD+20
+#define MALPHAS						LAST_WARD+21
+#define MARIONETTE					LAST_WARD+22
+#define MOTHER						LAST_WARD+23
+#define NABERIUS					LAST_WARD+24
+#define ORTHOS						LAST_WARD+25
+#define OSE							LAST_WARD+26
+#define OTIAX						LAST_WARD+27
+#define PAIMON						LAST_WARD+28
+#define SIMURGH						LAST_WARD+29
+#define TENEBROUS					LAST_WARD+30
+#define YMIR						LAST_WARD+31
+#define DAHLVER_NAR					LAST_WARD+32
+#define ACERERAK					LAST_WARD+33
+#define NUMINA						LAST_WARD+34
 
 /*Functional halucinatory wards, keep in sync with engrave.c!*/
 #define CERULEAN_SIGN				2

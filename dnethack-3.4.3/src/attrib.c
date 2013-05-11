@@ -35,6 +35,9 @@ const struct innate {
 		     {  15, &(HStealth), "stealthy", "" },
 		     {	 0, 0, 0, 0 } },
 
+	bin_abil[] = {
+		     {	 0, 0, 0, 0 } },
+
 	cav_abil[] = { {	 7, &(HFast), "quick", "slow" },
 		     {	15, &(HWarning), "sensitive", "" },
 		     {	 0, 0, 0, 0 } },
@@ -560,6 +563,7 @@ int oldlevel, newlevel;
 	switch (Role_switch) {
 	case PM_ARCHEOLOGIST:   abil = arc_abil;	break;
 	case PM_BARBARIAN:      abil = bar_abil;	break;
+	case PM_EXILE:      	abil = bin_abil;	break;
 	case PM_CAVEMAN:        abil = cav_abil;	break;
 #ifdef CONVICT
 	case PM_CONVICT:        abil = con_abil;	break;

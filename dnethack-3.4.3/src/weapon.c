@@ -1379,7 +1379,7 @@ const struct def_skill *class_skill;
 	}
 
 	/* Set skill for all weapons in inventory to be basic */
-	for (obj = invent; obj; obj = obj->nobj) {
+	if(!Role_if(PM_EXILE)) for (obj = invent; obj; obj = obj->nobj) {
 	    skill = weapon_type(obj);
 	    if (skill != P_NONE)
 		P_SKILL(skill) = P_BASIC;

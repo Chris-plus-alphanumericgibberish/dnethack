@@ -46,6 +46,13 @@ static struct trobj Barbarian[] = {
 	{ FOOD_RATION, 0, FOOD_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj Binder[] = {
+	{ VOULGE, 0, WEAPON_CLASS, 1, 0 },
+	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
+	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
+	{ FLINT, 0, GEM_CLASS, 1, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 static struct trobj Cave_man[] = {
 #define C_AMMO	2
 	{ CLUB, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
@@ -325,6 +332,10 @@ static const struct def_skill Skill_B[] = {
 #endif
     { P_TWO_WEAPON_COMBAT, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_MASTER },
+    { P_NONE, 0 }
+};
+
+static const struct def_skill Skill_N[] = {
     { P_NONE, 0 }
 };
 
@@ -641,7 +652,9 @@ u_init()
 
 	u.umoved = FALSE;
 	u.umortality = 0;
-	u.ugrave_arise = Role_if(PM_PIRATE) ? PM_SKELETAL_PIRATE : NON_PM;
+	u.ugrave_arise = Role_if(PM_PIRATE) ? PM_SKELETAL_PIRATE : 
+					 Role_if(PM_EXILE) ? PM_SHADE 
+						: NON_PM;
 	
 	u.ukinghill = 0;
 	u.protean = 0;
@@ -709,6 +722,10 @@ u_init()
 		knows_class(WEAPON_CLASS);
 		knows_class(ARMOR_CLASS);
 		skill_init(Skill_B);
+		break;
+	case PM_EXILE:
+		ini_inv(Binder);
+		skill_init(Skill_N);
 		break;
 	case PM_CAVEMAN:
 		Cave_man[C_AMMO].trquan = rn1(11, 10);	/* 10..20 */
@@ -954,7 +971,9 @@ u_init()
 #endif
 
 	find_ac();			/* get initial ac value */
-	init_attr(75);			/* init attribute values */
+	if(Role_if(PM_EXILE)){
+		init_attr(55);
+	} else init_attr(75);			/* init attribute values */
 	max_rank_sz();			/* set max str size for class ranks */
 /*
  *	Do we really need this?
@@ -988,6 +1007,7 @@ int otyp;
     switch (Role_switch) {
      case PM_ARCHEOLOGIST:	skills = Skill_A; break;
      case PM_BARBARIAN:		skills = Skill_B; break;
+     case PM_EXILE:			skills = Skill_N; break;
      case PM_CAVEMAN:		skills = Skill_C; break;
 #ifdef CONVICT
      case PM_CONVICT:		skills = Skill_Con; break;
@@ -1135,7 +1155,8 @@ register struct trobj *trop;
 			    obj->quan = (long) trop->trquan;
 			    trop->trquan = 1;
 			} else if (obj->oclass == GEM_CLASS &&
-				is_graystone(obj) && obj->otyp != FLINT) {
+				((is_graystone(obj) && obj->otyp != FLINT) ||
+				  Role_if(PM_EXILE) )) {
 			    obj->quan = 1L;
 			}
 #ifdef CONVICT

@@ -49,6 +49,8 @@ extern int NDECL(dothrow); /**/
 extern int NDECL(doeat); /**/
 extern int NDECL(done2); /**/
 extern int NDECL(doengward); /**/
+extern int NDECL(doengrave); /**/
+extern int NDECL(doward); /**/
 extern int NDECL(dopickup); /**/
 extern int NDECL(ddoinv); /**/
 extern int NDECL(dotypeinv); /**/
@@ -1469,7 +1471,8 @@ static const struct func_tab cmdlist[] = {
 	{'D', FALSE, doddrop},
 	{M('d'), FALSE, dodip},
 	{'e', FALSE, doeat},
-	{'E', FALSE, doengward},
+/*	{'E', FALSE, doengward}, */
+	{'E', FALSE, doengrave},
 	{M('e'), TRUE, enhance_weapon_skill},
 	{'f', FALSE, dofire},
 /*	'F' : fight (one time) */
@@ -1499,12 +1502,14 @@ static const struct func_tab cmdlist[] = {
 	{M('p'), TRUE, dopray},
 	{'q', FALSE, dodrink},
 	{'Q', FALSE, dowieldquiver},
+	{C('q'), FALSE, doward},
 	{M('q'), TRUE, done2},
 	{'r', FALSE, doread},
 	{'R', FALSE, doremring},
 	{M('r'), FALSE, dorub},
 	{'s', TRUE, dosearch, "searching"},
 	{'S', TRUE, dosave},
+/*	{C('s'), FALSE, doseal}, */
 	{M('s'), FALSE, dosit},
 	{'t', FALSE, dothrow},
 	{'T', FALSE, dotakeoff},

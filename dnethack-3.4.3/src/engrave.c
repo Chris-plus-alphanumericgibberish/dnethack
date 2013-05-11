@@ -165,7 +165,7 @@ static const char *haluMesg[] = {
 	"What would YOU give up to... to see it through?",
 	"Don't trust the skull.",
 	"Fall in a more hardboiled manner.",
-	"Since you are reading this, chances are you have already installed this game on your computer. If this is true, you have just participated in bringing about the end of the world. But don't beat yourself up about it.",
+	"Since you are reading this, chances are you have already installed this game on your computer.\nIf this is true, you have just participated in bringing about the end of the world.\nBut don't beat yourself up about it.",
 	"YOU HATE TIME TRAVEL YOU HATE TIME TRAVEL YOU HATE....",
 	"It begins to dawn on you that everything you just did may have been a colossal waste of time.",
 	"We will BUILD heroes!",
@@ -399,7 +399,45 @@ const char * haluWard[] =  {
 	"a naudh rune", /* misery */
 	"an Eye of Providence", "a pyramid surmounted by an eye", /* Christian */
 	"a one-way staircase",
-	"an a encircled by its own tail" /* meta */
+	"an 'a' encircled by its own tail" /* meta */
+};
+
+//There is a seal of ? inscribed here.
+const char * sealNames[] =  {
+	"Ahazu",
+	"Amon",
+	"Andrealphus",
+	"Andromalius",
+	"Astaroth",
+	"Balam",
+	"Berith",
+	"Buer",
+	"Chupoclops",
+	"Dantalion",
+	"Dunstan",
+	"Echidna",
+	"Eden",
+	"Eridu",
+	"Eurynome",
+	"Eve",
+	"Fáfnir",
+	"Huginn and Muninn",
+	"Iris",
+	"Jack",
+	"Malphas",
+	"Marionette",
+	"Mother",
+	"Naberius",
+	"Orthos",
+	"Ose",
+	"Otiax",
+	"Paimon",
+	"Simurgh",
+	"Tenebrous",
+	"Ymir",
+	"Dahlver-Nar",
+	"Acererak",
+	"Numina"
 };
 
 char *
@@ -707,7 +745,7 @@ xchar x, y;
 /* Decide whether a particular string is engraved at a specified
  * location; a case-insensitive substring match used.
  * Ignore headstones, in case the player names herself "Elbereth".
-	Heh. Why not?
+	Heh. Why not? Restriction on headstone Elberenths removed.
  */
 int
 sengr_at(s, x, y)
@@ -954,7 +992,7 @@ register int x,y;
 				/*if(!(ep->complete_wards))*/ 
 				wardbuflen += sprintf(&wardbuf[wardbuflen]," %s",
 											wardNames[ep->ward_id][sum>1 ? 1 : 0]);
-				pline("%d",wardbuflen);
+				//pline("%d",wardbuflen);
 				pline("%s %s", wardbuf, word);
 			}
 		  }
