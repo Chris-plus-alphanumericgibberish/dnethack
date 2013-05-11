@@ -255,6 +255,7 @@ int sx, sy;
 	struct monst *mtmp;
 	int atype;
 	struct permonst *ptr;
+	struct obj *curobj = 0;
 
 	if (rn2(100) < depth(&u.uz) &&
 		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC,0)) &&
@@ -267,9 +268,13 @@ int sx, sy;
 	} else {
 	    atype = get_shop_item(shp - shtypes);
 	    if (atype < 0)
-		(void) mksobj_at(-atype, sx, sy, TRUE, TRUE);
+			curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
 	    else
-		(void) mkobj_at(atype, sx, sy, TRUE);
+			curobj = mkobj_at(atype, sx, sy, TRUE);
+		
+		if(curobj){
+			curobj->shopOwned = TRUE;
+		}
 	}
 }
 

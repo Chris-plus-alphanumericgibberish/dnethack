@@ -1392,6 +1392,10 @@ struct obj *otmp;
 	    Strcpy(u.ushops, fakeshop);
 	    /* sets obj->unpaid if necessary */
 	    addtobill(otmp, TRUE, FALSE, FALSE);
+		if(otmp->shopOwned && !(otmp->unpaid)){ /* shop stock is outside shop */
+			if(otmp->sknown && !(otmp->ostolen) ) otmp->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
+			otmp->ostolen = TRUE; /* object was apparently stolen by someone (not necessarily the player) */
+		}
 	    Strcpy(u.ushops, saveushops);
 	    /* if you're outside the shop, make shk notice */
 	    if (!index(u.ushops, *fakeshop))

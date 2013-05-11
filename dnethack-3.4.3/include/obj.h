@@ -62,6 +62,7 @@ struct obj {
 	Bitfield(dknown,1);	/* color or text known */
 	Bitfield(bknown,1);	/* blessing or curse known */
 	Bitfield(rknown,1);	/* rustproof or not known */
+	Bitfield(sknown,1);	/* stolen or not known */
 
 	Bitfield(oeroded,2);	/* rusted/burnt weapon/armor */
 	Bitfield(oeroded2,2);	/* corroded/rotted weapon/armor */
@@ -91,7 +92,11 @@ struct obj {
 
 	Bitfield(in_use,1);	/* for magic items before useup items */
 	Bitfield(bypass,1);	/* mark this as an object to be skipped by bhito() */
-	/* 6 free bits */
+	Bitfield(lifted,1); /* dipped in potion of levitation */
+	Bitfield(lightened,1);/* dipped in potion of enlightenment */
+	Bitfield(shopOwned,1);	/* owned by a shopkeeper */
+	Bitfield(ostolen,1); 	/* was removed from a shop without being sold */
+	/* 1 free bits */
 
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
 #define leashmon  corpsenm	/* gets m_id of attached pet */
@@ -118,8 +123,6 @@ struct obj {
 #define NG_RUNE		0x0000100L
 #define A_RUNE		0x0000200L
 
-	Bitfield(lifted,1); /* dipped in potion of levitation */
-	Bitfield(lightened,1);/* dipped in potion of enlightenment */
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 
 	long oextra[1];		/* used for name of ordinary objects - length

@@ -28,6 +28,8 @@ STATIC_VAR NEARDATA long int followmsg;	/* last time of follow message */
 
 STATIC_DCL void FDECL(setpaid, (struct monst *));
 STATIC_DCL long FDECL(addupbill, (struct monst *));
+STATIC_DCL long FDECL(setallstolen, (struct obj *));
+STATIC_DCL long FDECL(setallpaid, (struct obj *));
 STATIC_DCL void FDECL(pacify_shk, (struct monst *));
 STATIC_DCL struct bill_x *FDECL(onbill, (struct obj *, struct monst *, BOOLEAN_P));
 STATIC_DCL struct monst *FDECL(next_shkp, (struct monst *, BOOLEAN_P));
@@ -333,6 +335,54 @@ register struct monst *shkp;
 	return(total);
 }
 
+STATIC_OVL long
+setallstolen(obj)
+register struct obj *obj;
+{
+	register struct obj *otmp;
+
+	if(obj->unpaid){
+		obj->ostolen = TRUE;
+		obj->sknown = TRUE; /*you know you stole it*/
+	}
+
+	if (Has_contents(obj))
+	    for(otmp = obj->cobj; otmp; otmp = otmp->nobj) {
+		if(otmp->oclass == COIN_CLASS) continue;
+
+		if (Has_contents(otmp))
+		    setallstolen(otmp);
+		else
+			if(obj->unpaid){
+				obj->ostolen = TRUE;
+				obj->sknown = TRUE; /*you know you stole it*/
+			}
+	    }
+}
+
+STATIC_OVL long
+setallpaid(obj)
+register struct obj *obj;
+{
+	register struct obj *otmp;
+
+	if(obj->unpaid){
+		obj->shopOwned = TRUE;
+	}
+
+	if (Has_contents(obj))
+	    for(otmp = obj->cobj; otmp; otmp = otmp->nobj) {
+		if(otmp->oclass == COIN_CLASS) continue;
+
+		if (Has_contents(otmp))
+		    setallpaid(otmp);
+		else
+			if(obj->unpaid){
+				obj->shopOwned = TRUE;
+			}
+	    }
+}
+
 #endif /* OVLB */
 #ifdef OVL1
 
@@ -500,6 +550,7 @@ struct monst *shkp;
 {
 	struct eshk *eshkp;
 	long total;
+	struct obj *curobj;
 
 	eshkp = ESHK(shkp);
 	rouse_shk(shkp, TRUE);
@@ -508,9 +559,11 @@ struct monst *shkp;
 	    Your("credit of %ld %s is used to cover your shopping bill.",
 		 eshkp->credit, currency(eshkp->credit));
 	    total = 0L;		/* credit gets cleared by setpaid() */
+		for(curobj = invent; curobj; curobj = curobj->nobj) setallpaid(curobj);
 	} else {
 	    You("escaped the shop without paying!");
 	    total -= eshkp->credit;
+		for(curobj = invent; curobj; curobj = curobj->nobj) setallstolen(curobj);
 	}
 	setpaid(shkp);
 	if (!total) return FALSE;
@@ -1765,6 +1818,7 @@ boolean itemize;
 	}
 
 	pay(ltmp, shkp);
+	obj->shopOwned = FALSE;
 	shk_names_obj(shkp, obj, consumed ?
 			"paid for %s at a cost of %ld gold piece%s.%s" :
 			"bought %s for %ld gold piece%s.%s", ltmp, "");
@@ -2893,6 +2947,9 @@ move_on:
 		    c = 'n';
 
 		if (c == 'y') {
+			obj->ostolen = FALSE;
+			obj->sknown = FALSE; /* won't know if it becomes stolen again.*/
+			obj->shopOwned = TRUE;
 		    shk_names_obj(shkp, obj, (sell_how != SELL_NORMAL) ?
 			    "traded %s for %ld zorkmid%s in %scredit." :
 			"relinquish %s and acquire %ld zorkmid%s in %scredit.",
@@ -2946,6 +3003,9 @@ move_on:
 			    if (!obj->unpaid && !saleitem) obj->no_charge = 1;
 			    subfrombill(obj, shkp);
 			    pay(-offer, shkp);
+				obj->ostolen = FALSE;
+				obj->sknown = FALSE; /*won't know if it becomes stolen again*/
+				obj->shopOwned = TRUE;
 			    shk_names_obj(shkp, obj, (sell_how != SELL_NORMAL) ?
 				    (!ltmp && cltmp && only_partially_your_contents) ?
 			    	    "sold some items inside %s for %ld gold pieces%s.%s" :

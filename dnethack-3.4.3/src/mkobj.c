@@ -384,6 +384,9 @@ boolean artif;
 	otmp->ovar1 = 0;
 	otmp->gifted = A_NONE;
 	otmp->lifted = 0;
+	otmp->shopOwned = 0;
+	otmp->sknown = 0;
+	otmp->ostolen = 0;
 	otmp->lightened = 0;
 	if ((otmp->otyp >= ELVEN_SHIELD && otmp->otyp <= ORCISH_SHIELD) ||
 			otmp->otyp == SHIELD_OF_REFLECTION)

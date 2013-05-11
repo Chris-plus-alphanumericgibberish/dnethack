@@ -39,9 +39,9 @@ STATIC_OVL struct Jitem Pirate_items[];
 STATIC_OVL struct Jitem Japanese_items[] = {
 	{ BATTLE_AXE, "ono" },
 	{ BROADSWORD, "ninja-to" },
-	{ BRONZE_PLATE_MAIL, "tanko" }
+	{ BRONZE_PLATE_MAIL, "tanko" },
 	{ CLUB, "jo" },
-	{ CRYSTAL_PLATE_MAIL, "jade o-yoroi" }
+	{ CRYSTAL_PLATE_MAIL, "jade o-yoroi" },
 	{ DAGGER, "kunai" },
 	{ DART, "bo-shuriken" },
 	{ DWARVISH_MATTOCK, "dwarvish zaghnal" },
@@ -626,6 +626,7 @@ register struct obj *obj;
 	if (obj->oinvis) Strcat(prefix,"invisible ");
 #endif
 
+	if(obj->sknown && obj->ostolen) Strcpy(prefix, "stolen ");
 	if (obj->bknown &&
 	    obj->oclass != COIN_CLASS &&
 	    (obj->otyp != POT_WATER || !objects[POT_WATER].oc_name_known
@@ -839,7 +840,7 @@ register struct obj *otmp;
     if (otmp->oclass == COIN_CLASS) return FALSE;	/* always fully ID'd */
 #endif
     /* check fundamental ID hallmarks first */
-    if (!otmp->known || !otmp->dknown ||
+    if (!otmp->known || !otmp->dknown || !otmp->sknown || 
 #ifdef MAIL
 	    (!otmp->bknown && otmp->otyp != SCR_MAIL) ||
 #else
@@ -1798,7 +1799,7 @@ boolean from_user;
 	register int i;
 	register struct obj *otmp;
 	int cnt, spe, spesgn, typ, very, rechrg;
-	int blessed, uncursed, iscursed, ispoisoned, isgreased;
+	int blessed, uncursed, iscursed, ispoisoned, isgreased, stolen;
 	int eroded, eroded2, erodeproof;
 #ifdef INVISIBLE_OBJECTS
 	int isinvisible;
@@ -1828,7 +1829,7 @@ boolean from_user;
 	const char *name=0;
 
 	cnt = spe = spesgn = typ = very = rechrg =
-		blessed = uncursed = iscursed =
+		blessed = uncursed = iscursed = stolen = 
 #ifdef INVISIBLE_OBJECTS
 		isinvisible =
 #endif
@@ -1872,6 +1873,8 @@ boolean from_user;
 			while(digit(*bp)) bp++;
 			while(*bp == ' ') bp++;
 			l = 0;
+		} else if (!strncmpi(bp, "stolen ", l=7)) {
+			stolen = 1;
 		} else if (!strncmpi(bp, "blessed ", l=8) ||
 			   !strncmpi(bp, "holy ", l=5)) {
 			blessed = 1;
@@ -2644,6 +2647,10 @@ typfnd:
 		}
 	}
 
+	if(stolen){
+		otmp->ostolen = 1;
+		otmp->sknown = 1;
+	}
 	/* set blessed/cursed -- setting the fields directly is safe
 	 * since weight() is called below and addinv() will take care
 	 * of luck */

@@ -1519,7 +1519,7 @@ struct obj *otmp;
 {
     makeknown(otmp->otyp);
     if (otmp->oartifact) discover_artifact((xchar)otmp->oartifact);
-    otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = 1;
+    otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
     if (otmp->otyp == EGG && otmp->corpsenm != NON_PM)
 	learn_egg_type(otmp->corpsenm);
 }
@@ -2376,6 +2376,8 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	if (obj->oclass == COIN_CLASS) return TRUE;
 #endif
 	if (obj->unpaid != otmp->unpaid ||
+		obj->sknown != otmp->sknown ||
+		obj->ostolen != otmp->ostolen ||
 	    obj->spe != otmp->spe || obj->dknown != otmp->dknown ||
 	    (obj->bknown != otmp->bknown && !Role_if(PM_PRIEST)) ||
 	    obj->cursed != otmp->cursed || obj->blessed != otmp->blessed ||
