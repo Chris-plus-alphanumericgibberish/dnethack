@@ -908,7 +908,7 @@ struct obj *obj;
     /* killer name should be more specific than general xname; however, exact
        info like blessed/cursed and rustproof makes things be too verbose */
     obj->known = obj->dknown = 1;
-    obj->bknown = obj->rknown = obj->greased = 0;
+    obj->bknown = obj->rknown = obj->sknown = obj->greased = 0;
     /* if character is a priest[ess], bknown will get toggled back on */
     obj->blessed = obj->cursed = 0;
     /* "killed by poisoned <obj>" would be misleading when poison is

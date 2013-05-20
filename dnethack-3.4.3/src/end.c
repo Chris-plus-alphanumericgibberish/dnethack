@@ -374,7 +374,7 @@ boolean taken;
 
 			for (obj = invent; obj; obj = obj->nobj) {
 			    makeknown(obj->otyp);
-			    obj->known = obj->bknown = obj->dknown = obj->rknown = 1;
+			    obj->known = obj->bknown = obj->dknown = obj->rknown = obj->sknown = 1;
 			}
 			(void) display_inventory((char *)0, TRUE);
 			container_contents(invent, TRUE, TRUE);
@@ -519,7 +519,7 @@ winid endwin;
 		u.urexp += points;
 	    } else {
 		makeknown(otmp->otyp);
-		otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = 1;
+		otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 		/* assumes artifacts don't have quan > 1 */
 		Sprintf(pbuf, "%s%s (worth %ld %s and %ld points)",
 			the_unique_obj(otmp) ? "The " : "",
@@ -941,7 +941,7 @@ boolean identified, all_containers;
 			if (identified) {
 			    makeknown(obj->otyp);
 			    obj->known = obj->bknown =
-			    obj->dknown = obj->rknown = 1;
+			    obj->dknown = obj->rknown = obj->sknown = 1;
 			}
 			putstr(tmpwin, 0, doname(obj));
 		    }
