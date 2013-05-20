@@ -1174,6 +1174,7 @@ resistances_enlightenment()
 	putstr(en_win, 0, "");
 
 	/*** Resistances to troubles ***/
+	/* It is important to inform the player as to the status of any resistances that can expire */
 	if (Fire_resistance && Cold_resistance) putstr(en_win, 0, "You feel comfortable.");
 	else{
 		if (Fire_resistance) putstr(en_win, 0, "You feel chilly.");
@@ -1182,7 +1183,7 @@ resistances_enlightenment()
 	if (Sleep_resistance) putstr(en_win, 0, "You feel wide awake.");
 	if (Disint_resistance) putstr(en_win, 0, "You feel very firm.");
 	if (Shock_resistance) putstr(en_win, 0, "You feel well grounded.");
-	if (Poison_resistance) putstr(en_win, 0, "You feel well healthy.");
+	if (Poison_resistance) putstr(en_win, 0, "You feel healthy.");
 /*	if (Drain_resistance) you_are("level-drain resistant");
 	if (Sick_resistance) you_are("immune to sickness");
 	if (Antimagic) you_are("magic-protected");
@@ -1509,7 +1510,7 @@ static const struct func_tab cmdlist[] = {
 	{M('r'), FALSE, dorub},
 	{'s', TRUE, dosearch, "searching"},
 	{'S', TRUE, dosave},
-/*	{C('s'), FALSE, doseal}, */
+	{C('s'), FALSE, doseal}, 
 	{M('s'), FALSE, dosit},
 	{'t', FALSE, dothrow},
 	{'T', FALSE, dotakeoff},

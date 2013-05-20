@@ -32,8 +32,12 @@ struct engr {
 #define SIGN_OF_THE_SCION_QUEEN		9
 #define CARTOUCHE_OF_THE_CAT_LORD	10
 #define WINGS_OF_GARUDA				11
-#define NUMBER_OF_WARDS				11
-#define LAST_WARD					11
+#define SIGIL_OF_CTHUGHA			12
+#define BRAND_OF_ITHAQUA			13
+#define TRACERY_OF_KRAKAL			14
+#define YELLOW_SIGN					15
+#define NUMBER_OF_WARDS				15
+#define LAST_WARD					15
 
 #define FIRST_SEAL					LAST_WARD+1
 #define AHAZU						LAST_WARD+1

@@ -384,7 +384,12 @@ struct you {
 #define WARD_QUEEN			0x0000200L
 #define WARD_CAT_LORD		0x0000400L
 #define WARD_GARUDA			0x0000800L
+#define WARD_CTHUGHA		0x0001000L
+#define WARD_ITHAQUA		0x0002000L
+#define WARD_KRAKAL			0x0004000L
+#define WARD_YELLOW			0x0008000L
 
+	short sealorder[31];
 	long	sealsKnown;	/* seals known independently of the Binder's intrinsic knowledge */
 #define SEAL_AHAZU					0x0000001L
 	long	ahazu;	//turn on which spirit will be again eligible for binding.
@@ -402,18 +407,18 @@ struct you {
 	long	berith;
 #define SEAL_BUER					0x0000080L
 	long	buer;
-#define SEAL_CATALHOYUK				0x0000100L
-	long	catalhoyuk;
-#define SEAL_CHUPOCLOPS				0x0000200L
+#define SEAL_CHUPOCLOPS				0x0000100L
 	long	chupoclops;
-#define SEAL_DANTALION				0x0000400L
+#define SEAL_DANTALION				0x0000200L
 	long	dantalion;
-#define SEAL_DUNSTAN				0x0000800L
+#define SEAL_DUNSTAN				0x0000400L
 	long	dunstan;
-#define SEAL_ECHIDNA				0x0001000L
+#define SEAL_ECHIDNA				0x0000800L
 	long	echidna;
-#define SEAL_EDEN					0x0002000L
+#define SEAL_EDEN					0x0001000L
 	long	eden;
+#define SEAL_ERIDU					0x0002000L
+	long	eridu;
 #define SEAL_EURYNOME				0x0004000L
 	long	eurynome;
 #define SEAL_EVE					0x0008000L
@@ -477,6 +482,7 @@ struct you {
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
 };	/* end of `struct you' */
 
+extern long sealKey[31];
 #define Upolyd (u.umonnum != u.umonster)
 
 #endif	/* YOU_H */

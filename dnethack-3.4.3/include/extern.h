@@ -609,6 +609,7 @@ E void FDECL(del_engr_ward_at, (int,int));
 E int NDECL(freehand);
 E int NDECL(doengrave);
 E int NDECL(doward);
+E int NDECL(doseal);
 E int NDECL(doengward);
 E void FDECL(save_engravings, (int,int));
 E void FDECL(rest_engravings, (int));

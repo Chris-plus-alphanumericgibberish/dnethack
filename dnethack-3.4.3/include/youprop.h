@@ -28,12 +28,14 @@
 #define HFire_resistance	u.uprops[FIRE_RES].intrinsic
 #define EFire_resistance	u.uprops[FIRE_RES].extrinsic
 #define Fire_resistance		(HFire_resistance || EFire_resistance || \
-				 resists_fire(&youmonst))
+				 resists_fire(&youmonst) || \
+				 ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA)
 
 #define HCold_resistance	u.uprops[COLD_RES].intrinsic
 #define ECold_resistance	u.uprops[COLD_RES].extrinsic
 #define Cold_resistance		(HCold_resistance || ECold_resistance || \
-				 resists_cold(&youmonst))
+				 resists_cold(&youmonst) || \
+				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA)
 
 #define HSleep_resistance	u.uprops[SLEEP_RES].intrinsic
 #define ESleep_resistance	u.uprops[SLEEP_RES].extrinsic
@@ -48,7 +50,8 @@
 #define HShock_resistance	u.uprops[SHOCK_RES].intrinsic
 #define EShock_resistance	u.uprops[SHOCK_RES].extrinsic
 #define Shock_resistance	(HShock_resistance || EShock_resistance || \
-				 resists_elec(&youmonst))
+				 resists_elec(&youmonst) || \
+				 ward_at(u.ux,u.uy) == TRACERY_OF_KRAKAL)
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
