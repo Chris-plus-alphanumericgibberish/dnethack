@@ -53,6 +53,13 @@ static struct trobj Binder[] = {
 	{ FLINT, 0, GEM_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+//definition of an extern in you.h
+long sealKey[31] = {SEAL_AHAZU, SEAL_AMON, SEAL_ANDREALPHUS, SEAL_ANDROMALIUS, SEAL_ASTAROTH, SEAL_BALAM, 
+				 SEAL_BERITH, SEAL_BUER, SEAL_CHUPOCLOPS, SEAL_DANTALION, SEAL_DUNSTAN, SEAL_ECHIDNA, SEAL_EDEN,
+				 SEAL_ERIDU, SEAL_EURYNOME, SEAL_EVE, SEAL_FAFNIR, SEAL_HUGINN_MUNINN, SEAL_IRIS, SEAL_JACK,
+				 SEAL_MALPHAS, SEAL_MARIONETTE, SEAL_MOTHER, SEAL_NABERIUS, SEAL_ORTHOS, SEAL_OSE, SEAL_OTIAX,
+				 SEAL_PAIMON, SEAL_SIMURGH, SEAL_TENEBROUS, SEAL_YMIR
+				};
 static struct trobj Cave_man[] = {
 #define C_AMMO	2
 	{ CLUB, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
@@ -616,8 +623,8 @@ u_init()
 	u.chokhmah = 0;
 	u.gevurah = 0;
 	u.hod = 0;
-	u.wardsknown = 0;
-	//u.wardsknown = ~0; //~0 should be all 1s, and is therefore debug mode.
+	//u.wardsknown = 0;
+	u.wardsknown = ~0; //~0 should be all 1s, and is therefore debug mode.
 
 #if 0	/* documentation of more zero values as desirable */
 	u.usick_cause[0] = 0;
@@ -659,6 +666,20 @@ u_init()
 	u.ukinghill = 0;
 	u.protean = 0;
 
+	if(Role_if(PM_EXILE)){
+		short i,j,tmp;
+		for(i=0;i<31;i++) u.sealorder[i]=i;
+		for(i=0;i<31;i++){
+			j=rn2(31);
+			tmp = u.sealorder[i];
+			u.sealorder[i] = u.sealorder[j];
+			u.sealorder[j] = tmp;
+		}
+//		for(i=0;i<32;i++) pline("%d", u.sealorder[i]);
+		u.sealsKnown = sealKey[u.sealorder[0]] | sealKey[u.sealorder[1]] | sealKey[u.sealorder[2]];
+	}
+	else 	u.sealsKnown = 0;
+
 	u.umonnum = u.umonster = (flags.female &&
 			urole.femalenum != NON_PM) ? urole.femalenum :
 			urole.malenum;
@@ -680,7 +701,7 @@ u_init()
 	for (i = 0; i <= MAXSPELL; i++) spl_book[i].sp_id = NO_SPELL;
 	u.ublesscnt = 300;			/* no prayers just yet */
 	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] = u.ualign.type =
-			aligns[flags.initalign].value;
+			Role_if(PM_EXILE) ? A_NEUTRAL : aligns[flags.initalign].value;
 	u.ulycn = NON_PM;
 
 #if defined(BSD) && !defined(POSIX_TYPES)
@@ -1145,8 +1166,13 @@ register struct trobj *trop;
 			obj->quan = u.umoney0;
 		} else {
 #endif
+			if(Role_if(PM_EXILE)){
+				obj->dknown = obj->rknown = 1;
+				if(obj->oclass == WEAPON_CLASS) obj->oeroded = 1;
+			}else{
 			obj->dknown = obj->bknown = obj->rknown = 1;
 			if (objects[otyp].oc_uses_known) obj->known = 1;
+			}
 			obj->cursed = 0;
 			if (obj->opoisoned && u.ualign.type != A_CHAOTIC)
 			    obj->opoisoned = 0;
@@ -1176,7 +1202,7 @@ register struct trobj *trop;
 		obj = addinv(obj);
 
 		/* Make the type known if necessary */
-		if (OBJ_DESCR(objects[otyp]) && obj->known)
+		if (OBJ_DESCR(objects[otyp]) && obj->known && !Role_if(PM_EXILE))
 			discover_object(otyp, TRUE, FALSE);
 		if (otyp == OIL_LAMP)
 			discover_object(POT_OIL, TRUE, FALSE);

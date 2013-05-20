@@ -92,7 +92,7 @@ const struct Role roles[] = {
 	PM_EXILE, NON_PM, NON_PM,
 	PM_STRANGE_CORPSE, NON_PM, PM_ACERERAK,
 	PM_BUGBEAR, PM_LICH, S_HUMANOID, S_LICH,
-	ART_DOORS_OF_TEETH,
+	ART_PEN_OF_THE_VOID,
 	MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_NEUTRAL,
 	/* Str Int Wis Dex Con Cha */
@@ -769,15 +769,18 @@ str2gend(str)
 	return ROLE_NONE;
 }
 
-
+/* I TRIED to add forced alignments in a non-hacky manner, but SOMETHING SOMEWHERE nullpointers if the
+	Role struct changes lengths, gdb was no help, and I'm tired of screwing with it.  */
 boolean
 validalign(rolenum, racenum, alignnum)
 	int rolenum, racenum, alignnum;
 {
 	/* Assumes validrole and validrace */
 	return (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		(roles[rolenum].allow & races[racenum].allow &
-		 aligns[alignnum].allow & ROLE_ALIGNMASK));
+		(((roles[rolenum].allow & races[racenum].allow &
+		 aligns[alignnum].allow & ROLE_ALIGNMASK)) || 
+		(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow == ROLE_NEUTRAL)
+		));
 }
 
 
@@ -789,20 +792,22 @@ randalign(rolenum, racenum)
 
 	/* Count the number of valid alignments */
 	for (i = 0; i < ROLE_ALIGNS; i++)
-	    if (roles[rolenum].allow & races[racenum].allow &
-	    		aligns[i].allow & ROLE_ALIGNMASK)
+	    if ((roles[rolenum].allow & races[racenum].allow &
+	    		aligns[i].allow & ROLE_ALIGNMASK) ||
+			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow == ROLE_NEUTRAL)
+			)
 	    	n++;
 
 	/* Pick a random alignment */
 	if (n) n = rn2(n);
 	for (i = 0; i < ROLE_ALIGNS; i++)
-	    if (roles[rolenum].allow & races[racenum].allow &
-	    		aligns[i].allow & ROLE_ALIGNMASK) {
+	    if ((roles[rolenum].allow & races[racenum].allow &
+	    		aligns[i].allow & ROLE_ALIGNMASK) ||
+			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow == ROLE_NEUTRAL)
+			) {
 	    	if (n) n--;
 	    	else return (i);
 	    }
-	/* Off-race Binders default to netural */
-	if(Role_if(PM_EXILE)) return AM_NEUTRAL;
 	/* This role/race has no permitted alignments? */
 	return (rn2(ROLE_ALIGNS));
 }
