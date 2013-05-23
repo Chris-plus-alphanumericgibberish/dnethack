@@ -9,7 +9,6 @@ STATIC_PTR int NDECL(prayer_done);
 STATIC_DCL struct obj *NDECL(worst_cursed_item);
 STATIC_DCL int NDECL(in_trouble);
 STATIC_DCL void FDECL(fix_worst_trouble,(int));
-STATIC_DCL void FDECL(angrygods,(ALIGNTYP_P));
 STATIC_DCL void FDECL(at_your_feet, (const char *));
 #ifdef ELBERETH
 STATIC_DCL void NDECL(gcrownu);
@@ -116,7 +115,6 @@ but that's really hard.
 #define ugod_is_angry() (u.ualign.record < 0)
 #define on_altar()	IS_ALTAR(levl[u.ux][u.uy].typ)
 #define on_shrine()	((levl[u.ux][u.uy].altarmask & AM_SHRINE) != 0)
-#define a_align(x,y)	((aligntyp)Amask2align(levl[x][y].altarmask & AM_MASK))
 
 STATIC_OVL int
 in_trouble()
@@ -550,7 +548,7 @@ aligntyp resp_god;
 	done(DIED);
 }
 
-STATIC_OVL void
+void
 angrygods(resp_god)
 aligntyp resp_god;
 {
@@ -584,7 +582,7 @@ aligntyp resp_god;
 			      youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
 			verbalize("Thou must relearn thy lessons!");
 			(void) adjattrib(A_WIS, -1, FALSE);
-			losexp((char *)0,TRUE);
+			losexp((char *)0,TRUE,FALSE,TRUE);
 			break;
 	    case 6:	if (!Punished) {
 			    gods_angry(resp_god);

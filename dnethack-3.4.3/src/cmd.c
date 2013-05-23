@@ -621,7 +621,7 @@ wiz_level_change(VOID_ARGS)
 	}
 	if (newlevel < 1) newlevel = 1;
 	while (u.ulevel > newlevel)
-	    losexp("#levelchange",TRUE);
+	    losexp("#levelchange",TRUE,TRUE,TRUE);
     } else {
 	if (u.ulevel >= MAXULEV) {
 	    You("are already as experienced as you can get.");

@@ -299,6 +299,8 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 
 #define rn1(x,y)	(rn2(x)+(y))
 
+#define a_align(x,y)	((aligntyp)Amask2align(levl[x][y].altarmask & AM_MASK))
+
 /* negative armor class is randomly weakened to prevent invulnerability */
 #define AC_VALUE(AC)	((AC) >= 0 ? (AC) : -rnd(-(AC)))
 

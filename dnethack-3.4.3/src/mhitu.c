@@ -1338,7 +1338,7 @@ dopois:
 		hitmsg(mtmp, mattk);
 		if(mdat == &mons[PM_DEMOGORGON]){
 			poisoned(buf, ptmp, mdat->mname, 30);
-			losexp("rotting alive",TRUE);
+			losexp("rotting alive",TRUE,FALSE,FALSE);
 		}
 		else if (uncancelled && !rn2(8)) {
 		    Sprintf(buf, "%s %s",
@@ -1536,7 +1536,7 @@ dopois:
 	    case AD_DRLI:
 			hitmsg(mtmp, mattk);
 			if (uncancelled && !rn2(3) && !Drain_resistance) {
-			    losexp("life force drain",TRUE);
+			    losexp("life force drain",TRUE,FALSE,FALSE);
 				if(mdat == &mons[PM_METROID] || mdat == &mons[PM_ALPHA_METROID] || mdat == &mons[PM_GAMMA_METROID] 
 					|| mdat == &mons[PM_ZETA_METROID] || mdat == &mons[PM_OMEGA_METROID] 
 					|| mdat == &mons[PM_METROID_QUEEN]){
@@ -1851,7 +1851,7 @@ dopois:
 				polyself(FALSE);
 				if(rnd(100)<15){
 					Your("cellular structure degenerates.");
-					losexp("cellular degeneration",TRUE);
+					losexp("cellular degeneration",TRUE,TRUE,FALSE);
 				}
 			}
 		break;
@@ -2867,9 +2867,9 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				if(!Drain_resistance || !rn2(3)){
 					You("meet the gaze of Hethradiah, right head of Demogorgon!");
 					You("feel a primal darkness fall upon your soul!");
-					losexp("primal darkness",FALSE);
-					losexp("primal darkness",FALSE);
-					losexp("primal darkness",TRUE);
+					losexp("primal darkness",FALSE,!rn2(10),FALSE);
+					losexp("primal darkness",FALSE,!rn2(10),FALSE);
+					losexp("primal darkness",TRUE,!rn2(10),FALSE);
 					forget_levels(13);
 					forget_objects(13);
 					succeeded=1;
@@ -2881,7 +2881,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			else if (!mtmp->mcan && !rn2(3) && !Drain_resistance 
 						&& mtmp->mcansee && canseemon(mtmp)) {
 				You("feel your life force whither before the gaze of %s!", mon_nam(mtmp));
-			    losexp("life force drain",TRUE);
+			    losexp("life force drain",TRUE,FALSE,FALSE);
 //				forget_levels(10);
 //				forget_objects(10);
 				succeeded=1;
@@ -3546,7 +3546,7 @@ register struct monst *mon;
 				case 3:
 					if (!resists_drli(&youmonst)) {
 						You_feel("out of shape.");
-						losexp("overexertion",TRUE);
+						losexp("overexertion",TRUE,FALSE,FALSE);
 					} else {
 						You("have a curious feeling...");
 					}
@@ -3744,9 +3744,9 @@ struct monst *mon;
 			case 3:
 				if (!resists_drli(&youmonst)) {
 					You_feel("out of shape.");
-					losexp("overexertion",FALSE);
-					losexp("overexertion",FALSE);
-					losexp("overexertion",TRUE);
+					losexp("overexertion",FALSE,FALSE,FALSE);
+					losexp("overexertion",FALSE,FALSE,FALSE);
+					losexp("overexertion",TRUE,FALSE,FALSE);
 				} else {
 					You("have a curious feeling...");
 				}
@@ -3754,7 +3754,7 @@ struct monst *mon;
 			case 4: {
 				int tmp;
 				if (!resists_drli(&youmonst)) {
-					losexp("exhaustion",TRUE);
+					losexp("exhaustion",TRUE,FALSE,FALSE);
 				}
 				You_feel("exhausted.");
 					exercise(A_STR, FALSE);
@@ -3917,9 +3917,9 @@ struct monst *mon;
 			case 3:
 				if (!resists_drli(&youmonst)) {
 					You_feel("out of shape.");
-					losexp("overexertion",FALSE);
-					losexp("overexertion",FALSE);
-					losexp("overexertion",TRUE);
+					losexp("overexertion",FALSE,FALSE,FALSE);
+					losexp("overexertion",FALSE,FALSE,FALSE);
+					losexp("overexertion",TRUE,FALSE,FALSE);
 				} else {
 					You("have a curious feeling...");
 				}
@@ -3927,7 +3927,7 @@ struct monst *mon;
 			case 4: {
 				int tmp;
 				if (!resists_drli(&youmonst)) {
-					losexp("exhaustion",TRUE);
+					losexp("exhaustion",TRUE,FALSE,FALSE);
 				}
 				You_feel("exhausted.");
 					exercise(A_STR, FALSE);
@@ -4151,8 +4151,8 @@ register struct monst *mon;
 			case 4: {
 				int tmp;
 				if (!resists_drli(&youmonst)) {
-					losexp("exhaustion",FALSE);
-					losexp("exhaustion",TRUE);
+					losexp("exhaustion",FALSE,FALSE,FALSE);
+					losexp("exhaustion",TRUE,FALSE,FALSE);
 				}
 				You_feel("exhausted.");
 					exercise(A_STR, FALSE);
@@ -4458,7 +4458,7 @@ register struct monst *mon;
 					}
 				} else{
 					verbalize("You're so helpless!");
-						losexp("dark speach",FALSE);
+						losexp("dark speach",FALSE,TRUE,FALSE);
 				}
 			break;
 			case 2:
@@ -4486,7 +4486,7 @@ register struct monst *mon;
 				}
 				else{
 					verbalize("You're so stupid!");
-					losexp("dark speach",FALSE);
+					losexp("dark speach",FALSE,TRUE,FALSE);
 				}
 				
 			break;
@@ -4515,7 +4515,7 @@ register struct monst *mon;
 				}
 				else{
 					verbalize("You're so clumsy!");
-					losexp("dark speach",FALSE);
+					losexp("dark speach",FALSE,TRUE,FALSE);
 				}
 			break;
 			case 4:
@@ -4542,7 +4542,7 @@ register struct monst *mon;
 				}
 				else{
 					verbalize("You're so lazy!");
-					losexp("dark speach",FALSE);
+					losexp("dark speach",FALSE,TRUE,FALSE);
 				}
 			break;
 			case 5:
@@ -4983,7 +4983,7 @@ register struct monst *mon;
 			case 3:
 				if (!resists_drli(&youmonst)) {
 					You_feel("out of shape.");
-					losexp("overexertion",TRUE);
+					losexp("overexertion",TRUE,FALSE,FALSE);
 				} else {
 					You("have a curious feeling...");
 				}
@@ -5312,7 +5312,7 @@ int dmg;
 				i = d(1,6);
 				(void) adjattrib(A_INT, -i, 1);
 				while(i-- > 0){
-					if(i%2) losexp("brain damage",FALSE);
+					if(i%2) losexp("brain damage",FALSE,TRUE,FALSE);
 					forget_levels(10);	/* lose memory of 10% of levels per point lost*/
 					forget_objects(10);	/* lose memory of 10% of objects per point lost*/
 					exercise(A_WIS, FALSE);
@@ -5358,12 +5358,12 @@ int dmg;
 				} //else
 				You_feel("the tentacles drill through your unprotected %s and into your soul!",body_part(BODY_FLESH));
 				if (!resists_drli(&youmonst)) {
-					losexp("soul-shreding tentacles",FALSE);
-					losexp("soul-shreding tentacles",FALSE);
-					losexp("soul-shreding tentacles",FALSE);
+					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
+					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
+					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
 					i = d(1,4);
 					while(i-- > 0){
-						losexp("soul-shreding tentacles",FALSE);
+						losexp("soul-shreding tentacles",FALSE,FALSE,TRUE);
 						exercise(A_WIS, FALSE);
 						exercise(A_WIS, FALSE);
 						exercise(A_WIS, FALSE);

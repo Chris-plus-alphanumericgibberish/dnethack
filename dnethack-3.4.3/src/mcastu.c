@@ -1244,7 +1244,7 @@ int spellnum;
         } else {
             Your("body deteriorates!");
             exercise(A_CON, FALSE);
-            losexp("life drainage",TRUE);
+            losexp("life drainage",TRUE,FALSE,FALSE);
         }
         dmg = 0;
         break;

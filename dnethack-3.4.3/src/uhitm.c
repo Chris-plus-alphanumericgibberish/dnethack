@@ -2480,7 +2480,7 @@ uchar aatyp;
 			}
 		    if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
 			if (!Drain_resistance) {
-			    losexp("life force drain",TRUE);
+			    losexp("life force drain",TRUE,FALSE,FALSE);
 			}
 		  }
 		  

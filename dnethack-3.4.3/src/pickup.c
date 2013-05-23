@@ -1950,6 +1950,7 @@ register struct obj *obj;
 	}
 
 	if(obj->oartifact && !touch_artifact(obj,&youmonst)) return 0;
+	if(obj->oartifact && obj->oartifact == ART_PEN_OF_THE_VOID && !Role_if(PM_EXILE)) u.sealsKnown |= obj->ovar1;
 
 	if (obj->otyp == CORPSE) {
 	    if ( (touch_petrifies(&mons[obj->corpsenm])) && !uarmg

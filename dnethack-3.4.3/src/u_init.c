@@ -680,6 +680,18 @@ u_init()
 	}
 	else 	u.sealsKnown = 0;
 
+	u.sealCounts = 0;
+	u.sealsActive = 0;
+	u.specialSealsActive = 0;
+
+	u.ahazu = u.amon = u.andrealphus = u.andromalius = u.astaroth = u.balam = u.berith = u.buer = u.chupoclops = u.dantalion = u.dunstan = 0;
+	u.echidna = u.eden = u.eridu = u.eurynome = u.eve = u.fafnir = u.huginn_muninn = u.iris = u.jack = u.malphas = u.marionette = u.mother = 0;
+	u.naberius = u.orthos = u.ose = u.otiax = u.paimon = u.simurgh = u.tenebrous = u.ymir = u.dahlver_nar = u.acererak = 0;
+	
+	
+	u.spirit[1] = u.spirit[2] = u.spirit[3] = u.spirit[4] = u.spirit[5] = u.spiritQuest = u.spiritTineA = u.spiritTineB = 0;
+	u.spiritT[1] = u.spiritT[2] = u.spiritT[3] = u.spiritT[4] = u.spiritT[5] = u.spiritQuestT = u.spiritTineTA = u.spiritTineTB = 0;
+
 	u.umonnum = u.umonster = (flags.female &&
 			urole.femalenum != NON_PM) ? urole.femalenum :
 			urole.malenum;

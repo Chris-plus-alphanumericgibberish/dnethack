@@ -594,6 +594,7 @@ E int NDECL(num_genocides);
 E char *FDECL(random_engraving, (char *));
 E void FDECL(wipeout_text, (char *,int,unsigned));
 E boolean NDECL(can_reach_floor);
+E struct engr *NDECL(get_head_engr);
 E const char *FDECL(surface, (int,int));
 E const char *FDECL(ceiling, (int,int));
 E struct engr *FDECL(engr_at, (XCHAR_P,XCHAR_P));
@@ -626,7 +627,7 @@ E void FDECL(make_grave, (int,int,const char *));
 
 E int FDECL(experience, (struct monst *,int));
 E void FDECL(more_experienced, (int,int));
-E void FDECL(losexp, (const char *,BOOLEAN_P));
+E void FDECL(losexp, (const char *,BOOLEAN_P,BOOLEAN_P,BOOLEAN_P));
 E void NDECL(newexplevel);
 E void FDECL(pluslvl, (BOOLEAN_P));
 E long FDECL(rndexp, (BOOLEAN_P));
@@ -1643,6 +1644,7 @@ E int NDECL(prayer_done);
 #endif
 E void FDECL(gods_angry,(ALIGNTYP_P));
 E void FDECL(gods_upset,(ALIGNTYP_P));
+E void FDECL(angrygods,(ALIGNTYP_P));
 E int NDECL(dosacrifice);
 E boolean FDECL(can_pray, (BOOLEAN_P));
 E int NDECL(dopray);

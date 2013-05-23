@@ -1884,7 +1884,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			else
 				pline("%s drains your life!",
 				      The(distant_name(otmp, xname)));
-			losexp("life drainage",TRUE);
+			losexp("life drainage",TRUE,FALSE,FALSE);
 			if (magr && magr->mhp < magr->mhpmax) {
 			    magr->mhp += (oldhpmax - u.uhpmax)/2;
 			    if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;

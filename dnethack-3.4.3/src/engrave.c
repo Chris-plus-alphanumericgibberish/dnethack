@@ -516,6 +516,11 @@ static const struct {
 	{'8', "3o"}
 };
 
+struct engr *
+get_head_engr(){
+	return head_engr;
+}
+
 void
 wipeout_text(engr, cnt, seed)
 char *engr;

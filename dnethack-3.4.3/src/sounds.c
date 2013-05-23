@@ -13,6 +13,7 @@
 #ifdef OVLB
 
 static int FDECL(domonnoise,(struct monst *));
+int FDECL(dobinding,(int, int));
 static int NDECL(dochat);
 
 #endif /* OVLB */
@@ -872,10 +873,6 @@ dochat()
 	pline("They won't hear you out there.");
 	return(0);
     }
-    if (Underwater) {
-	Your("speech is unintelligible underwater.");
-	return(0);
-    }
 
     if (!Blind && (otmp = shop_object(u.ux, u.uy)) != (struct obj *)0) {
 	/* standing on something in a shop and chatting causes the shopkeeper
@@ -923,8 +920,12 @@ dochat()
     if (!mtmp || mtmp->mundetected ||
 		mtmp->m_ap_type == M_AP_FURNITURE ||
 		mtmp->m_ap_type == M_AP_OBJECT)
-	return(0);
+	return dobinding(tx,ty);
 
+    if (Underwater) {
+	Your("speech is unintelligible underwater.");
+	return(0);
+    }
     /* sleeping monsters won't talk, except priests (who wake up) */
     if ((!mtmp->mcanmove || mtmp->msleeping) && !mtmp->ispriest) {
 		/* If it is unseen, the player can't tell the difference between
@@ -971,6 +972,111 @@ dochat()
     return domonnoise(mtmp);
 }
 
+int
+dobinding(tx,ty)
+int tx,ty;
+{
+	struct engr *ep = get_head_engr();
+	int numSlots;
+	int bindingPeriod = 5000;
+	for(ep;ep;ep=ep->nxt_engr) 
+		if(ep->engr_x==tx && ep->engr_y==ty)
+			break;//else continue
+	if(!(ep)) return 0; //no engraving found
+	if(ep->halu_ward || ep->ward_id < FIRST_SEAL || 
+		ep->complete_wards < 1 || ep->engr_time+5 < moves) return 0; //engraving does not contain a valid seal, or is too old.
+	
+	if(u.ulevel <= 2) numSlots=1;
+	else if(u.ulevel <= 9) numSlots=2;
+	else if(u.ulevel <= 18) numSlots=3;
+	else if(u.ulevel <= 25) numSlots=4;
+	else numSlots=5;
+	
+	switch(ep->ward_id){
+	case AHAZU:{
+		if(u.ahazu < moves){
+			struct trap *t=t_at(tx,ty);
+			if(t->ttyp == PIT){ //Ahazu requires that his seal be drawn in a pit.
+				pline("The walls of the pit are moved away, revealing a vast starry expanse beneath the world.");
+				if(u.sealCounts < numSlots){
+					pline("A voice whispers from bellow:");
+					pline("\"All shall feed the shattered night.\"");
+					u.sealsActive |= SEAL_AHAZU;
+					u.spirit[numSlots] = SEAL_AHAZU;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("A voice whispers from bellow:");
+					pline("\"All shall feed the shattered night.\"");
+					uwep->ovar1 |= SEAL_AHAZU;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_AHAZU;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_AHAZU;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("A voice whispers from bellow, but you don't catch what it says.");
+				}
+				u.ahazu = moves + bindingPeriod;
+			}
+		}
+	}break;
+	case AMON:{
+		if(u.amon < moves){
+			int curx, cury;
+			char altarfound=0;
+			//Amon can't be invoked on levels with altars, and in fact doing so causes imediate level loss, as for a broken taboo.
+			for(curx=1;curx < COLNO;curx++)
+				for(curx=1;cury < ROWNO;cury++)
+					if(IS_ALTAR(levl[curx][cury].typ)){ altarfound=1; cury=ROWNO; curx=COLNO;}//end search
+			
+			if(!altarfound){
+				pline("");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_AMON;
+					u.spirit[numSlots] = SEAL_AMON;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_AMON;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_AMON;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_AMON;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+				}
+			}
+			else{
+				losexp("shreading of the soul",TRUE,TRUE,TRUE);
+				if(in_rooms(tx, ty, TEMPLE)){
+//					struct monst *priest = findpriest(roomno);
+					//invoking Amon inside a temple angers the resident deity
+					altar_wrath(tx, ty);
+					angrygods(a_align(tx,ty));
+				}
+			}
+			u.amon = moves + bindingPeriod; // invoking amon on a level with an altar triggers the binding period.
+		}
+	}break;
+	}
+	
+}
 #ifdef USER_SOUNDS
 
 extern void FDECL(play_usersound, (const char*, int));

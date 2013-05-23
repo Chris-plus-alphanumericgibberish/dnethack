@@ -113,9 +113,11 @@ more_experienced(exp, rexp)
 }
 
 void
-losexp(drainer,verbose)		/* e.g., hit by drain life attack */
+losexp(drainer,verbose,force,expdrain)		/* e.g., hit by drain life attack */
 const char *drainer;	/* cause of death, if drain should be fatal */
 boolean verbose; /* attack has custom notification */
+boolean force; /* attack ignores drain resistance */
+boolean expdrain; /* attack drains exp as well */
 {
 	register int num;
 
@@ -126,7 +128,7 @@ boolean verbose; /* attack has custom notification */
 	    drainer = 0;
 	else
 #endif
-	    if (resists_drli(&youmonst)) return;
+	    if (!force && resists_drli(&youmonst)) return;
 
 	if (u.ulevel > 1) {
 		if(verbose) pline("%s level %d.", Goodbye(), u.ulevel);
@@ -163,8 +165,11 @@ boolean verbose; /* attack has custom notification */
 	if (u.uen < 0) u.uen = 0;
 	else if (u.uen > u.uenmax) u.uen = u.uenmax;
 
-	if (u.uexp > 0)
-		u.uexp = newuexp(u.ulevel) - 1;
+	if (u.uexp > 0){
+		if(!expdrain) u.uexp = newuexp(u.ulevel) - 1;
+		else if(u.ulevel > 1) u.uexp = (newuexp(u.ulevel) - newuexp(u.ulevel-1))/2 + newuexp(u.ulevel-1);
+		else u.uexp = newuexp(1)/2;
+	}
 	if(Role_if(PM_EXILE)) binderdown();
 	flags.botl = 1;
 }

@@ -390,7 +390,7 @@ struct you {
 #define WARD_YELLOW			0x0008000L
 
 	short sealorder[31];
-	long	sealsKnown;	/* seals known independently of the Binder's intrinsic knowledge */
+	long	sealsKnown;
 #define SEAL_AHAZU					0x0000001L
 	long	ahazu;	//turn on which spirit will be again eligible for binding.
 #define SEAL_AMON					0x0000002L
@@ -462,13 +462,16 @@ struct you {
 #define SEAL_NUMINA					0x0000004L
 //	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
 	
+	char sealCounts;
 	long sealsActive;
 	long specialSealsActive;
 	
 	//Spirits in order bound:
-	long spirit1,spirit2,spirit3,spirit4,spirit5,spiritQuest,spiritsQuill,spiritTineA,spiritTineB;
+	long spirit[5];
+	long spiritQuest,spiritTineA,spiritTineB;
 	//Corresponding timeouts (turn on which binding expires):
-	long spiritT1,spiritT2,spiritT3,spiritT4,spiritT5,spiritQuestT,spiritsQuillT,spiritTineTA,spiritTineTB;
+	long spiritT[5];
+	long spiritQuestT,spiritTineTA,spiritTineTB;
 
 	/* 	variable that keeps track of summoning in your vicinity.
 		Only allow 1 per turn, to help reduce summoning cascades. */
