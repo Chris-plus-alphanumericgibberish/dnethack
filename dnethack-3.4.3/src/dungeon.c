@@ -632,6 +632,10 @@ struct level_map {
 	{ "wizard1",	&wiz1_level },
 	{ "wizard2",	&wiz2_level },
 	{ "wizard3",	&wiz3_level },
+#ifdef RECORD_ACHIEVE
+	{ "minend",     &mineend_level },
+	{ "soko1",      &sokoend_level },
+#endif
 	/*Planes*/
 	{ "air",	&air_level },
 	{ "astral",	&astral_level },

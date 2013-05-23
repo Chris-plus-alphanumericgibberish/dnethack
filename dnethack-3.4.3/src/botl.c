@@ -275,6 +275,13 @@ bot2()
 
 	if(flags.time)
 	    Sprintf(nb = eos(nb), " T:%ld", moves);
+#ifdef REALTIME_ON_BOTL
+  if(iflags.showrealtime) {
+    time_t currenttime = get_realtime();
+    Sprintf(nb = eos(nb), " %d:%2.2d", currenttime / 3600, 
+                                       (currenttime % 3600) / 60);
+  }
+#endif
 	if(strcmp(hu_stat[u.uhs], "        ")) {
 		Sprintf(nb = eos(nb), " ");
 		Strcat(newbot2, hu_stat[u.uhs]);

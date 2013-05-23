@@ -1698,6 +1698,10 @@ register struct monst *mtmp;
 	}
 	if(mtmp->iswiz) wizdead();
 	if(mtmp->data->msound == MS_NEMESIS) nemdead();
+#ifdef RECORD_ACHIEVE
+        if(mtmp->data == &mons[PM_MEDUSA])
+            achieve.killed_medusa = 1;
+#endif
 	if(glyph_is_invisible(levl[mtmp->mx][mtmp->my].glyph))
 	    unmap_object(mtmp->mx, mtmp->my);
 	m_detach(mtmp, mptr);
