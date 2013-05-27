@@ -1943,7 +1943,7 @@ arti_invoke(obj)
 
     if(oart->inv_prop > LAST_PROP) {
 	/* It's a special power, not "just" a property */
-	if(obj->age > monstermoves && oart->inv_prop != FIRE_SHIKAI && oart->inv_prop != SEVENFOLD) {
+	if(obj->age > monstermoves && oart->inv_prop != FIRE_SHIKAI && oart->inv_prop != SEVENFOLD && oart->inv_prop != TELEPORT_SHOES) {
 	    /* the artifact is tired :-) */
 		if(obj->oartifact == ART_FIELD_MARSHAL_S_BATON){
 			You_hear("the sounds of hurried preparation.");
@@ -2115,6 +2115,18 @@ arti_invoke(obj)
 	case OBJECT_DET:
 		object_detect(obj, 0);
 		artifact_detect(obj);
+	break;
+	case TELEPORT_SHOES:
+		if(obj == uarmf){
+			tele();//hungerless teleport
+		}else if(!obj->owornmask){
+			obj_extract_self(obj);
+			dropy(obj);
+			rloco(obj);
+			pline("%s teleports without you.",xname(obj));
+		}else{
+			pline("%s shakes for an instant.");
+		}
 	break;
 #ifdef CONVICT
 	case PHASING:   /* Walk through walls and stone like a xorn */
