@@ -2020,6 +2020,10 @@ doward()
 	    type = ENGR_BLOOD;
 
 	/* Can the adventurer engrave at all? */
+	if(!u.wardsknown){
+		You("don't know any wards.");
+		return 0;
+	}
 
 	if(u.uswallow) {
 		if (is_animal(u.ustuck->data)) {
@@ -3039,7 +3043,10 @@ doseal()
 	    type = ENGR_BLOOD;
 
 	/* Can the adventurer engrave at all? */
-
+	if(!u.sealsKnown && !(Role_if(PM_EXILE) && (quest_status.got_quest || quest_status.killed_nemesis || u.ulevel == 30) )){
+		You("don't know any seals.");
+		return 0;
+	}
 	if(u.uswallow) {
 		if (is_animal(u.ustuck->data)) {
 			pline("What would you do, write \"Jonah was here\"?");
@@ -3728,11 +3735,6 @@ pick_seal()
 	start_menu(tmpwin);
 	any.a_void = 0;		/* zero out all bits */
 	
-	if(!u.sealsKnown && !(Role_if(PM_EXILE) && (quest_status.got_quest || quest_status.killed_nemesis || u.ulevel == 30) )){
-		You("don't know any seals.");
-		return 0;
-	}
-
 	Sprintf(buf, "Known Seals");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	if(u.sealsKnown & SEAL_AHAZU){
