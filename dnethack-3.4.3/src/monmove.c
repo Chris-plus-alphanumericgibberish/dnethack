@@ -16,6 +16,7 @@ STATIC_DCL void FDECL(distfleeck,(struct monst *,int *,int *,int *));
 STATIC_DCL int FDECL(m_arrival, (struct monst *));
 STATIC_DCL boolean FDECL(scaryElb, (struct monst *));
 STATIC_DCL boolean FDECL(scaryItem, (struct monst *));
+STATIC_DCL boolean FDECL(scaryYellow, (int, struct monst *));
 STATIC_DCL boolean FDECL(scaryHept, (int, struct monst *));
 STATIC_DCL boolean FDECL(scaryGorg, (int, struct monst *));
 STATIC_DCL boolean FDECL(scaryCircle, (int, struct monst *));
@@ -27,6 +28,10 @@ STATIC_DCL boolean FDECL(scaryEye, (int, struct monst *));
 STATIC_DCL boolean FDECL(scaryQueen, (int, struct monst *));
 STATIC_DCL boolean FDECL(scaryCat, (int, struct monst *));
 STATIC_DCL boolean FDECL(scaryWings, (int, struct monst *));
+STATIC_DCL boolean FDECL(scaryTou, (struct monst *));
+STATIC_DCL boolean FDECL(scaryDre, (struct monst *));
+STATIC_DCL boolean FDECL(scaryVei, (struct monst *));
+STATIC_DCL boolean FDECL(scaryThj, (struct monst *));
 STATIC_DCL void FDECL(watch_on_duty,(struct monst *));
 
 #endif /* OVL0 */
@@ -173,8 +178,12 @@ struct monst *mtmp;
 			 || (ward_at(x,y) == SIGN_OF_THE_SCION_QUEEN && scaryQueen(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == CARTOUCHE_OF_THE_CAT_LORD && scaryCat(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == WINGS_OF_GARUDA && scaryWings(num_wards_at(x,y), mtmp))
-			 || (mtmp->data->mlet == S_VAMPIRE
-			     && IS_ALTAR(levl[x][y].typ)));
+			 || (ward_at(x,y) == YELLOW_SIGN && scaryYellow(num_wards_at(x,y), mtmp))
+			 || (scaryTou(mtmp) && toustefna_at(x,y))
+			 || (scaryDre(mtmp) && dreprun_at(x,y))
+			 || (scaryVei(mtmp) && veioistafur_at(x,y))
+			 || (scaryThj(mtmp) && thjofastafur_at(x,y))
+			 || (mtmp->data->mlet == S_VAMPIRE && IS_ALTAR(levl[x][y].typ)));
 }
 
 boolean
@@ -206,16 +215,51 @@ struct monst *mtmp;
 				mtmp->mpeaceful = TRUE;
 				mtmp->mhp = mtmp->mhpmax;
 			}
-	return 	mtmp->data == &mons[PM_BAT] ||
-			mtmp->data == &mons[PM_GIANT_BAT] ||
-			mtmp->data == &mons[PM_CROW] ||
-			mtmp->data == &mons[PM_RAVEN] ||
-			mtmp->data == &mons[PM_VAMPIRE_BAT] ||
+	return 	is_bird(mtmp->data) ||
+			is_bat(mtmp->data) ||
 			mtmp->data->mlet == S_RODENT ||
 			mtmp->data->mlet == S_SNAKE ||
 			mtmp->data->mlet == S_SPIDER ||
 			mtmp->data->mlet == S_EEL ||
 			mtmp->data->mlet == S_LIZARD;
+}
+
+boolean
+scaryTou(mtmp)
+struct monst *mtmp;
+{
+	if(mtmp->isshk || mtmp->iswiz || 
+			is_rider(mtmp->data)) return FALSE;
+	return 	mtmp->data->mlet == S_DOG ||
+			mtmp->data->mlet == S_FELINE;
+}
+boolean
+scaryDre(mtmp)
+struct monst *mtmp;
+{
+	if(mtmp->isshk || mtmp->iswiz || 
+			is_rider(mtmp->data)) return FALSE;
+	return 	is_bird(mtmp->data) ||
+			is_bat(mtmp->data) ||
+			mtmp->data->mlet == S_QUADRUPED ||
+			mtmp->data->mlet == S_UNICORN;
+}
+boolean
+scaryVei(mtmp)
+struct monst *mtmp;
+{
+	if(mtmp->isshk || mtmp->iswiz || 
+			is_rider(mtmp->data)) return FALSE;
+	return 	mtmp->data->mlet == S_EEL;
+}
+boolean
+scaryThj(mtmp)
+struct monst *mtmp;
+{
+	if(mtmp->isshk || mtmp->iswiz || 
+			is_rider(mtmp->data)) return FALSE;
+	return 	mtmp->data->mlet == S_LEPRECHAUN ||
+			mtmp->data->mlet == S_NYMPH;
 }
 boolean
 scaryQueen(complete, mtmp)

@@ -153,6 +153,10 @@ struct monst *mon;
 	   else if (ptr->mlet == S_EEL || ptr->mlet == S_SNAKE) tmp += 2;
 	}
 
+	/* weapons with the veioistafur stave are highly effective against sea monsters */
+	if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && 
+		(otmp->ovar1 & WARD_VEIOISTAFUR) && mon->data->mlet == S_EEL) tmp += 4;
+	
 	/* Picks used against xorns and earth elementals */
 	if (is_pick(otmp) &&
 	   (passes_walls(ptr) && thick_skinned(ptr))) tmp += 2;
@@ -318,6 +322,10 @@ struct monst *mon;
 		bonus += rnd(4);
 	    if (objects[otyp].oc_material == SILVER && hates_silver(ptr))
 		bonus += rnd(20);
+
+		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && 
+			(otmp->ovar1 & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);
+			
 
 	    /* if the weapon is going to get a double damage bonus, adjust
 	       this bonus so that effectively it's added after the doubling */

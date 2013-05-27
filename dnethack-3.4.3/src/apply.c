@@ -41,6 +41,10 @@ STATIC_DCL boolean FDECL(figurine_location_checks,
 				(struct obj *, coord *, BOOLEAN_P));
 STATIC_DCL boolean NDECL(uhave_graystone);
 STATIC_DCL void FDECL(add_class, (char *, CHAR_P));
+STATIC_DCL int FDECL(do_carve_obj, (struct obj *));
+STATIC_PTR int NDECL(pick_rune);		/* occupation callback */
+STATIC_PTR char NDECL(pick_carvee);		/* occupation callback */
+
 
 #ifdef	AMIGA
 void FDECL( amii_speaker, ( struct obj *, char *, int ) );
@@ -2800,6 +2804,139 @@ char class;
 }
 
 int
+do_carve_obj(obj)
+struct obj *obj;
+{
+	int rune;
+	char carveelet;
+	struct obj *carvee;
+	struct obj *otmp;
+	rune = pick_rune();
+	if(!rune) return 0;
+	carveelet = pick_carvee();
+	
+	for (otmp = invent; otmp; otmp = otmp->nobj) {
+		if(otmp->invlet == carveelet) break;
+	}
+	if(otmp) carvee = otmp;
+	else return 0;
+	
+	if(carvee->spe > obj->spe){
+		pline("The %s is too dull to cut into the %s.", xname(obj), xname(carvee));
+		return 0;
+	}
+	if(carvee->ovar1 != 0 ){
+		You("chip off the existing rune.");
+		if(carvee->oartifact) pline("The wood heals like the rune was never there.");
+		else carvee->spe -= 1;
+		if(carvee->spe < -1*rn2(8)){
+			You("destroyed the %s in the process.", xname(carvee));
+			useup(carvee);
+			return 0;
+		}
+	}
+	carvee->ovar1 = get_wardID(rune);
+	You("carve a %s into the %s.",wardDecode[decode_wardID(carvee->ovar1)],xname(carvee));
+	see_monsters(); //Some magic staves grant detection, so recheck that now.
+	return 1;
+}
+
+int
+pick_rune()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	if(!(u.wardsknown & (WARD_TOUSTEFNA|WARD_DREPRUN|WARD_OTTASTAFUR|WARD_KAUPALOKI|WARD_VEIOISTAFUR|WARD_THJOFASTAFUR) )){
+		You("can't think of anything to carve.");
+		return 0;
+	}
+	Sprintf(buf, "Known Magical Staves");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(u.wardsknown & WARD_TOUSTEFNA){
+		Sprintf(buf, "Toustefna stave");
+		any.a_int = TOUSTEFNA;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(u.wardsknown & WARD_DREPRUN){
+		Sprintf(buf, "Dreprun stave");
+		any.a_int = DREPRUN;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(u.wardsknown & WARD_VEIOISTAFUR){
+		Sprintf(buf, "Veioistafur stave");
+		any.a_int = VEIOISTAFUR;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(u.wardsknown & WARD_THJOFASTAFUR){
+		Sprintf(buf, "Thjofastafur stave");
+		any.a_int = THJOFASTAFUR;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	end_menu(tmpwin, "Choose stave:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_int : 0;
+}
+
+char
+pick_carvee()
+{
+	winid tmpwin;
+	int n=0, how,count=0;
+	char buf[BUFSZ];
+	struct obj *otmp;
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf, "Carvable items");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	for(otmp = invent; otmp; otmp = otmp->nobj){
+		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD){
+			Sprintf(buf, xname(otmp));
+			any.a_char = otmp->invlet;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				otmp->invlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			count++;
+		}
+	}
+	end_menu(tmpwin, "Choose ward:");
+
+	how = PICK_ONE;
+	if(count) n = select_menu(tmpwin, how, &selected);
+	else You("don't have any carvable items.");
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_char : 0;
+}
+
+int
 doapply()
 {
 	struct obj *obj;
@@ -2828,6 +2965,8 @@ doapply()
 	if (obj->oclass == WAND_CLASS)
 	    return do_break_wand(obj);
 
+	if(is_knife(obj)) return do_carve_obj(obj);
+	
 	switch(obj->otyp){
 	case BLINDFOLD:
 	case LENSES:

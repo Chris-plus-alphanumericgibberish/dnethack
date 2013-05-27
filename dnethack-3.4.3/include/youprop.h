@@ -159,7 +159,8 @@
 /* Warning for a specific type of monster */
 #define HWarn_of_mon		u.uprops[WARN_OF_MON].intrinsic
 #define EWarn_of_mon		u.uprops[WARN_OF_MON].extrinsic
-#define Warn_of_mon		(HWarn_of_mon || EWarn_of_mon)
+#define Warn_of_mon		(HWarn_of_mon || EWarn_of_mon || (uwep && uwep->oclass == WEAPON_CLASS && objects[(uwep)->otyp].oc_material == WOOD && \
+					(uwep->ovar1 & WARD_THJOFASTAFUR)))
 
 #define HUndead_warning		u.uprops[WARN_UNDEAD].intrinsic
 #define Undead_warning		(HUndead_warning)

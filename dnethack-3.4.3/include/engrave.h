@@ -36,8 +36,22 @@ struct engr {
 #define BRAND_OF_ITHAQUA			13
 #define TRACERY_OF_KRAKAL			14
 #define YELLOW_SIGN					15
-#define NUMBER_OF_WARDS				15
-#define LAST_WARD					15
+
+#define FIRST_RUNE					16
+
+#define TOUSTEFNA					16
+#define DREPRUN						17
+#define OTTASTAFUR					18
+#define KAUPALOKI					19
+#define VEIOISTAFUR					20
+#define THJOFASTAFUR				21
+#define TH_RUNE						22
+#define T_RUNE						23
+#define NG_RUNE						24
+#define A_RUNE						25
+
+#define NUMBER_OF_WARDS				25
+#define LAST_WARD					25
 
 #define FIRST_SEAL					LAST_WARD+1
 #define AHAZU						LAST_WARD+1

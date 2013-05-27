@@ -590,22 +590,32 @@ boolean artif;
 			else if( rn2(3) ) otmp->ovar1 = WARD_ACHERON;
 		 break;
 		 case 3:
-			if( rn2(2) ){
+			if( !(rn2(3)) ){
 				if( !(rn2(5)) ) otmp->ovar1 = WARD_EYE;
 				else if( !(rn2(4)) ) otmp->ovar1 = WARD_QUEEN;
 				else if( !(rn2(3)) )otmp->ovar1 = WARD_GARUDA;
 				else if( rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
 				else otmp->ovar1 = WARD_CAT_LORD;
 			}
+			else if(rn2(2)){
+				if( !(rn2(4)) ) otmp->ovar1 = WARD_TOUSTEFNA;
+				else if( !(rn2(3)) )otmp->ovar1 = WARD_DREPRUN;
+				else if(  (rn2(2)) )otmp->ovar1 = WARD_VEIOISTAFUR;
+				else otmp->ovar1 = WARD_THJOFASTAFUR;
+			}
 			else if( rn2(3) ) otmp->ovar1 = WARD_ACHERON;
 		 break;
 		 case 4:
 			if( rn2(4) ){
-				if( !(rn2(5)) ) otmp->ovar1 = WARD_EYE;
-				else if( !rn2(4) ) otmp->ovar1 = WARD_QUEEN;
-				else if( !rn2(3) )otmp->ovar1 = WARD_GARUDA;
-				else if( !rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
-				else otmp->ovar1 = WARD_CAT_LORD;
+				if( !(rn2(9)) ) otmp->ovar1 = WARD_EYE;
+				else if( !rn2(8) ) otmp->ovar1 = WARD_QUEEN;
+				else if( !rn2(7) )otmp->ovar1 = WARD_GARUDA;
+				else if( !rn2(6) )otmp->ovar1 = WARD_ELDER_SIGN;
+				else if( !rn2(5) )otmp->ovar1 = WARD_CAT_LORD;
+				else if( !rn2(4) ) otmp->ovar1 = WARD_TOUSTEFNA;
+				else if( !rn2(3) )otmp->ovar1 = WARD_DREPRUN;
+				else if(  rn2(2) )otmp->ovar1 = WARD_VEIOISTAFUR;
+				else otmp->ovar1 = WARD_THJOFASTAFUR;
 			}
 			else otmp->ovar1 = WARD_ACHERON;
 		 break;
@@ -615,10 +625,14 @@ boolean artif;
 				else otmp->ovar1 = WARD_HAMSA;
 			}
 			else if( (rn2(3)) ){
-				if( !(rn2(4)) ) otmp->ovar1 = WARD_QUEEN;
-				else if( !rn2(3) )otmp->ovar1 = WARD_GARUDA;
-				else if( !rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
-				else otmp->ovar1 = WARD_CAT_LORD;
+				if( !(rn2(8)) ) otmp->ovar1 = WARD_QUEEN;
+				else if( !rn2(7) )otmp->ovar1 = WARD_GARUDA;
+				else if( !rn2(6) )otmp->ovar1 = WARD_ELDER_SIGN;
+				else if( !rn2(5) )otmp->ovar1 = WARD_CAT_LORD;
+				else if( !rn2(4) ) otmp->ovar1 = WARD_TOUSTEFNA;
+				else if( !rn2(3) )otmp->ovar1 = WARD_DREPRUN;
+				else if(  rn2(2) )otmp->ovar1 = WARD_VEIOISTAFUR;
+				else otmp->ovar1 = WARD_THJOFASTAFUR;
 			}
 			else otmp->ovar1 = WARD_EYE;
 		 break;
@@ -629,10 +643,14 @@ boolean artif;
 				else otmp->ovar1 = WARD_HAMSA;
 			}
 			else if( (rn2(6)) ){
-				if( !(rn2(4)) ) otmp->ovar1 = WARD_QUEEN;
-				else if( !rn2(3) )otmp->ovar1 = WARD_GARUDA;
-				else if( !rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
-				else otmp->ovar1 = WARD_CAT_LORD;
+				if( !(rn2(8)) ) otmp->ovar1 = WARD_QUEEN;
+				else if( !rn2(7) )otmp->ovar1 = WARD_GARUDA;
+				else if( !rn2(6) )otmp->ovar1 = WARD_ELDER_SIGN;
+				else if( !rn2(5) )otmp->ovar1 = WARD_CAT_LORD;
+				else if( !rn2(4) ) otmp->ovar1 = WARD_TOUSTEFNA;
+				else if( !rn2(3) )otmp->ovar1 = WARD_DREPRUN;
+				else if(  rn2(2) )otmp->ovar1 = WARD_VEIOISTAFUR;
+				else otmp->ovar1 = WARD_THJOFASTAFUR;
 			}
 			else otmp->ovar1 = WARD_EYE;
 		 break;

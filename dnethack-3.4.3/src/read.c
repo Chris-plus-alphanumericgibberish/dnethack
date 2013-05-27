@@ -107,6 +107,10 @@ doread()
 			return(1);
 		}
 	}
+	else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
+		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
+		return(1);
+	}
 	/* outrumor has its own blindness check */
 	else if(scroll->otyp == FORTUNE_COOKIE) {
 	    if(flags.verbose)

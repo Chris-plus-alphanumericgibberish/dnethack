@@ -39,7 +39,8 @@ STATIC_DCL int FDECL(isqrt, (int));
 
 long FDECL(doreadstudy, (const char *));
 
-const char * wardDecode[] = {
+//definition of an extern in you.h
+char *wardDecode[26] = {
 	"digit",
 	"heptagram",
 	"Gorgoneion",
@@ -52,6 +53,16 @@ const char * wardDecode[] = {
 	"sign of the Scion Queen Mother",
 	"cartouche of the Cat Lord",
 	"sketch of the wings of Garuda",
+	"sigil of Cthugha",
+	"brand of Ithaqua",
+	"tracery of Krakal",
+	"yellow sign",
+	"toustefna stave",
+	"dreprun stave",
+	"ottastafur stave",
+	"kaupaloki stave",
+	"veioistafur stave",
+	"thjofastafur stave",
 };
 /* The roles[] table lists the role-specific values for tuning
  * percent_success().

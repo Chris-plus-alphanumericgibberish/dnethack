@@ -101,8 +101,11 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define FLASHED_LIGHT	3
 #define INVIS_BEAM	4
 
-#define MATCH_WARN_OF_MON(mon)	 (Warn_of_mon && flags.warntype && \
-		   		 (flags.warntype & (mon)->data->mflags2))
+#define MATCH_WARN_OF_MON(mon)	( (Warn_of_mon && flags.warntype && \
+					(flags.warntype & (mon)->data->mflags2)) || \
+					(uwep && uwep->oclass == WEAPON_CLASS && objects[(uwep)->otyp].oc_material == WOOD && \
+					(uwep->ovar1 & WARD_THJOFASTAFUR) && (mon->data->mlet == S_LEPRECHAUN || mon->data->mlet == S_NYMPH)) \
+				)
 
 #include "trap.h"
 #include "flag.h"

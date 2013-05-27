@@ -388,6 +388,13 @@ struct you {
 #define WARD_ITHAQUA		0x0002000L
 #define WARD_KRAKAL			0x0004000L
 #define WARD_YELLOW			0x0008000L
+#define WARD_TOUSTEFNA		0x0010000L
+#define WARD_DREPRUN		0x0020000L
+#define WARD_OTTASTAFUR		0x0040000L
+#define WARD_KAUPALOKI		0x0080000L
+#define WARD_VEIOISTAFUR	0x0100000L
+#define WARD_THJOFASTAFUR	0x0200000L
+
 
 	short sealorder[31];
 	long	sealsKnown;
@@ -486,6 +493,7 @@ struct you {
 };	/* end of `struct you' */
 
 extern long sealKey[31];
+extern char *wardDecode[26];
 #define Upolyd (u.umonnum != u.umonster)
 
 #endif	/* YOU_H */

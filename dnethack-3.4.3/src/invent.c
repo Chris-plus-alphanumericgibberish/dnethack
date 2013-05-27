@@ -644,6 +644,54 @@ register int n, x, y;
 }
 
 struct obj *
+toustefna_at(x,y)
+register int x, y;
+{
+	register struct obj *otmp;
+
+	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
+		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_TOUSTEFNA))
+		    return(otmp);
+	return((struct obj *)0);
+}
+
+struct obj *
+dreprun_at(x,y)
+register int x, y;
+{
+	register struct obj *otmp;
+
+	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
+		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_DREPRUN))
+		    return(otmp);
+	return((struct obj *)0);
+}
+
+struct obj *
+veioistafur_at(x,y)
+register int x, y;
+{
+	register struct obj *otmp;
+
+	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
+		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_VEIOISTAFUR))
+		    return(otmp);
+	return((struct obj *)0);
+}
+
+struct obj *
+thjofastafur_at(x,y)
+register int x, y;
+{
+	register struct obj *otmp;
+
+	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
+		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_THJOFASTAFUR))
+		    return(otmp);
+	return((struct obj *)0);
+}
+
+struct obj *
 aligned_sartprop3_at(n,x,y)
 register int n, x, y;
 {
@@ -946,7 +994,8 @@ register const char *let,*word;
 			!strcmp(word, "untrap with")) &&
 		     /* Picks, axes, pole-weapons, bullwhips */
 		    ((otmp->oclass == WEAPON_CLASS && !is_pick(otmp) &&
-		      !is_axe(otmp) && !is_pole(otmp) && otyp != BULLWHIP) ||
+		      !is_axe(otmp) && !is_pole(otmp) && otyp != BULLWHIP &&
+			  !is_knife(otmp)) ||
 		     (otmp->oclass == POTION_CLASS &&
 		     /* only applicable potion is oil, and it will only
 			be offered as a choice when already discovered */
@@ -991,10 +1040,15 @@ register const char *let,*word;
 		    )))
 			allowall = TRUE;
 	    }
-		//Make on exception for the Rod, so you can read the inscription.
-		if ((!strcmp(word, "read") && otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)){
+		//Make an exception for the Rod, so you can read the inscription.
+		if (otmp->oartifact == ART_ROD_OF_SEVEN_PARTS && !strcmp(word, "read")){
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;//for whatever reason, must allow all in order to get message other than "silly"
+		}
+		//Make exceptions for wooden weapons that have been engraved
+		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && otmp->ovar1 && !strcmp(word, "read")){
+			bp[foo++] = otmp->invlet;
+			allowall = TRUE;
 		}
 
 	    if(ilet == 'z') ilet = 'A'; else ilet++;
@@ -2403,6 +2457,7 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	if (obj->unpaid != otmp->unpaid ||
 		obj->sknown != otmp->sknown ||
 		obj->ostolen != otmp->ostolen ||
+		obj->ovar1 != otmp->ovar1 ||
 	    obj->spe != otmp->spe || obj->dknown != otmp->dknown ||
 	    (obj->bknown != otmp->bknown && !Role_if(PM_PRIEST)) ||
 	    obj->cursed != otmp->cursed || obj->blessed != otmp->blessed ||

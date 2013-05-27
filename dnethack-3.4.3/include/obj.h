@@ -117,16 +117,6 @@ struct obj {
 	long owornmask;
 	long ovar1;		/* extra variable. Specifies the contents of Books of Secrets. */
 			/* Also, records special features for weapons */
-#define TOUSTEFNA	0x0000001L
-#define DREPRUN		0x0000002L
-#define OTTASTAFUR	0x0000004L
-#define KAUPALOKI	0x0000008L
-#define VEIOISTAFUR	0x0000010L
-#define THJOFASTAFUR	0x0000020L
-#define TH_RUNE		0x0000040L
-#define T_RUNE		0x0000080L
-#define NG_RUNE		0x0000100L
-#define A_RUNE		0x0000200L
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 
@@ -152,6 +142,9 @@ struct obj {
 #define is_blade(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= P_DAGGER && \
 			 objects[otmp->otyp].oc_skill <= P_SABER)
+#define is_knife(otmp)	(otmp->oclass == WEAPON_CLASS && \
+			 (objects[otmp->otyp].oc_skill == P_DAGGER || \
+			 objects[otmp->otyp].oc_skill == P_KNIFE))
 #define is_axe(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 objects[otmp->otyp].oc_skill == P_AXE)
