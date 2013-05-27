@@ -51,6 +51,10 @@ static struct trobj Binder[] = {
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
 	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
 	{ FLINT, 0, GEM_CLASS, 1, 0 },
+	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, 0 },
+	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
+	{ APPLE, 0, FOOD_CLASS, 2, 0 },
+	{ TRIPE_RATION, 0, FOOD_CLASS, 2, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 //definition of an extern in you.h
