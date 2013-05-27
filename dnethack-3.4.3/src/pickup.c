@@ -1266,6 +1266,10 @@ boolean telekinesis;	/* not picking it up directly by hand */
 #endif
 		obj->dknown = 1;
 
+	if(obj->shopOwned && !(obj->unpaid)){ /* shop stock is outside shop */
+		if(obj->sknown && !(obj->ostolen) ) obj->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
+		obj->ostolen = TRUE; /* object was apparently stolen by someone (not necessarily the player) */
+	}
 	if (obj == uchain) {    /* do not pick up attached chain */
 	    return 0;
 	} else if (obj->oartifact && !touch_artifact(obj,&youmonst)) {
@@ -1949,6 +1953,10 @@ register struct obj *obj;
 		obj->owt = weight(obj);
 	}
 
+	if(obj->shopOwned && !(obj->unpaid)){ /* shop stock is outside shop */
+		if(obj->sknown && !(obj->ostolen) ) obj->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
+		obj->ostolen = TRUE; /* object was apparently stolen by someone (not necessarily the player) */
+	}
 	if(obj->oartifact && !touch_artifact(obj,&youmonst)) return 0;
 	if(obj->oartifact && obj->oartifact == ART_PEN_OF_THE_VOID && !Role_if(PM_EXILE)) u.sealsKnown |= obj->ovar1;
 
