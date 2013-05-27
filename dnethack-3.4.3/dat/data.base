@@ -3365,10 +3365,16 @@ humanoid
 human
 chieftain
 guard
+ninja
 maid
 nurse
+page
+ronin
+shopkeeper
 student
+thug
 warrior
+*watch*
 player
 human or elf*
 	These strange creatures live mostly on the surface of the
@@ -3552,7 +3558,7 @@ izchak
 	complications due to cancer.  We then dedicated NetHack 3.2 in his
 	memory.
 			[ Mike Stephenson, for the NetHack DevTeam ]
-jabberwock
+*jabberwock
 	"Beware the Jabberwock, my son!
 	  The jaws that bite, the claws that catch!
 	Beware the Jubjub bird, and shun
