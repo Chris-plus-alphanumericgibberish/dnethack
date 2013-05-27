@@ -2309,7 +2309,7 @@ register int	mmflags;
 	    if (count_wsegs(mtmp)) place_worm_tail_randomly(mtmp, x, y);
 	}
 	set_malign(mtmp);		/* having finished peaceful changes */
-	if(u.uevent.uaxus_foe && (mndx <= PM_QUINON || mndx >= PM_MONOTON)){
+	if(u.uevent.uaxus_foe && (mndx <= PM_QUINON && mndx >= PM_MONOTON)){
 		mtmp->mpeaceful = mtmp->mtame = FALSE;
 	}
 	if(anymon) {

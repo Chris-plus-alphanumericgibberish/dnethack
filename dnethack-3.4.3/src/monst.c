@@ -455,7 +455,7 @@ NEARDATA struct permonst mons[] = {
 	*/
 
     MON("beholder", S_EYE, //11
-	LVL(6, 3, -4, 50, -10), (G_GENO|G_HELL|1),
+	LVL(6, 3, 4, 50, -10), (G_GENO|G_HELL|1),
 	A(ATTK(AT_GAZE, AD_RGAZ, 4, 6), ATTK(AT_GAZE, AD_RGAZ, 4,6),
 	  ATTK(AT_NONE, AD_PLYS, 1, 100), 
 	  AT_NONE, AT_NONE, AT_NONE),
