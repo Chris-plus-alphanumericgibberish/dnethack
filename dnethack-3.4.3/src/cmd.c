@@ -1525,7 +1525,8 @@ static const struct func_tab cmdlist[] = {
 	{'W', FALSE, dowear},
 	{M('w'), FALSE, dowipe},
 	{'x', FALSE, doswapweapon},
-	{'X', TRUE, enter_explore_mode},
+/*	{'X', TRUE, enter_explore_mode},*/
+	{'X', TRUE, dotwoweapon},
 /*	'y', 'Y' : go nw */
 	{'z', FALSE, dozap},
 	{'Z', TRUE, docast},

@@ -25,7 +25,7 @@ C       Call (name) a particular monster
 d       Drop an item
 D       Drop specific item types
 e       Eat something
-E       Engrave writing on the floor
+E       Engrave writing or a ward on the floor
 f       Fire ammunition from quiver
 F       Followed by direction, fight a monster (even if you don't sense it)
 g       Followed by direction, move until you are near something
@@ -55,6 +55,7 @@ p       Pay your shopping bill
 P       Put on an accessory (ring, amulet, etc)
 q       Quaff (drink) something (potion, water, etc)
 Q       Select ammunition for quiver
+^Q		Draw a ward.
 r       Read a scroll or spellbook
 R       Remove an accessory (ring, amulet, etc)
 s       Search for traps and secret doors
@@ -69,7 +70,7 @@ V       Show long version and game history
 w       Wield (put in use) a weapon
 W       Wear a piece of armor
 x       Swap wielded and secondary weapons
-X       Enter explore (discovery) mode (only if defined)
+X       Toggle two-weapon combat
 y       Go northwest 1 space
 Y       Go northwest until you are on top of something
 ^Y      Go northwest until you are near something

@@ -26,7 +26,6 @@ O       options set options
 \       known   display list of what's been discovered
 v       version display version number
 V       history display game history
-X       explore switch the game to explore (discovery) mode
 ^A      again   redo the previous command (^A denotes the keystroke CTRL-A)
 ^R      redraw  redraw the screen
 ^P      prevmsg repeat previous message (subsequent ^P's repeat earlier ones)
@@ -43,7 +42,7 @@ C       call    name an individual monster (ex. baptize your dog)
 d       drop    drop an object.  d7a:  drop seven items of object 'a'
 D       Drop    drop selected types of objects
 e       eat     eat something
-E       engrave write a message in the dust on the floor  (E-  use fingers)
+E       engrave write a message or draw in the dust on the floor  (E-  use fingers)
 f       fire    fire ammunition from quiver
 F       fight   followed by direction, fight a monster
 i       invent  list your inventory (all objects you are carrying)
@@ -56,6 +55,7 @@ p       pay     pay your bill (in a shop)
 P       puton   put on an accessory (ring, amulet, etc)
 q       quaff   drink something (potion, water, etc)
 Q       quiver  select ammunition for quiver
+^Q		ward	draw a ward on the floor
 r       read    read a scroll or spellbook
 R       remove  remove an accessory (ring, amulet, etc)
 s       search  search for secret doors, hidden traps and monsters
@@ -64,6 +64,7 @@ T       takeoff take off some armor
 w       wield   wield a weapon  (w-  wield nothing)
 W       wear    put on some armor
 x       xchange swap wielded and secondary weapons
+X       twotweapon toggle two-weapon combat
 z       zap     zap a wand
 Z       Zap     cast a spell
 <       up      go up the stairs
