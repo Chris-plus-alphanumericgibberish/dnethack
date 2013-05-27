@@ -627,8 +627,8 @@ u_init()
 	u.chokhmah = 0;
 	u.gevurah = 0;
 	u.hod = 0;
-	//u.wardsknown = 0;
-	u.wardsknown = ~0; //~0 should be all 1s, and is therefore debug mode.
+	u.wardsknown = 0;
+	//u.wardsknown = ~0; //~0 should be all 1s, and is therefore debug mode.
 
 #if 0	/* documentation of more zero values as desirable */
 	u.usick_cause[0] = 0;
