@@ -2620,13 +2620,18 @@ wiz_port_debug()
  *   window port causing a buffer overflow there.
  */
 char
-yn_function(query,resp, def)
-const char *query,*resp;
+yn_function(plainquery,resp, def)
+const char *plainquery,*resp;
 char def;
 {
 	char qbuf[QBUFSZ];
+	const char *query;
 	unsigned truncspot, reduction = sizeof(" [N]  ?") + 1;
 
+	/*Ben Collver's fixes*/
+	if(Role_if(PM_PIRATE)) query = piratesay(plainquery);
+	else query = plainquery;
+	
 	if (resp) reduction += strlen(resp) + sizeof(" () ");
 	if (strlen(query) < (QBUFSZ - reduction))
 		return (*windowprocs.win_yn_function)(query, resp, def);

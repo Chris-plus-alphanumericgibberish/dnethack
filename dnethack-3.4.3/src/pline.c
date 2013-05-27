@@ -56,62 +56,8 @@ pline VA_DECL(const char *, line)
 	    Vsprintf(pbuf,line,VA_ARGS);
 	    line = pbuf;
 	}
-	if(Role_if(PM_PIRATE)){
-		line = replace(line,"You","Ye");
-		line = replace(line,"you","ye");
-		line = replace(line,"His","'is");
-		line = replace(line," his"," 'is");
-		line = replace(line,"Her","'er");
-		line = replace(line," her"," 'er");
-		line = replace(line,"Are","Be");
-		line = replace(line," are"," be");
-		line = replace(line,"Is ","Be");
-		line = replace(line," is "," be ");
-		line = replace(line," is."," be.");
-		line = replace(line," is,"," be,");
-		line = replace(line,"Is ","Be ");
-		line = replace(line,"Of ","O' ");
-		line = replace(line," of "," o' ");
-		line = replace(line,"Of.","O'.");
-		line = replace(line," of."," o'.");
-		line = replace(line,"Of,","O',");
-		line = replace(line," of,"," o',");
-		line = replace(line," ear"," lug");
-		line = replace(line,"Ear"," Lug");
-		line = replace(line,"eye","deadlight");
-		line = replace(line,"Eye","Deadlight");
-		line = replace(line,"zorkmids ","doubloons ");
-		line = replace(line,"Zorkmids ","Doubloons ");
-		line = replace(line,"zorkmids.","doubloons.");
-		line = replace(line,"Zorkmids.","Doubloons.");
-		line = replace(line,"zorkmids,","doubloons,");
-		line = replace(line,"Zorkmids,","Doubloons,");
-		line = replace(line,"zorkmids)","doubloons)");
-		line = replace(line,"Zorkmids)","Doubloons)");
-		line = replace(line,"zorkmid ","doubloon ");
-		line = replace(line,"Zorkmid ","Doubloon ");
-		line = replace(line,"zorkmid.","doubloon.");
-		line = replace(line,"Zorkmid.","Doubloon.");
-		line = replace(line,"zorkmid,","doubloon,");
-		line = replace(line,"Zorkmid,","Doubloon,");
-		line = replace(line,"zorkmid)","doubloon)");
-		line = replace(line,"Zorkmid)","Doubloon)");
-		line = replace(line,"gold coins","pieces of eight");
-		line = replace(line,"Gold coins","Pieces of eight");
-		line = replace(line,"gold coin","piece of eight");
-		line = replace(line,"Gold coin","Piece of eight");
-		line = replace(line,"gold pieces.","pieces of eight.");
-		line = replace(line,"Gold pieces.","Pieces of eight.");
-		line = replace(line,"gold pieces,","pieces of eight,");
-		line = replace(line,"Gold pieces,","Pieces of eight,");
-		line = replace(line,"gold pieces ","pieces of eight ");
-		line = replace(line,"Gold pieces ","Pieces of eight ");
-		line = replace(line,"gold piece.","piece of eight.");
-		line = replace(line,"Gold piece.","Piece of eight.");
-		line = replace(line,"gold piece,","piece of eight,");
-		line = replace(line,"Gold piece,","Piece of eight,");
-		line = replace(line,"gold piece ","piece of eight ");
-		line = replace(line,"Gold piece ","Piece of eight ");
+	if(Role_if(PM_PIRATE)){/*Ben Collver's fixes*/
+		line = piratesay(line);
 	}
 	if (!iflags.window_inited) {
 	    raw_print(line);
@@ -505,18 +451,62 @@ self_invis_message()
 	}
 }
 
-char *replace(st, orig, repl)
+char *
+replace(st, orig, repl)
 const char *st, *orig, *repl;
 {
-	static char buffer[BUFSZ];
-	char *ch;
-	if (!(ch = strstr(st, orig)))
+	static char retval[BUFSZ];
+	char buffer[BUFSZ];
+	char *ch, *pos;
+	int len;
+	memset(buffer, 0, BUFSZ);
+	pos = st;
+	while ((ch = strstr(pos, orig))){
+		len = (ch - pos);
+		strncat(buffer, pos, len);
+		strncat(buffer, repl, strlen(repl));
+		pos = (ch + strlen(orig));
+	}
+	if (pos == st) {
 		return st;
-	strncpy(buffer, st, ch-st);  
-	buffer[ch-st] = 0;
-	sprintf(buffer+(ch-st), "%s%s", repl, ch+strlen(orig));
-	return buffer;
+	}
+	if (pos < (st + strlen(st))) {
+		strncat(buffer, pos, (st - pos));
+	}
+	strcpy(retval, buffer);
+	return retval;
 }
 
+/*Ben Collver's fixes*/
+char *
+piratesay(orig)
+const char *orig;
+{
+		orig = replace(orig,"You","Ye");
+		orig = replace(orig,"you","ye");
+		orig = replace(orig,"His","'is");
+		orig = replace(orig," his"," 'is");
+		orig = replace(orig,"Her","'er");
+		orig = replace(orig," her"," 'er");
+		orig = replace(orig,"Are","Be");
+		orig = replace(orig," are"," be");
+		orig = replace(orig,"Is","Be");
+		orig = replace(orig," is"," be");
+		orig = replace(orig,"Of","O'");
+		orig = replace(orig," ear"," lug");
+		orig = replace(orig,"Ear","Lug");
+		orig = replace(orig," eye"," deadlight");
+		orig = replace(orig,"Eye","Deadlight");
+		orig = replace(orig,"zorkmid","doubloon");
+		orig = replace(orig,"Zorkmid","Doubloon");
+		orig = replace(orig,"gold coins","pieces of eight");
+		orig = replace(orig,"Gold coins","Pieces of eight");
+		orig = replace(orig,"gold coin","piece of eight");
+		orig = replace(orig,"Gold coin","Piece of eight");
+		orig = replace(orig,"gold pieces","pieces of eight");
+		orig = replace(orig,"Gold pieces","Pieces of eight");
+		orig = replace(orig,"gold piece","piece of eight");
+		orig = replace(orig,"Gold piece","Piece of eight");
+}
 #endif /* OVLB */
 /*pline.c*/
