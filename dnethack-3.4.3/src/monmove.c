@@ -475,6 +475,26 @@ struct monst *mtmp;
 	
 }
 boolean
+scaryYellow(complete, mtmp)
+int complete;
+struct monst *mtmp;
+{
+	if(complete <= 0) return FALSE;
+	else if(mtmp->isshk || mtmp->isgd || mtmp->iswiz || 
+			is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
+			is_rider(mtmp->data) ||
+			(mtmp->data == &mons[PM_ELDER_PRIEST])
+		) return FALSE;
+	if((is_human(mtmp->data) || is_elf(mtmp->data) || is_dwarf(mtmp->data) ||
+		  is_gnome(mtmp->data) || is_orc(mtmp->data)) && 
+		  !is_undead(mtmp->data) && 
+		  !is_were(mtmp->data)){
+			mtmp->mcrazed = 1;
+			return !rn2(10);
+	}
+	
+}
+boolean
 scaryItem(mtmp)
 struct monst *mtmp;
 {
