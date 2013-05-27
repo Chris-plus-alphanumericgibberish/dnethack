@@ -649,6 +649,7 @@ gcrownu()
     HShock_resistance |= FROMOUTSIDE;
     HSleep_resistance |= FROMOUTSIDE;
     HPoison_resistance |= FROMOUTSIDE;
+	u.wardsknown |= WARD_HEPTAGRAM;
     godvoice(u.ualign.type, (char *)0);
 
     obj = ok_wep(uwep) ? uwep : 0;
@@ -1001,7 +1002,13 @@ pleased(g_align)
 	    } else if (!(HStealth & INTRINSIC))  {
 		HStealth |= FROMOUTSIDE;
 		pline(msg, "Stealth");
-	    } else {
+	    } else if(!(u.wardsknown & WARD_HAMSA)){
+			u.wardsknown |= WARD_HAMSA;
+			pline(msg, "the Hamsa ward");
+	    } else if(!(u.wardsknown & WARD_HEXAGRAM)){
+			u.wardsknown |= WARD_HEXAGRAM;
+			pline(msg, "the Hexagram ward");
+		}else {
 		if (!(HProtection & INTRINSIC))  {
 		    HProtection |= FROMOUTSIDE;
 		    if (!u.ublessed)  u.ublessed = rn1(3, 2);
