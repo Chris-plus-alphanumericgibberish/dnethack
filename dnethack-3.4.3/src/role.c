@@ -276,7 +276,7 @@ const struct Role roles[] = {
 	PM_MAYOR_CUMMERBUND, PM_PIRATE_BROTHER, PM_BLACKBEARD_S_GHOST,
 	PM_SKELETAL_PIRATE, PM_SOLDIER, S_RODENT, S_ELEMENTAL, /* Ghost pirates, soldiers, rats in the food stores, and the occasional storm*/
 	ART_TREASURY_OF_PROTEUS,
-	MH_HUMAN|MH_DWARF|MH_ELF | ROLE_MALE|ROLE_FEMALE |
+	MH_HUMAN|MH_ELF | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_CHAOTIC|ROLE_NEUTRAL,
 	/* Str Int Wis Dex Con Cha */
 	{   8,  7, 7,  8,  8,  7 },
