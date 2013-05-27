@@ -671,6 +671,9 @@ static const char *build_opts[] = {
 #ifdef LOGFILE
 		"log file",
 #endif
+#ifdef XLOGFILE
+		"extended log file",
+#endif
 #ifdef MAIL
 		"mail daemon",
 #endif
@@ -768,6 +771,27 @@ static const char *build_opts[] = {
 #endif
 #ifdef ZEROCOMP
 		"zero-compressed save files",
+#endif
+#ifdef RECORD_TURNS
+		"record turns in xlogfile",
+#endif
+#ifdef RECORD_CONDUCT
+		"record conduct in xlogfile",
+#endif
+#ifdef RECORD_ACHIEVE
+		"record major achievements in xlogfile",
+#endif
+#ifdef RECORD_REALTIME
+		"record real time in xlogfile",
+#endif
+#ifdef RECORD_START_END_TIME
+		"record starting and ending time in xlogfile",
+#endif
+#ifdef RECORD_GENDER0
+		"record initial gender in xlogfile",
+#endif
+#ifdef RECORD_ALIGN0
+		"record initial alignment in xlogfile",
 #endif
 		save_bones_compat_buf,
 		"basic NetHack features"
