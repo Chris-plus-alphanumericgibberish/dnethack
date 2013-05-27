@@ -363,7 +363,9 @@ learn(VOID_ARGS)
 	if(booktype == SPE_SECRETS){
 		if(book->oartifact) doparticularinvoke(book); //this is a redundant check
 		else{ 
-			if(!(book->ovar1)) book->ovar1 = d(1,10);
+			if(!(book->ovar1) || 
+				book->ovar1 > 10 ||
+				book->ovar1 < 1) book->ovar1 = d(1,10);
 			switch(book->ovar1){
 				case 1:
 					pline("...these are some surprisingly petty secrets.");

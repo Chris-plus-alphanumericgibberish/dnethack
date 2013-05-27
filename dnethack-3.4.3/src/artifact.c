@@ -3141,6 +3141,15 @@ arti_invoke(obj)
 					case SELECT_HEALTH:
 						delay = 0;
 					break;
+					case SELECT_SIGN:
+						delay = -100;
+					break;
+					case SELECT_WARDS:
+						delay = -60;
+					break;
+					case SELECT_ELEMENTS:
+						delay = -100;
+					break;
 				}
 				//if it WAS a spellbook effect, set the delay here
 				if(booktype) switch (objects[booktype].oc_level) {
@@ -3445,6 +3454,30 @@ struct obj *obj;
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
+	if(obj->ovar1 & R_Y_SIGN){
+		Sprintf(buf, "Study the legends of lost Carcosa");
+		any.a_int = SELECT_SIGN;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(obj->ovar1 & R_WARDS){
+		Sprintf(buf, "Study up on ancient warding signs");
+		any.a_int = SELECT_WARDS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(obj->ovar1 & R_ELEMENTS){
+		Sprintf(buf, "Study the Lords of the Elements");
+		any.a_int = SELECT_ELEMENTS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
 	end_menu(tmpwin, prompt);
 
 	how = PICK_ONE;
@@ -3721,6 +3754,7 @@ read_necro(VOID_ARGS)
 	else if(necro_effect < SELECT_STUDY){/* special effect */
 		switch(necro_effect){
 			case SELECT_COMBAT:
+				You("grasp the basics of your weapon's use.");
 				if( uwep && P_MAX_SKILL(objects[uwep->otyp].oc_skill) < P_EXPERT && u.uen >= 100){
 					u.uen -= 100;
 					u.uenmax -= 20;
@@ -3731,6 +3765,25 @@ read_necro(VOID_ARGS)
 			case SELECT_HEALTH:
 				use_unicorn_horn(artiptr);
 			break;
+			case SELECT_SIGN:
+				if(u.wardsknown & WARD_YELLOW) You("skim the legends of Lost Carcosa");
+				else You("read the legends of Lost Carcosa.");
+				u.wardsknown |= WARD_YELLOW;
+			break;
+			case SELECT_WARDS:
+				You("review the section on ancient warding signs.");
+				u.wardsknown |= WARD_ACHERON|WARD_PENTAGRAM|WARD_HEXAGRAM|WARD_ELDER_SIGN|WARD_HAMSA|WARD_EYE|WARD_QUEEN|WARD_CAT_LORD|WARD_GARUDA;
+			break;
+			case SELECT_ELEMENTS:
+				if( (u.wardsknown & WARD_CTHUGHA) && (u.wardsknown & WARD_ITHAQUA) && (u.wardsknown & WARD_KRAKAL)){
+					You("page through the section on the Lords of the Elements");
+				}else if((u.wardsknown & WARD_CTHUGHA) || (u.wardsknown & WARD_ITHAQUA) || (u.wardsknown & WARD_KRAKAL)){
+					You("refresh your memory about the Lords of the Elements");
+				}else{
+					You("read about the Lords of the Elements");
+				}
+				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KRAKAL;
+			break;
 		}
 	}
 	else if(necro_effect == SELECT_STUDY){
@@ -3740,7 +3793,7 @@ read_necro(VOID_ARGS)
 //		pline("learned %d abilities",artiptr->spestudied);
 		if(d(1,10) * 10  - artiptr->spestudied * 10 - 150 + ACURR(A_INT) * 10 > 0){
 			if(!(artiptr->ovar1 & LAST_PAGE)){
-				chance = d(1,22);
+				chance = d(1,25);
 			}
 			else if(!(artiptr->ovar1 & (S_OOZE|S_SHOGGOTH|S_NIGHTGAUNT|S_BYAKHEE|SUM_DEMON|S_DEVIL) )){
 				chance = d(1,6);
@@ -4036,8 +4089,50 @@ read_necro(VOID_ARGS)
 					You("find another secret to health and recovery.");
 				}
 			break;
+			case 23:
+				if(!(artiptr->ovar1 & R_Y_SIGN)){
+					You("discover the legends of Lost Carcosa.");
+					artiptr->ovar1 |= R_Y_SIGN;
+					artiptr->spestudied++;
+					if(artiptr->spestudied > rn1(4,6)){
+						artiptr->ovar1|= LAST_PAGE;
+					}
+				}
+				else{
+					You("find another section on Lost Carcosa.");
+				}
+//				u.wardsknown |= WARD_YELLOW;
+			break;
+			case 24:
+				if(!(artiptr->ovar1 & R_WARDS)){
+					You("discover a treatise on ancient warding signs.");
+					artiptr->ovar1 |= R_WARDS;
+					artiptr->spestudied++;
+					if(artiptr->spestudied > rn1(4,6)){
+						artiptr->ovar1|= LAST_PAGE;
+					}
+				}
+				else{
+					You("discover another treatise on ancient warding signs.");
+				}
+//				u.wardsknown |= WARD_ACHERON|WARD_PENTAGRAM|WARD_HEXAGRAM|WARD_ELDER_SIGN|WARD_HAMSA|WARD_EYE|WARD_QUEEN|WARD_CAT_LORD|WARD_GARUDA;
+			break;
+			case 25:
+				if(!(artiptr->ovar1 & R_ELEMENTS)){
+					You("discover a section detailing the Lords of the Elements.");
+					artiptr->ovar1 |= R_ELEMENTS;
+					artiptr->spestudied++;
+					if(artiptr->spestudied > rn1(4,6)){
+						artiptr->ovar1|= LAST_PAGE;
+					}
+				}
+				else{
+					You("discover another section on the Lords of the Elements.");
+				}
+//				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KRAKAL;
+			break;
 		}
-//		artiptr->ovar1 = -1; //debug
+//		artiptr->ovar1 = ~0; //debug
 	}
 	else{
 		pline("Unrecognized Necronomicon effect.");
