@@ -1036,18 +1036,20 @@ int tx,ty;
 					if(IS_ALTAR(levl[curx][cury].typ)){ altarfound=1; cury=ROWNO; curx=COLNO;}//end search
 			
 			if(!altarfound){
-				pline("");
+				pline("A golden flame roars suddenly to life within the seal, throwning the world into a stark relief of hard-edged shadows and brilliant light.");
 				if(u.sealCounts < numSlots){
-					pline("");
-					pline("");
+					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
+					pline("A voice speaks from the now blood-red flame, even as it dies.");
+					pline("\"Cursed are you who calls me forth. I damn you to bear my sign and my flames, alone in this world of darkness!\"");
 					u.sealsActive |= SEAL_AMON;
 					u.spirit[numSlots] = SEAL_AMON;
 					u.spiritT[numSlots] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
-					pline("");
+					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
+					pline("A voice speaks from the now blood-red flame, even as it dies.");
+					pline("\"Cursed are you who calls me forth. I damn you to bear my flames, alone in this world of darkness!\"");
 					uwep->ovar1 |= SEAL_AMON;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_AMON;
@@ -1059,7 +1061,7 @@ int tx,ty;
 					}
 				}
 				else{
-					pline("");
+					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
 				}
 			}
 			else{
