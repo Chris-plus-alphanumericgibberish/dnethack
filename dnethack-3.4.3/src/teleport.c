@@ -780,16 +780,16 @@ level_tele()
 #ifdef WIZARD
 		if (!(wizard))
 #endif
-	    if (Inhell && !u.uevent.gehennom_entered && 
+	    if (Inhell && !u.uevent.gehennom_entered && /*seal off gehennom untill you formally enter it by descending the valley of the dead staircase.*/
 			newlev >= (dungeons[u.uz.dnum].depth_start)){
 				newlev = dungeons[u.uz.dnum].depth_start;
 				pline("Sorry...");
 		}
-		else if (Inhell && !u.uevent.invoked &&
+		else if (Inhell && !u.uevent.invoked && /*seal off square level and sanctum untill you perform the invocation.*/
 			newlev >= (dungeons[u.uz.dnum].depth_start +
-					dunlevs_in_dungeon(&u.uz) - 1)) {
+					dunlevs_in_dungeon(&u.uz) - 2)) {
 		newlev = dungeons[u.uz.dnum].depth_start +
-					dunlevs_in_dungeon(&u.uz) - 2;
+					dunlevs_in_dungeon(&u.uz) - 3;
 		pline("Sorry...");
 	    }
 	    /* no teleporting out of quest dungeon */
@@ -1243,8 +1243,8 @@ random_teleport_level()
 	min_depth = In_quest(&u.uz) ? dungeons[u.uz.dnum].depth_start : 1;
 	max_depth = dunlevs_in_dungeon(&u.uz) +
 			(dungeons[u.uz.dnum].depth_start - 1);
-	/* can't reach the Sanctum if the invocation hasn't been performed */
-	if (Inhell && !u.uevent.invoked) max_depth -= 1;
+	/* can't reach the Sanctum OR square level if the invocation hasn't been performed */
+	if (Inhell && !u.uevent.invoked) max_depth -= 2;
 
 	/* Get a random value relative to the current dungeon */
 	/* Range is 1 to current+3, current not counting */

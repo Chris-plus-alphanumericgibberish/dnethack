@@ -356,7 +356,7 @@ boolean td;	/* td == TRUE : trap door or hole */
 	   || Flying || is_clinger(youmonst.data)
 	   || (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP)
 	   || (Inhell && !u.uevent.invoked &&
-					newlevel == dunlevs_in_dungeon(&u.uz))
+					newlevel == (dunlevs_in_dungeon(&u.uz) - 1))/*seal off sanctum and square level until the invocation is performed*/
 		) {
 		if (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP)            
 		pline("But thanks to your trusty whip ...");
