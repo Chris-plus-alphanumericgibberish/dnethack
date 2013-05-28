@@ -887,8 +887,12 @@ int spellnum;
           if (malediction) /* give a warning to the player */
                verbalize(rn2(2) ? "I shall make a statue of thee!" :
                                   "I condemn thee to eternity unmoving!");
+           if(!Free_action && !(rn2(10) && have_lizard()) ){
            You_feel("less limber.");
            Stoned = 5;
+		   }else{
+			You_feel("a momentary stiffness.");
+		   }
         } dmg = 0;
         break;
      case MAKE_VISIBLE:
