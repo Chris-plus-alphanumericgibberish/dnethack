@@ -1055,6 +1055,17 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 # Essential tools (assume they have a wand of striking)
 OBJECT:'?',"earth",(10,03),blessed,0
+# Random items
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[25%]:random,random,random
+OBJECT[25%]:random,random,random
+OBJECT[25%]:random,random,random
+
 #
 
 #
@@ -1219,6 +1230,16 @@ MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 # Essential tools (assume they have a wand of striking)
 OBJECT:'?',"earth",(10,03),blessed,+0
+# Random items
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[25%]:random,random,random
+OBJECT[25%]:random,random,random
+OBJECT[25%]:random,random,random
 
 #
 #	The Wizards Manse
@@ -1826,6 +1847,54 @@ FLAGS: hardfloor,lethe
 GEOMETRY:center,center
 MAP
 0  ---------   ---     ---      ---      ---    ---    ---    ---      ------
+1  |       |---- ------- -------- -------- ------ ------ ------ -------|    |
+2  |                                                                        |
+3  |       |---- -------}}------- -------- ------ ------ ------ -------|    |
+4  ---------   - -     -}}}     ---      ---    - -    ---    ---      ------
+5                    }}}}}}}}                                      }}}       
+6                  }}}}}}}}}}}}}        ...  .........            }}}}}}...  
+7                }}}}}}}}}}}}}}}}.      ...............          }}}}}}}}}.. 
+8              }} }}}}}}}}}}}}}}}}....  ...   ...............   }}}}}}}}}}}} 
+9           }}}}}} }       }}}}}}}}....       ........         }}}}}}}}}}}}}}
+0       }}}}}}}}}           ..}}}}} }...       .....         }}}}}}}}}}}}}}}}
+1  }}}}}}}}}}}     .         ...}} }}}}}         .         }} }}}}}}}}}}}}}}}
+2}}}}}}}}}}}    ....          ....}}}}}}}}}}}          }}}}}}} }}}}}}}}....  
+3}}}}}}}}}}   ...       ..     .   }}}}}}}}}}}}}}}}}}}}}}}}}}}} }..      .   
+4}}}}}}}}}   ..      ......    ..  .}}}}}}}}}}}}}}}}}}}}}}}}}}....     ....  
+5  }}}}    ...     ..........   .   .}}}}}}}}}}}}}}}}}}}}}}    .  .... ..    
+6      ..... .    ...............   .}}}}}}}}}}}}}}}}}}}}}  ............ ..  
+7      .     ...  ............    ....}}}}}}}}}}}}}}}}}}}} ............ .... 
+8              ....  ..............  ....}}}}}}}}}}}}}}}}   ................ 
+9                                          }}}}}}}}}}}}                      
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7
+# Random hive objects (may be embedded in walls)
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+GEOMETRY:center,center
+MAP
+0  ---------   ---     ---      ---      ---    ---    ---    ---      ------
 1  |.......|----#-------}--------#--------#------#------#------#-------|....|
 2  |.......+###########}}}}}}}}########################################+....|
 3  |.......|----#-------}}-------#--------#------#------#------#-------|....|
@@ -2153,6 +2222,14 @@ TRAP:"board",(60,08)
 TRAP:"board",(64,10)
 TRAP:"board",(46,10)
 TRAP:"board",(46,11)
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 
 #
@@ -3167,3 +3244,15 @@ MONSTER:'b',"shoggoth",(27,13),asleep,hostile
 MONSTER:'b',"shoggoth",(25,13),asleep,hostile
 MONSTER:'b',"shoggoth",(23,13),asleep,hostile
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random

@@ -13,6 +13,44 @@ GEOMETRY: center,center
 #0        1         2         3         4         5         6
 #01234567890123456789012345678901234567890123456789012345678901234567890
 MAP
+0                             ......           ......               
+1                         .............     ........... ....        
+2                         ....................................      
+3                       ............................................
+4                      ......................  ....................  
+5                     ....................        ...............   
+6                     .....................        .................
+7                     ......................        ................
+8                     .......................      ..............   
+9                       ..........................................  
+0                      ...........................................  
+1                       ........................................... 
+2                         .................... ...................  
+3                         ...............       ................     
+4                              ........        ... ............     
+5                              ....                  ....           
+ENDMAP
+
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+# the missing magic lamp!
+OBJECT:'(',"magic lamp",random
+
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
 0                            .}}}}}}.        ..}}}}}}..             
 1                       ..}}}}}}}}}}}}}.   .}}}}}}}}}}}.}}}}..      
 2      .......}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}..    
@@ -32,7 +70,6 @@ MAP
 ENDMAP
 #1234567890123456789012345678901234567890123456789012345678901234567890
 #0        1         2         3         4         5         6
-RANDOM_PLACES:(40,06),(49,05),(46,10),(30,07)
 RANDOM_MONSTERS: ';',':'
 REGION:(00,00,66,15),unlit,"ordinary"
 STAIR:(05,12),up
@@ -56,8 +93,6 @@ OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
-# the missing magic lamp!
-OBJECT:'(',"magic lamp",place[0]
 # the beach-combing committee
 #MONSTER: ';',"giant crab",(10,6),hostile
 #MONSTER: ';',"giant crab",(11,7),hostile

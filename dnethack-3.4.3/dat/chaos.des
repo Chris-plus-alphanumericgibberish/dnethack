@@ -88,6 +88,10 @@ TRAP: "teleport", random
 TRAP: "teleport", random
 TRAP: "teleport", random
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY:center,top
 #0         1         2   	  3	      4	    5		  6	      7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -105,6 +109,10 @@ ENDMAP
 #0         1         2   	  3	      4	    5		  6	      7
 
 BRANCH:(21,05,21,05),(0,0,0,0)
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 #STAIR: levregion(01,01,74,19), up
 #STAIR: levregion(01,01,74,19), down
@@ -180,13 +188,20 @@ MONSTER: 'o', "goblin", random, hostile
 MONSTER: 'o', "goblin", random, hostile
 MONSTER: 'o', "goblin", random, hostile
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
 0               |---|            |-----|            |---|                    
-1               |.|.|------------| ... |------------|.|.|                    
-2               |.+..............---.---..............+.|                    
+1               | |.|------------| ... |------------|.| |                    
+2               | +..............---.---..............+ |                    
 3               --|.|-----------|.......|-----------|.|--                    
 4                 |.|...........----.----...........|.|                      
 5                 |.|...............................|.|                      
@@ -202,8 +217,8 @@ MAP
 5                 |.|...............................|.|                      
 6                 |.|...........----+----...........|.|                      
 7               --|.|-----------|.......|-----------|.|--                    
-8               |.+..............---+---..............+.|                    
-9               |.|.|------------| ... |------------|.|.|                    
+8               | +..............---+---..............+ |                    
+9               | |.|------------| ... |------------|.| |                    
 0               |---|            |- . -|            |---|                    
 ENDMAP
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
@@ -235,6 +250,10 @@ OBJECT[75%]:'$',random,random
 OBJECT[75%]:'$',random,random
 OBJECT[75%]:'$',random,random
 OBJECT[75%]:'$',random,random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
@@ -363,6 +382,13 @@ OBJECT:'!',random,random
 OBJECT:'!',random,random
 OBJECT:')',random,random
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
@@ -405,6 +431,9 @@ MONSTER: '\'', "clay golem", random, hostile
 
 OBJECT:')',random,random
 OBJECT:')',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
@@ -542,6 +571,13 @@ MONSTER: 'e', "beholder", random, hostile
 MONSTER: 'e', "beholder", random, hostile
 MONSTER: 'e', "beholder", random, hostile
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 MAZE:"chaosm",' '
 FLAGS: nommap,hardfloor, shortsighted
 GEOMETRY:center,center
@@ -607,6 +643,13 @@ MONSTER: 'e', "beholder", random, hostile
 MONSTER: 'e', "beholder", random, hostile
 MONSTER: 'e', "beholder", random, hostile
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 MAZE:"chaosfrh",' '
 FLAGS: nommap,hardfloor, shortsighted
 GEOMETRY:center,center
@@ -666,6 +709,13 @@ MONSTER:'Z',random, random
 
 MONSTER:'L',"lich", (53, 19), asleep
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 MAZE:"chaosffh",' '
 FLAGS: nommap,hardfloor, shortsighted
 GEOMETRY:center,center
@@ -710,6 +760,13 @@ MONSTER:'i',random, random
 MONSTER:'i',random, random
 MONSTER:'i',random, random
 MONSTER:'i',random, random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
@@ -760,6 +817,49 @@ MONSTER:'&',"marilith", (58, 11),asleep
 
 MAZE:"chaossth",' '
 FLAGS: nommap,hardfloor, shortsighted
+GEOMETRY:center,center
+#0         1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0               |.......................................|                    
+1               |                  ...                  |                    
+2               |------------------ . ------------------|                    
+3                       |                       |                            
+4               |--------------           --------------|                    
+5               |             |           |             |                    
+6               |       -------           -------       |                    
+7               |       |                       |       |                    
+8               |       -------  -------  -------       |                    
+9               |       |     |--|     |--|     |       |                    
+0               |       |                       |       |                    
+1               |       |     |--|     |--|     |       |                    
+2               |       -------  -------  -------       |                    
+3               |       |                       |       |                    
+4               |       ------- - - - - - -------       |                    
+5               |             |           |             |                    
+6               |--------------  -------  --------------|                    
+7               |       |        |     |        |       |                    
+8               |    ---|------  -------  ------|---    |                    
+9               |    |        |           |        |    |                    
+0               |---------------------------------------|                    
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -821,6 +921,13 @@ MONSTER:';',"shark", random
 MONSTER:';',"shark", random
 MONSTER:';',"kraken", (35, 01)
 
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 MAZE:"chaosvth",' '
 FLAGS: nommap,hardfloor, shortsighted
 GEOMETRY:center,center
@@ -863,6 +970,20 @@ MONSTER:'E',"air elemental", random
 MONSTER:'E',"air elemental", random
 MONSTER:'E',"air elemental", random
 MONSTER:'E',"air elemental", random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7

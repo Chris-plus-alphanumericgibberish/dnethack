@@ -39,6 +39,12 @@ ALTAR:(40,04),noalign,shrine
 MONSTER:'@',"aligned priest",(40,03),noalign,hostile
 MONSTER:'@',"aligned priest",(40,05),noalign,hostile
 MONSTER:'@',"aligned priest",(39,04),noalign,hostile
+#Offerings on the altar
+OBJECT:random,random,(40,04)
+OBJECT:random,random,(40,04)
+OBJECT:random,random,(40,04)
+OBJECT:random,random,(40,04)
+
 # flanking the doorway....
 TRAP: "spiked pit",(06,03)
 TRAP: "spiked pit",(06,05)
