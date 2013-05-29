@@ -2803,6 +2803,8 @@ char class;
 	Strcat(cl, tmp);
 }
 
+const int carveTurns[6] = {1,2,1,0,3,1};
+
 int
 do_carve_obj(obj)
 struct obj *obj;
@@ -2811,6 +2813,9 @@ struct obj *obj;
 	char carveelet;
 	struct obj *carvee;
 	struct obj *otmp;
+	multi = 0;		/* moves consumed */
+	nomovemsg = (char *)0;	/* occupation end message */
+
 	rune = pick_rune();
 	if(!rune) return 0;
 	carveelet = pick_carvee();
@@ -2827,6 +2832,7 @@ struct obj *obj;
 	}
 	if(carvee->ovar1 != 0 ){
 		You("chip off the existing rune.");
+		multi-=1;
 		if(carvee->oartifact) pline("The wood heals like the rune was never there.");
 		else carvee->spe -= 1;
 		if(carvee->spe < -1*rn2(8)){
@@ -2835,6 +2841,8 @@ struct obj *obj;
 			return 0;
 		}
 	}
+	multi -= carveTurns[rune-FIRST_RUNE];
+	nomovemsg = "You finish carving.";;
 	carvee->ovar1 = get_wardID(rune);
 	You("carve a %s into the %s.",wardDecode[decode_wardID(carvee->ovar1)],xname(carvee));
 	see_monsters(); //Some magic staves grant detection, so recheck that now.
