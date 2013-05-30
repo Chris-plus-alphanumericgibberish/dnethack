@@ -3064,7 +3064,7 @@ struct permonst _mons2[] = {
 	M2_HOSTILE|M2_STRONG|M2_COLLECT, M3_WAITFORU, HI_SILVER),
 	MON("retriever", S_GOLEM, //25
 	LVL(20, 10, 0, 80, -6), (G_HELL|G_NOCORPSE|1),//needs quote
-	A(ATTK(AT_CLAW, AD_VORP, 2,8), ATTK(AT_CLAW, AD_SAMU, 2, 8),  //claw attacks must come first
+	A(ATTK(AT_CLAW, AD_SHRD, 2,8), ATTK(AT_CLAW, AD_SAMU, 2, 8),  //claw attacks must come first
 	  ATTK(AT_GAZE, AD_RETR, 4, 8), ATTK(AT_CLAW, AD_ABDC, 1,8),  //AD_RETR 
 	  NO_ATTK, NO_ATTK),
 	SIZ(2000, 0, 0, MS_SILENT, MZ_LARGE),
