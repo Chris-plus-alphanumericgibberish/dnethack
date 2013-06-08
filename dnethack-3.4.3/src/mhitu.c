@@ -1158,58 +1158,8 @@ hitmu(mtmp, mattk)
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_CHKH:
-		dmg += u.chokhmah;
-		if (mattk->aatyp == AT_HUGS && !sticks(youmonst.data)) {
-		    if(!u.ustuck && rn2(2)) {
-			if (u_slip_free(mtmp, mattk)) {
-			    dmg = 0;
-			} else {
-			    u.ustuck = mtmp;
-			    pline("%s grabs you!", Monnam(mtmp));
-			}
-		    } else if(u.ustuck == mtmp) {
-			exercise(A_STR, FALSE);
-			You("are being %s.",
-			      (mtmp->data == &mons[PM_ROPE_GOLEM])
-			      ? "choked" : "crushed");
-		    }
-		} else {			  /* hand to hand weapon */
-		    if(mattk->aatyp == AT_WEAP && otmp) {
-			if (otmp->otyp == CORPSE
-				&& touch_petrifies(&mons[otmp->corpsenm])) {
-			    dmg = 1;
-			    pline("%s hits you with the %s corpse.",
-				Monnam(mtmp), mons[otmp->corpsenm].mname);
-			    if (!Stoned)
-				goto do_stone;
-			}
-			dmg += dmgval(otmp, &youmonst);
-			if (dmg <= 0) dmg = 1;
-			if (!(otmp->oartifact &&
-				artifact_hit(mtmp, &youmonst, otmp, &dmg,dieroll)))
-			     hitmsg(mtmp, mattk);
-			if (!dmg) break;
-			if (u.mh > 1 && u.mh > ((u.uac>0) ? dmg : dmg+u.uac) &&
-				   objects[otmp->otyp].oc_material == IRON &&
-					(u.umonnum==PM_BLACK_PUDDING
-					|| u.umonnum==PM_BROWN_PUDDING)) {
-			    /* This redundancy necessary because you have to
-			     * take the damage _before_ being cloned.
-			     */
-			    if (u.uac < 0) dmg += u.uac;
-			    if (dmg < 1) dmg = 1;
-			    if (dmg > 1) exercise(A_STR, FALSE);
-			    u.mh -= dmg;
-			    flags.botl = 1;
-			    dmg = 0;
-			    if(cloneu())
-			    You("divide as %s hits you!",mon_nam(mtmp));
-			}
-			urustm(mtmp, otmp);
-		    } else if (mattk->aatyp != AT_TUCH || dmg != 0 ||
-				mtmp != u.ustuck)
 			hitmsg(mtmp, mattk);
-		}
+			dmg += u.chokhmah*5;
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_DISE:
@@ -2280,6 +2230,7 @@ dopois:
 	    Sprintf(buf, "%s %s",
 		    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
 		poisoned(buf, A_CON, mdat->mname, 60);
+		if(Poison_resistance) wdmg /= 2;
 		while( ABASE(A_WIS) > ATTRMIN(A_WIS) && wdmg > 0){
 			wdmg--;
 			(void) adjattrib(A_WIS, -1, TRUE);
@@ -2299,7 +2250,7 @@ dopois:
 				dmg *= 2;
 			}
 			else if (noncorporeal(youmonst.data) || amorphous(youmonst.data)) {
-				pline("%s slices through your %s.",
+				pline("%s passes through your %s.",
 				      mon_nam(mtmp), body_part(HEAD));
 				dmg *= 2;
 			}

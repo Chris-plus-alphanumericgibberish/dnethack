@@ -384,7 +384,7 @@ choose_magic_special(mtmp, type)
 struct monst *mtmp;
 unsigned int type;
 {
-     if (rn2(2) || mtmp->iswiz) {
+     if (rn2(2)) {
        switch(monsndx(mtmp->data)) {
        case PM_WIZARD_OF_YENDOR:
            return (rn2(4) ? rnd(STRANGLE) :
@@ -834,7 +834,7 @@ int spellnum;
            Your("%s %s!", makeplural(body_part(HAND)),
                (old ? "are filthier than ever" : "get slimy"));
        }
-       if(haseyes(youmonst.data) && !Blindfolded && rn2(3)) {
+       if(haseyes(youmonst.data) && !Blindfolded && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
            old = u.ucreamed;
            u.ucreamed += rn1(20, 9);
            Your("%s is coated in %sgunk!", body_part(FACE),
@@ -887,7 +887,7 @@ int spellnum;
           if (malediction) /* give a warning to the player */
                verbalize(rn2(2) ? "I shall make a statue of thee!" :
                                   "I condemn thee to eternity unmoving!");
-           if(!Free_action && !(rn2(10) && have_lizard()) ){
+           if(!Stone_resistance && !(rn2(10) && (have_lizard()) || Free_action) ){
            You_feel("less limber.");
            Stoned = 5;
 		   }else{

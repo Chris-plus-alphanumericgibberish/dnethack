@@ -67,7 +67,7 @@
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
 #define Drain_resistance	(HDrain_resistance || EDrain_resistance || \
 				 resists_drli(&youmonst) || \
-				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) >=5 ))
+				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) >=4 ))
 
 /* Intrinsics only */
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic

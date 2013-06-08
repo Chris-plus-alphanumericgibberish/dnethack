@@ -6,19 +6,23 @@
 MAZE:"tower1",' '
 FLAGS: noteleport,hardfloor
 GEOMETRY:half-left,center
+#          1       
+#012345678901234567
 MAP
-  --- --- ---  
-  |.| |.| |.|  
----S---S---S---
-|.......+.+...|
----+-----.-----
-|.....\.|.+.|  
----+-----.-----
-|.......+.+...|
----S---S---S---
-  |.| |.| |.|  
-  --- --- ---  
+0  --- --- ---  
+1  |.| |.| |.|  
+2---S---S---S---
+3|.......+.+...|
+4---+-----.-----
+5|.....\.|.+.|  
+6---+-----.-----
+7|.......+.+...|
+8---S---S---S---
+9  |.| |.| |.|  
+0  --- --- ---  
 ENDMAP
+#012345678901234567
+#          1       
 LADDER:(11,05),down
 # The lord and his court
 MONSTER:'V',"Vlad the Impaler",(06,05)
@@ -55,24 +59,30 @@ NON_DIGGABLE:(00,00,14,10)
 MAZE:"tower2",' '
 FLAGS: noteleport,hardfloor
 GEOMETRY:half-left,center
+#          1       
+#012345678901234567
 MAP
-  --- --- ---  
-  |.| |.| |.|  
----S---S---S---
-|.S.........S.|
--S-.------+----
-|.|......|..|  
--S------.------
-|.S......+..S.|
----S---S---S---
-  |.| |.| |.|  
-  --- --- ---  
+0  --- --- ---  
+1  |.| |.| |.|  
+2---S---S---S---
+3|.S.........S.|
+4-S-.------+----
+5|.|......|..|  
+6-S------.------
+7|.S......+..S.|
+8---S---S---S---
+9  |.| |.| |.|  
+0  --- --- ---  
 ENDMAP
+#012345678901234567
+#          1       
 # Random places are the 10 niches
 RANDOM_PLACES:(03,01),(07,01),(11,01),(01,03),(13,03),
 	      (01,07),(13,07),(03,09),(07,09),(11,09)
 LADDER:(11,05),up
+MONSTER:'&',random,(11,05)
 LADDER:(03,07),down
+MONSTER:'&',random,(05,05)
 DOOR:locked,(10,04)
 DOOR:locked,(09,07)
 MONSTER:'&',random,place[0]
@@ -96,21 +106,25 @@ NON_DIGGABLE:(00,00,14,10)
 MAZE:"tower3",' '
 FLAGS: noteleport,hardfloor
 GEOMETRY:half-left,center
+#          1       
+#012345678901234567
 MAP
-    --- --- ---  
-    |.| |.| |.|    
-  ---S---S---S---
-  |.S.........S.|  
------.........-----
-|...|.........+...|
-|.---.........---.|
-|.|.S.........S.|.|
-|.---S---S---S---.|
-|...|.|.|.|.|.|...|
----.---.---.---.---
-  |.............|  
-  ---------------  
+0    --- --- ---  
+1    |.| |.| |.|    
+2  ---S---S---S---
+3  |.S.........S.|  
+4-----.........-----
+5|...|.........+...|
+6|.---.........---.|
+7|.|.S.........S.|.|
+8|.---S---S---S---.|
+9|...|.|.|.|.|.|...|
+0---.---.---.---.---
+1  |.............|  
+2  ---------------  
 ENDMAP
+#012345678901234567
+#          1       
 # Random places are the 10 niches
 RANDOM_PLACES:(05,01),(09,01),(13,01),(03,03),(15,03),
 	      (03,07),(15,07),(05,09),(09,09),(13,09)
@@ -121,10 +135,10 @@ DOOR:locked,(14,05)
 # Let's put cerberus behind the door, just for the fun...
 # He was meant to go in hell, but fits the semi-Castlevania theme OK.
 MONSTER:'d',"Cerberus",(13,05), hostile
-MONSTER:random,random,(12,04)
-MONSTER:random,random,(12,06)
-MONSTER:random,random,random
-MONSTER:random,random,random
+MONSTER:'d',"hell hound pup",(12,04)
+MONSTER:'d',"hell hound pup",(12,06)
+MONSTER:'i',random,random
+MONSTER:'i',random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
@@ -169,7 +183,7 @@ MAP
 6 }}-+F---F---F--}}     ........T........T...T....T.....T..PPPPP.T.......    
 7  }}}}}}}}}}}}}}}.      B...T.....T...........T..........PPPPPP...T...      
 8   }}}}}}}}}}}}}. . . ..   .....T...T....T.........T..T.PPPPPP.T....        
-9     ....  ..... . . .       .................T........PPPPPP.....          
+9     ....  ....... . .       .................T........PPPPPP.....          
 0         ..                                                                 
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345

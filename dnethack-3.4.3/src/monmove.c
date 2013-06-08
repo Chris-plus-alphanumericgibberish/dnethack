@@ -209,7 +209,9 @@ struct monst *mtmp;
 {
 	if(complete <= 0) return FALSE;
 	else if(mtmp->isshk || mtmp->iswiz || 
-			is_rider(mtmp->data)) return FALSE;
+			is_rider(mtmp->data) ||
+			( (mvitals[PM_KITTEN].mvflags & G_GONE) && (mvitals[PM_CAT].mvflags & G_GONE) && (mvitals[PM_LARGE_CAT].mvflags & G_GONE) )
+		) return FALSE;
 	else if(mtmp->data->mlet == S_FELINE
 			){ /* && mvitals[PM_KITTEN].died == 0*/
 				mtmp->mpeaceful = TRUE;

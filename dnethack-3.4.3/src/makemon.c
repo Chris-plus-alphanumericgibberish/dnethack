@@ -2138,7 +2138,7 @@ register int	mmflags;
 		break;
 	    case S_KETER:
 			if (mndx == PM_CHOKHMAH_SEPHIRAH){
-				mtmp->mhpmax = u.chokhmah*mtmp->mhpmax;
+				mtmp->mhpmax = 1+u.chokhmah*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
 			if(mndx != PM_MALKUTH_SEPHIRAH){
@@ -2521,8 +2521,27 @@ rndmonst()
 		return &mons[PM_CHOKHMAH_SEPHIRAH];
 	}
 	if (u.uz.dnum == tower_dnum)
-		return rn2(10) ? mkclass(S_ZOMBIE, 0) : mkclass(S_VAMPIRE, 0);
-
+		switch(rn2(10)){
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				return mkclass(S_ZOMBIE, 0)
+			break;
+			case 5:
+			case 6:
+				return mkclass(S_IMP, 0);
+			break;
+			case 7:
+				return mkclass(S_DOG,0);
+			break;
+			case 8:
+				return mkclass(S_VAMPIRE,0);
+			break;
+			case 9:
+				return mkclass(S_DEMON,0);
+			break;
 	if (u.uz.dnum == tomb_dnum)
 		return rn2(2) ? mkclass(S_ZOMBIE, 0) : mkclass(S_MUMMY, 0);
 
