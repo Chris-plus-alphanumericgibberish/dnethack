@@ -618,20 +618,27 @@ struct level_map {
 #endif
 	{ "medusa",	&medusa_level },
 	/*Gehennom*/
-//	{ "asmodeus",	&asmodeus_level },
-	{ "hell3",	&asmodeus_level },
-//	{ "baalz",	&baalzebub_level },
-	{ "hell2",	&baalzebub_level },
-	{ "fakewiz1",	&portal_level },
-//	{ "juiblex",	&juiblex_level },
-	{ "abyss",	&juiblex_level },
-//	{ "orcus",	&orcus_level },
-	{ "abys2",	&orcus_level },
-	{ "sanctum",	&sanctum_level },
 	{ "valley",	&valley_level },
+	
 	{ "wizard1",	&wiz1_level },
 	{ "wizard2",	&wiz2_level },
 	{ "wizard3",	&wiz3_level },
+	
+//	{ "asmodeus",	&asmodeus_level },
+//	{ "baalz",	&baalzebub_level },
+	{ "hell",	&hell2_level },
+	{ "hell2",	&hell2_level },
+	{ "hell3",	&hell3_level },
+	{ "fakewiz1",	&portal_level },
+//	{ "juiblex",	&juiblex_level },
+//	{ "orcus",	&orcus_level },
+	{ "abyss",	&abyss1_level },
+	{ "abyss-1",	&abyss1_juiblex_level },
+	{ "abys2",	&abyss2_level },
+	{ "brine",	&abyss3_level },
+	
+	{ "sanctum",	&sanctum_level },
+
 #ifdef RECORD_ACHIEVE
 	{ "minend",     &mineend_level },
 	{ "soko1",      &sokoend_level },

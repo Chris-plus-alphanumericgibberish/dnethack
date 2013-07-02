@@ -103,12 +103,23 @@ typedef struct branch {
 #define Is_waterlevel(x)	(on_level(x, &water_level))
 #define Is_firelevel(x)		(on_level(x, &fire_level))
 #define Is_airlevel(x)		(on_level(x, &air_level))
+
 #define Is_medusa_level(x)	(on_level(x, &medusa_level))
 #define Is_oracle_level(x)	(on_level(x, &oracle_level))
+
 #define Is_valley(x)		(on_level(x, &valley_level))
-#define Is_juiblex_level(x)	(on_level(x, &juiblex_level))
-#define Is_asmo_level(x)	(on_level(x, &asmodeus_level))
-#define Is_baal_level(x)	(on_level(x, &baalzebub_level))
+
+#define Is_hell1(x)			(on_level(x, &hell1_level))
+#define Is_hell2(x)			(on_level(x, &hell2_level))
+#define Is_hell3(x)			(on_level(x, &hell3_level))
+#define Is_asmo_level(x)	(on_level(x, &hell3_level))
+#define Is_baal_level(x)	(on_level(x, &hell2_level))
+
+#define Is_abyss1(x)		(on_level(x, &abyss1_level))
+#define Is_abyss2(x)		(on_level(x, &abyss2_level))
+#define Is_abyss3(x)		(on_level(x, &abyss3_level))
+#define Is_juiblex_level(x)	(on_level(x, &abyss1_juiblex_level))
+
 #define Is_wiz1_level(x)	(on_level(x, &wiz1_level))
 #define Is_wiz2_level(x)	(on_level(x, &wiz2_level))
 #define Is_wiz3_level(x)	(on_level(x, &wiz3_level))

@@ -64,16 +64,18 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_wiz1_level;
     d_level	d_wiz2_level;
     d_level	d_wiz3_level;
-    d_level	d_juiblex_level;
-    d_level	d_orcus_level;
+//    d_level	d_juiblex_level;
+//    d_level	d_orcus_level;
+    d_level	d_demogorgon_level;
     d_level	d_hell1_level;
     d_level	d_hell2_level;
     d_level	d_hell3_level;
     d_level	d_abyss_level;
+    d_level	d_abyss_juiblex_level;
     d_level	d_abys2_level;
     d_level	d_brine_level;
-    d_level	d_baalzebub_level;	/* unused */
-    d_level	d_asmodeus_level;	/* unused */
+//    d_level	d_baalzebub_level;	/* unused */
+//    d_level	d_asmodeus_level;	/* unused */
     d_level	d_portal_level;		/* only in goto_level() [do.c] */
     d_level	d_sanctum_level;
 	/*Planes*/
@@ -131,10 +133,19 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define wiz1_level		(dungeon_topology.d_wiz1_level)
 #define wiz2_level		(dungeon_topology.d_wiz2_level)
 #define wiz3_level		(dungeon_topology.d_wiz3_level)
-#define juiblex_level		(dungeon_topology.d_juiblex_level)
-#define orcus_level		(dungeon_topology.d_orcus_level)
-#define baalzebub_level		(dungeon_topology.d_baalzebub_level)
-#define asmodeus_level		(dungeon_topology.d_asmodeus_level)
+#define abyss1_level	(dungeon_topology.d_abyss_level)
+#define abyss1_juiblex_level	(dungeon_topology.d_abyss_juiblex_level)
+#define abyss2_level	(dungeon_topology.d_abys2_level)
+#define orcus_level		(dungeon_topology.d_abys2_level)
+#define abyss3_level	(dungeon_topology.d_brine_level)
+#define hell1_level		(dungeon_topology.d_hell1_level)
+#define hell2_level		(dungeon_topology.d_hell2_level)
+#define hell3_level		(dungeon_topology.d_hell3_level)
+////define juiblex_level		(dungeon_topology.d_juiblex_level)
+//define orcus_level		(dungeon_topology.d_orcus_level)
+//define demogoron_level		(dungeon_topology.d_demogorgon_level)
+//define baalzebub_level		(dungeon_topology.d_baalzebub_level)
+//define asmodeus_level		(dungeon_topology.d_asmodeus_level)
 #define portal_level		(dungeon_topology.d_portal_level)
 #define sanctum_level		(dungeon_topology.d_sanctum_level)
 	/*Planes*/
