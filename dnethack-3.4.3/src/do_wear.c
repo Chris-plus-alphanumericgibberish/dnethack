@@ -1640,15 +1640,24 @@ find_ac()
 	if (HProtection & INTRINSIC) uac -= u.ublessed;
 	uac -= u.uacinc;
 	uac -= u.uspellprot;
-	dexbonus = (int)( (ACURR(A_DEX)-1)/2 - 5 ); /*ranges from -5 to +7 (1 to 25) */
+	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
 	if(Role_if(PM_MONK) && !uarm){
 		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
 		dexbonus += max((int)( (ACURR(A_WIS)-1)/2 - 5 ),0) + (int)(u.ulevel/6 + 1);
 	}
-	if(dexbonus > 0 && uarm
-		&& uarm->otyp != DWARVISH_MITHRIL_COAT && uarm->otyp != ELVEN_MITHRIL_COAT &&
-			uarm->otyp != LEATHER_JACKET
-		) dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
+	if(dexbonus > 0 && uarm){
+		if(uarm->otyp == BRONZE_PLATE_MAIL || uarm->otyp == CHAIN_MAIL || uarm->otyp == SCALE_MAIL || 
+			uarm->otyp == STUDDED_LEATHER_ARMOR || uarm->otyp == LEATHER_ARMOR || uarm->otyp == BANDED_MAIL)
+				dexbonus = max(
+						(int)(dexbonus/2), 
+						(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
+							(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
+						)
+					);
+		else if(uarm->otyp != DWARVISH_MITHRIL_COAT && uarm->otyp != ELVEN_MITHRIL_COAT &&
+			uarm->otyp != LEATHER_JACKET)
+				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
+	}
 	uac -= dexbonus;
 	if (uac < -128) uac = -128;	/* u.uac is an schar */
 	if(uac != u.uac){
