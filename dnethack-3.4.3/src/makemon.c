@@ -2527,7 +2527,7 @@ rndmonst()
 			case 2:
 			case 3:
 			case 4:
-				return mkclass(S_ZOMBIE, 0)
+				return mkclass(S_ZOMBIE, 0);
 			break;
 			case 5:
 			case 6:
@@ -2542,6 +2542,7 @@ rndmonst()
 			case 9:
 				return mkclass(S_DEMON,0);
 			break;
+		}
 	if (u.uz.dnum == tomb_dnum)
 		return rn2(2) ? mkclass(S_ZOMBIE, 0) : mkclass(S_MUMMY, 0);
 
