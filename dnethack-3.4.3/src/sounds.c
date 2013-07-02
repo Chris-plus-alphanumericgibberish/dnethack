@@ -972,6 +972,29 @@ dochat()
     return domonnoise(mtmp);
 }
 
+//definition of an extern in you.h
+//A bag, a silver key, a (gold) ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
+char *andromaliusItems[18] = {
+	"a sack",
+	"a silver key",
+	"a ring",
+	"a coin",
+	"a dagger",
+	"an apple",
+	"a scroll",
+	"a whistle",
+	"a mirror",
+	"an egg",
+	"a potion",
+	"a dead spider",
+	"a human skull",
+	"an arm bone",
+	"a spellbook",
+	"a bell",
+	"a set of lockpicks",
+	"a live sewer rat"
+};
+
 int
 dobinding(tx,ty)
 int tx,ty;
@@ -997,7 +1020,7 @@ int tx,ty;
 		if(u.ahazu < moves){
 			struct trap *t=t_at(tx,ty);
 			if(t->ttyp == PIT){ //Ahazu requires that his seal be drawn in a pit.
-				pline("The walls of the pit are moved away, revealing a vast starry expanse beneath the world.");
+				pline("The walls of the pit are lifted swiftly away, revealing a vast starry expanse beneath the world.");
 				if(u.sealCounts < numSlots){
 					pline("A voice whispers from bellow:");
 					pline("\"All shall feed the shattered night.\"");
@@ -1039,7 +1062,7 @@ int tx,ty;
 				pline("A golden flame roars suddenly to life within the seal, throwning the world into a stark relief of hard-edged shadows and brilliant light.");
 				if(u.sealCounts < numSlots){
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
-					pline("A voice speaks from the now blood-red flame, even as it dies.");
+					pline("A voice speaks from the now blood-red flame, even as it dies:");
 					pline("\"Cursed are you who calls me forth. I damn you to bear my sign and my flames, alone in this world of darkness!\"");
 					u.sealsActive |= SEAL_AMON;
 					u.spirit[numSlots] = SEAL_AMON;
@@ -1073,8 +1096,322 @@ int tx,ty;
 					angrygods(a_align(tx,ty));
 				}
 			}
-			u.amon = moves + bindingPeriod; // invoking amon on a level with an altar triggers the binding period.
+			u.amon = moves + bindingPeriod; // invoking amon on a level with an altar still triggers the binding period.
 		}
+	}break;
+	case ANDREALPHUS:{
+		if(u.andrealphus < moves){
+			if(isok(tx+(tx-u.ux), ty+(ty-u.uy)) && IS_CORNER(levl[tx+(tx-u.ux)][ty+(ty-u.uy)].typ) && 
+				IS_WALL(levl[tx+(tx-u.ux)][ty].typ) && IS_WALL(levl[tx][ty+(ty-u.uy)].typ)
+			){ //Andrealphus requires that his seal be drawn in a corner.
+				Your("perspective shifts, and the wall before you takes on new depth.");
+				pline("The dim dungeon light, refracting through strange angles, casts the alien figure before you in rainbow hues.");
+				if(u.sealCounts < numSlots){
+					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
+					pline("\"Though born of curves, by my level and my square you shall rectify the world.\"");
+					u.sealsActive |= SEAL_ANDREALPHUS;
+					u.spirit[numSlots] = SEAL_ANDREALPHUS;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
+					pline("\"Though your instrument is born of points, by my level and my square it shall rectify the world.\"");
+					uwep->ovar1 |= SEAL_ANDREALPHUS;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_ANDREALPHUS;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_ANDREALPHUS;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
+					pline("You, born of dishonest curves, are unworthy of my measure.");
+				}
+				u.andrealphus = moves + bindingPeriod;
+			}
+		}
+	}break;
+	case ANDROMALIUS:{ /*UNFINISHED*/
+		if(u.andromalius < moves){
+			//Seal must be drawn around any two of a bag, a silver key, a (gold) ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
+			struct obj *o1 = 0, *o2 = 0, *otmp;
+			int count = 0;
+			int t1, t2;
+			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere)
+				if(!otmp->oartifact){
+					if(!o1){
+						if(otmp->otyp == SACK){ o1 = otmp; t1 = 0;}
+						else if(otmp->otyp == UNIVERSAL_KEY){ o1 = otmp; t1 = 1;}
+						else if(otmp->oclass == RING_CLASS){ o1 = otmp; t1 = 2;}
+						else if(otmp->oclass == COIN_CLASS){ o1 = otmp; t1 = 3;}
+						else if(otmp->otyp == DAGGER){ o1 = otmp; t1 = 4;}
+						else if(otmp->otyp == APPLE){ o1 = otmp; t1 = 5;}
+						else if(otmp->oclass == SCROLL_CLASS){ o1 = otmp; t1 = 6;}
+						else if(otmp->otyp == TIN_WHISTLE){ o1 = otmp; t1 = 7;}
+						else if(otmp->otyp == MIRROR){ o1 = otmp; t1 = 8;}
+						else if(otmp->otyp == EGG){ o1 = otmp; t1 = 9;}
+						else if(otmp->oclass == POTION_CLASS){ o1 = otmp; t1 = 10;}
+						//spider corpse
+						//human corpse (skull)
+						//humanoid or ape corpse (arm bone)
+						else if(otmp->oclass == SPBOOK_CLASS){ o1 = otmp; t1 = 14;}
+						else if(otmp->otyp == BELL){ o1 = otmp; t1 = 15;}
+						else if(otmp->otyp == LOCK_PICK){ o1 = otmp; t1 = 16;}
+						//live sewer rat
+					}
+					else if(!o2){
+						if(otmp->otyp == SACK && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 0;}
+						else if(otmp->otyp == UNIVERSAL_KEY && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 1;}
+						else if(otmp->oclass == RING_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 2;}
+						else if(otmp->oclass == COIN_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 3;}
+						else if(otmp->otyp == DAGGER && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 4;}
+						else if(otmp->otyp == APPLE && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 5;}
+						else if(otmp->oclass == SCROLL_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 6;}
+						else if(otmp->otyp == TIN_WHISTLE && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 7;}
+						else if(otmp->otyp == MIRROR && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 8;}
+						else if(otmp->otyp == EGG && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 9;}
+						else if(otmp->oclass == POTION_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 10;}
+						//spider corpse
+						//human corpse (skull)
+						//humanoid or ape corpse (arm bone)
+						else if(otmp->oclass == SPBOOK_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 14;}
+						else if(otmp->otyp == BELL && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 15;}
+						else if(otmp->otyp == LOCK_PICK && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 16;}
+						//live sewer rat
+					}
+					else break;
+				}
+			if(o1 && o2){
+				int i1 = rn2(18), i2 = rn2(18);
+				
+				while(i1 == t1 || i1 == t2) i1 = rn2(18);
+				while(i2 == t1 || i2 == t2 || i2 == i1) i2 = rn2(18);
+				
+				pline("Gloved hands reach down and pick up %s and %s from the confines of the seal.", andromaliusItems[t1] andromaliusItems[t2]);
+				pline("The hands begin to juggle. They move faster and faster, adding new objects as they go.");
+				pline("You spot %s and %s before loosing track of the individual objects.",andromaliusItems[i1],andromaliusItems[i2]);
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_ANDROMALIUS;
+					u.spirit[numSlots] = SEAL_ANDROMALIUS;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_ANDROMALIUS;
+					if(!u.spiritTineA){
+						u.spiritTineA = SEAL_ANDROMALIUS;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_ANDROMALIUS;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline("");
+				}
+				u.andrealphus = moves + bindingPeriod;
+				//coins: use up just one.
+				useup(o1);
+				useup(o2);
+			}
+		}
+	}break;
+	case ASTAROTH:{
+		if(u.astaroth < moves){
+			if(){ //Astaroth requires that his seal be drawn on a square with a damaged item.
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_ASTAROTH;
+					u.spirit[numSlots] = SEAL_ASTAROTH;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_ASTAROTH;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_ASTAROTH;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_ASTAROTH;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.astaroth = moves + bindingPeriod;
+			}
+		}
+	}break;
+	case BALAM:{
+		if(u.balam < moves){
+			if(){ //Balam requires that her seal be drawn on an icy square.
+				You("stab your weapon down into the ice.");
+				if(u.sealCounts < numSlots){
+					pline("In the back of your mind");
+					pline("");
+					u.sealsActive |= SEAL_BALAM;
+					u.spirit[numSlots] = SEAL_BALAM;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_BALAM;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_BALAM;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_BALAM;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.balam = moves + bindingPeriod;
+			}
+		}
+	}break;
+	case BERITH:{
+		if(u.berith < moves){
+			if(){ //Berith requires that his seal be drawn around a set of riding gloves, riding boots, a saddle, a saber, a longsword, a bow, or a lance.
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_BERITH;
+					u.spirit[numSlots] = SEAL_BERITH;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_BERITH;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_BERITH;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_BERITH;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.berith = moves + bindingPeriod;
+			}
+		}
+	}break;
+	case BUER:{
+		// if(u.vestige < moves){
+			// if(){ //Spirit requires that his seal be drawn .
+				// Your(".");
+				// pline(".");
+				// if(u.sealCounts < numSlots){
+					// pline("");
+					// pline("");
+					// u.sealsActive |= SEAL_;
+					// u.spirit[numSlots] = SEAL_;
+					// u.spiritT[numSlots] = moves + bindingPeriod;
+					// u.sealCounts++;
+				// }
+				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					// pline("");
+					// pline("");
+					// uwep->ovar1 |= SEAL_;
+					// if(!u.spiritTineA){ 
+						// u.spiritTineA = SEAL_;
+						// u.spiritTineTA= moves + bindingPeriod;
+					// }
+					// else{
+						// u.spiritTineB = SEAL_;
+						// u.spiritTineTB= moves + bindingPeriod;
+					// }
+				// }
+				// else{
+					// pline("");
+					// pline(".");
+				// }
+				// u.vestige = moves + bindingPeriod;
+			// }
+		// }
+	}break;
+	case CHUPOCLOPS:{
+	}break;
+	case DANTALION:{
+	}break;
+	case DUNSTAN:{
+	}break;
+	case ECHIDNA:{
+	}break;
+	case EDEN:{
+	}break;
+	case ERIDU:{
+	}break;
+	case EURYNOME:{
+	}break;
+	case EVE:{
+	}break;
+	case FAFNIR:{
+	}break;
+	case HUGINN_MUNINN:{
+	}break;
+	case IRIS:{
+	}break;
+	case JACK:{
+	}break;
+	case MALPHAS:{
+	}break;
+	case MARIONETTE:{
+	}break;
+	case MOTHER:{
+	}break;
+	case NABERIUS:{
+	}break;
+	case ORTHOS:{
+	}break;
+	case OSE:{
+	}break;
+	case OTIAX:{
+	}break;
+	case PAIMON:{
+	}break;
+	case SIMURGH:{
+	}break;
+	case TENEBROUS:{
+	}break;
+	case YMIR:{
+	}break;
+	case DAHLVER_NAR:{
+	}break;
+	case ACERERAK:{
+	}break;
+	case NUMINA:{
 	}break;
 	}
 	

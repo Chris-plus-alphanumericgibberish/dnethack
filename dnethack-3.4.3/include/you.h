@@ -494,6 +494,7 @@ struct you {
 
 extern long sealKey[31];
 extern char *wardDecode[26];
+extern char *andromaliusItems[18];
 #define Upolyd (u.umonnum != u.umonster)
 
 #endif	/* YOU_H */
