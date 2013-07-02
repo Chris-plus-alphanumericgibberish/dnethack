@@ -350,9 +350,17 @@ dig(VOID_ARGS)
 			    }
 			}
 			if (IS_TREE(lev->typ)) {
+				char numsticks;
+				struct obj *staff;
 			    digtxt = "You cut down the tree.";
 			    lev->typ = ROOM;
 //			    if (!rn2(5)) (void) rnd_treefruit_at(dpx, dpy); /*for now, remove fruit drops for chopping down trees*/
+				levl[bhitpos.x][bhitpos.y].typ = CORR;
+				for(numsticks = d(2,4)-1; numsticks > 0; numsticks--){
+					staff = mksobj_at(QUARTERSTAFF, dpx, dpy, FALSE, FALSE);
+					staff->spe = 0;
+					staff->cursed = staff->blessed = FALSE;
+				}
 			} else {
 			    digtxt = "You succeed in cutting away some rock.";
 			    lev->typ = CORR;
