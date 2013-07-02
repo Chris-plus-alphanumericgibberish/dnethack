@@ -67,7 +67,12 @@
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
 #define Drain_resistance	(HDrain_resistance || EDrain_resistance || \
 				 resists_drli(&youmonst) || \
-				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) >=4 ))
+				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) >=4 ) && \
+					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \
+						(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && \
+						(mvitals[PM_LARGE_CAT].mvflags & G_GENOD || mvitals[PM_LARGE_CAT].died >= 120) \
+					) \
+				)
 
 /* Intrinsics only */
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic
@@ -75,7 +80,12 @@
 				 youmonst.data->mlet == S_FUNGUS || \
 				 youmonst.data == &mons[PM_GHOUL] || \
 				 defends(AD_DISE,uwep) || \
-				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) == 7))
+				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) == 7 && \
+					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \
+						(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && \
+						(mvitals[PM_LARGE_CAT].mvflags & G_GENOD || mvitals[PM_LARGE_CAT].died >= 120) \
+					) \
+				 ))
 #define Invulnerable		u.uprops[INVULNERABLE].intrinsic    /* [Tom] */
 
 /* Extrinsics only */

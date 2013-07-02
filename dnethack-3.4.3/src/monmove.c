@@ -210,7 +210,10 @@ struct monst *mtmp;
 	if(complete <= 0) return FALSE;
 	else if(mtmp->isshk || mtmp->iswiz || 
 			is_rider(mtmp->data) ||
-			( (mvitals[PM_KITTEN].mvflags & G_GONE) && (mvitals[PM_CAT].mvflags & G_GONE) && (mvitals[PM_LARGE_CAT].mvflags & G_GONE) )
+			( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && 
+				(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && 
+				(mvitals[PM_LARGE_CAT].mvflags & G_GENOD || mvitals[PM_LARGE_CAT].died >= 120)
+			)
 		) return FALSE;
 	else if(mtmp->data->mlet == S_FELINE
 			){ /* && mvitals[PM_KITTEN].died == 0*/
@@ -445,7 +448,7 @@ struct monst *mtmp;
 	else if(mtmp->data->mlet == S_SNAKE){
 				mtmp->mpeaceful = TRUE;
 			}
-	return d(1,100) <= 30*complete && 
+	return d(1,100) <= 33*complete && 
 			(!is_golem(mtmp->data)) &&
 			(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 			(mtmp->data != &mons[PM_ELDER_PRIEST]) &&

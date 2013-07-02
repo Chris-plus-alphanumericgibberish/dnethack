@@ -2803,7 +2803,7 @@ char class;
 	Strcat(cl, tmp);
 }
 
-const int carveTurns[6] = {1,2,1,0,3,1};
+const int carveTurns[6] = {3,4,2,1,5,2};
 
 int
 do_carve_obj(obj)
