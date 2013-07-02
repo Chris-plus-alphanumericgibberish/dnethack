@@ -1543,8 +1543,11 @@ register struct obj	*sobj;
 				}
 			}
 	     }
+		 You_feel("guilty for destroying such a valuable text.");
+		 u.ualign.record /= 2;
+		 u.ualign.sins += 4;
 		}
-		else if((u.ualign.type == A_NEUTRAL || u.ualign.type == A_LAWFUL) && u.ualign.record > 0){
+		else if(u.ualign.type == A_NEUTRAL || (u.ualign.type == A_LAWFUL && u.ualign.record > 0)){
 		 pline("It's meaning is unclear, and you think you didn't pronounce it quite right.");
 		 if (u.uswallow) {
 			if(u.ustuck->data->maligntyp < A_NEUTRAL) monflee(u.ustuck, 7, FALSE, FALSE);
@@ -1564,10 +1567,25 @@ register struct obj	*sobj;
 				}
 			}
 	     }
+		 if(u.ualign.type == A_NEUTRAL) {
+			You_feel("less neutral.");
+			u.ualign.record -= 8;
+			u.ualign.sins += 8;
+		 }
+		 else{
+			You_feel("guilty for destroying such a valuable text.");
+			u.ualign.record -= 20;
+			u.ualign.sins += 10;
 		}
-		else{//chaotic or poorly aligned
+		}
+		else{//chaotic or poorly aligned lawful
 		 You("find it quite confusing.");
 		    incr_itimeout(&HConfusion, max(u.ualign.record, -1*u.ualign.record));
+		 if(u.ualign.type == A_LAWFUL){
+			You_feel("unworthy of such a lawful text.");
+			u.ualign.record -= 8;
+			u.ualign.sins += 8;
+		 }
 		}
 	}
 	break;
