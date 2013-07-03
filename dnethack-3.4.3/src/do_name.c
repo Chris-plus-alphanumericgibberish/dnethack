@@ -935,6 +935,8 @@ static const char * const bogusmons[] = {
 	"smurf",				/* The Smurfs */
 	"tribble", "Klingon", "Borg",		/* Star Trek */
 	"Ewok",	"Wookiee", "Jedi", "Sith",	/* Star Wars */
+	"incredible hulk",		/* Comics */
+	"hegemonic brute", "sovereign slayer", "draconian dignitary", "courtyard droll", /* Homestuck */
 	"Totoro",				/* Tonari no Totoro */
 	"ohmu",					/* Nausicaa */
 	"youma",				/* Sailor Moon */

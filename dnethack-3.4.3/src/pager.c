@@ -590,7 +590,7 @@ static const char * const bogusobjects[] = {
        "buckled boots",
        "riding boots",
 		
-	   "can of grease",
+	   "can of Greece",
 	   "can of crease",
 	   "can of Grease",
 	   "can of greaser",
@@ -647,6 +647,8 @@ static const char * const bogusobjects[] = {
        "blessed 9 helm of Des Lynam",     /* Bottom */
 	   "oscillation overthruster",
 	   "magic device",
+
+	   "Infinity Gauntlet",
 
         /* Geekery */
        "AAA chipset",                      /* Amiga */
