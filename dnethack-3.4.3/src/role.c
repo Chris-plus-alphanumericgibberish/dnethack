@@ -77,32 +77,32 @@ const struct Role roles[] = {
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
 	10, 14, 0, 0,  8, A_INT, SPE_HASTE_SELF,      -4
 },
-{	{"Binder", 		 0}, {
-	{"Exile",        0},
-	{"Heratic",      0},
-	{"Cultist",      0},
-	{"Binder",       0},
-	{"Akousmatikoi", 0},
-	{"Mathematikoi", 0},
-	{"Doctor",       0},
-	{"Unbinder",     0},
-	{"Gnostikos",    0} },
-	"Yaldabaoth", "the void", "_Sophia", /* Gnostic */
-	"Bin", "the lost library", "the Tower of Woe",
-	PM_EXILE, NON_PM, NON_PM,
-	PM_STRANGE_CORPSE, NON_PM, PM_ACERERAK,
-	PM_BUGBEAR, PM_LICH, S_HUMANOID, S_LICH,
-	ART_PEN_OF_THE_VOID,
-	MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC | ROLE_MALE|ROLE_FEMALE |
-	  ROLE_NEUTRAL,
-	/* Str Int Wis Dex Con Cha */
-	{  6,  6,  6,  6,  6,  6 },
-	{  10,  10,  10, 10, 10,  10 },
-	/* Init   Lower  Higher */
-	{ 11, 0,  0, 10,  2, 0 },	/* Hit points */
-	{  5, 0,  1, 0,  1, 0 },15,	/* Energy */
-	-5, 10, 5, 10,  25, A_INT, SPE_SLEEP,             -4
-},
+// {	{"Binder", 		 0}, {
+	// {"Exile",        0},
+	// {"Heratic",      0},
+	// {"Cultist",      0},
+	// {"Binder",       0},
+	// {"Akousmatikoi", 0},
+	// {"Mathematikoi", 0},
+	// {"Doctor",       0},
+	// {"Unbinder",     0},
+	// {"Gnostikos",    0} },
+	// "Yaldabaoth", "the void", "_Sophia", /* Gnostic */
+	// "Bin", "the lost library", "the Tower of Woe",
+	// PM_EXILE, NON_PM, NON_PM,
+	// PM_STRANGE_CORPSE, NON_PM, PM_ACERERAK,
+	// PM_BUGBEAR, PM_LICH, S_HUMANOID, S_LICH,
+	// ART_PEN_OF_THE_VOID,
+	// MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC | ROLE_MALE|ROLE_FEMALE |
+	  // ROLE_NEUTRAL,
+	// /* Str Int Wis Dex Con Cha */
+	// {  6,  6,  6,  6,  6,  6 },
+	// {  10,  10,  10, 10, 10,  10 },
+	// /* Init   Lower  Higher */
+	// { 11, 0,  0, 10,  2, 0 },	/* Hit points */
+	// {  5, 0,  1, 0,  1, 0 },15,	/* Energy */
+	// -5, 10, 5, 10,  25, A_INT, SPE_SLEEP,             -4
+// },
 {	{"Caveman", "Cavewoman"}, {
 	{"Troglodyte",  0},
 	{"Aborigine",   0},
