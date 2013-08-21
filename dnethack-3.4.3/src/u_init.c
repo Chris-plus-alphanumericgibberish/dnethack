@@ -763,6 +763,8 @@ u_init()
 	case PM_EXILE:
 		ini_inv(Binder);
 		skill_init(Skill_N);
+    	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
+			u.ualign.type = A_NEUTRAL; /* Override racial alignment */
 		break;
 	case PM_CAVEMAN:
 		Cave_man[C_AMMO].trquan = rn1(11, 10);	/* 10..20 */
