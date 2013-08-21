@@ -158,12 +158,14 @@ onscary(x, y, mtmp)
 int x, y;
 struct monst *mtmp;
 {
+	struct obj *alignedfearobj = aligned_sartprop3_at(SPFX3_FEAR, x, y);
+	
 
 	return (boolean)( 
 				((
 					sobj_at(SCR_SCARE_MONSTER, x, y)
-				 || aligned_sartprop3_at(SPFX3_FEAR, x, y)
-				 )&& scaryItem(mtmp) 
+				 || (alignedfearobj && !touch_artifact(alignedfearobj,mtmp))
+				 ) && scaryItem(mtmp)
 				)
 			 || (u.umonnum == PM_GHOUL && mtmp->data == &mons[PM_GUG])
 			 || (sengr_at("Elbereth", x, y) && scaryElb(mtmp))
@@ -183,7 +185,8 @@ struct monst *mtmp;
 			 || (scaryDre(mtmp) && dreprun_at(x,y))
 			 || (scaryVei(mtmp) && veioistafur_at(x,y))
 			 || (scaryThj(mtmp) && thjofastafur_at(x,y))
-			 || (mtmp->data->mlet == S_VAMPIRE && IS_ALTAR(levl[x][y].typ)));
+			 || (mtmp->data->mlet == S_VAMPIRE && IS_ALTAR(levl[x][y].typ))
+			);
 }
 
 boolean
