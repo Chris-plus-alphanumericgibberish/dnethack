@@ -155,7 +155,7 @@ A("Kingslayer",		STILETTO,
 A("Peace Keeper",		ATHAME, 
 	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, (M2_HOSTILE), /* speaks for itself */
 	PHYS(5,10),	NO_DFNS,	NO_CARY,	/*Weaker attack and damage */
-	0, A_NONE, NON_PM, NON_PM, 2500L, 
+	0, A_LAWFUL, NON_PM, NON_PM, 2500L, 
 	0,0,0),
 
 A("Ogresmasher",		WAR_HAMMER, //needs quote
@@ -188,13 +188,13 @@ A("Mjollnir",			WAR_HAMMER,		/* Mjo:llnir */
 
 A("the Pen of the Void",	ATHAME,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK), 0, 0,
-	PHYS(5,0),	NO_DFNS,	CARY(AD_MAGM),
+	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	0,	A_NEUTRAL, PM_EXILE, NON_PM, 2500L, 
 	0,0,0),
 
 #ifdef CONVICT
 A("Luck Blade",			SHORT_SWORD,
-	(SPFX_RESTR|SPFX_INTEL), SPFX_LUCK,0,
+	(SPFX_RESTR|SPFX_INTEL), 0,0,
 	PHYS(1, 4),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
 	0,0,0 ),
 #endif /* CONVICT */
@@ -539,7 +539,7 @@ A("Nighthorn",	UNICORN_HORN, /*from SLASH'EM, although modified from its origina
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_INTEL), SPFX_LUCK,0, //needs quote
 	FIRE(12,24),	FIRE(0,0),	NO_CARY,
 	LEVITATION,	A_CHAOTIC, NON_PM, NON_PM, 5000L, 
-	SPFX2_FIRE2,SPFX3_FEAR,0), /*Fire explosion and acts as a scroll of scare monster.*/
+	SPFX2_FIRE2,SPFX3_FEAR,0), /*Fire explosion and acts as a scroll of scare monster against non-chaotic monsters.*/
 
 
 /*//////Artifact Keys.  Must be grouped together.  Some code in lock.c depends on the order.  Also artifact.h//////*/
