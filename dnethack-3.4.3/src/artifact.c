@@ -748,11 +748,17 @@ touch_artifact(obj,mon)
 														//Neutral horns blast NEUTRAL.
 		}
     } else if (!is_covetous(mon->data) && !is_mplayer(mon->data)) {
+		if(oart->otyp != UNICORN_HORN){
 		badclass = self_willed &&
 			   oart->role != NON_PM && !(oart == &artilist[ART_EXCALIBUR]
 			   || oart == &artilist[ART_CLARENT]);
 		badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
 		   (oart->alignment != sgn(mon->data->maligntyp));
+		}
+		else{/* Unicorn horns */
+			badclass = TRUE;
+			badalign = oart->alignment != A_NONE && (oart->alignment != sgn(mon->data->maligntyp));
+		}
     } else {    /* an M3_WANTSxxx monster or a fake player */
 		/* special monsters trying to take the Amulet, invocation tools or
 		   quest item can touch anything except for `spec_applies' artifacts */
