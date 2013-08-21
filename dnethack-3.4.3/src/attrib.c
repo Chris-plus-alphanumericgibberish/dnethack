@@ -233,7 +233,10 @@ boolean parameter; /* So I can't think up of a good name.  So sue me. --KAA */
 		else if (otmp->blessed) bonchance += otmp->quan;
 		else if (parameter) bonchance += otmp->quan;
 	    }
-
+#ifdef CONVICT
+	if(Role_if(PM_CONVICT)) bonchance -= (u.ulevel-1)/10 + 1; /* a Convict's karmic burden becomes 
+																only more heavy as they level up */
+#endif	/* CONVICT */
 	return sgn((int)bonchance);
 }
 
