@@ -86,10 +86,19 @@
 #define is_ogre(ptr)		(((ptr)->mlet & S_OGRE) != 0L)
 #define is_human(ptr)		(((ptr)->mflags2 & M2_HUMAN) != 0L)
 #define your_race(ptr)		(((ptr)->mflags2 & urace.selfmask) != 0L)
+#define is_andromaliable(ptr)	(is_elf(ptr) || is_dwarf(ptr) || is_gnome(ptr) || is_orc(ptr) || is_human(ptr) || \
+								 (ptr) == &mons[PM_MONKEY] || (ptr) == &mons[PM_APE] || (ptr) == &mons[PM_YETI] || \
+								 (ptr) == &mons[PM_CARNIVOROUS_APE] || (ptr) == &mons[PM_SASQUATCH]\
+								)
 #define is_bat(ptr)		((ptr) == &mons[PM_BAT] || \
 				 (ptr) == &mons[PM_GIANT_BAT] || \
 				 (ptr) == &mons[PM_VAMPIRE_BAT])
 #define is_social_insect(ptr) ((ptr)->mlet == S_ANT && (ptr)->maligntyp > 0)
+#define is_spider(ptr) ((ptr)->mlet == S_SPIDER && (\
+				 (ptr) == &mons[PM_CAVE_SPIDER]\
+				 (ptr) == &mons[PM_GIANT_SPIDER]\
+				 (ptr) == &mons[PM_PHASE_SPIDER]\
+				 ))
 #ifdef CONVICT
 # define is_rat(ptr)		((ptr) == &mons[PM_SEWER_RAT] || \
 				 (ptr) == &mons[PM_GIANT_RAT] || \

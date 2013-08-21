@@ -1414,6 +1414,7 @@ E int NDECL(find_hboots);
 E int NDECL(find_bboots);
 E int NDECL(find_jboots);
 E int NDECL(find_engagement_ring);
+E int NDECL(find_gold_ring);
 E void NDECL(oinit);
 E void FDECL(savenames, (int,int));
 E void FDECL(restnames, (int));
