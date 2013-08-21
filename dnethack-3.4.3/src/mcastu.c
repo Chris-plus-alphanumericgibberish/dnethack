@@ -756,7 +756,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			shieldeff(u.ux, u.uy);
 			pline_The("missiles bounce off!");
 			dmg = 0;
-		} else dmg = d((int)mtmp->m_lev/2 + 1,6);
+		} //else dmg = d((int)mtmp->m_lev/2 + 1,6);
 		break;
         default:
 	    {
@@ -1770,7 +1770,7 @@ castmm(mtmp, mdef, mattk)
 	                if (canspotmon(mdef))
 			    pline_The("missiles bounce off!");
 			dmg = 0;
-		} else dmg = d((int)mtmp->m_lev/2 + 1,6);
+		} //else dmg = d((int)mtmp->m_lev/2 + 1,6);
 		break;
 	    default:
 		{
@@ -2023,7 +2023,7 @@ castum(mtmp, mattk)
 			shieldeff(mtmp->mx, mtmp->my);
 			pline_The("missiles bounce off!");
 			dmg = 0;
-		} else dmg = d((int)ml/2 + 1,6);
+		}// else dmg = d((int)ml/2 + 1,6);
 		break;
 	    default:
 	    {
