@@ -1949,7 +1949,7 @@ arti_invoke(obj)
 
     if(oart->inv_prop > LAST_PROP) {
 	/* It's a special power, not "just" a property */
-	if(obj->age > monstermoves && oart->inv_prop != FIRE_SHIKAI && oart->inv_prop != SEVENFOLD && oart->inv_prop != TELEPORT_SHOES) {
+	if(obj->age > monstermoves && oart->inv_prop != FIRE_SHIKAI && oart->inv_prop != SEVENFOLD) {
 	    /* the artifact is tired :-) */
 		if(obj->oartifact == ART_FIELD_MARSHAL_S_BATON){
 			You_hear("the sounds of hurried preparation.");
