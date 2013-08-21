@@ -973,26 +973,26 @@ dochat()
 }
 
 //definition of an extern in you.h
-//A bag, a silver key, a (gold) ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
+//A bag, a silver key, a gold ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
 char *andromaliusItems[18] = {
-	"a sack",
-	"a silver key",
-	"a ring",
-	"a coin",
-	"a dagger",
-	"an apple",
-	"a scroll",
-	"a whistle",
-	"a mirror",
-	"an egg",
-	"a potion",
-	"a dead spider",
-	"a human skull",
-	"an arm bone",
-	"a spellbook",
-	"a bell",
-	"a set of lockpicks",
-	"a live sewer rat"
+/*00*/	"a sack",
+/*01*/	"a silver key",
+/*02*/	"a gold ring",
+/*03*/	"a coin",
+/*04*/	"a dagger",
+/*05*/	"an apple",
+/*06*/	"a scroll",
+/*07*/	"a whistle",
+/*08*/	"a mirror",
+/*09*/	"an egg",
+/*00*/	"a potion",
+/*11*/	"a dead spider",
+/*12*/	"a human skull",
+/*13*/	"an arm bone",
+/*14*/	"a spellbook",
+/*15*/	"a bell",
+/*16*/	"a set of lockpicks",
+/*17*/	"a live sewer rat"
 };
 
 int
@@ -1062,7 +1062,7 @@ int tx,ty;
 				pline("A golden flame roars suddenly to life within the seal, throwning the world into a stark relief of hard-edged shadows and brilliant light.");
 				if(u.sealCounts < numSlots){
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
-					pline("A voice speaks from the now blood-red flame, even as it dies:");
+					pline("Even as it dies, a voice speaks from the blood-red flame:");
 					pline("\"Cursed are you who calls me forth. I damn you to bear my sign and my flames, alone in this world of darkness!\"");
 					u.sealsActive |= SEAL_AMON;
 					u.spirit[numSlots] = SEAL_AMON;
@@ -1071,7 +1071,7 @@ int tx,ty;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
-					pline("A voice speaks from the now blood-red flame, even as it dies.");
+					pline("Even as it dies, a voice speaks from the blood-red flame:");
 					pline("\"Cursed are you who calls me forth. I damn you to bear my flames, alone in this world of darkness!\"");
 					uwep->ovar1 |= SEAL_AMON;
 					if(!u.spiritTineA){ 
@@ -1105,10 +1105,10 @@ int tx,ty;
 				IS_WALL(levl[tx+(tx-u.ux)][ty].typ) && IS_WALL(levl[tx][ty+(ty-u.uy)].typ)
 			){ //Andrealphus requires that his seal be drawn in a corner.
 				Your("perspective shifts, and the wall before you takes on new depth.");
-				pline("The dim dungeon light, refracting through strange angles, casts the alien figure before you in rainbow hues.");
+				pline("The dim dungeon light refracts oddly, casts the alien figure before you in rainbow hues.");
 				if(u.sealCounts < numSlots){
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
-					pline("\"Though born of curves, by my level and my square you shall rectify the world.\"");
+					pline("\"Though born of curves, by my square you shall rectify the world.\"");
 					u.sealsActive |= SEAL_ANDREALPHUS;
 					u.spirit[numSlots] = SEAL_ANDREALPHUS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1116,7 +1116,7 @@ int tx,ty;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
-					pline("\"Though your instrument is born of points, by my level and my square it shall rectify the world.\"");
+					pline("\"Though your instrument is born of the point, by my square it shall rectify the world.\"");
 					uwep->ovar1 |= SEAL_ANDREALPHUS;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_ANDREALPHUS;
@@ -1129,7 +1129,7 @@ int tx,ty;
 				}
 				else{
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
-					pline("You, born of dishonest curves, are unworthy of my measure.");
+					pline("\"You, born of dishonest curves, are unworthy of my measure.\"");
 				}
 				u.andrealphus = moves + bindingPeriod;
 			}
@@ -1137,16 +1137,18 @@ int tx,ty;
 	}break;
 	case ANDROMALIUS:{ /*UNFINISHED*/
 		if(u.andromalius < moves){
-			//Seal must be drawn around any two of a bag, a silver key, a (gold) ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
+			//Seal must be drawn around any two of a bag, a silver key, a gold ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
 			struct obj *o1 = 0, *o2 = 0, *otmp;
 			int count = 0;
 			int t1, t2;
+			static int gldring = 0;
+			if (!gldring) gldring = find_gold_ring();
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere)
 				if(!otmp->oartifact){
 					if(!o1){
 						if(otmp->otyp == SACK){ o1 = otmp; t1 = 0;}
 						else if(otmp->otyp == UNIVERSAL_KEY){ o1 = otmp; t1 = 1;}
-						else if(otmp->oclass == RING_CLASS){ o1 = otmp; t1 = 2;}
+						else if(otmp->oclass == RING_CLASS && otmp->otyp == gldring){ o1 = otmp; t1 = 2;}
 						else if(otmp->oclass == COIN_CLASS){ o1 = otmp; t1 = 3;}
 						else if(otmp->otyp == DAGGER){ o1 = otmp; t1 = 4;}
 						else if(otmp->otyp == APPLE){ o1 = otmp; t1 = 5;}
@@ -1155,9 +1157,9 @@ int tx,ty;
 						else if(otmp->otyp == MIRROR){ o1 = otmp; t1 = 8;}
 						else if(otmp->otyp == EGG){ o1 = otmp; t1 = 9;}
 						else if(otmp->oclass == POTION_CLASS){ o1 = otmp; t1 = 10;}
-						//spider corpse
-						//human corpse (skull)
-						//humanoid or ape corpse (arm bone)
+						else if(otmp->oclass == CORPSE && otmp->corpsenm==PM_CAVE_SPIDER){ o1 = otmp; t1 = 11;}
+						else if(otmp->oclass == CORPSE && your_race(&mons[otmp->corpsenm])){ o1 = otmp; t1 = 12;}
+						else if(otmp->oclass == CORPSE && is_andromaliable(&mons[otmp->corpsenm]) ){ o1 = otmp; t1 = 13;}
 						else if(otmp->oclass == SPBOOK_CLASS){ o1 = otmp; t1 = 14;}
 						else if(otmp->otyp == BELL){ o1 = otmp; t1 = 15;}
 						else if(otmp->otyp == LOCK_PICK){ o1 = otmp; t1 = 16;}
@@ -1166,7 +1168,7 @@ int tx,ty;
 					else if(!o2){
 						if(otmp->otyp == SACK && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 0;}
 						else if(otmp->otyp == UNIVERSAL_KEY && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 1;}
-						else if(otmp->oclass == RING_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 2;}
+						else if(otmp->oclass == RING_CLASS && otmp->otyp == gldring && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 2;}
 						else if(otmp->oclass == COIN_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 3;}
 						else if(otmp->otyp == DAGGER && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 4;}
 						else if(otmp->otyp == APPLE && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 5;}
@@ -1175,9 +1177,9 @@ int tx,ty;
 						else if(otmp->otyp == MIRROR && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 8;}
 						else if(otmp->otyp == EGG && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 9;}
 						else if(otmp->oclass == POTION_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 10;}
-						//spider corpse
-						//human corpse (skull)
-						//humanoid or ape corpse (arm bone)
+						else if(otmp->oclass == CORPSE && otmp->corpsenm==PM_CAVE_SPIDER && t1 != 11){ o2 = otmp; t2 = 11;}
+						else if(otmp->oclass == CORPSE && your_race(&mons[otmp->corpsenm]) && t1 != 12 && otmp != o1){ o2 = otmp; t2 = 12;}
+						else if(otmp->oclass == CORPSE && is_andromaliable(&mons[otmp->corpsenm]) && t1 != 13 && otmp != o1){ o2 = otmp; t2 = 13;}
 						else if(otmp->oclass == SPBOOK_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 14;}
 						else if(otmp->otyp == BELL && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 15;}
 						else if(otmp->otyp == LOCK_PICK && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 16;}
@@ -1186,25 +1188,27 @@ int tx,ty;
 					else break;
 				}
 			if(o1 && o2){
-				int i1 = rn2(18), i2 = rn2(18);
+				int i1 = rn2(18), i2 = rn2(18), i3 = rn2(18);
 				
 				while(i1 == t1 || i1 == t2) i1 = rn2(18);
 				while(i2 == t1 || i2 == t2 || i2 == i1) i2 = rn2(18);
+				while(i3 == t1 || i3 == t2 || i3 == i1 || i3 == i2) i3 = rn2(18);
 				
-				pline("Gloved hands reach down and pick up %s and %s from the confines of the seal.", andromaliusItems[t1] andromaliusItems[t2]);
+				pline("Gloved hands reach down and pick up %s and %s from the confines of the seal.", andromaliusItems[t1], andromaliusItems[t2]);
 				pline("The hands begin to juggle. They move faster and faster, adding new objects as they go.");
 				pline("You spot %s and %s before loosing track of the individual objects.",andromaliusItems[i1],andromaliusItems[i2]);
 				if(u.sealCounts < numSlots){
-					pline("");
-					pline("");
+					pline("Suddenly, the hands toss one of the whrilling objects to you.");
+					/*make object here*/
+					pline("When your attention returns to the seal, the hands have gone.");
 					u.sealsActive |= SEAL_ANDROMALIUS;
 					u.spirit[numSlots] = SEAL_ANDROMALIUS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
-					pline("");
+					pline("Suddenly, the hands toss one of the whrilling objects to you.");
+					pline("It's the Pen of the Void. You didn't notice it had been taken!");
 					uwep->ovar1 |= SEAL_ANDROMALIUS;
 					if(!u.spiritTineA){
 						u.spiritTineA = SEAL_ANDROMALIUS;
@@ -1216,8 +1220,9 @@ int tx,ty;
 					}
 				}
 				else{
-					pline("");
-					pline("");
+					pline("Suddenly, the hands toss one of the whrilling objects at you.");
+					pline("The %s passes far over your head, out of reach.", andromaliusItems[i3]);
+					pline("When your attention returns to the seal, the hands have gone.");
 				}
 				u.andrealphus = moves + bindingPeriod;
 				//coins: use up just one.
@@ -1226,22 +1231,30 @@ int tx,ty;
 			}
 		}
 	}break;
-	case ASTAROTH:{
+	case ASTAROTH:{/*UNFINISHED*/
 		if(u.astaroth < moves){
-			if(){ //Astaroth requires that his seal be drawn on a square with a damaged item.
+			struct obj *o = 0, *otmp;
+			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+				if(otmp->spe < 0 || otmp->oeroded || otmp->oeroded2){
+					o = otmp;
+					otmp = 0; //breaks out of loop.
+				}
+			}
+			if(o && u.sealCounts < numSlots){ //Astaroth requires that his seal be drawn on a square with a damaged item.
 				Your(".");
-				pline(".");
-				if(u.sealCounts < numSlots){
 					pline("");
-					pline("");
+				pline("*I am Astaroth, the Clockmaker. You shall be my instrument, to repair this broken world.*");
 					u.sealsActive |= SEAL_ASTAROTH;
 					u.spirit[numSlots] = SEAL_ASTAROTH;
 					u.spiritT[numSlots] = moves + bindingPeriod;
 					u.sealCounts++;
+				if(o->spe<0) o->spe=0;
+				if(o->oeroded) o->oeroded=0;
+				if(o->oeroded2) o->oeroded2=0;
 				}
-				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+			else if(uwep && (uwep->spe<0 || uwep->oeroded || uwep->oeroded2) && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("");
-					pline("");
+				pline("*I am Astaroth, the Clockmaker. You shall hold my instrument, to repair this broken world.*");
 					uwep->ovar1 |= SEAL_ASTAROTH;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_ASTAROTH;
@@ -1252,29 +1265,42 @@ int tx,ty;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
 				}
-				else{
+			else if(o || (uwep && (uwep->spe<0 || uwep->oeroded || uwep->oeroded2))){
 					pline("");
 					pline(".");
+				if(o){
+					if(o->spe<0) o->spe++;
+					if(o->oeroded) o->oeroded--;
+					if(o->oeroded2) o->oeroded2--;
+				}
+				else{
+					if(uwep->spe<0) uwep->spe++;
+					if(uwep->oeroded) uwep->oeroded--;
+					if(uwep->oeroded2) uwep->oeroded2--;
+				}
 				}
 				u.astaroth = moves + bindingPeriod;
 			}
-		}
 	}break;
-	case BALAM:{
+	case BALAM:{/*UNFINISHED*/
 		if(u.balam < moves){
-			if(){ //Balam requires that her seal be drawn on an icy square.
-				You("stab your weapon down into the ice.");
+			if(FALSE){ //Balam requires that her seal be drawn on an icy square.
+				You("stab your weapon down into the ice, cracking it.");
 				if(u.sealCounts < numSlots){
-					pline("In the back of your mind");
-					pline("");
+					pline("A woman's scream echos through your mind as the cracks form a vaguely humanoid outline on the ice.");
+					pline("A voice sobs in your ear:");
+					pline("\"I am Balam, offered up as the last sacrifice; condemned to bleed until the end of all suffering.\"");
+					pline("\"In your name was this done, therefore you shall bear my stigmata and share my suffering.\"");
 					u.sealsActive |= SEAL_BALAM;
 					u.spirit[numSlots] = SEAL_BALAM;
 					u.spiritT[numSlots] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
-					pline("");
+					pline("A woman's scream echos through your mind as the cracks form a vaguely humanoid outline on the ice.");
+					pline("A voice sobs from under the ice:");
+					pline("\"I am Balam, offered up as the last sacrifice; condemned to bleed until the end of all suffering.\"");
+					pline("\"By your hand was this done, therefore you shall be stained by my blood.\"");
 					uwep->ovar1 |= SEAL_BALAM;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_BALAM;
@@ -1286,8 +1312,8 @@ int tx,ty;
 					}
 				}
 				else{
-					pline("");
-					pline(".");
+					pline("A woman's scream drifts through your mind, and the cracks describe a vaguely humanoid outline on the ice.");
+					pline("But nothing else occurs....");
 				}
 				u.balam = moves + bindingPeriod;
 			}
@@ -1295,7 +1321,7 @@ int tx,ty;
 	}break;
 	case BERITH:{
 		if(u.berith < moves){
-			if(){ //Berith requires that his seal be drawn around a set of riding gloves, riding boots, a saddle, a saber, a longsword, a bow, or a lance.
+			if(FALSE){ //Berith requires that his seal be drawn around a set of riding gloves, riding boots, a saddle, a saber, a longsword, a bow, or a lance.
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
