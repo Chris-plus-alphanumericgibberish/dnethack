@@ -109,6 +109,10 @@ doread()
 	}
 	else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
+		if(! (u.wardsknown & get_wardID(scroll->ovar1)) ){
+			You("have learned a new warding stave!");
+			u.wardsknown |= get_wardID(scroll->ovar1);
+		}
 		return(1);
 	}
 	/* outrumor has its own blindness check */
@@ -678,6 +682,8 @@ forget_objects(percent)
 	count = ((count * percent) + 50) / 100;
 	for (i = 0; i < count; i++)
 	    forget_single_object(indices[i]);
+	
+	if(rn2(100 < percent)) u.uevent.uread_necronomicon = 0; /* potentially forget having read necronomicon */
 }
 
 
