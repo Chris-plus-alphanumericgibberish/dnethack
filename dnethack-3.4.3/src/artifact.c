@@ -3080,10 +3080,10 @@ arti_invoke(obj)
 			if(!u.uevent.uread_necronomicon){
 				if(obj->ovar1) You("find notes scribbled the margins!  These will come in handy!");
 				u.uevent.uread_necronomicon = 1;
-			    discover_artifact(ART_NECRONOMICON);
-				identify(obj);
-				update_inventory();
 			}
+			discover_artifact(ART_NECRONOMICON);
+			identify(obj);
+			update_inventory();
 			if(obj->ovar1 && yn("Read a known incantation?") == 'y'){
 				int booktype = 0;
 				u.uconduct.literate++;
@@ -3094,22 +3094,22 @@ arti_invoke(obj)
 						delay = 0;
 					break;
 					case SELECT_BYAKHEE:
-						delay = -60;
+						delay = -2;
 					break;
 					case SELECT_NIGHTGAUNT:
-						delay = -60;
+						delay = -3;
 					break;
 					case SELECT_SHOGGOTH:
-						delay = -60;
+						delay = -2;
 					break;
 					case SELECT_OOZE:
-						delay = -40;
+						delay = -1;
 					break;
 					case SELECT_DEMON:
-						delay = -60;
+						delay = -6;
 					break;
 					case SELECT_DEVIL:
-						delay = -90;
+						delay = -9;
 					break;
 					case SELECT_PROTECTION:
 						booktype = SPE_PROTECTION;
@@ -3204,20 +3204,17 @@ arti_invoke(obj)
 				delay = -100;
 				artiptr = obj;
 				set_occupation(read_necro, "studying", 0);
+				exercise(A_WIS, FALSE);
 			}
 			else{
-				Hallucination ? 
-					pline("The strange symbols stare at you reproachfully.") :
-					You("close the Necronomicon.");
-//					"Just opening the book isn't enough.  You actually have to read it."
-//					);
+				if(Hallucination) pline("The strange symbols stare at you reproachfully.");
+				You("close the Necronomicon.");
 			}
 		   }
 		   else{
 				Hallucination ? 
 					pline("Cool it, Link.  It's just a book.") : 
 					You("hold the Necronomicon awkwardly, then put it away.");
-//					"If you weren't going to read it, why'd you take it out?"
 		   }
 		break;
 		default: pline("Program in dissorder.  Artifact invoke property not recognized");
@@ -3598,8 +3595,8 @@ read_necro(VOID_ARGS)
 //			(-26+ACURR(A_INT))/2 :
 //			(-26+ACURR(A_INT))); /* Necronomicon is difficult to put down */
 //	    delay -= -26+ACURR(A_INT); /* - a negative number is + */
-		delay--;
-		if(ublindf && ublindf->otyp == LENSES) delay--;
+		delay++;
+		if(ublindf && ublindf->otyp == LENSES) delay++;
 		if(delay < 0){
 			return(1); /* still busy */
 		}
@@ -3673,7 +3670,7 @@ read_necro(VOID_ARGS)
 					initedog(mtmp);
 					mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
 					if(!rn2(9)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
-					if(u.ulevel < mtmp->m_lev){
+					if(u.ulevel < mtmp->m_lev && rn2(2)){
 						mtmp->mtame = 0;
 						mtmp->mpeaceful = 0;
 						mtmp->mtraitor = 1;
@@ -3809,7 +3806,7 @@ read_necro(VOID_ARGS)
 //		pline("learned %d abilities",artiptr->spestudied);
 		if(!(artiptr->ovar1)) artiptr->spestudied = 0; /* Sanity enforcement. Something wierd is going on with the artifact creation code.*/
 //		pline("learned %d abilities",artiptr->spestudied);
-		if(d(1,10) * 10  - artiptr->spestudied * 10 - 150 + ACURR(A_INT) * 10 > 0){
+		if(d(1,10) - artiptr->spestudied - 15 + ACURR(A_INT) > 0){
 			if(!(artiptr->ovar1 & LAST_PAGE)){
 				chance = d(1,25);
 			}
@@ -3820,6 +3817,9 @@ read_necro(VOID_ARGS)
 		switch(chance){
 			case 0:
 				You("fail.");
+				exercise(A_WIS, FALSE);
+				exercise(A_WIS, FALSE);
+				exercise(A_INT, FALSE);
 			break;
 			case 1:
 				if(!(artiptr->ovar1 & S_OOZE)){
