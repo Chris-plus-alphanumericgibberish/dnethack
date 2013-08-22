@@ -374,7 +374,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			    /* fall through */
 			case CREAM_PIE:
 			case BLINDING_VENOM:
-			    hitu = thitu(8, 0, singleobj, (char *)0);
+			    hitu = thitu(4+mon->m_lev, 0, singleobj, (char *)0);
 			    break;
 			default:
 			    dam = dmgval(singleobj, &youmonst);
@@ -389,7 +389,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 					if(singleobj->otyp == ELVEN_ARROW) dam++;
 				}
 			    if (bigmonst(youmonst.data)) hitv++;
-			    hitv += 8 + singleobj->spe;
+			    hitv += 4 + mon->m_lev + singleobj->spe;
 			    if (dam < 1) dam = 1;
 				/*FIXME:  incomplete initialization, monsters can't use artifact ranged weapons*/
 //				if(/*hitu && */(singleobj->oartifact || ammo_and_launcher(singleobj, MON_WEP(mon))) ){
@@ -541,7 +541,7 @@ struct monst *mtmp;
 	    hitv = 3 - distmin(u.ux,u.uy, mtmp->mx,mtmp->my);
 	    if (hitv < -4) hitv = -4;
 	    if (bigmonst(youmonst.data)) hitv++;
-	    hitv += 8 + otmp->spe;
+	    hitv += 4 + mtmp->m_lev + otmp->spe;
 	    if (dam < 1) dam = 1;
 
 	    (void) thitu(hitv, dam, otmp, (char *)0);
