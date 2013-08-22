@@ -104,13 +104,18 @@ boolean ohit;
 int x,y;
 {
 	int retvalu = 1;
-	int create;
+	int create, autopickup = 0;
 	struct monst *mtmp;
 	struct trap *t;
 
 	if (breaks(obj, x, y)) return 1;
-	if (destroy_thrown) //destroy_thrown is a state variable set in firemu
-		create = 0;
+	if (destroy_thrown){ //destroy_thrown is a state variable set in firemu
+		if(ohit && x == u.ux && y == u.uy && obj->otyp == LOADSTONE && !rn2(3) ){
+			create = 1;
+			autopickup = 1;
+		}
+		else create = 0;
+	}
 	else if (ohit && (is_multigen(obj) || obj->otyp == ROCK))
 		create = !rn2(3);
 	else create = 1;
@@ -129,7 +134,10 @@ int x,y;
 				mtmp = &youmonst;
 			    if (mtmp && ohit)
 				passive_obj(mtmp, obj, (struct attack *)0);
-			    stackobj(obj);
+				if(mtmp == &youmonst && obj->otyp == LOADSTONE && (!rn2(3) || autopickup) ){
+					pickup_object(obj,1,FALSE);
+				}
+				else stackobj(obj);
 			    retvalu = 0;
 			}
 		}
@@ -1010,7 +1018,7 @@ register struct monst *mtmp;
 register struct attack *mattk;
 {
 	register struct obj *qvr = NULL;
-	int ammo_type;
+	int ammo_type, autodestroy = 1;
 
 	if(lined_up(mtmp)) {
 		int yadj, xadj, rngmod;
@@ -1024,8 +1032,7 @@ register struct attack *mattk;
 			    qvr->cursed = 0;
 			    qvr->quan = 1;
 			    qvr->spe = 7;
-				rngmod = 1000; /* Fly untill it strikes something */
-				goto skip_invent_check;
+				rngmod = 1000; /* Fly until it strikes something */
 			break;
 			case AD_SLVR:
 				ammo_type = SILVER_ARROW;
@@ -1035,9 +1042,14 @@ register struct attack *mattk;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;
 			    qvr->cursed = 0;
-			    qvr->spe = 5;
 				rngmod = 8;
-				goto skip_invent_check;
+			break;
+			case AD_LOAD:
+				ammo_type = LOADSTONE;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 1;
+				rngmod = 8;
 			break;
 			case AD_BLDR:
 				ammo_type = BOULDER;
@@ -1045,7 +1057,7 @@ register struct attack *mattk;
 			    qvr->blessed = 0;
 			    qvr->cursed = 0;
 				rngmod = 8;
-				goto skip_invent_check;
+				autodestroy = 0;
 			break;
 			case AD_VBLD:
 				ammo_type = HEAVY_IRON_BALL;
@@ -1060,21 +1072,21 @@ register struct attack *mattk;
 					yadj = -1*xadj;
 				}
 				else xadj = yadj = d(1,3)-2;
-				goto skip_invent_check;
 			break;
 		    default:
 				ammo_type = ARROW;
 			break;
 		}
+		if(!qvr){
 		for(qvr = mtmp->minvent; qvr; qvr=qvr->nobj){
 				if(qvr->otyp==ammo_type) break;
 		}
-skip_invent_check:
+		}
 		if(!qvr){
 			return 0; //no ammo of the right type found.
 		}
 		if(BOLT_LIM + rngmod >= distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy)) {
-			if(ammo_type != BOULDER) destroy_thrown = 1; //state variable referenced in drop_throw
+			destroy_thrown = autodestroy; //state variable referenced in drop_throw
 			    if (canseemon(mtmp)) pline("%s shoots at you!", Monnam(mtmp));
 				m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
 					BOLT_LIM + rngmod, qvr,TRUE);
