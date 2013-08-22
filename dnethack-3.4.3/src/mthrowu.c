@@ -379,7 +379,9 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			default:
 			    dam = dmgval(singleobj, &youmonst);
 			    hitv = 3 - distmin(u.ux,u.uy, mon->mx,mon->my);
-			    if (hitv < -4) hitv = -4;
+			    if (hitv < -4) hitv = (hitv+4)/2-4;
+			    if (hitv < -8) hitv = (hitv+8)*2/3-8;
+			    if (hitv < -12) hitv = (hitv+12)*3/4-12;
 			    if (is_elf(mon->data) &&
 				objects[singleobj->otyp].oc_skill == P_BOW) {
 				hitv++;
@@ -539,7 +541,9 @@ struct monst *mtmp;
 
 	    dam = dmgval(otmp, &youmonst);
 	    hitv = 3 - distmin(u.ux,u.uy, mtmp->mx,mtmp->my);
-	    if (hitv < -4) hitv = -4;
+		if (hitv < -4) hitv = (hitv+4)/2-4;
+		if (hitv < -8) hitv = (hitv+8)*2/3-8;
+		if (hitv < -12) hitv = (hitv+12)*3/4-12;
 	    if (bigmonst(youmonst.data)) hitv++;
 	    hitv += 4 + mtmp->m_lev + otmp->spe;
 	    if (dam < 1) dam = 1;
