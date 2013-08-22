@@ -175,6 +175,12 @@ int otyp,oquan;
 #endif /* OVLB */
 #ifdef OVL2
 
+static NEARDATA int angelweps[] = {
+	ART_DEMONBANE, ART_SUNSWORD, ART_SWORD_OF_ERATHAOL, ART_SABER_OF_SABAOTH,
+	ART_SWORD_OF_ONOEL, ART_GLAIVE_OF_SHAMSIEL, ART_LANCE_OF_URIEL,
+	ART_HAMMER_OF_BARQUIEL,
+};
+
 STATIC_OVL void
 m_initweap(mtmp)
 register struct monst *mtmp;
@@ -542,8 +548,7 @@ register struct monst *mtmp;
 	
 			    /* maybe make it special */
 			    if (!rn2(20) || is_lord(ptr))
-				otmp = oname(otmp, artiname(
-					rn2(2) ? ART_DEMONBANE : ART_SUNSWORD));
+				otmp = oname(otmp, artiname(angelweps[rn2(8)]));
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 			    spe2 = rn2(4);
@@ -3042,6 +3047,7 @@ static NEARDATA char syms[] = {
 	AMULET_CLASS, TOOL_CLASS, ROCK_CLASS, GEM_CLASS, SPBOOK_CLASS,
 	S_MIMIC_DEF, S_MIMIC_DEF, S_MIMIC_DEF,
 };
+
 
 void
 set_mimic_sym(mtmp)		/* KAA, modified by ERS */
