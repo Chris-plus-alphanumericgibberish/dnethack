@@ -927,7 +927,7 @@ static const char * const bogusmons[] = {
 	"yithian", "elder thing", "old one", "great old one", "outer god", "other god", "elder god", /* Lovecraft */
 	"eyeless albino penguin", /* More Lovecraft */
 	"shadowgirl",		/* Shadowgirls */
-	"Luggage",				/* Discworld */
+	"Luggage", "God of Stuff",				/* Discworld */
 	"Ent",					/* Lord of the Rings */
 	"tangle tree", "nickelpede", "wiggle",	/* Xanth */
 	"white rabbit", "snark",		/* Lewis Carroll */
@@ -936,6 +936,7 @@ static const char * const bogusmons[] = {
 	"tribble", "Klingon", "Borg",		/* Star Trek */
 	"Ewok",	"Wookiee", "Jedi", "Sith",	/* Star Wars */
 	"incredible hulk",		/* Comics */
+	"incredible bulk",		/* 8-bit theater */
 	"hegemonic brute", "sovereign slayer", "draconian dignitary", "courtyard droll", /* Homestuck */
 	"Totoro",				/* Tonari no Totoro */
 	"ohmu",					/* Nausicaa */
@@ -943,7 +944,10 @@ static const char * const bogusmons[] = {
 	"Lone Power", 			/* So you want to be a Wizard? */
 	"electric boid", "feral waffle-iron", "Bowman's wolf", "worried machine", "omniquantalist", 
 		"squid in a space-suit", /* Freefall */
-	"carbosilicate amorph", "debatably-sapient kreely", "viral boy-band", /* Schlock Mercenary */
+	"carbosilicate amorph", "debatably-sapient kreely", "viral boy-band", 
+		"self-replicating, self-aware war machine", "maximally effective mercenary", /* Schlock Mercenary */
+	"friend demon", /* Drowtales */
+	"big dumb object", /* Scifi */
 	"Godzilla", "King Kong",		/* monster movies */
 	"earthquake beast",			/* old L of SH */
 	"shinigami captain", "shinigami lieutenant", "arrancar", "hollow",	/* Bleach */

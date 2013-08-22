@@ -1137,7 +1137,7 @@ consume_offering(otmp)
 register struct obj *otmp;
 {
     if (Hallucination)
-	switch (rn2(5)) {
+	switch (rn2(9)) {
 	    case 0:
 		Your("sacrifice sprouts wings and a propeller and roars away!");
 		break;
@@ -1151,6 +1151,18 @@ register struct obj *otmp;
 	    case 4:
 		You("can't find your sacrifice.");
 		You("must have misplaced it!");
+		break;
+	    case 5:
+		Your("sacrifice is consumed with doubt!");
+		break;
+	    case 6:
+		Your("sacrifice rots away!");
+		break;
+		case 7:
+		godvoice(rn2(3)-1, "Hey! I ordered the chicken!");
+		break;
+		case 8:
+		godvoice(rn2(3)-1, "Oh, gross! Honey, the pets left another dead critter on the doorstep!");
 		break;
 	}
     else if (Blind && u.ualign.type == A_LAWFUL)
