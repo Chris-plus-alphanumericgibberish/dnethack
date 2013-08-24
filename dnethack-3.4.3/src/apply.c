@@ -2704,8 +2704,30 @@ do_break_wand(obj)
 	dmg = d(1 + obj->spe,6);	/* normally 2d12 */
     case WAN_CANCELLATION:
     case WAN_POLYMORPH:
-    case WAN_TELEPORTATION:
     case WAN_UNDEAD_TURNING:
+    case WAN_DRAINING:	/* KMH */
+	affects_objects = TRUE;
+	break;
+    case WAN_TELEPORTATION:
+		/* WAC make tele trap if you broke a wand of teleport */
+		/* But make sure the spot is valid! */
+	    if ((obj->spe > 2) && rn2(obj->spe - 2) && !level.flags.noteleport &&
+		    !u.uswallow && !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
+		    !IS_ROCK(levl[u.ux][u.uy].typ) &&
+		    !closed_door(u.ux, u.uy) && !t_at(u.ux, u.uy))) {
+
+			struct trap *ttmp;
+
+			ttmp = maketrap(u.ux, u.uy, TELEP_TRAP);
+			if (ttmp) {
+				ttmp->madeby_u = 1;
+				newsym(u.ux, u.uy); /* if our hero happens to be invisible */
+				if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
+					/* shopkeeper will remove it */
+					add_damage(u.ux, u.uy, 0L);             
+				}
+			}
+		}
 	affects_objects = TRUE;
 	break;
     default:

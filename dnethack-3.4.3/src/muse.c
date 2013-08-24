@@ -953,7 +953,10 @@ struct monst *mtmp;
 #define MUSE_POT_ACID 14
 /*#define MUSE_WAN_TELEPORTATION 15*/
 #define MUSE_POT_SLEEPING 16
-#define MUSE_SCR_EARTH 17
+#define MUSE_WAN_DRAINING 17	/* KMH */
+#define MUSE_SCR_EARTH 18
+
+#define MUSE_WAN_CANCELLATION 21	/* Lethe */
 
 /* Select an offensive item/action for a monster.  Returns TRUE iff one is
  * found.
@@ -1039,6 +1042,11 @@ struct monst *mtmp;
 			m.has_offense = MUSE_WAN_MAGIC_MISSILE;
 		    }
 		}
+		nomore(MUSE_WAN_DRAINING);
+		if(obj->otyp == WAN_DRAINING && obj->spe > 0) {
+			m.offensive = obj;
+			m.has_offense = MUSE_WAN_DRAINING;
+		}
 		nomore(MUSE_WAN_STRIKING);
 		if(obj->otyp == WAN_STRIKING && obj->spe > 0) {
 			m.offensive = obj;
@@ -1088,6 +1096,11 @@ struct monst *mtmp;
 		       && (!In_endgame(&u.uz) || Is_earthlevel(&u.uz))) {
 		    m.offensive = obj;
 		    m.has_offense = MUSE_SCR_EARTH;
+		}
+		nomore(MUSE_WAN_CANCELLATION);
+		if (obj->otyp == WAN_CANCELLATION && obj->spe > 0) {
+			m.offensive   = obj;
+			m.has_offense = MUSE_WAN_CANCELLATION;
 		}
 #if 0
 		nomore(MUSE_SCR_FIRE);
@@ -1166,6 +1179,37 @@ register struct obj *otmp;
 	case WAN_CANCELLATION:
 	case SPE_CANCELLATION:
 		(void) cancel_monst(mtmp, otmp, FALSE, TRUE, FALSE,0);
+		break;
+	case WAN_DRAINING:	/* KMH */
+		tmp = d(2,6);
+		if (mtmp == &youmonst) {
+			if (Drain_resistance) {
+				shieldeff(u.ux, u.uy);
+				pline("Boing!");
+			} else
+				losexp("life drainage", TRUE, FALSE, FALSE);
+			if (zap_oseen)
+				makeknown(WAN_DRAINING);
+			stop_occupation();
+			nomul(0);
+			break;
+		} else if (resists_drli(mtmp)) {
+			shieldeff(mtmp->mx, mtmp->my);
+			break;	/* skip makeknown */
+		} else if (!resist(mtmp, otmp->oclass, tmp, NOTELL) &&
+				mtmp->mhp > 0) {
+			mtmp->mhpmax -= tmp;
+			if (mtmp->mhpmax <= 0 || mtmp->m_lev <= 0)
+				monkilled(mtmp, "", AD_DRLI);
+			else {
+				mtmp->m_lev--;
+				if (canseemon(mtmp)) {
+					pline("%s suddenly seems weaker!", Monnam(mtmp));
+				}
+			}
+		}
+		if (cansee(mtmp->mx, mtmp->my) && zap_oseen)
+			makeknown(WAN_DRAINING);
 		break;
 	}
 	if (reveal_invis) {
@@ -1330,6 +1374,8 @@ struct monst *mtmp;
 		return (mtmp->mhp <= 0) ? 1 : 2;
 	case MUSE_WAN_TELEPORTATION:
 	case MUSE_WAN_STRIKING:
+	case MUSE_WAN_DRAINING:	/* KMH */
+	case MUSE_WAN_CANCELLATION:  /* Lethe */
 		zap_oseen = oseen;
 		mzapmsg(mtmp, otmp, FALSE);
 		otmp->spe--;
@@ -1560,12 +1606,12 @@ struct monst *mtmp;
 		case 4: return POT_BLINDNESS;
 		case 5: return POT_SLEEPING;
 		case 6: return POT_PARALYSIS;
-		case 7: case 8:
-			return WAN_MAGIC_MISSILE;
-		case 9: return WAN_SLEEP;
-		case 10: return WAN_FIRE;
-		case 11: return WAN_COLD;
-		case 12: return WAN_LIGHTNING;
+		case 7: return WAN_MAGIC_MISSILE;
+		case 8: return WAN_SLEEP;
+		case 9: return WAN_FIRE;
+		case 10: return WAN_COLD;
+		case 11: return WAN_LIGHTNING;
+		case 12: return WAN_DRAINING;
 	}
 	/*NOTREACHED*/
 	return 0;
@@ -2124,7 +2170,9 @@ struct obj *obj;
 	    if (objects[typ].oc_dir == RAY ||
 		    typ == WAN_STRIKING ||
 		    typ == WAN_TELEPORTATION ||
-		    typ == WAN_CREATE_MONSTER)
+		    typ == WAN_CREATE_MONSTER ||
+		    typ == WAN_DRAINING	||
+		    typ == WAN_CANCELLATION)
 		return TRUE;
 	    break;
 	case POTION_CLASS:

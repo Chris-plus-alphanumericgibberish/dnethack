@@ -128,7 +128,7 @@ boolean expdrain; /* attack drains exp as well */
 	    drainer = 0;
 	else
 #endif
-	    if (!force && resists_drli(&youmonst)) return;
+	    if (!force && Drain_resistance) return;
 
 	if (u.ulevel > 1) {
 		if(verbose) pline("%s level %d.", Goodbye(), u.ulevel);

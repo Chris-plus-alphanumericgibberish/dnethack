@@ -37,8 +37,8 @@ struct conditionals {
 //#endif
 	/* commented out in monst.c at present */
 //	{ MON_GLYPH, PM_SHOCKING_SPHERE, "beholder" },
-	{ MON_GLYPH, PM_BABY_SILVER_DRAGON, "baby shimmering dragon" },
-	{ MON_GLYPH, PM_SILVER_DRAGON, "shimmering dragon" },
+//	{ MON_GLYPH, PM_BABY_SILVER_DRAGON, "baby shimmering dragon" },
+//	{ MON_GLYPH, PM_SILVER_DRAGON, "shimmering dragon" },
 //	{ MON_GLYPH, PM_JABBERWOCK, "vorpal jabberwock" },
 	{ MON_GLYPH, PM_VAMPIRE_LORD, "vampire mage" },
 #ifndef CHARON /* not supported yet */
@@ -63,8 +63,8 @@ struct conditionals {
 	{ MON_GLYPH, PM_ROSHI, "guide" },
 #endif
 	/* objects commented out in objects.c at present */
-	{ OBJ_GLYPH, SILVER_DRAGON_SCALE_MAIL, "shimmering dragon scale mail" },
-	{ OBJ_GLYPH, SILVER_DRAGON_SCALES, "shimmering dragon scales" },
+//	{ OBJ_GLYPH, SILVER_DRAGON_SCALE_MAIL, "shimmering dragon scale mail" },
+//	{ OBJ_GLYPH, SILVER_DRAGON_SCALES, "shimmering dragon scales" },
 #ifndef TOURIST
 	{ OBJ_GLYPH, LEATHER_JACKET, "Hawaiian shirt" },
 	{ OBJ_GLYPH, LEATHER_JACKET, "T-shirt" },

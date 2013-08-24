@@ -269,6 +269,28 @@ nh_timeout()
 				pline("...But only a bit.");
 			}
 		break;
+		case ACID_RES:
+			Your("skin feels more sensitive!");
+			if(HAcid_resistance){
+				pline("...But only a bit.");
+			}
+		break;
+		case DRAIN_RES:
+			You_feel("less energetic!");
+			if(HDrain_resistance){
+				pline("...But only a bit.");
+			}
+		break;
+		case DISPLACED:
+			if(Hallucination){
+				You("calm down");
+				if(Displaced){
+					pline("...But only a bit.");
+				}
+			}
+			if(!Displaced) Your("outline ceases shimmering.");
+			else Your("outline becomes more distinct.");
+		break;
 		case STONED:
 			if (delayed_killer && !killer) {
 				killer = delayed_killer;

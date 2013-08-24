@@ -895,6 +895,7 @@ domove()
 	int bc_control;				/* control for ball&chain */
 	boolean cause_delay = FALSE;	/* dragging ball will skip a move */
 	const char *predicament;
+	boolean displacer = FALSE;	/* defender attempts to displace you */
 
 	u_wipe_engr(rnd(5));
 
@@ -1111,10 +1112,13 @@ domove()
 		    }
 		}
 		if(multi < 0) return;	/* we just fainted */
-
+		/* new displacer beast thingie -- by [Tom] */
+		/* sometimes, instead of attacking, you displace it. */
+		/* Good joke, huh? */
+		if (is_displacer(mtmp->data) && !rn2(2)) displacer = TRUE;
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
-		if(attack(mtmp)) return;
+		else if(attack(mtmp)) return;
 	    }
 	}
 
@@ -1143,6 +1147,8 @@ domove()
 	    newsym(x, y);
 	}
 	/* not attacking an animal, so we try to move */
+	if (!displacer) {
+
 #ifdef STEED
 	if (u.usteed && !u.usteed->mcanmove && (u.dx || u.dy)) {
 		pline("%s won't move!", upstart(y_monnam(u.usteed)));
@@ -1281,6 +1287,18 @@ domove()
 	    return;
 	}
 
+	} else if (!test_move(u.ux, u.uy, x-u.ux, y-u.uy, TEST_MOVE)) {
+	    /*
+	     * If a monster attempted to displace us but failed
+	     * then we are entitled to our normal attack.
+	     */
+	    if (!attack(mtmp)) {
+		flags.move = 0;
+		nomul(0);
+	    }
+	    return;
+	}
+
 	/* Move ball and chain.  */
 	if (Punished)
 	    if (!drag_ball(x,y, &bc_control, &ballx, &bally, &chainx, &chainy,
@@ -1288,8 +1306,15 @@ domove()
 		return;
 
 	/* Check regions entering/leaving */
-	if (!in_out_region(x,y))
+	if (!in_out_region(x,y)) {
+#if 0
+	    /* [ALI] This can't happen at present, but if it did we would
+	     * also need to worry about the call to drag_ball above.
+	     */
+	    if (displacer) (void)attack(mtmp);
+#endif
 	    return;
+	}
 
  	/* now move the hero */
 	mtmp = m_at(x, y);
@@ -1303,6 +1328,28 @@ domove()
 		exercise_steed();
 	}
 #endif
+
+	if (displacer) {
+	    char pnambuf[BUFSZ];
+
+	    u.utrap = 0;			/* A lucky escape */
+	    /* save its current description in case of polymorph */
+	    Strcpy(pnambuf, mon_nam(mtmp));
+	    remove_monster(x, y);
+	    place_monster(mtmp, u.ux0, u.uy0);
+	    /* check for displacing it into pools and traps */
+	    switch (minliquid(mtmp) ? 2 : mintrap(mtmp)) {
+		case 0:
+		    You("displaced %s.", pnambuf);
+		    break;
+		case 1:
+		case 3:
+		    break;
+		case 2:
+		    u.uconduct.killer++;
+		    break;
+	    }
+	}
 
 	/*
 	 * If safepet at destination then move the pet to the hero's

@@ -1485,7 +1485,7 @@ dopois:
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_DRLI:
 			hitmsg(mtmp, mattk);
-			if (uncancelled && !rn2(3) && !Drain_resistance) {
+			if (!mtmp->mcan && !rn2(3) && !Drain_resistance) {
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 				if(mdat == &mons[PM_METROID] || mdat == &mons[PM_ALPHA_METROID] || mdat == &mons[PM_GAMMA_METROID] 
 					|| mdat == &mons[PM_ZETA_METROID] || mdat == &mons[PM_OMEGA_METROID] 
@@ -2818,9 +2818,9 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				if(!Drain_resistance || !rn2(3)){
 					You("meet the gaze of Hethradiah, right head of Demogorgon!");
 					You("feel a primal darkness fall upon your soul!");
-					losexp("primal darkness",FALSE,!rn2(10),FALSE);
-					losexp("primal darkness",FALSE,!rn2(10),FALSE);
-					losexp("primal darkness",TRUE,!rn2(10),FALSE);
+					losexp("primal darkness",FALSE,!rn2(3),FALSE);
+					losexp("primal darkness",FALSE,!rn2(3),FALSE);
+					losexp("primal darkness",TRUE,TRUE,FALSE);
 					forget_levels(13);
 					forget_objects(13);
 					succeeded=1;
@@ -3495,7 +3495,7 @@ register struct monst *mon;
 					flags.botl = 1;
 					break;
 				case 3:
-					if (!resists_drli(&youmonst)) {
+					if (!Drain_resistance) {
 						You_feel("out of shape.");
 						losexp("overexertion",TRUE,FALSE,FALSE);
 					} else {
@@ -3693,7 +3693,7 @@ struct monst *mon;
 				flags.botl = 1;
 				break;
 			case 3:
-				if (!resists_drli(&youmonst)) {
+				if (!Drain_resistance) {
 					You_feel("out of shape.");
 					losexp("overexertion",FALSE,FALSE,FALSE);
 					losexp("overexertion",FALSE,FALSE,FALSE);
@@ -3704,7 +3704,7 @@ struct monst *mon;
 				break;
 			case 4: {
 				int tmp;
-				if (!resists_drli(&youmonst)) {
+				if (!Drain_resistance) {
 					losexp("exhaustion",TRUE,FALSE,FALSE);
 				}
 				You_feel("exhausted.");
@@ -3866,7 +3866,7 @@ struct monst *mon;
 				flags.botl = 1;
 				break;
 			case 3:
-				if (!resists_drli(&youmonst)) {
+				if (!Drain_resistance) {
 					You_feel("out of shape.");
 					losexp("overexertion",FALSE,FALSE,FALSE);
 					losexp("overexertion",FALSE,FALSE,FALSE);
@@ -3877,7 +3877,7 @@ struct monst *mon;
 				break;
 			case 4: {
 				int tmp;
-				if (!resists_drli(&youmonst)) {
+				if (!Drain_resistance) {
 					losexp("exhaustion",TRUE,FALSE,FALSE);
 				}
 				You_feel("exhausted.");
@@ -4101,7 +4101,7 @@ register struct monst *mon;
 			break;
 			case 4: {
 				int tmp;
-				if (!resists_drli(&youmonst)) {
+				if (!Drain_resistance) {
 					losexp("exhaustion",FALSE,FALSE,FALSE);
 					losexp("exhaustion",TRUE,FALSE,FALSE);
 				}
@@ -4932,7 +4932,7 @@ register struct monst *mon;
 				flags.botl = 1;
 				break;
 			case 3:
-				if (!resists_drli(&youmonst)) {
+				if (!Drain_resistance) {
 					You_feel("out of shape.");
 					losexp("overexertion",TRUE,FALSE,FALSE);
 				} else {
@@ -5308,7 +5308,7 @@ int dmg;
 			break;  //blocked
 				} //else
 				You_feel("the tentacles drill through your unprotected %s and into your soul!",body_part(BODY_FLESH));
-				if (!resists_drli(&youmonst)) {
+				if (!Drain_resistance) {
 					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
 					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
 					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);

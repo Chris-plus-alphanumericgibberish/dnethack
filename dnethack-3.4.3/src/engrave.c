@@ -1484,6 +1484,29 @@ doengrave()
 			    dengr = TRUE;
 			}
 			break;
+		    case WAN_DRAINING:	/* KMH */
+			if (oep) {
+			    /*
+			     * [ALI] Wand of draining give messages like
+			     * either polymorph or cancellation/make
+			     * invisible depending on whether the
+			     * old engraving is completely wiped or not.
+			     * Note: Blindness has slightly different
+			     * effect than with wand of polymorph.
+			     */
+			    u_wipe_engr(5);
+			    oep = engr_at(u.ux,u.uy);
+			    if (!Blind) {
+				if (!oep)
+				    pline_The("engraving on the %s vanishes!",
+				      surface(u.ux,u.uy));
+				else {
+				    strcpy(buf, oep->engr_txt);
+				    dengr = TRUE;
+				}
+			    }
+			}
+			break;
 		    case WAN_NOTHING:
 		    case WAN_UNDEAD_TURNING:
 		    case WAN_OPENING:
@@ -2221,6 +2244,29 @@ doward()
 					else randHalu = TRUE;
 				}
 			    dengr = TRUE;
+			}
+			break;
+		    case WAN_DRAINING:	/* KMH */
+			if (oep) {
+			    /*
+			     * [ALI] Wand of draining give messages like
+			     * either polymorph or cancellation/make
+			     * invisible depending on whether the
+			     * old engraving is completely wiped or not.
+			     * Note: Blindness has slightly different
+			     * effect than with wand of polymorph.
+			     */
+			    u_wipe_engr(5);
+			    oep = engr_at(u.ux,u.uy);
+			    if (!Blind) {
+				if (!oep)
+				    pline_The("engraving on the %s vanishes!",
+				      surface(u.ux,u.uy));
+				else {
+				    strcpy(buf, oep->engr_txt);
+				    dengr = TRUE;
+				}
+			    }
 			}
 			break;
 		    case WAN_NOTHING:
@@ -3243,6 +3289,29 @@ doseal()
 					else randHalu = TRUE;
 				}
 			    dengr = TRUE;
+			}
+			break;
+		    case WAN_DRAINING:	/* KMH */
+			if (oep) {
+			    /*
+			     * [ALI] Wand of draining give messages like
+			     * either polymorph or cancellation/make
+			     * invisible depending on whether the
+			     * old engraving is completely wiped or not.
+			     * Note: Blindness has slightly different
+			     * effect than with wand of polymorph.
+			     */
+			    u_wipe_engr(5);
+			    oep = engr_at(u.ux,u.uy);
+			    if (!Blind) {
+				if (!oep)
+				    pline_The("engraving on the %s vanishes!",
+				      surface(u.ux,u.uy));
+				else {
+				    strcpy(buf, oep->engr_txt);
+				    dengr = TRUE;
+				}
+			    }
 			}
 			break;
 		    case WAN_NOTHING:

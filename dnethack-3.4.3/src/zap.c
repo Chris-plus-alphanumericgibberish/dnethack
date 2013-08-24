@@ -317,13 +317,14 @@ struct obj *otmp;
 		    wake = FALSE;
 		break;
 	case SPE_DRAIN_LIFE:
+	case WAN_DRAINING:	/* KMH */
 		dmg = rnd(8);
 		if(dbldam) dmg *= 2;
-		if (otyp == SPE_DRAIN_LIFE)
-			dmg += spell_damage_bonus();
-		if (resists_drli(mtmp))
+		
+		if (resists_drli(mtmp)) {
 		    shieldeff(mtmp->mx, mtmp->my);
-		else if (!resist(mtmp, otmp->oclass, dmg, NOTELL) &&
+	break;	/* skip makeknown */
+		}else if (!resist(mtmp, otmp->oclass, dmg, NOTELL) &&
 				mtmp->mhp > 0) {
 		    mtmp->mhp -= dmg;
 		    mtmp->mhpmax -= dmg;
@@ -335,6 +336,7 @@ struct obj *otmp;
 			    pline("%s suddenly seems weaker!", Monnam(mtmp));
 		    }
 		}
+		makeknown(otyp);
 		break;
 	default:
 		impossible("What an interesting effect (%d)", otyp);
@@ -1638,6 +1640,7 @@ struct obj *obj, *otmp;
 #endif
 		break;
 	case SPE_DRAIN_LIFE:
+	case WAN_DRAINING:	/* KMH */
 		(void) drain_item(obj);
 		break;
 	case WAN_TELEPORTATION:
@@ -2059,11 +2062,13 @@ boolean ordinary;
 		case SPE_CANCELLATION:
 		    (void) cancel_monst(&youmonst, obj, TRUE, FALSE, TRUE,0);
 		    break;
-
+		case WAN_DRAINING:	/* KMH */
 		case SPE_DRAIN_LIFE:
 			if (!Drain_resistance) {
 				losexp("life drainage",TRUE,FALSE,FALSE);
 				makeknown(obj->otyp);
+			} else {
+				shieldeff(u.ux, u.uy);
 			}
 			damage = 0;	/* No additional damage */
 			break;
@@ -2280,6 +2285,7 @@ struct obj *obj;	/* wand or spell */
 		case WAN_SPEED_MONSTER:
 		case SPE_HEALING:
 		case SPE_EXTRA_HEALING:
+		case WAN_DRAINING:
 		case SPE_DRAIN_LIFE:
 		case WAN_OPENING:
 		case SPE_KNOCK:

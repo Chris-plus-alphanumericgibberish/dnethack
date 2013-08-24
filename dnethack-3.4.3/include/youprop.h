@@ -59,7 +59,7 @@
 				 resists_poison(&youmonst) || \
 				 (ward_at(u.ux,u.uy) == WINGS_OF_GARUDA && num_wards_at(u.ux, u.uy) > rn2(7)))
 
-#define HAcid_resistance	u.uprops[POISON_RES].intrinsic
+#define HAcid_resistance	u.uprops[ACID_RES].intrinsic
 #define EAcid_resistance	u.uprops[ACID_RES].extrinsic
 #define Acid_resistance		(HAcid_resistance || EAcid_resistance || resists_acid(&youmonst))
 
@@ -209,8 +209,9 @@
 #define Invisible		(Invis && !See_invisible)
 		/* Note: invisibility also hides inventory and steed */
 
+#define HDisplaced		u.uprops[DISPLACED].intrinsic
 #define EDisplaced		u.uprops[DISPLACED].extrinsic
-#define Displaced		EDisplaced
+#define Displaced		(HDisplaced || EDisplaced || is_displacer(youmonst.data))
 
 #define HStealth		u.uprops[STEALTH].intrinsic
 #define EStealth		u.uprops[STEALTH].extrinsic

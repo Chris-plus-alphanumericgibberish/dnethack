@@ -18,6 +18,7 @@
 #define resists_poison(mon)	(((mon)->mintrinsics & MR_POISON) != 0)
 #define resists_acid(mon)	(((mon)->mintrinsics & MR_ACID) != 0)
 #define resists_ston(mon)	(((mon)->mintrinsics & MR_STONE) != 0)
+#define resists_drain(mon)	(((mon)->mintrinsics & MR_DRAIN) != 0)
 
 #define is_lminion(mon)		(is_minion((mon)->data) && \
 				 (mon)->data->maligntyp >= A_COALIGNED && \
@@ -25,6 +26,7 @@
 				  EPRI(mon)->shralign > 0))
 
 #define is_flyer(ptr)		(((ptr)->mflags1 & M1_FLY) != 0L)
+#define is_displacer(ptr)	((ptr) == &mons[PM_DISPLACER_BEAST] || (ptr) == &mons[PM_SHIMMERING_DRAGON])
 #define is_floater(ptr)		((ptr)->mlet == S_EYE)
 #define is_clinger(ptr)		(((ptr)->mflags1 & M1_CLING) != 0L)
 #define is_swimmer(ptr)		(((ptr)->mflags1 & M1_SWIM) != 0L)

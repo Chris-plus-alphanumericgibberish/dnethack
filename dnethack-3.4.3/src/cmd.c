@@ -1184,7 +1184,10 @@ resistances_enlightenment()
 	if (Disint_resistance) putstr(en_win, 0, "You feel very firm.");
 	if (Shock_resistance) putstr(en_win, 0, "You feel well grounded.");
 	if (Poison_resistance) putstr(en_win, 0, "You feel healthy.");
-/*	if (Drain_resistance) you_are("level-drain resistant");
+	if (Acid_resistance) putstr(en_win, 0, "Your skin feels leathery.");
+	if (Displaced) putstr(en_win, 0, "Your outline shimmers and shifts.");
+	if (Drain_resistance) putstr(en_win, 0, "You feel especially energetic.");
+/*
 	if (Sick_resistance) you_are("immune to sickness");
 	if (Antimagic) you_are("magic-protected");
 	if (Stone_resistance)

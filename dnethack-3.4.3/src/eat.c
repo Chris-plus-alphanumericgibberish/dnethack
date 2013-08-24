@@ -611,6 +611,15 @@ register struct permonst *ptr;
 #else
 		return(ptr->mconveys & MR_COLD);
 #endif
+	    case ACID_RES:
+#ifdef DEBUG
+		if (ptr->mconveys & MR_ACID) {
+			debugpline("can get acid resistance");
+			return(TRUE);
+		} else  return(FALSE);
+#else
+		return(ptr->mconveys & MR_ACID);
+#endif
 	    case DISINT_RES:
 #ifdef DEBUG
 		if (ptr->mconveys & MR_DISINT) {
@@ -646,6 +655,15 @@ register struct permonst *ptr;
 		} else  return(FALSE);
 #else
 		return(can_teleport(ptr));
+#endif
+	    case DISPLACED:
+#ifdef DEBUG
+		if (is_displacer(ptr)) {
+			debugpline("can displacement");
+			return(TRUE);
+		} else  return(FALSE);
+#else
+		return(is_displacer(ptr));
 #endif
 	    case TELEPORT_CONTROL:
 #ifdef DEBUG
@@ -694,6 +712,7 @@ unsigned short nutval;
 		case SLEEP_RES:
 		case COLD_RES:
 		case SHOCK_RES:
+		case ACID_RES:
 			chance = 0;//skip role, give atribute.
 		break;
 		case POISON_RES:
@@ -702,6 +721,9 @@ unsigned short nutval;
 				chance = 1;
 			else
 				chance = 15;
+			break;
+		case DISPLACED:
+			chance = ptr == &mons[PM_SHIMMERING_DRAGON] ? 0 : 10;
 			break;
 		case TELEPORT:
 			chance = 10;
@@ -740,7 +762,7 @@ unsigned short nutval;
 		}
 		if( (HFire_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
 			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
-			HFire_resistance &= !TIMEOUT; //wipe old timer, leaving higher bits in place
+			HFire_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HFire_resistance |= timer; //set new timer
 		}
 		else{
@@ -759,13 +781,13 @@ unsigned short nutval;
 		}
 		if( (HSleep_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
 			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
-			HSleep_resistance &= !TIMEOUT; //wipe old timer, leaving higher bits in place
+			HSleep_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HSleep_resistance |= timer; //set new timer
 		}
 		else{
 			HSleep_resistance |= TIMEOUT; //set timer to max value
 		}
-		if(ptr->geno & G_UNIQ){
+		if(permanent){
 			HSleep_resistance |= FROMOUTSIDE;
 		}
 		break;
@@ -778,13 +800,13 @@ unsigned short nutval;
 		}
 		if( (HCold_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
 			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
-			HCold_resistance &= !TIMEOUT; //wipe old timer, leaving higher bits in place
+			HCold_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HCold_resistance |= timer; //set new timer
 		}
 		else{
 			HCold_resistance |= TIMEOUT; //set timer to max value
 		}
-		if(ptr->geno & G_UNIQ){
+		if(permanent){
 			HCold_resistance |= FROMOUTSIDE;
 		}
 		break;
@@ -811,14 +833,36 @@ unsigned short nutval;
 		}
 		if( (HShock_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
 			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
-			HShock_resistance &= !TIMEOUT; //wipe old timer, leaving higher bits in place
+			HShock_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HShock_resistance |= timer; //set new timer
 		}
 		else{
 			HShock_resistance |= TIMEOUT; //set timer to max value
 		}
-		if(ptr->geno & G_UNIQ){
+		if(permanent){
 			HShock_resistance |= FROMOUTSIDE;
+		}
+		break;
+	    case ACID_RES:	/* acid resistance */
+#ifdef DEBUG
+		debugpline("Trying to give acid resistance");
+#endif
+		if( !(HAcid_resistance) ) {
+			if (Hallucination)
+				rn2(2) ? You_feel("like you've really gotten back to basics!") : You_feel("insoluble.");
+			else
+				Your("skin feels leathery.");
+		}
+		if( (HAcid_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
+			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
+			HAcid_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HAcid_resistance |= timer; //set new timer
+		}
+		else{
+			HAcid_resistance |= TIMEOUT; //set timer to max value
+		}
+		if(permanent){
+			HAcid_resistance |= FROMOUTSIDE;
 		}
 		break;
 	    case POISON_RES:
@@ -830,6 +874,29 @@ unsigned short nutval;
 				 "especially healthy." : "healthy.");
 			HPoison_resistance |= FROMOUTSIDE;
 		}
+		break;
+	    case DISPLACED:	/* displacement resistance */
+		//Note that intrinsic displacemnt disregards the timeout multiplier and permanence setting.
+#ifdef DEBUG
+		debugpline("Trying to give intrinsic displacement");
+#endif
+		if( !(HDisplaced) ) {
+			if (Hallucination)
+				You_feel("quite beside yourself!");
+			else
+				Your("outline shimmers and shifts.");
+		}
+		if( (HDisplaced & TIMEOUT) + (long)(nutval) < TIMEOUT) {
+			long timer = (HDisplaced & TIMEOUT) + (long)(nutval);
+			HDisplaced &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HDisplaced |= timer; //set new timer
+		}
+		else{
+			HDisplaced |= TIMEOUT; //set timer to max value
+		}
+		// if(permanent){
+			// HDisplaced |= FROMOUTSIDE;
+		// }
 		break;
 	    case TELEPORT:
 #ifdef DEBUG
@@ -932,6 +999,9 @@ BOOLEAN_P tin;
 		}
 		break;
 	    case PM_WRAITH:
+			pluslvl(FALSE);
+		break;
+	    case PM_DEEP_DRAGON:
 			pluslvl(FALSE);
 		break;
 	    case PM_HUMAN_WERERAT:
@@ -1755,6 +1825,23 @@ struct obj *otmp;
 		if (!(HSleeping & FROMOUTSIDE))
 		    accessory_has_effect(otmp);
 		HSleeping = FROMOUTSIDE | rnd(100);
+		break;
+	    case AMULET_OF_DRAIN_RESISTANCE:
+#ifdef DEBUG
+			debugpline("Trying to give drain resistance");
+#endif
+			if( !(HDrain_resistance) ) {
+				You(Hallucination ? "are bouncing off the walls!" :
+					"feel especially energetic.");
+			}
+			if( (HDrain_resistance & TIMEOUT) + 1000 < TIMEOUT) {
+				long timer = (HDrain_resistance & TIMEOUT)+1000;
+				HDrain_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HDrain_resistance |= timer; //set new timer
+			}
+			else{
+				HDrain_resistance |= TIMEOUT; //set timer to max value
+			}
 		break;
 	    case RIN_SUSTAIN_ABILITY:
 	    case AMULET_OF_LIFE_SAVING:
