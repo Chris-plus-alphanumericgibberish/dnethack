@@ -351,7 +351,7 @@ const char * haluWard[] =  {
 	"a circle of da Vinci",
 	"a hand making a rude gesture",
 	"a junior sign",
-	"a childish impure eye",
+	"a childish compound eye",
 	"a Sign of an Illegitimate Step-daughter",
 	"a cenotaph of a catgirl",
 	"a groovy rendition of the wings of Gargula",
