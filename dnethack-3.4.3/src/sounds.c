@@ -1101,11 +1101,12 @@ int tx,ty;
 	}break;
 	case ANDREALPHUS:{
 		if(u.andrealphus < moves){
+			//Andrealphus requires that his seal be drawn in a corner.
 			if(isok(tx+(tx-u.ux), ty+(ty-u.uy)) && IS_CORNER(levl[tx+(tx-u.ux)][ty+(ty-u.uy)].typ) && 
 				IS_WALL(levl[tx+(tx-u.ux)][ty].typ) && IS_WALL(levl[tx][ty+(ty-u.uy)].typ)
-			){ //Andrealphus requires that his seal be drawn in a corner.
-				Your("perspective shifts, and the wall before you takes on new depth.");
-				pline("The dim dungeon light refracts oddly, casts the alien figure before you in rainbow hues.");
+			){
+				Your("perspective shifts, and the walls before you take on new depth.");
+				pline("The dim dungeon light refracts oddly, casting the alien figure before you in rainbow hues.");
 				if(u.sealCounts < numSlots){
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
 					pline("\"Though born of curves, by my square you shall rectify the world.\"");
@@ -1231,7 +1232,7 @@ int tx,ty;
 			}
 		}
 	}break;
-	case ASTAROTH:{/*UNFINISHED*/
+	case ASTAROTH:{
 		if(u.astaroth < moves){
 			struct obj *o = 0, *otmp;
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
@@ -1241,8 +1242,10 @@ int tx,ty;
 				}
 			}
 			if(o && u.sealCounts < numSlots){ //Astaroth requires that his seal be drawn on a square with a damaged item.
-				Your(".");
-					pline("");
+				pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal.");
+				pline("The hand gently touches the %s %s, then rests on the seal's surface as its unseen owner shifts his weight onto that arm.");
+				pline("There is the sound of shrieking metal, and a cracked porcelain face swings into view on a metalic armature.");
+				pline("A voice speaks to you, as the immobile white face weeps tears of black oil onto the %s.");
 				pline("*I am Astaroth, the Clockmaker. You shall be my instrument, to repair this broken world.*");
 					u.sealsActive |= SEAL_ASTAROTH;
 					u.spirit[numSlots] = SEAL_ASTAROTH;
@@ -1253,7 +1256,10 @@ int tx,ty;
 				if(o->oeroded2) o->oeroded2=0;
 				}
 			else if(uwep && (uwep->spe<0 || uwep->oeroded || uwep->oeroded2) && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
+				pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal.");
+				pline("The hand slowly reaches out towards you, then rests on the seal's surface as its unseen owner shifts his weight onto that arm.");
+				pline("There is the sound of shrieking metal, and a cracked porcelain face swings into view on a metalic armature.");
+				pline("A voice speaks to you, as the immobile white face studies you and weeps tears of black oil.");
 				pline("*I am Astaroth, the Clockmaker. You shall hold my instrument, to repair this broken world.*");
 					uwep->ovar1 |= SEAL_ASTAROTH;
 					if(!u.spiritTineA){ 
@@ -1264,27 +1270,32 @@ int tx,ty;
 						u.spiritTineB = SEAL_ASTAROTH;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+				pline("The hand catches a teardrop and anoints the Pen of the Void with the glistening oil.");
+				if(uwep->spe<0) uwep->spe=0;
+				if(uwep->oeroded) uwep->oeroded=0;
+				if(uwep->oeroded2) uwep->oeroded2=0;
 				}
-			else if(o || (uwep && (uwep->spe<0 || uwep->oeroded || uwep->oeroded2))){
-					pline("");
-					pline(".");
+			else if(o || (uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (uwep->spe<0 || uwep->oeroded || uwep->oeroded2))){
+				pline("Black oil falls like teardrops into the seal.");
 				if(o){
 					if(o->spe<0) o->spe++;
 					if(o->oeroded) o->oeroded--;
 					if(o->oeroded2) o->oeroded2--;
+					pline("But nothing else occurs.");
 				}
 				else{
 					if(uwep->spe<0) uwep->spe++;
 					if(uwep->oeroded) uwep->oeroded--;
 					if(uwep->oeroded2) uwep->oeroded2--;
+					pline("The Pen of the Void drips black oil, as if in sympathy.");
 				}
 				}
 				u.astaroth = moves + bindingPeriod;
 			}
 	}break;
-	case BALAM:{/*UNFINISHED*/
+	case BALAM:{
 		if(u.balam < moves){
-			if(FALSE){ //Balam requires that her seal be drawn on an icy square.
+			if(levl[tx][ty].typ == ICE){ //Balam requires that her seal be drawn on an icy square.
 				You("stab your weapon down into the ice, cracking it.");
 				if(u.sealCounts < numSlots){
 					pline("A woman's scream echos through your mind as the cracks form a vaguely humanoid outline on the ice.");
@@ -1319,9 +1330,18 @@ int tx,ty;
 			}
 		}
 	}break;
-	case BERITH:{
+	case BERITH:{ /*UNFINISHED (ya think? :) )*/
 		if(u.berith < moves){
-			if(FALSE){ //Berith requires that his seal be drawn around a set of riding gloves, riding boots, a saddle, a saber, a longsword, a bow, or a lance.
+			struct obj *o = 0, *otmp;
+//			int[] validtypes = {}
+	//Berith requires that his seal be drawn around a set of riding gloves, riding boots, a saddle, a saber, a longsword, a bow, or a lance.
+			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+				if(is_berithable(otmp)){
+					o = otmp;
+					otmp = 0; //breaks out of loop.
+				}
+			}
+			if(o){
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
@@ -1355,7 +1375,7 @@ int tx,ty;
 	}break;
 	case BUER:{
 		// if(u.vestige < moves){
-			// if(){ //Spirit requires that his seal be drawn .
+			// if(){ //Buer requires that hir seal be drawn .
 				// Your(".");
 				// pline(".");
 				// if(u.sealCounts < numSlots){

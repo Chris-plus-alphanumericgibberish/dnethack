@@ -329,6 +329,15 @@ struct obj {
 				 (obj)->otyp == FLINT     || \
 				 (obj)->otyp == TOUCHSTONE)
 
+/* vesitge related */
+#define is_berithable(otmp)	(otmp->otyp == SADDLE\
+				|| otmp->otyp == SILVER_SABER\
+				|| otmp->otyp == LONG_SWORD\
+				|| otmp->otyp == BOW\
+				|| otmp->otyp == LANCE\
+				|| (OBJ_DESCR(objects[otmp->otyp]) != (char *)0 && !strncmp(OBJ_DESCR(objects[otmp->otyp]), "riding ", 7))\
+				)
+
 /* misc */
 #define is_flimsy(otmp)		(objects[(otmp)->otyp].oc_material <= LEATHER)
 
