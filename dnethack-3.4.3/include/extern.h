@@ -1829,6 +1829,7 @@ E char *FDECL(root_plselection_prompt, (char *, int, int, int, int, int));
 
 E char *FDECL(getrumor, (int,char *, BOOLEAN_P));
 E void FDECL(outrumor, (int,int));
+E void NDECL(outgmaster);
 E void FDECL(outoracle, (BOOLEAN_P, BOOLEAN_P));
 E void FDECL(save_oracles, (int,int));
 E void FDECL(restore_oracles, (int));

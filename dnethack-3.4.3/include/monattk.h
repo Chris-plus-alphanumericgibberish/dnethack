@@ -119,6 +119,8 @@
 #define AD_HODS		122 /* Hod Sephirah's mirror attack */
 #define AD_CHRN		123 /* Nightmare's horn attack */
 #define AD_LOAD		124 /* throws loadstones */
+#define AD_GARO		125 /* blows up after dispensing rumor */
+#define AD_GARO_MASTER	126 /* blows up after dispensing oracle */
 
 
 //#define AD_VMSL		180 //Vorlon missile: elect, disintegration, blast.  Triple damage.

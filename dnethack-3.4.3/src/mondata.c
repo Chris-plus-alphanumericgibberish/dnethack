@@ -85,6 +85,7 @@ struct monst *mon;
 
 	return (boolean)(is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
 			 ptr == &mons[PM_DEATH] ||
+			 mon->mintrinsics & MR_DRAIN ||
 			 (wep && wep->oartifact && defends(AD_DRLI, wep)));
 }
 

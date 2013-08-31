@@ -77,8 +77,6 @@
 /* Intrinsics only */
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic
 #define Sick_resistance		(HSick_resistance || \
-				 youmonst.data->mlet == S_FUNGUS || \
-				 youmonst.data == &mons[PM_GHOUL] || \
 				 defends(AD_DISE,uwep) || \
 				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) == 7 && \
 					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \

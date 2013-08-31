@@ -21,11 +21,13 @@ STATIC_DCL void FDECL(kill_eggs, (struct obj *));
 
 #ifdef REINCARNATION
 #define LEVEL_SPECIFIC_NOCORPSE(mdat) \
-	 (Is_rogue_level(&u.uz) || \
-	   (level.flags.graveyard && is_undead(mdat) && rn2(3)))
+	 ((Is_rogue_level(&u.uz) || \
+	   (level.flags.graveyard && is_undead(mdat) && rn2(3))) \
+	   && mdat!=&mons[PM_GARO] && mdat!=&mons[PM_GARO_MASTER])
 #else
 #define LEVEL_SPECIFIC_NOCORPSE(mdat) \
-	   (level.flags.graveyard && is_undead(mdat) && rn2(3))
+	   (level.flags.graveyard && is_undead(mdat) && rn2(3) \
+	   && mdat!=&mons[PM_GARO] && mdat!=&mons[PM_GARO_MASTER])
 #endif
 
 
@@ -1776,6 +1778,25 @@ boolean was_swallowed;			/* digestion */
 			    obj->cursed = obj->blessed = FALSE;
 				explode(mon->mx, mon->my, 1, tmp, MON_EXPLODE, EXPL_FIERY);
 				u.uevent.ukilled_apollyon = 1;
+			}
+			else if(mdat->mattk[i].adtyp == AD_GARO){
+				pline("\"R-regrettable... Although my rival, you were spectacular.");
+				pline("I shall take my bow by opening my heart and revealing my wisdom...");
+				outrumor(0, BY_OTHER); //either true or false, no mechanism specified.
+				pline("Belief or disbelief rests with you.");
+				pline("To die without leaving a corpse....\"");
+				explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);
+				pline("\"That is the way of us Garo.\"");
+			}
+			else if(mdat->mattk[i].adtyp == AD_GARO_MASTER){
+				pline("\"To think thou couldst defeat me...");
+				pline("Though my rival, thou were't spectacular.");
+				pline("I shall take my bow by opening my heart and revealing my wisdom...");
+				outgmaster(); //Gives out a major consultation. Does not set the consultation flags.
+				pline("Do not forget these words...");
+				pline("Die I shall, leaving no corpse.\"");
+				explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);
+				pline("\"That is the law of us Garo.\"");
 			}
 			else if(mdat->mattk[i].adtyp == AD_COLD){
 			//mdat == &mons[PM_BAALPHEGOR] || mdat == &mons[PM_ANCIENT_OF_ICE] || mdat == &mons[PM_FREEZING_SPHERE]){

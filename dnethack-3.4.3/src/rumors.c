@@ -283,6 +283,50 @@ boolean delphi;
 	}
 }
 
+void
+outgmaster()
+{
+	char	line[COLNO];
+	char	*endp;
+	dlb	*oracles;
+	int oracle_idx;
+	char xbuf[BUFSZ];
+
+	if(oracle_flg < 0 ||			/* couldn't open ORACLEFILE */
+	   (oracle_flg > 0 && oracle_cnt == 0))	/* oracles already exhausted */
+		return;
+
+	oracles = dlb_fopen(ORACLEFILE, "r");
+	if (oracles) {
+		winid tmpwin;
+		if (oracle_flg == 0) {	/* if this is the first outoracle() */
+			init_oracles(oracles);
+			oracle_flg = 1;
+			if (oracle_cnt == 0) return;
+		}
+		/* oracle_loc[0] is the special oracle;		*/
+		/* oracle_loc[1..oracle_cnt-1] are normal ones	*/
+		if (oracle_cnt <= 1) return;  /*(shouldn't happen?)*/
+		oracle_idx = rnd((int) oracle_cnt - 1);
+		(void) dlb_fseek(oracles, oracle_loc[oracle_idx], SEEK_SET);
+		oracle_loc[oracle_idx] = oracle_loc[--oracle_cnt];
+
+		tmpwin = create_nhwindow(NHW_TEXT);
+		putstr(tmpwin, 0, "");
+
+		while(dlb_fgets(line, COLNO, oracles) && strcmp(line,"---\n")) {
+			if ((endp = index(line, '\n')) != 0) *endp = 0;
+			putstr(tmpwin, 0, xcrypt(line, xbuf));
+		}
+		display_nhwindow(tmpwin, TRUE);
+		destroy_nhwindow(tmpwin);
+		(void) dlb_fclose(oracles);
+	} else {
+		pline("Can't open oracles file!");
+		oracle_flg = -1;	/* don't try to open it again */
+	}
+}
+
 int
 doconsult(oracl)
 register struct monst *oracl;

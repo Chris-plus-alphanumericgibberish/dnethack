@@ -3881,7 +3881,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.sealsKnown & SEAL_BUER){
-		Sprintf(buf, "Buer, the Philosopher of Healing");
+		Sprintf(buf, "Buer, who walks all places");
 		any.a_int = BUER;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,

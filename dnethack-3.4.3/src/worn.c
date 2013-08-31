@@ -256,7 +256,7 @@ boolean on, silently;
 	 case PROTECTION:
 	    break;
 	 default:
-	    if (which <= 8) {	/* 1 thru 8 correspond to MR_xxx mask values */
+	    if (which <= 10) {	/* 1 thru 10 correspond to MR_xxx mask values */
 		/* FIRE,COLD,SLEEP,DISINT,SHOCK,POISON,ACID,STONE */
 		mask = (uchar) (1 << (which - 1));
 		mon->mintrinsics |= (unsigned short) mask;
@@ -284,6 +284,8 @@ boolean on, silently;
 	 case POISON_RES:
 	 case ACID_RES:
 	 case STONE_RES:
+	 case DRAIN_RES:
+	 case SICK_RES:
 	    mask = (uchar) (1 << (which - 1));
 	    /* If the monster doesn't have this resistance intrinsically,
 	       check whether any other worn item confers it.  Note that

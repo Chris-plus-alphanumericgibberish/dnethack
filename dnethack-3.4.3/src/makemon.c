@@ -472,8 +472,27 @@ register struct monst *mtmp;
 		break;
 
 		break;
-		case S_GHOST:
-		if(mm == PM_BLACKBEARD_S_GHOST){
+		case S_GHOST:{
+			switch (mm){
+			case PM_GARO:
+				if(rnd(100) > 75) (void)mongets(mtmp, SHURIKEN);
+				(void)mongets(mtmp, STILETTO);
+				(void)mongets(mtmp, STILETTO);
+				return;//no random stuff
+			break;
+			case PM_GARO_MASTER:
+				(void)mongets(mtmp, SHURIKEN);
+				otmp = mksobj(STILETTO, TRUE, FALSE);
+				curse(otmp);
+				otmp->spe = 4;
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(STILETTO, TRUE, FALSE);
+				curse(otmp);
+				otmp->spe = 4;
+				(void) mpickobj(mtmp, otmp);
+				return;//no random stuff
+			break;
+			case PM_BLACKBEARD_S_GHOST:{
 			int spe2;
 		    otmp = mksobj(SCIMITAR, FALSE, FALSE);
 		    curse(otmp);
@@ -482,8 +501,9 @@ register struct monst *mtmp;
 		    spe2 = d(2,3);
 		    otmp->spe = max(otmp->spe, spe2);
 		    (void) mpickobj(mtmp, otmp);
+			break;}
 		}
-		break;
+		break;}
 	    case S_ANGEL:
 		{
 /*			if(ptr == &mons[PM_DESTROYER]){
@@ -2358,10 +2378,11 @@ mbirth_limit(mndx)
 int mndx;
 {
 	/* assert(MAXMONNO < 255); */
-	return (mndx == PM_NAZGUL ? 9 : mndx == PM_ERINYS ? 3 : mndx == PM_METROID ? 21 : mndx == PM_ALPHA_METROID ? 45 
-		: mndx == PM_GAMMA_METROID ? 48 : mndx == PM_ZETA_METROID ? 9 : mndx == PM_OMEGA_METROID ? 12
-		: mndx == PM_METROID_QUEEN ? 3 : mndx == PM_ARGENTUM_GOLEM ? 8 : mndx == PM_ALHOON ? 2 
-		: mndx == PM_CENTER_OF_ALL ? 1 : mndx == PM_SOLDIER ? 250 : mndx == PM_SOLDIER_ANT ? 250 : MAXMONNO); 
+	return (mndx == PM_NAZGUL ? 9 : mndx == PM_ERINYS ? 3 : mndx == PM_GARO_MASTER ? 1 : mndx == PM_METROID ? 21
+		: mndx == PM_ALPHA_METROID ? 45 : mndx == PM_GAMMA_METROID ? 48 : mndx == PM_ZETA_METROID ? 9 
+		: mndx == PM_OMEGA_METROID ? 12 : mndx == PM_METROID_QUEEN ? 3 : mndx == PM_ARGENTUM_GOLEM ? 8 
+		: mndx == PM_ALHOON ? 2 : mndx == PM_CENTER_OF_ALL ? 1 : mndx == PM_SOLDIER ? 250
+		: mndx == PM_SOLDIER_ANT ? 250 : MAXMONNO); 
 }
 
 /* used for wand/scroll/spell of create monster */

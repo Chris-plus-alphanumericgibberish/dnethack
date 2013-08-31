@@ -14,9 +14,9 @@
 #define POISON_RES		 6
 #define ACID_RES		 7
 #define STONE_RES		 8
-/* note: for the first eight properties, MR_xxx == (1 << (xxx_RES - 1)) */
-#define ADORNED			 9
-#define REGENERATION		10
+#define DRAIN_RES		 9
+#define SICK_RES		10
+/* note: for the first ten properties, MR_xxx == (1 << (xxx_RES - 1)) */
 #define SEARCHING		11
 #define SEE_INVIS		12
 #define INVIS			13
@@ -58,8 +58,8 @@
 #define MAGICAL_BREATHING	49
 #define HALF_SPDAM		50
 #define HALF_PHDAM		51
-#define SICK_RES		52
-#define DRAIN_RES		53
+#define ADORNED			52
+#define REGENERATION	53
 #define WARN_UNDEAD		54
 #define INVULNERABLE		55
 #define FREE_ACTION		56
