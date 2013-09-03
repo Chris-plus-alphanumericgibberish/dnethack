@@ -145,6 +145,12 @@ static const char *haluMesg[] = {
 	"And if you're the kind of person who parties with a bathtub full of pasta, I suspect you don't care much about cholesterol anyway.",
 	"I AM A SEXY SHOELESS GOD OF WAR!!!",
 	
+	"It's only the end if you want it to be.",
+	"Mistakes were made.",
+	"But at what cost?",
+	"For we wrestle not against flesh and blood, but against principalities and powers.",
+	"Life is truth, and never a dream...",
+	"fire, walk with me.",
 	"redefine happiness",
 	"no more sadness, no more anger, no more envy...",
 	"Even false things are true",
@@ -157,7 +163,8 @@ static const char *haluMesg[] = {
 	"My hatred will not be stanched until it has consumed all else!",
 	"Life... dreams... hope... Where do they come from? And where do they go...?",
 	"I will NEVER be a memory.",
-	"All the world will be your enemy, Prince With A Thousand Enemies, and when they catch you they will kill you... but first they must catch you.",
+	"All the world will be your enemy, Prince With A Thousand Enemies,",
+	"and when they catch you they will kill you... but first they must catch you.",
 	"This statement is false.",
 	"Quod Erat Demonstrandum", "anno Domini", "per centum",
 	"I was so surprised, I CLASSIFIED INFORMATION, I really did!",
@@ -188,8 +195,8 @@ static const char *haluMesg[] = {
 	"It begins to dawn on you that everything you just did may have been a colossal waste of time.",
 	"We will BUILD heroes!",
 	"If you replace the working parts, you get a different machine.",
-	"Never tell me the odds!",
-	"If you destroy the working parts, what you get is a broken machine."
+	"If you destroy the working parts, what you get is a broken machine.",
+	"Never tell me the odds!"
 };
 
 const int wardStrokes[][7] = {
@@ -344,6 +351,8 @@ const char * haluWard[] =  {
 	"a set of three trefoils, the lower most inverted", /* describes the three of clubs. Too Many Magicians*/
 	"a Trump of Doom", "a Sign of Chaos", "a Pattern of Amber", "a Ghostwheel",
 	
+	"a Court symbol", "a Forest symbol", "the sign of the Wandering Eye", /* Gunnerkrigg Court */
+
 	/* Not quite */
 	"a heptagenarian",
 	"an octogram",
@@ -368,13 +377,13 @@ const char * haluWard[] =  {
 	"a circle surrounding a triangle of dots and another of triangels",/*Zelda*/
 	"a setting (rising?) sun", /* Dresden Codak */
 	"an asymmetric, stylized arrowhead, point upwards", /* Star Trek*/
-	"a set of three blades, the top blade straight, the left curved down, the right curved up",
+	"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
 	"a Sharuan Mindharp", /* Star Wars expanded universe */
 	"a winged blade of light", /* Jedi Order symbol */
-	"a screw attack symbol",
+	"an angular S in before a segmented circle",//"a screw attack symbol",
 	"more dakka",
 	
-	"a symbol of pain",
+	"a symbol of pain", /* DnD */
 	/* Planescape */
 	"a mimir",
 	"a symbol of torment",
@@ -421,7 +430,7 @@ const char * haluWard[] =  {
 	"a hand-mirror of Aphrodite",
 	"a shield and spear of Ares", /* alchemy/male/female */
 	
-	"a black moon lilith astrological sign",
+	"a black moon lilith sign",
 
 	"a window", /* op-sys*/
 	"a no symbol",
@@ -433,6 +442,7 @@ const char * haluWard[] =  {
 	"a set of three circles in the shape of a mouse's head",
 	"a meaningless coincidence",
 	"a stylized, fan-shaped seashell",
+	"a bitten apple",
 	"a pair of arches meeting to form an \"M\"",
 	"a Swoosh mark",
 	"a set of five interlocked rings",
@@ -445,12 +455,12 @@ const char * haluWard[] =  {
 	"a yin-yang", "a taijitu",/* Taoist */
 	"a hand of Eris", /* Discordian */
 	"an ichthus", "a Cross", /* Christian*/
+	"a wheel with eight spokes", /* Budhism */
 	"a fish with legs", "a fat fish", "a fish with tentacles, legs, and wings",
 		/* ichthus parodies/derivitives: darwin, buddha, and Cthulhu. */
 	"a set of seven concentric circles",
 	"a left-handed trefoil knot",
 	"a triskelion", /* Ancient Symbol */
-	"a wheel with eight spokes", /* Budhism */
 	"a rough circle enclosing an A", /* Anarchy */
 	"a Tree of Life", /* Kabbalah */
 	"a winged oak",
