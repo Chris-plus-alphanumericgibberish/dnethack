@@ -892,7 +892,7 @@ static const char * const bogusmons[] = {
 	"pterodactyl", "tyrannosaurus rex", "basilisk",
 	"efreeti", "marid", "dao",/* dnd genies */
 	"rot grub", "bookworm", 
-	"Euryale", "Stheno", /* Medusa's sisters. Oddly enough "The X" works for them,
+	"Euryale", "Stheno", /* Medusa's elder sisters. Oddly enough "The X" works for them,
 							as their names can be interpreted as titles. */
 	"demi lichen", "master lichen", "arch-lichen", /* lich lichens */
 	"priest of a well-known god", /* Not very mysterious */
@@ -903,7 +903,7 @@ static const char * const bogusmons[] = {
 	"shadow", "hologram", "jester", "attorney", "sleazoid",
 	"killer tomato", "shrinking violet",
 	"amazon", "mermaid", "gynoid", "magical girl",
-	"wild man", "merman", "android", "shonen hero",
+	"wild man", "merman", "android", "shonen hero", "delinquent",
 	"robot", "battlemech",
 	"rhinovirus", 
 	"harpy", 
