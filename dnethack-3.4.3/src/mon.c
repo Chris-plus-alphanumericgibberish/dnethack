@@ -1782,7 +1782,7 @@ boolean was_swallowed;			/* digestion */
 			else if(mdat->mattk[i].adtyp == AD_GARO){
 				pline("\"R-regrettable... Although my rival, you were spectacular.");
 				pline("I shall take my bow by opening my heart and revealing my wisdom...");
-				outrumor(0, BY_OTHER); //either true or false, no mechanism specified.
+				outrumor(rn2(2), BY_OTHER); //either true (3/4) or false (1/4), no mechanism specified.
 				pline("Belief or disbelief rests with you.");
 				pline("To die without leaving a corpse....\"");
 				explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);
