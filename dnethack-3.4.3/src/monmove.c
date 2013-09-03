@@ -14,24 +14,6 @@ extern boolean notonhead;
 STATIC_DCL int FDECL(disturb,(struct monst *));
 STATIC_DCL void FDECL(distfleeck,(struct monst *,int *,int *,int *));
 STATIC_DCL int FDECL(m_arrival, (struct monst *));
-STATIC_DCL boolean FDECL(scaryElb, (struct monst *));
-STATIC_DCL boolean FDECL(scaryItem, (struct monst *));
-STATIC_DCL boolean FDECL(scaryYellow, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryHept, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryGorg, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryCircle, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryPent, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryHex, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryHam, (int, struct monst *));
-STATIC_DCL boolean FDECL(scarySign, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryEye, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryQueen, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryCat, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryWings, (int, struct monst *));
-STATIC_DCL boolean FDECL(scaryTou, (struct monst *));
-STATIC_DCL boolean FDECL(scaryDre, (struct monst *));
-STATIC_DCL boolean FDECL(scaryVei, (struct monst *));
-STATIC_DCL boolean FDECL(scaryThj, (struct monst *));
 STATIC_DCL void FDECL(watch_on_duty,(struct monst *));
 
 #endif /* OVL0 */
@@ -168,7 +150,6 @@ struct monst *mtmp;
 				 ) && scaryItem(mtmp)
 				)
 			 || (u.umonnum == PM_GHOUL && mtmp->data == &mons[PM_GUG])
-			 || (sengr_at("Elbereth", x, y) && scaryElb(mtmp))
 			 || (ward_at(x,y) == HEPTAGRAM && scaryHept(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == GORGONEION && scaryGorg(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == CIRCLE_OF_ACHERON && scaryCircle(num_wards_at(x,y), mtmp))
@@ -181,6 +162,7 @@ struct monst *mtmp;
 			 || (ward_at(x,y) == CARTOUCHE_OF_THE_CAT_LORD && scaryCat(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == WINGS_OF_GARUDA && scaryWings(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == YELLOW_SIGN && scaryYellow(num_wards_at(x,y), mtmp))
+			 || (scaryElb(mtmp) && sengr_at("Elbereth", x, y))
 			 || (scaryTou(mtmp) && toustefna_at(x,y))
 			 || (scaryDre(mtmp) && dreprun_at(x,y))
 			 || (scaryVei(mtmp) && veioistafur_at(x,y))

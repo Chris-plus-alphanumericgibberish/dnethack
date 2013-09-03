@@ -1366,7 +1366,7 @@ poly_obj(obj, id)
 	if (obj->otrapped && Is_box(otmp)) otmp->otrapped = TRUE;
 
 	if (obj->opoisoned && is_poisonable(otmp))
-		otmp->opoisoned = TRUE;
+		otmp->opoisoned = obj->opoisoned;
 
 	if (id == STRANGE_OBJECT && obj->otyp == CORPSE) {
 	/* turn crocodile corpses into shoes */
@@ -3331,7 +3331,7 @@ xchar sx, sy;
 	    if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 	    break;
 	case ZT_POISON_GAS:
-	    poisoned("blast", A_DEX, "poisoned blast", 15);
+	    poisoned("blast", A_DEX, "poisoned blast", 15, 0);
 	    break;
 	case ZT_ACID:
 	    if (Acid_resistance) {

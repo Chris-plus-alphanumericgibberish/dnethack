@@ -2227,12 +2227,85 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		(void) rottenfood(otmp);
 
 	    if (otmp->oclass == WEAPON_CLASS && otmp->opoisoned) {
+			if(otmp->opoisoned & OPOISON_BASIC){
 		pline("Ecch - that must have been poisonous!");
 		if(!Poison_resistance) {
 		    losestr(rnd(4));
 		    losehp(rnd(15), xname(otmp), KILLED_BY_AN);
 		} else
 		    You("seem unaffected by the poison.");
+			}
+			else if(otmp->opoisoned & OPOISON_FILTH){
+				pline("Ulch - that was tainted with filth!");
+				if (Sick_resistance) {
+					pline("It doesn't seem at all sickening, though...");
+				} else {
+					char buf[BUFSZ];
+					long sick_time;
+
+					sick_time = (long) rn1(10, 10);
+					/* make sure new ill doesn't result in improvement */
+					if (Sick && (sick_time > Sick))
+						sick_time = (Sick > 1L) ? Sick - 1L : 1L;
+					Sprintf(buf, "filth-crusted %s", xname(otmp));
+					make_sick(sick_time, buf, TRUE, SICK_VOMITABLE);
+				}
+			}
+			else if(otmp->opoisoned & OPOISON_SLEEP){
+				pline("Ecch - that must have been drugged!");
+				if(Poison_resistance || Sleep_resistance) {
+					You("suddenly fall asleep!");
+					fall_asleep(-rn1(10, 25 - 12*bcsign(otmp)), TRUE);
+				} else
+					You("seem unaffected by the drugs.");
+			}
+			else if(otmp->opoisoned & OPOISON_BLIND){
+				pline("Ecch - that must have been poisoned!");
+				make_blinded(rn1(200, 250 - 125 * bcsign(otmp)),
+						 (boolean)!Blind);
+			}
+			else if(otmp->opoisoned & OPOISON_PARAL){
+				if (Free_action)
+					You("stiffen momentarily.");
+				else {
+					if (Levitation || Is_airlevel(&u.uz)||Is_waterlevel(&u.uz))
+					You("are motionlessly suspended.");
+#ifdef STEED
+					else if (u.usteed)
+					You("are frozen in place!");
+#endif
+					else
+					Your("%s are frozen to the %s!",
+						 makeplural(body_part(FOOT)), surface(u.ux, u.uy));
+					nomul(-(rn1(10, 25 - 12*bcsign(otmp))));
+					nomovemsg = You_can_move_again;
+					exercise(A_DEX, FALSE);
+				}
+			}
+			else if(otmp->opoisoned & OPOISON_AMNES){
+				forget((!otmp->blessed? ALL_SPELLS : 0) | ALL_MAP);
+				if (Hallucination)
+					pline("Hakuna matata!");
+				else
+					You_feel("your memories dissolve.");
+
+				/* Blessed amnesia makes you forget lycanthropy, sickness */
+				if (otmp->blessed) {
+					if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF)) {
+					You("forget your affinity to %s!",
+							makeplural(mons[u.ulycn].mname));
+					if (youmonst.data == &mons[u.ulycn])
+						you_unwere(FALSE);
+					u.ulycn = NON_PM;	/* cure lycanthropy */
+					}
+					make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+
+					/* You feel refreshed */
+					u.uhunger += 50 + rnd(50);
+					newuhs(FALSE);
+				} else
+					exercise(A_WIS, FALSE);
+			}
 	    } else if (!otmp->cursed)
 		pline("This %s is delicious!",
 		      otmp->oclass == COIN_CLASS ? foodword(otmp) :

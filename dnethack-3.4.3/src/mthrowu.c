@@ -195,6 +195,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	    else if (verbose) pline("%s is hit%s", Monnam(mtmp), exclam(damage));
 
 	    if (otmp->opoisoned && is_poisonable(otmp)) {
+			if(otmp->opoisoned & OPOISON_BASIC){
 		if (resists_poison(mtmp)) {
 		    if (vis) pline_The("poison doesn't seem to affect %s.",
 				   mon_nam(mtmp));
@@ -206,6 +207,80 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 			damage = mtmp->mhp;
 		    }
 		}
+				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_BASIC;
+			}
+			if(otmp->opoisoned & OPOISON_FILTH){
+				if (resists_sickness(mtmp)) {
+					if (vis) pline_The("filth doesn't seem to affect %s.",
+						   mon_nam(mtmp));
+				} else {
+					if (rn2(30)) {
+						damage += rnd(12);
+					} else {
+					if (vis) pline_The("tainted filth was deadly...");
+						damage = mtmp->mhp;
+					}
+				}
+				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_FILTH;
+			}
+			if(otmp->opoisoned & OPOISON_SLEEP){
+				if (resists_poison(mtmp) || resists_sleep(mtmp) || rn2(10)) {
+					if (vis) pline_The("drug doesn't seem to affect %s.",
+						   mon_nam(mtmp));
+				} else {
+					if (sleep_monst(mtmp, rnd(12), POTION_CLASS)) {
+						pline("%s falls asleep.", Monnam(mtmp));
+						slept_monst(mtmp);
+					}
+				}
+				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_SLEEP;
+			}
+			if(otmp->opoisoned & OPOISON_BLIND){
+				if (resists_poison(mtmp)) {
+					if (vis) pline_The("poison doesn't seem to affect %s.",
+						   mon_nam(mtmp));
+				} else {
+					if (rn2(10)) {
+						damage += rnd(3);
+					} else {
+						if(haseyes(mtmp->data)) {
+							if (vis) pline("It seems %s has gone blind!", mon_nam(mtmp));
+							register int btmp = 64 + rn2(32) +
+							rn2(32) * !resist(mtmp, POTION_CLASS, 0, NOTELL);
+							btmp += mtmp->mblinded;
+							mtmp->mblinded = min(btmp,127);
+							mtmp->mcansee = 0;
+						}
+					}
+				}
+				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_BLIND;
+			}
+			if(otmp->opoisoned & OPOISON_PARAL){
+				if (resists_poison(mtmp)) {
+					if (vis) pline_The("poison doesn't seem to affect %s.",
+						   mon_nam(mtmp));
+				} else {
+					if (rn2(10)) {
+						damage += rnd(6);
+					} else {
+						damage += 6;
+						if (mtmp->mcanmove) {
+							mtmp->mcanmove = 0;
+							mtmp->mfrozen = rnd(25);
+						}
+					}
+				}
+				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_PARAL;
+			}
+			if(otmp->opoisoned & OPOISON_AMNES){
+				if (!mindless(mtmp->data) && !rn2(10)){
+					if (vis) pline("%s looks around as if awakening from a dream.",
+						   Monnam(mtmp));
+					mtmp->mtame = FALSE;
+					mtmp->mpeaceful = TRUE;
+				}
+				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_AMNES;
+			}
 	    }
 	    if ( (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
 		    hates_silver(mtmp->data)) {
@@ -414,7 +489,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 
 			Strcpy(onmbuf, xname(singleobj));
 			Strcpy(knmbuf, killer_xname(singleobj));
-			poisoned(onmbuf, A_STR, knmbuf, -10);
+			poisoned(onmbuf, A_STR, knmbuf, -10, singleobj->opoisoned);
 		    }
 		    if(hitu &&
 		       can_blnd((struct monst*)0, &youmonst,

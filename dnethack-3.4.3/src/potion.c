@@ -1184,6 +1184,7 @@ boolean your_fault;
 			    monkilled(mon, "", AD_ACID);
 		    else
 			mon->mtame = FALSE;	
+			mon->mpeaceful = TRUE;
 		    break;
 		case PM_WIZARD_OF_YENDOR:
 		    if (your_fault) {
@@ -2057,7 +2058,12 @@ dodip()
 		potion = splitobj(obj, 1L);
 		potion->in_use = TRUE;
 	    }
-	    if (get_wet(obj, TRUE)) goto poof;
+	    if(get_wet(obj, TRUE)){
+			if(is_poisonable(obj)){
+				obj->opoisoned = OPOISON_AMNES;
+			}
+			goto poof;
+		}
 	}
 	/* WAC - Finn Theoderson - make polymorph and gain level msgs similar
 	 * 	 Give out name of new object and allow user to name the potion
@@ -2188,7 +2194,7 @@ dodip()
 #endif
 
 	if(is_poisonable(obj)) {
-	    if(potion->otyp == POT_SICKNESS && !obj->opoisoned) {
+	    if(potion->otyp == POT_SICKNESS && !(obj->opoisoned & OPOISON_BASIC)) {
 		char buf[BUFSZ];
 		if (potion->quan > 1L)
 		    Sprintf(buf, "One of %s", the(xname(potion)));
@@ -2196,7 +2202,40 @@ dodip()
 		    Strcpy(buf, The(xname(potion)));
 		pline("%s forms a coating on %s.",
 		      buf, the(xname(obj)));
-		obj->opoisoned = TRUE;
+			obj->opoisoned = OPOISON_BASIC;
+			goto poof;
+	    } else if(potion->otyp == POT_SLEEPING && !(obj->opoisoned & OPOISON_SLEEP)) {
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			pline("%s forms a drug-coating on %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = 0;
+			obj->opoisoned = OPOISON_SLEEP;
+			goto poof;
+	    } else if(potion->otyp == POT_BLINDNESS && !(obj->opoisoned & OPOISON_BLIND)) {
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			pline("%s forms a coating on %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = 0;
+			obj->opoisoned = OPOISON_BLIND;
+			goto poof;
+	    } else if(potion->otyp == POT_PARALYSIS && !(obj->opoisoned & OPOISON_PARAL)) {
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			obj->opoisoned = 0;
+			pline("%s forms a coating on %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = OPOISON_PARAL;
 		goto poof;
 	    } else if(obj->opoisoned &&
 		      (potion->otyp == POT_HEALING ||

@@ -21,7 +21,7 @@ STATIC_DCL int FDECL(gulpum, (struct monst *,struct attack *));
 STATIC_DCL boolean FDECL(hmonas, (struct monst *,int));
 STATIC_DCL void FDECL(nohandglow, (struct monst *));
 STATIC_DCL boolean FDECL(shade_aware, (struct obj *));
-STATIC_DCL boolean FDECL(dragon_hit, (struct monst *, struct obj *, int, int *, boolean *, boolean *));
+STATIC_DCL boolean FDECL(dragon_hit, (struct monst *, struct obj *, int, int *, boolean *, boolean *, boolean *));
 
 extern boolean notonhead;	/* for long worms */
 /* The below might become a parameter instead if we use it a lot */
@@ -565,6 +565,7 @@ int thrown;
 	int tmp;
 	struct permonst *mdat = mon->data;
 	int barehand_silver_rings = 0;
+	int barehand_jade_rings = 0;
 	/* The basic reason we need all these booleans is that we don't want
 	 * a "hit" message when a monster dies, so we have to know how much
 	 * damage it did _before_ outputting a hit message, but any messages
@@ -573,7 +574,9 @@ int thrown;
 	 */
 	boolean hittxt = FALSE, destroyed = FALSE, already_killed = FALSE;
 	boolean get_dmg_bonus = TRUE;
-	boolean ispoisoned = FALSE, needpoismsg = FALSE, poiskilled = FALSE;
+	int ispoisoned = 0;
+	boolean needpoismsg = FALSE, needfilthmsg = FALSE, needdrugmsg = FALSE, needsamnesiamsg = FALSE, poiskilled = FALSE, 
+			filthkilled = FALSE, druggedmon = FALSE, poisblindmon = FALSE, amnesiamon = FALSE;
 	boolean silvermsg = FALSE, silverobj = FALSE;
 	boolean valid_weapon_attack = FALSE;
 	boolean unarmed = !uwep && !uarm && !uarms;
@@ -586,6 +589,9 @@ int thrown;
 	char unconventional[BUFSZ];	/* substituted for word "attack" in msg */
 	char saved_oname[BUFSZ];
 
+	static short jadeRing = 0;
+	if(!jadeRing) jadeRing = find_jade_ring();
+	
 	unconventional[0] = '\0';
 	saved_oname[0] = '\0';
 	
@@ -620,12 +626,22 @@ int thrown;
 			if (uright && (objects[uright->otyp].oc_material == SILVER || arti_silvered(uright)))
 			    barehand_silver_rings++;
 			if (barehand_silver_rings && hates_silver(mdat)) {
-			    tmp += rnd(20);
+			    tmp += d(barehand_silver_rings,20);
 			    silvermsg = TRUE;
+			}
+			if (uleft && uleft->otyp == jadeRing)
+			    barehand_jade_rings++;
+			if (uright && uright->otyp == jadeRing )
+			    barehand_jade_rings++;
+			if (barehand_jade_rings && hates_silver(mdat)) {
+			    tmp += d(barehand_jade_rings, 20);
+			    silvermsg = TRUE; /* jade ring handled in same code block as silver ring */
 			}
 	    }
 	} else {
 	    Strcpy(saved_oname, cxname(obj));
+		if(obj->opoisoned && is_poisonable(obj))
+			ispoisoned = obj->opoisoned;
 	    if(obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 #ifdef CONVICT
 	       obj->oclass == GEM_CLASS || obj->otyp == HEAVY_IRON_BALL) {
@@ -754,7 +770,7 @@ int thrown;
 				hittxt = TRUE;
 			}
 			if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
-				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled);
+				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
 			}
 		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) )
 				&& hates_silver(mdat)) {
@@ -791,8 +807,6 @@ int thrown;
 						hittxt = TRUE;
 					}
 				}
-				if(obj->opoisoned && is_poisonable(obj))
-				    ispoisoned = TRUE;
 			}
 		}
 	    } else if(obj->oclass == POTION_CLASS) {
@@ -1029,8 +1043,6 @@ int thrown;
 	}
 
 	if (ispoisoned || arti_poisoned(obj)) {
-	    int nopoison = (10 - (obj->owt/10));            
-	    if(nopoison < 2) nopoison = 2;
 	    if Role_if(PM_SAMURAI) {
 			You("dishonorably use a poisoned weapon!");
 			adjalign(-sgn(u.ualign.type)*5); //stiffer penalty
@@ -1041,16 +1053,56 @@ int thrown;
 			adjalign(-2);//stiffer penalty
 			if(rn2(2)) u.hod++;
 	    }
-	    if (obj && !rn2(nopoison) && !arti_poisoned(obj)) {
-			obj->opoisoned = FALSE;
-			Your("%s %s no longer poisoned.", xname(obj),
-			     otense(obj, "are"));
+		if(obj && obj->opoisoned & OPOISON_BASIC){
+			if (resists_poison(mon))
+				needpoismsg = TRUE;
+			else if (rn2(10))
+				tmp += rnd(6);
+			else poiskilled = TRUE;
+		}
+		if(obj && obj->opoisoned & OPOISON_FILTH){
+			if (resists_sickness(mon))
+				needfilthmsg = TRUE;
+			else if (rn2(10))
+				tmp += rnd(12);
+			else filthkilled = TRUE;
+		}
+		if(obj && obj->opoisoned & OPOISON_SLEEP){
+			if (resists_poison(mon) || resists_sleep(mon))
+				needdrugmsg = TRUE;
+			else if(!rn2(5) && sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
 	    }
+		if(obj && obj->opoisoned & OPOISON_BLIND){
 	    if (resists_poison(mon))
 		needpoismsg = TRUE;
 	    else if (rn2(10))
+				tmp += rnd(3);
+			 else {
+				tmp += 3;
+				poisblindmon = TRUE;
+			}
+		}
+		if(obj && obj->opoisoned & OPOISON_PARAL){
+			if (resists_poison(mon))
+				needpoismsg = TRUE;
+			else if (rn2(8))
 		tmp += rnd(6);
-	    else poiskilled = TRUE;
+			 else {
+				tmp += 6;
+				if (mon->mcanmove) {
+					mon->mcanmove = 0;
+					mon->mfrozen = rnd(25);
+				}
+			}
+		}
+		if(obj && obj->opoisoned & OPOISON_AMNES){
+			if(mindless(mon->data)) needsamnesiamsg = TRUE;
+			else if(!rn2(10)) amnesiamon = TRUE;
+		}
+	    if (obj && !rn2(20) && !arti_poisoned(obj)) {
+			obj->opoisoned = FALSE;
+			pline("The coating on your %s has worn off.", xname(obj));
+	    }
 	}
 	if (tmp < 1) {
 	    /* make sure that negative damage adjustment can't result
@@ -1150,6 +1202,12 @@ int thrown;
 			fmt = "Your silver ring sears %s!";
 		    else if (barehand_silver_rings == 2)
 			fmt = "Your silver rings sear %s!";
+		    else if (barehand_jade_rings == 1 && barehand_silver_rings == 1)
+			fmt = "Your silver and jade rings sear %s!";
+		    else if (barehand_jade_rings == 2)
+			fmt = "Your jade rings sear %s!";
+		    else if (barehand_jade_rings == 1)
+			fmt = "Your jade ring sears %s!";
 		    else if (silverobj && saved_oname[0]) {
 		    	Sprintf(silverobjbuf, "Your %s%s %s %%s!",
 		    		strstri(saved_oname, "silver") ?
@@ -1170,11 +1228,43 @@ int thrown;
 
 	if (needpoismsg)
 		pline_The("poison doesn't seem to affect %s.", mon_nam(mon));
+	if (needfilthmsg)
+		pline_The("filth doesn't seem to affect %s.", mon_nam(mon));
+	if (needdrugmsg)
+		pline_The("drug doesn't seem to affect %s.", mon_nam(mon));
+	if (needsamnesiamsg)
+		pline_The("lethe-rust doesn't seem to affect %s.", mon_nam(mon));
 	if (poiskilled) {
 		pline_The("poison was deadly...");
 		if (!already_killed) xkilled(mon, 0);
 		return FALSE;
-	} else if (destroyed) {
+	}
+	if (filthkilled) {
+		pline_The("tainted filth was deadly...");
+		if (!already_killed) xkilled(mon, 0);
+		return FALSE;
+	}
+	if (druggedmon){
+		pline("%s falls asleep.", Monnam(mon));
+		slept_monst(mon);
+	}
+	if (poisblindmon){
+		if(haseyes(mon->data)) {
+			if (canseemon(mon)) pline("It seems %s has gone blind!", mon_nam(mon));
+			register int btmp = 64 + rn2(32) +
+			rn2(32) * !resist(mon, POTION_CLASS, 0, NOTELL);
+			btmp += mon->mblinded;
+			mon->mblinded = min(btmp,127);
+			mon->mcansee = 0;
+		}
+	}
+	if (amnesiamon){
+		if (canseemon(mon)) pline("%s looks around as if awakening from a dream.",
+			   Monnam(mon));
+		mon->mtame = FALSE;
+		mon->mpeaceful = TRUE;
+	}
+	else if (destroyed) {
 		if (!already_killed)
 		    killed(mon);	/* takes care of most messages */
 	} else if(u.umconf && !thrown) {
@@ -2814,12 +2904,13 @@ struct obj *otmp;	/* source of flash */
 /*uhitm.c*/
 
 boolean
-dragon_hit(mon, otmp, type, dmgptr, needpoismsg, poiskilled)
+dragon_hit(mon, otmp, type, dmgptr, needpoismsg, poiskilled, druggedmon)
 struct monst *mon;
 struct obj *otmp;
 int *dmgptr;
 boolean *needpoismsg;
 boolean *poiskilled;
+boolean *druggedmon;
 {
 	int mail = 1;//Was it mail or just scales? 1=scales, 2 = mail
 	switch(type){
@@ -2933,7 +3024,7 @@ boolean *poiskilled;
 		case ORANGE_DRAGON_SCALES:
 			if(!resists_sleep(mon) && !rn2(20/mail)){
 				pline("Gas rises from your %s.", aobjnam(otmp, (char *)0));
-				sleep_monst(mon, d(max(1,otmp->spe), 12),'\0');
+				if(sleep_monst(mon, d(max(1,otmp->spe), 12),'\0')) *druggedmon = TRUE;
 				return TRUE;
 			}
 		break;

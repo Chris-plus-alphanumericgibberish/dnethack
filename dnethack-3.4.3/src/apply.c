@@ -14,6 +14,7 @@ static const char tools_too[] = { ALL_CLASSES, TOOL_CLASS, POTION_CLASS,
 #ifdef TOURIST
 STATIC_DCL int FDECL(use_camera, (struct obj *));
 #endif
+STATIC_DCL int FDECL(do_present_ring, (struct obj *));
 STATIC_DCL int FDECL(use_towel, (struct obj *));
 STATIC_DCL boolean FDECL(its_dead, (int,int,int *));
 STATIC_DCL int FDECL(use_stethoscope, (struct obj *));
@@ -91,6 +92,82 @@ use_camera(obj)
 	return 1;
 }
 #endif
+
+STATIC_OVL int
+do_present_ring(obj)
+	struct obj *obj;
+{
+	register struct monst *mtmp;
+
+	if(!getdir((char *)0)) return(0);
+	
+	if(obj->ovar1 == 0 && !(obj->ohaluengr)){
+		exercise(A_WIS, FALSE);
+		return(0);
+	}
+	
+	if (u.uswallow) {
+		You("display the ring's engraving to %s %s.", s_suffix(mon_nam(u.ustuck)),
+		    mbodypart(u.ustuck, STOMACH));
+		pline("Nothing happens.");
+		exercise(A_WIS, FALSE);
+		return(0);
+	} else if (u.dz) {
+		You("display the ring's engraving to the %s.",
+			(u.dz > 0) ? surface(u.ux,u.uy) : ceiling(u.ux,u.uy));
+		pline("Nothing happens.");
+		exercise(A_WIS, FALSE);
+		return(0);
+	} else if (!u.dx && !u.dy) {
+		if(!(obj->ohaluengr)){
+			pline("A %s is engraved on the ring.",wardDecode[obj->ovar1]);
+			if( !(u.wardsknown & get_wardID(obj->ovar1)) ){
+				You("have learned a new warding sign!");
+				u.wardsknown |= get_wardID(obj->ovar1);
+			}
+		}
+		else{
+			pline("There is %s engraved on the ring.",fetchHaluWard((int)obj->ovar1));
+		}
+		return(1);
+	} else if (isok(u.ux+u.dx, u.uy+u.dy) && (mtmp = m_at(u.ux+u.dx, u.uy+u.dy)) != 0) {
+		You("display the ring's engraving to %s.", mon_nam(mtmp));
+		if (obj->cursed && rn2(3)) {
+			return(0);
+		}
+		if(!(obj->ohaluengr) || obj->ovar1 == CERULEAN_SIGN){
+			if(
+				(obj->ovar1 == HEPTAGRAM && scaryHept(1, mtmp)) ||
+				(obj->ovar1 == GORGONEION && scaryGorg(1, mtmp)) ||
+				(obj->ovar1 == CIRCLE_OF_ACHERON && scaryCircle(1, mtmp)) ||
+				(obj->ovar1 == PENTAGRAM && scaryPent(1, mtmp)) ||
+				(obj->ovar1 == HEXAGRAM && scaryHex(1, mtmp)) ||
+				(obj->ovar1 == HAMSA && scaryHam(1, mtmp)) ||
+				( (obj->ovar1 == ELDER_SIGN || obj->ovar1 == CERULEAN_SIGN) && scarySign(1, mtmp)) ||
+				(obj->ovar1 == ELDER_ELEMENTAL_EYE && scaryEye(1, mtmp)) ||
+				(obj->ovar1 == SIGN_OF_THE_SCION_QUEEN && scaryQueen(1, mtmp)) ||
+				(obj->ovar1 == CARTOUCHE_OF_THE_CAT_LORD && scaryCat(1, mtmp)) ||
+				(obj->ovar1 == WINGS_OF_GARUDA && scaryWings(1, mtmp)) ||
+/*				(obj->ovar1 == SIGIL_OF_CTHUGHA && (1, mtmp)) ||
+				(obj->ovar1 == BRAND_OF_ITHAQUA && (1, mtmp)) ||
+				(obj->ovar1 == TRACERY_OF_KRAKAL && (1, mtmp)) || These wards curently don't have scaryX functions. */
+				(obj->ovar1 == YELLOW_SIGN && scaryYellow(1, mtmp)) ||
+				(obj->ovar1 == TOUSTEFNA && scaryTou(mtmp)) ||
+				(obj->ovar1 == DREPRUN && scaryDre(mtmp)) ||
+/*				(obj->ovar1 == OTTASTAFUR && (mtmp)) ||
+				(obj->ovar1 == KAUPALOKI && (mtmp)) || Unimplemented runes. */
+				(obj->ovar1 == VEIOISTAFUR && scaryVei(mtmp)) ||
+				(obj->ovar1 == THJOFASTAFUR && scaryThj(mtmp))
+			){
+				if (rn2(7))
+					monflee(mtmp, rnd(10), TRUE, TRUE);
+				else
+					monflee(mtmp, rnd(100), TRUE, TRUE);
+			}
+		}
+	}
+	return 1;
+}
 
 STATIC_OVL int
 use_towel(obj)
@@ -2995,6 +3072,9 @@ doapply()
 	if (obj->oclass == WAND_CLASS)
 	    return do_break_wand(obj);
 
+	if (obj->oclass == RING_CLASS)
+	    return do_present_ring(obj);
+	
 	if(is_knife(obj)) return do_carve_obj(obj);
 	
 	switch(obj->otyp){

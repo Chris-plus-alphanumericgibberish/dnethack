@@ -388,6 +388,8 @@ boolean artif;
 	otmp->sknown = 0;
 	otmp->ostolen = 0;
 	otmp->lightened = 0;
+	otmp->obroken = 0; /* BUGFIX: shouldn't this be set to 0 initially? */
+	otmp->opoisoned = 0;
 	if ((otmp->otyp >= ELVEN_SHIELD && otmp->otyp <= ORCISH_SHIELD) ||
 			otmp->otyp == SHIELD_OF_REFLECTION)
 		otmp->dknown = 0;
@@ -406,8 +408,10 @@ boolean artif;
 			curse(otmp);
 			otmp->spe = -rne(3);
 		} else	blessorcurse(otmp, 10);
-		if (is_poisonable(otmp) && !rn2(100))
-			otmp->opoisoned = 1;
+		if (is_poisonable(otmp) && ((is_ammo(otmp) && !rn2(100)) || !rn2(1000) )){
+			if(!rn2(100)) otmp->opoisoned = OPOISON_FILTH; /* Once a game or once every few games */
+			else otmp->opoisoned = OPOISON_BASIC;
+		}
 
 		if (artif && !rn2(20))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
@@ -725,6 +729,22 @@ boolean artif;
 		otmp->recharged = 0; /* used to control recharging */
 		break;
 	case RING_CLASS:
+		if(isEngrRing(otmp->otyp) && !rn2(3) ){
+			if(rn2(4)){
+				otmp->ohaluengr = TRUE;
+				otmp->ovar1 = (long)random_haluIndex();
+			}
+			else{
+				otmp->ohaluengr = FALSE;
+				otmp->ovar1 = rn2(4) ? CIRCLE_OF_ACHERON :
+								!rn2(6) ? HAMSA : 
+								!rn2(5) ? ELDER_SIGN : 
+								!rn2(4) ? WINGS_OF_GARUDA : 
+								!rn2(3) ? ELDER_ELEMENTAL_EYE : 
+								!rn2(2) ? SIGN_OF_THE_SCION_QUEEN : 
+								          CARTOUCHE_OF_THE_CAT_LORD ;
+			}
+		}
 		if(objects[otmp->otyp].oc_charged) {
 		    blessorcurse(otmp, 3);
 		    if(rn2(10)) {

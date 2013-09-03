@@ -109,9 +109,22 @@ doread()
 	}
 	else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
-		if(! (u.wardsknown & get_wardID(scroll->ovar1)) ){
+		if(! (u.wardsknown & scroll->ovar1) ){
 			You("have learned a new warding stave!");
+			u.wardsknown |= scroll->ovar1;
+		}
+		return(1);
+	}
+	else if(scroll->oclass == RING_CLASS && isEngrRing((scroll)->otyp) && scroll->ovar1){
+		if(!(scroll->ohaluengr)){
+			pline("A %s is engraved on the ring.",wardDecode[scroll->ovar1]);
+			if( !(u.wardsknown & get_wardID(scroll->ovar1)) ){
+				You("have learned a new warding sign!");
 			u.wardsknown |= get_wardID(scroll->ovar1);
+		}
+		}
+		else{
+			pline("There is %s engraved on the ring.",fetchHaluWard((int)scroll->ovar1));
 		}
 		return(1);
 	}

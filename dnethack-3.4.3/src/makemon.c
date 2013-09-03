@@ -168,7 +168,7 @@ int otyp,oquan;
 	otmp = mksobj(otyp, TRUE, FALSE);
 	otmp->quan = (long) rn1(oquan, 3);
 	otmp->owt = weight(otmp);
-	if (otyp == ORCISH_ARROW) otmp->opoisoned = TRUE;
+	if (otyp == ORCISH_ARROW) otmp->opoisoned = OPOISON_BASIC;
 	(void) mpickobj(mtmp, otmp);
 }
 

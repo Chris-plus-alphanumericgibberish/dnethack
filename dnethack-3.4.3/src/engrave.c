@@ -524,6 +524,12 @@ char *outbuf;
 	return outbuf;
 }
 
+int
+random_haluIndex()
+{
+	return rn2(SIZE(haluMesg));
+}
+
 /* Partial rubouts for engraving characters. -3. */
 static const struct {
 	char		wipefrom;
@@ -547,6 +553,13 @@ static const struct {
 struct engr *
 get_head_engr(){
 	return head_engr;
+}
+
+char *
+fetchHaluWard(index)
+int index;
+{
+	return haluWard[index];
 }
 
 void

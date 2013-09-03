@@ -1050,6 +1050,11 @@ register const char *let,*word;
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;
 		}
+		//Make exceptions for rings that have been engraved
+		if(otmp->oclass == RING_CLASS && isEngrRing((otmp)->otyp) && otmp->ovar1 && (!strcmp(word, "read") || !strcmp(word, "use or apply"))){
+			bp[foo++] = otmp->invlet;
+			allowall = TRUE;
+		}
 
 	    if(ilet == 'z') ilet = 'A'; else ilet++;
 	}

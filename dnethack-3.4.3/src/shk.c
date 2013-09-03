@@ -4824,7 +4824,7 @@ struct monst *shkp;
 
 	    if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
-	    obj->opoisoned = TRUE;
+	    obj->opoisoned = OPOISON_BASIC;
 	    break;
 
 	default:

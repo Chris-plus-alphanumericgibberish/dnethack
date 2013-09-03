@@ -311,8 +311,14 @@ register struct obj *obj;
 			Sprintf(buf,"%s amulet", dn);
 		break;
 	    case WEAPON_CLASS:
-		if (is_poisonable(obj) && obj->opoisoned)
-			Strcpy(buf, "poisoned ");
+		if (is_poisonable(obj) && obj->opoisoned){
+			if(obj->opoisoned & OPOISON_BASIC) Strcpy(buf, "poisoned ");
+			if(obj->opoisoned & OPOISON_FILTH) Strcpy(buf, "filth-crusted ");
+			if(obj->opoisoned & OPOISON_SLEEP) Strcpy(buf, "drug-coated ");
+//			if(obj->opoisoned & OPOISON_BLIND) Strcpy(buf, "poisoned ");
+//			if(obj->opoisoned & OPOISON_PARAL) Strcpy(buf, "poisoned ");
+			if(obj->opoisoned & OPOISON_AMNES) Strcpy(buf, "lethe-rusted ");
+		}
 	    case VENOM_CLASS:
 	    case TOOL_CLASS:
 		if (typ == LENSES)
@@ -594,7 +600,7 @@ char *
 doname(obj)
 register struct obj *obj;
 {
-	boolean ispoisoned = FALSE;
+	int ispoisoned = 0;
 	char prefix[PREFIX];
 	char tmpbuf[PREFIX+1];
 	/* when we have to add something at the start of prefix instead of the
@@ -608,9 +614,29 @@ register struct obj *obj;
 	 * combining both into one function taking a parameter.
 	 */
 	/* must check opoisoned--someone can have a weirdly-named fruit */
-	if (!strncmp(bp, "poisoned ", 9) && obj->opoisoned) {
+	if (!strncmp(bp, "lethe-rusted ", 13) && obj->opoisoned & OPOISON_AMNES) {
+		bp += 13;
+		ispoisoned = OPOISON_AMNES;
+	}
+	// if (!strncmp(bp, "poisoned ", 9) && obj->opoisoned & OPOISON_PARAL) {
+		// bp += 9;
+		// ispoisoned = OPOISON_PARAL;
+	// }
+	// if (!strncmp(bp, "poisoned ", 9) && obj->opoisoned & OPOISON_BLIND) {
+		// bp += 9;
+		// ispoisoned = OPOISON_BLIND;
+	// }
+	if (!strncmp(bp, "drug-coated ", 12) && obj->opoisoned & OPOISON_BASIC) {
+		bp += 12;
+		ispoisoned = OPOISON_SLEEP;
+	}
+	if (!strncmp(bp, "filth-crusted ", 14) && obj->opoisoned & OPOISON_FILTH) {
+		bp += 14;
+		ispoisoned = OPOISON_FILTH;
+	}
+	if (!strncmp(bp, "poisoned ", 9) && obj->opoisoned & OPOISON_BASIC) {
 		bp += 9;
-		ispoisoned = TRUE;
+		ispoisoned = OPOISON_BASIC;
 	}
 
 	if(obj->quan != 1L)
@@ -668,8 +694,14 @@ register struct obj *obj;
 			Strcat(bp, " (being worn)");
 		break;
 	case WEAPON_CLASS:
-		if(ispoisoned)
+		if(ispoisoned & OPOISON_BASIC)
 			Strcat(prefix, "poisoned ");
+		if(ispoisoned & OPOISON_FILTH)
+			Strcat(prefix, "filth-crusted ");
+		if(ispoisoned & OPOISON_SLEEP)
+			Strcat(prefix, "drug-coated ");
+		if(ispoisoned & OPOISON_AMNES)
+			Strcat(prefix, "lethe-rusted ");
 plus:
 		add_erosion_words(obj, prefix);
 		if(obj->known) {
@@ -734,6 +766,7 @@ charges:
 	case RING_CLASS:
 		add_erosion_words(obj, prefix);
 ring:
+		if(obj->ovar1 && isEngrRing(obj->otyp)) Strcat(prefix, "engraved ");
 		if(obj->owornmask & W_RINGR) Strcat(bp, " (on right ");
 		if(obj->owornmask & W_RINGL) Strcat(bp, " (on left ");
 		if(obj->owornmask & W_RING) {
@@ -2712,7 +2745,7 @@ typfnd:
 	/* set poisoned */
 	if (ispoisoned) {
 	    if (is_poisonable(otmp))
-		otmp->opoisoned = (Luck >= 0);
+		otmp->opoisoned = (Luck >= 0) ? OPOISON_BASIC : 0;
 	    else if (Is_box(otmp) || typ == TIN)
 		otmp->otrapped = 1;
 	    else if (oclass == FOOD_CLASS)

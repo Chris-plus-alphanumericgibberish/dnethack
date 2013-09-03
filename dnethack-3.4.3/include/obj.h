@@ -74,9 +74,9 @@ struct obj {
 	Bitfield(oerodeproof,1); /* erodeproof weapon/armor */
 	Bitfield(olocked,1);	/* object is locked */
 	Bitfield(obroken,1);	/* lock has been broken */
+#define ohaluengr obroken	/* engraving on ring isn't a ward */
 	Bitfield(otrapped,1);	/* container is trapped */
 				/* or accidental tripped rolling boulder trap */
-#define opoisoned otrapped	/* object (weapon) is coated with poison */
 
 	Bitfield(recharged,3);	/* number of times it's been recharged */
 	Bitfield(lamplit,1);	/* a light-source -- can be lit */
@@ -103,6 +103,15 @@ struct obj {
 #define spestudied corpsenm	/* # of times a spellbook has been studied */
 #define fromsink  corpsenm	/* a potion from a sink */
 
+	int opoisoned; /* poisons smeared on the weapon*/
+#define OPOISON_NONE	 0
+#define OPOISON_BASIC	 1 /* Deadly Poison */
+#define OPOISON_FILTH	 2 /* Deadly Sickness */
+#define OPOISON_SLEEP	 4 /* Sleeping Poison */
+#define OPOISON_BLIND	 8 /* Blinding Poison */
+#define OPOISON_PARAL	16 /* Paralysis Poison */
+#define OPOISON_AMNES	32 /* Amnesia Poison */
+
 #ifdef RECORD_ACHIEVE
 #define record_achieve_special corpsenm
 #endif
@@ -115,8 +124,9 @@ struct obj {
 	/* in order to prevent alignment problems oextra should
 	   be (or follow) a long int */
 	long owornmask;
-	long ovar1;		/* extra variable. Specifies the contents of Books of Secrets. */
-			/* Also, records special features for weapons */
+	long ovar1;		/* extra variable. Specifies the contents of Books of Secrets, and the warding sign of spellbooks. */
+			/* Also, records special features for weapons. Currently, the only special feature is runes on wooden weapons. */
+			/* Rings: specifies # of charges on droven ring. May be used to specify engraving on gemstone rings? */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 
@@ -184,9 +194,11 @@ struct obj {
 #define is_multigen(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
 			 objects[otmp->otyp].oc_skill <= -P_BOW)
+// define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
+			 // objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
+			 // objects[otmp->otyp].oc_skill <= -P_BOW)
 #define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
-			 objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
-			 objects[otmp->otyp].oc_skill <= -P_BOW)
+			objects[otmp->otyp].oc_dir != WHACK)
 #define uslinging()	(uwep && objects[uwep->otyp].oc_skill == P_SLING)
 
 /* Armor */

@@ -1079,6 +1079,13 @@ hitmu(mtmp, mattk)
 				goto do_stone;
 			}
 			dmg += dmgval(uwep, &youmonst);
+			
+			if (uwep->opoisoned){
+				Sprintf(buf, "%s %s",
+					s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
+				poisoned(buf, A_CON, mdat->mname, 30, uwep->opoisoned);
+			}
+			
 			if (dmg <= 0) dmg = 1;
 			if (!(uwep->oartifact &&
 				artifact_hit(mtmp, &youmonst, uwep, &dmg,dieroll)))
@@ -1129,6 +1136,12 @@ hitmu(mtmp, mattk)
 				goto do_stone;
 			}
 			dmg += dmgval(otmp, &youmonst);
+			
+			if (otmp->opoisoned){
+				Sprintf(buf, "%s %s",
+					s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
+				poisoned(buf, A_CON, mdat->mname, 30, otmp->opoisoned);
+			}
 			if (dmg <= 0) dmg = 1;
 			if (!(otmp->oartifact &&
 				artifact_hit(mtmp, &youmonst, otmp, &dmg,dieroll)))
@@ -1287,13 +1300,13 @@ hitmu(mtmp, mattk)
 dopois:
 		hitmsg(mtmp, mattk);
 		if(mdat == &mons[PM_DEMOGORGON]){
-			poisoned(buf, ptmp, mdat->mname, 30);
+			poisoned(buf, ptmp, mdat->mname, 6, 0);
 			losexp("rotting alive",TRUE,FALSE,FALSE);
 		}
 		else if (uncancelled && !rn2(8)) {
 		    Sprintf(buf, "%s %s",
 			    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
-		    poisoned(buf, ptmp, mdat->mname, 30);
+		    poisoned(buf, ptmp, mdat->mname, 30, 0);
 		}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2229,7 +2242,7 @@ dopois:
 		hitmsg(mtmp, mattk);
 	    Sprintf(buf, "%s %s",
 		    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
-		poisoned(buf, A_CON, mdat->mname, 60);
+		poisoned(buf, A_CON, mdat->mname, 60, 0);
 		if(Poison_resistance) wdmg /= 2;
 		while( ABASE(A_WIS) > ATTRMIN(A_WIS) && wdmg > 0){
 			wdmg--;

@@ -542,8 +542,8 @@ RING("polymorph control", POLYMORPH_CONTROL, "emerald",
 RING("invisibility", INVIS, "wire",         150, 1, 0, 5, IRON, HI_METAL),
 RING("see invisible", SEE_INVIS, "engagement",
 					    150, 1, 0, 5, IRON, HI_METAL),
-RING("protection from shape changers", PROT_FROM_SHAPE_CHANGERS, "shiny",
-					    100, 1, 0, 5, IRON, CLR_BRIGHT_CYAN),
+RING("protection from shape changers", PROT_FROM_SHAPE_CHANGERS, "droven",
+					    100, 1, 0, 5, MITHRIL, CLR_BRIGHT_CYAN),
 #undef RING
 
 /* amulets ... - THE Amulet comes last because it is special */

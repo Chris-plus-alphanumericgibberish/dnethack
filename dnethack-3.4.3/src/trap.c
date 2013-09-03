@@ -681,14 +681,21 @@ unsigned trflags;
 		otmp = mksobj(DART, TRUE, FALSE);
 		otmp->quan = 1L;
 		otmp->owt = weight(otmp);
-		if (!rn2(6)) otmp->opoisoned = 1;
+		if (!rn2(6)) otmp->opoisoned = rn2(4) ? OPOISON_BASIC : 
+										!rn2(3) ? OPOISON_SLEEP : 
+										rn2 (2) ? OPOISON_PARAL :
+										OPOISON_BLIND;
 #ifdef STEED
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
 		if (thitu(7, dmgval(otmp, &youmonst), otmp, "little dart")) {
 		    if (otmp->opoisoned)
-			poisoned("dart", A_CON, "little dart", -10);
+			poisoned("dart", A_CON, "little dart", -10, rn2(10) ? OPOISON_BASIC :
+														!rn2(4) ? OPOISON_SLEEP :
+														!rn2(3) ? OPOISON_BLIND :
+														!rn2(2) ? OPOISON_PARAL :
+																  OPOISON_AMNES);
 		    obfree(otmp, (struct obj *)0);
 		} else {
 		    place_object(otmp, u.ux, u.uy);
@@ -950,7 +957,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    losehp(rnd(10),"fell into a pit of iron spikes",
 			NO_KILLER_PREFIX);
 		    if (!rn2(6))
-			poisoned("spikes", A_STR, "fall onto poison spikes", 8);
+			poisoned("spikes", A_STR, "fall onto poison spikes", 8, 0);
 		} else
 		    losehp(rnd(6),"fell into a pit", NO_KILLER_PREFIX);
 		if (Punished && !carried(uball)) {
@@ -1782,7 +1789,10 @@ register struct monst *mtmp;
 			otmp = mksobj(DART, TRUE, FALSE);
 			otmp->quan = 1L;
 			otmp->owt = weight(otmp);
-			if (!rn2(6)) otmp->opoisoned = 1;
+			if (!rn2(6)) otmp->opoisoned = rn2(4) ? OPOISON_BASIC : 
+										!rn2(3) ? OPOISON_SLEEP : 
+										rn2 (2) ? OPOISON_PARAL :
+										OPOISON_BLIND;
 			if (in_sight) seetrap(trap);
 			if (thitm(7, mtmp, otmp, 0, FALSE)) trapkilled = TRUE;
 			break;
@@ -3949,7 +3959,7 @@ boolean disarm;
 		case 17:
 			pline("A cloud of noxious gas billows from %s.",
 							the(xname(obj)));
-			poisoned("gas cloud", A_STR, "cloud of poison gas",15);
+			poisoned("gas cloud", A_STR, "cloud of poison gas",15,0);
 			exercise(A_CON, FALSE);
 			break;
 		case 16:
@@ -3957,7 +3967,11 @@ boolean disarm;
 		case 14:
 		case 13:
 			You_feel("a needle prick your %s.",body_part(bodypart));
-			poisoned("needle", A_CON, "poisoned needle",10);
+			poisoned("needle", A_CON, "poisoned needle",10,	rn2(10) ? OPOISON_BASIC :
+															!rn2(4) ? OPOISON_SLEEP :
+															!rn2(3) ? OPOISON_BLIND :
+															!rn2(2) ? OPOISON_PARAL :
+																	  OPOISON_AMNES);
 			exercise(A_CON, FALSE);
 			break;
 		case 12:

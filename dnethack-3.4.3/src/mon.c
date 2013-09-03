@@ -2503,9 +2503,9 @@ poisontell(typ)
 }
 
 void
-poisoned(string, typ, pname, fatal)
+poisoned(string, typ, pname, fatal, opoistype)
 const char *string, *pname;
-int  typ, fatal;
+int  typ, fatal, opoistype;
 {
 	int i, plural, kprefix = KILLED_BY_AN;
 	boolean thrown_weapon = (fatal < 0);
@@ -2520,6 +2520,7 @@ int  typ, fatal;
 			string, plural ? "were" : "was");
 	}
 
+	if(!opoistype || (opoistype & OPOISON_BASIC)){
 	if(Poison_resistance) {
 		if(!strcmp(string, "blast")) shieldeff(u.ux, u.uy);
 		pline_The("poison doesn't seem to affect you.");
@@ -2555,6 +2556,66 @@ int  typ, fatal;
 		done(strstri(pname, "poison") ? DIED : POISONING);
 	}
 	(void) encumber_msg();
+	}
+	else if(opoistype & OPOISON_FILTH){
+		if(Sick_resistance) {
+			pline_The("tainted filth doesn't seem to affect you.");
+			return;
+		} else {
+			long sick_time;
+
+			sick_time = (long) rn1(20, 20);
+			/* make sure new ill doesn't result in improvement */
+			if (Sick && (sick_time > Sick))
+				sick_time = (Sick > 2L) ? Sick/2L : 1L;
+			make_sick(sick_time, string, TRUE, SICK_NONVOMITABLE);
+		}
+	}
+	else if(opoistype & OPOISON_SLEEP){
+		if(Poison_resistance || Sleep_resistance) {
+			pline_The("drug doesn't seem to affect you.");
+			return;
+		} else if(!rn2(20*thrown_weapon)){
+			You("suddenly fall asleep!");
+			fall_asleep(-rn1(2, 6), TRUE);
+		}
+	}
+	else if(opoistype & OPOISON_BLIND){
+		if(Poison_resistance) {
+			pline_The("poison doesn't seem to affect you.");
+			return;
+		} else if(!rn2(20*thrown_weapon)){
+			i = thrown_weapon ? 3 : 8;
+			if(Half_physical_damage) i = (i+1) / 2;
+			losehp(i, pname, kprefix);
+			make_blinded(rn1(20, 25),
+					 (boolean)!Blind);
+		} else{
+			i = thrown_weapon ? rnd(3) : rn1(5,3);
+			if(Half_physical_damage) i = (i+1) / 2;
+			losehp(i, pname, kprefix);
+		}
+	}
+	else if(opoistype & OPOISON_PARAL){
+		if(Poison_resistance || Free_action) {
+			pline_The("poison doesn't seem to affect you.");
+			return;
+		} else if(!rn2(20*thrown_weapon)){
+			i = thrown_weapon ? 6 : 16;
+			if(Half_physical_damage) i = (i+1) / 2;
+			losehp(i, pname, kprefix);
+			nomul(-(rn1(5, 12 - 6)));
+		} else{
+			i = thrown_weapon ? rnd(6) : rn1(10,6);
+			if(Half_physical_damage) i = (i+1) / 2;
+			losehp(i, pname, kprefix);
+		}
+	}
+	else if(opoistype & OPOISON_AMNES){
+		forget_levels(1);	/* lose memory of 1% of levels*/
+		forget_objects(1);	/* lose memory of 1% of objects*/
+		forget_traps();		/* lose memory of all traps*/
+	}
 }
 
 /* monster responds to player action; not the same as a passive attack */
