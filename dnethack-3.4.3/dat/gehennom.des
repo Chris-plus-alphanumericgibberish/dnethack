@@ -136,12 +136,12 @@ TRAP:"magic", random
 
 # Random monsters.
 # The ghosts.
-MONSTER:' ',"ghost",random
-MONSTER:' ',"ghost",random
-MONSTER:' ',"ghost",random
-MONSTER:' ',"ghost",random
-MONSTER:' ',"ghost",random
-MONSTER:' ',"ghost",random
+MONSTER:'_',"ghost",random
+MONSTER:'_',"ghost",random
+MONSTER:'_',"ghost",random
+MONSTER:'_',"ghost",random
+MONSTER:'_',"ghost",random
+MONSTER:'_',"ghost",random
 # Add a few bats for atmosphere.
 MONSTER:'B',"vampire bat",random
 MONSTER:'B',"vampire bat",random
@@ -163,7 +163,7 @@ MONSTER:'M',random,random
 #
 # The Juiblex level
 #
-MAZE:"abyss-1",' '
+MAZE:"abyss-1", ' '
 FLAGS:noteleport,hardfloor,nommap,shortsighted
 INIT_MAP:'.','}',true,true,unlit,false
 # guarantee at least one open spot to ensure successful stair placement
@@ -285,7 +285,7 @@ TRAP:"magic",random
 #
 # The Zuggtmoy level
 #
-MAZE:"abyss-2",' '
+MAZE:"abyss-2", ' '
 FLAGS:noteleport,hardfloor,nommap,shortsighted
 INIT_MAP:'.','P',true,true,unlit,false
 # guarantee at least one open spot to ensure successful stair placement
@@ -507,8 +507,8 @@ OBJECT:random,random,random
 MONSTER:'&',"Orcus",(33,15)
 # And its preferred companions
 MONSTER:'Z',"human zombie",(32,15)
-MONSTER:' ',"shade",(32,14)
-MONSTER:' ',"shade",(32,16)
+MONSTER:'_',"shade",(32,14)
+MONSTER:'_',"shade",(32,16)
 MONSTER:'V',"vampire",(35,16)
 MONSTER:'V',"vampire",(35,14)
 MONSTER:'V',"vampire lord",(36,14)
@@ -519,10 +519,10 @@ MONSTER:'Z',"skeleton",random
 MONSTER:'Z',"skeleton",random
 MONSTER:'Z',"skeleton",random
 MONSTER:'Z',"skeleton",random
-MONSTER:' ',"shade",random
-MONSTER:' ',"shade",random
-MONSTER:' ',"shade",random
-MONSTER:' ',"shade",random
+MONSTER:'_',"shade",random
+MONSTER:'_',"shade",random
+MONSTER:'_',"shade",random
+MONSTER:'_',"shade",random
 MONSTER:'Z',"giant zombie",random
 MONSTER:'Z',"giant zombie",random
 MONSTER:'Z',"giant zombie",random
@@ -1577,7 +1577,7 @@ MAP
 0}}}}II  ...   ......   II I.II}}}}}}}}}}}}}}}}}}}}}}}}}}}I}}}II....P|.....PI
 ENDMAP
 
-MONSTER:'&', "Creature in the Ice", (41,08)
+MONSTER:'&', "creature in the ice", (41,08)
 
 STAIR: (08,20), up
 STAIR: (41,08), down
@@ -2917,7 +2917,7 @@ MONSTER:';',"kraken",random
 MONSTER:';',"kraken",random
 MONSTER:';',"kraken",random
 
-MAZE: "abyss-3",' '
+MAZE: "abyss-3", ' '
 FLAGS: noteleport,hardfloor,nommap,shortsighted
 
 GEOMETRY: right,center

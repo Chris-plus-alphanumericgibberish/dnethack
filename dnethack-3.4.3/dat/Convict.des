@@ -140,9 +140,9 @@ MONSTER: '@',"prison guard",(66,01),asleep
 MONSTER: '@',"prison guard",(74,02),asleep
 MONSTER: '@',"prison guard",(63,03),asleep
 MONSTER: '@',"prison guard",(72,03),asleep
-MONSTER: 'K',"Malkuth Sephirah",(71,04),asleep
-MONSTER: 'K',"Malkuth Sephirah",(68,05),asleep
-MONSTER: 'K',"Hod Sephirah",(64,06),asleep
+MONSTER: 'K',"malkuth sephirah",(71,04),asleep
+MONSTER: 'K',"malkuth sephirah",(68,05),asleep
+MONSTER: 'K',"hod sephirah",(64,06),asleep
 # Iron golem in supply room
 MONSTER: ''',"iron golem",(11,17),asleep
 # Supply room junk
@@ -369,9 +369,9 @@ MONSTER:'@',"inmate",(23,08)
 MONSTER:'@',"inmate",(11,14)
 MONSTER:'@',"inmate",(06,05)
 # Undead prisoners
-MONSTER:' ',"ghost",(42,17),"Orzo the Inmate"
-MONSTER[50%]:' ',"ghost",(40,18),"Fredgar the Inmate"
-MONSTER[50%]:' ',"ghost",(06,12),"Rastilon the Inmate"
+MONSTER:'_',"ghost",(42,17),"Orzo the Inmate"
+MONSTER[50%]:'_',"ghost",(40,18),"Fredgar the Inmate"
+MONSTER[50%]:'_',"ghost",(06,12),"Rastilon the Inmate"
 MONSTER:'Z',"skeleton",(28,15),awake
 # Bugs and snakes
 MONSTER:'S',"pit viper",(06,17)
