@@ -134,7 +134,7 @@ extern uchar monsyms[MAXMCLASSES];		/* current class symbols */
 #define DEF_YETI	'Y'
 #define DEF_ZOMBIE	'Z'
 #define DEF_HUMAN	'@'
-#define DEF_GHOST	' '
+#define DEF_GHOST	'_'
 #define DEF_GOLEM	'\''
 #define DEF_DEMON	'&'
 #define DEF_EEL		';'
