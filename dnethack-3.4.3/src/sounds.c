@@ -22,6 +22,44 @@ static int NDECL(dochat);
 
 static int FDECL(mon_in_room, (struct monst *,int));
 
+//I am Buer, X,
+static const char *buerTitles[] = {
+	"grandmother huntress",
+	"grandfather hunter",
+	"the wandering sage",
+	"the forsaken sage",
+	"the banished sage",
+	"interent teacher",
+	"fallen of heaven",
+	"risen of hell",
+	"the first healer",
+	"philosopher of nature",
+	"of the philosophy of healing",
+	"philosopher of healing",
+	"philosopher of natural morality",
+	"the lost",
+	"the ignored",
+	"paragon of morality"
+};
+static const char *buerSetOne[] = {
+	"cursed by a witch",
+	"doomed by the gods",
+	"seduced by a demon and made",
+	"taken by a fey spirit and left",
+	"destined",
+	"determined"
+};
+//to
+static const char *buerSetTwo[] = {
+	"wander for all time",
+	"walk through the ages",
+	"search the five corners of the world",
+	"bear witness 'til all is redemed at last",
+	"never be released by death",
+	"search for redemption, but never to find it",
+	"seek virtue forevermore"
+};
+
 /* this easily could be a macro, but it might overtax dumb compilers */
 static int
 mon_in_room(mon, rmtyp)
@@ -1330,10 +1368,11 @@ int tx,ty;
 			}
 		}
 	}break;
-	case BERITH:{ /*UNFINISHED (ya think? :) )*/
+	case BERITH:{
+		static int slvring = 0;
+		if (!slvring) slvring = find_silver_ring();
 		if(u.berith < moves){
 			struct obj *o = 0, *otmp;
-//			int[] validtypes = {}
 	//Berith requires that his seal be drawn around a set of riding gloves, riding boots, a saddle, a saber, a longsword, a bow, or a lance.
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
 				if(is_berithable(otmp)){
@@ -1341,20 +1380,23 @@ int tx,ty;
 					otmp = 0; //breaks out of loop.
 				}
 			}
-			if(o){
-				Your(".");
-				pline(".");
+	//Berith further requires that the summoner wear a blessed silver ring on his or her left hand.
+			if(o && uleft && uleft->otyp == slvring && uleft->blessed){
+				pline("Gold rains down within the circumference of the seal, melting slowly to blood where it lands.");
+				pline("A figure takes form within the showering gold, staring down at you from a crimson horse.");
+				pline("His crown is gold, and his clothes are red like blood.");
+				pline("\"I am Berith, %s.",rn2(2) ? "war-leader of the forgotten" : "god of the covenant of blood");
 				if(u.sealCounts < numSlots){
-					pline("");
-					pline("");
+					pline("I anoint you in Blood and Gold, that bloodshed and riches shall follow in your wake.");
+					pline("That is my covenant, my blessing, and my curse.\"");
 					u.sealsActive |= SEAL_BERITH;
 					u.spirit[numSlots] = SEAL_BERITH;
 					u.spiritT[numSlots] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
-					pline("");
+					pline("I anoint your blade with Blood, for blood calls to blood.");
+					pline("That is the covenant and curse of Berith.\"");
 					uwep->ovar1 |= SEAL_BERITH;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_BERITH;
@@ -1366,16 +1408,51 @@ int tx,ty;
 					}
 				}
 				else{
-					pline("");
-					pline(".");
+					You("think you can hear faint hoofbeats from within the seal.");
+					pline("But they fade away before you can be sure.");
 				}
 				u.berith = moves + bindingPeriod;
 			}
 		}
 	}break;
 	case BUER:{
+		if(u.buer < moves){
+		//Buer's seal may be drawn anywhere.
+			pline("You hear hooved footfalls approaching quickly, though you can’t make out from what direction.");
+			pline("They set an odd tempo; very regular and faster by far than any animal of four legs could comfortably keep.");
+			pline("The footfalls reach a crescendo, and an odd creature rolls into the seal in front of you.");
+			pline("The creature’s five legs are arranged in a star pattern, and to move it rolls from foot to foot.");
+			pline("At the center of the wheel is a lion’s head, complete with a glorious mane.");
+			pline("The creature speaks to you; and it’s voice, though deep, is clearly that of a woman.");
+			pline("\"I am Buer, %s, %s to %s.", buerTitles[rn2(SIZE(buerTitles))], buerSetOne[rn2(SIZE(buerSetOne))], buerSetOne[rn2(SIZE(buerSetTwo))]);
+			if(u.sealCounts < numSlots){
+				pline("Will you walk with me?\"");
+				u.sealsActive |= SEAL_BUER;
+				u.spirit[numSlots] = SEAL_BUER;
+				u.spiritT[numSlots] = moves + bindingPeriod;
+				u.sealCounts++;
+			}
+			else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+				pline("I will walk beside you.\"");
+				uwep->ovar1 |= SEAL_BUER;
+				if(!u.spiritTineA){ 
+					u.spiritTineA = SEAL_BUER;
+					u.spiritTineTA= moves + bindingPeriod;
+				}
+				else{
+					u.spiritTineB = SEAL_BUER;
+					u.spiritTineTB= moves + bindingPeriod;
+				}
+			}
+			else{
+				pline("I wish you well as you walk your path.\"");
+			}
+			u.buer = moves + bindingPeriod;
+		}
+	}break;
+	case CHUPOCLOPS:{
 		// if(u.vestige < moves){
-			// if(){ //Buer requires that hir seal be drawn .
+			// if(){ //Spirit requires that his seal be drawn .
 				// Your(".");
 				// pline(".");
 				// if(u.sealCounts < numSlots){
@@ -1406,8 +1483,6 @@ int tx,ty;
 				// u.vestige = moves + bindingPeriod;
 			// }
 		// }
-	}break;
-	case CHUPOCLOPS:{
 	}break;
 	case DANTALION:{
 	}break;
