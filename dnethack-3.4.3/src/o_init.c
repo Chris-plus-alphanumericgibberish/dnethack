@@ -347,6 +347,20 @@ find_gold_ring()
 }
 
 int
+find_silver_ring()
+{
+    register int i;
+    register const char *s;
+
+    for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
+	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "silver"))
+	    return i;
+
+    impossible("silver ring not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
+int
 find_opal_ring()
 {
     register int i;
