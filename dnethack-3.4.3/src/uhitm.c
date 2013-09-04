@@ -1191,6 +1191,22 @@ int thrown;
 		else You("%s %s%s", Role_if(PM_BARBARIAN) ? "smite" : "hit",
 			 mon_nam(mon), canseemon(mon) ? exclam(tmp) : ".");
 	}
+	
+	if (mdat == &mons[PM_URANIUM_IMP] && !mon->mcan){
+	    if (mon->mhp <= 0) {
+		killed(mon);
+		return FALSE;
+	    } else {
+		if (canseemon(mon)) pline("%s %s reality!", Monnam(mon),
+			level.flags.noteleport ? "tries to warp" : "warps");
+		if (!level.flags.noteleport) {
+		    tele(); coord cc;
+		    enexto(&cc, u.ux, u.uy, &mons[PM_URANIUM_IMP]);
+		    rloc_to(mon, cc.x, cc.y);
+		}
+	    }
+	    return TRUE;
+	}
 
 	if (silvermsg) {
 		const char *fmt;

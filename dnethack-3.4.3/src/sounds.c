@@ -988,6 +988,12 @@ dochat()
 		mtmp->mpeaceful = 1;
 		mtmp = tamedog(mtmp, (struct obj *)0);
 	}
+	
+    /* That is IT. EVERYBODY OUT. You are DEAD SERIOUS. */
+    if (mtmp->data == &mons[PM_URANIUM_IMP]) {
+		monflee(mtmp, rn1(20,10), TRUE, FALSE);
+    }
+	
 #ifdef CONVICT
     if (Role_if(PM_CONVICT) && is_rat(mtmp->data) && !mtmp->mpeaceful &&
      !mtmp->mtame) {
