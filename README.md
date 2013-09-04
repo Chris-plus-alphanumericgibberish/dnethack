@@ -2,11 +2,11 @@ dNetHack
 ========
 A variant of nethack 3.4.4
 
-In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash’em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, Bulwersator, Karl Garrison, probably others (wasn’t always good about documenting who’s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past. The Chokhmah Sephirah is based on the Recoudut, an epic inevitable posted to some message board by someone, years ago, somewhere out there on the internet. That original source has long since vanished. The other Keter Sephiroth are based on the DnD inevitables.
+In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slashï¿½em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, Bulwersator, Karl Garrison, probably others (wasnï¿½t always good about documenting whoï¿½s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past. The Chokhmah Sephirah is based on the Recoudut, an epic inevitable posted to some message board by someone, years ago, somewhere out there on the internet. That original source has long since vanished. The other Keter Sephiroth are based on the DnD inevitables.
 
 Implemented YANI's from rec.games.roguelike.nethack and the nethack wiki, including several of Jonadab the Unsightly One's suggestions.
 
-dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re-organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi-level alignment “quest” branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight-up maze levels. Characters of any alignment may enter any alignment “quest.” To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
+dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re-organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi-level alignment ï¿½questï¿½ branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight-up maze levels. Characters of any alignment may enter any alignment ï¿½quest.ï¿½ To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
 
 Overall, dnethack is more difficult than vanilla nethack, as there are more ways to get into trouble as a late-game character, and several ways to go from ascension-ready character to tombstone in just a few rounds. The design goal is for all such threats to be counterable, so that the late game is more difficult and dangerous but not randomly lethal.
 
@@ -14,20 +14,30 @@ Overall, dnethack is more difficult than vanilla nethack, as there are more ways
 (...Two major sources of inspiration: Dungeons and Dragons (DnD) and Cthulhu Mythos) 
 ____________________________
 __Player Character Changes__
+
 -Elbereth removed
 
------New system using warding signs implemented instead.
+--New system using warding signs implemented instead.
 
------Wards are learned from spellbooks.
+-----Wards are learned from spellbooks, engraved magic rings, prayer, and sometimes the ground.
 
------Wards are engraved using the regular engrave command (E).
+-----Wards are engraved using the regular engrave command (E), or Ctrl^q.
 
------Squares may contain one type of ward AND one text engraving.
+-----Squares may contain one type of ward AND one text engraving (as well as any number of staves, see below).
 
 -----Wards and engravings may be of different types (ie, you can have a burned ward and a dust-engraved message in the same square)
 
 -----Altering the ward or the engraving obscures the ward, making you vulnerable until you finish the alteration.
 
+--A suplementary system of carved wards has also been implemented.
+
+-----Islandic magical staves are warding signs that can be carved into wooden weapons.
+
+-----Carve staves by applying (a) a knife.
+
+-----Use staves by dropping them at your feet. Squares may contain any number of stave-carved weapons as well as a text engraving and a warding sign. 
+
+-----Some staves grant other abilities when a weapon carved with one is wielded.
 
 -Barbarians can reach expert in Broadsword and Trident
 
@@ -35,20 +45,13 @@ __Player Character Changes__
 
 --Convicts will find they are unable to raise their alignment record as fast as other roles can.
 
---Convicts will find a slightly alter
+--Convicts will find a slightly altered first gift
 
-
--Valks can reach expert in spear but only skilled in longsword
-
--Valks start with a +1 spear instead of a +1 longsword (as in Slash'em).
-
--Valks start with leather armor and +1 small shields
+--Convicts will find they have trouble keeping their luck up in the later stages of the game.
 
 -Knights can reach expert in polearms but only basic in two-weapon fighting.
 
 -Monks recive extra AC if they aren't wearing body armor. Dependent on dexterity, wisdom, and level.
-
--Samurai can reach skilled in polearms, and gain a +1 skill-level bonus when using naginatas (glaives)
 
 -Priests get special treatment w/ regards to artifacts
 
@@ -58,9 +61,17 @@ __Player Character Changes__
 
 -Priests and Knights can expend 30 energy to turn undead in 1 turn instead of 5 turns.
 
+-Samurai can reach skilled in polearms, and gain a +1 skill-level bonus when using naginatas (glaives)
+
 -Samurai, Archeologist, and Knight special alignment penalties made harsher.
 
 -Tourist quest monsters revised to better reflect Ank-Morpork
+
+-Valks can reach expert in spear but only skilled in longsword
+
+-Valks start with a +1 spear instead of a +1 longsword (as in Slash'em).
+
+-Valks start with leather armor and +1 small shields
 
 -Gnomes begin with Gnomish hats and a small pile of tallow candles
 
@@ -68,19 +79,21 @@ __Player Character Changes__
 
 -Changed how gaining intrinsic resistances from food works
 
------You have a shot at all resistances a corpse can give, not just a randomly chosen one.
+--You have a shot at all resistances a corpse can give, not just a randomly chosen one.
 
------Fire, Sleep, Cold, and Electricity resistances gained from corpses time out.
+----Some corpses grant temporary intrinsic displacement as well.
 
------Resistances received from leveling up and from crowning do not time out.
+--Fire, Sleep, Cold, Acid, and Electricity resistances gained from corpses time out.
+
+--Resistances received from leveling up and from crowning do not time out.
 
 -"Fixed" a few dietary violations of common sense, so watch what you eat!
 
 -Tweaked skills slightly
 
-------Expert gives +5 to-hit and +3 damage (-2 to hit and +2 damage for twoweapon fighting)
+--Expert gives +5 to-hit and +3 damage (-2 to hit and +2 damage for twoweapon fighting)
 
-------Expert riding gives +2 to-hit and +5 damage
+--Expert riding gives +2 to-hit and +5 damage
 
 
 (...)
@@ -164,7 +177,7 @@ Only your quest Nemeses will deliberately steal your quest artifact, other monst
 
 	-Makes QA a dependable source of extrinsics, deepening differences between classes.
 	
--Foo-Bane artifacts are better (don’t need to be enchanted to be effective), and can be wielded in the off-hand behind a second artifact.
+-Foo-Bane artifacts are better (donï¿½t need to be enchanted to be effective), and can be wielded in the off-hand behind a second artifact.
 
 
 (ha. ha.)
