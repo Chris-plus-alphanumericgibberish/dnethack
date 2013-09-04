@@ -2101,10 +2101,14 @@ boolean past;
 
     vampire = makemon(&mons[PM_VAMPIRE], box->ox, box->oy, NO_MINVENT);
 	set_malign(vampire);
-	if (!canspotmon(vampire))
+	if (!canspotmon(vampire)){
 	    You("think %s brushed against your %s.", something, body_part(HAND));
-	else
-	    pline(past ? "There was a vampire in the coffin! %s stands." : "There is a vampire in the coffin! %s stands.", Monnam(vampire));
+	}
+	else{
+	    if(Hallucination) 
+			pline(past ? "There was a dark knight in the coffin. The dark knight rises!" : "There is a dark knight in the coffin. The dark knight rises!");
+	    else pline(past ? "There was a vampire in the coffin! %s rises." : "There is a vampire in the coffin! %s rises.", Monnam(vampire));
+	}
 //	(void) christen_monst(vampire, sc);
     box->owt = weight(box);
     return;
