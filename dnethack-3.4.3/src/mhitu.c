@@ -2147,7 +2147,7 @@ dopois:
 					dmg = 2 * (Upolyd ? u.mh : u.uhp)
 						  + 400; //FATAL_DAMAGE_MODIFIER;
 					pline("%s sucks your %s off!",
-					      mon_nam(mtmp), body_part(HEAD));
+					      Monnam(mtmp), body_part(HEAD));
 				}
 				else{
 					You_feel("%s trying to suck your extremities off!",mon_nam(mtmp));
