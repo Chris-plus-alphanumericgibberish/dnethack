@@ -927,7 +927,7 @@ static const char * const bogusmons[] = {
 	"yithian", "elder thing", "old one", "great old one", "outer god", "other god", "elder god", /* Lovecraft */
 	"eyeless albino penguin", /* More Lovecraft */
 	"shadowgirl",		/* Shadowgirls */
-	"Luggage", "God of Stuff",				/* Discworld */
+	"Luggage", "God of Stuff", "vampiric watermelon",	/* Discworld */
 	"Ent",					/* Lord of the Rings */
 	"tangle tree", "nickelpede", "wiggle",	/* Xanth */
 	"white rabbit", "snark",		/* Lewis Carroll */

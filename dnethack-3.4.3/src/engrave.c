@@ -61,9 +61,8 @@ static const char *random_mesg[] = {
         "You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
 };
 
-/* Note: most of these were contributed by members of the
-	Nethack Usenet group, rec.games.roguelike.nethack */
 static const char *haluMesg[] = {
+/* contributed by members of the Nethack Usenet group, rec.games.roguelike.nethack */
 	"Which way did he go, George, which way did he go?",
 	"Until you stalk and overrun, you can't devour anyone.",
 	"Fee.  Fie.  Foe.  Foo.",
@@ -145,58 +144,62 @@ static const char *haluMesg[] = {
 	"And if you're the kind of person who parties with a bathtub full of pasta, I suspect you don't care much about cholesterol anyway.",
 	"I AM A SEXY SHOELESS GOD OF WAR!!!",
 	
-	"It's only the end if you want it to be.",
+	"Bad Wolf", /* Dr. Who */
+	"It's only the end if you want it to be.", /*Batgirl*/
 	"Mistakes were made.",
 	"But at what cost?",
-	"For we wrestle not against flesh and blood, but against principalities and powers.",
-	"Life is truth, and never a dream...",
-	"fire, walk with me.",
-	"redefine happiness",
-	"no more sadness, no more anger, no more envy...",
-	"Even false things are true",
-	"FIVE TONS OF FLAX!",
-	"Fnord",
-	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul",
-	"No Fate",
-	"This world can have but one Emperor.",
-	"We shall devour your light, and use it to return this world to the Void!",
-	"My hatred will not be stanched until it has consumed all else!",
-	"Life... dreams... hope... Where do they come from? And where do they go...?",
-	"I will NEVER be a memory.",
-	"All the world will be your enemy, Prince With A Thousand Enemies,",
-	"and when they catch you they will kill you... but first they must catch you.",
-	"This statement is false.",
-	"Quod Erat Demonstrandum", "anno Domini", "per centum",
-	"I was so surprised, I CLASSIFIED INFORMATION, I really did!",
-	"[REDACTED]",
-	"[DATA EXPUNGED]",
-	"[DATA PLUNGED]",
-	"[DATA EXPANDED]",
-	"I am a toaster!",
-	"I prepared Explosive Runes this morning.",
-	"In any battle, there's always a level of force against which no tactics can succeed.",
-	"1002: He is Not that Which He Says He Is.",
-	"3001: Behinde the Eagle's Neste a grate Ash hath fellen.",
-	"VI. You Shall Not Subject Your God To Market Forces!",
-	"NOT A Secret Base",
-	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.",
-	"I SAW THE EYE. Over the horizon, like a rising sun!",
+	"For we wrestle not against flesh and blood, but against principalities and powers.", /* Ephesians 6:12 */
+	"Life is truth, and never a dream...", /* Persona 4 */
+	"fire, walk with me.", /*Twin Peaks*/
+	"redefine happiness", /* Blue Oyster Cult */
+	"no more sadness, no more anger, no more envy...", /*Halo*/
+	"Even false things are true", "FIVE TONS OF FLAX!", "Fnord", /*Discordianism*/
+	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
+	"No Fate", /*Terminator*/
+	"This world can have but one Emperor.", /*FF II*/
+	"We shall devour your light, and use it to return this world to the Void!", /*FFIII*/
+	"My hatred will not be stanched until it has consumed all else!", /*FFV*/
+	"Life... dreams... hope... Where do they come from? And where do they go...?", /*FFVI*/
+	"I will NEVER be a memory.", /*FFVII Advent Children*/
+	"All the world will be your enemy, Prince With A Thousand Enemies...", /*Watership Down*/
+		"...and when they catch you they will kill you... but first they must catch you.",
+	"This statement is false.", /*Logical contradiction*/
+	"Quod Erat Demonstrandum", "anno Domini", "per centum", /* QED, AD, percent */
+	"I was so surprised, I CLASSIFIED INFORMATION, I really did!", /*Haruhi Suzumiya*/
+	"[REDACTED]", "[DATA EXPUNGED]", "[DATA PLUNGED]", "[DATA EXPANDED]", "I am a toaster!", /* SCP Foundation */
+	"I prepared Explosive Runes this morning.", /*Order of the Stick*/
+		"In any battle, there's always a level of force against which no tactics can succeed.",
+	"1002: He is Not that Which He Says He Is.", /*Good Omens*/
+		"3001: Behinde the Eagle's Neste a grate Ash hath fellen.",
+	"VI. You Shall Not Subject Your God To Market Forces!",	/*Discworld*/
+		"Nae quin! Nae laird! Nae master! We willna be fooled again!"
+		"Morituri Nolumus Mori"
+		"End-of-the-World Switch. PLEASE DO NOT TOUCH"
+		"Give a man a fire and he's warm for a day, but set fire to him and he's warm for the rest of his life."
+		"Do not, under any circumstances, open this door"
+		"WORDS IN THE HEART CANNOT BE TAKEN"
+		"Slab: Jus' say \"AarrghaarrghpleeassennononoUGH\""
+		"Ahahahahaha! Ahahahaha! Aahahaha!\nBEWARE!!!!!\nYrs sincerely\nThe Opera Ghost"
+		"Bee There Orr Bee A Rectangular Thyng"
+	"NOT A Secret Base", /*Gunnerkrigg Court*/
+	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
+	"I SAW THE EYE. Over the horizon, like a rising sun!", /* Dresden Codak */
 	"That's Science, isn't it? The perpetual horizon.\nBut we found a way, haha, we found a way around that!",
 	"What would YOU give up to... to see it through?",
-	"Don't trust the skull.",
-	"We do not threaten or warn or advise. We tell the truth.",
-	"What you stole is even more dangerous and precious than you know.",
-	"In the end, you will fly away and live forever, and you will leave the world shattered in your wake.",
-	"You will return to where you started, and you will become what you hate.",
-	"And in doing so, you will restore the world to what it was.",
-	"Fall in a more hardboiled manner.",
-	"Since you are reading this, chances are you have already installed this game on your computer.\nIf this is true, you have just participated in bringing about the end of the world.\nBut don't beat yourself up about it.",
-	"YOU HATE TIME TRAVEL YOU HATE TIME TRAVEL YOU HATE....",
-	"It begins to dawn on you that everything you just did may have been a colossal waste of time.",
-	"We will BUILD heroes!",
-	"If you replace the working parts, you get a different machine.",
-	"If you destroy the working parts, what you get is a broken machine.",
-	"Never tell me the odds!"
+	"Don't trust the skull.", /* Cynarfpncr: Gbezrag (mild spoiler) */
+	"We do not threaten or warn or advise. We tell the truth.", /* The Mansion of E */
+		"What you stole is even more dangerous and precious than you know.",
+		"In the end, you will fly away and live forever, and you will leave the world shattered in your wake.",
+		"You will return to where you started, and you will become what you hate.",
+		"And in doing so, you will restore the world to what it was.",
+	"Fall in a more hardboiled manner.", /* MS Paint Adventures */
+		"Since you are reading this, chances are you have already installed this game on your computer.\nIf this is true, you have just participated in bringing about the end of the world.\nBut don't beat yourself up about it.",
+		"YOU HATE TIME TRAVEL YOU HATE TIME TRAVEL YOU HATE....",
+		"It begins to dawn on you that everything you just did may have been a colossal waste of time.",
+	"We will BUILD heroes!", /* THE PROTOMEN */
+		"If you replace the working parts, you get a different machine.",
+		"If you destroy the working parts, what you get is a broken machine.",
+	"Never tell me the odds!" /* Starwars */
 };
 
 const int wardStrokes[][7] = {
