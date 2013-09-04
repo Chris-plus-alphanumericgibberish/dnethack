@@ -991,8 +991,13 @@ register struct obj *obj;
 		wt =  150; /* Same as a crystal ball (ie, the Orb of Weight) */
 	}
 
-	if (obj->otyp == LARGE_BOX && obj->spe == 1) /* Schroedinger's Cat */
+	if (obj->otyp == LARGE_BOX && obj->spe){ /* Schroedinger's Cat */
+		if(obj->spe == 1){
 		wt += mons[PM_HOUSECAT].cwt;
+		}else if(obj->spe == 4){
+			wt += mons[PM_VAMPIRE].cwt;
+		}
+	}
 	if (Is_container(obj) || obj->otyp == STATUE) {
 		struct obj *contents;
 		register int cwt = 0;
