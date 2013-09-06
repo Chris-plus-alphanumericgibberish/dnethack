@@ -1406,7 +1406,7 @@ dopois:
 		}
 		//end moved brain removal msgs
 		if(mtmp->data == &mons[PM_MIGO_PHILOSOPHER]||mtmp->data == &mons[PM_MIGO_QUEEN])
-			return 2;
+			return 3;
 		break;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_PLYS:
