@@ -132,6 +132,18 @@ register int x, y, n;
 		 * are peaceful and some are not, the result will just be a
 		 * smaller group.
 		 */
+		 	/* if caller wants random locations, do one here */
+		if(x == 0 && y == 0) {
+			int tryct = 0;	/* careful with bigrooms */
+			struct monst fakemon;
+
+			fakemon.data = mtmp->data;	/* set up for goodpos */
+			do {
+				mm.x = rn1(COLNO-3,2);
+				mm.y = rn2(ROWNO);
+			} while(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS) ||
+				(tryct++ < 50 && cansee(mm.x, mm.y)));
+		}
 		if (enexto(&mm, mm.x, mm.y, mtmp->data)) {
 		    mon = makemon(mtmp->data, mm.x, mm.y, NO_MM_FLAGS);
 		    mon->mpeaceful = FALSE;
@@ -146,6 +158,18 @@ register int x, y, n;
 	}
 	else{
 	 while(cnt--) {
+		 	/* if caller wants random locations, do one here */
+		if(x == 0 && y == 0) {
+			int tryct = 0;	/* careful with bigrooms */
+			struct monst fakemon;
+
+			fakemon.data = mtmp->data;	/* set up for goodpos */
+			do {
+				mm.x = rn1(COLNO-3,2);
+				mm.y = rn2(ROWNO);
+			} while(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS) ||
+				(tryct++ < 50 && cansee(mm.x, mm.y)));
+		}
 		if (enexto(&mm, mm.x, mm.y, mtmp->data)) {
 		    mon = makemon(mtmp->data, mm.x, mm.y, NO_MM_FLAGS);
 		    mon->mpeaceful = 1;
@@ -2040,6 +2064,11 @@ register int	mmflags;
 				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				num = 2;
 				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SERGEANT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+			}
+		break;
+		case S_ANGEL:
+			if (anymon && is_weeping(mtmp->data) && u.uevent.udemigod){
+				m_initlgrp(mtmp, 0, 0);
 			}
 		break;
 	    case S_GIANT:

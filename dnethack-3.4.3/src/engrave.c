@@ -39,26 +39,29 @@ static const char *random_mesg[] = {
 	"You've got mail!", /* AOL */
 #endif
 	"As if!", /* Clueless */
-        "Arooo!  Werewolves of Yendor!", /* gang tag */
-        "Dig for Victory here", /* pun, duh */
-        "Don't go this way",
-        "Gaius Julius Primigenius was here.  Why are you late?", /* pompeii */
-        "Go left --->", "<--- Go right",
-        "Haermund Hardaxe carved these runes", /* viking graffiti */
-        "Here be dragons",
-        "Need a light?  Come visit the Minetown branch of Izchak's Lighting Store!",
-        "Save now, and do your homework!",
-        "Snakes on the Astral Plane - Soon in a dungeon near you",
-        "There was a hole here.  It's gone now.",
-        "The Vibrating Square",
-        "This is a pit!",
-        "This is not the dungeon you are looking for.",
-        "This square deliberately left blank.",
-        "Warning, Exploding runes!",
-        "Watch out, there's a gnome with a wand of death behind that door!",
-        "X marks the spot",
-        "X <--- You are here.",
-        "You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
+	"Arooo!  Werewolves of Yendor!", /* gang tag */
+	"Dig for Victory here", /* pun, duh */
+	"Don't go this way",
+	"Gaius Julius Primigenius was here.  Why are you late?", /* pompeii */
+	"Go left --->",	"<--- Go right",
+	"Haermund Hardaxe carved these runes", /* viking graffiti */
+	"Here be dragons",
+	"Need a light?  Come visit the Minetown branch of Izchak's Lighting Store!",
+	"Save now, and do your homework!",
+	"Snakes on the Astral Plane - Soon in a dungeon near you",
+	"There was a hole here.  It's gone now.",
+	"The Vibrating Square",
+	"This is a pit!",
+	"This is not the dungeon you are looking for.",
+	"This square deliberately left blank.",
+	"Warning, Exploding runes!",
+	"Watch out, there's a gnome with a wand of death behind that door!",
+	"X marks the spot",
+	"X <--- You are here.",
+	"You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
+	/*weeping angels, Unnethack*/
+	"Beware of the weeping angels", /* Doctor Who */
+	"Duck, Sally Sparrow", /* Doctor Who */
 };
 
 static const char *haluMesg[] = {
@@ -383,7 +386,7 @@ const char * haluWard[] =  {
 	"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
 	"a Sharuan Mindharp", /* Star Wars expanded universe */
 	"a winged blade of light", /* Jedi Order symbol */
-	"an angular S in before a segmented circle",//"a screw attack symbol",
+	"an angular S before a segmented circle",/*a screw attack symbol*/,
 	"more dakka",
 	
 	"a symbol of pain", /* DnD */

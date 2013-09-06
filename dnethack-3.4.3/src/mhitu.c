@@ -619,9 +619,11 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_GAZE:	/* can affect you either ranged or not */
 			/* Medusa gaze already operated through m_respond in
-			 * dochug(); don't gaze more than once per round.
+			 * 	dochug();
+			 * Weeping angels gaze during movemon().
+			 * Don't gaze more than once per round.
 			 */
-			if (mdat != &mons[PM_MEDUSA])
+			if (mdat != &mons[PM_MEDUSA] && !is_weeping(mdat))
 				sum[i] = gazemu(mtmp, mattk);
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
 				mtmp->mextra[0] = mtmp->mextra[0]+1;
@@ -1804,6 +1806,47 @@ dopois:
 		hitmsg(mtmp, mattk);
 		if ( armuncancel || (mtmp->data==&mons[PM_PALE_NIGHT] && !rn2(3)) ) {
 			(void) safe_teleds(FALSE);
+		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_LVLT:
+		hitmsg(mtmp, mattk);
+		if (uncancelled) {
+		    if(flags.verbose) {
+		    	if (Teleport_control) {
+				You("feel like you could have lost some potential.");
+			} else {
+				You("suddenly feel like you've lost some potential.");
+			}
+		    }
+		level_tele();
+		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_WEEP: /*Weeping Angel's attack*/
+		hitmsg(mtmp, mattk);
+		if (uncancelled) {
+			if(!u.uevent.udemigod){
+				if (Teleport_control || Drain_resistance) {
+					if(flags.verbose) You("feel like you could have lost some potential.");
+				} else {
+					int potentialLost = 0;
+					level_tele();
+					You("suddenly feel like you've lost some potential.");
+					potentialLost = min(abs(u.uz.dlevel - u.utolev.dlevel),u.ulevel-1)/2 + 1;
+					for(potentialLost; potentialLost>0; potentialLost--) losexp("loss of potential",FALSE,TRUE,TRUE); /*not verbose, force drain, drain exp also*/
+					dmg = 0;
+					return 3; /*You teleported, monster should stop attacking.*/
+				}
+			}
+			else{/*The angels will try to drain you dry during the endgame*/
+				if (Drain_resistance) {
+					if(flags.verbose) You("feel like you could have lost some potential.");
+				} else {
+					You("suddenly feel like you've lost some potential.");
+					losexp("loss of potential",FALSE,TRUE,TRUE); /*not verbose, force drain, drain exp also*/
+				}
+		    }
 		}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -3086,6 +3129,32 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    if (dmg) mdamageu(mtmp, dmg);
 		}
 		break;
+	    case AD_BLNK:
+		if (!mtmp->mcan && canseemon(mtmp) &&
+			couldsee(mtmp->mx, mtmp->my) &&
+			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
+		    int dmg = d(1,4);
+		    if (!Reflecting) {
+			pline("%s reflection in your mind weakens you.", s_suffix(Monnam(mtmp)));
+			stop_occupation();
+	    		exercise(A_INT, TRUE);
+		    } else {
+			if (flags.verbose)
+			    /* Since this message means the player is unaffected, limit
+			       its occurence to preserve flavor but avoid message spam */
+			    if (!rn2(10)) pline("%s is covering its face.", Monnam(mtmp));
+			dmg = 0;
+		    }
+		    if (dmg){
+				int temparise = u.ugrave_arise;
+				u.ugrave_arise = monsndx(mtmp->data);
+				mdamageu(mtmp, dmg);
+				/*If the player surived the gaze attack, restore the value of arise*/
+				u.ugrave_arise = temparise;
+			}
+			mtmp->mspec_used = 10; //In practice, this will be zeroed when a new movement ration is handed out, and acts to make sure Blink can only be used once per round.
+		}
+		break;
 		case AD_HALU:
 		if (!mtmp->mcan && canseemon(mtmp) &&
 			couldsee(mtmp->mx, mtmp->my) &&
@@ -3161,9 +3230,9 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		break;
 */
 		case AD_WISD:{ //Cthulhu's attack
-			if(canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my)) {
+			if(canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) && !mtmp->mspec_used) {
 				int dmg = d((int)mattk->damn, (int)mattk->damd);
-				if(!couldsee(mtmp->mx, mtmp->my)) dmg /= 10;
+//				if(!couldsee(mtmp->mx, mtmp->my)) dmg /= 10;
 				if(!dmg) break;
 				pline("Blasphemous geometries assault your sanity!");
 				while( !(ABASE(A_WIS) <= ATTRMIN(A_WIS)) && dmg > 0){
@@ -3180,6 +3249,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					You("tear at yourself in horror!"); //assume always able to damage self
 					mdamageu(mtmp, dmg*10);
 				}
+				mtmp->mspec_used = 4; //In practice, this will be zeroed when a new movement ration is handed out, and acts to make sure GC can only use the gaze once per round.
 				succeeded=1;
 			}
 		}

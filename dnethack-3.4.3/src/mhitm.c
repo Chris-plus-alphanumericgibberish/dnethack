@@ -498,7 +498,11 @@ hitmm(magr, mdef, mattk)
 				Sprintf(buf,"%s butts", magr_name);
 				break;
 			case AT_TUCH:
+				if (is_weeping(magr->data)) {
+					Sprintf(buf,"%s is touching", magr_name);
+				} else {
 				Sprintf(buf,"%s touches", magr_name);
+				}
 				break;
 			case AT_TENT:
 				Sprintf(buf, "%s tentacles suck",
@@ -513,7 +517,12 @@ hitmm(magr, mdef, mattk)
 				    break;
 				}
 			default:
+				if (is_weeping(magr->data)) {
+					Sprintf(buf,"%s is hitting", magr_name);
+				} else {
 				Sprintf(buf,"%s hits", magr_name);
+		    }
+				break;
 		    }
 		    pline("%s %s.", buf, mon_nam_too(mdef_name, mdef, magr));
 		}
@@ -530,6 +539,20 @@ gazemm(magr, mdef, mattk)
 	char buf[BUFSZ];
 
 	if(vis) {
+		/* the gaze attack of weeping (arch)angels isn't active like others */
+		if (is_weeping(magr->data)) {
+			if (mon_reflects(mdef, (char *)0)) {
+				return (MM_MISS);
+			} else {
+				Sprintf(buf,"%s is staring at", Monnam(magr));
+				pline("%s %s.", buf, mon_nam(mdef));
+			}
+		} else {
+			Sprintf(buf,"%s gazes at", Monnam(magr));
+			pline("%s %s...", buf, mon_nam(mdef));
+		}
+	}
+	if(vis) {
 		Sprintf(buf,"%s gazes at", Monnam(magr));
 		pline("%s %s...", buf, mon_nam(mdef));
 	}
@@ -537,7 +560,7 @@ gazemm(magr, mdef, mattk)
 	if (magr->mcan || !magr->mcansee ||
 	    (magr->minvis && !perceives(mdef->data)) ||
 	    !mdef->mcansee || mdef->msleeping) {
-	    if(vis) pline("but nothing happens.");
+	    if(vis && !is_weeping(magr->data)) pline("but nothing happens.");
 	    return(MM_MISS);
 	}
 	/* call mon_reflects 2x, first test, then, if visible, print message */
@@ -992,6 +1015,30 @@ mdamagem(magr, mdef, mattk)
 			pline("%s suddenly disappears!", mdef_Monnam);
 		}
 		break;
+	    case AD_WEEP:
+	    case AD_LVLT:
+		if (!cancelled && tmp < mdef->mhp && !tele_restrict(mdef)) {
+		    char mdef_Monnam[BUFSZ];
+		    if (vis) Strcpy(mdef_Monnam, Monnam(mdef));
+		    mdef->mstrategy &= ~STRAT_WAITFORU;
+		    if (u.uevent.udemigod) {
+		    /* Once the player kills Rodney or performs the Invocation, weeping angels will 
+		       be too interested in your potential to feed off the potential of monsters */
+			if (vis && canspotmon(magr) && flags.verbose)
+			    pline("%s is glancing at you with a hungry stare.", Monnam(magr));
+		    } else {
+			if (vis && canspotmon(mdef))
+			    if (flags.verbose)
+				pline("%s vanishes before your eyes.", Monnam(mdef));
+			    int nlev;
+			    d_level flev;
+			    nlev = random_teleport_level();
+			    get_level(&flev, nlev); 
+			    migrate_to_level(mdef, ledger_no(&flev), MIGR_RANDOM,
+				    (coord *)0);
+		    }
+		}
+		break;
 	    case AD_SLEE:
 		if (!cancelled && !mdef->msleeping &&
 			sleep_monst(mdef, rnd(10), -1)) {
@@ -1004,6 +1051,10 @@ mdamagem(magr, mdef, mattk)
 		}
 		break;
 	    case AD_PLYS:
+		if (is_weeping(mdef->data)) {
+		    tmp = 0;
+		    break;
+		}
 		if(!cancelled && mdef->mcanmove) {
 		    if (vis) {
 			Strcpy(buf, Monnam(mdef));
@@ -1015,6 +1066,10 @@ mdamagem(magr, mdef, mattk)
 		}
 		break;
 	    case AD_TCKL:
+		if (is_weeping(mdef->data)) {
+		    tmp = 0;
+		    break;
+		}
 		if(mdef->mcanmove) {
 		    if (vis) {
 			Strcpy(buf, Monnam(magr));
@@ -1026,6 +1081,10 @@ mdamagem(magr, mdef, mattk)
   		}
 		break;
 	    case AD_SLOW:
+		if (is_weeping(mdef->data)) {
+		    tmp = 0;
+		    break;
+		}
 		if (!cancelled && mdef->mspeed != MSLOW) {
 		    unsigned int oldspeed = mdef->mspeed;
 
@@ -1059,6 +1118,19 @@ mdamagem(magr, mdef, mattk)
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		}
 		tmp = 0;
+		break;
+	    case AD_BLNK:
+		/* Weeping angels using their gaze attack on each
+		   other has unfortunate effects for both of them */
+		if (is_weeping(pd) && mdef->mcansee && magr->mcansee) {
+		    if (vis) {
+			Strcpy(buf, Monnam(mdef));
+			pline("%s and %s are permanently quantum-locked!", buf, mon_nam(magr));
+		    }
+		    monstone(mdef);
+		    monstone(magr);
+		    return (MM_DEF_DIED | MM_AGR_DIED);
+		}
 		break;
 	    case AD_HALU:
 		if (!magr->mcan && haseyes(pd) && mdef->mcansee) {

@@ -89,8 +89,11 @@ moveloop()
 		    mcalcdistress();	/* adjust monsters' trap, blind, etc */
 
 		    /* reallocate movement rations to monsters */
-		    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+		    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
 				mtmp->movement += mcalcmove(mtmp);
+				if(mtmp->data == &mons[PM_GREAT_CTHULHU]) mtmp->mspec_used = 0;
+				if(is_weeping(mtmp->data)) mtmp->mspec_used = 0;
+			}
 
 		    if(!rn2(u.uevent.udemigod ? 25 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70))

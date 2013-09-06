@@ -713,8 +713,12 @@ register struct monst *mtmp;
 	    return(0);	/* other frozen monsters can't do anything */
 	}
 
-	if (mdat == &mons[PM_GREAT_CTHULHU] && couldsee(mtmp->mx, mtmp->my)) //Great Cthulu drives investigators mad when gazed upon.
+	if (mdat == &mons[PM_GREAT_CTHULHU]){
+		if(couldsee(mtmp->mx, mtmp->my)) //Great Cthulu drives investigators mad when gazed upon.
 	    m_respond(mtmp);
+		if(mtmp->movement > 0) //Great Cthulu moves only once every few turns.
+			return 0;
+	}
 	
 	/* there is a chance we will wake it */
 	if (mtmp->msleeping && !disturb(mtmp)) {
@@ -1125,7 +1129,6 @@ register int after;
 	     */
 	    if((dist2(mtmp->mx, mtmp->my, tx, ty) < 2) &&
 	       intruder && (intruder != mtmp)) {
-
 		notonhead = (intruder->mx != tx || intruder->my != ty);
 		if(mattackm(mtmp, intruder) == 2) return(2);
 		mmoved = 1;

@@ -11,6 +11,7 @@
 #include "mfndpos.h"
 #include "edog.h"
 #include <ctype.h>
+#include <stdlib.h>
 
 STATIC_DCL boolean FDECL(restrap,(struct monst *));
 #ifdef OVL2
@@ -665,6 +666,9 @@ movemon()
 {
     register struct monst *mtmp, *nmtmp;
     register boolean somebody_can_move = FALSE;
+	int maxtheta=0, mintheta=0, indextheta, deltax, deltay, theta, arc;
+	boolean thetafirst=TRUE;
+
 #if 0
     /* part of the original warning code which was replaced in 3.3.1 */
     warnlevel = 0;
@@ -687,11 +691,35 @@ movemon()
     and drink cursed potions of raise level to change levels.  These are
     all reflexive at this point.  Should one monster be able to level
     teleport another, this scheme would have problems.
+	
+	Uh oh, weeping 	angels have a levelport attack. Doesn't seem to 
+	cause problems, though....
     */
 
+	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+		if(is_weeping(mtmp->data) && canseemon(mtmp)){
+			deltax = u.ux - mtmp->mx;
+			deltay = u.uy - mtmp->my;
+			theta = (int)(atan((float)deltay/(float)deltax)*100);
+			if(deltax<0&&deltay<0) theta+=314;
+			else if(deltax<0) theta+=314;
+			else if(deltay<=0) theta+=628;
+			theta -= 314;
+			if(thetafirst){
+				indextheta = theta;
+				thetafirst = FALSE;
+			}else{
+				theta = theta - indextheta;
+				if(theta <= -314) theta+=628;
+				else if(theta > 314) theta -= 628;
+				if(theta<mintheta) mintheta = theta;
+				else if(theta>maxtheta) maxtheta = theta;
+			}
+		}
+	}
+	arc = maxtheta - mintheta;
     for(mtmp = fmon; mtmp; mtmp = nmtmp) {
 	nmtmp = mtmp->nmon;
-
 	/* Find a monster that we have not treated yet.	 */
 	if(DEADMONSTER(mtmp))
 	    continue;
@@ -701,6 +729,12 @@ movemon()
 	mtmp->movement -= NORMAL_SPEED;
 	if (mtmp->movement >= NORMAL_SPEED)
 	    somebody_can_move = TRUE;
+	if(is_weeping(mtmp->data) && canseemon(mtmp)){
+		mtmp->mextra[0] +=  (long)(NORMAL_SPEED*arc/314);
+		m_respond(mtmp);
+		if(mtmp->mextra[0] >= NORMAL_SPEED*2) mtmp->mextra[0] -= NORMAL_SPEED*2;
+		else continue;
+	}
 
 	if (vision_full_recalc) vision_recalc(0);	/* vision! */
 
@@ -1122,7 +1156,7 @@ mfndpos(mon, poss, info, flag)
 	register int cnt = 0;
 	register uchar ntyp;
 	uchar nowtyp;
-	boolean wantpool,poolok,lavaok,nodiag;
+	boolean wantpool,poolok,lavaok,nodiag,quantumlock;
 	boolean rockok = FALSE, treeok = FALSE, thrudoor;
 	int maxx, maxy;
 
@@ -1135,6 +1169,7 @@ mfndpos(mon, poss, info, flag)
 	poolok = is_flyer(mdat) || is_clinger(mdat) ||
 		 (is_swimmer(mdat) && !wantpool);
 	lavaok = is_flyer(mdat) || is_clinger(mdat) || likes_lava(mdat);
+	quantumlock = FALSE;//(is_weeping(mdat));
 	thrudoor = ((flag & (ALLOW_WALL|BUSTDOOR)) != 0L);
 	if (flag & ALLOW_DIG) {
 	    struct obj *mw_tmp;
@@ -1196,6 +1231,8 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 #endif
 	       ))
 		continue;
+	    if(nx != 0 && ny != 0 && canseemon(mon) && quantumlock)
+			continue;
 	    if((is_pool(nx,ny) == wantpool || poolok) &&
 	       (lavaok || !is_lava(nx,ny))) {
 		int dispx, dispy;
@@ -2646,6 +2683,13 @@ register struct monst *mtmp;
 		 break;
 	     }
     } else if(mtmp->data == &mons[PM_GREAT_CTHULHU]) {
+		register int i;
+		for(i = 0; i < NATTK; i++)
+			 if(mtmp->data->mattk[i].aatyp == AT_GAZE) {
+			 (void) gazemu(mtmp, &mtmp->data->mattk[i]);
+			 break;
+			 }
+    } else if(is_weeping(mtmp->data)) {
 		register int i;
 		for(i = 0; i < NATTK; i++)
 			 if(mtmp->data->mattk[i].aatyp == AT_GAZE) {

@@ -805,6 +805,11 @@ struct obj *obj;
 		freeinv(obj);
 		(void) mpickobj(mtmp,obj);
 		if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);
+	} else if(!mtmp->mcan && !mtmp->minvis && is_weeping(mtmp->data)) {
+		if (vis)
+			pline ("%s stares at its reflection with a stony expression.", Monnam(mtmp));
+			mtmp->mcanmove = 0;
+			mtmp->mfrozen = 1;
 	} else if (!is_unicorn(mtmp->data) && !humanoid(mtmp->data) &&
 			(!mtmp->minvis || perceives(mtmp->data)) && rn2(5)) {
 		if (vis)

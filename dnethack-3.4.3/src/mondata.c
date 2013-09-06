@@ -36,9 +36,15 @@ int atyp, dtyp;
 {
     struct attack *a;
 
-    for (a = &ptr->mattk[0]; a < &ptr->mattk[NATTK]; a++)
-	if (a->aatyp == atyp && (dtyp == AD_ANY || a->adtyp == dtyp))
-	    return a;
+    for (a = &ptr->mattk[0]; a < &ptr->mattk[NATTK]; a++){
+		if (a->aatyp == atyp && ( 
+								  (dtyp == AD_ANY && atyp != AT_GAZE)
+								 /*Some gazes are passive, not attacks. 
+									It was leading monsters like weeping angels to try to stand off with their useless gazes*/
+								||(dtyp == AD_ANY && a->adtyp != AD_BLNK && a->adtyp != AD_WISD && a->adtyp != AD_STON )
+								|| a->adtyp == dtyp)
+		) return a;
+	}
 
     return (struct attack *)0;
 }

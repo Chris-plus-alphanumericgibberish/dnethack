@@ -1076,6 +1076,11 @@ static const char * const bogusmons[] = {
         "Gloorx Vloq", "Blork the orc",         /* Dungeon Crawl Stone Soup */
         "unicorn pegasus kitten",               /* Wil Wheaton, John Scalzi */
 
+	/* bogus UnNetHack monsters */
+	"weeping angle",
+	"gelatinous sphere", "gelatinous pyramid",
+	"gelatinous Klein bottle", "gelatinous Mandelbrot set"
+	
 	"nyan cat"
 };
 
