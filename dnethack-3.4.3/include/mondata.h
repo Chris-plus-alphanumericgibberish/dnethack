@@ -242,6 +242,8 @@
 #define touch_petrifies(ptr)	((ptr) == &mons[PM_COCKATRICE] || \
 				 (ptr) == &mons[PM_CHICKATRICE])
 
+#define is_weeping(ptr)		((ptr) == &mons[PM_WEEPING_ANGEL])
+
 #define is_mind_flayer(ptr)	((ptr) == &mons[PM_MIND_FLAYER] || \
 				 (ptr) == &mons[PM_MASTER_MIND_FLAYER]|| \
 				 (ptr) == &mons[PM_ALHOON]|| \

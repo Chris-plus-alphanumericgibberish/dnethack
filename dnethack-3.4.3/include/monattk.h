@@ -121,6 +121,10 @@
 #define AD_LOAD		124 /* throws loadstones */
 #define AD_GARO		125 /* blows up after dispensing rumor */
 #define AD_GARO_MASTER	126 /* blows up after dispensing oracle */
+#define AD_LVLT		127	/* level teleport (was weeping angel) */
+#define AD_BLNK		128	/* mental invasion (weeping angel) */
+#define AD_WEEP		129	/* Level teleport and drain (weeping angel) */
+
 
 
 //#define AD_VMSL		180 //Vorlon missile: elect, disintegration, blast.  Triple damage.
