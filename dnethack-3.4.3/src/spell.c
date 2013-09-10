@@ -1394,7 +1394,6 @@ void
 initialward(obj)
 struct obj *obj;
 {
-	int i;
 	// WARD_ACHERON			0x0000008L
 	// WARD_QUEEN			0x0000200L
 	// WARD_GARUDA			0x0000800L
@@ -1404,6 +1403,7 @@ struct obj *obj;
 	// WARD_CAT_LORD		0x0000400L
 	if(obj->ovar1 && !(u.wardsknown & obj->ovar1)){
 		u.wardsknown |= obj->ovar1;
+		return;
 	}
 	
 	switch(rn2(16)){
@@ -1451,8 +1451,8 @@ struct obj *obj;
 			if(!(u.wardsknown & WARD_ELDER_SIGN)){
 				obj->ovar1 = WARD_ELDER_SIGN;
 				u.wardsknown |= obj->ovar1;
-		break;
 			}
+		break; /*Fall through to here*/
 	}
 	return;
 }

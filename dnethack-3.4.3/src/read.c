@@ -1496,6 +1496,77 @@ register struct obj	*sobj;
 		}
 		punish(sobj);
 		break;
+	case SCR_WARD:{
+		//Make sure that engraved messages on the seafloor are read correctly.
+		//Confused: Scare adjacent monsters.
+		//Hallucination: Scribe hallucinatory ward
+		struct engr *engrHere = engr_at(u.ux,u.uy);
+		if(is_lava(u.ux, u.uy)){
+			pline("The lava shifts and flows beneath you.");
+	break;
+		}
+		if (IS_ALTAR(levl[u.ux][u.uy].typ)) {
+			pline("The ground around the altar shifts briefly."); 
+			altar_wrath(u.ux, u.uy);
+	break;
+		}
+		pline("The %s shifts beneath you,%sengraving a %s ward.", 
+			surface(u.ux,u.uy),
+			engrHere ? " wiping away the existing engraving and " : " ",
+			wardDecode[sobj->ovar1]
+		);
+		known = TRUE;
+		del_engr_ward_at(u.ux,u.uy);
+		make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
+		
+		engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
+		engrHere->ward_id = sobj->ovar1;
+		if(sobj->cursed){
+			if(is_pool(u.ux, u.uy)){
+				pline("The lines of blood quickly disperse into the water.");
+		break;
+			}
+			engrHere->ward_type = ENGR_BLOOD;
+		} else engrHere->ward_type = ENGRAVE;
+		engrHere->complete_wards = sobj->blessed ? wardMax[sobj->ovar1] : 1;
+		if( !(u.wardsknown & get_wardID(sobj->ovar1)) ){
+			You("have learned a new warding sign!");
+			u.wardsknown |= get_wardID(sobj->ovar1);
+		}
+	break;}
+	case SCR_WARDING:{
+		//make it so choosing what's already there reinforces.
+		//Brilliant fire burns a %X ward into the %surface
+		//Cursed: A ripple of dark energy spreads out across the %surface
+		//Confused: Scribe random ward that you DON'T know.
+		//Hallucination: A ripple of %color energy.... Changes all wards to hallucinatory random wards.
+		struct engr *engrHere = engr_at(u.ux,u.uy);
+		int wardNum = pick_ward();
+		pline("%d",wardNum);
+		known = TRUE;
+		if(!wardNum)
+	break;
+		if(is_lava(u.ux, u.uy)){
+			pline("Brilliant fire dances over the lava for a moment.");
+	break;
+		}
+		if (IS_ALTAR(levl[u.ux][u.uy].typ)) {
+			pline("Brilliant fire dances over the altar briefly."); 
+			altar_wrath(u.ux, u.uy);
+	break;
+		}
+		pline("Brilliant fire plays over the %s, burning a %s ward into it.", 
+			surface(u.ux,u.uy),
+			wardDecode[wardNum],
+			surface(u.ux,u.uy)
+		);
+		known = TRUE;
+		if(!engrHere) make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
+		engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
+		engrHere->ward_id = wardNum;
+		engrHere->ward_type = BURN;
+		engrHere->complete_wards = sobj->blessed ? wardMax[wardNum] : 1;
+	break;}
 	case SCR_STINKING_CLOUD: {
 	        coord cc;
 

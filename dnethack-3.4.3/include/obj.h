@@ -126,7 +126,7 @@ struct obj {
 	long owornmask;
 	long ovar1;		/* extra variable. Specifies the contents of Books of Secrets, and the warding sign of spellbooks. */
 			/* Also, records special features for weapons. Currently, the only special feature is runes on wooden weapons. */
-			/* Rings: specifies # of charges on droven ring. May be used to specify engraving on gemstone rings? */
+			/* Rings: specifies # of charges on droven ring and engraving on gemstone rings */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 

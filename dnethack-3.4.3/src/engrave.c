@@ -8,7 +8,6 @@
 #include <ctype.h>
 
 STATIC_VAR NEARDATA struct engr *head_engr;
-extern int NDECL(pick_ward);
 
 #ifdef OVLB
 /* random engravings */
@@ -245,6 +244,25 @@ const int wardsAdded[][7] = {
 	{0,0,0, 0,0,0, 0}
 };
 
+int wardMax[16] = {
+	7,
+	7,
+	3,
+	4,
+	7,
+	7,
+	6,
+	5,
+	7,
+	7,
+	7,
+	7,
+	1,
+	1,
+	1,
+	1
+};
+
 //const int wardDesc[] = {0, 0,0,0, 0,0,0, 0,0,0, 0,1}
 //const char * descOfWards[] = {"There is ", "The "}
 //There is ? inscribed here.
@@ -336,6 +354,8 @@ const char * wardNames[][2] = {
 	{"tracery of Krakal", "traceries of Krakal"},
 	{"yellow sign", "yellow signs"},
 };
+
+
 /* There is %s drawn here */
 const char * haluWard[] =  {
 	"", /* 0 index */
@@ -344,6 +364,14 @@ const char * haluWard[] =  {
 	/*DnD*/
 	"a cerulean weeping-willow", /* it's magic. Unlike the others, this one works. Keep in sync with engrave.h!*/
 
+	/*Special behavior, these move across the floor, keep in sync with allmain.c*/
+	"a north-east facing glider",
+	"a north-west facing glider",
+	"a south-west facing glider",
+	"a south-east facing glider",
+	"a square"
+	
+	
 	/* books */
 	"a set of holy horns", "a Summoning Dark mine-sign", "a Long Dark mine-sign",
 	"a Following Dark mine-sign", "a Closing Dark mine-sign", "an Opening Dark mine-sign",
@@ -386,7 +414,7 @@ const char * haluWard[] =  {
 	"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
 	"a Sharuan Mindharp", /* Star Wars expanded universe */
 	"a winged blade of light", /* Jedi Order symbol */
-	"an angular S before a segmented circle",/*a screw attack symbol*/,
+	"an angular S before a segmented circle",/*a screw attack symbol*/
 	"more dakka",
 	
 	"a symbol of pain", /* DnD */
@@ -431,7 +459,6 @@ const char * haluWard[] =  {
 	"a zorkmid",
 	
 	"a diagram of the bridges of Konigsberg",
-	"a glider from the Game of Life",
 
 	"a hand-mirror of Aphrodite",
 	"a shield and spear of Ares", /* alchemy/male/female */
@@ -443,15 +470,18 @@ const char * haluWard[] =  {
 	"a test pattern",
 	"a work of modern art",
 	"a flag of Neverland",
-	"a hyped-up duck dressed in a sailor's shirt and hat",
+	"a hyped-up duck dressed in a sailor's shirt and hat", /* Disney */
 	"a mouse with 2d ears",
 	"a set of three circles in the shape of a mouse's head",
 	"a meaningless coincidence",
+	
+	/*Corporate Logos*/
 	"a stylized, fan-shaped seashell",
 	"a bitten apple",
 	"a pair of arches meeting to form an \"M\"",
 	"a Swoosh mark",
-	"a set of five interlocked rings",
+	
+	"a set of five interlocked rings", /*Olympics logo*/
 	"a running man", /* Exit */
 	"a running man holding a cane",
 	"a one-and-zero", /* Power toggle */
@@ -2114,7 +2144,7 @@ doward()
 		You_cant("draw on the water!");
 		return(0);
 	}
-	if(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)/* in bubble */) {
+	if(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)/* in bubble */ /*|| is_sky(u.ux, u.uy)*/) {
 		You_cant("draw in thin air!");
 		return(0);
 	}

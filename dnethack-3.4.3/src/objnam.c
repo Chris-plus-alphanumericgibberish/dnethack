@@ -319,6 +319,7 @@ register struct obj *obj;
 //			if(obj->opoisoned & OPOISON_PARAL) Strcpy(buf, "poisoned ");
 			if(obj->opoisoned & OPOISON_AMNES) Strcpy(buf, "lethe-rusted ");
 		}
+		if(objects[(obj)->otyp].oc_material == WOOD && obj->ovar1) Strcpy(buf, "carved ");
 	    case VENOM_CLASS:
 	    case TOOL_CLASS:
 		if (typ == LENSES)
@@ -450,7 +451,8 @@ register struct obj *obj;
 		if(!obj->dknown) break;
 		if(nn) {
 			Strcat(buf, " of ");
-			Strcat(buf, actualn);
+			if(obj->otyp != SCR_WARD) Strcat(buf, actualn);
+			else Strcat(buf, wardDecode[obj->ovar1]);
 		} else if(un) {
 			Strcat(buf, " called ");
 			Strcat(buf, un);
@@ -1857,6 +1859,21 @@ boolean from_user;
 	 * automatically sticks 'candied' in front of such names.
 	 */
 
+	boolean heptagram = FALSE,
+		gorgoneion = FALSE,
+		acheron = FALSE,
+		pentagram = FALSE,
+		hexagram = FALSE,
+		hamsa = FALSE,
+		sign = FALSE,
+		eye = FALSE,
+		queen = FALSE,
+		cartouche = FALSE,
+		garuda = FALSE,
+		toustefna = FALSE,
+		dreprun = FALSE,
+		veioistafur = FALSE,
+		thjofastafur = FALSE;
 	char oclass;
 	char *un, *dn, *actualn;
 	const char *name=0;
@@ -1908,6 +1925,40 @@ boolean from_user;
 			l = 0;
 		} else if (!strncmpi(bp, "stolen ", l=7)) {
 			stolen = 1;
+		} else if(!strncmpi(bp, "heptagram ", l=10)){
+			heptagram = TRUE;
+		} else if(!strncmpi(bp, "gorgoneion ", l=10)){
+			gorgoneion = TRUE;
+		} else if(!strncmpi(bp, "circle of acheron ", l=18)){
+			acheron = TRUE;
+		} else if(!strncmpi(bp, "pentagram ", l=10)){
+			pentagram = TRUE;
+		} else if(!strncmpi(bp, "hexagram ", l=9)){
+			hexagram = TRUE;
+		} else if(!strncmpi(bp, "hamsa ", l=6)){
+			hamsa = TRUE;
+		} else if(!strncmpi(bp, "elder sign ", l=11)){
+			sign = TRUE;
+		} else if(!strncmpi(bp, "elder elemental eye ", l=20)){
+			eye = TRUE;
+		} else if(!strncmpi(bp, "sign of the scion queen mother ", l=31)){
+			queen = TRUE;
+		} else if(!strncmpi(bp, "cartouche of the cat lord ", l=26)){
+			cartouche = TRUE;
+		} else if(!strncmpi(bp, "wings of garuda ", l=16)){
+			garuda = TRUE;
+		} else if(!strncmpi(bp, "toustefna ", l=10)){
+			toustefna = TRUE;
+		} else if(!strncmpi(bp, "dreprun ", l=8)){
+			dreprun = TRUE;
+		} else if(!strncmpi(bp, "veioistafur ", l=12)){
+			veioistafur = TRUE;
+		} else if(!strncmpi(bp, "thjofastafur ", l=13)){
+			thjofastafur = TRUE;
+		} else if(!strncmpi(bp, "engraved ", l=9)){
+			/*This modifier does nothing, really, but people should be allowed to write it.*/;
+		} else if(!strncmpi(bp, "carved ", l=7)){
+			/*This modifier does nothing, really, but people should be allowed to write it.*/;
 		} else if (!strncmpi(bp, "blessed ", l=8) ||
 			   !strncmpi(bp, "holy ", l=5)) {
 			blessed = 1;
@@ -2321,6 +2372,62 @@ srch:
 		typ = TIN;
 		goto typfnd;
 	}
+	/*This is meant to catch "scrolls of X"*/
+	if(!strncmpi(actualn, "heptagram", 9)){
+		heptagram = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "gorgoneion", 9)){
+		gorgoneion = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "circle of acheron", 9)){
+		acheron = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "pentagram", 9)){
+		pentagram = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "hexagram", 8)){
+		hexagram = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "hamsa", 5)){
+		hamsa = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "elder sign", 10)){
+		sign = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "elder elemental eye", 19)){
+		eye = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "sign of the scion queen mother", 30)){
+		queen = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "cartouche of the cat lord", 25)){
+		cartouche = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
+	if(!strncmpi(actualn, "wings of garuda", 15)){
+		garuda = TRUE;
+		typ = SCR_WARD;
+		goto typfnd;
+	}
 	/* Note: not strncmpi.  2 fruits, one capital, one not, are possible. */
 	{
 	    char *fp;
@@ -2683,6 +2790,47 @@ typfnd:
 	if(stolen){
 		otmp->ostolen = 1;
 		otmp->sknown = 1;
+	}
+	
+	if(otmp->oclass == RING_CLASS && isEngrRing((otmp)->otyp) && (wizard || (otmp->ovar1 && !(otmp->ohaluengr)))){
+		if(heptagram);  /*can't be wished for*/
+		else if(gorgoneion);  /*can't be wished for*/
+		else if(acheron) otmp->ovar1 = CIRCLE_OF_ACHERON;
+		else if(pentagram) otmp->ovar1 = PENTAGRAM; /*not found randomly, but can be wished for*/
+		else if(hexagram); /*can't be wished for*/
+		else if(hamsa) otmp->ovar1 = HAMSA;
+		else if(sign) otmp->ovar1 = ELDER_SIGN;
+		else if(eye) otmp->ovar1 = ELDER_ELEMENTAL_EYE;
+		else if(queen) otmp->ovar1 = SIGN_OF_THE_SCION_QUEEN;
+		else if(cartouche) otmp->ovar1 = CARTOUCHE_OF_THE_CAT_LORD;
+		else if(garuda) otmp->ovar1 = WINGS_OF_GARUDA;
+		else if(toustefna); /*can't be wished for*/
+		else if(dreprun); /*can't be wished for*/
+		else if(veioistafur); /*can't be wished for*/
+		else if(thjofastafur); /*can't be wished for*/
+	}
+	
+	if(otmp->otyp == SCR_WARD){
+		/* Can wish for a scroll of any ward, including heptagram. You are spending a wish, after all.*/
+		if(heptagram) otmp->ovar1 = HEPTAGRAM;
+		else if(gorgoneion) otmp->ovar1 = GORGONEION;
+		else if(acheron) otmp->ovar1 = CIRCLE_OF_ACHERON;
+		else if(pentagram) otmp->ovar1 = PENTAGRAM;
+		else if(hexagram) otmp->ovar1 = HEXAGRAM;
+		else if(hamsa) otmp->ovar1 = HAMSA;
+		else if(sign) otmp->ovar1 = ELDER_SIGN;
+		else if(eye) otmp->ovar1 = ELDER_ELEMENTAL_EYE;
+		else if(queen) otmp->ovar1 = SIGN_OF_THE_SCION_QUEEN;
+		else if(cartouche) otmp->ovar1 = CARTOUCHE_OF_THE_CAT_LORD;
+		else if(garuda) otmp->ovar1 = WINGS_OF_GARUDA;
+	}
+	
+	/*You're spending a wish, you can get whatever stave you ask for*/
+	if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD){
+		if(toustefna) otmp->ovar1 = WARD_TOUSTEFNA; 
+		else if(dreprun) otmp->ovar1 = WARD_DREPRUN;
+		else if(veioistafur) otmp->ovar1 = WARD_VEIOISTAFUR;
+		else if(thjofastafur) otmp->ovar1 = WARD_THJOFASTAFUR;
 	}
 	/* set blessed/cursed -- setting the fields directly is safe
 	 * since weight() is called below and addinv() will take care

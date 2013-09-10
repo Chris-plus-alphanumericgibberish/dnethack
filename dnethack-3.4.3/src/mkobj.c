@@ -380,7 +380,7 @@ boolean artif;
 	otmp->otyp = otyp;
 	otmp->where = OBJ_FREE;
 	otmp->dknown = index(dknowns, let) ? 0 : 1;
-	otmp->corpsenm = 0; /* BUGFIX: Where does this get set? shouldn't it be given a default during initilation? */
+	otmp->corpsenm = 0; /* BUGFIX: Where does this get set? shouldn't it be given a default during initialization? */
 	otmp->ovar1 = 0;
 	otmp->gifted = A_NONE;
 	otmp->lifted = 0;
@@ -411,6 +411,13 @@ boolean artif;
 		if (is_poisonable(otmp) && ((is_ammo(otmp) && !rn2(100)) || !rn2(1000) )){
 			if(!rn2(100)) otmp->opoisoned = OPOISON_FILTH; /* Once a game or once every few games */
 			else otmp->opoisoned = OPOISON_BASIC;
+		} else if(objects[(otmp)->otyp].oc_material == WOOD && !rn2(100)){
+			switch(d(1,4)){
+				case 1: otmp->ovar1 = WARD_TOUSTEFNA; break;
+				case 2: otmp->ovar1 = WARD_DREPRUN; break;
+				case 3: otmp->ovar1 = WARD_VEIOISTAFUR; break;
+				case 4: otmp->ovar1 = WARD_THJOFASTAFUR; break;
+			}
 		}
 
 		if (artif && !rn2(20))
@@ -556,6 +563,18 @@ boolean artif;
 		if (otmp->otyp != SCR_MAIL)
 #endif
 			blessorcurse(otmp, 4);
+		if(otmp->otyp == SCR_WARD){
+			int prob = rn2(73);
+			/*The circle of acheron is so common and so easy to draw that noone makes ward scrolls of it*/
+			if(prob < 10) otmp->ovar1 = WINGS_OF_GARUDA;
+			else if(prob < 20) otmp->ovar1 = CARTOUCHE_OF_THE_CAT_LORD;
+			else if(prob < 30) otmp->ovar1 = SIGN_OF_THE_SCION_QUEEN;
+			else if(prob < 40) otmp->ovar1 = ELDER_ELEMENTAL_EYE;
+			else if(prob < 50) otmp->ovar1 = ELDER_SIGN;
+			else if(prob < 60) otmp->ovar1 = HAMSA;
+			else if(prob < 70) otmp->ovar1 = PENTAGRAM;
+			else otmp->ovar1 = HEXAGRAM;
+		}
 		break;
 	case SPBOOK_CLASS:
 		blessorcurse(otmp, 17);

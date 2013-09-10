@@ -492,9 +492,10 @@ struct you {
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
 };	/* end of `struct you' */
 
-extern long sealKey[31];
-extern char *wardDecode[26];
-extern char *andromaliusItems[18];
+extern long sealKey[31]; /*Defined in */
+extern char *wardDecode[26]; /*Defined in spell.c*/
+extern int wardMax[16]; /*Defined in engrave.c*/
+extern char *andromaliusItems[18]; /*Defined in */
 #define Upolyd (u.umonnum != u.umonster)
 
 #endif	/* YOU_H */

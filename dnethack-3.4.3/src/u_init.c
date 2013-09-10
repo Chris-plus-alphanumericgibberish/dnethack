@@ -954,6 +954,12 @@ u_init()
 	    knows_object(DWARVISH_MITHRIL_COAT);
 	    knows_object(DWARVISH_CLOAK);
 	    knows_object(DWARVISH_ROUNDSHIELD);
+		switch(d(1,4)){
+			case 1: u.wardsknown |= WARD_TOUSTEFNA;break;
+			case 2: u.wardsknown |= WARD_DREPRUN;break;
+			case 3: u.wardsknown |= WARD_VEIOISTAFUR;break;
+			case 4: u.wardsknown |= WARD_THJOFASTAFUR;break;
+		}	
 	    break;
 
 	case PM_GNOME:
@@ -1194,6 +1200,10 @@ register struct trobj *trop;
 			obj->cursed = 0;
 			if (obj->opoisoned && u.ualign.type != A_CHAOTIC)
 			    obj->opoisoned = 0;
+			if (obj->ovar1){
+				if(obj->oclass == WEAPON_CLASS && objects[(obj)->otyp].oc_material == WOOD) u.wardsknown |= obj->ovar1;
+				else if(obj->oclass == RING_CLASS && isEngrRing((obj)->otyp) && !(obj->ohaluengr)) u.wardsknown |= decode_wardID(obj->ovar1);
+			}
 			if (obj->oclass == WEAPON_CLASS ||
 				obj->oclass == TOOL_CLASS) {
 			    obj->quan = (long) trop->trquan;
