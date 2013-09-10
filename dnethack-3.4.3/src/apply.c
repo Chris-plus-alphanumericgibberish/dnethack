@@ -7,8 +7,8 @@
 
 #ifdef OVLB
 
-static const char tools[] = { TOOL_CLASS, WEAPON_CLASS, WAND_CLASS, 0 };
-static const char tools_too[] = { ALL_CLASSES, TOOL_CLASS, POTION_CLASS,
+static const char tools[] = { COIN_CLASS, TOOL_CLASS, WEAPON_CLASS, WAND_CLASS, 0 };
+static const char tools_too[] = { COIN_CLASS, ALL_CLASSES, TOOL_CLASS, POTION_CLASS,
 				  WEAPON_CLASS, WAND_CLASS, GEM_CLASS, 0 };
 
 #ifdef TOURIST
@@ -16,7 +16,7 @@ STATIC_DCL int FDECL(use_camera, (struct obj *));
 #endif
 STATIC_DCL int FDECL(do_present_ring, (struct obj *));
 STATIC_DCL int FDECL(use_towel, (struct obj *));
-STATIC_DCL boolean FDECL(its_dead, (int,int,int *));
+STATIC_DCL boolean FDECL(its_dead, (int,int,int *,struct obj*));
 STATIC_DCL int FDECL(use_stethoscope, (struct obj *));
 STATIC_DCL void FDECL(use_whistle, (struct obj *));
 STATIC_DCL void FDECL(use_magic_whistle, (struct obj *));
@@ -38,6 +38,7 @@ STATIC_DCL int FDECL(use_pole, (struct obj *));
 STATIC_DCL int FDECL(use_cream_pie, (struct obj *));
 STATIC_DCL int FDECL(use_grapple, (struct obj *));
 STATIC_DCL int FDECL(do_break_wand, (struct obj *));
+STATIC_DCL int FDECL(do_flip_coin, (struct obj *));
 STATIC_DCL boolean FDECL(figurine_location_checks,
 				(struct obj *, coord *, BOOLEAN_P));
 STATIC_DCL boolean NDECL(uhave_graystone);
@@ -67,7 +68,7 @@ use_camera(obj)
 	if(!getdir((char *)0)) return(0);
 
 	if (obj->spe <= 0) {
-		pline(nothing_happens);
+		pline("%s", nothing_happens);
 		return (1);
 	}
 	consume_obj_charge(obj, TRUE);
@@ -240,8 +241,9 @@ use_towel(obj)
 
 /* maybe give a stethoscope message based on floor objects */
 STATIC_OVL boolean
-its_dead(rx, ry, resp)
+its_dead(rx, ry, resp, tobj)
 int rx, ry, *resp;
+struct obj* tobj;
 {
 	struct obj *otmp;
 	struct trap *ttmp;
@@ -272,6 +274,26 @@ int rx, ry, *resp;
 	    }
 	    return TRUE;
 	}
+
+	/* listening to eggs is a little fishy, but so is stethoscopes detecting alignment
+	 * The overcomplex wording is because all the monster-naming functions operate
+	 * on actual instances of the monsters, and we're dealing with just an index
+	 * so we can avoid things like "a owlbear", etc. */
+	if ((otmp = sobj_at(EGG,rx,ry))) {
+		if (Hallucination) {
+			pline("You listen to the egg and guess... %s?",rndmonnam());
+		} else {
+			if (stale_egg(otmp) || otmp->corpsenm == NON_PM) {
+				pline("The egg doesn't make much noise at all.");
+			} else {
+				pline("You listen to the egg and guess... %s?",mons[otmp->corpsenm].mname);
+				learn_egg_type(otmp->corpsenm);
+			}
+		}
+		return TRUE;
+	}
+
+
 	return FALSE;
 }
 
@@ -330,7 +352,7 @@ use_stethoscope(obj)
 		else if (u.dz < 0 || !can_reach_floor())
 		    You_cant("reach the %s.",
 			(u.dz > 0) ? surface(u.ux,u.uy) : ceiling(u.ux,u.uy));
-		else if (its_dead(u.ux, u.uy, &res))
+		else if (its_dead(u.ux, u.uy, &res, obj))
 		    ;	/* message already given */
 		else if (Is_stronghold(&u.uz))
 		    You_hear("the crackling of hellfire.");
@@ -383,7 +405,7 @@ use_stethoscope(obj)
 		return res;
 	}
 
-	if (!its_dead(rx, ry, &res))
+	if (!its_dead(rx, ry, &res, obj))
 	    You("hear nothing special.");	/* not You_hear()  */
 	return res;
 }
@@ -702,7 +724,7 @@ struct obj *obj;
 		if(!Blind && !Invisible) {
 		    if (u.umonnum == PM_FLOATING_EYE && ward_at(u.ux, u.uy) != HAMSA) {
 				if (!Free_action) {
-					pline(Hallucination ?
+					pline("%s", Hallucination ?
 						  "Yow!  The mirror stares back!" :
 						  "Yikes!  You've frozen yourself!");
 					nomul(-rnd((MAXULEV+6) - u.ulevel));
@@ -891,7 +913,7 @@ struct obj **optr;
 		if (!obj->cursed)
 		    (void) openit();
 		else
-		    pline(nothing_happens);
+		    pline("%s", nothing_happens);
 
 	    } else if (obj->cursed) {
 		coord mm;
@@ -923,7 +945,7 @@ struct obj **optr;
 		}
 		res += openit();
 		switch (res) {
-		  case 0:  pline(nothing_happens); break;
+		  case 0:  pline("%s", nothing_happens); break;
 		  case 1:  pline("%s opens...", Something);
 			   learno = TRUE; break;
 		  default: pline("Things open around you...");
@@ -935,7 +957,7 @@ struct obj **optr;
 		amii_speaker( obj, "AeFeaeFeAefegw", AMII_OKAY_VOLUME );
 #endif
 		if (findit() != 0) learno = TRUE;
-		else pline(nothing_happens);
+		else pline("%s", nothing_happens);
 	    }
 
 	}	/* charged BofO */
@@ -1996,7 +2018,7 @@ struct obj *tstone;
     }
 
     if (Blind) {
-	pline(scritch);
+	pline("%s", scritch);
 	return;
     } else if (Hallucination) {
 	pline("Oh wow, man: Fractals!");
@@ -2074,7 +2096,7 @@ struct obj *tstone;
     else if (streak_color)
 	pline("You see %s streaks on the %s.", streak_color, stonebuf);
     else
-	pline(scritch);
+	pline("%s", scritch);
     return;
 }
 
@@ -2280,7 +2302,7 @@ struct obj *obj;
 		You("wrap your bullwhip around %s on the %s.",
 		    an(singular(otmp, xname)), surface(u.ux, u.uy));
 		if (rnl(6) || pickup_object(otmp, 1L, TRUE) < 1)
-		    pline(msg_slipsfree);
+		    pline("%s", msg_slipsfree);
 		return 1;
 	    }
 	}
@@ -2321,7 +2343,7 @@ struct obj *obj;
 		wrapped_what = strcpy(buf, mon_nam(mtmp));
 	    } else if (proficient) {
 		if (attack(mtmp)) return 1;
-		else pline(msg_snap);
+		else pline("%s", msg_snap);
 	    }
 	}
 	if (!wrapped_what) {
@@ -2343,10 +2365,10 @@ struct obj *obj;
 		    vision_full_recalc = 1;
 		}
 	    } else {
-		pline(msg_slipsfree);
+		pline("%s", msg_slipsfree);
 	    }
 	    if (mtmp) wakeup(mtmp);
-	} else pline(msg_snap);
+	} else pline("%s", msg_snap);
 
     } else if (mtmp) {
 	if (!canspotmon(mtmp) &&
@@ -2438,7 +2460,7 @@ struct obj *obj;
 		    break;
 		}
 	    } else {
-		pline(msg_slipsfree);
+		pline("%s", msg_slipsfree);
 	    }
 	    wakeup(mtmp);
 	} else {
@@ -2448,7 +2470,7 @@ struct obj *obj;
 	    else You("flick your bullwhip towards %s.", mon_nam(mtmp));
 	    if (proficient) {
 		if (attack(mtmp)) return 1;
-		else pline(msg_snap);
+		else pline("%s", msg_snap);
 	    }
 	}
 
@@ -2457,7 +2479,7 @@ struct obj *obj;
 	    You("snap your whip through thin air.");
 
     } else {
-	pline(msg_snap);
+	pline("%s", msg_snap);
 
     }
     return 1;
@@ -2482,7 +2504,7 @@ use_pole (obj)
 
 	/* Are you allowed to use the pole? */
 	if (u.uswallow) {
-	    pline(not_enough_room);
+	    pline("%s", not_enough_room);
 	    return (0);
 	}
 	if (obj != uwep) {
@@ -2492,7 +2514,7 @@ use_pole (obj)
      /* assert(obj == uwep); */
 
 	/* Prompt for a location */
-	pline(where_to_hit);
+	pline("%s", where_to_hit);
 	cc.x = u.ux;
 	cc.y = u.uy;
 	if (getpos(&cc, TRUE, "the spot to hit") < 0)
@@ -2535,7 +2557,7 @@ use_pole (obj)
 		u.uconduct.weaphit++;
 	} else
 	    /* Now you know that nothing is there... */
-	    pline(nothing_happens);
+	    pline("%s", nothing_happens);
 	return (1);
 }
 
@@ -2589,7 +2611,7 @@ use_grapple (obj)
 
 	/* Are you allowed to use the hook? */
 	if (u.uswallow) {
-	    pline(not_enough_room);
+	    pline("%s", not_enough_room);
 	    return (0);
 	}
 	if (obj != uwep) {
@@ -2599,7 +2621,7 @@ use_grapple (obj)
      /* assert(obj == uwep); */
 
 	/* Prompt for a location */
-	pline(where_to_hit);
+	pline("%s", where_to_hit);
 	cc.x = u.ux;
 	cc.y = u.uy;
 	if (getpos(&cc, TRUE, "the spot to hit") < 0)
@@ -2697,7 +2719,7 @@ use_grapple (obj)
 	    }
 	    break;
 	}
-	pline(nothing_happens);
+	pline("%s", nothing_happens);
 	return (1);
 }
 
@@ -2713,7 +2735,7 @@ do_break_wand(obj)
     register int i, x, y;
     register struct monst *mon;
     int dmg, damage;
-    boolean affects_objects;
+    boolean affects_objects, is_fragile;
     boolean shop_damage = FALSE;
     int expltype = EXPL_MAGICAL;
     char confirm[QBUFSZ], the_wand[BUFSZ], buf[BUFSZ];
@@ -2724,15 +2746,17 @@ do_break_wand(obj)
 				the_wand, ysimple_name(obj), "the wand"));
     if (yn(confirm) == 'n' ) return 0;
 
+    is_fragile = (!strcmp(OBJ_DESCR(objects[obj->otyp]), "balsa"));
+
     if (nohands(youmonst.data)) {
 	You_cant("break %s without hands!", the_wand);
 	return 0;
-    } else if (ACURR(A_STR) < 10) {
+    } else if (ACURR(A_STR) < (is_fragile ? 5 : 10)) {
 	You("don't have the strength to break %s!", the_wand);
 	return 0;
     }
-    pline("Raising %s high above your %s, you break it in two!",
-	  the_wand, body_part(HEAD));
+    pline("Raising %s high above your %s, you %s it in two!",
+	  the_wand, body_part(HEAD), is_fragile ? "snap" : "break");
 
     /* [ALI] Do this first so that wand is removed from bill. Otherwise,
      * the freeinv() below also hides it from setpaid() which causes problems.
@@ -2747,7 +2771,7 @@ do_break_wand(obj)
     setnotworn(obj);		/* so we need to do this ourselves */
 
     if (obj->spe <= 0) {
-	pline(nothing_else_happens);
+	pline("%s", nothing_else_happens);
 	goto discard_broken_wand;
     }
     obj->ox = u.ux;
@@ -2756,14 +2780,33 @@ do_break_wand(obj)
     affects_objects = FALSE;
 
     switch (obj->otyp) {
-    case WAN_WISHING:
     case WAN_NOTHING:
+	pline("Suddenly, and without warning, nothing happens.");
+	goto discard_broken_wand;
+    case WAN_WISHING:
     case WAN_LOCKING:
     case WAN_PROBING:
     case WAN_ENLIGHTENMENT:
-    case WAN_OPENING:
     case WAN_SECRET_DOOR_DETECTION:
-	pline(nothing_else_happens);
+	pline("%s", nothing_else_happens);
+	goto discard_broken_wand;
+    case WAN_OPENING:
+	/* make trap door if you broke a wand of opening */
+	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
+	    !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
+	    !IS_ROCK(levl[u.ux][u.uy].typ) && !closed_door(u.ux, u.uy) &&
+	    !t_at(u.ux, u.uy) && Can_dig_down(&u.uz))) {
+		struct trap *ttmp;
+		ttmp = maketrap(u.ux, u.uy, TRAPDOOR);
+		    if (ttmp) {
+			ttmp->madeby_u = 1;
+			ttmp->tseen = 1;
+			newsym(u.ux, u.uy);
+			    if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
+				add_damage(u.ux, u.uy, 0L);             
+			    }
+		    }
+	}
 	goto discard_broken_wand;
     case WAN_DEATH:
     case WAN_LIGHTNING:
@@ -2779,17 +2822,27 @@ do_break_wand(obj)
 	explode(u.ux, u.uy,
 		(obj->otyp - WAN_MAGIC_MISSILE), dmg, WAND_CLASS, expltype);
 	makeknown(obj->otyp);	/* explode described the effect */
+	/* make magic trap if you broke a wand of magic missile */
+	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
+	    !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
+	    !IS_ROCK(levl[u.ux][u.uy].typ) &&
+	    !closed_door(u.ux, u.uy) && !t_at(u.ux, u.uy))) {
+		struct trap *ttmp;
+		ttmp = maketrap(u.ux, u.uy, MAGIC_TRAP);
+		    if (ttmp) {
+			ttmp->madeby_u = 1;
+			ttmp->tseen = 1;
+			newsym(u.ux, u.uy);
+			    if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
+				add_damage(u.ux, u.uy, 0L);             
+			    }
+		    }
+	}
 	goto discard_broken_wand;
     case WAN_STRIKING:
 	/* we want this before the explosion instead of at the very end */
 	pline("A wall of force smashes down around you!");
 	dmg = d(1 + obj->spe,6);	/* normally 2d12 */
-    case WAN_CANCELLATION:
-    case WAN_POLYMORPH:
-    case WAN_UNDEAD_TURNING:
-    case WAN_DRAINING:	/* KMH */
-	affects_objects = TRUE;
-	break;
     case WAN_TELEPORTATION:
 		/* WAC make tele trap if you broke a wand of teleport */
 		/* But make sure the spot is valid! */
@@ -2797,12 +2850,11 @@ do_break_wand(obj)
 		    !u.uswallow && !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
 		    !IS_ROCK(levl[u.ux][u.uy].typ) &&
 		    !closed_door(u.ux, u.uy) && !t_at(u.ux, u.uy))) {
-
 			struct trap *ttmp;
-
 			ttmp = maketrap(u.ux, u.uy, TELEP_TRAP);
 			if (ttmp) {
 				ttmp->madeby_u = 1;
+				ttmp->tseen = 1;
 				newsym(u.ux, u.uy); /* if our hero happens to be invisible */
 				if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
 					/* shopkeeper will remove it */
@@ -2810,6 +2862,61 @@ do_break_wand(obj)
 				}
 			}
 		}
+	affects_objects = TRUE;
+    case WAN_POLYMORPH:
+	/* make poly trap if you broke a wand of polymorph */
+	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
+	    !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
+	    !IS_ROCK(levl[u.ux][u.uy].typ) &&
+	    !closed_door(u.ux, u.uy) && !t_at(u.ux, u.uy))) {
+		struct trap *ttmp;
+		ttmp = maketrap(u.ux, u.uy, POLY_TRAP);
+		    if (ttmp) {
+			ttmp->madeby_u = 1;
+			ttmp->tseen = 1;
+			newsym(u.ux, u.uy);
+			    if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
+				add_damage(u.ux, u.uy, 0L);             
+			    }
+		    }
+	}
+	affects_objects = TRUE;
+    case WAN_SLEEP:
+	/* make sleeping gas trap if you broke a wand of sleep */
+	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
+	    !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
+	    !IS_ROCK(levl[u.ux][u.uy].typ) &&
+	    !closed_door(u.ux, u.uy) && !t_at(u.ux, u.uy))) {
+		struct trap *ttmp;
+		ttmp = maketrap(u.ux, u.uy, SLP_GAS_TRAP);
+		    if (ttmp) {
+			ttmp->madeby_u = 1;
+			ttmp->tseen = 1;
+			newsym(u.ux, u.uy);
+			    if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
+				add_damage(u.ux, u.uy, 0L);             
+			    }
+		    }
+	}
+    case WAN_CANCELLATION:
+	/* make anti-magic trap if you broke a wand of cancellation */
+	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
+	    !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
+	    !IS_ROCK(levl[u.ux][u.uy].typ) &&
+	    !closed_door(u.ux, u.uy) && !t_at(u.ux, u.uy))) {
+		struct trap *ttmp;
+		ttmp = maketrap(u.ux, u.uy, ANTI_MAGIC);
+		    if (ttmp) {
+			ttmp->madeby_u = 1;
+			ttmp->tseen = 1;
+			newsym(u.ux, u.uy);
+			    if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
+				add_damage(u.ux, u.uy, 0L);             
+			    }
+		    }
+	}
+	affects_objects = TRUE;
+    case WAN_UNDEAD_TURNING:
 	affects_objects = TRUE;
 	break;
     default:
@@ -2894,6 +3001,55 @@ uhave_graystone()
 		if(is_graystone(otmp))
 			return TRUE;
 	return FALSE;
+}
+
+STATIC_OVL int
+do_flip_coin(obj)
+struct obj *obj;
+{
+#ifndef GOLDOBJ
+    u.ugold += obj->quan;
+    dealloc_obj(obj);
+#endif
+
+    if (nohands(youmonst.data)) {
+	pline("And how would you flip the coin without hands?");
+	return 0;
+    } else if (!freehand()) {
+	You("need at least one free %s.", body_part(HAND));
+	return 0;
+    } else if (Underwater) {
+	pline("This coin wasn't designed to be flipped underwater.");
+	return 0;
+    }
+
+    You("flip %s coin.",
+#ifndef GOLDOBJ
+	(u.ugold > 1)
+#else
+	(obj->quan > 1)
+#endif
+	? "a" : "the");
+
+    if (!Fumbling && !Glib && !Blind &&
+	((ACURR(A_DEX) + Luck) > 0) && rn2((ACURR(A_DEX) + Luck))) {
+	xchar ht = rn2(2);
+	pline("%s.", ht ? "Heads" : "Tails");
+	if (Hallucination && ht && !rn2(8))
+	    pline("Oh my, it %s at you!", rn2(2) ? "grins" : "winks");
+    } else {
+	struct obj *gold;
+	You("try to catch the coin but it slips from your %s.",
+	    makeplural(body_part(HAND)));
+#ifndef GOLDOBJ
+	gold = mkgoldobj(1);
+#else
+	if (obj->quan > 1) gold = splitobj(obj, 1L);
+	else gold = obj;
+#endif
+	dropx(gold);
+    }
+    return 1;
 }
 
 STATIC_OVL void
@@ -3076,11 +3232,11 @@ doapply()
 
 	if (obj->oclass == WAND_CLASS)
 	    return do_break_wand(obj);
-
-	if (obj->oclass == RING_CLASS)
+	else if (obj->oclass == COIN_CLASS)
+	    return do_flip_coin(obj);
+	else if (obj->oclass == RING_CLASS)
 	    return do_present_ring(obj);
-	
-	if(is_knife(obj)) return do_carve_obj(obj);
+	else if(is_knife(obj)) return do_carve_obj(obj);
 	
 	switch(obj->otyp){
 	case BLINDFOLD:
@@ -3295,7 +3451,7 @@ doapply()
 					       (const char *)0);
 		    makeknown(HORN_OF_PLENTY);
 		} else
-		    pline(nothing_happens);
+		    pline("%s", nothing_happens);
 		break;
 	case LAND_MINE:
 	case BEARTRAP:

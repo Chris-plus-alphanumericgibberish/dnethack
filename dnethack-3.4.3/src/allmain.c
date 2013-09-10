@@ -26,6 +26,11 @@ moveloop()
 #endif
     int moveamt = 0, wtcap = 0, change = 0;
     boolean didmove = FALSE, monscanmove = FALSE;
+    /* don't make it obvious when monsters will start speeding up */
+    int monclock;
+    int timeout_start = rnd(10000)+25000;
+    int clock_base = 80000L-timeout_start;
+    int past_clock;
 
     flags.moonphase = phase_of_the_moon();
     if(flags.moonphase == FULL_MOON) {
@@ -94,11 +99,50 @@ moveloop()
 				if(mtmp->data == &mons[PM_GREAT_CTHULHU]) mtmp->mspec_used = 0;
 				if(is_weeping(mtmp->data)) mtmp->mspec_used = 0;
 			}
+			 /* Vanilla generates a critter every 70-ish turns.
+			  * The rate accelerates to every 50 or so below the Castle,
+			  * and 'round every 25 turns once you've done the Invocation.
+			  *
+			  * We will push it even further.  Monsters post-Invocation
+			  * will almost always appear on the stairs (if present), and 
+			  * much more frequently; this, along with the extra intervene()
+			  * calls, should certainly make it seem like you're wading back
+			  * through the teeming hordes.
+			  *
+			  * Aside from that, a more general clock should be put on things;
+			  * after about 30,000 turns, the frequency rate of appearance
+			  * and (TODO) difficulty of monsters generated will slowly increase until
+			  * it reaches the point it will be at as if you were post-Invocation.
+			  *
+			  * 80,000 turns should be adequate as a target mark for this effect;
+			  * if you haven't ascended in 80,000 turns, you're intentionally
+			  * fiddling around somewhere and will certainly be strong enough
+			  * to handle anything that comes your way, so this won't be 
+			  * dropping newbies off the edge of the planet.  -- DSR 12/2/07
+			  */
+			monclock = 70;
+			if (u.uevent.udemigod) {
+				monclock = 10;
+			} else {
+				if (depth(&u.uz) > depth(&stronghold_level)) {
+					monclock = 50;
+				}
+				past_clock = moves - timeout_start;
+				if (past_clock > 0) {
+					monclock -= past_clock*60/clock_base;
+				}
+			}
+			/* make sure we don't fall off the bottom */
+			if (monclock < 10) { monclock = 10; }
 
-		    if(!rn2(u.uevent.udemigod ? 25 :
-			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70))
+			/* TODO: adj difficulty in makemon */
+			if (!rn2(monclock)) {
+				if (u.uevent.udemigod && xupstair && rn2(10)) {
+					(void) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTOK);
+				} else {
 			(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
-
+				}
+			}
 			//If the player no longer meets the kusanagi's requirements (ie, they lost the amulet,
 			//blast 'em and drop to the ground.
 			if (uwep && uwep->oartifact == ART_KUSANAGI_NO_TSURUGI){
@@ -347,6 +391,22 @@ moveloop()
 	    /* once-per-hero-took-time things go here */
 	    /******************************************/
 
+	    if (u.utrap && u.utraptype == TT_LAVA) {
+		    if (!is_lava(u.ux,u.uy))
+			    u.utrap = 0;
+		    else if (!u.uinvulnerable) {
+			    u.utrap -= 1<<8;
+			    if (u.utrap < 1<<8) {
+				    killer_format = KILLED_BY;
+				    killer = "molten lava";
+				    You("sink below the surface and die.");
+				    done(DISSOLVED);
+			    } else if (!u.umoved) {
+				    Norep("You sink deeper into the lava.");
+				    u.utrap += rnd(4);
+			    }
+		    }
+	    }
 
 	} /* actual time passed */
 
@@ -418,23 +478,6 @@ moveloop()
 	    !In_endgame(&u.uz) && !BClairvoyant &&
 	    !(moves % 15) && !rn2(2))
 		do_vicinity_map();
-
-	if(u.utrap && u.utraptype == TT_LAVA) {
-	    if(!is_lava(u.ux,u.uy))
-		u.utrap = 0;
-	    else if (!u.uinvulnerable) {
-		u.utrap -= 1<<8;
-		if(u.utrap < 1<<8) {
-		    killer_format = KILLED_BY;
-		    killer = "molten lava";
-		    You("sink below the surface and die.");
-		    done(DISSOLVED);
-		} else if(didmove && !u.umoved) {
-		    Norep("You sink deeper into the lava.");
-		    u.utrap += rnd(4);
-		}
-	    }
-	}
 
 #ifdef WIZARD
 	if (iflags.sanity_check)
