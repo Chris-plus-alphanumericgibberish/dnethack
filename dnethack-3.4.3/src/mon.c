@@ -1416,6 +1416,13 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(is_elf(md) && (is_orc(ma) || is_ogre(ma) || is_undead(ma)) && !is_undead(md))
 		return ALLOW_M|ALLOW_TM;
 
+	/* Nazgul vs. hobbits */
+	if(ma == &mons[PM_NAZGUL] && md == &mons[PM_HOBBIT])
+		return ALLOW_M|ALLOW_TM;
+	/* and vice versa */
+	if(md == &mons[PM_NAZGUL] && ma == &mons[PM_HOBBIT])
+		return ALLOW_M|ALLOW_TM;
+
 	/* gnolls vs. minotaurs */
 	if(is_gnoll(ma) && is_minotaur(md))
 		return ALLOW_M|ALLOW_TM;
