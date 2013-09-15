@@ -650,6 +650,9 @@ MONSTER:'&',"barbed devil",(18,08),hostile
 MONSTER:'&',"erinys",(10,04),hostile
 MONSTER:'&',"marilith",(07,09),hostile
 MONSTER:'&',"nalfeshnee",(27,08),hostile
+MONSTER:'U',"shambling horror",random,hostile
+MONSTER:'U',"stumbling horror",random,hostile
+MONSTER:'U',"wandering horror",random,hostile
 # Moloch's horde
 MONSTER:'@',"aligned priest",(20,03),noalign,hostile
 MONSTER:'@',"aligned priest",(15,04),noalign,hostile

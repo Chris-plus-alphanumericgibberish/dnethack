@@ -286,6 +286,11 @@ register int fd, mode;
 	bwrite(fd, (genericptr_t) &uid, sizeof uid);
 	bwrite(fd, (genericptr_t) &flags, sizeof(struct flag));
 	bwrite(fd, (genericptr_t) &u, sizeof(struct you));
+	
+	/* save random monsters*/
+	bwrite(fd, (genericptr_t) &mons[PM_SHAMBLING_HORROR], sizeof(struct permonst));
+	bwrite(fd, (genericptr_t) &mons[PM_STUMBLING_HORROR], sizeof(struct permonst));
+	bwrite(fd, (genericptr_t) &mons[PM_WANDERING_HORROR], sizeof(struct permonst));
 
 	/* must come before migrating_objs and migrating_mons are freed */
 	save_timers(fd, mode, RANGE_GLOBAL);

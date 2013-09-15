@@ -2694,6 +2694,32 @@ struct permonst _mons2[] = {
 	  NO_ATTK, NO_ATTK),
 	SIZ(1200, 500, 0, MS_SILENT, MZ_LARGE), 0, 0,
 	M1_TUNNEL|M1_CARNIVORE|M1_THICK_HIDE, M2_STRONG, M3_INFRAVISIBLE, CLR_BROWN),
+/*
+ * Placeholder for the random creature...
+ *
+ * None of these stats have any significance, they're just to ensure
+ * that if one does get accidentally generated in the 'normal' way
+ * (without a remapped permonst) that nothing useful happens.
+ *
+ * Also note that the LVL value will affect your generated
+ * monster's internal difficulty in monstr.h; be careful to leave this
+ * fairly high as random permutations of ATTK() could make it nasty
+ */
+	MON("shambling horror", S_UMBER,
+	LVL(10, 12, 0, 0, 0), (G_HELL|G_NOCORPSE|1),
+	A(NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+	SIZ(25, 25, 0, MS_SILENT, MZ_TINY), 0, 0,
+	M1_CARNIVORE, 0, M3_INFRAVISIBLE, CLR_BRIGHT_GREEN),
+	MON("stumbling horror", S_UMBER,
+	LVL(10, 12, 0, 0, 0), (G_HELL|G_NOCORPSE|1),
+	A(NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+	SIZ(25, 25, 0, MS_SILENT, MZ_TINY), 0, 0,
+	M1_CARNIVORE, 0, M3_INFRAVISIBLE, CLR_YELLOW),
+	MON("wandering horror", S_UMBER,
+	LVL(10, 12, 0, 0, 0), (G_HELL|G_NOCORPSE|1),
+	A(NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+	SIZ(25, 25, 0, MS_SILENT, MZ_TINY), 0, 0,
+	M1_CARNIVORE, 0, M3_INFRAVISIBLE, CLR_RED),
     MON("uvuudaum", S_UMBER,//26
 	LVL(19, 16, -6, 80, 0), (G_NOHELL|G_NOCORPSE|1),
 	A(ATTK(AT_LRCH, AD_UVUU, 3, 12), ATTK(AT_WEAP, AD_PHYS, 2, 6),
