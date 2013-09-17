@@ -1015,6 +1015,7 @@ E long FDECL(attk_protection, (int));
 
 /* ### mhitu.c ### */
 
+E boolean FDECL(diseasemu, (struct permonst *));
 E const char *FDECL(mpoisons_subj, (struct monst *,struct attack *));
 E void NDECL(u_slow_down);
 E struct monst *NDECL(cloneu);

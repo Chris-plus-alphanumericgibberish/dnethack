@@ -1449,6 +1449,13 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(ma == &mons[PM_NURSE] && mdef->mhp < mdef->mhpmax && magr->mpeaceful == mdef->mpeaceful)
 		return ALLOW_M|ALLOW_TM;
 
+	/* dungeon fern spores hate everything */
+	if(is_fern_spore(ma) && !is_fern_spore(md) && !is_vegetation(md))
+		return ALLOW_M|ALLOW_TM;
+	/* and everything hates them */
+	if(is_fern_spore(md) && !is_fern_spore(ma) && !is_vegetation(ma))
+		return ALLOW_M|ALLOW_TM;
+
 	else if (magr->data == &mons[PM_SKELETAL_PIRATE] &&
 		mdef->data == &mons[PM_SOLDIER])
 	    return ALLOW_M|ALLOW_TM;
@@ -1807,8 +1814,11 @@ boolean was_swallowed;			/* digestion */
 	    	Sprintf(killer_buf, "%s explosion", s_suffix(mdat->mname));
 	    	killer = killer_buf;
 	    	killer_format = KILLED_BY_AN;
-			if(mdat==&mons[PM_GAS_SPORE]){
+			if(mdat==&mons[PM_GAS_SPORE] || mdat==&mons[PM_DUNGEON_FERN_SPORE]){
 	    	  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_NOXIOUS); //explode(x, y, type, dam, olet, expltype)
+			}
+			else if(mdat==&mons[PM_SWAMP_FERN_SPORE]){
+	    	  explode(mon->mx, mon->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 			}
 			else if(mdat->mattk[i].adtyp == AD_FIRE){
 				//mdat == &mons[PM_BALROG] || mdat == &mons[PM_MEPHISTOPHELES] || mdat == &mons[PM_FLAMING_SPHERE]){
@@ -2093,6 +2103,49 @@ boolean was_swallowed;			/* digestion */
 }
 
 
+void
+spore_dies(mon)
+struct monst *mon;
+{
+	if (mon->mhp <= 0) {
+	    int sporetype;
+	    coord mm; schar ltyp;
+	    mm.x = mon->mx; mm.y = mon->my;
+	    ltyp = levl[mm.x][mm.y].typ;
+	    create_gas_cloud(mm.x, mm.y, rn1(2,1), rnd(8));
+	    /* all fern spores have a 2/3 chance of creating nothing, except for
+	       the generic fern spore, which guarantees a terrain-appropriate fern */
+	    if (mon->data == &mons[PM_DUNGEON_FERN_SPORE]) {
+		/* dungeon ferns cannot reproduce on ice, lava, or water; swamp is okay */
+			if (!is_ice(mm.x, mm.y) && !is_lava(mm.x, mm.y) && !is_pool(mm.x, mm.y))
+				sporetype = 0;
+			else return;
+			if (rn2(3)) return;
+	    } else if (mon->data == &mons[PM_SWAMP_FERN_SPORE]) {
+			if (!is_ice(mm.x, mm.y) && !is_lava(mm.x, mm.y) && !is_pool(mm.x, mm.y))
+				sporetype = 3;
+			else return;
+			if (rn2(3)) return;
+		}
+	    /* when creating a new fern, 5/6 chance of creating
+	       a fern sprout and 1/6 chance of a fully-grown one */
+	    switch (sporetype) {
+		case 0:
+		    if (!rn2(6)) makemon(&mons[PM_DUNGEON_FERN], mm.x, mm.y, NO_MM_FLAGS);
+		    else makemon(&mons[PM_DUNGEON_FERN_SPROUT], mm.x, mm.y, NO_MM_FLAGS);
+	    break;
+		case 3:
+		    if (!rn2(6)) makemon(&mons[PM_SWAMP_FERN], mm.x, mm.y, NO_MM_FLAGS);
+		    else makemon(&mons[PM_SWAMP_FERN_SPROUT], mm.x, mm.y, NO_MM_FLAGS);
+	    break;
+		default:
+		    pline("BUG: Unknown spore type: (%d)", sporetype);
+	    break;
+	    }
+
+	}
+}
+
 /* drop (perhaps) a cadaver and remove monster */
 void
 mondied(mdef)
@@ -2242,6 +2295,9 @@ int how;
 
 	if (be_sad && mdef->mhp <= 0)
 	    You("have a sad feeling for a moment, then it passes.");
+	if (is_fern_spore(mdef->data)) {
+		spore_dies(mdef);
+	}
 }
 
 void
@@ -2338,6 +2394,9 @@ xkilled(mtmp, dest)
 	mdat = mtmp->data; /* note: mondead can change mtmp->data */
 	mndx = monsndx(mdat);
 
+	if (is_fern_spore(mdat)) {
+		spore_dies(mtmp);
+	}
 	if (stoned) {
 		stoned = FALSE;
 		goto cleanup;

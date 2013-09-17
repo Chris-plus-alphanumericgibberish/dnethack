@@ -88,6 +88,9 @@ int expltype;
 		case 8: str = "concusion";
 			adtyp = AD_PHYS;
 			break;
+		case 9: str = "cloud of spores";
+			adtyp = AD_DISE;
+			break;
 		default: impossible("explosion base type %d?", type); return;
 	}
 
@@ -127,6 +130,10 @@ int expltype;
 			case AD_ACID:
 				explmask[i][j] = !!Acid_resistance;
 				break;
+			case AD_DISE: /*assumes only swamp ferns have disease explosions*/
+				explmask[i][j] = !!Sick_resistance;
+				diseasemu(&mons[PM_SWAMP_FERN_SPORE]);
+				break;
 			default:
 				impossible("explosion type %d?", adtyp);
 				break;
@@ -165,6 +172,9 @@ int expltype;
 				break;
 			case AD_ACID:
 				explmask[i][j] |= resists_acid(mtmp);
+				break;
+			case AD_DISE:
+				explmask[i][j] |= resists_sickness(mtmp);
 				break;
 			default:
 				impossible("explosion type %d?", adtyp);
@@ -255,6 +265,7 @@ int expltype;
 				       "irradiated by pure energy" : "perforated") :
 				      (adtyp == AD_ELEC) ? "shocked" :
 				      (adtyp == AD_DRST) ? "poisoned" :
+				      (adtyp == AD_DISE) ? "food poisoning" :
 				      (adtyp == AD_ACID) ? "an upset stomach" :
 				       "fried");
 			else
@@ -266,6 +277,7 @@ int expltype;
 				       "overwhelmed by pure energy" : "perforated") :
 				      (adtyp == AD_ELEC) ? "shocked" :
 				      (adtyp == AD_DRST) ? "intoxicated" :
+				      (adtyp == AD_DISE) ? "quesy" :
 				      (adtyp == AD_ACID) ? "burned" :
 				       "fried");
 		} else if (cansee(i+x-1, j+y-1)) {

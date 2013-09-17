@@ -24,7 +24,6 @@ STATIC_DCL void FDECL(palemayberem, (struct obj *, const char *, boolean));
 # endif
 #endif /* OVLB */
 
-STATIC_DCL boolean FDECL(diseasemu, (struct permonst *));
 STATIC_DCL int FDECL(hitmu, (struct monst *,struct attack *));
 STATIC_DCL int FDECL(gulpmu, (struct monst *,struct attack *));
 STATIC_DCL int FDECL(explmu, (struct monst *,struct attack *,BOOLEAN_P));
@@ -640,6 +639,7 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_EXPL:	/* automatic hit if next to, and aimed at you */
 			if(!range2) sum[i] = explmu(mtmp, mattk, foundyou);
+			if (is_fern_spore(mdat)) spore_dies(mtmp);
 			break;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -895,7 +895,7 @@ int attk;
 #endif /* OVLB */
 #ifdef OVL1
 
-STATIC_OVL boolean
+boolean
 diseasemu(mdat)
 struct permonst *mdat;
 {
@@ -3211,6 +3211,25 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				}
 				return 3; // if a mi-go fires a mist projector, it can take no further actions that turn
 			}
+		break;
+	    case AD_SPOR:
+		/* release a spore if the player is nearby */
+		if (is_fern(mtmp->data) && !mtmp->mcan && distu(mtmp->mx, mtmp->my) <= 96 &&
+			!is_fern_sprout(mtmp->data) ? !rn2(2) : !rn2(4)) {
+		    coord mm;
+		    mm.x = mtmp->mx; mm.y = mtmp->my;
+		    enexto(&mm, mm.x, mm.y, &mons[PM_DUNGEON_FERN_SPORE]);
+			if (mtmp->data == &mons[PM_DUNGEON_FERN] ||
+				mtmp->data == &mons[PM_DUNGEON_FERN_SPROUT]) {
+			makemon(&mons[PM_DUNGEON_FERN_SPORE], mm.x, mm.y, NO_MM_FLAGS);
+		    } else if (mtmp->data == &mons[PM_SWAMP_FERN] ||
+				mtmp->data == &mons[PM_SWAMP_FERN_SPROUT]) {
+			makemon(&mons[PM_SWAMP_FERN_SPORE], mm.x, mm.y, NO_MM_FLAGS);
+		    } else { /* currently these should not be generated */
+			makemon(&mons[PM_DUNGEON_FERN_SPORE], mm.x, mm.y, NO_MM_FLAGS);
+		    }
+		    if (canseemon(mtmp)) pline("%s releases a spore!", Monnam(mtmp));
+		}
 		break;
 /*		case AD_VTGT:  // vorlon missile targeting vision
 		{

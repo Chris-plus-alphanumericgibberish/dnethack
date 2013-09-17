@@ -166,6 +166,7 @@
 #define M3_TENGTPORT	0x00001000L		/* Monster teleports as Tengu */
 #define M3_CHILL		0x00002000L		/* cold to eat */
 #define M3_TOSTY		0x00004000L		/* hot to eat */
+#define M3_STATIONARY	0x00008000L		/* does not move. */
 
 #define MZ_TINY		0		/* < 2' */
 #define MZ_SMALL	1		/* 2-4' */

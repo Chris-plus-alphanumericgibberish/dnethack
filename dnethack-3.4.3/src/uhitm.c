@@ -31,22 +31,6 @@ static boolean override_confirmation = FALSE;
 
 #define PROJECTILE(obj)	((obj) && is_ammo(obj))
 
-//copied from mhitu
-STATIC_OVL boolean
-diseasemu(mdat)
-struct permonst *mdat;
-{
-	if (Sick_resistance) {
-		You_feel("a slight illness.");
-		return FALSE;
-	} else {
-		make_sick(Sick ? Sick/3L + 1L : (long)rn1(ACURR(A_CON), 20),
-			mdat->mname, TRUE, SICK_NONVOMITABLE);
-		return TRUE;
-	}
-}
-
-
 
 /* modified from hurtarmor() in mhitu.c */
 /* This is not static because it is also used for monsters rusting monsters */
@@ -2524,6 +2508,12 @@ uchar aatyp;
 				  diseasemu(mon->data);
 				  pline("%s collapses in a puddle of noxious fluid!", mon_nam(mon));
 				  killed(mon);
+			  }
+		  }
+		  else if(mon->data==&mons[PM_SWAMP_FERN]){
+			  if(!rn2(3)){
+  				  pline("A cloud of spores is released!");
+				  diseasemu(mon->data);
 			  }
 		  }
 		  else{

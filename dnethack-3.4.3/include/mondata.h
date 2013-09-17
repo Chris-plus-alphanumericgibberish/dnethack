@@ -253,6 +253,11 @@
 				 (ptr)->mlet == S_VORTEX || \
 				 (ptr) == &mons[PM_MANES])
 
+#define likes_swamp(ptr)	((ptr)->mlet == S_PUDDING || \
+				 (ptr)->mlet == S_FUNGUS || \
+				 (ptr) == &mons[PM_OCHRE_JELLY])
+#define stationary(ptr)		((ptr)->mflags3 & M3_STATIONARY)
+
 /* Used for conduct with corpses, tins, and digestion attacks */
 /* G_NOCORPSE monsters might still be swallowed as a purple worm */
 /* Maybe someday this could be in mflags... */
@@ -261,6 +266,7 @@
 				 (ptr)->mlet == S_FUNGUS ||           \
 				 (ptr)->mlet == S_VORTEX ||           \
 				 (ptr)->mlet == S_LIGHT ||            \
+				 (ptr)->mlet == S_PLANT ||            \
 				((ptr)->mlet == S_ELEMENTAL &&        \
 				 (ptr) != &mons[PM_STALKER]) ||       \
 				((ptr)->mlet == S_GOLEM &&            \
@@ -272,6 +278,20 @@
 				((ptr)->mlet == S_PUDDING &&         \
 				 (ptr) != &mons[PM_BLACK_PUDDING] && \
 				 (ptr) != &mons[PM_DARKNESS_GIVEN_HUNGER]))
+
+/* Keep track of ferns, fern sprouts, fern spores, and other plants */
+
+#define is_fern_sprout(ptr)	((ptr) == &mons[PM_DUNGEON_FERN_SPROUT] || \
+				 (ptr) == &mons[PM_SWAMP_FERN_SPROUT])
+
+#define is_fern_spore(ptr)	((ptr) == &mons[PM_DUNGEON_FERN_SPORE] || \
+				 (ptr) == &mons[PM_SWAMP_FERN_SPORE])
+
+#define is_fern(ptr)		(is_fern_sprout(ptr) || \
+				 (ptr) == &mons[PM_DUNGEON_FERN] || \
+				 (ptr) == &mons[PM_SWAMP_FERN])
+
+#define is_vegetation(ptr)	((ptr)->mlet == S_PLANT || is_fern(ptr))
 
 #ifdef CONVICT
 #define befriend_with_obj(ptr, obj) ((obj)->oclass == FOOD_CLASS && \

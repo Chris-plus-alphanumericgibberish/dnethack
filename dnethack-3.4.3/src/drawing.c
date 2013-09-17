@@ -154,8 +154,9 @@ const char def_monsyms[MAXMCLASSES] = {
 	DEF_DEMON,
 	DEF_EEL,
 	DEF_LIZARD,
-	DEF_WORM_TAIL,
-	DEF_MIMIC_DEF,		/* 60 */
+	DEF_PLANT,
+	DEF_WORM_TAIL,		/* 60 */
+	DEF_MIMIC_DEF,		/* 61 */
 };
 
 /* The explanations below are also used when the user gives a string
@@ -185,7 +186,7 @@ const char * const monexplain[MAXMCLASSES] = {
     "apelike creature",		"zombie",
 
     "human or elf",		"ghost",		"golem",
-    "major demon",		"sea monster",		"lizard",
+    "major demon",		"sea monster",		"lizard", "plant",
     "long worm tail",		"mimic"
 };
 

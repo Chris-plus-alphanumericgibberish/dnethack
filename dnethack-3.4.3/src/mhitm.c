@@ -381,6 +381,7 @@ mattackm(magr, mdef)
 	    case AT_EXPL:
 		if (distmin(magr->mx,magr->my,mdef->mx,mdef->my) > 1) break;
 		res[i] = explmm(magr, mdef, mattk);
+		if (magr->data == &mons[PM_DUNGEON_FERN_SPORE]) spore_dies(magr);
 		if (res[i] == MM_MISS) { /* cancelled--no attack */
 		    strike = 0;
 		    attk = 0;

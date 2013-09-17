@@ -124,6 +124,7 @@
 #define AD_LVLT		127	/* level teleport (was weeping angel) */
 #define AD_BLNK		128	/* mental invasion (weeping angel) */
 #define AD_WEEP		129	/* Level teleport and drain (weeping angel) */
+#define AD_SPOR		130	/* generate spore */
 
 
 

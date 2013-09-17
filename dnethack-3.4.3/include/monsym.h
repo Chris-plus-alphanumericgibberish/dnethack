@@ -67,11 +67,12 @@
 #define S_DEMON		56
 #define S_EEL		57
 #define S_LIZARD	58
+#define S_PLANT		59
 
-#define S_WORM_TAIL	59
-#define S_MIMIC_DEF	60
+#define S_WORM_TAIL	60
+#define S_MIMIC_DEF	61
 
-#define MAXMCLASSES 61	/* number of monster classes */
+#define MAXMCLASSES 62	/* number of monster classes */
 
 #if 0	/* moved to decl.h so that makedefs.c won't see them */
 extern const char def_monsyms[MAXMCLASSES];	/* default class symbols */
@@ -139,6 +140,7 @@ extern uchar monsyms[MAXMCLASSES];		/* current class symbols */
 #define DEF_DEMON	'&'
 #define DEF_EEL		';'
 #define DEF_LIZARD	':'
+#define DEF_PLANT	'#'
 
 #define DEF_INVISIBLE	'I'
 #define DEF_WORM_TAIL	'~'
