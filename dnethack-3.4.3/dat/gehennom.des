@@ -2381,7 +2381,7 @@ MONSTER:'&',"pit fiend", (39,10), "the Fourth Ashmade"
 MONSTER:'&',"pit fiend", (39,10), "the Fifth Ashmade"
 MONSTER:'&',"pit fiend", (39,10), "the Sixth Ashmade"
 MONSTER:'&',"pit fiend", (39,10), "the Seventh Ashmade"
-MONSTER:'&',"pit fiend", (39,10), "the Eight Ashmade"
+MONSTER:'&',"pit fiend", (39,10), "the Eighth Ashmade"
 
 MONSTER:'i',"legion devil captain", place[0]
 MONSTER:'&',"pit fiend", place[0]
@@ -2403,7 +2403,7 @@ MONSTER:'D', "green dragon", place[2], "the Ambassador of Minauros"
 MONSTER:'i', "legion devil captain", place[2], "the Ambassador of Dis"
 MONSTER:'&', "barbed devil", place[2], "the Ambassador of Avernus"
 
-MONSTER:'&',"nessian pit fiend", place[3], "The Chancellor of Hell"
+MONSTER:'&',"nessian pit fiend", place[3], "Baalberith"
 MONSTER:'&',"pit fiend", place[3], "Baalzephon"
 MONSTER:'&',"pit fiend", place[3], "Furcas"
 MONSTER:'&',"pit fiend", place[3], "Dagos"
