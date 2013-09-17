@@ -788,7 +788,7 @@ A("Rod of Dis", MACE,
 	TAMING,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_RAM,SPFX3_NOCNT,0),
 
-A("Averice", SHORT_SWORD,
+A("Avarice", SHORT_SWORD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	PHYS(10,0),	NO_DFNS,	NO_CARY,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
@@ -902,7 +902,7 @@ A("Lance of Uriel",			LANCE,		/*  */
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/
 	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
-A("Hammer of Barquiel",			LUCERN_HAMMER,		/* Yes, I know it's bladed ;) */
+A("Hammer of Barquiel",			LUCERN_HAMMER,		/* Yes, I know it's bladed ;-) */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH), 0, 0,
 	PHYS(7,0),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/

@@ -82,7 +82,7 @@ vomiting_dialogue()
 
 	if ((((Vomiting & TIMEOUT) % 3L) == 2) && (i >= 0)
 	    && (i < SIZE(vomiting_texts)))
-		You(vomiting_texts[SIZE(vomiting_texts) - i - 1]);
+		You("%s", vomiting_texts[SIZE(vomiting_texts) - i - 1]);
 
 	switch ((int) i) {
 	case 0:
@@ -209,6 +209,9 @@ nh_timeout()
 	    else if(u.uluck < baseluck && (nostone || time_luck > 0))
 		u.uluck++;
 	}
+#ifdef CONVICT
+    if(Phasing) phasing_dialogue();
+#endif /* CONVICT */
 	if(u.uinvulnerable) return; /* things past this point could kill you */
 	if(Stoned) stoned_dialogue();
 	if(Slimed) slime_dialogue();

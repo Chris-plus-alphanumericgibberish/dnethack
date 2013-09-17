@@ -63,8 +63,8 @@
 /* other conveyances: teleport, teleport control, telepathy */
 
 /* individual resistances */
-#define MR2_SEE_INVIS	0x0100	/* see invisible */
-#define MR2_LEVITATE	0x0200	/* levitation */
+//#define MR2_SEE_INVIS	0x0100	/* slot taken by MR_DRAIN see invisible */
+//#define MR2_LEVITATE	0x0200	/* slot taken by MR_SICK levitation */
 #define MR2_WATERWALK	0x0400	/* water walking */
 #define MR2_MAGBREATH	0x0800	/* magical breathing */
 #define MR2_DISPLACED	0x1000	/* displaced */

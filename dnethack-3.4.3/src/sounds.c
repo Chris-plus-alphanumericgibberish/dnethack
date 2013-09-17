@@ -1279,17 +1279,36 @@ int tx,ty;
 	case ASTAROTH:{
 		if(u.astaroth < moves){
 			struct obj *o = 0, *otmp;
+			char prefix[32]; //thoroughly 11, corroded 9
+			boolean iscrys;
+			prefix[0] = '\0';
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
 				if(otmp->spe < 0 || otmp->oeroded || otmp->oeroded2){
 					o = otmp;
-					otmp = 0; //breaks out of loop.
+			break;
 				}
 			}
 			if(o && u.sealCounts < numSlots){ //Astaroth requires that his seal be drawn on a square with a damaged item.
+				iscrys = (o->otyp == CRYSKNIFE);
+				if (o->oeroded && !iscrys) {
+					switch (o->oeroded) {
+						case 2:	Strcat(prefix, "very "); break;
+						case 3:	Strcat(prefix, "thoroughly "); break;
+					}			
+					Strcat(prefix, is_rustprone(o) ? "rusty " : "burnt ");
+				}
+				if (o->oeroded2 && !iscrys) {
+					switch (o->oeroded2) {
+						case 2:	Strcat(prefix, "very "); break;
+						case 3:	Strcat(prefix, "thoroughly "); break;
+					}			
+					Strcat(prefix, is_corrodeable(o) ? "corroded " :
+						"rotted ");
+				}
 				pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal.");
-				pline("The hand gently touches the %s %s, then rests on the seal's surface as its unseen owner shifts his weight onto that arm.");
+				pline("The hand gently touches the %s%s, then rests on the seal's surface as its unseen owner shifts his weight onto that arm.", prefix, xname(o));
 				pline("There is the sound of shrieking metal, and a cracked porcelain face swings into view on a metalic armature.");
-				pline("A voice speaks to you, as the immobile white face weeps tears of black oil onto the %s.");
+				pline("A voice speaks to you, as the immobile white face weeps tears of black oil onto the %s.", surface(tx,ty));
 				pline("*I am Astaroth, the Clockmaker. You shall be my instrument, to repair this broken world.*");
 					u.sealsActive |= SEAL_ASTAROTH;
 					u.spirit[numSlots] = SEAL_ASTAROTH;
@@ -1301,7 +1320,7 @@ int tx,ty;
 				}
 			else if(uwep && (uwep->spe<0 || uwep->oeroded || uwep->oeroded2) && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 				pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal.");
-				pline("The hand slowly reaches out towards you, then rests on the seal's surface as its unseen owner shifts his weight onto that arm.");
+				pline("The hand slowly stretches out towards you, then rests on the seal's surface as its unseen owner shifts his weight onto that arm.");
 				pline("There is the sound of shrieking metal, and a cracked porcelain face swings into view on a metalic armature.");
 				pline("A voice speaks to you, as the immobile white face studies you and weeps tears of black oil.");
 				pline("*I am Astaroth, the Clockmaker. You shall hold my instrument, to repair this broken world.*");
@@ -1383,7 +1402,7 @@ int tx,ty;
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
 				if(is_berithable(otmp)){
 					o = otmp;
-					otmp = 0; //breaks out of loop.
+			break;
 				}
 			}
 	//Berith further requires that the summoner wear a blessed silver ring on his or her left hand.
@@ -1424,13 +1443,13 @@ int tx,ty;
 	case BUER:{
 		if(u.buer < moves){
 		//Buer's seal may be drawn anywhere.
-			pline("You hear hooved footfalls approaching quickly, though you can’t make out from what direction.");
+			pline("You hear hooved footfalls approaching quickly, though you can't make out from what direction.");
 			pline("They set an odd tempo; very regular and faster by far than any animal of four legs could comfortably keep.");
 			pline("The footfalls reach a crescendo, and an odd creature rolls into the seal in front of you.");
-			pline("The creature’s five legs are arranged in a star pattern, and to move it rolls from foot to foot.");
-			pline("At the center of the wheel is a lion’s head, complete with a glorious mane.");
-			pline("The creature speaks to you; and it’s voice, though deep, is clearly that of a woman.");
-			pline("\"I am Buer, %s, %s to %s.", buerTitles[rn2(SIZE(buerTitles))], buerSetOne[rn2(SIZE(buerSetOne))], buerSetOne[rn2(SIZE(buerSetTwo))]);
+			pline("The creature's five legs are arranged in a star pattern, and to move it rolls from foot to foot.");
+			pline("At the center of the wheel is a lion's head, complete with a glorious mane.");
+			pline("The creature speaks to you; and it's voice, though deep, is clearly that of a woman.");
+			pline("\"I am Buer, %s, %s to %s.", buerTitles[rn2(SIZE(buerTitles))], buerSetOne[rn2(SIZE(buerSetOne))], buerSetTwo[rn2(SIZE(buerSetTwo))]);
 			if(u.sealCounts < numSlots){
 				pline("Will you walk with me?\"");
 				u.sealsActive |= SEAL_BUER;

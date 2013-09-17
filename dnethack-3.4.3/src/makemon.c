@@ -1454,7 +1454,7 @@ register struct	monst	*mtmp;
 		    case PM_MAMMON:
 //				(void)mongets(mtmp, WAN_STRIKING);
 				otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_AVERICE));		
+				otmp = oname(otmp, artiname(ART_AVARICE));		
 				otmp->blessed = FALSE;
 				otmp->cursed = TRUE;
 				otmp->spe = 3;

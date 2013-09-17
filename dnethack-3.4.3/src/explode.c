@@ -54,12 +54,13 @@ int expltype;
 			default:  break;
 		}
 
-	if (olet == MON_EXPLODE) {
-	    str = killer;
-	    killer = 0;		/* set again later as needed */
-	    adtyp = AD_PHYS;
-	} 
-	else switch (abs(type) % 10) {
+	// if (olet == MON_EXPLODE) {
+	    // str = killer;
+	    // killer = 0;		/* set again later as needed */
+	    // adtyp = AD_PHYS;
+	// }
+	// else switch (abs(type) % 10) {
+	switch (abs(type) % 10) {
 		case 0: str = "magical blast";
 			adtyp = AD_MAGM;
 			break;

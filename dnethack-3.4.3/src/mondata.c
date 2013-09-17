@@ -20,9 +20,9 @@ int flag;
     if (flag == -1) return;		/* "don't care" */
 
     if (flag == 1)
-		mon->mintrinsics |= (ptr->mresists & 0x00FF);
+		mon->mintrinsics |= (ptr->mresists & 0x03FF);
     else
-		mon->mintrinsics = (ptr->mresists & 0x00FF);
+		mon->mintrinsics = (ptr->mresists & 0x03FF);
     return;
 }
 
@@ -634,7 +634,7 @@ static const short grownups[][2] = {
 	{PM_PAGE, PM_KNIGHT},
 	{PM_ACOLYTE, PM_PRIEST},
 	{PM_APPRENTICE, PM_WIZARD},
-	{PM_MANES,PM_LEMURE},
+
 	{NON_PM,NON_PM}
 };
 
