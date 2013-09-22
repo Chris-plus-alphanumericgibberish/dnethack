@@ -616,6 +616,7 @@ int randMeleeAttackTypes[] =
 						 AT_STNG, 
 						 AT_TENT, 
 						 AT_WHIP, 
+						 AT_LNCK, 
 						 AT_LRCH, 
 						 AT_WEAP, 
 						 AT_HODS };
@@ -706,6 +707,8 @@ int randGazeDamageTypes[] =
 						 AD_ELEC, 
 						 AD_HALU, 
 						 AD_SLEE, 
+						 AD_LUCK,
+						 AD_RGAZ,
 						 AD_MIST };
  // AT_ARRW, 
  // AT_MAGC }

@@ -10,60 +10,58 @@ extern void demonpet();
 /* tactics() may call for a specific spell */
 /* 0 = no spell */
        /* attack spells */
-//define DAMAGE                 1
-#define MAGIC_MISSILE          2  /* magic missile */
-#define DRAIN_LIFE             3  /* drain life */
-#define ARROW_RAIN             4
-#define CONE_OF_COLD           5  /* cone of cold */
-#define LIGHTNING              6
-#define FIRE_PILLAR            7
-#define GEYSER                 8
-#define ACID_RAIN              9
-#define SUMMON_MONS            10
+#define PSI_BOLT			   1
+#define OPEN_WOUNDS			   PSI_BOLT+1
+#define MAGIC_MISSILE          OPEN_WOUNDS+1 /* magic missile */
+#define DRAIN_LIFE             MAGIC_MISSILE+1  /* drain life */
+#define ARROW_RAIN             DRAIN_LIFE+1
+#define CONE_OF_COLD           ARROW_RAIN+1  /* cone of cold */
+#define LIGHTNING              CONE_OF_COLD+1
+#define FIRE_PILLAR            LIGHTNING+1
+#define GEYSER                 FIRE_PILLAR+1
+#define ACID_RAIN              GEYSER+1
+#define SUMMON_MONS            ACID_RAIN+1
+#define SUMMON_DEVIL           SUMMON_MONS+1
+#define DEATH_TOUCH			   SUMMON_DEVIL+1
        /* healing spells */
-#define CURE_SELF              11  /* healing */
+#define CURE_SELF              DEATH_TOUCH+1  /* healing */
        /* divination spells */
-#define MAKE_VISIBLE           12
+#define MAKE_VISIBLE           CURE_SELF+1
        /* (dis)enchantment spells */
-#define HASTE_SELF             13 /* haste self */
-#define STUN_YOU               14
-#define CONFUSE_YOU            15
-#define PARALYZE               16
-#define BLIND_YOU              17
-#define SLEEP                  18 /* sleep */
-#define DRAIN_ENERGY           19
-#define WEAKEN_STATS           20
-#define DESTRY_ARMR            21
-#define DESTRY_WEPN            22
+#define HASTE_SELF             MAKE_VISIBLE+1 /* haste self */
+#define STUN_YOU               HASTE_SELF+1
+#define CONFUSE_YOU            STUN_YOU+1
+#define PARALYZE               CONFUSE_YOU+1
+#define BLIND_YOU              PARALYZE+1
+#define SLEEP                  BLIND_YOU+1 /* sleep */
+#define DRAIN_ENERGY           SLEEP+1
+#define WEAKEN_STATS           DRAIN_ENERGY+1
+#define WEAKEN_YOU			   WEAKEN_STATS+1
+#define DESTRY_ARMR            WEAKEN_YOU+1
+#define DESTRY_WEPN            DESTRY_ARMR+1
+#define EVIL_EYE			   DESTRY_WEPN+1
        /* clerical spells */
-#define CURSE_ITEMS            23
-#define INSECTS                24
-#define RAISE_DEAD             25
-#define SUMMON_ANGEL           26
-#define PLAGUE                 27
-#define PUNISH                 28
+#define CURSE_ITEMS            EVIL_EYE+1
+#define INSECTS                CURSE_ITEMS+1
+#define RAISE_DEAD             INSECTS+1
+#define SUMMON_ANGEL           RAISE_DEAD+1
+#define PLAGUE                 SUMMON_ANGEL+1
+#define PUNISH                 PLAGUE+1
+#define AGGRAVATION			   PUNISH+1
        /* escape spells */
-#define DISAPPEAR              29 /* invisibility */
+#define DISAPPEAR              AGGRAVATION+1 /* invisibility */
        /* matter spells */
-#define DARKNESS               30
-#define SUMMON_SPHERE          31 /* flame sphere */
-#define MAKE_WEB               32
-#define DROP_BOULDER           33
-#define EARTHQUAKE             34
-#define TURN_TO_STONE          35
+#define DARKNESS               DISAPPEAR+1
+#define SUMMON_SPHERE          DARKNESS+1 /* flame sphere */
+#define MAKE_WEB               SUMMON_SPHERE+1
+#define DROP_BOULDER           MAKE_WEB+1
+#define EARTHQUAKE             DROP_BOULDER+1
+#define TURN_TO_STONE          EARTHQUAKE+1
        /* unique monster spells */
-#define NIGHTMARE              36
-#define FILTH                  37
-#define CLONE_WIZ              38
-#define STRANGLE               39
-		/* legacy monster spells */
-#define DEATH_TOUCH				40
-#define AGGRAVATION				41
-#define OPEN_WOUNDS				42
-#define PSI_BOLT				43
-#define WEAKEN_YOU				44
-		/* more monster spells */
-#define SUMMON_DEVIL            45
+#define NIGHTMARE              TURN_TO_STONE+1
+#define FILTH                  NIGHTMARE+1
+#define CLONE_WIZ              FILTH+1
+#define STRANGLE               CLONE_WIZ+1
 
 extern void you_aggravate(struct monst *);
 
@@ -234,7 +232,7 @@ boolean hostile;
 	return DESTRY_ARMR;
     case 7:
     case 6:
-	return WEAKEN_YOU;
+	return EVIL_EYE;
     case 5:
     case 4:
 	return MAKE_VISIBLE;
@@ -346,15 +344,15 @@ boolean hostile;
 	}else{
 		 spellnum = spellnum % 18;
 		//case "17"
-		if(spellnum == ((mid+3)%4)+14) return PUNISH;
+		if(spellnum == ((mid/10+3)%4)+14) return PUNISH;
 		//case "16"
-		if(spellnum == ((mid+2)%4)+14) return (mid % 2) ? SUMMON_ANGEL : SUMMON_DEVIL;
+		if(spellnum == ((mid/10+2)%4)+14) return (mid % 2) ? SUMMON_ANGEL : SUMMON_DEVIL;
 		//case "14"
-		if(spellnum == ((mid+0)%4)+14) return PLAGUE;
+		if(spellnum == ((mid/10+0)%4)+14) return PLAGUE;
 		//case "13"
 		if(spellnum == ((mid+4)%5)+9) return EARTHQUAKE;
 		//case "12"
-		if(spellnum == ((mid+3)%5)+9) return (mid % 2) ? GEYSER : ACID_RAIN;
+		if(spellnum == ((mid+3)%5)+9) return ( (mid/10) % 2) ? GEYSER : ACID_RAIN;
 		//case "11"
 		if(spellnum == ((mid+2)%5)+9) return FIRE_PILLAR;
 		//case "9"
@@ -362,7 +360,7 @@ boolean hostile;
 		//case "8"
 		if(spellnum == ((mid+3)%4)+5) return DRAIN_LIFE;
 		//case "7"
-		if(spellnum == ((mid+2)%4)+5) return CURSE_ITEMS;
+		if(spellnum == ((mid+2)%4)+5) return ( (mid/10) % 2) ? CURSE_ITEMS : EVIL_EYE;
 		//case "6"
 		if(spellnum == ((mid+1)%4)+5) return INSECTS;
 		//case "4"
@@ -372,7 +370,7 @@ boolean hostile;
 		//case "2"
 		if(spellnum == ((mid+0)%3)+2) return CONFUSE_YOU;
 		//case "1"
-		if(spellnum == ((mid+1)%2)+0) return ( (mid+1) % 2) ? CURE_SELF : OPEN_WOUNDS;
+		if(spellnum == ((mid+1)%2)+0) return ( (mid/10+1) % 2) ? CURE_SELF : OPEN_WOUNDS;
 		//case "0", "5", "10", "15", "18+"
 		return (mid % 2) ? CURE_SELF : OPEN_WOUNDS;
 	}
@@ -785,7 +783,7 @@ struct monst *mtmp;
 int dmg;
 int spellnum;
 {
-    boolean malediction = (mtmp->iswiz || (mtmp->data->msound == MS_NEMESIS && rn2(2)));
+    boolean malediction = (mtmp && (mtmp->iswiz || (mtmp->data->msound == MS_NEMESIS && rn2(2))));
     int zap; /* used for ray spells */
     
     if (dmg == 0 && !is_undirected_spell(AD_SPEL, spellnum)) {
@@ -795,11 +793,11 @@ int spellnum;
 
     switch (spellnum) {
     case DEATH_TOUCH:
-	pline("Oh no, %s's using the touch of death!", mhe(mtmp));
+	pline("Oh no, %s's using the touch of death!", mtmp ? mhe(mtmp) : "something");
 	if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
 	    You("seem no deader than before.");
 		dmg = 0; //you don't take damage
-	} else if (!Antimagic && rn2(mtmp->m_lev) > 12) {
+	} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12)) {
 	    if (Hallucination) {
 		You("have an out of body experience.");
 	    } else {
@@ -812,16 +810,17 @@ int spellnum;
 	    if (Antimagic) shieldeff(u.ux, u.uy);
 //	    pline("Lucky for you, it didn't work!");
 		Your("%s flutters!", body_part(HEART));
-		dmg = rnd(mtmp->m_lev); //you still take damage
+		dmg = mtmp ? rnd(mtmp->m_lev) : 10; //you still take damage
 	}
 	break;
     case CLONE_WIZ:
-	if (mtmp->iswiz && flags.no_of_wizards == 1) {
+	if (mtmp && mtmp->iswiz && flags.no_of_wizards == 1) {
 	    pline("Double Trouble...");
 	    clonewiz();
 	    dmg = 0;
 	} else
-	    impossible("bad wizard cloning?");
+	    if(mtmp) impossible("bad wizard cloning?");
+		//else end with no message.
 	break;
      case FILTH:
     {
@@ -834,7 +833,7 @@ int spellnum;
            Your("%s %s!", makeplural(body_part(HAND)),
                (old ? "are filthier than ever" : "get slimy"));
        }
-       if(haseyes(youmonst.data) && !Blindfolded && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
+       if(haseyes(youmonst.data) && !Blindfolded && mtmp && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
            old = u.ucreamed;
            u.ucreamed += rn1(20, 9);
            Your("%s is coated in %sgunk!", body_part(FACE),
@@ -883,17 +882,18 @@ int spellnum;
 	break;
     }
      case TURN_TO_STONE:
-        if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
           if (malediction) /* give a warning to the player */
                verbalize(rn2(2) ? "I shall make a statue of thee!" :
                                   "I condemn thee to eternity unmoving!");
+        if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
            if(!Stone_resistance && !(rn2(10) && (have_lizard()) || Free_action) ){
            You_feel("less limber.");
            Stoned = 5;
 		   }else{
 			You_feel("a momentary stiffness.");
 		   }
-        } dmg = 0;
+        } 
+		dmg = 0;
         break;
      case MAKE_VISIBLE:
        HInvis &= ~INTRINSIC;
@@ -911,10 +911,11 @@ int spellnum;
      case PUNISH:
         if (!Punished) {
             punish((struct obj *)0);
-           if (is_prince(mtmp->data)) uball->owt += 160;
+           if (mtmp && is_prince(mtmp->data)) uball->owt += 160;
 	} else {
                 Your("iron ball gets heavier!");
-                uball->owt += 160;
+				if (mtmp && is_prince(mtmp->data)) uball->owt += 240;
+                else uball->owt += 160;
 	}
 	dmg = 0;
 	break;
@@ -927,7 +928,9 @@ int spellnum;
                                     rn2(2) ? "power" : "might");
             else verbalize("Open thy maw, mighty earth!");
 	}
-        do_earthquake(((int)mtmp->m_lev - 1) / 6, TRUE, mtmp);
+		mtmp ? 
+			do_earthquake(((int)mtmp->m_lev - 1) / 6 + 1, TRUE, mtmp)
+		:	do_earthquake(rnd(5), TRUE, 1); //Fixme: true "not my fault" flag needed.
         aggravate(); /* wake up without scaring */
        dmg = 0;
 	break;
@@ -942,6 +945,8 @@ int spellnum;
        erode_obj(uwep, TRUE, FALSE);
        erode_obj(uswapwep, TRUE, FALSE);
        erode_armor(&youmonst, TRUE);
+	   destroy_item(POTION_CLASS, AD_FIRE);
+	   water_damage(invent, FALSE, FALSE, FALSE);
        if (!resists_blnd(&youmonst) && rn2(2)) {
            pline_The("acid gets into your %s!", eyecount(youmonst.data) == 1 ?
                  body_part(EYE) : makeplural(body_part(EYE)));
@@ -978,7 +983,7 @@ int spellnum;
 	(void) burn_floor_paper(u.ux, u.uy, TRUE, FALSE);
 	break;
     case LIGHTNING:
-    if (!dmgtype(mtmp->data, AD_CLRC)) {
+    if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
        zap = AD_ELEC;
        goto ray;
     } else {
@@ -1005,7 +1010,9 @@ int spellnum;
     }
     case SUMMON_ANGEL: /* cleric only */
     {
-       struct monst *mtmp2 = mk_roamer(&mons[PM_ANGEL],
+       struct monst *mtmp2;
+	   if(!mtmp) goto psibolt;
+	   mtmp2 = mk_roamer(&mons[PM_ANGEL],
                mtmp->data->maligntyp, mtmp->mux, mtmp->muy, FALSE);
        if (mtmp2) {
            if (canspotmon(mtmp2))
@@ -1022,7 +1029,9 @@ int spellnum;
     }
     case SUMMON_DEVIL: /* cleric only */
     {
-       struct monst *mtmp2 = summon_minion(mtmp->data->maligntyp, FALSE, TRUE);
+       struct monst *mtmp2;
+	   if(!mtmp) goto psibolt;
+	   mtmp2 = summon_minion(mtmp->data->maligntyp, FALSE, TRUE);
        if (mtmp2) {
            if (canspotmon(mtmp2))
                pline("%s ascends from below!",
@@ -1037,7 +1046,7 @@ int spellnum;
     case SUMMON_MONS:
     {
 	int count;
-	if(u.summonMonster) goto psibolt;
+	if(!mtmp || u.summonMonster) goto psibolt;
 	u.summonMonster = TRUE;
 	count = nasty(mtmp);	/* summon something nasty */
 	if (mtmp->iswiz)
@@ -1071,6 +1080,8 @@ int spellnum;
 	coord bypos;
 	int quan;
 
+	if(!mtmp) goto psibolt;
+	
 	quan = (mtmp->m_lev < 2) ? 1 : rnd((int)mtmp->m_lev / 2);
 	if (quan < 3) quan = 3;
 	success = pm ? TRUE : FALSE;
@@ -1118,9 +1129,9 @@ int spellnum;
      {
        coord mm;
        register int x, y;
-       pline("%s raised the dead!", Monnam(mtmp));
-       mm.x = mtmp->mx;
-       mm.y = mtmp->my;
+       pline("%s raised the dead!", mtmp ? Monnam(mtmp) : "Something");
+       mm.x = mtmp ? mtmp->mx : u.ux;
+       mm.y = mtmp ? mtmp->my : u.uy;
        mkundead(&mm, TRUE, NO_MINVENT);
        dmg = 0;
        break;
@@ -1148,7 +1159,7 @@ int spellnum;
            if (weap == TRIDENT) weap = JAVELIN;
        }
        otmp = mksobj(weap, TRUE, FALSE);
-       otmp->quan = (long) rn1(7,mtmp->m_lev/2);
+       otmp->quan = (long) rn1(7,mtmp ? mtmp->m_lev/2 : rnd(15) );
        otmp->owt = weight(otmp);
        You("are hit from all directions by a %s of %s!",
                rn2(2) ? "shower" : "hail", xname(otmp));
@@ -1213,14 +1224,21 @@ int spellnum;
                   Your("%s shape in your %s.", aobjnam(otmp, "change"), hands);
                   poly_obj(otmp, BANANA);
                }
-        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE &&
-				   rn2(acurrstr()) < (((int)mtmp->m_lev+1)/2)) {
+        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE){
+			if(rn2(acurrstr()) < (((int)mtmp->m_lev+1)/2)) {
                 Your("%s knocked out of your %s!",
                     aobjnam(otmp,"are"), hands);
                 setuwep((struct obj *)0);
                 dropx(otmp);
-        } else {
-            shieldeff(u.ux, u.uy);
+			}
+			else if(rn2(acurrstr()) < rnd(15) ){
+                Your("%s knocked out of your %s!",
+                    aobjnam(otmp,"are"), hands);
+                setuwep((struct obj *)0);
+                dropx(otmp);
+			}
+			else Your("%s for a moment.", aobjnam(otmp, "shudder"));
+        } else{
             Your("%s for a moment.", aobjnam(otmp, "shudder"));
         } dmg = 0;
         break;
@@ -1238,6 +1256,16 @@ int spellnum;
        }
        dmg = 0;
        break;
+    case EVIL_EYE:
+		if(mtmp){
+			struct attack evilEye = {AT_GAZE, AD_LUCK, 0, 0};
+			gazemu(mtmp, &evilEye);
+		}
+		else{
+			You_feel("your luck running out.");
+			change_luck(-1);
+		}
+    break;
     case DRAIN_LIFE:  /* simulates player spell "drain life" */
         if (Drain_resistance) {
             /* note: magic resistance doesn't protect
@@ -1258,15 +1286,16 @@ int spellnum;
 		if(rn2(2)){
 			You_feel("a bit weaker.");
 		    losestr(1);
-		    if (u.uhp < 1)
-			done_in_by(mtmp);
+		    if (u.uhp < 1 && mtmp)
+				done_in_by(mtmp) ;
 	    }else You_feel("momentarily weakened.");
 	} else {
 	    You("suddenly feel weaker!");
-	    dmg = mtmp->m_lev - 6;
+	    dmg = mtmp ? mtmp->m_lev - 6 : rnd(15);
+		if(dmg<3)dmg = 3;
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	    losestr(rnd(dmg));
-	    if (u.uhp < 1)
+	    if (u.uhp < 1 && mtmp)
 		done_in_by(mtmp);
 	}
 	dmg = 0;
@@ -1274,7 +1303,7 @@ int spellnum;
     case WEAKEN_STATS:           /* drain any stat */
        if (Fixed_abil) {
            You_feel("momentarily weakened.");
-       } else if (is_prince(mtmp->data)) {
+       } else if (mtmp ? is_prince(mtmp->data) : rn2(3)) {
           int typ = 0;
           boolean change = FALSE;
           do {
@@ -1283,7 +1312,8 @@ int spellnum;
           if (!change) goto drainhp;
        } else {
           int typ = rn2(A_MAX);
-           dmg = mtmp->m_lev - 6;
+           dmg = mtmp ? mtmp->m_lev - 6 : rnd(15);
+		   if(dmg < 3) dmg = 3;
            if (Half_spell_damage) dmg = (dmg + 1) / 2;
            if (dmg < 1) dmg = 1;
           /* try for a random stat */
@@ -1301,7 +1331,7 @@ drainhp:
                   u.uhp -= dmg;
                   u.uhpmax -= dmg;
               }
-              if (u.uhp < 1) done_in_by(mtmp);
+              if (u.uhp < 1 && mtmp) done_in_by(mtmp);
                /* Quest nemesis maledictions */
               if (malediction)
                  verbalize("Verily, thou art no mightier than the merest newt.");
@@ -1310,7 +1340,7 @@ drainhp:
        dmg = 0;
        break;
     case NIGHTMARE:
-       You_hear("%s laugh menacingly as the world blurs around you...", mon_nam(mtmp));
+       You_hear("%s laugh menacingly as the world blurs around you...", mtmp ? mon_nam(mtmp) : "Someone");
        dmg = (dmg + 1) / ((Antimagic + Half_spell_damage) * 2);
        make_confused(HConfusion + dmg*10, FALSE);
        make_stunned(HStun + dmg*5, FALSE);
@@ -1332,6 +1362,7 @@ drainhp:
         dmg = 0;
        break;
     case DISAPPEAR:            /* makes self invisible */
+		if(!mtmp) goto openwounds;
        if (!mtmp->minvis && !mtmp->invis_blkd) {
            if (canseemon(mtmp))
                pline("%s suddenly %s!", Monnam(mtmp),
@@ -1356,6 +1387,7 @@ drainhp:
     case MAGIC_MISSILE:
        zap = AD_MAGM;
 ray:
+	   if(!mtmp) goto psibolt;
        nomul(0);
        if(canspotmon(mtmp))
            pline("%s zaps you with a %s!", Monnam(mtmp),
@@ -1367,7 +1399,7 @@ ray:
 	/* note: resists_blnd() doesn't apply here */
 	if (!Blinded) {
 	    int num_eyes = eyecount(youmonst.data);
-	    if (dmgtype(mtmp->data, AD_CLRC))
+	    if (mtmp && dmgtype(mtmp->data, AD_CLRC))
 	    pline("Scales cover your %s!",
 		  (num_eyes == 1) ?
 		  body_part(EYE) : makeplural(body_part(EYE)));
@@ -1389,7 +1421,7 @@ ray:
 	} else {
 	    if (multi >= 0)
 		You("are frozen in place!");
-	    dmg = 4 + (int)mtmp->m_lev;
+	    dmg = 4 + mtmp ? (int)mtmp->m_lev : rnd(30);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	    nomul(-dmg);
 	}
@@ -1402,7 +1434,7 @@ ray:
 	} else {
 	    boolean oldprop = !!Confusion;
 
-           dmg = 4 + (int)mtmp->m_lev;
+           dmg = 4 + mtmp ? (int)mtmp->m_lev : rnd(30);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	    make_confused(HConfusion + dmg, TRUE);
 	    if (Hallucination)
@@ -1448,10 +1480,12 @@ ray:
        dmg = 0;
        break;
     case HASTE_SELF:
+	   if(!mtmp) goto psibolt;
        mon_adjust_speed(mtmp, 1, (struct obj *)0);
        dmg = 0;
        break;
     case CURE_SELF:
+	if(!mtmp) goto openwounds;
 	if (mtmp->mhp < mtmp->mhpmax) {
 	    if (canseemon(mtmp))
 		pline("%s looks better.", Monnam(mtmp));
@@ -1462,6 +1496,7 @@ ray:
 	}
 	break;
     case OPEN_WOUNDS:
+	openwounds:
 	if (Antimagic) {
 	    shieldeff(u.ux, u.uy);
 	    dmg = (dmg + 1) / 2;
@@ -1506,7 +1541,7 @@ ray:
 	break;
     }
 
-    if (dmg) mdamageu(mtmp, dmg);
+    if (dmg) mtmp ? mdamageu(mtmp, dmg) : losehp(dmg, "malevolent spell", KILLED_BY_AN);;
 }
 
 STATIC_DCL

@@ -1115,6 +1115,9 @@ mdamagem(magr, mdef, mattk)
 			pline("%s slows down.", Monnam(mdef));
 		}
 		break;
+	    case AD_LUCK: 
+		/* Luck drain only makes sense for the player, so let's make 
+		 * the monster confused instead */
 	    case AD_CONF:
 		/* Since confusing another monster doesn't have a real time
 		 * limit, setting spec_used would not really be right (though
