@@ -256,6 +256,9 @@ MONSTER:'b',random,random
 MONSTER:'b',random,random
 MONSTER:'b',random,random
 MONSTER:'P',random,random
+MONSTER:'P',"flux slime",random
+MONSTER:'P',"flux slime",random
+MONSTER:'P',"flux slime",random
 MONSTER:'b',random,random
 MONSTER:'j',random,random
 MONSTER:'m',random,random
@@ -310,24 +313,24 @@ OBJECT:'`',"boulder",random
 # lair
 GEOMETRY:center,center
 MAP
-..PPPPP.PPPPP.PPPPP.PPPPP.PPPPP.PPPPP.PPPPP.PPPPP..
-.PPP.PPPPP..PPP..PPPPP..PPP..PPPPP..PPP..PPPPP.PPP.
-PPP...PP..PP.P.PP.PP.PPP...PPP.PPP..PPP..PPPP...PPP
-.PPP.PP.PPP.PP.PP.PP...PP.PP.....PP.....P....P.PPP.
-..PPP..PPP.PP.PP.PP..PP.....PP.PPP.PP.PPPPPPPPPPP..
-.PPP..PPPPP.PP.PP.PP...PPPPP.....PP.PPPPPP.....PPP.
-PPP..PP...PP..PP.PPP.PPP...PPP.PPP.P.PPPP..}.}..PPP
-PP.PPPP...PPPPP.P...PPP..}..PPP.P.PPP.PPPP.....PPPP
-P.PPPP.PP.P..P.PPPPPPP..}.}..PPP.PPP.PP..PP...PPPP.
-.PPPP.PPPP....PPPPP.PPP..}..PPP.PPPP.PP..PP...PPP.P
-PPPP..PP.PP..PPPP...PPPP...PPP.PPPPP.PPPP.PPPPPP.PP
-PPP...PP...PPP..PPPPPPPPPPPP.....PPPP.PP...P..P.PPP
-.PPP..PP.PPPP....PP..PPP..PP.....PPPP.PPP.P....PPP.
-..PPP.PPPP..PP..PP..PP..PP..PP.PPP..P.P..PPP..PPP..
-.PPP.PPPP....PPPP..PP....PPPPPPP...PPP....PPPP.PPP.
-PPP...PPP....PPP..PPP....PPP..PP...PPP....PPP...PPP
-.PPP.PPPPP..PPP..PPPPP..PPP..PPPPP..PPP..PPPPP.PPP.
-..PPPPP.PPPPP.PPPPP.PPPPP.PPPPP.PPPPP.PPPPP.PPPPP..
+PP.....P.....P.....P.....P.....P.....P.....P.....PP
+P...T.....TT...TT.....TT...TT.....TT...TT.....T...P
+...TTT..TT..T.T..T..T...TTT...T...TT...TT....TTT...
+P...T..T...T..T..T..TTT..T..TTTTT..TTTTT.TTTT.T...P
+PP...TT...T..T..T..TT..TTTTT..T...T..T...........PP
+P...TT.....T..T..T..TTT.....TTTTT..T......TTTTT...P
+...TT..TTT..TT..T...T...TPT...T...T.T....TT}T}TT...
+..T....TTT.....T.TTT...TP}PT...T.T...T....TTTTT....
+.P....T..T.TT.T.......TT}.}TT...T...T..TT..TTT....P
+P....T....TTTT.....T...TP}PT...T....T..TT..TTT...P.
+....TT..T..TT....TTT....TPT...T.....T....T......T..
+...TTT..TTT...TT............TTTTT....T..TTT.TT.T...
+P...TT..T....TTTT..TT...TT..TTTTT....T...T.TTTT...P
+PP...T....TT..TT..TT..TT..TT..T...TT.T.TT...TT...PP
+P...T....TTTT....TT..TTTT.......TTT...TTTT....T...P
+...TTT...TTTT...TT...TTTT...TT..TTT...TTTT...TTT...
+P...T.....TT...TT.....TT...TT.....TT...TT.....T...P
+PP.....P.....P.....P.....P.....P.....P.....P.....PP
 ENDMAP
 # Random registers
 RANDOM_MONSTERS:'n','w','F','F'
@@ -341,16 +344,12 @@ STAIR:levregion(69,00,79,20),(0,0,50,17),up
 BRANCH:levregion(01,00,11,20),(0,0,50,17)
 TELEPORT_REGION:levregion(01,00,11,20),(0,0,50,17),up
 TELEPORT_REGION:levregion(69,00,79,20),(0,0,50,17),down
-FOUNTAIN:place[0]
-MONSTER:'m',"giant mimic",place[1],m_feature "fountain"
-MONSTER:'m',"giant mimic",place[2],m_feature "fountain"
-MONSTER:'m',"giant mimic",place[3],m_feature "fountain"
 # The demon of the swamp
 MONSTER:'&',"Zuggtmoy",(25,08)
 # And a couple demons
-MONSTER:'i',"manes",(43,08)
-MONSTER:'i',"manes",(44,08)
-MONSTER:'i',"manes",(45,08)
+MONSTER:'i',"manes",random
+MONSTER:'i',"manes",random
+MONSTER:'i',"manes",random
 # Some liquids and gems
 OBJECT:'*',random,(43,06)
 OBJECT:'*',random,(45,06)
@@ -358,14 +357,14 @@ OBJECT:'!',random,(43,09)
 OBJECT:'!',random,(44,09)
 OBJECT:'!',random,(45,09)
 # And lots of blobby monsters
-MONSTER:monster[0],random,(25,06)
-MONSTER:monster[1],random,(24,07)
-MONSTER:monster[2],random,(26,07)
-MONSTER:monster[3],random,(23,08)
-MONSTER:monster[3],random,(27,08)
-MONSTER:monster[2],random,(24,09)
-MONSTER:monster[1],random,(26,09)
-MONSTER:monster[0],random,(25,10)
+MONSTER:monster[0],random,random
+MONSTER:monster[1],random,random
+MONSTER:monster[2],random,random
+MONSTER:monster[3],random,random
+MONSTER:monster[3],random,random
+MONSTER:monster[2],random,random
+MONSTER:monster[1],random,random
+MONSTER:monster[0],random,random
 MONSTER:'n',"swamp nymph",random
 MONSTER:'n',random,random
 MONSTER:'n',random,random
@@ -380,14 +379,20 @@ MONSTER:'w',random,random
 MONSTER:'F',random,random
 MONSTER:'F',random,random
 MONSTER:'F',random,random
-MONSTER:'m',random,random
-MONSTER:'m',random,random
-MONSTER:';',"jellyfish",random
-MONSTER:';',"jellyfish",random
-MONSTER:';',"jellyfish",random
-MONSTER:';',"jellyfish",random
-MONSTER:';',"jellyfish",random
-MONSTER:';',"jellyfish",random
+MONSTER:'F',random,random
+MONSTER:'F',random,random
+MONSTER:'F',random,random
+MONSTER:'#',"swamp fern",random
+MONSTER:'#',"swamp fern",random
+MONSTER:'#',"swamp fern",random
+MONSTER:'#',"dungeon fern",random
+MONSTER:'#',"dungeon fern",random
+MONSTER:'#',"dungeon fern",random
+MONSTER:'#',"razor vine",random
+MONSTER:'#',"razor vine",random
+MONSTER:'#',"razor vine",random
+MONSTER:'#',"razor vine",random
+MONSTER:'#',"razor vine",random
 # Some random objects
 OBJECT:'!',random,random
 OBJECT:'!',random,random
@@ -396,13 +401,6 @@ OBJECT:'%',random,random
 OBJECT:'%',random,random
 OBJECT:'%',random,random
 OBJECT:'`',"boulder",random
-# Some traps
-TRAP:"sleep gas",random
-TRAP:"sleep gas",random
-TRAP:"anti magic",random
-TRAP:"anti magic",random
-TRAP:"magic",random
-TRAP:"magic",random
 #
 # The Orcus Level
 #

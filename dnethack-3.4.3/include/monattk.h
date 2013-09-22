@@ -28,6 +28,7 @@
 #define AT_WHIP		18	/* Whips you */
 #define AT_LRCH		19	/* Reach attack */
 #define AT_HODS		20  /* Hod Sephirah's mirror attack */
+#define AT_LNCK		21  /* Bite attack with reach */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */
@@ -125,6 +126,11 @@
 #define AD_BLNK		128	/* mental invasion (weeping angel) */
 #define AD_WEEP		129	/* Level teleport and drain (weeping angel) */
 #define AD_SPOR		130	/* generate spore */
+#define AD_FNEX		131	/* FerN spore EXplosion */
+#define AD_SSUN		132	/* Slaver Sunflower gaze */
+#define AD_MAND		133	/* Mandrake's dying shriek (kills all on level, use w/ AT_BOOM) */
+#define AD_BARB		134	/* Physical damage retalitory attack */
+#define AD_LUCK		135	/* Luck-draining gaze (UnNetHack) */
 
 
 

@@ -62,6 +62,7 @@ register struct attack *mattk;
 			compat == 2 ? "engagingly" : "seductively");
 	} else
 	    switch (mattk->aatyp) {
+		case AT_LNCK:
 		case AT_BITE:
 			pline("%s bites!", Monnam(mtmp));
 			break;
@@ -147,7 +148,7 @@ struct attack *mattk;
 	} else {
 	    return (mattk->aatyp == AT_TUCH) ? "contact" :
 		   (mattk->aatyp == AT_GAZE) ? "gaze" :
-		   (mattk->aatyp == AT_BITE) ? "bite" : "sting";
+		   (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK) ? "bite" : "sting";
 	}
 }
 
@@ -184,7 +185,7 @@ wildmiss(mtmp, mattk)		/* monster attacked your displaced image */
 
 	if (!mtmp->mcansee || (Invis && !perceives(mtmp->data))) {
 	    const char *swings =
-		mattk->aatyp == AT_BITE ? "snaps" :
+		mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK ? "snaps" :
 		mattk->aatyp == AT_KICK ? "kicks" :
 		(mattk->aatyp == AT_STNG ||
 		 mattk->aatyp == AT_BUTT ||
@@ -690,6 +691,7 @@ mattacku(mtmp)
 					 }
 			break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AT_LNCK:
 		case AT_LRCH:{
 			if(dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 5){
 				if(mtmp->mconf || Conflict ||
@@ -2104,6 +2106,7 @@ dopois:
 			if(obj){
 			 int i = 0;
 			 switch (mattk->aatyp) {
+				case AT_LNCK:
 				case AT_BITE:
 					pline("%s's teeth catch on your armor!", Monnam(mtmp));
 				break;
@@ -2509,6 +2512,10 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			    "can barely breathe!");
 			/* NB: Amphibious includes Breathless */
 			if (Amphibious && !flaming(youmonst.data)) tmp = 0;
+			else exercise(A_CON, FALSE);
+		    } else if (mtmp->data == &mons[PM_DREADBLOSSOM_SWARM]) {
+				You("are sliced by the whirling stems!");
+				exercise(A_DEX, FALSE);
 		    } else {
 			You("are pummeled with debris!");
 			exercise(A_STR, FALSE);
@@ -2654,6 +2661,13 @@ boolean ufound;
 	hitmsg(mtmp, mattk);
 
 	switch (mattk->adtyp) {
+		case AD_FNEX:
+			mondead(mtmp);
+			if(mtmp->data==&mons[PM_SWAMP_FERN_SPORE]) explode(mtmp->mx, mtmp->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL);
+			else explode(mtmp->mx, mtmp->my, 7, tmp, MON_EXPLODE, EXPL_NOXIOUS);
+			return 2;
+		break;
+		
 	    case AD_COLD:
 		not_affected |= Cold_resistance;
 		goto common;
@@ -2684,7 +2698,7 @@ common:
 		    if (mon_visible(mtmp) || (rnd(tmp /= 2) > u.ulevel)) {
 			You("are blinded by a blast of light!");
 			make_blinded((long)tmp, FALSE);
-			if (!Blind) Your(vision_clears);
+			if (!Blind) Your("%s", vision_clears);
 		    } else if (flags.verbose)
 			You("get the impression it was not terribly bright.");
 		}
@@ -3060,6 +3074,34 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    if (!Blind) Your(vision_clears);
 		    else make_stunned((long)d(1,3),TRUE);
 			succeeded=1;
+		}
+		break;
+	    case AD_SSUN:
+		if (!mtmp->mcan && couldsee(mtmp->mx, mtmp->my) &&
+			levl[mtmp->mx][mtmp->my].lit) {
+			int dmg = d((int)mattk->damn, (int)mattk->damd);
+		    pline("%s attacks you with a beam of reflected light!", Monnam(mtmp));
+		    stop_occupation();
+			if(canseemon(mtmp) && !resists_blnd(&youmonst)){
+				int blnd = d((int)mattk->damn, (int)mattk->damd);
+				You("are blinded by %s beam!",
+							  s_suffix(mon_nam(mtmp)));
+				make_blinded((long)blnd,FALSE);
+				succeeded=1;
+			}
+		    if (Fire_resistance) {
+				pline_The("beam doesn't feel hot!");
+				dmg = 0;
+		    } else succeeded=1;
+		    burn_away_slime();
+		    if ((int) mtmp->m_lev > rn2(20))
+			destroy_item(SCROLL_CLASS, AD_FIRE);
+		    if ((int) mtmp->m_lev > rn2(20))
+			destroy_item(POTION_CLASS, AD_FIRE);
+		    if ((int) mtmp->m_lev > rn2(25))
+			destroy_item(SPBOOK_CLASS, AD_FIRE);
+			
+		    if (dmg) mdamageu(mtmp, dmg);
 		}
 		break;
 	    case AD_FIRE:

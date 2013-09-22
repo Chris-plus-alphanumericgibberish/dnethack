@@ -1755,6 +1755,14 @@ int typ;
 	    level.flags.arboreal = 1;
 	if (lev_flags & LETHE)
 	    level.flags.lethe = 1;
+	if (lev_flags & SLIME)
+		level.flags.slime = 1;
+	if (lev_flags & FUNGI)
+		level.flags.fungi = 1;
+	if (lev_flags & DUN)
+		level.flags.dun = 1;
+	if (lev_flags & NECRO)
+		level.flags.necro = 1;
 
 	/* Read message */
 	Fread((genericptr_t) &n, 1, sizeof(n), fd);

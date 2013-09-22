@@ -746,6 +746,7 @@ movemon()
 		if(mtmp->mextra[0] >= NORMAL_SPEED*2) mtmp->mextra[0] -= NORMAL_SPEED*2;
 		else continue;
 	}
+	if(mtmp->data == &mons[PM_DREADBLOSSOM_SWARM] && !canseemon(mtmp) && u.ustuck != mtmp) continue; /* Dreadblossoms only attack those who can see them */
 
 	if (vision_full_recalc) vision_recalc(0);	/* vision! */
 
@@ -1826,7 +1827,7 @@ boolean was_swallowed;			/* digestion */
 	    	killer = killer_buf;
 	    	killer_format = KILLED_BY_AN;
 			if(mdat==&mons[PM_GAS_SPORE] || mdat==&mons[PM_DUNGEON_FERN_SPORE]){
-	    	  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_NOXIOUS); //explode(x, y, type, dam, olet, expltype)
+	    	  explode(mon->mx, mon->my, 7, tmp, MON_EXPLODE, EXPL_NOXIOUS); //explode(x, y, type, dam, olet, expltype)
 			}
 			else if(mdat==&mons[PM_SWAMP_FERN_SPORE]){
 	    	  explode(mon->mx, mon->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
@@ -1876,6 +1877,34 @@ boolean was_swallowed;			/* digestion */
 			}
 			else if(mdat == &mons[PM_ANCIENT_OF_DEATH]){
 			  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_DARK);
+			}
+			else if(mdat->mattk[i].adtyp == AD_MAND){
+				struct monst *mtmp, *mtmp2;
+				pline("%s lets out a terrible shriek!", Monnam(mon));
+				for (mtmp = fmon; mtmp; mtmp = mtmp2){
+					mtmp2 = mtmp->nmon;
+					if(mtmp->data->geno & G_GENO && !nonliving(mon->data) && !is_demon(mon->data) && !is_keter(mon->data)){
+						if (DEADMONSTER(mtmp)) continue;
+						mtmp->mhp = -10;
+						monkilled(mtmp,"",AD_DRLI);
+					}
+				}
+				/* And a finger of death type attack on you */
+				if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
+					You("seem no deader than before.");
+				} else if (rn2(mon->m_lev) > 12) {
+					if (Hallucination) {
+					You("have an out of body experience.");
+					} else {
+					killer_format = KILLED_BY_AN;
+					killer = "mandrake's dying shriek";
+					done(DIED);
+					}
+				} else {
+					if (Antimagic) shieldeff(u.ux, u.uy);
+					Your("%s flutters!", body_part(HEART));
+					mdamageu(mon, rnd(mon->m_lev));
+				}
 			}
 			else{
 			  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);

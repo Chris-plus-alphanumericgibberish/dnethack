@@ -315,6 +315,18 @@ mattackm(magr, mdef)
 		    return MM_MISS;
 #endif /* TAME_RANGED_ATTACKS */
 		}
+		else goto meleeattack;
+		case AT_LRCH:
+		case AT_LNCK:
+		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 5)
+		{
+#ifdef TAME_RANGED_ATTACKS
+                    break; /* might have more ranged attacks */
+#else
+		    return MM_MISS;
+#endif /* TAME_RANGED_ATTACKS */
+		}
+meleeattack:
 		/* Monsters won't attack cockatrices physically if they
 		 * have a weapon instead.  This instinct doesn't work for
 		 * players, or under conflict or confusion. 
@@ -489,6 +501,7 @@ hitmm(magr, mdef, mattk)
 
 		    Strcpy(magr_name, Monnam(magr));
 		    switch (mattk->aatyp) {
+			case AT_LNCK:
 			case AT_BITE:
 				Sprintf(buf,"%s bites", magr_name);
 				break;
@@ -677,7 +690,14 @@ explmm(magr, mdef, mattk)
 		pline("%s explodes!", Monnam(magr));
 	else	noises(magr, mattk);
 
-	result = mdamagem(magr, mdef, mattk);
+	if(!is_fern_spore(magr->data)) result = mdamagem(magr, mdef, mattk);
+	else{
+		mondead(magr);
+		if(magr->data==&mons[PM_SWAMP_FERN_SPORE]) explode(magr->mx, magr->my, 9, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_MAGICAL);
+		else explode(magr->mx, magr->my, 7, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_NOXIOUS);
+		if (magr->mhp > 0) return result;
+		else return result | MM_AGR_DIED;
+	}
 
 	/* Kill off agressor if it didn't die. */
 	if (!(result & MM_AGR_DIED)) {
@@ -1746,6 +1766,7 @@ int aatyp;
 	w_mask = ~0L;		/* special case; no defense needed */
 	break;
     case AT_CLAW:
+    case AT_LRCH:
     case AT_TUCH:
     case AT_WEAP:
 	w_mask = W_ARMG;	/* caller needs to check for weapon */
@@ -1760,6 +1781,7 @@ int aatyp;
 	w_mask = (W_ARMC|W_ARMG); /* attacker needs both to be protected */
 	break;
     case AT_BITE:
+    case AT_LNCK:
     case AT_STNG:
     case AT_ENGL:
     case AT_TENT:

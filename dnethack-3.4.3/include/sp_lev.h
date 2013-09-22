@@ -23,6 +23,10 @@
 #define SHORTSIGHTED	8
 #define ARBOREAL	16
 #define LETHE		64		/* All water on level is Lethe-ized */
+#define SLIME		128
+#define FUNGI		256
+#define DUN			512
+#define NECRO		1024
 
     /* special level types */
 #define SP_LEV_ROOMS	1

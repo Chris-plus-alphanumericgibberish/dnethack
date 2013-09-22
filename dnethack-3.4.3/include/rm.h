@@ -467,6 +467,11 @@ struct levelflags {
 	Bitfield(is_cavernous_lev,1);
 	Bitfield(arboreal, 1);		/* Trees replace rock */
 	Bitfield(lethe, 1);			/* All water on level causes amnesia */
+	
+	Bitfield(slime, 1);			/* corpses on level become slimes */
+	Bitfield(fungi, 1);			/* corpses on level become fungi */
+	Bitfield(dun, 1);			/* level is the dun savana */
+	Bitfield(necro, 1);			/* corpses on level rise as undead */
 };
 
 typedef struct

@@ -2218,6 +2218,7 @@ use_weapon:
 				sum[i] = damageum(mon,mattk);
 			break;
 		case AT_CLAW:
+		case AT_LRCH: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
 			if (i==0 && uwep && !cantwield(youmonst.data)) goto use_weapon;
 #ifdef SEDUCE
 			/* succubi/incubi are humanoid, but their _second_
@@ -2228,6 +2229,7 @@ use_weapon:
 #endif
 		case AT_KICK:
 		case AT_BITE:
+		case AT_LNCK: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
 		case AT_STNG:
 		case AT_TUCH:
 		case AT_BUTT:
@@ -2258,7 +2260,7 @@ use_weapon:
 			    }
 			    if (mattk->aatyp == AT_KICK)
 				    You("kick %s.", mon_nam(mon));
-			    else if (mattk->aatyp == AT_BITE)
+			    else if (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK)
 				    You("bite %s.", mon_nam(mon));
 			    else if (mattk->aatyp == AT_STNG)
 				    You("sting %s.", mon_nam(mon));
@@ -2404,6 +2406,11 @@ uchar aatyp;
 
 	switch(ptr->mattk[i].adtyp) {
 
+	  case AD_BARB:
+		if(ptr == &mons[PM_RAZORVINE]) You("are hit by the sprining vines!");
+		else You("are hit by %s barbs!", s_suffix(mon_nam(mon)));
+		mdamageu(mon, tmp);
+	  break;
 	  case AD_ACID:
 	    if(mhit && rn2(2)) {
 		if (Blind || !flags.verbose) You("are splashed!");
@@ -2484,7 +2491,7 @@ uchar aatyp;
 		if (aatyp == AT_KICK) {
 		    obj = uarmf;
 		    if (!obj) break;
-		} else if (aatyp == AT_BITE || aatyp == AT_BUTT ||
+		} else if (aatyp == AT_BITE || aatyp == AT_LNCK || aatyp == AT_LRCH || aatyp == AT_BUTT ||
 			   (aatyp >= AT_STNG && aatyp < AT_WEAP)) {
 		    break;		/* no object involved */
 		}
