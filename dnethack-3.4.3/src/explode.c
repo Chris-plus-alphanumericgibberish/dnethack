@@ -85,7 +85,7 @@ int expltype;
 		case 7: str = "splash of acid";
 			adtyp = AD_ACID;
 			break;
-		case 8: str = "concusion";
+		case 8: str = "blast";
 			adtyp = AD_PHYS;
 			break;
 		case 9: str = "cloud of spores";
