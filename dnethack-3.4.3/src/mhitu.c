@@ -3254,6 +3254,29 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				return 3; // if a mi-go fires a mist projector, it can take no further actions that turn
 			}
 		break;
+	    case AD_LUCK:
+		if(!mtmp->mcan && canseemon(mtmp) && 
+			couldsee(mtmp->mx, mtmp->my) && 
+			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
+		    pline("%s glares ominously at you!", Monnam(mtmp));
+		    mtmp->mspec_used = mtmp->mspec_used + d(2,6);
+
+		    if (uwep && uwep->otyp == MIRROR && uwep->blessed) {
+			pline("%s sees its own glare in your mirror.",
+				Monnam(mtmp)); 
+			pline("%s is cancelled!", Monnam(mtmp));
+			mtmp->mcan = 1;
+			monflee(mtmp, 0, FALSE, TRUE);
+		    } else if((uwep && !uwep->cursed && confers_luck(uwep)) || 
+			    (stone_luck(TRUE) > 0 && rn2(4))) {
+			pline("Luckily, you are not affected.");
+		    } else {
+			You_feel("your luck running out.");
+			change_luck(-1);
+		    }
+		    stop_occupation();
+		}
+		break;
 	    case AD_SPOR:
 		/* release a spore if the player is nearby */
 		if (is_fern(mtmp->data) && !mtmp->mcan && distu(mtmp->mx, mtmp->my) <= 96 &&
