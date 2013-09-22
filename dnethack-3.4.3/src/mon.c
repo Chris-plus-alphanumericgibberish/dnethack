@@ -696,6 +696,17 @@ movemon()
 	cause problems, though....
     */
 
+	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+		if(is_weeping(mtmp->data)){
+			if(mtmp->mextra[1] && u.uevent.udemigod){
+				mtmp->mextra[1] = 0;
+				m_initgrp(mtmp, 0, 0, 10);
+			}
+		} else if(mtmp->data == &mons[PM_RAZORVINE] && !rn2(4) && !(monstermoves % 10) ){
+			makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		}
+	}
+	
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 		if(is_weeping(mtmp->data) && canseemon(mtmp)){
 			deltax = u.ux - mtmp->mx;

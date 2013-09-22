@@ -24,7 +24,6 @@ STATIC_DCL boolean FDECL(uncommon, (int));
 STATIC_DCL int FDECL(align_shift, (struct permonst *));
 #endif /* OVL0 */
 STATIC_DCL boolean FDECL(wrong_elem_type, (struct permonst *));
-STATIC_DCL void FDECL(m_initgrp,(struct monst *,int,int,int));
 STATIC_DCL void FDECL(m_initthrow,(struct monst *,int,int));
 STATIC_DCL void FDECL(m_initweap,(struct monst *));
 #ifdef OVL1
@@ -77,7 +76,7 @@ wrong_elem_type(ptr)
     return FALSE;
 }
 
-STATIC_OVL void
+void
 m_initgrp(mtmp, x, y, n)	/* make a group just like mtmp */
 register struct monst *mtmp;
 register int x, y, n;
@@ -2067,8 +2066,9 @@ register int	mmflags;
 			}
 		break;
 		case S_ANGEL:
-			if (anymon && is_weeping(mtmp->data) && u.uevent.udemigod){
-				m_initlgrp(mtmp, 0, 0);
+			if (anymon && is_weeping(mtmp->data)){
+				if(u.uevent.udemigod) m_initlgrp(mtmp, 0, 0);
+				else mtmp->mextra[1] = 1;
 			}
 		break;
 	    case S_GIANT:
