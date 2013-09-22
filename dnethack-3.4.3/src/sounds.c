@@ -1476,6 +1476,52 @@ int tx,ty;
 		}
 	}break;
 	case CHUPOCLOPS:{
+		// if(u.chupoclops < moves){
+			// struct obj *o = 0, *otmp;
+			// for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+				// if(is_chupodible(otmp)){
+					// o = otmp;
+			// break;
+				// }
+			// }
+			// if(o || IS_GRAVE(&levl[tx][ty]->typ)){ //Chupoclops requires that her seal be drawn around a humanoid corpse or grave.
+				// Your(".");
+				// pline(".");
+				// if(u.sealCounts < numSlots){
+					// pline("");
+					// pline("");
+					// u.sealsActive |= SEAL_CHUPOCLOPS;
+					// u.spirit[numSlots] = SEAL_CHUPOCLOPS;
+					// u.spiritT[numSlots] = moves + bindingPeriod;
+					// u.sealCounts++;
+				// }
+				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					// pline("");
+					// pline("");
+					// uwep->ovar1 |= SEAL_CHUPOCLOPS;
+					// if(!u.spiritTineA){
+						// u.spiritTineA = SEAL_CHUPOCLOPS;
+						// u.spiritTineTA= moves + bindingPeriod;
+					// }
+					// else{
+						// u.spiritTineB = SEAL_CHUPOCLOPS;
+						// u.spiritTineTB= moves + bindingPeriod;
+					// }
+				// }
+				// else{
+					// pline("");
+					// pline(".");
+				// }
+				// u.chupoclops = moves + bindingPeriod;
+				// if(o) useup(o);
+				// else{
+					// levl[tx][ty].typ = ROOM;
+					// digfarhole(TRUE,tx,ty);
+				// }
+			// }
+		// }
+	}break;
+	case DANTALION:{
 		// if(u.vestige < moves){
 			// if(){ //Spirit requires that his seal be drawn .
 				// Your(".");
@@ -1508,8 +1554,6 @@ int tx,ty;
 				// u.vestige = moves + bindingPeriod;
 			// }
 		// }
-	}break;
-	case DANTALION:{
 	}break;
 	case DUNSTAN:{
 	}break;

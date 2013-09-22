@@ -349,6 +349,7 @@ struct obj {
 				|| otmp->otyp == LANCE\
 				|| (OBJ_DESCR(objects[otmp->otyp]) != (char *)0 && !strncmp(OBJ_DESCR(objects[otmp->otyp]), "riding ", 7))\
 				)
+#define is_chupodible(otmp) (your_race(&mons[otmp->corpsenm]))
 
 /* misc */
 #define is_flimsy(otmp)		(objects[(otmp)->otyp].oc_material <= LEATHER)
