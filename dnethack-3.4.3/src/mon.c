@@ -696,17 +696,31 @@ movemon()
 	cause problems, though....
     */
 
+	/////////////////////////////////////////////////////
+	//Weeping angel handling////////////////////////////
+	///////////////////////////////////////////////////
+	/*
+	 * 1) Angels generated randomly prior to you becoming a demigod are generated as individuals. 
+	 *		Angels generated afterwards are generated as large groups.
+	 *		Check if any angels on current level were generated before you became a demigod, and create a large group if so.
+	 * 2) Angels move faster if there are more of them in your line of sight, and especially if they are widely separated.
+	 *		Calculate the minimum vission arc that covers all angels in view
+	 * 3) Once the current movement loop begins, scale the angel's movement by the value calculated in 2. Also, scale
+	 *		the angel's AC based on the value from 2, slower speed equals higher AC (Quantum Lock).
+	 */
+	//Weeping angel step 1
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
 		if(is_weeping(mtmp->data)){
 			if(mtmp->mextra[1] && u.uevent.udemigod){
-				mtmp->mextra[1] = 0;
+				mtmp->mextra[1] = 0; //Quantum Lock status will be reset below.
 				m_initgrp(mtmp, 0, 0, 10);
 			}
 		} else if(mtmp->data == &mons[PM_RAZORVINE] && !rn2(4) && !(monstermoves % 10) ){
-			makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT);
+			makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
 		}
 	}
 	
+	//Weeping angel step 2
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 		if(is_weeping(mtmp->data) && canseemon(mtmp)){
 			deltax = u.ux - mtmp->mx;
@@ -729,6 +743,8 @@ movemon()
 		}
 	}
 	arc = maxtheta - mintheta;
+	
+	//Current Movement Loop///////////////////////////////////////////////////
     for(mtmp = fmon; mtmp; mtmp = nmtmp) {
 	nmtmp = mtmp->nmon;
 	/* Find a monster that we have not treated yet.	 */
@@ -740,8 +756,18 @@ movemon()
 	mtmp->movement -= NORMAL_SPEED;
 	if (mtmp->movement >= NORMAL_SPEED)
 	    somebody_can_move = TRUE;
+	
+	//Weeping angel step 3
 	if(is_weeping(mtmp->data) && canseemon(mtmp)){
 		mtmp->mextra[0] +=  (long)(NORMAL_SPEED*arc/314);
+		if(!arc){
+			mtmp->mextra[1] &= 0x1L; //clear higher order bits, first bit is whether it should generate a swarm when you return
+			mtmp->mextra[1] |= 0x4L; //Quantum Locked
+		}
+		else if(arc < 314/2){
+			mtmp->mextra[1] &= 0x1L; //clear higher order bits, first bit is whether it should generate a swarm when you return
+			mtmp->mextra[1] |= 0x2L; //Partial Quantum Lock
+		}
 		m_respond(mtmp);
 		if(mtmp->mextra[0] >= NORMAL_SPEED*2) mtmp->mextra[0] -= NORMAL_SPEED*2;
 		else continue;

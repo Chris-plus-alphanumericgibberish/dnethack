@@ -349,6 +349,10 @@ register struct monst *mon;
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
+	else if(is_weeping(mon->data)){
+		if(mon->mextra[1] & 0x4L) base = -125; //Fully Quantum Locked
+		if(mon->mextra[1] & 0x2L) base = -20; //Partial Quantum Lock
+	}
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
 		if(uarmf) armac += ARM_BONUS(uarmf);
