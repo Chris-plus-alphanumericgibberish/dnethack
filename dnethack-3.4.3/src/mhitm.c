@@ -1038,7 +1038,7 @@ mdamagem(magr, mdef, mattk)
 		break;
 	    case AD_WEEP:
 	    case AD_LVLT:
-		if (!cancelled && tmp < mdef->mhp && !tele_restrict(mdef)) {
+		if (!cancelled && tmp < mdef->mhp) {
 		    char mdef_Monnam[BUFSZ];
 		    if (vis) Strcpy(mdef_Monnam, Monnam(mdef));
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
