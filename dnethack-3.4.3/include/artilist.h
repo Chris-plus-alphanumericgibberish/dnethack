@@ -71,7 +71,7 @@ A("Vorpal Blade",		LONG_SWORD,
 	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, /*Vorpal Blade also uses exploading dice (roll again if maximum number is rolled)*/
 	0,0,0),							 /*According to an article on 1d4Chan, the average of an exploading die is roughly that of a die one size larger*/
 									 /*So vorpal sword is effectively 2d10+2/2d14+2*/
-A("The Marauder's Map", SCR_MAGIC_MAPPING,
+A("The Marauder's Map", SCR_MAGIC_MAPPING, /* needs quote */
 	(SPFX_RESTR), 0, 0, NO_ATTK,	NO_DFNS,	NO_CARY,
 	OBJECT_DET,	A_CHAOTIC, PM_PIRATE, NON_PM, 2000L,
 	0,0,0),
@@ -134,7 +134,7 @@ A("Werebane",			SILVER_SABER, //needs quote
 	0, A_NONE, NON_PM, NON_PM, 1500L,					/*a few late game enemies */
 	(SPFX2_DEMIBANE|SPFX2_NOWERE),0,0),
 
-A("Giantslayer",		AXE, //needs quote
+A("Giantslayer",		AXE,
 	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, (M2_GIANT|M2_ROCKTHROW), /* deducts move from hit giants. */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,								/* also works vs a few late game enemies. */
 	0, A_NONE, NON_PM, NON_PM, 2000L, 
@@ -193,7 +193,7 @@ A("the Pen of the Void",	ATHAME,
 	0,0,0),
 
 #ifdef CONVICT
-A("Luck Blade",			SHORT_SWORD,
+A("Luck Blade",			SHORT_SWORD, //needs quote
 	(SPFX_RESTR|SPFX_INTEL), 0,0,
 	PHYS(1, 4),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
 	0,0,0 ),
@@ -318,8 +318,8 @@ A("The Arkenstone", DIAMOND,
 	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
 	0,SPFX3_LIGHT,0),
 
-A("The Silence Glaive",		GLAIVE,
-	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_DRLI), 0, 0, //needs quote
+A("The Silence Glaive",		GLAIVE, //needs quote
+	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_DRLI), 0, 0,
 	DRLI(1,1),	DRLI(0,0),	NO_CARY,
 	SATURN, A_NONE, NON_PM, NON_PM, 8000L, 
 	0,0,0),
