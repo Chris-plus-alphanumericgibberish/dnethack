@@ -592,6 +592,9 @@ E int NDECL(num_genocides);
 /* ### engrave.c ### */
 
 E int NDECL(pick_ward);
+E int NDECL(randHaluWard);
+E int NDECL(random_unknown_ward);
+E int FDECL(get_num_wards_added, (int, int));
 E char *FDECL(random_engraving, (char *));
 E int NDECL(random_haluIndex);
 E char *FDECL(fetchHaluWard, (int));
