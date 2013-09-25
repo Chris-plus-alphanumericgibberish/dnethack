@@ -566,6 +566,15 @@ random_haluIndex()
 	return rn2(SIZE(haluMesg));
 }
 
+int
+get_num_wards_added(ward,complete)
+int ward;
+int complete;
+{
+	return wardsAdded[ward][complete];
+}
+
+
 /* Partial rubouts for engraving characters. -3. */
 static const struct {
 	char		wipefrom;
@@ -596,6 +605,11 @@ fetchHaluWard(index)
 int index;
 {
 	return haluWard[index];
+}
+
+int
+randHaluWard(){
+	return rn2(SIZE(haluWard)-1)+1;
 }
 
 void
@@ -1165,7 +1179,7 @@ register int x,y;
 		  }
 		 }
 		 else{
-			pline("There is %s drawn here.", haluWard[rn2(SIZE(haluWard)-1)+1]);
+			pline("There is %s drawn here.", haluWard[randHaluWard()]);
 		 }
 		}
 	}
@@ -1533,7 +1547,7 @@ doengrave()
 					(void) random_engraving(buf);
 			    }
 				if(oep->ward_id){
-					randWard = rn2(10) ? 1 : rn2(10) ? rn2(SIZE(haluWard)-1)+1 : 0;
+					randWard = rn2(10) ? 1 : rn2(10) ? randHaluWard() : 0;
 					if(!randWard){
 						randWard = rn2(NUMBER_OF_WARDS)+1;
 						randHalu = FALSE;
@@ -2295,7 +2309,7 @@ doward()
 					(void) random_engraving(buf);
 			    }
 				if(oep->ward_id){
-					randWard = rn2(10) ? 1 : rn2(10) ? rn2(SIZE(haluWard)-1)+1 : 0;
+					randWard = rn2(10) ? 1 : rn2(10) ? randHaluWard() : 0;
 					if(!randWard){
 						randWard = rn2(NUMBER_OF_WARDS)+1;
 						randHalu = FALSE;
@@ -2627,7 +2641,7 @@ doward()
 			}
 	    }
 		else if(c == 'y'){
-			int newWards = wardsAdded[oep->ward_id][oep->complete_wards];
+			int newWards = get_num_wards_added(oep->ward_id, oep->complete_wards);
 			int increment;
 			if(oep->complete_wards >= 7 || newWards < 1){
 				pline("The warding sign can be reinforced no further!");
@@ -2825,16 +2839,16 @@ doward()
 	    }
 	}
 	else if (oep && oep->ward_id){
-		oep->complete_wards += wardsAdded[oep->ward_id][oep->complete_wards];
+		oep->complete_wards += get_num_wards_added(oep->ward_id, oep->complete_wards);
 	}
 	else if(oep){
 		if(!Hallucination || !rn2(4)){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-			oep->complete_wards = wardsAdded[oep->ward_id][0];
+			oep->complete_wards = get_num_wards_added(oep->ward_id, 0);
 		}
 		else{
-			oep->ward_id = rn2(4) ? 1 : rn2(100) ? rn2(SIZE(haluWard)-1)+1 : 0;
+			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
 			if(!oep->ward_id){
 				oep->ward_id = rn2(NUMBER_OF_WARDS)+1;
 				oep->halu_ward = FALSE;
@@ -2850,10 +2864,10 @@ doward()
 		if(!Hallucination){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-			oep->complete_wards = wardsAdded[oep->ward_id][0];
+			oep->complete_wards = get_num_wards_added(oep->ward_id, 0);
 		}
 		else{
-			oep->ward_id = rn2(4) ? 1 : rn2(100) ? rn2(SIZE(haluWard)-1)+1 : 0;
+			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
 			if(!oep->ward_id){
 				oep->ward_id = rn2(NUMBER_OF_WARDS)+1;
 				oep->halu_ward = FALSE;
@@ -2873,6 +2887,65 @@ doward()
 	}
 
 	return(1);
+}
+
+int
+random_unknown_ward()
+{
+	int options[FIRST_RUNE];
+	int num_unknown=0;
+	
+	if(~u.wardsknown & WARD_HEPTAGRAM){
+		options[num_unknown++] = HEPTAGRAM;
+	}
+	if(~u.wardsknown & WARD_GORGONEION){
+		options[num_unknown++] = GORGONEION;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_ACHERON){
+		options[num_unknown++] = CIRCLE_OF_ACHERON;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_PENTAGRAM){
+		options[num_unknown++] = PENTAGRAM;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_HEXAGRAM){
+		options[num_unknown++] = HEXAGRAM;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_HAMSA){
+		options[num_unknown++] = HAMSA;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_ELDER_SIGN){
+		options[num_unknown++] = ELDER_SIGN;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_EYE){
+		options[num_unknown++] = ELDER_ELEMENTAL_EYE;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_QUEEN){
+		options[num_unknown++] = SIGN_OF_THE_SCION_QUEEN;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_CAT_LORD){
+		options[num_unknown++] = CARTOUCHE_OF_THE_CAT_LORD;	/* must be non-zero */
+	}
+	if(~u.wardsknown & WARD_GARUDA){
+		options[num_unknown++] = WINGS_OF_GARUDA;	/* must be non-zero */
+	}
+	if(!rn2(10) || !num_unknown){ /*ie, if the character knows all non-legendary wards*/
+		if(~u.wardsknown & WARD_CTHUGHA){
+			options[num_unknown++] = SIGIL_OF_CTHUGHA;	/* must be non-zero */
+		}
+		if(~u.wardsknown & WARD_ITHAQUA){
+			options[num_unknown++] = BRAND_OF_ITHAQUA;	/* must be non-zero */
+		}
+		if(~u.wardsknown & WARD_KRAKAL){
+			options[num_unknown++] = TRACERY_OF_KRAKAL;	/* must be non-zero */
+		}
+		if(~u.wardsknown & WARD_YELLOW){
+			options[num_unknown++] = YELLOW_SIGN;	/* must be non-zero */
+		}
+	}
+	if(num_unknown){
+		return options[rn2(num_unknown)];
+	}
+	else return -1;
 }
 
 int
@@ -3340,7 +3413,7 @@ doseal()
 					(void) random_engraving(buf);
 			    }
 				if(oep->ward_id){
-					randWard = rn2(10) ? 1 : rn2(10) ? rn2(SIZE(haluWard)-1)+1 : 0;
+					randWard = rn2(10) ? 1 : rn2(10) ? randHaluWard() : 0;
 					if(!randWard){
 						randWard = rn2(NUMBER_OF_WARDS)+1;
 						randHalu = FALSE;
@@ -3826,7 +3899,7 @@ doseal()
 			oep->complete_wards = 1;
 		}
 		else{
-			oep->ward_id = rn2(4) ? 1 : rn2(100) ? rn2(SIZE(haluWard)-1)+1 : 0;
+			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
 			if(!oep->ward_id){
 				oep->ward_id = rn2(NUMBER_OF_WARDS)+1;
 				oep->halu_ward = FALSE;
@@ -3845,7 +3918,7 @@ doseal()
 			oep->complete_wards = 1;
 		}
 		else{
-			oep->ward_id = rn2(4) ? 1 : rn2(100) ? rn2(SIZE(haluWard)-1)+1 : 0;
+			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
 			if(!oep->ward_id){
 				oep->ward_id = rn2(NUMBER_OF_WARDS)+1;
 				oep->halu_ward = FALSE;

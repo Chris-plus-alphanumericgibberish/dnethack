@@ -1498,8 +1498,24 @@ register struct obj	*sobj;
 		break;
 	case SCR_WARD:{
 		//Make sure that engraved messages on the seafloor are read correctly.
-		//Confused: Scare adjacent monsters.
-		//Hallucination: Scribe hallucinatory ward
+		if(confused && !Hallucination){
+		register struct monst *mtmp;
+			//Scare nearby monsters.
+			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+				if (DEADMONSTER(mtmp)) continue;
+				if(distu(mtmp->mx,mtmp->my) <= 2 ) {
+					if(sobj->cursed) {
+						mtmp->mflee = mtmp->mfrozen = mtmp->msleeping = 0;
+						mtmp->mcanmove = 1;
+					} else if (! resist(mtmp, sobj->oclass, 0, NOTELL)){
+						if (rn2(7))
+							monflee(mtmp, rnd(10), TRUE, TRUE);
+						else
+							monflee(mtmp, rnd(100), TRUE, TRUE);
+					}
+				}
+			}
+		}
 		struct engr *engrHere = engr_at(u.ux,u.uy);
 		if(is_lava(u.ux, u.uy)){
 			pline("The lava shifts and flows beneath you.");
@@ -1520,6 +1536,14 @@ register struct obj	*sobj;
 		make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
 		
 		engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
+		if(Hallucination){
+			//Scribe hallucinatory ward
+			engrHere->halu_ward = TRUE;
+			engrHere->ward_type = ENGRAVE;
+			engrHere->ward_id = randHaluWard();
+	break;
+		}
+		else{
 		engrHere->ward_id = sobj->ovar1;
 		if(sobj->cursed){
 			if(is_pool(u.ux, u.uy)){
@@ -1528,23 +1552,32 @@ register struct obj	*sobj;
 			}
 			engrHere->ward_type = ENGR_BLOOD;
 		} else engrHere->ward_type = ENGRAVE;
-		engrHere->complete_wards = sobj->blessed ? wardMax[sobj->ovar1] : 1;
+			engrHere->complete_wards = sobj->blessed ? wardMax[sobj->ovar1] : get_num_wards_added(engrHere->ward_id,0);
 		if( !(u.wardsknown & get_wardID(sobj->ovar1)) ){
 			You("have learned a new warding sign!");
 			u.wardsknown |= get_wardID(sobj->ovar1);
 		}
+		}
 	break;}
 	case SCR_WARDING:{
-		//make it so choosing what's already there reinforces.
-		//Brilliant fire burns a %X ward into the %surface
-		//Cursed: A ripple of dark energy spreads out across the %surface
 		//Confused: Scribe random ward that you DON'T know.
 		//Hallucination: A ripple of %color energy.... Changes all wards to hallucinatory random wards.
+		if(sobj->cursed){
+			//Cursed: Destroy all wards on the level
+			
+	break;
+		}
+		else if(Hallucination){
+			//Convert all wards to random wards
+			
+	break;
+		}
 		struct engr *engrHere = engr_at(u.ux,u.uy);
-		int wardNum = pick_ward();
-		pline("%d",wardNum);
+		int wardNum;
+		if(!confused) wardNum = pick_ward();
+		else wardNum = random_unknown_ward();
+//		pline("%d",wardNum);
 		known = TRUE;
-		if(!wardNum)
 	break;
 		if(is_lava(u.ux, u.uy)){
 			pline("Brilliant fire dances over the lava for a moment.");
@@ -1557,15 +1590,29 @@ register struct obj	*sobj;
 		}
 		pline("Brilliant fire plays over the %s, burning a %s ward into it.", 
 			surface(u.ux,u.uy),
-			wardDecode[wardNum],
+			wardNum != -1 ? wardDecode[wardNum] : "Cerulean Sign",
 			surface(u.ux,u.uy)
 		);
 		known = TRUE;
-		if(!engrHere) make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
+		if(!engrHere){
+			make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
 		engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
+		}
+		
+		if(wardNum == -1){ /*Confused reading of scroll with no unknown wards remaining. Engrave Cerulean Sign, which can't be learned*/
+			engrHere->halu_ward = TRUE;
+			engrHere->ward_id = CERULEAN_SIGN;
+			engrHere->ward_type = BURN;
+			engrHere->complete_wards = 1;
+		}
+		else if(engrHere->ward_id != wardNum){
 		engrHere->ward_id = wardNum;
 		engrHere->ward_type = BURN;
-		engrHere->complete_wards = sobj->blessed ? wardMax[wardNum] : 1;
+			engrHere->complete_wards = sobj->blessed ? wardMax[wardNum] : get_num_wards_added(engrHere->ward_id,0);
+		}
+		else{
+			engrHere->complete_wards = sobj->blessed ? wardMax[wardNum] : get_num_wards_added(engrHere->ward_id, engrHere->complete_wards);
+		}
 	break;}
 	case SCR_STINKING_CLOUD: {
 	        coord cc;
