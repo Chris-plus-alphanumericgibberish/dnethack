@@ -3889,14 +3889,14 @@ struct monst *mon;
 		if(ACURR(A_CHA)+rn1(4,3) < 24){
 			pline("Before you can get up, %s slips a knife between your ribs!",
 			noit_Monnam(mon));
-			if(Half_physical_damage) losehp(rn1(10, 6), "knife to the ribs", KILLED_BY);
-			else losehp(rn1(20, 6), "knife to the ribs", KILLED_BY);
+			if(Half_physical_damage) losehp(rn1(5, 6), "knife to the ribs", KILLED_BY);
+			else losehp(rn1(10, 6), "knife to the ribs", KILLED_BY);
 		}
 		else{
 			pline("As you get up, %s tries to knife you, but is too distracted to do it properly!",
 			noit_Monnam(mon));
-			if(Half_physical_damage) losehp(rn1(4, 6), "knife to the ribs", KILLED_BY);
-			else losehp(rn1(8, 6), "knife to the ribs", KILLED_BY);
+			if(Half_physical_damage) losehp(rn1(1, 6), "knife to the ribs", KILLED_BY);
+			else losehp(rn1(2, 6), "knife to the ribs", KILLED_BY);
 		}
 		mon->mspec_used = rnd(13)+3;
 		return 0;
@@ -4062,14 +4062,14 @@ struct monst *mon;
 		if(ACURR(A_CHA)+d(4,3) < 24){
 			pline("Before you can get up, %s slips a knife between your ribs!",
 			noit_Monnam(mon));
-			if(Half_physical_damage) losehp(d(10, 6), "knife to the ribs", KILLED_BY);
-			else losehp(d(20, 6), "knife to the ribs", KILLED_BY);
+			if(Half_physical_damage) losehp(d(5, 6), "knife to the ribs", KILLED_BY);
+			else losehp(d(10, 6), "knife to the ribs", KILLED_BY);
 		}
 		else{
 			pline("As you get up, %s tries to knife you, but is too distracted to do it properly!",
 			noit_Monnam(mon));
-			if(Half_physical_damage) losehp(d(4, 6), "knife to the ribs", KILLED_BY);
-			else losehp(d(8, 6), "knife to the ribs", KILLED_BY);
+			if(Half_physical_damage) losehp(d(1, 6), "knife to the ribs", KILLED_BY);
+			else losehp(d(2, 6), "knife to the ribs", KILLED_BY);
 		}
 		mon->mspec_used = rnd(13)+3;
 		return 0;
@@ -4565,6 +4565,7 @@ register struct monst *mon;
 					optr = mksobj(IRON_BAR, TRUE, FALSE);		
 					curse(optr);
 					optr->spe = -6;
+					verbalize("This will keep you out of trouble.");
 					(void) hold_another_object(optr, u.uswallow ?
 							   "Fortunately, you're out of reach! %s away." :
 							   "Fortunately, you can't hold anything more! %s away.",
@@ -4572,7 +4573,6 @@ register struct monst *mon;
 								 Is_airlevel(&u.uz) || u.uinwater ?
 								   "slip" : "drop")),
 							   (const char *)0);
-					verbalize("This will keep you out of trouble.");
 					if(carried(optr)){
 						setuwep(optr);
 					}
@@ -4894,7 +4894,7 @@ register struct monst *mon;
 		return 0;
 	}
 
-	if (rn2(66) < 2*ACURR(A_WIS) - ACURR(A_INT) || helpless) {
+	if (rn2(66) > 2*ACURR(A_WIS) - ACURR(A_INT) || helpless) {
 		int lifesaved = 0;
 		int wdmg = (int)(d(1,10)) + 1;
 		palemayberem(uarmc, cloak_simple_name(uarmc), helpless);
