@@ -1578,6 +1578,7 @@ register struct obj	*sobj;
 		else wardNum = random_unknown_ward();
 //		pline("%d",wardNum);
 		known = TRUE;
+		if(!wardNum) /*Player cancelled prompt*/
 	break;
 		if(is_lava(u.ux, u.uy)){
 			pline("Brilliant fire dances over the lava for a moment.");
