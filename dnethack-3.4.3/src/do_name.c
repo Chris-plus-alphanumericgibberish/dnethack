@@ -1134,7 +1134,7 @@ static NEARDATA const char * const hcolors[] = {
 	"striped", "spiral", "swirly", "plaid", "checkered", "argyle",
 	"paisley", "blotchy", "guernsey-spotted", "polka-dotted",
 	"square", "round", "triangular",
-	"cabernet", "sangria", "fuchsia", "wisteria",
+	"cabernet", "sangria", "fuchsia", "wisteria", "mauve", "puce",
 	"lemon-lime", "strawberry-banana", "peppermint",
 	"romantic", "incandescent"
 };

@@ -1564,11 +1564,13 @@ register struct obj	*sobj;
 		//Hallucination: A ripple of %color energy.... Changes all wards to hallucinatory random wards.
 		if(sobj->cursed){
 			//Cursed: Destroy all wards on the level
+			pline("A ripple of black fire spreads out over the %s.", surface(u.ux,u.uy));
 			blank_all_wards();
 	break;
 		}
 		else if(Hallucination){
 			//Convert all wards to random wards
+			pline("A ripple of %s fire spreads out over the %s.", hcolor(0), surface(u.ux,u.uy));
 			randomize_all_wards();
 	break;
 		}
@@ -1612,7 +1614,7 @@ register struct obj	*sobj;
 			engrHere->complete_wards = sobj->blessed ? wardMax[wardNum] : get_num_wards_added(engrHere->ward_id,0);
 		}
 		else{
-			engrHere->complete_wards = sobj->blessed ? wardMax[wardNum] : get_num_wards_added(engrHere->ward_id, engrHere->complete_wards);
+			engrHere->complete_wards += sobj->blessed ? wardMax[wardNum] : get_num_wards_added(engrHere->ward_id, engrHere->complete_wards);
 		}
 	break;}
 	case SCR_STINKING_CLOUD: {
