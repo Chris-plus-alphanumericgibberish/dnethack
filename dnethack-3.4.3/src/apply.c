@@ -116,10 +116,53 @@ do_present_ring(obj)
 	} else if (u.dz) {
 		You("display the ring's engraving to the %s.",
 			(u.dz > 0) ? surface(u.ux,u.uy) : ceiling(u.ux,u.uy));
+		if(u.dz < 0){
 		pline("Nothing happens.");
 		exercise(A_WIS, FALSE);
 			return 0;
-
+		}
+		if(is_lava(u.ux, u.uy) || flags.beginner || !(u.ualign.type == A_CHAOTIC || Hallucination) ){
+			pline("Nothing happens.");
+			if(u.ualign.type == A_LAWFUL) exercise(A_WIS, FALSE);
+			return 0;
+		}else{
+			You_feel("as though the engraving on the ring could fall right off!");
+			if(yn("Give it a push?") == 'n'){
+				pline("Nothing happens.");
+				return 0;
+			}
+			else{
+				struct engr *engrHere = engr_at(u.ux,u.uy);
+				if(u.ualign.type == A_LAWFUL) exercise(A_WIS, FALSE);
+				if (IS_ALTAR(levl[u.ux][u.uy].typ)) {
+					altar_wrath(u.ux, u.uy);
+					return 0;
+				}
+				if(!engrHere){
+					make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
+					engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
+				}
+				if(obj->ohaluengr == engrHere->halu_ward && obj->ovar1 == engrHere->ward_id){
+					pline("the engraving tumbles off the ring to join it's fellows.");
+					engrHere->complete_wards += engrHere->halu_ward ? 0 : get_num_wards_added(engrHere->ward_id,engrHere->complete_wards);
+					obj->ohaluengr = FALSE;
+					obj->ovar1 = FALSE;
+				}
+				else{
+					pline("the engraving tumbles off the ring%s.", engrHere->ward_id ? "and covers the existing drawing" : "");
+					engrHere->ward_id = obj->ovar1;
+					engrHere->halu_ward = obj->ohaluengr;
+					engrHere->complete_wards = engrHere->halu_ward ? 1 : get_num_wards_added(engrHere->ward_id,0);
+					engrHere->ward_type = obj->blessed ? BURN : obj->cursed ? DUST : ENGRAVE;
+					if( !(u.wardsknown & get_wardID(engrHere->ward_id)) ){
+						You("have learned a new warding sign!");
+						u.wardsknown |= get_wardID(engrHere->ward_id);
+					}
+					obj->ohaluengr = FALSE;
+					obj->ovar1 = FALSE;
+				}
+			}
+		}
 	} else if (!u.dx && !u.dy) {
 		if(!(obj->ohaluengr)){
 			pline("A %s is engraved on the ring.",wardDecode[obj->ovar1]);
