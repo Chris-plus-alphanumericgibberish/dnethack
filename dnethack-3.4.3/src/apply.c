@@ -63,9 +63,9 @@ use_camera(obj)
 
 	if(Underwater) {
 		pline("Using your camera underwater would void the warranty.");
-		return(0);
+		return 0;
 	}
-	if(!getdir((char *)0)) return(0);
+	if(!getdir((char *)0)) return 0;
 
 	if (obj->spe <= 0) {
 		pline("%s", nothing_happens);
@@ -100,11 +100,11 @@ do_present_ring(obj)
 {
 	register struct monst *mtmp;
 
-	if(!getdir((char *)0)) return(0);
+	if(!getdir((char *)0)) return 0;
 	
 	if(obj->ovar1 == 0 && !(obj->ohaluengr)){
 		exercise(A_WIS, FALSE);
-		return(0);
+		return 0;
 	}
 	
 	if (u.uswallow) {
@@ -112,13 +112,14 @@ do_present_ring(obj)
 		    mbodypart(u.ustuck, STOMACH));
 		pline("Nothing happens.");
 		exercise(A_WIS, FALSE);
-		return(0);
+		return 0;
 	} else if (u.dz) {
 		You("display the ring's engraving to the %s.",
 			(u.dz > 0) ? surface(u.ux,u.uy) : ceiling(u.ux,u.uy));
 		pline("Nothing happens.");
 		exercise(A_WIS, FALSE);
-		return(0);
+			return 0;
+
 	} else if (!u.dx && !u.dy) {
 		if(!(obj->ohaluengr)){
 			pline("A %s is engraved on the ring.",wardDecode[obj->ovar1]);
@@ -134,7 +135,7 @@ do_present_ring(obj)
 	} else if (isok(u.ux+u.dx, u.uy+u.dy) && (mtmp = m_at(u.ux+u.dx, u.uy+u.dy)) != 0) {
 		You("display the ring's engraving to %s.", mon_nam(mtmp));
 		if (obj->cursed && rn2(3)) {
-			return(0);
+			return 0;
 		}
 		if(!(obj->ohaluengr) || obj->ovar1 == CERULEAN_SIGN){
 			if(
@@ -2508,7 +2509,7 @@ use_pole (obj)
 	    return (0);
 	}
 	if (obj != uwep) {
-	    if (!wield_tool(obj, "swing")) return(0);
+	    if (!wield_tool(obj, "swing")) return 0;
 	    else res = 1;
 	}
      /* assert(obj == uwep); */
@@ -2597,7 +2598,7 @@ struct obj *obj;
 	}
 	obj_extract_self(obj);
 	delobj(obj);
-	return(0);
+	return 0;
 }
 
 STATIC_OVL int
@@ -2615,7 +2616,7 @@ use_grapple (obj)
 	    return (0);
 	}
 	if (obj != uwep) {
-	    if (!wield_tool(obj, "cast")) return(0);
+	    if (!wield_tool(obj, "cast")) return 0;
 	    else res = 1;
 	}
      /* assert(obj == uwep); */
