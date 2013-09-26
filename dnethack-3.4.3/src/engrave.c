@@ -2928,7 +2928,7 @@ random_unknown_ward()
 	if(~u.wardsknown & WARD_GARUDA){
 		options[num_unknown++] = WINGS_OF_GARUDA;	/* must be non-zero */
 	}
-	if(!rn2(10) || !num_unknown){ /*ie, if the character knows all non-legendary wards*/
+	if(!rn2(100) || (!num_unknown && !rn2(10))){ /*!num_unknown: ie, if the character knows all non-legendary wards*/
 		if(~u.wardsknown & WARD_CTHUGHA){
 			options[num_unknown++] = SIGIL_OF_CTHUGHA;	/* must be non-zero */
 		}
@@ -4411,6 +4411,31 @@ register struct engr *ep;
 	}
 }
 
+void
+blank_all_wards()
+{
+	struct engr *ep = head_engr, *np;
+	
+	while(ep) {
+		np = ep->nxt_engr;
+		del_ward(ep);
+		ep = np;
+	}
+}
+
+void
+randomize_all_wards()
+{
+	struct engr *ep = head_engr;
+	
+	while(ep) {
+		if(ep->ward_id){
+			ep->halu_ward = TRUE;
+			ep->ward_id = random_haluIndex();
+		}
+		ep = ep->nxt_engr;
+	}
+}
 /* randomly relocate an engraving */
 void
 rloc_engr(ep)

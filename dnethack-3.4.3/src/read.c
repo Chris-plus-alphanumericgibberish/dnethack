@@ -1564,12 +1564,12 @@ register struct obj	*sobj;
 		//Hallucination: A ripple of %color energy.... Changes all wards to hallucinatory random wards.
 		if(sobj->cursed){
 			//Cursed: Destroy all wards on the level
-			
+			blank_all_wards();
 	break;
 		}
 		else if(Hallucination){
 			//Convert all wards to random wards
-			
+			randomize_all_wards();
 	break;
 		}
 		struct engr *engrHere = engr_at(u.ux,u.uy);
