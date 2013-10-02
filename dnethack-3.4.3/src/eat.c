@@ -1451,6 +1451,15 @@ struct obj *obj;
 	return(0);
 }
 
+static char *eatrat[] = { 
+	"This tastes delicious!",
+	"This tastes quite good!",
+	"This tastes quite good (could use some ketchup, though).",
+	"This tastes ... good (but really needs some ketchup).",
+	"...You'd pay double for ketchup.",
+	"...What you wouldn't give for some ketchup....",
+};
+
 STATIC_OVL int
 eatcorpse(otmp)		/* called when a corpse is selected as food */
 	register struct obj *otmp;
@@ -1551,6 +1560,14 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	    }
 		    
 	    if (!retcode) consume_oeaten(otmp, 2);	/* oeaten >>= 2 */
+	} else if(is_rat(&mons[mnum]) && Race_if(PM_DWARF)){
+		if(u.uconduct.ratseaten<SIZE(eatrat)) pline("%s", eatrat[u.uconduct.ratseaten++]);
+		else{
+			u.uconduct.ratseaten++;
+			pline("%s", eatrat[SIZE(eatrat)-1]);
+		}
+	} else if(mnum == PM_LONG_WORM){
+		pline("This tastes spicy!");
 	} else {
 	    pline("%s%s %s!",
 		  !uniq ? "This " : !type_is_pname(&mons[mnum]) ? "The " : "",
