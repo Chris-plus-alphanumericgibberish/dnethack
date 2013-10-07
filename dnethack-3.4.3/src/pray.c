@@ -1137,7 +1137,7 @@ consume_offering(otmp)
 register struct obj *otmp;
 {
     if (Hallucination)
-	switch (rn2(9)) {
+	switch (rn2(22)) {
 	    case 0:
 		Your("sacrifice sprouts wings and a propeller and roars away!");
 		break;
@@ -1163,6 +1163,46 @@ register struct obj *otmp;
 		break;
 		case 8:
 		godvoice(rn2(3)-1, "Oh, gross! Honey, the pets left another dead critter on the doorstep!");
+		break;
+		case 9:
+		Your("sacrifice is consumed in a flash!");
+		break;
+		case 10:
+		Your("sacrifice is consumed by the altar!");
+		break;
+		case 11:
+		You("consume the sacrifice!");
+		break;
+		case 12:
+		Your("sacrifice is rejected!");
+		break;
+		case 13:
+		Your("sacrifice is dejected!");
+		break;
+		case 14:
+		godvoice(rn2(3)-1, "This better be kosher!");
+		break;
+		case 15:
+		Your("sacrifice is consumed in a lash of fight!");
+		break;
+		case 16:
+		Your("sacrifice is lame!");
+		break;
+		case 17:
+		You("are consumed in a %s!",
+	      u.ualign.type != A_LAWFUL ? "flash of light" : "burst of flame");
+    	break;
+	    case 18:
+		Your("sacrifice is consumed with jealousy!");
+		break;
+	    case 19:
+		Your("sacrifice is consumed with embarrassment!");
+		break;
+	    case 20:
+		Your("sacrifice is consumed with self-hate!");
+		break;
+	    case 21:
+		Your("sacrifice was stolen by fairies!");
 		break;
 	}
     else if (Blind && u.ualign.type == A_LAWFUL)
@@ -1854,12 +1894,38 @@ u_gname()  /* returns the name of the player's deity */
     return align_gname(u.ualign.type);
 }
 
+const char * const hallu_gods[] = {
+	"goodness",
+	
+	"Armok",
+	"Nyarlathotep",
+	
+	"the universe",
+	"Capitalism",
+	"Communism",
+	"something",
+	"the U.N.O.",
+	"the Flying Spaghetti Monster",
+	"the Invisible Pink Unicorn",
+	"last thursday",
+	
+	"the gnome with the wand of death",
+	"the DevTeam",
+	"Dion Nicolaas",
+	"marvin",
+	"Dudley",
+	"the RNG"
+};
+
 const char *
 align_gname(alignment)
 aligntyp alignment;
 {
     const char *gnam;
 
+	if (Hallucination) {
+		return hallu_gods[rn2(SIZE(hallu_gods))];
+	}
     switch (alignment) {
      case A_NONE:
 		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
