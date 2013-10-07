@@ -535,7 +535,8 @@ static const struct def_skill Skill_T[] = {
     { P_BOW, P_BASIC },			{ P_SLING, P_BASIC },
     { P_CROSSBOW, P_BASIC },		{ P_DART, P_EXPERT },
     { P_SHURIKEN, P_BASIC },		{ P_BOOMERANG, P_BASIC },
-    { P_WHIP, P_BASIC },		{ P_UNICORN_HORN, P_SKILLED },
+    { P_WHIP, P_BASIC },		{ P_HARVEST, P_BASIC },
+	{ P_UNICORN_HORN, P_SKILLED },
     { P_DIVINATION_SPELL, P_BASIC },	{ P_ENCHANTMENT_SPELL, P_BASIC },
     { P_ESCAPE_SPELL, P_SKILLED },
 #ifdef STEED

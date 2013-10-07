@@ -25,6 +25,7 @@
 #define PN_CLERIC_SPELL			(-12)
 #define PN_ESCAPE_SPELL			(-13)
 #define PN_MATTER_SPELL			(-14)
+#define PN_HARVEST			(-15)
 
 STATIC_DCL void FDECL(give_may_advance_msg, (int));
 
@@ -46,7 +47,8 @@ STATIC_VAR NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
 	PN_HAMMER,        QUARTERSTAFF,   PN_POLEARMS,  SPEAR,
 	JAVELIN,          TRIDENT,        LANCE,        BOW,
 	SLING,            CROSSBOW,       DART,
-	SHURIKEN,         BOOMERANG,      PN_WHIP,      UNICORN_HORN,
+	SHURIKEN,         BOOMERANG,      PN_WHIP,      PN_HARVEST,
+	UNICORN_HORN,
 	PN_ATTACK_SPELL,     PN_HEALING_SPELL,
 	PN_DIVINATION_SPELL, PN_ENCHANTMENT_SPELL,
 	PN_CLERIC_SPELL,     PN_ESCAPE_SPELL,
@@ -74,6 +76,7 @@ STATIC_VAR NEARDATA const char * const odd_skill_names[] = {
     "clerical spells",
     "escape spells",
     "matter spells",
+	"farm implements",
 };
 /* indexed vis `is_martial() */
 STATIC_VAR NEARDATA const char * const barehands_or_martial[] = {
@@ -146,6 +149,9 @@ struct monst *mon;
 
 	if (is_spear(otmp) &&
 	   index(kebabable, ptr->mlet)) tmp += 2;
+
+	if (is_farm(otmp) &&
+	    ptr->mlet == S_PLANT) tmp += 6;
 
 	/* trident is highly effective against swimmers */
 	if (otmp->otyp == TRIDENT && is_swimmer(ptr)) {
@@ -228,6 +234,7 @@ struct monst *mon;
 
 		case FLAIL:
 		case RANSEUR:
+		case SCYTHE:
 		case VOULGE:		tmp += rnd(4); break;
 
 		case ACID_VENOM:
@@ -311,6 +318,7 @@ struct monst *mon;
 	    }
 	}
 
+	if(is_farm(otmp) && ptr->mlet == S_PLANT) tmp *= 2;
 /*	Put weapon vs. monster type damage bonuses in below:	*/
 	if (Is_weapon || otmp->oclass == GEM_CLASS ||
 		otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS) {

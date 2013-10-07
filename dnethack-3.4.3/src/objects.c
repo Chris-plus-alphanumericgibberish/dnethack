@@ -121,25 +121,28 @@ WEAPON("trident", (char *)0,
 
 /* blades */
 WEAPON("dagger", (char *)0,
-	1, 1, 0, 30, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
+	1, 1, 0, 22, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
 WEAPON("elven dagger", "runed dagger",
-	0, 1, 0, 10, 10,  4,  5,  3, 4, P,   P_DAGGER, WOOD, HI_WOOD),
+	0, 1, 0,  7, 10,  4,  5,  3, 4, P,   P_DAGGER, WOOD, HI_WOOD),
 WEAPON("orcish dagger", "crude dagger",
-	0, 1, 0, 12, 10,  5,  3,  5, 1, P,   P_DAGGER, IRON, CLR_BLACK),
+	0, 1, 0,  9, 10,  5,  3,  5, 1, P,   P_DAGGER, IRON, CLR_BLACK),
 WEAPON("silver dagger", (char *)0,
-	1, 1, 0,  3, 12, 40,  4,  3, 2, P,   P_DAGGER, SILVER, HI_SILVER),
+	1, 1, 0,  2, 12, 40,  4,  3, 2, P,   P_DAGGER, SILVER, HI_SILVER),
 WEAPON("athame", (char *)0,
 	1, 1, 0,  0, 10,  4,  4,  4, 2, S,   P_DAGGER, IRON, HI_METAL),
 WEAPON("scalpel", (char *)0,
 	1, 1, 0,  0,  5,  6,  3,  1, 3, S,   P_KNIFE, METAL, HI_METAL),
 WEAPON("knife", (char *)0,
-	1, 1, 0, 20,  5,  4,  3,  2, 0, P|S, P_KNIFE, IRON, HI_METAL),
+	1, 1, 0, 14,  5,  4,  3,  2, 2, P|S, P_KNIFE, IRON, HI_METAL),
 WEAPON("stiletto", (char *)0,
-	1, 1, 0,  5,  5,  4,  6,  2, 1, P|S, P_KNIFE, IRON, HI_METAL),
+	1, 1, 0,  4,  5,  4,  6,  2, 1, P|S, P_KNIFE, IRON, HI_METAL),
 WEAPON("worm tooth", (char *)0,
 	1, 0, 0,  0, 20,  2,  2,  2, 0, 0,   P_KNIFE, 0, CLR_WHITE),
 WEAPON("crysknife", (char *)0,
 	1, 0, 0,  0, 20,100, 10, 10, 3, P,   P_KNIFE, MINERAL, CLR_WHITE),
+
+WEAPON("sickle", (char *)0,
+	1, 1, 0, 22, 20,  4,  4,  1, -2, S,   P_HARVEST, IRON, HI_METAL),
 
 WEAPON("axe", (char *)0,
 	1, 0, 0, 40, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
@@ -208,23 +211,26 @@ WEAPON("voulge", "pole cleaver",
 	0, 0, 1,  4,125,  5,  4,  4, 0, S,   P_POLEARMS, IRON, HI_METAL),
 						/* +d4 both */
 WEAPON("dwarvish mattock", "broad pick",
-	0, 0, 1, 13,120, 50, 12,  8,-1, B,   P_PICK_AXE, IRON, HI_METAL),
+	0, 0, 1, 13,120, 50, 12,  8,-1, P|B,   P_PICK_AXE, IRON, HI_METAL),
 
 /* curved/hooked */
 WEAPON("fauchard", "pole sickle",
-	0, 0, 1,  6, 60,  5,  6,  8, 0, P|S, P_POLEARMS, IRON, HI_METAL),
+	0, 0, 1,  5, 60,  5,  6,  8, 0, P|S, P_POLEARMS, IRON, HI_METAL),
 WEAPON("guisarme", "pruning hook",
-	0, 0, 1,  6, 80,  5,  4,  8, 0, S,   P_POLEARMS, IRON, HI_METAL),
+	0, 0, 1,  5, 80,  5,  4,  8, 0, S,   P_POLEARMS, IRON, HI_METAL),
 						/* +1d4 small */
 WEAPON("bill-guisarme", "hooked polearm",
-	0, 0, 1,  4,120,  7,  4, 10, 0, P|S, P_POLEARMS, IRON, HI_METAL),
+	0, 0, 1,  3,120,  7,  4, 10, 0, P|S, P_POLEARMS, IRON, HI_METAL),
 						/* +1d4 small */
 /* other */
 WEAPON("lucern hammer", "pronged polearm",
-	0, 0, 1,  5,150,  7,  4,  6, 0, B|P, P_POLEARMS, IRON, HI_METAL),
+	0, 0, 1,  4,150,  7,  4,  6, 0, B|P, P_POLEARMS, IRON, HI_METAL),
 						/* +1d4 small */
 WEAPON("bec de corbin", "beaked polearm",
-	0, 0, 1,  4,100,  8,  8,  6, 0, B|P, P_POLEARMS, IRON, HI_METAL),
+	0, 0, 1,  3,100,  8,  8,  6, 0, B|P, P_POLEARMS, IRON, HI_METAL),
+
+WEAPON("scythe", (char *)0,
+	1, 0, 1, 5, 100,  6,  4,  4, -2, S,   P_HARVEST, IRON, HI_METAL),
 
 /* bludgeons */
 WEAPON("mace", (char *)0,
