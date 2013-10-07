@@ -345,7 +345,7 @@ mattacku(mtmp)
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
 
-	if(!u.uevent.udemigod && is_weeping(mtmp)) mtmp->movement = 0; /*Only attack once per turn*/
+	if(!(u.uevent.udemigod) && is_weeping(mtmp->data)) mtmp->movement = 0; /*Only attack once per turn*/
 	
 	/* If swallowed, can only be affected by u.ustuck */
 	if(u.uswallow) {

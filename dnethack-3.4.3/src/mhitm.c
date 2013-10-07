@@ -1048,9 +1048,17 @@ mdamagem(magr, mdef, mattk)
 			if (vis && canspotmon(magr) && flags.verbose)
 			    pline("%s is glancing at you with a hungry stare.", Monnam(magr));
 		    } else {
-			if (vis && canspotmon(mdef))
-			    if (flags.verbose)
+#ifdef STEED
+			if (u.usteed == mdef) {
+			    pline("%s vanishes from underneath you.", Monnam(mdef));
+			    dismount_steed(DISMOUNT_VANISHED);
+			} else {
+#endif
+			    if (vis && canspotmon(mdef) && flags.verbose)
 				pline("%s vanishes before your eyes.", Monnam(mdef));
+#ifdef STEED
+			}
+#endif
 			    int nlev;
 			    d_level flev;
 			    nlev = random_teleport_level();
