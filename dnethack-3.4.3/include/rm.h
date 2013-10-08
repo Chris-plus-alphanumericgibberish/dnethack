@@ -30,44 +30,46 @@
  */
 
 /* Level location types */
-#define STONE		0
-#define VWALL		1
-#define HWALL		2
-#define TLCORNER	3
-#define TRCORNER	4
-#define BLCORNER	5
-#define BRCORNER	6
-#define CROSSWALL	7	/* For pretty mazes and special levels */
-#define TUWALL		8
-#define TDWALL		9
-#define TLWALL		10
-#define TRWALL		11
-#define DBWALL		12
-#define TREE		13	/* KMH */
-#define SDOOR		14
-#define SCORR		15
-#define POOL		16
-#define MOAT		17	/* pool that doesn't boil, adjust messages */
-#define WATER		18
-#define DRAWBRIDGE_UP	19
-#define LAVAPOOL	20
-#define IRONBARS	21	/* KMH */
-#define DOOR		22
-#define CORR		23
-#define ROOM		24
-#define STAIRS		25
-#define LADDER		26
-#define FOUNTAIN	27
-#define THRONE		28
-#define SINK		29
-#define GRAVE		30
-#define ALTAR		31
-#define ICE		32
-#define DRAWBRIDGE_DOWN 33
-#define AIR		34
-#define CLOUD		35
-
-#define MAX_TYPE	36
+enum {
+    STONE = 0,
+    VWALL,
+    HWALL,
+    TLCORNER,
+    TRCORNER,
+    BLCORNER,
+    BRCORNER,
+    CROSSWALL,	/* For pretty mazes and special levels */
+    TUWALL,
+    TDWALL,
+    TLWALL,
+    TRWALL,
+    DBWALL,
+    TREE,	/* KMH */
+    DEADTREE,	/* youkan */
+    SDOOR,
+    SCORR,
+    POOL,
+    MOAT,	/* pool that doesn't boil, adjust messages */
+    WATER,
+    DRAWBRIDGE_UP,
+    LAVAPOOL,
+    IRONBARS,	/* KMH */
+    DOOR,
+    CORR,
+    ROOM,
+    STAIRS,
+    LADDER,
+    FOUNTAIN,
+    THRONE,
+    SINK,
+    GRAVE,
+    ALTAR,
+    ICE,
+    DRAWBRIDGE_DOWN,
+    AIR,
+    CLOUD,
+    MAX_TYPE
+};
 #define INVALID_TYPE	127
 
 /*
@@ -82,6 +84,8 @@
 #define IS_DOOR(typ)	((typ) == DOOR)
 #define IS_TREE(typ)	((typ) == TREE || \
 			(level.flags.arboreal && (typ) == STONE))
+#define IS_DEADTREE(typ) ((typ) == DEADTREE)
+#define IS_TREES(typ)	(IS_TREE(typ) || IS_DEADTREE(typ))
 #define ACCESSIBLE(typ) ((typ) >= DOOR)		/* good position */
 #define IS_ROOM(typ)	((typ) >= ROOM)		/* ROOM, STAIRS, furniture.. */
 #define ZAP_POS(typ)	((typ) >= POOL)
@@ -105,115 +109,119 @@
 
 /* begin dungeon characters */
 
-#define S_stone		0
-#define S_vwall		1
-#define S_hwall		2
-#define S_tlcorn	3
-#define S_trcorn	4
-#define S_blcorn	5
-#define S_brcorn	6
-#define S_crwall	7
-#define S_tuwall	8
-#define S_tdwall	9
-#define S_tlwall	10
-#define S_trwall	11
-#define S_ndoor		12
-#define S_vodoor	13
-#define S_hodoor	14
-#define S_vcdoor	15	/* closed door, vertical wall */
-#define S_hcdoor	16	/* closed door, horizontal wall */
-#define S_bars		17	/* KMH -- iron bars */
-#define S_tree		18	/* KMH */
-#define S_room		19
-#define S_corr		20
-#define S_litcorr	21
-#define S_upstair	22
-#define S_dnstair	23
-#define S_upladder	24
-#define S_dnladder	25
-#define S_altar		26
-#define S_grave		27
-#define S_throne	28
-#define S_sink		29
-#define S_fountain	30
-#define S_pool		31
-#define S_ice		32
-#define S_lava		33
-#define S_vodbridge	34
-#define S_hodbridge	35
-#define S_vcdbridge	36	/* closed drawbridge, vertical wall */
-#define S_hcdbridge	37	/* closed drawbridge, horizontal wall */
-#define S_air		38
-#define S_cloud		39
-#define S_water		40
+enum {
+    S_stone = 0,
+    S_vwall,
+    S_hwall,
+    S_tlcorn,
+    S_trcorn,
+    S_blcorn,
+    S_brcorn,
+    S_crwall,
+    S_tuwall,
+    S_tdwall,
+    S_tlwall,
+    S_trwall,
+    S_ndoor,
+    S_vodoor,
+    S_hodoor,
+    S_vcdoor,	/* closed door, vertical wall */
+    S_hcdoor,	/* closed door, horizontal wall */
+    S_bars,	/* KMH -- iron bars */
+    S_tree,	/* KMH */
+    S_deadtree,	/* youkan */
+    S_room,
+    S_corr,
+    S_litcorr,
+    S_upstair,
+    S_dnstair,
+    S_upladder,
+    S_dnladder,
+    S_altar,
+    S_grave,
+    S_throne,
+    S_sink,
+    S_fountain,
+    S_pool,
+    S_ice,
+    S_lava,
+    S_vodbridge,
+    S_hodbridge,
+    S_vcdbridge,	/* closed drawbridge, vertical wall */
+    S_hcdbridge,	/* closed drawbridge, horizontal wall */
+    S_air,
+    S_cloud,
+    S_water,
 
 /* end dungeon characters, begin traps */
 
-#define S_arrow_trap		41
-#define S_dart_trap		42
-#define S_falling_rock_trap	43
-#define S_squeaky_board		44
-#define S_bear_trap		45
-#define S_land_mine		46
-#define S_rolling_boulder_trap	47
-#define S_sleeping_gas_trap	48
-#define S_rust_trap		49
-#define S_fire_trap		50
-#define S_pit			51
-#define S_spiked_pit		52
-#define S_hole			53
-#define S_trap_door		54
-#define S_teleportation_trap	55
-#define S_level_teleporter	56
-#define S_magic_portal		57
-#define S_web			58
-#define S_statue_trap		59
-#define S_magic_trap		60
-#define S_anti_magic_trap	61
-#define S_polymorph_trap	62
+    S_arrow_trap,
+    S_dart_trap,
+    S_falling_rock_trap,
+    S_squeaky_board,
+    S_bear_trap,
+    S_land_mine,
+    S_rolling_boulder_trap,
+    S_sleeping_gas_trap,
+    S_rust_trap,
+    S_fire_trap,
+    S_pit,
+    S_spiked_pit,
+    S_hole,
+    S_trap_door,
+    S_teleportation_trap,
+    S_level_teleporter,
+    S_magic_portal,
+    S_web,
+    S_statue_trap,
+    S_magic_trap,
+    S_anti_magic_trap,
+    S_polymorph_trap,
 
 /* end traps, begin special effects */
 
-#define S_vbeam		63	/* The 4 zap beam symbols.  Do NOT separate. */
-#define S_hbeam		64	/* To change order or add, see function     */
-#define S_lslant	65	/* zapdir_to_glyph() in display.c.	    */
-#define S_rslant	66
-#define S_digbeam	67	/* dig beam symbol */
-#define S_flashbeam	68	/* camera flash symbol */
-#define S_boomleft	69	/* thrown boomerang, open left, e.g ')'    */
-#define S_boomright	70	/* thrown boomerand, open right, e.g. '('  */
-#define S_ss1		71	/* 4 magic shield glyphs */
-#define S_ss2		72
-#define S_ss3		73
-#define S_ss4		74
+
+    S_vbeam,	/* The 4 zap beam symbols.  Do NOT separate. */
+    S_hbeam,	/* To change order or add, see function     */
+    S_lslant,	/* zapdir_to_glyph() in display.c.	    */
+    S_rslant,
+    S_digbeam,	/* dig beam symbol */
+    S_flashbeam,	/* camera flash symbol */
+    S_boomleft,	/* thrown boomerang, open left, e.g ')'    */
+    S_boomright,	/* thrown boomerand, open right, e.g. '('  */
+    S_ss1,	/* 4 magic shield glyphs */
+    S_ss2,
+    S_ss3,
+    S_ss4,
 
 /* The 8 swallow symbols.  Do NOT separate.  To change order or add, see */
 /* the function swallow_to_glyph() in display.c.			 */
-#define S_sw_tl		75	/* swallow top left [1]			*/
-#define S_sw_tc		76	/* swallow top center [2]	Order:	*/
-#define S_sw_tr		77	/* swallow top right [3]		*/
-#define S_sw_ml		78	/* swallow middle left [4]	1 2 3	*/
-#define S_sw_mr		79	/* swallow middle right [6]	4 5 6	*/
-#define S_sw_bl		80	/* swallow bottom left [7]	7 8 9	*/
-#define S_sw_bc		81	/* swallow bottom center [8]		*/
-#define S_sw_br		82	/* swallow bottom right [9]		*/
+    S_sw_tl,		/* swallow top left [1]			*/
+    S_sw_tc,		/* swallow top center [2]	Order:	*/
+    S_sw_tr,		/* swallow top right [3]		*/
+    S_sw_ml,		/* swallow middle left [4]	1 2 3	*/
+    S_sw_mr,		/* swallow middle right [6]	4 5 6	*/
+    S_sw_bl,		/* swallow bottom left [7]	7 8 9	*/
+    S_sw_bc,		/* swallow bottom center [8]		*/
+    S_sw_br,		/* swallow bottom right [9]		*/
 
-#define S_explode1	83	/* explosion top left			*/
-#define S_explode2	84	/* explosion top center			*/
-#define S_explode3	85	/* explosion top right		 Ex.	*/
-#define S_explode4	86	/* explosion middle left		*/
-#define S_explode5	87	/* explosion middle center	 /-\	*/
-#define S_explode6	88	/* explosion middle right	 |@|	*/
-#define S_explode7	89	/* explosion bottom left	 \-/	*/
-#define S_explode8	90	/* explosion bottom center		*/
-#define S_explode9	91	/* explosion bottom right		*/
+    S_explode1,		/* explosion top left			*/
+    S_explode2,		/* explosion top center			*/
+    S_explode3,		/* explosion top right		 Ex.	*/
+    S_explode4,		/* explosion middle left		*/
+    S_explode5,		/* explosion middle center	 /-\	*/
+    S_explode6,		/* explosion middle right	 |@|	*/
+    S_explode7,		/* explosion bottom left	 \-/	*/
+    S_explode8,		/* explosion bottom center		*/
+    S_explode9,		/* explosion bottom right		*/
 
 /* end effects */
 
-#define MAXPCHARS	92	/* maximum number of mapped characters */
-#define MAXDCHARS	41	/* maximum of mapped dungeon characters */
-#define MAXTCHARS	22	/* maximum of mapped trap characters */
-#define MAXECHARS	29	/* maximum of mapped effects characters */
+    MAXPCHARS		/* maximum number of mapped characters */
+};
+#define MAXDCHARS	(S_water+1)	/* maximum of mapped dungeon characters */
+#define MAXTCHARS	(S_polymorph_trap-S_water)	/* maximum of mapped trap characters */
+#define MAXECHARS	(S_explode9-S_vbeam+1)	/* maximum of mapped effects characters */
 #define MAXEXPCHARS	9	/* number of explosion characters */
 
 struct symdef {

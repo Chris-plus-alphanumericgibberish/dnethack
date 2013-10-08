@@ -322,7 +322,7 @@ still_chewing(x,y)
 
     if (!boulder && IS_ROCK(lev->typ) && !may_dig(x,y)) {
 	You("hurt your teeth on the %s.",
-	    IS_TREE(lev->typ) ? "tree" : "hard stone");
+	    IS_TREES(lev->typ) ? "tree" : "hard stone");
 	nomul(0);
 	return 1;
     } else if (digging.pos.x != x || digging.pos.y != y ||
@@ -335,11 +335,11 @@ still_chewing(x,y)
 	assign_level(&digging.level, &u.uz);
 	/* solid rock takes more work & time to dig through */
 	digging.effort =
-	    (IS_ROCK(lev->typ) && !IS_TREE(lev->typ) ? 30 : 60) + u.udaminc;
+	    (IS_ROCK(lev->typ) && !IS_TREES(lev->typ) ? 30 : 60) + u.udaminc;
 	You("start chewing %s %s.",
 	    (boulder || IS_TREE(lev->typ)) ? "on a" : "a hole in the",
 	    boulder ? "boulder" :
-	    IS_TREE(lev->typ) ? "tree" : IS_ROCK(lev->typ) ? "rock" : "door");
+	    IS_TREES(lev->typ) ? "tree" : IS_ROCK(lev->typ) ? "rock" : "door");
 	watch_dig((struct monst *)0, x, y, FALSE);
 	return 1;
     } else if ((digging.effort += (30 + u.udaminc)) <= 100)  {
@@ -347,7 +347,8 @@ still_chewing(x,y)
 	    You("%s chewing on the %s.",
 		digging.chew ? "continue" : "begin",
 		boulder ? "boulder" :
-		IS_TREE(lev->typ) ? "tree" :
+		lev->typ == IRONBARS ? "bars" :
+		IS_TREES(lev->typ) ? "tree" :
 		IS_ROCK(lev->typ) ? "rock" : "door");
 	digging.chew = TRUE;
 	watch_dig((struct monst *)0, x, y, FALSE);

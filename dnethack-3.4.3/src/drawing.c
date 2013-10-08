@@ -225,6 +225,7 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'+', "closed door",	C(CLR_BROWN)},	/* hcdoor */
 	{'#', "iron bars",	C(HI_METAL)},	/* bars */
 	{'#', "tree",		C(CLR_GREEN)},	/* tree */
+	{'#', "dead tree",	C(CLR_BLACK)},	/* dead tree */
 	{'.', "floor of a room",C(CLR_GRAY)},	/* room */
 /*20*/	{'#', "corridor",	C(CLR_GRAY)},	/* dark corr */
 	{'#', "lit corridor",	C(CLR_GRAY)},	/* lit corr (see mapglyph.c) */
@@ -336,6 +337,7 @@ static uchar ibm_graphics[MAXPCHARS] = {
 	g_FILLER(S_hcdoor),
 	240,	/* S_bars:	equivalence symbol */
 	241,	/* S_tree:	plus or minus symbol */
+	241,	/* S_deadtree:	plus or minus symbol */
 	0xfa,	/* S_room:	meta-z, centered dot */
 /*20*/	0xb0,	/* S_corr:	meta-0, light shading */
 	0xb1,	/* S_litcorr:	meta-1, medium shading */
@@ -435,6 +437,7 @@ static uchar dec_graphics[MAXPCHARS] = {
 	g_FILLER(S_hcdoor),
 	0xfb,	/* S_bars:	meta-{, small pi */
 	0xe7,	/* S_tree:	meta-g, plus-or-minus */
+	0xe7,	/* S_deadtree:	meta-g, plus-or-minus */
 	0xfe,	/* S_room:	meta-~, centered dot */
 /*20*/	g_FILLER(S_corr),
 	g_FILLER(S_litcorr),
@@ -532,6 +535,7 @@ static uchar mac_graphics[MAXPCHARS] = {
 	0xef,	/* S_hcdoor */
 	0xf0,	/* S_bars:	equivalency symbol */
 	0xf1,	/* S_tree:	plus-or-minus */
+	0xf1,	/* S_deadtree:	plus-or-minus */
 	g_FILLER(S_Room),
 /*20*/	0xB0,	/* S_corr */
 	g_FILLER(S_litcorr),

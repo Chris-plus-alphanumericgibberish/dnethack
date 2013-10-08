@@ -2580,6 +2580,14 @@ srch:
 		    return(&zeroobj);
 		}
 
+		if(!BSTRCMP(bp, p-9, "dead tree")) {
+		    levl[u.ux][u.uy].typ = DEADTREE;
+		    pline("A dead tree.");
+		    newsym(u.ux, u.uy);
+		    block_point(u.ux, u.uy);
+		    return &zeroobj;
+		}
+
 		if(!BSTRCMP(bp, p-4, "tree")) {
 		    levl[u.ux][u.uy].typ = TREE;
 		    pline("A tree.");
