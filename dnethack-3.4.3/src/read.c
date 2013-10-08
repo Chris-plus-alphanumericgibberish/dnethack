@@ -1319,7 +1319,7 @@ register struct obj	*sobj;
 				nomul(rnd(3));
 				sobj->age += (long) d(3,10);
 			} else sobj->age = monstermoves + (long) d(3,10);
-			do_vicinity_map();
+			do_vicinity_map(u.ux,u.uy);
 		}
 		break;
 	case SCR_AMNESIA:

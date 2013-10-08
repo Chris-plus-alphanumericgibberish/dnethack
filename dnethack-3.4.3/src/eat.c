@@ -1118,7 +1118,7 @@ BOOLEAN_P tin;
 			You(Hallucination ? "can see your own insides!"
 				: "feel as though you can see the world from a whole new angle!");
 			if (!BClairvoyant)
-			    do_vicinity_map();
+			    do_vicinity_map(u.ux,u.uy);
 			/* at present, only one thing blocks clairvoyance */
 			else if (uarmh && uarmh->otyp == CORNUTHAUM)
 			    You("sense a pointy hat on top of your %s.",

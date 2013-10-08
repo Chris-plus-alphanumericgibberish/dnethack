@@ -119,6 +119,7 @@ char *wardDecode[26] = {
 
 /* since the spellbook itself doesn't blow up, don't say just "explodes" */
 static const char explodes[] = "radiates explosive energy";
+static const char where_to_cast[] = "Where do you want to cast the spell?";
 
 /* convert a letter into a number in the range 0..51, or -1 if not a letter */
 STATIC_OVL int
@@ -1061,10 +1062,17 @@ boolean atme;
 		(void) make_familiar((struct obj *)0, u.ux, u.uy, FALSE);
 		break;
 	case SPE_CLAIRVOYANCE:
-		if (!BClairvoyant)
-		    do_vicinity_map();
+		if (!BClairvoyant) {
+		    if (role_skill >= P_SKILLED) {
+			coord cc;
+			pline(where_to_cast);
+			cc.x = u.ux;
+			cc.y = u.uy;
+			if (getpos(&cc, TRUE, "the desired position") >= 0)
+		    	    do_vicinity_map(cc.x,cc.y);
+		    } else do_vicinity_map(u.ux,u.uy);
 		/* at present, only one thing blocks clairvoyance */
-		else if (uarmh && uarmh->otyp == CORNUTHAUM)
+		} else if (uarmh && uarmh->otyp == CORNUTHAUM)
 		    You("sense a pointy hat on top of your %s.",
 			body_part(HEAD));
 		break;
@@ -1100,7 +1108,7 @@ throwspell()
 	    You("had better wait for the sun to come out."); return 0;
 	}
 
-	pline("Where do you want to cast the spell?");
+	pline(where_to_cast);
 	cc.x = u.ux;
 	cc.y = u.uy;
 	if (getpos(&cc, TRUE, "the desired position") < 0)

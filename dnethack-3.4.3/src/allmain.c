@@ -477,7 +477,7 @@ moveloop()
 	if ((u.uhave.amulet || Clairvoyant) &&
 	    !In_endgame(&u.uz) && !BClairvoyant &&
 	    !(moves % 15) && !rn2(2))
-		do_vicinity_map();
+		do_vicinity_map(u.ux,u.uy);
 
 #ifdef WIZARD
 	if (iflags.sanity_check)
