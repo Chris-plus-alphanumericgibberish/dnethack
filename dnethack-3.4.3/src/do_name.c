@@ -921,7 +921,7 @@ static const char * const bogusmons[] = {
 	"jotun",					/* Norse legend */
 	"killer bunny",				/* Monty Python */
 	"rodent of unusual size",		/* The Princess Bride */
-	"Smokey the bear",	/* "Only you can prevent forest fires!" */
+	"bear named Smokey",	/* "Only you can prevent forest fires!" */
 	"5.9176 pentranomeker worm", /* The Mimir, contributed by Joshua Jarvis */
 	"andalite",					/* Animorphs */
 	"yithian", "elder thing", "old one", "great old one", "outer god", "other god", "elder god", /* Lovecraft */
@@ -938,7 +938,7 @@ static const char * const bogusmons[] = {
 	"incredible hulk",		/* Comics */
 	"incredible bulk",		/* 8-bit theater */
 	"hegemonic brute", "sovereign slayer", "draconian dignitary", "courtyard droll", /* Homestuck */
-	"Totoro",				/* Tonari no Totoro */
+	"sprit named Totoro",	/* Tonari no Totoro */
 	"ohmu",					/* Nausicaa */
 	"youma",				/* Sailor Moon */
 	"Lone Power", 			/* So you want to be a Wizard? */
@@ -948,7 +948,7 @@ static const char * const bogusmons[] = {
 		"self-replicating, self-aware war machine", "maximally effective mercenary", /* Schlock Mercenary */
 	"friend demon", /* Drowtales */
 	"big dumb object", /* Scifi */
-	"Godzilla", "King Kong",		/* monster movies */
+	"kaiju named Godzilla", "giant ape named King Kong",		/* monster movies */
 	"earthquake beast",			/* old L of SH */
 	"shinigami captain", "shinigami lieutenant", "arrancar", "hollow",	/* Bleach */
 	"nyaasu",				/* Pokemon (Meowth) */
@@ -977,7 +977,7 @@ static const char * const bogusmons[] = {
 	"Predator",				/* Movie */
 	"mother-in-law", 		/* common pests */
 	"visible stalker",		/* occupational hazard */
-	"Minosaur", "vestigal virgin", "octagenarian", "Mary of the Immaculate Contraption", /*non campus mentus*/
+	"Minosaur", "vestigal virgin", "octagenarian", /*"saint called Mary of the Immaculate Contraption,"*/ /*non campus mentus*/
 	"arsassin",				/* Psych */
         "one-winged dewinged stab-bat",  /* KoL */
         "praying mantis",
@@ -996,7 +996,7 @@ static const char * const bogusmons[] = {
         "Crow T. Robot",
         "diagonally moving grid bug",
         "dropbear",
-        "Dudley",
+        "@ named Dudley",
         "El Pollo Diablo",
         "evil overlord",
         "existential angst",
@@ -1046,12 +1046,12 @@ static const char * const bogusmons[] = {
 	"solidus",
 	"obelus",
 
-        "apostrophe golem", "Bob the angry flower",
+        "apostrophe golem", "angry flower named Bob",
         "bonsai-kitten", "Boxxy", "lonelygirl15",
         "tie-thulu", "Domo-kun",
         "looooooooooooong cat",                 /* internet memes */
         "bohrbug", "mandelbug", "schroedinbug", /* bugs */
-        "Gerbenok",                             /* Monty Python killer rabbit */
+        "rabbit named Gerbenok",                /* Monty Python killer rabbit */
         "doenertier",                           /* Erkan & Stefan */
         "Invisible Pink Unicorn",
         "Flying Spaghetti Monster",             /* deities */
@@ -1059,9 +1059,11 @@ static const char * const bogusmons[] = {
         "Qwerty Uiop", "troglotroll",           /* Zamonien */
         "wolpertinger", "elwedritsche", "skvader",
         "Nessie", "tatzelwurm", "dahu",         /* european cryptids */
+			"bigfoot", "tree octopus",
         "three-headed monkey",                  /* Monkey Island */
         "little green man",                     /* modern folklore */
         "weighted Companion Cube",              /* Portal */
+			"Oracle turret", "morality core",
         "/b/tard",                              /* /b/ */
         "manbearpig",                           /* South Park */
         "ceiling cat", "basement cat",
