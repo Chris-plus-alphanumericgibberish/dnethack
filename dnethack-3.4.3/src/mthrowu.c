@@ -306,7 +306,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 			? "destroyed" : "killed");
 		/* don't blame hero for unknown rolling boulder trap */
 		if (!flags.mon_moving &&
-		    (otmp->otyp != BOULDER || range >= 0 || !otmp->otrapped))
+		    (!is_boulder(otmp) || range >= 0 || !otmp->otrapped))
 		    xkilled(mtmp,0);
 		else mondied(mtmp);
 	    }
@@ -1416,7 +1416,7 @@ int whodidit;	/* 1==hero, 0=other, -1==just check whether it'll pass thru */
 	if (whodidit ? hero_breaks(otmp, x, y, FALSE) : breaks(otmp, x, y))
 	    *obj_p = otmp = 0;		/* object is now gone */
 	    /* breakage makes its own noises */
-	else if (obj_type == BOULDER || obj_type == HEAVY_IRON_BALL)
+	else if (obj_type == BOULDER || obj_type == STATUE || obj_type == HEAVY_IRON_BALL)
 	    pline("Whang!");
 	else if (otmp->oclass == COIN_CLASS ||
 		objects[obj_type].oc_material == GOLD ||

@@ -1359,7 +1359,7 @@ int style;
 
 	otmp = sobj_at(otyp, x1, y1);
 	/* Try the other side too, for rolling boulder traps */
-	if (!otmp && otyp == BOULDER) {
+	if (!otmp && otyp == BOULDER) { /*only boulders*/
 		otherside = TRUE;
 		otmp = sobj_at(otyp, x2, y2);
 	}
@@ -1529,7 +1529,7 @@ int style;
 			break;
 		    }
 		    if (otyp == BOULDER &&
-		       (otmp2 = sobj_at(BOULDER, bhitpos.x, bhitpos.y)) != 0) {
+		       (otmp2 = sobj_at(BOULDER, bhitpos.x, bhitpos.y)) != 0) {/*only actual boulders*/
 			const char *bmsg =
 				     " as one boulder sets another in motion";
 
@@ -1703,7 +1703,7 @@ register struct monst *mtmp;
 	    }
 		
 	    if (!rn2(40)) {
-		if (sobj_at(BOULDER, mtmp->mx, mtmp->my) &&
+		if (boulder_at(mtmp->mx, mtmp->my) &&
 			(trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)) {
 		    if (!rn2(2)) {
 			mtmp->mtrapped = 0;

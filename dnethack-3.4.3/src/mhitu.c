@@ -2425,7 +2425,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 	if (!u.uswallow) {	/* swallows you */
 		if (youmonst.data->msize >= MZ_HUGE) return(0);
 		if ((t && ((t->ttyp == PIT) || (t->ttyp == SPIKED_PIT))) &&
-		    sobj_at(BOULDER, u.ux, u.uy))
+		    boulder_at(u.ux, u.uy))
 			return(0);
 
 		if (Punished) unplacebc();	/* ball&chain go away */

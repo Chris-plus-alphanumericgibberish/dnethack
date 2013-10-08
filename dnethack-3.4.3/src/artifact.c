@@ -4499,9 +4499,9 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 
 		    mtmp = m_at(x,y);
 
-		    if ((otmp = sobj_at(BOULDER, x, y)) != 0) {
+		    if ((otmp = boulder_at(x, y)) != 0) {
 			if (cansee(x, y))
-			   pline("KADOOM! The boulder falls into a chasm%s!",
+			   pline("KADOOM! The %s falls into a chasm%s!", xname(boulder_at(x,y)),
 			      ((x == u.ux) && (y == u.uy)) ? " below you" : "");
 			if (mtmp)
 				mtmp->mtrapped = 0;

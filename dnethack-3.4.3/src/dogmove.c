@@ -1135,7 +1135,7 @@ xchar nx, ny;
 {
     if ((!is_pool(nx,ny) || is_swimmer(mon->data)) &&
 	(!is_lava(nx,ny) || likes_lava(mon->data)) &&
-	(!sobj_at(BOULDER,nx,ny) || throws_rocks(mon->data)))
+	(!boulder_at(nx,ny) || throws_rocks(mon->data)))
     	return TRUE;
     return FALSE;
 }

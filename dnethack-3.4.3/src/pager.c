@@ -461,134 +461,97 @@ const char what_is_an_unknown_object[] = "an unknown object";
 
 static const char * const bogusobjects[] = {
        /* Real */
-       "arrow",
-       "elven arrow",
-       "orcish arrow",
-       "runed arrow",
+	   "eleven arrow"
+	   "ortish arrow",
        "ruined arrow",
-       "crude arrow",
        "vulgar arrow",
-       "ya",
        "ja",
-       "bamboo arrow",
        "bamboozled sparrow",
        "crossbow bolt",
-       "dart",
-       "shuriken",
+	   "crossbow dolt",
+	   "throwing fart",
        "shurunken",
-       "boomerang",
-       "elven spear",
-       "orcish spear",
-       "dwarvish spear",
-       "silver spear",
+	   "bomberang",
+       "elven drear",
+       "orcish dear",
+       "dwarvish peer",
        "sliver spear",
-       "javelin",
-       "throwing spear",
        "throwing spar",
-       "trident",
        "2x3dent",
-       "dagger",
        "danger",
-       "elven dagger",
        "elven danger",
-       "orcish dagger",
        "orcish danger",
-       "silver dagger",
-       "sliver dagger",
        "sliver danger",
-       "athame",
-       "scalpel",
-       "knife",
+	   "allthame",
+       "scalp",
        "stiletto",
-       "worm tooth",
-       "crysknife",
-       "axe",
-       "battle-axe",
-       "short sword",
-       "scimitar",
-       "curved sword",
+	   "silletto",
+       "criesknife",
+       "old battle-axe",
+       "length-challenged sword",
        "re-curved sword",
        "de-curved sword",
        "circular sword",
-       "silver saber",
-       "broadsword",
-       "long sword",
-       "two-handed sword",
-       "katana",
-       "tsurugi",
-       "runesword",
-       "partisan",
+       "longer sword",
+       "three-handed sword",
+       "catana",
+       "dunesword",
        "bi-partisan",
-       "spetum",
-       "glaive",
-       "ranseur",
-       "lance",
-       "halberd",
-       "bardiche",
-       "voulge",
-       "dwarvish mattock",
+       "parisian",
+       "sniptem",
+       "fave",
+       "rancor",
+       "lancer",
+       "halbeard",
+       "snake-eyed bardiche",
+       "vouge",
+       "dwarvish hassock",
        "fauchard",
-       "guisarme",
-       "bill-guisarme",
-       "lucern hammer",
-       "bec de corbin",
+       "mysarme",
+       "uisarme",
+       "lucifer's hammer",
+       "bec de corwin",
        "yet another poorly-differentiated polearm",
-       "mace",
-       "morning star",
+       "rusty YAPDP",
+       "can of mace",
        "evening star",
-       "war hammer",
+       "dawn star",
+       "day star",
        "peace hammer",
-       "club",
-       "quarterstaff",
+       "wooden sandwich",
+       "halfstaff",
        "iron bar",
-       "aklys",
-       "thonged club",
-       "thong",
-       "flail",
-       "bullwhip",
-       "bow",
-       "elven bow",
-       "orcish bow",
-       "yumi",
+       "thong club",
+       "dire flail",
+       "dire fail",
+       "trollwhip",
        "partially-eaten yumi",
-       "sling",
-       "sling",
-       "crossbow",
-       "fedora",
-       "conical hat",
-       "plumed helmet",
-       "etched helmet",
-       "crested helmet",
-       "visored helmet",
-       "plate mail",
-       "mithril-coat",
-       "banded mail",
-       "splint mail",
-       "chain mail",
-       "scale mail",
-       "ring mail",
-       "studded leather armor",
+       "X-bow",
+       "conical flat",
+       "mithril-boat",
+       "barded mail",
+       "yet another substandard mail variant",
        "scale-reinforced banded-splint mail with chain joints",
-       "shirt",
-       "cloak",
-       "robe",
+       "leather studd armor",
+       "white shirt",
+       "undershirt",
+       "cope [sic]",
        "lion skin",
-       "small shield",
-       "elven shield",
+       "bear skin robe",
+       "bear skin rug",
+       "undersized shield",
        "shield of reflection",
-       "old gloves",
-       "padded gloves",
-       "riding gloves",
-       "fencing gloves",
-       "walking shoes",
-       "hard shoes",
+       "shield of rarefaction",
+       "padding gloves",
+       "rideable gloves",
+       "feching gloves",
+       "wandering walking shoes",
+       "hardly shoes",
        "jackboots",
-       "combat boots",
-       "jungle boots",
+       "combat boats",
        "hiking boots",
-       "mud boots",
-       "buckled boots",
-       "riding boots",
+       "wild hiking boots",
+       "muddy boots",
 		
 	   "can of Greece",
 	   "can of crease",
@@ -610,7 +573,7 @@ static const char * const bogusobjects[] = {
        "traffic cone",
        "chainsaw",
 /*	   "pair of high-heeled stilettos",    /* the *other* stiletto */
-	   "high-heeled stilettos",
+	   "high-heeled stiletto",
 	   "comic book",
 	   "lipstick",
        "dinner-jacket",
@@ -621,7 +584,7 @@ static const char * const bogusobjects[] = {
        "holy hand grenade",                /* Monty Python */
        "decoder ring",
        "amulet of huge gold chains",       /* Foo' */
-       "rubber Marduk"
+       "rubber Marduk",
        "unicron horn",                     /* Transformers */
        "holy grail",                       /* Monty Python */
        "chainmail bikini",
@@ -631,7 +594,7 @@ static const char * const bogusobjects[] = {
 
        /* Musical Instruments */
        "grand piano",
-       "two slightly sampled electric eels", /* Oldfield */
+       "set of two slightly sampled electric eels", /* Oldfield */
        "kick drum",                        /* 303 */
        "tooled airhorn",
 
@@ -643,7 +606,7 @@ static const char * const bogusobjects[] = {
        "pincers of peril",                 /* Goonies */
        "ring of schwartz",                 /* Spaceballs */
        "signed copy of Diaspora",          /* Greg Egan */
-       "the missing evidence in the Kelner case", /* Naked Gun */
+       "file containing the missing evidence in the Kelner case", /* Naked Gun */
        "blessed 9 helm of Des Lynam",     /* Bottom */
 	   "oscillation overthruster",
 	   "magic device",
@@ -665,6 +628,8 @@ static const char * const bogusobjects[] = {
 	   /* Movies etc. */
 	   "overloading phaser", /* Star Trek */
 	   "thermal detinator", /* Star Wars */
+       "thing that is not tea",/*"no tea here!", "no tea, sadly",*/ /* HGttG */
+		"potion almost, but not quite, entirely unlike tea",
 	   "potion of Pan-Galactic Gargle Blaster", "black scroll-case labled DON'T PANIC", /* HGttG */
 	   "ridiculously dangerous epaulet [it's armed]", /* Schlock Mercenary*/
 	   "pokeball", /* Pokemon */
@@ -683,49 +648,48 @@ static const char * const bogusobjects[] = {
        "black pudding corpse",
 # endif
        /* Fantasy */
-       "pipe weed",                        /* LOTR */
+       "leaf of pipe weed",                /* LOTR */
        "knife missile",                    /* Iain M. Banks */
        "large gem",                        /* Valhalla */
        "monster manual",                   /* D&D */
        "ring of power",                    /* LOTR */
        "lightsaber",	                   /* Star Wars */
-       "thing that is not tea","no tea here!", "no tea, sadly", /* HGttG */
-	   "potion almost, but not quite, entirely unlike tea",
 /*       "pan-galactic gargle blaster",      /* HGttG */
        "silmaril",                         /* LOTR */
        "pentagram of protection",          /* Quake */
 	   "crown of swords",
 
 	   /* Books */
-	   "The Codex of the Infinite Planes",	   /* DnD */
-	   "Non-Conduit Transdimensional Fabric Fluxes and Real-Time Inter-dimensional Matrix Transformations", /* Maldin's Greyhawk */
-       "The Book of Sand",                     /* Jorge Luis Borges */
-       "spellbook called Octavo",          /* Discworld */
+	   "Codex of the Infinite Planes",	   /* DnD */
+	   "spellbook of Non-Conduit Transdimensional Fabric Fluxes and Real-Time Inter-dimensional Matrix Transformations", /* Maldin's Greyhawk */
+       "spellbook named The Book of Sand",                     /* Jorge Luis Borges */
+       "spellbook named Octavo",       	   /* Discworld */
+		"Necrotelicomnicon",
 	   "lost copy of The Nice and Accurate Prophecies of Anges Nutter", /* Good Omens */
-	   "Addition Made Simple",
-	   "Noncommutative Hyperdimensional Geometry Made (Merely!) Complicated",
+	   "spellbook of Addition Made Simple",
+	   "spellbook of Noncommutative Hyperdimensional Geometry Made (Merely!) Complicated",
 	   "heavily obfuscated spellbook",
 	   "scroll of abstruse logic",
 	   "spellbook of sub-formal introtransreductive logic [for Dummies!]",
-	   "A Brief History of Time",
-	   "The Book of Eibon", 					/* Clark Ashton Smith */
-	   "The King in Yellow", 					/* Robert W. Chambers */
-	   "De Vermis Mysteriis",					/* Robert Bloch */
-	   "Necronomicon",							/* HP Lovecraft (yes, I know there is a game artifact of this name) */
-	   "Al Azif",								/* "Arabic" name for the Necronomicon, HP Lovecraft */
-	   "Unaussprechlichen Kulten",				/*  Robert E. Howard; Lovecraft and Derleth */
-	   "Nameless Cults",						/*  (the original name) */
-	   "Unspeakable Cults",						/*  One of the two things "Unaussprechlichen" translates to */
-	   "Unpronouncable Cults",					/*  The other thing "Unaussprechlichen" translates to */
-	   "The Diary of Drenicus the Wise",		/*  Dicefreaks, The Gates of Hell */
-	   "Clavicula Salomonis Regis",				/* ie, The Lesser Key of Solomon */
-	   "The Five Books of Moses",				/* aka the Torah */
-	   "The Six and Seventh Books of Moses",	/* 18th- or 19th-century magical text allegedly written by Moses */
-	   "The Book of Coming Forth by Day", "The Book of emerging forth into the Light",
-	   "Sefer Raziel HaMalakh",
-	   "The Testament of Solomon",
-	   "The Book of Enoch",
-	   "The Uruk Tablets",
+	   "spellbook named A Brief History of Time",
+	   "spellbook named The Book of Eibon", 					/* Clark Ashton Smith */
+	   "playbook named The King in Yellow", 					/* Robert W. Chambers */
+	   "spellbook named De Vermis Mysteriis",					/* Robert Bloch */
+	   "spellbook named Necronomicon",							/* HP Lovecraft (yes, I know there is a game artifact of this name) */
+	   "spellbook named Al Azif",								/* "Arabic" name for the Necronomicon, HP Lovecraft */
+	   "spellbook named Unaussprechlichen Kulten",				/*  Robert E. Howard; Lovecraft and Derleth */
+	   "spellbook named Nameless Cults",						/*  (the original name) */
+	   "spellbook named Unspeakable Cults",						/*  One of the two things "Unaussprechlichen" translates to */
+	   "spellbook named Unpronouncable Cults",					/*  The other thing "Unaussprechlichen" translates to */
+	   "spellbook named The Diary of Drenicus the Wise",		/*  Dicefreaks, The Gates of Hell */
+	   "spellbook named Clavicula Salomonis Regis",				/* ie, The Lesser Key of Solomon */
+	   "copy of The Five Books of Moses",				/* aka the Torah */
+	   "spellbook named The Six and Seventh Books of Moses",	/* 18th- or 19th-century magical text allegedly written by Moses */
+	   "spellbook named The Book of Coming Forth by Day", "spellbook named The Book of emerging forth into the Light",
+	   "spellbook named Sefer Raziel HaMalakh",
+	   "spellbook named The Testament of Solomon",
+	   "spellbook named The Book of Enoch",
+	   "spellbook named The Uruk Tablets",
        "dead sea scroll",
 	   "mayan codex",
 
@@ -768,10 +732,10 @@ static const char * const bogusobjects[] = {
 	   "spellbook of cone of cord",
        "helm of telemetry",
        "helm of head-butting",
-       "blue suede boots of charisma",
-	   "boots of rug-cutting",
-	   "cursed boots of mazing",
-       "wisdom boots",
+       "pair of blue suede boots of charisma",
+	   "pair of boots of rug-cutting",
+	   "pair of cursed boots of mazing",
+       "pair of wisdom boots",
        "cubic zirconium",
        "amulet of instadeath",
        "amulet of bad luck",
@@ -813,8 +777,16 @@ const char *
 rndobjnam()
 {
        int name;
+	if(!rn2(3)){
        name = rn2(SIZE(bogusobjects));
        return bogusobjects[name];
+//	} else if(!rn2(2)){
+//		name = rn2(TIN);
+//		return OBJ_DESCR(objects[name]);
+	} else{
+		name = rn2(TIN);
+		return OBJ_NAME(objects[name]);
+	}
 }
 
 
@@ -1046,8 +1018,8 @@ do_look(quick)
 		}
 		/* Kludge: warning trumps boulders on the display.
 		   Reveal the boulder too or player can get confused */
-		if (from_screen && sobj_at(BOULDER, cc.x, cc.y))
-			Strcat(out_str, " co-located with a boulder");
+		if (from_screen && boulder_at(cc.x, cc.y))
+			Strcat(out_str, " co-located with a large object");
 		break;	/* out of for loop*/
 	    }
 	}

@@ -86,7 +86,7 @@ int shotlimit;
 	}
 	if ((obj->oartifact == ART_MJOLLNIR || 
 			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORD) && ACURR(A_STR) < STR19(25)
-	   || (obj->otyp == BOULDER && !throws_rocks(youmonst.data))) {
+	   || (is_boulder(obj) && !throws_rocks(youmonst.data))) {
 		pline("It's too heavy.");
 		return(1);
 	}
@@ -485,9 +485,9 @@ hurtle_step(arg, x, y)
 	    losehp(rnd(2+*range), "crashing into iron bars", KILLED_BY);
 	    return FALSE;
 	}
-	if ((obj = sobj_at(BOULDER,x,y)) != 0) {
+	if ((obj = boulder_at(x,y)) != 0) {
 	    You("bump into a %s.  Ouch!", xname(obj));
-	    losehp(rnd(2+*range), "bumping into a boulder", KILLED_BY);
+	    losehp(rnd(2+*range), "bumping into a heavy object", KILLED_BY);
 	    return FALSE;
 	}
 	if (!may_pass) {
@@ -981,7 +981,7 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 		    if(range < 1) range = 1;
 		}
 
-		if (obj->otyp == BOULDER)
+		if (is_boulder(obj))
 		    range = 20;		/* you must be giant */
 		else if (obj->oartifact == ART_MJOLLNIR) //But the axe of D Lords can be thrown
 		    range = (range + 1) / 2;	/* it's heavy */
@@ -1152,6 +1152,9 @@ boolean mon_notices;
 	case BOULDER:
 	    tmp += 6;
 	    break;
+	case STATUE:
+	    if(is_boulder(obj)) tmp += 6;
+    break;
 	default:
 	    if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 		    obj->oclass == GEM_CLASS)
@@ -1392,7 +1395,7 @@ register struct obj   *obj;
 		tmiss(obj, mon);
 	    }
 
-	} else if (otyp == BOULDER) {
+	} else if (is_boulder(obj)) {
 	    exercise(A_STR, TRUE);
 	    if (tmp >= rnd(20)) {
 		exercise(A_DEX, TRUE);

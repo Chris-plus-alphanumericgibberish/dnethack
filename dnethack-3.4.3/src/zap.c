@@ -1285,7 +1285,7 @@ poly_obj(obj, id)
 	int obj_location = obj->where;
 
 	if (obj->otyp == BOULDER && In_sokoban(&u.uz))
-	    change_luck(-1);	/* Sokoban guilt */
+	    change_luck(-1);	/* Sokoban guilt, boulders only */
 	if (id == STRANGE_OBJECT) { /* preserve symbol */
 	    int try_limit = 3;
 	    /* Try up to 3 times to make the magic-or-not status of
@@ -1466,8 +1466,8 @@ poly_obj(obj, id)
 	otmp->owornmask = obj->owornmask;
 no_unwear:
 
-	if (obj_location == OBJ_FLOOR && obj->otyp == BOULDER &&
-		otmp->otyp != BOULDER)
+	if (obj_location == OBJ_FLOOR && is_boulder(obj) &&
+		!is_boulder(otmp))
 	    unblock_point(obj->ox, obj->oy);
 
 	/* ** we are now done adjusting the object ** */
@@ -1618,7 +1618,7 @@ struct obj *obj, *otmp;
 		break;
 	case WAN_STRIKING:
 	case SPE_FORCE_BOLT:
-		if (obj->otyp == BOULDER)
+		if (obj->otyp == BOULDER) /*boulders only*/
 			fracture_rock(obj);
 		else if (obj->otyp == STATUE)
 			(void) break_statue(obj);
@@ -2949,7 +2949,7 @@ struct obj *obj;			/* object tossed/used */
 		obj->otyp == HEAVY_IRON_BALL) {
 		struct obj *bobj;
 		struct trap *t;
-		if ((bobj = sobj_at(BOULDER, x, y)) != 0) {
+		if ((bobj = boulder_at(x, y)) != 0) {
 		    if (cansee(x,y))
 			pline("%s hits %s.",
 			      The(distant_name(obj, xname)), an(xname(bobj)));
@@ -3729,14 +3729,14 @@ xchar x, y;
 	if (Underwater) vision_recalc(1);
 	newsym(x,y);
 	if (cansee(x,y)) Norep("The ice crackles and melts.");
-	if ((otmp = sobj_at(BOULDER, x, y)) != 0) {
+	if ((otmp = boulder_at(x, y)) != 0) {
 	    if (cansee(x,y)) pline("%s settles...", An(xname(otmp)));
 	    do {
 		obj_extract_self(otmp);	/* boulder isn't being pushed */
 		if (!boulder_hits_pool(otmp, x, y, FALSE))
 		    impossible("melt_ice: no pool?");
 		/* try again if there's another boulder and pool didn't fill */
-	    } while (is_pool(x,y) && (otmp = sobj_at(BOULDER, x, y)) != 0);
+	    } while (is_pool(x,y) && (otmp = boulder_at(x, y)) != 0);
 	    newsym(x,y);
 	}
 	if (x == u.ux && y == u.uy)
@@ -3954,7 +3954,7 @@ register struct obj *obj;		   /* no texts here! */
 {
 	/* A little Sokoban guilt... */
 	if (obj->otyp == BOULDER && In_sokoban(&u.uz) && !flags.mon_moving)
-	    change_luck(-1);
+	    change_luck(-1); /*boulders only*/
 
 	obj->otyp = ROCK;
 	obj->quan = (long) rn1(60, 7);

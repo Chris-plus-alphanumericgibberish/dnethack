@@ -822,6 +822,7 @@ E void FDECL(freeinv, (struct obj *));
 E void FDECL(delallobj, (int,int));
 E void FDECL(delobj, (struct obj *));
 E struct obj *FDECL(sobj_at, (int,int,int));
+E struct obj *FDECL(boulder_at, (int,int));
 E struct obj *FDECL(toustefna_at, (int,int));
 E struct obj *FDECL(dreprun_at, (int,int));
 E struct obj *FDECL(veioistafur_at, (int,int));

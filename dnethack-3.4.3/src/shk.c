@@ -3410,7 +3410,7 @@ boolean catchup;	/* restoring a level */
 	    }
 	    while ((otmp = level.objects[x][y]) != 0)
 		/* Don't mess w/ boulders -- just merge into wall */
-		if ((otmp->otyp == BOULDER) || (otmp->otyp == ROCK)) {
+		if ((otmp->otyp == BOULDER) || (otmp->otyp == ROCK)) {/*actual boulders only*/
 		    obj_extract_self(otmp);
 		    obfree(otmp, (struct obj *)0);
 		} else {

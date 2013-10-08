@@ -112,7 +112,7 @@ genericptr_t poolcnt;
 	if (((x+y)%2) || (x == u.ux && y == u.uy) ||
 	    (rn2(1 + distmin(u.ux, u.uy, x, y)))  ||
 	    (levl[x][y].typ != ROOM) ||
-	    (sobj_at(BOULDER, x, y)) || nexttodoor(x, y))
+	    (boulder_at(x, y)) || nexttodoor(x, y))
 		return;
 
 	if ((ttmp = t_at(x, y)) != 0 && !delfloortrap(ttmp))

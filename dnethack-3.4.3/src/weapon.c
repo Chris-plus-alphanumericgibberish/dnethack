@@ -360,6 +360,7 @@ struct monst *mon;
 #ifdef OVL0
 
 STATIC_DCL struct obj *FDECL(oselect, (struct monst *,int));
+STATIC_DCL struct obj *FDECL(oselectBoulder, (struct monst *));
 #define Oselect(x)	if ((otmp = oselect(mtmp, x)) != 0) return(otmp);
 
 STATIC_OVL struct obj *
@@ -380,6 +381,24 @@ int x;
 		    dmgval(otmp, &zeromonst) > dmgval(obest, &zeromonst))
 		    obest = otmp;
 	}
+	}
+	return obest;
+}
+
+STATIC_OVL struct obj *
+oselectBoulder(mtmp)
+struct monst *mtmp;
+{
+	struct obj *otmp, *obest = 0;
+
+	for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
+	    if (is_boulder(otmp)  &&
+		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
+            {
+	        if (!obest ||
+		    dmgval(otmp, &zeromonst) > dmgval(obest, &zeromonst))
+		    obest = otmp;
+		}
 	}
 	return obest;
 }
@@ -412,8 +431,8 @@ struct obj *otmp;
 
         if (wep->oartifact) return FALSE;
 
-        if (throws_rocks(mtmp->data) &&  wep->otyp == BOULDER) return FALSE;
-        if (throws_rocks(mtmp->data) && otmp->otyp == BOULDER) return TRUE;
+        if (throws_rocks(mtmp->data) &&  is_boulder(wep)) return FALSE;
+        if (throws_rocks(mtmp->data) && is_boulder(otmp)) return TRUE;
     }
     
     if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
@@ -464,7 +483,7 @@ register struct monst *mtmp;
 	propellor = &zeroobj;
 	Oselect(EGG); /* cockatrice egg */
 	if(throws_rocks(mtmp->data))	/* ...boulders for giants */
-	    Oselect(BOULDER);
+	    oselectBoulder(mtmp);
 
 	/* Select polearms first; they do more damage and aren't expendable */
 	/* The limit of 13 here is based on the monster polearm range limit

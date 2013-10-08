@@ -1321,10 +1321,10 @@ int x, y;
 	panic("place_object: obj not free");
 
     obj_no_longer_held(otmp);
-    if (otmp->otyp == BOULDER) block_point(x,y);	/* vision */
+    if (is_boulder(otmp)) block_point(x,y);	/* vision */
 
     /* obj goes under boulders */
-    if (otmp2 && (otmp2->otyp == BOULDER)) {
+    if (otmp2 && is_boulder(otmp2)) {
 	otmp->nexthere = otmp2->nexthere;
 	otmp2->nexthere = otmp;
     } else {
@@ -1474,7 +1474,7 @@ register struct obj *otmp;
 
     if (otmp->where != OBJ_FLOOR)
 	panic("remove_object: obj not on floor");
-    if (otmp->otyp == BOULDER) unblock_point(x,y); /* vision */
+    if (is_boulder(otmp)) unblock_point(x,y); /* vision */
     extract_nexthere(otmp, &level.objects[x][y]);
     extract_nobj(otmp, &fobj);
     if (otmp->timed) obj_timer_checks(otmp,x,y,0);

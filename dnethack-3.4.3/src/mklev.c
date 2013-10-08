@@ -1281,7 +1281,7 @@ coord *tm;
 		else if (!somexy(croom,&m))
 		    return;
 	    } while (occupied(m.x, m.y) ||
-			(avoid_boulder && sobj_at(BOULDER, m.x, m.y)));
+			(avoid_boulder && boulder_at(m.x, m.y)));
 	}
 
 	(void) maketrap(m.x, m.y, kind);
@@ -1516,7 +1516,7 @@ int dist;
 
     /* clear boulders; leave some rocks for non-{moat|trap} locations */
     make_rocks = (dist != 1 && dist != 4 && dist != 5) ? TRUE : FALSE;
-    while ((otmp = sobj_at(BOULDER, x, y)) != 0) {
+    while ((otmp = boulder_at(x, y)) != 0) {
 	if (make_rocks) {
 	    fracture_rock(otmp);
 	    make_rocks = FALSE;		/* don't bother with more rocks */

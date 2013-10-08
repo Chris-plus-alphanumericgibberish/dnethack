@@ -644,6 +644,17 @@ register int n, x, y;
 }
 
 struct obj *
+boulder_at(x,y)
+register int x, y;
+{
+	register struct obj *otmp;
+
+	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
+		if(	is_boulder(otmp) ) return(otmp);
+	return((struct obj *)0);
+}
+
+struct obj *
 toustefna_at(x,y)
 register int x, y;
 {
@@ -937,7 +948,7 @@ register const char *let,*word;
 #ifdef GOLDOBJ
 		|| (usegold && otmp->invlet == GOLD_SYM)
 #endif
-		|| (useboulder && otmp->otyp == BOULDER)
+		|| (useboulder && is_boulder(otmp))
 		) {
 		register int otyp = otmp->otyp;
 		bp[foo++] = otmp->invlet;
@@ -2370,7 +2381,7 @@ boolean picked_some;
 #ifdef INVISIBLE_OBJECTS
 	    if (otmp->oinvis && !See_invisible) verb = "feel";
 #endif
-	    You("%s here %s.", verb, Hallucination ? rndobjnam() : doname(otmp));
+	    You("%s here %s.", verb, Hallucination ? an(rndobjnam()) : doname(otmp));
 	    if (otmp->otyp == CORPSE) feel_cockatrice(otmp, FALSE);
 	} else {
 	    display_nhwindow(WIN_MESSAGE, FALSE);
@@ -2385,12 +2396,12 @@ boolean picked_some;
 		if (otmp->otyp == CORPSE && will_feel_cockatrice(otmp, FALSE)) {
 			char buf[BUFSZ];
 			felt_cockatrice = TRUE;
-			Strcpy(buf, Hallucination ? rndobjnam() : doname(otmp));
+			Strcpy(buf, Hallucination ? an(rndobjnam()) : doname(otmp));
 			Strcat(buf, "...");
 			putstr(tmpwin, 0, buf);
 			break;
 		}
-		putstr(tmpwin, 0, Hallucination ? rndobjnam() : doname(otmp));
+		putstr(tmpwin, 0, Hallucination ? an(rndobjnam()) : doname(otmp));
 	    }
 	    display_nhwindow(tmpwin, TRUE);
 	    destroy_nhwindow(tmpwin);

@@ -1879,10 +1879,10 @@ boolean quietly;
 			IS_TREES(levl[x][y].typ) ? "a tree" : "solid rock");
 		return FALSE;
 	}
-	if (sobj_at(BOULDER,x,y) && !passes_walls(&mons[obj->corpsenm])
+	if (boulder_at(x,y) && !passes_walls(&mons[obj->corpsenm])
 			&& !throws_rocks(&mons[obj->corpsenm])) {
 		if (!quietly)
-			You("cannot fit the figurine on the boulder.");
+			You("cannot fit the figurine on the %s.",xname(boulder_at(x,y)));
 		return FALSE;
 	}
 	return TRUE;
@@ -2393,8 +2393,8 @@ struct obj *obj;
 	if (!wrapped_what) {
 	    if (IS_FURNITURE(levl[rx][ry].typ))
 		wrapped_what = something;
-	    else if (sobj_at(BOULDER, rx, ry))
-		wrapped_what = "a boulder";
+	    else if (boulder_at(rx, ry))
+		wrapped_what = xname(boulder_at(rx,ry));
 	}
 	if (wrapped_what) {
 	    coord cc;

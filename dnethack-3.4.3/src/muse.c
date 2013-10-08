@@ -373,7 +373,7 @@ struct monst *mtmp;
 		if ((xx==x && yy==y) || !level.monsters[xx][yy])
 		if ((t = t_at(xx,yy)) != 0)
 		if ((verysmall(mtmp->data) || throws_rocks(mtmp->data) ||
-		     passes_walls(mtmp->data)) || !sobj_at(BOULDER, xx, yy))
+		     passes_walls(mtmp->data)) || !boulder_at(xx, yy))
 		if (!onscary(xx,yy,mtmp)) {
 			if ((t->ttyp == TRAPDOOR || t->ttyp == HOLE)
 				&& !is_floater(mtmp->data)
@@ -1754,7 +1754,7 @@ struct monst *mtmp;
 		    if ((mdat != &mons[PM_GRID_BUG] && mtmp->data != &mons[PM_BEBELITH]) || xx == x || yy == y)
 			if (/* (xx==x && yy==y) || */ !level.monsters[xx][yy])
 			    if ((t = t_at(xx, yy)) != 0 &&
-			      (ignore_boulders || !sobj_at(BOULDER, xx, yy))
+			      (ignore_boulders || !boulder_at(xx, yy))
 			      && !onscary(xx, yy, mtmp)) {
 				if (t->ttyp == POLY_TRAP) {
 				    trapx = xx;

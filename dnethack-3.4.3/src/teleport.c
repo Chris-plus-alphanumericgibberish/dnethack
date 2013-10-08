@@ -80,7 +80,7 @@ unsigned gpflags;
 
 	if (closed_door(x, y) && (!mdat || !amorphous(mdat)))
 		return FALSE;
-	if (sobj_at(BOULDER, x, y) && (!mdat || !throws_rocks(mdat)))
+	if (boulder_at(x, y) && (!mdat || !throws_rocks(mdat)))
 		return FALSE;
 	return TRUE;
 }

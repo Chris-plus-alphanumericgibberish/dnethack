@@ -198,7 +198,7 @@ dig_check(madeby, verbose, x, y)
 	    if(verbose) pline_The("%s here is too hard to %s.",
 				  surface(x,y), verb);
 	    return(FALSE);
-	} else if (sobj_at(BOULDER, x, y)) {
+	} else if (boulder_at(x, y)) {
 	    if(verbose) There("isn't enough room to %s here.", verb);
 	    return(FALSE);
 	} else if (madeby == BY_OBJECT &&
@@ -333,7 +333,7 @@ dig(VOID_ARGS)
 			struct obj *bobj;
 
 			fracture_rock(obj);
-			if ((bobj = sobj_at(BOULDER, dpx, dpy)) != 0) {
+			if ((bobj = boulder_at(dpx, dpy)) != 0) {
 			    /* another boulder here, restack it to the top */
 			    obj_extract_self(bobj);
 			    place_object(bobj, dpx, dpy);
@@ -707,17 +707,17 @@ boolean pit_only;
 		    return TRUE;
 		}
 
-	} else if ((boulder_here = sobj_at(BOULDER, u.ux, u.uy)) != 0) {
+	} else if ((boulder_here = boulder_at(u.ux, u.uy)) != 0) {
 		if (ttmp && (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) &&
 		    rn2(2)) {
-			pline_The("boulder settles into the pit.");
+			pline_The("%s settles into the pit.", xname(boulder_here) );
 			ttmp->ttyp = PIT;	 /* crush spikes */
 		} else {
 			/*
 			 * digging makes a hole, but the boulder immediately
 			 * fills it.  Final outcome:  no hole, no boulder.
 			 */
-			pline("KADOOM! The boulder falls in!");
+			pline("KADOOM! The %s falls in!", xname(boulder_here) );
 			(void) delfloortrap(ttmp);
 		}
 		delobj(boulder_here);
@@ -1538,17 +1538,17 @@ int y;
 		    return TRUE;
 		}
 
-	} else if ((boulder_here = sobj_at(BOULDER, x, y)) != 0) {
+	} else if ((boulder_here = boulder_at(x, y)) != 0) {
 		if (ttmp && (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) &&
 		    rn2(2)) {
-			pline_The("boulder settles into the pit.");
+			pline_The("%s settles into the pit.", xname(boulder_here));
 			ttmp->ttyp = PIT;	 /* crush spikes */
 		} else {
 			/*
 			 * digging makes a hole, but the boulder immediately
 			 * fills it.  Final outcome:  no hole, no boulder.
 			 */
-			pline("KADOOM! The boulder falls in!");
+			pline("KADOOM! The %s falls in!", xname(boulder_here));
 			(void) delfloortrap(ttmp);
 		}
 		delobj(boulder_here);

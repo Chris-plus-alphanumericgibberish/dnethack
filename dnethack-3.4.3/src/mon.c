@@ -1077,7 +1077,7 @@ mpickstuff(mtmp, str)
 				doname(otmp) : distant_name(otmp, doname));
 		obj_extract_self(otmp);
 		/* unblock point after extract, before pickup */
-		if (otmp->otyp == BOULDER)
+		if (is_boulder(otmp))
 		    unblock_point(otmp->ox,otmp->oy);	/* vision */
 		if(otmp) (void) mpickobj(mtmp, otmp);	/* may merge and free otmp */
 		m_dowear(mtmp, FALSE);
@@ -1099,7 +1099,7 @@ register struct monst *mtmp;
 	register struct obj *obj;
 
 	for(obj = mtmp->minvent; obj; obj = obj->nobj) {
-		if(obj->otyp != BOULDER || !throws_rocks(mtmp->data))
+		if(!is_boulder(obj) || !throws_rocks(mtmp->data))
 			curload += obj->owt;
 	}
 
@@ -1169,7 +1169,7 @@ struct obj *otmp;
 	 */
 
 	/* special--boulder throwers carry unlimited amounts of boulders */
-	if (throws_rocks(mdat) && otyp == BOULDER)
+	if (throws_rocks(mdat) && is_boulder(otmp))
 		return(TRUE);
 
 	/* nymphs deal in stolen merchandise, but not boulders or statues */
@@ -1335,7 +1335,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			if(flag & NOGARLIC) continue;
 			info[cnt] |= NOGARLIC;
 		}
-		if(checkobj && sobj_at(BOULDER, nx, ny)) {
+		if(checkobj && boulder_at(nx, ny)) {
 			if(!(flag & ALLOW_ROCK)) continue;
 			info[cnt] |= ALLOW_ROCK;
 		}
@@ -2280,7 +2280,7 @@ register struct monst *mdef;
 		    if (obj->owornmask & W_WEP)
 			setmnotwielded(mdef,obj);
 		    obj->owornmask = 0L;
-		    if (obj->otyp == BOULDER ||
+		    if (is_boulder(obj) ||
 #if 0				/* monsters don't carry statues */
      (obj->otyp == STATUE && mons[obj->corpsenm].msize >= mdef->data->msize) ||
 #endif
@@ -2433,7 +2433,7 @@ xkilled(mtmp, dest)
 
 	if (mtmp->mtrapped && (t = t_at(x, y)) != 0 &&
 		(t->ttyp == PIT || t->ttyp == SPIKED_PIT) &&
-		sobj_at(BOULDER, x, y))
+		boulder_at(x, y))
 	    dest |= 2;     /*
 			    * Prevent corpses/treasure being created "on top"
 			    * of the boulder that is about to fall in. This is
@@ -3298,7 +3298,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 
 	    for (otmp = mtmp->minvent; otmp; otmp = otmp2) {
 		otmp2 = otmp->nobj;
-		if (otmp->otyp == BOULDER) {
+		if (is_boulder(otmp)) {
 		    /* this keeps otmp from being polymorphed in the
 		       same zap that the monster that held it is polymorphed */
 		    if (polyspot) bypass_obj(otmp);

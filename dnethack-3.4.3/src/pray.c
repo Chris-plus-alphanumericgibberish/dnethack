@@ -2009,7 +2009,7 @@ int dx,dy;
     long count = 0L;
 
     for(otmp = level.objects[u.ux+dx][u.uy+dy]; otmp; otmp = otmp->nexthere) {
-	if(otmp->otyp == BOULDER)
+	if(is_boulder(otmp))
 	    count += otmp->quan;
     }
 
@@ -2024,7 +2024,7 @@ int dx,dy;
 	return TRUE;
     if (IS_ROCK(levl[u.ux+2*dx][u.uy+2*dy].typ))
 	return TRUE;
-    if (sobj_at(BOULDER, u.ux+2*dx, u.uy+2*dy))
+    if (boulder_at(u.ux+2*dx, u.uy+2*dy))
 	return TRUE;
 
     return FALSE;

@@ -2650,7 +2650,7 @@ dlb *fd;
 
 		    maze1xy(&mm, DRY);
 		    trytrap = rndtrap();
-		    if (sobj_at(BOULDER, mm.x, mm.y))
+		    if (boulder_at(mm.x, mm.y))
 			while (trytrap == PIT || trytrap == SPIKED_PIT ||
 				trytrap == TRAPDOOR || trytrap == HOLE)
 			    trytrap = rndtrap();

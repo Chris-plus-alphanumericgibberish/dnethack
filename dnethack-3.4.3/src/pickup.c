@@ -757,7 +757,7 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 		    add_menu(win, obj_to_glyph(curr), &any,
 			    qflags & USE_INVLET ? curr->invlet : 0,
 			    def_oc_syms[(int)objects[curr->otyp].oc_class],
-			    ATR_NONE, Hallucination ? rndobjnam() : doname(curr), MENU_UNSELECTED);
+			    ATR_NONE, Hallucination ? an(rndobjnam()) : doname(curr), MENU_UNSELECTED);
 		}
 	    }
 	    pack++;
@@ -1151,13 +1151,13 @@ boolean telekinesis;
 {
     int result, old_wt, new_wt, prev_encumbr, next_encumbr;
 
-    if (obj->otyp == BOULDER && In_sokoban(&u.uz)) {
+    if (obj->otyp == BOULDER && In_sokoban(&u.uz)) {/*note, sokoban limit is just boulders*/
 	You("cannot get your %s around this %s.",
 			body_part(HAND), xname(obj));
 	return -1;
     }
     if (obj->otyp == LOADSTONE ||
-	    (obj->otyp == BOULDER && throws_rocks(youmonst.data)))
+	    (is_boulder(obj) && throws_rocks(youmonst.data)))
 	return 1;		/* lift regardless of current situation */
 
     *cnt_p = carry_count(obj, container, *cnt_p, telekinesis, &old_wt, &new_wt);
@@ -1848,7 +1848,7 @@ register struct obj *obj;
 	}
 
 	/* boxes, boulders, and big statues can't fit into any container */
-	if (obj->otyp == ICE_BOX || Is_box(obj) || obj->otyp == BOULDER ||
+	if (obj->otyp == ICE_BOX || Is_box(obj) || is_boulder(obj) ||
 		(obj->otyp == STATUE && bigmonst(&mons[obj->corpsenm]))) {
 		/*
 		 *  xname() uses a static result array.  Save obj's name

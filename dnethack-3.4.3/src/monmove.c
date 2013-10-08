@@ -1296,7 +1296,7 @@ not_special:
 			   && !is_rider(&mons[otmp->corpsenm])))) ||
 		       (likemagic && index(magical, otmp->oclass)) ||
 		       (uses_items && searches_for_item(mtmp, otmp)) ||
-		       (likerock && otmp->otyp == BOULDER) ||
+		       (likerock && is_boulder(otmp)) ||
 		       (likegems && otmp->oclass == GEM_CLASS &&
 			objects[otmp->otyp].oc_material != MINERAL) ||
 		       (conceals && !cansee(otmp->ox,otmp->oy)) ||
@@ -1308,7 +1308,7 @@ not_special:
 				
 				if(can_carry(mtmp,otmp) &&
 				 (throws_rocks(ptr) ||
-				  !sobj_at(BOULDER,xx,yy)) &&
+				  !boulder_at(xx,yy)) &&
 				 (!is_unicorn(ptr) ||
 				  objects[otmp->otyp].oc_material == GEMSTONE) &&
 				   /* Don't get stuck circling an Elbereth */

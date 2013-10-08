@@ -62,7 +62,7 @@ struct obj *otmp;
 register int rx, ry;
 boolean pushing;
 {
-	if (!otmp || otmp->otyp != BOULDER)
+	if (!otmp || !is_boulder(otmp))
 	    impossible("Not a boulder?");
 	else if (!Is_waterlevel(&u.uz) && (is_pool(rx,ry) || is_lava(rx,ry))) {
 	    boolean lava = is_lava(rx,ry), fills_up;
@@ -145,15 +145,16 @@ const char *verb;
 	/* make sure things like water_damage() have no pointers to follow */
 	obj->nobj = obj->nexthere = (struct obj *)0;
 
-	if (obj->otyp == BOULDER && boulder_hits_pool(obj, x, y, FALSE))
+	if (is_boulder(obj) && boulder_hits_pool(obj, x, y, FALSE))
 		return TRUE;
-	else if (obj->otyp == BOULDER && (t = t_at(x,y)) != 0 &&
+	else if (is_boulder(obj) && (t = t_at(x,y)) != 0 &&
 		 (t->ttyp==PIT || t->ttyp==SPIKED_PIT
 			|| t->ttyp==TRAPDOOR || t->ttyp==HOLE)) {
 		if (((mtmp = m_at(x, y)) && mtmp->mtrapped) ||
 			(u.utrap && u.ux == x && u.uy == y)) {
 		    if (*verb)
-			pline_The("boulder %s into the pit%s.",
+			pline_The("%s %s into the pit%s.",
+				xname(obj),
 				vtense((const char *)0, verb),
 				(mtmp) ? "" : " with you");
 		    if (mtmp) {
@@ -165,7 +166,7 @@ const char *verb;
 			mtmp->mtrapped = 0;
 		    } else {
 			if (!Passes_walls && !throws_rocks(youmonst.data)) {
-			    losehp(rnd(15), "squished under a boulder",
+			    losehp(rnd(15), "squished under a heavy object",
 				   NO_KILLER_PREFIX);
 			    return FALSE;	/* player remains trapped */
 			} else u.utrap = 0;
@@ -176,9 +177,10 @@ const char *verb;
 				if ((x == u.ux) && (y == u.uy))
 					You_hear("a CRASH! beneath you.");
 				else
-					You_hear("the boulder %s.", verb);
+					You_hear("the %s %s.", xname(obj), verb);
 			} else if (cansee(x, y)) {
-				pline_The("boulder %s%s.",
+				pline_The("%s %s%s.",
+					xname(obj),
 				    t->tseen ? "" : "triggers and ",
 				    t->ttyp == TRAPDOOR ? "plugs a trap door" :
 				    t->ttyp == HOLE ? "plugs a hole" :

@@ -527,7 +527,7 @@ feel_location(x, y)
 	if (IS_ROCK(lev->typ) || (IS_DOOR(lev->typ) &&
 				(lev->doormask & (D_LOCKED | D_CLOSED)))) {
 	    map_background(x, y, 1);
-	} else if ((boulder = sobj_at(BOULDER,x,y)) != 0) {
+	} else if ((boulder = boulder_at(x,y)) != 0) {
 	    map_object(boulder, 1);
 	} else if (IS_DOOR(lev->typ)) {
 	    map_background(x, y, 1);

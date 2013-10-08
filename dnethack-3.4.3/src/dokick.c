@@ -438,7 +438,7 @@ xchar x, y;
 	kickobj = level.objects[x][y];
 
 	/* kickobj should always be set due to conditions of call */
-	if(!kickobj || kickobj->otyp == BOULDER
+	if(!kickobj || is_boulder(kickobj)
 			|| kickobj == uball || kickobj == uchain)
 		return(0);
 
@@ -814,7 +814,7 @@ dokick()
 	kickobj = (struct obj *)0;
 	if (OBJ_AT(x, y) &&
 	    (!Levitation || Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)
-	     || sobj_at(BOULDER,x,y))) {
+	     || boulder_at(x,y))) {
 		if(kick_object(x, y)) {
 		    if(Is_airlevel(&u.uz))
 			hurtle(-u.dx, -u.dy, 1, TRUE); /* assume it's light */
@@ -1368,8 +1368,8 @@ xchar x, y, dlev;
 		oct += obj->quan;
 		if(obj == uball || obj == uchain) continue;
 		/* boulders can fall too, but rarely & never due to rocks */
-		if((isrock && obj->otyp == BOULDER) ||
-		   rn2(obj->otyp == BOULDER ? 30 : 3)) continue;
+		if((isrock && is_boulder(obj) ) ||
+		   rn2(is_boulder(obj) ? 30 : 3)) continue;
 		obj_extract_self(obj);
 
 		if(costly) {
@@ -1471,7 +1471,7 @@ boolean shop_floor_obj;
 	}
 	/* boulders never fall through trap doors, but they might knock
 	   other things down before plugging the hole */
-	if (otmp->otyp == BOULDER &&
+	if (is_boulder(otmp) &&
 		((t = t_at(x, y)) != 0) &&
 		(t->ttyp == TRAPDOOR || t->ttyp == HOLE)) {
 	    if (impact) impact_drop(otmp, x, y, 0);
@@ -1538,7 +1538,7 @@ boolean shop_floor_obj;
 	otmp->oy = cc.y;
 	otmp->owornmask = (long)toloc;
 	/* boulder from rolling boulder trap, no longer part of the trap */
-	if (otmp->otyp == BOULDER) otmp->otrapped = 0;
+	if (is_boulder(otmp)) otmp->otrapped = 0;
 
 	if(impact) {
 	    /* the objs impacted may be in a shop other than

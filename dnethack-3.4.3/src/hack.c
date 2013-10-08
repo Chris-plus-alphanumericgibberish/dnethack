@@ -66,7 +66,7 @@ moverock()
     register struct monst *mtmp;
 
     sx = u.ux + u.dx,  sy = u.uy + u.dy;	/* boulder starting position */
-    while ((otmp = sobj_at(BOULDER, sx, sy)) != 0) {
+    while ((otmp = boulder_at(sx, sy)) != 0) {
 	/* make sure that this boulder is visible as the top object */
 	if (otmp != level.objects[sx][sy]) movobj(otmp, sx, sy);
 
@@ -95,7 +95,7 @@ moverock()
 		!Is_rogue_level(&u.uz) &&
 #endif
 		(levl[rx][ry].doormask & ~D_BROKEN) == D_NODOOR)) &&
-	    !sobj_at(BOULDER, rx, ry)) {
+	    !boulder_at(rx, ry)) {
 	    ttmp = t_at(rx, ry);
 	    mtmp = m_at(rx, ry);
 
@@ -314,7 +314,7 @@ still_chewing(x,y)
     xchar x, y;
 {
     struct rm *lev = &levl[x][y];
-    struct obj *boulder = sobj_at(BOULDER,x,y);
+    struct obj *boulder = boulder_at(x,y);
     const char *digtxt = (char *)0, *dmgtxt = (char *)0;
 
     if (digging.down)		/* not continuing previous dig (w/ pick-axe) */
@@ -336,10 +336,12 @@ still_chewing(x,y)
 	/* solid rock takes more work & time to dig through */
 	digging.effort =
 	    (IS_ROCK(lev->typ) && !IS_TREES(lev->typ) ? 30 : 60) + u.udaminc;
-	You("start chewing %s %s.",
-	    (boulder || IS_TREE(lev->typ)) ? "on a" : "a hole in the",
-	    boulder ? "boulder" :
-	    IS_TREES(lev->typ) ? "tree" : IS_ROCK(lev->typ) ? "rock" : "door");
+	You("start chewing %s.",
+	    boulder ? (boulder_at(x,y))->otyp==STATUE ? "on a statue" : "on a boulder" :
+	    lev->typ == IRONBARS ? "on the iron bars" :
+	    IS_TREES(lev->typ) ? "on a tree" :
+	    IS_ROCK(lev->typ) ? "a hole in the rock" :
+	    "a hole in the door");
 	watch_dig((struct monst *)0, x, y, FALSE);
 	return 1;
     } else if ((digging.effort += (30 + u.udaminc)) <= 100)  {
@@ -361,7 +363,7 @@ still_chewing(x,y)
 
     if (boulder) {
 	delobj(boulder);		/* boulder goes bye-bye */
-	You("eat the boulder.");	/* yum */
+	You("eat the %s.",xname(boulder));	/* yum */
 
 	/*
 	 *  The location could still block because of
@@ -370,7 +372,7 @@ still_chewing(x,y)
 	 *
 	 *  [perhaps use does_block() below (from vision.c)]
 	 */
-	if (IS_ROCK(lev->typ) || closed_door(x,y) || sobj_at(BOULDER,x,y)) {
+	if (IS_ROCK(lev->typ) || closed_door(x,y) || boulder_at(x,y)) {
 	    block_point(x,y);	/* delobj will unblock the point */
 	    /* reset dig state */
 	    (void) memset((genericptr_t)&digging, 0, sizeof digging);
@@ -525,7 +527,7 @@ bad_rock(mdat,x,y)
 struct permonst *mdat;
 register xchar x,y;
 {
-	return((boolean) ((In_sokoban(&u.uz) && sobj_at(BOULDER,x,y)) ||
+	return((boolean) ((In_sokoban(&u.uz) && boulder_at(x,y)) ||
 	       (IS_ROCK(levl[x][y].typ)
 		    && (!tunnels(mdat) || needspick(mdat) || !may_dig(x,y))
 		    && !(passes_walls(mdat) && may_passwall(x,y)))));
@@ -697,7 +699,7 @@ int mode;
 	return FALSE;
     }
 
-    if (sobj_at(BOULDER,x,y) && (In_sokoban(&u.uz) || !Passes_walls)) {
+    if (boulder_at(x,y) && (In_sokoban(&u.uz) || !Passes_walls)) {
 	if (!(Blind || Hallucination) && (flags.run >= 2) && mode != TEST_TRAV)
 	    return FALSE;
 	if (mode == DO_MOVE) {
@@ -711,7 +713,7 @@ int mode;
 	    struct obj* obj;
 
 	    /* don't pick two boulders in a row, unless there's a way thru */
-	    if (sobj_at(BOULDER,ux,uy) && !In_sokoban(&u.uz)) {
+	    if (boulder_at(ux,uy) && !In_sokoban(&u.uz)) {
 		if (!Passes_walls &&
 		    !(tunnels(youmonst.data) && !needspick(youmonst.data)) &&
 		    !carrying(PICK_AXE) && !carrying(DWARVISH_MATTOCK) &&
@@ -791,7 +793,7 @@ boolean guess;
 
 		    if (!isok(nx, ny)) continue;
 		    if ((!Passes_walls && !can_ooze(&youmonst) &&
-			closed_door(x, y)) || sobj_at(BOULDER, x, y)) {
+			closed_door(x, y)) || boulder_at(x, y)) {
 			/* closed doors and boulders usually
 			 * cause a delay, so prefer another path */
 			if (travel[x][y] > radius-3) {
@@ -1166,7 +1168,7 @@ domove()
 	}
 	if(u.utrap) {
 		if(u.utraptype == TT_PIT) {
-		    if (!rn2(2) && sobj_at(BOULDER, u.ux, u.uy)) {
+		    if (!rn2(2) && boulder_at(u.ux, u.uy)) {
 			Your("%s gets stuck in a crevice.", body_part(LEG));
 			display_nhwindow(WIN_MESSAGE, FALSE);
 			clear_nhwindow(WIN_MESSAGE);
@@ -1383,7 +1385,7 @@ domove()
 	    if (mtmp->mtrapped &&
 		    (trap = t_at(mtmp->mx, mtmp->my)) != 0 &&
 		    (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT) &&
-		    sobj_at(BOULDER, trap->tx, trap->ty)) {
+		    boulder_at(trap->tx, trap->ty)) {
 		/* can't swap places with pet pinned in a pit by a boulder */
 		u.ux = u.ux0,  u.uy = u.uy0;	/* didn't move after all */
 	    } else if (u.ux0 != x && u.uy0 != y &&
@@ -2306,11 +2308,11 @@ inv_weight()
 #endif
 	while (otmp) {
 #ifndef GOLDOBJ
-		if (otmp->otyp != BOULDER || !throws_rocks(youmonst.data))
+		if (!is_boulder(otmp) || !throws_rocks(youmonst.data))
 #else
 		if (otmp->oclass == COIN_CLASS)
 			wt += (int)(((long)otmp->quan + 50L) / 100L);
-		else if (otmp->otyp != BOULDER || !throws_rocks(youmonst.data))
+		else if (!is_boulder(otmp) || !throws_rocks(youmonst.data))
 #endif
 			wt += otmp->owt;
 		otmp = otmp->nobj;

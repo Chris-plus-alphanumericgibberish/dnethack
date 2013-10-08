@@ -173,7 +173,7 @@ does_block(x,y,lev)
 
     /* Boulders block light. */
     for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
-	if (obj->otyp == BOULDER) return 1;
+	if (is_boulder(obj)) return 1;
 
     /* Mimics mimicing a door or boulder block light. */
     if ((mon = m_at(x,y)) && (!mon->minvis || See_invisible) &&
