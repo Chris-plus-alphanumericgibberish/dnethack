@@ -61,9 +61,20 @@ static const char *random_mesg[] = {
 	/*weeping angels, Unnethack*/
 	"Beware of the weeping angels", /* Doctor Who */
 	"Duck, Sally Sparrow", /* Doctor Who */
+	
+	/* contributed by members of NetHackWiki */
+	"Write down the coordinates, he said.", /* the Submachine series */
+		"...look for a green leaf...",
+		"...bring it to the statue...",
+		"...you should arrive at the lab...",
+		"...or somewhere nearby...", 
 };
 
 static const char *haluMesg[] = {
+	/* contributed by members of NetHackWiki */
+	"Please disable the following security protocols: 2-18, 1-12, 1-0", /* the Submachine series */
+		"Our coil is broken, and we don't have a replacement. It's useless. It's so useless.", 
+	
 /* contributed by members of the Nethack Usenet group, rec.games.roguelike.nethack */
 	"Which way did he go, George, which way did he go?",
 	"Until you stalk and overrun, you can't devour anyone.",
