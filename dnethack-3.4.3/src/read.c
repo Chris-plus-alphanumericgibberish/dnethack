@@ -381,6 +381,8 @@ struct obj *obj;
 	if (obj->oclass == RING_CLASS)
 	    return (boolean)(objects[obj->otyp].oc_charged &&
 			(obj->known || objects[obj->otyp].oc_uname));
+	if (is_lightsaber(obj))
+	    return TRUE;
 	if (is_weptool(obj))	/* specific check before general tools */
 	    return FALSE;
 	if (obj->oclass == TOOL_CLASS)
@@ -558,6 +560,23 @@ int curse_bless;
 		    if (obj->otyp != DWARVISH_IRON_HELM) {
 				obj->spe = 1;
 		    }
+		}
+	    case GREEN_LIGHTSABER:
+	    case BLUE_LIGHTSABER:
+	    case RED_LIGHTSABER:
+	    case RED_DOUBLE_LIGHTSABER:
+		if (is_cursed) {
+		    if (obj->lamplit) {
+			end_burn(obj, TRUE);
+			obj->age = 0;
+			if (!Blind)
+			    pline("%s deactivates!", The(xname(obj)));
+		    } else
+			obj->age = 0;
+		} else if (is_blessed) {
+		    obj->age = 1500;
+		    p_glow2(obj, NH_BLUE);
+		} else {
 		    obj->age += 750;
 		    if (obj->age > 1500) obj->age = 1500;
 		    p_glow1(obj);

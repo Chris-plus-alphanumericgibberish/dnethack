@@ -588,9 +588,9 @@ OBJECT(OBJ("Amulet of Yendor",	/* note: description == name */
 		BITS(kn,0,chg,1,mgc,chg,0,0,0,0,0,P_NONE,mat), \
 		0, TOOL_CLASS, prob, 0, \
 		wt, cost, 0, 0, 0, 0, wt, color )
-#define WEPTOOL(name,desc,kn,mgc,bi,prob,wt,cost,sdam,ldam,hitbon,sub,mat,clr) \
+#define WEPTOOL(name,desc,kn,mgc,chg,bi,prob,wt,cost,sdam,ldam,hitbon,typ,sub,mat,clr) \
 	OBJECT( OBJ(name,desc), \
-		BITS(kn,0,1,0,mgc,1,0,0,bi,0,hitbon,sub,mat), \
+		BITS(kn,0,1,chg,mgc,1,0,0,bi,0,typ,sub,mat), \
 		0, TOOL_CLASS, prob, 0, \
 		wt, cost, sdam, ldam, hitbon, 0, wt, clr )
 /* containers */
@@ -676,12 +676,29 @@ TOOL("drum of earthquake", "drum",
 				0, 0, 1, 1,   2, 25,  25, LEATHER, HI_LEATHER),
 /* tools useful as weapons */
 WEPTOOL("pick-axe", (char *)0,
-	1, 0, 0, 20, 100,  50,	6,  3, WHACK,  P_PICK_AXE, IRON, HI_METAL),
+	1, 0, 0, 0, 17, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
+/* [WAC]
+ * Lightsabers are -3 to hit 
+ * Double lightsaber is -4 to hit (only red)
+ * DMG is increased: 10.5/15.5
+ * green :9 + d3, 13 + d5
+ * blue : 8 + d5, 12 + d7
+ * red :  6 + d9, 10 + d11
+ * red double: 6 + d9 + d9, 10 + d11 + d11  (15/21) in double mode
+ */
+WEPTOOL("green lightsaber", "lightsaber",
+	0, 0, 1, 0,  1, 60, 500, 3,  5, -3, SLASH, P_SABER, PLASTIC, HI_METAL),
+WEPTOOL("blue lightsaber",  "lightsaber",
+	0, 0, 1, 0,  1, 60, 500, 5,  7, -3, SLASH, P_SABER, PLATINUM, HI_METAL),
+WEPTOOL("red lightsaber",  "lightsaber",
+	0, 0, 1, 0,  1, 60, 500, 9,  11, -3, SLASH, P_SABER, PLATINUM, HI_METAL),
+WEPTOOL("red double lightsaber",  "double lightsaber",
+	0, 0, 1, 1,  0, 60,1000, 9,  11, -4, SLASH, P_QUARTERSTAFF, PLATINUM, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
-	0, 0, 0,  5,  30,  50,  2,  6, WHACK,  P_FLAIL, IRON, HI_METAL),
+	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
 /* 3.4.1: unicorn horn left classified as "magic" */
 WEPTOOL("unicorn horn", (char *)0,
-	1, 1, 1,  0,  20, 100, 12, 12, PIERCE, P_UNICORN_HORN, BONE, CLR_WHITE),
+	1, 1, 0, 1,  0,  20, 100, 12, 12, 0, PIERCE, P_UNICORN_HORN, BONE, CLR_WHITE),
 
 /* two special unique artifact "tools" */
 OBJECT(OBJ("Candelabrum of Invocation", "candelabrum"),

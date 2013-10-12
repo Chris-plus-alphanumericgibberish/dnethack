@@ -501,7 +501,25 @@ doforce()		/* try to force a chest with your weapon */
 	register int c, picktyp;
 	char qbuf[QBUFSZ];
 
-	if(!uwep ||	/* proper type test */
+	if (!uwep) { /* Might want to make this so you use your shoulder */
+	    You_cant("force anything without a weapon.");
+	     return(0);
+	}
+
+	if (u.utrap && u.utraptype == TT_WEB) {
+	    You("are entangled in a web!");
+	    return(0);
+	} else if (uwep && is_lightsaber(uwep)) {
+	    if (!uwep->lamplit) {
+		Your("lightsaber is deactivated!");
+		return(0);
+	    }
+	} else if(uwep->otyp == LOCK_PICK ||
+	    uwep->otyp == CREDIT_CARD ||
+	    uwep->otyp == SKELETON_KEY) {
+	    	return pick_lock(uwep);
+	/* not a lightsaber or lockpicking device*/
+	} else if(!uwep ||     /* proper type test */
 	   (uwep->oclass != WEAPON_CLASS && !is_weptool(uwep) &&
 	    uwep->oclass != ROCK_CLASS) ||
 	   (objects[uwep->otyp].oc_skill < P_DAGGER) ||
@@ -513,11 +531,21 @@ doforce()		/* try to force a chest with your weapon */
 	    return(0);
 	}
 
-	picktyp = is_blade(uwep);
-	if(xlock.usedtime && xlock.box && picktyp == xlock.picktyp) {
+	if (is_lightsaber(uwep))
+	    picktyp = 2;
+	else
+	picktyp = is_blade(uwep) ? 1 : 0;
+	if(xlock.usedtime && picktyp == xlock.picktyp) {
+	    if (xlock.box) {
 	    You("resume your attempt to force the lock.");
 	    set_occupation(forcelock, "forcing the lock", 0);
 	    return(1);
+	}
+//		else if (xlock.door) {
+//			You("resume your attempt to force the door.");
+//			set_occupation(forcedoor, "forcing the door", 0);
+//			return(1);
+//	    }
 	}
 
 	/* A lock is made only for the honest man, the thief will break it. */
@@ -538,16 +566,21 @@ doforce()		/* try to force a chest with your weapon */
 		if(c == 'q') return(0);
 		if(c == 'n') continue;
 
-		if(picktyp)
+		if(picktyp == 2)
+		    You("begin melting it with your %s.", xname(uwep));
+		else if(picktyp)
 		    You("force your %s into a crack and pry.", xname(uwep));
 		else
 		    You("start bashing it with your %s.", xname(uwep));
 		xlock.box = otmp;
-		xlock.chance = objects[uwep->otyp].oc_wldam * 2;
+		if (is_lightsaber(uwep))
+		    xlock.chance = uwep->spe * 2 + 75;
+		else xlock.chance = objects[uwep->otyp].oc_wldam * 2;
 		xlock.picktyp = picktyp;
 		xlock.usedtime = 0;
 		break;
 	    }
+
 
 	if(xlock.box)	set_occupation(forcelock, "forcing the lock", 0);
 	else		You("decide not to force the issue.");

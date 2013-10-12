@@ -1231,7 +1231,18 @@ struct obj *obj;
 		   obj->otyp == BRASS_LANTERN ||
 		   obj->otyp == DWARVISH_IRON_HELM)
 		    pline("%s lamp is now off.", Shk_Your(buf, obj));
-		else
+		else if(is_lightsaber(obj)) {
+		    if (obj->otyp == RED_DOUBLE_LIGHTSABER) {
+			/* Do we want to activate dual bladed mode? */
+			if (!obj->altmode && (!obj->cursed || rn2(4))) {
+			    You("ignite the second blade of %s.", yname(obj));
+			    obj->altmode = TRUE;
+			    return;
+			} else obj->altmode = FALSE;
+		    }
+		    lightsaber_deactivate(obj, TRUE);
+		    return;
+		} else
 		    You("snuff out %s.", yname(obj));
 		end_burn(obj, TRUE);
 		return;
@@ -1239,8 +1250,11 @@ struct obj *obj;
 	/* magic lamps with an spe == 0 (wished for) cannot be lit */
 	if ((!Is_candle(obj) && obj->age == 0)
 			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)) {
-		if (obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_IRON_HELM)
-			Your("lamp has run out of power.");
+		if (obj->otyp == BRASS_LANTERN || 
+			obj->otyp == DWARVISH_IRON_HELM || 
+			is_lightsaber(obj)
+		)
+			Your("%s has run out of power.", xname(obj));
 		else pline("This %s has no %s.", xname(obj), obj->otyp != GNOMISH_POINTY_HAT ? "oil" : "wax");
 		return;
 	}
@@ -1252,6 +1266,13 @@ struct obj *obj;
 				obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_IRON_HELM) {
 		    check_unpaid(obj);
 		    pline("%s lamp is now on.", Shk_Your(buf, obj));
+		} else if (is_lightsaber(obj)) {
+		    /* WAC -- lightsabers */
+		    /* you can see the color of the blade */
+		    
+		    if (!Blind) makeknown(obj->otyp);
+		    You("ignite %s.", yname(obj));
+		    unweapon = FALSE;
 		} else {	/* candle(s) */
 		    pline("%s flame%s %s%s",
 			s_suffix(Yname2(obj)),
@@ -3402,6 +3423,12 @@ doapply()
 	case GNOMISH_POINTY_HAT:
 		use_candle(&obj);
 		break;
+	case GREEN_LIGHTSABER:
+  	case BLUE_LIGHTSABER:
+	case RED_LIGHTSABER:
+	case RED_DOUBLE_LIGHTSABER:
+		if (uwep != obj && !wield_tool(obj, (const char *)0)) break;
+		/* Fall through - activate via use_lamp */
 		    
 /* MRKR: dwarvish helms are mining helmets. 
  * They can be used as brass lanterns. 	

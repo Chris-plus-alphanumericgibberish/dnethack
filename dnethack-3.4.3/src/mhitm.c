@@ -845,14 +845,37 @@ mdamagem(magr, mdef, mattk)
 			if (otmp->otyp == CORPSE &&
 				touch_petrifies(&mons[otmp->corpsenm]))
 			    goto do_stone;
-			tmp += dmgval(otmp, mdef);
+			/* WAC -- Real weapon?
+			 * Could be stuck with a cursed bow/polearm it wielded
+			 */
+			if (/* if you strike with a bow... */
+			    is_launcher(otmp) ||
+			    /* or strike with a missile in your hand... */
+			    (is_missile(otmp) || is_ammo(otmp)) ||
+			    /* lightsaber that isn't lit ;) */
+			    (is_lightsaber(otmp) && !otmp->lamplit) ||
+			    /* WAC -- or using a pole at short range... */
+			    (is_pole(otmp))) {
+			    /* then do only 1-2 points of damage */
+			    if (pd == &mons[PM_SHADE] && otmp->otyp != SILVER_ARROW)
+				tmp = 0;
+			    else
+				tmp = rnd(2);
+			} else tmp += dmgval(otmp, mdef);
+			
+            /* WAC Weres get seared */
+            if(otmp && objects[otmp->otyp].oc_material == SILVER &&
+              (hates_silver(pd))) {
+            	tmp += 8;
+            	if (vis) pline("The silver sears %s!", mon_nam(mdef));
+            }
 			if (otmp->oartifact) {
 			    (void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
 			    if (mdef->mhp <= 0)
 				return (MM_DEF_DIED |
 					(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
 			}
-			if (tmp)
+			if (otmp && tmp)
 				mrustm(magr, mdef, otmp);
 		    }
 		} else if (magr->data == &mons[PM_PURPLE_WORM] &&

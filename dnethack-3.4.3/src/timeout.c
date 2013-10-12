@@ -1140,6 +1140,57 @@ long timeout;
 
 		break;
 
+	    case RED_DOUBLE_LIGHTSABER:
+	    	if (obj->altmode && obj->cursed && !rn2(25)) {
+		    obj->altmode = FALSE;
+		    pline("%s %s reverts to single blade mode!",
+			    whose, xname(obj));
+	    	}
+	    case GREEN_LIGHTSABER: 
+	    case BLUE_LIGHTSABER:
+	    case RED_LIGHTSABER:
+	        /* Callback is checked every 5 turns - 
+	        	lightsaber automatically deactivates if not wielded */
+	        if ((obj->cursed && !rn2(50)) ||
+	            (obj->where == OBJ_FLOOR) || 
+		    (obj->where == OBJ_MINVENT && 
+		    	(!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)) ||
+		    (obj->where == OBJ_INVENT &&
+		    	((!uwep || uwep != obj) &&
+		    	 (!u.twoweap || !uswapwep || obj != uswapwep))))
+	            lightsaber_deactivate(obj, FALSE);
+		switch (obj->age) {			
+		    case 100:
+			/* Single warning time */
+			if (canseeit) {
+			    switch (obj->where) {
+				case OBJ_INVENT:
+				case OBJ_MINVENT:
+				    pline("%s %s dims!",whose, xname(obj));
+				    break;
+				case OBJ_FLOOR:
+				    You("see %s dim!", an(xname(obj)));
+				    break;
+			    }
+			} else {
+			    You("hear the hum of %s change!", an(xname(obj)));
+			}
+			break;
+		    case 0:
+			lightsaber_deactivate(obj, FALSE);
+			break;
+
+		    default:
+			/*
+			 * Someone added fuel to the lightsaber while it was
+			 * lit.  Just fall through and let begin burn
+			 * handle the new age.
+			 */
+			break;
+		}
+		if (obj && obj->age && obj->lamplit) /* might be deactivated */
+		    begin_burn(obj, TRUE);
+		break;
 	    default:
 		impossible("burn_object: unexpeced obj %s", xname(obj));
 		break;
@@ -1147,6 +1198,37 @@ long timeout;
 	if (need_newsym) newsym(x, y);
 }
 
+/* lightsabers deactivate when they hit the ground/not wielded */
+/* assumes caller checks for correct conditions */
+void
+lightsaber_deactivate (obj, timer_attached)
+	struct obj *obj;
+	boolean timer_attached;
+{
+	xchar x,y;
+	char whose[BUFSZ];
+
+	(void) Shk_Your(whose, obj);
+		
+	if (get_obj_location(obj, &x, &y, 0)) {
+	    if (cansee(x, y)) {
+		switch (obj->where) {
+			case OBJ_INVENT:
+			case OBJ_MINVENT:
+			    pline("%s %s deactivates.",whose, xname(obj));
+			    break;
+			case OBJ_FLOOR:
+			    You("see %s deactivate.", an(xname(obj)));
+			    break;
+		}
+	    } else {
+		You("hear a lightsaber deactivate.");
+	    }
+	}
+	if (obj->otyp == RED_DOUBLE_LIGHTSABER) obj->altmode = FALSE;
+	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = TRUE;
+	end_burn(obj, timer_attached);
+}
 /*
  * Start a burn timeout on the given object. If not "already lit" then
  * create a light source for the vision system.  There had better not
@@ -1194,6 +1276,14 @@ begin_burn(obj, already_lit)
 	    case MAGIC_LAMP:
 		obj->lamplit = 1;
 		do_timer = FALSE;
+	    case RED_DOUBLE_LIGHTSABER:
+	    	if (obj->altmode && obj->age > 1) 
+		    obj->age--; /* Double power usage */
+	    case RED_LIGHTSABER:
+	    case BLUE_LIGHTSABER:
+	    case GREEN_LIGHTSABER:
+	    	turns = 1;
+    	    	radius = 1;
 		break;
 
 	    case POT_OIL:

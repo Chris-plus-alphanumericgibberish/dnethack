@@ -495,7 +495,10 @@ obj_is_burning(obj)
     struct obj *obj;
 {
     return (obj->lamplit &&
-		(obj->otyp == MAGIC_LAMP || ignitable(obj) || artifact_light(obj)));
+		 (	obj->otyp == MAGIC_LAMP
+		 || ignitable(obj)
+		 ||	is_lightsaber(obj)
+		 ||	artifact_light(obj)));
 }
 
 /* copy the light source(s) attachted to src, and attach it/them to dest */

@@ -41,6 +41,7 @@ struct obj {
 	char	oclass;		/* object class */
 	char	invlet;		/* designation in inventory */
 	char	oartifact;	/* artifact array index */
+	schar 	altmode; 	/* alternate modes - eg. SMG, double Lightsaber */
 
 	xchar where;		/* where the object thinks it is */
 #define OBJ_FREE	0		/* object not attached to anything */
@@ -193,6 +194,10 @@ struct obj {
 #define bimanual(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 objects[otmp->otyp].oc_bimanual)
+#define is_lightsaber(otmp) ((otmp)->otyp == GREEN_LIGHTSABER || \
+							 (otmp)->otyp == BLUE_LIGHTSABER || \
+							 (otmp)->otyp == RED_LIGHTSABER || \
+							 (otmp)->otyp == RED_DOUBLE_LIGHTSABER)
 #define is_multigen(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
 			 objects[otmp->otyp].oc_skill <= -P_BOW)

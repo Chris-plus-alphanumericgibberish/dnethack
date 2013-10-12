@@ -26,6 +26,7 @@
 #define PN_ESCAPE_SPELL			(-13)
 #define PN_MATTER_SPELL			(-14)
 #define PN_HARVEST			(-15)
+static void FDECL(mon_ignite_lightsaber, (struct obj *, struct monst *));
 
 STATIC_DCL void FDECL(give_may_advance_msg, (int));
 
@@ -253,6 +254,12 @@ struct monst *mon;
 		case LONG_SWORD:	
 			if(otmp->oartifact == ART_TOBIUME) tmp -= 3; 
 		break;
+		case GREEN_LIGHTSABER:  tmp +=13; break;
+		case BLUE_LIGHTSABER:   tmp +=12; break;
+		case RED_DOUBLE_LIGHTSABER: 
+					if (otmp->altmode) tmp += rnd(11);
+					/* fallthrough */
+		case RED_LIGHTSABER:    tmp +=10; break;
 		case WAR_HAMMER:
 			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4); break;
 		case BULLWHIP:
@@ -290,6 +297,12 @@ struct monst *mon;
 		case VOULGE:		
 			tmp += rnd(4);
 		break;
+		case GREEN_LIGHTSABER:  tmp +=9; break;
+		case BLUE_LIGHTSABER:   tmp +=8; break;
+		case RED_DOUBLE_LIGHTSABER:
+					if (otmp->altmode) tmp += rnd(9);
+					/* fallthrough */
+		case RED_LIGHTSABER: 	tmp +=6; break;
 		case ACID_VENOM:	tmp += rnd(6); break;
 		case SCIMITAR:
 			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
@@ -375,6 +388,7 @@ int x;
 		    /* never select non-cockatrice corpses */
 		    !((x == CORPSE || x == EGG) &&
 			!touch_petrifies(&mons[otmp->corpsenm])) &&
+                    (!is_lightsaber(otmp) || otmp->age) &&
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
             {
 	        if (!obest ||
@@ -584,6 +598,9 @@ register struct monst *mtmp;
 static const NEARDATA short hwep[] = {
 	  CORPSE,  /* cockatrice corpse */
 	  TSURUGI, RUNESWORD, DWARVISH_MATTOCK, TWO_HANDED_SWORD, BATTLE_AXE,
+	  RED_DOUBLE_LIGHTSABER, RED_LIGHTSABER,
+	  BLUE_LIGHTSABER,
+	  GREEN_LIGHTSABER,
 	  KATANA, UNICORN_HORN, CRYSKNIFE, TRIDENT, LONG_SWORD,
 	  ELVEN_BROADSWORD, BROADSWORD, SCIMITAR, SILVER_SABER,
 	  MORNING_STAR, ELVEN_SHORT_SWORD, DWARVISH_SHORT_SWORD, SHORT_SWORD,
@@ -770,6 +787,8 @@ register struct monst *mon;
 		struct obj *mw_tmp = MON_WEP(mon);
 		if (mw_tmp && mw_tmp->otyp == obj->otyp) {
 		/* already wielding one similar to it */
+			if (is_lightsaber(obj))
+			    mon_ignite_lightsaber(obj, mon);
 			mon->weapon_check = NEED_WEAPON;
 			return 0;
 		}
@@ -830,12 +849,51 @@ register struct monst *mon;
 			    s_suffix(mon_nam(mon)), mbodypart(mon,HAND));
 		}
 		obj->owornmask = W_WEP;
+		if (is_lightsaber(obj))
+		    mon_ignite_lightsaber(obj, mon);
 		return 1;
 	}
 	mon->weapon_check = NEED_WEAPON;
 	return 0;
 }
 
+static void
+mon_ignite_lightsaber(obj, mon)
+struct obj * obj;
+struct monst * mon;
+{
+	/* No obj or not lightsaber */
+	if (!obj || !is_lightsaber(obj)) return;
+
+	/* WAC - Check lightsaber is on */
+	if (!obj->lamplit) {
+	    if (obj->cursed && !rn2(2)) {
+		if (canseemon(mon)) pline("%s %s flickers and goes out.", 
+			s_suffix(Monnam(mon)), xname(obj));
+
+	    } else {
+		if (canseemon(mon)) {
+			makeknown(obj->otyp);
+			pline("%s ignites %s.", Monnam(mon),
+				an(xname(obj)));
+		}	    	
+		begin_burn(obj, FALSE);
+	    }
+	} else {
+		/* Double Lightsaber in single mode? Ignite second blade */
+		if (obj->otyp == RED_DOUBLE_LIGHTSABER && !obj->altmode) {
+		    /* Do we want to activate dual bladed mode? */
+		    if (!obj->altmode && (!obj->cursed || rn2(4))) {
+			if (canseemon(mon)) pline("%s ignites the second blade of %s.", 
+				Monnam(mon), an(xname(obj)));
+		    	obj->altmode = TRUE;
+		    	return;
+		    } else obj->altmode = FALSE;
+		    lightsaber_deactivate(obj, TRUE);
+		}
+		return;
+	}
+}
 int
 abon()		/* attack bonus for strength & dexterity */
 {

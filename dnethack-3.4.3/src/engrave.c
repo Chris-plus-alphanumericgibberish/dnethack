@@ -71,7 +71,7 @@ static const char *random_mesg[] = {
 };
 
 static const char *haluMesg[] = {
-	/* contributed by members of NetHackWiki */
+/* contributed by members of NetHackWiki */
 	"Please disable the following security protocols: 2-18, 1-12, 1-0", /* the Submachine series */
 		"Our coil is broken, and we don't have a replacement. It's useless. It's so useless.", 
 	
@@ -1704,7 +1704,10 @@ doengrave()
 		break;
 
 	    case WEAPON_CLASS:
-		if (is_blade(otmp)) {
+		if (is_lightsaber(otmp)) {
+			if (otmp->lamplit) type = BURN;
+			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if (is_blade(otmp)) {
 		    if ((int)otmp->spe > -3)
 			type = ENGRAVE;
 		    else
@@ -2466,7 +2469,10 @@ doward()
 		break;
 
 	    case WEAPON_CLASS:
-		if (is_blade(otmp)) {
+				if (is_lightsaber(otmp)) {
+			if (otmp->lamplit) type = BURN;
+			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if (is_blade(otmp)) {
 		    if ((int)otmp->spe > -3)
 			type = ENGRAVE;
 		    else
@@ -3570,7 +3576,10 @@ doseal()
 		break;
 
 	    case WEAPON_CLASS:
-		if (is_blade(otmp)) {
+				if (is_lightsaber(otmp)) {
+			if (otmp->lamplit) type = BURN;
+			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if (is_blade(otmp)) {
 		    if ((int)otmp->spe > -3)
 			type = ENGRAVE;
 		    else

@@ -501,6 +501,15 @@ boolean artif;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 2);
 					break;
+		case RED_DOUBLE_LIGHTSABER:
+					otmp->altmode = FALSE;
+		case GREEN_LIGHTSABER:
+		case BLUE_LIGHTSABER:
+		case RED_LIGHTSABER:
+					otmp->lamplit = 0;
+					otmp->age = (long) rn1(500,1000);
+					blessorcurse(otmp, 2);
+					break;
 		case CHEST:
 		case LARGE_BOX:		otmp->olocked = !!(rn2(5));
 					otmp->otrapped = !(rn2(10));

@@ -644,6 +644,8 @@ int thrown;
 		     !u.usteed &&
 #endif
 		     is_pole(obj)) ||
+		    /* lightsaber that isn't lit ;) */
+		    (is_lightsaber(obj) && !obj->lamplit) ||
 		    /* or throw a missile without the proper bow... */
 		    (is_ammo(obj) && !ammo_and_launcher(obj, uwep))) {
 		    /* then do only 1-2 points of damage */

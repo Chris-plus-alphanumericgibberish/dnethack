@@ -1133,15 +1133,36 @@ hitmu(mtmp, mattk)
 		    }
 		} else {			  /* hand to hand weapon */
 		    if(mattk->aatyp == AT_WEAP && otmp) {
-			if (otmp->otyp == CORPSE
-				&& touch_petrifies(&mons[otmp->corpsenm])) {
+			if (otmp->otyp == CORPSE &&
+				touch_petrifies(&mons[otmp->corpsenm])) {
 			    dmg = 1;
 			    pline("%s hits you with the %s corpse.",
 				Monnam(mtmp), mons[otmp->corpsenm].mname);
-			    if (!Stoned)
-				goto do_stone;
+			    if (!Stoned) goto do_stone;
 			}
-			dmg += dmgval(otmp, &youmonst);
+			/* WAC -- Real weapon?
+			 * Could be stuck with a cursed bow/polearm it wielded
+			 */
+			if (/* if you strike with a bow... */
+				is_launcher(otmp) ||
+				/* or strike with a missile in your hand... */
+				(is_missile(otmp) || is_ammo(otmp)) ||
+				/* lightsaber that isn't lit ;) */
+				(is_lightsaber(otmp) && !otmp->lamplit) ||
+				/* WAC -- or using a pole at short range... */
+				(is_pole(otmp))) {
+			    /* then do only 1-2 points of damage */
+			    if (u.umonnum == PM_SHADE && otmp->otyp != SILVER_ARROW)
+				dmg = 0;
+			    else
+				dmg = rnd(2);
+			} else dmg += dmgval(otmp, &youmonst);
+
+			if (objects[otmp->otyp].oc_material == SILVER &&
+				hates_silver(youmonst.data)) {
+			    pline("The silver sears your flesh!");
+			}
+
 			
 			if (otmp->opoisoned){
 				Sprintf(buf, "%s %s",

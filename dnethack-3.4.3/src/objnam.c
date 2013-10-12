@@ -710,6 +710,12 @@ plus:
 			Strcat(prefix, sitoa(obj->spe));
 			Strcat(prefix, " ");
 		}
+		if (is_lightsaber(obj)) {
+		    if (obj->lamplit) Strcat(bp, " (lit)");
+#  ifdef DEBUG
+		    Sprintf(eos(bp), " (%d)", obj->age);		
+#  endif
+		}
 		break;
 	case ARMOR_CLASS:
 		if(obj->owornmask & W_ARMOR)
@@ -1593,6 +1599,7 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 	{ "dragon scale mail",
 			ARMOR_CLASS,  GRAY_DRAGON_SCALE_MAIL, YELLOW_DRAGON_SCALE_MAIL },
 	{ "sword",	WEAPON_CLASS, SHORT_SWORD,    KATANA },
+	{ "lightsaber", WEAPON_CLASS, GREEN_LIGHTSABER, RED_DOUBLE_LIGHTSABER },
 #ifdef WIZARD
 	{ "venom",	VENOM_CLASS,  BLINDING_VENOM, ACID_VENOM },
 #endif
