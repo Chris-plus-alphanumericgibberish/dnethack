@@ -463,6 +463,21 @@ xchar
     return TRUE;
 }
 
+boolean
+check_stinking_cloud_region(x, y)
+xchar x, y;
+{
+	int i;
+    for (i = 0; i < n_regions; i++) {
+		if (inside_region(regions[i], x, y) &&
+			regions[i]->inside_f == INSIDE_GAS_CLOUD
+		) {
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 /*
  * check wether a monster enters/leaves one or more region.
 */
