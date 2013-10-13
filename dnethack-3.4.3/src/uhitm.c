@@ -759,7 +759,7 @@ int thrown;
 				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
 			}
 		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) )
-				&& hates_silver(mdat)) {
+				&& hates_silver(mdat) && !(is_lightsaber(obj) && obj->lamplit)) {
 			silvermsg = TRUE; silverobj = TRUE;
 		    }
 #ifdef STEED

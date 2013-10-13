@@ -1140,15 +1140,14 @@ long timeout;
 
 		break;
 
-	    case RED_DOUBLE_LIGHTSABER:
+	    case DOUBLE_LIGHTSABER:
 	    	if (obj->altmode && obj->cursed && !rn2(25)) {
 		    obj->altmode = FALSE;
 		    pline("%s %s reverts to single blade mode!",
 			    whose, xname(obj));
 	    	}
-	    case GREEN_LIGHTSABER: 
-	    case BLUE_LIGHTSABER:
-	    case RED_LIGHTSABER:
+	    case LIGHTSABER: 
+	    case BEAMSWORD:
 	        /* Callback is checked every 5 turns - 
 	        	lightsaber automatically deactivates if not wielded */
 	        if ((obj->cursed && !rn2(50)) ||
@@ -1225,7 +1224,7 @@ lightsaber_deactivate (obj, timer_attached)
 		You("hear a lightsaber deactivate.");
 	    }
 	}
-	if (obj->otyp == RED_DOUBLE_LIGHTSABER) obj->altmode = FALSE;
+	if (obj->otyp == DOUBLE_LIGHTSABER) obj->altmode = FALSE;
 	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = TRUE;
 	end_burn(obj, timer_attached);
 }
@@ -1276,13 +1275,16 @@ begin_burn(obj, already_lit)
 	    case MAGIC_LAMP:
 		obj->lamplit = 1;
 		do_timer = FALSE;
-	    case RED_DOUBLE_LIGHTSABER:
-	    	if (obj->altmode && obj->age > 1) 
+		break;
+	    case DOUBLE_LIGHTSABER:
+	    	if (!obj->oartifact && obj->altmode && obj->age > 1) 
 		    obj->age--; /* Double power usage */
-	    case RED_LIGHTSABER:
-	    case BLUE_LIGHTSABER:
-	    case GREEN_LIGHTSABER:
-	    	turns = 1;
+	    case LIGHTSABER:
+	    case BEAMSWORD:
+			if(obj->oartifact){
+				obj->lamplit = 1;
+				do_timer = FALSE;
+			} else turns = 1;
     	    	radius = 1;
 		break;
 

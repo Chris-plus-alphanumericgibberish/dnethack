@@ -676,24 +676,16 @@ TOOL("drum of earthquake", "drum",
 				0, 0, 1, 1,   2, 25,  25, LEATHER, HI_LEATHER),
 /* tools useful as weapons */
 WEPTOOL("pick-axe", (char *)0,
-	1, 0, 0, 0, 17, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
-/* [WAC]
- * Lightsabers are -3 to hit 
- * Double lightsaber is -4 to hit (only red)
- * DMG is increased: 10.5/15.5
- * green :9 + d3, 13 + d5
- * blue : 8 + d5, 12 + d7
- * red :  6 + d9, 10 + d11
- * red double: 6 + d9 + d9, 10 + d11 + d11  (15/21) in double mode
+	1, 0, 0, 0, 20, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
+/* 
+ * Lightsabers get 3x dice when lit 
  */
-WEPTOOL("green lightsaber", "lightsaber",
-	0, 0, 1, 0,  1, 60, 500, 3,  5, -3, SLASH, P_SABER, PLASTIC, HI_METAL),
-WEPTOOL("blue lightsaber",  "lightsaber",
-	0, 0, 1, 0,  1, 60, 500, 5,  7, -3, SLASH, P_SABER, PLATINUM, HI_METAL),
-WEPTOOL("red lightsaber",  "lightsaber",
-	0, 0, 1, 0,  1, 60, 500, 9,  11, -3, SLASH, P_SABER, PLATINUM, HI_METAL),
-WEPTOOL("red double lightsaber",  "double lightsaber",
-	0, 0, 1, 1,  0, 60,1000, 9,  11, -4, SLASH, P_QUARTERSTAFF, PLATINUM, HI_METAL),
+WEPTOOL("lightsaber", "silver sword hilt",
+	0, 0, 1, 0,  0, 60, 500, 8,  8, -3, SLASH, P_SABER, SILVER, HI_SILVER),
+WEPTOOL("beamsword",  "gold sword hilt",
+	0, 0, 1, 0,  0, 60, 500, 10,10, -3, SLASH, P_BROAD_SWORD, GOLD, HI_GOLD),
+WEPTOOL("double lightsaber",  "platinum grip",
+	0, 0, 1, 1,  0, 60,1000, 11, 11, -4, SLASH, P_QUARTERSTAFF, PLATINUM, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
 	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
 /* 3.4.1: unicorn horn left classified as "magic" */

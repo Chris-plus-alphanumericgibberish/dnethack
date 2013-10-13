@@ -150,6 +150,17 @@ moveloop()
 					dropx(uwep);
 				}
 			}
+			if(uwep && uwep->oartifact == ART_ATMA_WEAPON &&
+				uwep->cursed && 
+				uwep->lamplit
+			){
+				if (!Drain_resistance) {
+					pline("%s for a moment, then %s brightly.",
+					  Tobjnam(uwep, "flicker"), otense(uwep, "burn"));
+					losexp("life force drain",TRUE,TRUE,TRUE);
+					uwep->cursed = FALSE;
+				}
+			}
 
 		    /* reset summon monster block. */
 			if(u.summonMonster) u.summonMonster = FALSE;

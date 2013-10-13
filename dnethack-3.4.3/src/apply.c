@@ -1232,7 +1232,7 @@ struct obj *obj;
 		   obj->otyp == DWARVISH_IRON_HELM)
 		    pline("%s lamp is now off.", Shk_Your(buf, obj));
 		else if(is_lightsaber(obj)) {
-		    if (obj->otyp == RED_DOUBLE_LIGHTSABER) {
+		    if (obj->otyp == DOUBLE_LIGHTSABER) {
 			/* Do we want to activate dual bladed mode? */
 			if (!obj->altmode && (!obj->cursed || rn2(4))) {
 			    You("ignite the second blade of %s.", yname(obj));
@@ -1248,8 +1248,9 @@ struct obj *obj;
 		return;
 	}
 	/* magic lamps with an spe == 0 (wished for) cannot be lit */
-	if ((!Is_candle(obj) && obj->age == 0)
-			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)) {
+	if ((!Is_candle(obj) && obj->age == 0 && !(is_lightsaber(obj) && obj->oartifact ))
+			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)
+		) {
 		if (obj->otyp == BRASS_LANTERN || 
 			obj->otyp == DWARVISH_IRON_HELM || 
 			is_lightsaber(obj)
@@ -1257,6 +1258,17 @@ struct obj *obj;
 			Your("%s has run out of power.", xname(obj));
 		else pline("This %s has no %s.", xname(obj), obj->otyp != GNOMISH_POINTY_HAT ? "oil" : "wax");
 		return;
+	}
+	if(is_lightsaber(obj) && 
+		obj->cursed && 
+		obj->oartifact == ART_ATMA_WEAPON
+	){
+		if (!Drain_resistance) {
+			pline("%s for a moment, then %s brightly.",
+		      Tobjnam(obj, "flicker"), otense(obj, "burn"));
+			losexp("life force drain",TRUE,TRUE,TRUE);
+			obj->cursed = FALSE;
+		}
 	}
 	if (obj->cursed && !rn2(2)) {
 		pline("%s for a moment, then %s.",
@@ -1603,7 +1615,7 @@ register struct obj *obj;
 	    instapetrify(kbuf);
 	}
 	if (is_rider(&mons[corpse->corpsenm])) {
-		(void) revive_corpse(corpse);
+		(void) revive_corpse(corpse, REVIVE_MONSTER);
 		verbalize("Yes...  But War does not preserve its enemies...");
 		return;
 	}
@@ -3423,10 +3435,9 @@ doapply()
 	case GNOMISH_POINTY_HAT:
 		use_candle(&obj);
 		break;
-	case GREEN_LIGHTSABER:
-  	case BLUE_LIGHTSABER:
-	case RED_LIGHTSABER:
-	case RED_DOUBLE_LIGHTSABER:
+	case LIGHTSABER:
+  	case BEAMSWORD:
+	case DOUBLE_LIGHTSABER:
 		if (uwep != obj && !wield_tool(obj, (const char *)0)) break;
 		/* Fall through - activate via use_lamp */
 		    

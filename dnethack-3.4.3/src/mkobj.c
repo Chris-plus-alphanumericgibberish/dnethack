@@ -501,11 +501,10 @@ boolean artif;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 2);
 					break;
-		case RED_DOUBLE_LIGHTSABER:
+		case DOUBLE_LIGHTSABER:
 					otmp->altmode = FALSE;
-		case GREEN_LIGHTSABER:
-		case BLUE_LIGHTSABER:
-		case RED_LIGHTSABER:
+		case LIGHTSABER:
+		case BEAMSWORD:
 					otmp->lamplit = 0;
 					otmp->age = (long) rn1(500,1000);
 					blessorcurse(otmp, 2);
@@ -839,6 +838,8 @@ start_corpse_timeout(body)
 
 #define TAINT_AGE (50L)		/* age when corpses go bad */
 #define TROLL_REVIVE_CHANCE 37	/* 1/37 chance for 50 turns ~ 75% chance */
+#define MOLD_REVIVE_CHANCE 23	/*  1/23 chance for 50 turns ~ 90% chance */
+#define MOLDY_CHANCE 290	/*  1/290 chance for 200 turns ~ 50% chance */
 #define ROT_AGE (250L)		/* age when corpses rot away */
 
 	/* lizards, beholders, and lichen don't rot or revive */
@@ -871,6 +872,30 @@ start_corpse_timeout(body)
 		for (age = 2; age <= TAINT_AGE; age++)
 		    if (!rn2(TROLL_REVIVE_CHANCE)) {	/* troll revives */
 			action = REVIVE_MON;
+			when = age;
+			break;
+		    }
+	} else if (mons[body->corpsenm].mlet == S_FUNGUS) {
+		/* Fungi come back with a vengeance - if you don't eat it or
+		 * destroy it,  any live cells will quickly use the dead ones
+		 * as food and come back.
+		 */
+		long age;
+		for (age = 2; age <= TAINT_AGE; age++)
+		    if (!rn2(MOLD_REVIVE_CHANCE)) {    /* mold revives */
+			action = REVIVE_MON;
+			when = age;
+			break;
+		    }
+	} 
+	
+	if (action == ROT_CORPSE && !acidic(&mons[body->corpsenm])) {
+		/* Corpses get moldy
+		 */
+		long age;
+		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
+		    if (!rn2(MOLDY_CHANCE)) {    /* "revives" as a random s_fungus */
+			action = MOLDY_CORPSE;
 			when = age;
 			break;
 		    }

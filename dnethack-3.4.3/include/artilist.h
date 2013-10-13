@@ -285,6 +285,12 @@ A("Rod of the Ram",			MACE, /* Wolf, Ram, and Hart? Ram demon? */
 	0, A_NEUTRAL, NON_PM, NON_PM, 3000L, 
 	SPFX2_RAM2,0,0),
 
+A("Atma Weapon", 		BEAMSWORD, /*Sword whose attack power is bound to its wielder's life force*/
+	(SPFX_RESTR|SPFX_DFLAG2), 0, M2_NASTY,
+	PHYS(6,0),	NO_DFNS,	NO_CARY, //needs quote
+	0, A_NONE, NON_PM, NON_PM, 6660L, 
+	0,0,0),
+
 A("Tensa Zangetsu",		TSURUGI,
 	(SPFX_RESTR|SPFX_HSPDAM), 0, 0, /*also has a haste effect when wielded, but massively increases hunger and damages the wielder*/
 	PHYS(1,0),	NO_DFNS,	NO_CARY, /*The damage effect is cripplingly bad, really...*/
