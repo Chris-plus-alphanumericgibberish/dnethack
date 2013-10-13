@@ -18,17 +18,21 @@ typedef void FDECL((*timeout_proc), (genericptr_t, long));
 #define RANGE_LEVEL  0		/* save/restore timers staying on level */
 #define RANGE_GLOBAL 1		/* save/restore timers following global play */
 
+/* flags for revive type after timeout */
+#define	REVIVE_MONSTER	0
+#define	REVIVE_MOLD		1
 /*
  * Timeout functions.  Add a define here, then put it in the table
  * in timeout.c.  "One more level of indirection will fix everything."
  */
 #define ROT_ORGANIC	0	/* for buried organics */
 #define ROT_CORPSE	1
-#define REVIVE_MON	2
-#define BURN_OBJECT	3
-#define HATCH_EGG	4
-#define FIG_TRANSFORM	5
-#define NUM_TIME_FUNCS	6
+#define MOLDY_CORPSE	2
+#define REVIVE_MON	3
+#define BURN_OBJECT	4
+#define HATCH_EGG	5
+#define FIG_TRANSFORM	6
+#define NUM_TIME_FUNCS	7
 
 /* used in timeout.c */
 typedef struct fe {

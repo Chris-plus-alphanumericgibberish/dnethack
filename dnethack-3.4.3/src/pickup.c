@@ -1329,7 +1329,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 	    } else if (is_rider(&mons[obj->corpsenm])) {
 		pline("At your %s, the corpse suddenly moves...",
 			telekinesis ? "attempted acquisition" : "touch");
-		(void) revive_corpse(obj);
+		(void) revive_corpse(obj, REVIVE_MONSTER);
 		exercise(A_WIS, FALSE);
 		return -1;
 	    }
@@ -1885,6 +1885,7 @@ register struct obj *obj;
 		/* stop any corpse timeouts when frozen */
 		if (obj->otyp == CORPSE && obj->timed) {
 			long rot_alarm = stop_timer(ROT_CORPSE, (genericptr_t)obj);
+			(void) stop_timer(MOLDY_CORPSE, (genericptr_t)obj);
 			(void) stop_timer(REVIVE_MON, (genericptr_t)obj);
 			/* mark a non-reviving corpse as such */
 			if (rot_alarm) obj->norevive = 1;

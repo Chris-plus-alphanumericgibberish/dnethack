@@ -1538,9 +1538,11 @@ deferred_goto()
  * Return TRUE if we created a monster for the corpse.  If successful, the
  * corpse is gone.
  */
+
 boolean
-revive_corpse(corpse)
+revive_corpse(corpse, moldy)
 struct obj *corpse;
+int moldy;
 {
     struct monst *mtmp, *mcarry;
     boolean is_uwep, chewed;
@@ -1562,30 +1564,48 @@ struct obj *corpse;
 	/* container_where is the outermost container's location even if nested */
 	if (container_where == OBJ_MINVENT && mtmp2) mcarry = mtmp2;
     }
-    mtmp = revive(corpse);	/* corpse is gone if successful */
+    mtmp = revive(corpse);      /* corpse is gone if successful && quan == 1 */
 
     if (mtmp) {
-	chewed = (mtmp->mhp < mtmp->mhpmax);
+	/*
+	 * [ALI] Override revive's HP calculation. The HP that a mold starts
+	 * with do not depend on the HP of the monster whose corpse it grew on.
+	 */
+	if (moldy)
+	    mtmp->mhp = mtmp->mhpmax;
+	chewed = !moldy && (mtmp->mhp < mtmp->mhpmax);
 	if (chewed) cname = cname_buf;	/* include "bite-covered" prefix */
 	switch (where) {
 	    case OBJ_INVENT:
-		if (is_uwep)
+		if (is_uwep) {
+		    if (moldy) {
+			Your("weapon goes moldy.");
+			pline("%s writhes out of your grasp!", Monnam(mtmp));
+		    }
+		    else
 		    pline_The("%s writhes out of your grasp!", cname);
+		}
 		else
 		    You_feel("squirming in your backpack!");
 		break;
 
 	    case OBJ_FLOOR:
-		if (cansee(mtmp->mx, mtmp->my))
+		if (cansee(mtmp->mx, mtmp->my)) {
+		    if (moldy)
+			pline("%s grows on a moldy corpse!",
+			  Amonnam(mtmp));
+		    else
 		    pline("%s rises from the dead!", chewed ?
 			  Adjmonnam(mtmp, "bite-covered") : Monnam(mtmp));
+		}
 		break;
 
 	    case OBJ_MINVENT:		/* probably a nymph's */
 		if (cansee(mtmp->mx, mtmp->my)) {
 		    if (canseemon(mcarry))
-			pline("Startled, %s drops %s as it revives!",
-			      mon_nam(mcarry), an(cname));
+			pline("Startled, %s drops %s as it %s!",
+			      mon_nam(mcarry), moldy ? "a corpse" : an(cname),
+			      moldy ? "goes moldy" : "revives");
 		    else
 			pline("%s suddenly appears!", chewed ?
 			      Adjmonnam(mtmp, "bite-covered") : Monnam(mtmp));
@@ -1632,12 +1652,96 @@ long timeout;
     struct obj *body = (struct obj *) arg;
 
     /* if we succeed, the corpse is gone, otherwise, rot it away */
-    if (!revive_corpse(body)) {
+    if (!revive_corpse(body, REVIVE_MONSTER)) {
 	if (is_rider(&mons[body->corpsenm]))
 	    You_feel("less hassled.");
 	(void) start_timer(250L - (monstermoves-body->age),
 					TIMER_OBJECT, ROT_CORPSE, arg);
     }
+}
+
+
+static const int molds[] = 
+{
+	PM_BROWN_MOLD,
+	PM_YELLOW_MOLD,
+	PM_GREEN_MOLD,
+	PM_RED_MOLD
+};
+/* Revive the corpse as a mold via a timeout. */
+/*ARGSUSED*/
+void
+moldy_corpse(arg, timeout)
+genericptr_t arg;
+long timeout;
+{
+	int pmtype, oldtyp, oldquan;
+	struct obj *body = (struct obj *) arg;
+
+	/* Turn the corpse into a mold corpse if molds are available */
+	oldtyp = body->corpsenm;
+
+	/* Weight towards non-motile fungi.
+	 */
+	//	fruitadd("slime mold");
+	pmtype = molds[rn2(SIZE(molds))];
+
+	/* [ALI] Molds don't grow in adverse conditions.  If it ever
+	 * becomes possible for molds to grow in containers we should
+	 * check for iceboxes here as well.
+	 */
+	if ((body->where == OBJ_FLOOR || body->where==OBJ_BURIED) &&
+	  (is_pool(body->ox, body->oy) || is_lava(body->ox, body->oy) ||
+	  is_ice(body->ox, body->oy)))
+	pmtype = -1;
+
+	if (pmtype != -1) {
+	/* We don't want special case revivals */
+	if (cant_create(&pmtype, TRUE) || (body->oxlth &&
+				(body->oattached == OATTACHED_MONST)))
+		pmtype = -1; /* cantcreate might have changed it so change it back */
+		else {
+			body->corpsenm = pmtype;
+
+		/* oeaten isn't used for hp calc here, and zeroing it 
+		 * prevents eaten_stat() from worrying when you've eaten more
+		 * from the corpse than the newly grown mold's nutrition
+		 * value.
+		 */
+		body->oeaten = 0;
+
+		/* [ALI] If we allow revive_corpse() to get rid of revived
+		 * corpses from hero's inventory then we run into problems
+		 * with unpaid corpses.
+		 */
+		if (body->where == OBJ_INVENT)
+			body->quan++;
+		oldquan = body->quan;
+			if (revive_corpse(body, REVIVE_MOLD)) {
+			if (oldquan != 1) {		/* Corpse still valid */
+			body->corpsenm = oldtyp;
+			if (body->where == OBJ_INVENT) {
+				useup(body);
+				oldquan--;
+			}
+			}
+			if (oldquan == 1)
+			body = (struct obj *)0;	/* Corpse gone */
+		}
+		}
+	}
+
+	/* If revive_corpse succeeds, it handles the reviving corpse.
+	 * If there was more than one corpse, or the revive failed,
+	 * set the remaining corpse(s) to rot away normally.
+	 * Revive_corpse handles genocides
+	 */
+	if (body) {
+		body->corpsenm = oldtyp; /* Fixup corpse after (attempted) revival */
+		body->owt = weight(body);
+		(void) start_timer(250L - (monstermoves-peek_at_iced_corpse_age(body)),
+			TIMER_OBJECT, ROT_CORPSE, arg);
+	}
 }
 
 int
