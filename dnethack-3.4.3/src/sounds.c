@@ -2150,38 +2150,39 @@ int tx,ty;
 		}
 	}break;
 	case OSE:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that its seal be drawn underwater.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.ose < moves){
+			//Spirit requires that its seal be drawn underwater.
+			if(IS_POOL(levl[tx][ty].typ) && IS_POOL(levl[u.ux][u.uy].typ) && u.uinwater){ 
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_OSE;
+					u.spirit[numSlots] = SEAL_OSE;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_OSE;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_OSE;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_OSE;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.ose = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case OTIAX:{
 		// if(u.vestige < moves){
