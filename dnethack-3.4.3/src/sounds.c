@@ -1038,6 +1038,20 @@ char *andromaliusItems[18] = {
 /*16*/	"a set of lockpicks",
 /*17*/	"a live sewer rat"
 };
+static const int androCorpses[] = {
+	PM_ELF,
+	PM_DWARF,
+	PM_GNOME,
+	PM_ORC,
+	PM_HUMAN,
+	PM_HOBBIT,
+	PM_DEEP_ONE,
+	PM_MONKEY,
+	PM_APE,
+	PM_YETI,
+	PM_CARNIVOROUS_APE,
+	PM_SASQUATCH
+};
 
 int
 dobinding(tx,ty)
@@ -1184,13 +1198,15 @@ int tx,ty;
 		if(u.andromalius < moves){
 			//Seal must be drawn around any two of a bag, a silver key, a gold ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
 			struct obj *o1 = 0, *o2 = 0, *otmp;
+			struct monst *rat = 0;
 			int count = 0;
 			int t1, t2;
 			static int gldring = 0;
 			if (!gldring) gldring = find_gold_ring();
+			if(m_at(tx,ty)->data == &mons[PM_SEWER_RAT]) {rat = m_at(tx,ty); t1=17;}
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere)
 				if(!otmp->oartifact){
-					if(!o1){
+					if(!o1 && !rat){
 						if(otmp->otyp == SACK){ o1 = otmp; t1 = 0;}
 						else if(otmp->otyp == UNIVERSAL_KEY){ o1 = otmp; t1 = 1;}
 						else if(otmp->oclass == RING_CLASS && otmp->otyp == gldring){ o1 = otmp; t1 = 2;}
@@ -1208,7 +1224,6 @@ int tx,ty;
 						else if(otmp->oclass == SPBOOK_CLASS){ o1 = otmp; t1 = 14;}
 						else if(otmp->otyp == BELL){ o1 = otmp; t1 = 15;}
 						else if(otmp->otyp == LOCK_PICK){ o1 = otmp; t1 = 16;}
-						//live sewer rat
 					}
 					else if(!o2){
 						if(otmp->otyp == SACK && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 0;}
@@ -1228,11 +1243,10 @@ int tx,ty;
 						else if(otmp->oclass == SPBOOK_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 14;}
 						else if(otmp->otyp == BELL && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 15;}
 						else if(otmp->otyp == LOCK_PICK && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 16;}
-						//live sewer rat
 					}
 					else break;
 				}
-			if(o1 && o2){
+			if((o1 || rat) && o2){
 				int i1 = rn2(18), i2 = rn2(18), i3 = rn2(18);
 				
 				while(i1 == t1 || i1 == t2) i1 = rn2(18);
@@ -1245,6 +1259,138 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("Suddenly, the hands toss one of the whrilling objects to you.");
 					/*make object here*/
+					switch(i3){
+						case 0:
+							otmp = mksobj(SACK, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 1:
+							otmp = mksobj(UNIVERSAL_KEY, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 2:
+							otmp = mksobj(gldring, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = TRUE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 3://Coin
+							otmp = mkobj(COIN_CLASS, FALSE);
+							otmp->quan = 1;
+							otmp->owt = weight(otmp);
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 4:
+							otmp = mksobj(DAGGER, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 5:
+							otmp = mksobj(APPLE, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 6:
+							otmp = mkobj(SCROLL_CLASS, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 7:
+							otmp = mksobj(TIN_WHISTLE, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 8:
+							otmp = mksobj(MIRROR, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 9:
+							otmp = mksobj(EGG, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 10:
+							otmp = mkobj(POTION_CLASS, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 11:
+							otmp = mksobj(CORPSE, TRUE, FALSE);
+							otmp->corpsenm = PM_CAVE_SPIDER;
+							otmp->owt = weight(otmp);
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 12:
+							otmp = mksobj(CORPSE, TRUE, FALSE);
+							otmp->corpsenm = urace.malenum;
+							otmp->oeaten = mons[otmp->corpsenm].cnutrit;
+							consume_oeaten(otmp, 1);
+							otmp->owt = weight(otmp);
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 13:
+							otmp = mksobj(CORPSE, TRUE, FALSE);
+							otmp->corpsenm = androCorpses[SIZE(androCorpses)];
+							otmp->oeaten = mons[otmp->corpsenm].cnutrit;
+							consume_oeaten(otmp, 1);
+							otmp->owt = weight(otmp);
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 14:
+							otmp = mkobj(SPBOOK_CLASS, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = TRUE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 15:
+							otmp = mksobj(BELL, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 16:
+							otmp = mksobj(LOCK_PICK, TRUE, FALSE);
+							otmp->blessed = FALSE;
+							otmp->cursed = FALSE;
+							hold_another_object(otmp, "You drop %s!",
+								doname(otmp), (const char *)0);
+						break;
+						case 17:
+							rat = makemon(&mons[PM_SEWER_RAT], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+							initedog(rat);
+							rat->mtame = 10;
+							rat->mpeaceful = 1;
+							pline("A startled-looking rat lands in your %s, then leaps to the floor.",makeplural(body_part(HAND)));
+						break;
+					}
 					pline("When your attention returns to the seal, the hands have gone.");
 					u.sealsActive |= SEAL_ANDROMALIUS;
 					u.spirit[numSlots] = SEAL_ANDROMALIUS;
@@ -1266,13 +1412,19 @@ int tx,ty;
 				}
 				else{
 					pline("Suddenly, the hands toss one of the whrilling objects at you.");
-					pline("The %s passes far over your head, out of reach.", andromaliusItems[i3]);
+					You("see %s pass far over your %s, out of reach.", andromaliusItems[i3], body_part(HEAD));
 					pline("When your attention returns to the seal, the hands have gone.");
 				}
 				u.andrealphus = moves + bindingPeriod;
-				//coins: use up just one.
-				useup(o1);
-				useup(o2);
+				if(o1){
+					if(o1->quan > 1) o1->quan--; 
+					else useup(o1);
+				}
+				if(rat) mongone(rat);
+				if(o2){
+					if(o2->quan > 1) o2->quan--; 
+					else useup(o2);
+				}
 			}
 		}
 	}break;
@@ -1670,8 +1822,7 @@ int tx,ty;
 	}break;
 	case ERIDU:{
 		// if(u.vestige < moves){
-			//Spirit requires that his seal be drawn in a large open space.
-			// if(){
+			// if(){ //Spirit requires that his seal be drawn in a large open space.
 				// Your(".");
 				// pline(".");
 				// if(u.sealCounts < numSlots){
@@ -2185,38 +2336,39 @@ int tx,ty;
 		}
 	}break;
 	case OTIAX:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that its seal be drawn on an open door.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.otiax < moves){
+			//Spirit requires that its seal be drawn on an open door.
+			if(IS_DOOR(levl[tx][ty].typ) && closed_door(tx,ty)){ 
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_OTIAX;
+					u.spirit[numSlots] = SEAL_OTIAX;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_OTIAX;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_OTIAX;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_OTIAX;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.otiax = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case PAIMON:{
 		// if(u.vestige < moves){
