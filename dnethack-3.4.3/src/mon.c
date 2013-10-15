@@ -716,7 +716,7 @@ movemon()
 				m_initgrp(mtmp, 0, 0, 10);
 			}
 		} else if(mtmp->data == &mons[PM_RAZORVINE] && !rn2(4) && !(monstermoves % 10) ){
-			makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+			makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH|NO_MINVENT);
 		}
 	}
 	
