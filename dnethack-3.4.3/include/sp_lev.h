@@ -17,16 +17,18 @@
 #define MAP_Y_LIM	21
 
     /* Per level flags */
-#define NOTELEPORT	1
-#define HARDFLOOR	2
-#define NOMMAP		4
-#define SHORTSIGHTED	8
-#define ARBOREAL	16
-#define LETHE		64		/* All water on level is Lethe-ized */
-#define SLIME		128
-#define FUNGI		256
-#define DUN			512
-#define NECRO		1024
+#define NOTELEPORT	0x00000001L
+#define HARDFLOOR	0x00000002L
+#define NOMMAP		0x00000004L
+#define SHORTSIGHTED	0x00000008L
+#define ARBOREAL	0x00000010L
+#define LETHE		0x00000020L	/* All water on level is Lethe-ized */
+#define SLIME		0x00000040L
+#define FUNGI		0x00000080L
+#define DUN			0x00000100L
+#define NECRO		0x00000200L
+#define CAVE		0x00000400L
+#define OUTSIDE		0x00000800L
 
     /* special level types */
 #define SP_LEV_ROOMS	1

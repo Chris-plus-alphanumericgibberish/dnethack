@@ -1763,6 +1763,10 @@ int typ;
 		level.flags.dun = 1;
 	if (lev_flags & NECRO)
 		level.flags.necro = 1;
+	if (lev_flags & CAVE)
+		level.flags.cave = 1;
+	if (lev_flags & OUTSIDE)
+		level.flags.outside = 1;
 
 	/* Read message */
 	Fread((genericptr_t) &n, 1, sizeof(n), fd);

@@ -480,6 +480,8 @@ struct levelflags {
 	Bitfield(fungi, 1);			/* corpses on level become fungi */
 	Bitfield(dun, 1);			/* level is the dun savana */
 	Bitfield(necro, 1);			/* corpses on level rise as undead */
+	Bitfield(cave, 1);			/* level is a cave */
+	Bitfield(outside, 1);			/* level is outside */
 };
 
 typedef struct

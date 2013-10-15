@@ -1425,6 +1425,14 @@ int tx,ty;
 					if(o2->quan > 1) o2->quan--; 
 					else useup(o2);
 				}
+			} else{
+				int i1 = rn2(18), i2 = rn2(18);				
+				while(i1 == i2) i2 = rn2(18);
+				pline("The image of a pair of gloved hands comes unbidden to the forefront of your mind.");
+				pline("With your mind's eye, you watch as they make a show of prestidigitation,");
+				pline("palming and unpalming %s. Suddenly, they throw %s at your face!", andromaliusItems[i1], andromaliusItems[i2]);
+				You("come out of your revere with a start.");
+				u.spiritT[numSlots] = moves + bindingPeriod/10;
 			}
 		}
 	}break;
@@ -1753,38 +1761,39 @@ int tx,ty;
 		}
 	}break;
 	case ECHIDNA:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that her seal be drawn in a cave.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-				// }
-			// }
+		if(u.echidna < moves){
+			//Spirit requires that her seal be drawn in a cave.
+			if(level.flags.cave){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_ECHIDNA;
+					u.spirit[numSlots] = SEAL_ECHIDNA;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_ECHIDNA;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_ECHIDNA;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_ECHIDNA;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.echidna = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case EDEN:{
 		if(u.eden < moves){
@@ -1855,39 +1864,41 @@ int tx,ty;
 		// }
 	}break;
 	case EURYNOME:{
-		// if(u.vestige < moves){
-			//Spirit requires that her seal be drawn beside some water.
-			// if(){
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.eurynome < moves){
+			//Spirit requires that her seal be drawn before some water.
+			if(isok(tx+(tx-u.ux), ty+(ty-u.uy)) && 
+				IS_POOL(levl[tx+(tx-u.ux)][ty+(ty-u.uy)].typ)
+			){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_EURYNOME;
+					u.spirit[numSlots] = SEAL_EURYNOME;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_EURYNOME;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_EURYNOME;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_EURYNOME;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.eurynome = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case EVE:{
 		if(u.eve < moves){
@@ -2405,38 +2416,39 @@ int tx,ty;
 		// }
 	}break;
 	case SIMURGH:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that her seal be drawn outside.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.simurgh < moves){
+			//Spirit requires that her seal be drawn outside.
+			if(level.flags.outside){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_SIMURGH;
+					u.spirit[numSlots] = SEAL_SIMURGH;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_SIMURGH;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_SIMURGH;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_SIMURGH;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.simurgh = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case TENEBROUS:{
 		// if(u.vestige < moves){
