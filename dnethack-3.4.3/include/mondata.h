@@ -90,7 +90,7 @@
 #define is_ogre(ptr)		(((ptr)->mlet & S_OGRE) != 0L)
 #define is_human(ptr)		(((ptr)->mflags2 & M2_HUMAN) != 0L)
 #define your_race(ptr)		(((ptr)->mflags2 & urace.selfmask) != 0L)
-#define is_andromaliable(ptr)	(is_elf(ptr) || is_dwarf(ptr) || is_gnome(ptr) || is_orc(ptr) || is_human(ptr) || \
+#define is_andromaliable(ptr)	(is_elf(ptr) || is_dwarf(ptr) || is_gnome(ptr) || is_orc(ptr) || is_human(ptr) || (ptr) == &mons[PM_HOBBIT] || \
 								 (ptr) == &mons[PM_MONKEY] || (ptr) == &mons[PM_APE] || (ptr) == &mons[PM_YETI] || \
 								 (ptr) == &mons[PM_CARNIVOROUS_APE] || (ptr) == &mons[PM_SASQUATCH]\
 								)

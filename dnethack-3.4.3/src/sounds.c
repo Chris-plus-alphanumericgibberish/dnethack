@@ -1830,38 +1830,48 @@ int tx,ty;
 		}
 	}break;
 	case ERIDU:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that his seal be drawn in a large open space.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.eridu < moves){
+			boolean largeRoom = TRUE;
+			int i, j;
+			for(i = -2; i <= 2; i++){
+				for(j=-2;j<= 2; j++){
+					if(isok(tx+i,ty+j) && 
+						IS_ROOM(levl[tx+i][ty+j].typ)
+					) largeRoom = FALSE;
+				}
+			}
+			//Spirit requires that his seal be drawn in a large open space.
+			if(largeRoom){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_ERIDU;
+					u.spirit[numSlots] = SEAL_ERIDU;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_ERIDU;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_ERIDU;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_ERIDU;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.eridu = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case EURYNOME:{
 		if(u.eurynome < moves){
@@ -2170,8 +2180,9 @@ int tx,ty;
 	}break;
 	case MARIONETTE:{
 		if(u.marionette < moves){
-			//Spirit requires that her seal be drawn in the Valley of the Dead.
-			if(on_level(&valley_level, &u.uz)){ 
+			//Spirit requires that her seal be drawn in the Valley of the Dead or in a graveyard.
+			boolean in_a_graveyard = rooms[levl[tx][ty].roomno - ROOMOFFSET].rtype == MORGUE;
+			if(in_a_graveyard || on_level(&valley_level, &u.uz)){
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
@@ -2451,38 +2462,39 @@ int tx,ty;
 		}
 	}break;
 	case TENEBROUS:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that his seal be drawn in hell.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.tenebrous < moves){
+			//Spirit requires that his seal be drawn in darkness.
+			if( !(levl[tx][ty].lit) && !(levl[u.ux][u.uy].lit) ){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_TENEBROUS;
+					u.spirit[numSlots] = SEAL_TENEBROUS;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_TENEBROUS;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_TENEBROUS;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_TENEBROUS;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.tenebrous = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case YMIR:{
 		// if(u.vestige < moves){
@@ -2519,104 +2531,57 @@ int tx,ty;
 		// }
 	}break;
 	case DAHLVER_NAR:{
-		// if(u.dahlver_nar < moves){
-			// if(u.ulevel >= 14 && Role_if(PM_EXILE)){ //Spirit requires that his seal be drawn by a level 14+ Binder.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_DAHLVER_NAR;
-					// u.spirit[numSlots] = SEAL_DAHLVER_NAR;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_DAHLVER_NAR;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_DAHLVER_NAR;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_DAHLVER_NAR;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.dahlver_nar = moves + bindingPeriod;
-			// }
-		// }
+		if(u.dahlver_nar < moves){
+			//Spirit requires that his seal be drawn by a level 14+ Binder.
+			if(u.ulevel >= 14 && Role_if(PM_EXILE)){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					if(u.spiritQuest){
+						//Eject current quest spirit
+						u.specialSealsActive &= ~u.spiritQuest;
+						losexp("shreading of the soul",TRUE,TRUE,TRUE);
+					}
+					u.specialSealsActive |= SEAL_DAHLVER_NAR;
+					u.spiritQuest = SEAL_DAHLVER_NAR;
+					u.spiritQuestT = moves + bindingPeriod;
+				}
+				u.dahlver_nar = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case ACERERAK:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that his seal be drawn by a Binder who has killed him.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.acererak < moves){
+			//Spirit requires that his seal be drawn by a Binder who has killed him.
+			if(Role_if(PM_EXILE) && quest_status.killed_nemesis){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					if(u.spiritQuest){
+						//Eject current quest spirit
+						u.specialSealsActive &= ~u.spiritQuest;
+						losexp("shreading of the soul",TRUE,TRUE,TRUE);
+					}
+					u.specialSealsActive |= SEAL_ACERERAK;
+					u.spiritQuest = SEAL_ACERERAK;
+					u.spiritQuestT = moves + bindingPeriod;
+				}
+				u.acererak = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case NUMINA:{
 		//Spirit requires that its seal be drawn by a level 30 Binder.
-		// if(u.ulevel == 30 && Role_if(PM_EXILE)){
-			// Your(".");
-			// pline(".");
-			// if(u.sealCounts < numSlots){
-				// pline("");
-				// pline("");
-				// u.sealsActive |= SEAL_;
-				// u.spirit[numSlots] = SEAL_;
-				// u.spiritT[numSlots] = moves + bindingPeriod;
-				// u.sealCounts++;
-			// }
-			// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-				// pline("");
-				// pline("");
-				// uwep->ovar1 |= SEAL_;
-				// if(!u.spiritTineA){ 
-					// u.spiritTineA = SEAL_;
-					// u.spiritTineTA= moves + bindingPeriod;
-				// }
-				// else{
-					// u.spiritTineB = SEAL_;
-					// u.spiritTineTB= moves + bindingPeriod;
-				// }
-			// }
-			// else{
-				// pline("");
-				// pline(".");
-			// }
-		// }
+		//There is no binding period.
+		if(u.ulevel == 30 && Role_if(PM_EXILE)){
+			pline("");
+			pline("");
+			u.specialSealsActive |= SEAL_NUMINA;
+		}
 	}break;
 	}
 	
