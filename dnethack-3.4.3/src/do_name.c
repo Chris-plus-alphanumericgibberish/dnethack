@@ -888,6 +888,7 @@ char *outbuf;
 static const char * const bogusmons[] = {
 	"jumbo shrimp", "giant pigmy", /* oxymorons */
 	"gnu", "killer penguin", "Hexley", /* op-syses */
+	"lemming with a suicide vest", /* Because jumping to just YOUR death isn't enough. */
 	"giant cockroach", "giant slug", "maggot", 
 	"pterodactyl", "tyrannosaurus rex", "basilisk",
 	"efreeti", "marid", "dao",/* dnd genies */
@@ -914,8 +915,10 @@ static const char * const bogusmons[] = {
 	"brogmoid", "dornbeast",		/* Quendor (Zork, &c.) */
 	"Ancient Multi-Hued Dragon", "Evil Iggy",
 						/* Moria */
+	"rattlesnake", "ice monster", "phantom",
+	"quagga", "aquator", "griffin",
 	"emu", "kestrel", "xeroc", "venus flytrap",
-						/* Rogue */
+						/* Rogue V5 http://rogue.rogueforge.net/vade-mecum/ */
 	"creeping coins",			/* Wizardry */
 	"hydra", "siren",			/* Greek legend */
 	"jotun",					/* Norse legend */
@@ -926,7 +929,7 @@ static const char * const bogusmons[] = {
 	"andalite",					/* Animorphs */
 	"yithian", "elder thing", "old one", "great old one", "outer god", "other god", "elder god", /* Lovecraft */
 	"eyeless albino penguin", /* More Lovecraft */
-	"shadowgirl",		/* Shadowgirls */
+	"shadowgirl",				/* Shadowgirls */
 	"Luggage", "God of Stuff", "vampiric watermelon",	/* Discworld */
 	"Ent",					/* Lord of the Rings */
 	"tangle tree", "nickelpede", "wiggle",	/* Xanth */
@@ -1005,6 +1008,7 @@ static const char * const bogusmons[] = {
         "gazebo",
         "gonzo journalist",
         "gray goo", "magnetic monopole",
+	"ooblecks",
         "heisenbug",
         "lag monster",
         "loan shark",
@@ -1045,6 +1049,8 @@ static const char * const bogusmons[] = {
 	"guillemet",
 	"solidus",
 	"obelus",
+	"miniature blimp",
+	"lungfish",
 
         "apostrophe golem", "angry flower named Bob",
         "bonsai-kitten", "Boxxy", "lonelygirl15",
@@ -1078,12 +1084,110 @@ static const char * const bogusmons[] = {
         "Gloorx Vloq", "Blork the orc",         /* Dungeon Crawl Stone Soup */
         "unicorn pegasus kitten",               /* Wil Wheaton, John Scalzi */
 
+	"nyan cat",
+	"grind bug",
+	"enderman",
+	"wight supremacist",
+	"Magical Trevor",
+	"first category perpetual motion device",
+
+	"ghoti",
+	"regex engine",
+	"netsplit",
+	"wiki",
+	"peer",
+	"pigasus",
+	"Semigorgon",
+	"meeple",
+	"conventioneer",
+	"terracotta warrior",
+	"large microbat", "small megabat",
+	"uberhulk",
+	"hearse",
+	"COBOL",
+	"tofurkey",
+	"hippocampus",
+	"hippogriff",
+	"kelpie",
+
+	/* soundex and typos of monsters */
+	"gloating eye",
+	"flush golem"
+	"martyr orc",
+	"mortar orc",
+	"acute blob",
+	"aria elemental",
+	"aliasing priest",
+	"aligned parasite",
+	"aligned parquet",
+	"aligned proctor",
+	"baby balky dragon",
+	"baby blues dragon",
+	"baby caricature",
+	"baby crochet",
+	"baby grainy dragon",
+	"baby bong worm",
+	"baby long word",
+	"baby parable worm",
+	"barfed devil",
+	"beer wight",
+	"boor wight",
+	"brawny mold",
+	"rave spider",
+	"clue golem",
+	"bust vortex",
+	"errata elemental",
+	"elastic eel",
+	"electrocardiogram eel",
+	"fir elemental",
+	"tire elemental",
+	"flamingo sphere",
+	"fallacy golem",
+	"frizzed centaur",
+	"forest centerfold",
+	"fierceness sphere",
+	"frosted giant",
+	"geriatric snake",
+	"gnat ant",
+	"giant bath",
+	"grant beetle",
+	"giant mango",
+	"glossy golem",
+	"gnome laureate",
+	"gnome dummy",
+	"gooier ooze",
+	"green slide",
+	"guardian nacho",
+	"hell hound pun",
+	"high purist",
+	"hairnet devil",
+	"ice trowel",
+	"feather golem",
+	"lounge worm",
+	"mountain lymph",
+	"pager golem",
+	"pie fiend",
+	"prophylactic worm",
+	"sock mole",
+	"rogue piercer",
+	"seesawing sphere",
+	"simile mimic",
+	"moldier ant",
+	"stain vortex",
+	"scone giant",
+	"umbrella hulk",
+	"vampire mace",
+	"verbal jabberwock",
+	"water lemon",
+	"water melon",
+	"winged grizzly",
+	"yellow wight", 
+
 	/* bogus UnNetHack monsters */
 	"weeping angle",
 	"gelatinous sphere", "gelatinous pyramid",
 	"gelatinous Klein bottle", "gelatinous Mandelbrot set",
-	
-	"nyan cat"
+	"array terminator"
 };
 
 
