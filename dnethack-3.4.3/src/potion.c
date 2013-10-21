@@ -316,7 +316,7 @@ ghost_from_bottle()
 		Hallucination ? rndmonnam() : (const char *)"ghost");
 	if(flags.verbose)
 	    You("are frightened to death, and unable to move.");
-	nomul(-3);
+	nomul(-3, "being frightened to death");
 	nomovemsg = "You regain your composure.";
 }
 
@@ -629,7 +629,7 @@ peffects(otmp)
 		    else
 			Your("%s are frozen to the %s!",
 			     makeplural(body_part(FOOT)), surface(u.ux, u.uy));
-		    nomul(-(rn1(10, 25 - 12*bcsign(otmp))));
+		    nomul(-(rn1(10, 25 - 12*bcsign(otmp))), "frozen by a potion");
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 		}
@@ -1378,7 +1378,7 @@ register struct obj *obj;
 		kn++;
 		if (!Free_action) {
 		    pline("%s seems to be holding you.", Something);
-		    nomul(-rnd(5));
+		    nomul(-rnd(5), "frozen by a potion");
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 		} else You("stiffen momentarily.");
@@ -1387,7 +1387,7 @@ register struct obj *obj;
 		kn++;
 		if (!Free_action && !Sleep_resistance) {
 		    You_feel("rather tired.");
-		    nomul(-rnd(5));
+		    nomul(-rnd(5), "sleeping off a magical draught");
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 		} else You("yawn.");
@@ -1932,7 +1932,6 @@ boolean amnesia;
 	return used;
 }
 
-
 int
 dodip()
 {
@@ -1940,7 +1939,7 @@ dodip()
 	struct obj *singlepotion;
 	const char *tmp;
 	uchar here;
-	char allowall[2], qbuf[QBUFSZ], Your_buf[BUFSZ];
+	char allowall[2], qbuf[BUFSZ+QBUFSZ], Your_buf[BUFSZ];
 	short mixture;
 //	int res; //unreferenced?  added as part of lethe code?
 
@@ -1951,13 +1950,22 @@ dodip()
 	here = levl[u.ux][u.uy].typ;
 	/* Is there a fountain to dip into here? */
 	if (IS_FOUNTAIN(here)) {
+#ifdef PARANOID
+		Sprintf(qbuf, "Dip %s into the fountain?", the(xname(obj)));
+		if(yn(qbuf) == 'y') {
+#else
 		if(yn("Dip it into the fountain?") == 'y') {
+#endif
 			dipfountain(obj);
 			return(1);
 		}
 	} else if (is_pool(u.ux,u.uy)) {
 		tmp = waterbody_name(u.ux,u.uy);
+#ifdef PARANOID
+		Sprintf(qbuf, "Dip %s into the %s?", the(xname(obj)), tmp);
+#else
 		Sprintf(qbuf, "Dip it into the %s?", tmp);
+#endif
 		if (yn(qbuf) == 'y') {
 		    if (Levitation) {
 			floating_above(tmp);
@@ -1974,7 +1982,12 @@ dodip()
 		}
 	}
 
+#ifdef PARANOID
+	Sprintf(qbuf, "dip %s into", the(xname(obj)));
+	if(!(potion = getobj(beverages, qbuf)))
+#else
 	if(!(potion = getobj(beverages, "dip into")))
+#endif
 		return(0);
 	if (potion == obj && potion->quan == 1L) {
 		pline("That is a potion bottle, not a Klein bottle!");
@@ -2265,6 +2278,7 @@ dodip()
 			    obj->oeroded == MAX_ERODE ? "destroys" : "damages",
 			    yname(obj));
 		    if (obj->oeroded == MAX_ERODE) {
+			setnotworn(obj);
 			obj_extract_self(obj);
 			obfree(obj, (struct obj *)0);
 			obj = (struct obj *) 0;

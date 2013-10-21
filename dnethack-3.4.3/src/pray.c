@@ -1303,7 +1303,7 @@ dosacrifice()
 		    if (sgn(u.ualign.type) == sgn(dmon->data->maligntyp))
 			dmon->mpeaceful = TRUE;
 		    You("are terrified, and unable to move.");
-		    nomul(-3);
+		    nomul(-3, "being terrified of a demon");
 		} else pline_The("%s.", demonless_msg);
 	    }
 
@@ -1700,7 +1700,7 @@ dopray()
 	}
     }
 #endif
-    nomul(-3);
+    nomul(-3, "praying");
     nomovemsg = "You finish your prayer.";
     afternmv = prayer_done;
 
@@ -1866,10 +1866,10 @@ doturn()
 	//Altered turn undead to consume energy if possible, otherwise take full time.
 	if(fast){
 		u.uen -= 30;
-		nomul(-1);
+		nomul(-1, "trying to turn the undead");
 	}
 	else
-		nomul(-5);
+		nomul(-5, "trying to turn the undead");
 	return(1);
 }
 

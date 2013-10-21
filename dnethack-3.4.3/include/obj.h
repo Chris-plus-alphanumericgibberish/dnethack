@@ -97,7 +97,8 @@ struct obj {
 	Bitfield(lightened,1);/* dipped in potion of enlightenment */
 	Bitfield(shopOwned,1);	/* owned by a shopkeeper */
 	Bitfield(ostolen,1); 	/* was removed from a shop without being sold */
-	/* 1 free bits */
+    Bitfield(was_thrown,1); /* for pickup_thrown */
+	/* 0 free bits */
 
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
 #define leashmon  corpsenm	/* gets m_id of attached pet */

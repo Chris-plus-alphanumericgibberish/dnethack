@@ -61,7 +61,6 @@ register int x;	/* good luck approaches 0, bad luck approaches (x-1) */
 	return i;
 }
 
-
 #endif /* OVLB */
 #ifdef OVL0
 
@@ -69,7 +68,7 @@ int
 rnd(x)		/* 1 <= rnd(x) <= x */
 register int x;
 {
-	if(x<=0) x=1; //fixes a crash from feeding rnd a negative number.  I'd rather this behavior.
+	if(x<=0) x=1; //fixes a crash from feeding rnd a negative number.  I'd rather have this behavior.
 #ifdef DEBUG
 	if (x <= 0) {
 		impossible("rnd(%d) attempted", x);

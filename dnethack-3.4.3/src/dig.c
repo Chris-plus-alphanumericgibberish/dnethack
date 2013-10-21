@@ -984,7 +984,7 @@ struct obj *obj;
 				aobjnam(obj, "become"));
 			    /* you ought to be able to let go; tough luck */
 			    /* (maybe `move_into_trap()' would be better) */
-			    nomul(-d(2,2));
+			    nomul(-d(2,2), "entangled in a web");
 			    nomovemsg = "You pull free.";
 			} else if (lev->typ == IRONBARS) {
 			    pline("Clang!");

@@ -606,7 +606,7 @@ doforce()		/* try to force a chest with your weapon */
 
 	x = u.ux + u.dx;
 	y = u.uy + u.dy;
-	if (x == u.ux && y == u.uy && !u.dz) {
+	if (x == u.ux && y == u.uy && u.dz > -1) {
 	for(otmp = level.objects[u.ux][u.uy]; otmp; otmp = otmp->nexthere)
 	    if(Is_box(otmp)) {
 		if (otmp->obroken || !otmp->olocked) {

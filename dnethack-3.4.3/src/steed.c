@@ -174,7 +174,6 @@ doride()
 {
 	boolean forcemount = FALSE;
 
-
 	if (u.usteed)
 	    dismount_steed(DISMOUNT_BYCHOICE);
 	else if (getdir((char *)0) && isok(u.ux+u.dx, u.uy+u.dy)) {

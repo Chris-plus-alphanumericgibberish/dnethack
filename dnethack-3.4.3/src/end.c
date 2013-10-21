@@ -101,7 +101,7 @@ int sig_unused;
 		clear_nhwindow(WIN_MESSAGE);
 		curs_on_u();
 		wait_synch();
-		if(multi > 0) nomul(0);
+		if(multi > 0) nomul(0, NULL);
 	} else {
 		(void)done2();
 	}
@@ -119,7 +119,7 @@ done2()
 		clear_nhwindow(WIN_MESSAGE);
 		curs_on_u();
 		wait_synch();
-		if(multi > 0) nomul(0);
+		if(multi > 0) nomul(0, NULL);
 		if(multi == 0) {
 		    u.uinvulnerable = FALSE;	/* avoid ctrl-C bug -dlc */
 		    u.usleep = 0;
@@ -225,7 +225,12 @@ register struct monst *mtmp;
 		    Sprintf(eos(buf), " called %s", NAME(mtmp));
 	}
 
-	if (multi) Strcat(buf, ", while helpless");
+	if (multi) {
+	    if (strlen(multi_txt) > 0)
+		Sprintf(eos(buf), ", while %s", multi_txt);
+	    else
+		Strcat(buf, ", while helpless");
+	}
 	killer = buf;
 	if (mtmp->data->mlet == S_WRAITH)
 		u.ugrave_arise = PM_WRAITH;
@@ -736,8 +741,18 @@ die:
 
 	if (bones_ok) {
 #ifdef WIZARD
+# ifdef PARANOID
+	    if(wizard) {
+		getlin("Save WIZARD MODE bones? [no/yes]", paranoid_buf);
+		(void) lcase (paranoid_buf);
+		if (strcmp (paranoid_buf, "yes"))
+		  really_bon = FALSE;
+            }
+            if(really_bon)
+# else
 	    if (!wizard || yn("Save bones?") == 'y')
-#endif
+#endif /* PARANOID */
+#endif /* WIZARD */
 		savebones(corpse);
 	    /* corpse may be invalid pointer now so
 		ensure that it isn't used again */
@@ -988,6 +1003,17 @@ STATIC_OVL void
 list_vanquished(defquery, ask)
 char defquery;
 boolean ask;
+#ifdef DUMP_LOG
+{
+  do_vanquished(defquery, ask, FALSE);
+}
+
+void
+do_vanquished(defquery, ask, want_dump)
+int defquery;
+boolean ask;
+boolean want_dump;
+#endif
 {
     register int i, lev;
     int ntypes = 0, max_lev = 0, nkilled;
@@ -1019,7 +1045,7 @@ boolean ask;
 	    for (lev = max_lev; lev >= 0; lev--)
 	      for (i = LOW_PM; i < NUMMONS; i++)
 		if (mons[i].mlevel == lev && (nkilled = mvitals[i].died) > 0) {
-		    if ((mons[i].geno & G_UNIQ) && (i != PM_HIGH_PRIEST)) {
+		    if ((mons[i].geno & G_UNIQ) && i != PM_HIGH_PRIEST) {
 			Sprintf(buf, "%s%s",
 				!type_is_pname(&mons[i]) ? "The " : "",
 				mons[i].mname);

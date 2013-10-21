@@ -17,8 +17,8 @@ static const char *artifact_names[] = {
 #define     NO_ATTK	{0,0,0,0}		/* no attack */
 #define     NO_DFNS	{0,0,0,0}		/* no defense */
 #define     NO_CARY	{0,0,0,0}		/* no carry effects */
-#define     DFNS(c)	{0,c,0,0}		//DFNS(AD_MAGM) == grants magic resistance when wielded
-#define     CARY(c)	{0,c,0,0}		//CARY(AD_MAGM) == grants magic resistance when in open inventory
+#define     DFNS(c)	{0,c,0,0}		/* DFNS(AD_MAGM) == grants magic resistance when wielded */
+#define     CARY(c)	{0,c,0,0}		/* CARY(AD_MAGM) == grants magic resistance when in open inventory */
 #define     PHYS(a,b)	{0,AD_PHYS,a,b}		/* physical */
 #define     DRLI(a,b)	{0,AD_DRLI,a,b}		/* life drain */
 #define     COLD(a,b)	{0,AD_COLD,a,b}

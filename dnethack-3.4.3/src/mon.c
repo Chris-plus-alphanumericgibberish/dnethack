@@ -2775,7 +2775,7 @@ int  typ, fatal, opoistype;
 			i = thrown_weapon ? 6 : 16;
 			if(Half_physical_damage) i = (i+1) / 2;
 			losehp(i, pname, kprefix);
-			nomul(-(rn1(5, 12 - 6)));
+			nomul(-(rn1(5, 12 - 6)), "immobilized by paralysis venom");
 		} else{
 			i = thrown_weapon ? rnd(6) : rn1(10,6);
 			if(Half_physical_damage) i = (i+1) / 2;

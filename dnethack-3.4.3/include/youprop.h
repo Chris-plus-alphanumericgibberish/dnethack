@@ -365,5 +365,4 @@
 #define Lifesaved		u.uprops[LIFESAVED].extrinsic
 
 
-
 #endif /* YOUPROP_H */

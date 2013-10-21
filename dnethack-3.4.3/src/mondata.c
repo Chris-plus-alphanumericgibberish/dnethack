@@ -499,6 +499,10 @@ const char *in_str;
 		{ "erinyes",		PM_ERINYS },
 	    /* falsely caught by -ves check above */
 		{ "master of thief",	PM_MASTER_OF_THIEVES },
+	    /* human-form weres */
+		{ "wererat (human)",	PM_HUMAN_WERERAT },
+		{ "werejackal (human)",	PM_HUMAN_WEREJACKAL },
+		{ "werewolf (human)",	PM_HUMAN_WEREWOLF },
 	    /* end of list */
 		{ 0, 0 }
 	};

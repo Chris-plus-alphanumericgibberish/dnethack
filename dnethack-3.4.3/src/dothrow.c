@@ -303,8 +303,11 @@ dofire()
 		if (!flags.autoquiver) {
 			/* Don't automatically fill the quiver */
 			You("have no ammunition readied!");
+			if (iflags.quiver_fired)
+			  dowieldquiver(); /* quiver_fired */
+			if (!uquiver)
 			return(dothrow());
-		}
+		} else {
 		autoquiver();
 		if (!uquiver) {
 			You("have nothing appropriate for your quiver!");
@@ -313,6 +316,7 @@ dofire()
 			You("fill your quiver:");
 			prinv((char *)0, uquiver, 0L);
 		}
+	}
 	}
 
 	/*
@@ -611,13 +615,13 @@ hurtle(dx, dy, range, verbose)
      */
     if(Punished && !carried(uball)) {
 	You_feel("a tug from the iron ball.");
-	nomul(0);
+	nomul(0, NULL);
 	return;
     } else if (u.utrap) {
 	You("are anchored by the %s.",
 	    u.utraptype == TT_WEB ? "web" : u.utraptype == TT_LAVA ? "lava" :
 		u.utraptype == TT_INFLOOR ? surface(u.ux,u.uy) : "trap");
-	nomul(0);
+	nomul(0, NULL);
 	return;
     }
 
@@ -627,7 +631,7 @@ hurtle(dx, dy, range, verbose)
 
     if(!range || (!dx && !dy) || u.ustuck) return; /* paranoia */
 
-    nomul(-range);
+    nomul(-range, "moving through the air");
     if (verbose)
 	You("%s in the opposite direction.", range > 1 ? "hurtle" : "float");
     /* if we're in the midst of shooting multiple projectiles, stop */
@@ -871,6 +875,8 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 	boolean impaired = (Confusion || Stunned || Blind ||
 			   Hallucination || Fumbling);
 
+       obj->was_thrown = 1;
+
 	if ((obj->cursed || obj->greased) && (u.dx || u.dy) && !rn2(7)) {
 	    boolean slipok = TRUE;
 	    if (ammo_and_launcher(obj, uwep))
@@ -990,14 +996,17 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 
 		if (Underwater) range = 1;
 
+		boolean obj_destroyed = FALSE;
 		mon = bhit(u.dx, u.dy, range, THROWN_WEAPON,
 			   (int FDECL((*),(MONST_P,OBJ_P)))0,
 			   (int FDECL((*),(OBJ_P,OBJ_P)))0,
-			   obj);
+			   obj, &obj_destroyed);
 
 		/* have to do this after bhit() so u.ux & u.uy are correct */
 		if(Is_airlevel(&u.uz) || Levitation)
 		    hurtle(-u.dx, -u.dy, urange, TRUE);
+
+		if (obj_destroyed) return; /* fixes C343-100 */
 	}
 
 	if (mon) {
@@ -1785,7 +1794,7 @@ struct obj *obj;
 			mon = bhit(u.dx, u.dy, range, THROWN_WEAPON,
 				   (int FDECL((*),(MONST_P,OBJ_P)))0,
 				   (int FDECL((*),(OBJ_P,OBJ_P)))0,
-				   obj);
+				   obj, NULL);
 			if(mon) {
 			    if (ghitm(mon, obj))	/* was it caught? */
 				return 1;

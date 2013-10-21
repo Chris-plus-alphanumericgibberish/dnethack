@@ -669,7 +669,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	    return(0);
 	}
 
-	nomul(0);
+	nomul(0, NULL);
        /* increased to rn2(ml*20) to make kobold/orc shamans less helpless */
        if(rn2(ml*20) < (mtmp->mconf ? 100 : 20)) {     /* fumbled attack */
 	    if (canseemon(mtmp) && flags.soundok)
@@ -1388,7 +1388,7 @@ drainhp:
        zap = AD_MAGM;
 ray:
 	   if(!mtmp) goto psibolt;
-       nomul(0);
+       nomul(0, NULL);
        if(canspotmon(mtmp))
            pline("%s zaps you with a %s!", Monnam(mtmp),
                      flash_types[10+zap-1]);
@@ -1417,13 +1417,13 @@ ray:
 	    shieldeff(u.ux, u.uy);
 	    if (multi >= 0)
 		You("stiffen briefly.");
-	    nomul(-1);
+	    nomul(-1, "paralyzed by a monster");
 	} else {
 	    if (multi >= 0)
 		You("are frozen in place!");
 	    dmg = 4 + mtmp ? (int)mtmp->m_lev : rnd(30);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
-	    nomul(-dmg);
+	    nomul(-dmg, "paralyzed by a monster");
 	}
 	dmg = 0;
 	break;
@@ -1913,7 +1913,7 @@ buzzmu(mtmp, mattk)		/* monster uses spell (ranged) */
 	    return(0);
 	}
 	if(lined_up(mtmp) && rn2(3)) {
-	    nomul(0);
+	    nomul(0, NULL);
 	    if(mattk->adtyp && (mattk->adtyp < 11)) { /* no cf unsigned >0 */
 		if(canseemon(mtmp))
 		    pline("%s zaps you with a %s!", Monnam(mtmp),

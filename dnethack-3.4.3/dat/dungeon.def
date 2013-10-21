@@ -81,7 +81,7 @@ LEVEL:		"stair4" "K" @ (5, 0)
 LEVEL:		"stair5" "L" @ (6, 0)
 LEVEL:		"sanctum" "none" @ (-1, 0)
 LEVEL:		"wizard1" "none" @ (7, 0)
-CHAINLEVEL:	"wizard2" "X" "wizard1" + (1, 0)
+CHAINLEVEL:			"wizard2" "X" "wizard1" + (1, 0)
 CHAINLEVEL:			"wizard3" "Z" "wizard1" + (2, 0)
 LEVEL:		"hell3" "none" @ (-3, 0)
 LEVALIGN:		lawful

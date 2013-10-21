@@ -304,6 +304,7 @@ struct monst *mon;
 		case BROADSWORD:
 		case ELVEN_BROADSWORD:
 		case RUNESWORD:
+		case SCYTHE:
 		case VOULGE:		
 			tmp += rnd(4);
 		break;

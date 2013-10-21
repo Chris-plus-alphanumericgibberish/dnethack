@@ -341,7 +341,7 @@ mattacku(mtmp)
 		 * invisible, or you might be blind....
 		 */
 	
-	if(!ranged) nomul(0);
+	if(!ranged) nomul(0, NULL);
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
 
@@ -1443,7 +1443,7 @@ dopois:
 				if (Blind) You("are frozen!");
 				else You("are frozen by %s!", mon_nam(mtmp));
 				nomovemsg = 0;	/* default: "you can move again" */
-				nomul(-rnd(10));
+				nomul(-rnd(10), "paralyzed by a monster");
 				exercise(A_DEX, FALSE);
 		    }
 		}
@@ -1458,8 +1458,8 @@ dopois:
 				if (Blind) You("are mercilessly tickled!");
 				else You("are mercilessly tickled by %s!", mon_nam(mtmp));
 				nomovemsg = 0;	/* default: "you can move again" */
-				if(rn2(4)) nomul(-rnd(10));
-				else nomul(-1);
+				if(rn2(4)) nomul(-rnd(10), "being tickled to death");
+				else nomul(-1, "being tickled to death");
 				exercise(A_DEX, FALSE);
 				exercise(A_CON, FALSE);
 				if(uwep){
@@ -2881,8 +2881,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				You("meet the gaze of Aameul, left head of Demogorgon!");
 				You("are mesmerized!", mon_nam(mtmp));
 				nomovemsg = 0;	/* default: "you can move again" */
-				if(!Free_action && !Sleep_resistance) nomul(-rn1(5,2));
-				else if(!Free_action || !Sleep_resistance) nomul(-1);
+				if(!Free_action && !Sleep_resistance) nomul(-rn1(5,2), "mesmerized by Aameul");
+				else if(!Free_action || !Sleep_resistance) nomul(-1, "mesmerized by Aameul");
 				else youmonst.movement -= 6;
 				exercise(A_DEX, FALSE);
 				succeeded=1;
@@ -2899,7 +2899,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			else{
 				You("are mesmerized by %s!", mon_nam(mtmp));
 				nomovemsg = 0;	/* default: "you can move again" */
-				nomul(-rnd(10));
+				nomul(-rnd(10), "mesmerized by a monster");
 				exercise(A_DEX, FALSE);
 				succeeded=1;
 		    }
@@ -4323,7 +4323,7 @@ register struct monst *mon;
 			else
 				You("are paralyzed!");
 			pline("She has immobilized you with her magic!");
-		    nomul(-(rn1(10, 25)));
+		    nomul(-(rn1(10, 25)), "immobilized by night-terrors");
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 			break;
@@ -4868,7 +4868,7 @@ register struct monst *mon;
 	if (helpless || 25 + rn2(100) > ACURR(A_CHA) + ACURR(A_STR)) {
 		int turns = d(1, 4);
 		if(!helpless) You("are taken off guard!");
-		nomul(-(turns));
+		nomul(-(turns), "knocked reeling by a violent lover");
 		nomovemsg = You_can_move_again;
 		mon->mspec_used = turns;
 		return 0;
@@ -5718,7 +5718,6 @@ boolean helpless;
 
 #endif /* OVLB */
 
-
 #ifdef OVL1
 
 STATIC_OVL int
@@ -5895,6 +5894,7 @@ cloneu()
 	if (u.mh <= 1) return(struct monst *)0;
 	if (mvitals[mndx].mvflags & G_EXTINCT) return(struct monst *)0;
 	mon = makemon(youmonst.data, u.ux, u.uy, NO_MINVENT|MM_EDOG);
+	if (mon) {
 	mon = christen_monst(mon, plname);
 	initedog(mon);
 	mon->m_lev = youmonst.data->mlevel;
@@ -5902,6 +5902,7 @@ cloneu()
 	mon->mhp = u.mh / 2;
 	u.mh -= mon->mhp;
 	flags.botl = 1;
+	}
 	return(mon);
 }
 

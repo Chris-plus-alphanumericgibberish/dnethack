@@ -218,6 +218,8 @@ struct instance_flags {
 	boolean lan_mail;	/* mail is initialized */
 	boolean lan_mail_fetched; /* mail is awaiting display */
 #endif
+	boolean  quiver_fired;
+       boolean  pickup_thrown;
 /*
  * Window capability support.
  */

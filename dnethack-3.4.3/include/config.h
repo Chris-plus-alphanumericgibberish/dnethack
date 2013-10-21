@@ -328,7 +328,16 @@ typedef unsigned char	uchar;
 #define STEED		/* Riding steeds */
 #define TOURIST		/* Tourist players with cameras and Hawaiian shirts */
 #define CONVICT		/* Convict player with heavy iron ball */
+#define OTHER_SERVICES  /* shopkeeper services (SLASH'EM) */
 
+#define TAME_RANGED_ATTACKS /* tame monsters use ranged attacks */
+#define ATTACK_PETS         /* monsters attack pets directly */
+/* #define TAME_SUMMONING */  /* tame spellcasters can summon tame monsters */
+                              /* (including you) */
+#define YOUMONST_SPELL      /* you can cast monster spells in the form
+                               of a monster */
+#define PET_SATIATION       /* pets can become satiated and choke;
+                               they can also hoard food if intelligent */
 /* difficulty */
 #define ELBERETH	/* Engraving the E-word repels monsters */
 /* I/O */
@@ -343,16 +352,8 @@ typedef unsigned char	uchar;
 
 #define EXP_ON_BOTL	/* Show experience on bottom line */
 /* #define SCORE_ON_BOTL */	/* added by Gary Erickson (erickson@ucivax) */
-#define OTHER_SERVICES  /* shopkeeper services (SLASH'EM) */
 
-#define TAME_RANGED_ATTACKS /* tame monsters use ranged attacks */
-#define ATTACK_PETS         /* monsters attack pets directly */
-/* #define TAME_SUMMONING */  /* tame spellcasters can summon tame monsters */
-                              /* (including you) */
-#define YOUMONST_SPELL      /* you can cast monster spells in the form
-                               of a monster */
-#define PET_SATIATION       /* pets can become satiated and choke;
-                               they can also hoard food if intelligent */
+
 
 
 /* #define REALTIME_ON_BOTL */  /* Show elapsed time on bottom line.  Note:

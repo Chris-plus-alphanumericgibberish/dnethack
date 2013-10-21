@@ -266,7 +266,7 @@ boolean picked_some;
 
 	/* If there are objects here, take a look. */
 	if (ct) {
-	    if (flags.run) nomul(0);
+	    if (flags.run) nomul(0, NULL);
 	    flush_screen(1);
 	    (void) look_here(ct, picked_some);
 	} else {
@@ -445,7 +445,7 @@ int what;		/* should be a long */
 		}
 
 		/* if there's anything here, stop running */
-		if (OBJ_AT(u.ux,u.uy) && flags.run && flags.run != 8 && !flags.nopick) nomul(0);
+		if (OBJ_AT(u.ux,u.uy) && flags.run && flags.run != 8 && !flags.nopick) nomul(0, NULL);
 	}
 
 	add_valid_menu_class(0);	/* reset */
@@ -614,7 +614,11 @@ boolean grab;	 /* forced pickup, rather than forced leave behind? */
 					iflags.autopickup_exceptions[AP_GRAB] :
 					iflags.autopickup_exceptions[AP_LEAVE];
 	while (ape) {
+	    if (ape->is_regexp) {
+		if (regexec(&ape->match, objdesc, 0, NULL, 0) == 0) return TRUE;
+	    } else {
 		if (pmatch(ape->pattern, objdesc)) return TRUE;
+	    }
 		ape = ape->next;
 	}
 	return FALSE;
@@ -644,11 +648,11 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
 
 
 #ifndef AUTOPICKUP_EXCEPTIONS
-	    if (!*otypes || index(otypes, curr->oclass))
+           if (!*otypes || index(otypes, curr->oclass) || (iflags.pickup_thrown && curr->was_thrown))
 #else
-	    if ((!*otypes || index(otypes, curr->oclass) ||
+	     if (((!*otypes || index(otypes, curr->oclass) ||
 		 is_autopickup_exception(curr, TRUE)) &&
-	    	 !is_autopickup_exception(curr, FALSE))
+		  !is_autopickup_exception(curr, FALSE)) || (iflags.pickup_thrown && curr->was_thrown))
 #endif
 		n++;
 
@@ -656,11 +660,11 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
 	    *pick_list = pi = (menu_item *) alloc(sizeof(menu_item) * n);
 	    for (n = 0, curr = olist; curr; curr = FOLLOW(curr, follow))
 #ifndef AUTOPICKUP_EXCEPTIONS
-		if (!*otypes || index(otypes, curr->oclass)) {
+               if (!*otypes || index(otypes, curr->oclass) || (iflags.pickup_thrown && curr->was_thrown)) {
 #else
-	    if ((!*otypes || index(otypes, curr->oclass) ||
+		 if (((!*otypes || index(otypes, curr->oclass) ||
 		 is_autopickup_exception(curr, TRUE)) &&
-	    	 !is_autopickup_exception(curr, FALSE)) {
+		      !is_autopickup_exception(curr, FALSE)) || (iflags.pickup_thrown && curr->was_thrown)) {
 #endif
 		    pi[n].item.a_obj = curr;
 		    pi[n].count = curr->quan;
@@ -1310,7 +1314,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 		    obj->quan -= count;
 	    }
 	    flags.botl = 1;
-	    if (flags.run) nomul(0);
+	    if (flags.run) nomul(0, NULL);
 	    return 1;
 #endif
 	} else if (obj->otyp == CORPSE) {
@@ -1361,6 +1365,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 	    obj = splitobj(obj, count);
 
 	obj = pick_obj(obj);
+	obj->was_thrown = 0;
 
 	if (uwep && uwep == obj) mrg_to_wielded = TRUE;
 	nearload = near_capacity();
@@ -2151,7 +2156,7 @@ register int held;
 	    (void) chest_trap(obj, HAND, FALSE);
 	    /* even if the trap fails, you've used up this turn */
 	    if (multi >= 0) {	/* in case we didn't become paralyzed */
-		nomul(-1);
+		nomul(-1, "opening a container");
 		nomovemsg = "";
 	    }
 	    return 1;

@@ -485,9 +485,29 @@ domonability(VOID_ARGS)
 STATIC_PTR int
 enter_explore_mode(VOID_ARGS)
 {
+#ifdef PARANOID
+	char buf[BUFSZ];
+	int really_xplor = FALSE;
+#endif
+	pline("Explore mode is for local games, not public servers.");
+	return 0;
+
 	if(!discover && !wizard) {
 		pline("Beware!  From explore mode there will be no return to normal game.");
+#ifdef PARANOID
+		if (iflags.paranoid_quit) {
+		  getlin ("Do you want to enter explore mode? [yes/no]?",buf);
+		  (void) lcase (buf);
+		  if (!(strcmp (buf, "yes"))) really_xplor = TRUE;
+		} else {
 		if (yn("Do you want to enter explore mode?") == 'y') {
+		    really_xplor = TRUE;
+		  }
+		}
+		if (really_xplor) {
+#else
+		if (yn("Do you want to enter explore mode?") == 'y') {
+#endif
 			clear_nhwindow(WIN_MESSAGE);
 			You("are now in non-scoring explore mode.");
 			discover = TRUE;
@@ -979,7 +999,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	Sprintf(buf, "a carrying capacity of %d remaining", -1*inv_weight());
     you_have(buf);
 #endif
-		if (Adornment) {
+	if (Adornment) {
 	    int adorn = 0;
 
 	    if(uleft && uleft->otyp == RIN_ADORNMENT) adorn += uleft->spe;
@@ -2630,7 +2650,7 @@ char def;
 	char qbuf[QBUFSZ];
 	const char *query;
 	unsigned truncspot, reduction = sizeof(" [N]  ?") + 1;
-
+	
 	/*Ben Collver's fixes*/
 	if(Role_if(PM_PIRATE)) query = piratesay(plainquery);
 	else query = plainquery;

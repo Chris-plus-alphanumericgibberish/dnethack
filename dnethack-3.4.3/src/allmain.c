@@ -140,7 +140,7 @@ moveloop()
 				if (u.uevent.udemigod && xupstair && rn2(10)) {
 					(void) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTOK);
 				} else {
-			(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
+					(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 				}
 			}
 			//If the player no longer meets the kusanagi's requirements (ie, they lost the amulet,
@@ -353,7 +353,7 @@ moveloop()
 				if (occupation)
 				    stop_occupation();
 				else
-				    nomul(0);
+				    nomul(0, NULL);
 				if (change == 1) polyself(FALSE);
 				else you_were();
 				change = 0;
@@ -402,17 +402,17 @@ moveloop()
 	    /* once-per-hero-took-time things go here */
 	    /******************************************/
 
-	    if (u.utrap && u.utraptype == TT_LAVA) {
-		    if (!is_lava(u.ux,u.uy))
+	if(u.utrap && u.utraptype == TT_LAVA) {
+	    if(!is_lava(u.ux,u.uy))
 			    u.utrap = 0;
 		    else if (!u.uinvulnerable) {
 			    u.utrap -= 1<<8;
-			    if (u.utrap < 1<<8) {
+			if(u.utrap < 1<<8) {
 				    killer_format = KILLED_BY;
 				    killer = "molten lava";
 				    You("sink below the surface and die.");
 				    done(DISSOLVED);
-			    } else if (!u.umoved) {
+			} else if(didmove && !u.umoved) {
 				    Norep("You sink deeper into the lava.");
 				    u.utrap += rnd(4);
 			    }
@@ -537,6 +537,9 @@ moveloop()
 	    if (flags.time && flags.run) flags.botl = 1;
 	    display_nhwindow(WIN_MAP, FALSE);
 	}
+
+	if (moves > last_clear_screen + 2000) doredraw();
+
     }
 }
 
@@ -555,7 +558,7 @@ stop_occupation()
 		sync_hunger();
 */
 #ifdef REDO
-		nomul(0);
+		nomul(0, NULL);
 		pushch(0);
 #endif
 	}

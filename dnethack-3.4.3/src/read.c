@@ -189,6 +189,7 @@ doread()
     "I scored with the princess",
     "I Support Single Succubi",
     "I want to live forever or die in the attempt.",
+    "I'll stick it in you!",
     "Kop Killaz",
     "Lichen Park",
     "LOST IN THOUGHT - please send search party",
@@ -221,9 +222,27 @@ doread()
     "Anhur State University - Home of the Fighting Fire Ants!",
     "FREE HUGS",
     "Serial Ascender",
+    "Plunder Island Brimstone Beach Club",
+    "Real Men Are Valkyries",
+    "Young Men's Cavedigging Association",
+    "Occupy Fort Ludios",
     "I couldn't afford this T-shirt so I stole it!",
     "End Mercantile Opacity Discrimination Now: Let Invisible Customers Shop!",
     "Elvira's House O'Succubi, granting the gift of immorality!",
+    "Mind Flayers Suck",
+    "I'm not wearing any pants",
+    "Newt Fodder",
+    "My Dog ate Og",
+    "End Lich Prejudice Now!",
+    "Down With The Living!",
+    "Pudding Farmer",
+    "Dudley",
+    "I pray to Our Lady of Perpetual Mood Swings",
+    "Soooo, When's the Wizard Getting Back to You About That Brain?",
+    "Vegetarian",
+    "I plan to go to Astral",
+    "If They Don't Have Fruit Juice in Heaven, I Ain't Going",
+    "Living Dead",
 	    };
 	    char buf[BUFSZ];
 	    int erosion;
@@ -288,6 +307,9 @@ doread()
 
 	/* Actions required to win the game aren't counted towards conduct */
 	if (scroll->otyp != SPE_BOOK_OF_THE_DEAD &&
+#ifdef MAIL
+	    scroll->otyp != SCR_MAIL &&
+#endif
 		scroll->otyp != SPE_BLANK_PAPER &&
 		scroll->otyp != SCR_BLANK_PAPER)
 	    u.uconduct.literate++;
@@ -1334,7 +1356,7 @@ register struct obj	*sobj;
 		else{
 			if(sobj->age > monstermoves){
 				pline("The map %s hard to see.", vtense((char *)0,"are"));
-				nomul(rnd(3));
+				nomul(-1*rnd(3), "studying a magic map");
 				sobj->age += (long) d(3,10);
 			} else sobj->age = monstermoves + (long) d(3,10);
 			do_vicinity_map(u.ux,u.uy);

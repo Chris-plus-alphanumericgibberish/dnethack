@@ -175,18 +175,18 @@ aligntyp alignment;	/* target alignment, or A_NONE */
 
 	/* gather eligible artifacts */
 	for (n = 0, a = artilist+1, m = 1; a->otyp; a++, m++)
-	    if ((!by_align ? a->otyp == o_typ :
+	    if ((!by_align ? artitypematch(a, otmp) :
 		    (a->alignment == alignment ||
 			(a->alignment == A_NONE && u.ugifts > 0))) &&
 		(!(a->spfx & SPFX_NOGEN) || unique) && !artiexist[m]) {
-		if (by_align && a->race != NON_PM && race_hostile(&mons[a->race]))
-		    continue;	/* skip enemies' equipment */
-		else if (by_align && Role_if(a->role))
-		    goto make_artif;	/* 'a' points to the desired one */
-		else if(by_align && Role_if(PM_PIRATE)) continue; /* pirates are not gifted artifacts */
-		else
-		    eligible[n++] = m;
-	    }
+			if (by_align && a->race != NON_PM && race_hostile(&mons[a->race]))
+				continue;	/* skip enemies' equipment */
+			else if (by_align && Role_if(a->role))
+				goto make_artif;	/* 'a' points to the desired one */
+			else if(by_align && Role_if(PM_PIRATE)) continue; /* pirates are not gifted artifacts */
+			else
+				eligible[n++] = m;
+	}
 
 	if (n) {		/* found at least one candidate */
 	    m = eligible[rn2(n)];	/* [0..n-1] */
@@ -555,7 +555,7 @@ long wp_mask;
 
 	/* effects from the defn field */
 	dtyp = (wp_mask != W_ART) ? oart->defn.adtyp : oart->cary.adtyp;
-
+	
 	if (dtyp == AD_FIRE)
 	    mask = &EFire_resistance;
 	else if (dtyp == AD_COLD)
@@ -749,11 +749,11 @@ touch_artifact(obj,mon)
 		}
     } else if (!is_covetous(mon->data) && !is_mplayer(mon->data)) {
 		if(oart->otyp != UNICORN_HORN){
-		badclass = self_willed &&
-			   oart->role != NON_PM && !(oart == &artilist[ART_EXCALIBUR]
-			   || oart == &artilist[ART_CLARENT]);
-		badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
-		   (oart->alignment != sgn(mon->data->maligntyp));
+			badclass = self_willed &&
+				   oart->role != NON_PM && !(oart == &artilist[ART_EXCALIBUR]
+				   || oart == &artilist[ART_CLARENT]);
+			badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
+			   (oart->alignment != sgn(mon->data->maligntyp));
 		}
 		else{/* Unicorn horns */
 			badclass = TRUE;
@@ -1125,7 +1125,7 @@ char *type;			/* blade, staff, etc */
 	    if (Antimagic) {
 		resisted = TRUE;
 	    } else {
-		nomul(-3);
+		nomul(-3, "being scared stiff");
 		nomovemsg = "";
 		if (magr && magr == u.ustuck && sticks(youmonst.data)) {
 		    u.ustuck = (struct monst *)0;
@@ -2117,7 +2117,7 @@ arti_invoke(obj)
 	    otmp->owt = weight(otmp);
 	    otmp = hold_another_object(otmp, "Suddenly %s out.",
 				       aobjnam(otmp, "fall"), (const char *)0);
-			}
+	}
 	case OBJECT_DET:
 		object_detect(obj, 0);
 		artifact_detect(obj);
@@ -2358,7 +2358,7 @@ arti_invoke(obj)
 							2, //2 = AD_COLD, explode uses nonstandard damage type flags...
 							(u.ulevel + obj->spe + spell_damage_bonus())*3, 0,
 							EXPL_FROSTY);
-					nomul(-1);//both the first and the second dance leave you momentarily exposed.
+					nomul(-1, "performing a sword dance");//both the first and the second dance leave you momentarily exposed.
 				}
 			}
 			else if (dancenumber == '2') {
@@ -2374,7 +2374,7 @@ arti_invoke(obj)
 					u.SnSd2 = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST)||Role_if(PM_SAMURAI) ? .9 : 1));
 					buzz(WAN_COLD - WAN_MAGIC_MISSILE,
 						 (u.ulevel + obj->spe + spell_damage_bonus()), u.ux, u.uy, u.dx, u.dy,7+obj->spe);				}
-					nomul(-1);//both the first and the second dance leave you momentarily exposed.
+					nomul(-1, "performing a sword dance");//both the first and the second dance leave you momentarily exposed.
 			}
 			else if (dancenumber == '3') {
 				if(u.SnSd3 > monstermoves){
@@ -2541,7 +2541,7 @@ arti_invoke(obj)
 				set_destroy_thrown(1); //state variable referenced in drop_throw
 					m_throw(&youmonst, u.ux + xadj, u.uy + yadj, u.dx, u.dy,
 						2*BOLT_LIM, otmp,TRUE);
-					nomul(0);
+					nomul(0, NULL);
 				set_destroy_thrown(0);  //state variable referenced in drop_throw
 			}
 		}
@@ -3585,7 +3585,7 @@ read_necro(VOID_ARGS)
 	if (Confusion) {		/* became confused while learning */
 //	    (void) confused_book(book);
 	    artiptr = 0;		/* no longer studying */
-	    nomul(delay);		/* remaining delay is uninterrupted */
+	    nomul(delay, "struggling with the Necronomicon");		/* remaining delay is uninterrupted */
 	    delay = 0;
 	    return(0);
 	}
@@ -3774,7 +3774,7 @@ read_necro(VOID_ARGS)
 					u.uen -= 100;
 					u.uenmax -= 20;
 					unrestrict_weapon_skill(objects[uwep->otyp].oc_skill);
-					P_MAX_SKILL(objects[uwep->otyp].oc_skill) = P_EXPERT;
+					u.weapon_skills[objects[uwep->otyp].oc_skill].max_skill = P_EXPERT;
 				}
 			break;
 			case SELECT_HEALTH:

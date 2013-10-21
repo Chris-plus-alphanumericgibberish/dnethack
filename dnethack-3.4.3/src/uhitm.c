@@ -31,7 +31,6 @@ static boolean override_confirmation = FALSE;
 
 #define PROJECTILE(obj)	((obj) && is_ammo(obj))
 
-
 /* modified from hurtarmor() in mhitu.c */
 /* This is not static because it is also used for monsters rusting monsters */
 void
@@ -102,6 +101,9 @@ register struct monst *mtmp;
 struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 {
 	char qbuf[QBUFSZ];
+#ifdef PARANOID
+	char buf[BUFSZ];
+#endif
 
 	/* if you're close enough to attack, alert any waiting monster */
 	mtmp->mstrategy &= ~STRAT_WAITMASK;
@@ -203,11 +205,26 @@ struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 			return(FALSE);
 		}
 		if (canspotmon(mtmp)) {
+#ifdef PARANOID
+			Sprintf(qbuf, "Really attack %s? [no/yes]",
+				mon_nam(mtmp));
+			if (iflags.paranoid_hit) {
+				getlin (qbuf, buf);
+				(void) lcase (buf);
+				if (strcmp (buf, "yes")) {
+				  flags.move = 0;
+				  return(TRUE);
+				}
+			} else {
+#endif
 			Sprintf(qbuf, "Really attack %s?", mon_nam(mtmp));
 			if (yn(qbuf) != 'y') {
 				flags.move = 0;
 				return(TRUE);
 			}
+#ifdef PARANOID
+			}
+#endif
 		}
 	}
 
@@ -750,7 +767,7 @@ int thrown;
 					You("drop it at your feet.");
 					(void) dropy(monwep);
 				}
-				nomul(0);
+				nomul(0, NULL);
 				if(mon->mhp <= 0) /* flung weapon killed monster */
 				    return FALSE;
 				hittxt = TRUE;
@@ -2059,7 +2076,7 @@ register struct attack *mattk;
 				 */
 				You("digest %s.", mon_nam(mdef));
 				if (Slow_digestion) tmp *= 2;
-				nomul(-tmp);
+				nomul(-tmp, "digesting a victim");
 				nomovemsg = msgbuf;
 			    } else pline("%s", msgbuf);
 			    if (mdef->data == &mons[PM_GREEN_SLIME]) {
@@ -2554,7 +2571,7 @@ uchar aatyp;
 				else {
 				    You("are frozen by %s gaze!",
 					  s_suffix(mon_nam(mon)));
-				    nomul(-1*d(1,100));
+				    nomul(-1*d(1,100), "frozen by the gaze of Axus");
 				}
 		    }
 			pline("%s reaches out with %s %s!  A corona of dancing energy surrounds the %s!",
@@ -2677,7 +2694,7 @@ uchar aatyp;
 				else {
 				    You("are frozen by %s gaze!",
 					  s_suffix(mon_nam(mon)));
-				    nomul((ACURR(A_WIS) > 12 || rn2(4)) ? -tmp : -127);
+				    nomul((ACURR(A_WIS) > 12 || rn2(4)) ? -tmp : -127, "frozen by a monster's gaze");
 				}
 		    } else {
 				pline("%s cannot defend itself.",
@@ -2689,7 +2706,7 @@ uchar aatyp;
 		} else { /* gelatinous cube */
 		    You("are frozen by %s!", mon_nam(mon));
 	    	    nomovemsg = 0;	/* default: "you can move again" */
-		    nomul(-tmp);
+		    nomul(-tmp, "frozen by a monster");
 		    exercise(A_DEX, FALSE);
 		}
 		break;

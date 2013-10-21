@@ -86,7 +86,7 @@ use_camera(obj)
 	} else if ((mtmp = bhit(u.dx, u.dy, COLNO, FLASHED_LIGHT,
 				(int FDECL((*),(MONST_P,OBJ_P)))0,
 				(int FDECL((*),(OBJ_P,OBJ_P)))0,
-				obj)) != 0) {
+				obj, NULL)) != 0) {
 		obj->ox = u.ux,  obj->oy = u.uy;
 		(void) flash_hits_mon(mtmp, obj);
 	}
@@ -117,8 +117,8 @@ do_present_ring(obj)
 		You("display the ring's engraving to the %s.",
 			(u.dz > 0) ? surface(u.ux,u.uy) : ceiling(u.ux,u.uy));
 		if(u.dz < 0){
-		pline("Nothing happens.");
-		exercise(A_WIS, FALSE);
+			pline("Nothing happens.");
+			exercise(A_WIS, FALSE);
 			return 0;
 		}
 		if(is_lava(u.ux, u.uy) || flags.beginner || !(u.ualign.type == A_CHAOTIC || Hallucination) ){
@@ -771,7 +771,7 @@ struct obj *obj;
 					pline("%s", Hallucination ?
 						  "Yow!  The mirror stares back!" :
 						  "Yikes!  You've frozen yourself!");
-					nomul(-rnd((MAXULEV+6) - u.ulevel));
+					nomul(-rnd((MAXULEV+6) - u.ulevel), "frozen by your own reflection");
 				} else You("stiffen momentarily under your gaze.");
 		    } else if (youmonst.data->mlet == S_VAMPIRE)
 				You("don't have a reflection.");
@@ -817,7 +817,7 @@ struct obj *obj;
 	mtmp = bhit(u.dx, u.dy, COLNO, INVIS_BEAM,
 		    (int FDECL((*),(MONST_P,OBJ_P)))0,
 		    (int FDECL((*),(OBJ_P,OBJ_P)))0,
-		    obj);
+		    obj, NULL);
 	if (!mtmp || !haseyes(mtmp->data))
 		return 1;
 
@@ -943,7 +943,7 @@ struct obj **optr;
 				break;
 			case 2: /* no explanation; it just happens... */
 				nomovemsg = "";
-				nomul(-rnd(2));
+				nomul(-rnd(2), "ringing a bell");
 				break;
 		}
 	    }
@@ -1177,7 +1177,7 @@ struct obj *obj;
 }
 
 /* Called when potentially lightable object is affected by fire_damage().
-   Return TRUE if object was lit and FALSE otherwise --ALI */
+	Return TRUE if object was lit and FALSE otherwise --ALI */
 boolean
 catch_lit(obj)
 struct obj *obj;
@@ -1565,7 +1565,7 @@ int magic; /* 0=Physical, otherwise skill level */
 		change_luck(-1);
 
 	    teleds(cc.x, cc.y, TRUE);
-	    nomul(-1);
+	    nomul(-1, "jumping around");
 	    nomovemsg = "";
 	    morehungry(rnd(25));
 	    return 1;
@@ -3065,7 +3065,7 @@ do_break_wand(obj)
     current_wand = 0;
     if (obj)
 	delobj(obj);
-    nomul(0);
+    nomul(0, NULL);
     return 1;
 }
 
@@ -3343,6 +3343,7 @@ doapply()
 	case BAG_OF_HOLDING:
 	case OILSKIN_SACK:
 		res = use_container(obj, 1);
+		goto xit2; /* obj may have been destroyed */
 		break;
 	case BAG_OF_TRICKS:
 		bagotricks(obj);
@@ -3556,11 +3557,12 @@ doapply()
 		}
 		pline("Sorry, I don't know how to use that.");
 	xit:
-		nomul(0);
+		nomul(0, NULL);
 		return 0;
 	}
 	if (res && obj && obj->oartifact) arti_speak(obj);
-	nomul(0);
+xit2:
+	nomul(0, NULL);
 	return res;
 }
 

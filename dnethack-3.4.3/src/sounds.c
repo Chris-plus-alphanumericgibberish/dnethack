@@ -302,7 +302,11 @@ dosounds()
 
 static const char * const h_sounds[] = {
     "beep", "boing", "sing", "belche", "creak", "cough", "rattle",
-    "ululate", "pop", "jingle", "sniffle", "tinkle", "eep"
+    "ululate", "pop", "jingle", "sniffle", "tinkle", "eep",
+    "clatter", "hum", "sizzle", "twitter", "wheeze", "rustle",
+    "honk", "lisp", "yodel", "coo", "burp", "moo", "boom",
+    "murmur", "oink", "quack", "rumble", "twang", "bellow",
+    "toot", "gargle", "hoot", "warble"
 };
 
 const char *
@@ -364,7 +368,7 @@ register struct monst *mtmp;
 	growl_verb = growl_sound(mtmp);
     if (growl_verb) {
 	pline("%s %s!", Monnam(mtmp), vtense((char *)0, growl_verb));
-	if(flags.run) nomul(0);
+	if(flags.run) nomul(0, NULL);
 	wake_nearto(mtmp->mx, mtmp->my, mtmp->data->mlevel * 18);
     }
 }
@@ -405,7 +409,7 @@ register struct monst *mtmp;
     }
     if (yelp_verb) {
 	pline("%s %s!", Monnam(mtmp), vtense((char *)0, yelp_verb));
-	if(flags.run) nomul(0);
+	if(flags.run) nomul(0, NULL);
 	wake_nearto(mtmp->mx, mtmp->my, mtmp->data->mlevel * 12);
     }
 }
@@ -437,7 +441,7 @@ register struct monst *mtmp;
     }
     if (whimper_verb) {
 	pline("%s %s.", Monnam(mtmp), vtense((char *)0, whimper_verb));
-	if(flags.run) nomul(0);
+	if(flags.run) nomul(0, NULL);
 	wake_nearto(mtmp->mx, mtmp->my, mtmp->data->mlevel * 6);
     }
 }
@@ -666,7 +670,7 @@ register struct monst *mtmp;
 	case MS_BONES:
 	    pline("%s rattles noisily.", Monnam(mtmp));
 	    You("freeze for a moment.");
-	    nomul(-2);
+	    nomul(-2, "being scared by rattling");
 	    break;
 	case MS_LAUGH:
 	    {

@@ -186,7 +186,6 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	    return 1;
 	} else {
 	    damage = dmgval(otmp, mtmp);
-
 	    if (otmp->otyp == ACID_VENOM && resists_acid(mtmp))
 		damage = 0;
 	    if (ismimic) seemimic(mtmp);
@@ -420,7 +419,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 		    if (ohitmon(mtmp, singleobj, range, verbose))
 			break;
 		} else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
-		    if (multi) nomul(0);
+		    if (multi) nomul(0, NULL);
 
 		    if (singleobj->oclass == GEM_CLASS &&
 			    singleobj->otyp <= LAST_GEM+9 /* 9 glass colors */
@@ -718,7 +717,7 @@ struct monst *mtmp;
 	m_shot.o = STRANGE_OBJECT;
 	m_shot.s = FALSE;
 
-	nomul(0);
+	nomul(0, NULL);
 }
 
 extern int monstr[];
@@ -983,7 +982,7 @@ struct monst *mdef;
 	m_shot.o = STRANGE_OBJECT;
 	m_shot.s = FALSE;
 
-	nomul(0);
+	nomul(0, NULL);
 }
 
 #endif /* OVL1 */
@@ -1031,7 +1030,7 @@ register struct attack *mattk;
 			m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
 			distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy), otmp,
 			TRUE);
-		    nomul(0);
+		    nomul(0, NULL);
 		    return 0;
 		}
 	}
@@ -1076,7 +1075,7 @@ register struct attack *mattk;
 		if(!rn2(BOLT_LIM-distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy))) {
 		    if (canseemon(mtmp)) {
 			pline("%s spits venom!", Monnam(mtmp));
-		    nomul(0);
+		    nomul(0, NULL);
 		    }
 		    m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
 			distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy), otmp,
@@ -1202,7 +1201,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 			      breathwep[typ-1]);
 		    buzz((int) (-20 - (typ-1)), (int)mattk->damn,
 			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0);
-		    nomul(0);
+		    nomul(0, NULL);
 		    /* breath runs out sometimes. Also, give monster some
 		     * cunning; don't breath if the player fell asleep.
 		     */
@@ -1247,7 +1246,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 		    {
 			pline("%s breathes %s!", Monnam(mtmp),
 			      breathwep[typ-1]);
-		    nomul(0);
+		    nomul(0, NULL);
 	            }
 		    buzz((int) (-20 - (typ-1)), (int)mattk->damn,
 			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0);

@@ -746,7 +746,7 @@ E void FDECL(check_special_room, (BOOLEAN_P));
 E int NDECL(dopickup);
 E void NDECL(lookaround);
 E int NDECL(monster_nearby);
-E void FDECL(nomul, (int));
+E void FDECL(nomul, (int, const char *));
 E void FDECL(unmul, (const char *));
 E void FDECL(losehp, (int,const char *,BOOLEAN_P));
 E int NDECL(weight_cap);
@@ -2513,7 +2513,7 @@ E const char *FDECL(exclam, (int force));
 E void FDECL(hit, (const char *,struct monst *,const char *));
 E void FDECL(miss, (const char *,struct monst *));
 E struct monst *FDECL(bhit, (int,int,int,int,int (*)(MONST_P,OBJ_P),
-			     int (*)(OBJ_P,OBJ_P),struct obj *));
+			     int (*)(OBJ_P,OBJ_P),struct obj *, boolean *));
 E struct monst *FDECL(boomhit, (int,int));
 E int FDECL(burn_floor_paper, (int,int,BOOLEAN_P,BOOLEAN_P));
 E void FDECL(buzz, (int,int,XCHAR_P,XCHAR_P,int,int,int));

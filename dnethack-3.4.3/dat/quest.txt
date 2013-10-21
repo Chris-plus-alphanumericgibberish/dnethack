@@ -2339,21 +2339,21 @@ to quickly return to %H and find %l.
 A great crack opens below %n, and a huge, flaming hand 
 reaches out to seize his wispy form. He curses ye:
     NO! I won't die here, %p! It is ye who's soul will feed 
-	the Devil! I am king of all the oceans, I cannot be killed!
-	I will haunt ye until %d betrays ye!
+    the Devil! I am king of all the oceans, I cannot be killed!
+    I will haunt ye until %d betrays ye!
 %E
 %Cc Pir 00081
 As %l senses %o, the lines on his face harden
 into what may be his version of a smile.
     Ye have claimed %o.  Ye hold in
-	yer hands all the treasures of the sea.  Ye may well be
-	the next Dread Pirate, greater even than Roberts. My 
-	%S, ye should seek a treasure greater than any pirate
-	has ever sought before: the Amulet of Yendor.
-	
-	The great Wizard, who lives in Yendor, knows that ye 
-	can claim this prize. It was he who sent the soldiers here.
-	Return to %Z, and claim yer destiny!
+    yer hands all the treasures of the sea.  Ye may well be
+    the next Dread Pirate, greater even than Roberts. My 
+    %S, ye should seek a treasure greater than any pirate
+    has ever sought before: the Amulet of Yendor.
+    
+    The great Wizard, who lives in Yendor, knows that ye 
+    can claim this prize. It was he who sent the soldiers here.
+    Return to %Z, and claim yer destiny!
 %E
 %Cc Pir 00082
 "%oC is yers.  Yer destiny awaits through the portal that 

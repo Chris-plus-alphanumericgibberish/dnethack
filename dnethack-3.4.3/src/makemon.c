@@ -145,9 +145,11 @@ register int x, y, n;
 		}
 		if (enexto(&mm, mm.x, mm.y, mtmp->data)) {
 		    mon = makemon(mtmp->data, mm.x, mm.y, NO_MM_FLAGS);
+		    if (mon) {
 		    mon->mpeaceful = FALSE;
 		    mon->mavenge = 0;
 		    set_malign(mon);
+		    }
 		    /* Undo the second peace_minded() check in makemon(); if the
 		     * monster turned out to be peaceful the first time we
 		     * didn't create it at all; we don't want a second check.
@@ -2608,7 +2610,7 @@ rndmonst()
 		return rn2(3) ? &mons[PM_JELLYFISH] : rn2(2) ? &mons[PM_SHARK] : &mons[PM_GIANT_EEL];
 
 	if (rndmonst_state.choice_count < 0) {	/* need to recalculate */
-	    
+	    int zlevel, minmlev, maxmlev;
 	    boolean elemlevel;
 #ifdef REINCARNATION
 	    boolean upper;
@@ -2627,6 +2629,11 @@ rndmonst()
 #endif
 		return (struct permonst *)0;
 	    } /* else `mndx' now ready for use below */
+	    zlevel = level_difficulty();
+	    /* determine the level of the weakest monster to make. */
+	    minmlev = zlevel / 6;
+	    /* determine the level of the strongest monster to make. */
+	    maxmlev = (zlevel + u.ulevel) / 2;
 #ifdef REINCARNATION
 	    upper = Is_rogue_level(&u.uz);
 #endif
@@ -3097,7 +3104,6 @@ static NEARDATA char syms[] = {
 	AMULET_CLASS, TOOL_CLASS, ROCK_CLASS, GEM_CLASS, SPBOOK_CLASS,
 	S_MIMIC_DEF, S_MIMIC_DEF, S_MIMIC_DEF,
 };
-
 
 void
 set_mimic_sym(mtmp)		/* KAA, modified by ERS */

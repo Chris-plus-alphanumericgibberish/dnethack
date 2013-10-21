@@ -1865,6 +1865,7 @@ boolean from_user;
 	 * automatically sticks 'candied' in front of such names.
 	 */
 
+    short dummyshort;
 	boolean heptagram = FALSE,
 		gorgoneion = FALSE,
 		acheron = FALSE,

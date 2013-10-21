@@ -446,7 +446,7 @@ int locflags;	/* non-zero means get location even if monster is buried */
 	    *xp = u.ux;
 	    *yp = u.uy;
 	    return TRUE;
-	} else if (mon->mx > 0 && (!mon->mburied || locflags)) {
+	} else if (mon && !DEADMONSTER(mon) && mon->mx > 0 && (!mon->mburied || locflags)) {
 	    *xp = mon->mx;
 	    *yp = mon->my;
 	    return TRUE;
@@ -671,9 +671,11 @@ register struct obj *obj;
 			    mtmp = christen_monst(mtmp, ONAME(obj));
 			/* flag the quest leader as alive. */
 			if (mtmp->data->msound == MS_LEADER || mtmp->m_id ==
-				quest_status.leader_m_id)
+			    quest_status.leader_m_id) {
+			    quest_status.leader_m_id = mtmp->m_id;
 			    quest_status.leader_is_dead = FALSE;
 		    }
+		}
 		}
 		if (mtmp) {
 			if (obj->oeaten)
@@ -2598,7 +2600,7 @@ register struct	obj	*obj;
 	    } else if (u.dz) {
 		disclose = zap_updown(obj);
 	    } else {
-		(void) bhit(u.dx,u.dy, rn1(8,6),ZAPPED_WAND, bhitm,bhito, obj);
+		(void) bhit(u.dx,u.dy, rn1(8,6),ZAPPED_WAND, bhitm,bhito, obj, NULL);
 	    }
 	    /* give a clue if obj_zapped */
 	    if (obj_zapped)
@@ -2746,16 +2748,18 @@ register struct monst *mtmp;
  *  one is revealed for a weapon, but if not a weapon is left up to fhitm().
  */
 struct monst *
-bhit(ddx,ddy,range,weapon,fhitm,fhito,obj)
+bhit(ddx,ddy,range,weapon,fhitm,fhito,obj,obj_destroyed)
 register int ddx,ddy,range;		/* direction and range */
 int weapon;				/* see values in hack.h */
 int FDECL((*fhitm), (MONST_P, OBJ_P)),	/* fns called when mon/obj hit */
     FDECL((*fhito), (OBJ_P, OBJ_P));
 struct obj *obj;			/* object tossed/used */
+boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may be NULL */
 {
 	struct monst *mtmp;
 	uchar typ;
 	boolean shopdoor = FALSE, point_blank = TRUE;
+	if (obj_destroyed) { *obj_destroyed = FALSE; }
 
 	if (weapon == KICKED_WEAPON) {
 	    /* object starts one square in front of player */
@@ -2813,6 +2817,7 @@ struct obj *obj;			/* object tossed/used */
 		    ((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&obj, x - ddx, y - ddy,
 			      point_blank ? 0 : !rn2(5), 1))) {
 		/* caveat: obj might now be null... */
+		if (obj == NULL && obj_destroyed) { *obj_destroyed = TRUE; }
 		bhitpos.x -= ddx;
 		bhitpos.y -= ddy;
 		break;
@@ -3508,9 +3513,9 @@ register int dx,dy,range;
 	if (mon) {
 	    if (type == ZT_SPELL(ZT_FIRE)) break;
 	    if (type >= 0) mon->mstrategy &= ~STRAT_WAITMASK;
-	#ifdef STEED
+#ifdef STEED
 	    buzzmonst:
-	#endif
+#endif
 	    if (zap_hit(find_mac(mon), spell_type)) {
 		if (mon_reflects(mon, (char *)0)) {
 		    if(cansee(mon->mx,mon->my)) {
@@ -3562,9 +3567,9 @@ register int dx,dy,range;
 			    else
 				hit(fltxt, mon, "!");
 			}
-		#ifndef GOLDOBJ
+#ifndef GOLDOBJ
 			mon->mgold = 0L;
-		#endif
+#endif
 
 	/* note: worn amulet of life saving must be preserved in order to operate */
 	#define oresist_disintegration(obj) \
@@ -3610,13 +3615,13 @@ register int dx,dy,range;
 		miss(fltxt,mon);
 	    }
 	} else if (sx == u.ux && sy == u.uy && range >= 0) {
-	    nomul(0);
-	#ifdef STEED
+	    nomul(0, NULL);
+#ifdef STEED
 	    if (u.usteed && !rn2(3) && !mon_reflects(u.usteed, (char *)0)) {
 		    mon = u.usteed;
 		    goto buzzmonst;
 	    } else
-	#endif
+#endif
 	    if (zap_hit((int) u.uac, 0)) {
 		range -= 2;
 		pline("%s hits you!", The(fltxt));
@@ -3640,7 +3645,7 @@ register int dx,dy,range;
 		if (!Blind) Your(vision_clears);
 	    }
 	    stop_occupation();
-	    nomul(0);
+		    nomul(0, NULL);
 	}
 
 		if(lev->typ == TREE && abstype == ZT_DEATH && abs(type) != ZT_BREATH(ZT_DEATH)) {

@@ -1151,7 +1151,9 @@ register const char *let,*word;
 #ifndef GOLDOBJ
 			if(!(allowcnt == 2 && cnt < u.ugold))
 				cnt = u.ugold;
+			if (cnt)
 			return(mkgoldobj(cnt));
+			else return((struct obj *)0);
 #endif
 		}
 		if(ilet == '?' || ilet == '*') {

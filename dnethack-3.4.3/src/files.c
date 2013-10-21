@@ -1283,7 +1283,6 @@ char *lockname;
 #endif
 }
 
-
 /* lock a file */
 boolean
 lock_file(filename, whichprefix, retryct)

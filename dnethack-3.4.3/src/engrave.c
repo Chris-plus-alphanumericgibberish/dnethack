@@ -1068,7 +1068,7 @@ register int x,y;
 			}
 			You("%s: \"%s\"",
 				  (Blind) ? "feel the words" : "read",  et);
-			if(flags.run > 1) nomul(0);
+			if(flags.run > 1) nomul(0, NULL);
 		}
 	}
 	if(ep && ep->ward_id){
@@ -4615,6 +4615,7 @@ static const char *epitaphs[] = {
         "Are we all being disintegrated, or is it just me?",
         "At least I'm good at something",
         "Attempted suicide",
+	"Auri sacra fames",
         "Auribus teneo lupum",
         "Be prepared",
         "Beauty survives",
@@ -4729,6 +4730,7 @@ static const char *epitaphs[] = {
         "Here lies the body of John Round. Lost at sea and never found.",
         "Here there be dragons",
         "Hey, I didn't write this stuff!",
+	"Hodie mihi, cras tibi",
         "Hold my calls",
         "Home Sweet Hell",
         "Humpty Dumpty, a Bad Egg.  He was pushed off the wall.",
@@ -4867,7 +4869,7 @@ static const char *epitaphs[] = {
         "Ya really had me going baby, but now I'm gone.",
         "Yes Dear, just a few more minutes...",
         "You said it wasn't poisonous!",
-        "You set my heart aflame.... You gave me heartburn."
+        "You set my heart aflame. You gave me heartburn."
 };
 
 /* Create a headstone at the given location.
