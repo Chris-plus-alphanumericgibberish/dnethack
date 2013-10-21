@@ -1081,7 +1081,8 @@ int tx,ty;
 	case AHAZU:{
 		if(u.ahazu < moves){
 			struct trap *t=t_at(tx,ty);
-			if(t->ttyp == PIT){ //Ahazu requires that his seal be drawn in a pit.
+			//Ahazu requires that his seal be drawn in a pit.
+			if(t->ttyp == PIT){
 				pline("The walls of the pit are lifted swiftly away, revealing a vast starry expanse beneath the world.");
 				if(u.sealCounts < numSlots){
 					pline("A voice whispers from bellow:");
@@ -1126,6 +1127,7 @@ int tx,ty;
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
 					pline("Even as it dies, a voice speaks from the blood-red flame:");
 					pline("\"Cursed are you who calls me forth. I damn you to bear my sign and my flames, alone in this world of darkness!\"");
+					unrestrict_weapon_skill(P_CLERIC_SPELL);
 					u.sealsActive |= SEAL_AMON;
 					u.spirit[numSlots] = SEAL_AMON;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1172,6 +1174,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
 					pline("\"Though born of curves, by my square you shall rectify the world.\"");
+					unrestrict_weapon_skill(P_ESCAPE_SPELL);
 					u.sealsActive |= SEAL_ANDREALPHUS;
 					u.spirit[numSlots] = SEAL_ANDREALPHUS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1199,8 +1202,8 @@ int tx,ty;
 		}
 	}break;
 	case ANDROMALIUS:{ /*UNFINISHED*/
+		//Seal must be drawn around any two of a bag, a silver key, a gold ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
 		if(u.andromalius < moves){
-			//Seal must be drawn around any two of a bag, a silver key, a gold ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
 			struct obj *o1 = 0, *o2 = 0, *otmp;
 			struct monst *rat = 0;
 			int count = 0;
@@ -1396,6 +1399,7 @@ int tx,ty;
 						break;
 					}
 					pline("When your attention returns to the seal, the hands have gone.");
+					unrestrict_weapon_skill(P_DAGGER);
 					u.sealsActive |= SEAL_ANDROMALIUS;
 					u.spirit[numSlots] = SEAL_ANDROMALIUS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1452,7 +1456,8 @@ int tx,ty;
 			break;
 				}
 			}
-			if(o && u.sealCounts < numSlots){ //Astaroth requires that his seal be drawn on a square with a damaged item.
+			//Astaroth requires that his seal be drawn on a square with a damaged item.
+			if(o && u.sealCounts < numSlots){
 				iscrys = (o->otyp == CRYSKNIFE);
 				if (o->oeroded && !iscrys) {
 					switch (o->oeroded) {
@@ -1474,6 +1479,8 @@ int tx,ty;
 				pline("There is the sound of shrieking metal, and a cracked porcelain face swings into view on a metalic armature.");
 				pline("A voice speaks to you, as the immobile white face weeps tears of black oil onto the %s.", surface(tx,ty));
 				pline("*I am Astaroth, the Clockmaker. You shall be my instrument, to repair this broken world.*");
+				unrestrict_weapon_skill(P_CROSSBOW);
+				unrestrict_weapon_skill(P_SHURIKEN);
 					u.sealsActive |= SEAL_ASTAROTH;
 					u.spirit[numSlots] = SEAL_ASTAROTH;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1522,13 +1529,15 @@ int tx,ty;
 	}break;
 	case BALAM:{
 		if(u.balam < moves){
-			if(levl[tx][ty].typ == ICE){ //Balam requires that her seal be drawn on an icy square.
+			//Balam requires that her seal be drawn on an icy square.
+			if(levl[tx][ty].typ == ICE){
 				You("stab your weapon down into the ice, cracking it.");
 				if(u.sealCounts < numSlots){
 					pline("A woman's scream echos through your mind as the cracks form a vaguely humanoid outline on the ice.");
 					pline("A voice sobs in your ear:");
 					pline("\"I am Balam, offered up as the last sacrifice; condemned to bleed until the end of all suffering.\"");
 					pline("\"In your name was this done, therefore you shall bear my stigmata and share my suffering.\"");
+					unrestrict_weapon_skill(P_WHIP);
 					u.sealsActive |= SEAL_BALAM;
 					u.spirit[numSlots] = SEAL_BALAM;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1578,6 +1587,9 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("I anoint you in Blood and Gold, that bloodshed and riches shall follow in your wake.");
 					pline("That is my covenant, my blessing, and my curse.\"");
+					unrestrict_weapon_skill(P_SABER);
+					unrestrict_weapon_skill(P_LANCE);
+					unrestrict_weapon_skill(P_RIDING);
 					u.sealsActive |= SEAL_BERITH;
 					u.spirit[numSlots] = SEAL_BERITH;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1605,8 +1617,8 @@ int tx,ty;
 		}
 	}break;
 	case BUER:{
-		if(u.buer < moves){
 		//Buer's seal may be drawn anywhere.
+		if(u.buer < moves){
 			pline("You hear hooved footfalls approaching quickly, though you can't make out from what direction.");
 			pline("They set an odd tempo; very regular and faster by far than any animal of four legs could comfortably keep.");
 			pline("The footfalls reach a crescendo, and an odd creature rolls into the seal in front of you.");
@@ -1616,6 +1628,7 @@ int tx,ty;
 			pline("\"I am Buer, %s, %s to %s.", buerTitles[rn2(SIZE(buerTitles))], buerSetOne[rn2(SIZE(buerSetOne))], buerSetTwo[rn2(SIZE(buerSetTwo))]);
 			if(u.sealCounts < numSlots){
 				pline("Will you walk with me?\"");
+				unrestrict_weapon_skill(P_HEALING_SPELL);
 				u.sealsActive |= SEAL_BUER;
 				u.spirit[numSlots] = SEAL_BUER;
 				u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1648,7 +1661,8 @@ int tx,ty;
 			break;
 				}
 			}
-			if(o || IS_GRAVE(levl[tx][ty].typ)){ //Chupoclops requires that her seal be drawn around a humanoid corpse or grave.
+			//Chupoclops requires that her seal be drawn around a humanoid corpse or grave.
+			if(o || IS_GRAVE(levl[tx][ty].typ)){
 				// pline("The %s within the seal begins to twitch and shake.");
 				// Your("consciousness expands, and you sense great currents of despair and mortality that wrap the world like silken threads.");
 				// pline("The %s falls still, and you know you're in the presence of the Spider.");
@@ -1658,6 +1672,7 @@ int tx,ty;
 				pline("you know you are in the presence of the Spider.");
 				if(u.sealCounts < numSlots){
 					pline("She wraps you tight in her bitter cords and sends you forth, bait for her Web.");
+					unrestrict_weapon_skill(P_KNIFE);
 					u.sealsActive |= SEAL_CHUPOCLOPS;
 					u.spirit[numSlots] = SEAL_CHUPOCLOPS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1689,12 +1704,16 @@ int tx,ty;
 	}break;
 	case DANTALION:{
 		if(u.dantalion < moves){
-			if(IS_THRONE(levl[tx][ty].typ)){ //Spirit requires that his seal be drawn around a throne.
+			//Spirit requires that his seal be drawn around a throne.
+			if(IS_THRONE(levl[tx][ty].typ)){
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_BROAD_SWORD);
+					unrestrict_weapon_skill(P_TWO_HANDED_SWORD);
+					unrestrict_weapon_skill(P_SCIMITAR);
 					u.sealsActive |= SEAL_DANTALION;
 					u.spirit[numSlots] = SEAL_DANTALION;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1732,12 +1751,14 @@ int tx,ty;
 					else if( !(otmp = level.objects[ttx][tty]) || otmp->otyp != ROCK ) validLocation = FALSE;
 				}
 			}
-			if(validLocation){ //Spirit requires that his seal be drawn in a ring of rocks.
+			//Spirit requires that his seal be drawn in a ring of rocks.
+			if(validLocation){
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_POLEARMS);
 					u.sealsActive |= SEAL_DUNSTAN;
 					u.spirit[numSlots] = SEAL_DUNSTAN;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1773,6 +1794,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_UNICORN_HORN);
 					u.sealsActive |= SEAL_ECHIDNA;
 					u.spirit[numSlots] = SEAL_ECHIDNA;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1801,12 +1823,14 @@ int tx,ty;
 	}break;
 	case EDEN:{
 		if(u.eden < moves){
-			if(IS_FOUNTAIN(levl[tx][ty].typ)){ //Spirit requires that its seal be drawn by a fountain.
+			//Spirit requires that its seal be drawn by a fountain.
+			if(IS_FOUNTAIN(levl[tx][ty].typ)){
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_LONG_SWORD);
 					u.sealsActive |= SEAL_EDEN;
 					u.spirit[numSlots] = SEAL_EDEN;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1851,6 +1875,12 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_SHORT_SWORD);
+					unrestrict_weapon_skill(P_HAMMER);
+					unrestrict_weapon_skill(P_JAVELIN);
+					unrestrict_weapon_skill(P_SLING);
+					unrestrict_weapon_skill(P_DART);
+					unrestrict_weapon_skill(P_BOOMERANG);
 					u.sealsActive |= SEAL_ERIDU;
 					u.spirit[numSlots] = SEAL_ERIDU;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1888,6 +1918,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
 					u.sealsActive |= SEAL_EURYNOME;
 					u.spirit[numSlots] = SEAL_EURYNOME;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1925,6 +1956,9 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_FLAIL);
+					unrestrict_weapon_skill(P_BOW);
+					unrestrict_weapon_skill(P_HARVEST);
 					u.sealsActive |= SEAL_EVE;
 					u.spirit[numSlots] = SEAL_EVE;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -1952,39 +1986,48 @@ int tx,ty;
 		}
 	}break;
 	case FAFNIR:{
-		// if(u.vestige < moves){
+		if(u.fafnir < moves){
+			boolean coins = FALSE;
+			struct obj *otmp;
+			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+				if(otmp->oclass == COIN_CLASS && otmp->quan >= 100*u.ulevel){
+					coins = TRUE;
+			break;
+				}
+			}
 			//Spirit requires that his seal be drawn in a vault, or on a pile of 100xyour level coins.
-			// if(){
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+			if(coins || *in_rooms(tx,ty,VAULT)){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					unrestrict_weapon_skill(P_PICK_AXE);
+					u.sealsActive |= SEAL_FAFNIR;
+					u.spirit[numSlots] = SEAL_FAFNIR;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_FAFNIR;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_FAFNIR;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_FAFNIR;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.fafnir = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case HUGINN_MUNINN:{
 		if(u.huginn_muninn < moves){
@@ -1994,6 +2037,7 @@ int tx,ty;
 			if(u.sealCounts < numSlots){
 				pline("");
 				pline("");
+				unrestrict_weapon_skill(P_SPEAR);
 				u.sealsActive |= SEAL_HUGINN_MUNINN;
 				u.spirit[numSlots] = SEAL_HUGINN_MUNINN;
 				u.spiritT[numSlots] = moves + bindingPeriod;
@@ -2028,6 +2072,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_MORNING_STAR);
 					u.sealsActive |= SEAL_IRIS;
 					u.spirit[numSlots] = SEAL_IRIS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -2091,16 +2136,20 @@ int tx,ty;
 	}break;
 	case MALPHAS:{
 		if(u.malphas < moves){
-			int ttx, tty;
-			struct obj *otmp;
+			struct obj *otmp, *o=NULL;
 			struct monst *mtmp;
 			//Spirit requires that his seal be drawn in a square with a fresh corpse.
-			if((otmp = level.objects[ttx][tty]) &&
-				otmp->otyp != CORPSE && 
+			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+				if(otmp->otyp == CORPSE && 
 				(otmp->corpsenm == PM_ACID_BLOB
 				|| (monstermoves <= peek_at_iced_corpse_age(otmp) + 50)
 				)
 			){ 
+					o = otmp;
+			break;
+				}
+			}
+			if(o){
 				  /*////////////////////////////////*/
 				 /* Do a light sacrificing routine */
 				/*////////////////////////////////*/
@@ -2200,6 +2249,8 @@ int tx,ty;
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_AXE);
+					unrestrict_weapon_skill(P_MATTER_SPELL);
 					uwep->ovar1 |= SEAL_MARIONETTE;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_MARIONETTE;
@@ -2227,6 +2278,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_DIVINATION_SPELL);
 					u.sealsActive |= SEAL_MOTHER;
 					u.spirit[numSlots] = SEAL_MOTHER;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -2264,6 +2316,8 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_QUARTERSTAFF);
+					unrestrict_weapon_skill(P_ATTACK_SPELL);
 					u.sealsActive |= SEAL_NABERIUS;
 					u.spirit[numSlots] = SEAL_NABERIUS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -2335,6 +2389,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_TRIDENT);
 					u.sealsActive |= SEAL_OSE;
 					u.spirit[numSlots] = SEAL_OSE;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -2397,38 +2452,53 @@ int tx,ty;
 		}
 	}break;
 	case PAIMON:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that her seal be drawn around a spellbook.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.paimon < moves){
+			struct obj *otmp, *o=NULL;
+			struct monst *mtmp;
+			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+				if(otmp->oclass == SPBOOK_CLASS && 
+					!(
+					  otmp->corpsenm == SPE_BLANK_PAPER ||
+					  otmp->corpsenm == SPE_BOOK_OF_THE_DEAD ||
+					  otmp->corpsenm == SPE_SECRETS
+					)
+				){
+					o = otmp;
+			break;
+				}
+			}
+			//Spirit requires that her seal be drawn around a spellbook. The summoner must face toward the northwest during the ritual.
+			if( o && tx - u.ux < 0 && ty - u.uy < 0){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					u.sealsActive |= SEAL_PAIMON;
+					u.spirit[numSlots] = SEAL_PAIMON;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_PAIMON;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_PAIMON;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_PAIMON;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.paimon = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case SIMURGH:{
 		if(u.simurgh < moves){
@@ -2439,6 +2509,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_ENCHANTMENT_SPELL);
 					u.sealsActive |= SEAL_SIMURGH;
 					u.spirit[numSlots] = SEAL_SIMURGH;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -2474,6 +2545,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
+					unrestrict_weapon_skill(P_MACE);
 					u.sealsActive |= SEAL_TENEBROUS;
 					u.spirit[numSlots] = SEAL_TENEBROUS;
 					u.spiritT[numSlots] = moves + bindingPeriod;
@@ -2501,38 +2573,54 @@ int tx,ty;
 		}
 	}break;
 	case YMIR:{
-		// if(u.vestige < moves){
-			// if(){ //Spirit requires that his seal be drawn around a rotting corpse of a poisonous creature.
-				// Your(".");
-				// pline(".");
-				// if(u.sealCounts < numSlots){
-					// pline("");
-					// pline("");
-					// u.sealsActive |= SEAL_;
-					// u.spirit[numSlots] = SEAL_;
-					// u.spiritT[numSlots] = moves + bindingPeriod;
-					// u.sealCounts++;
-				// }
-				// else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					// pline("");
-					// pline("");
-					// uwep->ovar1 |= SEAL_;
-					// if(!u.spiritTineA){ 
-						// u.spiritTineA = SEAL_;
-						// u.spiritTineTA= moves + bindingPeriod;
-					// }
-					// else{
-						// u.spiritTineB = SEAL_;
-						// u.spiritTineTB= moves + bindingPeriod;
-					// }
-				// }
-				// else{
-					// pline("");
-					// pline(".");
-				// }
-				// u.vestige = moves + bindingPeriod;
-			// }
-		// }
+		if(u.ymir < moves){
+			struct obj *otmp, *o=NULL;
+			struct monst *mtmp;
+			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+				if(	otmp->otyp == CORPSE && 
+					otmp->corpsenm != PM_LICHEN && 
+					otmp->corpsenm != PM_LIZARD && 
+					otmp->corpsenm != PM_BEHOLDER && 
+					monstermoves <= (monstermoves - peek_at_iced_corpse_age(otmp))/(10L) > 5L &&
+					poisonous(&mons[otmp->corpsenm])
+				){
+					o = otmp;
+			break;
+				}
+			}
+			//Spirit requires that his seal be drawn around a rotting corpse of a poisonous creature.
+			if(	o ){
+				Your(".");
+				pline(".");
+				if(u.sealCounts < numSlots){
+					pline("");
+					pline("");
+					unrestrict_weapon_skill(P_CLUB);
+					u.sealsActive |= SEAL_YMIR;
+					u.spirit[numSlots] = SEAL_YMIR;
+					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.sealCounts++;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					pline("");
+					pline("");
+					uwep->ovar1 |= SEAL_YMIR;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_YMIR;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_YMIR;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+				}
+				else{
+					pline("");
+					pline(".");
+				}
+				u.ymir = moves + bindingPeriod;
+			}
+		}
 	}break;
 	case DAHLVER_NAR:{
 		if(u.dahlver_nar < moves){
@@ -2582,13 +2670,93 @@ int tx,ty;
 		//Spirit requires that its seal be drawn by a level 30 Binder.
 		//There is no binding period.
 		if(u.ulevel == 30 && Role_if(PM_EXILE)){
+			int skill;
 			pline("");
 			pline("");
+			for (skill = 0; skill < P_NUM_SKILLS; skill++) {
+				OLD_P_SKILL(skill) = P_UNSKILLED;
+			}
 			u.specialSealsActive |= SEAL_NUMINA;
 		}
 	}break;
 	}
 	
+}
+
+int
+P_MAX_SKILL(p_skill)
+int p_skill;
+{
+	int maxskill = OLD_P_MAX_SKILL(p_skill);
+	if(spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
+	return maxskill;
+}
+
+int
+P_SKILL(p_skill)
+int p_skill;
+{
+	int curskill = OLD_P_SKILL(p_skill),
+		maxskill = P_MAX_SKILL(p_skill);
+	if(spiritSkill(p_skill)){
+		curskill += 1;
+	}
+	return min(curskill, maxskill);
+}
+
+int
+P_RESTRICTED(p_skill)
+int p_skill;
+{
+	return (u.weapon_skills[p_skill].skill==P_ISRESTRICTED 
+		&& !(spiritSkill(p_skill)) );
+}
+
+boolean
+spiritSkill(p_skill)
+int p_skill;
+{
+	if(u.specialSealsActive & SEAL_NUMINA) return TRUE;
+	if(p_skill == P_DAGGER) return u.sealsActive & SEAL_ANDROMALIUS? TRUE : FALSE;
+	if(p_skill == P_KNIFE) return u.sealsActive & SEAL_CHUPOCLOPS? TRUE : FALSE;
+	if(p_skill == P_AXE) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
+	if(p_skill == P_PICK_AXE) return u.sealsActive & SEAL_FAFNIR? TRUE : FALSE;
+	if(p_skill == P_SHORT_SWORD) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_BROAD_SWORD) return u.sealsActive & SEAL_DANTALION? TRUE : FALSE;
+	if(p_skill == P_LONG_SWORD) return u.sealsActive & SEAL_EDEN? TRUE : FALSE;
+	if(p_skill == P_TWO_HANDED_SWORD) return u.sealsActive & SEAL_DANTALION? TRUE : FALSE;
+	if(p_skill == P_SCIMITAR) return u.sealsActive & SEAL_DANTALION? TRUE : FALSE;
+	if(p_skill == P_SABER) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
+	if(p_skill == P_CLUB) return u.sealsActive & SEAL_YMIR? TRUE : FALSE;
+	if(p_skill == P_MACE) return u.sealsActive & SEAL_TENEBROUS? TRUE : FALSE;
+	if(p_skill == P_MORNING_STAR) return u.sealsActive & SEAL_IRIS? TRUE : FALSE;
+	if(p_skill == P_FLAIL) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
+	if(p_skill == P_HAMMER) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_QUARTERSTAFF) return u.sealsActive & SEAL_NABERIUS? TRUE : FALSE;
+	if(p_skill == P_POLEARMS) return u.sealsActive & SEAL_DUNSTAN? TRUE : FALSE;
+	if(p_skill == P_SPEAR) return u.sealsActive & SEAL_HUGINN_MUNINN? TRUE : FALSE;
+	if(p_skill == P_JAVELIN) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_TRIDENT) return u.sealsActive & SEAL_OSE? TRUE : FALSE;
+	if(p_skill == P_LANCE) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
+	if(p_skill == P_BOW) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
+	if(p_skill == P_SLING) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_CROSSBOW) return u.sealsActive & SEAL_ASTAROTH? TRUE : FALSE;
+	if(p_skill == P_DART) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_SHURIKEN) return u.sealsActive & SEAL_ASTAROTH? TRUE : FALSE;
+	if(p_skill == P_BOOMERANG) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_WHIP) return u.sealsActive & SEAL_BALAM? TRUE : FALSE;
+	if(p_skill == P_HARVEST) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
+	if(p_skill == P_UNICORN_HORN) return u.sealsActive & SEAL_ECHIDNA? TRUE : FALSE;
+	if(p_skill == P_ATTACK_SPELL) return u.sealsActive & SEAL_NABERIUS? TRUE : FALSE;
+	if(p_skill == P_HEALING_SPELL) return u.sealsActive & SEAL_BUER? TRUE : FALSE;
+	if(p_skill == P_DIVINATION_SPELL) return u.sealsActive & SEAL_MOTHER? TRUE : FALSE;
+	if(p_skill == P_ENCHANTMENT_SPELL) return u.sealsActive & SEAL_SIMURGH? TRUE : FALSE;
+	if(p_skill == P_CLERIC_SPELL) return u.sealsActive & SEAL_AMON? TRUE : FALSE;
+	if(p_skill == P_ESCAPE_SPELL) return u.sealsActive & SEAL_ANDREALPHUS? TRUE : FALSE;
+	if(p_skill == P_MATTER_SPELL) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
+	if(p_skill == P_RIDING) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
+	if(p_skill == P_BARE_HANDED_COMBAT) return u.sealsActive & SEAL_EURYNOME? TRUE : FALSE;
+	return FALSE;
 }
 #ifdef USER_SOUNDS
 

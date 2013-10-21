@@ -348,7 +348,7 @@ struct obj {
 				 (obj)->otyp == FLINT     || \
 				 (obj)->otyp == TOUCHSTONE)
 
-/* vesitge related */
+/* spirit related */
 #define is_berithable(otmp)	(otmp->otyp == SADDLE\
 				|| otmp->otyp == SILVER_SABER\
 				|| otmp->otyp == LONG_SWORD\

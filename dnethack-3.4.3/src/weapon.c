@@ -993,7 +993,7 @@ STATIC_OVL int
 slots_required(skill)
 int skill;
 {
-    int tmp = P_SKILL(skill);
+    int tmp = OLD_P_SKILL(skill);
 
     /* The more difficult the training, the more slots it takes.
      *	unskilled -> basic	1
@@ -1026,7 +1026,7 @@ boolean speedy;
 	    (wizard && speedy) ||
 #endif
 	    (P_ADVANCE(skill) >=
-		(unsigned) practice_needed_to_advance(P_SKILL(skill))
+		(unsigned) practice_needed_to_advance(OLD_P_SKILL(skill))
 	    && u.skills_advanced < P_SKILL_LIMIT
 	    && u.weapon_slots >= slots_required(skill)));
 }
@@ -1039,7 +1039,7 @@ int skill;
     return !P_RESTRICTED(skill)
 	    && P_SKILL(skill) < P_MAX_SKILL(skill) && (
 	    (P_ADVANCE(skill) >=
-		(unsigned) practice_needed_to_advance(P_SKILL(skill))
+		(unsigned) practice_needed_to_advance(OLD_P_SKILL(skill))
 	    && u.skills_advanced < P_SKILL_LIMIT));
 }
 
@@ -1052,7 +1052,7 @@ int skill;
     return !P_RESTRICTED(skill)
 	    && P_SKILL(skill) >= P_MAX_SKILL(skill) && (
 	    (P_ADVANCE(skill) >=
-		(unsigned) practice_needed_to_advance(P_SKILL(skill))));
+		(unsigned) practice_needed_to_advance(OLD_P_SKILL(skill))));
 }
 
 STATIC_OVL void
@@ -1060,7 +1060,7 @@ skill_advance(skill)
 int skill;
 {
     u.weapon_slots -= slots_required(skill);
-    P_SKILL(skill)++;
+	OLD_P_SKILL(skill)++;
     u.skill_record[u.skills_advanced++] = skill;
     /* subtly change the advance message to indicate no more advancement */
     You("are now %s skilled in %s.",
@@ -1179,12 +1179,12 @@ enhance_weapon_skill()
 			Sprintf(buf, " %s%-*s %-12s %5d(%4d)",
 			    prefix, longest, P_NAME(i), sklnambuf,
 			    P_ADVANCE(i),
-			    practice_needed_to_advance(P_SKILL(i)));
+			    practice_needed_to_advance(OLD_P_SKILL(i)));
 		    else
 			Sprintf(buf, " %s%s\t%s\t%5d(%4d)",
 			    prefix, P_NAME(i), sklnambuf,
 			    P_ADVANCE(i),
-			    practice_needed_to_advance(P_SKILL(i)));
+			    practice_needed_to_advance(OLD_P_SKILL(i)));
 		 } else
 #endif
 		{
@@ -1235,9 +1235,9 @@ void
 unrestrict_weapon_skill(skill)
 int skill;
 {
-    if (skill < P_NUM_SKILLS && P_RESTRICTED(skill)) {
-	P_SKILL(skill) = P_UNSKILLED;
-	P_MAX_SKILL(skill) = P_BASIC;
+    if (skill < P_NUM_SKILLS && OLD_P_RESTRICTED(skill)) {
+		OLD_P_SKILL(skill) = P_UNSKILLED;
+		OLD_P_MAX_SKILL(skill) = P_BASIC;
 	P_ADVANCE(skill) = 0;
     }
 }
@@ -1287,9 +1287,9 @@ int n;	/* number of slots to lose; normally one */
 	    u.weapon_slots--;
 	} else if (u.skills_advanced) {
 	    skill = u.skill_record[--u.skills_advanced];
-	    if (P_SKILL(skill) <= P_UNSKILLED)
+	    if (OLD_P_SKILL(skill) <= P_UNSKILLED)
 		panic("lose_weapon_skill (%d)", skill);
-	    P_SKILL(skill)--;	/* drop skill one level */
+	    OLD_P_SKILL(skill)--;	/* drop skill one level */
 	    /* Lost skill might have taken more than one slot; refund rest. */
 	    u.weapon_slots = slots_required(skill) - 1;
 	    /* It might now be possible to advance some other pending
@@ -1486,8 +1486,8 @@ const struct def_skill *class_skill;
 
 	/* initialize skill array; by default, everything is restricted */
 	for (skill = 0; skill < P_NUM_SKILLS; skill++) {
-	    P_SKILL(skill) = P_ISRESTRICTED;
-	    P_MAX_SKILL(skill) = P_ISRESTRICTED;
+		OLD_P_SKILL(skill) = P_ISRESTRICTED;
+		OLD_P_MAX_SKILL(skill) = P_ISRESTRICTED;
 	    P_ADVANCE(skill) = 0;
 	}
 
@@ -1495,17 +1495,17 @@ const struct def_skill *class_skill;
 	if(!Role_if(PM_EXILE)) for (obj = invent; obj; obj = obj->nobj) {
 	    skill = weapon_type(obj);
 	    if (skill != P_NONE)
-		P_SKILL(skill) = P_BASIC;
+			OLD_P_SKILL(skill) = P_BASIC;
 	}
 
 	/* set skills for magic */
 	if (Role_if(PM_HEALER) || Role_if(PM_MONK)) {
-		P_SKILL(P_HEALING_SPELL) = P_BASIC;
+		OLD_P_SKILL(P_HEALING_SPELL) = P_BASIC;
 	} else if (Role_if(PM_PRIEST)) {
-		P_SKILL(P_CLERIC_SPELL) = P_BASIC;
+		OLD_P_SKILL(P_CLERIC_SPELL) = P_BASIC;
 	} else if (Role_if(PM_WIZARD)) {
-		P_SKILL(P_ATTACK_SPELL) = P_BASIC;
-		P_SKILL(P_ENCHANTMENT_SPELL) = P_BASIC;
+		OLD_P_SKILL(P_ATTACK_SPELL) = P_BASIC;
+		OLD_P_SKILL(P_ENCHANTMENT_SPELL) = P_BASIC;
 	}
 
 	/* walk through array to set skill maximums */
@@ -1513,19 +1513,19 @@ const struct def_skill *class_skill;
 	    skmax = class_skill->skmax;
 	    skill = class_skill->skill;
 
-	    P_MAX_SKILL(skill) = skmax;
-	    if (P_SKILL(skill) == P_ISRESTRICTED)	/* skill pre-set */
-		P_SKILL(skill) = P_UNSKILLED;
+	    OLD_P_MAX_SKILL(skill) = skmax;
+	    if (OLD_P_SKILL(skill) == P_ISRESTRICTED)	/* skill pre-set */
+			OLD_P_SKILL(skill) = P_UNSKILLED;
 	}
 
 	/* High potential fighters already know how to use their hands. */
-	if (P_MAX_SKILL(P_BARE_HANDED_COMBAT) > P_EXPERT)
-	    P_SKILL(P_BARE_HANDED_COMBAT) = P_BASIC;
+	if (OLD_P_MAX_SKILL(P_BARE_HANDED_COMBAT) > P_EXPERT)
+	    OLD_P_SKILL(P_BARE_HANDED_COMBAT) = P_BASIC;
 
 	/* Roles that start with a horse know how to ride it */
 #ifdef STEED
 	if (urole.petnum == PM_PONY)
-	    P_SKILL(P_RIDING) = P_BASIC;
+	    OLD_P_SKILL(P_RIDING) = P_BASIC;
 #endif
 
 	/*
@@ -1533,12 +1533,12 @@ const struct def_skill *class_skill;
 	 * & set advance
 	 */
 	for (skill = 0; skill < P_NUM_SKILLS; skill++) {
-	    if (!P_RESTRICTED(skill)) {
-		if (P_MAX_SKILL(skill) < P_SKILL(skill)) {
+	    if (!OLD_P_RESTRICTED(skill)) {
+		if (OLD_P_MAX_SKILL(skill) < OLD_P_SKILL(skill)) {
 		    impossible("skill_init: curr > max: %s", P_NAME(skill));
-		    P_MAX_SKILL(skill) = P_SKILL(skill);
+		    OLD_P_MAX_SKILL(skill) = OLD_P_SKILL(skill);
 		}
-		P_ADVANCE(skill) = practice_needed_to_advance(P_SKILL(skill)-1);
+		P_ADVANCE(skill) = practice_needed_to_advance(OLD_P_SKILL(skill)-1);
 	    }
 	}
 }

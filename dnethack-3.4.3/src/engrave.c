@@ -3256,7 +3256,8 @@ doseal()
 	    type = ENGR_BLOOD;
 
 	/* Can the adventurer engrave at all? */
-	if(!u.sealsKnown && !(Role_if(PM_EXILE) && (quest_status.got_quest || quest_status.killed_nemesis || u.ulevel == 30) )){
+	if(Role_if(PM_EXILE)) binderup(); //reaply all known seals, in case of memory loss.
+	if(!u.sealsKnown){
 		You("don't know any seals.");
 		return 0;
 	}

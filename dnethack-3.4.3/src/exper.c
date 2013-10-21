@@ -5,7 +5,6 @@
 #include "hack.h"
 
 STATIC_DCL void NDECL(binderdown);
-STATIC_DCL void NDECL(binderup);
 STATIC_DCL long FDECL(newuexp, (int));
 STATIC_DCL int FDECL(enermod, (int));
 

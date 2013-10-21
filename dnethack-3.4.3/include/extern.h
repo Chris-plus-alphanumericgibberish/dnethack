@@ -638,6 +638,7 @@ E int FDECL(experience, (struct monst *,int));
 E void FDECL(more_experienced, (int,int));
 E void FDECL(losexp, (const char *,BOOLEAN_P,BOOLEAN_P,BOOLEAN_P));
 E void NDECL(newexplevel);
+E void NDECL(binderup);
 E void FDECL(pluslvl, (BOOLEAN_P));
 E long FDECL(rndexp, (BOOLEAN_P));
 
@@ -1994,6 +1995,10 @@ E void FDECL(yelp, (struct monst *));
 E void FDECL(whimper, (struct monst *));
 E void FDECL(beg, (struct monst *));
 E int NDECL(dotalk);
+E int FDECL(P_MAX_SKILL, (int));
+E int FDECL(P_SKILL, (int));
+E int FDECL(P_RESTRICTED, (int));
+E boolean FDECL(spiritSkill, (int));
 #ifdef USER_SOUNDS
 E int FDECL(add_sound_mapping, (const char *));
 E void FDECL(play_sound_for_message, (const char *));
