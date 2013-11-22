@@ -511,8 +511,8 @@ NON_DIGGABLE:(56,15,75,20)
 #	The "goal" level for the quest.
 #
 #	Here you meet Blackbeard's Ghost, your nemesis monster.
-#   You have to defeat Nalzok in combat to gain the artifact 
-#	you have been assigned to retrieve.
+#   You have to defeat Blackbeard's Ghost in combat to gain 
+#	the artifact you have been assigned to retrieve.
 #
 
 MAZE: "Pir-goal", ' '
