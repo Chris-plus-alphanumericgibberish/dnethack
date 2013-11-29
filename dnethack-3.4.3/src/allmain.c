@@ -22,8 +22,8 @@ moveloop()
 #if defined(MICRO) || defined(WIN32)
     char ch;
     int abort_lev;
-	struct obj *pobj;
 #endif
+	struct obj *pobj;
     int moveamt = 0, wtcap = 0, change = 0;
     boolean didmove = FALSE, monscanmove = FALSE;
     /* don't make it obvious when monsters will start speeding up */
