@@ -19,7 +19,7 @@ static char *FDECL(You_buf, (int));
 /* Note that these declarations rely on knowledge of the internals
  * of the variable argument handling stuff in "tradstdc.h"
  */
-char * FDECL(replace, (const char *, const char *, const char *));
+const char * FDECL(replace, (const char *, const char *, const char *));
 
 #if defined(USE_STDARG) || defined(USE_VARARGS)
 static void FDECL(vpline, (const char *, va_list));
@@ -489,13 +489,13 @@ self_invis_message()
 	}
 }
 
-char *
+const char *
 replace(st, orig, repl)
 const char *st, *orig, *repl;
 {
 	static char retval[BUFSZ];
 	char buffer[BUFSZ];
-	char *ch, *pos;
+	const char *ch, *pos;
 	int len;
 	memset(buffer, 0, BUFSZ);
 	pos = st;
