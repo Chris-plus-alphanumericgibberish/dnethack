@@ -30,7 +30,7 @@ static void FDECL(mon_ignite_lightsaber, (struct obj *, struct monst *));
 
 STATIC_DCL void FDECL(give_may_advance_msg, (int));
 
-extern struct monst zeromonst;
+//extern struct monst zeromonst;
 
 #ifndef OVLB
 
@@ -211,10 +211,11 @@ struct obj *otmp;
 struct monst *mon;
 {
 	int tmp = 0, otyp = otmp->otyp;
-	struct permonst *ptr = mon->data;
+	struct permonst *ptr;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
 
-	if (!ptr) ptr = &mons[NUMMONS];
+	if (!mon) ptr = &mons[NUMMONS];
+	else ptr = mon->data;
 
 	if (otyp == CREAM_PIE) return 0;
 
@@ -413,7 +414,7 @@ int x;
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
             {
 	        if (!obest ||
-		    dmgval(otmp, &zeromonst) > dmgval(obest, &zeromonst))
+				dmgval(otmp, 0 /*zeromonst*/) > dmgval(obest, 0 /*zeromonst*/))
 		    obest = otmp;
 	}
 	}
@@ -431,7 +432,7 @@ struct monst *mtmp;
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
             {
 	        if (!obest ||
-		    dmgval(otmp, &zeromonst) > dmgval(obest, &zeromonst))
+		    dmgval(otmp, 0 /*zeromonst*/) > dmgval(obest, 0 /*zeromonst*/))
 		    obest = otmp;
 		}
 	}
@@ -480,7 +481,7 @@ struct obj *otmp;
             if ( wep &&
 	         wep->otyp == pwep[i] &&
                !(otmp->otyp == pwep[i] &&
-	         dmgval(otmp, &zeromonst) > dmgval(wep, &zeromonst)))
+	         dmgval(otmp, 0 /*zeromonst*/) > dmgval(wep, 0 /*zeromonst*/)))
 	        return FALSE;
             if (otmp->otyp == pwep[i]) return TRUE;
         }
@@ -494,7 +495,7 @@ struct obj *otmp;
         if ( wep &&
              wep->otyp == rwep[i] &&
            !(otmp->otyp == rwep[i] &&
-	     dmgval(otmp, &zeromonst) > dmgval(wep, &zeromonst)))
+	     dmgval(otmp, 0 /*zeromonst*/) > dmgval(wep, 0 /*zeromonst*/)))
 	    return FALSE;
         if (otmp->otyp == rwep[i]) return TRUE;
     }
@@ -658,7 +659,7 @@ struct obj *otmp;
         if ( wep &&
 	     wep->otyp == hwep[i] &&
            !(otmp->otyp == hwep[i] &&
-	     dmgval(otmp, &zeromonst) > dmgval(wep, &zeromonst)))
+	     dmgval(otmp, 0 /*zeromonst*/) > dmgval(wep, 0 /*zeromonst*/)))
 	    return FALSE;
         if (otmp->otyp == hwep[i]) return TRUE;
     }
