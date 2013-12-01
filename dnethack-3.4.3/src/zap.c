@@ -320,8 +320,9 @@ struct obj *otmp;
 	case WAN_DRAINING:	/* KMH */
 		dmg = rnd(8);
 		if(dbldam) dmg *= 2;
-		
-		if (resists_drli(mtmp)) {
+		if (otyp == SPE_DRAIN_LIFE)
+			dmg += spell_damage_bonus();
+		if (resists_drli(mtmp)){
 		    shieldeff(mtmp->mx, mtmp->my);
 	break;	/* skip makeknown */
 		}else if (!resist(mtmp, otmp->oclass, dmg, NOTELL) &&
