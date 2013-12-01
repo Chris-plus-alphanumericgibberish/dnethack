@@ -167,6 +167,11 @@ register boolean special;
 		    else if (rn2(2)) weapon = CLUB;
 		    if (helm == HELM_OF_BRILLIANCE) helm = STRANGE_OBJECT;
 		    break;
+		case PM_EXILE:
+			weapon = SCYTHE;
+			armor = ELVEN_MITHRIL_COAT;
+			cloak = LEATHER_CLOAK;
+	    break;
 		case PM_HEALER:
 		    if (rn2(4)) weapon = QUARTERSTAFF;
 		    else if (rn2(2)) weapon = rn2(2) ? UNICORN_HORN : SCALPEL;
@@ -191,6 +196,11 @@ register boolean special;
 		    if (rn2(4)) helm = rn2(2) ? HELM_OF_BRILLIANCE : HELM_OF_TELEPATHY;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
 		    break;
+		case PM_PIRATE:
+			weapon = SCIMITAR;
+			armor = LEATHER_JACKET;
+			shield = SMALL_SHIELD;
+	    break;
 		case PM_RANGER:
 		    if (rn2(2)) weapon = ELVEN_DAGGER;
 		    break;
