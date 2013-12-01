@@ -779,7 +779,10 @@ validalign(rolenum, racenum, alignnum)
 	return (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
 		(((roles[rolenum].allow & races[racenum].allow &
 		 aligns[alignnum].allow & ROLE_ALIGNMASK)) || 
-		(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow == ROLE_NEUTRAL)
+		(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#ifdef CONVICT
+	|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#endif
 		));
 }
 
@@ -794,7 +797,10 @@ randalign(rolenum, racenum)
 	for (i = 0; i < ROLE_ALIGNS; i++)
 	    if ((roles[rolenum].allow & races[racenum].allow &
 	    		aligns[i].allow & ROLE_ALIGNMASK) ||
-			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow == ROLE_NEUTRAL)
+			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#ifdef CONVICT
+		|| (roles[rolenum].malenum==PM_CONVICT && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#endif
 			)
 	    	n++;
 
@@ -803,7 +809,10 @@ randalign(rolenum, racenum)
 	for (i = 0; i < ROLE_ALIGNS; i++)
 	    if ((roles[rolenum].allow & races[racenum].allow &
 	    		aligns[i].allow & ROLE_ALIGNMASK) ||
-			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow == ROLE_NEUTRAL)
+			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#ifdef CONVICT
+		|| (roles[rolenum].malenum==PM_CONVICT && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#endif
 			) {
 	    	if (n) n--;
 	    	else return (i);
@@ -858,7 +867,12 @@ int rolenum, racenum, gendnum, alignnum;
 		!(allow & genders[gendnum].allow & ROLE_GENDMASK))
 	    return FALSE;
 	if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK))
+		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
+			(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
+#ifdef CONVICT
+		|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
+#endif
+	))
 	    return FALSE;
 	return TRUE;
     } else {
@@ -871,7 +885,12 @@ int rolenum, racenum, gendnum, alignnum;
 		    !(allow & genders[gendnum].allow & ROLE_GENDMASK))
 		continue;
 	    if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK))
+		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
+				(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
+#ifdef CONVICT
+			|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
+#endif
+		))
 		continue;
 	    return TRUE;
 	}
@@ -924,7 +943,12 @@ int rolenum, racenum, gendnum, alignnum;
 		!(allow & genders[gendnum].allow & ROLE_GENDMASK))
 	    return FALSE;
 	if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK))
+		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
+			(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
+#ifdef CONVICT
+		|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
+#endif
+	))
 	    return FALSE;
 	return TRUE;
     } else {
@@ -937,7 +961,12 @@ int rolenum, racenum, gendnum, alignnum;
 		    !(allow & genders[gendnum].allow & ROLE_GENDMASK))
 		continue;
 	    if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK))
+		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
+				(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
+#ifdef CONVICT
+			|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
+#endif
+	))
 		continue;
 	    return TRUE;
 	}
@@ -1050,7 +1079,12 @@ int rolenum, racenum, gendnum, alignnum;
 		!(allow & roles[rolenum].allow & ROLE_ALIGNMASK))
 	    return FALSE;
 	if (racenum >= 0 && racenum < SIZE(races)-1 &&
-		!(allow & races[racenum].allow & ROLE_ALIGNMASK))
+		!(allow & races[racenum].allow & ROLE_ALIGNMASK || 
+			(roles[rolenum].malenum==PM_EXILE && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#ifdef CONVICT
+		|| (roles[rolenum].malenum==PM_CONVICT && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#endif
+	))
 	    return FALSE;
 	return TRUE;
     } else {
@@ -1060,7 +1094,12 @@ int rolenum, racenum, gendnum, alignnum;
 		    !(allow & roles[rolenum].allow & ROLE_ALIGNMASK))
 		continue;
 	    if (racenum >= 0 && racenum < SIZE(races)-1 &&
-		    !(allow & races[racenum].allow & ROLE_ALIGNMASK))
+		    !(allow & races[racenum].allow & ROLE_ALIGNMASK || 
+				(roles[rolenum].malenum==PM_EXILE && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#ifdef CONVICT
+			|| (roles[rolenum].malenum==PM_CONVICT && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+#endif
+		))
 		continue;
 	    return TRUE;
 	}
