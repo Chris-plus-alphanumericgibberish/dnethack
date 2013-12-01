@@ -167,7 +167,7 @@ struct monst *mtmp;
 			 || (scaryDre(mtmp) && dreprun_at(x,y))
 			 || (scaryVei(mtmp) && veioistafur_at(x,y))
 			 || (scaryThj(mtmp) && thjofastafur_at(x,y))
-			 || (mtmp->data->mlet == S_VAMPIRE && IS_ALTAR(levl[x][y].typ))
+			 || (is_vampire(mtmp->data) && IS_ALTAR(levl[x][y].typ))
 			);
 }
 

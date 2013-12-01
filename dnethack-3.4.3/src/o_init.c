@@ -196,7 +196,7 @@ shuffle_all()
 			int j = last-1;
 
 			if (oclass == POTION_CLASS)
-			    j -= 2;  /* water and amnesia have fixed descriptions */
+			    j -= 3;  /* water, amnesia, and blood have fixed descriptions */
 			else if (oclass == AMULET_CLASS ||
 				 oclass == SCROLL_CLASS ||
 				 oclass == SPBOOK_CLASS) {

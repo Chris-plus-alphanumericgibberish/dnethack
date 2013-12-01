@@ -351,7 +351,9 @@ exerper()
 		pline("exerper: Hunger checks");
 #endif
 		switch (hs) {
-		    case SATIATED:	exercise(A_DEX, FALSE);
+		    case SATIATED:	if (maybe_polyd(!is_vampire(youmonst.data),
+						!Race_if(PM_VAMPIRE)))  /* undead */
+					    exercise(A_DEX, FALSE);
 					if (Role_if(PM_MONK))
 					    exercise(A_WIS, FALSE);
 					break;
@@ -613,6 +615,7 @@ int oldlevel, newlevel;
 	case PM_HUMAN:
 	case PM_DWARF:
 	case PM_GNOME:
+	case PM_VAMPIRE:
 	default:                rabil = 0;		break;
 	}
 

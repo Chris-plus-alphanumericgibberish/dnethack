@@ -30,6 +30,15 @@
 #define EXT_ENCUMBER	4	/* Overtaxed */
 #define OVERLOADED	5	/* Overloaded */
 
+/* hunger texts used on bottom line (each 8 chars long) */
+#define SATIATED	0
+#define NOT_HUNGRY	1
+#define HUNGRY		2
+#define WEAK		3
+#define FAINTING	4
+#define FAINTED		5
+#define STARVED		6
+
 /* Macros for how a rumor was delivered in outrumor() */
 #define BY_ORACLE	0
 #define BY_COOKIE	1
@@ -76,12 +85,13 @@
 #define CRUSHING	 8
 #define STONING		 9
 #define TURNED_SLIME	 10
-#define GENOCIDED	11
-#define PANICKED	12
-#define TRICKED		13
-#define QUIT		14
-#define ESCAPED		15
-#define ASCENDED	16
+#define DISINTEGRATED 11
+#define GENOCIDED	12
+#define PANICKED	13
+#define TRICKED		14
+#define QUIT		15
+#define ESCAPED		16
+#define ASCENDED	17
 
 #include "align.h"
 #include "dungeon.h"

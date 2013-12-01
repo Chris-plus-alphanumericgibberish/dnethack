@@ -428,7 +428,11 @@ register struct obj *obj;
 	    case POTION_CLASS:
 		if (obj->dknown && obj->odiluted)
 			Strcpy(buf, "diluted ");
-		if(nn || un || !obj->dknown) {
+		if( typ == POT_BLOOD && obj->known) {
+			Strcat(buf, "potion");
+			Sprintf(eos(buf), " of %s blood", mons[obj->corpsenm].mname);
+		}
+		else if(nn || un || !obj->dknown) {
 			Strcat(buf, "potion");
 			if(!obj->dknown) break;
 			if(nn) {
@@ -792,15 +796,27 @@ ring:
 		}
 		break;
 	case FOOD_CLASS:
-		if (obj->oeaten)
-		    Strcat(prefix, "partly eaten ");
+		if (obj->otyp == CORPSE && obj->odrained) {
+#ifdef WIZARD
+		    if (wizard && obj->oeaten < drainlevel(obj))
+			Strcpy(tmpbuf, "over-drained ");
+		    else
+#endif
+		    Sprintf(tmpbuf, "%sdrained ",
+		      (obj->oeaten > drainlevel(obj)) ? "partly " : "");
+		}
+		else if (obj->oeaten)
+		    Strcpy(tmpbuf, "partly eaten ");
+		else
+		    tmpbuf[0] = '\0';
+		Strcat(prefix, tmpbuf);
 		if (obj->otyp == CORPSE) {
 		    if (mons[obj->corpsenm].geno & G_UNIQ) {
 			Sprintf(prefix, "%s%s ",
 				(type_is_pname(&mons[obj->corpsenm]) ?
 					"" : "the "),
 				s_suffix(mons[obj->corpsenm].mname));
-			if (obj->oeaten) Strcat(prefix, "partly eaten ");
+			Strcat(prefix, tmpbuf);
 		    } else {
 			Strcat(prefix, mons[obj->corpsenm].mname);
 			Strcat(prefix, " ");
@@ -1850,7 +1866,7 @@ boolean from_user;
 #ifdef INVISIBLE_OBJECTS
 	int isinvisible;
 #endif
-	int halfeaten, mntmp, contents;
+	int halfeaten, halfdrained, mntmp, contents;
 	int islit, unlabeled, ishistoric, isdiluted;
 	struct fruit *f;
 	int ftype = current_fruit;
@@ -1892,6 +1908,7 @@ boolean from_user;
 
 	cnt = spe = spesgn = typ = very = rechrg =
 		blessed = uncursed = iscursed = stolen = 
+		isdrained = halfdrained =
 #ifdef INVISIBLE_OBJECTS
 		isinvisible =
 #endif
@@ -2036,6 +2053,12 @@ boolean from_user;
 			   !strncmpi(bp, "rotted ", l=7)) {
 			eroded2 = 1 + very;
 			very = 0;
+		} else if (!strncmpi(bp, "partly drained ", l=15)) {
+			isdrained = 1;
+			halfdrained = 1;
+		} else if (!strncmpi(bp, "drained ", l=8)) {
+			isdrained = 1;
+			halfdrained = 0;
 		} else if (!strncmpi(bp, "partly eaten ", l=13)) {
 			halfeaten = 1;
 		} else if (!strncmpi(bp, "historic ", l=9)) {
@@ -2982,6 +3005,18 @@ typfnd:
 		else otmp->oeaten = objects[otmp->otyp].oc_nutrition;
 		/* (do this adjustment before setting up object's weight) */
 		consume_oeaten(otmp, 1);
+	}
+	if (isdrained && otmp->otyp == CORPSE) {
+		int amt;
+		otmp->odrained = 1;
+		amt = mons[otmp->corpsenm].cnutrit - drainlevel(otmp);
+		if (halfdrained) {
+		    amt /= 2;
+		    if (amt == 0)
+			amt++;
+		}
+		/* (do this adjustment before setting up object's weight) */
+		consume_oeaten(otmp, -amt);
 	}
 	otmp->owt = weight(otmp);
 	if (very && otmp->otyp == HEAVY_IRON_BALL) otmp->owt += 160;

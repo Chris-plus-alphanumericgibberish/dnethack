@@ -3325,7 +3325,7 @@ xchar sx, sy;
 	    killer = fltxt;
 	    /* when killed by disintegration breath, don't leave corpse */
 	    u.ugrave_arise = (type == -ZT_BREATH(ZT_DEATH)) ? -3 : NON_PM;
-	    done(DIED);
+	    done((type== -ZT_BREATH(ZT_DEATH)) ? DISINTEGRATED : DIED);
 	    return; /* lifesaved */
 	case ZT_LIGHTNING:
 	    if (Shock_resistance) {

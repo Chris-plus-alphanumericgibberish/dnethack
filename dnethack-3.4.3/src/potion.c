@@ -922,6 +922,46 @@ peffects(otmp)
 		You_feel("a little %s.", Hallucination ? "normal" : "strange");
 		if (!Unchanging) polyself(FALSE);
 		break;
+	case POT_BLOOD:
+		unkn++;
+		if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+			pline("It smells like %s%s.", 
+					!type_is_pname(&mons[otmp->corpsenm]) ||
+					!(mons[otmp->corpsenm].geno & G_UNIQ) ||
+					Hallucination ? 
+						"the " : 
+						"", 
+					Hallucination ? 
+						makeplural(rndmonnam()) : 
+						mons[otmp->corpsenm].geno & G_UNIQ ? 
+						mons[otmp->corpsenm].mname : 
+						makeplural(mons[otmp->corpsenm].mname)
+			);
+			if (yn("Drink it?") == 'n') {
+				break;
+			}else{
+				violated_vegetarian();
+				u.uconduct.unvegan++;
+				if (otmp->cursed)
+				pline("Yecch!  This %s.", Hallucination ?
+				"liquid could do with a good stir" : "blood has congealed");
+				else pline(Hallucination ?
+				  "The %s liquid stirs memories of home." :
+				  "The %s blood tastes delicious.",
+				  otmp->odiluted ? "watery" : "thick");
+				if (!otmp->cursed)
+				lesshungry((otmp->odiluted ? 1 : 2) *
+				  (otmp->blessed ? mons[(otmp)->corpsenm].cnutrit*1.5/5 : mons[(otmp)->corpsenm].cnutrit/5 ));
+			}
+
+		} else {
+		    violated_vegetarian();
+		    pline("Ugh.  That was vile.");
+		    if(!uclockwork) make_vomiting(Vomiting+d(10,8), TRUE);
+		}
+		cprefx(otmp->corpsenm, TRUE);
+	    cpostfx(otmp->corpsenm, FALSE);
+	break;
 	default:
 		impossible("What a funny potion! (%u)", otmp->otyp);
 		return(0);
@@ -1434,6 +1474,13 @@ register struct obj *obj;
 	case POT_POLYMORPH:
 		exercise(A_CON, FALSE);
 		break;
+	case POT_BLOOD:
+		if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+		    exercise(A_WIS, FALSE);
+		    You_feel("a sense of loss.");
+		} else
+		    exercise(A_CON, FALSE);
+		break;
 /*
 	case POT_GAIN_LEVEL:
 	case POT_LEVITATION:
@@ -1500,6 +1547,7 @@ register struct obj *o1, *o2;
 			    case POT_HALLUCINATION:
 			    case POT_BLINDNESS:
 			    case POT_CONFUSION:
+			    case POT_BLOOD:
 				return POT_WATER;
 			}
 			break;
@@ -1528,6 +1576,8 @@ register struct obj *o1, *o2;
 			switch (o2->otyp) {
 			    case POT_SICKNESS:
 				return POT_SICKNESS;
+			    case POT_BLOOD:
+				return POT_BLOOD;
 			    case POT_SPEED:
 				return POT_BOOZE;
 			    case POT_GAIN_LEVEL:

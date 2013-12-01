@@ -390,6 +390,7 @@ boolean artif;
 	otmp->lightened = 0;
 	otmp->obroken = 0; /* BUGFIX: shouldn't this be set to 0 initially? */
 	otmp->opoisoned = 0;
+	otmp->fromsink = 0;
 	if ((otmp->otyp >= ELVEN_SHIELD && otmp->otyp <= ORCISH_SHIELD) ||
 			otmp->otyp == SHIELD_OF_REFLECTION)
 		otmp->dknown = 0;
@@ -424,6 +425,7 @@ boolean artif;
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		break;
 	case FOOD_CLASS:
+	    otmp->odrained = 0;
 	    otmp->oeaten = 0;
 	    switch(otmp->otyp) {
 	    case CORPSE:
@@ -563,6 +565,19 @@ boolean artif;
 	case BALL_CLASS:
 		break;
 	case POTION_CLASS:
+		if(otmp->otyp == POT_BLOOD){
+			otmp->corpsenm = NON_PM;	/* empty (so far) */
+			for (tryct = 200; tryct > 0; --tryct) {
+				mndx = undead_to_corpse(rndmonnum());
+				if (mons[mndx].cnutrit &&
+					!(mvitals[mndx].mvflags & G_NOCORPSE)
+					&& has_blood(&mons[mndx]) ) {
+				otmp->corpsenm = mndx;
+				break;
+				}
+			}
+			blessorcurse(otmp, 10);
+		}
 		if (otmp->otyp == POT_OIL)
 		    otmp->age = MAX_OIL_IN_FLASK;	/* amount of oil */
 		/* fall through */

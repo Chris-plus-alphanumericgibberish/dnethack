@@ -113,21 +113,26 @@
 #define M2_NOPOLY	0x00000001L	/* players mayn't poly into one */
 #define M2_UNDEAD	0x00000002L	/* is walking dead */
 #define M2_WERE		0x00000004L	/* is a lycanthrope */
+/*ROLE_RACEMASK starts*/
 #define M2_HUMAN	0x00000008L	/* is a human */
 #define M2_ELF		0x00000010L	/* is an elf */
 #define M2_DWARF	0x00000020L	/* is a dwarf */
 #define M2_GNOME	0x00000040L	/* is a gnome */
 #define M2_ORC		0x00000080L	/* is an orc */
-#define M2_DEMON	0x00000100L	/* is a demon */
-#define M2_MERC		0x00000200L	/* is a guard or soldier */
-#define M2_LORD		0x00000400L	/* is a lord to its kind */
-#define M2_PRINCE	0x00000800L	/* is an overlord to its kind */
-#define M2_MINION	0x00001000L	/* is a minion of a deity */
-#define M2_GIANT	0x00002000L	/* is a giant */
+#define M2_VAMPIRE	0x00000100L	/* is a vampire */
+#define M2_DEMON	0x00000400L	/* is a demon */
+#define M2_MINION	0x00000800L	/* is a minion of a deity */
+#define M2_LORD		0x00001000L	/* is a lord to its kind */
+#define M2_PRINCE	0x00002000L	/* is an overlord to its kind */
+#define M2_GIANT	0x00004000L	/* is a giant */
+#define M2_MERC		0x00008000L	/* is a guard or soldier */
+/*ROLE_RACEMASK ends*/
+/*ROLE_GENDMASK starts*/
 #define M2_MALE		0x00010000L	/* always male */
 #define M2_FEMALE	0x00020000L	/* always female */
 #define M2_NEUTER	0x00040000L	/* neither male nor female */
 #define M2_PNAME	0x00080000L	/* monster name is a proper name */
+/*ROLE_GENDMASK ends*/
 #define M2_HOSTILE	0x00100000L	/* always starts hostile */
 #define M2_PEACEFUL	0x00200000L	/* always starts peaceful */
 #define M2_DOMESTIC	0x00400000L	/* can be tamed by feeding */
@@ -184,6 +189,7 @@
 #define MH_DWARF	M2_DWARF
 #define MH_GNOME	M2_GNOME
 #define MH_ORC		M2_ORC
+#define MH_VAMPIRE	M2_VAMPIRE
 
 
 /* for mons[].geno (constant during game) */

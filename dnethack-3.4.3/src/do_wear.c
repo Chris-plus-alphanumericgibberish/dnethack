@@ -237,6 +237,18 @@ Cloak_on(VOID_ARGS)
   		break;
 	default: impossible(unknown_type, c_cloak, uarmc->otyp);
     }
+    /* vampires get a charisma bonus when wearing an opera cloak */
+    const char* cloak_desc = OBJ_DESCR(objects[uarmc->otyp]);
+    if (cloak_desc != (char *)0 &&
+	!strcmp(cloak_desc, "opera cloak") &&
+	maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+		You("%s very impressive in your %s.", Blind ||
+				(Invis && !See_invisible) ? "feel" : "look",
+				OBJ_DESCR(objects[uarmc->otyp]));
+		ABON(A_CHA) += 1;
+		flags.botl = 1;
+    }
+    /* racial armor bonus */
 	if(arti_lighten(uarmc)) inv_weight();
     return 0;
 }
@@ -286,6 +298,14 @@ Cloak_off(VOID_ARGS)
 		EAcid_resistance &= ~WORN_CLOAK;
   		break;
 	default: impossible(unknown_type, c_cloak, otyp);
+    }
+    /* vampires get a charisma bonus when wearing an opera cloak */
+    const char* cloak_desc = OBJ_DESCR(objects[otyp]);
+    if (cloak_desc != (char *)0 &&
+	!strcmp(cloak_desc, "opera cloak") &&
+	maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+		ABON(A_CHA) -= 1;
+		flags.botl = 1;
     }
     return 0;
 }

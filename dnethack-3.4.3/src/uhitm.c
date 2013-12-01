@@ -447,7 +447,7 @@ register struct monst *mtmp;
 		return(FALSE);
 
 	tmp = find_roll_to_hit(mtmp);
-	if (Upolyd)
+	if (Upolyd || Race_if(PM_VAMPIRE))
 		(void) hmonas(mtmp, tmp);
 	else
 		(void) hitum(mtmp, tmp, youmonst.data->mattk);
@@ -588,6 +588,7 @@ int thrown;
 #ifdef STEED
 	int jousting = 0;
 #endif
+	boolean vapekilled = FALSE; /* WAC added boolean for vamps vaporize */
 	int wtype;
 	struct obj *monwep;
 	char yourbuf[BUFSZ];
@@ -1716,9 +1717,26 @@ register struct attack *mattk;
 		}
 		tmp = 0;
 		break;
+	    case AD_VAMP:
 	    case AD_DRLI:
 		if (!negated && !rn2(3) && !resists_drli(mdef)) {
 			int xtmp = d(2,6);
+			if (mdef->mhp < xtmp) xtmp = mdef->mhp;
+			/* Player vampires are smart enough not to feed while
+			   biting if they might have trouble getting it down */
+			if (!Race_if(PM_INCANTIFIER) && maybe_polyd(is_vampire(youmonst.data),
+			    Race_if(PM_VAMPIRE)) && u.uhunger <= 1420 &&
+			    mattk->aatyp == AT_BITE && has_blood(pd)) {
+				/* For the life of a creature is in the blood
+				   (Lev 17:11) */
+				if (flags.verbose)
+				    You("feed on the lifeblood.");
+				/* [ALI] Biting monsters does not count against
+				   eating conducts. The draining of life is
+				   considered to be primarily a non-physical
+				   effect */
+				lesshungry(xtmp * 6);
+			}
 			pline("%s suddenly seems weaker!", Monnam(mdef));
 			mdef->mhpmax -= xtmp;
 			if ((mdef->mhp -= xtmp) <= 0 || !mdef->m_lev) {
@@ -2205,6 +2223,7 @@ register int tmp;
 	int	i, sum[NATTK], hittmp = 0;
 	int	nsum = 0;
 	int	dhit = 0;
+	boolean Old_Upolyd = Upolyd;
 
 	for(i = 0; i < NATTK; i++) {
 	    sum[i] = 0;
@@ -2256,11 +2275,26 @@ use_weapon:
 		case AT_KICK:
 		case AT_BITE:
 		case AT_LNCK: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
+			/* [ALI] Vampires are also smart. They avoid biting
+			   monsters if doing so would be fatal */
+			if ((uwep || (u.twoweap && uswapwep)) &&
+				is_vampire(youmonst.data) &&
+				(is_rider(mon->data) ||
+				 mon->data == &mons[PM_GREEN_SLIME])){
+					pline("breaking bite");
+			    	break;
+				}
 		case AT_STNG:
 		case AT_TUCH:
 		case AT_BUTT:
 		case AT_TENT:
 			if (i==0 && uwep && (youmonst.data->mlet==S_LICH)) goto use_weapon;
+			if ((uwep || u.twoweap && uswapwep) &&
+				(touch_petrifies(mon->data) ||
+				 mon->data == &mons[PM_MEDUSA])){
+					pline("breaking contact");
+			    	break;
+				}
 			if ((dhit = (tmp > rnd(20) || u.uswallow)) != 0) {
 			    int compat;
 
@@ -2396,8 +2430,8 @@ use_weapon:
 		(void) passive(mon, sum[i], 1, mattk->aatyp);
 		nsum |= sum[i];
 	    }
-	    if (!Upolyd)
-		break; /* No extra attacks if no longer a monster */
+	    if (Upolyd != Old_Upolyd)
+		break; /* No extra attacks if form changed */
 	    if (multi < 0)
 		break; /* If paralyzed while attacking, i.e. floating eye */
 	}
@@ -2416,6 +2450,10 @@ uchar aatyp;
 	register struct permonst *ptr = mon->data;
 	register int i, tmp;
 	struct obj *optr;
+	if (mhit && aatyp == AT_BITE && is_vampire(youmonst.data)) {
+	    if (bite_monster(mon))
+		return 2;			/* lifesaved */
+	}
 	for(i = 0; ; i++) {
 	    if(i >= NATTK) return(malive | mhit);	/* no passive attacks */
 	    if(ptr->mattk[i].aatyp == AT_NONE) break;	/* try this one */

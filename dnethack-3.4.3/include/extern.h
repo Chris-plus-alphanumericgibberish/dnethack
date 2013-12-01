@@ -550,6 +550,8 @@ E int NDECL(eatfood);
 E int NDECL(opentin);
 E int NDECL(unfaint);
 #endif
+E void FDECL(cprefx, (int, BOOLEAN_P));
+E void FDECL(cpostfx, (int, BOOLEAN_P));
 E boolean FDECL(is_edible, (struct obj *));
 E void NDECL(init_uhunger);
 E int NDECL(Hear_again);
@@ -751,6 +753,8 @@ E int NDECL(monster_nearby);
 E void FDECL(nomul, (int, const char *));
 E void FDECL(unmul, (const char *));
 E void FDECL(losehp, (int,const char *,BOOLEAN_P));
+E void FDECL(set_uhpmax, (int,BOOLEAN_P));
+E void NDECL(check_uhpmax);
 E int NDECL(weight_cap);
 E int NDECL(inv_weight);
 E int NDECL(near_capacity);
@@ -1650,6 +1654,7 @@ E char *FDECL(piratesay, (const char *));
 
 /* ### polyself.c ### */
 
+E void NDECL(init_uasmon);
 E void NDECL(set_uasmon);
 E void NDECL(change_sex);
 E void FDECL(polyself, (BOOLEAN_P));

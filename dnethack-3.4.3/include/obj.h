@@ -74,6 +74,7 @@ struct obj {
 #define norevive oeroded2
 	Bitfield(oerodeproof,1); /* erodeproof weapon/armor */
 	Bitfield(olocked,1);	/* object is locked */
+#define odrained olocked	/* drained corpse */
 	Bitfield(obroken,1);	/* lock has been broken */
 #define ohaluengr obroken	/* engraving on ring isn't a ward */
 	Bitfield(otrapped,1);	/* container is trapped */
@@ -99,11 +100,13 @@ struct obj {
 	Bitfield(ostolen,1); 	/* was removed from a shop without being sold */
     Bitfield(was_thrown,1); /* for pickup_thrown */
 	/* 0 free bits */
+	Bitfield(fromsink,1);
+	/* 31 free bits in this field, I think -CM */
 
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
 #define leashmon  corpsenm	/* gets m_id of attached pet */
 #define spestudied corpsenm	/* # of times a spellbook has been studied */
-#define fromsink  corpsenm	/* a potion from a sink */
+//define fromsink  corpsenm	/* a potion from a sink */
 
 	int opoisoned; /* poisons smeared on the weapon*/
 #define OPOISON_NONE	 0
@@ -269,6 +272,7 @@ struct obj {
 			 pm_to_cham((obj)->corpsenm) != CHAM_ORDINARY)
 #define mlevelgain(obj) (ofood(obj) && (obj)->corpsenm == PM_WRAITH)
 #define mhealup(obj)	(ofood(obj) && (obj)->corpsenm == PM_NURSE)
+#define drainlevel(corpse) (mons[(corpse)->corpsenm].cnutrit*4/5)
 
 /* Containers */
 #define carried(o)	((o)->where == OBJ_INVENT)

@@ -1648,6 +1648,19 @@ register struct	monst	*mtmp;
 
 			}
 		break;
+	    case S_VAMPIRE:
+		switch(rn2(6)) {
+			case 1:
+			(void)mongets(mtmp, POT_BLOOD);
+			case 2:
+			(void)mongets(mtmp, POT_BLOOD);
+			case 3:
+			(void)mongets(mtmp, POT_BLOOD);
+			case 4:
+			(void)mongets(mtmp, POT_BLOOD);
+			default:
+			break;
+		}
 		case S_EYE:
 			if(ptr == &mons[PM_AXUS]){
 				struct obj *otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
@@ -2178,14 +2191,15 @@ register int	mmflags;
 					if(anymon) for(num; num >= 0; num--) makemon(&mons[PM_BABY_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 					else for(num; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 					}
-		case S_VAMPIRE:
-			{
+		break;
+//		case S_VAMPIRE:
+//			{
 //				if(mndx == PM_STAR_VAMPIRE){
 //				    mtmp->minvis = TRUE;
 //				    mtmp->perminvis = TRUE;
 //				}
-			}
-		break;
+//			}
+//		break;
 		case S_BLOB:
 			if (mndx == PM_SHOGGOTH){
 				mtmp->mhpmax = 3*mtmp->mhpmax;

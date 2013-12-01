@@ -83,6 +83,7 @@
 #define polyok(ptr)		(((ptr)->mflags2 & M2_NOPOLY) == 0L)
 #define is_undead(ptr)		(((ptr)->mflags2 & M2_UNDEAD) != 0L)
 #define is_were(ptr)		(((ptr)->mflags2 & M2_WERE) != 0L)
+#define is_vampire(ptr)		(((ptr)->mflags2 & M2_VAMPIRE) != 0L)
 #define is_elf(ptr)		(((ptr)->mflags2 & M2_ELF) != 0L)
 #define is_dwarf(ptr)		(((ptr)->mflags2 & M2_DWARF) != 0L)
 #define is_gnome(ptr)		(((ptr)->mflags2 & M2_GNOME) != 0L)
@@ -279,6 +280,11 @@
 				((ptr)->mlet == S_PUDDING &&         \
 				 (ptr) != &mons[PM_BLACK_PUDDING] && \
 				 (ptr) != &mons[PM_DARKNESS_GIVEN_HUNGER]))
+
+/* For vampires */
+#define has_blood(ptr)		(!vegetarian(ptr) && \
+				   (ptr)->mlet != S_GOLEM && \
+				   (!is_undead(ptr) || is_vampire(ptr)))
 
 /* Keep track of ferns, fern sprouts, fern spores, and other plants */
 

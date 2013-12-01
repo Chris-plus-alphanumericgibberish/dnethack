@@ -1576,7 +1576,9 @@ boolean
 tinnable(corpse)
 struct obj *corpse;
 {
+	if (corpse->otyp != CORPSE) return 0;
 	if (corpse->oeaten) return 0;
+	if (corpse->odrained) return 0;
 	if (!mons[corpse->corpsenm].cnutrit) return 0;
 	return 1;
 }
@@ -1595,8 +1597,12 @@ register struct obj *obj;
 		return;
 	}
 	if (!(corpse = floorfood("tin", 2))) return;
-	if (corpse->oeaten) {
+	if (corpse->otyp == CORPSE && (corpse->oeaten || corpse->odrained)) {
 		You("cannot tin %s which is partly eaten.",something);
+		return;
+	}
+	if (!tinnable(corpse)) {
+		You_cant("tin that!");
 		return;
 	}
 	if (touch_petrifies(&mons[corpse->corpsenm])
@@ -2288,6 +2294,7 @@ set_trap()
 	}
 
 	if (--trapinfo.time_needed > 0) return 1;	/* still busy */
+
 
 	ttyp = (otmp->otyp == LAND_MINE) ? LANDMINE : BEAR_TRAP;
 	ttmp = maketrap(u.ux, u.uy, ttyp);

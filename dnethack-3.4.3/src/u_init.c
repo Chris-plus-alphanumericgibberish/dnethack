@@ -306,6 +306,13 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_GNOME, CLUB,			AKLYS    },
     { PM_GNOME, BOW,			CROSSBOW	      },
     { PM_GNOME, ARROW,			CROSSBOW_BOLT	      },
+    { PM_VAMPIRE,	FOOD_RATION,		POT_BLOOD    	  },
+    { PM_VAMPIRE,	CRAM_RATION,		POT_BLOOD    	  },
+    { PM_VAMPIRE,	POT_FRUIT_JUICE,	POT_BLOOD	      },
+    { PM_VAMPIRE,	TRIPE_RATION,		POT_BLOOD    	  },
+    { PM_VAMPIRE,	BANANA,				POT_BLOOD    	  },
+    { PM_VAMPIRE,	APPLE,				POT_BLOOD    	  },
+    { PM_VAMPIRE,	POT_BOOZE,			POT_BLOOD    	  },
     { NON_PM,	STRANGE_OBJECT,		STRANGE_OBJECT	      }
 };
 
@@ -852,7 +859,7 @@ u_init()
 	u.umonnum = u.umonster = (flags.female &&
 			urole.femalenum != NON_PM) ? urole.femalenum :
 			urole.malenum;
-	set_uasmon();
+	init_uasmon();
 
 	u.ulevel = 0;	/* set up some of the initial attributes */
 	u.uhp = u.uhpmax = newhp();
@@ -932,8 +939,8 @@ u_init()
         knows_object(SKELETON_KEY);
         knows_object(GRAPPLING_HOOK);
         skill_init(Skill_Con);
-		u.hod = 6;
-		u.ualign.sins = 16; /* You have sinned */
+		u.hod += 6;
+		u.ualign.sins += 16; /* You have sinned */
         u.uhunger = 200;  /* On the verge of hungry */
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
         u.ualign.type = A_CHAOTIC; /* Override racial alignment */
@@ -1178,7 +1185,12 @@ u_init()
 	    knows_object(URUK_HAI_SHIELD);
 	    knows_object(ORCISH_CLOAK);
 	    break;
-
+	case PM_VAMPIRE:
+	    /* Vampires start off with gods not as pleased, luck penalty */
+	    adjalign(-5); 
+		u.ualign.sins += 5;
+	    change_luck(-1);
+	    break;
 	default:	/* impossible */
 		break;
 	}
