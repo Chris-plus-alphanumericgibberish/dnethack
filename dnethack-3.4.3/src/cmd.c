@@ -998,6 +998,8 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 #ifdef WIZARD
 	Sprintf(buf, "a carrying capacity of %d remaining", -1*inv_weight());
     you_have(buf);
+	Sprintf(buf, "%d points of nutrition remaining", YouHunger);
+    you_have(buf);
 #endif
 	if (Adornment) {
 	    int adorn = 0;
