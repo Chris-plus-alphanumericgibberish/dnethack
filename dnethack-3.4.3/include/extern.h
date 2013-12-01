@@ -607,6 +607,7 @@ E struct engr *NDECL(get_head_engr);
 E const char *FDECL(surface, (int,int));
 E const char *FDECL(ceiling, (int,int));
 E struct engr *FDECL(engr_at, (XCHAR_P,XCHAR_P));
+E void NDECL(move_gliders);
 E int FDECL(sengr_at, (const char *,XCHAR_P,XCHAR_P));
 E int FDECL(ward_at, (XCHAR_P,XCHAR_P));
 E int FDECL(num_wards_at, (XCHAR_P,XCHAR_P));

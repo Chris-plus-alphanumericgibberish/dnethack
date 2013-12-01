@@ -89,8 +89,15 @@ struct engr {
 #define ACERERAK					LAST_WARD+33
 #define NUMINA						LAST_WARD+34
 
+/*Some hallucinatory engravings have special properties. Keep track of them here*/
 /*Functional halucinatory wards, keep in sync with engrave.c!*/
 #define CERULEAN_SIGN				2
+/*These wards move across the ground. Keep in sync with allmain*/
+#define	NORTHEAST_GLIDER	3
+#define	NORTHWEST_GLIDER	4
+#define	SOUTHWEST_GLIDER	5
+#define	SOUTHEAST_GLIDER	6
+#define DEAD_GLIDER			7
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 
 /*One type of ward per square

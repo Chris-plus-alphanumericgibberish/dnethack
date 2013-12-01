@@ -888,6 +888,83 @@ register int x, y;
 	return what;
 }
 
+
+/*Preliminary glider implementation
+ *Gliders can move engravings in their square along with them.
+ */
+void
+move_gliders()
+{
+	struct engr *ep = head_engr;
+
+	while(ep) {
+		if(ep->halu_ward){
+			switch(ep->ward_id){
+				case NORTHEAST_GLIDER:
+					if((monstermoves - ep->engr_time)%4 == 3){ //Gliders move at c/4 
+						if(IS_ROOM(levl[ep->engr_x+1][ep->engr_y-1].typ)
+							&& !engr_at(ep->engr_x+1,ep->engr_y-1)
+						){
+							/* The glider moves, towing any engravings in the square
+							 * along for the ride. Allows for strategic use of glider-rings
+							 */
+							ep->engr_x++;
+							ep->engr_y--;
+						}
+						else ep->ward_id = DEAD_GLIDER; //Glider turns into a square.
+					}
+				break;
+				case NORTHWEST_GLIDER:
+					if((monstermoves - ep->engr_time)%4 == 3){ //Gliders move at c/4 
+						if(IS_ROOM(levl[ep->engr_x-1][ep->engr_y-1].typ)
+							&& !engr_at(ep->engr_x-1,ep->engr_y-1)
+						){
+							/* The glider moves, towing any engravings in the square
+							 * along for the ride. Allows for strategic use of glider-rings
+							 */
+							ep->engr_x--;
+							ep->engr_y--;
+						}
+						else ep->ward_id = DEAD_GLIDER; //Glider turns into a square.
+					}
+				break;
+				case SOUTHWEST_GLIDER:
+					if((monstermoves - ep->engr_time)%4 == 3){ //Gliders move at c/4 
+						if(IS_ROOM(levl[ep->engr_x-1][ep->engr_y+1].typ)
+							&& !engr_at(ep->engr_x-1,ep->engr_y+1)
+						){
+							/* The glider moves, towing any engravings in the square
+							 * along for the ride. Allows for strategic use of glider-rings
+							 */
+							ep->engr_x--;
+							ep->engr_y++;
+						}
+						else ep->ward_id = DEAD_GLIDER; //Glider turns into a square.
+					}
+				break;
+				case SOUTHEAST_GLIDER:
+				break;
+					if((monstermoves - ep->engr_time)%4 == 3){ //Gliders move at c/4 
+						if(IS_ROOM(levl[ep->engr_x+1][ep->engr_y+1].typ)
+							&& !engr_at(ep->engr_x+1,ep->engr_y+1)
+						){
+							/* The glider moves, towing any engravings in the square
+							 * along for the ride. Allows for strategic use of glider-rings
+							 */
+							ep->engr_x++;
+							ep->engr_y++;
+						}
+						else ep->ward_id = DEAD_GLIDER; //Glider turns into a square.
+					}
+				default:
+				//Nothing special
+				break;
+			}
+		}
+		ep = ep->nxt_engr;
+	}
+}
+
 struct engr *
 engr_at(x, y)
 xchar x, y;

@@ -232,6 +232,8 @@ moveloop()
 		    nh_timeout();
 		    run_regions();
 
+			move_gliders();
+
 		    if (u.ublesscnt)  u.ublesscnt--;
 		    if(flags.time && !flags.run)
 			flags.botl = 1;
