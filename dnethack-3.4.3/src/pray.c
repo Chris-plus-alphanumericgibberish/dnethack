@@ -962,7 +962,7 @@ pleased(g_align)
 	    u.uhp = u.uhpmax;
 	    if (Upolyd) u.mh = u.mhmax;
 	    ABASE(A_STR) = AMAX(A_STR);
-	    if (u.uhunger < 900) init_uhunger();
+	    if (YouHunger < 900) init_uhunger();
 	    if (u.uluck < 0) u.uluck = 0;
 	    make_blinded(0L,TRUE);
 	    flags.botl = 1;

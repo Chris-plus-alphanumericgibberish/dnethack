@@ -467,7 +467,9 @@ peffects(otmp)
 		    make_sick(0L, (char *) 0, TRUE, SICK_ALL);
 
 		    /* You feel refreshed */
-		    u.uhunger += 50 + rnd(50);
+		    if(Race_if(PM_INCANTIFIER)) u.uen += 50 + rnd(50);
+		    else u.uhunger += 50 + rnd(50);
+		    
 		    newuhs(FALSE);
 		} else
 		    exercise(A_WIS, FALSE);
@@ -475,7 +477,7 @@ peffects(otmp)
 	case POT_WATER:
 		if(!otmp->blessed && !otmp->cursed) {
 		    pline("This tastes like water.");
-		    u.uhunger += rnd(10);
+		    if(!Race_if(PM_INCANTIFIER)) u.uhunger += rnd(10);
 		    newuhs(FALSE);
 		    break;
 		}
@@ -529,7 +531,7 @@ peffects(otmp)
 		    make_confused(itimeout_incr(HConfusion, d(3,8)), FALSE);
 		/* the whiskey makes us feel better */
 		if (!otmp->odiluted) healup(1, 0, FALSE, FALSE);
-		u.uhunger += 10 * (2 + bcsign(otmp));
+		if(!Race_if(PM_INCANTIFIER)) u.uhunger += 10 * (2 + bcsign(otmp));
 		newuhs(FALSE);
 		exercise(A_WIS, FALSE);
 		if(otmp->cursed) {
@@ -593,7 +595,7 @@ peffects(otmp)
 			  otmp->odiluted ? "reconstituted " : "",
 			  fruitname(TRUE));
 		if (otmp->otyp == POT_FRUIT_JUICE) {
-		    u.uhunger += (otmp->odiluted ? 5 : 10) * (2 + bcsign(otmp));
+		    if(!Race_if(PM_INCANTIFIER)) u.uhunger += (otmp->odiluted ? 5 : 10) * (2 + bcsign(otmp));
 		    newuhs(FALSE);
 		    break;
 		}

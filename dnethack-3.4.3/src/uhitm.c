@@ -2036,7 +2036,7 @@ register struct attack *mattk;
 
 	if(mdef->data->msize >= MZ_HUGE) return 0;
 
-	if(u.uhunger < 1500 && !u.uswallow) {
+	if(YouHunger < (Race_if(PM_INCANTIFIER) ? u.uenmax*3/4 : 1500) && !u.uswallow) {
 	    for (otmp = mdef->minvent; otmp; otmp = otmp->nobj)
 		(void) snuff_lit(otmp);
 
@@ -2087,7 +2087,8 @@ register struct attack *mattk;
 				!(mvitals[monsndx(mdef->data)].mvflags &
 				  G_NOCORPSE)) {
 				/* nutrition only if there can be a corpse */
-				u.uhunger += (mdef->data->cnutrit+1) / 2;
+				if(Race_if(PM_INCANTIFIER)) u.uen += mdef->m_lev;
+				else u.uhunger += (mdef->data->cnutrit+1) / 2;
 			    } else tmp = 0;
 			    Sprintf(msgbuf, "You totally digest %s.",
 					    mon_nam(mdef));

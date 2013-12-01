@@ -29,6 +29,7 @@
 #define AT_LRCH		19	/* Reach attack */
 #define AT_HODS		20  /* Hod Sephirah's mirror attack */
 #define AT_LNCK		21  /* Bite attack with reach */
+#define AT_MMGC		22	/* uses magic spell(s), but don't allow player spellcasting (Monster-only MaGiC) */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */

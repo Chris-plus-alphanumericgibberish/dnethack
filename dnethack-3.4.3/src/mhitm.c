@@ -425,6 +425,7 @@ meleeattack:
 
 #ifdef TAME_RANGED_ATTACKS
             case AT_MAGC:
+            case AT_MMGC:
 		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2) break;
 
 	        res[i] = castmm(magr, mdef, mattk);
@@ -1805,6 +1806,7 @@ int aatyp;
     case AT_GAZE:
     case AT_BREA:
     case AT_MAGC:
+    case AT_MMGC:
 	w_mask = ~0L;		/* special case; no defense needed */
 	break;
     case AT_CLAW:

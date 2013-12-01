@@ -282,7 +282,8 @@ moveloop()
 			}
 		    } else if (u.uhp < u.uhpmax &&
 			 (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
-			if (u.ulevel > 9 && !(moves % 3)) {
+			if (u.ulevel > 9 && !(moves % 3) && 
+				!(Race_if(PM_INCANTIFIER))) {
 			    int heal, Con = (int) ACURR(A_CON);
 
 			    if (Con <= 12) {
@@ -297,6 +298,7 @@ moveloop()
 				u.uhp = u.uhpmax;
 			} else if (Regeneration ||
 			     (u.ulevel <= 9 &&
+				 !(Race_if(PM_INCANTIFIER)) &&
 			      !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
 			    flags.botl = 1;
 			    u.uhp++;
@@ -319,7 +321,7 @@ moveloop()
 		    }
 
 		    if ((u.uen < u.uenmax) &&
-			((wtcap < MOD_ENCUMBER &&
+			((wtcap < MOD_ENCUMBER && !Race_if(PM_INCANTIFIER) &&
 			  (!(moves%((MAXULEV + 8 - u.ulevel) *
 				    (Role_if(PM_WIZARD) ? 3 : 4) / 6))))
 			 || Energy_regeneration)) {

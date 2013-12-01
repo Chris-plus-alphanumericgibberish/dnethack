@@ -178,6 +178,14 @@ register boolean special;
 		    if (rn2(4)) helm = rn2(2) ? HELM_OF_BRILLIANCE : HELM_OF_TELEPATHY;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
 		    break;
+		case PM_INCANTIFIER:
+		    if (rn2(4)) weapon = rn2(2) ? QUARTERSTAFF : ATHAME;
+	    	armor = rn2(2) ? BLACK_DRAGON_SCALE_MAIL :
+	    			SILVER_DRAGON_SCALE_MAIL;
+	    	cloak = ROBE;
+		    if (rn2(4)) helm = HELM_OF_BRILLIANCE;
+		    shield = STRANGE_OBJECT;
+		break;
 		case PM_KNIGHT:
 		    if (rn2(4)) weapon = LONG_SWORD;
 		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);

@@ -63,7 +63,7 @@ experience(mtmp, nk)	/* return # of exp points for mtmp after nk killed */
 	    if(tmp2 > AT_BUTT) {
 
 		if(tmp2 == AT_WEAP) tmp += 5;
-		else if(tmp2 == AT_MAGC) tmp += 10;
+		else if(tmp2 == AT_MAGC || tmp2 == AT_MMGC) tmp += 10;
 		else tmp += 3;
 	    }
 	}

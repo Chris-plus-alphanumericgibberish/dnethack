@@ -915,7 +915,7 @@ toofar:
 	if (( attacktype(mtmp->data, AT_BREA) ||
 	      attacktype(mtmp->data, AT_GAZE) ||
 	      attacktype(mtmp->data, AT_SPIT) ||
-	     (attacktype(mtmp->data, AT_MAGC) &&
+	     ((attacktype(mtmp->data, AT_MAGC) || attacktype(mtmp->data, AT_MMGC)) &&
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         <= AD_SPC2))
 	      ) ||
@@ -968,7 +968,7 @@ toofar:
 		    struct attack *a;
 
 		    for (a = &mdat->mattk[0]; a < &mdat->mattk[NATTK]; a++) {
-			if (a->aatyp == AT_MAGC && (a->adtyp == AD_SPEL || a->adtyp == AD_CLRC)) {
+			if ((a->aatyp == AT_MAGC || a->aatyp == AT_MMGC) && (a->adtyp == AD_SPEL || a->adtyp == AD_CLRC)) {
 			    if (castmu(mtmp, a, FALSE, FALSE)) {
 				tmp = 3;
 				break;

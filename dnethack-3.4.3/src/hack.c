@@ -359,7 +359,8 @@ still_chewing(x,y)
 
     /* Okay, you've chewed through something */
     u.uconduct.food++;
-    u.uhunger += rnd(20);
+	if(Race_if(PM_INCANTIFIER)) u.uen += rnd(20);
+	else u.uhunger += rnd(20);
 
     if (boulder) {
 	delobj(boulder);		/* boulder goes bye-bye */

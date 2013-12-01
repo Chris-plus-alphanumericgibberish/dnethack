@@ -266,6 +266,7 @@ struct you {
 	char	ushops_left[5]; /* ditto, shops exited this turn */
 
 	int	 uhunger;	/* refd only in eat.c and shk.c */
+#define YouHunger	(Race_if(PM_INCANTIFIER) ? u.uen : u.uhunger)
 	unsigned uhs;		/* hunger state - see eat.c */
 
 	boolean ukinghill; /* records if you are carying the pirate treasure (and are therefor king of the hill) */

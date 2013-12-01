@@ -15,7 +15,6 @@ static NEARDATA int RoSbook;		/* Read spell or Study Wards?"
 #define KEEN 20000
 #define READ_SPELL 1
 #define STUDY_WARD 2
-#define MAX_SPELL_STUDY 3
 #define incrnknow(spell)        spl_book[spell].sp_know = KEEN
 
 #define spellev(spell)		spl_book[spell].sp_lev
@@ -856,7 +855,7 @@ boolean atme;
 	}
 	energy = (spellev(spell) * 5);    /* 5 <= energy <= 35 */
 
-	if (u.uhunger <= 10 && spellid(spell) != SPE_DETECT_FOOD) {
+	if (!Race_if(PM_INCANTIFIER) && u.uhunger <= 10 && spellid(spell) != SPE_DETECT_FOOD) {
 		You("are too hungry to cast that spell.");
 		return(0);
 	} else if (ACURR(A_STR) < 4)  {
@@ -909,8 +908,8 @@ boolean atme;
 			 * this is low enough that they must eat before
 			 * casting anything else except detect food
 			 */
-			if (hungr > u.uhunger-3)
-				hungr = u.uhunger-3;
+			if (hungr > YouHunger-3)
+				hungr = YouHunger-3;
 			morehungry(hungr);
 		}
 	}

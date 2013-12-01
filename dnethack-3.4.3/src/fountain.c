@@ -229,7 +229,8 @@ drinkfountain()
 
 	if (fate < 10) {
 		pline_The("cool draught refreshes you.");
-		u.uhunger += rnd(10); /* don't choke on water */
+		if(Race_if(PM_INCANTIFIER)) u.uen += rnd(10); /* don't choke on water */
+		else u.uhunger += rnd(10); /* don't choke on water */
 		newuhs(FALSE);
 		if(mgkftn) return;
 	} else {

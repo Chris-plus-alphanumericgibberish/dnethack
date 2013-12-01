@@ -1110,7 +1110,7 @@ char *type;			/* blade, staff, etc */
 	    } else {
 		if (mdef->data == &mons[PM_CLAY_GOLEM] || mdef->data == &mons[PM_SPELL_GOLEM])
 		    mdef->mhp = 1;	/* cancelled clay golems will die */
-		if (youattack && attacktype(mdef->data, AT_MAGC)) {
+		if (youattack && (attacktype(mdef->data, AT_MAGC) || attacktype(mdef->data, AT_MMGC))) {
 		    You("absorb magical energy!");
 		    u.uenmax++;
 		    u.uen++;

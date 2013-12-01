@@ -715,7 +715,7 @@ register struct obj *obj;
 			Strcat(prefix, "lethe-rusted ");
 plus:
 		add_erosion_words(obj, prefix);
-		if(obj->known) {
+		if(obj->known || Race_if(PM_INCANTIFIER)) {
 			Strcat(prefix, sitoa(obj->spe));
 			Strcat(prefix, " ");
 		}
@@ -790,7 +790,7 @@ ring:
 		    Strcat(bp, body_part(HAND));
 		    Strcat(bp, ")");
 		}
-		if(obj->known && objects[obj->otyp].oc_charged) {
+		if((obj->known || Race_if(PM_INCANTIFIER)) && objects[obj->otyp].oc_charged) {
 			Strcat(prefix, sitoa(obj->spe));
 			Strcat(prefix, " ");
 		}

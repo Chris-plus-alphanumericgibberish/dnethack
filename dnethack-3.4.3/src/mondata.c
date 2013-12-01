@@ -168,7 +168,7 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 	    return FALSE;
 
 	switch(aatyp) {
-	case AT_EXPL: case AT_BOOM: case AT_GAZE: case AT_MAGC:
+	case AT_EXPL: case AT_BOOM: case AT_GAZE: case AT_MAGC: case AT_MMGC:
 	case AT_BREA: /* assumed to be lightning */
 	    /* light-based attacks may be cancelled or resisted */
 	    if (magr && magr->mcan)

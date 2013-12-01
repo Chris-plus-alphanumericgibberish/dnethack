@@ -228,7 +228,8 @@ newman()
 	check_uhpmax();
 
 	redist_attr();
-	u.uhunger = rn1(500,500);
+	if(Race_if(PM_INCANTIFIER)) u.uen = min(u.uenmax, rn1(500,500));
+	else u.uhunger = rn1(500,500);
 	if (Sick) make_sick(0L, (char *) 0, FALSE, SICK_ALL);
 	Stoned = 0;
 	delayed_killer = 0;

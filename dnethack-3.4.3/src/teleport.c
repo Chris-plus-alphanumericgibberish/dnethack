@@ -502,7 +502,7 @@ dotele()
 #endif
 	    }
 
-	    if (u.uhunger <= 100 || ACURR(A_STR) < 6) {
+	    if ((!Race_if(PM_INCANTIFIER) && u.uhunger <= 100) || ACURR(A_STR) < 6) {
 #ifdef WIZARD
 		if (!wizard) {
 #endif

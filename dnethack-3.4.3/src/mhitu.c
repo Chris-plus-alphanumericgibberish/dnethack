@@ -777,7 +777,8 @@ mattacku(mtmp)
 					wildmiss(mtmp, mattk);
 			}
 		break;
-		case AT_MAGC:{
+		case AT_MAGC:
+		case AT_MMGC:{
 			int temp=0;
 			if( mdat == &mons[PM_ASMODEUS] ) mtmp->mspec_used = 0;
 			if( mdat == &mons[PM_DEMOGORGON] && rn2(3) ) mtmp->mspec_used = 0;

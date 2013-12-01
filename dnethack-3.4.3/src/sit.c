@@ -285,7 +285,7 @@ dosit()
 			return 0;
 		}
 
-		if (u.uhunger < (int)objects[EGG].oc_nutrition) {
+		if (YouHunger < (int)objects[EGG].oc_nutrition) {
 			You("don't have enough energy to lay an egg.");
 			return 0;
 		}

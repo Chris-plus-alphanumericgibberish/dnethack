@@ -117,6 +117,8 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	orc_abil[] = { {	1, &(HPoison_resistance), "", "" },
+
+	inc_abil[] = { {	1, &(HAntimagic), "", "" },
 		     {	 0, 0, 0, 0 } };
 
 static long next_check = 600L;	/* arbitrary first setting */
@@ -342,10 +344,10 @@ exerper()
 	if(!(moves % 10)) {
 		/* Hunger Checks */
 
-		int hs = (u.uhunger > 1000) ? SATIATED :
-			 (u.uhunger > 150) ? NOT_HUNGRY :
-			 (u.uhunger > 50) ? HUNGRY :
-			 (u.uhunger > 0) ? WEAK : FAINTING;
+		int hs = (YouHunger > 1000) ? SATIATED :
+			 (YouHunger > 150) ? NOT_HUNGRY :
+			 (YouHunger > 50) ? HUNGRY :
+			 (YouHunger > 0) ? WEAK : FAINTING;
 
 #ifdef DEBUG
 		pline("exerper: Hunger checks");
@@ -613,6 +615,7 @@ int oldlevel, newlevel;
 	case PM_ELF:            rabil = elf_abil;	break;
 	case PM_ORC:            rabil = orc_abil;	break;
 	case PM_HUMAN:
+	case PM_INCANTIFIER:	rabil = inc_abil;	break;
 	case PM_DWARF:
 	case PM_GNOME:
 	case PM_VAMPIRE:
