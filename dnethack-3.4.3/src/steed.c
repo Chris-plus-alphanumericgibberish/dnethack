@@ -12,6 +12,10 @@ static NEARDATA const char steeds[] = {
 	S_QUADRUPED, S_UNICORN, S_ANGEL, S_CENTAUR, S_DRAGON, S_JABBERWOCK, '\0'
 };
 
+static NEARDATA const char drow_steeds[] = {
+	S_SPIDER, S_LIZARD, S_DEMON, '\0'
+};
+
 STATIC_DCL boolean FDECL(landing_spot, (coord *, int, int));
 
 /* caller has decided that hero can't reach something while mounted */
@@ -30,8 +34,12 @@ can_saddle(mtmp)
 {
 	struct permonst *ptr = mtmp->data;
 
-	return (index(steeds, ptr->mlet) && (ptr->msize >= MZ_MEDIUM) &&
-			(!humanoid(ptr) || ptr->mlet == S_CENTAUR) &&
+	return ((index(steeds, ptr->mlet) || 
+				(index(drow_steeds, ptr->mlet) && Race_if(PM_DROW))) && 
+			(ptr->msize >= MZ_MEDIUM) &&
+			(!humanoid(ptr) || ptr->mlet == S_CENTAUR
+				|| ptr == &mons[PM_SALAMANDER] 
+				|| ptr == &mons[PM_MARILITH]) &&
 			!amorphous(ptr) && !noncorporeal(ptr) &&
 			!is_whirly(ptr) && !unsolid(ptr));
 }

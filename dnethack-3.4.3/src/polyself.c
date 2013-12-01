@@ -1189,6 +1189,58 @@ domindblast()
 	return 1;
 }
 
+int
+dodarken()
+{
+
+	if (u.uen < 15 && u.uen<u.uenmax) {
+	    You("lack the energy to invoke the darkness.");
+	    return(0);
+	}
+	u.uen = max(u.uen-15,0);
+	flags.botl = 1;
+	You("invoke the darkness.");
+	litroom(FALSE,NULL);
+	
+	return 1;
+}
+
+int
+doclockspeed()
+{
+	short newspeed = doclockmenu();
+	if(newspeed != u.ucspeed){
+		if(newspeed == HIGH_CLOCKSPEED && u.uhs < WEAK) morehungry(10);
+		/*Note: that adjustment may have put you at weak*/
+		if(newspeed == HIGH_CLOCKSPEED && u.uhs >= WEAK){
+			pline("There is insufficient tension left in your mainspring for you to move at high speed.");
+		}
+		else if(newspeed == SLOW_CLOCKSPEED && u.uhs == SATIATED){
+			pline("There is too much tension in your mainspring for you to move at low speed.");
+		}
+		else{
+			switch(newspeed){
+			case HIGH_CLOCKSPEED:
+				You("increase your clock to high speed.");
+				u.ucspeed = newspeed;
+			break;
+			case NORM_CLOCKSPEED:
+				You("%s your clock to normal speed.",u.ucspeed== HIGH_CLOCKSPEED ? "decrease" : "increase");
+				u.ucspeed = newspeed;
+			break;
+			case SLOW_CLOCKSPEED:
+				You("decrease your clock to low speed.");
+				u.ucspeed = newspeed;
+			break;
+			}
+		}
+		return 1;
+	} else{
+		You("leave your clock at its current speed.");
+		return 0;
+	}
+}
+
 STATIC_OVL void
 uunstick()
 {

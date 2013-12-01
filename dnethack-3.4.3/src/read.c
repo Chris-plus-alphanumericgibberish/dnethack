@@ -115,7 +115,7 @@ doread()
 		}
 		return(1);
 	}
-	else if(scroll->oclass == RING_CLASS && isEngrRing((scroll)->otyp) && scroll->ovar1){
+	else if(scroll->oclass == RING_CLASS && (isEngrRing((scroll)->otyp)||isSignetRing((scroll)->otyp)) && scroll->ovar1){
 		if(!(scroll->ohaluengr)){
 			pline("A %s is engraved on the ring.",wardDecode[scroll->ovar1]);
 			if( !(u.wardsknown & get_wardID(scroll->ovar1)) ){
@@ -137,7 +137,16 @@ doread()
 	    useup(scroll);
 	    return(1);
 #ifdef TOURIST
-	} else if (scroll->otyp == T_SHIRT) {
+	} else if(scroll->oclass == ARMOR_CLASS
+		&& scroll->ohaluengr
+		&& scroll->ovar1
+		&& (scroll->otyp == DROVEN_PLATE_MAIL
+			|| scroll->otyp == DROVEN_CHAIN_MAIL
+		)
+	){
+		pline("There is %s engraved on the armor.",fetchHaluWard((int)scroll->ovar1));
+		return(1);
+	}else if (scroll->otyp == T_SHIRT) {
 	    static const char *shirt_msgs[] = { /* Scott Bigham */
     "I explored the Dungeons of Doom and all I got was this lousy T-shirt!",
     "Is that Mjollnir in your pocket or are you just happy to see me?",

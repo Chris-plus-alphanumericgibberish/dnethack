@@ -133,7 +133,7 @@
 #define AD_BARB		134	/* Physical damage retalitory attack */
 #define AD_LUCK		135	/* Luck-draining gaze (UnNetHack) */
 #define AD_VAMP		136	/* Vampire's blood drain attack */
-
+#define AD_WEBS		137	/* Vampire's blood drain attack */
 
 
 //#define AD_VMSL		180 //Vorlon missile: elect, disintegration, blast.  Triple damage.

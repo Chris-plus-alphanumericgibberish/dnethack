@@ -971,13 +971,18 @@ struct monst *mon;
 {
 	struct obj *armor;
 	int armpro = 0;
+	int cpro = 0;
 
 	armor = (mon == &youmonst) ? uarm : which_armor(mon, W_ARM);
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
 	armor = (mon == &youmonst) ? uarmc : which_armor(mon, W_ARMC);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
+	if(armor){
+		cpro = armor->otyp == DROVEN_CLOAK ? 
+			objects[armor->otyp].a_can - armor->ovar1 :
+			objects[armor->otyp].a_can;
+		if(armpro < cpro) armpro = cpro;
+	}
 	armor = (mon == &youmonst) ? uarmh : which_armor(mon, W_ARMH);
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
@@ -5789,6 +5794,10 @@ register struct attack *mattk;
 		}
 		return 1;
 	    }
+	    case AD_WEBS:{	/* KMH -- remove enchantment (disenchanter) */
+			struct trap *ttmp2 = maketrap(mtmp->mx, mtmp->my, WEB);
+			if (ttmp2) mintrap(mtmp);
+		}break;
 	    case AD_ENCH:	/* KMH -- remove enchantment (disenchanter) */
 	    	if (otmp) {
 	    	    (void) drain_item(otmp);

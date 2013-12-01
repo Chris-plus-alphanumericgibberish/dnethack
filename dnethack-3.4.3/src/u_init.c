@@ -244,6 +244,14 @@ static struct trobj TallowCandles[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 
+static struct trobj SleepPotions[] = {
+	{ POT_SLEEPING, 0, POTION_CLASS, 1, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj DrovenCloak[] = {
+	{ DROVEN_CLOAK, 0, ARMOR_CLASS, 1, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 static struct trobj Tinopener[] = {
 	{ TIN_OPENER, 0, TOOL_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -262,6 +270,10 @@ static struct trobj Blindfold[] = {
 };
 static struct trobj Instrument[] = {
 	{ WOODEN_FLUTE, 0, TOOL_CLASS, 1, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj RandRing[] = {
+	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Xtra_food[] = {
@@ -320,6 +332,15 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_GNOME, CLUB,			AKLYS    },
     { PM_GNOME, BOW,			CROSSBOW	      },
     { PM_GNOME, ARROW,			CROSSBOW_BOLT	      },
+    { PM_DROW,	CLOAK_OF_DISPLACEMENT,		DROVEN_PLATE_MAIL  },
+    { PM_DROW,	CLOAK_OF_MAGIC_RESISTANCE,	DROVEN_CHAIN_MAIL  },
+    { PM_DROW,	ROBE,						DROVEN_PLATE_MAIL  },
+    { PM_DROW,	DAGGER,			DROVEN_DAGGER	      },
+    { PM_DROW,	SPEAR,			DROVEN_SHORT_SWORD	      },
+    { PM_DROW,	SHORT_SWORD,	DROVEN_SHORT_SWORD     },
+    { PM_DROW,	BOW,			DROVEN_CROSSBOW	      },
+    { PM_DROW,	ARROW,			DROVEN_BOLT	      },
+    { PM_DROW,	LEATHER_CLOAK,				DROVEN_CLOAK  },
     { PM_INCANTIFIER,CLOAK_OF_MAGIC_RESISTANCE,		ROBE  },
     { PM_INCANTIFIER,CLOAK_OF_DISPLACEMENT,		ROBE  },
     { PM_INCANTIFIER,	LEATHER_ARMOR,		ROBE  },
@@ -858,6 +879,8 @@ u_init()
 	u.ukinghill = 0;
 	u.protean = 0;
 
+	u.uhouse = 0;
+	
 	if(Role_if(PM_EXILE)){
 		short i,j,tmp;
 		for(i=0;i<31;i++) u.sealorder[i]=i;
@@ -1147,7 +1170,55 @@ u_init()
 	    knows_object(ELVEN_CLOAK);
 	    break;
 
-	case PM_DWARF:
+	case PM_DROW:{
+		struct obj* pobj;
+		
+	    /*
+	     * All drow get signet rings. Pirates and wizards get them through their
+		 * class equipment
+	     */
+		ini_inv(SleepPotions);
+	    if (!Role_if(PM_PIRATE) && !Role_if(PM_WIZARD)) {
+			ini_inv(RandRing);
+	    }
+		
+		if(!Role_if(PM_EXILE)) ini_inv(DrovenCloak);
+	    /* Drow can recognize all droven objects */
+	    knows_object(DROVEN_SHORT_SWORD);
+	    knows_object(DROVEN_BOLT);
+	    knows_object(DROVEN_CROSSBOW);
+	    knows_object(DROVEN_DAGGER);
+	    knows_object(DROVEN_CHAIN_MAIL);
+	    knows_object(DROVEN_PLATE_MAIL);
+	    knows_object(DROVEN_CLOAK);
+	    knows_object(find_signet_ring());
+		
+		u.uhouse = !Role_if(PM_EXILE) ?
+				rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE :
+				rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;;
+		for(pobj = invent; pobj; pobj=pobj->nobj){
+			if(pobj->otyp == DROVEN_CHAIN_MAIL ||
+				pobj->otyp == DROVEN_PLATE_MAIL){
+					pobj->ohaluengr = TRUE;
+					pobj->ovar1 = !flags.female ? 
+						u.uhouse :
+						LOLTH_SYMBOL;
+			}
+			else if(isSignetRing(pobj->otyp)){
+				pobj->ohaluengr = TRUE;
+				pobj->ovar1 = u.uhouse;
+				pobj->opoisoned = OPOISON_SLEEP;
+				pobj->opoisonchrgs = 30;
+			}
+			else if(is_poisonable(pobj)){
+				pobj->opoisoned = OPOISON_SLEEP;
+			}
+			
+		}
+    }break;
+
+	case PM_DWARF:{
+		struct obj* otmp;
 	    /* Dwarves can recognize all dwarvish objects */
 	    knows_object(DWARVISH_SPEAR);
 	    knows_object(DWARVISH_SHORT_SWORD);
@@ -1599,7 +1670,8 @@ register struct trobj *trop;
 		 * one will immediately read it and use the iron ball as a
 		 * weapon.)
 		 */
-			obj = mkobj(trop->trclass, FALSE);
+			if(Race_if(PM_DROW)) obj = mksobj(find_signet_ring(),TRUE,FALSE);
+			else obj = mkobj(trop->trclass, FALSE);
 			otyp = obj->otyp;
 			while (otyp == WAN_WISHING
 				|| otyp == nocreate
@@ -1685,6 +1757,9 @@ register struct trobj *trop;
 			if (objects[otyp].oc_uses_known) obj->known = 1;
 			}
 			obj->cursed = 0;
+			if(obj->otyp == DROVEN_PLATE_MAIL ||
+				obj->otyp == DROVEN_CHAIN_MAIL)
+					obj->oerodeproof = 1;
 			if (obj->opoisoned && u.ualign.type != A_CHAOTIC)
 			    obj->opoisoned = 0;
 			if (obj->ovar1){

@@ -1284,6 +1284,8 @@ int spell;
 	else if (uarmc && uarmc->otyp == ROBE)
 		splcaster -= uarmc->oartifact ? 2*urole.spelarmr : urole.spelarmr;
 
+	if(uarm && uarm->otyp == DROVEN_CHAIN_MAIL) splcaster -= urole.spelarmr/2;
+	
 	if(uarm && uarm->oartifact == ART_DRAGON_PLATE) splcaster += urole.spelarmr;
 
 	if (uarms) splcaster += urole.spelshld;

@@ -35,7 +35,15 @@ register struct monst *mtmp;
 STATIC_OVL int
 pet_type()
 {
-	if (urole.petnum != NON_PM)
+	if(Race_if(PM_DROW)){
+		if(preferred_pet == 's')
+			return (PM_CAVE_SPIDER);
+		else if(preferred_pet == ':' || preferred_pet == 'l')
+			return (PM_BABY_CROCODILE);
+		else 
+			return (rn2(3) ? PM_CAVE_SPIDER : PM_BABY_CROCODILE);
+	}
+	else if (urole.petnum != NON_PM)
 	    return (urole.petnum);
 	else if (preferred_pet == 'c')
 	    return (PM_KITTEN);

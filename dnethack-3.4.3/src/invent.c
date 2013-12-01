@@ -1017,6 +1017,7 @@ register const char *let,*word;
 		     /* MRKR: mining helmets */
 		     (otmp->oclass == ARMOR_CLASS &&
 		      otyp != DWARVISH_IRON_HELM &&
+		      otyp != DROVEN_CLOAK &&
 			  otyp != GNOMISH_POINTY_HAT) || 
 		     (otmp->oclass == GEM_CLASS && !is_graystone(otmp))))
 		|| (!strcmp(word, "invoke") &&
@@ -1060,8 +1061,19 @@ register const char *let,*word;
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;
 		}
+		//Make exceptions for armors that have been engraved
+		if(otmp->oclass == ARMOR_CLASS
+			&& otmp->ohaluengr
+			&& otmp->ovar1
+			&& (   otmp->otyp == DROVEN_PLATE_MAIL 
+				|| otmp->otyp == DROVEN_CHAIN_MAIL)
+			&& otmp->ovar1 && !strcmp(word, "read")
+		){
+			bp[foo++] = otmp->invlet;
+			allowall = TRUE;
+		}
 		//Make exceptions for rings that have been engraved
-		if(otmp->oclass == RING_CLASS && isEngrRing((otmp)->otyp) && otmp->ovar1 && (!strcmp(word, "read") || !strcmp(word, "use or apply"))){
+		if(otmp->oclass == RING_CLASS && (isEngrRing((otmp)->otyp) || isSignetRing((otmp)->otyp)) && otmp->ovar1 && (!strcmp(word, "read") || !strcmp(word, "use or apply"))){
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;
 		}

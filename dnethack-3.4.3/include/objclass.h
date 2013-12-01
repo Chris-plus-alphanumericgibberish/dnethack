@@ -74,8 +74,10 @@ struct objclass {
 /* secondary damage: rot/acid/acid */
 #define is_corrodeable(otmp)	(objects[otmp->otyp].oc_material == COPPER || objects[otmp->otyp].oc_material == IRON)
 
+#define is_evaporable(otmp)	(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL)
+
 #define is_damageable(otmp) (is_rustprone(otmp) || is_flammable(otmp) || \
-				is_rottable(otmp) || is_corrodeable(otmp))
+				is_rottable(otmp) || is_corrodeable(otmp) || is_evaporable(otmp))
 
 	schar	oc_subtyp;
 #define oc_skill	oc_subtyp   /* Skills of weapons, spellbooks, tools, gems */

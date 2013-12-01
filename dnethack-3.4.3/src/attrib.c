@@ -613,6 +613,7 @@ int oldlevel, newlevel;
 
 	switch (Race_switch) {
 	case PM_ELF:            rabil = elf_abil;	break;
+	case PM_DROW:           rabil = elf_abil;	break;
 	case PM_ORC:            rabil = orc_abil;	break;
 	case PM_HUMAN:
 	case PM_INCANTIFIER:	rabil = inc_abil;	break;

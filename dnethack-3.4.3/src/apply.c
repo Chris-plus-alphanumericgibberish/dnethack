@@ -32,6 +32,7 @@ STATIC_DCL void FDECL(use_figurine, (struct obj **));
 STATIC_DCL void FDECL(use_grease, (struct obj *));
 STATIC_DCL void FDECL(use_trap, (struct obj *));
 STATIC_DCL void FDECL(use_stone, (struct obj *));
+STATIC_DCL void FDECL(use_droven_cloak, (struct obj *));
 STATIC_PTR int NDECL(set_trap);		/* occupation callback */
 STATIC_DCL int FDECL(use_whip, (struct obj *));
 STATIC_DCL int FDECL(use_pole, (struct obj *));
@@ -2320,6 +2321,78 @@ set_trap()
 	return 0;
 }
 
+STATIC_OVL void
+use_droven_cloak(otmp)
+struct obj *otmp;
+{
+	int ttyp, tmp, rx, ry;
+	const char *what = (char *)0;
+	struct trap *ttmp;
+	struct monst *mtmp;
+
+    if (!getdir((char *)0)) return;
+
+    if (Stunned || (Confusion && !rn2(5))) confdir();
+    rx = u.ux + u.dx;
+    ry = u.uy + u.dy;
+    mtmp = m_at(rx, ry);
+
+	if (nohands(youmonst.data))
+	    what = "without hands";
+	else if (Stunned)
+	    what = "while stunned";
+	else if (u.uswallow)
+	    what = is_animal(u.ustuck->data) ? "while swallowed" :
+			"while engulfed";
+	else if (Underwater)
+	    what = "underwater";
+	else if (Levitation)
+	    what = "while levitating";
+	else if (is_pool(rx, ry))
+	    what = "in water";
+	else if (is_lava(rx, ry))
+	    what = "in lava";
+	else if (On_stairs(rx, ry))
+	    what = (rx == xdnladder || rx == xupladder) ?
+			"on the ladder" : "on the stairs";
+	else if (IS_FURNITURE(levl[rx][ry].typ) ||
+		IS_ROCK(levl[rx][ry].typ) ||
+		closed_door(rx, ry) || ((ttmp = t_at(rx, ry)) && ttmp->ttyp != WEB))
+	    what = "here";
+	if (what) {
+	    You_cant("set a trap %s!",what);
+	    reset_trapset();
+	    return;
+	}
+	
+	if(ttmp) {
+		if(otmp->ovar1) otmp->ovar1--;
+		pline("The cloak sweeps up a web!");
+		deltrap(ttmp);
+		newsym(rx, ry);
+		if(rx==u.ux && ry==u.uy) u.utrap = 0;
+		else if(mtmp) mtmp->mtrapped = 0;
+
+	}
+	else {
+		ttmp = maketrap(rx, ry, WEB);
+		if(ttmp){
+			pline("A web spins out from the cloak!");
+			ttmp->madeby_u = 1;
+			ttmp->tseen = 1;
+			newsym(rx, ry);
+			if (*in_rooms(rx,ry,SHOPBASE)) {
+				add_damage(rx, ry, 0L);		/* schedule removal */
+			}
+			if(rx==u.ux && ry==u.uy) dotrap(ttmp, NOWEBMSG);
+			else if(mtmp) mintrap(mtmp);
+		}
+		if(otmp->ovar1 > 3) useup(otmp);
+		else otmp->ovar1++;
+	}
+	reset_trapset();
+}
+
 STATIC_OVL int
 use_whip(obj)
 struct obj *obj;
@@ -3303,7 +3376,8 @@ doapply()
 		Strcpy(class_list, tools);
 	if (carrying(CREAM_PIE) || carrying(EUCALYPTUS_LEAF))
 		add_class(class_list, FOOD_CLASS);
-	if (carrying(DWARVISH_IRON_HELM) || carrying(GNOMISH_POINTY_HAT))
+	if (carrying(DWARVISH_IRON_HELM) || carrying(GNOMISH_POINTY_HAT) 
+		|| carrying(DROVEN_CLOAK))
 		add_class(class_list, ARMOR_CLASS);
 
 
@@ -3546,6 +3620,9 @@ doapply()
 	case LAND_MINE:
 	case BEARTRAP:
 		use_trap(obj);
+		break;
+	case DROVEN_CLOAK:
+		use_droven_cloak(obj);
 		break;
 	case FLINT:
 	case LUCKSTONE:

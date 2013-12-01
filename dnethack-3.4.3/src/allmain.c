@@ -694,6 +694,7 @@ newgame()
 #endif /* RECORD_REALTIME || REALTIME_ON_BOTL */
 
 	/* Success! */
+	if(Race_if(PM_DROW)) litroom(FALSE,NULL);
 	welcome(TRUE);
 	return;
 }

@@ -829,4 +829,112 @@ struct obj *obj;
 
     return 0;
 }
+
+void
+light_damage(arg, timeout)
+genericptr_t arg;
+long timeout;
+{
+	struct obj *obj = (struct obj *) arg;;
+ 	xchar x = 0, y = 0;
+	boolean on_floor = obj->where == OBJ_FLOOR,
+		in_invent = obj->where == OBJ_INVENT;
+
+//	pline("checking light damage");
+	if (on_floor) {
+	    x = obj->ox;
+	    y = obj->oy;
+		if(levl[x][y].lit == 0){
+			if(obj->oeroded && obj->oerodeproof && !rn2(20)) obj->oeroded--;
+			start_timer(1, TIMER_OBJECT,
+						LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+		if(obj->oeroded < 2){
+			obj->oeroded++;
+			start_timer(1, TIMER_OBJECT,
+						LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}else{
+			useup(obj);
+		}
+	} else if (in_invent) {
+//		pline("object in invent");
+		int armpro = 0;
+		if(uarmc){
+			armpro = uarmc->otyp == DROVEN_CLOAK ? 
+				objects[uarmc->otyp].a_can - uarmc->ovar1 :
+				objects[uarmc->otyp].a_can;
+		}
+		if(levl[u.ux][u.uy].lit == 0 || ((rn2(3) < armpro) && rn2(50))){
+			if(obj->oeroded && obj->oerodeproof && 
+				!rn2(20) && levl[u.ux][u.uy].lit == 0) obj->oeroded--;
+			start_timer(1, TIMER_OBJECT,
+						LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+		if(obj->oeroded < 2){
+			obj->oeroded++;
+			start_timer(1, TIMER_OBJECT,
+						LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+	    if (flags.verbose) {
+			char *name = obj->otyp == CORPSE ? corpse_xname(obj, FALSE) : xname(obj);
+			Your("%s%s %s away%c",
+				 obj == uwep ? "wielded " : nul, name,
+				 otense(obj, "evaporate"), obj == uwep ? '!' : '.');
+	    }
+	    if (obj == uwep) {
+			uwepgone();	/* now bare handed */
+			stop_occupation();
+			useup(obj);
+	    } else if (obj == uswapwep) {
+			uswapwepgone();
+			stop_occupation();
+			useup(obj);
+	    } else if (obj == uquiver) {
+			uqwepgone();
+			stop_occupation();
+			useup(obj);
+	    } else if (obj == uarm || obj == uarmc || obj == uarms || obj == uarmh || 
+					obj == uarmg || obj == uarmf || obj == uarms) {
+			stop_occupation();
+			destroy_arm(obj);
+	    } else{
+			stop_occupation();
+			useup(obj);
+		}
+	} else if (obj->where == OBJ_MINVENT && obj->owornmask) {
+		struct obj *armor = which_armor(obj->ocarry, W_ARMC);
+		int armpro = 0;
+		if(armor){
+			armpro = armor->otyp == DROVEN_CLOAK ? 
+				objects[armor->otyp].a_can - armor->ovar1 :
+				objects[armor->otyp].a_can;
+		}
+		if(levl[obj->ocarry->mx][obj->ocarry->my].lit == 0
+			 || ((rn2(3) < armpro) && rn2(50))){
+			if(obj->oeroded && obj->oerodeproof 
+				&& !rn2(20) && levl[obj->ocarry->mx][obj->ocarry->my].lit == 0) 
+					obj->oeroded--;
+			start_timer(1, TIMER_OBJECT,
+						LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+		if(obj->oeroded < 2){
+			obj->oeroded++;
+			start_timer(1, TIMER_OBJECT,
+						LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+	    if (obj == MON_WEP(obj->ocarry)) {
+			setmnotwielded(obj->ocarry,obj);
+			MON_NOWEP(obj->ocarry);
+			useup(obj);
+	    }
+	}
+	if (on_floor) newsym(x, y);
+	else if (in_invent) update_inventory();
+}
 /*worn.c*/

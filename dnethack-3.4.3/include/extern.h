@@ -1449,6 +1449,7 @@ E int NDECL(find_mboots);
 E int NDECL(find_hboots);
 E int NDECL(find_bboots);
 E int NDECL(find_jboots);
+E int NDECL(find_signet_ring);
 E int NDECL(find_engagement_ring);
 E int NDECL(find_gold_ring);
 E int NDECL(find_opal_ring);
@@ -1466,6 +1467,7 @@ E int NDECL(find_ivory_ring);
 E int NDECL(find_emerald_ring);
 E int NDECL(find_droven_ring);
 E boolean FDECL(isEngrRing, (short));
+E boolean FDECL(isSignetRing, (short));
 E void NDECL(oinit);
 E void FDECL(savenames, (int,int));
 E void FDECL(restnames, (int));
@@ -1668,6 +1670,7 @@ E int NDECL(dosummon);
 E int NDECL(dogaze);
 E int NDECL(dohide);
 E int NDECL(domindblast);
+E int NDECL(dodarken);
 E void FDECL(skinback, (BOOLEAN_P));
 E const char *FDECL(mbodypart, (struct monst *,int));
 E const char *FDECL(body_part, (int));
@@ -2489,6 +2492,7 @@ E int FDECL(extra_pref, (struct monst *, struct obj *));
 E void FDECL(bypass_obj, (struct obj *));
 E void NDECL(clear_bypasses);
 E int FDECL(racial_exception, (struct monst *, struct obj *));
+E void FDECL(light_damage, (genericptr_t, long));
 
 /* ### write.c ### */
 

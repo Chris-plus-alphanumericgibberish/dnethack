@@ -382,6 +382,35 @@ const char * haluWard[] =  {
 	"a south-east facing glider",
 	"a square",
 	
+	/*Special behavior, these identify drow houses*/
+	"a House Baenre crest",
+	"a House Barrison Del'Armgo crest",
+	"a House Xorlarrin crest",
+	"a House Faen Tlabbar crest",
+	"a House Mizzrym crest",
+	"a House Fey-Branche crest",
+	"a House Melarn crest",
+	"a House Duskryn crest",
+	
+	/*Special behavior, these identify fallen drow houses*/
+	"a House Bront'tej crest",
+	"a House Celofraie crest",
+	"a House DeVir crest",
+	"a House Do'Urden crest",
+	"a House Elec'thil crest",
+	"a House H'Kar crest",
+	"a House Hun'ett crest",
+	"a House Masq'il'yr crest",
+	"a House Mlin'thobbyn crest",
+	"a House Oblodra crest",
+	"a House S'sril crest",
+	"a House Syr'thaerl crest",
+	"a House Teken'duis crest",
+	"a House Thaeyalla crest",
+	"a House X'larraz'et'soj crest",
+	
+	/* Special behavior, lolth holly symbol */
+	"a silver spider-like star",
 	
 	/* books */
 	"a set of holy horns", "a Summoning Dark mine-sign", "a Long Dark mine-sign",

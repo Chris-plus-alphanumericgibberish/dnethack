@@ -627,10 +627,22 @@ int thrown;
 	     * don't get both bonuses.
 	     */
 	    if (!uarmg) {
-			if (uleft && (objects[uleft->otyp].oc_material == SILVER || arti_silvered(uleft)))
-			    barehand_silver_rings++;
-			if (uright && (objects[uright->otyp].oc_material == SILVER || arti_silvered(uright)))
-			    barehand_silver_rings++;
+			if (uleft 
+				&& (objects[uleft->otyp].oc_material == SILVER 
+					|| arti_silvered(uleft) 
+					|| (uleft->ohaluengr
+						&& (isEngrRing(uleft->otyp) || isSignetRing(uleft->otyp))
+						&& uleft->ovar1 == LOLTH_SYMBOL)
+				)
+			) barehand_silver_rings++;
+			if (uright 
+				&& (objects[uright->otyp].oc_material == SILVER 
+					|| arti_silvered(uright)
+					|| (uright->ohaluengr
+						&& (isEngrRing(uright->otyp) || isSignetRing(uright->otyp))
+						&& uright->ovar1 == LOLTH_SYMBOL)
+				)
+			) barehand_silver_rings++;
 			if (barehand_silver_rings && hates_silver(mdat)) {
 			    tmp += d(barehand_silver_rings,20);
 			    silvermsg = TRUE;
@@ -642,6 +654,107 @@ int thrown;
 			if (barehand_jade_rings && hates_silver(mdat)) {
 			    tmp += d(barehand_jade_rings, 20);
 			    silvermsg = TRUE; /* jade ring handled in same code block as silver ring */
+			}
+			/* posioned rings */
+			if(uright && uright->opoisoned && isSignetRing(uright->otyp)){
+				if(uright->opoisoned & OPOISON_BASIC && !rn2(10)){
+					if (resists_poison(mon))
+						needpoismsg = TRUE;
+					else poiskilled = TRUE;
+					
+					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
+				}
+				if(uright->opoisoned & OPOISON_FILTH && !rn2(10)){
+					if (resists_sickness(mon))
+						needfilthmsg = TRUE;
+					else filthkilled = TRUE;
+					
+					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
+				}
+				if(uright->opoisoned & OPOISON_SLEEP && !rn2(5)){
+					if (resists_poison(mon) || resists_sleep(mon))
+						needdrugmsg = TRUE;
+					else if(!rn2(5) && sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
+					
+					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
+				}
+				if(uright->opoisoned & OPOISON_BLIND && !rn2(10)){
+					if (resists_poison(mon))
+						needpoismsg = TRUE;
+					 else {
+						poisblindmon = TRUE;
+					}
+					
+					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
+				}
+				if(uright->opoisoned & OPOISON_PARAL && !rn2(8)){
+					if (resists_poison(mon))
+						needpoismsg = TRUE;
+					 else {
+						if (mon->mcanmove) {
+							mon->mcanmove = 0;
+							mon->mfrozen = rnd(25);
+						}
+					}
+					
+					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
+				}
+				if(uright->opoisoned & OPOISON_AMNES && !rn2(10)){
+					if(mindless(mon->data)) needsamnesiamsg = TRUE;
+					else amnesiamon = TRUE;
+					
+					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
+				}
+			}
+			if(uleft && uleft->opoisoned && isSignetRing(uleft->otyp)){
+				if(uleft->opoisoned & OPOISON_BASIC && !rn2(10)){
+					if (resists_poison(mon))
+						needpoismsg = TRUE;
+					else poiskilled = TRUE;
+					
+					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
+				}
+				if(uleft->opoisoned & OPOISON_FILTH && !rn2(10)){
+					if (resists_sickness(mon))
+						needfilthmsg = TRUE;
+					else filthkilled = TRUE;
+					
+					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
+				}
+				if(uleft->opoisoned & OPOISON_SLEEP && !rn2(5)){
+					if (resists_poison(mon) || resists_sleep(mon))
+						needdrugmsg = TRUE;
+					else if(!rn2(5) && sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
+					
+					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
+				}
+				if(uleft->opoisoned & OPOISON_BLIND && !rn2(10)){
+					if (resists_poison(mon))
+						needpoismsg = TRUE;
+					 else {
+						poisblindmon = TRUE;
+					}
+					
+					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
+				}
+				if(uleft->opoisoned & OPOISON_PARAL && !rn2(8)){
+					if (resists_poison(mon))
+						needpoismsg = TRUE;
+					 else {
+						if (mon->mcanmove) {
+							mon->mcanmove = 0;
+							mon->mfrozen = rnd(25);
+						}
+					}
+					
+					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
+				}
+				if(uleft->opoisoned & OPOISON_AMNES && !rn2(10)){
+					if(mindless(mon->data)) needsamnesiamsg = TRUE;
+					else amnesiamon = TRUE;
+					
+					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
+				}
 			}
 	    }
 	} else {
@@ -1261,16 +1374,6 @@ defaultvalue:
 		pline_The("drug doesn't seem to affect %s.", mon_nam(mon));
 	if (needsamnesiamsg)
 		pline_The("lethe-rust doesn't seem to affect %s.", mon_nam(mon));
-	if (poiskilled) {
-		pline_The("poison was deadly...");
-		if (!already_killed) xkilled(mon, 0);
-		return FALSE;
-	}
-	if (filthkilled) {
-		pline_The("tainted filth was deadly...");
-		if (!already_killed) xkilled(mon, 0);
-		return FALSE;
-	}
 	if (druggedmon){
 		pline("%s falls asleep.", Monnam(mon));
 		slept_monst(mon);
@@ -1291,7 +1394,21 @@ defaultvalue:
 		mon->mtame = FALSE;
 		mon->mpeaceful = TRUE;
 	}
-	else if (destroyed) {
+	if (poiskilled) {
+		pline_The("poison was deadly...");
+		if (!already_killed) xkilled(mon, 0);
+		return FALSE;
+	} else if (filthkilled) {
+		pline_The("tainted filth was deadly...");
+		if (!already_killed) xkilled(mon, 0);
+		return FALSE;
+	} else if (vapekilled) {
+		if (cansee(mon->mx, mon->my))
+			pline("%s%ss body vaporizes!", Monnam(mon),
+				canseemon(mon) ? "'" : "");                
+		if (!already_killed) xkilled(mon, 2);
+		return FALSE;
+	} else if (destroyed) {
 		if (!already_killed)
 		    killed(mon);	/* takes care of most messages */
 	} else if(u.umconf && !thrown) {
@@ -2549,6 +2666,19 @@ uchar aatyp;
 		mdamageu(mon, tmp);
 	    }
 	    break;
+	  case AD_WEBS:{
+		struct trap *ttmp2 = maketrap(u.ux, u.uy, WEB);
+		if (ttmp2) {
+			pline_The("webbing sticks to you. You're caught!");
+			dotrap(ttmp2, NOWEBMSG);
+#ifdef STEED
+			if (u.usteed && u.utrap) {
+			/* you, not steed, are trapped */
+			dismount_steed(DISMOUNT_FELL);
+			}
+#endif
+		}
+	 } break;
 	  case AD_ENCH:	/* KMH -- remove enchantment (disenchanter) */
 	    if (mhit) {
 		struct obj *obj = (struct obj *)0;

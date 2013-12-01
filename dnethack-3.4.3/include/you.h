@@ -181,8 +181,11 @@ struct Race {
 	xchar attrmax[A_MAX];	/* maximum allowable attribute */
 	struct RoleAdvance hpadv; /* hit point advancement */
 	struct RoleAdvance enadv; /* energy advancement */
-#if 0	/* DEFERRED */
 	int   nv_range;		/* night vision range */
+#define NO_NIGHTVISION	0
+#define NIGHTVISION2	2
+#define NIGHTVISION3	3
+#if 0	/* DEFERRED */
 	int   xray_range;	/* X-ray vision range */
 #endif
 
@@ -270,7 +273,8 @@ struct you {
 	unsigned uhs;		/* hunger state - see eat.c */
 
 	boolean ukinghill; /* records if you are carying the pirate treasure (and are therefor king of the hill) */
-	int protean; /* counter for the auto-polypiling power of the*/
+	int protean; /* counter for the auto-polypiling power of the pirate treasure*/
+	int uhouse; /* drow house info */
 	struct prop uprops[LAST_PROP+1];
 
 	unsigned umconf;

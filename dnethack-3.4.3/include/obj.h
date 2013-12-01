@@ -65,8 +65,8 @@ struct obj {
 	Bitfield(rknown,1);	/* rustproof or not known */
 	Bitfield(sknown,1);	/* stolen or not known */
 
-	Bitfield(oeroded,2);	/* rusted/burnt weapon/armor */
-	Bitfield(oeroded2,2);	/* corroded/rotted weapon/armor */
+	Bitfield(oeroded,2);	/* rusted/burnt/vaporized weapon/armor */
+	Bitfield(oeroded2,2);	/* corroded/rotted/fractured weapon/armor */
 #define greatest_erosion(otmp) (int)((otmp)->oeroded > (otmp)->oeroded2 ? (otmp)->oeroded : (otmp)->oeroded2)
 #define MAX_ERODE 3
 #define orotten oeroded		/* rotten food */
@@ -107,6 +107,7 @@ struct obj {
 #define leashmon  corpsenm	/* gets m_id of attached pet */
 #define spestudied corpsenm	/* # of times a spellbook has been studied */
 //define fromsink  corpsenm	/* a potion from a sink */
+#define opoisonchrgs corpsenm	/* number of poison doses left */
 
 	int opoisoned; /* poisons smeared on the weapon*/
 #define OPOISON_NONE	 0
@@ -131,7 +132,8 @@ struct obj {
 	long owornmask;
 	long ovar1;		/* extra variable. Specifies the contents of Books of Secrets, and the warding sign of spellbooks. */
 			/* Also, records special features for weapons. Currently, the only special feature is runes on wooden weapons. */
-			/* Rings: specifies # of charges on droven ring and engraving on gemstone rings */
+			/* Rings: specifies engraving on certain rings */
+			/* Cloaks: Droven: Tattered level.  */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 

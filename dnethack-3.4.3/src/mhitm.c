@@ -1678,6 +1678,10 @@ int mdead;
 		goto assess_dmg;
 	    }
 	    break;
+	    case AD_WEBS:{	/* KMH -- remove enchantment (disenchanter) */
+			struct trap *ttmp2 = maketrap(magr->mx, magr->my, WEB);
+			if (ttmp2) mintrap(magr);
+		}break;
 	    case AD_ENCH:	/* KMH -- remove enchantment (disenchanter) */
 		if (mhit && !mdef->mcan && otmp) {
 		    (void) drain_item(otmp);

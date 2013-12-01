@@ -180,7 +180,7 @@ register char oclass;
 STATIC_OVL void
 shuffle_all()
 {
-	int first, last, oclass;
+	int first, last, oclass, signetring;
 
 	for (oclass = 1; oclass < MAXOCLASSES; oclass++) {
 		first = bases[oclass];
@@ -213,6 +213,19 @@ shuffle_all()
 		}
 	}
 
+	/* check signet ring */
+	
+	signetring = find_signet_ring();
+	while(signetring == RIN_LEVITATION ||
+	   signetring== RIN_AGGRAVATE_MONSTER ||
+	   signetring== RIN_HUNGER ||
+	   signetring== RIN_POLYMORPH ||
+	   signetring== RIN_POLYMORPH_CONTROL
+	){
+		shuffle(RIN_ADORNMENT, RIN_PROTECTION_FROM_SHAPE_CHAN, TRUE);
+		signetring = find_signet_ring();
+	}
+	
 	/* shuffle the helmets */
 	shuffle(HELMET, HELM_OF_TELEPATHY, FALSE);
 
@@ -313,6 +326,21 @@ find_jboots()
 	    return i;
 
     impossible("jungle boots not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
+/* find the object index for the signet ring */
+int
+find_signet_ring()
+{
+    register int i;
+    register const char *s;
+
+    for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "black signet"))
+			return i;
+
+    impossible("signet ring not found?");
     return -1;	/* not 0, or caller would try again each move */
 }
 
@@ -542,18 +570,13 @@ find_emerald_ring()
     return -1;	/* not 0, or caller would try again each move */
 }
 
-int
-find_droven_ring()
+boolean
+isSignetRing(otyp)
+short otyp;
 {
-    register int i;
-    register const char *s;
-
-    for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
-	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "droven"))
-	    return i;
-
-    impossible("droven ring not found?");
-    return -1;	/* not 0, or caller would try again each move */
+	static int sigring = 0;
+	if(!sigring) sigring = find_signet_ring();
+	return sigring == otyp;
 }
 
 /* test if a ring is an engravable ring */

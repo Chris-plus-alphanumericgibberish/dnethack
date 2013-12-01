@@ -585,7 +585,8 @@ char *prefix;
 			case 2:	Strcat(prefix, "very "); break;
 			case 3:	Strcat(prefix, "thoroughly "); break;
 		}			
-		Strcat(prefix, is_rustprone(obj) ? "rusty " : "burnt ");
+		Strcat(prefix, is_rustprone(obj) ? "rusty " : 
+					   is_evaporable(obj) ? "nebulous " : "burnt ");
 	}
 	if (obj->oeroded2 && !iscrys) {
 		switch (obj->oeroded2) {
@@ -595,9 +596,16 @@ char *prefix;
 		Strcat(prefix, is_corrodeable(obj) ? "corroded " :
 			"rotted ");
 	}
+	if (obj->ovar1 && obj->otyp == DROVEN_CLOAK) {
+		switch (obj->ovar1) {
+			case 2:	Strcat(prefix, "very "); break;
+			case 3:	Strcat(prefix, "thoroughly "); break;
+		}			
+		Strcat(prefix, "tattered ");
+	}
 	if (obj->rknown && obj->oerodeproof)
 		Strcat(prefix,
-		       iscrys ? "fixed " :
+		       (iscrys || is_evaporable(obj)) ? "fixed " :
 		       is_rustprone(obj) ? "rustproof " :
 		       is_corrodeable(obj) ? "corrodeproof " :	/* "stainless"? */
 		       is_flammable(obj) ? "fireproof " : "");
@@ -1861,8 +1869,8 @@ boolean from_user;
 	register int i;
 	register struct obj *otmp;
 	int cnt, spe, spesgn, typ, very, rechrg;
-	int blessed, uncursed, iscursed, ispoisoned, isgreased, stolen;
-	int eroded, eroded2, erodeproof;
+	int blessed, uncursed, iscursed, ispoisoned, isgreased, isdrained, stolen;
+	int eroded, eroded2, eroded3, erodeproof;
 #ifdef INVISIBLE_OBJECTS
 	int isinvisible;
 #endif
@@ -1912,7 +1920,7 @@ boolean from_user;
 #ifdef INVISIBLE_OBJECTS
 		isinvisible =
 #endif
-		ispoisoned = isgreased = eroded = eroded2 = erodeproof =
+		ispoisoned = isgreased = eroded = eroded2 = eroded3 = erodeproof =
 		halfeaten = islit = unlabeled = ishistoric = isdiluted = 0;
 	mntmp = NON_PM;
 #define UNDEFINED 0
@@ -2052,6 +2060,9 @@ boolean from_user;
 		} else if (!strncmpi(bp, "corroded ", l=9) ||
 			   !strncmpi(bp, "rotted ", l=7)) {
 			eroded2 = 1 + very;
+			very = 0;
+		} else if (!strncmpi(bp, "tattered ", l=9)) {
+			eroded3 = 1 + very;
 			very = 0;
 		} else if (!strncmpi(bp, "partly drained ", l=15)) {
 			isdrained = 1;
@@ -2924,6 +2935,8 @@ typfnd:
 		    otmp->oeroded = eroded;
 	    if (eroded2 && (is_corrodeable(otmp) || is_rottable(otmp)))
 		    otmp->oeroded2 = eroded2;
+	    if (eroded3 && otmp->otyp == DROVEN_CLOAK)
+		    otmp->ovar1 = eroded3;
 
 	    /* set erodeproof */
 	    if (erodeproof && !eroded && !eroded2)

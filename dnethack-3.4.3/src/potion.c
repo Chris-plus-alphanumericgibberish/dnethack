@@ -2312,6 +2312,54 @@ dodip()
 		goto poof;
 	    }
 	}
+	if(isSignetRing(obj->otyp)) {
+	    if(potion->otyp == POT_SICKNESS && (!obj->opoisoned || obj->opoisoned & OPOISON_BASIC)){
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			pline("%s is drawn up into %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = OPOISON_BASIC;
+			obj->opoisonchrgs = 30;
+			goto poof;
+	    } else if(potion->otyp == POT_SLEEPING && (!obj->opoisoned || obj->opoisoned & OPOISON_SLEEP)){
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			pline("%s is drawn up into %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = OPOISON_SLEEP;
+			obj->opoisonchrgs = 30;
+			goto poof;
+	    } else if(potion->otyp == POT_BLINDNESS && (!obj->opoisoned || obj->opoisoned & OPOISON_BLIND)) {
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			pline("%s is drawn up into %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = OPOISON_BLIND;
+			obj->opoisonchrgs = 30;
+			goto poof;
+	    } else if(potion->otyp == POT_PARALYSIS && (!obj->opoisoned || obj->opoisoned & OPOISON_PARAL)) {
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			obj->opoisoned = 0;
+			pline("%s is drawn up into %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = OPOISON_PARAL;
+			obj->opoisonchrgs = 30;
+			goto poof;
+	    }
+	}
 
 	if (potion->otyp == POT_OIL) {
 	    boolean wisx = FALSE;

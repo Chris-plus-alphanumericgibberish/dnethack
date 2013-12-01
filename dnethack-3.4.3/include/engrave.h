@@ -98,6 +98,38 @@ struct engr {
 #define	SOUTHWEST_GLIDER	5
 #define	SOUTHEAST_GLIDER	6
 #define DEAD_GLIDER			7
+/*These engravings correspond to active drow houses*/
+#define BAENRE				8
+#define BARRISON_DEL_ARMGO	9
+#define XORLARRIN 			10
+#define FAEN_TLABBAR 		11
+#define MIZZRYM				12
+#define FEY_BRANCHE			13
+#define MELARN				14
+#define DUSKRYN				15
+#define FIRST_HOUSE			BAENRE
+#define LAST_HOUSE			DUSKRYN
+/*These engravings correspond to disbanded drow houses*/
+#define BRONT_TEJ			16
+#define CELOFRAIE			17
+#define DEVIR				18
+#define DO_URDEN			19
+#define ELEC_THIL			20
+#define H_KAR				21
+#define HUN_ETT				22
+#define MASQ_IL_YR			23
+#define MLIN_THOBBYN		24
+#define OBLODRA				25
+#define S_SRIL				26
+#define SYR_THAERL			27
+#define TEKEN_DUIS			28
+#define THAEYALLA			29
+#define X_LARRAZ_ET_SOJ		30
+#define FIRST_FALLEN_HOUSE	BRONT_TEJ
+#define LAST_FALLEN_HOUSE	X_LARRAZ_ET_SOJ
+
+#define LOLTH_SYMBOL		31
+
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 
 /*One type of ward per square

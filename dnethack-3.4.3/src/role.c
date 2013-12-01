@@ -496,7 +496,8 @@ const struct Race races[] = {
 	{ STR18(100), 18, 18, 18, 18, 18 },
 	/* Init   Lower  Higher */
 	{  2, 0,  0, 2,  1, 0 },	/* Hit points */
-	{  1, 0,  2, 0,  2, 0 }		/* Energy */
+	{  1, 0,  2, 0,  2, 0 },		/* Energy */
+	NO_NIGHTVISION
 },
 {	"incantifier", "incantifier", "wanterkind", "Inc",
 	{0, 0},
@@ -509,10 +510,11 @@ const struct Race races[] = {
 	{ STR18(100), 18, 18, 18, 18, 18 },
 	/* Init   Lower  Higher */
 	{  2, 0,  0, 2,  0, 2 },	/* Hit points */
-	{  0, 0,  10, 0, 10, 0 }		/* Energy */
+	{  0, 0,  10, 0, 10, 0 },		/* Energy */
+	NO_NIGHTVISION
 },
 {	"elf", "elven", "elvenkind", "Elf",
-	{0, 0},
+	{"elf", "elf-maid"},
 	PM_ELF, NON_PM, PM_ELF_MUMMY, PM_ELF_ZOMBIE,
 	MH_ELF | ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
 	MH_ELF, MH_ELF, MH_ORC,
@@ -521,7 +523,21 @@ const struct Race races[] = {
 	{   18,    20, 20, 18, 16, 18 },
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  1, 0 },	/* Hit points */
-	{  2, 0,  3, 0,  3, 0 }		/* Energy */
+	{  2, 0,  3, 0,  3, 0 },	/* Energy */
+	NIGHTVISION3
+},
+{	"drow", "droven", "drovenkind", "Dro",
+	{"hedrow", "drow"},
+	PM_DROW, NON_PM, PM_DROW_MUMMY, PM_DROW_ZOMBIE,
+	MH_ELF | ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
+	MH_ELF, 0, MH_ELF|MH_ORC,
+	/*  Str    Int Wis Dex Con Cha */
+	{    3,     3,  3,  3,  3,  3 },
+	{   18,    20, 20, 18, 16, 18 },
+	/* Init   Lower  Higher */
+	{  1, 0,  0, 1,  1, 0 },	/* Hit points */
+	{  2, 0,  3, 0,  3, 0 },	/* Energy */
+	NIGHTVISION2
 },
 {	"dwarf", "dwarven", "dwarvenkind", "Dwa",
 	{0, 0},
@@ -533,7 +549,8 @@ const struct Race races[] = {
 	{ STR18(100), 16, 16, 20, 20, 16 },
 	/* Init   Lower  Higher */
 	{  4, 0,  0, 3,  2, 0 },	/* Hit points */
-	{  0, 0,  0, 0,  0, 0 }		/* Energy */
+	{  0, 0,  0, 0,  0, 0 },	/* Energy */
+	NO_NIGHTVISION
 },
 {	"gnome", "gnomish", "gnomehood", "Gno",
 	{0, 0},
@@ -545,7 +562,8 @@ const struct Race races[] = {
 	{STR18(50),19, 18, 18, 18, 18 },
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  0, 0 },	/* Hit points */
-	{  2, 0,  2, 0,  2, 0 }		/* Energy */
+	{  2, 0,  2, 0,  2, 0 },	/* Energy */
+	NO_NIGHTVISION
 },
 {	"orc", "orcish", "orcdom", "Orc",
 	{0, 0},
@@ -557,7 +575,8 @@ const struct Race races[] = {
 	{STR18(50),16, 16, 18, 18, 16 },
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  0, 0 },	/* Hit points */
-	{  1, 0,  1, 0,  1, 0 }		/* Energy */
+	{  1, 0,  1, 0,  1, 0 },	/* Energy */
+	NO_NIGHTVISION
 },
 {	"vampire", "vampiric", "vampirehood", "Vam",
 	{"vampire", "vampiress"},
@@ -572,7 +591,7 @@ const struct Race races[] = {
 	{  3, 0,  4, 0,  4, 0 },	/* Energy */
 },
 /* Array terminator */
-{ 0, 0, 0, 0 }};
+{ 0, 0, 0, 0, 0 }};
 
 
 /* The player's race, created at runtime from initial

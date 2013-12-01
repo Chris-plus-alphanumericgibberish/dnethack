@@ -463,6 +463,7 @@ domonability(VOID_ARGS)
 	else if (webmaker(youmonst.data)) return dospinweb();
 	else if (is_hider(youmonst.data)) return dohide();
 	else if (is_mind_flayer(youmonst.data)) return domindblast();
+	else if (is_drow(youmonst.data) || (!Upolyd && Race_if(PM_DROW))) return dodarken();
 	else if (u.umonnum == PM_GREMLIN) {
 	    if(IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
 		if (split_mon(&youmonst, (struct monst *)0))

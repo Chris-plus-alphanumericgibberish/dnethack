@@ -203,6 +203,7 @@ Cloak_on(VOID_ARGS)
 		makeknown(uarmc->otyp);
 		break;
 	case ORCISH_CLOAK:
+	case DROVEN_CLOAK:
 	case DWARVISH_CLOAK:
 	case CLOAK_OF_MAGIC_RESISTANCE:
 	case ROBE:
@@ -267,6 +268,7 @@ Cloak_off(VOID_ARGS)
     switch (otyp) {
 	case ELVEN_CLOAK:
 	case ORCISH_CLOAK:
+	case DROVEN_CLOAK:
 	case DWARVISH_CLOAK:
 	case CLOAK_OF_PROTECTION:
 	case CLOAK_OF_MAGIC_RESISTANCE:

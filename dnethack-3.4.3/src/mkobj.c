@@ -751,6 +751,9 @@ boolean artif;
 			otmp->oerodeproof = otmp->rknown = 1;
 #endif
 		}
+		if(is_evaporable(otmp)) start_timer(1, TIMER_OBJECT,
+					LIGHT_DAMAGE, (genericptr_t)otmp);
+
 		
 		/* MRKR: Mining helmets have lamps */
 		if (otmp->otyp == DWARVISH_IRON_HELM) {
@@ -762,6 +765,13 @@ boolean artif;
 		    otmp->age = (long) rn1(50,50);
 		    otmp->lamplit = 0;
 		}
+		if(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL){
+			otmp->ohaluengr = TRUE;
+			if(!(rn2(10))) otmp->ovar1 = LOLTH_SYMBOL;
+			else if(!(rn2(4))) otmp->ovar1 = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
+			else otmp->ovar1 = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
+		}
+
 		break;
 	case WAND_CLASS:
 		if(otmp->otyp == WAN_WISHING) otmp->spe = rnd(3); else
@@ -786,6 +796,12 @@ boolean artif;
 								!rn2(2) ? SIGN_OF_THE_SCION_QUEEN : 
 								          CARTOUCHE_OF_THE_CAT_LORD ;
 			}
+		}
+		if(isSignetRing(otmp->otyp)){
+			otmp->ohaluengr = TRUE;
+			if(!(rn2(100))) otmp->ovar1 = LOLTH_SYMBOL;
+			else if(!(rn2(4))) otmp->ovar1 = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
+			else otmp->ovar1 = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
 		}
 		if(objects[otmp->otyp].oc_charged) {
 		    blessorcurse(otmp, 3);
