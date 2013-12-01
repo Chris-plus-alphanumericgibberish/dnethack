@@ -1325,7 +1325,7 @@ struct permonst *ptr;
 
 	    tmp2 = ptr->mattk[i].aatyp;
 	    n += (tmp2 > 0);
-	    n += (tmp2 == AT_MAGC);
+	    n += (tmp2 == AT_MAGC || tmp2 == AT_MMGC);
 	    n += (tmp2 == AT_WEAP && (ptr->mflags2 & M2_STRONG));
 	}
 
