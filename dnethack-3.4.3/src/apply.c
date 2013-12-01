@@ -1481,7 +1481,7 @@ int magic; /* 0=Physical, otherwise skill level */
 	cc.y = u.uy;
 	if (getpos(&cc, TRUE, "the desired position") < 0)
 		return 0;	/* user pressed ESC */
-	if (!magic && !(HJumping & ~INTRINSIC) && !EJumping &&
+	if (!magic && !(HJumping & ~INTRINSIC) && !EJumping && !(u.sealsActive&SEAL_OSE) &&
 			distu(cc.x, cc.y) != 5) {
 		/* The Knight jumping restriction still applies when riding a
 		 * horse.  After all, what shape is the knight piece in chess?
