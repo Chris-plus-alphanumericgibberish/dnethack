@@ -586,7 +586,6 @@ static const struct def_skill Skill_W[] = {
     { P_NONE, 0 }
 };
 
-
 STATIC_OVL void
 knows_object(obj)
 register int obj;
@@ -628,6 +627,7 @@ int randSpecialAttackTypes[] =
 						 AT_GAZE, 
 						 AT_ENGL, 
 						 AT_ARRW, 
+						 AT_BREA, 
 						 AT_MAGC };
 
 int randMeleeDamageTypes[] = 
@@ -686,6 +686,17 @@ int randMeleeDamageTypes[] =
 						 AD_LVLT,
 						 AD_WEEP };
 
+int randBreathDamageTypes[] = 
+						{AD_RBRE, 
+						 AD_MAGM, 
+						 AD_COLD, 
+						 AD_DRST, 
+						 AD_FIRE, 
+						 AD_SLEE, 
+						 AD_ELEC, 
+						 AD_ACID, 
+						 AD_DISN };
+
 int randSpitDamageTypes[] = 
 						{AD_BLND, 
 						 AD_ACID, 
@@ -734,6 +745,14 @@ int randArrowDamageTypes[] =
  // AT_MAGC }
 int randMagicDamageTypes[] = 
 						{AD_SPEL, 
+						 AD_SPEL,
+						 AD_SPEL,
+						 AD_MAGM,
+						 AD_FIRE,
+						 AD_COLD,
+						 AD_ELEC,
+						 AD_CLRC,
+						 AD_CLRC,
 						 AD_CLRC };
 void
 u_init()
@@ -743,6 +762,7 @@ u_init()
 					*stumbler = &mons[PM_STUMBLING_HORROR], 
 					*wanderer = &mons[PM_WANDERING_HORROR];
 	struct attack* attkptr;
+	int shamattacks, stumattacks, wandattacks;
 
 	flags.female = flags.initgend;
 	flags.beginner = 1;
@@ -898,6 +918,8 @@ u_init()
 		skill_init(Skill_N);
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 			u.ualign.type = A_NEUTRAL; /* Override racial alignment */
+		u.hod += 10;  /*One transgression is all it takes*/
+		u.gevurah += 5; /*One resurection or two rehumanizations is all it takes*/
 		break;
 	case PM_CAVEMAN:
 		Cave_man[C_AMMO].trquan = rn1(11, 10);	/* 10..20 */
@@ -1088,12 +1110,40 @@ u_init()
 	    knows_object(DWARVISH_CLOAK);
 	    knows_object(DWARVISH_ROUNDSHIELD);
 		switch(d(1,4)){
-			case 1: u.wardsknown |= WARD_TOUSTEFNA;break;
-			case 2: u.wardsknown |= WARD_DREPRUN;break;
-			case 3: u.wardsknown |= WARD_VEIOISTAFUR;break;
-			case 4: u.wardsknown |= WARD_THJOFASTAFUR;break;
+			case 1: 
+				u.wardsknown |= WARD_TOUSTEFNA;
+				otmp = mksobj(CLUB, TRUE, FALSE);
+				otmp->spe = otmp->cursed = otmp->blessed = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->ovar1 = WARD_TOUSTEFNA;
+				addinv(otmp);
+			break;
+			case 2: 
+				u.wardsknown |= WARD_DREPRUN;
+				otmp = mksobj(CLUB, TRUE, FALSE);
+				otmp->spe = otmp->cursed = otmp->blessed = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->ovar1 = WARD_DREPRUN;
+				addinv(otmp);
+			break;
+			case 3: 
+				u.wardsknown |= WARD_VEIOISTAFUR;
+				otmp = mksobj(CLUB, TRUE, FALSE);
+				otmp->spe = otmp->cursed = otmp->blessed = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->ovar1 = WARD_VEIOISTAFUR;
+				addinv(otmp);
+			break;
+			case 4: 
+				u.wardsknown |= WARD_THJOFASTAFUR;
+				otmp = mksobj(CLUB, TRUE, FALSE);
+				otmp->spe = otmp->cursed = otmp->blessed = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->ovar1 = WARD_THJOFASTAFUR;
+				addinv(otmp);
+			break;
 		}	
-	    break;
+	}break;
 
 	case PM_GNOME:
 	    /* Gnomes can recognize common dwarvish objects */
@@ -1110,11 +1160,11 @@ u_init()
 
 	case PM_ORC:
 	    /* compensate for generally inferior equipment */
-	    if (!Role_if(PM_WIZARD))
+	    if (!Role_if(PM_WIZARD)
 #ifdef CONVICT
-        if (!Role_if(PM_CONVICT))
+         && !Role_if(PM_CONVICT)
 #endif /* CONVICT */
-		ini_inv(Xtra_food);
+		) ini_inv(Xtra_food);
 	    /* Orcs can recognize all orcish objects */
 	    knows_object(ORCISH_SHORT_SWORD);
 	    knows_object(ORCISH_ARROW);
@@ -1190,8 +1240,9 @@ u_init()
 	wanderer->mr = rn2(11)*10;				/* varying amounts of MR */
 	wanderer->maligntyp = rn2(21)-10;			/* any alignment */
 	
-	/* attacks...? (basic only to start)  */
-	for (i = 0; i < rnd(4); i++) {
+	/* attacks...?  */
+	shamattacks = rnd(4);
+	for (i = 0; i < shamattacks; i++) {
 		attkptr = &shambler->mattk[i];
 		/* restrict it to certain types of attacks */
 		attkptr->aatyp = randMeleeAttackTypes[rn2(SIZE(randMeleeAttackTypes))];
@@ -1200,8 +1251,43 @@ u_init()
 		attkptr->damd = rn2(4)*2+6;		/* either too high or too low */
 //		pline("shambling horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
 	}
-	/* attacks...? (basic only to start)  */
-	for (i = 0; i < rnd(4); i++) {
+	shamattacks = shamattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
+	for(i; i < shamattacks; i++){
+		attkptr = &shambler->mattk[i];
+		/* restrict it to certain types of attacks */
+		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
+		switch(attkptr->aatyp){
+			case AT_SPIT:
+				attkptr->adtyp = randSpitDamageTypes[rn2(SIZE(randSpitDamageTypes))];
+			break;
+			case AT_HUGS:
+				attkptr->adtyp = AD_PHYS;
+			break;
+			case AT_GAZE:
+				attkptr->adtyp = randGazeDamageTypes[rn2(SIZE(randGazeDamageTypes))];
+			break;
+			case AT_ENGL:
+				attkptr->adtyp = randEngulfDamageTypes[rn2(SIZE(randEngulfDamageTypes))];
+			break;
+			case AT_ARRW:
+				attkptr->adtyp = randArrowDamageTypes[rn2(SIZE(randArrowDamageTypes))];
+			break;
+			case AT_MAGC:
+				attkptr->adtyp = randMagicDamageTypes[rn2(SIZE(randMagicDamageTypes))];
+			break;
+			case AT_BREA:
+				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
+			break;
+			default:
+			break;
+		}
+		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
+		attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
+	}
+
+	/* attacks...? */
+	stumattacks = rnd(4);
+	for (i = 0; i < stumattacks; i++) {
 		attkptr = &stumbler->mattk[i];
 		/* restrict it to certain types of attacks */
 		attkptr->aatyp = randMeleeAttackTypes[rn2(SIZE(randMeleeAttackTypes))];
@@ -1210,8 +1296,42 @@ u_init()
 		attkptr->damd = rn2(4)*2+6;		/* either too high or too low */
 //		pline("stumbling horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
 	}
-	/* attacks...? (basic only to start)  */
-	for (i = 0; i < rnd(4); i++) {
+	stumattacks = stumattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
+	for(i; i < stumattacks; i++){
+		attkptr = &stumbler->mattk[i];
+		/* restrict it to certain types of attacks */
+		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
+		switch(attkptr->aatyp){
+			case AT_SPIT:
+				attkptr->adtyp = randSpitDamageTypes[rn2(SIZE(randSpitDamageTypes))];
+			break;
+			case AT_HUGS:
+				attkptr->adtyp = AD_PHYS;
+			break;
+			case AT_GAZE:
+				attkptr->adtyp = randGazeDamageTypes[rn2(SIZE(randGazeDamageTypes))];
+			break;
+			case AT_ENGL:
+				attkptr->adtyp = randEngulfDamageTypes[rn2(SIZE(randEngulfDamageTypes))];
+			break;
+			case AT_ARRW:
+				attkptr->adtyp = randArrowDamageTypes[rn2(SIZE(randArrowDamageTypes))];
+			break;
+			case AT_MAGC:
+				attkptr->adtyp = randMagicDamageTypes[rn2(SIZE(randMagicDamageTypes))];
+			break;
+			case AT_BREA:
+				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
+			break;
+			default:
+			break;
+		}
+		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
+		attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
+	}
+	/* attacks...? */
+	wandattacks = rnd(4);
+	for (i = 0; i < wandattacks; i++) {
 		attkptr = &wanderer->mattk[i];
 		/* restrict it to certain types of attacks */
 		attkptr->aatyp = randMeleeAttackTypes[rn2(SIZE(randMeleeAttackTypes))];
@@ -1219,6 +1339,39 @@ u_init()
 		attkptr->damn = d(1,3);			/* we're almost sure to get this wrong first time */
 		attkptr->damd = rn2(4)*2+6;		/* either too high or too low */
 //		pline("wandering horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
+	}
+	wandattacks = wandattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
+	for(i; i < wandattacks; i++){
+		attkptr = &wanderer->mattk[i];
+		/* restrict it to certain types of attacks */
+		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
+		switch(attkptr->aatyp){
+			case AT_SPIT:
+				attkptr->adtyp = randSpitDamageTypes[rn2(SIZE(randSpitDamageTypes))];
+			break;
+			case AT_HUGS:
+				attkptr->adtyp = AD_PHYS;
+			break;
+			case AT_GAZE:
+				attkptr->adtyp = randGazeDamageTypes[rn2(SIZE(randGazeDamageTypes))];
+			break;
+			case AT_ENGL:
+				attkptr->adtyp = randEngulfDamageTypes[rn2(SIZE(randEngulfDamageTypes))];
+			break;
+			case AT_ARRW:
+				attkptr->adtyp = randArrowDamageTypes[rn2(SIZE(randArrowDamageTypes))];
+			break;
+			case AT_MAGC:
+				attkptr->adtyp = randMagicDamageTypes[rn2(SIZE(randMagicDamageTypes))];
+			break;
+			case AT_BREA:
+				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
+			break;
+			default:
+			break;
+		}
+		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
+		attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
 	}
 	shambler->msize = rn2(MZ_GIGANTIC+1);			/* any size */
 	shambler->cwt = 20;					/* fortunately moot as it's flagged NOCORPSE */
@@ -1240,7 +1393,11 @@ u_init()
 	
 	for (i = 0; i < rnd(6); i++) {
 		shambler->mresists |= (1 << rn2(10));		/* physical resistances... */
+	}
+	for (i = 0; i < rnd(6); i++) {
 		stumbler->mresists |= (1 << rn2(10));		/* physical resistances... */
+	}
+	for (i = 0; i < rnd(6); i++) {
 		wanderer->mresists |= (1 << rn2(10));		/* physical resistances... */
 	}
 	// for (i = 0; i < rnd(5); i++) {
@@ -1257,7 +1414,11 @@ u_init()
 	shambler->mflags1 = 0;
 	for (i = 0; i < rnd(17); i++) {
 		shambler->mflags1 |= (1 << rn2(33));		/* trainwreck this way :D */
+	}
+	for (i = 0; i < rnd(17); i++) {
 		stumbler->mflags1 |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
 		wanderer->mflags1 |= (1 << rn2(33));
 	}
 	shambler->mflags1 &= ~M1_UNSOLID;			/* no ghosts */
@@ -1272,7 +1433,11 @@ u_init()
 	wanderer->mflags2 = M2_NOPOLY | M2_HOSTILE;		/* Don't let the player be one of these yet. */
 	for (i = 0; i < rnd(17); i++) {
 		shambler->mflags2 |= (1 << rn2(31));
+	}
+	for (i = 0; i < rnd(17); i++) {
 		stumbler->mflags2 |= (1 << rn2(31));
+	}
+	for (i = 0; i < rnd(17); i++) {
 		wanderer->mflags2 |= (1 << rn2(31));
 	}
 	shambler->mflags2 &= ~M2_MERC;				/* no guards */
@@ -1292,7 +1457,11 @@ u_init()
 
 	for (i = 0; i < rnd(17); i++) {
 		shambler->mflags2 |= (0x100 << rn2(7));
+	}
+	for (i = 0; i < rnd(17); i++) {
 		stumbler->mflags2 |= (0x100 << rn2(7));
+	}
+	for (i = 0; i < rnd(17); i++) {
 		wanderer->mflags2 |= (0x100 << rn2(7));
 	}
 	return;
