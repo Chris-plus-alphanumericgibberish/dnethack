@@ -23,6 +23,10 @@ uchar oc_syms[MAXOCLASSES] = DUMMY; /* the current object  display symbols */
 uchar showsyms[MAXPCHARS]  = DUMMY; /* the current feature display symbols */
 uchar monsyms[MAXMCLASSES] = DUMMY; /* the current monster display symbols */
 uchar warnsyms[WARNCOUNT]  = DUMMY;  /* the current warning display symbols */
+#ifdef USER_DUNGEONCOLOR
+uchar showsymcolors[MAXPCHARS] = DUMMY; /* current feature display colors */
+#endif
+
 
 /* Default object class symbols.  See objclass.h. */
 const char def_oc_syms[MAXOCLASSES] = {
@@ -316,6 +320,10 @@ const struct symdef defsyms[MAXPCHARS] = {
 #ifdef PC9800
 void NDECL((*ibmgraphics_mode_callback)) = 0;	/* set in tty_start_screen() */
 #endif /* PC9800 */
+
+#ifdef CURSES_GRAPHICS
+void NDECL((*cursesgraphics_mode_callback)) = 0;
+#endif
 
 static uchar ibm_graphics[MAXPCHARS] = {
 /* 0*/	g_FILLER(S_stone),
@@ -657,6 +665,21 @@ int glth, maxlen, offset;
 		       graph_chars[i] : defsyms[i+offset].sym);
 }
 
+#ifdef USER_DUNGEONCOLOR
+void
+assign_colors(graph_colors, glth, maxlen, offset)
+register uchar *graph_colors;
+int glth, maxlen, offset;
+{
+    register int i;
+
+    for (i = 0; i < maxlen; i++)
+	showsymcolors[i+offset] =
+	    (((i < glth) && (graph_colors[i] < CLR_MAX)) ?
+	     graph_colors[i] : defsyms[i+offset].color);
+}
+#endif
+
 void
 switch_graphics(gr_set_flag)
 int gr_set_flag;
@@ -680,6 +703,9 @@ int gr_set_flag;
  */
 	    iflags.IBMgraphics = TRUE;
 	    iflags.DECgraphics = FALSE;
+#ifdef CURSES_GRAPHICS
+        iflags.cursesgraphics = FALSE;
+#endif
 	    assign_graphics(ibm_graphics, SIZE(ibm_graphics), MAXPCHARS, 0);
 #ifdef PC9800
 	    if (ibmgraphics_mode_callback) (*ibmgraphics_mode_callback)();
@@ -693,6 +719,9 @@ int gr_set_flag;
  */
 	    iflags.DECgraphics = TRUE;
 	    iflags.IBMgraphics = FALSE;
+#ifdef CURSES_GRAPHICS
+        iflags.cursesgraphics = FALSE;
+#endif
 	    assign_graphics(dec_graphics, SIZE(dec_graphics), MAXPCHARS, 0);
 	    if (decgraphics_mode_callback) (*decgraphics_mode_callback)();
 	    break;
@@ -701,6 +730,14 @@ int gr_set_flag;
 	case MAC_GRAPHICS:
 	    assign_graphics(mac_graphics, SIZE(mac_graphics), MAXPCHARS, 0);
 	    break;
+#endif
+#ifdef CURSES_GRAPHICS
+    case CURS_GRAPHICS:
+	    assign_graphics((uchar *)0, 0, MAXPCHARS, 0);
+        iflags.cursesgraphics = TRUE;
+	    iflags.IBMgraphics = FALSE;
+	    iflags.DECgraphics = FALSE;
+        break;
 #endif
 	}
     return;
