@@ -353,6 +353,9 @@ register struct monst *mon;
 		if(mon->mextra[1] & 0x4L) base = -125; //Fully Quantum Locked
 		if(mon->mextra[1] & 0x2L) base = -20; //Partial Quantum Lock
 	}
+	else if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
+		base -= 15;
+	}
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
 		if(uarmf) armac += ARM_BONUS(uarmf);

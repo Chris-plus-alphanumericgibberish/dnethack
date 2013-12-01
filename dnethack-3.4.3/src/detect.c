@@ -737,6 +737,7 @@ int mclass;			/* monster class, 0 for all */
 	    if (otmp && otmp->cursed &&
 		(mtmp->msleeping || !mtmp->mcanmove)) {
 		mtmp->msleeping = mtmp->mfrozen = 0;
+      if(mtmp->data!= &mons[PM_GIANT_TURTLE] || !(mtmp->mflee))
 		mtmp->mcanmove = 1;
 		woken = TRUE;
 	    }

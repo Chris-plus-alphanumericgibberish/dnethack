@@ -510,6 +510,9 @@ coord *cc;
 		mtmp2->mtrapped = 0;
 		mtmp2->msleeping = 0;
 		mtmp2->mfrozen = 0;
+      if(mtmp->data == &mons[PM_GIANT_TURTLE] && (mtmp->mflee))
+        mtmp2->mcanmove=0;
+      else
 		mtmp2->mcanmove = 1;
 		/* most cancelled monsters return to normal,
 		   but some need to stay cancelled */

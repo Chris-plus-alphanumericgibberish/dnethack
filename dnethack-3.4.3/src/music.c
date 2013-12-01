@@ -68,8 +68,10 @@ int distance;
 		distm = distu(mtmp->mx, mtmp->my);
 		if (distm < distance) {
 		    mtmp->msleeping = 0;
+      if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee)){
 		    mtmp->mcanmove = 1;
 		    mtmp->mfrozen = 0;
+}
 		    /* May scare some monsters */
 		    if (distm < distance/3 &&
 			    !resist(mtmp, TOOL_CLASS, 0, NOTELL))

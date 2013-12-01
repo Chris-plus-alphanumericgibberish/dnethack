@@ -293,10 +293,14 @@ register struct monst *mtmp;
 	if(!mtmp->mcanmove) {
 		tmp += 4;
 		if(!rn2(10)) {
+      if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee)){
 			mtmp->mcanmove = 1;
 			mtmp->mfrozen = 0;
+}
 		}
 	}
+   if(mtmp->data == &mons[PM_GIANT_TURTLE] && mtmp->mflee && !mtmp->mcanmove)
+     tmp -=6;  /* don't penalize enshelled turtles */
 	if (is_orc(mtmp->data) && maybe_polyd(is_elf(youmonst.data),
 			Race_if(PM_ELF)))
 	    tmp++;
@@ -1901,6 +1905,7 @@ register struct attack *mattk;
 		break;
 	}
 
+   if (mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp = tmp/2;
 	mdef->mstrategy &= ~STRAT_WAITFORU; /* in case player is very fast */
 	if((mdef->mhp -= tmp) < 1) {
 	    if (mdef->mtame && !cansee(mdef->mx,mdef->my)) {
@@ -2202,7 +2207,6 @@ register int tmp;
 	int	dhit = 0;
 
 	for(i = 0; i < NATTK; i++) {
-
 	    sum[i] = 0;
 	    mattk = getmattk(youmonst.data, i, sum, &alt_attk);
 	    switch(mattk->aatyp) {

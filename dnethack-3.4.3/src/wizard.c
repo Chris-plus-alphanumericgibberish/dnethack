@@ -384,6 +384,7 @@ aggravate()
 		mtmp->msleeping = 0;
 		if(!mtmp->mcanmove && !rn2(5)) {
 			mtmp->mfrozen = 0;
+      if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee))
 			mtmp->mcanmove = 1;
 		}
 	    }

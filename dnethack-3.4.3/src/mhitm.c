@@ -223,6 +223,7 @@ mattackm(magr, mdef)
     /* Calculate the armour class differential. */
     tmp = find_mac(mdef) + magr->m_lev;
     if (mdef->mconf || !mdef->mcanmove || mdef->msleeping) {
+		if(mdef->data != &mons[PM_GIANT_TURTLE] || !mdef->mflee)
 	tmp += 4;
 	mdef->msleeping = 0;
     }
@@ -1476,6 +1477,7 @@ mdamagem(magr, mdef, mattk)
 	    default:	tmp = 0;
 			break;
 	}
+   if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp=tmp/2; 
 	if(!tmp) return(MM_MISS);
 
 	if((mdef->mhp -= tmp) < 1) {
