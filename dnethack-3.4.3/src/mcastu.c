@@ -273,7 +273,7 @@ boolean hostile;
 	return DESTRY_ARMR;
     case 7:
     case 6:
-	return WEAKEN_YOU;
+	return EVIL_EYE;
     case 5:
 	return MAKE_VISIBLE;
     case 4:
@@ -344,25 +344,31 @@ boolean hostile;
 	}else{
 		 spellnum = spellnum % 18;
 		//case "17"
-		if(spellnum == ((mid/10+3)%4)+14) return PUNISH;
+		if(spellnum == ((mid/100+3)%4)+14) return PUNISH;
 		//case "16"
-		if(spellnum == ((mid/10+2)%4)+14) return (mid % 2) ? SUMMON_ANGEL : SUMMON_DEVIL;
+		//case "15"
+		//Cure/Inflict
+		if(spellnum == ((mid/100+2)%4)+14) return (mid % 2) ? SUMMON_ANGEL : SUMMON_DEVIL;
 		//case "14"
-		if(spellnum == ((mid/10+0)%4)+14) return PLAGUE;
+		if(spellnum == ((mid/100+0)%4)+14) return PLAGUE;
 		//case "13"
 		if(spellnum == ((mid+4)%5)+9) return EARTHQUAKE;
 		//case "12"
-		if(spellnum == ((mid+3)%5)+9) return ( (mid/10) % 2) ? GEYSER : ACID_RAIN;
+		if(spellnum == ((mid+3)%5)+9) return ( (mid/11) % 2) ? GEYSER : ACID_RAIN;
 		//case "11"
 		if(spellnum == ((mid+2)%5)+9) return FIRE_PILLAR;
+		//case "10"
+		//Cure/Inflict
 		//case "9"
 		if(spellnum == ((mid+0)%5)+9) return LIGHTNING;
 		//case "8"
-		if(spellnum == ((mid+3)%4)+5) return DRAIN_LIFE;
+		if(spellnum == ((mid/10+3)%4)+5) return DRAIN_LIFE;
 		//case "7"
-		if(spellnum == ((mid+2)%4)+5) return ( (mid/10) % 2) ? CURSE_ITEMS : EVIL_EYE;
+		if(spellnum == ((mid/10+2)%4)+5) return ( (mid/3) % 2) ? CURSE_ITEMS : EVIL_EYE;
 		//case "6"
-		if(spellnum == ((mid+1)%4)+5) return INSECTS;
+		if(spellnum == ((mid/10+1)%4)+5) return INSECTS;
+		//case "5"
+		//Cure/Inflict
 		//case "4"
 		if(spellnum == ((mid+2)%3)+2) return BLIND_YOU;
 		//case "3"
@@ -370,7 +376,7 @@ boolean hostile;
 		//case "2"
 		if(spellnum == ((mid+0)%3)+2) return CONFUSE_YOU;
 		//case "1"
-		if(spellnum == ((mid+1)%2)+0) return ( (mid/10+1) % 2) ? CURE_SELF : OPEN_WOUNDS;
+		if(spellnum == ((mid+1)%2)+0) return ( (mid+1) % 2) ? CURE_SELF : OPEN_WOUNDS;
 		//case "0", "5", "10", "15", "18+"
 		return (mid % 2) ? CURE_SELF : OPEN_WOUNDS;
 	}
