@@ -1397,7 +1397,7 @@ struct obj *obj;
 	return;
 }
 
-/* Learn a spell during creation of the initial inventory */
+/* Learn a ward during creation of the initial inventory */
 void
 initialward(obj)
 struct obj *obj;
