@@ -174,7 +174,6 @@ moveloop()
 #endif
 		    {
 			moveamt = youmonst.data->mmove;
-
 			if (Very_fast) {	/* speed boots or potion */
 			    /* average movement is 1.67 times normal */
 			    moveamt += NORMAL_SPEED / 2;
@@ -243,7 +242,10 @@ moveloop()
 					for(pobj = invent; pobj; pobj=pobj->nobj)
 						if(pobj->oartifact == ART_TREASURY_OF_PROTEUS)
 							break;
-					if(!pobj) pline("Treasury not actually in inventory??");
+					if(!pobj){
+						pline("Treasury not actually in inventory??");
+						u.ukinghill = 0;
+					}
 					else if(pobj->cobj){
 						arti_poly_contents(pobj);
 					}
