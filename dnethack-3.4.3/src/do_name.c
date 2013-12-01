@@ -992,7 +992,7 @@ char *outbuf;
 static const char * const bogusmons[] = {
 	"jumbo shrimp", "giant pigmy", /* oxymorons */
 	"gnu", "killer penguin", "Hexley", /* op-syses */
-	"lemming with a suicide vest", /* Because jumping to just YOUR death isn't enough. */
+	"lemming with a suicide vest", /* They have to be more than just a lemming. Because jumping to your death is not enough.. */
 	"giant cockroach", "giant slug", "maggot", 
 	"pterodactyl", "tyrannosaurus rex", "basilisk",
 	"efreeti", "marid", "dao",/* dnd genies */
