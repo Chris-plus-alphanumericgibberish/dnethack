@@ -225,6 +225,8 @@ doread()
     "Plunder Island Brimstone Beach Club",
     "Real Men Are Valkyries",
     "Young Men's Cavedigging Association",
+    "YMRCIGBSA - recovering mind, body, and spirit since 1844",
+    "YHPA - Young Humanoid's Pagan Association",
     "Occupy Fort Ludios",
     "I couldn't afford this T-shirt so I stole it!",
     "End Mercantile Opacity Discrimination Now: Let Invisible Customers Shop!",
