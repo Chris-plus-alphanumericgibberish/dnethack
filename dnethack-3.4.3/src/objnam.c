@@ -316,8 +316,8 @@ register struct obj *obj;
 			if(obj->opoisoned & OPOISON_BASIC) Strcpy(buf, "poisoned ");
 			if(obj->opoisoned & OPOISON_FILTH) Strcpy(buf, "filth-crusted ");
 			if(obj->opoisoned & OPOISON_SLEEP) Strcpy(buf, "drug-coated ");
-//			if(obj->opoisoned & OPOISON_BLIND) Strcpy(buf, "poisoned ");
-//			if(obj->opoisoned & OPOISON_PARAL) Strcpy(buf, "poisoned ");
+			if(obj->opoisoned & OPOISON_BLIND) Strcpy(buf, "stained ");
+			if(obj->opoisoned & OPOISON_PARAL) Strcpy(buf, "envenomed ");
 			if(obj->opoisoned & OPOISON_AMNES) Strcpy(buf, "lethe-rusted ");
 		}
 		if(objects[(obj)->otyp].oc_material == WOOD && obj->ovar1) Strcpy(buf, "carved ");
@@ -621,14 +621,14 @@ register struct obj *obj;
 		bp += 13;
 		ispoisoned = OPOISON_AMNES;
 	}
-	// if (!strncmp(bp, "poisoned ", 9) && obj->opoisoned & OPOISON_PARAL) {
-		// bp += 9;
-		// ispoisoned = OPOISON_PARAL;
-	// }
-	// if (!strncmp(bp, "poisoned ", 9) && obj->opoisoned & OPOISON_BLIND) {
-		// bp += 9;
-		// ispoisoned = OPOISON_BLIND;
-	// }
+	if (!strncmp(bp, "envenomed ", 10) && obj->opoisoned & OPOISON_PARAL) {
+		bp += 9;
+		ispoisoned = OPOISON_PARAL;
+	}
+	if (!strncmp(bp, "stained ", 8) && obj->opoisoned & OPOISON_BLIND) {
+		bp += 9;
+		ispoisoned = OPOISON_BLIND;
+	}
 	if (!strncmp(bp, "drug-coated ", 12) && obj->opoisoned & OPOISON_BASIC) {
 		bp += 12;
 		ispoisoned = OPOISON_SLEEP;
@@ -699,6 +699,10 @@ register struct obj *obj;
 	case WEAPON_CLASS:
 		if(ispoisoned & OPOISON_BASIC)
 			Strcat(prefix, "poisoned ");
+		if(ispoisoned & OPOISON_PARAL)
+			Strcat(prefix, "envenomed ");
+		if(ispoisoned & OPOISON_BLIND)
+			Strcat(prefix, "stained ");
 		if(ispoisoned & OPOISON_FILTH)
 			Strcat(prefix, "filth-crusted ");
 		if(ispoisoned & OPOISON_SLEEP)

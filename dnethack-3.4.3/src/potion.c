@@ -2213,6 +2213,7 @@ dodip()
 		    Sprintf(buf, "One of %s", the(xname(potion)));
 		else
 		    Strcpy(buf, The(xname(potion)));
+			obj->opoisoned = 0;
 		pline("%s forms a coating on %s.",
 		      buf, the(xname(obj)));
 			obj->opoisoned = OPOISON_BASIC;
@@ -2223,9 +2224,9 @@ dodip()
 				Sprintf(buf, "One of %s", the(xname(potion)));
 			else
 				Strcpy(buf, The(xname(potion)));
+			obj->opoisoned = 0;
 			pline("%s forms a drug-coating on %s.",
 				  buf, the(xname(obj)));
-			obj->opoisoned = 0;
 			obj->opoisoned = OPOISON_SLEEP;
 			goto poof;
 	    } else if(potion->otyp == POT_BLINDNESS && !(obj->opoisoned & OPOISON_BLIND)) {
@@ -2234,9 +2235,9 @@ dodip()
 				Sprintf(buf, "One of %s", the(xname(potion)));
 			else
 				Strcpy(buf, The(xname(potion)));
+			obj->opoisoned = 0;
 			pline("%s forms a coating on %s.",
 				  buf, the(xname(obj)));
-			obj->opoisoned = 0;
 			obj->opoisoned = OPOISON_BLIND;
 			goto poof;
 	    } else if(potion->otyp == POT_PARALYSIS && !(obj->opoisoned & OPOISON_PARAL)) {
