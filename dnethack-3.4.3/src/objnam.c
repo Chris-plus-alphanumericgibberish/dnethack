@@ -293,6 +293,7 @@ register struct obj *obj;
 	if (!nn && ocl->oc_uses_known && ocl->oc_unique) obj->known = 0;
 	if (!Blind) obj->dknown = TRUE;
 	if (Role_if(PM_PRIEST)) obj->bknown = TRUE;
+	if (u.sealsActive&SEAL_ANDROMALIUS) obj->sknown = TRUE;
 	if (obj_is_pname(obj))
 	    goto nameit;
 	switch (obj->oclass) {
