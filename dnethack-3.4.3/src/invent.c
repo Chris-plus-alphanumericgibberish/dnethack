@@ -1045,10 +1045,9 @@ register const char *let,*word;
 		/* "ugly check" for reading fortune cookies, part 2 */
 		if ((!strcmp(word, "read") &&
 		    (otmp->otyp == FORTUNE_COOKIE
-#ifdef TOURIST
 			|| otmp->otyp == T_SHIRT
-#endif
-		    )))
+		    )
+		))
 			allowall = TRUE;
 	    }
 		//Make an exception for the Rod, so you can read the inscription.
