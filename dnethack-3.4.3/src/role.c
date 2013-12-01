@@ -91,7 +91,7 @@ const struct Role roles[] = {
 	// "Bin", "the lost library", "the Tower of Woe",
 	// PM_EXILE, NON_PM, NON_PM,
 	// PM_STRANGE_CORPSE, NON_PM, PM_ACERERAK,
-	// PM_BUGBEAR, PM_LICH, S_HUMANOID, S_LICH,
+	// PM_SKELETON, PM_LICH, S_HUMANOID, S_LICH,
 	// ART_PEN_OF_THE_VOID,
 	// MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC | ROLE_MALE|ROLE_FEMALE |
 	  // ROLE_NEUTRAL,

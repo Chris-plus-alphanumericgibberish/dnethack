@@ -812,9 +812,11 @@ int thrown;
 		    valid_weapon_attack = (tmp > 1);
 		    if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
-		    } else if (mon->mflee && Role_if(PM_ROGUE) && !Upolyd) {
+		    } else if ((mon->mflee && Role_if(PM_ROGUE) && !Upolyd) ||
+						u.sealsActive&SEAL_ANDROMALIUS) {
 			You("strike %s from behind!", mon_nam(mon));
-			tmp += rnd(u.ulevel);
+				if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel);
+				if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel/2);
 			hittxt = TRUE;
 		    } else if ( (( (dieroll <= 2 || (Role_if(PM_BARBARIAN) && dieroll <= 4)) && 
 						  obj == uwep &&

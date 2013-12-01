@@ -754,6 +754,7 @@ E void NDECL(lookaround);
 E int NDECL(monster_nearby);
 E void FDECL(nomul, (int, const char *));
 E void FDECL(unmul, (const char *));
+E void FDECL(showdmg, (int, BOOLEAN_P));
 E void FDECL(losehp, (int,const char *,BOOLEAN_P));
 E void FDECL(set_uhpmax, (int,BOOLEAN_P));
 E void NDECL(check_uhpmax);

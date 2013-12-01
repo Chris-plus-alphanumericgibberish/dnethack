@@ -2207,6 +2207,51 @@ maybe_wail()
     }
 }
 
+/** Print the amount n of damage inflicted,
+ * if the Mother is bound.
+ */
+void
+showdmg(n,you)
+int n; /**< amount of damage inflicted */
+boolean you; /**< true, if you are hit */
+{
+	if (u.sealsActive & SEAL_MOTHER && n > 0) {
+		if (you)
+			pline("[%d pts.]", n);
+		else
+			pline("(%d pts.)", n);
+	}
+}
+
+void
+check_uhpmax()
+{
+
+	if (u.uhpmax < 1)
+		u.uhpmax = 1;
+	if (u.mhmax < 1)
+		u.mhmax = 1;
+	if (u.uhp < 1)
+		u.uhp = 1;
+	if (u.mh < 1)
+		u.mh = 1;
+}
+
+void
+set_uhpmax(new_hpmax, poly)
+int new_hpmax;
+boolean poly;
+{
+	if (new_hpmax < 1) {
+		if (!poly) u.uhpmax = new_hpmax;
+		else       u.mhmax = new_hpmax;
+		return;
+	}
+	
+	if (!poly) u.uhpmax = 1;
+	else       u.mhmax = 1;
+}
+
 void
 losehp(n, knam, k_format)
 register int n;
