@@ -670,7 +670,7 @@ register struct monst *mtmp;
 	case MS_BONES:
 	    pline("%s rattles noisily.", Monnam(mtmp));
 	    You("freeze for a moment.");
-	    nomul(-2, "being scared by rattling");
+	    nomul(-2, "scared by rattling bones");
 	    break;
 	case MS_LAUGH:
 	    {
@@ -715,6 +715,7 @@ register struct monst *mtmp;
 		    break;
 		} else return 0;	/* no sound */
 	    }
+		
 	    /* Generic peaceful humanoid behaviour. */
 	    if (mtmp->mflee)
 		pline_msg = "wants nothing to do with you.";
