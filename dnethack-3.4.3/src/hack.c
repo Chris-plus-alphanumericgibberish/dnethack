@@ -927,7 +927,13 @@ domove()
 		u.ux = x = u.ustuck->mx;
 		u.uy = y = u.ustuck->my;
 		mtmp = u.ustuck;
-	} else {
+	}else if(u.ustuck && !flags.nopick && !(u.ustuck->mpeaceful && !Hallucination)){
+		u.dx = u.ustuck->mx - u.ux;
+		u.dy = u.ustuck->my - u.uy;
+		x = u.ustuck->mx;
+		y = u.ustuck->my;
+		mtmp = u.ustuck;
+	}else {
 		if (Is_airlevel(&u.uz) && rn2(4) &&
 			!Levitation && !Flying) {
 		    switch(rn2(3)) {
