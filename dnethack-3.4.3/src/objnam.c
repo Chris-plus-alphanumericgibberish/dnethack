@@ -775,7 +775,7 @@ charges:
 	case RING_CLASS:
 		add_erosion_words(obj, prefix);
 ring:
-		if(obj->ovar1 && isEngrRing(obj->otyp)) Strcat(prefix, "engraved ");
+		if(obj->ovar1 && (isEngrRing(obj->otyp))) Strcat(prefix, "engraved ");
 		if(obj->owornmask & W_RINGR) Strcat(bp, " (on right ");
 		if(obj->owornmask & W_RINGL) Strcat(bp, " (on left ");
 		if(obj->owornmask & W_RING) {
@@ -1937,23 +1937,35 @@ boolean from_user;
 			heptagram = TRUE;
 		} else if(!strncmpi(bp, "gorgoneion ", l=10)){
 			gorgoneion = TRUE;
-		} else if(!strncmpi(bp, "circle of acheron ", l=18)){
+		} else if(!strncmpi(bp, "circle of acheron ", l=18) ||
+					!strncmpi(bp, "circle ", l=7) ||
+					!strncmpi(bp, "acheron ", l=8)){
 			acheron = TRUE;
 		} else if(!strncmpi(bp, "pentagram ", l=10)){
 			pentagram = TRUE;
 		} else if(!strncmpi(bp, "hexagram ", l=9)){
 			hexagram = TRUE;
-		} else if(!strncmpi(bp, "hamsa ", l=6)){
+		} else if(!strncmpi(bp, "hamsa mark ", l=11) ||
+					!strncmpi(bp, "hamsa ", l=6)){
 			hamsa = TRUE;
 		} else if(!strncmpi(bp, "elder sign ", l=11)){
 			sign = TRUE;
-		} else if(!strncmpi(bp, "elder elemental eye ", l=20)){
+		} else if(!strncmpi(bp, "elder elemental eye ", l=20) ||
+					!strncmpi(bp, "elder eye ", l=10) ||
+					!strncmpi(bp, "elemental eye ", l=14)){
 			eye = TRUE;
-		} else if(!strncmpi(bp, "sign of the scion queen mother ", l=31)){
+		} else if(!strncmpi(bp, "sign of the scion queen mother ", l=31) ||
+					!strncmpi(bp, "scion queen mother ", l=19) ||
+					!strncmpi(bp, "queen mother ", l=13) ||
+					!strncmpi(bp, "mother ", l=7)){
 			queen = TRUE;
-		} else if(!strncmpi(bp, "cartouche of the cat lord ", l=26)){
+		} else if(!strncmpi(bp, "cartouche of the cat lord ", l=26) ||
+					!strncmpi(bp, "cat lord ", l=9) ||
+					!strncmpi(bp, "cartouche ", l=10)){
 			cartouche = TRUE;
-		} else if(!strncmpi(bp, "wings of garuda ", l=16)){
+		} else if(!strncmpi(bp, "wings of garuda ", l=16) ||
+					!strncmpi(bp, "garuda ", l=7) ||
+					!strncmpi(bp, "wings ", l=6)){
 			garuda = TRUE;
 		} else if(!strncmpi(bp, "toustefna ", l=10)){
 			toustefna = TRUE;
