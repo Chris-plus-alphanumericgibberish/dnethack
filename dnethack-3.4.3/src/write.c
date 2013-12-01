@@ -29,6 +29,7 @@ register struct obj *otmp;
 	case SCR_AMNESIA:
 	case SCR_FIRE:
 	case SCR_EARTH:
+	case SCR_WARD:
 		return(8);
 /*		break; */
 	case SCR_DESTROY_ARMOR:
@@ -52,6 +53,7 @@ register struct obj *otmp;
 	case SCR_STINKING_CLOUD:
 	case SCR_TAMING:
 	case SCR_TELEPORTATION:
+	case SCR_WARDING:
 		return(20);
 /*		break; */
 	case SCR_GENOCIDE:
@@ -79,6 +81,7 @@ register struct obj *pen;
 	int first, last, i;
 	boolean by_descr = FALSE;
 	const char *typeword;
+	int theward;
 
 	if (nohands(youmonst.data)) {
 	    You("need hands to be able to write!");
@@ -121,7 +124,110 @@ register struct obj *pen;
 		(void)strncpy(bp, " armor ", 7);	/* won't add '\0' */
 		(void)mungspaces(bp + 1);	/* remove the extra space */
 	}
-
+	if(!strcmpi(nm, "heptagram")){
+		if( !(u.wardsknown & WARD_HEPTAGRAM)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = HEPTAGRAM;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "gorgoneion")){
+		if( !(u.wardsknown & WARD_GORGONEION)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = GORGONEION;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "circle of acheron") || 
+				!strcmpi(nm, "circle") || 
+				!strcmpi(nm, "acheron")){
+		if( !(u.wardsknown & WARD_ACHERON)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = CIRCLE_OF_ACHERON;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "pentagram")){
+		if( !(u.wardsknown & WARD_PENTAGRAM)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = PENTAGRAM;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "hexagram")){
+		if( !(u.wardsknown & WARD_HEXAGRAM)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = HEXAGRAM;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "hamsa") ||
+				!strcmpi(nm, "hamsa mark")){
+		if( !(u.wardsknown & WARD_HAMSA)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = HAMSA;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "elder sign") || 
+				!strcmpi(nm, "the elder sign")){
+		if( !(u.wardsknown & WARD_ELDER_SIGN)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = ELDER_SIGN;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "elder elemental eye") ||
+				!strcmpi(nm, "elder eye") ||
+				!strcmpi(nm, "elemental eye")){
+		if( !(u.wardsknown & WARD_EYE)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = ELDER_ELEMENTAL_EYE;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "sign of the scion queen mother") ||
+				!strcmpi(nm, "sign of the scion queen mother") ||
+				!strcmpi(nm, "scion queen mother") ||
+				!strcmpi(nm, "queen mother") ||
+				!strcmpi(nm, "mother") ||
+				!strcmpi(nm, "sign")){
+		if( !(u.wardsknown & WARD_QUEEN)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = SIGN_OF_THE_SCION_QUEEN;
+		i = SCR_WARD;
+		goto found_ward;
+	} else if(!strcmpi(nm, "cartouche of the cat lord") ||
+				!strcmpi(nm, "cat lord") ||
+				!strcmpi(nm, "cartouche")){
+		if( !(u.wardsknown & WARD_CAT_LORD)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		i = CARTOUCHE_OF_THE_CAT_LORD;
+		theward = TRUE;
+		goto found_ward;
+	} else if(!strcmpi(nm, "wings of garuda") ||
+				!strcmpi(nm, "garuda") ||
+				!strcmpi(nm, "wings")){
+		if( !(u.wardsknown & WARD_GARUDA)){
+			You_cant("scribe a ward you don't know!");
+			return 1;
+		}
+		theward = WINGS_OF_GARUDA;
+		i = SCR_WARD;
+		goto found_ward;
+	} else{
 	first = bases[(int)paper->oclass];
 	last = bases[(int)paper->oclass + 1] - 1;
 	for (i = first; i <= last; i++) {
@@ -135,11 +241,15 @@ register struct obj *pen;
 			goto found;
 		}
 	}
-
 	There("is no such %s!", typeword);
 	return 1;
+	}
 found:
-
+	if(i == SCR_WARD){
+		You("must specify the ward to scribe!");
+		return 1;
+	}
+found_ward:
 	if (i == SCR_BLANK_PAPER || i == SPE_BLANK_PAPER) {
 		You_cant("write that!");
 		pline("It's obscene!");
@@ -160,6 +270,9 @@ found:
 
 	new_obj = mksobj(i, FALSE, FALSE);
 	new_obj->bknown = (paper->bknown && pen->bknown);
+	if(i==SCR_WARD){
+		new_obj->ovar1 = theward;
+	}
 
 	/* shk imposes a flat rate per use, not based on actual charges used */
 	check_unpaid(pen);
