@@ -901,8 +901,15 @@ peffects(otmp)
 			    }
 			} else if(otmp->cursed)
 			    pline("This tastes like castor oil.");
-			else
+			else{
 			    pline("That was smooth!");
+				if(uclockwork){
+					boolean good_for_you = TRUE;
+					healup(d(4 + 2 * bcsign(otmp), 4),
+						   !otmp->cursed ? 1 : 0, !!otmp->blessed, !otmp->cursed);
+					if(u.uhs < WEAK && u.uhs > SATIATED) lesshungry(20);
+				}
+			}
 			exercise(A_WIS, good_for_you);
 		}
 		break;

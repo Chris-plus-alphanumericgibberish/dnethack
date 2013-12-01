@@ -985,6 +985,8 @@ register const char *let,*word;
 		|| (!strcmp(word, "wield") &&
 		    (otmp->oclass == TOOL_CLASS && !is_weptool(otmp)))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
+		|| (!strcmp(word, "wind with") && (otmp->oclass == TOOL_CLASS &&
+		     otyp != SKELETON_KEY))
 		|| (!strcmp(word, "sacrifice") &&
 		    (otyp != CORPSE &&
 		     otyp != AMULET_OF_YENDOR && otyp != FAKE_AMULET_OF_YENDOR))

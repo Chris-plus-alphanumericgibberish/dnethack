@@ -575,6 +575,8 @@ E void FDECL(food_substitution, (struct obj *,struct obj *));
 E void NDECL(fix_petrification);
 E void FDECL(consume_oeaten, (struct obj *,int));
 E boolean FDECL(maybe_finished_meal, (BOOLEAN_P));
+E int FDECL(ask_turns, (struct monst *, int, int));
+E int FDECL(start_clockwinding, (struct obj *,struct monst *, int));
 
 /* ### end.c ### */
 

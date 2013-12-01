@@ -117,6 +117,15 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	orc_abil[] = { {	1, &(HPoison_resistance), "", "" },
+		     {	 0, 0, 0, 0 } },
+
+	clk_abil[] = { {	1, &(HPoison_resistance), "", "" },
+		     {	 1, &(HSick_resistance), "", "" },
+		     {	 1, &(HStone_resistance), "", "" },
+		     {	 5, &(HShock_resistance), "", "" },
+		     {	 10, &(HCold_resistance), "", "" },
+		     {	 15, &(HFire_resistance), "", "" },
+		     {	 0, 0, 0, 0 } },
 
 	inc_abil[] = { {	1, &(HAntimagic), "", "" },
 		     {	 0, 0, 0, 0 } };
@@ -304,6 +313,7 @@ boolean	inc_or_dec;
 	pline("Exercise:");
 #endif
 	if (i == A_CHA) return;	/* can't exercise cha */
+	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
 
 	/* no physical exercise while polymorphed; the body's temporary */
 	if (Upolyd && i != A_WIS) return;
@@ -406,6 +416,7 @@ exerchk()
 {
 	int	i, mod_val;
 
+	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
 	/*	Check out the periodic accumulations */
 	exerper();
 
@@ -616,6 +627,7 @@ int oldlevel, newlevel;
 	case PM_DROW:           rabil = elf_abil;	break;
 	case PM_ORC:            rabil = orc_abil;	break;
 	case PM_HUMAN:
+	case PM_CLOCKWORK_AUTOMATON:rabil = clk_abil;	break;
 	case PM_INCANTIFIER:	rabil = inc_abil;	break;
 	case PM_DWARF:
 	case PM_GNOME:

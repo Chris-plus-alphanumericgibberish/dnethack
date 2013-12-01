@@ -73,7 +73,7 @@ static NEARDATA const char *deaths[] = {		/* the array of death */
 	"burning", "dissolving under the heat and pressure",
 	"crushed", "turned to stone", "turned into slime",
 	"genocided",
-	"disintegrated", 
+	"disintegrated", "exploded after being overwound",
 	"panic", "trickery",
 	"quit", "escaped", "ascended"
 };
@@ -83,7 +83,7 @@ static NEARDATA const char *ends[] = {		/* "when you..." */
 	"burned", "dissolved in the lava",
 	"were crushed", "turned to stone", "turned into slime",
 	"were genocided",
-	"were disintegrated",
+	"were disintegrated", "were overwound and exploded",
 	"panicked", "were tricked",
 	"quit", "escaped", "ascended"
 };
@@ -590,6 +590,7 @@ int how;
 		      !Blind ? "begins to glow" : "feels warm");
 		if (how == CHOKING) You("vomit ...");
 		if (how == DISINTEGRATED) You("reconstitute!");
+		else if (how == OVERWOUND) You("reassemble!");
 		else You_feel("much better!");
 
 		pline_The("medallion crumbles to dust!");

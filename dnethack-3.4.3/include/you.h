@@ -305,7 +305,10 @@ struct you {
 	struct attribs	macurr,		/* for monster attribs */
 			mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */
-
+	short ucspeed;
+#define	HIGH_CLOCKSPEED	1
+#define	NORM_CLOCKSPEED	2
+#define	SLOW_CLOCKSPEED	3
 	unsigned ucreamed;
 	unsigned uswldtim;		/* time you have been swallowed */
 
@@ -498,6 +501,7 @@ struct you {
 	int keter, chokhmah, gevurah, hod;
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
 };	/* end of `struct you' */
+#define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
 
 extern long sealKey[31]; /*Defined in */
 extern char *wardDecode[26]; /*Defined in spell.c*/

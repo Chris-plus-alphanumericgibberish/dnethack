@@ -89,12 +89,13 @@
 #define STONING		 9
 #define TURNED_SLIME	 10
 #define DISINTEGRATED 11
-#define GENOCIDED	12
-#define PANICKED	13
-#define TRICKED		14
-#define QUIT		15
-#define ESCAPED		16
-#define ASCENDED	17
+#define OVERWOUND 	12
+#define GENOCIDED	13
+#define PANICKED	14
+#define TRICKED		15
+#define QUIT		16
+#define ESCAPED		17
+#define ASCENDED	18
 
 #include "align.h"
 #include "dungeon.h"

@@ -19,6 +19,7 @@ STATIC_DCL void FDECL(drop_weapon,(int));
 STATIC_DCL void NDECL(uunstick);
 STATIC_DCL int FDECL(armor_to_dragon,(int));
 STATIC_DCL void NDECL(newman);
+STATIC_DCL short NDECL(doclockmenu);
 
 /* Assumes u.umonster is set up already */
 /* Use u.umonster since we might be restoring and you may be polymorphed */
@@ -1279,6 +1280,11 @@ int part;
 		"light headed", "neck", "spine", "toe", "hair",
 		"blood", "lung", "nose", "stomach","heart","skin",
 		"flesh","beat","bones","creak","crack"},
+	*clockwork_parts[] = { "arm", "photoreceptor", "face", "finger",
+		"fingertip", "foot", "hand", "handed", "head", "leg",
+		"addled", "neck", "chassis", "toe", "doll-hair",
+		"blood", "gear", "chemoreceptor", "keyhole","mainspring","metal skin",
+		"brass structure","tick","rods","creak","bend"},
 	*jelly_parts[] = { "pseudopod", "dark spot", "front",
 		"pseudopod extension", "pseudopod extremity",
 		"pseudopod root", "grasp", "grasped", "cerebral area",
@@ -1361,7 +1367,7 @@ int part;
 	if (humanoid(mptr) &&
 		(part == ARM || part == FINGER || part == FINGERTIP ||
 		    part == HAND || part == HANDED))
-	    return humanoid_parts[part];
+	    return uclockwork ? clockwork_parts[part] : humanoid_parts[part];
 	if (mptr == &mons[PM_RAVEN] || mptr == &mons[PM_CROW])
 	    return bird_parts[part];
 	if (mptr->mlet == S_CENTAUR || mptr->mlet == S_UNICORN ||
@@ -1387,7 +1393,7 @@ int part;
 	if (mptr->mlet == S_FUNGUS)
 	    return fungus_parts[part];
 	if (humanoid(mptr))
-	    return humanoid_parts[part];
+	    return uclockwork ? clockwork_parts[part] : humanoid_parts[part];
 	return animal_parts[part];
 }
 
@@ -1485,6 +1491,54 @@ int atyp;
 	    default:
 		return -1;
 	}
+}
+
+
+STATIC_OVL short
+doclockmenu()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "To what speed will you set your clock?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	Sprintf(buf, "High speed");
+	any.a_int = HIGH_CLOCKSPEED;	/* must be non-zero */
+	incntlet = 'a';
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	
+	Sprintf(buf, "Normal speed");
+	incntlet = 'b';
+	any.a_int = NORM_CLOCKSPEED;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	
+	
+	Sprintf(buf, "Low speed");
+	incntlet = 'c';
+	any.a_int = SLOW_CLOCKSPEED;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	
+	
+	end_menu(tmpwin, "Change your clock-speed");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? (short)selected[0].item.a_int : (short)u.ucspeed;
 }
 
 #endif /* OVLB */

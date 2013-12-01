@@ -1612,9 +1612,6 @@ shk_other_services()
 	menu_item *selected;
 	int n;
 
-	/* Do you want to use other services */
-	if (yn("Do you wish to try our other services?") != 'y' ) return;
-
 	/* Init your name */
 	if (!is_human(youmonst.data))
 		slang = "ugly";
@@ -1622,7 +1619,33 @@ shk_other_services()
 		slang = (flags.female) ? "lady" : "buddy";
 
 	/* Init the shopkeeper */
-	shkp = shop_keeper(/* roomno= */*u.ushops);
+	shkp = shop_keeper(/* roomno= */u.ushops);
+	
+	if(uclockwork && yn("Shall I wind your mainspring?") == 'y'){
+		struct obj *key;
+		int turns = 0;
+		char class_list[MAXOCLASSES+2];
+		static const char tools[] = { TOOL_CLASS, 0 };
+
+		
+		Strcpy(class_list, tools);
+		key = getobj(class_list, "wind with");
+		if (!key){
+			pline(Never_mind);
+			return;
+		}
+		turns = ask_turns(shkp, 0, u.ulevel*10);
+		if(!turns){
+			pline(Never_mind);
+			return;
+		}
+		start_clockwinding(key, shkp, turns);
+		return;
+	}
+	
+	/* Do you want to use other services */
+	if (yn("Do you wish to try our other services?") != 'y' ) return;
+
 	if (!ESHK(shkp)->services) return;
 
 	/*

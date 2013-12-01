@@ -96,6 +96,10 @@ moveloop()
 		    /* reallocate movement rations to monsters */
 		    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
 				mtmp->movement += mcalcmove(mtmp);
+				if(mtmp->moccupation && !occupation){
+					mtmp->moccupation = 0;
+					mtmp->mcanmove = 1;
+				}
 				if(mtmp->data == &mons[PM_GREAT_CTHULHU]) mtmp->mspec_used = 0;
 				if(is_weeping(mtmp->data)) mtmp->mspec_used = 0;
 			}
@@ -170,6 +174,9 @@ moveloop()
 		    if (u.usteed && u.umoved) {
 			/* your speed doesn't augment steed's speed */
 			moveamt = mcalcmove(u.usteed);
+			if(uclockwork && u.ucspeed == HIGH_CLOCKSPEED){
+				morehungry(3); /*You are still burning spring tension, even if it doesn't affect your speed!*/
+			}
 		    } else
 #endif
 		    {
@@ -204,8 +211,17 @@ moveloop()
 				}
 			}
 			else if(u.ZangetsuSafe < u.ulevel) u.ZangetsuSafe++;
+			
+			if(uclockwork && u.ucspeed == HIGH_CLOCKSPEED){
+				moveamt *= 2;
+				morehungry(2*moveamt/NORMAL_SPEED - 1);
+			}
 			}
 
+			if(uclockwork && u.ucspeed == SLOW_CLOCKSPEED)
+				moveamt /= 2; /*Even if you are mounted, a slow clockspeed affects how 
+								fast you can issue commands to the mount*/
+			
 		    switch (wtcap) {
 			case UNENCUMBERED: break;
 			case SLT_ENCUMBER: moveamt -= (moveamt / 4); break;
@@ -283,7 +299,7 @@ moveloop()
 		    } else if (u.uhp < u.uhpmax &&
 			 (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
 			if (u.ulevel > 9 && !(moves % 3) && 
-				!(Race_if(PM_INCANTIFIER))) {
+				!(Race_if(PM_INCANTIFIER) || uclockwork)) {
 			    int heal, Con = (int) ACURR(A_CON);
 
 			    if (Con <= 12) {
@@ -298,7 +314,7 @@ moveloop()
 				u.uhp = u.uhpmax;
 			} else if (Regeneration ||
 			     (u.ulevel <= 9 &&
-				 !(Race_if(PM_INCANTIFIER)) &&
+				 !(Race_if(PM_INCANTIFIER) || uclockwork) &&
 			      !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
 			    flags.botl = 1;
 			    u.uhp++;
@@ -555,11 +571,18 @@ moveloop()
 void
 stop_occupation()
 {
+	struct monst *mtmp;
 	if(occupation) {
 		if (!maybe_finished_meal(TRUE))
 		    You("stop %s.", occtxt);
 		occupation = 0;
 		flags.botl = 1; /* in case u.uhs changed */
+		for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+			if(mtmp->moccupation && !occupation){
+				mtmp->moccupation = 0;
+				mtmp->mcanmove = 1;
+			}
+		}
 /* fainting stops your occupation, there's no reason to sync.
 		sync_hunger();
 */

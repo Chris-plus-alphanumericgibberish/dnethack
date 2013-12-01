@@ -19,6 +19,7 @@ STATIC_PTR int NDECL(eatfood);
 STATIC_PTR void FDECL(costly_tin, (const char*));
 STATIC_PTR int NDECL(opentin);
 STATIC_PTR int NDECL(unfaint);
+STATIC_PTR int NDECL(windclock);
 
 #ifdef OVLB
 STATIC_DCL const char *FDECL(food_xname, (struct obj *,BOOLEAN_P));
@@ -77,6 +78,16 @@ const char *hu_stat[] = {
 	"Fainting",
 	"Fainted ",
 	"Starved "
+};
+
+const char *ca_hu_stat[] = {
+	"OvrWound",
+	"        ",
+	"Waning  ",
+	"Unwound ",
+	"Slipping",
+	"Slipped ",
+	"Stopped "
 };
 
 #endif /* OVLB */
@@ -198,6 +209,7 @@ static NEARDATA struct {
 	int	usedtime,	/* turns spent eating */
 		reqtime;	/* turns required to eat */
 	int	nmod;		/* coded nutrition per turn */
+	struct	monst *mon; /* monster associated with item */
 	Bitfield(canchoke,1);	/* was satiated at beginning */
 
 	/* start_eating() initializes these */
@@ -1393,6 +1405,11 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 		costly_tin((const char*)0);
 		goto use_me;
 	    }
+         if (uclockwork){
+           You("have no way to eat, so you discard the tin instead.");
+           if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
+           goto use_me;
+         }
 	    /* in case stop_occupation() was called on previous meal */
 	    victual.piece = (struct obj *)0;
 	    victual.fullwarn = victual.eating = victual.doreset = FALSE;
@@ -2325,6 +2342,11 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		pline("If you can't breathe air, how can you consume solids?");
 		return 0;
 	}
+
+	if(uclockwork){
+		pline("You are metal and springs, not flesh and blood. You cannot eat.");
+		return 0;
+	}
 	if (!(otmp = floorfood("eat", 0))) return 0;
 	if (check_capacity((char *)0)) return 0;
 
@@ -2747,12 +2769,13 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if (u.uinvulnerable) return;	/* you don't feel hungrier */
 
 	if ((!u.usleep || !rn2(10))	/* slow metabolic rate while asleep */
-		&& (carnivorous(youmonst.data) || herbivorous(youmonst.data))
+		&& (carnivorous(youmonst.data) || herbivorous(youmonst.data) || uclockwork)
 #ifdef CONVICT
         /* Convicts can last twice as long at hungry and below */
         && (!Role_if(PM_CONVICT) || (moves % 2) || (u.uhs < HUNGRY))
 #endif /* CONVICT */
-		&& !( (Slow_digestion && (!Race_if(PM_INCANTIFIER) || moves%2)))
+		&& !( (Slow_digestion && (!Race_if(PM_INCANTIFIER) || moves%2)) || 
+				(uclockwork && u.ucspeed == SLOW_CLOCKSPEED) ))
 			(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);		/* ordinary food consumption */
 	if(uwep && (
 			uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youmonst.data)))
@@ -2824,7 +2847,17 @@ register int num;
 		    choke(victual.piece);
 		    reset_eat();
 		} else
-		    choke(occupation == opentin ? tin.tin : (struct obj *)0);
+		    if(!uclockwork) choke(occupation == opentin ? tin.tin : (struct obj *)0);
+			else{
+				Your("mainspring is wound too tight!");
+				Your("clockwork breaks apart!");
+				killer_format = KILLED_BY;
+				killer = "overclocking";
+				done(OVERWOUND);
+				victual.piece = 0;
+				victual.mon = 0;
+				return;
+			}
 		/* no reset_eat() */
 	    }
 	} else {
@@ -2834,8 +2867,14 @@ register int num;
 	    if ((Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax * 3/4) ||
 			(!Race_if(PM_INCANTIFIER) && u.uhunger >= 1500)) {
 		if (!victual.eating || (victual.eating && !victual.fullwarn)) {
+				if(!uclockwork){
 		    pline("You're having a hard time getting all of it down.");
 		    nomovemsg = "You're finally finished.";
+				}
+				else{
+					Your("mainspring is being overwound!");
+					nomovemsg = "The winding finally stopped.";
+				}
 		    if (!victual.eating)
 			multi = -2;
 		    else {
@@ -2866,6 +2905,132 @@ unfaint(VOID_ARGS)
 	return 0;
 }
 
+int
+ask_turns(mon, flatrate, perturn)
+struct monst *mon;
+int flatrate;
+int perturn;
+{
+	int ret, turns;
+	long price;
+	char buf[BUFSZ], qbuf[QBUFSZ];
+	boolean pay;
+	
+	Sprintf(qbuf, "How many turns?");
+	getlin(qbuf, buf);
+	(void)mungspaces(buf);
+	if (buf[0] == '\033' || buf[0] == '\0') ret = 0;
+	else ret = sscanf(buf, "%d", &turns);
+	
+	if (ret != 1 || turns <= 0){
+		return 0;
+	}
+	
+	price = (long)(turns*perturn + flatrate);
+	
+	if(price){
+	Sprintf(qbuf, "That will be %ld %s. (Pay?)", price, currency(price));
+	if(yn(qbuf)=='y'){
+#ifndef GOLDOBJ
+	if (price >= u.ugold) {
+		You("don't have enough %s!", currency(price));
+		return 0;
+	} else {
+		You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+	}
+	u.ugold -= price;
+	mon->mgold += price;
+#else
+	if (price >= umoney) {
+		You("don't have enough %s!", currency(price));
+		return 0;
+	} else {
+		You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+	}
+	(void) money2mon(mon, price);
+#endif
+	}
+	return turns;
+	}
+	else return turns;
+}
+
+int
+start_clockwinding(key, mon, turns)
+struct obj * key;
+struct monst *mon;
+int turns;
+{
+  // int ret;
+  // char buf[BUFSZ], qbuf[QBUFSZ];
+  // Sprintf(qbuf, "How many turns?");
+  // getlin(qbuf, buf);
+  // (void)mungspaces(buf);
+  // if (buf[0] == '\033' || buf[0] == '\0') ret = 0;
+  // else ret = sscanf(buf, "%d", &turns);
+
+  // if (ret != 1 || turns <= 0){
+    // pline(Never_mind);
+    // return 0;
+  // }
+
+  if (key->otyp != SKELETON_KEY)
+    return 0;
+  pline("%s uses the key to wind up your clockwork.", Monnam(mon));
+  victual.piece = key;
+  victual.canchoke = TRUE;
+  victual.usedtime = 0;
+  victual.fullwarn = FALSE;
+  victual.reqtime = turns;
+  victual.mon = mon;
+  mon->moccupation = 1;
+  mon->mcanmove = 0;
+  Sprintf(msgbuf, "winding");
+  set_occupation(windclock, msgbuf, 0);
+  return 1;
+}
+
+
+
+STATIC_PTR
+int
+windclock()
+{ 
+  if (victual.reqtime == victual.usedtime){
+    occupation = 0;
+	pline("%s finishes winding up your clockwork.", Monnam(victual.mon));
+	victual.mon->moccupation = 0;
+	victual.mon->mcanmove = 1;
+    newuhs(FALSE);
+    victual.piece = 0;
+    victual.mon = 0;
+  }else if (!carried(victual.piece)){
+    newuhs(FALSE);
+    stop_occupation();
+    victual.piece = 0;
+    victual.mon = 0;
+    return 0;
+  }else if(victual.canchoke && u.uhunger >= 2000) {
+    Your("mainspring is wound too tight!");
+    Your("clockwork breaks apart!");
+    killer_format = KILLED_BY;
+    killer = "overclocking";
+    done(OVERWOUND);
+    victual.piece = 0;
+    victual.mon = 0;
+    return 0;
+  }
+  else if (u.uhunger >= 1500 && !victual.fullwarn) {
+    pline("%s is having a hard time cranking the key.",Monnam(victual.mon));
+    victual.fullwarn = TRUE;
+  }
+  else {
+    u.uhunger += 10;
+    victual.usedtime ++;
+  }
+  flags.botl = 1;
+  return 1;
+}
 #endif /* OVLB */
 #ifdef OVL0
 
@@ -2904,6 +3069,7 @@ boolean incr;
 	static unsigned save_hs;
 	static boolean saved_hs = FALSE;
 	int h = YouHunger;
+     boolean clockwork = uclockwork;
 
 	newhs = (h > (Race_if(PM_INCANTIFIER) ? max(u.uenmax/2,200) : 1000) ) ? SATIATED :
 		(h > 150) ? NOT_HUNGRY :
@@ -2952,15 +3118,28 @@ boolean incr;
 			if(!is_fainted() && multi >= 0 /* %% */) {
 				/* stop what you're doing, then faint */
 				stop_occupation();
+	            if (clockwork){
+	              Your("clockwork slips.");
+	              flags.soundok=0;
+				  nomul(-2, "immobilized by slipping gears.");
+	              nomovemsg = "Your clockwork catches again.";
+	            } else {
 				You("faint from lack of food.");
 				flags.soundok = 0;
 					nomul(-10+YouHunger/10, "fainted from lack of food");
 				nomovemsg = "You regain consciousness.";
 				afternmv = unfaint;
+            	}
 				newhs = FAINTED;
 			}
 		} else
 		if(YouHunger < -(int)(200 + 20*ACURR(A_CON))) {
+            if (clockwork){
+              Your("clockwork comes to a complete stop.");
+			  killer_format = KILLED_BY_AN;
+			  killer = "unwound spring";
+			  done(DIED);
+            } else {
 			u.uhs = STARVED;
 			flags.botl = 1;
 			bot();
@@ -2968,6 +3147,7 @@ boolean incr;
 			killer_format = KILLED_BY;
 			killer = "starvation";
 			done(STARVING);
+			}
 			/* if we return, we lifesaved, and that calls newuhs */
 			return;
 		}
@@ -2980,6 +3160,17 @@ boolean incr;
 			losestr(-1);
 		switch(newhs){
 		case HUNGRY:
+	        if (clockwork){
+	          if (Hallucination)
+	            Your((!incr)? "cuckoo only feels hungry now.":
+	                "cuckoo is feeling hungry.");
+	          else
+	          You_feel((!incr) ? "your mainspring tightening." :
+	             "the power of your mainspring waning.");
+	          if (incr && occupation && occupation != windclock)
+	            stop_occupation();
+		break;
+	        }
 			if (Hallucination) {
 			    You((!incr) ?
 				"now have a lesser case of the munchies." :
@@ -2993,6 +3184,20 @@ boolean incr;
 			    stop_occupation();
 			break;
 		case WEAK:
+	        if (clockwork){
+	          You_feel("your mainspring %s and your gears %s.",
+	              (Hallucination)?"sprunging":"unwinding",
+	              (!incr)?"still slipping":
+	              (u.uhunger < 45 ) ? "slipping":
+	              "starting to slip");  
+	          if (incr && occupation && occupation != windclock)
+	            stop_occupation();
+			  if(u.ucspeed == HIGH_CLOCKSPEED){
+				pline("There is no longer sufficient tension in your mainspring to maintain a high clock-speed");
+				u.ucspeed = NORM_CLOCKSPEED;
+			  }
+		break;
+	        }
 			if (Hallucination)
 			    pline((!incr) ?
 				  "You still have the munchies." :
@@ -3011,6 +3216,22 @@ boolean incr;
 			    (occupation != eatfood && occupation != opentin))
 			    stop_occupation();
 			break;
+		case SATIATED:
+	        if (clockwork){
+			  if(u.ucspeed == SLOW_CLOCKSPEED){
+				pline("There is now too much tension in your mainspring to maintain a slow clock-speed");
+				u.ucspeed = NORM_CLOCKSPEED;
+			  }
+			}
+		break;
+		case FAINTING:
+	        if (clockwork){
+			  if(u.ucspeed == HIGH_CLOCKSPEED){
+				pline("There is no longer sufficient tension in your mainspring to maintain a high clock-speed");
+				u.ucspeed = NORM_CLOCKSPEED;
+			  }
+			}
+		break;
 		}
 		u.uhs = newhs;
 		flags.botl = 1;

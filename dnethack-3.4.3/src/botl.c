@@ -6,6 +6,7 @@
 
 #ifdef OVL0
 extern const char *hu_stat[];	/* defined in eat.c */
+extern const char *ca_hu_stat[];	/* defined in eat.c */
 
 const char * const enc_stat[] = {
 	"",
@@ -282,9 +283,16 @@ bot2()
                                        (currenttime % 3600) / 60);
   }
 #endif
+	if(uclockwork){
+		if(strcmp(ca_hu_stat[u.uhs], "        ")) {
+			Sprintf(nb = eos(nb), " ");
+			Strcat(newbot2, ca_hu_stat[u.uhs]);
+		}
+	} else{
 	if(strcmp(hu_stat[u.uhs], "        ")) {
 		Sprintf(nb = eos(nb), " ");
 		Strcat(newbot2, hu_stat[u.uhs]);
+		}
 	}
 	if(Confusion)	   Sprintf(nb = eos(nb), " Conf");
 	if(Sick) {

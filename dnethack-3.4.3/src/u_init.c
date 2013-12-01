@@ -220,6 +220,11 @@ static struct trobj Wizard[] = {
  *	Optional extra inventory items.
  */
 
+static struct trobj Key[] = {
+	{ SKELETON_KEY, 0, TOOL_CLASS, 1, 1 },
+	{ 0, 0, 0, 0, 0 }
+};
+
 static struct trobj HealingBook[] = {
 	{ SPE_HEALING, 0, SPBOOK_CLASS, 1, 1 },
 	{ 0, 0, 0, 0, 0 }
@@ -354,6 +359,13 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_VAMPIRE,	BANANA,				POT_BLOOD    	  },
     { PM_VAMPIRE,	APPLE,				POT_BLOOD    	  },
     { PM_VAMPIRE,	POT_BOOZE,			POT_BLOOD    	  },
+    { PM_CLOCKWORK_AUTOMATON,	FOOD_RATION, 		POT_OIL },
+    { PM_CLOCKWORK_AUTOMATON,	CRAM_RATION, 		POT_OIL },
+    { PM_CLOCKWORK_AUTOMATON,	POT_FRUIT_JUICE,	POT_OIL	      },
+    { PM_CLOCKWORK_AUTOMATON,	TRIPE_RATION,		POT_OIL    	  },
+    { PM_CLOCKWORK_AUTOMATON,	BANANA,				POT_OIL    	  },
+    { PM_CLOCKWORK_AUTOMATON,	APPLE,				POT_OIL    	  },
+    { PM_CLOCKWORK_AUTOMATON,	POT_BOOZE,			POT_OIL    	  },
     { NON_PM,	STRANGE_OBJECT,		STRANGE_OBJECT	      }
 };
 
@@ -1133,6 +1145,10 @@ u_init()
 	case PM_HUMAN:
 	    /* Nothing special */
 	    break;
+
+	case PM_CLOCKWORK_AUTOMATON:
+		ini_inv(Key);
+    break;
 
 	case PM_INCANTIFIER:
 		skill_add(Skill_I);

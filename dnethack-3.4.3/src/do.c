@@ -1747,6 +1747,10 @@ long timeout;
 int
 donull()
 {
+	if(uclockwork && !rn2(15-u.ulevel/2)){
+		if(!Upolyd && u.uhp<u.uhpmax) u.uhp++;
+		else if(Upolyd && u.mh<u.mhmax) u.mh++;
+	}
 	return(1);	/* Do nothing, but let other things happen */
 }
 

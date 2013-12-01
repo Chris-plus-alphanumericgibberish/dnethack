@@ -1672,6 +1672,7 @@ find_ac()
 	if (HProtection & INTRINSIC) uac -= u.ublessed;
 	uac -= u.uacinc;
 	uac -= u.uspellprot;
+	if(uclockwork) uac -= 3; /*intrinsic armor bonus for automata*/
 	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
 	if(Role_if(PM_MONK) && !uarm){
 		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);

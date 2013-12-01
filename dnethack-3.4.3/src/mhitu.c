@@ -42,6 +42,7 @@ static const int elementalgaze[] = {AD_FIRE,AD_COLD,AD_ELEC};
 /* See comment in mhitm.c.  If we use this a lot it probably should be */
 /* changed to a parameter to mhitu. */
 static int dieroll;
+static const char tools[] = { TOOL_CLASS, 0 };
 
 #ifdef OVL1
 
@@ -3561,6 +3562,9 @@ register struct monst *mon;
 	register struct obj *ring, *nring;
 	boolean fem = (mon->data == &mons[PM_SUCCUBUS]) || mon->data == &mons[PM_CARMILLA]; /* otherwise incubus */
 	char qbuf[QBUFSZ];
+	struct obj *key;
+	int turns = 0;
+	char class_list[MAXOCLASSES+2];
 //	pline("starting ssex");
 	if(TRUE){
 
@@ -3678,12 +3682,33 @@ register struct monst *mon;
 			adjalign(1);
 
 		/* by this point you have discovered mon's identity, blind or not... */
+		if(!uclockwork){
 		pline("Time stands still while you and %s lie in each other's arms...",
 			noit_mon_nam(mon));
+		}
+		else{
+			pline("You and %s lie down together...",
+				noit_mon_nam(mon));
+		}
 		if (rn2(35) > ACURR(A_CHA) + ACURR(A_INT)) {
 			/* Don't bother with mspec_used here... it didn't get tired! */
+			if(!uclockwork){
 			pline("%s seems to have enjoyed it more than you...",
 				noit_Monnam(mon));
+			} else{
+				char buf[BUFSZ];
+				pline("%s looks briefly confused...",
+					noit_Monnam(mon));
+				if(!rn2(5) && !Drain_resistance){
+					pline("...then tries to suck out your soul with a kiss!");
+					losexp("stolen soul",FALSE,FALSE,FALSE);
+				}
+				else {
+					buf[0] = '\0';
+					steal(mon, buf,FALSE);
+				}
+				goto pay;
+			}
 			switch (rn2(5)) {
 				case 0: You_feel("drained of energy.");
 					u.uen = 0;
@@ -3721,8 +3746,37 @@ register struct monst *mon;
 			}
 		} else {
 			mon->mspec_used = rnd(100); /* monster is worn out */
+			if(!uclockwork){
 			You("seem to have enjoyed it more than %s...",
 				noit_mon_nam(mon));
+			} else{
+				pline("Time stands still while you and %s lie in each other's arms...",
+					noit_mon_nam(mon));
+				if(!rn2(5)){
+					pline("That was a very educational experience.");
+					pluslvl(FALSE);
+					goto pay;
+				} else{
+					You("persuade %s to wind your clockwork.",
+						noit_mon_nam(mon));
+					struct obj *key;
+					int turns = 0;
+					
+					Strcpy(class_list, tools);
+					key = getobj(class_list, "wind with");
+					if (!key){
+						pline(Never_mind);
+						goto pay;
+					}
+					turns = ask_turns(mon, 0, 0);
+					if(!turns){
+						pline(Never_mind);
+						goto pay;
+					}
+					lesshungry((.8 + ((double)rn2(5))) * (turns*10));
+					goto pay;
+				}
+			}
 			switch (rn2(5)) {
 			case 0: You_feel("raised to your full potential.");
 				exercise(A_CON, TRUE);
@@ -3750,7 +3804,7 @@ register struct monst *mon;
 				break;
 			}
 		}
-
+pay:
 		if (mon->mtame) /* don't charge */ ;
 		else if (rn2(20) < ACURR(A_CHA)) {
 			pline("%s demands that you pay %s, but you refuse...",
@@ -3815,6 +3869,11 @@ struct monst *mon;
 	struct obj *ring, *nring;
 	boolean fem = TRUE; /* Lilith */
 	//char qbuf[QBUFSZ];
+	char qbuf[QBUFSZ];
+	struct obj *key;
+	int turns = 0;
+	char class_list[MAXOCLASSES+2];
+
 
 
 	if (mon->mcan || mon->mspec_used) {
@@ -3874,11 +3933,38 @@ struct monst *mon;
 		return 1;
 	}
 	/* by this point you have discovered mon's identity, blind or not... */
+	if(!uclockwork){
 	pline("Time stands still while you and %s lie in each other's arms...",
 		noit_mon_nam(mon));
+	}
+	else{
+		pline("You and %s lie down together...",
+			noit_mon_nam(mon));
+	}
 	if (rn2(139) > ACURR(A_CHA) + ACURR(A_INT)) {
+		if(!uclockwork){
 		pline("%s seems to have enjoyed it more than you...",
 			noit_Monnam(mon));
+		} else{
+			char buf[BUFSZ];
+			pline("%s looks briefly confused...",
+				noit_Monnam(mon));
+			if(!rn2(5) && !Drain_resistance){
+				pline("...then tries to suck out your soul with a kiss!");
+				losexp("stolen soul",FALSE,FALSE,FALSE);
+				losexp("stolen soul",FALSE,FALSE,FALSE);
+				losexp("stolen soul",TRUE,FALSE,FALSE);
+			}
+			else {
+				buf[0] = '\0';
+				steal(mon, buf,FALSE);
+			}
+			pline("Before you can get up, %s slips a knife into your gears!",
+			noit_Monnam(mon));
+			if(Half_physical_damage) losehp(rn1(5, 6), "knife to the ribs", KILLED_BY);
+			else losehp(rn1(10, 6), "knife in the gears", KILLED_BY);
+			goto pay;
+		}
 		switch (rn2(5)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
@@ -3940,8 +4026,38 @@ struct monst *mon;
 		return 0;
 	} else {
 		mon->mspec_used = rnd(39)+13;
+		if(!uclockwork){
 		You("seem to have enjoyed it more than %s...",
 			noit_mon_nam(mon));
+		} else{
+			pline("Time stands still while you and %s lie in each other's arms...",
+				noit_mon_nam(mon));
+			if(!rn2(5)){
+				pline("That was a very educational experience!");
+				pluslvl(FALSE);
+				pluslvl(FALSE);
+				goto pay;
+			} else{
+				You("persuade %s to wind your clockwork.",
+					noit_mon_nam(mon));
+				struct obj *key;
+				int turns = 0;
+				
+				Strcpy(class_list, tools);
+				key = getobj(class_list, "wind with");
+				if (!key){
+					pline(Never_mind);
+					goto pay;
+				}
+				turns = ask_turns(mon, 0, 0);
+				if(!turns){
+					pline(Never_mind);
+					goto pay;
+				}
+				lesshungry(turns*10);
+				goto pay;
+			}
+		}
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
@@ -3977,6 +4093,7 @@ struct monst *mon;
 			break;
 		}
 	}
+pay:
 	if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
 	return 1;
 }
@@ -3988,6 +4105,10 @@ struct monst *mon;
 	struct obj *ring, *nring;
 	boolean fem = FALSE; /* Belial */
 	//char qbuf[QBUFSZ];
+	char qbuf[QBUFSZ];
+	struct obj *key;
+	int turns = 0;
+	char class_list[MAXOCLASSES+2];
 
 
 	if (mon->mcan || mon->mspec_used) {
@@ -4047,11 +4168,38 @@ struct monst *mon;
 		return 1;
 	}
 	/* by this point you have discovered mon's identity, blind or not... */
+	if(!uclockwork){
 	pline("Time stands still while you and %s lie in each other's arms...",
 		noit_mon_nam(mon));
+	}
+	else{
+		pline("You and %s lie down together...",
+			noit_mon_nam(mon));
+	}
 	if (rn2(139) > ACURR(A_CHA) + ACURR(A_INT)) {
+		if(!uclockwork){
 		pline("%s seems to have enjoyed it more than you...",
 			noit_Monnam(mon));
+		} else{
+			char buf[BUFSZ];
+			pline("%s looks briefly confused...",
+				noit_Monnam(mon));
+			if(!rn2(5) && !Drain_resistance){
+				pline("...then tries to suck out your soul with a kiss!");
+				losexp("stolen soul",FALSE,FALSE,FALSE);
+				losexp("stolen soul",FALSE,FALSE,FALSE);
+				losexp("stolen soul",FALSE,FALSE,FALSE);
+			}
+			else {
+				buf[0] = '\0';
+				steal(mon, buf,FALSE);
+			}
+			pline("Before you can get up, %s slips a knife between your ribs!",
+			noit_Monnam(mon));
+			if(Half_physical_damage) losehp(d(5, 6), "knife to the ribs", KILLED_BY);
+			else losehp(d(10, 6), "knife to the ribs", KILLED_BY);
+			goto pay;
+		}
 		switch (rn2(5)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
@@ -4113,8 +4261,38 @@ struct monst *mon;
 		return 0;
 	} else {
 		mon->mspec_used = rnd(39)+13;
+		if(!uclockwork){
 		You("seem to have enjoyed it more than %s...",
 			noit_mon_nam(mon));
+		} else{
+			pline("Time stands still while you and %s lie in each other's arms...",
+				noit_mon_nam(mon));
+			if(!rn2(5)){
+				pline("That was a very educational experience.");
+				pluslvl(FALSE);
+				pluslvl(FALSE);
+				goto pay;
+			} else{
+				You("persuade %s to wind your clockwork.",
+					noit_mon_nam(mon));
+				struct obj *key;
+				int turns = 0;
+				
+				Strcpy(class_list, tools);
+				key = getobj(class_list, "wind with");
+				if (!key){
+					pline(Never_mind);
+					goto pay;
+				}
+				turns = ask_turns(mon, 0, 0);
+				if(!turns){
+					pline(Never_mind);
+					goto pay;
+				}
+				lesshungry(turns*10);
+				goto pay;
+			}
+		}
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
@@ -4150,6 +4328,7 @@ struct monst *mon;
 			break;
 		}
 	}
+pay:
 	if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
 	return 1;
 }
@@ -4269,11 +4448,30 @@ register struct monst *mon;
 	if (u.ualign.type == A_CHAOTIC)
 		adjalign(1);
 	/* by this point you have discovered mon's identity, blind or not... */
+	if(!uclockwork){
 	pline("Time stands still while you and %s lie in each other's arms...",
 		noit_mon_nam(mon));
+	}
+	else{
+		pline("You and %s lie down together...",
+			noit_mon_nam(mon));
+	}
 	if (helpless || rn2(120) > ACURR(A_CHA) + ACURR(A_CON) + ACURR(A_INT)) {
+		if(!uclockwork){
 		pline("%s seems to have enjoyed it more than you...",
 			noit_Monnam(mon));
+		} else{
+			pline("...but she becomes enraged when she discovers you're mechanical!");
+			verbalize("How dare you trick me!");
+			pline("She attacks your keyhole with her barbed tail!");
+			losehp(d(4, 12), "an enraged demoness", KILLED_BY);
+			morehungry(d(2,12)*10);
+			pline("She claws your face!");
+			losehp(d(4, 4), "an enraged demoness", KILLED_BY);
+			(void) adjattrib(A_CHA, -1*d(2,4), TRUE);
+			AMAX(A_CHA) = ABASE(A_CHA); //permanent drain!
+			goto pay;
+		}
 		switch (rn2(8)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
@@ -4348,8 +4546,38 @@ register struct monst *mon;
 		return 1;
 	} else {
 		mon->mspec_used = rnd(39)+13;
+		if(!uclockwork){
 		You("seem to have enjoyed it more than %s...",
 			noit_mon_nam(mon));
+		} else{
+			pline("She becomes very angry when she discovers your mechanical nature.");
+			pline("She claws at you...");
+			losehp(d(4, 4), "an angry paramour", KILLED_BY);
+			pline("...but you manage to distract her before she does serious harm.");
+			switch(rn2(4)){
+				case 0:
+						verbalize("Thou art wonderful! My favor shall protect you from harm!");
+						/* Well, she's mixing thous and yous in these pronouncements, */
+						/* But apparently she's ALSO overenthused enough to bless somebody who's fighting her, so... */
+						u.uacinc += d(1,10);
+				break;
+				case 1:
+						verbalize("I name you my champion. Go forth and slay thy enemies with my blessing!");
+						u.udaminc += d(1,10);
+						u.uhitinc += d(1,10);
+				break;
+				case 2:
+						verbalize("Truly thou art as a fountain of life!");
+						u.uhpmax = (int)(u.uhpmax*1.2);
+						u.uenmax = (int)(u.uenmax*1.2);
+				break;
+				case 3:
+						You_feel("as though you could lift mountains!");
+						u.ucarinc += d(1,4)*50;
+				break;
+			}
+			goto pay;
+		}
 		if(ufem && (ACURR(A_CHA) < rn2(35))){
 			if(rn2(2) || uarmh){
 				pline("She attacks you with her barbed tail!");
@@ -4435,6 +4663,7 @@ register struct monst *mon;
 		break;
 		}
 	}
+pay:
 	if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
 	return 1;
 }
@@ -4491,7 +4720,7 @@ register struct monst *mon;
 			break;
 		if (ring==uleft || ring==uright) continue;
 		
-		pline("%s decides you'd look more prettier wearing your %s,",
+		pline("%s decides you'd look prettier wearing your %s,",
 		Blind ? "He" : Monnam(mon), xname(ring));
 		pline("and puts it on your finger.");
 		
@@ -4555,12 +4784,32 @@ register struct monst *mon;
 	if (u.ualign.type == A_CHAOTIC)
 		adjalign(1);
 	/* by this point you have discovered mon's identity, blind or not... */
+	if(!uclockwork){
 	pline("Time stands still while you and %s lie in each other's arms...",
 		noit_mon_nam(mon));
+	}
+	else{
+		pline("You and %s lie down together...",
+			noit_mon_nam(mon));
+	}
 	if (helpless || rn2(120) > ACURR(A_CHA) + ACURR(A_CON) + ACURR(A_INT)) {
 		struct obj *optr;
+		if(!uclockwork){
 		pline("%s seems to have enjoyed it more than you...",
 			noit_Monnam(mon));
+		} else{
+			pline("...he becomes enraged when he discovers you're mechanical!");
+			verbalize("How dare you trick me!");
+			pline("He viciously bites you!");
+			losehp(d(4, 8), "an enraged demon prince", KILLED_BY);
+			(void) adjattrib(A_CHA, -1*d(1,8), TRUE);
+			AMAX(A_CHA) = ABASE(A_CHA); //permanent drain!
+			pline("He drips acid into your inner workings!");
+			if(!HAcid_resistance){
+				losehp(d(6, 8), "an enraged demon prince", KILLED_BY);
+				morehungry(d(3,8));
+			}
+		}
 		switch (rn2(6)) {
 			case 0: verbalize("Surely you don't need all this junk?!");
 				buf[0] = '\0';
@@ -5000,6 +5249,9 @@ register struct monst *mon;
 	register struct obj *ring, *nring;
 	boolean fem = (mon->data == &mons[PM_SUCCUBUS]) || mon->data == &mons[PM_CARMILLA]; /* otherwise incubus */
 	char qbuf[QBUFSZ];
+	struct obj *key;
+	int turns = 0;
+	char class_list[MAXOCLASSES+2];
 //	pline("starting ssex");
 	if (mon->mcan || mon->mspec_used) {
 		pline("%s acts as though %s has got a %sheadache.",
@@ -5115,12 +5367,33 @@ register struct monst *mon;
 		adjalign(1);
 
 	/* by this point you have discovered mon's identity, blind or not... */
+	if(!uclockwork){
 	pline("Time stands still while you and %s lie in each other's arms...",
 		noit_mon_nam(mon));
+	}
+	else{
+		pline("You and %s lie down together...",
+			noit_mon_nam(mon));
+	}
 	if (rn2(35) > ACURR(A_CHA) + ACURR(A_INT)) {
 		/* Don't bother with mspec_used here... it didn't get tired! */
+		if(!uclockwork){
 		pline("%s seems to have enjoyed it more than you...",
 			noit_Monnam(mon));
+		} else{
+			char buf[BUFSZ];
+			pline("%s looks briefly confused...",
+				noit_Monnam(mon));
+			if(!rn2(5) && !Drain_resistance){
+				pline("...then tries to suck out your soul with a kiss!");
+				losexp("stolen soul",FALSE,FALSE,FALSE);
+			}
+			else {
+				buf[0] = '\0';
+				steal(mon, buf,FALSE);
+			}
+			goto pay;
+		}
 		switch (rn2(5)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
@@ -5177,8 +5450,37 @@ register struct monst *mon;
 */		}
 	} else {
 		mon->mspec_used = rnd(100); /* monster is worn out */
+		if(!uclockwork){
 		You("seem to have enjoyed it more than %s...",
 			noit_mon_nam(mon));
+		} else{
+			pline("Time stands still while you and %s lie in each other's arms...",
+				noit_mon_nam(mon));
+			if(!rn2(5)){
+				pline("That was a very educational experience.");
+				pluslvl(FALSE);
+				goto pay;
+			} else{
+				You("persuade %s to wind your clockwork.",
+					noit_mon_nam(mon));
+				struct obj *key;
+				int turns = 0;
+				
+				Strcpy(class_list, tools);
+				key = getobj(class_list, "wind with");
+				if (!key){
+					pline(Never_mind);
+					goto pay;
+				}
+				turns = ask_turns(mon, 0, 0);
+				if(!turns){
+					pline(Never_mind);
+					goto pay;
+				}
+				lesshungry((.8 + ((double)rn2(5))) * (turns*10));
+				goto pay;
+			}
+		}
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
@@ -5206,6 +5508,7 @@ register struct monst *mon;
 			break;
 		}
 	}
+pay:
 	return 1;
 }
 

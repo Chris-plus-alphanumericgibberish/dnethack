@@ -120,6 +120,7 @@
 #define M2_GNOME	0x00000040L	/* is a gnome */
 #define M2_ORC		0x00000080L	/* is an orc */
 #define M2_VAMPIRE	0x00000100L	/* is a vampire */
+#define M2_CLOCK	0x00000200L	/* is a clockwork automaton */
 #define M2_DEMON	0x00000400L	/* is a demon */
 #define M2_MINION	0x00000800L	/* is a minion of a deity */
 #define M2_LORD		0x00001000L	/* is a lord to its kind */
@@ -190,6 +191,7 @@
 #define MH_GNOME	M2_GNOME
 #define MH_ORC		M2_ORC
 #define MH_VAMPIRE	M2_VAMPIRE
+#define MH_CLOCK	M2_CLOCK
 
 
 /* for mons[].geno (constant during game) */

@@ -41,7 +41,7 @@ const struct Role roles[] = {
 	PM_LORD_CARNARVON, PM_STUDENT, PM_MINION_OF_HUHETOTL,
 	NON_PM, PM_HUMAN_MUMMY, S_SNAKE, S_MUMMY,
 	ART_ITLACHIAYAQUE,
-	MH_HUMAN|MH_DWARF|MH_GNOME|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
+	MH_HUMAN|MH_DWARF|MH_GNOME|MH_CLOCK|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL,
 	/* Str Int Wis Dex Con Cha */
 	{   7, 10, 10,  7,  7,  7 },
@@ -198,7 +198,7 @@ const struct Role roles[] = {
 	PM_KING_ARTHUR, PM_PAGE, PM_IXOTH,
 	PM_QUASIT, PM_OCHRE_JELLY, S_IMP, S_JELLY,
 	ART_MAGIC_MIRROR_OF_MERLIN,
-	MH_HUMAN | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
+	MH_HUMAN|MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
 	/* Str Int Wis Dex Con Cha */
 	{  13,  7, 14,  8, 10, 17 },
 	{  30, 15, 15, 10, 20, 10 },
@@ -224,7 +224,7 @@ const struct Role roles[] = {
 	PM_GRAND_MASTER, PM_ABBOT, PM_MASTER_KAEN,
 	PM_EARTH_ELEMENTAL, PM_XORN, S_ELEMENTAL, S_XORN,
 	ART_EYES_OF_THE_OVERWORLD,
-	MH_HUMAN | ROLE_MALE|ROLE_FEMALE |
+	MH_HUMAN|MH_CLOCK | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{  10,  7,  8,  8,  7,  7 },
@@ -250,7 +250,7 @@ const struct Role roles[] = {
 	PM_ARCH_PRIEST, PM_ACOLYTE, PM_NALZOK,//Legion
 	PM_HUMAN_ZOMBIE, PM_WRAITH, S_ZOMBIE, S_WRAITH,//Zombies, wraiths, elementals, zombies.  Place oozes.
 	ART_MITRE_OF_HOLINESS,
-	MH_HUMAN|MH_ELF | ROLE_MALE|ROLE_FEMALE |
+	MH_HUMAN|MH_ELF|MH_CLOCK | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{   7,  7, 10,  7,  7,  7 },
@@ -370,7 +370,7 @@ const struct Role roles[] = {
 	PM_LORD_SATO, PM_ROSHI, PM_ASHIKAGA_TAKAUJI,
 	PM_WOLF, PM_STALKER, S_DOG, S_ELEMENTAL,
 	ART_TSURUGI_OF_MURAMASA,
-	MH_HUMAN | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
+	MH_HUMAN|MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
 	/* Str Int Wis Dex Con Cha */
 	{  10,  8,  7, 10, 17,  6 },
 	{  30, 10,  8, 30, 14,  8 },
@@ -589,6 +589,20 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  3, 0,  0, 3,  2, 0 },	/* Hit points */
 	{  3, 0,  4, 0,  4, 0 },	/* Energy */
+	NO_NIGHTVISION
+},
+{	"clockwork automaton", "automatic", "clockwork-kind", "Clk",
+	{0, 0},
+	PM_CLOCKWORK_AUTOMATON, NON_PM, NON_PM, NON_PM,
+	MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
+	MH_CLOCK, MH_DWARF, MH_GNOME,
+	/*    Str     Int Wis Dex Con Cha */
+	{      8,      8,  8,  8,  8,  8 },
+	{ STR18(100), 18, 18, 18, 18, 18 },
+	/* Init   Lower  Higher */
+	{  3, 0,  3, 0,  3, 0 },	/* Hit points */
+	{  3, 0,  3, 0,  3, 0 },	/* Energy */
+	NO_NIGHTVISION
 },
 /* Array terminator */
 { 0, 0, 0, 0, 0 }};
@@ -607,7 +621,8 @@ struct Race urace =
 	{ STR18(100), 18, 18, 18, 18, 18 },
 	/* Init   Lower  Higher */
 	{  2, 0,  0, 2,  1, 0 },	/* Hit points */
-	{  1, 0,  2, 0,  2, 0 }		/* Energy */
+	{  1, 0,  2, 0,  2, 0 },	/* Energy */
+	NO_NIGHTVISION
 };
 
 

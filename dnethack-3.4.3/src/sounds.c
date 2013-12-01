@@ -16,6 +16,8 @@ static int FDECL(domonnoise,(struct monst *));
 int FDECL(dobinding,(int, int));
 static int NDECL(dochat);
 
+static const char tools[] = { TOOL_CLASS, 0 };
+
 #endif /* OVLB */
 
 #ifdef OVL0
@@ -473,6 +475,7 @@ register struct monst *mtmp;
 			*verbl_msg = 0;	/* verbalize() */
     struct permonst *ptr = mtmp->data;
     char verbuf[BUFSZ];
+	char class_list[MAXOCLASSES+2];
 
     /* presumably nearness and sleep checks have already been made */
     if (!flags.soundok) return(0);
@@ -499,6 +502,24 @@ register struct monst *mtmp;
 	case MS_LEADER:
 	case MS_NEMESIS:
 	case MS_GUARDIAN:
+	    if (mtmp->mpeaceful && uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				break;
+			}
+			turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
 	    quest_chat(mtmp);
 	    break;
 	case MS_SELL: /* pitch, pay, total */
@@ -719,6 +740,25 @@ register struct monst *mtmp;
 	    }
 		
 	    /* Generic peaceful humanoid behaviour. */
+	    if (mtmp->mpeaceful && uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				break;
+			}
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*100, u.ulevel*10);
+			else turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
 	    if (mtmp->mflee)
 		pline_msg = "wants nothing to do with you.";
 	    else if (mtmp->mhp < mtmp->mhpmax/4)
@@ -772,6 +812,25 @@ register struct monst *mtmp;
 			(void) doseduce(mtmp);
 			break;
 	    }
+	    if (mtmp->mpeaceful && uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				break;
+			}
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*111, u.ulevel*11);
+			else turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
 	    switch ((poly_gender() != (int) mtmp->female) ? rn2(3) : 0)
 #else
 	    switch ((poly_gender() == 0) ? rn2(3) : 0)
@@ -824,8 +883,26 @@ register struct monst *mtmp;
             }
         } else
 #endif /* CONVICT */
-	    if (mtmp->mpeaceful && !mtmp->mtame) {
-		(void) demon_talk(mtmp);
+	    if (mtmp->mpeaceful) {
+			if(uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+				struct obj *key;
+				int turns = 0;
+				
+				Strcpy(class_list, tools);
+				key = getobj(class_list, "wind with");
+				if (!key){
+					pline(Never_mind);
+					break;
+				}
+				if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20, u.ulevel*15);
+				else turns = ask_turns(mtmp, 0, 0);
+				if(!turns){
+					pline(Never_mind);
+					break;
+				}
+				start_clockwinding(key, mtmp, turns);
+				break;
+			} else if(!mtmp->mtame) (void) demon_talk(mtmp);
 		break;
 	    }
 	    /* fall through */
@@ -838,17 +915,36 @@ register struct monst *mtmp;
 	    pline_msg = "seems to mutter a cantrip.";
 	    break;
 	case MS_NURSE:
+	    if (mtmp->mpeaceful && uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				break;
+			}
+			if(!mtmp->mtame) turns = ask_turns(mtmp, 0, u.ulevel*5);
+			else turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
 	    if (uwep && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)))
 		verbl_msg = "Put that weapon away before you hurt someone!";
-	    else if (uarmc || uarm || uarmh || uarms || uarmg || uarmf)
-		verbl_msg = Role_if(PM_HEALER) ?
-			  "Doc, I can't help you unless you cooperate." :
-			  "Please undress so I can examine you.";
-#ifdef TOURIST
-	    else if (uarmu)
-		verbl_msg = "Take off your shirt, please.";
-#endif
 	    else verbl_msg = "Relax, this won't hurt a bit.";
+	    // else if (uarmc || uarm || uarmh || uarms || uarmg || uarmf)
+		// verbl_msg = Role_if(PM_HEALER) ?
+			  // "Doc, I can't help you unless you cooperate." :
+			  // "Please undress so I can examine you.";
+// #ifdef TOURIST
+	    // else if (uarmu)
+		// verbl_msg = "Take off your shirt, please.";
+// #endif
 	    break;
 	case MS_GUARD:
 #ifndef GOLDOBJ
@@ -871,6 +967,25 @@ register struct monst *mtmp;
 		    "The food's not fit for Orcs!",
 		    "My feet hurt, I've been on them all day!",
 		};
+	    if (mtmp->mpeaceful && uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				break;
+			}
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*200, 0);
+			else turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
 		verbl_msg = mtmp->mpeaceful ? soldier_pax_msg[rn2(3)]
 					    : soldier_foe_msg[rn2(3)];
 	    }

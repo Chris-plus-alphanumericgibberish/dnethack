@@ -16,6 +16,7 @@
 STATIC_DCL boolean FDECL(histemple_at,(struct monst *,XCHAR_P,XCHAR_P));
 STATIC_DCL boolean FDECL(has_shrine,(struct monst *));
 
+static const char tools[] = { TOOL_CLASS, 0 };
 /*
  * Move for priests and shopkeepers.  Called from shk_move() and pri_move().
  * Valid returns are  1: moved  0: didn't  -1: let m_move do it  -2: died.
@@ -418,6 +419,7 @@ register struct monst *priest;
 {
 	boolean coaligned = p_coaligned(priest);
 	boolean strayed = (u.ualign.record < 0);
+	char class_list[MAXOCLASSES+2];
 
 	/* KMH, conduct */
 	u.uconduct.gnostic++;
@@ -459,7 +461,13 @@ register struct monst *priest;
 #ifndef GOLDOBJ
 	if(!u.ugold) {
 	    if(coaligned && !strayed) {
-		if (priest->mgold > 0L) {
+		if(uclockwork && u.uhs >= WEAK &&
+		   yn("Shall I wind your clockwork, brother?") == 'y'){
+			struct obj *key;
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			start_clockwinding(key, priest, 10);
+		} else if (priest->mgold > 0L) {
 		    /* Note: two bits is actually 25 cents.  Hmm. */
 		    pline("%s gives you %s for an ale.", Monnam(priest),
 			(priest->mgold == 1L) ? "one bit" : "two bits");
@@ -473,7 +481,17 @@ register struct monst *priest;
 	if(!money_cnt(invent)) {
 	    if(coaligned && !strayed) {
                 long pmoney = money_cnt(priest->minvent);
-		if (pmoney > 0L) {
+		if(uclockwork && u.uhs >= WEAK &&
+		   yn("Shall I wind your clockwork, brother?") == 'y'){
+			struct obj *key;
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				return;
+			}
+			start_clockwinding(key, priest, 10);
+		} else if (pmoney > 0L) {
 		    /* Note: two bits is actually 25 cents.  Hmm. */
 		    pline("%s gives you %s for an ale.", Monnam(priest),
 			(pmoney == 1L) ? "one bit" : "two bits");
@@ -485,6 +503,23 @@ register struct monst *priest;
 	    } else
 		pline("%s is not interested.", Monnam(priest));
 	    return;
+	} else if(uclockwork &&
+	   yn("Shall I wind your clockwork, pilgrim?") == 'y'){
+		struct obj *key;
+		int turns = 0;
+		
+		Strcpy(class_list, tools);
+		key = getobj(class_list, "wind with");
+		if (!key){
+			pline(Never_mind);
+			return;
+		}
+		turns = ask_turns(priest, u.ulevel*100, 0);
+		if(!turns){
+			pline(Never_mind);
+			return;
+		}
+		start_clockwinding(key, priest, turns);
 	} else {
 	    long offer;
 
