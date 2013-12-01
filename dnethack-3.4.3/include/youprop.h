@@ -29,39 +29,41 @@
 #define EFire_resistance	u.uprops[FIRE_RES].extrinsic
 #define Fire_resistance		(HFire_resistance || EFire_resistance || \
 				 resists_fire(&youmonst) || \
-				 ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA)
+				 ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA || u.sealsActive&SEAL_FAFNIR)
 
 #define HCold_resistance	u.uprops[COLD_RES].intrinsic
 #define ECold_resistance	u.uprops[COLD_RES].extrinsic
 #define Cold_resistance		(HCold_resistance || ECold_resistance || \
 				 resists_cold(&youmonst) || \
-				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA)
+				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON)
 
 #define HSleep_resistance	u.uprops[SLEEP_RES].intrinsic
 #define ESleep_resistance	u.uprops[SLEEP_RES].extrinsic
 #define Sleep_resistance	(HSleep_resistance || ESleep_resistance || \
-				 resists_sleep(&youmonst))
+				 resists_sleep(&youmonst) || u.sealsActive&SEAL_CHUPOCLOPS)
 
 #define HDisint_resistance	u.uprops[DISINT_RES].intrinsic
 #define EDisint_resistance	u.uprops[DISINT_RES].extrinsic
 #define Disint_resistance	(HDisint_resistance || EDisint_resistance || \
-				 resists_disint(&youmonst))
+				 resists_disint(&youmonst) || u.sealsActive&SEAL_ORTHOS)
 
 #define HShock_resistance	u.uprops[SHOCK_RES].intrinsic
 #define EShock_resistance	u.uprops[SHOCK_RES].extrinsic
 #define Shock_resistance	(HShock_resistance || EShock_resistance || \
 				 resists_elec(&youmonst) || \
-				 ward_at(u.ux,u.uy) == TRACERY_OF_KRAKAL)
+				 ward_at(u.ux,u.uy) == TRACERY_OF_KRAKAL || u.sealsActive&SEAL_ASTAROTH)
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
 #define Poison_resistance	(HPoison_resistance || EPoison_resistance || \
 				 resists_poison(&youmonst) || \
-				 (ward_at(u.ux,u.uy) == WINGS_OF_GARUDA && num_wards_at(u.ux, u.uy) > rn2(7)))
+				 (ward_at(u.ux,u.uy) == WINGS_OF_GARUDA && num_wards_at(u.ux, u.uy) > rn2(7))\
+				 || u.sealsActive&SEAL_YMIR)
 
 #define HAcid_resistance	u.uprops[ACID_RES].intrinsic
 #define EAcid_resistance	u.uprops[ACID_RES].extrinsic
-#define Acid_resistance		(HAcid_resistance || EAcid_resistance || resists_acid(&youmonst))
+#define Acid_resistance		(HAcid_resistance || EAcid_resistance || \
+							 resists_acid(&youmonst) || u.sealsActive&SEAL_ECHIDNA)
 
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
@@ -71,8 +73,18 @@
 					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \
 						(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && \
 						(mvitals[PM_LARGE_CAT].mvflags & G_GENOD || mvitals[PM_LARGE_CAT].died >= 120) \
-					) \
+					) || u.sealsActive&SEAL_TENEBROUS\
 				)
+
+#define HAntimagic		u.uprops[ANTIMAGIC].intrinsic
+#define EAntimagic		u.uprops[ANTIMAGIC].extrinsic
+#define Antimagic		(EAntimagic || HAntimagic ||\
+				 (Upolyd && resists_magm(&youmonst)))
+
+#define HStone_resistance	u.uprops[STONE_RES].intrinsic
+#define EStone_resistance	u.uprops[STONE_RES].extrinsic
+#define Stone_resistance	(HStone_resistance || EStone_resistance || resists_ston(&youmonst))
+
 
 /* Intrinsics only */
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic
@@ -83,17 +95,11 @@
 						(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && \
 						(mvitals[PM_LARGE_CAT].mvflags & G_GENOD || mvitals[PM_LARGE_CAT].died >= 120) \
 					) \
-				 ))
+				 ) || u.sealsActive&SEAL_IRIS)
 #define Invulnerable		u.uprops[INVULNERABLE].intrinsic    /* [Tom] */
 
 /* Extrinsics only */
-#define EAntimagic		u.uprops[ANTIMAGIC].extrinsic
-#define Antimagic		(EAntimagic || \
-				 (Upolyd && resists_magm(&youmonst)))
-
-#define EStone_resistance	u.uprops[STONE_RES].extrinsic
-#define Stone_resistance	(EStone_resistance || resists_ston(&youmonst))
-
+//None
 
 /*** Troubles ***/
 /* Pseudo-property */
@@ -101,12 +107,12 @@
 
 /* Those implemented solely as timeouts (we use just intrinsic) */
 #define HStun			u.uprops[STUNNED].intrinsic
-#define Stunned			(HStun || u.umonnum == PM_STALKER || \
-				 youmonst.data->mlet == S_BAT)
+#define Stunned			((HStun || u.umonnum == PM_STALKER || \
+				 youmonst.data->mlet == S_BAT) && !(u.sealsActive&SEAL_NUMINA))
 		/* Note: birds will also be stunned */
 
 #define HConfusion		u.uprops[CONFUSION].intrinsic
-#define Confusion		HConfusion
+#define Confusion		HConfusion && !(u.sealsActive&SEAL_NUMINA)
 
 #define Blinded			u.uprops[BLINDED].intrinsic
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES)
@@ -152,45 +158,45 @@
 #define HSee_invisible		u.uprops[SEE_INVIS].intrinsic
 #define ESee_invisible		u.uprops[SEE_INVIS].extrinsic
 #define See_invisible		(HSee_invisible || ESee_invisible || \
-				 perceives(youmonst.data))
+				 perceives(youmonst.data) || u.sealsActive&SEAL_NABERIUS)
 
 #define HTelepat		u.uprops[TELEPAT].intrinsic
 #define ETelepat		u.uprops[TELEPAT].extrinsic
 #define Blind_telepat		(HTelepat || ETelepat || \
-				 telepathic(youmonst.data))
-#define Unblind_telepat		(ETelepat)
+				 telepathic(youmonst.data) || u.sealsActive&SEAL_DANTALION)
+#define Unblind_telepat		(ETelepat || u.sealsActive&SEAL_DANTALION)
 
 #define HWarning		u.uprops[WARNING].intrinsic
 #define EWarning		u.uprops[WARNING].extrinsic
-#define Warning			(HWarning || EWarning)
+#define Warning			(HWarning || EWarning || u.sealsActive&SEAL_HUGINN_MUNINN)
 
 /* Warning for a specific type of monster */
 #define HWarn_of_mon		u.uprops[WARN_OF_MON].intrinsic
 #define EWarn_of_mon		u.uprops[WARN_OF_MON].extrinsic
 #define Warn_of_mon		(HWarn_of_mon || EWarn_of_mon || (uwep && uwep->oclass == WEAPON_CLASS && objects[(uwep)->otyp].oc_material == WOOD && \
-					(uwep->ovar1 & WARD_THJOFASTAFUR)))
+					(uwep->ovar1 & WARD_THJOFASTAFUR)) || u.sealsActive&SEAL_PAIMON)
 
 #define HUndead_warning		u.uprops[WARN_UNDEAD].intrinsic
-#define Undead_warning		(HUndead_warning)
+#define Undead_warning		(HUndead_warning || u.sealsActive&SEAL_ACERERAK)
 
 #define HSearching		u.uprops[SEARCHING].intrinsic
 #define ESearching		u.uprops[SEARCHING].extrinsic
-#define Searching		(HSearching || ESearching)
+#define Searching		(HSearching || ESearching || u.sealsActive&SEAL_OTIAX)
 
 #define HClairvoyant		u.uprops[CLAIRVOYANT].intrinsic
 #define EClairvoyant		u.uprops[CLAIRVOYANT].extrinsic
 #define BClairvoyant		u.uprops[CLAIRVOYANT].blocked
-#define Clairvoyant		((HClairvoyant || EClairvoyant) &&\
+#define Clairvoyant		((HClairvoyant || EClairvoyant || u.sealsActive&SEAL_MOTHER) &&\
 				 !BClairvoyant)
 
 #define HInfravision		u.uprops[INFRAVISION].intrinsic
 #define EInfravision		u.uprops[INFRAVISION].extrinsic
 #define Infravision		(HInfravision || EInfravision || \
-				  infravision(youmonst.data))
+				  infravision(youmonst.data) || u.sealsActive&SEAL_FAFNIR)
 
 #define HDetect_monsters	u.uprops[DETECT_MONSTERS].intrinsic
 #define EDetect_monsters	u.uprops[DETECT_MONSTERS].extrinsic
-#define Detect_monsters		(HDetect_monsters || EDetect_monsters)
+#define Detect_monsters		(HDetect_monsters || EDetect_monsters || u.sealsActive&SEAL_NUMINA)
 
 
 /*** Appearance and behavior ***/
@@ -202,19 +208,20 @@
 #define Invis			((HInvis || EInvis || Underwater || \
 						 pm_invisible(youmonst.data) || \
 						 (ward_at(u.ux,u.uy) == HAMSA \
-							&& num_wards_at(u.ux, u.uy) == 6 ) \
-						  ) && !BInvis)
+							&& num_wards_at(u.ux, u.uy) == 6 ) || \
+						  u.sealsActive&SEAL_DUNSTAN) && !BInvis)
 #define Invisible		(Invis && !See_invisible)
 		/* Note: invisibility also hides inventory and steed */
 
 #define HDisplaced		u.uprops[DISPLACED].intrinsic
 #define EDisplaced		u.uprops[DISPLACED].extrinsic
-#define Displaced		(HDisplaced || EDisplaced || is_displacer(youmonst.data))
+#define Displaced		(HDisplaced || EDisplaced || \
+						 is_displacer(youmonst.data) || u.sealsActive&SEAL_ORTHOS)
 
 #define HStealth		u.uprops[STEALTH].intrinsic
 #define EStealth		u.uprops[STEALTH].extrinsic
 #define BStealth		u.uprops[STEALTH].blocked
-#define Stealth			((HStealth || EStealth || Underwater) && !BStealth)
+#define Stealth			((HStealth || EStealth || Underwater || u.sealsActive&SEAL_DUNSTAN) && !BStealth)
 
 #define HAggravate_monster	u.uprops[AGGRAVATE_MONSTER].intrinsic
 #define EAggravate_monster	u.uprops[AGGRAVATE_MONSTER].extrinsic
@@ -228,7 +235,7 @@
 /*** Transportation ***/
 #define HJumping		u.uprops[JUMPING].intrinsic
 #define EJumping		u.uprops[JUMPING].extrinsic
-#define Jumping			(HJumping || EJumping)
+#define Jumping			(HJumping || EJumping || u.sealsActive&SEAL_OSE)
 
 #define HTeleportation		u.uprops[TELEPORT].intrinsic
 #define ETeleportation		u.uprops[TELEPORT].extrinsic
@@ -306,16 +313,16 @@
 
 #define HHalf_spell_damage	u.uprops[HALF_SPDAM].intrinsic
 #define EHalf_spell_damage	u.uprops[HALF_SPDAM].extrinsic
-#define Half_spell_damage	(HHalf_spell_damage || EHalf_spell_damage)
+#define Half_spell_damage	(HHalf_spell_damage || EHalf_spell_damage || u.sealsActive&SEAL_BALAM)
 
 #define HHalf_physical_damage	u.uprops[HALF_PHDAM].intrinsic
 #define EHalf_physical_damage	u.uprops[HALF_PHDAM].extrinsic
-#define Half_physical_damage	(HHalf_physical_damage || EHalf_physical_damage)
+#define Half_physical_damage	(HHalf_physical_damage || EHalf_physical_damage || u.sealsActive&SEAL_EVE)
 
 #define HRegeneration		u.uprops[REGENERATION].intrinsic
 #define ERegeneration		u.uprops[REGENERATION].extrinsic
 #define Regeneration		(HRegeneration || ERegeneration || \
-				 regenerates(youmonst.data))
+				 regenerates(youmonst.data) || u.sealsActive&SEAL_BUER)
 
 #define HEnergy_regeneration	u.uprops[ENERGY_REGENERATION].intrinsic
 #define EEnergy_regeneration	u.uprops[ENERGY_REGENERATION].extrinsic
