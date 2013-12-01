@@ -380,7 +380,7 @@ const char * haluWard[] =  {
 	"a north-west facing glider",
 	"a south-west facing glider",
 	"a south-east facing glider",
-	"a square"
+	"a square",
 	
 	
 	/* books */
