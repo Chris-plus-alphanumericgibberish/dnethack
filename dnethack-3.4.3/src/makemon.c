@@ -2281,6 +2281,8 @@ register int	mmflags;
 			else if(mndx == PM_DEMOGORGON){ 
 				mtmp->mhpmax = 2*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
+				pline("Demogorgon, Prince of Demons, is near!");
+				com_pager(200);
 			}
 			else if(mndx == PM_PALE_NIGHT){ 
 				mtmp->mextra[0] = 0;

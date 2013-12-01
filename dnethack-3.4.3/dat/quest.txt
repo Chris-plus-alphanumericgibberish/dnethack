@@ -4333,3 +4333,9 @@ determined to recover the Amulet for your deity, or die
 in the attempt.  Your hour of destiny has come.  For
 the sake of us all:  Go bravely with %d!
 %E
+#
+# Demogorgon warning
+#
+%Cc - 00200
+Demogorgon, Prince of Demons, is near!
+%E
