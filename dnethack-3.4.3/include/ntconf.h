@@ -97,10 +97,7 @@ extern void FDECL(interject, (int));
 #define NO_SIGNAL
 #define index	strchr
 #define rindex	strrchr
-
-/* Time stuff */
 #include <time.h>
-
 #define USE_STDARG
 #ifdef RANDOM
 /* Use the high quality random number routines. */

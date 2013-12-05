@@ -550,9 +550,9 @@ boolean pets_only;	/* true for ascension or final escape */
 					pline("%s is still trapped.", Monnam(mtmp));
 				stay_behind = TRUE;
 			}
-	#ifdef STEED
+#ifdef STEED
 			if (mtmp == u.usteed) stay_behind = FALSE;
-	#endif
+#endif
 			if (stay_behind) {
 				if (mtmp->mleashed) {
 					pline("%s leash suddenly comes loose.",

@@ -215,7 +215,7 @@ dig_check(madeby, verbose, x, y)
 }
 
 STATIC_OVL int
-dig(VOID_ARGS)
+dig()
 {
 	register struct rm *lev;
 	register xchar dpx = digging.pos.x, dpy = digging.pos.y;
