@@ -965,9 +965,16 @@ peffects(otmp)
 
 		} else {
 		    violated_vegetarian();
+			u.uconduct.unvegan++;
 		    pline("Ugh.  That was vile.");
-		    if(!uclockwork) make_vomiting(Vomiting+d(10,8), TRUE);
+		    if(!uclockwork){
+				make_vomiting(Vomiting+d(10,8), TRUE);
+				if (!otmp->cursed)
+				lesshungry((otmp->odiluted ? 1 : 2) *
+					(otmp->blessed ? mons[(otmp)->corpsenm].cnutrit*1.5/5 : mons[(otmp)->corpsenm].cnutrit/5 ));
 		}
+		}
+		//Note: clockworks that use potions of blood as oil gain the intrinsics!
 		cprefx(otmp->corpsenm, TRUE);
 	    cpostfx(otmp->corpsenm, FALSE);
 	break;
