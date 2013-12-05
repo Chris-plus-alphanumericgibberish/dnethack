@@ -143,7 +143,9 @@ struct monst {
 	struct obj *mw;
 	long misc_worn_check;
 	xchar weapon_check;
-
+	xchar combat_mode;
+#define	RANGED_MODE	0
+#define HNDHND_MODE	1
 
 	uchar mnamelth;		/* length of name (following mxlth) */
 	short mxlth;		/* length of following data */

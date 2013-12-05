@@ -906,6 +906,7 @@ toofar:
 	    if (!(scared && mw_tmp && is_pick(mw_tmp)) &&
 		mtmp->weapon_check == NEED_WEAPON &&
 		!(mtmp->mtrapped && !nearby && select_rwep(mtmp))) {
+		mtmp->combat_mode = HNDHND_MODE;
 		mtmp->weapon_check = NEED_HTH_WEAPON;
 		if (mon_wield_item(mtmp) != 0) return(0);
 	    }

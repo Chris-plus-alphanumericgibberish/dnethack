@@ -586,8 +586,8 @@ register struct monst *mtmp;
 		  propellor = (oselect(mtmp, CROSSBOW));
 		}
 		if (!tmpprop) tmpprop = propellor;
-		if ((otmp = MON_WEP(mtmp)) && otmp->cursed && otmp != propellor
-				&& mtmp->weapon_check == NO_WEAPON_WANTED)
+		if (((otmp = MON_WEP(mtmp)) && otmp->cursed && otmp != propellor
+				&& mtmp->weapon_check == NO_WEAPON_WANTED) || (mtmp->combat_mode == HNDHND_MODE))
 			propellor = 0;
 	    }
 	    /* propellor = obj, propellor to use

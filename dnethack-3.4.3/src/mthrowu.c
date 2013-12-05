@@ -596,14 +596,16 @@ struct monst *mtmp;
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (mtmp->weapon_check == NEED_WEAPON || !MON_WEP(mtmp)) {
 	    if (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8) {
+			mtmp->combat_mode = HNDHND_MODE;
 	        mtmp->weapon_check = NEED_HTH_WEAPON;
 	        if(mon_wield_item(mtmp) != 0) return;
-	    }
-	    mtmp->weapon_check = NEED_RANGED_WEAPON;
-	    /* mon_wield_item resets weapon_check as appropriate */
-	    if(mon_wield_item(mtmp) != 0) return;
+	    } else {
+			mtmp->combat_mode = RANGED_MODE;
+		    mtmp->weapon_check = NEED_RANGED_WEAPON;
+		    /* mon_wield_item resets weapon_check as appropriate */
+		    if(mon_wield_item(mtmp) != 0) return;
+		}
 	}
-
 	/* Pick a weapon */
 	otmp = select_rwep(mtmp);
 	if (!otmp) return;
