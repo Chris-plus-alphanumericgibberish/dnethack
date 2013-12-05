@@ -2400,6 +2400,24 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		return 1;
 	}
 	if(Race_if(PM_INCANTIFIER) && !objects[otmp->otyp].oc_unique){ //redundant check against unique
+		if (otmp->quan > 1L) {
+		    if(!carried(otmp))
+			(void) splitobj(otmp, otmp->quan - 1L);
+		    else
+			otmp = splitobj(otmp, 1L);
+		if (carried(otmp)) {
+			freeinv(otmp);
+			if (inv_cnt() >= 52) {
+			sellobj_state(SELL_DONTSELL);
+			dropy(otmp);
+			sellobj_state(SELL_NORMAL);
+			} else {
+			otmp->oxlth++;		/* hack to prevent merge */
+			otmp = addinv(otmp);
+			otmp->oxlth--;
+			}
+		}
+		}
 		switch(otmp->oclass){
 			case WEAPON_CLASS:
 	    	    (void) drain_item(otmp);
