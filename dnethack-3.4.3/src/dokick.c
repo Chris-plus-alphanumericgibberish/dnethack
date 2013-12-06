@@ -86,7 +86,14 @@ register boolean clumsy;
 		if (martial()) {
 		    if (dmg > 1) kick_skill = P_MARTIAL_ARTS;
 		    dmg += rn2(ACURR(A_DEX)/2 + 1);
-			if(uarmf && uarmf->oartifact) artifact_hit(&youmonst, mon, uarmf, &dmg, d(1,20));
+			if(uarmf && 
+			   uarmf->oartifact && 
+			   artifact_hit(&youmonst, mon, uarmf, &dmg, d(1,20)) 
+			  ){
+				if(mon->mhp <= 0) /* artifact killed monster */
+					return;
+				if (dmg == 0) return;
+			}
 		}
 		/* a good kick exercises your dex */
 		exercise(A_DEX, TRUE);
