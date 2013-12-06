@@ -47,9 +47,7 @@ struct u_event {
 
 	Bitfield(invoked,1);		/* invoked Gate to the Sanctum level */
 	Bitfield(gehennom_entered,1);	/* entered Gehennom via Valley */
-#ifdef ELBERETH
 	Bitfield(uhand_of_elbereth,2);	/* became Hand of Elbereth */
-#endif
 	Bitfield(udemigod,1);		/* killed the wiz */
 	Bitfield(ukilled_apollyon,1);		/* killed the angel of the pit.  Lucifer should spawn on Astral */
 	Bitfield(sum_entered,1);		/* entered Sum-of-All */
