@@ -651,15 +651,31 @@ static const char * const bogusobjects[] = {
        "leaf of pipe weed",                /* LOTR */
        "knife missile",                    /* Iain M. Banks */
        "large gem",                        /* Valhalla */
-       "monster manual",                   /* D&D */
        "ring of power",                    /* LOTR */
-       "lightsaber",	                   /* Star Wars */
-/*       "pan-galactic gargle blaster",      /* HGttG */
        "silmaril",                         /* LOTR */
        "pentagram of protection",          /* Quake */
-	   "crown of swords",
+	   "crown of swords",					/* Wheel of Time */
+	   
+	   /* Interwebs */
+	   "memetic kill agent",				/* SCP Foundation */
+	   "bottle of squid pro quo ink",		/* Problem Sleuth */
+	   "highly indulgent self-insert",
+	   
+	   /* Mythology */
+	   "sampo",
+	   "shamir",
+	   "golden fleece",
+	   "gold apple labeled \"For the Fairest\"",
+	   "Holy Grail",
+	   "Ark of the Covenant",
+	   
+	   /* Other Games */
+	   "Chaos Emerald",
+	   "bronze sphere",
+	   "modron cube",
 
 	   /* Books */
+       "monster manual",                   /* D&D */
 	   "Codex of the Infinite Planes",	   /* DnD */
 	   "spellbook of Non-Conduit Transdimensional Fabric Fluxes and Real-Time Inter-dimensional Matrix Transformations", /* Maldin's Greyhawk */
        "spellbook named The Book of Sand",                     /* Jorge Luis Borges */
@@ -692,12 +708,13 @@ static const char * const bogusobjects[] = {
 	   "spellbook named The Uruk Tablets",
        "dead sea scroll",
 	   "mayan codex",
+	   "simple textbook on the zoologically dubious",			/* Homestuck */
 
        /* Historical */
 	   "Amarna letter",
 	   "lost ark of the covenant",
        "cat o'nine tails",
-       "pieces of eight",
+       "piece of eight",
        "codpiece",
        "straight-jacket",
        "bayonet",
