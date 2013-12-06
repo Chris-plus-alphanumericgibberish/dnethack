@@ -472,6 +472,12 @@ A("Gauntlets of Spell Power",		GAUNTLETS_OF_POWER, /*Note: it is quite deliberat
 	0, A_NONE, NON_PM, NON_PM, 4000L, 
 	SPFX2_SILVERED|SPFX2_SPELLUP,0,0),
 
+A("Premium Heart",		GAUNTLETS_OF_POWER,
+	(SPFX_RESTR), 0, 0,
+	PHYS(1,0),	NO_DFNS,	NO_CARY, //needs quote
+	0, A_NONE, NON_PM, NON_PM, 4000L, 
+	0,0,0),
+
 /*	Doesn't Work...
 A("Hellrider's Saddle",			SADDLE,
 	(SPFX_RESTR), SPFX_REFLECT, 0,
