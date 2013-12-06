@@ -110,7 +110,7 @@ register struct obj *obj;
 	}
 	if(obj->oclass == SCROLL_CLASS && obj->otyp != SCR_BLANK_PAPER && 
 #ifdef MAIL
-		obj->otyp != MAIL && 
+		obj->otyp != SCR_MAIL && 
 #endif
 		!obj->oartifact) return TRUE;
 	if(obj->oclass == SPBOOK_CLASS && obj->otyp != SPE_BLANK_PAPER && !obj->oartifact) return TRUE;
