@@ -841,7 +841,7 @@ u_init()
 	u.ustuck = (struct monst *)0;
 
 	u.summonMonster = FALSE;
-	u.uleadamulet = FALSE;
+//	u.uleadamulet = FALSE;
 	u.ZangetsuSafe = 1;
 	u.regifted = 0;
 	u.keter = 0;
