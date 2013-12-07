@@ -74,6 +74,8 @@ struct u_conduct {		/* number of times... */
 	long	polyselfs;	/* transformed yourself */
 	long	wishes;		/* used a wish */
 	long	wisharti;	/* wished for an artifact */
+	long	shopID;		/* number of items id by shopkeepers */
+	long	IDs;		/* number of items id by magic or shopkeepers */
 				/* genocides already listed at end of game */
 };
 

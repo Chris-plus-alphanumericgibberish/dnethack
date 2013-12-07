@@ -4521,7 +4521,9 @@ shk_identify(slang, shkp)
 		makeknown(obj->otyp);
 		obj->dknown = 1;
     		prinv((char *)0, obj, 0L); /* Print result */
+		u.uconduct.IDs++;
 	}
+	u.uconduct.shopID++;
 }
 
 
