@@ -916,7 +916,11 @@ toofar:
 	if (( attacktype(mtmp->data, AT_BREA) ||
 	      attacktype(mtmp->data, AT_GAZE) ||
 	      attacktype(mtmp->data, AT_SPIT) ||
-	     ((attacktype(mtmp->data, AT_MAGC) || attacktype(mtmp->data, AT_MMGC)) &&
+	     (attacktype(mtmp->data, AT_MMGC) &&
+	      (((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp
+	         <= AD_SPC2))
+	      ) ||
+	     (attacktype(mtmp->data, AT_MAGC) &&
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         <= AD_SPC2))
 	      ) ||
@@ -952,7 +956,6 @@ toofar:
 	    ygold = findgold(invent);
 	    lepgold = findgold(mtmp->minvent);
 	}
-
 	if(!nearby || mtmp->mflee || scared ||
 	   mtmp->mconf || mtmp->mstun || (mtmp->minvis && !rn2(3)) ||
 	   (mdat->mlet == S_LEPRECHAUN && !ygold && (lepgold || rn2(2))) ||
@@ -1013,7 +1016,6 @@ toofar:
 			return(1);
 		}
 	}
-
 /*	Now, attack the player if possible - one attack set per monst	*/
 
 	if (!mtmp->mpeaceful || mdat == &mons[PM_NURSE] ||
