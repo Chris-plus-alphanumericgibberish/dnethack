@@ -981,7 +981,7 @@ dokick()
 			} else if(u.uz.dnum == law_dnum) {
 			    if (rn2(3)) {
 					if ( !rn2(6) && !(mvitals[PM_KILLER_BEE].mvflags & G_GONE) )
-					    You_hear("a insects crawling."); /* a warning */
+					    You_hear("insects crawling."); /* a warning */
 					goto ouch;
 			    }
 			    if (rn2(2) && !(maploc->looted & TREE_LOOTED) &&
