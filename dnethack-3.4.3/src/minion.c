@@ -156,7 +156,7 @@ register struct monst *mtmp;
 	if (uwep && (
 			   uwep->oartifact == ART_EXCALIBUR 
 			|| uwep->oartifact == ART_ROD_OF_SEVEN_PARTS
-			|| uwep->oartifact == ART_LANCEA_LONGINI
+			|| uwep->oartifact == ART_LANCE_OF_LONGINUS
 		) ) {
 	    pline("%s looks very angry.", Amonnam(mtmp));
 	    mtmp->mpeaceful = mtmp->mtame = 0;

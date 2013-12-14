@@ -664,7 +664,7 @@ long wp_mask;
 	    if (on) EHalf_physical_damage |= wp_mask;
 	    else EHalf_physical_damage &= ~wp_mask;
 	}
-	if ((spfx & SPFX_XRAY) && (otmp->oartifact != ART_AXE_OF_THE_DWARVISH_LORD || Race_if(PM_DWARF))) {
+	if ((spfx & SPFX_XRAY) && (otmp->oartifact != ART_AXE_OF_THE_DWARVISH_LORDS || Race_if(PM_DWARF))) {
 	    /* this assumes that no one else is using xray_range */
 	    if (on) u.xray_range = 3;
 	    else u.xray_range = -1;

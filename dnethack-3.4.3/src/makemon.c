@@ -2363,7 +2363,7 @@ register int	mmflags;
 	    if (uwep && (
 			uwep->oartifact == ART_EXCALIBUR
 			|| uwep->oartifact == ART_ROD_OF_SEVEN_PARTS
-			|| uwep->oartifact == ART_LANCEA_LONGINI
+			|| uwep->oartifact == ART_LANCE_OF_LONGINUS
 		) ) mtmp->mpeaceful = mtmp->mtame = FALSE;
 	}
 #ifndef DCC30_BUG

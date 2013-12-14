@@ -77,7 +77,7 @@ int shotlimit;
 	if(!canletgo(obj,"throw"))
 		return(0);
 	if ( (obj->oartifact == ART_MJOLLNIR || 
-			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORD ||
+			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS ||
 			obj->oartifact == ART_WINDRIDER) && 
 			obj != uwep) {
 	    pline("%s must be wielded before it can be thrown.",
@@ -85,7 +85,7 @@ int shotlimit;
 		return(0);
 	}
 	if ((obj->oartifact == ART_MJOLLNIR || 
-			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORD) && ACURR(A_STR) < STR19(25)
+			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) && ACURR(A_STR) < STR19(25)
 	   || (is_boulder(obj) && !throws_rocks(youmonst.data))) {
 		pline("It's too heavy.");
 		return(1);
@@ -920,7 +920,7 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 	    if (u.dz < 0 &&  ( 
 				(obj->oartifact == ART_MJOLLNIR &&
 				 Role_if(PM_VALKYRIE)) || 
-				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORD && 
+				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
 				 obj->oartifact == ART_WINDRIDER
 			  ) && !impaired) {
@@ -1040,7 +1040,7 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 		if ( ( 
 				(obj->oartifact == ART_MJOLLNIR &&
 				 Role_if(PM_VALKYRIE)) || 
-				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORD && 
+				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
 				 obj->oartifact == ART_WINDRIDER
 			  ) &&
