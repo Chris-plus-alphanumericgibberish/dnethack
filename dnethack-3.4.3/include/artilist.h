@@ -266,8 +266,7 @@ A("Sunsword",			LONG_SWORD,
 	0, A_LAWFUL, NON_PM, NON_PM, 1500L, 	/*trollsbane.  But trollsbane can be twoweaponed.  And is silver.*/
 	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,0,0), 
 
-//A("The Axe of the Dwarvish Lords", BATTLE_AXE, /*can be thrown by dwarves*/
-A("The Axe of the Dwarvish Lord", BATTLE_AXE, /*can be thrown by dwarves*/
+A("The Axe of the Dwarvish Lords", BATTLE_AXE, /*can be thrown by dwarves*/
 	(SPFX_RESTR|SPFX_TCTRL|SPFX_XRAY), 0, 0,	/*x-ray vision is for dwarves only.*/
 	PHYS(1, 0),	NO_DFNS,	NO_CARY, 
 	0, A_LAWFUL, NON_PM, PM_DWARF, 4000L, //needs quote
@@ -311,8 +310,8 @@ A("Tobiume",		LONG_SWORD,
 	FIRE_SHIKAI, A_CHAOTIC, NON_PM, NON_PM, 8000L,
 	SPFX2_DISARM|SPFX2_FIRE2|SPFX2_RAM2,0,0),/*Ram and Fire blast only trigger if enemy is low hp*/
 
-//A("Lance of Longinus",			SILVER_SPEAR,
-A("Lancea Longini",			SILVER_SPEAR,
+//A("Lancea Longini",			SILVER_SPEAR,
+A("The Lance of Longinus",			SILVER_SPEAR,
 	(SPFX_RESTR|SPFX_HSPDAM|SPFX_HPHDAM|SPFX_DEFN), 0, 0, //needs quote
 	NO_ATTK,	DFNS(AD_MAGM),	DRLI(0,0),
 	WWALKING, A_LAWFUL, NON_PM, NON_PM, 1500L, 

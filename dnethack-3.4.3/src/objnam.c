@@ -1723,6 +1723,9 @@ const char *oldstr;
 			   !BSTRCMP(bp, p-14, "shape changers") ||
 			   !BSTRCMP(bp, p-15, "detect monsters") ||
 			   !BSTRCMPI(bp, p-11, "Aesculapius") || /* staff */
+			   !BSTRCMPI(bp, p-8, "Longinus") || 	/* spear */
+			   !BSTRCMPI(bp, p-14, "Dwarvish Lords") || /* axe */
+			   !BSTRCMPI(bp, p-11, "Seven Parts") || /* spear */
 			   !BSTRCMP(bp, p-10, "eucalyptus") ||
 #ifdef WIZARD
 			   !BSTRCMP(bp, p-9, "iron bars") ||
@@ -2317,7 +2320,8 @@ boolean from_user;
 	   strncmpi(bp, "leather arm", 11) &&
 	   strncmpi(bp, "tooled horn", 11) &&
 	   strncmpi(bp, "food ration", 11) &&
-	   strncmpi(bp, "meat ring", 9)
+	   strncmpi(bp, "meat ring", 9) && 
+	   strncmpi(bp, "atma weapon", 11)
 	)
 	for (i = 0; i < (int)(sizeof wrpsym); i++) {
 		register int j = strlen(wrp[i]);
