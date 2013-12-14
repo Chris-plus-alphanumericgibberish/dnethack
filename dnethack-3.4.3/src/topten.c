@@ -888,18 +888,20 @@ encodeconduct(void)
 {
        long e = 0L;
 
-       if(!u.uconduct.food)            e |= 0x001L;
-       if(!u.uconduct.unvegan)         e |= 0x002L;
-       if(!u.uconduct.unvegetarian)    e |= 0x004L;
-       if(!u.uconduct.gnostic)         e |= 0x008L;
-       if(!u.uconduct.weaphit)         e |= 0x010L;
-       if(!u.uconduct.killer)          e |= 0x020L;
-       if(!u.uconduct.literate)        e |= 0x040L;
-       if(!u.uconduct.polypiles)       e |= 0x080L;
-       if(!u.uconduct.polyselfs)       e |= 0x100L;
-       if(!u.uconduct.wishes)          e |= 0x200L;
-       if(!u.uconduct.wisharti)        e |= 0x400L;
-       if(!num_genocides())            e |= 0x800L;
+       if(!u.uconduct.food)            e |= 0x0001L;
+       if(!u.uconduct.unvegan)         e |= 0x0002L;
+       if(!u.uconduct.unvegetarian)    e |= 0x0004L;
+       if(!u.uconduct.gnostic)         e |= 0x0008L;
+       if(!u.uconduct.weaphit)         e |= 0x0010L;
+       if(!u.uconduct.killer)          e |= 0x0020L;
+       if(!u.uconduct.literate)        e |= 0x0040L;
+       if(!u.uconduct.polypiles)       e |= 0x0080L;
+       if(!u.uconduct.polyselfs)       e |= 0x0100L;
+       if(!u.uconduct.wishes)          e |= 0x0200L;
+       if(!u.uconduct.wisharti)        e |= 0x0400L;
+       if(!num_genocides())            e |= 0x0800L;
+       if(!u.uconduct.shopID)          e |= 0x1000L;
+       if(!u.uconduct.IDs)             e |= 0x2000L;
 
        return e;
 }

@@ -1456,6 +1456,20 @@ int final;
 			" for any artifacts");
 	}
 
+	if (!u.uconduct.shopID == 0) {
+	    you_have_never("payed a shopkeeper to identify an item");
+	} else {
+	    Sprintf(buf, "payed to have %d item%s identified",
+		    u.uconduct.shopID, plur(u.uconduct.shopID));
+	    you_have_X(buf);
+	}
+	if (!u.uconduct.IDs == 0) {
+	    you_have_never("magically identified an item");
+	} else {
+	    Sprintf(buf, "magically identified %d item%s",
+		    u.uconduct.IDs, plur(u.uconduct.shopID));
+	    you_have_X(buf);
+	}
 	/* Pop up the window and wait for a key */
 	display_nhwindow(en_win, TRUE);
 	destroy_nhwindow(en_win);
