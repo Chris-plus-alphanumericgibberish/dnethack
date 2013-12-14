@@ -3195,6 +3195,7 @@ MAP
 ENDMAP
 #012345678901234
 #0         1 
+REGION:(02,02,12,12),unlit,"morgue",unfilled
 MAZEWALK:(00,00),west
 MAZEWALK:(14,14),east
 MONSTER:'&',"Pale Night",(07,07)
