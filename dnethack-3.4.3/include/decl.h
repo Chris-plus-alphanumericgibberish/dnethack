@@ -69,14 +69,35 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_wiz3_level;
 //    d_level	d_juiblex_level;
 //    d_level	d_orcus_level;
-    d_level	d_demogorgon_level;
     d_level	d_hell1_level;
+	int		hell1_variant;
+#define BAEL_LEVEL		1
+#define DISPATER_LEVEL	2
+#define MAMMON_LEVEL	3
+#define BELIAL_LEVEL	4
     d_level	d_hell2_level;
+	int		hell2_variant;
+#define LEVIATHAN_LEVEL	1
+#define LILITH_LEVEL	2
+#define BAALZEBUB_LEVEL	3
+#define MEPHISTOPHELES_LEVEL	4
     d_level	d_hell3_level;
     d_level	d_abyss_level;
-    d_level	d_abyss_juiblex_level;
+	int		abyss_variant;
+#define JUIBLEX_LEVEL	1
+#define ZUGGTMOY_LEVEL	2
+#define YEENOGHU_LEVEL	3
+#define BAPHOMET_LEVEL	4
+#define NIGHT_LEVEL		5
     d_level	d_abys2_level;
+	int		abys2_variant;
+#define MALCANTHET_LEVEL	1
+#define GRAZ_ZT_LEVEL	2
+#define ORCUS_LEVEL		3
     d_level	d_brine_level;
+	int		brine_variant;
+#define DEMOGORGON_LEVEL	1
+#define DAGON_LEVEL		2
 //    d_level	d_baalzebub_level;	/* unused */
 //    d_level	d_asmodeus_level;	/* unused */
     d_level	d_portal_level;		/* only in goto_level() [do.c] */
@@ -102,13 +123,15 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 	/*Quest Levels*/
 	xchar	d_quest_dnum;
     d_level	d_qstart_level, d_qlocate_level, d_nemesis_level;
-
+	/*Neutral Quest*/
 	xchar	d_neutral_dnum;
     d_level	d_gatetown_level, d_spire_level, d_sum_of_all_level, d_rlyeh_level;
+	/*Chaos Quest*/
 	xchar	d_chaos_dnum;
     d_level	d_chaosf_level, d_chaoss_level, d_chaost_level, d_chaosm_level,
 		d_chaosfrh_level, d_chaosffh_level, d_chaossth_level,
 		d_chaosvth_level, d_chaose_level;
+	/*Law Quest*/
 	xchar	d_law_dnum;
 	d_level d_path1, d_path2, d_path3, d_illregrd, 
 		d_arcadia1, d_arcadia2, d_arcadia3, d_arcward, d_arcfort,

@@ -500,26 +500,43 @@ register const char *s;
 	char protofile[20];
 	s_level	*sp = Is_special(&u.uz);
 	coord mm;
-
+	int levvar = 0;
 	if(*s) {
-	    if(sp && sp->rndlevs) Sprintf(protofile, "%s-%d", s,
-						rnd((int) sp->rndlevs));
+	    if(sp && sp->rndlevs){ 
+			levvar = rnd((int) sp->rndlevs);
+			Sprintf(protofile, "%s-%d", s, levvar);
+		}
 	    else		 Strcpy(protofile, s);
 	} else if(*(dungeons[u.uz.dnum].proto)) {
 	    if(dunlevs_in_dungeon(&u.uz) > 1) {
-		if(sp && sp->rndlevs)
+			if(sp && sp->rndlevs){
+				levvar = rnd((int) sp->rndlevs);
 		     Sprintf(protofile, "%s%d-%d", dungeons[u.uz.dnum].proto,
 						dunlev(&u.uz),
-						rnd((int) sp->rndlevs));
-		else Sprintf(protofile, "%s%d", dungeons[u.uz.dnum].proto,
+						 levvar);
+			}else Sprintf(protofile, "%s%d", dungeons[u.uz.dnum].proto,
 						dunlev(&u.uz));
 	    } else if(sp && sp->rndlevs) {
+			levvar = rnd((int) sp->rndlevs);
 		     Sprintf(protofile, "%s-%d", dungeons[u.uz.dnum].proto,
-						rnd((int) sp->rndlevs));
+						levvar);
 	    } else Strcpy(protofile, dungeons[u.uz.dnum].proto);
 
 	} else Strcpy(protofile, "");
 
+//	pline("%s", protofile);
+//	pline("%d", levvar);
+	if(Is_hell1(&u.uz)){
+		dungeon_topology.hell1_variant = levvar;
+	} else if(Is_hell2(&u.uz)){
+		dungeon_topology.hell2_variant = levvar;
+	} else if(Is_abyss1(&u.uz)){
+		dungeon_topology.abyss_variant = levvar;
+	} else if(Is_abyss2(&u.uz)){
+		dungeon_topology.abys2_variant = levvar;
+	} else if(Is_abyss3(&u.uz)){
+		dungeon_topology.brine_variant = levvar;
+	}
 #ifdef WIZARD
 	/* SPLEVTYPE format is "level-choice,level-choice"... */
 	if (wizard && *protofile && sp && sp->rndlevs) {

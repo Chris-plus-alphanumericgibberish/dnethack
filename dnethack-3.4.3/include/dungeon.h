@@ -107,18 +107,49 @@ typedef struct branch {
 #define Is_medusa_level(x)	(on_level(x, &medusa_level))
 #define Is_oracle_level(x)	(on_level(x, &oracle_level))
 
+#define Is_path(x)		(on_level(x, &path1_level) || on_level(x, &path2_level) || on_level(x, &path3_level))
+#define Is_illregrd(x)	(on_level(x, &illregrd_level))
+#define Is_arcadia(x)	(on_level(x, &arcadia1_level) ||\
+						 on_level(x, &arcadia2_level) ||\
+						 on_level(x, &arcadia3_level) ||\
+						 on_level(x, &arcward_level) ||\
+						 on_level(x, &arcfort_level)\
+						)
+#define Is_arcadia_woods(x)	(on_level(x, &arcadia1_level) ||\
+						 on_level(x, &arcadia2_level) ||\
+						 on_level(x, &arcadia3_level)\
+						)
+#define Is_arcadia3(x)	(on_level(x, &arcadia3_level))
+
+#define Is_lich_level(x)	(on_level(x, &chaosfrh_level))
+#define Is_marilith_level(x)	(on_level(x, &chaosffh_level))
+#define Is_kraken_level(x)	(on_level(x, &chaossth_level))
+#define Is_tiamat_level(x)	(on_level(x, &chaosvth_level))
+#define Is_chaos_level(x)	(on_level(x, &chaose_level))
+
+#define Is_rlyeh(x)			(on_level(x, &rlyeh_level))
+
 #define Is_valley(x)		(on_level(x, &valley_level))
 
 #define Is_hell1(x)			(on_level(x, &hell1_level))
+#define Is_bael_level(x)	(on_level(x, &hell1_level) && dungeon_topology.hell1_variant == BAEL_LEVEL)
 #define Is_hell2(x)			(on_level(x, &hell2_level))
 #define Is_hell3(x)			(on_level(x, &hell3_level))
 #define Is_asmo_level(x)	(on_level(x, &hell3_level))
-#define Is_baal_level(x)	(on_level(x, &hell2_level))
 
 #define Is_abyss1(x)		(on_level(x, &abyss1_level))
+#define Is_juiblex_level(x)	(on_level(x, &abyss1_level) && dungeon_topology.abyss_variant == JUIBLEX_LEVEL)
+#define Is_zuggtmoy_level(x)	(on_level(x, &abyss1_level) && dungeon_topology.abyss_variant == ZUGGTMOY_LEVEL)
+#define Is_yeenoghu_level(x)	(on_level(x, &abyss1_level) && dungeon_topology.abyss_variant == YEENOGHU_LEVEL)
+#define Is_baphomet_level(x)	(on_level(x, &abyss1_level) && dungeon_topology.abyss_variant == BAPHOMET_LEVEL)
+#define Is_night_level(x)	(on_level(x, &abyss1_level) && dungeon_topology.abyss_variant == NIGHT_LEVEL)
 #define Is_abyss2(x)		(on_level(x, &abyss2_level))
+#define Is_malcanthet_level(x)	(on_level(x, &abyss2_level) && dungeon_topology.abys2_variant == MALCANTHET_LEVEL)
+#define Is_grazzt_level(x)	(on_level(x, &abyss2_level) && dungeon_topology.abys2_variant == GRAZ_ZT_LEVEL)
+#define Is_orcus_level(x)	(on_level(x, &abyss2_level) && dungeon_topology.abys2_variant == ORCUS_LEVEL)
 #define Is_abyss3(x)		(on_level(x, &abyss3_level))
-#define Is_juiblex_level(x)	(on_level(x, &abyss1_juiblex_level))
+#define Is_demogorgon_level(x)	(on_level(x, &abyss3_level) && dungeon_topology.brine_variant == DEMOGORGON_LEVEL)
+#define Is_dagon_level(x)	(on_level(x, &abyss3_level) && dungeon_topology.brine_variant == DAGON_LEVEL)
 
 #define Is_wiz1_level(x)	(on_level(x, &wiz1_level))
 #define Is_wiz2_level(x)	(on_level(x, &wiz2_level))
@@ -139,6 +170,8 @@ typedef struct branch {
 
 #define In_sokoban(x)		((x)->dnum == sokoban_dnum)
 #define In_tower(x)		((x)->dnum == tower_dnum)
+#define In_sunsea(x)		((x)->dnum == sea_dnum)
+#define In_moloch_temple(x)	((x)->dnum == temple_dnum)
 #define Inhell			In_hell(&u.uz)	/* now gehennom */
 #define In_endgame(x)		((x)->dnum == astral_level.dnum)
 

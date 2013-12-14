@@ -131,16 +131,182 @@ unsigned *ospecial;
 	    else
 #endif
 		/* Special colours for special dungeon areas */
-			if (iflags.use_color && offset == S_tree) {
-				if (Is_abyss1(&u.uz)) color = CLR_BROWN;
+		if(iflags.use_color){
+			if(In_sokoban(&u.uz)){
+				if(offset >= S_vwall && offset <= S_trwall){
+					color = CLR_BLUE;
 			}
-			if (iflags.use_color && Is_juiblex_level(&u.uz)){
+			} else if(In_endgame(&u.uz)){
+				if(Is_earthlevel(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BROWN;
+					}
+					if(offset >= S_room && offset <= S_dnladder){
+						color = CLR_BROWN;
+					}
+				} else if(Is_waterlevel(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BLUE;
+					}
+					if(offset >= S_room && offset <= S_dnladder){
+						color = CLR_BLUE;
+					}
+				} else if(Is_firelevel(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BLACK;
+					}
+					if(offset >= S_room && offset <= S_dnladder){
+						color = CLR_BLACK;
+					}
+				}
+			} else if(In_sunsea(&u.uz)){
+				if(offset >= S_vwall && offset <= S_trwall){
+					color = CLR_BROWN;
+				}
+				if(offset >= S_room && offset <= S_dnladder){
+					color = CLR_BROWN;
+				}
+			} else if(In_moloch_temple(&u.uz)){
+				if(offset >= S_vwall && offset <= S_trwall){
+					color = CLR_RED;
+				}
+				if(offset >= S_room && offset <= S_dnladder){
+					color = CLR_BLACK;
+				}
+			} else if(In_cha(&u.uz)){
+				if(offset >= S_vwall && offset <= S_trwall){
+					color = CLR_BLACK;
+				}
+				if(offset >= S_room && offset <= S_dnladder){
+					color = CLR_BLACK;
+				}
+				if(Is_lich_level(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BROWN;
+					}
+				} else if(Is_marilith_level(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_ORANGE;
+					}
+				} else if(Is_kraken_level(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BRIGHT_BLUE;
+					}
+				} else if(Is_tiamat_level(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_CYAN;
+					}
+				}
+			} else if(In_neu(&u.uz)){
+				if(u.uz.dlevel <= sum_of_all_level.dlevel){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BROWN;
+					}
+					if(offset == S_room){
+						if(u.uz.dlevel < spire_level.dlevel &&
+							u.uz.dlevel > gatetown_level.dlevel)
+							color = CLR_BRIGHT_GREEN;
+						else color = CLR_BROWN;
+					}
+				}
+				else if(Is_rlyeh(&u.uz)){
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BLUE;
+					}
+					else if(offset >= S_room && offset <= S_dnladder){
+						color = CLR_BLUE;
+					}
+				}else{
+					if(offset >= S_vwall && offset <= S_trwall){
+						color = CLR_BLACK;
+					}
+					else if(offset >= S_room && offset <= S_dnladder){
+						color = CLR_BLACK;
+					}
+				}
+			} else if(In_law(&u.uz)){
+				if(Is_path(&u.uz)){
+					if(offset >= S_room && offset <= S_dnladder){
+						color = CLR_BROWN;
+					}
+				}
+				if(Is_arcadia_woods(&u.uz)){
+					if(x<69 || !Is_arcadia3(&u.uz)){
+						if(offset >= S_vwall && offset <= S_trwall){
+							color = CLR_BROWN;
+						}
+						else if(offset >= S_room && offset <= S_dnladder){
+							color = CLR_GREEN;
+						}
+					}
+				}
+			} else if(In_hell(&u.uz)){
+				if(offset >= S_vwall && offset <= S_trwall){
+					color = CLR_RED;
+				}
+				if(Is_valley(&u.uz)){
+					if (iflags.use_color && Is_valley(&u.uz) && color != CLR_BLACK) {
+						color = (color < NO_COLOR) ? CLR_GRAY : CLR_WHITE; /* The valley is drained of color */
+					}
+				}
+				if(Is_abyss1(&u.uz)){
+					if (Is_juiblex_level(&u.uz)){
+						if (offset == S_pool || offset == S_water)
+							color = CLR_BRIGHT_GREEN;
+						if(offset >= S_vwall && offset <= S_hcdoor)
+							color = CLR_GREEN;
+						if (offset == S_room)
+							color = CLR_GREEN;
+					}
+					else if (Is_zuggtmoy_level(&u.uz)){
 				if (offset == S_pool || offset == S_water)
 					color = CLR_BRIGHT_GREEN;
 				if(offset >= S_vwall && offset <= S_hcdoor)
 					color = CLR_GREEN;
+						if (offset == S_room)
+							color = CLR_MAGENTA;
+						if (offset == S_tree)
+							color = CLR_BRIGHT_MAGENTA;
+					}
+					else if (Is_yeenoghu_level(&u.uz)){
+						if (offset == S_pool || offset == S_water)
+							color = CLR_YELLOW;
+						if(offset >= S_vwall && offset <= S_hcdoor)
+							color = CLR_BROWN;
+						if (offset == S_room)
+							color = CLR_YELLOW;
+						if (offset == S_tree)
+							color = CLR_BROWN;
+					}
+					else if (Is_night_level(&u.uz)){
+						if(*in_rooms(x,y,MORGUE)){
+							if(offset >= S_vwall && offset <= S_hcdoor)
+								color = CLR_WHITE;
+							if (offset == S_room)
+								color = CLR_GRAY;
 			}
-		if (iflags.use_color && offset >= S_vwall && offset <= S_hcdoor) {
+					}
+					// else if (Is_baphomet_level(&u.uz)){
+					// }
+				} else if(Is_abyss2(&u.uz)){
+					if (Is_orcus_level(&u.uz)){
+						if(offset >= S_vwall && offset <= S_hcdoor)
+							color = CLR_BLACK;
+						if (offset == S_room)
+							color = CLR_BROWN;
+					}
+				} else if(Is_abyss3(&u.uz)){
+					if(offset >= S_vwall && offset <= S_hcdoor)
+						color = CLR_GREEN;
+				} else if(Is_abyss3(&u.uz)){
+					if(offset >= S_vwall && offset <= S_hcdoor)
+						color = CLR_GREEN;
+				} else if(Is_hell3(&u.uz)){
+						if (offset == S_room)
+							color = CLR_ORANGE;
+				}
+			}
+			if (offset >= S_vwall && offset <= S_hcdoor) {
 				if (*in_rooms(x,y,BEEHIVE))
 				color = CLR_YELLOW;
 				else if (In_W_tower(x, y, &u.uz))
@@ -149,15 +315,25 @@ unsigned *ospecial;
 				color = CLR_BROWN;
 				else if (Is_astralevel(&u.uz))
 				color = CLR_WHITE;
-			} else if (iflags.use_color && offset == S_room) {
+			} else if (offset == S_room) {
 				if (*in_rooms(x,y,BEEHIVE))
 				color = CLR_YELLOW;
-//				else if (*in_rooms(x,y,SWAMP)){
-//					if (Is_juiblex_level(&u.uz)) color = CLR_BRIGHT_GREEN;//Doesn't stick....?
-//					else color = CLR_GREEN;
-//				}
-			} else if (iflags.use_color && offset == S_altar) {
-				color = CLR_WHITE;
+				else if(In_mines(&u.uz)){
+					color = CLR_BROWN;
+				}
+			} else if (offset == S_altar) {
+				if (Is_astralevel(&u.uz)) color = CLR_BRIGHT_MAGENTA;
+				else if(Is_sanctum(&u.uz)) color = CLR_MAGENTA;
+				else switch((aligntyp)Amask2align(levl[x][y].altarmask & AM_MASK)) { 
+					case A_LAWFUL: color = CLR_WHITE; break; 
+					case A_NEUTRAL: color = CLR_GRAY; break; 
+					case A_CHAOTIC: color = CLR_BLACK; break; 
+					default: color = CLR_RED; break;
+				}
+			}
+			if(artifact_door(x, y)){
+				color = CLR_MAGENTA;
+			}
 			}
 			if (color == NO_COLOR) cmap_color(offset);
     } else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */

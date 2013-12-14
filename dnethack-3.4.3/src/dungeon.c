@@ -633,7 +633,6 @@ struct level_map {
 //	{ "juiblex",	&juiblex_level },
 //	{ "orcus",	&orcus_level },
 	{ "abyss",	&abyss1_level },
-	{ "abyss-1",	&abyss1_juiblex_level },
 	{ "abys2",	&abyss2_level },
 	{ "brine",	&abyss3_level },
 	
@@ -654,7 +653,7 @@ struct level_map {
 	{ X_LOCATE,	&qlocate_level },
 	{ X_GOAL,	&nemesis_level },
 	/*Law Levels*/
-	{ "path1",&path1_level },
+	{ "path1",	&path1_level },
 	{ "path2",	&path2_level },
 	{ "path3",	&path3_level },
 	{ "illregrd",	&illregrd_level },
