@@ -210,7 +210,7 @@ moveloop()
 					exercise(A_STR, FALSE);
 				}
 			}
-			else if(u.ZangetsuSafe < u.ulevel) u.ZangetsuSafe++;
+			else if(u.ZangetsuSafe < u.ulevel && !(moves%10)) u.ZangetsuSafe++;
 			
 			if(uclockwork && u.ucspeed == HIGH_CLOCKSPEED){
 				moveamt *= 2;
