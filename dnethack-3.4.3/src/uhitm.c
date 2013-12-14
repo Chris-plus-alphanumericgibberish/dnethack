@@ -1283,7 +1283,7 @@ defaultvalue:
 	if (unarmed && tmp > 1 && !thrown && !obj && !Upolyd) {
 	    if (!bigmonst(mdat) && !thick_skinned(mdat)) {
 			if((uarmg && uarmg->oartifact == ART_PREMIUM_HEART && rnd(20) < P_SKILL(P_BARE_HANDED_COMBAT)) || 
-				rnd(100) < P_SKILL(P_BARE_HANDED_COMBAT))
+				rnd(100) < P_SKILL(P_BARE_HANDED_COMBAT)){
 		if (canspotmon(mon))
 		    pline("%s %s from your powerful strike!", Monnam(mon),
 			  makeplural(stagger(mon->data, "stagger")));
@@ -1295,6 +1295,7 @@ defaultvalue:
 		}
 		hittxt = TRUE;
 	    }
+	}
 	}
 
 	if (!already_killed) mon->mhp -= tmp;
