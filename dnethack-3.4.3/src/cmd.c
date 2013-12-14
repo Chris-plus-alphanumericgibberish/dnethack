@@ -866,6 +866,11 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	putstr(en_win, 0, final ? "Final Attributes:" : "Current Attributes:");
 	putstr(en_win, 0, "");
 
+	if (uclockwork){
+		if(u.ucspeed==HIGH_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to high speed.");
+		if(u.ucspeed==NORM_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to normal speed.");
+		if(u.ucspeed==SLOW_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to low speed.");
+	}
 	if (u.uevent.uhand_of_elbereth) {
 #ifdef ELBERETH
 	    static const char * const hofe_titles[3] = {
@@ -1197,6 +1202,11 @@ resistances_enlightenment()
 	putstr(en_win, 0, "Current Status:");
 	putstr(en_win, 0, "");
 
+	if (uclockwork){
+		if(u.ucspeed==HIGH_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to high speed.");
+		if(u.ucspeed==NORM_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to normal speed.");
+		if(u.ucspeed==SLOW_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to low speed.");
+	}
 	/*** Resistances to troubles ***/
 	/* It is important to inform the player as to the status of any resistances that can expire */
 	if (Fire_resistance && Cold_resistance) putstr(en_win, 0, "You feel comfortable.");
