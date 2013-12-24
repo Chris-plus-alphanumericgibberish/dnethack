@@ -423,6 +423,28 @@ unsigned int type;
        case PM_IXOTH:
            return NIGHTMARE;
 
+	case PM_CHAOS:
+		switch(rn2(10)){
+			case 0:
+				return CURE_SELF;
+			break;
+			case 1:
+			case 2:
+			case 3:
+				return LIGHTNING;
+			break;
+			case 4:
+			case 5:
+			case 6:
+				return FIRE_PILLAR;
+			break;
+			case 7:
+			case 8:
+			case 9:
+				return GEYSER;
+			break;
+		}
+
        case PM_GRAND_MASTER:
        case PM_MASTER_KAEN:
           return (rn2(2) ? WEAKEN_YOU : EARTHQUAKE);
@@ -536,28 +558,6 @@ unsigned int type;
 				return DEATH_TOUCH;
 			break;
 		}
-/*	case PM_CHAOS:
-		switch(rn2(10)){
-			case 0:
-				return CURE_SELF;
-			break;
-			case 1:
-			case 2:
-			case 3:
-				return LIGHTNING;
-			break;
-			case 4:
-			case 5:
-			case 6:
-				return FIRE_PILLAR;
-			break;
-			case 7:
-			case 8:
-			case 9:
-				return GEYSER;
-			break;
-		}
-*/
 	case PM_MINOTAUR_PRIESTESS:
 		switch (d(1,5)+8) {
 			case 13:
