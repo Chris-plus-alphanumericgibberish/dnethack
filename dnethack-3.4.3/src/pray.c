@@ -1916,18 +1916,65 @@ u_gname()  /* returns the name of the player's deity */
 const char * const hallu_gods[] = {
 	"goodness",
 	
-	"Armok",
-	"Nyarlathotep",
+	"the Yggdrasil Entity",
+	"the Unbounded Blue",
+	"the Silencer in the stars",
 	
+	//Games
+	"Armok",
+	"Hylia",
+	"the three golden goddesses",
+	"the Lady of Pain",
+	"the Outsider",
+	"Yevon",
+	"Bhunivelze",
+	"Etro",
+	"the Transcendent One",
+	"the Mana Tree",
+	"Luna",
+	"Arceus",
+	"the Composer",
+	"the Conductor",
+	
+	//Literature
+	"Mahasamatman",
+	"Nyarlathotep",
+	"Azathoth",
+	"Galactus",
+	"Sauron",
+	"Morgoth",
+	"Eru Iluvatar",
+	"the Powers that Be",
+	"the Lone Power",
+	
+	//Internet
+	"SCP-343",
+	"the Slender Man",
+	"the Powers What Is",
+	
+	//atheism
 	"the universe",
-	"Capitalism",
-	"Communism",
-	"something",
-	"the U.N.O.",
 	"the Flying Spaghetti Monster",
 	"the Invisible Pink Unicorn",
 	"last thursday",
 	
+	//Economic systems
+	"Capitalism",
+	"Communism",
+
+	//Ok, so I have no idea what this is....
+	"the U.N.O.",
+	
+	//Vague
+	"something",
+	"someone",
+	"whatever",
+	"thing",
+	"thingy",
+	"whatchamacallit",
+	"whosamawhatsit",
+	
+	//nethack
 	"the gnome with the wand of death",
 	"the DevTeam",
 	"Dion Nicolaas",

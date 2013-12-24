@@ -477,7 +477,7 @@ static const char * const bogusobjects[] = {
        "dwarvish peer",
        "sliver spear",
        "throwing spar",
-       "2x3dent",
+       "2x3dent", /*Homestuck*/
        "danger",
        "elven danger",
        "orcish danger",
@@ -498,7 +498,7 @@ static const char * const bogusobjects[] = {
        "dunesword",
        "bi-partisan",
        "parisian",
-       "sniptem",
+       "sniptem",	/*Order of the Stick*/
        "fave",
        "rancor",
        "lancer",
@@ -658,7 +658,7 @@ static const char * const bogusobjects[] = {
 	   
 	   /* Interwebs */
 	   "memetic kill agent",				/* SCP Foundation */
-	   "bottle of squid pro quo ink",		/* Problem Sleuth */
+	   "bottle of squid pro quo ink",		/* MSPA */
 	   "highly indulgent self-insert",
 	   
 	   /* Mythology */

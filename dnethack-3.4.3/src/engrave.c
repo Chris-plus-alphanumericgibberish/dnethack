@@ -157,6 +157,9 @@ static const char *haluMesg[] = {
 	"And if you're the kind of person who parties with a bathtub full of pasta, I suspect you don't care much about cholesterol anyway.",
 	"I AM A SEXY SHOELESS GOD OF WAR!!!",
 	
+	"I see you...",
+		"...do you see me?",
+	
 	"Bad Wolf", /* Dr. Who */
 	"It's only the end if you want it to be.", /*Batgirl*/
 	"Mistakes were made.",
@@ -168,6 +171,7 @@ static const char *haluMesg[] = {
 	"no more sadness, no more anger, no more envy...", /*Halo*/
 	"Even false things are true", "FIVE TONS OF FLAX!", "Fnord", /*Discordianism*/
 	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
+		"This thing all things devours.",
 	"No Fate", /*Terminator*/
 	"This world can have but one Emperor.", /*FF II*/
 	"We shall devour your light, and use it to return this world to the Void!", /*FFIII*/
@@ -175,7 +179,8 @@ static const char *haluMesg[] = {
 	"Life... dreams... hope... Where do they come from? And where do they go...?", /*FFVI*/
 	"I will NEVER be a memory.", /*FFVII Advent Children*/
 	"All the world will be your enemy, Prince With A Thousand Enemies...", /*Watership Down*/
-		"...and when they catch you they will kill you... but first they must catch you.",
+		"...and when they catch you they will kill you...",
+		"but first they must catch you.",
 	"This statement is false.", /*Logical contradiction*/
 	"Quod Erat Demonstrandum", "anno Domini", "per centum", /* QED, AD, percent */
 	"I was so surprised, I CLASSIFIED INFORMATION, I really did!", /*Haruhi Suzumiya*/
@@ -185,21 +190,22 @@ static const char *haluMesg[] = {
 	"1002: He is Not that Which He Says He Is.", /*Good Omens*/
 		"3001: Behinde the Eagle's Neste a grate Ash hath fellen.",
 	"VI. You Shall Not Subject Your God To Market Forces!",	/*Discworld*/
-		"Nae quin! Nae laird! Nae master! We willna be fooled again!"
-		"Morituri Nolumus Mori"
-		"End-of-the-World Switch. PLEASE DO NOT TOUCH"
-		"Give a man a fire and he's warm for a day, but set fire to him and he's warm for the rest of his life."
-		"Do not, under any circumstances, open this door"
-		"WORDS IN THE HEART CANNOT BE TAKEN"
-		"Slab: Jus' say \"AarrghaarrghpleeassennononoUGH\""
-		"Ahahahahaha! Ahahahaha! Aahahaha!\nBEWARE!!!!!\nYrs sincerely\nThe Opera Ghost"
-		"Bee There Orr Bee A Rectangular Thyng"
+		"Nae quin! Nae laird! Nae master! We willna be fooled again!",
+		"Morituri Nolumus Mori",
+		"End-of-the-World Switch. PLEASE DO NOT TOUCH",
+		"Give a man a fire and he's warm for a day, but set fire to him and he's warm for the rest of his life.",
+		"Do not, under any circumstances, open this door",
+		"WORDS IN THE HEART CANNOT BE TAKEN",
+		"Slab: Jus' say \"AarrghaarrghpleeassennononoUGH\"",
+		"Ahahahahaha! Ahahahaha! Aahahaha!\nBEWARE!!!!!\nYrs sincerely\nThe Opera Ghost",
+		"Bee There Orr Bee A Rectangular Thyng",
 	"NOT A Secret Base", /*Gunnerkrigg Court*/
 	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
 	"I SAW THE EYE. Over the horizon, like a rising sun!", /* Dresden Codak */
 	"That's Science, isn't it? The perpetual horizon.\nBut we found a way, haha, we found a way around that!",
 	"What would YOU give up to... to see it through?",
 	"Don't trust the skull.", /* Cynarfpncr: Gbezrag (mild spoiler) */
+	"death is the greatest illusion", /*Blade of Innocence*/
 	"We do not threaten or warn or advise. We tell the truth.", /* The Mansion of E */
 		"What you stole is even more dangerous and precious than you know.",
 		"In the end, you will fly away and live forever, and you will leave the world shattered in your wake.",
@@ -212,6 +218,18 @@ static const char *haluMesg[] = {
 	"We will BUILD heroes!", /* THE PROTOMEN */
 		"If you replace the working parts, you get a different machine.",
 		"If you destroy the working parts, what you get is a broken machine.",
+	"To right the countless wrongs of our day,\nwe shine this light of true redemption,\nthat this place may become as paradise.",/*It's a Wonderful World/The World Ends with You*/
+		"What a wonderful world such would be...",
+		"Please...Don't kill me...",
+		"Another world awaits. ...And you're going! ",
+		"You have seven days.",
+	"But the future refused to change.", /*Chrono Trigger*/
+	"I wonder... If you do the right thing... Does it really make... everybody... happy?",/*Majora's Mask*/
+		"Your friends... What kind of... people are they? I wonder... Do these people... think of you... as a friend?",
+		"What makes you happy? I wonder...what makes you happy...does it make...others happy, too?",
+		"Your true face... What kind of... face is it? I wonder... The face under the mask... Is that... your true face?",
+		"You've met with a terrible fate, haven't you?",
+	"Why are you sad?", /*Blood-C*/
 	"Never tell me the odds!" /* Starwars */
 };
 

@@ -1058,7 +1058,7 @@ static const char * const bogusmons[] = {
 	"kaiju named Godzilla", "giant ape named King Kong",		/* monster movies */
 	"earthquake beast",			/* old L of SH */
 	"shinigami captain", "shinigami lieutenant", "arrancar", "hollow",	/* Bleach */
-	"nyaasu",				/* Pokemon (Meowth) */
+	"nyaasu", "missingno.", "pikachu",	/* Pokemon (Meowth) */
 	"Invid", "Veritech",		/* Robotech */
 	"berserk Eva",				/* Neon Genesis Evangelion */
 	"boomer",				/* Bubblegum Crisis */
