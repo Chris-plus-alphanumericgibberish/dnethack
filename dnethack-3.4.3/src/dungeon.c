@@ -1275,8 +1275,7 @@ int levnum;
 	branch *br;
 	xchar dgn = u.uz.dnum;
 
-	if (levnum <= 0) {
-	    /* can only currently happen in endgame */
+	if (levnum <= 0 && In_endgame(&u.uz)) {
 	    levnum = u.uz.dlevel;
 	} else if (levnum > dungeons[dgn].depth_start
 			    + dungeons[dgn].num_dunlevs - 1) {
@@ -1290,7 +1289,10 @@ int levnum;
 	     * levnum.
 	     */
 	    if (levnum < dungeons[dgn].depth_start) {
-
+			if(In_mines(&u.uz) && u.uz.dlevel < dungeons[u.uz.dnum].entry_lev){
+				dgn = tower_dnum;
+			}
+			else{
 		do {
 		    /*
 		     * Find the parent dungeon of this dungeon.
@@ -1306,7 +1308,7 @@ int levnum;
 		    dgn = br->end1.dnum;
 		} while (levnum < dungeons[dgn].depth_start);
 	    }
-
+	    }
 	    /* We're within the same dungeon; calculate the level. */
 	    levnum = levnum - dungeons[dgn].depth_start + 1;
 	}

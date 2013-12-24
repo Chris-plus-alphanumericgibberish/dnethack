@@ -237,7 +237,7 @@ char *buf;
 			Is_astralevel(&u.uz) ? "Astral Plane " : "End Game ");
 	else {
 		/* ports with more room may expand this one */
-		Sprintf(buf, "Dlvl:%-2d ", depth(&u.uz));
+		Sprintf(buf, "Dlvl:%-2d ", depth(&u.uz) > 0 ? depth(&u.uz) : depth(&u.uz)-1);
 		ret = 0;
 	}
 	return ret;

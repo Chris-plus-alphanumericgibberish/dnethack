@@ -640,7 +640,7 @@ level_tele()
 		     trycnt < 10);
 
 	    /* no dungeon escape via this route */
-	    if (newlev == 0) {
+	    if (newlev == 0 /*&& dungeons[u.uz.dnum].depth_start > 0*/) {
 		if (trycnt >= 10)
 		    goto random_levtport;
 		if (ynq("Go to Nowhere.  Are you sure?") != 'y') return;
@@ -706,7 +706,7 @@ level_tele()
 
 	killer = 0;		/* still alive, so far... */
 
-	if (newlev < 0 && !force_dest) {
+	if (newlev < 0 && dungeons[u.uz.dnum].depth_start-1 > newlev && !force_dest) {
 		if (*u.ushops0) {
 		    /* take unpaid inventory items off of shop bills */
 		    in_mklev = TRUE;	/* suppress map update */
@@ -743,6 +743,7 @@ level_tele()
 		    killer_format = NO_KILLER_PREFIX;
 		}
 	}
+	if(newlev<0) newlev++;//Dungeon levels should skip from 1 to -1, 0 should always be nowhere.
 
 	if (killer) {	/* the chosen destination was not survivable */
 	    d_level lsav;
