@@ -77,8 +77,7 @@ int shotlimit;
 	if(!canletgo(obj,"throw"))
 		return(0);
 	if ( (obj->oartifact == ART_MJOLLNIR || 
-			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS ||
-			obj->oartifact == ART_WINDRIDER) && 
+			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) && 
 			obj != uwep) {
 	    pline("%s must be wielded before it can be thrown.",
 		The(xname(obj)));
@@ -111,7 +110,7 @@ int shotlimit;
 	 */
 	skill = objects[obj->otyp].oc_skill;
 	if ((ammo_and_launcher(obj, uwep) || skill == P_DAGGER ||
-			skill == -P_DART || skill == -P_SHURIKEN) &&
+			skill == -P_DART || skill == -P_SHURIKEN || skill == -P_BOOMERANG ) &&
 		!(Confusion || Stunned)) {
 	    /* Bonus if the player is proficient in this weapon... */
 	    switch (P_SKILL(weapon_type(obj))) {
@@ -148,7 +147,7 @@ int shotlimit;
 	    }
 	}
 
-	if ((long)multishot > obj->quan) multishot = (int)obj->quan;
+	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER) multishot = (int)obj->quan;
 	multishot = rnd(multishot);
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 
@@ -157,16 +156,21 @@ int shotlimit;
 	   attempted to specify a count */
 	if (multishot > 1 || shotlimit > 0) {
 	    /* "You shoot N arrows." or "You throw N daggers." */
-	    You("%s %d %s.",
+		if(obj->quan > 1) You("%s %d %s.",
 		m_shot.s ? "shoot" : "throw",
 		multishot,	/* (might be 1 if player gave shotlimit) */
-		(multishot == 1) ? singular(obj, xname) :  xname(obj));
+		(multishot == 1) ? singular(obj, xname) : obj->quan == 1 ? the(xname(obj)) : xname(obj));
+		else if(multishot>1) You("%s %s %d times.",
+		m_shot.s ? "shoot" : "throw",
+		(multishot == 1) ? singular(obj, xname) : obj->quan == 1 ? the(xname(obj)) : xname(obj),
+		multishot);	/* (might be 1 if player gave shotlimit) */
 	}
 
 	wep_mask = obj->owornmask;
 	m_shot.o = obj->otyp;
 	m_shot.n = multishot;
 	for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
+		if(!obj || obj->where != OBJ_INVENT) break; //Weapon lost
 	    twoweap = u.twoweap;
 	    /* split this object off from its slot if necessary */
 	    if (obj->quan > 1L) {
@@ -928,8 +932,12 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 		      Tobjnam(obj, "hit"), ceiling(u.ux,u.uy));
 		obj = addinv(obj);
 		(void) encumber_msg();
+		if(obj->oartifact == ART_WINDRIDER){
+			setuqwep(obj);
+		} else{
 		setuwep(obj);
 		u.twoweap = twoweap;
+		}
 	    } else if (u.dz < 0 && !Is_airlevel(&u.uz) &&
 		    !Underwater && !Is_waterlevel(&u.uz)) {
 		(void) toss_up(obj, rn2(5));
@@ -1052,8 +1060,12 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 			pline("%s to your hand!", Tobjnam(obj, "return"));
 			obj = addinv(obj);
 			(void) encumber_msg();
+			if(obj->oartifact == ART_WINDRIDER){
+				setuqwep(obj);
+			} else{
 			setuwep(obj);
 			u.twoweap = twoweap;
+			}
 			if(cansee(bhitpos.x, bhitpos.y))
 			    newsym(bhitpos.x,bhitpos.y);
 		    } else {
@@ -1364,6 +1376,7 @@ register struct obj   *obj;
 		   sometimes disappear when thrown */
 		if (objects[otyp].oc_skill < P_NONE &&
 				objects[otyp].oc_skill > -P_BOOMERANG &&
+				!(obj->oartifact) && 
 				!objects[otyp].oc_magic) {
 		    /* we were breaking 2/3 of everything unconditionally.
 		     * we still don't want anything to survive unconditionally,
