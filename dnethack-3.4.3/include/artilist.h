@@ -447,7 +447,7 @@ A("Whisperfeet",			SPEED_BOOTS,/*adapted from Slash'em*/
 	INVIS, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
 	SPFX2_STLTH,0,WSFX_PLUSSEV),
 
-A("Water Flower", WATER_WALKING_BOOTS,
+A("Water Flowers", WATER_WALKING_BOOTS,
 	(SPFX_RESTR|SPFX_DISPL), 0, 0, //needs quote
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	TELEPORT_SHOES, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message
