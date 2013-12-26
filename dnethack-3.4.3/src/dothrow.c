@@ -118,10 +118,13 @@ int shotlimit;
 	    case P_SKILLED:	multishot++; break;
 	    case P_EXPERT:	multishot += 2; break;
 	    }
+	    /* ...or is using the legendary Longbow... */
+		if(uwep && uwep->oartifact == ART_LONGBOW_OF_DIANA) multishot++;
 	    /* ...or is using a special weapon for their role... */
 	    switch (Role_switch) {
 	    case PM_RANGER:
 		multishot++;
+		if(uwep && uwep->oartifact == ART_LONGBOW_OF_DIANA) multishot++;//double bonus for Rangers
 		break;
 	    case PM_ROGUE:
 		if (skill == P_DAGGER) multishot++;
