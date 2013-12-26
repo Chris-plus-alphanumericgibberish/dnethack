@@ -31,6 +31,7 @@ STATIC_DCL void FDECL(m_initinv,(struct monst *));
 #endif /* OVL1 */
 
 extern const int monstr[];
+int curhouse = 0;
 
 #define m_initsgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 3)
 #define m_initlgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 10)
@@ -374,6 +375,58 @@ register struct monst *mtmp;
 		    if (w1) (void)mongets(mtmp, w1);
 		    if (!w2 && w1 != DAGGER && !rn2(4)) w2 = KNIFE;
 		    if (w2) (void)mongets(mtmp, w2);
+		} else if(is_drow(ptr)){
+			if(mm != PM_DROW_MATRON){
+				if (rn2(2)){
+					otmp = mksobj(DROVEN_CHAIN_MAIL, FALSE, FALSE);
+					otmp->ohaluengr = TRUE;
+					otmp->ovar1 = curhouse;
+					(void) mpickobj(mtmp, otmp);
+				}
+				(void) mongets(mtmp, DROVEN_CLOAK);
+				if (rn2(2)) (void)mongets(mtmp, HELMET);
+				else if (!rn2(4)) (void)mongets(mtmp, HIGH_BOOTS);
+				if (rn2(2)) (void)mongets(mtmp, DROVEN_DAGGER);
+				switch (rn2(3)) {
+				case 0:
+					if (!rn2(4)) (void)mongets(mtmp, SMALL_SHIELD);
+					if (rn2(3)) (void)mongets(mtmp, DROVEN_SHORT_SWORD);
+					(void)mongets(mtmp, DROVEN_CROSSBOW);
+					m_initthrow(mtmp, DROVEN_BOLT, 24);
+				break;
+				case 1:
+					(void)mongets(mtmp, DROVEN_SHORT_SWORD);
+					if (rn2(2)) (void)mongets(mtmp, LARGE_SHIELD);
+				break;
+				case 2:
+					if (rn2(2)) {
+						(void)mongets(mtmp, DROVEN_SHORT_SWORD);
+						(void)mongets(mtmp, SMALL_SHIELD);
+					}
+					(void)mongets(mtmp, SCYTHE);
+				break;
+				}
+		    } else {
+				otmp = mksobj(DROVEN_PLATE_MAIL, FALSE, FALSE);
+				otmp->ohaluengr = TRUE;
+				otmp->ovar1 = LOLTH_SYMBOL;
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(find_signet_ring(), FALSE, FALSE);
+				otmp->ohaluengr = TRUE;
+				otmp->ovar1 = curhouse;
+				(void) mpickobj(mtmp, otmp);
+				(void) mongets(mtmp, DROVEN_CLOAK);
+				(void)mongets(mtmp, HELMET);
+				(void)mongets(mtmp, HIGH_BOOTS);
+				(void)mongets(mtmp, DROVEN_DAGGER);
+				(void)mongets(mtmp, DROVEN_SHORT_SWORD);
+				(void)mongets(mtmp, LARGE_SHIELD);
+				(void)mongets(mtmp, DROVEN_CROSSBOW);
+				m_initthrow(mtmp, DROVEN_BOLT, 24);
+				if (rn2(3) || (in_mklev && Is_earthlevel(&u.uz)))
+					(void)mongets(mtmp, PICK_AXE);
+				if (!rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
+		    }
 		} else if (is_elf(ptr)) {
 		    if (rn2(2))
 			(void) mongets(mtmp,
@@ -1357,6 +1410,23 @@ register struct	monst	*mtmp;
 		break;
 	    case S_MUMMY:
 		if (rn2(7)) (void)mongets(mtmp, MUMMY_WRAPPING);
+			if(ptr == &mons[PM_DROW_MUMMY] && !rn2(10)){
+				otmp = mksobj(find_signet_ring(), FALSE, FALSE);
+				otmp->ohaluengr = TRUE;
+				if(!(rn2(10))) otmp->ovar1 = LOLTH_SYMBOL;
+				else if(!(rn2(4))) otmp->ovar1 = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
+				else otmp->ovar1 = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
+				(void) mpickobj(mtmp, otmp);
+			}
+		break;
+		case S_ZOMBIE:
+			if(ptr == &mons[PM_DROW_ZOMBIE] && !rn2(10)){
+				otmp = mksobj(find_signet_ring(), FALSE, FALSE);
+				otmp->ohaluengr = TRUE;
+				if(!(rn2(4))) otmp->ovar1 = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
+				else otmp->ovar1 = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
+				(void) mpickobj(mtmp, otmp);
+			}
 		break;
 	    case S_QUANTMECH:
 		if (!rn2(20)) {
@@ -1881,6 +1951,7 @@ register int	mmflags;
 	boolean allow_minvent = ((mmflags & NO_MINVENT) == 0);
 	boolean countbirth = ((mmflags & MM_NOCOUNTBIRTH) == 0);
 	unsigned gpflags = (mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
+	boolean unsethouse = FALSE;
 
 	/* if caller wants random location, do it here */
 	if(x == 0 && y == 0) {
@@ -2011,6 +2082,12 @@ register int	mmflags;
 	mtmp->mtraitor  = FALSE;
 	mtmp->mcrazed  = FALSE;
 
+	/* Ok, here's the deal: I'm using a global to coordinate the house emblems on the drow's armor. It needs to be set up here so that everyone created as part of the group gets the same emblem, and then unset after this creature's armor is created. */
+	if(is_drow(ptr) && !curhouse){
+		curhouse = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
+		unsethouse = TRUE;
+	}
+	
 	switch(ptr->mlet) {
 		case S_MIMIC:
 			set_mimic_sym(mtmp);
@@ -2095,18 +2172,24 @@ register int	mmflags;
 				for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 		break;
+		case S_HUMAN:
+				if (mndx == PM_DROW_MATRON){
+					m_initlgrp(makemon(&mons[PM_DROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+				}
+		break;
 		case S_HUMANOID:
-			if (anymon && mndx == PM_DEEPER_ONE){
-				int num = 0;
-				num = rn1(10,3);
-				for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-			}
-			if (anymon && mndx == PM_ELVENKING){
-				int num = 0;
-				num = rnd(2);
-				for(num; num >= 0; num--) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				num = rn1(6,3);
-				for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+			if(anymon){
+				if (mndx == PM_DEEPER_ONE){
+					int num = 0;
+					num = rn1(10,3);
+					for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				} else if (mndx == PM_ELVENKING){
+					int num = 0;
+					num = rnd(2);
+					for(num; num >= 0; num--) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					num = rn1(6,3);
+					for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				}
 			}
 		break;
 		case S_FUNGUS:
@@ -2406,6 +2489,10 @@ register int	mmflags;
 	    /* no initial inventory is allowed */
 	    if (mtmp->minvent) discard_minvent(mtmp);
 	    mtmp->minvent = (struct obj *)0;    /* caller expects this */
+	}
+	if(unsethouse){
+		/*At this point, we have FINALLY created the inventory for the initial creature and all its associates, so the global should be unset now.*/
+		curhouse = 0;
 	}
 	if ((ptr->mflags3 & M3_WAITMASK) && !(mmflags & MM_NOWAIT)) {
 		if (ptr->mflags3 & M3_WAITFORU)

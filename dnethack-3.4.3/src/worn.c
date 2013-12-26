@@ -856,11 +856,15 @@ long timeout;
 						LIGHT_DAMAGE, (genericptr_t)obj);
 			return;
 		}else{
-			useup(obj);
+			// useup(obj);
+			obj_extract_self(obj);
+			obfree(obj, (struct obj *)0);
 		}
 	} else if (in_invent) {
 //		pline("object in invent");
 		int armpro = 0;
+		boolean isarmor = obj == uarm || obj == uarmc || obj == uarms || obj == uarmh || 
+					obj == uarmg || obj == uarmf || obj == uarms;
 		if(uarmc){
 			armpro = uarmc->otyp == DROVEN_CLOAK ? 
 				objects[uarmc->otyp].a_can - uarmc->ovar1 :
@@ -879,7 +883,7 @@ long timeout;
 						LIGHT_DAMAGE, (genericptr_t)obj);
 			return;
 		}
-	    if (flags.verbose) {
+	    if (flags.verbose && !isarmor) {
 			char *name = obj->otyp == CORPSE ? corpse_xname(obj, FALSE) : xname(obj);
 			Your("%s%s %s away%c",
 				 obj == uwep ? "wielded " : nul, name,
@@ -888,26 +892,27 @@ long timeout;
 	    if (obj == uwep) {
 			uwepgone();	/* now bare handed */
 			stop_occupation();
-			useup(obj);
+			useupall(obj);
 	    } else if (obj == uswapwep) {
 			uswapwepgone();
 			stop_occupation();
-			useup(obj);
+			useupall(obj);
 	    } else if (obj == uquiver) {
 			uqwepgone();
 			stop_occupation();
-			useup(obj);
-	    } else if (obj == uarm || obj == uarmc || obj == uarms || obj == uarmh || 
-					obj == uarmg || obj == uarmf || obj == uarms) {
+			useupall(obj);
+	    } else if (isarmor) {
 			stop_occupation();
 			destroy_arm(obj);
 	    } else{
 			stop_occupation();
-			useup(obj);
+			useupall(obj);
 		}
 	} else if (obj->where == OBJ_MINVENT && obj->owornmask) {
 		struct obj *armor = which_armor(obj->ocarry, W_ARMC);
 		int armpro = 0;
+		long unwornmask;
+		struct monst *mtmp;
 		if(armor){
 			armpro = armor->otyp == DROVEN_CLOAK ? 
 				objects[armor->otyp].a_can - armor->ovar1 :
@@ -933,6 +938,20 @@ long timeout;
 			MON_NOWEP(obj->ocarry);
 			useup(obj);
 	    }
+		else if((unwornmask = obj->owornmask) != 0L){
+			mtmp = obj->ocarry;
+			obj_extract_self(obj);
+			mtmp->misc_worn_check &= ~unwornmask;
+			obj->owornmask = 0L;
+			update_mon_intrinsics(mtmp, obj, FALSE, FALSE);
+			// useup(obj);
+			obfree(obj, (struct obj *)0);
+		}
+		else{
+			obj_extract_self(obj);
+			// useup(obj);
+			obfree(obj, (struct obj *)0);
+		}
 	}
 	if (on_floor) newsym(x, y);
 	else if (in_invent) update_inventory();
