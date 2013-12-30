@@ -1724,7 +1724,7 @@ const char *oldstr;
 			   !BSTRCMP(bp, p-15, "detect monsters") ||
 			   !BSTRCMPI(bp, p-11, "Aesculapius") || /* staff */
 			   !BSTRCMPI(bp, p-8, "Longinus") || 	/* spear */
-			   !BSTRCMPI(bp, p-14, "Water Flowers") || 	/* spear */
+			   !BSTRCMPI(bp, p-13, "Water Flowers") || 	/* spear */
 			   !BSTRCMPI(bp, p-14, "Dwarvish Lords") || /* axe */
 			   !BSTRCMPI(bp, p-11, "Seven Parts") || /* spear */
 			   !BSTRCMP(bp, p-10, "eucalyptus") ||
