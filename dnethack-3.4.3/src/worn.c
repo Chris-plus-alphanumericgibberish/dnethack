@@ -936,7 +936,10 @@ long timeout;
 	    if (obj == MON_WEP(obj->ocarry)) {
 			setmnotwielded(obj->ocarry,obj);
 			MON_NOWEP(obj->ocarry);
-			useup(obj);
+			m_useup(obj->ocarry, obj);
+			//useup(obj);
+			// obj_extract_self(obj);
+			// obfree(obj, (struct obj *)0);
 	    }
 		else if((unwornmask = obj->owornmask) != 0L){
 			mtmp = obj->ocarry;
@@ -944,13 +947,16 @@ long timeout;
 			mtmp->misc_worn_check &= ~unwornmask;
 			obj->owornmask = 0L;
 			update_mon_intrinsics(mtmp, obj, FALSE, FALSE);
+			m_useup(obj->ocarry, obj);
 			// useup(obj);
-			obfree(obj, (struct obj *)0);
+			// obj_extract_self(obj);
+			// obfree(obj, (struct obj *)0);
 		}
 		else{
 			obj_extract_self(obj);
+			m_useup(obj->ocarry, obj);
 			// useup(obj);
-			obfree(obj, (struct obj *)0);
+			// obfree(obj, (struct obj *)0);
 		}
 	}
 	if (on_floor) newsym(x, y);
