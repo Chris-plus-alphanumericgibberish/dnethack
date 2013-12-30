@@ -336,6 +336,10 @@ E void NDECL(deferred_goto);
 E boolean FDECL(revive_corpse, (struct obj *, int));
 E void FDECL(revive_mon, (genericptr_t, long));
 E void FDECL(moldy_corpse, (genericptr_t, long));
+E void FDECL(slimy_corpse, (genericptr_t, long));
+E void FDECL(shady_corpse, (genericptr_t, long));
+E void FDECL(zombie_corpse, (genericptr_t, long));
+E int FDECL(zombify_PM, (int));
 E int NDECL(donull);
 E int NDECL(dowipe);
 E void FDECL(set_wounded_legs, (long,int));
@@ -2011,6 +2015,7 @@ E int FDECL(P_MAX_SKILL, (int));
 E int FDECL(P_SKILL, (int));
 E int FDECL(P_RESTRICTED, (int));
 E boolean FDECL(spiritSkill, (int));
+E boolean FDECL(roleSkill, (int));
 #ifdef USER_SOUNDS
 E int FDECL(add_sound_mapping, (const char *));
 E void FDECL(play_sound_for_message, (const char *));

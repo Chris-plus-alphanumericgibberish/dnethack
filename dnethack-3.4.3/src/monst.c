@@ -2026,7 +2026,7 @@ then fill new spaces with our spawn!’
 	SIZ(100, 100, 0, MS_SILENT, MZ_SMALL), MR_POISON|MR_SICK, MR_POISON,
 	M1_BREATHLESS|M1_NOEYES|M1_NOLIMBS|M1_NOHEAD|M1_MINDLESS|M1_NOTAKE,
 	M2_HOSTILE|M2_NEUTER, 0, CLR_MAGENTA),
-	/*NOTE: some code in mkobj.c (start_corpse_timeout) assumes that the migo are contigous here and that the migo worker is first and the migo queen is last*/
+	/*NOTE: update is_migo in mondata.h if migo are added or removed*/
 	MON("migo worker", S_FUNGUS,//9
 	LVL(7, 10, 2, 20, 0), (G_GENO|G_SGROUP|2),
 	A(ATTK(AT_CLAW, AD_PHYS, 1, 6), NO_ATTK, NO_ATTK, 

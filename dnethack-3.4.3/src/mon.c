@@ -427,9 +427,11 @@ register struct monst *mtmp;
 	    default:
 		if (mvitals[mndx].mvflags & G_NOCORPSE)
 		    return (struct obj *)0;
-		else	/* preserve the unique traits of some creatures */
+		else{	/* preserve the unique traits of some creatures */
+//			pline("preserving unique traits");
 		    obj = mkcorpstat(CORPSE, KEEPTRAITS(mtmp) ? mtmp : 0,
 				     mdat, x, y, TRUE);
+		}
 		break;
 	}
 	/* All special cases should precede the G_NOCORPSE check */

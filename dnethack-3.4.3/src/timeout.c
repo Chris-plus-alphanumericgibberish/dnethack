@@ -1561,7 +1561,10 @@ static const ttable timeout_funcs[NUM_TIME_FUNCS] = {
     TTAB(burn_object,	cleanup_burn,		"burn_object"),
     TTAB(hatch_egg,	(timeout_proc)0,	"hatch_egg"),
     TTAB(fig_transform,	(timeout_proc)0,	"fig_transform"),
-    TTAB(light_damage,	(timeout_proc)0,	"light_damage")
+    TTAB(light_damage,	(timeout_proc)0,	"light_damage"),
+    TTAB(slimy_corpse,	(timeout_proc)0,	"slimy_corpse"),
+	TTAB(zombie_corpse,	(timeout_proc)0,	"zombie_corpse"),
+    TTAB(shady_corpse,	(timeout_proc)0,	"shady_corpse")
 };
 #undef TTAB
 

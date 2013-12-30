@@ -1891,6 +1891,9 @@ register struct obj *obj;
 		if (obj->otyp == CORPSE && obj->timed) {
 			long rot_alarm = stop_timer(ROT_CORPSE, (genericptr_t)obj);
 			(void) stop_timer(MOLDY_CORPSE, (genericptr_t)obj);
+			(void) stop_timer(SLIMY_CORPSE, (genericptr_t)obj);
+			(void) stop_timer(ZOMBIE_CORPSE, (genericptr_t)obj);
+			(void) stop_timer(SHADY_CORPSE, (genericptr_t)obj);
 			(void) stop_timer(REVIVE_MON, (genericptr_t)obj);
 			/* mark a non-reviving corpse as such */
 			if (rot_alarm) obj->norevive = 1;

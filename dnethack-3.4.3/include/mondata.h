@@ -92,8 +92,15 @@
 #define is_dwarf(ptr)		(((ptr)->mflags2 & M2_DWARF) != 0L)
 #define is_gnome(ptr)		(((ptr)->mflags2 & M2_GNOME) != 0L)
 #define is_orc(ptr)		(((ptr)->mflags2 & M2_ORC) != 0L)
-#define is_ogre(ptr)		(((ptr)->mlet & S_OGRE) != 0L)
+#define is_ogre(ptr)		((ptr)->mlet == S_OGRE)
+#define is_kobold(ptr)		((ptr)->mlet == S_KOBOLD)
+#define is_ettin(ptr)		((ptr) == &mons[PM_ETTIN])
 #define is_human(ptr)		(((ptr)->mflags2 & M2_HUMAN) != 0L)
+#define is_fungus(ptr)		((ptr)->mlet == S_FUNGUS)
+#define is_migo(ptr)		((ptr) == &mons[PM_MIGO_WORKER] ||\
+							 (ptr) == &mons[PM_MIGO_SOLDIER] ||\
+							 (ptr) == &mons[PM_MIGO_PHILOSOPHER] ||\
+							 (ptr) == &mons[PM_MIGO_QUEEN])
 #define your_race(ptr)		(((ptr)->mflags2 & urace.selfmask) != 0L)
 #define is_andromaliable(ptr)	(is_elf(ptr) || is_dwarf(ptr) || is_gnome(ptr) || is_orc(ptr) || is_human(ptr) || (ptr) == &mons[PM_HOBBIT] || \
 								 (ptr) == &mons[PM_MONKEY] || (ptr) == &mons[PM_APE] || (ptr) == &mons[PM_YETI] || \
@@ -125,6 +132,12 @@
 #define is_minotaur(ptr)		((ptr) == &mons[PM_MINOTAUR] || \
 				 (ptr) == &mons[PM_MINOTAUR_PRIESTESS] || \
 				 (ptr) == &mons[PM_BAPHOMET])
+#define is_pirate(ptr)		((ptr) == &mons[PM_PIRATE] || \
+				 (ptr) == &mons[PM_PIRATE_BROTHER] || \
+				 (ptr) == &mons[PM_SKELETAL_PIRATE] || \
+				 (ptr) == &mons[PM_DAMNED_PIRATE] || \
+				 (ptr) == &mons[PM_GITHYANKI_PIRATE] || \
+				 (ptr) == &mons[PM_MAYOR_CUMMERBUND])
 #define is_golem(ptr)		((ptr)->mlet == S_GOLEM)
 #define is_domestic(ptr)	(((ptr)->mflags2 & M2_DOMESTIC) != 0L)
 #define is_demon(ptr)		(((ptr)->mflags2 & M2_DEMON) != 0L)
@@ -194,7 +207,7 @@
 				 (ptr) == &mons[PM_HUMAN])
 
 /* return TRUE if the monster tends to revive */
-#define is_reviver(ptr)		(is_rider(ptr) || (ptr)->mlet == S_TROLL)
+#define is_reviver(ptr)		(is_rider(ptr) || (ptr)->mlet == S_TROLL || (ptr)->mlet == S_FUNGUS)
 
 #define is_demihuman(ptr)	((ptr) == &mons[PM_MINOTAUR] || \
 				 (ptr) == &mons[PM_MINOTAUR_PRIESTESS] || \

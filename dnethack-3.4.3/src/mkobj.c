@@ -866,11 +866,15 @@ start_corpse_timeout(body)
 	long corpse_age;	/* age of corpse          */
 	int rot_adjust;
 	short action;
+	long age;
+	int chance;
 
 #define TAINT_AGE (50L)		/* age when corpses go bad */
 #define TROLL_REVIVE_CHANCE 37	/* 1/37 chance for 50 turns ~ 75% chance */
 #define MOLD_REVIVE_CHANCE 23	/*  1/23 chance for 50 turns ~ 90% chance */
-#define MOLDY_CHANCE 290	/*  1/290 chance for 200 turns ~ 50% chance */
+#define BASE_MOLDY_CHANCE 19900	/*  1/19900 chance for 200 turns ~ 1% chance */
+#define HALF_MOLDY_CHANCE 290	/*  1/290 chance for 200 turns ~ 50% chance */
+#define FULL_MOLDY_CHANCE 87	/*  1/87 chance for 200 turns ~ 90% chance */
 #define ROT_AGE (250L)		/* age when corpses rot away */
 
 	/* lizards, beholders, and lichen don't rot or revive */
@@ -885,33 +889,35 @@ start_corpse_timeout(body)
 		when = ROT_AGE - corpse_age;
 	when += (long)(rnz(rot_adjust) - rot_adjust);
 	
-	if(body->corpsenm >= PM_MIGO_WORKER && body->corpsenm <= PM_MIGO_QUEEN){
+//	pline("corpse type: %d, %c",mons[body->corpsenm].mlet,def_monsyms[mons[body->corpsenm].mlet]);
+	if(is_migo(&mons[body->corpsenm])){
 		when = when/10 + 1;
 	}
-
 	if (is_rider(&mons[body->corpsenm])) {
 		/*
 		 * Riders always revive.  They have a 1/3 chance per turn
 		 * of reviving after 12 turns.  Always revive by 500.
 		 */
+//		pline("setting up rider revival for %s", xname(body));
 		action = REVIVE_MON;
 		for (when = 12L; when < 500L; when++)
 		    if (!rn2(3)) break;
 
 	} else if (mons[body->corpsenm].mlet == S_TROLL && !body->norevive) {
-		long age;
+//		pline("setting up troll revival for %s", xname(body));
 		for (age = 2; age <= TAINT_AGE; age++)
 		    if (!rn2(TROLL_REVIVE_CHANCE)) {	/* troll revives */
 			action = REVIVE_MON;
 			when = age;
 			break;
 		    }
-	} else if (mons[body->corpsenm].mlet == S_FUNGUS) {
+	} else if (is_fungus(&mons[body->corpsenm]) && 
+			  !is_migo(&mons[body->corpsenm])) {
 		/* Fungi come back with a vengeance - if you don't eat it or
 		 * destroy it,  any live cells will quickly use the dead ones
 		 * as food and come back.
 		 */
-		long age;
+//		pline("setting up fungus revival for %s", xname(body));
 		for (age = 2; age <= TAINT_AGE; age++)
 		    if (!rn2(MOLD_REVIVE_CHANCE)) {    /* mold revives */
 			action = REVIVE_MON;
@@ -923,16 +929,44 @@ start_corpse_timeout(body)
 	if (action == ROT_CORPSE && !acidic(&mons[body->corpsenm])) {
 		/* Corpses get moldy
 		 */
-		long age;
+		chance = Is_zuggtmoy_level(&u.uz) ? FULL_MOLDY_CHANCE : BASE_MOLDY_CHANCE;
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
-		    if (!rn2(MOLDY_CHANCE)) {    /* "revives" as a random s_fungus */
+				if (!rn2(chance)) {    /* "revives" as a random s_fungus */
 			action = MOLDY_CORPSE;
 			when = age;
 			break;
 		    }
 	}
+	if(action == ROT_CORPSE && Is_juiblex_level(&u.uz)) {
+		chance = FULL_MOLDY_CHANCE;
+			for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
+				if (!rn2(chance)) {    /* "revives" as a random s_fungus */
+					action = SLIMY_CORPSE;
+					when = age;
+					break;
+				}
+	}
+	if(action == ROT_CORPSE && Is_night_level(&u.uz)){
+		chance = FULL_MOLDY_CHANCE;
+		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
+			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
+				action = ZOMBIE_CORPSE;
+				when = age;
+				break;
+			}
+	}
+	if(action == ROT_CORPSE && Is_orcus_level(&u.uz)){
+		chance = FULL_MOLDY_CHANCE;
+		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
+			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
+				action = SHADY_CORPSE;
+				when = age;
+				break;
+		}
+	}
 	
 	if (body->norevive) body->norevive = 0;
+//	pline("Starting timer %d on %s", action, xname(body));
 	(void) start_timer(when, TIMER_OBJECT, action, (genericptr_t)body);
 }
 
@@ -1214,10 +1248,13 @@ boolean init;
 
 		otmp->corpsenm = monsndx(ptr);
 		otmp->owt = weight(otmp);
-		if (otmp->otyp == CORPSE &&
-			(special_corpse(old_corpsenm) ||
-				special_corpse(otmp->corpsenm))) {
+		// if (otmp->otyp == CORPSE &&
+			// (special_corpse(old_corpsenm) ||
+				// special_corpse(otmp->corpsenm))) {
+		//Between molding and all the special effects, would be best to just rest timers for everything.
+		if (otmp->otyp == CORPSE) {
 		    obj_stop_timers(otmp);
+//			pline("special corpse detected");
 		    start_corpse_timeout(otmp);
 		}
 	    }
@@ -1335,7 +1372,7 @@ int x, y;
 const char *nm;
 {
 	struct obj *otmp;
-
+//	pline("named object detected");
 	otmp = mkcorpstat(objtype, (struct monst *)0, ptr,
 				x, y, (boolean)(objtype != STATUE));
 	if (nm)

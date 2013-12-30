@@ -20,7 +20,11 @@ typedef void FDECL((*timeout_proc), (genericptr_t, long));
 
 /* flags for revive type after timeout */
 #define	REVIVE_MONSTER	0
-#define	REVIVE_MOLD		1
+#define	GROW_MOLD		1
+#define	REVIVE_MOLD		2
+#define	GROW_SLIME		3
+#define	REVIVE_ZOMBIE	4
+#define	REVIVE_SHADE	5
 /*
  * Timeout functions.  Add a define here, then put it in the table
  * in timeout.c.  "One more level of indirection will fix everything."
@@ -33,7 +37,10 @@ typedef void FDECL((*timeout_proc), (genericptr_t, long));
 #define HATCH_EGG	5
 #define FIG_TRANSFORM	6
 #define LIGHT_DAMAGE	7
-#define NUM_TIME_FUNCS	8
+#define SLIMY_CORPSE	8
+#define ZOMBIE_CORPSE	9
+#define SHADY_CORPSE	10
+#define NUM_TIME_FUNCS	11
 
 /* used in timeout.c */
 typedef struct fe {
