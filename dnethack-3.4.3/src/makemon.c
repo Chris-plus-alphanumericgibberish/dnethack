@@ -1959,6 +1959,32 @@ register int	mmflags;
 	unsigned gpflags = (mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
 	boolean unsethouse = FALSE;
 
+	/* if caller both a random creature and a random location, try both at once first */
+	if(!ptr && x == 0 && y == 0){
+		int tryct = 0;	/* careful with bigrooms */
+		struct monst fakemon;
+		do{
+			x = rn1(COLNO-3,2);
+			y = rn2(ROWNO);
+			ptr = rndmonst();
+			if(!ptr) {
+	#ifdef DEBUG
+				pline("Warning: no monster.");
+	#endif
+				return((struct monst *) 0);	/* no more monsters! */
+			}
+			fakemon.data = ptr;
+			gpflags = (amphibious(ptr)||is_swimmer(ptr)) ? 
+				MM_IGNOREWATER : 
+				(mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
+		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 50);
+		if(tryct >= 50){
+			//That failed, return to the default way of handling things
+			ptr = (struct monst *)0;
+			x = y = 0;
+		}
+	}
+	
 	/* if caller wants random location, do it here */
 	if(x == 0 && y == 0) {
 		int tryct = 0;	/* careful with bigrooms */
@@ -2640,27 +2666,82 @@ rndmonst()
 												entering sum of all */
 	}
 
-	if (u.uz.dnum == quest_dnum && rn2(7) && (ptr = qt_montype()) != 0)
+	if (u.uz.dnum == quest_dnum && rn2(7) && (ptr = qt_montype()) != 0){
 	    return ptr;
-
-	if (u.uz.dnum == neutral_dnum && 
-		(on_level(&rlyeh_level,&u.uz) ||  on_level(&sum_of_all_level,&u.uz) || on_level(&gatetown_level,&u.uz)))
+	}
+	else if (u.uz.dnum == neutral_dnum && 
+		(on_level(&rlyeh_level,&u.uz) ||  on_level(&sum_of_all_level,&u.uz) || on_level(&gatetown_level,&u.uz))){
 	    if(!in_mklev) return neutral_montype();
 		else return (struct permonst *)0;/*NOTE: ugly method to stop monster generation durning level creation, since I can't find a better way*/
-
-	if (u.uz.dnum == chaos_dnum)
+	}
+	else if (u.uz.dnum == chaos_dnum){
 	    return chaos_montype();
-
-	if (u.uz.dnum == law_dnum)
+	}
+	else if (u.uz.dnum == law_dnum){
 	    return law_montype();
-
-	if (u.uz.dnum == mines_dnum){
+	}
+	else if (u.uz.dnum == mines_dnum){
 		int roll = d(1,10);
 		switch(roll){
 			case 1:	case 2: case 3: case 4: return mkclass(S_GNOME, 0); break;
 			case 5:	case 6: return &mons[PM_DWARF]; break;
 			default: break; //proceed with normal generation
 		}
+	}
+	else if(Is_juiblex_level(&u.uz)){
+		if(rn2(2)) return rn2(2) ? mkclass(S_BLOB, 0) : mkclass(S_PUDDING, 0);
+		//else default
+	}
+	else if(Is_zuggtmoy_level(&u.uz)){
+		if(rn2(2)) return rn2(3) ? mkclass(S_FUNGUS, 0) : mkclass(S_PLANT, 0);
+		//else default
+	}
+	else if(Is_yeenoghu_level(&u.uz)){
+		int roll = d(1,20);
+		switch(roll){
+			case 1:	case 2: case 3: case 4: 
+			case 5:	case 6: case 7: case 8: return &mons[PM_GNOLL]; break;
+			case 9:	return &mons[PM_ANUBITE]; break;
+			case 10: case 11: return &mons[PM_GNOLL_GHOUL]; break;
+			case 12: return &mons[PM_GNOLL_MATRIARCH]; break;
+			default: break; //proceed with normal generation
+		}
+	}
+	else if(Is_baphomet_level(&u.uz)){
+		int roll = d(1,10);
+		switch(roll){
+			case 1:	case 2: return &mons[PM_MINOTAUR]; break;
+			case 3: return &mons[PM_MINOTAUR_PRIESTESS]; break;
+			default: break; //proceed with normal generation
+		}
+	}
+	else if(Is_night_level(&u.uz)){
+		if(rn2(2)) return rn2(2) ? mkclass(S_ZOMBIE, 0) : &mons[PM_SKELETON];
+		if(!rn2(20)) return mkclass(S_LICH, 0);
+		//else default
+	}
+	else if(Is_malcanthet_level(&u.uz)){
+		if(!rn2(6)) return rn2(3) ? &mons[PM_SUCCUBUS] : &mons[PM_INCUBUS];
+		//else default
+	}
+	else if(Is_grazzt_level(&u.uz)){
+		if(!rn2(6)) return !rn2(3) ? &mons[PM_SUCCUBUS] : &mons[PM_INCUBUS];
+		//else default
+	}
+	else if(Is_orcus_level(&u.uz)){
+		if(rn2(2)) return !rn2(3) ? mkclass(S_WRAITH, 0) : &mons[PM_SHADE];
+		if(!rn2(20)) return mkclass(S_LICH, 0);
+		//else default
+	}
+	else if(Is_demogorgon_level(&u.uz)){
+		if(rn2(3)) return mkclass(S_DEMON, 0) ;
+		//else default
+	}
+	else if(Is_dagon_level(&u.uz)){
+		if(rn2(2)){
+			return rn2(3) ? &mons[PM_KRAKEN] : rn2(2) ? &mons[PM_SHARK] : &mons[PM_ELECTRIC_EEL];
+		}
+		//else default
 	}
 
 	if(u.hod && !rn2(10) && rn2(40+u.hod) > 50){
