@@ -739,19 +739,26 @@ movemon()
 	 *		Angels generated afterwards are generated as large groups.
 	 *		Check if any angels on current level were generated before you became a demigod, and create a large group if so.
 	 * 2) Angels move faster if there are more of them in your line of sight, and especially if they are widely separated.
-	 *		Calculate the minimum vission arc that covers all angels in view
+	 *		Calculate the minimum vision arc that covers all angels in view
 	 * 3) Once the current movement loop begins, scale the angel's movement by the value calculated in 2. Also, scale
 	 *		the angel's AC based on the value from 2, slower speed equals higher AC (Quantum Lock).
 	 */
-	//Weeping angel step 1
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+	//Weeping angel step 1
 		if(is_weeping(mtmp->data)){
 			if(mtmp->mextra[1] && u.uevent.udemigod){
 				mtmp->mextra[1] = 0; //Quantum Lock status will be reset below.
 				m_initgrp(mtmp, 0, 0, 10);
 			}
-		} else if(mtmp->data == &mons[PM_RAZORVINE] && !rn2(4) && !(monstermoves % 10) ){
-			makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH|NO_MINVENT);
+		} else if(mtmp->data == &mons[PM_RAZORVINE] && 
+				  mtmp->mhp == mtmp->mhpmax && 
+				  !mtmp->mcan && 
+				  !rn2(4) && 
+				  !((monstermoves + mtmp->mnum) % 10)
+		){
+			struct monst *sprout = (struct monst *) 0;
+			sprout = makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH|NO_MINVENT);
+			if(sprout) sprout->mhp = In_hell(&u.uz) ? sprout->mhp*3/4 : sprout->mhp/2;
 		}
 	}
 	
@@ -1442,7 +1449,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
    combinations, this allows one monster to attack another adjacent one
    in the absence of Conflict.  There is no provision for targetting
    other monsters; just hand to hand fighting when they happen to be
-   next to each other. */
+   next to each other. Incorporates changes from grudge mod */
 long
 mm_aggression(magr, mdef)
 struct monst *magr,	/* monster that is currently deciding where to move */
@@ -1489,6 +1496,10 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		return ALLOW_M|ALLOW_TM;
 	/* and vice versa */
 	if(is_elf(md) && (is_orc(ma) || is_ogre(ma) || is_undead(ma)) && !is_undead(md))
+		return ALLOW_M|ALLOW_TM;
+
+	/* elves vs. drow */
+	if( is_elf(ma) && is_elf(md) && is_drow(ma) != is_drow(md))
 		return ALLOW_M|ALLOW_TM;
 
 	/* Nazgul vs. hobbits */
