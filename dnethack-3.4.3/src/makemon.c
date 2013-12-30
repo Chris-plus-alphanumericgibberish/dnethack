@@ -201,6 +201,11 @@ int otyp,oquan;
 #endif /* OVLB */
 #ifdef OVL2
 
+static NEARDATA int angelwepsbase[] = {
+	SILVER_SABER, LONG_SWORD, LONG_SWORD, SILVER_SABER,
+	TWO_HANDED_SWORD, GLAIVE, LANCE,
+	LUCERN_HAMMER,
+};
 static NEARDATA int angelweps[] = {
 	ART_DEMONBANE, ART_SUNSWORD, ART_SWORD_OF_ERATHAOL, ART_SABER_OF_SABAOTH,
 	ART_SWORD_OF_ONOEL, ART_GLAIVE_OF_SHAMSIEL, ART_LANCE_OF_URIEL,
@@ -640,13 +645,14 @@ register struct monst *mtmp;
 */
 			/*else*/ {
 				int spe2;
+				int artnum = rn2(8);
 	
 			    /* create minion stuff; can't use mongets */
-			    otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+			    otmp = mksobj(angelwepsbase[artnum], FALSE, FALSE);
 	
 			    /* maybe make it special */
 			    if (!rn2(20) || is_lord(ptr))
-				otmp = oname(otmp, artiname(angelweps[rn2(8)]));
+				otmp = oname(otmp, artiname(angelweps[artnum]));
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 			    spe2 = rn2(4);
