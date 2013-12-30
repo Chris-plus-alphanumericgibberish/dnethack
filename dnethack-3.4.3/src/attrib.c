@@ -72,7 +72,7 @@ const struct innate {
 		     {  23, &(HSick_resistance), "immunized","immunocompromised" },
 		     {  25, &(EDisint_resistance), "firm","less firm" },
 		     {  27, &(HStone_resistance), "limber","stiff" },
-		     {  29, &(HAntimagic), "sceptical","credulous" },
+		     {  29, &(HAntimagic), "skeptical","credulous" },
 		     {  30, &(HDrain_resistance), "above earthly concerns","not so above it all" },
 		     {   0, 0, 0, 0 } },
 
@@ -122,9 +122,9 @@ const struct innate {
 	clk_abil[] = { {	1, &(HPoison_resistance), "", "" },
 		     {	 1, &(HSick_resistance), "", "" },
 		     {	 1, &(HStone_resistance), "", "" },
-		     {	 5, &(HShock_resistance), "", "" },
-		     {	 10, &(HCold_resistance), "", "" },
-		     {	 15, &(HFire_resistance), "", "" },
+		     {	 5, &(HShock_resistance), "shock resistant", "less shock resistant" },
+		     {	 10, &(HCold_resistance), "cold resistant", "less cold resistant" },
+		     {	 15, &(HFire_resistance), "heat resistant", "less heat resistant" },
 		     {	 0, 0, 0, 0 } },
 
 	inc_abil[] = { {	1, &(HAntimagic), "", "" },
@@ -626,9 +626,9 @@ int oldlevel, newlevel;
 	case PM_ELF:            rabil = elf_abil;	break;
 	case PM_DROW:           rabil = elf_abil;	break;
 	case PM_ORC:            rabil = orc_abil;	break;
-	case PM_HUMAN:
 	case PM_CLOCKWORK_AUTOMATON:rabil = clk_abil;	break;
 	case PM_INCANTIFIER:	rabil = inc_abil;	break;
+	case PM_HUMAN:
 	case PM_DWARF:
 	case PM_GNOME:
 	case PM_VAMPIRE:
