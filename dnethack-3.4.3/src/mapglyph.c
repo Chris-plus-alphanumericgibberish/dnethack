@@ -252,15 +252,15 @@ unsigned *ospecial;
 				if(Is_abyss1(&u.uz)){
 					if (Is_juiblex_level(&u.uz)){
 						if (offset == S_pool || offset == S_water)
-							color = CLR_BRIGHT_GREEN;
+							color = CLR_GREEN;
 						if(offset >= S_vwall && offset <= S_hcdoor)
 							color = CLR_GREEN;
 						if (offset == S_room)
-							color = CLR_GREEN;
+							color = CLR_BRIGHT_GREEN;
 					}
 					else if (Is_zuggtmoy_level(&u.uz)){
 				if (offset == S_pool || offset == S_water)
-					color = CLR_BRIGHT_GREEN;
+							color = CLR_GREEN;
 				if(offset >= S_vwall && offset <= S_hcdoor)
 					color = CLR_GREEN;
 						if (offset == S_room)
