@@ -172,6 +172,8 @@ static struct trobj Rogue[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Samurai[] = {
+#define S_WEAPON	0
+#define S_SECOND	1
 #define S_ARROWS	3
 	{ KATANA, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ SHORT_SWORD, 0, WEAPON_CLASS, 1, UNDEF_BLESS }, /* wakizashi */
@@ -571,7 +573,7 @@ static const struct def_skill Skill_Ran[] = {
 };
 
 static const struct def_skill Skill_S[] = {
-    { P_DAGGER, P_BASIC },		{ P_KNIFE,  P_SKILLED },
+    { P_DAGGER, P_BASIC },		{ P_KNIFE,  P_EXPERT },
     { P_SHORT_SWORD, P_EXPERT },	{ P_BROAD_SWORD, P_SKILLED },
     { P_LONG_SWORD, P_EXPERT },		{ P_TWO_HANDED_SWORD, P_EXPERT },
     { P_SCIMITAR, P_BASIC },		{ P_SABER, P_BASIC },
@@ -579,6 +581,7 @@ static const struct def_skill Skill_S[] = {
     { P_POLEARMS, P_SKILLED },		{ P_SPEAR, P_BASIC },
     { P_JAVELIN, P_BASIC },		{ P_LANCE, P_SKILLED },
     { P_BOW, P_EXPERT },		{ P_SHURIKEN, P_EXPERT },
+	{ P_DART, P_EXPERT },
     { P_ATTACK_SPELL, P_SKILLED },	{ P_CLERIC_SPELL, P_SKILLED },
 #ifdef STEED
     { P_RIDING, P_SKILLED },
@@ -642,7 +645,7 @@ static const struct def_skill Skill_W[] = {
     { P_QUARTERSTAFF, P_EXPERT },	{ P_POLEARMS, P_SKILLED },
     { P_SPEAR, P_BASIC },		{ P_JAVELIN, P_BASIC },
     { P_TRIDENT, P_BASIC },		{ P_SLING, P_SKILLED },
-    { P_DART, P_EXPERT },		{ P_SHURIKEN, P_BASIC },
+    { P_DART, P_SKILLED },		{ P_SHURIKEN, P_BASIC },
     { P_ATTACK_SPELL, P_EXPERT },	{ P_HEALING_SPELL, P_SKILLED },
     { P_DIVINATION_SPELL, P_EXPERT },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
     { P_CLERIC_SPELL, P_SKILLED },	{ P_ESCAPE_SPELL, P_EXPERT },
@@ -1099,6 +1102,10 @@ u_init()
 		break;
 	case PM_SAMURAI:
 		Samurai[S_ARROWS].trquan = rn1(20, 26);
+		if(flags.female){
+			Samurai[S_WEAPON].trotyp = GLAIVE;
+			Samurai[S_SECOND].trotyp = KNIFE;
+		}
 		ini_inv(Samurai);
 		if(!rn2(5)) ini_inv(Blindfold);
 		knows_class(WEAPON_CLASS);

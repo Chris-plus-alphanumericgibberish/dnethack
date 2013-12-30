@@ -2816,7 +2816,7 @@ int p_skill;
 {
 	int curskill = OLD_P_SKILL(p_skill),
 		maxskill = P_MAX_SKILL(p_skill);
-	if(spiritSkill(p_skill)){
+	if(spiritSkill(p_skill) || roleSkill(p_skill)){
 		curskill += 1;
 	}
 	return min(curskill, maxskill);
@@ -2828,6 +2828,14 @@ int p_skill;
 {
 	return (u.weapon_skills[p_skill].skill==P_ISRESTRICTED 
 		&& !(spiritSkill(p_skill)) );
+}
+
+boolean
+roleSkill(p_skill)
+int p_skill;
+{
+	if(p_skill == P_POLEARMS) return (Role_if(PM_SAMURAI) && uwep && uwep->otyp == GLAIVE);
+	else return FALSE;
 }
 
 boolean

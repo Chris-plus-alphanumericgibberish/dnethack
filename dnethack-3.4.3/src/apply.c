@@ -2679,7 +2679,6 @@ use_pole (obj)
 
 	/* Calculate range */
 	typ = uwep_skill_type();
-	if(Role_if(PM_SAMURAI) && uwep && uwep->otyp == GLAIVE) skillBonus = 1; //Samurai get bonus with Naginatas
 	if (typ == P_NONE || (P_SKILL(typ)+skillBonus) <= P_BASIC) max_range = 4;
 	else if ( (P_SKILL(typ)+skillBonus) == P_SKILLED) max_range = 5;
 	else max_range = 8;
