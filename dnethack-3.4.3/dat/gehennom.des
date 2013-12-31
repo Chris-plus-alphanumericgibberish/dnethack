@@ -290,26 +290,33 @@ TRAP:"magic",random
 #
 MAZE:"abyss-2", ' '
 FLAGS:noteleport,hardfloor,nommap,shortsighted
-INIT_MAP:'.','P',true,true,unlit,false
+INIT_MAP:'.','P',true,true,lit,false
 # guarantee at least one open spot to ensure successful stair placement
+#01234567
 GEOMETRY:left,bottom
 MAP
-PPPPPPPP
-PP...PPP
-PPP...PP
-PPPP.PPP
-PPPPPPPP
+0PPPPPPPP
+1PP...PPP
+2PPP...PP
+3PPPP.PPP
+4PPPPPPPP
 ENDMAP
+#01234567
 OBJECT:'`',"boulder",random
+REGION:(00,00,07,04),lit,"ordinary"
+
+#01234567
 GEOMETRY:right,top
 MAP
-PPPPPPPP
-PPPP.PPP
-PPP...PP
-PP...PPP
-PPPPPPPP
+0PPPPPPPP
+1PPPP.PPP
+2PPP...PP
+3PP...PPP
+4PPPPPPPP
 ENDMAP
+#01234567
 OBJECT:'`',"boulder",random
+REGION:(00,00,07,04),lit,"ordinary"
 # lair
 GEOMETRY:center,center
 MAP
@@ -336,7 +343,7 @@ ENDMAP
 RANDOM_MONSTERS:'n','w','F','F'
 RANDOM_PLACES:(04,02),(46,02),(04,15),(46,15)
 # Dungeon description
-REGION:(00,00,50,17),unlit,"swamp"
+REGION:(00,00,50,17),lit,"swamp"
 MAZEWALK:(00,09),west
 MAZEWALK:(50,08),east
 STAIR:levregion(01,00,11,20),(0,0,50,17),down
@@ -2879,7 +2886,7 @@ ENDMAP
 
 
 STAIR: (08,01), down
-STAIR: (73,19), up
+STAIR: (73,18), up
 
 TELEPORT_REGION:(00,00,46,20),(0,0,0,0),down
 TELEPORT_REGION:(00,00,46,20),(0,0,0,0),up
