@@ -151,6 +151,16 @@
 								(ptr) == &mons[PM_QUINON] ||\
 								(ptr) == &mons[PM_AXUS]\
 							)
+#define is_divider(ptr)		( (ptr) == &mons[PM_BLACK_PUDDING]\
+							  || (ptr) == &mons[PM_BROWN_PUDDING]\
+							  || (ptr) == &mons[PM_DARKNESS_GIVEN_HUNGER]\
+							  || (ptr) == &mons[PM_GREMLIN]\
+							  || (ptr) == &mons[PM_DUNGEON_FERN_SPORE]\
+							  || (ptr) == &mons[PM_DUNGEON_FERN_SPROUT]\
+							  || (ptr) == &mons[PM_SWAMP_FERN_SPORE]\
+							  || (ptr) == &mons[PM_SWAMP_FERN_SPROUT]\
+							  || (ptr) == &mons[PM_RAZORVINE]\
+							)
 #define is_mercenary(ptr)	(((ptr)->mflags2 & M2_MERC) != 0L)
 #define is_male(ptr)		(((ptr)->mflags2 & M2_MALE) != 0L)
 #define is_female(ptr)		(((ptr)->mflags2 & M2_FEMALE) != 0L)
