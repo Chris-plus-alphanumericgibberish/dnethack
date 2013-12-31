@@ -116,6 +116,7 @@ register struct obj *obj;
 	if(obj->oclass == SPBOOK_CLASS && obj->otyp != SPE_BLANK_PAPER && !obj->oartifact) return TRUE;
 	if(obj->oclass == RING_CLASS && obj->spe >= 0 && !obj->oartifact) return TRUE;
 	if(obj->oclass == WAND_CLASS && obj->spe > 0 && obj->otyp != WAN_NOTHING) return TRUE;
+	if(obj->otyp == CORPSE && (obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET)) return TRUE;
 	
 	return FALSE;
 }
@@ -2399,7 +2400,8 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		stackobj(otmp);
 		return 1;
 	}
-	if(Race_if(PM_INCANTIFIER) && !objects[otmp->otyp].oc_unique){ //redundant check against unique
+	if(Race_if(PM_INCANTIFIER)){
+		if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
 		if (otmp->quan > 1L) {
 		    if(!carried(otmp))
 			(void) splitobj(otmp, otmp->quan - 1L);
@@ -2465,6 +2467,15 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				lesshungry(10);
 				if(!otmp->spe) otmp->otyp = WAN_NOTHING;
 				You("drain the %s%s.", xname(otmp),otmp->spe?"":" dry");
+			break;
+			case FOOD_CLASS:
+				if(otmp->otyp == CORPSE){
+					You("drain the %s.", xname(otmp));
+					cprefx(otmp->corpsenm, TRUE);
+					cpostfx(otmp->corpsenm, FALSE);
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				}
 			break;
 		}
 		return 1;
