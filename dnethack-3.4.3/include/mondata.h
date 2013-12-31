@@ -73,6 +73,8 @@
 				 (ptr) == &mons[PM_MIND_FLAYER] || \
 				 (ptr) == &mons[PM_MASTER_MIND_FLAYER])
 #define is_armed(ptr)		attacktype(ptr, AT_WEAP)
+#define crpsdanger(ptr)		(acidic(ptr) || poisonous(ptr) ||\
+							 freezing(ptr) || burning(ptr))
 #define acidic(ptr)		(((ptr)->mflags1 & M1_ACID) != 0L)
 #define poisonous(ptr)		(((ptr)->mflags1 & M1_POIS) != 0L)
 #define freezing(ptr)		(((ptr)->mflags3 & M3_CHILL) != 0L)

@@ -955,6 +955,8 @@ struct monst *mtmp;
 #define MUSE_POT_SLEEPING 16
 #define MUSE_WAN_DRAINING 17	/* KMH */
 #define MUSE_SCR_EARTH 18
+#define MUSE_POT_ENERGY_BLOOD 19
+#define MUSE_POT_STONE_BLOOD 20
 
 #define MUSE_WAN_CANCELLATION 21	/* Lethe */
 
@@ -1042,6 +1044,12 @@ struct monst *mtmp;
 			m.has_offense = MUSE_WAN_MAGIC_MISSILE;
 		    }
 		}
+		nomore(MUSE_POT_STONE_BLOOD);
+		if(obj->otyp == POT_BLOOD && !rn2(20) 
+			&& touch_petrifies(&mons[obj->corpsenm])) {
+			m.offensive = obj;
+			m.has_offense = MUSE_POT_STONE_BLOOD;
+		}
 		nomore(MUSE_WAN_DRAINING);
 		if(obj->otyp == WAN_DRAINING && obj->spe > 0) {
 			m.offensive = obj;
@@ -1076,6 +1084,11 @@ struct monst *mtmp;
 		if(obj->otyp == POT_ACID) {
 			m.offensive = obj;
 			m.has_offense = MUSE_POT_ACID;
+		}
+		nomore(MUSE_POT_ENERGY_BLOOD);
+		if(obj->otyp == POT_BLOOD && crpsdanger(&mons[obj->corpsenm])) {
+			m.offensive = obj;
+			m.has_offense = MUSE_POT_ENERGY_BLOOD;
 		}
 		/* we can safely put this scroll here since the locations that
 		 * are in a 1 square radius are a subset of the locations that
@@ -1560,6 +1573,8 @@ struct monst *mtmp;
 	case MUSE_POT_CONFUSION:
 	case MUSE_POT_SLEEPING:
 	case MUSE_POT_ACID:
+	case MUSE_POT_ENERGY_BLOOD:
+	case MUSE_POT_STONE_BLOOD:
 		/* Note: this setting of dknown doesn't suffice.  A monster
 		 * which is out of sight might throw and it hits something _in_
 		 * sight, a problem not existing with wands because wand rays
