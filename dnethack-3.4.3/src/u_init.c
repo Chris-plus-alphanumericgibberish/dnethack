@@ -1321,6 +1321,7 @@ u_init()
 	    break;
 	case PM_VAMPIRE:
 	    /* Vampires start off with gods not as pleased, luck penalty */
+	    knows_object(POT_BLOOD);
 	    adjalign(-5); 
 		u.ualign.sins += 5;
 	    change_luck(-1);
