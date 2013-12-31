@@ -2802,11 +2802,13 @@ typfnd:
 		switch (typ) {
 		case TIN:
 			otmp->spe = 0; /* No spinach */
+		case POT_BLOOD:
 			if (dead_species(mntmp, FALSE)) {
 			    otmp->corpsenm = NON_PM;	/* it's empty */
 			} else if (!(mons[mntmp].geno & G_UNIQ) &&
 				   !(mvitals[mntmp].mvflags & G_NOCORPSE) &&
-				   mons[mntmp].cnutrit != 0) {
+				   mons[mntmp].cnutrit != 0 &&
+				   !(typ==POT_BLOOD && !has_blood(&mons[mntmp]))) {
 			    otmp->corpsenm = mntmp;
 			}
 			break;
