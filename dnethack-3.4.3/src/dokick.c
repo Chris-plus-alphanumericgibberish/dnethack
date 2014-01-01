@@ -1091,13 +1091,24 @@ dokick()
 			case 2:	pline("Some branches are swinging...");
 				break;
 			case 3:	if (!may_dig(x,y)) goto ouch;
+				{
+				int numsticks;
+				struct obj *staff;
 				pline("The dead tree falls down.");
 				maploc->typ = ROOM;
+				for(numsticks = d(1,4); numsticks > 0; numsticks--){
+					staff = mksobj_at(rn2(2) ? QUARTERSTAFF : CLUB, x, y, FALSE, FALSE);
+					staff->spe = 0;
+					staff->oeroded2 = 1;
+					staff->blessed = FALSE;
+					staff->cursed = TRUE;
+				}
+				unblock_point(x,y);	/* vision */
 				if (Blind)
 					feel_location(x,y);	/* we know it's gone */
 				else
 					newsym(x,y);
-				unblock_point(x,y);	/* vision */
+				}
 				break;
 			case 4: {
 				coord mm;
