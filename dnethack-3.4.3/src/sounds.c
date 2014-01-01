@@ -1786,10 +1786,10 @@ int tx,ty;
 				// pline("The %s falls still, and you know you're in the presence of the Spider.");
 				pline("The great sweep of lives and civilizations seems represented in microcosm by the scene within the seal’s boundaries.");
 				You("sense the twin threads of mortality and despair,");
-				pline("that wrap the world and its inhabitants like silken bindings, and, suddenly,");
+				pline("that wrap this world and its inhabitants like silken bindings, and, suddenly,");
 				pline("you know you are in the presence of the Spider.");
 				if(u.sealCounts < numSlots){
-					pline("She wraps you tight in her bitter cords and sends you forth, bait for her Web.");
+					pline("She wraps you tight in her bitter cords and sends you forth, bait within her web.");
 					unrestrict_weapon_skill(P_KNIFE);
 					u.sealsActive |= SEAL_CHUPOCLOPS;
 					u.spirit[numSlots] = SEAL_CHUPOCLOPS;
@@ -1797,7 +1797,7 @@ int tx,ty;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("She wraps your blade tight in her bitter cords, and anchor for her Web.");
+					pline("She wraps your blade tight in her bitter cords, making it an anchor for her web.");
 					uwep->ovar1 |= SEAL_CHUPOCLOPS;
 					if(!u.spiritTineA){
 						u.spiritTineA = SEAL_CHUPOCLOPS;
