@@ -751,8 +751,10 @@ boolean artif;
 			otmp->oerodeproof = otmp->rknown = 1;
 #endif
 		}
-		if(is_evaporable(otmp)) start_timer(1, TIMER_OBJECT,
+		if(is_evaporable(otmp)){
+			start_timer(1, TIMER_OBJECT,
 					LIGHT_DAMAGE, (genericptr_t)otmp);
+		}
 
 		
 		/* MRKR: Mining helmets have lamps */

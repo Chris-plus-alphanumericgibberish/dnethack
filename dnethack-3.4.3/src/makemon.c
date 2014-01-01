@@ -383,7 +383,7 @@ register struct monst *mtmp;
 		} else if(is_drow(ptr)){
 			if(mm != PM_DROW_MATRON){
 				if (rn2(2)){
-					otmp = mksobj(DROVEN_CHAIN_MAIL, FALSE, FALSE);
+					otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
 					otmp->ohaluengr = TRUE;
 					otmp->ovar1 = curhouse;
 					(void) mpickobj(mtmp, otmp);
@@ -412,11 +412,11 @@ register struct monst *mtmp;
 				break;
 				}
 		    } else {
-				otmp = mksobj(DROVEN_PLATE_MAIL, FALSE, FALSE);
+				otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
 				otmp->ohaluengr = TRUE;
 				otmp->ovar1 = LOLTH_SYMBOL;
 				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(find_signet_ring(), FALSE, FALSE);
+				otmp = mksobj(find_signet_ring(), TRUE, FALSE);
 				otmp->ohaluengr = TRUE;
 				otmp->ovar1 = curhouse;
 				(void) mpickobj(mtmp, otmp);

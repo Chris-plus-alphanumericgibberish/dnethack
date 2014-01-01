@@ -1721,12 +1721,9 @@ boolean in_view;
 		    if (obj->oclass != WAND_CLASS)
 			impossible("breaking odd object?");
 		case CRYSTAL_PLATE_MAIL:
-		case DROVEN_PLATE_MAIL:
-		case DROVEN_CHAIN_MAIL:
 		case DROVEN_BOLT:
 		case DROVEN_DAGGER:
 		case DROVEN_SHORT_SWORD:
-		case DROVEN_CROSSBOW:
 		case LENSES:
 		case MIRROR:
 		case CRYSTAL_BALL:
