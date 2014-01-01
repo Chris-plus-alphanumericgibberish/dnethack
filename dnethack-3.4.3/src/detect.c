@@ -445,6 +445,7 @@ int		class;		/* an object class, 0 for all */
 	if (do_dknown) do_dknown_of(obj);
     }
 
+    if (!Is_paradise(&u.uz)){
     for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
 	if (!class || o_in(obj, class)) {
 	    if (obj->ox == u.ux && obj->oy == u.uy) ctu++;
@@ -452,6 +453,7 @@ int		class;		/* an object class, 0 for all */
 	}
 	if (do_dknown) do_dknown_of(obj);
     }
+	}
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 	if (DEADMONSTER(mtmp)) continue;
@@ -488,6 +490,7 @@ int		class;		/* an object class, 0 for all */
 /*
  *	Map all buried objects first.
  */
+    if (!Is_paradise(&u.uz)){
     for (obj = level.buriedobjlist; obj; obj = obj->nobj)
 	if (!class || (otmp = o_in(obj, class))) {
 	    if (class) {
@@ -498,6 +501,7 @@ int		class;		/* an object class, 0 for all */
 		map_object(otmp, 1);
 	    } else
 		map_object(obj, 1);
+		}
 	}
     /*
      * If we are mapping all objects, map only the top object of a pile or

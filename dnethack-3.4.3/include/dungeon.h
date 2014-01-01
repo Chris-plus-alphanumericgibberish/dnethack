@@ -170,7 +170,10 @@ typedef struct branch {
 
 #define In_sokoban(x)		((x)->dnum == sokoban_dnum)
 #define In_tower(x)		((x)->dnum == tower_dnum)
-#define In_sunsea(x)		((x)->dnum == sea_dnum)
+#define In_sea(x)		((x)->dnum == sea_dnum)
+#define Is_sunsea(x)	(In_sea(x) && dungeon_topology.sea_variant == SUNLESS_SEA_LEVEL)
+#define Is_paradise(x)	(In_sea(x) && dungeon_topology.sea_variant == PARADISE_ISLAND_LEVEL)
+#define Is_sunkcity(x)	(In_sea(x) && dungeon_topology.sea_variant == SUNKEN_CITY_LEVEL)
 #define In_moloch_temple(x)	((x)->dnum == temple_dnum)
 #define Inhell			In_hell(&u.uz)	/* now gehennom */
 #define In_endgame(x)		((x)->dnum == astral_level.dnum)

@@ -7,7 +7,7 @@
 # treasure. Hope you brought your amulet of magical breathing!
 #
 #
-MAZE: "sea",' '
+MAZE: "sea-1",' '
 MESSAGE:"You hear the roar of the sea. That can't be right...."
 GEOMETRY: center,center
 #0        1         2         3         4         5         6
@@ -44,6 +44,18 @@ OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[50%]:')',"silver dagger", random
+OBJECT[10%]:')',"silver saber", random
+OBJECT:'=',random,random
+OBJECT:'=',random,random
 # the missing magic lamp!
 OBJECT:'(',"magic lamp",random
 
@@ -75,7 +87,7 @@ REGION:(00,00,66,15),unlit,"ordinary"
 STAIR:(05,12),up
 BRANCH:(05,12,05,12),(0,0,0,0)
 # the treasure island!
-CONTAINER:'(',"chest",(45,6)
+CONTAINER:'(',"chest",random
 OBJECT: random, random, contained
 OBJECT: random, random, contained
 OBJECT: random, random, contained
@@ -123,3 +135,322 @@ MONSTER: ';',random,random,hostile
 ENGRAVING:(11,03),burn,"The lamp washed into the sea while I slept! Woe and damnnation!"
 OBJECT: random,random,(11,03)
 
+MAZE: "sea-2",' '
+MESSAGE:"You hear the roar of the sea. That can't be right...."
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+0............................................................
+1............................................................
+2................................                ............
+3......................                        ..............
+4..............                        TT       .............
+5........                TT            TT         ...........
+6...                     TT                         .........
+7...                                               T  .......
+8.......                                          TT  .......
+9.......                          L                T   ......
+0.......             TT         LL                   ........
+1..........          TT       LLL           T        ........
+2.............               LL             T       .........
+3.............              LL                      .........
+4.....................     LL                    ............
+5...........................        TTT       ...............
+6..........................          T           ............
+7..........   ...................                   .........
+8..........  ................................................
+9...........  ...............................................
+0............................................................
+ENDMAP
+
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+OBJECT[90%]:random,random,random
+
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT[90%]:'*',random,random
+OBJECT[90%]:'*',random,random
+OBJECT[90%]:'*',random,random
+OBJECT[90%]:'*',random,random
+OBJECT[90%]:'*',random,random
+OBJECT[90%]:'*',random,random
+OBJECT[90%]:'*',random,random
+OBJECT[90%]:'*',random,random
+
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+1}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+2}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}................}}}}}}}}}}}}
+3}}}}}}}}}}}}}}}}}}}}}}........................}}}}}}}}}}}}}}
+4}}}}}}}}}}}}}}.................................}}}}}}}}}}}}}
+5}}}}}}}}.........................................}}}}}}}}}}}
+6}}}................................................}}}}}}}}}
+7}}}..................................................}}}}}}}
+8}}}}}}}.........................  ...................}}}}}}}
+9}}}}}}}......................... L ...................}}}}}}
+0}}}}}}}........................LL ..................}}}}}}}}
+1}}}}}}}}}}...................LLL....................}}}}}}}}
+2}}}}}}}}}}}}}...............LL.....................}}}}}}}}}
+3}}}}}}}}}}}}}..............LL......................}}}}}}}}}
+4}}}}}}}}}}}}}}}}}}}}}.....LL....................}}}}}}}}}}}}
+5}}}}}}}}}}}}}}}}}}}}}}}}}}}..................}}}}}}}}}}}}}}}
+6}}}}}}}}}}}}}}}}}}}}}}}}}}......................}}}}}}}}}}}}
+7}}}}}}}}}}...}}}}}}}}}}}}}}}}}}}...................}}}}}}}}}
+8}}}}}}}}}}..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+9}}}}}}}}}}}..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+ENDMAP
+
+OBJECT:'(',"figurine",random,cursed, 0
+OBJECT[75%]:'(',"figurine",random,cursed, 0
+OBJECT[50%]:'(',"figurine",random,cursed, 0
+OBJECT[25%]:'(',"figurine",random,cursed, 0
+
+CONTAINER:'(',"chest",random
+OBJECT:'$',random,contained
+OBJECT:'$',random,contained
+OBJECT:'$',random,contained
+OBJECT:'$',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'=',random,contained
+OBJECT:'=',random,contained
+OBJECT[50%]:')',"silver dagger", contained
+OBJECT[10%]:')',"silver saber", contained
+OBJECT:'(',"magic lamp",contained
+OBJECT:'(',"oil lamp",contained
+
+GEOMETRY: center,center
+#0         1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+1}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+2}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}................}}}}}}}}}}}}
+3}}}}}}}}}}}}}}}}}}}}}}........................}}}}}}}}}}}}}}
+4}}}}}}}}}}}}}}........................TT.......}}}}}}}}}}}}}
+5}}}}}}}}................TT............TT.........}}}}}}}}}}}
+6}}}.....................TT.........................}}}}}}}}}
+7}}}...............................................T..}}}}}}}
+8}}}}}}}.........................  ...............TT..}}}}}}}
+9}}}}}}}......................... L ...............T...}}}}}}
+0}}}}}}}.............TT.........LL ..................}}}}}}}}
+1}}}}}}}}}}..........TT.......LLL...........T........}}}}}}}}
+2}}}}}}}}}}}}}...............LL.............T.......}}}}}}}}}
+3}}}}}}}}}}}}}..............LL......................}}}}}}}}}
+4}}}}}}}}}}}}}}}}}}}}}.....LL....................}}}}}}}}}}}}
+5}}}}}}}}}}}}}}}}}}}}}}}}}}}........TTT.......}}}}}}}}}}}}}}}
+6}}}}}}}}}}}}}}}}}}}}}}}}}}..........T...........}}}}}}}}}}}}
+7}}}}}}}}}}...}}}}}}}}}}}}}}}}}}}...................}}}}}}}}}
+8}}}}}}}}}}..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+9}}}}}}}}}}}..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+ENDMAP
+BRANCH:(34,10,34,10),(0,0,0,0)
+REGION:(00,00,59,20),  lit,"ordinary",unfilled,false
+
+
+MONSTER: 'f',"tiger",random
+MONSTER: 'f',"tiger",random
+
+MONSTER: 'B',"parrot",random
+MONSTER: 'B',"parrot",random
+MONSTER: 'B',"parrot",random
+MONSTER: 'B',"parrot",random
+
+MONSTER: 'Y',"monkey",random
+MONSTER: 'Y',"monkey",random
+MONSTER: 'Y',"monkey",random
+
+MONSTER: ':',"crocodile",random
+MONSTER: ':',"crocodile",random
+MONSTER: ':',"crocodile",random
+
+MONSTER: 'S',random,random
+MONSTER: 'S',random,random
+MONSTER: 'S',random,random
+
+MONSTER: 's',"giant spider",random
+MONSTER: 's',"giant spider",random
+
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+
+MAZE: "sea-3",' '
+MESSAGE:"You hear the roar of the sea. That can't be right...."
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+0                     }}}}}-    -}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+1              }}}}}}}}}}}}-    -}}}}------}}}}}}}}}}}}}}}}}}
+2         }}}}}}}}}}}}}}}}}-     }}}}-    -}}}}}}}}}}}}}}}}}}
+3       }}}}}}}}}}}}}}}}}}}-    -}}}}-    --------}}}}}}}}}}}
+4       }}}}}}}}}}}}}}}}}}}------}}}}-         -  }}}}}}}}}}}
+5        }}}}}}}}}}}}}}}}}}}}}}}}}}}}-         -    }}}}}}}}}
+6         }}}}}}}}}}}}}}}}}}}------}}------    -    }}}}}}}}}
+7        }}}}}}}}}}}}}}}}}}}}-    -}}}}}}}-          }}}}}}}}
+8       }}}}}}}}}}}}}}}}}}}}}-     }}}}---------------}}}}}}}
+9       }}}}}}}}}}}}}}}}}}}}}-    ------    -    ----- -}}}}}
+0      }}}}}}}}}}}}}}}}}}}}}}-         -    -    -     -}}}}}
+1       }}}}}}}}}}}}}}}}}}}}}------    -    -     -    -}}}}}
+2        }}}}}}}}}}}}}}}}}}}}}}}}}-    -    -    --    -}}}}}
+3        }}}}}}}}}}}}}}}}}}}}}}}}}-    -- ---------    -}}}}}
+4          }}}}}}}}}}}}}}}}}}}}}}}------}}}}}}}}}}------}}}}}
+5           }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+6          }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+7            }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+8               }}}}}}}}}}}}}}}}      }}}}}}}}}}}}}}}}}}}}}}}
+9                 }}}}}}}}}             }}}}}}}}}}}}}}}}}}}}}
+0                     }                     }}}}}}}}}}}}}}}}}
+ENDMAP
+
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+MONSTER: ';',random,random,hostile
+
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+0                          -..  -                            
+1                          -.   -    ------                  
+2                          -.        -....-                  
+3                          -    -    -....--------           
+4                          ------    -.........-             
+5                                    -....-..  -             
+6                            ------  ------.   -             
+7                            -    -       -.                 
+8                            -         ----.-- -------       
+9                            -.   ------....-. ..----- -     
+0                            -.........-....-....-..   -     
+1                            ------....-....-.....-.   -     
+2                                 -.........-....--..  -     
+3                                 -....------------....-     
+4                                 ------          ------     
+5                                                            
+6                                                            
+7                                                            
+8                                                            
+9                                                            
+0                                                            
+ENDMAP
+
+OBJECT:'(',"figurine",random,cursed, 0
+OBJECT[75%]:'(',"figurine",random,cursed, 0
+OBJECT[50%]:'(',"figurine",random,cursed, 0
+OBJECT[25%]:'(',"figurine",random,cursed, 0
+
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:'$',random,random
+OBJECT:')',random,random
+OBJECT:')',random,random
+OBJECT:')',random,random
+OBJECT:')',random,random
+OBJECT:')',random,random
+OBJECT:'"',random,random
+OBJECT:'=',random,random
+OBJECT:'=',random,random
+OBJECT[50%]:')',"silver dagger", random
+OBJECT[10%]:')',"silver saber", random
+OBJECT:'(',"magic lamp",random
+
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deeper one",random,hostile
+
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deep one",random,hostile
+MONSTER: 'h',"deeper one",random,hostile
+
+GEOMETRY: center,center
+#0        1         2         3         4         5         6
+#01234567890123456789012345678901234567890123456789012345678901234567890
+MAP
+0.....................}}}}}-}}}}-}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+1.... .........}}}}}}}}}}}}-}}}}-}}}}------}}}}}}}}}}}}}}}}}}
+2.........}}}}}}}}}}}}}}}}}-}}}}}}}}}-}}}}-}}}}}}}}}}}}}}}}}}
+3.......}}}}}}}}}}}}}}}}}}}-}}}}--}---}}}}--------}}}}}}}}}}}
+4... ...}}}}}}}}}}}}}}}}}}}------}-}}-}}}}}}}}}-}}}}}}}}}}}}}
+5........}}}}}}}}}}}}}}}}}}}}}}}}}}}}-}}}}-}}}}-}}}}}}}}}}}}}
+6.........}}}}}}}}}}}}}}}}}}}------}}------}}}}-}}}}}}}}}}}}}
+7........}}}}}}}}}}}}}}}}}}}}-}}}}-}}}}}}}-}}}}.}}}}}}}}}}}}}
+8.. ....}}}}}}}}}}}}}}}}}}}}}-}}}}}}}}}----}--}-------}}}}}}}
+9.......}}}}}}}}}}}}}}}}}}}}}-}}}}------}}}}-}}}}-----}-}}}}}
+0......}}}}}}}}}}}}}}}}}}}}}}-}}}}}}}}}-}.}}-}}}}-}}}}}-}}}}}
+1.......}}}}}}}}}}}}}}}}}}}}}------}}}}-}}}}-}}}}}-}}}}-}}}}}
+2. ......}}}}}}}}}}}}}}}}}}}}}}}}}-}}}}}}}}}-}}}}--}}}}-}}}}}
+3... ....}}}}}}}}}}}}}}}}}}}}}}}}}-}}}}------------}}}}-}}}}}
+4..........}}}}}}}}}}}}}}}}}}}}}}}------}}}}}}}}}}------}}}}}
+5...........}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+6. ........}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+7...-|.......}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+8....|. ........}}}}}}}}}}}}}}}}......}}}}}}}}}}}}}}}}}}}}}}}
+9....|.... .......}}}}}}}}}.............}}}}}}}}}}}}}}}}}}}}}
+0.....................}.....................}}}}}}}}}}}}}}}}}
+ENDMAP
+
+BRANCH:(03,18,03,18),(0,0,0,0)
+REGION:(00,00,59,20),  lit,"ordinary",unfilled,false
+
+MONSTER: 'B',"crow",random
+MONSTER: 'B',"crow",random
+MONSTER: 'B',"crow",random
+MONSTER: 'B',"crow",random
+MONSTER: 'B',"crow",random
+MONSTER: 'B',"crow",random

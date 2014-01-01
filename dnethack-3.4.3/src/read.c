@@ -892,11 +892,13 @@ struct obj *sobj;
 
 int
 seffects(sobj)
-register struct obj	*sobj;
+struct obj	*sobj;
 {
-	register int cval;
-	register boolean confused = (Confusion != 0);
-	register struct obj *otmp;
+	int cval;
+	boolean confused = (Confusion != 0);
+	struct obj *otmp;
+	boolean extra = FALSE;
+	
 
 	if (objects[sobj->otyp].oc_magic)
 		exercise(A_WIS, TRUE);		/* just for trying */
@@ -1347,6 +1349,20 @@ register struct obj	*sobj;
 		    	    	cvt_sdoor_to_door(&levl[x][y]);
 		    /* do_mapping() already reveals secret passages */
 		}
+		if((sobj->blessed || sobj->oartifact) && Is_paradise(&u.uz)){
+			struct obj* obj;
+			for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
+				if(obj->otyp == CHEST){
+					int x = obj->ox, y = obj->oy;
+					extra = TRUE;
+					make_engr_at(x,y,"X",moves,BURN);
+					if(isok(x+1,y+1)) make_engr_at(x+1,y+1,"\\",moves,BURN);
+					if(isok(x+1,y-1)) make_engr_at(x+1,y-1,"/",moves,BURN);
+					if(isok(x-1,y+1)) make_engr_at(x-1,y+1,"/",moves,BURN);
+					if(isok(x-1,y-1)) make_engr_at(x-1,y-1,"\\",moves,BURN);
+				}
+			}
+		}
 		known = TRUE;
 	case SPE_MAGIC_MAPPING:
 		if (level.flags.nommap) {
@@ -1356,6 +1372,7 @@ register struct obj	*sobj;
 		}
 		if(!(sobj->oartifact)){
 		pline("A map coalesces in your mind!");
+		if(extra) pline("X marks the spot!");
 		cval = (sobj->cursed && !confused);
 		if(cval) HConfusion = 1;	/* to screw up map */
 		do_mapping();

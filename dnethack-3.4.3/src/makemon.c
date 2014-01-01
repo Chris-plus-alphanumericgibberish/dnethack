@@ -2796,8 +2796,60 @@ rndmonst()
 	if (u.uz.dnum == temple_dnum)
 		return rn2(4) ? mkclass(S_ZOMBIE, 0) : mkclass(S_BLOB, 0);
 
-	if (u.uz.dnum == sea_dnum)
+	if(In_sea(&u.uz)){
+		if (Is_sunsea(&u.uz))
 		return rn2(3) ? &mons[PM_JELLYFISH] : rn2(2) ? &mons[PM_SHARK] : &mons[PM_GIANT_EEL];
+		else if(Is_paradise(&u.uz)){
+			switch(rn2(10)){
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+					return mkclass(S_EEL, 0);
+				break;
+				case 4:
+				case 5:
+					return &mons[PM_PARROT];
+				break;
+				case 6:
+					return mkclass(S_SNAKE, 0);
+				break;
+				case 7:
+					return &mons[PM_MONKEY];
+				break;
+				case 8:
+					return mkclass(S_LIZARD,0);
+				break;
+				case 9:
+					return mkclass(S_SPIDER,0);
+				break;
+			}
+		}
+		else if(Is_sunkcity(&u.uz)){
+			switch(rn2(10)){
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+					return mkclass(S_EEL, 0);
+				break;
+				case 4:
+				case 5:
+					return &mons[PM_DEEP_ONE];
+				break;
+				case 6:
+					return &mons[PM_DEEPER_ONE];
+				break;
+				case 7:
+				case 8:
+					return &mons[PM_SOLDIER];
+				break;
+				case 9:
+					return mkclass(S_DOG,0);
+				break;
+			}
+		}
+	}
 
 	if (rndmonst_state.choice_count < 0) {	/* need to recalculate */
 	    int zlevel, minmlev, maxmlev;

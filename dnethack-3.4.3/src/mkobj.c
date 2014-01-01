@@ -1174,6 +1174,35 @@ struct obj *
 rnd_treefruit_at(x,y)
 int x, y;
 {
+	struct obj *otmp;
+	if(Is_zuggtmoy_level(&u.uz)){
+		otmp = mksobj_at(SLIME_MOLD, x, y,TRUE,FALSE);
+		otmp->spe = fruitadd("slime mold");
+		return otmp;
+	} else if((In_quest(&u.uz) && Role_if(PM_PIRATE)) || Is_paradise(&u.uz)){
+		int chance = rn2(100);
+		if(chance < 10){
+			otmp = mksobj_at(SLIME_MOLD, x, y,TRUE,FALSE);
+			otmp->spe = fruitadd("coconut");
+			return otmp;
+		} else if(chance < 25){
+			return mksobj_at(BANANA, x, y, TRUE, FALSE);
+		} else if(chance < 50){
+			otmp = mksobj_at(SLIME_MOLD, x, y,TRUE,FALSE);
+			otmp->spe = fruitadd("mango");
+			return otmp;
+		} else if(chance < 75){
+			return mksobj_at(ORANGE, x, y, TRUE, FALSE);
+		} else if(chance < 99){
+			otmp = mksobj_at(EGG, x, y,TRUE,FALSE);
+			otmp->corpsenm = PM_PARROT;
+			return otmp;
+		} else{
+			otmp = mksobj_at(SLIME_MOLD, x, y,TRUE,FALSE);
+			otmp->spe = fruitadd("tree squid");
+			return otmp;
+		}
+	}
 	return mksobj_at(treefruits[rn2(SIZE(treefruits))], x, y, TRUE, FALSE);
 }
 #endif /* OVL0 */

@@ -114,6 +114,10 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     xchar	d_tomb_dnum;
 	/*The Sunless Sea*/
     xchar	d_sea_dnum;
+	int		sea_variant;
+#define SUNLESS_SEA_LEVEL		1
+#define PARADISE_ISLAND_LEVEL	2
+#define SUNKEN_CITY_LEVEL		3
 	/*The Temple of Moloch*/
     xchar	d_temple_dnum;
 	/*Sokoban*/

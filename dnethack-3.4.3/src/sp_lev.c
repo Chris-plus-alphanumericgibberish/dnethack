@@ -1055,6 +1055,7 @@ struct mkroom	*croom;
 #endif
 
 	stackobj(otmp);
+	if(Is_paradise(&u.uz) && (otmp->otyp == FIGURINE || otmp->otyp == CHEST)) bury_an_obj(otmp);
 
     }		/* if (rn2(100) < o->chance) */
  o_done:

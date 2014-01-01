@@ -536,6 +536,8 @@ register const char *s;
 		dungeon_topology.abys2_variant = levvar;
 	} else if(Is_abyss3(&u.uz)){
 		dungeon_topology.brine_variant = levvar;
+	} else if(In_sea(&u.uz)){
+		dungeon_topology.sea_variant = levvar;
 	}
 #ifdef WIZARD
 	/* SPLEVTYPE format is "level-choice,level-choice"... */

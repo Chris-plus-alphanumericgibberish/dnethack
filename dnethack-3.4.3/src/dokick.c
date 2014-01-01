@@ -957,6 +957,56 @@ dokick()
 					return(1);
 				}
 			    goto ouch;
+			} else if((In_quest(&u.uz) && Role_if(PM_PIRATE)) || Is_paradise(&u.uz)){
+			    if (rn2(15) && !(maploc->looted & TREE_LOOTED) &&
+				  (treefruit = rnd_treefruit_at(x, y))) {
+					long nfruit = 8L-rnl(7), nfall;
+					short frtype = treefruit->otyp;
+					int frtspe = treefruit->spe;
+					treefruit->quan = nfruit;
+					if (is_plural(treefruit))
+					    pline("Some %s fall from the tree!", xname(treefruit));
+					else
+					    pline("%s falls from the tree!", An(xname(treefruit)));
+					nfall = scatter(x,y,2,MAY_HIT,treefruit);
+					if (nfall != nfruit) {
+					    /* scatter left some in the tree, but treefruit
+					     * may not refer to the correct object */
+					    treefruit = mksobj(frtype, TRUE, FALSE);
+					    treefruit->quan = nfruit-nfall;
+						treefruit->spe = frtspe;
+					    pline("%ld %s got caught in the branches.",
+						nfruit-nfall, xname(treefruit));
+					    dealloc_obj(treefruit);
+					}
+					exercise(A_DEX, TRUE);
+					exercise(A_WIS, TRUE);	/* discovered a new food source! */
+					newsym(x, y);
+					maploc->looted |= TREE_LOOTED;
+					return(1);
+			    } else if (rn2(3)) {
+					if ( !rn2(3) && !(mvitals[PM_PARROT].mvflags & G_GONE) )
+					    You_hear("flapping wings."); /* a warning */
+					goto ouch;
+			    } else if (!(maploc->looted & TREE_SWARM)) {
+			    	int cnt = rnl(4) + 2;
+					int made = 0;
+			    	coord mm;
+			    	mm.x = x; mm.y = y;
+					while (cnt--) {
+					    if (enexto(&mm, mm.x, mm.y, &mons[PM_PARROT])
+						&& makemon(&mons[PM_PARROT],
+							       mm.x, mm.y, MM_ANGRY)
+						) made++;
+					}
+					if ( made )
+					    pline("You've disturbed the birds nesting high in the tree's branches!");
+					else
+					    pline("Some colorful feathers drift down.");
+					maploc->looted |= TREE_SWARM;
+					return(1);
+				}
+			    goto ouch;
 			} else if(u.uz.dnum == chaos_dnum) {
 			    if (rn2(6)) {
 					if ( !rn2(3) && !(mvitals[PM_DRYAD].mvflags & G_GONE) )

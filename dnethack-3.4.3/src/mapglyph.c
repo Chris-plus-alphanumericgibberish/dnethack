@@ -159,12 +159,20 @@ unsigned *ospecial;
 						color = CLR_BLACK;
 					}
 				}
-			} else if(In_sunsea(&u.uz)){
+			} else if(Is_sunsea(&u.uz)){
 				if(offset >= S_vwall && offset <= S_trwall){
 					color = CLR_BROWN;
 				}
 				if(offset >= S_room && offset <= S_dnladder){
 					color = CLR_BROWN;
+				}
+			} else if(Is_paradise(&u.uz)){
+				if(offset >= S_room && offset <= S_litcorr){
+					color = CLR_YELLOW;
+				}
+			} else if(Is_sunkcity(&u.uz)){
+				if(offset >= S_room && offset <= S_litcorr){
+					color = CLR_BRIGHT_GREEN;
 				}
 			} else if(In_moloch_temple(&u.uz)){
 				if(offset >= S_vwall && offset <= S_trwall){

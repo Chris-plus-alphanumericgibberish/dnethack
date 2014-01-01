@@ -512,7 +512,8 @@ int x, y;
 
     if (lava_cnt > moat_cnt + pool_cnt && rn2(lava_cnt + 1))
 	return LAVAPOOL;
-    else if (moat_cnt > 0 && rn2(moat_cnt + 1))
+    else if ((moat_cnt > 0 && rn2(moat_cnt + 1)) ||
+			(Is_paradise(&u.uz) && !rn2(10)))
 	return MOAT;
     else if (pool_cnt > 0 && rn2(pool_cnt + 1))
 	return POOL;
