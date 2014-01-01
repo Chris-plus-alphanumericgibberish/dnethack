@@ -1842,6 +1842,7 @@ boolean itemize;
 
 	pay(ltmp, shkp);
 	obj->shopOwned = FALSE;
+	obj->ostolen = FALSE;
 	shk_names_obj(shkp, obj, consumed ?
 			"paid for %s at a cost of %ld gold piece%s.%s" :
 			"bought %s for %ld gold piece%s.%s", ltmp, "");

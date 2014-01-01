@@ -1980,7 +1980,7 @@ register int	mmflags;
 		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 50);
 		if(tryct >= 50){
 			//That failed, return to the default way of handling things
-			ptr = (struct monst *)0;
+			ptr = (struct permonst *)0;
 			x = y = 0;
 		}
 	}

@@ -621,7 +621,7 @@ char *outbuf;
 int
 random_haluIndex()
 {
-	return rn2(SIZE(haluMesg));
+	return rn2(SIZE(haluWard));
 }
 
 int
@@ -1122,7 +1122,7 @@ register int x,y;
 	/* Sensing an engraving does not require sight,
 	 * nor does it necessarily imply comprehension (literacy).
 	 */
-	if(ep && ep->engr_txt[0]) {
+	if(ep && ep->engr_txt[0] && (Underwater || !is_pool(x,y))) {
 	    switch(ep->engr_type) {
 	    case DUST:
 		if(!Blind) {
