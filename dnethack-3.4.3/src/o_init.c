@@ -605,7 +605,7 @@ short otyp;
 	
 	if(!egrings[12]) egrings[12] = find_emerald_ring();
 	
-    for (i = 0; i <= 13; i++)
+    for (i = 0; i < 13; i++)
 		if (egrings[i] == otyp) return TRUE;
 
     return FALSE;
