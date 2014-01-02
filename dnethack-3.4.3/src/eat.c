@@ -116,7 +116,7 @@ register struct obj *obj;
 	if(obj->oclass == SPBOOK_CLASS && obj->otyp != SPE_BLANK_PAPER && !obj->oartifact) return TRUE;
 	if(obj->oclass == RING_CLASS && obj->spe >= 0 && !obj->oartifact) return TRUE;
 	if(obj->oclass == WAND_CLASS && obj->spe > 0 && obj->otyp != WAN_NOTHING) return TRUE;
-	if(obj->otyp == CORPSE && (obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET)) return TRUE;
+	if(obj->otyp == CORPSE && (obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET || obj->corpsenm == PM_NEWT)) return TRUE;
 	
 	return FALSE;
 }
