@@ -47,7 +47,7 @@ STATIC_OVL struct Jitem Japanese_items[] = {
 	{ DWARVISH_MATTOCK, "dwarvish zaghnal" },
 	{ FLAIL, "nunchaku" },
 	{ FOOD_RATION, "gunyoki" },
-	{ GAUNTLETS_OF_FUMBLING, "kote of power" },
+	{ GAUNTLETS_OF_FUMBLING, "kote of fumbling" },
 	{ GAUNTLETS_OF_POWER, "kote of power" },
 	{ GLAIVE, "naginata" },
 	{ GUISARME, "kamayari" },
@@ -586,7 +586,7 @@ char *prefix;
 			case 3:	Strcat(prefix, "thoroughly "); break;
 		}			
 		Strcat(prefix, is_rustprone(obj) ? "rusty " : 
-					   is_evaporable(obj) ? "nebulous " : "burnt ");
+					   is_evaporable(obj) ? "tenuous " : "burnt ");
 	}
 	if (obj->oeroded2 && !iscrys) {
 		switch (obj->oeroded2) {

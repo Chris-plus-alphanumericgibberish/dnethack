@@ -145,7 +145,7 @@ WEAPON("worm tooth", (char *)0,
 WEAPON("crysknife", (char *)0,
 	1, 0, 0,  0, 20,100, 10, 10, 3, P,   P_KNIFE, MINERAL, CLR_WHITE),
 
-WEAPON("sickle", (char *)0,
+WEAPON("sickle", (char *)0, /* Vs plants: +6 to hit and double damage */
 	1, 1, 0, 22, 20,  4,  4,  1, -2, S,   P_HARVEST, IRON, HI_METAL),
 
 WEAPON("axe", (char *)0,
@@ -236,7 +236,7 @@ WEAPON("lucern hammer", "pronged polearm",
 WEAPON("bec de corbin", "beaked polearm",
 	0, 0, 1,  3,100,  8,  8,  6, 0, B|P, P_POLEARMS, IRON, HI_METAL),
 
-WEAPON("scythe", (char *)0,
+WEAPON("scythe", (char *)0, /* 2d4 damage. Vs plants: +6 to hit and double damage */
 	1, 0, 1, 5, 100,  6,  4,  4, -2, S,   P_HARVEST, IRON, HI_METAL),
 
 /* bludgeons */
@@ -563,7 +563,7 @@ RING("invisibility", INVIS, "wire",         150, 1, 0, 5, IRON, HI_METAL),
 RING("see invisible", SEE_INVIS, "engagement",
 					    150, 1, 0, 5, IRON, HI_METAL),
 RING("protection from shape changers", PROT_FROM_SHAPE_CHANGERS, "black signet",
-					    100, 1, 0, 5, MITHRIL, CLR_BRIGHT_CYAN),
+					    100, 1, 0, 5, MITHRIL, CLR_BLACK),
 #undef RING
 
 /* amulets ... - THE Amulet comes last because it is special */
