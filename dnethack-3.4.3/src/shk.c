@@ -1619,7 +1619,7 @@ shk_other_services()
 		slang = (flags.female) ? "lady" : "buddy";
 
 	/* Init the shopkeeper */
-	shkp = shop_keeper(/* roomno= */u.ushops);
+	shkp = shop_keeper(*u.ushops);
 	
 	if(uclockwork && yn("Shall I wind your mainspring?") == 'y'){
 		struct obj *key;
