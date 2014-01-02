@@ -408,7 +408,8 @@ register struct monst *mtmp;
 						(void)mongets(mtmp, DROVEN_SHORT_SWORD);
 						(void)mongets(mtmp, SMALL_SHIELD);
 					}
-					(void)mongets(mtmp, SCYTHE);
+					(void)mongets(mtmp, POT_SLEEPING);
+					(void)mongets(mtmp, POT_SLEEPING);
 				break;
 				}
 		    } else {

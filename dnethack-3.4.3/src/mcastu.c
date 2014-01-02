@@ -1075,19 +1075,27 @@ int spellnum;
 	break;
     }
     case INSECTS:
+	if(!mtmp) goto psibolt;
       {
 	/* Try for insects, and if there are none
 	   left, go for (sticks to) snakes.  -3. */
-	struct permonst *pm = mkclass(S_ANT,0);
+	struct permonst *mdat = mtmp->data;
+	struct permonst *pm;
 	struct monst *mtmp2 = (struct monst *)0;
-	char let = (pm ? S_ANT : S_SNAKE);
+	char let;
 	boolean success;
 	int i;
 	coord bypos;
 	int quan;
 
-	if(!mtmp) goto psibolt;
-	
+	if(is_drow(mdat)){
+		pm = mkclass(S_SPIDER,0);
+		let = (pm ? S_SPIDER : S_SNAKE);
+	}
+	else{
+		pm = mkclass(S_ANT,0);
+		let = (pm ? S_ANT : S_SNAKE);
+	}
 	quan = (mtmp->m_lev < 2) ? 1 : rnd((int)mtmp->m_lev / 2);
 	if (quan < 3) quan = 3;
 	success = pm ? TRUE : FALSE;
@@ -1121,13 +1129,13 @@ int spellnum;
 		Monnam(mtmp));
 	else if (Invisible && !perceives(mtmp->data) &&
 				(mtmp->mux != u.ux || mtmp->muy != u.uy))
-	    pline("%s summons insects around a spot near you!",
-		Monnam(mtmp));
+	    pline("%s summons %s around a spot near you!",
+		Monnam(mtmp), let == S_SPIDER ? "arachnids" : "insects");
 	else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy))
-	    pline("%s summons insects around your displaced image!",
-		Monnam(mtmp));
+	    pline("%s summons %s around your displaced image!",
+		Monnam(mtmp), let == S_SPIDER ? "arachnids" : "insects");
 	else
-	    pline("%s summons insects!", Monnam(mtmp));
+	    pline("%s summons %s!", Monnam(mtmp), let == S_SPIDER ? "arachnids" : "insects");
 	dmg = 0;
 	break;
       }
@@ -2444,24 +2452,34 @@ int spellnum;
 	break;
     }
     case INSECTS:
+	if (!mtmp || mtmp->mhp < 1) {
+	    impossible("insect spell with no target");
+	    return;
+	}
       {
 	/* Try for insects, and if there are none
 	   left, go for (sticks to) snakes.  -3. */
-	struct permonst *pm = mkclass(S_ANT,0);
+	struct permonst *pm;
 	struct monst *mtmp2 = (struct monst *)0;
-	char let = (pm ? S_ANT : S_SNAKE);
+	char let;
 	boolean success;
 	int i;
 	coord bypos;
 	int quan;
         
-	if (!mtmp || mtmp->mhp < 1) {
-	    impossible("insect spell with no mtmp");
-	    return;
+	if((yours && Race_if(PM_DROW)) || 
+		(!yours && is_drow((mattk->data)) )){ /*summoning is determined by your actual race*/
+		pm = mkclass(S_SPIDER,0);
+		let = (pm ? S_SPIDER : S_SNAKE);
+	}
+	else{
+		pm = mkclass(S_ANT,0);
+		let = (pm ? S_ANT : S_SNAKE);
 	}
 
-	quan = (mons[u.umonnum].mlevel < 2) ? 1 : 
+	if(yours) quan = (mons[u.umonnum].mlevel < 2) ? 1 : 
 	       rnd(mons[u.umonnum].mlevel / 2);
+	else quan = (mattk->m_lev < 2) ? 1 : rnd((int)mattk->m_lev / 2);
 	if (quan < 3) quan = 3;
 	success = pm ? TRUE : FALSE;
 	for (i = 0; i <= quan; i++) {
@@ -2488,7 +2506,7 @@ int spellnum;
 	    else if (let == S_SNAKE)
 	        You("transforms a clump of sticks into snakes!");
 	    else
-	        You("summon insects!");
+	        You("summon %s!",let == S_SPIDER ? "arachnids" : "insects");
         } else if (canseemon(mtmp)) {
 	    if (!success)
 	        pline("%s casts at a clump of sticks, but nothing happens.",
@@ -2497,7 +2515,7 @@ int spellnum;
 	        pline("%s transforms a clump of sticks into snakes!",
 		      Monnam(mattk));
 	    else
-	        pline("%s summons insects!", Monnam(mattk));
+	        pline("%s summons %s!", Monnam(mattk),let == S_SPIDER ? "arachnids" : "insects");
 	}
 	dmg = 0;
 	break;
