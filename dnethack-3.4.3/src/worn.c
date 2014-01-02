@@ -840,6 +840,12 @@ long timeout;
 	boolean on_floor = obj->where == OBJ_FLOOR,
 		in_invent = obj->where == OBJ_INVENT;
 
+	if(obj->shopOwned){
+		start_timer(1, TIMER_OBJECT,
+					LIGHT_DAMAGE, (genericptr_t)obj);
+		return;
+	}
+
 //	pline("checking light damage");
 	if (on_floor) {
 	    x = obj->ox;
