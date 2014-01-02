@@ -17,6 +17,7 @@ STATIC_DCL void FDECL(reward_untrap, (struct trap *, struct monst *));
 STATIC_DCL int FDECL(disarm_holdingtrap, (struct trap *));
 STATIC_DCL int FDECL(disarm_rust_trap, (struct trap *));
 STATIC_DCL int FDECL(disarm_fire_trap, (struct trap *));
+STATIC_DCL int FDECL(disarm_magic_trap, (struct trap *));
 STATIC_DCL int FDECL(disarm_landmine, (struct trap *));
 STATIC_DCL int FDECL(disarm_squeaky_board, (struct trap *));
 STATIC_DCL int FDECL(disarm_shooting_trap, (struct trap *, int));
@@ -3422,6 +3423,22 @@ struct trap *ttmp;
 	return 1;
 }
 
+STATIC_OVL int
+disarm_magic_trap(ttmp) /* Paul Sonier */
+struct trap *ttmp;
+{
+	xchar trapx = ttmp->tx, trapy = ttmp->ty;
+	if(!Race_if(PM_INCANTIFIER)){
+		You("cannot disable %s trap.", (u.dx || u.dy) ? "that" : "this");
+		return 0;
+	} //else
+	You("drain the trap's magical energy!");
+	lesshungry(50);
+	deltrap(ttmp);
+	newsym(trapx, trapy);
+	return 1;
+}
+
 /* getobj will filter down to cans of grease and known potions of oil */
 static NEARDATA const char oil[] = { ALL_CLASSES, TOOL_CLASS, POTION_CLASS, 0 };
 static NEARDATA const char disarmpotion[] = { ALL_CLASSES, POTION_CLASS, 0 };
@@ -3738,6 +3755,11 @@ boolean force;
 				    return 0;
 				}
 				return help_monster_out(mtmp, ttmp);
+			case TELEP_TRAP:
+			case LEVEL_TELEP:
+			case MAGIC_TRAP:
+			case POLY_TRAP:
+				return disarm_magic_trap(ttmp);
 			default:
 				You("cannot disable %s trap.", (u.dx || u.dy) ? "that" : "this");
 				return 0;
