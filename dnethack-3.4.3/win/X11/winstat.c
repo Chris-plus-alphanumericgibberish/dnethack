@@ -35,6 +35,7 @@
 #include "winX.h"
 
 extern const char *hu_stat[]; /* from eat.c */
+extern const char *ca_hu_stat[];	/* defined in eat.c */
 extern const char *enc_stat[]; /* from botl.c */
 
 static void FDECL(update_fancy_status, (struct xwindow *));
@@ -381,7 +382,7 @@ update_val(attr_rec, new_value)
 
 	/* special cases: hunger, encumbrance, sickness */
 	if (attr_rec == &shown_stats[F_HUNGER]) {
-	    XtSetArg(args[0], XtNlabel, hu_stat[new_value]);
+	    XtSetArg(args[0], XtNlabel, uclockwork ? ca_hu_stat[new_value] : hu_stat[new_value]);
 	} else if (attr_rec == &shown_stats[F_ENCUMBER]) {
 	    XtSetArg(args[0], XtNlabel, enc_stat[new_value]);
 	} else if (attr_rec == &shown_stats[F_SICK]) {

@@ -200,6 +200,7 @@ int qt_compact_mode = 0;
 #endif
 extern const char *enc_stat[]; /* from botl.c */
 extern const char *hu_stat[]; /* from eat.c */
+extern const char *ca_hu_stat[];	/* defined in eat.c */
 extern const char *killed_by_prefix[];
 extern int total_tiles_used; // from tile.c
 extern short glyph2tile[]; // from tile.c
@@ -2479,7 +2480,7 @@ void NetHackQtStatusWindow::updateStats()
     intel.setLabel("INT:",(long)ACURR(A_INT));
     wis.setLabel("WIS:",(long)ACURR(A_WIS));
     cha.setLabel("CHA:",(long)ACURR(A_CHA));
-    const char* hung=hu_stat[u.uhs];
+    const char* hung=uclockwork ? ca_hu_stat[u.uhs] : hu_stat[u.uhs];
     if (hung[0]==' ') {
 	hunger.hide();
     } else {

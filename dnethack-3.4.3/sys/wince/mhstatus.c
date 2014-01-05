@@ -172,6 +172,7 @@ void mswin_status_window_size (HWND hWnd, LPSIZE sz)
 	}
 }
 extern const char *hu_stat[];	/* defined in eat.c */
+extern const char *ca_hu_stat[];	/* defined in eat.c */
 extern const char *enc_stat[]; /* define in botl.c */
 void FormatStatusString(char* text, int format)
 {
@@ -252,9 +253,16 @@ void FormatStatusString(char* text, int format)
 	if(flags.time)
 	    Sprintf(nb = eos(nb), "T:%ld ", moves);
 
+	if(uclockwork){
+		if(strcmp(ca_hu_stat[u.uhs], "        ")) {
+			Strcat(text, ca_hu_stat[u.uhs]);
+			Sprintf(nb = eos(nb), " ");
+		}
+	}else{
 	if(strcmp(hu_stat[u.uhs], "        ")) {
 		Strcat(text, hu_stat[u.uhs]);
 		Sprintf(nb = eos(nb), " ");
+		}
 	}
 	if(Confusion)	   Sprintf(nb = eos(nb), "Conf");
 	if(Sick) {

@@ -9,6 +9,7 @@
 
 
 extern const char *hu_stat[]; /* from eat.c */
+extern const char *ca_hu_stat[];	/* defined in eat.c */
 extern const char *enc_stat[]; /* from botl.c */
 
 void ghack_status_window_update_stats();
@@ -726,7 +727,7 @@ void ghack_status_window_update_stats()
 	}
     }
     
-    hung=hu_stat[u.uhs];
+    hung=uclockwork ? ca_hu_stat[u.uhs] : hu_stat[u.uhs];
     if (lastHungr != u.uhs) {
 	if (firstTime==FALSE) {
 	    /* Ok, this changed so add it to the highlighing list */
