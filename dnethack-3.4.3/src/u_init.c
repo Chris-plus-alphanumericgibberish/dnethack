@@ -1159,9 +1159,10 @@ u_init()
 
 	case PM_INCANTIFIER:
 		skill_add(Skill_I);
-	    if (!Role_if(PM_HEALER)) ini_inv(HealingBook);
+	    if (!Role_if(PM_HEALER) && (!Role_if(PM_MONK) || Monk[M_BOOK].trotyp != SPE_HEALING)) ini_inv(HealingBook);
+		else ini_inv(ExtraBook);
 	    if (!Role_if(PM_WIZARD)) ini_inv(ForceBook);
-	    if (Role_if(PM_WIZARD) || Role_if(PM_HEALER)) ini_inv(ExtraBook);
+		else ini_inv(ExtraBook);
     break;
 
 	case PM_ELF:
@@ -1725,6 +1726,10 @@ register struct trobj *trop;
 				    (Role_if(PM_WIZARD) || Race_if(PM_INCANTIFIER)))
 				|| (otyp == SPE_HEALING &&
 				    Race_if(PM_INCANTIFIER))
+				|| ((otyp == SPE_HEALING || 
+					 otyp == SPE_EXTRA_HEALING ||
+					 otyp == SPE_STONE_TO_FLESH) &&
+				    Role_if(PM_HEALER))
 				/* powerful spells are either useless to
 				   low level players or unbalancing; also
 				   spells in restricted skill categories */
