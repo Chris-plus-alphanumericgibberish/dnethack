@@ -164,9 +164,13 @@ register boolean special;
 		case PM_CAVEMAN:
 		case PM_CAVEWOMAN:
 		    if (rn2(4)) weapon = MACE;
-		    else if (rn2(2)) weapon = CLUB;
+		    else weapon = CLUB;
 		    if (helm == HELM_OF_BRILLIANCE) helm = STRANGE_OBJECT;
 		    break;
+		case PM_CLOCKWORK_AUTOMATON:
+		    weapon = LONG_SWORD;
+		    armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
+		break;
 		case PM_EXILE:
 			weapon = SCYTHE;
 			armor = ELVEN_MITHRIL_COAT;
