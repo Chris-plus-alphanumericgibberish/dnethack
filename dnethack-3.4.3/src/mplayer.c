@@ -171,6 +171,11 @@ register boolean special;
 		    weapon = LONG_SWORD;
 		    armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
 		break;
+#ifdef PM_CONVICT
+		case PM_CONVICT:
+		    if (rn2(4)) weapon = FLAIL;
+		break;
+#endif
 		case PM_EXILE:
 			weapon = SCYTHE;
 			armor = ELVEN_MITHRIL_COAT;
@@ -241,7 +246,9 @@ register boolean special;
 		    if (rn2(4)) helm = HELM_OF_BRILLIANCE;
 		    shield = STRANGE_OBJECT;
 		    break;
-		default: impossible("bad mplayer monster");
+		default:
+			pline("Recieved %d.",monsndx(ptr));
+			impossible("bad mplayer monster");
 		    weapon = 0;
 		    break;
 	    }
