@@ -1105,7 +1105,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 
 	    case ANTI_MAGIC:
 		seetrap(trap);
-		if(Antimagic) {
+		if(Antimagic && !Race_if(PM_INCANTIFIER)) {
 		    shieldeff(u.ux, u.uy);
 		    You_feel("momentarily lethargic.");
 		} else drain_en(rnd(u.ulevel) + 1);
