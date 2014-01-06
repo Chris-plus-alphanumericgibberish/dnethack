@@ -419,14 +419,14 @@ morguemon()
 	register int i = rn2(100), hd = rn2(level_difficulty());
 
 	if(hd > 10 && i < 10)
-		return((Inhell || In_endgame(&u.uz)) ? mkclass(S_DEMON,0) :
-							   mkclass(S_MUMMY,0));
+		return((Inhell || In_endgame(&u.uz)) ? mkclass(S_DEMON,G_NOHELL|G_HELL) :
+							   mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL));
 //						       &mons[ndemon(A_NONE)]); Was this, but I think this was nullpointering
 	if(hd > 8 && i > 85)
-		return(mkclass(S_VAMPIRE,0));
+		return(mkclass(S_VAMPIRE, Inhell ? G_HELL : G_NOHELL));
 
 	return((i < 20) ? &mons[PM_GHOST]
-			: (i < 40) ? &mons[PM_WRAITH] : mkclass(S_ZOMBIE,0));
+			: (i < 40) ? &mons[PM_WRAITH] : mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL));
 }
 
 STATIC_OVL struct permonst *
@@ -474,7 +474,7 @@ mkswamp()	/* Michiel Huisjes & Fred de Wilde */
 			}
 		    } else
 			if(!rn2(4))	/* swamps tend to be moldy */
-			    (void) makemon(mkclass(S_FUNGUS,0),
+			    (void) makemon(mkclass(S_FUNGUS, Inhell ? G_HELL : G_NOHELL),
 						sx, sy, NO_MM_FLAGS);
 			else if(!rn2(6))
 			    if (!rn2(2)) /* swamp ferns like swamps */
@@ -668,15 +668,15 @@ struct permonst *
 courtmon()
 {
 	int     i = rn2(60) + rn2(3*level_difficulty());
-	if (i > 100)		return(mkclass(S_DRAGON,0));
-	else if (i > 95)	return(mkclass(S_GIANT,0));
-	else if (i > 85)	return(mkclass(S_TROLL,0));
-	else if (i > 75)	return(mkclass(S_CENTAUR,0));
-	else if (i > 60)	return(mkclass(S_ORC,0));
+	if (i > 100)		return(mkclass(S_DRAGON, Inhell ? G_HELL : G_NOHELL));
+	else if (i > 95)	return(mkclass(S_GIANT, Inhell ? G_HELL : G_NOHELL));
+	else if (i > 85)	return(mkclass(S_TROLL, Inhell ? G_HELL : G_NOHELL));
+	else if (i > 75)	return(mkclass(S_CENTAUR, Inhell ? G_HELL : G_NOHELL));
+	else if (i > 60)	return(mkclass(S_ORC, Inhell ? G_HELL : G_NOHELL));
 	else if (i > 45)	return(&mons[PM_BUGBEAR]);
 	else if (i > 30)	return(&mons[PM_HOBGOBLIN]);
-	else if (i > 15)	return(mkclass(S_GNOME,0));
-	else			return(mkclass(S_KOBOLD,0));
+	else if (i > 15)	return(mkclass(S_GNOME, Inhell ? G_HELL : G_NOHELL));
+	else			return(mkclass(S_KOBOLD, Inhell ? G_HELL : G_NOHELL));
 }
 
 #define NSTYPES (PM_CAPTAIN - PM_SOLDIER + 1)

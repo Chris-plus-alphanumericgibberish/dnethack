@@ -2684,17 +2684,17 @@ rndmonst()
 	else if (u.uz.dnum == mines_dnum){
 		int roll = d(1,10);
 		switch(roll){
-			case 1:	case 2: case 3: case 4: return mkclass(S_GNOME, 0); break;
+			case 1:	case 2: case 3: case 4: return mkclass(S_GNOME, G_NOHELL); break;
 			case 5:	case 6: return &mons[PM_DWARF]; break;
 			default: break; //proceed with normal generation
 		}
 	}
 	else if(Is_juiblex_level(&u.uz)){
-		if(rn2(2)) return rn2(2) ? mkclass(S_BLOB, 0) : mkclass(S_PUDDING, 0);
+		if(rn2(2)) return rn2(2) ? mkclass(S_BLOB, G_NOHELL|G_HELL) : mkclass(S_PUDDING, G_NOHELL|G_HELL);
 		//else default
 	}
 	else if(Is_zuggtmoy_level(&u.uz)){
-		if(rn2(2)) return rn2(3) ? mkclass(S_FUNGUS, 0) : mkclass(S_PLANT, 0);
+		if(rn2(2)) return rn2(3) ? mkclass(S_FUNGUS, G_NOHELL|G_HELL) : mkclass(S_PLANT, G_NOHELL|G_HELL);
 		//else default
 	}
 	else if(Is_yeenoghu_level(&u.uz)){
@@ -2717,8 +2717,8 @@ rndmonst()
 		}
 	}
 	else if(Is_night_level(&u.uz)){
-		if(rn2(2)) return rn2(2) ? mkclass(S_ZOMBIE, 0) : &mons[PM_SKELETON];
-		if(!rn2(20)) return mkclass(S_LICH, 0);
+		if(rn2(2)) return rn2(2) ? mkclass(S_ZOMBIE, G_NOHELL|G_HELL) : &mons[PM_SKELETON];
+		if(!rn2(20)) return mkclass(S_LICH, G_NOHELL|G_HELL);
 		//else default
 	}
 	else if(Is_malcanthet_level(&u.uz)){
@@ -2730,12 +2730,12 @@ rndmonst()
 		//else default
 	}
 	else if(Is_orcus_level(&u.uz)){
-		if(rn2(2)) return !rn2(3) ? mkclass(S_WRAITH, 0) : &mons[PM_SHADE];
-		if(!rn2(20)) return mkclass(S_LICH, 0);
+		if(rn2(2)) return !rn2(3) ? mkclass(S_WRAITH, G_NOHELL|G_HELL) : &mons[PM_SHADE];
+		if(!rn2(20)) return mkclass(S_LICH, G_NOHELL|G_HELL);
 		//else default
 	}
 	else if(Is_demogorgon_level(&u.uz)){
-		if(rn2(3)) return mkclass(S_DEMON, 0) ;
+		if(rn2(3)) return mkclass(S_DEMON, G_NOHELL|G_HELL) ;
 		//else default
 	}
 	else if(Is_dagon_level(&u.uz)){
@@ -2775,27 +2775,27 @@ rndmonst()
 			case 2:
 			case 3:
 			case 4:
-				return mkclass(S_ZOMBIE, 0);
+				return mkclass(S_ZOMBIE, G_NOHELL);
 			break;
 			case 5:
 			case 6:
-				return mkclass(S_IMP, 0);
+				return mkclass(S_IMP, G_NOHELL);
 			break;
 			case 7:
-				return mkclass(S_DOG,0);
+				return mkclass(S_DOG,G_NOHELL);
 			break;
 			case 8:
-				return mkclass(S_VAMPIRE,0);
+				return mkclass(S_VAMPIRE, G_NOHELL);
 			break;
 			case 9:
-				return mkclass(S_DEMON,0);
+				return mkclass(S_DEMON, G_HELL);
 			break;
 		}
 	if (u.uz.dnum == tomb_dnum)
-		return rn2(2) ? mkclass(S_ZOMBIE, 0) : mkclass(S_MUMMY, 0);
+		return rn2(2) ? mkclass(S_ZOMBIE, G_NOHELL) : mkclass(S_MUMMY, G_NOHELL);
 
 	if (u.uz.dnum == temple_dnum)
-		return rn2(4) ? mkclass(S_ZOMBIE, 0) : mkclass(S_BLOB, 0);
+		return rn2(4) ? mkclass(S_ZOMBIE, G_NOHELL) : mkclass(S_BLOB, G_NOHELL);
 
 	if(In_sea(&u.uz)){
 		if (Is_sunsea(&u.uz))
@@ -2806,23 +2806,23 @@ rndmonst()
 				case 1:
 				case 2:
 				case 3:
-					return mkclass(S_EEL, 0);
+					return mkclass(S_EEL, G_NOHELL);
 				break;
 				case 4:
 				case 5:
 					return &mons[PM_PARROT];
 				break;
 				case 6:
-					return mkclass(S_SNAKE, 0);
+					return mkclass(S_SNAKE, G_NOHELL);
 				break;
 				case 7:
 					return &mons[PM_MONKEY];
 				break;
 				case 8:
-					return mkclass(S_LIZARD,0);
+					return mkclass(S_LIZARD,G_NOHELL);
 				break;
 				case 9:
-					return mkclass(S_SPIDER,0);
+					return mkclass(S_SPIDER,G_NOHELL);
 				break;
 			}
 		}
@@ -2832,7 +2832,7 @@ rndmonst()
 				case 1:
 				case 2:
 				case 3:
-					return mkclass(S_EEL, 0);
+					return mkclass(S_EEL, G_NOHELL);
 				break;
 				case 4:
 				case 5:
@@ -2846,7 +2846,7 @@ rndmonst()
 					return &mons[PM_SOLDIER];
 				break;
 				case 9:
-					return mkclass(S_DOG,0);
+					return mkclass(S_DOG,G_NOHELL);
 				break;
 			}
 		}
@@ -2962,7 +2962,7 @@ char	class;
 int	spc;
 {
 	register int	first, last, num = 0;
-	int maxmlev, mask = (G_NOGEN | G_UNIQ) & ~spc;
+	int maxmlev, mask = (G_NOHELL | G_HELL | G_NOGEN | G_UNIQ) & ~spc;
 
 	maxmlev = level_difficulty() >> 1;
 	if(class < 1 || class >= MAXMCLASSES) {

@@ -345,10 +345,10 @@ do_pit:		    chasm = maketrap(x,y,PIT);
                        switch(rn2(In_hell(&u.uz) ? 7 : 5)) {
                       case 2:(void) makemon(&mons[PM_ROCK_MOLE], x, y, NO_MM_FLAGS);
                        case 3:(void) makemon(&mons[PM_EARTH_ELEMENTAL], x, y, NO_MM_FLAGS);
-                       case 4:(void) makemon(mkclass(S_XORN, 0), x, y, NO_MM_FLAGS);
-                       case 5:(void) makemon(mkclass(S_DEMON, 0), x, y, NO_MM_FLAGS);
+                       case 4:(void) makemon(mkclass(S_XORN,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+                       case 5:(void) makemon(mkclass(S_DEMON, G_NOHELL|G_HELL), x, y, NO_MM_FLAGS);
                       case 6:(void) makemon(&mons[PM_UMBER_HULK], x, y, NO_MM_FLAGS);
-                       default:(void) makemon(mkclass(S_ZOMBIE, 0), x, y, NO_MM_FLAGS);
+                       default:(void) makemon(mkclass(S_ZOMBIE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
                        }
                        mtmp = m_at(x,y);
                        if (mtmp && canseemon(mtmp)) horrors++;

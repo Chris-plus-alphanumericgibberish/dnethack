@@ -1089,11 +1089,11 @@ int spellnum;
 	int quan;
 
 	if(is_drow(mdat)){
-		pm = mkclass(S_SPIDER,0);
+		pm = mkclass(S_SPIDER,G_NOHELL|G_HELL);
 		let = (pm ? S_SPIDER : S_SNAKE);
 	}
 	else{
-		pm = mkclass(S_ANT,0);
+		pm = mkclass(S_ANT,G_NOHELL|G_HELL);
 		let = (pm ? S_ANT : S_SNAKE);
 	}
 	quan = (mtmp->m_lev < 2) ? 1 : rnd((int)mtmp->m_lev / 2);
@@ -1102,7 +1102,7 @@ int spellnum;
 	for (i = 0; i <= quan; i++) {
 	    if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data))
 		break;
-	    if ((pm = mkclass(let,0)) != 0 &&
+	    if ((pm = mkclass(let,G_NOHELL|G_HELL)) != 0 &&
 		    (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
 		success = TRUE;
 		mtmp2->msleeping = mtmp2->mpeaceful = mtmp2->mtame = 0;
@@ -1355,7 +1355,7 @@ drainhp:
        break;
     case NIGHTMARE:
        You_hear("%s laugh menacingly as the world blurs around you...", mtmp ? mon_nam(mtmp) : "Someone");
-       dmg = (dmg + 1) / ((Antimagic + Half_spell_damage) * 2);
+       if(Antimagic||Half_spell_damage) dmg = (dmg + 1) / ((Antimagic + Half_spell_damage) * 2);
        make_confused(HConfusion + dmg*10, FALSE);
        make_stunned(HStun + dmg*5, FALSE);
        make_hallucinated(HHallucination + dmg*15, FALSE, 0L);
@@ -2469,11 +2469,11 @@ int spellnum;
         
 	if((yours && Race_if(PM_DROW)) || 
 		(!yours && is_drow((mattk->data)) )){ /*summoning is determined by your actual race*/
-		pm = mkclass(S_SPIDER,0);
+		pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
 		let = (pm ? S_SPIDER : S_SNAKE);
 	}
 	else{
-		pm = mkclass(S_ANT,0);
+		pm = mkclass(S_ANT,G_NOHELL|G_HELL);
 		let = (pm ? S_ANT : S_SNAKE);
 	}
 
@@ -2485,7 +2485,7 @@ int spellnum;
 	for (i = 0; i <= quan; i++) {
 	    if (!enexto(&bypos, mtmp->mx, mtmp->my, mtmp->data))
 		break;
-	    if ((pm = mkclass(let,0)) != 0 &&
+	    if ((pm = mkclass(let,G_NOHELL|G_HELL)) != 0 &&
 		    (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
 		success = TRUE;
 		mtmp2->msleeping = 0;

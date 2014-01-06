@@ -929,7 +929,7 @@ struct obj **optr;
 		    !(mvitals[PM_DRYAD].mvflags & G_GONE) &&
 		    !(mvitals[PM_NAIAD].mvflags & G_GONE) &&
 		    !(mvitals[PM_OREAD].mvflags & G_GONE) &&
-		    (mtmp = makemon(mkclass(S_NYMPH, 0),
+		    (mtmp = makemon(mkclass(S_NYMPH, Inhell ? G_HELL : G_NOHELL),
 					u.ux, u.uy, NO_MINVENT)) != 0) {
 		You("summon %s!", a_monnam(mtmp));
 		if (!obj_resists(obj, 93, 100)) {

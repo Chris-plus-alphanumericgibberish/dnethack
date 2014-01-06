@@ -786,7 +786,7 @@ struct mkroom	*croom;
 	    else if (g_mvflags & G_GONE)	/* genocided or extinct */
 		pm = (struct permonst *) 0;	/* make random monster */
 	} else {
-	    pm = mkclass(class,G_NOGEN);
+	    pm = mkclass(class,Inhell ? G_HELL|G_NOGEN : G_NOHELL|G_NOGEN);
 	    /* if we can't get a specific monster type (pm == 0) then the
 	       class has been genocided, so settle for a random monster */
 	}

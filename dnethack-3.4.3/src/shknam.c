@@ -258,7 +258,7 @@ int sx, sy;
 	struct obj *curobj = 0;
 
 	if (rn2(100) < depth(&u.uz) &&
-		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC,0)) &&
+		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC,Inhell ? G_HELL : G_NOHELL)) &&
 		(mtmp = makemon(ptr,sx,sy,NO_MM_FLAGS)) != 0) {
 	    /* note: makemon will set the mimic symbol to a shop item */
 	    if (rn2(10) >= depth(&u.uz)) {

@@ -431,12 +431,12 @@ qt_montype()
 	    qpm = urole.enemy1num;
 	    if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
 	    	return (&mons[qpm]);
-	    return (mkclass(urole.enemy1sym, 0));
+	    return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
 	}
 	qpm = urole.enemy2num;
 	if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
 	    return (&mons[qpm]);
-	return (mkclass(urole.enemy2sym, 0));
+	return (mkclass(urole.enemy2sym, G_NOHELL|G_HELL));
 }
 
 struct permonst *
@@ -445,7 +445,7 @@ chaos_montype()
 	if(on_level(&chaosf_level,&u.uz)){
 		int chance = d(1,100);
 		if(chance < 10){
-			return mkclass(S_ZOMBIE, 0);
+			return mkclass(S_ZOMBIE, G_NOHELL);
 		}
 		else if(chance < 30){
 			return &mons[PM_HUMAN_ZOMBIE];
@@ -530,7 +530,7 @@ chaos_montype()
 			return &mons[PM_EARTH_ELEMENTAL];
 		}
 		else if(chance < 30){
-			return mkclass(S_ZOMBIE, 0);
+			return mkclass(S_ZOMBIE, G_NOHELL);
 		}
 		else if(chance < 65){
 			return &mons[PM_VAMPIRE];
@@ -597,7 +597,7 @@ struct permonst *
 neutral_montype()
 {
 	if(on_level(&sum_of_all_level,&u.uz)){
-		return mkclass(S_GOLEM, 0);
+		return mkclass(S_GOLEM, G_NOHELL|G_HELL);
 	}
 	if(on_level(&rlyeh_level,&u.uz)){
 		int chance = d(1,100);
@@ -655,7 +655,7 @@ law_montype()
 	if(on_level(&path1_level,&u.uz)){
 		int chance = d(1,100);
 		if(chance < 10){
-			return mkclass(S_DEMON, 0);
+			return mkclass(S_DEMON, G_NOHELL|G_HELL);
 		}
 		else if(chance < 60){
 			return mkclass(S_IMP, 0);
@@ -682,7 +682,7 @@ law_montype()
 	else if(on_level(&path2_level,&u.uz)){
 		int chance = d(1,100);
 		if(chance < 2){
-			return mkclass(S_DEMON, 0);
+			return mkclass(S_DEMON, G_NOHELL|G_HELL);
 		}
 		else if(chance < 40){
 			return mkclass(S_IMP, 0);

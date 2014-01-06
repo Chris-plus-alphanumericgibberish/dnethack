@@ -2366,7 +2366,7 @@ create_particular()
 	    whichpm = &mons[which];
 	    for (i = 0; i <= multi; i++) {
 		if (monclass != MAXMCLASSES)
-		    whichpm = mkclass(monclass, 0);
+		    whichpm = mkclass(monclass, Inhell ? G_HELL : G_NOHELL);
 		if (maketame) {
 		    mtmp = makemon(whichpm, u.ux, u.uy, MM_EDOG);
 		    if (mtmp) {
