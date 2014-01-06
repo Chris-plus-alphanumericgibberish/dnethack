@@ -2641,7 +2641,7 @@ dlb *fd;
 		    maze1xy(&mm, DRY);
 		    (void) mksobj_at(BOULDER, mm.x, mm.y, TRUE, FALSE);
 	    }
-		if(u.uz.dnum != law_dnum){
+		if(Inhell){
 			for (x = rn2(2); x; x--) {
 				maze1xy(&mm, DRY);
 				(void) makemon(&mons[PM_MINOTAUR], mm.x, mm.y, NO_MM_FLAGS);
