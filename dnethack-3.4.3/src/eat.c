@@ -2422,51 +2422,50 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		}
 		switch(otmp->oclass){
 			case WEAPON_CLASS:
+				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
-				You("drain the %s%s.", xname(otmp),otmp->spe?"":" dry");
 			break;
 			case RING_CLASS:
 				if(otmp->oartifact) break; //redundant check
 				pline("The %s turns to dust as you drain it dry.", xname(otmp));
 				eataccessory(otmp);
-				lesshungry(50);
 				if (otmp == uwep && otmp->quan == 1L) uwepgone();
 				if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
 				if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
 
 				if (carried(otmp)) useup(otmp);
 				else useupf(otmp, 1L);
+				lesshungry(50);
 			break;
 			case ARMOR_CLASS:
+				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
-				You("drain the %s%s.", xname(otmp),otmp->spe?"":" dry");
 			break;
 			case TOOL_CLASS:
+				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
-				You("drain the %s%s.", xname(otmp),otmp->spe?"":" dry");
 			break;
 			case SCROLL_CLASS:
 				if(otmp->oartifact) break; //redundant check
+				You("drain the ink from the %s.", xname(otmp));
 	    	    otmp->otyp = SCR_BLANK_PAPER;
 				lesshungry(50);
-				You("lick the ink off the %s.", xname(otmp));
 			break;
 			case SPBOOK_CLASS:
 				if(otmp->oartifact) break; //redundant check
-				otmp->spestudied++;
-				lesshungry(50);
 				You("drain the magic from the %s.", xname(otmp));
+				otmp->spestudied++;
 	    	    if(otmp->spestudied > MAX_SPELL_STUDY) otmp->otyp = SPE_BLANK_PAPER;
+				lesshungry(50);
 			break;
 			case WAND_CLASS:
+				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
-//	    	    otmp->otyp = SPE_BLANK_PAPER;
-				lesshungry(10);
 				if(!otmp->spe) otmp->otyp = WAN_NOTHING;
-				You("drain the %s%s.", xname(otmp),otmp->spe?"":" dry");
+				lesshungry(10);
 			break;
 			case FOOD_CLASS:
 				if(otmp->otyp == CORPSE){
@@ -2979,8 +2978,10 @@ int perturn;
 	}
 	(void) money2mon(mon, price);
 #endif
-	}
 	return turns;
+	} else{
+		return 0;
+	}
 	}
 	else return turns;
 }
