@@ -2206,8 +2206,16 @@ register int	mmflags;
 			}
 		break;
 		case S_HUMAN:
+			if(anymon){
 				if (mndx == PM_DROW_MATRON){
 					m_initlgrp(makemon(&mons[PM_DROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+				} else if (mndx == PM_ELVENKING){
+					int num = 0;
+					num = rnd(2);
+					for(num; num >= 0; num--) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					num = rn1(6,3);
+					for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				}
 				}
 		break;
 		case S_HUMANOID:
@@ -2216,19 +2224,13 @@ register int	mmflags;
 					int num = 0;
 					num = rn1(10,3);
 					for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				} else if (mndx == PM_ELVENKING){
-					int num = 0;
-					num = rnd(2);
-					for(num; num >= 0; num--) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-					num = rn1(6,3);
-					for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				}
 			}
 		break;
 		case S_FUNGUS:
 			if (anymon && mndx == PM_MIGO_QUEEN){
 				int num = 0;
-				num = rn2(2);
+				num = rn2(2)+1;
 				for(num; num >= 0; num--) makemon(&mons[PM_MIGO_PHILOSOPHER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				num = rn2(3)+3;
 				for(num; num >= 0; num--) makemon(&mons[PM_MIGO_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
