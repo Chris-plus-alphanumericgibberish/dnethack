@@ -2191,12 +2191,14 @@ register int	mmflags;
 			}
 		break;
 		case S_ANGEL:
+			if(is_weeping(mtmp->data)){
 			mtmp->mextra[0] = 0;
 			mtmp->mextra[1] = 0;
 			mtmp->mextra[2] = 0;
-			if (anymon && is_weeping(mtmp->data)){
+				if (anymon){
 				if(u.uevent.udemigod) m_initlgrp(mtmp, 0, 0);
 				else mtmp->mextra[2] = 1; //Set to 1 to initiallize
+			}
 			}
 		break;
 	    case S_GIANT:
