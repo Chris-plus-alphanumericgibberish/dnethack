@@ -313,6 +313,7 @@
 /* For vampires */
 #define has_blood(ptr)		(!vegetarian(ptr) && \
 				   (ptr)->mlet != S_GOLEM && \
+				   (ptr)->mlet != S_KETER && \
 				   (!is_undead(ptr) || is_vampire(ptr)))
 
 /* Keep track of ferns, fern sprouts, fern spores, and other plants */
