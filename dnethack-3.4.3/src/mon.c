@@ -746,8 +746,8 @@ movemon()
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
 	//Weeping angel step 1
 		if(is_weeping(mtmp->data)){
-			if(mtmp->mextra[1] && u.uevent.udemigod){
-				mtmp->mextra[1] = 0; //Quantum Lock status will be reset below.
+			if(mtmp->mextra[2] && u.uevent.udemigod){
+				mtmp->mextra[2] = 0; //Quantum Lock status will be reset below.
 				m_initgrp(mtmp, 0, 0, 10);
 			}
 		} else if(mtmp->data == &mons[PM_RAZORVINE] && 
