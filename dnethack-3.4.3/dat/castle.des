@@ -825,8 +825,8 @@ RANDOM_OBJECTS:'[',')','*','%'
 RANDOM_PLACES:(10,06),(58,06),(58,12),(26,15)
 RANDOM_MONSTERS:'L','N','E','H','M','O','R','T','X','Z'
 
-TELEPORT_REGION:levregion(01,00,10,20),(1,1,61,15),down
-TELEPORT_REGION:levregion(69,00,79,20),(1,1,61,15),up
+TELEPORT_REGION:levregion(01,00,10,20),(10,02,59,17),down
+TELEPORT_REGION:levregion(69,00,79,20),(10,02,59,17),up
 STAIR:levregion(01,00,10,20),(0,0,62,16),up
 # Doors
 DOOR:closed,(06,13)
@@ -939,10 +939,10 @@ MONSTER:'@',"soldier",(28,15)
 MONSTER:'@',"soldier",(57,14)
 MONSTER:'@',"soldier",(58,13)
 # The four dragons that are guarding the storerooms
-MONSTER:'D',random,(45,06)
-MONSTER:'D',random,(53,06)
-MONSTER:'D',random,(54,13)
-MONSTER:'D',random,(48,13)
+MONSTER:'D',random,(48,07)
+MONSTER:'D',random,(50,07)
+MONSTER:'D',random,(49,11)
+MONSTER:'D',random,(50,11)
 # Sea monsters in the moat
 MONSTER:';',"giant eel",(13,08)
 MONSTER:';',"giant eel",(06,03)
@@ -1011,27 +1011,27 @@ REGION:(43,06,46,07),lit,"ordinary"
 REGION:(50,05,55,05),lit,"ordinary"
 REGION:(52,06,55,07),lit,"ordinary"
 
-#############################################################
-REGION:(43,06,46,07),lit,"ordinary"
-REGION:(39,10,45,11),lit,"ordinary"
-REGION:(49,05,55,06),lit,"ordinary"
-REGION:(49,10,55,11),lit,"ordinary"
+REGION:(53,11,55,14),lit,"ordinary"
+REGION:(52,13,52,14),lit,"ordinary"
+
+REGION:(47,11,48,14),lit,"ordinary"
+REGION:(49,13,50,14),lit,"ordinary"
+REGION:(45,14,46,14),lit,"ordinary"
+
 #   Corners
-REGION:(26,15,32,16),lit,"ordinary"
+REGION:(16,15,32,16),lit,"ordinary"
 REGION:(57,12,58,16),lit,"ordinary"
 REGION:(10,02,11,06),lit,"ordinary"
 REGION:(57,02,58,06),lit,"ordinary"
 #   Barracks
 REGION:(21,05,25,07),lit,"barracks"
 REGION:(31,05,41,06),lit,"barracks"
+#############################################################
 #   Hallways
-REGION:(08,03,54,03),unlit,"ordinary"
-REGION:(08,13,54,13),unlit,"ordinary"
-REGION:(16,08,25,08),unlit,"ordinary"
-REGION:(39,08,55,08),unlit,"ordinary"
-#   Storeroom alcoves
-REGION:(47,05,47,06),unlit,"ordinary"
-REGION:(47,10,47,11),unlit,"ordinary"
+REGION:(13,03,55,03),unlit,"ordinary"
+REGION:(34,16,55,16),unlit,"ordinary"
+REGION:(43,09,57,09),unlit,"ordinary"
+REGION:(57,08,57,10),unlit,"ordinary"
 
 ##
 ##Castle 5
@@ -1232,7 +1232,7 @@ REGION:(00,00,62,16),unlit,"ordinary"
 #   Courtyards
 REGION:(57,05,62,11),lit,"ordinary"
 #   Throne room
-REGION:(27,05,37,11),lit,"throne",unfilled
+REGION:(28,05,37,11),lit,"throne",unfilled
 #   Antechamber
 REGION:(07,07,07,07),lit,"ordinary",unfilled,true
 #   Storerooms
@@ -1255,4 +1255,6 @@ REGION:(39,08,55,08),unlit,"ordinary"
 #   Storeroom alcoves
 REGION:(47,05,47,06),unlit,"ordinary"
 REGION:(47,10,47,11),unlit,"ordinary"
+#	Bloody Hallway hack/patch
+REGION:(06,06,12,06),lit,"ordinary"
 
