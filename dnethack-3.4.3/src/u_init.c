@@ -1010,7 +1010,7 @@ u_init()
 		u.ualign.sins += 16; /* You have sinned */
         /* On the verge of hungry */
 		if(Race_if(PM_INCANTIFIER)){
-			u.uen = 200;
+			u.uen = 100;
 		}
 		else u.uhunger = 200;
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
