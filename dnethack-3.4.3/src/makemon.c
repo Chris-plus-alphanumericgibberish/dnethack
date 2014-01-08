@@ -1975,9 +1975,7 @@ register int	mmflags;
 				return((struct monst *) 0);	/* no more monsters! */
 			}
 			fakemon.data = ptr;
-			gpflags = (amphibious(ptr)||is_swimmer(ptr)) ? 
-				MM_IGNOREWATER : 
-				(mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
+			gpflags = (mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
 		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 50);
 		if(tryct >= 50){
 			//That failed, return to the default way of handling things

@@ -64,7 +64,7 @@ unsigned gpflags;
 					Swimming || Amphibious);
 		else	return (is_flyer(mdat) || is_swimmer(mdat) ||
 							is_clinger(mdat));
-	    } else if (mdat->mlet == S_EEL && rn2(13) && !ignorewater) {
+	    } else if (mdat->mlet == S_EEL && !ignorewater) {
 		return FALSE;
 	    } else if (is_lava(x,y)) {
 		if (mtmp == &youmonst)
