@@ -1552,6 +1552,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				otmp2->owornmask = 0L;
 				update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);
 			}
+			/* Ask the player if they want to keep the object */
+			pline("Reaver sweaps %s away from %s", doname(otmp2), mon_nam(mdef));
+			if(yn("Do you try to grab it for yourself?") == 'y'){
 			/* give the object to the character */
 			otmp2 = Role_if(PM_PIRATE) ? 
 				hold_another_object(otmp2, "Ye snatched but dropped %s.",
@@ -1564,6 +1567,21 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 
 				Sprintf(kbuf, "stolen %s corpse", mons[otmp2->corpsenm].mname);
 				instapetrify(kbuf);
+				}
+			} else{
+				getdir((char *)0);
+				if(u.dx || u.dy){
+					You("toss it away.");
+					m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy,
+							(int)((ACURRSTR)/2 - otmp2->owt/40), otmp2,TRUE);
+				}
+				else{
+					You("drop it at your feet.");
+					(void) dropy(otmp2);
+				}
+				nomul(0, NULL);
+				if(mdef->mhp <= 0) /* flung weapon killed monster */
+				    return TRUE;
 			}
 			/* more take-away handling, after theft message */
 			if (unwornmask & W_WEP) {		/* stole wielded weapon */
