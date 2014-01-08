@@ -508,7 +508,8 @@ struct monst *mtmp;
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
-	    is_rider(mtmp->data) || mtmp->data == &mons[PM_MINOTAUR])
+	    (is_rider(mtmp->data) && !(mtmp->data == &mons[PM_NAZGUL])) || 
+		mtmp->data == &mons[PM_MINOTAUR])
 		return(FALSE);
 	return (boolean) (mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
@@ -520,9 +521,10 @@ struct monst *mtmp;
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
-	    is_rider(mtmp->data) || mtmp->data == &mons[PM_MINOTAUR])
+	    (is_rider(mtmp->data) && !(mtmp->data == &mons[PM_NAZGUL])) || 
+		mtmp->data == &mons[PM_MINOTAUR])
 		return(FALSE);
-	return (boolean) mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE;
+	return (boolean) mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data == &mons[PM_NAZGUL];
   }
 	
 			
