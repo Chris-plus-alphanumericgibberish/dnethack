@@ -473,6 +473,19 @@ mkmap(init_lev)
 	    level.flags.is_maze_lev = FALSE;
 	    level.flags.is_cavernous_lev = TRUE;
 	}
+	if(In_quest(&u.uz) && Role_if(PM_PIRATE)){
+		int lim, x, y;
+		for(i = d(1,4); i>0; i--){
+			for(lim = 0; lim < 10; lim++){
+				x = rn2(COLNO)+1;
+				y = rn2(ROWNO);
+				if(levl[x][y].typ == fg_typ && levl[x][y].lit){
+					levl[x][y].typ = TREE;
+			break;
+				}
+			}
+		}
+	}
 	free(new_locations);
 }
 
