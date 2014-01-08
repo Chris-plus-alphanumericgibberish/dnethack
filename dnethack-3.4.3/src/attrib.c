@@ -354,7 +354,7 @@ exerper()
 	if(!(moves % 10)) {
 		/* Hunger Checks */
 
-		int hs = (YouHunger > 1000) ? SATIATED :
+		int hs = (YouHunger > (Race_if(PM_INCANTIFIER) ? max(u.uenmax/2,200) : 1000)) ? SATIATED :
 			 (YouHunger > 150) ? NOT_HUNGRY :
 			 (YouHunger > 50) ? HUNGRY :
 			 (YouHunger > 0) ? WEAK : FAINTING;
