@@ -100,7 +100,7 @@ register struct obj *obj;
 	/* protect invocation tools but not Rider corpses (handled elsewhere)*/
      /* if (obj->oclass != FOOD_CLASS && obj_resists(obj, 0, 0)) */
 	 /* Repeating this check in the name of futureproofing */
-	if (objects[obj->otyp].oc_unique || objects[obj->otyp].oc_merge)
+	if (objects[obj->otyp].oc_unique || (objects[obj->otyp].oc_merge && obj->otyp != CORPSE && obj->oclass != SCROLL_CLASS))
 		return FALSE;
 	
 	if(obj->spe>0){
