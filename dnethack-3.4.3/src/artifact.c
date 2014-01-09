@@ -1540,8 +1540,21 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		struct obj *otmp2, **minvent_ptr;
 		long unwornmask;
 
+		/* Don't steal worn items, and downweight wielded items */
 		if((otmp2 = mdef->minvent) != 0) {
+			while(otmp2 && 
+				  otmp2->owornmask&W_ARMOR && 
+				  !( (otmp2->owornmask&W_WEP) && !rn2(10))
+			) otmp2 = otmp2->nobj;
+		}
+		
+		/* Still has handling for worn items, incase that changes */
+		if(otmp2 != 0){
 			/* take the object away from the monster */
+			if(otmp2->quan > 1L){
+				otmp2 = splitobj(otmp2, 1L);
+				obj_extract_self(otmp2); //wornmask is cleared by splitobj
+			} else{
 			obj_extract_self(otmp2);
 			if ((unwornmask = otmp2->owornmask) != 0L) {
 				mdef->misc_worn_check &= ~unwornmask;
@@ -1551,6 +1564,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				}
 				otmp2->owornmask = 0L;
 				update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);
+			}
 			}
 			/* Ask the player if they want to keep the object */
 			pline("Reaver sweaps %s away from %s", doname(otmp2), mon_nam(mdef));

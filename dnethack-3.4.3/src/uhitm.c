@@ -873,6 +873,10 @@ int thrown;
 										P_SKILL(wtype) >= P_BASIC && 
 										!rn2(20 - 5*P_SKILL(wtype))) /*Need to be separate from dieroll, */
 				)){														/*	since Ranseurs are bimanual!*/
+				if(monwep->quan > 1L){
+					monwep = splitobj(monwep, 1L);
+					obj_extract_self(monwep); //wornmask is cleared by splitobj
+				} else{
 				long unwornmask;
 			    if ((unwornmask = monwep->owornmask) != 0L) {
 					mon->misc_worn_check &= ~unwornmask;
@@ -883,6 +887,7 @@ int thrown;
 			    obj_extract_self(monwep);
 				monwep->owornmask = 0L;
 				update_mon_intrinsics(mon, monwep, FALSE, FALSE);
+				}
 				pline("%s %s is snaged by your %s.",
 				      s_suffix(Monnam(mon)), xname(monwep), xname(obj));
 				getdir((char *)0);
