@@ -70,6 +70,7 @@ showscore  display your approximate accumulated score             [FALSE]
 Boolean options if TEXTCOLOR was set at compile time:
 color      use different colors for objects on screen   [TRUE for micros]
 hilite_pet display pets in a highlighted manner                   [FALSE]
+dnethack_dungeon_colors Some levels have colored walls/floors     [TRUE]
 
 Boolean option if TIMED_DELAY was set at compile time (tty interface only):
 timed_delay    on unix and VMS, use a timer instead of sending

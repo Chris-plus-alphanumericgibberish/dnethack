@@ -131,7 +131,7 @@ unsigned *ospecial;
 	    else
 #endif
 		/* Special colours for special dungeon areas */
-		if(iflags.use_color){
+		if(iflags.use_color && iflags.dnethack_dungeon_colors){
 			if(In_sokoban(&u.uz)){
 				if(offset >= S_vwall && offset <= S_trwall){
 					color = CLR_BLUE;
