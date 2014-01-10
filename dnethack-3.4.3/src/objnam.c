@@ -798,7 +798,22 @@ ring:
 		if(obj->owornmask & W_RINGL) Strcat(bp, " (on left ");
 		if(obj->owornmask & W_RING) {
 		    Strcat(bp, body_part(HAND));
+			if(isSignetRing(obj->otyp)){
+				if(obj->opoisoned & OPOISON_BASIC) Strcat(bp, ", poison injecting");
+				if(obj->opoisoned & OPOISON_FILTH) Strcat(bp, ", filth injecting");
+				if(obj->opoisoned & OPOISON_SLEEP) Strcat(bp, ", drug injecting");
+				if(obj->opoisoned & OPOISON_BLIND) Strcat(bp, ", eyebite injecting");
+				if(obj->opoisoned & OPOISON_PARAL) Strcat(bp, ", venom injecting");
+				if(obj->opoisoned & OPOISON_AMNES) Strcat(bp, ", lethe injecting");
+			}
 		    Strcat(bp, ")");
+		} else if(isSignetRing(obj->otyp)){
+				if(obj->opoisoned & OPOISON_BASIC) Strcat(bp, " (poison injecting)");
+				if(obj->opoisoned & OPOISON_FILTH) Strcat(bp, " (filth injecting)");
+				if(obj->opoisoned & OPOISON_SLEEP) Strcat(bp, " (drug injecting)");
+				if(obj->opoisoned & OPOISON_BLIND) Strcat(bp, " (eyebite injecting)");
+				if(obj->opoisoned & OPOISON_PARAL) Strcat(bp, " (venom injecting)");
+				if(obj->opoisoned & OPOISON_AMNES) Strcat(bp, " (lethe injecting)");
 		}
 		if((obj->known || Race_if(PM_INCANTIFIER)) && objects[obj->otyp].oc_charged) {
 			Strcat(prefix, sitoa(obj->spe));

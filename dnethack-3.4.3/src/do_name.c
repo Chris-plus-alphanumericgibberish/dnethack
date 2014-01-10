@@ -1013,8 +1013,13 @@ static const char * const bogusmons[] = {
 	"rhinovirus", 
 	"harpy", 
 	"lion-dog", "rat-ant", 
+	"bot for announcing commits", "bot for evaluating code", "message-sending bot", "bot for hugging people",
+	"channel-occupying bot",
 	"Y2K bug", "foo",
 						/* misc. */
+	"neutral twin", "vampiric half-dragon half-troll lycanthropic fiendish snail", 
+		"squid thingy", "allegedly-matriarchal drow", /* Order of the Stick */
+	
 	"grue", "Christmas-tree monster", "luck sucker", "paskald",
 	"brogmoid", "dornbeast",		/* Quendor (Zork, &c.) */
 	"Ancient Multi-Hued Dragon", "Evil Iggy",
@@ -1035,6 +1040,7 @@ static const char * const bogusmons[] = {
 	"eyeless albino penguin", /* More Lovecraft */
 	"shadowgirl",				/* Shadowgirls */
 	"Luggage", "God of Stuff", "vampiric watermelon",	/* Discworld */
+		"fearsome madeofplasticoid", /* The Unadulterated Cat */
 	"Ent",					/* Lord of the Rings */
 	"tangle tree", "nickelpede", "wiggle",	/* Xanth */
 	"white rabbit", "snark",		/* Lewis Carroll */
