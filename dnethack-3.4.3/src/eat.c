@@ -114,6 +114,7 @@ register struct obj *obj;
 #endif
 		!obj->oartifact) return TRUE;
 	if(obj->oclass == SPBOOK_CLASS && obj->otyp != SPE_BLANK_PAPER && !obj->oartifact) return TRUE;
+	if(obj->oclass == AMULET_CLASS && obj->spe >= 0 && !obj->oartifact) return TRUE;
 	if(obj->oclass == RING_CLASS && obj->spe >= 0 && !obj->oartifact) return TRUE;
 	if(obj->oclass == WAND_CLASS && obj->spe > 0 && obj->otyp != WAN_NOTHING) return TRUE;
 	if(obj->otyp == CORPSE && (obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET || obj->corpsenm == PM_NEWT)) return TRUE;
@@ -2438,6 +2439,18 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				else useupf(otmp, 1L);
 				lesshungry(50);
 			break;
+			case AMULET_CLASS:
+				if(otmp->oartifact || objects[otmp->otyp].oc_unique) break; //redundant check
+				pline("The %s crumbles to dust as you drain it dry.", xname(otmp));
+				eataccessory(otmp);
+				if (otmp == uwep && otmp->quan == 1L) uwepgone();
+				if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+				if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+
+				if (carried(otmp)) useup(otmp);
+				else useupf(otmp, 1L);
+				lesshungry(50);
+			break;
 			case ARMOR_CLASS:
 				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
@@ -2451,6 +2464,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 			case SCROLL_CLASS:
 				if(otmp->oartifact) break; //redundant check
 				You("drain the ink from the %s.", xname(otmp));
+				costly_cancel(otmp);
 	    	    otmp->otyp = SCR_BLANK_PAPER;
 				lesshungry(50);
 			break;
@@ -2458,6 +2472,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if(otmp->oartifact) break; //redundant check
 				You("drain the magic from the %s.", xname(otmp));
 				otmp->spestudied++;
+				costly_cancel(otmp);
 	    	    if(otmp->spestudied > MAX_SPELL_STUDY) otmp->otyp = SPE_BLANK_PAPER;
 				lesshungry(50);
 			break;
