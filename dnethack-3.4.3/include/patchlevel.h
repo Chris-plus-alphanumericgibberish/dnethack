@@ -16,13 +16,13 @@
 #define EDITLEVEL	0
 
 #define COPYRIGHT_BANNER_A \
-"NetHack, Copyright 1985-2003"
+"dNethack, Copyright 2012-2014"
 
 #define COPYRIGHT_BANNER_B \
-"         By Stichting Mathematisch Centrum and M. Stephenson."
+"    Based on NetHack, Copyright 1985-2003 by Stichting Mathematisch"
 
 #define COPYRIGHT_BANNER_C \
-"         See license for details."
+"         Centrum and M. Stephenson.  See license for details."
 
 /*
  * If two or more successive releases have compatible data files, define
