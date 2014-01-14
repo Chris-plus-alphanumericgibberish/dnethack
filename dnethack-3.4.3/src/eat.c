@@ -100,10 +100,13 @@ register struct obj *obj;
 	/* protect invocation tools but not Rider corpses (handled elsewhere)*/
      /* if (obj->oclass != FOOD_CLASS && obj_resists(obj, 0, 0)) */
 	 /* Repeating this check in the name of futureproofing */
-	if (objects[obj->otyp].oc_unique || (objects[obj->otyp].oc_merge && obj->otyp != CORPSE && obj->oclass != SCROLL_CLASS))
+	if (objects[obj->otyp].oc_unique || (objects[obj->otyp].oc_merge && 
+										 obj->otyp != CORPSE && 
+										 obj->otyp != TIN && 
+										 obj->oclass != SCROLL_CLASS))
 		return FALSE;
 	
-	if(obj->spe>0){
+	if(obj->spe > 0){
 		if(obj->oclass == WEAPON_CLASS) return TRUE;
 		if(obj->oclass == ARMOR_CLASS) return TRUE;
 		if(obj->oclass == TOOL_CLASS) return TRUE;
@@ -118,6 +121,7 @@ register struct obj *obj;
 	if(obj->oclass == RING_CLASS && obj->spe >= 0 && !obj->oartifact) return TRUE;
 	if(obj->oclass == WAND_CLASS && obj->spe > 0 && obj->otyp != WAN_NOTHING) return TRUE;
 	if(obj->otyp == CORPSE && (obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET || obj->corpsenm == PM_NEWT)) return TRUE;
+	if(obj->otyp == TIN && (!obj->known || obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET || obj->corpsenm == PM_NEWT)) return TRUE;
 	
 	return FALSE;
 }
@@ -1401,15 +1405,32 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 	    }
 	    if (which == 0) what = makeplural(what);
 	    pline("It smells like %s%s.", (which == 2) ? "the " : "", what);
+        if (uclockwork){
+           You("have no way to eat, so you discard the tin instead.");
+           if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
+		   costly_tin((const char*)0);
+           goto use_me;
+        } else if(Race_if(PM_INCANTIFIER) && 
+			((tin.tin->corpsenm != PM_NEWT && 
+			tin.tin->corpsenm != PM_AOA_DROPLET && 
+			tin.tin->corpsenm != PM_AOA) ||
+			Hallucination) ){
+				You("would not derive any nutrition from eating that, so you discard it instead.");
+				costly_tin((const char*)0);
+				goto use_me;
+		}
 	    if (yn("Eat it?") == 'n') {
 		if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
 		if (flags.verbose) You("discard the open tin.");
 		costly_tin((const char*)0);
 		goto use_me;
 	    }
-         if (uclockwork){
-           You("have no way to eat, so you discard the tin instead.");
-           if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
+		if(Race_if(PM_INCANTIFIER)){
+			You("drain energy from %s %s.", tintxts[r].txt,
+				mons[tin.tin->corpsenm].mname);
+			cprefx(tin.tin->corpsenm, TRUE);
+			cpostfx(tin.tin->corpsenm, FALSE);
+			costly_tin((const char*)0);
            goto use_me;
          }
 	    /* in case stop_occupation() was called on previous meal */
@@ -1448,7 +1469,12 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 			Blind ? "" : " ", Blind ? "" : hcolor(NH_GREEN));
 	    else
 		pline("It contains spinach.");
-
+		if(Race_if(PM_INCANTIFIER) ){
+				pline("Sadly, you would not derive any nutrition from eating it.");
+				You("reluctantly discard the spinach");
+				costly_tin((const char*)0);
+				goto use_me;
+		}
 	    if (yn("Eat it?") == 'n') {
 		if (!Hallucination && !tin.tin->cursed)
 		    tin.tin->dknown = tin.tin->known = TRUE;
@@ -2489,6 +2515,10 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					cpostfx(otmp->corpsenm, FALSE);
 					if (carried(otmp)) useup(otmp);
 					else useupf(otmp, 1L);
+				}
+				if(otmp->otyp == TIN) {
+					start_tin(otmp);
+					return(1);
 				}
 			break;
 		}
