@@ -467,7 +467,7 @@ static const char * const bogusobjects[] = {
        "vulgar arrow",
        "ja",
        "bamboozled sparrow",
-       "crossbow bolt",
+       "crossbow colt",
 	   "crossbow dolt",
 	   "throwing fart",
        "shurunken",
@@ -520,7 +520,6 @@ static const char * const bogusobjects[] = {
        "peace hammer",
        "wooden sandwich",
        "halfstaff",
-       "iron bar",
        "thong club",
        "dire flail",
        "dire fail",
@@ -530,8 +529,8 @@ static const char * const bogusobjects[] = {
        "conical flat",
        "mithril-boat",
        "barded mail",
-       "yet another substandard mail variant",
-       "scale-reinforced banded-splint mail with chain joints",
+       "cursed yet-another-substandard-mail-variant",
+       "scale-reinforced banded splint mail with chain joints",
        "leather studd armor",
        "white shirt",
        "undershirt",
@@ -542,16 +541,17 @@ static const char * const bogusobjects[] = {
        "undersized shield",
        "shield of reflection",
        "shield of rarefaction",
-       "padding gloves",
-       "rideable gloves",
-       "feching gloves",
-       "wandering walking shoes",
-       "hardly shoes",
-       "jackboots",
-       "combat boats",
-       "hiking boots",
-       "wild hiking boots",
-       "muddy boots",
+       "pair of padding gloves",
+       "pair of rideable gloves",
+       "pair of feching gloves",
+       "pair of wandering walking shoes",
+       "pair of walkabout shoes",
+       "pair of hardly shoes",
+       "pair of jackboots",
+       "pair of combat boats",
+       "pair of hiking boots",
+       "pair of wild hiking boots",
+       "pair of muddy boots",
 		
 	   "can of Greece",
 	   "can of crease",
@@ -676,11 +676,20 @@ static const char * const bogusobjects[] = {
 
 	   /* Books */
        "monster manual",                   /* D&D */
+       "monster book of monsters",         /* Harry Potter */
 	   "Codex of the Infinite Planes",	   /* DnD */
 	   "spellbook of Non-Conduit Transdimensional Fabric Fluxes and Real-Time Inter-dimensional Matrix Transformations", /* Maldin's Greyhawk */
+		   "spellbook named the Codex of Betrayal",
+		   "spellbook named the Demonomicon of Iggwilv",
+		   "spellbook named the Book of Keeping",
+		   "Black Scroll of Ahm",
+	   "Elder Scroll", /*the Elder Scrolls*/
+       "spellbook named The Ta’ge Fragments", /* Cthulhutech */
+       "spellbook named Tome of Eternal Darkness", /* Eternal Darkness */
+       "history book called A Chronicle of the Daevas", /* SCP Foundation */
        "spellbook named The Book of Sand",                     /* Jorge Luis Borges */
        "spellbook named Octavo",       	   /* Discworld */
-		"Necrotelicomnicon",
+		"spellbook called Necrotelicomnicon",
 	   "lost copy of The Nice and Accurate Prophecies of Anges Nutter", /* Good Omens */
 	   "spellbook of Addition Made Simple",
 	   "spellbook of Noncommutative Hyperdimensional Geometry Made (Merely!) Complicated",
@@ -690,6 +699,7 @@ static const char * const bogusobjects[] = {
 	   "spellbook named A Brief History of Time",
 	   "spellbook named The Book of Eibon", 					/* Clark Ashton Smith */
 	   "playbook named The King in Yellow", 					/* Robert W. Chambers */
+	   "playbook called the Scottish play", 					/* Robert W. Chambers */
 	   "spellbook named De Vermis Mysteriis",					/* Robert Bloch */
 	   "spellbook named Necronomicon",							/* HP Lovecraft (yes, I know there is a game artifact of this name) */
 	   "spellbook named Al Azif",								/* "Arabic" name for the Necronomicon, HP Lovecraft */
@@ -709,6 +719,10 @@ static const char * const bogusobjects[] = {
        "dead sea scroll",
 	   "mayan codex",
 	   "simple textbook on the zoologically dubious",			/* Homestuck */
+	   "spellbook named The Book of Night with Moon",			/* So you want to be a Wizard? */
+	   "spellbook named The Grimmerie",			/* Wicked */
+	   "book of horrors", /* MLP */
+	   "book of Remembrance and Forgetting", /* the Old Kingdom */
 
        /* Historical */
 	   "Amarna letter",
