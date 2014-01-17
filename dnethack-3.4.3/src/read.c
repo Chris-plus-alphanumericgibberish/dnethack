@@ -1565,7 +1565,6 @@ struct obj	*sobj;
 		punish(sobj);
 		break;
 	case SCR_WARD:{
-		//Make sure that engraved messages on the seafloor are read correctly.
 		if(confused && !Hallucination){
 		register struct monst *mtmp;
 			//Scare nearby monsters.
@@ -1620,7 +1619,9 @@ struct obj	*sobj;
 			}
 			engrHere->ward_type = ENGR_BLOOD;
 		} else engrHere->ward_type = ENGRAVE;
-			engrHere->complete_wards = sobj->blessed ? wardMax[sobj->ovar1] : get_num_wards_added(engrHere->ward_id,0);
+			engrHere->complete_wards = sobj->blessed ? 
+										wardMax[sobj->ovar1] : 
+										get_num_wards_added(engrHere->ward_id,0);
 		if( !(u.wardsknown & get_wardID(sobj->ovar1)) ){
 			You("have learned a new warding sign!");
 			u.wardsknown |= get_wardID(sobj->ovar1);
@@ -1679,10 +1680,14 @@ struct obj	*sobj;
 		else if(engrHere->ward_id != wardNum){
 		engrHere->ward_id = wardNum;
 		engrHere->ward_type = BURN;
-			engrHere->complete_wards = sobj->blessed ? wardMax[wardNum] : get_num_wards_added(engrHere->ward_id,0);
+			engrHere->complete_wards = sobj->blessed ? 
+										wardMax[wardNum] : 
+										get_num_wards_added(engrHere->ward_id,0);
 		}
 		else{
-			engrHere->complete_wards += sobj->blessed ? wardMax[wardNum] : get_num_wards_added(engrHere->ward_id, engrHere->complete_wards);
+			engrHere->complete_wards = sobj->blessed ? 
+										wardMax[wardNum] : 
+										engrHere->complete_wards + get_num_wards_added(engrHere->ward_id, engrHere->complete_wards);
 		}
 	break;}
 	case SCR_STINKING_CLOUD: {
