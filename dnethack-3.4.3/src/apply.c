@@ -3122,10 +3122,15 @@ do_break_wand(obj)
 		    watch_dig((struct monst *)0, x, y, TRUE);
 		    if (*in_rooms(x,y,SHOPBASE)) shop_damage = TRUE;
 		}		    
+		if(IS_GRAVE(levl[x][y].typ)){
+			digactualhole(x, y, BY_OBJECT, PIT);
+			dig_up_grave(x,y);
+		} else{
 		digactualhole(x, y, BY_OBJECT,
 			      (rn2(obj->spe) < 3 || !Can_dig_down(&u.uz)) ?
 			       PIT : HOLE);
 	    }
+		}
 	    continue;
 	} else if(obj->otyp == WAN_CREATE_MONSTER) {
 	    /* u.ux,u.uy creates it near you--x,y might create it in rock */

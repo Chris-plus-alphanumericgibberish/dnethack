@@ -16,7 +16,6 @@ STATIC_DCL void FDECL(mkcavearea, (BOOLEAN_P));
 STATIC_DCL int FDECL(dig_typ, (struct obj *,XCHAR_P,XCHAR_P));
 STATIC_DCL int NDECL(dig);
 STATIC_DCL schar FDECL(fillholetyp, (int, int));
-STATIC_DCL void NDECL(dig_up_grave);
 
 /* Indices returned by dig_typ() */
 #define DIGTYP_UNDIGGABLE 0
@@ -747,7 +746,7 @@ boolean pit_only;
 
 	} else if (IS_GRAVE(lev->typ)) {        
 	    digactualhole(u.ux, u.uy, BY_YOU, PIT);
-	    dig_up_grave();
+	    dig_up_grave(u.ux, u.uy);
 	    return TRUE;
 	} else if (lev->typ == DRAWBRIDGE_UP) {
 		/* must be floor or ice, other cases handled above */
@@ -809,8 +808,9 @@ boolean pit_only;
 	return FALSE;
 }
 
-STATIC_OVL void
-dig_up_grave()
+void
+dig_up_grave(x,y)
+int x, y;
 {
 	struct obj *otmp;
 
@@ -835,27 +835,27 @@ dig_up_grave()
 	case 0:
 	case 1:
 	    You("unearth a corpse.");
-	    if (!!(otmp = mk_tt_object(CORPSE, u.ux, u.uy)))
+	    if (!!(otmp = mk_tt_object(CORPSE, x, y)))
 	    	otmp->age -= 100;		/* this is an *OLD* corpse */;
 	    break;
 	case 2:
 	    if (!Blind) pline(Hallucination ? "Dude!  The living dead!" :
  			"The grave's owner is very upset!");
- 	    (void) makemon(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL), u.ux, u.uy, NO_MM_FLAGS);
+ 	    (void) makemon(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
 	    break;
 	case 3:
 	    if (!Blind) pline(Hallucination ? "I want my mummy!" :
  			"You've disturbed a tomb!");
- 	    (void) makemon(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL), u.ux, u.uy, NO_MM_FLAGS);
+ 	    (void) makemon(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
 	    break;
 	default:
 	    /* No corpse */
 	    pline_The("grave seems unused.  Strange....");
 	    break;
 	}
-	levl[u.ux][u.uy].typ = ROOM;
-	del_engr_ward_at(u.ux, u.uy);
-	newsym(u.ux,u.uy);
+	levl[x][y].typ = ROOM;
+	del_engr_ward_at(x, y);
+	newsym(x,y);
 	return;
 }
 
