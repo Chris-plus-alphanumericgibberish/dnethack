@@ -2309,8 +2309,9 @@ register int	mmflags;
 			{
 				int num=6;
 				if(mndx==PM_METROID_QUEEN) 
-					if(anymon) for(num; num >= 0; num--) makemon(&mons[PM_BABY_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-					else for(num; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					if(anymon) for(num; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					// if(anymon) for(num; num >= 0; num--) makemon(&mons[PM_BABY_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					// else for(num; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 					}
 		break;
 //		case S_VAMPIRE:
@@ -3130,8 +3131,8 @@ struct monst *mtmp, *victim;
 			mtmp->mtame = 0;
 			mtmp->mpeaceful = 1;
 			for(i; i < 6; i++){
-				baby = makemon(&mons[PM_BABY_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				if(tnum--) tamedog(baby,(struct obj *) 0);
+				baby = makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				if(tnum-->0) tamedog(baby,(struct obj *) 0);
 			}
 		}
 	}

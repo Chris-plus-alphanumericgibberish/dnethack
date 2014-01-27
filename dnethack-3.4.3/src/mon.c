@@ -814,8 +814,51 @@ movemon()
 		if(mtmp->mextra[0] >= NORMAL_SPEED*2) mtmp->mextra[0] -= NORMAL_SPEED*2;
 		else continue;
 	}
+	
 	if(mtmp->data == &mons[PM_DREADBLOSSOM_SWARM] && !canseemon(mtmp) && u.ustuck != mtmp) continue; /* Dreadblossoms only attack those who can see them */
 
+	if(mtmp->data == &mons[PM_METROID_QUEEN]){
+		if(mtmp->mtame){
+			struct monst *baby;
+			int tnum = d(1,6);
+			int i = 0;
+			mtmp->mtame = 0;
+			mtmp->mpeaceful = 1;
+			for(i; i < 6; i++){
+				baby = makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				if(tnum-- > 0) tamedog(baby,(struct obj *) 0);
+				else baby->mpeaceful = 1;
+			}
+		}
+		if(!rn2(100)){
+			struct obj *egg;
+			egg = mksobj(EGG, FALSE, FALSE);
+			egg->spe = 0; //not yours
+			egg->quan = 1;
+			egg->owt = weight(egg);
+			egg->corpsenm = egg_type_from_parent(PM_METROID_QUEEN, FALSE);
+			attach_egg_hatch_timeout(egg);
+			if(canseemon(mtmp)){
+				egg->known = egg->dknown = 1;
+				pline("%s lays an egg.",Monnam(mtmp));
+			}
+			if (!flooreffects(egg, mtmp->mx, mtmp->my, "")) {
+				place_object(egg, mtmp->mx, mtmp->my);
+				stackobj(egg);
+				newsym(mtmp->mx, mtmp->my);  /* map the rock */
+			}
+			stackobj(egg);
+		}
+	}
+	
+	if(u.uevent.uaxus_foe && 
+		is_auton(mtmp->data) && 
+		mtmp->mpeaceful
+	){
+		pline("%s gets angry...", Amonnam(mtmp));
+		mtmp->mpeaceful = 0;
+	}
+	
 	if (vision_full_recalc) vision_recalc(0);	/* vision! */
 
 	if (minliquid(mtmp)) continue;

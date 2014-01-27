@@ -555,7 +555,7 @@ long timeout;
 		       while it's in your inventory */
 		    if ((yours && !silent) ||
 			(carried(egg) && mon->data->mlet == S_DRAGON) ||
-			(carried(egg) && mon->data == &mons[PM_METROID_QUEEN]) ) { //metroid egg
+			(carried(egg) && mon->data == &mons[PM_BABY_METROID]) ) { //metroid egg
 			if ((mon2 = tamedog(mon, (struct obj *)0)) != 0) {
 			    mon = mon2;
 			    if (carried(egg) && mon->data->mlet != S_DRAGON)
