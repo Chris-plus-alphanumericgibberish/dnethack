@@ -1389,7 +1389,7 @@ drainhp:
            impossible("no reason for monster to cast disappear spell?");
        break;
      case DRAIN_ENERGY: /* stronger than antimagic field */
-        if(Antimagic) {
+        if(Antimagic && !Race_if(PM_INCANTIFIER)) {
             shieldeff(u.ux, u.uy);
            You_feel("momentarily lethargic.");
         } else drain_en(rn1(u.ulevel,dmg));
