@@ -1651,6 +1651,16 @@ int mdead;
 
 	/* These affect the enemy even if defender killed */
 	switch(mddat->mattk[i].adtyp) {
+		case AD_BARB:
+			Strcpy(buf, Monnam(magr));
+			if(canseemon(magr)){
+				if(mdef->data == &mons[PM_RAZORVINE]) 
+					pline("%s is hit by the sprining vines!", buf);
+				else pline("%s is hit by %s barbs!",
+					  buf, s_suffix(mon_nam(mdef)));
+			}
+			goto assess_dmg;
+		break;
 	    case AD_ACID:
 		if (mhit && !rn2(2)) {
 		    Strcpy(buf, Monnam(magr));
