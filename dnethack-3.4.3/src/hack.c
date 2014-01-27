@@ -2327,18 +2327,18 @@ weight_cap()
 	}
 	if(arti_lighten(uarm)){
 		if(uarm->blessed) carrcap *= 1.5;
-		else if(uarm->cursed) carrcap *= 1.25;
+		else if(!uarm->cursed) carrcap *= 1.25;
 		else carrcap *= .75;
 	}
 	if(arti_lighten(uarmc)){
 		if(uarmc->blessed) carrcap *= 1.5;
-		else if(uarmc->cursed) carrcap *= 1.25;
+		else if(!uarmc->cursed) carrcap *= 1.25;
 		else carrcap *= .75;
 	}
 #ifdef TOURIST
 	if(arti_lighten(uarmu)){
 		if(uarmu->blessed) carrcap *= 1.5;
-		else if(uarmu->cursed) carrcap *= 1.25;
+		else if(!uarmu->cursed) carrcap *= 1.25;
 		else carrcap *= .75;
 	}
 #endif	/* TOURIST */
