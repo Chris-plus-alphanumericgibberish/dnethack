@@ -1268,8 +1268,12 @@ begin_burn(obj, already_lit)
 	long turns = 0;
 	boolean do_timer = TRUE;
 
-	if (obj->age == 0 && obj->otyp != MAGIC_LAMP && !artifact_light(obj) && !arti_light(obj))
-	    return;
+	if (obj->age == 0 && 
+		obj->otyp != MAGIC_LAMP && 
+		!artifact_light(obj) && 
+		!arti_light(obj) && 
+		!obj->oartifact == ART_ATMA_WEAPON
+	) return;
 
 	switch (obj->otyp) {
 	    case MAGIC_LAMP:
@@ -1383,7 +1387,9 @@ end_burn(obj, timer_attached)
 	    return;
 	}
 
-	if (obj->otyp == MAGIC_LAMP || artifact_light(obj))
+	if (obj->otyp == MAGIC_LAMP 
+		|| artifact_light(obj)
+		|| obj->oartifact == ART_ATMA_WEAPON)
 	    timer_attached = FALSE;
 
 	if (!timer_attached) {
