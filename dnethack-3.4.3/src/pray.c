@@ -1793,11 +1793,8 @@ doturn()
 	struct monst *mtmp, *mtmp2;
 	int once, range, xlev;
 	short fast = 0;
-	if(u.uen >= 30 && yn("Use abbreviated liturgy?") == 'y'){
-		fast = 1;
-	}
 
-	if (!Role_if(PM_PRIEST) && !Role_if(PM_KNIGHT)) {
+	if (!Role_if(PM_PRIEST) && !Role_if(PM_KNIGHT) && !Race_if(PM_VAMPIRE)) {
 		/* Try to use turn undead spell. */
 		if (objects[SPE_TURN_UNDEAD].oc_name_known) {
 		    register int sp_no;
@@ -1813,9 +1810,13 @@ doturn()
 		You("don't know how to turn undead!");
 		return(0);
 	}
-	u.uconduct.gnostic++;
+	if(!Race_if(PM_VAMPIRE)) u.uconduct.gnostic++;
 
-	if ((u.ualign.type != A_CHAOTIC &&
+	if(!Race_if(PM_VAMPIRE) && u.uen >= 30 && yn("Use abbreviated liturgy?") == 'y'){
+		fast = 1;
+	}
+
+	if ((u.ualign.type != A_CHAOTIC && !Race_if(PM_VAMPIRE) &&
 		    (is_demon(youmonst.data) || is_undead(youmonst.data))) ||
 				u.ugangr > 6 /* "Die, mortal!" */) {
 
@@ -1825,12 +1826,13 @@ doturn()
 		return(0);
 	}
 
-	if (Inhell) {
+	if (Inhell && !Race_if(PM_VAMPIRE)) {
 	    pline("Since you are in Gehennom, %s won't help you.", u_gname());
 	    aggravate();
 	    return(0);
 	}
-	pline("Calling upon %s, you chant holy scripture.", u_gname());
+	if(!Race_if(PM_VAMPIRE)) pline("Calling upon %s, you chant holy scripture.", u_gname());
+	else You("focus your vampiric aura!");
 	exercise(A_WIS, TRUE);
 
 	/* note: does not perform unturn_dead() on victims' inventories */
@@ -1849,8 +1851,10 @@ doturn()
 
 		    mtmp->msleeping = 0;
 		    if (Confusion) {
-			if (!once++)
-			    pline("Unfortunately, your voice falters.");
+			if (!once++){
+			    if(!Race_if(PM_VAMPIRE)) pline("Unfortunately, your voice falters.");
+			    else pline("Unfortunately, your concentration falters.");
+			}
 			mtmp->mflee = 0;
 			mtmp->mfrozen = 0;
 			mtmp->mcanmove = 1;
@@ -1871,6 +1875,7 @@ doturn()
 				if (u.ualign.type == A_CHAOTIC) {
 				    mtmp->mpeaceful = 1;
 				    set_malign(mtmp);
+					if(PM_VAMPIRE) tamedog(mtmp, (struct obj *)0);
 				} else { /* damn them */
 				    killed(mtmp);
 				}

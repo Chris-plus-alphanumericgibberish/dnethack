@@ -218,10 +218,16 @@ A("Kiku-ichimonji",		KATANA,
 	it) if you are devoutly lawful. */
 	/*Clarent has been modified to make it the Knight sac-gift*/
 A("Clarent",			LONG_SWORD, /*quote (sorta)*/
-	(SPFX_RESTR|SPFX_DEFN|SPFX_DFLAG1), 0, M1_THICK_HIDE,
+	(SPFX_RESTR|SPFX_DFLAG1), 0, M1_THICK_HIDE,
 	PHYS(4,8),	NO_DFNS,		NO_CARY,
 	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
 	SPFX2_DIG,0,0), 
+
+A("Rod of Lordly Might", MACE, /*needs quote*/
+	(SPFX_RESTR|SPFX_DEFN), 0, 0,
+	PHYS(3,0),	NO_DFNS,	NO_CARY,
+	LORDLY,	A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, 
+	0,SPFX3_ENGRV,0), 
 
 /*
  *	Magicbane is a bit different!  Its magic fanfare
@@ -312,10 +318,10 @@ A("Tobiume",		LONG_SWORD,
 
 //A("Lancea Longini",			SILVER_SPEAR,
 A("The Lance of Longinus",			SILVER_SPEAR,
-	(SPFX_RESTR|SPFX_HSPDAM|SPFX_HPHDAM|SPFX_DEFN), 0, 0, //needs quote
+	(SPFX_RESTR|SPFX_HSPDAM|SPFX_HPHDAM|SPFX_DEFN|SPFX_REFLECT), 0, 0, //needs quote
 	NO_ATTK,	DFNS(AD_MAGM),	DRLI(0,0),
 	WWALKING, A_LAWFUL, NON_PM, NON_PM, 1500L, 
-	0,SPFX3_ENGRV,0),
+	0,0,0),
 
 A("The Arkenstone", DIAMOND,
     SPFX_RESTR, SPFX_AGGRM, 0,
@@ -683,6 +689,18 @@ A("The Eyes of the Overworld",	LENSES,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_XRAY), 0, 0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	ENLIGHTENING,	A_NEUTRAL,	 PM_MONK, NON_PM, 2500L, 
+	0,0,0),
+
+A("The Mantle of Heaven",	LEATHER_CLOAK, /*Actually an ornamental cope in game*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HSPDAM), 0, 0,
+	NO_ATTK,	ELEC(0,0),	COLD(0,0), /* Plus double AC bonus */
+	0,	A_LAWFUL,	 PM_NOBLEMAN, NON_PM, 2500L,
+	0,0,0),
+
+A("The Vestment of Hell",	LEATHER_CLOAK, /*Actually an opera cloak in game*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HPHDAM), 0, 0,
+	NO_ATTK,	ACID(0,0),	FIRE(0,0), /* Plus double AC bonus */
+	0,	A_CHAOTIC,	 PM_NOBLEMAN, NON_PM, 2500L,
 	0,0,0),
 
 A("The Mitre of Holiness",	HELM_OF_BRILLIANCE,

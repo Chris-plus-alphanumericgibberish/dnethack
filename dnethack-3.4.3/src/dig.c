@@ -373,8 +373,14 @@ dig()
 				struct obj *staff;
 			    digtxt = "You cut down the tree.";
 			    lev->typ = ROOM;
-//			    if (!rn2(5)) (void) rnd_treefruit_at(dpx, dpy); /*for now, remove fruit drops for chopping down trees*/
-				levl[bhitpos.x][bhitpos.y].typ = CORR;
+			    if (!(lev->looted & TREE_LOOTED) && !rn2(5)){
+					if(u.uz.dnum != neutral_dnum &&
+						u.uz.dnum != chaos_dnum &&
+						!on_level(&medusa_level,&u.uz) &&
+						!(Role_if(PM_NOBLEMAN) && In_quest(&u.uz)) &&
+						u.uz.dnum != tower_dnum
+					) (void) rnd_treefruit_at(dpx, dpy);
+				}
 				for(numsticks = d(2,4)-1; numsticks > 0; numsticks--){
 					staff = mksobj_at(rn2(2) ? QUARTERSTAFF : CLUB, dpx, dpy, FALSE, FALSE);
 					staff->spe = 0;
@@ -839,14 +845,24 @@ int x, y;
 	    	otmp->age -= 100;		/* this is an *OLD* corpse */;
 	    break;
 	case 2:
+		if(!Race_if(PM_VAMPIRE)){
 	    if (!Blind) pline(Hallucination ? "Dude!  The living dead!" :
  			"The grave's owner is very upset!");
  	    (void) makemon(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+		} else{
+			You("unearth a minion.");
+			(void) initedog(makemon(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL), x, y, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH));
+		}
 	    break;
 	case 3:
+		if(!Race_if(PM_VAMPIRE)){
 	    if (!Blind) pline(Hallucination ? "I want my mummy!" :
  			"You've disturbed a tomb!");
  	    (void) makemon(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+		} else {
+			You("recruit a follower from this tomb.");
+			(void) initedog(makemon(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL), x, y, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH));
+		}
 	    break;
 	default:
 	    /* No corpse */
@@ -1595,7 +1611,7 @@ int y;
 
 	} else if (IS_GRAVE(lev->typ)) {        
 	    digactualhole(x, y, BY_YOU, PIT);
-	    dig_up_grave();
+	    dig_up_grave(x,y);
 	    return TRUE;
 	} else if (lev->typ == DRAWBRIDGE_UP) {
 		/* must be floor or ice, other cases handled above */

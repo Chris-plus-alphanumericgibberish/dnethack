@@ -884,7 +884,7 @@ dokick()
 			}
 			exercise(A_DEX, TRUE);
 			return(1);
-		    } else if(Luck > 0 && !rn2(3) && !maploc->looted) {
+		    } else if(Luck > 0 && !rn2(3) && !(maploc->looted&T_LOOTED)) {
 			(void) mkgold((long) rn1(201, 300), x, y);
 			i = Luck + 1;
 			if(i > 6) i = 6;
@@ -898,7 +898,7 @@ dokick()
 			    newsym(x, y);
 			}
 			/* prevent endless milking */
-			maploc->looted = T_LOOTED;
+			maploc->looted &= T_LOOTED;
 			return(1);
 		    } else if (!rn2(4)) {
 			if(dunlev(&u.uz) < dunlevs_in_dungeon(&u.uz)) {
@@ -1026,7 +1026,7 @@ dokick()
 					return(1);
 				}
 			    goto ouch;
-			} else if(u.uz.dnum == neutral_dnum) {
+			} else if(u.uz.dnum == neutral_dnum || (Role_if(PM_NOBLEMAN) && In_quest(&u.uz))) {
 					goto ouch;
 			} else if(u.uz.dnum == law_dnum) {
 			    if (rn2(3)) {

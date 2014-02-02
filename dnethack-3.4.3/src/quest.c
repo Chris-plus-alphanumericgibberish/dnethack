@@ -111,6 +111,7 @@ boolean talk;
 {
     int purity;
     aligntyp original_alignment = u.ualignbase[A_ORIGINAL];
+	int racemod = Race_if(PM_VAMPIRE) ? 5 : 0;
 
 #ifdef WIZARD
     if (wizard && talk) {
@@ -119,15 +120,15 @@ boolean talk;
 		align_str(u.ualign.type), align_str(original_alignment));
 	} else if (u.ualignbase[A_CURRENT] != original_alignment) {
 	    You("have converted.");
-	} else if (u.ualign.record < MIN_QUEST_ALIGN) {
+	} else if (u.ualign.record < (MIN_QUEST_ALIGN - racemod)) {
 	    You("are currently %d and require %d.",
-		u.ualign.record, MIN_QUEST_ALIGN);
+		u.ualign.record, MIN_QUEST_ALIGN-racemod);
 	    if (yn_function("adjust?", (char *)0, 'y') == 'y')
-		u.ualign.record = MIN_QUEST_ALIGN;
+		u.ualign.record = MIN_QUEST_ALIGN-racemod;
 	}
     }
 #endif
-    purity = (u.ualign.record >= MIN_QUEST_ALIGN &&
+    purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod) &&
 	      u.ualign.type == original_alignment &&
 	      u.ualignbase[A_CURRENT] == original_alignment) ?  1 :
 	     (u.ualignbase[A_CURRENT] != original_alignment) ? -1 : 0;
@@ -352,11 +353,23 @@ quest_chat(mtmp)
 	chat_with_leader();
 	return;
     }
+	if(
+		(Role_if(PM_NOBLEMAN) && 
+		(mtmp->data == &mons[PM_KNIGHT] 
+			|| mtmp->data == &mons[PM_MAID]) && 
+		mtmp->mpeaceful) ||
+		(Role_if(PM_NOBLEMAN) && 
+		mtmp->data == &mons[PM_KNIGHT] && 
+		mtmp->mpeaceful)
+	){
+		chat_with_guardian();
+	} else {
     switch(mtmp->data->msound) {
 	    case MS_NEMESIS:	chat_with_nemesis(); break;
 	    case MS_GUARDIAN:	chat_with_guardian(); break;
 	    default:	impossible("quest_chat: Unknown quest character %s.",
 				   mon_nam(mtmp));
+		}
 	}
 }
 

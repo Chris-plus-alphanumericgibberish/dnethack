@@ -205,6 +205,13 @@ register boolean special;
 		    cloak = ROBE;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
 		    break;
+		case PM_NOBLEMAN:
+		case PM_NOBLEWOMAN:
+		    weapon = RAPIER;
+		    armor = CHAIN_MAIL;
+		    cloak = find_opera_cloak();
+		    shield = STRANGE_OBJECT;
+		break;
 		case PM_PRIEST:
 		case PM_PRIESTESS:
 		    if (rn2(2)) weapon = MACE;
@@ -237,12 +244,12 @@ register boolean special;
 		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
 		    break;
 		case PM_WIZARD:
-		    if (rn2(4)) weapon = rn2(2) ? QUARTERSTAFF : ATHAME;
+		   weapon = rn2(2) ? QUARTERSTAFF : ATHAME;
 		    if (rn2(2)) {
 		    	armor = rn2(2) ? BLACK_DRAGON_SCALE_MAIL :
 		    			SILVER_DRAGON_SCALE_MAIL;
-		    	cloak = CLOAK_OF_MAGIC_RESISTANCE;
 		    }
+		    	cloak = CLOAK_OF_MAGIC_RESISTANCE;
 		    if (rn2(4)) helm = HELM_OF_BRILLIANCE;
 		    shield = STRANGE_OBJECT;
 		    break;

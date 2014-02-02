@@ -433,7 +433,6 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	mread(fd, (genericptr_t) &quest_status, sizeof(struct q_score));
 	mread(fd, (genericptr_t) spl_book,
 				sizeof(struct spell) * (MAXSPELL + 1));
-	restore_artifacts(fd);
 	restore_oracles(fd);
 	if (u.ustuck)
 		mread(fd, (genericptr_t) stuckid, sizeof (*stuckid));
@@ -449,6 +448,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	ffruit = loadfruitchn(fd);
 
 	restnames(fd);
+	restore_artifacts(fd);
 	restore_waterlevel(fd);
 #ifdef RECORD_ACHIEVE
 	mread(fd, (genericptr_t) &achieve, sizeof achieve);

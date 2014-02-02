@@ -963,6 +963,13 @@ struct obj *otmp;
 	else /*  str ==25*/bonus = 8;
 
 	if(otmp && objects[otmp->otyp].oc_bimanual) bonus *= 2;
+	
+	if(uwep && otmp==uwep && otmp->otyp==RAPIER){
+		int dex = ACURR(A_DEX);
+		bonus/=2; /*Half strength bonus/penalty*/
+		
+		bonus += (dex-11)/2;
+	}
 	return bonus;
 }
 

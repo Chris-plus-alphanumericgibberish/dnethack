@@ -171,6 +171,17 @@
 #define SELECT_APPLE		SELECT_TRIPE + 1
 #define SELECT_BANANA		SELECT_APPLE + 1
 
+#define COMMAND_RAPIER			 1
+#define COMMAND_AXE				 2
+#define COMMAND_MACE			 3
+#define COMMAND_SPEAR			 4
+#define COMMAND_LANCE			 5
+#define COMMAND_LADDER			 6
+#define COMMAND_CLAIRVOYANCE	 7
+#define COMMAND_FEAR			 8
+#define COMMAND_LIFE			 9
+#define COMMAND_KNEEL			10
+
 struct artifact {
 	short	    otyp;
 	const char  *name;
@@ -224,6 +235,7 @@ struct artifact {
 #define PHASING		(LAST_PROP+33)
 #define OBJECT_DET	(LAST_PROP+34)
 #define TELEPORT_SHOES	(LAST_PROP+35)
+#define LORDLY	(LAST_PROP+36)
 
 #define CountsAgainstGifts(x)	!(artilist[x].cspfx3 & SPFX3_NOCNT)
 							/*(x != ART_WATER_CRYSTAL && \

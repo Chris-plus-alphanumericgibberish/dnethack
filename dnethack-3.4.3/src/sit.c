@@ -5,6 +5,8 @@
 #include "hack.h"
 #include "artifact.h"
 
+int NDECL(dohomesit);
+
 void
 take_gold()
 {
@@ -158,7 +160,57 @@ dosit()
 	    You(sit_message, "drawbridge");
 
 	} else if(IS_THRONE(typ)) {
+		if(Role_if(PM_NOBLEMAN) && In_quest(&u.uz)){
+			You(sit_message, defsyms[S_throne].explanation);
+			if(uarmc &&
+			  ((!Race_if(PM_VAMPIRE) && uarmc->oartifact == ART_MANTLE_OF_HEAVEN) ||
+			  ( Race_if(PM_VAMPIRE) && uarmc->oartifact == ART_VESTMENT_OF_HELL))
+			){
+			if(~levl[u.ux][u.uy].looted & (NOBLE_GENO|NOBLE_KNOW|NOBLE_PETS|NOBLE_WISH)){
+			  switch(dohomesit()){
+				case NOBLE_GENO:
+					pline("A voice echoes:");
+					verbalize("By thy Imperious order, %s...",
+						  flags.female ? "Dame" : "Sire");
+					do_genocide(5);	/* REALLY|ONTHRONE, see do_genocide() */
+					levl[u.ux][u.uy].looted |= NOBLE_GENO;
+				break;
+				case NOBLE_KNOW:
+					You("use your noble insight!");
+					if (invent) {
+						/* rn2(5) agrees w/seffects() */
+						identify_pack(rn2(5));
+					}
+					levl[u.ux][u.uy].looted |= NOBLE_KNOW;
+				break;
+				case NOBLE_PETS:{
+					int cnt = rnd(10);
+					struct monst *mtmp;
 
+					pline("A voice echoes:");
+					verbalize("Thy audience hath been summoned, %s!",
+						  flags.female ? "Dame" : "Sire");
+					while(cnt--){
+						mtmp = makemon(courtmon(), u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+						initedog(mtmp);
+					}
+					levl[u.ux][u.uy].looted |= NOBLE_PETS;
+				}break;
+				case NOBLE_WISH:{
+					makewish();
+					levl[u.ux][u.uy].looted |= NOBLE_WISH;
+				}break;
+				default:
+					You_feel("right at home.");
+				break;
+			 }
+			} else {
+					You_feel("right at home.");
+			}
+			} else {
+					You_feel("that something is missing....");
+			}
+		} else {
 	    You(sit_message, defsyms[S_throne].explanation);
 	    if (rnd(6) > 4)  {
 		switch (rnd(13))  {
@@ -200,13 +252,13 @@ dosit()
 			break;
 		    case 7:
 			{
-			register int cnt = rnd(10);
+				int cnt = rnd(10);
 
 			pline("A voice echoes:");
 			verbalize("Thy audience hath been summoned, %s!",
 				  flags.female ? "Dame" : "Sire");
 			while(cnt--)
-			    (void) makemon(courtmon(), u.ux, u.uy, NO_MM_FLAGS);
+					(void) makemon(courtmon(), u.ux, u.uy, MM_ADJACENTOK);
 			break;
 			}
 		    case 8:
@@ -264,7 +316,7 @@ dosit()
 				break;
 		}
 	    } else {
-		if (is_prince(youmonst.data))
+			if (is_prince(youmonst.data) || Role_if(PM_NOBLEMAN))
 		    You_feel("very comfortable here.");
 		else
 		    You_feel("somehow out of place...");
@@ -276,7 +328,7 @@ dosit()
 		pline_The("throne vanishes in a puff of logic.");
 		newsym(u.ux,u.uy);
 	    }
-
+		}
 	} else if (lays_eggs(youmonst.data)) {
 		struct obj *uegg;
 
@@ -535,6 +587,61 @@ attrcurse()			/* remove a random INTRINSIC ability */
 		}
 	default: break;
 	}
+}
+
+int
+dohomesit()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "What do you command?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	if( !(levl[u.ux][u.uy].looted & NOBLE_GENO) ){
+		Sprintf(buf, "Order a genocide");
+		any.a_int = NOBLE_GENO;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'g', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	
+	if(!(levl[u.ux][u.uy].looted & NOBLE_KNOW)){
+		Sprintf(buf, "Use your insight");
+		any.a_int = NOBLE_KNOW;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'i', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	
+	if(!(levl[u.ux][u.uy].looted & NOBLE_PETS)){
+		Sprintf(buf, "Grant an audience");
+		any.a_int = NOBLE_PETS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'a', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	
+	if(!(levl[u.ux][u.uy].looted & NOBLE_WISH)){
+		Sprintf(buf, "Demand tribute");
+		any.a_int = NOBLE_WISH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'W', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	end_menu(tmpwin, "Your command?");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? selected[0].item.a_int : 0;
 }
 
 /*sit.c*/

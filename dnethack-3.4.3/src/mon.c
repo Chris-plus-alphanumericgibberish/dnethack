@@ -1528,11 +1528,22 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 
 	/* Since the quest guardians are under siege, it makes sense to have 
        them fight hostiles.  (But we don't want the quest leader to be in danger.) */
-	if(ma->msound==MS_GUARDIAN && magr->mpeaceful==TRUE && mdef->mpeaceful==FALSE)
-		return ALLOW_M|ALLOW_TM;
+	if( (ma->msound==MS_GUARDIAN 
+		  || (Role_if(PM_NOBLEMAN) && (ma == &mons[PM_KNIGHT] || ma == &mons[PM_MAID] || ma == &mons[PM_PEASANT]) && magr->mpeaceful)
+		  || (Role_if(PM_KNIGHT) && ma == &mons[PM_KNIGHT] && magr->mpeaceful)
+		)
+		&& magr->mpeaceful==TRUE 
+		&& mdef->mpeaceful==FALSE
+	) return ALLOW_M|ALLOW_TM;
 	/* and vice versa */
-	if(md->msound==MS_GUARDIAN && mdef->mpeaceful==TRUE && magr->mpeaceful==FALSE && rn2(2))
-		return ALLOW_M|ALLOW_TM;
+	if( (md->msound == MS_GUARDIAN 
+		  || (Role_if(PM_NOBLEMAN) && (md == &mons[PM_KNIGHT] || md == &mons[PM_MAID] || md == &mons[PM_PEASANT]) && mdef->mpeaceful)
+		  || (Role_if(PM_KNIGHT) && md == &mons[PM_KNIGHT] && mdef->mpeaceful)
+		)
+		&& mdef->mpeaceful==TRUE 
+		&& magr->mpeaceful==FALSE 
+		&& rn2(2)
+	) return ALLOW_M|ALLOW_TM;
 
 	/* elves vs. orcs */
 	if(is_elf(ma) && (is_orc(md) || is_ogre(md) || is_undead(md)) && !is_undead(ma))

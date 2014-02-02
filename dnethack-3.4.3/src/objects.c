@@ -105,7 +105,7 @@ WEAPON("boomerang", (char *)0,
 
 /* spears */
 WEAPON("spear", (char *)0,
-	1, 1, 0, 50, 30,  3,  6,  8, 0, P,   P_SPEAR, IRON, HI_METAL),
+	1, 1, 0, 48, 30,  3,  6,  8, 0, P,   P_SPEAR, IRON, HI_METAL),
 WEAPON("elven spear", "runed spear",
 	0, 1, 0, 10, 30,  3,  7,  7, 2, P,   P_SPEAR, WOOD, HI_WOOD),
 WEAPON("orcish spear", "crude spear",
@@ -149,7 +149,7 @@ WEAPON("sickle", (char *)0, /* Vs plants: +6 to hit and double damage */
 	1, 1, 0, 22, 20,  4,  4,  1, -2, S,   P_HARVEST, IRON, HI_METAL),
 
 WEAPON("axe", (char *)0,
-	1, 0, 0, 40, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
+	1, 0, 0, 38, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
 WEAPON("battle-axe", "double-headed axe",
 	0, 0, 1, 10,120, 40,  8,  6, 0, S,   P_AXE, IRON, HI_METAL),
 						/* "double-bitted" ? */
@@ -168,6 +168,8 @@ WEAPON("dwarvish short sword", "broad short sword",
 	0, 0, 0,  2, 30, 10,  8,  7, 0, P,   P_SHORT_SWORD, IRON, HI_METAL),
 WEAPON("scimitar", "curved sword",
 	0, 0, 0, 15, 40, 15,  8,  8, 0, S,   P_SCIMITAR, IRON, HI_METAL),
+WEAPON("rapier", (char *)0,
+	1, 0, 0,  6, 40, 20,  6,  4, 2, P,   P_SABER, METAL, HI_SILVER),
 WEAPON("silver saber", (char *)0,
 	1, 0, 0,  6, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
 WEAPON("broadsword", (char *)0,
@@ -177,7 +179,7 @@ WEAPON("elven broadsword", "runed broadsword",
 	0, 0, 0,  4, 70, 10,  6,  6, 2, S,   P_BROAD_SWORD, WOOD, HI_WOOD),
 						/* +d4 small, +1 large */
 WEAPON("long sword", (char *)0,
-	1, 0, 0, 50, 40, 15,  8, 12, 0, S,   P_LONG_SWORD, IRON, HI_METAL),
+	1, 0, 0, 48, 40, 15,  8, 12, 0, S,   P_LONG_SWORD, IRON, HI_METAL),
 WEAPON("two-handed sword", (char *)0,
 	1, 0, 1, 22,150, 50, 12,  6, 0, S,   P_TWO_HANDED_SWORD, IRON, HI_METAL),
 						/* +2d6 large */
@@ -429,6 +431,12 @@ ARMOR("striped shirt", (char *)0,
 	1, 0, 0, 0,	 0, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_GRAY),
 # endif /* CONVICT */
 #endif
+/*Ruffled shirts are little different from other shirts*/
+ARMOR("ruffled shirt", (char *)0,
+	1, 0, 0, 0,	 0, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_WHITE),
+/* victorian underwear, on the other hand, inflicts a penalty to AC but grants MC 3 */
+ARMOR("victorian underwear", (char *)0,
+	1, 0, 0, 0,	 0, 5,	 5,   2, 10, 3, ARM_SHIRT, CLOTH, CLR_WHITE),
 
 /* cloaks */
 /*  'cope' is not a spelling mistake... leave it be */
@@ -437,11 +445,11 @@ CLOAK("mummy wrapping", (char *)0,
 CLOAK("elven cloak", "faded pall",
 		0, 1,	STEALTH,    7, 0, 10, 60,  9, 3, CLOTH, CLR_BLACK),
 CLOAK("droven cloak", "cobwebbed cloak",
-		0, 1,	0,      1, 0, 10, 60,  10, 3, CLOTH, CLR_BLACK),
+		0, 1,	0,      1, 0, 10, 60,  10, 3, CLOTH, CLR_GRAY),
 CLOAK("orcish cloak", "coarse mantelet",
 		0, 0,	0,	    8, 0, 10, 40, 10, 2, CLOTH, CLR_BLACK),
 CLOAK("dwarvish cloak", "hooded cloak",
-		0, 0,	0,	    8, 0, 10, 50, 9, 2, CLOTH, HI_CLOTH),
+		0, 0,	0,	    8, 0, 10, 50, 9, 2, CLOTH, CLR_BLUE),
 CLOAK("oilskin cloak", "slippery cloak",
 		0, 0,	0,	    8, 0, 10, 50,  9, 3, CLOTH, HI_CLOTH),
 CLOAK("robe", (char *)0,
@@ -456,11 +464,11 @@ CLOAK("leather cloak", (char *)0,
 CLOAK("cloak of protection", "tattered cape",
 		0, 1,	PROTECTION, 9, 0, 10, 50,  7, 3, CLOTH, HI_CLOTH),
 CLOAK("cloak of invisibility", "opera cloak",
-		0, 1,	INVIS,	   10, 0, 10, 60,  9, 2, CLOTH, CLR_BRIGHT_MAGENTA),
+		0, 1,	INVIS,	   10, 0, 10, 60,  9, 2, CLOTH, CLR_BLACK),
 CLOAK("cloak of magic resistance", "ornamental cope",
 		0, 1,	ANTIMAGIC,  2, 0, 10, 60,  9, 3, CLOTH, CLR_WHITE),
 CLOAK("cloak of displacement", "piece of cloth",
-		0, 1,	DISPLACED, 10, 0, 10, 50,  9, 2, CLOTH, HI_CLOTH),
+		0, 1,	DISPLACED, 10, 0, 10, 50,  9, 2, CLOTH, CLR_BRIGHT_MAGENTA),
 
 /* shields */
 SHIELD("small shield", (char *)0,

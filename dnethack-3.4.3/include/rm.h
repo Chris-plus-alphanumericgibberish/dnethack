@@ -264,6 +264,13 @@ extern const struct symdef def_warnsyms[WARNCOUNT];
  * Thrones should only be looted once.
  */
 #define T_LOOTED	1
+/*
+ * Flags for special throne in the noble quest.
+ */
+#define NOBLE_GENO	 2
+#define NOBLE_KNOW	 4
+#define NOBLE_PETS	 8
+#define NOBLE_WISH	16
 
 /*
  * Trees have more than one kick result.

@@ -534,11 +534,38 @@ boolean artif;
 		case HORN_OF_PLENTY:
 		case BAG_OF_TRICKS:	otmp->spe = rnd(20);
 					break;
-		case FIGURINE:	{	int tryct2 = 0;
+		case FIGURINE:	{
+					if(Is_paradise(&u.uz)){
+						switch(rn2(3)){
+							case 0:
+								otmp->corpsenm = PM_SHADE;
+							break;
+							case 1:
+								otmp->corpsenm = PM_DARKNESS_GIVEN_HUNGER;
+							break;
+							case 2:
+								otmp->corpsenm = PM_NIGHTGAUNT;
+							break;
+						}
+					} else if(Is_sunkcity(&u.uz)){
+						switch(rn2(3)){
+							case 0:
+								otmp->corpsenm = PM_DEEPEST_ONE;
+							break;
+							case 1:
+								otmp->corpsenm = PM_MASTER_MIND_FLAYER;
+							break;
+							case 2:
+								otmp->corpsenm = PM_SHOGGOTH;
+							break;
+						}
+					} else {
+						int tryct2 = 0;
 					do
 					    otmp->corpsenm = rndmonnum();
 					while(is_human(&mons[otmp->corpsenm])
 						&& tryct2++ < 30);
+					}
 					blessorcurse(otmp, 4);
 					break;
 				}
@@ -1100,6 +1127,7 @@ weight(obj)
 register struct obj *obj;
 {
 	int wt = objects[obj->otyp].oc_weight;
+	if(obj->oartifact == ART_ROD_OF_LORDLY_MIGHT) wt = objects[MACE].oc_weight;
 	if(obj->oartifact == ART_EARTH_CRYSTAL){
 		wt *= 2; //300
 	}

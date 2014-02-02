@@ -2427,7 +2427,6 @@ use_weapon:
 			if ((uwep || u.twoweap && uswapwep) &&
 				(touch_petrifies(mon->data) ||
 				 mon->data == &mons[PM_MEDUSA])){
-					pline("breaking contact");
 			    	break;
 				}
 			if ((dhit = (tmp > rnd(20) || u.uswallow)) != 0) {

@@ -127,6 +127,11 @@ const struct innate {
 		     {	 15, &(HFire_resistance), "heat resistant", "less heat resistant" },
 		     {	 0, 0, 0, 0 } },
 
+	vam_abil[] = { {	1, &(HPoison_resistance), "", "" },
+			 {	11, &(HCold_resistance), "the chill of the grave", "the warmth of life" },
+		     {	 21, &(HPolymorph_control), "in control", "out of control" },
+		     {	 0, 0, 0, 0 } },
+	
 	inc_abil[] = { {	1, &(HAntimagic), "", "" },
 		     {	 0, 0, 0, 0 } };
 
@@ -628,10 +633,10 @@ int oldlevel, newlevel;
 	case PM_ORC:            rabil = orc_abil;	break;
 	case PM_CLOCKWORK_AUTOMATON:rabil = clk_abil;	break;
 	case PM_INCANTIFIER:	rabil = inc_abil;	break;
+	case PM_VAMPIRE:		rabil = vam_abil;	break;
 	case PM_HUMAN:
 	case PM_DWARF:
 	case PM_GNOME:
-	case PM_VAMPIRE:
 	default:                rabil = 0;		break;
 	}
 

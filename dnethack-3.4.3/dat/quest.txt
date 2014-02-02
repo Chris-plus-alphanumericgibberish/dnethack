@@ -2132,6 +2132,249 @@ the Astral plane.  I suspect that I shall never see you again in this
 life, but I hope to at %ds feet."
 %E
 #
+#       Noble
+#
+#
+%Cc Nob 00001
+You find yourself standing in sight of %H.  You relax, anticipating 
+the comforts of home. But wait! What are those banners in the distance?
+%E
+%Cp Nob 00002
+Once again, you return to %H.
+%E
+%Cp Nob 00003
+Again you return to %H.  You fear the rebelion may soon overwhelm
+the keep.
+%E
+%Cp Nob 00005
+"Greetings, %r.  It is good to see you again."
+%E
+%Cp Nob 00006
+"%r %p!  There has been an uprising amongst the peasantry!"
+%E
+%Cp Nob 00007
+"Greetings, %r.  %lC arived, claiming she will help us put down the
+rebellion. She is waiting in the great hall."
+%E
+%Cp Nob 00008
+"Alas, it seems as if %d has withdrawn from us."
+%E
+%Cp Nob 00009
+"I think the rebellion has outside aid."
+%E
+%Cp Nob 00010
+"Greetings, %r.  It is good to see you again."
+%E
+%Cp Nob 00011
+"The rebellion was easily crushed, once their leader was slain."
+%E
+%Cp Nob 00012
+"Good news, %s!  With the rebellion quelled, your tax collectors have 
+been able to resume their work!"
+%E
+%Cp Nob 00013
+"Long live the %r!"
+%E
+%Cp Nob 00014
+"%dC save the %r!"
+%E
+%Cc Nob 00015
+"Ah, %p, my "%r."  You're a little late.  The peasant revolt has
+already swept across your lands, leaving only this keep untouched.
+The cards say you will need my help to reclaim your place. But
+I won't assist just anyone."
+%E
+%Cp Nob 00016
+"Again, you have returned.  Are you now ready to begin?"
+%E
+%Cp Nob 00017
+"Once more, you have returned.  Are at last ready to begin?""
+%E
+%Cc Nob 00018
+"%dC has turned away from you, my "%r." Your faithlessness has
+cost you %H and your destiny. Flee into exile
+or end your life at the hands of the rebels.
+%E
+%Cc Nob 00019
+"Fool, only as a %R can you hope to put down the rebellion.
+You must go out and gather further renown."
+%E
+%Cc Nob 00020
+"Only with the full support of %d can you succeed.
+Go away, and don't return without the favor of %d."
+%E
+%Cc Nob 00021
+"Yes, %r.  The cards say you are ready."
+
+With that, she begins drawing cards from her deck. First is
+the zero of trumps, followed swiftly by the queen and seven
+of swords.
+
+"After you departed from %H, %n 
+and her companions broke into the keep and stole
+%o, which symbolizes your right to rule
+these lands."
+
+The five of wands joins them on the table, followed by the
+five of swords.
+
+"With her stolen authority, %n raised
+a peasant revolt and routed your army."
+
+%lC gathers up the cards, suffles the deck, and
+resumes drawing. Again, the first card is the zero of trumps,
+this time followed by the three and seven of wands, the
+queen and ten of swords, and finally the ten of trumps.
+
+"You must travel to %i, slay %n,
+and recover %o."
+
+She sits back and fixes you with a piercing stare.
+
+"I'd use the secret passage in your throne room to reach
+the forest, if I were you."
+%E
+%Cp Nob 00025
+"You must learn to rely on %d."
+%E
+%Cp Nob 00026
+She draws a card from the center of the deck.
+It is the queen of swords.
+
+"A powerful warrior with a silver sword."
+%E
+%Cp Nob 00027
+"Why are you still here?"
+%E
+%Cp Nob 00028
+She deals a card from the bottom of the deck. It is the
+queen of wands.
+
+"A woman of nature. She fights with arrows of the moon's metal."
+%E
+%Cp Nob 00029
+"Well, what are you waiting for?"
+%E
+%Cp Nob 00030
+"Get on with it!"
+%E
+%Cp Nob 00031
+"Your surviving knights still fight the rebels in the woods."
+%E
+%Cp Nob 00032
+"There are still some loyal peasants in the woods."
+%E
+%Cp Nob 00033
+She turns over the top card. It is the five of trumps.
+
+"A holy man.  He can heal his friends and set the sky on fire"
+%E
+%Cp Nob 00034
+She pulls a card from the deck: The one of trumps.
+
+"A man of magic.  At his word the elements rise up and energy
+rains down; but as any true mage knows, sleep will kill you
+faster than flames!"
+%E
+%Cc Nob 00035
+You remember the directions to %i, given to you
+by the %l.  You are on the right path.
+%E
+%Cp Nob 00036
+Again, you approach %i.
+%E
+%Cc Nob 00040
+You have found %i.
+
+The rebel leaders will be in  one of the houses.
+%E
+%Cp Nob 00041
+Again, you have invaded %ns stronghold.
+%E
+%Cc Nob 00050
+"So, at last you have come. Your death shall set this land free!"
+%E
+%Cp Nob 00051
+"So, %r.  You are a fool to return here."
+%E
+%Cp Nob 00052
+"Die, %r!"
+%E
+%Cp Nob 00053
+"You have no right to %o!"
+%E
+%Cp Nob 00060
+"Run away, %c, and keep your life."
+%E
+%Cp Nob 00061
+"You are no match for us, %c."
+%E
+%Cp Nob 00062
+"Turn to dust!"
+%E
+%Cp Nob 00063
+"%d won't help you."
+%E
+%Cp Nob 00064
+"You shall oppress us no more!"
+%E
+%Cp Nob 00065
+"You will die here, %r %c"
+%E
+%Cp Nob 00066
+"You cannot defeat me, for I have justice on my side."
+%E
+%Cp Nob 00067
+"Monster!"
+%E
+%Cp Nob 00068
+"I powers have failed you, %r."
+%E
+%Cp Nob 00069
+"Without %o, you have no claim over us!"
+%E
+%Cc Nob 00070
+As you pick up %o, you feel connected to your land and your people
+for the first time since returning to %H.
+
+You feel you should hury back to the keep and take up your throne
+once again, if just for a short time.
+%E
+%Cc Nob 00080
+%nC sinks to her knees, coughing blood. She gasps:
+
+    "Bastard. You may kill me, but you can't kill justice!
+	The rebellion is greater than any one person. These people shall
+	be free of your tyrany yet!"
+
+%nC is silent after that, but you remain prudently out of arm's reach
+until you are certain she has bled out.
+%E
+%Cc Nob 00081
+"You have returned, %r.  And regained %o, no less."
+
+She flicks a card from her deck, and when it lands at your feet you
+see that it is fifteenth trump.
+
+"Isn't your own quest yet unfinished?"
+%E
+%Cc Nob 00082
+%lC studies %o for a moment,
+then turns to glare at to you.
+
+"How cruel you are to taunt an old woman. My curse, the curse of
+all my kin, prevents me from ever finding a home of my own."
+%E
+%Cp Nob 00090
+"Why are you back!?  There is nothing left to be done here!"
+%E
+%Cc Nob 00091
+%lC holds up the last two cards in her deck: the two and twenty-one
+of trumps.
+
+"You have one task remaining. It begins where you entered."
+%E
+#
 #	Pirate
 #
 %Cc Pir 00001

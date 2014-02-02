@@ -25,8 +25,11 @@ extern void demonpet();
 #define DEATH_TOUCH			   SUMMON_DEVIL+1
        /* healing spells */
 #define CURE_SELF              DEATH_TOUCH+1  /* healing */
+#define MASS_CURE_CLOSE        CURE_SELF+1  /* heal allies */
+#define MASS_CURE_FAR          MASS_CURE_CLOSE+1  /* heal allies */
+#define RECOVER                MASS_CURE_FAR+1  /* remove afflictions */
        /* divination spells */
-#define MAKE_VISIBLE           CURE_SELF+1
+#define MAKE_VISIBLE           RECOVER+1
        /* (dis)enchantment spells */
 #define HASTE_SELF             MAKE_VISIBLE+1 /* haste self */
 #define STUN_YOU               HASTE_SELF+1
@@ -510,6 +513,38 @@ unsigned int type;
 				return DEATH_TOUCH;
 			break;
 		}
+	case PM_MILITANT_CLERIC:
+		switch(rn2(6)){
+			case 0:
+			case 1:
+				return CURE_SELF;
+			break;
+			case 2:
+				return MASS_CURE_FAR;
+			break;
+			case 3:
+				return MASS_CURE_CLOSE;
+			break;
+			case 4:
+				return RECOVER;
+			break;
+			case 5:
+				return FIRE_PILLAR;
+			break;
+		}
+	case PM_ADVENTURING_WIZARD:
+		switch(rn2(4)){
+			case 0:
+			case 1:
+				return SLEEP;
+			break;
+			case 2:
+				return MAGIC_MISSILE;
+			break;
+			case 3:
+				return SUMMON_SPHERE;
+			break;
+		}
 	case PM_PALE_NIGHT:
 		switch(rn2(5)){
 			case 0:
@@ -591,7 +626,7 @@ unsigned int type;
 				return CONFUSE_YOU;
 			break;
 			case 1:
-				return CURE_SELF;
+				return MASS_CURE_FAR;
 			break;
 			case 0:
 			default:
@@ -1509,6 +1544,74 @@ ray:
 	    dmg = 0;
 	}
 	break;
+	case MASS_CURE_CLOSE:{
+		int x, y, n;
+		struct monst *cmon;
+		if(!mtmp){
+			x = u.ux;
+			y = u.uy;
+			n = 8;
+		} else {
+			x = mtmp->mx;
+			x = mtmp->my;
+			n = mtmp->m_lev/3+1;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( cmon != mtmp &&
+				cmon->mhp<cmon->mhpmax && 
+				((mtmp && cmon->mpeaceful == mtmp->mpeaceful) ||
+				 (!mtmp && !cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 4
+			){
+				if((cmon->mhp += d(n,8)) > cmon->mhpmax)
+					cmon->mhp = cmon->mhpmax;
+				if (canseemon(cmon))
+					pline("%s looks better.", Monnam(mtmp));
+			}
+		}
+
+	}break;
+	case MASS_CURE_FAR:{
+		int x, y, n;
+		struct monst *cmon;
+		if(!mtmp){
+			x = u.ux;
+			y = u.uy;
+			n = 8;
+		} else {
+			x = mtmp->mux;
+			x = mtmp->muy;
+			n = mtmp->m_lev/3+1;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( cmon != mtmp &&
+				cmon->mhp<cmon->mhpmax && 
+				((mtmp && cmon->mpeaceful == mtmp->mpeaceful) ||
+				 (!mtmp && !cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 4
+			){
+				if((cmon->mhp += d(n,8)) > cmon->mhpmax)
+					cmon->mhp = cmon->mhpmax;
+				if (canseemon(cmon))
+					pline("%s looks better.", Monnam(mtmp));
+			}
+		}
+
+	}break;
+	case RECOVER:
+		if(!mtmp) goto openwounds;
+		if(!mtmp->perminvis) mtmp->minvis = 0;
+		if(mtmp->permspeed == MSLOW) mtmp->permspeed = 0;
+		mtmp->mcan = 0;
+		mtmp->mcrazed = 0; 
+		mtmp->mcansee = 1;
+		mtmp->mblinded = 0;
+		mtmp->mcanmove = 1;
+		mtmp->mfrozen = 0;
+		mtmp->msleeping = 0;
+		mtmp->mstun = 0;
+		mtmp->mconf = 0;
+	break;
     case OPEN_WOUNDS:
 	openwounds:
 	if (Antimagic) {
@@ -1677,6 +1780,12 @@ int spellnum;
 	    return TRUE;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
+	    return TRUE;
+	/* healing when stats are ok */
+	if (spellnum == RECOVER && !(mtmp->mcan || mtmp->mcrazed || 
+								!mtmp->mcansee || !mtmp->mcanmove || 
+								!mtmp->msleeping || mtmp->mstun || 
+								mtmp->mconf || mtmp->permspeed == MSLOW))
 	    return TRUE;
        /* don't summon anything if it doesn't think you're around
           or the caster is peaceful */
@@ -1861,6 +1970,11 @@ int spellnum;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
 	    return TRUE;
+	/* healing when stats are ok */
+	if (spellnum == RECOVER && !(mtmp->mcan || mtmp->mcrazed || 
+								!mtmp->mcansee || !mtmp->mcanmove || 
+								!mtmp->msleeping || mtmp->mstun || 
+								mtmp->mconf || mtmp->permspeed == MSLOW))
 	/* don't summon monsters if it doesn't think you're around */
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1)
 						&& spellnum == CLONE_WIZ)
@@ -1873,9 +1987,6 @@ int spellnum;
         if (spellnum == INSECTS)
 	    return TRUE;
 #endif
- 	/* healing when already healed */
-	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
-	    return TRUE;
 	/* blindness spell on blinded player */
 	if ((!haseyes(mdef->data) || mdef->mblinded) && spellnum == BLIND_YOU)
 	    return TRUE;

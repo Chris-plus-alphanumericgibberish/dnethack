@@ -234,6 +234,33 @@ const struct Role roles[] = {
 	{  2, 2,  0, 2,  0, 2 },10,	/* Energy */
 	10, 8,-2, 2, 20, A_WIS, SPE_RESTORE_ABILITY, -4
 },
+{	{"Nobleman", "Noblewoman"}, {
+	{"Pargar",       0},
+	{"Cneaz",	     0},
+	{"Ban",		     0},
+	{"Jude",	     0},
+	{"Boier",	     0},
+	{"Cupar",	     0},
+	{"Clucer",	     0},
+	{"Domn",	     0},
+	{"Domnitor",     0} },
+	"God the Father", "_Mother Earth", "the Satan", /* Romanian, sorta */
+	"Nob", "your ancestral home",
+	  "the rebel village",
+	PM_NOBLEMAN, PM_NOBLEWOMAN, PM_PONY,
+	PM_OLD_GYPSY_WOMAN, PM_SERVANT, PM_REBEL_RINGLEADER,
+	PM_SOLDIER, PM_PEASANT, S_HUMANOID, S_HUMAN,
+	ART_MANTLE_OF_HEAVEN,
+	MH_HUMAN|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
+	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
+	/* Str Int Wis Dex Con Cha */
+	{   10,10,  7, 10,  7,  7 },
+	{  20, 18, 10, 20, 15, 17 },
+	/* Init   Lower  Higher */
+	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
+	{  2, 2,  0, 2,  0, 2 },10,	/* Energy */
+	10, 4,-4, 4, 8, A_INT, SPE_PROTECTION, -24
+},
 {	{"Priest", "Priestess"}, {
 	{"Aspirant",    0},
 	{"Acolyte",     0},

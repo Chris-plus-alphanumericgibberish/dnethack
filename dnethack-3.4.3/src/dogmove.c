@@ -756,6 +756,8 @@ boolean ranged;
 		((mtmp->mhp*4 < mtmp->mhpmax
 		  || mtmp2->data->msound == MS_GUARDIAN
 		  || mtmp2->data->msound == MS_LEADER
+		  || (Role_if(PM_NOBLEMAN) && (mtmp->data == &mons[PM_KNIGHT] || mtmp->data == &mons[PM_MAID] || mtmp->data == &mons[PM_PEASANT]) && mtmp->mpeaceful)
+		  || (Role_if(PM_KNIGHT) && (mtmp->data == &mons[PM_KNIGHT]) && mtmp->mpeaceful)
 		  || always_peaceful(mtmp2->data)) &&
 		 mtmp2->mpeaceful && !Conflict) ||
 		   (!ranged && touch_petrifies(mtmp2->data) &&

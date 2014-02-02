@@ -123,6 +123,17 @@ static struct trobj Monk[] = {
 	{ FORTUNE_COOKIE, 0, FOOD_CLASS, 3, UNDEF_BLESS },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj Noble[] = {
+#define NOB_SHIRT	1
+	{ RAPIER, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
+	{ RUFFLED_SHIRT, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ LEATHER_CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
+	{ APPLE, 0, FOOD_CLASS, 10, 0 },
+	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 static struct trobj Pirate[] = {
 #define PIR_KNIVES	1
 #define PIR_SNACK 5
@@ -494,6 +505,27 @@ static const struct def_skill Skill_Mon[] = {
     { P_CLERIC_SPELL, P_SKILLED },  { P_ESCAPE_SPELL, P_BASIC },
     { P_MATTER_SPELL, P_BASIC },
     { P_MARTIAL_ARTS, P_GRAND_MASTER },
+    { P_NONE, 0 }
+};
+
+static const struct def_skill Skill_Nob[] = {
+    { P_DAGGER, P_BASIC },		{ P_KNIFE, P_EXPERT },
+    { P_AXE, P_EXPERT },
+    { P_SHORT_SWORD, P_SKILLED },	{ P_BROAD_SWORD, P_SKILLED },
+    { P_LONG_SWORD, P_EXPERT },
+    { P_SCIMITAR, P_EXPERT },		{ P_SABER, P_EXPERT },
+    { P_CLUB, P_BASIC },		{ P_MACE, P_EXPERT },
+    { P_MORNING_STAR, P_BASIC },	{ P_FLAIL, P_BASIC },
+    { P_POLEARMS, P_BASIC },
+    { P_SPEAR, P_EXPERT },		{ P_JAVELIN, P_BASIC },
+    { P_TRIDENT, P_BASIC },		{ P_LANCE, P_SKILLED },
+    { P_BOW, P_SKILLED },			{ P_CROSSBOW, P_BASIC },
+    { P_ATTACK_SPELL, P_SKILLED },	{ P_HEALING_SPELL, P_SKILLED },
+    { P_ESCAPE_SPELL, P_SKILLED },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
+#ifdef STEED
+    { P_RIDING, P_SKILLED },
+#endif
+    { P_BARE_HANDED_COMBAT, P_SKILLED },
     { P_NONE, 0 }
 };
 
@@ -1050,6 +1082,14 @@ u_init()
 		else if(!rn2(10)) ini_inv(Lamp);
 		knows_class(ARMOR_CLASS);
 		skill_init(Skill_Mon);
+		break;
+	case PM_NOBLEMAN:
+		if(flags.female){
+			Noble[NOB_SHIRT].trotyp = VICTORIAN_UNDERWEAR;
+		}
+		ini_inv(Noble);
+		knows_class(ARMOR_CLASS);
+		skill_init(Skill_Nob);
 		break;
 	case PM_PIRATE:
 #ifndef GOLDOBJ

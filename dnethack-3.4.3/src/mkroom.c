@@ -289,6 +289,7 @@ struct mkroom *sroom;
 		/* don't place monster on explicitly placed throne */
 		if(type == COURT && IS_THRONE(levl[sx][sy].typ))
 		    continue;
+		if(!(Role_if(PM_NOBLEMAN) && In_quest(&u.uz) )){
 		mon = makemon(
 		    (type == COURT) ? courtmon() :
 		    (type == BARRACKS) ? squadmon() :
@@ -308,6 +309,7 @@ struct mkroom *sroom;
 				set_malign(mon);
 			}
 		}
+		}
 		switch(type) {
 		    case ZOO:
 		    case LEPREHALL:
@@ -323,6 +325,7 @@ struct mkroom *sroom;
 			(void) mkgold((long) rn1(i, 10), sx, sy);
 			break;
 		    case MORGUE:
+			if(!(Role_if(PM_NOBLEMAN) && In_quest(&u.uz) )){
 			if(!rn2(5))
 			    (void) mk_tt_object(CORPSE, sx, sy);
 			if(!rn2(10))	/* lots of treasure buried with dead */
@@ -330,6 +333,7 @@ struct mkroom *sroom;
 					     sx, sy, TRUE, FALSE);
 			if (!rn2(5))
 			    make_grave(sx, sy, (char *)0);
+			} else if(rn2(2)) make_grave(sx, sy, (char *)0);
 			break;
 		    case BEEHIVE:
 			if(!rn2(3))

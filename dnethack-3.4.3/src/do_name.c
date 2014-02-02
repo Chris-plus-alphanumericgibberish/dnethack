@@ -3,6 +3,12 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "artifact.h"
+#ifdef OVLB
+#include "artilist.h"
+#else
+STATIC_DCL struct artifact artilist[];
+#endif
 
 #ifdef OVLB
 
@@ -522,6 +528,23 @@ const char *name;
 	if (obj->oartifact || (lth && exist_artifact(obj->otyp, name)))
 		return obj;
 
+	if(!strcmp((&artilist[ART_MANTLE_OF_HEAVEN])->name,name) &&
+	   obj && obj->otyp == LEATHER_CLOAK){
+		if(!Race_if(PM_VAMPIRE)) obj = poly_obj(obj,find_cope());
+		else{
+			obj = poly_obj(obj,find_opera_cloak());
+			name = "The Vestment of Hell";
+		}
+	}
+	else if(!strcmp((&artilist[ART_VESTMENT_OF_HELL])->name,name) &&
+	   obj && obj->otyp == LEATHER_CLOAK){
+		if(Race_if(PM_VAMPIRE)) obj = poly_obj(obj,find_opera_cloak());
+		else{
+			obj = poly_obj(obj,find_cope());
+			name = "The Mantle of Heaven";
+		}
+	}
+	
 	if (lth == obj->onamelth) {
 		/* no need to replace entire object */
 		if (lth) Strcpy(ONAME(obj), name);
@@ -529,6 +552,7 @@ const char *name;
 		obj = realloc_obj(obj, obj->oxlth,
 			      (genericptr_t)obj->oextra, lth, name);
 	}
+	
 	if (lth) artifact_exists(obj, name, TRUE);
 	if (obj->oartifact) {
 	    /* can't dual-wield with artifact as secondary weapon */

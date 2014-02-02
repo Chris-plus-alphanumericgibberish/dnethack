@@ -323,7 +323,7 @@ register struct monst *mtmp;
 				(void) mpickobj(mtmp, otmp);
 				return;//no random stuff!
 			}
-		if(mm == PM_DAEMON){
+			else if(mm == PM_DAEMON){
 			otmp = mksobj(SILVER_SABER, TRUE, FALSE);
 			otmp = oname(otmp, artiname(ART_ICONOCLAST));
 			otmp->spe = 9;
@@ -433,7 +433,7 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, PICK_AXE);
 				if (!rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
 		    }
-		} else if (is_elf(ptr)) {
+			} else if (is_elf(ptr) && ptr != &mons[PM_HALF_ELF_RANGER]) {
 		    if (rn2(2))
 			(void) mongets(mtmp,
 				   rn2(2) ? ELVEN_MITHRIL_COAT : ELVEN_CLOAK);
@@ -519,6 +519,60 @@ register struct monst *mtmp;
 				(void) mongets(mtmp, RUNESWORD);
 				(void) mongets(mtmp, PLATE_MAIL);
 			break;
+				case PM_REBEL_RINGLEADER:
+					(void) mongets(mtmp, SILVER_SABER);
+					(void) mongets(mtmp, GRAY_DRAGON_SCALE_MAIL);
+					(void) mongets(mtmp, SMALL_SHIELD);
+					(void) mongets(mtmp, HIGH_BOOTS);
+				break;
+				case PM_ADVENTURING_WIZARD:
+					(void) mongets(mtmp, QUARTERSTAFF);
+					(void) mongets(mtmp, LEATHER_ARMOR);
+					(void) mongets(mtmp, ROBE);
+					(void) mongets(mtmp, LOW_BOOTS);
+				break;
+				case PM_MILITANT_CLERIC:
+					(void) mongets(mtmp, MACE);
+					(void) mongets(mtmp, PLATE_MAIL);
+					(void) mongets(mtmp, LARGE_SHIELD);
+					(void) mongets(mtmp, IRON_SHOES);
+				break;
+				case PM_HALF_ELF_RANGER:
+					otmp = mksobj(SILVER_ARROW, TRUE, FALSE);
+					otmp->blessed = FALSE;
+					otmp->cursed = FALSE;
+					otmp->quan += 10;
+					(void) mongets(mtmp, ELVEN_SHORT_SWORD);
+					(void) mongets(mtmp, ELVEN_SHORT_SWORD);
+					(void) mongets(mtmp, ELVEN_MITHRIL_COAT);
+					(void) mongets(mtmp, ELVEN_LEATHER_HELM);
+					(void) mongets(mtmp, ELVEN_CLOAK);
+					(void) mongets(mtmp, HIGH_BOOTS);
+					(void) mongets(mtmp, ELVEN_BOW);
+					(void) mpickobj(mtmp,otmp);
+				break;
+				case PM_PEASANT:
+					switch(rn2(6)){
+						case 0:
+							(void)mongets(mtmp, SICKLE);
+						break;
+						case 1:
+							(void)mongets(mtmp, SCYTHE);
+						break;
+						case 2:
+							(void)mongets(mtmp, KNIFE);
+						break;
+						case 3:
+							(void)mongets(mtmp, CLUB);
+						break;
+						case 4:
+							(void)mongets(mtmp, AXE);
+						break;
+						case 5:
+							(void)mongets(mtmp, VOULGE);
+						break;
+					}
+				break;
 			case PM_NINJA: 
 				(void)mongets(mtmp, BROADSWORD);
 				chance = d(1,100);
@@ -3257,9 +3311,11 @@ register struct permonst *ptr;
 		} else return FALSE;
 	}
 	if (always_peaceful(ptr)) return TRUE;
-	if (always_hostile(ptr) && (u.uz.dnum != law_dnum || !is_social_insect(ptr)
+	if (always_hostile(ptr) && 
+		(u.uz.dnum != law_dnum || !is_social_insect(ptr)
 		|| (!on_level(&arcadia1_level,&u.uz) && !on_level(&arcadia2_level,&u.uz) && !on_level(&arcadia3_level,&u.uz) && !on_level(&arcward_level,&u.uz))
-		)) return FALSE;
+		) && (!is_vampire(ptr) || maybe_polyd(!is_vampire(youmonst.data), !Race_if(PM_VAMPIRE)))
+		) return FALSE;
 	if (ptr->msound == MS_LEADER || ptr->msound == MS_GUARDIAN)
 		return TRUE;
 	if (ptr->msound == MS_NEMESIS)	return FALSE;

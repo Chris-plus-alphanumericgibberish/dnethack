@@ -1046,6 +1046,7 @@ struct monst *mtmp;
 		}
 		nomore(MUSE_POT_STONE_BLOOD);
 		if(obj->otyp == POT_BLOOD && !rn2(20) 
+			&& !is_vampire(mtmp->data)
 			&& touch_petrifies(&mons[obj->corpsenm])) {
 			m.offensive = obj;
 			m.has_offense = MUSE_POT_STONE_BLOOD;
@@ -1086,7 +1087,10 @@ struct monst *mtmp;
 			m.has_offense = MUSE_POT_ACID;
 		}
 		nomore(MUSE_POT_ENERGY_BLOOD);
-		if(obj->otyp == POT_BLOOD && crpsdanger(&mons[obj->corpsenm])) {
+		if(obj->otyp == POT_BLOOD 
+			&& !is_vampire(mtmp->data)
+			&& crpsdanger(&mons[obj->corpsenm])
+		) {
 			m.offensive = obj;
 			m.has_offense = MUSE_POT_ENERGY_BLOOD;
 		}

@@ -548,6 +548,19 @@ Shirt_on(VOID_ARGS)
 	default: impossible(unknown_type, c_shirt, uarmu->otyp);
     }
 */
+	if(uarmu->otyp == RUFFLED_SHIRT) {
+		You("%s very dashing in your %s.", Blind ||
+				(Invis && !See_invisible) ? "feel" : "look",
+				OBJ_NAME(objects[uarmu->otyp]));
+		ABON(A_CHA) += 1;
+		flags.botl = 1;
+	}
+	else if(uarmu->otyp == VICTORIAN_UNDERWEAR){
+		pline("The %s shapes your figure, but it isn't very practical to fight in.",
+				OBJ_NAME(objects[uarmu->otyp]));
+		ABON(A_CHA) += 2;
+		flags.botl = 1;
+	}
 	if(arti_lighten(uarmu)) inv_weight();
     return 0;
 }
@@ -566,6 +579,15 @@ Shirt_off(VOID_ARGS)
 	default: impossible(unknown_type, c_shirt, uarmu->otyp);
     }
 */
+	if(uarmu->otyp == RUFFLED_SHIRT) {
+		ABON(A_CHA) -= 1;
+		flags.botl = 1;
+	}
+	else if(uarmu->otyp == VICTORIAN_UNDERWEAR){
+		ABON(A_CHA) -= 2;
+		flags.botl = 1;
+	}
+	
     setworn((struct obj *)0, W_ARMU);
 	if(checkweight) inv_weight();
     return 0;
@@ -1232,21 +1254,39 @@ register struct obj *otmp;
 	if(cursed(otmp)) return(0);
 	if(delay) {
 		nomul(delay, "disrobing");
-		if (is_helmet(otmp)) {
+		if (is_shield(otmp)) {
+			nomovemsg = "You finish taking off your shield.";
+			afternmv = Shield_off;
+		     }
+		else if (is_helmet(otmp)) {
 			nomovemsg = "You finish taking off your helmet.";
 			afternmv = Helmet_off;
-		     }
-		else if (is_gloves(otmp)) {
-			nomovemsg = "You finish taking off your gloves.";
-			afternmv = Gloves_off;
 		     }
 		else if (is_boots(otmp)) {
 			nomovemsg = "You finish taking off your boots.";
 			afternmv = Boots_off;
 		     }
-		else {
+		else if (is_gloves(otmp)) {
+			nomovemsg = "You finish taking off your gloves.";
+			afternmv = Gloves_off;
+		     }
+		else if (is_cloak(otmp)) {
+			nomovemsg = "You finish taking off your cloak.";
+			afternmv = Cloak_off;
+		     }
+		else if (otmp->otyp == VICTORIAN_UNDERWEAR) {
+			nomovemsg = "You finish taking off your impractical underwear.";
+			afternmv = Shirt_off;
+		     }
+		else if (is_shirt(otmp)) {
+			nomovemsg = "You finish taking off your shirt.";
+			afternmv = Shirt_off;
+		     }
+		else if (is_suit(otmp)){
 			nomovemsg = "You finish taking off your suit.";
 			afternmv = Armor_off;
+		} else {
+			impossible("Attempting to remove unknown armor type (with delay)");
 		}
 	} else {
 		/* Be warned!  We want off_msg after removing the item to
@@ -1264,10 +1304,20 @@ register struct obj *otmp;
 		 * 3.2 (actually 3.1 even): this comment is obsolete since
 		 * fire resistance is not needed for Gehennom.
 		 */
-		if(is_cloak(otmp))
-			(void) Cloak_off();
-		else if(is_shield(otmp))
+		if(is_shield(otmp))
 			(void) Shield_off();
+		else if(is_helmet(otmp))
+			(void) Helmet_off();
+		else if(is_boots(otmp))
+			(void) Boots_off();
+		else if(is_gloves(otmp))
+			(void) Gloves_off();
+		else if(is_cloak(otmp))
+			(void) Cloak_off();
+		else if(is_shirt(otmp))
+			(void) Shirt_off();
+		else if(is_suit(otmp))
+			(void) Armor_off();
 		else setworn((struct obj *)0, otmp->owornmask & W_ARMOR);
 		off_msg(otmp);
 	}
@@ -1489,17 +1539,22 @@ dowear()
 	delay = -objects[otmp->otyp].oc_delay;
 	if(delay){
 		nomul(delay, "dressing up");
-		if(is_boots(otmp)) afternmv = Boots_on;
-		if(is_helmet(otmp)) afternmv = Helmet_on;
-		if(is_gloves(otmp)) afternmv = Gloves_on;
-		if(otmp == uarm) afternmv = Armor_on;
+		if(is_shield(otmp)) afternmv = Shield_on;
+		else if(is_helmet(otmp)) afternmv = Helmet_on;
+		else if(is_boots(otmp)) afternmv = Boots_on;
+		else if(is_gloves(otmp)) afternmv = Gloves_on;
+		else if(is_cloak(otmp)) afternmv = Cloak_on;
+		else if(is_shirt(otmp)) afternmv = Shirt_on;
+		else if(otmp == uarm) afternmv = Armor_on;
 		nomovemsg = "You finish your dressing maneuver.";
 	} else {
-		if(is_cloak(otmp)) (void) Cloak_on();
-		if (is_shield(otmp)) (void) Shield_on();
-#ifdef TOURIST
-		if (is_shirt(otmp)) (void) Shirt_on();
-#endif
+		if(is_shield(otmp)) (void) Shield_on();
+		else if(is_helmet(otmp)) (void) Helmet_on();
+		else if(is_boots(otmp)) (void) Boots_on();
+		else if(is_gloves(otmp)) (void) Gloves_on();
+		else if(is_cloak(otmp)) (void) Cloak_on();
+		else if(is_shirt(otmp)) (void) Shirt_on();
+		else if(otmp == uarm) (void) Armor_on();
 		on_msg(otmp);
 	}
 	takeoff_mask = taking_off = 0L;
@@ -1645,14 +1700,18 @@ find_ac()
 	int uac = mons[u.umonnum].ac;
 
 	if(uarm) uac -= ARM_BONUS(uarm);
-	if(uarmc) uac -= ARM_BONUS(uarmc);
+	if(uarmc){
+		if(uarmc->oartifact == ART_MANTLE_OF_HEAVEN || 
+			uarmc->oartifact == ART_VESTMENT_OF_HELL
+		) uac -= 2*ARM_BONUS(uarmc);
+		else uac -= ARM_BONUS(uarmc);
+	}
 	if(uarmh) uac -= ARM_BONUS(uarmh);
 	if(uarmf) uac -= ARM_BONUS(uarmf);
 	if(uarms) uac -= ARM_BONUS(uarms);
 	if(uarmg) uac -= ARM_BONUS(uarmg);
-#ifdef TOURIST
 	if(uarmu) uac -= ARM_BONUS(uarmu);
-#endif
+	
     static int cbootsd = 0;
     if (!cbootsd) cbootsd = find_cboots();
     if (uarmf && uarmf->otyp == cbootsd) uac -= 1; /*max( (int)(uarmf->spe/2+1),(int)(uarmf->spe/-2+1));/* adds half again the enchantment, 
@@ -1661,11 +1720,20 @@ find_ac()
     if (!pgloves) pgloves = find_pgloves();
     if (uarmf && uarmf->otyp == pgloves) uac -= 1;
 
-	if(uwep && uwep->oartifact == ART_TOBIUME) uac -= max(uwep->spe,0);
-	if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+	if(uwep){
+		if(uwep->otyp == RAPIER) uac -= max(
+											min(
+											(ACURR(A_DEX)-13)/4,
+											P_SKILL(weapon_type(uwep))-1
+											)
+										,0);
+		if(uwep->oartifact == ART_TOBIUME ||
+			uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max(uwep->spe,0);
+		if(uwep->oartifact == ART_TENSA_ZANGETSU){
 		uac -= max( (uwep->spe+1)/2,0);
 		if(!uarmc || !uarm) uac -= max( uwep->spe,0);
 		if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
+	}
 	}
 	if(uleft && uleft->otyp == RIN_PROTECTION) uac -= uleft->spe;
 	if(uright && uright->otyp == RIN_PROTECTION) uac -= uright->spe;
@@ -1678,6 +1746,12 @@ find_ac()
 		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
 		dexbonus += max((int)( (ACURR(A_WIS)-1)/2 - 5 ),0) + (int)(u.ulevel/6 + 1);
 	}
+	/*Corsets suck*/
+	if(uarmu && uarmu->otyp == VICTORIAN_UNDERWEAR){
+		uac += 2; //flat penalty. Something in the code "corrects" ac values >10, this is a kludge.
+		dexbonus = min(dexbonus-2,0);
+	}
+	
 	if(dexbonus > 0 && uarm){
 		if(uarm->otyp == BRONZE_PLATE_MAIL || uarm->otyp == CHAIN_MAIL || uarm->otyp == SCALE_MAIL || 
 			uarm->otyp == STUDDED_LEATHER_ARMOR || uarm->otyp == LEATHER_ARMOR || uarm->otyp == BANDED_MAIL)

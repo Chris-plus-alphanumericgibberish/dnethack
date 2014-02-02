@@ -83,6 +83,10 @@
 #define herbivorous(ptr)	(((ptr)->mflags1 & M1_HERBIVORE) != 0L)
 #define metallivorous(ptr)	(((ptr)->mflags1 & M1_METALLIVORE) != 0L)
 #define polyok(ptr)		(((ptr)->mflags2 & M2_NOPOLY) == 0L)
+#define is_Rebel(ptr)		(ptr == &mons[PM_REBEL_RINGLEADER] ||\
+							 ptr == &mons[PM_ADVENTURING_WIZARD] ||\
+							 ptr == &mons[PM_MILITANT_CLERIC] ||\
+							 ptr == &mons[PM_HALF_ELF_RANGER])
 #define is_undead(ptr)		(((ptr)->mflags2 & M2_UNDEAD) != 0L)
 #define is_were(ptr)		(((ptr)->mflags2 & M2_WERE) != 0L)
 #define is_vampire(ptr)		(((ptr)->mflags2 & M2_VAMPIRE) != 0L)
