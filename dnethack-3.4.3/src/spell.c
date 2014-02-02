@@ -54,7 +54,7 @@ char *wardDecode[26] = {
 	"sketch of the wings of Garuda",
 	"sigil of Cthugha",
 	"brand of Ithaqua",
-	"tracery of Krakal",
+	"tracery of Karakal",
 	"yellow sign",
 	"toustefna stave",
 	"dreprun stave",

@@ -119,7 +119,7 @@
 
 #define	R_Y_SIGN		0x00400000L	//yellow sign
 #define	R_WARDS			0x00800000L	//eye, queen
-#define	R_ELEMENTS		0x01000000L	//cthuqha, ithaqua, and krakal
+#define	R_ELEMENTS		0x01000000L	//Cthuqha, Ithaqua, and Karakal
 
 
 #define	LAST_PAGE	0x40000000L

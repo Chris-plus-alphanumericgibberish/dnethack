@@ -34,7 +34,7 @@ struct engr {
 #define WINGS_OF_GARUDA				11
 #define SIGIL_OF_CTHUGHA			12
 #define BRAND_OF_ITHAQUA			13
-#define TRACERY_OF_KRAKAL			14
+#define TRACERY_OF_KARAKAL			14
 #define YELLOW_SIGN					15
 
 #define FIRST_RUNE					16

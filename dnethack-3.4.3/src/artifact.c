@@ -4066,14 +4066,14 @@ read_necro(VOID_ARGS)
 				u.wardsknown |= WARD_ACHERON|WARD_PENTAGRAM|WARD_HEXAGRAM|WARD_ELDER_SIGN|WARD_HAMSA|WARD_EYE|WARD_QUEEN|WARD_CAT_LORD|WARD_GARUDA;
 			break;
 			case SELECT_ELEMENTS:
-				if( (u.wardsknown & WARD_CTHUGHA) && (u.wardsknown & WARD_ITHAQUA) && (u.wardsknown & WARD_KRAKAL)){
+				if( (u.wardsknown & WARD_CTHUGHA) && (u.wardsknown & WARD_ITHAQUA) && (u.wardsknown & WARD_KARAKAL)){
 					You("page through the section on the Lords of the Elements");
-				}else if((u.wardsknown & WARD_CTHUGHA) || (u.wardsknown & WARD_ITHAQUA) || (u.wardsknown & WARD_KRAKAL)){
+				}else if((u.wardsknown & WARD_CTHUGHA) || (u.wardsknown & WARD_ITHAQUA) || (u.wardsknown & WARD_KARAKAL)){
 					You("refresh your memory about the Lords of the Elements");
 				}else{
 					You("read about the Lords of the Elements");
 				}
-				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KRAKAL;
+				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
 			break;
 		}
 	}
@@ -4423,7 +4423,7 @@ read_necro(VOID_ARGS)
 				else{
 					You("discover another section on the Lords of the Elements.");
 				}
-//				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KRAKAL;
+//				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
 			break;
 		}
 //		artiptr->ovar1 = ~0; //debug

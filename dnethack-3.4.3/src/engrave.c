@@ -350,7 +350,7 @@ const char * wardText[][7] =  {
 		"",
 		"",
 		""},
-	{"a tracery of Krakal",
+	{"a tracery of Karakal",
 		"", 
 		"",
 		"",
@@ -380,7 +380,7 @@ const char * wardNames[][2] = {
 	{"wing of Garuda", "wings of Garuda"},
 	{"sigil of Cthugha", "sigils of Cthugha"},
 	{"brand of Ithaqua", "brands of Ithaqua"},
-	{"tracery of Krakal", "traceries of Krakal"},
+	{"tracery of Karakal",	"traceries of Karakal"},
 	{"yellow sign", "yellow signs"},
 };
 
@@ -3076,8 +3076,8 @@ random_unknown_ward()
 		if(~u.wardsknown & WARD_ITHAQUA){
 			options[num_unknown++] = BRAND_OF_ITHAQUA;	/* must be non-zero */
 		}
-		if(~u.wardsknown & WARD_KRAKAL){
-			options[num_unknown++] = TRACERY_OF_KRAKAL;	/* must be non-zero */
+		if(~u.wardsknown & WARD_KARAKAL){
+			options[num_unknown++] = TRACERY_OF_KARAKAL;	/* must be non-zero */
 		}
 		if(~u.wardsknown & WARD_YELLOW){
 			options[num_unknown++] = YELLOW_SIGN;	/* must be non-zero */
@@ -3209,9 +3209,9 @@ pick_ward()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(u.wardsknown & WARD_KRAKAL){
-		Sprintf(buf, "The Tracery of Krakal");
-		any.a_int = TRACERY_OF_KRAKAL;	/* must be non-zero */
+	if(u.wardsknown & WARD_KARAKAL){
+		Sprintf(buf,	"The Tracery of Karakal");
+		any.a_int = TRACERY_OF_KARAKAL;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
@@ -3264,7 +3264,7 @@ int wardID;
 		break;
 		case WARD_ITHAQUA: return BRAND_OF_ITHAQUA;
 		break;
-		case WARD_KRAKAL: return TRACERY_OF_KRAKAL;
+		case WARD_KARAKAL: return TRACERY_OF_KARAKAL;
 		break;
 		case WARD_YELLOW: return YELLOW_SIGN;
 		break;
@@ -3317,7 +3317,7 @@ int floorID;
 		break;
 		case BRAND_OF_ITHAQUA: return WARD_ITHAQUA;
 		break;
-		case TRACERY_OF_KRAKAL: return WARD_KRAKAL;
+		case TRACERY_OF_KARAKAL: return WARD_KARAKAL;
 		break;
 		case YELLOW_SIGN: return WARD_YELLOW;
 		break;
@@ -4412,7 +4412,7 @@ int sealID;
 		break;
 		case WARD_ITHAQUA: return BRAND_OF_ITHAQUA;
 		break;
-		case WARD_KRAKAL: return TRACERY_OF_KRAKAL;
+		case WARD_KARAKAL: return TRACERY_OF_KARAKAL;
 		break;
 		case WARD_YELLOW: return YELLOW_SIGN;
 		break;
@@ -4453,7 +4453,7 @@ int floorID;
 		break;
 		case BRAND_OF_ITHAQUA: return WARD_ITHAQUA;
 		break;
-		case TRACERY_OF_KRAKAL: return WARD_KRAKAL;
+		case TRACERY_OF_KARAKAL: return WARD_KARAKAL;
 		break;
 		case YELLOW_SIGN: return WARD_YELLOW;
 		break;

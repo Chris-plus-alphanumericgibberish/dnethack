@@ -196,7 +196,7 @@ do_present_ring(obj)
 				(obj->ovar1 == WINGS_OF_GARUDA && scaryWings(1, mtmp)) ||
 /*				(obj->ovar1 == SIGIL_OF_CTHUGHA && (1, mtmp)) ||
 				(obj->ovar1 == BRAND_OF_ITHAQUA && (1, mtmp)) ||
-				(obj->ovar1 == TRACERY_OF_KRAKAL && (1, mtmp)) || These wards curently don't have scaryX functions. */
+				(obj->ovar1 == TRACERY_OF_KARAKAL && (1, mtmp)) || These wards curently don't have scaryX functions. */
 				(obj->ovar1 == YELLOW_SIGN && scaryYellow(1, mtmp)) ||
 				(obj->ovar1 == TOUSTEFNA && scaryTou(mtmp)) ||
 				(obj->ovar1 == DREPRUN && scaryDre(mtmp)) ||

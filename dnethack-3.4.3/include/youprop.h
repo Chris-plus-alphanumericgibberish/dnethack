@@ -51,7 +51,7 @@
 #define EShock_resistance	u.uprops[SHOCK_RES].extrinsic
 #define Shock_resistance	(HShock_resistance || EShock_resistance || \
 				 resists_elec(&youmonst) || \
-				 ward_at(u.ux,u.uy) == TRACERY_OF_KRAKAL || u.sealsActive&SEAL_ASTAROTH)
+				 ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || u.sealsActive&SEAL_ASTAROTH)
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
