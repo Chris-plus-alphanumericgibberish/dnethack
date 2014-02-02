@@ -1360,8 +1360,12 @@ poly_obj(obj, id)
 
 	otmp->cursed = obj->cursed;
 	otmp->blessed = obj->blessed;
+	otmp->bknown = obj->bknown;
 	otmp->oeroded = obj->oeroded;
 	otmp->oeroded2 = obj->oeroded2;
+	otmp->ostolen = obj->ostolen;
+	otmp->shopOwned = obj->shopOwned;
+	otmp->sknown = obj->sknown;
 	if (!is_flammable(otmp) && !is_rustprone(otmp)) otmp->oeroded = 0;
 	if (!is_corrodeable(otmp) && !is_rottable(otmp)) otmp->oeroded2 = 0;
 	if (is_damageable(otmp))
