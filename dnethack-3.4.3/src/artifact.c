@@ -835,6 +835,8 @@ struct monst *mtmp;
 	struct permonst *ptr;
 	boolean yours;
 
+	if(!mtmp) return FALSE; //Invoked with a null monster while calculating hypothetical data (I think)
+
 	if(!(weap->spfx & (SPFX_DBONUS | SPFX_ATTK)))
 	    return(weap->attk.adtyp == AD_PHYS);
 
