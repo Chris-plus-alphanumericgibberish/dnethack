@@ -1297,6 +1297,11 @@ int part;
 		"light headed", "neck", "spine", "rear claw tip",
 		"fur", "blood", "lung", "nose", "stomach","heart","skin",
 		"flesh","beat","bones","creak","crack" },
+	*insect_parts[] = { "forelimb", "compound eye", "face", "foreclaw", "claw tip",
+		"rear claw", "foreclaw", "clawed", "head", "rear limb",
+		"light headed", "neck", "notochord", "rear claw tip",
+		"setae", "ichor", "spriacle", "antenna", "stomach","dorsal vessel","exoskeleton",
+		"chitin","pulse","apodeme","creak","tear" },
 	*bird_parts[] = { "wing", "eye", "face", "wing", "wing tip",
 		"foot", "wing", "winged", "head", "leg",
 		"light headed", "neck", "spine", "toe",
@@ -1394,6 +1399,8 @@ int part;
 	    return fungus_parts[part];
 	if (humanoid(mptr))
 	    return uclockwork ? clockwork_parts[part] : humanoid_parts[part];
+	if (mptr->mlet == S_ANT)
+		return insect_parts[part];
 	return animal_parts[part];
 }
 
