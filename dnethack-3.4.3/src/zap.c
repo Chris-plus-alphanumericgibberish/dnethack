@@ -3389,6 +3389,7 @@ boolean u_caused;
 	    obj2 = obj->nexthere;
 	    if (obj->oclass == SCROLL_CLASS || obj->oclass == SPBOOK_CLASS) {
 		if (obj->otyp == SCR_FIRE || obj->otyp == SPE_FIREBALL ||
+			obj->otyp == SCR_GOLD_SCROLL_OF_LAW || 
 			obj_resists(obj, 2, 100))
 		    continue;
 		scrquan = obj->quan;	/* number present */
@@ -4055,7 +4056,7 @@ register int osym, dmgtyp;
 
 			if (osym==SCROLL_CLASS && obj->oartifact)
 			skip++;
-		    if (obj->otyp == SCR_FIRE || obj->otyp == SPE_FIREBALL)
+		    if (obj->otyp == SCR_FIRE || obj->otyp == SCR_GOLD_SCROLL_OF_LAW || obj->otyp == SPE_FIREBALL)
 			skip++;
 		    if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 			skip++;
@@ -4184,7 +4185,7 @@ int osym, dmgtyp;
 		case AD_FIRE:
 			if (osym==SCROLL_CLASS && obj->oartifact)
 				skip++;
-		    if (obj->otyp == SCR_FIRE || obj->otyp == SPE_FIREBALL)
+		    if (obj->otyp == SCR_FIRE || obj->otyp == SCR_GOLD_SCROLL_OF_LAW || obj->otyp == SPE_FIREBALL)
 			skip++;
 		    if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 			skip++;
