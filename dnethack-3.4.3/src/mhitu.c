@@ -6224,6 +6224,7 @@ cloneu()
 	mon->m_lev = youmonst.data->mlevel;
 	mon->mhpmax = u.mhmax;
 	mon->mhp = u.mh / 2;
+		mon->mclone = 1;
 	u.mh -= mon->mhp;
 	flags.botl = 1;
 	}

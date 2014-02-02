@@ -114,6 +114,7 @@ struct monst {
 	Bitfield(wormno,5);	/* at most 31 worms on any level */
 #define MAX_NUM_WORMS	32	/* should be 2^(wormno bitfield size) */
 	Bitfield(moccupation,1);/* linked to your occupation */
+	Bitfield(mclone,1);		/* is a clone of another monster (don't make death drop) */
 	
 
 	long mstrategy;		/* for monsters with mflag3: current strategy */
