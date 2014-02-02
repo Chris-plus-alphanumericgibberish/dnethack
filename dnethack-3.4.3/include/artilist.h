@@ -361,7 +361,7 @@ A("Blade Dancer's Dagger",		SILVER_DAGGER,//needs quote
 
 A("Limb of the Black Tree",			CLUB,//needs quote
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN), 0, 0,
-	FIRE(4,1),	FIRE(0,0),	NO_CARY,
+	FIRE(4,1),	NO_DFNS,	FIRE(0,0),
 	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
 	SPFX2_FIRE2,0,0),
 
@@ -373,7 +373,7 @@ A("Hellfire",			CROSSBOW,/*adapted from Slash'em*/
 
 A("Lash of the Cold Waste",		BULLWHIP,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN), 0, 0,
-	COLD(4,1),	COLD(0,0),	NO_CARY,	
+	COLD(4,1),	NO_DFNS,	COLD(0,0),	
 	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
 	SPFX2_COLD2,0,0),
 
@@ -394,7 +394,7 @@ A("Fuma-itto no Ken",		BROADSWORD, //needs quote
  *  this being a clan of ninja from the Sengoku era
  *  (there should be an accent over the u of "Fuma" and the o of "-itto").
  *  Nethack Samurai call broadswords "Ninja-to," which is the steriotypical ninja sword.
- *  Aparently, there was no such thing as an actual Ninja-to, its something Hollywood made up!
+ *  Aparently, there was no such thing as an actual Ninja-to, it's something Hollywood made up!
  */
 A("Yoichi no yumi", YUMI, //needs quote
 	(SPFX_RESTR), 0, 0,
