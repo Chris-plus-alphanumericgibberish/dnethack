@@ -12,6 +12,7 @@
 
 #ifdef OVLB
 
+static const char *FDECL(DantalionRace,(int));
 static int FDECL(domonnoise,(struct monst *));
 int FDECL(dobinding,(int, int));
 static int NDECL(dochat);
@@ -62,6 +63,16 @@ static const char *buerSetTwo[] = {
 	"seek virtue forevermore"
 };
 
+static const char *echidnaTitles[] = {
+	"the She Viper",
+	"mate of Typhon",
+	"daughter of Tartarus and Gaia",
+	"daughter of hell and earth",
+	"enemy of the Gods",
+	"grim and ageless",
+	"guardian of Arima",
+	"Mother of Monsters"
+};
 /* this easily could be a macro, but it might overtax dumb compilers */
 static int
 mon_in_room(mon, rmtyp)
@@ -1651,8 +1662,12 @@ int tx,ty;
 			if(levl[tx][ty].typ == ICE){
 				You("stab your weapon down into the ice, cracking it.");
 				if(u.sealCounts < numSlots){
+					if(!Blind){
 					pline("A woman's scream echos through your mind as the cracks form a vaguely humanoid outline on the ice.");
 					pline("A voice sobs in your ear:");
+					} else {
+						pline("A woman's scream echos through your mind, then a voice sobs in your ear:");
+					}
 					pline("\"I am Balam, offered up as the last sacrifice; condemned to bleed until the end of all suffering.\"");
 					pline("\"In your name was this done, therefore you shall bear my stigmata and share my suffering.\"");
 					unrestrict_weapon_skill(P_WHIP);
@@ -1662,8 +1677,12 @@ int tx,ty;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					if(!Blind){
 					pline("A woman's scream echos through your mind as the cracks form a vaguely humanoid outline on the ice.");
 					pline("A voice sobs from under the ice:");
+					} else {
+						pline("A woman's scream echos through your mind, then a voice sobs from under the ice:");
+					}
 					pline("\"I am Balam, offered up as the last sacrifice; condemned to bleed until the end of all suffering.\"");
 					pline("\"By your hand was this done, therefore you shall be stained by my blood.\"");
 					uwep->ovar1 |= SEAL_BALAM;
@@ -1677,8 +1696,12 @@ int tx,ty;
 					}
 				}
 				else{
+					if(!Blind){
 					pline("A woman's scream drifts through your mind, and the cracks describe a vaguely humanoid outline on the ice.");
 					pline("But nothing else occurs....");
+					} else {
+						pline("A woman's scream drifts through your mind, but nothing else occurs....");
+					}
 				}
 				u.balam = moves + bindingPeriod;
 			}
@@ -1698,9 +1721,11 @@ int tx,ty;
 			}
 	//Berith further requires that the summoner wear a blessed silver ring on his or her left hand.
 			if(o && uleft && uleft->otyp == slvring && uleft->blessed){
+				if(!Blind){
 				pline("Gold rains down within the circumference of the seal, melting slowly to blood where it lands.");
 				pline("A figure takes form within the showering gold, staring down at you from a crimson horse.");
 				pline("His crown is gold, and his clothes are red like blood.");
+				}
 				pline("\"I am Berith, %s.",rn2(2) ? "war-leader of the forgotten" : "god of the covenant of blood");
 				if(u.sealCounts < numSlots){
 					pline("I anoint you in Blood and Gold, that bloodshed and riches shall follow in your wake.");
@@ -1739,9 +1764,11 @@ int tx,ty;
 		if(u.buer < moves){
 			pline("You hear hooved footfalls approaching quickly, though you can't make out from what direction.");
 			pline("They set an odd tempo; very regular and faster by far than any animal of four legs could comfortably keep.");
+			if(!Blind){
 			pline("The footfalls reach a crescendo, and an odd creature rolls into the seal in front of you.");
 			pline("The creature's five legs are arranged in a star pattern, and to move it rolls from foot to foot.");
 			pline("At the center of the wheel is a lion's head, complete with a glorious mane.");
+			}
 			pline("The creature speaks to you; and it's voice, though deep, is clearly that of a woman.");
 			pline("\"I am Buer, %s, %s to %s.", buerTitles[rn2(SIZE(buerTitles))], buerSetOne[rn2(SIZE(buerSetOne))], buerSetTwo[rn2(SIZE(buerSetTwo))]);
 			if(u.sealCounts < numSlots){
@@ -1824,11 +1851,19 @@ int tx,ty;
 		if(u.dantalion < moves){
 			//Spirit requires that his seal be drawn around a throne.
 			if(IS_THRONE(levl[tx][ty].typ)){
-				Your(".");
-				pline(".");
+				if(!Blind) {
+					You("see a man with many countenances step out from behind the throne.");
+					pline("Below his crown are many faces of %s,", DantalionRace(u.umonster)); /*  */
+					pline("and as he nods and cranes his head, new faces are constantly revealed.");
+				}
+				pline("\"Tremble, for I am Dantalion, king over all the kings of %s\"",urace.coll);
 				if(u.sealCounts < numSlots){
-					pline("");
-					pline("");
+					if(!Blind) {
+						pline("The staring faces seem vaguely familiar...");
+						pline("With a start, you realize they remind you of yourself, and your family!");
+					}
+					pline("\"You, who bear my bloodline,\"");
+					pline("\"go forth %swith my blessing.\"", flags.female ? "":"and rule ");
 					unrestrict_weapon_skill(P_BROAD_SWORD);
 					unrestrict_weapon_skill(P_TWO_HANDED_SWORD);
 					unrestrict_weapon_skill(P_SCIMITAR);
@@ -1838,8 +1873,10 @@ int tx,ty;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
-					pline("");
+					if(flags.initgend==1){ /*(female)*/
+					}
+					pline("\"You, who bear my sceptre,\"");
+					pline("\"go forth, in my name!\"");
 					uwep->ovar1 |= SEAL_DANTALION;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_DANTALION;
@@ -1851,15 +1888,16 @@ int tx,ty;
 					}
 				}
 				else{
-					pline("");
-					pline(".");
+					if(!Blind) {
+						pline("His myriad faces study you with disapproval, and he departs as suddenly as he arived.");
+					}
 				}
 				u.dantalion = moves + bindingPeriod;
 			}
 		}
 	}break;
-	case DUNSTAN:{
-		if(u.dunstan < moves){
+	case SHIRO:{
+		if(u.shiro < moves){
 			int ttx, tty;
 			boolean validLocation = TRUE;
 			struct obj *otmp;
@@ -1871,35 +1909,35 @@ int tx,ty;
 			}
 			//Spirit requires that his seal be drawn in a ring of rocks.
 			if(validLocation){
-				Your(".");
-				pline(".");
+				pline("\"I'm shocked. So few ever speak to me, everyone ignores me and passes me by.\"");
+				pline("\"It's 'cause I'm about as impressive as a stone, right?...I'm used to it, though.\"");
 				if(u.sealCounts < numSlots){
-					pline("");
-					pline("");
+					pline("\"You look like a pretty distinctive person.\"");
+					pline("\"Let me follow you and practice standing out.\"");
 					unrestrict_weapon_skill(P_POLEARMS);
-					u.sealsActive |= SEAL_DUNSTAN;
-					u.spirit[numSlots] = SEAL_DUNSTAN;
+					u.sealsActive |= SEAL_SHIRO;
+					u.spirit[numSlots] = SEAL_SHIRO;
 					u.spiritT[numSlots] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
-					pline("");
-					uwep->ovar1 |= SEAL_DUNSTAN;
+					pline("\"That looks like a pretty distinctive weapon.\"");
+					pline("\"Let me follow you and see how you use it.\"");
+					uwep->ovar1 |= SEAL_SHIRO;
 					if(!u.spiritTineA){ 
-						u.spiritTineA = SEAL_DUNSTAN;
+						u.spiritTineA = SEAL_SHIRO;
 						u.spiritTineTA= moves + bindingPeriod;
 					}
 					else{
-						u.spiritTineB = SEAL_DUNSTAN;
+						u.spiritTineB = SEAL_SHIRO;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
 				}
 				else{
-					pline("");
-					pline(".");
+					pline("\"Well, I'm certain a person as distinctive as you has better things to do than talk to me.\"");
+					pline("\"I hope you visit again some time.\"");
 				}
-				u.dunstan = moves + bindingPeriod;
+				u.shiro = moves + bindingPeriod;
 			}
 		}
 	}break;
@@ -1907,11 +1945,14 @@ int tx,ty;
 		if(u.echidna < moves){
 			//Spirit requires that her seal be drawn in a cave.
 			if(level.flags.cave){
-				Your(".");
-				pline(".");
+				if(!Blind){
+					You("suddenly notice a monstrous nymph reclining in the center of the seal.");
+					pline("She is half a fair woman, with glancing eyes and fair cheeks,");
+					pline("and half again a terible dragon, with great scaly wings and serpent's tails where legs should be.");
+				}
 				if(u.sealCounts < numSlots){
-					pline("");
-					pline("");
+					pline("\"I am Echidna, %s.\"",echidnaTitles[rn2(SIZE(echidnaTitles))]);
+					pline("\"Free me from this place, and I and my brood shall fight for your cause.\"");
 					unrestrict_weapon_skill(P_UNICORN_HORN);
 					u.sealsActive |= SEAL_ECHIDNA;
 					u.spirit[numSlots] = SEAL_ECHIDNA;
@@ -1919,8 +1960,8 @@ int tx,ty;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("");
-					pline("");
+					pline("\"I am Echidna, %s.\"",echidnaTitles[rn2(SIZE(echidnaTitles))]);
+					pline("\"Cut my bonds, and I shall lend my wrath to your cause.\"");
 					uwep->ovar1 |= SEAL_ECHIDNA;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_ECHIDNA;
@@ -1932,8 +1973,11 @@ int tx,ty;
 					}
 				}
 				else{
-					pline("");
-					pline(".");
+					if(!Blind){
+						pline("She hisses at you, then slithers away.");
+					} else {
+						pline("Something hisses at you, then slithers away.");
+					}
 				}
 				u.echidna = moves + bindingPeriod;
 			}
@@ -1943,7 +1987,9 @@ int tx,ty;
 		if(u.eden < moves){
 			//Spirit requires that its seal be drawn by a fountain.
 			if(IS_FOUNTAIN(levl[tx][ty].typ)){
-				Your(".");
+				if(!Blind){
+//					pline();
+				}
 				pline(".");
 				if(u.sealCounts < numSlots){
 					pline("");
@@ -2801,7 +2847,37 @@ int tx,ty;
 	
 }
 
-int
+static
+const char *
+DantalionRace(pmon)
+int pmon;
+{
+	switch(pmon){
+		case PM_HUMAN:
+		case PM_INCANTIFIER:
+		case PM_VAMPIRE:
+		case PM_CLOCKWORK_AUTOMATON:
+		default:
+			return "men";
+		break;
+		case PM_ELF:
+			return "elf-lords";
+		break;
+		case PM_DROW:
+			return "hedrow";
+		break;
+		case PM_DWARF:
+			return "dwarves";
+		break;
+		case PM_GNOME:
+			return "gnomes";
+		break;
+		case PM_ORC:
+			return "orcs";
+		break;
+	}
+}
+
 P_MAX_SKILL(p_skill)
 int p_skill;
 {
@@ -2859,7 +2935,7 @@ int p_skill;
 	if(p_skill == P_FLAIL) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
 	if(p_skill == P_HAMMER) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
 	if(p_skill == P_QUARTERSTAFF) return u.sealsActive & SEAL_NABERIUS? TRUE : FALSE;
-	if(p_skill == P_POLEARMS) return u.sealsActive & SEAL_DUNSTAN? TRUE : FALSE;
+	if(p_skill == P_POLEARMS) return u.sealsActive & SEAL_SHIRO? TRUE : FALSE;
 	if(p_skill == P_SPEAR) return u.sealsActive & SEAL_HUGINN_MUNINN? TRUE : FALSE;
 	if(p_skill == P_JAVELIN) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
 	if(p_skill == P_TRIDENT) return u.sealsActive & SEAL_OSE? TRUE : FALSE;

@@ -428,8 +428,8 @@ struct you {
 	long	chupoclops;
 #define SEAL_DANTALION				0x0000200L
 	long	dantalion;
-#define SEAL_DUNSTAN				0x0000400L
-	long	dunstan;
+#define SEAL_SHIRO				0x0000400L
+	long	shiro;
 #define SEAL_ECHIDNA				0x0000800L
 	long	echidna;
 #define SEAL_EDEN					0x0001000L

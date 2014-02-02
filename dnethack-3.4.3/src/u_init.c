@@ -59,7 +59,7 @@ static struct trobj Binder[] = {
 };
 //definition of an extern in you.h
 long sealKey[31] = {SEAL_AHAZU, SEAL_AMON, SEAL_ANDREALPHUS, SEAL_ANDROMALIUS, SEAL_ASTAROTH, SEAL_BALAM, 
-				 SEAL_BERITH, SEAL_BUER, SEAL_CHUPOCLOPS, SEAL_DANTALION, SEAL_DUNSTAN, SEAL_ECHIDNA, SEAL_EDEN,
+				 SEAL_BERITH, SEAL_BUER, SEAL_CHUPOCLOPS, SEAL_DANTALION, SEAL_SHIRO, SEAL_ECHIDNA, SEAL_EDEN,
 				 SEAL_ERIDU, SEAL_EURYNOME, SEAL_EVE, SEAL_FAFNIR, SEAL_HUGINN_MUNINN, SEAL_IRIS, SEAL_JACK,
 				 SEAL_MALPHAS, SEAL_MARIONETTE, SEAL_MOTHER, SEAL_NABERIUS, SEAL_ORTHOS, SEAL_OSE, SEAL_OTIAX,
 				 SEAL_PAIMON, SEAL_SIMURGH, SEAL_TENEBROUS, SEAL_YMIR
@@ -946,7 +946,7 @@ u_init()
 	u.sealsActive = 0;
 	u.specialSealsActive = 0;
 
-	u.ahazu = u.amon = u.andrealphus = u.andromalius = u.astaroth = u.balam = u.berith = u.buer = u.chupoclops = u.dantalion = u.dunstan = 0;
+	u.ahazu = u.amon = u.andrealphus = u.andromalius = u.astaroth = u.balam = u.berith = u.buer = u.chupoclops = u.dantalion = u.shiro = 0;
 	u.echidna = u.eden = u.eridu = u.eurynome = u.eve = u.fafnir = u.huginn_muninn = u.iris = u.jack = u.malphas = u.marionette = u.mother = 0;
 	u.naberius = u.orthos = u.ose = u.otiax = u.paimon = u.simurgh = u.tenebrous = u.ymir = u.dahlver_nar = u.acererak = 0;
 	

@@ -577,7 +577,7 @@ const char * sealNames[] =  {
 	"Buer", /* 7 */
 	"Chupoclops", /* 8 */
 	"Dantalion", /* 9 */
-	"Dunstan", /* 10 */
+	"Shiro", /* 10 */
 	"Echidna", /* 11 */
 	"Eden", /* 12 */
 	"Eridu", /* 13 */
@@ -4181,14 +4181,6 @@ pick_seal()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(u.sealsKnown & SEAL_DUNSTAN){
-		Sprintf(buf, "Dunstan, the stone man");
-		any.a_int = DUNSTAN;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
 	if(u.sealsKnown & SEAL_ECHIDNA){
 		Sprintf(buf, "Echidna, Mother of Monsters");
 		any.a_int = ECHIDNA;	/* must be non-zero */
@@ -4320,6 +4312,14 @@ pick_seal()
 	if(u.sealsKnown & SEAL_PAIMON){
 		Sprintf(buf, "Paimon, the Fell Archivist");
 		any.a_int = PAIMON;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(u.sealsKnown & SEAL_SHIRO){
+		Sprintf(buf,	"Shiro, the stone soldier");
+		any.a_int = SHIRO;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);

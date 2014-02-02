@@ -64,7 +64,7 @@ struct engr {
 #define BUER						LAST_WARD+8
 #define CHUPOCLOPS					LAST_WARD+9
 #define DANTALION					LAST_WARD+10
-#define DUNSTAN						LAST_WARD+11
+#define SHIRO						LAST_WARD+11
 #define ECHIDNA						LAST_WARD+12
 #define EDEN						LAST_WARD+13
 #define ERIDU						LAST_WARD+14

@@ -209,7 +209,7 @@
 						 pm_invisible(youmonst.data) || \
 						 (ward_at(u.ux,u.uy) == HAMSA \
 							&& num_wards_at(u.ux, u.uy) == 6 ) || \
-						  u.sealsActive&SEAL_DUNSTAN) && !BInvis)
+						  u.sealsActive&SEAL_SHIRO) && !BInvis)
 #define Invisible		(Invis && !See_invisible)
 		/* Note: invisibility also hides inventory and steed */
 
@@ -221,7 +221,7 @@
 #define HStealth		u.uprops[STEALTH].intrinsic
 #define EStealth		u.uprops[STEALTH].extrinsic
 #define BStealth		u.uprops[STEALTH].blocked
-#define Stealth			((HStealth || EStealth || Underwater || u.sealsActive&SEAL_DUNSTAN) && !BStealth)
+#define Stealth			((HStealth || EStealth || Underwater || u.sealsActive&SEAL_SHIRO) && !BStealth)
 
 #define HAggravate_monster	u.uprops[AGGRAVATE_MONSTER].intrinsic
 #define EAggravate_monster	u.uprops[AGGRAVATE_MONSTER].extrinsic
