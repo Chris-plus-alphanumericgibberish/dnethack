@@ -4,11 +4,16 @@
 
 /* NetHack 3.4.3 */
 #define VERSION_MAJOR	3
-#define VERSION_MINOR	4
+/* Started at 3.4.3, for the nethack version. Incremented straight 
+   to 6 with the advent of the Noble role, counting 5 as the initial
+   release, and 6 due to the save compatibility break that the Nobel
+   role induced.
+*/
+#define VERSION_MINOR	6
 /*
  * PATCHLEVEL is updated for each release.
  */
-#define PATCHLEVEL	3
+#define PATCHLEVEL	0
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
