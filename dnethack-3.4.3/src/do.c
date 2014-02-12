@@ -2020,9 +2020,25 @@ int oldPM;
 int
 donull()
 {
-	if(uclockwork && !rn2(15-u.ulevel/2)){
-		if(!Upolyd && u.uhp<u.uhpmax) u.uhp++;
-		else if(Upolyd && u.mh<u.mhmax) u.mh++;
+	static long lastreped = -13;//hacky way to tell if the player has recently tried repairing themselves
+	if(uclockwork){
+		if(!Upolyd && u.uhp<u.uhpmax){
+			if(lastreped < monstermoves-13) You("attempt to make repairs.");
+			if(!rn2(15-u.ulevel/2)) u.uhp++;
+			lastreped = monstermoves;
+			if(u.uhp == u.uhpmax){
+				You("complete your repairs.");
+				lastreped = -13;
+			}
+		} else if(Upolyd && u.mh<u.mhmax){
+			if(lastreped < monstermoves-100) You("attempt to make repairs.");
+			if(!rn2(15-u.ulevel/2)) u.mh++;
+			lastreped = monstermoves;
+			if(u.mh == u.mhmax){
+				You("complete your repairs.");
+				lastreped = -13;
+			}
+		}
 	}
 	return(1);	/* Do nothing, but let other things happen */
 }
