@@ -459,6 +459,7 @@ const char * haluWard[] =  {
 	
 	"a Robotech Defense Force insignia", /*...Robotech*/
 	"a Black Knights insignia", /* Code Geass */
+	"a rose crest", /* Revolutionary Girl Utena */
 	"an inverted triangle flanked by seven eyes", /* NGE */
 	"a laughing man", /* Ghost in the Shell */
 	"an alchemic array", "a human transmutation circle", /* Fullmetal Alchemist */
@@ -466,7 +467,7 @@ const char * haluWard[] =  {
 	"a circle enclosing four swirling lines", "a flame inside a circle",
 	"a snowflake within a circle", "an inverted triangle with a dot above each face, enclosed by a circle",
 	"a sign resembling an eyeless yin-yang", 
-	"a circle surrounding a triangle of dots and another of triangels",/*Zelda*/
+	"a circle surrounding a triangle of dots and another of triangles",/*Zelda*/
 	"a setting (rising?) sun", /* Dresden Codak */
 	"an asymmetric, stylized arrowhead, point upwards", /* Star Trek*/
 	"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
@@ -4631,6 +4632,9 @@ static const char *epitaphs[] = {
 	"Soon ripe. Soon rotten. Soon gone. But not forgotten.",
 	"Here lies the body of Jonathan Blake. Stepped on the gas instead of the brake.",
 	"Go away!",
+	
+	"Summer Rose - Thus Kindly I Scatter", /* RWBY */
+	
         "Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
         "Applaud, my friends, the comedy is finished.",
         "At last... a nice long sleep.",

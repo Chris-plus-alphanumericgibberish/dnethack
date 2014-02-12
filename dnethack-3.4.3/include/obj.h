@@ -134,6 +134,7 @@ struct obj {
 			/* Also, records special features for weapons. Currently, the only special feature is runes on wooden weapons. */
 			/* Rings: specifies engraving on certain rings */
 			/* Cloaks: Droven: Tattered level.  */
+			/* Masks: Ability scores? */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 
