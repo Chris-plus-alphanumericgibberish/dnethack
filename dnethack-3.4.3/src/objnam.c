@@ -2515,7 +2515,9 @@ srch:
 		typ = SCR_WARD;
 		goto typfnd;
 	}
-	if(!strncmpi(actualn, "circle of acheron", 9)){
+	if(!strncmpi(actualn, "acheron", 7) ||
+		!strncmpi(actualn, "circle", 6) ||
+		!strncmpi(actualn, "circle of acheron", 17)){
 		acheron = TRUE;
 		typ = SCR_WARD;
 		goto typfnd;
@@ -2530,7 +2532,8 @@ srch:
 		typ = SCR_WARD;
 		goto typfnd;
 	}
-	if(!strncmpi(actualn, "hamsa", 5)){
+	if(!strncmpi(actualn, "hamsa mark", 10) || 
+		!strncmpi(actualn, "hamsa", 5)){
 		hamsa = TRUE;
 		typ = SCR_WARD;
 		goto typfnd;
@@ -2540,22 +2543,31 @@ srch:
 		typ = SCR_WARD;
 		goto typfnd;
 	}
-	if(!strncmpi(actualn, "elder elemental eye", 19)){
+	if(!strncmpi(actualn, "elder elemental eye", 19)
+		||!strncmpi(actualn, "elder eye", 9)
+		||!strncmpi(actualn, "elemental eye", 13)){
 		eye = TRUE;
 		typ = SCR_WARD;
 		goto typfnd;
 	}
-	if(!strncmpi(actualn, "sign of the scion queen mother", 30)){
+	if(!strncmpi(actualn, "sign of the scion queen mother", 30)\
+		||!strncmpi(actualn, "scion queen mother", 18)
+		||!strncmpi(actualn, "queen mother", 12)
+		||!strncmpi(actualn, "mother", 6)){
 		queen = TRUE;
 		typ = SCR_WARD;
 		goto typfnd;
 	}
-	if(!strncmpi(actualn, "cartouche of the cat lord", 25)){
+	if(!strncmpi(actualn, "cartouche of the cat lord", 25)
+		||!strncmpi(actualn, "cat lord", 8)
+		||!strncmpi(actualn, "cartouche", 9)){
 		cartouche = TRUE;
 		typ = SCR_WARD;
 		goto typfnd;
 	}
-	if(!strncmpi(actualn, "wings of garuda", 15)){
+	if(!strncmpi(actualn, "wings of garuda", 15)
+		||!strncmpi(actualn, "wings", 5)
+		||!strncmpi(actualn, "garuda", 6)){
 		garuda = TRUE;
 		typ = SCR_WARD;
 		goto typfnd;

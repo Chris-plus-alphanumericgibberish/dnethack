@@ -1677,7 +1677,8 @@ struct obj	*sobj;
 			engrHere->ward_type = BURN;
 			engrHere->complete_wards = 1;
 		}
-		else if(engrHere->ward_id != wardNum){
+		else if(engrHere->ward_id != wardNum 
+				|| engrHere->ward_type != BURN){
 		engrHere->ward_id = wardNum;
 		engrHere->ward_type = BURN;
 			engrHere->complete_wards = sobj->blessed ? 
