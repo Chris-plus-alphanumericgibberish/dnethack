@@ -274,7 +274,7 @@ boolean forcecontrol;
 				uarm->otyp <= YELLOW_DRAGON_SCALES);
 	boolean leonine = (uarmc && uarmc->otyp == LEO_NEMAEUS_HIDE);
 	boolean iswere = (u.ulycn >= LOW_PM || is_were(youmonst.data));
-	boolean isvamp = (is_vampire(youmonst.data));
+	boolean isvamp = (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)));
 	boolean was_floating = (Levitation || Flying);
 
 	if(!Polymorph_control && !forcecontrol && !draconian && !iswere && !isvamp) {

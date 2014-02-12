@@ -1166,11 +1166,10 @@ hitmu(mtmp, mattk)
 			} else dmg += dmgval(otmp, &youmonst);
 
 			if (objects[otmp->otyp].oc_material == SILVER &&
-				hates_silver(youmonst.data)) {
+				maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
 			    pline("The silver sears your flesh!");
 			}
 
-			
 			if (otmp->opoisoned){
 				Sprintf(buf, "%s %s",
 					s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));

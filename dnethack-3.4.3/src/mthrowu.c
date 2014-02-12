@@ -75,7 +75,7 @@ const char *name;	/* if null, then format `obj' */
 		else You("are hit by %s%s", onm, exclam(dam));
 
 		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
-				&& hates_silver(youmonst.data)) {
+				&& maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
 			dam += rnd(20);
 			pline_The("silver sears your flesh!");
 			exercise(A_CON, FALSE);

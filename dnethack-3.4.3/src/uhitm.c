@@ -2413,10 +2413,9 @@ use_weapon:
 			/* [ALI] Vampires are also smart. They avoid biting
 			   monsters if doing so would be fatal */
 			if ((uwep || (u.twoweap && uswapwep)) &&
-				is_vampire(youmonst.data) &&
+				maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) &&
 				(is_rider(mon->data) ||
 				 mon->data == &mons[PM_GREEN_SLIME])){
-					pline("breaking bite");
 			    	break;
 				}
 		case AT_STNG:
@@ -2584,7 +2583,7 @@ uchar aatyp;
 	register struct permonst *ptr = mon->data;
 	register int i, tmp;
 	struct obj *optr;
-	if (mhit && aatyp == AT_BITE && is_vampire(youmonst.data)) {
+	if (mhit && aatyp == AT_BITE && maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
 	    if (bite_monster(mon))
 		return 2;			/* lifesaved */
 	}

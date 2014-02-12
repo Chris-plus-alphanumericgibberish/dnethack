@@ -158,7 +158,7 @@ register struct obj *obj;
 	/* [ALI] (fully) drained food is not presented as an option,
 	 * but partly eaten food is (even though you can't drain it).
 	 */
-	if (is_vampire(youmonst.data))
+	if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)))
 		return (boolean)(obj->otyp == CORPSE &&
 		  has_blood(&mons[obj->corpsenm]) && (!obj->odrained ||
 		  obj->oeaten > drainlevel(obj)));
@@ -498,7 +498,8 @@ eatfood(VOID_ARGS)		/* called each move during eating process */
 		do_reset_eat();
 		return(0);
 	}
-	if (is_vampire(youmonst.data) != victual.piece->odrained) {
+	if (maybe_polyd(is_vampire(youmonst.data), 
+			Race_if(PM_VAMPIRE)) != victual.piece->odrained) {
 	    /* Polymorphed while eating/draining */
 	    do_reset_eat();
 	    return(0);
@@ -1644,7 +1645,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	 * Thus happens before the conduct checks intentionally - should it be after?
 	 * Blood is assumed to be meat and flesh.
 	 */
-	if (is_vampire(youmonst.data)) {
+	if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
 	    /* oeaten is set up by touchfood */
 	    if (otmp->odrained ? otmp->oeaten <= drainlevel(otmp) :
 	      otmp->oeaten < mons[otmp->corpsenm].cnutrit) {
@@ -1765,7 +1766,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	    if (!retcode) consume_oeaten(otmp, 2);	/* oeaten >>= 2 */
 	    if (otmp->odrained && otmp->oeaten < drainlevel(otmp))
 	        otmp->oeaten = drainlevel(otmp);
-	} else if (!is_vampire(youmonst.data)) {
+	} else if (maybe_polyd(!is_vampire(youmonst.data), !Race_if(PM_VAMPIRE))) {
 		if(is_rat(&mons[mnum]) && Race_if(PM_DWARF)){
 		if(u.uconduct.ratseaten<SIZE(eatrat)) pline("%s", eatrat[u.uconduct.ratseaten++]);
 		else{
@@ -2657,7 +2658,8 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	/* [ALI] Hero polymorphed in the meantime.
 	 */
 	if (otmp == victual.piece &&
-	  is_vampire(youmonst.data) != otmp->odrained)
+	  maybe_polyd(is_vampire(youmonst.data), 
+	  Race_if(PM_VAMPIRE)) != otmp->odrained)
 	    victual.piece = (struct obj *)0;	/* Can't resume */
 
 	/* [ALI] Blood can coagulate during the interruption
@@ -2842,7 +2844,11 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if (u.uinvulnerable) return;	/* you don't feel hungrier */
 
 	if ((!u.usleep || !rn2(10))	/* slow metabolic rate while asleep */
-		&& (carnivorous(youmonst.data) || herbivorous(youmonst.data) || uclockwork || is_vampire(youmonst.data))
+		&& (carnivorous(youmonst.data) 
+			|| herbivorous(youmonst.data) 
+			|| uclockwork 
+			|| maybe_polyd(is_vampire(youmonst.data), 
+							Race_if(PM_VAMPIRE)))
 #ifdef CONVICT
         /* Convicts can last twice as long at hungry and below */
         && (!Role_if(PM_CONVICT) || (moves % 2) || (u.uhs < HUNGRY))

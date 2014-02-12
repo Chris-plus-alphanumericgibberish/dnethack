@@ -432,7 +432,7 @@ register struct obj *obj;
 	    case POTION_CLASS:
 		if (obj->dknown && obj->odiluted)
 			Strcpy(buf, "diluted ");
-		if( typ == POT_BLOOD && (obj->known || is_vampire(youmonst.data)) && obj->dknown ) {
+		if( typ == POT_BLOOD && (obj->known || maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) && obj->dknown ) {
 			Strcat(buf, "potion");
 			Sprintf(eos(buf), " of %s blood", mons[obj->corpsenm].mname);
 		}
