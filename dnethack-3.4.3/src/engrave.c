@@ -108,7 +108,6 @@ static const char *haluMesg[] = {
 	"Very fond of rumpots, crackpots, and how are you Mr. Wilson?",
 	"No matter how valuable it might be, any man's life is still worth more than any animal's.",
 	"No clock for this.  Flyin' now.",
-	"Of course, you realize, this means war.",
 	"She's fast enough for you, old man. What's the cargo?",
 	"There're few who haven't heard the name of Gurney Halleck.",
 	"Do you like mayonnaise and corn on your pizza?",
@@ -4631,9 +4630,14 @@ static const char *epitaphs[] = {
 	"I made an ash of myself",
 	"Soon ripe. Soon rotten. Soon gone. But not forgotten.",
 	"Here lies the body of Jonathan Blake. Stepped on the gas instead of the brake.",
+	"He never killed a man, that did not need killing.",
 	"Go away!",
 	
 	"Summer Rose - Thus Kindly I Scatter", /* RWBY */
+	"Hold my beer and watch this!", /* Rango */
+	"Of course, you realize, this means war.",
+	
+	"Package contains: One posthumous worm feeder",
 	
         "Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
         "Applaud, my friends, the comedy is finished.",
