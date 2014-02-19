@@ -2698,7 +2698,8 @@ register struct permonst *ptr;
 
 static NEARDATA struct {
 	int choice_count;
-	char mchoices[SPECIAL_PM];	/* value range is 0..127 */
+	int mchoices[SPECIAL_PM];	/* not at ALL sure the monsters fit into a char, and in this age trying to save such a
+								   small amount of memory seems outdated */
 } rndmonst_state = { -1, {0} };
 
 /* select a random monster type */
@@ -2991,6 +2992,98 @@ rndmonst()
 	}
 	return &mons[mndx];
 }
+
+/* select a random monster type for a shapeshifter to turn into */
+int
+rndshape()
+{
+	register struct permonst *ptr;
+	register int mndx, ct;
+	int zlevel, minmlev, maxmlev;
+	int choice_count;
+	int mchoices[SPECIAL_PM];
+	boolean elemlevel;
+	
+	zlevel = level_difficulty();
+	
+	/*increase difficulty to allow mildly out of depth monsters */
+	zlevel += 12;
+	
+	/* determine the level of the weakest monster to make. */
+	minmlev = zlevel / 6;
+	/* determine the level of the strongest monster to make. */
+	maxmlev = (zlevel + u.ulevel) / 2;
+
+#ifdef REINCARNATION
+	boolean upper;
+#endif
+
+	choice_count = 0;
+	/* look for first common monster */
+	for (mndx = LOW_PM; mndx < SPECIAL_PM; mndx++) {
+		if (!uncommon(mndx)) break;
+		mchoices[mndx] = 0;
+	}		
+	if (mndx == SPECIAL_PM) {
+	/* evidently they've all been exterminated */
+#ifdef DEBUG
+	pline("rndmonst: no common mons!");
+#endif
+	return NON_PM;
+	} /* else `mndx' now ready for use below */
+#ifdef REINCARNATION
+	upper = Is_rogue_level(&u.uz);
+#endif
+	elemlevel = In_endgame(&u.uz) && !Is_astralevel(&u.uz);
+
+/*
+*	Find out how many monsters exist in the range we have selected.
+*/
+	/* (`mndx' initialized above) */
+	for ( ; mndx < SPECIAL_PM; mndx++) {
+	ptr = &mons[mndx];
+	mchoices[mndx] = 0;
+	if (tooweak(mndx, minmlev) || toostrong(mndx, maxmlev))
+		continue;
+#ifdef REINCARNATION
+	if (upper && !isupper(def_monsyms[(int)(ptr->mlet)])) continue;
+#endif
+	if (elemlevel && wrong_elem_type(ptr)) continue;
+	if (uncommon(mndx)) continue;
+	ct = (int)(ptr->geno & G_FREQ)/2 + align_shift(ptr);
+	if (ct < 0 || ct > 127)
+		panic("rndmonst: bad count [#%d: %d]", mndx, ct);
+	choice_count += ct;
+	mchoices[mndx] = (char)ct;
+	}
+/*
+ *	    Possible modification:  if choice_count is "too low",
+ *	    expand minmlev..maxmlev range and try again.
+ */
+
+	if (choice_count <= 0) {
+	    /* maybe no common mons left, or all are too weak or too strong */
+#ifdef DEBUG
+	    Norep("rndmonst: choice_count=%d", choice_count);
+#endif
+	    return NON_PM;
+	}
+
+/*
+ *	Now, select a monster at random.
+ */
+	ct = rnd(choice_count);
+	for (mndx = LOW_PM; mndx < SPECIAL_PM; mndx++)
+	    if ((ct -= (int)mchoices[mndx]) <= 0) break;
+
+	if (mndx == SPECIAL_PM || uncommon(mndx)) {	/* shouldn't happen */
+	    impossible("rndmonst: bad `mndx' [#%d]", mndx);
+	    return NON_PM;
+	}
+	return mndx;
+}
+
+
 
 /* called when you change level (experience or dungeon depth) or when
    monster species can no longer be created (genocide or extinction) */

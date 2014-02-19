@@ -998,6 +998,7 @@ E struct monst *FDECL(clone_mon, (struct monst *,XCHAR_P,XCHAR_P));
 E struct monst *FDECL(makemon, (struct permonst *,int,int,int));
 E boolean FDECL(create_critters, (int,struct permonst *));
 E struct permonst *NDECL(rndmonst);
+E int NDECL(rndshape);
 E void FDECL(reset_rndmonst, (int));
 E struct permonst *FDECL(mkclass, (CHAR_P,int));
 E int FDECL(adj_lev, (struct permonst *));

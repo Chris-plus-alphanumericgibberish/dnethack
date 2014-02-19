@@ -3215,7 +3215,8 @@ struct monst *mon;
 		if (tries==5) pline(thats_enough_tries);
 	}
 #endif /*WIZARD*/
-	if (mndx == NON_PM) mndx = rn1(SPECIAL_PM - LOW_PM, LOW_PM);
+	if (mndx == NON_PM) mndx = rndshape();//first try to get an in-depth monster
+	if (mndx == NON_PM) mndx = rn1(SPECIAL_PM - LOW_PM, LOW_PM);//double check in case no monst was returned
 	return mndx;
 }
 
