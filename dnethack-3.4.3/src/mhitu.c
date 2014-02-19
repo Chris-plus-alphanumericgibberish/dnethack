@@ -689,6 +689,7 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_ARRW:{
 			int n;
+		    if (canseemon(mtmp)) pline("%s shoots at you!", Monnam(mtmp));
 			if(range2) for(n = d(mattk->damn, mattk->damd); n > 0; n--) sum[i] = firemu(mtmp, mattk);
 			/* Note: firemu takes care of displacement */
 					 }

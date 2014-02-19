@@ -384,6 +384,16 @@ meleeattack:
 		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
 		break;
+
+	    case AT_ARRW:{
+			int n;
+		    if (canseemon(magr)) pline("%s shoots.", Monnam(magr));
+	        for(n = d(mattk->damn, mattk->damd); n > 0; n--) firemm(magr, mdef, mattk);
+		if (tmphp > mdef->mhp) res[i] = MM_HIT;
+		else res[i] = MM_MISS;
+		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
+		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
+		}break;
 #endif /* TAME_RANGED_ATTACKS */
 
 	    case AT_GAZE:

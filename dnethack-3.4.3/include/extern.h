@@ -1381,6 +1381,7 @@ E void FDECL(thrwmu, (struct monst *));
 E void FDECL(thrwmm, (struct monst *, struct monst *));
 E int FDECL(spitmu, (struct monst *,struct attack *));
 E int FDECL(firemu, (struct monst *,struct attack *));
+E int FDECL(firemm, (struct monst *,struct monst *,struct attack *));
 /*E int FDECL(firemm, (struct monst *,struct attack *));*/
 E int FDECL(spitmm, (struct monst *,struct monst *,struct attack *));
 E int FDECL(breamu, (struct monst *,struct attack *));

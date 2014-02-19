@@ -1074,14 +1074,16 @@ register struct attack *mattk;
 			otmp = mksobj(ACID_VENOM, TRUE, FALSE);
 			break;
 		}
-		if(!rn2(BOLT_LIM-distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy))) {
+		if(!rn2(BOLT_LIM-distmin(mtmp->mx,mtmp->my,mdef->mx,mdef->my))) {
 		    if (canseemon(mtmp)) {
 			pline("%s spits venom!", Monnam(mtmp));
 		    nomul(0, NULL);
 		    }
+			destroy_thrown = 1; //state variable referenced in drop_throw
 		    m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
-			distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy), otmp,
+					distmin(mtmp->mx,mtmp->my,mdef->mx,mdef->my), otmp,
 			FALSE);
+			destroy_thrown = 0;  //state variable referenced in drop_throw
 		    return 0;
 		}
 	}
@@ -1163,7 +1165,90 @@ register struct attack *mattk;
 		}
 		if(BOLT_LIM + rngmod >= distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy)) {
 			destroy_thrown = autodestroy; //state variable referenced in drop_throw
-			    if (canseemon(mtmp)) pline("%s shoots at you!", Monnam(mtmp));
+				m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
+					BOLT_LIM + rngmod, qvr,TRUE);
+			    /*nomul(0);*/ //Copy paste error?
+			destroy_thrown = 0;  //state variable referenced in drop_throw
+		}
+	}
+	return 0;
+}
+
+int
+firemm(mtmp, mdef, mattk)		/* monster fires arrows at you */
+register struct monst *mtmp, *mdef;
+register struct attack *mattk;
+{
+	register struct obj *qvr = NULL;
+	int ammo_type, autodestroy = 1;
+
+	if(mlined_up(mtmp, mdef, FALSE)) {
+		int yadj, xadj, rngmod;
+		yadj = xadj = 0;
+		rngmod = 0;
+		switch (mattk->adtyp) {
+		    case AD_SOLR:
+				ammo_type = SILVER_ARROW;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 1;
+			    qvr->cursed = 0;
+			    qvr->quan = 1;
+			    qvr->spe = 7;
+				rngmod = 1000; /* Fly until it strikes something */
+			break;
+			case AD_SLVR:
+				ammo_type = SILVER_ARROW;
+			break;
+			case AD_BALL:
+				ammo_type = HEAVY_IRON_BALL;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 0;
+				rngmod = 8;
+			break;
+			case AD_LOAD:
+				ammo_type = LOADSTONE;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 1;
+				rngmod = 8;
+			break;
+			case AD_BLDR:
+				ammo_type = BOULDER;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 0;
+				rngmod = 8;
+				autodestroy = 0;
+			break;
+			case AD_VBLD:
+				ammo_type = HEAVY_IRON_BALL;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 0;
+				rngmod = 8;
+				if(mtmp->muy == mtmp->my) yadj = d(1,3)-2;
+				else if(mtmp->mux == mtmp->mx) xadj = d(1,3)-2;
+				else if(mtmp->mux - mtmp->mx == mtmp->muy - mtmp->my){
+					xadj = d(1,3)-2;
+					yadj = -1*xadj;
+				}
+				else xadj = yadj = d(1,3)-2;
+			break;
+		    default:
+				ammo_type = ARROW;
+			break;
+		}
+		if(!qvr){
+			for(qvr = mtmp->minvent; qvr; qvr=qvr->nobj){
+					if(qvr->otyp==ammo_type) break;
+			}
+		}
+		if(!qvr){
+			return 0; //no ammo of the right type found.
+		}
+		if(BOLT_LIM + rngmod >= distmin(mtmp->mx,mtmp->my,mdef->mx,mdef->my)) {
+			destroy_thrown = autodestroy; //state variable referenced in drop_throw
 				m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
 					BOLT_LIM + rngmod, qvr,TRUE);
 			    /*nomul(0);*/ //Copy paste error?
