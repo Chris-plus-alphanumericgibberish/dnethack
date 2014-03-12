@@ -609,7 +609,7 @@ E int NDECL(random_unknown_ward);
 E int FDECL(get_num_wards_added, (int, int));
 E char *FDECL(random_engraving, (char *));
 E int NDECL(random_haluIndex);
-E char *FDECL(fetchHaluWard, (int));
+E const char *FDECL(fetchHaluWard, (int));
 E void FDECL(wipeout_text, (char *,int,unsigned));
 E boolean NDECL(can_reach_floor);
 E struct engr *NDECL(get_head_engr);
