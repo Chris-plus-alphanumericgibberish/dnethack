@@ -658,7 +658,7 @@ get_head_engr(){
 	return head_engr;
 }
 
-char *
+const char *
 fetchHaluWard(index)
 int index;
 {
