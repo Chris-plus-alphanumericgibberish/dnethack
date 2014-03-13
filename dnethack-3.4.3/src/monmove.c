@@ -572,7 +572,7 @@ disturb(mtmp)
 		(!(mtmp->data->mlet == S_NYMPH
 			|| mtmp->data == &mons[PM_JABBERWOCK]
 //#if 0	/* DEFERRED */
-			|| mtmp->data == &mons[PM_VORPAL_JABBERWOCK]
+			// || mtmp->data == &mons[PM_VORPAL_JABBERWOCK]
 //#endif
 			|| mtmp->data->mlet == S_LEPRECHAUN) || !rn2(50)) &&
 		(Aggravate_monster
@@ -620,9 +620,9 @@ boolean fleemsg;
 			 // mtmp->mfrozen = mtmp->mfleetim;
              if(canseemon(mtmp)) 
                pline("%s hides in %s shell!",Monnam(mtmp),mhis(mtmp));
-           }else
-	    if (!mtmp->mflee && fleemsg && canseemon(mtmp) && !mtmp->mfrozen)
-		pline("%s turns to flee!", (Monnam(mtmp)));
+		} else if (!mtmp->mflee && fleemsg && canseemon(mtmp) && !mtmp->mfrozen) 
+			mtmp->data == &mons[PM_BANDERSNATCH] ? pline("%s becomes frumious!", (Monnam(mtmp)))
+												 : pline("%s turns to flee!", (Monnam(mtmp)));
 	    mtmp->mflee = 1;
 	}
 }
@@ -755,7 +755,7 @@ register struct monst *mtmp;
 		(void) rloc(mtmp, FALSE);
 		return(0);
 	}
-	if (mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1))
+	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)|| mdat->msound == MS_JUBJUB))
 	    m_respond(mtmp);
 	if (mdat == &mons[PM_MEDUSA] && couldsee(mtmp->mx, mtmp->my))
 	    m_respond(mtmp);
@@ -842,8 +842,52 @@ register struct monst *mtmp;
 	/* the watch will look around and see if you are up to no good :-) */
 	if (mdat == &mons[PM_WATCHMAN] || mdat == &mons[PM_WATCH_CAPTAIN])
 		watch_on_duty(mtmp);
+	else if(mdat == &mons[PM_TOVE] && !rn2(20)){
+		struct trap *ttmp = t_at(mtmp->mx, mtmp->my);
+		struct rm *lev = &levl[mtmp->mx][mtmp->my];
+		schar typ;
+		boolean nohole = !Can_dig_down(&u.uz);
+		if (!(
+			!isok(mtmp->mx,mtmp->my) || 
+			(ttmp && ttmp->ttyp == MAGIC_PORTAL) ||
+		   /* ALI - artifact doors from slash'em */
+			(IS_DOOR(levl[mtmp->mx][mtmp->my].typ) && artifact_door(mtmp->mx, mtmp->my)) ||
+			(IS_ROCK(lev->typ) && lev->typ != SDOOR &&
+			(lev->wall_info & W_NONDIGGABLE) != 0) ||
+			(is_pool(mtmp->mx, mtmp->my) || is_lava(mtmp->mx, mtmp->my)) ||
+			(lev->typ == DRAWBRIDGE_DOWN ||
+			   (is_drawbridge_wall(mtmp->mx, mtmp->my) >= 0)) ||
+			(boulder_at(mtmp->mx, mtmp->my)) ||
+			(IS_GRAVE(lev->typ)) ||
+			(lev->typ == DRAWBRIDGE_UP) ||
+			(IS_THRONE(lev->typ)) ||
+			(IS_ALTAR(lev->typ))
+		)){
+			typ = fillholetyp(mtmp->mx,mtmp->my);
+			if (canseemon(mtmp))
+				pline("%s gyres and gimbles into the %s.", Monnam(mtmp),surface(mtmp->mx,mtmp->my));
+			if (typ != ROOM) {
+				lev->typ = typ;
+				if (ttmp) (void) delfloortrap(ttmp);
+				/* if any objects were frozen here, they're released now */
+				unearth_objs(mtmp->mx, mtmp->my);
 
-	else if (is_mind_flayer(mdat) && !rn2(20)) {
+					if(cansee(mtmp->mx, mtmp->my))
+						pline_The("hole fills with %s!",
+						  typ == LAVAPOOL ? "lava" : "water");
+				if (!Levitation && !Flying && mtmp->mx==u.ux && mtmp->my==u.uy) {
+					if (typ == LAVAPOOL)
+					(void) lava_effects();
+					else if (!Wwalking)
+					(void) drown();
+				}
+			}
+			if (nohole || !ttmp || (ttmp->ttyp != PIT && ttmp->ttyp != SPIKED_PIT && ttmp->ttyp != TRAPDOOR))
+				digactualhole(mtmp->mx, mtmp->my, mtmp, PIT);
+			else
+				digactualhole(mtmp->mx, mtmp->my, mtmp, HOLE);
+		}
+	} else if (is_mind_flayer(mdat) && !rn2(20)) {
 		struct monst *m2, *nmon = (struct monst *)0;
 
 		if (canseemon(mtmp))
@@ -950,7 +994,7 @@ toofar:
 /*	Now the actual movement phase	*/
 
 #ifndef GOLDOBJ
-	if(!nearby || mtmp->mflee || scared ||
+	if(!nearby || (mtmp->mflee && mtmp->data != &mons[PM_BANDERSNATCH]) || scared ||
 	   mtmp->mconf || mtmp->mstun || (mtmp->minvis && !rn2(3)) ||
 	   (mdat->mlet == S_LEPRECHAUN && !u.ugold && (mtmp->mgold || rn2(2))) ||
 #else
@@ -958,7 +1002,7 @@ toofar:
 	    ygold = findgold(invent);
 	    lepgold = findgold(mtmp->minvent);
 	}
-	if(!nearby || mtmp->mflee || scared ||
+	if(!nearby || (mtmp->mflee && mtmp->data != &mons[PM_BANDERSNATCH]) || scared ||
 	   mtmp->mconf || mtmp->mstun || (mtmp->minvis && !rn2(3)) ||
 	   (mdat->mlet == S_LEPRECHAUN && !ygold && (lepgold || rn2(2))) ||
 #endif
@@ -1197,7 +1241,7 @@ not_special:
 	omy = mtmp->my;
 	gx = mtmp->mux;
 	gy = mtmp->muy;
-	appr = mtmp->mflee ? -1 : 1;
+	appr = (mtmp->mflee && mtmp->data != &mons[PM_BANDERSNATCH]) ? -1 : 1;
 	if (mtmp->mconf || (u.uswallow && mtmp == u.ustuck))
 		appr = 0;
 	else {
@@ -1379,7 +1423,7 @@ not_special:
 	else flag |= ALLOW_U;
 	if (is_minion(ptr) || is_rider(ptr)) flag |= ALLOW_SANCT;
 	/* unicorn may not be able to avoid hero on a noteleport level */
-	if ((is_unicorn(ptr) || ptr == &mons[PM_UVUUDAUM]) && !level.flags.noteleport) flag |= NOTONL;
+	if ((is_unicorn(ptr) && !level.flags.noteleport) || ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH]) flag |= NOTONL;
 	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
 	if (passes_bars(ptr) && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz)) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
@@ -1404,8 +1448,8 @@ not_special:
 	    /* allow monsters be shortsighted on some levels for balance */
 	    if((!mtmp->mpeaceful || mtmp->data == &mons[PM_NURSE]) && level.flags.shortsighted &&
 	       nidist > (couldsee(nix,niy) ? 144 : 36) && appr == 1) appr = 0;
-	    if ((is_unicorn(ptr) || ptr == &mons[PM_UVUUDAUM]) 
-			&& level.flags.noteleport) {
+	    if ((is_unicorn(ptr) && level.flags.noteleport) 
+			|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH]){
 			/* on noteleport levels, perhaps we cannot avoid hero */
 			for(i = 0; i < cnt; i++)
 				if(!(info[i] & NOTONL)) avoid=TRUE;

@@ -2104,7 +2104,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    case PM_BALUCHITHERIUM:
 			    case PM_PURPLE_WORM:
 			    case PM_JABBERWOCK:
-				case PM_VORPAL_JABBERWOCK:
+				// case PM_VORPAL_JABBERWOCK:
 			    case PM_ARGENTUM_GOLEM:
 			    case PM_IRON_GOLEM:
 			    case PM_CENTER_OF_ALL:

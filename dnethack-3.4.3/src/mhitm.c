@@ -737,6 +737,8 @@ mdamagem(magr, mdef, mattk)
 	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd);
 	boolean cancelled;
 
+	if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
+
 	if (touch_petrifies(pd) && !resists_ston(magr)) {
 	    long protector = attk_protection((int)mattk->aatyp),
 		 wornitems = magr->misc_worn_check;

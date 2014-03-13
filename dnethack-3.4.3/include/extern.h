@@ -246,6 +246,7 @@ E void NDECL(sokoban_detect);
 
 /* ### dig.c ### */
 
+E schar FDECL(fillholetyp, (int, int));
 E boolean NDECL(is_digging);
 #ifdef USE_TRAMPOLI
 E int NDECL(dig);
@@ -2220,6 +2221,7 @@ E int FDECL(passive, (struct monst *,BOOLEAN_P,int,UCHAR_P));
 E void FDECL(passive_obj, (struct monst *,struct obj *,struct attack *));
 E void FDECL(stumble_onto_mimic, (struct monst *));
 E int FDECL(flash_hits_mon, (struct monst *,struct obj *));
+E boolean FDECL(hmonas, (struct monst *,int));
 
 /* ### unixmain.c ### */
 

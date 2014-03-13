@@ -636,7 +636,8 @@ struct monst *mon;
 	if(mon->data == &mons[PM_PYTHON] && 
 		dist2(mon->mx, mon->my, mon->mux, mon->muy) <= 2)
 		mmove *= 4;
-	
+	if(mon->data == &mons[PM_BANDERSNATCH] && mon->mflee)
+		mmove += 12;
     /* Note: MSLOW's `+ 1' prevents slowed speed 1 getting reduced to 0;
      *	     MFAST's `+ 2' prevents hasted speed 1 from becoming a no-op;
      *	     both adjustments have negligible effect on higher speeds.
@@ -2911,6 +2912,21 @@ register struct monst *mtmp;
 
 	}
 	aggravate();
+    } else if(mtmp->data->msound == MS_JUBJUB) {
+		struct monst *tmpm;
+		if(flags.soundok) {
+			pline("%s screams high and shrill.", Monnam(mtmp));
+			stop_occupation();
+		}
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(tmpm != mtmp){
+				if(tmpm->mtame && tmpm->mtame<20) tmpm->mtame++;
+				if(d(1,tmpm->mhp) < mtmp->mhpmax){
+					tmpm->mflee = 1;
+				}
+			}
+		}
+		make_stunned(HStun + mtmp->mhp/10, TRUE);
     }
     if(mtmp->data == &mons[PM_MEDUSA]) {
 	register int i;

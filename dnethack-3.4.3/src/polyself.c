@@ -602,6 +602,12 @@ int	mntmp;
 		pline(use_thec,monsterc,"emit a mental blast");
 	    if (youmonst.data->msound == MS_SHRIEK) /* worthless, actually */
 		pline(use_thec,monsterc,"shriek");
+	    if (youmonst.data->msound == MS_JUBJUB)
+		pline(use_thec,monsterc,"scream");
+	    if (youmonst.data == &mons[PM_TOVE])
+		pline(use_thec,monsterc,"gimble a hole in the ground");
+	    if (youmonst.data == &mons[PM_BANDERSNATCH])
+		pline(use_thec,monsterc,"snap at a distant target");
 	    if (lays_eggs(youmonst.data) && flags.female)
 		pline(use_thec,"sit","lay an egg");
 	}

@@ -158,7 +158,24 @@ static const char *haluMesg[] = {
 	
 	"I see you...",
 		"...do you see me?",
+		"That was a mistake.",
 	
+	"T1M3 FOr WH4T?", /*Homestuck. This is Terezi's side of her conversation with Snowman, */
+		"WH4T M1SS1ON?", /*in which Terezi communicated by writing on walls and statues etc with colored chalk*/
+		"WH4T 4BOUT TH3 QU33N?",
+		"J4CK W4S H3LP1NG US 3X1L3 H3R SO...BOTH??? >:\\",
+		"OK H3H3H3 >:] WOW OHMYGOD D4RK T3XT L4DY! 1 G3T 1T!!!!!",
+		">8[ NO 1 DONT TH1NK SO WH3R3 4R3 YOU TH3N?",
+		"OK SORRY 1 4SK3D! >:O",
+		"WH4T? NO H3H3H3 1TS OK B3C4US3",
+		"1 DONT W4NT TO RUN OUT OF R3D >:[",
+		"B3C4US3!!! R3D 1S TH3 B3ST 4ND T4ST3S TH3 B3ST!!! <3",
+		"OK TH3N WH4T?",
+		"WH3R3 1S 1T?",
+	
+	"He who is valiant and pure of spirit may find the holy grail in the Castle of Aaaaarrrrrrggghhh...", /*Monty Python*/
+	"If someone is reading this...I must have failed.", /*The Guardian Legend*/
+	"You are lost. You can never go home.", /* Gollum's Song */
 	"Bad Wolf", /* Dr. Who */
 	"It's only the end if you want it to be.", /*Batgirl*/
 	"Mistakes were made.",
@@ -177,6 +194,7 @@ static const char *haluMesg[] = {
 	"My hatred will not be stanched until it has consumed all else!", /*FFV*/
 	"Life... dreams... hope... Where do they come from? And where do they go...?", /*FFVI*/
 	"I will NEVER be a memory.", /*FFVII Advent Children*/
+	"Servant of time. Daughter of chaos. Unto the world unseen, the untamed you guide.", /*FFXIII-2*/
 	"All the world will be your enemy, Prince With A Thousand Enemies...", /*Watership Down*/
 		"...and when they catch you they will kill you...",
 		"but first they must catch you.",
@@ -184,6 +202,7 @@ static const char *haluMesg[] = {
 	"Quod Erat Demonstrandum", "anno Domini", "per centum", /* QED, AD, percent */
 	"I was so surprised, I CLASSIFIED INFORMATION, I really did!", /*Haruhi Suzumiya*/
 	"[REDACTED]", "[DATA EXPUNGED]", "[DATA PLUNGED]", "[DATA EXPANDED]", "I am a toaster!", /* SCP Foundation */
+		"Special Containment Procedures: You're going to die, you poor dumb fuck.", /*SCP-1983*/
 	"I prepared Explosive Runes this morning.", /*Order of the Stick*/
 		"In any battle, there's always a level of force against which no tactics can succeed.",
 	"1002: He is Not that Which He Says He Is.", /*Good Omens*/
@@ -205,6 +224,7 @@ static const char *haluMesg[] = {
 	"What would YOU give up to... to see it through?",
 	"Don't trust the skull.", /* Cynarfpncr: Gbezrag (mild spoiler) */
 	"death is the greatest illusion", /*Blade of Innocence*/
+	"The quality of your lives depends on what you make of them!", /* The Life and Times of Scrooge McDuck */
 	"We do not threaten or warn or advise. We tell the truth.", /* The Mansion of E */
 		"What you stole is even more dangerous and precious than you know.",
 		"In the end, you will fly away and live forever, and you will leave the world shattered in your wake.",
@@ -229,6 +249,8 @@ static const char *haluMesg[] = {
 		"Your true face... What kind of... face is it? I wonder... The face under the mask... Is that... your true face?",
 		"You've met with a terrible fate, haven't you?",
 	"Why are you sad?", /*Blood-C*/
+	"Only accurate information has practical application.", /* not sure where this originated, possibly Aron Ra?*/
+	"Now watch what you say or they'll be calling you a radical!", /* The Logical Song, Supertramp */
 	"Never tell me the odds!" /* Starwars */
 };
 

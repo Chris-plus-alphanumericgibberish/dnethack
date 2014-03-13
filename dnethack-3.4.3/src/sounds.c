@@ -695,6 +695,19 @@ asGuardian:
 	case MS_BURBLE:
 	    pline_msg = "burbles.";
 	    break;
+	case MS_JUBJUB:{
+		struct monst *tmpm;
+	    pline_msg = "screams high and shrill.";
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(tmpm != mtmp){
+				if(tmpm->mtame && tmpm->mtame<20) tmpm->mtame++;
+				if(d(1,tmpm->mhp) < mtmp->mhpmax){
+					tmpm->mflee = 1;
+				}
+			}
+		}
+		make_stunned(HStun + mtmp->mhp/10, TRUE);
+	}break;
 	case MS_SHRIEK:
 	    pline_msg = "shrieks.";
 	    aggravate();

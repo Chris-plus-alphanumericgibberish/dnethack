@@ -2217,25 +2217,46 @@ struct permonst _mons2[] = {
 
 /* 'I' is a visual marker for all invisible monsters and must be unused */
 /*
- * Jabberwock
+ * Monsters from the Jabberwocky poem
  */
-    MON("jabberwock", S_JABBERWOCK,//18
-	LVL(15, 12, -2, 50, 0), (G_GENO|1),
-	A(ATTK(AT_BITE, AD_PHYS, 2,10), ATTK(AT_BITE, AD_PHYS, 2,10),
-	  ATTK(AT_CLAW, AD_PHYS, 2,10), ATTK(AT_CLAW, AD_PHYS, 2,10),
-	  NO_ATTK, NO_ATTK),
-	SIZ(1300, 600, 0, MS_BURBLE, MZ_LARGE), 0, 0,
-	M1_ANIMAL|M1_FLY|M1_CARNIVORE,
-	M2_HOSTILE|M2_STRONG|M2_NASTY|M2_COLLECT, M3_INFRAVISIBLE, CLR_ORANGE),
-//#if 0	/* UN-DEFERRED */
-    MON("vorpal jabberwock", S_JABBERWOCK, //31      
+    MON("tove", S_JABBERWOCK,//
+	LVL(10, 10, -2, 50, 0), (G_GENO|G_NOHELL|1), /* Frequency should increase while hallucinating and while demigod */
+	A(ATTK(AT_BITE, AD_PHYS, 1,10), NO_ATTK,
+	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+	SIZ(300, 50, 0, MS_SQEEK, MZ_SMALL), 0, 0,
+	M1_ANIMAL|M1_NOHANDS|M1_OMNIVORE,
+	M2_WANDER, M3_INFRAVISIBLE, CLR_BROWN),
+    MON("jubjub bird", S_JABBERWOCK,//
+	LVL(15, 12, -2, 50, 0), (G_GENO|G_NOHELL|1),/* Frequency should increase while hallucinating and while demigod */
+	A(ATTK(AT_BITE, AD_PHYS, 1,10), ATTK(AT_CLAW, AD_PHYS, 1,10),
+	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+	SIZ(1000, 100, 0, MS_JUBJUB, MZ_MEDIUM), 0, 0,/* Frightens creatures, stuns you. Tins of meat are "symetrical" if blessed */
+	M1_ANIMAL|M1_NOHANDS|M1_HERBIVORE,
+	M2_HOSTILE|M2_NASTY, M3_INFRAVISIBLE, CLR_BRIGHT_GREEN),
+    MON("bandersnatch", S_JABBERWOCK,//
+	LVL(20, 24, -2, 50, 0), (G_GENO|G_NOHELL|1),/* Frequency should increase while hallucinating and while demigod */
+	A(ATTK(AT_LNCK, AD_PHYS, 2,10), NO_ATTK,	
+	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+	SIZ(1300, 600, 0, MS_GROWL, MZ_LARGE), 0, 0,/* Becomes frumious instead of scared. Moves even faster and hits harder. */
+	M1_ANIMAL|M1_CARNIVORE,
+	M2_HOSTILE|M2_STALK|M2_STRONG|M2_NASTY|M2_COLLECT, M3_INFRAVISIBLE, CLR_BLUE),
+    MON("jabberwock", S_JABBERWOCK,//
 	LVL(25, 12, -2, 50, 0), (G_GENO|G_NOHELL|1),
-	A(ATTK(AT_BITE, AD_PHYS, 3, 10), ATTK(AT_BITE, AD_PHYS, 3, 10),
-	  ATTK(AT_CLAW, AD_VORP, 3, 10), ATTK(AT_CLAW, AD_VORP, 3, 10),
+	A(ATTK(AT_BITE, AD_PHYS, 3,10), ATTK(AT_BITE, AD_PHYS, 3,10),
+	  ATTK(AT_CLAW, AD_PHYS, 3,10), ATTK(AT_CLAW, AD_PHYS, 3,10),
 	  NO_ATTK, NO_ATTK),
 	SIZ(1300, 600, 0, MS_BURBLE, MZ_LARGE), 0, 0,
 	M1_ANIMAL|M1_FLY|M1_CARNIVORE,
-	M2_HOSTILE|M2_STALK|M2_STRONG|M2_NASTY|M2_COLLECT|M2_GIANT, M3_INFRAVISIBLE, HI_LORD),
+	M2_HOSTILE|M2_STRONG|M2_STALK|M2_NASTY|M2_COLLECT, M3_INFRAVISIBLE, CLR_ORANGE),
+//#if 0	/* removed */
+    // MON("vorpal jabberwock", S_JABBERWOCK, //31      
+	// LVL(25, 12, -2, 50, 0), (G_GENO|G_NOHELL|1),
+	// A(ATTK(AT_BITE, AD_PHYS, 3, 10), ATTK(AT_BITE, AD_PHYS, 3, 10),
+	  // ATTK(AT_CLAW, AD_VORP, 3, 10), ATTK(AT_CLAW, AD_VORP, 3, 10),
+	  // NO_ATTK, NO_ATTK),
+	// SIZ(1300, 600, 0, MS_BURBLE, MZ_LARGE), 0, 0,
+	// M1_ANIMAL|M1_FLY|M1_CARNIVORE,
+	// M2_HOSTILE|M2_STALK|M2_STRONG|M2_NASTY|M2_COLLECT|M2_GIANT, M3_INFRAVISIBLE, HI_LORD),
 //#endif
 /*
  * Keter Sephiroth

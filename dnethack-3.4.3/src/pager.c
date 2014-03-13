@@ -699,23 +699,27 @@ static const char * const bogusobjects[] = {
 	   "spellbook named A Brief History of Time",
 	   "spellbook named The Book of Eibon", 					/* Clark Ashton Smith */
 	   "playbook named The King in Yellow", 					/* Robert W. Chambers */
-	   "playbook called the Scottish play", 					/* Robert W. Chambers */
+	   "playbook called the Scottish play", 					/* aka Macbeth */
 	   "spellbook named De Vermis Mysteriis",					/* Robert Bloch */
+	   "HANDBOOK FOR THE IMMINENTLY DECEASED named ~ATH",		/* Homestuck */
 	   "spellbook named Necronomicon",							/* HP Lovecraft (yes, I know there is a game artifact of this name) */
 	   "spellbook named Al Azif",								/* "Arabic" name for the Necronomicon, HP Lovecraft */
 	   "spellbook named Unaussprechlichen Kulten",				/*  Robert E. Howard; Lovecraft and Derleth */
-	   "spellbook named Nameless Cults",						/*  (the original name) */
-	   "spellbook named Unspeakable Cults",						/*  One of the two things "Unaussprechlichen" translates to */
-	   "spellbook named Unpronouncable Cults",					/*  The other thing "Unaussprechlichen" translates to */
+	   "spellbook called Nameless Cults",						/*  (the original name) */
+	   "spellbook called Unspeakable Cults",					/*  One of the two things "Unaussprechlichen" translates to */
+	   "spellbook called Unpronouncable Cults",					/*  The other thing "Unaussprechlichen" translates to */
 	   "spellbook named The Diary of Drenicus the Wise",		/*  Dicefreaks, The Gates of Hell */
 	   "spellbook named Clavicula Salomonis Regis",				/* ie, The Lesser Key of Solomon */
 	   "copy of The Five Books of Moses",				/* aka the Torah */
 	   "spellbook named The Six and Seventh Books of Moses",	/* 18th- or 19th-century magical text allegedly written by Moses */
 	   "spellbook named The Book of Coming Forth by Day", "spellbook named The Book of emerging forth into the Light",
-	   "spellbook named Sefer Raziel HaMalakh",
+	   "spellbook named Sepher Ha-Razim",						/* Book given to Noah by the angel Raziel */
+	   "spellbook named Sefer Raziel HaMalakh", 				/*"Book of Raziel the Angel”, given to Adam */
 	   "spellbook named The Testament of Solomon",
 	   "spellbook named The Book of Enoch",
 	   "spellbook named The Uruk Tablets",
+	   "spellbook named the Book of Shadows",
+	   "spellbook named the Book of Mirrors",
        "dead sea scroll",
 	   "mayan codex",
 	   "simple textbook on the zoologically dubious",			/* Homestuck */

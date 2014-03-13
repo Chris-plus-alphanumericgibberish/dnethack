@@ -1438,8 +1438,12 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 	    victual.piece = (struct obj *)0;
 	    victual.fullwarn = victual.eating = victual.doreset = FALSE;
 
+		if(tin.tin->corpsenm == PM_JUBJUB_BIRD && tin.tin->blessed){
+			You("consume symmetrical %s", mons[tin.tin->corpsenm].mname);
+		} else {
 	    You("consume %s %s.", tintxts[r].txt,
 			mons[tin.tin->corpsenm].mname);
+		}
 
 	    /* KMH, conduct */
 	    u.uconduct.food++;
@@ -1456,7 +1460,10 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 
 	    /* check for vomiting added by GAN 01/16/87 */
 	    if(tintxts[r].nut < 0) make_vomiting((long)rn1(15,10), FALSE);
-	    else lesshungry(tintxts[r].nut);
+		else if(tin.tin->corpsenm == PM_JUBJUB_BIRD && tin.tin->blessed){
+			lesshungry(600);
+			use_unicorn_horn(tin.tin);
+		} else lesshungry(tintxts[r].nut);
 
 	    if(r == 0 || r == FRENCH_FRIED_TIN) {
 	        /* Assume !Glib, because you can't open tins when Glib. */
@@ -1510,6 +1517,9 @@ start_tin(otmp)		/* called when starting to open a tin */
 
 	if (metallivorous(youmonst.data)) {
 		You("bite right into the metal tin...");
+		tmp = 1;
+	} else if (Upolyd && u.umonnum == PM_TOVE) {
+		You("gyre, gimbling right into the metal tin.");
 		tmp = 1;
 	} else if (nolimbs(youmonst.data)) {
 		You("cannot handle the tin properly to open it.");

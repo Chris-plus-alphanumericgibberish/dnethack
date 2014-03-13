@@ -76,8 +76,8 @@ register boolean clumsy;
 	    abuse_dog(mon);
 	    if (mon->mtame)
 		monflee(mon, (dmg ? rnd(dmg) : 1), FALSE, FALSE);
-	    else
-		mon->mflee = 0;
+	    else if(mon->data == &mons[PM_BANDERSNATCH]) mon->mflee = 1;
+	    else mon->mflee = 0;
 	}
 
 	if (dmg > 0) {

@@ -1065,7 +1065,8 @@ hitmu(mtmp, mattk)
 	if(uarm && uarm->oartifact && !rn2(10)) touch_artifact(uarm, &youmonst);
 
 /*	First determine the base damage done */
-	dmg = d((int)mattk->damn, (int)mattk->damd);
+	if(mtmp->mflee && mdat == &mons[PM_BANDERSNATCH]) dmg = d((int)mattk->damn, 2*(int)mattk->damd);
+	else dmg = d((int)mattk->damn, (int)mattk->damd);
 	if(is_undead(mdat) && midnight())
 		dmg += d((int)mattk->damn, (int)mattk->damd); /* extra damage */
 
@@ -1130,8 +1131,11 @@ hitmu(mtmp, mattk)
 			if (u_slip_free(mtmp, mattk)) {
 			    dmg = 0;
 			} else {
+				if(Upolyd && u.umonnum == PM_TOVE) You("are much too slithy to grab!");
+				else {
 			    u.ustuck = mtmp;
 			    pline("%s grabs you!", Monnam(mtmp));
+			}
 			}
 		    } else if(u.ustuck == mtmp) {
 			exercise(A_STR, FALSE);
@@ -1644,7 +1648,8 @@ dopois:
 	    case AD_STCK:
 		hitmsg(mtmp, mattk);
 		if (uncancelled && !u.ustuck && !sticks(youmonst.data))
-			u.ustuck = mtmp;
+			if(Upolyd && u.umonnum == PM_TOVE) You("are much too slithy to get stuck!");
+			else u.ustuck = mtmp;
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_WRAP:
@@ -1655,7 +1660,8 @@ dopois:
 			} else {
 			    pline("%s swings itself around you!",
 				  Monnam(mtmp));
-			    u.ustuck = mtmp;
+				if(Upolyd && u.umonnum == PM_TOVE) pline("Fortunately, you are much too slithy to grab!");
+				else u.ustuck = mtmp;
 			}
 		    } else if(u.ustuck == mtmp) {
 			if (is_pool(mtmp->mx,mtmp->my) && !Swimming
@@ -2310,7 +2316,8 @@ dopois:
 	    case AD_MALK:
 		hitmsg(mtmp, mattk);
 		if (!rn2(4) && /*!u.ustuck &&*/ !sticks(youmonst.data))
-			u.ustuck = mtmp;
+			if(Upolyd && u.umonnum == PM_TOVE) You("are much too slithy to grab!");
+			else u.ustuck = mtmp;
 		if (uncancelled) {
 		    You("get zapped!");
 		    if (Shock_resistance) {

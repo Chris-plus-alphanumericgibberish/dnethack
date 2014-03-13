@@ -372,7 +372,7 @@ register struct monst *mtmp;
 				  /* [arbitrary reason why it isn't moving] */
 	else if (mtmp->mstrategy & STRAT_WAITMASK)
 				  Strcat(info, ", meditating");
-	else if (mtmp->mflee)	  Strcat(info, ", scared");
+	else if (mtmp->mflee && mtmp->data != &mons[PM_BANDERSNATCH]) Strcat(info, ", scared");
 	if (mtmp->mtrapped)	  Strcat(info, ", trapped");
 	if (mtmp->mspeed)	  Strcat(info,
 					mtmp->mspeed == MFAST ? ", fast" :

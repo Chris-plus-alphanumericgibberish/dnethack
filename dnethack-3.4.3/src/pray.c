@@ -1855,7 +1855,7 @@ doturn()
 			    if(!Race_if(PM_VAMPIRE)) pline("Unfortunately, your voice falters.");
 			    else pline("Unfortunately, your concentration falters.");
 			}
-			mtmp->mflee = 0;
+			if(mtmp->data != &mons[PM_BANDERSNATCH]) mtmp->mflee = 0;
 			mtmp->mfrozen = 0;
 			mtmp->mcanmove = 1;
 		    } else if (!resist(mtmp, '\0', 0, TELL)) {

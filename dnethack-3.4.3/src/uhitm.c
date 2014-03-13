@@ -18,7 +18,6 @@ STATIC_DCL int FDECL(explum, (struct monst *,struct attack *));
 STATIC_DCL void FDECL(start_engulf, (struct monst *));
 STATIC_DCL void NDECL(end_engulf);
 STATIC_DCL int FDECL(gulpum, (struct monst *,struct attack *));
-STATIC_DCL boolean FDECL(hmonas, (struct monst *,int));
 STATIC_DCL void FDECL(nohandglow, (struct monst *));
 STATIC_DCL boolean FDECL(shade_aware, (struct obj *));
 STATIC_DCL boolean FDECL(dragon_hit, (struct monst *, struct obj *, int, int *, boolean *, boolean *, boolean *));
@@ -240,7 +239,7 @@ struct monst *mtmp;
 {
 	if (Role_if(PM_KNIGHT) && u.ualign.type == A_LAWFUL &&
 	    (!mtmp->mcanmove || mtmp->msleeping ||
-		(mtmp->mflee && !mtmp->mavenge))){
+		(mtmp->mflee && mtmp->data != &mons[PM_BANDERSNATCH] && !mtmp->mavenge))){
 		    You("caitiff!");
 			if(u.ualign.record > 10) {
 				u.ualign.sins++;
@@ -820,8 +819,10 @@ int thrown;
 		    valid_weapon_attack = (tmp > 1);
 		    if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
-		    } else if ((mon->mflee && Role_if(PM_ROGUE) && !Upolyd) ||
-						u.sealsActive&SEAL_ANDROMALIUS) {
+		    } else if ((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) && 
+						((Role_if(PM_ROGUE) && !Upolyd) ||
+							u.sealsActive&SEAL_ANDROMALIUS)
+			) {
 			You("strike %s from behind!", mon_nam(mon));
 				if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel);
 				if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel/2);
@@ -1965,7 +1966,8 @@ register struct attack *mattk;
 		break;
 	    case AD_STCK:
 		if (!negated && !sticks(mdef->data))
-		    u.ustuck = mdef; /* it's now stuck to you */
+			if(mdef->data == &mons[PM_TOVE]) pline("It is too slithy to get stuck!");
+			else u.ustuck = mdef; /* it's now stuck to you */
 		break;
 	    case AD_WRAP:
 		if (!sticks(mdef->data)) {
@@ -1975,7 +1977,8 @@ register struct attack *mattk;
 			} else {
 			    You("swing yourself around %s!",
 				  mon_nam(mdef));
-			    u.ustuck = mdef;
+				if(mdef->data == &mons[PM_TOVE]) pline("Unfortunately, it is much too slithy to grab!");
+				else u.ustuck = mdef; /* it's now stuck to you */
 			}
 		    } else if(u.ustuck == mdef) {
 			/* Monsters don't wear amulets of magical breathing */
@@ -2349,7 +2352,7 @@ register struct attack *mattk;
 		wakeup(mdef);
 }
 
-STATIC_OVL boolean
+boolean
 hmonas(mon, tmp)		/* attack monster as a monster. */
 register struct monst *mon;
 register int tmp;

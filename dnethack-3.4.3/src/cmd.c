@@ -105,6 +105,7 @@ extern int NDECL(doorganize); /**/
 static int NDECL((*timed_occ_fn));
 #endif /* OVL1 */
 
+STATIC_DCL int NDECL(use_reach_attack);
 STATIC_PTR int NDECL(doprev_message);
 STATIC_PTR int NDECL(timed_occupation);
 STATIC_PTR int NDECL(doextcmd);
@@ -478,10 +479,125 @@ domonability(VOID_ARGS)
 	    if(u.uburied)
 		pline("Unfortunately sound does not carry well through rock.");
 	    else aggravate();
+	} else if (youmonst.data->msound == MS_JUBJUB) {
+	    You("scream high and shrill.");
+	    if(u.uburied)
+		pline("Unfortunately sound does not carry well through rock.");
+	    else{
+			struct monst *tmpm;
+			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+				if(tmpm->mtame && tmpm->mtame<20) tmpm->mtame++;
+				if(d(1,tmpm->mhp) < Upolyd ? u.mh : u.uhp){
+					tmpm->mflee = 1;
+				}
+			}
+		}
+	} else if (youmonst.data == &mons[PM_TOVE]) {
+		struct trap *ttmp = t_at(u.ux, u.uy);
+		struct rm *lev = &levl[u.ux][u.uy];
+		schar typ;
+		boolean nohole = !Can_dig_down(&u.uz);
+		if (!(
+			!isok(u.ux,u.uy) || 
+			(ttmp && ttmp->ttyp == MAGIC_PORTAL) ||
+		   /* ALI - artifact doors from slash'em */
+			(IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
+			(IS_ROCK(lev->typ) && lev->typ != SDOOR &&
+			(lev->wall_info & W_NONDIGGABLE) != 0) ||
+			(is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) ||
+			(lev->typ == DRAWBRIDGE_DOWN ||
+			   (is_drawbridge_wall(u.ux, u.uy) >= 0)) ||
+			(boulder_at(u.ux, u.uy)) ||
+			(IS_GRAVE(lev->typ)) ||
+			(lev->typ == DRAWBRIDGE_UP) ||
+			(IS_THRONE(lev->typ)) ||
+			(IS_ALTAR(lev->typ))
+		)){
+			typ = fillholetyp(u.ux,u.uy);
+			You("gyre and gimble into the %s.", surface(u.ux,u.uy));
+			if (typ != ROOM) {
+				lev->typ = typ;
+				if (ttmp) (void) delfloortrap(ttmp);
+				/* if any objects were frozen here, they're released now */
+				unearth_objs(u.ux, u.uy);
+
+					if(cansee(u.ux, u.uy))
+						pline_The("hole fills with %s!",
+						  typ == LAVAPOOL ? "lava" : "water");
+				if (!Levitation && !Flying) {
+					if (typ == LAVAPOOL)
+					(void) lava_effects();
+					else if (!Wwalking)
+					(void) drown();
+				}
+			}
+			if (nohole || !ttmp || (ttmp->ttyp != PIT && ttmp->ttyp != SPIKED_PIT && ttmp->ttyp != TRAPDOOR))
+				digactualhole(u.ux, u.uy, &youmonst, PIT);
+			else
+				digactualhole(u.ux, u.uy, &youmonst, HOLE);
+		}
+	} else if(youmonst.data == &mons[PM_BANDERSNATCH]){
+		use_reach_attack();
 	} else if (Upolyd)
 		pline("Any special ability you may have is purely reflexive.");
 	else You("don't have a special ability in your normal form!");
 	return 0;
+}
+
+STATIC_OVL int
+use_reach_attack()
+{
+	int res = 0, typ, max_range = 4, min_range = 1;
+	coord cc;
+	struct monst *mtmp;
+
+
+	/* Are you allowed to use a reach attack? */
+	if (u.uswallow) {
+	    pline("There's not enough room here to use that.");
+	    return (0);
+	}
+	/* Prompt for a location */
+	pline("Where do you want to hit?");
+	cc.x = u.ux;
+	cc.y = u.uy;
+	if (getpos(&cc, TRUE, "the spot to hit") < 0)
+	    return 0;	/* user pressed ESC */
+
+	/* Calculate range */
+	typ = P_BARE_HANDED_COMBAT;
+	if (typ == P_NONE || P_SKILL(typ) <= P_BASIC) max_range = 4;
+	else if ( P_SKILL(typ) == P_SKILLED) max_range = 5;
+	else if ( P_SKILL(typ) == P_EXPERT) max_range = 8;
+	else if ( P_SKILL(typ) == P_MASTER) max_range = 9;
+	else max_range = 10;
+	if (distu(cc.x, cc.y) > max_range) {
+	    pline("Too far!");
+	    return (res);
+	} else if (distu(cc.x, cc.y) < min_range) {
+	    pline("Too close!");
+	    return (res);
+	} else if (!cansee(cc.x, cc.y) &&
+		   ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0 ||
+		    !canseemon(mtmp))) {
+	    You("won't hit anything if you can't see that spot.");
+	    return (res);
+	} else if (!couldsee(cc.x, cc.y)) { /* Eyes of the Overworld */
+	    You("can't reach that spot from here.");
+	    return res;
+	}
+
+	/* Attack the monster there */
+	if ((mtmp = m_at(cc.x, cc.y)) != (struct monst *)0) {
+	    int oldhp = mtmp->mhp;
+
+	    bhitpos = cc;
+	    check_caitiff(mtmp);
+	    (void) hmonas(mtmp, find_roll_to_hit(mtmp));
+	} else
+	    /* Now you know that nothing is there... */
+	    pline("%s", nothing_happens);
+	return (1);
 }
 
 STATIC_PTR int

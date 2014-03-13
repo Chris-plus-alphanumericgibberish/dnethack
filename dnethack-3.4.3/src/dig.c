@@ -15,7 +15,6 @@ STATIC_DCL void FDECL(mkcavepos, (XCHAR_P,XCHAR_P,int,BOOLEAN_P,BOOLEAN_P));
 STATIC_DCL void FDECL(mkcavearea, (BOOLEAN_P));
 STATIC_DCL int FDECL(dig_typ, (struct obj *,XCHAR_P,XCHAR_P));
 STATIC_DCL int NDECL(dig);
-STATIC_DCL schar FDECL(fillholetyp, (int, int));
 
 /* Indices returned by dig_typ() */
 #define DIGTYP_UNDIGGABLE 0
@@ -248,7 +247,7 @@ dig()
 	    /* ALI - Artifact doors from Slash'em */
 	    if (IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
 	    		dig_typ(uwep, dpx, dpy) == DIGTYP_ROCK ||
-		    IS_DOOR(lev->typ) && artifact_door(dpx, dpy)) {
+		    (IS_DOOR(lev->typ) && artifact_door(dpx, dpy))) {
 		pline("This %s is too hard to %s.",
 			IS_DOOR(lev->typ) ? "door" : "wall", verb);
 		return(0);
@@ -708,7 +707,7 @@ boolean pit_only;
 
 	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL || nohole)) ||
 	   /* ALI - artifact doors from slash'em */
-	   IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy) ||
+	   (IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
 	   (IS_ROCK(lev->typ) && lev->typ != SDOOR &&
 	    (lev->wall_info & W_NONDIGGABLE) != 0)) {
 		pline_The("%s here is too hard to dig in.", surface(u.ux,u.uy));
@@ -1556,7 +1555,7 @@ boolean pit_only;
 int x;
 int y;
 {
-	register struct trap *ttmp = t_at(x, y);
+	struct trap *ttmp = t_at(x, y);
 	struct rm *lev = &levl[x][y];
 	struct obj *boulder_here;
 	schar typ;
@@ -1565,19 +1564,19 @@ int y;
     if (!isok(x,y)) return FALSE; // if out of bounds or whatever.
 	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL || nohole)) ||
 	   /* ALI - artifact doors from slash'em */
-	   IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy) ||
+	   (IS_DOOR(levl[x][y].typ) && artifact_door(x, y)) ||
 	   (IS_ROCK(lev->typ) && lev->typ != SDOOR &&
 	    (lev->wall_info & W_NONDIGGABLE) != 0)) {
 			if(cansee(x, y))
 				pline_The("dust over the %s swirls in the wind.", surface(x,y));
 
-	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
+	} else if (is_pool(x, y) || is_lava(x, y)) {
 		pline_The("%s sloshes furiously for a moment, then subsides.",
-			is_lava(u.ux, u.uy) ? "lava" : "water");
+			is_lava(x, y) ? "lava" : "water");
 		wake_nearby();	/* splashing */
 
 	} else if (lev->typ == DRAWBRIDGE_DOWN ||
-		   (is_drawbridge_wall(u.ux, u.uy) >= 0)) {
+		   (is_drawbridge_wall(x, y) >= 0)) {
 		/* drawbridge_down is the platform crossing the moat when the
 		   bridge is extended; drawbridge_wall is the open "doorway" or
 		   closed "door" where the portcullis/mechanism is located */
