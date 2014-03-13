@@ -342,20 +342,6 @@ const struct Role roles[] = {
 	10, 8, 0, 1,  9, A_INT, SPE_DETECT_TREASURE, -30
 },
 {	{"Ranger", 0}, {
-#if 0	/* OBSOLETE */
-	{"Edhel",       "Elleth"},
-	{"Edhel",       "Elleth"},      /* elf-maid */
-	{"Ohtar",       "Ohtie"},       /* warrior */
-	{"Kano",			/* commander (Q.) ['a] */
-			"Kanie"},	/* educated guess, until further research- SAC */
-	{"Arandur",			/* king's servant, minister (Q.) - guess */
-			"Aranduriel"},	/* educated guess */
-	{"Hir",         "Hiril"},       /* lord, lady (S.) ['ir] */
-	{"Aredhel",     "Arwen"},       /* noble elf, maiden (S.) */
-	{"Ernil",       "Elentariel"},  /* prince (S.), elf-maiden (Q.) */
-	{"Elentar",     "Elentari"},	/* Star-king, -queen (Q.) */
-	"Solonor Thelandira", "Aerdrie Faenya", "Lolth", /* Elven */
-#endif
 	{"Tenderfoot",    0},
 	{"Lookout",       0},
 	{"Trailblazer",   0},
@@ -489,6 +475,33 @@ const struct Role roles[] = {
 {{0, 0}}
 };
 
+struct RoleName ElfRangerRanks[9] = {{"Edhel",       "Elleth"},
+	{"Edhel",       "Elleth"},      /* elf-maid */
+	{"Ohtar",       "Ohtie"},       /* warrior */
+	{"Kano",			/* commander (Q.) ['a] */
+			"Kanie"},	/* educated guess, until further research- SAC */
+	{"Arandur",			/* king's servant, minister (Q.) - guess */
+			"Aranduriel"},	/* educated guess */
+	{"Hir",         "Hiril"},       /* lord, lady (S.) ['ir] */
+	{"Aredhel",     "Arwen"},       /* noble elf, maiden (S.) */
+	{"Ernil",       "Elentariel"},  /* prince (S.), elf-maiden (Q.) */
+	{"Elentar",     "Elentari"}};	/* Star-king, -queen (Q.) */
+	
+const char *ElfRangerLgod = "Manwe Sulimo",
+		   *ElfRangerNgod = "_Yavanna", 
+		   *ElfRangerCgod = "Tulkas"; /* Elven */
+
+const char *DrowMaleLgod = "Eddergud",
+		   *DrowMaleNgod = "Vhaeraun",
+		   *DrowMaleCgod = "_Lolth"; /* Hedroven */
+
+const char *DrowFemaleLgod = "_Eilistraee",
+		   *DrowFemaleNgod = "_Kiaransalee", 
+		   *DrowFemaleCgod = "_Lolth"; /* Droven */
+
+const char *BinLgod = "Yaldabaoth",
+		   *BinNgod = "the void",
+		   *BinCgod = "_Sophia"; /* Gnostic */
 
 /* The player's role, created at runtime from initial
  * choices.  This may be munged in role_init().
