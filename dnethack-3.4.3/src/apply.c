@@ -3292,6 +3292,7 @@ struct obj *obj;
 	nomovemsg = "You finish carving.";;
 	carvee->ovar1 = get_wardID(rune);
 	You("carve a %s into the %s.",wardDecode[decode_wardID(carvee->ovar1)],xname(carvee));
+    u.uconduct.wardless++;
 	see_monsters(); //Some magic staves grant detection, so recheck that now.
 	return 1;
 }
