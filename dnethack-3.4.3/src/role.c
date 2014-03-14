@@ -699,9 +699,17 @@ validrole(rolenum)
 
 
 int
-randrole()
+randrole(ralign)
+	int ralign;
 {
-	return (rn2(SIZE(roles)-1));
+	if(!ralign) return (rn2(SIZE(roles)-1));
+	else{
+		int rolenum=0,i,allowed = 0;
+		for(i=0;i<SIZE(roles)-1;i++) if(roles[i].allow & ralign) allowed++;
+		allowed = rnd(allowed);
+		for(i=0;i<SIZE(roles)-1;i++) if(roles[i].allow & ralign) if(!(--allowed)) return i;
+	}
+	return 0;/* Backup, should never reach */
 }
 
 
@@ -1254,7 +1262,7 @@ rigid_role_checks()
 	flags.initrole = pick_role(flags.initrace, flags.initgend,
 					flags.initalign, PICK_RANDOM);
 	if (flags.initrole < 0)
-	    flags.initrole = randrole();
+	    flags.initrole = randrole(0);
     }
     if (flags.initrole != ROLE_NONE) {
 	if (flags.initrace == ROLE_NONE)
@@ -1581,7 +1589,7 @@ role_init()
 	    /* Try the player letter second */
 	    if ((flags.initrole = str2role(pl_character)) < 0)
 	    	/* None specified; pick a random role */
-	    	flags.initrole = randrole();
+	    	flags.initrole = randrole(0);
 	}
 
 	/* We now have a valid role index.  Copy the role name back. */
@@ -1638,13 +1646,32 @@ role_init()
 	/* Fix up the god names */
 	if (flags.pantheon == -1) {		/* new game */
 	    flags.pantheon = flags.initrole;	/* use own gods */
+	    flags.panLgod = flags.initrole;	/* use own gods */
+	    flags.panNgod = flags.initrole;	/* use own gods */
+	    flags.panCgod = flags.initrole;	/* use own gods */
 	    while (!roles[flags.pantheon].lgod)	/* unless they're missing */
-		flags.pantheon = randrole();
+		flags.pantheon = randrole(0);
+		if(Role_if(PM_EXILE)){
+			do{
+				while (!roles[flags.panLgod].lgod) flags.panLgod = randrole(AM_LAWFUL);
+				while (!roles[flags.panNgod].ngod) flags.panNgod = randrole(AM_NEUTRAL);
+				while (!roles[flags.panCgod].cgod) flags.panCgod = randrole(AM_CHAOTIC);
+			} while(flags.panLgod != panNgod &&
+					flags.panLgod != panCgod &&
+					flags.panNgod != panCgod );
+		}
 	}
 	if (!urole.lgod) {
 	    urole.lgod = roles[flags.pantheon].lgod;
 	    urole.ngod = roles[flags.pantheon].ngod;
 	    urole.cgod = roles[flags.pantheon].cgod;
+	}
+	if(Role_if(PM_EXILE)){
+		urole.lgod = roles[flags.panLgod].lgod;
+		urole.ngod = roles[flags.panNgod].ngod;
+		urole.cgod = roles[flags.panCgod].cgod;
+	} else if(Race_if(PM_DROW)){
+	} else if(Race_if(PM_ELF)){
 	}
 
 	/* Fix up infravision */
