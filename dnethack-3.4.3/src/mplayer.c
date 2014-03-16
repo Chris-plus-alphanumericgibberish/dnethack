@@ -132,8 +132,8 @@ register boolean special;
 	    		rnd_class(OILSKIN_CLOAK, CLOAK_OF_DISPLACEMENT);
 	    short helm = !rn2(8) ? STRANGE_OBJECT :
 	    		rnd_class(ELVEN_LEATHER_HELM, HELM_OF_TELEPATHY);
-	    short shield = !rn2(8) ? STRANGE_OBJECT :
-	    		rnd_class(ELVEN_SHIELD, SHIELD_OF_REFLECTION);
+	    short shield = !rn2(2) ? rnd_class(GRAY_DRAGON_SCALE_SHIELD, YELLOW_DRAGON_SCALE_SHIELD) 
+							   : (!rn2(8) ? STRANGE_OBJECT : rnd_class(ELVEN_SHIELD, SHIELD_OF_REFLECTION));
 	    int quan;
 	    struct obj *otmp;
 

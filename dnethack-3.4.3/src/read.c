@@ -931,6 +931,28 @@ struct obj	*sobj;
 		}
 		if(confused) {
 			otmp->oerodeproof = !(sobj->cursed);
+			if (otmp->otyp >= GRAY_DRAGON_SCALES &&
+				otmp->otyp <= YELLOW_DRAGON_SCALES) {
+				/* dragon scales get turned into dragon scale shield */
+				if(Blind) {
+					Your("%s %s harder!", xname(otmp), otense(otmp, "feel"));
+				} else {
+					Your("%s merges and hardens!", xname(otmp));
+				}
+				setworn((struct obj *)0, W_ARMS);
+				setworn((struct obj *)0, W_ARM);
+				/* assumes same order */
+				otmp->otyp = GRAY_DRAGON_SCALE_SHIELD +
+					otmp->otyp - GRAY_DRAGON_SCALES;
+				otmp->cursed = 0;
+				if (sobj->blessed) {
+					otmp->spe++;
+					otmp->blessed = 1;
+				}
+				otmp->known = 1;
+				setworn(otmp, W_ARMS);
+				break;
+			} else {
 			if(Blind) {
 			    otmp->rknown = FALSE;
 			    Your("%s %s warm for a moment.",
@@ -951,6 +973,7 @@ struct obj	*sobj;
 				 xname(otmp),
 				 otense(otmp, Blind ? "feel" : "look"));
 			}
+			}
 			break;
 		}
 		/* elven armor vibrates warningly when enchanted beyond a limit */
@@ -965,10 +988,12 @@ struct obj	*sobj;
 		if (sobj->cursed)
 		    same_color =
 			(otmp->otyp == BLACK_DRAGON_SCALE_MAIL ||
+			 otmp->otyp == BLACK_DRAGON_SCALE_SHIELD ||
 			 otmp->otyp == BLACK_DRAGON_SCALES);
 		else
 		    same_color =
 			(otmp->otyp == SILVER_DRAGON_SCALE_MAIL ||
+			 otmp->otyp == SILVER_DRAGON_SCALE_SHIELD ||
 			 otmp->otyp == SILVER_DRAGON_SCALES ||
 			 otmp->otyp == SHIELD_OF_REFLECTION);
 		if (Blind) same_color = FALSE;

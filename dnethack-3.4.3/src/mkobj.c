@@ -1132,7 +1132,7 @@ register struct obj *obj;
 		wt *= 2; //300
 	}
 	else if(obj->oartifact == ART_DRAGON_PLATE){
-		wt =  (int)(wt * 1.5); //450
+		wt =  (int)(wt * 1.5); //225
 	}
 
 	if(obj->oartifact == ART_TREASURY_OF_PROTEUS){

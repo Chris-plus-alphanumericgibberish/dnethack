@@ -292,12 +292,18 @@ struct obj {
 				 (obj)->otyp <= YELLOW_DRAGON_SCALES)
 #define Is_dragon_mail(obj)	((obj)->otyp >= GRAY_DRAGON_SCALE_MAIL && \
 				 (obj)->otyp <= YELLOW_DRAGON_SCALE_MAIL)
-#define Is_dragon_armor(obj)	(Is_dragon_scales(obj) || Is_dragon_mail(obj))
+#define Is_dragon_shield(obj) ((obj)->otyp >= GRAY_DRAGON_SCALE_SHIELD && \
+							   (obj)->otyp <= YELLOW_DRAGON_SCALE_SHIELD)
+#define Is_dragon_armor(obj)	(Is_dragon_scales(obj) || Is_dragon_mail(obj) || Is_dragon_shield(obj))
 #define Dragon_scales_to_pm(obj) &mons[PM_GRAY_DRAGON + (obj)->otyp \
 				       - GRAY_DRAGON_SCALES]
 #define Dragon_mail_to_pm(obj)	&mons[PM_GRAY_DRAGON + (obj)->otyp \
 				      - GRAY_DRAGON_SCALE_MAIL]
+#define Dragon_shield_to_pm(obj)	&mons[PM_GRAY_DRAGON + (obj)->otyp \
+				      - GRAY_DRAGON_SCALE_SHIELD]
 #define Dragon_to_scales(pm)	(GRAY_DRAGON_SCALES + (pm - mons))
+#define Have_same_dragon_armor_and_shield	((Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == Dragon_shield_to_pm(uarms)) ||\
+													 (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == Dragon_shield_to_pm(uarms)) )
 
 /* Elven gear */
 #define is_elven_weapon(otmp)	((otmp)->otyp == ELVEN_ARROW\

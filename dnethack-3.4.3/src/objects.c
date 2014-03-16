@@ -344,7 +344,7 @@ HELM("helm of telepathy", "visored helmet",
  *	    the same defined in monst.c.
  */
 #define DRGN_ARMR(name,mgc,power,cost,ac,color) \
-	ARMOR(name,(char *)0,1,mgc,1,power,0,5,300,cost,ac,0,ARM_SUIT,DRAGON_HIDE,color)
+	ARMOR(name,(char *)0,1,mgc,1,power,0,5,150,cost,ac,0,ARM_SUIT,DRAGON_HIDE,color)
 /* 3.4.1: dragon scale mail reclassified as "magic" since magic is
    needed to create them */
 DRGN_ARMR("gray dragon scale mail",   1, ANTIMAGIC,  1200, 1, CLR_GRAY),
@@ -474,17 +474,34 @@ CLOAK("cloak of displacement", "piece of cloth",
 SHIELD("small shield", (char *)0,
 		1, 0, 0, 0,	     6, 0, 30,	3,  9, 0, WOOD, HI_WOOD),
 SHIELD("elven shield", "blue and green shield",
-		0, 0, 0, 0,	     2, 0, 40,	7,  8, 0, WOOD, CLR_GREEN),
+		0, 0, 0, 0,	     2, 0, 40,	7,  8, 2, WOOD, CLR_GREEN),
 SHIELD("Uruk-hai shield", "white-handed shield",
-		0, 0, 0, 0,	     2, 0, 50,	7,  8, 0, IRON, HI_METAL),
+		0, 0, 0, 0,	     2, 0, 50,	7,  8, 1, IRON, HI_METAL),
 SHIELD("orcish shield", "red-eyed shield",
 		0, 0, 0, 0,	     2, 0, 50,	7,  9, 0, IRON, CLR_RED),
 SHIELD("large shield", (char *)0,
-		1, 0, 1, 0,	     7, 0,100, 10,  8, 0, IRON, HI_METAL),
+		1, 0, 1, 0,	     7, 0,100, 10,  8, 1, IRON, HI_METAL),
 SHIELD("dwarvish roundshield", "large round shield",
-		0, 0, 0, 0,	     4, 0,100, 10,  7, 0, IRON, HI_METAL),
+		0, 0, 0, 0,	     4, 0, 80, 10,  7, 1, IRON, HI_METAL),
 SHIELD("shield of reflection", "polished silver shield",
 		0, 1, 0, REFLECTING, 3, 0, 50, 50,  8, 0, SILVER, HI_SILVER),
+/*#define SHIELD(name,desc,kn,mgc,blk,power,prob,delay,wt,cost,ac,can,metal,c) \
+     ARMOR(name,desc,kn,mgc,blk,power,prob,delay,wt,cost,ac,can,ARM_SHIELD,metal,c) */
+#define DRGN_SHIELD(name,mgc,power,cost,ac,color)						\
+	ARMOR(name,(char *)0,1,mgc,1,power,0,0,150,cost,ac,0,ARM_SHIELD,DRAGON_HIDE,color)
+/* 3.4.1: dragon scale mail reclassified as "magic" since magic is
+   needed to create them */
+DRGN_SHIELD("gray dragon scale shield", 1, ANTIMAGIC,  1200, 7, CLR_GRAY),
+DRGN_SHIELD("silver dragon scale shield", 1, REFLECTING, 1200, 7, DRAGON_SILVER),
+DRGN_SHIELD("shimmering dragon scale shield", 1, DISPLACED, 1200, 7, CLR_CYAN),
+DRGN_SHIELD("deep dragon scale shield", 1, DRAIN_RES, 1200, 7, CLR_MAGENTA),
+DRGN_SHIELD("red dragon scale shield", 1, FIRE_RES,    900, 7, CLR_RED),
+DRGN_SHIELD("white dragon scale shield", 1, COLD_RES,    900, 7, CLR_WHITE),
+DRGN_SHIELD("orange dragon scale shield", 1, SLEEP_RES,   900, 7, CLR_ORANGE),
+DRGN_SHIELD("black dragon scale shield", 1, DISINT_RES, 1200, 7, CLR_BLACK),
+DRGN_SHIELD("blue dragon scale shield", 1, SHOCK_RES,   900, 7, CLR_BLUE),
+DRGN_SHIELD("green dragon scale shield", 1, POISON_RES,  900, 7, CLR_GREEN),
+DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, CLR_YELLOW),
 
 /* gloves */
 /* these have their color but not material shuffled, so the IRON must stay

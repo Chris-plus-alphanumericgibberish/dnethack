@@ -827,7 +827,8 @@ rehumanize()
 }
 
 int
-dobreathe()
+dobreathe(mdat)
+	struct permonst *mdat;
 {
 	struct attack *mattk;
 
@@ -844,7 +845,7 @@ dobreathe()
 
 	if (!getdir((char *)0)) return(0);
 
-	mattk = attacktype_fordmg(youmonst.data, AT_BREA, AD_ANY);
+	mattk = attacktype_fordmg(mdat, AT_BREA, AD_ANY);
 	if (!mattk)
 	    impossible("bad breath attack?");	/* mouthwash needed... */
 	else

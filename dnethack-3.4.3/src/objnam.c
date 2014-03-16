@@ -1649,6 +1649,10 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 #endif
 	{ "dragon scales",
 			ARMOR_CLASS,  GRAY_DRAGON_SCALES, YELLOW_DRAGON_SCALES },
+	{ "dragon scale shield",
+			ARMOR_CLASS,  GRAY_DRAGON_SCALE_SHIELD, YELLOW_DRAGON_SCALE_SHIELD },
+	{ "scale shield",
+			ARMOR_CLASS,  LARGE_SHIELD, LARGE_SHIELD },
 	{ "dragon scale mail",
 			ARMOR_CLASS,  GRAY_DRAGON_SCALE_MAIL, YELLOW_DRAGON_SCALE_MAIL },
 	{ "sword",	WEAPON_CLASS, SHORT_SWORD,    KATANA },
@@ -1854,6 +1858,7 @@ struct alt_spellings {
 	{ "saber", SILVER_SABER },
 	{ "silver sabre", SILVER_SABER },
 	{ "smooth shield", SHIELD_OF_REFLECTION },
+	{ "grey dragon scale shield", GRAY_DRAGON_SCALE_SHIELD },
 	{ "grey dragon scale mail", GRAY_DRAGON_SCALE_MAIL },
 	{ "grey dragon scales", GRAY_DRAGON_SCALES },
 	{ "enchant armour", SCR_ENCHANT_ARMOR },
@@ -2937,6 +2942,14 @@ typfnd:
 			if (mntmp >= PM_GRAY_DRAGON &&
 						mntmp <= PM_YELLOW_DRAGON)
 			    otmp->otyp = GRAY_DRAGON_SCALE_MAIL +
+						    mntmp - PM_GRAY_DRAGON;
+			break;
+		case LARGE_SHIELD:
+			/* Dragon shield - depends on the order of objects */
+			/*		 & dragons.			 */
+			if (mntmp >= PM_GRAY_DRAGON &&
+						mntmp <= PM_YELLOW_DRAGON)
+			    otmp->otyp = GRAY_DRAGON_SCALE_SHIELD +
 						    mntmp - PM_GRAY_DRAGON;
 			break;
 		}

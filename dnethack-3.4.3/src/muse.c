@@ -2253,10 +2253,12 @@ const char *str;
 {
 	struct obj *orefl = which_armor(mon, W_ARMS);
 
-	if (orefl && orefl->otyp == SHIELD_OF_REFLECTION) {
+	if (orefl &&
+		(orefl->otyp == SHIELD_OF_REFLECTION ||
+		 orefl->otyp == SILVER_DRAGON_SCALE_SHIELD)) {
 	    if (str) {
 		pline(str, s_suffix(mon_nam(mon)), "shield");
-		makeknown(SHIELD_OF_REFLECTION);
+		makeknown(orefl->otyp);
 	    }
 	    return TRUE;
 	} else if (arti_reflects(MON_WEP(mon))) {

@@ -986,6 +986,8 @@ struct monst *mon;
 		if(armpro < cpro) armpro = cpro;
 	}
 	armor = (mon == &youmonst) ? uarmh : which_armor(mon, W_ARMH);
+	if(mon == &youmonst && !uarmc && 
+		uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
 
@@ -1003,8 +1005,9 @@ struct monst *mon;
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
 	armor = (mon == &youmonst) ? uarms : which_armor(mon, W_ARMS);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
+	if (armor && armpro < 3){
+	    armpro = min(3, armpro+objects[armor->otyp].a_can);
+	}
 
 #ifdef STEED
 	/* this one is really a stretch... */
@@ -1012,8 +1015,6 @@ struct monst *mon;
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
 #endif
-	if(mon == &youmonst && !uarmc && 
-		uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
 
 	return armpro;
 }

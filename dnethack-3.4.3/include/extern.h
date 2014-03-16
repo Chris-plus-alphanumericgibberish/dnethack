@@ -1675,7 +1675,7 @@ E void NDECL(change_sex);
 E void FDECL(polyself, (BOOLEAN_P));
 E int FDECL(polymon, (int));
 E void NDECL(rehumanize);
-E int NDECL(dobreathe);
+E int FDECL(dobreathe, (struct permonst *));
 E int NDECL(dospit);
 E int NDECL(doremove);
 E int NDECL(dospinweb);

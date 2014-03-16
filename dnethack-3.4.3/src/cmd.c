@@ -452,8 +452,20 @@ extcmd_via_menu()	/* here after # - now show pick-list of possible commands */
 STATIC_PTR int
 domonability(VOID_ARGS)
 {
-	if (can_breathe(youmonst.data)) return dobreathe();
-	else if (attacktype(youmonst.data, AT_SPIT)) return dospit();
+	if (can_breathe(youmonst.data)) return dobreathe(youmonst.data);
+	else if(uarm && uarms && 
+			Is_dragon_armor(uarm) && Is_dragon_shield(uarms) && 
+			Have_same_dragon_armor_and_shield &&
+			uarm->age < monstermoves && uarms->age < monstermoves &&
+			yn("Use dragonbreath?") == 'y'
+	){
+		int res;
+		if(res = dobreathe(Dragon_shield_to_pm(uarms))){
+			uarm->age = monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
+			uarms->age= monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
+		}
+		return res;
+	} else if (attacktype(youmonst.data, AT_SPIT)) return dospit();
 	else if (attacktype(youmonst.data, AT_MAGC))
 	    return castum((struct monst *)0,
 	                   &youmonst.data->mattk[attackindex(youmonst.data, 
