@@ -4,6 +4,7 @@
 
 #include "hack.h"
 #include "epri.h"
+#include "artifact.h"
 
 STATIC_PTR int NDECL(prayer_done);
 STATIC_DCL struct obj *NDECL(worst_cursed_item);
@@ -661,11 +662,17 @@ gcrownu()
 		in_hand = (uwep && uwep->oartifact == ART_REAVER);
 		already_exists = exist_artifact(SCIMITAR, artiname(ART_REAVER));
 		verbalize("Hurrah for our Pirate King!");
-	}
-	else {
+	} else {
     switch (u.ualign.type) {
     case A_LAWFUL:
 	u.uevent.uhand_of_elbereth = 1;
+	if(Role_if(PM_MONK)){
+		in_hand = FALSE;
+		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
+	} else if(Role_if(PM_WIZARD)){
+		in_hand = FALSE;
+		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+	}
 #ifdef ELBERETH
 	verbalize("I crown thee...  The Hand of Elbereth!");
 #else
@@ -674,14 +681,30 @@ gcrownu()
 	break;
     case A_NEUTRAL:
 	u.uevent.uhand_of_elbereth = 2;
+	if(Role_if(PM_MONK)){
+		in_hand = FALSE;
+		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
+	} else if(Role_if(PM_WIZARD)){
+		in_hand = FALSE;
+		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+	} else {
 	in_hand = (uwep && uwep->oartifact == ART_VORPAL_BLADE);
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_VORPAL_BLADE));
+	}
 	verbalize("Thou shalt be my Envoy of Balance!");
 	break;
     case A_CHAOTIC:
 	u.uevent.uhand_of_elbereth = 3;
+	if(Role_if(PM_MONK)){
+		in_hand = FALSE;
+		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
+	} else if(Role_if(PM_WIZARD)){
+		in_hand = FALSE;
+		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+	} else {
 	in_hand = (uwep && uwep->oartifact == ART_STORMBRINGER);
 	already_exists = exist_artifact(RUNESWORD, artiname(ART_STORMBRINGER));
+	}
 	verbalize("Thou art chosen to %s for My Glory!",
 		  already_exists && !in_hand ? "take lives" : "steal souls");
 	break;
@@ -691,34 +714,43 @@ gcrownu()
     class_gift = STRANGE_OBJECT;
     /* 3.3.[01] had this in the A_NEUTRAL case below,
        preventing chaotic wizards from receiving a spellbook */
-    if (Role_if(PM_WIZARD) &&
-	    (!uwep || (uwep->oartifact != ART_VORPAL_BLADE &&
-		       uwep->oartifact != ART_STORMBRINGER)) &&
-	    !carrying(SPE_FINGER_OF_DEATH)) {
-	class_gift = SPE_FINGER_OF_DEATH;
- make_splbk:
-	obj = mksobj(class_gift, TRUE, FALSE);
-	bless(obj);
-	obj->bknown = TRUE;
+    if (Role_if(PM_WIZARD)) {
+		if(!already_exists){
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above for some reason */
+			} else if (!already_exists) {
+				obj = mksobj(SPE_SECRETS, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_NECRONOMICON));
+				obj->spe = 1;
 	at_your_feet("A spellbook");
 	dropy(obj);
 	u.ugifts++;
-	/* when getting a new book for known spell, enhance
-	   currently wielded weapon rather than the book */
-	for (sp_no = 0; sp_no < MAXSPELL; sp_no++)
-	    if (spl_book[sp_no].sp_id == class_gift) {
-		if (ok_wep(uwep)) obj = uwep;	/* to be blessed,&c */
-		break;
 	    }
-    } else if (Role_if(PM_MONK) &&
-	    (!uwep || !uwep->oartifact) &&
-	    !carrying(SPE_RESTORE_ABILITY)) {
-	/* monks rarely wield a weapon */
-	class_gift = SPE_RESTORE_ABILITY;
-	goto make_splbk;
+			if (obj && obj->oartifact == ART_NECRONOMICON){
+				obj->ovar1 |= SP_DEATH;
+				discover_artifact(ART_NECRONOMICON);
     }
+		}
+		else{
+			for(obj = invent; obj; obj=obj->nobj)
+				if(obj->oartifact == ART_NECRONOMICON) 
+					obj->ovar1 |= SP_DEATH;
 
-	if( Role_if(PM_PIRATE) ){
+		}
+	} else if (Role_if(PM_MONK)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			obj = mksobj(ROBE, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_GRANDMASTER_S_ROBE));
+			obj->spe = 1;
+			at_your_feet("A robe");
+			dropy(obj);
+			u.ugifts++;
+		}
+		if (obj && obj->oartifact == ART_GRANDMASTER_S_ROBE)
+			discover_artifact(ART_GRANDMASTER_S_ROBE);
+    } else if( Role_if(PM_PIRATE) ){
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */
 		} else if (in_hand) {
@@ -737,8 +769,7 @@ gcrownu()
 		unrestrict_weapon_skill(P_SCIMITAR);
 		if (obj && obj->oartifact == ART_REAVER)
 			discover_artifact(ART_REAVER);
-	}
-	else {
+	} else {
     switch (u.ualign.type) {
     case A_LAWFUL:
 	if (class_gift != STRANGE_OBJECT) {
@@ -1139,7 +1170,7 @@ consume_offering(otmp)
 register struct obj *otmp;
 {
     if (Hallucination)
-	switch (rn2(23)) {
+	switch (rn2(24)) {
 	    case 0:
 		Your("sacrifice sprouts wings and a propeller and roars away!");
 		break;
@@ -1208,6 +1239,10 @@ register struct obj *otmp;
 		break;
 	    case 22:
 		Your("sacrifice is vanishes in a dash at night!");
+	    case 23:
+		u.ualign.type == A_LAWFUL ?
+			Your("sacrifice is consumed in a flash of %s light!", hcolor(0)):
+			Your("sacrifice is consumed in a burst of %s flame!", hcolor(0));
 		break;
 	}
     else if (Blind && u.ualign.type == A_LAWFUL)
@@ -1452,6 +1487,11 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		if(u.ualignbase[A_CURRENT] == u.ualignbase[A_ORIGINAL] &&
 		   altaralign != A_NONE) {
 		    You("have a strong feeling that %s is angry...", u_gname());
+			if(otmp->otyp == CORPSE && is_rider(&mons[otmp->corpsenm])){
+				pline("A pulse of darkness radiates from your sacrifice!");
+				angrygods(altaralign);
+				return 1;
+			} 
 		    consume_offering(otmp);
 		    pline("%s accepts your allegiance.", a_gname());
 
@@ -1479,6 +1519,11 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		}
 		return(1);
 	    } else {
+		if(otmp->otyp == CORPSE && is_rider(&mons[otmp->corpsenm])){
+			pline("A pulse of darkness radiates from your sacrifice!");
+			angrygods(altaralign);
+			return 1;
+		}
 		consume_offering(otmp);
 		You("sense a conflict between %s and %s.",
 		    u_gname(), a_gname());
@@ -1518,6 +1563,11 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    }
 	}
 
+	if(otmp->otyp == CORPSE && is_rider(&mons[otmp->corpsenm])){
+		pline("A pulse of darkness radiates from your sacrifice!");
+		angrygods(altaralign);
+		return 1;
+	} 
 	consume_offering(otmp);
 	/*if(altaralign == A_UNKNOWN) return(1);*/
 	/* OK, you get brownie points. */
@@ -2033,7 +2083,7 @@ aligntyp alignment;
 
     if (!Hallucination) return align_gname(alignment);
 
-    which = randrole();
+    which = randrole(0);
     switch (rn2(3)) {
      case 0:	gnam = roles[which].lgod; break;
      case 1:	gnam = roles[which].ngod; break;

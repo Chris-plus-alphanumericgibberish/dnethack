@@ -117,6 +117,9 @@ hack_artifacts()
 	if(Role_if(PM_NOBLEMAN) && Race_if(PM_VAMPIRE)){
 		urole.questarti = ART_VESTMENT_OF_HELL;
 	}
+	if (Role_if(PM_MONK)) {
+	    artilist[ART_GRANDMASTER_S_ROBE].alignment = alignmnt;
+	}
 	if (urole.questarti) {
 	    artilist[urole.questarti].alignment = alignmnt;
 	    artilist[urole.questarti].role = Role_switch;
