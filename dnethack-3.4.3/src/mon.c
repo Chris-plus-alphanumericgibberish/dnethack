@@ -634,7 +634,7 @@ struct monst *mon;
 	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH])
 		mmove += u.chokhmah;
 	if(mon->data == &mons[PM_PYTHON] && 
-		dist2(mon->mx, mon->my, mon->mux, mon->muy) <= 2)
+		dist2(mon->mx, mon->my, mon->mux, mon->muy) <= 8)
 		mmove *= 4;
 	if(mon->data == &mons[PM_BANDERSNATCH] && mon->mflee)
 		mmove += 12;

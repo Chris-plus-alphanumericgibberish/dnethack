@@ -588,7 +588,7 @@ const char * haluWard[] =  {
 };
 
 //There is a seal of ? inscribed here.
-const char * sealNames[] =  {
+char * sealNames[] =  {
 	"Ahazu", /* 0 */
 	"Amon", /* 1 */
 	"Andrealphus", /* 2 */

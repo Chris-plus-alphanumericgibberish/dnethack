@@ -1128,8 +1128,20 @@ register struct obj *obj;
 {
 	int wt = objects[obj->otyp].oc_weight;
 	if(obj->oartifact == ART_ROD_OF_LORDLY_MIGHT) wt = objects[MACE].oc_weight;
-	if(obj->oartifact == ART_EARTH_CRYSTAL){
-		wt *= 2; //300
+	else if(obj->oartifact == ART_EARTH_CRYSTAL){
+		wt = 80;
+	}
+	else if(obj->oartifact == ART_WATER_CRYSTAL){
+		wt = 40;
+	}
+	else if(obj->oartifact == ART_FIRE_CRYSTAL){
+		wt = 20;
+	}
+	else if(obj->oartifact == ART_AIR_CRYSTAL){
+		wt = 20;
+	}
+	else if(obj->oartifact == ART_BLACK_CRYSTAL){
+		wt = 40; //200 total
 	}
 	else if(obj->oartifact == ART_DRAGON_PLATE){
 		wt =  (int)(wt * 1.5); //225

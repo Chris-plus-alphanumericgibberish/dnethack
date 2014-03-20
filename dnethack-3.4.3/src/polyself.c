@@ -580,6 +580,10 @@ int	mntmp;
 	    if (attacktype(youmonst.data, AT_MAGC))
 		pline(use_thec,monsterc,"cast monster spells");
 #endif /* YOUMONST_SPELL */
+	    if (is_drow(youmonst.data))
+		pline(use_thec,monsterc,"invoke darkness");
+	    if (uclockwork)
+		pline(use_thec,monsterc,"adjust your clockspeed");
 	    if (can_breathe(youmonst.data))
 		pline(use_thec,monsterc,"use your breath weapon");
 	    if (attacktype(youmonst.data, AT_SPIT))

@@ -470,6 +470,8 @@ struct you {
 	long	tenebrous;
 #define SEAL_YMIR					0x40000000L
 	long	ymir;
+//Special flag for lookup tables, indicating that it is a quest spirit and should be treated as such
+#define SEAL_SPECIAL				0x80000000L
 
 //The remaining seals (Dahlver-Nar, Acererak, and the Numina) can't be learned in any way other than binder class features
 #define SEAL_DAHLVER_NAR			0x0000001L
@@ -503,9 +505,10 @@ struct you {
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
 
-extern long sealKey[31]; /*Defined in */
+extern long sealKey[34]; /*Defined in u_init.c*/
 extern char *wardDecode[26]; /*Defined in spell.c*/
 extern int wardMax[16]; /*Defined in engrave.c*/
+extern char *sealNames[34]; /*Defined in engrave.c*/
 extern char *andromaliusItems[18]; /*Defined in */
 #define Upolyd (u.umonnum != u.umonster)
 

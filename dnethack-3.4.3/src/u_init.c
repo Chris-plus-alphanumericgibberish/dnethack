@@ -58,11 +58,11 @@ static struct trobj Binder[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 //definition of an extern in you.h
-long sealKey[31] = {SEAL_AHAZU, SEAL_AMON, SEAL_ANDREALPHUS, SEAL_ANDROMALIUS, SEAL_ASTAROTH, SEAL_BALAM, 
+long sealKey[34] = {SEAL_AHAZU, SEAL_AMON, SEAL_ANDREALPHUS, SEAL_ANDROMALIUS, SEAL_ASTAROTH, SEAL_BALAM, 
 				 SEAL_BERITH, SEAL_BUER, SEAL_CHUPOCLOPS, SEAL_DANTALION, SEAL_SHIRO, SEAL_ECHIDNA, SEAL_EDEN,
 				 SEAL_ERIDU, SEAL_EURYNOME, SEAL_EVE, SEAL_FAFNIR, SEAL_HUGINN_MUNINN, SEAL_IRIS, SEAL_JACK,
 				 SEAL_MALPHAS, SEAL_MARIONETTE, SEAL_MOTHER, SEAL_NABERIUS, SEAL_ORTHOS, SEAL_OSE, SEAL_OTIAX,
-				 SEAL_PAIMON, SEAL_SIMURGH, SEAL_TENEBROUS, SEAL_YMIR
+				 SEAL_PAIMON, SEAL_SIMURGH, SEAL_TENEBROUS, SEAL_YMIR, SEAL_SPECIAL|SEAL_DAHLVER_NAR, SEAL_SPECIAL|SEAL_ACERERAK, SEAL_SPECIAL|SEAL_NUMINA
 				};
 static struct trobj Cave_man[] = {
 #define C_AMMO	2
@@ -1296,7 +1296,7 @@ u_init()
 				u.wardsknown |= WARD_TOUSTEFNA;
 				otmp = mksobj(CLUB, TRUE, FALSE);
 				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 				otmp->ovar1 = WARD_TOUSTEFNA;
 				addinv(otmp);
 			break;
@@ -1304,7 +1304,7 @@ u_init()
 				u.wardsknown |= WARD_DREPRUN;
 				otmp = mksobj(CLUB, TRUE, FALSE);
 				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 				otmp->ovar1 = WARD_DREPRUN;
 				addinv(otmp);
 			break;
@@ -1312,7 +1312,7 @@ u_init()
 				u.wardsknown |= WARD_VEIOISTAFUR;
 				otmp = mksobj(CLUB, TRUE, FALSE);
 				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 				otmp->ovar1 = WARD_VEIOISTAFUR;
 				addinv(otmp);
 			break;
@@ -1320,7 +1320,7 @@ u_init()
 				u.wardsknown |= WARD_THJOFASTAFUR;
 				otmp = mksobj(CLUB, TRUE, FALSE);
 				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = 0;
+				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 				otmp->ovar1 = WARD_THJOFASTAFUR;
 				addinv(otmp);
 			break;
@@ -1819,10 +1819,10 @@ register struct trobj *trop;
 		} else {
 #endif
 			if(Role_if(PM_EXILE)){
-				obj->dknown = obj->rknown = 1;
+				obj->dknown = obj->rknown = obj->sknown = 1;
 				if(obj->oclass == WEAPON_CLASS) obj->oeroded = 1;
 			}else{
-			obj->dknown = obj->bknown = obj->rknown = 1;
+				obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
 			if (objects[otyp].oc_uses_known) obj->known = 1;
 			}
 			obj->cursed = 0;

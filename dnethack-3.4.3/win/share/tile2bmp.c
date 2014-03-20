@@ -37,7 +37,7 @@ extern char *FDECL(tilename, (int, int));
 #define MAX_Y 960
 # else
 #define MAX_X 640		/* 1 per byte, 8 bits per pixel */
-#define MAX_Y 512		/* Was 480, increased by 32 (two rows) */
+#define MAX_Y 544		/* Was 480, increased by 64 (four rows) */
 # endif
 #endif	
 
