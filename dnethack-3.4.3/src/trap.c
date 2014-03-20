@@ -3433,9 +3433,10 @@ struct trap *ttmp;
 		return 0;
 	} //else
 	You("drain the trap's magical energy!");
-	lesshungry(50);
+	u.uconduct.food++;
 	deltrap(ttmp);
 	newsym(trapx, trapy);
+	lesshungry(50);
 	return 1;
 }
 

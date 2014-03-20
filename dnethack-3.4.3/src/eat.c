@@ -1427,6 +1427,7 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 		goto use_me;
 	    }
 		if(Race_if(PM_INCANTIFIER)){
+			u.uconduct.food++;
 			You("drain energy from %s %s.", tintxts[r].txt,
 				mons[tin.tin->corpsenm].mname);
 			cprefx(tin.tin->corpsenm, TRUE);
@@ -2460,12 +2461,14 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		}
 		switch(otmp->oclass){
 			case WEAPON_CLASS:
+				u.uconduct.food++;
 				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
 			break;
 			case RING_CLASS:
 				if(otmp->oartifact) break; //redundant check
+				u.uconduct.food++;
 				pline("The %s turns to dust as you drain it dry.", xname(otmp));
 				eataccessory(otmp);
 				if (otmp == uwep && otmp->quan == 1L) uwepgone();
@@ -2478,6 +2481,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 			break;
 			case AMULET_CLASS:
 				if(otmp->oartifact || objects[otmp->otyp].oc_unique) break; //redundant check
+				u.uconduct.food++;
 				pline("The %s crumbles to dust as you drain it dry.", xname(otmp));
 				eataccessory(otmp);
 				if (otmp == uwep && otmp->quan == 1L) uwepgone();
@@ -2489,17 +2493,20 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				lesshungry(50);
 			break;
 			case ARMOR_CLASS:
+				u.uconduct.food++;
 				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
 			break;
 			case TOOL_CLASS:
+				u.uconduct.food++;
 				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
 			break;
 			case SCROLL_CLASS:
 				if(otmp->oartifact) break; //redundant check
+				u.uconduct.food++;
 				You("drain the ink from the %s.", xname(otmp));
 				costly_cancel(otmp);
 	    	    otmp->otyp = SCR_BLANK_PAPER;
@@ -2507,6 +2514,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 			break;
 			case SPBOOK_CLASS:
 				if(otmp->oartifact) break; //redundant check
+				u.uconduct.food++;
 				You("drain the magic from the %s.", xname(otmp));
 				otmp->spestudied++;
 				costly_cancel(otmp);
@@ -2514,6 +2522,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				lesshungry(50);
 			break;
 			case WAND_CLASS:
+				u.uconduct.food++;
 				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
 				if(!otmp->spe) otmp->otyp = WAN_NOTHING;
@@ -2521,6 +2530,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 			break;
 			case FOOD_CLASS:
 				if(otmp->otyp == CORPSE){
+					u.uconduct.food++;
 					You("drain the %s.", xname(otmp));
 					cprefx(otmp->corpsenm, TRUE);
 					cpostfx(otmp->corpsenm, FALSE);
