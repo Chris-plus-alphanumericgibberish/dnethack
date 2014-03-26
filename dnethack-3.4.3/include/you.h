@@ -349,6 +349,7 @@ struct you {
 	schar	uacinc;			/* bonus AC (not spell/divine) */
 	schar	uac;
 	uchar	uspellprot;		/* protection by SPE_PROTECTION */
+	uchar	udrunken;		/* drunkeness level */
 	uchar	usptime;		/* #moves until uspellprot-- */
 	uchar	uspmtime;		/* #moves between uspellprot-- */
 	int	uhp,uhpmax;

@@ -1745,6 +1745,7 @@ find_ac()
 	if(Role_if(PM_MONK) && !uarm){
 		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
 		dexbonus += max((int)( (ACURR(A_WIS)-1)/2 - 5 ),0) + (int)(u.ulevel/6 + 1);
+		if(Confusion && u.udrunken>u.ulevel) dexbonus += u.udrunken/9+1;
 	}
 	/*Corsets suck*/
 	if(uarmu && uarmu->otyp == VICTORIAN_UNDERWEAR){
