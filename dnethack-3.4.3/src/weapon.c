@@ -384,7 +384,9 @@ struct monst *mon;
 		   it will hit with essentially the same impact, but
 		   there ought to some penalty for using damaged gear
 		   so always subtract erosion even for blunt weapons. */
-		tmp -= greatest_erosion(otmp);
+		/* Rust weapons may now shatter when used, so don't subtract
+		   damage for blunt anymore */
+		if(!is_bludgeon(otmp)) tmp -= greatest_erosion(otmp);
 		if (tmp < 1) tmp = 1;
 	}
 
