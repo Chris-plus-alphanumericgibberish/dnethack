@@ -1284,9 +1284,35 @@ defaultvalue:
 	    hittxt = TRUE;
 	} else
 #endif
+	if(obj && is_bludgeon(obj) && (obj->oeroded || obj->oeroded2)){
+		int breakmod = is_wood(obj) ? 1 : 0;
+		boolean breakwep = FALSE;
+		switch(greatest_erosion(obj)+breakmod){
+			case 1:
+				//Will not break
+			break;
+			case 2:
+				if(!rn2(1000)) breakwep = TRUE;
+			break;
+			case 3:
+				if(!rn2(100)) breakwep = TRUE;
+			break;
+			case 4: //Ie, an errode 3 wooded weapon
+				if(!rn2(10)) breakwep = TRUE;
+			break;
+		}
+		if(breakwep){
+					boolean more_than_1 = (obj->quan > 1L);
 
-	/* VERY small chance of stunning opponent if unarmed. */
-	if (unarmed && tmp > 1 && !thrown && !obj && !Upolyd) {
+					pline("As you hit %s, %s%s %s breaks and is ruined!",
+						  mon_nam(mon), more_than_1 ? "one of " : "",
+						  shk_your(yourbuf, obj), xname(obj));
+					if (!more_than_1) uwepgone();	/* set unweapon */
+					useup(obj);
+					if (!more_than_1) obj = (struct obj *) 0;
+					hittxt = TRUE;
+				}
+	} else if (unarmed && tmp > 1 && !thrown && !obj && !Upolyd) { 	/* VERY small chance of stunning opponent if unarmed. */
 	    if (!bigmonst(mdat) && !thick_skinned(mdat)) {
 			if((uarmg && uarmg->oartifact == ART_PREMIUM_HEART && rnd(20) < P_SKILL(P_BARE_HANDED_COMBAT)) || 
 				rnd(100) < P_SKILL(P_BARE_HANDED_COMBAT)){
