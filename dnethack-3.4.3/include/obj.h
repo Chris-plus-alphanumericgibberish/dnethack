@@ -214,6 +214,15 @@ struct obj {
 #define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			objects[otmp->otyp].oc_dir != WHACK)
 #define uslinging()	(uwep && objects[uwep->otyp].oc_skill == P_SLING)
+#define is_bludgeon(otmp)	(otmp->oclass == SPBOOK_CLASS || \
+			otmp->oclass == WAND_CLASS || \
+			objects[otmp->otyp].oc_dir == WHACK) //Whack == 0
+#define is_stabbing(otmp)	(otmp->oclass != SPBOOK_CLASS && \
+			otmp->oclass != WAND_CLASS && \
+			objects[otmp->otyp].oc_dir | PIERCE) //Pierce == 1
+#define is_slashing(otmp)	(otmp->oclass != SPBOOK_CLASS && \
+			otmp->oclass != WAND_CLASS && \
+			objects[otmp->otyp].oc_dir | SLASH) //Pierce == 2
 
 /* Armor */
 #define is_shield(otmp) (otmp->oclass == ARMOR_CLASS && \
@@ -372,8 +381,10 @@ struct obj {
 				)
 #define is_chupodible(otmp) (your_race(&mons[otmp->corpsenm]))
 
-/* misc */
+/* material */
 #define is_flimsy(otmp)		(objects[(otmp)->otyp].oc_material <= LEATHER)
+#define is_wood(otmp)		(objects[(otmp)->otyp].oc_material == WOOD)
+/* misc */
 #define is_boulder(otmp)		((otmp)->otyp == BOULDER || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
 
 /* helpers, simple enough to be macros */
