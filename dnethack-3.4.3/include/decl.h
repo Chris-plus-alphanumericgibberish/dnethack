@@ -85,10 +85,13 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_abyss_level;
 	int		abyss_variant;
 #define JUIBLEX_LEVEL	1
+#define JUIBLEX_RES		1
 #define ZUGGTMOY_LEVEL	2
+#define ZUGGTMOY_RES	2
 #define YEENOGHU_LEVEL	3
 #define BAPHOMET_LEVEL	4
 #define NIGHT_LEVEL		5
+#define NIGHT_RES		3
     d_level	d_abys2_level;
 	int		abys2_variant;
 #define ORCUS_LEVEL		1

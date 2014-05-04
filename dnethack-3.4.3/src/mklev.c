@@ -603,10 +603,14 @@ clear_level_structures()
 	level.flags.is_cavernous_lev = 0;
 	level.flags.lethe = 0;
 
+	/* Not currently used */
 	level.flags.slime = 0;
 	level.flags.fungi = 0;
 	level.flags.dun = 0;
 	level.flags.necro = 0;
+	
+	level.flags.cave = 0;
+	level.flags.outside = 0;
 
 	nroom = 0;
 	rooms[0].hx = -1;

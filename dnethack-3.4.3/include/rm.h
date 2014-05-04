@@ -483,10 +483,13 @@ struct levelflags {
 	Bitfield(arboreal, 1);		/* Trees replace rock */
 	Bitfield(lethe, 1);			/* All water on level causes amnesia */
 	
+	/* Not currently used */
 	Bitfield(slime, 1);			/* corpses on level become slimes */
 	Bitfield(fungi, 1);			/* corpses on level become fungi */
 	Bitfield(dun, 1);			/* level is the dun savana */
 	Bitfield(necro, 1);			/* corpses on level rise as undead */
+	/* End not currently used */
+	
 	Bitfield(cave, 1);			/* level is a cave */
 	Bitfield(outside, 1);			/* level is outside */
 };

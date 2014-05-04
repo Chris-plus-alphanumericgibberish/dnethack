@@ -11,12 +11,14 @@ typedef struct d_flags {	/* dungeon/level type flags */
 	Bitfield(maze_like, 1); /* is this a maze? */
 	Bitfield(rogue_like, 1); /* is this an old-fashioned presentation? */
 	Bitfield(align, 3);	/* dungeon alignment. */
+	Bitfield(raise, 3);	/* corpse resurection type (current max 8) */
 	Bitfield(unused, 1);	/* etc... */
 } d_flags;
 
 typedef struct d_level {	/* basic dungeon level element */
 	xchar	dnum;		/* dungeon number */
 	xchar	dlevel;		/* level number */
+	d_flags flags;		/* type flags */
 } d_level;
 
 typedef struct s_level {	/* special dungeon level element */
