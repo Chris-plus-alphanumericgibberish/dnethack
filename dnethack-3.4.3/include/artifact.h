@@ -56,13 +56,15 @@
 
 #define SPFX2_BLDTHRST	0x0010000L	/* bloodthirsty weapon (primary wielded only) */
 #define SPFX2_BRIGHT	0x0020000L	/* turns trolls to stone, dusts gremlins */
-
+#define SPFX2_STEAL		0x0040000L  /* steals stuff */
 #define SPFX2_DANCER	0x0080000L	/* extra movement points for attacking */
 #define SPFX2_SILVERED	0x0100000L	/* weapon is silvered  */
 #define SPFX2_STLTH		0x0200000L	/* gives stealth when wielded or worn */
 #define SPFX2_SHATTER	0x0400000L	/* breaks opponents weapons */
 #define SPFX2_DISARM	0x0800000L	/* disarms opponents */
 #define SPFX2_SPELLUP	0x1000000L	/* increases spell power */
+#define SPFX2_TENTROD	0x2000000L	/* various effects */
+#define SPFX2_SHINING	0x4000000L	/* passes through armor */
 
 #define SPFX3_ENGRV		0x0000001L	/* Allows fast engraving (as for Athame) */
 #define SPFX3_PCTRL		0x0000002L	/* grants polymorph control (caried or wielded) */
@@ -79,7 +81,6 @@
 ///////////////////
 //To be implemented
 #define SPFX2_NINJA		0x0000008L	/* throws from 1-your skill level ninja stars after each attack */
-#define SPFX2_STEAL		0x0040000L  /* steals stuff */
 #define SPFX3_CARCAP	0x0000020L	/* increases carrying capacity when carried */
 
 

@@ -438,6 +438,27 @@ struct obj *obj;
 }
 
 boolean
+arti_steal(obj)
+struct obj *obj;
+{
+    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_STEAL));
+}
+
+boolean
+arti_tentRod(obj)
+struct obj *obj;
+{
+    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_TENTROD));
+}
+
+boolean
+arti_shining(obj)
+struct obj *obj;
+{
+    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_SHINING));
+}
+
+boolean
 arti_mandala(obj)
 struct obj *obj;
 {
@@ -1543,13 +1564,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				return TRUE;
 		}
 	}
-
-	if (!spec_dbon_applies) {
-	    /* since damage bonus didn't apply, nothing more to do;  
-	       no further attacks have side-effects on inventory */
-	    return FALSE;
-	}
-	if(otmp->oartifact == ART_REAVER){
+	if(arti_steal(otmp)){
 	 if(youattack){
 	  if(mdef->minvent && (Role_if(PM_PIRATE) || !rn2(10) ) ){
 		struct obj *otmp2, **minvent_ptr;
@@ -1582,7 +1597,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			}
 			}
 			/* Ask the player if they want to keep the object */
-			pline("Reaver sweaps %s away from %s", doname(otmp2), mon_nam(mdef));
+			pline("Your blade sweaps %s away from %s", doname(otmp2), mon_nam(mdef));
 			if(yn("Do you try to grab it for yourself?") == 'y'){
 			/* give the object to the character */
 			otmp2 = Role_if(PM_PIRATE) ? 
@@ -1901,6 +1916,104 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	    }
 	}
+	if(arti_tentRod(otmp) && !youdefend){
+		int extrahits = rn2(7);
+		int monAC, extrahit=0;
+		while(extrahits--){
+			monAC = find_roll_to_hit(mdef)-2*extrahits-2;
+			if(u.uswallow || monAC > rnd(20)){
+				*dmgptr += dmgval(otmp, mdef);
+				extrahit++;
+			}
+		}
+		if(extrahit >= 2){
+			switch(rn2(3)){
+			case 0:
+				mdef->mcansee = 0;
+				mdef->mblinded = d(3,3);
+			break;
+			case 1:
+				mdef->mstun = 1;
+			break;
+			case 2:
+				mdef->mconf = 1;
+			break;
+			}
+		}
+		if(extrahit >= 6){
+			switch(rn2(3)){
+			case 0:
+				mdef->mspeed = MSLOW;
+				mdef->permspeed = MSLOW;
+			break;
+			case 1:
+				mdef->mcanmove = 0;
+				mdef->mfrozen = d(1,6);
+			break;
+			case 2:
+				mdef->mcrazed = 1;
+			break;
+			}
+		}
+		if(extrahit == 7){
+			if(!resists_fire(mdef)) *dmgptr += d(1, 7);
+			if(!resists_cold(mdef)) *dmgptr += d(1, 7);
+			if(!resists_elec(mdef)) *dmgptr += d(1, 7);
+			if(!resists_acid(mdef)) *dmgptr += d(1, 7);
+			if(!resists_magm(mdef)) *dmgptr += d(1, 7);
+			if(!resists_poison(mdef)) *dmgptr += d(1, 7);
+			if(!resists_drli(mdef)) *dmgptr += d(1, 7);
+		}
+	} else if(arti_tentRod(otmp) && youdefend){
+		int extrahits = rn2(7);
+		int extrahit = 0;
+		while(extrahits--){
+			if(u.uswallow || u.uac > rnd(20)){
+				*dmgptr += dmgval(otmp, mdef);
+				extrahit++;
+			}
+		}
+		if(extrahit >= 2){
+			switch(rn2(3)){
+			case 0:
+				make_blinded(Blinded+d(3,3), FALSE);
+			break;
+			case 1:
+				make_stunned((HStun)+d(3,3),FALSE);
+			break;
+			case 2:
+				make_confused(HConfusion+d(3,3),FALSE);
+			break;
+			}
+		}
+		if(extrahit >= 6){
+			switch(rn2(3)){
+			case 0:
+				u_slow_down();
+			break;
+			case 1:
+				nomul(-1*d(3,3), "paralyzed by the Tentacle Rod.");
+			break;
+			case 2:
+				make_confused(10000,FALSE); //very large value representing insanity
+			break;
+			}
+		}
+		if(extrahit == 7){
+			if(!Fire_resistance) *dmgptr += d(1, 7);
+			if(!Cold_resistance) *dmgptr += d(1, 7);
+			if(!Shock_resistance) *dmgptr += d(1, 7);
+			if(!Acid_resistance) *dmgptr += d(1, 7);
+			if(!Antimagic) *dmgptr += d(1, 7);
+			if(!Poison_resistance) *dmgptr += d(1, 7);
+			if(!Drain_resistance) *dmgptr += d(1, 7);
+		}
+	}
+	if (!spec_dbon_applies) {
+	    /* since damage bonus didn't apply, nothing more to do;  
+	       no further attacks have side-effects on inventory */
+	    return FALSE;
+	}
 	if (spec_ability(otmp, SPFX_DRLI)) {
 		if (!youdefend) {
 			if (vis) {
@@ -2152,7 +2265,9 @@ arti_invoke(obj)
 	    struct obj *otmp;
 		if(obj->oartifact == ART_LONGBOW_OF_DIANA) otmp = mksobj(ARROW, TRUE, FALSE);
 		else if(obj->oartifact == ART_FUMA_ITTO_NO_KEN) otmp = mksobj(SHURIKEN, TRUE, FALSE);
+		else if(obj->oartifact == ART_SILVER_STARLIGHT) otmp = mksobj(SHURIKEN, TRUE, FALSE);
 		else if(obj->oartifact == ART_YOICHI_NO_YUMI) otmp = mksobj(YA, TRUE, FALSE);
+		else if(obj->oartifact == ART_WRATHFUL_SPIDER) otmp = mksobj(DROVEN_BOLT, TRUE, FALSE);
 
 	    if (!otmp) goto nothing_special;
 	    otmp->blessed = obj->blessed;

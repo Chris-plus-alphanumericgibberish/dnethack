@@ -59,7 +59,7 @@ A("Stormbringer",		RUNESWORD,
 A("Reaver",			SCIMITAR,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,0,
 	PHYS(5,8),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_PIRATE, NON_PM, 6000L,
-	0, 0, 0 ),
+	SPFX2_STEAL, 0, 0 ),
 /*
  *	Two problems:  1) doesn't let trolls regenerate heads,
  *	2) doesn't give unusual message for 2-headed monsters (but
@@ -270,7 +270,7 @@ A("Sunsword",			LONG_SWORD,
 	(SPFX_RESTR|SPFX_DFLAG2|SPFX_SEARCH|SPFX_ATTK|SPFX_BEHEAD), 0, (M2_UNDEAD|M2_DEMON),
 	PHYS(1,0),	DFNS(AD_BLND),	NO_CARY,	/*also petrifies trolls, making this weapon strictly better than*/
 	0, A_LAWFUL, NON_PM, NON_PM, 1500L, 	/*trollsbane.  But trollsbane can be twoweaponed.  And is silver.*/
-	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,0,0), 
+	SPFX2_SHINING|SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,0,0), 
 
 A("The Axe of the Dwarvish Lords", BATTLE_AXE, /*can be thrown by dwarves*/
 	(SPFX_RESTR|SPFX_TCTRL|SPFX_XRAY), 0, 0,	/*x-ray vision is for dwarves only.*/
@@ -665,13 +665,47 @@ A("The Iron Ball of Liberation", HEAVY_IRON_BALL,
 	SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
 #endif	/* CONVICT */
 
-#if 0	/* OBSOLETE */
-A("The Palantir of Westernesse",	CRYSTAL_BALL,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),
-		(SPFX_ESP|SPFX_REGEN|SPFX_HSPDAM), 0,
+A("Silver Starlight",		RAPIER,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(4,4),	NO_DFNS,	NO_CARY,
+	CREATE_AMMO, A_NONE, NON_PM, PM_DROW, 5000L,
+	SPFX2_SILVERED|SPFX2_SHINING,0,0),
+
+A("Wrathful Spider",		DROVEN_CROSSBOW,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(1,0),	NO_DFNS,	NO_CARY,
+	CREATE_AMMO, A_CHAOTIC, NON_PM, PM_DROW, 5000L,
+	SPFX2_STLTH,0,0),
+
+A("Tentacle Rod",		FLAIL,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(6,1),	NO_DFNS,	NO_CARY,
+	0, A_NONE, NON_PM, PM_DROW, 5000L,
+	SPFX2_TENTROD,0,0),
+
+A("Crescent Blade",		SILVER_SABER,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_BEHEAD), SPFX_REFLECT, 0,
+	FIRE(4,0),	NO_DFNS,	NO_CARY,
+	0, A_LAWFUL, NON_PM, PM_DROW, 5000L,
+	SPFX2_SHINING,0,0),
+
+A("Darkweaver's Cloak",	DROVEN_CLOAK,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY, 
+	0,	A_NONE,	 NON_PM, PM_DROW, 5000L,
+	0,0,WSFX_PLUSSEV),
+
+A("Spidersilk",	ELVEN_MITHRIL_COAT,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
-	TAMING,		A_CHAOTIC, NON_PM , PM_ELF, 8000L ),
-#endif
+	0,	A_CHAOTIC,	 NON_PM, PM_DROW, 5000L,
+	SPFX2_SPELLUP,0,WSFX_PLUSSEV), /*Adds sleep poison to unarmed attacks*/
+
+A("Webweaver's Crook",	FAUCHARD,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(1,0),	NO_DFNS,	CARY(AD_MAGM), 
+	0,	A_LAWFUL,	 NON_PM, PM_DROW, 5000L,
+	SPFX2_POISONED,0,0), /*Adds poison to all attacks*/
 
 A("The Staff of Aesculapius",	QUARTERSTAFF,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_INTEL|SPFX_DRLI|SPFX_REGEN), 0,0,
@@ -720,6 +754,19 @@ A("The Longbow of Diana", BOW,
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	CREATE_AMMO, A_CHAOTIC, PM_RANGER, NON_PM, 4000L, 
 	SPFX2_SILVERED,0,0), /*silver is the moon's metal... but bows don't enter this code...*/
+
+A("The Palantir of Westernesse",	CRYSTAL_BALL,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),
+		(SPFX_WARN|SPFX_ESP|SPFX_REFLECT|SPFX_XRAY), 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	TAMING,		A_CHAOTIC, NON_PM , PM_ELF, 8000L,
+	0,0,0),
+
+A("Belthronding", ELVEN_BOW,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), SPFX_DISPL, 0,
+	PHYS(5,0),	NO_DFNS,	NO_CARY,
+	CREATE_AMMO, A_CHAOTIC, NON_PM, PM_ELF, 4000L, 
+	SPFX2_STLTH,0,0),
 
 A("The Master Key of Thievery", SKELETON_KEY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SPEAK),
@@ -819,7 +866,7 @@ A("Rod of Dis", MACE,
 
 A("Avarice", SHORT_SWORD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
-	PHYS(10,0),	NO_DFNS,	NO_CARY,
+	PHYS(10,1),	NO_DFNS,	NO_CARY,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_STEAL,SPFX3_NOCNT,0),
 
