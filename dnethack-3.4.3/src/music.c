@@ -494,7 +494,8 @@ struct obj *instr;
 	    impossible("What a weird instrument (%d)!", instr->otyp);
 	    break;
 	}
-	return 2;		/* That takes time */
+	nomul(-1,"improvising a tune");
+	return 1;
 }
 
 /*
@@ -575,11 +576,10 @@ struct obj *instr;
 			if(isok(x,y))
 			if(find_drawbridge(&x,&y)) {
 			    u.uevent.uheard_tune = 2; /* tune now fully known */
-			    if(levl[x][y].typ == DRAWBRIDGE_DOWN)
-				close_drawbridge(x,y);
-			    else
-				open_drawbridge(x,y);
-			    return 0;
+			    if(levl[x][y].typ == DRAWBRIDGE_DOWN) close_drawbridge(x,y);
+			    else open_drawbridge(x,y);
+				nomul(-1,"playing the passtune");
+			    return 1;
 			}
 	    } else if(flags.soundok) {
 		if (u.uevent.uheard_tune < 1) u.uevent.uheard_tune = 1;
@@ -633,6 +633,7 @@ struct obj *instr;
 		}
 	    }
 	  }
+	nomul(-1,"guessing at the passtune");
 	return 1;
     } else
 	    return do_improvisation(instr);
