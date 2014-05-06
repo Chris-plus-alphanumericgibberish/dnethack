@@ -861,6 +861,62 @@ register struct obj *obj;
 			break;
 		/* case RIN_PROTECTION:  not needed */
 	}
+
+	/* MRKR: Cancelled *DSM reverts to scales.  */
+	/*       Suggested by Daniel Morris in RGRN */
+
+	if (obj->otyp >= GRAY_DRAGON_SCALE_MAIL &&
+	    obj->otyp <= YELLOW_DRAGON_SCALE_MAIL) {
+		/* dragon scale mail reverts to dragon scales */
+
+		boolean worn = (obj == uarm);
+
+		if (!Blind) {
+			char buf[BUFSZ];
+			pline("%s %s reverts to its natural form!", 
+		              Shk_Your(buf, obj), xname(obj));
+		} else if (worn) {
+			Your("armor feels looser.");
+		}
+		costly_cancel(obj);
+
+		if (worn) {
+			setworn((struct obj *)0, W_ARM);
+		}
+
+		/* assumes same order */
+		obj->otyp = GRAY_DRAGON_SCALES +
+			obj->otyp - GRAY_DRAGON_SCALE_MAIL;
+
+		if (worn) {
+			setworn(obj, W_ARM);
+		}
+	}
+
+	if (obj->otyp >= GRAY_DRAGON_SCALE_SHIELD &&
+	    obj->otyp <= YELLOW_DRAGON_SCALE_SHIELD) {
+		/* dragon scale shield reverts to dragon scales */
+
+		boolean worn = (obj == uarms);
+
+		if (!Blind) {
+			char buf[BUFSZ];
+			pline("%s %s reverts to its natural form!", 
+		              Shk_Your(buf, obj), xname(obj));
+		} else if (worn) {
+			Your("shield reverts to its natural form!");
+		}
+		costly_cancel(obj);
+
+		if (worn) {
+			setworn((struct obj *)0, W_ARMS);
+		}
+
+		/* assumes same order */
+		obj->otyp = GRAY_DRAGON_SCALES +
+			obj->otyp - GRAY_DRAGON_SCALE_SHIELD;
+	}
+
 	if (objects[obj->otyp].oc_magic
 	    || (obj->spe && (obj->oclass == ARMOR_CLASS ||
 			     obj->oclass == WEAPON_CLASS || is_weptool(obj)))
