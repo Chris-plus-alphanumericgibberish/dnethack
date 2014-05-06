@@ -155,6 +155,26 @@ extern struct Role urole;
 #define ROLE_NONE	(-1)
 #define ROLE_RANDOM	(-2)
 
+struct mask_properties {
+	int msklevel;
+	int mskmonnum;
+	int mskrolenum;
+	Bitfield(mskfemale,1);
+	struct attribs	mskacurr,
+					mskaexe,
+					mskamask;
+	align	mskalign;
+	schar mskluck;
+	int mskhp,mskhpmax;
+	int msken,mskenmax;
+	int mskgangr;
+	long mskexp, mskrexp;
+	int	mskweapon_slots;		/* unused skill slots */
+	int	mskskills_advanced;		/* # of advances made so far */
+	xchar	mksskill_record[P_SKILL_LIMIT];	/* skill advancements */
+	struct skills mask_skills[P_NUM_SKILLS];
+};
+
 /*** Unified structure specifying race information ***/
 
 struct Race {
@@ -252,8 +272,8 @@ struct you {
 	boolean umoved;		/* changed map location (post-move) */
 	int last_str_turn;	/* 0: none, 1: half turn, 2: full turn */
 				/* +: turn right, -: turn left */
-	int ulevel;		/* 1 to MAXULEV */
-	int ulevelmax;
+	int ulevel, ulevel_real;		/* 1 to MAXULEV */
+	int ulevelmax, ulevelmax_real;
 	unsigned utrap;		/* trap timeout */
 	unsigned utraptype;	/* defined if utrap nonzero */
 #define TT_BEARTRAP	0
@@ -342,19 +362,20 @@ struct you {
 	int luckturn;
 #define Luck	(u.uluck + u.moreluck)
 #define LUCKADD		3	/* added value when carrying luck stone */
+#define DIELUCK		4	/* subtracted from current luck on final death */
 #define LUCKMAX		10	/* on moonlit nights 11 */
 #define LUCKMIN		(-10)
-	schar	uhitinc;
-	schar	udaminc;
-	int		ucarinc;		/* bonus carrying capacity*/
+	schar	uhitinc;		/* bonus to-hit chance */
+	schar	udaminc;		/* bonus damage */
+	int		ucarinc;		/* bonus carrying capacity */
 	schar	uacinc;			/* bonus AC (not spell/divine) */
 	schar	uac;
 	uchar	uspellprot;		/* protection by SPE_PROTECTION */
-	uchar	udrunken;		/* drunkeness level */
+	uchar	udrunken;		/* drunkeness level (based on total number of potions of booze drunk) */
 	uchar	usptime;		/* #moves until uspellprot-- */
 	uchar	uspmtime;		/* #moves between uspellprot-- */
-	int	uhp,uhpmax;
-	int	uen, uenmax;		/* magical energy - M. Stephenson */
+	int	uhp,uhpmax,uhpmax_real;
+	int	uen, uenmax,uenmax_real;		/* magical energy - M. Stephenson */
 	int ugangr;			/* if the gods are angry at you */
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */

@@ -1912,4 +1912,8 @@ register struct trobj *trop;
 	}
 }
 
+void
+set_mask(){
+}
+
 /*u_init.c*/

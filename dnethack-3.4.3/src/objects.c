@@ -677,7 +677,8 @@ TOOL("mirror", "looking glass", 0, 0, 0, 0,  45, 13,  10, GLASS, HI_SILVER),
 TOOL("mirror", "looking glass", 0, 0, 0, 0,  60, 13,  10, GLASS, HI_SILVER),
 #endif
 TOOL("crystal ball", "glass orb",
-				0, 0, 1, 1,  15,150,  60, GLASS, HI_GLASS),
+								0, 0, 1, 1,  15,150, 200, GLASS, HI_GLASS),
+TOOL("mask", (char *)0,			1, 0, 0, 0,  10, 10,  80, LEATHER, CLR_WHITE),
 TOOL("lenses", (char *)0,	1, 0, 0, 0,   5,  3,  80, GLASS, HI_GLASS),
 TOOL("blindfold", (char *)0,    1, 0, 0, 0,  50,  2,  20, CLOTH, CLR_BLACK),
 TOOL("towel", (char *)0,        1, 0, 0, 0,  50,  2,  50, CLOTH, CLR_MAGENTA),
@@ -699,7 +700,7 @@ TOOL("beartrap", (char *)0,     1, 0, 0, 0,   0,200,  60, IRON, HI_METAL),
 /* instruments */
 /* some code in invent.c requires wooden flute .. drum of earthquake to be
    consecutive, with the wooden flute first and drum of earthquake last */
-TOOL("tin whistle", "whistle",  0, 0, 0, 0, 100,  3,  10, METAL, HI_METAL),
+TOOL("tin whistle", "whistle",  0, 0, 0, 0,  90,  3,  10, METAL, HI_METAL),
 TOOL("magic whistle", "whistle",0, 0, 1, 0,  30,  3,  10, METAL, HI_METAL),
 /* "If tin whistles are made out of tin, what do they make foghorns out of?" */
 TOOL("wooden flute", "flute",   0, 0, 0, 0,   4,  5,  12, WOOD, HI_WOOD),

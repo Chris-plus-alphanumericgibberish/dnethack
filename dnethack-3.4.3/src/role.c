@@ -475,6 +475,32 @@ const struct Role roles[] = {
 {{0, 0}}
 };
 
+const struct Role WtWrole = {	
+	{"Worm that Walks", 0}, {
+	{"",      0},
+	{"",0},
+	{"",0},
+	{"",     0},
+	{"",   0},
+	{"",   0},
+	{"",0},
+	{"",   0},
+	{"",     0} },
+	"", "", "", /* Determined by Mask */
+	"", "", "", /* Determined by Mask */
+	PM_WORM_THAT_WALKS, NON_PM, NON_PM,
+	NON_PM, NON_PM, NON_PM, /* Determined by Mask */
+	NON_PM, NON_PM, NON_PM, NON_PM, /* Determined by Mask */
+	0, /* Determined by Mask */
+	0, /* Determined by Mask */
+	/* Str Int Wis Dex Con Cha */
+	{  3,  3,  3,  3,  3,  3 },
+	{ 10, 10, 10, 10, 10, 10 },
+	/* Init   Lower  Higher */
+	{ 11, 0,  0, 8,  1, 0 },	/* Hit points */
+	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
+	10, 5, 0, 2, 10, A_INT, SPE_MAGIC_MAPPING,   -9
+};
 struct RoleName ElfRangerRanks[9] = {{"Edhel",       "Elleth"},
 	{"Edhel",       "Elleth"},      /* elf-maid */
 	{"Ohtar",       "Ohtie"},       /* warrior */
@@ -752,6 +778,17 @@ str2role(str)
 
 	/* Couldn't find anything appropriate */
 	return ROLE_NONE;
+}
+
+const struct Role *
+pm2role(tpm)
+	int tpm;
+{
+	int i;
+	for(i = 0; SIZE(roles)-1; i++){
+		if(roles[i].malenum==tpm || roles[i].femalenum==tpm) return &roles[i];
+	}
+	return pm2role(PM_BARBARIAN); //default to barbarian
 }
 
 

@@ -567,6 +567,57 @@ init_attr(np)
 }
 
 void
+init_mask_attr(np, mask)
+	int	np;
+	struct obj *mask;
+{
+	int	i, x, tryct;
+	struct Role *mrole = pm2role(mask->mp->mskrolenum);
+
+	for(i = 0; i < A_MAX; i++) {
+	    ABASE(i) = AMAX(i) = urole.attrbase[i];
+	    ATEMP(i) = ATIME(i) = 0;
+	    np -= urole.attrbase[i];
+	}
+
+	tryct = 0;
+	while(np > 0 && tryct < 100) {
+
+	    x = rn2(100);
+	    for (i = 0; (i < A_MAX) && ((x -= urole.attrdist[i]) > 0); i++) ;
+	    if(i >= A_MAX) continue; /* impossible */
+
+	    if(ABASE(i) >= ATTRMAX(i)) {
+
+		tryct++;
+		continue;
+	    }
+	    tryct = 0;
+	    ABASE(i)++;
+	    AMAX(i)++;
+	    np--;
+	}
+
+	tryct = 0;
+	while(np < 0 && tryct < 100) {		/* for redistribution */
+
+	    x = rn2(100);
+	    for (i = 0; (i < A_MAX) && ((x -= urole.attrdist[i]) > 0); i++) ;
+	    if(i >= A_MAX) continue; /* impossible */
+
+	    if(ABASE(i) <= ATTRMIN(i)) {
+
+		tryct++;
+		continue;
+	    }
+	    tryct = 0;
+	    ABASE(i)--;
+	    AMAX(i)--;
+	    np++;
+	}
+}
+
+void
 redist_attr()
 {
 	register int i, tmp;

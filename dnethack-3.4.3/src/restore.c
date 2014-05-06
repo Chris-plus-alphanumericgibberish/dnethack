@@ -207,6 +207,13 @@ boolean ghostly, frozen;
 		else otmp2->nobj = otmp;
 		mread(fd, (genericptr_t) otmp,
 					(unsigned) xl + sizeof(struct obj));
+		if(otmp->mp){
+			otmp->mp = malloc(sizeof(struct mask_properties));
+			mread(fd, (genericptr_t) otmp->mp, (unsigned) sizeof(struct mask_properties));
+//			mread(fd, (genericptr_t) otmp->mp->mskacurr, (unsigned) sizeof(struct attribs));
+//			mread(fd, (genericptr_t) otmp->mp->mskaexe, (unsigned) sizeof(struct attribs));
+//			mread(fd, (genericptr_t) otmp->mp->mskamask, (unsigned) sizeof(struct attribs));
+		}
 		if (ghostly) {
 		    unsigned nid = flags.ident++;
 		    add_id_mapping(otmp->o_id, nid);

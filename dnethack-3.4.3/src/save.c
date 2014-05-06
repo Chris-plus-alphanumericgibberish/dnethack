@@ -866,6 +866,12 @@ register struct obj *otmp;
 		xl = otmp->oxlth + otmp->onamelth;
 		bwrite(fd, (genericptr_t) &xl, sizeof(int));
 		bwrite(fd, (genericptr_t) otmp, xl + sizeof(struct obj));
+			if(otmp->mp){
+				bwrite(fd, (genericptr_t) otmp->mp, (unsigned) sizeof(struct mask_properties));
+//				bwrite(fd, (genericptr_t) otmp->mp->mskacurr, sizeof(struct attribs));
+//				bwrite(fd, (genericptr_t) otmp->mp->mskaexe, sizeof(struct attribs));
+//				bwrite(fd, (genericptr_t) otmp->mp->mskamask, sizeof(struct attribs));
+			}
 	    }
 	    if (Has_contents(otmp))
 		saveobjchn(fd,otmp->cobj,mode);

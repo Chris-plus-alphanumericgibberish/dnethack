@@ -391,6 +391,7 @@ boolean artif;
 	otmp->obroken = 0; /* BUGFIX: shouldn't this be set to 0 initially? */
 	otmp->opoisoned = 0;
 	otmp->fromsink = 0;
+	otmp->mp = (struct mask_properties *) 0;
 	if ((otmp->otyp >= ELVEN_SHIELD && otmp->otyp <= ORCISH_SHIELD) ||
 			otmp->otyp == SHIELD_OF_REFLECTION)
 		otmp->dknown = 0;
@@ -578,6 +579,21 @@ boolean artif;
 		case DRUM_OF_EARTHQUAKE:
 					otmp->spe = rn1(5,4);
 					break;
+	    case MASK:
+			if(rn2(4)){
+				int tryct2 = 0;
+				do otmp->corpsenm = rndmonnum();
+				while(is_human(&mons[otmp->corpsenm])
+					&& tryct2++ < 30);
+			} else if(rn2(10)){
+				do otmp->corpsenm = rn2(PM_LONG_WORM_TAIL);
+				while(mons[otmp->corpsenm].geno & G_UNIQ);
+			} else {
+				do otmp->corpsenm = PM_ARCHEOLOGIST + rn2(PM_WIZARD - PM_ARCHEOLOGIST);
+				while(otmp->corpsenm == PM_WORM_THAT_WALKS);
+			}
+			doMaskStats(otmp);
+		break;
 	    }
 	    break;
 	case AMULET_CLASS:
@@ -883,6 +899,35 @@ boolean artif;
 	return(otmp);
 }
 
+void
+doMaskStats(mask)
+	struct obj *mask;
+{
+	mask->mp = malloc(sizeof(struct mask_properties));
+	if(is_mplayer(&mons[mask->corpsenm])){
+		mask->mp->msklevel = rnd(10);
+//		mask->mp->mskmonnum = 
+		mask->mp->mskrolenum = mask->corpsenm;
+//		mask->mp->mskfemale = 
+////		mask->mp->mskacurr = malloc(sizeof(struct attribs));
+////		mask->mp->mskaexe = malloc(sizeof(struct attribs));
+////		mask->mp->mskamask = malloc(sizeof(struct attribs));
+//		mask->mp->mskalign = 
+		mask->mp->mskluck = rn1(9,-4);
+//		mask->mp->mskhp = 
+//		mask->mp->mskhpmax = mask->mp->mskhp;
+//		mask->mp->msken = 
+//		mask->mp->mskenmax = mask->mp->msken;
+		mask->mp->mskgangr = 0;
+//		mask->mp->mskexp = 
+		mask->mp->mskrexp = mask->mp->msklevel-1;
+		mask->mp->mskweapon_slots = 0;
+		mask->mp->mskskills_advanced = 0;
+		
+//	} else {
+	}
+}
+
 /*
  * Start a corpse decay or revive timer.
  * This takes the age of the corpse into consideration as of 3.4.0.
@@ -907,7 +952,7 @@ start_corpse_timeout(body)
 #define ROT_AGE (250L)		/* age when corpses rot away */
 
 	/* lizards, beholders, and lichen don't rot or revive */
-	if (body->corpsenm == PM_LIZARD || body->corpsenm == PM_LICHEN || body->corpsenm == PM_BEHOLDER) return;
+	if (body->corpsenm == PM_LIZARD || body->corpsenm == PM_LICHEN || body->corpsenm == PM_BEHOLDER || body->spe) return;
 
 	action = ROT_CORPSE;		/* default action: rot away */
 	rot_adjust = in_mklev ? 25 : 10;	/* give some variation */
@@ -1322,7 +1367,7 @@ boolean init;
 		// if (otmp->otyp == CORPSE &&
 			// (special_corpse(old_corpsenm) ||
 				// special_corpse(otmp->corpsenm))) {
-		//Between molding and all the special effects, would be best to just rest timers for everything.
+		//Between molding and all the special effects, would be best to just reset timers for everything.
 		if (otmp->otyp == CORPSE) {
 		    obj_stop_timers(otmp);
 //			pline("special corpse detected");

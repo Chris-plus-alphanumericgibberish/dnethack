@@ -34,6 +34,7 @@ struct obj {
 				   royal coffers for a court ( == 2)
 				   tells which fruit a fruit is
 				   special for uball and amulet
+				   do not decay for corpses
 				   historic and gender for statues */
 #define STATUE_HISTORIC 0x01
 #define STATUE_MALE     0x02
@@ -104,6 +105,7 @@ struct obj {
 	/* 31 free bits in this field, I think -CM */
 
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
+					/* Class of mask */
 #define leashmon  corpsenm	/* gets m_id of attached pet */
 #define spestudied corpsenm	/* # of times a spellbook has been studied */
 //define fromsink  corpsenm	/* a potion from a sink */
@@ -134,9 +136,10 @@ struct obj {
 			/* Also, records special features for weapons. Currently, the only special feature is runes on wooden weapons. */
 			/* Rings: specifies engraving on certain rings */
 			/* Cloaks: Droven: Tattered level.  */
-			/* Masks: Ability scores? */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
+
+	struct mask_properties *mp;
 
 	long oextra[1];		/* used for name of ordinary objects - length
 				   is flexible; amount for tmp gold objects.  Must be last? */

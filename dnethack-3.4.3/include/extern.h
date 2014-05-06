@@ -1166,6 +1166,7 @@ E void FDECL(add_to_buried, (struct obj *));
 E void FDECL(dealloc_obj, (struct obj *));
 E void FDECL(obj_ice_effects, (int, int, BOOLEAN_P));
 E long FDECL(peek_at_iced_corpse_age, (struct obj *));
+E void FDECL(doMaskStats, (struct obj *));
 #ifdef WIZARD
 E void NDECL(obj_sanity_check);
 #endif
@@ -1882,6 +1883,7 @@ E int FDECL(randrace, (int));
 E int FDECL(randgend, (int, int));
 E int FDECL(randalign, (int, int));
 E int FDECL(str2role, (char *));
+E const struct Role *FDECL(pm2role, (int));
 E int FDECL(str2race, (char *));
 E int FDECL(str2gend, (char *));
 E int FDECL(str2align, (char *));
