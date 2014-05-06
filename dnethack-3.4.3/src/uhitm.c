@@ -263,8 +263,13 @@ register struct monst *mtmp;
 	schar tmp;
 	int tmp2;
 
-	tmp = 1 + Luck + abon() + find_mac(mtmp) + u.uhitinc +
-		maybe_polyd(youmonst.data->mlevel, u.ulevel);
+	if(uwep && arti_shining(uwep)){
+		tmp = 1 + Luck + abon() + base_mac(mtmp) + u.uhitinc +
+			maybe_polyd(youmonst.data->mlevel, u.ulevel);
+	} else {
+		tmp = 1 + Luck + abon() + find_mac(mtmp) + u.uhitinc +
+			maybe_polyd(youmonst.data->mlevel, u.ulevel);
+	}
 
 	check_caitiff(mtmp);
 
@@ -581,7 +586,7 @@ int thrown;
 	int ispoisoned = 0;
 	boolean needpoismsg = FALSE, needfilthmsg = FALSE, needdrugmsg = FALSE, needsamnesiamsg = FALSE, poiskilled = FALSE, 
 			filthkilled = FALSE, druggedmon = FALSE, poisblindmon = FALSE, amnesiamon = FALSE;
-	boolean silvermsg = FALSE, silverobj = FALSE;
+	boolean silvermsg = FALSE, sunmsg = FALSE, silverobj = FALSE;
 	boolean valid_weapon_attack = FALSE;
 	boolean unarmed = !uwep && !uarm && !uarms;
 #ifdef STEED
@@ -797,7 +802,9 @@ int thrown;
 		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) )
 				&& hates_silver(mdat)) {
 				tmp += rnd(20); //I think this is the right thing to do here.  I don't think it enters the main silver section
-				silvermsg = TRUE; silverobj = TRUE;
+				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
+				else silvermsg = TRUE;
+				silverobj = TRUE;
 		    }
 		    if (!thrown && obj == uwep && obj->otyp == BOOMERANG &&
 			    rnl(4) == 4-1 && obj->oartifact == 0) {
@@ -911,7 +918,9 @@ int thrown;
 			}
 		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) )
 				&& hates_silver(mdat) && !(is_lightsaber(obj) && obj->lamplit)) {
-			silvermsg = TRUE; silverobj = TRUE;
+				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
+				else silvermsg = TRUE;
+				silverobj = TRUE;
 		    }
 #ifdef STEED
 		    if (u.usteed && !thrown && tmp > 0 &&
@@ -1152,7 +1161,9 @@ defaultvalue:
 			if ( (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
 						&& hates_silver(mdat)) {
 				tmp += rnd(20);
-				silvermsg = TRUE; silverobj = TRUE;
+				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
+				else silvermsg = TRUE;
+				silverobj = TRUE;
 			}
 		    }
 		}
@@ -1372,6 +1383,28 @@ defaultvalue:
 		    	fmt = silverobjbuf;
 		    } else
 			fmt = "The silver sears %s!";
+		} else {
+		    *whom = highc(*whom);	/* "it" -> "It" */
+		    fmt = "%s is seared!";
+		}
+		/* note: s_suffix returns a modifiable buffer */
+		if (!noncorporeal(mdat))
+		    whom = strcat(s_suffix(whom), " flesh");
+		pline(fmt, whom);
+	}
+
+	if (sunmsg) {
+		const char *fmt;
+		char *whom = mon_nam(mon);
+		char silverobjbuf[BUFSZ];
+
+		if (canspotmon(mon)) {
+			if (silverobj && saved_oname[0]) {
+		    	Sprintf(silverobjbuf, "Your %s %s %%s!",
+					saved_oname, vtense(saved_oname, "sear"));
+		    	fmt = silverobjbuf;
+		    } else
+			fmt = "The brilliant blade sears %s!";
 		} else {
 		    *whom = highc(*whom);	/* "it" -> "It" */
 		    fmt = "%s is seared!";

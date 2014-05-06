@@ -336,11 +336,28 @@ boolean on, silently;
 	newsym(mon->mx, mon->my);
 }
 
+int base_mac(mon)
+struct monst *mon;
+{
+	int base = mon->data->ac, armac = 0;
+	
+	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
+	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
+		base -= u.chokhmah;
+	}
+	else if(is_weeping(mon->data)){
+		if(mon->mextra[1] & 0x4L) base = -125; //Fully Quantum Locked
+		if(mon->mextra[1] & 0x2L) base = -20; //Partial Quantum Lock
+	}
+	return base;
+}
+
 int
 find_mac(mon)
-register struct monst *mon;
+struct monst *mon;
 {
-	register struct obj *obj;
+	struct obj *obj;
 	int base = mon->data->ac, armac = 0;
 	long mwflags = mon->misc_worn_check;
 

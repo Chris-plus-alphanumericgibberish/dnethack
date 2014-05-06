@@ -1693,6 +1693,61 @@ doputon()
 
 #ifdef OVL0
 
+int base_uac()
+{
+	int dexbonus = 0;
+	int uac = mons[u.umonnum].ac;
+
+	if(uwep){
+		if(uwep->otyp == RAPIER && arti_shining(uwep)) 
+										uac -= max(
+											min(
+											(ACURR(A_DEX)-13)/4,
+											P_SKILL(weapon_type(uwep))-1
+											)
+										,0);
+		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max(uwep->spe,0);
+		if(uwep->oartifact == ART_TENSA_ZANGETSU){
+			uac -= max( (uwep->spe+1)/2,0);
+			if(!uarmc || !uarm) uac -= max( uwep->spe,0);
+			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
+		}
+	}
+	if(uleft && uleft->otyp == RIN_PROTECTION) uac -= uleft->spe;
+	if(uright && uright->otyp == RIN_PROTECTION) uac -= uright->spe;
+	if (HProtection & INTRINSIC) uac -= u.ublessed;
+	uac -= u.uacinc;
+	uac -= u.uspellprot;
+	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
+	if(Role_if(PM_MONK) && !uarm){
+		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
+		dexbonus += max((int)( (ACURR(A_WIS)-1)/2 - 5 ),0) + (int)(u.ulevel/6 + 1);
+		if(Confusion && u.udrunken>u.ulevel) dexbonus += u.udrunken/9+1;
+	}
+	/*Corsets suck*/
+	if(uarmu && uarmu->otyp == VICTORIAN_UNDERWEAR){
+		uac += 2; //flat penalty. Something in the code "corrects" ac values >10, this is a kludge.
+		dexbonus = min(dexbonus-2,0);
+	}
+	
+	if(dexbonus > 0 && uarm){
+		if(uarm->otyp == BRONZE_PLATE_MAIL || uarm->otyp == CHAIN_MAIL || uarm->otyp == SCALE_MAIL || 
+			uarm->otyp == STUDDED_LEATHER_ARMOR || uarm->otyp == LEATHER_ARMOR || uarm->otyp == BANDED_MAIL)
+				dexbonus = max(
+						(int)(dexbonus/2), 
+						(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
+							(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
+						)
+					);
+		else if(uarm->otyp != DWARVISH_MITHRIL_COAT && uarm->otyp != ELVEN_MITHRIL_COAT &&
+			uarm->otyp != LEATHER_JACKET)
+				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
+	}
+	uac -= dexbonus;
+	if (uac < -128) uac = -128;	/* u.uac is an schar */
+	return uac;
+}
+
 void
 find_ac()
 {
