@@ -154,6 +154,7 @@ struct monst {
 	/* in order to prevent alignment problems mextra should
 	   be (or follow) a long int */
 	int meating;		/* monster is eating timeout */
+	int mfaction;		/* faction to which monster belongs */
 	//hatching situation
 	//AT_LAYEGG, PM_HATCHLING_NAME, x, d
 	//timetohatch
