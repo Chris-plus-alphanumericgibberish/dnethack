@@ -487,16 +487,25 @@ struct RoleName ElfRangerRanks[9] = {{"Edhel",       "Elleth"},
 	{"Ernil",       "Elentariel"},  /* prince (S.), elf-maiden (Q.) */
 	{"Elentar",     "Elentari"}};	/* Star-king, -queen (Q.) */
 	
-const char *ElfRangerLgod = "Manwe Sulimo",
+const char *ElfRangerLgod = "Orome",
 		   *ElfRangerNgod = "_Yavanna", 
 		   *ElfRangerCgod = "Tulkas"; /* Elven */
 
-const char *DrowMaleLgod = "Eddergud",
+const char *ElfPriestessLgod = "_Vaire",
+		   *ElfPriestessNgod = "_Varda Elentari",
+		   *ElfPriestessCgod = "_Nessa"; /* Elven */
+
+const char *ElfPriestLgod = "Manwe Sulimo",
+		   *ElfPriestNgod = "Mandos",
+		   *ElfPriestCgod = "Lorien"; /* Elven */
+
+const char *DrowMaleLgodKnown = "Eddergud",
+		   *DrowMaleLgodUknwn = "the black web",
 		   *DrowMaleNgod = "Vhaeraun",
 		   *DrowMaleCgod = "_Lolth"; /* Hedroven */
 
 const char *DrowFemaleLgod = "_Eilistraee",
-		   *DrowFemaleNgod = "_Kiaransalee", 
+		   *DrowFemaleNgod = "_Kiaransali", 
 		   *DrowFemaleCgod = "_Lolth"; /* Droven */
 
 const char *BinLgod = "Yaldabaoth",
@@ -1653,25 +1662,56 @@ role_init()
 		flags.pantheon = randrole(0);
 		if(Role_if(PM_EXILE)){
 			do{
-				while (!roles[flags.panLgod].lgod) flags.panLgod = randrole(AM_LAWFUL);
-				while (!roles[flags.panNgod].ngod) flags.panNgod = randrole(AM_NEUTRAL);
-				while (!roles[flags.panCgod].cgod) flags.panCgod = randrole(AM_CHAOTIC);
-			} while(flags.panLgod != panNgod &&
-					flags.panLgod != panCgod &&
-					flags.panNgod != panCgod );
+				do flags.panLgod = randrole(AM_LAWFUL); while (!roles[flags.panLgod].lgod);
+				do flags.panNgod = randrole(AM_NEUTRAL); while (!roles[flags.panNgod].ngod);
+				do flags.panCgod = randrole(AM_CHAOTIC); while (!roles[flags.panCgod].cgod);
+			} while(flags.panLgod == flags.panNgod ||
+					flags.panLgod == flags.panCgod ||
+					flags.panNgod == flags.panCgod );
 		}
 	}
-	if (!urole.lgod) {
-	    urole.lgod = roles[flags.pantheon].lgod;
-	    urole.ngod = roles[flags.pantheon].ngod;
-	    urole.cgod = roles[flags.pantheon].cgod;
-	}
+	
 	if(Role_if(PM_EXILE)){
 		urole.lgod = roles[flags.panLgod].lgod;
 		urole.ngod = roles[flags.panNgod].ngod;
 		urole.cgod = roles[flags.panCgod].cgod;
 	} else if(Race_if(PM_DROW)){
-	} else if(Race_if(PM_ELF)){
+		if(flags.initgend){ /*true = female*/
+			urole.lgod = DrowFemaleLgod;
+			urole.ngod = DrowFemaleNgod;
+			urole.cgod = DrowFemaleCgod;
+		} else{
+			urole.lgod = DrowMaleLgodUknwn;
+			urole.ngod = DrowMaleNgod;
+			urole.cgod = DrowMaleCgod;
+		}
+	} else if(Race_if(PM_ELF) && Role_if(PM_RANGER)){
+		urole.lgod = ElfRangerLgod;
+		urole.ngod = ElfRangerNgod;
+		urole.cgod = ElfRangerCgod;
+		urole.rank[1] = ElfRangerRanks[1];
+		urole.rank[2] = ElfRangerRanks[2];
+		urole.rank[3] = ElfRangerRanks[3];
+		urole.rank[4] = ElfRangerRanks[4];
+		urole.rank[5] = ElfRangerRanks[5];
+		urole.rank[6] = ElfRangerRanks[6];
+		urole.rank[7] = ElfRangerRanks[7];
+		urole.rank[8] = ElfRangerRanks[8];
+		urole.rank[9] = ElfRangerRanks[9];
+	}  else if(Race_if(PM_ELF) && Role_if(PM_PRIEST)){
+		if(flags.initgend){ /*true = female*/
+			urole.lgod = ElfPriestessLgod;
+			urole.ngod = ElfPriestessNgod;
+			urole.cgod = ElfPriestessCgod;
+		} else{
+			urole.lgod = ElfPriestLgod;
+			urole.ngod = ElfPriestNgod;
+			urole.cgod = ElfPriestCgod;
+		}
+	} else if (!urole.lgod) {
+	    urole.lgod = roles[flags.pantheon].lgod;
+	    urole.ngod = roles[flags.pantheon].ngod;
+	    urole.cgod = roles[flags.pantheon].cgod;
 	}
 
 	/* Fix up infravision */

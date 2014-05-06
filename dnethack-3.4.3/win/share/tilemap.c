@@ -49,17 +49,8 @@ struct conditionals {
 #endif
 #ifndef TOURIST
 	{ MON_GLYPH, PM_SAMURAI, "tourist" },
-#endif
-	/* commented out in monst.c at present */
-	{ MON_GLYPH, PM_SHAMAN_KARNOV, "Earendil" },
-	{ MON_GLYPH, PM_SHAMAN_KARNOV, "Elwing" },
-#ifndef TOURIST
 	{ MON_GLYPH, PM_LORD_SATO, "Twoflower" },
-#endif
-	/* commented out in monst.c at present */
-	{ MON_GLYPH, PM_CHROMATIC_DRAGON, "Goblin King" },
-	{ MON_GLYPH, PM_NEANDERTHAL, "High-elf" },
-#ifndef TOURIST
+
 	{ MON_GLYPH, PM_ROSHI, "guide" },
 #endif
 	/* objects commented out in objects.c at present */

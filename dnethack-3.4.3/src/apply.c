@@ -32,7 +32,7 @@ STATIC_DCL void FDECL(use_figurine, (struct obj **));
 STATIC_DCL void FDECL(use_grease, (struct obj *));
 STATIC_DCL void FDECL(use_trap, (struct obj *));
 STATIC_DCL void FDECL(use_stone, (struct obj *));
-STATIC_DCL void FDECL(use_droven_cloak, (struct obj *));
+STATIC_DCL int FDECL(use_droven_cloak, (struct obj *));
 STATIC_PTR int NDECL(set_trap);		/* occupation callback */
 STATIC_DCL int FDECL(use_whip, (struct obj *));
 STATIC_DCL int FDECL(use_pole, (struct obj *));
@@ -2347,11 +2347,12 @@ set_trap()
 	return 0;
 }
 
-STATIC_OVL void
+STATIC_OVL int
 use_droven_cloak(otmp)
 struct obj *otmp;
 {
 	int ttyp, tmp, rx, ry;
+	boolean gone = FALSE;
 	const char *what = (char *)0;
 	struct trap *ttmp;
 	struct monst *mtmp;
@@ -2413,10 +2414,15 @@ struct obj *otmp;
 			if(rx==u.ux && ry==u.uy) dotrap(ttmp, NOWEBMSG);
 			else if(mtmp) mintrap(mtmp);
 		}
-		if(otmp->ovar1 > 3) useup(otmp);
-		else otmp->ovar1++;
+		if(++otmp->ovar1 > 3){
+			gone = TRUE;
+			useup(otmp);
+			pline("The thoroughly tattered cloak falls to pieces");
+		}
 	}
 	reset_trapset();
+	if(gone) return 0;
+	else return 1;
 }
 
 STATIC_OVL int
@@ -3577,7 +3583,7 @@ doapply()
 		res = use_towel(obj);
 		break;
 	case CRYSTAL_BALL:
-		use_crystal_ball(obj);
+		res = use_crystal_ball(obj);
 		break;
 	case MAGIC_MARKER:
 		res = dowrite(obj);
@@ -3653,7 +3659,7 @@ doapply()
 		use_trap(obj);
 		break;
 	case DROVEN_CLOAK:
-		use_droven_cloak(obj);
+		res = use_droven_cloak(obj);
 		break;
 	case FLINT:
 	case LUCKSTONE:

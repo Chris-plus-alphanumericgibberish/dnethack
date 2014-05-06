@@ -448,8 +448,11 @@ const char * haluWard[] =  {
 	"a House Thaeyalla crest",
 	"a House X'larraz'et'soj crest",
 	
-	/* Special behavior, lolth holly symbol */
+	/* Special behavior, lolth holy symbol */
 	"a silver spider-like star",
+	
+	/* Eddergud holy symbol */
+	"an obsidian spiderweb",
 	
 	/* books */
 	"a set of holy horns", "a Summoning Dark mine-sign", "a Long Dark mine-sign",

@@ -3440,6 +3440,50 @@ struct trap *ttmp;
 	return 1;
 }
 
+static int webxprime = 0, webyprime = 0;
+
+void
+dowebgush(cx,cy)
+	int cx,cy;
+{
+	int madeweb = 0;
+	
+	webxprime = u.ux;
+	webyprime = u.uy;
+	do_clear_area(cx, cy, 4, webgush, (genericptr_t)&madeweb);
+}
+
+void
+webgush(cx, cy, poolcnt)
+int cx, cy;
+genericptr_t poolcnt;
+{
+	register struct monst *mtmp;
+	register struct trap *ttmp;
+
+	if (((cx+cy)%2 && rn2(3 + distmin(webxprime, webyprime, cx, cy))) || 
+	    (rn2(1 + distmin(webxprime, webyprime, cx, cy)))  ||
+	    (levl[cx][cy].typ != ROOM))
+		return;
+
+	if ((ttmp = t_at(cx, cy)) != 0)
+		return;
+
+	/* Put a web at cx, cy */
+	ttmp = maketrap(cx, cy, WEB);
+	if(ttmp){
+		ttmp->madeby_u = 0;
+		ttmp->tseen = cansee(cx, cy) ? 1 : 0;
+		newsym(cx, cy);
+		if (*in_rooms(cx,cy,SHOPBASE)) {
+			add_damage(cx, cy, 0L);		/* schedule removal */
+		}
+		if(cx==u.ux && cy==u.uy) dotrap(ttmp, NOWEBMSG);
+		else if(mtmp = m_at(cx,cy)) mintrap(mtmp);
+	}
+	reset_trapset();
+}
+
 /* getobj will filter down to cans of grease and known potions of oil */
 static NEARDATA const char oil[] = { ALL_CLASSES, TOOL_CLASS, POTION_CLASS, 0 };
 static NEARDATA const char disarmpotion[] = { ALL_CLASSES, POTION_CLASS, 0 };

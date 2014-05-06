@@ -2130,6 +2130,20 @@ dopois:
 		    pline("Yuck!");
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_WEBS:{
+			struct trap *ttmp2 = maketrap(u.ux, u.uy, WEB);
+			if (ttmp2) {
+				pline_The("webbing sticks to you. You're caught!");
+				dotrap(ttmp2, NOWEBMSG);
+#ifdef STEED
+				if (u.usteed && u.utrap) {
+				/* you, not steed, are trapped */
+				dismount_steed(DISMOUNT_FELL);
+				}
+#endif
+			}
+		}break;
+///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_ENCH:	/* KMH -- remove enchantment (disenchanter) */
 		hitmsg(mtmp, mattk);
 		/* uncancelled is sufficient enough; please
@@ -6105,7 +6119,23 @@ register struct attack *mattk;
 		}
 		return 1;
 	    }
-	    case AD_WEBS:{	/* KMH -- remove enchantment (disenchanter) */
+		case AD_DRST:
+		case AD_DRDX:
+		case AD_DRCO:
+			if (!rn2(8)) {
+				Your("blood was poisoned!");
+				if (resists_poison(mtmp)){
+					pline_The("poison doesn't seem to affect %s.",
+						mon_nam(mtmp));
+				} else {
+					if (!rn2(10)) {
+						Your("poison was deadly...");
+						tmp = mtmp->mhp;
+					} else tmp += rn1(10,6);
+				}
+			}
+		break;
+	    case AD_WEBS:{
 			struct trap *ttmp2 = maketrap(mtmp->mx, mtmp->my, WEB);
 			if (ttmp2) mintrap(mtmp);
 		}break;

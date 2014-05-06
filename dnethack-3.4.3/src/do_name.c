@@ -785,6 +785,13 @@ boolean called;
 	    Strcat(buf, " the ");
 	    if (do_invis) Strcat(buf, "invisible ");
 		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
+		else if(is_drow(mdat)){
+			struct obj *otmp;
+			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
+				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL) 
+					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+			}
+		}
 	    Strcat(buf, mdat->mname);
 	    return buf;
 	}
@@ -817,6 +824,13 @@ boolean called;
 		name_at_start = TRUE;
 	    } else if (called) {
 		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Sprintf(eos(buf), "frumious ");
+			else if(is_drow(mdat)){
+				struct obj *otmp;
+				for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
+					if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL) 
+						&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+				}
+			}
 		Sprintf(eos(buf), "%s called %s", mdat->mname, name);
 		name_at_start = (boolean)type_is_pname(mdat);
 	    } else if (is_mplayer(mdat) && (bp = strstri(name, " the ")) != 0) {
@@ -844,6 +858,13 @@ boolean called;
 	    name_at_start = FALSE;
 	} else {
 		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
+		else if(is_drow(mdat)){
+			struct obj *otmp;
+			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
+				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL) 
+					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+			}
+		}
 	    Strcat(buf, mdat->mname);
 	    name_at_start = (boolean)type_is_pname(mdat);
 	}
@@ -1013,6 +1034,66 @@ char *outbuf;
 	Strcpy(outbuf, x_monnam(mon, article, (char *)0, 0, TRUE));
     }
     return outbuf;
+}
+
+char *
+getDrowHouse(hnum)
+long hnum;
+{
+	switch(hnum){
+		case BAENRE:
+			return "House Baenre";
+		case BARRISON_DEL_ARMGO:
+			return "House Barrison Del'Armgo";
+		case XORLARRIN:
+			return "House Xorlarrin";
+		case FAEN_TLABBAR:
+			return "House Faen Tlabbar";
+		case MIZZRYM:
+			return "House Mizzrym";
+		case FEY_BRANCHE:
+			return "House Fey-Branche";
+		case MELARN:
+			return "House Melarn";
+		case DUSKRYN:
+			return "House Duskryn";
+		/*Disbanded drow houses*/
+		case BRONT_TEJ:
+			return "House Bront'tej";
+		case CELOFRAIE:
+			return "House Celofraie";
+		case DEVIR:
+			return "House DeVir";
+		case DO_URDEN:
+			return "House Do'Urden";
+		case ELEC_THIL:
+			return "House Elec'thil";
+		case H_KAR:
+			return "House H'Kar";
+		case HUN_ETT:
+			return "House Hun'ett";
+		case MASQ_IL_YR:
+			return "House Masq'il'yr";
+		case MLIN_THOBBYN:
+			return "House Mlin'thobbyn";
+		case OBLODRA:
+			return "House Oblodra";
+		case S_SRIL:
+			return "House S'sril";
+		case SYR_THAERL:
+			return "House Syr'thaerl";
+		case TEKEN_DUIS:
+			return "House Teken'duis";
+		case THAEYALLA:
+			return "House Thaeyalla";
+		case X_LARRAZ_ET_SOJ:
+			return "House X'larraz'et'soj";
+		/*holy symbols*/
+		case LOLTH_SYMBOL:
+			return "silver star bearing";
+		case EDDER_SYMBOL:
+			return u.uevent.knoweddergud ? "Edderkirke" : "black-webbed";
+	}
 }
 
 static const char * const bogusmons[] = {

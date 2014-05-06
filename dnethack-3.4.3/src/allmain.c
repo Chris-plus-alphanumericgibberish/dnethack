@@ -642,6 +642,9 @@ newgame()
 	init_objects();		/* must be before u_init() */
 
 	flags.pantheon = -1;	/* role_init() will reset this */
+	flags.panLgod = -1;	/* role_init() will reset this */
+	flags.panNgod = -1;	/* role_init() will reset this */
+	flags.panCgod = -1;	/* role_init() will reset this */
 	role_init();		/* must be before init_dungeons(), u_init(),
 				 * and init_artifacts() */
 
@@ -690,11 +693,27 @@ newgame()
 #ifdef CONVICT
         if (Role_if(PM_CONVICT)) {
 		    com_pager(199);
+        } else if(Race_if(PM_ELF)){
+			com_pager(201);
         } else {
 		com_pager(1);
 	}
 #else
+		if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER))){
+			com_pager(201);
+		} if(Race_if(PM_WORM_THAT_WALKS)){
+			if(Role_if(PM_CONVICT)){
+				com_pager(204);
+			} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER))){
+				com_pager(203);
+			} else{
+				com_pager(202);
+			}
+			com_pager(205);
+			com_pager(206);
+		} else {
 		com_pager(1);
+		}
 #endif /* CONVICT */
 	}
 

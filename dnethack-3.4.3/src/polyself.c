@@ -854,7 +854,7 @@ dobreathe(mdat)
 	    impossible("bad breath attack?");	/* mouthwash needed... */
 	else
 	    buzz((int) (20 + mattk->adtyp-1), (int)mattk->damn,
-		u.ux, u.uy, u.dx, u.dy,0);
+		u.ux, u.uy, u.dx, u.dy,0,0);
 	return(1);
 }
 
@@ -864,7 +864,9 @@ dospit()
 	struct obj *otmp;
 
 	if (!getdir((char *)0)) return(0);
-	otmp = mksobj(u.umonnum==PM_COBRA ? BLINDING_VENOM : ACID_VENOM,
+	otmp = mksobj(u.umonnum==PM_COBRA ? BLINDING_VENOM 
+									  : (u.umonnum==PM_SPROW || u.umonnum==PM_DRIDER) ? BALL_OF_WEBBING 
+									  : ACID_VENOM,
 			TRUE, FALSE);
 	otmp->spe = 1; /* to indicate it's yours */
 	throwit(otmp, 0L, FALSE);

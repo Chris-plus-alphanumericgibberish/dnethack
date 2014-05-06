@@ -1182,7 +1182,7 @@ defaultvalue:
 	    use_skill(wtype, 1);
 	}
 
-	if (ispoisoned || arti_poisoned(obj)) {
+	if (ispoisoned || (obj && (arti_poisoned(obj) || obj->oartifact == ART_WEBWEAVER_S_CROOK))) {
 	    if Role_if(PM_SAMURAI) {
 			You("dishonorably use a poisoned weapon!");
 			adjalign(-sgn(u.ualign.type)*5); //stiffer penalty
@@ -1193,7 +1193,7 @@ defaultvalue:
 			adjalign(-2);//stiffer penalty
 			if(rn2(2)) u.hod++;
 	    }
-		if(obj && obj->opoisoned & OPOISON_BASIC){
+		if(obj && (obj->opoisoned & OPOISON_BASIC || arti_poisoned(obj))){
 			if (resists_poison(mon))
 				needpoismsg = TRUE;
 			else if (rn2(10))
@@ -1207,7 +1207,7 @@ defaultvalue:
 				tmp += rnd(12);
 			else filthkilled = TRUE;
 		}
-		if(obj && obj->opoisoned & OPOISON_SLEEP){
+		if(obj && (obj->opoisoned & OPOISON_SLEEP || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
 			if (resists_poison(mon) || resists_sleep(mon))
 				needdrugmsg = TRUE;
 			else if(!rn2(5) && sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
@@ -1222,7 +1222,7 @@ defaultvalue:
 				poisblindmon = TRUE;
 			}
 		}
-		if(obj && obj->opoisoned & OPOISON_PARAL){
+		if(obj && (obj->opoisoned & OPOISON_PARAL || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
 			if (resists_poison(mon))
 				needpoismsg = TRUE;
 			else if (rn2(8))
@@ -1239,7 +1239,7 @@ defaultvalue:
 			if(mindless(mon->data)) needsamnesiamsg = TRUE;
 			else if(!rn2(10)) amnesiamon = TRUE;
 		}
-	    if (obj && !rn2(20) && !arti_poisoned(obj)) {
+	    if (obj && !rn2(20) && obj->opoisoned) {
 			obj->opoisoned = FALSE;
 			pline("The coating on your %s has worn off.", xname(obj));
 	    }
@@ -2026,6 +2026,10 @@ register struct attack *mattk;
 		    tmp = 0;
 		}
 		break;
+	    case AD_WEBS:{
+			struct trap *ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
+			if (ttmp2) mintrap(mdef);
+		}break;
 	    case AD_ENCH:	/* KMH -- remove enchantment (disenchanter) */
 		/* there's no msomearmor() function, so just do damage */
 	     /* if (negated) break; */
@@ -2582,8 +2586,9 @@ register int malive;
 uchar aatyp;
 {
 	register struct permonst *ptr = mon->data;
-	register int i, tmp;
+	register int i, tmp, ptmp;
 	struct obj *optr;
+	char	 buf[BUFSZ];
 	if (mhit && aatyp == AT_BITE && maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
 	    if (bite_monster(mon))
 		return 2;			/* lifesaved */
@@ -2709,6 +2714,24 @@ uchar aatyp;
 		passive_obj(mon, obj, &(ptr->mattk[i]));
 	    }
 	    break;
+	    case AD_DRST:
+		ptmp = A_STR;
+		goto dobpois;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_DRDX:
+		ptmp = A_DEX;
+		goto dobpois;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_DRCO:
+		ptmp = A_CON;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+dobpois:
+		if (!rn2(8)) {
+			Sprintf(buf, "%s blood",
+				s_suffix(Monnam(mon)));
+		    poisoned(buf, ptmp, mon->data->mname, 30, 0);
+		}
+	  break;
 	  case AD_HLBD:
 //		pline("hp: %d x: %d y: %d", (mon->mhp*100)/mon->mhpmax, mon->mx, mon->my);
 	    if(!mhit) break; //didn't draw blood, forget it.

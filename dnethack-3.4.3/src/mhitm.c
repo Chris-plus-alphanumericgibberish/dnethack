@@ -1477,6 +1477,10 @@ mdamagem(magr, mdef, mattk)
 	    case AD_WRAP: /* monsters cannot grab one another, it's too hard */
 		if (magr->mcan) tmp = 0;
 		break;
+	    case AD_WEBS:{
+			struct trap *ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
+			if (ttmp2) mintrap(mdef);
+		}break;
 	    case AD_ENCH:
 		/* there's no msomearmor() function, so just do damage */
 	     /* if (cancelled) break; */
@@ -1700,6 +1704,25 @@ int mdead;
 		goto assess_dmg;
 	    }
 	    break;
+	    case AD_DRST:
+	    case AD_DRDX:
+	    case AD_DRCO:
+		if (!rn2(8)) {
+		    if (vis)
+			pline("%s blood was poisoned!", s_suffix(Monnam(magr)));
+		    if (resists_poison(mdef)) {
+			if (vis)
+			    pline_The("poison doesn't seem to affect %s.",
+				mon_nam(mdef));
+		    } else {
+			if (rn2(10)) tmp += rn1(10,6);
+			else {
+			    if (vis) pline_The("poison was deadly...");
+			    tmp = mdef->mhp;
+			}
+		    }
+		}
+		break;
 	    case AD_WEBS:{	/* KMH -- remove enchantment (disenchanter) */
 			struct trap *ttmp2 = maketrap(magr->mx, magr->my, WEB);
 			if (ttmp2) mintrap(magr);

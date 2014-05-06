@@ -959,9 +959,13 @@ toofar:
 	}
 
 /*      Look for other monsters to fight (at a distance) */
-	if (( attacktype(mtmp->data, AT_BREA) ||
+	if (( 
 	      attacktype(mtmp->data, AT_GAZE) ||
-	      attacktype(mtmp->data, AT_SPIT) ||
+	      (!mtmp->mspec_used && 
+			(attacktype(mtmp->data, AT_SPIT) ||
+			 attacktype(mtmp->data, AT_BREA)
+			)
+		  )||
 	     (attacktype(mtmp->data, AT_MMGC) &&
 	      (((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp
 	         <= AD_SPC2))
@@ -979,13 +983,12 @@ toofar:
 	    if (mtmp2 && 
 	        (mtmp2 != &youmonst || 
 		 dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) > 2) &&
-		 (mtmp2 != mtmp))
-	    {
+			(mtmp2 != mtmp)
+		){
 	        int res;
 		res = (mtmp2 == &youmonst) ? mattacku(mtmp)
 		                           : mattackm(mtmp, mtmp2);
-	        if (res & MM_AGR_DIED)
-		    return 1; /* Oops. */
+	        if (res & MM_AGR_DIED) return 1; /* Oops. */
 
 		return 0; /* that was our move for the round */
 	    }

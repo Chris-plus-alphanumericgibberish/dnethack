@@ -1430,7 +1430,7 @@ register struct obj   *obj;
 	    }
 
 	} else if ((otyp == EGG || otyp == CREAM_PIE ||
-		    otyp == BLINDING_VENOM || otyp == ACID_VENOM) &&
+		    otyp == BLINDING_VENOM || otyp == ACID_VENOM || otyp == BALL_OF_WEBBING) &&
 		(guaranteed_hit || ACURR(A_DEX) > rnd(25))) {
 	    (void) hmon(mon, obj, 1);
 	    return 1;	/* hmon used it up */
@@ -1651,6 +1651,9 @@ boolean from_invent;
 			if (hero_caused && obj->spe && obj->corpsenm >= LOW_PM)
 			    change_luck((schar) -min(obj->quan, 5L));
 			break;
+		case BALL_OF_WEBBING:
+			dowebgush(x,y);
+		break;
 	}
 	if (hero_caused) {
 	    if (from_invent) {
@@ -1702,6 +1705,7 @@ struct obj *obj;
 		case MELON:
 		case ACID_VENOM:
 		case BLINDING_VENOM:
+		case BALL_OF_WEBBING:
 			return 1;
 		default:
 			return 0;
@@ -1741,6 +1745,7 @@ boolean in_view;
 			break;
 		case EGG:
 		case MELON:
+		case BALL_OF_WEBBING:
 			pline("Splat!");
 			break;
 		case CREAM_PIE:

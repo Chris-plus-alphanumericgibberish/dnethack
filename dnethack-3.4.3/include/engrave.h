@@ -129,6 +129,7 @@ struct engr {
 #define LAST_FALLEN_HOUSE	X_LARRAZ_ET_SOJ
 
 #define LOLTH_SYMBOL		31
+#define EDDER_SYMBOL		32
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 

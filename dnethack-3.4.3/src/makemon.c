@@ -2168,10 +2168,16 @@ register int	mmflags;
 	mtmp->mtraitor  = FALSE;
 	mtmp->mcrazed  = FALSE;
 
-	/* Ok, here's the deal: I'm using a global to coordinate the house emblems on the drow's armor. It needs to be set up here so that everyone created as part of the group gets the same emblem, and then unset after this creature's armor is created. */
-	if(is_drow(ptr) && !curhouse){
+	/* Ok, here's the deal: I'm using a global to coordinate the house emblems on the drow's armor. 
+	   It needs to be set up here so that everyone created as part of the group gets the same emblem, 
+	   and then unset after this creature's armor is created. */
+	if(is_drow(ptr)){
+		if(!curhouse){
 		curhouse = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
 		unsethouse = TRUE;
+	}
+		mtmp->mfaction = curhouse;
+		pline("%d",mtmp->mfaction);
 	}
 	
 	switch(ptr->mlet) {

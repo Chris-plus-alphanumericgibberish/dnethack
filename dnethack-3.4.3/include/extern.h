@@ -232,7 +232,7 @@ E int FDECL(monster_detect, (struct obj *,int));
 E int FDECL(pet_detect_and_tame, (struct obj *));
 E int FDECL(trap_detect, (struct obj *));
 E const char *FDECL(level_distance, (d_level *));
-E void FDECL(use_crystal_ball, (struct obj *));
+E int FDECL(use_crystal_ball, (struct obj *));
 E void NDECL(do_mapping);
 E void FDECL(do_vicinity_map, (int,int));
 E void FDECL(cvt_sdoor_to_door, (struct rm *));
@@ -370,6 +370,7 @@ E char *FDECL(y_monnam, (struct monst *));
 E char *FDECL(Adjmonnam, (struct monst *,const char *));
 E char *FDECL(Amonnam, (struct monst *));
 E char *FDECL(a_monnam, (struct monst *));
+E char *FDECL(getDrowHouse, (long));
 E char *FDECL(distant_monnam, (struct monst *,int,char *));
 E const char *NDECL(rndmonnam);
 E const char *FDECL(hcolor, (const char *));
@@ -2206,6 +2207,8 @@ E boolean NDECL(unconscious);
 E boolean NDECL(lava_effects);
 E void FDECL(blow_up_landmine, (struct trap *));
 E int FDECL(launch_obj,(SHORT_P,int,int,int,int,int));
+E void FDECL(dowebgush, (int,int));
+E void FDECL(webgush, (int,int,genericptr_t));
 
 /* ### u_init.c ### */
 
