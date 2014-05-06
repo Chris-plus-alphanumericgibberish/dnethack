@@ -22,6 +22,10 @@ STATIC_DCL struct obj *FDECL(on_ground, (SHORT_P));
 STATIC_DCL boolean FDECL(you_have, (int));
 STATIC_DCL long FDECL(target_on, (int,struct monst *));
 STATIC_DCL long FDECL(strategy, (struct monst *));
+STATIC_DCL void FDECL(wizgush, (int, int, genericptr_t));
+STATIC_DCL void NDECL(dowizgush);
+
+static int xprime = 0, yprime = 0;
 
 static NEARDATA const int nasties[] = {
 	PM_COCKATRICE, PM_ETTIN, PM_STALKER, PM_MINOTAUR, PM_RED_DRAGON,
@@ -516,6 +520,88 @@ resurrect()
 		verbalize("So thou thought thou couldst %s me, fool.", verb);
 	}
 
+}
+
+STATIC_PTR void
+dowizdarken()
+{
+	register struct monst *mtmp;
+	register struct trap *ttmp;
+	int cx, cy;
+	
+	for(cx = 0; cx < COLNO; cx++){
+		for(cy = 0; cy < ROWNO; cy++){
+			levl[cx][cy].lit = 0;
+			snuff_light_source(cx, cy);
+			if(!rn2(3)) switch(rn2(5)) {
+				case 2:(void) makemon(&mons[PM_SHADE], cx, cy, NO_MM_FLAGS);break;
+				case 3:(void) makemon(&mons[PM_BLACK_LIGHT], cx, cy, NO_MM_FLAGS);break;
+				case 4:(void) makemon(&mons[PM_WRAITH], cx, cy, NO_MM_FLAGS);break;
+				case 5:(void) makemon(rn2(10) ? &mons[PM_SHADE] : &mons[PM_DARKNESS_GIVEN_HUNGER], cx, cy, NO_MM_FLAGS);break;
+				default:(void) makemon(mkclass(S_WRAITH, G_NOHELL|G_HELL), cx, cy, NO_MM_FLAGS);break;
+			}
+		}
+	}
+}
+
+void
+dowizgush() /* Gushing forth along LOS from (u.ux, u.uy) and random other spots */
+{
+	int madepool = 0,cx,cy;
+	
+	xprime = u.ux;
+	yprime = u.uy;
+	do_clear_area(u.ux, u.uy, 9, wizgush, (genericptr_t)&madepool);
+	pline("Water sprays all over you.");
+	water_damage(invent, FALSE, FALSE, FALSE);
+	for(cx = 0; cx < COLNO; cx++){
+		for(cy = 0; cy < ROWNO; cy++){
+			if(!rn2(100)){
+				madepool = 0;
+				xprime = cx;
+				yprime = cy;
+				do_clear_area(cx, cy, 9, wizgush, (genericptr_t)&madepool);
+			}
+		}
+	}
+}
+
+STATIC_PTR void
+wizgush(cx, cy, poolcnt)
+int cx, cy;
+genericptr_t poolcnt;
+{
+	register struct monst *mtmp;
+	register struct trap *ttmp;
+
+	if (((cx+cy)%2) || 
+	    (rn2(1 + distmin(xprime, yprime, cx, cy)))  ||
+	    (levl[cx][cy].typ != ROOM) ||
+	    (boulder_at(cx, cy)) || nexttodoor(cx, cy))
+		return;
+
+	if ((ttmp = t_at(cx, cy)) != 0 && !delfloortrap(ttmp))
+		return;
+
+	/* Put a pool at cx, cy */
+	levl[cx][cy].typ = POOL;
+	/* No kelp! */
+	del_engr_ward_at(cx, cy);
+	water_damage(level.objects[cx][cy], FALSE, TRUE, FALSE);
+
+	if ((mtmp = m_at(cx, cy)) != 0){
+		(void) minliquid(mtmp);
+	}else{
+		if(!rn2(3)) switch(rn2(In_hell(&u.uz) ? 7 : 5)) {
+			case 2:(void) makemon(&mons[PM_KRAKEN], cx, cy, NO_MM_FLAGS);
+			case 3:(void) makemon(&mons[PM_WATER_ELEMENTAL], cx, cy, NO_MM_FLAGS);
+			case 4:(void) makemon(&mons[PM_DEEPER_ONE], cx, cy, NO_MM_FLAGS);
+			case 5:(void) makemon(&mons[PM_WATER_DEMON], cx, cy, NO_MM_FLAGS);
+			case 6:(void) makemon(&mons[PM_UMBER_HULK], cx, cy, NO_MM_FLAGS);
+			default:(void) makemon(mkclass(S_EEL, G_NOHELL|G_HELL), cx, cy, NO_MM_FLAGS);
+		}
+		newsym(cx,cy);
+	}
 }
 
 /*	Here, we make trouble for the poor shmuck who actually	*/

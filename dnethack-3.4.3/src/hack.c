@@ -2373,6 +2373,9 @@ inv_weight()
 		else if (!is_boulder(otmp) || !throws_rocks(youmonst.data))
 #endif
 			wt += otmp->owt;
+
+		if(u.uleadamulet && (otmp->otyp == AMULET_OF_YENDOR || otmp->otyp == FAKE_AMULET_OF_YENDOR))
+			wt += 24*otmp->owt; /* Same as loadstone by default. Only affects fake amulets in open inventory */
 		otmp = otmp->nobj;
 	}
 	wc = weight_cap();
