@@ -1611,6 +1611,8 @@ ray:
 		mtmp->msleeping = 0;
 		mtmp->mstun = 0;
 		mtmp->mconf = 0;
+	    if (canseemon(mtmp))
+			pline("%s looks recovered.", Monnam(mtmp));
 	break;
     case OPEN_WOUNDS:
 	openwounds:

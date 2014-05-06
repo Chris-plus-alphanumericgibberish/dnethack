@@ -585,7 +585,7 @@ int mode;
 	    if (mode == DO_MOVE) {
 		if (Is_stronghold(&u.uz) && is_db_wall(x,y))
 		    pline_The("drawbridge is up!");
-		else if (Passes_walls && !may_passwall(x,y) && In_sokoban(&u.uz))
+		if (Passes_walls && !may_passwall(x,y) && In_sokoban(&u.uz))
 		    pline_The("Sokoban walls resist your ability.");
 	    }
 	    return FALSE;

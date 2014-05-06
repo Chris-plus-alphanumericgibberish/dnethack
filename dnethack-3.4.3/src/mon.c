@@ -1986,7 +1986,7 @@ boolean was_swallowed;			/* digestion */
 				outrumor(rn2(2), BY_OTHER); //either true (3/4) or false (1/4), no mechanism specified.
 				pline("Belief or disbelief rests with you.");
 				pline("To die without leaving a corpse....\"");
-				explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);
+				explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_MUDDY);
 				pline("\"That is the way of us Garo.\"");
 			}
 			else if(mdat->mattk[i].adtyp == AD_GARO_MASTER){
@@ -1996,7 +1996,7 @@ boolean was_swallowed;			/* digestion */
 				outgmaster(); //Gives out a major consultation. Does not set the consultation flags.
 				pline("Do not forget these words...");
 				pline("Die I shall, leaving no corpse.\"");
-				explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);
+				explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_MUDDY);
 				pline("\"That is the law of us Garo.\"");
 			}
 			else if(mdat->mattk[i].adtyp == AD_COLD){

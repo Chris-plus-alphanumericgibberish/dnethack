@@ -2024,6 +2024,8 @@ const char * const hallu_gods[] = {
 	"Communism",
 
 	//Ok, so I have no idea what this is....
+	//<Muad> same thing as the UN
+	//<Muad> if that fits the context
 	"the U.N.O.",
 	
 	//Vague
