@@ -1883,7 +1883,7 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 	m2->my = mm.y;
 
 	m2->minvent = (struct obj *) 0; /* objects don't clone */
-	m2->mclone; //no death drop
+	m2->mclone = TRUE; //no death drop
 	m2->mleashed = FALSE;
 #ifndef GOLDOBJ
 	m2->mgold = 0L;
@@ -2167,6 +2167,7 @@ register int	mmflags;
 	mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : peace_minded(ptr);
 	mtmp->mtraitor  = FALSE;
 	mtmp->mcrazed  = FALSE;
+	mtmp->mclone  = FALSE;
 
 	/* Ok, here's the deal: I'm using a global to coordinate the house emblems on the drow's armor. 
 	   It needs to be set up here so that everyone created as part of the group gets the same emblem, 
@@ -2177,7 +2178,6 @@ register int	mmflags;
 		unsethouse = TRUE;
 	}
 		mtmp->mfaction = curhouse;
-		pline("%d",mtmp->mfaction);
 	}
 	
 	switch(ptr->mlet) {
