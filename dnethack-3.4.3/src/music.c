@@ -442,7 +442,7 @@ struct obj *instr;
 		    }
 		} else {
 		    buzz((instr->otyp == FROST_HORN) ? AD_COLD-1 : AD_FIRE-1,
-			 rn1(6,6), u.ux, u.uy, u.dx, u.dy,0);
+			 rn1(6,6), u.ux, u.uy, u.dx, u.dy,0,0);
 		}
 		makeknown(instr->otyp);
 		break;

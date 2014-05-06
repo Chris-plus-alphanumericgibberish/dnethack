@@ -108,11 +108,11 @@
 /* Those implemented solely as timeouts (we use just intrinsic) */
 #define HStun			u.uprops[STUNNED].intrinsic
 #define Stunned			((HStun || u.umonnum == PM_STALKER || \
-				 youmonst.data->mlet == S_BAT) && !(u.sealsActive&SEAL_NUMINA))
+				 youmonst.data->mlet == S_BAT) && !(u.specialSealsActive&SEAL_NUMINA))
 		/* Note: birds will also be stunned */
 
 #define HConfusion		u.uprops[CONFUSION].intrinsic
-#define Confusion		HConfusion && !(u.sealsActive&SEAL_NUMINA)
+#define Confusion		HConfusion && !(u.specialSealsActive&SEAL_NUMINA)
 
 #define Blinded			u.uprops[BLINDED].intrinsic
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES)
@@ -177,7 +177,7 @@
 					(uwep->ovar1 & WARD_THJOFASTAFUR)) || u.sealsActive&SEAL_PAIMON)
 
 #define HUndead_warning		u.uprops[WARN_UNDEAD].intrinsic
-#define Undead_warning		(HUndead_warning || u.sealsActive&SEAL_ACERERAK)
+#define Undead_warning		(HUndead_warning || u.specialSealsActive&SEAL_ACERERAK)
 
 #define HSearching		u.uprops[SEARCHING].intrinsic
 #define ESearching		u.uprops[SEARCHING].extrinsic
@@ -196,7 +196,7 @@
 
 #define HDetect_monsters	u.uprops[DETECT_MONSTERS].intrinsic
 #define EDetect_monsters	u.uprops[DETECT_MONSTERS].extrinsic
-#define Detect_monsters		(HDetect_monsters || EDetect_monsters || u.sealsActive&SEAL_NUMINA)
+#define Detect_monsters		(HDetect_monsters || EDetect_monsters || u.specialSealsActive&SEAL_NUMINA)
 
 
 /*** Appearance and behavior ***/

@@ -81,6 +81,7 @@ struct flag {
 	boolean  sparkle;	/* show "resisting" special FX (Scott Bigham) */
 	boolean  standout;	/* use standout for --More-- */
 	boolean  time;		/* display elapsed 'time' */
+	boolean  timeoutOrder;	/* display spirits and powers in order of timeout */
 	boolean  tombstone;	/* print tombstone */
 	boolean  toptenwin;	/* ending list in window instead of stdout */
 	boolean  verbose;	/* max battle info */

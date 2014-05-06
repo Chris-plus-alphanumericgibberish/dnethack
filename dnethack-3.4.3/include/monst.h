@@ -115,6 +115,8 @@ struct monst {
 #define MAX_NUM_WORMS	32	/* should be 2^(wormno bitfield size) */
 	Bitfield(moccupation,1);/* linked to your occupation */
 	Bitfield(mclone,1);		/* is a clone of another monster (don't make death drop) */
+	Bitfield(uhurtm,1);		/* injured by you */
+	Bitfield(mhurtu,1);		/* has injured you */
 	Bitfield(housealert,1);	/* won't accept house-based pacification */
 	
 

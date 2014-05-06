@@ -23,11 +23,14 @@ static NEARDATA int RoSbook;		/* Read spell or Study Wards?"
 	((char)((spell < 26) ? ('a' + spell) : ('A' + spell - 26)))
 
 STATIC_DCL int FDECL(spell_let_to_idx, (CHAR_P));
+STATIC_DCL boolean FDECL(check_spirit_let, (char));
 STATIC_DCL boolean FDECL(cursed_book, (struct obj *bp));
 STATIC_DCL boolean FDECL(confused_book, (struct obj *));
 STATIC_DCL void FDECL(deadbook, (struct obj *));
 STATIC_PTR int NDECL(learn);
 STATIC_DCL boolean FDECL(getspell, (int *));
+STATIC_DCL boolean FDECL(getspirit, (int *));
+STATIC_DCL boolean FDECL(spiritLets, (char *));
 STATIC_DCL boolean FDECL(dospellmenu, (const char *,int,int *));
 STATIC_DCL int FDECL(percent_success, (int));
 STATIC_DCL int NDECL(throwspell);
@@ -693,6 +696,142 @@ getspell(spell_no)
 	return dospellmenu("Choose which spell to cast",
 			   SPELLMENU_CAST, spell_no);
 }
+/*
+ * Return TRUE if a spell was picked, with the spell index in the return
+ * parameter.  Otherwise return FALSE.
+ */
+ 
+STATIC_OVL boolean
+getspirit(power_no)
+	int *power_no;
+{
+	int nspells, idx;
+	char ilet, lets[BUFSZ], qbuf[QBUFSZ];
+
+	if (flags.menu_style == MENU_TRADITIONAL) {
+	    /* we know there is at least 1 known spell */
+		
+		//put characters into lets here
+		spiritLets(lets);
+		
+	    for(;;)  {
+		Sprintf(qbuf, "Use which power?", lets);
+		if ((ilet = yn_function(qbuf, (char *)0, '\0')) == '?')
+		    break;
+
+		if (index(quitchars, ilet))
+		    return FALSE;
+		
+		if(check_spirit_let(ilet)){
+			*power_no = u.spiritPOrder[(int) ilet];
+			return TRUE;
+		} else
+		    You("don't know that power.");
+		}
+	}
+	return dospiritmenu("Choose which power to use", power_no);
+}
+
+static const int spiritPOwner[NUMBER_POWERS] = {
+	SEAL_AHAZU,
+	SEAL_AMON,
+	SEAL_ANDREALPHUS, SEAL_ANDREALPHUS,
+	SEAL_ANDROMALIUS, SEAL_ANDROMALIUS,
+	SEAL_ASTAROTH, SEAL_ASTAROTH,
+	SEAL_BALAM, SEAL_BALAM,
+	SEAL_BERITH, SEAL_BERITH,
+	SEAL_BUER, SEAL_BUER,
+	SEAL_CHUPOCLOPS,
+	SEAL_DANTALION, SEAL_DANTALION,
+	SEAL_SHIRO,
+	SEAL_ECHIDNA,
+	SEAL_EDEN, SEAL_EDEN, SEAL_EDEN,
+	SEAL_ERIDU,
+	SEAL_EURYNOME, SEAL_EURYNOME,
+	SEAL_EVE, SEAL_EVE,
+	SEAL_FAFNIR, SEAL_FAFNIR,
+	SEAL_HUGINN_MUNINN,
+	SEAL_IRIS, SEAL_IRIS,
+	SEAL_JACK, SEAL_JACK,
+	SEAL_MALPHAS,
+	SEAL_MARIONETTE, SEAL_MARIONETTE,
+	SEAL_MOTHER,
+	SEAL_NABERIUS, SEAL_NABERIUS,
+	SEAL_ORTHOS,
+	SEAL_OSE, SEAL_OSE,
+	SEAL_OTIAX,
+	SEAL_PAIMON, SEAL_PAIMON,
+	SEAL_SIMURGH, SEAL_SIMURGH, SEAL_SIMURGH,
+	SEAL_TENEBROUS, SEAL_TENEBROUS, SEAL_TENEBROUS,
+	SEAL_YMIR, SEAL_YMIR,
+	SEAL_SPECIAL|SEAL_DAHLVER_NAR,
+	SEAL_SPECIAL|SEAL_ACERERAK,
+	SEAL_SPECIAL|SEAL_NUMINA, SEAL_SPECIAL|SEAL_NUMINA, SEAL_SPECIAL|SEAL_NUMINA
+};
+
+static const char *spiritPName[NUMBER_POWERS] = {
+	"Abduction",
+	"Fire Breath",
+	"Transdimensional Ray", "Teleport",
+	"Jester's Mirth", "Thief's Instincts",
+	"Astaroth's Assembly", "Astaroth's Shards",
+	"Icy Glare", "Balam's Anointing",
+	"Sow Discord", "Blood Mercenary",
+	"Gift of Healing", "Gift of Health",
+	"Throw webbing",
+	"Dread", "Thought Travel",
+	"Earth Swallow",
+	"Echidna's Venom",
+	"Recall to Eden", "Purifying Blast", "Stargate",
+	"Walk among Thresholds",
+	"Shape the Wind", "Vengance",
+	"Barage", "Thorns and Stones",
+	"Breath Poison", "Ruinous Strike",
+	"Raven's Tallons",
+	"Horrid Wilting", "Turn Humans and Animals",
+	"Hellfire", "Refill Lantern",
+	"Call Murder",
+	"Root Shout", "Long Stride",
+	"Confusing Touch",
+	"Bloody Tongue", "Silver Tongue",
+	"Exhalation of the Rift", 
+	"Querient Thoughts", "Great Leap",
+	"Open",
+	"Read Spell", "Book Telepathy",
+	"Enlightenment", "Hook in the Sky", "Unite the Earth and Sky",
+	"Damning Darkness", "Touch of the Void", "Echos of the Last Word",
+	"Poison Gaze", "Gap Step",
+	"Moan",
+	"Swallow Soul",
+	"Identify", "Clairvoyance", "Find Path"
+};
+
+STATIC_OVL boolean
+spiritLets(lets)
+	char *lets;
+{
+	int i,s;
+	if(flags.timeoutOrder){
+		for(s=0; s<NUM_BIND_SPRITS; s++){
+			if(u.spirit[s]) for(i = 0; i<52; i++){
+				if(spiritPOwner[u.spiritPOrder[i]] == u.spirit[s] && u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves){
+					Sprintf(lets, "%c", i<26 ? 'a'+(char)i : 'A'+(char)(i-26));
+				}
+			}
+		}
+	} else {
+		for(i = 0; i<52; i++){
+			if(((spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
+				!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
+				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL) &&
+				u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves
+			){
+				Sprintf(lets, "%c", i<26 ? 'a'+(char)i : 'A'+(char)(i-26));
+			}
+		}
+	}
+	return TRUE;
+}
 
 /* the 'Z' command -- cast a spell */
 int
@@ -703,6 +842,32 @@ docast()
 	if (getspell(&spell_no))
 	    return spelleffects(spell_no, FALSE);
 	return 0;
+}
+
+/* the '^f' command -- fire a spirit power */
+int
+dospirit()
+{
+	int power_no;
+	
+	if (getspirit(&power_no))
+					return spiriteffects(power_no, FALSE);
+	return 0;
+}
+
+STATIC_OVL boolean
+check_spirit_let(let)
+	char let;
+{
+	int i;
+	if(let >= 'a' && let <= 'z') i = (int)(let - 'a');
+	else if(let >= 'A' && let <= 'Z') i = (int)(let - 'A' + 26);
+	else return FALSE; //not a valid letter
+	
+	return u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves && spiritPOwner[u.spiritPOrder[i]] &&
+			((spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
+			!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
+			spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL);
 }
 
 STATIC_OVL const char *
@@ -826,6 +991,77 @@ int spell;
 	    break;
     }
     return;
+}
+
+int
+spiriteffects(power, atme)
+	int power;
+	boolean atme;
+{
+	int dsize;
+	if(u.ulevel <= 2) dsize=1;
+	else if(u.ulevel <= 5) dsize=2;
+	else if(u.ulevel <= 9) dsize=3;
+	else if(u.ulevel <= 13) dsize=4;
+	else if(u.ulevel <= 17) dsize=5;
+	else if(u.ulevel <= 21) dsize=6;
+	else if(u.ulevel <= 25) dsize=7;
+	else if(u.ulevel <= 29) dsize=8;
+	else dsize=9;
+	
+	boolean reveal_invis = FALSE;
+	switch(power){
+		case PWR_ABDUCTION:
+		break;
+		case PWR_FIRE_BREATH:
+			if (!getdir((char *)0)) return(0);
+			buzz((int) (20 + AD_FIRE-1), 0,
+				u.ux, u.uy, u.dx, u.dy,0,d(5,dsize));
+			u.spiritPColdowns[PWR_FIRE_BREATH] = monstermoves + 25;
+		break;
+		case PWR_TRANSDIMENSIONAL_RAY:{
+			int dmg;
+			int range = rn1(7,7);
+			xchar lsx, lsy, sx, sy;
+			struct monst *mon;
+			sx = u.ux;
+			sy = u.uy;
+			if (!getdir((char *)0)) return(0);
+			if(u.uswallow)
+			while(range-- > 0){
+				lsx = sx; sx += u.dx;
+				lsy = sy; sy += u.dy;
+				if(isok(sx,sy)) {
+					mon = m_at(sx, sy);
+					if(cansee(sx,sy)) {
+						/* reveal/unreveal invisible monsters before tmp_at() */
+						if (mon && !canspotmon(mon))
+							map_invisible(sx, sy);
+						else if (!mon && glyph_is_invisible(levl[sx][sy].glyph)) {
+							unmap_object(sx, sy);
+							newsym(sx, sy);
+						}
+						if (mon) {
+							reveal_invis = TRUE;
+							if (resists_magm(mon)) {	/* match effect on player */
+								shieldeff(mon->mx, mon->my);
+							} else {
+								dmg = d(d(1,5),dsize);
+								u_teleport_mon(mon, TRUE);
+							}
+						}
+					}
+				} else break;
+			}
+		}break;
+		case PWR_TELEPORT:
+		break;
+		case PWR_JESTER_S_MIRTH:
+		break;
+		default:
+			pline("BANG! That's not going to kill TOO many people, is it...? Maybe %d.", power);
+		break;
+	}
 }
 
 int
@@ -1176,6 +1412,73 @@ dovspell()
 	return 0;
 }
 
+int
+dospiritmenu(prompt, power_no)
+const char *prompt;
+int *power_no;
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	menu_item *selected;
+	anything any;
+	int i,s,j;
+	long place;
+	
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf, "Select spirit power:");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	if(flags.timeoutOrder){
+		for(s=0; s<NUM_BIND_SPRITS; s++){
+			if(u.spirit[s]){
+				j=0;
+				place == 1;
+				while(!(spiritPOwner[u.spiritPOrder[i]] & place)){
+					j++;
+					place = place << 1;
+				}
+				add_menu(tmpwin, NO_GLYPH, 0, 0, 0, ATR_BOLD, sealNames[j], MENU_UNSELECTED);
+				for(i = 0; i<52; i++){
+					if(spiritPOwner[u.spiritPOrder[i]] == u.spirit[s] && 
+						u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves
+					){
+						Sprintf(buf, spiritPName[u.spiritPOrder[i]]);
+						any.a_int = u.spiritPOrder[i]+1;	/* must be non-zero */
+						add_menu(tmpwin, NO_GLYPH, &any,
+							i<26 ? 'a'+(char)i : 'A'+(char)(i-26), 
+							0, ATR_NONE, buf, MENU_UNSELECTED);
+					}
+				}
+			}
+		}
+	} else {
+		for(i = 0; i<52; i++){
+			if(((spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
+				!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
+				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL) &&
+				u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves
+			){
+				Sprintf(buf, spiritPName[u.spiritPOrder[i]]);
+				any.a_int = u.spiritPOrder[i]+1;	/* must be non-zero */
+				add_menu(tmpwin, NO_GLYPH, &any,
+					i<26 ? 'a'+(char)i : 'A'+(char)(i-26), 
+					0, ATR_NONE, buf, MENU_UNSELECTED);
+			}
+		}
+	}
+	end_menu(tmpwin, prompt);
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	if(n > 0) *power_no = selected[0].item.a_int - 1;
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? TRUE : FALSE;
+}
+
 STATIC_OVL boolean
 dospellmenu(prompt, splaction, spell_no)
 const char *prompt;
@@ -1504,4 +1807,28 @@ const char *prompt;
 }
 
 
+void
+set_spirit_powers(spirits_seal)
+	long spirits_seal;
+{
+	int i,j;
+	for(i=0;i<NUMBER_POWERS;i++){
+		if(spiritPOwner[i]==spirits_seal){
+			for(j=0;j<52;j++){
+				if(u.spiritPOrder[j] == i) break;
+			}
+			if(j==52) for(j=0;j<52;j++){
+				if(u.spiritPOrder[j] == -1 ||
+					!((spiritPOwner[u.spiritPOrder[j]] & u.sealsActive &&
+					!(spiritPOwner[u.spiritPOrder[j]] & SEAL_SPECIAL)) || 
+					spiritPOwner[u.spiritPOrder[j]] & u.specialSealsActive & ~SEAL_SPECIAL)
+				){
+					u.spiritPOrder[j] = i;
+					break;
+				}
+			}
+			if(j==52) impossible("Could not find a free letter for power %d",i);
+		}
+	}
+}
 /*spell.c*/

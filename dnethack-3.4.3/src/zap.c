@@ -24,8 +24,8 @@ extern boolean m_using;
 STATIC_DCL void FDECL(polyuse, (struct obj*, int, int));
 STATIC_DCL void FDECL(create_polymon, (struct obj *, int));
 STATIC_DCL boolean FDECL(zap_updown, (struct obj *));
-STATIC_DCL int FDECL(zhitm, (struct monst *,int,int,struct obj **));
-STATIC_DCL void FDECL(zhitu, (int,int,const char *,XCHAR_P,XCHAR_P));
+STATIC_DCL int FDECL(zhitm, (struct monst *,int,int,int,struct obj **));
+STATIC_DCL void FDECL(zhitu, (int,int,int,const char *,XCHAR_P,XCHAR_P));
 STATIC_DCL void FDECL(revive_egg, (struct obj *));
 #ifdef STEED
 STATIC_DCL boolean FDECL(zap_steed, (struct obj *));
@@ -1069,6 +1069,7 @@ int ochance, achance;	/* percent chance for ordinary objects, artifacts */
 	    obj->otyp == SPE_BOOK_OF_THE_DEAD ||
 	    obj->otyp == CANDELABRUM_OF_INVOCATION ||
 	    obj->otyp == BELL_OF_OPENING ||
+	    obj->oartifact == ART_PEN_OF_THE_VOID ||
 	    (obj->otyp == CORPSE && is_rider(&mons[obj->corpsenm]))) {
 		return TRUE;
 	} else {
@@ -2624,11 +2625,11 @@ register struct	obj	*obj;
 	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_FINGER_OF_DEATH)
 		buzz(otyp - SPE_MAGIC_MISSILE + 10,
 		     u.ulevel / 2 + 1,
-		     u.ux, u.uy, u.dx, u.dy,0);
+		     u.ux, u.uy, u.dx, u.dy,0,0);
 	    else if (otyp >= WAN_MAGIC_MISSILE && otyp <= WAN_LIGHTNING)
 		buzz(otyp - WAN_MAGIC_MISSILE,
 		     (otyp == WAN_MAGIC_MISSILE) ? 2 : 6,
-		     u.ux, u.uy, u.dx, u.dy,0);
+		     u.ux, u.uy, u.dx, u.dy,0,0);
 	    else
 		impossible("weffects: unexpected spell or wand");
 	    disclose = TRUE;
@@ -3052,10 +3053,10 @@ int dx, dy;
 }
 
 STATIC_OVL int
-zhitm(mon, type, nd, ootmp)			/* returns damage to mon */
-register struct monst *mon;
-register int type, nd;
-struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
+zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
+	struct monst *mon;
+	int type, nd, flat;
+	struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 {
 	register int tmp = 0;
 	register int abstype = abs(type) % 10;
@@ -3069,7 +3070,8 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		    sho_shieldeff = TRUE;
 		    break;
 		}
-		tmp = d(nd,6);
+		if(!flat) tmp = d(nd,6);
+		else tmp = flat;
 		if (spellcaster)
 		    tmp += spell_damage_bonus();
 #ifdef WIZ_PATCH_DEBUG
@@ -3083,8 +3085,9 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		    sho_shieldeff = TRUE;
 		    break;
 		}
-		tmp = d(nd,6);
-		if (resists_cold(mon)) tmp += 7;
+		if(!flat) tmp = d(nd,6);
+		else tmp = flat;
+		if (resists_cold(mon)) tmp *= 1.5;
 		if (spellcaster)
 		    tmp += spell_damage_bonus();
 #ifdef WIZ_PATCH_DEBUG
@@ -3103,8 +3106,9 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		    sho_shieldeff = TRUE;
 		    break;
 		}
-		tmp = d(nd,6);
-		if (resists_fire(mon)) tmp += d(nd, 3);
+		if(!flat) tmp = d(nd,6);
+		else tmp = flat;
+		if (resists_fire(mon)) tmp *= 1.5;
 		if (spellcaster)
 		    tmp += spell_damage_bonus();
 #ifdef WIZ_PATCH_DEBUG
@@ -3116,7 +3120,7 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		break;
 	case ZT_SLEEP:
 		tmp = 0;
-		(void)sleep_monst(mon, d(nd, 25),
+		(void)sleep_monst(mon, flat ? flat : d(nd, 25),
 				type == ZT_WAND(ZT_SLEEP) ? WAND_CLASS : '\0');
 		break;
 	case ZT_DEATH:		/* death/disintegration */
@@ -3192,7 +3196,8 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		    tmp = 0;
 		    /* can still blind the monster */
 		} else
-		    tmp = d(nd,6);
+			if(!flat) tmp = d(nd,6);
+			else tmp = flat;
 		if (spellcaster)
 		    tmp += spell_damage_bonus();
 #ifdef WIZ_PATCH_DEBUG
@@ -3217,14 +3222,16 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		    sho_shieldeff = TRUE;
 		    break;
 		}
-		tmp = d(nd,6);
+		if(!flat) tmp = d(nd,6);
+		else tmp = flat;
 		break;
 	case ZT_ACID:
 		if (resists_acid(mon)) {
 		    sho_shieldeff = TRUE;
 		    break;
 		}
-		tmp = d(nd,6);
+		if(!flat) tmp = d(nd,6);
+		else tmp = flat;
 		if (!rn2(6)) erode_obj(MON_WEP(mon), TRUE, TRUE);
 		if (!rn2(6)) erode_armor(mon, TRUE);
 		break;
@@ -3244,8 +3251,8 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 }
 
 STATIC_OVL void
-zhitu(type, nd, fltxt, sx, sy)
-int type, nd;
+zhitu(type, nd, flat, fltxt, sx, sy)
+int type, nd, flat;
 const char *fltxt;
 xchar sx, sy;
 {
@@ -3257,7 +3264,8 @@ xchar sx, sy;
 		shieldeff(sx, sy);
 		pline_The("missiles bounce off!");
 	    } else {
-		dam = d(nd,6);
+		if(!flat) dam = d(nd,6);
+		else dam = flat;
 		exercise(A_STR, FALSE);
 	    }
 	    break;
@@ -3265,9 +3273,10 @@ xchar sx, sy;
 	    if (Fire_resistance) {
 		shieldeff(sx, sy);
 		You("don't feel hot!");
-		ugolemeffects(AD_FIRE, d(nd, 6));
+		ugolemeffects(AD_FIRE, flat ? flat : d(nd, 6));
 	    } else {
-		dam = d(nd, 6);
+		if(!flat) dam = d(nd,6);
+		else dam = flat;
 	    }
 	    burn_away_slime();
 	    if (burnarmor(&youmonst)) {	/* "body hit" */
@@ -3280,9 +3289,10 @@ xchar sx, sy;
 	    if (Cold_resistance) {
 		shieldeff(sx, sy);
 		You("don't feel cold.");
-		ugolemeffects(AD_COLD, d(nd, 6));
+		ugolemeffects(AD_COLD, flat ? flat : d(nd, 6));
 	    } else {
-		dam = d(nd, 6);
+		if(!flat) dam = d(nd,6);
+		else dam = flat;
 	    }
 	    if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
 	    break;
@@ -3291,7 +3301,7 @@ xchar sx, sy;
 		shieldeff(u.ux, u.uy);
 		You("don't feel sleepy.");
 	    } else {
-		fall_asleep(-d(nd,25), TRUE); /* sleep ray */
+		fall_asleep(flat ? -1*flat : -d(nd,25), TRUE); /* sleep ray */
 	    }
 	    break;
 	case ZT_DEATH:
@@ -3334,9 +3344,10 @@ xchar sx, sy;
 	    if (Shock_resistance) {
 		shieldeff(sx, sy);
 		You("aren't affected.");
-		ugolemeffects(AD_ELEC, d(nd, 6));
+		ugolemeffects(AD_ELEC, flat ? flat : d(nd, 6));
 	    } else {
-		dam = d(nd, 6);
+		if(!flat) dam = d(nd,6);
+		else dam = flat;
 		exercise(A_CON, FALSE);
 	    }
 	    if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
@@ -3350,7 +3361,8 @@ xchar sx, sy;
 		dam = 0;
 	    } else {
 		pline_The("acid burns!");
-		dam = d(nd,6);
+		if(!flat) dam = d(nd,6);
+		else dam = flat;
 		exercise(A_STR, FALSE);
 	    }
 	    /* using two weapons at once makes both of them more vulnerable */
@@ -3450,19 +3462,20 @@ int type;	/* either hero cast spell type or 0 */
 /* type == -30 to -39 : monster shooting a wand */
 /* called with dx = dy = 0 with vertical bolts */
 /* a range of 0 means "random range rn1(7,7), which is the default behavior */
+/* 0 flat damage means nd6 damage, nozero flat damage means that much damage only */
 void
-buzz(type,nd,sx,sy,dx,dy,range)
-register int type, nd;
-register xchar sx,sy;
-register int dx,dy,range;
+buzz(type,nd,sx,sy,dx,dy,range,flat)
+	int type, nd, flat;
+	xchar sx,sy;
+	int dx,dy,range;
 {
     int abstype = abs(type) % 10;
     struct rm *lev;
-    register xchar lsx, lsy;
+    xchar lsx, lsy;
     struct monst *mon;
     coord save_bhitpos;
     boolean shopdamage = FALSE;
-    register const char *fltxt;
+    const char *fltxt;
     struct obj *otmp;
     int spell_type;
 
@@ -3474,7 +3487,7 @@ register int dx,dy,range;
 	register int tmp;
 
 	if(type < 0) return;
-	tmp = zhitm(u.ustuck, type, nd, &otmp);
+	tmp = zhitm(u.ustuck, type, nd, flat, &otmp);
 	if(!u.ustuck)	u.uswallow = 0;
 	else	pline("%s rips into %s%s",
 		      The(fltxt), mon_nam(u.ustuck), exclam(tmp));
@@ -3535,7 +3548,7 @@ register int dx,dy,range;
 		    dy = -dy;
 		} else {
 		    boolean mon_could_move = mon->mcanmove;
-		    int tmp = zhitm(mon, type, nd, &otmp);
+				int tmp = zhitm(mon, type, nd, flat, &otmp);
 
 		    if ( (is_rider(mon->data) || mon->data == &mons[PM_DEMOGORGON]) 
 					&& abs(type) == ZT_BREATH(ZT_DEATH)) {
@@ -3642,7 +3655,7 @@ register int dx,dy,range;
 		    dy = -dy;
 		    shieldeff(sx, sy);
 		} else {
-		    zhitu(type, nd, fltxt, sx, sy);
+				zhitu(type, nd, flat, fltxt, sx, sy);
 		}
 	    } else {
 		pline("%s whizzes by you!", The(fltxt));

@@ -2060,12 +2060,15 @@ E void FDECL(book_disappears, (struct obj *));
 E void FDECL(book_substitution, (struct obj *,struct obj *));
 E void NDECL(age_spells);
 E int NDECL(docast);
+E int NDECL(dospirit);
 E int FDECL(spell_skilltype, (int));
+E int FDECL(spiriteffects, (int,BOOLEAN_P));
 E int FDECL(spelleffects, (int,BOOLEAN_P));
 E void NDECL(losespells);
 E int NDECL(dovspell);
 E void FDECL(initialspell, (struct obj *));
 E void FDECL(initialward, (struct obj *));
+E void FDECL(set_spirit_powers, (long));
 
 /* ### steal.c ### */
 
@@ -2556,7 +2559,7 @@ E struct monst *FDECL(bhit, (int,int,int,int,int (*)(MONST_P,OBJ_P),
 			     int (*)(OBJ_P,OBJ_P),struct obj *, boolean *));
 E struct monst *FDECL(boomhit, (int,int));
 E int FDECL(burn_floor_paper, (int,int,BOOLEAN_P,BOOLEAN_P));
-E void FDECL(buzz, (int,int,XCHAR_P,XCHAR_P,int,int,int));
+E void FDECL(buzz, (int,int,XCHAR_P,XCHAR_P,int,int,int,int));
 E void FDECL(melt_ice, (XCHAR_P,XCHAR_P));
 E int FDECL(zap_over_floor, (XCHAR_P,XCHAR_P,int,boolean *));
 E void FDECL(fracture_rock, (struct obj *));

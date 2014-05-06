@@ -1345,7 +1345,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				deltax = deltax > 1 ? 1 : deltax < -1 ? -1 : deltax;
 				deltay = deltay > 1 ? 1 : deltay < -1 ? -1 : deltay;
 				buzz(WAN_LIGHTNING - WAN_MAGIC_MISSILE,
-				 6, u.ux, u.uy, deltax, deltay,0);
+				 6, u.ux, u.uy, deltax, deltay,0,0);
 			}
 		}
 		else if(youdefend){
@@ -1361,7 +1361,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				deltax = deltax > 1 ? 1 : deltax < -1 ? -1 : deltax;
 				deltay = deltay > 1 ? 1 : deltay < -1 ? -1 : deltay;
 				buzz( -30 - (WAN_LIGHTNING - WAN_MAGIC_MISSILE),
-			     6, u.ux, u.uy, deltax, deltay,0);
+			     6, u.ux, u.uy, deltax, deltay,0,0);
 			}
 		}
 		else{
@@ -1377,7 +1377,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				deltax = deltax > 1 ? 1 : deltax < -1 ? -1 : deltax;
 				deltay = deltay > 1 ? 1 : deltay < -1 ? -1 : deltay;
 				buzz( -30 - (WAN_LIGHTNING - WAN_MAGIC_MISSILE),
-			     6, magr->mx, magr->mx, deltax, deltay,0);
+			     6, magr->mx, magr->mx, deltax, deltay,0,0);
 			}
 		}
 	}
@@ -2539,7 +2539,8 @@ arti_invoke(obj)
 					pline("Tsugi no mai, Hakuren!");
 					u.SnSd2 = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST)||Role_if(PM_SAMURAI) ? .9 : 1));
 					buzz(WAN_COLD - WAN_MAGIC_MISSILE,
-						 (u.ulevel + obj->spe + spell_damage_bonus()), u.ux, u.uy, u.dx, u.dy,7+obj->spe);				}
+						 (u.ulevel + obj->spe + spell_damage_bonus()), u.ux, u.uy, u.dx, u.dy,7+obj->spe,0);
+				}
 					nomul(-1, "performing a sword dance");//both the first and the second dance leave you momentarily exposed.
 			}
 			else if (dancenumber == '3') {

@@ -490,7 +490,6 @@ holetime()
 }
 
 /* Return typ of liquid to fill a hole with, or ROOM, if no liquid nearby */
-STATIC_OVL
 schar
 fillholetyp(x,y)
 int x, y;

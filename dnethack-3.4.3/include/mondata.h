@@ -121,13 +121,11 @@
 				 (ptr) == &mons[PM_GIANT_SPIDER]\
 				 (ptr) == &mons[PM_PHASE_SPIDER]\
 				 ))
-#ifdef CONVICT
-# define is_rat(ptr)		((ptr) == &mons[PM_SEWER_RAT] || \
+#define is_rat(ptr)		((ptr) == &mons[PM_SEWER_RAT] || \
 				 (ptr) == &mons[PM_GIANT_RAT] || \
 				 (ptr) == &mons[PM_RABID_RAT] || \
 				 (ptr) == &mons[PM_ENORMOUS_RAT] || \
 				 (ptr) == &mons[PM_RODENT_OF_UNUSUAL_SIZE])
-#endif /* CONVICT */
 #define is_bird(ptr)		((ptr)->mlet == S_BAT && !is_bat(ptr) && (ptr) != &mons[PM_BYAKHEE])
 #define is_giant(ptr)		(((ptr)->mflags2 & M2_GIANT) != 0L)
 #define is_gnoll(ptr)		((ptr) == &mons[PM_GNOLL] || \

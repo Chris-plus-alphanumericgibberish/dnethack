@@ -704,7 +704,7 @@ struct monst *priest;
 	    break;
 	}
 
-	buzz(-10-(AD_ELEC-1), 6, x, y, sgn(tbx), sgn(tby),0); /* bolt of lightning */
+	buzz(-10-(AD_ELEC-1), 6, x, y, sgn(tbx), sgn(tby),0,0); /* bolt of lightning */
 	exercise(A_WIS, FALSE);
 }
 

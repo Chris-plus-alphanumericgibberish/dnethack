@@ -1620,8 +1620,6 @@ int final;
 static const struct func_tab cmdlist[] = {
 	{C('d'), FALSE, dokick}, /* "D" is for door!...?  Msg is in dokick.c */
 #ifdef WIZARD
-	{C('e'), TRUE, wiz_detect},
-	{C('f'), TRUE, wiz_map},
 	{C('g'), TRUE, wiz_genesis},
 	{C('i'), TRUE, wiz_identify},
 #endif
@@ -1634,7 +1632,6 @@ static const struct func_tab cmdlist[] = {
 	{C('t'), TRUE, dotele},
 #ifdef WIZARD
 	{C('v'), TRUE, wiz_level_tele},
-	{C('w'), TRUE, wiz_wish},
 #endif
 	{C('x'), TRUE, doattributes},
 #ifdef SUSPEND
@@ -1653,10 +1650,12 @@ static const struct func_tab cmdlist[] = {
 	{'e', FALSE, doeat},
 	{'E', FALSE, doengward},
 /*	{'E', FALSE, doengrave},*/
+	{C('e'), TRUE, doseal},
 	{M('e'), TRUE, enhance_weapon_skill},
 	{'f', FALSE, dofire},
 /*	'F' : fight (one time) */
 	{M('f'), FALSE, doforce},
+	{C('f'), TRUE, dospirit},
 /*	'g', 'G' : multiple go */
 /*	'h', 'H' : go west */
 	{'h', TRUE, dohelp}, /* if number_pad is set */
@@ -1689,7 +1688,7 @@ static const struct func_tab cmdlist[] = {
 	{M('r'), FALSE, dorub},
 	{'s', TRUE, dosearch, "searching"},
 	{'S', TRUE, dosave},
-	{C('s'), FALSE, doseal}, 
+//	{C('s'), FALSE, doseal}, 
 	{M('s'), FALSE, dosit},
 	{'t', FALSE, dothrow},
 	{'T', FALSE, dotakeoff},
@@ -1702,6 +1701,7 @@ static const struct func_tab cmdlist[] = {
 	{M('v'), TRUE, doextversion},
 	{'w', FALSE, dowield},
 	{'W', FALSE, dowear},
+	{C('w'), TRUE, doward},
 	{M('w'), FALSE, dowipe},
 	{'x', FALSE, doswapweapon},
 /*	{'X', TRUE, enter_explore_mode},*/
@@ -1775,6 +1775,8 @@ struct ext_func_tab extcmdlist[] = {
 	 */
 	{(char *)0, (char *)0, donull, TRUE},
 	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE},
 #ifdef DEBUG_MIGRATING_MONS
 	{(char *)0, (char *)0, donull, TRUE},
 #endif
@@ -1786,6 +1788,7 @@ struct ext_func_tab extcmdlist[] = {
 #endif
 	{(char *)0, (char *)0, donull, TRUE},
         {(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE},
 	{(char *)0, (char *)0, donull, TRUE},
 	{(char *)0, (char *)0, donull, TRUE},
 #ifdef DEBUG
@@ -1800,6 +1803,8 @@ struct ext_func_tab extcmdlist[] = {
 static const struct ext_func_tab debug_extcmdlist[] = {
 	{"levelchange", "change experience level", wiz_level_change, TRUE},
 	{"lightsources", "show mobile light sources", wiz_light_sources, TRUE},
+	{"detect", "do wizard detection", wiz_detect, TRUE},
+	{"map", "map the current level", wiz_map, TRUE},
 #ifdef DEBUG_MIGRATING_MONS
 	{"migratemons", "migrate n random monsters", wiz_migrate_mons, TRUE},
 #endif
@@ -1813,6 +1818,7 @@ static const struct ext_func_tab debug_extcmdlist[] = {
 	{"stats", "show memory statistics", wiz_show_stats, TRUE},
 	{"timeout", "look at timeout queue", wiz_timeout_queue, TRUE},
 	{"vision", "show vision array", wiz_show_vision, TRUE},
+	{"wish", "make a wizard wish", wiz_wish, TRUE},
 #ifdef DEBUG
 	{"wizdebug", "wizard debug command", wiz_debug_cmd, TRUE},
 #endif

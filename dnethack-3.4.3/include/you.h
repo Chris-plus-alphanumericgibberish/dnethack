@@ -509,15 +509,89 @@ struct you {
 	long specialSealsActive;
 	
 	//Spirits in order bound:
-	long spirit[5];
-	long spiritQuest,spiritTineA,spiritTineB;
+	long spirit[7];
+#define	GATE_SPIRITS	5
+#define	QUEST_SPIRIT	5
+#define	OUTER_SPIRIT	6
+#define	NUM_BIND_SPRITS	7
+	long spiritTineA,spiritTineB;
 	//Corresponding timeouts (turn on which binding expires):
-	long spiritT[5];
-	long spiritQuestT,spiritTineTA,spiritTineTB;
+	long spiritT[7];
+	long spiritTineTA,spiritTineTB;
+	
+	
+#define	PWR_ABDUCTION				 0
+#define	PWR_FIRE_BREATH				 1
+#define	PWR_TRANSDIMENSIONAL_RAY	 2
+#define	PWR_TELEPORT				 3
+#define	PWR_JESTER_S_MIRTH			 4
+#define	PWR_THIEF_S_INSTINCTS		 5
+#define	PWR_ASTAROTH_S_ASSEMBLY		 6
+#define	PWR_ASTAROTH_S_SHARDS		 7
+#define	PWR_ICY_GLARE				 8
+#define	PWR_BALAM_S_ANOINTING		 9
+#define	PWR_BLOOD_MERCENARY			10
+#define	PWR_SOW_DISCORD				11
+#define	PWR_GIFT_OF_HEALING			12
+#define	PWR_GIFT_OF_HEALTH			13
+#define	PWR_THROW_WEBBING			14
+#define	PWR_THOUGHT_TRAVEL			15
+#define	PWR_DREAD_OF_DANTALION		16
+#define	PWR_EARTH_SWALLOW			17
+#define	PWR_ECHIDNA_S_VENOM			18
+#define	PWR_SUCKLE_MONSTER			19
+#define	PWR_STARGATE				20
+#define	PWR_RECALL_TO_EDEN			21
+#define	PWR_PURIFYING_BLAST			22
+#define	PWR_WALKER_OF_THRESHOLDS	23
+#define	PWR_VENGANCE				24
+#define	PWR_SHAPE_THE_WIND			25
+#define	PWR_THORNS_AND_STONES		26
+#define	PWR_BARAGE					27
+#define	PWR_BREATH_POISON			28
+#define	PWR_RUNIOUS_STRIKE			29
+#define	PWR_RAVEN_S_TALONS			30
+#define	PWR_HORRID_WILTING			31
+#define	PWR_TURN_ANIMALS_AND_HUMANOIDS	32
+#define	PWR_REFILL_LANTERN			33
+#define	PWR_HELLFIRE				34
+#define	PWR_CALL_MURDER				35
+#define	PWR_ROOT_SHOUT				36
+#define	PWR_LONG_STRIDE				37
+#define	PWR_CONFUSING_TOUCH			38
+#define	PWR_BLOODY_TOUNGE			39
+#define	PWR_SILVER_TOUNGE			40
+#define	PWR_EXHALATION_OF_THE_RIFT	41
+#define	PWR_QUERIENT_THOUGHTS		42
+#define	PWR_GREAT_LEAP				43
+#define	PWR_MASTER_OF_DOORWAYS		44
+#define	PWR_READ_SPELL				45
+#define	PWR_BOOK_TELEPATHY			46
+#define	PWR_UNITE_THE_EARTH_AND_SKY	47
+#define	PWR_HOOK_IN_THE_SKY			48
+#define	PWR_ENLIGHTENMENT			49
+#define	PWR_DAMNING_DARKNESS		50
+#define	PWR_TOUCH_OF_THE_VOID		51
+#define	PWR_ECHOS_OF_THE_LAST_WORD	52
+#define	PWR_POISON_GAZE				53
+#define	PWR_GAP_STEP				54
+#define	PWR_MOAN					55
+#define	PWR_SWALLOW_SOUL			56
+#define	PWR_IDENTIFY_INVENTORY		57
+#define	PWR_CLAIRVOYANCE			58
+#define	PWR_FIND_PATH				59
+#define	NUMBER_POWERS				60
+
+	short spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
+//	char spiritPLetters[NUMBER_POWERS];
+	long spiritPColdowns[NUMBER_POWERS];
+	
 
 	/* 	variable that keeps track of summoning in your vicinity.
 		Only allow 1 per turn, to help reduce summoning cascades. */
 	boolean summonMonster;
+	/* 	Variable that checks if the Wizard has increased the weight of the amulet */
+	boolean uleadamulet;
 	/*Ugly extra artifact variables workaround.  Spaghetti code alert!*/
 	long SnSd1, SnSd2, SnSd3, SnSd3duration;
 	int ZangetsuSafe;

@@ -1215,7 +1215,7 @@ dobinding(tx,ty)
 int tx,ty;
 {
 	struct engr *ep = get_head_engr();
-	int numSlots;
+	int numSlots, i;
 	int bindingPeriod = 5000;
 	for(ep;ep;ep=ep->nxt_engr) 
 		if(ep->engr_x==tx && ep->engr_y==ty)
@@ -1241,8 +1241,9 @@ int tx,ty;
 					pline("A voice whispers from bellow:");
 					pline("\"All shall feed the shattered night.\"");
 					u.sealsActive |= SEAL_AHAZU;
-					u.spirit[numSlots] = SEAL_AHAZU;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_AHAZU;
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
+					set_spirit_powers(SEAL_AHAZU);
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1271,7 +1272,7 @@ int tx,ty;
 			char altarfound=0;
 			//Amon can't be invoked on levels with altars, and in fact doing so causes imediate level loss, as for a broken taboo.
 			for(curx=1;curx < COLNO;curx++)
-				for(curx=1;cury < ROWNO;cury++)
+				for(cury=1;cury < ROWNO;cury++)
 					if(IS_ALTAR(levl[curx][cury].typ)){ altarfound=1; cury=ROWNO; curx=COLNO;}//end search
 			
 			if(!altarfound){
@@ -1282,8 +1283,9 @@ int tx,ty;
 					pline("\"Cursed are you who calls me forth. I damn you to bear my sign and my flames, alone in this world of darkness!\"");
 					unrestrict_weapon_skill(P_CLERIC_SPELL);
 					u.sealsActive |= SEAL_AMON;
-					u.spirit[numSlots] = SEAL_AMON;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_AMON;
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
+					set_spirit_powers(SEAL_AMON);
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1329,8 +1331,9 @@ int tx,ty;
 					pline("\"Though born of curves, by my square you shall rectify the world.\"");
 					unrestrict_weapon_skill(P_ESCAPE_SPELL);
 					u.sealsActive |= SEAL_ANDREALPHUS;
-					u.spirit[numSlots] = SEAL_ANDREALPHUS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_ANDREALPHUS;
+					set_spirit_powers(SEAL_ANDREALPHUS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1554,8 +1557,9 @@ int tx,ty;
 					pline("When your attention returns to the seal, the hands have gone.");
 					unrestrict_weapon_skill(P_DAGGER);
 					u.sealsActive |= SEAL_ANDROMALIUS;
-					u.spirit[numSlots] = SEAL_ANDROMALIUS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_ANDROMALIUS;
+					set_spirit_powers(SEAL_ANDROMALIUS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1593,7 +1597,7 @@ int tx,ty;
 				pline("With your mind's eye, you watch as they make a show of prestidigitation,");
 				pline("palming and unpalming %s. Suddenly, they throw %s at your face!", andromaliusItems[i1], andromaliusItems[i2]);
 				You("come out of your revere with a start.");
-				u.spiritT[numSlots] = moves + bindingPeriod/10;
+				u.spiritT[u.sealCounts] = moves + bindingPeriod/10;
 			}
 		}
 	}break;
@@ -1635,8 +1639,9 @@ int tx,ty;
 				unrestrict_weapon_skill(P_CROSSBOW);
 				unrestrict_weapon_skill(P_SHURIKEN);
 					u.sealsActive |= SEAL_ASTAROTH;
-					u.spirit[numSlots] = SEAL_ASTAROTH;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+				u.spirit[u.sealCounts] = SEAL_ASTAROTH;
+				set_spirit_powers(SEAL_ASTAROTH);
+				u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				if(o->spe<0) o->spe=0;
 				if(o->oeroded) o->oeroded=0;
@@ -1696,8 +1701,9 @@ int tx,ty;
 					pline("\"In your name was this done, therefore you shall bear my stigmata and share my suffering.\"");
 					unrestrict_weapon_skill(P_WHIP);
 					u.sealsActive |= SEAL_BALAM;
-					u.spirit[numSlots] = SEAL_BALAM;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_BALAM;
+					set_spirit_powers(SEAL_BALAM);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1758,8 +1764,9 @@ int tx,ty;
 					unrestrict_weapon_skill(P_LANCE);
 					unrestrict_weapon_skill(P_RIDING);
 					u.sealsActive |= SEAL_BERITH;
-					u.spirit[numSlots] = SEAL_BERITH;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_BERITH;
+					set_spirit_powers(SEAL_BERITH);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1799,8 +1806,9 @@ int tx,ty;
 				pline("Will you walk with me?\"");
 				unrestrict_weapon_skill(P_HEALING_SPELL);
 				u.sealsActive |= SEAL_BUER;
-				u.spirit[numSlots] = SEAL_BUER;
-				u.spiritT[numSlots] = moves + bindingPeriod;
+				u.spirit[u.sealCounts] = SEAL_BUER;
+				set_spirit_powers(SEAL_BUER);
+				u.spiritT[u.sealCounts] = moves + bindingPeriod;
 				u.sealCounts++;
 			}
 			else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1843,8 +1851,9 @@ int tx,ty;
 					pline("She wraps you tight in her bitter cords and sends you forth, bait within her web.");
 					unrestrict_weapon_skill(P_KNIFE);
 					u.sealsActive |= SEAL_CHUPOCLOPS;
-					u.spirit[numSlots] = SEAL_CHUPOCLOPS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_CHUPOCLOPS;
+					set_spirit_powers(SEAL_CHUPOCLOPS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1892,8 +1901,9 @@ int tx,ty;
 					unrestrict_weapon_skill(P_TWO_HANDED_SWORD);
 					unrestrict_weapon_skill(P_SCIMITAR);
 					u.sealsActive |= SEAL_DANTALION;
-					u.spirit[numSlots] = SEAL_DANTALION;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_DANTALION;
+					set_spirit_powers(SEAL_DANTALION);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1940,8 +1950,9 @@ int tx,ty;
 					pline("\"Let me follow you and practice standing out.\"");
 					unrestrict_weapon_skill(P_POLEARMS);
 					u.sealsActive |= SEAL_SHIRO;
-					u.spirit[numSlots] = SEAL_SHIRO;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_SHIRO;
+					set_spirit_powers(SEAL_SHIRO);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1979,8 +1990,9 @@ int tx,ty;
 					pline("\"Free me from this place, and I and my brood shall fight for your cause.\"");
 					unrestrict_weapon_skill(P_UNICORN_HORN);
 					u.sealsActive |= SEAL_ECHIDNA;
-					u.spirit[numSlots] = SEAL_ECHIDNA;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_ECHIDNA;
+					set_spirit_powers(SEAL_ECHIDNA);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2012,16 +2024,21 @@ int tx,ty;
 			//Spirit requires that its seal be drawn by a fountain.
 			if(IS_FOUNTAIN(levl[tx][ty].typ)){
 				if(!Blind){
-//					pline();
+					pline("The water in the fountain begins to bubble.");
+					pline("A dome of cerulean crystal emerges from the center of the fountain,");
+					pline("the apex of a circular silver cathedral.");
+					pline("A dome of cerulean crystal emerges from the center of the fountain,");
+				} else {
+					pline(".");
 				}
-				pline(".");
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
 					unrestrict_weapon_skill(P_LONG_SWORD);
 					u.sealsActive |= SEAL_EDEN;
-					u.spirit[numSlots] = SEAL_EDEN;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_EDEN;
+					set_spirit_powers(SEAL_EDEN);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2070,8 +2087,9 @@ int tx,ty;
 					unrestrict_weapon_skill(P_DART);
 					unrestrict_weapon_skill(P_BOOMERANG);
 					u.sealsActive |= SEAL_ERIDU;
-					u.spirit[numSlots] = SEAL_ERIDU;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_ERIDU;
+					set_spirit_powers(SEAL_ERIDU);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2108,8 +2126,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
 					u.sealsActive |= SEAL_EURYNOME;
-					u.spirit[numSlots] = SEAL_EURYNOME;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_EURYNOME;
+					set_spirit_powers(SEAL_EURYNOME);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2148,8 +2167,9 @@ int tx,ty;
 					unrestrict_weapon_skill(P_BOW);
 					unrestrict_weapon_skill(P_HARVEST);
 					u.sealsActive |= SEAL_EVE;
-					u.spirit[numSlots] = SEAL_EVE;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_EVE;
+					set_spirit_powers(SEAL_EVE);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2178,13 +2198,13 @@ int tx,ty;
 			boolean coins = FALSE;
 			struct obj *otmp;
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
-				if(otmp->oclass == COIN_CLASS && otmp->quan >= 100*u.ulevel){
+				if(otmp->oclass == COIN_CLASS && otmp->quan >= 1000*u.ulevel){
 					coins = TRUE;
 			break;
 				}
 			}
 			//Spirit requires that his seal be drawn in a vault, or on a pile of 100xyour level coins.
-			if(coins || *in_rooms(tx,ty,VAULT)){
+			if(coins || (*in_rooms(tx,ty,VAULT) && u.uinvault)){
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
@@ -2192,8 +2212,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_PICK_AXE);
 					u.sealsActive |= SEAL_FAFNIR;
-					u.spirit[numSlots] = SEAL_FAFNIR;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_FAFNIR;
+					set_spirit_powers(SEAL_FAFNIR);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2227,8 +2248,9 @@ int tx,ty;
 				pline("");
 				unrestrict_weapon_skill(P_SPEAR);
 				u.sealsActive |= SEAL_HUGINN_MUNINN;
-				u.spirit[numSlots] = SEAL_HUGINN_MUNINN;
-				u.spiritT[numSlots] = moves + bindingPeriod;
+				u.spirit[u.sealCounts] = SEAL_HUGINN_MUNINN;
+				set_spirit_powers(SEAL_HUGINN_MUNINN);
+				u.spiritT[u.sealCounts] = moves + bindingPeriod;
 				u.sealCounts++;
 			}
 			else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2262,8 +2284,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_MORNING_STAR);
 					u.sealsActive |= SEAL_IRIS;
-					u.spirit[numSlots] = SEAL_IRIS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_IRIS;
+					set_spirit_powers(SEAL_IRIS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2297,8 +2320,9 @@ int tx,ty;
 					pline("");
 					pline("");
 					u.sealsActive |= SEAL_JACK;
-					u.spirit[numSlots] = SEAL_JACK;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_JACK;
+					set_spirit_powers(SEAL_JACK);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2393,8 +2417,9 @@ int tx,ty;
 					pline("");
 					pline("");
 					u.sealsActive |= SEAL_MALPHAS;
-					u.spirit[numSlots] = SEAL_MALPHAS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_MALPHAS;
+					set_spirit_powers(SEAL_MALPHAS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2430,8 +2455,9 @@ int tx,ty;
 					pline("");
 					pline("");
 					u.sealsActive |= SEAL_MARIONETTE;
-					u.spirit[numSlots] = SEAL_MARIONETTE;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_MARIONETTE;
+					set_spirit_powers(SEAL_MARIONETTE);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2468,8 +2494,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_DIVINATION_SPELL);
 					u.sealsActive |= SEAL_MOTHER;
-					u.spirit[numSlots] = SEAL_MOTHER;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_MOTHER;
+					set_spirit_powers(SEAL_MOTHER);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2507,8 +2534,9 @@ int tx,ty;
 					unrestrict_weapon_skill(P_QUARTERSTAFF);
 					unrestrict_weapon_skill(P_ATTACK_SPELL);
 					u.sealsActive |= SEAL_NABERIUS;
-					u.spirit[numSlots] = SEAL_NABERIUS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_NABERIUS;
+					set_spirit_powers(SEAL_NABERIUS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2543,8 +2571,9 @@ int tx,ty;
 					pline("");
 					pline("");
 					u.sealsActive |= SEAL_ORTHOS;
-					u.spirit[numSlots] = SEAL_ORTHOS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_ORTHOS;
+					set_spirit_powers(SEAL_ORTHOS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2579,8 +2608,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_TRIDENT);
 					u.sealsActive |= SEAL_OSE;
-					u.spirit[numSlots] = SEAL_OSE;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_OSE;
+					set_spirit_powers(SEAL_OSE);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2614,8 +2644,9 @@ int tx,ty;
 					pline("");
 					pline("");
 					u.sealsActive |= SEAL_OTIAX;
-					u.spirit[numSlots] = SEAL_OTIAX;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_OTIAX;
+					set_spirit_powers(SEAL_OTIAX);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2663,8 +2694,9 @@ int tx,ty;
 					pline("");
 					pline("");
 					u.sealsActive |= SEAL_PAIMON;
-					u.spirit[numSlots] = SEAL_PAIMON;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_PAIMON;
+					set_spirit_powers(SEAL_PAIMON);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2699,8 +2731,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_ENCHANTMENT_SPELL);
 					u.sealsActive |= SEAL_SIMURGH;
-					u.spirit[numSlots] = SEAL_SIMURGH;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_SIMURGH;
+					set_spirit_powers(SEAL_SIMURGH);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2735,8 +2768,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_MACE);
 					u.sealsActive |= SEAL_TENEBROUS;
-					u.spirit[numSlots] = SEAL_TENEBROUS;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_TENEBROUS;
+					set_spirit_powers(SEAL_TENEBROUS);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2785,8 +2819,9 @@ int tx,ty;
 					pline("");
 					unrestrict_weapon_skill(P_CLUB);
 					u.sealsActive |= SEAL_YMIR;
-					u.spirit[numSlots] = SEAL_YMIR;
-					u.spiritT[numSlots] = moves + bindingPeriod;
+					u.spirit[u.sealCounts] = SEAL_YMIR;
+					set_spirit_powers(SEAL_YMIR);
+					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2819,14 +2854,15 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
-					if(u.spiritQuest){
+					if(u.spirit[QUEST_SPIRIT]){
 						//Eject current quest spirit
-						u.specialSealsActive &= ~u.spiritQuest;
+						u.specialSealsActive &= ~u.spirit[QUEST_SPIRIT];
 						losexp("shreading of the soul",TRUE,TRUE,TRUE);
 					}
-					u.specialSealsActive |= SEAL_DAHLVER_NAR;
-					u.spiritQuest = SEAL_DAHLVER_NAR;
-					u.spiritQuestT = moves + bindingPeriod;
+					u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
+					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
+					set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
+					u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
 				}
 				u.dahlver_nar = moves + bindingPeriod;
 			}
@@ -2841,14 +2877,15 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("");
 					pline("");
-					if(u.spiritQuest){
+					if(u.spirit[QUEST_SPIRIT]){
 						//Eject current quest spirit
-						u.specialSealsActive &= ~u.spiritQuest;
+						u.specialSealsActive &= ~u.spirit[QUEST_SPIRIT];
 						losexp("shreading of the soul",TRUE,TRUE,TRUE);
 					}
-					u.specialSealsActive |= SEAL_ACERERAK;
-					u.spiritQuest = SEAL_ACERERAK;
-					u.spiritQuestT = moves + bindingPeriod;
+					u.specialSealsActive |= SEAL_SPECIAL|SEAL_ACERERAK;
+					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_ACERERAK;
+					set_spirit_powers(SEAL_SPECIAL|SEAL_ACERERAK);
+					u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
 				}
 				u.acererak = moves + bindingPeriod;
 			}
@@ -2864,7 +2901,9 @@ int tx,ty;
 			for (skill = 0; skill < P_NUM_SKILLS; skill++) {
 				OLD_P_SKILL(skill) = P_UNSKILLED;
 			}
-			u.specialSealsActive |= SEAL_NUMINA;
+			u.spirit[OUTER_SPIRIT] = SEAL_SPECIAL|SEAL_NUMINA;
+			u.specialSealsActive |= SEAL_SPECIAL|SEAL_NUMINA;
+			set_spirit_powers(SEAL_SPECIAL|SEAL_NUMINA);
 		}
 	}break;
 	}

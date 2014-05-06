@@ -1441,7 +1441,7 @@ ray:
        if(canspotmon(mtmp))
            pline("%s zaps you with a %s!", Monnam(mtmp),
                      flash_types[10+zap-1]);
-       buzz(-(10+zap-1),(mtmp->m_lev/2)+1, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0);
+       buzz(-(10+zap-1),(mtmp->m_lev/2)+1, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
        dmg = 0;
        break;
     case BLIND_YOU:
@@ -2044,7 +2044,7 @@ buzzmu(mtmp, mattk)		/* monster uses spell (ranged) */
 		    pline("%s zaps you with a %s!", Monnam(mtmp),
 			  flash_types[ad_to_typ(mattk->adtyp)]);
 		buzz(-ad_to_typ(mattk->adtyp), (int)mattk->damn,
-		     mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0);
+		     mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
 	    } else impossible("Monster spell %d cast", mattk->adtyp-1);
 	}
 	return(1);

@@ -1372,7 +1372,7 @@ struct monst *mtmp;
 		buzz((int)(-30 - (otmp->otyp - WAN_MAGIC_MISSILE)),
 			(otmp->otyp == WAN_MAGIC_MISSILE) ? 2 : 6,
 			mtmp->mx, mtmp->my,
-			sgn(tbx), sgn(tby),0);
+			sgn(tbx), sgn(tby),0,0);
 		m_using = FALSE;
 		return (mtmp->mhp <= 0) ? 1 : 2;
 	case MUSE_FIRE_HORN:
@@ -1386,7 +1386,7 @@ struct monst *mtmp;
 		m_using = TRUE;
 		buzz(-30 - ((otmp->otyp==FROST_HORN) ? AD_COLD-1 : AD_FIRE-1),
 			rn1(6,6), mtmp->mx, mtmp->my,
-			sgn(tbx), sgn(tby),0);
+			sgn(tbx), sgn(tby),0,0);
 		m_using = FALSE;
 		return (mtmp->mhp <= 0) ? 1 : 2;
 	case MUSE_WAN_TELEPORTATION:

@@ -951,8 +951,11 @@ u_init()
 	u.naberius = u.orthos = u.ose = u.otiax = u.paimon = u.simurgh = u.tenebrous = u.ymir = u.dahlver_nar = u.acererak = 0;
 	
 	
-	u.spirit[1] = u.spirit[2] = u.spirit[3] = u.spirit[4] = u.spirit[5] = u.spiritQuest = u.spiritTineA = u.spiritTineB = 0;
-	u.spiritT[1] = u.spiritT[2] = u.spiritT[3] = u.spiritT[4] = u.spiritT[5] = u.spiritQuestT = u.spiritTineTA = u.spiritTineTB = 0;
+	u.spirit[0] = u.spirit[1] = u.spirit[2] = u.spirit[3] = u.spirit[4] = u.spirit[5] = u.spirit[6] = u.spiritTineA = u.spiritTineB = 0;
+	u.spiritT[0] = u.spiritT[1] = u.spiritT[2] = u.spiritT[3] = u.spiritT[4] = u.spiritT[5] = u.spiritT[6] = u.spiritTineTA = u.spiritTineTB = 0;
+	
+	for(i = 0; i<52; i++) u.spiritPOrder[i] = -1;
+	for(i = 0; i<NUMBER_POWERS; i++) u.spiritPColdowns[i] = 0;
 
 	u.umonnum = u.umonster = (flags.female &&
 			urole.femalenum != NON_PM) ? urole.femalenum :
@@ -1386,10 +1389,10 @@ u_init()
 	u.umoney0 += hidden_gold();	/* in case sack has gold in it */
 #endif
 
-	find_ac();			/* get initial ac value */
 	if(Role_if(PM_EXILE)){
 		init_attr(55);
 	} else init_attr(75);			/* init attribute values */
+	find_ac();				/* get initial ac value */
 	max_rank_sz();			/* set max str size for class ranks */
 /*
  *	Do we really need this?
