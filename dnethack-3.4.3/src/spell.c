@@ -275,6 +275,11 @@ struct obj *book2;
 		else arti_cursed = TRUE;
 	    }
 	}
+	if(!arti2_primed && !arti_cursed && uwep && uwep->oartifact == ART_SILVER_KEY){
+	    pline("As you read from the book, you unconciously move the silver key through a complex unlocking gesture.");
+		if(!uwep->cursed) arti2_primed = TRUE;
+		else arti_cursed = TRUE;
+	}
 
 	if(arti_cursed) {
 	    pline_The("invocation fails!");

@@ -600,6 +600,7 @@ register struct obj *obj;
 	if (obj->otyp == AMULET_OF_YENDOR ||
 			obj->otyp == CANDELABRUM_OF_INVOCATION ||
 			obj->otyp == BELL_OF_OPENING ||
+			obj->oartifact == ART_SILVER_KEY ||
 			obj->oartifact == ART_PEN_OF_THE_VOID ||
 			obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 		/* player might be doing something stupid, but we
