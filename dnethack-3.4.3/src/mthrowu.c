@@ -1007,7 +1007,6 @@ register struct attack *mattk;
 		}
 	}
     if(mtmp->mspec_used){
-		mtmp->mspec_used--;
 		return 0;
 	}
 	if(lined_up(mtmp)) {
