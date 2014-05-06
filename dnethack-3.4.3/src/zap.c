@@ -124,7 +124,7 @@ struct obj *otmp;
 		if (resists_magm(mtmp)) {	/* match effect on player */
 			shieldeff(mtmp->mx, mtmp->my);
 			break;	/* skip makeknown */
-		} else if (u.uswallow || rnd(20) < 10 + find_mac(mtmp)) {
+		} else if (u.uswallow || otyp == WAN_STRIKING || rnd(20) < 10 + find_mac(mtmp)) {
 			dmg = d(2,12);
 			if(dbldam) dmg *= 2;
 			if (otyp == SPE_FORCE_BOLT)
