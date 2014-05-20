@@ -540,8 +540,10 @@ struct autopickup_exception {
 
 #ifdef RECORD_ACHIEVE
 struct u_achieve {
+        Bitfield(get_keys,9);        /* the alignment keys */
         Bitfield(get_bell,1);        /* You have obtained the bell of 
                                       * opening */
+        Bitfield(get_skey,1);        /* You have obtained the silver key */
         Bitfield(get_candelabrum,1); /* You have obtained the candelabrum */
         Bitfield(get_book,1);        /* You have obtained the book of 
                                       * the dead */
@@ -558,6 +560,9 @@ struct u_achieve {
                                       * end of the mines. */
         Bitfield(finish_sokoban,1);  /* You obtained the sokoban prize. */
         Bitfield(killed_medusa,1);   /* You defeated Medusa. */
+		Bitfield(killed_lucifer,1);		/* Bragging rights */
+		Bitfield(killed_asmodeus,1);		/* Bragging rights */
+		Bitfield(killed_demogorgon,1);		/* Bragging rights */
 };
 
 E struct u_achieve achieve;

@@ -1898,7 +1898,16 @@ register struct monst *mtmp;
 	if(mtmp->iswiz) wizdead();
 	if(mtmp->data->msound == MS_NEMESIS) nemdead();
 #ifdef RECORD_ACHIEVE
-        if(mtmp->data == &mons[PM_MEDUSA])
+	if(mtmp->data == &mons[PM_LUCIFER]){
+		achieve.killed_lucifer = 1;
+	}
+	else if(mtmp->data == &mons[PM_ASMODEUS]){
+		achieve.killed_asmodeus = 1;
+	}
+	else if(mtmp->data == &mons[PM_DEMOGORGON]){
+		achieve.killed_demogorgon = 1;
+	}
+	else if(mtmp->data == &mons[PM_MEDUSA])
             achieve.killed_medusa = 1;
 #endif
 	if(glyph_is_invisible(levl[mtmp->mx][mtmp->my].glyph))

@@ -925,9 +925,19 @@ encodeachieve(void)
    *  9   obtained the luckstone from the Mines
    *  10  obtained the sokoban prize
    *  11  killed medusa
+   *  12  killed lucifer
+   *  13  killed asmodeus
+   *  14  killed demogorgon
+   *  15  obtained 3 keys
+   *  16  obtained 9 keys
    */
 
   long r;
+  int i,keys=0;
+  
+  for(i=0;i<9;i++){
+	if((achieve.get_keys >> i) & 1) keys++;
+  }
 
   r = 0;
 
@@ -943,6 +953,11 @@ encodeachieve(void)
   if(achieve.get_luckstone)      r |= 1L << 9;
   if(achieve.finish_sokoban)     r |= 1L << 10;
   if(achieve.killed_medusa)      r |= 1L << 11;
+  if(achieve.killed_lucifer)     r |= 1L << 12;
+  if(achieve.killed_asmodeus)    r |= 1L << 13;
+  if(achieve.killed_demogorgon)  r |= 1L << 14;
+  if(keys >= 3)					 r |= 1L << 15;
+  if(keys == 9)  				 r |= 1L << 16;
 
   return r;
 }

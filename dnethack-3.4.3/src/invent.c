@@ -278,13 +278,18 @@ struct obj *obj;
 #endif
 	} else if (obj->oartifact) {
 		if (is_quest_artifact(obj)) {
-		    if (u.uhave.questart)
-			impossible("already have quest artifact?");
+		    if (u.uhave.questart) impossible("already have quest artifact?");
 		    u.uhave.questart = 1;
 		    artitouch();
 		}
 		if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
 			u.ukinghill = TRUE;
+#ifdef RECORD_ACHIEVE
+		} else if(obj->oartifact == ART_SILVER_KEY){
+			achieve.get_skey = TRUE;
+		} else if(obj->oartifact >= ART_FIRST_KEY_OF_LAW && obj->oartifact <= ART_THIRD_KEY_OF_NEUTRALITY){
+			achieve.get_keys |= (1 << (obj->oartifact - ART_FIRST_KEY_OF_LAW));
+#endif
 		}
 		set_artifact_intrinsic(obj, 1, W_ART);
 	}
