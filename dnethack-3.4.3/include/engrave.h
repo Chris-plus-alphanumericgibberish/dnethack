@@ -128,8 +128,15 @@ struct engr {
 #define FIRST_FALLEN_HOUSE	BRONT_TEJ
 #define LAST_FALLEN_HOUSE	X_LARRAZ_ET_SOJ
 
-#define LOLTH_SYMBOL		31
-#define EDDER_SYMBOL		32
+	/*Special behavior, these identify hedrow towers*/
+#define SORCERE				31
+#define MAGTHERE			32
+#define XAXOX				33
+#define FIRST_TOWER			SORCERE
+#define LAST_TOWER			XAXOX
+
+#define LOLTH_SYMBOL		34
+#define EDDER_SYMBOL		35
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 

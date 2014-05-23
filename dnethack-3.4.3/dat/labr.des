@@ -1,0 +1,63 @@
+MAZE:"lbyrnth",random
+FLAGS: noteleport
+
+INIT_MAP: ' ' , ' ' , false , false , unlit , false
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                         |---------------------------|                      
+1                         |...|.....................|.|                      
+2                         |.|.|.|-----------------|.|.|                      
+3                         |.|.|.|.................|.|.|                      
+4                         |.|.|.|.---------------.|.|.|                      
+5                         |.|.|.|.|.............|.|.|.|                      
+6                         |.|.|.|.|.-----------.|.|.|.|                      
+7                         |.|.|.|.|.|.........|.|.|.|.|                      
+8                         |.|.|.|.|.|.-------.|.|.|.|.|                      
+9                         |.|.|.|.|.|.|.....|.|.|.|.|.|                      
+0                         |.|.|.|.|.-.|.|-|.-.|.|.|.|.|                      
+1                         |.|.|.|.|...|.|.|...|.|.|.|.|                      
+2                         |.|.|.|.|----.|.-----.|.|.|.|                      
+3                         |.|.|.|.......|.......|.|.|.|                      
+4                         |.|.|.-----------------.|.|.|                      
+5                         |.|.|.........|.........|.|.|                      
+6                         |.|.-------S-.|.---------.|.|                      
+7                         |.|.........|.|.|.........|.|                      
+8                         |.----------|.|.|.---------.|                      
+9                         |...........|...|...........|                      
+0                         -----------------------------                      
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
+
+RANDOM_PLACES:(36,19),(40,11),(52,01)
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
+
+MONSTER:'H',"Minotaur",place[0]
+OBJECT:'+',random,place[0]
+OBJECT:'+',random,place[0]
+OBJECT:'+',random,place[0]
+MONSTER:'H',"Minotaur Priestess",place[1]
+OBJECT:'+',random,place[1]
+OBJECT:'+',random,place[1]
+OBJECT:'+',random,place[1]
+MONSTER:'@',"Illurien of the Myriad Glimpses",place[2]
+
+
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random

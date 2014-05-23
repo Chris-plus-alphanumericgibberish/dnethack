@@ -448,6 +448,11 @@ const char * haluWard[] =  {
 	"a House Thaeyalla crest",
 	"a House X'larraz'et'soj crest",
 	
+	/*Special behavior, these identify hedrow towers*/
+	"a Tower Sorcere crest",
+	"a Tower Magthere crest",
+	"a Tower Xaxox crest",
+	
 	/* Special behavior, lolth holy symbol */
 	"a silver spider-like star",
 	

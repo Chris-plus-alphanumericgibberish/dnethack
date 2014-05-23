@@ -1324,11 +1324,12 @@ boolean at_stairs, falling, portal;
 		display_nhwindow(WIN_MESSAGE, FALSE);
 #endif
 		You_hear("groans and moans everywhere.");
-	    } else pline("It is hot here.  You smell smoke...");
-
+	    } else {
+			pline("It is hot here.  You smell smoke...");
 #ifdef RECORD_ACHIEVE
 		achieve.enter_gehennom = 1;
 #endif
+	}
 	}
 
 	if (familiar) {

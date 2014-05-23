@@ -1370,7 +1370,6 @@ boolean init;
 		//Between molding and all the special effects, would be best to just reset timers for everything.
 		if (otmp->otyp == CORPSE) {
 		    obj_stop_timers(otmp);
-//			pline("special corpse detected");
 		    start_corpse_timeout(otmp);
 		}
 	    }
@@ -1488,7 +1487,7 @@ int x, y;
 const char *nm;
 {
 	struct obj *otmp;
-//	pline("named object detected");
+
 	otmp = mkcorpstat(objtype, (struct monst *)0, ptr,
 				x, y, (boolean)(objtype != STATUE));
 	if (nm)

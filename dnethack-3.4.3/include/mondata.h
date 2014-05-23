@@ -125,7 +125,7 @@
 #define is_vampire(ptr)		(((ptr)->mflags2 & M2_VAMPIRE) != 0L)
 #define is_elf(ptr)		(((ptr)->mflags2 & M2_ELF) != 0L)
 #define is_drow(ptr)		(((ptr) == &mons[PM_DROW]) ||\
-							 ((ptr) == &mons[PM_DROW_WARRIOR]) ||\
+							 ((ptr) == &mons[PM_HEDROW_WARRIOR]) ||\
 							 ((ptr) == &mons[PM_DROW_MATRON])\
 							)
 #define is_dwarf(ptr)		(((ptr)->mflags2 & M2_DWARF) != 0L)

@@ -1878,6 +1878,7 @@ E int FDECL(rnd, (int));
 E int FDECL(d, (int,int));
 E int FDECL(exploding_d, (int,int,int));
 E int FDECL(lucky_exploding_d, (int,int,int));
+E int FDECL(unlucky_exploding_d, (int,int,int));
 E int FDECL(rne, (int));
 E int FDECL(rnz, (int));
 

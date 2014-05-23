@@ -29,7 +29,8 @@ static NEARDATA const char bullets[] =
 struct obj *thrownobj = 0;	/* tracks an object until it lands */
 
 extern boolean notonhead;	/* for long worms */
-
+//definition of an extern in you.h
+boolean barage=FALSE;
 
 /* Throw the selected object, asking for direction */
 int

@@ -137,7 +137,6 @@ fightm(mtmp)		/* have monsters fight each other */
 	     * happen if the monster attacked a cockatrice bare-handedly, for
 	     * instance.
 	     */
-//		pline("checking melee mmaggression");
 	    if(mon != mtmp && !DEADMONSTER(mon)) {
 		if(monnear(mtmp,mon->mx,mon->my)) {
 		    if (!conflict && !mm_aggression(mtmp, mon))
@@ -287,12 +286,12 @@ mattackm(magr, mdef)
 		    is_launcher(MON_WEP(magr))) {
 		    /* implies no melee weapon found */
 			if(thrwmm(magr, mdef)){
-		    if (tmphp > mdef->mhp) res[i] = MM_HIT;
-		    else res[i] = MM_MISS;
-		    if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
-		    if (magr->mhp < 1) res[i] = MM_AGR_DIED;
-		    break;
-		}
+			    if (tmphp > mdef->mhp) res[i] = MM_HIT;
+			    else res[i] = MM_MISS;
+			    if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
+			    if (magr->mhp < 1) res[i] = MM_AGR_DIED;
+			    break;
+			}
 		}
 #endif
 		possibly_unwield(magr, FALSE);

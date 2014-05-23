@@ -2275,7 +2275,7 @@ register int	mmflags;
 		case S_HUMAN:
 			if(anymon){
 				if (mndx == PM_DROW_MATRON){
-					m_initlgrp(makemon(&mons[PM_DROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+					m_initlgrp(makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
 				} else if (mndx == PM_ELVENKING){
 					int num = 0;
 					num = rnd(2);

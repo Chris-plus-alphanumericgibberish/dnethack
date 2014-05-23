@@ -407,7 +407,7 @@ struct monst *mtmp;
 		if (isok(xx,yy))
 		if ((mon = m_at(xx,yy)) && is_mercenary(mon->data) &&
 				mon->data != &mons[PM_GUARD] &&
-				(mon->msleeping || (!mon->mcanmove))) {
+				(mon->msleeping || (!mon->mcanmove && mon->mnotlaugh))) {
 			m.defensive = obj;
 			m.has_defense = MUSE_BUGLE;
 		}
@@ -957,8 +957,9 @@ struct monst *mtmp;
 #define MUSE_SCR_EARTH 18
 #define MUSE_POT_ENERGY_BLOOD 19
 #define MUSE_POT_STONE_BLOOD 20
+#define MUSE_MJOLLNIR 21
 
-#define MUSE_WAN_CANCELLATION 21	/* Lethe */
+#define MUSE_WAN_CANCELLATION 22	/* Lethe */
 
 /* Select an offensive item/action for a monster.  Returns TRUE iff one is
  * found.
@@ -1002,7 +1003,18 @@ struct monst *mtmp;
 	if (!ranged_stuff) return FALSE;
 #define nomore(x) if(m.has_offense==x) continue;
 	for(obj=mtmp->minvent; obj; obj=obj->nobj) {
-		/* nomore(MUSE_WAN_DEATH); */
+	    if(mtmp->data == &mons[PM_VALKYRIE] && obj->oartifact == ART_MJOLLNIR && !obj->cursed && mtmp->misc_worn_check & ARM_GLOVES) {
+			struct obj *otmp;
+			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
+				if (otmp->owornmask & ARM_GLOVES && otmp->otyp == GAUNTLETS_OF_POWER){
+					m.offensive = obj;
+					m.has_offense = MUSE_MJOLLNIR;
+			break;
+				}
+			}
+	if(m.has_offense==MUSE_MJOLLNIR) break;
+		}
+		nomore(MUSE_WAN_DEATH);
 		if (!reflection_skip) {
 		    if(obj->otyp == WAN_DEATH && obj->spe > 0) {
 			m.offensive = obj;
@@ -1458,7 +1470,7 @@ struct monst *mtmp;
 				    if (mtmp2->minvis && !canspotmon(mtmp2))
 					map_invisible(mtmp2->mx, mtmp2->my);
 				}
-	    	    	    	mdmg = dmgval(otmp2, mtmp2) * otmp2->quan;
+	    	    	    	mdmg = dmgval(otmp2, mtmp2, 0) * otmp2->quan;
 				if (helmet) {
 				    if(is_metallic(helmet)) {
 					if (canspotmon(mtmp2))
@@ -1505,7 +1517,7 @@ struct monst *mtmp;
 			    !noncorporeal(youmonst.data) &&
 			    !unsolid(youmonst.data)) {
 			You("are hit by %s!", doname(otmp2));
-			dmg = dmgval(otmp2, &youmonst) * otmp2->quan;
+			dmg = dmgval(otmp2, &youmonst, 0) * otmp2->quan;
 			if (uarmh) {
 			    if(is_metallic(uarmh)) {
 				pline("Fortunately, you are wearing a hard helmet.");
@@ -1579,6 +1591,7 @@ struct monst *mtmp;
 	case MUSE_POT_ACID:
 	case MUSE_POT_ENERGY_BLOOD:
 	case MUSE_POT_STONE_BLOOD:
+	case MUSE_MJOLLNIR:
 		/* Note: this setting of dknown doesn't suffice.  A monster
 		 * which is out of sight might throw and it hits something _in_
 		 * sight, a problem not existing with wands because wand rays
@@ -2341,7 +2354,7 @@ boolean by_you;
 	struct obj *obj;
 
 	if (resists_ston(mon)) return FALSE;
-	if (mon->meating || !mon->mcanmove || mon->msleeping) return FALSE;
+	if (mon->meating || !mon->mcanmove || !mon->mnotlaugh || mon->msleeping) return FALSE;
 
 	for(obj = mon->minvent; obj; obj = obj->nobj) {
 	    /* Monsters can also use potions of acid */

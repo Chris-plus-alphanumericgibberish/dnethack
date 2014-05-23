@@ -1011,9 +1011,6 @@ register struct attack *mattk;
 	}
 	if(lined_up(mtmp)) {
 		switch (mattk->adtyp) {
-//		    case AD_SHOG:
-//			otmp = mksobj(SHOGGOTH_VENOM, TRUE, FALSE);
-//			break;
 		    case AD_WEBS:
 				mtmp->mspec_used = d(2,6);
 				otmp = mksobj(BALL_OF_WEBBING, TRUE, FALSE);
