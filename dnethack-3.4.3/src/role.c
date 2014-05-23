@@ -501,6 +501,39 @@ const struct Role WtWrole = {
 	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
 	10, 5, 0, 2, 10, A_INT, SPE_MAGIC_MAPPING,   -9
 };
+
+/*
+{	{"Ranger", 0}, {
+	{"Tenderfoot",    0},
+	{"Lookout",       0},
+	{"Trailblazer",   0},
+	{"Reconnoiterer", "Reconnoiteress"},
+	{"Scout",         0},
+	{"Arbalester",    0},
+	{"Archer",        0},
+	{"Sharpshooter",  0},
+	{"Marksman",      "Markswoman"} },
+	"Mercury", "_Venus", "Mars",
+	"Ran", "Orion's camp", "the cave of the wumpus",
+	PM_RANGER, NON_PM, PM_LITTLE_DOG,
+	PM_ORION, PM_HUNTER, PM_SCORPIUS,						//Should be PM_NECROMACER, PM_HIGH_ELF, 
+	PM_FOREST_CENTAUR, PM_SCORPION, S_CENTAUR, S_SPIDER,	//Should be PM_MORDOR_ORC, PM_OLOG_HAI, S_ORC, S_TROLL
+	ART_LONGBOW_OF_DIANA,
+	MH_HUMAN|MH_ELF|MH_GNOME|MH_ORC | ROLE_MALE|ROLE_FEMALE |
+	  ROLE_NEUTRAL|ROLE_CHAOTIC,
+	// Str Int Wis Dex Con Cha
+	{  13, 13, 13,  9, 13,  7 },
+	{  30, 10, 10, 20, 20, 10 },
+	// Init   Lower  Higher
+	{ 13, 0,  0, 6,  1, 0 },	// Hit points
+	{  1, 0,  0, 1,  0, 1 },12,	// Energy (Ranger)
+	{  4, 3,  0, 2,  0, 3 },12,	// Energy (Wizard)
+	10, 9, 2, 1, 10, A_INT, SPE_INVISIBILITY,   -13
+} 
+*/
+int ElfRangerFavoredSpell = SPE_DETECT_MONSTERS;
+int ElfRangerFavoredBonus = -26;
+
 struct RoleName ElfRangerRanks[9] = {{"Edhel",       "Elleth"},
 	{"Edhel",       "Elleth"},      /* elf-maid */
 	{"Ohtar",       "Ohtie"},       /* warrior */
@@ -541,6 +574,7 @@ const char *BinLgod = "Yaldabaoth",
 /* The player's role, created at runtime from initial
  * choices.  This may be munged in role_init().
  */
+
 struct Role urole =
 {	{"Undefined", 0}, { {0, 0}, {0, 0}, {0, 0},
 	{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },

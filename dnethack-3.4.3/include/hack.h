@@ -118,6 +118,8 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 
 #define MATCH_WARN_OF_MON(mon)	( (Warn_of_mon && flags.warntype && \
 					(flags.warntype & (mon)->data->mflags2)) || \
+					(u.sealsActive&SEAL_PAIMON && is_magical((mon)->data)) || \
+					(u.sealsActive&SEAL_ANDREALPHUS && is_thief((mon)->data)) || \
 					(uwep && uwep->oclass == WEAPON_CLASS && objects[(uwep)->otyp].oc_material == WOOD && \
 					(uwep->ovar1 & WARD_THJOFASTAFUR) && (mon->data->mlet == S_LEPRECHAUN || mon->data->mlet == S_NYMPH)) \
 				)

@@ -87,6 +87,7 @@ extern int NDECL(dosearch); /**/
 extern int NDECL(doidtrap); /**/
 extern int NDECL(dopay); /**/
 extern int NDECL(dosit); /**/
+extern int NDECL(dodeepswim); /**/
 extern int NDECL(dotalk); /**/
 extern int NDECL(docast); /**/
 extern int NDECL(dovspell); /**/
@@ -1761,6 +1762,7 @@ struct ext_func_tab extcmdlist[] = {
 #endif
 	{"rub", "rub a lamp or a stone", dorub, FALSE},
 	{"sit", "sit down", dosit, FALSE},
+	{"swim", "swim under water", dodeepswim, FALSE},
 	{"turn", "turn undead", doturn, TRUE},
 	{"twoweapon", "toggle two-weapon combat", dotwoweapon, FALSE},
 	{"untrap", "untrap something", dountrap, FALSE},

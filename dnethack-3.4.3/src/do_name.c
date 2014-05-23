@@ -916,6 +916,34 @@ register struct monst *mtmp;
 #ifdef OVL0
 
 char *
+sheheit(mtmp)
+register struct monst *mtmp;
+{
+	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "it" : mtmp->female ? "she" : "he";
+}
+
+char *
+SheHeIt(mtmp)
+register struct monst *mtmp;
+{
+	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "It" : mtmp->female ? "She" : "He";
+}
+
+char *
+hisherits(mtmp)
+register struct monst *mtmp;
+{
+	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "its" : mtmp->female ? "her" : "his";
+}
+
+char *
+HisHerIts(mtmp)
+register struct monst *mtmp;
+{
+	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "Its" : mtmp->female ? "Her" : "His";
+}
+
+char *
 mon_nam(mtmp)
 register struct monst *mtmp;
 {

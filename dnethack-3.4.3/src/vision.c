@@ -723,7 +723,7 @@ vision_recalc(control)
 	    }
 
 	    else if ((next_row[col] & COULD_SEE)
-				&& (lev->lit || (next_row[col] & TEMP_LIT))) {
+				&& (lev->lit || (next_row[col] & TEMP_LIT) || u.sealsActive&SEAL_AMON)) {
 		/*
 		 * We see this position because it is lit.
 		 */
@@ -737,7 +737,7 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if (flev->lit || next_array[row+dy][col+dx] & TEMP_LIT) {
+		    if (flev->lit || next_array[row+dy][col+dx] & TEMP_LIT || u.sealsActive&SEAL_AMON) {
 			next_row[col] |= IN_SIGHT;	/* we see it */
 
 			oldseenv = lev->seenv;

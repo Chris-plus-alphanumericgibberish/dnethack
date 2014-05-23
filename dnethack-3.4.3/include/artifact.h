@@ -121,6 +121,8 @@
 #define	R_Y_SIGN		0x00400000L	//yellow sign
 #define	R_WARDS			0x00800000L	//eye, queen
 #define	R_ELEMENTS		0x01000000L	//Cthuqha, Ithaqua, and Karakal
+#define	R_NAMES_1		0x02000000L	//Half of the spirits (based on random order)
+#define	R_NAMES_2		0x04000000L	//Other half of the spirits
 
 
 #define	LAST_PAGE	0x40000000L
@@ -161,9 +163,11 @@
 #define	SELECT_SIGN			SELECT_HEALTH + 1
 #define	SELECT_WARDS		SELECT_SIGN + 1
 #define	SELECT_ELEMENTS		SELECT_WARDS + 1
+#define	SELECT_SPIRITS1		SELECT_ELEMENTS + 1
+#define	SELECT_SPIRITS2		SELECT_SPIRITS1 + 1
 
 
-#define SELECT_STUDY		SELECT_ELEMENTS + 1
+#define SELECT_STUDY		SELECT_SPIRITS2 + 1
 
 #define SELECT_WHISTLE		1
 #define SELECT_LEASH		SELECT_WHISTLE + 1
@@ -237,6 +241,9 @@ struct artifact {
 #define OBJECT_DET	(LAST_PROP+34)
 #define TELEPORT_SHOES	(LAST_PROP+35)
 #define LORDLY	(LAST_PROP+36)
+#define VOID_CHIME	(LAST_PROP+37)
+#define INFINITESPELLS	(LAST_PROP+38)
+#define SPIRITNAMES	(LAST_PROP+39)
 
 #define CountsAgainstGifts(x)	!(artilist[x].cspfx3 & SPFX3_NOCNT)
 							/*(x != ART_WATER_CRYSTAL && \

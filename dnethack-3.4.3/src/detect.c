@@ -166,6 +166,7 @@ register struct obj *sobj;
     register struct obj *obj;
     register struct monst *mtmp;
     int uw = u.uinwater;
+    int usw = u.usubwater;
     struct obj *temp;
     boolean stale;
 
@@ -234,6 +235,7 @@ outgoldmap:
     cls();
 
     u.uinwater = 0;
+    u.usubwater = 0;
     /* Discover gold locations. */
     for (obj = fobj; obj; obj = obj->nobj) {
     	if (sobj->blessed && (temp = o_material(obj, GOLD))) {
@@ -283,6 +285,7 @@ outgoldmap:
     display_nhwindow(WIN_MAP, TRUE);
     docrt();
     u.uinwater = uw;
+    u.usubwater = usw;
     if (Underwater) under_water(2);
     if (u.uburied) under_ground(2);
     return(0);
@@ -300,7 +303,7 @@ register struct obj	*sobj;
     boolean confused = (Confusion || (sobj && sobj->cursed)), stale;
     char oclass = confused ? POTION_CLASS : FOOD_CLASS;
     const char *what = confused ? something : "food";
-    int uw = u.uinwater;
+    int uw = u.uinwater, usw = u.usubwater;
 
     stale = clear_stale_map(oclass, 0);
 
@@ -353,6 +356,7 @@ register struct obj	*sobj;
 	known = TRUE;
 	cls();
 	u.uinwater = 0;
+	u.usubwater = 0;
 	for (obj = fobj; obj; obj = obj->nobj)
 	    if ((temp = o_in(obj, oclass)) != 0) {
 		if (temp != obj) {
@@ -384,6 +388,7 @@ register struct obj	*sobj;
 	exercise(A_WIS, TRUE);
 	docrt();
 	u.uinwater = uw;
+	u.usubwater = usw;
 	if (Underwater) under_water(2);
 	if (u.uburied) under_ground(2);
     }
@@ -411,7 +416,7 @@ int		class;		/* an object class, 0 for all */
     int ct = 0, ctu = 0;
     register struct obj *obj, *otmp = (struct obj *)0;
     register struct monst *mtmp;
-    int uw = u.uinwater;
+    int uw = u.uinwater, usw = u.usubwater;
     int sym, boulder = 0;
 
     if (class < 0 || class >= MAXOCLASSES) {
@@ -487,6 +492,7 @@ int		class;		/* an object class, 0 for all */
     cls();
 
     u.uinwater = 0;
+    u.usubwater = 0;
 /*
  *	Map all buried objects first.
  */
@@ -573,6 +579,7 @@ int		class;		/* an object class, 0 for all */
     docrt();	/* this will correctly reset vision */
 
     u.uinwater = uw;
+    u.usubwater = usw;
     if (Underwater) under_water(2);
     if (u.uburied) under_ground(2);
     return 0;
@@ -599,6 +606,7 @@ struct obj	*detector;	/* object doing the detecting */
     register struct obj *obj, *otmp = (struct obj *)0;
     register struct monst *mtmp;
     int uw = u.uinwater;
+    int usw = u.usubwater;
 
 	if (is_cursed){ /* Possible false negative */
 		Role_if(PM_PIRATE) ? strange_feeling(detector, "Ye feel a lack o' something.") : strange_feeling(detector, "You feel a lack of something.");
@@ -610,28 +618,30 @@ struct obj	*detector;	/* object doing the detecting */
     else
     	Strcpy(stuff, "artifacts");
 
-    if (do_dknown) for(obj = invent; obj; obj = obj->nobj) do_dknown_of(obj);
+    if (do_dknown) for(obj = invent; obj; obj = obj->nobj) if(obj->oartifact) do_dknown_of(obj);
 
     for (obj = fobj; obj; obj = obj->nobj) {
 	if (obj && obj->oartifact) {
 	    if (obj->ox != u.ux || obj->oy != u.uy) ct++;
+			if (do_dknown) do_dknown_of(obj);
 	}
-	if (do_dknown) do_dknown_of(obj);
     }
 
     for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
 	if (obj && obj->oartifact) {
 	    if (obj->ox != u.ux || obj->oy != u.uy) ct++;
+			if (do_dknown) do_dknown_of(obj);
 	}
-	if (do_dknown) do_dknown_of(obj);
     }
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 	if (DEADMONSTER(mtmp)) continue;
 		for (obj = mtmp->minvent; obj; obj = obj->nobj) {
-			if (obj && obj->oartifact) ct++;
+			if (obj && obj->oartifact){
+				ct++;
 			if (do_dknown) do_dknown_of(obj);
 		}
+	}
 	}
 
     if (!clear_stale_map(ALL_CLASSES, 0) && !ct) {
@@ -642,6 +652,7 @@ struct obj	*detector;	/* object doing the detecting */
     cls();
 
     u.uinwater = 0;
+    u.usubwater = 0;
 /*
  *	Map all buried objects first.
  */
@@ -684,6 +695,114 @@ struct obj	*detector;	/* object doing the detecting */
     docrt();	/* this will correctly reset vision */
 
     u.uinwater = uw;
+    u.usubwater = usw;
+    if (Underwater) under_water(2);
+    if (u.uburied) under_ground(2);
+    return 0;
+}
+
+/*
+ * Used for spirit effects.  Returns:
+ *
+ *	1 - nothing was detected
+ *	0 - something was detected
+ */
+int
+book_detect(blessed)
+boolean blessed;	/* do blessed detecting */
+{
+    register int x, y;
+    char stuff[BUFSZ];
+    int do_dknown = blessed;
+    int ct = 0;
+    register struct obj *obj, *otmp = (struct obj *)0;
+    register struct monst *mtmp;
+    int uw = u.uinwater;
+    int usw = u.usubwater;
+	
+    if (Hallucination)
+		Strcpy(stuff, something);
+    else
+    	Strcpy(stuff, "books");
+
+    if (do_dknown) for(obj = invent; obj; obj = obj->nobj) if(obj->oclass == SPBOOK_CLASS) do_dknown_of(obj);
+
+    for (obj = fobj; obj; obj = obj->nobj) {
+		if (obj && obj->oclass == SPBOOK_CLASS) {
+			if (obj->ox != u.ux || obj->oy != u.uy) ct++;
+			if (do_dknown) do_dknown_of(obj);
+		}
+    }
+
+    for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
+		if (obj && obj->oclass == SPBOOK_CLASS) {
+			if (obj->ox != u.ux || obj->oy != u.uy) ct++;
+			if (do_dknown) do_dknown_of(obj);
+		}
+    }
+
+    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	if (DEADMONSTER(mtmp)) continue;
+		for (obj = mtmp->minvent; obj; obj = obj->nobj) {
+			if (obj && obj->oclass == SPBOOK_CLASS){
+				ct++;
+				if (do_dknown) do_dknown_of(obj);
+			}
+		}
+	}
+
+    if (!clear_stale_map(ALL_CLASSES, 0) && !ct) {
+		strange_feeling((struct obj *) 0, "You feel a lack of something.");
+	    return 1;
+	}
+
+    cls();
+
+    u.uinwater = 0;
+    u.usubwater = 0;
+/*
+ *	Map all buried objects first.
+ */
+    for (obj = level.buriedobjlist; obj; obj = obj->nobj)
+		if (obj && obj->oclass == SPBOOK_CLASS) {
+			map_object(obj, 1);
+		}
+    /*
+     * If we are mapping all objects, map only the top object of a pile or
+     * the first object in a monster's inventory.  Otherwise, go looking
+     * for a matching object class and display the first one encountered
+     * at each location.
+     *
+     * Objects on the floor override buried objects.
+     */
+    for (x = 1; x < COLNO; x++)
+	for (y = 0; y < ROWNO; y++)
+	    for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
+		if (obj && obj->oclass == SPBOOK_CLASS) {
+			map_object(obj, 1);
+	break;
+		}
+    /* Objects in the monster's inventory override floor objects. */
+    for (mtmp = fmon ; mtmp ; mtmp = mtmp->nmon) {
+	if (DEADMONSTER(mtmp)) continue;
+	for (obj = mtmp->minvent; obj; obj = obj->nobj)
+	    if (obj && obj->oclass == SPBOOK_CLASS) {
+			map_object(obj, 1);
+	break;
+	    }
+    }
+
+    newsym(u.ux,u.uy);
+    You("detect the %s of %s.", ct ? "presence" : "absence",stuff);
+    display_nhwindow(WIN_MAP, TRUE);
+    /*
+     * What are we going to do when the hero does an object detect while blind
+     * and the detected object covers a known pool?
+     */
+    docrt();	/* this will correctly reset vision */
+
+    u.uinwater = uw;
+    u.usubwater = usw;
     if (Underwater) under_water(2);
     if (u.uburied) under_ground(2);
     return 0;
@@ -864,6 +983,7 @@ register struct obj *sobj;
     register struct obj *obj;
     register int door;
     int uw = u.uinwater;
+    int usw = u.usubwater;
     boolean found = FALSE;
     coord cc;
 
@@ -901,6 +1021,7 @@ outtrapmap:
     cls();
 
     u.uinwater = 0;
+    u.usubwater = 0;
     for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
 	sense_trap(ttmp, 0, 0, sobj && sobj->cursed);
 
@@ -920,6 +1041,7 @@ outtrapmap:
     display_nhwindow(WIN_MAP, TRUE);
     docrt();
     u.uinwater = uw;
+    u.usubwater = usw;
     if (Underwater) under_water(2);
     if (u.uburied) under_ground(2);
     return(0);
@@ -1126,13 +1248,16 @@ do_mapping()
 {
     register int zx, zy;
     int uw = u.uinwater;
+    int usw = u.usubwater;
 
     u.uinwater = 0;
+    u.usubwater = 0;
     for (zx = 1; zx < COLNO; zx++)
 	for (zy = 0; zy < ROWNO; zy++)
 	    show_map_spot(zx, zy);
     exercise(A_WIS, TRUE);
     u.uinwater = uw;
+    u.usubwater = usw;
     if (!level.flags.hero_memory || Underwater) {
 	flush_screen(1);			/* flush temp screen */
 	display_nhwindow(WIN_MAP, TRUE);	/* wait */

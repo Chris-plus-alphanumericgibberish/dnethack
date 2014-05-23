@@ -393,7 +393,7 @@ register struct monst *mtmp;
 {
     register const char *yelp_verb = 0;
 
-    if (mtmp->msleeping || !mtmp->mcanmove || !mtmp->data->msound)
+    if (mtmp->msleeping || !mtmp->mcanmove || !mtmp->mnotlaugh || !mtmp->data->msound)
 	return;
 
     /* presumably nearness and soundok checks have already been made */
@@ -434,7 +434,7 @@ register struct monst *mtmp;
 {
     register const char *whimper_verb = 0;
 
-    if (mtmp->msleeping || !mtmp->mcanmove || !mtmp->data->msound)
+    if (mtmp->msleeping || !mtmp->mcanmove || !mtmp->mnotlaugh || !mtmp->data->msound)
 	return;
 
     /* presumably nearness and soundok checks have already been made */
@@ -464,7 +464,7 @@ void
 beg(mtmp)
 register struct monst *mtmp;
 {
-    if (mtmp->msleeping || !mtmp->mcanmove ||
+    if (mtmp->msleeping || !mtmp->mcanmove || !mtmp->mnotlaugh ||
 	    !(carnivorous(mtmp->data) || herbivorous(mtmp->data)))
 	return;
 
@@ -1053,7 +1053,7 @@ static int
 dochat()
 {
     register struct monst *mtmp;
-    register int tx,ty;
+    register int tx,ty,bindresult;
     struct obj *otmp;
 
     if (is_silent(youmonst.data)) {
@@ -1112,10 +1112,11 @@ dochat()
     tx = u.ux+u.dx; ty = u.uy+u.dy;
     mtmp = m_at(tx, ty);
 
+	if(bindresult = dobinding(tx,ty)) return bindresult;
+
     if (!mtmp || mtmp->mundetected ||
 		mtmp->m_ap_type == M_AP_FURNITURE ||
-		mtmp->m_ap_type == M_AP_OBJECT)
-	return dobinding(tx,ty);
+		mtmp->m_ap_type == M_AP_OBJECT) return 0;
 
     if (Underwater) {
 	Your("speech is unintelligible underwater.");
@@ -1133,7 +1134,13 @@ dochat()
     /* if this monster is waiting for something, prod it into action */
     mtmp->mstrategy &= ~STRAT_WAITMASK;
 
-    if (mtmp->mtame && mtmp->meating) {
+    /* laughing monsters can't talk */
+    if (!mtmp->mnotlaugh) {
+		if (!is_silent(mtmp->data)) pline("%s laughs hysterically", Monnam(mtmp));
+		return(0);
+    }
+	
+    if (mtmp->mtame && mtmp->mnotlaugh && mtmp->meating) {
 		if (!canspotmon(mtmp))
 			map_invisible(mtmp->mx, mtmp->my);
 		pline("%s is eating noisily.", Monnam(mtmp));
@@ -1221,6 +1228,7 @@ int tx,ty;
 		if(ep->engr_x==tx && ep->engr_y==ty)
 			break;//else continue
 	if(!(ep)) return 0; //no engraving found
+	
 	if(ep->halu_ward || ep->ward_id < FIRST_SEAL || 
 		ep->complete_wards < 1 || ep->engr_time+5 < moves) return 0; //engraving does not contain a valid seal, or is too old.
 	
@@ -1287,6 +1295,8 @@ int tx,ty;
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					set_spirit_powers(SEAL_AMON);
 					u.sealCounts++;
+					vision_full_recalc = 1; //can now see perfectly in the dark
+					doredraw();
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
@@ -2062,8 +2072,8 @@ int tx,ty;
 			}
 		}
 	}break;
-	case ERIDU:{
-		if(u.eridu < moves){
+	case ENKI:{
+		if(u.enki < moves){
 			boolean largeRoom = TRUE;
 			int i, j;
 			for(i = -2; i <= 2; i++){
@@ -2086,22 +2096,22 @@ int tx,ty;
 					unrestrict_weapon_skill(P_SLING);
 					unrestrict_weapon_skill(P_DART);
 					unrestrict_weapon_skill(P_BOOMERANG);
-					u.sealsActive |= SEAL_ERIDU;
-					u.spirit[u.sealCounts] = SEAL_ERIDU;
-					set_spirit_powers(SEAL_ERIDU);
+					u.sealsActive |= SEAL_ENKI;
+					u.spirit[u.sealCounts] = SEAL_ENKI;
+					set_spirit_powers(SEAL_ENKI);
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("");
 					pline("");
-					uwep->ovar1 |= SEAL_ERIDU;
+					uwep->ovar1 |= SEAL_ENKI;
 					if(!u.spiritTineA){ 
-						u.spiritTineA = SEAL_ERIDU;
+						u.spiritTineA = SEAL_ENKI;
 						u.spiritTineTA= moves + bindingPeriod;
 					}
 					else{
-						u.spiritTineB = SEAL_ERIDU;
+						u.spiritTineB = SEAL_ENKI;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
 				}
@@ -2109,7 +2119,7 @@ int tx,ty;
 					pline("");
 					pline(".");
 				}
-				u.eridu = moves + bindingPeriod;
+				u.enki = moves + bindingPeriod;
 			}
 		}
 	}break;
@@ -2986,7 +2996,7 @@ int p_skill;
 	if(p_skill == P_KNIFE) return u.sealsActive & SEAL_CHUPOCLOPS? TRUE : FALSE;
 	if(p_skill == P_AXE) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
 	if(p_skill == P_PICK_AXE) return u.sealsActive & SEAL_FAFNIR? TRUE : FALSE;
-	if(p_skill == P_SHORT_SWORD) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_SHORT_SWORD) return u.sealsActive & SEAL_ENKI? TRUE : FALSE;
 	if(p_skill == P_BROAD_SWORD) return u.sealsActive & SEAL_DANTALION? TRUE : FALSE;
 	if(p_skill == P_LONG_SWORD) return u.sealsActive & SEAL_EDEN? TRUE : FALSE;
 	if(p_skill == P_TWO_HANDED_SWORD) return u.sealsActive & SEAL_DANTALION? TRUE : FALSE;
@@ -2996,19 +3006,19 @@ int p_skill;
 	if(p_skill == P_MACE) return u.sealsActive & SEAL_TENEBROUS? TRUE : FALSE;
 	if(p_skill == P_MORNING_STAR) return u.sealsActive & SEAL_IRIS? TRUE : FALSE;
 	if(p_skill == P_FLAIL) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
-	if(p_skill == P_HAMMER) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_HAMMER) return u.sealsActive & SEAL_ENKI ? TRUE : FALSE;
 	if(p_skill == P_QUARTERSTAFF) return u.sealsActive & SEAL_NABERIUS? TRUE : FALSE;
 	if(p_skill == P_POLEARMS) return u.sealsActive & SEAL_SHIRO? TRUE : FALSE;
 	if(p_skill == P_SPEAR) return u.sealsActive & SEAL_HUGINN_MUNINN? TRUE : FALSE;
-	if(p_skill == P_JAVELIN) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_JAVELIN) return u.sealsActive & SEAL_ENKI? TRUE : FALSE;
 	if(p_skill == P_TRIDENT) return u.sealsActive & SEAL_OSE? TRUE : FALSE;
 	if(p_skill == P_LANCE) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
 	if(p_skill == P_BOW) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
-	if(p_skill == P_SLING) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_SLING) return u.sealsActive & SEAL_ENKI? TRUE : FALSE;
 	if(p_skill == P_CROSSBOW) return u.sealsActive & SEAL_ASTAROTH? TRUE : FALSE;
-	if(p_skill == P_DART) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_DART) return u.sealsActive & SEAL_ENKI? TRUE : FALSE;
 	if(p_skill == P_SHURIKEN) return u.sealsActive & SEAL_ASTAROTH? TRUE : FALSE;
-	if(p_skill == P_BOOMERANG) return u.sealsActive & SEAL_ERIDU? TRUE : FALSE;
+	if(p_skill == P_BOOMERANG) return u.sealsActive & SEAL_ENKI? TRUE : FALSE;
 	if(p_skill == P_WHIP) return u.sealsActive & SEAL_BALAM? TRUE : FALSE;
 	if(p_skill == P_HARVEST) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
 	if(p_skill == P_UNICORN_HORN) return u.sealsActive & SEAL_ECHIDNA? TRUE : FALSE;

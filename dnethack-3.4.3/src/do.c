@@ -104,6 +104,7 @@ boolean pushing;
 
 		if (fills_up && u.uinwater && distu(rx,ry) == 0) {
 		    u.uinwater = 0;
+		    u.usubwater = 0;
 		    docrt();
 		    vision_full_recalc = 1;
 		    You("find yourself on dry land again!");
@@ -1061,6 +1062,7 @@ boolean at_stairs, falling, portal;
 	fill_pit(u.ux, u.uy);
 	u.ustuck = 0;				/* idem */
 	u.uinwater = 0;
+	u.usubwater = 0;
 	u.uundetected = 0;	/* not hidden, even if means are available */
 	keepdogs(FALSE);
 	if (u.uswallow)				/* idem */

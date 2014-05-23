@@ -1214,7 +1214,7 @@ int spellnum;
                rn2(2) ? "shower" : "hail", xname(otmp));
        dmg = 0;
        for (i = 0; i < otmp->quan; i++) {
-          dmg += dmgval(otmp, &youmonst);
+          dmg += dmgval(otmp, &youmonst, 0);
        }
         if (!flooreffects(otmp, u.ux, u.uy, "fall")) {
             place_object(otmp, u.ux, u.uy);
@@ -1238,7 +1238,7 @@ int spellnum;
        if (iron) otmp->owt += 160 * rn2(2);
         pline("%s drops out of %s and hits you!", An(xname(otmp)),
                 iron ? "nowhere" : the(ceiling(u.ux,u.uy)));
-        dmg = dmgval(otmp, &youmonst);
+        dmg = dmgval(otmp, &youmonst, 0);
         if (uarmh) {
             if (is_metallic(uarmh)) {
                 pline("Fortunately, you are wearing a hard helmet.");

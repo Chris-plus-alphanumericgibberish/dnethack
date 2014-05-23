@@ -3779,7 +3779,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 	////////////////////////////////////////////////////////////////////////////////////////
     tmp_at(DISP_END,0);
     if (type == ZT_SPELL(ZT_FIRE))
-	explode(sx, sy, type, d(12,6), 0, EXPL_FIERY);
+		explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_FIERY);
     if (shopdamage)
 	pay_for_damage(abstype == ZT_FIRE ?  "burn away" :
 		       abstype == ZT_COLD ?  "shatter" :
@@ -3916,6 +3916,7 @@ boolean *shopdamage;
 			if (u.uinwater) {   /* not just `if (Underwater)' */
 			    /* leave the no longer existent water */
 			    u.uinwater = 0;
+			    u.usubwater = 0;
 			    u.uundetected = 0;
 			    docrt();
 			    vision_full_recalc = 1;

@@ -349,7 +349,7 @@ register int roomno;
 		shrined = has_shrine(priest);
 		sanctum = ( (priest->data == &mons[PM_HIGH_PRIEST] || priest->data == &mons[PM_ELDER_PRIEST]) &&
 			   (Is_sanctum(&u.uz) || In_endgame(&u.uz)));
-		can_speak = (priest->mcanmove && !priest->msleeping &&
+		can_speak = (priest->mcanmove && priest->mnotlaugh && !priest->msleeping &&
 			     flags.soundok);
 		if (can_speak) {
 		    unsigned save_priest = priest->ispriest;
@@ -421,8 +421,15 @@ register struct monst *priest;
 	boolean strayed = (u.ualign.record < 0);
 	char class_list[MAXOCLASSES+2];
 
+	if(!priest->mnotlaugh){
+	    pline("%s is laughing uncontrollably!",
+				Monnam(priest));
+		return;
+	}
+	
 	/* KMH, conduct */
 	u.uconduct.gnostic++;
+	
 
 	if(priest->mflee || (!priest->ispriest && coaligned && strayed)) {
 	    pline("%s doesn't want anything to do with you!",

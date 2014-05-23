@@ -51,11 +51,44 @@
 #define has_horns(ptr)		(num_horns(ptr) > 0)
 #define is_whirly(ptr)		((ptr)->mlet == S_VORTEX || \
 				 (ptr) == &mons[PM_AIR_ELEMENTAL] ||\
+				 (ptr) == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] ||\
 				 (ptr) == &mons[PM_DREADBLOSSOM_SWARM])
 #define flaming(ptr)		((ptr) == &mons[PM_FIRE_VORTEX] || \
 				 (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				 (ptr) == &mons[PM_FIRE_ELEMENTAL] || \
 				 (ptr) == &mons[PM_SALAMANDER])
+#define is_stone(ptr)	((ptr) == &mons[PM_DUST_VORTEX] || \
+				 (ptr) == &mons[PM_EARTH_ELEMENTAL] || \
+				 (ptr) == &mons[PM_GARGOYLE] || \
+				 (ptr) == &mons[PM_WINGED_GARGOYLE] || \
+				 (ptr) == &mons[PM_XORN])
+#define is_anhydrous(ptr)	(flaming(ptr)  || \
+							 is_stone(ptr) || \
+							 is_auton(ptr) || \
+				 (ptr)->mlet == S_KETER || \
+				 (ptr) == &mons[PM_AOA] || \
+				 (ptr) == &mons[PM_AOA_DROPLET])
+#define no_innards(ptr)	((ptr)->mlet == S_VORTEX || \
+						 (ptr)->mlet == S_LIGHT || \
+						 (ptr)->mlet == S_ELEMENTAL || \
+						 ((ptr) == &mons[PM_SHAMBLING_HORROR] && u.shambin == 2) || \
+						 ((ptr) == &mons[PM_STUMBLING_HORROR] && u.stumbin == 2) || \
+						 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 2) || \
+						 (ptr)->mlet == S_WRAITH || \
+						 (ptr)->mlet == S_GHOST || \
+						 (ptr)->mlet == S_GOLEM \
+						)
+#define undiffed_innards(ptr)	((ptr)->mlet == S_BLOB || \
+								 (ptr) == &mons[PM_FLOATING_EYE] || \
+								 (ptr)->mlet == S_JELLY || \
+								 (ptr)->mlet == S_TRAPPER || \
+								 (ptr)->mlet == S_FUNGUS || \
+								 (ptr)->mlet == S_PUDDING || \
+								 ((ptr) == &mons[PM_SHAMBLING_HORROR] && u.shambin == 1) || \
+								 ((ptr) == &mons[PM_STUMBLING_HORROR] && u.stumbin == 1) || \
+								 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 1) || \
+								 (ptr)->mlet == S_PLANT \
+								)
 #define is_silent(ptr)		((ptr)->msound == MS_SILENT)
 #define unsolid(ptr)		(((ptr)->mflags1 & M1_UNSOLID) != 0L)
 #define mindless(ptr)		(((ptr)->mflags1 & M1_MINDLESS) != 0L)
@@ -180,6 +213,20 @@
 #define cantweararm(ptr)	(breakarm(ptr) || sliparm(ptr))
 #define throws_rocks(ptr)	(((ptr)->mflags2 & M2_ROCKTHROW) != 0L)
 #define type_is_pname(ptr)	(((ptr)->mflags2 & M2_PNAME) != 0L)
+#define is_thief(ptr)		( (ptr)->mattk[0].adtyp == AD_SGLD || (ptr)->mattk[0].adtyp == AD_SITM \
+							||(ptr)->mattk[1].adtyp == AD_SGLD || (ptr)->mattk[1].adtyp == AD_SITM \
+							||(ptr)->mattk[2].adtyp == AD_SGLD || (ptr)->mattk[2].adtyp == AD_SITM \
+							||(ptr)->mattk[3].adtyp == AD_SGLD || (ptr)->mattk[3].adtyp == AD_SITM \
+							||(ptr)->mattk[4].adtyp == AD_SGLD || (ptr)->mattk[4].adtyp == AD_SITM \
+							||(ptr)->mattk[5].adtyp == AD_SGLD || (ptr)->mattk[5].adtyp == AD_SITM \
+							)
+#define is_magical(ptr)		( (ptr)->mattk[0].aatyp == AT_MMGC || (ptr)->mattk[0].aatyp == AT_MAGC \
+							||(ptr)->mattk[1].aatyp == AT_MMGC || (ptr)->mattk[1].aatyp == AT_MAGC \
+							||(ptr)->mattk[2].aatyp == AT_MMGC || (ptr)->mattk[2].aatyp == AT_MAGC \
+							||(ptr)->mattk[3].aatyp == AT_MMGC || (ptr)->mattk[3].aatyp == AT_MAGC \
+							||(ptr)->mattk[4].aatyp == AT_MMGC || (ptr)->mattk[4].aatyp == AT_MAGC \
+							||(ptr)->mattk[5].aatyp == AT_MMGC || (ptr)->mattk[5].aatyp == AT_MAGC \
+							)
 #define is_lord(ptr)		(((ptr)->mflags2 & M2_LORD) != 0L)
 #define is_prince(ptr)		(((ptr)->mflags2 & M2_PRINCE) != 0L)
 #define is_ndemon(ptr)		(is_demon(ptr) && \
@@ -283,7 +330,7 @@
 				 (ptr) == &mons[PM_ALHOON]|| \
 				 (ptr) == &mons[PM_GREAT_CTHULHU])
 
-#define nonliving(ptr)		(is_golem(ptr) || is_undead(ptr) || \
+#define nonliving(ptr)		(is_keter(ptr) || is_golem(ptr) || is_undead(ptr) || \
 				 (ptr)->mlet == S_VORTEX || \
 				 (ptr) == &mons[PM_MANES])
 

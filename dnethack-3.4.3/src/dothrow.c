@@ -150,8 +150,9 @@ int shotlimit;
 	    }
 	}
 
+	if(!barage) multishot = rnd(multishot); //state variable, we are doing a spirit power barage
+	else multishot += u.ulevel/10;
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER) multishot = (int)obj->quan;
-	multishot = rnd(multishot);
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 
 	m_shot.s = ammo_and_launcher(obj,uwep) ? TRUE : FALSE;
@@ -794,7 +795,7 @@ boolean hitsroof;
 	return FALSE;
     } else {		/* neither potion nor other breaking object */
 	boolean less_damage = uarmh && is_metallic(uarmh), artimsg = FALSE;
-	int dmg = dmgval(obj, &youmonst);
+	int dmg = dmgval(obj, &youmonst, 0);
 
 	if (obj->oartifact)
 	    /* need a fake die roll here; rn1(18,2) avoids 1 and 20 */

@@ -5,7 +5,6 @@
 #include "hack.h"
 
 STATIC_DCL boolean FDECL(tele_jump_ok, (int,int,int,int));
-STATIC_DCL boolean FDECL(teleok, (int,int,BOOLEAN_P));
 STATIC_DCL void NDECL(vault_tele);
 STATIC_DCL boolean FDECL(rloc_pos_ok, (int,int,struct monst *));
 STATIC_DCL void FDECL(mvault_tele, (struct monst *));
@@ -214,7 +213,7 @@ int x1, y1, x2, y2;
 	return TRUE;
 }
 
-STATIC_OVL boolean
+boolean
 teleok(x, y, trapok)
 register int x, y;
 boolean trapok;
@@ -534,7 +533,7 @@ dotele()
 
 	    if (castit) {
 		exercise(A_WIS, TRUE);
-		if (spelleffects(sp_no, TRUE))
+		if (spelleffects(sp_no, TRUE, 0))
 			return(1);
 		else
 #ifdef WIZARD

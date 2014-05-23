@@ -660,7 +660,7 @@ unsigned trflags;
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
-		if (thitu(8, dmgval(otmp, &youmonst), otmp, "arrow")) {
+		if (thitu(8, dmgval(otmp, &youmonst, 0), otmp, "arrow")) {
 		    obfree(otmp, (struct obj *)0);
 		} else {
 		    place_object(otmp, u.ux, u.uy);
@@ -690,7 +690,7 @@ unsigned trflags;
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
-		if (thitu(7, dmgval(otmp, &youmonst), otmp, "little dart")) {
+		if (thitu(7, dmgval(otmp, &youmonst, 0), otmp, "little dart")) {
 		    if (otmp->opoisoned)
 			poisoned("dart", A_CON, "little dart", -10, rn2(10) ? OPOISON_BASIC :
 														!rn2(4) ? OPOISON_SLEEP :
@@ -1455,7 +1455,7 @@ int style;
 		} else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
 			if (multi) nomul(0, NULL);
 			if (thitu(9 + singleobj->spe,
-				  dmgval(singleobj, &youmonst),
+				  dmgval(singleobj, &youmonst, 0),
 				  singleobj, (char *)0))
 			    stop_occupation();
 		}
@@ -2992,6 +2992,7 @@ drown()
 	boolean inpool_ok = FALSE, crawl_ok;
 	int i, x, y;
 	const char *sparkle = level.flags.lethe? "sparkling " : "";
+	boolean canswim;
 
 	/* happily wading in the same contiguous pool */
 	if (u.uinwater && is_pool(u.ux-u.dx,u.uy-u.dy) &&
@@ -3037,24 +3038,31 @@ drown()
 		unleash_all();
 	}
 
-	if (Amphibious || Swimming) {
-		if (Amphibious) {
+	canswim = (Swimming && !Punished && inv_weight() < 0);
+	if (Amphibious || canswim) {
+		u.uinwater = 1;
+		if (Amphibious && canswim && yn("Dive underwater?")=='y') {
+			u.divetimer = ACURR(A_CON);
+		} else u.divetimer = 0;
+		if (Amphibious && (u.divetimer || !canswim)){
 			if (flags.verbose)
-				pline("But you aren't drowning.");
+				if(!canswim) pline("But you aren't drowning.");
 			if (!Is_waterlevel(&u.uz)) {
 				if (Hallucination)
 					Your("keel hits the bottom.");
 				else
 					You("touch bottom.");
+				u.usubwater = 1;
+				under_water(1);
 			}
+		} else { //canswim and are swiming
+			You("swim on the surface.");
 		}
 		if (Punished) {
 			unplacebc();
 			placebc();
 		}
 		vision_recalc(2);	/* unsee old position */
-		u.uinwater = 1;
-		under_water(1);
 		vision_full_recalc = 1;
 		return(FALSE);
 	}
@@ -3117,12 +3125,14 @@ drown()
 		pline("But in vain.");
 	}
 	u.uinwater = 1;
+	u.usubwater = 1;
 	You("drown.");
 	/* [ALI] Vampires return to vampiric form on drowning.
 	 */
 	if (Upolyd && !Unchanging && Race_if(PM_VAMPIRE)) {
 		rehumanize();
 		u.uinwater = 0;
+		u.usubwater = 0;
 		You("fly up out of the water!");
 		return (TRUE);
 	}
@@ -3137,10 +3147,32 @@ drown()
 	}
 	if (u.uinwater) {
 	    u.uinwater = 0;
+	    u.usubwater = 0;
 	    You("find yourself back %s.", Is_waterlevel(&u.uz) ?
 		"in an air bubble" : "on land");
 	}
 	return(TRUE);
+}
+
+boolean
+dodeepswim()
+{
+	if(u.uinwater && (Swimming && !Punished && inv_weight() < 0)){
+		if(u.divetimer){
+			u.usubwater = 0;
+			u.divetimer = 0;
+			vision_recalc(2);	/* unsee old position */
+			vision_full_recalc = 1;
+			doredraw();
+		} else{
+			u.usubwater = 1;
+			if(Amphibious) u.divetimer = -1; /* unlimited duration dive */
+			else u.divetimer = ACURR(A_CON); /* limited duration dive */
+			under_water(1);
+			vision_recalc(2);	/* unsee old position */
+			vision_full_recalc = 1;
+		}
+	}
 }
 
 void
@@ -4225,7 +4257,7 @@ boolean nocorpse;
 			pline("%s is hit by %s!", Monnam(mon), doname(obj));
 		if (d_override) dam = d_override;
 		else if (obj) {
-			dam = dmgval(obj, mon);
+			dam = dmgval(obj, mon, 0);
 			if (dam < 1) dam = 1;
 		}
 		if ((mon->mhp -= dam) <= 0) {

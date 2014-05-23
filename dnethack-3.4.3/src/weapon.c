@@ -206,13 +206,14 @@ struct monst *mon;
  *	of "otmp" against the monster.
  */
 int
-dmgval(otmp, mon)
+dmgval(otmp, mon, spec)
 struct obj *otmp;
 struct monst *mon;
+int spec;
 {
 	int tmp = 0, otyp = otmp->otyp;
 	struct permonst *ptr;
-	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
+	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp)), youdefend = mon == &youmonst;
 
 	if (!mon) ptr = &mons[NUMMONS];
 	else ptr = mon->data;
@@ -221,8 +222,18 @@ struct monst *mon;
 
 	if (bigmonst(ptr)) {
 		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wldam,1);
-		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = lucky_exploding_d(1,objects[otyp].oc_wldam,0);
+		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
+															unlucky_exploding_d(1,objects[otyp].oc_wldam,0) : 
+															lucky_exploding_d(1,objects[otyp].oc_wldam,0);
 	    else if (objects[otyp].oc_wldam) tmp = rnd(objects[otyp].oc_wldam);
+		
+		if(spec & SPEC_MARIONETTE){
+			if(otmp->oartifact == ART_VORPAL_BLADE) tmp += exploding_d(1,objects[otyp].oc_wldam+2,1);
+			else if(otmp->oartifact == ART_LUCK_BLADE) tmp += youdefend ? 
+															unlucky_exploding_d(1,objects[otyp].oc_wldam+2,0) : 
+															lucky_exploding_d(1,objects[otyp].oc_wldam+2,0);
+			else if (objects[otyp].oc_wldam) tmp += rnd(objects[otyp].oc_wldam+2);
+		}
 	    switch (otyp) {
 		case IRON_CHAIN:
 		case CROSSBOW_BOLT:
@@ -239,10 +250,12 @@ struct monst *mon;
 		case SCYTHE:
 		case VOULGE:		tmp += rnd(4); break;
 
-		case ACID_VENOM:
 		case HALBERD:
 		case SPETUM:		tmp += rnd(6); break;
-
+		case ACID_VENOM:
+			if(otmp->ovar1) tmp = otmp->ovar1;
+			else tmp += rnd(6);
+		break;
 		case BATTLE_AXE:
 		case BARDICHE:
 		case TRIDENT:		tmp += d(2,4); break;
@@ -278,8 +291,18 @@ struct monst *mon;
 	    }
 	} else {
 		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wsdam,1);
-		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = lucky_exploding_d(1,objects[otyp].oc_wsdam,0);
+		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
+															unlucky_exploding_d(1,objects[otyp].oc_wsdam,0) : 
+															lucky_exploding_d(1,objects[otyp].oc_wsdam,0);
 	    else if (objects[otyp].oc_wsdam) tmp = rnd(objects[otyp].oc_wsdam);
+		
+		if(spec & SPEC_MARIONETTE){
+			if(otmp->oartifact == ART_VORPAL_BLADE) tmp += exploding_d(1,objects[otyp].oc_wsdam+2,1);
+			else if(otmp->oartifact == ART_LUCK_BLADE) tmp += youdefend ? 
+															unlucky_exploding_d(1,objects[otyp].oc_wsdam+2,0) : 
+															lucky_exploding_d(1,objects[otyp].oc_wsdam+2,0);
+			else if (objects[otyp].oc_wsdam) tmp += rnd(objects[otyp].oc_wsdam+2);
+		}
 	    switch (otyp) {
 		case IRON_CHAIN:
 		case CROSSBOW_BOLT:
@@ -325,7 +348,10 @@ struct monst *mon;
 			tmp += d(2, objects[otyp].oc_wsdam);
 			if (otmp->altmode) tmp += d(2, objects[otyp].oc_wsdam);
 			break;
-		case ACID_VENOM:	tmp += rnd(6); break;
+		case ACID_VENOM:
+			if(otmp->ovar1) tmp = otmp->ovar1;
+			else tmp += rnd(6);
+		break;
 		case SCIMITAR:
 			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
 	    }
@@ -363,7 +389,7 @@ struct monst *mon;
 		bonus += rnd(4);
 	    if (is_axe(otmp) && is_wooden(ptr))
 		bonus += rnd(4);
-	    if (objects[otyp].oc_material == SILVER && hates_silver(ptr))
+	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(ptr))
 		bonus += rnd(20);
 
 		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && 
@@ -416,7 +442,7 @@ int x;
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
             {
 	        if (!obest ||
-				dmgval(otmp, 0 /*zeromonst*/) > dmgval(obest, 0 /*zeromonst*/))
+				dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0))
 		    obest = otmp;
 	}
 	}
@@ -434,7 +460,7 @@ struct monst *mtmp;
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
             {
 	        if (!obest ||
-		    dmgval(otmp, 0 /*zeromonst*/) > dmgval(obest, 0 /*zeromonst*/))
+		    dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0))
 		    obest = otmp;
 		}
 	}
@@ -483,7 +509,7 @@ struct obj *otmp;
             if ( wep &&
 	         wep->otyp == pwep[i] &&
                !(otmp->otyp == pwep[i] &&
-	         dmgval(otmp, 0 /*zeromonst*/) > dmgval(wep, 0 /*zeromonst*/)))
+	         dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(wep, 0 /*zeromonst*/, 0)))
 	        return FALSE;
             if (otmp->otyp == pwep[i]) return TRUE;
         }
@@ -497,7 +523,7 @@ struct obj *otmp;
         if ( wep &&
              wep->otyp == rwep[i] &&
            !(otmp->otyp == rwep[i] &&
-	     dmgval(otmp, 0 /*zeromonst*/) > dmgval(wep, 0 /*zeromonst*/)))
+	     dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(wep, 0 /*zeromonst*/, 0)))
 	    return FALSE;
         if (otmp->otyp == rwep[i]) return TRUE;
     }
@@ -661,7 +687,7 @@ struct obj *otmp;
         if ( wep &&
 	     wep->otyp == hwep[i] &&
            !(otmp->otyp == hwep[i] &&
-	     dmgval(otmp, 0 /*zeromonst*/) > dmgval(wep, 0 /*zeromonst*/)))
+	     dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(wep, 0 /*zeromonst*/, 0)))
 	    return FALSE;
         if (otmp->otyp == hwep[i]) return TRUE;
     }

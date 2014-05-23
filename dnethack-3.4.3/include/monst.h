@@ -98,6 +98,9 @@ struct monst {
 	Bitfield(mcanmove,1);	/* paralysis, similar to mblinded */
 	Bitfield(mfrozen,7);
 
+	Bitfield(mnotlaugh,1);	/* collapsed from laughter, similar to mblinded */
+	Bitfield(mlaughing,7);
+	
 	Bitfield(msleeping,1);	/* asleep until woken */
 	Bitfield(mstun,1);	/* stunned (off balance) */
 	Bitfield(mconf,1);	/* confused */
@@ -157,6 +160,7 @@ struct monst {
 	   be (or follow) a long int */
 	int meating;		/* monster is eating timeout */
 	int mfaction;		/* faction to which monster belongs */
+	int mvanishes;
 	//hatching situation
 	//AT_LAYEGG, PM_HATCHLING_NAME, x, d
 	//timetohatch

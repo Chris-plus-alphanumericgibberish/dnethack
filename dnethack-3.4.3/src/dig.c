@@ -10,6 +10,8 @@
 
 static NEARDATA boolean did_dig_msg;
 
+STATIC_DCL void NDECL(fakerocktrap);
+STATIC_DCL void NDECL(openfakedoor);
 STATIC_DCL boolean NDECL(rm_waslit);
 STATIC_DCL void FDECL(mkcavepos, (XCHAR_P,XCHAR_P,int,BOOLEAN_P,BOOLEAN_P));
 STATIC_DCL void FDECL(mkcavearea, (BOOLEAN_P));
@@ -693,6 +695,180 @@ int ttyp;
 	}
 }
 
+void
+openactualdoor(x, y, madeby, ttyp)
+register int	x, y;
+struct monst	*madeby;
+int ttyp;
+{
+	struct obj *oldobjs, *newobjs;
+	register struct trap *ttmp;
+	char surface_type[BUFSZ];
+	struct rm *lev = &levl[x][y];
+	boolean shopdoor;
+	struct monst *mtmp = m_at(x, y);	/* may be madeby */
+	boolean madeby_u = (madeby == BY_YOU);
+	boolean madeby_obj = (madeby == BY_OBJECT);
+	boolean at_u = (x == u.ux) && (y == u.uy);
+	boolean wont_fall = Levitation || Flying;
+
+	if (u.utrap && u.utraptype == TT_INFLOOR) u.utrap = 0;
+
+	if (ttyp != TRAPDOOR && !Can_dig_down(&u.uz)) {
+	    impossible("openactaldoor: can't open %s on this level.",
+		       defsyms[trap_to_defsym(ttyp)].explanation);
+	    ttyp = PIT;
+	}
+
+	/* maketrap() might change it, also, in this situation,
+	   surface() returns an inappropriate string for a grave */
+	if (IS_GRAVE(lev->typ))
+	    Strcpy(surface_type, "grave");
+	else
+	    Strcpy(surface_type, surface(x,y));
+	shopdoor = IS_DOOR(lev->typ) && *in_rooms(x, y, SHOPBASE);
+	oldobjs = level.objects[x][y];
+	ttmp = maketrap(x, y, ttyp);
+	if (!ttmp) return;
+	newobjs = level.objects[x][y];
+	ttmp->tseen = (madeby_u || cansee(x,y));
+	ttmp->madeby_u = madeby_u;
+	newsym(ttmp->tx,ttmp->ty);
+
+	pline("A trapdoor opens in the %s.", surface_type);
+	if (ttyp == PIT) {
+
+	    if(madeby_u) {
+			if (shopdoor) pay_for_damage("ruin", FALSE);
+	    }
+	    if(at_u) {
+		if (!wont_fall) {
+		    if (!Passes_walls)
+			u.utrap = rn1(4,2);
+		    u.utraptype = TT_PIT;
+		    vision_full_recalc = 1;	/* vision limits change */
+		} else
+		    u.utrap = 0;
+		if (oldobjs != newobjs)	/* something unearthed */
+			(void) pickup(1);	/* detects pit */
+	    } else if(mtmp) {
+		if(is_flyer(mtmp->data) || is_floater(mtmp->data)) {
+		    if(canseemon(mtmp))
+			pline("%s %s over the trapdoor.", Monnam(mtmp),
+						     (is_flyer(mtmp->data)) ?
+						     "flies" : "floats");
+		} else if(mtmp != madeby)
+		    (void) mintrap(mtmp);
+	    }
+	} else {	/* was TRAPDOOR now a HOLE*/
+
+	    if (at_u) {
+		if (!u.ustuck && !wont_fall && !next_to_u()) {
+		    You("are jerked back by your pet!");
+		    wont_fall = TRUE;
+		}
+
+		/* Floor objects get a chance of falling down.  The case where
+		 * the hero does NOT fall down is treated here.  The case
+		 * where the hero does fall down is treated in goto_level().
+		 */
+		if (u.ustuck || wont_fall) {
+		    if (newobjs)
+			impact_drop((struct obj *)0, x, y, 0);
+		    if (oldobjs != newobjs)
+			(void) pickup(1);
+		    if (shopdoor && madeby_u) pay_for_damage("ruin", FALSE);
+
+		} else {
+		    d_level newlevel;
+
+		    if (*u.ushops && madeby_u)
+			shopdig(1); /* shk might snatch pack */
+		    /* handle earlier damage, eg breaking wand of digging */
+		    else if (!madeby_u) pay_for_damage("dig into", TRUE);
+
+		    You("fall through...");
+		    /* Earlier checks must ensure that the destination
+		     * level exists and is in the present dungeon.
+		     */
+		    newlevel.dnum = u.uz.dnum;
+		    newlevel.dlevel = u.uz.dlevel + 1;
+		    goto_level(&newlevel, FALSE, TRUE, FALSE);
+		    /* messages for arriving in special rooms */
+		    spoteffects(FALSE);
+		}
+	    } else {
+		if (shopdoor && madeby_u) pay_for_damage("ruin", FALSE);
+		if (newobjs)
+		    impact_drop((struct obj *)0, x, y, 0);
+		if (mtmp) {
+		     /*[don't we need special sokoban handling here?]*/
+		    if (is_flyer(mtmp->data) || is_floater(mtmp->data) ||
+		        mtmp->data == &mons[PM_WUMPUS] ||
+			(mtmp->wormno && count_wsegs(mtmp) > 5) ||
+			mtmp->data->msize >= MZ_HUGE) return;
+		    if (mtmp == u.ustuck)	/* probably a vortex */
+			    return;		/* temporary? kludge */
+
+		    if (teleport_pet(mtmp, FALSE)) {
+			d_level tolevel;
+
+			if (Is_stronghold(&u.uz)) {
+			    assign_level(&tolevel, &valley_level);
+			} else if (Is_botlevel(&u.uz)) {
+			    if (canseemon(mtmp))
+				pline("%s avoids the trap.", Monnam(mtmp));
+			    return;
+			} else {
+			    get_level(&tolevel, depth(&u.uz) + 1);
+			}
+			if (mtmp->isshk) make_angry_shk(mtmp, 0, 0);
+			migrate_to_level(mtmp, ledger_no(&tolevel),
+					 MIGR_RANDOM, (coord *)0);
+		    }
+		}
+	    }
+	}
+}
+
+void
+openactualrocktrap(x, y, madeby)
+register int	x, y;
+struct monst	*madeby;
+{
+	int ttyp = ROCKTRAP;
+	struct obj *oldobjs, *newobjs;
+	register struct trap *ttmp;
+	char surface_type[BUFSZ];
+	struct rm *lev = &levl[x][y];
+	boolean shopdoor;
+	struct monst *mtmp = m_at(x, y);	/* may be madeby */
+	boolean madeby_u = (madeby == BY_YOU);
+	boolean madeby_obj = (madeby == BY_OBJECT);
+	boolean at_u = (x == u.ux) && (y == u.uy);
+
+	if (u.utrap && u.utraptype == TT_INFLOOR) u.utrap = 0;
+	
+	shopdoor = IS_DOOR(lev->typ) && *in_rooms(x, y, SHOPBASE);
+	oldobjs = level.objects[x][y];
+	ttmp = maketrap(x, y, ttyp);
+	if (!ttmp) return;
+	ttmp->tseen = (madeby_u || cansee(x,y));
+	ttmp->madeby_u = madeby_u;
+	newsym(ttmp->tx,ttmp->ty);
+
+	pline("A trapdoor opens in the %s.", ceiling(x,y));
+	if(madeby_u) {
+		if (shopdoor) pay_for_damage("ruin", FALSE);
+	}
+	if(at_u) {
+		u.utrap = 0;
+		dotrap(ttmp, 0);
+	} else if(mtmp) {
+		(void) mintrap(mtmp);
+	}
+}
+
 /* return TRUE if digging succeeded, FALSE otherwise */
 boolean
 dighole(pit_only)
@@ -806,6 +982,383 @@ boolean pit_only;
 		else
 			digactualhole(u.ux, u.uy, BY_YOU, HOLE);
 
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+STATIC_DCL
+void
+openfakedoor()
+{
+	d_level dtmp;
+	char msgbuf[BUFSZ];
+	int newlevel = dunlev(&u.uz);
+	
+	if(!Blind && !(Levitation || Flying)) pline("A trap door opens up under you!");
+	
+	if(Levitation || Flying){
+		if(!In_sokoban(&u.uz)) return;
+		else {
+			pline("Powerful winds force you down!");
+			losehp(rnd(2), "dangerous winds", KILLED_BY);
+		}
+	}
+	
+	if(*u.ushops) shopdig(1);
+
+	if (Is_stronghold(&u.uz)) {
+		find_hell(&dtmp);
+	} else {
+		do {
+			newlevel++;
+		} while(!rn2(5) && newlevel < dunlevs_in_dungeon(&u.uz));
+		
+		dtmp.dnum = u.uz.dnum;
+		dtmp.dlevel = newlevel;
+	}
+	Sprintf(msgbuf, "The hole in the %s above you closes up.",
+		ceiling(u.ux,u.uy));
+	schedule_goto(&dtmp, FALSE, TRUE, 0,
+			  (char *)0, !Blind ? msgbuf : (char *)0);
+}
+
+/* return TRUE if digging succeeded, FALSE otherwise */
+boolean
+opentrapdoor(pit_only)
+boolean pit_only;
+{
+	d_level dtmp;
+	int newlevel = dunlev(&u.uz);
+	struct trap *ttmp = t_at(u.ux, u.uy);
+	struct rm *lev = &levl[u.ux][u.uy];
+	struct obj *boulder_here;
+	schar typ;
+	boolean nohole = !Can_dig_down(&u.uz);
+
+	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL)) ||
+	   /* ALI - artifact doors from slash'em */
+	   (IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
+	   (IS_ROCK(lev->typ) && lev->typ != SDOOR &&
+	    (lev->wall_info & W_NONDIGGABLE) != 0)) {
+		pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+		
+		return FALSE;
+	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
+		You("can't open a door into a liquid!");
+	} else if (lev->typ == DRAWBRIDGE_DOWN ||
+		   (is_drawbridge_wall(u.ux, u.uy) >= 0)) {
+		/* drawbridge_down is the platform crossing the moat when the
+		   bridge is extended; drawbridge_wall is the open "doorway" or
+		   closed "door" where the portcullis/mechanism is located */
+		if (lev->typ == DBWALL ) {
+			open_drawbridge(u.ux, u.uy);
+			return TRUE;
+		} else {
+		    pline_The("drawbridge is already open.");
+		    return FALSE;
+		}
+
+	} else if ((boulder_here = boulder_at(u.ux, u.uy)) != 0) {
+		/*
+		 * digging makes a hole, but the boulder immediately
+		 * fills it.  Final outcome:  no hole, no boulder.
+		 */
+		pline("KADOOM! The %s falls in!", xname(boulder_here) );
+		(void) delfloortrap(ttmp);
+		delobj(boulder_here);
+		return TRUE;
+	} else if (IS_GRAVE(lev->typ)) {
+		/* You succeed in opening the grave.*/
+	    openactualdoor(u.ux, u.uy, BY_YOU, PIT);
+	    dig_up_grave(u.ux, u.uy);
+	    return TRUE;
+	} else if (IS_DOOR(lev->typ)) {
+		if(lev->doormask == D_NODOOR){
+			goto goodspot;
+		} else if(lev->doormask & D_BROKEN){
+			pline("The door is broken open.");
+			return FALSE;
+		} else if(lev->doormask & D_ISOPEN){
+			pline("The door is already open.");
+			return FALSE;
+		} else {
+			pline("The door opens.");
+			lev->doormask &= ~(D_CLOSED|D_LOCKED);
+			lev->doormask |= D_ISOPEN;
+			if (Blind)
+			feel_location(u.ux,u.uy);	/* the hero knows she opened it  */
+			else
+			newsym(u.ux,u.uy);
+			unblock_point(u.ux,u.uy);		/* vision: new see through there */
+		}
+	    return TRUE;
+	} else if (lev->typ == DRAWBRIDGE_UP) {
+		/* must be floor or ice, other cases handled above */
+		/* dig "pit" and let fluid flow in (if possible) */
+		typ = fillholetyp(u.ux,u.uy);
+
+		if (typ == ROOM) {
+			if(!pit_only){
+				openfakedoor();
+				return TRUE;
+			} else {
+				pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+				return FALSE;
+			}
+		}
+
+		lev->drawbridgemask &= ~DB_UNDER;
+		lev->drawbridgemask |= (typ == LAVAPOOL) ? DB_LAVA : DB_MOAT;
+
+ liquid_flow:
+		if (ttmp) (void) delfloortrap(ttmp);
+		/* if any objects were frozen here, they're released now */
+		unearth_objs(u.ux, u.uy);
+
+		pline("Though the trapdoor opens, it is immediately filled with %s!",
+		      typ == LAVAPOOL ? "lava" : "water");
+		if (!Levitation && !Flying) {
+		    if (typ == LAVAPOOL)
+			(void) lava_effects();
+		    else if (!Wwalking)
+			(void) drown();
+		}
+		return TRUE;
+
+	} else if (IS_FOUNTAIN(lev->typ)) {
+		if(!pit_only){
+			openfakedoor();
+			return TRUE;
+		} else {
+			pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+			return FALSE;
+		}
+#ifdef SINKS
+	} else if (IS_SINK(lev->typ)) {
+		if(!pit_only){
+			openfakedoor();
+			return TRUE;
+		} else {
+			pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+			return FALSE;
+		}
+#endif
+	} else if (IS_THRONE(lev->typ)) {
+		if(!pit_only){
+			openfakedoor();
+			return TRUE;
+		} else {
+			pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+			return FALSE;
+		}
+	} else if (IS_ALTAR(lev->typ)) {
+		if(!pit_only){
+			openfakedoor();
+			return TRUE;
+		} else {
+			pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+			return FALSE;
+		}
+	} else {
+goodspot:
+		typ = fillholetyp(u.ux,u.uy);
+		
+		if (typ != ROOM) {
+			lev->typ = typ;
+			goto liquid_flow;
+		}
+		/* finally we get to make a hole */
+		if (nohole || pit_only)
+			openactualdoor(u.ux, u.uy, BY_YOU, PIT);
+		else
+			openactualdoor(u.ux, u.uy, BY_YOU, TRAPDOOR);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/* return TRUE if digging succeeded, FALSE otherwise */
+boolean
+opennewdoor(x,y)
+int x,y;
+{
+	struct rm *lev = &levl[x][y];
+	schar typ;
+
+	if (/* ALI - artifact doors from slash'em */
+	   (IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
+	   (IS_ROCK(lev->typ) && lev->typ != SDOOR &&
+	    (lev->wall_info & W_NONDIGGABLE) != 0)) {
+		pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+		
+		return FALSE;
+	} else if (lev->typ == DRAWBRIDGE_DOWN ||
+		   (is_drawbridge_wall(x, y) >= 0)) {
+		/* drawbridge_down is the platform crossing the moat when the
+		   bridge is extended; drawbridge_wall is the open "doorway" or
+		   closed "door" where the portcullis/mechanism is located */
+		if (lev->typ == DBWALL ) {
+			open_drawbridge(x, y);
+			return TRUE;
+		} else {
+		    pline_The("drawbridge is already open.");
+		    return FALSE;
+		}
+	} else if (IS_GRAVE(lev->typ)) {
+		/* You succeed in opening the grave.*/
+	    openactualdoor(x, y, BY_YOU, PIT);
+	    dig_up_grave(u.ux, u.uy);
+	    return TRUE;
+	} else if (IS_DOOR(lev->typ)) {
+		if(lev->doormask == D_NODOOR){
+			goto badspot;
+		} else if(lev->doormask & D_BROKEN){
+			pline("The door is broken open.");
+			return FALSE;
+		} else if(lev->doormask & D_ISOPEN){
+			pline("The door is already open.");
+			return FALSE;
+		} else {
+			pline("The door opens.");
+			lev->doormask &= ~(D_CLOSED|D_LOCKED);
+			lev->doormask |= D_ISOPEN;
+			if (Blind)
+			feel_location(x,y);	/* the hero knows she opened it  */
+			else
+			newsym(x,y);
+			unblock_point(x,y);		/* vision: new see through there */
+		}
+	    return TRUE;
+	} else if (lev->typ == DRAWBRIDGE_UP || ZAP_POS(lev->typ)) {
+badspot:
+		pline("Doors can only exist in solid surfaces!");
+		return FALSE;
+	} else {
+		lev->typ = DOOR;
+		pline("A new door opens.");
+		lev->doormask = D_ISOPEN;
+		if (Blind)
+			feel_location(x,y);	/* the hero knows she opened it  */
+		else
+			newsym(x,y);
+			unblock_point(x,y);		/* vision: new see through there */
+		return TRUE;
+	}
+	return FALSE;
+}
+
+STATIC_DCL
+void
+fakerocktrap()
+{
+	int dmg = d(2,6); /* should be std ROCK dmg? */
+	struct obj *otmp;
+
+	otmp = mksobj_at(ROCK, u.ux, u.uy, TRUE, FALSE);
+	otmp->quan = 1L;
+	otmp->owt = weight(otmp);
+
+	pline("A trap door in %s opens and %s falls on your %s!",
+	  the(ceiling(u.ux,u.uy)),
+	  an(xname(otmp)),
+	  body_part(HEAD));
+
+	if (uarmh) {
+	if(is_metallic(uarmh)) {
+		pline("Fortunately, you are wearing a hard helmet.");
+		dmg = 2;
+	} else if (flags.verbose) {
+		Your("%s does not protect you.", xname(uarmh));
+	}
+	}
+
+	if (!Blind) otmp->dknown = 1;
+	stackobj(otmp);
+	newsym(u.ux,u.uy);	/* map the rock */
+
+	losehp(dmg, "falling rock", KILLED_BY_AN);
+	exercise(A_STR, FALSE);
+}
+
+/* return TRUE if digging succeeded, FALSE otherwise */
+boolean
+openrocktrap()
+{
+	struct trap *ttmp = t_at(u.ux, u.uy);
+	struct rm *lev = &levl[u.ux][u.uy];
+	schar typ;
+
+	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL)) ||
+	   /* ALI - artifact doors from slash'em */
+	   (IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
+	   (IS_ROCK(lev->typ) && lev->typ != SDOOR &&
+	    (lev->wall_info & W_NONDIGGABLE) != 0)) {
+		pline_The("%s here refuses to open.", ceiling(u.ux,u.uy));
+		
+		return FALSE;
+	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
+		fakerocktrap();
+	    return TRUE;
+	} else if (lev->typ == DRAWBRIDGE_DOWN ||
+		   (is_drawbridge_wall(u.ux, u.uy) >= 0)) {
+		/* drawbridge_down is the platform crossing the moat when the
+		   bridge is extended; drawbridge_wall is the open "doorway" or
+		   closed "door" where the portcullis/mechanism is located */
+		if (lev->typ == DBWALL ) {
+			open_drawbridge(u.ux, u.uy);
+			return TRUE;
+		} else {
+		    pline_The("drawbridge is already open.");
+		    return FALSE;
+		}
+
+	} else if (IS_GRAVE(lev->typ)) {
+		fakerocktrap();
+	    return TRUE;
+	} else if (IS_DOOR(lev->typ)) {
+		if(lev->doormask == D_NODOOR){
+			openactualrocktrap(u.ux, u.uy, BY_YOU);
+			return TRUE;
+		} else if(lev->doormask & D_BROKEN){
+			pline("The door is broken open.");
+			return FALSE;
+		} else if(lev->doormask & D_ISOPEN){
+			pline("The door is already open.");
+			return FALSE;
+		} else {
+			pline("The door opens.");
+			lev->doormask &= ~(D_CLOSED|D_LOCKED);
+			lev->doormask |= D_ISOPEN;
+			if (Blind)
+			feel_location(u.ux,u.uy);	/* the hero knows she opened it  */
+			else
+			newsym(u.ux,u.uy);
+			unblock_point(u.ux,u.uy);		/* vision: new see through there */
+		}
+	    return TRUE;
+	} else if (lev->typ == DRAWBRIDGE_UP) {
+		fakerocktrap();
+	    return TRUE;
+	} else if (IS_FOUNTAIN(lev->typ)) {
+		fakerocktrap();
+	    return TRUE;
+#ifdef SINKS
+	} else if (IS_SINK(lev->typ)) {
+		fakerocktrap();
+	    return TRUE;
+#endif
+	} else if (IS_THRONE(lev->typ)) {
+		fakerocktrap();
+	    return TRUE;
+	} else if (IS_ALTAR(lev->typ)) {
+		fakerocktrap();
+	    return TRUE;
+	} else {
+		openactualrocktrap(u.ux, u.uy, BY_YOU);
 		return TRUE;
 	}
 

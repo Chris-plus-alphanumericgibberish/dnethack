@@ -60,7 +60,7 @@ static struct trobj Binder[] = {
 //definition of an extern in you.h
 long sealKey[34] = {SEAL_AHAZU, SEAL_AMON, SEAL_ANDREALPHUS, SEAL_ANDROMALIUS, SEAL_ASTAROTH, SEAL_BALAM, 
 				 SEAL_BERITH, SEAL_BUER, SEAL_CHUPOCLOPS, SEAL_DANTALION, SEAL_SHIRO, SEAL_ECHIDNA, SEAL_EDEN,
-				 SEAL_ERIDU, SEAL_EURYNOME, SEAL_EVE, SEAL_FAFNIR, SEAL_HUGINN_MUNINN, SEAL_IRIS, SEAL_JACK,
+				 SEAL_ENKI, SEAL_EURYNOME, SEAL_EVE, SEAL_FAFNIR, SEAL_HUGINN_MUNINN, SEAL_IRIS, SEAL_JACK,
 				 SEAL_MALPHAS, SEAL_MARIONETTE, SEAL_MOTHER, SEAL_NABERIUS, SEAL_ORTHOS, SEAL_OSE, SEAL_OTIAX,
 				 SEAL_PAIMON, SEAL_SIMURGH, SEAL_TENEBROUS, SEAL_YMIR, SEAL_SPECIAL|SEAL_DAHLVER_NAR, SEAL_SPECIAL|SEAL_ACERERAK, SEAL_SPECIAL|SEAL_NUMINA
 				};
@@ -876,8 +876,9 @@ u_init()
 	u.ustuck = (struct monst *)0;
 
 	u.summonMonster = FALSE;
-//	u.uleadamulet = FALSE;
+	u.uleadamulet = FALSE;
 	u.ZangetsuSafe = 1;
+	u.voidChime = 0;
 	u.regifted = 0;
 	u.keter = 0;
 	u.chokhmah = 0;
@@ -925,10 +926,11 @@ u_init()
 	
 	u.ukinghill = 0;
 	u.protean = 0;
+	u.divetimer = 0;
 
 	u.uhouse = 0;
 	
-	if(Role_if(PM_EXILE)){
+	/*Randomize spirit order*/{
 		short i,j,tmp;
 		for(i=0;i<31;i++) u.sealorder[i]=i;
 		for(i=0;i<31;i++){
@@ -937,7 +939,8 @@ u_init()
 			u.sealorder[i] = u.sealorder[j];
 			u.sealorder[j] = tmp;
 		}
-//		for(i=0;i<32;i++) pline("%d", u.sealorder[i]);
+	}
+	if(Role_if(PM_EXILE)){
 		u.sealsKnown = sealKey[u.sealorder[0]] | sealKey[u.sealorder[1]] | sealKey[u.sealorder[2]];
 	}
 	else 	u.sealsKnown = 0;
@@ -947,7 +950,7 @@ u_init()
 	u.specialSealsActive = 0;
 
 	u.ahazu = u.amon = u.andrealphus = u.andromalius = u.astaroth = u.balam = u.berith = u.buer = u.chupoclops = u.dantalion = u.shiro = 0;
-	u.echidna = u.eden = u.eridu = u.eurynome = u.eve = u.fafnir = u.huginn_muninn = u.iris = u.jack = u.malphas = u.marionette = u.mother = 0;
+	u.echidna = u.eden = u.enki = u.eurynome = u.eve = u.fafnir = u.huginn_muninn = u.iris = u.jack = u.malphas = u.marionette = u.mother = 0;
 	u.naberius = u.orthos = u.ose = u.otiax = u.paimon = u.simurgh = u.tenebrous = u.ymir = u.dahlver_nar = u.acererak = 0;
 	
 	
@@ -971,6 +974,8 @@ u_init()
 	    u.uenmax += rnd(urace.enadv.inrnd);
 	u.uen = u.uenmax;
 	u.uspellprot = 0;
+	u.sowdisc = 0;
+	u.voidChime = 0;
 	adjabil(0,1);
 	u.ulevel = u.ulevelmax = 1;
 
@@ -1597,6 +1602,19 @@ u_init()
 	shambler->mconveys = 0;					/* flagged NOCORPSE */
 	stumbler->mconveys = 0;
 	wanderer->mconveys = 0;
+	
+	if(!rn2(10)) u.shambin = 2;
+	else if(rn2(9) > 1) u.shambin = 1;
+	else u.shambin = 0;
+	
+	if(!rn2(10)) u.stumbin = 2;
+	else if(rn2(9) > 1) u.stumbin = 1;
+	else u.stumbin = 0;
+	
+	if(!rn2(10)) u.wandein = 2;
+	else if(rn2(9) > 1) u.wandein = 1;
+	else u.wandein = 0;
+	
 	/*
 	 * now time for the random flags.  this will likely produce
 	 * a number of complete trainwreck monsters at first, but

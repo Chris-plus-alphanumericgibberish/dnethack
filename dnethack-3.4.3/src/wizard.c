@@ -542,6 +542,13 @@ dowizdarken()
 			}
 		}
 	}
+	if (!Blind) {
+	    vision_recalc(2);
+
+	    /* replace ball&chain */
+	    if (Punished)
+		move_bc(0, 0, uball->ox, uball->oy, uchain->ox, uchain->oy);
+	}
 }
 
 void

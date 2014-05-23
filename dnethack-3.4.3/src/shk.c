@@ -117,7 +117,7 @@ long amount;
 	return 0L;
     }
     if (!ygold || ygold->quan < amount) {
-	impossible("Paying without %s money?", ygold ? "enough" : "");
+	impossible("Paying without %smoney?", ygold ? "enough " : "");
 	return 0L;
     }
 
@@ -127,6 +127,32 @@ long amount;
 	remove_worn_item(ygold, FALSE);		/* quiver */
     freeinv(ygold);
     add_to_minv(mon, ygold);
+    flags.botl = 1;
+    return amount;
+}
+
+long
+money2none(amount)
+long amount;
+{
+    struct obj *ygold = findgold(invent);
+
+    if (amount <= 0) {
+	impossible("%s payment in money2none!", amount ? "negative" : "zero");
+	return 0L;
+    }
+    if (!ygold || ygold->quan < amount) {
+	impossible("Paying without %smoney?", ygold ? "enough " : "");
+	return 0L;
+    }
+
+    if (ygold->quan > amount)
+	ygold = splitobj(ygold, amount);
+    else if (ygold->owornmask)
+	remove_worn_item(ygold, FALSE);		/* quiver */
+    freeinv(ygold);
+	ygold->quan=1;
+	useup(ygold);
     flags.botl = 1;
     return amount;
 }
@@ -501,7 +527,7 @@ boolean newlev;
 	if (!eshkp->billct && !eshkp->debit)	/* bill is settled */
 	    return;
 
-	if (!*leavestring && shkp->mcanmove && !shkp->msleeping) {
+	if (!*leavestring && shkp->mcanmove && shkp->mnotlaugh && !shkp->msleeping) {
 	    /*
 	     * Player just stepped onto shop-boundary (known from above logic).
 	     * Try to intimidate him into paying his bill
@@ -633,7 +659,7 @@ register char *enterstring;
 	    pacify_shk(shkp);
 	}
 
-	if (shkp->msleeping || !shkp->mcanmove || eshkp->following)
+	if (shkp->msleeping || !shkp->mcanmove || !shkp->mnotlaugh || eshkp->following)
 	    return;	/* no dialog */
 
 	if (Invis) {
@@ -1307,6 +1333,8 @@ proceed:
 	eshkp = ESHK(shkp);
 	ltmp = eshkp->robbed;
 
+	if(!shkp->mnotlaugh) return 0;
+	
 	/* wake sleeping shk when someone who owes money offers payment */
 	if (ltmp || eshkp->billct || eshkp->debit) 
 	    rouse_shk(shkp, TRUE);
@@ -2537,7 +2565,7 @@ register boolean ininv, dummy, silent;
 	} else /* i.e., !container */
 	    add_one_tobill(obj, dummy);
 speak:
-	if (shkp->mcanmove && !shkp->msleeping && !silent) {
+	if (shkp->mcanmove && !shkp->msleeping && !shkp->mnotlaugh && !silent) {
 	    char buf[BUFSZ];
 
 	    if(!ltmp) {
@@ -3178,7 +3206,7 @@ register xchar x, y;
 	if (!(shkp = shop_keeper(inside_shop(x, y))) ||
 	    !inhishop(shkp)) return(0);
 
-	if (shkp->mcanmove && !shkp->msleeping &&
+	if (shkp->mcanmove && !shkp->msleeping && shkp->mnotlaugh &&
 	    (*u.ushops != ESHK(shkp)->shoproom || !inside_shop(u.ux, u.uy)) &&
 	    dist2(shkp->mx, shkp->my, x, y) < 3 &&
 	    /* if it is the shk's pos, you hit and anger him */
@@ -3359,7 +3387,7 @@ boolean catchup;	/* restoring a level */
 
 	if ((monstermoves - tmp_dam->when) < REPAIR_DELAY)
 	    return(0);
-	if (shkp->msleeping || !shkp->mcanmove || ESHK(shkp)->following)
+	if (shkp->msleeping || !shkp->mcanmove || !shkp->mnotlaugh || ESHK(shkp)->following)
 	    return(0);
 	x = tmp_dam->place.x;
 	y = tmp_dam->place.y;
@@ -3628,7 +3656,7 @@ register int fall;
 
     /* 0 == can't speak, 1 == makes animal noises, 2 == speaks */
     lang = 0;
-    if (shkp->msleeping || !shkp->mcanmove || is_silent(shkp->data))
+    if (shkp->msleeping || !shkp->mcanmove || !shkp->mnotlaugh || is_silent(shkp->data))
 	;	/* lang stays 0 */
     else if (shkp->data->msound <= MS_ANIMAL)
 	lang = 1;
@@ -3659,7 +3687,7 @@ register int fall;
 	    adjalign(-sgn(u.ualign.type));
 	}
     } else if(!um_dist(shkp->mx, shkp->my, 5) &&
-		!shkp->msleeping && shkp->mcanmove &&
+		!shkp->msleeping && shkp->mcanmove && shkp->mnotlaugh &&
 		(ESHK(shkp)->billct || ESHK(shkp)->debit)) {
 	    register struct obj *obj, *obj2;
 	    if (nolimbs(shkp->data)) {
@@ -3911,7 +3939,7 @@ register xchar x, y;
 	    break;
     /* note: otmp might have ->no_charge set, but that's ok */
     return (otmp && costly_spot(x, y) && NOTANGRY(shkp)
-	    && shkp->mcanmove && !shkp->msleeping)
+	    && shkp->mcanmove && shkp->mnotlaugh && !shkp->msleeping)
 		? otmp : (struct obj *)0;
 }
 
@@ -4190,7 +4218,7 @@ boolean altusage;
 	    if (!rn2(3)) arg2 = "Ahem.  ";
 	}
 
-	if (shkp->mcanmove || !shkp->msleeping)
+	if (shkp->mcanmove || shkp->mnotlaugh || !shkp->msleeping)
 	    verbalize(fmt, arg1, arg2, tmp, currency(tmp));
 	ESHK(shkp)->debit += tmp;
 	exercise(A_WIS, TRUE);		/* you just got info */
@@ -4261,7 +4289,7 @@ register xchar x, y;
 	     * shk is within a 'jumping' distance.
 	     */
 	    && ESHK(shkp)->shd.x == x && ESHK(shkp)->shd.y == y
-	    && shkp->mcanmove && !shkp->msleeping
+	    && shkp->mcanmove && shkp->mnotlaugh && !shkp->msleeping
 	    && (ESHK(shkp)->debit || ESHK(shkp)->billct ||
 		ESHK(shkp)->robbed)) {
 		pline("%s%s blocks your way!", shkname(shkp),
@@ -4296,7 +4324,7 @@ register xchar x, y;
 	sy = ESHK(shkp)->shk.y;
 
 	if(shkp->mx == sx && shkp->my == sy
-		&& shkp->mcanmove && !shkp->msleeping
+		&& shkp->mcanmove && shkp->mnotlaugh && !shkp->msleeping
 		&& (x == sx-1 || x == sx+1 || y == sy-1 || y == sy+1)
 		&& (Invis || carrying(PICK_AXE) || carrying(DWARVISH_MATTOCK)
 #ifdef STEED

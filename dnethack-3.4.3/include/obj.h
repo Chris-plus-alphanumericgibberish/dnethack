@@ -136,6 +136,7 @@ struct obj {
 			/* Also, records special features for weapons. Currently, the only special feature is runes on wooden weapons. */
 			/* Rings: specifies engraving on certain rings */
 			/* Cloaks: Droven: Tattered level.  */
+			/* Acid venom: nonstandard damage amount */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 
@@ -144,6 +145,43 @@ struct obj {
 	long oextra[1];		/* used for name of ordinary objects - length
 				   is flexible; amount for tmp gold objects.  Must be last? */
 };
+
+//Useful items (ovar1 flags for planned cloak of useful items)
+#define USE_DAGGER	0x0000001L
+#define TWO_DAGGER	0x0000002L
+#define USE_LANTERN	0x0000004L
+#define TWO_LANTERN	0x0000008L
+#define USE_MIRROR	0x0000010L
+#define TWO_MIRROR	0x0000020L
+#define USE_POLE	0x0000040L
+#define USE_SACK	0x0000100L
+#define USE_GOLD	0x0000400L
+#define USE_CHEST	0x0001000L
+#define USE_DOOR	0x0004000L
+#define USE_GEMS	0x0010000L
+#define USE_PONY	0x0040000L
+#define USE_PIT		0x0100000L
+#define USE_POTION	0x0400000L
+#define USE_LAND	0x1000000L
+#define USE_DOGS	0x4000000L
+//Useful items 2
+#define USE_SCROLL	0x0000001
+#define USE_WINDOW	0x0000004
+#define USE_RAM		0x0000010
+#define USE_STARS	0x0000040
+// #define USE_	0x0000100
+// #define USE_	0x0000400
+// #define USE_	0x0001000
+
+#define SPEC_FIRE		0x0000001L
+#define SPEC_COLD		0x0000002L
+#define SPEC_ELEC		0x0000004L
+#define SPEC_ACID		0x0000008L
+#define SPEC_WILT		0x0000010L
+#define SPEC_RADI		0x0000020L
+#define SPEC_BONUS		0x0000040L
+#define SPEC_DESTRUCTOR	0x0000080L
+#define SPEC_MARIONETTE	0x0000100L
 
 #define newobj(xl)	(struct obj *)alloc((unsigned)(xl) + sizeof(struct obj))
 #define ONAME(otmp)	(((char *)(otmp)->oextra) + (otmp)->oxlth)
@@ -270,6 +308,7 @@ struct obj {
 				|| (otmp)->oartifact == ART_KINGSLAYER\
 				|| (otmp)->oartifact == ART_OGRESMASHER\
 				|| (otmp)->oartifact == ART_TROLLSBANE\
+				|| (otmp)->oartifact == ART_PEN_OF_THE_VOID\
 				|| ((otmp)->oartifact == ART_CLARENT && uwep && uwep->oartifact==ART_EXCALIBUR)\
 				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_BLADE_SINGER_S_SPEAR)\
 				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_SODE_NO_SHIRAYUKI)\

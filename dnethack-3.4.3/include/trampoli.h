@@ -257,6 +257,7 @@
 /* ### trap.c ### */
 #define dotele()     dotele_()
 #define dountrap()   dountrap_()
+#define dodeepswim()   dodeepswim_()
 #define float_down() float_down_()
 
 

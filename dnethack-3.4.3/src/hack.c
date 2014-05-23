@@ -1564,6 +1564,7 @@ boolean pick;
 			goto stillinwater;
 		was_underwater = Underwater && !Is_waterlevel(&u.uz);
 		u.uinwater = 0;		/* leave the water */
+		u.usubwater = 0;		/* leave the water */
 		if (was_underwater) {	/* restore vision */
 			docrt();
 			vision_full_recalc = 1;

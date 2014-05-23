@@ -673,6 +673,33 @@ mattacku(mtmp)
 			}
 			break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AT_ILUR:
+			if (!range2) {
+			    if(foundyou) {
+				if(u.uswallow || tmp > (j = rnd(20+i))) {
+				    /* Force swallowing monster to be
+				     * displayed even when player is
+				     * moving away */
+				    flush_screen(1);
+				    if(u.ustuck == mtmp) sum[i] = gulpmu(mtmp, mattk);
+				    else sum[i] = hitmu(mtmp, mattk);
+				} else {
+				    missmu(mtmp, (tmp == j), mattk);
+				}
+			    } else if (is_animal(mtmp->data)) {
+				pline("%s gulps some air!", Monnam(mtmp));
+			    } else {
+				if (youseeit)
+				    pline("%s lunges forward and recoils!",
+					  Monnam(mtmp));
+				else
+				    You_hear("a %s nearby.",
+					     is_whirly(mtmp->data) ?
+						"rushing noise" : "splat");
+			   }
+			}
+			break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_BREA:
 //			if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;
 			if(range2) sum[i] = breamu(mtmp, mattk);
@@ -1094,7 +1121,7 @@ hitmu(mtmp, mattk)
 			    if (!Stoned)
 				goto do_stone;
 			}
-			dmg += dmgval(uwep, &youmonst);
+			dmg += dmgval(uwep, &youmonst, 0);
 			
 			if (uwep->opoisoned){
 				Sprintf(buf, "%s %s",
@@ -1169,7 +1196,7 @@ hitmu(mtmp, mattk)
 				dmg = 0;
 			    else
 				dmg = rnd(2);
-			} else dmg += dmgval(otmp, &youmonst);
+			} else dmg += dmgval(otmp, &youmonst, 0);
 
 			if (objects[otmp->otyp].oc_material == SILVER &&
 				maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
@@ -1648,9 +1675,10 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_STCK:
 		hitmsg(mtmp, mattk);
-		if (uncancelled && !u.ustuck && !sticks(youmonst.data))
+		if (uncancelled && !u.ustuck && !sticks(youmonst.data)){
 			if(Upolyd && u.umonnum == PM_TOVE) You("are much too slithy to get stuck!");
 			else u.ustuck = mtmp;
+		}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_WRAP:
@@ -2393,6 +2421,14 @@ dopois:
 		 }
  		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_ILUR: //Non-engulfed hit = damage and stick to you
+		hitmsg(mtmp, mattk);
+		if (!u.ustuck && !sticks(youmonst.data)){
+			if(Upolyd && u.umonnum == PM_TOVE) You("are much too slithy to get stuck!");
+			else u.ustuck = mtmp;
+		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
 /*		case AD_VMSL:	//vorlon missile.  triple damage
 			mondead(mtmp);
 			explode(mtmp->mx, mtmp->my, 5, 2*dmg, -1, EXPL_WET);		//-1 is unspecified source. 5 is electrical
@@ -2679,6 +2715,50 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				}
 		    }
 		break;
+		case AD_ILUR:{
+			int perc;
+			if(has_blood(youmonst.data)){
+				pline("A mist of blood is torn from your %s and swept into the cloud!", body_part(BODY_SKIN));
+				tmp *= 2;
+				if(Upolyd) perc = (u.mhmax - u.mh - tmp)*10/u.mhmax;
+				else perc = (u.uhpmax - u.uhp - tmp)*10/u.uhpmax;
+				if(perc > 10) perc = 10;
+				if(perc >= 5) forget_levels(perc);
+				if(perc > 1) forget_objects(perc);
+			} else if(!is_anhydrous(youmonst.data)){
+				pline("A mist of water is drawn through your %s and swept into the cloud!", body_part(BODY_SKIN));
+				if(Upolyd) perc = (u.mhmax - u.mh - tmp)*10/u.mhmax;
+				else perc = (u.uhpmax - u.uhp - tmp)*10/u.uhpmax;
+				if(perc > 10) perc = 10;
+				if(perc >= 5) forget_levels(perc);
+				if(perc > 1) forget_objects(perc);
+			} else {
+				if (u.umonnum == PM_IRON_GOLEM) {
+					You("are laden with moisture and rust away!");
+				/* KMH -- this is okay with unchanging */
+					rehumanize();
+					mtmp->mhp = 1;
+					expels(mtmp, mtmp->data,FALSE);
+					pline("Rusting your iron body took a severe toll on the cloud!");
+				}
+				else {
+					You("are laden with moisture and %s",
+						flaming(youmonst.data) ? "are smoldering out!" :
+						Breathless ? "find it mildly uncomfortable." :
+						amphibious(youmonst.data) ? "feel comforted." :
+						"can barely breathe!");
+					/* NB: Amphibious includes Breathless */
+					if (Amphibious && !flaming(youmonst.data)) tmp = 0;
+					hurtarmor(AD_RUST);
+					// No way to tell if rusting occurs!
+					// if(mtmp->mhp > 1){
+						// mtmp->mhp -= 10;
+						// if(mtmp->mhp < 1) mtmp->mhp = 1;
+					// }
+				}
+			}
+			if(Half_physical_damage) tmp = (tmp*2)-1; /*reverse formula, cancel half damage*/
+		}break;
 		default:
 		    tmp = 0;
 		break;
@@ -3459,6 +3539,7 @@ register struct monst *mtmp;
 register int n;
 {
 	flags.botl = 1;
+	if(n > 0) mtmp->mhurtu = TRUE;
 	if (Upolyd) {
 		u.mh -= n;
 		if (u.mh < 1) rehumanize();
@@ -5187,7 +5268,7 @@ register struct monst *mon;
 	}
 
 	if(mon->mextra[0] == 1){
-		if (Blind) You_feel("cloth against your skin...");
+		if (Blind) You_feel("cloth against your %s...",body_part(BODY_SKIN));
 		else{
 			pline("The shroud dances as if in the wind. The %s figure beneath is almost exposed!", fem ? "shapely feminine" : "shapely masculine");
 			You_feel("very attracted to %s.", mon_nam(mon));

@@ -194,6 +194,9 @@ nh_timeout()
 
 	if (flags.friday13) baseluck -= 1;
 
+	if(u.sowdisc) u.sowdisc--; //timeout for discord
+	if(u.voidChime) u.voidChime--;
+	
 	if (u.uluck != baseluck) {
 	    int timeout = 600;
 	    int time_luck = stone_luck(FALSE);

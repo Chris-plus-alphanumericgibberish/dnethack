@@ -412,7 +412,9 @@ boolean
 arti_silvered(obj)
 struct obj *obj;
 {
-    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_SILVERED));
+    return (obj && obj->oartifact && (spec_ability2(obj, SPFX2_SILVERED) || 
+									  (obj->oartifact == ART_PEN_OF_THE_VOID &&
+									   obj->ovar1 & SEAL_EDEN)));
 }
 
 /* used so that callers don't need to known about SPFX_ codes */
@@ -1922,7 +1924,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		while(extrahits--){
 			monAC = find_roll_to_hit(mdef)-2*extrahits-2;
 			if(u.uswallow || monAC > rnd(20)){
-				*dmgptr += dmgval(otmp, mdef);
+				*dmgptr += dmgval(otmp, mdef, 0);
 				extrahit++;
 			}
 		}
@@ -1969,7 +1971,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		int extrahit = 0;
 		while(extrahits--){
 			if(u.uswallow || u.uac > rnd(20)){
-				*dmgptr += dmgval(otmp, mdef);
+				*dmgptr += dmgval(otmp, mdef, 0);
 				extrahit++;
 			}
 		}
@@ -2883,7 +2885,7 @@ arti_invoke(obj)
 						int x, y;
 						x = u.ux + u.dx;
 						y = u.uy + u.dy;
-						if(digfarhole(TRUE, x, y)){
+						if(isok(x, y) && digfarhole(TRUE, x, y)){
 							obj->spe--; // lose charge
 							pline("Your weapon has become more flawed.");
 						} else if( (d(1,20)-10) > 0 ){
@@ -3335,6 +3337,12 @@ arti_invoke(obj)
 					case SELECT_ELEMENTS:
 						delay = -100;
 					break;
+					case SELECT_SPIRITS1:
+						delay = -125;
+					break;
+					case SELECT_SPIRITS2:
+						delay = -125;
+					break;
 				}
 				//if it WAS a spellbook effect, set the delay here
 				if(booktype) switch (objects[booktype].oc_level) {
@@ -3384,6 +3392,45 @@ arti_invoke(obj)
 					You("hold the Necronomicon awkwardly, then put it away.");
 		   }
 		break;
+		case SPIRITNAMES:{
+		   // if(yn("Open the Book of Lost Names?")=='y'){
+			// if(Blind){
+				// You_cant("feel any Braille writing.");
+		// break;
+			// }
+			// discover_artifact(ART_BOOK_OF_LOST_NAMES);
+			// identify(obj);
+			// update_inventory();
+			// if(obj->ovar1 && yn("Contact a known spirit?") == 'y'){
+				// u.uconduct.literate++;
+				// lostname = donecromenu("Choose which incantation to contact", obj);
+				// delay = -25;
+				// artiptr = obj;
+				// set_occupation(read_lost, "studying", 0);
+			// }
+			// else if(yn("Risk your name amongst the Lost?") == 'y'){
+				// int chance = 0;
+				// u.uconduct.literate++;
+				// You("open your mind to the cold winds of the Void.");
+				// lostname = SEAL_SPECIAL;
+				// delay = -125;
+				// artiptr = obj;
+				// set_occupation(read_lost, "studying", 0);
+				// exercise(A_WIS, FALSE);
+			// }
+			// else{
+				// if(Hallucination) pline("The whisperers berate you ceaselessly.");
+				// You("close the Book of Lost Names.");
+			// }
+		   // }
+		   // else{
+				// Hallucination ? 
+					// pline("Cool it, Link.  It's just a book.") : 
+					// You("hold the Book of Lost Names awkwardly, then put it away.");
+		   // }
+		}break;
+		case INFINITESPELLS:{
+		}break;
 		case LORDLY:
 			if(uwep && uwep == obj){
 				//struct obj *otmp;
@@ -3508,6 +3555,15 @@ arti_invoke(obj)
 				}
 				if(lordlydictum >= COMMAND_LADDER) obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1)); 
 			} else You_feel("that you should be wielding %s", the(xname(obj)));;
+		break;
+		case VOID_CHIME:
+			if(quest_status.killed_nemesis){
+				int i;
+				u.voidChime = 5;
+				for(i=0;i < NUMBER_POWERS;i++){
+					u.spiritPColdowns[i] = 0;
+				}
+			}
 		break;
 		default: pline("Program in dissorder.  Artifact invoke property not recognized");
 		break;
@@ -3780,6 +3836,22 @@ struct obj *obj;
 	if(obj->ovar1 & R_ELEMENTS){
 		Sprintf(buf, "Study the Lords of the Elements");
 		any.a_int = SELECT_ELEMENTS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(obj->ovar1 & R_NAMES_1){
+		Sprintf(buf, "Study the first half of the testament of whispers");
+		any.a_int = SELECT_SPIRITS1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(obj->ovar1 & R_NAMES_2){
+		Sprintf(buf, "Study the second half of the testament of whispers");
+		any.a_int = SELECT_SPIRITS2;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
@@ -4196,6 +4268,26 @@ read_necro(VOID_ARGS)
 				}
 				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
 			break;
+			case SELECT_SPIRITS1:
+				// if( (u.wardsknown & WARD_CTHUGHA) && (u.wardsknown & WARD_ITHAQUA) && (u.wardsknown & WARD_KARAKAL)){
+					// You("page through the section on the Lords of the Elements");
+				// }else if((u.wardsknown & WARD_CTHUGHA) || (u.wardsknown & WARD_ITHAQUA) || (u.wardsknown & WARD_KARAKAL)){
+					// You("refresh your memory about the Lords of the Elements");
+				// }else{
+					// You("read about the Lords of the Elements");
+				// }
+				// u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
+			break;
+			case SELECT_SPIRITS2:
+				// if( (u.wardsknown & WARD_CTHUGHA) && (u.wardsknown & WARD_ITHAQUA) && (u.wardsknown & WARD_KARAKAL)){
+					// You("page through the section on the Lords of the Elements");
+				// }else if((u.wardsknown & WARD_CTHUGHA) || (u.wardsknown & WARD_ITHAQUA) || (u.wardsknown & WARD_KARAKAL)){
+					// You("refresh your memory about the Lords of the Elements");
+				// }else{
+					// You("read about the Lords of the Elements");
+				// }
+				// u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
+			break;
 		}
 	}
 	else if(necro_effect == SELECT_STUDY){
@@ -4205,7 +4297,7 @@ read_necro(VOID_ARGS)
 //		pline("learned %d abilities",artiptr->spestudied);
 		if(d(1,10) - artiptr->spestudied - 15 + ACURR(A_INT) > 0){
 			if(!(artiptr->ovar1 & LAST_PAGE)){
-				chance = d(1,25);
+				chance = d(1,27);
 			}
 			else if(!(artiptr->ovar1 & (S_OOZE|S_SHOGGOTH|S_NIGHTGAUNT|S_BYAKHEE|SUM_DEMON|S_DEVIL) )){
 				chance = d(1,6);
@@ -4543,6 +4635,34 @@ read_necro(VOID_ARGS)
 				}
 				else{
 					You("discover another section on the Lords of the Elements.");
+				}
+//				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
+			case 26:
+				if(!(artiptr->ovar1 & R_NAMES_1)){
+					if(artiptr->ovar1 & R_NAMES_2) You("find the first half of the testament of whispers.");
+					else You("come across the first half of something called 'the testament of whispers.'");
+					artiptr->ovar1 |= R_NAMES_1;
+					artiptr->spestudied++;
+					if(artiptr->spestudied > rn1(4,6)){
+						artiptr->ovar1|= LAST_PAGE;
+					}
+				}
+				else{
+					You("discover another transcription of the first half of the testament of whispers.");
+				}
+//				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
+			case 27:
+				if(!(artiptr->ovar1 & R_NAMES_2)){
+					if(artiptr->ovar1 & R_NAMES_1) You("find the second half of the testament of whispers.");
+					else You("come across the latter half of something called 'the testament of whispers.'");
+					artiptr->ovar1 |= R_NAMES_2;
+					artiptr->spestudied++;
+					if(artiptr->spestudied > rn1(4,6)){
+						artiptr->ovar1|= LAST_PAGE;
+					}
+				}
+				else{
+					You("discover another transcription of the latter half of the testament of whispers.");
 				}
 //				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
 			break;

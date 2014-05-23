@@ -125,7 +125,7 @@ dochugw(mtmp)
 	    /* can see it now, or sense it and would normally see it */
 	    (canseemon(mtmp) ||
 		(sensemon(mtmp) && couldsee(mtmp->mx,mtmp->my))) &&
-	    mtmp->mcanmove &&
+	    mtmp->mcanmove && mtmp->mnotlaugh &&
 	    !noattacks(mtmp->data) && !onscary(u.ux, u.uy, mtmp))
 		stop_occupation();
 
@@ -714,9 +714,9 @@ register struct monst *mtmp;
 	quest_stat_check(mtmp);
 
    if (mdat != &mons[PM_GIANT_TURTLE] || !mtmp->mflee)
-	if (!mtmp->mcanmove || (mtmp->mstrategy & STRAT_WAITMASK)) {
+	if (!(mtmp->mcanmove && mtmp->mnotlaugh) || (mtmp->mstrategy & STRAT_WAITMASK)) {
 	    if (Hallucination) newsym(mtmp->mx,mtmp->my);
-	    if (mtmp->mcanmove && (mtmp->mstrategy & STRAT_CLOSE) &&
+	    if (mtmp->mcanmove && mtmp->mnotlaugh && (mtmp->mstrategy & STRAT_CLOSE) &&
 	       !mtmp->msleeping && monnear(mtmp, u.ux, u.uy))
 		quest_talk(mtmp);	/* give the leaders a chance to speak */
 	    return(0);	/* other frozen monsters can't do anything */
@@ -1048,7 +1048,7 @@ toofar:
 			break;
 		    case 1:	/* monster moved */
 			/* Maybe it stepped on a trap and fell asleep... */
-			if (mtmp->msleeping || !mtmp->mcanmove) return(0);
+			if (mtmp->msleeping || !(mtmp->mcanmove && mtmp->mnotlaugh)) return(0);
 			if(!nearby &&
 			  (ranged_attk(mdat) || find_offensive(mtmp)))
 			    break;
@@ -1075,7 +1075,7 @@ toofar:
 	    if(mtmp->wormno) wormhitu(mtmp);
 	}
 	/* special speeches for quest monsters */
-	if (!mtmp->msleeping && mtmp->mcanmove && nearby)
+	if (!mtmp->msleeping && mtmp->mcanmove && mtmp->mnotlaugh && nearby)
 	    quest_talk(mtmp);
 	/* extra emotional attack for vile monsters */
 	if (inrange && mtmp->data->msound == MS_CUSS && !mtmp->mpeaceful &&
@@ -1695,7 +1695,7 @@ postmov:
 		} else
 		newsym(mtmp->mx,mtmp->my);
 	    }
-	    if(OBJ_AT(mtmp->mx, mtmp->my) && mtmp->mcanmove) {
+	    if(OBJ_AT(mtmp->mx, mtmp->my) && mtmp->mcanmove && mtmp->mnotlaugh) {
 		/* recompute the likes tests, in case we polymorphed
 		 * or if the "likegold" case got taken above */
 		if (setlikes) {
@@ -1748,7 +1748,7 @@ postmov:
 		   (just in case the object it was hiding under went away);
 		   usually set mundetected unless monster can't move.  */
 		if (mtmp->mundetected ||
-			(mtmp->mcanmove && !mtmp->msleeping && rn2(5)))
+			(mtmp->mcanmove && mtmp->mnotlaugh && !mtmp->msleeping && rn2(5)))
 		    mtmp->mundetected = (ptr->mlet != S_EEL) ?
 			OBJ_AT(mtmp->mx, mtmp->my) :
 			(is_pool(mtmp->mx, mtmp->my) && !Is_waterlevel(&u.uz));

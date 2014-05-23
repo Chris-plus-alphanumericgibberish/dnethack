@@ -22,6 +22,7 @@ static NEARDATA int RoSbook;		/* Read spell or Study Wards?"
 #define spellet(spell)	\
 	((char)((spell < 26) ? ('a' + spell) : ('A' + spell - 26)))
 
+STATIC_PTR int NDECL(purifying_blast);
 STATIC_DCL int FDECL(spell_let_to_idx, (CHAR_P));
 STATIC_DCL boolean FDECL(check_spirit_let, (char));
 STATIC_DCL boolean FDECL(cursed_book, (struct obj *bp));
@@ -34,7 +35,10 @@ STATIC_DCL boolean FDECL(spiritLets, (char *));
 STATIC_DCL boolean FDECL(dospellmenu, (const char *,int,int *));
 STATIC_DCL int FDECL(percent_success, (int));
 STATIC_DCL int NDECL(throwspell);
+STATIC_DCL int NDECL(throwgaze);
 STATIC_DCL void NDECL(cast_protection);
+STATIC_DCL boolean FDECL(sightwedge, (int,int, int,int, int,int));
+STATIC_DCL boolean FDECL(tt_findadjacent, (coord *, struct monst *));
 STATIC_DCL void FDECL(spell_backfire, (int));
 STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
 STATIC_DCL int FDECL(isqrt, (int));
@@ -122,6 +126,7 @@ char *wardDecode[26] = {
 /* since the spellbook itself doesn't blow up, don't say just "explodes" */
 static const char explodes[] = "radiates explosive energy";
 static const char where_to_cast[] = "Where do you want to cast the spell?";
+static const char where_to_gaze[] = "Where do you want to look?";
 
 /* convert a letter into a number in the range 0..51, or -1 if not a letter */
 STATIC_OVL int
@@ -751,7 +756,7 @@ static const int spiritPOwner[NUMBER_POWERS] = {
 	SEAL_SHIRO,
 	SEAL_ECHIDNA,
 	SEAL_EDEN, SEAL_EDEN, SEAL_EDEN,
-	SEAL_ERIDU,
+	SEAL_ENKI,
 	SEAL_EURYNOME, SEAL_EURYNOME,
 	SEAL_EVE, SEAL_EVE,
 	SEAL_FAFNIR, SEAL_FAFNIR,
@@ -796,8 +801,8 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Horrid Wilting", "Turn Humans and Animals",
 	"Hellfire", "Refill Lantern",
 	"Call Murder",
-	"Root Shout", "Long Stride",
-	"Confusing Touch",
+	"Root Shout", "Pull Wires",
+	"Disgusted Gaze",
 	"Bloody Tongue", "Silver Tongue",
 	"Exhalation of the Rift", 
 	"Querient Thoughts", "Great Leap",
@@ -845,7 +850,7 @@ docast()
 	int spell_no;
 
 	if (getspell(&spell_no))
-	    return spelleffects(spell_no, FALSE);
+					return spelleffects(spell_no, FALSE, 0);
 	return 0;
 }
 
@@ -998,6 +1003,152 @@ int spell;
     return;
 }
 
+STATIC_OVL boolean
+sightwedge
+(dx,dy,x1,y1,x2,y2)
+int dx,dy,x1,y1,x2,y2;
+{
+	boolean gx=FALSE, gy=FALSE;
+	if(dy){
+		if(dx < 0){
+			if(x1 < x2) gx = TRUE;
+		} else if(dx > 0){
+			if(x1 > x2) gx = TRUE;
+		} else {
+			if(dy > 0 && y2 > y1){
+				int deltax = x2 - x1, deltay = y2 - y1;
+				if(deltax < deltay && deltax > -1*deltay){
+					gx = TRUE;
+					gy = TRUE;
+				}
+			}
+			else if(dy < 0 && y2 < y1){
+				int deltax = x2 - x1, deltay = y2 - y1;
+				if(deltax > deltay && deltax < -1*deltay){
+					gx = TRUE;
+					gy = TRUE;
+				}
+			}
+		}
+	}
+	if(dx){
+		if(dy < 0){
+			if(y1 < y2) gy = TRUE;
+		} else if(dy > 0){
+			if(y1 > y2) gy = TRUE;
+		} else {
+			if(dx > 0 && x2 > x1){
+				int deltax = x2 - x1, deltay = y2 - y1;
+				if(deltay < deltax && deltay < -1*deltax){
+					gx = TRUE;
+					gy = TRUE;
+				}
+			}
+			else if(dx < 0 && x2 < x1){
+				int deltax = x2 - x1, deltay = y2 - y1;
+				if(deltay > deltax && deltay > -1*deltax){
+					gx = TRUE;
+					gy = TRUE;
+				}
+			}
+		}
+	}
+	return gx && gy;
+}
+
+void
+damningdark(x,y,val)
+int x, y;
+genericptr_t val;
+{
+	int nd = *((int *)val);
+	struct monst *mon=m_at(x,y);
+	if (levl[x][y].lit){
+	    levl[x][y].lit = 0;
+	    snuff_light_source(x, y);
+		if(mon){
+			if(is_undead(mon->data) || resists_drain(mon) || is_demon(mon->data)){
+				shieldeff(mon->mx, mon->my);
+			} else {
+				setmangry(mon);
+				mon->mhp -= d(5, nd);
+			}
+		}
+	} else {
+		if(mon){
+			if(is_undead(mon->data) || resists_drain(mon) || is_demon(mon->data)){
+				shieldeff(mon->mx, mon->my);
+			} else {
+				setmangry(mon);
+				mon->mhp -= d(rnd(5), nd);
+			}
+		}
+	}
+	if (mon->mhp <= 0){
+		mon->mhp = 0;
+		xkilled(mon, 1);
+	}
+}
+
+
+
+STATIC_OVL boolean
+tt_findadjacent(cc, mon)
+coord *cc;
+struct monst *mon;
+{
+	int x, y;
+	for(x = mon->mx-1; x <= mon->mx+1; x++){
+		for(y = mon->my-1; y <= mon->my+1; y++){
+			if(teleok(x,y,TRUE)){
+				cc->x = x;
+				cc->y = y;
+				return TRUE;
+			}
+		}
+	}
+	return FALSE;
+}
+
+STATIC_PTR int
+purifying_blast()
+{
+	struct monst *mon;
+	int dmg;
+	int dsize;
+	if(u.ulevel <= 2) dsize=1;
+	else if(u.ulevel <= 5) dsize=2;
+	else if(u.ulevel <= 9) dsize=3;
+	else if(u.ulevel <= 13) dsize=4;
+	else if(u.ulevel <= 17) dsize=5;
+	else if(u.ulevel <= 21) dsize=6;
+	else if(u.ulevel <= 25) dsize=7;
+	else if(u.ulevel <= 29) dsize=8;
+	else dsize=9;
+	
+	mon = m_at(u.ux+u.dx, u.uy+u.dy);
+	if(!mon){
+		buzz(SPE_FIREBALL - SPE_MAGIC_MISSILE + 10, 0,
+			u.ux, u.uy, u.dx, u.dy,25,d(10,dsize));
+	} else if(resists_elec(mon) || resists_disint(mon)){
+		shieldeff(mon->mx, mon->my);
+		buzz(SPE_FIREBALL - SPE_MAGIC_MISSILE + 10, 0, 
+			u.ux+u.dx, u.uy+u.dy, u.dx, u.dy,25,d(10,dsize));
+	} else {
+		mhurtle(mon, u.dx, u.dy, 25);
+		dmg = d(10,dsize);
+		mon->mhp -= dmg;
+		setmangry(mon);
+		if(hates_silver(mon->data)) mon->mhp -= d(5,dsize);
+		if (mon->mhp <= 0){
+			xkilled(mon, 1);
+		}
+		buzz(SPE_FIREBALL - SPE_MAGIC_MISSILE + 10, 0,
+			u.ux, u.uy, u.dx, u.dy,25,d(10,dsize));
+	}
+	u.uacinc-=7;  //Note: was added when purifying blast began to charge.
+}
+
 int
 spiriteffects(power, atme)
 	int power;
@@ -1016,13 +1167,22 @@ spiriteffects(power, atme)
 	
 	boolean reveal_invis = FALSE;
 	switch(power){
-		case PWR_ABDUCTION:
-		break;
+		case PWR_ABDUCTION:{
+			struct monst *mon;
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				if(mon->uhurtm && mon->data->geno & G_GENO){
+					Your("shadow flows under %s, swallowing %s up!",mon_nam(mon),mhim(mon));
+					mongone(mon);
+				}
+			} else break;
+		}break;
 		case PWR_FIRE_BREATH:
-			if (!getdir((char *)0)) return(0);
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
 			buzz((int) (20 + AD_FIRE-1), 0,
 				u.ux, u.uy, u.dx, u.dy,0,d(5,dsize));
-			u.spiritPColdowns[PWR_FIRE_BREATH] = monstermoves + 25;
 		break;
 		case PWR_TRANSDIMENSIONAL_RAY:{
 			int dmg;
@@ -1031,16 +1191,24 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
-			if (!getdir((char *)0)) return(0);
-			if(u.uswallow)
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(u.uswallow){
+				mon = u.ustuck;
+				if (!resists_magm(mon)) {
+					dmg = d(rnd(5),dsize);
+					mon->mhp -= dmg;
+					if (mon->mhp <= 0){
+						xkilled(mon, 1);
+					} else u_teleport_mon(mon, TRUE);
+				}
+			}
 			while(range-- > 0){
-				lsx = sx; sx += u.dx;
-				lsy = sy; sy += u.dy;
+				sx += u.dx;
+				sy += u.dy;
 				if(isok(sx,sy)) {
 					mon = m_at(sx, sy);
-					if(cansee(sx,sy)) {
 						/* reveal/unreveal invisible monsters before tmp_at() */
-						if (mon && !canspotmon(mon))
+					if (mon && !canspotmon(mon) && cansee(sx,sy))
 							map_invisible(sx, sy);
 						else if (!mon && glyph_is_invisible(levl[sx][sy].glyph)) {
 							unmap_object(sx, sy);
@@ -1052,26 +1220,1161 @@ spiriteffects(power, atme)
 								shieldeff(mon->mx, mon->my);
 							} else {
 								dmg = d(d(1,5),dsize);
-								u_teleport_mon(mon, TRUE);
+							mon->mhp -= dmg;
+							if (mon->mhp <= 0){
+								xkilled(mon, 1);
+								continue;
 							}
+							u_teleport_mon(mon, TRUE);
 						}
 					}
 				} else break;
 			}
 		}break;
 		case PWR_TELEPORT:
+			tele();//hungerless teleport
 		break;
-		case PWR_JESTER_S_MIRTH:
+		case PWR_JESTER_S_MIRTH:{
+			struct monst *mon;
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				mon->mnotlaugh = 0;
+				mon->mlaughing = d(1,4);
+				pline("%s collapses in a fit of laughter.", Monnam(mon));
+			} else break;
+		}break;
+		case PWR_THIEF_S_INSTINCTS:
+			findit();
 		break;
+		case PWR_ASTAROTH_S_ASSEMBLY:{
+			int dmg;
+			int range = dsize;
+			xchar lsx, lsy, sx, sy;
+			struct monst *mon;
+			sx = u.ux;
+			sy = u.uy;
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(u.uswallow){
+				explode(u.ux,u.uy,5/*Electrical*/, d(5,dsize), WAND_CLASS, EXPL_MAGICAL);
+			} else {
+				while(--range >= 0){
+					lsx = sx; sx += u.dx;
+					lsy = sy; sy += u.dy;
+					if(isok(sx,sy) && !IS_STWALL(levl[sx][sy].typ)) {
+						mon = m_at(sx, sy);
+						if(mon){
+							dmg = d(5,range+1); //Damage decreases with range
+							explode(sx, sy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
+							break;//break loop
+						}
+					} else {
+						dmg = d(5,range+1); //Damage decreases with range
+						explode(lsx, lsy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
+						break;//break loop
+					}
+				}
+				u.uspellprot = max(dsize - (range+1),u.uspellprot);
+				u.usptime = 5;
+				u.uspmtime = 5;
+			}
+		}break;
+		case PWR_ASTAROTH_S_SHARDS:
+		if (getdir((char *)0) && (u.dx || u.dy)){
+		    struct obj *otmp;
+			int i, x, y;
+			x =  u.ux;
+			y = u.uy;
+			for(i = dsize; i > 0; i--){
+				int xadj=0;
+				int yadj=0;
+				otmp = mksobj(SHURIKEN, TRUE, FALSE);
+			    otmp->blessed = 0;
+			    otmp->cursed = 0;
+				if(u.dy == 0) yadj = d(1,3)-2 + d(1,3)-2;
+				else if(u.dx == 0) xadj = d(1,3)-2 + d(1,3)-2;
+				else if(u.dx == u.dy){
+					int dd = d(1,3)-2 + d(1,3)-2;
+					xadj = dd;
+					yadj = -1 * dd;
+				}
+				else{
+					int dd = d(1,3)-2 + d(1,3)-2;
+					xadj = yadj = dd;
+				}
+				set_destroy_thrown(1); //state variable referenced in drop_throw
+					m_throw(&youmonst, u.ux + xadj, u.uy + yadj, u.dx, u.dy,
+						rn1(5,5), otmp,TRUE);
+					nomul(0, NULL);
+				set_destroy_thrown(0);  //state variable referenced in drop_throw
+			}
+			losehp(dsize, "little shards of metal ripping out of your body", KILLED_BY);
+		}
+		break;
+		case PWR_ICY_GLARE:{
+			int range = (u.ulevel/2+1),dmg;
+			struct monst *mprime, *mon, *nxtmon;
+			xchar sx, sy;
+			boolean gx=FALSE, gy=FALSE;
+			sx = u.ux;
+			sy = u.uy;
+			if(Blind){
+				You("need to be able to see in order to glare!");
+				return 0;
+			}
+			if (!getdir((char *)0) && (u.dz || u.dy)) return(0);
+			if(u.uswallow) break;
+			while(--range >= 0){
+				sx += u.dx;
+				sy += u.dy;
+				if(isok(sx,sy)) {
+				  if(cansee(sx,sy)){
+					mon = m_at(sx, sy);
+					if(mon && canseemon(mon)) {
+						mprime = mon;
+						if (resists_cold(mon)) {	/* match effect on player */
+							shieldeff(mon->mx, mon->my);
+						} else {
+							dmg = d(5,dsize);
+							mon->mhp -= dmg;
+							setmangry(mon);
+							if(resists_fire(mon)) mon->mhp -= dmg;
+							if (mon->mhp <= 0){
+								xkilled(mon, 1);
+								break;
+							}
+						}
+					}
+				  }
+				} else range = -1;
+			}
+			range = (u.ulevel/2+1)^2;
+			for(mon = fmon; mon; mon = nxtmon){
+				nxtmon = mon->nmon;
+				if (DEADMONSTER(mon)) continue;
+				if(mprime != mon && canseemon(mon) && dist2(u.ux,u.uy,mon->mx,mon->my)<=range){
+					if(sightwedge(u.dx,u.dy,u.ux,u.uy,mon->mx, mon->my)){
+						if (resists_cold(mon)) {	/* match effect on player */
+							shieldeff(mon->mx, mon->my);
+						} else {
+							dmg = 0.5*d(5,dsize);
+							mon->mhp -= dmg;
+							setmangry(mon);
+							if(resists_fire(mon)) mon->mhp -= dmg;
+							if (mon->mhp <= 0){
+								mon->mhp = 0;
+								xkilled(mon, 1);
+								break;
+							}
+						}
+					}
+				}
+			}
+			for(sx = 0; sx < COLNO; sx++){
+				for(sy = 0; sy < ROWNO; sy++){
+					if(levl[sx][sy].typ == POOL || levl[sx][sy].typ == MOAT){
+						if(dist2(u.ux,u.uy,mon->mx,mon->my)<=range && cansee(sx,sy)){
+							if(levl[sx][sy].typ == POOL){
+								levl[sx][sy].icedpool = ICED_POOL;
+							} else {
+								levl[sx][sy].icedpool = ICED_MOAT;
+							}
+							levl[sx][sy].typ = ICE;
+							newsym(sx,sy);
+						}
+					}
+				}
+			}
+			make_blinded(Blinded+5L,FALSE);
+		}break;
+		case PWR_BALAM_S_ANOINTING:{
+			//thick-skinned creatures loose their eyes
+			struct monst *mon;
+			int dmg;
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				if (resists_cold(mon) || is_anhydrous(mon->data)) {	/* match effect on player */
+					shieldeff(mon->mx, mon->my);
+				} else {
+					if(rn2(10)){
+						dmg = d(5,dsize);
+					} else {
+						if(thick_skinned(mon->data)){
+							dmg = d(5,dsize);
+							mon->mcansee = 0;
+							mon->mblinded = 0;
+						} else {
+							dmg = mon->mhp;
+						}
+					}
+					mon->mhp -= dmg;
+					setmangry(mon);
+					if(resists_fire(mon)) mon->mhp -= dmg;
+					if (mon->mhp <= 0){
+						mon->mhp = 0;
+						xkilled(mon, 1);
+						break;
+					}
+				}
+			} else break;
+		}break;
+		case PWR_BLOOD_MERCENARY:{
+			int dmg;
+			int range = rn1(7,7);
+			boolean enoughGold;
+			xchar sx, sy;
+			struct monst *mon;
+			sx = u.ux;
+			sy = u.uy;
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(u.uswallow){
+				enoughGold = FALSE;
+				reveal_invis = TRUE;
+				dmg = d(5,dsize);
+#ifndef GOLDOBJ
+				if (u.ugold >= dmg) enoughGold = TRUE;
+#else
+				if (money_cnt(invent) >= dmg) enoughGold = TRUE;
+#endif
+				if(enoughGold){
+#ifndef GOLDOBJ
+					u.ugold -= dmg;
+#else
+					money2none(dmg);
+#endif
+					mon->mhp -= dmg;
+					if (mon->mhp <= 0){
+						xkilled(mon, 1);
+						break;
+					}
+				}
+			}
+			while(range-- > 0){
+				sx += u.dx;
+				sy += u.dy;
+				if(isok(sx,sy) && !IS_ROCK(levl[sx][sy].typ)) {
+					mon = m_at(sx, sy);
+					/* reveal/unreveal invisible monsters before tmp_at() */
+					if (mon && !canspotmon(mon) && cansee(sx,sy))
+						map_invisible(sx, sy);
+					else if (!mon && glyph_is_invisible(levl[sx][sy].glyph)) {
+						unmap_object(sx, sy);
+						newsym(sx, sy);
+					}
+					if (mon) {
+						enoughGold = FALSE;
+						reveal_invis = TRUE;
+						dmg = d(5,dsize);
+#ifndef GOLDOBJ
+						if (u.ugold >= dmg) enoughGold = TRUE;
+#else
+						if (money_cnt(invent) >= dmg) enoughGold = TRUE;
+#endif
+						if(enoughGold){
+#ifndef GOLDOBJ
+							u.ugold -= dmg;
+#else
+							money2none(dmg);
+#endif
+							mon->mhp -= dmg;
+							if (mon->mhp <= 0){
+								xkilled(mon, 1);
+								continue;
+							}
+						}
+					}
+				} else break;
+			}
+		}break;
+		case PWR_SOW_DISCORD:
+			u.sowdisc = dsize;
+		break;
+		case PWR_GIFT_OF_HEALING:{
+			struct monst *mon;
+			int dmg;
+			if (!getdir((char *)0)  && !(u.dz)) return(0);
+			if(!(u.dx || u.dy)){
+				healup(d(5,dsize), 0, FALSE, FALSE);
+			} else if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				if (nonliving(mon->data)) {	/* match effect on player */
+					shieldeff(mon->mx, mon->my);
+				} else {
+					mon->mhp += d(5,dsize);
+					if(mon->mhp > mon->mhpmax) mon->mhp = mon->mhpmax;
+				}
+			} else break;
+		}break;
+		case PWR_GIFT_OF_HEALTH:{
+			struct monst *mon;
+			struct obj *pseudo;
+			int dmg;
+			if (!getdir((char *)0)  && !(u.dz)) return(0);
+			if(!(u.dx || u.dy)){
+				int idx, recover, val_limit, aprobs = 0, fixpoint, curpoint;
+				
+				if (Sick) make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+				if (Blinded > (long)u.ucreamed) make_blinded((long)u.ucreamed, TRUE);
+				if (HHallucination) (void) make_hallucinated(0L, TRUE, 0L);
+				if (Vomiting) make_vomiting(0L, TRUE);
+				if (HConfusion) make_confused(0L, TRUE);
+				if (HStun) make_stunned(0L, TRUE);
+
+				/* collect attribute troubles */
+				for (idx = 0; idx < A_MAX; idx++) {
+					val_limit = AMAX(idx);
+					/* don't recover strength lost from hunger */
+					if (idx == A_STR && u.uhs >= WEAK) val_limit--;
+					
+					if (val_limit > ABASE(idx)) aprobs += val_limit - ABASE(idx);
+				}
+				if(aprobs) for(recover = 0; recover < 5; recover++){
+					if(!aprobs) break;
+					fixpoint = rnd(aprobs);
+					curpoint = 0;
+					for (idx = 0; idx < A_MAX; idx++) {
+						val_limit = AMAX(idx);
+						/* don't recover strength lost from hunger */
+						if (idx == A_STR && u.uhs >= WEAK) val_limit--;
+						
+						if (val_limit > ABASE(idx)) curpoint += val_limit - ABASE(idx);
+						if (curpoint >= fixpoint){
+							ABASE(idx)++;
+							aprobs--;
+					break;
+						}
+					}
+				}
+			} else if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				if (nonliving(mon->data)) {	/* match effect on player */
+					shieldeff(mon->mx, mon->my);
+				} else {
+					if(mon->permspeed == MSLOW) mon->permspeed = 0;
+					mon->mcan = 0;
+					mon->mcrazed = 0; 
+					mon->mcansee = 1;
+					mon->mblinded = 0;
+					mon->mcanmove = 1;
+					mon->mfrozen = 0;
+					mon->msleeping = 0;
+					mon->mstun = 0;
+					mon->mconf = 0;
+					if (canseemon(mon))
+						pline("%s looks recovered.", Monnam(mon));
+				}
+			} else break;
+		}break;
+		case PWR_THROW_WEBBING:
+			if (getdir((char *)0) && (u.dx || u.dy)){
+				struct obj *otmp;
+				otmp = mksobj(BALL_OF_WEBBING, TRUE, FALSE);
+				otmp->blessed = 0;
+				otmp->cursed = 0;
+				otmp->spe = 1; /* to indicate it's yours */
+				throwit(otmp, 0L, FALSE);
+				// m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy,
+					// rn1(5,5), otmp,TRUE);
+				nomul(0, NULL);
+			}
+		break;
+		case PWR_THOUGHT_TRAVEL:{
+			coord cc;
+			int cancelled;
+			struct monst *mon;
+		    cc.x = u.ux;
+		    cc.y = u.uy;
+		    pline("To what creature do you wish to travel?");
+			do cancelled = getpos(&cc, TRUE, "the desired creature");
+			while( !((mon = m_at(cc.x,cc.y)) && tp_sensemon(mon) && tt_findadjacent(&cc, mon)) && cancelled >= 0);
+			if(cancelled < 0) return 0; /*abort*/
+//		    if (u.usteed){
+//			}
+			teleds(cc.x, cc.y, FALSE);
+		}break;
+		case PWR_DREAD_OF_DANTALION:{
+			register struct monst *mtmp;
+			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+				if (DEADMONSTER(mtmp)) continue;
+				if(cansee(mtmp->mx,mtmp->my) && !(mtmp->data->geno & G_UNIQ)) {
+					monflee(mtmp, d(5,dsize), FALSE, TRUE);
+				}
+			}
+		}break;
+		case PWR_EARTH_SWALLOW:{
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				digfarhole(TRUE, u.ux+u.dx, u.uy+u.dy);
+				mksobj_at(BOULDER, u.ux+u.dx, u.uy+u.dy, TRUE, FALSE);
+			} else break;
+		}break;
+		case PWR_ECHIDNA_S_VENOM:{
+			struct obj *otmp;
+			if (!getdir((char *)0)) return(0);
+			otmp = mksobj(u.umonnum==PM_COBRA ? BLINDING_VENOM 
+											  : (u.umonnum==PM_SPROW || u.umonnum==PM_DRIDER) ? BALL_OF_WEBBING 
+											  : ACID_VENOM,
+					TRUE, FALSE);
+			otmp->spe = 1; /* to indicate it's yours */
+			otmp->ovar1 = d(5,dsize); /* save the damge this should do */
+			throwit(otmp, 0L, FALSE);
+		}break;
+		case PWR_SUCKLE_MONSTER:{
+			struct monst *mon;
+			int dmg;
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				if(rn2(u.ulevel) < mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
+					mon->mpeaceful = 1;
+					mon->mhp = mon->mhpmax;
+				} else {
+					if (mon->isshk) make_happy_shk(mon, FALSE);
+					else (void) tamedog(mon, (struct obj *) 0);
+				}
+				losehp(mon->m_lev, "suckling a monster on your blood", KILLED_BY);
+			} else break;
+		}break;
+		case PWR_STARGATE:
+			level_tele();
+		break;
+		case PWR_RECALL_TO_EDEN:{
+			struct monst *mon;
+			int perc;
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon || mon->data->geno & G_UNIQ) break;
+				if(Upolyd) perc = (u.mh - mon->mhp)*100/u.mh;
+				else perc = (u.uhp - mon->mhp)*100/u.uhp;
+				
+				if(perc>0 && rnd(100) < perc){
+					mongone(mon);
+				}
+			} else break;
+		}break;
+		case PWR_PURIFYING_BLAST:{
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				u.uacinc+=7; //Note: purifying_blast subtracts 7 from uacinc to compensate.
+				nomul(-5, "charging up a purifying blast");
+				nomovemsg = "You finish charging.";
+				afternmv = purifying_blast;
+			}
+		}break;
+		case PWR_WALKER_OF_THRESHOLDS:{
+			coord cc;
+			int cancelled;
+		    cc.x = u.ux;
+		    cc.y = u.uy;
+		    pline("To what doorway do you wish to travel?");
+			do cancelled = getpos(&cc, TRUE, "the desired doorway");
+			while( !(IS_DOOR(levl[cc.x][cc.y].typ) && teleok(cc.x, cc.y, FALSE)) && cancelled >= 0);
+			if(cancelled < 0) return 0; /*abort*/
+//		    if (u.usteed){
+//			}
+			teleds(cc.x, cc.y, FALSE);
+		}break;
+		case PWR_VENGANCE:{
+			struct monst *mon;
+			int i,j;
+			for(i=-1;i<=1;i++){
+			  for(j=-1;j<=1;j++){
+				if((i!=0 || j!=0) && isok(u.ux+i, u.uy+j) && (mon = m_at(u.ux+u.dx, u.uy+u.dy)) && mon->mhurtu){
+					mon->mhp -= d(5,dsize);
+					setmangry(mon);
+					if (mon->mhp <= 0){
+						mon->mhp = 0;
+						xkilled(mon, 1);
+					}
+				}
+			  }
+			}
+		}break;
+		case PWR_SHAPE_THE_WIND:{
+			struct monst *mon;
+			struct permonst *pm;
+			int i;
+			for(i=dsize; i > 0; i--){
+				do pm = &mons[rn2(PM_LONG_WORM_TAIL)];
+				while( (pm->geno & (G_UNIQ|G_NOGEN)) );
+				if(mon = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH|NO_MINVENT)){
+					initedog(mon);
+					mon->mvanishes = 5;
+				}
+			}
+		}break;
+		case PWR_THORNS_AND_STONES:{
+			struct obj *otmp;
+			if(uwep){
+				switch(uwep->otyp){
+					case BOW:
+						otmp = mksobj(ARROW, TRUE, FALSE);
+					break;
+					case ELVEN_BOW:
+						otmp = mksobj(ELVEN_ARROW, TRUE, FALSE);
+					break;
+					case ORCISH_BOW:
+						otmp = mksobj(ORCISH_ARROW, TRUE, FALSE);
+					break;
+					case YUMI:
+						otmp = mksobj(YA, TRUE, FALSE);
+					break;
+					case SLING:
+						otmp = mksobj(FLINT, TRUE, FALSE);
+					break;
+					case CROSSBOW:
+						otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+					break;
+					case DROVEN_CROSSBOW:
+						otmp = mksobj(DROVEN_BOLT, TRUE, FALSE);
+					break;
+				}
+			} else{
+				if(rn2(2)){
+					otmp = mksobj(ARROW, TRUE, FALSE);
+				} else {
+					otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+				}
+			}
+			otmp->blessed = 0;
+			otmp->cursed = 0;
+			otmp->bknown = 1;
+			otmp->spe = 0;
+			otmp->quan = rnd(5) + rnd(dsize);
+			otmp->owt = weight(otmp);
+			losehp(dsize, "thorns and stones piercing your body", KILLED_BY);
+			otmp = hold_another_object(otmp, "They %s out.",
+						   aobjnam(otmp, "fall"), (const char *)0);
+		}break;
+		case PWR_BARAGE:
+			barage = TRUE; //state variable
+			if(uquiver) throw_obj(uquiver, 0);
+			barage = FALSE;
+		break;
+		case PWR_BREATH_POISON:{
+	        coord cc;
+			pline("Breath where?");
+			cc.x = u.ux;
+			cc.y = u.uy;
+			if (getpos(&cc, TRUE, "the desired position") < 0) {
+				pline(Never_mind);
+				return 0;
+			}
+			if (!cansee(cc.x, cc.y) || distu(cc.x, cc.y) >= 32) {
+				You("smell rotten eggs.");
+				break;
+			}
+			(void) create_gas_cloud(cc.x, cc.y, dsize, d(5,dsize));
+		}break;
+		case PWR_RUINOUS_STRIKE:{
+			int dmg;
+			struct monst *mon;
+			struct trap *ttmp;
+			if (u.utrap){
+				You("can't use a ruinous strike while stuck in a trap!");
+				return 0;
+			}
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				zap_dig(-1,-1,1);
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if ((ttmp = t_at(u.ux+u.dx, u.uy+u.dy)) && ttmp->ttyp != PIT && ttmp->ttyp != HOLE && ttmp->ttyp != MAGIC_PORTAL) {
+					if(ttmp->ttyp == SPIKED_PIT){
+						ttmp->ttyp = PIT;
+						ttmp->tseen = 1;
+						newsym(u.ux+u.dx, u.uy+u.dy);
+					} else if(ttmp->ttyp == TRAPDOOR){
+						ttmp->ttyp = HOLE;
+						ttmp->tseen = 1;
+						newsym(u.ux+u.dx, u.uy+u.dy);
+					} else {
+						deltrap(ttmp);
+						newsym(u.ux+u.dx, u.uy+u.dy);
+					}
+					if(mon && ttmp->ttyp != PIT) mon->mtrapped = 0;
+				}
+				if(mon && is_golem(mon->data)){
+					mon->mhp = 0;
+					xkilled(mon, 1);
+				} else if(nonliving(mon->data)){
+					mon->mhp -= d(rnd(5),dsize);
+					if(mon->mhp <= 0){
+						mon->mhp = 0;
+						xkilled(mon,1);
+					}
+				}
+			} else break;
+		}break;
+		case PWR_RAVEN_S_TALONS:{
+			int dmg;
+			struct monst *mon;
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				dmg = d(5,dsize);
+				mon->mcansee = 0;
+				mon->mblinded = 0;
+				mon->mhp -= dmg;
+				if (mon->mhp <= 0){
+					mon->mhp = 0;
+					xkilled(mon, 1);
+					break;
+				}
+			} else break;
+		}break;
+		case PWR_HORRID_WILTING:{
+			int dmg;
+			struct monst *mon;
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				if(nonliving(mon->data) || is_anhydrous(mon->data)){
+					shieldeff(mon->mx, mon->my);
+					break;
+				}
+				dmg = min(d(5,dsize),mon->mhp);
+				if (mon->mhp < dmg){
+					dmg = mon->mhp;
+					mon->mhp = 0;
+					xkilled(mon, 1);
+				} else mon->mhp -= dmg;
+				healup(dmg, 0, FALSE, FALSE);
+			} else break;
+		}break;
+		case PWR_TURN_ANIMALS_AND_HUMANOIDS:{
+			register struct monst *mtmp;
+			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+				if (DEADMONSTER(mtmp)) continue;
+				if(cansee(mtmp->mx,mtmp->my) && (is_animal(mtmp->data) || 
+												 mtmp->data->mlet == S_HUMAN  || 
+												 mtmp->data->mlet == S_HUMANOID ) 
+											 && !mindless(mtmp->data)
+											 && !resist(mtmp, '\0', 0, TELL)
+				) {
+					if(u.ulevel >= mtmp->m_lev+6 && !resist(mtmp, '\0', 0, NOTELL)){
+						killed(mtmp);
+					} else monflee(mtmp, d(5,dsize), FALSE, TRUE);
+				}
+			}
+		}break;
+		case PWR_REFILL_LANTERN:
+			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact){
+				uwep->age += d(5,dsize) * 10;
+				if(uwep->age > 1500) uwep->age = 1500;
+			} else return 0;
+		break;
+		case PWR_HELLFIRE:
+			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact && uwep->lamplit){
+				if (throwspell()) {
+					if(uwep->age < 500) uwep->age = 0;
+					else uwep->age -= 500;
+					explode(u.dx,u.dy,1/*Fire*/, d(5,dsize), WAND_CLASS, EXPL_FIERY);
+				} else return 0;
+			}
+		break;
+		case PWR_CALL_MURDER:{
+			struct monst *mon;
+			mon = makemon(&mons[PM_CROW], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+			initedog(mon);
+		}break;
+		case PWR_ROOT_SHOUT:{
+			int dmg;
+			int range = rn1(7,7);
+			xchar sx, sy;
+			struct monst *mon;
+			sx = u.ux;
+			sy = u.uy;
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(u.uswallow){
+				zap_dig(-1,-1,1); /*try to blast free of engulfing monster*/
+				if(u.uswallow) break;
+			}
+			zap_dig(-1,-1,range);
+			while(range-- > 0){
+				sx += u.dx;
+				sy += u.dy;
+				if(isok(sx,sy) && !IS_ROCK(levl[sx][sy].typ)) {
+					mon = m_at(sx, sy);
+					/* reveal/unreveal invisible monsters before tmp_at() */
+					if (mon && !canspotmon(mon) && cansee(sx,sy))
+						map_invisible(sx, sy);
+					else if (!mon && glyph_is_invisible(levl[sx][sy].glyph)) {
+						unmap_object(sx, sy);
+						newsym(sx, sy);
+							}
+					if (mon) {
+						mon->mhp -= d(rnd(5), dsize);/*lower damage*/
+						if (mon->mhp <= 0){
+							xkilled(mon, 1);
+							continue;
+						}
+					}
+				} else break;
+			}
+		}break;
+		case PWR_PULL_WIRES:{
+			int sx, sy, range,i;
+			struct trap *t;
+			const char *pullmsg = "The wires yank you out of the %s!";
+			boolean once = FALSE;
+			for(i=0;i<dsize;i++){
+			if (!getdir((char *)0)  && (u.dx || u.dy)) break;
+				once = TRUE;
+				sx = u.ux;
+				sy = u.uy;
+				for(range = (int)((ACURRSTR)/2 - 2); range > 0; range--){
+					sx += u.dx;
+					sy += u.dy;
+					if(!(ACCESSIBLE(levl[sx][sy].typ) || 
+						 levl[sx][sy].typ == POOL || 
+						 levl[sx][sy].typ == MOAT || 
+						 levl[sx][sy].typ == LAVAPOOL
+						) || m_at(sx,sy)
+					) {
+						sx -= u.dx;
+						sy -= u.dy;
+				break;
+					} else if(In_sokoban(&u.uz) ? (t = t_at(sx, sy)) && t->ttyp >= HOLE : (t = t_at(sx, sy)) && t->ttyp > TRAPDOOR){
+				break; //trap indexed above trapdoors have triggers that extend above the ground. Sokoban winds prevent passage over holes and trapdoors
+					}
+				}
+				if (sx != u.ux || sy != u.uy) {
+					if (u.utrap && u.utraptype != TT_INFLOOR) {
+						switch(u.utraptype) {
+						case TT_PIT:
+						pline(pullmsg, "pit");
+						break;
+						case TT_WEB:
+						pline(pullmsg, "web");
+						pline_The("web is destroyed!");
+						deltrap(t_at(u.ux,u.uy));
+						break;
+						case TT_LAVA:
+						pline(pullmsg, "lava");
+						break;
+						case TT_BEARTRAP: {
+						register long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
+						static int jboots6 = 0;
+						if (!jboots6) jboots6 = find_jboots();
+						pline(pullmsg, "bear trap");
+	#ifdef STEED
+						if(u.usteed) set_wounded_legs(side, rn1(1000, 500)); /*clunky as hell, but gets the job done! */
+						if (!u.usteed)
+	#endif
+						{
+							if (uarmf && uarmf->otyp == jboots6){
+								int bootdamage = d(1,10);
+								losehp(2, "leg damage from being pulled out of a bear trap",
+										KILLED_BY);
+								set_wounded_legs(side, rn1(100,50));
+								if(bootdamage > uarmf->spe){
+									claws_destroy_arm(uarmf);
+								}else{
+									for(bootdamage; bootdamage >= 0; bootdamage--) drain_item(uarmf);
+									Your("boots are damaged!");
+								}
+							}
+							else{
+								losehp(rn1(10,20), "leg damage from being pulled out of a bear trap", KILLED_BY);
+								set_wounded_legs(side, rn1(1000,500));
+								Your("%s %s is severely damaged.",
+										(side == LEFT_SIDE) ? "left" : "right",
+										body_part(LEG));
+							}
+						}
+						}break;
+						}
+						u.utrap = 0;
+						fill_pit(u.ux, u.uy);
+					}
+					u.ux0 = u.ux;
+					u.uy0 = u.uy;
+					u.ux = sx;
+					u.uy = sy;
+					vision_full_recalc = 1;	/* hero has moved, recalculate vision later */
+					doredraw();
+				}
+			}
+			if(!once) return 0; //Canceled first prompt
+		}break;
+		case PWR_DISGUSTED_GAZE:{
+			struct monst *mon;
+			struct obj *obj;
+			if(throwgaze()){
+				if((mon = m_at(u.dx,u.dy)) && canseemon(mon)){
+					if(uwep){
+						obj = uwep;
+						uwepgone();
+						obj_extract_self(obj);
+						dropy(obj);
+					}
+					if(uarms){
+						obj = uarms;
+						setnotworn(obj);
+						obj_extract_self(obj);
+						dropy(obj);
+					}
+					if(distmin(u.ux, u.uy, mon->mx, mon->my) <= u.ulevel/10+1 && !resist(mon, '\0', 0, NOTELL)){
+						mon->mcanmove = 0;
+						mon->mfrozen = max(mon->mfrozen, 5);
+					}
+					if (resists_elec(mon)) {	/* match effect on player */
+						shieldeff(mon->mx, mon->my);
+					} else {
+						mon->mhp -= d(5,dsize);
+						setmangry(mon);
+						if (mon->mhp <= 0){
+							mon->mhp = 0;
+							xkilled(mon, 1);
+							break;
+						}
+					}
+				} else {
+					You("don't see a monster there.");
+					return 0;
+				}
+			} else return 0;
+		}break;
+		case PWR_BLOODY_TOUNGE:{
+			struct monst *mon;
+			if(!getdir((char *)0)  && (u.dx || u.dy)) break;
+			if(mon = m_at(u.ux+u.dx, u.uy+u.dy)) mon->mflee = 1;//does not make monster hostile
+		}break;
+		case PWR_SILVER_TOUNGE:{
+			struct monst *mon;
+			if(!getdir((char *)0)  && (u.dx || u.dy)) break;
+			if((mon = m_at(u.ux+u.dx, u.uy+u.dy)) && 
+				always_hostile(mon->data) &&
+				!(mon->data->geno & G_UNIQ) &&
+				!mon->mtraitor
+			){
+				if (mon->isshk) make_happy_shk(mon, FALSE);
+				mon->mpeaceful = 1;
+			}
+		}break;
+		case PWR_EXHALATION_OF_THE_RIFT:{
+			int dmg, i;
+			int range = rn1(5,5);
+			xchar lsx, lsy, sx, sy;
+			struct monst *mon;
+			sx = u.ux;
+			sy = u.uy;
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(u.uswallow){
+				expels(u.ustuck, u.ustuck->data, TRUE);
+				if(is_whirly(mon->data)){
+					pline("%s blows apart in the wind.",Monnam(u.ustuck));
+					mon->mhp = 0;
+					xkilled(mon, 1);
+					break;
+				}
+			} else {
+				for(i=range; i > 0; i--){
+					sx += u.dx;
+					sy += u.dy;
+					if(!isok(sx,sy) || !ZAP_POS(levl[sx][sy].typ)) {
+						sx -= u.dx;
+						sy -= u.dy;
+				break;
+					}
+				}
+				while(sx != u.ux || sy != u.uy){
+					mon = m_at(sx, sy);
+					if(mon){
+						dmg = d(rnd(5),dsize);
+					}
+					sx -= u.dx;
+					sy -= u.dy;
+				}
+			}
+		}break;
+		case PWR_QUERIENT_THOUGHTS:{
+			struct monst *mon, *nmon;
+			for(mon=fmon; mon; mon = nmon) {
+				nmon = mon->nmon;
+				if (DEADMONSTER(mon)) continue;
+				if (mon->mpeaceful) continue;
+				if (mindless(mon->data)) continue;
+				if (telepathic(mon->data) || !rn2(5)){
+					// if (cansee(mon->mx, mon->my))
+						// pline("It locks on to %s.", mon_nam(m2));
+					mon->mhp -= d(5,10);
+					if (mon->mhp <= 0) xkilled(mon, 1);
+					else mon->msleeping = 1;
+				}
+				else mon->msleeping = 0;
+			}
+		}break;
+		case PWR_GREAT_LEAP:
+			level_tele();
+		break;
+		case PWR_MASTER_OF_DOORWAYS:{
+			//with apologies to Neil Gaiman
+			struct monst *mon;
+			if (!getdir((char *)0)) return(0);
+			if(!(u.dx || u.dy || u.dz)){
+				pline("Maybe your innards should stay inside your body?");
+				return 0;
+			} else if(u.dz > 0) {
+				if(!opentrapdoor(Can_dig_down(&u.uz))) return 0;
+				else break;
+			} else if(u.dz < 0) {
+				if(!openrocktrap()) return 0;
+				else break;
+			} else if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon){
+					if(!opennewdoor(u.ux+u.dx, u.uy+u.dy)) return 0;
+					else break;
+				} else if(unsolid(mon->data)){
+					pline("%s is not solid enough to open a door in.",Monnam(mon));
+					shieldeff(mon->mx, mon->my);
+					return FALSE;
+				} else if (no_innards(mon->data)) {	/* match effect on player */
+					pline("The inside of %s is much like the outside.",mon_nam(mon));
+					shieldeff(mon->mx, mon->my);
+					break;
+				} else {
+					if(!resist(mon, '\0', 0, TELL)){
+						if(undiffed_innards(mon->data)){
+							You("open a door into %s. Some of %s insides leak out.", mon_nam(mon), hisherits(mon));
+							mon->mhp -= d(rnd(5),dsize);
+						} else {
+							if(rn2(10)){
+								You("open a door into %s, exposing %s internal organs.", mon_nam(mon), hisherits(mon));
+								mon->mhp = d(rnd(5) * 5,dsize);
+							} else {
+								You("open a door into %s, releasing %s vital organs.", mon_nam(mon), hisherits(mon));
+								mon->mhp = 0;
+							}
+						}
+						setmangry(mon);
+						if (mon->mhp <= 0){
+							mon->mhp = 0;
+							xkilled(mon, 1);
+							break;
+						}
+					}
+				}
+			} else return 0;
+		}break;
+		case PWR_READ_SPELL:{
+			if(uwep && uwep->oclass == SPBOOK_CLASS && !uwep->oartifact && !uwep->otyp == SPE_BLANK_PAPER && !uwep->otyp == SPE_SECRETS){
+				uwep->spestudied++;
+				costly_cancel(uwep);
+				spelleffects(0,FALSE,uwep->otyp);
+	    	    if(uwep->spestudied > MAX_SPELL_STUDY) uwep->otyp = SPE_BLANK_PAPER;
+			} else return 0;
+		}break;
+		case PWR_BOOK_TELEPATHY:
+			book_detect(u.ulevel>13);
+		break;
+		case PWR_UNITE_THE_EARTH_AND_SKY:
+			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)){
+				struct trap *t = t_at(u.ux+u.dx, u.uy+u.dy);
+				struct monst *mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(t->ttyp == PIT || t->ttyp == SPIKED_PIT){
+					deltrap(t);
+					levl[u.ux+u.dx][u.uy+u.dy].typ = POOL;
+					newsym(u.ux+u.dx, u.uy+u.dy);
+					if(mon) mon->mtrapped = 0;
+				} else if(levl[u.ux+u.dx][u.uy+u.dy].typ == ROOM || levl[u.ux+u.dx][u.uy+u.dy].typ == CORR){
+					levl[u.ux+u.dx][u.uy+u.dy].typ = TREE;
+				}
+			}
+		break;
+		case PWR_HOOK_IN_THE_SKY:
+			if((ledger_no(&u.uz) == 1 && u.uhave.amulet) ||
+				Can_rise_up(u.ux, u.uy, &u.uz)) {
+			    const char *riseup ="rise up, through the %s!";
+			    if(ledger_no(&u.uz) == 1) {
+			        You(riseup, ceiling(u.ux,u.uy));
+				goto_level(&earth_level, FALSE, FALSE, FALSE);
+			    } else {
+			        register int newlev = depth(&u.uz)-1;
+				d_level newlevel;
+
+				get_level(&newlevel, newlev);
+				if(on_level(&newlevel, &u.uz)) {
+				    pline("It tasted bad.");
+				    break;
+				} else You(riseup, ceiling(u.ux,u.uy));
+				goto_level(&newlevel, FALSE, FALSE, FALSE);
+			    }
+			}
+			else You("have an uneasy feeling.");
+		break;
+		case PWR_ENLIGHTENMENT:
+			You_feel("self-knowledgeable...");
+			display_nhwindow(WIN_MESSAGE, FALSE);
+			enlightenment(0);
+			pline_The("feeling subsides.");
+		break;
+		case PWR_DAMNING_DARKNESS:
+			do_clear_area(u.ux, u.uy, dsize, damningdark, (genericptr_t) &dsize);
+		break;
+		case PWR_TOUCH_OF_THE_VOID:{
+			struct monst *mon;
+			if(!getdir((char *)0) || (!u.dx && !u.dy)) return 0;
+			mon = m_at(u.ux+u.dx,u.uy+u.dy);
+			if(!mon) return 0;
+			if (resists_drli(mon) || resist(mon, '\0', 0, NOTELL)){
+				shieldeff(mon->mx, mon->my);
+				break;
+			} else {
+				int dmg,lvls;
+				lvls = min(rnd(5),rnd(dsize));
+				dmg = d(lvls,8);
+				mon->mhp -= dmg;
+				mon->mhpmax -= dmg;
+				mon->m_lev -= lvls;
+				if (mon->mhp <= 0 || mon->mhpmax <= 0 || mon->m_lev < 1)
+					xkilled(mon, 1);
+				else {
+					if (canseemon(mon))
+						pline("%s suddenly seems weaker!", Monnam(mon));
+				}
+			}
+		}break;
+		case PWR_ECHOS_OF_THE_LAST_WORD:{
+			struct monst *mon;
+			if(!getdir((char *)0) || (!u.dx && !u.dy)) return 0;
+			mon = m_at(u.ux+u.dx,u.uy+u.dy);
+			if(!mon) return 0;
+			if(resists_drli(mon) || !(mon->data->geno & G_GENO) || is_demon(mon->data)){
+				int nlev;
+				d_level tolevel;
+				int migrate_typ = MIGR_RANDOM;
+				if(mon->data->geno & G_UNIQ){
+					if (mon_has_amulet(mon) || In_endgame(&u.uz)) {
+						if (canspotmon(mon))
+						pline("%s seems very disoriented for a moment.",
+							Monnam(mon));
+						return 0;
+					}
+					nlev = random_teleport_level();
+					if (nlev == depth(&u.uz)) {
+						if (canspotmon(mon))
+						pline("%s shudders for a moment.", Monnam(mon));
+						return 0;
+					}
+					get_level(&tolevel, nlev);
+					if (canspotmon(mon)) {
+						pline("Suddenly, %s disappears out of sight.", mon_nam(mon));
+					}
+					migrate_to_level(mon, ledger_no(&tolevel),
+							 migrate_typ, (coord *)0);
+				} else {
+					mongone(mon);
+				}
+			}
+		}break;
+		case PWR_POISON_GAZE:{
+			coord cc;
+			int cancelled;
+			struct monst *mon;
+		    cc.x = u.ux;
+		    cc.y = u.uy;
+		    pline("At what monster do you wish to gaze?");
+			do cancelled = getpos(&cc, TRUE, "the desired doorway");
+			while( !((mon=m_at(cc.x,cc.y))  && canspotmon(mon)) && cancelled >= 0);
+			if(cancelled < 0) return 0; /*abort*/
+			if(!mon || !canseemon(mon)) break;
+			if(resists_poison(mon)){
+				shieldeff(mon->mx, mon->my);
+			} else if(rn2(10)){
+				mon->mhp = 0;
+				xkilled(mon, 1);
+				break;
+			} else {
+				mon->mhp -= d(5,dsize);
+				if(mon->mhp <= 0){
+					mon->mhp = 0;
+					xkilled(mon, 1);
+					break;
+				}
+			}
+		}break;
+		case PWR_GAP_STEP:
+			if(!Levitation) {
+				int i;
+				for(i=0; i < GATE_SPIRITS; i++) if(u.spirit[i] == SEAL_YMIR) break;
+				if(i<GATE_SPIRITS) HLevitation = u.spiritT[i] - moves + 5; //Remaining time until binding expires, plus safety margin
+				else HLevitation = u.voidChime + 5; //Remaining time until chime expires (apparently, it was in the Pen), plus safety margin
+				if(Levitation) float_up();
+			} else return 0;
+		break;
+		case PWR_MOAN:{
+			struct monst *mon;
+			for(mon = fmon; mon; mon = mon->nmon){
+				if(!DEADMONSTER(mon) && dist2(u.ux,u.uy,mon->mx,mon->my)<=u.ulevel && 
+					!mindless(mon->data) && !resist(mon, '\0', 0, TELL)
+				) {
+					if(u.ulevel >= mon->m_lev-5){
+						mon->mconf = 1;
+						if(u.ulevel >= mon->m_lev+5){
+							mon->mcrazed;
+						}
+					}
+					monflee(mon, d(5,dsize), FALSE, TRUE);
+				}
+			}
+		}break;
+		case PWR_SWALLOW_SOUL:{
+			struct monst *mon;
+			if(!getdir((char *)0) || (!u.dx && !u.dy)) return 0;
+			mon = m_at(u.ux+u.dx,u.uy+u.dy);
+			if(!mon) return 0;
+			if(resists_drli(mon) || nonliving(mon->data) || mon->m_lev > u.ulevel){
+				shieldeff(mon->mx, mon->my);
+			} else {
+				mon->mhp = 0;
+				xkilled(mon,1);
+				if(u.ulevelmax > u.ulevel) pluslvl(FALSE);
+			}
+		}break;
+		case PWR_IDENTIFY_INVENTORY:
+		    identify_pack(0);
+		break;
+		case PWR_CLAIRVOYANCE:
+			do_vicinity_map(u.ux,u.uy);
+		break;
+		case PWR_FIND_PATH:{
+			struct trap *ttmp;
+			int du = 255; /*Arbitrary value larger than 144*/
+			for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
+				if(ttmp->ttyp == MAGIC_PORTAL) {/*may be more than one portal on some levels*/
+					du = min(du, distu(ttmp->tx, ttmp->ty));
+				}
+				if (du <= 9)
+				You_feel("%s path under your feet!", In_endgame(&u.uz) ? "the":"a");
+				else if (du <= 64)
+				You_feel("%s path nearby.", In_endgame(&u.uz) ? "the":"a");
+				else if (du <= 144)
+				pline("%s path in the distance.", In_endgame(&u.uz) ? "the":"a");
+			}
+		}break;
 		default:
-			pline("BANG! That's not going to kill TOO many people, is it...? Maybe %d.", power);
+			pline("BANG! That's not going to kill TOO many people, is it...? Unknown power %d.", power);
 		break;
 	}
+	u.spiritPColdowns[power] = monstermoves + 25;
+	return 1;
 }
 
 int
-spelleffects(spell, atme)
-int spell;
+spelleffects(spell, atme, spelltyp)
+int spell, spelltyp;
 boolean atme;
 {
 	int energy, damage, chance, n, intell;
@@ -1080,6 +2383,7 @@ boolean atme;
 	struct obj *pseudo;
 	coord cc;
 
+	if(!spelltyp){
 	/*
 	 * Spell casting no longer affects knowledge of the spell. A
 	 * decrement of spell knowledge is done every turn.
@@ -1170,6 +2474,11 @@ boolean atme;
 	pseudo = mksobj(spellid(spell), FALSE, FALSE);
 	pseudo->blessed = pseudo->cursed = 0;
 	pseudo->quan = 20L;			/* do not let useup get it */
+	} else {
+		pseudo = mksobj(spelltyp, FALSE, FALSE);
+		pseudo->blessed = pseudo->cursed = 0;
+		pseudo->quan = 20L;			/* do not let useup get it */
+	}
 	/*
 	 * Find the skill the hero has in a spell type category.
 	 * See spell_skilltype for categories.
@@ -1217,7 +2526,8 @@ boolean atme;
 			}
 	break;
 		  }
-		  else if(pseudo->otyp == SPE_FIREBALL) u.uen += energy/2; //get some energy back for casting basic fireball, cone of cold is a line so maybe it's beter
+		  // else if(!spelltyp && pseudo->otyp == SPE_FIREBALL) u.uen += energy/2; //get some energy back for casting basic fireball, cone of cold is a line so maybe it's beter
+		  else if(!spelltyp) u.uen += energy/2;
 		} /* else fall through... */
 
 	/* these spells are all duplicates of wand effects */
@@ -1373,6 +2683,37 @@ throwspell()
 	}
 }
 
+/* Choose location where spell takes effect. */
+STATIC_OVL int
+throwgaze()
+{
+	coord cc;
+
+	pline(where_to_gaze);
+	cc.x = u.ux;
+	cc.y = u.uy;
+	if (getpos(&cc, TRUE, "the desired position") < 0)
+	    return 0;	/* user pressed ESC */
+	/* The number of moves from hero to where the spell drops.*/
+	if (distmin(u.ux, u.uy, cc.x, cc.y) > 10) {
+	    You("can't see something that far away clearly enough!");
+	    return 0;
+	} else if (u.uswallow) {
+	    You("can't see anything in here!");
+	    exercise(A_WIS, FALSE); /* What were you THINKING! */
+	    u.dx = 0;
+	    u.dy = 0;
+	    return 1;
+	} else if (!cansee(cc.x, cc.y) || IS_STWALL(levl[cc.x][cc.y].typ)) {
+	    You("can't see that location!");
+	    return 0;
+	} else {
+	    u.dx=cc.x;
+	    u.dy=cc.y;
+	    return 1;
+	}
+}
+
 void
 losespells()
 {
@@ -1462,7 +2803,8 @@ int *power_no;
 		}
 	} else {
 		for(i = 0; i<52; i++){
-			if(((spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
+			if(((u.spiritPOrder[i] != -1 &&
+				spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
 				!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
 				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL) &&
 				u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves

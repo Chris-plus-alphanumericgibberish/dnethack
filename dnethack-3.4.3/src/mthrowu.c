@@ -185,7 +185,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	    potionhit(mtmp, otmp, FALSE);
 	    return 1;
 	} else {
-	    damage = dmgval(otmp, mtmp);
+	    damage = dmgval(otmp, mtmp, 0);
 	    if (otmp->otyp == ACID_VENOM && resists_acid(mtmp)) damage = 0;
 	    if (ismimic) seemimic(mtmp);
 	    mtmp->msleeping = 0;
@@ -458,7 +458,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			    hitu = thitu(4+mon->m_lev, 0, singleobj, (char *)0);
 			    break;
 			default:
-			    dam = dmgval(singleobj, &youmonst);
+			    dam = dmgval(singleobj, &youmonst, 0);
 			    hitv = 3 - distmin(u.ux,u.uy, mon->mx,mon->my);
 			    if (hitv < -4) hitv = (hitv+4)/2-4;
 			    if (hitv < -8) hitv = (hitv+8)*2/3-8;
@@ -622,7 +622,7 @@ struct monst *mtmp;
 		      obj_is_pname(otmp) ? the(onm) : an(onm));
 	    }
 
-	    dam = dmgval(otmp, &youmonst);
+	    dam = dmgval(otmp, &youmonst, 0);
 	    hitv = 3 - distmin(u.ux,u.uy, mtmp->mx,mtmp->my);
 		if (hitv < -4) hitv = (hitv+4)/2-4;
 		if (hitv < -8) hitv = (hitv+8)*2/3-8;
@@ -842,7 +842,6 @@ struct monst *mtmp;
 		        	mret = mat;
 		    }
 		}
-
 		if (mtmp->mtame && mat->mtame)
 		{
 		    mret = oldmret;
@@ -867,7 +866,7 @@ struct monst *mtmp;
 }
 
 /* monster attempts ranged weapon attack against monster */
-void
+boolean
 thrwmm(mtmp, mdef)
 struct monst *mtmp;
 struct monst *mdef;
@@ -882,16 +881,16 @@ struct monst *mdef;
 	if (mtmp->weapon_check == NEED_WEAPON || !MON_WEP(mtmp)) {
 	    mtmp->weapon_check = NEED_RANGED_WEAPON;
 	    /* mon_wield_item resets weapon_check as appropriate */
-	    if(mon_wield_item(mtmp) != 0) return;
+	    if(mon_wield_item(mtmp) != 0) return TRUE;
 	}
 
 	/* Pick a weapon */
 	otmp = select_rwep(mtmp);
-	if (!otmp) return;
+	if (!otmp) return FALSE;
 
 	if (is_pole(otmp)) {
 	    if (dist2(mtmp->mx, mtmp->my, mdef->mx, mdef->my) > POLE_LIM)
-		return;	/* Out of range, or intervening wall */
+		return FALSE;	/* Out of range, or intervening wall */
 
 	    if (canseemon(mtmp)) {
 		onm = xname(otmp);
@@ -900,7 +899,7 @@ struct monst *mdef;
 	    }
 
 	    (void) ohitmon(mdef, otmp, 0, FALSE);
-	    return;
+	    return TRUE;
 	}
 
 	x = mtmp->mx;
@@ -911,7 +910,7 @@ struct monst *mdef;
 	 * of fire:
 	 */
 	if (!mlined_up(mtmp, mdef, FALSE))
-	    return;
+	    return FALSE;
 
 	skill = objects[otmp->otyp].oc_skill;
 	mwep = MON_WEP(mtmp);		/* wielded weapon */
@@ -983,7 +982,8 @@ struct monst *mdef;
 	m_shot.o = STRANGE_OBJECT;
 	m_shot.s = FALSE;
 
-	nomul(0, NULL);
+	//nomul(0, NULL); this is the monster function
+    return TRUE;
 }
 
 #endif /* OVL1 */
@@ -1027,6 +1027,7 @@ register struct attack *mattk;
 				/* fall through */
 		    case AD_ACID:
 			otmp = mksobj(ACID_VENOM, TRUE, FALSE);
+				if(mattk->damn && mattk->damd) otmp->ovar1 = d(mattk->damn,mattk->damd);
 			break;
 		}
 		if(!rn2(BOLT_LIM-distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy))) {
@@ -1086,6 +1087,7 @@ register struct attack *mattk;
 				/* fall through */
 		    case AD_ACID:
 			otmp = mksobj(ACID_VENOM, TRUE, FALSE);
+			if(mattk->damn && mattk->damd) otmp->ovar1 = d(mattk->damn,mattk->damd);
 			break;
 		}
 		if(!rn2(BOLT_LIM-distmin(mtmp->mx,mtmp->my,mdef->mx,mdef->my))) {

@@ -342,6 +342,7 @@ fixup_special()
     if (was_waterlevel) {
 	was_waterlevel = FALSE;
 	u.uinwater = 0;
+	u.usubwater = 0;
 	unsetup_waterlevel();
     } else if (Is_waterlevel(&u.uz)) {
 	level.flags.hero_memory = 0;

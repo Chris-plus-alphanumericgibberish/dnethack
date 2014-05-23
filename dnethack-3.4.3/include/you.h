@@ -51,6 +51,7 @@ struct u_event {
 	Bitfield(uhand_of_elbereth,2);	/* became Hand of Elbereth */
 	Bitfield(udemigod,1);		/* killed the wiz */
 	Bitfield(ukilled_apollyon,1);		/* killed the angel of the pit.  Lucifer should spawn on Astral */
+	Bitfield(ukilled_illurien,1);		/* Harassment */
 	Bitfield(sum_entered,1);		/* entered Sum-of-All */
 	Bitfield(uaxus_foe,1);		/* enemy of the modrons */
 	Bitfield(ascended,1);		/* has offered the Amulet */
@@ -334,14 +335,18 @@ struct you {
 	unsigned uswldtim;		/* time you have been swallowed */
 
 	Bitfield(uswallow,1);		/* true if swallowed */
-	Bitfield(uinwater,1);		/* if you're currently in water (only
-					   underwater possible currently) */
+	Bitfield(uinwater,1);		/* if you're currently in water */
+	Bitfield(usubwater,1);		/* if you're currently underwater */
 	Bitfield(uundetected,1);	/* if you're a hiding monster/piercer */
 	Bitfield(mfemale,1);		/* saved human value of flags.female */
 	Bitfield(uinvulnerable,1);	/* you're invulnerable (praying) */
 	Bitfield(uburied,1);		/* you're buried */
 	Bitfield(uedibility,1);		/* blessed food detection; sense unsafe food */
-	/* 1 free bit! */
+	/* 0 free bits? (doesn't add up?) */
+	Bitfield(shambin,2);		/* Whether the shambling horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
+	Bitfield(stumbin,2);		/* Whether the stumbling horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
+	Bitfield(wandein,2);		/* Whether the wandering horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
+	/* 26 free bits */
 
 	unsigned udg_cnt;		/* how long you have been demigod */
 	struct u_event	uevent;		/* certain events have happened */
@@ -374,6 +379,7 @@ struct you {
 	uchar	udrunken;		/* drunkeness level (based on total number of potions of booze drunk) */
 	uchar	usptime;		/* #moves until uspellprot-- */
 	uchar	uspmtime;		/* #moves between uspellprot-- */
+	uchar	sowdisc;		/* sowing discord (spirit special attack) */
 	int	uhp,uhpmax,uhpmax_real;
 	int	uen, uenmax,uenmax_real;		/* magical energy - M. Stephenson */
 	int ugangr;			/* if the gods are angry at you */
@@ -403,6 +409,7 @@ struct you {
 	xchar	skill_record[P_SKILL_LIMIT];	/* skill advancements */
 	struct skills weapon_skills[P_NUM_SKILLS];
 	boolean twoweap;		/* KMH -- Using two-weapon combat */
+	int divetimer;			/* how long you can stay under water */
 
 	long	wardsknown;	/* known wards */
 #define	WARD_ELBERETH		0x0000001L
@@ -457,8 +464,8 @@ struct you {
 	long	echidna;
 #define SEAL_EDEN					0x0001000L
 	long	eden;
-#define SEAL_ERIDU					0x0002000L
-	long	eridu;
+#define SEAL_ENKI					0x0002000L
+	long	enki;
 #define SEAL_EURYNOME				0x0004000L
 	long	eurynome;
 #define SEAL_EVE					0x0008000L
@@ -549,7 +556,7 @@ struct you {
 #define	PWR_THORNS_AND_STONES		26
 #define	PWR_BARAGE					27
 #define	PWR_BREATH_POISON			28
-#define	PWR_RUNIOUS_STRIKE			29
+#define	PWR_RUINOUS_STRIKE			29
 #define	PWR_RAVEN_S_TALONS			30
 #define	PWR_HORRID_WILTING			31
 #define	PWR_TURN_ANIMALS_AND_HUMANOIDS	32
@@ -557,8 +564,8 @@ struct you {
 #define	PWR_HELLFIRE				34
 #define	PWR_CALL_MURDER				35
 #define	PWR_ROOT_SHOUT				36
-#define	PWR_LONG_STRIDE				37
-#define	PWR_CONFUSING_TOUCH			38
+#define	PWR_PULL_WIRES				37
+#define	PWR_DISGUSTED_GAZE			38
 #define	PWR_BLOODY_TOUNGE			39
 #define	PWR_SILVER_TOUNGE			40
 #define	PWR_EXHALATION_OF_THE_RIFT	41
@@ -595,6 +602,7 @@ struct you {
 	/*Ugly extra artifact variables workaround.  Spaghetti code alert!*/
 	long SnSd1, SnSd2, SnSd3, SnSd3duration;
 	int ZangetsuSafe;
+	int voidChime;
 	short RoSPkills, RoSPflights;
 	/*Keter counters*/
 	int keter, chokhmah, gevurah, hod;
@@ -606,7 +614,8 @@ extern long sealKey[34]; /*Defined in u_init.c*/
 extern char *wardDecode[26]; /*Defined in spell.c*/
 extern int wardMax[16]; /*Defined in engrave.c*/
 extern char *sealNames[34]; /*Defined in engrave.c*/
-extern char *andromaliusItems[18]; /*Defined in */
+extern char *andromaliusItems[18]; /*Defined in sounds.c*/
+extern boolean barage; /*Defined in dothrow.c*/
 #define Upolyd (u.umonnum != u.umonster)
 
 #endif	/* YOU_H */

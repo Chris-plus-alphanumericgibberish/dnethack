@@ -30,6 +30,7 @@
 #define AT_HODS		20  /* Hod Sephirah's mirror attack */
 #define AT_LNCK		21  /* Bite attack with reach */
 #define AT_MMGC		22	/* uses magic spell(s), but don't allow player spellcasting (Monster-only MaGiC) */
+#define AT_ILUR		23	/* Two stage swallow attack, currently belongs to Illurien only */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */
@@ -134,6 +135,11 @@
 #define AD_LUCK		135	/* Luck-draining gaze (UnNetHack) */
 #define AD_VAMP		136	/* Vampire's blood drain attack */
 #define AD_WEBS		137	/* Vampire's blood drain attack */
+#define AD_ILUR		138 /* memory draining engulf attack belonging to Illurien */
+
+
+#define AD_AHAZU	150 /*  */
+#define AD_AMON		151 /*  */
 
 
 //#define AD_VMSL		180 //Vorlon missile: elect, disintegration, blast.  Triple damage.

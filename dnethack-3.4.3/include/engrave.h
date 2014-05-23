@@ -67,7 +67,7 @@ struct engr {
 #define SHIRO						LAST_WARD+11
 #define ECHIDNA						LAST_WARD+12
 #define EDEN						LAST_WARD+13
-#define ERIDU						LAST_WARD+14
+#define ENKI						LAST_WARD+14
 #define EURYNOME					LAST_WARD+15
 #define EVE							LAST_WARD+16
 #define FAFNIR						LAST_WARD+17

@@ -1075,7 +1075,7 @@ dogaze()
 			if (yn(qbuf) != 'y') continue;
 			setmangry(mtmp);
 		    }
-		    if (!mtmp->mcanmove || mtmp->mstun || mtmp->msleeping ||
+		    if (!mtmp->mcanmove || !mtmp->mnotlaugh || mtmp->mstun || mtmp->msleeping ||
 				    !mtmp->mcansee || !haseyes(mtmp->data)) {
 			looked--;
 			continue;

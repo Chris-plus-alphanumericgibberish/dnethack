@@ -108,7 +108,10 @@ fightm(mtmp)		/* have monsters fight each other */
 {
 	register struct monst *mon, *nmon;
 	int result, has_u_swallowed;
-	boolean conflict = Conflict && !resist(mtmp, RING_CLASS, 0, 0);
+	boolean conflict = Conflict && 
+						couldsee(mtmp->mx,mtmp->my) && 
+						(distu(mtmp->mx,mtmp->my) <= BOLT_LIM*BOLT_LIM) && 
+						!resist(mtmp, RING_CLASS, 0, 0);
 #ifdef LINT
 	nmon = 0;
 #endif
@@ -134,11 +137,11 @@ fightm(mtmp)		/* have monsters fight each other */
 	     * happen if the monster attacked a cockatrice bare-handedly, for
 	     * instance.
 	     */
+//		pline("checking melee mmaggression");
 	    if(mon != mtmp && !DEADMONSTER(mon)) {
 		if(monnear(mtmp,mon->mx,mon->my)) {
 		    if (!conflict && !mm_aggression(mtmp, mon))
 		    	continue;
-
 		    if(!u.uswallow && (mtmp == u.ustuck)) {
 			if(!rn2(4)) {
 			    pline("%s releases you!", Monnam(mtmp));
@@ -217,8 +220,7 @@ mattackm(magr, mdef)
 
     /* Grid bugs and Bebeliths cannot attack at an angle. */
     if ((pa == &mons[PM_GRID_BUG] || pa == &mons[PM_BEBELITH]) && magr->mx != mdef->mx
-						&& magr->my != mdef->my)
-	return(MM_MISS);
+						&& magr->my != mdef->my) return(MM_MISS);
 
     /* Calculate the armour class differential. */
     tmp = find_mac(mdef) + magr->m_lev;
@@ -284,12 +286,13 @@ mattackm(magr, mdef)
 		if (!MON_WEP(magr) ||
 		    is_launcher(MON_WEP(magr))) {
 		    /* implies no melee weapon found */
-		    thrwmm(magr, mdef);
+			if(thrwmm(magr, mdef)){
 		    if (tmphp > mdef->mhp) res[i] = MM_HIT;
 		    else res[i] = MM_MISS;
 		    if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		    if (magr->mhp < 1) res[i] = MM_AGR_DIED;
 		    break;
+		}
 		}
 #endif
 		possibly_unwield(magr, FALSE);
@@ -875,7 +878,7 @@ mdamagem(magr, mdef, mattk)
 				tmp = 0;
 			    else
 				tmp = rnd(2);
-			} else tmp += dmgval(otmp, mdef);
+			} else tmp += dmgval(otmp, mdef, 0);
 			
             /* WAC Weres get seared */
             if(otmp && objects[otmp->otyp].oc_material == SILVER &&

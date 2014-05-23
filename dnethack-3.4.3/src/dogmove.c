@@ -682,6 +682,9 @@ int after, udist, whappr;
 			   (dog_has_minvent && rn2(edog->apport)))
 				appr = 1;
 		}
+		if(appr == 0 && u.sealsActive&SEAL_ECHIDNA && !mindless(mtmp->data) && (is_animal(mtmp->data) || slithy(mtmp->data) || nohands(mtmp->data))){
+			appr = 1;
+		}
 		/* if you have dog food it'll follow you more closely */
 		if (appr == 0) {
 			obj = invent;

@@ -2163,11 +2163,13 @@ register int	mmflags;
 	    mtmp->mtrapseen |= (1L << (MAGIC_PORTAL-1));
 
 	place_monster(mtmp, x, y);
-	mtmp->mcansee = mtmp->mcanmove = TRUE;
+	mtmp->mcansee = mtmp->mcanmove = mtmp->mnotlaugh = TRUE;
+	mtmp->mblinded = mtmp->mfrozen = mtmp->mlaughing = 0;
 	mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : peace_minded(ptr);
 	mtmp->mtraitor  = FALSE;
 	mtmp->mcrazed  = FALSE;
 	mtmp->mclone  = FALSE;
+	mtmp->mvanishes  = -1;
 
 	/* Ok, here's the deal: I'm using a global to coordinate the house emblems on the drow's armor. 
 	   It needs to be set up here so that everyone created as part of the group gets the same emblem, 
@@ -2178,6 +2180,7 @@ register int	mmflags;
 		unsethouse = TRUE;
 	}
 		mtmp->mfaction = curhouse;
+		pline("%d",mtmp->mfaction);
 	}
 	
 	switch(ptr->mlet) {
@@ -2357,6 +2360,11 @@ register int	mmflags;
 						mtmp->mcanmove = 0;
 						mtmp->mfrozen = 0;
 					}
+				}
+				if(!rn2(9)){
+					mtmp->mnotlaugh = 0;
+					You_hear("soft laughter.");
+					mtmp->mlaughing = d(2,4);
 				}
 				if(!rn2(8)){
 					mtmp->msleeping = 1;

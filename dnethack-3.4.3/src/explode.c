@@ -533,7 +533,7 @@ struct obj *obj;			/* only scatter this obj        */
 				    hitvalu = 8 + stmp->obj->spe;
 				    if (bigmonst(youmonst.data)) hitvalu++;
 				    hitu = thitu(hitvalu,
-						 dmgval(stmp->obj, &youmonst),
+						 dmgval(stmp->obj, &youmonst, 0),
 						 stmp->obj, (char *)0);
 				    if (hitu) {
 					stmp->range -= 3;

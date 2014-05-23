@@ -874,7 +874,7 @@ movemon()
 	}
 
 	/* continue if the monster died fighting */
-	if (Conflict && !mtmp->iswiz && mtmp->mcansee) {
+	if (!mtmp->iswiz && mtmp->mcansee) {
 	    /* Note:
 	     *  Conflict does not take effect in the first round.
 	     *  Therefore, A monster when stepping into the area will
@@ -883,10 +883,7 @@ movemon()
 	     *  The call to fightm() must be _last_.  The monster might
 	     *  have died if it returns 1.
 	     */
-	    if (couldsee(mtmp->mx,mtmp->my) &&
-		(distu(mtmp->mx,mtmp->my) <= BOLT_LIM*BOLT_LIM) &&
-							fightm(mtmp))
-		continue;	/* mon might have died */
+	    if (fightm(mtmp)) continue;	/* mon might have died */
 	}
 	if(dochugw(mtmp))		/* otherwise just move the monster */
 	    continue;
@@ -1504,6 +1501,8 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	ma = magr->data;
 	md = mdef->data;
 
+	if (u.sowdisc && !mdef->mtame)
+	    return ALLOW_M|ALLOW_TM;
 	/* supposedly purple worms are attracted to shrieking because they
 	   like to eat shriekers, so attack the latter when feasible */
 	if (ma == &mons[PM_PURPLE_WORM] &&
@@ -2363,6 +2362,29 @@ register struct monst *mdef;
 #ifndef GOLDOBJ
 	mdef->mgold = 0L;
 #endif
+	m_detach(mdef, mdef->data);
+}
+
+/* monster vanishes, not dies, leaving inventory */
+void
+monvanished(mdef)
+register struct monst *mdef;
+{
+	mdef->mhp = 0;	/* can skip some inventory bookkeeping */
+#ifdef STEED
+	/* Player is thrown from his steed when it disappears */
+	if (mdef == u.usteed)
+		dismount_steed(DISMOUNT_GENERIC);
+#endif
+
+	/* drop special items like the Amulet so that a dismissed Keter or nurse
+	   can't remove them from the game */
+	mdrop_special_objs(mdef);
+	/* release rest of monster's inventory--it is removed from game */
+	// discard_minvent(mdef);
+// #ifndef GOLDOBJ
+	// mdef->mgold = 0L;
+// #endif
 	m_detach(mdef, mdef->data);
 }
 

@@ -174,7 +174,7 @@
 #define HWarn_of_mon		u.uprops[WARN_OF_MON].intrinsic
 #define EWarn_of_mon		u.uprops[WARN_OF_MON].extrinsic
 #define Warn_of_mon		(HWarn_of_mon || EWarn_of_mon || (uwep && uwep->oclass == WEAPON_CLASS && objects[(uwep)->otyp].oc_material == WOOD && \
-					(uwep->ovar1 & WARD_THJOFASTAFUR)) || u.sealsActive&SEAL_PAIMON)
+					(uwep->ovar1 & WARD_THJOFASTAFUR)) || u.sealsActive&SEAL_PAIMON || u.sealsActive&SEAL_ANDREALPHUS)
 
 #define HUndead_warning		u.uprops[WARN_UNDEAD].intrinsic
 #define Undead_warning		(HUndead_warning || u.specialSealsActive&SEAL_ACERERAK)
@@ -277,9 +277,11 @@
 #ifdef STEED
 # define Swimming		(HSwimming || ESwimming || \
 				 is_swimmer(youmonst.data) || \
+				 u.sealsActive&SEAL_ENKI || \
 				 (u.usteed && is_swimmer(u.usteed->data)))
 #else
 # define Swimming		(HSwimming || ESwimming || \
+				 u.sealsActive&SEAL_ENKI || \
 				 is_swimmer(youmonst.data))
 #endif
 	/* Get wet, don't go under water unless if amphibious */
@@ -287,13 +289,17 @@
 #define HMagical_breathing	u.uprops[MAGICAL_BREATHING].intrinsic
 #define EMagical_breathing	u.uprops[MAGICAL_BREATHING].extrinsic
 #define Amphibious		(HMagical_breathing || EMagical_breathing || \
+				 u.sealsActive&SEAL_ASTAROTH || \
+				 u.divetimer || \
 				 amphibious(youmonst.data))
 	/* Get wet, may go under surface */
 
 #define Breathless		(HMagical_breathing || EMagical_breathing || \
+				 u.sealsActive&SEAL_ASTAROTH || \
 				 breathless(youmonst.data))
 
-#define Underwater		(u.uinwater)
+//define Underwater		(u.uinwater)
+#define Underwater		(u.usubwater)
 /* Note that Underwater and u.uinwater are both used in code.
    The latter form is for later implementation of other in-water
    states, like swimming, wading, etc. */

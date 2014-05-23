@@ -90,11 +90,18 @@ moveloop()
 		if (!monscanmove && youmonst.movement < NORMAL_SPEED) {
 		    /* both you and the monsters are out of steam this round */
 		    /* set up for a new turn */
-		    struct monst *mtmp;
+		    struct monst *mtmp, *nxtmon;
 		    mcalcdistress();	/* adjust monsters' trap, blind, etc */
 
 		    /* reallocate movement rations to monsters */
-		    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+		    for (mtmp = fmon; mtmp; mtmp = nxtmon){
+				nxtmon = mtmp->nmon;
+				if(mtmp->mvanishes>-1){
+					if(mtmp->mvanishes-- == 0){
+						mongone(mtmp);
+						continue;
+					}
+				}
 				mtmp->movement += mcalcmove(mtmp);
 				if(mtmp->moccupation && !occupation){
 					mtmp->moccupation = 0;

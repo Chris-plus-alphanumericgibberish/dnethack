@@ -369,6 +369,8 @@ register struct monst *mtmp;
 	else if (mtmp->mfrozen || !mtmp->mcanmove)
 				  Strcat(info, ", can't move");
 #endif
+	else if (mtmp->mlaughing || !mtmp->mnotlaugh)
+				  Strcat(info, is_silent(mtmp->data) ? ", shaking uncontrollably" : ", laughing hysterically");
 				  /* [arbitrary reason why it isn't moving] */
 	else if (mtmp->mstrategy & STRAT_WAITMASK)
 				  Strcat(info, ", meditating");
