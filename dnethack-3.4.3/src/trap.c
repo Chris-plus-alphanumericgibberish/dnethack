@@ -2992,11 +2992,10 @@ drown()
 	boolean inpool_ok = FALSE, crawl_ok;
 	int i, x, y;
 	const char *sparkle = level.flags.lethe? "sparkling " : "";
-	boolean canswim;
 
 	/* happily wading in the same contiguous pool */
 	if (u.uinwater && is_pool(u.ux-u.dx,u.uy-u.dy) &&
-	    (Swimming || Amphibious)) {
+	    (Swimming || (Amphibious && u.usubwater))) {
 		/* water effects on objects every now and then */
 		if (!rn2(5)) inpool_ok = TRUE;
 		else return(FALSE);
@@ -3007,10 +3006,10 @@ drown()
 		Is_waterlevel(&u.uz) ? "plunge" : "fall",
 		sparkle,
 		Amphibious || Swimming ? '.' : '!');
-	    if (!Swimming && !Is_waterlevel(&u.uz))
+	}
+	if (!u.usubwater && !Swimming && !Is_waterlevel(&u.uz))
 		    You("sink like %s.",
 			Hallucination ? "the Titanic" : "a rock");
-	}
 
 	if (level.flags.lethe) {
 	    /* Bad idea */
@@ -3038,15 +3037,14 @@ drown()
 		unleash_all();
 	}
 
-	canswim = (Swimming && !Punished && inv_weight() < 0);
-	if (Amphibious || canswim) {
+	if (Amphibious || Swimming) {
 		u.uinwater = 1;
-		if (Amphibious && canswim && yn("Dive underwater?")=='y') {
-			u.divetimer = ACURR(A_CON);
+		if (Swimming && ACURR(A_CON) > 11 && yn("Dive underwater?")=='y') {
+			u.divetimer = (ACURR(A_CON)-10)/2 + 1;
 		} else u.divetimer = 0;
-		if (Amphibious && (u.divetimer || !canswim)){
+		if (Amphibious && (u.divetimer || !Swimming)){
 			if (flags.verbose)
-				if(!canswim) pline("But you aren't drowning.");
+				if(!Swimming) pline("But you aren't drowning.");
 			if (!Is_waterlevel(&u.uz)) {
 				if (Hallucination)
 					Your("keel hits the bottom.");
@@ -3154,24 +3152,34 @@ drown()
 	return(TRUE);
 }
 
-boolean
+int
 dodeepswim()
 {
-	if(u.uinwater && (Swimming && !Punished && inv_weight() < 0)){
-		if(u.divetimer){
+	if(u.uinwater && Swimming){
+		if(u.usubwater){
+			You("swim up to the surface.");
 			u.usubwater = 0;
 			u.divetimer = 0;
 			vision_recalc(2);	/* unsee old position */
 			vision_full_recalc = 1;
 			doredraw();
-		} else{
+			return 1;
+		} else { 
+			if(ACURR(A_CON) > 11){
+				You("dive below the surface.");
 			u.usubwater = 1;
-			if(Amphibious) u.divetimer = -1; /* unlimited duration dive */
-			else u.divetimer = ACURR(A_CON); /* limited duration dive */
+				u.divetimer = (ACURR(A_CON)-10)/2 + 1; /* limited duration dive */
 			under_water(1);
 			vision_recalc(2);	/* unsee old position */
 			vision_full_recalc = 1;
+				return 1;
+			} else You("can't hold your breath for very long.");
+			return 0;
 		}
+	} else {
+		if(!u.uinwater) You("can't dive unless you're swimming!");
+		else if(!Swimming) You("can't swim!");
+		return 0;
 	}
 }
 
