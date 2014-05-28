@@ -385,6 +385,20 @@ const char * wardText[][7] =  {
 		"",
 		"",
 		""},
+	{"a Hypergeometric transit equation",
+		"", 
+		"",
+		"",
+		"",
+		"",
+		""},
+	{"a Hypergeometric stabilization equation",
+		"", 
+		"",
+		"",
+		"",
+		"",
+		""},
 };
 const char * wardNames[][2] = {
 	{"digit", "digits"},
@@ -403,6 +417,8 @@ const char * wardNames[][2] = {
 	{"brand of Ithaqua", "brands of Ithaqua"},
 	{"tracery of Karakal",	"traceries of Karakal"},
 	{"yellow sign", "yellow signs"},
+	{"Hypergeometric transit equation", "Hypergeometric transit equations"},
+	{"Hypergeometric stabilization equation", "Hypergeometric stabilization equations"},
 };
 
 
@@ -1276,11 +1292,11 @@ register int x,y;
 				if( ep->ward_id < FIRST_SEAL ){
 			int sum;
 			if(ep->complete_wards){
-				int wardhere = get_wardID(ep->ward_id);
+						long wardhere = get_wardID(ep->ward_id);
 				pline("There is %s %s", 
 					wardText[ep->ward_id][ep->complete_wards-1],
 					word);
-				if( !(u.wardsknown & wardhere) ){
+						if( !(u.wardsknown & wardhere) && ep->ward_id < DONTLEARNWARD ){
 					You("have learned a new warding!");
 					u.wardsknown |= wardhere;
 				}
@@ -1316,6 +1332,13 @@ register int x,y;
 						pline("There is a seal of %s %s", 
 							sealNames[((int)ep->ward_id)-((int)FIRST_SEAL)],
 							word);
+						if(!Role_if(PM_EXILE) && ep->ward_id < QUEST_SPIRITS){
+							long wardhere = 1L << (((int)ep->ward_id)-((int)FIRST_SEAL)-1);
+							if( !(u.wardsknown & wardhere) && ep->ward_id < DONTLEARNWARD ){
+								You("have learned a new seal!");
+								u.sealsKnown |= wardhere;
+							}
+						}
 					}
 					else if(ep->scuffed_wards){
 						pline("There is a scuffed seal of %s %s", 
@@ -3256,6 +3279,22 @@ pick_ward()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
+	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDREALPHUS){
+		Sprintf(buf,	"Hypergeometric transit solution");
+		any.a_int = ANDREALPHUS_TRANSIT;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDREALPHUS){
+		Sprintf(buf,	"Hypergeometric stabilization solution");
+		any.a_int = ANDREALPHUS_STABILIZE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
 	end_menu(tmpwin, "Choose ward:");
 
 	how = PICK_ONE;
@@ -3298,6 +3337,10 @@ int wardID;
 		case WARD_KARAKAL: return TRACERY_OF_KARAKAL;
 		break;
 		case WARD_YELLOW: return YELLOW_SIGN;
+		break;
+		case WARD_TRANSIT: return ANDREALPHUS_TRANSIT;
+		break;
+		case WARD_STABILIZE: return ANDREALPHUS_STABILIZE;
 		break;
 		case WARD_TOUSTEFNA: return TOUSTEFNA;
 		break;
@@ -3351,6 +3394,10 @@ int floorID;
 		case TRACERY_OF_KARAKAL: return WARD_KARAKAL;
 		break;
 		case YELLOW_SIGN: return WARD_YELLOW;
+		break;
+		case ANDREALPHUS_TRANSIT: return WARD_TRANSIT;
+		break;
+		case ANDREALPHUS_STABILIZE: return WARD_STABILIZE;
 		break;
 		case TOUSTEFNA: return WARD_TOUSTEFNA;
 		break;
@@ -4412,87 +4459,33 @@ pick_seal()
 	return ( n > 0 ) ? selected[0].item.a_int : 0;
 }
 
-int
-decode_sealID(sealID)
-int sealID;
-{
-	switch(sealID){
-		case WARD_HEPTAGRAM: return HEPTAGRAM;
-		break;
-		case WARD_GORGONEION: return GORGONEION;
-		break;
-		case WARD_ACHERON: return CIRCLE_OF_ACHERON;
-		break;
-		case WARD_PENTAGRAM: return PENTAGRAM;
-		break;
-		case WARD_HEXAGRAM: return HEXAGRAM;
-		break;
-		case WARD_HAMSA: return HAMSA;
-		break;
-		case WARD_ELDER_SIGN: return ELDER_SIGN;
-		break;
-		case WARD_EYE: return ELDER_ELEMENTAL_EYE;
-		break;
-		case WARD_QUEEN: return SIGN_OF_THE_SCION_QUEEN;
-		break;
-		case WARD_CAT_LORD: return CARTOUCHE_OF_THE_CAT_LORD;
-		break;
-		case WARD_GARUDA: return WINGS_OF_GARUDA;
-		break;
-		case WARD_CTHUGHA: return SIGIL_OF_CTHUGHA;
-		break;
-		case WARD_ITHAQUA: return BRAND_OF_ITHAQUA;
-		break;
-		case WARD_KARAKAL: return TRACERY_OF_KARAKAL;
-		break;
-		case WARD_YELLOW: return YELLOW_SIGN;
-		break;
-		default:
-		return 0;
-		break;
-	}
-}
+// int
+// decode_sealID(sealID)
+// int sealID;
+// {
+	// switch(sealID){
+		// case SEAL_AHAZU: return ;
+		// break;
+		// case SEAL_AMON: return ;
+		// break;
+		// case SEAL_ANDREALPHUS: return ;
+		// break;
+		// default:
+		// return 0;
+		// break;
+	// }
+// }
 
-int
-get_sealID(floorID)
-int floorID;
-{
-	switch(floorID){
-		case HEPTAGRAM: return WARD_HEPTAGRAM;
-		break;
-		case GORGONEION: return WARD_GORGONEION;
-		break;
-		case CIRCLE_OF_ACHERON: return WARD_ACHERON;
-		break;
-		case PENTAGRAM: return WARD_PENTAGRAM;
-		break;
-		case HEXAGRAM: return WARD_HEXAGRAM;
-		break;
-		case HAMSA: return WARD_HAMSA;
-		break;
-		case ELDER_SIGN: return WARD_ELDER_SIGN;
-		break;
-		case ELDER_ELEMENTAL_EYE: return WARD_EYE;
-		break;
-		case SIGN_OF_THE_SCION_QUEEN: return WARD_QUEEN;
-		break;
-		case CARTOUCHE_OF_THE_CAT_LORD: return WARD_CAT_LORD;
-		break;
-		case WINGS_OF_GARUDA: return WARD_GARUDA;
-		break;
-		case SIGIL_OF_CTHUGHA: return WARD_CTHUGHA;
-		break;
-		case BRAND_OF_ITHAQUA: return WARD_ITHAQUA;
-		break;
-		case TRACERY_OF_KARAKAL: return WARD_KARAKAL;
-		break;
-		case YELLOW_SIGN: return WARD_YELLOW;
-		break;
-		default:
-		return 0;
-		break;
-	}
-}
+// int
+// get_sealID(floorID)
+// int floorID;
+// {
+	// switch(floorID){
+		// default:
+		// return 0;
+		// break;
+	// }
+// }
 
 void
 save_engravings(fd, mode)

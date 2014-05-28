@@ -79,12 +79,13 @@
 #define HAntimagic		u.uprops[ANTIMAGIC].intrinsic
 #define EAntimagic		u.uprops[ANTIMAGIC].extrinsic
 #define Antimagic		(EAntimagic || HAntimagic ||\
+						(u.sealsActive&SEAL_MOTHER) ||\
 				 (Upolyd && resists_magm(&youmonst)))
 
 #define HStone_resistance	u.uprops[STONE_RES].intrinsic
 #define EStone_resistance	u.uprops[STONE_RES].extrinsic
-#define Stone_resistance	(HStone_resistance || EStone_resistance || resists_ston(&youmonst))
-
+#define Stone_resistance	(HStone_resistance || EStone_resistance ||\
+							u.sealsActive&SEAL_MARIONETTE || resists_ston(&youmonst))
 
 /* Intrinsics only */
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic
@@ -118,6 +119,7 @@
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES)
 		/* ...means blind because of a cover */
 #define Blind	((Blinded || Blindfolded || !haseyes(youmonst.data)) && \
+		 !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp == CRYSTAL_PLATE_MAIL)) && \
 		 !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD))
 		/* ...the Eyes operate even when you really are blind
 		    or don't have any eyes */
@@ -133,6 +135,7 @@
 #define HHallucination		u.uprops[HALLUC].intrinsic
 #define EHalluc_resistance	u.uprops[HALLUC_RES].extrinsic
 #define Halluc_resistance	(EHalluc_resistance || \
+							 u.sealsActive&SEAL_HUGINN_MUNINN || \
 				 (Upolyd && dmgtype(youmonst.data, AD_HALU)))
 #define Hallucination		(HHallucination && !Halluc_resistance)
 
@@ -143,7 +146,7 @@
 
 #define HWounded_legs		u.uprops[WOUNDED_LEGS].intrinsic
 #define EWounded_legs		u.uprops[WOUNDED_LEGS].extrinsic
-#define Wounded_legs		(HWounded_legs || EWounded_legs)
+#define Wounded_legs		((HWounded_legs || EWounded_legs) && !(u.sealsActive&SEAL_ACERERAK))
 
 #define HSleeping		u.uprops[SLEEPING].intrinsic
 #define ESleeping		u.uprops[SLEEPING].extrinsic
@@ -240,11 +243,14 @@
 #define HTeleportation		u.uprops[TELEPORT].intrinsic
 #define ETeleportation		u.uprops[TELEPORT].extrinsic
 #define Teleportation		(HTeleportation || ETeleportation || \
+							 ward_at(u.ux,u.uy) == ANDREALPHUS_TRANSIT || \
 				 can_teleport(youmonst.data))
 
 #define HTeleport_control	u.uprops[TELEPORT_CONTROL].intrinsic
 #define ETeleport_control	u.uprops[TELEPORT_CONTROL].extrinsic
 #define Teleport_control	(HTeleport_control || ETeleport_control || \
+				 u.sealsActive&SEAL_ANDREALPHUS || \
+				 ward_at(u.ux,u.uy) == ANDREALPHUS_STABILIZE || \
 				 control_teleport(youmonst.data))
 
 #define HLevitation		u.uprops[LEVITATION].intrinsic
@@ -267,7 +273,7 @@
 #endif
 	/* May touch surface; does not override any others */
 
-#define Wwalking		(u.uprops[WWALKING].extrinsic && \
+#define Wwalking		((u.uprops[WWALKING].extrinsic || u.sealsActive&&SEAL_EURYNOME) && \
 				 !Is_waterlevel(&u.uz))
 	/* Don't get wet, can't go under water; overrides others except levitation */
 	/* Wwalking is meaningless on water level */
@@ -275,14 +281,21 @@
 #define HSwimming		u.uprops[SWIMMING].intrinsic
 #define ESwimming		u.uprops[SWIMMING].extrinsic	/* [Tom] */
 #ifdef STEED
-# define Swimming		(HSwimming || ESwimming || \
+# define Swimming	(((HSwimming || ESwimming || \
 				 is_swimmer(youmonst.data) || \
-				 u.sealsActive&SEAL_ENKI || \
+				 u.sealsActive&SEAL_ENKI) && !Punished && inv_weight() < 0) || \
+				 (u.usteed && is_swimmer(u.usteed->data)))
+# define NoburdSwimming	((HSwimming || ESwimming || \
+				 is_swimmer(youmonst.data) || \
+				 u.sealsActive&SEAL_ENKI) && !Punished) || \
 				 (u.usteed && is_swimmer(u.usteed->data)))
 #else
-# define Swimming		(HSwimming || ESwimming || \
-				 u.sealsActive&SEAL_ENKI || \
-				 is_swimmer(youmonst.data))
+# define Swimming	((HSwimming || ESwimming || \
+				 is_swimmer(youmonst.data) || \
+				 u.sealsActive&SEAL_ENKI) && !Punished && inv_weight() < 0)
+# define NoburdSwimming	((HSwimming || ESwimming || \
+				 is_swimmer(youmonst.data) || \
+				 u.sealsActive&SEAL_ENKI) && !Punished)
 #endif
 	/* Get wet, don't go under water unless if amphibious */
 
@@ -369,13 +382,14 @@
 
 #define EReflecting		u.uprops[REFLECTING].extrinsic
 #define Reflecting		(EReflecting || \
+						 (u.sealsActive&SEAL_EDEN) || \
 				 (youmonst.data == &mons[PM_SILVER_DRAGON]))
 
-#define Free_action		u.uprops[FREE_ACTION].extrinsic /* [Tom] */
+#define Free_action		(u.uprops[FREE_ACTION].extrinsic || u.sealsActive&SEAL_EURYNOME) /* [Tom] */
 
-#define Fixed_abil		u.uprops[FIXED_ABIL].extrinsic	/* KMH */
+#define Fixed_abil		(u.uprops[FIXED_ABIL].extrinsic || u.sealsActive&SEAL_DAHLVER_NAR)	/* KMH */
 
-#define Lifesaved		u.uprops[LIFESAVED].extrinsic
+#define Lifesaved		(u.uprops[LIFESAVED].extrinsic || u.sealsActive&SEAL_JACK)
 
 
 #endif /* YOUPROP_H */

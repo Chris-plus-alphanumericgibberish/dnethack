@@ -63,6 +63,8 @@ char *wardDecode[26] = {
 	"brand of Ithaqua",
 	"tracery of Karakal",
 	"yellow sign",
+	"Hypergeometric transit equation",
+	"Hypergeometric stabilization equation",
 	"toustefna stave",
 	"dreprun stave",
 	"ottastafur stave",
@@ -1110,21 +1112,25 @@ struct monst *mon;
 	return FALSE;
 }
 
+int
+spiritDsize()
+{
+	if(u.ulevel <= 2) return 1;
+	else if(u.ulevel <= 5) return 2;
+	else if(u.ulevel <= 9) return 3;
+	else if(u.ulevel <= 13) return 4;
+	else if(u.ulevel <= 17) return 5;
+	else if(u.ulevel <= 21) return 6;
+	else if(u.ulevel <= 25) return 7;
+	else if(u.ulevel <= 29) return 8;
+	else return 9;
+}
 STATIC_PTR int
 purifying_blast()
 {
 	struct monst *mon;
 	int dmg;
-	int dsize;
-	if(u.ulevel <= 2) dsize=1;
-	else if(u.ulevel <= 5) dsize=2;
-	else if(u.ulevel <= 9) dsize=3;
-	else if(u.ulevel <= 13) dsize=4;
-	else if(u.ulevel <= 17) dsize=5;
-	else if(u.ulevel <= 21) dsize=6;
-	else if(u.ulevel <= 25) dsize=7;
-	else if(u.ulevel <= 29) dsize=8;
-	else dsize=9;
+	int dsize = spiritDsize();
 	
 	mon = m_at(u.ux+u.dx, u.uy+u.dy);
 	if(!mon){
@@ -1154,16 +1160,7 @@ spiriteffects(power, atme)
 	int power;
 	boolean atme;
 {
-	int dsize;
-	if(u.ulevel <= 2) dsize=1;
-	else if(u.ulevel <= 5) dsize=2;
-	else if(u.ulevel <= 9) dsize=3;
-	else if(u.ulevel <= 13) dsize=4;
-	else if(u.ulevel <= 17) dsize=5;
-	else if(u.ulevel <= 21) dsize=6;
-	else if(u.ulevel <= 25) dsize=7;
-	else if(u.ulevel <= 29) dsize=8;
-	else dsize=9;
+	int dsize = spiritDsize();
 	
 	boolean reveal_invis = FALSE;
 	switch(power){
@@ -1396,6 +1393,14 @@ spiriteffects(power, atme)
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
+				if(!freehand()){
+					You("need a free hand to make a touch attack!");
+					return 0;
+				}
+				if(find_roll_to_hit(mon) <= rnd(20)){
+					You("miss.");
+					break;
+				}
 				if (resists_cold(mon) || is_anhydrous(mon->data)) {	/* match effect on player */
 					shieldeff(mon->mx, mon->my);
 				} else {
@@ -1820,8 +1825,11 @@ spiriteffects(power, atme)
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
 				dmg = d(5,dsize);
+				if(haseyes(mon->data)){
+					if(mon->mcansee) dmg += d(5,dsize);
 				mon->mcansee = 0;
 				mon->mblinded = 0;
+				}
 				mon->mhp -= dmg;
 				if (mon->mhp <= 0){
 					mon->mhp = 0;
@@ -1885,6 +1893,9 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			mon = makemon(&mons[PM_CROW], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 			initedog(mon);
+			mon->m_lev += (u.ulevel - mon->m_lev)/2;
+			mon->mhpmax = (mon->m_lev * 8) - 4;
+			mon->mhp =  mon->mhpmax;
 		}break;
 		case PWR_ROOT_SHOUT:{
 			int dmg;
@@ -2027,7 +2038,7 @@ spiriteffects(power, atme)
 						mon->mcanmove = 0;
 						mon->mfrozen = max(mon->mfrozen, 5);
 					}
-					if (resists_elec(mon)) {	/* match effect on player */
+					if (resists_elec(mon)) {
 						shieldeff(mon->mx, mon->my);
 					} else {
 						mon->mhp -= d(5,dsize);
@@ -2228,6 +2239,14 @@ spiriteffects(power, atme)
 			if(!getdir((char *)0) || (!u.dx && !u.dy)) return 0;
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
+			if(!freehand()){
+				You("need a free hand to make a touch attack!");
+				return 0;
+			}
+			if(find_roll_to_hit(mon) <= rnd(20)){
+				You("miss.");
+				break;
+			}
 			if (resists_drli(mon) || resist(mon, '\0', 0, NOTELL)){
 				shieldeff(mon->mx, mon->my);
 				break;
@@ -3159,6 +3178,7 @@ set_spirit_powers(spirits_seal)
 	long spirits_seal;
 {
 	int i,j;
+	if(spirits_seal==0) return;
 	for(i=0;i<NUMBER_POWERS;i++){
 		if(spiritPOwner[i]==spirits_seal){
 			for(j=0;j<52;j++){

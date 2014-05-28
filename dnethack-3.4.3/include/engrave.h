@@ -36,22 +36,25 @@ struct engr {
 #define BRAND_OF_ITHAQUA			13
 #define TRACERY_OF_KARAKAL			14
 #define YELLOW_SIGN					15
+#define DONTLEARNWARD				16
+#define ANDREALPHUS_TRANSIT			16
+#define ANDREALPHUS_STABILIZE		17
 
-#define FIRST_RUNE					16
+#define FIRST_RUNE					18
 
-#define TOUSTEFNA					16
-#define DREPRUN						17
-#define OTTASTAFUR					18
-#define KAUPALOKI					19
-#define VEIOISTAFUR					20
-#define THJOFASTAFUR				21
-#define TH_RUNE						22
-#define T_RUNE						23
-#define NG_RUNE						24
-#define A_RUNE						25
+#define TOUSTEFNA					18
+#define DREPRUN						19
+#define OTTASTAFUR					20
+#define KAUPALOKI					21
+#define VEIOISTAFUR					22
+#define THJOFASTAFUR				23
+#define TH_RUNE						24
+#define T_RUNE						25
+#define NG_RUNE						26
+#define A_RUNE						27
 
-#define NUMBER_OF_WARDS				25
-#define LAST_WARD					25
+#define NUMBER_OF_WARDS				27
+#define LAST_WARD					27
 
 #define FIRST_SEAL					LAST_WARD+1
 #define AHAZU						LAST_WARD+1
@@ -85,6 +88,7 @@ struct engr {
 #define SIMURGH						LAST_WARD+29
 #define TENEBROUS					LAST_WARD+30
 #define YMIR						LAST_WARD+31
+#define QUEST_SPIRITS				LAST_WARD+32
 #define DAHLVER_NAR					LAST_WARD+32
 #define ACERERAK					LAST_WARD+33
 #define NUMINA						LAST_WARD+34

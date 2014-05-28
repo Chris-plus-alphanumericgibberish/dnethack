@@ -232,7 +232,7 @@ moverock()
 #endif
 		  if (moves > lastmovetime+2 || moves < lastmovetime)
 		    pline("With %s effort you move %s.",
-			  throws_rocks(youmonst.data) ? "little" : "great",
+			  (throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR)) ? "little" : "great",
 			  the(xname(otmp)));
 		  exercise(A_STR, TRUE);
 #ifdef STEED
@@ -264,7 +264,10 @@ moverock()
 	    You("try to move %s, but in vain.", the(xname(otmp)));
 	    if (Blind) feel_location(sx, sy);
 	cannot_push:
-	    if (throws_rocks(youmonst.data)) {
+		if(u.sealsActive&SEAL_MARIONETTE){
+			fracture_rock(otmp);
+			break;
+		} else if (throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR)) {
 #ifdef STEED
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
 		    You("aren't skilled enough to %s %s from %s.",
@@ -659,12 +662,12 @@ int mode;
 		You("cannot pass that way.");
 	    return FALSE;
 	}
-	if (bigmonst(youmonst.data)) {
+	if (bigmonst(youmonst.data) && !(u.sealsActive||SEAL_ANDREALPHUS)) {
 	    if (mode == DO_MOVE)
 		Your("body is too large to fit through.");
 	    return FALSE;
 	}
-	if (invent && (inv_weight() + weight_cap() > 600)) {
+	if (invent && (inv_weight() + weight_cap() > 600) && !(u.sealsActive||SEAL_ANDREALPHUS)) {
 	    if (mode == DO_MOVE)
 #ifdef CONVICT
         if (!Passes_walls)
@@ -2326,6 +2329,7 @@ weight_cap()
 		}
 		if (carrcap < 0) carrcap = 0;
 	}
+	if(u.sealsActive&SEAL_FAFNIR) carrcap *= ((double) u.ulevel)/100;
 	if(arti_lighten(uarm)){
 		if(uarm->blessed) carrcap *= 1.5;
 		else if(!uarm->cursed) carrcap *= 1.25;
@@ -2367,11 +2371,11 @@ inv_weight()
 #endif
 	while (otmp) {
 #ifndef GOLDOBJ
-		if (!is_boulder(otmp) || !throws_rocks(youmonst.data))
+		if (!is_boulder(otmp) || !throws_rocks(youmonst.data) || !(u.sealsActive&SEAL_YMIR))
 #else
 		if (otmp->oclass == COIN_CLASS)
 			wt += (int)(((long)otmp->quan + 50L) / 100L);
-		else if (!is_boulder(otmp) || !throws_rocks(youmonst.data))
+		else if (!is_boulder(otmp) || !throws_rocks(youmonst.data) || !(u.sealsActive&SEAL_YMIR))
 #endif
 			wt += otmp->owt;
 

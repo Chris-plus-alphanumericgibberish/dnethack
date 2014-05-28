@@ -319,6 +319,7 @@ boolean	inc_or_dec;
 #endif
 	if (i == A_CHA) return;	/* can't exercise cha */
 	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
+	if(u.sealsActive&SEAL_HUGINN_MUNINN && (i == A_INT || i == A_WIS)) return; /* don't excercise int or wis while artificially maxed */
 
 	/* no physical exercise while polymorphed; the body's temporary */
 	if (Upolyd && i != A_WIS) return;
@@ -825,7 +826,7 @@ int x;
 		else return((schar)((tmp >= 125) ? 125 : (tmp <= 3) ? 3 : tmp));
 #endif
 	} else if (x == A_CHA) {
-		if (tmp < 18 && (youmonst.data->mlet == S_NYMPH ||
+		if (tmp < 18 && youmonst.data && (youmonst.data->mlet == S_NYMPH ||
 		    u.umonnum==PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
 		    return 18;
 	} else if (x == A_INT || x == A_WIS) {
@@ -833,6 +834,7 @@ int x;
 		 * stupid.  there are lower levels of cognition than "dunce".
 		 */
 		if (uarmh && uarmh->otyp == DUNCE_CAP) return(6);
+		else if(u.sealsActive&SEAL_HUGINN_MUNINN) return 25;
 	}
 #ifdef WIN32_BUG
 	return(x=((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp));

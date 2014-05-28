@@ -60,6 +60,8 @@ STATIC_DCL int FDECL(spec_applies, (const struct artifact *,struct monst *));
 STATIC_DCL int FDECL(arti_invoke, (struct obj*));
 STATIC_DCL boolean FDECL(Mb_hit, (struct monst *magr,struct monst *mdef,
 				  struct obj *,int *,int,BOOLEAN_P,char *,char *));
+STATIC_DCL boolean FDECL(voidPen_hit, (struct monst *magr,struct monst *mdef,
+				  struct obj *,int *,int,BOOLEAN_P,char *));
 
 /* The amount added to the victim's total hit points to insure that the
    victim will be killed even after damage bonus/penalty adjustments.
@@ -404,7 +406,7 @@ boolean
 arti_poisoned(obj)
 struct obj *obj;
 {
-    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_POISONED));
+    return (obj && obj->oartifact && ((spec_ability2(obj, SPFX2_POISONED)) || (obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_YMIR)));
 }
 
 /* used so that callers don't need to known about SPFX_ codes */
@@ -1060,6 +1062,270 @@ static const char * const mb_verb[2][4] = {
 
 /* called when someone is being hit by Magicbane */
 STATIC_OVL boolean
+voidPen_hit(magr, mdef, pen, dmgptr, dieroll, vis, hittee)
+struct monst *magr, *mdef;	/* attacker and defender */
+struct obj *pen;			/* Pen of the Void */
+int *dmgptr;			/* extra damage target will suffer */
+int dieroll;			/* d20 that has already scored a hit */
+boolean vis;			/* whether the action can be seen */
+char *hittee;			/* target's name: "you" or mon_nam(mdef) */
+{
+    char buf[BUFSZ];
+	boolean youdefend = mdef == &youmonst;
+	boolean youattack = magr == &youmonst;
+	boolean and = FALSE;
+	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 2 : 1;
+	
+	buf[0] = '\0';
+	if(u.voidChime){
+		pline("The ringing blade hits %s", hittee);
+	}
+	if (pen->ovar1&SEAL_AMON) {
+	    if (vis){ 
+			Sprintf(buf, "fiery");
+			and = TRUE;
+		}
+	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+	    if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+	    if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+	    if (youdefend && Slimed) burn_away_slime();
+	}
+	if (pen->ovar1&SEAL_BALAM) {
+	    if (vis){ 
+			and ? Sprintf(buf, "yet freezing") : Sprintf(buf, "freezing");
+			and = TRUE;
+		}
+	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+	}
+	if (pen->ovar1&SEAL_ASTAROTH) {
+	    if (vis){ 
+			and ? Sprintf(buf, "and crackling") : Sprintf(buf, "crackling");
+			and = TRUE;
+		}
+	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+	    if (!rn2(5)) (void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+	}
+	if (pen->ovar1&SEAL_ENKI) {
+	    if (vis){ 
+			and ? Sprintf(buf, "and dripping") : Sprintf(buf, "dripping");
+			and = TRUE;
+		}
+		/*water damage?*/
+	}
+	if (pen->ovar1&SEAL_ECHIDNA) {
+	    if (vis){ 
+			and ? Sprintf(buf, "and sizzling") : Sprintf(buf, "sizzling");
+			and = TRUE;
+		}
+	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+	}
+	
+	if(vis) pline("The %s%s blade hits %s", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
+	
+	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
+		if(vis) pline("The blade's shadow catches on %s", hittee);
+		mdef->movement -= 3;
+	}
+	if(pen->ovar1&SEAL_BUER){
+		if(youattack) healup(d(dnum,4), 0, FALSE, FALSE);
+		else{
+			magr->mhp = min(magr->mhp + d(dnum,4),magr->mhpmax);
+		}
+	}
+	if(pen->ovar1&SEAL_CHUPOCLOPS && dieroll < 3){
+		struct trap *ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
+		if (ttmp2){
+			if(youdefend){
+				pline_The("webbing sticks to you. You're caught!");
+				dotrap(ttmp2, NOWEBMSG);
+#ifdef STEED
+				if (u.usteed && u.utrap) {
+				/* you, not steed, are trapped */
+				dismount_steed(DISMOUNT_FELL);
+				}
+#endif
+			}
+			else mintrap(mdef);
+		}
+	}
+	if(pen->ovar1&SEAL_DANTALION && dieroll < 3){
+		if(youdefend) aggravate();
+	    else probe_monster(mdef);
+	}
+	if(pen->ovar1&SEAL_SHIRO && dieroll < ACURR(A_CHA)){
+		struct obj *otmp;
+		otmp = mksobj(ROCK, TRUE, FALSE);
+		otmp->blessed = 0;
+		otmp->cursed = 0;
+		set_destroy_thrown(1); //state variable referenced in drop_throw
+			m_throw(magr, magr->mx, magr->my, mdef->mx-magr->mx, mdef->my-magr->my, 1, otmp,TRUE);
+		set_destroy_thrown(0);  //state variable referenced in drop_throw
+		if(mdef->mhp <= 0) return vis;//Monster was killed by throw and we should stop.
+	}
+	if(pen->ovar1&SEAL_MOTHER && dieroll < 2){
+		if(youdefend) nomul(5,"held by the pen of the void");
+	    else if(mdef->mcanmove || mdef->mfrozen){
+			mdef->mcanmove = 0;
+			mdef->mfrozen = max(mdef->mfrozen, 5);
+		}
+	}
+	if(pen->ovar1&SEAL_ORTHOS && dieroll < 3){
+		if(youdefend){
+			You("are addled by the gusting winds!");
+			make_stunned((HStun + 3), FALSE);
+		} else {
+			if(vis) pline("%s is thrown backwards by the gusting winds!",Monnam(mdef));
+			if(bigmonst(mdef->data)) mhurtle(mdef, u.dx, u.dy, 1);
+			else mhurtle(mdef, u.dx, u.dy, 10);
+			if(mdef->mhp <= 0) return vis;//Monster was killed as part of movement and we should stop.
+		}
+	}
+	if(pen->ovar1&SEAL_OTIAX && dieroll < 2){
+		if(youattack){
+			struct obj *otmp2, **minvent_ptr;
+			long unwornmask;
+
+			/* Don't steal worn items, and downweight wielded items */
+			if((otmp2 = mdef->minvent) != 0) {
+				while(otmp2 && 
+					  otmp2->owornmask&W_ARMOR && 
+					  !( (otmp2->owornmask&W_WEP) && !rn2(10))
+				) otmp2 = otmp2->nobj;
+			}
+			/* Still has handling for worn items, incase that changes */
+			if(otmp2 != 0){
+				int dx,dy;
+				/* take the object away from the monster */
+				if(otmp2->quan > 1L){
+					otmp2 = splitobj(otmp2, 1L);
+					obj_extract_self(otmp2); //wornmask is cleared by splitobj
+				} else{
+					obj_extract_self(otmp2);
+					if ((unwornmask = otmp2->owornmask) != 0L) {
+						mdef->misc_worn_check &= ~unwornmask;
+						if (otmp2->owornmask & W_WEP) {
+							setmnotwielded(mdef,otmp2);
+							MON_NOWEP(mdef);
+						}
+						otmp2->owornmask = 0L;
+						update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);
+					}
+				}
+				dx = rn2(3) - 1;
+				dy = rn2(3) - 1;
+				if(dx || dy){
+					Your("winds toss %s away.",doname(otmp2));
+					m_throw(&youmonst, mdef->mx, mdef->my, dx, dy, 1, otmp2,TRUE);
+				}
+				else{
+					Your("winds drop %s at your feet.",doname(otmp2));
+					(void) dropy(otmp2);
+				}
+				/* more take-away handling, after theft message */
+				if (unwornmask & W_WEP) {		/* stole wielded weapon */
+					possibly_unwield(mdef, FALSE);
+				} else if (unwornmask & W_ARMG) {	/* stole worn gloves */
+					mselftouch(mdef, (const char *)0, TRUE);
+					if (mdef->mhp <= 0)	/* it's now a statue */
+						return 1; /* monster is dead */
+				}
+			}
+		} else if(youdefend){
+			if(!(u.sealsActive&SEAL_ANDROMALIUS)){
+				buf[0] = '\0';
+				switch(steal(magr, buf,FALSE)){
+				  case -1:
+					return vis;
+				  case 0:
+				  break;
+				  default:
+					pline("%s steals %s.", Monnam(magr), buf);
+				  break;
+				}
+			}
+		} else {
+			struct obj *otmp;
+			for (otmp = mdef->minvent; otmp; otmp = otmp->nobj) if (!magr->mtame || !otmp->cursed) break;
+
+			if (otmp) {
+				char onambuf[BUFSZ], mdefnambuf[BUFSZ];
+
+				/* make a special x_monnam() call that never omits
+				   the saddle, and save it for later messages */
+				Strcpy(mdefnambuf, x_monnam(mdef, ARTICLE_THE, (char *)0, 0, FALSE));
+
+	#ifdef STEED
+				if (u.usteed == mdef &&
+						otmp == which_armor(mdef, W_SADDLE))
+					/* "You can no longer ride <steed>." */
+					dismount_steed(DISMOUNT_POLY);
+	#endif
+				obj_extract_self(otmp);
+				if (otmp->owornmask) {
+					mdef->misc_worn_check &= ~otmp->owornmask;
+					if (otmp->owornmask & W_WEP)
+						setmnotwielded(mdef,otmp);
+					otmp->owornmask = 0L;
+					update_mon_intrinsics(mdef, otmp, FALSE, FALSE);
+				}
+				/* add_to_minv() might free otmp [if it merges] */
+				if (vis)
+					Strcpy(onambuf, doname(otmp));
+				(void) add_to_minv(magr, otmp);
+				if (vis) {
+					Strcpy(buf, Monnam(magr));
+					pline("%s steals %s from %s!", buf,
+						onambuf, mdefnambuf);
+				}
+				possibly_unwield(mdef, FALSE);
+				mdef->mstrategy &= ~STRAT_WAITFORU;
+				mselftouch(mdef, (const char *)0, FALSE);
+				
+				if (mdef->mhp <= 0) return vis;
+			}
+		}
+	}
+	if(pen->ovar1&SEAL_PAIMON){
+		if(youattack) u.uen = min(u.uen+dnum,u.uenmax);
+		else magr->mspec_used = max(magr->mspec_used - dnum,0);
+	}
+	if(pen->ovar1&SEAL_SIMURGH){
+		if(youdefend && !Blind){
+			You("are dazzled by prismatic feathers!");
+			make_stunned((HStun + 5), FALSE);
+		}
+		else if(mdef->mcansee && haseyes(mdef->data)){
+			pline("%s is dazzled by prismatic feathers!", Monnam(mdef));
+			mdef->mstun = 1;
+		}
+	}
+	if(pen->ovar1&SEAL_TENEBROUS && dieroll <= dnum){
+		if(youdefend && !Blind){
+			if (Blind)
+				You_feel("an unholy blade drain your life!");
+			else pline_The("unholy blade drains your life!");
+			losexp("life drainage",TRUE,FALSE,FALSE);
+		}
+		else if(mdef->mcansee && haseyes(mdef->data)){
+			if (vis) {
+				pline_The("unholy blade draws the life from %s!",
+				      mon_nam(mdef));
+			}
+			if (mdef->m_lev == 0) {
+			    *dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+			} else {
+			    int drain = rnd(8);
+			    *dmgptr += drain;
+			    mdef->mhpmax -= drain;
+			    mdef->m_lev--;
+			    drain /= 2;
+			}
+		}
+	}
+	return vis;
+}
+
+STATIC_OVL boolean
 Mb_hit(magr, mdef, mb, dmgptr, dieroll, vis, hittee, type)
 struct monst *magr, *mdef;	/* attacker and defender */
 struct obj *mb;			/* Magicbane */
@@ -1434,13 +1700,15 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 //	    if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
 //	    if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
-	    if (youdefend && Slimed) burn_away_slime();
 	    return realizes_damage;
 	}
 	if (attacks(AD_STUN, otmp) && dieroll <= MB_MAX_DIEROLL) {
 	    /* Magicbane's special attacks (possibly modifies hittee[]) */
 		return Mb_hit(magr, mdef, otmp, dmgptr, dieroll, vis, hittee, 
 			otmp->oartifact == ART_STAFF_OF_THE_ARCHMAGI ? "staff" : "blade");
+	}
+	if(otmp->oartifact == ART_PEN_OF_THE_VOID){
+		return voidPen_hit(magr, mdef, otmp, dmgptr, dieroll, vis, hittee);
 	}
 //	pline("D20 role was %d", dieroll);
 //	pline("%d", otmp->oeaten);
@@ -1625,7 +1893,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 					You("drop it at your feet.");
 					(void) dropy(otmp2);
 				}
-				nomul(0, NULL);
 				if(mdef->mhp <= 0) /* flung weapon killed monster */
 				    return TRUE;
 			}
@@ -3560,10 +3827,16 @@ arti_invoke(obj)
 			if(quest_status.killed_nemesis){
 				int i;
 				u.voidChime = 5;
+				pline("You strike the twin-bladed athame like a tuning fork. The beautiful chime is like nothing you have ever heard.");
+				obj->ovar1 |= u.sealsActive;
+				u.sealsActive |= obj->ovar1;
+				set_spirit_powers(u.spiritTineA);
+				set_spirit_powers(u.spiritTineB);
 				for(i=0;i < NUMBER_POWERS;i++){
 					u.spiritPColdowns[i] = 0;
 				}
 			}
+			else pline("You strike the single-bladed athame, but nothing happens.");
 		break;
 		default: pline("Program in dissorder.  Artifact invoke property not recognized");
 		break;
@@ -4729,6 +5002,7 @@ artifact_light(obj)
 {
     return	(get_artifact(obj) && 
 				(obj->oartifact == ART_SUNSWORD ||
+				 (obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_JACK) ||
 				 (obj->oartifact >= ART_SWORD_OF_ERATHAOL &&
 				  obj->oartifact <= ART_HAMMER_OF_BARQUIEL)
 				)

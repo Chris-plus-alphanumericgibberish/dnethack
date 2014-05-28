@@ -1063,7 +1063,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (Stone_resistance)
 		you_are("petrification resistant");
 	if (Invulnerable) you_are("invulnerable");
-	if (u.uedibility) you_can("recognize detrimental food");
+	if (u.uedibility || u.sealsActive&SEAL_BUER) you_can("recognize detrimental food");
 
 	/*** Troubles ***/
 	if (Halluc_resistance)

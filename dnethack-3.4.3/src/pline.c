@@ -319,6 +319,7 @@ align_str(alignment)
 	case A_NEUTRAL: return "neutral";
 	case A_LAWFUL:	return "lawful";
 	case A_NONE:	return "unaligned";
+	case A_VOID:	return "non-aligned";
 //	case A_UNKNOWN:	return "unknown";
     }
     return "unknown";

@@ -86,7 +86,7 @@ int shotlimit;
 	}
 	if ((obj->oartifact == ART_MJOLLNIR || 
 			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) && ACURR(A_STR) < STR19(25)
-	   || (is_boulder(obj) && !throws_rocks(youmonst.data))) {
+	   || (is_boulder(obj) && !throws_rocks(youmonst.data) && !(u.sealsActive&SEAL_YMIR))) {
 		pline("It's too heavy.");
 		return(1);
 	}
@@ -1240,7 +1240,7 @@ register struct obj   *obj;
 	 * Certain items which don't in themselves do damage ignore tmp.
 	 * Distance and monster size affect chance to hit.
 	 */
-	tmp = -1 + Luck + find_mac(mon) + u.uhitinc +
+	tmp = -1 + Luck + find_mac(mon) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel);
 	if (ACURR(A_DEX) < 4) tmp -= 3;
 	else if (ACURR(A_DEX) < 6) tmp -= 2;

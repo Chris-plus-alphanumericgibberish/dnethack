@@ -69,7 +69,7 @@ register struct attack *mattk;
 			break;
 		case AT_KICK:
 			pline("%s kicks%c", Monnam(mtmp),
-				    thick_skinned(youmonst.data) ? '.' : '!');
+				    (thick_skinned(youmonst.data) || u.sealsActive&SEAL_ENKI) ? '.' : '!');
 			break;
 		case AT_STNG:
 			pline("%s stings!", Monnam(mtmp));
@@ -589,12 +589,13 @@ mattacku(mtmp)
 		case AT_BUTT:
 		case AT_TENT:
 		case AT_WHIP:
+			if(u.sealsActive&SEAL_OTIAX && !rn2(5)) tmp = 0;
 			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict ||
 					!touch_petrifies(youmonst.data))) {
 			    if (foundyou) {
 				if(tmp > (j = rnd(20+i))) {
 				    if (mattk->aatyp != AT_KICK ||
-					    !thick_skinned(youmonst.data))
+					    !(thick_skinned(youmonst.data) || u.sealsActive&SEAL_ENKI))
 					sum[i] = hitmu(mtmp, mattk);
 				} else
 				    missmu(mtmp, (tmp == j), mattk);
@@ -650,14 +651,15 @@ mattacku(mtmp)
 		case AT_ENGL:
 			if (!range2) {
 			    if(foundyou) {
-				if(u.uswallow || tmp > (j = rnd(20+i))) {
+				if((u.uswallow || tmp > (j = rnd(20+i))) && !(u.sealsActive&SEAL_AHAZU)) {
 				    /* Force swallowing monster to be
 				     * displayed even when player is
 				     * moving away */
 				    flush_screen(1);
 				    sum[i] = gulpmu(mtmp, mattk);
 				} else {
-				    missmu(mtmp, (tmp == j), mattk);
+					if(u.uswallow) expels(mtmp, mtmp->data, TRUE);
+				    else missmu(mtmp, (tmp == j), mattk);
 				}
 			    } else if (is_animal(mtmp->data)) {
 				pline("%s gulps some air!", Monnam(mtmp));
@@ -1001,6 +1003,8 @@ struct monst *mon;
 	struct obj *armor;
 	int armpro = 0;
 	int cpro = 0;
+
+	if(u.sealsActive&SEAL_PAIMON) return 3;
 
 	armor = (mon == &youmonst) ? uarm : which_armor(mon, W_ARM);
 	if (armor && armpro < objects[armor->otyp].a_can)
@@ -1732,12 +1736,13 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SGLD:
 		hitmsg(mtmp, mattk);
-		if (youmonst.data->mlet == mdat->mlet) break;
+		if (youmonst.data->mlet == mdat->mlet || u.sealsActive&SEAL_ANDROMALIUS) break;
 		if(!mtmp->mcan) stealgold(mtmp);
 		break;
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SITM:	/* for now these are the same */
+			if(u.sealsActive&SEAL_ANDROMALIUS) break;
 	    case AD_SEDU: //duplicated bellow, in the gaze section.
 //pline("test string!");
 			if(mdat == &mons[PM_DEMOGORGON]){
@@ -2098,7 +2103,7 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_DETH:
 		pline("%s reaches out with its deadly touch.", Monnam(mtmp));
-		if (is_undead(youmonst.data)) {
+		if (is_undead(youmonst.data) || u.sealsActive&SEAL_OSE) {
 		    /* Still does normal damage */
 		    pline("Was that the touch of death?");
 		    break;
@@ -2907,6 +2912,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 								return 3;
 			}break;
 			case AD_SITM: //duplicate the whole nine yards, just cause
+				if(u.sealsActive&SEAL_ANDROMALIUS) break;
 				if(distu(mtmp->mx,mtmp->my) > 1 ||
 					mtmp->mcan ||
 					Blind ||
@@ -2972,7 +2978,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				pline("Oh no, %s's using the gaze of death!", mhe(mtmp));
 				if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
 				    You("seem no deader than before.");
-				} else if (!Antimagic) {
+				} else if (!Antimagic && !(u.sealsActive&SEAL_OSE)) {
 				    if (Hallucination) {
 						You("have an out of body experience.");
 				    } else {
@@ -6314,6 +6320,45 @@ register struct attack *mattk;
 	}
 	else tmp = 0;
 
+	if(u.sealsActive){
+		if(u.sealsActive&SEAL_ECHIDNA){
+			pline("%s is splashed by your acidic blood!", Monnam(mtmp));
+			if (resists_acid(mtmp)) {
+				pline("%s is not affected.", Monnam(mtmp));
+			} else {
+				tmp += rnd(spiritDsize());
+			}
+		}
+		if(u.sealsActive&SEAL_FAFNIR){
+			pline("%s is burned by your halo of flames!", Monnam(mtmp));
+			if (resists_fire(mtmp)) {
+				pline("%s is not affected.", Monnam(mtmp));
+			} else {
+				tmp += rnd(spiritDsize());
+				if(resists_cold(mtmp)) tmp += rnd(spiritDsize());
+			}
+		}
+		if(u.sealsActive&SEAL_EDEN){
+			if (hates_silver(mtmp->data)) {
+				Your("silver body sears %s!", mon_nam(mtmp));
+				tmp += rnd(20);
+			}
+		}
+		if(u.sealsActive&SEAL_EURYNOME && !rn2(5)){
+			You("counterattack!");
+			attack(mtmp);
+		}
+	}
+
+	if(!(u.sealsActive&SEAL_EURYNOME) && uwep && 
+		uwep->oartifact == ART_PEN_OF_THE_VOID && 
+		uwep->ovar1&SEAL_EURYNOME && 
+		!rn2(quest_status.killed_nemesis ? 10 : 20)
+	){
+		You("counterattack!");
+		attack(mtmp);
+	}
+	
     assess_dmg:
 	if((mtmp->mhp -= tmp) <= 0) {
 		pline("%s dies!", Monnam(mtmp));

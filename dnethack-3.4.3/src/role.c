@@ -77,32 +77,32 @@ const struct Role roles[] = {
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
 	10, 14, 0, 0,  8, A_INT, SPE_HASTE_SELF,      -18
 },
-// {	{"Binder", 		 0}, {
-	// {"Exile",        0},
-	// {"Heratic",      0},
-	// {"Cultist",      0},
-	// {"Binder",       0},
-	// {"Akousmatikoi", 0},
-	// {"Mathematikoi", 0},
-	// {"Doctor",       0},
-	// {"Unbinder",     0},
-	// {"Gnostikos",    0} },
-	// "Yaldabaoth", "the void", "_Sophia", /* Gnostic */
-	// "Bin", "the lost library", "the Tower of Woe",
-	// PM_EXILE, NON_PM, NON_PM,
-	// PM_STRANGE_CORPSE, NON_PM, PM_ACERERAK,
-	// PM_SKELETON, PM_LICH, S_HUMANOID, S_LICH,
-	// ART_PEN_OF_THE_VOID,
-	// MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC|MH_CLOCK|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
-	  // ROLE_NEUTRAL,
-	// /* Str Int Wis Dex Con Cha */
-	// {  6,  6,  6,  6,  6,  6 },
-	// {  10,  10,  10, 10, 10,  10 },
-	// /* Init   Lower  Higher */
-	// { 11, 0,  0, 10,  2, 0 },	/* Hit points */
-	// {  5, 0,  1, 0,  1, 0 },15,	/* Energy */
-	// -5, 10, 5, 10,  25, A_INT, SPE_SLEEP,             -14
-// },
+{	{"Binder", 		 0}, {
+	{"Exile",        0},
+	{"Heratic",      0},
+	{"Cultist",      0},
+	{"Binder",       0},
+	{"Akousmatikoi", 0},
+	{"Mathematikoi", 0},
+	{"Doctor",       0},
+	{"Unbinder",     0},
+	{"Gnostikos",    0} },
+	0, 0, 0,	/* chosen randomly from among the other roles */
+	"Bin", "the lost library", "the Tower of Woe",
+	PM_EXILE, NON_PM, NON_PM,
+	PM_STRANGE_CORPSE, NON_PM, PM_ACERERAK,
+	PM_SKELETON, PM_LICH, S_HUMANOID, S_LICH,
+	ART_PEN_OF_THE_VOID,
+	MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC|MH_CLOCK|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
+	  ROLE_LAWFUL|ROLE_CHAOTIC|ROLE_NEUTRAL,
+	/* Str Int Wis Dex Con Cha */
+	{  6,  6,  6,  6,  6,  6 },
+	{ 11,  9,  9, 11, 11,  9 },
+	/* Init   Lower  Higher */
+	{ 11, 0,  0, 10,  2, 0 },	/* Hit points */
+	{  5, 0,  1,  0,  1, 0 },15,	/* Energy */
+	-5, 10, 5, 10,  25, A_INT, SPE_SLEEP, -14
+},
 {	{"Caveman", "Cavewoman"}, {
 	{"Troglodyte",  0},
 	{"Aborigine",   0},
@@ -965,8 +965,7 @@ validalign(rolenum, racenum, alignnum)
 	/* Assumes validrole and validrace */
 	return (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
 		(((roles[rolenum].allow & races[racenum].allow &
-		 aligns[alignnum].allow & ROLE_ALIGNMASK)) || 
-		(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+		 aligns[alignnum].allow & ROLE_ALIGNMASK))
 #ifdef CONVICT
 	|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
@@ -983,8 +982,7 @@ randalign(rolenum, racenum)
 	/* Count the number of valid alignments */
 	for (i = 0; i < ROLE_ALIGNS; i++)
 	    if ((roles[rolenum].allow & races[racenum].allow &
-	    		aligns[i].allow & ROLE_ALIGNMASK) ||
-			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+	    		aligns[i].allow & ROLE_ALIGNMASK)
 #ifdef CONVICT
 		|| (roles[rolenum].malenum==PM_CONVICT && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
@@ -995,8 +993,7 @@ randalign(rolenum, racenum)
 	if (n) n = rn2(n);
 	for (i = 0; i < ROLE_ALIGNS; i++)
 	    if ((roles[rolenum].allow & races[racenum].allow &
-	    		aligns[i].allow & ROLE_ALIGNMASK) ||
-			(roles[rolenum].malenum==PM_EXILE && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+	    		aligns[i].allow & ROLE_ALIGNMASK)
 #ifdef CONVICT
 		|| (roles[rolenum].malenum==PM_CONVICT && aligns[i].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
@@ -1054,8 +1051,7 @@ int rolenum, racenum, gendnum, alignnum;
 		!(allow & genders[gendnum].allow & ROLE_GENDMASK))
 	    return FALSE;
 	if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
-			(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
+		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK
 #ifdef CONVICT
 		|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
@@ -1072,8 +1068,7 @@ int rolenum, racenum, gendnum, alignnum;
 		    !(allow & genders[gendnum].allow & ROLE_GENDMASK))
 		continue;
 	    if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
-				(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
+		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK
 #ifdef CONVICT
 			|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
@@ -1130,8 +1125,7 @@ int rolenum, racenum, gendnum, alignnum;
 		!(allow & genders[gendnum].allow & ROLE_GENDMASK))
 	    return FALSE;
 	if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
-			(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
+		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK
 #ifdef CONVICT
 		|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
 #endif
@@ -1148,8 +1142,7 @@ int rolenum, racenum, gendnum, alignnum;
 		    !(allow & genders[gendnum].allow & ROLE_GENDMASK))
 		continue;
 	    if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
-		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK || 
-				(roles[rolenum].malenum==PM_EXILE && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
+		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK
 #ifdef CONVICT
 			|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & allow & ROLE_RACEMASK)
 #endif
@@ -1266,8 +1259,7 @@ int rolenum, racenum, gendnum, alignnum;
 		!(allow & roles[rolenum].allow & ROLE_ALIGNMASK))
 	    return FALSE;
 	if (racenum >= 0 && racenum < SIZE(races)-1 &&
-		!(allow & races[racenum].allow & ROLE_ALIGNMASK || 
-			(roles[rolenum].malenum==PM_EXILE && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+		!(allow & races[racenum].allow & ROLE_ALIGNMASK
 #ifdef CONVICT
 		|| (roles[rolenum].malenum==PM_CONVICT && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
@@ -1281,8 +1273,7 @@ int rolenum, racenum, gendnum, alignnum;
 		    !(allow & roles[rolenum].allow & ROLE_ALIGNMASK))
 		continue;
 	    if (racenum >= 0 && racenum < SIZE(races)-1 &&
-		    !(allow & races[racenum].allow & ROLE_ALIGNMASK || 
-				(roles[rolenum].malenum==PM_EXILE && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
+		    !(allow & races[racenum].allow & ROLE_ALIGNMASK
 #ifdef CONVICT
 			|| (roles[rolenum].malenum==PM_CONVICT && allow & roles[rolenum].allow & ROLE_ALIGNMASK && roles[rolenum].allow & races[racenum].allow & ROLE_RACEMASK)
 #endif

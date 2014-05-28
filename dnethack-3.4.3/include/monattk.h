@@ -31,6 +31,8 @@
 #define AT_LNCK		21  /* Bite attack with reach */
 #define AT_MMGC		22	/* uses magic spell(s), but don't allow player spellcasting (Monster-only MaGiC) */
 #define AT_ILUR		23	/* Two stage swallow attack, currently belongs to Illurien only */
+#define AT_HITS		24	/* Automatic hit, no contact */
+#define AT_WISP		25	/* Attack with wisps of mist, no contact */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */
@@ -138,8 +140,14 @@
 #define AD_ILUR		138 /* memory draining engulf attack belonging to Illurien */
 
 
-#define AD_AHAZU	150 /*  */
-#define AD_AMON		151 /*  */
+//#define AD_AHAZU	150 /*  */
+//Amon is a headbutt (AT_BUTT/AD_PHYS)
+//Chupoclops is a poisonous bite (AT_BITE/AD_DRST)
+#define AD_DUNSTAN	150
+#define AD_IRIS		151
+#define AD_NABERIUS	152
+#define AD_OTIAX	153
+#define AD_SIMURGH	154
 
 
 //#define AD_VMSL		180 //Vorlon missile: elect, disintegration, blast.  Triple damage.

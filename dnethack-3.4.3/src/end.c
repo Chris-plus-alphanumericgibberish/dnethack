@@ -585,6 +585,7 @@ int how;
 	if (how < PANICKED) u.umortality++;
 	if (Lifesaved && (how <= GENOCIDED)) {
 		pline("But wait...");
+		if(uamul && uamul->otyp == AMULET_OF_LIFE_SAVING){
 		makeknown(AMULET_OF_LIFE_SAVING);
 		Your("medallion %s!",
 		      !Blind ? "begins to glow" : "feels warm");
@@ -594,8 +595,43 @@ int how;
 		else You_feel("much better!");
 
 		pline_The("medallion crumbles to dust!");
+			if (uamul) useup(uamul);
+		} else if(u.sealsActive&SEAL_JACK){
+			int i;
+			boolean foundJack = FALSE;
+			u.sealsActive &= ~SEAL_JACK;
+			losexp("shreading of the soul",TRUE,TRUE,TRUE);
+			for(i=0; i<u.sealCounts; i++){
+				if(u.spirit[i] == SEAL_JACK){
+					foundJack = TRUE;
+				}
+				if(foundJack){
+					if(i<u.sealCounts-1){
+						u.spirit[i] = u.spirit[i+1];
+						u.spiritT[i] = u.spiritT[i+1];
+					} else {
+						u.spirit[i]=0;
+						u.spiritT[i]=0;
+						u.sealCounts--;
+					}
+				}
+			}
+			if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID){
+				uwep->ovar1 &= ~SEAL_JACK;
+				if(u.spiritTineA == SEAL_JACK){
+					u.spiritTineA = u.spiritTineB;
+					u.spiritTineTA = u.spiritTineTB;
+					u.spiritTineB = 0;
+					u.spiritTineTB = 0;
+				} else if(u.spiritTineB == SEAL_JACK){
+					u.spiritTineB = 0;
+					u.spiritTineTB = 0;
+				}
+			}
+		} else {
+			impossible("Lifesaved with no amulet or Jack?");
+		}
 		u.gevurah += 4;//cheated death.
-		if (uamul) useup(uamul);
 
 		(void) adjattrib(A_CON, -1, TRUE);
 		if(u.uhpmax <= 0) u.uhpmax = 10;	/* arbitrary */

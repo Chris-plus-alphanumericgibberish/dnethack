@@ -23,6 +23,7 @@ moveloop()
     char ch;
     int abort_lev;
 #endif
+    struct monst *mtmp, *nxtmon;
 	struct obj *pobj;
     int moveamt = 0, wtcap = 0, change = 0;
     boolean didmove = FALSE, monscanmove = FALSE;
@@ -31,6 +32,9 @@ moveloop()
     int timeout_start = rnd(10000)+25000;
     int clock_base = 80000L-timeout_start;
     int past_clock;
+	int oldspiritAC=0;
+	int tx,ty;
+	int nmonsclose,nmonsnear,enkispeedlim;
 
     flags.moonphase = phase_of_the_moon();
     if(flags.moonphase == FULL_MOON) {
@@ -80,8 +84,61 @@ moveloop()
 		wtcap = encumber_msg();
 
 		flags.mon_moving = TRUE;
-		do {
+		do { /* Monster turn loop */
 		    monscanmove = movemon();
+////////////////////////////////////////////////////////////////////////////////////////////////
+			oldspiritAC = u.spiritAC;
+			u.spiritAC = 0; /* reset temporary spirit AC bonuses. Do this once per monster turn */
+			if(u.sealsActive){
+				if(u.sealsActive&SEAL_MALPHAS){
+					for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+						if(mtmp->data == &mons[PM_CROW] && mtmp->mtame && !um_dist(u.ux,u.uy,1)){
+							u.spiritAC++;
+							u.spiritAttk++;
+						}
+					}
+				}
+				if(u.sealsActive&SEAL_ANDREALPHUS){
+					if(isok(tx=u.ux-1,ty=u.uy-1) && IS_CORNER(levl[tx][ty].typ) 
+						&& IS_WALL(levl[tx+1][ty].typ) && IS_WALL(levl[tx][ty+1].typ)) u.spiritAC += u.ulevel/2+1;
+					else if(isok(tx=u.ux+1,ty=u.uy-1) && IS_CORNER(levl[tx][ty].typ) 
+						&& IS_WALL(levl[tx-1][ty].typ) && IS_WALL(levl[tx][ty+1].typ)) u.spiritAC += u.ulevel/2+1;
+					else if(isok(tx=u.ux+1,ty=u.uy+1) && IS_CORNER(levl[tx][ty].typ) 
+						&& IS_WALL(levl[tx-1][ty].typ) && IS_WALL(levl[tx][ty-1].typ)) u.spiritAC += u.ulevel/2+1;
+					else if(isok(tx=u.ux-1,ty=u.uy+1) && IS_CORNER(levl[tx][ty].typ) 
+						&& IS_WALL(levl[tx+1][ty].typ) && IS_WALL(levl[tx][ty-1].typ)) u.spiritAC += u.ulevel/2+1;
+				}
+				if(u.sealsActive&SEAL_ENKI){
+					for(tx=u.ux-1; tx<=u.ux+1;tx++){
+						for(ty=u.uy-1; ty<=u.uy+1;ty++){
+							if(isok(tx,ty) && (tx!=u.ux || ty!=u.uy) && IS_STWALL(levl[tx][ty].typ)) u.spiritAC += 1;
+						}
+					}
+				}
+				if(u.spiritAC!=oldspiritAC) flags.botl = 1;
+			}
+////////////////////////////////////////////////////////////////////////////////////////////////
+			//These artifacts may need to respond to what monsters have done.
+			///If the player no longer meets the kusanagi's requirements (ie, they lost the amulet,
+			///blast 'em and drop to the ground.
+			if (uwep && uwep->oartifact == ART_KUSANAGI_NO_TSURUGI){
+				if(!touch_artifact(uwep,&youmonst)){
+					dropx(uwep);
+				}
+			}
+			///If the Atma weapon becomes cursed, it drains life from the wielder to stay lit.
+			if(uwep && uwep->oartifact == ART_ATMA_WEAPON &&
+				uwep->cursed && 
+				uwep->lamplit
+			){
+				if (!Drain_resistance) {
+					pline("%s for a moment, then %s brightly.",
+					  Tobjnam(uwep, "flicker"), otense(uwep, "burn"));
+					losexp("life force drain",TRUE,TRUE,TRUE);
+					uwep->cursed = FALSE;
+				}
+			}
+////////////////////////////////////////////////////////////////////////////////////////////////
 		    if (youmonst.movement > NORMAL_SPEED)
 			break;	/* it's now your turn */
 		} while (monscanmove);
@@ -90,7 +147,6 @@ moveloop()
 		if (!monscanmove && youmonst.movement < NORMAL_SPEED) {
 		    /* both you and the monsters are out of steam this round */
 		    /* set up for a new turn */
-		    struct monst *mtmp, *nxtmon;
 		    mcalcdistress();	/* adjust monsters' trap, blind, etc */
 
 		    /* reallocate movement rations to monsters */
@@ -154,24 +210,6 @@ moveloop()
 					(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 				}
 			}
-			//If the player no longer meets the kusanagi's requirements (ie, they lost the amulet,
-			//blast 'em and drop to the ground.
-			if (uwep && uwep->oartifact == ART_KUSANAGI_NO_TSURUGI){
-				if(!touch_artifact(uwep,&youmonst)){
-					dropx(uwep);
-				}
-			}
-			if(uwep && uwep->oartifact == ART_ATMA_WEAPON &&
-				uwep->cursed && 
-				uwep->lamplit
-			){
-				if (!Drain_resistance) {
-					pline("%s for a moment, then %s brightly.",
-					  Tobjnam(uwep, "flicker"), otense(uwep, "burn"));
-					losexp("life force drain",TRUE,TRUE,TRUE);
-					uwep->cursed = FALSE;
-				}
-			}
 
 		    /* reset summon monster block. */
 			if(u.summonMonster) u.summonMonster = FALSE;
@@ -188,6 +226,20 @@ moveloop()
 #endif
 		    {
 			moveamt = youmonst.data->mmove;
+			if(u.sealsActive&SEAL_EURYNOME && IS_POOL(levl[u.ux][u.uy].typ)){
+				if (Very_fast) {	/* speed boots or potion */
+					/* average movement is 1.78 times normal */
+					moveamt += 2*NORMAL_SPEED / 3;
+					if (rn2(3) == 0) moveamt += NORMAL_SPEED / 3;
+				} else if (Fast) {
+					/* average movement is 1.56 times normal */
+					moveamt += NORMAL_SPEED / 3;
+					if (rn2(3) != 0) moveamt += NORMAL_SPEED / 3;
+				} else {
+					/* average movement is 1.33 times normal */
+					if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
+				}
+			} else {
 			if (Very_fast) {	/* speed boots or potion */
 			    /* average movement is 1.67 times normal */
 			    moveamt += NORMAL_SPEED / 2;
@@ -196,7 +248,25 @@ moveloop()
 			    /* average movement is 1.33 times normal */
 			    if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
 			}
-			
+			}
+			if(u.sealsActive&SEAL_ENKI){
+				nmonsclose = nmonsnear = 0;
+				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+					if(mtmp->mpeaceful) continue;
+					if(um_dist(u.ux,u.uy,1)){
+						nmonsclose++;
+						nmonsnear++;
+					} else if(um_dist(u.ux,u.uy,2)){
+						nmonsnear++;
+					}
+				}
+				enkispeedlim = u.ulevel/10+1;
+				if(nmonsclose>1){
+					moveamt += min(enkispeedlim,nmonsclose);
+					nmonsnear -= min(enkispeedlim,nmonsclose);
+				}
+				if(nmonsnear>3) moveamt += min(enkispeedlim,nmonsnear-2);
+			}
 			if (uwep && uwep->oartifact == ART_GARNET_ROD) moveamt += NORMAL_SPEED / 2;
 			if (uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				moveamt += NORMAL_SPEED;
@@ -218,6 +288,10 @@ moveloop()
 				}
 			}
 			else if(u.ZangetsuSafe < u.ulevel && !(moves%10)) u.ZangetsuSafe++;
+			
+			if(u.sealsActive&SEAL_ASTAROTH && u.uinwater){
+				losehp(1, "rusting through", KILLED_BY);
+			}
 			
 			if(uclockwork && u.ucspeed == HIGH_CLOCKSPEED){
 				moveamt *= 2;
@@ -328,6 +402,21 @@ moveloop()
 			}
 		    }
 
+			if(u.sealsActive&SEAL_YMIR && (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)){
+				if((u.ulevel > 9 && !(moves % 3)) || 
+					(u.ulevel <= 9 && !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))
+				){
+					int val_limit, idx;
+					for (idx = 0; idx < A_MAX; idx++) {
+						val_limit = AMAX(idx);
+						/* don't recover strength lost from hunger */
+						if (idx == A_STR && u.uhs >= WEAK) val_limit--;
+						
+						if (val_limit > ABASE(idx)) ABASE(idx)++;
+					}
+				}
+			}
+			
 		    /* moving around while encumbered is hard work */
 		    if (wtcap > MOD_ENCUMBER && u.umoved) {
 			if(!(wtcap < EXT_ENCUMBER ? moves%30 : moves%10)) {

@@ -963,6 +963,8 @@ dokick()
 					long nfruit = 8L-rnl(7), nfall;
 					short frtype = treefruit->otyp;
 					int frtspe = treefruit->spe;
+					if(u.sealsActive&SEAL_EVE) nfruit *= 1.5L;
+					else if(uwep && uwep->oartifact==ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_EVE) nfruit *= 1.2L;
 					treefruit->quan = nfruit;
 					if (is_plural(treefruit))
 					    pline("Some %s fall from the tree!", xname(treefruit));
@@ -1026,7 +1028,9 @@ dokick()
 					return(1);
 				}
 			    goto ouch;
-			} else if(u.uz.dnum == neutral_dnum || (Role_if(PM_NOBLEMAN) && In_quest(&u.uz))) {
+			} else if(u.uz.dnum == neutral_dnum || (In_quest(&u.uz) && 
+				(Role_if(PM_NOBLEMAN) || Race_if(PM_DROW) || (Role_if(PM_RANGER) && Race_if(PM_ELF)))
+			)) {
 					goto ouch;
 			} else if(u.uz.dnum == law_dnum) {
 			    if (rn2(3)) {
@@ -1038,6 +1042,7 @@ dokick()
 				  (treefruit = rnd_treefruit_at(x, y))) {
 					long nfruit = 8L-rnl(7), nfall;
 					short frtype = treefruit->otyp;
+					if(u.sealsActive&SEAL_EVE) nfruit *= 1.5L;
 					treefruit->quan = nfruit;
 					if (is_plural(treefruit))
 					    pline("Some %s fall from the tree!", xname(treefruit));
@@ -1090,6 +1095,7 @@ dokick()
 				  (treefruit = rnd_treefruit_at(x, y))) {
 					long nfruit = 8L-rnl(7), nfall;
 					short frtype = treefruit->otyp;
+					if(u.sealsActive&SEAL_EVE) nfruit *= 1.5L;
 					treefruit->quan = nfruit;
 					if (is_plural(treefruit))
 					    pline("Some %s fall from the tree!", xname(treefruit));

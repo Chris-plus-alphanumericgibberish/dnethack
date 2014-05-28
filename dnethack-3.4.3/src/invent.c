@@ -172,6 +172,7 @@ struct obj **potmp, **pobj;
 		 * to stop the burn on both items, then merge the age,
 		 * then restart the burn.
 		 */
+		if(obj->otyp == CORPSE && otmp->otyp == CORPSE) otmp->ovar1 = max(otmp->ovar1,obj->ovar1);
 		if (!obj->lamplit)
 		    otmp->age = ((otmp->age*otmp->quan) + (obj->age*obj->quan))
 			    / (otmp->quan + obj->quan);
@@ -934,7 +935,7 @@ register const char *let,*word;
 
 	/* another ugly check: show boulders (not statues) */
 	if(*let == WEAPON_CLASS &&
-	   !strcmp(word, "throw") && throws_rocks(youmonst.data))
+	   !strcmp(word, "throw") && (throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR)))
 	    useboulder = TRUE;
 
 	if(allownone) *bp++ = '-';
@@ -2504,7 +2505,7 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	if (obj->unpaid != otmp->unpaid ||
 		obj->sknown != otmp->sknown ||
 		obj->ostolen != otmp->ostolen ||
-		obj->ovar1 != otmp->ovar1 ||
+		(obj->ovar1 != otmp->ovar1 && obj->otyp != CORPSE) ||
 	    obj->spe != otmp->spe || obj->dknown != otmp->dknown ||
 	    (obj->bknown != otmp->bknown && !Role_if(PM_PRIEST)) ||
 	    obj->cursed != otmp->cursed || obj->blessed != otmp->blessed ||
@@ -2762,7 +2763,7 @@ STATIC_VAR NEARDATA const char *bogusclasses[] = {
 	"Filler","Useless Objects", "Artifacts", "Ascension Kit Items",
 	"Staves", "Songs", "Drinks", "Grimoires", "Gears", "Cogs",
 	"Marmosets", "Bugs", "Easter Eggs", "Tiny Monuments","Consumables",
-	"Junk", "Foos", "Spoilers", "YANIs"
+	"Junk", "FOOs", "BARs", "Spoilers", "YANIs", "Splatbooks", "SCPs"
 };
 
 static NEARDATA const char oth_symbols[] = {

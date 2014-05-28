@@ -528,6 +528,7 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/tomb.des    $(DAT)/blacktemple.des $(DAT)/sunlesssea.des \
 	 $(DAT)/storage.des \
 	 $(DAT)/convict.des \
+	 $(DAT)/noble.des \
 	 $(DAT)/pirate.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
@@ -561,6 +562,7 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/sunlesssea.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/storage.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/convict.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/noble.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/pirate.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)

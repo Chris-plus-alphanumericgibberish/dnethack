@@ -22,6 +22,8 @@ typedef struct	align {		/* alignment & record */
 #define A_NEUTRAL	 0
 #define A_LAWFUL	 1
 
+#define A_VOID		 127 /* arbitrary, void alignment is an altar flag only */
+
 #define A_COALIGNED	 1
 #define A_OPALIGNED	(-1)
 
@@ -29,15 +31,23 @@ typedef struct	align {		/* alignment & record */
 #define AM_CHAOTIC	 1
 #define AM_NEUTRAL	 2
 #define AM_LAWFUL	 4
+#define AM_VOID		 8
 
-#define AM_MASK		 7
+#define AM_MASK		 15
 
 #define AM_SPLEV_CO	 3
 #define AM_SPLEV_NONCO	 7
 
-#define Amask2align(x)	((aligntyp) ((!(x)) ? A_NONE \
-			 : ((x) == AM_LAWFUL) ? A_LAWFUL : ((int)x) - 2))
-#define Align2amask(x)	(((x) == A_NONE) ? AM_NONE \
-			 : ((x) == A_LAWFUL) ? AM_LAWFUL : (x) + 2)
-
+#define Amask2align(x)	((aligntyp) ( (x)==AM_NONE ? A_NONE : \
+									  (x)==AM_CHAOTIC ? A_CHAOTIC :\
+									  (x)==AM_NEUTRAL ? A_NEUTRAL :\
+									  (x)==AM_LAWFUL ? A_LAWFUL :\
+									  (x)==AM_VOID ? A_VOID : A_NONE\
+									))
+#define Align2amask(x)	( (x)==A_NONE ? AM_NONE : \
+						  (x)==A_CHAOTIC ? AM_CHAOTIC :\
+						  (x)==A_NEUTRAL ? AM_NEUTRAL :\
+						  (x)==A_LAWFUL ? AM_LAWFUL :\
+						  (x)==A_VOID ? AM_VOID : A_NONE\
+						)
 #endif /* ALIGN_H */

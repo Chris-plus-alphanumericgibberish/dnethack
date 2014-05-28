@@ -878,6 +878,7 @@ u_init()
 	u.summonMonster = FALSE;
 	u.uleadamulet = FALSE;
 	u.ZangetsuSafe = 1;
+	u.ucspeed = NORM_CLOCKSPEED;
 	u.voidChime = 0;
 	u.regifted = 0;
 	u.keter = 0;
@@ -983,8 +984,7 @@ u_init()
 	init_uhunger();
 	for (i = 0; i <= MAXSPELL; i++) spl_book[i].sp_id = NO_SPELL;
 	u.ublesscnt = 300;			/* no prayers just yet */
-	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] = u.ualign.type =
-			Role_if(PM_EXILE) ? A_NEUTRAL : aligns[flags.initalign].value;
+	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] = u.ualign.type = aligns[flags.initalign].value;
 	u.ulycn = NON_PM;
 
 #if defined(BSD) && !defined(POSIX_TYPES)

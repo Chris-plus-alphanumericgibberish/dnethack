@@ -587,144 +587,144 @@ Again, and you think possibly for the last time, you stand before
 %H.
 %E
 %Cp Bin 00005
-...
+Why have you returned?
 %E
 %Cp Bin 00006
-...
+Get out!
 %E
 %Cp Bin 00007
-...
+Go away!
 %E
 %Cp Bin 00008
-...
+The baron is going to kill you, and all that have harbored you!
 %E
 %Cp Bin 00009
-...
+Freak!
 %E
 %Cp Bin 00010
-....
+Leave, now!
 %E
 %Cp Bin 00011
-....
+Go.
 %E
 %Cp Bin 00012
-....
+This is no longer your home.
 %E
 %Cp Bin 00013
-....
+Run, or the baron will kill you!
 %E
 %Cp Bin 00014
 ....
 %E
 %Cc Bin 00015
-"Ah, %p.  You have returned at last.  The world is in dire
-need of your help.  There is a great quest you must undertake.
+For the second time in your life, you stand above the strange mumified 
+corpse that lies alone in the ruined library.
 
-"But first, I must see if you are ready to take on such a challenge."
+You feel something reaching out to you, as though across an infinite
+distance.
 %E
 %Cp Bin 00016
-"%p, you are back.  Are you ready now for the challenge?"
+You stand again above the mumified corpse, and again you feel something
+reach for you within your mind.
 %E
 %Cp Bin 00017
-"Again, you stand before me, %p.  Surely you have prepared yourself."
+You stand again above the mumified corpse, and again you feel something
+reach for you within your mind.
 %E
 %Cc Bin 00018
-"Pah!  You have betrayed the gods, %p.  You will never attain
-the glory which you aspire to.  Your failure to follow the true path has
-closed this future to you.
-
-"I will protect these people as best I can, but soon %n will overcome
-me and destroy all who once called you %s.  Now begone!"
+You feel that you have left your path, and will never again stand in
+this place.
 %E
 %Cc Bin 00019
-"%p, I fear that you are as yet too inexperienced to face
-%n.  Only %Ra with the help of %d could ever hope to
-defeat him."
+The reacher falls back, in failure. Perhaps %Ra could hear it.
 %E
 %Cc Bin 00020
-"%pC!  You have wandered from the path of the %a!
-If you attempt to overcome %n in this state, he will surely
-enslave your soul.  Your only hope, and ours, lies in your purification.
-Go forth, and return when you feel ready."
+You feel that you have left your path, and must return to the %a.
 %E
 %Cc Bin 00021
-"The world is in great need of your assistance, %p.
+You reach out as well, and together you bridge the distance.
 
-"About six months ago, I learned that a mysterious sorcerer, known
-as %n, had begun to gather a large group of cutthroats and brigands
-about him.
+A bloody form now hangs before you, a form that may once have been
+a man, now savaged by great beasts. So violent was the attack that
+the beasts' teeth were torn from their sockets, and lodged in the
+man's skin. The shear variety of teeth bears mute witness to the
+number of assailants that dogged the man.
 
-"At about the same time, these people you once rode with `liberated' a
-potent magical talisman, %o, from a Turanian caravan.
+The thousand wisperers speak as one: "Dahlver-Nar; Dahlver of the
+teeth; the first to listen, the first to speak. Dahlver-Nar, of
+the Gates of Teeth, who built the way through which we reach."
 
-"%nC and his Black Horde swept down upon %i and defeated
-the people there, driving them out into the desert.  He has taken
-%o, and seeks to bend it to his will.  I detected the
-subtle changes in the currents of fate, and joined these people.
-Then I sent forth a summons for you.
+The bloody form moans in pain and paws at it's ruined, 
+toothless mouth with its ruined, tooth-torn hands.
 
-"If %n can bend %o to his will, he will become
-almost indestructible.  He will then be able to enslave the minds of
-men across the world.  You are the only hope.  The gods smile upon you,
-and with %d behind you, you alone can defeat %n.
-
-"You must go to %i.  From there, you can track down
-%n, defeat him, and return %o to us.  Only
-then will the world be safe."
+"Another now seeks to close those Gates. A mortal man, who died
+and yet walked on, who moulderd to dust, and yet thought on.
+Acererak the Devourer, Acererak the skull; who lives and stands
+and thinks now on both sides of the Gates, who has but to bite
+down, to cut off the breeze through which we talk, to sever 
+the way on which you walk."
 %E
 %Cp Bin 00025
-"%nC is strong in the dark arts, but not immune to cold steel."
+...
 %E
 %Cp Bin 00026
-"Remember that %n is a great sorcerer.  He lived in the time
-of Atlantis."
+...
 %E
 %Cp Bin 00027
-"If you fail, %p, I will not be able to protect these people long."
+...
 %E
 %Cp Bin 00028
-"To enter %i, you must be very stealthy.  The horde will be on
-guard."
+...
 %E
 %Cp Bin 00029
-"Call upon %d in your time of need."
+...
 %E
 %Cp Bin 00030
-"May %d protect you, and guide your steps."
+...
 %E
 %Cp Bin 00031
-"If you can lay hands upon %o, carry it for good fortune."
+...
 %E
 %Cp Bin 00032
-"I cannot stand against %ns sorcery.  But %d will help you."
+...
 %E
 %Cp Bin 00033
-"Do not fear %n.  I know you can defeat him."
+...
 %E
 %Cp Bin 00034
-"You have a great road to travel, %p, but only after you defeat
-%n."
+...
 %E
 %Cc Bin 00035
-The scent of water comes to you in the desert breeze.  You know that
-you have located %i.
+This place, too, you know well, for it is the village of your waking
+life, the village of your birth.
+
+In your youth, the world was a simple place. You could see your whole
+life, mapped out in the lives of your ancestors. You knew the girl 
+that you would wed, the church where you would marry, the land that 
+you would work, and the place that you would lay until the world
+was remade.
+
+But all that was swept away in a single night, by the dream that
+led to your exile.
+
+Some strange magic is at work, for your village is not located near
+the Lost Library. At least, you don't think it is, you never were
+a traveler. You resolve to pass quickly through the village.
 %E
 %Cp Bin 00036
-Yet again you have a chance to infiltrate %i.
+You stand again in the waking world, in the village of your birth.
 %E
 %Cc Bin 00040
-The hairs on the nape of your neck lift as you sense an energy in the
-very air around you.  You fight down a primordial panic that seeks to
-make you turn and run.  This is surely the lair of %n.
+You have come upon a tower in the woods outside your village. You are
+certain that this wasn't here when your exile began. You feel that 
+Acererak is within.
 %E
 %Cp Bin 00041
-Yet again you feel the air around you heavy with malevolent magical energy.
+You stand again before the tower.
 %E
 %Cc Bin 00050
-"So.  This is what that second rate sorcerer %l sends to do his bidding.
-I have slain many before you.  You shall give me little sport.
-
-"Prepare to die, %c."
+..................................................................
+"So, you are the one who dreamt of the "
 %E
 %Cp Bin 00051
 "I have wasted too much time on you already.  Now, you shall die."

@@ -306,6 +306,11 @@ nothing_to_steal:
 #endif
 gotobj:
 	if(otmp->o_id == stealoid) return(0);
+	
+	if(otmp->oartifact == ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_ANDROMALIUS){
+		pline("%s tries to steal your weapon, but is prevented!",Monnam(mtmp));
+		return 0;
+	}
 
 	/* animals can't overcome curse stickiness nor unlock chains */
 	if (monkey_business) {

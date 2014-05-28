@@ -104,6 +104,7 @@ STATIC_DCL boolean FDECL(can_advance, (int, BOOLEAN_P));
 STATIC_DCL boolean FDECL(could_advance, (int));
 STATIC_DCL boolean FDECL(peaked_skill, (int));
 STATIC_DCL int FDECL(slots_required, (int));
+STATIC_DCL int FDECL(pendamage, (struct obj *,struct monst *));
 
 #ifdef OVL1
 
@@ -356,6 +357,9 @@ int spec;
 			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
 	    }
 	}
+	if(otmp->oartifact == ART_PEN_OF_THE_VOID){
+		tmp += pendamage(otmp, mon);
+	}
 	if (Is_weapon) {
 		tmp += otmp->spe;
 		/* negative enchantment mustn't produce negative damage */
@@ -380,6 +384,7 @@ int spec;
 	}
 
 	if(is_farm(otmp) && ptr->mlet == S_PLANT) tmp *= 2;
+	if(u.sealsActive&SEAL_EVE && ptr->mlet == S_PLANT) tmp *= 2;
 /*	Put weapon vs. monster type damage bonuses in below:	*/
 	if (Is_weapon || otmp->oclass == GEM_CLASS ||
 		otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS) {
@@ -417,6 +422,78 @@ int spec;
 	}
 
 	return(tmp);
+}
+
+STATIC_OVL
+int
+pendamage(pen, mon)
+struct obj *pen;
+struct monst *mon;
+{
+	boolean youdef = mon == &youmonst;
+	int dmg = 0;
+	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 2 : 1;
+	
+	if(pen->ovar1&SEAL_AMON){
+		if(youdef && !Fire_resistance) dmg += d(dnum,4);
+		else if(!youdef && !resists_fire(mon)) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_BALAM){
+		if(youdef && !Cold_resistance) dmg += d(dnum,4);
+		else if(!youdef && !resists_cold(mon)) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_ASTAROTH){
+		if(youdef && !Shock_resistance) dmg += d(dnum,4);
+		else if(!youdef && !resists_elec(mon)) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_ECHIDNA){
+		if(youdef && !Acid_resistance) dmg += d(dnum,4);
+		else if(!youdef && !resists_acid(mon)) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_FAFNIR){
+		if(youdef){
+			if(is_golem(youmonst.data)) dmg += d(2*dnum,4);
+			else if(nonliving(youmonst.data)) dmg += d(dnum,4);
+		}
+		else {
+			if(is_golem(mon->data)) dmg += d(2*dnum,4);
+			else if(nonliving(mon->data)) dmg += d(dnum,4);
+		}
+	}
+	if(pen->ovar1&SEAL_IRIS){
+		if(youdef && !(nonliving(youmonst.data) || is_anhydrous(youmonst.data))) dmg += d(dnum,4);
+		else if(!youdef && !(nonliving(mon->data) || is_anhydrous(mon->data))) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_ENKI){
+		if(youdef && !(nonliving(youmonst.data) || amphibious(youmonst.data))) dmg += d(dnum,4);
+		else if(!youdef && !(nonliving(mon->data) || amphibious(mon->data))) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_OSE){
+		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,4);
+		else if(!youdef && !mindless(mon->data) && (telepathic(mon->data) || !rn2(5))) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_NABERIUS){
+		if(youdef && (Upolyd ? u.mh < .25*u.mhmax : u.uhp < .25*u.uhpmax)) dmg += d(dnum,4);
+		else if(!youdef){
+			if(mon->mflee) dmg += d(dnum,4);
+			if(mon->mpeaceful) dmg += d(dnum,4);
+		}
+	}
+	if(pen->ovar1&SEAL_HUGINN_MUNINN){
+		if(youdef){
+			if(!Blind){
+				make_blinded(Blinded+1L,FALSE);
+				dmg += d(dnum,4);
+			}
+		}
+		else if(!youdef){
+			if(mon->mcansee){
+				dmg += d(dnum,4);
+				mon->mcansee = 0;
+				mon->mblinded = 1;
+			}
+		}
+	}
 }
 
 #endif /* OVLB */

@@ -185,18 +185,71 @@ burn_away_slime()
 #ifdef OVL0
 
 void
+unbind(spir,forced)
+long spir;
+boolean forced;
+{
+	int i;
+	boolean found = FALSE;
+	
+	if(forced) losexp("shreading of the soul",TRUE,TRUE,TRUE);
+	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
+	
+	if(!(spir&SEAL_SPECIAL)){
+		int j;
+		if(u.sealsActive&spir){
+			u.sealsActive &= ~spir;
+			for(i=0; i<u.sealCounts; i++){
+				if(u.spirit[i] == spir){
+					found = TRUE;
+				}
+				if(found){
+					if(i<u.sealCounts-1){
+						u.spirit[i] = u.spirit[i+1];
+						u.spiritT[i] = u.spiritT[i+1];
+					} else {
+						u.spirit[i]=0;
+						u.spiritT[i]=0;
+						u.sealCounts--;
+					}
+				}
+			}
+		} else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID){
+			uwep->ovar1 &= ~spir;
+		}
+		if(u.spiritTineA == spir){
+			u.spiritTineA = u.spiritTineB;
+			u.spiritTineTA = u.spiritTineTB;
+			u.spiritTineB = 0;
+			u.spiritTineTB = 0;
+		} else if(u.spiritTineB == spir){
+			u.spiritTineB = 0;
+			u.spiritTineTB = 0;
+		}
+		for(j=0;j<GATE_SPIRITS;j++) if(spir>>j == 1) Your("link with %s has broken%s", sealNames[j], forced ? "!" : ".");
+	} else {
+		u.specialSealsActive &= ~spir;
+		if(u.specialSealsActive) u.specialSealsActive |= SEAL_SPECIAL;
+		if(u.spirit[QUEST_SPIRIT] == spir){
+			u.spirit[QUEST_SPIRIT]=0;
+			u.spiritT[QUEST_SPIRIT]=0;
+		} else if(u.spirit[OUTER_SPIRIT] == spir){
+			u.spirit[OUTER_SPIRIT]=0;
+			u.spiritT[OUTER_SPIRIT]=0;
+		}
+	}
+}
+
+char *spiritFadeTerms[] = {"starting to fade","growing weaker","very faint","fading fast","about to break"};
+
+void
 nh_timeout()
 {
 	register struct prop *upp;
-	int sleeptime;
-	int m_idx;
-	int baseluck = (flags.moonphase == FULL_MOON) ? 1 : 0;
+	int sleeptime, i, m_idx, baseluck = (flags.moonphase == FULL_MOON) ? 1 : 0;
 
 	if (flags.friday13) baseluck -= 1;
 
-	if(u.sowdisc) u.sowdisc--; //timeout for discord
-	if(u.voidChime) u.voidChime--;
-	
 	if (u.uluck != baseluck) {
 	    int timeout = 600;
 	    int time_luck = stone_luck(FALSE);
@@ -268,6 +321,60 @@ nh_timeout()
 		    Norep("The %s haze around you %s.", hcolor(NH_GOLDEN),
 			  u.uspellprot ? "becomes less dense" : "disappears");
 	    }
+	}
+
+	if(u.sowdisc) u.sowdisc--; //timeout for discord
+	if(u.voidChime){
+		u.voidChime--;
+		if(!u.voidChime){
+			u.sealsActive = 0;
+			for(i=0;i<u.sealCounts;i++) u.sealsActive |= u.spirit[i];
+			if(uwep && uwep->oartifact==ART_PEN_OF_THE_VOID){
+				uwep->ovar1 = 0;
+				uwep->ovar1 |= u.spiritTineTA;
+				uwep->ovar1 |= u.spiritTineTB;
+	}
+		}
+	}
+	if(!u.voidChime){
+		while(u.spirit[0] && u.spiritT[0] < moves) unbind(u.spirit[0],0);
+		if(u.spiritTineB && u.spiritTineTB < moves) unbind(u.spiritTineB,0);
+		if(u.spiritTineA && u.spiritTineTA < moves) unbind(u.spiritTineA,0);
+		if(u.spirit[QUEST_SPIRIT] && u.spiritT[QUEST_SPIRIT] < moves) 
+			unbind(u.spirit[QUEST_SPIRIT],0);
+		//if(u.spirit[OUTER_SPIRIT] && u.spiritT[OUTER_SPIRIT] < moves) 
+			//unbind(u.spirit[OUTER_SPIRIT]); Numina does not time out
+	}
+	if(u.sealsActive || u.specialSealsActive){
+		int remaining = 0;
+		for(i=0;i<u.sealCounts;i++){
+			if(u.spiritT[i] > moves + 625) continue;
+			else if(u.spiritT[i] == moves + 625) remaining = 1;
+			else if(u.spiritT[i] == moves + 125) remaining = 2;
+			else if(u.spiritT[i] == moves + 25) remaining = 3;
+			else if(u.spiritT[i] == moves + 5) remaining = 4;
+			else if(u.spiritT[i] == moves + 1) remaining = 5;
+			if(remaining){
+				int j;
+				for(j=0;j<QUEST_SPIRITS;j++){
+					if((u.spirit[i] >> j) == 1){
+						Your("link with %s is %s", sealNames[j], spiritFadeTerms[remaining-1]);
+					}
+				}
+			}
+		}
+	}
+	
+	if(u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){
+		u.divetimer--;
+		if(u.divetimer==0){
+			You("can't hold your breath any longer");
+			u.usubwater = 0;
+			if(!Swimming) drown();
+			vision_full_recalc = 1;
+			vision_recalc(2);	/* unsee old position */
+			doredraw();
+		}
 	}
 
 #ifdef STEED

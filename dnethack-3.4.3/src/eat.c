@@ -1684,7 +1684,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	else
 	    otmp->odrained = 0;
 
-	/* Very rotten corpse will make you sick unless you are a ghoul or a ghast */
+	/* Very rotten corpse will make you sick unless you are a ghoul or a ghast or bound to Chupoclops */
 	if (mnum != PM_ACID_BLOB && !stoneable && rotted > 5L) {
 		boolean cannibal = maybe_cannibal(mnum, FALSE);
 	    if (u.umonnum == PM_GHOUL) {
@@ -1692,6 +1692,10 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		      mons[mnum].mlet == S_FUNGUS ? "fungoid vegetation" :
 		      !vegetarian(&mons[mnum]) ? "meat" : "protoplasm",
 		      cannibal ? ", cannibal" : "");
+	    } else if(u.sealsActive&SEAL_CHUPOCLOPS){
+		boolean cannibal = maybe_cannibal(mnum, FALSE);
+			pline("The corpse liquefies into a putrid broth, and you slurp it down%s!",
+			cannibal ? ", cannibal" : "");
 	    } else {	    
 		pline("Ulch - that %s was tainted%s!",
 		      mons[mnum].mlet == S_FUNGUS ? "fungoid vegetation" :
@@ -1755,8 +1759,8 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	}
 
 	/* delay is weight dependent */
-	victual.reqtime = 3 + (mons[mnum].cwt >> 6);
-	if (otmp->odrained) victual.reqtime = rounddiv(victual.reqtime, 5);
+	victual.reqtime = (u.sealsActive&SEAL_AHAZU) ? 1 : (3 + (mons[mnum].cwt >> 6));
+	if (otmp->odrained) victual.reqtime = (u.sealsActive&SEAL_AHAZU) ? 1 : rounddiv(victual.reqtime, 5);
 
 	if (!tp && mnum != PM_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER &&
 			(otmp->orotten || !rn2(7))) {
@@ -2286,7 +2290,7 @@ struct obj *otmp;
 	 * order from most detrimental to least detrimental.
 	 */
 
-	if (cadaver && mnum != PM_ACID_BLOB && rotted > 5L && !Sick_resistance) {
+	if (cadaver && mnum != PM_ACID_BLOB && rotted > 5L && !(Sick_resistance || u.sealsActive&SEAL_CHUPOCLOPS)) {
 		/* Tainted meat */
 		Sprintf(buf, "%s like %s could be tainted! %s",
 			foodsmell, it_or_they, eat_it_anyway);
@@ -2357,7 +2361,7 @@ struct obj *otmp;
 		else return 2;
 	}
 
-	if (cadaver && mnum != PM_ACID_BLOB && rotted > 5L && Sick_resistance) {
+	if (cadaver && mnum != PM_ACID_BLOB && rotted > 5L && (Sick_resistance || u.sealsActive&SEAL_CHUPOCLOPS)) {
 		/* Tainted meat with Sick_resistance */
 		Sprintf(buf, "%s like %s could be tainted! %s",
 			foodsmell, it_or_they, eat_it_anyway);
@@ -2390,12 +2394,14 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	if (!(otmp = floorfood("eat", 0))) return 0;
 	if (check_capacity((char *)0)) return 0;
 
-	if (u.uedibility) {
+	if (u.uedibility || u.sealsActive&SEAL_BUER) {
 		int res = edibility_prompts(otmp);
 		if (res) {
+			if(!u.sealsActive&SEAL_BUER){
 		    Your("%s stops tingling and your sense of smell returns to normal.",
 			body_part(NOSE));
 		    u.uedibility = 0;
+			}
 		    if (res == 1) return 0;
 		}
 	}
@@ -2768,7 +2774,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		break;
 	    }
 
-	    victual.reqtime = objects[otmp->otyp].oc_delay;
+	    victual.reqtime = (u.sealsActive&SEAL_AHAZU) ? 1 : objects[otmp->otyp].oc_delay;
 	    if (otmp->otyp != FORTUNE_COOKIE &&
 		(otmp->cursed ||
 		 (((monstermoves - otmp->age) > (int) otmp->blessed ? 50:30) &&
@@ -2803,7 +2809,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	debugpline("nutrit == %d, cnutrit == %d", nutrit, otmp->otyp == CORPSE ?
 	  mons[otmp->corpsenm].cnutrit : objects[otmp->otyp].oc_nutrition);
 #endif
-	victual.reqtime = (basenutrit == 0 ? 0 :
+	victual.reqtime = (basenutrit == 0 ? 0 : (u.sealsActive&SEAL_AHAZU) ? 1 : 
 		rounddiv(victual.reqtime * (long)nutrit, basenutrit));
 #ifdef DEBUG
 	debugpline("after rounddiv: victual.reqtime == %d", victual.reqtime);
@@ -2892,6 +2898,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	    if (near_capacity() > SLT_ENCUMBER) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	} else {		/* even turns */
 	    if (Hunger) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+	    if (u.sealsActive&SEAL_AHAZU) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	    /* Conflict uses up food too */
 	    if (HConflict || (EConflict & (~W_ARTI))) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	    /* +0 charged rings don't do anything, so don't affect hunger */

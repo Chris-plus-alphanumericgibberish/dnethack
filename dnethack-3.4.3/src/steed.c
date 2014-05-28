@@ -471,7 +471,7 @@ int forceit;
 			    (distance == min_distance && rn2(2))) {
 			if (i > 0 || (((t = t_at(x, y)) == 0 || !t->tseen) &&
 				      (!boulder_at(x, y) ||
-				       throws_rocks(youmonst.data)))) {
+				       throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR)))) {
 			    spot->x = x;
 			    spot->y = y;
 			    min_distance = distance;

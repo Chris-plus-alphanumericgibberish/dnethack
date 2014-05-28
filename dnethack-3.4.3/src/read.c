@@ -2270,6 +2270,10 @@ register struct obj	*sobj;
     struct obj *otmp;
 #endif /* CONVICT */
 	/* KMH -- Punishment is still okay when you are riding */
+	if(u.sealsActive&SEAL_MALPHAS){
+		You("avoid punishment for your misbehavior!");
+		return;
+	}
 	You("are being punished for your misbehavior!");
 	if(Punished){
 		Your("iron ball gets heavier.");

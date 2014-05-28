@@ -10,16 +10,17 @@
 
 #define pm_resistance(ptr,typ)	(((ptr)->mresists & (typ)) != 0)
 
-#define resists_fire(mon)	(((mon)->mintrinsics & MR_FIRE) != 0)
-#define resists_cold(mon)	(((mon)->mintrinsics & MR_COLD) != 0)
-#define resists_sleep(mon)	(((mon)->mintrinsics & MR_SLEEP) != 0)
-#define resists_disint(mon)	(((mon)->mintrinsics & MR_DISINT) != 0)
-#define resists_elec(mon)	(((mon)->mintrinsics & MR_ELEC) != 0)
-#define resists_poison(mon)	(((mon)->mintrinsics & MR_POISON) != 0)
-#define resists_acid(mon)	(((mon)->mintrinsics & MR_ACID) != 0)
-#define resists_ston(mon)	(((mon)->mintrinsics & MR_STONE) != 0)
-#define resists_drain(mon)	(((mon)->mintrinsics & MR_DRAIN) != 0)
-#define resists_sickness(mon)	(((mon)->mintrinsics & MR_SICK) != 0)
+//#define resists_fire(mon)	(((mon)->mintrinsics & MR_FIRE) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance))
+// #define resists_fire(mon)	(((mon)->mintrinsics & MR_FIRE) != 0)
+// #define resists_cold(mon)	(((mon)->mintrinsics & MR_COLD) != 0)
+// #define resists_sleep(mon)	(((mon)->mintrinsics & MR_SLEEP) != 0)
+// #define resists_disint(mon)	(((mon)->mintrinsics & MR_DISINT) != 0)
+// #define resists_elec(mon)	(((mon)->mintrinsics & MR_ELEC) != 0)
+// #define resists_poison(mon)	(((mon)->mintrinsics & MR_POISON) != 0)
+// #define resists_acid(mon)	(((mon)->mintrinsics & MR_ACID) != 0)
+// #define resists_ston(mon)	(((mon)->mintrinsics & MR_STONE) != 0)
+// #define resists_drain(mon)	(((mon)->mintrinsics & MR_DRAIN) != 0)
+// #define resists_sickness(mon)	(((mon)->mintrinsics & MR_SICK) != 0)
 
 #define is_lminion(mon)		(is_minion((mon)->data) && \
 				 (mon)->data->maligntyp >= A_COALIGNED && \
@@ -28,7 +29,7 @@
 
 #define is_flyer(ptr)		(((ptr)->mflags1 & M1_FLY) != 0L)
 #define is_displacer(ptr)	((ptr) == &mons[PM_DISPLACER_BEAST] || (ptr) == &mons[PM_SHIMMERING_DRAGON])
-#define is_floater(ptr)		((ptr)->mlet == S_EYE)
+#define is_floater(ptr)		((ptr) && (ptr)->mlet == S_EYE && !(is_auton(ptr) || ptr == &mons[PM_MONOTON]))
 #define is_clinger(ptr)		(((ptr)->mflags1 & M1_CLING) != 0L)
 #define is_swimmer(ptr)		(((ptr)->mflags1 & M1_SWIM) != 0L)
 #define breathless(ptr)		(((ptr)->mflags1 & M1_BREATHLESS) != 0L)
@@ -313,7 +314,12 @@
 #define likes_lava(ptr)		(ptr == &mons[PM_FIRE_ELEMENTAL] || \
 				 ptr == &mons[PM_SALAMANDER])
 #define pm_invisible(ptr) ((ptr) == &mons[PM_STALKER] || \
-			   (ptr) == &mons[PM_BLACK_LIGHT])
+			   (ptr) == &mons[PM_BLACK_LIGHT] ||\
+			   (ptr) == &mons[PM_PHANTOM_FUNGUS] ||\
+			   (ptr) == &mons[PM_CENTER_OF_ALL] ||\
+			   (ptr) == &mons[PM_DARKNESS_GIVEN_HUNGER] ||\
+			   (ptr) == &mons[PM_ANCIENT_OF_DEATH]\
+			   )
 
 /* could probably add more */
 #define likes_fire(ptr)		((ptr) == &mons[PM_FIRE_VORTEX] || \

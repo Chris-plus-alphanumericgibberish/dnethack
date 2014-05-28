@@ -2208,6 +2208,10 @@ boolean ordinary;
 			  "The wand shoots an apparently harmless beam at you."
 			  : "You seem no deader than before.");
 			break;
+		    } else if(u.sealsActive&SEAL_OSE){
+				(obj->otyp == WAN_DEATH) ? 
+					pline("The wand shoots an apparently harmless beam at you."):
+					You("shoot yourself with an apparently harmless beam.");
 		    }
 		    Sprintf(buf, "shot %sself with a death ray", uhim());
 		    killer = buf;
@@ -3382,7 +3386,7 @@ xchar sx, sy;
 #ifdef TOURIST
 		if (uarmu) (void) destroy_arm(uarmu);
 #endif
-	    } else if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
+	    } else if (nonliving(youmonst.data) || is_demon(youmonst.data) || u.sealsActive&SEAL_OSE) {
 		shieldeff(sx, sy);
 		You("seem unaffected.");
 		break;

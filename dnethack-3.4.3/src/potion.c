@@ -691,13 +691,13 @@ peffects(otmp)
 			losehp(1, "mildly contaminated potion", KILLED_BY_AN);
 		    }
 		} else {
-		    if(Poison_resistance)
+		    if(Poison_resistance){
 			pline(
 			  "(But in fact it was biologically contaminated %s.)",
 			      fruitname(TRUE));
 		    if (Role_if(PM_HEALER))
 			pline("Fortunately, you have been immunized.");
-		    else {
+			} else {
 			int typ = rn2(A_MAX);
 
 			if (!Fixed_abil) {
@@ -721,6 +721,7 @@ peffects(otmp)
 			You("are shocked back to your senses!");
 			(void) make_hallucinated(0L,FALSE,0L);
 		}
+		if(u.sealsActive&SEAL_YMIR && !otmp->blessed) goto as_extra_healing;
 		break;
 	case POT_CONFUSION:
 		if(!Confusion)
@@ -820,6 +821,7 @@ peffects(otmp)
 		exercise(A_CON, TRUE);
 		break;
 	case POT_EXTRA_HEALING:
+as_extra_healing:
 		You_feel("much better.");
 		healup(d(6 + 2 * bcsign(otmp), 8),
 		       otmp->blessed ? 5 : !otmp->cursed ? 2 : 0,

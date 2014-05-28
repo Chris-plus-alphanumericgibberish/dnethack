@@ -1262,11 +1262,22 @@ E boolean FDECL(attacktype, (struct permonst *,int));
 E int FDECL(attackindex, (struct permonst *,int,int));
 E boolean FDECL(poly_when_stoned, (struct permonst *));
 E boolean FDECL(resists_drli, (struct monst *));
+E boolean FDECL(resists_fire, (struct monst *));
+E boolean FDECL(resists_cold, (struct monst *));
+E boolean FDECL(resists_sleep, (struct monst *));
+E boolean FDECL(resists_disint, (struct monst *));
+E boolean FDECL(resists_elec, (struct monst *));
+E boolean FDECL(resists_poison, (struct monst *));
+E boolean FDECL(resists_acid, (struct monst *));
+E boolean FDECL(resists_ston, (struct monst *));
+E boolean FDECL(resists_drain, (struct monst *));
+E boolean FDECL(resists_sickness, (struct monst *));
 E boolean FDECL(resists_magm, (struct monst *));
 E boolean FDECL(resists_blnd, (struct monst *));
 E boolean FDECL(can_blnd, (struct monst *,struct monst *,UCHAR_P,struct obj *));
 E boolean FDECL(ranged_attk, (struct permonst *));
 E boolean FDECL(hates_silver, (struct permonst *));
+E boolean FDECL(hates_iron, (struct permonst *));
 E boolean FDECL(passes_bars, (struct permonst *));
 E boolean FDECL(can_track, (struct permonst *));
 E boolean FDECL(breakarm, (struct permonst *));
@@ -2071,6 +2082,7 @@ E void FDECL(book_disappears, (struct obj *));
 E void FDECL(book_substitution, (struct obj *,struct obj *));
 E void NDECL(age_spells);
 E int NDECL(docast);
+E int NDECL(spiritDsize);
 E int NDECL(dospirit);
 E int FDECL(spell_skilltype, (int));
 E int FDECL(spiriteffects, (int,BOOLEAN_P));
@@ -2150,6 +2162,7 @@ E void FDECL(substitute_tiles, (d_level *));
 /* ### timeout.c ### */
 
 E void NDECL(burn_away_slime);
+E void FDECL(unbind, (long, boolean));
 E void NDECL(nh_timeout);
 E void FDECL(fall_asleep, (int, BOOLEAN_P));
 E void FDECL(attach_egg_hatch_timeout, (struct obj *));
@@ -2247,6 +2260,7 @@ E void FDECL(passive_obj, (struct monst *,struct obj *,struct attack *));
 E void FDECL(stumble_onto_mimic, (struct monst *));
 E int FDECL(flash_hits_mon, (struct monst *,struct obj *));
 E boolean FDECL(hmonas, (struct monst *,int));
+E boolean FDECL(hmonwith, (struct monst *,int, struct attack *, int));
 
 /* ### unixmain.c ### */
 

@@ -1161,7 +1161,7 @@ boolean telekinesis;
 	return -1;
     }
     if (obj->otyp == LOADSTONE ||
-	    (is_boulder(obj) && throws_rocks(youmonst.data)))
+	    (is_boulder(obj) && (throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR))))
 	return 1;		/* lift regardless of current situation */
 
     *cnt_p = carry_count(obj, container, *cnt_p, telekinesis, &old_wt, &new_wt);
@@ -1426,6 +1426,7 @@ encumber_msg()
     int newcap = near_capacity();
 
     if(oldcap < newcap) {
+	if(oldcap == UNENCUMBERED && u.uinwater && !u.usubwater) drown();
 	switch(newcap) {
 	case 1: Your("movements are slowed slightly because of your load.");
 		break;

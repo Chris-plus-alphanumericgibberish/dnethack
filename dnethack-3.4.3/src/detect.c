@@ -1488,6 +1488,7 @@ register int aflag;
 	    int fund = (uwep && uwep->oartifact &&
 		    spec_ability(uwep, SPFX_SEEK)) ?
 		    uwep->spe : 0;
+		if(u.sealsActive&SEAL_OTIAX) fund += spiritDsize();
 	    if (ublindf && ublindf->otyp == LENSES && !Blind)
 		    fund += 2; /* JDS: lenses help searching */
 	    if (fund > 5) fund = 5;

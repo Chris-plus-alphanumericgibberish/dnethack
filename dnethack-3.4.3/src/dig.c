@@ -378,7 +378,10 @@ dig()
 					if(u.uz.dnum != neutral_dnum &&
 						u.uz.dnum != chaos_dnum &&
 						!on_level(&medusa_level,&u.uz) &&
-						!(Role_if(PM_NOBLEMAN) && In_quest(&u.uz)) &&
+						!(In_quest(&u.uz) && (Role_if(PM_NOBLEMAN) ||
+						Race_if(PM_DROW) || 
+						(Race_if(PM_ELF) && Role_if(PM_RANGER))
+						)) &&
 						u.uz.dnum != tower_dnum
 					) (void) rnd_treefruit_at(dpx, dpy);
 				}

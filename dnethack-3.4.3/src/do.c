@@ -166,7 +166,7 @@ const char *verb;
 			}
 			mtmp->mtrapped = 0;
 		    } else {
-			if (!Passes_walls && !throws_rocks(youmonst.data)) {
+			if (!Passes_walls && !throws_rocks(youmonst.data) && !(u.sealsActive&SEAL_YMIR)) {
 			    losehp(rnd(15), "squished under a heavy object",
 				   NO_KILLER_PREFIX);
 			    return FALSE;	/* player remains trapped */

@@ -510,6 +510,9 @@ vision_recalc(control)
     static unsigned char colbump[COLNO+1];	/* cols to bump sv */
     unsigned char *sv;				/* ptr to seen angle bits */
     int oldseenv;				/* previous seenv value */
+    int oldxray;				/* previous xray range value */
+	struct monst *mon, *nmon;
+	
 
     vision_full_recalc = 0;			/* reset flag */
     if (in_mklev || !iflags.vision_inited) return;
@@ -608,9 +611,16 @@ vision_recalc(control)
 	    view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
 		0, (void FDECL((*),(int,int,genericptr_t)))0, (genericptr_t)0);
 
+	
 	/*
 	 * Set the IN_SIGHT bit for xray and night vision.
 	 */
+	
+	if(u.sealsActive&SEAL_ORTHOS){
+		oldxray = u.xray_range;
+		u.xray_range += u.ulevel/10+1;
+	}
+	
 	if (u.xray_range >= 0) {
 	    if (u.xray_range) {
 		ranges = circle_ptr(u.xray_range);
@@ -668,6 +678,7 @@ vision_recalc(control)
 		}
 	    }
 	}
+	if(u.sealsActive&SEAL_ORTHOS) u.xray_range=oldxray;
     }
 
     /* Set the correct bits for all light sources. */
@@ -680,6 +691,7 @@ vision_recalc(control)
     temp_array = viz_array;
     viz_array = next_array;
 
+	
     /*
      * The main update loop.  Here we do two things:
      *
