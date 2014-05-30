@@ -132,6 +132,7 @@ doread()
 	else if(scroll->otyp == FORTUNE_COOKIE) {
 	    if(flags.verbose)
 		You("break up the cookie and throw away the pieces.");
+		if(scroll->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
 	    outrumor(bcsign(scroll), BY_COOKIE);
 	    if (!Blind) u.uconduct.literate++;
 	    useup(scroll);
@@ -322,8 +323,10 @@ doread()
 	    scroll->otyp != SCR_MAIL &&
 #endif
 		scroll->otyp != SPE_BLANK_PAPER &&
-		scroll->otyp != SCR_BLANK_PAPER)
-	    u.uconduct.literate++;
+		scroll->otyp != SCR_BLANK_PAPER){
+			if(scroll->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
+		    u.uconduct.literate++;
+		}
 
 	confused = (Confusion != 0);
 #ifdef MAIL

@@ -261,11 +261,13 @@ dowield()
 	/* Handle no object, or object in other slot */
 	if (wep == &zeroobj)
 		wep = (struct obj *) 0;
-	else if (wep == uswapwep)
+	else if (wep == uswapwep){
+		if(uwep->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
 		return (doswapweapon());
-	else if (wep == uquiver)
+	} else if (wep == uquiver){
+		if(uwep->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
 		setuqwep((struct obj *) 0);
-	else if (wep->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL
+	} else if (wep->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL
 #ifdef STEED
 			| W_SADDLE
 #endif
@@ -281,6 +283,7 @@ dowield()
 		setuswapwep(oldwep);
 	untwoweapon();
 
+	if(uwep->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
 	return (result);
 }
 

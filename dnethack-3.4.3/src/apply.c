@@ -3431,6 +3431,8 @@ doapply()
 	    return 1;	/* evading your grasp costs a turn; just be
 			   grateful that you don't drop it as well */
 
+	if(obj->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
+
 	if (obj->oclass == WAND_CLASS)
 	    return do_break_wand(obj);
 	else if (obj->oclass == COIN_CLASS)

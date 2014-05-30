@@ -1536,6 +1536,7 @@ dowear()
 		return 1;
 	}
 
+	if(otmp->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
 	otmp->known = TRUE;
 	if(otmp == uwep)
 		setuwep((struct obj *)0);
