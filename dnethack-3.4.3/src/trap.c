@@ -628,7 +628,9 @@ unsigned trflags;
 	    if(!Fumbling && ttype != MAGIC_PORTAL &&
 		ttype != ANTI_MAGIC && !forcebungle &&
 		(!rn2(5) ||
-	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)))) {
+	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)) ||
+		((ttype == HOLE || ttype == TRAPDOOR || ttype == PIT || ttype == SPIKED_PIT) && u.sealsActive&SEAL_SIMURGH)
+		)) {
 		You("escape %s %s.",
 		    (ttype == ARROW_TRAP && !trap->madeby_u) ? "an" :
 			a_your[trap->madeby_u],
