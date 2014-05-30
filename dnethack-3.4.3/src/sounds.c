@@ -2881,8 +2881,7 @@ int tx,ty;
 					pline("");
 					if(u.spirit[QUEST_SPIRIT]){
 						//Eject current quest spirit
-						u.specialSealsActive &= ~u.spirit[QUEST_SPIRIT];
-						losexp("shreading of the soul",TRUE,TRUE,TRUE);
+						if(u.specialSealsActive&SEAL_DAHLVER_NAR) unbind(SEAL_SPECIAL|SEAL_DAHLVER_NAR,TRUE);
 					}
 					u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
@@ -2904,8 +2903,7 @@ int tx,ty;
 					pline("");
 					if(u.spirit[QUEST_SPIRIT]){
 						//Eject current quest spirit
-						u.specialSealsActive &= ~u.spirit[QUEST_SPIRIT];
-						losexp("shreading of the soul",TRUE,TRUE,TRUE);
+						if(u.specialSealsActive&SEAL_ACERERAK) unbind(SEAL_SPECIAL|SEAL_ACERERAK,TRUE);
 					}
 					u.specialSealsActive |= SEAL_SPECIAL|SEAL_ACERERAK;
 					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_ACERERAK;
