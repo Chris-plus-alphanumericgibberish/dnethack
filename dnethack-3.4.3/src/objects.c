@@ -774,12 +774,14 @@ OBJECT(OBJ("meat ring", (char *)0),
 /* fruits & veggies */
 FOOD("kelp frond",           0, 1,  1, 0, VEGGY,  30, CLR_GREEN),
 FOOD("eucalyptus leaf",      3, 1,  1, 0, VEGGY,  30, CLR_GREEN),
+/*Forbidden by Eve starts here:*/
 FOOD("apple",               15, 1,  2, 0, VEGGY,  50, CLR_RED),
 FOOD("orange",              10, 1,  2, 0, VEGGY,  80, CLR_ORANGE),
 FOOD("pear",                10, 1,  2, 0, VEGGY,  50, CLR_BRIGHT_GREEN),
 FOOD("melon",               10, 1,  5, 0, VEGGY, 100, CLR_BRIGHT_GREEN),
 FOOD("banana",              10, 1,  2, 0, VEGGY,  80, CLR_YELLOW),
 FOOD("carrot",              15, 1,  2, 0, VEGGY,  50, CLR_ORANGE),
+/*:and ends here*/
 FOOD("sprig of wolfsbane",   7, 1,  1, 0, VEGGY,  40, CLR_GREEN),
 FOOD("clove of garlic",      7, 1,  1, 0, VEGGY,  40, CLR_WHITE),
 FOOD("slime mold",          75, 1,  5, 0, VEGGY, 250, HI_ORGANIC),

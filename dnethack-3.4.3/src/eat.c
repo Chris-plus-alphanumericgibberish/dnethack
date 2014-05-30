@@ -2720,6 +2720,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	u.uconduct.food++;
 
 	if(otmp->otyp == EGG && u.sealsActive&SEAL_ECHIDNA) unbind(SEAL_ECHIDNA,TRUE);
+	if(otmp->otyp >= APPLE && otmp->otyp <= BANANA && u.sealsActive&SEAL_EVE) unbind(SEAL_EVE,TRUE);
 	victual.piece = otmp = touchfood(otmp);
 	victual.usedtime = 0;
 
