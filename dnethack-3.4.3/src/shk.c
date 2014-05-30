@@ -2818,6 +2818,7 @@ register boolean peaceful, silent;
 				Monnam(shkp), plname);
 		} else  Norep("You hear a scream, \"Thief!\"");
 	    }
+		if(u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS,TRUE);
 	    hot_pursuit(shkp);
 	    (void) angry_guards(FALSE);
 	}
