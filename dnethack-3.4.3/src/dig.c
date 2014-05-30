@@ -1922,6 +1922,7 @@ register int zx, zy, digdepth;
 		} else if (IS_TREE(room->typ)) {
 		    room->typ = ROOM;
 		    digdepth -= 2;
+			if(u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 		} else {	/* IS_ROCK but not IS_WALL or SDOOR */
 		    room->typ = CORR;
 		    digdepth--;
