@@ -588,6 +588,10 @@ fall_asleep(how_long, wakeup_msg)
 int how_long;
 boolean wakeup_msg;
 {
+	if(u.sealsActive&SEAL_HUGINN_MUNINN){
+		unbind(SEAL_HUGINN_MUNINN,TRUE);
+		return; //expel and end
+	}
 	stop_occupation();
 	nomul(how_long, "sleeping");
 	/* generally don't notice sounds while sleeping */
