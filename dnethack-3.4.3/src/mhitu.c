@@ -1397,10 +1397,14 @@ dopois:
 		case AD_WISD:
 			if (uncancelled && !rn2(8)) {
 				pline("%s assaults your sanity!", Monnam(mtmp));
+				if(u.sealsActive&SEAL_HUGINN_MUNINN){
+					unbind(SEAL_HUGINN_MUNINN,TRUE);
+				} else {
 				(void) adjattrib(A_WIS, -dmg/10+1, FALSE);
 				forget_levels(10);	/* lose memory of 10% of levels*/
 				forget_objects(10);	/* lose memory of 10% of objects*/
 				exercise(A_WIS, FALSE);
+			}
 			}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1430,11 +1434,15 @@ dopois:
 		//forget_levels(25);	/* lose memory of 25% of levels */
 		//forget_objects(25);	/* lose memory of 25% of objects */
 		//exercise(A_WIS, FALSE);
+		if(u.sealsActive&SEAL_HUGINN_MUNINN){
+			unbind(SEAL_HUGINN_MUNINN,TRUE);
+		} else {
 		(void) adjattrib(A_INT, -dmg, FALSE);
 		while(dmg--){
 			forget_levels(10);	/* lose memory of 10% of levels per point lost*/
 			forget_objects(10);	/* lose memory of 10% of objects per point lost*/
 			exercise(A_WIS, FALSE);
+		}
 		}
 		//begin moved brain removal messages
 		if (!uarmh || uarmh->otyp != DUNCE_CAP) {
@@ -2386,6 +2394,9 @@ dopois:
 		    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
 		poisoned(buf, A_CON, mdat->mname, 60, 0);
 		if(Poison_resistance) wdmg /= 2;
+		if(u.sealsActive&SEAL_HUGINN_MUNINN){
+			unbind(SEAL_HUGINN_MUNINN,TRUE);
+		} else {
 		while( ABASE(A_WIS) > ATTRMIN(A_WIS) && wdmg > 0){
 			wdmg--;
 			(void) adjattrib(A_WIS, -1, TRUE);
@@ -2398,6 +2409,7 @@ dopois:
 		if(wdmg){
 			boolean chg;
 		    chg = make_hallucinated(HHallucination + (long)(wdmg*5),FALSE,0L);
+		}
 		}
 		drain_en( (int)(dmg/2) );
 		if(!rn2(20)){
@@ -2684,12 +2696,16 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		break;
 		case AD_LETHE:
 			pline("The waters of the Lethe wash over you!");
+			if(u.sealsActive&SEAL_HUGINN_MUNINN){
+				unbind(SEAL_HUGINN_MUNINN,TRUE);
+			} else {
 			(void) adjattrib(A_INT, -1, FALSE);
 			forget_levels(25);	/* lose memory of 25% of levels*/
 			forget_objects(25);	/* lose memory of 25% of objects*/
 			water_damage(invent, FALSE, FALSE, TRUE);
 
 			exercise(A_WIS, FALSE);
+			}
 			if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
 				int lifesaved = 0;
 				struct obj *wore_amulet = uamul;
@@ -2725,18 +2741,26 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			if(has_blood(youmonst.data)){
 				pline("A mist of blood is torn from your %s and swept into the cloud!", body_part(BODY_SKIN));
 				tmp *= 2;
+				if(u.sealsActive&SEAL_HUGINN_MUNINN){
+					unbind(SEAL_HUGINN_MUNINN,TRUE);
+				} else {
 				if(Upolyd) perc = (u.mhmax - u.mh - tmp)*10/u.mhmax;
 				else perc = (u.uhpmax - u.uhp - tmp)*10/u.uhpmax;
 				if(perc > 10) perc = 10;
 				if(perc >= 5) forget_levels(perc);
 				if(perc > 1) forget_objects(perc);
+				}
 			} else if(!is_anhydrous(youmonst.data)){
 				pline("A mist of water is drawn through your %s and swept into the cloud!", body_part(BODY_SKIN));
+				if(u.sealsActive&SEAL_HUGINN_MUNINN){
+					unbind(SEAL_HUGINN_MUNINN,TRUE);
+				} else {
 				if(Upolyd) perc = (u.mhmax - u.mh - tmp)*10/u.mhmax;
 				else perc = (u.uhpmax - u.uhp - tmp)*10/u.uhpmax;
 				if(perc > 10) perc = 10;
 				if(perc >= 5) forget_levels(perc);
 				if(perc > 1) forget_objects(perc);
+				}
 			} else {
 				if (u.umonnum == PM_IRON_GOLEM) {
 					You("are laden with moisture and rust away!");
@@ -3040,8 +3064,12 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					losexp("primal darkness",FALSE,!rn2(3),FALSE);
 					losexp("primal darkness",FALSE,!rn2(3),FALSE);
 					losexp("primal darkness",TRUE,TRUE,FALSE);
+					if(u.sealsActive&SEAL_HUGINN_MUNINN){
+						unbind(SEAL_HUGINN_MUNINN,TRUE);
+					} else {
 					forget_levels(13);
 					forget_objects(13);
+					}
 					succeeded=1;
 				}
 				else You("avoid the gaze of the right head of Demogorgon!");
@@ -3468,6 +3496,9 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 //				if(!couldsee(mtmp->mx, mtmp->my)) dmg /= 10;
 				if(!dmg) break;
 				pline("Blasphemous geometries assault your sanity!");
+				if(u.sealsActive&SEAL_HUGINN_MUNINN){
+					unbind(SEAL_HUGINN_MUNINN,TRUE);
+				} else {
 				while( !(ABASE(A_WIS) <= ATTRMIN(A_WIS)) && dmg > 0){
 					dmg--;
 					(void) adjattrib(A_WIS, -1, TRUE);
@@ -3481,6 +3512,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				if(dmg > 0){
 					You("tear at yourself in horror!"); //assume always able to damage self
 					mdamageu(mtmp, dmg*10);
+				}
 				}
 				mtmp->mspec_used = 4; //In practice, this will be zeroed when a new movement ration is handed out, and acts to make sure GC can only use the gaze once per round.
 				succeeded=1;
@@ -4599,6 +4631,9 @@ register struct monst *mon;
 				flags.botl = 1;
 				break;
 			case 2: Your("mind is dulled.");
+				if(u.sealsActive&SEAL_HUGINN_MUNINN){
+					unbind(SEAL_HUGINN_MUNINN,TRUE);
+				} else {
 				(void) adjattrib(A_INT, -3, TRUE);
 				(void) adjattrib(A_WIS, -3, TRUE);
 					forget_levels(30);
@@ -4606,6 +4641,7 @@ register struct monst *mon;
 					exercise(A_WIS, FALSE);
 					exercise(A_WIS, FALSE);
 					exercise(A_WIS, FALSE);
+				}
 				flags.botl = 1;
 				break;
 			case 3:
@@ -5342,9 +5378,13 @@ register struct monst *mon;
 			(void) adjattrib(A_WIS, -1, TRUE);
 			exercise(A_WIS, FALSE);
 		}
+		if(u.sealsActive&SEAL_HUGINN_MUNINN){
+			unbind(SEAL_HUGINN_MUNINN,TRUE);
+		} else {
 		if(AMAX(A_WIS) > ABASE(A_WIS)) AMAX(A_WIS) = (int)((AMAX(A_WIS) - ABASE(A_WIS))/2 + 1); //permanently drain wisdom
 		forget_levels(25);	/* lose memory of 25% of levels */
 		forget_objects(25);	/* lose memory of 25% of objects */
+		}
 	} else {
 		You("hang back from the %s form beneath the shroud. It poses enticingly.", fem ? "voluptuous feminine" : "muscular masculine");
 	}
@@ -5880,12 +5920,16 @@ int dmg;
 				} //else
 				You_feel("the tentacles bore into your skull!");
 				i = d(1,6);
+				if(u.sealsActive&SEAL_HUGINN_MUNINN){
+					unbind(SEAL_HUGINN_MUNINN,TRUE);
+				} else {
 				(void) adjattrib(A_INT, -i, 1);
 				while(i-- > 0){
 					if(i%2) losexp("brain damage",FALSE,TRUE,FALSE);
 					forget_levels(10);	/* lose memory of 10% of levels per point lost*/
 					forget_objects(10);	/* lose memory of 10% of objects per point lost*/
 					exercise(A_WIS, FALSE);
+				}
 				}
 				//begin moved brain removal messages
 				Your("brain is cored like an apple!");

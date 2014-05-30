@@ -2944,9 +2944,13 @@ int  typ, fatal, opoistype;
 		}
 	}
 	else if(opoistype & OPOISON_AMNES){
+		if(u.sealsActive&SEAL_HUGINN_MUNINN){
+			unbind(SEAL_HUGINN_MUNINN,TRUE);
+		} else {
 		forget_levels(1);	/* lose memory of 1% of levels*/
 		forget_objects(1);	/* lose memory of 1% of objects*/
 		forget_traps();		/* lose memory of all traps*/
+	}
 	}
 }
 

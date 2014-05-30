@@ -851,7 +851,10 @@ void
 forget(howmuch)
 int howmuch;
 {
-
+	if(u.sealsActive&SEAL_HUGINN_MUNINN){
+		unbind(SEAL_HUGINN_MUNINN,TRUE);
+		return; //expel and end
+	}
 	if (Punished) u.bc_felt = 0;	/* forget felt ball&chain */
 
 	forget_map(howmuch);
