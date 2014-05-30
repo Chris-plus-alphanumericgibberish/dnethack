@@ -2719,6 +2719,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	/* KMH, conduct */
 	u.uconduct.food++;
 
+	if(otmp->otyp == EGG && u.sealsActive&SEAL_ECHIDNA) unbind(SEAL_ECHIDNA,TRUE);
 	victual.piece = otmp = touchfood(otmp);
 	victual.usedtime = 0;
 
