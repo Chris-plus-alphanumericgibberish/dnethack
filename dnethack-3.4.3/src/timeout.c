@@ -195,6 +195,17 @@ boolean forced;
 	if(forced) losexp("shreading of the soul",TRUE,TRUE,TRUE);
 	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
+	if(spir&SEAL_SPECIAL){
+		if(spir&SEAL_DAHLVER_NAR) Your("link with Dahlver-Nar has been broken.");
+		else if(spir&SEAL_ACERERAK) Your("link with Acererak has been broken.");
+		else if(spir&SEAL_NUMINA) Your("links with the Numina have been broken.");
+	} else for(i=0;i<QUEST_SPIRITS;i++){
+		if((spir >> i) == 1){
+			Your("link with %s has been broken.", sealNames[i]);
+			break;
+		}
+	}
+	
 	if(!(spir&SEAL_SPECIAL)){
 		int j;
 		if(u.sealsActive&spir){
@@ -226,7 +237,6 @@ boolean forced;
 			u.spiritTineB = 0;
 			u.spiritTineTB = 0;
 		}
-		for(j=0;j<GATE_SPIRITS;j++) if(spir>>j == 1) Your("link with %s has broken%s", sealNames[j], forced ? "!" : ".");
 	} else {
 		u.specialSealsActive &= ~spir;
 		if(u.specialSealsActive) u.specialSealsActive |= SEAL_SPECIAL;
@@ -358,7 +368,7 @@ nh_timeout()
 				int j;
 				for(j=0;j<QUEST_SPIRITS;j++){
 					if((u.spirit[i] >> j) == 1){
-						Your("link with %s is %s", sealNames[j], spiritFadeTerms[remaining-1]);
+						Your("link with %s is %s.", sealNames[j], spiritFadeTerms[remaining-1]);
 					}
 				}
 			}
