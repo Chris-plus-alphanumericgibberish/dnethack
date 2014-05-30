@@ -326,6 +326,7 @@ dosit()
 		/* may have teleported */
 		levl[u.ux][u.uy].typ = ROOM;
 		pline_The("throne vanishes in a puff of logic.");
+			if(u.sealsActive&SEAL_DANTALION) unbind(SEAL_DANTALION,TRUE);
 		newsym(u.ux,u.uy);
 	    }
 		}
