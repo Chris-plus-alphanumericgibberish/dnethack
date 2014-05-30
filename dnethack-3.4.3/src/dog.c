@@ -473,7 +473,10 @@ long nmv;		/* number of moves */
 	    int wilder = (imv + 75) / 150;
 	    if (mtmp->mtame > wilder) mtmp->mtame -= wilder;	/* less tame */
 	    else if (mtmp->mtame > rn2(wilder)) mtmp->mtame = 0;  /* untame */
-	    else mtmp->mtame = mtmp->mpeaceful = 0;		/* hostile! */
+	    else{
+			mtmp->mtame = mtmp->mpeaceful = 0;		/* hostile! */
+			mtmp->mferal = 1;
+		}
 	}
 	/* check to see if it would have died as a pet; if so, go wild instead
 	 * of dying the next time we call dog_move()
@@ -483,8 +486,11 @@ long nmv;		/* number of moves */
 	    struct edog *edog = EDOG(mtmp);
 
 	    if ((monstermoves > edog->hungrytime + 500 && mtmp->mhp < 3) ||
-		    (monstermoves > edog->hungrytime + 750))
-		mtmp->mtame = mtmp->mpeaceful = 0;
+		    (monstermoves > edog->hungrytime + 750)
+		){
+			mtmp->mtame = mtmp->mpeaceful = 0;		/* hostile! */
+			mtmp->mferal = 1;
+		}
 	}
 
 	if (!mtmp->mtame && mtmp->mleashed) {

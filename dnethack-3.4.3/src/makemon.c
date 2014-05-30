@@ -2167,6 +2167,7 @@ register int	mmflags;
 	mtmp->mblinded = mtmp->mfrozen = mtmp->mlaughing = 0;
 	mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : peace_minded(ptr);
 	mtmp->mtraitor  = FALSE;
+	mtmp->mferal  = FALSE;
 	mtmp->mcrazed  = FALSE;
 	mtmp->mclone  = FALSE;
 	mtmp->mvanishes  = -1;

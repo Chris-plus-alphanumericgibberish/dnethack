@@ -63,6 +63,8 @@ struct monst {
 	unsigned int mintrinsics;	/* low 10 correspond to mresists */
 	int mspec_used;		/* monster's special ability attack timeout */
 
+	Bitfield(mferal,1);	/* was once tame */
+	
 	Bitfield(female,1);	/* is female */
 	Bitfield(minvis,1);	/* currently invisible */
 	Bitfield(invis_blkd,1); /* invisibility blocked */

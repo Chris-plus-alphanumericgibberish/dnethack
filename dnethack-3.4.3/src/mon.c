@@ -2721,6 +2721,8 @@ cleanup:
 	} else if (mtmp->mpeaceful)
 		adjalign(-5);
 
+	if(((mtmp->mferal || mtmp->mtame)) && u.sealsActive&SEAL_BERITH) unbind(SEAL_BERITH,TRUE);
+
 	/* malign was already adjusted for u.ualign.type and randomization */
 	adjalign(mtmp->malign);
 }
