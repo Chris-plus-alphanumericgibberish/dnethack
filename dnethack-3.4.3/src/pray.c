@@ -1252,6 +1252,10 @@ register struct obj *otmp;
 	      u.ualign.type == A_LAWFUL ? "flash of light" : "burst of flame");
     if (carried(otmp)) useup(otmp);
     else useupf(otmp, 1L);
+	if(u.sealsActive&SEAL_BALAM){
+		struct permonst *ptr = &mons[otmp->corpsenm];
+		if(!(is_animal(ptr) || nohands(ptr))) unbind(SEAL_BALAM,TRUE);
+	}
 	if(u.sealsActive&SEAL_TENEBROUS){
 		struct permonst *ptr = &mons[otmp->corpsenm];
 		if(ptr == &mons[PM_WRAITH]) unbind(SEAL_TENEBROUS,TRUE);
