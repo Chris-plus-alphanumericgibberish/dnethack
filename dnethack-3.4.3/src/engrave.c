@@ -2926,6 +2926,7 @@ doward()
 			return(0);
 	    }
 	}
+	if(u.sealsActive&SEAL_CHUPOCLOPS) unbind(SEAL_CHUPOCLOPS,TRUE); 
 	u.uconduct.wardless++;
 	if (eow) {
 		del_ward(oep);
