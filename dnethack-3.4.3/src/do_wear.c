@@ -251,6 +251,14 @@ Cloak_on(VOID_ARGS)
     }
     /* racial armor bonus */
 	if(arti_lighten(uarmc)) inv_weight();
+	
+	if(u.sealsActive&SEAL_SHIRO){
+		pline("Hey, people might notice me with that!");
+		if (donning(uarmc)) cancel_don();
+		(void) Cloak_off();
+		useup(uarmc);
+		unbind(SEAL_SHIRO,TRUE);
+	}
     return 0;
 }
 
