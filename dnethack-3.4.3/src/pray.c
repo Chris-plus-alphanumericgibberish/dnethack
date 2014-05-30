@@ -1252,6 +1252,14 @@ register struct obj *otmp;
 	      u.ualign.type == A_LAWFUL ? "flash of light" : "burst of flame");
     if (carried(otmp)) useup(otmp);
     else useupf(otmp, 1L);
+	if(u.sealsActive&SEAL_TENEBROUS){
+		struct permonst *ptr = &mons[otmp->corpsenm];
+		if(ptr == &mons[PM_WRAITH]) unbind(SEAL_TENEBROUS,TRUE);
+	}
+	if(u.sealsActive&SEAL_YMIR){
+		struct permonst *ptr = &mons[otmp->corpsenm];
+		if(is_giant(ptr)) unbind(SEAL_YMIR,TRUE);
+	}
     exercise(A_WIS, TRUE);
 }
 
