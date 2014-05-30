@@ -358,9 +358,11 @@ doread()
 	  if(confused) {
 	    if (Hallucination)
 		pline("Being so trippy, you screw up...");
-	    else
+	    else{
 		pline("Being confused, you mis%s the magic words...",
 			is_silent(youmonst.data) ? "understand" : "pronounce");
+			if(u.sealsActive&SEAL_PAIMON) unbind(SEAL_PAIMON,TRUE);
+		}
 	  }
 	}
 	if(!seffects(scroll))  {
