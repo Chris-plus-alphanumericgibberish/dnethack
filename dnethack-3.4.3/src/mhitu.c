@@ -3816,6 +3816,7 @@ register struct monst *mon;
 		if (uarm || uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 			verbalize("You're such a %s; I wish...",
 					flags.female ? "sweet lady" : "nice guy");
+			if(u.sealsActive&SEAL_ENKI) unbind(SEAL_ENKI,TRUE);
 			if (!tele_restrict(mon)) (void) rloc(mon, FALSE);
 			return 1;
 		}
