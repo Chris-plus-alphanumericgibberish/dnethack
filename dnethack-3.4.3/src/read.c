@@ -2066,6 +2066,7 @@ do_class_genocide()
 			    kill_genocided_monsters();
 			    update_inventory();		/* eggs & tins */
 			    pline("Wiped out all %s.", nam);
+				if(u.sealsActive&SEAL_MOTHER) unbind(SEAL_MOTHER,TRUE);
 			    if (Upolyd && i == u.umonnum) {
 				u.mh = -1;
 				if (Unchanging) {
@@ -2220,6 +2221,7 @@ int how;
 	    mvitals[mndx].mvflags |= (G_GENOD | G_NOCORPSE);
 	    pline("Wiped out %s%s.", which,
 		  (*which != 'a') ? buf : makeplural(buf));
+		if(u.sealsActive&SEAL_MOTHER) unbind(SEAL_MOTHER,TRUE);
 
 	    if (killplayer) {
 		/* might need to wipe out dual role */
