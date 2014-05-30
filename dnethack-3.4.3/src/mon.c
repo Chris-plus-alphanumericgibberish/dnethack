@@ -2569,6 +2569,7 @@ xkilled(mtmp, dest)
 
 	/* KMH, conduct */
 	u.uconduct.killer++;
+	if(mtmp->data == &mons[PM_CROW] && u.sealsActive&SEAL_MALPHAS) unbind(SEAL_MALPHAS,TRUE);
 
 	if (dest & 1) {
 	    const char *verb = nonliving(mtmp->data) ? "destroy" : "kill";

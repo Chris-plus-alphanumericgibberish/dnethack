@@ -725,6 +725,7 @@ register xchar x, y;
 			pline("%s chokes on the leash!", Monnam(mtmp));
 			/* tameness eventually drops to 1 here (never 0) */
 			if (mtmp->mtame && rn2(mtmp->mtame)) mtmp->mtame--;
+			if(mtmp->data == &mons[PM_CROW] && u.sealsActive&SEAL_MALPHAS) unbind(SEAL_MALPHAS,TRUE);
 		    }
 		} else {
 		    if (um_dist(mtmp->mx, mtmp->my, 5)) {
