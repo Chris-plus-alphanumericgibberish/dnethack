@@ -67,34 +67,41 @@ doread()
 				break;
 				case(1):
 					pline("The damage is lighter further from the point, and looking close you can just make out the word \"Ruat\" near the pommel.");
+					u.uconduct.literate++;
 				break;
 				case(2):
 					pline("The damage is lighter further from the point.");
 					pline("Looking close, you can just make out the phrase \"Ruat Coelum\" near the pommel.");
 					pline("It seems to be part of a longer inscription, but the Rod has been thoroughly defaced.");
+					u.uconduct.literate++;
 				break;
 				case(3):
 					pline("The damage is lighter near the pommel, and an inscription spirals around the rod.");
 					pline("You can make out the phrase \"Ruat Coelum, Fiat\", but the rest of the inscription is defaced.");
+					u.uconduct.literate++;
 				break;
 				case(4):
 					pline("The damage is lighter on the half nearest the pommel.");
 					pline("You can make out the phrase \"Ruat Coelum, Fiat Justitia.\"");
 					pline("There's more, but the rest of it is illegible.");
+					u.uconduct.literate++;
 				break;
 				case(5):
 					pline("The damage is heaviest near the tip.");
 					pline("You read part of an inscription: \"Ruat Coelum, Fiat Justitia. Ecce!\"");
 					pline("There's more, but the rest of it is illegible.");
+					u.uconduct.literate++;
 				break;
 				case(6):
 					pline("The damage is heaviest near the tip.");
 					pline("You read most of the inscription: \"Ruat Coelum, Fiat Justitia. Ecce! Lex\"");
 					pline("There's more, but the rest of it is scratched out.");
+					u.uconduct.literate++;
 				break;
 				case(7):
 					pline("An inscription spirals around the Rod, from pommel to tip:");
 					pline("\"Ruat Coelum, Fiat Justitia. Ecce! Lex Rex!\"");
+					u.uconduct.literate++;
 				break;
 			}
 			if(u.RoSPflights > 0){
