@@ -511,6 +511,7 @@ peffects(otmp)
 			if (u.ulycn >= LOW_PM)
 			    you_unwere(TRUE);	/* "Purified" */
 			/* make_confused(0L,TRUE); */
+			if(u.sealsActive&SEAL_MARIONETTE) unbind(SEAL_MARIONETTE,TRUE);
 		    } else {
 			if(u.ualign.type == A_LAWFUL) {
 			    pline("This burns like acid!");

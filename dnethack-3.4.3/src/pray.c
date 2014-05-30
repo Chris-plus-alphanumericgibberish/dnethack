@@ -1021,6 +1021,7 @@ pleased(g_align)
 		}
 	    }
 	    if (any) update_inventory();
+		if(u.sealsActive&SEAL_MARIONETTE) unbind(SEAL_MARIONETTE,TRUE);
 	    break;
 	}
 	case 5: {

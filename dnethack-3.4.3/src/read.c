@@ -1195,6 +1195,7 @@ struct obj	*sobj;
 		if (sobj->cursed) {
 		    pline_The("scroll disintegrates.");
 		} else {
+			if(!confused && u.sealsActive&SEAL_MARIONETTE) unbind(SEAL_MARIONETTE,TRUE);
 		    for (obj = invent; obj; obj = obj->nobj) {
 			long wornmask;
 #ifdef GOLDOBJ
