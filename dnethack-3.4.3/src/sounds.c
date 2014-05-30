@@ -2662,7 +2662,7 @@ int tx,ty;
 	case OTIAX:{
 		if(u.otiax < moves){
 			//Spirit requires that its seal be drawn on an open door.
-			if(IS_DOOR(levl[tx][ty].typ) && !closed_door(tx,ty)){ 
+			if(IS_DOOR(levl[tx][ty].typ) && closed_door(tx,ty)){ 
 				Your(".");
 				pline(".");
 				if(u.sealCounts < numSlots){
