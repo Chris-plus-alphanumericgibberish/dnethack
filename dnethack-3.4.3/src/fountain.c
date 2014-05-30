@@ -188,6 +188,8 @@ boolean isyou;
 		level.flags.nfountains--;
 		if(isyou && in_town(x, y))
 		    (void) angry_guards(FALSE);
+		
+		if(isyou && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 	}
 }
 

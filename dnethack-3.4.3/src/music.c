@@ -274,6 +274,15 @@ struct monst *mon;
 			if (cansee(x,y))
 				pline_The("headstone topples into a chasm.");
 			goto do_pit;
+		  case TREE:
+			if (cansee(x,y))
+				pline_The("tree topples into a chasm.");
+			if(!mon && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+			goto do_pit;
+		  case DEADTREE:
+			if (cansee(x,y))
+				pline_The("dead tree topples into a chasm.");
+			goto do_pit;
 		  case THRONE :
 			if (cansee(x,y))
 				pline_The("throne falls into a chasm.");

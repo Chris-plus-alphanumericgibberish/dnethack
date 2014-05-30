@@ -390,6 +390,7 @@ dig()
 					staff->spe = 0;
 					staff->cursed = staff->blessed = FALSE;
 				}
+				if(u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 			} else {
 			    digtxt = "You succeed in cutting away some rock.";
 			    lev->typ = CORR;
@@ -554,6 +555,7 @@ int ttyp;
 	    dogushforth(FALSE);
 	    SET_FOUNTAIN_WARNED(x,y);		/* force dryup */
 	    dryup(x, y, madeby_u);
+		if(u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 	    return;
 #ifdef SINKS
 	} else if (IS_SINK(lev->typ)) {
@@ -1759,6 +1761,7 @@ register struct monst *mtmp;
 	    }
 	} else if (IS_TREE(here->typ)) {
 	    here->typ = ROOM;
+		if(u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 //	    if (pile && pile < 5)
 //		(void) rnd_treefruit_at(mtmp->mx, mtmp->my);
 	} else {
