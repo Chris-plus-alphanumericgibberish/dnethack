@@ -410,6 +410,7 @@ dig()
 			    lev->doormask = D_NODOOR;
 			}
 			digtxt = "You make an opening in the wall.";
+			if(IS_WALL(lev->typ) && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
 		} else if(lev->typ == SDOOR) {
 			cvt_sdoor_to_door(lev);	/* ->typ = DOOR */
 			digtxt = "You break through a secret door!";
@@ -1903,6 +1904,7 @@ register int zx, zy, digdepth;
 	    } else if (IS_ROCK(room->typ)) {
 		if (!may_dig(zx,zy)) break;
 		if (IS_WALL(room->typ) || room->typ == SDOOR) {
+			if(IS_WALL(room->typ) && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
 		    if (*in_rooms(zx,zy,SHOPBASE)) {
 			add_damage(zx, zy, 200L);
 			shopwall = TRUE;
