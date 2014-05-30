@@ -536,6 +536,7 @@ register struct monst *priest;
 		verbalize("Thou shalt regret thine action!");
 		if(coaligned) adjalign(-1);
 	    } else if(offer < (u.ulevel * 200)) {
+		if(u.sealsActive&SEAL_AMON) unbind(SEAL_AMON,TRUE);
 #ifndef GOLDOBJ
 		if(u.ugold > (offer * 2L)) verbalize("Cheapskate.");
 #else
@@ -547,12 +548,14 @@ register struct monst *priest;
 		    exercise(A_WIS, TRUE);
 		}
 	    } else if(offer < (u.ulevel * 400)) {
+		if(u.sealsActive&SEAL_AMON) unbind(SEAL_AMON,TRUE);
 		verbalize("Thou art indeed a pious individual.");
 #ifndef GOLDOBJ
-		if(u.ugold < (offer * 2L)) {
+		if(u.ugold < (offer * 2L))
 #else
-		if(money_cnt(invent) < (offer * 2L)) {
+		if(money_cnt(invent) < (offer * 2L))
 #endif
+		{
 		    if (coaligned && u.ualign.record <= ALGN_SINNED)
 			adjalign(1);
 		    verbalize("I bestow upon thee a blessing.");
@@ -561,18 +564,21 @@ register struct monst *priest;
 	    } else if(offer < (u.ulevel * 600) &&
 		      u.ublessed < 20 &&
 		      (u.ublessed < 9 || !rn2(u.ublessed))) {
+		if(u.sealsActive&SEAL_AMON) unbind(SEAL_AMON,TRUE);
 		verbalize("Thy devotion has been rewarded.");
 		if (!(HProtection & INTRINSIC))  {
 			HProtection |= FROMOUTSIDE;
 			if (!u.ublessed)  u.ublessed = rn1(3, 2);
 		} else u.ublessed++;
 	    } else {
+		if(u.sealsActive&SEAL_AMON) unbind(SEAL_AMON,TRUE);
 		verbalize("Thy selfless generosity is deeply appreciated.");
 #ifndef GOLDOBJ
-		if(u.ugold < (offer * 2L) && coaligned) {
+		if(u.ugold < (offer * 2L) && coaligned)
 #else
-		if(money_cnt(invent) < (offer * 2L) && coaligned) {
+		if(money_cnt(invent) < (offer * 2L) && coaligned)
 #endif
+		{
 		    if(strayed && (moves - u.ucleansed) > 5000L) {
 			u.ualign.record = 0; /* cleanse thee */
 			u.ucleansed = moves;

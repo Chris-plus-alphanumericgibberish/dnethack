@@ -1747,6 +1747,7 @@ dopray()
 	if (yn("Are you sure you want to pray?") == 'n')
 	    return 0;
 
+	if(u.sealsActive&SEAL_AMON) unbind(SEAL_AMON,TRUE);
     u.uconduct.gnostic++;
     /* Praying implies that the hero is conscious and since we have
        no deafness attribute this implies that all verbalized messages
