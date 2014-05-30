@@ -418,6 +418,7 @@ dig()
 				lev->doormask = D_BROKEN;
 		} else if(closed_door(dpx, dpy)) {
 			digtxt = "You break through the door.";
+			if(!(lev->doormask&D_LOCKED) && u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX, TRUE);
 			if(shopedge) {
 			    add_damage(dpx, dpy, 400L);
 			    dmgtxt = "break";
@@ -1854,6 +1855,7 @@ register int zx, zy, digdepth;
 	    room = &levl[zx][zy];
 	    tmp_at(zx,zy);
 	    delay_output();	/* wait a little bit */
+		if(closed_door(zx, zy) && !(levl[zx][zy].doormask&D_LOCKED) && u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX, TRUE);
 	    if (closed_door(zx, zy) || room->typ == SDOOR) {
 		/* ALI - Artifact doors from slash'em*/
 		if (artifact_door(zx, zy)) {

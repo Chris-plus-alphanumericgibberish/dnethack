@@ -140,9 +140,11 @@ picklock(VOID_ARGS)	/* try to open/close a lock */
 		    if (*in_rooms(u.ux+u.dx, u.uy+u.dy, SHOPBASE))
 			add_damage(u.ux+u.dx, u.uy+u.dy, 0L);
 		    newsym(u.ux+u.dx, u.uy+u.dy);
-	    } else if (xlock.door->doormask & D_LOCKED)
-		xlock.door->doormask = D_CLOSED;
-	    else xlock.door->doormask = D_LOCKED;
+	    } else if (xlock.door->doormask & D_LOCKED) xlock.door->doormask = D_CLOSED;
+	    else{
+			xlock.door->doormask = D_LOCKED;
+			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
+		}
 	} else {
 	    xlock.box->olocked = !xlock.box->olocked;
 	    if(xlock.box->otrapped)	
@@ -1023,24 +1025,28 @@ int x, y;
 	    case D_CLOSED:
 		if (key)
 		    msg = "The door closes!";
-		else
+		else{
 		msg = "The door locks!";
-		break;
+			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
+		}break;
 	    case D_ISOPEN:
 		if (key)
 		    msg = "The door swings shut!";
-		else
+		else{
 		msg = "The door swings shut, and locks!";
-		break;
+			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
+		}break;
 	    case D_BROKEN:
 		msg = "The broken door reassembles and locks!";
+			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
 		break;
 	    case D_NODOOR:
 		if (key)
 		    msg = "The broken door reassembles!";
-		else
+		else{
 		msg = "The broken door reassembles and locks!";
-		break;
+			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
+		}break;
 		break;
 	    default:
 		res = FALSE;
