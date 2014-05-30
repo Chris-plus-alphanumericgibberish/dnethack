@@ -5288,6 +5288,7 @@ int force;
 		  case THRONE :
 			if (cansee(x,y))
 				pline_The("throne falls into a chasm.");
+			if(u.sealsActive&SEAL_DANTALION) unbind(SEAL_DANTALION,TRUE);
 			/* Falls into next case */
 		  case ROOM :
 		  case CORR : /* Try to make a pit */

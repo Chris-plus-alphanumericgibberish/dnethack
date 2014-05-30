@@ -882,6 +882,7 @@ dokick()
 			    pline("CRASH!  You destroy the throne.");
 			    newsym(x, y);
 			}
+			if(u.sealsActive&SEAL_DANTALION) unbind(SEAL_DANTALION,TRUE);
 			exercise(A_DEX, TRUE);
 			return(1);
 		    } else if(Luck > 0 && !rn2(3) && !(maploc->looted&T_LOOTED)) {
