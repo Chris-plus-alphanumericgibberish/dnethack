@@ -118,8 +118,19 @@ moveloop()
 				if(u.spiritAC!=oldspiritAC) flags.botl = 1;
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
+			if(u.uhs == WEAK && u.sealsActive&SEAL_AHAZU) unbind(SEAL_AHAZU,TRUE);
+#ifndef GOLDOBJ
+			if(u.sealsActive&SEAL_FAFNIR && u.ugold < u.ulevel*100) unbind(SEAL_FAFNIR,TRUE);
+#else
+			if(u.sealsActive&SEAL_FAFNIR && money_cnt(invent) < u.ulevel*100) unbind(SEAL_FAFNIR,TRUE);
+#endif
+			if(u.sealsActive&SEAL_JACK && (Is_astralevel(&u.uz) || Inhell)) unbind(SEAL_JACK,TRUE);
+			if(u.sealsActive&SEAL_ORTHOS && !(viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)) unbind(SEAL_ORTHOS,TRUE);
+			if(u.sealsActive&SEAL_NABERIUS && u.udrunken<u.ulevel) unbind(SEAL_NABERIUS,TRUE);
+			if(u.specialSealsActive&SEAL_NUMINA && u.ulevel<30) unbind(SEAL_SPECIAL|SEAL_NUMINA,TRUE);
+////////////////////////////////////////////////////////////////////////////////////////////////
 			//These artifacts may need to respond to what monsters have done.
-			///If the player no longer meets the kusanagi's requirements (ie, they lost the amulet,
+			///If the player no longer meets the kusanagi's requirements (ie, they lost the amulet)
 			///blast 'em and drop to the ground.
 			if (uwep && uwep->oartifact == ART_KUSANAGI_NO_TSURUGI){
 				if(!touch_artifact(uwep,&youmonst)){
