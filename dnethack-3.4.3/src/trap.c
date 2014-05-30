@@ -982,6 +982,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			       defsyms[trap_to_defsym(ttype)].explanation);
 		    break;		/* don't activate it after all */
 		}
+		if(u.sealsActive&SEAL_SIMURGH) unbind(SEAL_SIMURGH,TRUE);
 		fall_through(TRUE);
 		break;
 
