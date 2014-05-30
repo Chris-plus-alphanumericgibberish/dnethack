@@ -2041,8 +2041,8 @@ donull()
 				You("complete your repairs.");
 				lastreped = -13;
 			}
-		}
-	}
+		} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
+	} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
 	return(1);	/* Do nothing, but let other things happen */
 }
 
