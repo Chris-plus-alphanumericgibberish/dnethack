@@ -779,6 +779,9 @@ struct obj *obj;
 		    else if (u.umonnum == PM_UMBER_HULK && ward_at(u.ux, u.uy) != HAMSA) {
 				pline("Huh?  That doesn't look like you!");
 				make_confused(HConfusion + d(3,4),FALSE);
+		    } else if (u.sealsActive&SEAL_IRIS){
+				pline("What?  Who is that in the mirror!?");
+				unbind(SEAL_IRIS,TRUE);
 		    } else if (Hallucination)
 				You(look_str, hcolor((char *)0));
 		    else if (Sick)

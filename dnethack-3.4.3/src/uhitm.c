@@ -3198,6 +3198,10 @@ uchar aatyp;
 	else
 	    tmp = 0;
 
+	if(mon_reflects(mon,"You catch a glimpse of a stranger's reflection in")){
+		if(u.sealsActive&SEAL_IRIS) unbind(SEAL_IRIS,TRUE);
+	}
+	
 /*	These affect you even if they just died */
 
 	switch(ptr->mattk[i].adtyp) {
