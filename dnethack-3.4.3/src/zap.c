@@ -2203,6 +2203,7 @@ boolean ordinary;
 
 		case WAN_DEATH:
 		case SPE_FINGER_OF_DEATH:
+			if(u.sealsActive&SEAL_BUER) unbind(SEAL_BUER,TRUE);
 		    if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
 			pline((obj->otyp == WAN_DEATH) ?
 			  "The wand shoots an apparently harmless beam at you."
@@ -2683,11 +2684,12 @@ register struct	obj	*obj;
 
 	    if (otyp == WAN_DIGGING || otyp == SPE_DIG)
 		zap_dig(-1,-1,-1);//-1-1-1 = "use defaults"
-	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_FINGER_OF_DEATH)
+	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_FINGER_OF_DEATH){
+		if(u.sealsActive&SEAL_BUER && (otyp == SPE_FINGER_OF_DEATH || otyp == WAN_DEATH )) unbind(SEAL_BUER,TRUE);
 		buzz(otyp - SPE_MAGIC_MISSILE + 10,
 		     u.ulevel / 2 + 1,
 		     u.ux, u.uy, u.dx, u.dy,0,0);
-	    else if (otyp >= WAN_MAGIC_MISSILE && otyp <= WAN_LIGHTNING)
+	    } else if (otyp >= WAN_MAGIC_MISSILE && otyp <= WAN_LIGHTNING)
 		buzz(otyp - WAN_MAGIC_MISSILE,
 		     (otyp == WAN_MAGIC_MISSILE) ? 2 : 6,
 		     u.ux, u.uy, u.dx, u.dy,0,0);

@@ -2245,9 +2245,10 @@ int spellnum;
 	    impossible("touch of death with no mtmp");
 	    return;
 	}
-	if (yours)
+	if (yours){
+		if(u.sealsActive&SEAL_BUER) goto uspsibolt; //not your fault.
 	    pline("You're using the touch of death!");
-	else if (canseemon(mattk))
+	} else if (canseemon(mattk))
 	{
 	    char buf[BUFSZ];
 	    Sprintf(buf, "%s%s", mtmp->mtame ? "Oh no, " : "",
@@ -2502,6 +2503,7 @@ int spellnum;
 	break;
     case PSI_BOLT:
 	default:
+uspsibolt:
 	if (!mtmp || mtmp->mhp < 1) {
 	    impossible("psibolt spell with no mtmp");
 	    return;
