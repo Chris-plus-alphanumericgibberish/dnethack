@@ -3740,6 +3740,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			newsym(sx,sy);
 		    }
 		    range = 0;
+			if(type<20 && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 		    break;
 		}
 
