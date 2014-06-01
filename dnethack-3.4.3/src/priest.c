@@ -420,10 +420,50 @@ register struct monst *priest;
 	boolean coaligned = p_coaligned(priest);
 	boolean strayed = (u.ualign.record < 0);
 	char class_list[MAXOCLASSES+2];
+	int seenSeals;
 
 	if(!priest->mnotlaugh){
 	    pline("%s is laughing uncontrollably!",
 				Monnam(priest));
+		return;
+	}
+	
+	seenSeals = countFarSigns(priest);
+	EPRI(priest)->signspotted = max(seenSeals, EPRI(priest)->signspotted);
+	if(seenSeals > 1){
+		EPRI(priest)->pbanned = TRUE;
+		if(seenSeals == 4){
+			verbalize("Foul heretic!");
+			priest->mpeaceful=0;
+		} else if(seenSeals == 5){
+			coord mm;
+			verbalize("Foul heretic! The Lord's servants shall humble you!");
+			priest->mpeaceful=0;
+			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
+		} else if(seenSeals == 6){
+			coord mm;
+			verbalize("Foul heretic! The Lord's servants shall humble you!");
+			priest->mpeaceful=0;
+			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
+			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
+			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
+			/* Create swarm near down staircase (hinders return to level) */
+			mm.x = xdnstair;
+			mm.y = ydnstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near up staircase (hinders retreat from level) */
+			mm.x = xupstair;
+			mm.y = yupstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		}
+	}
+	
+	if(EPRI(priest)->pbanned || seenSeals){
+		verbalize("Your kind are anathema.");
 		return;
 	}
 	

@@ -11,6 +11,8 @@ struct epri {
 	schar shroom;		/* index in rooms */
 	coord shrpos;		/* position of shrine */
 	d_level shrlevel;	/* level (& dungeon) of shrine */
+	boolean pbanned;	/* player banned by priest */
+	char signspotted;	/* max number of signs spotted by priest */
 };
 
 #define EPRI(mon)	((struct epri *)&(mon)->mextra[0])

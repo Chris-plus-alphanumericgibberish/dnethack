@@ -617,7 +617,7 @@ u_entered_shop(enterstring)
 register char *enterstring;
 {
 
-	register int rt;
+	register int rt, seenSeals;
 	register struct monst *shkp;
 	register struct eshk *eshkp;
 	static const char no_shk[] = "This shop appears to be deserted.";
@@ -674,6 +674,46 @@ register char *enterstring;
 	}
 #endif /* CONVICT */
 
+	seenSeals = countFarSigns(shkp);
+	eshkp->signspotted = max(seenSeals, eshkp->signspotted);
+	if(seenSeals > 1){
+		eshkp->pbanned = TRUE;
+		if(seenSeals == 4){
+			verbalize("Foul heretic!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+		} else if(seenSeals == 5){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		} else if(seenSeals == 6){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near down staircase (hinders return to level) */
+			mm.x = xdnstair;
+			mm.y = ydnstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near up staircase (hinders retreat from level) */
+			mm.x = xupstair;
+			mm.y = yupstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		}
+	}
+	
 	rt = rooms[*enterstring - ROOMOFFSET].rtype;
 
 	if (ANGRY(shkp)) {
@@ -683,10 +723,9 @@ register char *enterstring;
 		      shtypes[rt - SHOPBASE].name);
 	} else if (eshkp->robbed) {
 	    pline("%s mutters imprecations against shoplifters.", shkname(shkp));
+	} else if (eshkp->pbanned || seenSeals) {
+	    verbalize("I don't sell to your kind.");
 	} else {
-#ifdef CONVICT
-        if (!eshkp->pbanned || inside_shop(u.ux, u.uy))
-#endif /* CONVICT */
 	    verbalize("%s, %s!  Welcome%s to %s %s!",
 		      Hello(shkp), plname,
 		      eshkp->visitct++ ? " again" : "",
@@ -730,11 +769,9 @@ register char *enterstring;
 			  "Leave %s outside.", y_monnam(u.usteed));
 		should_block = TRUE;
 #endif
-#ifdef CONVICT
-	    } else if (eshkp->pbanned) {
-	    verbalize("I don't sell to your kind here.");
+	    } else if (eshkp->pbanned || seenSeals) {
+	    // verbalize("I don't sell to your kind here.");
 		should_block = TRUE;
-#endif
 	    } else {
 		should_block = (Fast && (sobj_at(PICK_AXE, u.ux, u.uy) ||
 				      sobj_at(DWARVISH_MATTOCK, u.ux, u.uy)));
@@ -970,9 +1007,7 @@ register struct obj *obj, *merge;
 	else if (obj == uarmh) setnotworn(obj);
 	else if (obj == uarms) setnotworn(obj);
 	else if (obj == uarmg) setnotworn(obj);
-#ifdef TOURIST
 	else if (obj == uarmu) setnotworn(obj);
-#endif
 	else if (obj == uarmf) setnotworn(obj);
 
 	dealloc_obj(obj);
@@ -1239,7 +1274,7 @@ dopay()
 #endif
 	int pass, tmp, sk = 0, seensk = 0;
 	boolean paid = FALSE, stashed_gold = (hidden_gold() > 0L);
-
+	int seenSeals;
 	multi = 0;
 
 	/* find how many shk's there are, how many are in */
@@ -1351,21 +1386,24 @@ proceed:
 #endif
 		if(!ltmp)
 		    You("do not owe %s anything.", mon_nam(shkp));
+		else if(ESHK(shkp)->signspotted > 3) pline("Unfortunately, %s refuses payment.", mhe(shkp));
 #ifndef GOLDOBJ
-		else if(!u.ugold) {
+		else if(!u.ugold)
 #else
-		else if(!umoney) {
+		else if(!umoney)
 #endif
+		{
 		    You("%shave no money.", stashed_gold ? "seem to " : "");
 		    if(stashed_gold)
 			pline("But you have some gold stashed away.");
 		} else {
 #ifndef GOLDOBJ
 		    long ugold = u.ugold;
-		    if(ugold > ltmp) {
+		    if(ugold > ltmp)
 #else
-		    if(umoney > ltmp) {
+		    if(umoney > ltmp)
 #endif
+			{
 			You("give %s the %ld gold piece%s %s asked for.",
 			    mon_nam(shkp), ltmp, plur(ltmp), mhe(shkp));
 			pay(ltmp, shkp);
@@ -1462,7 +1500,7 @@ proceed:
 			x_monnam(shkp, ARTICLE_THE, "angry", 0, FALSE),
 			mhim(shkp));
 		    pay(1000L,shkp);
-		    if (strncmp(eshkp->customer, plname, PL_NSIZ) || rn2(3))
+		    if (strncmp(eshkp->customer, plname, PL_NSIZ) || rn2(3) || eshkp->signspotted<=3)
 			make_happy_shk(shkp, FALSE);
 		    else
 			pline("But %s is as angry as ever.", mon_nam(shkp));
@@ -1474,6 +1512,49 @@ proceed:
 		if(resident) setpaid(resident);
 		return(0);
 	}        
+	seenSeals = countFarSigns(shkp);
+	eshkp->signspotted = max(seenSeals, eshkp->signspotted);
+	if(seenSeals > 1){
+		eshkp->pbanned = TRUE;
+		if(seenSeals == 4){
+			verbalize("Foul heretic!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+		} else if(seenSeals == 5){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		} else if(seenSeals == 6){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near down staircase (hinders return to level) */
+			mm.x = xdnstair;
+			mm.y = ydnstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near up staircase (hinders retreat from level) */
+			mm.x = xupstair;
+			mm.y = yupstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		}
+	}
+	if(eshkp->pbanned || seenSeals){
+		pline("I don't sell to your kind!");
+		return(0);
+	}
 	/* pay debt, if any, first */
 	if(eshkp->debit) {
 		long dtmp = eshkp->debit;
@@ -1638,7 +1719,7 @@ shk_other_services()
 	winid tmpwin;
 	anything any;
 	menu_item *selected;
-	int n;
+	int n, seenSeals;
 
 	/* Init your name */
 	if (!is_human(youmonst.data))
@@ -1648,6 +1729,50 @@ shk_other_services()
 
 	/* Init the shopkeeper */
 	shkp = shop_keeper(*u.ushops);
+	
+	seenSeals = countCloseSigns(shkp);
+	ESHK(shkp)->signspotted = max(seenSeals, ESHK(shkp)->signspotted);
+	if(seenSeals > 1){
+		ESHK(shkp)->pbanned = TRUE;
+		if(seenSeals == 4){
+			verbalize("Foul heretic!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+		} else if(seenSeals == 5){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		} else if(seenSeals == 6){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near down staircase (hinders return to level) */
+			mm.x = xdnstair;
+			mm.y = ydnstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near up staircase (hinders retreat from level) */
+			mm.x = xupstair;
+			mm.y = yupstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		}
+	}
+	if(ESHK(shkp)->pbanned || seenSeals){
+		pline("I don't do business for your kind.");
+		return;
+	}
 	
 	if(uclockwork && yn("Shall I wind your mainspring?") == 'y'){
 		struct obj *key;
@@ -1931,9 +2056,8 @@ int croaked;	/* -1: escaped dungeon; 0: quit; 1: died */
 		else {
 		    numsk++;
 		    taken |= inherits(mtmp, numsk, croaked);
-#ifdef CONVICT
 		    ESHK(mtmp)->pbanned = FALSE; /* Un-ban for bones levels */
-#endif /* CONVICT */
+		    ESHK(mtmp)->signspotted = 0; /* seen no signs */
 		}
 	    }
 	}
@@ -2207,12 +2331,10 @@ register struct monst *shkp;	/* if angry, impose a surcharge */
 		} else if (!(obj->o_id % 4)) /* arbitrarily impose surcharge */
 		    tmp += tmp / 3L;
 	}
-#ifdef TOURIST
 	if ((Role_if(PM_TOURIST) && u.ulevel < (MAXULEV/2))
 	    || (uarmu && !uarm && !uarmc))	/* touristy shirt visible */
 		tmp += tmp / 3L;
 	else
-#endif
 	if (uarmh && uarmh->otyp == DUNCE_CAP)
 		tmp += tmp / 3L;
 
@@ -2333,12 +2455,10 @@ register struct monst *shkp;
 {
 	long tmp = getprice(obj, TRUE) * obj->quan;
 
-#ifdef TOURIST
 	if ((Role_if(PM_TOURIST) && u.ulevel < (MAXULEV/2))
-	    || (uarmu && !uarm && !uarmc))	/* touristy shirt visible */
+	    || (uarmu && uarmu->otyp == HAWAIIAN_SHIRT && !uarm && !uarmc))	/* touristy shirt visible */
 		tmp /= 3L;
 	else
-#endif
 	if (uarmh && uarmh->otyp == DUNCE_CAP)
 		tmp /= 3L;
 	else
@@ -3590,9 +3710,7 @@ register struct monst *shkp;
 		    uondoor = (u.ux == eshkp->shd.x && u.uy == eshkp->shd.y);
 		    if(uondoor) {
 			badinv = (carrying(PICK_AXE) || carrying(DWARVISH_MATTOCK) ||
-#ifdef CONVICT
             eshkp->pbanned ||
-#endif /* CONVICT */
 				  (Fast && (sobj_at(PICK_AXE, u.ux, u.uy) ||
 				  sobj_at(DWARVISH_MATTOCK, u.ux, u.uy))));
 			if(satdoor && badinv)
@@ -4101,8 +4219,12 @@ struct monst *shkp;
 		pline("%s says that business is good.", shkname(shkp));
 	else if (strcmp(shkname(shkp), "Izchak") == 0)
 		pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))],shkname(shkp));
-	else
+	else{
 		pline("%s talks about the problem of shoplifters.",shkname(shkp));
+	}
+#ifdef OTHER_SERVICES
+	shk_other_services();
+#endif                
 }
 
 STATIC_OVL void
