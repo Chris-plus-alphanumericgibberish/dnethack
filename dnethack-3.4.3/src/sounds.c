@@ -785,7 +785,7 @@ asGuardian:
 				pline(Never_mind);
 				break;
 			}
-			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*100, u.ulevel*10);
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*10 + 100, u.ulevel);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
 				pline(Never_mind);
@@ -857,7 +857,7 @@ asGuardian:
 				pline(Never_mind);
 				break;
 			}
-			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*111, u.ulevel*11);
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*11 +111, u.ulevel*1.1);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
 				pline(Never_mind);
@@ -929,7 +929,7 @@ asGuardian:
 					pline(Never_mind);
 					break;
 				}
-				if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20, u.ulevel*15);
+				if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20, u.ulevel*5);
 				else turns = ask_turns(mtmp, 0, 0);
 				if(!turns){
 					pline(Never_mind);
@@ -960,7 +960,7 @@ asGuardian:
 				pline(Never_mind);
 				break;
 			}
-			if(!mtmp->mtame) turns = ask_turns(mtmp, 0, u.ulevel*5);
+			if(!mtmp->mtame) turns = ask_turns(mtmp, 0, u.ulevel*.5);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
 				pline(Never_mind);
@@ -1012,7 +1012,7 @@ asGuardian:
 				pline(Never_mind);
 				break;
 			}
-			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*200, 0);
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20+200, 0);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
 				pline(Never_mind);

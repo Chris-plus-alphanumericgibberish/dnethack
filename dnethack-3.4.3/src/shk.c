@@ -1787,7 +1787,7 @@ shk_other_services()
 			pline(Never_mind);
 			return;
 		}
-		turns = ask_turns(shkp, 0, u.ulevel*10);
+		turns = ask_turns(shkp, 0, 30);
 		if(!turns){
 			pline(Never_mind);
 			return;

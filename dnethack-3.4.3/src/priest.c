@@ -561,7 +561,7 @@ register struct monst *priest;
 			pline(Never_mind);
 			return;
 		}
-		turns = ask_turns(priest, u.ulevel*100, 0);
+		turns = ask_turns(priest, u.ulevel*10+100, 0);
 		if(!turns){
 			pline(Never_mind);
 			return;
