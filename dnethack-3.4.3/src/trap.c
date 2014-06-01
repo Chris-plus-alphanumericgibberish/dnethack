@@ -3027,7 +3027,7 @@ drown()
 
 	if (u.umonnum == PM_GREMLIN && rn2(3))
 	    (void)split_mon(&youmonst, (struct monst *)0);
-	else if (u.umonnum == PM_IRON_GOLEM) {
+	else if (u.umonnum == PM_IRON_GOLEM && !(u.sealsActive&SEAL_EDEN)) {
 	    You("rust!");
 	    i = d(2,6);
 	    if (u.mhmax > i) u.mhmax -= i;

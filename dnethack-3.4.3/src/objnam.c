@@ -750,6 +750,9 @@ plus:
 		goto plus;
 	case TOOL_CLASS:
 		/* weptools already get this done when we go to the +n code */
+		if(Role_if(PM_EXILE) && obj->otyp==BELL_OF_OPENING){
+			Strcat(prefix, "warped and cracked ");
+		}
 		if (!is_weptool(obj))
 		    add_erosion_words(obj, prefix);
 		if(obj->owornmask & (W_TOOL /* blindfold */

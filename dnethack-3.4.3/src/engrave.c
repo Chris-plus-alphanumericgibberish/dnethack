@@ -4119,13 +4119,17 @@ doseal()
 	    }
 	}
 	else if (oep && oep->ward_id){
+			oep->ward_id = ward;
+			oep->ward_type = type;
 		oep->complete_wards = 1;
+			oep->engr_time = moves;
 	}
 	else if(oep){
 		if(!Hallucination || !rn2(4)){
 			oep->ward_id = ward;
 			oep->ward_type = type;
 			oep->complete_wards = 1;
+			oep->engr_time = moves;
 		}
 		else{
 			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
@@ -4506,6 +4510,7 @@ int fd, mode;
 	    if (((ep->engr_lth && ep->engr_txt[0]) || ep->ward_id) && perform_bwrite(mode)) {
 			bwrite(fd, (genericptr_t)&(ep->engr_lth), sizeof(ep->engr_lth));
 			bwrite(fd, (genericptr_t)ep, sizeof(struct engr) + ep->engr_lth);
+			bwrite(fd, (genericptr_t)&(ep->engr_time), sizeof(long));
 	    }
 	    if (release_data(mode))
 			dealloc_engr(ep);
@@ -4536,7 +4541,8 @@ int fd;
 		/* mark as finished for bones levels -- no problem for
 		 * normal levels as the player must have finished engraving
 		 * to be able to move again */
-		ep->engr_time = moves;
+		// ep->engr_time = moves;
+		mread(fd, (genericptr_t) &(ep->engr_time), sizeof(long));
 	}
 }
 

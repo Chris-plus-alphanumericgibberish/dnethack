@@ -276,11 +276,14 @@ struct obj *book2;
 		if(!otmp->cursed) arti1_primed = TRUE;
 		else arti_cursed = TRUE;
 	    }
-	    if(otmp->otyp == BELL_OF_OPENING &&
+	    if(!Role_if(PM_EXILE) && otmp->otyp == BELL_OF_OPENING &&
 	       (moves - otmp->age) < 5L) { /* you rang it recently */
 		if(!otmp->cursed) arti2_primed = TRUE;
 		else arti_cursed = TRUE;
 	    }
+	}
+	if(u.voidChime && u.sealsActive&SEAL_OTIAX){
+		arti2_primed = TRUE;
 	}
 	if(!arti2_primed && !arti_cursed && uwep && uwep->oartifact == ART_SILVER_KEY){
 	    pline("As you read from the book, you unconciously move the silver key through a complex unlocking gesture.");
@@ -756,7 +759,7 @@ static const int spiritPOwner[NUMBER_POWERS] = {
 	SEAL_CHUPOCLOPS,
 	SEAL_DANTALION, SEAL_DANTALION,
 	SEAL_SHIRO,
-	SEAL_ECHIDNA,
+	SEAL_ECHIDNA, SEAL_ECHIDNA,
 	SEAL_EDEN, SEAL_EDEN, SEAL_EDEN,
 	SEAL_ENKI,
 	SEAL_EURYNOME, SEAL_EURYNOME,
@@ -788,20 +791,20 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Jester's Mirth", "Thief's Instincts",
 	"Astaroth's Assembly", "Astaroth's Shards",
 	"Icy Glare", "Balam's Anointing",
-	"Sow Discord", "Blood Mercenary",
+	"Blood Mercenary", "Sow Discord",
 	"Gift of Healing", "Gift of Health",
 	"Throw webbing",
-	"Dread", "Thought Travel",
+	"Thought Travel", "Dread of Dantalion",
 	"Earth Swallow",
-	"Echidna's Venom",
-	"Recall to Eden", "Purifying Blast", "Stargate",
+	"Echidna's Venom", "Suckle Monster",
+	"Purifying Blast", "Recall to Eden", "Stargate",
 	"Walk among Thresholds",
-	"Shape the Wind", "Vengance",
-	"Barage", "Thorns and Stones",
+	"Vengance", "Shape the Wind",
+	"Thorns and Stones", "Barage",
 	"Breath Poison", "Ruinous Strike",
 	"Raven's Tallons",
 	"Horrid Wilting", "Turn Humans and Animals",
-	"Hellfire", "Refill Lantern",
+	"Refill Lantern", "Hellfire", 
 	"Call Murder",
 	"Root Shout", "Pull Wires",
 	"Disgusted Gaze",
@@ -1011,51 +1014,66 @@ sightwedge
 int dx,dy,x1,y1,x2,y2;
 {
 	boolean gx=FALSE, gy=FALSE;
-	if(dy){
-		if(dx < 0){
-			if(x1 < x2) gx = TRUE;
-		} else if(dx > 0){
-			if(x1 > x2) gx = TRUE;
-		} else {
-			if(dy > 0 && y2 > y1){
-				int deltax = x2 - x1, deltay = y2 - y1;
-				if(deltax < deltay && deltax > -1*deltay){
-					gx = TRUE;
-					gy = TRUE;
-				}
-			}
-			else if(dy < 0 && y2 < y1){
-				int deltax = x2 - x1, deltay = y2 - y1;
-				if(deltax > deltay && deltax < -1*deltay){
-					gx = TRUE;
-					gy = TRUE;
-				}
-			}
-		}
+	int deltax = x2-x1, deltay = y2-y1;
+	if(dy == 0){
+		if(dx > 0) return deltay<deltax && -deltay<deltax;
+		if(dx < 0) return deltay>deltax && -deltay>deltax;
+		if(dx == 0)return FALSE;
 	}
-	if(dx){
-		if(dy < 0){
-			if(y1 < y2) gy = TRUE;
-		} else if(dy > 0){
-			if(y1 > y2) gy = TRUE;
-		} else {
-			if(dx > 0 && x2 > x1){
-				int deltax = x2 - x1, deltay = y2 - y1;
-				if(deltay < deltax && deltay < -1*deltax){
-					gx = TRUE;
-					gy = TRUE;
-				}
-			}
-			else if(dx < 0 && x2 < x1){
-				int deltax = x2 - x1, deltay = y2 - y1;
-				if(deltay > deltax && deltay > -1*deltax){
-					gx = TRUE;
-					gy = TRUE;
-				}
-			}
-		}
+	if(dx == 0){
+		if(dy > 0) return deltay>deltax && -deltay<deltax;
+		if(dy < 0) return deltay<deltax && -deltay>deltax;
+		if(dy == 0)return FALSE;
 	}
-	return gx && gy;
+	if(dy > 0 && dx > 0) return deltax>0 && deltay>0;
+	if(dy > 0 && dx < 0) return deltax<0 && deltay>0;
+	if(dy < 0 && dx < 0) return deltax<0 && deltay<0;
+	if(dy < 0 && dx > 0) return deltax>0 && deltay<0;
+	// // if(dy){
+		// // if(dx < 0){
+			// // if(x1 < x2) gx = TRUE;
+		// // } else if(dx > 0){
+			// // if(x1 > x2) gx = TRUE;
+		// // } else {
+			// // if(dy > 0 && y2 > y1){
+				// // int deltax = x2 - x1, deltay = y2 - y1;
+				// // if(deltax < deltay && deltax > -1*deltay){
+					// // gx = TRUE;
+					// // gy = TRUE;
+				// // }
+			// // }
+			// // else if(dy < 0 && y2 < y1){
+				// // int deltax = x2 - x1, deltay = y2 - y1;
+				// // if(deltax > deltay && deltax < -1*deltay){
+					// // gx = TRUE;
+					// // gy = TRUE;
+				// // }
+			// // }
+		// // }
+	// // }
+	// // if(dx){
+		// // if(dy < 0){
+			// // if(y1 < y2) gy = TRUE;
+		// // } else if(dy > 0){
+			// // if(y1 > y2) gy = TRUE;
+		// // } else {
+			// // if(dx > 0 && x2 > x1){
+				// // int deltax = x2 - x1, deltay = y2 - y1;
+				// // if(deltay < deltax && deltay < -1*deltax){
+					// // gx = TRUE;
+					// // gy = TRUE;
+				// // }
+			// // }
+			// // else if(dx < 0 && x2 < x1){
+				// // int deltax = x2 - x1, deltay = y2 - y1;
+				// // if(deltay > deltax && deltay > -1*deltax){
+					// // gx = TRUE;
+					// // gy = TRUE;
+				// // }
+			// // }
+		// // }
+	// // }
+	// return gx && gy;
 }
 
 void
@@ -1169,12 +1187,20 @@ spiriteffects(power, atme)
 			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon) break;
+				if(!mon){
+					pline("There is no target there.");
+					break;
+				}
 				if(mon->uhurtm && mon->data->geno & G_GENO){
 					Your("shadow flows under %s, swallowing %s up!",mon_nam(mon),mhim(mon));
 					mongone(mon);
+				} else {
+					Your("shadow flows under %s, but nothing happens.",mon_nam(mon));
 				}
-			} else break;
+			} else{
+				pline("There is no target there.");
+				break;
+				}
 		}break;
 		case PWR_FIRE_BREATH:
 			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
@@ -1196,7 +1222,10 @@ spiriteffects(power, atme)
 					mon->mhp -= dmg;
 					if (mon->mhp <= 0){
 						xkilled(mon, 1);
-					} else u_teleport_mon(mon, TRUE);
+					} else{
+						You("hit %s",mon_nam(mon));
+						u_teleport_mon(mon, TRUE);
+					}
 				}
 			}
 			while(range-- > 0){
@@ -1221,6 +1250,9 @@ spiriteffects(power, atme)
 							if (mon->mhp <= 0){
 								xkilled(mon, 1);
 								continue;
+							} else{
+								You("hit %s",mon_nam(mon));
+								u_teleport_mon(mon, TRUE);
 							}
 							u_teleport_mon(mon, TRUE);
 						}
@@ -1236,13 +1268,20 @@ spiriteffects(power, atme)
 			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon) break;
+				if(!mon){
+					pline("There is no target there.");
+					break;
+				}
 				mon->mnotlaugh = 0;
 				mon->mlaughing = d(1,4);
 				pline("%s collapses in a fit of laughter.", Monnam(mon));
-			} else break;
+			} else{
+				pline("There is no target there.");
+				break;
+			}
 		}break;
 		case PWR_THIEF_S_INSTINCTS:
+			You("exercise your instincts.");
 			findit();
 		break;
 		case PWR_ASTAROTH_S_ASSEMBLY:{
@@ -1272,6 +1311,7 @@ spiriteffects(power, atme)
 						break;//break loop
 					}
 				}
+				pline("Leftover electrical potential prodeces a field around you.");
 				u.uspellprot = max(dsize - (range+1),u.uspellprot);
 				u.usptime = 5;
 				u.uspmtime = 5;
@@ -1321,7 +1361,10 @@ spiriteffects(power, atme)
 				return 0;
 			}
 			if (!getdir((char *)0) && (u.dz || u.dy)) return(0);
-			if(u.uswallow) break;
+			if(u.uswallow){
+				You("can't see well enough in here!");
+				break;
+			}
 			while(--range >= 0){
 				sx += u.dx;
 				sy += u.dy;
@@ -1363,7 +1406,7 @@ spiriteffects(power, atme)
 								mon->mhp = 0;
 								xkilled(mon, 1);
 								break;
-							}
+							} else You("glare at %s.", mon_nam(mon));
 						}
 					}
 				}
@@ -1371,7 +1414,8 @@ spiriteffects(power, atme)
 			for(sx = 0; sx < COLNO; sx++){
 				for(sy = 0; sy < ROWNO; sy++){
 					if(levl[sx][sy].typ == POOL || levl[sx][sy].typ == MOAT){
-						if(dist2(u.ux,u.uy,mon->mx,mon->my)<=range && cansee(sx,sy)){
+						if(dist2(u.ux,u.uy,sx,sy)<=range && cansee(sx,sy)){
+							if(sightwedge(u.dx,u.dy,u.ux,u.uy,sx,sy)){
 							if(levl[sx][sy].typ == POOL){
 								levl[sx][sy].icedpool = ICED_POOL;
 							} else {
@@ -1383,6 +1427,8 @@ spiriteffects(power, atme)
 					}
 				}
 			}
+			}
+			You("feel your eyes freeze and pop!");
 			make_blinded(Blinded+5L,FALSE);
 		}break;
 		case PWR_BALAM_S_ANOINTING:{
@@ -1422,7 +1468,7 @@ spiriteffects(power, atme)
 						mon->mhp = 0;
 						xkilled(mon, 1);
 						break;
-					}
+					} else You("hit %s.", mon_nam(mon));
 				}
 			} else break;
 		}break;
@@ -1434,7 +1480,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) && !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
 				enoughGold = FALSE;
 				reveal_invis = TRUE;
@@ -1454,9 +1500,10 @@ spiriteffects(power, atme)
 					if (mon->mhp <= 0){
 						xkilled(mon, 1);
 						break;
+					} else You("hit %s", mon_nam(mon));
+				} else You("don't have enough gold on hand.");
 					}
-				}
-			}
+			You("fire a blast of gold and blood.");
 			while(range-- > 0){
 				sx += u.dx;
 				sy += u.dy;
@@ -1488,13 +1535,14 @@ spiriteffects(power, atme)
 							if (mon->mhp <= 0){
 								xkilled(mon, 1);
 								continue;
-							}
-						}
+							} else You("hit %s", mon_nam(mon));
+						} You("don't have enough gold on hand.");
 					}
 				} else break;
 			}
 		}break;
 		case PWR_SOW_DISCORD:
+			You("sow discord amongst your enemies");
 			u.sowdisc = dsize;
 		break;
 		case PWR_GIFT_OF_HEALING:{
@@ -1502,10 +1550,12 @@ spiriteffects(power, atme)
 			int dmg;
 			if (!getdir((char *)0)  && !(u.dz)) return(0);
 			if(!(u.dx || u.dy)){
+				You("heal yourself.");
 				healup(d(5,dsize), 0, FALSE, FALSE);
 			} else if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
+				You("heal %s.", mon_nam(mon));
 				if (nonliving(mon->data)) {	/* match effect on player */
 					shieldeff(mon->mx, mon->my);
 				} else {
@@ -1522,6 +1572,7 @@ spiriteffects(power, atme)
 			if(!(u.dx || u.dy)){
 				int idx, recover, val_limit, aprobs = 0, fixpoint, curpoint;
 				
+				You("recover.");
 				if (Sick) make_sick(0L, (char *) 0, TRUE, SICK_ALL);
 				if (Blinded > (long)u.ucreamed) make_blinded((long)u.ucreamed, TRUE);
 				if (HHallucination) (void) make_hallucinated(0L, TRUE, 0L);
@@ -1560,6 +1611,7 @@ spiriteffects(power, atme)
 				if (nonliving(mon->data)) {	/* match effect on player */
 					shieldeff(mon->mx, mon->my);
 				} else {
+					pline("%s recovers.", Monnam(mon));
 					if(mon->permspeed == MSLOW) mon->permspeed = 0;
 					mon->mcan = 0;
 					mon->mcrazed = 0; 
@@ -1578,6 +1630,7 @@ spiriteffects(power, atme)
 		case PWR_THROW_WEBBING:
 			if (getdir((char *)0) && (u.dx || u.dy)){
 				struct obj *otmp;
+				You("throw a ball of webbing.");
 				otmp = mksobj(BALL_OF_WEBBING, TRUE, FALSE);
 				otmp->blessed = 0;
 				otmp->cursed = 0;
@@ -1604,6 +1657,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_DREAD_OF_DANTALION:{
 			register struct monst *mtmp;
+			You("evoke dread!");
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 				if (DEADMONSTER(mtmp)) continue;
 				if(cansee(mtmp->mx,mtmp->my) && !(mtmp->data->geno & G_UNIQ)) {
@@ -1614,20 +1668,23 @@ spiriteffects(power, atme)
 		case PWR_EARTH_SWALLOW:{
 			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				struct obj *otmp;
+				You("ask the earth to open.");
 				digfarhole(TRUE, u.ux+u.dx, u.uy+u.dy);
-				mksobj_at(BOULDER, u.ux+u.dx, u.uy+u.dy, TRUE, FALSE);
+				otmp = mksobj(BOULDER, TRUE, FALSE);
+				m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy, 1, otmp,TRUE);
+				nomul(0, NULL);
 			} else break;
 		}break;
 		case PWR_ECHIDNA_S_VENOM:{
 			struct obj *otmp;
 			if (!getdir((char *)0)) return(0);
-			otmp = mksobj(u.umonnum==PM_COBRA ? BLINDING_VENOM 
-											  : (u.umonnum==PM_SPROW || u.umonnum==PM_DRIDER) ? BALL_OF_WEBBING 
-											  : ACID_VENOM,
-					TRUE, FALSE);
+			otmp = mksobj(ACID_VENOM, TRUE, FALSE);
 			otmp->spe = 1; /* to indicate it's yours */
 			otmp->ovar1 = d(5,dsize); /* save the damge this should do */
-			throwit(otmp, 0L, FALSE);
+			You("spit venom.");
+			m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy, 10, otmp,TRUE);
+			// throwit(otmp, 0L, FALSE);
 		}break;
 		case PWR_SUCKLE_MONSTER:{
 			struct monst *mon;
@@ -1636,31 +1693,14 @@ spiriteffects(power, atme)
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
+				You("try to suckle a monster on your blood!");
+				losehp((int)(mon->m_lev)+1, "suckling a monster on your blood", KILLED_BY);
 				if(rn2(u.ulevel) < mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
 					mon->mpeaceful = 1;
 					mon->mhp = mon->mhpmax;
 				} else {
 					if (mon->isshk) make_happy_shk(mon, FALSE);
 					else (void) tamedog(mon, (struct obj *) 0);
-				}
-				losehp(mon->m_lev, "suckling a monster on your blood", KILLED_BY);
-			} else break;
-		}break;
-		case PWR_STARGATE:
-			level_tele();
-		break;
-		case PWR_RECALL_TO_EDEN:{
-			struct monst *mon;
-			int perc;
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
-			if(isok(u.ux+u.dx, u.uy+u.dy)) {
-				mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon || mon->data->geno & G_UNIQ) break;
-				if(Upolyd) perc = (u.mh - mon->mhp)*100/u.mh;
-				else perc = (u.uhp - mon->mhp)*100/u.uhp;
-				
-				if(perc>0 && rnd(100) < perc){
-					mongone(mon);
 				}
 			} else break;
 		}break;
@@ -1673,6 +1713,25 @@ spiriteffects(power, atme)
 				afternmv = purifying_blast;
 			}
 		}break;
+		case PWR_RECALL_TO_EDEN:{
+			struct monst *mon;
+			int perc;
+			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon || mon->data->geno & G_UNIQ) break;
+				You("attempt to recall %s to eden.", mon_nam(mon));
+				if(Upolyd) perc = (u.mh - mon->mhp)*100/u.mh;
+				else perc = (u.uhp - mon->mhp)*100/u.uhp;
+				
+				if(perc>0 && rnd(100) < perc){
+					mongone(mon);
+				}
+			} else break;
+		}break;
+		case PWR_STARGATE:
+			level_tele();
+		break;
 		case PWR_WALKER_OF_THRESHOLDS:{
 			coord cc;
 			int cancelled;
@@ -1689,15 +1748,16 @@ spiriteffects(power, atme)
 		case PWR_VENGANCE:{
 			struct monst *mon;
 			int i,j;
+			You("lash out in vengance");
 			for(i=-1;i<=1;i++){
 			  for(j=-1;j<=1;j++){
-				if((i!=0 || j!=0) && isok(u.ux+i, u.uy+j) && (mon = m_at(u.ux+u.dx, u.uy+u.dy)) && mon->mhurtu){
+				if((i!=0 || j!=0) && isok(u.ux+i, u.uy+j) && (mon = m_at(u.ux+i, u.uy+j)) && mon->mhurtu){
 					mon->mhp -= d(5,dsize);
 					setmangry(mon);
 					if (mon->mhp <= 0){
 						mon->mhp = 0;
 						xkilled(mon, 1);
-					}
+					} else You("hit %s",mon_nam(mon));
 				}
 			  }
 			}
@@ -1706,6 +1766,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			struct permonst *pm;
 			int i;
+			You("dance and shape the wind.");
 			for(i=dsize; i > 0; i--){
 				do pm = &mons[rn2(PM_LONG_WORM_TAIL)];
 				while( (pm->geno & (G_UNIQ|G_NOGEN)) );
@@ -1717,6 +1778,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_THORNS_AND_STONES:{
 			struct obj *otmp;
+			You("pull out some of the thorns and stones that torment Eve.");
 			if(uwep){
 				switch(uwep->otyp){
 					case BOW:
@@ -1759,6 +1821,7 @@ spiriteffects(power, atme)
 						   aobjnam(otmp, "fall"), (const char *)0);
 		}break;
 		case PWR_BARAGE:
+			You("get ready to fire a barrage.");
 			barage = TRUE; //state variable
 			if(uquiver) throw_obj(uquiver, 0);
 			barage = FALSE;
@@ -1788,6 +1851,7 @@ spiriteffects(power, atme)
 			}
 			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				You("deliver a ruinous strike.");
 				zap_dig(-1,-1,1);
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if ((ttmp = t_at(u.ux+u.dx, u.uy+u.dy)) && ttmp->ttyp != PIT && ttmp->ttyp != HOLE && ttmp->ttyp != MAGIC_PORTAL) {
@@ -1808,12 +1872,12 @@ spiriteffects(power, atme)
 				if(mon && is_golem(mon->data)){
 					mon->mhp = 0;
 					xkilled(mon, 1);
-				} else if(nonliving(mon->data)){
+				} else if(mon && nonliving(mon->data)){
 					mon->mhp -= d(rnd(5),dsize);
 					if(mon->mhp <= 0){
 						mon->mhp = 0;
 						xkilled(mon,1);
-					}
+					} else You("hit %s.", mon_nam(mon));
 				}
 			} else break;
 		}break;
@@ -1825,7 +1889,8 @@ spiriteffects(power, atme)
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
 				dmg = d(5,dsize);
-				if(haseyes(mon->data)){
+				if(haseyes(mon->data) && mon->mcansee){
+					You("claw at %s's eyes.", mon_nam(mon));
 					if(mon->mcansee) dmg += d(5,dsize);
 				mon->mcansee = 0;
 				mon->mblinded = 0;
@@ -1835,7 +1900,7 @@ spiriteffects(power, atme)
 					mon->mhp = 0;
 					xkilled(mon, 1);
 					break;
-				}
+				} else if(!haseyes(mon->data)) You("hit %s.", mon_nam(mon));
 			} else break;
 		}break;
 		case PWR_HORRID_WILTING:{
@@ -1854,12 +1919,16 @@ spiriteffects(power, atme)
 					dmg = mon->mhp;
 					mon->mhp = 0;
 					xkilled(mon, 1);
-				} else mon->mhp -= dmg;
+				} else{
+					mon->mhp -= dmg;
+					You("hit %s.", mon_nam(mon));
+				}
 				healup(dmg, 0, FALSE, FALSE);
 			} else break;
 		}break;
 		case PWR_TURN_ANIMALS_AND_HUMANOIDS:{
 			register struct monst *mtmp;
+			You("try to turn away or slay humans and humanoids.");
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 				if (DEADMONSTER(mtmp)) continue;
 				if(cansee(mtmp->mx,mtmp->my) && (is_animal(mtmp->data) || 
@@ -1875,9 +1944,14 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_REFILL_LANTERN:
-			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact){
+			if(uwep && (uwep->otyp == OIL_LAMP) && !uwep->oartifact){
 				uwep->age += d(5,dsize) * 10;
 				if(uwep->age > 1500) uwep->age = 1500;
+				You("refill the %s",xname(uwep));
+				if(uwep->lamplit){
+					end_burn(uwep, TRUE);
+					begin_burn(uwep, FALSE);
+				}
 			} else return 0;
 		break;
 		case PWR_HELLFIRE:
@@ -1886,7 +1960,13 @@ spiriteffects(power, atme)
 					if(uwep->age < 500) uwep->age = 0;
 					else uwep->age -= 500;
 					explode(u.dx,u.dy,1/*Fire*/, d(5,dsize), WAND_CLASS, EXPL_FIERY);
+					end_burn(uwep, TRUE);
+					begin_burn(uwep, FALSE);
 				} else return 0;
+			} else{
+				if(uwep && uwep->otyp == BRASS_LANTERN) pline("You need an oil lamp. These moddern lamps just aren't the same!");
+				else You("You must wield a burning lamp!");
+				return 0;
 			}
 		break;
 		case PWR_CALL_MURDER:{
@@ -2793,6 +2873,11 @@ int *power_no;
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
 	any.a_void = 0;		/* zero out all bits */
+	
+	if(!u.sealsActive && !u.specialSealsActive){
+		You("don't have any spirits bound.");
+		return 0;
+	}
 	
 	Sprintf(buf, "Select spirit power:");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);

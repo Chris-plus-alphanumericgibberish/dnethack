@@ -119,7 +119,7 @@
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES)
 		/* ...means blind because of a cover */
 #define Blind	((Blinded || Blindfolded || !haseyes(youmonst.data)) && \
-		 !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp == CRYSTAL_PLATE_MAIL)) && \
+		 !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp != CRYSTAL_PLATE_MAIL)) && \
 		 !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD))
 		/* ...the Eyes operate even when you really are blind
 		    or don't have any eyes */
@@ -208,12 +208,17 @@
 #define HInvis			u.uprops[INVIS].intrinsic
 #define EInvis			u.uprops[INVIS].extrinsic
 #define BInvis			u.uprops[INVIS].blocked
-#define Invis			((HInvis || EInvis || Underwater || \
+#define NoBInvis		(HInvis || EInvis || Underwater || \
 						 pm_invisible(youmonst.data) || \
 						 (ward_at(u.ux,u.uy) == HAMSA \
 							&& num_wards_at(u.ux, u.uy) == 6 ) || \
-						  u.sealsActive&SEAL_SHIRO) && !BInvis)
-#define Invisible		(Invis && !See_invisible)
+						  u.sealsActive&SEAL_SHIRO)
+#define Invis			(((HInvis || EInvis || \
+						 pm_invisible(youmonst.data) || \
+						 (ward_at(u.ux,u.uy) == HAMSA \
+							&& num_wards_at(u.ux, u.uy) == 6 ) || \
+						  u.sealsActive&SEAL_SHIRO) && !BInvis) || Underwater)
+#define Invisible		(Invis && !See_invisible && !Underwater)
 		/* Note: invisibility also hides inventory and steed */
 
 #define HDisplaced		u.uprops[DISPLACED].intrinsic

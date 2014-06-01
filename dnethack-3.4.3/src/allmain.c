@@ -92,7 +92,7 @@ moveloop()
 			if(u.sealsActive){
 				if(u.sealsActive&SEAL_MALPHAS){
 					for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
-						if(mtmp->data == &mons[PM_CROW] && mtmp->mtame && !um_dist(u.ux,u.uy,1)){
+						if(mtmp->data == &mons[PM_CROW] && mtmp->mtame && !um_dist(mtmp->mx,mtmp->my,1)){
 							u.spiritAC++;
 							u.spiritAttk++;
 						}

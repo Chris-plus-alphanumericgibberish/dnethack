@@ -793,6 +793,7 @@ struct obj *obj;
 				ACURR(A_CHA) > 14 ?
 				(poly_gender()==1 ? "beautiful" : "handsome") :
 				"ugly");
+			signs_mirror();
 		} else {
 			You_cant("see your %s %s.",
 				ACURR(A_CHA) > 14 ?
@@ -913,6 +914,11 @@ struct obj **optr;
 
 	You("ring %s.", the(xname(obj)));
 
+	if(Role_if(PM_EXILE) && obj->otyp == BELL_OF_OPENING){
+		pline("It makes a rather sad clonk.");
+		return;
+	}
+	
 	if (Underwater || (u.uswallow && ordinary)) {
 #ifdef	AMIGA
 	    amii_speaker( obj, "AhDhGqEqDhEhAqDqFhGw", AMII_MUFFLED_VOLUME );

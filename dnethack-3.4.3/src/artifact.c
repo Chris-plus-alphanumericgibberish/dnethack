@@ -1081,7 +1081,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	
 	buf[0] = '\0';
 	if(u.voidChime){
-		pline("The ringing blade hits %s", hittee);
+		pline("The ringing blade hits %s.", hittee);
 	}
 	if (pen->ovar1&SEAL_AMON) {
 	    if (vis){ 
@@ -1123,10 +1123,10 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 	}
 	
-	if(vis) pline("The %s%s blade hits %s", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
+	if(vis && (and || (pen->ovar1&SEAL_FAFNIR))) pline("The %s%s blade hits %s.", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
 	
 	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
-		if(vis) pline("The blade's shadow catches on %s", hittee);
+		if(vis) pline("The blade's shadow catches on %s.", hittee);
 		mdef->movement -= 3;
 	}
 	if(pen->ovar1&SEAL_BUER){
@@ -3673,7 +3673,7 @@ arti_invoke(obj)
 			// update_inventory();
 			// if(obj->ovar1 && yn("Contact a known spirit?") == 'y'){
 				// u.uconduct.literate++;
-				// lostname = donecromenu("Choose which incantation to contact", obj);
+				// lostname = dolostmenu("Choose which spirit to contact", obj);
 				// delay = -25;
 				// artiptr = obj;
 				// set_occupation(read_lost, "studying", 0);
@@ -4544,26 +4544,16 @@ read_necro(VOID_ARGS)
 				}
 				u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
 			break;
-			case SELECT_SPIRITS1:
-				// if( (u.wardsknown & WARD_CTHUGHA) && (u.wardsknown & WARD_ITHAQUA) && (u.wardsknown & WARD_KARAKAL)){
-					// You("page through the section on the Lords of the Elements");
-				// }else if((u.wardsknown & WARD_CTHUGHA) || (u.wardsknown & WARD_ITHAQUA) || (u.wardsknown & WARD_KARAKAL)){
-					// You("refresh your memory about the Lords of the Elements");
-				// }else{
-					// You("read about the Lords of the Elements");
-				// }
-				// u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
-			break;
-			case SELECT_SPIRITS2:
-				// if( (u.wardsknown & WARD_CTHUGHA) && (u.wardsknown & WARD_ITHAQUA) && (u.wardsknown & WARD_KARAKAL)){
-					// You("page through the section on the Lords of the Elements");
-				// }else if((u.wardsknown & WARD_CTHUGHA) || (u.wardsknown & WARD_ITHAQUA) || (u.wardsknown & WARD_KARAKAL)){
-					// You("refresh your memory about the Lords of the Elements");
-				// }else{
-					// You("read about the Lords of the Elements");
-				// }
-				// u.wardsknown |= WARD_CTHUGHA|WARD_ITHAQUA|WARD_KARAKAL;
-			break;
+			case SELECT_SPIRITS1:{
+				int i;
+				You("read the first half of the testament of whispers.");
+				for(i=0; i<16; i++) u.sealsKnown &= u.sealorder[i];
+			}break;
+			case SELECT_SPIRITS2:{
+				int i;
+				You("read the second half of the testament of whispers.");
+				for(i=15; i<32; i++) u.sealsKnown &= u.sealorder[i];
+			}break;
 		}
 	}
 	else if(necro_effect == SELECT_STUDY){

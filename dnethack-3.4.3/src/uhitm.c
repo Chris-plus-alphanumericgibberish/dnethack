@@ -474,7 +474,7 @@ register struct monst *mtmp;
 		keepattacking = hmonas(mtmp, tmp);
 	else
 		keepattacking = hitum(mtmp, tmp, youmonst.data->mattk);
-	if((u.sealsActive || u.specialSealsActive) && keepattacking){
+	if((u.sealsActive || u.specialSealsActive) && keepattacking && !DEADMONSTER(mtmp)){
 		if(u.sealsActive&SEAL_AMON) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_AMON],1);
 		if(!keepattacking) goto atk_done;
 		if(u.sealsActive&SEAL_CHUPOCLOPS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_CHUPOCLOPS],1);
@@ -968,6 +968,7 @@ int thrown;
 				if(mon->mhp <= 0) /* artifact killed monster */
 				    return FALSE;
 				if (tmp == 0) return TRUE;
+				hittxt = TRUE;
 			}
 			if((monwep = MON_WEP(mon)) != 0 && 
 				(arti_disarm(obj) || (obj->otyp == RANSEUR && 
@@ -2227,6 +2228,7 @@ register struct attack *mattk;
 		}
 		break;
 		case AD_IRIS:
+			u.irisAttack = moves;
 			if(!rn2(20)){
 				if(nonliving(mdef->data) || is_anhydrous(mdef->data)){
 					shieldeff(mdef->mx, mdef->my);
@@ -2248,7 +2250,9 @@ register struct attack *mattk;
 				mdef->mstun=1;
 			}
 		break;
-		case AD_OTIAX: if(!rn2(10)){
+		case AD_OTIAX:
+		u.otiaxAttack = moves;
+		if(!rn2(10)){
 			struct obj *otmp2, **minvent_ptr;
 			long unwornmask;
 
@@ -3198,7 +3202,7 @@ uchar aatyp;
 	else
 	    tmp = 0;
 
-	if(mon_reflects(mon,"You catch a glimpse of a stranger's reflection in")){
+	if(u.sealsActive&SEAL_IRIS && mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.")){
 		if(u.sealsActive&SEAL_IRIS) unbind(SEAL_IRIS,TRUE);
 	}
 	

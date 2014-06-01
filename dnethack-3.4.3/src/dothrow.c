@@ -156,8 +156,8 @@ int shotlimit;
 	    }
 	}
 
-	if(!barage) multishot = rnd(multishot); //state variable, we are doing a spirit power barage
-	else multishot += u.ulevel/10;
+	if(!barage) multishot = rnd(multishot);
+	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barage
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER) multishot = (int)obj->quan;
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 

@@ -77,6 +77,7 @@ nemdead()
 {
 	if(!Qstat(killed_nemesis)) {
 	    Qstat(killed_nemesis) = TRUE;
+		if(Role_if(PM_EXILE)) u.uevent.qcompleted = TRUE;
 	    qt_pager(QT_KILLEDNEM);
 	}
 }
@@ -195,7 +196,7 @@ struct obj *obj;	/* quest artifact; possibly null if carrying Amulet */
 	Qstat(got_thanks) = TRUE;
 
 	if (obj) {
-	    u.uevent.qcompleted = 1;	/* you did it! */
+	    if(!Role_if(PM_EXILE)) u.uevent.qcompleted = 1;	/* you did it! */
 	    /* behave as if leader imparts sufficient info about the
 	       quest artifact */
 	    fully_identify_obj(obj);
@@ -266,6 +267,12 @@ chat_with_leader()
 	    qt_pager(QT_ASSIGNQUEST);
 	    exercise(A_WIS, TRUE);
 	    Qstat(got_quest) = TRUE;
+		if(Role_if(PM_EXILE)){
+			u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
+			set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
+			u.spiritT[QUEST_SPIRIT] = moves + 5000;
+			u.dahlver_nar = moves + 5000;
+		}
 	  }
 	}
 }

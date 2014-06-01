@@ -954,6 +954,14 @@ u_init()
 	u.echidna = u.eden = u.enki = u.eurynome = u.eve = u.fafnir = u.huginn_muninn = u.iris = u.jack = u.malphas = u.marionette = u.mother = 0;
 	u.naberius = u.orthos = u.ose = u.otiax = u.paimon = u.simurgh = u.tenebrous = u.ymir = u.dahlver_nar = u.acererak = 0;
 	
+	u.osepro[0] = '\0';
+	u.osegen[0] = '\0';
+	
+	if(rn2(20)){
+		if(flags.female) Sprintf(u.osepro,"she");
+	}
+	
+	u.irisAttack = u.otiaxAttack = 0;
 	
 	u.spirit[0] = u.spirit[1] = u.spirit[2] = u.spirit[3] = u.spirit[4] = u.spirit[5] = u.spirit[6] = u.spiritTineA = u.spiritTineB = 0;
 	u.spiritT[0] = u.spiritT[1] = u.spiritT[2] = u.spiritT[3] = u.spiritT[4] = u.spiritT[5] = u.spiritT[6] = u.spiritTineTA = u.spiritTineTB = 0;

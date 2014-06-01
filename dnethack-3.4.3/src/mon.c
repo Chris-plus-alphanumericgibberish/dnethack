@@ -695,6 +695,8 @@ mcalcdistress()
 	/* gradually time out temporary problems */
 	if (mtmp->mblinded && !--mtmp->mblinded)
 	    mtmp->mcansee = 1;
+	if (mtmp->mlaughing && !--mtmp->mlaughing)
+	    mtmp->mnotlaugh = 1;
 	if (mtmp->mfrozen && !--mtmp->mfrozen)
 	    mtmp->mcanmove = 1;
 	if (mtmp->mfleetim && !--mtmp->mfleetim)

@@ -1004,7 +1004,7 @@ struct monst *mon;
 	int armpro = 0;
 	int cpro = 0;
 
-	if(u.sealsActive&SEAL_PAIMON) return 3;
+	if(u.sealsActive&SEAL_PAIMON && mon == &youmonst) return 3;
 
 	armor = (mon == &youmonst) ? uarm : which_armor(mon, W_ARM);
 	if (armor && armpro < objects[armor->otyp].a_can)
@@ -6280,7 +6280,7 @@ register struct attack *mattk;
 	    default:
 		break;
 	}
-	if (!Upolyd) return 1;
+//	if (!Upolyd) return 1; //Removed to enable spirit pasive attacks
 
 	/* These affect the enemy only if you are still a monster */
 	if (rn2(3)) switch(youmonst.data->mattk[i].adtyp) {
