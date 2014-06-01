@@ -793,6 +793,7 @@ struct obj *obj;
 				ACURR(A_CHA) > 14 ?
 				(poly_gender()==1 ? "beautiful" : "handsome") :
 				"ugly");
+			signs_mirror();
 		} else {
 			You_cant("see your %s %s.",
 				ACURR(A_CHA) > 14 ?

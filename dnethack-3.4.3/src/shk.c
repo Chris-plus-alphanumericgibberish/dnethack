@@ -5270,6 +5270,110 @@ check_lower:
 
 #endif /* OTHER_SERVICES */
 
+boolean
+dahlverNarVis()
+{
+	if(Upolyd){
+		if(u.mh == u.mhmax) return FALSE;
+		else if(u.mh >= .75*u.mhmax) return (uarmg != 0);
+		else if(u.mh >= .50*u.mhmax) return (uarmg && (uarmc || uarm));
+		else if(u.mh >= .25*u.mhmax) return (uarmg && (uarmc || uarm) && uarmh);
+		else return TRUE;
+	} else {
+		if(u.uhp == u.uhpmax) return FALSE;
+		else if(u.uhp >= .75*u.uhpmax) return (uarmg != 0);
+		else if(u.uhp >= .50*u.uhpmax) return (uarmg && (uarmc || uarm));
+		else if(u.uhp >= .25*u.uhpmax) return (uarmg && (uarmc || uarm) && uarmh);
+		else return TRUE;
+	}
+}
+
+int
+countFarSigns(mon)
+struct monst *mon;
+{
+	int count=0;
+	if(couldsee(mon->mx, mon->my) && mon->mcansee){
+		// if(u.sealsActive&SEAL_AHAZU);
+		if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
+		// if(u.sealsActive&SEAL_ANDREALPHUS);
+		// if(u.sealsActive&SEAL_ANDROMALIUS);
+		if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES)) count++;
+		if(u.sealsActive&SEAL_BALAM && !Invis && !(uarmc || uarm)) count++;
+		if(u.sealsActive&SEAL_BERITH && !Invis && (u.usteed || !(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))) count++;
+		if(u.sealsActive&SEAL_BUER && !Invis && !uarmf) count++;
+		// if(u.sealsActive&SEAL_CHUPOCLOPS);
+		if(u.sealsActive&SEAL_DANTALION && !NoBInvis && !(uarmc || (uarm && uarm->otyp != CRYSTAL_PLATE_MAIL) || uarmu)) count++;
+		// if(u.sealsActive&SEAL_SHIRO);
+		if(u.sealsActive&SEAL_ECHIDNA && !Invis && !(uarmf && (uarmc || uarm))) count++;
+		if(u.sealsActive&SEAL_EDEN && !NoBInvis && verysmall(youmonst.data) && !uarmh) count++;
+		if(u.sealsActive&SEAL_ENKI && !Invis && !(uarm || uarmc)) count++;
+		if(u.sealsActive&SEAL_EURYNOME && !Invis && levl[u.ux][u.uy].lit != 0) count++;
+		if(u.sealsActive&SEAL_EVE && !NoBInvis && !(uarmf && (uarm || uarmc))) count++;
+		// if(u.sealsActive&SEAL_FAFNIR);
+		// if(u.sealsActive&SEAL_HUGINN_MUNINN);
+		if(u.sealsActive&SEAL_IRIS && !NoBInvis && !((uarm && moves > u.irisAttack+5) || (uarmc && moves > u.irisAttack+1))) count++;
+		if(u.sealsActive&SEAL_JACK && !NoBInvis && !uarmc) count++;
+		// if(u.sealsActive&SEAL_MALPHAS);
+		if(u.sealsActive&SEAL_MARIONETTE && !NoBInvis && !(uarm && is_metallic(uarm))) count++;
+		if(u.sealsActive&SEAL_MOTHER && !NoBInvis && !uarmg) count++;
+		// if(u.sealsActive&SEAL_NABERIUS);
+		if(u.sealsActive&SEAL_ORTHOS && !NoBInvis && !(!uarmc || uarmc->otyp == MUMMY_WRAPPING)) count++;
+		if(u.sealsActive&SEAL_OSE && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)) count++;
+		if(u.sealsActive&SEAL_OTIAX && !Invis && !(moves > u.otiaxAttack+5)) count++;
+		if(u.sealsActive&SEAL_PAIMON && !Invis && !uarmh) count++;
+		if(u.sealsActive&SEAL_SIMURGH && !Invis && !(((uarmg || uarmc) && uarmh))) count++;
+		if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || (moves>20000 && !(uarmc && uarmg)))) count++;
+		if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis && dahlverNarVis()) count++;
+		if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !ublindf) count++;
+		// if(u.specialSealsActive&SEAL_NUMINA);
+	}
+	return count;
+}
+
+int
+countCloseSigns(mon)
+struct monst *mon;
+{
+	int count=0;
+	if(couldsee(mon->mx, mon->my) && mon->mcansee){
+		if(u.sealsActive&SEAL_AHAZU && !(ublindf && ublindf->otyp==MASK)) count++;
+		// if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
+		if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		// if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES)) count++;
+		if(u.sealsActive&SEAL_BALAM && !Invis && (uarmc || uarm) && !(uarmg && uarmf)) count++;
+		// if(u.sealsActive&SEAL_BERITH && !Invis && (u.usteed || !(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))) count++;
+		// if(u.sealsActive&SEAL_BUER && !Invis && !uarmf) count++;
+		if(u.sealsActive&SEAL_CHUPOCLOPS && !NoBInvis && !(ublindf && ublindf->otyp==MASK)) count++;
+		// if(u.sealsActive&SEAL_DANTALION && !NoBInvis && !(uarmc || (uarm && uarm != CRYSTAL_PLATE_MAIL))) count++;
+		// if(u.sealsActive&SEAL_SHIRO);
+		// if(u.sealsActive&SEAL_ECHIDNA && !Invis && !(uarmf && (uarmc || uarm))) count++;
+		if(u.sealsActive&SEAL_EDEN && !NoBInvis && !verysmall(youmonst.data) && !bigmonst(youmonst.data) && !uarmh) count++;
+		// if(u.sealsActive&SEAL_ENKI && !Invis && !(uarm || uarmc)) count++;
+		if(u.sealsActive&SEAL_EURYNOME && !Invis && levl[u.ux][u.uy].lit == 0 && viz_array[u.uy][u.ux]&TEMP_LIT) count++;
+		// if(u.sealsActive&SEAL_EVE && !NoBInvis && !(uarmf && (uarm || uarmc))) count++;
+		if(u.sealsActive&SEAL_FAFNIR && !NoBInvis && !(uright || uarmg)) count++;
+		if(u.sealsActive&SEAL_HUGINN_MUNINN && !NoBInvis && !uarmh) count++;
+		// if(u.sealsActive&SEAL_IRIS && !NoBInvis && !((uarm && moves > u.irisAttack+5) || (uarmc && moves > u.irisAttack+1))) count++;
+		// if(u.sealsActive&SEAL_JACK && !NoBInvis && !uarmc) count++;
+		if(u.sealsActive&SEAL_MALPHAS && !NoBInvis && !(ublindf && ublindf->otyp==MASK)) count++;
+		// if(u.sealsActive&SEAL_MARIONETTE && !NoBInvis && !(uarm && is_metallic(uarm))) count++;
+		// if(u.sealsActive&SEAL_MOTHER && !uarmg) count++;
+		if(u.sealsActive&SEAL_NABERIUS && !NoBInvis && !(ublindf && ublindf->otyp==MASK)) count++;
+		// if(u.sealsActive&SEAL_ORTHOS && !NoBInvis && !(!uarmc || uarmc->otyp == MUMMY_WRAPPING)) count++;
+		// if(u.sealsActive&SEAL_OSE && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)) count++;
+		// if(u.sealsActive&SEAL_OTIAX && !Invis && !(moves > u.otiaxAttack+5)) count++;
+		// if(u.sealsActive&SEAL_PAIMON && !Invis && !uarmh) count++;
+		if(u.sealsActive&SEAL_SIMURGH && !Invis && uarmc && uarmh && !uarmg) count++;
+		// if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		// if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || (moves>20000 && !(uarmc && uarmg)))) count++;
+		// if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis && dahlverNarVis()) count++;
+		// if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !ublindf) count++;
+	} if(u.specialSealsActive&SEAL_NUMINA) count++;
+	return count;
+}
 
 #endif /* OVLB */
 

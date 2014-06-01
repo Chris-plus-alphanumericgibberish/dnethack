@@ -148,6 +148,7 @@ STATIC_PTR int NDECL(doattributes);
 STATIC_PTR int NDECL(doconduct); /**/
 STATIC_PTR boolean NDECL(minimal_enlightenment);
 STATIC_PTR void NDECL(resistances_enlightenment);
+STATIC_PTR void NDECL(signs_enlightenment);
 
 #ifdef OVLB
 STATIC_DCL void FDECL(enlght_line, (const char *,const char *,const char *));
@@ -1374,6 +1375,528 @@ resistances_enlightenment()
 	return;
 }
 
+void
+signs_enlightenment()
+{
+	int ltmp;
+	char buf[BUFSZ];
+	boolean message = FALSE;
+
+	en_win = create_nhwindow(NHW_MENU);
+	putstr(en_win, 0, "Current Appearance:");
+	putstr(en_win, 0, "");
+
+	if(Invis){
+		putstr(en_win, 0, "You are invisible.");
+		message = TRUE;
+	}
+	
+	// if(u.sealsActive&SEAL_AHAZU && !(ublindf && ublindf->otyp==MASK));
+	if(u.sealsActive&SEAL_AMON && !Invis){
+//		if(!(uarmh && is_metallic(uarmh))){
+		putstr(en_win, 0, "You have a pair of large ram's horns.");
+//		} else putstr(en_win, 0, "Your ram's horns have fused with your helm, taking on a metalic hue.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))){
+		putstr(en_win, 0, "Up close, it is plain your shadow aspires to depth as well as width and height.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis){
+//		if((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT)))
+			putstr(en_win, 0, "Your features have taken on the rigidity of a cheap disguise.");
+		// else putstr(en_win, 0, "Your rigid features can't be seen in the dark.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_ASTAROTH && !Invis){
+		if(!ublindf || ublindf->otyp == LENSES)
+			putstr(en_win, 0, "A black liquid leaks from around your eyes.");
+		else if(ublindf && ublindf->otyp == MASK)
+			putstr(en_win, 0, "The black liquid leaking from your eyes is hidden by your mask.");
+		else
+			putstr(en_win, 0, "The black liquid leaking from your eyes is soaked up by your blindfold.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_BALAM && !Invis){
+		if(uarmc || uarm)
+			putstr(en_win, 0, "Freezing water leaks from a gash in you neck, but is hidden by your clothes.");
+		else
+			putstr(en_win, 0, "Freezing water leaks from a deep gash in you neck.");
+		if(!uarmg)
+			putstr(en_win, 0, "Freezing water leaks from deep holes in your wrists.");
+		if(!uarmf)
+			putstr(en_win, 0, "Freezing water leaks from deep holes in your ankles.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_BERITH && !Invis){
+		if(u.usteed)
+			putstr(en_win, 0, "Your steed is drenched in gore.");
+		if(!(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))
+			putstr(en_win, 0, "You are drenched in gore.");
+		else
+			putstr(en_win, 0, "Your armor is faced with crimson enamel.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_BUER && !Invis){
+		if(!uarmf)
+			putstr(en_win, 0, "Your legs bifurcate into twin pairs of cloven-hoved feet.");
+		else
+			putstr(en_win, 0, "Your strange feet a hidden in your shoes.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_CHUPOCLOPS){
+		putstr(en_win, 0, "You feel something in your cheeks.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_DANTALION && !NoBInvis){
+		if(!(uarmc || ((uarm && uarm->otyp != CRYSTAL_PLATE_MAIL) || uarmu))){
+			switch(u.ulevel/10+1){
+				case 1:
+				putstr(en_win, 0, "There is an extra face growing on your chest.");
+				break;
+				case 2:
+				putstr(en_win, 0, "There is a pair of faces growing on your chest.");
+				break;
+				case 3:
+				putstr(en_win, 0, "Many extra faces grow on your chest.");
+				break;
+				case 4:
+				putstr(en_win, 0, "There are legions of faces growing on your chest.");
+				break;
+			}
+		}
+		else{
+			if(u.ulevel/10){
+				putstr(en_win, 0, "Your extra faces are covered by your clothes.");
+			} else
+				putstr(en_win, 0, "Your extra face is covered by your clothes.");
+		}
+		message = TRUE;
+	}
+	// if(u.sealsActive&SEAL_SHIRO);
+	if(u.sealsActive&SEAL_ECHIDNA && !Invis){
+		if(!(uarmf && (uarmc || uarm)))
+			putstr(en_win, 0, "Your hips give rise to twin serpent's tails instead of legs.");
+		else
+			putstr(en_win, 0, "Your serpentine legs are disguised by your clothes.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_EDEN){
+		putstr(en_win, 0, "There is something rigid in the crown of your skull.");
+		message = TRUE;
+	} 
+	if(u.sealsActive&SEAL_ENKI && !Invis){
+		if(!(uarm || uarmc))
+			putstr(en_win, 0, "Water runs off your body in steady rivulets.");
+		else
+			putstr(en_win, 0, "Your body's runoff is caught by your clothes.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_EURYNOME && !Invis){
+		if(levl[u.ux][u.uy].lit != 0){
+			putstr(en_win, 0, "Your shadow is that of a dancing nymph.");
+			message = TRUE;
+		} else if(viz_array[u.uy][u.ux]&TEMP_LIT){
+			putstr(en_win, 0, "It's a bit hard to see, but your shadow is a dancing nymph.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_EVE && !NoBInvis){
+		if(!uarm && !uarmc){
+			putstr(en_win, 0, "There is a blood-caked wound on your stomach.");
+			message = TRUE;
+		}
+		if(!uarmf){
+			putstr(en_win, 0, "Your feet are torn by thorns and stones.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_FAFNIR && !NoBInvis){ 
+		if(!(uright || uarmg)){
+			putstr(en_win, 0, "There is a ring-shaped burn scar around your right ring-finger.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_HUGINN_MUNINN){
+		putstr(en_win, 0, "There is something rustling around in your ear.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_IRIS && !NoBInvis){
+		if(moves <= u.irisAttack+1){
+			putstr(en_win, 0, "Waving, iridescent tentacles sprout from your forearms.");
+			message = TRUE;
+		} else if(!uarmc && moves <= u.irisAttack+5){
+			putstr(en_win, 0, "There are iridescent tentacles wrapped around your forearms.");
+			message = TRUE;
+		} else if(!uarm){
+			putstr(en_win, 0, "There are iridescent veins just under the skin of your forearms.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_JACK){
+		putstr(en_win, 0, "There is something on your back.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_MALPHAS){
+		putstr(en_win, 0, "You feel things pecking the inside of your mouth.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_MARIONETTE && !NoBInvis){
+		if(!(uarm && is_metallic(uarm)))
+			putstr(en_win, 0, "Metal wires protrude from your elbows, knees, and back.");
+		else
+			putstr(en_win, 0, "The metal wires protruding from your body have merged with your armor.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_MOTHER && !NoBInvis){
+		if(!uarmg)
+			putstr(en_win, 0, "The eyes on your fingers and palms stare back at you.");
+		else
+			putstr(en_win, 0, "The eyes on your fingers and palms are covered up.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_NABERIUS){
+		putstr(en_win, 0, "Your tongue feels odd.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_ORTHOS && !NoBInvis){
+		if(uarmc && uarmc->otyp != MUMMY_WRAPPING){
+			putstr(en_win, 0, "Your cloak blows in a nonexistant wind.");
+			message = TRUE;
+		}
+	}
+	// // if(u.sealsActive&SEAL_OSE && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)) count++;
+	if(u.sealsActive&SEAL_OTIAX && !Invis){
+		if(moves <= u.otiaxAttack+5){
+			putstr(en_win, 0, "The mist around you is formed into writhing tendrils.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_PAIMON && !Invis){ 
+		putstr(en_win, 0, "There is a crown floating over your head.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_SIMURGH && !Invis){
+		if(!uarmg)
+			putstr(en_win, 0, "You have iron claws.");
+		else
+			putstr(en_win, 0, "Your iron claws seem to be part of you gloves.");
+		putstr(en_win, 0, "There are prismatic feathers around your head.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_TENEBROUS && !Invis){
+		if(!(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))){
+			putstr(en_win, 0, "Your shadow is deep black and pools unnaturally close to you.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_YMIR && !Invis){
+		if(moves>5000 && moves <= 10000){
+			if(!(uarm || uarmc))
+				putstr(en_win, 0, "Your skin color is a bit off.");
+			else
+				putstr(en_win, 0, "Your skin is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>10000 && moves <= 20000){
+			if(!(uarmc))
+				putstr(en_win, 0, "Maggots burrow through your skin.");
+			else
+				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>20000){
+			if(!(uarmc && uarmg))
+				putstr(en_win, 0, "Your skin is rotting off.");
+			else
+				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+			message = TRUE;
+		}
+	}
+	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis){
+		if(dahlverNarVis())
+			putstr(en_win, 0, "Your wounds are full of sharp teeth!");
+		else
+			putstr(en_win, 0, "You feel teeth beneath your skin.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_ACERERAK){
+		putstr(en_win, 0, "Your eyes feel odd.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_NUMINA){
+		putstr(en_win, 0, "You are surounded by whispers.");
+		message = TRUE;
+	}
+	
+	if(!message){
+		putstr(en_win, 0, "You think you look pretty normal.");
+	}
+	
+	display_nhwindow(en_win, TRUE);
+	destroy_nhwindow(en_win);
+	return;
+}
+
+void
+signs_mirror()
+{
+	int ltmp;
+	char buf[BUFSZ];
+	boolean message = FALSE;
+
+	en_win = create_nhwindow(NHW_MENU);
+	putstr(en_win, 0, "Current Appearance:");
+	putstr(en_win, 0, "");
+
+	if(Invis){
+		putstr(en_win, 0, "You are invisible.");
+		message = TRUE;
+	}
+	
+	if(u.sealsActive&SEAL_AHAZU && !NoBInvis){
+		if(!(ublindf && ublindf->otyp==MASK)){
+			putstr(en_win, 0, "There is a starry void in your throat.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_AMON && !Invis){
+		if(!(uarmh && is_metallic(uarmh))){
+			putstr(en_win, 0, "You have a pair of large ram's horns.");
+		} else putstr(en_win, 0, "Your ram's horns have fused with your helm, taking on a metalic hue.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis){
+		if((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT)))
+			putstr(en_win, 0, "Your features have taken on the rigidity of a cheap disguise.");
+		else putstr(en_win, 0, "Your rigid features can't be seen in the dark.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_ASTAROTH && !Invis){
+		if(!ublindf || ublindf->otyp == LENSES)
+			putstr(en_win, 0, "A black liquid leaks from around your eyes.");
+		else if(ublindf && ublindf->otyp == MASK)
+			putstr(en_win, 0, "The black liquid leaking from your eyes is hidden by your mask.");
+		else
+			putstr(en_win, 0, "The black liquid leaking from your eyes is soaked up by your blindfold.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_BALAM && !Invis){
+		if(uarmc || uarm)
+			putstr(en_win, 0, "Freezing water leaks from a gash in you neck, but is hidden by your clothes.");
+		else
+			putstr(en_win, 0, "Freezing water leaks from a deep gash in you neck.");
+		if(!uarmg)
+			putstr(en_win, 0, "Freezing water leaks from deep holes in your wrists.");
+		if(!uarmf)
+			putstr(en_win, 0, "Freezing water leaks from deep holes in your ankles.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_BERITH && !Invis){
+		if(!(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))
+			putstr(en_win, 0, "You are drenched in gore.");
+		else
+			putstr(en_win, 0, "Your armor is faced with crimson enamel.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_BUER && !Invis){
+		if(!uarmf)
+			putstr(en_win, 0, "Your legs bifurcate into twin pairs of cloven-hoved feet.");
+		else
+			putstr(en_win, 0, "Your strange feet a hidden in your shoes.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_CHUPOCLOPS && !NoBInvis){
+		if(!(ublindf && ublindf->otyp==MASK)){
+			putstr(en_win, 0, "You see a pair of chelicerae in your mouth!");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_DANTALION && !NoBInvis){
+		if(!(uarmc || ((uarm && uarm->otyp != CRYSTAL_PLATE_MAIL) || uarmu))){
+			switch(u.ulevel/10+1){
+				case 1:
+				putstr(en_win, 0, "There is an extra face growing on your chest.");
+				break;
+				case 2:
+				putstr(en_win, 0, "There is a pair of faces growing on your chest.");
+				break;
+				case 3:
+				putstr(en_win, 0, "Many extra faces grow on your chest.");
+				break;
+				case 4:
+				putstr(en_win, 0, "There are legions of faces growing on your chest.");
+				break;
+			}
+		}
+		else{
+			if(u.ulevel/10){
+				putstr(en_win, 0, "Your extra faces are covered by your clothes.");
+			} else
+				putstr(en_win, 0, "Your extra face is covered by your clothes.");
+		}
+		message = TRUE;
+	}
+	// if(u.sealsActive&SEAL_SHIRO);
+	if(u.sealsActive&SEAL_ECHIDNA && !Invis){
+		if(!(uarmf && (uarmc || uarm)))
+			putstr(en_win, 0, "Your hips give rise to twin serpent's tails instead of legs.");
+		else
+			putstr(en_win, 0, "Your serpentine legs are disguised by your clothes.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_EDEN && !NoBInvis){
+		putstr(en_win, 0, "You see a garden through the dome of purple crystal enbedded in your head!");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_ENKI && !Invis){
+		if(!(uarm || uarmc))
+			putstr(en_win, 0, "Water runs off your body in steady rivulets.");
+		else
+			putstr(en_win, 0, "Your body's runoff is caught by your clothes.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_EVE && !NoBInvis){
+		if(!uarm && !uarmc){
+			putstr(en_win, 0, "There is a blood-caked wound on your stomach.");
+			message = TRUE;
+		}
+		if(!uarmf){
+			putstr(en_win, 0, "Your feet are torn by thorns and stones.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_FAFNIR && !NoBInvis){ 
+		if(!(uright || uarmg)){
+			putstr(en_win, 0, "There is a ring-shaped burn scar around your right ring-finger.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_HUGINN_MUNINN && !NoBInvis){
+		if(!(ublindf && ublindf->otyp==MASK)){
+			putstr(en_win, 0, "You find a raven nesting in each ear!");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_IRIS && !NoBInvis){
+		if(moves <= u.irisAttack+1){
+			putstr(en_win, 0, "Waving, iridescent tentacles sprout from your forearms.");
+			message = TRUE;
+		} else if(!uarmc && moves <= u.irisAttack+5){
+			putstr(en_win, 0, "There are iridescent tentacles wrapped around your forearms.");
+			message = TRUE;
+		} else if(!uarm){
+			putstr(en_win, 0, "There are iridescent veins just under the skin of your forearms.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_JACK && !NoBInvis){
+		if(!uarmc){
+			putstr(en_win, 0, "You see an old, old man on your back!");
+		} else {
+			putstr(en_win, 0, "You see a bump under your cloak on your back.");
+		}
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_MALPHAS && !NoBInvis){
+		if(!(ublindf && ublindf->otyp==MASK)){
+			putstr(en_win, 0, "There is a whole flock's worth of crows peeking out of your throat!");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_MARIONETTE && !NoBInvis){
+		if(!(uarm && is_metallic(uarm)))
+			putstr(en_win, 0, "Metal wires protrude from your elbows, knees, and back.");
+		else
+			putstr(en_win, 0, "The metal wires protruding from your body have merged with your armor.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_MOTHER && !NoBInvis){
+		if(!uarmg)
+			putstr(en_win, 0, "The eyes on your fingers and palms stare back at you.");
+		else
+			putstr(en_win, 0, "The eyes on your fingers and palms are covered up.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_NABERIUS && !NoBInvis){
+		if(!(ublindf && ublindf->otyp==MASK)){
+			putstr(en_win, 0, "Your tongue is forked!");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_ORTHOS && !NoBInvis){
+		if(uarmc && uarmc->otyp != MUMMY_WRAPPING){
+			putstr(en_win, 0, "Your cloak blows in a nonexistant wind.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_OSE && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)){
+			putstr(en_win, 0, "You feel your gaze as a tangible force.");
+			message = TRUE;
+	}
+	if(u.sealsActive&SEAL_OTIAX && !Invis){
+		if(moves <= u.otiaxAttack+5){
+			putstr(en_win, 0, "The mist around you is formed into writhing tendrils.");
+			message = TRUE;
+		}
+	}
+	if(u.sealsActive&SEAL_PAIMON && !Invis){ 
+		if(!uarmh)
+			putstr(en_win, 0, "There is a crown floating over your head.");
+		else
+			putstr(en_win, 0, "There is a crown sitting on your helm.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_SIMURGH && !Invis){
+		if(!uarmg)
+			putstr(en_win, 0, "You have iron claws.");
+		else
+			putstr(en_win, 0, "Your iron claws seem to be part of you gloves.");
+		if(!uarmh)
+			putstr(en_win, 0, "There is a pair of prismatic wings reaching around your head.");
+		else
+			putstr(en_win, 0, "Your helm has a crest of prismatic feathers.");
+		message = TRUE;
+	}
+	if(u.sealsActive&SEAL_YMIR && !Invis){
+		if(moves>5000 && moves <= 10000){
+			if(!(uarm || uarmc))
+				putstr(en_win, 0, "Your skin color is a bit off.");
+			else
+				putstr(en_win, 0, "Your skin is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>10000 && moves <= 20000){
+			if(!(uarmc))
+				putstr(en_win, 0, "Maggots burrow through your skin.");
+			else
+				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>20000){
+			if(!(uarmc && uarmg))
+				putstr(en_win, 0, "Your skin is rotting off.");
+			else
+				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+			message = TRUE;
+		}
+	}
+	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis){
+		if(dahlverNarVis()){
+			putstr(en_win, 0, "Your wounds are full of sharp teeth!");
+			message = TRUE;
+		}
+	}
+	if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !(ublindf && ublindf->otyp != LENSES)){
+		putstr(en_win, 0, "You gave gemstones for eyes!");
+		message = TRUE;
+	}
+	
+	if(!message){
+		putstr(en_win, 0, "You think you look pretty normal.");
+	}
+	
+	display_nhwindow(en_win, TRUE);
+	destroy_nhwindow(en_win);
+	return;
+}
+
 /*
  * Courtesy function for non-debug, non-explorer mode players
  * to help refresh them about who/what they are.
@@ -1486,6 +2009,7 @@ doattributes(VOID_ARGS)
 	if (wizard || discover)
 		enlightenment(0);
 	else resistances_enlightenment();
+	if(u.sealsActive || u.specialSealsActive) signs_enlightenment();
 	return 0;
 }
 

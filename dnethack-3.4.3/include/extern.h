@@ -188,6 +188,7 @@ E void FDECL(rhack, (char *));
 E int NDECL(doextlist);
 E int NDECL(extcmd_via_menu);
 E void FDECL(enlightenment, (int));
+E void NDECL(signs_mirror);
 E void FDECL(show_conduct, (int));
 E int FDECL(xytod, (SCHAR_P,SCHAR_P));
 E void FDECL(dtoxy, (coord *,int));
@@ -1959,6 +1960,7 @@ E void FDECL(bclose, (int));
 E void FDECL(savefruitchn, (int,int));
 E void NDECL(free_dungeons);
 E void NDECL(freedynamicdata);
+E boolean NDECL(dahlverNarVis);
 
 /* ### shk.c ### */
 
@@ -2022,6 +2024,8 @@ E boolean FDECL(block_entry, (XCHAR_P,XCHAR_P));
 E char *FDECL(shk_your, (char *,struct obj *));
 E char *FDECL(Shk_Your, (char *,struct obj *));
 E void FDECL(makeketer, (coord *));
+E int FDECL(countFarSigns, (struct monst *));
+E int FDECL(countCloseSigns, (struct monst *));
 
 /* ### shknam.c ### */
 

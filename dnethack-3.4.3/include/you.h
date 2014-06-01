@@ -477,7 +477,7 @@ struct you {
 #define SEAL_HUGINN_MUNINN			0x0020000L
 	long	huginn_muninn;
 #define SEAL_IRIS					0x0040000L
-	long	iris;
+	long	iris, irisAttack;
 #define SEAL_JACK					0x0080000L
 	long	jack;
 #define SEAL_MALPHAS				0x0100000L
@@ -493,7 +493,7 @@ struct you {
 #define SEAL_OSE					0x2000000L
 	long	ose;
 #define SEAL_OTIAX					0x4000000L
-	long	otiax;
+	long	otiax, otiaxAttack;
 #define SEAL_PAIMON					0x8000000L
 	long	paimon;
 #define SEAL_SIMURGH				0x10000000L
