@@ -46,18 +46,13 @@ static const char *random_mesg[] = {
 	"Haermund Hardaxe carved these runes", /* viking graffiti */
 	"Here be dragons",
 	"Need a light?  Come visit the Minetown branch of Izchak's Lighting Store!",
-	"Save now, and do your homework!",
-	"Snakes on the Astral Plane - Soon in a dungeon near you",
 	"There was a hole here.  It's gone now.",
 	"The Vibrating Square",
 	"This is a pit!",
-	"This is not the dungeon you are looking for.",
-	"This square deliberately left blank.",
-	"Warning, Exploding runes!",
 	"Watch out, there's a gnome with a wand of death behind that door!",
 	"X marks the spot",
 	"X <--- You are here.",
-	"You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
+	"Who are you?", "What do you want?", "Why are you here?", "Where are you going?", /*Babylon 5*/
 	/*weeping angels, Unnethack*/
 	"Beware of the weeping angels", /* Doctor Who */
 	"Duck, Sally Sparrow", /* Doctor Who */
@@ -71,6 +66,14 @@ static const char *random_mesg[] = {
 };
 
 static const char *haluMesg[] = {
+	"This is not the dungeon you are looking for.",
+	"Save now, and do your homework!",
+	"Snakes on the Astral Plane - Soon in a dungeon near you",
+	"This square deliberately left blank.",
+	"Warning, Exploding runes!",
+	"You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
+	
+	"@ <--- You are here.",
 /* contributed by members of NetHackWiki */
 	"Please disable the following security protocols: 2-18, 1-12, 1-0", /* the Submachine series */
 		"Our coil is broken, and we don't have a replacement. It's useless. It's so useless.", 
@@ -173,6 +176,8 @@ static const char *haluMesg[] = {
 		"OK TH3N WH4T?",
 		"WH3R3 1S 1T?",
 	
+	"Well, how did I get here?", /*Once In A Lifetime*/
+	"You can be me when I'm gone.", /*Sandman*/
 	"He who is valiant and pure of spirit may find the holy grail in the Castle of Aaaaarrrrrrggghhh...", /*Monty Python*/
 	"If someone is reading this...I must have failed.", /*The Guardian Legend*/
 	"You are lost. You can never go home.", /* Gollum's Song */
