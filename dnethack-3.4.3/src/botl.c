@@ -210,8 +210,11 @@ bot1()
 	Sprintf(nb = eos(nb),
 		"Dx:%-1d Co:%-1d In:%-1d Wi:%-1d Ch:%-1d",
 		ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS), ACURR(A_CHA));
-	Sprintf(nb = eos(nb), (u.ualign.type == A_CHAOTIC) ? "  Chaotic" :
-			(u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
+	Sprintf(nb = eos(nb), 
+			(u.ualign.type == A_CHAOTIC) ? "  Chaotic" :
+			(u.ualign.type == A_NEUTRAL) ? "  Neutral" : 
+			(u.ualign.type == A_LAWFUL) ?  "  Lawful " :
+			(u.ualign.type == A_VOID) ?    "  Gnostic" : "   Other ");
 #ifdef SCORE_ON_BOTL
 	if (flags.showscore)
 	    Sprintf(nb = eos(nb), " S:%ld", botl_score());

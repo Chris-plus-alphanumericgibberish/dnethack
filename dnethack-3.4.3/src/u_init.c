@@ -1031,7 +1031,7 @@ u_init()
 		ini_inv(Binder);
 		skill_init(Skill_N);
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
-			u.ualign.type = A_NEUTRAL; /* Override racial alignment */
+			u.ualign.type = A_VOID; /* Override racial alignment */
 		u.hod += 10;  /*One transgression is all it takes*/
 		u.gevurah += 5; /*One resurection or two rehumanizations is all it takes*/
 		break;

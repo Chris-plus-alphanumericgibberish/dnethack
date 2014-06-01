@@ -1632,7 +1632,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    }
 	} else {
 	    int nartifacts = nartifact_exist();
-//		pline("looking into an artifact gift.  %d currently exist", nartifacts);
+		//pline("looking into an artifact gift.  %d currently exist. %d gifts have been given, on level %d, and your luck %d.", nartifacts, (int)u.ugifts, u.ulevel, (int)u.uluck);
 	    /* you were already in pretty good standing */
 	    /* The player can gain an artifact */
 	    /* The chance goes down as the number of artifacts goes up */

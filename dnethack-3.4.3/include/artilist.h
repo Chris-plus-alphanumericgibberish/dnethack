@@ -189,7 +189,7 @@ A("Mjollnir",			WAR_HAMMER,		/* Mjo:llnir */
 A("the Pen of the Void",	ATHAME,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK), 0, 0,
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
-	VOID_CHIME,	A_NEUTRAL, PM_EXILE, NON_PM, 2500L, 
+	VOID_CHIME,	A_VOID, PM_EXILE, NON_PM, 2500L, 
 	0,0,0),
 
 #ifdef CONVICT

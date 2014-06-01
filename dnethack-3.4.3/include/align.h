@@ -22,7 +22,7 @@ typedef struct	align {		/* alignment & record */
 #define A_NEUTRAL	 0
 #define A_LAWFUL	 1
 
-#define A_VOID		 127 /* arbitrary, void alignment is an altar flag only */
+#define A_VOID		 -3 /* chosen to line up with topten and aligns[] (aligns[] is defined in role.c) */
 
 #define A_COALIGNED	 1
 #define A_OPALIGNED	(-1)
