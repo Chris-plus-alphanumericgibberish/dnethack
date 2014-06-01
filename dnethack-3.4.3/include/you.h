@@ -492,6 +492,8 @@ struct you {
 	long	orthos;
 #define SEAL_OSE					0x2000000L
 	long	ose;
+	char	osepro[5];
+	char	osegen[9];
 #define SEAL_OTIAX					0x4000000L
 	long	otiax, otiaxAttack;
 #define SEAL_PAIMON					0x8000000L
