@@ -476,21 +476,21 @@ register struct monst *mtmp;
 		keepattacking = hitum(mtmp, tmp, youmonst.data->mattk);
 	if((u.sealsActive || u.specialSealsActive) && keepattacking && !DEADMONSTER(mtmp)){
 		if(u.sealsActive&SEAL_AMON) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_AMON],1);
-		if(!keepattacking) goto atk_done;
+		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
 		if(u.sealsActive&SEAL_CHUPOCLOPS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_CHUPOCLOPS],1);
-		if(!keepattacking) goto atk_done;
+		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
 		if(u.sealsActive&SEAL_IRIS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_IRIS],1);
-		if(!keepattacking) goto atk_done;
+		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
 		if(u.sealsActive&SEAL_NABERIUS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_NABERIUS],1);
-		if(!keepattacking) goto atk_done;
+		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
 		if(u.sealsActive&SEAL_OTIAX){
 			int tendrils = min(rnd(5),rnd(spiritDsize()));
-			while(tendrils && keepattacking){
+			while(tendrils && keepattacking && !DEADMONSTER(mtmp)){
 				keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_OTIAX],1);
 				tendrils--;
 			}
 		}
-		if(!keepattacking) goto atk_done;
+		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
 		if(u.sealsActive&SEAL_SIMURGH) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_SIMURGH],1);
 	}
 	mtmp->mstrategy &= ~STRAT_WAITMASK;

@@ -1443,7 +1443,7 @@ spiriteffects(power, atme)
 					You("need a free hand to make a touch attack!");
 					return 0;
 				}
-				if(find_roll_to_hit(mon) <= rnd(20)){
+				if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) >= rnd(20)){
 					You("miss.");
 					break;
 				}
@@ -2236,7 +2236,7 @@ spiriteffects(power, atme)
 				pline("Maybe your innards should stay inside your body?");
 				return 0;
 			} else if(u.dz > 0) {
-				if(!opentrapdoor(Can_dig_down(&u.uz))) return 0;
+				if(!opentrapdoor(!Can_dig_down(&u.uz))) return 0;
 				else break;
 			} else if(u.dz < 0) {
 				if(!openrocktrap()) return 0;
@@ -2246,6 +2246,9 @@ spiriteffects(power, atme)
 				if(!mon){
 					if(!opennewdoor(u.ux+u.dx, u.uy+u.dy)) return 0;
 					else break;
+				} if(find_roll_to_hit(mon) < rnd(20)){
+					You("miss.");
+					break;
 				} else if(unsolid(mon->data)){
 					pline("%s is not solid enough to open a door in.",Monnam(mon));
 					shieldeff(mon->mx, mon->my);
@@ -2262,7 +2265,7 @@ spiriteffects(power, atme)
 						} else {
 							if(rn2(10)){
 								You("open a door into %s, exposing %s internal organs.", mon_nam(mon), hisherits(mon));
-								mon->mhp = d(rnd(5) * 5,dsize);
+								mon->mhp -= d(rnd(5) * 5,dsize);
 							} else {
 								You("open a door into %s, releasing %s vital organs.", mon_nam(mon), hisherits(mon));
 								mon->mhp = 0;
@@ -2343,7 +2346,7 @@ spiriteffects(power, atme)
 				You("need a free hand to make a touch attack!");
 				return 0;
 			}
-			if(find_roll_to_hit(mon) <= rnd(20)){
+			if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) >= rnd(20)){
 				You("miss.");
 				break;
 			}

@@ -721,7 +721,7 @@ int ttyp;
 
 	if (u.utrap && u.utraptype == TT_INFLOOR) u.utrap = 0;
 
-	if (ttyp != TRAPDOOR && !Can_dig_down(&u.uz)) {
+	if (ttyp == TRAPDOOR && !Can_dig_down(&u.uz)) {
 	    impossible("openactaldoor: can't open %s on this level.",
 		       defsyms[trap_to_defsym(ttyp)].explanation);
 	    ttyp = PIT;

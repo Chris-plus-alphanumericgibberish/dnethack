@@ -749,6 +749,7 @@ mattacku(mtmp)
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_WEAP:
+			if(u.sealsActive&SEAL_OTIAX && !rn2(5)) tmp = 0;
 			if(range2) {
 #ifdef REINCARNATION
 				if (!Is_rogue_level(&u.uz))
@@ -787,6 +788,7 @@ mattacku(mtmp)
 			}
 			break;
 		case AT_HODS:
+			if(u.sealsActive&SEAL_OTIAX && !rn2(5)) tmp = 0;
 			if(!range2){
 			    int hittmp = 0;
 
