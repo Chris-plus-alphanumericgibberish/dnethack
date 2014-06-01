@@ -126,6 +126,7 @@ hack_artifacts()
 	    artilist[urole.questarti].alignment = alignmnt;
 	    artilist[urole.questarti].role = Role_switch;
 	}
+	artilist[ART_PEN_OF_THE_VOID].alignment = A_VOID; //something changed this??? Change it back.
 	return;
 }
 
