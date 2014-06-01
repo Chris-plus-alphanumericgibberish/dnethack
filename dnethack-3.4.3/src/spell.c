@@ -1891,7 +1891,7 @@ spiriteffects(power, atme)
 				dmg = d(5,dsize);
 				if(haseyes(mon->data) && mon->mcansee){
 					You("claw at %s's eyes.", mon_nam(mon));
-					if(mon->mcansee) dmg += d(5,dsize);
+					if(mon->mcansee) dmg += d(rnd(5),dsize);
 				mon->mcansee = 0;
 				mon->mblinded = 0;
 				}
@@ -1947,7 +1947,7 @@ spiriteffects(power, atme)
 			if(uwep && (uwep->otyp == OIL_LAMP) && !uwep->oartifact){
 				uwep->age += d(5,dsize) * 10;
 				if(uwep->age > 1500) uwep->age = 1500;
-				You("refill the %s",xname(uwep));
+				You("refill %s",the(xname(uwep)));
 				if(uwep->lamplit){
 					end_burn(uwep, TRUE);
 					begin_burn(uwep, FALSE);
@@ -1965,12 +1965,13 @@ spiriteffects(power, atme)
 				} else return 0;
 			} else{
 				if(uwep && uwep->otyp == BRASS_LANTERN) pline("You need an oil lamp. These moddern lamps just aren't the same!");
-				else You("You must wield a burning lamp!");
+				else You("must wield a burning lamp!");
 				return 0;
 			}
 		break;
 		case PWR_CALL_MURDER:{
 			struct monst *mon;
+			You("call down backup!");
 			mon = makemon(&mons[PM_CROW], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 			initedog(mon);
 			mon->m_lev += (u.ulevel - mon->m_lev)/2;
@@ -1985,6 +1986,7 @@ spiriteffects(power, atme)
 			sx = u.ux;
 			sy = u.uy;
 			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			You("scream!");
 			if(u.uswallow){
 				zap_dig(-1,-1,1); /*try to blast free of engulfing monster*/
 				if(u.uswallow) break;
@@ -2007,7 +2009,7 @@ spiriteffects(power, atme)
 						if (mon->mhp <= 0){
 							xkilled(mon, 1);
 							continue;
-						}
+						} else You("hit %s", mon_nam(mon));
 					}
 				} else break;
 			}
@@ -2102,22 +2104,28 @@ spiriteffects(power, atme)
 			struct obj *obj;
 			if(throwgaze()){
 				if((mon = m_at(u.dx,u.dy)) && canseemon(mon)){
+					Your("arms swing up and your hands jerk open in a single, spasmodic motion.");
 					if(uwep){
 						obj = uwep;
 						uwepgone();
 						obj_extract_self(obj);
+						You("drop %s.",the(xname(obj))); 
 						dropy(obj);
 					}
-					if(uarms){
-						obj = uarms;
-						setnotworn(obj);
+					if(uswapwep && u.twoweap){
+						obj = uswapwep;
+						untwoweapon();
+						uswapwepgone();
 						obj_extract_self(obj);
+						You("drop %s.",the(xname(obj))); 
 						dropy(obj);
 					}
+					pline("The wild, staring eyes that cover your hands focus on %s.", mon_nam(mon));
 					if(distmin(u.ux, u.uy, mon->mx, mon->my) <= u.ulevel/10+1 && !resist(mon, '\0', 0, NOTELL)){
 						mon->mcanmove = 0;
 						mon->mfrozen = max(mon->mfrozen, 5);
 					}
+					pline("%s is struck by a bolt of lightning.", Monnam(mon));
 					if (resists_elec(mon)) {
 						shieldeff(mon->mx, mon->my);
 					} else {
@@ -2138,7 +2146,11 @@ spiriteffects(power, atme)
 		case PWR_BLOODY_TOUNGE:{
 			struct monst *mon;
 			if(!getdir((char *)0)  && (u.dx || u.dy)) break;
-			if(mon = m_at(u.ux+u.dx, u.uy+u.dy)) mon->mflee = 1;//does not make monster hostile
+			Your("forked red tounge speaks of its own accord.");
+			if(mon = m_at(u.ux+u.dx, u.uy+u.dy)){
+				mon->mflee = 1;//does not make monster hostile
+				pline("%s turns to flee.", Monnam(mon));
+			}
 		}break;
 		case PWR_SILVER_TOUNGE:{
 			struct monst *mon;
@@ -2148,6 +2160,7 @@ spiriteffects(power, atme)
 				!(mon->data->geno & G_UNIQ) &&
 				!mon->mtraitor
 			){
+				Your("forked tounge speaks with silvery grace.");
 				if (mon->isshk) make_happy_shk(mon, FALSE);
 				mon->mpeaceful = 1;
 			}
@@ -2169,6 +2182,7 @@ spiriteffects(power, atme)
 					break;
 				}
 			} else {
+				pline("a whistling wind springs up.");
 				for(i=range; i > 0; i--){
 					sx += u.dx;
 					sy += u.dy;
@@ -2181,8 +2195,14 @@ spiriteffects(power, atme)
 				while(sx != u.ux || sy != u.uy){
 					mon = m_at(sx, sy);
 					if(mon){
-						dmg = d(rnd(5),dsize);
+						mon->mhp -= d(5,dsize);
+						setmangry(mon);
+						if (mon->mhp <= 0){
+							mon->mhp = 0;
+							xkilled(mon, 1);
+							break;
 					}
+					} else pline("%s is flung back by the wind.",Monnam(mon));
 					sx -= u.dx;
 					sy -= u.dy;
 				}
@@ -2190,14 +2210,13 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_QUERIENT_THOUGHTS:{
 			struct monst *mon, *nmon;
+			You("release a burst of mental static.");
 			for(mon=fmon; mon; mon = nmon) {
 				nmon = mon->nmon;
 				if (DEADMONSTER(mon)) continue;
 				if (mon->mpeaceful) continue;
 				if (mindless(mon->data)) continue;
 				if (telepathic(mon->data) || !rn2(5)){
-					// if (cansee(mon->mx, mon->my))
-						// pline("It locks on to %s.", mon_nam(m2));
 					mon->mhp -= d(5,10);
 					if (mon->mhp <= 0) xkilled(mon, 1);
 					else mon->msleeping = 1;
@@ -2206,6 +2225,7 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_GREAT_LEAP:
+			You("leap through the ceiling.");
 			level_tele();
 		break;
 		case PWR_MASTER_OF_DOORWAYS:{

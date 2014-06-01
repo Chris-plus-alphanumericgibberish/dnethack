@@ -766,6 +766,10 @@ asGuardian:
 			mtmp->data == &mons[PM_KNIGHT] && 
 			mtmp->mpeaceful
 		) goto asGuardian; /* Jump up to a different case in this switch statment */
+		else if(Role_if(PM_EXILE) && 
+			mtmp->data == &mons[PM_PEASANT] && 
+			mtmp->mpeaceful
+		) goto asGuardian; /* Jump up to a different case in this switch statment */
 
 	    if (!mtmp->mpeaceful) {
 		if (In_endgame(&u.uz) && is_mplayer(ptr)) {
@@ -2441,10 +2445,12 @@ int tx,ty;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_JACK;
 						u.spiritTineTA= moves + bindingPeriod;
+						if(!uwep->lamplit) begin_burn(uwep, FALSE);
 					}
 					else{
 						u.spiritTineB = SEAL_JACK;
 						u.spiritTineTB= moves + bindingPeriod;
+						if(!uwep->lamplit) begin_burn(uwep, FALSE);
 					}
 				}
 				else{

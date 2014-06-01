@@ -227,6 +227,10 @@ boolean forced;
 			}
 		} else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID){
 			uwep->ovar1 &= ~spir;
+			if(uwep->lamplit && !artifact_light(uwep)) end_burn(uwep, TRUE);
+		} else if(uswapwep  && uswapwep->oartifact == ART_PEN_OF_THE_VOID){
+			uswapwep->ovar1 &= ~spir;
+			if(uswapwep->lamplit && !artifact_light(uswapwep)) end_burn(uswapwep, TRUE);
 		}
 		if(u.spiritTineA == spir){
 			u.spiritTineA = u.spiritTineB;
@@ -343,6 +347,15 @@ nh_timeout()
 				uwep->ovar1 = 0;
 				uwep->ovar1 |= u.spiritTineTA;
 				uwep->ovar1 |= u.spiritTineTB;
+				if(artifact_light(uwep) && !uwep->lamplit) begin_burn(uwep, FALSE);
+				else if(!artifact_light(uwep) && uwep->lamplit) end_burn(uwep, TRUE);
+			}
+			else if(uswapwep && uswapwep->oartifact==ART_PEN_OF_THE_VOID){
+				uswapwep->ovar1 = 0;
+				uswapwep->ovar1 |= u.spiritTineTA;
+				uswapwep->ovar1 |= u.spiritTineTB;
+				// if(artifact_light(uswapwep) && !uswapwep->lamplit) begin_burn(uswapwep, FALSE);
+				// else if(!artifact_light(uswapwep) && uswapwep->lamplit) end_burn(uswapwep, TRUE);
 	}
 		}
 	}

@@ -723,8 +723,7 @@ Acererak is within.
 You stand again before the tower.
 %E
 %Cc Bin 00050
-..................................................................
-"So, you are the one who dreamt of the "
+"So, you are the one who dreamt of the Gate"
 %E
 %Cp Bin 00051
 "I have wasted too much time on you already.  Now, you shall die."
@@ -733,11 +732,10 @@ You stand again before the tower.
 "You return yet again, %c!  Are you prepared for death now?"
 %E
 %Cp Bin 00053
-"I shall have %o back, you pitiful excuse for %ca.
-And your life as well."
+"Give me %o."
 %E
 %Cp Bin 00060
-"My pets will dine on your carcass tonight!"
+"This is your final night!"
 %E
 %Cp Bin 00061
 "You are a sorry excuse for %ra."
@@ -749,16 +747,17 @@ And your life as well."
 "I shall use your very skin to bind my next grimoire."
 %E
 %Cp Bin 00064
-"%d cannot protect you now.  Here, you die."
+"You have reached the end."
 %E
 %Cp Bin 00065
 "Your %a nature makes you weak.  You cannot defeat me."
 %E
 %Cp Bin 00066
-"Come, %c.  I shall kill you, then unleash the horde on your tribe."
+"Come, %c.  I shall kill you, then live forever."
 %E
 %Cp Bin 00067
-"Once you are dead, my horde shall finish off %l, and your tribe."
+"Once you are dead, there will be none to contest my 
+hold over the teeth."
 %E
 %Cp Bin 00068
 "Fight, %c, or are you afraid of the mighty %n?"
@@ -768,64 +767,24 @@ And your life as well."
 %E
 %Cc Bin 00070
 As you pick up %o, you feel the power of it
-flowing through your hands.  It seems to be in two or more places
+flowing through your hands.  It seems to be in two or more worlds
 at once, even though you are holding it.
 %E
 %Cc Bin 00080
-%nC falls to the ground, and utters a last curse at you.  Then his
-body fades slowly, seemingly dispersing into the air around you.  You
-slowly become aware that the overpowering aura of magic in the air has
-begun to fade.
+%nC falls to the ground, and utters a last curse at you.  His golden
+skull shatters to jewelled fragments when it hits.
 %E
 %Cc Bin 00081
-When %l sees %o, he smiles, and says:
-
-    Well done, %p.  You have saved the world from certain doom.
-    What, now, should be done with %o?
-
-    These people, brave as they are, cannot hope to guard it from
-    other sorcerers who will detect it, as surely as %n did.
-
-    Take %o with you, %p.  It will guard you in
-    your adventures, and you can best guard it.  You embark on a
-    quest far greater than you realize.
-
-    Remember me, %p, and return when you have triumphed.  I
-    will tell you then of what you must do.  You will understand when the
-    time comes.
+Dahlver-Nar is still dead
 %E
 %Cc Bin 00082
-%l gazes reverently at %o, then back at you.
-
-"You are its keeper now, and the time has come to resume your search
-for the Amulet.  %Z await your return through the
-magic portal which brought you here."
+You pick %o back up.
 %E
 %Cp Bin 00090
-"Tell us, %p, have you fared well on your great quest?"
+...
 %E
 %Cc Bin 00091
-"This is wondrous, %p.  I feared that you could not possibly
-succeed in your quest, but here you are in possession of the Amulet
-of Yendor!
-
-"I have studied the texts of the magi constantly since you left.  In
-the Book of Skelos, I found this:
-
-    %d will cause a child to be sent into the world.  This child is to
-    be made strong by trial of battle and magic, for %d has willed it so.
-    It is said that the child of %d will recover the Amulet of Yendor
-    that was stolen from the Creator at the beginning of time.
-
-"As you now possess the amulet, %p, I suspect that the Book
-speaks of you.
-
-    The child of %d will take the Amulet, and travel to the Astral
-    Plane, where the Great Temple of %d is to be found.  The Amulet
-    will be sacrificed to %d, there on His altar.  Then the child will
-    stand by %d as champion of all %cP for eternity.
-
-"This is all I know, %p.  I hope it will help you."
+...
 %E
 #
 #	Cave(wo)man

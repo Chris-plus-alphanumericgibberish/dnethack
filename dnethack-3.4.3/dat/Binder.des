@@ -14,87 +14,98 @@ GEOMETRY:center,center
 #          1         2         3         4         5         6         7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-0..................................PP........................................
-1...................................PP.......................................
-2...................................PP.......................................
-3....................................PP......................................
-4........--------------......-----....PPP....................................
-5........|...S........|......+...|...PPP.....................................
-6........|----........|......|...|....PP.....................................
-7........|.\..........+......-----...........................................
-8........|----........|...............PP.....................................
-9........|...S........|...-----.......PPP....................................
-0........--------------...+...|......PPPPP...................................
-1.........................|...|.......PPP....................................
-2...-----......-----......-----........PP....................................
-3...|...+......|...+..--+--.............PP...................................
-4...|...|......|...|..|...|..............PP..................................
-5...-----......-----..|...|.............PPPP.................................
-6.....................-----............PP..PP................................
-7.....................................PP...PP................................
-8....................................PP...PP.................................
-9....................................PP....PP................................
-0....................................PP....PP................................
+0                                                                            
+1                                |------|                                    
+2                                | .  . |                                    
+3                           |-+--- +  . --+--|                               
+4                           |      .  .      |                               
+5                           |.....      .....|                               
+6                           +                |                               
+7                           |.....      .....|                               
+8                           |                +                               
+9                           |--++-      -----|                               
+0                                +      |                                    
+1                                ---++---                                    
+2                                                                            
+3                                - -  - -                                    
+4                                                                            
+5                                                                            
+6                                                                            
+7                                                                            
+8                                                                            
+9                                                                            
+0                                                                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#          1         2         3         4         5         6         7
+
+OBJECT:'?',"scare monster",random,cursed,0
+OBJECT:'?',"scare monster",random,cursed,0
+OBJECT:'?',"scare monster",random,cursed,0
+OBJECT:'?',"scare monster",random,cursed,0
+OBJECT:'?',"scare monster",random,cursed,0
+
+
+GEOMETRY:center,center
+#          1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0............................................................................
+1.. ...................   .......|------|....................................
+2....  .................. .......|. .. .|....................... ............
+3..... .... ...   ..... ....|-+---.+.. .--+--|...............     ...........
+4.........  ... . ..........|...... .. ......|....  .............  ..........
+5.......   .....  ..........|     ......     |......  .......................
+6....... ........ ..........+................|...  ..........................
+7..... .. ..................|     ......     |...............................
+8....  .. ..........   .....|................+.................   ...........
+9..............   .... .....|--++-......-----|........ ...........    .......
+0....   ......   ................+......|.............   .......  ...........
+1................................---++---..........  ... .........  .........
+2.....    ............ .............................. .......................
+3........  ..................... -.-..-.-....................................
+4....  .............................. ......  .........................  ....
+5...............  ............... .   . ..... .....................  ....  ..
+6.... ............  ....   ........ . ..   ... ................ ....  .......
+7..........  ................ . ..... ........................ .. ...........
+8...  ............. .......   ..............................  ...............
+9....  .... .......  .................................. ..................  .
+0....  ...  ......... .................................   ...............  ..
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #          1         2         3         4         5         6         7
 # Dungeon Description
-REGION:(00,00,75,19),lit,"ordinary"
-REGION:(09,05,11,05),unlit,"ordinary"
-REGION:(09,07,11,07),lit,"ordinary"
-REGION:(09,09,11,09),unlit,"ordinary"
-REGION:(13,05,20,09),lit,"ordinary"
-REGION:(29,05,31,06),lit,"ordinary"
-REGION:(26,10,28,11),lit,"ordinary"
-REGION:(04,13,06,14),lit,"ordinary"
-REGION:(15,13,17,14),lit,"ordinary"
-REGION:(22,14,24,15),lit,"ordinary"
+REGION:(00,00,75,20),unlit,"morgue",unfilled
 # Stairs
-STAIR:(09,09),down
+STAIR:(35,05),down
 # Portal arrival point
-BRANCH:(62,02,62,02),(0,0,0,0)
+BRANCH:(00,00,75,20),(27,01,44,11)
 # Doors
-DOOR:locked,(12,05)
-DOOR:locked,(12,09)
-DOOR:closed,(21,07)
-DOOR:open,(07,13)
-DOOR:open,(18,13)
-DOOR:open,(23,13)
-DOOR:open,(25,10)
-DOOR:open,(28,05)
+
 # Elder
-MONSTER:'@',"strange corpse",(10,07)
+MONSTER:'M',"strange corpse",(36,06)
 # The treasure of Pelias
-OBJECT:'(',"chest",(09,05)
-# chieftain guards for the audience chamber
-MONSTER:'_',"shade",(10,05), peaceful
-MONSTER:'_',"shade",(10,09), peaceful
-MONSTER:'_',"shade",(11,05), peaceful
-MONSTER:'_',"shade",(11,09), peaceful
-MONSTER:'_',"shade",(14,05), peaceful
-MONSTER:'_',"shade",(14,09), peaceful
-MONSTER:'_',"shade",(16,05), peaceful
-MONSTER:'_',"shade",(16,09), peaceful
+
+# shadows
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
+MONSTER:'_',"shade",random, peaceful
 # Non diggable walls
-NON_DIGGABLE:(00,00,75,19)
+NON_DIGGABLE:(00,00,75,20)
 # One trap to keep the ogres at bay.
-TRAP:"spiked pit",(37,07)
-# Eels in the river
-MONSTER:';',"giant eel",(36,01)
-MONSTER:';',"giant eel",(37,09)
-MONSTER:';',"giant eel",(39,15)
-# Monsters on siege duty.
-MONSTER:'O',"ogre",(40,08),hostile
-MONSTER:'O',"ogre",(41,06),hostile
-MONSTER:'O',"ogre",(41,07),hostile
-MONSTER:'O',"ogre",(41,08),hostile
-MONSTER:'O',"ogre",(41,09),hostile
-MONSTER:'O',"ogre",(41,10),hostile
-MONSTER:'O',"ogre",(42,06),hostile
-MONSTER:'O',"ogre",(42,07),hostile
-MONSTER:'O',"ogre",(42,08),hostile
-MONSTER:'O',"ogre",(42,09),hostile
-MONSTER:'O',"ogre",(42,10),hostile
 
 #
 #	The "locate" level for the quest.
@@ -104,105 +115,90 @@ MONSTER:'O',"ogre",(42,10),hostile
 #
 
 MAZE: "Bin-loca",' '
-FLAGS: hardfloor
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '.' , 'T' , false , true , lit , false
 GEOMETRY:center,center
+#0         1         2         3         4         
+#01234567890123456789012345678901234567890123456789
 MAP
-..........PPP.........................................                      
-...........PP..........................................        .......      
-..........PP...........-----..........------------------     ..........     
-...........PP..........+...|..........|....S...........|..  ............    
-..........PPP..........|...|..........|-----...........|...  .............  
-...........PPP.........-----..........+....+...........|...  .............  
-..........PPPPPPPPP...................+....+...........S.................   
-........PPPPPPPPPPPPP.........-----...|-----...........|................    
-......PPPPPPPPPPPPPP..P.......+...|...|....S...........|          ...       
-.....PPPPPPP......P..PPPP.....|...|...------------------..         ...      
-....PPPPPPP.........PPPPPP....-----........................      ........   
-...PPPPPPP..........PPPPPPP..................................   ..........  
-....PPPPPPP........PPPPPPP....................................  ..........  
-.....PPPPP........PPPPPPP.........-----........................   ........  
-......PPP..PPPPPPPPPPPP...........+...|.........................    .....   
-..........PPPPPPPPPPP.............|...|.........................     ....   
-..........PPPPPPPPP...............-----.........................       .    
-..............PPP.................................................          
-...............PP....................................................       
-................PPP...................................................      
+0..................................................
+1.-----..-----..-----..-------.T.T.T.T.T.T.T.T.T.T.
+2.|...|..|...|..|...|..|.....|.....................
+3.---+-..--+--..--+--..|.....|.T.T.T.T.T.T.T.T.T.T.
+4......................|.....|.....................
+5.|-|..................|.....|.T.T.T.T.|---------|.
+6.|.|..................---+---.........|.........|.
+7.|.+..................................+.........|.
+8.|.|..................................|.........|.
+9.|-|..................................|---------|.
+0.....................|-|........................F.
+1.--+-................+.|..............F.........F.
+2.|..|.--+--..--+--...|.|..............F.........F.
+3.|..|.|...|..|...|...|.|..............F.........F.
+4.----.-----..-----...|-|..............FFFFFFFFFFF.
+5..................................................
 ENDMAP
+#01234567890123456789012345678901234567890123456789
+#0         1         2         3         4         
 # Dungeon Description
-REGION:(00,00,75,19),lit,"ordinary"
-REGION:(24,03,26,04),unlit,"ordinary"
-REGION:(31,08,33,09),unlit,"ordinary"
-REGION:(35,14,37,15),unlit,"ordinary"
-REGION:(39,03,54,08),lit,"ordinary"
-REGION:(56,00,75,08),unlit,"ordinary"
-REGION:(64,09,75,16),unlit,"ordinary"
-# Doors
-DOOR:open,(23,03)
-DOOR:open,(30,08)
-DOOR:open,(34,14)
-DOOR:locked,(38,05)
-DOOR:locked,(38,06)
-DOOR:closed,(43,03)
-DOOR:closed,(43,05)
-DOOR:closed,(43,06)
-DOOR:closed,(43,08)
-DOOR:locked,(55,06)
+REGION:(00,00,49,15),lit,"ordinary"
 # Stairs
-STAIR:(05,02),up
-STAIR:(70,13),down
-# Objects
-OBJECT:random,random,(42,03)
-OBJECT:random,random,(42,03)
-OBJECT:random,random,(42,03)
-OBJECT:random,random,(41,03)
-OBJECT:random,random,(41,03)
-OBJECT:random,random,(41,03)
-OBJECT:random,random,(41,03)
-OBJECT:random,random,(41,08)
-OBJECT:random,random,(41,08)
-OBJECT:random,random,(42,08)
-OBJECT:random,random,(42,08)
-OBJECT:random,random,(42,08)
-OBJECT:random,random,(71,13)
-OBJECT:random,random,(71,13)
-OBJECT:random,random,(71,13)
-# Random traps
-TRAP:"spiked pit",(10,13)
-TRAP:"spiked pit",(21,07)
-TRAP:"spiked pit",(67,08)
-TRAP:"spiked pit",(68,09)
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
+STAIR:(00,10),up
+# Doors
+# Outside Doors
+DOOR:closed,(04,03)
+DOOR:closed,(03,07)
+DOOR:closed,(03,11)
+DOOR:closed,(10,03)
+DOOR:closed,(08,12)
+DOOR:closed,(17,03)
+DOOR:closed,(15,12)
+DOOR:closed,(21,11)
+DOOR:locked,(25,06)
+DOOR:closed,(38,07)
+
+# Church
+REGION:(39,06,47,08),lit,"temple"
+ALTAR:(46,07),noncoaligned,shrine
+STAIR:(47,07),down
+REGION:(39,10,47,13),lit,"morgue"
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 # Random monsters.
-MONSTER:'O',"ogre",(12,09),hostile
-MONSTER:'O',"ogre",(18,11),hostile
-MONSTER:'O',"ogre",(45,05),hostile
-MONSTER:'O',"ogre",(45,06),hostile
-MONSTER:'O',"ogre",(47,05),hostile
-MONSTER:'O',"ogre",(46,05),hostile
-MONSTER:'O',"ogre",(56,03),hostile
-MONSTER:'O',"ogre",(56,04),hostile
-MONSTER:'O',"ogre",(56,05),hostile
-MONSTER:'O',"ogre",(56,06),hostile
-MONSTER:'O',"ogre",(57,03),hostile
-MONSTER:'O',"ogre",(57,04),hostile
-MONSTER:'O',"ogre",(57,05),hostile
-MONSTER:'O',"ogre",(57,06),hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',random,random,hostile
-MONSTER:'T',random,random,hostile
-MONSTER:'T',"rock troll",(46,06),hostile
-MONSTER:'T',"rock troll",(47,06),hostile
-MONSTER:'T',"rock troll",(56,07),hostile
-MONSTER:'T',"rock troll",(57,07),hostile
-MONSTER:'T',"rock troll",(70,13),hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',random,random,hostile
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',"peasant",random,peaceful
+MONSTER:'@',random,random,hostile
+MONSTER:'@',random,random,hostile
+MONSTER:'@',random,random,hostile
+MONSTER:'@',"captain",random,hostile
+MONSTER:'@',"lieutenant",random,hostile
+MONSTER:'@',"sergeant",random,hostile
+MONSTER:'@',"sergeant",random,hostile
+MONSTER:'@',"soldier",random,hostile
+MONSTER:'@',"soldier",random,hostile
+MONSTER:'@',"soldier",random,hostile
+MONSTER:'@',"soldier",random,hostile
+MONSTER:'@',"soldier",random,hostile
+MONSTER:'@',"soldier",random,hostile
 
 #
 #	The "goal" level for the quest.
@@ -214,91 +210,77 @@ MONSTER:'T',random,random,hostile
 
 MAZE: "Bin-goal", ' '
 GEOMETRY:center,center
+#0         1         2   	   3	     4		   5		 6	       7
+#01234567890123456789012345678901234567890123456789012345678901234567890
 MAP
-                                                                            
-                               .............                                
-                             ..................                             
-        ....              .........................          ....           
-      .......          ..........................           .......         
-      ......             ........................          .......          
-      ..  ......................................             ..             
-       ..                 .....................             ..              
-        ..                 ..................              ..               
-         ..         ..S...S..............   ................                
-          ..                   ........                ...                  
-       .........                                         ..                 
-       ......  ..                                         ...  ....         
-      .. ...    ..                             ......       ........        
-   ....          .. ..................        ........       ......         
-  ......          ......................       ......         ..            
-   ....             ..................              ...........             
-                      ..............                                        
-                        ...........                                         
-                                                                            
+0                                                                       
+1                                                                       
+2                                    .                                  
+3                                   ...                                 
+4                                 ...H...                               
+5                                .H  H  H.                              
+6                                . ##### H                              
+7                               .. #H#H# ..                             
+8                              ..HH#####HH..                            
+9                               .. #H#H# ..                             
+0                                . ##### .                              
+1                                .H  H  H.                              
+2                                 ...H...                               
+3                                   ...                                 
+4                                    .                                  
+5                                                                       
+6                                                                       
 ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890
+#0         1         2   	   3	     4		   5		 6	       7
 # Dungeon Description
-REGION:(00,00,75,19),unlit,"ordinary"
-# Secret doors
-DOOR:locked,(22,09)
-DOOR:locked,(26,09)
+REGION:(34,06,38,10),  lit,"ordinary"
 # Stairs
-STAIR:(36,05),up
-# The altar.  Unattended.
-ALTAR:(63,04),noncoaligned,altar
-NON_DIGGABLE:(00,00,75,19)
-# Objects
-OBJECT:'*',"luckstone",(63,04),blessed,0,"The Heart of Ahriman"
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-# Random traps
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-# Random monsters.
-MONSTER:'@',"Thoth Amon",(63,04),hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',"ogre",random,hostile
-MONSTER:'O',random,random,hostile
-MONSTER:'O',random,random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',"rock troll",random,hostile
-MONSTER:'T',random,random,hostile
+STAIR:(00,00, 70,16), (20,00, 50,16),up
+
+MAZEWALK:(36,02),north
+MAZEWALK:(30,08),west
+MAZEWALK:(42,08),east
+MAZEWALK:(36,14),south
+
 WALLIFY
+
+# Objects
+OBJECT:')',"athame",(36,08),cursed,0,"The Pen of the Void"
+# Random monsters.
+MONSTER:'L',"Acererak",(36,08)
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',"human zombie",random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'W',"wraith",random
+MONSTER:'W',"wraith",random
+MONSTER:'W',"wraith",random
+MONSTER:'W',"wraith",random
+MONSTER:'W',"wraith",random
+MONSTER:'W',"wraith",random
+MONSTER:'W',"wraith",random
+MONSTER:'W',"wraith",random
+MONSTER:'W',random,random
+
+MONSTER: '@',"aligned priest",random, hostile
+MONSTER: '@',"aligned priest",random, hostile
+MONSTER: '@',"aligned priest",random, hostile
+MONSTER: '@',"aligned priest",random, hostile
+
+MONSTER: '@',"knight",random, hostile
+MONSTER: '@',"knight",random, hostile
+MONSTER: '@',"knight",random, hostile
+MONSTER: '@',"knight",random, hostile
 
 #
 #	The "fill" levels for the quest.
@@ -310,7 +292,7 @@ WALLIFY
 #
 
 MAZE: "Bin-fila" , ' '
-INIT_MAP: '.' , '.' , true , true , unlit , false
+INIT_MAP: ' ' , '.' , false, false, lit , false
 NOMAP
 #
 STAIR: random, up
@@ -319,55 +301,57 @@ STAIR: random, down
 OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
 #
 TRAP: random, random
 TRAP: random, random
 TRAP: random, random
 TRAP: random, random
 #
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', random, random, hostile
-MONSTER: 'T', "rock troll", random, hostile
+MONSTER: 'L', "lich", random, hostile
+MONSTER: 'L', "lich", random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
 
-MAZE: "Bin-filb" , ' '
-INIT_MAP: '.' , ' ' , true , true , unlit , true
-NOMAP
+
+LEVEL: "Bin-filb"
 #
+ROOM: "ordinary" , random, random, random, random
 STAIR: random, up
+OBJECT: random,random,random
+MONSTER: 'Z', "human zombie", random
+MONSTER: 'W', "wraith", random
+
+ROOM: "morgue" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random,random,random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+OBJECT: random,random,random
+MONSTER: 'Z', "human zombie", random
+MONSTER: 'W', "wraith", random
+
+ROOM: "morgue" , random, random, random, random
 STAIR: random, down
-#
 OBJECT: random, random, random
 OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-#
 TRAP: random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
 TRAP: random, random
+MONSTER: 'Z', "human zombie", random
+MONSTER: 'W', "wraith", random
+
+ROOM: "morgue" , random, random, random, random
+OBJECT: random, random, random
 TRAP: random, random
-TRAP: random, random
-#
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', "ogre", random, hostile
-MONSTER: 'O', random , random, hostile
-MONSTER: 'T', "rock troll", random, hostile
-MONSTER: 'T', "rock troll", random, hostile
-MONSTER: 'T', "rock troll", random, hostile
-MONSTER: 'T', random , random, hostile
+
+RANDOM_CORRIDORS

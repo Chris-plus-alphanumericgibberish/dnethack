@@ -438,7 +438,7 @@ struct you {
 #define WARD_THJOFASTAFUR	0x0800000L
 
 
-	short sealorder[31];
+	int sealorder[31];
 	long	sealsKnown;
 #define SEAL_AHAZU					0x0000001L
 	long	ahazu;	//turn on which spirit will be again eligible for binding.
@@ -515,9 +515,11 @@ struct you {
 #define SEAL_NUMINA					0x0000004L
 //	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
 	
-	char sealCounts;
+	int sealCounts;
 	long sealsActive;
 	long specialSealsActive;
+	
+	int wisSpritis, intSpirits;
 	
 	//Spirits in order bound:
 	long spirit[7];
@@ -595,7 +597,7 @@ struct you {
 #define	PWR_FIND_PATH				59
 #define	NUMBER_POWERS				60
 
-	short spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
+	int spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
 //	char spiritPLetters[NUMBER_POWERS];
 	long spiritPColdowns[NUMBER_POWERS];
 	
@@ -611,7 +613,7 @@ struct you {
 	int voidChime;
 	short RoSPkills, RoSPflights;
 	/*Keter counters*/
-	int keter, chokhmah, gevurah, hod;
+	int keter, chokhmah, binah, gevurah, hod, daat;
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))

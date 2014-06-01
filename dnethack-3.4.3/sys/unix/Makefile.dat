@@ -100,7 +100,7 @@ options:	../util/makedefs
 
 
 spec_levs: ../util/lev_comp \
-	bigroom.des castle.des endgame.des gehennom.des knox.des medusa.des \
+	bigroom.des castle.des endgame.des gehennom.des knox.des labr.des medusa.des \
 	mines.des oracle.des law.des chaos.des neutrality.des sokoban.des \
 	tower.des yendor.des tomb.des blacktemple.des sunlesssea.des storage.des
 	../util/lev_comp bigroom.des
@@ -108,6 +108,7 @@ spec_levs: ../util/lev_comp \
 	../util/lev_comp endgame.des
 	../util/lev_comp gehennom.des
 	../util/lev_comp knox.des
+	../util/lev_comp labr.des
 	../util/lev_comp medusa.des
 	../util/lev_comp mines.des
 	../util/lev_comp oracle.des
@@ -124,11 +125,12 @@ spec_levs: ../util/lev_comp \
 	touch spec_levs
 
 quest_levs: ../util/lev_comp \
-	Arch.des Barb.des Caveman.des Convict.des Healer.des Knight.des Monk.des \
+	Arch.des Barb.des Binder.des Caveman.des Convict.des Healer.des Knight.des Monk.des \
 	Pirate.des Noble.des Priest.des Ranger.des Rogue.des Samurai.des Tourist.des \
 	Valkyrie.des Wizard.des
 	../util/lev_comp Arch.des
 	../util/lev_comp Barb.des
+	../util/lev_comp Binder.des
 	../util/lev_comp Caveman.des
 	../util/lev_comp Convict.des
 	../util/lev_comp Healer.des

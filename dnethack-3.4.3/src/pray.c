@@ -46,6 +46,8 @@ static const char	*Moloch = "Moloch";
 static const char	*Chaos = "Chaos";
 static const char	*DeepChaos = "Cosmos in chains";
 static const char	*tVoid = "the Void";
+static const char	*Demiurge = "Yaldabaoth";
+static const char	*Sophia = "Pistis Sophia";
 static const char	*Other = "an alien god";
 static const char	*BlackMother = "the Black Mother";
 
@@ -1425,6 +1427,7 @@ dosacrifice()
 	    if(carried(otmp)) useup(otmp); /* well, it's gone now */
 	    else useupf(otmp, 1L);
 	    You("offer the Amulet of Yendor to %s...", a_gname());
+		if(!Role_if(PM_EXILE)){
 	    if (u.ualign.type != altaralign) {
 		/* And the opposing team picks you up and
 		   carries you off on their shoulders */
@@ -1449,6 +1452,38 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    flags.female ? "dess" : "");
 		done(ASCENDED);
 	    }
+		} else {
+	    if (altaralign == A_LAWFUL) {
+		/* And the opposing team picks you up and
+		   carries you off on their shoulders */
+		adjalign(-99);
+		pline("%s accepts your gift, and regains complete control over his creation.", a_gname());
+		pline("In that instant, you loose all your powers as %s shuts the Gate.", a_gname());
+		pline("Fortunately, %s permits you to live...", a_gname());
+		pline("Occasionally, you may even be able to remeber that you have forgoten something.");
+		pline("A cloud of %s smoke surrounds you...",
+		      hcolor((const char *)"orange"));
+		done(ESCAPED);
+	    } else if(altaralign == A_CHAOTIC) {
+		/* And the opposing team picks you up and
+		   carries you off on their shoulders */
+		adjalign(-99);
+		pline("%s accepts your gift, and gains complete control over creation.", a_gname());
+		pline("In the next instant, she destroys it.", a_gname());
+		pline("You are functionally dead, your soul escaped from its earth husk...");
+		pline("...as well as everything that made you-YOU.");
+		done(ESCAPED);
+	    } else { /* super big win */
+		adjalign(10);
+#ifdef RECORD_ACHIEVE
+		achieve.ascended = 1;
+#endif
+		pline("From the threshold of the Gate, you look back at the world");
+		pline("You don't know what awaits you in the Void,");
+		pline("But you think that you can handle it.");
+		done(ASCENDED);
+	    }
+		}
 	}
     } /* real Amulet */
 
@@ -2079,9 +2114,24 @@ aligntyp alignment;
 		else if(u.uz.dnum == neutral_dnum) gnam = BlackMother;
 		else gnam = Moloch; 
 	 break;
-     case A_LAWFUL:	gnam = urole.lgod; break;
-     case A_NEUTRAL:	gnam = urole.ngod; break;
-     case A_CHAOTIC:	gnam = urole.cgod; break;
+     case A_LAWFUL:
+		if(!Role_if(PM_EXILE)){ 
+						gnam = urole.lgod; break;
+		} else if(Is_astralevel(&u.uz)) {
+						gnam = Demiurge; break;
+		}
+     case A_NEUTRAL:	
+		if(!Role_if(PM_EXILE)){ 
+						gnam = urole.ngod; break;
+		} else if(Is_astralevel(&u.uz)) {
+						gnam = tVoid; break;
+		}
+     case A_CHAOTIC:	
+		if(!Role_if(PM_EXILE)){
+						gnam = urole.cgod; break;
+		} else if(Is_astralevel(&u.uz)) {
+						gnam = Sophia; break;
+		}
      case A_VOID:		gnam = tVoid; break;
      default:		impossible("unknown alignment.");
 			gnam = "someone"; break;

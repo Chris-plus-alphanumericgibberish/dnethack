@@ -883,8 +883,10 @@ u_init()
 	u.regifted = 0;
 	u.keter = 0;
 	u.chokhmah = 0;
+	u.binah = 0;
 	u.gevurah = 0;
 	u.hod = 0;
+	u.daat = 0;
 	u.wardsknown = 0;
 	//u.wardsknown = ~0; //~0 should be all 1s, and is therefore debug mode.
 
@@ -932,7 +934,7 @@ u_init()
 	u.uhouse = 0;
 	
 	/*Randomize spirit order*/{
-		short i,j,tmp;
+		int i,j,tmp;
 		for(i=0;i<31;i++) u.sealorder[i]=i;
 		for(i=0;i<31;i++){
 			j=rn2(31);
@@ -956,6 +958,9 @@ u_init()
 	
 	u.osepro[0] = '\0';
 	u.osegen[0] = '\0';
+	
+	u.wisSpritis = 0;
+	u.intSpirits = 0;
 	
 	if(rn2(20)){
 		if(flags.female) Sprintf(u.osepro,"she");
@@ -1042,6 +1047,7 @@ u_init()
 			u.ualign.type = A_VOID; /* Override racial alignment */
 		u.hod += 10;  /*One transgression is all it takes*/
 		u.gevurah += 5; /*One resurection or two rehumanizations is all it takes*/
+		u.daat += 8;
 		break;
 	case PM_CAVEMAN:
 		Cave_man[C_AMMO].trquan = rn1(11, 10);	/* 10..20 */

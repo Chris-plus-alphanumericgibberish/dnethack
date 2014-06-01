@@ -529,7 +529,9 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/storage.des \
 	 $(DAT)/convict.des \
 	 $(DAT)/noble.des \
-	 $(DAT)/pirate.des
+	 $(DAT)/pirate.des \
+	 $(DAT)/binder.des \
+	 $(DAT)/labr.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/endgame.des)
@@ -563,6 +565,8 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/storage.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/convict.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/noble.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/binder.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/labr.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/pirate.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)

@@ -90,7 +90,7 @@ const struct Role roles[] = {
 	0, 0, 0,	/* chosen randomly from among the other roles */
 	"Bin", "the lost library", "the Tower of Woe",
 	PM_EXILE, NON_PM, NON_PM,
-	PM_STRANGE_CORPSE, NON_PM, PM_ACERERAK,
+	PM_STRANGE_CORPSE, PM_PEASANT, PM_ACERERAK,
 	PM_SKELETON, PM_LICH, S_HUMANOID, S_LICH,
 	ART_PEN_OF_THE_VOID,
 	MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC|MH_CLOCK|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |

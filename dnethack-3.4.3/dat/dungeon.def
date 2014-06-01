@@ -161,6 +161,7 @@ LEVEL:		"nkai-b" "O" @ (17, 0)
 LEVEL:		"nkai-c" "P" @ (18, 0)
 LEVEL:		"nkai-z" "Q" @ (19, 0)
 LEVEL:		"rlyeh" "none" @ (20, 0)
+BRANCH:		"The Dispensary" @ (2, 5)
 
 
 # Chaos Quest
@@ -228,6 +229,12 @@ DUNGEON:        "The Temple of Moloch" "none" (1, 0)
 ALIGNMENT:      chaotic
 DESCRIPTION:    mazelike
 LEVEL:          "mtemple" "none" @ (1, 0)
+
+##
+DUNGEON:        "The Dispensary" "none" (1, 0)
+ALIGNMENT:      neutral
+DESCRIPTION:    mazelike
+LEVEL:          "lbyrnth" "none" @ (1, 0)
 
 
 #

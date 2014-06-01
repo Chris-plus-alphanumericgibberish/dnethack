@@ -51,6 +51,22 @@ long mask;
 	register struct obj *oobj;
 	register int p;
 
+	/*Handle the pen of the void here*/
+	if(obj && obj->oartifact == ART_PEN_OF_THE_VOID){
+		if(obj->ovar1 && !Role_if(PM_EXILE)){
+			long oldseals = u.sealsKnown;
+			u.sealsKnown |= obj->ovar1;
+			if(oldseals != u.sealsKnown) You("learned new seals.");
+		}
+		obj->ovar1 = u.spiritTineA|u.spiritTineB;
+		if(u.voidChime){
+			int i;
+			for(i=0; i<u.sealCounts; i++){
+				obj->ovar1 |= u.spirit[i];
+			}
+		}
+	}
+	
 	if ((mask & (W_ARM|I_SPECIAL)) == (W_ARM|I_SPECIAL)) {
 	    /* restoring saved game; no properties are conferred via skin */
 	    uskin = obj;

@@ -785,13 +785,13 @@ boolean called;
 	    Strcat(buf, " the ");
 	    if (do_invis) Strcat(buf, "invisible ");
 		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
-		if (u.sealsActive&SEAL_MOTHER){
+		if (u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)){
 			if(mtmp->mhp == mtmp->mhpmax) Strcat(buf, "uninjured ");
 			else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
 			else if(mtmp->mhp >= .5*mtmp->mhpmax) Strcat(buf, "bruised ");
 			else if(mtmp->mhp >= .25*mtmp->mhpmax) Strcat(buf, "bloodied ");
 			else if(mtmp->mhp >= .1*mtmp->mhpmax) Strcat(buf, "badly bloodied ");
-			else Strcat(buf, "mortally injured ");
+			else if(mtmp->mhp > 0) Strcat(buf, "mortally injured ");
 		}
 		if(is_drow(mdat)){
 			struct obj *otmp;
@@ -832,13 +832,13 @@ boolean called;
 		name_at_start = TRUE;
 	    } else if (called) {
 		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Sprintf(eos(buf), "frumious ");
-			if (u.sealsActive&SEAL_MOTHER){
+			if (u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)){
 				if(mtmp->mhp == mtmp->mhpmax) Strcat(buf, "uninjured ");
 				else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
 				else if(mtmp->mhp >= .5*mtmp->mhpmax) Strcat(buf, "bruised ");
 				else if(mtmp->mhp >= .25*mtmp->mhpmax) Strcat(buf, "bloodied ");
 				else if(mtmp->mhp >= .1*mtmp->mhpmax) Strcat(buf, "badly bloodied ");
-				else Strcat(buf, "mortally injured ");
+				else if(mtmp->mhp > 0) Strcat(buf, "mortally injured ");
 			}
 			if(is_drow(mdat)){
 				struct obj *otmp;
@@ -874,13 +874,13 @@ boolean called;
 	    name_at_start = FALSE;
 	} else {
 		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
-		if (u.sealsActive&SEAL_MOTHER){
+		if (u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)){
 			if(mtmp->mhp == mtmp->mhpmax) Strcat(buf, "uninjured ");
 			else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
 			else if(mtmp->mhp >= .5*mtmp->mhpmax) Strcat(buf, "bruised ");
 			else if(mtmp->mhp >= .25*mtmp->mhpmax) Strcat(buf, "bloodied ");
 			else if(mtmp->mhp >= .1*mtmp->mhpmax) Strcat(buf, "badly bloodied ");
-			else Strcat(buf, "mortally injured ");
+			else if(mtmp->mhp > 0) Strcat(buf, "mortally injured ");
 		}
 		if(is_drow(mdat)){
 			struct obj *otmp;

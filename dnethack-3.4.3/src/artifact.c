@@ -1128,6 +1128,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
 		if(vis) pline("The blade's shadow catches on %s.", hittee);
 		mdef->movement -= 3;
+		and = TRUE;
 	}
 	if(pen->ovar1&SEAL_BUER){
 		if(youattack) healup(d(dnum,4), 0, FALSE, FALSE);
@@ -1182,6 +1183,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			else mhurtle(mdef, u.dx, u.dy, 10);
 			if(mdef->mhp <= 0) return vis;//Monster was killed as part of movement and we should stop.
 		}
+		and = TRUE;
 	}
 	if(pen->ovar1&SEAL_OTIAX && dieroll < 2){
 		if(youattack){
@@ -1301,6 +1303,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			pline("%s is dazzled by prismatic feathers!", Monnam(mdef));
 			mdef->mstun = 1;
 		}
+		and = TRUE;
 	}
 	if(pen->ovar1&SEAL_TENEBROUS && dieroll <= dnum){
 		if(youdefend && !Blind){
@@ -1324,8 +1327,9 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			    drain /= 2;
 			}
 		}
+		and = TRUE;
 	}
-	return vis;
+	return vis&&and;
 }
 
 STATIC_OVL boolean
@@ -3838,6 +3842,7 @@ arti_invoke(obj)
 				for(i=0;i < NUMBER_POWERS;i++){
 					u.spiritPColdowns[i] = 0;
 				}
+				if(obj == uwep && uwep->lamplit && artifact_light(obj)) begin_burn(uwep, FALSE);
 			}
 			else pline("You strike the single-bladed athame, but nothing happens.");
 		break;
@@ -4547,12 +4552,12 @@ read_necro(VOID_ARGS)
 			case SELECT_SPIRITS1:{
 				int i;
 				You("read the first half of the testament of whispers.");
-				for(i=0; i<16; i++) u.sealsKnown &= u.sealorder[i];
+				for(i=0; i<16; i++) u.sealsKnown &= sealKey[u.sealorder[i]];
 			}break;
 			case SELECT_SPIRITS2:{
 				int i;
 				You("read the second half of the testament of whispers.");
-				for(i=15; i<32; i++) u.sealsKnown &= u.sealorder[i];
+				for(i=15; i<32; i++) u.sealsKnown &= sealKey[u.sealorder[i]];
 			}break;
 		}
 	}
