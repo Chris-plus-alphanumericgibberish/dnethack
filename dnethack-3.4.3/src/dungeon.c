@@ -1331,6 +1331,35 @@ d_level *lev;
 #ifdef OVL1
 
 boolean
+In_outdoors(lev)
+d_level *lev;
+{
+	if(In_quest(lev)){
+		if(Role_if(PM_ARCHEOLOGIST) || Role_if(PM_BARBARIAN) || Role_if(PM_EXILE)
+		|| Role_if(PM_PIRATE) || Role_if(PM_PRIEST) || Role_if(PM_SAMURAI)
+		|| Role_if(PM_VALKYRIE) || Role_if(PM_WIZARD)){
+			return lev->dlevel >= qlocate_level.dlevel;
+		} else if(Role_if(PM_HEALER) || Role_if(PM_NOBLEMAN)){
+			return TRUE;
+		} else if(Role_if(PM_KNIGHT) || Role_if(PM_RANGER)){
+			return lev->dlevel > nemesis_level.dlevel;
+		} else if(Role_if(PM_TOURIST)) {
+			return on_level(lev, &qlocate_level) || on_level(lev, &qstart_level);
+		}
+	} else if(In_tower(lev)){
+//		return lev->dlevel==4;
+	} 
+	else if(Is_paradise(lev) || Is_sunkcity(lev)) return TRUE;
+	else if(In_neu(lev)){
+		return lev->dlevel > sum_of_all_level.dlevel;
+	} else if(Is_arcadia_woods(lev)) return TRUE;
+	else if(In_cha) {
+		return on_level(lev, &chaosf_level) || on_level(lev, &chaoss_level);
+	}
+	return FALSE;
+}
+
+boolean
 In_mines(lev)	/* are you in the mines dungeon? */
 d_level	*lev;
 {

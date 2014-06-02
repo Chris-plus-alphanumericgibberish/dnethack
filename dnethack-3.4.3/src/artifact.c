@@ -3838,7 +3838,11 @@ arti_invoke(obj)
 				obj->ovar1 |= u.sealsActive;
 				u.sealsActive |= obj->ovar1;
 				set_spirit_powers(u.spiritTineA);
+					if(u.spiritTineA&wis_spirits) u.wisSpirits++;
+					if(u.spiritTineA&int_spirits) u.intSpirits++;
 				set_spirit_powers(u.spiritTineB);
+					if(u.spiritTineB&wis_spirits) u.wisSpirits++;
+					if(u.spiritTineB&int_spirits) u.intSpirits++;
 				for(i=0;i < NUMBER_POWERS;i++){
 					u.spiritPColdowns[i] = 0;
 				}

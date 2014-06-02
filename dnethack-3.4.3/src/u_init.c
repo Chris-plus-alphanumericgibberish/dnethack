@@ -962,7 +962,7 @@ u_init()
 	u.osepro[0] = '\0';
 	u.osegen[0] = '\0';
 	
-	u.wisSpritis = 0;
+	u.wisSpirits = 0;
 	u.intSpirits = 0;
 	
 	if(FALSE){

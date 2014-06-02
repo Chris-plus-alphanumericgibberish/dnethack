@@ -813,7 +813,7 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Querient Thoughts", "Great Leap",
 	"Open",
 	"Read Spell", "Book Telepathy",
-	"Enlightenment", "Hook in the Sky", "Unite the Earth and Sky",
+	"Unite the Earth and Sky", "Hook in the Sky", "Enlightenment",
 	"Damning Darkness", "Touch of the Void", "Echos of the Last Word",
 	"Poison Gaze", "Gap Step",
 	"Moan",
@@ -1839,7 +1839,7 @@ spiriteffects(power, atme)
 				You("smell rotten eggs.");
 				break;
 			}
-			(void) create_gas_cloud(cc.x, cc.y, dsize, d(5,dsize));
+			(void) create_gas_cloud(cc.x, cc.y, dsize/2, d(rnd(5),dsize));
 		}break;
 		case PWR_RUINOUS_STRIKE:{
 			int dmg;
@@ -2195,14 +2195,14 @@ spiriteffects(power, atme)
 				while(sx != u.ux || sy != u.uy){
 					mon = m_at(sx, sy);
 					if(mon){
+						mhurtle(mon, u.dx, u.dy, mon);
 						mon->mhp -= d(5,dsize);
 						setmangry(mon);
 						if (mon->mhp <= 0){
 							mon->mhp = 0;
 							xkilled(mon, 1);
-							break;
+						} else pline("%s is flung back by the wind.",Monnam(mon));
 					}
-					} else pline("%s is flung back by the wind.",Monnam(mon));
 					sx -= u.dx;
 					sy -= u.dy;
 				}
@@ -2305,12 +2305,15 @@ spiriteffects(power, atme)
 			if(isok(u.ux+u.dx, u.uy+u.dy)){
 				struct trap *t = t_at(u.ux+u.dx, u.uy+u.dy);
 				struct monst *mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(t->ttyp == PIT || t->ttyp == SPIKED_PIT){
+				if(t && (t->ttyp == PIT || t->ttyp == SPIKED_PIT)){
+					pline("Water rains down from above and fills the pit.");
+					mksobj_at(KELP_FROND,u.ux,u.uy,FALSE,FALSE);
 					deltrap(t);
 					levl[u.ux+u.dx][u.uy+u.dy].typ = POOL;
 					newsym(u.ux+u.dx, u.uy+u.dy);
 					if(mon) mon->mtrapped = 0;
 				} else if(levl[u.ux+u.dx][u.uy+u.dy].typ == ROOM || levl[u.ux+u.dx][u.uy+u.dy].typ == CORR){
+					pline("Water rains down from above, and a tree grows up from the ground.");
 					levl[u.ux+u.dx][u.uy+u.dy].typ = TREE;
 				}
 			}
@@ -2318,7 +2321,7 @@ spiriteffects(power, atme)
 		case PWR_HOOK_IN_THE_SKY:
 			if((ledger_no(&u.uz) == 1 && u.uhave.amulet) ||
 				Can_rise_up(u.ux, u.uy, &u.uz)) {
-			    const char *riseup ="rise up, through the %s!";
+			    const char *riseup ="are yanked up, through the %s!";
 			    if(ledger_no(&u.uz) == 1) {
 			        You(riseup, ceiling(u.ux,u.uy));
 				goto_level(&earth_level, FALSE, FALSE, FALSE);
@@ -2328,7 +2331,12 @@ spiriteffects(power, atme)
 
 				get_level(&newlevel, newlev);
 				if(on_level(&newlevel, &u.uz)) {
-				    pline("It tasted bad.");
+						You("are yanked up, and hit your %s on the %s.",
+							body_part(HEAD),
+							ceiling(u.ux,u.uy));
+						losehp(uarmh ? 1 : rnd(10),
+							"colliding with the ceiling",
+							KILLED_BY);
 				    break;
 				} else You(riseup, ceiling(u.ux,u.uy));
 				goto_level(&newlevel, FALSE, FALSE, FALSE);
@@ -2381,11 +2389,12 @@ spiriteffects(power, atme)
 			if(!getdir((char *)0) || (!u.dx && !u.dy)) return 0;
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
+			You("speak an echo of the Last Word of creation.");
 			if(resists_drli(mon) || !(mon->data->geno & G_GENO) || is_demon(mon->data)){
 				int nlev;
 				d_level tolevel;
 				int migrate_typ = MIGR_RANDOM;
-				if(mon->data->geno & G_UNIQ){
+				if(mon->data->geno & G_UNIQ || mon_has_amulet(mon)){
 					if (mon_has_amulet(mon) || In_endgame(&u.uz)) {
 						if (canspotmon(mon))
 						pline("%s seems very disoriented for a moment.",
@@ -2405,6 +2414,7 @@ spiriteffects(power, atme)
 					migrate_to_level(mon, ledger_no(&tolevel),
 							 migrate_typ, (coord *)0);
 				} else {
+					pline("%s colapses in on %sself.", Monnam(mon), sheheit(mon));
 					mongone(mon);
 				}
 			}
@@ -2438,14 +2448,22 @@ spiriteffects(power, atme)
 		case PWR_GAP_STEP:
 			if(!Levitation) {
 				int i;
+				pline("\"There was, in times of old,\"");
+				pline("\"when Ymir lived,\"");
+				pline("\"but a yawning gap, and grass nowhere.\"");
 				for(i=0; i < GATE_SPIRITS; i++) if(u.spirit[i] == SEAL_YMIR) break;
 				if(i<GATE_SPIRITS) HLevitation = u.spiritT[i] - moves + 5; //Remaining time until binding expires, plus safety margin
 				else HLevitation = u.voidChime + 5; //Remaining time until chime expires (apparently, it was in the Pen), plus safety margin
 				if(Levitation) float_up();
-			} else return 0;
+				HLevitation |= I_SPECIAL;
+			} else {
+				You("are already levitating.");
+				return 0;
+			}
 		break;
 		case PWR_MOAN:{
 			struct monst *mon;
+			You("let out a frightful moan.");
 			for(mon = fmon; mon; mon = mon->nmon){
 				if(!DEADMONSTER(mon) && dist2(u.ux,u.uy,mon->mx,mon->my)<=u.ulevel && 
 					!mindless(mon->data) && !resist(mon, '\0', 0, TELL)
@@ -2453,8 +2471,9 @@ spiriteffects(power, atme)
 					if(u.ulevel >= mon->m_lev-5){
 						mon->mconf = 1;
 						if(u.ulevel >= mon->m_lev+5){
+							pline("%s goes insane.", Monnam(mon));
 							mon->mcrazed;
-						}
+						} else pline("%s looks dizzy.", Monnam(mon));
 					}
 					monflee(mon, d(5,dsize), FALSE, TRUE);
 				}
@@ -2468,6 +2487,7 @@ spiriteffects(power, atme)
 			if(resists_drli(mon) || nonliving(mon->data) || mon->m_lev > u.ulevel){
 				shieldeff(mon->mx, mon->my);
 			} else {
+				You("suck out a %s's soul.", mon_nam(mon));
 				mon->mhp = 0;
 				xkilled(mon,1);
 				if(u.ulevelmax > u.ulevel) pluslvl(FALSE);
@@ -3061,7 +3081,21 @@ int spell;
 
 	splcaster = urole.spelbase;
 	special = urole.spelheal;
+	if(!Role_if(PM_EXILE)){
 	statused = ACURR(urole.spelstat);
+	} else {
+		if(u.specialSealsActive&SEAL_NUMINA){
+		if(abs(u.wisSpirits - u.intSpirits) <= 1) statused = max(ACURR(A_WIS), ACURR(A_INT));
+		} else if(u.wisSpirits > u.intSpirits){
+		statused = ACURR(A_WIS);
+		} else if(u.wisSpirits < u.intSpirits){
+		statused = ACURR(A_WIS);
+		} else if(u.wisSpirits || u.intSpirits){
+		statused = max(ACURR(A_WIS), ACURR(A_INT));
+		} else {
+		statused = min(ACURR(A_WIS), ACURR(A_INT));
+		}
+	}
 
 	if (uarm && (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE) )
 	    splcaster += (uarmc && uarmc->otyp == ROBE) ?

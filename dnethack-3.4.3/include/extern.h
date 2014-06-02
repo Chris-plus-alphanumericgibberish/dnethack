@@ -540,6 +540,7 @@ E boolean FDECL(Can_fall_thru, (d_level *));
 E boolean FDECL(Can_dig_down, (d_level *));
 E boolean FDECL(Can_rise_up, (int,int,d_level *));
 E boolean FDECL(In_quest, (d_level *));
+E boolean FDECL(In_outdoors, (d_level *));
 E boolean FDECL(In_mines, (d_level *));
 E boolean FDECL(In_neu, (d_level *));
 E boolean FDECL(In_cha, (d_level *));

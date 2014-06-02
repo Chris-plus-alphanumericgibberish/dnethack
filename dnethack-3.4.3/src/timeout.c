@@ -196,12 +196,12 @@ boolean forced;
 	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
 	if(spir&SEAL_SPECIAL){
-		if(spir&SEAL_DAHLVER_NAR) Your("link with Dahlver-Nar has been broken.");
-		else if(spir&SEAL_ACERERAK) Your("link with Acererak has been broken.");
-		else if(spir&SEAL_NUMINA) Your("links with the Numina have been broken.");
+		if(spir&SEAL_DAHLVER_NAR) Your("link with Dahlver-Nar has &sbroken.",forced?"been ":"");
+		else if(spir&SEAL_ACERERAK) Your("link with Acererak has %sbroken.",forced?"been ":"");
+		else if(spir&SEAL_NUMINA) Your("links with the Numina have %sbroken.",forced?"been ":"");
 	} else for(i=0;i<QUEST_SPIRITS;i++){
 		if((spir >> i) == 1){
-			Your("link with %s has been broken.", sealNames[i]);
+			Your("link with %s has %sbroken.", sealNames[i],forced?"been ":"");
 			break;
 		}
 	}
@@ -210,6 +210,8 @@ boolean forced;
 		int j;
 		if(u.sealsActive&spir){
 			u.sealsActive &= ~spir;
+			if(int_spirits) u.intSpirits--;
+			else if(wis_spirits) u.wisSpirits--;
 			for(i=0; i<u.sealCounts; i++){
 				if(u.spirit[i] == spir){
 					found = TRUE;
@@ -242,6 +244,8 @@ boolean forced;
 			u.spiritTineTB = 0;
 		}
 	} else {
+		if(spir&SEAL_DAHLVER_NAR) u.wisSpirits--;
+		if(spir&SEAL_ACERERAK) u.intSpirits--;
 		u.specialSealsActive &= ~spir;
 		if(u.specialSealsActive) u.specialSealsActive |= SEAL_SPECIAL;
 		if(u.spirit[QUEST_SPIRIT] == spir){
@@ -341,19 +345,20 @@ nh_timeout()
 	if(u.voidChime){
 		u.voidChime--;
 		if(!u.voidChime){
-			u.sealsActive = 0;
+			if(u.spiritTineA) unbind(u.spiritTineA,FALSE);
+			if(u.spiritTineB) unbind(u.spiritTineB,FALSE);
 			for(i=0;i<u.sealCounts;i++) u.sealsActive |= u.spirit[i];
 			if(uwep && uwep->oartifact==ART_PEN_OF_THE_VOID){
 				uwep->ovar1 = 0;
-				uwep->ovar1 |= u.spiritTineTA;
-				uwep->ovar1 |= u.spiritTineTB;
+				uwep->ovar1 |= u.spiritTineA;
+				uwep->ovar1 |= u.spiritTineB;
 				if(artifact_light(uwep) && !uwep->lamplit) begin_burn(uwep, FALSE);
 				else if(!artifact_light(uwep) && uwep->lamplit) end_burn(uwep, TRUE);
 			}
 			else if(uswapwep && uswapwep->oartifact==ART_PEN_OF_THE_VOID){
 				uswapwep->ovar1 = 0;
-				uswapwep->ovar1 |= u.spiritTineTA;
-				uswapwep->ovar1 |= u.spiritTineTB;
+				uswapwep->ovar1 |= u.spiritTineA;
+				uswapwep->ovar1 |= u.spiritTineB;
 				// if(artifact_light(uswapwep) && !uswapwep->lamplit) begin_burn(uswapwep, FALSE);
 				// else if(!artifact_light(uswapwep) && uswapwep->lamplit) end_burn(uswapwep, TRUE);
 	}

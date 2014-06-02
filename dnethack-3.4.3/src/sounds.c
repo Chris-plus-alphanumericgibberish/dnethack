@@ -1199,6 +1199,10 @@ dochat()
     return domonnoise(mtmp);
 }
 
+//definition of externs in you.h
+long wis_spirits = SEAL_AMON|SEAL_BUER|SEAL_MOTHER|SEAL_SIMURGH;
+long int_spirits = SEAL_ANDREALPHUS|SEAL_NABERIUS|SEAL_OSE|SEAL_PAIMON;
+
 //definition of an extern in you.h
 //A bag, a silver key, a gold ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
 char *andromaliusItems[18] = {
@@ -1315,6 +1319,7 @@ int tx,ty;
 					u.spirit[u.sealCounts] = SEAL_AMON;
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
 					set_spirit_powers(SEAL_AMON);
+					u.wisSpirits++;
 					u.sealCounts++;
 					vision_full_recalc = 1; //can now see perfectly in the dark
 					doredraw();
@@ -1366,6 +1371,7 @@ int tx,ty;
 					u.spirit[u.sealCounts] = SEAL_ANDREALPHUS;
 					set_spirit_powers(SEAL_ANDREALPHUS);
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
+					u.intSpirits++;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -1865,6 +1871,7 @@ int tx,ty;
 				u.spirit[u.sealCounts] = SEAL_BUER;
 				set_spirit_powers(SEAL_BUER);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
+				u.wisSpirits++;
 				u.sealCounts++;
 			}
 			else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2619,6 +2626,7 @@ int tx,ty;
 					u.spirit[u.sealCounts] = SEAL_MOTHER;
 					set_spirit_powers(SEAL_MOTHER);
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
+					u.wisSpirits++;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2665,6 +2673,7 @@ int tx,ty;
 					u.spirit[u.sealCounts] = SEAL_NABERIUS;
 					set_spirit_powers(SEAL_NABERIUS);
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
+					u.intSpirits++;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
@@ -2748,6 +2757,7 @@ int tx,ty;
 					u.spirit[u.sealCounts] = SEAL_OSE;
 					set_spirit_powers(SEAL_OSE);
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
+					u.intSpirits++;
 					u.sealCounts++;
 					levl[tx][ty].typ = ROOM;
 					newsym(tx,ty);
@@ -2850,6 +2860,7 @@ int tx,ty;
 					u.spirit[u.sealCounts] = SEAL_PAIMON;
 					set_spirit_powers(SEAL_PAIMON);
 					u.spiritT[u.sealCounts] = moves + bindingPeriod;
+					u.intSpirits++;
 					u.sealCounts++;
 					u.paimon = moves + bindingPeriod;
 				}
@@ -2886,7 +2897,7 @@ int tx,ty;
 	case SIMURGH:{
 		if(u.simurgh < moves){
 			//Spirit requires that her seal be drawn outside.
-			if(level.flags.outside){
+			if(In_outdoors(&u.uz)){
 				pline("A brilliantly colored bird with iron claws flies high overhead.");
 				if(u.sealCounts < numSlots){
 					pline("It swoops down and lands on your shoulder.");
@@ -3032,6 +3043,7 @@ int tx,ty;
 					set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
 					u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
 				u.dahlver_nar = moves + bindingPeriod;
+				u.wisSpirits++;
 			}
 		}
 	}break;
@@ -3052,6 +3064,7 @@ int tx,ty;
 					set_spirit_powers(SEAL_SPECIAL|SEAL_ACERERAK);
 					u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
 				u.acererak = moves + bindingPeriod;
+				u.intSpirits++;
 			}
 		}
 	}break;
