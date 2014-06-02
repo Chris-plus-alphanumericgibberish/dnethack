@@ -2282,12 +2282,19 @@ spiriteffects(power, atme)
 			} else return 0;
 		}break;
 		case PWR_READ_SPELL:{
-			if(uwep && uwep->oclass == SPBOOK_CLASS && !uwep->oartifact && !uwep->otyp == SPE_BLANK_PAPER && !uwep->otyp == SPE_SECRETS){
+			if(uwep && uwep->oclass == SPBOOK_CLASS && !uwep->oartifact && uwep->otyp != SPE_BLANK_PAPER && uwep->otyp != SPE_SECRETS){
+				You("read from the spellbook in your hands.");
 				uwep->spestudied++;
 				costly_cancel(uwep);
 				spelleffects(0,FALSE,uwep->otyp);
-	    	    if(uwep->spestudied > MAX_SPELL_STUDY) uwep->otyp = SPE_BLANK_PAPER;
-			} else return 0;
+	    	    if(uwep->spestudied > MAX_SPELL_STUDY){
+					pline("The magical energy within %s is exhausted.",the(xname(uwep)));
+					uwep->otyp = SPE_BLANK_PAPER;
+				}
+			} else{
+				You("need to be holding a spellbook.");
+				return 0;
+			}
 		}break;
 		case PWR_BOOK_TELEPATHY:
 			book_detect(u.ulevel>13);

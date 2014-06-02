@@ -1265,8 +1265,13 @@ defaultvalue:
 				silverobj = TRUE;
 			}
 		    }
-			if(u.sealsActive&SEAL_PAIMON && mon && !DEADMONSTER(mon) && resists_drli(mon) && obj->oclass == SPBOOK_CLASS && !rn2(10)){
+			if(u.sealsActive&SEAL_PAIMON && mon && !DEADMONSTER(mon) && 
+				!resists_drli(mon) && obj->oclass == SPBOOK_CLASS && 
+				!uwep->oartifact && uwep->otyp != SPE_BLANK_PAPER && 
+				uwep->otyp != SPE_SECRETS && !rn2(10)
+			){
 				int dmg = rnd(8);
+				pline("%s seems weaker.",Monnam(mon));
 				mon->mhpmax -= dmg;
 				tmp += dmg;
 				mon->m_lev--;
