@@ -689,6 +689,9 @@ static const struct def_skill Skill_W[] = {
     { P_NONE, 0 }
 };
 
+static const char *oseVowels[] = {"a","e","i","o","u","ae","oe","oo","y"};
+static const char *oseConsonants[] = {"b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z","ch","ll","sh","th"};
+
 STATIC_OVL void
 knows_object(obj)
 register int obj;
@@ -962,8 +965,59 @@ u_init()
 	u.wisSpritis = 0;
 	u.intSpirits = 0;
 	
+	if(FALSE){
+		if(flags.female) Sprintf(u.osepro,"he");
+		else Sprintf(u.osepro,"she");
+		
 	if(rn2(20)){
-		if(flags.female) Sprintf(u.osepro,"she");
+			if(urace.individual.m){
+				if(flags.female) Sprintf(u.osegen,urace.individual.m);
+				else Sprintf(u.osegen,urace.individual.f);
+			} else {
+				Sprintf(u.osegen,urace.noun);
+			}
+		} else {
+			int rndI = randrace(flags.initrole);
+			if(races[rndI].individual.m){
+				if(flags.female) Sprintf(u.osegen,races[rndI].individual.m);
+				else Sprintf(u.osegen,races[rndI].individual.f);
+			} else {
+				Sprintf(u.osegen,races[rndI].noun);
+			}
+		}
+	} else if(rn2(20)){
+		if(!flags.female) Sprintf(u.osepro,"he");
+		else Sprintf(u.osepro,"she");
+		
+	if(rn2(20)){
+			if(urace.individual.m){
+				if(flags.female) Sprintf(u.osegen,urace.individual.f);
+				else Sprintf(u.osegen,urace.individual.m);
+			} else {
+				Sprintf(u.osegen,urace.noun);
+			}
+		} else {
+			int rndI = randrace(flags.initrole);
+			if(races[rndI].individual.m){
+				if(flags.female) Sprintf(u.osegen,races[rndI].individual.f);
+				else Sprintf(u.osegen,races[rndI].individual.m);
+			} else {
+				Sprintf(u.osegen,races[rndI].noun);
+			}
+		}
+	} else{
+		int i, lets = rnd(2) + rn2(2);
+		Strcat(u.osepro, oseConsonants[rn2(SIZE(oseConsonants))]);
+		for(i=0; i<lets;i++){
+			if(i%2) Strcat(u.osepro, oseConsonants[rn2(SIZE(oseConsonants))]);
+			else Strcat(u.osepro, oseVowels[rn2(SIZE(oseVowels))]);
+		}
+		i, lets = rnd(5);
+		Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
+		for(i=0; i<lets;i++){
+			if(i%2) Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
+			else Strcat(u.osegen, oseVowels[rn2(SIZE(oseVowels))]);
+		}
 	}
 	
 	u.irisAttack = u.otiaxAttack = 0;

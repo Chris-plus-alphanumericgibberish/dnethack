@@ -1235,9 +1235,6 @@ static const int androCorpses[] = {
 	PM_CARNIVOROUS_APE,
 	PM_SASQUATCH
 };
-static const char *oseVowels[] = {"a","e","i","o","u","ae","oe","oo","y"};
-static const char *oseConsonants[] = {"b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z","ch","ll"};
-
 
 int
 dobinding(tx,ty)
@@ -2742,7 +2739,7 @@ int tx,ty;
 					pline("The sea-bottom within the seal fades, as if it were silt settling out of muddy water.");
 					pline("A sleeping %s floats gently up out of the dark seas below the seal.",u.osegen);
 					pline("You supose %s could be called comely,",u.osepro);
-					pline("though to be honest %s is about average among %s you have known.",u.osepro,u.osegen);
+					pline("though to be honest %s is about average among %s you have known.",u.osepro,makeplural(u.osegen));
 					if(!rn2(20)) pline("The figure's eyes open, and you have a long negotiation before achieving a good pact.");
 					else pline("You know that this is Ose, despite never having met.");
 					pline("The seabed rises.");
@@ -2756,6 +2753,9 @@ int tx,ty;
 					newsym(tx,ty);
 					levl[u.ux][u.uy].typ = ROOM;
 					newsym(u.ux,u.uy);
+					vision_recalc(2);	/* unsee old position */
+					vision_full_recalc = 1;
+					spoteffects(FALSE);
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("A the sea bottom swirls below your weapon.");
