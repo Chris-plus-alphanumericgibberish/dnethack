@@ -3101,7 +3101,7 @@ int spell;
 		} else if(u.wisSpirits > u.intSpirits){
 		statused = ACURR(A_WIS);
 		} else if(u.wisSpirits < u.intSpirits){
-		statused = ACURR(A_WIS);
+		statused = ACURR(A_INT);
 		} else if(u.wisSpirits || u.intSpirits){
 		statused = max(ACURR(A_WIS), ACURR(A_INT));
 		} else {
