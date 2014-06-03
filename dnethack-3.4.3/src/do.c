@@ -1374,14 +1374,14 @@ boolean at_stairs, falling, portal;
 	if (!In_quest(&u.uz0) && at_dgn_entrance("The Quest") &&
 		!(u.uevent.qexpelled || u.uevent.qcompleted || quest_status.leader_is_dead)) {
 		if(Role_if(PM_EXILE)){
+			You("sense something reaching out to you....");
+		} else {
 		if (u.uevent.qcalled) {
 			com_pager(Role_if(PM_ROGUE) ? 4 : 3);
 		} else {
 			com_pager(2);
 			u.uevent.qcalled = TRUE;
 		}
-		} else {
-			You("sense something reaching out to you....");
 		}
 	}
 
@@ -2030,20 +2030,22 @@ donull()
 	if(uclockwork){
 		if(!Upolyd && u.uhp<u.uhpmax){
 			if(lastreped < monstermoves-13) You("attempt to make repairs.");
-			if(!rn2(15-u.ulevel/2)) u.uhp++;
+			if(!rn2(15-u.ulevel/2)) u.uhp = min(u.uhp+rnd(10),u.uhpmax);
 			lastreped = monstermoves;
 			if(u.uhp == u.uhpmax){
 				You("complete your repairs.");
 				lastreped = -13;
 			}
+			stop_occupation();
 		} else if(Upolyd && u.mh<u.mhmax){
 			if(lastreped < monstermoves-100) You("attempt to make repairs.");
-			if(!rn2(15-u.ulevel/2)) u.mh++;
+			if(!rn2(15-u.ulevel/2)) u.mh = min(u.mh+rnd(10),u.umhmax);;
 			lastreped = monstermoves;
 			if(u.mh == u.mhmax){
 				You("complete your repairs.");
 				lastreped = -13;
 			}
+			stop_occupation();
 		} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
 	} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
 	return(1);	/* Do nothing, but let other things happen */

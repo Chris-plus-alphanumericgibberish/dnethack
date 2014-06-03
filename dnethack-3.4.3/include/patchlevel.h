@@ -2,14 +2,15 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-/* NetHack 3.4.3 */
+/* NetHack 3.4.3, dNethack version 3.7.0 */
 #define VERSION_MAJOR	3
 /* Started at 3.4.3, for the nethack version. Incremented straight 
-   to 6 with the advent of the Noble role, counting 5 as the initial
-   release, and 6 due to the save compatibility break that the Nobel
-   role induced.
+   to 3.6 with the advent of the Noble role, counting the initial
+   release as 3.5.
+   
+   Incremented to 3.7 with the advent of the Binder role.
 */
-#define VERSION_MINOR	6
+#define VERSION_MINOR	7
 /*
  * PATCHLEVEL is updated for each release.
  */

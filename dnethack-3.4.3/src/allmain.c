@@ -843,8 +843,8 @@ newgame()
 #endif /* RECORD_REALTIME || REALTIME_ON_BOTL */
 
 	/* Success! */
-	if(Race_if(PM_DROW)) litroom(FALSE,NULL);
 	welcome(TRUE);
+	if(Race_if(PM_DROW)) litroom(FALSE,NULL);
 	return;
 }
 
@@ -872,10 +872,28 @@ boolean new_game;	/* false => restoring an old game */
 	     currentgend != flags.initgend))
 	Sprintf(eos(buf), " %s", genders[currentgend].adj);
 
-    pline(new_game ? "%s %s, welcome to NetHack!  You are a%s %s %s."
-		   : "%s %s, the%s %s %s, welcome back to NetHack!",
+    pline(new_game ? "%s %s, welcome to dNetHack!  You are a%s %s %s."
+		   : "%s %s, the%s %s %s, welcome back to dNetHack!",
 	  Hello((struct monst *) 0), plname, buf, urace.adj,
 	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
+	pline("Press Ctrl^W or type #ward to engrave a warding sign.");
+	if(Role_if(PM_PIRATE)) You("can swim! Type #swim while swimming on the surface to dive down to the bottom.");
+	else if(Role_if(PM_EXILE)){
+		pline("Press Ctrl^E or type #seal to engrave a seal of binding.");
+		pline("#chat to a fresh seal to contact the spirit beyond.");
+		pline("Press Ctrl^F or type #power to fire active spirit powers!");
+	}
+	if(Race_if(PM_DROW)){
+		pline("Beware, droven armor evaporates in light!")
+		pline("Use #monster to create a patch of darkness.")
+	}
+	else if(Race_if(PM_CLOCKWORK_AUTOMATON)){
+		pline("Use #monster to adjust your clockspeed.")
+		You("do not heal naturally. Use '.' to attempt repairs.")
+	}
+	else if(Race_if(PM_INCANTIFIER)){
+		pline("Incantifiers eat magic, not food, and do not heal naturally.")
+	}
 }
 
 #ifdef POSITIONBAR

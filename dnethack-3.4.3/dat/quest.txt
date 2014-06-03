@@ -587,31 +587,31 @@ Again, and you think possibly for the last time, you stand before
 %H.
 %E
 %Cp Bin 00005
-Why have you returned?
+"Why have you returned?"
 %E
 %Cp Bin 00006
-Get out!
+"Get out!"
 %E
 %Cp Bin 00007
-Go away!
+"Go away!"
 %E
 %Cp Bin 00008
-The baron is going to kill you, and all that have harbored you!
+"The baron is going to kill you, and all that have harbored you!"
 %E
 %Cp Bin 00009
-Freak!
+"The Order of Seropaenes will hunt you down."
 %E
 %Cp Bin 00010
-Leave, now!
+"Leave, now!"
 %E
 %Cp Bin 00011
-Go.
+"Go."
 %E
 %Cp Bin 00012
-This is no longer your home.
+"This is no longer your home."
 %E
 %Cp Bin 00013
-Run, or the baron will kill you!
+"Run, or the baron will kill you!"
 %E
 %Cp Bin 00014
 ....
