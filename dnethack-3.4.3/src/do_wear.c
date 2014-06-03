@@ -1728,7 +1728,8 @@ int base_uac()
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
 	if(u.sealsActive&SEAL_ECHIDNA) uac -= (ACURR(A_CON)-10)/2;
-	if(u.specialSealsActive&SEAL_DAHLVER_NAR) uac -= Upolyd ? min(u.ulevel/2,(u.uhpmax - u.uhp)/10) : min(u.ulevel/2,(u.mhmax - u.mh)/10);
+	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
+	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
 	uac -= u.uspellprot;
 	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
 	if(Role_if(PM_MONK) && !uarm){
@@ -1807,6 +1808,9 @@ find_ac()
 	if (HProtection & INTRINSIC) uac -= u.ublessed;
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
+	if(u.sealsActive&SEAL_ECHIDNA) uac -= (ACURR(A_CON)-10)/2;
+	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
+	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
 	uac -= u.uspellprot;
 	if(uclockwork) uac -= 3; /*intrinsic armor bonus for automata*/
 	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */

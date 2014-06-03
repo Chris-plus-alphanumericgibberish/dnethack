@@ -2498,7 +2498,7 @@ spiriteffects(power, atme)
 			if(resists_drli(mon) || nonliving(mon->data) || mon->m_lev > u.ulevel){
 				shieldeff(mon->mx, mon->my);
 			} else {
-				You("suck out a %s's soul.", mon_nam(mon));
+				You("suck out %s's soul.", mon_nam(mon));
 				mon->mhp = 0;
 				xkilled(mon,1);
 				if(u.ulevelmax > u.ulevel) pluslvl(FALSE);
@@ -2513,6 +2513,7 @@ spiriteffects(power, atme)
 		case PWR_FIND_PATH:{
 			struct trap *ttmp;
 			int du = 255; /*Arbitrary value larger than 144*/
+			You("try to find nearby paths.");
 			for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
 				if(ttmp->ttyp == MAGIC_PORTAL) {/*may be more than one portal on some levels*/
 					du = min(du, distu(ttmp->tx, ttmp->ty));
@@ -2522,7 +2523,7 @@ spiriteffects(power, atme)
 				else if (du <= 64)
 				You_feel("%s path nearby.", In_endgame(&u.uz) ? "the":"a");
 				else if (du <= 144)
-				pline("%s path in the distance.", In_endgame(&u.uz) ? "the":"a");
+				You_feel("%s path in the distance.", In_endgame(&u.uz) ? "the":"a");
 			}
 		}break;
 		default:

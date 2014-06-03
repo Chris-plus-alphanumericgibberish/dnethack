@@ -3041,7 +3041,7 @@ int tx,ty;
 				pline("He moans and reaches out to you.");
 					if(u.spirit[QUEST_SPIRIT]){
 						//Eject current quest spirit
-						if(u.specialSealsActive&SEAL_DAHLVER_NAR) unbind(SEAL_SPECIAL|SEAL_DAHLVER_NAR,TRUE);
+					if(u.specialSealsActive&SEAL_ACERERAK) unbind(SEAL_SPECIAL|SEAL_ACERERAK,TRUE);
 					}
 					u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
@@ -3062,7 +3062,7 @@ int tx,ty;
 				pline("\"beyond life, motion, and thought.\"");
 					if(u.spirit[QUEST_SPIRIT]){
 						//Eject current quest spirit
-						if(u.specialSealsActive&SEAL_ACERERAK) unbind(SEAL_SPECIAL|SEAL_ACERERAK,TRUE);
+					if(u.specialSealsActive&SEAL_DAHLVER_NAR) unbind(SEAL_SPECIAL|SEAL_DAHLVER_NAR,TRUE);
 					}
 					u.specialSealsActive |= SEAL_SPECIAL|SEAL_ACERERAK;
 					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_ACERERAK;

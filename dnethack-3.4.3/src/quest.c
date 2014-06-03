@@ -268,10 +268,13 @@ chat_with_leader()
 	    exercise(A_WIS, TRUE);
 	    Qstat(got_quest) = TRUE;
 		if(Role_if(PM_EXILE)){
+			pline("ping");
+			u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 			u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 			set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
 			u.spiritT[QUEST_SPIRIT] = moves + 5000;
 			u.dahlver_nar = moves + 5000;
+			u.wisSpirits++;
 		}
 	  }
 	}
@@ -365,8 +368,8 @@ quest_chat(mtmp)
 		(mtmp->data == &mons[PM_KNIGHT] 
 			|| mtmp->data == &mons[PM_MAID]) && 
 		mtmp->mpeaceful) ||
-		(Role_if(PM_NOBLEMAN) && 
-		mtmp->data == &mons[PM_KNIGHT] && 
+		(Role_if(PM_EXILE) && 
+		mtmp->data == &mons[PM_PEASANT] && 
 		mtmp->mpeaceful)
 	){
 		chat_with_guardian();
