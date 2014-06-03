@@ -2373,11 +2373,11 @@ inv_weight()
 #endif
 	while (otmp) {
 #ifndef GOLDOBJ
-		if (!is_boulder(otmp) || !throws_rocks(youmonst.data) || !(u.sealsActive&SEAL_YMIR))
+		if (!is_boulder(otmp) || !(throws_rocks(youmonst.data) || u.sealsActive&SEAL_YMIR))
 #else
 		if (otmp->oclass == COIN_CLASS)
 			wt += (int)(((long)otmp->quan + 50L) / 100L);
-		else if (!is_boulder(otmp) || !throws_rocks(youmonst.data) || !(u.sealsActive&SEAL_YMIR))
+		else if (!is_boulder(otmp) || !(throws_rocks(youmonst.data) || u.sealsActive&SEAL_YMIR))
 #endif
 			wt += otmp->owt;
 

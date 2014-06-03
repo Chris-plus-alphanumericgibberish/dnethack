@@ -1260,6 +1260,8 @@ int tx,ty;
 	else if(u.ulevel <= 25) numSlots=4;
 	else numSlots=5;
 	
+	if(m_at(tx,ty) && (ep->ward_id != ANDROMALIUS || m_at(tx,ty)->data != &mons[PM_SEWER_RAT])) return 0;
+	
 	switch(ep->ward_id){
 	case AHAZU:{
 		if(u.ahazu < moves){
@@ -1407,7 +1409,9 @@ int tx,ty;
 			int t1, t2;
 			static int gldring = 0;
 			if (!gldring) gldring = find_gold_ring();
-			if(m_at(tx,ty)->data == &mons[PM_SEWER_RAT]) {rat = m_at(tx,ty); t2=17;}
+			
+			rat = m_at(tx,ty);
+			if(rat && rat->data == &mons[PM_SEWER_RAT]) t2=17;
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere)
 				if(!otmp->oartifact){
 					if(!o1){
@@ -2976,7 +2980,7 @@ int tx,ty;
 					otmp->corpsenm != PM_LICHEN && 
 					otmp->corpsenm != PM_LIZARD && 
 					otmp->corpsenm != PM_BEHOLDER && 
-					monstermoves <= (monstermoves - peek_at_iced_corpse_age(otmp))/(10L) > 5L &&
+					(monstermoves - peek_at_iced_corpse_age(otmp))/(10L) > 5L &&
 					poisonous(&mons[otmp->corpsenm])
 				){
 					o = otmp;
@@ -2985,21 +2989,22 @@ int tx,ty;
 			}
 			//Spirit requires that his seal be drawn around a rotting corpse of a poisonous creature.
 			if(	o ){
-				pline("\"There was, in times of old,\"");
-				pline("\"when Ymir lived,\"");
-				pline("\"neither sea nor sand nor waves,\"");
-				pline("\"no earth, nor heaven above,\"");
-				pline("\"but a yawning gap, and grass nowhere.\"");
-				pline("\"From Ymir's flesh the earth was formed,\"");
-				pline("\"and from his bones the hills.\"");
-				pline("\"From Ymir's skull, the ice-cold sky,\"");
-				pline("\"and from his blood the sea.\"");
+				pline("An eye opens on the ground within the seal,");
+				pline("and a voice speaks to you out of the Earth:");
+				pline("\"There was, in times of old, when Ymir lived,\"");
+				pline("neither sea nor sand nor waves,");
+				pline("no earth, nor heaven above,");
+				pline("but a yawning gap, and grass nowhere.");
+				pline("From Ymir's flesh the earth was formed,");
+				pline("and from his bones the hills.");
+				pline("From Ymir's skull, the ice-cold sky,");
+				pline("and from his blood the sea.\"");
 				if(u.sealCounts < numSlots){
-					pline("\"I was Ymir, god of poison,\"");
-					pline("\"and you the maggots in my corpse.\"");
-					pline("\"But I will make a pact with you,\"");
-					pline("\"to throw down the false gods,\"");
-					pline("\"that ordered my demise.\"");
+					pline("\"I was Ymir, god of poison,");
+					pline("and you the maggots in my corpse.");
+					pline("But I will make a pact with you,");
+					pline("to throw down the false gods,");
+					pline("that ordered my demise.\"");
 					unrestrict_weapon_skill(P_CLUB);
 					u.sealsActive |= SEAL_YMIR;
 					u.spirit[u.sealCounts] = SEAL_YMIR;
@@ -3008,9 +3013,9 @@ int tx,ty;
 					u.sealCounts++;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("\"I was Ymir, god of poison,\"");
-					pline("\"this steel is the steel of my teeth,\"");
-					pline("\"and the gods shall feel their bite.\"");
+					pline("\"I was Ymir, god of poison,");
+					pline("this steel is the steel of my teeth,");
+					pline("and the gods shall feel their bite.\"");
 					uwep->ovar1 |= SEAL_YMIR;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_YMIR;

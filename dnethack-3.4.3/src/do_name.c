@@ -961,6 +961,13 @@ register struct monst *mtmp;
 }
 
 char *
+himherit(mtmp)
+register struct monst *mtmp;
+{
+	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "it" : mtmp->female ? "her" : "him";
+}
+
+char *
 HisHerIts(mtmp)
 register struct monst *mtmp;
 {

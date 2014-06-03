@@ -2115,21 +2115,21 @@ aligntyp alignment;
 		else gnam = Moloch; 
 	 break;
      case A_LAWFUL:
-		if(!Role_if(PM_EXILE)){ 
+		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
 						gnam = urole.lgod; break;
-		} else if(Is_astralevel(&u.uz)) {
+		} else {
 						gnam = Demiurge; break;
 		}
      case A_NEUTRAL:	
-		if(!Role_if(PM_EXILE)){ 
+		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
 						gnam = urole.ngod; break;
-		} else if(Is_astralevel(&u.uz)) {
+		} else {
 						gnam = tVoid; break;
 		}
      case A_CHAOTIC:	
-		if(!Role_if(PM_EXILE)){
+		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
 						gnam = urole.cgod; break;
-		} else if(Is_astralevel(&u.uz)) {
+		} else {
 						gnam = Sophia; break;
 		}
      case A_VOID:		gnam = tVoid; break;

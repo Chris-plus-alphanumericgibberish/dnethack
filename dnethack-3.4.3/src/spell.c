@@ -1086,12 +1086,14 @@ genericptr_t val;
 	if (levl[x][y].lit){
 	    levl[x][y].lit = 0;
 	    snuff_light_source(x, y);
+		newsym(x,y);
 		if(mon){
 			if(is_undead(mon->data) || resists_drain(mon) || is_demon(mon->data)){
 				shieldeff(mon->mx, mon->my);
 			} else {
 				setmangry(mon);
 				mon->mhp -= d(5, nd);
+				pline("%s weakens.", Monnam(mon));
 			}
 		}
 	} else {
@@ -1101,10 +1103,11 @@ genericptr_t val;
 			} else {
 				setmangry(mon);
 				mon->mhp -= d(rnd(5), nd);
+				pline("%s weakens.", Monnam(mon));
 			}
 		}
 	}
-	if (mon->mhp <= 0){
+	if (mon && mon->mhp <= 0){
 		mon->mhp = 0;
 		xkilled(mon, 1);
 	}
@@ -1443,7 +1446,7 @@ spiriteffects(power, atme)
 					You("need a free hand to make a touch attack!");
 					return 0;
 				}
-				if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) >= rnd(20)){
+				if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) <= rnd(20)){
 					You("miss.");
 					break;
 				}
@@ -2193,9 +2196,10 @@ spiriteffects(power, atme)
 					}
 				}
 				while(sx != u.ux || sy != u.uy){
+					i++;
 					mon = m_at(sx, sy);
 					if(mon){
-						mhurtle(mon, u.dx, u.dy, mon);
+						mhurtle(mon, u.dx, u.dy, range+i);
 						mon->mhp -= d(5,dsize);
 						setmangry(mon);
 						if (mon->mhp <= 0){
@@ -2247,7 +2251,7 @@ spiriteffects(power, atme)
 				if(!mon){
 					if(!opennewdoor(u.ux+u.dx, u.uy+u.dy)) return 0;
 					else break;
-				} if(find_roll_to_hit(mon) < rnd(20)){
+				} if(find_roll_to_hit(mon) <= rnd(20)){
 					You("miss.");
 					break;
 				} else if(unsolid(mon->data)){
@@ -2315,6 +2319,7 @@ spiriteffects(power, atme)
 				} else if(levl[u.ux+u.dx][u.uy+u.dy].typ == ROOM || levl[u.ux+u.dx][u.uy+u.dy].typ == CORR){
 					pline("Water rains down from above, and a tree grows up from the ground.");
 					levl[u.ux+u.dx][u.uy+u.dy].typ = TREE;
+					newsym(u.ux+u.dx, u.uy+u.dy);
 				}
 			}
 		break;
@@ -2351,7 +2356,10 @@ spiriteffects(power, atme)
 			pline_The("feeling subsides.");
 		break;
 		case PWR_DAMNING_DARKNESS:
+			You("call on the wrath of shadow.");
 			do_clear_area(u.ux, u.uy, dsize, damningdark, (genericptr_t) &dsize);
+			vision_full_recalc = 1;	/* lighting changed */
+			doredraw();
 		break;
 		case PWR_TOUCH_OF_THE_VOID:{
 			struct monst *mon;
@@ -2362,7 +2370,7 @@ spiriteffects(power, atme)
 				You("need a free hand to make a touch attack!");
 				return 0;
 			}
-			if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) >= rnd(20)){
+			if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) <= rnd(20)){
 				You("miss.");
 				break;
 			}
@@ -2414,7 +2422,7 @@ spiriteffects(power, atme)
 					migrate_to_level(mon, ledger_no(&tolevel),
 							 migrate_typ, (coord *)0);
 				} else {
-					pline("%s colapses in on %sself.", Monnam(mon), sheheit(mon));
+					pline("%s colapses in on %sself.", Monnam(mon), himherit(mon));
 					mongone(mon);
 				}
 			}
@@ -2426,10 +2434,13 @@ spiriteffects(power, atme)
 		    cc.x = u.ux;
 		    cc.y = u.uy;
 		    pline("At what monster do you wish to gaze?");
-			do cancelled = getpos(&cc, TRUE, "the desired doorway");
+			do cancelled = getpos(&cc, TRUE, "the monster to gaze at");
 			while( !((mon=m_at(cc.x,cc.y))  && canspotmon(mon)) && cancelled >= 0);
 			if(cancelled < 0) return 0; /*abort*/
-			if(!mon || !canseemon(mon)) break;
+			if(!mon || !canseemon(mon)){
+				You("don't see a monster there.");
+				break;
+			}
 			if(resists_poison(mon)){
 				shieldeff(mon->mx, mon->my);
 			} else if(rn2(10)){
@@ -2442,15 +2453,15 @@ spiriteffects(power, atme)
 					mon->mhp = 0;
 					xkilled(mon, 1);
 					break;
-				}
+				} else You("shoot a venomous glare at %s.", mon_nam(mon));
 			}
 		}break;
 		case PWR_GAP_STEP:
 			if(!Levitation) {
 				int i;
-				pline("\"There was, in times of old,\"");
-				pline("\"when Ymir lived,\"");
-				pline("\"but a yawning gap, and grass nowhere.\"");
+				pline("\"There was, in times of old,");
+				pline("when Ymir lived,");
+				pline("but a yawning gap, and grass nowhere.\"");
 				for(i=0; i < GATE_SPIRITS; i++) if(u.spirit[i] == SEAL_YMIR) break;
 				if(i<GATE_SPIRITS) HLevitation = u.spiritT[i] - moves + 5; //Remaining time until binding expires, plus safety margin
 				else HLevitation = u.voidChime + 5; //Remaining time until chime expires (apparently, it was in the Pen), plus safety margin
