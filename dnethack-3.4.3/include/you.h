@@ -519,7 +519,7 @@ struct you {
 	long sealsActive;
 	long specialSealsActive;
 	
-	int wisSpritis, intSpirits;
+	int wisSpirits, intSpirits;
 	
 	//Spirits in order bound:
 	long spirit[7];
@@ -623,6 +623,8 @@ extern char *wardDecode[26]; /*Defined in spell.c*/
 extern int wardMax[16]; /*Defined in engrave.c*/
 extern char *sealNames[34]; /*Defined in engrave.c*/
 extern char *andromaliusItems[18]; /*Defined in sounds.c*/
+extern long int_spirits; /*Defined in sounds.c*/
+extern long wis_spirits; /*Defined in sounds.c*/
 extern boolean barage; /*Defined in dothrow.c*/
 #define Upolyd (u.umonnum != u.umonster)
 
