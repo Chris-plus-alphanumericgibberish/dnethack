@@ -1373,12 +1373,15 @@ boolean at_stairs, falling, portal;
 	/* the message from your quest leader */
 	if (!In_quest(&u.uz0) && at_dgn_entrance("The Quest") &&
 		!(u.uevent.qexpelled || u.uevent.qcompleted || quest_status.leader_is_dead)) {
-
+		if(Role_if(PM_EXILE)){
 		if (u.uevent.qcalled) {
 			com_pager(Role_if(PM_ROGUE) ? 4 : 3);
 		} else {
 			com_pager(2);
 			u.uevent.qcalled = TRUE;
+		}
+		} else {
+			You("sense something reaching out to you....");
 		}
 	}
 

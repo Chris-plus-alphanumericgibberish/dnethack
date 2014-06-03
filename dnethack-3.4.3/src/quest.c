@@ -223,7 +223,7 @@ chat_with_leader()
 	}
 
 /*	Rule 3: You've got the artifact and are back to return it. */
-	  else if(u.uhave.questart) {
+	  else if(u.uhave.questart && (!Role_if(PM_EXILE) || quest_status.killed_nemesis)) {
 	    struct obj *otmp;
 
 	    for (otmp = invent; otmp; otmp = otmp->nobj)
@@ -268,7 +268,6 @@ chat_with_leader()
 	    exercise(A_WIS, TRUE);
 	    Qstat(got_quest) = TRUE;
 		if(Role_if(PM_EXILE)){
-			pline("ping");
 			u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 			u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 			set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
