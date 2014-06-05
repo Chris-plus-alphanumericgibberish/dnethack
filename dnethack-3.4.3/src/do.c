@@ -2039,7 +2039,7 @@ donull()
 			stop_occupation();
 		} else if(Upolyd && u.mh<u.mhmax){
 			if(lastreped < monstermoves-100) You("attempt to make repairs.");
-			if(!rn2(15-u.ulevel/2)) u.mh = min(u.mh+rnd(10),u.umhmax);;
+			if(!rn2(15-u.ulevel/2)) u.mh = min(u.mh+rnd(10),u.mhmax);
 			lastreped = monstermoves;
 			if(u.mh == u.mhmax){
 				You("complete your repairs.");

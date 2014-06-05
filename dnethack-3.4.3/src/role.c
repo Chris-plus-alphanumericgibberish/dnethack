@@ -79,7 +79,7 @@ const struct Role roles[] = {
 },
 {	{"Binder", 		 0}, {
 	{"Exile",        0},
-	{"Heratic",      0},
+	{"Heretic",      0},
 	{"Cultist",      0},
 	{"Binder",       0},
 	{"Akousmatikoi", 0},

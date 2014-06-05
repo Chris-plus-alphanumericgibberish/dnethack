@@ -6394,6 +6394,7 @@ register struct attack *mattk;
 		if(u.sealsActive&SEAL_EURYNOME && !rn2(5)){
 			You("counterattack!");
 			attack(mtmp);
+			if(DEADMONSTER(mtmp)) return 2;
 		}
 	}
 
@@ -6404,6 +6405,7 @@ register struct attack *mattk;
 	){
 		You("counterattack!");
 		attack(mtmp);
+		if(DEADMONSTER(mtmp)) return 2;
 	}
 	
     assess_dmg:

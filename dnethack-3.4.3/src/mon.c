@@ -2647,6 +2647,7 @@ xkilled(mtmp, dest)
 		if (!rn2(6) && !(mvitals[mndx].mvflags & G_NOCORPSE)
 					&& mdat->mlet != S_KETER
 					&& mdat->mlet != S_PLANT
+					&& !(mtmp->mvanishes)
 					&& !(mtmp->mclone)
 							) {
 			int typ;

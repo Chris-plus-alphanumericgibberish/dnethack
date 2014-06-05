@@ -799,7 +799,7 @@ mdamagem(magr, mdef, mattk)
 		 */
 		num = monsndx(mdef->data);
 		if (magr->mtame && !magr->isminion &&
-		    !(mvitals[num].mvflags & G_NOCORPSE)) {
+		    !(mvitals[num].mvflags & G_NOCORPSE || mdef->mvanishes)) {
 		    struct obj *virtualcorpse = mksobj(CORPSE, FALSE, FALSE);
 		    int nutrit;
 
