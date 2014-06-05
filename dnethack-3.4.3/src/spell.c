@@ -1289,14 +1289,14 @@ spiriteffects(power, atme)
 		break;
 		case PWR_ASTAROTH_S_ASSEMBLY:{
 			int dmg;
-			int range = dsize;
+			int range = 5;
 			xchar lsx, lsy, sx, sy;
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
 			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
 			if(u.uswallow){
-				explode(u.ux,u.uy,5/*Electrical*/, d(5,dsize), WAND_CLASS, EXPL_MAGICAL);
+				explode(u.ux,u.uy,5/*Electrical*/, d(range,dsize), WAND_CLASS, EXPL_MAGICAL);
 			} else {
 				while(--range >= 0){
 					lsx = sx; sx += u.dx;
@@ -1304,18 +1304,18 @@ spiriteffects(power, atme)
 					if(isok(sx,sy) && !IS_STWALL(levl[sx][sy].typ)) {
 						mon = m_at(sx, sy);
 						if(mon){
-							dmg = d(5,range+1); //Damage decreases with range
+							dmg = d(range+1,dsize); //Damage decreases with range
 							explode(sx, sy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
 							break;//break loop
 						}
 					} else {
-						dmg = d(5,range+1); //Damage decreases with range
+						dmg = d(range+1,dsize); //Damage decreases with range
 						explode(lsx, lsy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
 						break;//break loop
 					}
 				}
-				pline("Leftover electrical potential prodeces a field around you.");
-				u.uspellprot = max(dsize - (range+1),u.uspellprot);
+				pline("Leftover electrical potential produces a field around you.");
+				u.uspellprot = max(5 - (range+1),u.uspellprot);
 				u.usptime = 5;
 				u.uspmtime = 5;
 			}

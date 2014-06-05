@@ -426,7 +426,22 @@ struct permonst *
 qt_montype()
 {
 	int qpm;
-
+	if(Role_if(PM_EXILE) && rn2(5)){
+		switch(rn2(4)){
+			case 0:
+				if(qpm = roles[flags.panLgod].guardnum) return (&mons[qpm]);
+			break;
+			case 1:
+				if(qpm = roles[flags.panNgod].guardnum) return (&mons[qpm]);
+			break;
+			case 2:
+				if(qpm = roles[flags.panCgod].guardnum) return (&mons[qpm]);
+			break;
+			case 3:
+				return (&mons[PM_SHADE]);
+			break;
+		}
+	}
 	if (rn2(5)) {
 	    qpm = urole.enemy1num;
 	    if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))

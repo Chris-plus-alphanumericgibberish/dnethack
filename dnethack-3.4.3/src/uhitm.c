@@ -2559,7 +2559,7 @@ register struct attack *mattk;
 			    tmp = 1 + (mdef->data->cwt >> 8);
 			    if (corpse_chance(mdef, &youmonst, TRUE) &&
 				!(mvitals[monsndx(mdef->data)].mvflags &
-				  G_NOCORPSE)) {
+				  G_NOCORPSE || mdef->mvanishes)) {
 				/* nutrition only if there can be a corpse */
 				if(Race_if(PM_INCANTIFIER)) u.uen += mdef->m_lev;
 				else u.uhunger += (mdef->data->cnutrit+1) / 2;

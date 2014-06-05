@@ -1738,6 +1738,24 @@ role_init()
 		urole.lgod = roles[flags.panLgod].lgod;
 		urole.ngod = roles[flags.panNgod].ngod;
 		urole.cgod = roles[flags.panCgod].cgod;
+		if(roles[flags.panLgod].guardnum){
+			mons[roles[flags.panLgod].guardnum].mflags2 &= ~M2_PEACEFUL;
+			mons[roles[flags.panLgod].guardnum].mflags2 |= M2_HOSTILE;
+			mons[roles[flags.panLgod].guardnum].mflags3 &= ~M3_CLOSE;
+			mons[roles[flags.panLgod].guardnum].msound = MS_CUSS;
+		}
+		if(roles[flags.panNgod].guardnum){
+			mons[roles[flags.panNgod].guardnum].mflags2 &= ~M2_PEACEFUL;
+			mons[roles[flags.panNgod].guardnum].mflags2 |= M2_HOSTILE;
+			mons[roles[flags.panNgod].guardnum].mflags3 &= ~M3_CLOSE;
+			mons[roles[flags.panNgod].guardnum].msound = MS_CUSS;
+		}
+		if(roles[flags.panCgod].guardnum){
+			mons[roles[flags.panCgod].guardnum].mflags2 &= ~M2_PEACEFUL;
+			mons[roles[flags.panCgod].guardnum].mflags2 |= M2_HOSTILE;
+			mons[roles[flags.panCgod].guardnum].mflags3 &= ~M3_CLOSE;
+			mons[roles[flags.panCgod].guardnum].msound = MS_CUSS;
+		}
 	} else if(Race_if(PM_DROW)){
 		if(flags.initgend){ /*true = female*/
 			urole.lgod = DrowFemaleLgod;
