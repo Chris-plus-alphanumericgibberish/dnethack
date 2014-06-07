@@ -2110,9 +2110,9 @@ int final;
 	}
 
 	if (!u.uconduct.shopID == 0) {
-	    you_have_never("payed a shopkeeper to identify an item");
+	    you_have_never("paid a shopkeeper to identify an item");
 	} else {
-	    Sprintf(buf, "payed to have %d item%s identified",
+	    Sprintf(buf, "paid to have %d item%s identified",
 		    u.uconduct.shopID, plur(u.uconduct.shopID));
 	    you_have_X(buf);
 	}

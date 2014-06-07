@@ -384,8 +384,9 @@ nh_timeout()
 			else if(u.spiritT[i] == moves + 1) remaining = 5;
 			if(remaining){
 				int j;
-				for(j=0;j<QUEST_SPIRITS;j++){
+				for(j=0;j<32;j++){
 					if((u.spirit[i] >> j) == 1){
+						pline("j: %d, slot: %d", j, i);
 						Your("link with %s is %s.", sealNames[j], spiritFadeTerms[remaining-1]);
 					}
 				}
