@@ -1728,8 +1728,10 @@ spiriteffects(power, atme)
 				else perc = (u.uhp - mon->mhp)*100/u.uhp;
 				
 				if(perc>0 && rnd(100) < perc){
+					pline("%s vanishes.", Monnam(mon));
+					healup(d(rnd(5),dsize), 0, FALSE, FALSE);
 					mongone(mon);
-				}
+				} else You("fail.");
 			} else break;
 		}break;
 		case PWR_STARGATE:
@@ -2031,6 +2033,7 @@ spiriteffects(power, atme)
 					sx += u.dx;
 					sy += u.dy;
 					if(!(ACCESSIBLE(levl[sx][sy].typ) || 
+						 (levl[sx][sy].typ == DOOR && levl[sx][sy].doormask&D_ISOPEN) ||
 						 levl[sx][sy].typ == POOL || 
 						 levl[sx][sy].typ == MOAT || 
 						 levl[sx][sy].typ == LAVAPOOL
@@ -2099,6 +2102,7 @@ spiriteffects(power, atme)
 					vision_full_recalc = 1;	/* hero has moved, recalculate vision later */
 					doredraw();
 				}
+				spoteffects(FALSE);
 			}
 			if(!once) return 0; //Canceled first prompt
 		}break;

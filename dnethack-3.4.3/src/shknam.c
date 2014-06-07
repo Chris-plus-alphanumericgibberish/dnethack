@@ -554,6 +554,8 @@ struct obj *obj;
 {
     int i, shp_indx = ESHK(shkp)->shoptype - SHOPBASE;
     const struct shclass *shp = &shtypes[shp_indx];
+	
+	if(obj->ostolen || ESHK(shkp)->pbanned) return FALSE;
 
     if (shp->symb == RANDOM_CLASS) return TRUE;
     else for (i = 0; i < SIZE(shtypes[0].iprobs) && shp->iprobs[i].iprob; i++)

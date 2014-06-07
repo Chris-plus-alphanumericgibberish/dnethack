@@ -617,7 +617,7 @@ u_entered_shop(enterstring)
 register char *enterstring;
 {
 
-	register int rt, seenSeals;
+	int rt, seenSeals;
 	register struct monst *shkp;
 	register struct eshk *eshkp;
 	static const char no_shk[] = "This shop appears to be deserted.";
@@ -669,12 +669,13 @@ register char *enterstring;
 	}
 #ifdef CONVICT
 	/* Visible striped prison shirt */
-	if ((uarmu && (uarmu->otyp == STRIPED_SHIRT)) && !uarm && !uarmc) {
+	if ((uarmu && (uarmu->otyp == STRIPED_SHIRT)) && !uarm && !uarmc && strcmp(shkname(shkp), "Izchak") != 0) {
 	    eshkp->pbanned = TRUE;
 	}
 #endif /* CONVICT */
 
 	seenSeals = countFarSigns(shkp);
+	if(seenSeals && strcmp(shkname(shkp), "Izchak") == 0) seenSeals = 0;
 	eshkp->signspotted = max(seenSeals, eshkp->signspotted);
 	if(seenSeals > 1){
 		eshkp->pbanned = TRUE;
@@ -1513,6 +1514,7 @@ proceed:
 		return(0);
 	}        
 	seenSeals = countFarSigns(shkp);
+	if(seenSeals && strcmp(shkname(shkp), "Izchak") == 0) seenSeals = 0;
 	eshkp->signspotted = max(seenSeals, eshkp->signspotted);
 	if(seenSeals > 1){
 		eshkp->pbanned = TRUE;
@@ -1731,6 +1733,7 @@ shk_other_services()
 	shkp = shop_keeper(*u.ushops);
 	
 	seenSeals = countCloseSigns(shkp);
+	if(seenSeals && strcmp(shkname(shkp), "Izchak") == 0) seenSeals = 0;
 	ESHK(shkp)->signspotted = max(seenSeals, ESHK(shkp)->signspotted);
 	if(seenSeals > 1){
 		ESHK(shkp)->pbanned = TRUE;
@@ -1770,7 +1773,7 @@ shk_other_services()
 		}
 	}
 	if(ESHK(shkp)->pbanned || seenSeals){
-		pline("I don't do business for your kind.");
+		pline("\"I don't do business for your kind.\"");
 		return;
 	}
 	
@@ -4161,6 +4164,7 @@ void
 shk_chat(shkp)
 struct monst *shkp;
 {
+	int seenSeals;
 	struct eshk *eshk;
 #ifdef GOLDOBJ
 	long shkmoney;
@@ -4178,12 +4182,56 @@ struct monst *shkp;
 		return;
 	}
 
+	seenSeals = countCloseSigns(shkp);
+	if(seenSeals && strcmp(shkname(shkp), "Izchak") == 0) seenSeals = 0;
+	ESHK(shkp)->signspotted = max(seenSeals, ESHK(shkp)->signspotted);
+	if(seenSeals > 1){
+		ESHK(shkp)->pbanned = TRUE;
+		if(seenSeals == 4){
+			verbalize("Foul heretic!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+		} else if(seenSeals == 5){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		} else if(seenSeals == 6){
+			coord mm;
+			verbalize("Foul heretic! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near down staircase (hinders return to level) */
+			mm.x = xdnstair;
+			mm.y = ydnstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+			/* Create swarm near up staircase (hinders retreat from level) */
+			mm.x = xupstair;
+			mm.y = yupstair;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		}
+	}
+	
 	eshk = ESHK(shkp);
 	if (ANGRY(shkp))
 		pline("%s mentions how much %s dislikes %s customers.",
 			shkname(shkp), mhe(shkp),
 			eshk->robbed ? "non-paying" : "rude");
-	else if (eshk->following) {
+	else if(ESHK(shkp)->pbanned || seenSeals){
+		pline("\"I don't do business for your kind.\"");
+		return;
+	} else if (eshk->following) {
 		if (strncmp(eshk->customer, plname, PL_NSIZ)) {
 		    verbalize("%s %s!  I was looking for %s.",
 			    Hello(shkp), plname, eshk->customer);
@@ -5458,7 +5506,7 @@ int
 countCloseSigns(mon)
 struct monst *mon;
 {
-	int count=0;
+	int count=countFarSigns(mon);
 	if(couldsee(mon->mx, mon->my) && mon->mcansee){
 		if(u.sealsActive&SEAL_AHAZU && !(ublindf && ublindf->otyp==MASK)) count++;
 		// if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
