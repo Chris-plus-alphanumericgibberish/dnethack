@@ -1003,7 +1003,6 @@ register struct monst *mtmp;
 	    case S_KOBOLD:
 		if (!rn2(4)) m_initthrow(mtmp, DART, 12);
 		break;
-
 	    case S_CENTAUR:
 		if (rn2(2)) {
 		    if(ptr == &mons[PM_FOREST_CENTAUR]) {
@@ -1298,6 +1297,21 @@ register struct	monst	*mtmp;
 			rloc_engr(oep);
 		 }
 		}
+		break;
+		case S_VORTEX:
+			if(ptr == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES]){
+				otmp = mksobj(SPE_SECRETS, TRUE, FALSE);
+				if(!rn2(3)){
+					otmp = oname(otmp, artiname(ART_BOOK_OF_LOST_NAMES));		
+				} else if(!rn2(2)){
+					otmp = oname(otmp, artiname(ART_SCROLL_OF_INFINITE_SPELLS));		
+				} else {
+					otmp = oname(otmp, artiname(ART_NECRONOMICON));		
+				}
+				otmp->blessed = FALSE;
+				otmp->cursed = FALSE;
+				(void) mpickobj(mtmp, otmp);
+			}
 		break;
 //		case S_IMP:
 //			switch(monsndx(ptr)) {
