@@ -35,6 +35,7 @@ int FDECL(dolordsmenu, (const char *,struct obj *));
 static NEARDATA schar delay;		/* moves left for this spell */
 static NEARDATA struct obj *artiptr;/* last/current artifact being used */
 static NEARDATA int necro_effect;	/* necro effect picked */
+static NEARDATA int lostname;	/* necro effect picked */
 
 static NEARDATA	int oozes[12] = {0, PM_ACID_BLOB, PM_QUIVERING_BLOB, 
 					  PM_GELATINOUS_CUBE, PM_DARKNESS_GIVEN_HUNGER, PM_GRAY_OOZE, 
@@ -55,6 +56,7 @@ static NEARDATA	int demons[16] = {0, PM_QUASIT, PM_MANES, PM_QUASIT,
 
 
 STATIC_PTR int NDECL(read_necro);
+STATIC_PTR int NDECL(read_lost);
 
 STATIC_DCL int FDECL(spec_applies, (const struct artifact *,struct monst *));
 STATIC_DCL int FDECL(arti_invoke, (struct obj*));
@@ -300,9 +302,11 @@ register boolean mod;
 				u.SnSd3 = 0;//turn on which you can reuse the third dance
 				u.SnSd3duration = 0;//turn until which the weapon does full damage
 			}
-			if(get_artifact(otmp)->inv_prop == NECRONOMICON){
+			if(get_artifact(otmp)->inv_prop == NECRONOMICON || get_artifact(otmp)->inv_prop == SPIRITNAMES){
 				otmp->ovar1 = 0;//ovar1 will be used to track special powers, via flags
 				otmp->spestudied = 0;//use to track number of powers discovered
+			} if(get_artifact(otmp)->inv_prop == INFINITESPELLS){
+				otmp->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
 			}
 			if( arti_light(otmp) ){
 				if (otmp->where == OBJ_FREE){
@@ -3667,43 +3671,50 @@ arti_invoke(obj)
 		   }
 		break;
 		case SPIRITNAMES:{
-		   // if(yn("Open the Book of Lost Names?")=='y'){
-			// if(Blind){
-				// You_cant("feel any Braille writing.");
-		// break;
-			// }
-			// discover_artifact(ART_BOOK_OF_LOST_NAMES);
-			// identify(obj);
-			// update_inventory();
-			// if(obj->ovar1 && yn("Contact a known spirit?") == 'y'){
-				// u.uconduct.literate++;
-				// lostname = dolostmenu("Choose which spirit to contact", obj);
-				// delay = -25;
-				// artiptr = obj;
-				// set_occupation(read_lost, "studying", 0);
-			// }
-			// else if(yn("Risk your name amongst the Lost?") == 'y'){
-				// int chance = 0;
-				// u.uconduct.literate++;
-				// You("open your mind to the cold winds of the Void.");
-				// lostname = SEAL_SPECIAL;
-				// delay = -125;
-				// artiptr = obj;
-				// set_occupation(read_lost, "studying", 0);
-				// exercise(A_WIS, FALSE);
-			// }
-			// else{
-				// if(Hallucination) pline("The whisperers berate you ceaselessly.");
-				// You("close the Book of Lost Names.");
-			// }
-		   // }
-		   // else{
-				// Hallucination ? 
-					// pline("Cool it, Link.  It's just a book.") : 
-					// You("hold the Book of Lost Names awkwardly, then put it away.");
-		   // }
+		   if(yn("Open the Book of Lost Names?")=='y'){
+			if(Blind){
+				You_cant("feel any Braille writing.");
+		break;
+			}
+			discover_artifact(ART_BOOK_OF_LOST_NAMES);
+			identify(obj);
+			update_inventory();
+			if(obj->ovar1 && yn("Contact a known spirit?") == 'y'){
+				long yourseals = u.sealsKnown;
+				u.sealsKnown = obj->ovar1;
+				u.uconduct.literate++;
+				lostname = pick_seal();
+				delay = -25;
+				artiptr = obj;
+				u.sealsKnown = yourseals;
+				set_occupation(read_lost, "studying", 0);
+			}
+			else if(yn("Risk your name amongst the Lost?") == 'y'){
+				int chance = 0;
+				u.uconduct.literate++;
+				You("open your mind to the cold winds of the Void.");
+				lostname = QUEST_SPIRITS;
+				delay = -125;
+				artiptr = obj;
+				set_occupation(read_lost, "studying", 0);
+				exercise(A_WIS, FALSE);
+			}
+			else{
+				if(Hallucination) pline("The whisperers berate you ceaselessly.");
+				You("close the Book of Lost Names.");
+			}
+		   }
+		   else{
+				Hallucination ? 
+					pline("Cool it, Link.  It's just a book.") : 
+					You("hold the Book of Lost Names awkwardly, then put it away.");
+		   }
 		}break;
 		case INFINITESPELLS:{
+			spelleffects(0,FALSE,obj->ovar1);
+			if(!rn2(20)){
+				obj->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
+			}
 		}break;
 		case LORDLY:
 			if(uwep && uwep == obj){
@@ -4946,6 +4957,72 @@ read_necro(VOID_ARGS)
 	}
 	else{
 		pline("Unrecognized Necronomicon effect.");
+	}
+	artiptr = 0;
+	return(0);
+}
+
+STATIC_PTR int
+read_lost(VOID_ARGS)
+{
+	struct permonst *pm;
+	struct monst *mtmp = 0;
+	int i, numSlots;
+	short booktype;
+	char splname[BUFSZ];
+
+	if (Confusion) {		/* became confused while learning */
+//	    (void) confused_book(book);
+	    artiptr = 0;		/* no longer studying */
+	    nomul(delay, "struggling with the Book of Lost Names");		/* remaining delay is uninterrupted */
+		losexp("getting lost in a book",TRUE,TRUE,TRUE);
+	    delay = 0;
+	    return(0);
+	}
+	if (delay) {	/* not if (delay++), so at end delay == 0 */
+	/* lenses give 50% faster reading */
+//	    nomul( (ublindf && ublindf->otyp == LENSES) ? 
+//			(-26+ACURR(A_INT))/2 :
+//			(-26+ACURR(A_INT))); /* Necronomicon is difficult to put down */
+//	    delay -= -26+ACURR(A_INT); /* - a negative number is + */
+		delay++;
+		if(ublindf && ublindf->otyp == LENSES) delay++;
+		if(delay < 0){
+			return(1); /* still busy */
+		}
+		delay = 0;
+	}
+	if(lostname < QUEST_SPIRITS){/* Bind spirit */
+		if(Role_if(PM_EXILE)){
+			if(u.ulevel <= 2) numSlots=1;
+			else if(u.ulevel <= 9) numSlots=2;
+			else if(u.ulevel <= 18) numSlots=3;
+			else if(u.ulevel <= 25) numSlots=4;
+			else numSlots=5;
+		} else {
+			numSlots=1;
+		}
+		if(u.sealCounts < numSlots) bindspirit(lostname);
+		else You("can't feel the spirit.");
+	}
+	else if(necro_effect == QUEST_SPIRITS){
+		int chance = 0;
+		if(!(artiptr->ovar1)) artiptr->spestudied = 0; /* Sanity enforcement. Something wierd is going on with the artifact creation code.*/
+
+		if(!(artiptr->ovar1 & SEAL_SPECIAL)){
+			long putativeSeal = 1L << rn2(31);
+			if(!(artiptr->ovar1 & putativeSeal)) losexp("getting lost in a book",TRUE,TRUE,TRUE);
+			else{
+				artiptr->ovar1 |= putativeSeal;
+				artiptr->spestudied++;
+			}
+		} else losexp("getting lost in a book",TRUE,TRUE,TRUE);
+		
+		if(artiptr->spestudied > 5 && !rn2(500)) artiptr->ovar1 |= SEAL_SPECIAL;
+		
+	}
+	else{
+		pline("Unrecognized Lost Names effect.");
 	}
 	artiptr = 0;
 	return(0);
