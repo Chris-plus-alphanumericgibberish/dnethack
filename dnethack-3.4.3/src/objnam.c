@@ -753,6 +753,18 @@ plus:
 		if(Role_if(PM_EXILE) && obj->otyp==BELL_OF_OPENING){
 			Strcat(prefix, "warped and cracked ");
 		}
+		if(obj->otyp == MASK){
+		    if (mons[obj->corpsenm].geno & G_UNIQ) {
+			Sprintf(prefix, "%s%s ",
+				(type_is_pname(&mons[obj->corpsenm]) ?
+					"" : "the "),
+				s_suffix(mons[obj->corpsenm].mname));
+			Strcat(prefix, tmpbuf);
+		    } else {
+			Strcat(prefix, mons[obj->corpsenm].mname);
+			Strcat(prefix, " ");
+		    }
+		}
 		if (!is_weptool(obj))
 		    add_erosion_words(obj, prefix);
 		if(obj->owornmask & (W_TOOL /* blindfold */

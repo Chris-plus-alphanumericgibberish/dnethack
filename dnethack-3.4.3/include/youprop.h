@@ -116,7 +116,7 @@
 #define Confusion		HConfusion && !(u.specialSealsActive&SEAL_NUMINA)
 
 #define Blinded			u.uprops[BLINDED].intrinsic
-#define Blindfolded		(ublindf && ublindf->otyp != LENSES)
+#define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK)
 		/* ...means blind because of a cover */
 #define Blind	((Blinded || Blindfolded || !haseyes(youmonst.data)) && \
 		 !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp != CRYSTAL_PLATE_MAIL)) && \

@@ -243,7 +243,7 @@ use_towel(obj)
 			make_blinded(Blinded + (long)u.ucreamed - old, TRUE);
 		    } else {
 			const char *what = (ublindf->otyp == LENSES) ?
-					    "lenses" : "blindfold";
+					    "lenses" : (ublindf->otyp == MASK) ? "mask" : "blindfold";
 			if (ublindf->cursed) {
 			    You("push your %s %s.", what,
 				rn2(2) ? "cock-eyed" : "crooked");
@@ -3450,12 +3450,14 @@ doapply()
 	switch(obj->otyp){
 	case BLINDFOLD:
 	case LENSES:
+	case MASK:
 		if (obj == ublindf) {
 		    if (!cursed(obj)) Blindf_off(obj);
 		} else if (!ublindf)
 		    Blindf_on(obj);
 		else You("are already %s.",
 			ublindf->otyp == TOWEL ?     "covered by a towel" :
+			ublindf->otyp == MASK ?      "wearing a mask" :
 			ublindf->otyp == BLINDFOLD ? "wearing a blindfold" :
 						     "wearing lenses");
 		break;

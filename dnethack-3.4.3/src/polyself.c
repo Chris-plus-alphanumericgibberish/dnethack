@@ -275,9 +275,10 @@ boolean forcecontrol;
 	boolean leonine = (uarmc && uarmc->otyp == LEO_NEMAEUS_HIDE);
 	boolean iswere = (u.ulycn >= LOW_PM || is_were(youmonst.data));
 	boolean isvamp = (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)));
+	boolean hasmask = (ublindf && ublindf->otyp==MASK && polyok(&mons[ublindf->corpsenm]));
 	boolean was_floating = (Levitation || Flying);
 
-	if(!Polymorph_control && !forcecontrol && !draconian && !iswere && !isvamp) {
+	if(!Polymorph_control && !forcecontrol && !draconian && !iswere && !isvamp && !hasmask) {
 	    if (rn2(20) > ACURR(A_CON)) {
 		You("%s", shudder_for_moment);
 		losehp(rnd(30), "system shock", KILLED_BY_AN);
@@ -309,7 +310,7 @@ boolean forcecontrol;
 		if (leonine &&
 		    (mntmp == PM_SON_OF_TYPHON || tries == 5))
 		    goto do_lion_merge;
-	} else if (draconian || leonine || iswere || isvamp) {
+	} else if (draconian || leonine || iswere || hasmask || isvamp) {
 		/* special changes that don't require polyok() */
 		if (draconian) {
 		    do_merge:
@@ -334,6 +335,11 @@ boolean forcecontrol;
 				/* save/restore hack */
 				uskin->owornmask |= I_SPECIAL;
 			}
+		} else if (hasmask) {
+			if ((youmonst.data) == &mons[ublindf->corpsenm])
+				mntmp = PM_HUMAN; /* Illegal; force newman() */
+			else
+				mntmp = ublindf->corpsenm;
 		} else if (iswere) {
 			if (is_were(youmonst.data))
 				mntmp = PM_HUMAN; /* Illegal; force newman() */
