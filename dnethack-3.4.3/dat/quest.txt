@@ -4643,3 +4643,40 @@ But destiny is a strange and winding road.
 
 And things have learnt to walk that once did crawl.
 %E
+#
+#	Legacy text for Binders
+#
+%Cc - 00207
+The priests tell a story:
+
+    After the Creation, the cruel god Moloch rebelled
+    against the authority of Marduk the Creator.
+    Moloch stole from Marduk the most powerful of all
+    the artifacts of the gods, the Amulet of Yendor,
+    and he hid it in the dark cavities of Gehennom, the
+    Under World, where he now lurks, and bides his time.
+
+The various gods and heroes of this world struggle 
+mightily to recover the amulet, for the god who reclaims
+the amulet will be granted ascendance over the other 
+gods of the world.
+
+You, a newly empowered %r, have been heralded
+from birth as..., well, no one actually heralded your
+birth. But if someone had, they would have heralded
+you as an instrument of your local feudal overlord.
+You were destined to live and die in the village
+of your ancestors.
+
+All that changed in one night, when you stumbled
+onto a forbidden secret. Since that night, priests
+and shopkeepers alike have eyed you with suspicion,
+while unseen whisperers ceaselessly repeat a litany
+of names in your ears.
+
+Exiled from your village, you seek to claim a new
+destiny in the depths of %Z,
+or die in the attempt.
+
+Go bravely with %d!
+%E

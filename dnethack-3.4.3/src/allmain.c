@@ -797,18 +797,17 @@ newgame()
 
 	if (flags.legacy) {
 		flush_screen(1);
+        if(Role_if(PM_EXILE)){
+			com_pager(207);
 #ifdef CONVICT
-        if (Role_if(PM_CONVICT)) {
+		} else if (Role_if(PM_CONVICT)) {
 		    com_pager(199);
+#endif /* CONVICT */
         } else if(Race_if(PM_ELF)){
 			com_pager(201);
-        } else {
-		com_pager(1);
-	}
-#else
-		if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER))){
+		} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER))){
 			com_pager(201);
-		} if(Race_if(PM_WORM_THAT_WALKS)){
+		} else if(Race_if(PM_WORM_THAT_WALKS)){
 			if(Role_if(PM_CONVICT)){
 				com_pager(204);
 			} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER))){
@@ -821,7 +820,6 @@ newgame()
 		} else {
 		com_pager(1);
 		}
-#endif /* CONVICT */
 	}
 
 #ifdef INSURANCE
