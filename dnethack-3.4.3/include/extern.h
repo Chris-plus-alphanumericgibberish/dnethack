@@ -617,6 +617,7 @@ E int NDECL(num_genocides);
 
 /* ### engrave.c ### */
 
+E void FDECL(bindspirit, (int));
 E void NDECL(blank_all_wards);
 E void NDECL(randomize_all_wards);
 E int NDECL(pick_ward);
