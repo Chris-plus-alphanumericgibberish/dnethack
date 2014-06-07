@@ -3040,6 +3040,10 @@ int perturn;
 	
 	price = (long)(turns*perturn + flatrate);
 	
+	if(price < 0){
+		You("couldn't have enough %s to pay for that!", currency(price));
+	}
+	
 	if(price){
 	Sprintf(qbuf, "That will be %ld %s. (Pay?)", price, currency(price));
 	if(yn(qbuf)=='y'){
