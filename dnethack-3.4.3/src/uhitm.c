@@ -3373,7 +3373,7 @@ dobpois:
 	}
 
 	if(ptr->mattk[i].adtyp==AD_AXUS) u.uevent.uaxus_foe = 1;//enemy of the modrons
-/*	These only affect you if they still live */
+	/*	These only affect you if they still live */
 	if(malive && !mon->mcan && rn2(3)) {
 
 	    switch(ptr->mattk[i].adtyp) {
