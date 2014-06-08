@@ -880,7 +880,7 @@ int thrown;
 #ifdef STEED
 		     !u.usteed &&
 #endif
-		     is_pole(obj) && obj->oartifact!=ART_WEBWEAVER_S_CROOK) ||
+		     is_pole(obj) && obj->oartifact!=ART_WEBWEAVER_S_CROOK && obj->oartifact!=ART_PEN_OF_THE_VOID) ||
 		    /* lightsaber that isn't lit ;) */
 		    (is_lightsaber(obj) && !obj->lamplit) ||
 		    /* or throw a missile without the proper bow... */

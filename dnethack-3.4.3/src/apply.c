@@ -3445,7 +3445,7 @@ doapply()
 	    return do_flip_coin(obj);
 	else if (obj->oclass == RING_CLASS)
 	    return do_present_ring(obj);
-	else if(is_knife(obj)) return do_carve_obj(obj);
+	else if(is_knife(obj) && !(obj->oartifact==ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_MARIONETTE)) return do_carve_obj(obj);
 	
 	switch(obj->otyp){
 	case BLINDFOLD:

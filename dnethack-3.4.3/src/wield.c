@@ -106,7 +106,8 @@ register struct obj *obj;
 #ifdef STEED
 				&& !u.usteed
 #endif
-				) : !is_weptool(obj);
+				&& obj->oartifact != ART_WEBWEAVER_S_CROOK && obj->oartifact != ART_PEN_OF_THE_VOID)
+					: !is_weptool(obj);
 	} else
 		unweapon = TRUE;	/* for "bare hands" message */
 	update_inventory();
