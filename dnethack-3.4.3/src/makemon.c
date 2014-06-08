@@ -1296,10 +1296,7 @@ register struct	monst	*mtmp;
 			oep->complete_wards = 1;
 			rloc_engr(oep);
 		 }
-		}
-		break;
-		case S_VORTEX:
-			if(ptr == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES]){
+		} else if(ptr == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES]){
 				otmp = mksobj(SPE_SECRETS, TRUE, FALSE);
 				if(!rn2(3)){
 					otmp = oname(otmp, artiname(ART_BOOK_OF_LOST_NAMES));		

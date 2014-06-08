@@ -578,7 +578,7 @@ mattacku(mtmp)
 
 	    sum[i] = 0;
 	    mattk = getmattk(mdat, i, sum, &alt_attk);
-	    if (u.uswallow && (mattk->aatyp != AT_ENGL))
+	    if (u.uswallow && (mattk->aatyp != AT_ENGL && mattk->aatyp != AT_ILUR))
 		continue;
 	    switch(mattk->aatyp) {
 		case AT_CLAW:	/* "hand to hand" attacks */
@@ -686,7 +686,8 @@ mattacku(mtmp)
 				    if(u.ustuck == mtmp) sum[i] = gulpmu(mtmp, mattk);
 				    else sum[i] = hitmu(mtmp, mattk);
 				} else {
-				    missmu(mtmp, (tmp == j), mattk);
+					if(u.uswallow) expels(mtmp, mtmp->data, TRUE);
+				    else missmu(mtmp, (tmp == j), mattk);
 				}
 			    } else if (is_animal(mtmp->data)) {
 				pline("%s gulps some air!", Monnam(mtmp));
@@ -2746,8 +2747,8 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				if(u.sealsActive&SEAL_HUGINN_MUNINN){
 					unbind(SEAL_HUGINN_MUNINN,TRUE);
 				} else {
-				if(Upolyd) perc = (u.mhmax - u.mh - tmp)*10/u.mhmax;
-				else perc = (u.uhpmax - u.uhp - tmp)*10/u.uhpmax;
+					if(Upolyd) perc = (u.mhmax - (u.mh - tmp))*10/u.mhmax;
+					else perc = (u.uhpmax - (u.uhp - tmp))*10/u.uhpmax;
 				if(perc > 10) perc = 10;
 				if(perc >= 5) forget_levels(perc);
 				if(perc > 1) forget_objects(perc);
