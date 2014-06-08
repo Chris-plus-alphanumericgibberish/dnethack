@@ -35,7 +35,7 @@ int FDECL(dolordsmenu, (const char *,struct obj *));
 static NEARDATA schar delay;		/* moves left for this spell */
 static NEARDATA struct obj *artiptr;/* last/current artifact being used */
 static NEARDATA int necro_effect;	/* necro effect picked */
-static NEARDATA int lostname;	/* necro effect picked */
+static NEARDATA int lostname;	/* spirit # picked */
 
 static NEARDATA	int oozes[12] = {0, PM_ACID_BLOB, PM_QUIVERING_BLOB, 
 					  PM_GELATINOUS_CUBE, PM_DARKNESS_GIVEN_HUNGER, PM_GRAY_OOZE, 
@@ -2411,6 +2411,7 @@ arti_invoke(obj)
 		oart->inv_prop != ICE_SHIKAI &&
 		oart->inv_prop != BLESS &&
 		oart->inv_prop != NECRONOMICON &&
+		oart->inv_prop != SPIRITNAMES &&
 		oart->inv_prop != LORDLY &&
 		oart->inv_prop != SEVENFOLD
 	)obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
@@ -3685,6 +3686,7 @@ arti_invoke(obj)
 				u.sealsKnown = obj->ovar1;
 				u.uconduct.literate++;
 				lostname = pick_seal();
+				if(!lostname) break;
 				delay = -25;
 				artiptr = obj;
 				u.sealsKnown = yourseals;
@@ -5003,18 +5005,26 @@ read_lost(VOID_ARGS)
 		} else {
 			numSlots=1;
 		}
-		if(u.sealCounts < numSlots) bindspirit(lostname);
-		else You("can't feel the spirit.");
+		// for(i=0;i<QUEST_SPIRITS;i++){
+			// pline("#%d:%s",i,sealNames[i]);
+		// }
+		pline("Using the rituals in the book, you attempt to form a bond with %s",sealNames[lostname-FIRST_SEAL-2]); /*Why doesn't math work?*/
+		if(u.sealCounts < numSlots){
+			bindspirit(lostname);
+		} else You("can't feel the spirit.");
 	}
-	else if(necro_effect == QUEST_SPIRITS){
+	else if(lostname == QUEST_SPIRITS){
 		int chance = 0;
 		if(!(artiptr->ovar1)) artiptr->spestudied = 0; /* Sanity enforcement. Something wierd is going on with the artifact creation code.*/
 
 		if(!(artiptr->ovar1 & SEAL_SPECIAL)){
-			long putativeSeal = 1L << rn2(31);
-			if(!(artiptr->ovar1 & putativeSeal)) losexp("getting lost in a book",TRUE,TRUE,TRUE);
+			long putativeSeal;
+			i = rn2(31);
+			putativeSeal = 1L << i;
+			if(artiptr->ovar1 & putativeSeal) losexp("getting lost in a book",TRUE,TRUE,TRUE);
 			else{
 				artiptr->ovar1 |= putativeSeal;
+				You("learn the name \"%s\" while studying the book.",sealNames[i]);
 				artiptr->spestudied++;
 			}
 		} else losexp("getting lost in a book",TRUE,TRUE,TRUE);
