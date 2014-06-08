@@ -3714,6 +3714,7 @@ arti_invoke(obj)
 		   }
 		}break;
 		case INFINITESPELLS:{
+			pline("The endless pages of the book cover the material of a spellbook of %s in exhaustive detail.",OBJ_NAME(objects[obj->ovar1]));
 			spelleffects(0,FALSE,obj->ovar1);
 			if(!rn2(20)){
 				obj->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
