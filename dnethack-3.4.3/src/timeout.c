@@ -389,7 +389,6 @@ nh_timeout()
 				int j;
 				for(j=0;j<32;j++){
 					if((u.spirit[i] >> j) == 1){
-						pline("j: %d, slot: %d", j, i);
 						Your("link with %s is %s.", sealNames[j], spiritFadeTerms[remaining-1]);
 					}
 				}
