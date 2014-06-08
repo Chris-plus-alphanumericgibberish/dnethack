@@ -2396,7 +2396,8 @@ dopois:
 	    Sprintf(buf, "%s %s",
 		    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
 		poisoned(buf, A_CON, mdat->mname, 60, 0);
-		if(Poison_resistance) wdmg /= 2;
+		if(Poison_resistance) wdmg -= ACURR(A_CON)/2;
+		if(wdmg > 0){
 		if(u.sealsActive&SEAL_HUGINN_MUNINN){
 			unbind(SEAL_HUGINN_MUNINN,TRUE);
 		} else {
@@ -2412,6 +2413,7 @@ dopois:
 		if(wdmg){
 			boolean chg;
 		    chg = make_hallucinated(HHallucination + (long)(wdmg*5),FALSE,0L);
+		}
 		}
 		}
 		drain_en( (int)(dmg/2) );
@@ -2430,13 +2432,8 @@ dopois:
 						+ 400; //FATAL_DAMAGE_MODIFIER;
 					pline("%s smashes your %s!",
 						mon_nam(mtmp), body_part(HEAD));
-				}
-				else{
-					dmg *= 2;
-					if(!uarmh->oartifact || (mtmp->data==&mons[PM_DEMOGORGON]) ){
-						claws_destroy_arm(uarmh);
-					}
-				}
+				} else pline("%s's headspike hits your %s!",
+						mon_nam(mtmp), xname(uarmh) );
 			}
 		 }
  		}break;

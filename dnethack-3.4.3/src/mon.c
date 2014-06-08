@@ -643,6 +643,8 @@ struct monst *mon;
 		mmove *= 4;
 	if(mon->data == &mons[PM_BANDERSNATCH] && mon->mflee)
 		mmove += 12;
+	if(mon->data == &mons[PM_UVUUDAUM] && mon->mpeaceful)
+		mmove /= 4;
     /* Note: MSLOW's `+ 1' prevents slowed speed 1 getting reduced to 0;
      *	     MFAST's `+ 2' prevents hasted speed 1 from becoming a no-op;
      *	     both adjustments have negligible effect on higher speeds.
@@ -867,6 +869,14 @@ movemon()
 	){
 		pline("%s gets angry...", Amonnam(mtmp));
 		mtmp->mpeaceful = 0;
+	}
+	if(u.uevent.udemigod && 
+		mtmp->data == &mons[PM_UVUUDAUM] && 
+		mtmp->mpeaceful
+	){
+		pline("%s shakes off it's torpor...", Amonnam(mtmp));
+		mtmp->mpeaceful = 0;
+		set_malign(mtmp);
 	}
 	
 	if (vision_full_recalc) vision_recalc(0);	/* vision! */
@@ -2060,10 +2070,6 @@ boolean was_swallowed;			/* digestion */
 					killer = "mandrake's dying shriek";
 					done(DIED);
 					}
-				} else if(!(u.sealsActive&SEAL_OSE)){
-					if (Antimagic) shieldeff(u.ux, u.uy);
-					Your("%s flutters!", body_part(HEART));
-					mdamageu(mon, rnd(mon->m_lev));
 				} else shieldeff(u.ux,u.uy);
 			}
 			else{
