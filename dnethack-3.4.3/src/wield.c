@@ -733,7 +733,9 @@ register int amount;
 	}
 	/* there is a (soft) upper and lower limit to uwep->spe */
 	if(((uwep->spe > 5 && amount >= 0) || (uwep->spe < -5 && amount < 0))
-								&& rn2(3) && uwep->oartifact != ART_ROD_OF_SEVEN_PARTS) {
+								&& rn2(3) && uwep->oartifact != ART_ROD_OF_SEVEN_PARTS
+								&& uwep->oartifact != ART_PEN_OF_THE_VOID
+	) {
 	    if (!Blind)
 	    Your("%s %s for a while and then %s.",
 		 aobjnam(uwep, "violently glow"), color,
@@ -778,6 +780,11 @@ register int amount;
 	if(uwep->oartifact == ART_ROD_OF_SEVEN_PARTS && uwep->spe > 7){
 		uwep->spe = 7;
 		Your("%s faintly for a moment.",aobjnam(uwep, "rattle"));
+	}
+	if(uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->spe > 5 && !(quest_status.killed_nemesis)){
+		uwep->spe = 5;
+	} else if(uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->spe > 10){
+		uwep->spe = 10;
 	}
 
 	return(1);
