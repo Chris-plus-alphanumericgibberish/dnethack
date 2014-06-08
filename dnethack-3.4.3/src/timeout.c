@@ -210,8 +210,8 @@ boolean forced;
 		int j;
 		if(u.sealsActive&spir){
 			u.sealsActive &= ~spir;
-			if(int_spirits) u.intSpirits--;
-			else if(wis_spirits) u.wisSpirits--;
+			if(spir&int_spirits) u.intSpirits--;
+			else if(spir&wis_spirits) u.wisSpirits--;
 			for(i=0; i<u.sealCounts; i++){
 				if(u.spirit[i] == spir){
 					found = TRUE;
@@ -345,9 +345,12 @@ nh_timeout()
 	if(u.voidChime){
 		u.voidChime--;
 		if(!u.voidChime){
-			if(u.spiritTineA) unbind(u.spiritTineA,FALSE);
-			if(u.spiritTineB) unbind(u.spiritTineB,FALSE);
-			for(i=0;i<u.sealCounts;i++) u.sealsActive |= u.spirit[i];
+			if(u.spiritTineA) u.sealsActive&=(~u.spiritTineA);
+				if(u.spiritTineA&wis_spirits) u.wisSpirits--;
+				if(u.spiritTineA&int_spirits) u.intSpirits--;
+			if(u.spiritTineB) u.sealsActive&=(~u.spiritTineB);
+				if(u.spiritTineB&wis_spirits) u.wisSpirits--;
+				if(u.spiritTineB&int_spirits) u.intSpirits--;
 			if(uwep && uwep->oartifact==ART_PEN_OF_THE_VOID){
 				uwep->ovar1 = 0;
 				uwep->ovar1 |= u.spiritTineA;
