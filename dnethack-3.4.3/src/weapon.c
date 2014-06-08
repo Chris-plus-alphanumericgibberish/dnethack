@@ -438,13 +438,13 @@ struct monst *mon;
 		if(youdef && !Fire_resistance) dmg += d(dnum,4);
 		else if(!youdef && !resists_fire(mon)) dmg += d(dnum,4);
 	}
-	if(pen->ovar1&SEAL_BALAM){
-		if(youdef && !Cold_resistance) dmg += d(dnum,4);
-		else if(!youdef && !resists_cold(mon)) dmg += d(dnum,4);
-	}
 	if(pen->ovar1&SEAL_ASTAROTH){
 		if(youdef && !Shock_resistance) dmg += d(dnum,4);
 		else if(!youdef && !resists_elec(mon)) dmg += d(dnum,4);
+	}
+	if(pen->ovar1&SEAL_BALAM){
+		if(youdef && !Cold_resistance) dmg += d(dnum,4);
+		else if(!youdef && !resists_cold(mon)) dmg += d(dnum,4);
 	}
 	if(pen->ovar1&SEAL_ECHIDNA){
 		if(youdef && !Acid_resistance) dmg += d(dnum,4);
