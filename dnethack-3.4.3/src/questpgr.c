@@ -426,32 +426,62 @@ struct permonst *
 qt_montype()
 {
 	int qpm;
-	if(Role_if(PM_EXILE) && rn2(5)){
+	if(rn2(5)){
+	  if(Role_if(PM_EXILE)){
 		switch(rn2(4)){
 			case 0:
-				if(qpm = roles[flags.panLgod].guardnum) return (&mons[qpm]);
+				qpm = roles[flags.panLgod].guardnum;
 			break;
 			case 1:
-				if(qpm = roles[flags.panNgod].guardnum) return (&mons[qpm]);
+				qpm = roles[flags.panNgod].guardnum;
 			break;
 			case 2:
-				if(qpm = roles[flags.panCgod].guardnum) return (&mons[qpm]);
+				qpm = roles[flags.panCgod].guardnum;
 			break;
 			case 3:
-				return (&mons[PM_SHADE]);
+				qpm = urole.enemy1num;
 			break;
 		}
-	}
-	if (rn2(5)) {
+		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
+			return (&mons[qpm]);
+		return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
+	  }
+	} else {
 	    qpm = urole.enemy1num;
 	    if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
 	    	return (&mons[qpm]);
 	    return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
 	}
-	qpm = urole.enemy2num;
-	if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-	    return (&mons[qpm]);
-	return (mkclass(urole.enemy2sym, G_NOHELL|G_HELL));
+	if(Role_if(PM_EXILE)){
+		switch(rn2(4)){
+			case 0:
+				qpm = (roles[flags.panLgod].femalenum == NON_PM || !rn2(2)) ? 
+					roles[flags.panLgod].malenum : 
+					roles[flags.panLgod].femalenum;
+			break;
+			case 1:
+				qpm = (roles[flags.panNgod].femalenum == NON_PM || !rn2(2)) ? 
+					roles[flags.panNgod].malenum : 
+					roles[flags.panNgod].femalenum;
+			break;
+			case 2:
+				qpm = (roles[flags.panCgod].femalenum == NON_PM || !rn2(2)) ? 
+					roles[flags.panCgod].malenum : 
+					roles[flags.panCgod].femalenum;
+			break;
+			case 3:
+				qpm = urole.enemy1num;
+			break;
+		}
+		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
+			return (&mons[qpm]);
+		return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
+	} else {
+		qpm = urole.enemy2num;
+		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
+		    return (&mons[qpm]);
+		return (mkclass(urole.enemy2sym, G_NOHELL|G_HELL));
+	}
 }
 
 struct permonst *
