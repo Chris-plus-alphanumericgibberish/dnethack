@@ -2042,7 +2042,7 @@ register int	mmflags;
 			}
 			fakemon.data = ptr;
 			gpflags = (mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
-		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 50);
+		} while((!goodpos(x, y, &fakemon, gpflags) || (!in_mklev && cansee(x, y))) && tryct++ < 50);
 		if(tryct >= 50){
 			//That failed, return to the default way of handling things
 			ptr = (struct permonst *)0;
