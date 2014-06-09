@@ -662,12 +662,12 @@ int mode;
 		You("cannot pass that way.");
 	    return FALSE;
 	}
-	if (bigmonst(youmonst.data) && !(u.sealsActive||SEAL_ANDREALPHUS)) {
+	if (bigmonst(youmonst.data) && !(u.sealsActive&SEAL_ANDREALPHUS)) {
 	    if (mode == DO_MOVE)
 		Your("body is too large to fit through.");
 	    return FALSE;
 	}
-	if (invent && (inv_weight() + weight_cap() > 600) && !(u.sealsActive||SEAL_ANDREALPHUS)) {
+	if (invent && (inv_weight() + weight_cap() > 600) && !(u.sealsActive&SEAL_ANDREALPHUS)) {
 	    if (mode == DO_MOVE)
 #ifdef CONVICT
         if (!Passes_walls)
