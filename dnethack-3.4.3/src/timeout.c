@@ -377,8 +377,9 @@ nh_timeout()
 			//unbind(u.spirit[OUTER_SPIRIT]); Numina does not time out
 	}
 	if(u.sealsActive || u.specialSealsActive){
-		int remaining = 0;
+		int remaining;
 		for(i=0;i<u.sealCounts;i++){
+			remaining = 0;
 			if(u.spiritT[i] > moves + 625) continue;
 			else if(u.spiritT[i] == moves + 625) remaining = 1;
 			else if(u.spiritT[i] == moves + 125) remaining = 2;
