@@ -139,7 +139,7 @@ lookat(x, y, buf, monbuf)
 			((mtmp->isshk && accurate)
 				? "tail of " : "tail of a ") : "",
 		    (mtmp->mtame && accurate) ? "tame " :
-		    (mtmp->mpeaceful && accurate) ? "peaceful " : "",
+		    (mtmp->mpeaceful && accurate) ? (mtmp->data==&mons[PM_UVUUDAUM]) ? "meditating " : "peaceful " : "",
 		    name);
 	    if (u.ustuck == mtmp)
 		Strcat(buf, (Upolyd && sticks(youmonst.data)) ?

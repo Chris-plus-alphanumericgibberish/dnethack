@@ -353,7 +353,10 @@ register struct monst *mtmp;
 	    }
 #endif
 	}
-	else if (mtmp->mpeaceful) Strcat(info, ", peaceful");
+	else if (mtmp->mpeaceful){
+		if(mtmp->data == &mons[PM_UVUUDAUM]) Strcat(info, ", in contemplative meditation");
+		else Strcat(info, ", peaceful");
+	}
 	else if (mtmp->mtraitor)  Strcat(info, ", traitor");
 	else if (mtmp->mferal)  Strcat(info, ", feral");
 	if (mtmp->meating)	  Strcat(info, ", eating");
