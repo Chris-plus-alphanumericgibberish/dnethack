@@ -5,8 +5,8 @@
 #include "hack.h"
 
 /* "an uncursed greased partly eaten guardian naga hatchling [corpse]" */
-#define PREFIX	80	/* (56) */
-#define SCHAR_LIM 127
+#define PREFIX	125	/* (56) */
+#define SCHAR_LIM 255
 #define NUMOBUF 12
 
 STATIC_DCL char *FDECL(strprepend,(char *,const char *));
