@@ -803,7 +803,7 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Thorns and Stones", "Barage",
 	"Breath Poison", "Ruinous Strike",
 	"Raven's Tallons",
-	"Horrid Wilting", "Turn Humans and Animals",
+	"Horrid Wilting", "Horrid Rainbow",
 	"Refill Lantern", "Hellfire", 
 	"Call Murder",
 	"Root Shout", "Pull Wires",
@@ -1982,7 +1982,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_TURN_ANIMALS_AND_HUMANOIDS:{
 			register struct monst *mtmp;
-			You("try to turn away or slay humans and humanoids.");
+			You("try to turn away or slay animals and humanoids.");
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 				if (DEADMONSTER(mtmp)) continue;
 				if(cansee(mtmp->mx,mtmp->my) && (is_animal(mtmp->data) || 
@@ -2013,7 +2013,7 @@ spiriteffects(power, atme)
 				if (throwspell()) {
 					if(uwep->age < 500) uwep->age = 0;
 					else uwep->age -= 500;
-					explode(u.dx,u.dy,1/*Fire*/, d(5,dsize), WAND_CLASS, EXPL_FIERY);
+					explode(u.dx,u.dy,1/*Fire*/, d(rnd(5),dsize), WAND_CLASS, EXPL_FIERY);
 					end_burn(uwep, TRUE);
 					begin_burn(uwep, FALSE);
 				} else return 0;
