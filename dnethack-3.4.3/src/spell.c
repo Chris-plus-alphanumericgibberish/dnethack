@@ -1783,6 +1783,7 @@ spiriteffects(power, atme)
 			} else {
 			if(!Blind) You("are surrounded by a shimmering sphere!");
 			else You_feel("weightless for a moment.");
+			u.uen = 0;
 			goto_level(&newlev, FALSE, FALSE, FALSE);
 			}
 		}break;
