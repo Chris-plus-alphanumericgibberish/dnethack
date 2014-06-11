@@ -2284,7 +2284,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_GREAT_LEAP:
 			You("plunge through the ceiling.");
-			morehungry(rnd(125));
+			morehungry(rnd(625));
 			level_tele();
 		break;
 		case PWR_MASTER_OF_DOORWAYS:{
