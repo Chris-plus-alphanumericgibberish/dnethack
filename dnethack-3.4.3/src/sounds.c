@@ -1943,7 +1943,7 @@ int tx,ty;
 					}
 				}
 				u.dantalion = moves + bindingPeriod;
-			} else{
+			} else {
 				You_hear("royal trumpets.");
 				u.dantalion = moves + bindingPeriod/10;
 			}
@@ -2630,7 +2630,7 @@ int tx,ty;
 					spoteffects(FALSE);
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					if(!Blind) pline("A the sea bottom swirls below your weapon.");
+					if(!Blind) pline("The sea bottom swirls below your weapon.");
 					uwep->ovar1 |= SEAL_OSE;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_OSE;
@@ -3305,7 +3305,7 @@ bindspirit(seal_id)
 			} else You("can't hear the numina.");
 	}break;
 	}
-	return 1;
+	return;
 }
 
 static
