@@ -317,6 +317,20 @@ struct toptenentry *tt;
 
 #ifdef RECORD_ACHIEVE
   (void)fprintf(rfile, SEP "achieve=0x%lx", encodeachieve());
+  {
+	long dnethachievements = 0L;
+	int i,keys=0;
+	for(i=0;i<9;i++){
+		if((achieve.get_keys >> i) & 1) keys++;
+	}
+	  if(achieve.killed_lucifer)     dnethachievements |= 1L << 0;
+	  if(achieve.killed_asmodeus)    dnethachievements |= 1L << 1;
+	  if(achieve.killed_demogorgon)  dnethachievements |= 1L << 2;
+	  if(keys >= 1)					 dnethachievements |= 1L << 3;
+	  if(keys >= 3)					 dnethachievements |= 1L << 4;
+	  if(keys == 9)  				 dnethachievements |= 1L << 5;
+  (void)fprintf(rfile, SEP "dnetachieve=0x%lx", dnethachievements);
+  }
 #endif
 
 #ifdef RECORD_REALTIME
@@ -925,21 +939,15 @@ encodeachieve(void)
    *  9   obtained the luckstone from the Mines
    *  10  obtained the sokoban prize
    *  11  killed medusa
-   *  12  killed lucifer
-   *  13  killed asmodeus
-   *  14  killed demogorgon
-   *  15  obtained 3 keys
-   *  16  obtained 9 keys
+   *  DEPRICATED: 12  killed lucifer
+   *  DEPRICATED: 13  killed asmodeus
+   *  DEPRICATED: 14  killed demogorgon
+   *  DEPRICATED: 15  obtained 3 keys
+   *  DEPRICATED: 16  obtained 9 keys
    */
 
   long r;
-  int i,keys=0;
-  
-  for(i=0;i<9;i++){
-	if((achieve.get_keys >> i) & 1) keys++;
-  }
-
-  r = 0;
+  r = 0L;
 
   if(achieve.get_bell)           r |= 1L << 0;
   if(achieve.enter_gehennom)     r |= 1L << 1;
@@ -953,11 +961,6 @@ encodeachieve(void)
   if(achieve.get_luckstone)      r |= 1L << 9;
   if(achieve.finish_sokoban)     r |= 1L << 10;
   if(achieve.killed_medusa)      r |= 1L << 11;
-  if(achieve.killed_lucifer)     r |= 1L << 12;
-  if(achieve.killed_asmodeus)    r |= 1L << 13;
-  if(achieve.killed_demogorgon)  r |= 1L << 14;
-  if(keys >= 3)					 r |= 1L << 15;
-  if(keys == 9)  				 r |= 1L << 16;
 
   return r;
 }
