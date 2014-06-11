@@ -2029,7 +2029,7 @@ spiriteffects(power, atme)
 			You("call down backup!");
 			mon = makemon(&mons[PM_CROW], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 			initedog(mon);
-			mon->m_lev += (u.ulevel - mon->m_lev)/2;
+			mon->m_lev += (u.ulevel - mon->m_lev)/3;
 			mon->mhpmax = (mon->m_lev * 8) - 4;
 			mon->mhp =  mon->mhpmax;
 		}break;
