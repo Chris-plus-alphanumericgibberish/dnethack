@@ -1276,7 +1276,7 @@ spiriteffects(power, atme)
 					break;
 				}
 				mon->mnotlaugh = 0;
-				mon->mlaughing = d(1,4);
+				mon->mlaughing = d(1,5)+u.ulevel/10;
 				pline("%s collapses in a fit of laughter.", Monnam(mon));
 			} else{
 				pline("There is no target there.");
