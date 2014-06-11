@@ -1197,10 +1197,10 @@ int x,y;
 	schar typ;
 
 	if (/* ALI - artifact doors from slash'em */
-	   (IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
+	   (IS_DOOR(levl[x][y].typ) && artifact_door(x, y)) ||
 	   (IS_ROCK(lev->typ) && lev->typ != SDOOR &&
 	    (lev->wall_info & W_NONDIGGABLE) != 0)) {
-		pline_The("%s here refuses to open.", surface(u.ux,u.uy));
+		pline_The("%s here refuses to open.", IS_DOOR(levl[x][y].typ) ? "door":"wall");
 		
 		return FALSE;
 	} else if (lev->typ == DRAWBRIDGE_DOWN ||
@@ -1218,7 +1218,7 @@ int x,y;
 	} else if (IS_GRAVE(lev->typ)) {
 		/* You succeed in opening the grave.*/
 	    openactualdoor(x, y, BY_YOU, PIT);
-	    dig_up_grave(u.ux, u.uy);
+	    dig_up_grave(x, y);
 	    return TRUE;
 	} else if (IS_DOOR(lev->typ)) {
 		if(lev->doormask == D_NODOOR){
