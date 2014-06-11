@@ -1326,7 +1326,7 @@ spiriteffects(power, atme)
 			int i, x, y;
 			x =  u.ux;
 			y = u.uy;
-			for(i = dsize; i > 0; i--){
+			for(i = dsize+u.ulevel/10+1; i > 0; i--){
 				int xadj=0;
 				int yadj=0;
 				otmp = mksobj(SHURIKEN, TRUE, FALSE);
