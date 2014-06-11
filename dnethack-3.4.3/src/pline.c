@@ -506,11 +506,11 @@ const char *
 replace(st, orig, repl)
 const char *st, *orig, *repl;
 {
-	static char retval[BUFSZ];
-	char buffer[BUFSZ];
+	static char retval[TBUFSZ];
+	char buffer[TBUFSZ];
 	const char *ch, *pos;
 	int len;
-	memset(buffer, 0, BUFSZ);
+	memset(buffer, 0, TBUFSZ);
 	pos = st;
 	while ((ch = strstr(pos, orig))){
 		len = (ch - pos);
