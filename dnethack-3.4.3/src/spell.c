@@ -1698,10 +1698,7 @@ spiriteffects(power, atme)
 				if(!mon) break;
 				You("try to suckle a monster on your blood!");
 				losehp((int)(mon->m_lev)+1, "suckling a monster on your blood", KILLED_BY);
-				if(rn2(u.ulevel) < mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
-					mon->mpeaceful = 1;
-					mon->mhp = mon->mhpmax;
-				} else {
+				if(rn2(u.ulevel) > mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
 					if (mon->isshk) make_happy_shk(mon, FALSE);
 					else (void) tamedog(mon, (struct obj *) 0);
 				}
