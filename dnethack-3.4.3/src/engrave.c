@@ -799,7 +799,7 @@ unsigned seed;		/* for semi-controlled randomization */
 		dlth = ep->degraded_wards * 3;
 		plth = ep->partial_wards * 1;
 		lth = clth+slth+dlth+plth;
-	}else if(ep->complete_wards >= FIRST_SEAL){
+	}else if(ep->ward_id >= FIRST_SEAL){
 		clth = ep->complete_wards * 5;
 		slth = ep->scuffed_wards * 4;
 		dlth = ep->degraded_wards * 3;
@@ -871,7 +871,7 @@ unsigned seed;		/* for semi-controlled randomization */
 				dlth = ep->degraded_wards * 10;
 				plth = ep->partial_wards * 10;
 				lth = clth+slth+dlth+plth;
-			}else if(ep->complete_wards >= FIRST_SEAL){
+			}else if(ep->ward_id >= FIRST_SEAL){
 				clth = ep->complete_wards * 5;
 				slth = ep->scuffed_wards * 4;
 				dlth = ep->degraded_wards * 3;
