@@ -57,7 +57,7 @@ pline VA_DECL(const char *, line)
 	    line = pbuf;
 	}
 	if(Role_if(PM_PIRATE)){/*Ben Collver's fixes*/
-		line = piratesay(line);
+//		line = piratesay(line);
 	}
 	if (!iflags.window_inited) {
 	    raw_print(line);
