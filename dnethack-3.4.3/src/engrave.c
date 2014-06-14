@@ -792,6 +792,7 @@ unsigned seed;		/* for semi-controlled randomization */
 	lth = 0;
 	clth = slth = dlth = plth = 0;
 	j = 0;
+	if(ep->ward_id >= FIRST_SEAL && ep->engr_time+5 >= moves && ep->ward_type != DUST && ep->ward_type != ENGR_BLOOD) return;
 	if(ep->halu_ward){
 		clth = ep->complete_wards * 12;
 		slth = ep->scuffed_wards * 6;
