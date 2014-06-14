@@ -286,6 +286,7 @@ bot2()
                                        (currenttime % 3600) / 60);
   }
 #endif
+
 	if(uclockwork){
 		if(strcmp(ca_hu_stat[u.uhs], "        ")) {
 			Sprintf(nb = eos(nb), " ");
