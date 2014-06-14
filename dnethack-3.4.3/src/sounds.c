@@ -1095,7 +1095,12 @@ dochat()
 	return (domonnoise(u.usteed));
 #endif
     if (u.dz) {
-	pline("They won't hear you %s there.", u.dz < 0 ? "up" : "down");
+		struct engr *ep = get_head_engr();
+		for(ep;ep;ep=ep->nxt_engr) 
+			if(ep->engr_x==u.ux && ep->engr_y==u.uy)
+				break;//else continue
+		if(!ep || ep->halu_ward || ep->ward_id < FIRST_SEAL) pline("They won't hear you %s there.", u.dz < 0 ? "up" : "down");
+		else pline("The gate won't open with you standing on the seal!");
 	return(0);
     }
 
@@ -1251,8 +1256,14 @@ int tx,ty;
 		if(ep->engr_x==tx && ep->engr_y==ty)
 			break;//else continue
 	if(!(ep)) return 0; //no engraving found
-	if(ep->halu_ward || ep->ward_id < FIRST_SEAL || 
-		ep->complete_wards < 1 || ep->engr_time+5 < moves) return 0; //engraving does not contain a valid seal, or is too old.
+	if(ep->halu_ward || ep->ward_id < FIRST_SEAL) return 0;
+	else if(ep->complete_wards < 1){
+		pline("The seal has been damaged.");
+		return 0;
+	} else if(ep->engr_time+5 < moves){
+		pline("The seal is too old.");
+		return 0;
+	}
 	
 	if(Role_if(PM_EXILE)){
 	if(u.ulevel <= 2) numSlots=1;
@@ -1299,7 +1310,7 @@ int tx,ty;
 				pline("Thoughts of falling and of narrow skys come unbidden into your mind.");
 				u.ahazu = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case AMON:{
 		if(u.amon < moves){
@@ -1349,7 +1360,7 @@ int tx,ty;
 				}
 			}
 			u.amon = moves + bindingPeriod; // invoking amon on a level with an altar still triggers the binding period.
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case ANDREALPHUS:{
 		if(u.andrealphus < moves){
@@ -1386,7 +1397,7 @@ int tx,ty;
 				pline("Thoughts intersecting lines rise to the forefront of your mind.");
 				u.andrealphus = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case ANDROMALIUS:{ /*UNFINISHED*/
 		//Seal must be drawn around any two of a bag, a silver key, a gold ring, (a pair of dice), a (copper) coin, a dagger, an apple, a scroll, (a comb), a whistle, a mirror, an egg, a potion, a dead spider, (an oak leaf), a dead human (skull and arm bone), (a lock), (a closed black book) a spellbook, a bell, (a (live?) dove), a set of lockpicks, or a live? sewer rat (mouse). The items are consumed.
@@ -1637,7 +1648,7 @@ int tx,ty;
 				You("come out of your revere with a start.");
 				u.andromalius = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case ASTAROTH:{
 		if(u.astaroth < moves){
@@ -1719,7 +1730,7 @@ int tx,ty;
 				pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
 				u.astaroth = moves + bindingPeriod/10;
 				}
-			}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case BALAM:{
 		if(u.balam < moves){
@@ -1769,7 +1780,7 @@ int tx,ty;
 				You("shiver violently.");
 				u.balam = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case BERITH:{
 		static int slvring = 0;
@@ -1818,7 +1829,7 @@ int tx,ty;
 				You("think of cavalry and silver rings.");
 				u.berith = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case BUER:{
 		//Buer's seal may be drawn anywhere.
@@ -1852,7 +1863,7 @@ int tx,ty;
 				pline("I wish you well as you walk your path.\"");
 			}
 			u.buer = moves + bindingPeriod;
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case CHUPOCLOPS:{
 		if(u.chupoclops < moves){
@@ -1901,7 +1912,7 @@ int tx,ty;
 				pline("Thoughts of death and despair almost overcome you.");
 				u.chupoclops = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case DANTALION:{
 		if(u.dantalion < moves){
@@ -1947,7 +1958,7 @@ int tx,ty;
 				You_hear("royal trumpets.");
 				u.dantalion = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case SHIRO:{
 		if(u.shiro < moves){
@@ -1994,7 +2005,7 @@ int tx,ty;
 				pline("For some reason you want to arrange rocks in a circle.");
 				u.shiro = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case ECHIDNA:{
 		if(u.echidna < moves){
@@ -2035,7 +2046,7 @@ int tx,ty;
 				You("hear scales scraping against stone echo through a cave.");
 				u.echidna = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case EDEN:{
 		if(u.eden < moves){
@@ -2078,7 +2089,7 @@ int tx,ty;
 				You_hear("water splashing.");
 				u.eden = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case ENKI:{
 		if(u.enki < moves){
@@ -2122,7 +2133,7 @@ int tx,ty;
 				You("dream of wide open spaces.");
 				u.enki = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case EURYNOME:{
 		if(u.eurynome < moves){
@@ -2167,7 +2178,7 @@ int tx,ty;
 				You("daydream of dancing across waves.");
 				u.eurynome = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case EVE:{
 		if(u.eve < moves){
@@ -2204,7 +2215,7 @@ int tx,ty;
 				You_hear("wind in the trees.");
 				u.eve = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case FAFNIR:{
 		if(u.fafnir < moves){
@@ -2247,7 +2258,7 @@ int tx,ty;
 				You_hear("the clink of coins.");
 				u.fafnir = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case HUGINN_MUNINN:{
 		if(u.huginn_muninn < moves){
@@ -2291,7 +2302,7 @@ int tx,ty;
 				if(!Blind) pline("They stare at you for a moment, and then leave just as suddenly as they came.");
 			}
 			u.huginn_muninn = moves + bindingPeriod;
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case IRIS:{
 		if(u.iris < moves){
@@ -2325,7 +2336,7 @@ int tx,ty;
 				You("smell sulfur.");
 				u.iris = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case JACK:{
 		if(u.jack < moves){
@@ -2359,7 +2370,7 @@ int tx,ty;
 				You("think of the wide earth.");
 				u.jack = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case MALPHAS:{
 		if(u.malphas < moves){
@@ -2438,7 +2449,7 @@ int tx,ty;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("A large black feather setles within the seal.");
-					pline("\"I Malphas. That feed my flock.\"");
+					pline("\"I am Malphas. With that instrument, you feed my flock.\"");
 					uwep->ovar1 |= SEAL_MALPHAS;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_MALPHAS;
@@ -2458,7 +2469,7 @@ int tx,ty;
 				You("smell fresh blood.");
 				u.malphas = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case MARIONETTE:{
 		if(u.marionette < moves){
@@ -2495,7 +2506,7 @@ int tx,ty;
 				You_hear("the sounds of digging, and of bones rattling together.");
 				u.marionette = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case MOTHER:{
 		if(u.mother < moves){
@@ -2528,7 +2539,7 @@ int tx,ty;
 				You("blink.");
 				u.mother = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case NABERIUS:{
 		if(u.naberius < moves){
@@ -2574,7 +2585,7 @@ int tx,ty;
 				You_hear("retoric and sage advice.");
 				u.naberius = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case ORTHOS:{
 		if(u.orthos < moves){
@@ -2606,7 +2617,7 @@ int tx,ty;
 				pline("For an instant you are falling.");
 				u.orthos = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case OSE:{
 		if(u.ose < moves){
@@ -2649,11 +2660,11 @@ int tx,ty;
 				You("feel wet....");
 				u.ose = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case OTIAX:{
 		if(u.otiax < moves){
-			//Spirit requires that its seal be drawn on an open door.
+			//Spirit requires that its seal be drawn on a closed door.
 			if(IS_DOOR(levl[tx][ty].typ) && closed_door(tx,ty)){ 
 				if(!Blind) pline("Thick fingers of mist reach under the door.");
 				if(u.sealCounts < numSlots){
@@ -2681,10 +2692,10 @@ int tx,ty;
 				}
 				u.otiax = moves + bindingPeriod;
 			} else{
-				You("instinctively look around for a portal to open.");
+				You("instinctively look around for a door to open.");
 				u.otiax = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case PAIMON:{
 		if(u.paimon < moves){
@@ -2745,7 +2756,7 @@ int tx,ty;
 				You("dream briefly of a library in the northwest kingdom.");
 				u.paimon = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case SIMURGH:{
 		if(u.simurgh < moves){
@@ -2776,7 +2787,7 @@ int tx,ty;
 				You("yearn for open skies.");
 				u.simurgh = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case TENEBROUS:{
 		if(u.tenebrous < moves){
@@ -2808,7 +2819,7 @@ int tx,ty;
 				You("feel that Tenebrous exists only in darkness.");
 				u.tenebrous = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case YMIR:{
 		if(u.ymir < moves){
@@ -2862,10 +2873,10 @@ int tx,ty;
 				}
 				u.ymir = moves + bindingPeriod;
 			}  else{
-				pline("Blood calls blood, and poison calls poison.");
+				pline("Rot calls rot, and poison calls poison.");
 				u.ymir = moves + bindingPeriod/10;
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case DAHLVER_NAR:{
 		if(u.dahlver_nar < moves){
@@ -2875,7 +2886,7 @@ int tx,ty;
 				pline("He moans and reaches out to you.");
 				bindspirit(ep->ward_id);
 			}
-		}
+		} else pline("You hear distant moaning.");
 	}break;
 	case ACERERAK:{
 		if(u.acererak < moves){
@@ -2883,11 +2894,11 @@ int tx,ty;
 			if(Role_if(PM_EXILE) && quest_status.killed_nemesis){
 				pline("A golden skull hanges over the seal.");
 				pline("\"I am Acererak. Long ago, I dared the Gates of Teeth.\"");
-				pline("\"Now I am trapped outside of time,\"");
-				pline("\"beyond life, motion, and thought.\"");
+				pline("\"Now I am trapped outside of time,");
+				pline("beyond life, motion, and thought.\"");
 				bindspirit(ep->ward_id);
 			}
-		}
+		} else pline("You can't feel the spirit.");
 	}break;
 	case NUMINA:{
 		//Spirit requires that its seal be drawn by a level 30 Binder.
@@ -2898,7 +2909,7 @@ int tx,ty;
 			pline("So insistent are they that even the un initiated can hear,");
 			pline("albeit only in the form of whispers.");
 			bindspirit(ep->ward_id);
-		}
+		} else pline("You hear whispering all around you.");
 	}break;
 	}
 	return 1;

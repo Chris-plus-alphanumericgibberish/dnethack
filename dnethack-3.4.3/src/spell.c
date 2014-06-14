@@ -806,7 +806,7 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Horrid Wilting", "Horrid Rainbow",
 	"Refill Lantern", "Hellfire", 
 	"Call Murder",
-	"Root Shout", "Pull Wires",
+	"Root Shout", "Yank Wires",
 	"Disgusted Gaze",
 	"Bloody Tongue", "Silver Tongue",
 	"Exhalation of the Rift", 
