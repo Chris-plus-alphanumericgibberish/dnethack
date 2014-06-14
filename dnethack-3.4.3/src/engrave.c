@@ -4191,7 +4191,7 @@ pick_seal()
 	Sprintf(buf, "Known Seals");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	if(u.sealsKnown & SEAL_AHAZU){
-		Sprintf(buf, "Ahazu, the Siezer");
+		Sprintf(buf,	"Ahazu, the Seizer");
 		any.a_int = AHAZU;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,

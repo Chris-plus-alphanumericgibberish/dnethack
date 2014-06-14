@@ -2203,7 +2203,7 @@ spiriteffects(power, atme)
 		case PWR_BLOODY_TOUNGE:{
 			struct monst *mon;
 			if(!getdir((char *)0)  && (u.dx || u.dy)) break;
-			Your("forked red tounge speaks of its own accord.");
+			Your("forked red tongue speaks of its own accord.");
 			if(mon = m_at(u.ux+u.dx, u.uy+u.dy)){
 				mon->mflee = 1;//does not make monster hostile
 				pline("%s turns to flee.", Monnam(mon));
@@ -2217,7 +2217,7 @@ spiriteffects(power, atme)
 				!(mon->data->geno & G_UNIQ) &&
 				!mon->mtraitor
 			){
-				Your("forked tounge speaks with silvery grace.");
+				Your("forked tongue speaks with silvery grace.");
 				if (mon->isshk) make_happy_shk(mon, FALSE);
 				mon->mpeaceful = 1;
 			}
