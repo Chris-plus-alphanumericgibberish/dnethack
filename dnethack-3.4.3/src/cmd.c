@@ -3362,8 +3362,9 @@ char def;
 	unsigned truncspot, reduction = sizeof(" [N]  ?") + 1;
 	
 	/*Ben Collver's fixes*/
-	if(Role_if(PM_PIRATE)) query = piratesay(plainquery);
-	else query = plainquery;
+//	if(Role_if(PM_PIRATE)) query = piratesay(plainquery);
+//	else query = plainquery;
+	query = plainquery;
 	
 	if (resp) reduction += strlen(resp) + sizeof(" () ");
 	if (strlen(query) < (QBUFSZ - reduction))
