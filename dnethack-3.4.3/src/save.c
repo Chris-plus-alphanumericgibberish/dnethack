@@ -245,6 +245,7 @@ dosave0()
 		ofd = open_levelfile(ltmp, whynot);
 		if (ofd < 0) {
 		    HUP pline("%s", whynot);
+			abort();
 		    (void) close(fd);
 		    (void) delete_savefile();
 		    HUP killer = whynot;
