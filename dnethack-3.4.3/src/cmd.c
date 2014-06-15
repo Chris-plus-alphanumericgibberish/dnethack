@@ -2195,8 +2195,8 @@ static const struct func_tab cmdlist[] = {
 	{'D', FALSE, doddrop},
 	{M('d'), FALSE, dodip},
 	{'e', FALSE, doeat},
-	{'E', FALSE, doengward},
-/*	{'E', FALSE, doengrave},*/
+/*	{'E', FALSE, doengward},*/
+	{'E', FALSE, doengrave},
 	{C('e'), TRUE, doseal},
 	{M('e'), TRUE, enhance_weapon_skill},
 	{'f', FALSE, dofire},
