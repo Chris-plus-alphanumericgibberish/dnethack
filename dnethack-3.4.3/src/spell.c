@@ -799,7 +799,7 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Echidna's Venom", "Suckle Monster",
 	"Purifying Blast", "Recall to Eden", "Stargate",
 	"Walk among Thresholds",
-	"Vengance", "Shape the Wind",
+	"Vengeance", "Shape the Wind",
 	"Thorns and Stones", "Barage",
 	"Breath Poison", "Ruinous Strike",
 	"Raven's Tallons",
@@ -1803,7 +1803,7 @@ spiriteffects(power, atme)
 		case PWR_VENGANCE:{
 			struct monst *mon;
 			int i,j;
-			You("lash out in vengance");
+			You("lash out in vengeance.");
 			for(i=-1;i<=1;i++){
 			  for(j=-1;j<=1;j++){
 				if((i!=0 || j!=0) && isok(u.ux+i, u.uy+j) && (mon = m_at(u.ux+i, u.uy+j)) && mon->mhurtu){
