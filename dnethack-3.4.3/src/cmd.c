@@ -1766,7 +1766,7 @@ signs_mirror()
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_EDEN && !NoBInvis){
-		putstr(en_win, 0, "You see a garden through the dome of purple crystal enbedded in your head!");
+		putstr(en_win, 0, "You see a garden through the dome of cerulean crystal enbedded in your head!");
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_ENKI && !Invis){
