@@ -1056,13 +1056,13 @@ struct monst *mtmp;
 			m.has_offense = MUSE_WAN_MAGIC_MISSILE;
 		    }
 		}
-		nomore(MUSE_POT_STONE_BLOOD);
-		if(obj->otyp == POT_BLOOD && !rn2(20) 
-			&& !is_vampire(mtmp->data)
-			&& touch_petrifies(&mons[obj->corpsenm])) {
-			m.offensive = obj;
-			m.has_offense = MUSE_POT_STONE_BLOOD;
-		}
+		// nomore(MUSE_POT_STONE_BLOOD);
+		// if(obj->otyp == POT_BLOOD && !rn2(20)
+			// && !is_vampire(mtmp->data)
+			// && touch_petrifies(&mons[obj->corpsenm])) {
+			// m.offensive = obj;
+			// m.has_offense = MUSE_POT_STONE_BLOOD;
+		// }
 		nomore(MUSE_WAN_DRAINING);
 		if(obj->otyp == WAN_DRAINING && obj->spe > 0) {
 			m.offensive = obj;
