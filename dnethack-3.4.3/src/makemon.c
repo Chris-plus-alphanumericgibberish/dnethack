@@ -3430,6 +3430,7 @@ register struct permonst *ptr;
 			return TRUE;
 		} else return FALSE;
 	}
+	if (mndx==PM_APOLLYON && sgn(mal) == sgn(ual)) return TRUE;
 	if(!u.uevent.udemigod && mndx==PM_UVUUDAUM) return TRUE;
 	if (always_peaceful(ptr)) return TRUE;
 	if (always_hostile(ptr) && 
