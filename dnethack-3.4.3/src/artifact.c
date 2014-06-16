@@ -1688,7 +1688,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	    if (realizes_damage)
 			pline_The("%s hits%s %s%c", otmp->oartifact == ART_CARESS ? "lashing whip" : 
 										otmp->oartifact == ART_RAMIEL ? "thundering polearm" : 
-										"masive hammer",
+										"massive hammer",
 			  !spec_dbon_applies ? "" : "!  Lightning strikes",
 			  hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
