@@ -1751,7 +1751,7 @@ register struct	monst	*mtmp;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
 
-				mlocal = makemon(&mons[PM_KRAKEN], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				mlocal = makemon(&mons[PM_DEEPEST_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
 				bless(otmp);
