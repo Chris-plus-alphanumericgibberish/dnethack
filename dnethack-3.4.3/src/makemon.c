@@ -1751,33 +1751,33 @@ register struct	monst	*mtmp;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
 
-				mlocal = makemon(&mons[PM_DEEPEST_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				mlocal = makemon(&mons[PM_KRAKEN], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
 				bless(otmp);
 				otmp->oerodeproof = TRUE;
-				(void) mpickobj(mlocal, otmp);
+				if(mlocal) (void) mpickobj(mlocal, otmp);
 
 				mlocal = makemon(&mons[PM_MARILITH], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
 				bless(otmp);
 				otmp->oerodeproof = TRUE;
-				(void) mpickobj(mlocal, otmp);
+				if(mlocal) (void) mpickobj(mlocal, otmp);
 
 				mlocal = makemon(&mons[PM_TIAMAT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
 				bless(otmp);
 				otmp->oerodeproof = TRUE;
-				(void) mpickobj(mlocal, otmp);
+				if(mlocal) (void) mpickobj(mlocal, otmp);
 
 				mlocal = makemon(&mons[PM_LICH], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
 				bless(otmp);
 				otmp->oerodeproof = TRUE;
-				(void) mpickobj(mlocal, otmp);
+				if(mlocal) (void) mpickobj(mlocal, otmp);
 				}
 			break;
 			case PM_GREAT_CTHULHU:
