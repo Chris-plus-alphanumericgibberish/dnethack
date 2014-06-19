@@ -2293,7 +2293,9 @@ dopois:
 		case AD_SUCK:
 			if (noncorporeal(youmonst.data) || amorphous(youmonst.data)) dmg = 0;
 			else{
-				if( has_head(youmonst.data) && !uarmh && !rn2(20) ){
+				if( has_head(youmonst.data) && !uarmh && !rn2(20) && 
+					((!Upolyd && u.uhp < .1*u.uhpmax) || (Upolyd && u.mh < .1*u.mhmax))
+				){
 					dmg = 2 * (Upolyd ? u.mh : u.uhp)
 						  + 400; //FATAL_DAMAGE_MODIFIER;
 					pline("%s sucks your %s off!",
