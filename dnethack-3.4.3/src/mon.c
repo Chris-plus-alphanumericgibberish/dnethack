@@ -2982,8 +2982,9 @@ register struct monst *mtmp;
 
 	}
 	aggravate();
-    } else if(mtmp->data->msound == MS_JUBJUB) {
+    } else if(mtmp->data->msound == MS_JUBJUB && !(mtmp->mspec_used)) {
 		struct monst *tmpm;
+		mtmp->mspec_used = 10;
 		if(flags.soundok) {
 			pline("%s screams high and shrill.", Monnam(mtmp));
 			stop_occupation();
