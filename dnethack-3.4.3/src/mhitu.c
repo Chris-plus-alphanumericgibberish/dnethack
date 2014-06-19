@@ -2209,7 +2209,7 @@ dopois:
 		case AD_SHRD:{
 		    struct obj *obj = some_armor(&youmonst);
 			hitmsg(mtmp, mattk);
-			if(obj){
+			if(obj && mtmp->data != &mons[PM_RETRIEVER]){
 			 int i = 0;
 			 switch (mattk->aatyp) {
 				case AT_LNCK:
@@ -2236,9 +2236,9 @@ dopois:
 					pline("%s's claws catch on your armor!", Monnam(mtmp));
 				break;
 			 }
-			 i = rnd(4);
+			 i = 1;
 			 if(mtmp->data==&mons[PM_DEMOGORGON]) i += rnd(4);
-			 for(i; i>=0; i--){
+			 for(i; i>0; i--){
 				if(obj->spe > -1*objects[(obj)->otyp].a_ac){
 					damage_item(obj);
 					if(!i) Your("%s less effective.", aobjnam(obj, "seem"));
@@ -2260,8 +2260,7 @@ dopois:
 				pline("%s rips %s apart!",
 				      mon_nam(mtmp), "you");
 			}
-		}
-		break;
+		} break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 		case AD_VORP:
 		hitmsg(mtmp, mattk);
