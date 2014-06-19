@@ -2747,12 +2747,13 @@ register struct obj *obj;
 register boolean force, here, forcelethe;
 {
 	/* Dips in the Lethe are a very poor idea Lethe patch*/
-	int luckpenalty = level.flags.lethe? 7 : 0;
+//	int luckpenalty = level.flags.lethe? 7 : 0;
+	int luckpenalty = 0;
 	struct obj *otmp;
 	struct obj *obj_original = obj;
 	boolean obj_destroyed = FALSE;
-	int is_lethe = level.flags.lethe || forcelethe;
-
+//	int is_lethe = level.flags.lethe || forcelethe;
+	int is_lethe = 0;
 	/* Scrolls, spellbooks, potions, weapons and
 	   pieces of armor may get affected by the water */
 	for (; obj; obj = otmp) {
@@ -2801,6 +2802,7 @@ register boolean force, here, forcelethe;
 			    obj->otyp = (is_lethe && !rn2(10)) ?
 					SCR_AMNESIA : SCR_BLANK_PAPER;
 			obj->spe = 0;
+			obj->ovar1 = 0;
 		    }
 			break;
 		    case SPBOOK_CLASS:
@@ -3016,12 +3018,12 @@ drown()
 		    You("sink like %s.",
 			Hallucination ? "the Titanic" : "a rock");
 
-	if (level.flags.lethe) {
-	    /* Bad idea */
-	    You_feel("the sparkling waters of the Lethe sweep away your "
-			    "cares!");
-	    forget(25);
-	}
+	// if (level.flags.lethe) {
+	    // /* Bad idea */
+	    // You_feel("the sparkling waters of the Lethe sweep away your "
+			    // "cares!");
+	    // forget(25);
+	// }
 
 	water_damage(invent, FALSE, FALSE, FALSE);
 

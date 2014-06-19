@@ -1511,9 +1511,9 @@ dopois:
 		    else {
 				if (Blind) You("are mercilessly tickled!");
 				else You("are mercilessly tickled by %s!", mon_nam(mtmp));
-				nomovemsg = 0;	/* default: "you can move again" */
-				if(rn2(4)) nomul(-rnd(10), "being tickled to death");
-				else nomul(-1, "being tickled to death");
+//				nomovemsg = 0;	/* default: "you can move again" */
+//				if(rn2(4)) nomul(-rnd(10), "being tickled to death");
+//				else nomul(-1, "being tickled to death");
 				exercise(A_DEX, FALSE);
 				exercise(A_CON, FALSE);
 				if(uwep){
@@ -1574,7 +1574,6 @@ dopois:
 				}
 			}
 		}
-
 		break;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_VAMP:
