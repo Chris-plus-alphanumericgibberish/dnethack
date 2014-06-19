@@ -2131,14 +2131,14 @@ int final;
 			" for any artifacts");
 	}
 
-	if (!u.uconduct.shopID == 0) {
+	if (u.uconduct.shopID == 0) {
 	    you_have_never("paid a shopkeeper to identify an item");
 	} else {
 	    Sprintf(buf, "paid to have %d item%s identified",
 		    u.uconduct.shopID, plur(u.uconduct.shopID));
 	    you_have_X(buf);
 	}
-	if (!u.uconduct.IDs == 0) {
+	if (u.uconduct.IDs == 0) {
 	    you_have_never("magically identified an item");
 	} else {
 	    Sprintf(buf, "magically identified %d item%s",
