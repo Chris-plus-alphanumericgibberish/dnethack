@@ -741,6 +741,8 @@ forget_objects(percent)
 	int i, count;
 	int indices[NUM_OBJECTS];
 
+	return; //Disable object forgetting
+	
 	if (percent == 0) return;
 	if (percent <= 0 || percent > 100) {
 	    impossible("forget_objects: bad percent %d", percent);

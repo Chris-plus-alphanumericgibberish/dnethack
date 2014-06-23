@@ -2700,8 +2700,8 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				unbind(SEAL_HUGINN_MUNINN,TRUE);
 			} else {
 			(void) adjattrib(A_INT, -1, FALSE);
-			forget_levels(25);	/* lose memory of 25% of levels*/
-			forget_objects(25);	/* lose memory of 25% of objects*/
+				forget_levels(25);	/* lose memory of 25% of levels*/
+				forget_objects(25);	/* lose memory of 25% of objects*/
 			water_damage(invent, FALSE, FALSE, TRUE);
 
 			exercise(A_WIS, FALSE);
