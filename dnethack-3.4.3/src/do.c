@@ -803,7 +803,8 @@ dodown()
 				uwep && is_pick(uwep)) {
 				return use_pick_axe2(uwep);
 			} else {
-				You_cant("go down here.");
+				if(levl[u.ux][u.uy].typ == STAIRS) pline("These stairs don't go down!");
+				else You_cant("go down here.");
 				return(0);
 			}
 		}
@@ -868,7 +869,8 @@ doup()
 			u.RoSPflights--;
 		}
 		else{
-			You_cant("go up here.");
+			if(levl[u.ux][u.uy].typ == STAIRS) pline("These stairs don't go up!");
+			else You_cant("go up here.");
 		}
 		return(0);
 	}
