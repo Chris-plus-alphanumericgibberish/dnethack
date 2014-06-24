@@ -3613,8 +3613,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 		    boolean mon_could_move = mon->mcanmove;
 				int tmp = zhitm(mon, type, nd, flat, &otmp);
 
-		    if ( (is_rider(mon->data) || mon->data == &mons[PM_DEMOGORGON]) 
-					&& abs(type) == ZT_BREATH(ZT_DEATH)) {
+				if ( is_rider(mon->data) && abs(type) == ZT_BREATH(ZT_DEATH)) {
 			if (canseemon(mon)) {
 			    hit(fltxt, mon, ".");
 			    pline("%s disintegrates.", Monnam(mon));
@@ -3627,6 +3626,10 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			mon->mhp = mon->mhpmax;
 			break; /* Out of while loop */
 		    }
+				if((mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_ASMODEUS]) && abs(type) == ZT_BREATH(ZT_DEATH)){
+					shieldeff(sx, sy);
+					break; /* Out of while loop */
+				}
 		    if (mon->data == &mons[PM_DEATH] && abstype == ZT_DEATH) {
 			if (canseemon(mon)) {
 			    hit(fltxt, mon, ".");
