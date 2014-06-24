@@ -2201,43 +2201,18 @@ doengrave()
 				} else if (len > 1)
 				otmp->spe -= len >> 1;
 				else otmp->spe -= 1; /* Prevent infinite engraving */
-			} else if ( (otmp->oclass == RING_CLASS) ||
-				 (otmp->oclass == GEM_CLASS) ) multi = -len;
-			else if(otmp->oclass == WAND_CLASS){
-				multi = -(len/10);
-				maxelen = otmp->spe*10;
-				if (multi < -1*otmp->spe){
-					multi = -(otmp->spe);
-					otmp->spe = 0;
-					nomovemsg = is_ice(u.ux,u.uy) ?
-					"You fail to finish blasting your message into the ice before running out of charges!":
-					"You fail to finish blasting your message into the floor before running out of charges!";
-				}
-				else if (multi){
-					otmp->spe += multi; /* multi is already negative*/
-					nomovemsg = is_ice(u.ux,u.uy) ?
-					"You finish blasting your message into the ice.":
-					"You finish blasting your message into the floor.";
-				}
-			}
-			if (multi && !nomovemsg) nomovemsg = "You finish engraving.";
+		} else
+		    if ( (otmp->oclass == RING_CLASS) ||
+			 (otmp->oclass == GEM_CLASS) )
+			multi = -len;
+		if (multi) nomovemsg = "You finish engraving.";
 		break;
 	    case BURN:
 			multi = -(len/10);
-			maxelen = otmp->spe*10;
-			if (multi < -1*otmp->spe){
-				multi = -(otmp->spe);
-				otmp->spe = 0;
-				nomovemsg = is_ice(u.ux,u.uy) ?
-				"You fail to finish melting your message into the ice before running out of charges!":
-				"You fail to finish burning your message into the floor before running out of charges!";
-			}
-			else if (multi){
-				otmp->spe += multi; /* multi is already negative*/
+		if (multi)
 				nomovemsg = is_ice(u.ux,u.uy) ?
 				"You finish melting your message into the ice.":
 				"You finish burning your message into the floor.";
-			}
 		break;
 	    case MARK:
 		multi = -(len/10);
@@ -2970,43 +2945,18 @@ doward()
 				} else if (len > 1)
 					otmp->spe -= len >> 1;
 				else otmp->spe -= 1; /* Prevent infinite engraving */
-			} else if ( (otmp->oclass == RING_CLASS) ||
-				 (otmp->oclass == GEM_CLASS) ) multi = -len;
-			else if(otmp->oclass == WAND_CLASS){
-				multi = -(len/10);
-				maxelen = otmp->spe*10;
-				if(multi < -1*otmp->spe){
-					multi = -(otmp->spe);
-					otmp->spe = 0;
-					nomovemsg = is_ice(u.ux,u.uy) ?
-					"You fail to finish blasting your drawing into the ice before running out of charges!":
-					"You fail to finish blasting your drawing into the floor before running out of charges!";
-				}
-				else if (multi){
-					otmp->spe += multi; /* multi is already negative*/
-					nomovemsg = is_ice(u.ux,u.uy) ?
-					"You finish blasting your drawing into the ice.":
-					"You finish blasting your drawing into the floor.";
-				}
-			}
-			if (multi && !nomovemsg) nomovemsg = "You finish drawing.";
+		} else
+		    if ( (otmp->oclass == RING_CLASS) ||
+			 (otmp->oclass == GEM_CLASS) )
+			multi = -len;
+			if (multi) nomovemsg =	"You finish drawing.";
 		break;
 	    case BURN:
 			multi = -(len/10);
-			maxelen = otmp->spe*10;
-			if(multi < -1*otmp->spe){
-				multi = -(otmp->spe);
-				otmp->spe = 0;
-				nomovemsg = is_ice(u.ux,u.uy) ?
-				"You fail to finish melting your drawing into the ice before running out of charges!":
-				"You fail to finish burning your drawing into the floor before running out of charges!";
-			}
-			else if (multi){
-				otmp->spe += multi; /* multi is already negative*/
+		if (multi)
 				nomovemsg = is_ice(u.ux,u.uy) ?
 				"You finish melting your drawing into the ice.":
 				"You finish burning your drawing into the floor.";
-			}
 		break;
 	    case MARK:
 			multi = -(len/10);
@@ -4049,43 +3999,18 @@ doseal()
 				} else if (len > 1)
 					otmp->spe -= len >> 1;
 				else otmp->spe -= 1; /* Prevent infinite engraving */
-			} else if ( (otmp->oclass == RING_CLASS) ||
-				 (otmp->oclass == GEM_CLASS) ) multi = -len;
-			else if(otmp->oclass == WAND_CLASS){
-				multi = -(len/10);
-				maxelen = otmp->spe*10;
-				if(multi < -1*otmp->spe){
-					multi = -(otmp->spe);
-					otmp->spe = 0;
-					nomovemsg = is_ice(u.ux,u.uy) ?
-					"You fail to finish blasting your drawing into the ice before running out of charges!":
-					"You fail to finish blasting your drawing into the floor before running out of charges!";
-				}
-				else if (multi){
-					otmp->spe += multi; /* multi is already negative*/
-					nomovemsg = is_ice(u.ux,u.uy) ?
-					"You finish blasting your drawing into the ice.":
-					"You finish blasting your drawing into the floor.";
-				}
-			}
-			if (multi && !nomovemsg) nomovemsg = "You finish drawing.";
+		} else
+		    if ( (otmp->oclass == RING_CLASS) ||
+			 (otmp->oclass == GEM_CLASS) )
+			multi = -len;
+			if (multi) nomovemsg =	"You finish drawing.";
 		break;
 	    case BURN:
 			multi = -(len/10);
-			maxelen = otmp->spe*10;
-			if(multi < -1*otmp->spe){
-				multi = -(otmp->spe);
-				otmp->spe = 0;
-				nomovemsg = is_ice(u.ux,u.uy) ?
-				"You fail to finish melting your drawing into the ice before running out of charges!":
-				"You fail to finish burning your drawing into the floor before running out of charges!";
-			}
-			else if (multi){
-				otmp->spe += multi; /* multi is already negative*/
+		if (multi)
 				nomovemsg = is_ice(u.ux,u.uy) ?
 				"You finish melting your drawing into the ice.":
 				"You finish burning your drawing into the floor.";
-			}
 		break;
 	    case MARK:
 			multi = -(len/10);
