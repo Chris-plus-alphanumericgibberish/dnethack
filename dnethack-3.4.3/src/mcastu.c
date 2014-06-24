@@ -675,7 +675,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		/* not trying to attack?  don't allow directed spells */
 		if (!thinks_it_foundyou) {
 		    if (!is_undirected_spell(mattk->adtyp, spellnum) ||
-                       spell_would_be_useless(mtmp, spellnum)) {
+                       spell_would_be_useless(mtmp, spellnum)
+			) {
 			if (foundyou)
 			    impossible("spellcasting monster found you and doesn't know it?");
 			return 0;
@@ -1357,11 +1358,11 @@ int spellnum;
           boolean change = FALSE;
           do {
               if (adjattrib(typ, -rnd(ACURR(typ))+3, -1)) change = TRUE;
-          } while (typ++ < A_MAX);
+          } while (++typ < A_MAX);
           if (!change) goto drainhp;
        } else {
           int typ = rn2(A_MAX);
-           dmg = mtmp ? mtmp->m_lev - 6 : rnd(15);
+           dmg = mtmp ? min(mtmp->m_lev - 6,15) : rnd(15);
 		   if(dmg < 3) dmg = 3;
            if (Half_spell_damage) dmg = (dmg + 1) / 2;
            if (dmg < 1) dmg = 1;
@@ -1671,10 +1672,8 @@ int spellnum;
 {
 	switch (spellnum) {
 	case CLONE_WIZ:
-       case RAISE_DEAD:
-       case EARTHQUAKE:
-       case SUMMON_ANGEL:
-       case SUMMON_SPHERE:
+	case RAISE_DEAD:
+	case SUMMON_ANGEL:
 	case SUMMON_MONS:
 	case DISAPPEAR:
 	case HASTE_SELF:
@@ -2085,13 +2084,13 @@ castum(mtmp, mattk)
 	    if (!spellnum) do {
 	        spellnum = choose_magic_special(&youmonst, mattk->adtyp);
              if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
-		/* not trying to attack?  don't allow directed spells */
-		if (!mtmp || mtmp->mhp < 1) {
+//		/* not trying to attack?  don't allow directed spells */
+//		if (!mtmp || mtmp->mhp < 1) {
 //		    if (is_undirected_spell(mattk->adtyp, spellnum) && 
 //			!uspell_would_be_useless(spellnum)) {
 //		        break;
 //		    }
-		}
+//		}
 	    } while(--cnt > 0 &&
 	            ((!mtmp && !is_undirected_spell(mattk->adtyp, spellnum))
 		    || uspell_would_be_useless(spellnum)));
