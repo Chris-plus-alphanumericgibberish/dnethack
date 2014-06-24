@@ -19,7 +19,7 @@ STATIC_DCL struct artifact artilist[];
 extern boolean notonhead;	/* for long worms */
 
 #define get_artifact(o) \
-		(((o)&&(o)->oartifact) ? &artilist[(int) (o)->oartifact] : 0)
+		(((o)&&(o)->oartifact) ? &artilist[(int) ((unsigned char) (o)->oartifact)] : 0)
 
 
 //duplicates of other functions, created due to problems with the linker
@@ -1678,7 +1678,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	}
 	if (attacks(AD_COLD, otmp) && (get_artifact(otmp)->inv_prop != ICE_SHIKAI || u.SnSd3duration > monstermoves) ) {
 	    if (realizes_damage)
-			pline_The("ice-cold %s %s %s%c", otmp->oartifact == ART_LASH_OF_THE_COLD_WASTE ? "whip" : "blade",
+			pline_The("ice-cold %s %s %s%c", otmp->oartifact == ART_LASH_OF_THE_COLD_WASTE ? "whip" : 
+											 ((unsigned char) otmp->oartifact) == ART_SCEPTRE_OF_THE_FROZEN_FLOO ? "staff" : "blade",
 				!spec_dbon_applies ? "hits" : "freezes",
 				hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
