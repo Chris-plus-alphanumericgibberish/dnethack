@@ -821,6 +821,9 @@ dodown()
 			return(0);
 		else pline("So be it.");
 		u.uevent.gehennom_entered = 1;	/* don't ask again */
+#ifdef RECORD_ACHIEVE
+		achieve.enter_gehennom = 1;
+#endif
 	}
 	if(on_level(&spire_level,&u.uz)){
 		u.uevent.sum_entered = 1; //entered sum of all
