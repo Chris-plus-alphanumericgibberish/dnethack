@@ -2192,7 +2192,7 @@ register int	mmflags;
 		unsethouse = TRUE;
 	}
 		mtmp->mfaction = curhouse;
-		pline("%d",mtmp->mfaction);
+//		pline("%d",mtmp->mfaction);
 	}
 	
 	switch(ptr->mlet) {
