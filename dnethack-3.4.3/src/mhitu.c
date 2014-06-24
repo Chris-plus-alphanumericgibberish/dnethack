@@ -3346,7 +3346,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    stop_occupation();
 			succeeded=1;
 		    if (Shock_resistance) {
-				You("aren't get shocked!");
+				You("aren't shocked!");
 				dmg = 0;
 				succeeded=0;
 		    }
