@@ -835,13 +835,20 @@ mattacku(mtmp)
 				temp = mtmp->mspec_used;
 				mtmp->mspec_used = 0;
 			}
-			if (range2)
+			if (range2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
 			    sum[i] = buzzmu(mtmp, mattk);
 			else {
-			    if (foundyou)
-				sum[i] = castmu(mtmp, mattk, TRUE, TRUE);
-			    else
-				sum[i] = castmu(mtmp, mattk, TRUE, FALSE);
+			    if (foundyou){
+					if(couldsee(mtmp->mx, mtmp->my))
+						sum[i] = castmu(mtmp, mattk, TRUE, TRUE);
+					else
+						sum[i] = castmu(mtmp, mattk, FALSE, FALSE);
+			    } else{
+					if(couldsee(mtmp->mx, mtmp->my))
+						sum[i] = castmu(mtmp, mattk, TRUE, FALSE);
+					else
+						sum[i] = castmu(mtmp, mattk, FALSE, FALSE);
+				}
 			}
 			if( mdat == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
 			if( mdat == &mons[PM_QUINON] ) {
