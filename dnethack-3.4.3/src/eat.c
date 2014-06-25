@@ -615,6 +615,7 @@ BOOLEAN_P bld;
 		if (Stoned) fix_petrification();
 		break;
 		/*Note: these three imply corpse*/
+	    case PM_GREAT_CTHULHU:
 	    case PM_DEATH:
 	    case PM_PESTILENCE:
 	    case PM_FAMINE:
@@ -632,6 +633,14 @@ BOOLEAN_P bld;
 			victual.piece = (struct obj *)0;
 		    return;
 		}
+		case PM_NAZGUL:
+		    /* It so happens that since we know these monsters */
+		    /* cannot appear in tins, victual.piece will always */
+		    /* be what we want, which is not generally true. */
+		    if (revive_corpse(victual.piece, REVIVE_MONSTER))
+			victual.piece = (struct obj *)0;
+		    return;
+		break;
 	    case PM_GREEN_SLIME:
 		if (!Slimed && !Unchanging && !flaming(youmonst.data) &&
 			youmonst.data != &mons[PM_GREEN_SLIME]) {
