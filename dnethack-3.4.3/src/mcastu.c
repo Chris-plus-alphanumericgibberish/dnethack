@@ -928,7 +928,7 @@ int spellnum;
                verbalize(rn2(2) ? "I shall make a statue of thee!" :
                                   "I condemn thee to eternity unmoving!");
         if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
-           if(!Stone_resistance && !(rn2(10) && (have_lizard()) || Free_action) ){
+           if(!Stone_resistance && (!rn2(10) || !(have_lizard() || Free_action)) ){
            You_feel("less limber.");
            Stoned = 5;
 		   }else{
