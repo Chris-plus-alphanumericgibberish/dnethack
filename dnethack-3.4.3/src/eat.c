@@ -633,7 +633,10 @@ BOOLEAN_P bld;
 			victual.piece = (struct obj *)0;
 		    return;
 		}
+		case PM_AXUS:
 		case PM_NAZGUL:
+		case PM_ELDER_PRIEST:
+		case PM_PRIEST_OF_AN_UNKNOWN_GOD:
 		    /* It so happens that since we know these monsters */
 		    /* cannot appear in tins, victual.piece will always */
 		    /* be what we want, which is not generally true. */
