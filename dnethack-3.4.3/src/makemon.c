@@ -3425,22 +3425,26 @@ register struct permonst *ptr;
 	int mndx = monsndx(ptr);
 	aligntyp mal = ptr->maligntyp, ual = u.ualign.type;
 
+	if (ptr->msound == MS_LEADER || ptr->msound == MS_GUARDIAN)
+		return TRUE;
+	if (ptr->msound == MS_NEMESIS)	return FALSE;
+	
+	if (always_peaceful(ptr)) return TRUE;
+	if(!u.uevent.udemigod && mndx==PM_UVUUDAUM) return TRUE;
+	
+	if(ual == A_VOID) return FALSE;
+	
 	if ((mndx <= PM_QUINON && mndx >= PM_MONOTON) && sgn(mal) == sgn(ual)){
 		if(!u.uevent.uaxus_foe){
 			return TRUE;
 		} else return FALSE;
 	}
 	if (mndx==PM_APOLLYON && sgn(mal) == sgn(ual)) return TRUE;
-	if(!u.uevent.udemigod && mndx==PM_UVUUDAUM) return TRUE;
-	if (always_peaceful(ptr)) return TRUE;
 	if (always_hostile(ptr) && 
 		(u.uz.dnum != law_dnum || !is_social_insect(ptr)
 		|| (!on_level(&arcadia1_level,&u.uz) && !on_level(&arcadia2_level,&u.uz) && !on_level(&arcadia3_level,&u.uz) && !on_level(&arcward_level,&u.uz))
 		) && (!is_vampire(ptr) || maybe_polyd(!is_vampire(youmonst.data), !Race_if(PM_VAMPIRE)))
 		) return FALSE;
-	if (ptr->msound == MS_LEADER || ptr->msound == MS_GUARDIAN)
-		return TRUE;
-	if (ptr->msound == MS_NEMESIS)	return FALSE;
 
 	if (race_peaceful(ptr)) return TRUE;
 	if (race_hostile(ptr)) return FALSE;
