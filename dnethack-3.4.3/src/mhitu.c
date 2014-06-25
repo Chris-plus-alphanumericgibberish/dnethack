@@ -2794,14 +2794,14 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 						"can barely breathe!");
 					/* NB: Amphibious includes Breathless */
 					if (Amphibious && !flaming(youmonst.data)) tmp = 0;
-					hurtarmor(AD_RUST);
-					// No way to tell if rusting occurs!
-					// if(mtmp->mhp > 1){
-						// mtmp->mhp -= 10;
-						// if(mtmp->mhp < 1) mtmp->mhp = 1;
-					// }
 				}
 			}
+			hurtarmor(AD_RUST);
+			// No way to tell if rusting occurs!
+			// if(mtmp->mhp > 1){
+				// mtmp->mhp -= 10;
+				// if(mtmp->mhp < 1) mtmp->mhp = 1;
+			// }
 			if(Half_physical_damage) tmp = (tmp*2)-1; /*reverse formula, cancel half damage*/
 		}break;
 		default:
