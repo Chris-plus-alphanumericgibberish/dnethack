@@ -3148,7 +3148,8 @@ int spell;
 	splcaster = urole.spelbase;
 	special = urole.spelheal;
 	if(!Role_if(PM_EXILE)){
-	statused = ACURR(urole.spelstat);
+		if(Race_if(PM_INCANTIFIER)) statused = ACURR(A_INT);
+		else statused = ACURR(urole.spelstat);
 	} else {
 		if(u.specialSealsActive&SEAL_NUMINA){
 		if(abs(u.wisSpirits - u.intSpirits) <= 1) statused = max(ACURR(A_WIS), ACURR(A_INT));
@@ -3159,7 +3160,8 @@ int spell;
 		} else if(u.wisSpirits || u.intSpirits){
 		statused = max(ACURR(A_WIS), ACURR(A_INT));
 		} else {
-		statused = min(ACURR(A_WIS), ACURR(A_INT));
+		if(Race_if(PM_INCANTIFIER)) statused = ACURR(A_INT);
+		else statused = min(ACURR(A_WIS), ACURR(A_INT));
 		}
 	}
 
@@ -3180,6 +3182,8 @@ int spell;
 	if (uarmg && is_metallic(uarmg)) splcaster += uarmgbon;
 	if (uarmf && is_metallic(uarmf)) splcaster += uarmfbon;
 
+	if (Race_if(PM_INCANTIFIER))
+		splcaster += urole.spelsbon;
 	if (spellid(spell) == urole.spelspec)
 		splcaster += urole.spelsbon;
 

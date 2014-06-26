@@ -565,6 +565,14 @@ init_attr(np)
 	    AMAX(i)--;
 	    np++;
 	}
+	if(Race_if(PM_INCANTIFIER)){
+	    for (i = 0; (i < A_MAX); i++){
+			if(ABASE(A_INT) < ABASE(i)){
+				ABASE(A_INT) = ABASE(i);
+				AMAX(A_INT) = AMAX(i);
+			}
+		}
+	}
 }
 
 void
