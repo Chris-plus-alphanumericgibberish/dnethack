@@ -2040,8 +2040,8 @@ donull()
 			if(u.uhp == u.uhpmax){
 				You("complete your repairs.");
 				lastreped = -13;
+				stop_occupation();
 			}
-			stop_occupation();
 		} else if(Upolyd && u.mh<u.mhmax){
 			if(lastreped < monstermoves-100) You("attempt to make repairs.");
 			if(!rn2(15-u.ulevel/2)) u.mh = min(u.mh+rnd(10),u.mhmax);
@@ -2049,8 +2049,8 @@ donull()
 			if(u.mh == u.mhmax){
 				You("complete your repairs.");
 				lastreped = -13;
+				stop_occupation();
 			}
-			stop_occupation();
 		} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
 	} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
 	return(1);	/* Do nothing, but let other things happen */

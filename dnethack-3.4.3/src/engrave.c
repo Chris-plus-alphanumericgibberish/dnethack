@@ -4047,15 +4047,15 @@ doseal()
 	else if (oep && oep->ward_id){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-		oep->complete_wards = 1;
-			oep->engr_time = moves;
+			oep->complete_wards = 1;
+			oep->engr_time = moves - multi;
 	}
 	else if(oep){
 		if(!Hallucination || !rn2(4)){
 			oep->ward_id = ward;
 			oep->ward_type = type;
 			oep->complete_wards = 1;
-			oep->engr_time = moves;
+			oep->engr_time = moves - multi;
 		}
 		else{
 			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
@@ -4066,6 +4066,7 @@ doseal()
 			else oep->halu_ward = TRUE;
 			oep->ward_type = type;
 			oep->complete_wards = 1;
+			oep->engr_time = moves - multi;
 		}
 	}
 	else{
