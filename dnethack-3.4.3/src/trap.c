@@ -1015,7 +1015,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			    a_your[trap->madeby_u]);
 		    break;
 		}
-		if (webmaker(youmonst.data)) {
+		if (webmaker(youmonst.data) || (uarm && uarm->oartifact==ART_SPIDERSILK)) {
 		    if (webmsgok)
 		    	pline(trap->madeby_u ? "You take a walk on your web."
 					 : "There is a spider web here.");
@@ -3212,7 +3212,7 @@ dountrap()	/* disarm a trap */
 	    pline("You're too strained to do that.");
 	    return 0;
 	}
-	if ((nohands(youmonst.data) && !webmaker(youmonst.data)) || !youmonst.data->mmove) {
+	if ((nohands(youmonst.data) && !(webmaker(youmonst.data) || (uarm && uarm->oartifact==ART_SPIDERSILK))) || !youmonst.data->mmove) {
 	    pline("And just how do you expect to do that?");
 	    return 0;
 	} else if (u.ustuck && sticks(youmonst.data)) {
@@ -3237,7 +3237,7 @@ struct trap *ttmp;
 	int chance = 3;
 
 	/* Only spiders know how to deal with webs reliably */
-	if (ttmp->ttyp == WEB && !webmaker(youmonst.data))
+	if (ttmp->ttyp == WEB && !(webmaker(youmonst.data))  || (uarm && uarm->oartifact==ART_SPIDERSILK))
 	 	chance = 30;
 	if (Confusion || Hallucination) chance++;
 	if (Blind) chance++;
@@ -3356,7 +3356,7 @@ boolean force_failure;
 			    if (mtmp->mtame) abuse_dog(mtmp);
 			    if ((mtmp->mhp -= rnd(4)) <= 0) killed(mtmp);
 			} else if (ttype == WEB) {
-			    if (!webmaker(youmonst.data)) {
+			    if (!(webmaker(youmonst.data) || (uarm && uarm->oartifact==ART_SPIDERSILK))) {
 				struct trap *ttmp2 = maketrap(u.ux, u.uy, WEB);
 				if (ttmp2) {
 				    pline_The("webbing sticks to you. You're caught too!");
