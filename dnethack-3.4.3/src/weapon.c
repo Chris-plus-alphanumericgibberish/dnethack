@@ -1423,7 +1423,7 @@ struct obj *obj;
 		/* Not using a weapon */
 		return (P_BARE_HANDED_COMBAT);
 #ifdef CONVICT
-    if ((obj->otyp == HEAVY_IRON_BALL) && Role_if(PM_CONVICT))
+    if ((obj->otyp == HEAVY_IRON_BALL) && (Role_if(PM_CONVICT) || u.sealsActive&SEAL_AHAZU))
         return objects[obj->otyp].oc_skill;
 #endif /* CONVICT */
 	if (obj->oclass != WEAPON_CLASS && obj->oclass != TOOL_CLASS &&

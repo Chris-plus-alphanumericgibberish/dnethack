@@ -1904,7 +1904,8 @@ int tx,ty;
 				}
 				else{
 					pline("The Spider passes you over, and collects her prize.");
-					if(o) useup(o);
+					
+					if(o) useupf(o, 1L);
 					else{
 						levl[tx][ty].typ = ROOM;
 						digfarhole(TRUE,tx,ty);
@@ -2926,6 +2927,7 @@ bindspirit(seal_id)
 	switch(seal_id){
 		case AHAZU:{
 			if(u.ahazu < moves){
+				unrestrict_weapon_skill(P_FLAIL);
 				u.sealsActive |= SEAL_AHAZU;
 				u.spirit[u.sealCounts] = SEAL_AHAZU;
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3103,7 +3105,6 @@ bindspirit(seal_id)
 		}break;
 		case EVE:{
 			if(u.eve < moves){
-				unrestrict_weapon_skill(P_FLAIL);
 				unrestrict_weapon_skill(P_BOW);
 				unrestrict_weapon_skill(P_HARVEST);
 				u.sealsActive |= SEAL_EVE;
@@ -3408,7 +3409,7 @@ int p_skill;
 	if(p_skill == P_CLUB) return u.sealsActive & SEAL_YMIR? TRUE : FALSE;
 	if(p_skill == P_MACE) return u.sealsActive & SEAL_TENEBROUS? TRUE : FALSE;
 	if(p_skill == P_MORNING_STAR) return u.sealsActive & SEAL_IRIS? TRUE : FALSE;
-	if(p_skill == P_FLAIL) return u.sealsActive & SEAL_EVE? TRUE : FALSE;
+	if(p_skill == P_FLAIL) return u.sealsActive & SEAL_AHAZU? TRUE : FALSE;
 	if(p_skill == P_HAMMER) return u.sealsActive & SEAL_ENKI ? TRUE : FALSE;
 	if(p_skill == P_QUARTERSTAFF) return u.sealsActive & SEAL_NABERIUS? TRUE : FALSE;
 	if(p_skill == P_POLEARMS) return u.sealsActive & SEAL_SHIRO? TRUE : FALSE;
