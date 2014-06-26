@@ -2397,7 +2397,7 @@ struct obj *otmp;
 		IS_ROCK(levl[rx][ry].typ) ||
 		closed_door(rx, ry) || ((ttmp = t_at(rx, ry)) && ttmp->ttyp != WEB))
 	    what = "here";
-	if (what) {
+	if (what && !(ttmp && ttmp->ttyp == WEB)) {
 	    You_cant("set a trap %s!",what);
 	    reset_trapset();
 	    return;
@@ -2410,7 +2410,6 @@ struct obj *otmp;
 		newsym(rx, ry);
 		if(rx==u.ux && ry==u.uy) u.utrap = 0;
 		else if(mtmp) mtmp->mtrapped = 0;
-
 	}
 	else {
 		ttmp = maketrap(rx, ry, WEB);
