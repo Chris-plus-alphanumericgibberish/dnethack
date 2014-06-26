@@ -2591,6 +2591,7 @@ arti_invoke(obj)
 	    otmp = hold_another_object(otmp, "Suddenly %s out.",
 				       aobjnam(otmp, "fall"), (const char *)0);
 	}
+	break;
 	case OBJECT_DET:
 		object_detect(obj, 0);
 		artifact_detect(obj);
