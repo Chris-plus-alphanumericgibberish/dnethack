@@ -266,7 +266,6 @@ register const char *name;
 	return FALSE;
 }
 
-/* I beleive this is the declaration that the artifact now exists.... */
 void
 artifact_exists(otmp, name, mod)
 register struct obj *otmp;
