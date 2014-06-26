@@ -3483,7 +3483,8 @@ doapply()
 	    return do_present_ring(obj);
 	else if(is_knife(obj) && !(obj->oartifact==ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_MARIONETTE)) return do_carve_obj(obj);
 	
-	switch(obj->otyp){
+	if(obj->oartifact == ART_SILVER_STARLIGHT) do_play_instrument(obj);
+	else switch(obj->otyp){
 	case BLINDFOLD:
 	case LENSES:
 	case MASK:

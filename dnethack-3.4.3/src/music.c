@@ -420,7 +420,21 @@ struct obj *instr;
 	else
 	    You("start playing %s.", the(xname(instr)));
 
-	switch (instr->otyp) {
+	if(instr->oartifact == ART_SILVER_STARLIGHT){
+	    if (do_spec && instr->spe > 0) {
+			if(instr->age > monstermoves) consume_obj_charge(instr, TRUE);
+			else instr->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
+			
+			You("produce soft music.");
+			put_monsters_to_sleep(u.ulevel * 5);
+			exercise(A_DEX, TRUE);
+	    } else {
+			do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
+			pline("%s.", Tobjnam(instr, do_spec ? "trill" : "toot"));
+			if (do_spec) charm_snakes(u.ulevel * 3);
+			exercise(A_DEX, TRUE);
+		}
+	} else switch (instr->otyp) {
 	case MAGIC_FLUTE:		/* Make monster fall asleep */
 	    if (do_spec && instr->spe > 0) {
 		consume_obj_charge(instr, TRUE);

@@ -609,7 +609,7 @@ struct attack *uattk;
 {
 	boolean malive;
 	if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-		tmp += find_mac(mon) - base_mac(mon);
+		tmp -= find_mac(mon) - base_mac(mon);
 	}
 	int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 
@@ -621,7 +621,7 @@ struct attack *uattk;
 		struct monst *m2 = m_at(mon->mx+u.dx,mon->my+u.dy);
 		if(!m2 || DEADMONSTER(m2) || m2==mon) return(malive);
 		if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-			tmp += find_mac(m2) - base_mac(m2);
+			tmp -= find_mac(m2) - base_mac(m2);
 		}
 		int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 
@@ -889,7 +889,8 @@ int thrown;
 		    if (mdat == &mons[PM_SHADE] && !(obj->otyp == SILVER_ARROW || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
 				tmp = 0;
 		    else tmp = rnd(2);
-		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) )
+		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || 
+					(thrown && obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) )
 				&& hates_silver(mdat)) {
 				tmp += rnd(20); //I think this is the right thing to do here.  I don't think it enters the main silver section
 				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
@@ -1011,7 +1012,8 @@ int thrown;
 			if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
 				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
 			}
-		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) )
+		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj)  || 
+					(thrown && obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) )
 				&& hates_silver(mdat) && !(is_lightsaber(obj) && obj->lamplit)) {
 				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
 				else silvermsg = TRUE;
@@ -1257,7 +1259,8 @@ defaultvalue:
 			 * Things like silver wands can arrive here so
 			 * so we need another silver check.
 			 */
-			if ( (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
+			if ( (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || 
+					(thrown && obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) )
 						&& hates_silver(mdat)) {
 				tmp += rnd(20);
 				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
@@ -1638,6 +1641,7 @@ struct obj *obj;
 	    || obj->otyp == MIRROR		/* silver in the reflective surface */
 	    || obj->otyp == CLOVE_OF_GARLIC	/* causes shades to flee */
 	    || objects[obj->otyp].oc_material == SILVER
+		|| (obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) 
 		|| arti_silvered(obj) )
 		return TRUE;
 	return FALSE;
@@ -2720,7 +2724,7 @@ use_weapon:
 			    hittmp = hitval(uwep, mon);
 			    hittmp += weapon_hit_bonus(uwep);
 				if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-					hittmp += find_mac(mon) - base_mac(mon);
+					hittmp -= find_mac(mon) - base_mac(mon);
 				}
 			    tmp += hittmp;
 			}
@@ -2747,7 +2751,7 @@ use_weapon:
 				hittmp = hitval(uwep, m2);
 				hittmp += weapon_hit_bonus(uwep);
 				if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-					hittmp += find_mac(m2) - base_mac(m2);
+					hittmp -= find_mac(m2) - base_mac(m2);
 				}
 				tmp += hittmp;
 				dhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
@@ -2988,7 +2992,7 @@ use_weapon:
 				hittmp = hitval(uwep, m2);
 				hittmp += weapon_hit_bonus(uwep);
 				if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-					hittmp += find_mac(m2) - base_mac(m2);
+					hittmp -= find_mac(m2) - base_mac(m2);
 				}
 				tmp += hittmp;
 				dhit = (tmp > (dieroll = rnd(20)) || u.uswallow);

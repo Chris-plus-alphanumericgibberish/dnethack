@@ -2564,8 +2564,16 @@ arti_invoke(obj)
 	    struct obj *otmp;
 		if(obj->oartifact == ART_LONGBOW_OF_DIANA) otmp = mksobj(ARROW, TRUE, FALSE);
 		else if(obj->oartifact == ART_FUMA_ITTO_NO_KEN) otmp = mksobj(SHURIKEN, TRUE, FALSE);
-		else if(obj->oartifact == ART_SILVER_STARLIGHT) otmp = mksobj(SHURIKEN, TRUE, FALSE);
-		else if(obj->oartifact == ART_YOICHI_NO_YUMI) otmp = mksobj(YA, TRUE, FALSE);
+		else if(obj->oartifact == ART_SILVER_STARLIGHT){
+			if(cansee(u.ux, u.uy)) pline("Silver starlight shines upon your blade!");
+			obj->cursed = 0;
+			obj->blessed = 1;
+			obj->oeroded = 0;
+			obj->oeroded2= 0;
+			obj->oerodeproof = 1;
+			if(obj->spe < 3) obj->spe = 3;
+			otmp = mksobj(SHURIKEN, TRUE, FALSE);
+		} else if(obj->oartifact == ART_YOICHI_NO_YUMI) otmp = mksobj(YA, TRUE, FALSE);
 		else if(obj->oartifact == ART_WRATHFUL_SPIDER) otmp = mksobj(DROVEN_BOLT, TRUE, FALSE);
 
 	    if (!otmp) goto nothing_special;
