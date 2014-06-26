@@ -1481,7 +1481,7 @@ register struct	monst	*mtmp;
 			}
 		break;
 	    case S_MUMMY:
-		if (rn2(7)) (void)mongets(mtmp, MUMMY_WRAPPING);
+		(void)mongets(mtmp, ptr == &mons[PM_DROW_MUMMY] ? DROVEN_CLOAK : MUMMY_WRAPPING);
 			if(ptr == &mons[PM_DROW_MUMMY] && !rn2(10)){
 				otmp = mksobj(find_signet_ring(), FALSE, FALSE);
 				otmp->ohaluengr = TRUE;
