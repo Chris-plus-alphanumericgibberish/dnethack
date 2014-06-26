@@ -4237,7 +4237,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.sealsKnown & SEAL_FAFNIR){
-		Sprintf(buf, "Fafnir, Dwarf-dragon");
+		Sprintf(buf,	"Fafnir, Jotunn Dragon");
 		any.a_int = FAFNIR;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
