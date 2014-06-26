@@ -1285,7 +1285,7 @@ int tx,ty;
 		if(u.ahazu < moves){
 			struct trap *t=t_at(tx,ty);
 			//Ahazu requires that his seal be drawn in a pit.
-			if(t->ttyp == PIT){
+			if(t && t->ttyp == PIT){
 				pline("The walls of the pit are lifted swiftly away, revealing a vast starry expanse beneath the world.");
 				if(u.sealCounts < numSlots){
 					pline("A voice whispers from bellow:");
@@ -2595,7 +2595,7 @@ int tx,ty;
 		if(u.orthos < moves){
 			struct trap *t=t_at(tx,ty);
 			//Spirit requires that his seal be drawn in a square with a hole.
-			if(t->ttyp == HOLE){
+			if(t && t->ttyp == HOLE){
 				if(!Blind) pline("The hole grows darker, and a whistling occurs at the edge of hearing.");
 				else pline("A whistling occurs at the edge of hearing.");
 				pline("The mournful whistle grows louder, as the air around you flows into the pit.");
