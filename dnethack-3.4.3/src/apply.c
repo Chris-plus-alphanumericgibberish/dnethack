@@ -33,6 +33,7 @@ STATIC_DCL void FDECL(use_grease, (struct obj *));
 STATIC_DCL void FDECL(use_trap, (struct obj *));
 STATIC_DCL void FDECL(use_stone, (struct obj *));
 STATIC_DCL int FDECL(use_droven_cloak, (struct obj *));
+STATIC_DCL int FDECL(use_darkweavers_cloak, (struct obj *));
 STATIC_PTR int NDECL(set_trap);		/* occupation callback */
 STATIC_DCL int FDECL(use_whip, (struct obj *));
 STATIC_DCL int FDECL(use_pole, (struct obj *));
@@ -2436,6 +2437,42 @@ struct obj *otmp;
 }
 
 STATIC_OVL int
+use_darkweavers_cloak(otmp)
+struct obj *otmp;
+{
+	int ttyp, tmp, rx, ry;
+	boolean gone = FALSE;
+	const char *what = (char *)0;
+	struct monst *mtmp;
+
+	if (nohands(youmonst.data))
+	    what = "without hands";
+	else if (Stunned)
+	    what = "while stunned";
+	else if (u.uswallow)
+	    what = is_animal(u.ustuck->data) ? "while swallowed" :
+			"while engulfed";
+	else if (Underwater)
+	    what = "underwater";
+	if (what) {
+	    You_cant("release darkness %s!",what);
+	    return;
+	}
+	
+	if(!levl[u.ux][u.uy].lit) {
+		if(otmp->spe < 7) otmp->spe++;
+		pline("The cloak sweeps up the dark!");
+		litroom(TRUE, otmp);	/* only needs to be done once */
+	}
+	else if(otmp->spe > -5){
+		otmp->spe--;
+		pline("The cloak releases a cloud of darkness!");
+		litroom(FALSE, otmp);	/* only needs to be done once */
+	}
+	return 1;
+}
+
+STATIC_OVL int
 use_whip(obj)
 struct obj *obj;
 {
@@ -3675,7 +3712,8 @@ doapply()
 		use_trap(obj);
 		break;
 	case DROVEN_CLOAK:
-		res = use_droven_cloak(obj);
+		if(obj->oartifact == ART_DARKWEAVER_S_CLOAK) res = use_darkweavers_cloak(obj);
+		else res = use_droven_cloak(obj);
 		break;
 	case FLINT:
 	case LUCKSTONE:
