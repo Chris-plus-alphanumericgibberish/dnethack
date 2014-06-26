@@ -125,12 +125,14 @@ int shotlimit;
 	    case P_EXPERT:	multishot += 2; break;
 	    }
 	    /* ...or is using the legendary Longbow... */
-		if(uwep && uwep->oartifact == ART_LONGBOW_OF_DIANA) multishot++;
+		if(ammo_and_launcher(obj, uwep)
+			&& (uwep->oartifact == ART_LONGBOW_OF_DIANA || uwep->oartifact == ART_BELTHRONDING)
+		) multishot++;
 	    /* ...or is using a special weapon for their role... */
 	    switch (Role_switch) {
 	    case PM_RANGER:
 		multishot++;
-		if(uwep && uwep->oartifact == ART_LONGBOW_OF_DIANA) multishot++;//double bonus for Rangers
+		if(ammo_and_launcher(obj, uwep) && uwep->oartifact == ART_LONGBOW_OF_DIANA) multishot++;//double bonus for Rangers
 		break;
 	    case PM_ROGUE:
 		if (skill == P_DAGGER) multishot++;
@@ -146,6 +148,7 @@ int shotlimit;
 	    case PM_ELF:
 		if (obj->otyp == ELVEN_ARROW && uwep &&
 				uwep->otyp == ELVEN_BOW) multishot++;
+		if(ammo_and_launcher(obj, uwep) && uwep->oartifact == ART_BELTHRONDING) multishot++;//double bonus for Elves
 		break;
 	    case PM_ORC:
 		if (obj->otyp == ORCISH_ARROW && uwep &&
@@ -158,6 +161,8 @@ int shotlimit;
 
 	if(!barage) multishot = rnd(multishot);
 	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barage
+	if(ammo_and_launcher(obj, uwep) && uwep->oartifact == ART_WRATHFUL_SPIDER) multishot+=rnd(8);
+	
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER) multishot = (int)obj->quan;
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 
