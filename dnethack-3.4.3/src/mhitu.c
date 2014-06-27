@@ -839,12 +839,12 @@ mattacku(mtmp)
 			    sum[i] = buzzmu(mtmp, mattk);
 			else {
 			    if (foundyou){
-					if(couldsee(mtmp->mx, mtmp->my))
+					if(couldsee(mtmp->mx, mtmp->my) && dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= BOLT_LIM*BOLT_LIM)
 						sum[i] = castmu(mtmp, mattk, TRUE, TRUE);
 					else
 						sum[i] = castmu(mtmp, mattk, FALSE, FALSE);
 			    } else{
-					if(couldsee(mtmp->mx, mtmp->my))
+					if(couldsee(mtmp->mx, mtmp->my) && dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= BOLT_LIM*BOLT_LIM)
 						sum[i] = castmu(mtmp, mattk, TRUE, FALSE);
 					else
 						sum[i] = castmu(mtmp, mattk, FALSE, FALSE);
