@@ -763,6 +763,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			destroy_item(WAND_CLASS, AD_ELEC);
 			if(!rn2(10)) destroy_item(RING_CLASS, AD_ELEC);
 		}
+		stop_occupation();
 		break;
 	    case AD_FIRE:
 		pline("You're enveloped in flames.");
@@ -779,6 +780,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			if(!rn2(10)) destroy_item(SPBOOK_CLASS, AD_FIRE);
 		}
 		burn_away_slime();
+		stop_occupation();
 		break;
 	    case AD_COLD:
 		pline("You're covered in frost.");
@@ -789,6 +791,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			if(!rn2(4)) destroy_item(POTION_CLASS, AD_COLD);
 		}
 		else destroy_item(POTION_CLASS, AD_COLD);
+		stop_occupation();
 		break;
 	    case AD_MAGM:
 		You("are hit by a shower of missiles!");
@@ -797,6 +800,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			pline_The("missiles bounce off!");
 			dmg = 0;
 		} //else dmg = d((int)mtmp->m_lev/2 + 1,6);
+		stop_occupation();
 		break;
         default:
 	    {
@@ -854,6 +858,7 @@ int spellnum;
 		Your("%s flutters!", body_part(HEART));
 		dmg = mtmp ? rnd(mtmp->m_lev) : 10; //you still take damage
 	} else shieldeff(u.ux, u.uy);
+	stop_occupation();
 	break;
     case CLONE_WIZ:
 	if (mtmp && mtmp->iswiz && flags.no_of_wizards == 1) {
@@ -890,6 +895,7 @@ int spellnum;
 	}
        vomit();
        dmg = rnd(Half_physical_damage ? 5 : 10);
+	stop_occupation();
 	break;
 	}
     case STRANGLE:
@@ -921,6 +927,7 @@ int spellnum;
            }
 	}
 	dmg = 0;
+	stop_occupation();
 	break;
     }
      case TURN_TO_STONE:
@@ -936,12 +943,14 @@ int spellnum;
 		   }
         } 
 		dmg = 0;
+	 stop_occupation();
         break;
      case MAKE_VISIBLE:
        HInvis &= ~INTRINSIC;
        You_feel("paranoid.");
        dmg = 0;
        break;
+	 stop_occupation();
      case PLAGUE:
        if (!Sick_resistance) {
           You("are afflicted with disease!");
@@ -950,6 +959,7 @@ int spellnum;
        } else You_feel("slightly infectious.");
        dmg = 0;
        break;
+	 stop_occupation();
      case PUNISH:
         if (!Punished) {
             punish((struct obj *)0);
@@ -960,6 +970,7 @@ int spellnum;
                 else uball->owt += 160;
 	}
 	dmg = 0;
+	stop_occupation();
 	break;
      case EARTHQUAKE:
        pline_The("entire %s is shaking around you!",
@@ -975,6 +986,7 @@ int spellnum;
 		:	do_earthquake(rnd(5), TRUE, 1); //Fixme: true "not my fault" flag needed.
         aggravate(); /* wake up without scaring */
        dmg = 0;
+	   stop_occupation();
 	break;
     case ACID_RAIN: /* as seen in the Lethe patch */
        pline("A torrent of burning acid rains down on you!");
@@ -996,11 +1008,13 @@ int spellnum;
            if (!Blind) Your(vision_clears);
     }
        /* TODO: corrode floor objects */
+	stop_occupation();
        break;
     case AGGRAVATION:
 	You_feel("that monsters are aware of your presence.");
 	aggravate();
 	dmg = 0;
+	stop_occupation();
 	break;
     case GEYSER:
 	/* this is physical damage, not magical damage */
@@ -1008,6 +1022,7 @@ int spellnum;
 	dmg = d(8, 6);
 	water_damage(invent, FALSE, FALSE, FALSE);
 	if (Half_physical_damage) dmg = (dmg + 1) / 2;
+	stop_occupation();
 	break;
     case FIRE_PILLAR:
 	pline("A pillar of fire strikes all around you!");
@@ -1023,6 +1038,7 @@ int spellnum;
 	destroy_item(POTION_CLASS, AD_FIRE);
 	destroy_item(SPBOOK_CLASS, AD_FIRE);
 	(void) burn_floor_paper(u.ux, u.uy, TRUE, FALSE);
+	stop_occupation();
 	break;
     case LIGHTNING:
     if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
@@ -1048,6 +1064,7 @@ int spellnum;
            make_blinded((long)rnd(100),FALSE);
            if (!Blind) Your(vision_clears);
         }
+	   stop_occupation();
        break;
     }
     case SUMMON_ANGEL: /* cleric only */
@@ -1193,6 +1210,7 @@ int spellnum;
        You_feel("as if you need some help.");
        rndcurse();
        dmg = 0;
+	   stop_occupation();
        break;
      case ARROW_RAIN: /* actually other things as well */
      {
@@ -1223,6 +1241,7 @@ int spellnum;
             newsym(u.ux, u.uy);
         }
         if (Half_physical_damage) dmg = (dmg + 1) / 2;
+	   stop_occupation();
      } break;
      case DROP_BOULDER:
      {
@@ -1255,6 +1274,7 @@ int spellnum;
             newsym(u.ux, u.uy);
         }
        if (Half_physical_damage) dmg = (dmg + 1) / 2;
+	   stop_occupation();
         break;
     }
      case DESTRY_WEPN:
@@ -1291,6 +1311,7 @@ int spellnum;
         } else{
             Your("%s for a moment.", aobjnam(otmp, "shudder"));
         } dmg = 0;
+	   stop_occupation();
         break;
      }
     case DESTRY_ARMR:
@@ -1305,6 +1326,7 @@ int spellnum;
            else verbalize("Thou might as well be naked!");
        }
        dmg = 0;
+	   stop_occupation();
        break;
     case EVIL_EYE:
 		if(mtmp){
@@ -1315,6 +1337,7 @@ int spellnum;
 			You_feel("your luck running out.");
 			change_luck(-1);
 		}
+    stop_occupation();
     break;
     case DRAIN_LIFE:  /* simulates player spell "drain life" */
         if (Drain_resistance) {
@@ -1329,6 +1352,7 @@ int spellnum;
             losexp("life drainage",TRUE,FALSE,FALSE);
         }
         dmg = 0;
+	    stop_occupation();
         break;
     case WEAKEN_YOU:		/* drain strength */
 	if (Antimagic) {
@@ -1349,6 +1373,7 @@ int spellnum;
 		done_in_by(mtmp);
 	}
 	dmg = 0;
+	stop_occupation();
 	break;
     case WEAKEN_STATS:           /* drain any stat */
        if (Fixed_abil) {
@@ -1388,6 +1413,7 @@ drainhp:
           }
        }
        dmg = 0;
+	   stop_occupation();
        break;
     case NIGHTMARE:
        You_hear("%s laugh menacingly as the world blurs around you...", mtmp ? mon_nam(mtmp) : "Someone");
@@ -1396,6 +1422,7 @@ drainhp:
        make_stunned(HStun + dmg*5, FALSE);
        make_hallucinated(HHallucination + dmg*15, FALSE, 0L);
        dmg = 0;
+	   stop_occupation();
        break;
     case MAKE_WEB:
        You("become entangled in hundreds of %s!",
@@ -1410,6 +1437,7 @@ drainhp:
             else verbalize("Struggle all you might, but it will get thee nowhere.");
        }
         dmg = 0;
+	   stop_occupation();
        break;
     case DISAPPEAR:            /* makes self invisible */
 		if(!mtmp) goto openwounds;
@@ -1430,6 +1458,7 @@ drainhp:
            You_feel("momentarily lethargic.");
         } else drain_en(rn1(u.ulevel,dmg));
         dmg = 0;
+	    stop_occupation();
         break;
     case SLEEP:
        zap = AD_SLEE;
@@ -1444,6 +1473,7 @@ ray:
                      flash_types[10+zap-1]);
        buzz(-(10+zap-1),(mtmp->m_lev/2)+1, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
        dmg = 0;
+	   stop_occupation();
        break;
     case BLIND_YOU:
 	/* note: resists_blnd() doesn't apply here */
@@ -1461,6 +1491,7 @@ ray:
 	    dmg = 0;
 	} else
 	    impossible("no reason for monster to cast blindness spell?");
+	stop_occupation();
 	break;
     case PARALYZE:
 	if (Antimagic || Free_action) {
@@ -1476,6 +1507,7 @@ ray:
 	    nomul(-dmg, "paralyzed by a monster");
 	}
 	dmg = 0;
+	stop_occupation();
 	break;
     case CONFUSE_YOU:
 	if (Antimagic) {
@@ -1493,6 +1525,7 @@ ray:
 		You_feel("%sconfused!", oldprop ? "more " : "");
 	}
 	dmg = 0;
+	stop_occupation();
 	break;
     case STUN_YOU:
        if (Antimagic || Free_action) {
@@ -1507,6 +1540,7 @@ ray:
            make_stunned(HStun + dmg, FALSE);
        }
        dmg = 0;
+	   stop_occupation();
        break;
     case SUMMON_SPHERE:
     {
@@ -1523,11 +1557,13 @@ ray:
            pline("%s is created!",
                       Hallucination ? rndmonnam() : Amonnam(mon));
        dmg = 0;
+	   stop_occupation();
        break;
     }
     case DARKNESS:
        litroom(FALSE, (struct obj *)0);
        dmg = 0;
+	   stop_occupation();
        break;
     case HASTE_SELF:
 	   if(!mtmp) goto psibolt;
@@ -1634,7 +1670,9 @@ ray:
 	else{
 		Your("body is covered with deadly wounds!");
 		dmg = max(Upolyd ? u.mh - 5 : u.uhp -5, 0);
-	}break;
+	}
+	stop_occupation();
+	break;
     case PSI_BOLT:
 	psibolt:
 	/* prior to 3.4.0 Antimagic was setting the damage to 1--this
@@ -1654,6 +1692,7 @@ ray:
 	    Your("%s suddenly aches very painfully!", body_part(HEAD));
 		if(dmg > 50) dmg = 50;
 	}
+	stop_occupation();
 	break;
     default:
        impossible("mcastu: invalid magic spell (%d)", spellnum);
