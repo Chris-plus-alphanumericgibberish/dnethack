@@ -1058,12 +1058,12 @@ pleased(g_align)
 	case 7:
 	case 8:
 	case 9:		/* KMH -- can occur during full moons */
-#ifdef ELBERETH
-	    if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth) {
+//ifdef ELBERETH
+	    if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth && !Role_if(PM_EXILE)) {
 		gcrownu();
 		break;
 	    } /* else FALLTHRU */
-#endif	/*ELBERETH*/
+//endif	/*ELBERETH*/
 	case 6:	{
 	    struct obj *otmp;
 	    int sp_no, trycnt = u.ulevel + 1;
