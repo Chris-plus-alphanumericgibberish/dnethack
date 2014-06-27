@@ -1215,8 +1215,10 @@ register struct obj *otmp;
 			if (Drain_resistance) {
 				shieldeff(u.ux, u.uy);
 				pline("Boing!");
-			} else
+			} else if (rnd(20) < 10 + u.uac) {
+			    pline_The("wand hits you!");
 				losexp("life drainage", TRUE, FALSE, FALSE);
+			} else pline_The("wand misses you.");
 			if (zap_oseen)
 				makeknown(WAN_DRAINING);
 			stop_occupation();

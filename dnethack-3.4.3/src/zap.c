@@ -315,8 +315,14 @@ struct obj *otmp;
 		} else
 		    wake = FALSE;
 		break;
-	case SPE_DRAIN_LIFE:
 	case WAN_DRAINING:	/* KMH */
+		zap_type_text = "wand";
+		reveal_invis = TRUE;
+		if (!(u.uswallow || rnd(20) < 10 + find_mac(mtmp))) {
+			miss(zap_type_text, mtmp);
+			break;
+		} //else fall through
+	case SPE_DRAIN_LIFE:
 		dmg = rnd(8);
 		if(dbldam) dmg *= 2;
 		if (otyp == SPE_DRAIN_LIFE)

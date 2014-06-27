@@ -1340,6 +1340,7 @@ int spellnum;
     stop_occupation();
     break;
     case DRAIN_LIFE:  /* simulates player spell "drain life" */
+		if(!mtmp || distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2){
         if (Drain_resistance) {
             /* note: magic resistance doesn't protect
 	     * against "drain life" spell
@@ -1353,6 +1354,7 @@ int spellnum;
         }
         dmg = 0;
 	    stop_occupation();
+		}
         break;
     case WEAKEN_YOU:		/* drain strength */
 	if (Antimagic) {
@@ -1773,6 +1775,8 @@ int spellnum;
        if(spellnum == DRAIN_ENERGY && u.uen < 5) return TRUE;
        /* don't cast acid rain if the player is petrifying */
        if (spellnum == ACID_RAIN && Stoned) return TRUE;
+       /* don't cast drain life if not in range */
+       if (spellnum == DRAIN_LIFE &&  distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2) return TRUE;
        /* don't destroy weapon if not wielding anything */
        if (spellnum == DESTRY_WEPN && !uwep) return TRUE;
        /* don't do strangulation if already strangled or there's no room in inventory */
