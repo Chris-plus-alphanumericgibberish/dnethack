@@ -835,6 +835,7 @@ mattacku(mtmp)
 				temp = mtmp->mspec_used;
 				mtmp->mspec_used = 0;
 			}
+			if( mdat == &mons[PM_DEMOGORGON] && !range2 && !mtmp->mflee && rn2(6)) break; //cast spells more rarely if he's in melee range
 			if (range2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
 			    sum[i] = buzzmu(mtmp, mattk);
 			else {
