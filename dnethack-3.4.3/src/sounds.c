@@ -1354,7 +1354,7 @@ int tx,ty;
 			}
 			else{
 				Your("mind's eye is blinded by a flame blasting through an altar.");
-				losexp("shreading of the soul",TRUE,TRUE,TRUE);
+				losexp("shredding of the soul",TRUE,TRUE,TRUE);
 				if(in_rooms(tx, ty, TEMPLE)){
 //					struct monst *priest = findpriest(roomno);
 					//invoking Amon inside a temple angers the resident deity
@@ -2754,7 +2754,7 @@ int tx,ty;
 					if(!Blind) pline("Woman and camel both vanish, replaced by a demon of black smoke.");
 					pline("A very masculine voice booms out:");
 					pline("\"How dare you waste the time of the fell archivist!\".");
-					losexp("shreading of the soul",TRUE,TRUE,TRUE);
+					losexp("shredding of the soul",TRUE,TRUE,TRUE);
 				}
 			} else{
 				You("dream briefly of a library in the northwest kingdom.");

@@ -601,7 +601,7 @@ int how;
 			int i;
 			boolean foundJack = FALSE;
 			u.sealsActive &= ~SEAL_JACK;
-			losexp("shreading of the soul",TRUE,TRUE,TRUE);
+			losexp("shredding of the soul",TRUE,TRUE,TRUE);
 			for(i=0; i<u.sealCounts; i++){
 				if(u.spirit[i] == SEAL_JACK){
 					foundJack = TRUE;

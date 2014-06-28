@@ -192,7 +192,7 @@ boolean forced;
 	int i;
 	boolean found = FALSE;
 	
-	if(forced) losexp("shreading of the soul",TRUE,TRUE,TRUE);
+	if(forced) losexp("shredding of the soul",TRUE,TRUE,TRUE);
 	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
 	if(spir&SEAL_SPECIAL){
