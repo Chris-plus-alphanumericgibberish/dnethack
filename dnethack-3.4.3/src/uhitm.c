@@ -3405,12 +3405,12 @@ dobpois:
 			else{
 				You("are jolted with energy!");
 				mdamageu(mon, tmp);
+			    if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_FIRE);
+			    if (!rn2(4)) (void) destroy_item(SCROLL_CLASS, AD_FIRE);
+			    if (!rn2(10)) (void) destroy_item(SPBOOK_CLASS, AD_FIRE);
+			    if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
+			    if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
 			}
-		    if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_FIRE);
-		    if (!rn2(4)) (void) destroy_item(SCROLL_CLASS, AD_FIRE);
-		    if (!rn2(10)) (void) destroy_item(SPBOOK_CLASS, AD_FIRE);
-		    if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
-		    if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
 
 			if(!Stunned) make_stunned((long)tmp, TRUE);
 			pline("%s reaches out with %s other %s!  A penumbra of shadows surrounds the %s!",
@@ -3423,8 +3423,8 @@ dobpois:
 			else{
 			    You("are suddenly very cold!");
 			    mdamageu(mon, tmp);
+				if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
 			}
-		    if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
 			if (!Drain_resistance) {
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 			}

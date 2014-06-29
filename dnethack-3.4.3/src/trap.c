@@ -2532,7 +2532,7 @@ struct obj *box;	/* null for floor trap */
 	
 	burn_away_slime();
 
-	if (burnarmor(&youmonst) || rn2(3)) {
+	if (burnarmor(&youmonst) || (rn2(3) && !Fire_resistance)) {
 	    destroy_item(SCROLL_CLASS, AD_FIRE);
 	    destroy_item(SPBOOK_CLASS, AD_FIRE);
 	    destroy_item(POTION_CLASS, AD_FIRE);
@@ -4112,10 +4112,11 @@ boolean disarm;
 			    shieldeff(u.ux, u.uy);
 			    You("don't seem to be affected.");
 			    dmg = 0;
-			} else
+			} else{
 			    dmg = d(4, 4);
-			destroy_item(RING_CLASS, AD_ELEC);
-			destroy_item(WAND_CLASS, AD_ELEC);
+				destroy_item(RING_CLASS, AD_ELEC);
+				destroy_item(WAND_CLASS, AD_ELEC);
+			}
 			if (dmg) losehp(dmg, "electric shock", KILLED_BY_AN);
 			break;
 		      }

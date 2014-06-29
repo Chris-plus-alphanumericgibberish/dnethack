@@ -994,12 +994,13 @@ int spellnum;
        if (Acid_resistance) {
 	    shieldeff(u.ux, u.uy);
            pline("It feels mildly uncomfortable.");
-	dmg = 0;
-    }
+		dmg = 0;
+		} else {
+			destroy_item(POTION_CLASS, AD_FIRE);
+    	}
        erode_obj(uwep, TRUE, FALSE);
        erode_obj(uswapwep, TRUE, FALSE);
        erode_armor(&youmonst, TRUE);
-	   destroy_item(POTION_CLASS, AD_FIRE);
 	   water_damage(invent, FALSE, FALSE, FALSE);
        if (!resists_blnd(&youmonst) && rn2(2)) {
            pline_The("acid gets into your %s!", eyecount(youmonst.data) == 1 ?
@@ -1029,14 +1030,15 @@ int spellnum;
 	if (Fire_resistance) {
 	    shieldeff(u.ux, u.uy);
 	    dmg = 0;
-	} else
+	} else{
 	    dmg = d(8, 6);
+		destroy_item(SCROLL_CLASS, AD_FIRE);
+		destroy_item(POTION_CLASS, AD_FIRE);
+		destroy_item(SPBOOK_CLASS, AD_FIRE);
+	}
 	if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	burn_away_slime();
 	(void) burnarmor(&youmonst);
-	destroy_item(SCROLL_CLASS, AD_FIRE);
-	destroy_item(POTION_CLASS, AD_FIRE);
-	destroy_item(SPBOOK_CLASS, AD_FIRE);
 	(void) burn_floor_paper(u.ux, u.uy, TRUE, FALSE);
 	stop_occupation();
 	break;
@@ -1054,11 +1056,12 @@ int spellnum;
 	    dmg = 0;
 	    if (reflects)
 		break;
-	} else
+	} else{
 	    dmg = d(8, 6);
+		destroy_item(WAND_CLASS, AD_ELEC);
+		destroy_item(RING_CLASS, AD_ELEC);
+	}
 	if (Half_spell_damage) dmg = (dmg + 1) / 2;
-	destroy_item(WAND_CLASS, AD_ELEC);
-	destroy_item(RING_CLASS, AD_ELEC);
        if (!resists_blnd(&youmonst)) {
            You("are blinded by the flash!");
            make_blinded((long)rnd(100),FALSE);

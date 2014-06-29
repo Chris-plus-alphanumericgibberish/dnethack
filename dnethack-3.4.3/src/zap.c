@@ -2060,13 +2060,13 @@ boolean ordinary;
 			You("shock yourself!");
 			damage = d(12,6);
 			exercise(A_CON, FALSE);
+		    destroy_item(WAND_CLASS, AD_ELEC);
+		    destroy_item(RING_CLASS, AD_ELEC);
 		    } else {
 			shieldeff(u.ux, u.uy);
 			You("zap yourself, but seem unharmed.");
 			ugolemeffects(AD_ELEC, d(12,6));
 		    }
-		    destroy_item(WAND_CLASS, AD_ELEC);
-		    destroy_item(RING_CLASS, AD_ELEC);
 		    if (!resists_blnd(&youmonst)) {
 			    You(are_blinded_by_the_flash);
 			    make_blinded((long)rnd(100),FALSE);
@@ -2088,12 +2088,12 @@ boolean ordinary;
 		    } else {
 			pline("You've set yourself afire!");
 			damage = d(12,6);
-		    }
-		    burn_away_slime();
-		    (void) burnarmor(&youmonst);
 		    destroy_item(SCROLL_CLASS, AD_FIRE);
 		    destroy_item(POTION_CLASS, AD_FIRE);
 		    destroy_item(SPBOOK_CLASS, AD_FIRE);
+		    }
+		    burn_away_slime();
+		    (void) burnarmor(&youmonst);
 		    break;
 
 		case WAN_COLD:
@@ -2107,8 +2107,8 @@ boolean ordinary;
 		    } else {
 			You("imitate a popsicle!");
 			damage = d(12,6);
-		    }
 		    destroy_item(POTION_CLASS, AD_COLD);
+		    }
 		    break;
 
 		case WAN_MAGIC_MISSILE:
@@ -3346,12 +3346,12 @@ xchar sx, sy;
 	    } else {
 		if(!flat) dam = d(nd,6);
 		else dam = flat;
-	    }
-	    burn_away_slime();
-	    if (burnarmor(&youmonst)) {	/* "body hit" */
 		if (!rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
 		if (!rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
 		if (!rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
+	    }
+	    burn_away_slime();
+	    if (burnarmor(&youmonst)) {	/* "body hit" */
 	    }
 	    break;
 	case ZT_COLD:
@@ -3362,8 +3362,8 @@ xchar sx, sy;
 	    } else {
 		if(!flat) dam = d(nd,6);
 		else dam = flat;
-	    }
 	    if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
+	    }
 	    break;
 	case ZT_SLEEP:
 	    if (Sleep_resistance) {
@@ -3418,9 +3418,9 @@ xchar sx, sy;
 		if(!flat) dam = d(nd,6);
 		else dam = flat;
 		exercise(A_CON, FALSE);
-	    }
 	    if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 	    if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
+	    }
 	    break;
 	case ZT_POISON_GAS:
 	    poisoned("blast", A_DEX, "poisoned blast", 15, 0);

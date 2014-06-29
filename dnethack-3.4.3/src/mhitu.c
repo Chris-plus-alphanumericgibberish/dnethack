@@ -1307,24 +1307,37 @@ hitmu(mtmp, mattk)
 		        youmonst.data == &mons[PM_PAPER_GOLEM] ||
 		        youmonst.data == &mons[PM_SPELL_GOLEM]) {
 			    You("roast!");
+				if((int) mtmp->m_lev > rn2(20))
+				destroy_item(SCROLL_CLASS, AD_FIRE);
+				if((int) mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_FIRE);
+				if((int) mtmp->m_lev > rn2(25))
+				destroy_item(SPBOOK_CLASS, AD_FIRE);
 			    /* KMH -- this is okay with unchanging */
 			    rehumanize();
 			    break;
 		    }else if (youmonst.data == &mons[PM_MIGO_WORKER]) {
 			    You("melt!");
+				if((int) mtmp->m_lev > rn2(20))
+				destroy_item(SCROLL_CLASS, AD_FIRE);
+				if((int) mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_FIRE);
+				if((int) mtmp->m_lev > rn2(25))
+				destroy_item(SPBOOK_CLASS, AD_FIRE);
 			    /* KMH -- this is okay with unchanging */
 			    rehumanize();
 			    break;
 		    } else if (Fire_resistance) {
 			pline_The("fire doesn't feel hot!");
 			dmg = 0;
-		    }
-		    if((int) mtmp->m_lev > rn2(20))
-			destroy_item(SCROLL_CLASS, AD_FIRE);
-		    if((int) mtmp->m_lev > rn2(20))
-			destroy_item(POTION_CLASS, AD_FIRE);
-		    if((int) mtmp->m_lev > rn2(25))
-			destroy_item(SPBOOK_CLASS, AD_FIRE);
+		    } else {
+			    if((int) mtmp->m_lev > rn2(20))
+				destroy_item(SCROLL_CLASS, AD_FIRE);
+			    if((int) mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_FIRE);
+			    if((int) mtmp->m_lev > rn2(25))
+				destroy_item(SPBOOK_CLASS, AD_FIRE);
+			}
 		    burn_away_slime();
 		} else dmg = 0;
 		break;
@@ -1336,9 +1349,10 @@ hitmu(mtmp, mattk)
 		    if (Cold_resistance) {
 			pline_The("frost doesn't seem cold!");
 			dmg = 0;
-		    }
-		    if((int) mtmp->m_lev > rn2(20))
-			destroy_item(POTION_CLASS, AD_COLD);
+		    } else {
+			    if((int) mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_COLD);
+			}
 		} else dmg = 0;
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1349,11 +1363,12 @@ hitmu(mtmp, mattk)
 		    if (Shock_resistance) {
 			pline_The("zap doesn't shock you!");
 			dmg = 0;
-		    }
-		    if((int) mtmp->m_lev > rn2(20))
-			destroy_item(WAND_CLASS, AD_ELEC);
-		    if((int) mtmp->m_lev > rn2(20))
-			destroy_item(RING_CLASS, AD_ELEC);
+		    } else {
+			    if((int) mtmp->m_lev > rn2(20))
+				destroy_item(WAND_CLASS, AD_ELEC);
+			    if((int) mtmp->m_lev > rn2(20))
+				destroy_item(RING_CLASS, AD_ELEC);
+			}
 		} else dmg = 0;
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2399,11 +2414,13 @@ dopois:
 		    if (Shock_resistance) {
 				pline_The("zap doesn't shock you!");
 		    }
-			else dmg += d(1,4);
-		    if((int) mtmp->m_lev > rn2(30))
-				destroy_item(WAND_CLASS, AD_ELEC);
-		    if((int) mtmp->m_lev > rn2(30))
-				destroy_item(RING_CLASS, AD_ELEC);
+			else{
+					dmg += d(1,4);
+			    if((int) mtmp->m_lev > rn2(30))
+					destroy_item(WAND_CLASS, AD_ELEC);
+			    if((int) mtmp->m_lev > rn2(30))
+					destroy_item(RING_CLASS, AD_ELEC);
+			}
 		}
  		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -3286,14 +3303,16 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    if (Fire_resistance) {
 				pline_The("beam doesn't feel hot!");
 				dmg = 0;
-		    } else succeeded=1;
+		    } else {
+				succeeded=1;
+			    if ((int) mtmp->m_lev > rn2(20))
+				destroy_item(SCROLL_CLASS, AD_FIRE);
+			    if ((int) mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_FIRE);
+			    if ((int) mtmp->m_lev > rn2(25))
+				destroy_item(SPBOOK_CLASS, AD_FIRE);
+			}
 		    burn_away_slime();
-		    if ((int) mtmp->m_lev > rn2(20))
-			destroy_item(SCROLL_CLASS, AD_FIRE);
-		    if ((int) mtmp->m_lev > rn2(20))
-			destroy_item(POTION_CLASS, AD_FIRE);
-		    if ((int) mtmp->m_lev > rn2(25))
-			destroy_item(SPBOOK_CLASS, AD_FIRE);
 			
 		    if (dmg) mdamageu(mtmp, dmg);
 		}
@@ -3312,15 +3331,16 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				pline_The("fire doesn't feel hot!");
 				dmg = 0;
 				succeeded=0;
-		    }
+		    } else{
+			    if ((int) mtmp->m_lev > rn2(20))
+				destroy_item(SCROLL_CLASS, AD_FIRE);
+			    if ((int) mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_FIRE);
+			    if ((int) mtmp->m_lev > rn2(25))
+				destroy_item(SPBOOK_CLASS, AD_FIRE);
+			    if (dmg) mdamageu(mtmp, dmg);
+			}
 		    burn_away_slime();
-		    if ((int) mtmp->m_lev > rn2(20))
-			destroy_item(SCROLL_CLASS, AD_FIRE);
-		    if ((int) mtmp->m_lev > rn2(20))
-			destroy_item(POTION_CLASS, AD_FIRE);
-		    if ((int) mtmp->m_lev > rn2(25))
-			destroy_item(SPBOOK_CLASS, AD_FIRE);
-		    if (dmg) mdamageu(mtmp, dmg);
 		}
 		break;
 		case AD_COLD:
@@ -3337,9 +3357,10 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				pline_The("frost doesn't feel cold!");
 				dmg = 0;
 				succeeded=0;
-		    }
-		    if ((int) mtmp->m_lev > rn2(20))
-				destroy_item(POTION_CLASS, AD_COLD);
+		    } else {
+			    if ((int) mtmp->m_lev > rn2(20))
+					destroy_item(POTION_CLASS, AD_COLD);
+			}
 		    if (dmg) mdamageu(mtmp, dmg);
 		}
 		break;
@@ -3357,11 +3378,12 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				You("aren't shocked!");
 				dmg = 0;
 				succeeded=0;
-		    }
-		    if ((int) mtmp->m_lev > rn2(20))
-			destroy_item(RING_CLASS, AD_ELEC);
-		    if ((int) mtmp->m_lev > rn2(20))
-			destroy_item(WAND_CLASS, AD_ELEC);
+		    } else {
+			    if ((int) mtmp->m_lev > rn2(20))
+				destroy_item(RING_CLASS, AD_ELEC);
+			    if ((int) mtmp->m_lev > rn2(20))
+				destroy_item(WAND_CLASS, AD_ELEC);
+			}
 		    if (dmg) mdamageu(mtmp, dmg);
 		}
 		break;
