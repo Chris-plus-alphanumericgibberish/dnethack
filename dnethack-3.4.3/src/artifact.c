@@ -292,19 +292,19 @@ register boolean mod;
 				u.RoSPkills = 7;//number of hits untill you gain a +
 				u.RoSPflights = 0;//number of flights remaining
 			}
-			if(get_artifact(otmp)->inv_prop == SPEED_BANKAI){
+			if(otmp->oartifact && get_artifact(otmp)->inv_prop == SPEED_BANKAI){
 				u.ZangetsuSafe = u.ulevel;//turns for which you can use Zangetsu safely
 			}
-			if(get_artifact(otmp)->inv_prop == ICE_SHIKAI){
+			if(otmp->oartifact && get_artifact(otmp)->inv_prop == ICE_SHIKAI){
 				u.SnSd1 = 0;//turn on which you can reuse the first dance
 				u.SnSd2 = 0;//turn on which you can reuse the second dance
 				u.SnSd3 = 0;//turn on which you can reuse the third dance
 				u.SnSd3duration = 0;//turn until which the weapon does full damage
 			}
-			if(get_artifact(otmp)->inv_prop == NECRONOMICON || get_artifact(otmp)->inv_prop == SPIRITNAMES){
+			if(otmp->oartifact && (get_artifact(otmp)->inv_prop == NECRONOMICON || get_artifact(otmp)->inv_prop == SPIRITNAMES)){
 				otmp->ovar1 = 0;//ovar1 will be used to track special powers, via flags
 				otmp->spestudied = 0;//use to track number of powers discovered
-			} if(get_artifact(otmp)->inv_prop == INFINITESPELLS){
+			} if(otmp->oartifact && get_artifact(otmp)->inv_prop == INFINITESPELLS){
 				otmp->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
 			}
 			if( arti_light(otmp) ){
