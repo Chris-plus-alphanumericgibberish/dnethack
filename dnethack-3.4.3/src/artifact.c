@@ -1022,7 +1022,7 @@ winid tmpwin;		/* supplied by dodiscover() */
     for (i = 0; i < NROFARTIFACTS; i++) {
 	if (artidisco[i] == 0) break;	/* empty slot implies end of list */
 	if (i == 0) putstr(tmpwin, iflags.menu_headings, "Artifacts");
-	m = artidisco[i];
+	m = (int)((unsigned char)((char)artidisco[i]));
 	otyp = artilist[m].otyp;
 	Sprintf(buf, "  %s [%s %s]", artiname(m),
 		align_str(artilist[m].alignment), simple_typename(otyp));
