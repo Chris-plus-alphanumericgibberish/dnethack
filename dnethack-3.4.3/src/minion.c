@@ -101,6 +101,7 @@ boolean devils;
 
     switch ((int)alignment) {
 	case A_LAWFUL:
+	case A_VOID:
 	    mnum = devils ? ndemon(alignment) : lminion();
 	    break;
 	case A_NEUTRAL:
@@ -111,7 +112,8 @@ boolean devils;
 	    mnum = ndemon(alignment);
 	    break;
 	default:
-	    impossible("unaligned player?");
+//	    impossible("unaligned player?");
+		pline("Odd alignment in minion summoning: %d",(int)alignment);
 	    mnum = ndemon(A_NONE);
 	    break;
     }
