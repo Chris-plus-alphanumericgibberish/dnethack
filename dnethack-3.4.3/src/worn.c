@@ -918,8 +918,11 @@ long timeout;
 		}
 		if(obj->oeroded < 2){
 			obj->oeroded++;
+			Your("%s degrades.",xname(obj));
 			start_timer(1, TIMER_OBJECT,
 						LIGHT_DAMAGE, (genericptr_t)obj);
+			stop_occupation();
+			if(flags.run) nomul(0, NULL);
 			return;
 		}
 	    if (flags.verbose && !isarmor) {
@@ -931,20 +934,25 @@ long timeout;
 	    if (obj == uwep) {
 			uwepgone();	/* now bare handed */
 			stop_occupation();
+			if(flags.run) nomul(0, NULL);
 			useupall(obj);
 	    } else if (obj == uswapwep) {
 			uswapwepgone();
 			stop_occupation();
+			if(flags.run) nomul(0, NULL);
 			useupall(obj);
 	    } else if (obj == uquiver) {
 			uqwepgone();
 			stop_occupation();
+			if(flags.run) nomul(0, NULL);
 			useupall(obj);
 	    } else if (isarmor) {
 			stop_occupation();
+			if(flags.run) nomul(0, NULL);
 			destroy_arm(obj);
 	    } else{
 			stop_occupation();
+			if(flags.run) nomul(0, NULL);
 			useupall(obj);
 		}
 	} else if (obj->where == OBJ_MINVENT && obj->owornmask) {
