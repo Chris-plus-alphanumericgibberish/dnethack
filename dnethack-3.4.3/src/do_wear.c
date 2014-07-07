@@ -1797,7 +1797,7 @@ find_ac()
 											P_SKILL(weapon_type(uwep))-1
 											)
 										,0);
-		if(uwep->oartifact == ART_TOBIUME ||
+		if(uwep->oartifact == ART_TOBIUME || uwep->oartifact == ART_MASAMUNE ||
 			uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max(uwep->spe,0);
 		if(uwep->oartifact == ART_TENSA_ZANGETSU){
 		uac -= max( (uwep->spe+1)/2,0);
