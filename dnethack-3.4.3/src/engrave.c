@@ -1763,10 +1763,10 @@ doengrave()
 			    u_wipe_engr(5);
 			    oep = engr_at(u.ux,u.uy);
 			    if (!Blind) {
-				if (!oep)
+				if (!oep){
 				    pline_The("engraving on the %s vanishes!",
 				      surface(u.ux,u.uy));
-				else {
+				} else {
 				    strcpy(buf, oep->engr_txt);
 				    dengr = TRUE;
 				}
