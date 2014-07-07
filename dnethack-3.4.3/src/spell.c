@@ -1968,7 +1968,7 @@ spiriteffects(power, atme)
 					shieldeff(mon->mx, mon->my);
 					break;
 				}
-				dmg = min(d(5,dsize),mon->mhp);
+				dmg = d(5,dsize);
 				if (mon->mhp < dmg){
 					dmg = mon->mhp;
 					mon->mhp = 0;
