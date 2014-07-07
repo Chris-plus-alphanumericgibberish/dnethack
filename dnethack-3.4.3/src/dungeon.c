@@ -1347,7 +1347,7 @@ d_level *lev;
 			return on_level(lev, &qlocate_level) || on_level(lev, &qstart_level);
 		}
 	} else if(In_tower(lev)){
-//		return lev->dlevel==4;
+		return lev->dlevel==4;
 	} 
 	else if(Is_paradise(lev) || Is_sunkcity(lev)) return TRUE;
 	else if(In_neu(lev)){
