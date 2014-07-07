@@ -2158,6 +2158,7 @@ spiriteffects(power, atme)
 		case PWR_DISGUSTED_GAZE:{
 			struct monst *mon;
 			struct obj *obj;
+			if(!uarmg && !(!uarmc || uarmc->otyp == MUMMY_WRAPPING)){
 			if(throwgaze()){
 				if((mon = m_at(u.dx,u.dy)) && canseemon(mon)){
 					Your("arms swing up and your hands jerk open in a single, spasmodic motion.");
@@ -2176,6 +2177,7 @@ spiriteffects(power, atme)
 						You("drop %s.",the(xname(obj))); 
 						dropy(obj);
 					}
+						youmonst.movement += NORMAL_SPEED;
 					pline("The wild, staring eyes that cover your hands focus on %s.", mon_nam(mon));
 					if(distmin(u.ux, u.uy, mon->mx, mon->my) <= u.ulevel/10+1 && !resist(mon, '\0', 0, NOTELL)){
 						mon->mcanmove = 0;
@@ -2198,6 +2200,10 @@ spiriteffects(power, atme)
 					return 0;
 				}
 			} else return 0;
+			} else{
+				pline("The eyes on your hands are covered!");
+				return 0;
+			}
 		}break;
 		case PWR_BLOODY_TOUNGE:{
 			struct monst *mon;
