@@ -1850,7 +1850,7 @@ signs_mirror()
 			message = TRUE;
 		}
 	}
-	if(u.sealsActive&SEAL_OSE && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)){
+	if(u.sealsActive&SEAL_OSE && !Blind && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)){
 			putstr(en_win, 0, "You feel your gaze as a tangible force.");
 			message = TRUE;
 	}
