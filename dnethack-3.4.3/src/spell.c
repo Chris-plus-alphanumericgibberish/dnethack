@@ -2266,6 +2266,82 @@ spiriteffects(power, atme)
 							xkilled(mon, 1);
 						} else pline("%s is flung back by the wind.",Monnam(mon));
 					}
+					if(!u.dx){
+						if(isok(sx+1,sy)){
+							mon = m_at(sx+1, sy);
+							if(mon){
+								mhurtle(mon, u.dx, u.dy, range+i);
+								mon->mhp -= d(rnd(5),dsize);
+								setmangry(mon);
+								if (mon->mhp <= 0){
+									mon->mhp = 0;
+									xkilled(mon, 1);
+								} else pline("%s is flung back by the wind.",Monnam(mon));
+							}
+						}
+						if(isok(sx-1,sy)){
+							mon = m_at(sx-1, sy);
+							if(mon){
+								mhurtle(mon, u.dx, u.dy, range+i);
+								mon->mhp -= d(rnd(5),dsize);
+								setmangry(mon);
+								if (mon->mhp <= 0){
+									mon->mhp = 0;
+									xkilled(mon, 1);
+								} else pline("%s is flung back by the wind.",Monnam(mon));
+							}
+						}
+					} else if(!u.dy){
+						if(isok(sx,sy+1)){
+							mon = m_at(sx, sy+1);
+							if(mon){
+								mhurtle(mon, u.dx, u.dy, range+i);
+								mon->mhp -= d(rnd(5),dsize);
+								setmangry(mon);
+								if (mon->mhp <= 0){
+									mon->mhp = 0;
+									xkilled(mon, 1);
+								} else pline("%s is flung back by the wind.",Monnam(mon));
+							}
+						}
+						if(isok(sx,sy-1)){
+							mon = m_at(sx, sy-1);
+							if(mon){
+								mhurtle(mon, u.dx, u.dy, range+i);
+								mon->mhp -= d(rnd(5),dsize);
+								setmangry(mon);
+								if (mon->mhp <= 0){
+									mon->mhp = 0;
+									xkilled(mon, 1);
+								} else pline("%s is flung back by the wind.",Monnam(mon));
+							}
+						}
+					} else {
+						if(isok(sx,sy-u.dy)){
+							mon = m_at(sx, sy-u.dy);
+							if(mon){
+								mhurtle(mon, u.dx, u.dy, range+i);
+								mon->mhp -= d(rnd(5),dsize);
+								setmangry(mon);
+								if (mon->mhp <= 0){
+									mon->mhp = 0;
+									xkilled(mon, 1);
+								} else pline("%s is flung back by the wind.",Monnam(mon));
+							}
+						}
+						if(isok(sx-u.dx,sy)){
+							mon = m_at(sx-u.dx, sy);
+							if(mon){
+								mhurtle(mon, u.dx, u.dy, range+i);
+								mon->mhp -= d(rnd(5),dsize);
+								setmangry(mon);
+								if (mon->mhp <= 0){
+									mon->mhp = 0;
+									xkilled(mon, 1);
+								} else pline("%s is flung back by the wind.",Monnam(mon));
+							}
+						}
+					}
 					sx -= u.dx;
 					sy -= u.dy;
 				}
