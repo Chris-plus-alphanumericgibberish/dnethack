@@ -2029,6 +2029,11 @@ const char * const hallu_gods[] = {
 	"the Silencer in the stars",
 	"the Drowned",
 	
+	//TV tropes
+	"the angels",
+	"the devils",
+	"the squid",
+	
 	//Games
 	"Armok",
 	"Hylia",
@@ -2040,10 +2045,16 @@ const char * const hallu_gods[] = {
 	"Etro",
 	"the Transcendent One",
 	"the Mana Tree",
+	"Golden Silver",
 	"Luna",
 	"Arceus",
 	"the Composer",
 	"the Conductor",
+	"Chakravartin",
+	"Chattur'gha",
+	"Ulyaoth",
+	"Xel'lo'tath",
+	"Mantorok",
 	
 	//Literature
 	"Mahasamatman",
@@ -2095,6 +2106,8 @@ const char * const hallu_gods[] = {
 	"the DevTeam",
 	"Dion Nicolaas",
 	"marvin",
+	"stth the first demigod",
+	"stth the wizard",
 	"Dudley",
 	"the RNG"
 };
