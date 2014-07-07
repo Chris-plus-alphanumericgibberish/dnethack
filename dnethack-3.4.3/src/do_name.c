@@ -1198,7 +1198,7 @@ static const char * const bogusmons[] = {
 	"hydra", "siren",			/* Greek legend */
 	"jotun",					/* Norse legend */
 	"killer bunny",				/* Monty Python */
-	"rodent of unusual size",		/* The Princess Bride */
+	"R. o. U. S.",		/* The Princess Bride */
 	"bear named Smokey",	/* "Only you can prevent forest fires!" */
 	"5.9176 pentranomeker worm", /* The Mimir, contributed by Joshua Jarvis */
 	"andalite",					/* Animorphs */
@@ -1257,7 +1257,7 @@ static const char * const bogusmons[] = {
 	"Predator",				/* Movie */
 	"mother-in-law", 		/* common pests */
 	"visible stalker",		/* occupational hazard */
-	"Minosaur", "vestigal virgin", "octagenarian", /*"saint called Mary of the Immaculate Contraption,"*/ /*non campus mentus*/
+	"Minosaur", "vestigal virgin", "octagenarian", /*"saint called Mary of the Immaculate Contraption",*/ /*non campus mentus*/
 	"spherical cow",		/* Joke about theoretical physicists */
 	"arsassin",				/* Psych */
         "one-winged dewinged stab-bat",  /* KoL */
@@ -1366,7 +1366,7 @@ static const char * const bogusmons[] = {
 	"grind bug",
 	"enderman",
 	"wight supremacist",
-	"Magical Trevor",
+	"wizard named Magical Trevor",
 	"first category perpetual motion device",
 
 	"ghoti",
