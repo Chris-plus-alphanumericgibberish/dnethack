@@ -5486,7 +5486,7 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_JACK && !NoBInvis && !uarmc) count++;
 		// if(u.sealsActive&SEAL_MALPHAS);
 		if(u.sealsActive&SEAL_MARIONETTE && !NoBInvis && !(uarm && is_metallic(uarm))) count++;
-		if(u.sealsActive&SEAL_MOTHER && !NoBInvis && !uarmg) count++;
+		if(u.sealsActive&SEAL_MOTHER && !NoBInvis && !uarmg && !(uarmc && uarmc->otyp == MUMMY_WRAPPING)) count++;
 		// if(u.sealsActive&SEAL_NABERIUS);
 		if(u.sealsActive&SEAL_ORTHOS && !NoBInvis && !(!uarmc || uarmc->otyp == MUMMY_WRAPPING)) count++;
 		if(u.sealsActive&SEAL_OSE && !Blind && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)) count++;
