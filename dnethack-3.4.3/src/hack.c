@@ -265,6 +265,7 @@ moverock()
 	    if (Blind) feel_location(sx, sy);
 	cannot_push:
 		if(u.sealsActive&SEAL_MARIONETTE){
+			Your("fingers dig into %s like roots!", the(xname(otmp)));
 			fracture_rock(otmp);
 			break;
 		} else if (throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR)) {
