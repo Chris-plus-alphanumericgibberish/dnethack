@@ -618,9 +618,8 @@ vision_recalc(control)
 	
 	if(u.sealsActive&SEAL_ORTHOS){
 		oldxray = u.xray_range;
-		u.xray_range += u.ulevel/10+1;
+		u.xray_range += spiritDsize()+1;
 	}
-	
 	if (u.xray_range >= 0) {
 	    if (u.xray_range) {
 		ranges = circle_ptr(u.xray_range);
