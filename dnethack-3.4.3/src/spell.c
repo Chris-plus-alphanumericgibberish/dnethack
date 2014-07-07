@@ -1998,7 +1998,7 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_REFILL_LANTERN:
-			if(uwep && (uwep->otyp == OIL_LAMP) && !uwep->oartifact){
+			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact){
 				uwep->age += d(5,dsize) * 10;
 				if(uwep->age > 1500) uwep->age = 1500;
 				You("refill %s",the(xname(uwep)));
@@ -2009,7 +2009,7 @@ spiriteffects(power, atme)
 			} else return 0;
 		break;
 		case PWR_HELLFIRE:
-			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact && uwep->lamplit){
+			if(uwep && (uwep->otyp == OIL_LAMP || uwep->otyp == POT_OIL || is_lightsaber(uwep)) && !uwep->oartifact && uwep->lamplit){
 				if (throwspell()) {
 					if(uwep->age < 500) uwep->age = 0;
 					else uwep->age -= 500;
