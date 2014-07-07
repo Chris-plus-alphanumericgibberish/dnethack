@@ -109,7 +109,7 @@ register struct obj *obj;
 	if(obj->spe > 0){
 		if(obj->oclass == WEAPON_CLASS) return TRUE;
 		if(obj->oclass == ARMOR_CLASS) return TRUE;
-		if(obj->oclass == TOOL_CLASS) return TRUE;
+		if(obj->oclass == TOOL_CLASS && is_weptool(obj)) return TRUE;
 	}
 	if(obj->oclass == SCROLL_CLASS && obj->otyp != SCR_BLANK_PAPER && 
 #ifdef MAIL
