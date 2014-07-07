@@ -50,6 +50,7 @@ static const char	*Demiurge = "Yaldabaoth";
 static const char	*Sophia = "Pistis Sophia";
 static const char	*Other = "an alien god";
 static const char	*BlackMother = "the Black Mother";
+static const char	*AllInOne = "Yog-Sothoth";
 
 static const char *godvoices[] = {
     "booms out",
@@ -2111,7 +2112,10 @@ aligntyp alignment;
      case A_NONE:
 		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
 		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
-		else if(u.uz.dnum == neutral_dnum) gnam = BlackMother;
+		else if(u.uz.dnum == neutral_dnum){
+			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
+			else gnam = BlackMother;
+		}
 		else gnam = Moloch; 
 	 break;
      case A_LAWFUL:
