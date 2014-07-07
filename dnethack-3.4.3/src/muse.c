@@ -2304,7 +2304,7 @@ const char *str;
 		if(str) 
 		pline(str, s_suffix(mon_nam(mon)), "surface");
 		return TRUE;
-	} else if(mon->data == &mons[PM_BAALPHEGOR]){
+	} else if(mon->data == &mons[PM_BAALPHEGOR] || mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(str) 
 		pline(str, s_suffix(mon_nam(mon)), "armor");
 		return TRUE;
