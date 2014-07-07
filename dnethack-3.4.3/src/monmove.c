@@ -524,7 +524,8 @@ struct monst *mtmp;
 	    (is_rider(mtmp->data) && !(mtmp->data == &mons[PM_NAZGUL])) || 
 		mtmp->data == &mons[PM_MINOTAUR])
 		return(FALSE);
-	return (boolean) mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data == &mons[PM_NAZGUL];
+	return (boolean) mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE 
+				|| mtmp->data->mlet == S_TROLL || mtmp->data == &mons[PM_NAZGUL];
   }
 	
 			
