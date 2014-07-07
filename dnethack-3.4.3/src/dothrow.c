@@ -828,7 +828,7 @@ boolean hitsroof;
 
 	if (uarmh) {
 	    if (less_damage && dmg < (Upolyd ? u.mh : u.uhp)) {
-		if (!artimsg)
+		if (!artimsg && (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET))
 		    pline("Fortunately, you are wearing a hard helmet.");
 	    } else if (flags.verbose &&
 		    !(obj->otyp == CORPSE && touch_petrifies(&mons[obj->corpsenm])))

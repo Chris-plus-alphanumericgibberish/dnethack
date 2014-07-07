@@ -1263,7 +1263,7 @@ int spellnum;
                 iron ? "nowhere" : the(ceiling(u.ux,u.uy)));
         dmg = dmgval(otmp, &youmonst, 0);
         if (uarmh) {
-            if (is_metallic(uarmh)) {
+            if (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET) {
                 pline("Fortunately, you are wearing a hard helmet.");
                 if (dmg > 2) dmg = 2;
             } else if (flags.verbose) {
