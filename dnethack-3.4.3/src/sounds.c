@@ -2231,7 +2231,7 @@ int tx,ty;
 			break;
 				}
 			}
-			//Spirit requires that his seal be drawn in a vault, or on a pile of 100xyour level coins.
+			//Spirit requires that his seal be drawn in a vault, or on a pile of 1000xyour level coins.
 			if(coins || (*in_rooms(tx,ty,VAULT) && u.uinvault)){
 				if(!Blind) You("suddenly notice a dragon %s", coins ? "buired in the coins" : "in the room.");
 				if(u.sealCounts < numSlots){
