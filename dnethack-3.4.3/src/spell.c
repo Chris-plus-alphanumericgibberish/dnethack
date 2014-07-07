@@ -1894,7 +1894,7 @@ spiriteffects(power, atme)
 				You("smell rotten eggs.");
 				break;
 			}
-			(void) create_gas_cloud(cc.x, cc.y, dsize/2, d(rnd(5),dsize));
+			(void) create_gas_cloud(cc.x, cc.y, u.ulevel/10+1, d(rnd(5),dsize));
 		}break;
 		case PWR_RUINOUS_STRIKE:{
 			int dmg;
