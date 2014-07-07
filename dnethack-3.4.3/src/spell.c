@@ -1943,19 +1943,18 @@ spiriteffects(power, atme)
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
-				dmg = d(5,dsize);
 				if(haseyes(mon->data) && mon->mcansee){
 					You("claw at %s's eyes.", mon_nam(mon));
-					if(mon->mcansee) dmg += d(rnd(5),dsize);
+					if(mon->mcansee) dmg = d(5,dsize);
 				mon->mcansee = 0;
 				mon->mblinded = 0;
-				}
+				} else dmg = d(rnd(5),dsize);
 				mon->mhp -= dmg;
 				if (mon->mhp <= 0){
 					mon->mhp = 0;
 					xkilled(mon, 1);
 					break;
-				} else if(!haseyes(mon->data)) You("hit %s.", mon_nam(mon));
+				} else You("hit %s.", mon_nam(mon));
 			} else break;
 		}break;
 		case PWR_HORRID_WILTING:{
