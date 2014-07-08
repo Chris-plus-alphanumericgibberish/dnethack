@@ -668,7 +668,10 @@ int x, y;
     }
     mon->mx = x, mon->my = y;
     level.monsters[x][y] = mon;
-	if (mon && opaque(mon->data) && (!mon->minvis || See_invisible))
+	pline("%d",(int)opaque(mon->data));
+	pline("%d",(int)!mon->minvis);
+	pline("%d",(int)See_invisible);
+	if (opaque(mon->data) && (!mon->minvis || See_invisible))
 		block_point(x,y);
 }
 
