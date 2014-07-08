@@ -668,7 +668,7 @@ int x, y;
     }
     mon->mx = x, mon->my = y;
     level.monsters[x][y] = mon;
-	pline("%d",u.umonster);
+//	pline("%d",u.umonster); O_o that was a strange series of bugs....
 //	if (opaque(mon->data) && (!mon->minvis || HSee_invisible || ESee_invisible || ((!Race_if(PM_INCANTIFIER) || Upolyd) && perceives(youmonst.data)) ))
 	if (opaque(mon->data) && (!mon->minvis || See_invisible))
 		block_point(x,y);
