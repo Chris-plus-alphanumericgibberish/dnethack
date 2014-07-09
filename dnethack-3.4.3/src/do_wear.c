@@ -253,10 +253,11 @@ Cloak_on(VOID_ARGS)
 	if(arti_lighten(uarmc)) inv_weight();
 	
 	if(u.sealsActive&SEAL_SHIRO){
+		struct obj *otmp = uarmc;
 		pline("Hey, people might notice me with that!");
-		if (donning(uarmc)) cancel_don();
+		if (donning(otmp)) cancel_don();
 		(void) Cloak_off();
-		useup(uarmc);
+		useup(otmp);
 		unbind(SEAL_SHIRO,TRUE);
 	}
     return 0;

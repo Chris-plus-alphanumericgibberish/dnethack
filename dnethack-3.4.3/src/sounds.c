@@ -1797,8 +1797,8 @@ int tx,ty;
 			break;
 				}
 			}
-	//Berith further requires that the summoner wear a blessed silver ring on his or her left hand.
-			if(o && uleft && uleft->otyp == slvring && uleft->blessed){
+			//Berith also allows the summoner to wear a blessed silver ring on his or her left hand.
+			if(o || (uleft && uleft->otyp == slvring && uleft->blessed)){
 				if(!Blind){
 				pline("Gold rains down within the circumference of the seal, melting slowly to blood where it lands.");
 				pline("A figure takes form within the showering gold, staring down at you from a crimson horse.");
