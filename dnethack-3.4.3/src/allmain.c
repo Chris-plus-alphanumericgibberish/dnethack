@@ -123,6 +123,14 @@ moveloop()
 			if(u.sealsActive&SEAL_ORTHOS && !(viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)) unbind(SEAL_ORTHOS,TRUE);
 			if(u.sealsActive&SEAL_NABERIUS && u.udrunken<u.ulevel) unbind(SEAL_NABERIUS,TRUE);
 			if(u.specialSealsActive&SEAL_NUMINA && u.ulevel<30) unbind(SEAL_SPECIAL|SEAL_NUMINA,TRUE);
+			if(u.sealsActive&SEAL_SHIRO && uarmc && uarmc->otyp == MUMMY_WRAPPING){
+				struct obj *otmp = uarmc;
+				pline("Hey, people might notice me with that!");
+				if (donning(otmp)) cancel_don();
+				(void) Cloak_off();
+				useup(otmp);
+				unbind(SEAL_SHIRO,TRUE);
+			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			//These artifacts may need to respond to what monsters have done.
 			///If the player no longer meets the kusanagi's requirements (ie, they lost the amulet)
