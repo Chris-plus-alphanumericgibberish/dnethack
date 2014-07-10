@@ -1068,7 +1068,7 @@ static const char * const mb_verb[2][4] = {
 #define MB_INDEX_SCARE		2
 #define MB_INDEX_CANCEL		3
 
-/* called when someone is being hit by Magicbane */
+/* called when someone is being hit by the pen of the void */
 STATIC_OVL boolean
 voidPen_hit(magr, mdef, pen, dmgptr, dieroll, vis, hittee)
 struct monst *magr, *mdef;	/* attacker and defender */
@@ -1087,7 +1087,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	buf[0] = '\0';
 	if(u.voidChime){
 		pline("The ringing blade hits %s.", hittee);
-	}
+	} else {
 	if (pen->ovar1&SEAL_AMON) {
 	    if (vis){ 
 			Sprintf(buf, "fiery");
@@ -1100,14 +1100,14 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	}
 	if (pen->ovar1&SEAL_BALAM) {
 	    if (vis){ 
-			and ? Sprintf(buf, "yet freezing") : Sprintf(buf, "freezing");
+			and ? Strcat(buf, " yet freezing") : Sprintf(buf, "freezing");
 			and = TRUE;
 		}
 	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
 	}
 	if (pen->ovar1&SEAL_ASTAROTH) {
 	    if (vis){ 
-			and ? Sprintf(buf, "and crackling") : Sprintf(buf, "crackling");
+			and ? Strcat(buf, " and crackling") : Sprintf(buf, "crackling");
 			and = TRUE;
 		}
 	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
@@ -1115,21 +1115,21 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	}
 	if (pen->ovar1&SEAL_ENKI) {
 	    if (vis){ 
-			and ? Sprintf(buf, "and dripping") : Sprintf(buf, "dripping");
+			and ? Strcat(buf, " and dripping") : Sprintf(buf, "dripping");
 			and = TRUE;
 		}
 		/*water damage?*/
 	}
 	if (pen->ovar1&SEAL_ECHIDNA) {
 	    if (vis){ 
-			and ? Sprintf(buf, "and sizzling") : Sprintf(buf, "sizzling");
+			and ? Strcat(buf, "and sizzling") : Sprintf(buf, "sizzling");
 			and = TRUE;
 		}
 	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 	}
 	
 	if(vis && (and || (pen->ovar1&SEAL_FAFNIR))) pline("The %s%s blade hits %s.", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
-	
+	}
 	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
 		if(vis) pline("The blade's shadow catches on %s.", hittee);
 		mdef->movement -= 3;

@@ -494,6 +494,7 @@ struct monst *mon;
 			}
 		}
 	}
+	return dmg;
 }
 
 #endif /* OVLB */
