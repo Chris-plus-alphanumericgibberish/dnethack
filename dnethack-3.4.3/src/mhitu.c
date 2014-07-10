@@ -1609,7 +1609,6 @@ dopois:
 		break;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_VAMP:
-	    case AD_DRLI:
 			hitmsg(mtmp, mattk);
 			/* if vampire biting (and also a pet) */
 			if (is_vampire(mtmp->data) && mattk->aatyp == AT_BITE &&
@@ -1622,6 +1621,12 @@ dopois:
 				    	EDOG(mtmp)->hungrytime += ((int)((youmonst.data)->cnutrit / 20) + 1);
 			}
 			if (!mtmp->mcan && !rn2(3) && !Drain_resistance) {
+			    losexp("life force drain",TRUE,FALSE,FALSE);
+			}
+		break;
+	    case AD_DRLI:
+			hitmsg(mtmp, mattk);
+			if (uncancelled  && !rn2(3) && !Drain_resistance) {
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 				if(mdat == &mons[PM_METROID] || mdat == &mons[PM_ALPHA_METROID] || mdat == &mons[PM_GAMMA_METROID] 
 					|| mdat == &mons[PM_ZETA_METROID] || mdat == &mons[PM_OMEGA_METROID] 
