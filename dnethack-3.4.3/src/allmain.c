@@ -84,6 +84,7 @@ moveloop()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			oldspiritAC = u.spiritAC;
 			u.spiritAC = 0; /* reset temporary spirit AC bonuses. Do this once per monster turn */
+			u.spiritAttk = 0;
 			if(u.sealsActive){
 				if(u.sealsActive&SEAL_MALPHAS){
 					for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
