@@ -120,9 +120,12 @@ int x,y;
 		create = !rn2(3);
 	else create = 1;
 
-	if (create && !((mtmp = m_at(x, y)) && (mtmp->mtrapped) &&
-			(t = t_at(x, y)) && ((t->ttyp == PIT) ||
-			(t->ttyp == SPIKED_PIT)))) {
+	// if (create && !((mtmp = m_at(x, y)) && (mtmp->mtrapped) &&
+			// (t = t_at(x, y)) && ((t->ttyp == PIT) ||
+			// (t->ttyp == SPIKED_PIT)))) {
+	mtmp = m_at(x, y);
+	t = t_at(x, y);
+	if (create) {
 		int objgone = 0;
 
 		if (down_gate(x, y) != -1)
