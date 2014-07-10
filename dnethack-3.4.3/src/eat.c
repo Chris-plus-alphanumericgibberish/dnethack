@@ -2077,7 +2077,7 @@ struct obj *otmp;
 		break;
 	    case AMULET_OF_STRANGULATION: /* bad idea! */
 		/* no message--this gives no permanent effect */
-		choke(otmp);
+		if(!Race_if(PM_INCANTIFIER)) choke(otmp);
 		break;
 	    case AMULET_OF_RESTFUL_SLEEP: /* another bad idea! */
 		if (!(HSleeping & FROMOUTSIDE))

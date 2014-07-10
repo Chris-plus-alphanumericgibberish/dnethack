@@ -88,14 +88,15 @@
 #define CRUSHING	 8
 #define STONING		 9
 #define TURNED_SLIME	 10
-#define GENOCIDED	11
+//define GENOCIDED	11
 #define DISINTEGRATED 12
 #define OVERWOUND 	13
-#define PANICKED	14
-#define TRICKED		15
-#define QUIT		16
-#define ESCAPED		17
-#define ASCENDED	18
+#define GENOCIDED	14
+#define PANICKED	15
+#define TRICKED		16
+#define QUIT		17
+#define ESCAPED		18
+#define ASCENDED	19
 
 #include "align.h"
 #include "dungeon.h"
