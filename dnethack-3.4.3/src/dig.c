@@ -396,6 +396,7 @@ dig()
 			    lev->typ = CORR;
 			}
 		} else if(IS_WALL(lev->typ)) {
+			if(IS_WALL(lev->typ) && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
 			if(shopedge) {
 			    add_damage(dpx, dpy, 10L * ACURRSTR);
 			    dmgtxt = "damage";
@@ -410,7 +411,6 @@ dig()
 			    lev->doormask = D_NODOOR;
 			}
 			digtxt = "You make an opening in the wall.";
-			if(IS_WALL(lev->typ) && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
 		} else if(lev->typ == SDOOR) {
 			cvt_sdoor_to_door(lev);	/* ->typ = DOOR */
 			digtxt = "You break through a secret door!";
