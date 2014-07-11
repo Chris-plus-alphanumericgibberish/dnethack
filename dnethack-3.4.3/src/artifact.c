@@ -1082,7 +1082,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	boolean youdefend = mdef == &youmonst;
 	boolean youattack = magr == &youmonst;
 	boolean and = FALSE;
-	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 2 : 1;
+	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 4 : 1; /* Die number is doubled after the quest */
 	
 	buf[0] = '\0';
 	if(u.voidChime){
@@ -1131,18 +1131,18 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	if(vis && (and || (pen->ovar1&SEAL_FAFNIR))) pline("The %s%s blade hits %s.", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
 	}
 	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
+	    *dmgptr += d(dnum,4);
 		if(vis) pline("The blade's shadow catches on %s.", hittee);
 		mdef->movement -= 3;
 		and = TRUE;
 	}
 	if(pen->ovar1&SEAL_BUER){
 		if(youattack) healup(d(dnum,4), 0, FALSE, FALSE);
-		else{
-			magr->mhp = min(magr->mhp + d(dnum,4),magr->mhpmax);
-		}
+		else magr->mhp = min(magr->mhp + d(dnum,4),magr->mhpmax);
 	}
 	if(pen->ovar1&SEAL_CHUPOCLOPS && dieroll < 3){
 		struct trap *ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
+	    *dmgptr += d(dnum,4);
 		if (ttmp2){
 			if(youdefend){
 				pline_The("webbing sticks to you. You're caught!");
@@ -1158,6 +1158,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		}
 	}
 	if(pen->ovar1&SEAL_DANTALION && dieroll < 3){
+	    *dmgptr += d(dnum,4);
 		if(youdefend) aggravate();
 	    else probe_monster(mdef);
 	}
@@ -1179,6 +1180,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		}
 	}
 	if(pen->ovar1&SEAL_ORTHOS && dieroll < 3){
+	    *dmgptr += d(dnum,4);
 		if(youdefend){
 			You("are addled by the gusting winds!");
 			make_stunned((HStun + 3), FALSE);
@@ -1191,6 +1193,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		and = TRUE;
 	}
 	if(pen->ovar1&SEAL_OTIAX && dieroll < 2){
+	    *dmgptr += d(dnum,4);
 		if(youattack){
 			struct obj *otmp2, **minvent_ptr;
 			long unwornmask;
@@ -2432,8 +2435,11 @@ arti_invoke(obj)
 		oart->inv_prop != NECRONOMICON &&
 		oart->inv_prop != SPIRITNAMES &&
 		oart->inv_prop != LORDLY &&
+		oart->inv_prop != VOID_CHIME &&
 		oart->inv_prop != SEVENFOLD
 	)obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
+
+	if(oart->inv_prop != VOID_CHIME) obj->age = monstermoves + 125L;
 
 	switch(oart->inv_prop) {
 	case TAMING: {
