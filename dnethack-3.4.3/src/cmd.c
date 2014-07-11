@@ -1048,6 +1048,28 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		Sprintf(buf, "%d chokhmah sephiroth ", u.chokhmah);
 		enl_msg(buf, "are", "were", " deployed.");
 	}
+	if(u.sealsActive || u.specialSealsActive){
+		int i,j,numBound,numFound=0;
+		numBound = u.sealCounts;
+		if(u.spirit[QUEST_SPIRIT]) numBound++;
+		if(u.spirit[OUTER_SPIRIT]) numBound++;
+		Sprintf(buf, "You are contracted to ");
+		for(i=0;i<NUM_BIND_SPRITS;i++){
+			if(u.spirit[i]) for(j=0;j<34;j++){
+				if((u.spirit[i] >> j) == 1){
+					Strcat(buf,sealNames[j]);
+					numFound++;
+					if(numBound==2 && numFound==1) Strcat(buf," and ");
+					else if(numBound>=3){
+						if(numFound<numBound-1) Strcat(buf,", ");
+						if(numFound==numBound-1) Strcat(buf,", and ");
+					}
+					break;
+				}
+			}
+		}
+		putstr(en_win, 0, buf);
+	}
 #endif
 
 	/*** Resistances to troubles ***/
