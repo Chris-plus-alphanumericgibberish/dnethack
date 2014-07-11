@@ -1312,6 +1312,7 @@ struct obj	*sobj;
 	case SCR_LIGHT:
 		if(!Blind) known = TRUE;
 		litroom(!confused && !sobj->cursed, sobj);
+		if(!confused && !sobj->cursed && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
 		break;
 	case SCR_TELEPORTATION:
 		if(confused || sobj->cursed) level_tele();

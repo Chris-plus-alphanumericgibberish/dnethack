@@ -2733,7 +2733,6 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 	if(otmp->otyp == EGG && u.sealsActive&SEAL_ECHIDNA) unbind(SEAL_ECHIDNA,TRUE);
 	if(otmp->otyp >= APPLE && otmp->otyp <= BANANA && u.sealsActive&SEAL_EVE) unbind(SEAL_EVE,TRUE);
-	if(otmp->corpsenm == PM_WRAITH && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
 	if(is_giant(&mons[otmp->corpsenm]) && u.sealsActive&SEAL_YMIR) unbind(SEAL_YMIR,TRUE);
 
 	victual.piece = otmp = touchfood(otmp);

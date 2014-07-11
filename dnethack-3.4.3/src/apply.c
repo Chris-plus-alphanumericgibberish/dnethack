@@ -3221,8 +3221,10 @@ do_break_wand(obj)
        Damage is handled in digactualhole in that case */
     if (shop_damage) pay_for_damage("dig into", FALSE);
 
-    if (obj->otyp == WAN_LIGHT)
-	litroom(TRUE, obj);	/* only needs to be done once */
+    if (obj->otyp == WAN_LIGHT){
+		litroom(TRUE, obj);	/* only needs to be done once */
+		if(u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+	}
 
  discard_broken_wand:
     obj = current_wand;		/* [see dozap() and destroy_item()] */

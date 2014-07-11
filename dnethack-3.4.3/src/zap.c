@@ -1932,6 +1932,7 @@ register struct obj *obj;
 		case WAN_LIGHT:
 		case SPE_LIGHT:
 			litroom(TRUE,obj);
+			if(u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
 			if (!Blind) known = TRUE;
 			break;
 		case WAN_SECRET_DOOR_DETECTION:
