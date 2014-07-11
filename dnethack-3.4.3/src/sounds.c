@@ -1974,7 +1974,6 @@ int tx,ty;
 					if(!isok(ttx,tty)) validLocation = FALSE;
 					else if( !((otmp = level.objects[ttx][tty]) && otmp->otyp == ROCK) && !(ttx==tx && tty==ty)){
 						validLocation = FALSE;
-						pline("what the hell");
 					}
 				}
 			}
