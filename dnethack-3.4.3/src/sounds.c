@@ -2592,7 +2592,7 @@ int tx,ty;
 	}break;
 	case ORTHOS:{
 		if(u.orthos < moves){
-			struct trap *t=t_at(tx,ty);
+			struct trap *t=t_at(tx+(tx-u.ux), ty+(ty-u.uy));
 			//Spirit requires that his seal be drawn in a square with a hole.
 			if(t && t->ttyp == HOLE){
 				if(!Blind) pline("The hole grows darker, and a whistling occurs at the edge of hearing.");
