@@ -1625,6 +1625,8 @@ int different;
 		    else if (different==REVIVE_SHADE)
 				pline("%s forms from a corpse!",
 				  Amonnam(mtmp));
+		    else if (mtmp->data==&mons[PM_DEATH])
+				pline("Death cannot die.");
 		    else
 		    pline("%s rises from the dead!", chewed ?
 			  Adjmonnam(mtmp, "bite-covered") : Monnam(mtmp));

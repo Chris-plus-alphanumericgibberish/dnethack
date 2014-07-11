@@ -57,6 +57,8 @@ static const char *random_mesg[] = {
 	"Beware of the weeping angels", /* Doctor Who */
 	"Duck, Sally Sparrow", /* Doctor Who */
 	
+	"stth was here", /* First ascension */
+	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */
 		"...look for a green leaf...",
@@ -163,6 +165,11 @@ static const char *haluMesg[] = {
 		"...do you see me?",
 		"That was a mistake.",
 	
+	"Listen at us, won't you?", /* All Our Friends Are Dead */
+		"Share with us your head",
+		"Do hide behind the iris",
+		"As all of our friends are dead.",
+	
 	"T1M3 FOr WH4T?", /*Homestuck. This is Terezi's side of her conversation with Snowman, */
 		"WH4T M1SS1ON?", /*in which Terezi communicated by writing on walls and statues etc with colored chalk*/
 		"WH4T 4BOUT TH3 QU33N?",
@@ -222,11 +229,14 @@ static const char *haluMesg[] = {
 		"Slab: Jus' say \"AarrghaarrghpleeassennononoUGH\"",
 		"Ahahahahaha! Ahahahaha! Aahahaha!\nBEWARE!!!!!\nYrs sincerely\nThe Opera Ghost",
 		"Bee There Orr Bee A Rectangular Thyng",
+		"We're certainly dwarves",
 	"NOT A Secret Base", /*Gunnerkrigg Court*/
 	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
 	"I SAW THE EYE. Over the horizon, like a rising sun!", /* Dresden Codak */
 	"That's Science, isn't it? The perpetual horizon.\nBut we found a way, haha, we found a way around that!",
 	"What would YOU give up to... to see it through?",
+		"Nothing. A shadow is nothing. It is merely a question not yet answered. We only fear the dark if we have no means of lighting our way.",
+		"The world turns, and dawn comes. And under the light of the sun I shall slay giants.",
 	"Don't trust the skull.", /* Cynarfpncr: Gbezrag (mild spoiler) */
 	"death is the greatest illusion", /*Blade of Innocence*/
 	"The quality of your lives depends on what you make of them!", /* The Life and Times of Scrooge McDuck */
@@ -338,7 +348,7 @@ const char * wardText[][7] =  {
 		"a four-handed hamsa mark", "a five-handed hamsa mark","a six-handed hamsa mark", 
 		"an overabundance of hamsa marks"},
 	{"an elder sign", "a one-armed elder sign", "a two-armed elder sign", "a three-armed elder sign", 
-		"a four-armed elder sign","a five-armed elder sign", "an extra-dimensional elder sign"},
+		"a four-armed elder sign","an eye of Yggdrasil",	"an extra-dimensional elder sign"},
 	{"an elder elemental eye", "a two-lobed elder elemental eye", "a three-lobed elder elemental eye",
 		"a four-lobed elder elemental eye", "a five-lobed elder elemental eye",
 		"a six-lobed elder elmental eye", "a seven-lobed elder elemental eye"},
