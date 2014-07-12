@@ -2637,6 +2637,7 @@ spiriteffects(power, atme)
 				mon->mhp = 0;
 				xkilled(mon,1);
 				if(u.ulevelmax > u.ulevel) pluslvl(FALSE);
+				else healup(d(mon->m_lev,4), 0, FALSE, FALSE);
 			}
 		}break;
 		case PWR_IDENTIFY_INVENTORY:
