@@ -2082,11 +2082,11 @@ spiriteffects(power, atme)
 					sx += u.dx;
 					sy += u.dy;
 					if(!(ACCESSIBLE(levl[sx][sy].typ) || 
-						 (levl[sx][sy].typ == DOOR && levl[sx][sy].doormask&D_ISOPEN) ||
 						 levl[sx][sy].typ == POOL || 
 						 levl[sx][sy].typ == MOAT || 
 						 levl[sx][sy].typ == LAVAPOOL
-						) || m_at(sx,sy)
+						) || m_at(sx,sy) || !isok(sx,sy) ||
+							(IS_DOOR(levl[sx][sy].typ) && (levl[sx][sy].doormask&(D_LOCKED|D_CLOSED|D_TRAPPED)))
 					) {
 						sx -= u.dx;
 						sy -= u.dy;
