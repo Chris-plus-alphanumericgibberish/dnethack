@@ -8,13 +8,48 @@ STATIC_DCL void NDECL(binderdown);
 STATIC_DCL long FDECL(newuexp, (int));
 STATIC_DCL int FDECL(enermod, (int));
 
+static long expUps[] = {
+0,
+20,
+50,
+100,
+200,
+400,
+800,
+1600,
+3200,
+6400,
+10000,
+14000,
+18000,
+22000,
+26000,
+30000,
+35000,
+40000,
+45000,
+50000,
+55000,
+60000,
+65000,
+70000,
+75000,
+80000,
+85000,
+90000,
+95000,
+100000
+};
+
 STATIC_OVL long
 newuexp(lev)
 int lev;
 {
-	if (lev < 10) return (10L * (1L << lev));
-	if (lev < 20) return (10000L * (1L << (lev - 10)));
-	return (10000000L * ((long)(lev - 19)));
+	if (lev < 30) return expUps[lev];
+	else return 100000L + lev*10000L;
+	// if (lev < 10) return (10L * (1L << lev));
+	// if (lev < 20) return (10000L * (1L << (lev - 10)));
+	// return (10000000L * ((long)(lev - 19)));
 }
 
 STATIC_OVL int
