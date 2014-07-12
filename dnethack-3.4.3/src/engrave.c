@@ -290,26 +290,28 @@ const int wardStrokes[][7] = {
 };
 
 const int wardsAdded[][7] = {
-	{1,1,1, 1,1,1, 1},
-	{1,1,1, 1,1,1, 1},
-	{1,1,1, 0,0,0, 0},
-	{1,1,1, 1,0,0, 0},
-	{1,1,1, 1,1,1, 1},
-	{1,1,1, 1,1,1, 1},
-	{1,1,2, 1,2,1, 0},
-	{1,1,1, 1,1,1, 0},
-	{1,1,1, 1,1,1, 1},
-	{1,1,1, 1,1,1, 1},
-	{1,1,1, 1,1,1, 1},
-	{1,1,1, 1,1,1, 1},
-	{1,0,0, 0,0,0, 0},
-	{1,0,0, 0,0,0, 0},
-	{1,0,0, 0,0,0, 0},
-	{1,0,0, 0,0,0, 0},
-	{0,0,0, 0,0,0, 0}
+	{1,1,1, 1,1,1, 1}, /* Spacer */
+	{1,1,1, 1,1,1, 1}, /* Heptagram */
+	{1,1,1, 0,0,0, 0}, /* Gorgoneion */
+	{1,1,1, 1,0,0, 0}, /* Circle of Acheron */
+	{1,1,1, 1,1,1, 1}, /* Pentagram */
+	{1,1,1, 1,1,1, 1}, /* Hexagram */
+	{1,1,2, 1,2,1, 0}, /* Hamsa */
+	{1,1,1, 1,1,1, 0}, /* Elder Sign */
+	{1,1,1, 1,1,1, 1}, /* Elder Elemental Eye */
+	{1,1,1, 1,1,1, 1}, /* Sign of the Scion Queen Mother */
+	{1,1,1, 1,1,1, 1}, /* Cartouche of the Cat Lord */
+	{1,1,1, 1,1,1, 1}, /* Wings of Garuda */
+	{1,0,0, 0,0,0, 0}, /* Sigil of Cthugha */
+	{1,0,0, 0,0,0, 0}, /* Brand of Ithaqua */
+	{1,0,0, 0,0,0, 0}, /* Tracery of Karakal */
+	{1,0,0, 0,0,0, 0}, /* Yellow Sign */
+	{1,0,0, 0,0,0, 0}, /* Hyper transit */
+	{1,0,0, 0,0,0, 0}, /* Hyper stabilize */
+	{0,0,0, 0,0,0, 0} /* Terminator */
 };
 
-int wardMax[16] = {
+int wardMax[18] = {
 	7,
 	7,
 	3,
@@ -322,6 +324,8 @@ int wardMax[16] = {
 	7,
 	7,
 	7,
+	1,
+	1,
 	1,
 	1,
 	1,
@@ -484,11 +488,23 @@ const char * haluWard[] =  {
 	"a Tower Magthere crest",
 	"a Tower Xaxox crest",
 	
-	/* Special behavior, lolth holy symbol */
+	/* Special behavior, Lolth holy symbol */
 	"a silver spider-like star",
 	
 	/* Eddergud holy symbol */
 	"an obsidian spiderweb",
+	
+	/* Not quite */
+	"a heptagenarian",
+	"an octogram",
+	"a pentagrain",
+	"a circle of da Vinci",
+	"a hand making a rude gesture",
+	"a junior sign",
+	"a childish compound eye",
+	"a Sign of an Illegitimate Step-daughter",
+	"a cenotaph of a catgirl",
+	"a groovy rendition of the wings of Gargula",
 	
 	/* books */
 	"a set of holy horns", "a Summoning Dark mine-sign", "a Long Dark mine-sign",
@@ -502,45 +518,44 @@ const char * haluWard[] =  {
 	"a triangle enclosing a circle and bisected by a line", /* Harry Potter */
 	"a set of three trefoils, the lower most inverted", /* describes the three of clubs. Too Many Magicians*/
 	"a Trump of Doom", "a Sign of Chaos", "a Pattern of Amber", "a Ghostwheel",
+	"a mockingjay", /* Hunger Games */
+	"a Sharuan Mindharp", /* Star Wars expanded universe */
+	"a winged blade of light", /* Jedi Order symbol */
 	
+	/* webcomics */
 	"a Court symbol", "a Forest symbol", "the sign of the Wandering Eye", /* Gunnerkrigg Court */
+	"a winged tower", /* Girl Genius */
+		"a stylised trilobite",
+	"a setting (rising?) sun", /* Dresden Codak */
 
-	/* Not quite */
-	"a heptagenarian",
-	"an octogram",
-	"a pentagrain",
-	"a circle of da Vinci",
-	"a hand making a rude gesture",
-	"a junior sign",
-	"a childish compound eye",
-	"a Sign of an Illegitimate Step-daughter",
-	"a cenotaph of a catgirl",
-	"a groovy rendition of the wings of Gargula",
-	
+	/* anime and manga */
 	"a Robotech Defense Force insignia", /*...Robotech*/
 	"a Black Knights insignia", /* Code Geass */
 	"a rose crest", /* Revolutionary Girl Utena */
 	"an inverted triangle flanked by seven eyes", /* NGE */
 	"a laughing man", /* Ghost in the Shell */
 	"an alchemic array", "a human transmutation circle", /* Fullmetal Alchemist */
-	"a triangle composed of three smaller triangles", "an eye and single tear", 
-	"a circle enclosing four swirling lines", "a flame inside a circle",
-	"a snowflake within a circle", "an inverted triangle with a dot above each face, enclosed by a circle",
-	"a sign resembling an eyeless yin-yang", 
-	"a circle surrounding a triangle of dots and another of triangles",/*Zelda*/
-	"a setting (rising?) sun", /* Dresden Codak */
 	"an asymmetric, stylized arrowhead, point upwards", /* Star Trek*/
 	"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
-	"a Sharuan Mindharp", /* Star Wars expanded universe */
-	"a winged blade of light", /* Jedi Order symbol */
+	"an image of a white lotus", /* Avatar, the Last Airbender */
+	
 	"an angular S before a segmented circle",/*a screw attack symbol*/
+	"a stylized umbrella", /* Resident Evil */
+	"an Imperium Aquilas", /* Warhammer 40k */
 	"more dakka",
+	"a triangle composed of three smaller triangles",	"an eye and single tear", /*Zelda*/
+		"a circle enclosing four swirling lines",	"a flame inside a circle",
+		"a snowflake within a circle",	"an inverted triangle with a dot above each face, enclosed by a circle",
+		"a sign resembling an eyeless yin-yang", 
+		"a circle surrounding a triangle of dots and another of triangles",
+	
+	"a silhouette of a bat", /* Batman */
 	
 	"a symbol of pain", /* DnD */
 	/* Planescape */
 	"a mimir",
 	"a symbol of torment",
-	"a circle enclosing two colliding arrows",
+	"a circle enclosing two curved colliding arrows",
 	"a pair of triangles, drawn tip to tip,",
 	"a stylized beast",
 	"a triangle crowned by a single line",
@@ -601,6 +616,7 @@ const char * haluWard[] =  {
 	"a Swoosh mark",
 	
 	"a set of five interlocked rings", /*Olympics logo*/
+	"a sign of the world to come",
 	"a running man", /* Exit */
 	"a running man holding a cane",
 	"a one-and-zero", /* Power toggle */
@@ -609,10 +625,12 @@ const char * haluWard[] =  {
 	"a convergence of parallel lines", "a sphere", /* How did you manage that? */
 	"a yin-yang", "a taijitu",/* Taoist */
 	"a hand of Eris", /* Discordian */
+	"a butterfly of death and rebirth",
 	"an ichthus", "a Cross", /* Christian*/
 	"a wheel with eight spokes", /* Budhism */
 	"a fish with legs", "a fat fish", "a fish with tentacles, legs, and wings",
 		/* ichthus parodies/derivitives: darwin, buddha, and Cthulhu. */
+	"an Eye of Horus", /*...*/
 	"a set of seven concentric circles",
 	"a left-handed trefoil knot",
 	"a triskelion", /* Ancient Symbol */
