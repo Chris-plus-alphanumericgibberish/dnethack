@@ -2560,7 +2560,7 @@ spiriteffects(power, atme)
 					pline("%s colapses in on %sself.", Monnam(mon), himherit(mon));
 					mongone(mon);
 				}
-			}
+			} else pline("%s looks briefly unsetled.", Monnam(mon));
 		}break;
 		case PWR_POISON_GAZE:{
 			coord cc;
