@@ -1050,12 +1050,18 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	}
 	if(u.sealsActive || u.specialSealsActive){
 		int i,j,numBound,numFound=0;
+		Sprintf(buf, "spirits bound: %d", u.sealCounts);
+		you_have(buf);
+		Sprintf(buf, "seals active: %lx", u.sealsActive);
+		you_have(buf);
+		Sprintf(buf, "special seals active: %lx", u.specialSealsActive);
+		you_have(buf);
 		numBound = u.sealCounts;
 		if(u.spirit[QUEST_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
 		Sprintf(buf, "You are contracted to ");
 		for(i=0;i<NUM_BIND_SPRITS;i++){
-			if(u.spirit[i]) for(j=0;j<34;j++){
+			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
 					Strcat(buf,sealNames[j]);
 					numFound++;
@@ -1066,6 +1072,33 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 					}
 					break;
 				}
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_DAHLVER_NAR){
+			Strcat(buf, sealNames[(DAHLVER_NAR) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_ACERERAK){
+			Strcat(buf, sealNames[(ACERERAK) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_NUMINA){
+			Strcat(buf, sealNames[(NUMINA) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
 		putstr(en_win, 0, buf);
@@ -1399,7 +1432,7 @@ resistances_enlightenment()
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
 		Sprintf(buf, "You are contracted to ");
 		for(i=0;i<NUM_BIND_SPRITS;i++){
-			if(u.spirit[i]) for(j=0;j<34;j++){
+			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
 					Strcat(buf,sealNames[j]);
 					numFound++;
@@ -1410,6 +1443,33 @@ resistances_enlightenment()
 					}
 					break;
 				}
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_DAHLVER_NAR){
+			Strcat(buf, sealNames[(DAHLVER_NAR) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_ACERERAK){
+			Strcat(buf, sealNames[(ACERERAK) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_NUMINA){
+			Strcat(buf, sealNames[(NUMINA) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
 		putstr(en_win, 0, buf);

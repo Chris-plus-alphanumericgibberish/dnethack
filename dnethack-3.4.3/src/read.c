@@ -114,6 +114,31 @@ doread()
 			return(1);
 		}
 	}
+	else if(scroll->oartifact == ART_PEN_OF_THE_VOID){
+	    if (Blind) {
+			You_cant("see the blade!");
+			return 0;
+		}
+		else{
+			int j;
+			if(!quest_status.killed_nemesis) pline("It seems this athame once had dual blades, but one blade has been snapped off at the hilt.");
+			else pline("The dual-bladed athame vibrates faintly.");
+			if(u.spiritTineA) for(j=0;j<32;j++){
+				if((u.spiritTineA >> j) == 1){
+					if(!quest_status.killed_nemesis) pline("The blade bears the seal of %s.",sealNames[j]);
+					else pline("The first blade bears the seal of %s.",sealNames[j]);
+					break;
+				}
+			}
+			if(quest_status.killed_nemesis && u.spiritTineB) for(j=0;j<32;j++){
+				if((u.spiritTineB >> j) == 1){
+					pline("The second blade bears the seal of %s.",sealNames[j]);
+					break;
+				}
+			}
+			return(1);
+		}
+	}
 	else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
 		if(! (u.wardsknown & scroll->ovar1) ){
