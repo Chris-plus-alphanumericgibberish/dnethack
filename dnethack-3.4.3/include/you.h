@@ -620,7 +620,7 @@ struct you {
 
 extern long sealKey[34]; /*Defined in u_init.c*/
 extern char *wardDecode[26]; /*Defined in spell.c*/
-extern int wardMax[16]; /*Defined in engrave.c*/
+extern int wardMax[18]; /*Defined in engrave.c*/
 extern char *sealNames[34]; /*Defined in engrave.c*/
 extern char *andromaliusItems[18]; /*Defined in sounds.c*/
 extern long int_spirits; /*Defined in sounds.c*/
