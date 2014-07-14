@@ -3391,6 +3391,12 @@ dobpois:
 				if (Free_action)
 				    You("momentarily stiffen under %s gaze!",
 					    s_suffix(mon_nam(mon)));
+				else if (ureflects("%s gaze is partially reflected by your %s.",
+							s_suffix(Monnam(mon)))){
+				    You("are frozen by %s gaze!",
+					  s_suffix(mon_nam(mon)));
+				    nomul(-1*d(1,10), "frozen by the gaze of Axus");
+				}
 				else {
 				    You("are frozen by %s gaze!",
 					  s_suffix(mon_nam(mon)));
@@ -3434,7 +3440,7 @@ dobpois:
 		  
 		  for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 			mndx = monsndx(mtmp->data);
-			if((mndx <= PM_QUINON || mndx >= PM_MONOTON) && mtmp->mpeaceful){
+			if(mndx <= PM_QUINON && mndx >= PM_MONOTON && mtmp->mpeaceful){
 				pline("%s gets angry...", Amonnam(mtmp));
 				mtmp->mpeaceful = 0;
 			}
@@ -3509,8 +3515,7 @@ dobpois:
 		    }
 		    if(mon->mcansee) {
 				if (ureflects("%s gaze is reflected by your %s.",
-					    s_suffix(Monnam(mon))))
-			    ;
+					    s_suffix(Monnam(mon))));
 				else if (Free_action)
 				    You("momentarily stiffen under %s gaze!",
 					    s_suffix(mon_nam(mon)));
