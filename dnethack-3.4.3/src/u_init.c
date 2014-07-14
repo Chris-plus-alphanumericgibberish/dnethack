@@ -1367,40 +1367,18 @@ u_init()
 	    knows_object(DWARVISH_MITHRIL_COAT);
 	    knows_object(DWARVISH_CLOAK);
 	    knows_object(DWARVISH_ROUNDSHIELD);
-		switch(d(1,4)){
-			case 1: 
-				u.wardsknown |= WARD_TOUSTEFNA;
-				otmp = mksobj(CLUB, TRUE, FALSE);
-				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
-				otmp->ovar1 = WARD_TOUSTEFNA;
-				addinv(otmp);
-			break;
-			case 2: 
-				u.wardsknown |= WARD_DREPRUN;
-				otmp = mksobj(CLUB, TRUE, FALSE);
-				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
-				otmp->ovar1 = WARD_DREPRUN;
-				addinv(otmp);
-			break;
-			case 3: 
-				u.wardsknown |= WARD_VEIOISTAFUR;
-				otmp = mksobj(CLUB, TRUE, FALSE);
-				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
-				otmp->ovar1 = WARD_VEIOISTAFUR;
-				addinv(otmp);
-			break;
-			case 4: 
-				u.wardsknown |= WARD_THJOFASTAFUR;
-				otmp = mksobj(CLUB, TRUE, FALSE);
-				otmp->spe = otmp->cursed = otmp->blessed = 0;
-				otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
-				otmp->ovar1 = WARD_THJOFASTAFUR;
-				addinv(otmp);
-			break;
-		}	
+		otmp = mksobj(CLUB, TRUE, FALSE);
+		otmp->spe = otmp->cursed = otmp->blessed = 0;
+		otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+		addinv(otmp);
+		otmp = mksobj(KNIFE, TRUE, FALSE);
+		otmp->spe = otmp->cursed = otmp->blessed = 0;
+		otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+		addinv(otmp);
+		u.wardsknown |= WARD_TOUSTEFNA;
+		u.wardsknown |= WARD_DREPRUN;
+		u.wardsknown |= WARD_VEIOISTAFUR;
+		u.wardsknown |= WARD_THJOFASTAFUR;
 	}break;
 
 	case PM_GNOME:
