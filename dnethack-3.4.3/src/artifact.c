@@ -2439,7 +2439,7 @@ arti_invoke(obj)
 		oart->inv_prop != SEVENFOLD
 	)obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
 
-	if(oart->inv_prop != VOID_CHIME) obj->age = monstermoves + 125L;
+	if(oart->inv_prop == VOID_CHIME) obj->age = monstermoves + 125L;
 
 	switch(oart->inv_prop) {
 	case TAMING: {
