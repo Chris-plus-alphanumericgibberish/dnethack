@@ -2513,8 +2513,10 @@ spiriteffects(power, atme)
 				shieldeff(mon->mx, mon->my);
 				break;
 			} else {
-				int dmg,lvls;
-				lvls = min(rnd(5),rnd(dsize));
+				int dmg,lvls,tmp;
+				lvls = rnd(5);
+				tmp = rnd(dsize);
+				lvls = min(lvls,tmp);
 				dmg = d(lvls,8);
 				mon->mhp -= dmg;
 				mon->mhpmax -= dmg;

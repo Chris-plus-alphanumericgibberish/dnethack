@@ -484,7 +484,10 @@ register struct monst *mtmp;
 		if(u.sealsActive&SEAL_NABERIUS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_NABERIUS],1);
 		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
 		if(u.sealsActive&SEAL_OTIAX){
-			int tendrils = min(rnd(5),rnd(spiritDsize()));
+			int tendrils,tmp2;
+			tendrils = rnd(5);
+			tmp2 = spiritDsize();
+			tendrils = min(tendrils,tmp2);
 			while(tendrils && keepattacking && !DEADMONSTER(mtmp)){
 				keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_OTIAX],1);
 				tendrils--;
@@ -2241,12 +2244,14 @@ register struct attack *mattk;
 		case AD_IRIS:
 			u.irisAttack = moves;
 			if(!rn2(20)){
+				int tmp2;
 				if(nonliving(mdef->data) || is_anhydrous(mdef->data)){
 					shieldeff(mdef->mx, mdef->my);
 					break;
 				}
 				pline("%s shrivels at your touch.", Monnam(mdef));
-				tmp = min(tmp+d(5,spiritDsize()),mdef->mhp);
+				tmp2 = tmp+d(5,spiritDsize());
+				tmp = min(tmp2,mdef->mhp);
 				healup(tmp, 0, FALSE, FALSE);
 			}
 		break;
