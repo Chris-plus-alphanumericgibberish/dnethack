@@ -2796,7 +2796,7 @@ use_weapon:
 		case AT_TENT:
 		case AT_WHIP:
 			if (i==0 && uwep && (youmonst.data->mlet==S_LICH)) goto use_weapon;
-			if ((uwep || u.twoweap && uswapwep) &&
+			if ((uwep || (u.twoweap && uswapwep) || uarmg) &&
 				(touch_petrifies(mon->data) ||
 				 mon->data == &mons[PM_MEDUSA])){
 			    	break;
