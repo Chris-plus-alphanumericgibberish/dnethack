@@ -5494,7 +5494,10 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_PAIMON && !Invis && !uarmh) count++;
 		if(u.sealsActive&SEAL_SIMURGH && !Invis && !(((uarmg || uarmc) && uarmh))) count++;
 		if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
-		if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || (moves>20000 && !(uarmc && uarmg)))) count++;
+		if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || 
+												 (moves>20000 && !(uarmc && uarmg && uarmf)) || (moves>50000 && !(uarmc && uarmg && uarmf && uarm && uarmh)) || 
+												 (moves>100000 && !(uarmc && uarmg && uarmf && uarm && uarmh && ublindf && ublindf->otyp==MASK))
+												)) count++;
 		if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis && dahlverNarVis()) count++;
 		if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !ublindf) count++;
 		// if(u.specialSealsActive&SEAL_NUMINA);
