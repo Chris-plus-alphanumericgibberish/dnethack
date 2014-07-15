@@ -1707,11 +1707,23 @@ signs_enlightenment()
 			else
 				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
 			message = TRUE;
-		} else if(moves>20000){
-			if(!(uarmc && uarmg))
+		} else if(moves>20000 && moves <= 50000){
+			if(!(uarmc && uarmg && uarmf))
 				putstr(en_win, 0, "Your skin is rotting off.");
 			else
 				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>50000 && moves <= 100000){
+			if(!(uarmc && uarmg && uarmf && uarm && uarmh))
+				putstr(en_win, 0, "Your rotted body bristles with fungal sporangia and burrowing vermin.");
+			else
+				putstr(en_win, 0, "Your rotted form is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>100000){
+			if(!(uarmc && uarmg && uarmf && uarm && uarmh && ublindf && ublindf->otyp==MASK))
+				putstr(en_win, 0, "Your putrid body is a riot of fungal forms and saprophagous insects.");
+			else
+				putstr(en_win, 0, "Your putrid form is hidden under your clothes.");
 			message = TRUE;
 		}
 	}
@@ -1973,11 +1985,23 @@ signs_mirror()
 			else
 				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
 			message = TRUE;
-		} else if(moves>20000){
-			if(!(uarmc && uarmg))
+		} else if(moves>20000 && moves <= 50000){
+			if(!(uarmc && uarmg && uarmf))
 				putstr(en_win, 0, "Your skin is rotting off.");
 			else
 				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>50000 && moves <= 100000){
+			if(!(uarmc && uarmg && uarmf && uarm && uarmh))
+				putstr(en_win, 0, "Your rotted body bristles with fungal sporangia and burrowing vermin.");
+			else
+				putstr(en_win, 0, "Your rotted form is hidden under your clothes.");
+			message = TRUE;
+		} else if(moves>100000){
+			if(!(uarmc && uarmg && uarmf && uarm && uarmh && ublindf && ublindf->otyp==MASK))
+				putstr(en_win, 0, "Your putrid body is a riot of fungal forms and saprophagous insects.");
+			else
+				putstr(en_win, 0, "Your putrid form is hidden under your clothes.");
 			message = TRUE;
 		}
 	}
