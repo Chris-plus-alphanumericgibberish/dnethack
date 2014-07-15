@@ -1122,7 +1122,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	}
 	if (pen->ovar1&SEAL_ECHIDNA) {
 	    if (vis){ 
-			and ? Strcat(buf, "and sizzling") : Sprintf(buf, "sizzling");
+			and ? Strcat(buf, " and sizzling") : Sprintf(buf, "sizzling");
 			and = TRUE;
 		}
 	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
