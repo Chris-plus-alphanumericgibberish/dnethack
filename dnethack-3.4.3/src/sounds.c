@@ -1291,6 +1291,7 @@ int tx,ty;
 					pline("A voice whispers from bellow:");
 					pline("\"All shall feed the shattered night.\"");
 					bindspirit(ep->ward_id);
+					u.ahazu = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("A voice whispers from bellow:");
@@ -1304,11 +1305,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_AHAZU;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.ahazu = moves + bindingPeriod;
 				}
 				else{
 					pline("A voice whispers from bellow, but you don't catch what it says.");
+					u.ahazu = moves + bindingPeriod/10;
 				}
-				u.ahazu = moves + bindingPeriod;
 			} else{
 				pline("Thoughts of falling and of narrow skys come unbidden into your mind.");
 				u.ahazu = moves + bindingPeriod/10;
@@ -1333,6 +1335,7 @@ int tx,ty;
 					bindspirit(ep->ward_id);
 					vision_full_recalc = 1; //can now see perfectly in the dark
 					doredraw();
+					u.amon = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
@@ -1347,9 +1350,11 @@ int tx,ty;
 						u.spiritTineB = SEAL_AMON;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.amon = moves + bindingPeriod;
 				}
 				else{
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
+					u.amon = moves + bindingPeriod/10;
 				}
 			}
 			else{
@@ -1361,8 +1366,8 @@ int tx,ty;
 					altar_wrath(tx, ty);
 					angrygods(a_align(tx,ty));
 				}
+				u.amon = moves + bindingPeriod; // invoking amon on a level with an altar still triggers the binding period.
 			}
-			u.amon = moves + bindingPeriod; // invoking amon on a level with an altar still triggers the binding period.
 		} else pline("You can't feel the spirit.");
 	}break;
 	case ANDREALPHUS:{
@@ -1377,6 +1382,7 @@ int tx,ty;
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
 					pline("\"Though born of curves, by my square you shall rectify the world.\"");
 					bindspirit(ep->ward_id);
+					u.andrealphus = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
@@ -1390,12 +1396,13 @@ int tx,ty;
 						u.spiritTineB = SEAL_ANDREALPHUS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.andrealphus = moves + bindingPeriod;
 				}
 				else{
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
 					pline("\"You, born of dishonest curves, are unworthy of my measure.\"");
+					u.andrealphus = moves + bindingPeriod/10;
 				}
-				u.andrealphus = moves + bindingPeriod;
 			} else{
 				pline("Thoughts intersecting lines rise to the forefront of your mind.");
 				u.andrealphus = moves + bindingPeriod/10;
@@ -1603,6 +1610,7 @@ int tx,ty;
 					}
 					pline("When your attention returns to the seal, the hands have gone.");
 					bindspirit(ep->ward_id);
+					u.andromalius = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("Suddenly, the hands toss one of the whrilling objects to you.");
@@ -1616,13 +1624,14 @@ int tx,ty;
 						u.spiritTineB = SEAL_ANDROMALIUS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.andromalius = moves + bindingPeriod;
 				}
 				else{
 					pline("Suddenly, the hands toss one of the whrilling objects at you.");
 					You("see %s pass far over your %s, out of reach.", andromaliusItems[i3], body_part(HEAD));
 					pline("When your attention returns to the seal, the hands have gone.");
+					u.andromalius = moves + bindingPeriod/10;
 				}
-				u.andromalius = moves + bindingPeriod;
 				if(o1){
 					if(o1->quan > 1) o1->quan--; 
 					else{
@@ -1692,6 +1701,7 @@ int tx,ty;
 				if(o->spe<0) o->spe=0;
 				if(o->oeroded) o->oeroded=0;
 				if(o->oeroded2) o->oeroded2=0;
+				u.astaroth = moves + bindingPeriod;
 				}
 			else if(uwep && (uwep->spe<0 || uwep->oeroded || uwep->oeroded2) && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 				pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal.");
@@ -1728,7 +1738,7 @@ int tx,ty;
 					if(uwep->oeroded2) uwep->oeroded2--;
 					pline("The Pen of the Void drips black oil, as if in sympathy.");
 				}
-				u.astaroth = moves + bindingPeriod;
+				u.astaroth = moves + bindingPeriod/10;
 			} else{
 				pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
 				u.astaroth = moves + bindingPeriod/10;
@@ -1750,6 +1760,7 @@ int tx,ty;
 					pline("\"I am Balam, offered up as the last sacrifice; condemned to bleed until the end of all suffering.\"");
 					pline("\"In your name was this done, therefore you shall bear my stigmata and share my suffering.\"");
 					bindspirit(ep->ward_id);
+					u.balam = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind){
@@ -1769,6 +1780,7 @@ int tx,ty;
 						u.spiritTineB = SEAL_BALAM;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.balam = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind){
@@ -1777,8 +1789,8 @@ int tx,ty;
 					} else {
 						pline("A woman's scream drifts through your mind, but nothing else occurs....");
 					}
+					u.balam = moves + bindingPeriod/10;
 				}
-				u.balam = moves + bindingPeriod;
 			} else{
 				You("shiver violently.");
 				u.balam = moves + bindingPeriod/10;
@@ -1799,18 +1811,25 @@ int tx,ty;
 			}
 			//Berith also allows the summoner to wear a blessed silver ring on his or her left hand.
 			if(o || (uleft && uleft->otyp == slvring && uleft->blessed)){
+				if(u.sealCounts < numSlots){
 				if(!Blind){
-				pline("Gold rains down within the circumference of the seal, melting slowly to blood where it lands.");
-				pline("A figure takes form within the showering gold, staring down at you from a crimson horse.");
-				pline("His crown is gold, and his clothes are red like blood.");
+					pline("Gold rains down within the circumference of the seal, melting slowly to blood where it lands.");
+					pline("A figure takes form within the showering gold, staring down at you from a crimson horse.");
+					pline("His crown is gold, and his clothes are red like blood.");
 				}
 				pline("\"I am Berith, %s.",rn2(2) ? "war-leader of the forgotten" : "god of the covenant of blood");
-				if(u.sealCounts < numSlots){
 					pline("I anoint you in Blood and Gold, that bloodshed and riches shall follow in your wake.");
 					pline("That is my covenant, my blessing, and my curse.\"");
 					bindspirit(ep->ward_id);
+					u.berith = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
+					if(!Blind){
+						pline("Gold rains down within the circumference of the seal, melting slowly to blood where it lands.");
+						pline("A figure takes form within the showering gold, staring down at you from a crimson horse.");
+						pline("His crown is gold, and his clothes are red like blood.");
+					}
+					pline("\"I am Berith, %s.",rn2(2) ? "war-leader of the forgotten" : "god of the covenant of blood");
 					pline("I anoint your blade with Blood, for blood calls to blood.");
 					pline("That is the covenant and curse of Berith.\"");
 					uwep->ovar1 |= SEAL_BERITH;
@@ -1822,12 +1841,13 @@ int tx,ty;
 						u.spiritTineB = SEAL_BERITH;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.berith = moves + bindingPeriod;
 				}
 				else{
 					You("think you can hear faint hoofbeats from within the seal.");
 					pline("But they fade away before you can be sure.");
+					u.berith = moves + bindingPeriod/10;
 				}
-				u.berith = moves + bindingPeriod;
 			} else{
 				You("think of cavalry and silver rings.");
 				u.berith = moves + bindingPeriod/10;
@@ -1849,6 +1869,7 @@ int tx,ty;
 			if(u.sealCounts < numSlots){
 				pline("Will you walk with me?\"");
 				bindspirit(ep->ward_id);
+				u.buer = moves + bindingPeriod;
 			}
 			else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 				pline("I will walk beside you.\"");
@@ -1861,11 +1882,13 @@ int tx,ty;
 					u.spiritTineB = SEAL_BUER;
 					u.spiritTineTB= moves + bindingPeriod;
 				}
+				u.buer = moves + bindingPeriod;
 			}
 			else{
 				pline("I wish you well as you walk your path.\"");
+				healup(d(5,spiritDsize()), 0, TRUE, TRUE);
+				u.buer = moves + bindingPeriod/10;
 			}
-			u.buer = moves + bindingPeriod;
 		} else pline("You can't feel the spirit.");
 	}break;
 	case CHUPOCLOPS:{
@@ -1889,6 +1912,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("She wraps you tight in her bitter cords and sends you forth, bait within her web.");
 					bindspirit(ep->ward_id);
+					u.chupoclops = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("She wraps your blade tight in her bitter cords, making it an anchor for her web.");
@@ -1901,6 +1925,7 @@ int tx,ty;
 						u.spiritTineB = SEAL_CHUPOCLOPS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.chupoclops = moves + bindingPeriod;
 				}
 				else{
 					pline("The Spider passes you over, and collects her prize.");
@@ -1910,8 +1935,8 @@ int tx,ty;
 						levl[tx][ty].typ = ROOM;
 						digfarhole(TRUE,tx,ty);
 					}
+					u.chupoclops = moves + bindingPeriod/10;
 				}
-				u.chupoclops = moves + bindingPeriod;
 			} else{
 				pline("Thoughts of death and despair almost overcome you.");
 				u.chupoclops = moves + bindingPeriod/10;
@@ -1936,6 +1961,7 @@ int tx,ty;
 					pline("\"You, who bear my bloodline,\"");
 					pline("\"go forth %swith my blessing.\"", flags.female ? "":"and rule ");
 					bindspirit(ep->ward_id);
+					u.dantalion = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(flags.initgend==1){ /*(female)*/
@@ -1951,13 +1977,14 @@ int tx,ty;
 						u.spiritTineB = SEAL_DANTALION;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.dantalion = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind) {
 						pline("His myriad faces study you with disapproval, and he departs as suddenly as he arived.");
 					}
+					u.dantalion = moves + bindingPeriod/10;
 				}
-				u.dantalion = moves + bindingPeriod;
 			} else {
 				You_hear("royal trumpets.");
 				u.dantalion = moves + bindingPeriod/10;
@@ -1985,6 +2012,7 @@ int tx,ty;
 					pline("\"You look like a pretty distinctive person.\"");
 					pline("\"Let me follow you and practice standing out.\"");
 					bindspirit(ep->ward_id);
+					u.shiro = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("\"That looks like a pretty distinctive weapon.\"");
@@ -1998,12 +2026,13 @@ int tx,ty;
 						u.spiritTineB = SEAL_SHIRO;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.shiro = moves + bindingPeriod;
 				}
 				else{
 					pline("\"Well, I'm certain a person as distinctive as you has better things to do than talk to me.\"");
 					pline("\"I hope you visit again some time.\"");
+					u.shiro = moves + bindingPeriod/10;
 				}
-				u.shiro = moves + bindingPeriod;
 			} else{
 				pline("For some reason you want to arrange rocks in a circle.");
 				u.shiro = moves + bindingPeriod/10;
@@ -2013,7 +2042,7 @@ int tx,ty;
 	case ECHIDNA:{
 		if(u.echidna < moves){
 			//NOT YET IMPLEMENTED: Spirit requires that her seal be drawn in a cave.
-			if(In_mines(&u.uz)){
+			if(In_mines(&u.uz) || (Inhell && !on_level(&valley_level, &u.uz))){
 				if(!Blind){
 					You("suddenly notice a monstrous nymph reclining in the center of the seal.");
 					pline("She is half a fair woman, with glancing eyes and fair cheeks,");
@@ -2023,6 +2052,7 @@ int tx,ty;
 					pline("\"I am Echidna, %s.\"",echidnaTitles[rn2(SIZE(echidnaTitles))]);
 					pline("\"Free me from this place, and I and my brood shall fight for your cause.\"");
 					bindspirit(ep->ward_id);
+					u.echidna = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("\"I am Echidna, %s.\"",echidnaTitles[rn2(SIZE(echidnaTitles))]);
@@ -2036,6 +2066,7 @@ int tx,ty;
 						u.spiritTineB = SEAL_ECHIDNA;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.echidna = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind){
@@ -2043,8 +2074,8 @@ int tx,ty;
 					} else {
 						pline("Something hisses at you, then slithers away.");
 					}
+					u.echidna = moves + bindingPeriod/10;
 				}
-				u.echidna = moves + bindingPeriod;
 			} else{
 				You("hear scales scraping against stone echo through a cave.");
 				u.echidna = moves + bindingPeriod/10;
@@ -2069,6 +2100,7 @@ int tx,ty;
 					pline("Radiant light falls upon you,");
 					pline("blinding you to what lies beyond.");
 					bindspirit(ep->ward_id);
+					u.eden = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("Radiant light falls on your weapon.");
@@ -2082,12 +2114,13 @@ int tx,ty;
 						u.spiritTineB = SEAL_EDEN;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.eden = moves + bindingPeriod;
 				}
 				else{
 					pline("But before they do, the whole construct jerks suddenly upwards,");
 					pline("out of sight.");
+					u.eden = moves + bindingPeriod/10;
 				}
-				u.eden = moves + bindingPeriod;
 			} else{
 				You_hear("water splashing.");
 				u.eden = moves + bindingPeriod/10;
@@ -2113,6 +2146,7 @@ int tx,ty;
 					pline("I am Enki, god of the first city.");
 					pline("Bow to me, and I shall teach the arts of civilzation.");
 					bindspirit(ep->ward_id);
+					u.enki = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("I am Enki, god of Eridu.");
@@ -2126,12 +2160,13 @@ int tx,ty;
 						u.spiritTineB = SEAL_ENKI;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.enki = moves + bindingPeriod;
 				}
 				else{
 					pline("But the figure is asleep,");
 					pline("and sinks again without saying a word.");
+					u.enki = moves + bindingPeriod/10;
 				}
-				u.enki = moves + bindingPeriod;
 			} else{
 				You("dream of wide open spaces.");
 				u.enki = moves + bindingPeriod/10;
@@ -2157,6 +2192,7 @@ int tx,ty;
 						pline("and beyond it, all at once.");
 					}
 					bindspirit(ep->ward_id);
+					u.eurynome = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind){
@@ -2172,11 +2208,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_EURYNOME;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.eurynome = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind) pline("but it pays you no heed.");
+					u.eurynome = moves + bindingPeriod/10;
 				}
-				u.eurynome = moves + bindingPeriod;
 			} else{
 				You("daydream of dancing across waves.");
 				u.eurynome = moves + bindingPeriod/10;
@@ -2196,6 +2233,7 @@ int tx,ty;
 					You("help her to her feet.");
 					pline("\"Shall we hunt together?\"");
 					bindspirit(ep->ward_id);
+					u.eve = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					You("try to help her, but she is unable to stand.");
@@ -2209,11 +2247,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_EVE;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.eve = moves + bindingPeriod;
 				}
 				else{
 					pline("In fact, you don't think she can move.");
+					u.eve = moves + bindingPeriod/10;
 				}
-				u.eve = moves + bindingPeriod;
 			} else{
 				You_hear("wind in the trees.");
 				u.eve = moves + bindingPeriod/10;
@@ -2238,6 +2277,7 @@ int tx,ty;
 					else pline("something bites you!");
 					Your("left finger stings!");
 					bindspirit(ep->ward_id);
+					u.fafnir = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("The dragon tries to steal your weapon!");
@@ -2252,11 +2292,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_FAFNIR;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.fafnir = moves + bindingPeriod;
 				}
 				else{
 					pline("It roars at you to leave it alone.");
+					u.fafnir = moves + bindingPeriod/10;
 				}
-				u.fafnir = moves + bindingPeriod;
 			} else{
 				You_hear("the clink of coins.");
 				u.fafnir = moves + bindingPeriod/10;
@@ -2281,6 +2322,7 @@ int tx,ty;
 					adjattrib(A_INT, -1, FALSE);
 					AMAX(A_INT) -= 1;
 				}
+				u.huginn_muninn = moves + bindingPeriod;
 			}
 			else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 				if(!Blind) pline("They croak raucously at your weapon.");
@@ -2300,11 +2342,12 @@ int tx,ty;
 				if(ACURR(A_INT)>ATTRMIN(A_INT)){
 					adjattrib(A_INT, -1, FALSE);
 				}
+				u.huginn_muninn = moves + bindingPeriod;
 			}
 			else{
 				if(!Blind) pline("They stare at you for a moment, and then leave just as suddenly as they came.");
+				u.huginn_muninn = moves + bindingPeriod/10;
 			}
-			u.huginn_muninn = moves + bindingPeriod;
 		} else pline("You can't feel the spirit.");
 	}break;
 	case IRIS:{
@@ -2317,6 +2360,7 @@ int tx,ty;
 					pline("Something jumps on you from behind!");
 					pline("\"YAY! Lets play together!!\"");
 					bindspirit(ep->ward_id);
+					u.iris = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("Something grabs your weapon!");
@@ -2330,11 +2374,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_IRIS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.iris = moves + bindingPeriod;
 				}
 				else{
 					pline("Apparently it was nothing.");
+					u.iris = moves + bindingPeriod/10;
 				}
-				u.iris = moves + bindingPeriod;
 			} else{
 				You("smell sulfur.");
 				u.iris = moves + bindingPeriod/10;
@@ -2349,6 +2394,7 @@ int tx,ty;
 					You("feel something climb onto your back!");
 					pline("\"Will you let me stay with you?\"");
 					bindspirit(ep->ward_id);
+					u.jack = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("A will-o-wisp drifts out of the seal to hover near your weapon.");
@@ -2364,11 +2410,12 @@ int tx,ty;
 						u.spiritTineTB= moves + bindingPeriod;
 						if(!uwep->lamplit) begin_burn(uwep, FALSE);
 					}
+					u.jack = moves + bindingPeriod;
 				}
 				else{
 					You_hear("aimless footsteps and creaking joints.");
+					u.jack = moves + bindingPeriod/10;
 				}
-				u.jack = moves + bindingPeriod;
 			} else{
 				You("think of the wide earth.");
 				u.jack = moves + bindingPeriod/10;
@@ -2449,6 +2496,7 @@ int tx,ty;
 					if(!Blind) pline("A black-feathered humanoid steps forth.");
 					pline("\"I am Malphas. You feed my flock. One way or the other.\"");
 					bindspirit(ep->ward_id);
+					u.malphas = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("A large black feather setles within the seal.");
@@ -2462,11 +2510,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_MALPHAS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.malphas = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind) pline("But it does not make itself known to you.");
+					u.malphas = moves + bindingPeriod/10;
 				}
-				u.malphas = moves + bindingPeriod;
 				useupf(otmp, 1L);
 			} else{
 				You("smell fresh blood.");
@@ -2487,6 +2536,7 @@ int tx,ty;
 					pline("You feel sharp pains in your elbowes and knees!");
 					if(!Blind) pline("It seems that you, are but a puppet.");
 					bindspirit(ep->ward_id);
+					u.marionette = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("The wires wrap around your weapon!");
@@ -2500,11 +2550,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_MARIONETTE;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.marionette = moves + bindingPeriod;
 				}
 				else{
 					pline("But they don't do anything interesting.");
+					u.marionette = moves + bindingPeriod/10;
 				}
-				u.marionette = moves + bindingPeriod;
 			} else{
 				You_hear("the sounds of digging, and of bones rattling together.");
 				u.marionette = moves + bindingPeriod/10;
@@ -2521,6 +2572,7 @@ int tx,ty;
 					pline("But you still can't see...");
 					pline("...the eyeballs don't belong to you!");
 					bindspirit(ep->ward_id);
+					u.mother = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("You're pretty sure somthing is staring at your weapon....");
@@ -2533,11 +2585,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_MOTHER;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.mother = moves + bindingPeriod;
 				}
 				else{
 					pline("The itching subsides.");
+					u.mother = moves + bindingPeriod/10;
 				}
-				u.mother = moves + bindingPeriod;
 			} else{
 				You("blink.");
 				u.mother = moves + bindingPeriod/10;
@@ -2561,6 +2614,7 @@ int tx,ty;
 					pline("\"I can smell the weaknesses others try to hide.\"");
 					pline("\"I can make men trust or make men flee.\"");
 					bindspirit(ep->ward_id);
+					u.naberius = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind){
@@ -2579,11 +2633,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_NABERIUS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.naberius = moves + bindingPeriod;
 				}
 				else{
 					pline("The sound fades away.");
+					u.naberius = moves + bindingPeriod/10;
 				}
-				u.naberius = moves + bindingPeriod;
 			} else{
 				You_hear("retoric and sage advice.");
 				u.naberius = moves + bindingPeriod/10;
@@ -2602,6 +2657,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("You feel that it will stay with you for a while.");
 					bindspirit(ep->ward_id);
+					u.orthos = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					Your("blade vibrates for a moment.");
@@ -2614,8 +2670,8 @@ int tx,ty;
 						u.spiritTineB = SEAL_ORTHOS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
-				}
 				u.orthos = moves + bindingPeriod;
+				} else u.orthos = moves + bindingPeriod/10;
 			} else{
 				pline("For an instant you are falling.");
 				u.orthos = moves + bindingPeriod/10;
@@ -2642,9 +2698,10 @@ int tx,ty;
 					vision_recalc(2);	/* unsee old position */
 					vision_full_recalc = 1;
 					spoteffects(FALSE);
+					u.ose = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					if(!Blind) pline("The sea bottom swirls below your weapon.");
+					if(!Blind) pline("The sea bottom swirls below your weapon, forming into thousands of reaching arms.");
 					uwep->ovar1 |= SEAL_OSE;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_OSE;
@@ -2654,11 +2711,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_OSE;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.ose = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind) pline("The silt in the seal swirls a bit. Otherwise, nothing happens.");
+					u.ose = moves + bindingPeriod/10;
 				}
-				u.ose = moves + bindingPeriod;
 			} else{
 				You("feel wet....");
 				u.ose = moves + bindingPeriod/10;
@@ -2677,6 +2735,7 @@ int tx,ty;
 					levl[tx][ty].doormask |= D_ISOPEN;
 					newsym(tx,ty);
 					bindspirit(ep->ward_id);
+					u.otiax = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("The mist fingers curl around your blade.");
@@ -2689,11 +2748,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_OTIAX;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.otiax = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind) pline("They fade away without incident.");
+					u.otiax = moves + bindingPeriod/10;
 				}
-				u.otiax = moves + bindingPeriod;
 			} else{
 				You("instinctively look around for a door to open.");
 				u.otiax = moves + bindingPeriod/10;
@@ -2752,7 +2812,7 @@ int tx,ty;
 					if(!Blind) pline("Her face darkens.");
 					if(!Blind) pline("Woman and camel both vanish, replaced by a demon of black smoke.");
 					pline("A very masculine voice booms out:");
-					pline("\"How dare you waste the time of the fell archivist!\".");
+					pline("\"How dare you waste the time of I, the fell archivist!\".");
 					losexp("shredding of the soul",TRUE,TRUE,TRUE);
 				}
 			} else{
@@ -2769,6 +2829,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("It swoops down and lands on your shoulder.");
 					bindspirit(ep->ward_id);
+					u.simurgh = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("Loose feathers rain down around your blade.");
@@ -2781,11 +2842,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_SIMURGH;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.simurgh = moves + bindingPeriod;
 				}
 				else{
 					pline("It leaves");
+					u.simurgh = moves + bindingPeriod/10;
 				}
-				u.simurgh = moves + bindingPeriod;
 			} else{
 				You("yearn for open skies.");
 				u.simurgh = moves + bindingPeriod/10;
@@ -2801,6 +2863,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					if(!Blind) pline("The darkness inside the seal flows out to pool around you.");
 					bindspirit(ep->ward_id);
+					u.tenebrous = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("The darkness inside the seal flows out to stain your weapon.");
@@ -2813,11 +2876,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_TENEBROUS;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.tenebrous = moves + bindingPeriod;
 				}
 				else{
 					if(!Blind)  pline("Gradually, the lighting returns to normal.");
+					u.tenebrous = moves + bindingPeriod/10;
 				}
-				u.tenebrous = moves + bindingPeriod;
 			} else{
 				You("feel that Tenebrous exists only in darkness.");
 				u.tenebrous = moves + bindingPeriod/10;
@@ -2842,8 +2906,10 @@ int tx,ty;
 			}
 			//Spirit requires that his seal be drawn around a rotting corpse of a poisonous creature.
 			if(	o ){
-				pline("An eye opens on the ground within the seal,");
-				pline("and a voice speaks to you out of the Earth:");
+				if(!Blind){
+					pline("An eye opens on the ground within the seal,");
+					pline("and a voice speaks to you out of the Earth:");
+				} else pline("A voice speaks to you out of the Earth:");
 				pline("\"There was, in times of old, when Ymir lived,\"");
 				pline("neither sea nor sand nor waves,");
 				pline("no earth, nor heaven above,");
@@ -2859,6 +2925,7 @@ int tx,ty;
 					pline("to throw down the false gods,");
 					pline("that ordered my demise.\"");
 					bindspirit(ep->ward_id);
+					u.ymir = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					pline("\"I was Ymir, god of poison,");
@@ -2873,8 +2940,12 @@ int tx,ty;
 						u.spiritTineB = SEAL_YMIR;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
+					u.ymir = moves + bindingPeriod;
+				} else {
+					if(!Blind) pline("The eye closes.");
+					else pline("But nothing else occurs.");
+					u.ymir = moves + bindingPeriod/10;
 				}
-				u.ymir = moves + bindingPeriod;
 			}  else{
 				pline("Rot calls rot, and poison calls poison.");
 				u.ymir = moves + bindingPeriod/10;
@@ -2888,6 +2959,7 @@ int tx,ty;
 				pline("The bloody, tooth-torn corpse of Dahlver-Nar hanges over the seal.");
 				pline("He moans and reaches out to you.");
 				bindspirit(ep->ward_id);
+				u.dahlver_nar = moves + bindingPeriod/10;
 			}
 		} else pline("You hear distant moaning.");
 	}break;
@@ -2900,6 +2972,7 @@ int tx,ty;
 				pline("\"Now I am trapped outside of time,");
 				pline("beyond life, motion, and thought.\"");
 				bindspirit(ep->ward_id);
+				u.acererak = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
