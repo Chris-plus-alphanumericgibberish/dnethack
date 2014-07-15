@@ -268,12 +268,14 @@ chat_with_leader()
 	    exercise(A_WIS, TRUE);
 	    Qstat(got_quest) = TRUE;
 		if(Role_if(PM_EXILE)){
-			u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
-			u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
-			set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
-			u.spiritT[QUEST_SPIRIT] = moves + 5000;
+			bindspirit(DAHLVER_NAR);
 			u.dahlver_nar = moves + 5000;
-			u.wisSpirits++;
+			// u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
+			// u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
+			// set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
+			// u.spiritT[QUEST_SPIRIT] = moves + 5000;
+			// u.dahlver_nar = moves + 5000;
+			// u.wisSpirits++;
 		}
 	  }
 	}
