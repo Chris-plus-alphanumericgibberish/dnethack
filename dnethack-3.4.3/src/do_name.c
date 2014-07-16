@@ -1147,9 +1147,18 @@ long hnum;
 			return "House Thaeyalla";
 		case X_LARRAZ_ET_SOJ:
 			return "House X'larraz'et'soj";
+		/*towers*/
+		case SORCERE:
+			return "Tower Sorcere";
+		case MAGTHERE:
+			return "Tower Magthere";
+		case XAXOX:
+			return "Tower Xaxox";
 		/*holy symbols*/
 		case LOLTH_SYMBOL:
 			return "silver star bearing";
+		case EILISTRAEE_SYMBOL:
+			return "dancing drow bearing";
 		case EDDER_SYMBOL:
 			return u.uevent.knoweddergud ? "Edderkirke" : "black-webbed";
 	}

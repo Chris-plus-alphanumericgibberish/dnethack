@@ -491,6 +491,9 @@ const char * haluWard[] =  {
 	/* Special behavior, Lolth holy symbol */
 	"a silver spider-like star",
 	
+	/* Special behavior, Eilistraee holy symbol */
+	"a pair of dancing silver drow",
+	
 	/* Eddergud holy symbol */
 	"an obsidian spiderweb",
 	
