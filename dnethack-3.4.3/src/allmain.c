@@ -73,8 +73,19 @@ moveloop()
 	didmove = flags.move;
 	if(didmove) {
 	    /* actual time passed */
-	    youmonst.movement -= NORMAL_SPEED;
-
+		if(flags.run != 0){
+			if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				youmonst.movement -= 1;
+			} else if(uwep && uwep->oartifact == ART_SODE_NO_SHIRAYUKI){
+				youmonst.movement -= 3;
+			} else if(uwep && uwep->oartifact == ART_TOBIUME){
+				youmonst.movement -= 4;
+			} else {
+				youmonst.movement -= NORMAL_SPEED;
+			}
+		} else {
+	 	   youmonst.movement -= NORMAL_SPEED;
+		}
 	    do { /* hero can't move this turn loop */
 		wtcap = encumber_msg();
 
