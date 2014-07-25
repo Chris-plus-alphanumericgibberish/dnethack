@@ -2333,7 +2333,6 @@ set_trap()
 
 	if (--trapinfo.time_needed > 0) return 1;	/* still busy */
 
-
 	ttyp = (otmp->otyp == LAND_MINE) ? LANDMINE : BEAR_TRAP;
 	ttmp = maketrap(u.ux, u.uy, ttyp);
 	if (ttmp) {
