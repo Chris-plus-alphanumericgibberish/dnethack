@@ -1399,7 +1399,7 @@ static const char * const bogusmons[] = {
 
 	/* soundex and typos of monsters */
 	"gloating eye",
-	"flush golem"
+	"flush golem",
 	"martyr orc",
 	"mortar orc",
 	"acute blob",
