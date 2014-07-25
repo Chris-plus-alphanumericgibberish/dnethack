@@ -637,8 +637,14 @@ A("The Necronomicon", SPE_SECRETS, /*from the works of HP Lovecraft*/
 	NECRONOMICON,	A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
+A("The Hand-Mirror of Cthylla", MIRROR, /*from the works of HP Lovecraft*/
+	(SPFX_NOGEN|SPFX_RESTR), (SPFX_SEARCH|SPFX_TCTRL),0,
+	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
+	CREATE_PORTAL,	A_NONE, NON_PM, NON_PM, 5000L, 
+	0,0,0),  /*polymorph control*/
+
 A("The Silver Key", UNIVERSAL_KEY, /*from the works of HP Lovecraft*/
-	(SPFX_NOGEN|SPFX_RESTR), (SPFX_EREGEN|SPFX_SEARCH|SPFX_TCTRL),0,
+	(SPFX_NOGEN|SPFX_RESTR), (SPFX_EREGEN|SPFX_TCTRL),0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	CREATE_PORTAL,	A_NEUTRAL, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_PCTRL,0),  /*polymorph control*/
