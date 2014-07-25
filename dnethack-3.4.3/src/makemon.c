@@ -159,7 +159,7 @@ register int x, y, n;
 	 }
 	}
 	else{
-	 while(cnt--) {
+	 while(cnt-- > 0) {
 		 	/* if caller wants random locations, do one here */
 		if(x == 0 && y == 0) {
 			int tryct = 0;	/* careful with bigrooms */
