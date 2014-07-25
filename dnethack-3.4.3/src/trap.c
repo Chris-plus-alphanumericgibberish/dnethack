@@ -2674,9 +2674,6 @@ xchar x, y;
 	    case LARGE_BOX:
 		chance = 30;
 		break;
-//		case DISTRESSED_PRINCESS:
-//			chance=0;
-		break;
 	    default:
 		chance = 20;
 		break;
