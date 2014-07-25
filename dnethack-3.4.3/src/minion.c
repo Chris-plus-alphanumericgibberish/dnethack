@@ -192,7 +192,8 @@ register struct monst *mtmp;
 	    set_malign(mtmp);
 	    return 0;
 	} else {
-		if(demand < 2000) demand = max(1000+rnd(1000), demand); //demons can't be bribed with chump change.
+		if(mtmp->data == &mons[PM_ASMODEUS] && demand < 9000) demand = 9000 + rn2(1000);
+		else if(demand < 2000) demand = max(1000+rnd(1000), demand); //demons can't be bribed with chump change.
 	    /* make sure that the demand is unmeetable if the monster
 	       has the Amulet, preventing monster from being satisified
 	       and removed from the game (along with said Amulet...) */
