@@ -761,7 +761,7 @@ static const int spiritPOwner[NUMBER_POWERS] = {
 	SEAL_SHIRO,
 	SEAL_ECHIDNA, SEAL_ECHIDNA,
 	SEAL_EDEN, SEAL_EDEN, SEAL_EDEN,
-	SEAL_ENKI,
+	SEAL_ENKI, SEAL_ENKI,
 	SEAL_EURYNOME, SEAL_EURYNOME,
 	SEAL_EVE, SEAL_EVE,
 	SEAL_FAFNIR, SEAL_FAFNIR,
@@ -796,9 +796,9 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Throw webbing",
 	"Thought Travel", "Dread of Dantalion",
 	"Earth Swallow",
-	"Echidna's Venom", "Suckle Monster",
+	"Echidna's Venom", "Sing Lullaby",
 	"Purifying Blast", "Recall to Eden", "Stargate",
-	"Walk among Thresholds",
+	"Walk among Thresholds", "Geyser",
 	"Vengeance", "Shape the Wind",
 	"Thorns and Stones", "Barage",
 	"Breath Poison", "Ruinous Strike",
@@ -1696,8 +1696,7 @@ spiriteffects(power, atme)
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
-				You("try to suckle a monster on your blood!");
-				losehp((int)(mon->m_lev)+1, "suckling a monster on your blood", KILLED_BY);
+				You("croon the sibilant lullaby of Echidna.");
 				if(rn2(u.ulevel) > mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
 					if (mon->isshk) make_happy_shk(mon, FALSE);
 					else (void) tamedog(mon, (struct obj *) 0);
@@ -1943,12 +1942,13 @@ spiriteffects(power, atme)
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
+				dmg = d(rnd(5),dsize);
 				if(haseyes(mon->data) && mon->mcansee){
 					You("claw at %s's eyes.", mon_nam(mon));
-					if(mon->mcansee) dmg = d(5,dsize);
+					if(mon->mcansee) dmg += d(5,dsize); //Bonus damage, since this renders wards inefective and is single target.
 				mon->mcansee = 0;
 				mon->mblinded = 0;
-				} else dmg = d(rnd(5),dsize);
+				}
 				mon->mhp -= dmg;
 				if (mon->mhp <= 0){
 					mon->mhp = 0;
@@ -2356,7 +2356,7 @@ spiriteffects(power, atme)
 				if (mon->mpeaceful) continue;
 				if (mindless(mon->data)) continue;
 				if (telepathic(mon->data) || !rn2(5)){
-					mon->mhp -= d(5,10);
+					mon->mhp -= d(5,15);
 					if (mon->mhp <= 0) xkilled(mon, 1);
 					else mon->msleeping = 1;
 				}
