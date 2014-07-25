@@ -1343,7 +1343,6 @@ not_special:
 	if((likegold || likegems || likeobjs || likemagic || likerock || conceals)
 	      && (!*in_rooms(omx, omy, SHOPBASE) || (!rn2(25) && !mtmp->isshk))) {
 	look_for_obj:
-		
 	    oomx = min(COLNO-1, omx+minr);
 	    oomy = min(ROWNO-1, omy+minr);
 	    lmx = max(1, omx-minr);
@@ -1383,7 +1382,6 @@ not_special:
 			!(otmp->otyp == CORPSE &&
 			  touch_petrifies(&mons[otmp->corpsenm])))
 		      ) && touch_artifact(otmp,mtmp)) {
-				
 				if(can_carry(mtmp,otmp) &&
 				 (throws_rocks(ptr) ||
 				  !boulder_at(xx,yy)) &&
