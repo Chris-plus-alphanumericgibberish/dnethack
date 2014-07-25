@@ -33,6 +33,7 @@
 #define AT_ILUR		23	/* Two stage swallow attack, currently belongs to Illurien only */
 #define AT_HITS		24	/* Automatic hit, no contact */
 #define AT_WISP		25	/* Attack with wisps of mist, no contact */
+#define AT_TNKR		26	/* Uses tinker attacks */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */
@@ -105,6 +106,7 @@
 #define AD_MALK		63	/* tries immobalizes you and destroys wands and rings */
 #define AD_UVUU		64	/* Uvuudaum head spike attack */
 #define AD_ABDC		65	/* Abduction attack, teleports you regardless of monster cancellation */
+
 #define AD_KAOS		96  /* Spawn Chaos */
 #define AD_LSEX		97	/* DEPRICATED? Lilith's seduction (extended) */
 #define AD_HLBD		99  /* Asmodeus's blood */
@@ -138,6 +140,7 @@
 #define AD_VAMP		136	/* Vampire's blood drain attack */
 #define AD_WEBS		137	/* Vampire's blood drain attack */
 #define AD_ILUR		138 /* memory draining engulf attack belonging to Illurien */
+#define AD_TNKR		139	/* Uses tinker attacks */
 
 
 //#define AD_AHAZU	150 /*  */

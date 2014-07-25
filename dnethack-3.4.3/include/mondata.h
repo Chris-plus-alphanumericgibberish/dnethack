@@ -306,6 +306,7 @@
 				  (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				  (ptr) == &mons[PM_SHOCKING_SPHERE] || \
 				  (ptr) == &mons[PM_FALLEN_ANGEL] || \
+				  (ptr) == &mons[PM_HOOLOOVOO] || \
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL]) ? 2 : \
 				 ((ptr) == &mons[PM_SOLAR]|| \
@@ -316,6 +317,7 @@
 #define pm_invisible(ptr) ((ptr) == &mons[PM_STALKER] || \
 			   (ptr) == &mons[PM_BLACK_LIGHT] ||\
 			   (ptr) == &mons[PM_PHANTOM_FUNGUS] ||\
+			   (ptr) == &mons[PM_HOOLOOVOO] ||\
 			   (ptr) == &mons[PM_CENTER_OF_ALL] ||\
 			   (ptr) == &mons[PM_DARKNESS_GIVEN_HUNGER] ||\
 			   (ptr) == &mons[PM_ANCIENT_OF_DEATH]\
