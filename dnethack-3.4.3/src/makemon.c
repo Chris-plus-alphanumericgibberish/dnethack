@@ -382,12 +382,10 @@ register struct monst *mtmp;
 		    if (w2) (void)mongets(mtmp, w2);
 		} else if(is_drow(ptr)){
 			if(mm != PM_DROW_MATRON){
-				if (rn2(2)){
-					otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
-					otmp->ohaluengr = TRUE;
-					otmp->ovar1 = curhouse;
-					(void) mpickobj(mtmp, otmp);
-				}
+				otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
+				otmp->ohaluengr = TRUE;
+				otmp->ovar1 = curhouse;
+				(void) mpickobj(mtmp, otmp);
 				(void) mongets(mtmp, DROVEN_CLOAK);
 				if (rn2(2)) (void)mongets(mtmp, HELMET);
 				else if (!rn2(4)) (void)mongets(mtmp, HIGH_BOOTS);
