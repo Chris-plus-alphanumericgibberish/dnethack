@@ -508,11 +508,23 @@ struct you {
 #define SEAL_SPECIAL				0x80000000L
 
 //The remaining seals (Dahlver-Nar, Acererak, and the Numina) can't be learned in any way other than binder class features
-#define SEAL_DAHLVER_NAR			0x0000001L
+#define SEAL_DAHLVER_NAR			0x00000001L
 	long	dahlver_nar;
-#define SEAL_ACERERAK				0x0000002L
+#define SEAL_ACERERAK				0x00000002L
 	long	acererak;
-#define SEAL_NUMINA					0x0000004L
+#define SEAL_COUNCIL				0x00000004L
+//	long	council; Crowning does not expire
+#define SEAL_COSMOS					0x00000010L
+	long	cosmos;
+#define SEAL_MISKA					0x00000020L
+	long	miska;
+#define SEAL_NUDZIARTH				0x00000040L
+	long	nudziarth;
+#define SEAL_ALIGNMENT_THING		0x00000080L
+	long	alignment_thing;
+#define SEAL_UNKNOWN_GOD			0x00000100L
+	long	unknown_god;
+#define SEAL_NUMINA					0x40000000L
 //	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
 	
 	int sealCounts;
@@ -521,15 +533,17 @@ struct you {
 	
 	int wisSpirits, intSpirits;
 	
-	//Spirits in order bound:
-	long spirit[7];
 #define	GATE_SPIRITS	5
 #define	QUEST_SPIRIT	5
-#define	OUTER_SPIRIT	6
-#define	NUM_BIND_SPRITS	7
+#define	ALIGN_SPIRIT	6
+#define	CROWN_SPIRIT	7
+#define	OUTER_SPIRIT	8
+#define	NUM_BIND_SPRITS	9
+	//Spirits in order bound:
+	long spirit[NUM_BIND_SPRITS];
 	long spiritTineA,spiritTineB;
 	//Corresponding timeouts (turn on which binding expires):
-	long spiritT[7];
+	long spiritT[NUM_BIND_SPRITS];
 	long spiritTineTA,spiritTineTB;
 	
 	int spiritAC;
@@ -559,43 +573,44 @@ struct you {
 #define	PWR_RECALL_TO_EDEN			21
 #define	PWR_STARGATE				22
 #define	PWR_WALKER_OF_THRESHOLDS	23
-#define	PWR_VENGANCE				24
-#define	PWR_SHAPE_THE_WIND			25
-#define	PWR_THORNS_AND_STONES		26
-#define	PWR_BARAGE					27
-#define	PWR_BREATH_POISON			28
-#define	PWR_RUINOUS_STRIKE			29
-#define	PWR_RAVEN_S_TALONS			30
-#define	PWR_HORRID_WILTING			31
-#define	PWR_TURN_ANIMALS_AND_HUMANOIDS	32
-#define	PWR_REFILL_LANTERN			33
-#define	PWR_HELLFIRE				34
-#define	PWR_CALL_MURDER				35
-#define	PWR_ROOT_SHOUT				36
-#define	PWR_PULL_WIRES				37
-#define	PWR_DISGUSTED_GAZE			38
-#define	PWR_BLOODY_TOUNGE			39
-#define	PWR_SILVER_TOUNGE			40
-#define	PWR_EXHALATION_OF_THE_RIFT	41
-#define	PWR_QUERIENT_THOUGHTS		42
-#define	PWR_GREAT_LEAP				43
-#define	PWR_MASTER_OF_DOORWAYS		44
-#define	PWR_READ_SPELL				45
-#define	PWR_BOOK_TELEPATHY			46
-#define	PWR_UNITE_THE_EARTH_AND_SKY	47
-#define	PWR_HOOK_IN_THE_SKY			48
-#define	PWR_ENLIGHTENMENT			49
-#define	PWR_DAMNING_DARKNESS		50
-#define	PWR_TOUCH_OF_THE_VOID		51
-#define	PWR_ECHOS_OF_THE_LAST_WORD	52
-#define	PWR_POISON_GAZE				53
-#define	PWR_GAP_STEP				54
-#define	PWR_MOAN					55
-#define	PWR_SWALLOW_SOUL			56
-#define	PWR_IDENTIFY_INVENTORY		57
-#define	PWR_CLAIRVOYANCE			58
-#define	PWR_FIND_PATH				59
-#define	NUMBER_POWERS				60
+#define	PWR_GEYSER					24
+#define	PWR_VENGANCE				25
+#define	PWR_SHAPE_THE_WIND			26
+#define	PWR_THORNS_AND_STONES		27
+#define	PWR_BARAGE					28
+#define	PWR_BREATH_POISON			29
+#define	PWR_RUINOUS_STRIKE			30
+#define	PWR_RAVEN_S_TALONS			31
+#define	PWR_HORRID_WILTING			32
+#define	PWR_TURN_ANIMALS_AND_HUMANOIDS	33
+#define	PWR_REFILL_LANTERN			34
+#define	PWR_HELLFIRE				35
+#define	PWR_CALL_MURDER				36
+#define	PWR_ROOT_SHOUT				37
+#define	PWR_PULL_WIRES				38
+#define	PWR_DISGUSTED_GAZE			39
+#define	PWR_BLOODY_TOUNGE			40
+#define	PWR_SILVER_TOUNGE			41
+#define	PWR_EXHALATION_OF_THE_RIFT	42
+#define	PWR_QUERIENT_THOUGHTS		43
+#define	PWR_GREAT_LEAP				44
+#define	PWR_MASTER_OF_DOORWAYS		45
+#define	PWR_READ_SPELL				46
+#define	PWR_BOOK_TELEPATHY			47
+#define	PWR_UNITE_THE_EARTH_AND_SKY	48
+#define	PWR_HOOK_IN_THE_SKY			49
+#define	PWR_ENLIGHTENMENT			50
+#define	PWR_DAMNING_DARKNESS		51
+#define	PWR_TOUCH_OF_THE_VOID		52
+#define	PWR_ECHOS_OF_THE_LAST_WORD	53
+#define	PWR_POISON_GAZE				54
+#define	PWR_GAP_STEP				55
+#define	PWR_MOAN					56
+#define	PWR_SWALLOW_SOUL			57
+#define	PWR_IDENTIFY_INVENTORY		58
+#define	PWR_CLAIRVOYANCE			59
+#define	PWR_FIND_PATH				60
+#define	NUMBER_POWERS				61
 
 	int spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
 //	char spiritPLetters[NUMBER_POWERS];
