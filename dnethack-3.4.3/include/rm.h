@@ -472,6 +472,8 @@ struct levelflags {
 	Bitfield(has_temple, 1);
 
 	Bitfield(has_swamp, 1);
+	Bitfield(has_island, 1);
+	Bitfield(has_river, 1);
 	Bitfield(noteleport,1);
 	Bitfield(hardfloor,1);
 	Bitfield(nommap,1);

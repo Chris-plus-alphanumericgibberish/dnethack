@@ -66,19 +66,21 @@ extern NEARDATA struct door doors[DOORMAX];
 #define LEPREHALL	11	/* leprechaun hall (Tom Proudfoot) */
 #define COCKNEST	12	/* cockatrice nest (Tom Proudfoot) */
 #define ANTHOLE		13	/* ants (Tom Proudfoot) */
-#define SHOPBASE	14	/* everything above this is a shop */
-#define ARMORSHOP	15	/* specific shop defines for level compiler */
-#define SCROLLSHOP	16
-#define POTIONSHOP	17
-#define WEAPONSHOP	18
-#define FOODSHOP	19
-#define RINGSHOP	20
-#define WANDSHOP	21
-#define TOOLSHOP	22
-#define BOOKSHOP	23
-#define UNIQUESHOP	24	/* shops here & above not randomly gen'd. */
-#define CANDLESHOP	24
-#define MAXRTYPE	24	/* maximum valid room type */
+#define ISLAND 14 /* ringed by water, contains items */
+#define RIVER 15 /* "room" is really a river running through the level*/
+#define SHOPBASE	16	/* everything above this is a shop */
+#define ARMORSHOP	17	/* specific shop defines for level compiler */
+#define SCROLLSHOP	18
+#define POTIONSHOP	19
+#define WEAPONSHOP 20
+#define FOODSHOP  21
+#define RINGSHOP	22
+#define WANDSHOP	23
+#define TOOLSHOP	24
+#define BOOKSHOP	25
+#define UNIQUESHOP	26	/* shops here & above not randomly gen'd. */
+#define CANDLESHOP	26
+#define MAXRTYPE	26	/* maximum valid room type */
 
 /* Special type for search_special() */
 #define ANY_TYPE	(-1)
