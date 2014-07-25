@@ -140,7 +140,7 @@ extern uchar monsyms[MAXMCLASSES];		/* current class symbols */
 #define DEF_DEMON	'&'
 #define DEF_EEL		';'
 #define DEF_LIZARD	':'
-#define DEF_PLANT	'#'
+#define DEF_PLANT	'{'
 
 #define DEF_INVISIBLE	'I'
 #define DEF_WORM_TAIL	'~'
