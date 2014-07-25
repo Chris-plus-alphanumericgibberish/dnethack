@@ -291,7 +291,7 @@ wormhitu(worm)
     register int wnum = worm->wormno;
     register struct wseg *seg;
 
-/*  if (!wnum) return;  bullet proofing */
+    if (!wnum) return; /* bullet proofing */
 
 /*  This does not work right now because mattacku() thinks that the head is
  *  out of range of the player.  We might try to kludge, and bring the head
