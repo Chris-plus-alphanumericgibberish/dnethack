@@ -1888,6 +1888,9 @@ register struct trobj *trop;
 			if(Role_if(PM_EXILE)){
 				obj->dknown = obj->rknown = obj->sknown = 1;
 				if(obj->oclass == WEAPON_CLASS) obj->oeroded = 1;
+				else if(obj->oclass == FOOD_CLASS){
+					obj->ostolen = TRUE;
+				}
 			}else{
 				obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
 			if (objects[otyp].oc_uses_known) obj->known = 1;
