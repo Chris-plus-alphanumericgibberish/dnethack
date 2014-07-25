@@ -2447,6 +2447,8 @@ int gaze_cancel;
 		else
 		    rehumanize();
 	    }
+		u.uen -= d(10,10);
+		if(u.uen<0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 	} else {
 	    mdef->mcan = TRUE;
 
