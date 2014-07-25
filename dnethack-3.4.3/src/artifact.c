@@ -2422,6 +2422,10 @@ arti_invoke(obj)
 			You_hear("the sounds of hurried preparation.");
 			return 1;
 		}
+		if(oart->inv_prop == VOID_CHIME) {
+	    pline("%s makes no sound.", The(xname(obj)));
+			return 1;
+		}
 	    You_feel("that %s %s ignoring you.",
 		     the(xname(obj)), otense(obj, "are"));
 	    /* and just got more so; patience is essential... */
