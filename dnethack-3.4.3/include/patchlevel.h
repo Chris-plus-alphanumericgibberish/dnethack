@@ -13,8 +13,12 @@
 #define VERSION_MINOR	7
 /*
  * PATCHLEVEL is updated for each release.
+ *
+ * dNethack started at .0
+ *
+ * 3.7.0 -> 3.7.1 indicates the advent of the true Binder quest goal level and Alignment spirits, as well as myriad bugfixes fixes
  */
-#define PATCHLEVEL	0
+#define PATCHLEVEL	1
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
