@@ -1158,9 +1158,18 @@ long hnum;
 			return "House Thaeyalla";
 		case X_LARRAZ_ET_SOJ:
 			return "House X'larraz'et'soj";
+		/*towers*/
+		case SORCERE:
+			return "Tower Sorcere";
+		case MAGTHERE:
+			return "Tower Magthere";
+		case XAXOX:
+			return "Tower Xaxox";
 		/*holy symbols*/
 		case LOLTH_SYMBOL:
 			return "silver star bearing";
+		case EILISTRAEE_SYMBOL:
+			return "dancing drow bearing";
 		case EDDER_SYMBOL:
 			return u.uevent.knoweddergud ? "Edderkirke" : "black-webbed";
 	}
@@ -1209,6 +1218,7 @@ static const char * const bogusmons[] = {
 	"hydra", "siren",			/* Greek legend */
 	"jotun",					/* Norse legend */
 	"killer bunny",				/* Monty Python */
+	"P. o. t. U. S.",		/* President of the United States */
 	"R. o. U. S.",		/* The Princess Bride */
 	"bear named Smokey",	/* "Only you can prevent forest fires!" */
 	"5.9176 pentranomeker worm", /* The Mimir, contributed by Joshua Jarvis */
@@ -1354,7 +1364,7 @@ static const char * const bogusmons[] = {
         "Qwerty Uiop", "troglotroll",           /* Zamonien */
         "wolpertinger", "elwedritsche", "skvader",
         "Nessie", "tatzelwurm", "dahu",         /* european cryptids */
-			"bigfoot", "tree octopus",
+			"bigfoot", "tree octopus", "mothman",
         "three-headed monkey",                  /* Monkey Island */
         "little green man",                     /* modern folklore */
         "weighted Companion Cube",              /* Portal */
@@ -1363,7 +1373,7 @@ static const char * const bogusmons[] = {
         "manbearpig",                           /* South Park */
         "ceiling cat", "basement cat",
         "monorail cat",                         /* the Internet is made for cat pix */
-        "rape golem",                           /* schnippi */
+        /*"rape golem",*/                           /* schnippi */
         "tridude",                              /* POWDER */
         "orcus cosmicus",                       /* Radomir Dopieralski */
         "yeek", "quylthulg",
@@ -1401,7 +1411,7 @@ static const char * const bogusmons[] = {
 
 	/* soundex and typos of monsters */
 	"gloating eye",
-	"flush golem"
+	"flush golem",
 	"martyr orc",
 	"mortar orc",
 	"acute blob",

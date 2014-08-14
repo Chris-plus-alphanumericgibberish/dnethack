@@ -57,6 +57,8 @@ static const char *random_mesg[] = {
 	"Beware of the weeping angels", /* Doctor Who */
 	"Duck, Sally Sparrow", /* Doctor Who */
 	
+	"4 8 15 16 23 42", /* Lost */
+	
 	"stth was here", /* First ascension */
 	
 	/* contributed by members of NetHackWiki */
@@ -187,6 +189,11 @@ static const char *haluMesg[] = {
 	"You can be me when I'm gone.", /*Sandman*/
 	"He who is valiant and pure of spirit may find the holy grail in the Castle of Aaaaarrrrrrggghhh...", /*Monty Python*/
 	"If someone is reading this...I must have failed.", /*The Guardian Legend*/
+	"The psychic efficacy of evil magic swords is vastly overrated.", /* The Water Phoenix King*/
+		"It is dangerous to be right when the gods are wrong.",
+		"Here are blind idiot children playing with a magic that hates them.",
+		"The walled-up abomination seems friendly enough.",
+		"Kill you... Take your face...",
 	"You are lost. You can never go home.", /* Gollum's Song */
 	"Bad Wolf", /* Dr. Who */
 	"It's only the end if you want it to be.", /*Batgirl*/
@@ -200,6 +207,7 @@ static const char *haluMesg[] = {
 	"Even false things are true", "FIVE TONS OF FLAX!", "Fnord", /*Discordianism*/
 	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
 		"This thing all things devours.",
+		"Not all those who wander are lost.",
 	"No Fate", /*Terminator*/
 	"This world can have but one Emperor.", /*FF II*/
 	"We shall devour your light, and use it to return this world to the Void!", /*FFIII*/
@@ -490,6 +498,9 @@ const char * haluWard[] =  {
 	
 	/* Special behavior, Lolth holy symbol */
 	"a silver spider-like star",
+	
+	/* Special behavior, Eilistraee holy symbol */
+	"a pair of dancing silver drow",
 	
 	/* Eddergud holy symbol */
 	"an obsidian spiderweb",

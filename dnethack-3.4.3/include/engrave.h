@@ -146,7 +146,8 @@ struct engr {
 #define LAST_TOWER			XAXOX
 
 #define LOLTH_SYMBOL		34
-#define EDDER_SYMBOL		35
+#define EILISTRAEE_SYMBOL	35
+#define EDDER_SYMBOL		36
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 
