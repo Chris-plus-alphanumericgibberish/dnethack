@@ -111,7 +111,7 @@ struct skills {
 #define P_ADVANCE(type)		(u.weapon_skills[type].advance)
 #define OLD_P_RESTRICTED(type)	(u.weapon_skills[type].skill == P_ISRESTRICTED)
 
-#define P_SKILL_LIMIT 60	/* Max number of skill advancements */
+#define P_SKILL_LIMIT 90	/* Max number of skill advancements (added +30 for human bonus, even though shouldnt need that many) */
 
 /* Initial skill matrix structure; used in u_init.c and weapon.c */
 struct def_skill {
