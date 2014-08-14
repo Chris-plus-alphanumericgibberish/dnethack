@@ -3467,14 +3467,16 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_BLNK:
-		if (!mtmp->mcan && canseemon(mtmp) &&
+		if (!mtmp->mcan && !u.wimage && canseemon(mtmp) &&
 			couldsee(mtmp->mx, mtmp->my) &&
-			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
+			mtmp->mcansee && !mtmp->mspec_used && rn2(5)
+		) {
 		    int dmg = d(1,4);
 		    if (!Reflecting) {
 			pline("%s reflection in your mind weakens you.", s_suffix(Monnam(mtmp)));
 			stop_occupation();
 	    		exercise(A_INT, TRUE);
+	    		exercise(A_WIS, FALSE);
 		    } else {
 			if (flags.verbose)
 			    /* Since this message means the player is unaffected, limit
@@ -3484,7 +3486,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    }
 		    if (dmg){
 				int temparise = u.ugrave_arise;
-				u.ugrave_arise = monsndx(mtmp->data);
+				u.wimage = TRUE;
+				u.ugrave_arise = PM_WEEPING_ANGEL;
 				mdamageu(mtmp, dmg);
 				/*If the player surived the gaze attack, restore the value of arise*/
 				u.ugrave_arise = temparise;
