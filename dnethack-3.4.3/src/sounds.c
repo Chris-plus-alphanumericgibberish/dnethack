@@ -3042,20 +3042,53 @@ int tx,ty;
 		} else pline("You can't feel the spirit.");
 	}break;
 	case COSMOS:{
+		struct obj *otmp;
 		if(u.sealTimeout[COSMOS-FIRST_SEAL] < moves){
 			if(Role_if(PM_EXILE)){
-				pline("You bind with Cosmos.");
+				for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere) {
+					if(otmp->otyp == CRYSTAL_BALL){
+						break; // break out of loop
+					}
+				}
+				if(otmp){
+					if(!Blind){
+						pline("In the heart of the crystal is a tiny, shining light.");
+						pline("The light expands, taking the shape of a golden-haired woman.");
+					}
+					pline("\"I am Cosmos, goddess of memory.\"");
+					pline("\"What once was, shall ever be remembered,\"");
+					pline("\"preserved in imperishable crystal.\"");
 				bindspirit(ep->ward_id);
 				u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod;
+				} else {
+					You("think of shining crystal.");
+					u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod/10;
+				}
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
 	case MISKA:{
 		if(u.sealTimeout[MISKA-FIRST_SEAL] < moves){
 			if(Role_if(PM_EXILE)){
-				pline("You bind with Miska.");
+				if(isok(tx+(tx-u.ux), ty+(ty-u.uy)) && 
+					is_lava(tx+(tx-u.ux), ty+(ty-u.uy))
+				){
+					if(!Blind){
+						pline("A plume of white smoke rises from the lava.");
+						pline("In the shadow of the white plume you see an ancient battlefield.");
+						pline("Members of every race and species you have ever seen fight in the battle,");
+						pline("some on one side, some on the other, along with many more races and species you have never seen.");
+						pline("In the heart of the conflict, a onyx skinned man drives a silver spear into the heart of a demon of wolves and spiders.");
+						pline("There is a flash, and the plume of white smoke is blown appart.");
+					} else {
+						pline("There is a percussion and a gust of wind.");
+					}
 				bindspirit(ep->ward_id);
 				u.sealTimeout[MISKA-FIRST_SEAL] = moves + bindingPeriod;
+				} else {
+					You("think of burning lava.");
+					u.sealTimeout[MISKA-FIRST_SEAL] = moves + bindingPeriod/10;
+				}
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -3071,6 +3104,20 @@ int tx,ty;
 					}
 				}
 				if(otmp){
+					if(!Blind){
+					pline("The mirror in the center of the seal blows apart into a cloud of silver fragments.");
+					pline("Reflected in them you see images of long ago.");
+					pline("You see a spire of stone; Axis Mundi, that links the boundless sky to the fathomless earth,");
+					pline("and a people living at the base of the spire, desiring only solitude and self-contemplation.");
+					pline("You see one of their number, different from the rest, build a great library of mirrors,");
+					pline("in which all the knowledge of the outside world is reflected.");
+					pline("You see her library abandoned, un-entered.");
+					pline("You see her library abandoned, un-entered.");
+					pline("But the mirrored library points the way. The people retreat into the realm that lies behind reflections,");
+					pline("and there build a mirrored champion,");
+					pline("the reflection of a god found sleeping in solitude within a closed-off dimension.");
+					pline("And you see shattered dreams.");
+					} else pline("You hear a mirror shatter.");
 					bindspirit(ep->ward_id);
 					u.sealTimeout[NUDZIARTH-FIRST_SEAL] = moves + bindingPeriod;
 					useupf(otmp, 1L);
