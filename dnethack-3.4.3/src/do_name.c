@@ -544,6 +544,17 @@ const char *name;
 			name = "The Mantle of Heaven";
 		}
 	}
+	else if(!strcmp((&artilist[ART_SILVER_KEY])->name,name) &&
+	   obj && obj->otyp == UNIVERSAL_KEY && Role_if(PM_EXILE)){
+		obj = poly_obj(obj,MIRROR);
+		name = "The Hand-Mirror of Cthylla";
+		lth = *name ? (int)(strlen(name) + 1) : 0;
+		if (lth > PL_PSIZ) {
+			lth = PL_PSIZ;
+			name = strncpy(buf, name, PL_PSIZ - 1);
+			buf[PL_PSIZ - 1] = '\0';
+		}
+	}
 	
 	if (lth == obj->onamelth) {
 		/* no need to replace entire object */

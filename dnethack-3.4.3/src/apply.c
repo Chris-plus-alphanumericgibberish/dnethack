@@ -768,7 +768,11 @@ struct obj *obj;
 		return 1;
 	}
 	if(!u.dx && !u.dy && !u.dz) {
-		if(!Blind && !Invisible) {
+		if(obj->oartifact == ART_HAND_MIRROR_OF_CTHYLLA && obj->age < moves && !Blind){
+			pline("An incomprehensible sight meets your eyes!");
+			losehp(d(15,15), "looking into Cthylla's hand-mirror", KILLED_BY);
+			obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
+		} else if(!Blind && !Invisible) {
 		    if (u.umonnum == PM_FLOATING_EYE && ward_at(u.ux, u.uy) != HAMSA) {
 				if (!Free_action) {
 					pline("%s", Hallucination ?
@@ -841,6 +845,18 @@ struct obj *obj;
 	} else if (mlet == S_VAMPIRE || mlet == S_GHOST) {
 	    if (vis)
 		pline ("%s doesn't have a reflection.", Monnam(mtmp));
+	} else if(obj->oartifact == ART_HAND_MIRROR_OF_CTHYLLA && obj->age < moves &&
+				(!mtmp->minvis || perceives(mtmp->data))
+	){
+		obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
+		if (vis)
+		    pline("%s is blasted by its reflection.", Monnam(mtmp));
+		monflee(mtmp, d(2,4), FALSE, FALSE);
+		mtmp->mhp -= d(15,15);
+		if (mtmp->mhp <= 0){
+			mtmp->mhp = 0;
+			xkilled(mtmp, 1);
+		}
 	} else if(!mtmp->mcan && !mtmp->minvis &&
 					mtmp->data == &mons[PM_MEDUSA]  && 
 					ward_at(mtmp->mx,mtmp->my) != HAMSA) {

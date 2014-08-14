@@ -245,19 +245,6 @@ struct artifact {
 #define INFINITESPELLS	(LAST_PROP+38)
 #define SPIRITNAMES	(LAST_PROP+39)
 
-#define CountsAgainstGifts(x)	!(artilist[x].cspfx3 & SPFX3_NOCNT)
-							/*(x != ART_WATER_CRYSTAL && \
-								x != ART_FIRE_CRYSTAL && \
-								x != ART_EARTH_CRYSTAL && \
-								x != ART_AIR_CRYSTAL && \
-								x != ART_WEREBUSTER && \
-								!(x >= ART_FIRST_KEY_OF_LAW && x <= ART_THIRD_KEY_OF_NEUTRALITY) && \
-								x != ART_CARESS && \
-								x != ART_ICONOCLAST \
-								) //checks to make sure x isn't the index of an artifact that doesn't count against
-									//the odds of getting a sac gift.  These are the alignment keys and a few
-									//auto-generated artifacts of dubious worth.
-									*/
 #define is_nameable_artifact(a) (\
 			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\
 			|| (a == &artilist[ART_SNICKERSNEE] && Role_if(PM_TOURIST) && (u.ulevel > 18 || u.uevent.qcompleted) )\

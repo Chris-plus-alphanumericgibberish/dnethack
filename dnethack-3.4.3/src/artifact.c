@@ -97,6 +97,25 @@ const int ELEC = 5;  //copied from explode.c
 const int elements[4] = {0, 1, 2, 5};
 const int explType[4] = {0, EXPL_FIERY, EXPL_FROSTY, EXPL_MAGICAL};
 
+boolean
+CountsAgainstGifts(x)
+int x;
+{
+	return (!(artilist[x].cspfx3 & SPFX3_NOCNT));
+							/*(x != ART_WATER_CRYSTAL && \
+								x != ART_FIRE_CRYSTAL && \
+								x != ART_EARTH_CRYSTAL && \
+								x != ART_AIR_CRYSTAL && \
+								x != ART_WEREBUSTER && \
+								!(x >= ART_FIRST_KEY_OF_LAW && x <= ART_THIRD_KEY_OF_NEUTRALITY) && \
+								x != ART_CARESS && \
+								x != ART_ICONOCLAST \
+								) //checks to make sure x isn't the index of an artifact that doesn't count against
+									//the odds of getting a sac gift.  These are the alignment keys and a few
+									//auto-generated artifacts of dubious worth.
+									*/
+}
+
 /* handle some special cases; must be called after u_init() 
 	Uh, it isn't, it's called BEFORE u_init. See allmain */
 STATIC_OVL void
@@ -1115,7 +1134,8 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	}
 	if (pen->ovar1&SEAL_ENKI) {
 	    if (vis){ 
-			and ? Strcat(buf, " and dripping") : Sprintf(buf, "dripping");
+			if(pen->ovar1&SEAL_AMON) and ? Strcat(buf, " and steaming") : Sprintf(buf, "steaming");
+			else and ? Strcat(buf, " and dripping") : Sprintf(buf, "dripping");
 			and = TRUE;
 		}
 		/*water damage?*/

@@ -1462,8 +1462,7 @@ register struct	monst	*mtmp;
 	    case S_LICH:
 		if (ptr == &mons[PM_DEATH_KNIGHT]){
 			(void)mongets(mtmp, RUNESWORD);
-		}
-		if (ptr == &mons[PM_MASTER_LICH] && !rn2(13))
+		} else if (ptr == &mons[PM_MASTER_LICH] && !rn2(13))
 			(void)mongets(mtmp, (rn2(7) ? ATHAME : WAN_NOTHING));
 		else if (ptr == &mons[PM_ARCH_LICH] && !rn2(3)) {
 			otmp = mksobj(rn2(3) ? ATHAME : QUARTERSTAFF,
@@ -1478,6 +1477,13 @@ register struct	monst	*mtmp;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
+		} else if(ptr == &mons[PM_ACERERAK]){
+			struct obj *otmp = mksobj(ATHAME, TRUE, FALSE);
+			otmp = oname(otmp, artiname(ART_PEN_OF_THE_VOID));
+			otmp->blessed = FALSE;
+			otmp->cursed = TRUE;
+			otmp->spe = 5;
+			(void) mpickobj(mtmp,otmp);
 			}
 		break;
 	    case S_MUMMY:
@@ -2070,7 +2076,6 @@ register int	mmflags;
 		} else
 			return((struct monst *)0);
 	}
-
 	/* Does monster already exist at the position? */
 	if(MON_AT(x, y)) {
 		if ((mmflags & MM_ADJACENTOK) != 0) {

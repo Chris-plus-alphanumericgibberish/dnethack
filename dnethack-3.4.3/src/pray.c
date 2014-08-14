@@ -1588,7 +1588,25 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 			      hcolor(
 			      u.ualign.type == A_LAWFUL ? NH_WHITE :
 			      u.ualign.type ? NH_BLACK : (const char *)"gray"));
-
+			if(Role_if(PM_EXILE) && In_quest(&u.uz) && u.uz.dlevel == nemesis_level.dlevel){
+				int door = 0, ix, iy;
+				if(altaralign == A_CHAOTIC) door = 1;
+				else if(altaralign == A_NEUTRAL) door = 2;
+				else if(altaralign == A_LAWFUL) door = 3;
+				else if(!u.uevent.qcompleted && altaralign == A_NONE) makemon(&mons[PM_ACERERAK],u.ux,u.uy,MM_ADJACENTOK);
+				
+				if(door){
+					for(ix = 1; ix < COLNO; ix++){
+						for(iy = 0; iy < ROWNO; iy++){
+							if(IS_DOOR(levl[ix][iy].typ) && artifact_door(ix,iy) == door){
+								You_hear("a door open.");
+								levl[ix][iy].typ = ROOM;
+								unblock_point(ix,iy);
+							}
+						}
+					}
+				}
+			}
 		    if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
 		       rnd(u.ualign.record) > (3*ALIGNLIM)/4)
 			(void) summon_minion(altaralign, TRUE, FALSE);
@@ -2121,6 +2139,7 @@ aligntyp alignment;
      case A_NONE:
 		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
 		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
+		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
 		else if(u.uz.dnum == neutral_dnum){
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
 			else gnam = BlackMother;

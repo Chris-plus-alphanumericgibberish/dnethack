@@ -190,7 +190,7 @@ A("the Pen of the Void",	ATHAME,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK), 0, 0,
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	VOID_CHIME,	A_VOID, PM_EXILE, NON_PM, 2500L, 
-	0,0,0),
+	0,SPFX3_NOCNT,0),
 
 #ifdef CONVICT
 A("Luck Blade",			SHORT_SWORD, //needs quote
@@ -637,9 +637,15 @@ A("The Necronomicon", SPE_SECRETS, /*from the works of HP Lovecraft*/
 	NECRONOMICON,	A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
-A("The Silver Key", UNIVERSAL_KEY, /*from the works of HP Lovecraft*/
-	(SPFX_NOGEN|SPFX_RESTR), (SPFX_EREGEN|SPFX_SEARCH|SPFX_TCTRL),0,
+A("The Hand-Mirror of Cthylla", MIRROR, /*from the works of HP Lovecraft*/
+	(SPFX_NOGEN|SPFX_RESTR), (SPFX_SEARCH|SPFX_TCTRL),0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
+	0,	A_NONE, NON_PM, NON_PM, 5000L, 
+	0,0,0),  /*polymorph control*/
+
+A("The Silver Key", UNIVERSAL_KEY, /*from the works of HP Lovecraft*/
+	(SPFX_NOGEN|SPFX_RESTR), (SPFX_EREGEN|SPFX_TCTRL),0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CREATE_PORTAL,	A_NEUTRAL, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_PCTRL,0),  /*polymorph control*/
 
@@ -682,8 +688,8 @@ A("The Iron Ball of Liberation", HEAVY_IRON_BALL,
 A("Silver Starlight",		RAPIER,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	PHYS(4,4),	NO_DFNS,	NO_CARY,
-	CREATE_AMMO, A_NONE, NON_PM, PM_DROW, 5000L,
-	SPFX2_SILVERED|SPFX2_SHINING,0,0),
+	CREATE_AMMO, A_NONE, NON_PM, PM_DROW, 5000L, /*Creates throwing stars. Makes throwing stars count as silver if wielded */
+	SPFX2_SILVERED|SPFX2_SHINING,0,0),			/*Also can be (a)pplied as a magic flute.*/
 
 A("Wrathful Spider",		DROVEN_CROSSBOW,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,

@@ -200,7 +200,10 @@ boolean sanctum;   /* is it the seat of the high priest? */
 		(void) rloc(m_at(sx+1, sy), FALSE); /* insurance */
 	if(Amask2align(levl[sx][sy].altarmask) == A_NONE && on_level(&sanctum_level, &u.uz)) //make moloch's high priest
 		priest = makemon(&mons[PM_ELDER_PRIEST], sx + 1, sy, NO_MM_FLAGS);
-	else priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
+	else if(Role_if(PM_EXILE)){
+		if(!sanctum) priest = makemon(&mons[PM_ALIGNED_PRIEST], sx + 1, sy, NO_MM_FLAGS);
+		else priest = (struct monst *) 0;
+	} else priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
 			 sx + 1, sy, NO_MM_FLAGS);
 	if (priest) {
 		EPRI(priest)->shroom = (sroom - rooms) + ROOMOFFSET;
@@ -229,6 +232,49 @@ boolean sanctum;   /* is it the seat of the high priest? */
 			uncurse(otmp);
 		    else
 			curse(otmp);
+		}
+	}
+	if(In_quest(&u.uz) && u.uz.dlevel == nemesis_level.dlevel && Role_if(PM_EXILE)){
+		int qpm = NON_PM;
+		if(Amask2align(levl[sx][sy].altarmask) == A_LAWFUL){
+			makemon(&mons[roles[flags.panLgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panLgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panLgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panLgod].guardnum], sx, sy, MM_ADJACENTOK);
+			qpm = (roles[flags.panLgod].femalenum == NON_PM || !rn2(2)) ? 
+				roles[flags.panLgod].malenum : 
+				roles[flags.panLgod].femalenum;
+			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+			qpm = (roles[flags.panLgod].femalenum == NON_PM || !rn2(2)) ? 
+				roles[flags.panLgod].malenum : 
+				roles[flags.panLgod].femalenum;
+			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+		} else if(Amask2align(levl[sx][sy].altarmask) == A_CHAOTIC){
+			makemon(&mons[roles[flags.panCgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panCgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panCgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panCgod].guardnum], sx, sy, MM_ADJACENTOK);
+			qpm = (roles[flags.panCgod].femalenum == NON_PM || !rn2(2)) ? 
+				roles[flags.panCgod].malenum : 
+				roles[flags.panCgod].femalenum;
+			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+			qpm = (roles[flags.panCgod].femalenum == NON_PM || !rn2(2)) ? 
+				roles[flags.panCgod].malenum : 
+				roles[flags.panCgod].femalenum;
+			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+		} else if(Amask2align(levl[sx][sy].altarmask) == A_NEUTRAL){
+			makemon(&mons[roles[flags.panNgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panNgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panNgod].guardnum], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[roles[flags.panNgod].guardnum], sx, sy, MM_ADJACENTOK);
+			qpm = (roles[flags.panNgod].femalenum == NON_PM || !rn2(2)) ? 
+				roles[flags.panNgod].malenum : 
+				roles[flags.panNgod].femalenum;
+			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+			qpm = (roles[flags.panNgod].femalenum == NON_PM || !rn2(2)) ? 
+				roles[flags.panNgod].malenum : 
+				roles[flags.panNgod].femalenum;
+			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
 		}
 	}
 }
@@ -366,6 +412,14 @@ register int roomno;
 		    if(priest->mpeaceful) {
 			msg1 = "Infidel, you have entered Moloch's Sanctum!";
 			msg2 = "Be gone!";
+			priest->mpeaceful = 0;
+			set_malign(priest);
+		    } else
+			msg1 = "You desecrate this place by your presence!";
+		} else if(In_quest(&u.uz) && Role_if(PM_EXILE) && u.uz.dlevel == nemesis_level.dlevel) {
+		    if(priest->mpeaceful) {
+			msg1 = "Your existence is blasphemy!";
+			msg2 = "No more shall you challenge the Most High!";
 			priest->mpeaceful = 0;
 			set_malign(priest);
 		    } else
