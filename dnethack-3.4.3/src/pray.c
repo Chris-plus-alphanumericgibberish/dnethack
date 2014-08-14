@@ -650,14 +650,16 @@ gcrownu()
     int sp_no;
 #define ok_wep(o) ((o) && ((o)->oclass == WEAPON_CLASS || is_weptool(o)))
 
-    HSee_invisible |= FROMOUTSIDE;
-    HFire_resistance |= FROMOUTSIDE;
-    HCold_resistance |= FROMOUTSIDE;
-    HShock_resistance |= FROMOUTSIDE;
-    HSleep_resistance |= FROMOUTSIDE;
-    HPoison_resistance |= FROMOUTSIDE;
-	u.wardsknown |= WARD_HEPTAGRAM;
-    godvoice(u.ualign.type, (char *)0);
+	if(!Role_if(PM_EXILE)){
+	    HSee_invisible |= FROMOUTSIDE;
+	    HFire_resistance |= FROMOUTSIDE;
+	    HCold_resistance |= FROMOUTSIDE;
+	    HShock_resistance |= FROMOUTSIDE;
+	    HSleep_resistance |= FROMOUTSIDE;
+	    HPoison_resistance |= FROMOUTSIDE;
+		u.wardsknown |= WARD_HEPTAGRAM;
+	    godvoice(u.ualign.type, (char *)0);
+	}
 
     obj = ok_wep(uwep) ? uwep : 0;
     already_exists = in_hand = FALSE;	/* lint suppression */
@@ -666,6 +668,14 @@ gcrownu()
 		in_hand = (uwep && uwep->oartifact == ART_REAVER);
 		already_exists = exist_artifact(SCIMITAR, artiname(ART_REAVER));
 		verbalize("Hurrah for our Pirate King!");
+	} else if(Role_if(PM_EXILE)){
+		You("suddenly perceive 15 pairs of star-like eyes, staring at you from within your head.");
+		pline("<<We are the Council of Elements>>");
+		pline("<<Guardians of the Material world>>");
+		pline("<<You who straddle the line between our world and the void beyond,");
+		pline("  you shall be our emissary to that which gave rise to us all>>");
+		bindspirit(COUNCIL);
+		return;
 	} else {
     switch (u.ualign.type) {
     case A_LAWFUL:
@@ -1254,8 +1264,6 @@ register struct obj *otmp;
 	Your("sacrifice disappears!");
     else Your("sacrifice is consumed in a %s!",
 	      u.ualign.type == A_LAWFUL ? "flash of light" : "burst of flame");
-    if (carried(otmp)) useup(otmp);
-    else useupf(otmp, 1L);
 	if(u.sealsActive&SEAL_BALAM){
 		struct permonst *ptr = &mons[otmp->corpsenm];
 		if(!(is_animal(ptr) || nohands(ptr))) unbind(SEAL_BALAM,TRUE);
@@ -1264,6 +1272,8 @@ register struct obj *otmp;
 		struct permonst *ptr = &mons[otmp->corpsenm];
 		if(is_giant(ptr)) unbind(SEAL_YMIR,TRUE);
 	}
+    if (carried(otmp)) useup(otmp);
+    else useupf(otmp, 1L);
     exercise(A_WIS, TRUE);
 }
 

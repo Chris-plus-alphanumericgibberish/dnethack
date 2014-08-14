@@ -358,6 +358,10 @@ register struct monst *mtmp;
 #define ATTK_NABERIUS	3
 #define ATTK_OTIAX		4
 #define ATTK_SIMURGH	5
+#define ATTK_MISKA_ARMS	6
+#define ATTK_MISKA_WOLF	7
+#define SPIRIT_NATTKS	(8+5+1)
+/**/
 static struct attack spiritattack[] = 
 {
 	{AT_BUTT,AD_PHYS,1,8},
@@ -365,8 +369,11 @@ static struct attack spiritattack[] =
 	{AT_TENT,AD_IRIS,1,4},
 	{AT_BITE,AD_NABERIUS,1,6},
 	{AT_WISP,AD_OTIAX,1,5},
-	{AT_CLAW,AD_SIMURGH,1,6}
+	{AT_CLAW,AD_SIMURGH,1,6},
+	{AT_WEAP, AD_PHYS, 2, 8},
+	{AT_BITE, AD_DRST, 2, 4}
 };
+struct attack curspiritattacks[SPIRIT_NATTKS];
 /* try to attack; return FALSE if monster evaded */
 /* u.dx and u.dy must be set */
 boolean
@@ -475,26 +482,47 @@ register struct monst *mtmp;
 	else
 		keepattacking = hitum(mtmp, tmp, youmonst.data->mattk);
 	if((u.sealsActive || u.specialSealsActive) && keepattacking && !DEADMONSTER(mtmp)){
-		if(u.sealsActive&SEAL_AMON) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_AMON],1);
-		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
-		if(u.sealsActive&SEAL_CHUPOCLOPS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_CHUPOCLOPS],1);
-		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
-		if(u.sealsActive&SEAL_IRIS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_IRIS],1);
-		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
-		if(u.sealsActive&SEAL_NABERIUS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_NABERIUS],1);
-		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+		static int nspiritattacks;
+		nspiritattacks = 0;
+		if(u.specialSealsActive&SEAL_MISKA){
+			if(u.ulevel >= 26) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_MISKA_ARMS];
+			if(u.ulevel >= 18) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_MISKA_WOLF];
+			if(u.ulevel >= 10) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_MISKA_WOLF];
+			// keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_MISKA_ARMS],1);
+			// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+			// keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_MISKA_WOLF],1);
+			// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+			// keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_MISKA_WOLF],1);
+			// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+		}
+		if(u.sealsActive&SEAL_AMON) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_AMON];
+		if(u.sealsActive&SEAL_CHUPOCLOPS) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_CHUPOCLOPS];
+		if(u.sealsActive&SEAL_IRIS) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+		if(u.sealsActive&SEAL_NABERIUS) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_NABERIUS];
+		// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+		// if(u.sealsActive&SEAL_AMON) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_AMON],1);
+		// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+		// if(u.sealsActive&SEAL_CHUPOCLOPS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_CHUPOCLOPS],1);
+		// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+		// if(u.sealsActive&SEAL_IRIS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_IRIS],1);
+		// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+		// if(u.sealsActive&SEAL_NABERIUS) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_NABERIUS],1);
+		// if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
 		if(u.sealsActive&SEAL_OTIAX){
 			int tendrils,tmp2;
 			tendrils = rnd(5);
 			tmp2 = spiritDsize();
 			tendrils = min(tendrils,tmp2);
-			while(tendrils && keepattacking && !DEADMONSTER(mtmp)){
-				keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_OTIAX],1);
-				tendrils--;
-			}
+			for(tendrils;tendrils>0;tendrils--) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_OTIAX];
+			// while(tendrils && keepattacking && !DEADMONSTER(mtmp)){
+				// keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_OTIAX],1);
+				// tendrils--;
+			// }
 		}
-		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
-		if(u.sealsActive&SEAL_SIMURGH) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_SIMURGH],1);
+		if(u.sealsActive&SEAL_SIMURGH) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_SIMURGH];
+//		if(u.sealsActive&SEAL_SIMURGH) keepattacking = hmonwith(mtmp,tmp,&spiritattack[ATTK_SIMURGH],1);
+//		if(!keepattacking || DEADMONSTER(mtmp)) goto atk_done;
+		if(nspiritattacks) keepattacking = hmonwith(mtmp,tmp,curspiritattacks,nspiritattacks);
 	}
 	mtmp->mstrategy &= ~STRAT_WAITMASK;
 
@@ -697,7 +725,7 @@ int thrown;
 	
 	wakeup(mon);
 	if(!obj) {	/* attack with bare hands */
-	    if (mdat == &mons[PM_SHADE] && !(u.sealsActive&SEAL_CHUPOCLOPS || u.sealsActive&SEAL_EDEN)) tmp = 0;
+	    if (mdat->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS || u.sealsActive&SEAL_EDEN)) tmp = 0;
 		else if (martial_bonus()){
 			if(uarmc && uarmc->oartifact == ART_GRANDMASTER_S_ROBE){
 				if(u.sealsActive&SEAL_EURYNOME) tmp = rn2(2) ? exploding_d(1,rnd(5)*2+2,0)+exploding_d(1,rnd(5)*2+2,0) : exploding_d(1,rnd(5)*2+2,0);
@@ -889,7 +917,7 @@ int thrown;
 		    /* or throw a missile without the proper bow... */
 		    (is_ammo(obj) && !ammo_and_launcher(obj, uwep))) {
 		    /* then do only 1-2 points of damage */
-		    if (mdat == &mons[PM_SHADE] && !(obj->otyp == SILVER_ARROW || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
+		    if (mdat->mlet == S_SHADE && !(obj->otyp == SILVER_ARROW || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
 				tmp = 0;
 		    else tmp = rnd(2);
 		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || 
@@ -911,7 +939,7 @@ int thrown;
 			useup(obj);
 			if (!more_than_1) obj = (struct obj *) 0;
 			hittxt = TRUE;
-			if (mdat != &mons[PM_SHADE] || u.sealsActive&SEAL_CHUPOCLOPS)
+			if (mdat->mlet != S_SHADE || u.sealsActive&SEAL_CHUPOCLOPS)
 			    tmp++;
 		    }
 		} else {
@@ -924,13 +952,22 @@ int thrown;
 		    valid_weapon_attack = (tmp > 1);
 		    if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
-		    } else if ((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) && 
+			} else if (((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || !mon->mcansee || !mon->mcanmove || !mon->mnotlaugh || 
+							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) ||
+								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
+								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) && 
 						((Role_if(PM_ROGUE) && !Upolyd) ||
 							u.sealsActive&SEAL_ANDROMALIUS)
 			) {
-			You("strike %s from behind!", mon_nam(mon));
+				if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+					(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
+					&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
+				) You("strike %s from behind!", mon_nam(mon));
+				else if(!mon->mcansee) You("strike the blinded %s!", l_monnam(mon));
+				else if(mon->mtrapped) You("strike the trapped %s!", l_monnam(mon));
+				else You("strike the helpless %s!", l_monnam(mon));
 				if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel);
-				if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel/2);
+				if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel);
 			hittxt = TRUE;
 		    } else if ( (( (dieroll <= 2 || (Role_if(PM_BARBARIAN) && dieroll <= 4)) && 
 						  obj == uwep &&
@@ -1042,6 +1079,8 @@ int thrown;
 			    /* Elves and Samurai do extra damage using
 			     * their bows&arrows; they're highly trained.
 			     */
+					if(u.sealsActive&SEAL_DANTALION) tmp += max(0,(ACURR(A_INT)-10)/2);
+					
 				    if (Role_if(PM_SAMURAI) &&
 						obj->otyp == YA && uwep->otyp == YUMI)
 							tmp++;
@@ -1070,9 +1109,9 @@ int thrown;
 			hittxt = TRUE;
 			/* in case potion effect causes transformation */
 			mdat = mon->data;
-			tmp = (mdat == &mons[PM_SHADE] && !(u.sealsActive&SEAL_CHUPOCLOPS)) ? 0 : 1;
+			tmp = (mdat->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS)) ? 0 : 1;
 		} else {
-			if (mdat == &mons[PM_SHADE] && !shade_aware(obj) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
+			if (mdat->mlet == S_SHADE && !shade_aware(obj) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
 			    tmp = 0;
 			    Strcpy(unconventional, cxname(obj));
 			} else {
@@ -1310,7 +1349,6 @@ defaultvalue:
 	    wtype = thrown ? weapon_type(wep) : uwep_skill_type();
 	    use_skill(wtype, 1);
 	}
-
 	if (ispoisoned || (obj && (arti_poisoned(obj) || obj->oartifact == ART_WEBWEAVER_S_CROOK))) {
 	    if Role_if(PM_SAMURAI) {
 			You("dishonorably use a poisoned weapon!");
@@ -1377,7 +1415,7 @@ defaultvalue:
 	    /* make sure that negative damage adjustment can't result
 	       in inadvertently boosting the victim's hit points */
 	    tmp = 0;
-	    if (mdat == &mons[PM_SHADE]) {
+	    if (mdat->mlet == S_SHADE) {
 		if (!hittxt) {
 		    const char *what = unconventional[0] ? unconventional : "attack";
 		    Your("%s %s harmlessly through %s.",
@@ -1879,7 +1917,7 @@ register struct attack *mattk;
 		    if(uwep) tmp = 0;
 		} else if(mattk->aatyp == AT_KICK) {
 		    if(thick_skinned(mdef->data)) tmp = 0;
-		    if(mdef->data == &mons[PM_SHADE]) {
+		    if(mdef->data->mlet == S_SHADE) {
 			if (!(uarmf && uarmf->blessed)) {
 			    impossible("bad shade attack function flow?");
 			    if(!(u.sealsActive&SEAL_CHUPOCLOPS)) tmp = 0;
@@ -2249,7 +2287,7 @@ register struct attack *mattk;
 					shieldeff(mdef->mx, mdef->my);
 					break;
 				}
-				pline("%s shrivels at your touch.", Monnam(mdef));
+				pline("%s shrivels at the touch of your irridescent tentacles!", Monnam(mdef));
 				tmp2 = tmp+d(5,spiritDsize());
 				tmp = min(tmp2,mdef->mhp);
 				healup(tmp, 0, FALSE, FALSE);
@@ -2784,7 +2822,7 @@ use_weapon:
 		case AT_LNCK: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
 			/* [ALI] Vampires are also smart. They avoid biting
 			   monsters if doing so would be fatal */
-			if ((uwep || (u.twoweap && uswapwep)) &&
+			if ((uwep || (u.twoweap && uswapwep) || uarmg) &&
 				maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) &&
 				(is_rider(mon->data) ||
 				 mon->data == &mons[PM_GREEN_SLIME])){
@@ -2818,7 +2856,7 @@ use_weapon:
 			    }
 			    wakeup(mon);
 			    /* maybe this check should be in damageum()? */
-			    if (mon->data == &mons[PM_SHADE] &&
+			    if (mon->data->mlet == S_SHADE &&
 					!(mattk->aatyp == AT_KICK &&
 					    uarmf && uarmf->blessed) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
 				Your("attack passes harmlessly through %s.",
@@ -2851,7 +2889,7 @@ use_weapon:
 			 */
 			dhit = 1;
 			wakeup(mon);
-			if (mon->data == &mons[PM_SHADE] && !(u.sealsActive&SEAL_CHUPOCLOPS))
+			if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
 			    Your("hug passes harmlessly through %s.",
 				mon_nam(mon));
 			else if (!sticks(mon->data) && !u.uswallow) {
@@ -2877,7 +2915,7 @@ use_weapon:
 		case AT_ENGL:
 			if((dhit = (tmp > rnd(20+i)))) {
 				wakeup(mon);
-				if (mon->data == &mons[PM_SHADE] && !(u.sealsActive&SEAL_CHUPOCLOPS))
+				if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
 				    Your("attempt to surround %s is harmless.",
 					mon_nam(mon));
 				else {
@@ -2946,18 +2984,20 @@ use_weapon:
 }
 
 boolean
-hmonwith(mon, tmp, mattk, nattk)		/* attack monster as a monster. */
+hmonwith(mon, tmp, attacklist, nattk)		/* attack monster as a monster. */
 struct monst *mon;
 int tmp;
-struct attack *mattk;
+struct attack *attacklist;
 int nattk;
 {
 	int	i, sum[nattk], hittmp = 0;
 	int	nsum = 0;
 	int	dhit = 0;
+	struct attack *mattk;
 	boolean Old_Upolyd = Upolyd;
 
 	for(i = 0; i < nattk; i++) {
+	mattk = &attacklist[i];
 	    sum[i] = 0;
 	    switch(mattk->aatyp) {
 		case AT_WEAP:
@@ -3025,7 +3065,7 @@ use_weapon:
 		case AT_LNCK: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
 			/* [ALI] Vampires are also smart. They avoid biting
 			   monsters if doing so would be fatal */
-			if ((uwep || (u.twoweap && uswapwep)) &&
+		if ((uwep || (u.twoweap && uswapwep)  || uarmg) &&
 				maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) &&
 				(is_rider(mon->data) ||
 				 mon->data == &mons[PM_GREEN_SLIME])){
@@ -3036,7 +3076,7 @@ use_weapon:
 		case AT_BUTT:
 		case AT_TENT:
 		case AT_WHIP:
-			if ((uwep || u.twoweap && uswapwep) &&
+		if ((uwep || (u.twoweap && uswapwep) || uarmg)&&
 				(touch_petrifies(mon->data) ||
 				 mon->data == &mons[PM_MEDUSA])){
 			    	break;
@@ -3058,7 +3098,7 @@ use_weapon:
 			    }
 			    wakeup(mon);
 			    /* maybe this check should be in damageum()? */
-			    if (mon->data == &mons[PM_SHADE] &&
+				if (mon->data->mlet == S_SHADE &&
 					!(mattk->aatyp == AT_KICK &&
 					    uarmf && uarmf->blessed) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
 				Your("attack passes harmlessly through %s.",
@@ -3095,7 +3135,7 @@ use_weapon:
 			 */
 			dhit = 1;
 			wakeup(mon);
-			if (mon->data == &mons[PM_SHADE] && !(u.sealsActive&SEAL_CHUPOCLOPS))
+			if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
 			    Your("hug passes harmlessly through %s.",
 				mon_nam(mon));
 			else if (!sticks(mon->data) && !u.uswallow) {
@@ -3121,7 +3161,7 @@ use_weapon:
 		case AT_ENGL:
 			if((dhit = (tmp > rnd(20+i)))) {
 				wakeup(mon);
-				if (mon->data == &mons[PM_SHADE] && !(u.sealsActive&SEAL_CHUPOCLOPS))
+				if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
 				    Your("attempt to surround %s is harmless.",
 					mon_nam(mon));
 				else {
@@ -3258,6 +3298,9 @@ uchar aatyp;
 		/* hero using monsters' AT_MAGC attack is hitting hand to
 		   hand rather than casting a spell */
 		if (aatyp == AT_MAGC) protector = W_ARMG;
+
+		/* Otiax's mist tendrils don't cause skin contact. */
+		if (aatyp == AT_WISP) protector = W_ARMG;
 
 		if (protector == 0L ||		/* no protection */
 			(protector == W_ARMG && !uarmg && !uwep) ||
@@ -3453,7 +3496,7 @@ dobpois:
 		  }
 		break;
 	  	  case AD_UNKNWN:
-			  if(uwep && uwep->oartifact){
+			  if(uwep && uwep->oartifact && uwep->oartifact != ART_SILVER_KEY && uwep->oartifact != ART_PEN_OF_THE_VOID && CountsAgainstGifts(uwep->oartifact)){
 					You_feel("%s tug gently on your %s.",mon_nam(mon), ONAME(uwep));
 					if(yn("Release it?")=='n'){
 						You("hold on tight.");
@@ -3461,15 +3504,20 @@ dobpois:
 					else{
 						You("let %s take your %s.",mon_nam(mon), ONAME(uwep));
 						pline_The(Hallucination ? "world pats you on the head." : "world quakes around you.  Perhaps it is the voice of a god?");
+						do_earthquake(5,0,0);
 						optr = uwep;
 						uwepgone();
-						if(optr->gifted != A_NONE){
+						if(optr->gifted != A_NONE && !Role_if(PM_EXILE)){
 							gods_angry(optr->gifted);
 							gods_upset(optr->gifted);
 						}
 						useup(optr);
 						u.regifted++;
 						mongone(mon);
+						if(Role_if(PM_EXILE) && u.regifted == 5){
+							pline("The image of an unknown and strange seal fills your mind!");
+							u.specialSealsKnown |= SEAL_UNKNOWN_GOD;
+						}
 					}
 			  }
 		  break;

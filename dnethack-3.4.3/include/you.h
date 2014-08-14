@@ -11,6 +11,7 @@
 #include "prop.h"		/* (needed here for util/makedefs.c) */
 #endif
 #include "skills.h"
+#include "engrave.h"
 
 /*** Substructures ***/
 
@@ -440,80 +441,60 @@ struct you {
 
 	int sealorder[31];
 	long	sealsKnown;
+	long	specialSealsKnown;
 #define SEAL_AHAZU					0x0000001L
-	long	ahazu;	//turn on which spirit will be again eligible for binding.
 #define SEAL_AMON					0x0000002L
-	long	amon;
 #define SEAL_ANDREALPHUS			0x0000004L
-	long	andrealphus;
 #define SEAL_ANDROMALIUS			0x0000008L
-	long	andromalius;
 #define SEAL_ASTAROTH				0x0000010L
-	long	astaroth;
 #define SEAL_BALAM					0x0000020L
-	long	balam;
 #define SEAL_BERITH					0x0000040L
-	long	berith;
 #define SEAL_BUER					0x0000080L
-	long	buer;
 #define SEAL_CHUPOCLOPS				0x0000100L
-	long	chupoclops;
 #define SEAL_DANTALION				0x0000200L
-	long	dantalion;
-#define SEAL_SHIRO				0x0000400L
-	long	shiro;
-#define SEAL_ECHIDNA				0x0000800L
-	long	echidna;
-#define SEAL_EDEN					0x0001000L
-	long	eden;
-#define SEAL_ENKI					0x0002000L
-	long	enki;
-#define SEAL_EURYNOME				0x0004000L
-	long	eurynome;
-#define SEAL_EVE					0x0008000L
-	long	eve;
-#define SEAL_FAFNIR					0x0010000L
-	long	fafnir;
-#define SEAL_HUGINN_MUNINN			0x0020000L
-	long	huginn_muninn;
-#define SEAL_IRIS					0x0040000L
-	long	iris, irisAttack;
-#define SEAL_JACK					0x0080000L
-	long	jack;
-#define SEAL_MALPHAS				0x0100000L
-	long	malphas;
-#define SEAL_MARIONETTE				0x0200000L
-	long	marionette;
-#define SEAL_MOTHER					0x0400000L
-	long	mother;
-#define SEAL_NABERIUS				0x0800000L
-	long	naberius;
-#define SEAL_ORTHOS					0x1000000L
-	long	orthos;
-#define SEAL_OSE					0x2000000L
-	long	ose;
+#define SEAL_ECHIDNA				0x0000400L
+#define SEAL_EDEN					0x0000800L
+#define SEAL_ENKI					0x0001000L
+#define SEAL_EURYNOME				0x0002000L
+	int		eurycounts;
+#define SEAL_EVE					0x0004000L
+#define SEAL_FAFNIR					0x0008000L
+#define SEAL_HUGINN_MUNINN			0x0010000L
+#define SEAL_IRIS					0x0020000L
+	long	irisAttack;
+#define SEAL_JACK					0x0040000L
+#define SEAL_MALPHAS				0x0080000L
+#define SEAL_MARIONETTE				0x0100000L
+#define SEAL_MOTHER					0x0200000L
+#define SEAL_NABERIUS				0x0400000L
+#define SEAL_ORTHOS					0x0800000L
+	int		orthocounts;
+#define SEAL_OSE					0x1000000L
 	char	osepro[5];
 	char	osegen[9];
-#define SEAL_OTIAX					0x4000000L
-	long	otiax, otiaxAttack;
-#define SEAL_PAIMON					0x8000000L
-	long	paimon;
+#define SEAL_OTIAX					0x2000000L
+	long	otiaxAttack;
+#define SEAL_PAIMON					0x4000000L
+#define SEAL_SHIRO					0x8000000L
 #define SEAL_SIMURGH				0x10000000L
-	long	simurgh;
 #define SEAL_TENEBROUS				0x20000000L
-	long	tenebrous;
 #define SEAL_YMIR					0x40000000L
-	long	ymir;
 //Special flag for lookup tables, indicating that it is a quest spirit and should be treated as such
 #define SEAL_SPECIAL				0x80000000L
 
 //The remaining seals (Dahlver-Nar, Acererak, and the Numina) can't be learned in any way other than binder class features
-#define SEAL_DAHLVER_NAR			0x0000001L
-	long	dahlver_nar;
-#define SEAL_ACERERAK				0x0000002L
-	long	acererak;
-#define SEAL_NUMINA					0x0000004L
+#define SEAL_DAHLVER_NAR			0x00000001L
+#define SEAL_ACERERAK				0x00000002L
+#define SEAL_COUNCIL				0x00000004L
+#define SEAL_COSMOS					0x00000010L
+#define SEAL_MISKA					0x00000020L
+#define SEAL_NUDZIARTH				0x00000040L
+#define SEAL_ALIGNMENT_THING		0x00000080L
+#define SEAL_UNKNOWN_GOD			0x00000100L
+#define SEAL_NUMINA					0x40000000L
 //	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
+	
+	int sealTimeout[NUMINA-FIRST_SEAL]; //turn on which spirit will be again eligible for binding.
 	
 	int sealCounts;
 	long sealsActive;
@@ -521,15 +502,18 @@ struct you {
 	
 	int wisSpirits, intSpirits;
 	
-	//Spirits in order bound:
-	long spirit[7];
 #define	GATE_SPIRITS	5
 #define	QUEST_SPIRIT	5
-#define	OUTER_SPIRIT	6
-#define	NUM_BIND_SPRITS	7
+#define	GPREM_SPIRIT	6
+#define	CROWN_SPIRIT	7
+#define	ALIGN_SPIRIT	8
+#define	OUTER_SPIRIT	9
+#define	NUM_BIND_SPRITS	10
+	//Spirits in order bound:
+	long spirit[NUM_BIND_SPRITS];
 	long spiritTineA,spiritTineB;
 	//Corresponding timeouts (turn on which binding expires):
-	long spiritT[7];
+	long spiritT[NUM_BIND_SPRITS];
 	long spiritTineTA,spiritTineTB;
 	
 	int spiritAC;
@@ -559,43 +543,49 @@ struct you {
 #define	PWR_RECALL_TO_EDEN			21
 #define	PWR_STARGATE				22
 #define	PWR_WALKER_OF_THRESHOLDS	23
-#define	PWR_VENGANCE				24
-#define	PWR_SHAPE_THE_WIND			25
-#define	PWR_THORNS_AND_STONES		26
-#define	PWR_BARAGE					27
-#define	PWR_BREATH_POISON			28
-#define	PWR_RUINOUS_STRIKE			29
-#define	PWR_RAVEN_S_TALONS			30
-#define	PWR_HORRID_WILTING			31
-#define	PWR_TURN_ANIMALS_AND_HUMANOIDS	32
-#define	PWR_REFILL_LANTERN			33
-#define	PWR_HELLFIRE				34
-#define	PWR_CALL_MURDER				35
-#define	PWR_ROOT_SHOUT				36
-#define	PWR_PULL_WIRES				37
-#define	PWR_DISGUSTED_GAZE			38
-#define	PWR_BLOODY_TOUNGE			39
-#define	PWR_SILVER_TOUNGE			40
-#define	PWR_EXHALATION_OF_THE_RIFT	41
-#define	PWR_QUERIENT_THOUGHTS		42
-#define	PWR_GREAT_LEAP				43
-#define	PWR_MASTER_OF_DOORWAYS		44
-#define	PWR_READ_SPELL				45
-#define	PWR_BOOK_TELEPATHY			46
-#define	PWR_UNITE_THE_EARTH_AND_SKY	47
-#define	PWR_HOOK_IN_THE_SKY			48
-#define	PWR_ENLIGHTENMENT			49
-#define	PWR_DAMNING_DARKNESS		50
-#define	PWR_TOUCH_OF_THE_VOID		51
-#define	PWR_ECHOS_OF_THE_LAST_WORD	52
-#define	PWR_POISON_GAZE				53
-#define	PWR_GAP_STEP				54
-#define	PWR_MOAN					55
-#define	PWR_SWALLOW_SOUL			56
-#define	PWR_IDENTIFY_INVENTORY		57
-#define	PWR_CLAIRVOYANCE			58
-#define	PWR_FIND_PATH				59
-#define	NUMBER_POWERS				60
+#define	PWR_GEYSER					24
+#define	PWR_VENGANCE				25
+#define	PWR_SHAPE_THE_WIND			26
+#define	PWR_THORNS_AND_STONES		27
+#define	PWR_BARAGE					28
+#define	PWR_BREATH_POISON			29
+#define	PWR_RUINOUS_STRIKE			30
+#define	PWR_RAVEN_S_TALONS			31
+#define	PWR_HORRID_WILTING			32
+#define	PWR_TURN_ANIMALS_AND_HUMANOIDS	33
+#define	PWR_REFILL_LANTERN			34
+#define	PWR_HELLFIRE				35
+#define	PWR_CALL_MURDER				36
+#define	PWR_ROOT_SHOUT				37
+#define	PWR_PULL_WIRES				38
+#define	PWR_DISGUSTED_GAZE			39
+#define	PWR_BLOODY_TOUNGE			40
+#define	PWR_SILVER_TOUNGE			41
+#define	PWR_EXHALATION_OF_THE_RIFT	42
+#define	PWR_QUERIENT_THOUGHTS		43
+#define	PWR_GREAT_LEAP				44
+#define	PWR_MASTER_OF_DOORWAYS		45
+#define	PWR_READ_SPELL				46
+#define	PWR_BOOK_TELEPATHY			47
+#define	PWR_UNITE_THE_EARTH_AND_SKY	48
+#define	PWR_HOOK_IN_THE_SKY			49
+#define	PWR_ENLIGHTENMENT			50
+#define	PWR_DAMNING_DARKNESS		51
+#define	PWR_TOUCH_OF_THE_VOID		52
+#define	PWR_ECHOS_OF_THE_LAST_WORD	53
+#define	PWR_POISON_GAZE				54
+#define	PWR_GAP_STEP				55
+#define	PWR_MOAN					56
+#define	PWR_SWALLOW_SOUL			57
+#define	PWR_EMBASSY_OF_ELEMENTS		58
+#define	PWR_SUMMON_MONSTER			59
+#define	PWR_MIRROR_SHATTER			60
+#define	PWR_PHASE_STEP				61
+#define	PWR_IDENTIFY_INVENTORY		62
+#define	PWR_CLAIRVOYANCE			63
+#define	PWR_FIND_PATH				64
+#define	PWR_GNOSIS_PREMONITION		65
+#define	NUMBER_POWERS				66
 
 	int spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
 //	char spiritPLetters[NUMBER_POWERS];
@@ -621,7 +611,8 @@ struct you {
 extern long sealKey[34]; /*Defined in u_init.c*/
 extern char *wardDecode[26]; /*Defined in spell.c*/
 extern int wardMax[18]; /*Defined in engrave.c*/
-extern char *sealNames[34]; /*Defined in engrave.c*/
+extern char *sealNames[]; /*Defined in engrave.c*/
+extern char *sealTitles[]; /*Defined in engrave.c*/
 extern char *andromaliusItems[18]; /*Defined in sounds.c*/
 extern long int_spirits; /*Defined in sounds.c*/
 extern long wis_spirits; /*Defined in sounds.c*/

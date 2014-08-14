@@ -146,7 +146,7 @@
 
 #define HWounded_legs		u.uprops[WOUNDED_LEGS].intrinsic
 #define EWounded_legs		u.uprops[WOUNDED_LEGS].extrinsic
-#define Wounded_legs		((HWounded_legs || EWounded_legs) && !(u.sealsActive&SEAL_ACERERAK))
+#define Wounded_legs		((HWounded_legs || EWounded_legs) && !(u.specialSealsActive&SEAL_ACERERAK))
 
 #define HSleeping		u.uprops[SLEEPING].intrinsic
 #define ESleeping		u.uprops[SLEEPING].extrinsic
@@ -237,7 +237,7 @@
 
 #define HAggravate_monster	u.uprops[AGGRAVATE_MONSTER].intrinsic
 #define EAggravate_monster	u.uprops[AGGRAVATE_MONSTER].extrinsic
-#define Aggravate_monster	(HAggravate_monster || EAggravate_monster)
+#define Aggravate_monster	(HAggravate_monster || EAggravate_monster || u.specialSealsActive&SEAL_ALIGNMENT_THING)
 
 #define HConflict		u.uprops[CONFLICT].intrinsic
 #define EConflict		u.uprops[CONFLICT].extrinsic
@@ -354,7 +354,7 @@
 
 #define HEnergy_regeneration	u.uprops[ENERGY_REGENERATION].intrinsic
 #define EEnergy_regeneration	u.uprops[ENERGY_REGENERATION].extrinsic
-#define Energy_regeneration	(HEnergy_regeneration || EEnergy_regeneration)
+#define Energy_regeneration	(HEnergy_regeneration || EEnergy_regeneration || u.specialSealsActive&SEAL_UNKNOWN_GOD)
 
 #define HProtection		u.uprops[PROTECTION].intrinsic
 #define EProtection		u.uprops[PROTECTION].extrinsic
@@ -382,7 +382,7 @@
 
 #define HSpellboost		u.uprops[SPELLBOOST].intrinsic
 #define ESpellboost		u.uprops[SPELLBOOST].extrinsic
-#define Spellboost		(HSpellboost || ESpellboost)
+#define Spellboost		(HSpellboost || ESpellboost || u.specialSealsActive&SEAL_NUDZIARTH)
 
 #define HFast			u.uprops[FAST].intrinsic
 #define EFast			u.uprops[FAST].extrinsic
@@ -396,7 +396,7 @@
 
 #define Free_action		(u.uprops[FREE_ACTION].extrinsic || u.sealsActive&SEAL_EURYNOME) /* [Tom] */
 
-#define Fixed_abil		(u.uprops[FIXED_ABIL].extrinsic || u.sealsActive&SEAL_DAHLVER_NAR)	/* KMH */
+#define Fixed_abil		(u.uprops[FIXED_ABIL].extrinsic || u.specialSealsActive&SEAL_DAHLVER_NAR)	/* KMH */
 
 #define Lifesaved		(u.uprops[LIFESAVED].extrinsic || u.sealsActive&SEAL_JACK)
 

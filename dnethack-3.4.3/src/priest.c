@@ -482,18 +482,21 @@ register struct monst *priest;
 		return;
 	}
 	
-	seenSeals = countFarSigns(priest);
+	seenSeals = countCloseSigns(priest);
 	EPRI(priest)->signspotted = max(seenSeals, EPRI(priest)->signspotted);
 	if(seenSeals > 1){
 		EPRI(priest)->pbanned = TRUE;
 		if(seenSeals == 4){
 			verbalize("Foul heretic!");
+			makemon(&mons[PM_DAAT_SEPHIRAH], u.ux, u.uy, MM_ADJACENTOK);
 			priest->mpeaceful=0;
 		} else if(seenSeals == 5){
 			coord mm;
 			verbalize("Foul heretic! The Lord's servants shall humble you!");
 			priest->mpeaceful=0;
 			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
+			makemon(&mons[PM_DAAT_SEPHIRAH], u.ux, u.uy, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], u.ux, u.uy, MM_ADJACENTOK);
 		} else if(seenSeals == 6){
 			coord mm;
 			verbalize("Foul heretic! The Lord's servants shall humble you!");
@@ -501,6 +504,8 @@ register struct monst *priest;
 			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
 			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
 			summon_minion(EPRI(priest)->shralign, FALSE, FALSE);
+			makemon(&mons[PM_DAAT_SEPHIRAH], u.ux, u.uy, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], u.ux, u.uy, MM_ADJACENTOK);
 			/* Create swarm near down staircase (hinders return to level) */
 			mm.x = xdnstair;
 			mm.y = ydnstair;

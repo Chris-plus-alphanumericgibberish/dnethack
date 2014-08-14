@@ -434,9 +434,23 @@ struct monst *mon;
 	int dmg = 0;
 	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 2 : 1;
 	
+	if(u.specialSealsActive&SEAL_COSMOS){
+		if(mon->data->maligntyp == A_CHAOTIC) dmg += d(2*dnum,4);
+		else if(mon->data->maligntyp == A_NEUTRAL) dmg += d(dnum,4);
+	} else if(u.specialSealsActive&SEAL_MISKA){
+		if(mon->data->maligntyp == A_LAWFUL) dmg += d(2*dnum,4);
+		else if(mon->data->maligntyp == A_NEUTRAL) dmg += d(dnum,4);
+	} else if(u.specialSealsActive&SEAL_NUDZIARTH){
+		if(mon->data->maligntyp != A_NEUTRAL) dmg += d(dnum,6);
+	} else if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
+		if(rn2(3)) dmg += d(rnd(2)*dnum,4);
+	} else if(u.specialSealsActive&SEAL_UNKNOWN_GOD){
+		dmg -= pen->spe;
+	}
+	
 	if(pen->ovar1&SEAL_AMON){
 		if(youdef && !Fire_resistance) dmg += d(dnum,4);
-		else if(!youdef && !resists_fire(mon)) dmg += d(dnum,4);
+		else if(!youdef && !resists_fire(mon)) dmg += d(resists_cold(mon) ? 2*dnum : dnum,4);
 	}
 	if(pen->ovar1&SEAL_ASTAROTH){
 		if(youdef && !Shock_resistance) dmg += d(dnum,4);
@@ -444,7 +458,7 @@ struct monst *mon;
 	}
 	if(pen->ovar1&SEAL_BALAM){
 		if(youdef && !Cold_resistance) dmg += d(dnum,4);
-		else if(!youdef && !resists_cold(mon)) dmg += d(dnum,4);
+		else if(!youdef && !resists_cold(mon)) dmg += d(resists_fire(mon) ? 2*dnum : dnum,4);
 	}
 	if(pen->ovar1&SEAL_ECHIDNA){
 		if(youdef && !Acid_resistance) dmg += d(dnum,4);
@@ -470,7 +484,7 @@ struct monst *mon;
 	}
 	if(pen->ovar1&SEAL_OSE){
 		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,4);
-		else if(!youdef && !mindless(mon->data) && (telepathic(mon->data) || !rn2(5))) dmg += d(dnum,4);
+		else if(!youdef && !mindless(mon->data) && (telepathic(mon->data) || !rn2(5))) dmg += d(dnum,15);
 	}
 	if(pen->ovar1&SEAL_NABERIUS){
 		if(youdef && (Upolyd ? u.mh < .25*u.mhmax : u.uhp < .25*u.uhpmax)) dmg += d(dnum,4);
@@ -1076,6 +1090,8 @@ struct obj *otmp;
 		
 		bonus += (dex-11)/2;
 	}
+	
+	if(u.sealsActive&SEAL_DANTALION) bonus += max(0,(ACURR(A_INT)-10)/2);
 	return bonus;
 }
 
@@ -1500,6 +1516,7 @@ struct obj *weapon;
 	bonus = ((bonus + 2) * (martial_bonus() ? 2 : 1)) / 2;
     }
 
+	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
 #ifdef STEED
 	/* KMH -- It's harder to hit while you are riding */
 	if (u.usteed) {
@@ -1569,6 +1586,8 @@ struct obj *weapon;
 	bonus = ((bonus + 1) * (martial_bonus() ? 3 : 1)) / 2;
     }
 
+	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
+	
 #ifdef STEED
 	/* KMH -- Riding gives some thrusting damage */
 	if (u.usteed && type != P_TWO_WEAPON_COMBAT) {

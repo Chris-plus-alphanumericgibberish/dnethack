@@ -656,30 +656,79 @@ char * sealNames[] =  {
 	"Buer", /* 7 */
 	"Chupoclops", /* 8 */
 	"Dantalion", /* 9 */
-	"Shiro", /* 10 */
-	"Echidna", /* 11 */
-	"Eden", /* 12 */
-	"Enki", /* 13 */
-	"Eurynome", /* 14 */
-	"Eve", /* 15 */
-	"Fáfnir", /* 16 */
-	"Huginn and Muninn", /* 17 */
-	"Iris", /* 18 */
-	"Jack", /* 19 */
-	"Malphas", /* 20 */
-	"Marionette", /* 21 */
-	"Mother", /* 22 */
-	"Naberius", /* 23 */
-	"Orthos", /* 24 */
-	"Ose", /* 25 */
-	"Otiax", /* 26 */
-	"Paimon", /* 27 */
+	"Echidna", /* 10 */
+	"Eden", /* 11 */
+	"Enki", /* 12 */
+	"Eurynome", /* 13 */
+	"Eve", /* 14 */
+	"Fafnir", /* 15 */
+	"Huginn and Muninn", /* 16 */
+	"Iris", /* 17 */
+	"Jack", /* 18 */
+	"Malphas", /* 19 */
+	"Marionette", /* 20 */
+	"Mother", /* 21 */
+	"Naberius", /* 22 */
+	"Orthos", /* 23 */
+	"Ose", /* 24 */
+	"Otiax", /* 25 */
+	"Paimon", /* 26 */
+	"Shiro", /* 27 */
 	"Simurgh", /* 28 */
 	"Tenebrous", /* 29 */
 	"Ymir", /* 30 */
 	"Dahlver-Nar", /* 31 */
 	"Acererak", /* 32 */
-	"Numina" /* 33 */
+	"the Council of Elements", /* 33 */
+	"Cosmos", /* 34 */
+	"Miska", /* 35 */
+	"Nudziarth", /* 36 */
+	"the Alignment Thing", /* 37 */
+	"the Unknown God", /* 38 */
+	"Numina" /* 39 */
+};
+
+char * sealTitles[] =  {
+	", the Seizer", /* 0 */
+	", the shadow before the altar", /* 1 */
+	", Marquis of Angles", /* 2 */
+	", the Repentent Rogue", /* 3 */
+	", the Broken Clockmaker", /* 4 */
+	", the Last Sacrifice", /* 5 */
+	", the Red Horseman", /* 6 */
+	", who walks all places", /* 7 */
+	", Hopetrapper", /* 8 */
+	", the Star Emperor", /* 9 */
+	", Mother of Monsters", /* 10 */
+	", the First Garden", /* 11 */
+	", God of the first city", /* 12 */
+	", lonely dancer", /* 13 */
+	", the first Sinner", /* 14 */
+	", Jotunn Dragon", /* 15 */
+	", Thought and Memory", /* 16 */
+	", Friend from Afar", /* 17 */
+	" of the Lantern", /* 18 */
+	", the Prince of Crows", /* 19 */
+	", Puppet of Screams", /* 20 */
+	", who beheld Beauty", /* 21 */
+	", mysterious councilor", /* 22 */
+	", Sovereign of the Howling Dark", /* 23 */
+	", dreamer in a drowned city", /* 24 */
+	", the Key to the Gate", /* 25 */
+	", the Fell Archivist", /* 26 */
+	", the stone soldier", /* 27 */
+	", who roosts on the Tree of Life", /* 28 */
+	", the Demonic Shadow", /* 29 */
+	", Lord of the Grassless Gap", /* 30 */
+	", the first Binder", /* 31 */
+	", the Demi-Lich", /* 32 */
+	"", /* 33 */
+	", goddess of crystal", /* 34 */
+	", the wolf-spider", /* 35 */
+	", the mirrored destroyer", /* 36 */
+	"", /* 37 */
+	"", /* 38 */
+	", The Whispering Multitude" /* 39 */
 };
 
 char *
@@ -820,7 +869,7 @@ unsigned seed;		/* for semi-controlled randomization */
 	lth = 0;
 	clth = slth = dlth = plth = 0;
 	j = 0;
-	if(ep->ward_id >= FIRST_SEAL && ep->engr_time+5 >= moves && ep->ward_type != DUST && ep->ward_type != ENGR_BLOOD) return;
+	if(ep->ward_id >= FIRST_SEAL && /*ep->engr_time+5 >= moves &&*/ ep->ward_type != DUST && ep->ward_type != ENGR_BLOOD) return;
 	if(ep->halu_ward){
 		clth = ep->complete_wards * 12;
 		slth = ep->scuffed_wards * 6;
@@ -4132,9 +4181,10 @@ int
 pick_seal()
 {
 	winid tmpwin;
-	int n, how;
+	int i, n, how;
 	char buf[BUFSZ];
 	char incntlet = 'a';
+	long seal_flag = 0x1L;
 	menu_item *selected;
 	anything any;
 
@@ -4144,272 +4194,76 @@ pick_seal()
 	
 	Sprintf(buf, "Known Seals");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
-	if(u.sealsKnown & SEAL_AHAZU){
-		Sprintf(buf,	"Ahazu, the Seizer");
-		any.a_int = AHAZU;	/* must be non-zero */
+	
+	for(i = 0; i < (QUEST_SPIRITS-FIRST_SEAL); i++){
+		seal_flag = 0x1L << i;
+		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && u.sealTimeout[i] < moves){
+			Sprintf(buf,	"%s%s", sealNames[i], sealTitles[i]);
+			any.a_int = (i+FIRST_SEAL);	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(u.sealsKnown & SEAL_AMON){
-		Sprintf(buf, "Amon, the shadow before the altar");
-		any.a_int = AMON;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(u.sealsKnown & SEAL_ANDREALPHUS){
-		Sprintf(buf, "Andrealphus, Marquis of Angles");
-		any.a_int = ANDREALPHUS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_ANDROMALIUS){
-		Sprintf(buf, "Andromalius, the Repentent Rogue");
-		any.a_int = ANDROMALIUS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_ASTAROTH){
-		Sprintf(buf, "Astaroth, the Broken Clockmaker");
-		any.a_int = ASTAROTH;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_BALAM){
-		Sprintf(buf, "Balam, the Last Sacrifice");
-		any.a_int = BALAM;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_BERITH){
-		Sprintf(buf, "Berith, the Red Horseman");
-		any.a_int = BERITH;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_BUER){
-		Sprintf(buf, "Buer, who walks all places");
-		any.a_int = BUER;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_CHUPOCLOPS){
-		Sprintf(buf, "Chupoclops, Hopetrapper");
-		any.a_int = CHUPOCLOPS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_DANTALION){
-		Sprintf(buf, "Dantalion, the Star Emperor");
-		any.a_int = DANTALION;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_ECHIDNA){
-		Sprintf(buf, "Echidna, Mother of Monsters");
-		any.a_int = ECHIDNA;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_EDEN){
-		Sprintf(buf, "Eden, the First Garden");
-		any.a_int = EDEN;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_ENKI){
-		Sprintf(buf,	"Enki, God of the first city");
-		any.a_int = ENKI;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_EURYNOME){
-		Sprintf(buf, "Eurynome, lonely dancer");
-		any.a_int = EURYNOME;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_EVE){
-		Sprintf(buf, "Eve, the first Sinner");
-		any.a_int = EVE;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_FAFNIR){
-		Sprintf(buf,	"Fafnir, Jotunn Dragon");
-		any.a_int = FAFNIR;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_HUGINN_MUNINN){
-		Sprintf(buf, "Huginn and Muninn, Thought and Memory");
-		any.a_int = HUGINN_MUNINN;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_IRIS){
-		Sprintf(buf, "Iris, Friend from Afar");
-		any.a_int = IRIS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_JACK){
-		Sprintf(buf, "Jack of the Lantern");
-		any.a_int = JACK;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_MALPHAS){
-		Sprintf(buf, "Malphas, the Prince of Crows");
-		any.a_int = MALPHAS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_MARIONETTE){
-		Sprintf(buf, "Marionette, Puppet of Screams");
-		any.a_int = MARIONETTE;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_MOTHER){
-		Sprintf(buf, "Mother, who beheld Beauty");
-		any.a_int = MOTHER;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_NABERIUS){
-		Sprintf(buf, "Naberius, mysterious councilor");
-		any.a_int = NABERIUS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_ORTHOS){
-		Sprintf(buf, "Orthos, Sovereign of the Howling Dark");
-		any.a_int = ORTHOS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_OSE){
-		Sprintf(buf, "Ose, dreamer in a drowned city");
-		any.a_int = OSE;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_OTIAX){
-		Sprintf(buf, "Otiax, the Key to the Gate");
-		any.a_int = OTIAX;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_PAIMON){
-		Sprintf(buf, "Paimon, the Fell Archivist");
-		any.a_int = PAIMON;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_SHIRO){
-		Sprintf(buf,	"Shiro, the stone soldier");
-		any.a_int = SHIRO;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_SIMURGH){
-		Sprintf(buf, "Simurgh, who roosts on the Tree of Life");
-		any.a_int = SIMURGH;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_TENEBROUS){
-		Sprintf(buf, "Tenebrous, the Demonic Shadow");
-		any.a_int = TENEBROUS;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(u.sealsKnown & SEAL_YMIR){
-		Sprintf(buf, "Ymir, Lord of the Grassless Gap");
-		any.a_int = YMIR;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
-	if(Role_if(PM_EXILE) && quest_status.got_quest){
-		Sprintf(buf, "Dahlver-Nar, the first Binder");
+	if(Role_if(PM_EXILE) && quest_status.got_quest && !(u.specialSealsActive&SEAL_DAHLVER_NAR) && u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] < moves){
+		Sprintf(buf,	"%s%s", sealNames[DAHLVER_NAR-FIRST_SEAL], sealTitles[DAHLVER_NAR-FIRST_SEAL]);
 		any.a_int = DAHLVER_NAR;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && quest_status.killed_nemesis){
-		Sprintf(buf, "Acererak, the Demi-Lich");
+	if(Role_if(PM_EXILE) && quest_status.killed_nemesis && !(u.specialSealsActive&SEAL_ACERERAK) && u.sealTimeout[ACERERAK-FIRST_SEAL] < moves){
+		Sprintf(buf,	"%s%s", sealNames[ACERERAK-FIRST_SEAL], sealTitles[ACERERAK-FIRST_SEAL]);
 		any.a_int = ACERERAK;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.ulevel == 30){
-		Sprintf(buf, "Numina, The Whispering Multitude");
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_COSMOS && !(u.specialSealsActive&SEAL_COSMOS) && u.sealTimeout[COSMOS-FIRST_SEAL] < moves){
+		Sprintf(buf,	"%s%s", sealNames[COSMOS-FIRST_SEAL], sealTitles[COSMOS-FIRST_SEAL]);
+		any.a_int = COSMOS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_MISKA && !(u.specialSealsActive&SEAL_MISKA) && u.sealTimeout[MISKA-FIRST_SEAL] < moves){
+		Sprintf(buf,	"%s%s", sealNames[MISKA-FIRST_SEAL], sealTitles[MISKA-FIRST_SEAL]);
+		any.a_int = MISKA;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIARTH && !(u.specialSealsActive&SEAL_NUDZIARTH) && u.sealTimeout[NUDZIARTH-FIRST_SEAL] < moves){
+		Sprintf(buf,	"%s%s", sealNames[NUDZIARTH-FIRST_SEAL], sealTitles[NUDZIARTH-FIRST_SEAL]);
+		any.a_int = NUDZIARTH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_ALIGNMENT_THING && !(u.specialSealsActive&SEAL_ALIGNMENT_THING) && u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] < moves){
+		Sprintf(buf,	"%s%s", sealNames[ALIGNMENT_THING-FIRST_SEAL], sealTitles[ALIGNMENT_THING-FIRST_SEAL]);
+		any.a_int = ALIGNMENT_THING;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_UNKNOWN_GOD && !(u.specialSealsActive&SEAL_UNKNOWN_GOD) && u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] < moves){
+		Sprintf(buf,	"%s%s", sealNames[UNKNOWN_GOD-FIRST_SEAL], sealTitles[UNKNOWN_GOD-FIRST_SEAL]);
+		any.a_int = UNKNOWN_GOD;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.ulevel == 30 && !(u.specialSealsActive&SEAL_NUMINA)){
+		Sprintf(buf,	"%s%s", sealNames[NUMINA-FIRST_SEAL], sealTitles[NUMINA-FIRST_SEAL]);
 		any.a_int = NUMINA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,

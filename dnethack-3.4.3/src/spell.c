@@ -23,6 +23,7 @@ static NEARDATA int RoSbook;		/* Read spell or Study Wards?"
 	((char)((spell < 26) ? ('a' + spell) : ('A' + spell - 26)))
 
 STATIC_PTR int NDECL(purifying_blast);
+STATIC_PTR struct permonst * NDECL(choose_crystal_summon);
 STATIC_DCL int FDECL(spell_let_to_idx, (CHAR_P));
 STATIC_DCL boolean FDECL(check_spirit_let, (char));
 STATIC_DCL boolean FDECL(cursed_book, (struct obj *bp));
@@ -576,7 +577,7 @@ struct obj *spellbook;
 			    - 2*objects[booktype].oc_level
 			    + ((ublindf && ublindf->otyp == LENSES) ? 2 : 0);
 			/* only wizards know if a spell is too difficult */
-			if (Role_if(PM_WIZARD) && read_ability < 20 &&
+			if ((Role_if(PM_WIZARD) || u.sealsActive&SEAL_PAIMON) && read_ability < 20 &&
 			    !confused) {
 			    char qbuf[QBUFSZ];
 			    Sprintf(qbuf,
@@ -761,7 +762,7 @@ static const int spiritPOwner[NUMBER_POWERS] = {
 	SEAL_SHIRO,
 	SEAL_ECHIDNA, SEAL_ECHIDNA,
 	SEAL_EDEN, SEAL_EDEN, SEAL_EDEN,
-	SEAL_ENKI,
+	SEAL_ENKI, SEAL_ENKI,
 	SEAL_EURYNOME, SEAL_EURYNOME,
 	SEAL_EVE, SEAL_EVE,
 	SEAL_FAFNIR, SEAL_FAFNIR,
@@ -781,7 +782,11 @@ static const int spiritPOwner[NUMBER_POWERS] = {
 	SEAL_YMIR, SEAL_YMIR,
 	SEAL_SPECIAL|SEAL_DAHLVER_NAR,
 	SEAL_SPECIAL|SEAL_ACERERAK,
-	SEAL_SPECIAL|SEAL_NUMINA, SEAL_SPECIAL|SEAL_NUMINA, SEAL_SPECIAL|SEAL_NUMINA
+	SEAL_SPECIAL|SEAL_COUNCIL,
+	SEAL_SPECIAL|SEAL_COSMOS,
+	SEAL_SPECIAL|SEAL_NUDZIARTH,
+	SEAL_SPECIAL|SEAL_UNKNOWN_GOD,
+	SEAL_SPECIAL|SEAL_NUMINA, SEAL_SPECIAL|SEAL_NUMINA, SEAL_SPECIAL|SEAL_NUMINA, SEAL_SPECIAL|SEAL_NUMINA
 };
 
 static const char *spiritPName[NUMBER_POWERS] = {
@@ -796,13 +801,13 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Throw webbing",
 	"Thought Travel", "Dread of Dantalion",
 	"Earth Swallow",
-	"Echidna's Venom", "Suckle Monster",
+	"Echidna's Venom", "Sing Lullaby",
 	"Purifying Blast", "Recall to Eden", "Stargate",
-	"Walk among Thresholds",
+	"Walk among Thresholds", "Geyser",
 	"Vengeance", "Shape the Wind",
 	"Thorns and Stones", "Barage",
 	"Breath Poison", "Ruinous Strike",
-	"Raven's Tallons",
+	"Raven's Talons",
 	"Horrid Wilting", "Horrid Rainbow",
 	"Refill Lantern", "Hellfire", 
 	"Call Murder",
@@ -818,8 +823,86 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Poison Gaze", "Gap Step",
 	"Moan",
 	"Swallow Soul",
-	"Identify", "Clairvoyance", "Find Path"
+	"Embassy of Elements",
+	"Crystal Memories",
+	"Mirror Shatter",
+	"Phase step",
+	"Identify", "Clairvoyance", "Find Path", "Gnosis Premonition"
 };
+
+int
+pick_council_seal()
+{
+	winid tmpwin;
+	int i, n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	long seal_flag = 0x1L;
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf,	"Pick spirit to re-contact:");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	for(i = 0; i < (QUEST_SPIRITS-FIRST_SEAL); i++){
+		seal_flag = 0x1L << i;
+		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && (u.sealTimeout[i] > 0 || u.specialSealsActive&SEAL_NUMINA) && u.sealTimeout[i] < moves ){
+			Sprintf(buf,	"%s%s", sealNames[i], sealTitles[i]);
+			any.a_int = i+FIRST_SEAL;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+		}
+	}
+	end_menu(tmpwin,	"Choose seal:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_int : 0;
+}
+
+int
+pick_gnosis_seal()
+{
+	winid tmpwin;
+	int i, n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	long seal_flag = 0x1L;
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf,	"Pick spirit:");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	for(i = 0; i < (QUEST_SPIRITS-FIRST_SEAL); i++){
+		seal_flag = 0x1L << i;
+		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && u.sealTimeout[i] < moves){
+			Sprintf(buf,	"%s%s", sealNames[i], sealTitles[i]);
+			any.a_int = i+FIRST_SEAL;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+		}
+	}
+	end_menu(tmpwin,	"Choose seal:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_int : 0;
+}
 
 STATIC_OVL boolean
 spiritLets(lets)
@@ -864,6 +947,19 @@ int
 dospirit()
 {
 	int power_no;
+	
+	if(!u.sealsActive && !u.specialSealsActive){
+		if(Role_if(PM_EXILE) && u.ulevel > 1 && u.spiritPColdowns[PWR_GNOSIS_PREMONITION] < monstermoves){
+			if(yn("Use Gnosis Premonition?") == 'y'){
+				spiriteffects(PWR_GNOSIS_PREMONITION, FALSE);
+				u.spiritPColdowns[PWR_GNOSIS_PREMONITION] = moves + 125;
+			}
+			return 1;
+		} else {
+			You("don't have any spirits bound.");
+			return 0;
+		}
+	}
 	
 	if (getspirit(&power_no))
 					return spiriteffects(power_no, FALSE);
@@ -1187,7 +1283,7 @@ spiriteffects(power, atme)
 	switch(power){
 		case PWR_ABDUCTION:{
 			struct monst *mon;
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon){
@@ -1217,7 +1313,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
 				mon = u.ustuck;
 				if (!resists_magm(mon)) {
@@ -1225,8 +1321,9 @@ spiriteffects(power, atme)
 					mon->mhp -= dmg;
 					if (mon->mhp <= 0){
 						xkilled(mon, 1);
-					} else{
-						You("hit %s",mon_nam(mon));
+					} else {
+						You("hit %s.",mon_nam(mon));
+						setmangry(mon);
 						u_teleport_mon(mon, TRUE);
 					}
 				}
@@ -1255,6 +1352,7 @@ spiriteffects(power, atme)
 								continue;
 							} else{
 								You("hit %s",mon_nam(mon));
+								setmangry(mon);
 								u_teleport_mon(mon, TRUE);
 							}
 							u_teleport_mon(mon, TRUE);
@@ -1268,7 +1366,7 @@ spiriteffects(power, atme)
 		break;
 		case PWR_JESTER_S_MIRTH:{
 			struct monst *mon;
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon){
@@ -1294,7 +1392,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
 				explode(u.ux,u.uy,5/*Electrical*/, d(range,dsize), WAND_CLASS, EXPL_MAGICAL);
 			} else {
@@ -1343,6 +1441,7 @@ spiriteffects(power, atme)
 					int dd = d(1,3)-2 + d(1,3)-2;
 					xadj = yadj = dd;
 				}
+				if(!ACCESSIBLE(levl[u.ux + xadj + u.dx][u.uy + yadj + u.dy].typ) && rn2(5)) i++;
 				set_destroy_thrown(1); //state variable referenced in drop_throw
 					m_throw(&youmonst, u.ux + xadj, u.uy + yadj, u.dx, u.dy,
 						rn1(5,5), otmp,TRUE);
@@ -1363,7 +1462,7 @@ spiriteffects(power, atme)
 				You("need to be able to see in order to glare!");
 				return 0;
 			}
-			if (!getdir((char *)0) && (u.dz || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
 				You("can't see well enough in here!");
 				break;
@@ -1381,12 +1480,12 @@ spiriteffects(power, atme)
 						} else {
 							dmg = d(5,dsize);
 							mon->mhp -= dmg;
-							setmangry(mon);
 							if(resists_fire(mon)) mon->mhp -= dmg;
 							if (mon->mhp <= 0){
 								xkilled(mon, 1);
 								break;
 							}
+							setmangry(mon);
 						}
 					}
 				  }
@@ -1403,13 +1502,13 @@ spiriteffects(power, atme)
 						} else {
 							dmg = 0.5*d(5,dsize);
 							mon->mhp -= dmg;
-							setmangry(mon);
 							if(resists_fire(mon)) mon->mhp -= dmg;
 							if (mon->mhp <= 0){
 								mon->mhp = 0;
 								xkilled(mon, 1);
 								break;
 							} else You("glare at %s.", mon_nam(mon));
+							setmangry(mon);
 						}
 					}
 				}
@@ -1438,11 +1537,13 @@ spiriteffects(power, atme)
 			//thick-skinned creatures loose their eyes
 			struct monst *mon;
 			int dmg;
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon) break;
-				if(!freehand()){
+				if(!mon){
+					You("reach out to touch empty space!");
+					break;
+				} if(!freehand()){
 					You("need a free hand to make a touch attack!");
 					return 0;
 				}
@@ -1453,27 +1554,33 @@ spiriteffects(power, atme)
 				if (resists_cold(mon) || is_anhydrous(mon->data)) {	/* match effect on player */
 					shieldeff(mon->mx, mon->my);
 				} else {
-					if(rn2(10)){
+					if(rn2(10) || !has_head(mon->data)){
 						dmg = d(5,dsize);
 					} else {
+						pline("An icicle grows on %s head.", s_suffix(mon_nam(mon)));
 						if(thick_skinned(mon->data)){
+							pline("It is blinded!");
 							dmg = d(5,dsize);
 							mon->mcansee = 0;
 							mon->mblinded = 0;
 						} else {
+							pline("It is pierced through!");
 							dmg = mon->mhp;
 						}
 					}
 					mon->mhp -= dmg;
-					setmangry(mon);
 					if(resists_fire(mon)) mon->mhp -= dmg;
 					if (mon->mhp <= 0){
 						mon->mhp = 0;
 						xkilled(mon, 1);
 						break;
 					} else You("hit %s.", mon_nam(mon));
+					setmangry(mon);
 				}
-			} else break;
+			} else{
+				You("reach out to touch empty space!");
+				break;
+				}
 		}break;
 		case PWR_BLOOD_MERCENARY:{
 			int dmg;
@@ -1483,7 +1590,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
-			if (!getdir((char *)0) && !(u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
 				enoughGold = FALSE;
 				reveal_invis = TRUE;
@@ -1504,6 +1611,7 @@ spiriteffects(power, atme)
 						xkilled(mon, 1);
 						break;
 					} else You("hit %s", mon_nam(mon));
+					setmangry(mon);
 				} else You("don't have enough gold on hand.");
 					}
 			You("fire a blast of gold and blood.");
@@ -1539,6 +1647,7 @@ spiriteffects(power, atme)
 								xkilled(mon, 1);
 								continue;
 							} else You("hit %s", mon_nam(mon));
+							setmangry(mon);
 						} You("don't have enough gold on hand.");
 					}
 				} else break;
@@ -1642,7 +1751,7 @@ spiriteffects(power, atme)
 				// m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy,
 					// rn1(5,5), otmp,TRUE);
 				nomul(0, NULL);
-			}
+			} else return 0;
 		break;
 		case PWR_THOUGHT_TRAVEL:{
 			coord cc;
@@ -1669,7 +1778,7 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_EARTH_SWALLOW:{
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				struct obj *otmp;
 				You("ask the earth to open.");
@@ -1692,12 +1801,11 @@ spiriteffects(power, atme)
 		case PWR_SUCKLE_MONSTER:{
 			struct monst *mon;
 			int dmg;
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
-				You("try to suckle a monster on your blood!");
-				losehp((int)(mon->m_lev)+1, "suckling a monster on your blood", KILLED_BY);
+				You("croon the sibilant lullaby of Echidna.");
 				if(rn2(u.ulevel) > mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
 					if (mon->isshk) make_happy_shk(mon, FALSE);
 					else (void) tamedog(mon, (struct obj *) 0);
@@ -1716,7 +1824,7 @@ spiriteffects(power, atme)
 		case PWR_RECALL_TO_EDEN:{
 			struct monst *mon;
 			int perc;
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon || mon->data->geno & G_UNIQ) break;
@@ -1728,7 +1836,9 @@ spiriteffects(power, atme)
 					pline("%s vanishes.", Monnam(mon));
 					healup(d(rnd(5),dsize), 0, FALSE, FALSE);
 					mongone(mon);
+					break;
 				} else You("fail.");
+				setmangry(mon);
 			} else break;
 		}break;
 		case PWR_STARGATE:{
@@ -1783,7 +1893,8 @@ spiriteffects(power, atme)
 			} else {
 			if(!Blind) You("are surrounded by a shimmering sphere!");
 			else You_feel("weightless for a moment.");
-			u.uen = 0;
+			u.uen -= 125;
+			if(u.uen < 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 			goto_level(&newlev, FALSE, FALSE, FALSE);
 			}
 		}break;
@@ -1800,6 +1911,34 @@ spiriteffects(power, atme)
 //			}
 			teleds(cc.x, cc.y, FALSE);
 		}break;
+		case PWR_GEYSER:{
+			int dmg;
+			struct monst *mon;
+			struct trap *t;
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				t = t_at(u.ux+u.dx, u.uy+u.dy);
+				if(mon){
+					if(find_roll_to_hit(mon) <= rnd(20)){
+						pline("A sudden geyser from the abzu washes over %s!", mon_nam(mon));
+						dmg = d(rnd(5), dsize);
+					} else {
+						pline("A sudden geyser from the abzu slams into %s!", mon_nam(mon));
+						dmg = d(8, dsize);
+					}
+					if(flaming(mon->data) || mon->data == &mons[PM_EARTH_ELEMENTAL]) dmg *= 2;
+					water_damage(mon->minvent, FALSE, FALSE, FALSE);
+					mon->mhp -= dmg;
+					if (mon->mhp <= 0){
+						mon->mhp = 0;
+						xkilled(mon, 1);
+						break;
+					}
+					setmangry(mon);
+				}
+			} else break;
+		}break;
 		case PWR_VENGANCE:{
 			struct monst *mon;
 			int i,j;
@@ -1808,11 +1947,12 @@ spiriteffects(power, atme)
 			  for(j=-1;j<=1;j++){
 				if((i!=0 || j!=0) && isok(u.ux+i, u.uy+j) && (mon = m_at(u.ux+i, u.uy+j)) && mon->mhurtu){
 					mon->mhp -= d(5,dsize);
-					setmangry(mon);
 					if (mon->mhp <= 0){
 						mon->mhp = 0;
 						xkilled(mon, 1);
+						break;
 					} else You("hit %s",mon_nam(mon));
+					setmangry(mon);
 				}
 			  }
 			}
@@ -1904,7 +2044,7 @@ spiriteffects(power, atme)
 				You("can't use a ruinous strike while stuck in a trap!");
 				return 0;
 			}
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				You("deliver a ruinous strike.");
 				zap_dig(-1,-1,1);
@@ -1932,60 +2072,84 @@ spiriteffects(power, atme)
 					if(mon->mhp <= 0){
 						mon->mhp = 0;
 						xkilled(mon,1);
+						break;
 					} else You("hit %s.", mon_nam(mon));
+					setmangry(mon);
 				}
 			} else break;
 		}break;
 		case PWR_RAVEN_S_TALONS:{
 			int dmg;
 			struct monst *mon;
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
+				dmg = d(rnd(5),dsize);
 				if(haseyes(mon->data) && mon->mcansee){
+					if(mon->data == &mons[PM_FLOATING_EYE]){
+						You("claw at %s.", mon_nam(mon));
+						dmg += d(5,dsize); //Bonus damage, since this renders wards inefective and is single target.
+						dmg *= 2;
+					} else {
 					You("claw at %s's eyes.", mon_nam(mon));
-					if(mon->mcansee) dmg = d(5,dsize);
+						dmg += d(5,dsize); //Bonus damage, since this renders wards inefective and is single target.
+					}
 				mon->mcansee = 0;
 				mon->mblinded = 0;
-				} else dmg = d(rnd(5),dsize);
+				}
 				mon->mhp -= dmg;
 				if (mon->mhp <= 0){
 					mon->mhp = 0;
 					xkilled(mon, 1);
 					break;
 				} else You("hit %s.", mon_nam(mon));
+				setmangry(mon);
 			} else break;
 		}break;
 		case PWR_HORRID_WILTING:{
 			int dmg;
 			struct monst *mon;
-			if (!getdir((char *)0)  && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon) break;
-				if(nonliving(mon->data) || is_anhydrous(mon->data)){
+				if(!mon){
+					pline("\"There's no one there, buddy!\"");
+					return;
+				} if(nonliving(mon->data) || is_anhydrous(mon->data)){
 					shieldeff(mon->mx, mon->my);
 					break;
 				}
 				dmg = d(5,dsize);
-				if (mon->mhp < dmg){
+				u.irisAttack = moves;
+				pline("Arcs of iridescent  droplets tear free from %s body!", s_suffix(mon_nam(mon)));
+				pline("They merge with and are absorbed by your tentacles!");
+				if(mon->data==&mons[PM_WATER_ELEMENTAL] || mon->data==&mons[PM_FOG_CLOUD] || mon->data==&mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES]) dmg *= 2;
+				if (mon->mhp <= dmg){
 					dmg = mon->mhp;
 					mon->mhp = 0;
 					xkilled(mon, 1);
+					break;
 				} else{
 					mon->mhp -= dmg;
-					You("hit %s.", mon_nam(mon));
+					setmangry(mon);
 				}
 				healup(dmg, 0, FALSE, FALSE);
-			} else break;
+			} else {
+				pline("\"There's no one there, buddy!\"");
+				return;
+			}
 		}break;
 		case PWR_TURN_ANIMALS_AND_HUMANOIDS:{
 			register struct monst *mtmp;
+			int range = BOLT_LIM + dsize;	/* 5 to 14 */
+			range *= range;
 			You("try to turn away or slay animals and humanoids.");
+			pline("A rainbow of unearthly colors dances behind your eyes!");
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 				if (DEADMONSTER(mtmp)) continue;
-				if(cansee(mtmp->mx,mtmp->my) && (is_animal(mtmp->data) || 
+				if(cansee(mtmp->mx,mtmp->my) && distu(mtmp->mx,mtmp->my) <= range &&
+					(is_animal(mtmp->data) || 
 												 mtmp->data->mlet == S_HUMAN  || 
 												 mtmp->data->mlet == S_HUMANOID ) 
 											 && !mindless(mtmp->data)
@@ -1996,6 +2160,7 @@ spiriteffects(power, atme)
 					} else monflee(mtmp, d(5,dsize), FALSE, TRUE);
 				}
 			}
+			nomul(5,"recovering from the Horrid Rainbow");
 		}break;
 		case PWR_REFILL_LANTERN:
 			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact){
@@ -2064,6 +2229,7 @@ spiriteffects(power, atme)
 							xkilled(mon, 1);
 							continue;
 						} else You("hit %s", mon_nam(mon));
+						setmangry(mon);
 					}
 				} else break;
 			}
@@ -2074,7 +2240,7 @@ spiriteffects(power, atme)
 			const char *pullmsg = "The wires yank you out of the %s!";
 			boolean once = FALSE;
 			for(i=0;i<dsize;i++){
-			if (!getdir((char *)0)  && (u.dx || u.dy)) break;
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) break;
 				once = TRUE;
 				sx = u.ux;
 				sy = u.uy;
@@ -2188,12 +2354,12 @@ spiriteffects(power, atme)
 						shieldeff(mon->mx, mon->my);
 					} else {
 						mon->mhp -= d(5,dsize);
-						setmangry(mon);
 						if (mon->mhp <= 0){
 							mon->mhp = 0;
 							xkilled(mon, 1);
 							break;
 						}
+							setmangry(mon);
 					}
 				} else {
 					You("don't see a monster there.");
@@ -2207,16 +2373,16 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_BLOODY_TOUNGE:{
 			struct monst *mon;
-			if(!getdir((char *)0)  && (u.dx || u.dy)) break;
+			if(!getdir((char *)0)  || !(u.dx || u.dy)) return 0;
 			Your("forked red tongue speaks of its own accord.");
 			if(mon = m_at(u.ux+u.dx, u.uy+u.dy)){
 				mon->mflee = 1;//does not make monster hostile
 				pline("%s turns to flee.", Monnam(mon));
-			}
+			} else return 0;
 		}break;
 		case PWR_SILVER_TOUNGE:{
 			struct monst *mon;
-			if(!getdir((char *)0)  && (u.dx || u.dy)) break;
+			if(!getdir((char *)0)  || !(u.dx || u.dy)) return 0;
 			if((mon = m_at(u.ux+u.dx, u.uy+u.dy)) && 
 				always_hostile(mon->data) &&
 				!(mon->data->geno & G_UNIQ) &&
@@ -2225,7 +2391,7 @@ spiriteffects(power, atme)
 				Your("forked tongue speaks with silvery grace.");
 				if (mon->isshk) make_happy_shk(mon, FALSE);
 				mon->mpeaceful = 1;
-			}
+			} else return 0;
 		}break;
 		case PWR_EXHALATION_OF_THE_RIFT:{
 			int dmg, i;
@@ -2264,7 +2430,10 @@ spiriteffects(power, atme)
 						if (mon->mhp <= 0){
 							mon->mhp = 0;
 							xkilled(mon, 1);
-						} else pline("%s is flung back by the wind.",Monnam(mon));
+						} else {
+							pline("%s is flung back by the wind.",Monnam(mon));
+							setmangry(mon);
+						}
 					}
 					if(!u.dx){
 						if(isok(sx+1,sy)){
@@ -2272,11 +2441,13 @@ spiriteffects(power, atme)
 							if(mon){
 								mhurtle(mon, u.dx, u.dy, range+i);
 								mon->mhp -= d(rnd(5),dsize);
-								setmangry(mon);
 								if (mon->mhp <= 0){
 									mon->mhp = 0;
 									xkilled(mon, 1);
-								} else pline("%s is flung back by the wind.",Monnam(mon));
+								} else {
+									pline("%s is flung back by the wind.",Monnam(mon));
+									setmangry(mon);
+								}
 							}
 						}
 						if(isok(sx-1,sy)){
@@ -2284,11 +2455,13 @@ spiriteffects(power, atme)
 							if(mon){
 								mhurtle(mon, u.dx, u.dy, range+i);
 								mon->mhp -= d(rnd(5),dsize);
-								setmangry(mon);
 								if (mon->mhp <= 0){
 									mon->mhp = 0;
 									xkilled(mon, 1);
-								} else pline("%s is flung back by the wind.",Monnam(mon));
+								} else {
+									pline("%s is flung back by the wind.",Monnam(mon));
+									setmangry(mon);
+								}
 							}
 						}
 					} else if(!u.dy){
@@ -2297,11 +2470,13 @@ spiriteffects(power, atme)
 							if(mon){
 								mhurtle(mon, u.dx, u.dy, range+i);
 								mon->mhp -= d(rnd(5),dsize);
-								setmangry(mon);
 								if (mon->mhp <= 0){
 									mon->mhp = 0;
 									xkilled(mon, 1);
-								} else pline("%s is flung back by the wind.",Monnam(mon));
+								} else {
+									pline("%s is flung back by the wind.",Monnam(mon));
+									setmangry(mon);
+								}
 							}
 						}
 						if(isok(sx,sy-1)){
@@ -2309,11 +2484,13 @@ spiriteffects(power, atme)
 							if(mon){
 								mhurtle(mon, u.dx, u.dy, range+i);
 								mon->mhp -= d(rnd(5),dsize);
-								setmangry(mon);
 								if (mon->mhp <= 0){
 									mon->mhp = 0;
 									xkilled(mon, 1);
-								} else pline("%s is flung back by the wind.",Monnam(mon));
+								} else {
+									pline("%s is flung back by the wind.",Monnam(mon));
+									setmangry(mon);
+								}
 							}
 						}
 					} else {
@@ -2322,11 +2499,13 @@ spiriteffects(power, atme)
 							if(mon){
 								mhurtle(mon, u.dx, u.dy, range+i);
 								mon->mhp -= d(rnd(5),dsize);
-								setmangry(mon);
 								if (mon->mhp <= 0){
 									mon->mhp = 0;
 									xkilled(mon, 1);
-								} else pline("%s is flung back by the wind.",Monnam(mon));
+								} else {
+									pline("%s is flung back by the wind.",Monnam(mon));
+									setmangry(mon);
+								}
 							}
 						}
 						if(isok(sx-u.dx,sy)){
@@ -2334,11 +2513,13 @@ spiriteffects(power, atme)
 							if(mon){
 								mhurtle(mon, u.dx, u.dy, range+i);
 								mon->mhp -= d(rnd(5),dsize);
-								setmangry(mon);
 								if (mon->mhp <= 0){
 									mon->mhp = 0;
 									xkilled(mon, 1);
-								} else pline("%s is flung back by the wind.",Monnam(mon));
+								} else {
+									pline("%s is flung back by the wind.",Monnam(mon));
+									setmangry(mon);
+								}
 							}
 						}
 					}
@@ -2356,9 +2537,12 @@ spiriteffects(power, atme)
 				if (mon->mpeaceful) continue;
 				if (mindless(mon->data)) continue;
 				if (telepathic(mon->data) || !rn2(5)){
-					mon->mhp -= d(5,10);
+					mon->mhp -= d(5,15);
 					if (mon->mhp <= 0) xkilled(mon, 1);
-					else mon->msleeping = 1;
+					else {
+						setmangry(mon);
+						mon->msleeping = 1;
+					}
 				}
 				else mon->msleeping = 0;
 			}
@@ -2407,16 +2591,16 @@ spiriteffects(power, atme)
 								You("open a door into %s, exposing %s internal organs.", mon_nam(mon), hisherits(mon));
 								mon->mhp -= d(rnd(5) * 5,dsize);
 							} else {
-								You("open a door into %s, releasing %s vital organs.", mon_nam(mon), hisherits(mon));
+								You("open a door into %s, releasing %s vital organs!", mon_nam(mon), hisherits(mon));
 								mon->mhp = 0;
 							}
 						}
-						setmangry(mon);
 						if (mon->mhp <= 0){
 							mon->mhp = 0;
 							xkilled(mon, 1);
 							break;
 						}
+						setmangry(mon);
 					}
 				}
 			} else return 0;
@@ -2424,13 +2608,13 @@ spiriteffects(power, atme)
 		case PWR_READ_SPELL:{
 			if(uwep && uwep->oclass == SPBOOK_CLASS && !uwep->oartifact && uwep->otyp != SPE_BLANK_PAPER && uwep->otyp != SPE_SECRETS){
 				You("read from the spellbook in your hands.");
-				uwep->spestudied++;
-				costly_cancel(uwep);
+				// uwep->spestudied++;
+				// costly_cancel(uwep);
 				spelleffects(0,FALSE,uwep->otyp);
-	    	    if(uwep->spestudied > MAX_SPELL_STUDY){
-					pline("The magical energy within %s is exhausted.",the(xname(uwep)));
-					uwep->otyp = SPE_BLANK_PAPER;
-				}
+	    	    // if(uwep->spestudied > MAX_SPELL_STUDY){
+					// pline("The magical energy within %s is exhausted.",the(xname(uwep)));
+					// uwep->otyp = SPE_BLANK_PAPER;
+				// }
 			} else{
 				You("need to be holding a spellbook.");
 				return 0;
@@ -2453,6 +2637,16 @@ spiriteffects(power, atme)
 					if(mon) mon->mtrapped = 0;
 				} else if(levl[u.ux+u.dx][u.uy+u.dy].typ == ROOM || levl[u.ux+u.dx][u.uy+u.dy].typ == CORR){
 					pline("Water rains down from above, and a tree grows up from the ground.");
+					levl[u.ux+u.dx][u.uy+u.dy].typ = TREE;
+					newsym(u.ux+u.dx, u.uy+u.dy);
+				} else if(levl[u.ux+u.dx][u.uy+u.dy].typ == TREE && 
+							levl[u.ux+u.dx][u.uy+u.dy].looted & TREE_LOOTED
+				){
+					pline("Water rains down from above, and fruit grows on the tree before you.");
+					levl[u.ux+u.dx][u.uy+u.dy].looted &= ~TREE_LOOTED;
+					newsym(u.ux+u.dx, u.uy+u.dy);
+				} else if(levl[u.ux+u.dx][u.uy+u.dy].typ == DEADTREE){
+					pline("Water rains down from above, bringing new life to the dead tree.");
 					levl[u.ux+u.dx][u.uy+u.dy].typ = TREE;
 					newsym(u.ux+u.dx, u.uy+u.dy);
 				}
@@ -2526,6 +2720,7 @@ spiriteffects(power, atme)
 				else {
 					if (canseemon(mon))
 						pline("%s suddenly seems weaker!", Monnam(mon));
+					setmangry(mon);
 				}
 			}
 		}break;
@@ -2591,6 +2786,7 @@ spiriteffects(power, atme)
 					xkilled(mon, 1);
 					break;
 				} else You("shoot a venomous glare at %s.", mon_nam(mon));
+				setmangry(mon);
 			}
 		}break;
 		case PWR_GAP_STEP:
@@ -2642,6 +2838,114 @@ spiriteffects(power, atme)
 				else healup(d(mon->m_lev,4), 0, FALSE, FALSE);
 			}
 		}break;
+		case PWR_EMBASSY_OF_ELEMENTS:{
+		    int spirit_id = pick_council_seal();
+			if(spirit_id) councilspirit(spirit_id);
+			else return 0;
+			You("re-contact %s", sealNames[spirit_id-FIRST_SEAL]);
+		}break;
+		case PWR_SUMMON_MONSTER:{
+			struct monst *mon;
+			struct permonst *pm;
+			pm = choose_crystal_summon();
+			if(pm && (mon = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH|NO_MINVENT))){
+				initedog(mon);
+				mon->mvanishes = 5;
+			} else return 0;
+		}break;
+		case PWR_MIRROR_SHATTER:{
+			int dmg;
+			boolean done = FALSE;
+			struct obj *obj;
+			xchar lsx, lsy, sx, sy;
+			struct monst *mon;
+			sx = u.ux;
+			sy = u.uy;
+			if(u.uswallow){
+				You("can't do that in here");
+				return 0;
+			}
+			if(!(uwep && uwep->otyp == MIRROR && !(uwep->oartifact))){
+				You("must be wielding a breakable mirror to use this power!");
+				return 0;
+			}
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
+			while(!done){
+				sx += u.dx;
+				sy += u.dy;
+				if(!isok(sx,sy)) return 0;
+				else {
+					for (obj = level.objects[sx][sy]; obj; obj = obj->nexthere) {
+						if(obj->otyp == MIRROR){
+							useupf(obj, 1);
+							done = TRUE;
+							break;
+						}
+					}
+					mon = m_at(sx, sy);
+					if(!done && mon){
+						for (obj = mon->minvent; obj; obj = obj->nobj) {
+							if(obj->otyp == MIRROR && !(obj->oartifact)){
+								m_useup(mon, obj);
+								done = TRUE;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if(!done) return 0;
+			//else
+			useup(uwep);
+			if(u.uhs == WEAK && u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH,TRUE);
+			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+			
+			while(sx != u.ux && sy != u.uy){
+				sx -= u.dx;
+				sy -= u.dy;
+				if(!isok(sx,sy)) break; //shouldn't need this, but....
+				else {
+					mon = m_at(sx, sy);
+					/* reveal/unreveal invisible monsters before tmp_at() */
+					if (mon && !canspotmon(mon) && cansee(sx,sy))
+						map_invisible(sx, sy);
+					else if (!mon && glyph_is_invisible(levl[sx][sy].glyph)) {
+						unmap_object(sx, sy);
+						newsym(sx, sy);
+					}
+					if (mon) {
+						reveal_invis = TRUE;
+						if (resists_magm(mon)) {	/* match effect on player */
+							shieldeff(mon->mx, mon->my);
+						} else {
+							dmg = d(5,dsize);
+							if(hates_silver(mon->data)){
+								dmg += rnd(20);
+								pline("The flying shards of mirror sear %s!", mon_nam(mon));
+							} else {
+								pline("The flying shards of mirror hit %s.", mon_nam(mon));
+								u_teleport_mon(mon, TRUE);
+							}
+							mon->mhp -= dmg;
+							if (mon->mhp <= 0){
+								xkilled(mon, 1);
+							}
+						}
+					}
+				}
+			}
+		}break;
+		case PWR_PHASE_STEP:{
+			if(!Passes_walls){
+				if (!Hallucination) {    
+					Your("body begins to feel less solid.");
+				} else {
+					You_feel("one with the spirit world.");
+				}
+			}
+			incr_itimeout(&Phasing, 5);
+		}break;
 		case PWR_IDENTIFY_INVENTORY:
 		    identify_pack(0);
 		break;
@@ -2664,13 +2968,56 @@ spiriteffects(power, atme)
 				You_feel("%s path in the distance.", In_endgame(&u.uz) ? "the":"a");
 			}
 		}break;
+		case PWR_GNOSIS_PREMONITION:{
+		    int spirit_id = pick_gnosis_seal();
+			if(spirit_id) gnosisspirit(spirit_id);
+			else return 0;
+			You("dream of %s", sealNames[spirit_id-FIRST_SEAL]);
+		}break;
 		default:
-			pline("BANG! That's not going to kill TOO many people, is it...? Unknown power %d.", power);
+			pline("BANG! That's not going to kill TOO many people, is it...? (Unknown power %d.)", power);
 		break;
 	}
 	u.spiritPColdowns[power] = monstermoves + 25;
 	return 1;
 }
+
+struct permonst *
+choose_crystal_summon()
+{
+	winid tmpwin;
+	int i, n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	long seal_flag = 0x1L;
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf,	"Pick creature to summon:");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	for(i = 0; i < NUMMONS; i++){
+		if( (mons[i].geno&G_UNIQ && mvitals[i].died >= 1 && i != PM_CREATURE_IN_THE_ICE)){
+			Sprintf(buf, "%s", mons[i].mname);
+			any.a_int = i;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+		}
+	}
+	end_menu(tmpwin,	"Choose summon:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? &mons[selected[0].item.a_int] : (struct permonst *) 0;
+}
+
 
 int
 spelleffects(spell, atme, spelltyp)
@@ -2739,14 +3086,21 @@ boolean atme;
 			 * understand quite well how to cast spells.
 			 */
 			intell = acurr(A_INT);
-			if (!Role_if(PM_WIZARD)) intell = 10;
-			switch (intell) {
-				case 25: case 24: case 23: case 22:
-				case 21: case 20: case 19: case 18:
-				case 17: hungr = 0; break;
-				case 16: hungr /= 4; break;
-				case 15: hungr /= 2; break;
-			}
+				if (!Role_if(PM_WIZARD)){
+					if(Race_if(PM_INCANTIFIER)) intell -= 6;
+					else intell -= 10;
+				}
+				if(intell < 15);
+				else if(intell < 16) hungr /= 2;
+				else if(intell < 20) hungr /= 4;
+				else hungr = 0;
+				// switch (intell) {
+					// case 25: case 24: case 23: case 22:
+					// case 21: case 20: case 19: case 18:
+					// case 17: hungr = 0; break;
+					// case 16: hungr /= 4; break;
+					// case 15: hungr /= 2; break;
+				// }
 			/* don't put player (quite) into fainting from
 			 * casting a spell, particularly since they might
 			 * not even be hungry at the beginning; however,
@@ -3075,11 +3429,6 @@ int *power_no;
 	start_menu(tmpwin);
 	any.a_void = 0;		/* zero out all bits */
 	
-	if(!u.sealsActive && !u.specialSealsActive){
-		You("don't have any spirits bound.");
-		return 0;
-	}
-	
 	Sprintf(buf, "Select spirit power:");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	
@@ -3255,6 +3604,8 @@ int spell;
 	else if (uarmc && uarmc->otyp == ROBE)
 		splcaster -= uarmc->oartifact ? 2*urole.spelarmr : urole.spelarmr;
 
+	if(u.sealsActive&SEAL_PAIMON) splcaster -= urole.spelarmr;
+	
 	if(uarm && uarm->otyp == DROVEN_CHAIN_MAIL) splcaster -= urole.spelarmr/2;
 	
 	if(uarm && uarm->oartifact == ART_DRAGON_PLATE) splcaster += urole.spelarmr;

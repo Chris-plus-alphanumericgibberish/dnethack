@@ -47,8 +47,9 @@ static struct trobj Barbarian[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Binder[] = {
-	{ VOULGE, 0, WEAPON_CLASS, 1, 0 },
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
+	{ VOULGE, 0, WEAPON_CLASS, 1, 0 },
+	{ SICKLE, 0, WEAPON_CLASS, 1, 0 },
 	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
 	{ FLINT, 0, GEM_CLASS, 1, 0 },
 	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, 0 },
@@ -323,6 +324,7 @@ static struct trobj Money[] = {
    the weaker cloak for elven rangers is intentional--they shoot better */
 static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ELF,	DAGGER,			ELVEN_DAGGER	      },
+    { PM_ELF,	KNIFE,			ELVEN_DAGGER	      },
     { PM_ELF,	SPEAR,			ELVEN_SPEAR	      },
     { PM_ELF,	SHORT_SWORD,		ELVEN_SHORT_SWORD     },
     { PM_ELF,	BOW,			ELVEN_BOW	      },
@@ -332,6 +334,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ELF,	CLOAK_OF_DISPLACEMENT,	ELVEN_CLOAK	      },
     { PM_ELF,	CRAM_RATION,		LEMBAS_WAFER	      },
     { PM_ORC,	DAGGER,			ORCISH_DAGGER	      },
+    { PM_ORC,	KNIFE,			ORCISH_DAGGER	      },
     { PM_ORC,	SPEAR,			ORCISH_SPEAR	      },
     { PM_ORC,	SHORT_SWORD,		ORCISH_SHORT_SWORD    },
     { PM_ORC,	BOW,			ORCISH_BOW	      },
@@ -354,6 +357,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	CLOAK_OF_MAGIC_RESISTANCE,	DROVEN_CHAIN_MAIL  },
     { PM_DROW,	ROBE,						DROVEN_PLATE_MAIL  },
     { PM_DROW,	DAGGER,			DROVEN_DAGGER	      },
+    { PM_DROW,	KNIFE,			DROVEN_DAGGER	      },
     { PM_DROW,	SPEAR,			DROVEN_SHORT_SWORD	      },
     { PM_DROW,	SHORT_SWORD,	DROVEN_SHORT_SWORD     },
     { PM_DROW,	BOW,			DROVEN_CROSSBOW	      },
@@ -927,7 +931,7 @@ u_init()
 	u.umoved = FALSE;
 	u.umortality = 0;
 	u.ugrave_arise = Role_if(PM_PIRATE) ? PM_SKELETAL_PIRATE : 
-					 Role_if(PM_EXILE) ? PM_SHADE 
+					 Role_if(PM_EXILE) ? PM_BROKEN_SHADOW 
 						: NON_PM;
 	
 	u.ukinghill = 0;
@@ -949,15 +953,17 @@ u_init()
 	if(Role_if(PM_EXILE)){
 		u.sealsKnown = sealKey[u.sealorder[0]] | sealKey[u.sealorder[1]] | sealKey[u.sealorder[2]];
 	}
-	else 	u.sealsKnown = 0;
+	else 	u.sealsKnown = 0L;
+	
+	u.specialSealsKnown = 0L;
 
 	u.sealCounts = 0;
 	u.sealsActive = 0;
 	u.specialSealsActive = 0;
 
-	u.ahazu = u.amon = u.andrealphus = u.andromalius = u.astaroth = u.balam = u.berith = u.buer = u.chupoclops = u.dantalion = u.shiro = 0;
-	u.echidna = u.eden = u.enki = u.eurynome = u.eve = u.fafnir = u.huginn_muninn = u.iris = u.jack = u.malphas = u.marionette = u.mother = 0;
-	u.naberius = u.orthos = u.ose = u.otiax = u.paimon = u.simurgh = u.tenebrous = u.ymir = u.dahlver_nar = u.acererak = 0;
+	u.sealTimeout[AHAZU-FIRST_SEAL] = u.sealTimeout[AMON-FIRST_SEAL] = u.sealTimeout[ANDREALPHUS-FIRST_SEAL] = u.sealTimeout[ANDROMALIUS-FIRST_SEAL] = u.sealTimeout[ASTAROTH-FIRST_SEAL] = u.sealTimeout[BALAM-FIRST_SEAL] = u.sealTimeout[BERITH-FIRST_SEAL] = u.sealTimeout[BUER-FIRST_SEAL] = u.sealTimeout[CHUPOCLOPS-FIRST_SEAL] = u.sealTimeout[DANTALION-FIRST_SEAL] = u.sealTimeout[SHIRO-FIRST_SEAL] = 0;
+	u.sealTimeout[ECHIDNA-FIRST_SEAL] = u.sealTimeout[EDEN-FIRST_SEAL] = u.sealTimeout[ENKI-FIRST_SEAL] = u.sealTimeout[EURYNOME-FIRST_SEAL] = u.sealTimeout[EVE-FIRST_SEAL] = u.sealTimeout[FAFNIR-FIRST_SEAL] = u.sealTimeout[HUGINN_MUNINN-FIRST_SEAL] = u.sealTimeout[IRIS-FIRST_SEAL] = u.sealTimeout[JACK-FIRST_SEAL] = u.sealTimeout[MALPHAS-FIRST_SEAL] = u.sealTimeout[MARIONETTE-FIRST_SEAL] = u.sealTimeout[MOTHER-FIRST_SEAL] = 0;
+	u.sealTimeout[NABERIUS-FIRST_SEAL] = u.sealTimeout[ORTHOS-FIRST_SEAL] = u.sealTimeout[OSE-FIRST_SEAL] = u.sealTimeout[OTIAX-FIRST_SEAL] = u.sealTimeout[PAIMON-FIRST_SEAL] = u.sealTimeout[SIMURGH-FIRST_SEAL] = u.sealTimeout[TENEBROUS-FIRST_SEAL] = u.sealTimeout[YMIR-FIRST_SEAL] = u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = u.sealTimeout[ACERERAK-FIRST_SEAL] = 0;
 	
 	u.osepro[0] = '\0';
 	u.osegen[0] = '\0';
@@ -1097,6 +1103,7 @@ u_init()
 	case PM_EXILE:
 		ini_inv(Binder);
 		skill_init(Skill_N);
+		knows_object(FLINT);
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 			u.ualign.type = A_VOID; /* Override racial alignment */
 		u.hod += 10;  /*One transgression is all it takes*/
@@ -1369,11 +1376,13 @@ u_init()
 	    knows_object(DWARVISH_ROUNDSHIELD);
 		otmp = mksobj(CLUB, TRUE, FALSE);
 		otmp->spe = otmp->cursed = otmp->blessed = 0;
-		otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+		if(Role_if(PM_EXILE)) otmp->dknown = otmp->rknown = otmp->sknown = 1;
+		else otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 		addinv(otmp);
 		otmp = mksobj(KNIFE, TRUE, FALSE);
 		otmp->spe = otmp->cursed = otmp->blessed = 0;
-		otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+		if(Role_if(PM_EXILE)) otmp->dknown = otmp->rknown = otmp->sknown = 1;
+		else otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 		addinv(otmp);
 		u.wardsknown |= WARD_TOUSTEFNA;
 		u.wardsknown |= WARD_DREPRUN;
@@ -1887,7 +1896,12 @@ register struct trobj *trop;
 #endif
 			if(Role_if(PM_EXILE)){
 				obj->dknown = obj->rknown = obj->sknown = 1;
-				if(obj->oclass == WEAPON_CLASS) obj->oeroded = 1;
+				if(obj->oclass == WEAPON_CLASS && !Race_if(PM_DWARF)){
+					if(objects[otyp].oc_material != WOOD) obj->oeroded = 1;
+					else obj->oeroded2 = 1;
+				} else if(obj->oclass == FOOD_CLASS){
+					obj->ostolen = TRUE;
+				} else if(obj->otyp == FLINT) obj->known = 1;
 			}else{
 				obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
 			if (objects[otyp].oc_uses_known) obj->known = 1;

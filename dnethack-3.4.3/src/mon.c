@@ -222,6 +222,10 @@ register struct monst *mtmp;
 	int mndx = monsndx(mdat);
 	struct obj *otmp;
 
+	if(u.specialSealsActive&SEAL_NUDZIARTH && !rn2(100)){
+		(void) mksobj_at(MIRROR, x, y, TRUE, FALSE);
+	}
+	
 	switch(mndx) {
 	    case PM_GRAY_DRAGON:
 	    case PM_SILVER_DRAGON:

@@ -1015,7 +1015,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			    a_your[trap->madeby_u]);
 		    break;
 		}
-		if (webmaker(youmonst.data) || (uarm && uarm->oartifact==ART_SPIDERSILK)) {
+		if (webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK)) {
 		    if (webmsgok)
 		    	pline(trap->madeby_u ? "You take a walk on your web."
 					 : "There is a spider web here.");
@@ -3212,7 +3212,7 @@ dountrap()	/* disarm a trap */
 	    pline("You're too strained to do that.");
 	    return 0;
 	}
-	if ((nohands(youmonst.data) && !(webmaker(youmonst.data) || (uarm && uarm->oartifact==ART_SPIDERSILK))) || !youmonst.data->mmove) {
+	if ((nohands(youmonst.data) && !(webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) || !youmonst.data->mmove) {
 	    pline("And just how do you expect to do that?");
 	    return 0;
 	} else if (u.ustuck && sticks(youmonst.data)) {
@@ -3237,7 +3237,7 @@ struct trap *ttmp;
 	int chance = 3;
 
 	/* Only spiders know how to deal with webs reliably */
-	if (ttmp->ttyp == WEB && !(webmaker(youmonst.data))  || (uarm && uarm->oartifact==ART_SPIDERSILK))
+	if (ttmp->ttyp == WEB && !(webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK)))
 	 	chance = 30;
 	if (Confusion || Hallucination) chance++;
 	if (Blind) chance++;
@@ -3356,7 +3356,7 @@ boolean force_failure;
 			    if (mtmp->mtame) abuse_dog(mtmp);
 			    if ((mtmp->mhp -= rnd(4)) <= 0) killed(mtmp);
 			} else if (ttype == WEB) {
-			    if (!(webmaker(youmonst.data) || (uarm && uarm->oartifact==ART_SPIDERSILK))) {
+			    if (!(webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) {
 				struct trap *ttmp2 = maketrap(u.ux, u.uy, WEB);
 				if (ttmp2) {
 				    pline_The("webbing sticks to you. You're caught too!");
@@ -3495,9 +3495,9 @@ dowebgush(cx,cy)
 {
 	int madeweb = 0;
 	
-	webxprime = u.ux;
-	webyprime = u.uy;
-	do_clear_area(cx, cy, 4, webgush, (genericptr_t)&madeweb);
+	webxprime = cx;
+	webyprime = cy;
+	do_clear_area(cx, cy, 2, webgush, (genericptr_t)&madeweb);
 }
 
 void
@@ -3508,10 +3508,10 @@ genericptr_t poolcnt;
 	register struct monst *mtmp;
 	register struct trap *ttmp;
 
-	if (((cx+cy)%2 && rn2(3 + distmin(webxprime, webyprime, cx, cy))) || 
-	    (rn2(1 + distmin(webxprime, webyprime, cx, cy)))  ||
-	    (levl[cx][cy].typ != ROOM))
-		return;
+	if (( (((webxprime-cx)+(webyprime-cy))%2) && 
+			distmin(webxprime, webyprime, cx, cy)%2)  ||
+	    !(SPACE_POS(levl[cx][cy].typ))
+	) return;
 
 	if ((ttmp = t_at(cx, cy)) != 0)
 		return;

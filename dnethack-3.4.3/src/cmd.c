@@ -1016,6 +1016,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	    };
 #endif
 	    if(Role_if(PM_PIRATE)) you_are("the Pirate King");
+	    else if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
 		else you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
 	}
 	
@@ -1058,8 +1059,12 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		you_have(buf);
 		numBound = u.sealCounts;
 		if(u.spirit[QUEST_SPIRIT]) numBound++;
+		if(Role_if(PM_EXILE) && u.uevent.uhand_of_elbereth) numBound++;
+		if(u.spirit[CROWN_SPIRIT]) numBound++;
+		if(u.spirit[GPREM_SPIRIT]) numBound++;
+		if(u.spirit[ALIGN_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
-		Sprintf(buf, "You are contracted to ");
+		Sprintf(buf, "Your soul is bound to ");
 		for(i=0;i<NUM_BIND_SPRITS;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
@@ -1092,6 +1097,60 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_COUNCIL){
+			Strcat(buf, sealNames[(COUNCIL) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_COSMOS){
+			Strcat(buf, sealNames[(COSMOS) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
+			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_NUDZIARTH){
+			Strcat(buf, sealNames[(NUDZIARTH) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_ALIGNMENT_THING){
+			Strcat(buf, sealNames[(ALIGNMENT_THING) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_UNKNOWN_GOD){
+			Strcat(buf, sealNames[(UNKNOWN_GOD) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_NUMINA){
 			Strcat(buf, sealNames[(NUMINA) - (FIRST_SEAL)]);
 			numFound++;
@@ -1101,6 +1160,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		Strcat(buf,".");
 		putstr(en_win, 0, buf);
 	}
 #endif
@@ -1429,8 +1489,12 @@ resistances_enlightenment()
 		int i,j,numBound,numFound=0;
 		numBound = u.sealCounts;
 		if(u.spirit[QUEST_SPIRIT]) numBound++;
+		if(Role_if(PM_EXILE) && u.uevent.uhand_of_elbereth) numBound++;
+		if(u.spirit[CROWN_SPIRIT]) numBound++;
+		if(u.spirit[GPREM_SPIRIT]) numBound++;
+		if(u.spirit[ALIGN_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
-		Sprintf(buf, "You are contracted to ");
+		Sprintf(buf, "Your soul is bound to ");
 		for(i=0;i<NUM_BIND_SPRITS;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
@@ -1463,6 +1527,60 @@ resistances_enlightenment()
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_COUNCIL){
+			Strcat(buf, sealNames[(COUNCIL) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_COSMOS){
+			Strcat(buf, sealNames[(COSMOS) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
+			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_NUDZIARTH){
+			Strcat(buf, sealNames[(NUDZIARTH) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_ALIGNMENT_THING){
+			Strcat(buf, sealNames[(ALIGNMENT_THING) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_UNKNOWN_GOD){
+			Strcat(buf, sealNames[(UNKNOWN_GOD) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_NUMINA){
 			Strcat(buf, sealNames[(NUMINA) - (FIRST_SEAL)]);
 			numFound++;
@@ -1472,6 +1590,7 @@ resistances_enlightenment()
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		Strcat(buf,".");
 		putstr(en_win, 0, buf);
 	}
 	display_nhwindow(en_win, TRUE);
@@ -1817,7 +1936,7 @@ signs_mirror()
 		if(!uarmf)
 			putstr(en_win, 0, "Your legs bifurcate into twin pairs of cloven-hoved feet.");
 		else
-			putstr(en_win, 0, "Your strange feet a hidden in your shoes.");
+			putstr(en_win, 0, "Your strange feet are hidden in your shoes.");
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_CHUPOCLOPS && !NoBInvis){

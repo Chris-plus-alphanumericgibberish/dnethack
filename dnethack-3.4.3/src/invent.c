@@ -285,12 +285,21 @@ struct obj *obj;
 		}
 		if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
 			u.ukinghill = TRUE;
-#ifdef RECORD_ACHIEVE
+//ifdef RECORD_ACHIEVE Record_achieve now mission-critical for Binder, so....
 		} else if(obj->oartifact == ART_SILVER_KEY){
 			achieve.get_skey = TRUE;
 		} else if(obj->oartifact >= ART_FIRST_KEY_OF_LAW && obj->oartifact <= ART_THIRD_KEY_OF_NEUTRALITY){
 			achieve.get_keys |= (1 << (obj->oartifact - ART_FIRST_KEY_OF_LAW));
-#endif
+//endif
+		}
+		if(Role_if(PM_EXILE) && 
+				(achieve.get_keys&0x002) && //Second key #1 (was 0x007)
+				(achieve.get_keys&0x010) && //Second key #2 (was 0x038)
+				(achieve.get_keys&0x080) && //Second key #3 (was 0x1C0)
+				!(u.specialSealsKnown&SEAL_ALIGNMENT_THING)
+		){
+			You("realize that, taken together, the patterns on the three third keys form a seal!");
+			u.specialSealsKnown |= SEAL_ALIGNMENT_THING;
 		}
 		set_artifact_intrinsic(obj, 1, W_ART);
 	}
@@ -608,6 +617,7 @@ register struct obj *obj;
 			obj->otyp == BELL_OF_OPENING ||
 			obj->oartifact == ART_SILVER_KEY ||
 			obj->oartifact == ART_PEN_OF_THE_VOID ||
+			(obj->oartifact >= ART_FIRST_KEY_OF_LAW && obj->oartifact <= ART_THIRD_KEY_OF_NEUTRALITY) ||
 			obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 		/* player might be doing something stupid, but we
 		 * can't guarantee that.  assume special artifacts

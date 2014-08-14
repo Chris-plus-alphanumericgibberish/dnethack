@@ -525,6 +525,7 @@ boolean pets_only;	/* true for ascension or final escape */
 	    if (DEADMONSTER(mtmp)) continue;
 	    if (pets_only && !mtmp->mtame) continue;
 	    if (((monnear(mtmp, u.ux, u.uy) && levl_follower(mtmp)) ||
+			 (mtmp->mtame && u.specialSealsActive&SEAL_COSMOS) ||
 #ifdef STEED
 			(mtmp == u.usteed) ||
 #endif

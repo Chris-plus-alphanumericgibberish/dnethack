@@ -190,17 +190,30 @@ long spir;
 boolean forced;
 {
 	int i;
-	boolean found = FALSE;
+	boolean found = FALSE, gnosis = (spir == u.spirit[GPREM_SPIRIT]);
 	
-	if(forced) losexp("shredding of the soul",TRUE,TRUE,TRUE);
+	if(spir==SEAL_JACK && forced && !gnosis && u.ulevel == 1){
+		Your("life is saved!");
+		pline("Unfortunatly, your soul is torn to shreds.");
+	}
+	if(forced && !gnosis) losexp("shredding of the soul",TRUE,TRUE,TRUE);
 	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
+	if(spir != SEAL_JACK && forced && gnosis){
+		You("are shaken to your core!");
+		return;
+	}
+	
 	if(spir&SEAL_SPECIAL){
-		if(spir&SEAL_DAHLVER_NAR) Your("link with Dahlver-Nar has &sbroken.",forced?"been ":"");
-		else if(spir&SEAL_ACERERAK) Your("link with Acererak has %sbroken.",forced?"been ":"");
-		else if(spir&SEAL_NUMINA) Your("links with the Numina have %sbroken.",forced?"been ":"");
+		for(i=0;i<(NUMINA-QUEST_SPIRITS);i++){
+			if(((spir&(~SEAL_SPECIAL)) >> i) == 1L){
+				Your("link with %s has %sbroken.", sealNames[i+(QUEST_SPIRITS-FIRST_SEAL)],forced?"been ":"");
+				break;
+			}
+		}
+		if(spir&SEAL_NUMINA) Your("links with the Numina have %sbroken.",forced?"been ":"");
 	} else for(i=0;i<QUEST_SPIRITS;i++){
-		if((spir >> i) == 1){
+		if((spir >> i) == 1L){
 			Your("link with %s has %sbroken.", sealNames[i],forced?"been ":"");
 			break;
 		}
@@ -227,6 +240,14 @@ boolean forced;
 					}
 				}
 			}
+			if(!found){
+				if(u.spirit[CROWN_SPIRIT] == spir){
+					u.spirit[CROWN_SPIRIT] = 0;
+				}
+				else if(u.spirit[GPREM_SPIRIT] == spir){
+					u.spirit[GPREM_SPIRIT] = 0;
+				}
+			}
 		} else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID){
 			uwep->ovar1 &= ~spir;
 			if(uwep->lamplit && !artifact_light(uwep)) end_burn(uwep, TRUE);
@@ -251,11 +272,17 @@ boolean forced;
 		if(u.spirit[QUEST_SPIRIT] == spir){
 			u.spirit[QUEST_SPIRIT]=0;
 			u.spiritT[QUEST_SPIRIT]=0;
+		} else if(u.spirit[ALIGN_SPIRIT] == spir){
+			u.spirit[ALIGN_SPIRIT]=0;
+			u.spiritT[ALIGN_SPIRIT]=0;
 		} else if(u.spirit[OUTER_SPIRIT] == spir){
 			u.spirit[OUTER_SPIRIT]=0;
 			u.spiritT[OUTER_SPIRIT]=0;
 		}
 	}
+	vision_full_recalc = 1;	/* visible monsters may have changed */
+	doredraw();
+	return;
 }
 
 char *spiritFadeTerms[] = {"starting to fade","growing weaker","very faint","fading fast","about to break"};
@@ -373,14 +400,21 @@ nh_timeout()
 		if(u.spiritTineA && u.spiritTineTA < moves) unbind(u.spiritTineA,0);
 		if(u.spirit[QUEST_SPIRIT] && u.spiritT[QUEST_SPIRIT] < moves) 
 			unbind(u.spirit[QUEST_SPIRIT],0);
+		if(u.spirit[ALIGN_SPIRIT] && u.spiritT[ALIGN_SPIRIT] < moves) 
+			unbind(u.spirit[ALIGN_SPIRIT],0);
+		if(u.spirit[CROWN_SPIRIT] && u.spiritT[CROWN_SPIRIT] < moves) 
+			unbind(u.spirit[CROWN_SPIRIT],0);
+		if(u.spirit[GPREM_SPIRIT] && u.spiritT[GPREM_SPIRIT] < moves) 
+			unbind(u.spirit[GPREM_SPIRIT],0);
 		//if(u.spirit[OUTER_SPIRIT] && u.spiritT[OUTER_SPIRIT] < moves) 
 			//unbind(u.spirit[OUTER_SPIRIT]); Numina does not time out
 	}
 	if(u.sealsActive || u.specialSealsActive){
 		int remaining;
-		for(i=0;i<u.sealCounts;i++){
+		for(i=0;i<OUTER_SPIRIT;i++){
 			remaining = 0;
 			if(u.spiritT[i] > moves + 625) continue;
+			else if(u.spiritT[i] <= moves) continue;
 			else if(u.spiritT[i] == moves + 625) remaining = 1;
 			else if(u.spiritT[i] == moves + 125) remaining = 2;
 			else if(u.spiritT[i] == moves + 25) remaining = 3;
@@ -388,13 +422,21 @@ nh_timeout()
 			else if(u.spiritT[i] == moves + 1) remaining = 5;
 			if(remaining){
 				int j;
+				if(u.spirit[i]&SEAL_SPECIAL){
 				for(j=0;j<32;j++){
-					if((u.spirit[i] >> j) == 1){
+						if(((u.spirit[i]&(~SEAL_SPECIAL)) >> j) == 1L){
+							Your("link with %s is %s.", sealNames[j+(QUEST_SPIRITS-FIRST_SEAL)], spiritFadeTerms[remaining-1]);
+						}
+					}
+				} else {
+					for(j=0;j<32;j++){
+						if((u.spirit[i] >> j) == 1L){
 						Your("link with %s is %s.", sealNames[j], spiritFadeTerms[remaining-1]);
 					}
 				}
 			}
 		}
+	}
 	}
 	
 	if(u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){

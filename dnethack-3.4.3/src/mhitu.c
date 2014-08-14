@@ -2506,7 +2506,9 @@ dopois:
  *	against hits.
  */
 	if (dmg && u.uac < 0) {
-		dmg -= rnd(-u.uac);
+		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+		else dmg -= rnd(-u.uac);
+		
 		if (dmg < 1) dmg = 1;
 	}
 

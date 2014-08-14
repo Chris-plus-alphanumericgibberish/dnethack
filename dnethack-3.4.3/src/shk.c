@@ -5544,7 +5544,13 @@ struct monst *mon;
 		// if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || (moves>20000 && !(uarmc && uarmg)))) count++;
 		// if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis && dahlverNarVis()) count++;
 		// if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !ublindf) count++;
+		if(u.specialSealsActive&SEAL_COUNCIL && !Blind) count++;
+		if(u.specialSealsActive&SEAL_COSMOS) count++;
+		if(u.specialSealsActive&SEAL_MISKA) count++;
+		if(u.specialSealsActive&SEAL_NUDZIARTH) count++;
+		if(u.specialSealsActive&SEAL_ALIGNMENT_THING) count++;
 	} if(u.specialSealsActive&SEAL_NUMINA) count++;
+//	if(u.specialSealsActive&SEAL_UNKNOWN_GOD) count++;
 	return count;
 }
 

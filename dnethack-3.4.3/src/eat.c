@@ -1701,6 +1701,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		boolean cannibal = maybe_cannibal(mnum, FALSE);
 	    if (u.umonnum == PM_GHOUL) {
 	    	pline("Yum - that %s was well aged%s!",
+		      mons[mnum].mlet == S_PLANT ? "vegetation" :
 		      mons[mnum].mlet == S_FUNGUS ? "fungoid vegetation" :
 		      !vegetarian(&mons[mnum]) ? "meat" : "protoplasm",
 		      cannibal ? ", cannibal" : "");
@@ -1764,7 +1765,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	} if ( !(poisonous(&mons[mnum]) || burning(&mons[mnum]) ||
 			 freezing(&mons[mnum])  || acidic(&mons[mnum])) &&
 			(rotted > 5L || (rotted > 3L && rn2(5)))
-					&& !Sick_resistance) {
+					&& !(Sick_resistance || u.sealsActive&SEAL_CHUPOCLOPS)) {
 		tp++;
 		You_feel("%ssick.", (Sick) ? "very " : "");
 		losehp(rnd(8), "cadaver", KILLED_BY_AN);
@@ -1788,11 +1789,11 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		if (carried(otmp)) useup(otmp);
 		else useupf(otmp, 1L);
 		retcode = 2;
-	    }
-		    
+	    } else {
 	    if (!retcode) consume_oeaten(otmp, 2);	/* oeaten >>= 2 */
 	    if (otmp->odrained && otmp->oeaten < drainlevel(otmp))
 	        otmp->oeaten = drainlevel(otmp);
+		}
 	} else if (maybe_polyd(!is_vampire(youmonst.data), !Race_if(PM_VAMPIRE))) {
 		if(is_rat(&mons[mnum]) && Race_if(PM_DWARF)){
 		if(u.uconduct.ratseaten<SIZE(eatrat)) pline("%s", eatrat[u.uconduct.ratseaten++]);
@@ -2192,6 +2193,11 @@ STATIC_OVL void
 fpostfx(otmp)		/* called after consuming (non-corpse) food */
 register struct obj *otmp;
 {
+	if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax && otmp->otyp >= CREAM_PIE && otmp->otyp <= TIN){
+		pline("The fruits of civilization give you strength!");
+	    u.uhp += objects[otmp->otyp].oc_nutrition;
+	    if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+	}
 	switch(otmp->otyp) {
 	    case SPRIG_OF_WOLFSBANE:
 		if (u.ulycn >= LOW_PM || is_were(youmonst.data))
@@ -2543,7 +2549,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				u.uconduct.food++;
 				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
 	    	    (void) drain_item(otmp);
-				if(!otmp->spe) otmp->otyp = WAN_NOTHING;
+//				if(!otmp->spe) otmp->otyp = WAN_NOTHING;
 				lesshungry(10);
 			break;
 			case FOOD_CLASS:

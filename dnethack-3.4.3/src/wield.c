@@ -476,7 +476,7 @@ can_twoweapon()
 	struct obj *otmp;
 
 #define NOT_WEAPON(obj) (!is_weptool(obj) && obj->oclass != WEAPON_CLASS)
-	if (!could_twoweap(youmonst.data)) {
+	if (!could_twoweap(youmonst.data) && !u.specialSealsActive&SEAL_MISKA) {
 		if (Upolyd)
 		    You_cant("use two weapons in your current form.");
 		else

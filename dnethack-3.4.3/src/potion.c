@@ -529,6 +529,11 @@ peffects(otmp)
 		pline("Ooph!  This tastes like %s%s!",
 		      otmp->odiluted ? "watered down " : "",
 		      Hallucination ? "dandelion wine" : "liquid fire");
+		if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax){
+			pline("The fruits of civilization give you strength!");
+			u.uhp += u.ulevel*10;
+			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+		}
 		if(u.udrunken < u.ulevel*3) u.udrunken++;
 		if (!otmp->blessed)
 		    make_confused(itimeout_incr(HConfusion, d(3,8)), FALSE);

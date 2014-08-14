@@ -1813,6 +1813,7 @@ register struct obj *obj;
 		   obj->otyp == CANDELABRUM_OF_INVOCATION ||
 		   obj->otyp == BELL_OF_OPENING ||
 		   obj->oartifact == ART_SILVER_KEY ||
+		   (obj->oartifact >= ART_FIRST_KEY_OF_LAW && obj->oartifact <= ART_THIRD_KEY_OF_NEUTRALITY) ||
 		   obj->oartifact == ART_PEN_OF_THE_VOID ||
 		   obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 	/* Prohibit Amulets in containers; if you allow it, monsters can't

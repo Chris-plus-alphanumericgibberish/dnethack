@@ -134,7 +134,10 @@ moveloop()
 			if(u.sealsActive&SEAL_JACK && (Is_astralevel(&u.uz) || Inhell)) unbind(SEAL_JACK,TRUE);
 			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON) 
 				&&!(viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)
-			) unbind(SEAL_ORTHOS,TRUE);
+			){
+				if(++u.orthocounts>5) unbind(SEAL_ORTHOS,TRUE);
+				else You_feel("increasingly panicked about being in the dark!");
+			}
 			if(u.sealsActive&SEAL_NABERIUS && u.udrunken<u.ulevel) unbind(SEAL_NABERIUS,TRUE);
 			if(u.specialSealsActive&SEAL_NUMINA && u.ulevel<30) unbind(SEAL_SPECIAL|SEAL_NUMINA,TRUE);
 			if(u.sealsActive&SEAL_SHIRO && uarmc && uarmc->otyp == MUMMY_WRAPPING){
@@ -276,6 +279,9 @@ moveloop()
 				}
 			}
 			else if(u.ZangetsuSafe < u.ulevel && !(moves%10)) u.ZangetsuSafe++;
+			
+			if(u.eurycounts && !(moves%10)) u.eurycounts--;
+			if(u.orthocounts && !(moves%10)) u.orthocounts--;
 			
 			if(u.sealsActive&SEAL_ASTAROTH && u.uinwater){
 				losehp(1, "rusting through", KILLED_BY);

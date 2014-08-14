@@ -671,7 +671,7 @@ register struct obj *obj;
 	if (obj->oinvis) Strcat(prefix,"invisible ");
 #endif
 
-	if(obj->sknown && obj->ostolen) Strcpy(prefix, "stolen ");
+	if(obj->sknown && obj->ostolen) Strcat(prefix, "stolen ");
 	if (obj->bknown &&
 	    obj->oclass != COIN_CLASS &&
 	    (obj->otyp != POT_WATER || !objects[POT_WATER].oc_name_known
@@ -752,6 +752,13 @@ plus:
 		/* weptools already get this done when we go to the +n code */
 		if(Role_if(PM_EXILE) && obj->otyp==BELL_OF_OPENING){
 			Strcat(prefix, "warped and cracked ");
+		}
+		if(
+			obj->oartifact==ART_SECOND_KEY_OF_CHAOS ||
+			obj->oartifact==ART_SECOND_KEY_OF_LAW ||
+			obj->oartifact==ART_SECOND_KEY_OF_NEUTRALITY
+		){
+			Strcat(prefix, "etched ");
 		}
 		if(obj->otyp == MASK){
 		    if (mons[obj->corpsenm].geno & G_UNIQ) {

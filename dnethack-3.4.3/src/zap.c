@@ -1132,6 +1132,7 @@ int ochance, achance;	/* percent chance for ordinary objects, artifacts */
 	    obj->otyp == CANDELABRUM_OF_INVOCATION ||
 	    obj->otyp == BELL_OF_OPENING ||
 	    obj->oartifact == ART_SILVER_KEY ||
+	    (obj->oartifact >= ART_FIRST_KEY_OF_LAW && obj->oartifact <= ART_THIRD_KEY_OF_NEUTRALITY) ||
 	    obj->oartifact == ART_PEN_OF_THE_VOID ||
 	    (obj->otyp == CORPSE && is_rider(&mons[obj->corpsenm]))) {
 		return TRUE;
@@ -1931,8 +1932,8 @@ register struct obj *obj;
 	switch(obj->otyp) {
 		case WAN_LIGHT:
 		case SPE_LIGHT:
-			litroom(TRUE,obj);
-			if(u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+			litroom(!(obj->cursed),obj);
+			if(!(obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
 			if (!Blind) known = TRUE;
 			break;
 		case WAN_SECRET_DOOR_DETECTION:

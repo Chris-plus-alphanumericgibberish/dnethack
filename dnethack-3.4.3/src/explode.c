@@ -30,7 +30,7 @@ char olet;
 int expltype;
 {
 	int i, j, k, damu = dam;
-	boolean starting = 1;
+	boolean starting = 1, silver = FALSE;
 	boolean visible, any_shield;
 	int uhurt = 0; /* 0=unhurt, 1=items damaged, 2=you and items damaged */
 	const char *str;
@@ -85,7 +85,9 @@ int expltype;
 		case 7: str = "splash of acid";
 			adtyp = AD_ACID;
 			break;
-		case 8: str = "blast";
+		case 8:
+			if(olet == TOOL_CLASS) str = "flying shards of mirror";
+			else str = "blast";
 			adtyp = AD_PHYS;
 			break;
 		case 9: str = "cloud of spores";
@@ -239,8 +241,7 @@ int expltype;
 	    if (flags.soundok) You_hear("a blast.");
 	}
 
-    if (dam)
-	for (i=0; i<3; i++) for (j=0; j<3; j++) {
+    if (dam) for (i=0; i<3; i++) for (j=0; j<3; j++) {
 		if (explmask[i][j] == 2) continue;
 		if (i+x-1 == u.ux && j+y-1 == u.uy)
 			uhurt = (explmask[i][j] == 1) ? 1 : 2;
@@ -265,8 +266,10 @@ int expltype;
 				       "irradiated by pure energy" : "perforated") :
 				      (adtyp == AD_ELEC) ? "shocked" :
 				      (adtyp == AD_DRST) ? "poisoned" :
-				      (adtyp == AD_DISE) ? "food poisoning" :
+				      (adtyp == AD_DISE) ? "high-yield food poisoning" :
 				      (adtyp == AD_ACID) ? "an upset stomach" :
+				      (adtyp == AD_PHYS) ? ((olet == TOOL_CLASS) ?
+				       "perforated" : "a bloated stomach") :
 				       "fried");
 			else
 				pline("%s gets slightly %s!",
@@ -279,6 +282,8 @@ int expltype;
 				      (adtyp == AD_DRST) ? "intoxicated" :
 				      (adtyp == AD_DISE) ? "quesy" :
 				      (adtyp == AD_ACID) ? "burned" :
+				      (adtyp == AD_PHYS) ? ((olet == TOOL_CLASS) ?
+				       "perforated" : "blasted open") :
 				       "fried");
 		} else if (cansee(i+x-1, j+y-1)) {
 		    if(mtmp->m_ap_type) seemimic(mtmp);
@@ -308,9 +313,12 @@ int expltype;
 				pline("%s resists the %s!", Monnam(mtmp), str);
 			    mdam = dam/2;
 			}
-			if (mtmp == u.ustuck)
+			if (mtmp == u.ustuck && x==u.ux && y==u.uy)
 				mdam *= 2;
-			if (resists_cold(mtmp) && adtyp == AD_FIRE)
+			if(hates_silver(mtmp->data) && silver){
+				pline("The %s sear %s!", str, mon_nam(mtmp));
+				mdam += rnd(20);
+			} if (resists_cold(mtmp) && adtyp == AD_FIRE)
 				mdam *= 2;
 			else if (resists_fire(mtmp) && adtyp == AD_COLD)
 				mdam *= 2;
@@ -329,6 +337,10 @@ int expltype;
 		if ((type >= 0 || adtyp == AD_PHYS) &&	/* gas spores */
 				flags.verbose && olet != SCROLL_CLASS)
 			You("are caught in the %s!", str);
+		if(hates_silver(youmonst.data) && silver){
+			You("are seared by the %s!", str);
+			damu += rnd(20);
+		}
 		/* do property damage first, in case we end up leaving bones */
 		if (adtyp == AD_FIRE) burn_away_slime();
 		if (Invulnerable) {
@@ -368,7 +380,9 @@ int expltype;
 			    Sprintf(killer_buf, "caught %sself in %s own %s",
 				    uhim(), uhis(), str);
 			} else if (!strncmpi(str,"tower of flame", 8) ||
-				   !strncmpi(str,"fireball", 8)) {
+				   !strncmpi(str,"fireball", 8) ||
+				   !strncmpi(str,"flying glass", 12)
+			) {
 			    killer_format = KILLED_BY_AN;
 			    Strcpy(killer_buf, str);
 			} else {

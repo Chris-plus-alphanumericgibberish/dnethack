@@ -2055,8 +2055,8 @@ donull()
 				lastreped = -13;
 				stop_occupation();
 			}
-		} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
-	} else if(u.sealsActive&SEAL_EURYNOME) unbind(SEAL_EURYNOME,TRUE);
+		} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
+	} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
 	return(1);	/* Do nothing, but let other things happen */
 }
 

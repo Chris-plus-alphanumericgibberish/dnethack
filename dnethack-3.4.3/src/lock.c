@@ -520,7 +520,7 @@ pick_lock(pick) /* pick a lock with a given object */
 			/* ALI - Artifact doors from slash'em*/
 		    xlock.key = pick->oartifact;
 			if (key){
-				if(xlock.key >= ART_FIRST_KEY_OF_LAW && xlock.key <= ART_THIRD_KEY_OF_NEUTRALITY) {
+				if(!In_quest(&u.uz) && xlock.key >= ART_FIRST_KEY_OF_LAW && xlock.key <= ART_THIRD_KEY_OF_NEUTRALITY) {
 				register struct rm *here;
 				here = &levl[cc.x][cc.y];
 				here->typ = ROOM;
@@ -530,7 +530,7 @@ pick_lock(pick) /* pick a lock with a given object */
 				newsym(cc.x,cc.y);					  //wierd problems.
 			    return(0);
 				}
-				else if (picktyp == SKELETON_KEY) {
+				else if (picktyp == SKELETON_KEY || picktyp == UNIVERSAL_KEY) {
 					Your("key doesn't seem to fit.");
 					return(0);
 				}

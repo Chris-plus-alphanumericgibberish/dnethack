@@ -21,6 +21,14 @@ STATIC_DCL void FDECL(move_update, (BOOLEAN_P));
 
 #ifdef OVL2
 
+int
+min_ints(i1, i2)
+int i1, i2;
+{
+	if(i1 > i2) return i1;
+	else return i2;
+}
+
 boolean
 revive_nasty(x, y, msg)
 int x,y;

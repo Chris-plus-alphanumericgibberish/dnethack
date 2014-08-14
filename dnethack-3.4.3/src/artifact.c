@@ -790,6 +790,24 @@ touch_artifact(obj,mon)
        will have to be extended to explicitly include quest artifacts */
     self_willed = ((oart->spfx & SPFX_INTEL) != 0);
     if (yours) {
+		if(Role_if(PM_EXILE)){
+			if(obj->oartifact == ART_ROD_OF_SEVEN_PARTS && !(u.specialSealsKnown&SEAL_MISKA)){
+				pline("There is a seal on the tip of the Rod! You can't see it, you know it's there, just the same.");
+				pline("You learn a new seal!");
+				u.specialSealsKnown |= SEAL_MISKA;
+			}
+			else if(obj->oartifact == ART_BLACK_CRYSTAL && !(u.specialSealsKnown&SEAL_COSMOS)){
+				pline("There is a seal in the heart of the crystal, shining bright through the darkness.");
+				pline("You learn a new seal!");
+				u.specialSealsKnown |= SEAL_COSMOS;
+			}
+			else if(obj->oartifact == ART_HAND_MIRROR_OF_CTHYLLA && !(u.specialSealsKnown&SEAL_NUDZIARTH)){
+				pline("The cracks on the mirror's surface form part of a seal.");
+				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
+				pline("With that realization comes knowledge of the seal's final form!");
+				u.specialSealsKnown |= SEAL_NUDZIARTH;
+			}
+		}
 		if(oart->otyp != UNICORN_HORN){
 			badclass = self_willed &&
 			   ((oart->role != NON_PM && !Role_if(oart->role)) ||
@@ -797,7 +815,10 @@ touch_artifact(obj,mon)
 			badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
 			   (oart->alignment != u.ualign.type || u.ualign.record < 0);
 			if(badalign && !badclass && self_willed && oart->role == NON_PM 
-				&& oart->race == NON_PM) badclass = TRUE;
+				&& oart->race == NON_PM
+			){
+				badclass = TRUE;
+			}
 			if(oart == &artilist[ART_KUSANAGI_NO_TSURUGI] && !(u.ulevel >= 30 || u.uhave.amulet)){
 				badclass = TRUE;
 				badalign = TRUE;
@@ -836,7 +857,24 @@ touch_artifact(obj,mon)
 		tmp.spfx &= SPFX_DBONUS;
 		badalign = !!spec_applies(&tmp, mon);
     }
-
+	if(badalign){
+		if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
+			badalign = FALSE;
+			badclass = FALSE;
+		}
+		else if(oart->alignment == A_LAWFUL && u.specialSealsActive&SEAL_COSMOS){
+			badalign = FALSE;
+			badclass = FALSE;
+		}
+		else if(oart->alignment == A_CHAOTIC && u.specialSealsActive&SEAL_MISKA){
+			badalign = FALSE;
+			badclass = FALSE;
+		}
+		else if(oart->alignment == A_NEUTRAL && u.specialSealsActive&SEAL_NUDZIARTH){
+			badalign = FALSE;
+			badclass = FALSE;
+		}
+	}
 	if(mon->data == &mons[PM_DAEMON]) badclass = badalign = FALSE;
 
 	if (((badclass || badalign) && self_willed) ||
