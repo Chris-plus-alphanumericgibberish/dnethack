@@ -169,6 +169,16 @@ dosounds()
 	    }
 	}
     }
+    if (level.flags.has_garden && !rn2(200)) {
+	static const char *garden_msg[4] = {
+		"crickets chirping!",
+		"birds singing!",
+		"grass growing!",
+		"wind in the willows!",
+	};
+	You_hear("%s", garden_msg[rn2(2) + 2 * hallu]);
+	return;
+    }
     if (level.flags.has_swamp && !rn2(200)) {
 	static const char * const swamp_msg[3] = {
 		"hear mosquitoes!",
@@ -288,6 +298,15 @@ dosounds()
 	    }
 	}
     }
+	if (level.flags.has_island && !rn2(200)) {
+		static const char *island_msg[3] = {
+			"hear seagulls.",
+			"hear burly voices singing shanties.",
+			"here someone ask about warez.",
+		};
+		You(island_msg[rn2(2)+hallu]);
+		return;
+	}
     if (level.flags.has_zoo && !rn2(200)) {
 	static const char * const zoo_msg[3] = {
 		"a sound reminiscent of an elephant stepping on a peanut.",
@@ -1165,6 +1184,14 @@ dochat()
 			otmp->ovar1 = moves + rnz(100);
 		}
 		else pline("....");
+	}
+	
+    if ( (!mtmp || mtmp->mundetected ||
+		mtmp->m_ap_type == M_AP_FURNITURE ||
+		mtmp->m_ap_type == M_AP_OBJECT) && levl[tx][ty].typ == IRONBARS
+	){
+		tx = tx+u.dx; ty = ty+u.dy;
+		mtmp = m_at(tx, ty);
 	}
 	
     if (!mtmp || mtmp->mundetected ||
