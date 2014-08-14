@@ -136,12 +136,12 @@ TRAP:"magic", random
 
 # Random monsters.
 # The ghosts.
-MONSTER:'_',"ghost",random
-MONSTER:'_',"ghost",random
-MONSTER:'_',"ghost",random
-MONSTER:'_',"ghost",random
-MONSTER:'_',"ghost",random
-MONSTER:'_',"ghost",random
+MONSTER:'.',"ghost",random
+MONSTER:'.',"ghost",random
+MONSTER:'.',"ghost",random
+MONSTER:'.',"ghost",random
+MONSTER:'.',"ghost",random
+MONSTER:'.',"ghost",random
 # Add a few bats for atmosphere.
 MONSTER:'B',"vampire bat",random
 MONSTER:'B',"vampire bat",random
@@ -389,17 +389,17 @@ MONSTER:'F',random,random
 MONSTER:'F',random,random
 MONSTER:'F',random,random
 MONSTER:'F',random,random
-MONSTER:'#',"swamp fern",random
-MONSTER:'#',"swamp fern",random
-MONSTER:'#',"swamp fern",random
-MONSTER:'#',"dungeon fern",random
-MONSTER:'#',"dungeon fern",random
-MONSTER:'#',"dungeon fern",random
-MONSTER:'#',"razor vine",random
-MONSTER:'#',"razor vine",random
-MONSTER:'#',"razor vine",random
-MONSTER:'#',"razor vine",random
-MONSTER:'#',"razor vine",random
+MONSTER:'{',"swamp fern",random
+MONSTER:'{',"swamp fern",random
+MONSTER:'{',"swamp fern",random
+MONSTER:'{',"dungeon fern",random
+MONSTER:'{',"dungeon fern",random
+MONSTER:'{',"dungeon fern",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
 # Some random objects
 OBJECT:'!',random,random
 OBJECT:'!',random,random
@@ -512,8 +512,8 @@ OBJECT:random,random,random
 MONSTER:'&',"Orcus",(33,15)
 # And its preferred companions
 MONSTER:'Z',"human zombie",(32,15)
-MONSTER:'_',"shade",(32,14)
-MONSTER:'_',"shade",(32,16)
+MONSTER:' ',"shade",(32,14)
+MONSTER:' ',"shade",(32,16)
 MONSTER:'V',"vampire",(35,16)
 MONSTER:'V',"vampire",(35,14)
 MONSTER:'V',"vampire lord",(36,14)
@@ -524,10 +524,10 @@ MONSTER:'Z',"skeleton",random
 MONSTER:'Z',"skeleton",random
 MONSTER:'Z',"skeleton",random
 MONSTER:'Z',"skeleton",random
-MONSTER:'_',"shade",random
-MONSTER:'_',"shade",random
-MONSTER:'_',"shade",random
-MONSTER:'_',"shade",random
+MONSTER:' ',"shade",random
+MONSTER:' ',"shade",random
+MONSTER:' ',"shade",random
+MONSTER:' ',"shade",random
 MONSTER:'Z',"giant zombie",random
 MONSTER:'Z',"giant zombie",random
 MONSTER:'Z',"giant zombie",random
@@ -2721,7 +2721,7 @@ MONSTER:'&',"balrog",place[3], asleep
 MONSTER:'&',"balrog",place[3], asleep
 
 
-CONTAINER:   '`', "statue" ,place[4], cursed, "marilith", 1, "Shaktari"
+CONTAINER:   '`', "statue" ,place[4], cursed, "Shaktari", 1
 OBJECT:'/', random, contained, blessed, 1
 OBJECT:'/', random, contained, blessed, 1
 OBJECT:'/', random, contained, blessed, 1
@@ -2729,7 +2729,6 @@ OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:'!', "full healing", contained, blessed, 0
-OBJECT:'"', "amulet of life saving", contained, blessed, 0
 OBJECT:')', "flail", contained, cursed, 3, "Sting of the Poison Queen"
 OBJECT:')', "runesword", contained, blessed, 3
 OBJECT:')', "runesword", contained, blessed, 3
@@ -2739,8 +2738,6 @@ OBJECT:'[', "shield of reflection", contained, blessed, 3
 OBJECT:'[', "helmet", contained, blessed, 3
 OBJECT:'[', "crystal plate mail", contained, blessed, 3
 OBJECT:'[', "cloak of magic resistance", contained, blessed, 3
-OBJECT:'=', "protection", contained, blessed, 6
-OBJECT:'=', "protection", contained, blessed, 6
 TRAP:"statue", place[4]
 MONSTER:'S',"python", place[4]
 MONSTER:'S',"cobra", place[4]

@@ -488,14 +488,14 @@ MAP
 |AAAAAAAAAAAAA|               |AA|A.....A|AA|               |AAAAAAAAAAAAA|
 |AA---------AA-|   |-------|  |AA|A.....A|AA|  |-------|   |-AA---------AA|
 |AA|AAAAAAA|AAA-| |-AAAAAAA-| |AA|AAA.AAA|AA| |-AAAAAAA-| |-AAA|AAAAAAA|AA|
-|AA|A.....A|AAAA-|-AAAAAAAAA-||AA----+----AA||-AAAAAAAAA-|-AAAA|A.....A|AA|
-|AA|A......+AAAAA+AAAAAAAAAAA||AAAAAAAAAAAAA||AAAAAAAAAAA+AAAAA+......A|AA|
-|AA|A.....A|AAAA-|-AAAAAAAAA-|--|AAAAAAAAA|--|-AAAAAAAAA-|-AAAA|A.....A|AA|
+|AA|A.....A|AAAA-|-AAAA.AAAA-||AA----+----AA||-AAAA.AAAA-|-AAAA|A.....A|AA|
+|AA|A......+AAAAA+AAAA...AAAA||AAAAAAAAAAAAA||AAAA...AAAA+AAAAA+......A|AA|
+|AA|A.....A|AAAA-|-AAAA.AAAA-|--|AAAAAAAAA|--|-AAAA.AAAA-|-AAAA|A.....A|AA|
 |AA|AAAAAAA|AAA-| |-AAAAAAA-|   -|---+---|-   |-AAAAAAA-| |-AAA|AAAAAAA|AA|
 |AA---------AA-|   |---+---|    |-AAAAAAA-|    |---+---|   |-AA---------AA|
-|AAAAAAAAAAAAA|      |AAA|-----|-AAAAAAAAA-|-----|AAA|      |AAAAAAAAAAAAA|
----------------      |AAAAAAAAA|AAAAAAAAAAA|AAAAAAAAA|      ---------------
-                     -------AAA|-AAAAAAAAA-|AAA-------                     
+|AAAAAAAAAAAAA|      |AAA|-----|-AAAA.AAAA-|-----|AAA|      |AAAAAAAAAAAAA|
+---------------      |AAAAAAAAA|AAAA...AAAA|AAAAAAAAA|      ---------------
+                     -------AAA|-AAAA.AAAA-|AAA-------                     
                            |AAAA|-AAAAAAA-|AAAA|                           
                            ---AAA|---+---|AAA---                           
                              |AAAAAAAAAAAAAAA|                             
