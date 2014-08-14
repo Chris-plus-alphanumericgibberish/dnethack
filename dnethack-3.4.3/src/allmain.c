@@ -200,7 +200,12 @@ moveloop()
 
 		    if(!rn2(u.uevent.udemigod ? 25 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)
-			) (void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
+			){
+				if (u.uevent.udemigod && xupstair && rn2(10)) {
+					(void) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTOK);
+				} //TEAM ATTACKS
+				(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
+			}
 
 		    /* reset summon monster block. */
 			if(u.summonMonster) u.summonMonster = FALSE;
