@@ -732,6 +732,7 @@ register char *enterstring;
 		      eshkp->visitct++ ? " again" : "",
 		      s_suffix(shkname(shkp)),
 		      shtypes[rt - SHOPBASE].name);
+		verbalize("Feel free to browse my wares, or chat with me about other services!");
 	}
 	/* can't do anything about blocking if teleported in */
 	if (!inside_shop(u.ux, u.uy)) {
