@@ -159,6 +159,7 @@ boolean seal;
     if (seal) {	/* remove the portal to the quest - sealing it off */
 	int reexpelled = u.uevent.qexpelled;
 	u.uevent.qexpelled = 1;
+	remdun_mapseen(quest_dnum);
 	/* Delete the near portal now; the far (main dungeon side)
 	   portal will be deleted as part of arrival on that level.
 	   If monster movement is in progress, any who haven't moved
@@ -259,7 +260,7 @@ chat_with_leader()
 	      qt_pager(QT_LASTLEADER);
 	      expulsion(TRUE);
 	    } else {
-	      Qstat(not_ready)++;
+	      if(!Role_if(PM_EXILE)) Qstat(not_ready)++;
 	      exercise(A_WIS, TRUE);
 	      expulsion(FALSE);
 	    }
@@ -269,12 +270,12 @@ chat_with_leader()
 	    Qstat(got_quest) = TRUE;
 		if(Role_if(PM_EXILE)){
 			bindspirit(DAHLVER_NAR);
-			u.dahlver_nar = moves + 5000;
+			u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + 5000;
 			// u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 			// u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 			// set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
 			// u.spiritT[QUEST_SPIRIT] = moves + 5000;
-			// u.dahlver_nar = moves + 5000;
+			// u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + 5000;
 			// u.wisSpirits++;
 		}
 	  }
@@ -287,8 +288,13 @@ leader_speaks(mtmp)
 {
 	/* maybe you attacked leader? */
 	if(!mtmp->mpeaceful) {
-		Qstat(pissed_off) = TRUE;
-		mtmp->mstrategy &= ~STRAT_WAITMASK;	/* end the inaction */
+		if(!Role_if(PM_EXILE)){
+			Qstat(pissed_off) = TRUE;
+			mtmp->mstrategy &= ~STRAT_WAITMASK;	/* end the inaction */
+		} else {
+			mtmp->mpeaceful = 1;
+			Qstat(pissed_off) = FALSE;
+		}
 	}
 	/* the quest leader might have passed through the portal into the
 	   regular dungeon; if so, mustn't perform "backwards expulsion" */

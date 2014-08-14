@@ -44,7 +44,7 @@ STATIC_DCL boolean FDECL(blocked_boulder,(int,int));
  */
 static const char	*Moloch = "Moloch";
 static const char	*Chaos = "Chaos";
-static const char	*DeepChaos = "Cosmos in chains";
+static const char	*DeepChaos = "Chaos, with Cosmos in chains";
 static const char	*tVoid = "the Void";
 static const char	*Demiurge = "Yaldabaoth";
 static const char	*Sophia = "Pistis Sophia";
@@ -561,6 +561,7 @@ aligntyp resp_god;
 {
 	register int	maxanger;
 
+	if(Role_if(PM_EXILE)) return;
 	if(Inhell) resp_god = A_NONE;
 	u.ublessed = 0;
 
@@ -1070,7 +1071,7 @@ pleased(g_align)
 	case 8:
 	case 9:		/* KMH -- can occur during full moons */
 //ifdef ELBERETH
-	    if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth && !Role_if(PM_EXILE)) {
+	    if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth) {
 		gcrownu();
 		break;
 	    } /* else FALLTHRU */
@@ -1157,8 +1158,12 @@ godvoice(g_align, words)
     else
 	words = "";
 
+	if(g_align != A_VOID){
     pline_The("voice of %s %s: %s%s%s", align_gname(g_align),
 	  godvoices[rn2(SIZE(godvoices))], quot, words, quot);
+	} else {
+		You("think you hear a voice in the distance: %s%s%s", quot, words, quot);
+	}
 }
 
 void
@@ -1539,9 +1544,9 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	if (u.ualign.type != altaralign) {
 	    /* Is this a conversion ? */
 	    /* An unaligned altar in Gehennom will always elicit rejection. */
-	    if (ugod_is_angry() || (altaralign == A_NONE && Inhell)) {
+	    if ((ugod_is_angry() && !Role_if(PM_EXILE)) || (altaralign == A_NONE && Inhell)) {
 		if(u.ualignbase[A_CURRENT] == u.ualignbase[A_ORIGINAL] &&
-		   altaralign != A_NONE) {
+		   altaralign != A_NONE && altaralign != A_VOID) {
 		    You("have a strong feeling that %s is angry...", u_gname());
 			if(otmp->otyp == CORPSE && is_rider(&mons[otmp->corpsenm])){
 				pline("A pulse of darkness radiates from your sacrifice!");
@@ -1797,7 +1802,7 @@ boolean praying;	/* false means no messages should be given */
        return value a non-deterministic approximation for enlightenment.
        This case should be uncommon enough to live with... */
 
-    return !praying ? (boolean)(p_type == 3 && !Inhell) : TRUE;
+    return !praying ? (boolean)(p_type == 3 && !(Inhell && u.ualign.type != A_VOID)) : TRUE;
 }
 
 int
@@ -1834,7 +1839,7 @@ dopray()
     nomovemsg = "You finish your prayer.";
     afternmv = prayer_done;
 
-    if(p_type == 3 && !Inhell) {
+    if((p_type == 3 && !(Inhell && u.ualign.type != A_VOID)) || (uwep && uwep->oartifact == ART_LANCE_OF_LONGINUS)) {
 	/* if you've been true to your god you can't die while you pray */
 	if (!Blind)
 	    You("are surrounded by a shimmering light.");
@@ -1877,7 +1882,7 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
 	}
 	return(1);
     }
-    if (Inhell) {
+    if (Inhell && u.ualign.type != A_VOID) {
 	pline("Since you are in Gehennom, %s won't help you.",
 	      align_gname(alignment));
 	/* haltingly aligned is least likely to anger */
@@ -1893,15 +1898,17 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
     } else if (p_type == 1) {
 		if(on_altar() && u.ualign.type != alignment)
 			(void) water_prayer(FALSE);
-		u.ublesscnt += rnz(250);
-		change_luck(-3);
-		gods_upset(u.ualign.type);
+		if(u.ualign.type != A_VOID){
+			u.ublesscnt += rnz(250);
+			change_luck(-3);
+			gods_upset(u.ualign.type);
+		}
     } else if(p_type == 2) {
 		if(water_prayer(FALSE)) {
 			/* attempted water prayer on a non-coaligned altar */
 			u.ublesscnt += rnz(250);
 			change_luck(-3);
-			gods_upset(u.ualign.type);
+			if(u.ualign.type != A_VOID) gods_upset(u.ualign.type);
 		} else pleased(alignment);
     } else {
 	/* coaligned */
@@ -1989,6 +1996,7 @@ doturn()
 			    /* this is intentional, lichs are tougher
 			       than zombies. */
 			case S_LICH:    xlev += 2;  /*FALLTHRU*/
+			case S_SHADE:   xlev += 2;  /*FALLTHRU*/
 			case S_GHOST:   xlev += 2;  /*FALLTHRU*/
 			case S_BAT: //Asumes undead bats are vampires
 			case S_VAMPIRE: xlev += 2;  /*FALLTHRU*/
