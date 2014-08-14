@@ -3055,10 +3055,16 @@ int perturn;
 		return 0;
 	}
 	
+	if(turns > 2000){
+		pline("\"That sounds really boring.\"");
+		return 0;
+	}
+	
 	price = (long)(turns*perturn + flatrate);
 	
 	if(price < 0){
 		You("couldn't have enough %s to pay for that!", currency(price));
+		return 0;
 	}
 	
 	if(price){
