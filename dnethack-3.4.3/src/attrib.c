@@ -749,10 +749,25 @@ int oldlevel, newlevel;
 	}
 
 	if (oldlevel > 0) {
-	    if (newlevel > oldlevel)
-		add_weapon_skill(newlevel - oldlevel);
-	    else
-		lose_weapon_skill(oldlevel - newlevel);
+		int skillslots;
+	    if (newlevel > oldlevel){
+			skillslots = newlevel - oldlevel;
+			if(Race_if(PM_HUMAN)){
+				if(!(skillslots%2)) skillslots *= 1.5;
+				else if(!(newlevel%2)) skillslots = skillslots*1.5 + 1;
+				else skillslots *= 1.5;
+			}
+			add_weapon_skill(skillslots);
+		}
+	    else{
+			skillslots = oldlevel - newlevel;
+			if(Race_if(PM_HUMAN)){
+				if(!(skillslots%2)) skillslots *= 1.5;
+				else if(!(oldlevel%2)) skillslots = skillslots*1.5 + 1;
+				else skillslots *= 1.5;
+			}
+			lose_weapon_skill(skillslots);
+		}
 	}
 }
 
