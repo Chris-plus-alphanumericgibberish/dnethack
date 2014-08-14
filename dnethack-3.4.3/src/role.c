@@ -91,7 +91,7 @@ const struct Role roles[] = {
 	"Bin", "the lost library", "the Tower of Woe",
 	PM_EXILE, NON_PM, NON_PM,
 	PM_STRANGE_CORPSE, PM_PEASANT, PM_ACERERAK,
-	PM_SKELETON, PM_LICH, S_HUMANOID, S_LICH,
+	PM_SKELETON, PM_LICH, S_HUMAN, S_HUMANOID,
 	ART_PEN_OF_THE_VOID,
 	MH_HUMAN|MH_DWARF|MH_GNOME|MH_ELF|MH_ORC|MH_CLOCK|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_CHAOTIC|ROLE_NEUTRAL,
@@ -612,7 +612,7 @@ const struct Race races[] = {
 	{0, 0},
 	PM_INCANTIFIER, NON_PM, PM_HUMAN_MUMMY, PM_HUMAN_ZOMBIE,
 	MH_HUMAN | ROLE_MALE|ROLE_FEMALE |
-	  ROLE_NEUTRAL|ROLE_CHAOTIC,
+	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	MH_HUMAN, 0, MH_GNOME|MH_ORC|MH_ELF,
 	/*    Str     Int Wis Dex Con Cha */
 	{      3,      3,  3,  3,  3,  3 },
@@ -1767,9 +1767,14 @@ role_init()
 			urole.cgod = DrowMaleCgod;
 		}
 	} else if(Race_if(PM_ELF) && Role_if(PM_RANGER)){
+		urole.filecode = "Elf";
 		urole.lgod = ElfRangerLgod;
 		urole.ngod = ElfRangerNgod;
 		urole.cgod = ElfRangerCgod;
+		urole.enemy1num = PM_MORDOR_ORC;
+		urole.enemy2num = PM_ORC_SHAMAN;
+		urole.enemy1sym = S_TROLL;
+		urole.enemy2sym = S_WRAITH;
 		urole.rank[1] = ElfRangerRanks[1];
 		urole.rank[2] = ElfRangerRanks[2];
 		urole.rank[3] = ElfRangerRanks[3];
