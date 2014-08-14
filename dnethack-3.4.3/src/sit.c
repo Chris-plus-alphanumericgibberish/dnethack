@@ -373,7 +373,13 @@ rndcurse()			/* curse a few inventory items at random! */
 	    You(mal_aura, "the magic-absorbing blade");
 	    return;
 	}
-	else if(u.ukinghill && rn2(20)){
+	for(otmp = invent; otmp; otmp=otmp->nobj){
+		if(otmp->oartifact == ART_HELPING_HAND){
+			You_feel("something lend you some help!");
+			return;
+		}
+	}
+	if(u.ukinghill && rn2(20)){
 	    You(mal_aura, "the cursed treasure chest");
 		otmp = 0;
 		for(otmp = invent; otmp; otmp=otmp->nobj)
