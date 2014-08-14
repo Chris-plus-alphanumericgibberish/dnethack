@@ -349,6 +349,7 @@ extern const struct symdef def_warnsyms[WARNCOUNT];
 struct rm {
 	int glyph;		/* what the hero thinks is there */
 	schar typ;		/* what is really there */
+	Bitfield(styp, 6);	/* last seen/touched dungeon typ */
 	uchar seenv;		/* seen vector */
 	Bitfield(flags,5);	/* extra information for typ */
 	Bitfield(horizontal,1); /* wall/door/etc is horiz. (more typ info) */
@@ -357,6 +358,19 @@ struct rm {
 	Bitfield(roomno,6);	/* room # for special rooms */
 	Bitfield(edge,1);	/* marks boundaries for special rooms*/
 };
+
+
+#define SET_TYPLIT(x,y,ttyp,llit)				\
+{								\
+  if ((x) >= 0 && (y) >= 0 && (x) < COLNO && (y) < ROWNO) {	\
+    if ((ttyp) < MAX_TYPE) levl[(x)][(y)].typ = (ttyp);		\
+    if ((ttyp) == LAVAPOOL) levl[(x)][(y)].lit = 1;		\
+    else if ((schar)(llit) != -2) {				\
+	if ((schar)(llit) == -1) levl[(x)][(y)].lit = rn2(2);	\
+	else levl[(x)][(y)].lit = (llit);			\
+    }								\
+  }								\
+}
 
 /*
  * Add wall angle viewing by defining "modes" for each wall type.  Each
@@ -466,11 +480,14 @@ struct levelflags {
 	Bitfield(has_zoo, 1);
 	Bitfield(has_court, 1);
 	Bitfield(has_morgue, 1);
+	Bitfield(has_garden, 1);
 	Bitfield(has_beehive, 1);
 	Bitfield(has_barracks, 1);
 	Bitfield(has_temple, 1);
 
 	Bitfield(has_swamp, 1);
+	Bitfield(has_island, 1);
+	Bitfield(has_river, 1);
 	Bitfield(noteleport,1);
 	Bitfield(hardfloor,1);
 	Bitfield(nommap,1);
