@@ -681,6 +681,11 @@ register int fd;
 	gameDiskPrompt();
 #endif
 	max_rank_sz(); /* to recompute mrank_sz (botl.c) */
+
+	/* this comes after inventory has been loaded */
+	for(otmp = invent; otmp; otmp = otmp->nobj)
+		if(otmp->owornmask)
+			setworn(otmp, otmp->owornmask);
 	/* take care of iron ball & chain */
 	for(otmp = fobj; otmp; otmp = otmp->nobj)
 		if(otmp->owornmask)
