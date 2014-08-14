@@ -561,10 +561,16 @@ aligntyp resp_god;
 {
 	register int	maxanger;
 
-	if(Role_if(PM_EXILE)) return;
+	if(Role_if(PM_EXILE) && resp_god == u.ualign.type) return;
+	
 	if(Inhell) resp_god = A_NONE;
 	u.ublessed = 0;
 
+	if(u.ualign.type == resp_god){
+		u.lastprayed = moves;
+		u.lastprayresult = PRAY_ANGER;
+		u.reconciled = REC_NONE;
+	}
 	/* changed from tmp = u.ugangr + abs (u.uluck) -- rph */
 	/* added test for alignment diff -dlc */
 	if(resp_god != u.ualign.type)
@@ -1178,6 +1184,7 @@ void
 gods_upset(g_align)
 	aligntyp g_align;
 {
+	if(Role_if(PM_EXILE)) return;
 	if(g_align == u.ualign.type) u.ugangr++;
 	else if(u.ugangr) u.ugangr--;
 	angrygods(g_align);
@@ -1482,9 +1489,11 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		adjalign(-99);
 		pline("%s accepts your gift, and gains complete control over creation.", a_gname());
 		pline("In the next instant, she destroys it.", a_gname());
-		pline("You are functionally dead, your soul escaped from its earth husk...");
-		pline("...as well as everything that made you-YOU.");
-		done(ESCAPED);
+		pline("You are functionally dead, your soul shorn from its earthly husk...");
+		pline("...as well as everything that made you YOU.");
+		killer_format = KILLED_BY;
+		killer = "the end of the world."; //8-bit theater
+		done(DISINTEGRATED);
 	    } else { /* super big win */
 		adjalign(10);
 #ifdef RECORD_ACHIEVE
@@ -1511,9 +1520,14 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    } else {
 		/* don't you dare try to fool the gods */
 		change_luck(-3);
+		if(!Role_if(PM_EXILE)){
 		adjalign(-1);
 		u.ugangr += 3;
 		value = -3;
+			u.lastprayresult = PRAY_ANGER;
+			u.lastprayed = moves;
+			u.reconciled = REC_NONE;
+		}
 	    }
     } /* fake Amulet */
 
@@ -1568,10 +1582,16 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    /* Beware, Conversion is costly */
 		    change_luck(-3);
 		    u.ublesscnt += 300;
+		    u.lastprayed = moves;
+			u.reconciled = REC_NONE;
+		    u.lastprayresult = PRAY_CONV;
 		    adjalign((int)(u.ualignbase[A_ORIGINAL] * (ALIGNLIM / 2)));
 		} else {
 		    u.ugangr += 3;
 		    adjalign(-5);
+		    u.lastprayed = moves;
+		    u.lastprayresult = PRAY_ANGER;
+			u.reconciled = REC_NONE;
 		    pline("%s rejects your sacrifice!", a_gname());
 		    godvoice(altaralign, "Suffer, infidel!");
 		    change_luck(-5);
@@ -1608,8 +1628,13 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 				if(altaralign == A_CHAOTIC) door = 1;
 				else if(altaralign == A_NEUTRAL) door = 2;
 				else if(altaralign == A_LAWFUL) door = 3;
-				else if(!u.uevent.qcompleted && altaralign == A_NONE) makemon(&mons[PM_ACERERAK],u.ux,u.uy,MM_ADJACENTOK);
-				
+				else if(!u.uevent.qcompleted && altaralign == A_NONE){
+					pline("The muted tension that filled the wind fades away.");
+					pline("You here again the thousand-tounged whisperers,");
+					pline("though you cannot make out the name they repeat.");
+					makemon(&mons[PM_ACERERAK],u.ux,u.uy,MM_ADJACENTOK);
+					pline("Someone now stands beside you!");
+				}
 				if(door){
 					for(ix = 1; ix < COLNO; ix++){
 						for(iy = 0; iy < ROWNO; iy++){
@@ -1665,6 +1690,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 			  "cosmic (not a new fact)" : "mollified");
 
 		    if ((int)u.uluck < 0) u.uluck = 0;
+		    u.reconciled = REC_MOL;
 		}
 	    } else { /* not satisfied yet */
 		if (Hallucination)
@@ -1693,6 +1719,8 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    else
 			You("have a feeling of reconciliation.");
 		    if ((int)u.uluck < 0) u.uluck = 0;
+			
+			u.reconciled = REC_REC;
 		}
 	    }
 	} else {
@@ -1718,6 +1746,9 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 			otmp->gifted = u.ualign.type;
 			u.ugifts++;
 		    u.ublesscnt = rnz(300 + (50 * nartifacts));
+			u.lastprayed = moves;
+			u.reconciled = REC_NONE;
+			u.lastprayresult = PRAY_GIFT;
 		    exercise(A_WIS, TRUE);
 		    /* make sure we can use this weapon */
 		    unrestrict_weapon_skill(weapon_type(otmp));
@@ -1750,6 +1781,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    "glimpse a four-leaf clover at your %s.",
 		    makeplural(body_part(FOOT)));
 	    }
+		u.reconciled = REC_REC;
 	}
     }
     return(1);
@@ -1824,6 +1856,8 @@ dopray()
     /* set up p_type and p_alignment */
     if (!can_pray(TRUE)) return 0;
 
+	u.lastprayed = moves;
+	u.reconciled = REC_NONE;
 #ifdef WIZARD
     if (wizard && p_type >= 0) {
 	if (yn("Force the gods to be pleased?") == 'y') {
@@ -1855,6 +1889,7 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
     aligntyp alignment = p_aligntyp;
 
     u.uinvulnerable = FALSE;
+	u.lastprayresult = PRAY_GOOD;
     if(p_type == -1) {
 	godvoice(alignment,
 		 alignment == A_LAWFUL ?
@@ -1863,9 +1898,11 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
 	You_feel("like you are falling apart.");
 	/* KMH -- Gods have mastery over unchanging */
 	if (!Race_if(PM_VAMPIRE)) {
+		u.lastprayresult = PRAY_GOOD;
 	rehumanize();
 	losehp(rnd(20), "residual undead turning effect", KILLED_BY_AN);
 	} else {
+		u.lastprayresult = PRAY_BAD;
 	   /* Starting vampires are inherently vampiric */
 	   losehp(rnd(20), "undead turning effect", KILLED_BY_AN);
 	   pline("You get the idea that %s will be of %s help to you.",
