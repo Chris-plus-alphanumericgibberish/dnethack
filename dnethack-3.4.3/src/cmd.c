@@ -1678,7 +1678,7 @@ signs_enlightenment()
 		if(!uarmf)
 			putstr(en_win, 0, "Your legs bifurcate into twin pairs of cloven-hoved feet.");
 		else
-			putstr(en_win, 0, "Your strange feet a hidden in your shoes.");
+			putstr(en_win, 0, "Your strange feet are hidden in your shoes.");
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_CHUPOCLOPS){
