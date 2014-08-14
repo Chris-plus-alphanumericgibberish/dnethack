@@ -811,7 +811,7 @@ MONSTER: 'b', "shoggoth", (11,01)
 MONSTER: 'd', "warg", (13,01)
 MONSTER: 'd', "anuban jackal", (15,01)
 MONSTER: 'e', "beholder", (17,01)
-OBJECT:'`',"boulder",(17,02)
+#OBJECT:'`',"boulder",(17,02)
 MONSTER: 'g', "gremlin", (19,01)
 MONSTER: 'g', "gargoyle", (21,01)
 MONSTER: 'g', "winged gargoyle", (23,01)
@@ -823,40 +823,52 @@ MONSTER: 'k', "kobold", (33,01)
 MONSTER: 'k', "large kobold", (35,01)
 MONSTER: 'k', "kobold lord", (37,01)
 MONSTER: 'k', "kobold shaman", (39,01)
+#OBJECT:'`',"boulder",(39,02)
 MONSTER: 'n', "dryad", (41,01)
 MONSTER: 'n', "naiad", (43,01)
 #OBJECT:'`',"boulder",(43,02)
 MONSTER: 'n', "swamp nymph", (45,01)
+#OBJECT:'`',"boulder",(45,02)
 MONSTER: 'o', "orc", (47,01)
 MONSTER: 'o', "hill orc", (49,01)
 MONSTER: 'o', "Mordor orc", (51,01)
 MONSTER: 'o', "Uruk-hai", (53,01)
 MONSTER: 'o', "orc shaman", (55,01)
+#OBJECT:'`',"boulder",(55,02)
 MONSTER: 'o', "orc-captain", (57,01)
 MONSTER: 'o', "goblin", (59,01)
 MONSTER: 'o', "hobgoblin", (61,01)
-OBJECT:'`',"statue",(63,01),"black unicorn",1
+MONSTER: 'u', "black unicorn", (63,01)
+#OBJECT:'`',"statue",(63,01),"black unicorn",1
 MONSTER: 'x', "bebelith", (65,01)
 MONSTER: 'B', "byakhee", (67,01)
 MONSTER: 'C', "mountain centaur", (69,01)
 MONSTER: 'D', "blue dragon", (71,01)
-OBJECT:'`',"boulder",(71,02)
+#OBJECT:'`',"boulder",(71,02)
 
 MONSTER: 'D', "black dragon", (73,03)
-OBJECT:'`',"boulder",(72,03)
+#OBJECT:'`',"boulder",(72,03)
 MONSTER: 'D', "white dragon", (73,05)
-OBJECT:'`',"boulder",(72,05)
+#OBJECT:'`',"boulder",(72,05)
 MONSTER: 'D', "red dragon", (73,07)
-OBJECT:'`',"boulder",(72,07)
+#OBJECT:'`',"boulder",(72,07)
 MONSTER: 'H', "gnoll matriarch", (73,09)
+#OBJECT:'`',"boulder",(72,09)
 MONSTER: 'H', "minotaur priestess", (73,11)
+#OBJECT:'`',"boulder",(72,11)
 MONSTER: 'L', "lich", (73,13)
+#OBJECT:'`',"boulder",(72,13)
 MONSTER: 'L', "demilich", (73,15)
-OBJECT:'`',"statue",(73,17),"master lich",1
+#OBJECT:'`',"boulder",(72,15)
+MONSTER: 'L', "master lich", (73,17)
+#OBJECT:'`',"statue",(73,17),"master lich",1
 
-OBJECT:'`',"statue",(71,19),"death knight",1
-OBJECT:'`',"statue",(69,19),"arch-lich",1
-OBJECT:'`',"statue",(67,19),"alhoon",1
+#OBJECT:'`',"statue",(71,19),"death knight",1
+#OBJECT:'`',"statue",(69,19),"arch-lich",1
+#OBJECT:'`',"statue",(67,19),"alhoon",1
+MONSTER: 'L', "baelnorn", (71,19)
+MONSTER: 'L', "death knight", (69,19)
+MONSTER: 'L', "arch-lich", (67,19)
 MONSTER: 'M', "kobold mummy", (65,19)
 MONSTER: 'M', "gnome mummy", (63,19)
 MONSTER: 'M', "orc mummy", (61,19)
@@ -868,9 +880,11 @@ MONSTER: 'N', "red naga", (51,19)
 #OBJECT:'`',"boulder",(51,18)
 MONSTER: 'O', "ogre", (49,19)
 MONSTER: 'O', "ogre mage", (47,19)
+#OBJECT:'`',"boulder",(47,18)
 MONSTER: 'O', "ogre lord", (45,19)
 MONSTER: 'O', "ogre king", (43,19)
 MONSTER: 'O', "siege ogre", (41,19)
+#OBJECT:'`',"boulder",(41,18)
 MONSTER: 'R', "disenchanter", (39,19)
 MONSTER: 'T', "troll", (37,19)
 MONSTER: 'T', "ice troll", (35,19)
@@ -896,9 +910,12 @@ MONSTER: '&', "hezrou", (01,15)
 MONSTER: '&', "nalfeshnee", (01,13)
 MONSTER: '&', "marilith", (01,11)
 MONSTER: '&', "balrog", (01,09)
-OBJECT:'`',"statue",(01,07),"shayahteen",1
-OBJECT:'`',"statue",(01,05),"retriever",1
-OBJECT:'`',"statue",(01,03),"ghost",1
+MONSTER: '&', "shayateen", (01,07)
+MONSTER: '\'', "retriever", (01,05)
+MONSTER: ' ', "broken shadow", (01,03)
+#OBJECT:'`',"statue",(01,07),"shayahteen",1
+#OBJECT:'`',"statue",(01,05),"retriever",1
+#OBJECT:'`',"statue",(01,03),"ghost",1
 
 GEOMETRY: center, center
 #0          1         2   	  3	      4	    5		  6	      7
@@ -929,6 +946,7 @@ ENDMAP
 STAIR: (03,03,71,17),(04,04,70,16),down
 STAIR: (35,10), up
 NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 REGION:(00,00,03,20),  lit,"ordinary"
 REGION:(00,17,75,20),  lit,"ordinary"
 REGION:(00,00,75,03),  lit,"ordinary"

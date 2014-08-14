@@ -1778,18 +1778,18 @@ MONSTER[50%]:random,random,random
 # A few statues
 CONTAINER:'`',"statue",(05,04),"oread",1
 CONTAINER:'`',"statue",(07,04),"dryad",1
-CONTAINER:'`',"statue",(06,01),"God",1,"Shub-Niggurath, Black Goat of the woods with a thousand young"
+CONTAINER:'`',"statue",(06,01),"god",1,"Shub-Niggurath, Black Goat of the woods with a thousand young"
 REGION:(04,01,08,02),lit,"temple"
 ALTAR:(06,01),noalign,altar
 
-CONTAINER:'`',"statue",(74,01),uncursed,"God",1,"the God of the Bloody Tongue"
+CONTAINER:'`',"statue",(74,01),uncursed,"god",1,"the God of the Bloody Tongue"
 OBJECT:'/',"death",contained
 OBJECT:'/',"undead turning",contained
 
-CONTAINER:'`',"statue",(67,15),"God",1,"Father Dagon"
+CONTAINER:'`',"statue",(67,15),"god",1,"Father Dagon"
 OBJECT:'"',"amulet of magical breathing",contained
 
-OBJECT:'`',"statue",(38,10), "God", 1, "something long since forgotten"
+OBJECT:'`',"statue",(38,10), "god", 1, "something long since forgotten"
 MONSTER:'&',"priest of an unknown god",(38,11)
 
 # Deep one servitors for the temple of Dagon
