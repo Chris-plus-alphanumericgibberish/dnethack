@@ -173,9 +173,17 @@ adjattrib(ndx, incr, msgflg)
 	    }
 	} else {
 	    if (ABASE(ndx) <= ATTRMIN(ndx)) {
-		if (msgflg == 0 && flags.verbose)
-		    pline("You're already as %s as you can get.",
-			  minusattr[ndx]);
+		if(ndx == A_WIS && u.wimage){
+			int temparise = u.ugrave_arise;
+			pline("The image of the weeping angel is taking over your body!");
+			u.ugrave_arise = PM_WEEPING_ANGEL;
+			done(WEEPING);
+			u.ugrave_arise = temparise;
+		} else {
+			if (msgflg == 0 && flags.verbose)
+			    pline("You're already as %s as you can get.",
+				  minusattr[ndx]);
+		}
 		ABASE(ndx) = ATTRMIN(ndx); /* just in case */
 		return FALSE;
 	    }
@@ -322,7 +330,7 @@ boolean	inc_or_dec;
 	if(u.sealsActive&SEAL_HUGINN_MUNINN && (i == A_INT || i == A_WIS)) return; /* don't excercise int or wis while artificially maxed */
 
 	/* no physical exercise while polymorphed; the body's temporary */
-	if (Upolyd && i != A_WIS) return;
+	if (Upolyd && i != A_WIS && i != A_INT) return;
 
 	if(abs(AEXE(i)) < AVAL) {
 		/*
@@ -496,7 +504,7 @@ exerchk()
 			break;
 		    case A_WIS: You((mod_val >0) ?
 				    "must have been very observant." :
-				    "haven't been paying attention.");
+				    u.wimage ? "are being consumed by the image of the weeping angel!" : "haven't been paying attention.");
 				if(mod_val < 0)	AMAX(i) -= mod_val; /* permanent drain */
 			break;
 		    }

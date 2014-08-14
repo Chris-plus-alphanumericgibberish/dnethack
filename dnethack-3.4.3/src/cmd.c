@@ -1032,6 +1032,22 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		else you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
 	}
 	
+	if(u.wimage){
+		if(ACURR(A_WIS) < 6){
+			Sprintf(buf, " filled with the image of a weeping angel");
+			enl_msg("Your mind ", "is","was",buf);
+		} else if(ACURR(A_WIS) < 9){
+			Sprintf(buf, " ever on your mind");
+			enl_msg("The image of a weeping angel ", "is","was",buf);
+		} else if(ACURR(A_WIS) < 12){
+			Sprintf(buf, " seem to shake the image of a weeping angel from your mind");
+			enl_msg("You ", "can't","couldn't",buf);
+		} else {
+			Sprintf(buf, " in the back of your mind");
+			enl_msg("The image of a weeping angel ", "lurks","lurked",buf);
+		}
+	}
+	
 
 	/* note: piousness 20 matches MIN_QUEST_ALIGN (quest.h) */
 	if (u.ualign.record >= 20)	you_are("piously aligned");
@@ -1499,6 +1515,15 @@ resistances_enlightenment()
 		Sprintf(buf, "You have wounded %s", makeplural(body_part(LEG)));
 		putstr(en_win, 0, buf);
 	}
+	
+	if(u.wimage){
+		if(ACURR(A_WIS) < 6) Sprintf(buf, "Your mind is filled with the image of a weeping angel");
+		else if(ACURR(A_WIS) < 9) Sprintf(buf, "The image of a weeping angel is ever on your mind");
+		else if(ACURR(A_WIS) < 12) Sprintf(buf, "You can't seem to shake the image of a weeping angel from your mind");
+		else Sprintf(buf, "The image of a weeping angel lurks in the back of your mind");
+		putstr(en_win, 0, buf);
+	}
+	
 	if(u.sealsActive || u.specialSealsActive){
 		int i,j,numBound,numFound=0;
 		numBound = u.sealCounts;

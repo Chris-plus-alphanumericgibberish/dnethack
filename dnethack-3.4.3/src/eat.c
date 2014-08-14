@@ -2981,7 +2981,7 @@ register int num;
 				Your("mainspring is wound too tight!");
 				Your("clockwork breaks apart!");
 				killer_format = KILLED_BY;
-				killer = "overclocking";
+				killer = "overwinding";
 				done(OVERWOUND);
 				victual.piece = 0;
 				victual.mon = 0;
@@ -3155,7 +3155,7 @@ windclock()
     Your("mainspring is wound too tight!");
     Your("clockwork breaks apart!");
     killer_format = KILLED_BY;
-    killer = "overclocking";
+    killer = "overwinding";
     done(OVERWOUND);
     victual.piece = 0;
     victual.mon = 0;

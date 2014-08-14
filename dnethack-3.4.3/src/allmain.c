@@ -285,8 +285,14 @@ moveloop()
 			}
 			else if(u.ZangetsuSafe < u.ulevel && !(moves%10)) u.ZangetsuSafe++;
 			
-			if(u.eurycounts && !(moves%10)) u.eurycounts--;
-			if(u.orthocounts && !(moves%10)) u.orthocounts--;
+			if(!(moves%10)){
+				if(u.eurycounts) u.eurycounts--;
+				if(u.orthocounts) u.orthocounts--;
+				if(u.wimage){
+					exercise(A_INT, TRUE);
+					exercise(A_WIS, FALSE);
+				}
+			}
 			
 			if(u.sealsActive&SEAL_ASTAROTH && u.uinwater){
 				losehp(1, "rusting through", KILLED_BY);

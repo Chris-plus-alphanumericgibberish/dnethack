@@ -889,6 +889,8 @@ void
 forget(howmuch)
 int howmuch;
 {
+	u.wimage = 0; //clear wa image from your mind
+	
 	if(u.sealsActive&SEAL_HUGINN_MUNINN){
 		unbind(SEAL_HUGINN_MUNINN,TRUE);
 		return; //expel and end
@@ -1233,7 +1235,10 @@ struct obj	*sobj;
 		if (sobj->cursed) {
 		    pline_The("scroll disintegrates.");
 		} else {
-			if(!confused && u.sealsActive&SEAL_MARIONETTE) unbind(SEAL_MARIONETTE,TRUE);
+			if(!confused && u.sealsActive&SEAL_MARIONETTE){
+				unbind(SEAL_MARIONETTE,TRUE);
+			} 
+			if(!confused) u.wimage = 0;
 		    for (obj = invent; obj; obj = obj->nobj) {
 			long wornmask;
 #ifdef GOLDOBJ
