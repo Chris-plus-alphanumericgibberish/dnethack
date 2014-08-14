@@ -29,13 +29,13 @@ MONSTER:'V',"Vlad the Impaler",(06,05),hostile
 MONSTER:'V',"Carmilla",(01,05),hostile
 MONSTER:'V',"Mina Harker",(02,05),hostile
 MONSTER:'V',"Ilona Szilagy",(07,05),hostile
-# These vampires are now in coffins.
-# MONSTER:'V',random,(03,09)
-# MONSTER:'V',random,(07,09)
-# MONSTER:'V',random,(11,09)
-# MONSTER:'V',random,(03,01)
-# MONSTER:'V',random,(07,01)
-# MONSTER:'V',random,(11,01)
+# More vampires are now in coffins.
+MONSTER:'V',random,(03,09)
+MONSTER:'V',random,(07,09)
+MONSTER:'V',random,(11,09)
+MONSTER:'V',random,(03,01)
+MONSTER:'V',random,(07,01)
+MONSTER:'V',random,(11,01)
 # The doors
 DOOR:closed,(08,03)
 DOOR:closed,(10,03)
@@ -99,6 +99,9 @@ OBJECT:'"',"amulet of strangulation",contained
 OBJECT:'[',"water walking boots",place[7]
 OBJECT:'[',"crystal plate mail",place[8]
 OBJECT:'+',"invisibility",place[9]
+OBJECT:'!',"water",(01,05),blessed,0
+OBJECT:'!',"water",(01,05),blessed,0
+OBJECT:'!',"water",(01,05),blessed,0
 OBJECT:'!',"water",(01,05),blessed,0
 # Walls in the tower are non diggable
 NON_DIGGABLE:(00,00,14,10)
@@ -204,8 +207,8 @@ DOOR:locked,(05,14)
 DOOR:locked,(13,10)
 DOOR:locked,(04,09)
 
-REGION:(40,10,40,10),  lit,"ordinary",unfilled,true
-REGION:(68,10,68,10),  lit,"ordinary",unfilled,true
+REGION:(19,00,75,16),  lit,"ordinary",unfilled
+REGION:(25,16,75,20),  lit,"ordinary",unfilled
 
 BRANCH:(73,10,73,10),(00,00,00,00)
 LADDER:(03,11),up

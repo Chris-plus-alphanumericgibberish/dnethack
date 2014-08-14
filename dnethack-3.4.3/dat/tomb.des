@@ -97,20 +97,20 @@ OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 MONSTER: 'L', "lich", (47,9)
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
-MONSTER: '_',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
+MONSTER: '.',random,random
 MONSTER: 'Z',random,random
 MONSTER: 'Z',random,random
 MONSTER: 'Z',random,random
