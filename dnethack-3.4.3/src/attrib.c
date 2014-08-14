@@ -568,8 +568,8 @@ init_attr(np)
 	if(Race_if(PM_INCANTIFIER)){
 	    for (i = 0; (i < A_MAX); i++){
 			if(ABASE(A_INT) < ABASE(i)){
-				ABASE(A_INT) = ABASE(i);
-				AMAX(A_INT) = AMAX(i);
+				ABASE(A_INT) = min(18, ABASE(i));
+				AMAX(A_INT) = min(18, AMAX(i));
 			}
 		}
 	}
