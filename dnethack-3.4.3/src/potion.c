@@ -889,9 +889,9 @@ as_extra_healing:
 			    pline("Magical energies course through your body.");
 			num = rnd(5) + 5 * otmp->blessed + 1;
 			u.uenmax += (otmp->cursed) ? -num : num;
-			u.uen += (otmp->cursed) ? -num : num;
+			u.uen += (otmp->cursed) ? -100 : 100;
 			if(u.uenmax <= 0) u.uenmax = 0;
-			if(u.uen <= 0) u.uen = 0;
+			if(u.uen <= 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 			flags.botl = 1;
 			exercise(A_WIS, TRUE);
 		}
