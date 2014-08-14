@@ -766,6 +766,7 @@ E void NDECL(drinksink);
 
 /* ### hack.c ### */
 
+E int FDECL(min_ints, (int,int));
 E boolean FDECL(revive_nasty, (int,int,const char*));
 E void FDECL(movobj, (struct obj *,XCHAR_P,XCHAR_P));
 E boolean FDECL(may_dig, (XCHAR_P,XCHAR_P));
