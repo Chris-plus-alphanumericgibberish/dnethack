@@ -101,8 +101,6 @@ MAP
 ENDMAP
 # Dungeon Description
 
-# The altar inside the temple
-
 # Doors
 
 # Stairs
@@ -121,7 +119,7 @@ NON_DIGGABLE:(10,02,30,13)
 #	been assigned to retrieve.
 #
 
-MAZE: "Pri-goal", ' '
+MAZE: "Dro-goal", ' '
 GEOMETRY:center,center
 MAP
 FLAGS: noteleport,hardfloor
@@ -157,12 +155,12 @@ REGION:(00,00,75,19),lit,"ordinary"
 # Stairs
 
 # Objects
-OBJECT:')',"rapier",place[0],blessed,0,"Silver Starlight"
+OBJECT:')',"rapier",(37,10),blessed,0,"Silver Starlight"
 
 # Random traps
 
 # Monsters.
-MONSTER:'&',"Seyll Auzkovyn",place[0]
+MONSTER:'@',"Seyll Auzkovyn", (37,10)
 
 #
 #	The "fill" levels for the quest.
@@ -175,6 +173,35 @@ MONSTER:'&',"Seyll Auzkovyn",place[0]
 
 LEVEL: "Dro-fila"
 #
+INIT_MAP: '.' , ' ' , true , true , random , true
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+#
+OBJECT: '*', random, random
+OBJECT: '*', random, random
+OBJECT: '*', random, random
+OBJECT: '(', random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+#
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+#
+
 
 LEVEL: "Dro-filb"
 #

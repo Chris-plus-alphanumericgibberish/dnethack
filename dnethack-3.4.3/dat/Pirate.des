@@ -106,9 +106,9 @@ MAP
 0                                                                            
 ENDMAP
 # Monsters on siege duty.
-MONSTER: '_',"ghost",random
-MONSTER: '_',"ghost",random
-MONSTER: '_',"ghost",random
+MONSTER: '.',"ghost",random
+MONSTER: '.',"ghost",random
+MONSTER: '.',"ghost",random
 MONSTER: 'Z',"skeletal pirate",random
 MONSTER: 'Z',"skeletal pirate",random
 MONSTER: 'Z',"skeletal pirate",random
@@ -397,7 +397,7 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2   	   3	     4		   5		 6	       7
 
-MONSTER: '_',"ghost",random
+MONSTER: '.',"ghost",random
 MONSTER: 'Z',"skeletal pirate",random
 MONSTER: 'Z',"skeletal pirate",random
 MONSTER: 'Z',"skeletal pirate",random
@@ -446,9 +446,9 @@ ENDMAP
 #0         1         2   	   3	     4		   5		 6	       7
 
 
-MONSTER: '_',"ghost",random
-MONSTER: '_',"ghost",random
-MONSTER: '_',"ghost",random
+MONSTER: '.',"ghost",random
+MONSTER: '.',"ghost",random
+MONSTER: '.',"ghost",random
 MONSTER: '&',"damned pirate",random
 MONSTER: 'Z',"skeletal pirate",random
 MONSTER: 'Z',"skeletal pirate",random
@@ -683,7 +683,7 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 # Random monsters.
-MONSTER:'_',"Blackbeard's Ghost",(36,08)
+MONSTER:'.',"Blackbeard's Ghost",(36,08)
 MONSTER:'Z',"human zombie",random
 MONSTER:'Z',"human zombie",random
 MONSTER:'Z',"human zombie",random
@@ -743,7 +743,7 @@ INIT_MAP: '.' , '}' , false, false , lit , false
 NOMAP
 STAIR: (20,00,75,20), (0,0,20,20), down
 
-MONSTER: '_',"ghost",random
+MONSTER: '.',"ghost",random
 MONSTER: 'Z',"skeletal pirate",random
 MONSTER: 'Z',"skeletal pirate",random
 MONSTER: 'Z',"skeletal pirate",random
@@ -801,9 +801,9 @@ TRAP: random, random
 OBJECT:random,random,random
 TRAP: random, random
 
-MONSTER: '_',"ghost",random
-MONSTER: '_',"ghost",random
-MONSTER: '_',"ghost",random
+MONSTER: '.',"ghost",random
+MONSTER: '.',"ghost",random
+MONSTER: '.',"ghost",random
 
 MONSTER: '@',"sergeant",random
 

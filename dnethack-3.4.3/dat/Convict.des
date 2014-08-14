@@ -369,9 +369,9 @@ MONSTER:'@',"inmate",(23,08)
 MONSTER:'@',"inmate",(11,14)
 MONSTER:'@',"inmate",(06,05)
 # Undead prisoners
-MONSTER:'_',"ghost",(42,17),"Orzo the Inmate"
-MONSTER[50%]:'_',"ghost",(40,18),"Fredgar the Inmate"
-MONSTER[50%]:'_',"ghost",(06,12),"Rastilon the Inmate"
+MONSTER:'.',"ghost",(42,17),"Orzo the Inmate"
+MONSTER[50%]:'.',"ghost",(40,18),"Fredgar the Inmate"
+MONSTER[50%]:'.',"ghost",(06,12),"Rastilon the Inmate"
 MONSTER:'Z',"skeleton",(28,15),awake
 # Bugs and snakes
 MONSTER:'S',"pit viper",(06,17)

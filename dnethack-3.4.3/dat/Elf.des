@@ -8,7 +8,7 @@
 #	Here you meet your (besieged) class leader, Celeborn/Galadriel
 #	and receive your quest assignment.
 #
-MAZE: "Elf-start",' '
+MAZE: "Elf-strt",' '
 FLAGS: noteleport,hardfloor
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
@@ -95,7 +95,7 @@ MONSTER: 'o',"goblin",random,hostile
 #	further towards your assigned quest.
 #
 
-MAZE: "Elf-locate",' '
+MAZE: "Elf-loca",' '
 FLAGS: hardfloor
 GEOMETRY:center,center
 MAP
@@ -301,7 +301,7 @@ WALLIFY
 #	and goal levels.
 #
 
-MAZE: "Elf-filla" , ' '
+MAZE: "Elf-fila" , ' '
 INIT_MAP: '.' , 'T', true, true, random, true
 NOMAP
 #
@@ -329,7 +329,7 @@ MONSTER: 'o', "Uruk-hai", random, hostile
 MONSTER: 'o', random, random, hostile
 MONSTER: 'O', "ogre", random, hostile
 
-MAZE: "Elf-fillb" , ' '
+MAZE: "Elf-filb" , ' '
 INIT_MAP: '.' , ' ', true, true, random, true
 NOMAP
 #
