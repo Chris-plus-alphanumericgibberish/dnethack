@@ -244,6 +244,10 @@ register struct monst *mtmp;
 	killer = buf;
 	if (mtmp->data->mlet == S_WRAITH)
 		u.ugrave_arise = PM_WRAITH;
+	else if (mtmp->data == &mons[PM_SHADE])
+		u.ugrave_arise = PM_SHADE;
+	else if (mtmp->data == &mons[PM_BROKEN_SHADOW])
+		u.ugrave_arise = PM_BROKEN_SHADOW;
 	else if (mtmp->data->mlet == S_MUMMY && urace.mummynum != NON_PM)
 		u.ugrave_arise = urace.mummynum;
 	else if (mtmp->data->mlet == S_VAMPIRE && Race_if(PM_HUMAN))
