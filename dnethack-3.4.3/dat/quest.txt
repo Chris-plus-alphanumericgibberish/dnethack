@@ -567,7 +567,7 @@ around you, shadows flit and flicker below an indistinct sky. A
 cold breeze blows in aimless breaths, bearing the rumor of distant
 whispers.
 
-You know this place well; though you have been here but one before,
+You know this place well; though you have been here but once before,
 and that in a dream. That night, as you stood over the strange, dry
 corpse that sprawls alone within the shell of this ruined library,
 the wind whispered to you with a thousand tounges, speaking the 
@@ -4664,7 +4664,7 @@ gods of the world.
 You, a newly empowered %r, have been heralded
 from birth as..., well, no one actually heralded your
 birth. But if someone had, they would have heralded
-you as an instrument of your local feudal overlord.
+you as a poor peon of your local feudal overlord.
 You were destined to live and die in the village
 of your ancestors.
 
