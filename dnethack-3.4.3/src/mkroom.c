@@ -17,9 +17,13 @@
 
 #ifdef OVLB
 STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
-STATIC_DCL struct mkroom * FDECL(pick_room,(BOOLEAN_P));
+STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
+STATIC_DCL void FDECL(mkgarden, (struct mkroom *));
+STATIC_DCL void NDECL(mkisland);
+STATIC_DCL void NDECL(mkriver);
+STATIC_DCL void FDECL(liquify, (xchar, xchar, boolean));
 STATIC_DCL coord * FDECL(shrine_pos, (int));
 STATIC_DCL struct permonst * NDECL(morguemon);
 STATIC_DCL struct permonst * NDECL(antholemon);
@@ -43,6 +47,15 @@ register struct mkroom *sroom;
 	return((boolean)( area > 20 ));
 }
 
+/* Returns true if room has both an X and Y size of at least five. */
+STATIC_OVL boolean
+isspacious(sroom)
+register struct mkroom *sroom;
+{
+	return((boolean)( ((sroom->hx - sroom-> lx)+1) >= 5 &&
+		(((sroom->hy - sroom->ly)+1) >=5 ) ));
+}
+
 void
 mkroom(roomtype)
 /* make and stock a room of a given type */
@@ -57,11 +70,14 @@ int	roomtype;
 	case MORGUE:	mkzoo(MORGUE); break;
 	case BARRACKS:	mkzoo(BARRACKS); break;
 	case SWAMP:	mkswamp(); break;
+	case GARDEN:	mkgarden((struct mkroom *)0); break;
 	case TEMPLE:	mktemple(); break;
 	case LEPREHALL:	mkzoo(LEPREHALL); break;
 	case COCKNEST:	mkzoo(COCKNEST); break;
 	case ANTHOLE:	mkzoo(ANTHOLE); break;
-	default:	impossible("Tried to make a room of type %d.", roomtype);
+	case ISLAND: mkisland(); break;
+	case RIVER: mkriver(); break;	default:	impossible("Tried to make a room of type %d.", roomtype);
+	case POOLROOM:	mkpoolroom(); break;
     }
 }
 
@@ -110,12 +126,24 @@ mkshop()
 				mkzoo(LEPREHALL);
 				return;
 			}
+			if(*ep == 'o' || *ep == 'O'){
+				mkpoolroom();
+				return;
+			}
 			if(*ep == '_'){
 				mktemple();
 				return;
 			}
+			if(*ep == 'n'){
+				mkgarden((struct mkroom *)0);
+				return;
+			}
 			if(*ep == '}'){
 				mkswamp();
+				return;
+			}
+			if(*ep == 'w' || *ep == 'W'){
+				mkisland();
 				return;
 			}
 			for(i=0; shtypes[i].name; i++)
@@ -182,7 +210,7 @@ gottype:
 	stock_room(i, sroom);
 }
 
-STATIC_OVL struct mkroom *
+struct mkroom *
 pick_room(strict)
 register boolean strict;
 /* pick an unused room, preferably with only one door */
@@ -239,6 +267,10 @@ struct mkroom *sroom;
 
 	sh = sroom->fdoor;
 	switch(type) {
+		case GARDEN:
+			mkgarden(sroom);
+			/* mkgarden() sets flags and we don't want other fillings */
+			return; 
 	    case COURT:
 		if(level.flags.is_maze_lev) {
 		    for(tx = sroom->lx; tx <= sroom->hx; tx++)
@@ -448,6 +480,77 @@ antholemon()
 			(struct permonst *)0 : &mons[mtyp]);
 }
 
+/** Create a special room with trees, fountains and nymphs.
+ * @author Pasi Kallinen
+ */
+STATIC_OVL void
+mkgarden(croom)
+struct mkroom *croom; /* NULL == choose random room */
+{
+    register int tryct = 0;
+    boolean maderoom = FALSE;
+    coord pos;
+    register int i, tried;
+
+    while ((tryct++ < 25) && !maderoom) {
+	register struct mkroom *sroom = croom ? croom : &rooms[rn2(nroom)];
+	
+	if (sroom->hx < 0 || (!croom && (sroom->rtype != OROOM ||
+	    !sroom->rlit || has_upstairs(sroom) || has_dnstairs(sroom))))
+	    	continue;
+
+	sroom->rtype = GARDEN;
+	maderoom = TRUE;
+	level.flags.has_garden = 1;
+
+	tried = 0;
+	if(rn2(2)){
+		while ((tried++ < 50) && somexy(sroom, &pos)) {
+			struct permonst *pmon;
+			if (!MON_AT(pos.x, pos.y)) {
+			struct monst *mtmp = makemon(&mons[PM_WEEPING_ANGEL], pos.x,pos.y, NO_MM_FLAGS);
+			if (mtmp) mtmp->msleeping = 1;
+			i--;
+			}
+		}
+	}
+	tried = 0;
+	i = rnd(4);
+	while ((tried++ < 50) && (i >= 0) && somexy(sroom, &pos)) {
+	    struct permonst *pmon;
+	    if (!MON_AT(pos.x, pos.y) && (pmon = mkclass(S_NYMPH,G_NOHELL))) {
+		struct monst *mtmp = makemon(pmon, pos.x,pos.y, NO_MM_FLAGS);
+		if (mtmp) mtmp->msleeping = 1;
+		i--;
+	    }
+	}
+	tried = 0;
+	i = rn1(5,3);
+	while ((tried++ < 50) && (i >= 0) && somexy(sroom, &pos)) {
+	    struct permonst *pmon;
+	    if (!MON_AT(pos.x, pos.y) && (pmon = mkclass(S_PLANT,G_HELL|G_NOHELL))) {
+		struct monst *mtmp = makemon(pmon, pos.x,pos.y, NO_MM_FLAGS);
+		if (mtmp) mtmp->msleeping = 1;
+		i--;
+	    }
+	}
+	tried = 0;
+	i = rn1(3,3);
+	while ((tried++ < 50) && (i >= 0) && somexy(sroom, &pos)) {
+	    if (levl[pos.x][pos.y].typ == ROOM && !MON_AT(pos.x,pos.y) &&
+		!nexttodoor(pos.x,pos.y)) {
+		if (rn2(3))
+		  levl[pos.x][pos.y].typ = TREE;
+		else {
+		    levl[pos.x][pos.y].typ = FOUNTAIN;
+		    level.flags.nfountains++;
+		}
+		i--;
+	    }
+	}
+    }
+}
+
 STATIC_OVL void
 mkswamp()	/* Michiel Huisjes & Fred de Wilde */
 {
@@ -489,6 +592,103 @@ mkswamp()	/* Michiel Huisjes & Fred de Wilde */
 	}
 }
 
+STATIC_OVL void
+mkriver()	/* John Harris */
+{
+	register int center, width, prog, fill, edge;
+	register int x, y;
+	level.flags.has_river = 1;
+	if (!rn2(4)) {      /* Horizontal river */
+		center = rn2(ROWNO-12)+6;
+		width = rn2(4)+4;
+		for (prog = 1; prog<COLNO; prog++) {
+			edge = TRUE;
+			for (fill=center-(width/2); fill<=center+(width/2) ; fill++) {
+				/* edge is true the first time through this loop and the last */
+				liquify(prog, fill, edge);
+				edge = (fill == (center+(width/2)-1));
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && width >4) {width--;}
+				else if (width <7) {width++;}
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && (center-width/2) >1) {center--;}
+				else if ((center+width/2) < ROWNO-1) {center++;}
+			}
+			/* Make sure river doesn't stray off map */
+			if (center < 4) {center = 4;}
+			if (center > (ROWNO-5)) {center = ROWNO-5;}
+		}
+	}
+	else {      /* Vertical river */
+		center = rn2(COLNO-14)+7;
+		width = rn2(4)+5;
+		for (prog = 1; prog<ROWNO; prog++) {
+			edge = TRUE;
+			for (fill=center-(width/2); fill<=center+(width/2) ; fill++) {
+				liquify(fill, prog, edge);
+				edge = (fill == (center+(width/2)-1));
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && width >5) {width--;}
+				else if (width <8) {width++;}
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && (center-width/2) >1) {center--;}
+				else if ((center+width/2) < ROWNO-1) {center++;}
+			}
+			/* Sanity checking */
+			if (center < 5) {center = 5;}
+			if (center > (COLNO-6)) {center = COLNO-6;}
+		}
+	}
+}
+
+/* This isn't currently used anywhere. It liquifies the whole level. */
+STATIC_OVL void
+mksea()	/* John Harris */
+{
+	register int x, y;
+	/*level.flags.has_river = 1;*/
+	for (x=1 ; x <= COLNO-1 ; x++) {
+		for (y=1 ; y <= ROWNO-1 ; y++) {
+			liquify(x,y, FALSE);
+		};
+	}
+}
+
+STATIC_OVL void
+liquify(x, y, edge)
+register xchar x, y;
+register boolean edge; /* Allows room walls to intrude slightly into river. */
+{
+	register int typ = levl[x][y].typ;
+	register int monster = PM_JELLYFISH;
+	/* Don't liquify shop walls */
+	if (level.flags.has_shop && *in_rooms(x, y, SHOPBASE)) {return;}
+	if (typ == STONE || (IS_WALL(typ) && !edge && rn2(3)))
+		{levl[x][y].typ = POOL;}
+	else if ((typ == SCORR || typ == CORR || IS_DOOR(typ)
+					|| typ == SDOOR) && !IS_WALL(typ)) {
+			levl[x][y].typ = ROOM;
+	}
+	/* Leave boulders scattered around, dislodged by erosion.
+		Also, because they are fun to push into water.  Plunk! */
+	if (levl[x][y].typ == ROOM && !rn2(13))
+		(void) mksobj_at(BOULDER, x, y, TRUE, FALSE);
+	/* Sea monsters */
+	if (levl[x][y].typ == POOL && !rn2(85-depth(&u.uz))) {
+		if (depth(&u.uz) > 19 && !rn2(3)) {monster = PM_ELECTRIC_EEL;}
+			else if (depth(&u.uz) > 15 && !rn2(3)) {monster = PM_GIANT_EEL;}
+			else if (depth(&u.uz) > 11 && !rn2(2)) {monster = PM_SHARK;}
+			else if (depth(&u.uz) > 7 && rn2(4)) {monster = PM_PIRANHA;}
+		(void) makemon(&mons[monster], x, y, NO_MM_FLAGS);
+	}
+	/* Underground rivers are relatively open spaces, so light them. */
+	levl[x][y].lit = 1;
+}
+
 STATIC_OVL coord *
 shrine_pos(roomno)
 int roomno;
@@ -499,6 +699,136 @@ int roomno;
 	buf.x = troom->lx + ((troom->hx - troom->lx) / 2);
 	buf.y = troom->ly + ((troom->hy - troom->ly) / 2);
 	return(&buf);
+}
+
+STATIC_OVL void
+mkisland() /* John Harris, modified from mktemple & mkshop,
+				with ideas and aid from Pasi Kallinen.*/
+{
+	register struct mkroom *sroom;
+	register struct rm *lev;
+	register int x, y, dif, ptype, pxwidth, pywidth;
+	register int txoff, tyoff, tspot, tdx, tdy;
+	register int mx, my, montype;
+	register struct obj *otmp;
+	register struct obj *ogold;
+	register int u_depth = depth(&u.uz);
+	/*An island room has a row of water or lava along the inside of the
+			wall of the room.  Because this can block progress, it has to be
+			done carefully....
+		In case someone wants to do something more with this, here's the
+			rationale behind the choices I've made:
+		Stairs inside the moat could prevent the player from leaving the level
+			or room, so that should always be forbidden.
+		A one-door room ensures this room isn't a necessary juncture between
+			staircases.
+		Deeper in the dungeon (past the mines, certainly) it becomes less
+			likely that the player will be held back by a single room, so beyond
+			level five the restrictions are relaxed a bit.
+		In case the player teleports into the room or falls into it from above,
+			we always generate a trap door inside it so the player can escape.
+		Specifics of room placement & types:
+		If we're on or before level four, island rooms can only be made
+			in the same kinds of places as shops.  This prevents the player
+			from being utterly blocked by the island, but it also makes them
+			quite rare in that area.
+		If we're at level five or below we're after the Mines, so a pick-axe
+			is almost guarenteed, so we can place islands in more places.
+		Starting with level six, if the room is big enough we may make some
+			extra water.
+		From level twelve down, we may use lava instead of water.
+		Note: this code depends on the room being rectangular.
+	*/
+	for(sroom = &rooms[0]; ; sroom++){
+		if(sroom->hx < 0) return;  /* from mkshop: Signifies out of rooms? */
+		if(sroom - rooms >= nroom) {
+			pline("rooms not closed by -1?");
+			return;
+		}
+
+		if(sroom->rtype != OROOM || !isspacious(sroom) ||
+			has_dnstairs(sroom) || has_upstairs(sroom))
+				continue;
+		if( sroom->doorct == 1 || (u_depth > 4 && sroom->doorct != 0)) break;
+	}
+
+	level.flags.has_island = 1;
+
+	if (!rn2(3) && u_depth > 11) {ptype = LAVAPOOL;}
+	else {ptype = POOL;};
+
+	if ( u_depth > 5 ) {
+		pxwidth = ((sroom->hx - sroom-> lx) > 6) ? 2 : 1;
+		pywidth = ((sroom->hy - sroom-> ly) > 6) ? 2 : 1;
+	}
+	else {pxwidth = pywidth = 1;}
+	/* Reveal secret doors and liquify borders */
+	for(x = sroom->lx; x <= sroom->hx; x++) {
+		if (levl[x][sroom->hy+1].typ == SDOOR)
+			{levl[x][sroom->hy+1].typ = DOOR;}
+		if (levl[x][sroom->ly-1].typ == SDOOR)
+			{levl[x][sroom->ly-1].typ = DOOR;}
+		levl[x][sroom->hy].typ = ptype;
+		levl[x][sroom->ly].typ = ptype;
+		if (pywidth == 2) {
+			levl[x][sroom->hy-1].typ = ptype;
+			levl[x][sroom->ly+1].typ = ptype;
+		}
+	}
+	for(y = (sroom->ly); y <= (sroom->hy); y++) {
+		if (levl[sroom->hx+1][y].typ == SDOOR)
+			{levl[sroom->hx+1][y].typ = DOOR;}
+		if (levl[sroom->lx-1][y].typ == SDOOR)
+			{levl[sroom->lx-1][y].typ = DOOR;}
+		levl[sroom->hx][y].typ = ptype;
+		levl[sroom->lx][y].typ = ptype;
+		if (pxwidth == 2) {
+			levl[sroom->hx-1][y].typ = ptype;
+			levl[sroom->lx+1][y].typ = ptype;
+		}
+	}
+	/* Find the center of the room */
+	x = (((sroom->hx - sroom->lx) / 2) + sroom->lx);
+	y = (((sroom->hy - sroom->ly) / 2) + sroom->ly);
+	/* Make the treasure, add gold to it, bury & mark it */
+	otmp = mksobj_at(CHEST, x, y, TRUE, TRUE);
+	ogold = mkgold((long)rn1(u_depth * 100 + 200, 250), x, y);
+	remove_object(ogold);
+	(void) add_to_container(otmp, ogold);
+	bury_an_obj(otmp);
+	make_engr_at(x,y,"X",0,ENGRAVE);
+
+	/* Put a tree next to the spot
+		(all desert islands have exactly one palm tree on them)*/
+	tspot = rn2(8);
+	if (tspot < 3) {tyoff = -1;}
+	else if (tspot > 3 && tspot != 7) {tyoff = 1;}
+	else tyoff = 0;
+	if (tspot == 0 || tspot > 5) {txoff = -1;}
+	else if (tspot > 1 && tspot < 5) {txoff = 1;}
+	else txoff = 0;
+	levl[x+txoff][y+tyoff].typ = TREE;
+	/* Add a trap door in case the player gets stuck here. */
+	do {
+		tdx = rn2(sroom->hx - sroom->lx + 1 - pxwidth * 2) + sroom->lx + pxwidth;
+		tdy = rn2(sroom->hy - sroom->ly + 1 - pywidth * 2) + sroom->ly + pywidth;
+	} while (((tdx == x)&&(tdy == y)) ||
+				((tdx == x + txoff) && (tdy == y + tyoff)));
+
+	maketrap(tdx, tdy, TRAPDOOR);
+	/* If level 9 or deeper, and the moat is water, maybe make a sea monster.
+		(Eels earlier in the dungeon might be too hard and/or produce
+		too many experience points.) */
+	if (u_depth > 8 && ptype == POOL) {
+		/* Make in the corners. */
+		if (rn2(2)) {
+			mx = (rn2(2)) ? sroom->hx : sroom->lx;
+			my = (rn2(2)) ? sroom->hy : sroom->ly;
+			(void) makemon(rn2(2) ? &mons[PM_GIANT_EEL]
+				: &mons[PM_ELECTRIC_EEL], mx, my, NO_MM_FLAGS);
+		}
+	}
+	level.flags.has_island = TRUE;
 }
 
 STATIC_OVL void

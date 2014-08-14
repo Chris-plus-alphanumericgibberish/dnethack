@@ -593,6 +593,9 @@ clear_level_structures()
 	level.flags.has_barracks = 0;
 	level.flags.has_temple = 0;
 	level.flags.has_swamp = 0;
+	level.flags.has_garden = 0;
+	level.flags.has_island = 0;
+	level.flags.has_river = 0;
 	level.flags.noteleport = 0;
 	level.flags.hardfloor = 0;
 	level.flags.nommap = 0;
@@ -750,25 +753,59 @@ makelevel()
 #ifdef WIZARD
 	if(wizard && nh_getenv("SHOPTYPE")) mkroom(SHOPBASE); else
 #endif
+
+	/* New room selection code:
+		We divide special rooms into different types and put up to one of each in
+		the level.  Because there are only so many suitable rooms on each
+		random map, levels with two kinds of rooms still aren't too common,
+		and I've yet to see three in tests.
+		Also, we separate out level-wide specials, like swamps,
+		and give them the chance to forbid special rooms from appearing.
+	*/
+
+	/* Part one: early level-wide modifications */
+	if (u_depth > 15 && !rn2(8)) {
+		mkroom(SWAMP);
+		goto skiprooms;
+	}
+	
+	/* Part two: special rooms */
+	/* Shops */
 	if (u_depth > 1 &&
 	    u_depth < depth(&medusa_level) &&
 	    nroom >= room_threshold &&
 	    rn2(u_depth) < 3) mkroom(SHOPBASE);
-	else if (u_depth > 4 && !rn2(6)) mkroom(COURT);
+
+	/* Zoos */
+	if (u_depth > 4 && !rn2(6)) mkroom(COURT);
 	else if (u_depth > 5 && !rn2(8) &&
 	   !(mvitals[PM_LEPRECHAUN].mvflags & G_GONE)) mkroom(LEPREHALL);
 	else if (u_depth > 6 && !rn2(7)) mkroom(ZOO);
-	else if (u_depth > 8 && !rn2(5)) mkroom(TEMPLE);
+	else if (u_depth > 7 && !rn2(6)) mkroom(GARDEN);
 	else if (u_depth > 9 && !rn2(5) &&
 	   !(mvitals[PM_KILLER_BEE].mvflags & G_GONE)) mkroom(BEEHIVE);
 	else if (u_depth > 11 && !rn2(6)) mkroom(MORGUE);
 	else if (u_depth > 12 && !rn2(8)) mkroom(ANTHOLE);
 	else if (u_depth > 14 && !rn2(4) &&
 	   !(mvitals[PM_SOLDIER].mvflags & G_GONE)) mkroom(BARRACKS);
-	else if (u_depth > 15 && !rn2(6)) mkroom(SWAMP);
 	else if (u_depth > 16 && !rn2(8) &&
 	   !(mvitals[PM_COCKATRICE].mvflags & G_GONE)) mkroom(COCKNEST);
+
+	/* Terrain */
+	if (u_depth > 2 && !rn2(8)) mkroom(ISLAND);
+		else if (u_depth > 8 && !rn2(7)) mkroom(TEMPLE);
+
+		/* Part three: late modifications */
+		/* Rivers on vault levels are buggy, so we forbid that.
+		Islands + rivers are potentially too blocking,
+			so no that either. 
+		dNethack adjustment: as Vlad's has garunteed water 
+			walking boots, I'm allowing Islands+rivers. */
+	if (u_depth > 3 && !rn2(4) &&
+		!level.flags.has_vault) mkroom(RIVER);
     }
+
+skiprooms:
 
 #ifdef REINCARNATION
 skip0:
@@ -943,11 +980,74 @@ mineralize()
 	    }
 }
 
+
+void
+wallwalk_right(x,y,fgtyp,fglit,bgtyp,chance)
+     xchar x,y;
+     schar fgtyp,fglit,bgtyp;
+     int chance;
+{
+    int sx,sy, nx,ny, dir, cnt;
+    schar tmptyp;
+    sx = x;
+    sy = y;
+    dir = 1;
+
+    if (!isok(x,y)) return;
+    if (levl[x][y].typ != bgtyp) return;
+
+    do {
+	if (!t_at(x,y) && !bydoor(x,y) && levl[x][y].typ == bgtyp && (chance >= rn2(100))) {
+	    SET_TYPLIT(x,y, fgtyp, fglit);
+	}
+	cnt = 0;
+	do {
+	    nx = x;
+	    ny = y;
+	    switch (dir % 4) {
+	    case 0: y--; break;
+	    case 1: x++; break;
+	    case 2: y++; break;
+	    case 3: x--; break;
+	    }
+	    if (isok(x,y)) {
+		tmptyp = levl[x][y].typ;
+		if (tmptyp != bgtyp && tmptyp != fgtyp) {
+		    dir++; x = nx; y = ny; cnt++;
+		} else {
+		    dir = (dir + 3) % 4;
+		}
+	    } else {
+		dir++; x = nx; y = ny; cnt++;
+	    }
+	} while ((nx == x && ny == y) && (cnt < 5));
+    } while ((x != sx) || (y != sy));
+}
+
+
+void
+mkpoolroom()
+{
+    struct mkroom *sroom;
+    schar typ;
+
+    if (!(sroom = pick_room(TRUE))) return;
+
+    if (sroom->hx - sroom->lx < 3 || sroom->hy - sroom->ly < 3) return;
+
+    sroom->rtype = POOLROOM;
+    typ = !rn2(5) ? POOL : LAVAPOOL;
+
+    wallwalk_right(sroom->lx, sroom->ly, typ, sroom->rlit, ROOM, 96);
+}
+
+
 void
 mklev()
 {
 	struct mkroom *croom;
 
+	init_mapseen(&u.uz);
 	if(getbones()) return;
 	in_mklev = TRUE;
 	makelevel();
