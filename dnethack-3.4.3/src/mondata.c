@@ -336,7 +336,7 @@ register struct permonst *ptr;
 /* returns TRUE if monster is especially affected by silver weapons */
 {
 	return((boolean)(is_were(ptr) || ptr->mlet==S_VAMPIRE || is_demon(ptr) ||
-		ptr == &mons[PM_SHADE] ||
+		ptr->mlet == S_SHADE ||
 		(ptr->mlet==S_IMP && ptr != &mons[PM_TENGU])));
 }
 
@@ -392,7 +392,7 @@ breakarm(ptr)	/* creature will break out of armor */
 {
 	return ((bigmonst(ptr) || (ptr->msize > MZ_SMALL && !humanoid(ptr)) ||
 		/* special cases of humanoids that cannot wear body armor */
-		ptr == &mons[PM_MARILITH] || ptr == &mons[PM_WINGED_GARGOYLE])
+		ptr == &mons[PM_WINGED_GARGOYLE])
 	      && !sliparm(ptr));
 }
 #endif /* OVLB */

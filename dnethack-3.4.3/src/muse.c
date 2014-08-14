@@ -906,7 +906,7 @@ struct monst *mtmp;
 	int trycnt = 0;
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
-			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
     try_again:
 	switch (rn2(8 + (difficulty > 3) + (difficulty > 6) +
@@ -974,6 +974,9 @@ struct monst *mtmp;
 	struct obj *helmet = which_armor(mtmp, W_ARMH);
 
 	struct monst *target = mfind_target(mtmp);
+	
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	
 	if (target)
 	{
 	    ranged_stuff = TRUE;
@@ -1624,7 +1627,7 @@ struct monst *mtmp;
 	int difficulty = monstr[(monsndx(pm))];
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
-			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	if (difficulty > 7 && !rn2(35)) return WAN_DEATH;
 	switch (rn2(9 - (difficulty < 4) + 4 * (difficulty > 6))) {
@@ -1659,7 +1662,7 @@ struct monst *mtmp;
 	int difficulty = monstr[(monsndx(pm))];
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
-			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	if (difficulty > 7 && !rn2(35)) return WAN_DEATH;
 	switch (rnd(8)) {
@@ -1684,7 +1687,7 @@ struct monst *mtmp;
 	int difficulty = monstr[(monsndx(pm))];
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
-			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	switch (rnd(6)) {
 		case 1: return WAN_SPEED_MONSTER;
@@ -1706,7 +1709,7 @@ struct monst *mtmp;
 	int difficulty = monstr[(monsndx(pm))];
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
-			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	switch (rnd(6)) {
 		case 1:	case 2: 
@@ -1728,7 +1731,7 @@ struct monst *mtmp;
 	int difficulty = monstr[(monsndx(pm))];
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
-			|| pm->mlet == S_GHOST || pm->mlet == S_KETER
+			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	switch (rnd(6)) {
 		case 1:	return POT_INVISIBILITY;
@@ -2151,6 +2154,7 @@ struct monst *mtmp;
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
 			|| pm->mlet == S_GHOST 
+			|| pm->mlet == S_SHADE
 			|| pm->mlet == S_KETER
 		) return 0;
 	/* Unlike other rnd_item functions, we only allow _weak_ monsters
@@ -2185,6 +2189,8 @@ struct obj *obj;
 
 	if (is_animal(mon->data) ||
 		mindless(mon->data) ||
+		mon->data == &mons[PM_SHADE] ||
+		mon->data == &mons[PM_BROKEN_SHADOW] ||
 		mon->data == &mons[PM_GHOST])	/* don't loot bones piles */
 	    return FALSE;
 

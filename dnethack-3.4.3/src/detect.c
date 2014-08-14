@@ -1161,7 +1161,7 @@ struct obj *obj;
     if (flags.verbose) You("may look for an object or monster symbol.");
     ch = yn_function("What do you look for?", (char *)0, '\0');
     /* Don't filter out ' ' here; it has a use */
-    if ((ch != def_monsyms[S_GHOST]) && index(quitchars,ch)) { 
+    if ((ch != def_monsyms[S_GHOST]) && (ch != def_monsyms[S_SHADE]) && index(quitchars,ch)) { 
 	if (flags.verbose) pline(Never_mind);
 	return 1;
     }

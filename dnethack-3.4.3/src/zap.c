@@ -2448,6 +2448,7 @@ int gaze_cancel;
 		else
 		    rehumanize();
 	    }
+		u.uen -= u.ulevel;
 	} else {
 	    mdef->mcan = TRUE;
 

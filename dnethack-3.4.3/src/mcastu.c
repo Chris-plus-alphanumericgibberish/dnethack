@@ -654,6 +654,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	int ret;
 	int spellnum = 0;
 
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
 	/* Three cases:
 	 * -- monster is attacking you.  Search for a useful spell.
 	 * -- monster thinks it's attacking you.  Search for a useful spell,
@@ -677,8 +678,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		    if (!is_undirected_spell(mattk->adtyp, spellnum) ||
                        spell_would_be_useless(mtmp, spellnum)
 			) {
-			if (foundyou)
-			    impossible("spellcasting monster found you and doesn't know it?");
+//				if (foundyou)
+//					impossible("spellcasting monster found you and doesn't know it?");
 			return 0;
 		    }
 		    break;
@@ -865,8 +866,10 @@ int spellnum;
 	    pline("Double Trouble...");
 	    clonewiz();
 	    dmg = 0;
-	} else
+	} else {
 	    if(mtmp) impossible("bad wizard cloning?");
+		dmg = 0;
+	}
 		//else end with no message.
 	break;
      case FILTH:
@@ -1747,6 +1750,8 @@ int spellnum;
      */
     boolean mcouldseeu = couldsee(mtmp->mx, mtmp->my);
 
+       /* only the wiz makes a clone */
+	if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == CLONE_WIZ) return TRUE;
 	/* aggravate monsters won't be cast by peaceful monsters */
 	if (mtmp->mpeaceful && (spellnum == AGGRAVATION))
 	    return TRUE;
@@ -1847,10 +1852,6 @@ int spellnum;
        if (spellnum == SUMMON_ANGEL && (In_hell(&u.uz) ||
 	   monsndx(mtmp->data) == MS_NEMESIS))
 	    return TRUE;
-       /* only the wiz makes a clone */
-	if ((!mtmp->iswiz || flags.no_of_wizards > 1)
-						&& spellnum == CLONE_WIZ)
-	    return TRUE;
        /* make visible spell by spellcaster with see invisible. */
        /* also won't cast it if your invisibility isn't intrinsic. */
        if ((!(HInvis & INTRINSIC) || perceives(mtmp->data))
@@ -1876,6 +1877,8 @@ castmm(mtmp, mdef, mattk)
 	int ret;
 	int spellnum = 0;
 
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;
 
@@ -2010,6 +2013,8 @@ struct monst *mtmp;
 struct monst *mdef;
 int spellnum;
 {
+	if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == CLONE_WIZ) 
+		return TRUE;
  	/* haste self when already fast */
 	if (mtmp->permspeed == MFAST && spellnum == HASTE_SELF)
 	    return TRUE;
@@ -2025,9 +2030,6 @@ int spellnum;
 								!mtmp->msleeping || mtmp->mstun || 
 								mtmp->mconf || mtmp->permspeed == MSLOW))
 	/* don't summon monsters if it doesn't think you're around */
-	if ((!mtmp->iswiz || flags.no_of_wizards > 1)
-						&& spellnum == CLONE_WIZ)
-	    return TRUE;
 #ifndef TAME_SUMMONING
         if (spellnum == SUMMON_MONS)
 	    return TRUE;
@@ -2334,6 +2336,7 @@ int spellnum;
                              PM_FREEZING_SPHERE : PM_SHOCKING_SPHERE));
        boolean created = FALSE;
        struct monst *mpet;
+	   if(!yours && !(mattk && mtmp && mattk->mtame != mtmp->mtame)) goto uspsibolt;
        if (!(mvitals[sphere].mvflags & G_GONE) &&
 		(mpet = makemon(&mons[sphere],
 			u.ux, u.uy, MM_EDOG|NO_MINVENT)) != 0){
@@ -2450,7 +2453,7 @@ int spellnum;
 	    if (otmp &&
 	        !oresist_disintegration(otmp))
 	    {
-	        pline("%s %s %s!",
+	       if (yours || canseemon(mtmp)) pline("%s %s %s!",
 		      s_suffix(Monnam(mtmp)),
 		      xname(otmp),
 		      is_cloak(otmp)  ? "crumbles and turns to dust" :
@@ -2476,7 +2479,7 @@ int spellnum;
 	}
 	if (resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
-	    pline("%s looks momentarily weakened.", Monnam(mtmp));
+	    if (yours || canseemon(mtmp)) pline("%s looks momentarily weakened.", Monnam(mtmp));
 	} else {
 	    if (mtmp->mhp < 1)
 	    {

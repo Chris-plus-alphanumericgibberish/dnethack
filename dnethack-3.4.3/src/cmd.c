@@ -1060,6 +1060,8 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		you_have(buf);
 		Sprintf(buf, "%d chokhmah sephiroth ", u.chokhmah);
 		enl_msg(buf, "are", "were", " deployed.");
+		Sprintf(buf, "%d weakness from being studied.", u.ustdy);
+		you_have(buf);
 	}
 	if(u.sealsActive || u.specialSealsActive){
 		int i,j,numBound,numFound=0;

@@ -154,6 +154,7 @@ const char def_monsyms[MAXMCLASSES] = {
 	DEF_ZOMBIE,
 	DEF_HUMAN,
 	DEF_GHOST,
+	DEF_SHADE,
 	DEF_GOLEM,
 	DEF_DEMON,
 	DEF_EEL,
@@ -181,7 +182,7 @@ const char * const monexplain[MAXMCLASSES] = {
 
     "angelic being",		"bat or bird",		"centaur",
     "dragon",			"elemental",		"fungus or mold",
-    "gnome",			"giant humanoid",	0,
+    "gnome or gizmo",	"giant humanoid",	0,
     "jabberwockian",	"Keter Sephiroth",		"lich",
     "mummy",			"naga",			"ogre",
     "pudding or ooze",		"quantum mechanic",	"rust monster or disenchanter",
@@ -189,7 +190,7 @@ const char * const monexplain[MAXMCLASSES] = {
     "vampire",			"wraith",		"xorn",
     "apelike creature",		"zombie",
 
-    "human or elf",		"ghost",		"golem",
+    "human or elf",		"ghost",		"shade",	"golem",
     "major demon",		"sea monster",		"lizard", "plant",
     "long worm tail",		"mimic"
 };
@@ -659,10 +660,10 @@ register uchar *graph_chars;
 int glth, maxlen, offset;
 {
     register int i;
-
     for (i = 0; i < maxlen; i++)
 	showsyms[i+offset] = (((i < glth) && graph_chars[i]) ?
 		       graph_chars[i] : defsyms[i+offset].sym);
+	monsyms[S_GHOST] = showsyms[S_room];
 }
 
 #ifdef USER_DUNGEONCOLOR
@@ -911,6 +912,7 @@ boolean is_rlevel;
 	    showsyms[S_anti_magic_trap] = 0x04;
 	    showsyms[S_polymorph_trap] = 0x04;
 #endif
+		monsyms[S_GHOST] = showsyms[S_room];
 	}
 #endif /* ASCIIGRAPH */
 

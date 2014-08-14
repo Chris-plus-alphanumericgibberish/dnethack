@@ -815,6 +815,8 @@ movemon()
 	if (mtmp->movement >= NORMAL_SPEED)
 	    somebody_can_move = TRUE;
 	
+	mtmp->mstdy /= 2; //monster is moving, reduce studied level
+
 	//Weeping angel step 3
 	if(is_weeping(mtmp->data) && canseemon(mtmp)){
 		mtmp->mextra[0] +=  (long)(NORMAL_SPEED*arc/314);
@@ -2226,7 +2228,7 @@ boolean was_swallowed;			/* digestion */
 				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 					mdat1 = mtmp->data;
 					if(mdat1==&mons[PM_AXUS]){
-						makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY);
+						makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY|MM_NOCOUNTBIRTH);
 						break; //break special for loop
 					}
 				}
@@ -3007,7 +3009,7 @@ register struct monst *mtmp;
 	register int i;
 	for(i = 0; i < NATTK; i++)
 	     if(mtmp->data->mattk[i].aatyp == AT_GAZE) {
-		 (void) gazemu(mtmp, &mtmp->data->mattk[i]);
+				 if(!mtmp->mtame) (void) gazemu(mtmp, &mtmp->data->mattk[i]);
 		 break;
 	     }
     } else if(mtmp->data == &mons[PM_GREAT_CTHULHU]) {

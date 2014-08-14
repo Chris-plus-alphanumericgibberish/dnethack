@@ -595,6 +595,8 @@ struct monst *mtmp;
 	int multishot;
 	const char *onm;
 
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return;
+	
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (mtmp->weapon_check == NEED_WEAPON || !MON_WEP(mtmp)) {
 	    if (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8) {
@@ -880,6 +882,8 @@ struct monst *mdef;
 	int multishot;
 	const char *onm;
 
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (mtmp->weapon_check == NEED_WEAPON || !MON_WEP(mtmp)) {
 	    mtmp->weapon_check = NEED_RANGED_WEAPON;
@@ -1281,6 +1285,9 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	register struct monst *mtmp;
 	register struct attack  *mattk;
 {
+
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp ;
 
@@ -1327,6 +1334,8 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp ;
 
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	
 	if (distmin(mtmp->mx, mtmp->my, mdef->mx, mdef->my) < 3)
 	    return 0;  /* not at close range */
 

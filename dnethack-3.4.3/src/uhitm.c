@@ -2447,6 +2447,13 @@ register struct attack *mattk;
 
    if (mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp = tmp/2;
 	mdef->mstrategy &= ~STRAT_WAITFORU; /* in case player is very fast */
+	
+	if(mdef->mstdy){
+		tmp += mdef->mstdy;
+		mdef->mstdy -= 1;
+	}
+		
+	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (mdef->mtame && !cansee(mdef->mx,mdef->my)) {
 		You_feel("embarrassed for a moment.");
@@ -3319,6 +3326,13 @@ uchar aatyp;
 	    break;
 	  case AD_RUST:
 	    if(mhit && !mon->mcan) {
+		if(mon->data==&mons[PM_NAIAD]){
+		  if((mon->mhp > 0 && mon->mhp < .5*mon->mhpmax
+		   && rn2(3)) || mon->mhp <= 0){
+			  pline("%s collapses into a puddle of water!", Monnam(mon));
+			  killed(mon);
+		  } else break;
+		}
 		if (aatyp == AT_KICK) {
 		    if (uarmf)
 			(void)rust_dmg(uarmf, xname(uarmf), 1, TRUE, &youmonst);
@@ -3407,7 +3421,7 @@ dobpois:
 			   && rn2(3)){
   				  pline("A cloud of spores is released!");
 				  diseasemu(mon->data);
-				  pline("%s collapses in a puddle of noxious fluid!", mon_nam(mon));
+				  pline("%s collapses in a puddle of noxious fluid!", Monnam(mon));
 				  killed(mon);
 			  }
 		  }
@@ -3448,43 +3462,45 @@ dobpois:
 				else {
 				    You("are frozen by %s gaze!",
 					  s_suffix(mon_nam(mon)));
-				    nomul(-1*d(1,100), "frozen by the gaze of Axus");
+				    nomul(-tmp, "frozen by the gaze of Axus");
 				}
 		    }
-			pline("%s reaches out with %s %s!  A corona of dancing energy surrounds the %s!",
-				mon_nam(mon), mhis(mon), mbodypart(mon, ARM), mbodypart(mon, HAND));
-			if(Shock_resistance) {
-			    shieldeff(u.ux, u.uy);
-			    You_feel("a mild tingle.");
-			    ugolemeffects(AD_ELEC, tmp);
 			}
-			else{
-				You("are jolted with energy!");
-				mdamageu(mon, tmp);
-			    if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_FIRE);
-			    if (!rn2(4)) (void) destroy_item(SCROLL_CLASS, AD_FIRE);
-			    if (!rn2(10)) (void) destroy_item(SPBOOK_CLASS, AD_FIRE);
-			    if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
-			    if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
-			}
+			// Moved to an active attack
+			// pline("%s reaches out with %s %s!  A corona of dancing energy surrounds the %s!",
+				// mon_nam(mon), mhis(mon), mbodypart(mon, ARM), mbodypart(mon, HAND));
+			// if(Shock_resistance) {
+			    // shieldeff(u.ux, u.uy);
+			    // You_feel("a mild tingle.");
+			    // ugolemeffects(AD_ELEC, tmp);
+			// }
+			// else{
+				// You("are jolted with energy!");
+				// mdamageu(mon, tmp);
+				// if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_FIRE);
+				// if (!rn2(4)) (void) destroy_item(SCROLL_CLASS, AD_FIRE);
+				// if (!rn2(10)) (void) destroy_item(SPBOOK_CLASS, AD_FIRE);
+				// if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
+				// if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
+			// }
 
-			if(!Stunned) make_stunned((long)tmp, TRUE);
-			pline("%s reaches out with %s other %s!  A penumbra of shadows surrounds the %s!",
-				mon_nam(mon), mhis(mon), mbodypart(mon, ARM), mbodypart(mon, HAND));
-		    if(Cold_resistance) {
-				shieldeff(u.ux, u.uy);
-				You_feel("a mild chill.");
-				ugolemeffects(AD_COLD, tmp);
-		    }
-			else{
-			    You("are suddenly very cold!");
-			    mdamageu(mon, tmp);
-				if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
-			}
-			if (!Drain_resistance) {
-			    losexp("life force drain",TRUE,FALSE,FALSE);
-			}
-		  }
+			// if(!Stunned) make_stunned((long)tmp, TRUE);
+			// pline("%s reaches out with %s other %s!  A penumbra of shadows surrounds the %s!",
+				// mon_nam(mon), mhis(mon), mbodypart(mon, ARM), mbodypart(mon, HAND));
+		    // if(Cold_resistance) {
+				// shieldeff(u.ux, u.uy);
+				// You_feel("a mild chill.");
+				// ugolemeffects(AD_COLD, tmp);
+		    // }
+			// else{
+			    // You("are suddenly very cold!");
+			    // mdamageu(mon, tmp);
+				// if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
+			// }
+			// if (!Drain_resistance) {
+			    // losexp("life force drain",TRUE,FALSE,FALSE);
+			// }
+		  // }
 		  
 		  for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 			mndx = monsndx(mtmp->data);
@@ -3493,8 +3509,7 @@ dobpois:
 				mtmp->mpeaceful = 0;
 			}
 		   }
-		  }
-		break;
+		} break;
 	  	  case AD_UNKNWN:
 			  if(uwep && uwep->oartifact && uwep->oartifact != ART_SILVER_KEY && uwep->oartifact != ART_PEN_OF_THE_VOID && CountsAgainstGifts(uwep->oartifact)){
 					You_feel("%s tug gently on your %s.",mon_nam(mon), ONAME(uwep));
@@ -3575,7 +3590,7 @@ dobpois:
 				else {
 				    You("are frozen by %s gaze!",
 					  s_suffix(mon_nam(mon)));
-				    nomul((ACURR(A_WIS) > 12 || rn2(4)) ? -tmp : -127, "frozen by a monster's gaze");
+				    nomul(-tmp, "frozen by a monster's gaze");
 				}
 		    } else {
 				pline("%s cannot defend itself.",

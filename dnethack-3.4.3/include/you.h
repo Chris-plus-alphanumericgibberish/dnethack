@@ -394,6 +394,7 @@ struct you {
 	long	uexp, urexp;
 	long	ucleansed;	/* to record moves when player was cleansed */
 	long	usleep;		/* sleeping; monstermove you last started */
+	int 	ustdy;		/* to record extra damage to be delt due to having been studied */
 	int uinvault;
 	struct monst *ustuck;
 #ifdef STEED

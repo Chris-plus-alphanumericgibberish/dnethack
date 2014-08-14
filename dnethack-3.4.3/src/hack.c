@@ -1628,9 +1628,15 @@ stillinwater:;
 			      Amonnam(mtmp), ceiling(u.ux,u.uy));
 			if(mtmp->mtame) /* jumps to greet you, not attack */
 			    ;
-			else if(uarmh && is_metallic(uarmh))
+			else if(uarmh && is_metallic(uarmh)){
+			    int dmg;
 			    pline("Its blow glances off your helmet.");
-			else if (u.uac + 3 <= rnd(20))
+				if(((mtmp->m_lev) - 8) > 0){
+				    dmg = d((mtmp->m_lev) - 5,3);
+				    if(Half_physical_damage) dmg = (dmg+1) / 2;
+				    mdamageu(mtmp, dmg);
+				}
+			} else if (u.uac + 3 <= rnd(20))
 			    You("are almost hit by %s!",
 				x_monnam(mtmp, ARTICLE_A, "falling", 0, TRUE));
 			else {

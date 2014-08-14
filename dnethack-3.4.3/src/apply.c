@@ -842,7 +842,7 @@ struct obj *obj;
 	    if (vis)
 		pline("%s can't see anything right now.", Monnam(mtmp));
 	/* some monsters do special things */
-	} else if (mlet == S_VAMPIRE || mlet == S_GHOST) {
+	} else if (mlet == S_VAMPIRE || mlet == S_GHOST || mlet == S_SHADE) {
 	    if (vis)
 		pline ("%s doesn't have a reflection.", Monnam(mtmp));
 	} else if(obj->oartifact == ART_HAND_MIRROR_OF_CTHYLLA && obj->age < moves &&
@@ -2349,7 +2349,6 @@ set_trap()
 
 	if (--trapinfo.time_needed > 0) return 1;	/* still busy */
 
-
 	ttyp = (otmp->otyp == LAND_MINE) ? LANDMINE : BEAR_TRAP;
 	ttmp = maketrap(u.ux, u.uy, ttyp);
 	if (ttmp) {
@@ -2384,12 +2383,13 @@ struct obj *otmp;
 	struct trap *ttmp;
 	struct monst *mtmp;
 
-    if (!getdir((char *)0)) return;
+    if (!getdir((char *)0) || !(u.dx || u.dy)) return;
 
     if (Stunned || (Confusion && !rn2(5))) confdir();
     rx = u.ux + u.dx;
     ry = u.uy + u.dy;
     mtmp = m_at(rx, ry);
+	ttmp = t_at(rx, ry);
 
 	if (nohands(youmonst.data))
 	    what = "without hands";
@@ -2406,12 +2406,12 @@ struct obj *otmp;
 	    what = "in water";
 	else if (is_lava(rx, ry))
 	    what = "in lava";
-	else if (On_stairs(rx, ry))
+	else if (On_stairs(rx, ry) && !(ttmp && ttmp->ttyp == WEB))
 	    what = (rx == xdnladder || rx == xupladder) ?
 			"on the ladder" : "on the stairs";
 	else if (IS_FURNITURE(levl[rx][ry].typ) ||
 		IS_ROCK(levl[rx][ry].typ) ||
-		closed_door(rx, ry) || ((ttmp = t_at(rx, ry)) && ttmp->ttyp != WEB))
+		closed_door(rx, ry) || (ttmp && ttmp->ttyp != WEB))
 	    what = "here";
 	if (what && !(ttmp && ttmp->ttyp == WEB)) {
 	    You_cant("set a trap %s!",what);

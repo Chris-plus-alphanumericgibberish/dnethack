@@ -395,9 +395,20 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	cliparound(u.ux, u.uy);
 #endif
 	/* reload random monster*/
+	{
+	const char *tname;
+	tname = mons[PM_SHAMBLING_HORROR].mname;
 	mread(fd, (genericptr_t) &mons[PM_SHAMBLING_HORROR], sizeof(struct permonst));
+	mons[PM_SHAMBLING_HORROR].mname = tname;
+	
+	tname = mons[PM_STUMBLING_HORROR].mname;
 	mread(fd, (genericptr_t) &mons[PM_STUMBLING_HORROR], sizeof(struct permonst));
+	mons[PM_STUMBLING_HORROR].mname = tname;
+	
+	tname = mons[PM_WANDERING_HORROR].mname;
 	mread(fd, (genericptr_t) &mons[PM_WANDERING_HORROR], sizeof(struct permonst));
+	mons[PM_WANDERING_HORROR].mname = tname;
+	}
 	
 	if(u.uhp <= 0 && (!Upolyd || u.mh <= 0)) {
 	    u.ux = u.uy = 0;	/* affects pline() [hence You()] */

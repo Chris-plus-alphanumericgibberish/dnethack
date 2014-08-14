@@ -814,6 +814,8 @@ plus:
 charges:
 		if(obj->known)
 		    Sprintf(eos(bp), " (%d:%d)", (int)obj->recharged, obj->spe);
+		else if(obj->spe <= 0 && Race_if(PM_INCANTIFIER))
+		    Sprintf(eos(bp), " (empty)");
 		break;
 	case POTION_CLASS:
 		if (obj->otyp == POT_OIL && obj->lamplit)

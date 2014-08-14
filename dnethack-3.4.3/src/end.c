@@ -202,7 +202,7 @@ register struct monst *mtmp;
 	    killer_format = KILLED_BY;
 	}
 	/* _the_ <invisible> <distorted> ghost of Dudley */
-	if (mtmp->data == &mons[PM_GHOST] && mtmp->mnamelth) {
+	if ((mtmp->data == &mons[PM_GHOST] || mtmp->data == &mons[PM_SHADE] || mtmp->data == &mons[PM_BROKEN_SHADOW]) && mtmp->mnamelth) {
 		Strcat(buf, "the ");
 		killer_format = KILLED_BY;
 	}
@@ -213,6 +213,12 @@ register struct monst *mtmp;
 
 	if(mtmp->data == &mons[PM_GHOST]) {
 		Strcat(buf, "ghost");
+		if (mtmp->mnamelth) Sprintf(eos(buf), " of %s", NAME(mtmp));
+	} else if(mtmp->data == &mons[PM_BROKEN_SHADOW]) {
+		Strcat(buf, "broken shadow");
+		if (mtmp->mnamelth) Sprintf(eos(buf), " of %s", NAME(mtmp));
+	} else if(mtmp->data == &mons[PM_SHADE]) {
+		Strcat(buf, "shade");
 		if (mtmp->mnamelth) Sprintf(eos(buf), " of %s", NAME(mtmp));
 	} else if(mtmp->isshk) {
 		Sprintf(eos(buf), "%s %s, the shopkeeper",

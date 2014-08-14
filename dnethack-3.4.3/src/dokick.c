@@ -48,7 +48,7 @@ register boolean clumsy;
 	if (thick_skinned(mon->data)) dmg = 0;
 
 	/* attacking a shade is useless */
-	if (mon->data == &mons[PM_SHADE])
+	if (mon->data->mlet == S_SHADE)
 	    dmg = 0;
 
 	if ((is_undead(mon->data) || is_demon(mon->data)) && uarmf &&
@@ -60,7 +60,7 @@ register boolean clumsy;
 			dmg += rnd(20);
 			silvermsg = TRUE; silverobj = TRUE;
 	}
-	if (mon->data == &mons[PM_SHADE] && !blessed_foot_damage && !silverobj) {
+	if (mon->data->mlet == S_SHADE && !blessed_foot_damage && !silverobj) {
 	    pline_The("%s.", kick_passes_thru);
 	    /* doesn't exercise skill or abuse alignment or frighten pet,
 	       and shades have no passive counterattack */
@@ -178,7 +178,7 @@ register xchar x, y;
 		/* we only care about kicking attacks here */
 		if (uattk->aatyp != AT_KICK) continue;
 
-		if (mon->data == &mons[PM_SHADE] &&
+		if (mon->data->mlet == S_SHADE &&
 			(!uarmf || !uarmf->blessed)) {
 		    /* doesn't matter whether it would have hit or missed,
 		       and shades have no passive counterattack */

@@ -100,6 +100,8 @@ register int x, y, n;
 	 */
 	int cnttmp,cntdiv;
 
+	if(!mtmp) return; //called with bum monster, return;
+	
 	cnttmp = cnt;
 # ifdef DEBUG
 	pline("init group call x=%d,y=%d,n=%d,cnt=%d.", x, y, n, cnt);
@@ -159,7 +161,7 @@ register int x, y, n;
 	 }
 	}
 	else{
-	 while(cnt--) {
+	 while(cnt-- > 0) {
 		 	/* if caller wants random locations, do one here */
 		if(x == 0 && y == 0) {
 			int tryct = 0;	/* careful with bigrooms */
@@ -382,12 +384,10 @@ register struct monst *mtmp;
 		    if (w2) (void)mongets(mtmp, w2);
 		} else if(is_drow(ptr)){
 			if(mm != PM_DROW_MATRON){
-				if (rn2(2)){
-					otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
-					otmp->ohaluengr = TRUE;
-					otmp->ovar1 = curhouse;
-					(void) mpickobj(mtmp, otmp);
-				}
+				otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
+				otmp->ohaluengr = TRUE;
+				otmp->ovar1 = curhouse;
+				(void) mpickobj(mtmp, otmp);
 				(void) mongets(mtmp, DROVEN_CLOAK);
 				if (rn2(2)) (void)mongets(mtmp, HELMET);
 				else if (!rn2(4)) (void)mongets(mtmp, HIGH_BOOTS);
@@ -1259,13 +1259,15 @@ register struct	monst	*mtmp;
 				(void) mongets(mtmp, TIN_WHISTLE);
 		} else if (ptr == &mons[PM_SHOPKEEPER]) {
 		    (void) mongets(mtmp,SKELETON_KEY);
-		    switch (rn2(4)) {
+		    switch (rn2(6)) {
 		    /* MAJOR fall through ... */
 		    case 0: (void) mongets(mtmp, WAN_MAGIC_MISSILE);
 		    case 1: (void) mongets(mtmp, POT_EXTRA_HEALING);
 		    case 2: (void) mongets(mtmp, POT_HEALING);
 				break;
 		    case 3: (void) mongets(mtmp, WAN_STRIKING);
+		    case 4: (void) mongets(mtmp, POT_HEALING);
+		    case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
 		    }
 		} else if (ptr->msound == MS_PRIEST ||
 			quest_mon_represents_role(ptr,PM_PRIEST)) {
@@ -2155,8 +2157,8 @@ register int	mmflags;
 	     * way to fit in the 50..127 positive range of a signed character
 	     * above the 1..49 that indicate "normal" monster levels */
 //	    mtmp->mhpmax = mtmp->mhp = 2*(ptr->mlevel - 6);
-	    mtmp->mhpmax = mtmp->mhp = 3*(ptr->mlevel - 6);
-	    mtmp->m_lev = mtmp->mhp / 4;	/* approximation */
+	    mtmp->mhpmax = mtmp->mhp = 8*(ptr->mlevel);
+	    // mtmp->m_lev = mtmp->mhp / 4;	/* approximation */
 	} else if (ptr->mlet == S_DRAGON && mndx >= PM_GRAY_DRAGON) {
 	    /* adult dragons */
 	    mtmp->mhpmax = mtmp->mhp = (int) (In_endgame(&u.uz) ?
@@ -2221,30 +2223,37 @@ register int	mmflags;
 		break;
 		case S_EYE:
 			if (mndx == PM_QUINON){
+				mtmp->movement = d(1,6);
 				if(anymon){
 					int num = 0;
-					makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 					num = rnd(6);
-					for(num; num >= 0; num--) makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-					m_initlgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+					for(num; num >= 0; num--) makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					m_initlgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
 				}
-				makemon(&mons[PM_QUATON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				makemon(&mons[PM_QUATON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			}
 			if (mndx == PM_QUATON){
+				mtmp->movement = d(1,7);
 				if(anymon){
 					int num = 0;
 					num = rn1(6,5);
-					for(num; num >= 0; num--) makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					for(num; num >= 0; num--) makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 				}
-				makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			}
 			if (mndx == PM_TRITON){
-				if(anymon) m_initlgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-				makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				mtmp->movement = d(1,8);
+				if(anymon) m_initlgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+				makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			}
 			if (mndx == PM_DUTON){
-				if(anymon && rn2(2)) m_initsgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-				else makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				mtmp->movement = d(1,9);
+				if(anymon && rn2(2)) m_initsgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+				else makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+			}
+			if (mndx == PM_MONOTON){
+				mtmp->movement = d(1,10);
 			}
 /*			if(mndx == PM_VORLON_MISSILE){
 				mtmp->mhpmax = 3;
@@ -2419,7 +2428,7 @@ register int	mmflags;
 				mtmp->mhpmax = 1+u.chokhmah*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
-			if(mndx != PM_MALKUTH_SEPHIRAH){
+			if(mndx != PM_MALKUTH_SEPHIRAH && mndx != PM_DAAT_SEPHIRAH && mndx != PM_BINAH_SEPHIRAH){
 				coord mm;
 				mm.x = xdnstair;
 				mm.y = ydnstair;
@@ -2456,7 +2465,7 @@ register int	mmflags;
 			}
 		break;
 		case S_UNICORN:
-			if (is_unicorn(ptr) &&
+			if (is_unicorn(ptr) && u.ualign.type != A_VOID &&
 					sgn(u.ualign.type) == sgn(ptr->maligntyp))
 				mtmp->mpeaceful = TRUE;
 //			if(mndx == PM_PINK_UNICORN){
@@ -3224,7 +3233,10 @@ register struct permonst *ptr;
 		return tmp;
 	}
 
-	if((tmp = ptr->mlevel) > 49) return(50); /* "special" demons/devils */
+	if((tmp = ptr->mlevel) > 49){
+//		pline("HD: %d", ptr->mlevel);
+		return tmp; /* "special" demons/devils */
+	}
 	tmp2 = (level_difficulty() - tmp);
 	if(tmp2 < 0) tmp--;		/* if mlevel > u.uz decrement tmp */
 	else tmp += (tmp2 / 5);		/* else increment 1 per five diff */

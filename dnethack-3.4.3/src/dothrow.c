@@ -817,7 +817,7 @@ boolean hitsroof;
 	    dmg = (int) obj->owt / 100;
 	    if (dmg < 1) dmg = 1;
 	    else if (dmg > 6) dmg = 6;
-	    if (youmonst.data == &mons[PM_SHADE] &&
+	    if (youmonst.data->mlet == S_SHADE &&
 		    objects[obj->otyp].oc_material != SILVER)
 		dmg = 0;
 	}
@@ -1415,7 +1415,14 @@ register struct obj   *obj;
 			return 1;
 		    }
 		}
-		passive_obj(mon, obj, (struct attack *)0);
+		if(mon->data == &mons[PM_NAIAD]){
+		  if((mon->mhp > 0 && mon->mhp < .5*mon->mhpmax
+		   && rn2(3)) || mon->mhp-tmp <= 0){
+			  pline("%s collapses into a puddle of water!", Monnam(mon));
+			  passive_obj(mon, obj, (struct attack *)0);
+			  killed(mon);
+		  }
+		} else passive_obj(mon, obj, (struct attack *)0);
 	    } else {
 		tmiss(obj, mon);
 	    }

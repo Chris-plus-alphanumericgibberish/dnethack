@@ -566,6 +566,7 @@ gazemm(magr, mdef, mattk)
 {
 	char buf[BUFSZ];
 
+	if(magr->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
 	if(vis) {
 		/* the gaze attack of weeping (arch)angels isn't active like others */
 		if (is_weeping(magr->data)) {
@@ -873,7 +874,7 @@ mdamagem(magr, mdef, mattk)
 			    /* WAC -- or using a pole at short range... */
 			    (is_pole(otmp))) {
 			    /* then do only 1-2 points of damage */
-			    if (pd == &mons[PM_SHADE] && otmp->otyp != SILVER_ARROW)
+			    if (mdef->data->mlet == S_SHADE && otmp->otyp != SILVER_ARROW)
 				tmp = 0;
 			    else
 				tmp = rnd(2);
@@ -951,6 +952,14 @@ mdamagem(magr, mdef, mattk)
 		/* only potions damage resistant players in destroy_item */
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		break;
+/////////////////////////////////////////////////
+		case AD_STDY:
+			if (!magr->mcan && magr->mcansee) {
+				mdef->mstdy = max(tmp,mdef->mstdy);
+				tmp = 0;
+			}
+		break;
+/////////////////////////////////////////////////
 	    case AD_COLD:
 		if (cancelled) {
 		    tmp = 0;
@@ -967,6 +976,7 @@ mdamagem(magr, mdef, mattk)
 		}
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_COLD);
 		break;
+/////////////////////////////////////////////////
 	    case AD_ELEC:
 		if (cancelled) {
 		    tmp = 0;
@@ -983,6 +993,78 @@ mdamagem(magr, mdef, mattk)
 		/* only rings damage resistant players in destroy_item */
 		tmp += destroy_mitem(mdef, RING_CLASS, AD_ELEC);
 		break;
+/////////////////////////////////////////////////
+	    case AD_AXUS:{
+			int multiple = 0;
+			int tmp2 = 0;
+			if (vis) pline("%s gets zapped!", Monnam(mdef));
+			if(resists_elec(mdef)) {
+				if (vis) pline_The("zap doesn't shock %s!", mon_nam(mdef));
+				shieldeff(mdef->mx, mdef->my);
+			    golemeffects(mdef, AD_ELEC, tmp);
+			}
+			else{
+				multiple++;
+				(void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+				(void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+				if(!resists_fire(mdef)){
+					if (vis)
+						pline("%s is %s!", Monnam(mdef),
+						  on_fire(mdef->data, mattk));
+					if (pd == &mons[PM_STRAW_GOLEM] ||
+						pd == &mons[PM_PAPER_GOLEM] ||
+						pd == &mons[PM_SPELL_GOLEM]) {
+							(void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+							(void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+							if (vis) pline("%s burns completely!", Monnam(mdef));
+							mondied(mdef);
+							if (mdef->mhp > 0) return 0;
+							else if (mdef->mtame && !vis)
+								pline("May %s roast in peace.", mon_nam(mdef));
+							return (MM_DEF_DIED | (grow_up(magr,mdef) ?
+										0 : MM_AGR_DIED));
+					} else if (pd == &mons[PM_MIGO_WORKER]) {
+							if (vis) pline("%s\'s brain melts!", Monnam(mdef));
+							mondied(mdef);
+							if (mdef->mhp > 0) return 0;
+							else if (mdef->mtame && !vis)
+								pline("May %s roast in peace.", mon_nam(mdef));
+							return (MM_DEF_DIED | (grow_up(magr,mdef) ?
+										0 : MM_AGR_DIED));
+					}
+					(void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+					(void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+					(void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+				}
+				mdef->mconf = 1;
+				mdef->mstun = 1;
+			}
+			if (vis) pline("%s is covered in frost!", Monnam(mdef));
+			if (resists_cold(mdef)) {
+				if (vis)
+				pline_The("frost doesn't seem to chill %s!",
+									mon_nam(mdef));
+				shieldeff(mdef->mx, mdef->my);
+				golemeffects(mdef, AD_COLD, tmp);
+			} else {
+				multiple++;
+				(void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+			}
+			if (!resists_drli(mdef)) {
+				tmp2 = d(2,6);
+				if (vis)
+					pline("%s suddenly seems weaker!", Monnam(mdef));
+				mdef->mhpmax -= tmp2;
+				if (mdef->m_lev == 0){
+					tmp2 = mdef->mhp;
+				}
+				else mdef->m_lev--;
+				/* Automatic kill if drained past level 0 */
+			}
+			tmp *= multiple;
+			tmp += tmp2;
+		} break;
+/////////////////////////////////////////////////
 	    case AD_ACID:
 		if (magr->mcan) {
 		    tmp = 0;
@@ -1505,6 +1587,11 @@ mdamagem(magr, mdef, mattk)
    if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp=tmp/2; 
 	if(!tmp) return(MM_MISS);
 
+	if(mdef->mstdy){
+		tmp += mdef->mstdy;
+		mdef->mstdy -= 1;
+	}
+	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (m_at(mdef->mx, mdef->my) == magr) {  /* see gulpmm() */
 		remove_monster(mdef->mx, mdef->my);

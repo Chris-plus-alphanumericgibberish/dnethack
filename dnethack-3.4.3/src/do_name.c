@@ -841,6 +841,12 @@ boolean called;
 	    if (mdat == &mons[PM_GHOST]) {
 		Sprintf(eos(buf), "%s ghost", s_suffix(name));
 		name_at_start = TRUE;
+	    } else if (mdat == &mons[PM_SHADE]) {
+			Sprintf(eos(buf), "%s shade", s_suffix(name));
+			name_at_start = TRUE;
+	    } else if (mdat == &mons[PM_BROKEN_SHADOW]) {
+			Sprintf(eos(buf), "%s broken shadow", s_suffix(name));
+			name_at_start = TRUE;
 	    } else if (called) {
 		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Sprintf(eos(buf), "frumious ");
 			if (u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)){

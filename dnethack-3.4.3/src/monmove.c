@@ -163,6 +163,7 @@ struct monst *mtmp;
 			 || (ward_at(x,y) == WINGS_OF_GARUDA && scaryWings(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == YELLOW_SIGN && scaryYellow(num_wards_at(x,y), mtmp))
 			 || (scaryElb(mtmp) && sengr_at("Elbereth", x, y))
+			 || (scaryLol(mtmp) && sengr_at("Lolth", x, y))
 			 || (scaryTou(mtmp) && toustefna_at(x,y))
 			 || (scaryDre(mtmp) && dreprun_at(x,y))
 			 || (scaryVei(mtmp) && veioistafur_at(x,y))
@@ -501,6 +502,26 @@ struct monst *mtmp;
 }
 
 boolean
+scaryLol(mtmp)
+struct monst *mtmp;
+{
+  if(Race_if(PM_DROW)){
+	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
+	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
+	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
+	    (is_rider(mtmp->data) && !(mtmp->data == &mons[PM_NAZGUL])) || 
+		mtmp->data == &mons[PM_MINOTAUR])
+		return(FALSE);
+	return (boolean) (mtmp->m_lev < u.ulevel) &&
+					(mtmp->data != &mons[PM_ELDER_PRIEST]) &&
+					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
+					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
+					(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
+					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
+  } else return(FALSE);
+}
+
+boolean
 scaryElb(mtmp)
 struct monst *mtmp;
 {
@@ -784,7 +805,8 @@ register struct monst *mtmp;
 	/* Monsters that want to acquire things */
 	/* may teleport, so do it before inrange is set */
 	if(is_covetous(mdat) && (mdat!=&mons[PM_DEMOGORGON] || !rn2(3)) 
-		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/)
+		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
+		&& !(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)))
 		(void) tactics(mtmp);
 
 	/* check distance and scariness of attacks */
@@ -910,7 +932,7 @@ register struct monst *mtmp;
 				pline("It locks on to your %s!",
 					m_sen ? "telepathy" :
 					Blind_telepat ? "latent telepathy" : "mind");
-				dmg = rnd(15);
+				dmg = mdat == &mons[PM_GREAT_CTHULHU] ? d(5,15) : rnd(15);
 				if (Half_spell_damage) dmg = (dmg+1) / 2;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
 			}
@@ -1241,7 +1263,7 @@ register int after;
 
 	/* teleport if that lies in our nature */
 	if(mteleport(ptr) && !rn2(5) && !mtmp->mcan &&
-	   !tele_restrict(mtmp)) {
+	   !tele_restrict(mtmp) && !(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz))) {
 	    if(mtmp->mhp < 7 || mtmp->mpeaceful || rn2(2))
 		(void) rloc(mtmp, FALSE);
 	    else
@@ -1343,7 +1365,6 @@ not_special:
 	if((likegold || likegems || likeobjs || likemagic || likerock || conceals)
 	      && (!*in_rooms(omx, omy, SHOPBASE) || (!rn2(25) && !mtmp->isshk))) {
 	look_for_obj:
-		
 	    oomx = min(COLNO-1, omx+minr);
 	    oomy = min(ROWNO-1, omy+minr);
 	    lmx = max(1, omx-minr);
@@ -1383,7 +1404,6 @@ not_special:
 			!(otmp->otyp == CORPSE &&
 			  touch_petrifies(&mons[otmp->corpsenm])))
 		      ) && touch_artifact(otmp,mtmp)) {
-				
 				if(can_carry(mtmp,otmp) &&
 				 (throws_rocks(ptr) ||
 				  !boulder_at(xx,yy)) &&
@@ -1442,7 +1462,7 @@ not_special:
 	if (passes_bars(ptr) && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz)) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
 	if (is_human(ptr) || ptr == &mons[PM_MINOTAUR]) flag |= ALLOW_SSM;
-	if (is_undead(ptr) && ptr->mlet != S_GHOST) flag |= NOGARLIC;
+	if (is_undead(ptr) && ptr->mlet != S_GHOST && ptr->mlet != S_SHADE) flag |= NOGARLIC;
 	if (throws_rocks(ptr)) flag |= ALLOW_ROCK;
 	if (can_open) flag |= OPENDOOR;
 	if (can_unlock) flag |= UNLOCKDOOR;
@@ -1585,7 +1605,9 @@ not_special:
 	    /* Place a segment at the old position. */
 	    if (mtmp->wormno) worm_move(mtmp);
 	} else {
-	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp)) {
+	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp) && 
+			!(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz))
+		) {
 		(void) rloc(mtmp, FALSE);
 		return(1);
 	    }

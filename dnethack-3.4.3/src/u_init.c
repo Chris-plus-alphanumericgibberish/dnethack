@@ -1473,19 +1473,19 @@ u_init()
 	}
 
 	/* what a horrible night to have a curse */
-	shambler->mlevel += rnd(7)-4;				/* shuffle level */
+	shambler->mlevel += rnd(9)-5;				/* shuffle level */
 	shambler->mmove = rn2(12)+7;				/* slow to very fast */
 	shambler->ac = rn2(21) + rn2(3) ? -10 : -20;/* any AC */
 	shambler->mr = rn2(11)*10;				/* varying amounts of MR */
 	shambler->maligntyp = rn2(21)-10;			/* any alignment */
 	
-	stumbler->mlevel += rnd(7)-4;				/* shuffle level */
+	stumbler->mlevel += rnd(9)-5;				/* shuffle level */
 	stumbler->mmove = rn2(12)+7;				/* slow to very fast */
 	stumbler->ac = rn2(21) + rn2(3) ? -10 : -20;/* any AC */
 	stumbler->mr = rn2(11)*10;				/* varying amounts of MR */
 	stumbler->maligntyp = rn2(21)-10;			/* any alignment */
 	
-	wanderer->mlevel += rnd(7)-4;				/* shuffle level */
+	wanderer->mlevel += rnd(9)-5;				/* shuffle level */
 	wanderer->mmove = rn2(12)+7;				/* slow to very fast */
 	wanderer->ac = rn2(21) + rn2(3) ? -10 : -20;/* any AC */
 	wanderer->mr = rn2(11)*10;				/* varying amounts of MR */

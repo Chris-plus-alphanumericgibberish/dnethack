@@ -728,11 +728,13 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_ARRW:{
 			int n;
+			if(range2){
 		    if (canseemon(mtmp)) pline("%s shoots at you!", Monnam(mtmp));
-			if(range2) for(n = d(mattk->damn, mattk->damd); n > 0; n--) sum[i] = firemu(mtmp, mattk);
+				for(n = d(mattk->damn, mattk->damd); n > 0; n--) sum[i] = firemu(mtmp, mattk);
 			/* Note: firemu takes care of displacement */
 					 }
-			break;
+		} break;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_LNCK:
 		case AT_LRCH:{
@@ -1306,7 +1308,7 @@ hitmu(mtmp, mattk)
 		    if (youmonst.data == &mons[PM_STRAW_GOLEM] ||
 		        youmonst.data == &mons[PM_PAPER_GOLEM] ||
 		        youmonst.data == &mons[PM_SPELL_GOLEM]) {
-			    You("roast!");
+			    You("burn up!");
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(20))
@@ -1371,6 +1373,60 @@ hitmu(mtmp, mattk)
 			}
 		} else dmg = 0;
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_AXUS: {
+			pline("%s reaches out with %s %s!  A corona of dancing energy surrounds the %s!",
+				mon_nam(mtmp), mhis(mtmp), mbodypart(mtmp, ARM), mbodypart(mtmp, HAND));
+			if(Shock_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    You_feel("a mild tingle.");
+			    ugolemeffects(AD_ELEC, dmg);
+			}
+			else{
+				You("are jolted with energy!");
+				mdamageu(mtmp, dmg);
+				if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
+				if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
+				if(!Fire_resistance){
+					pline("You're %s!", on_fire(youmonst.data, mattk));
+					if (youmonst.data == &mons[PM_STRAW_GOLEM] ||
+						youmonst.data == &mons[PM_PAPER_GOLEM] ||
+						youmonst.data == &mons[PM_SPELL_GOLEM]) {
+						You("burn up!");
+						destroy_item(SCROLL_CLASS, AD_FIRE);
+						destroy_item(POTION_CLASS, AD_FIRE);
+						destroy_item(SPBOOK_CLASS, AD_FIRE);
+						/* KMH -- this is okay with unchanging */
+						rehumanize();
+					} else if (youmonst.data == &mons[PM_MIGO_WORKER]) {
+						You("melt!");
+						/* KMH -- this is okay with unchanging */
+						rehumanize();
+						break;
+					}
+					if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_FIRE);
+					if (!rn2(4)) (void) destroy_item(SCROLL_CLASS, AD_FIRE);
+					if (!rn2(10)) (void) destroy_item(SPBOOK_CLASS, AD_FIRE);
+				}
+				if(!Stunned) make_stunned((long)dmg, TRUE);
+			}
+			pline("%s reaches out with %s other %s!  A penumbra of shadows surrounds the %s!",
+				mon_nam(mtmp), mhis(mtmp), mbodypart(mtmp, ARM), mbodypart(mtmp, HAND));
+		    if(Cold_resistance) {
+				shieldeff(u.ux, u.uy);
+				You_feel("a mild chill.");
+				ugolemeffects(AD_COLD, dmg);
+		    }
+			else{
+			    You("are suddenly very cold!");
+			    mdamageu(mtmp, dmg);
+				if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
+			}
+			if (!Drain_resistance) {
+			    losexp("life force drain",TRUE,FALSE,FALSE);
+			}
+			dmg = 0;
+		} break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SLEE:
 		hitmsg(mtmp, mattk);
@@ -2484,6 +2540,12 @@ dopois:
 			else u.ustuck = mtmp;
 		}
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AD_STDY:{
+			pline("%s studies you carefully.", Monnam(mtmp));
+			u.ustdy = max(dmg,u.ustdy);
+			dmg = 0;
+		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 /*		case AD_VMSL:	//vorlon missile.  triple damage
 			mondead(mtmp);
@@ -2502,6 +2564,10 @@ dopois:
 	}
 	if(u.uhp < 1) done_in_by(mtmp);
 
+	if(dmg && u.ustdy){
+		dmg += u.ustdy;
+		u.ustdy -= 1;
+	}
 /*	Negative armor class reduces damage done instead of fully protecting
  *	against hits.
  */
@@ -2829,6 +2895,11 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			// }
 			if(Half_physical_damage) tmp = (tmp*2)-1; /*reverse formula, cancel half damage*/
 		}break;
+		case AD_STDY:{
+			You("are studied from all directions!");
+			u.ustdy = max(tmp,u.ustdy);
+			tmp = 0;
+		}break;
 		default:
 		    tmp = 0;
 		break;
@@ -2954,6 +3025,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	int attack_type = mattk->adtyp;
 	struct	permonst *mdat = mtmp->data;
 	char buf[BUFSZ];
+	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
 	if(ward_at(u.ux,u.uy) == HAMSA) return 0;
 	if(mattk->adtyp == AD_RGAZ){
 		attack_type = gazeattacks[rn2(SIZE(gazeattacks))];	//flat random member of gazeattacks
@@ -3564,6 +3636,18 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				succeeded=1;
 			}
 		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AD_STDY:
+			if (!mtmp->mcan && canseemon(mtmp) &&
+				couldsee(mtmp->mx, mtmp->my) &&
+				mtmp->mcansee
+			) {
+				int dmg = d((int)mattk->damn, (int)mattk->damd);
+				pline("%s studies you with a level stare.", Monnam(mtmp));
+				u.ustdy = max(dmg,u.ustdy);
+				dmg = 0;
+			}
 		break;
 /*		case AD_SUMMON:
 			int count;

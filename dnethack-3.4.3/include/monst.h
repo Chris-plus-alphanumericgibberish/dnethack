@@ -62,6 +62,7 @@ struct monst {
 	schar mtame;		/* level of tameness, implies peaceful */
 	unsigned int mintrinsics;	/* low 10 correspond to mresists */
 	int mspec_used;		/* monster's special ability attack timeout */
+	int mstdy;		/* to record extra damage to be delt due to having been studied */
 
 	Bitfield(mferal,1);	/* was once tame */
 	

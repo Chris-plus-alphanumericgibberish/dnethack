@@ -36,7 +36,7 @@
 #define amphibious(ptr)		(((ptr)->mflags1 & (M1_AMPHIBIOUS | M1_BREATHLESS)) != 0L)
 #define passes_walls(ptr)	(((ptr)->mflags1 & M1_WALLWALK) != 0L)
 #define amorphous(ptr)		(((ptr)->mflags1 & M1_AMORPHOUS) != 0L)
-#define noncorporeal(ptr)	((ptr)->mlet == S_GHOST)
+#define noncorporeal(ptr)	((ptr)->mlet == S_GHOST || (ptr)->mlet == S_SHADE)
 #define tunnels(ptr)		(((ptr)->mflags1 & M1_TUNNEL) != 0L)
 #define needspick(ptr)		(((ptr)->mflags1 & M1_NEEDPICK) != 0L)
 #define hides_under(ptr)	(((ptr)->mflags1 & M1_CONCEAL) != 0L)
@@ -77,6 +77,7 @@
 						 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 2) || \
 						 (ptr)->mlet == S_WRAITH || \
 						 (ptr)->mlet == S_GHOST || \
+						 (ptr)->mlet == S_SHADE || \
 						 (ptr)->mlet == S_GOLEM \
 						)
 #define undiffed_innards(ptr)	((ptr)->mlet == S_BLOB || \
@@ -262,6 +263,7 @@
 				 (ptr) == &mons[PM_GREAT_CTHULHU] || \
 				 (ptr) == &mons[PM_AXUS] || \
 				 (ptr) == &mons[PM_NAZGUL] || \
+				 (ptr) == &mons[PM_STRANGE_CORPSE] || \
 				 (ptr) == &mons[PM_ELDER_PRIEST] || \
 				 (ptr) == &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD])
 #define is_placeholder(ptr)	((ptr) == &mons[PM_ORC] || \

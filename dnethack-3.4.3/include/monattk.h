@@ -138,6 +138,7 @@
 #define AD_VAMP		136	/* Vampire's blood drain attack */
 #define AD_WEBS		137	/* Vampire's blood drain attack */
 #define AD_ILUR		138 /* memory draining engulf attack belonging to Illurien */
+#define AD_STDY		141 /* Monster studies you, other monsters do more damage. */
 
 
 //#define AD_AHAZU	150 /*  */
