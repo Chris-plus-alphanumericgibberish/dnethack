@@ -1997,9 +1997,20 @@ spiriteffects(power, atme)
 					case DROVEN_CROSSBOW:
 						otmp = mksobj(DROVEN_BOLT, TRUE, FALSE);
 					break;
+					default:
+						if(!rn2(3)){
+							otmp = mksobj(FLINT, TRUE, FALSE);
+						} else if(!rn2(2)){
+							otmp = mksobj(ARROW, TRUE, FALSE);
+						} else {
+							otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+						}
+					break;
 				}
 			} else{
-				if(rn2(2)){
+				if(!rn2(3)){
+					otmp = mksobj(FLINT, TRUE, FALSE);
+				} else if(!rn2(2)){
 					otmp = mksobj(ARROW, TRUE, FALSE);
 				} else {
 					otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
