@@ -972,21 +972,21 @@ MAP
 7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
 8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
 9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-1 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T...............................
+1 T T T T T T T T T T T T T T T T T T T T T T T . . . . . . . . . . . . . . .
+2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T...............................
+3 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
+8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
+9 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
 0----------------------------------------------------------------------------
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0          1         2   	  3	      4	    5		  6	      7
-STAIR: (02,02,75,19),(0,0,0,0),down
+STAIR: (02,02,30,19),(0,0,0,0),down
 PORTAL:(75,10,75,10),(00,00,00,00),"arcadia2"
 NON_DIGGABLE:(00,00,75,20)
 REGION:(00,00,75,20),  lit,"ordinary"
@@ -1050,16 +1050,16 @@ MAP
 7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
 8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
 9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T...............................
-1 T T T T T T T T T T T T T T T T T T T T T T T . . . . . . . . . . . . . . .
-2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T...............................
-3 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
-5 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
-7 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
-8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
-9 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
+0............................................................................
+1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2............................................................................
+3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
 0----------------------------------------------------------------------------
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
