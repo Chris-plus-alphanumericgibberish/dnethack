@@ -2376,6 +2376,7 @@ doward()
 	char *sp;		/* Place holder for space count of engr text */
 	int ward = 0;	/* ID number of the ward to be engraved */
 	int len = 0;		/* # of nonspace chars of new engraving text */
+	int perc;		/*percent of ward that could be drawn*/
 	int maxelen;		/* Max allowable length of engraving text */
 	struct engr *oep = engr_at(u.ux,u.uy);
 				/* The current engraving */
@@ -3068,24 +3069,31 @@ doward()
 	}
 
 	/* Chop engraving down to size if necessary */
-	/* BETA: engraving fails if too long */
 	if (len > maxelen) {
-	    for (sp = ebuf; (maxelen && *sp); sp++)
-		if (!isspace(*sp)) maxelen--;
-	    if (!maxelen && *sp) {
-		*sp = (char)0;
-		if (multi) nomovemsg = "Unfortunatly, you can't complete the symbol.";
-		You("can't complete the symbol.", ebuf);
-	    }
-	}
-	else if (oep && oep->ward_id){
-		oep->complete_wards += get_num_wards_added(oep->ward_id, oep->complete_wards);
+		int perc = (len*100)/maxelen;
+		
+		if (multi) nomovemsg =	"Unfortunatly, you can't complete the ward.";
+		else You("can't complete the ward.");
+		
+		if(perc >= 90) oep->scuffed_wards += get_num_wards_added(oep->ward_id, oep->scuffed_wards);
+		else if(perc >= 75) oep->degraded_wards += get_num_wards_added(oep->ward_id, oep->degraded_wards);
+		else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, oep->partial_wards);
+	} else perc = 100;
+	
+	if (oep && oep->ward_id){
+		if(perc == 100) oep->complete_wards += get_num_wards_added(oep->ward_id, oep->complete_wards);
+		else if(perc >= 90) oep->scuffed_wards += get_num_wards_added(oep->ward_id, oep->scuffed_wards);
+		else if(perc >= 75) oep->degraded_wards += get_num_wards_added(oep->ward_id, oep->degraded_wards);
+		else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, oep->partial_wards);
 	}
 	else if(oep){
 		if(!Hallucination || !rn2(4)){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-			oep->complete_wards = get_num_wards_added(oep->ward_id, 0);
+			if(perc == 100) oep->complete_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 90) oep->scuffed_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 75) oep->degraded_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, 0);
 		}
 		else{
 			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
@@ -3095,7 +3103,11 @@ doward()
 			}
 			else oep->halu_ward = TRUE;
 			oep->ward_type = type;
-			oep->complete_wards = 1;
+			if(oep->halu_ward) oep->complete_wards = 1;
+			else if(perc == 100) oep->complete_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 90) oep->scuffed_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 75) oep->degraded_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, 0);
 		}
 	}
 	else{
@@ -3104,7 +3116,10 @@ doward()
 		if(!Hallucination){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-			oep->complete_wards = get_num_wards_added(oep->ward_id, 0);
+			if(perc == 100) oep->complete_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 90) oep->scuffed_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 75) oep->degraded_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, 0);
 		}
 		else{
 			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
@@ -3114,7 +3129,11 @@ doward()
 			}
 			else oep->halu_ward = TRUE;
 			oep->ward_type = type;
-			oep->complete_wards = 1;
+			if(oep->halu_ward) oep->complete_wards = 1;
+			else if(perc == 100) oep->complete_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 90) oep->scuffed_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 75) oep->degraded_wards += get_num_wards_added(oep->ward_id, 0);
+			else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, 0);
 		}
 	}
 
@@ -3484,6 +3503,7 @@ doseal()
 	char *sp;		/* Place holder for space count of engr text */
 	int ward = 0;	/* ID number of the ward to be engraved */
 	int len = 0;		/* # of nonspace chars of new engraving text */
+	int perc;		/* % of ward that could be drawn */
 	int maxelen;		/* Max allowable length of engraving text */
 	struct engr *oep = engr_at(u.ux,u.uy);
 				/* The current engraving */
@@ -4122,27 +4142,29 @@ doseal()
 	}
 
 	/* Chop engraving down to size if necessary */
-	/* BETA: engraving fails if too long */
 	if (len > maxelen) {
-	    for (sp = ebuf; (maxelen && *sp); sp++)
-		if (!isspace(*sp)) maxelen--;
-	    if (!maxelen && *sp) {
-		*sp = (char)0;
-		if (multi) nomovemsg = "Unfortunatly, you can't complete the symbol.";
-		You("can't complete the symbol.", ebuf);
-	    }
-	}
-	else if (oep && oep->ward_id){
+		perc = (len*100)/maxelen;
+		
+		if (multi) nomovemsg =	"Unfortunatly, you can't complete the seal.";
+		else You("can't complete the seal.");
+	} else perc = 100;
+	if (oep && oep->ward_id){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-			oep->complete_wards = 1;
+			if(perc == 100) oep->complete_wards = 1;
+			else if(perc >= 90) oep->scuffed_wards = 1;
+			else if(perc >= 75) oep->degraded_wards = 1;
+			else if(perc >= 50) oep->partial_wards = 1;
 			oep->engr_time = moves - multi;
 	}
 	else if(oep){
 		if(!Hallucination || !rn2(4)){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-			oep->complete_wards = 1;
+			if(perc == 100) oep->complete_wards = 1;
+			else if(perc >= 90) oep->scuffed_wards = 1;
+			else if(perc >= 75) oep->degraded_wards = 1;
+			else if(perc >= 50) oep->partial_wards = 1;
 			oep->engr_time = moves - multi;
 		}
 		else{
@@ -4153,7 +4175,10 @@ doseal()
 			}
 			else oep->halu_ward = TRUE;
 			oep->ward_type = type;
-			oep->complete_wards = 1;
+			if(perc == 100 || oep->halu_ward) oep->complete_wards = 1;
+			else if(perc >= 90) oep->scuffed_wards = 1;
+			else if(perc >= 75) oep->degraded_wards = 1;
+			else if(perc >= 50) oep->partial_wards = 1;
 			oep->engr_time = moves - multi;
 		}
 	}
@@ -4163,7 +4188,10 @@ doseal()
 		if(!Hallucination){
 			oep->ward_id = ward;
 			oep->ward_type = type;
-			oep->complete_wards = 1;
+			if(perc == 100) oep->complete_wards = 1;
+			else if(perc >= 90) oep->scuffed_wards = 1;
+			else if(perc >= 75) oep->degraded_wards = 1;
+			else if(perc >= 50) oep->partial_wards = 1;
 		}
 		else{
 			oep->ward_id = rn2(4) ? 1 : rn2(100) ? randHaluWard() : 0;
@@ -4173,7 +4201,10 @@ doseal()
 			}
 			else oep->halu_ward = TRUE;
 			oep->ward_type = type;
-			oep->complete_wards = 1;
+			if(perc == 100 || oep->halu_ward) oep->complete_wards = 1;
+			else if(perc >= 90) oep->scuffed_wards = 1;
+			else if(perc >= 75) oep->degraded_wards = 1;
+			else if(perc >= 50) oep->partial_wards = 1;
 		}
 	}
 
