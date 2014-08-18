@@ -427,6 +427,16 @@ register struct monst *mtmp;
 			mtmp->mnamelth = 0;
 		}
 		break;
+	    case PM_GARO:
+			if(!rn2(100)){
+				obj = mksobj_at(MASK, x, y, TRUE, FALSE);
+				obj->corpsenm = PM_GARO;
+			}
+		break;
+	    case PM_GARO_MASTER:
+			obj = mksobj_at(MASK, x, y, TRUE, FALSE);
+			obj->corpsenm = PM_GARO_MASTER;
+		break;
 	    default_1:
 	    default:
 		if (mvitals[mndx].mvflags & G_NOCORPSE)
@@ -2081,7 +2091,8 @@ boolean was_swallowed;			/* digestion */
 			else{
 			  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);
 			}
-	    	return (FALSE);
+	    	if(mdat == &mons[PM_GARO_MASTER] || mdat == &mons[PM_GARO]) return (TRUE);
+			else return (FALSE);
 	    } //End AT_BOOM != AD_HLBD && != AD_POSN
 		else if(mdat->mattk[i].adtyp == AD_HLBD && mdat == &mons[PM_ASMODEUS]){
 			int i;

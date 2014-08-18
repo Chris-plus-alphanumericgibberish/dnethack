@@ -1687,7 +1687,7 @@ doputon()
 				already_wearing(something); /* ??? */
 			return(0);
 		}
-		if (otmp->otyp != BLINDFOLD && otmp->otyp != TOWEL && otmp->otyp != LENSES) {
+		if (otmp->otyp != MASK && otmp->otyp != BLINDFOLD && otmp->otyp != TOWEL && otmp->otyp != LENSES) {
 			You_cant("wear that!");
 			return(0);
 		}

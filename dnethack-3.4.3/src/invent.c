@@ -999,7 +999,7 @@ register const char *let,*word;
 		else if ((putting_on(word) &&
 		    ((otmp->oclass == FOOD_CLASS && otmp->otyp != MEAT_RING) ||
 		    (otmp->oclass == TOOL_CLASS &&
-		     otyp != BLINDFOLD && otyp != TOWEL && otyp != LENSES)))
+		     otyp != BLINDFOLD && otyp != MASK && otyp != TOWEL && otyp != LENSES)))
 		|| (!strcmp(word, "wield") &&
 		    (otmp->oclass == TOOL_CLASS && !is_weptool(otmp)))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
