@@ -3276,6 +3276,8 @@ bindspirit(seal_id)
 		case BUER:{
 			if(u.sealTimeout[BUER-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_HEALING_SPELL);
+				unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
+				u.umartial = TRUE;
 				u.sealsActive |= SEAL_BUER;
 				u.spirit[u.sealCounts] = SEAL_BUER;
 				set_spirit_powers(SEAL_BUER);
@@ -3736,7 +3738,10 @@ P_MAX_SKILL(p_skill)
 int p_skill;
 {
 	int maxskill = OLD_P_MAX_SKILL(p_skill);
-	if(u.specialSealsActive&SEAL_NUMINA || spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
+	if(p_skill == P_BARE_HANDED_COMBAT){
+		if((u.sealsActive&SEAL_EURYNOME) && (u.sealsActive&SEAL_BUER)) maxskill = max(P_GRAND_MASTER,maxskill);
+		else if((u.sealsActive&SEAL_EURYNOME) || (u.sealsActive&SEAL_BUER)) maxskill = max(P_EXPERT,maxskill);
+	} else if(u.specialSealsActive&SEAL_NUMINA || spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
 	return maxskill;
 }
 
@@ -3746,7 +3751,13 @@ int p_skill;
 {
 	int curskill = OLD_P_SKILL(p_skill),
 		maxskill = P_MAX_SKILL(p_skill);
-	if(spiritSkill(p_skill) || roleSkill(p_skill)){
+	if(p_skill == P_BARE_HANDED_COMBAT){
+		if((u.sealsActive&SEAL_EURYNOME) && (u.sealsActive&SEAL_BUER)){
+			curskill += 2;
+		} else if((u.sealsActive&SEAL_EURYNOME) || (u.sealsActive&SEAL_BUER)){
+			curskill += 1;
+		}
+	} else if(spiritSkill(p_skill) || roleSkill(p_skill)){
 		curskill += 1;
 		maxskill += 1;
 	}
@@ -3812,7 +3823,7 @@ int p_skill;
 	if(p_skill == P_ESCAPE_SPELL) return u.sealsActive & SEAL_ANDREALPHUS? TRUE : FALSE;
 	if(p_skill == P_MATTER_SPELL) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
 	if(p_skill == P_RIDING) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
-	if(p_skill == P_BARE_HANDED_COMBAT) return u.sealsActive & SEAL_EURYNOME? TRUE : FALSE;
+	if(p_skill == P_BARE_HANDED_COMBAT) return u.sealsActive & (SEAL_EURYNOME|SEAL_BUER)? TRUE : FALSE;
 	return FALSE;
 }
 #ifdef USER_SOUNDS

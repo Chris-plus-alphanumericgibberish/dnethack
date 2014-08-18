@@ -6529,8 +6529,7 @@ register struct attack *mattk;
 		}
 	}
 
-	if(!(u.sealsActive&SEAL_EURYNOME) && uwep && 
-		uwep->oartifact == ART_PEN_OF_THE_VOID && 
+	if( uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && 
 		uwep->ovar1&SEAL_EURYNOME && 
 		!rn2(quest_status.killed_nemesis ? 10 : 20)
 	){

@@ -347,7 +347,8 @@ struct you {
 	Bitfield(shambin,2);		/* Whether the shambling horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
 	Bitfield(stumbin,2);		/* Whether the stumbling horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
 	Bitfield(wandein,2);		/* Whether the wandering horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
-	/* 26 free bits */
+	Bitfield(umartial,1);		/* blessed food detection; sense unsafe food */
+	/* 25 free bits */
 
 	unsigned udg_cnt;		/* how long you have been demigod */
 	struct u_event	uevent;		/* certain events have happened */

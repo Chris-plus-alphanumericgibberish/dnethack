@@ -105,6 +105,7 @@
 #define AD_MALK		63	/* tries immobalizes you and destroys wands and rings */
 #define AD_UVUU		64	/* Uvuudaum head spike attack */
 #define AD_ABDC		65	/* Abduction attack, teleports you regardless of monster cancellation */
+
 #define AD_KAOS		96  /* Spawn Chaos */
 #define AD_LSEX		97	/* DEPRICATED? Lilith's seduction (extended) */
 #define AD_HLBD		99  /* Asmodeus's blood */

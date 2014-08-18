@@ -1504,16 +1504,41 @@ struct obj *weapon;
     } else if (type == P_BARE_HANDED_COMBAT) {
 	/*
 	 *	       b.h.  m.a.
-	 *	unskl:	+1   n/a
+	 *	unskl:	+1    +2
 	 *	basic:	+1    +3
 	 *	skild:	+2    +4
 	 *	exprt:	+2    +5
 	 *	mastr:	+3    +6
 	 *	grand:	+3    +7
 	 */
-	bonus = P_SKILL(type);
-	bonus = max(bonus,P_UNSKILLED) - 1;	/* unskilled => 0 */
-	bonus = ((bonus + 2) * (martial_bonus() ? 2 : 1)) / 2;
+	// bonus = P_SKILL(type);
+	// bonus = max(bonus,P_UNSKILLED) - 1;	/* unskilled => 0 */
+	// bonus = ((bonus + 1) * (martial_bonus() ? 3 : 1)) / 2;
+		if(martial_bonus()){
+			skill = P_SKILL(type);
+			switch(skill){
+				default: impossible(bad_skill, skill); /* fall through */
+				case P_ISRESTRICTED:	bonus =  0; break;
+				case P_UNSKILLED:   	bonus = +2; break;
+				case P_BASIC:			bonus = +3; break;
+				case P_SKILLED:			bonus = +4; break;
+				case P_EXPERT:			bonus = +5; break;
+				case P_MASTER:			bonus = +7; break;
+				case P_GRAND_MASTER:	bonus = +9; break;
+			}
+		} else {
+			skill = P_SKILL(type);
+			switch(skill){
+				default: impossible(bad_skill, skill); /* fall through */
+				case P_ISRESTRICTED:	bonus = -2; break;
+				case P_UNSKILLED:   	bonus =  0; break;
+				case P_BASIC:			bonus = +1; break;
+				case P_SKILLED:			bonus = +2; break;
+				case P_EXPERT:			bonus = +3; break;
+				case P_MASTER:			bonus = +4; break;
+				case P_GRAND_MASTER:	bonus = +5; break;
+			}
+		}
     }
 
 	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
@@ -1572,18 +1597,43 @@ struct obj *weapon;
 	    case P_EXPERT:	bonus = 2; break;
 	}
     } else if (type == P_BARE_HANDED_COMBAT) {
-	/*
-	 *	       b.h.  m.a.
-	 *	unskl:	 0   n/a
-	 *	basic:	+1    +3
-	 *	skild:	+1    +4
-	 *	exprt:	+2    +6
-	 *	mastr:	+2    +7
-	 *	grand:	+3    +9
-	 */
-	bonus = P_SKILL(type);
-	bonus = max(bonus,P_UNSKILLED) - 1;	/* unskilled => 0 */
-	bonus = ((bonus + 1) * (martial_bonus() ? 3 : 1)) / 2;
+	// /*
+	 // *	       b.h.  m.a.
+	 // *	unskl:	 0   n/a
+	 // *	basic:	+1    +3
+	 // *	skild:	+1    +4
+	 // *	exprt:	+2    +6
+	 // *	mastr:	+2    +7
+	 // *	grand:	+3    +9
+	 // */
+	// bonus = P_SKILL(type);
+	// bonus = max(bonus,P_UNSKILLED) - 1;	/* unskilled => 0 */
+	// bonus = ((bonus + 1) * (martial_bonus() ? 3 : 1)) / 2;
+		if(martial_bonus()){
+			skill = P_SKILL(type);
+			switch(skill){
+				default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type)); /* fall through */
+				case P_ISRESTRICTED:	bonus = -2; break;
+				case P_UNSKILLED:   	bonus = +1; break;
+				case P_BASIC:			bonus = +3; break;
+				case P_SKILLED:			bonus = +4; break;
+				case P_EXPERT:			bonus = +5; break;
+				case P_MASTER:			bonus = +7; break;
+				case P_GRAND_MASTER:	bonus = +9; break;
+			}
+		} else {
+			skill = P_SKILL(type);
+			switch(skill){
+				default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type)); /* fall through */
+				case P_ISRESTRICTED:	bonus = -4; break;
+				case P_UNSKILLED:   	bonus = -2; break;
+				case P_BASIC:			bonus =  0; break;
+				case P_SKILLED:			bonus = +1; break;
+				case P_EXPERT:			bonus = +2; break;
+				case P_MASTER:			bonus = +3; break;
+				case P_GRAND_MASTER:	bonus = +4; break;
+			}
+		}
     }
 
 	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
