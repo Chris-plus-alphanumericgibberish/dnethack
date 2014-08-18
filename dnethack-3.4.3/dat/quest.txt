@@ -587,13 +587,13 @@ Again, and you think possibly for the last time, you stand before
 %H.
 %E
 %Cp Bin 00005
-"Why have you returned?"
+"Why have you returned? The Order of Seropaenes is hunting you!"
 %E
 %Cp Bin 00006
 "Get out!"
 %E
 %Cp Bin 00007
-"Go away!"
+"Go away! These fanatics never bothered us, before you left!"
 %E
 %Cp Bin 00008
 "The baron is going to kill you, and all that have harbored you!"
@@ -709,7 +709,9 @@ led to your exile.
 
 Some strange magic is at work, for your village is not located near
 the Lost Library. At least, you don't think it is, you never were
-a traveler. You resolve to pass quickly through the village.
+a traveler. You resolve to pass quickly through the village. You 
+know of a passage to the woods outside town, through the church
+catacombs
 %E
 %Cp Bin 00036
 You stand again in the waking world, in the village of your birth.
@@ -723,13 +725,15 @@ Acererak is within.
 You stand again before the tower.
 %E
 %Cc Bin 00050
-"So, you are the one who dreamt of the Gate"
+"So, you are the one who dreamt of the Gate. All your false sinner
+spirits will not avail you against me. I shall slay you, then return
+beyond the Gate, to close the path your kind have opened into the world."
 %E
 %Cp Bin 00051
 "I have wasted too much time on you already.  Now, you shall die."
 %E
 %Cp Bin 00052
-"You return yet again, %c!  Are you prepared for death now?"
+"Once, I was lost, aimless, but now I serve the one true God!"
 %E
 %Cp Bin 00053
 "Give me %o."
@@ -738,16 +742,16 @@ You stand again before the tower.
 "This is your final night!"
 %E
 %Cp Bin 00061
-"You are a sorry excuse for %ra."
+"Your sinner spirits will not save you from me!"
 %E
 %Cp Bin 00062
-"Run while you can, %c.  My next spell will be your last."
+"In God's Name!"
 %E
 %Cp Bin 00063
-"I shall use your very skin to bind my next grimoire."
+"You shall never pass the Gate!"
 %E
 %Cp Bin 00064
-"You have reached the end."
+"You have reached the end of your path."
 %E
 %Cp Bin 00065
 "Your %a nature makes you weak.  You cannot defeat me."
@@ -757,7 +761,7 @@ You stand again before the tower.
 %E
 %Cp Bin 00067
 "Once you are dead, there will be none to contest my 
-hold over the teeth."
+hold over the Teeth."
 %E
 %Cp Bin 00068
 "Fight, %c, or are you afraid of the mighty %n?"
@@ -771,8 +775,14 @@ flowing through your hands.  It seems to be in two or more worlds
 at once, even though you are holding it.
 %E
 %Cc Bin 00080
-%nC falls to the ground, and utters a last curse at you.  His golden
-skull shatters to jewelled fragments when it hits.
+%nC falls to the ground, and utters a last curse at you.
+    You fool! You have killed me, and all you love.
+	There is an Enemy in the Void. She comes from outside
+	the world, to drown it all in waves of Chaos!
+His golden skull shatters to jewelled fragments when it hits.
+The whispers on the wind grow more distinct, and the fragments
+are drawn together by the breeze. You can here them clearly now.
+It is Acererak's name they repeat.
 %E
 %Cc Bin 00081
 Dahlver-Nar is still dead
