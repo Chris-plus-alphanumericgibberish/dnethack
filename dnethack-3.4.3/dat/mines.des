@@ -1005,17 +1005,17 @@ MONSTER:'M',random,random
 MONSTER:'M',random,random
 MONSTER:'M',random,random
 MONSTER:'M',"ettin mummy",random
-MONSTER:'V',random,random
+#MONSTER:'V',random,random
 MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 MONSTER:'Z',random,random
-MONSTER:'V',random,random
-MONSTER:'e',random,random
-MONSTER:'e',random,random
-MONSTER:'e',random,random
-MONSTER:'e',random,random
+#MONSTER:'V',random,random
+MONSTER:'e',"floating eye",random
+MONSTER:'e',"floating eye",random
+MONSTER:'e',"floating eye",random
+MONSTER:'e',"floating eye",random
 
 
 # end mines.des
