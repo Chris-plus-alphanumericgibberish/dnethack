@@ -1729,6 +1729,8 @@ u_init()
 	for (i = 0; i < rnd(17); i++) {
 		wanderer->mflags2 |= (0x100 << rn2(7));
 	}
+	
+	u.oonaenergy = !rn2(3) ? AD_FIRE : rn(2) ? AD_COLD : AD_ELEC;
 	return;
 }
 
