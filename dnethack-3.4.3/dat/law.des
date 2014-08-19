@@ -1628,7 +1628,7 @@ TELEPORT_REGION:(06,04,07,04),(0,0,0,0),up
 STAIR: (07,04), down
 NON_DIGGABLE:(00,00,08,08)
 
-MONSTER:'A',"Apollyon",(02,04)
+MONSTER:'@',"Oona",(02,04)
 CONTAINER:'`',"statue",(3,4),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of Aaqa"
 OBJECT:')',"silver spear",contained,blessed,-7,"The Rod of Seven Parts"
 

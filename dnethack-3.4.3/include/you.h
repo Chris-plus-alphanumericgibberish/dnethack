@@ -329,6 +329,7 @@ struct you {
 			mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */
 	short ucspeed;
+	 
 #define	HIGH_CLOCKSPEED	1
 #define	NORM_CLOCKSPEED	2
 #define	SLOW_CLOCKSPEED	3
@@ -350,6 +351,7 @@ struct you {
 	Bitfield(umartial,1);		/* blessed food detection; sense unsafe food */
 	/* 25 free bits */
 
+	int oonaenergy;				/* Record the energy type used by Oona in your game. (Worm that Walks switches?) */
 	unsigned udg_cnt;		/* how long you have been demigod */
 	struct u_event	uevent;		/* certain events have happened */
 	struct u_have	uhave;		/* you're carrying special objects */
