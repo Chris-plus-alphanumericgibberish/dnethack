@@ -504,11 +504,11 @@ struct you {
 #define SEAL_DAHLVER_NAR			0x00000001L
 #define SEAL_ACERERAK				0x00000002L
 #define SEAL_COUNCIL				0x00000004L
-#define SEAL_COSMOS					0x00000010L
-#define SEAL_MISKA					0x00000020L
-#define SEAL_NUDZIARTH				0x00000040L
-#define SEAL_ALIGNMENT_THING		0x00000080L
-#define SEAL_UNKNOWN_GOD			0x00000100L
+#define SEAL_COSMOS					0x00000008L
+#define SEAL_MISKA					0x00000010L
+#define SEAL_NUDZIARTH				0x00000020L
+#define SEAL_ALIGNMENT_THING		0x00000040L
+#define SEAL_UNKNOWN_GOD			0x00000080L
 #define SEAL_NUMINA					0x40000000L
 //	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
 	

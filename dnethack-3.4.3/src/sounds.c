@@ -3588,6 +3588,7 @@ bindspirit(seal_id)
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_COSMOS;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_COSMOS);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_COSMOS;
+				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
 				u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
@@ -3600,6 +3601,7 @@ bindspirit(seal_id)
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_MISKA;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_MISKA);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_MISKA;
+				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
 				u.sealTimeout[MISKA-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
@@ -3612,6 +3614,7 @@ bindspirit(seal_id)
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_NUDZIARTH;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_NUDZIARTH);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_NUDZIARTH;
+				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
 				u.sealTimeout[NUDZIARTH-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
@@ -3624,6 +3627,7 @@ bindspirit(seal_id)
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_ALIGNMENT_THING;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_ALIGNMENT_THING);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_ALIGNMENT_THING;
+				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
 				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
@@ -3636,6 +3640,7 @@ bindspirit(seal_id)
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_UNKNOWN_GOD;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_UNKNOWN_GOD);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_UNKNOWN_GOD;
+				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
 				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
