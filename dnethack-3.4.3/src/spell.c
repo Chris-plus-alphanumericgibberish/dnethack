@@ -1487,9 +1487,10 @@ spiriteffects(power, atme)
 							}
 							setmangry(mon);
 						}
+						break;
 					}
 				  }
-				} else range = -1;
+				} else break;
 			}
 			range = (u.ulevel/2+1)^2;
 			for(mon = fmon; mon; mon = nxtmon){
@@ -1559,10 +1560,12 @@ spiriteffects(power, atme)
 					} else {
 						pline("An icicle grows on %s head.", s_suffix(mon_nam(mon)));
 						if(thick_skinned(mon->data)){
-							pline("It is blinded!");
-							dmg = d(5,dsize);
-							mon->mcansee = 0;
-							mon->mblinded = 0;
+							dmg = d(10,dsize);
+							if(haseyes(mon->data)){
+								pline("It is blinded!");
+								mon->mcansee = 0;
+								mon->mblinded = 0;
+							}
 						} else {
 							pline("It is pierced through!");
 							dmg = mon->mhp;
@@ -1655,7 +1658,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_SOW_DISCORD:
 			You("sow discord amongst your enemies");
-			u.sowdisc = dsize;
+			u.sowdisc = 5+dsize;
 		break;
 		case PWR_GIFT_OF_HEALING:{
 			struct monst *mon;
@@ -2031,6 +2034,10 @@ spiriteffects(power, atme)
 			You("get ready to fire a barrage.");
 			barage = TRUE; //state variable
 			if(uquiver) throw_obj(uquiver, 0);
+			else{
+				You("have nothing quivered.");
+				return;
+			}
 			barage = FALSE;
 		break;
 		case PWR_BREATH_POISON:{

@@ -3490,14 +3490,14 @@ struct trap *ttmp;
 static int webxprime = 0, webyprime = 0;
 
 void
-dowebgush(cx,cy)
+dowebgush(cx,cy,radius)
 	int cx,cy;
 {
 	int madeweb = 0;
 	
 	webxprime = cx;
 	webyprime = cy;
-	do_clear_area(cx, cy, 2, webgush, (genericptr_t)&madeweb);
+	do_clear_area(cx, cy, radius, webgush, (genericptr_t)&madeweb);
 }
 
 void
