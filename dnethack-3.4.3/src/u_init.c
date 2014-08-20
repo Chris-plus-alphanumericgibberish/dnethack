@@ -148,6 +148,7 @@ static struct trobj Pirate[] = {
 	{ BANANA, 0, FOOD_CLASS, 3, 0 },
 	{ POT_BOOZE, 0, POTION_CLASS, 3, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
+	{ PICK_AXE, 0, TOOL_CLASS, 1, 0 },
 	{ OILSKIN_SACK, 0, TOOL_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
@@ -1187,6 +1188,7 @@ u_init()
 		if(rn2(100)<50)	Pirate[PIR_JEWELRY].trotyp = RIN_ADORNMENT;
 		if(rn2(100)<50)	Pirate[PIR_TOOL].trotyp = GRAPPLING_HOOK;
 		ini_inv(Pirate);
+		knows_object(SACK);
 		knows_object(OILSKIN_SACK);
 		knows_object(OILSKIN_CLOAK);
 		knows_object(GRAPPLING_HOOK);
