@@ -1673,7 +1673,7 @@ boolean from_invent;
 			    change_luck((schar) -min(obj->quan, 5L));
 			break;
 		case BALL_OF_WEBBING:
-			dowebgush(x,y);
+			dowebgush(x,y, obj->ovar1 ? obj->ovar1 : 2);
 		break;
 	}
 	if (hero_caused) {

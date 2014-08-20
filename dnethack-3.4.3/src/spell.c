@@ -1747,6 +1747,7 @@ spiriteffects(power, atme)
 				otmp->blessed = 0;
 				otmp->cursed = 0;
 				otmp->spe = 1; /* to indicate it's yours */
+				otmp->ovar1 = 1 + u.ulevel/10;
 				throwit(otmp, 0L, FALSE);
 				// m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy,
 					// rn1(5,5), otmp,TRUE);
