@@ -343,7 +343,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ORC,	SMALL_SHIELD,		ORCISH_SHIELD	      },
     { PM_ORC,	RING_MAIL,		ORCISH_RING_MAIL      },
     { PM_ORC,	CHAIN_MAIL,		ORCISH_CHAIN_MAIL     },
-    { PM_ELF,	KNIFE,			DAGGER	      		  },
+    { PM_DWARF,	KNIFE,			DAGGER	      		  },
     { PM_DWARF, SPEAR,			DWARVISH_SPEAR	      },
     { PM_DWARF, SHORT_SWORD,		DWARVISH_SHORT_SWORD  },
     { PM_DWARF, HELMET,			DWARVISH_IRON_HELM    },
