@@ -409,6 +409,12 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	mread(fd, (genericptr_t) &mons[PM_WANDERING_HORROR], sizeof(struct permonst));
 	mons[PM_WANDERING_HORROR].mname = tname;
 	}
+	/* Fix up the alignment quest nemesi */
+	mons[PM_OONA].mcolor = (u.oonaenergy == AD_FIRE) ? CLR_RED 
+						 : (u.oonaenergy == AD_COLD) ? CLR_CYAN 
+						 : (u.oonaenergy == AD_ELEC) ? HI_ZAP 
+						 : CLR_WHITE;
+	mons[PM_OONA].mattk[0].adtyp = u.oonaenergy;
 	
 	if(u.uhp <= 0 && (!Upolyd || u.mh <= 0)) {
 	    u.ux = u.uy = 0;	/* affects pline() [hence You()] */

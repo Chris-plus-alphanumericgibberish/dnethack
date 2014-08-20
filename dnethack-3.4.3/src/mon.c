@@ -1979,6 +1979,15 @@ boolean was_swallowed;			/* digestion */
 	}
 	/* Gas spores always explode upon death */
 	for(i = 0; i < NATTK; i++) {
+		if(mdat->mattk[i].aatyp == AT_NONE &&  mdat->mattk[i].adtyp == AD_OONA){
+			struct obj *obj;
+			obj = mksobj_at(SKELETON_KEY, mon->mx, mon->my, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_THIRD_KEY_OF_LAW));
+			obj->spe = 0;
+			obj->cursed = obj->blessed = FALSE;
+			mdat->mattk[i].aatyp = AT_BOOM;
+			mdat->mattk[i].adtyp = u.oonaenergy;
+		}
 	    if (mdat->mattk[i].aatyp == AT_BOOM  &&  mdat->mattk[i].adtyp != AD_HLBD && mdat->mattk[i].adtyp != AD_POSN) {
 	    	if (mdat->mattk[i].damn)
 	    	    tmp = d((int)mdat->mattk[i].damn,
@@ -2023,11 +2032,6 @@ boolean was_swallowed;			/* digestion */
 				explode(mon->mx, mon->my, 1, tmp, MON_EXPLODE, EXPL_FIERY);
 			}
 			else if(mdat->mattk[i].adtyp == AD_JAILER){
-				struct obj *obj;
-				obj = mksobj_at(SKELETON_KEY, mon->mx, mon->my, FALSE, FALSE);
-				obj = oname(obj, artiname(ART_THIRD_KEY_OF_LAW));
-			    obj->spe = 0;
-			    obj->cursed = obj->blessed = FALSE;
 				explode(mon->mx, mon->my, 1, tmp, MON_EXPLODE, EXPL_FIERY);
 				u.uevent.ukilled_apollyon = 1;
 			}

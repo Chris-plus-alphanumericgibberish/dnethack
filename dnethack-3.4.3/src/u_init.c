@@ -1730,7 +1730,13 @@ u_init()
 		wanderer->mflags2 |= (0x100 << rn2(7));
 	}
 	
-	u.oonaenergy = !rn2(3) ? AD_FIRE : rn(2) ? AD_COLD : AD_ELEC;
+	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
+	/* Fix up the alignment quest nemesi */
+	mons[PM_OONA].mcolor = (u.oonaenergy == AD_FIRE) ? CLR_RED 
+						 : (u.oonaenergy == AD_COLD) ? CLR_CYAN 
+						 : (u.oonaenergy == AD_ELEC) ? HI_ZAP 
+						 : CLR_WHITE;
+	mons[PM_OONA].mattk[0].adtyp = u.oonaenergy;
 	return;
 }
 

@@ -705,6 +705,17 @@ law_montype()
 		else if(chance < 60){
 			return mkclass(S_IMP, 0);
 		}
+		else if(chance < 70 && mvitals[PM_OONA].died == 0){
+			if(u.oonaenergy == AD_FIRE){
+				return rn2(2) ? &mons[PM_FLAMING_SPHERE] : &mons[PM_FIRE_VORTEX];
+			}
+			if(u.oonaenergy == AD_COLD){
+				return rn2(2) ? &mons[PM_FREEZING_SPHERE] : &mons[PM_ICE_VORTEX];
+			}
+			if(u.oonaenergy == AD_ELEC){
+				return rn2(2) ? &mons[PM_SHOCKING_SPHERE] : &mons[PM_ENERGY_VORTEX];
+			}
+		}
 		else{
 			chance = d(1,31);
 			if(chance == 1){
@@ -732,6 +743,17 @@ law_montype()
 		else if(chance < 40){
 			return mkclass(S_IMP, 0);
 		}
+		else if(chance < 60 && mvitals[PM_OONA].died == 0){
+			if(u.oonaenergy == AD_FIRE){
+				return rn2(2) ? &mons[PM_FLAMING_SPHERE] : &mons[PM_FIRE_VORTEX];
+			}
+			if(u.oonaenergy == AD_COLD){
+				return rn2(2) ? &mons[PM_FREEZING_SPHERE] : &mons[PM_ICE_VORTEX];
+			}
+			if(u.oonaenergy == AD_ELEC){
+				return rn2(2) ? &mons[PM_SHOCKING_SPHERE] : &mons[PM_ENERGY_VORTEX];
+			}
+		}
 		else{
 			chance = d(1,31);
 			if(chance == 1){
@@ -755,6 +777,17 @@ law_montype()
 		int chance = d(1,100);
 		if(chance < 20){
 			return mkclass(S_IMP, 0);
+		}
+		else if(chance < 40 && mvitals[PM_OONA].died == 0){
+			if(u.oonaenergy == AD_FIRE){
+				return rn2(2) ? &mons[PM_FLAMING_SPHERE] : &mons[PM_FIRE_VORTEX];
+			}
+			if(u.oonaenergy == AD_COLD){
+				return rn2(2) ? &mons[PM_FREEZING_SPHERE] : &mons[PM_ICE_VORTEX];
+			}
+			if(u.oonaenergy == AD_ELEC){
+				return rn2(2) ? &mons[PM_SHOCKING_SPHERE] : &mons[PM_ENERGY_VORTEX];
+			}
 		}
 		else{
 			chance = d(1,31);
@@ -879,6 +912,16 @@ law_montype()
 			chance = d(1,6);
 			if(chance <= 5) return &mons[PM_SOLDIER];
 			else return &mons[PM_SERGEANT];
+		}
+	} else if(mvitals[PM_OONA].died == 0){
+		if(u.oonaenergy == AD_FIRE){
+			return rn2(2) ? &mons[PM_FLAMING_SPHERE] : &mons[PM_FIRE_VORTEX];
+		}
+		if(u.oonaenergy == AD_COLD){
+			return rn2(2) ? &mons[PM_FREEZING_SPHERE] : &mons[PM_ICE_VORTEX];
+		}
+		if(u.oonaenergy == AD_ELEC){
+			return rn2(2) ? &mons[PM_SHOCKING_SPHERE] : &mons[PM_ENERGY_VORTEX];
 		}
 	}
 	return (struct permonst *)0;
