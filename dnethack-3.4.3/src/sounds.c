@@ -3352,6 +3352,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_SLING);
 				unrestrict_weapon_skill(P_DART);
 				unrestrict_weapon_skill(P_BOOMERANG);
+				HSwimming |= INTRINSIC;
 				u.sealsActive |= SEAL_ENKI;
 				u.spirit[u.sealCounts] = SEAL_ENKI;
 				set_spirit_powers(SEAL_ENKI);
