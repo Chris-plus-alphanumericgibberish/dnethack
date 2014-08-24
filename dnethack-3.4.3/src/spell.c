@@ -3856,6 +3856,8 @@ set_spirit_powers(spirits_seal)
 	if(spirits_seal==0) return;
 	for(i=0;i<NUMBER_POWERS;i++){
 		if(spiritPOwner[i]==spirits_seal){
+			pline("%d",i);
+			u.spiritPColdowns[i] = 0;
 			for(j=0;j<52;j++){
 				if(u.spiritPOrder[j] == i) break;
 			}
