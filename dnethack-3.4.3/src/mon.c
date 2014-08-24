@@ -432,10 +432,12 @@ register struct monst *mtmp;
 				obj = mksobj_at(MASK, x, y, TRUE, FALSE);
 				obj->corpsenm = PM_GARO;
 			}
+		goto default_1;
 		break;
 	    case PM_GARO_MASTER:
 			obj = mksobj_at(MASK, x, y, TRUE, FALSE);
 			obj->corpsenm = PM_GARO_MASTER;
+		goto default_1;
 		break;
 	    default_1:
 	    default:
