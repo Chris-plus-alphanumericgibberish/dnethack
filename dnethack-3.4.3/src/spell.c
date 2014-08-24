@@ -2734,9 +2734,10 @@ spiriteffects(power, atme)
 				mon->mhp -= dmg;
 				mon->mhpmax -= dmg;
 				mon->m_lev -= lvls;
-				if (mon->mhp <= 0 || mon->mhpmax <= 0 || mon->m_lev < 1)
+				if(mon->m_lev < 0) mon->m_lev = 0; /* >_< Thanks bcode */
+				if (mon->mhp <= 0 || mon->mhpmax <= 0 || mon->m_lev < 1) {
 					xkilled(mon, 1);
-				else {
+				} else {
 					if (canseemon(mon))
 						pline("%s suddenly seems weaker!", Monnam(mon));
 					setmangry(mon);
