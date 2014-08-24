@@ -3382,6 +3382,10 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    if (Fire_resistance) {
 				pline_The("beam doesn't feel hot!");
 				dmg = 0;
+		    } else if(Reflecting){
+		    if (canseemon(mtmp)) ureflects("%s beam is reflected by your %s.",
+					 s_suffix(Monnam(mtmp)));
+				dmg = 0;
 		    } else {
 				succeeded=1;
 			    if ((int) mtmp->m_lev > rn2(20))

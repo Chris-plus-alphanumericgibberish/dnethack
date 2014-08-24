@@ -676,6 +676,7 @@ gcrownu()
 		already_exists = exist_artifact(SCIMITAR, artiname(ART_REAVER));
 		verbalize("Hurrah for our Pirate King!");
 	} else if(Role_if(PM_EXILE)){
+		u.uevent.uhand_of_elbereth = 2; /* Alignment of emissary is treated as neutral */
 		You("suddenly perceive 15 pairs of star-like eyes, staring at you from within your head.");
 		pline("<<We are the Council of Elements>>");
 		pline("<<Guardians of the Material world>>");

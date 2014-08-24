@@ -1351,7 +1351,7 @@ spiriteffects(power, atme)
 								xkilled(mon, 1);
 								continue;
 							} else{
-								You("hit %s",mon_nam(mon));
+								You("hit %s.",mon_nam(mon));
 								setmangry(mon);
 								u_teleport_mon(mon, TRUE);
 							}
@@ -2773,10 +2773,10 @@ spiriteffects(power, atme)
 					migrate_to_level(mon, ledger_no(&tolevel),
 							 migrate_typ, (coord *)0);
 				} else {
-					pline("%s colapses in on %sself.", Monnam(mon), himherit(mon));
+					pline("%s collapses in on %sself.", Monnam(mon), himherit(mon));
 					mongone(mon);
 				}
-			} else pline("%s looks briefly unsetled.", Monnam(mon));
+			} else pline("%s looks briefly unsettled.", Monnam(mon));
 		}break;
 		case PWR_POISON_GAZE:{
 			coord cc;

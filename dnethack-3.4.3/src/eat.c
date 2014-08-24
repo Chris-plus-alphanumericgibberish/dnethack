@@ -1803,6 +1803,8 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		}
 	} else if(mnum == PM_LONG_WORM){
 		pline("This tastes spicy!");
+	} else if(mnum == PM_CROW){
+		You("eat crow!");
 	} else {
 	    pline("%s%s %s!",
 		  !uniq ? "This " : !type_is_pname(&mons[mnum]) ? "The " : "",
