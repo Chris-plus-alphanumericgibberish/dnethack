@@ -830,19 +830,22 @@ movemon()
 	mtmp->mstdy /= 2; //monster is moving, reduce studied level
 
 	//Weeping angel step 3
-	if(is_weeping(mtmp->data) && canseemon(mtmp)){
-		mtmp->mextra[0] +=  (long)(NORMAL_SPEED*arc/314);
-		if(!arc){
-			mtmp->mextra[1] &= 0x1L; //clear higher order bits, first bit is whether it should generate a swarm when you return
-			mtmp->mextra[1] |= 0x4L; //Quantum Locked
+	if(is_weeping(mtmp->data)){
+		mtmp->mextra[1] &= 0x1L; //clear higher order bits, first bit is whether it should generate a swarm when you return
+		if(canseemon(mtmp)){
+			mtmp->mextra[0] +=  (long)(NORMAL_SPEED*arc/314);
+			if(!arc){
+				mtmp->mextra[1] |= 0x4L; //Quantum Locked
+			}
+			else if(arc < 314/2){
+				mtmp->mextra[1] |= 0x2L; //Partial Quantum Lock
+			}
+			m_respond(mtmp);
+			if(mtmp->mextra[0] >= NORMAL_SPEED*2) mtmp->mextra[0] -= NORMAL_SPEED*2;
+			else continue;
 		}
-		else if(arc < 314/2){
-			mtmp->mextra[1] &= 0x1L; //clear higher order bits, first bit is whether it should generate a swarm when you return
-			mtmp->mextra[1] |= 0x2L; //Partial Quantum Lock
-		}
-		m_respond(mtmp);
-		if(mtmp->mextra[0] >= NORMAL_SPEED*2) mtmp->mextra[0] -= NORMAL_SPEED*2;
-		else continue;
+		//else no quant lock
+		
 	}
 	
 	if(mtmp->data == &mons[PM_DREADBLOSSOM_SWARM] && !canseemon(mtmp) && u.ustuck != mtmp) continue; /* Dreadblossoms only attack those who can see them */
