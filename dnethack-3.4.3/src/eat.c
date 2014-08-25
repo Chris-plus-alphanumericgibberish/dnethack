@@ -2916,8 +2916,10 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if(uclockwork && u.ucspeed == SLOW_CLOCKSPEED && !(moves%10)) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	if (moves % 2) {	/* odd turns */
 	    /* Regeneration uses up food, unless due to an artifact */
-	    if (HRegeneration || ((ERegeneration & (~W_ART)) &&
-				(ERegeneration != W_WEP || !uwep->oartifact)))
+	    if ( (HRegeneration && !maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) || ((ERegeneration & (~W_ART)) &&
+				(ERegeneration != W_WEP || !uwep->oartifact) &&
+				(ERegeneration != W_ARMS || !uarms->oartifact) 
+				))
 			(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	    if (near_capacity() > SLT_ENCUMBER) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	} else {		/* even turns */
