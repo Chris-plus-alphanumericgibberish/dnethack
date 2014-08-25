@@ -376,14 +376,14 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_VAMPIRE,	POT_FRUIT_JUICE,	POT_BLOOD	      },
     { PM_VAMPIRE,	TRIPE_RATION,		POT_BLOOD    	  },
     { PM_VAMPIRE,	BANANA,				POT_BLOOD    	  },
-    { PM_VAMPIRE,	APPLE,				POT_BLOOD    	  },
+    { PM_VAMPIRE,	ORANGE,				POT_BLOOD    	  },
     { PM_VAMPIRE,	POT_BOOZE,			POT_BLOOD    	  },
     { PM_CLOCKWORK_AUTOMATON,	FOOD_RATION, 		POT_OIL },
     { PM_CLOCKWORK_AUTOMATON,	CRAM_RATION, 		POT_OIL },
     { PM_CLOCKWORK_AUTOMATON,	POT_FRUIT_JUICE,	POT_OIL	      },
     { PM_CLOCKWORK_AUTOMATON,	TRIPE_RATION,		POT_OIL    	  },
     { PM_CLOCKWORK_AUTOMATON,	BANANA,				POT_OIL    	  },
-    { PM_CLOCKWORK_AUTOMATON,	APPLE,				POT_OIL    	  },
+    { PM_CLOCKWORK_AUTOMATON,	ORANGE,				POT_OIL    	  },
     { PM_CLOCKWORK_AUTOMATON,	POT_BOOZE,			POT_OIL    	  },
     { NON_PM,	STRANGE_OBJECT,		STRANGE_OBJECT	      }
 };
@@ -1801,6 +1801,7 @@ register struct trobj *trop;
 				}
 			}
 			obj = mksobj(otyp, TRUE, FALSE);
+			if(obj->otyp == POT_BLOOD) obj->corpsenm = PM_HUMAN;
 			/* Don't start with +0 or negative rings */
 			if (objects[obj->otyp].oc_charged && obj->spe <= 0)
 				obj->spe = rne(3);
