@@ -113,7 +113,7 @@
 		/* Note: birds will also be stunned */
 
 #define HConfusion		u.uprops[CONFUSION].intrinsic
-#define Confusion		HConfusion && !(u.specialSealsActive&SEAL_NUMINA)
+#define Confusion		(HConfusion && !(u.specialSealsActive&SEAL_NUMINA))
 
 #define Blinded			u.uprops[BLINDED].intrinsic
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK)
