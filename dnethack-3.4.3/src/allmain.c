@@ -406,6 +406,10 @@ moveloop()
 			    u.uhp++;
 			}
 		    }
+			if(u.sealsActive&SEAL_BUER){
+				if(Upolyd && u.mh < u.mhmax) u.mh++;
+				else if(u.uhp < u.uhpmax) u.uhp++;
+			}
 
 			if(u.sealsActive&SEAL_YMIR && (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)){
 				if((u.ulevel > 9 && !(moves % 3)) || 
