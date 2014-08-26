@@ -769,9 +769,6 @@ register struct obj *obj;
 	case RIN_HUNGER:
 	case RIN_AGGRAVATE_MONSTER:
 	case RIN_POISON_RESISTANCE:
-	case RIN_FIRE_RESISTANCE:
-	case RIN_COLD_RESISTANCE:
-	case RIN_SHOCK_RESISTANCE:
 	case RIN_CONFLICT:
 	case RIN_TELEPORT_CONTROL:
 	case RIN_POLYMORPH:
@@ -784,6 +781,15 @@ register struct obj *obj;
 	case RIN_WARNING:
 		see_monsters();
 		break;
+	case RIN_FIRE_RESISTANCE:
+		if(!oldprop && !HFire_resistance) pline("The ring feels cool!");
+	break;
+	case RIN_COLD_RESISTANCE:
+		if(!oldprop && !HCold_resistance) pline("The ring feels warm!");
+	break;
+	case RIN_SHOCK_RESISTANCE:
+		if(!oldprop && !HShock_resistance) Your("ringfinger feels numb!");
+	break;
 	case RIN_SEE_INVISIBLE:
 		/* can now see invisible monsters */
 		set_mimic_blocking(); /* do special mimic handling */
