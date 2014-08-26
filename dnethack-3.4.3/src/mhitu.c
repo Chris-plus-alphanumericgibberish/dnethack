@@ -1845,8 +1845,8 @@ dopois:
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SITM:	/* for now these are the same */
-			if(u.sealsActive&SEAL_ANDROMALIUS) break;
 	    case AD_SEDU: //duplicated bellow, in the gaze section.
+			if(u.sealsActive&SEAL_ANDROMALIUS) break;
 //pline("test string!");
 			if(mdat == &mons[PM_DEMOGORGON]){
 				buf[0] = '\0';
