@@ -1209,7 +1209,35 @@ genericptr_t val;
 	}
 }
 
+STATIC_OVL boolean
+masterDoorBox(x,y)
+	int x, y;
+{
+	struct obj *otmp;
+	char qbuf[QBUFSZ];
+	char c;
+	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
+	if (Is_box(otmp)) {
+		if (!can_reach_floor()) {
+		You_cant("reach %s from up here.", the(xname(otmp)));
+		return FALSE;
+		}
+		
+		if (otmp->obroken || !otmp->olocked) continue;
 
+		Sprintf(qbuf, "There is %s here, unlock it?",
+				safe_qbuf("", sizeof("There is  here, unlock its lock?"),
+				doname(otmp), an(simple_typename(otmp->otyp)), "a box"));
+
+		c = ynq(qbuf);
+		if(c == 'q') return(FALSE);
+		if(c == 'n') continue;
+		
+		otmp->olocked = 0;
+		return TRUE;
+	}
+	return FALSE;
+}
 
 STATIC_OVL boolean
 tt_findadjacent(cc, mon)
@@ -2576,6 +2604,8 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			if (!getdir((char *)0)) return(0);
 			if(!(u.dx || u.dy || u.dz)){
+				if(masterDoorBox(u.ux,u.uy)) break;
+				//else
 				pline("Maybe your innards should stay inside your body?");
 				return 0;
 			} else if(u.dz > 0) {
@@ -2587,7 +2617,7 @@ spiriteffects(power, atme)
 			} else if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon){
-					if(!opennewdoor(u.ux+u.dx, u.uy+u.dy)) return 0;
+					if(!opennewdoor(u.ux+u.dx, u.uy+u.dy) && !masterDoorBox(u.ux+u.dx,u.uy+u.dy)) return 0;
 					else break;
 				} if(find_roll_to_hit(mon) <= rnd(20)){
 					You("miss.");

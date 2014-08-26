@@ -171,7 +171,8 @@ forcelock(VOID_ARGS)	/* try to force a locked chest */
 	    return((xlock.usedtime = 0));
 	}
 
-	if(xlock.picktyp) {	/* blade */
+	
+	if(xlock.picktyp == 1) {	/* blade */
 
 	    if(rn2(1000-(int)uwep->spe) > (992-greatest_erosion(uwep)*10) &&
 	       !uwep->cursed && !obj_resists(uwep, 0, 99)) {
@@ -185,15 +186,16 @@ forcelock(VOID_ARGS)	/* try to force a locked chest */
 		exercise(A_DEX, TRUE);
 		return((xlock.usedtime = 0));
 	    }
-	} else			/* blunt */
+	} else if(xlock.picktyp == 0)			/* blunt */
 	    wake_nearby();	/* due to hammering on the container */
 
+	if(xlock.picktyp == 3) u.otiaxAttack = moves;
 	if(rn2(100) >= xlock.chance) return(1);		/* still busy */
 
 	You("succeed in forcing the lock.");
 	xlock.box->olocked = 0;
-	xlock.box->obroken = 1;
-	if(!xlock.picktyp && !rn2(3)) {
+	if(!(u.sealsActive&SEAL_OTIAX)) xlock.box->obroken = 1;
+	if(!xlock.picktyp && !(u.sealsActive&SEAL_OTIAX) && !rn2(3)) {
 	    struct monst *shkp;
 	    boolean costly;
 	    long loss = 0L;
@@ -254,14 +256,14 @@ forcedoor()      /* try to break/pry open a door */
 		pline("This doorway has no door.");
 		return((xlock.usedtime = 0));
 	    case D_ISOPEN:
-		You("cannot lock an open door.");
+		You("cannot force an open door.");
 		return((xlock.usedtime = 0));
 	    case D_BROKEN:
 		pline("This door is broken.");
 		return((xlock.usedtime = 0));
 	}
 	
-	if (xlock.usedtime++ >= 50 || nohands(youmonst.data)) {
+	if (xlock.usedtime++ >= 50 || (nohands(youmonst.data) && !(u.sealsActive&SEAL_OTIAX))) {
 	    You("give up your attempt at %s the door.",
 	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ? 
 	    		"prying open" : "breaking down"));
@@ -269,15 +271,19 @@ forcedoor()      /* try to break/pry open a door */
 	    return((xlock.usedtime = 0));
 	}
 
+	if(xlock.picktyp == 3) u.otiaxAttack = moves;
+	
 	if(rn2(100) > xlock.chance) return(1);          /* still busy */
 
 	You("succeed in %s the door.",
-	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ? 
+	    	(xlock.picktyp == 3 ? "picking the lock on" : xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ? 
 	    		"prying open" : "breaking down"));
 
 	if(xlock.door->doormask & D_TRAPPED) {
 	    b_trapped("door", 0);
 	    xlock.door->doormask = D_NODOOR;
+	} else if (xlock.picktyp == 3) {
+	    xlock.door->doormask = D_ISOPEN;
 	} else if (xlock.picktyp == 1)
 	    xlock.door->doormask = D_BROKEN;
 	else xlock.door->doormask = D_NODOOR;
@@ -554,7 +560,7 @@ doforce()		/* try to force a chest with your weapon */
 	struct rm       *door;
 	char qbuf[QBUFSZ];
 
-	if (!uwep) { /* Might want to make this so you use your shoulder */
+	if (!uwep && !(u.sealsActive&SEAL_OTIAX)) { /* Might want to make this so you use your shoulder */
 	    You_cant("force anything without a weapon.");
 	     return(0);
 	}
@@ -562,6 +568,8 @@ doforce()		/* try to force a chest with your weapon */
 	if (u.utrap && u.utraptype == TT_WEB) {
 	    You("are entangled in a web!");
 	    return(0);
+	} else if (u.sealsActive&SEAL_OTIAX) {
+		;
 	} else if (uwep && is_lightsaber(uwep)) {
 	    if (!uwep->lamplit) {
 		Your("lightsaber is deactivated!");
@@ -584,7 +592,9 @@ doforce()		/* try to force a chest with your weapon */
 	    return(0);
 	}
 
-	if (is_lightsaber(uwep))
+	if (u.sealsActive&SEAL_OTIAX)
+	    picktyp = 3;
+	else if (is_lightsaber(uwep))
 	    picktyp = 2;
 	else
 	picktyp = is_blade(uwep) ? 1 : 0;
@@ -625,14 +635,19 @@ doforce()		/* try to force a chest with your weapon */
 		if(c == 'q') return(0);
 		if(c == 'n') continue;
 
-		if(picktyp == 2)
-		    You("begin melting it with your %s.", xname(uwep));
+		if(picktyp == 3) {
+		    You("insert your mist tendrils into the lock.");
+			u.otiaxAttack = moves;
+		} else if(picktyp == 2)
+		    You("begin melting the lock with your %s.", xname(uwep));
 		else if(picktyp)
 		    You("force your %s into a crack and pry.", xname(uwep));
 		else
 		    You("start bashing it with your %s.", xname(uwep));
 		xlock.box = otmp;
-		if (is_lightsaber(uwep))
+		if (picktyp == 3) //mist tendrils
+			xlock.chance = spiritDsize() * 10;
+		else if (picktyp == 2) //lightsaber
 		    xlock.chance = uwep->spe * 2 + 75;
 		else xlock.chance = objects[uwep->otyp].oc_wldam * 2;
 		xlock.picktyp = picktyp;
@@ -690,14 +705,20 @@ doforce()		/* try to force a chest with your weapon */
 		    pline("This door is broken.");
 		    return(0);
 		default:
-		    c = yn("Break down the door?");
+		    if(picktyp == 3) c = yn("Force the door's lock?");
+			else c = yn("Break down the door?");
 		    if(c == 'n') return(0);
 
-		    if(picktyp == 1)
+		    if(picktyp == 3){
+				You("insert your mist tendrils into the door's lock.");
+				u.otiaxAttack = moves;
+		    } else if(picktyp == 1)
 			You("force your %s into a crack and pry.", xname(uwep));
 		    else
 			You("start bashing it with your %s.", xname(uwep));
-		    if (is_lightsaber(uwep))
+		    if (picktyp == 3)
+				xlock.chance = spiritDsize() * 10;
+		    else if (is_lightsaber(uwep))
 			xlock.chance = uwep->spe + 38;
 		    else
 			xlock.chance = uwep->spe + objects[uwep->otyp].oc_wldam;
