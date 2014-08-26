@@ -3003,6 +3003,10 @@ xchar x, y;
 	}
 
 	saleitem = saleable(shkp, obj);
+	if(obj->ostolen){
+		verbalize("That item is stolen.");
+		obj->sknown = TRUE;
+	}
 	if(!isgold && !obj->unpaid && saleitem)
 	    ltmp = set_cost(obj, shkp);
 
