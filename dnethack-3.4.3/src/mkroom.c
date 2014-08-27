@@ -505,7 +505,8 @@ struct mkroom *croom; /* NULL == choose random room */
 
 	tried = 0;
 	if(rn2(2)){
-		while ((tried++ < 50) && somexy(sroom, &pos)) {
+		i = 1;
+		while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
 			struct permonst *pmon;
 			if (!MON_AT(pos.x, pos.y)) {
 			struct monst *mtmp = makemon(&mons[PM_WEEPING_ANGEL], pos.x,pos.y, NO_MM_FLAGS);
@@ -516,7 +517,7 @@ struct mkroom *croom; /* NULL == choose random room */
 	}
 	tried = 0;
 	i = rnd(4);
-	while ((tried++ < 50) && (i >= 0) && somexy(sroom, &pos)) {
+	while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
 	    struct permonst *pmon;
 	    if (!MON_AT(pos.x, pos.y) && (pmon = mkclass(S_NYMPH,G_NOHELL))) {
 		struct monst *mtmp = makemon(pmon, pos.x,pos.y, NO_MM_FLAGS);
@@ -526,7 +527,7 @@ struct mkroom *croom; /* NULL == choose random room */
 	}
 	tried = 0;
 	i = rn1(5,3);
-	while ((tried++ < 50) && (i >= 0) && somexy(sroom, &pos)) {
+	while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
 	    struct permonst *pmon;
 	    if (!MON_AT(pos.x, pos.y) && (pmon = mkclass(S_PLANT,G_HELL|G_NOHELL))) {
 		struct monst *mtmp = makemon(pmon, pos.x,pos.y, NO_MM_FLAGS);
@@ -536,7 +537,7 @@ struct mkroom *croom; /* NULL == choose random room */
 	}
 	tried = 0;
 	i = rn1(3,3);
-	while ((tried++ < 50) && (i >= 0) && somexy(sroom, &pos)) {
+	while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
 	    if (levl[pos.x][pos.y].typ == ROOM && !MON_AT(pos.x,pos.y) &&
 		!nexttodoor(pos.x,pos.y)) {
 		if (rn2(3))
