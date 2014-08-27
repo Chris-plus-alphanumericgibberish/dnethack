@@ -196,7 +196,11 @@ boolean forced;
 		Your("life is saved!");
 		pline("Unfortunatly, your soul is torn to shreds.");
 	}
-	if(forced && !gnosis) losexp("shredding of the soul",TRUE,TRUE,TRUE);
+	if(forced && !gnosis){
+		losexp("shredding of the soul",TRUE,TRUE,TRUE);
+		if(flags.run) nomul(0, NULL);
+		stop_occupation();
+	}
 	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
 	if(spir != SEAL_JACK && forced && gnosis){
@@ -280,6 +284,8 @@ boolean forced;
 			u.spiritT[OUTER_SPIRIT]=0;
 		}
 	}
+	stop_occupation();
+	if(flags.run) nomul(0, NULL);
 	vision_full_recalc = 1;	/* visible monsters may have changed */
 	doredraw();
 	return;
