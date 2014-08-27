@@ -560,8 +560,9 @@ mon_regen(mon, digest_meal)
 struct monst *mon;
 boolean digest_meal;
 {
-	if (mon->mhp < mon->mhpmax &&
-	    (moves % 20 == 0 || regenerates(mon->data))) mon->mhp++;
+	if (mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
+	if (mon->mhp < mon->mhpmax && (moves % 20 == 0)) mon->mhp += mon->m_lev;
+	if (mon->mhp > mon->mhpmax) mon->mhp = mon->mhpmax;
 	if (mon->mspec_used) mon->mspec_used--;
 	if (digest_meal) {
 	    if (mon->meating) mon->meating--;

@@ -3294,12 +3294,14 @@ struct monst *mtmp, *victim;
 	    /* If they can grow up, be sure the level is high enough for that */
 	    if (oldtype != newtype && mons[newtype].mlevel > lev_limit)
 		lev_limit = (int)mons[newtype].mlevel;
-	    /* number of hit points to gain; unlike for the player, we put
-	       the limit at the bottom of the next level rather than the top */
-	    max_increase = rnd((int)victim->m_lev + 1);
-	    if (mtmp->mhpmax + max_increase > hp_threshold + 1)
-		max_increase = max((hp_threshold + 1) - mtmp->mhpmax, 0);
-	    cur_increase = (max_increase > 1) ? rn2(max_increase) : 0;
+	    // /* number of hit points to gain; unlike for the player, we put
+	       // the limit at the bottom of the next level rather than the top */
+	    // max_increase = rnd((int)victim->m_lev + 1);
+	    // if (mtmp->mhpmax + max_increase > hp_threshold + 1)
+			// max_increase = max((hp_threshold + 1) - mtmp->mhpmax, 0);
+	    // cur_increase = (max_increase > 0) ? rn2(max_increase)+1 : 0;
+		max_increase = 1;
+		cur_increase = 1;
 	} else {
 	    /* a gain level potion or wraith corpse; always go up a level
 	       unless already at maximum (49 is hard upper limit except
