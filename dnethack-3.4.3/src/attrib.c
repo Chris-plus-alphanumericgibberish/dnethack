@@ -485,27 +485,27 @@ exerchk()
 		    case A_STR: You((mod_val >0) ?
 				    "must have been exercising." :
 				    "must have been abusing your body.");
-				if(mod_val < 0)	AMAX(i) -= mod_val; /* permanent drain */
+				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    case A_DEX: You((mod_val >0) ?
 				    "must have been working on your reflexes." :
 				    "haven't been working on reflexes lately.");
-				if(mod_val < 0)	AMAX(i) -= mod_val; /* permanent drain */
+				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    case A_CON: You((mod_val >0) ?
 				    "must be leading a healthy life-style." :
 				    "haven't been watching your health.");
-				if(mod_val < 0)	AMAX(i) -= mod_val; /* permanent drain */
+				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    case A_INT: You((mod_val >0) ?
 					"must have been really concentrating lately." :
 					"haven't been thinking things through.");
-				if(mod_val < 0)	AMAX(i) -= mod_val; /* permanent drain */
+				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    case A_WIS: You((mod_val >0) ?
 				    "must have been very observant." :
 				    u.wimage ? "are being consumed by the image of the weeping angel!" : "haven't been paying attention.");
-				if(mod_val < 0)	AMAX(i) -= mod_val; /* permanent drain */
+				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    }
 		}
