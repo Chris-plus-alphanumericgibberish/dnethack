@@ -690,13 +690,14 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || mtmp->mspec_used || !ml) {
+	if(mtmp->mcan || mtmp->mspec_used || !ml || u.uinvulnerable) {
 	    cursetxt(mtmp, is_undirected_spell(mattk->adtyp, spellnum));
 	    return(0);
 	}
 
 	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
-	    mtmp->mspec_used = 10 - mtmp->m_lev;
+	    if(mtmp->data == &mons[PM_HEDROW_WARRIOR]) mtmp->mspec_used = d(4,4);
+		else mtmp->mspec_used = 10 - mtmp->m_lev;
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
 	}
 
