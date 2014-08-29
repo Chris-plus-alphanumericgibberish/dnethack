@@ -2348,6 +2348,10 @@ const char *fmt, *str;
 	    if (fmt && str)
 	    	pline(fmt, str, "scales");
 	    return TRUE;
+	} else if (u.sealsActive&SEAL_EDEN) {
+	    if (fmt && str)
+	    	pline(fmt, str, "skin");
+	    return TRUE;
 	}
 	return FALSE;
 }
