@@ -2721,7 +2721,9 @@ cleanup:
 	}
 	if((mtmp->mpeaceful && !rn2(2)) || mtmp->mtame)	change_luck(-1);
 	if (is_unicorn(mdat) &&
-				sgn(u.ualign.type) == sgn(mdat->maligntyp)) {
+		sgn(u.ualign.type) == sgn(mdat->maligntyp) && 
+		u.ualign.type != A_VOID
+	) {
 		change_luck(-5);
 		u.hod += 10;
 		You_feel("guilty...");
