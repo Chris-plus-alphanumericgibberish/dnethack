@@ -1767,7 +1767,7 @@ role_init()
 			urole.cgod = DrowMaleCgod;
 		}
 	} else if(Race_if(PM_ELF) && Role_if(PM_RANGER)){
-		urole.filecode = "Elf";
+//		urole.filecode = "Elf";
 		urole.lgod = ElfRangerLgod;
 		urole.ngod = ElfRangerNgod;
 		urole.cgod = ElfRangerCgod;
