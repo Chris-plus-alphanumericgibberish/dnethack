@@ -736,7 +736,7 @@ int thrown;
 			}
 		}
 	    else tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,rnd(5)*2,0) : rnd(2);
-		if(u.specialSealsActive&SEAL_DAHLVER_NAR) tmp += d(2,6)+2;
+		if(u.specialSealsActive&SEAL_DAHLVER_NAR) tmp += d(2,6)+min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	    valid_weapon_attack = (tmp > 1);
 		if(uarmg){
 	    /* blessed gloves give bonuses when fighting 'bare-handed' */
