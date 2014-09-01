@@ -95,6 +95,9 @@ register struct attack *mattk;
 		default:
 			pline("%s hits!", Monnam(mtmp));
 	    }
+		if(mattk->adtyp == AD_WET){
+			You("are soaking wet!");
+		}
 }
 
 STATIC_OVL void
