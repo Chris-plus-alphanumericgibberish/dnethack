@@ -423,7 +423,7 @@ int what;		/* should be a long */
 		     * discrepancy with stuff in pits.
 		     */
 		    if ((ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) &&
-			(!u.utrap || (u.utrap && u.utraptype != TT_PIT))) {
+			(!u.utrap || (u.utrap && u.utraptype != TT_PIT)) && !Flying) {
 			read_engr_at(u.ux, u.uy);
 			return(0);
 		    }
