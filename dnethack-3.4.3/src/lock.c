@@ -674,11 +674,11 @@ doforce()		/* try to force a chest with your weapon */
 		return(0);
 	    }
 	    /* Lightsabers dig through doors and walls via dig.c */
-	    if (is_pick(uwep) ||
+	    if (picktyp != 3 && (is_pick(uwep) ||
 #ifdef LIGHTSABERS
 		    is_lightsaber(uwep) ||
 #endif
-		    is_axe(uwep)) 
+		    is_axe(uwep))) 
 	    	return use_pick_axe2(uwep);
 
 	    if(!IS_DOOR(door->typ)) { 
