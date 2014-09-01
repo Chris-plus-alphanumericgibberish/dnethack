@@ -1119,7 +1119,8 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(u.spirit[GPREM_SPIRIT]) numBound++;
 		if(u.spirit[ALIGN_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
-		Sprintf(buf, "Your soul is bound to ");
+		Sprintf(buf, "Your soul ");
+		enl_msg(buf, "are", "were", " bound to .");
 		for(i=0;i<NUM_BIND_SPRITS;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
@@ -2187,13 +2188,13 @@ signs_mirror()
 			if(!(uarmc))
 				putstr(en_win, 0, "Maggots burrow through your skin.");
 			else
-				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+				putstr(en_win, 0, "Your rot is hidden under your clothes.");
 			message = TRUE;
 		} else if(moves>20000 && moves <= 50000){
 			if(!(uarmc && uarmg && uarmf))
 				putstr(en_win, 0, "Your skin is rotting off.");
 			else
-				putstr(en_win, 0, "Your rotting is hidden under your clothes.");
+				putstr(en_win, 0, "Your rot is hidden under your clothes.");
 			message = TRUE;
 		} else if(moves>50000 && moves <= 100000){
 			if(!(uarmc && uarmg && uarmf && uarm && uarmh))
