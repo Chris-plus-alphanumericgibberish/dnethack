@@ -1066,8 +1066,8 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
 				 obj->oartifact == ART_WINDRIDER
-			  ) &&
-			(obj->blessed || rn2(100))) {
+			  )
+		) {
 		    /* we must be wearing Gauntlets of Power to get here */
 		    if(obj->oartifact != ART_WINDRIDER) sho_obj_return_to_u(obj);	    /* display its flight */
 
