@@ -679,12 +679,20 @@ register boolean edge; /* Allows room walls to intrude slightly into river. */
 	if (levl[x][y].typ == ROOM && !rn2(13))
 		(void) mksobj_at(BOULDER, x, y, TRUE, FALSE);
 	/* Sea monsters */
-	if (levl[x][y].typ == POOL && !rn2(85-depth(&u.uz))) {
-		if (depth(&u.uz) > 19 && !rn2(3)) {monster = PM_ELECTRIC_EEL;}
-			else if (depth(&u.uz) > 15 && !rn2(3)) {monster = PM_GIANT_EEL;}
-			else if (depth(&u.uz) > 11 && !rn2(2)) {monster = PM_SHARK;}
-			else if (depth(&u.uz) > 7 && rn2(4)) {monster = PM_PIRANHA;}
-		(void) makemon(&mons[monster], x, y, NO_MM_FLAGS);
+	if (levl[x][y].typ == POOL){
+		if(!rn2(85-depth(&u.uz))) {
+			if (depth(&u.uz) > 19 && !rn2(3)) {monster = PM_ELECTRIC_EEL;}
+				else if (depth(&u.uz) > 15 && !rn2(3)) {monster = PM_GIANT_EEL;}
+				else if (depth(&u.uz) > 11 && !rn2(2)) {monster = PM_SHARK;}
+				else if (depth(&u.uz) > 7 && rn2(4)) {monster = PM_PIRANHA;}
+			(void) makemon(&mons[monster], x, y, NO_MM_FLAGS);
+		}
+		if(!rn2(140-depth(&u.uz))){
+			mkobj_at(RANDOM_CLASS, x, y, FALSE);
+		}
+		else if(!rn2(100-depth(&u.uz))){
+		  (void) mkgold((long) rn1(10 * level_difficulty(),10), x, y);
+		}
 	}
 	/* Underground rivers are relatively open spaces, so light them. */
 	levl[x][y].lit = 1;
