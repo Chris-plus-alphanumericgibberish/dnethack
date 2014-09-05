@@ -1121,7 +1121,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
 		Sprintf(buf, "Your soul ");
 		enl_msg(buf, "are", "were", " bound to .");
-		for(i=0;i<NUM_BIND_SPRITS;i++){
+		for(i=0;i<ALIGN_SPIRIT;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
 					Strcat(buf,sealNames[j]);
