@@ -951,8 +951,8 @@ dospirit()
 	if(!u.sealsActive && !u.specialSealsActive){
 		if(Role_if(PM_EXILE) && u.ulevel > 1 && u.spiritPColdowns[PWR_GNOSIS_PREMONITION] < monstermoves){
 			if(yn("Use Gnosis Premonition?") == 'y'){
-				spiriteffects(PWR_GNOSIS_PREMONITION, FALSE);
-				u.spiritPColdowns[PWR_GNOSIS_PREMONITION] = moves + 125;
+				if(spiriteffects(PWR_GNOSIS_PREMONITION, FALSE))
+					u.spiritPColdowns[PWR_GNOSIS_PREMONITION] = moves + 125;
 			}
 			return 1;
 		} else {
@@ -3486,8 +3486,8 @@ int *power_no;
 		for(s=0; s<NUM_BIND_SPRITS; s++){
 			if(u.spirit[s]){
 				j=0;
-				place == 1;
-				while(!(spiritPOwner[u.spiritPOrder[i]] & place)){
+				place = 1;
+				while(!(spiritPOwner[u.spiritPOrder[j]] & place)){
 					j++;
 					place = place << 1;
 				}
@@ -3510,7 +3510,8 @@ int *power_no;
 			if(((u.spiritPOrder[i] != -1 &&
 				spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
 				!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
-				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL) &&
+				(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL && 
+				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL)) &&
 				u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves
 			){
 				Sprintf(buf, spiritPName[u.spiritPOrder[i]]);
