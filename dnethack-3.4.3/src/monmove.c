@@ -508,9 +508,8 @@ struct monst *mtmp;
   if(Race_if(PM_DROW)){
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
-	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
-	    (is_rider(mtmp->data) && !(mtmp->data == &mons[PM_NAZGUL])) || 
-		mtmp->data == &mons[PM_MINOTAUR])
+	    (is_rider(mtmp->data))
+	)
 		return(FALSE);
 	return (boolean) (mtmp->m_lev < u.ulevel) &&
 					(mtmp->data != &mons[PM_ELDER_PRIEST]) &&
