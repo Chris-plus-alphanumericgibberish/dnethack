@@ -1058,9 +1058,8 @@ int spellnum;
 	if (reflects || Shock_resistance) {
 	    shieldeff(u.ux, u.uy);
 	    dmg = 0;
-	    if (reflects)
-		break;
-	} else{
+	    if (reflects) break;
+	} else {
 	    dmg = d(8, 6);
 		destroy_item(WAND_CLASS, AD_ELEC);
 		destroy_item(RING_CLASS, AD_ELEC);
@@ -1366,7 +1365,9 @@ int spellnum;
 		}
         break;
     case WEAKEN_YOU:		/* drain strength */
-	if (Antimagic) {
+	if (Fixed_abil) {
+		You_feel("momentarily weakened.");
+	} else if (Antimagic) {
 	    shieldeff(u.ux, u.uy);
 		if(rn2(2)){
 			You_feel("a bit weaker.");
