@@ -3345,6 +3345,12 @@ struct obj *obj;
 	if(otmp) carvee = otmp;
 	else return 0;
 	
+	if(carvee == obj){
+//		pline("Your grasp of physics is appalling.");
+		pline("Is this a zen thing?");
+		return 0;
+	}
+	
 	if(carvee->spe > obj->spe){
 		pline("The %s is too dull to cut into the %s.", xname(obj), xname(carvee));
 		return 0;
