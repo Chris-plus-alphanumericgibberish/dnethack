@@ -1287,6 +1287,7 @@ static const char * const bogusmons[] = {
 	"Minosaur", "vestigal virgin", "octagenarian", /*"saint called Mary of the Immaculate Contraption",*/ /*non campus mentus*/
 	"spherical cow",		/* Joke about theoretical physicists */
 	"arsassin",				/* Psych */
+	"booksh elves",			/* Ciel, on freenode */
         "one-winged dewinged stab-bat",  /* KoL */
         "praying mantis",
         "arch-pedant",
