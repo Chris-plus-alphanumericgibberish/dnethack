@@ -81,7 +81,6 @@ const struct innate {
 		     {  11, &(HFast), "quick", "slow" },
 		     {	 0, 0, 0, 0 } },
 
-			 
 	pri_abil[] = { {	15, &(HWarning), "sensitive", "" },
 		     {  20, &(HFire_resistance), "cool", "warmer" },
 		     {	 0, 0, 0, 0 } },
