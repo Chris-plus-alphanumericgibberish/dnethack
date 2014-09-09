@@ -1102,16 +1102,17 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		enl_msg(buf, "are", "were", " deployed.");
 		Sprintf(buf, "%d weakness from being studied.", u.ustdy);
 		you_have(buf);
-	}
-	
-	if(u.sealsActive || u.specialSealsActive){
-		int i,j,numBound,numFound=0;
 		Sprintf(buf, "spirits bound: %d", u.sealCounts);
 		you_have(buf);
 		Sprintf(buf, "seals active: %lx", u.sealsActive);
 		you_have(buf);
 		Sprintf(buf, "special seals active: %lx", u.specialSealsActive);
 		you_have(buf);
+	}
+	
+	if(u.sealsActive || u.specialSealsActive){
+		int i,j,numBound,numFound=0;
+		char prebuf[BUFSZ];
 		numBound = u.sealCounts;
 		if(u.spirit[QUEST_SPIRIT]) numBound++;
 		if(Role_if(PM_EXILE) && u.uevent.uhand_of_elbereth) numBound++;
@@ -1119,8 +1120,8 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(u.spirit[GPREM_SPIRIT]) numBound++;
 		if(u.spirit[ALIGN_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
-		Sprintf(buf, "Your soul ");
-		enl_msg(buf, "are", "were", " bound to .");
+		Sprintf(prebuf, "Your soul ");
+		Sprintf(buf, " bound to ");
 		for(i=0;i<ALIGN_SPIRIT;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
@@ -1216,8 +1217,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
-		Strcat(buf,".");
-		putstr(en_win, 0, buf);
+		enl_msg(prebuf, "is", "was", buf);
 	}
 #endif
 
