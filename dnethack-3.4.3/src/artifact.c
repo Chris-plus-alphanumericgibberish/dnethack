@@ -1874,12 +1874,14 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 				otmp->dknown = TRUE;
 				mtmp = makemon(&mons[PM_FIRE_VORTEX], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-				initedog(mtmp);
-				mtmp->m_lev = u.ulevel / 2 + 1;
-				mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-				mtmp->mhp =  mtmp->mhpmax;
-				mtmp->mtame = 10;
-				mtmp->mpeaceful = 1;
+				if(mtmp){
+					initedog(mtmp);
+					mtmp->m_lev = u.ulevel / 2 + 1;
+					mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+					mtmp->mhp =  mtmp->mhpmax;
+					mtmp->mtame = 10;
+					mtmp->mpeaceful = 1;
+				}
 				messaged = TRUE;
 		} else if(mdef->data == &mons[PM_EARTH_ELEMENTAL] && youattack){
 				struct monst *mtmp = 0;
@@ -1887,12 +1889,14 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 				otmp->dknown = TRUE;
 				mtmp = makemon(&mons[PM_DUST_VORTEX], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-				initedog(mtmp);
-				mtmp->m_lev = u.ulevel / 2 + 1;
-				mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-				mtmp->mhp =  mtmp->mhpmax;
-				mtmp->mtame = 10;
-				mtmp->mpeaceful = 1;
+				if(mtmp){
+					initedog(mtmp);
+					mtmp->m_lev = u.ulevel / 2 + 1;
+					mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+					mtmp->mhp =  mtmp->mhpmax;
+					mtmp->mtame = 10;
+					mtmp->mpeaceful = 1;
+				}
 				messaged = TRUE;
 		} else if(mdef->data == &mons[PM_WATER_ELEMENTAL] && youattack){
 				struct monst *mtmp = 0;
@@ -1900,12 +1904,14 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 				otmp->dknown = TRUE;
 				mtmp = makemon(&mons[PM_FOG_CLOUD], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-				initedog(mtmp);
-				mtmp->m_lev = u.ulevel / 2 + 1;
-				mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-				mtmp->mhp =  mtmp->mhpmax;
-				mtmp->mtame = 10;
-				mtmp->mpeaceful = 1;
+				if(mtmp){
+					initedog(mtmp);
+					mtmp->m_lev = u.ulevel / 2 + 1;
+					mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+					mtmp->mhp =  mtmp->mhpmax;
+					mtmp->mtame = 10;
+					mtmp->mpeaceful = 1;
+				}
 				messaged = TRUE;
 		}
 	}
@@ -3497,12 +3503,14 @@ arti_invoke(obj)
 					while(n--) {
 						pm = &mons[summons[d(1,8)]];
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-						initedog(mtmp);
-						if(u.ulevel > 12) mtmp->m_lev += u.ulevel / 3;
-						mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-						mtmp->mhp =  mtmp->mhpmax;
-						mtmp->mtame = 10;
-						mtmp->mpeaceful = 1;
+						if(mtmp){
+							initedog(mtmp);
+							if(u.ulevel > 12) mtmp->m_lev += u.ulevel / 3;
+							mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+							mtmp->mhp =  mtmp->mhpmax;
+							mtmp->mtame = 10;
+							mtmp->mpeaceful = 1;
+						}
 					}
 					obj->spe = obj->spe - 7;// lose seven charge
 					pline("Your weapon rattles alarmingly!  It has become exceedingly flawed!");
@@ -3524,11 +3532,13 @@ arti_invoke(obj)
 					while(n--) {
 						pm = &mons[summons[d(1,8)]];
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
-						initedog(mtmp);
-						mtmp->m_lev += 7;
-						if(u.ulevel > 12) mtmp->m_lev += u.ulevel / 3;
-						mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-						mtmp->mhp =  mtmp->mhpmax;
+						if(mtmp){
+							initedog(mtmp);
+							mtmp->m_lev += 7;
+							if(u.ulevel > 12) mtmp->m_lev += u.ulevel / 3;
+							mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+							mtmp->mhp =  mtmp->mhpmax;
+						}
 					}
 					pseudo = mksobj(SPE_CHARM_MONSTER, FALSE, FALSE);
 					pseudo->blessed = pseudo->cursed = 0;
@@ -4480,15 +4490,17 @@ read_necro(VOID_ARGS)
 					u.uen -= 20;
 					for(i=max(1, d(1,20) - 16); i > 0; i--){
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
-						initedog(mtmp);
-						mtmp->m_lev += d(1,15) - 5;
-						if(u.ulevel < mtmp->m_lev){
-							mtmp->mtame = 0;
-							mtmp->mpeaceful = 0;
-							mtmp->mtraitor = 1;
+						if(mtmp){
+							initedog(mtmp);
+							mtmp->m_lev += d(1,15) - 5;
+							if(u.ulevel < mtmp->m_lev){
+								mtmp->mtame = 0;
+								mtmp->mpeaceful = 0;
+								mtmp->mtraitor = 1;
+							}
+							mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+							mtmp->mhp =  mtmp->mhpmax;
 						}
-						mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-						mtmp->mhp =  mtmp->mhpmax;
 					}
 				}
 			break;
@@ -4498,7 +4510,7 @@ read_necro(VOID_ARGS)
 					if(u.uen >= 10){
 						u.uen -= 10;
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
-						initedog(mtmp);
+						if(mtmp) initedog(mtmp);
 					}
 				}
 			break;
@@ -4515,16 +4527,18 @@ read_necro(VOID_ARGS)
 					u.uen -= 20;
 					for(i=max(1, d(1,10) - 2); i > 0; i--){
 						mtmp = makemon(&mons[oozes[d(1,11)]], u.ux+d(1,5)-3, u.uy+d(1,5)-3, MM_EDOG|MM_ADJACENTOK);
-						initedog(mtmp);
-						mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
-						if(u.ulevel < mtmp->m_lev){
-							mtmp->mtame = 0;
-							mtmp->mpeaceful = 0;
-							mtmp->mtraitor = 1;
+						if(mtmp){
+							initedog(mtmp);
+							mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
+							if(u.ulevel < mtmp->m_lev){
+								mtmp->mtame = 0;
+								mtmp->mpeaceful = 0;
+								mtmp->mtraitor = 1;
+							}
+							mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+							mtmp->mhp =  mtmp->mhpmax;
+							mtmp->mcrazed = 1;
 						}
-						mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-						mtmp->mhp =  mtmp->mhpmax;
-						mtmp->mcrazed = 1;
 					}
 				}
 			break;
@@ -4532,13 +4546,15 @@ read_necro(VOID_ARGS)
 				if(u.uen >= 60){
 					u.uen -= 60;
 					mtmp = makemon(&mons[devils[d(1,15)]], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
-					initedog(mtmp);
-					mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
-					if(!rn2(9)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
-					if(u.ulevel < mtmp->m_lev && rn2(2)){
-						mtmp->mtame = 0;
-						mtmp->mpeaceful = 0;
-						mtmp->mtraitor = 1;
+					if(mtmp){
+						initedog(mtmp);
+						mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
+						if(!rn2(9)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
+						if(u.ulevel < mtmp->m_lev && rn2(2)){
+							mtmp->mtame = 0;
+							mtmp->mpeaceful = 0;
+							mtmp->mtraitor = 1;
+						}
 					}
 				}
 			break;
@@ -4546,14 +4562,16 @@ read_necro(VOID_ARGS)
 				if(u.uen >= 45){
 					u.uen -= 45;
 					mtmp = makemon(&mons[demons[d(1,15)]], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
-					initedog(mtmp);
-					if(!rn2(6)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
-					if(u.ulevel < mtmp->m_lev || rn2(2)){
-						mtmp->mtame = 0;
-						mtmp->mpeaceful = 0;
-						mtmp->mtraitor = 1;
+					if(mtmp){
+						initedog(mtmp);
+						if(!rn2(6)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
+						if(u.ulevel < mtmp->m_lev || rn2(2)){
+							mtmp->mtame = 0;
+							mtmp->mpeaceful = 0;
+							mtmp->mtraitor = 1;
+						}
+						mtmp->mcrazed = 1;
 					}
-					mtmp->mcrazed = 1;
 				}
 			break;
 		}
