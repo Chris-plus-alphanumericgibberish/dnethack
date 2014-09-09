@@ -1631,7 +1631,7 @@ int tx,ty;
 						break;
 						case 13:
 							otmp = mksobj(CORPSE, TRUE, FALSE);
-							otmp->corpsenm = androCorpses[SIZE(androCorpses)];
+							otmp->corpsenm = androCorpses[rn2(SIZE(androCorpses))];
 							otmp->oeaten = mons[otmp->corpsenm].cnutrit;
 							consume_oeaten(otmp, 1);
 							otmp->owt = weight(otmp);
@@ -3146,8 +3146,8 @@ int tx,ty;
 					a = rn2(SIZE(alignmentThings));
 					b = rn2(SIZE(alignmentThings));
 				}while(a == b);
-				pline("%s",alignmentThings[rn2(SIZE(alignmentThings))]);
-				pline("%s",alignmentThings[rn2(SIZE(alignmentThings))]);
+				pline("%s",alignmentThings[a]);
+				pline("%s",alignmentThings[b]);
 				pline("You shake free of your trance, but you feel that something sticks to you still....");
 				bindspirit(ep->ward_id);
 				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] = moves + bindingPeriod;
@@ -3158,8 +3158,7 @@ int tx,ty;
 		if(u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] < moves){
 			if(Role_if(PM_EXILE)){
 				pline("As you contemplate the seal, your mind fills with unprecidented emotions and indecipherable thoughts,");
-				pline("While the world warps and quakes around you.");
-				pline("While the world warps and quakes around you.");
+				pline("while the world warps and quakes around you.");
 				pline("The experience ends as quickly as it began.");
 				You("don't know what that was about, but it seems your contract was accepted.");
 				make_confused(5, FALSE);
