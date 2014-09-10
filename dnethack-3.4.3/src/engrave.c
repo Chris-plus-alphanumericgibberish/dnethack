@@ -60,6 +60,7 @@ static const char *random_mesg[] = {
 	"4 8 15 16 23 42", /* Lost */
 	
 	"stth was here", /* First ascension */
+	"allihaveismymind followed stth", /* Second ascension */
 	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */

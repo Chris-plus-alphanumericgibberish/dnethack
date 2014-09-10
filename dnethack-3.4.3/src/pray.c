@@ -2178,6 +2178,8 @@ const char * const hallu_gods[] = {
 	"marvin",
 	"stth the first demigod",
 	"stth the wizard",
+	"allihaveismymind the second demigod",
+	"allihaveismymind the valkyrie",
 	"Dudley",
 	"the RNG"
 };
