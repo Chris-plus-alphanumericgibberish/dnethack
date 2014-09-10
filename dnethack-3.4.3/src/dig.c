@@ -1763,7 +1763,6 @@ register struct monst *mtmp;
 	    }
 	} else if (IS_TREE(here->typ)) {
 	    here->typ = ROOM;
-		if(u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 //	    if (pile && pile < 5)
 //		(void) rnd_treefruit_at(mtmp->mx, mtmp->my);
 	} else {
