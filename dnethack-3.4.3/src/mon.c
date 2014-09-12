@@ -781,8 +781,8 @@ movemon()
 		} else if(mtmp->data == &mons[PM_RAZORVINE] && 
 				  mtmp->mhp == mtmp->mhpmax && 
 				  !mtmp->mcan && 
-				  !rn2(4) && 
-				  !((monstermoves + mtmp->mnum) % 10)
+				  !((monstermoves + mtmp->mnum) % (30-depth(&u.uz)/2)) && 
+				  !rn2(4)
 		){
 			struct monst *sprout = (struct monst *) 0;
 			sprout = makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH|NO_MINVENT);
