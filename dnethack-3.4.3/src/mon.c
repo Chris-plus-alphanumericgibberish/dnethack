@@ -2296,11 +2296,11 @@ boolean was_swallowed;			/* digestion */
 			int lvlgain = 0;
 			int lvls = 0;
 			if((mdat==&mons[PM_DEEP_ONE])){
-				lvlgain = 1;
+				lvlgain = rn2(4) ? 0 : 1;
 			} else if((mdat==&mons[PM_DEEPER_ONE])){
-				lvlgain = 2;
+				lvlgain = rn2(2);
 			} else if((mdat==&mons[PM_DEEPEST_ONE])){
-				lvlgain = 4;
+				lvlgain = 1;
 			}
 
 			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
