@@ -1947,6 +1947,7 @@ dopois:
 			else if(mndx == PM_PALE_NIGHT && could_seduce(mtmp, &youmonst, mattk) 
 				&& !mtmp->mcan){
 				dopaleseduce(mtmp);
+				return 3;
 			}
 			else if(could_seduce(mtmp, &youmonst, mattk) == 1 
 				&& !mtmp->mcan){
@@ -5443,7 +5444,13 @@ register struct monst *mon;
 	boolean helpless = FALSE;
 	char qbuf[QBUFSZ];
 	
-	if((ward_at(u.ux,u.uy) == ELDER_SIGN && num_wards_at(u.ux, u.uy) == 6)) return 0;
+	if((ward_at(u.ux,u.uy) == ELDER_SIGN && num_wards_at(u.ux, u.uy) == 6) || 
+		(ward_at(u.ux,u.uy) == ELDER_EYE && num_wards_at(u.ux, u.uy) == 7) || 
+		ward_at(u.ux,u.uy) == PENTAGRAM || ward_at(u.ux,u.uy) == HEPTAGRAM ||
+		ward_at(u.ux,u.uy) == HEXAGRAM || 
+		(scaryElb(mon) && sengr_at("Elbereth", x, y)) || 
+		(scaryLol(mon) && sengr_at("Lolth", x, y))
+	) return 0;
 	
 	if (unconscious()) {/*Note: is probably not going to be possible to be unconscious and enter this function*/
 		You("are having a horrible dream.");

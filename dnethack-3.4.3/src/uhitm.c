@@ -3554,6 +3554,11 @@ dobpois:
 
 	  	  case AD_SSEX:{
 			int mndx = monsndx(mon->data);
+			
+			static int engagering4 = 0;
+			if (!engagering4) engagering4 = find_engagement_ring();
+			if ( (uleft && uleft->otyp == engagering4) || (uright && uright->otyp == engagering4)) break;
+			
 			if(mndx == PM_MOTHER_LILITH)
 				if(mon->mcan) mon->mcan=0;
 			if(mndx == PM_MOTHER_LILITH && could_seduce(mon, &youmonst, &(ptr->mattk[i])) == 1){
@@ -3583,6 +3588,7 @@ dobpois:
 			}
 			else if(mndx == PM_PALE_NIGHT){
 				dopaleseduce(mon);
+				nomul(-1,"staring at a veil");
 			}
 			else if(could_seduce(mon, &youmonst, &(ptr->mattk[i])) == 1 
 				&& !mon->mcan){
