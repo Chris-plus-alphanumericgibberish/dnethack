@@ -5445,11 +5445,11 @@ register struct monst *mon;
 	char qbuf[QBUFSZ];
 	
 	if((ward_at(u.ux,u.uy) == ELDER_SIGN && num_wards_at(u.ux, u.uy) == 6) || 
-		(ward_at(u.ux,u.uy) == ELDER_EYE && num_wards_at(u.ux, u.uy) == 7) || 
+		(ward_at(u.ux,u.uy) == ELDER_ELEMENTAL_EYE && num_wards_at(u.ux, u.uy) == 7) || 
 		ward_at(u.ux,u.uy) == PENTAGRAM || ward_at(u.ux,u.uy) == HEPTAGRAM ||
 		ward_at(u.ux,u.uy) == HEXAGRAM || 
-		(scaryElb(mon) && sengr_at("Elbereth", x, y)) || 
-		(scaryLol(mon) && sengr_at("Lolth", x, y))
+		(scaryElb(mon) && sengr_at("Elbereth", u.ux, u.uy)) || 
+		(scaryLol(mon) && sengr_at("Lolth", u.ux, u.uy))
 	) return 0;
 	
 	if (unconscious()) {/*Note: is probably not going to be possible to be unconscious and enter this function*/
