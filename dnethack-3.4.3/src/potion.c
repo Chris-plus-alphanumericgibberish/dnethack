@@ -891,6 +891,7 @@ as_extra_healing:
 			u.uenmax += (otmp->cursed) ? -num : num;
 			u.uen += (otmp->cursed) ? -100 : 100;
 			if(u.uenmax <= 0) u.uenmax = 0;
+			if(u.uen > u.uenmax) u.uen = u.uenmax;
 			if(u.uen <= 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 			flags.botl = 1;
 			exercise(A_WIS, TRUE);
