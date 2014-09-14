@@ -80,7 +80,7 @@ STATIC_OVL struct Jitem Pirate_items[] = {
 	{ SCIMITAR, "cutlass" },
 	{ SMALL_SHIELD, "buckler" },
 	{ SACK, "ditty bag" },
-	{ OILSKIN_SACK, "buccaneer's ditty bag" },
+	{ OILSKIN_SACK, "oilskin ditty bag" },
 	{ LARGE_BOX, "foot locker" },
 	{ CLUB, "belaying pin" },
 	{0, "" }
@@ -3129,8 +3129,7 @@ typfnd:
 		 (otmp->oartifact >= ART_ROD_OF_SEVEN_PARTS && otmp->oartifact <= ART_SILVER_KEY) || //no wishing for alignment quest artifacts
 		 (otmp->oartifact >= ART_SWORD_OF_ERATHAOL && otmp->oartifact <= ART_HAMMER_OF_BARQUIEL) || //no wishing for angel artifacts
 		 (otmp->oartifact >= ART_GENOCIDE && otmp->oartifact <= ART_DOOMSCREAMER) || //no wishing for demon artifacts
-		 (otmp->oartifact == ART_KUSANAGI_NO_TSURUGI) ||
-		 (Role_if(PM_PIRATE) && otmp->oartifact == ART_REAVER))
+		 (otmp->oartifact >= ART_STAFF_OF_THE_ARCHMAGI && otmp->oartifact <= ART_SNICKERSNEE))
 #ifdef WIZARD
 	    && !wizard
 #endif
