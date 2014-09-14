@@ -227,10 +227,10 @@ struct monst *victim;
 	    else if (vismon)
 		pline("%s's %s %s", Monnam(victim), aobjnam(otmp,"are"), txt);
 	}
-	if (!rn2(2)) {
+	if (!rn2(otmp->blessed ? 4 : 2)) {
 	    otmp->greased = 0;
 	    if (carried(otmp)) {
-		pline_The("grease dissolves.");
+		pline_The("grease on %s dissolves.",the(xname(otmp)));
 		update_inventory();
 	    }
 	}
