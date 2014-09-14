@@ -1581,7 +1581,7 @@ resistances_enlightenment()
 		if(u.spirit[ALIGN_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
 		Sprintf(buf, "Your soul is bound to ");
-		for(i=0;i<NUM_BIND_SPRITS;i++){
+		for(i=0;i<QUEST_SPIRIT;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
 					Strcat(buf,sealNames[j]);
@@ -2218,6 +2218,15 @@ signs_mirror()
 	}
 	if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !(ublindf && ublindf->otyp != LENSES)){
 		putstr(en_win, 0, "You gave gemstones for eyes!");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_COUNCIL && !NoBInvis){
+		if(!ublindf || ublindf->otyp == LENSES)
+			putstr(en_win, 0, "Your eyes shine like stars.");
+		else if(ublindf && ublindf->otyp == MASK)
+			putstr(en_win, 0, "Your star-like eyes shine through your mask.");
+		else
+			putstr(en_win, 0, "Your star-like eyes are covered by your blindfold.");
 		message = TRUE;
 	}
 	
