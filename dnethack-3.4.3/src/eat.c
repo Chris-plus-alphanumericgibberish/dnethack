@@ -1746,7 +1746,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	} if (freezing(&mons[mnum]) && !Cold_resistance) {
 		tp++;
 		You("feel your stomach freeze!"); /* not body_part() */
-		losehp(rnd(12) + rnd(12), "crionic corpse", KILLED_BY_AN);
+		losehp(rnd(12) + rnd(12), "cryonic corpse", KILLED_BY_AN);
 	} if (burning(&mons[mnum]) && !Fire_resistance) {
 		tp++;
 		You("feel your stomach boil!"); /* not body_part() */
