@@ -33,7 +33,10 @@ struct monst *mon;
 	    atyp = (ptr->maligntyp==A_NONE) ? A_NONE : sgn(ptr->maligntyp);
 	}
 	    
-	if (is_dprince(ptr) || (ptr == &mons[PM_WIZARD_OF_YENDOR])) {
+	if(ptr == &mons[PM_SHAKTARI]) {
+	    dtype = PM_MARILITH;
+		cnt = d(1,6);
+	} else if (is_dprince(ptr) || (ptr == &mons[PM_WIZARD_OF_YENDOR])) {
 	    dtype = (!rn2(20)) ? dprince(atyp) :
 				 (!rn2(4)) ? dlord(atyp) : ndemon(atyp);
 	    cnt = (!rn2(4) && is_ndemon(&mons[dtype])) ? 2 : 1;
@@ -286,11 +289,13 @@ aligntyp atyp;
 	int tryct, pm;
 
 	for (tryct = 0; tryct < 20; tryct++) {
-	    pm = rn1(PM_YEENOGHU + 1 - PM_JUIBLEX, PM_JUIBLEX);
+	    do pm = rn1(PM_YEENOGHU + 1 - PM_JUIBLEX, PM_JUIBLEX);
+		while(pm == PM_SHAKTARI);
 	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
+	
 	return(ndemon(atyp));	/* approximate */
 }
 
