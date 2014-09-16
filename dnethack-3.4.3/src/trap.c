@@ -2754,7 +2754,11 @@ register boolean force, here, forcelethe;
 	boolean obj_destroyed = FALSE;
 //	int is_lethe = level.flags.lethe || forcelethe;
 	int is_lethe = 0;
-	/* Scrolls, spellbooks, potions, weapons and
+	if( uarmc
+		&& uarmc->otyp == OILSKIN_CLOAK
+		&& (!uarmc->cursed || rn2(3))) {
+			return 0;
+	}	/* Scrolls, spellbooks, potions, weapons and
 	   pieces of armor may get affected by the water */
 	for (; obj; obj = otmp) {
 		otmp = here ? obj->nexthere : obj->nobj;
@@ -2781,12 +2785,6 @@ register boolean force, here, forcelethe;
 			 */
 			continue;
 		/* An oil skin cloak protects your body armor  */
-		} else if( obj->oclass == ARMOR_CLASS
-			&& obj == uarm
-			&& uarmc
-			&& uarmc->otyp == OILSKIN_CLOAK
-			&& (!uarmc->cursed || rn2(3))) {
-		    continue;
 		} else {
 		    /* The Lethe strips blessed and cursed status... */
 		    if (is_lethe) {
