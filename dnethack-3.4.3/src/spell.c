@@ -3659,8 +3659,6 @@ int spell;
 	
 	if(uarm && uarm->otyp == DROVEN_CHAIN_MAIL) splcaster -= urole.spelarmr/2;
 	
-	if(uarm && uarm->oartifact == ART_DRAGON_PLATE) splcaster += urole.spelarmr;
-
 	if (uarms) splcaster += urole.spelshld;
 
 	if (uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_BRILLIANCE)
