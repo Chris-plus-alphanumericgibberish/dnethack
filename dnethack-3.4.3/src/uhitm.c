@@ -2336,16 +2336,8 @@ register struct attack *mattk;
 						update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);
 					}
 				}
-				dx = rn2(3) - 1;
-				dy = rn2(3) - 1;
-				if(dx || dy){
-					Your("winds toss %s away.",doname(otmp2));
-					m_throw(&youmonst, mdef->mx, mdef->my, dx, dy, 1, otmp2,TRUE);
-				}
-				else{
-					Your("winds drop %s at your feet.",doname(otmp2));
-					(void) dropy(otmp2);
-				}
+				Your("mist tendrils free %s.",doname(otmp2));
+				mdrop_obj(mdef,otmp2,FALSE);
 				/* more take-away handling, after theft message */
 				if (unwornmask & W_WEP) {		/* stole wielded weapon */
 					possibly_unwield(mdef, FALSE);
