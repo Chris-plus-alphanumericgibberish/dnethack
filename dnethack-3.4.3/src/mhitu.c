@@ -1228,6 +1228,7 @@ hitmu(mtmp, mattk)
 			} else dmg += dmgval(otmp, &youmonst, 0);
 
 			if (objects[otmp->otyp].oc_material == SILVER &&
+				!(u.sealsActive&SEAL_EDEN) &&
 				maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
 			    pline("The silver sears your flesh!");
 			}
