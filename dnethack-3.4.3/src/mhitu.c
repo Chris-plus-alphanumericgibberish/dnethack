@@ -3493,7 +3493,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			    if (!rn2(10)) pline("%s is covering its face.", Monnam(mtmp));
 			dmg = 0;
 		    }
-		    if (dmg){
+		    if (dmg && !rn2(100)){
 				int temparise = u.ugrave_arise;
 				u.wimage = TRUE;
 				u.ugrave_arise = PM_WEEPING_ANGEL;
