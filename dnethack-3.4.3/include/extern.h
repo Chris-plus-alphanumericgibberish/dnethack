@@ -2129,6 +2129,7 @@ E void FDECL(stealamulet, (struct monst *));
 E void FDECL(stealquestart, (struct monst *));
 E void FDECL(mdrop_special_objs, (struct monst *));
 E void FDECL(relobj, (struct monst *,int,BOOLEAN_P));
+E void FDECL(mdrop_obj, (struct monst *,struct obj *,BOOLEAN_P));
 #ifdef GOLDOBJ
 E struct obj *FDECL(findgold, (struct obj *));
 #endif

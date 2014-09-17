@@ -8,7 +8,6 @@ STATIC_PTR int NDECL(stealarm);
 
 #ifdef OVLB
 STATIC_DCL const char *FDECL(equipname, (struct obj *));
-STATIC_DCL void FDECL(mdrop_obj, (struct monst *,struct obj *,BOOLEAN_P));
 
 STATIC_OVL const char *
 equipname(otmp)
@@ -577,7 +576,7 @@ struct monst *mtmp;
 #ifdef OVL0
 
 /* drop one object taken from a (possibly dead) monster's inventory */
-STATIC_OVL void
+void
 mdrop_obj(mon, obj, verbosely)
 struct monst *mon;
 struct obj *obj;
