@@ -62,6 +62,7 @@ static const char *random_mesg[] = {
 	"stth was here", /* First ascension */
 	"allihaveismymind followed stth", /* Second ascension */
 	"Khor followed allihaveismymind", /* Third ascension */
+	"ChrisANG followed Khor", /* Fourth ascension */
 	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */
