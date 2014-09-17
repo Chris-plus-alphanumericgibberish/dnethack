@@ -5244,7 +5244,7 @@ is a red right hand
 	M2_NOPOLY|M2_HOSTILE|M2_STRONG|M2_COLLECT, M3_WAITFORU|M3_INFRAVISION, HI_LORD),
 	MON("Oona", S_HUMAN,//
 	LVL(20, 9, -3, 127, 20), (G_NOCORPSE|G_NOGEN|G_UNIQ), //
-	A(ATTK(AT_MAGC, AD_OONA, 0,6), ATTK(AT_NONE, AD_OONA, 20, 6), /* The AD_ type of attack 1 is replaced with oona's energy type */
+	A(ATTK(AT_MAGC, AD_OONA, 0,8), ATTK(AT_NONE, AD_OONA, 20, 8), /* The AD_ type of attack 1 is replaced with oona's energy type */
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_ELF, 350, 0, MS_HUMANOID, MZ_HUMAN), MR_DRAIN|MR_SLEEP, MR_SLEEP,
 	M1_HUMANOID|M1_OMNIVORE|M1_SEE_INVIS,
