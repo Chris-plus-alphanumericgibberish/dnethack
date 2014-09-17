@@ -3322,7 +3322,10 @@ uchar aatyp;
 		  if((mon->mhp > 0 && mon->mhp < .5*mon->mhpmax
 		   && rn2(3)) || mon->mhp <= 0){
 			  pline("%s collapses into a puddle of water!", Monnam(mon));
-			  killed(mon);
+			  if(mon->mhp > 0){
+				mon->mhp = 0;
+			    killed(mon);
+			  }
 		  } else break;
 		}
 		if (aatyp == AT_KICK) {
