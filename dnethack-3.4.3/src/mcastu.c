@@ -1668,7 +1668,8 @@ ray:
 	if (Antimagic) {
 	    shieldeff(u.ux, u.uy);
 	    dmg = (dmg + 1) / 2;
-	}
+		if( dmg > 30) dmg = 30;
+	} else if( dmg > 60) dmg = 60;
 	if(dmg < (Upolyd ? u.mh : u.uhp)){
 		if (dmg <= 5)
 		    Your("skin itches badly for a moment.");
@@ -1677,7 +1678,7 @@ ray:
 		else if (dmg <= 30)
 		    pline("Severe wounds appear on your body!");
 		else
-		    Your("body is covered with painful wounds!");
+		    Your("body is covered with deep, painful wounds!");
 	}
 	else{
 		Your("body is covered with deadly wounds!");
