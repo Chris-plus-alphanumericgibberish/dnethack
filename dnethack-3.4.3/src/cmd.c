@@ -1122,7 +1122,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
 		Sprintf(prebuf, "Your soul ");
 		Sprintf(buf, " bound to ");
-		for(i=0;i<ALIGN_SPIRIT;i++){
+		for(i=0;i<QUEST_SPIRIT;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){
 				if((u.spirit[i] >> j) == 1){
 					Strcat(buf,sealNames[j]);
@@ -1161,6 +1161,18 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 			else if(numBound>=3){
 				if(numFound<numBound-1) Strcat(buf,", ");
 				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.spirit[CROWN_SPIRIT]) for(j=0;j<32;j++){
+			if((u.spirit[CROWN_SPIRIT] >> j) == 1){
+				Strcat(buf,sealNames[j]);
+				numFound++;
+				if(numBound==2 && numFound==1) Strcat(buf," and ");
+				else if(numBound>=3){
+					if(numFound<numBound-1) Strcat(buf,", ");
+					if(numFound==numBound-1) Strcat(buf,", and ");
+				}
+				break;
 			}
 		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_COSMOS){
@@ -1620,6 +1632,18 @@ resistances_enlightenment()
 			else if(numBound>=3){
 				if(numFound<numBound-1) Strcat(buf,", ");
 				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.spirit[CROWN_SPIRIT]) for(j=0;j<32;j++){
+			if((u.spirit[CROWN_SPIRIT] >> j) == 1){
+				Strcat(buf,sealNames[j]);
+				numFound++;
+				if(numBound==2 && numFound==1) Strcat(buf," and ");
+				else if(numBound>=3){
+					if(numFound<numBound-1) Strcat(buf,", ");
+					if(numFound==numBound-1) Strcat(buf,", and ");
+				}
+				break;
 			}
 		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_COSMOS){
