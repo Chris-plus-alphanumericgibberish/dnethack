@@ -1319,7 +1319,24 @@ spiriteffects(power, atme)
 					break;
 				}
 				if(mon->uhurtm && mon->data->geno & G_GENO){
+#define MAXVALUE 24
+					extern const int monstr[];
+					int value = min(monstr[monsndx(mon->data)] + 1,MAXVALUE);
 					Your("shadow flows under %s, swallowing %s up!",mon_nam(mon),mhim(mon));
+					cprefx(monsndx(mon->data), TRUE, TRUE);
+					cpostfx(monsndx(mon->data), FALSE, TRUE);
+					if(u.ugangr) {
+						u.ugangr -= ((value * (u.ualign.type == A_CHAOTIC ? 2 : 3)) / MAXVALUE);
+						if(u.ugangr < 0) u.ugangr = 0;
+					} else if(u.ualign.record < 0) {
+						if(value > MAXVALUE) value = MAXVALUE;
+						if(value > -u.ualign.record) value = -u.ualign.record;
+						adjalign(value);
+					} else if (u.ublesscnt > 0) {
+						u.ublesscnt -=
+						((value * (u.ualign.type == A_CHAOTIC ? 500 : 300)) / MAXVALUE);
+						if(u.ublesscnt < 0) u.ublesscnt = 0;
+					}
 					mongone(mon);
 				} else {
 					Your("shadow flows under %s, but nothing happens.",mon_nam(mon));

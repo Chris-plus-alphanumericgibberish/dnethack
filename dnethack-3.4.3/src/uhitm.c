@@ -551,7 +551,24 @@ register struct monst *mtmp;
 	
 	if(keepattacking && !DEADMONSTER(mtmp) && u.sealsActive&SEAL_AHAZU){
 		if(mtmp->mhp < .1*mtmp->mhpmax){
+#define MAXVALUE 24
+			extern const int monstr[];
+			int value = min(monstr[monsndx(mtmp->data)] + 1,MAXVALUE);
 			pline("%s sinks into your deep black shadow!", Monnam(mtmp));
+			cprefx(monsndx(mtmp->data), TRUE, TRUE);
+			cpostfx(monsndx(mtmp->data), FALSE, TRUE);
+			if(u.ugangr) {
+				u.ugangr -= ((value * (u.ualign.type == A_CHAOTIC ? 2 : 3)) / MAXVALUE);
+				if(u.ugangr < 0) u.ugangr = 0;
+			} else if(u.ualign.record < 0) {
+				if(value > MAXVALUE) value = MAXVALUE;
+				if(value > -u.ualign.record) value = -u.ualign.record;
+				adjalign(value);
+			} else if (u.ublesscnt > 0) {
+				u.ublesscnt -=
+				((value * (u.ualign.type == A_CHAOTIC ? 500 : 300)) / MAXVALUE);
+				if(u.ublesscnt < 0) u.ublesscnt = 0;
+			}
 			mongone(mtmp);
 		} else if(!rn2(5)){
 			Your("deep black shadow pools under %s.", mon_nam(mtmp));

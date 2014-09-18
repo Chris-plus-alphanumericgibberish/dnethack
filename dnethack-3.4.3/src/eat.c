@@ -537,7 +537,7 @@ boolean message;
 
 	if(victual.piece->otyp == CORPSE) {
 		if (!victual.piece->odrained || (Race_if(PM_VAMPIRE) && !rn2(5)))
-		cpostfx(victual.piece->corpsenm, FALSE);
+		cpostfx(victual.piece->corpsenm, FALSE, FALSE);
 	} else
 		fpostfx(victual.piece);
 
@@ -577,12 +577,12 @@ boolean allowmsg;
 }
 
 void
-cprefx(pm,bld)
+cprefx(pm,bld,nobadeffects)
 int pm;
-BOOLEAN_P bld;
+BOOLEAN_P bld, nobadeffects;
 {
-	(void) maybe_cannibal(pm,TRUE);
-	if (touch_petrifies(&mons[pm]) || pm == PM_MEDUSA) {
+	if(!nobadeffects) maybe_cannibal(pm,TRUE);
+	if (!nobadeffects && (touch_petrifies(&mons[pm]) || pm == PM_MEDUSA)) {
 	    if (!Stone_resistance &&
 		!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 		Sprintf(killer_buf, "tasting %s %s", mons[pm].mname, bld ? "blood" : "meat");
@@ -603,7 +603,7 @@ BOOLEAN_P bld;
 	    case PM_KITTEN:
 	    case PM_HOUSECAT:
 	    case PM_LARGE_CAT:
-		if (!CANNIBAL_ALLOWED()) {
+		if (!nobadeffects && !CANNIBAL_ALLOWED()) {
 		    You_feel("that %s the %s%s%s was a bad idea.",
 		      victual.eating ? "eating" : bld ? "drinking" : "biting",
 		      occupation == opentin ? "tinned " : "", mons[pm].mname,
@@ -614,18 +614,28 @@ BOOLEAN_P bld;
 	    case PM_LIZARD:
 		if (Stoned) fix_petrification();
 		break;
+	    case PM_MANDRAKE:
+			if(!nobadeffects){
+				pline ("Oh wow!  Great stuff!");
+				make_hallucinated(HHallucination + 200,FALSE,0L);
+			}
+			if (Stoned) fix_petrification();
+			make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+		break;
 		/*Note: these three imply corpse*/
 	    case PM_GREAT_CTHULHU:
 	    case PM_DEATH:
 	    case PM_PESTILENCE:
 	    case PM_FAMINE:
 		{ char buf[BUFSZ];
+			if(!nobadeffects){
 		    pline("Eating that is instantly fatal.");
 		    Sprintf(buf, "unwisely ate the body of %s",
 			    mons[pm].mname);
 		    killer = buf;
 		    killer_format = NO_KILLER_PREFIX;
 		    done(DIED);
+			}
 		    /* It so happens that since we know these monsters */
 		    /* cannot appear in tins, victual.piece will always */
 		    /* be what we want, which is not generally true. */
@@ -645,7 +655,7 @@ BOOLEAN_P bld;
 		    return;
 		break;
 	    case PM_GREEN_SLIME:
-		if (!Slimed && !Unchanging && !flaming(youmonst.data) &&
+		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youmonst.data) &&
 			youmonst.data != &mons[PM_GREEN_SLIME]) {
 		    You("don't feel very well.");
 		    Slimed = 10L;
@@ -1080,9 +1090,9 @@ unsigned short nutval;
 }
 
 void
-cpostfx(pm, tin)		/* called after completely consuming a corpse */
+cpostfx(pm, tin, nobadeffects)		/* called after completely consuming a corpse */
 register int pm;
-BOOLEAN_P tin;
+BOOLEAN_P tin, nobadeffects;
 {
 	register int tmp = 0;
 	boolean catch_lycanthropy = FALSE;
@@ -1144,20 +1154,28 @@ BOOLEAN_P tin;
 			pluslvl(FALSE);
 		break;
 	    case PM_HUMAN_WERERAT:
+			if(!nobadeffects){
 			catch_lycanthropy = TRUE;
 			u.ulycn = PM_WERERAT;
+			}
 		break;
 	    case PM_HUMAN_WEREJACKAL:
+			if(!nobadeffects){
 			catch_lycanthropy = TRUE;
 			u.ulycn = PM_WEREJACKAL;
+			}
 		break;
 	    case PM_HUMAN_WEREWOLF:
+			if(!nobadeffects){
 			catch_lycanthropy = TRUE;
 			u.ulycn = PM_WEREWOLF;
+			}
 		break;
 	    case PM_ANUBITE:
+			if(!nobadeffects){
 			catch_lycanthropy = TRUE;
 			u.ulycn = PM_WEREJACKAL;
+			}
 		break;
 	    case PM_NURSE:
 			if (Upolyd) u.mh = u.mhmax;
@@ -1165,9 +1183,12 @@ BOOLEAN_P tin;
 			flags.botl = 1;
 		break;
 		case PM_SEWER_RAT:
+			if(!nobadeffects){
 			if(d(1,10) > 9 && !Sick_resistance) make_vomiting(Vomiting+d(10,4), TRUE);
+			}
 		break;
 		case PM_RABID_RAT:
+			if(!nobadeffects){
 			if(d(1,20) > 19 && Sick_resistance){
 				if (!Sick_resistance) {
 					char buf[BUFSZ];
@@ -1183,25 +1204,28 @@ BOOLEAN_P tin;
 						make_sick(sick_time, buf, FALSE, SICK_NONVOMITABLE);
 				}
 			}
+			}
 		break;
 	    case PM_STALKER:
-		if(!Invis) {
-			set_itimeout(&HInvis, (long)rn1(100, 50));
-			if (!Blind && !BInvis) self_invis_message();
-		} else {
-			if (!(HInvis & INTRINSIC)) You_feel("hidden!");
-			HInvis |= FROMOUTSIDE;
-			HSee_invisible |= FROMOUTSIDE;
-		}
-		newsym(u.ux, u.uy);
+			if(!nobadeffects){
+			if(!Invis) {
+				set_itimeout(&HInvis, (long)rn1(100, 50));
+				if (!Blind && !BInvis) self_invis_message();
+			} else {
+				if (!(HInvis & INTRINSIC)) You_feel("hidden!");
+				HInvis |= FROMOUTSIDE;
+				HSee_invisible |= FROMOUTSIDE;
+			}
+			newsym(u.ux, u.uy);
+			}
 		/* fall into next case */
 	    case PM_YELLOW_LIGHT:
 		/* fall into next case */
 	    case PM_GIANT_BAT:
-		make_stunned(HStun + 30,FALSE);
+			if(!nobadeffects) make_stunned(HStun + 30,FALSE);
 		/* fall into next case */
 	    case PM_BAT:
-		make_stunned(HStun + 30,FALSE);
+			if(!nobadeffects) make_stunned(HStun + 30,FALSE);
 		break;
 	    case PM_GIANT_MIMIC:
 		tmp += 10;
@@ -1211,7 +1235,7 @@ BOOLEAN_P tin;
 		/* fall into next case */
 	    case PM_SMALL_MIMIC:
 		tmp += 20;
-		if (youmonst.data->mlet != S_MIMIC && !Unchanging) {
+		if (!nobadeffects && youmonst.data->mlet != S_MIMIC && !Unchanging) {
 		    char buf[BUFSZ];
 		    You_cant("resist the temptation to mimic %s.",
 			Hallucination ? "an orange" : "a pile of gold");
@@ -1237,18 +1261,20 @@ BOOLEAN_P tin;
 		}
 		break;
 	    case PM_QUANTUM_MECHANIC:
-		Your("velocity suddenly seems very uncertain!");
 		if (HFast & INTRINSIC) {
 			HFast &= ~INTRINSIC;
+			Your("velocity suddenly seems very uncertain!");
 			You("seem slower.");
-		} else {
+		} else if(!nobadeffects){
 			HFast |= FROMOUTSIDE;
+			Your("velocity suddenly seems very uncertain!");
 			You("seem faster.");
 		}
 		break;
 		case PM_GUG:
 			gainstr((struct obj *)0, 0);
 		break;
+	    case PM_MANDRAKE:
 	    case PM_LIZARD:
 			if (HStun > 2)  make_stunned(2L,FALSE);
 			if (HConfusion > 2)  make_confused(2L,FALSE);
@@ -1267,7 +1293,7 @@ BOOLEAN_P tin;
 	    case PM_CHAMELEON:
 	    case PM_DOPPELGANGER:
 	 /* case PM_SANDESTIN: */
-		if (!Unchanging) {
+		if (!Unchanging && !nobadeffects) {
 		    You_feel("a change coming over you.");
 		    polyself(FALSE);
 		}
@@ -1289,8 +1315,8 @@ BOOLEAN_P tin;
 		register struct permonst *ptr = &mons[pm];
 		int i, count;
 
-		if (dmgtype(ptr, AD_STUN) || dmgtype(ptr, AD_HALU) ||
-		    pm == PM_VIOLET_FUNGUS) {
+		if (!nobadeffects && (dmgtype(ptr, AD_STUN) || dmgtype(ptr, AD_HALU) ||
+		    pm == PM_VIOLET_FUNGUS)) {
 			pline ("Oh wow!  Great stuff!");
 			make_hallucinated(HHallucination + 200,FALSE,0L);
 		}
@@ -1322,7 +1348,8 @@ BOOLEAN_P tin;
 		 for (i = 1; i <= LAST_PROP; i++) {
 			if (intrinsic_possible(i, ptr)) {
 				count++;
-					givit(i, ptr, (tin && ptr->cnutrit > 50) ? 50 : ptr->cnutrit);
+					if(u.sealsActive&SEAL_AHAZU) givit(i, ptr, (tin && ptr->cnutrit > 45) ? 45 : ptr->cnutrit*0.9);
+					else givit(i, ptr, (tin && ptr->cnutrit > 50) ? 50 : ptr->cnutrit);
 			}
 		 }
 
@@ -1442,8 +1469,8 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 			u.uconduct.food++;
 			You("drain energy from %s %s.", tintxts[r].txt,
 				mons[tin.tin->corpsenm].mname);
-			cprefx(tin.tin->corpsenm, TRUE);
-			cpostfx(tin.tin->corpsenm, FALSE);
+			cprefx(tin.tin->corpsenm, TRUE, FALSE);
+			cpostfx(tin.tin->corpsenm, FALSE, FALSE);
 			costly_tin((const char*)0);
            goto use_me;
          }
@@ -1466,7 +1493,8 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 		violated_vegetarian();
 
 	    tin.tin->dknown = tin.tin->known = TRUE;
-	    cprefx(tin.tin->corpsenm,FALSE); cpostfx(tin.tin->corpsenm, TRUE);
+	    cprefx(tin.tin->corpsenm, FALSE, FALSE);
+		cpostfx(tin.tin->corpsenm, TRUE, FALSE);
 
 	    /* charge for one at pre-eating cost */
 	    costly_tin((const char*)0);
@@ -1834,7 +1862,7 @@ start_eating(otmp)		/* called as you start to eat */
 	victual.eating = TRUE;
 
 	if (otmp->otyp == CORPSE) {
-	    cprefx(victual.piece->corpsenm,FALSE);
+	    cprefx(victual.piece->corpsenm,FALSE,FALSE);
 	    if (!victual.piece || !victual.eating) {
 		/* rider revived, or died and lifesaved */
 		return;
@@ -2558,8 +2586,8 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if(otmp->otyp == CORPSE){
 					u.uconduct.food++;
 					You("drain the %s.", xname(otmp));
-					cprefx(otmp->corpsenm, TRUE);
-					cpostfx(otmp->corpsenm, FALSE);
+					cprefx(otmp->corpsenm, TRUE, FALSE);
+					cpostfx(otmp->corpsenm, FALSE, FALSE);
 					if (carried(otmp)) useup(otmp);
 					else useupf(otmp, 1L);
 				}

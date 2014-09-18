@@ -988,8 +988,8 @@ as_extra_healing:
 		}
 		//Note: clockworks that use potions of blood as oil gain the intrinsics!
 		//Incantifiers likewise gain intrinsics but not nutrition.
-		cprefx(otmp->corpsenm, TRUE);
-	    cpostfx(otmp->corpsenm, FALSE);
+		cprefx(otmp->corpsenm, TRUE, FALSE);
+	    cpostfx(otmp->corpsenm, FALSE, FALSE);
 	break;
 	default:
 		impossible("What a funny potion! (%u)", otmp->otyp);
