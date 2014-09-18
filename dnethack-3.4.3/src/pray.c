@@ -1198,7 +1198,7 @@ consume_offering(otmp)
 register struct obj *otmp;
 {
     if (Hallucination)
-	switch (rn2(24)) {
+	switch (rn2(25)) {
 	    case 0:
 		Your("sacrifice sprouts wings and a propeller and roars away!");
 		break;
@@ -1271,6 +1271,9 @@ register struct obj *otmp;
 		u.ualign.type == A_LAWFUL ?
 			Your("sacrifice is consumed in a flash of %s light!", hcolor(0)):
 			Your("sacrifice is consumed in a burst of %s flame!", hcolor(0));
+		break;
+	    case 24:
+		Your("sacrifice is consumed by trout!");
 		break;
 	}
     else if (Blind && u.ualign.type == A_LAWFUL)
