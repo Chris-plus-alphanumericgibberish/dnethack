@@ -771,8 +771,8 @@ register int amount;
 
 	/* an elven magic clue, cookie@keebler */
 	/* elven weapons vibrate warningly when enchanted beyond a limit */
-	if ((uwep->spe > 5)
-		&& (is_elven_weapon(uwep) || uwep->oartifact || !rn2(7)) &&
+	if ((uwep->spe > 5) && uwep->oartifact != ART_PEN_OF_THE_VOID &&
+		(is_elven_weapon(uwep) || uwep->oartifact || !rn2(7)) &&
 		uwep->oartifact != ART_ROD_OF_SEVEN_PARTS)
 	    Your("%s unexpectedly.",
 		aobjnam(uwep, "suddenly vibrate"));
