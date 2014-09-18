@@ -3456,11 +3456,13 @@ dobpois:
 			  if(!rn2(3)){
   				  pline("A cloud of spores is released!");
 				  diseasemu(mon->data);
+				  mon->mspec_used = 1;
 			  }
 		  }
 		  else if(!mon->mspec_used){
 			  pline("A cloud of spores is released!");
 			  diseasemu(mon->data);
+			  mon->mspec_used = 1;
 		  }
 	  break;
 	  default:
