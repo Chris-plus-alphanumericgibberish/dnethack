@@ -2447,15 +2447,20 @@ spiriteffects(power, atme)
 		case PWR_SILVER_TOUNGE:{
 			struct monst *mon;
 			if(!getdir((char *)0)  || !(u.dx || u.dy)) return 0;
-			if((mon = m_at(u.ux+u.dx, u.uy+u.dy)) && 
-				always_hostile(mon->data) &&
-				!(mon->data->geno & G_UNIQ) &&
-				!mon->mtraitor
-			){
+			if(mon = m_at(u.ux+u.dx, u.uy+u.dy)){
 				Your("forked tongue speaks with silvery grace.");
+				if(!always_hostile(mon->data) &&
+				!(mon->data->geno & G_UNIQ) &&
+				!mon->mtraitor){
 				if (mon->isshk) make_happy_shk(mon, FALSE);
-				mon->mpeaceful = 1;
-			} else return 0;
+					mon->mpeaceful = 1;
+				} else {
+					pline("%s doesn't waver, though.", Monnam(mon));
+				}
+			} else{
+				pline("There's nothing there!");
+				return 0;
+			}
 		}break;
 		case PWR_EXHALATION_OF_THE_RIFT:{
 			int dmg, i;
