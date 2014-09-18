@@ -392,7 +392,7 @@ register struct obj *otmp;
 		verbalize("You bit it, you bought it!");
 		bill_dummy_object(otmp);
 	    }
-		if((u.uconduct.unvegetarian || Role_if(PM_MONK)) && (otmp->otyp == K_RATION || otmp->otyp == C_RATION)){
+		if((!(u.uconduct.unvegetarian) || Role_if(PM_MONK)) && (otmp->otyp == K_RATION || otmp->otyp == C_RATION)){
 			You("find that this military ration has a meat serving.");
 			if(yn("Eat the meat?") == 'n'){
 				You("discard the meat.");
