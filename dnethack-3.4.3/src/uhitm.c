@@ -3452,13 +3452,13 @@ dobpois:
 				  killed(mon);
 			  }
 		  }
-		  else if(mon->data==&mons[PM_SWAMP_FERN]){
+		  else if(mon->data==&mons[PM_SWAMP_FERN] && !mon->mspec_used){
 			  if(!rn2(3)){
   				  pline("A cloud of spores is released!");
 				  diseasemu(mon->data);
 			  }
 		  }
-		  else{
+		  else if(!mon->mspec_used){
 			  pline("A cloud of spores is released!");
 			  diseasemu(mon->data);
 		  }

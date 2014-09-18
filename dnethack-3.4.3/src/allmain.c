@@ -194,7 +194,8 @@ moveloop()
 					mtmp->moccupation = 0;
 					mtmp->mcanmove = 1;
 				}
-				if(mtmp->data == &mons[PM_GREAT_CTHULHU]) mtmp->mspec_used = 0;
+				if(mtmp->data == &mons[PM_GREAT_CTHULHU] || mtmp->data == &mons[PM_ZUGGTMOY] 
+					|| mtmp->data == &mons[PM_SWAMP_FERN]) mtmp->mspec_used = 0;
 				if(is_weeping(mtmp->data)) mtmp->mspec_used = 0;
 			}
 
