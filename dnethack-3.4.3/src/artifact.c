@@ -3821,9 +3821,11 @@ arti_invoke(obj)
 		}break;
 		case INFINITESPELLS:{
 			pline("The endless pages of the book cover the material of a spellbook of %s in exhaustive detail.",OBJ_NAME(objects[obj->ovar1]));
+			pline("Following the instructions on the pages, you cast the spell!");
 			spelleffects(0,FALSE,obj->ovar1);
 			if(!rn2(20)){
 				obj->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
+				pline("The endless pages of the book turn themselves. They settle on a section describing %s.",OBJ_NAME(objects[obj->ovar1]));
 			}
 		}break;
 		case LORDLY:
@@ -5123,7 +5125,7 @@ read_lost(VOID_ARGS)
 		// for(i=0;i<QUEST_SPIRITS;i++){
 			// pline("#%d:%s",i,sealNames[i]);
 		// }
-		pline("Using the rituals in the book, you attempt to form a bond with %s",sealNames[lostname-FIRST_SEAL-2]); /*Why doesn't math work?*/
+		pline("Using the rituals in the book, you attempt to form a bond with %s",sealNames[lostname-FIRST_SEAL]);
 		if(u.sealCounts < numSlots){
 			bindspirit(lostname);
 		} else You("can't feel the spirit.");

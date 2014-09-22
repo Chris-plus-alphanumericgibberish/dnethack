@@ -519,11 +519,49 @@ struct obj *spellbook;
 {
 	register int	 booktype = spellbook->otyp;
 	register boolean confused = (Confusion != 0);
+	char splname[BUFSZ];
 	boolean too_hard = FALSE;
 
 	if(spellbook->oartifact){ //this is the primary artifact-book check.
+		if(spellbook->oartifact != ART_SCROLL_OF_INFINITE_SPELLS){
 		doparticularinvoke(spellbook);//there is a redundant check in the spell learning code
 		return 1;					//which should never be reached, and only catches books of secrets anyway.
+		} else {
+			int i;
+			Sprintf(splname, objects[spellbook->ovar1].oc_name_known ?
+					"\"%s\"" : "the \"%s\" spell",
+				OBJ_NAME(objects[spellbook->ovar1]));
+			for (i = 0; i < MAXSPELL; i++)  {
+				if (spellid(i) == spellbook->ovar1)  {
+					pline("The endless pages of the book cover the material of a spellbook of %s in exhaustive detail.",OBJ_NAME(objects[spellbook->ovar1]));
+					if (spellknow(i) <= 1000) {
+						Your("knowledge of %s is keener.", splname);
+						incrnknow(i);
+						exercise(A_WIS,TRUE);       /* extra study */
+						if(!rn2(20)){
+							spellbook->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
+							pline("The endless pages of the book turn themselves. They settle on a section describing %s.",OBJ_NAME(objects[spellbook->ovar1]));
+						}
+					} else { /* 1000 < spellknow(i) <= MAX_SPELL_STUDY */
+						You("know %s quite well already.", splname);
+					}
+					break;
+				} else if (spellid(i) == NO_SPELL)  {
+					spl_book[i].sp_id = spellbook->ovar1;
+					spl_book[i].sp_lev = objects[spellbook->ovar1].oc_level;
+					incrnknow(i);
+					pline("The endless pages of the book cover the material of a spellbook of %s in exhaustive detail.",OBJ_NAME(objects[spellbook->ovar1]));
+					pline("Using the instructions on the pages, you easilly learn to cast the spell!");
+					if(!rn2(20)){
+						spellbook->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
+						pline("The endless pages of the book turn themselves. They settle on a section describing %s.",OBJ_NAME(objects[spellbook->ovar1]));
+					}
+					break;
+				}
+			}
+			if (i == MAXSPELL) impossible("Too many spells memorized!");
+			return 1;
+		}
 	}
 
 	if (delay && !confused && spellbook == book &&
