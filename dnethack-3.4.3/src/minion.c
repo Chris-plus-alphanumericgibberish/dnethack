@@ -45,7 +45,7 @@ struct monst *mon;
 				 (!rn2(20)) ? dlord(atyp) : ndemon(atyp);
 	    cnt = (!rn2(4) && is_ndemon(&mons[dtype])) ? 2 : 1;
 	} else if (is_ndemon(ptr)) {
-	    dtype = (!rn2(20)) ? dlord(atyp) :
+	    dtype = (!rn2(20) && Inhell) ? dlord(atyp) :
 				 (!rn2(6)) ? ndemon(atyp) : monsndx(ptr);
 	    cnt = 1;
 	} else if (is_lminion(mon)) {
