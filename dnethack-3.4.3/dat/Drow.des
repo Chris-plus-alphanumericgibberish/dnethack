@@ -120,8 +120,6 @@ NON_DIGGABLE:(10,02,30,13)
 #
 
 MAZE: "Dro-goal", ' '
-GEOMETRY:center,center
-MAP
 FLAGS: noteleport,hardfloor
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
@@ -148,7 +146,6 @@ MAP
 8TTTTTTTTTTTTT.TTTTTTTTT.TT.......................TT.TTTTTTTT......TTTTTT.TTT
 9TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 ENDMAP
-ENDMAP
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
 
@@ -174,7 +171,7 @@ MONSTER:'@',"Seyll Auzkovyn", (37,10)
 LEVEL: "Dro-fila"
 #
 INIT_MAP: '.' , ' ' , true , true , random , true
-NOMAP
+#NOMAP
 #
 STAIR: random, up
 STAIR: random, down
