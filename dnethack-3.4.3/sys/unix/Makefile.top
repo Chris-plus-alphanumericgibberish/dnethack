@@ -15,8 +15,8 @@
 
 # make NetHack
 PREFIX	 = /usr
-GAME     = nethack
-# GAME     = nethack.prg
+GAME     = dnethack
+# GAME     = dnethack.prg
 GAMEUID  = games
 GAMEGRP  = bin
 
@@ -73,10 +73,18 @@ CHGRP = chgrp
 
 DATHELP = help hh cmdhelp history opthelp wizhelp
 
-SPEC_LEVS = asmodeus.lev baalz.lev bigrm-?.lev castle.lev fakewiz?.lev \
-	juiblex.lev knox.lev medusa-?.lev minend-?.lev minefill.lev \
-	minetn-?.lev oracle.lev orcus.lev sanctum.lev soko?-?.lev \
-	tower?.lev valley.lev wizard?.lev \
+SPEC_LEVS = abyss-?.lev abys2-?.lev arcadia?.lev arcfort.lev arcward.lev \
+	atower?.lev bigrm-?.lev bgrmb-?.lev brine-?.lev castle-?.lev \
+	chalev.lev chaosf.lev chaoss.lev chaost.lev chaosm.lev chaosfrh.lev \
+	chaosffh.lev chaossth.lev chaosvth.lev chaose.lev fakewiz?.lev \
+	gatetwn.lev hell-?.lev hell2-?.lev hell3.lev illregrd.lev \
+	knox.lev lawlev-?.lev lbyrnth.lev leth-a-?.lev lethe-b.lev \
+	leth-c-?.lev leth-d-?.lev lethe-e.lev lethe-f.lev lethe-g.lev \
+	lethe-z.lev medusa-?.lev minend-?.lev minefill.lev minetn-?.lev \
+	mtemple.lev neulev.lev nkai-a-?.lev nkai-b.lev nkai-c.lev nkai-z.lev \
+	oracle.lev out?.lev path?.lev qstlb.lev rlyeh.lev sanctum.lev \
+	sea-?.lev soko?-?.lev spire.lev stair?.lev stor-?.lev sumall.lev \
+	tomb.lev tower?.lev towrtop.lev valley.lev wizard?.lev \
 	astral.lev air.lev earth.lev fire.lev water.lev
 QUEST_LEVS = ???-goal.lev ???-fil?.lev ???-loca.lev ???-strt.lev
 
