@@ -645,7 +645,7 @@ A("The Hand-Mirror of Cthylla", MIRROR, /*from the works of HP Lovecraft*/
 
 A("The Silver Key", UNIVERSAL_KEY, /*from the works of HP Lovecraft*/
 	(SPFX_NOGEN|SPFX_RESTR), (SPFX_EREGEN|SPFX_TCTRL),0,
-	NO_ATTK,	NO_DFNS,	NO_CARY,
+	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	CREATE_PORTAL,	A_NEUTRAL, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_PCTRL,0),  /*polymorph control*/
 
