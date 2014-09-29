@@ -1179,6 +1179,14 @@ register int after;
 	ptr = mtmp->data; /* mintrap() can change mtmp->data -dlc */
 
 	if (mtmp->meating) {
+		if(mtmp->meating < 0){
+			pline("ERROR RECOVERY: Negative meating timer (%d) set to 0", mtmp->meating);
+			mtmp->meating = 0;
+		}
+		if(mtmp->meating > 100){
+			pline("ERROR RECOVERY: Overlong meating timer (%d) truncated to 100 turns", mtmp->meating);
+			mtmp->meating = 0;
+		}
 	    mtmp->meating--;
 	    return 3;			/* still eating */
 	}
