@@ -1223,7 +1223,7 @@ dochat()
     if (mtmp->mtame && mtmp->mnotlaugh && mtmp->meating) {
 		if (!canspotmon(mtmp))
 			map_invisible(mtmp->mx, mtmp->my);
-		pline("%s is eating noisily.", Monnam(mtmp));
+		pline("%s is eating noisily. Looks like it will take %d turns to finish.", Monnam(mtmp), mtmp->meating);
 		return (0);
     }
 	
