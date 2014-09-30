@@ -3531,16 +3531,17 @@ int *power_no;
 	int n, how;
 	char buf[BUFSZ];
 	menu_item *selected;
-	anything any;
+	anything any, anyvoid;
 	int i,s,j;
 	long place;
 	
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
 	any.a_void = 0;		/* zero out all bits */
+	anyvoid.a_void = 0;		/* zero out all bits */
 	
 	Sprintf(buf, "Select spirit power:");
-	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	add_menu(tmpwin, NO_GLYPH, &anyvoid, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	
 	if(flags.timeoutOrder){
 		for(s=0; s<NUM_BIND_SPRITS; s++){
@@ -3551,16 +3552,19 @@ int *power_no;
 					j++;
 					place = place << 1;
 				}
-				add_menu(tmpwin, NO_GLYPH, 0, 0, 0, ATR_BOLD, sealNames[j], MENU_UNSELECTED);
+				add_menu(tmpwin, NO_GLYPH, &anyvoid, 0, 0, ATR_BOLD, sealNames[j], MENU_UNSELECTED);
 				for(i = 0; i<52; i++){
-					if(spiritPOwner[u.spiritPOrder[i]] == u.spirit[s] && 
-						u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves
-					){
+					if(spiritPOwner[u.spiritPOrder[i]] == u.spirit[s]){
+						if(u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves){
 						Sprintf(buf, spiritPName[u.spiritPOrder[i]]);
 						any.a_int = u.spiritPOrder[i]+1;	/* must be non-zero */
 						add_menu(tmpwin, NO_GLYPH, &any,
 							i<26 ? 'a'+(char)i : 'A'+(char)(i-26), 
 							0, ATR_NONE, buf, MENU_UNSELECTED);
+						} else {
+							Sprintf(buf, " %2d %s", u.spiritPColdowns[u.spiritPOrder[i]] - monstermoves + 1, spiritPName[u.spiritPOrder[i]]);
+							add_menu(tmpwin, NO_GLYPH, &anyvoid, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
+						}
 					}
 				}
 			}
@@ -3571,14 +3575,18 @@ int *power_no;
 				spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
 				!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
 				(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL && 
-				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL)) &&
-				u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves
+				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL))
 			){
+				if(u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves){
 				Sprintf(buf, spiritPName[u.spiritPOrder[i]]);
 				any.a_int = u.spiritPOrder[i]+1;	/* must be non-zero */
 				add_menu(tmpwin, NO_GLYPH, &any,
 					i<26 ? 'a'+(char)i : 'A'+(char)(i-26), 
 					0, ATR_NONE, buf, MENU_UNSELECTED);
+				} else {
+					Sprintf(buf, " %2d %s", u.spiritPColdowns[u.spiritPOrder[i]] - monstermoves + 1, spiritPName[u.spiritPOrder[i]]);
+					add_menu(tmpwin, NO_GLYPH, &anyvoid, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
+				}
 			}
 		}
 	}
