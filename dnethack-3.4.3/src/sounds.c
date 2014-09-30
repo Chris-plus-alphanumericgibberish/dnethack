@@ -2932,11 +2932,16 @@ int tx,ty;
 				if(!Blind) pline("beyond mere absense of light.");
 				if(u.sealCounts < numSlots){
 					if(!Blind) pline("The darkness inside the seal flows out to pool around you.");
+					pline("None shall rest until my vengeance is complete.");
+					pline("All who stand in my way shall face the wrath of that");
+					pline("which was wrought in the ancient halls");
+					pline("of the realm now known only for dust.");
 					bindspirit(ep->ward_id);
 					u.sealTimeout[TENEBROUS-FIRST_SEAL] = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("The darkness inside the seal flows out to stain your weapon.");
+					pline("None shall rest until my vengeance is complete.");
 					uwep->ovar1 |= SEAL_TENEBROUS;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_TENEBROUS;
