@@ -3150,9 +3150,9 @@ boolean atme;
 	    pline("It invokes nightmarish images in your mind...");
 	    spell_backfire(spell);
 	    return(0);
-	} else if (spellknow(spell) <= 100) {
+	} else if (spellknow(spell) <= 200) { /* 1% */
 	    You("strain to recall the spell.");
-	} else if (spellknow(spell) <= 1000) {
+	} else if (spellknow(spell) <= 1000) { /* 5% */
 	    Your("knowledge of this spell is growing faint.");
 	}
 	energy = (spellev(spell) * 5);    /* 5 <= energy <= 35 */
@@ -3617,17 +3617,19 @@ int *spell_no;
 	 * in the window-ports (say via a tab character).
 	 */
 	if (!iflags.menu_tab_sep)
-		Sprintf(buf, "%-20s     Level  %-12s Fail", "    Name", "Category");
+		Sprintf(buf, "%-20s     Level  %-12s Fail   Memory", "    Name", "Category");
 	else
-		Sprintf(buf, "Name\tLevel\tCategory\tFail");
+		Sprintf(buf, "Name\tLevel\tCategory\tFail\tMemory");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
 		Sprintf(buf, iflags.menu_tab_sep ?
-			"%s\t%-d%s\t%s\t%-d%%" : "%-20s  %2d%s   %-12s %3d%%",
+			"%s\t%-d%s\t%s\t%-d%%\t%-d%%" : "%-20s  %2d%s   %-12s %3d%%     %3d%%",
 			spellname(i), spellev(i),
 			spellknow(i) ? " " : "*",
 			spelltypemnemonic(spell_skilltype(spellid(i))),
-			100 - percent_success(i));
+			100 - percent_success(i),
+			(spellknow(i) * 100 + (KEEN - 1)) / KEEN
+		);
 
 		any.a_int = i+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
