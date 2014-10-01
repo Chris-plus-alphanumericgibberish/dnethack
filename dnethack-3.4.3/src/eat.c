@@ -2516,7 +2516,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		switch(otmp->oclass){
 			case WEAPON_CLASS:
 				u.uconduct.food++;
-				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
+				You("drain the %s%s.", xname(otmp),otmp->spe>=1 ? "":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
 			break;
@@ -2548,13 +2548,13 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 			break;
 			case ARMOR_CLASS:
 				u.uconduct.food++;
-				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
+				You("drain the %s%s.", xname(otmp),otmp->spe>=1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
 			break;
 			case TOOL_CLASS:
 				u.uconduct.food++;
-				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
+				You("drain the %s%s.", xname(otmp),otmp->spe>=1?"":" dry");
 	    	    (void) drain_item(otmp);
 				lesshungry(50);
 			break;
@@ -2577,7 +2577,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 			break;
 			case WAND_CLASS:
 				u.uconduct.food++;
-				You("drain the %s%s.", xname(otmp),otmp->spe>1?"":" dry");
+				You("drain the %s%s.", xname(otmp),otmp->spe>=1 ?"":" dry");
 	    	    (void) drain_item(otmp);
 //				if(!otmp->spe) otmp->otyp = WAN_NOTHING;
 				lesshungry(10);
