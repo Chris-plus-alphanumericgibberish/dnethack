@@ -287,6 +287,10 @@ doread()
     "I plan to go to Astral",
     "If They Don't Have Fruit Juice in Heaven, I Ain't Going",
     "Living Dead",
+	
+	/* #nethack suggestions */
+    "Lich Park",
+    "I'd rather be pudding farming",
 	    };
 	    char buf[BUFSZ];
 	    int erosion;
