@@ -57,7 +57,7 @@ pline VA_DECL(const char *, line)
 	    line = pbuf;
 	}
 	if(Role_if(PM_PIRATE)){/*Ben Collver's fixes*/
-//		line = piratesay(line);
+		line = piratesay(line);
 	}
 	if (!iflags.window_inited) {
 	    raw_print(line);
@@ -509,7 +509,7 @@ const char *st, *orig, *repl;
 	static char retval[TBUFSZ];
 	char buffer[TBUFSZ];
 	const char *ch, *pos;
-	int len;
+	long len;
 	memset(buffer, 0, TBUFSZ);
 	pos = st;
 	while ((ch = strstr(pos, orig))){
