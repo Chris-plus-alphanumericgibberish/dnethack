@@ -178,6 +178,7 @@
 				 (ptr) == &mons[PM_GITHYANKI_PIRATE] || \
 				 (ptr) == &mons[PM_MAYOR_CUMMERBUND])
 #define is_golem(ptr)		((ptr)->mlet == S_GOLEM)
+#define is_clockwork(ptr)	(((ptr)->mflags2 & M2_CLOCK) != 0L)
 #define is_domestic(ptr)	(((ptr)->mflags2 & M2_DOMESTIC) != 0L)
 #define is_demon(ptr)		(((ptr)->mflags2 & M2_DEMON) != 0L)
 #define is_keter(ptr)		((ptr)->mlet == S_KETER)
@@ -338,7 +339,8 @@
 				 (ptr) == &mons[PM_ALHOON]|| \
 				 (ptr) == &mons[PM_GREAT_CTHULHU])
 
-#define nonliving(ptr)		(is_keter(ptr) || is_golem(ptr) || is_undead(ptr) || \
+#define nonliving(ptr)		(is_keter(ptr) || is_golem(ptr) || \
+				 is_undead(ptr) || is_clockwork(ptr) || \
 				 (ptr)->mlet == S_VORTEX || \
 				 (ptr) == &mons[PM_MANES])
 
