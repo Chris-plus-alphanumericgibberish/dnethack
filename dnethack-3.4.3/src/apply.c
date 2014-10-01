@@ -1684,27 +1684,29 @@ register struct obj *obj;
 						  doname(can), (const char *)0);
 		} else impossible("Bottling failed.");
 	} else{
-	if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
-	    static const char you_buy_it[] = "You tin it, you bought it!";
-
-	    can->corpsenm = corpse->corpsenm;
-	    can->cursed = obj->cursed;
-	    can->blessed = obj->blessed;
-	    can->owt = weight(can);
-	    can->known = 1;
-	    can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
-	    if (carried(corpse)) {
-		if (corpse->unpaid)
-		    verbalize(you_buy_it);
-		useup(corpse);
-	    } else {
-		if (costly_spot(corpse->ox, corpse->oy) && !corpse->no_charge)
-		    verbalize(you_buy_it);
-		useupf(corpse, 1L);
-	    }
-	    can = hold_another_object(can, "You make, but cannot pick up, %s.",
-				      doname(can), (const char *)0);
-	} else impossible("Tinning failed.");
+		if(yn("This corpse does not have blood. Tin it?") == 'y'){
+			if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
+			    static const char you_buy_it[] = "You tin it, you bought it!";
+		
+	    		can->corpsenm = corpse->corpsenm;
+	    		can->cursed = obj->cursed;
+	    		can->blessed = obj->blessed;
+	    		can->owt = weight(can);
+	    		can->known = 1;
+	    		can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
+	    		if (carried(corpse)) {
+				if (corpse->unpaid)
+				    verbalize(you_buy_it);
+				useup(corpse);
+			    } else {
+				if (costly_spot(corpse->ox, corpse->oy) && !corpse->no_charge)
+				    verbalize(you_buy_it);
+				useupf(corpse, 1L);
+			    }
+			    can = hold_another_object(can, "You make, but cannot pick up, %s.",
+					      doname(can), (const char *)0);
+			} else impossible("Tinning failed.");
+		}
 	}
 }
 
