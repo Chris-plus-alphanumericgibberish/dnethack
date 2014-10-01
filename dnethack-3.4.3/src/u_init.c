@@ -1109,6 +1109,10 @@ u_init()
 		ini_inv(Binder);
 		skill_init(Skill_N);
 		knows_object(FLINT);
+		if(Race_if(PM_INCANTIFIER)){
+			knows_object(SPE_HEALING);
+			knows_object(SPE_FORCE_BOLT);
+		}
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 			u.ualign.type = A_VOID; /* Override racial alignment */
 		u.hod += 10;  /*One transgression is all it takes*/
