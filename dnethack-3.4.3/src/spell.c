@@ -1362,7 +1362,7 @@ spiriteffects(power, atme)
 					int value = min(monstr[monsndx(mon->data)] + 1,MAXVALUE);
 					Your("shadow flows under %s, swallowing %s up!",mon_nam(mon),mhim(mon));
 					cprefx(monsndx(mon->data), TRUE, TRUE);
-					cpostfx(monsndx(mon->data), FALSE, TRUE);
+					cpostfx(monsndx(mon->data), FALSE, TRUE, FALSE);
 					if(u.ugangr) {
 						u.ugangr -= ((value * (u.ualign.type == A_CHAOTIC ? 2 : 3)) / MAXVALUE);
 						if(u.ugangr < 0) u.ugangr = 0;

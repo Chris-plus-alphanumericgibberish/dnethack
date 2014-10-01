@@ -556,7 +556,7 @@ register struct monst *mtmp;
 			int value = min(monstr[monsndx(mtmp->data)] + 1,MAXVALUE);
 			pline("%s sinks into your deep black shadow!", Monnam(mtmp));
 			cprefx(monsndx(mtmp->data), TRUE, TRUE);
-			cpostfx(monsndx(mtmp->data), FALSE, TRUE);
+			cpostfx(monsndx(mtmp->data), FALSE, TRUE, FALSE);
 			if(u.ugangr) {
 				u.ugangr -= ((value * (u.ualign.type == A_CHAOTIC ? 2 : 3)) / MAXVALUE);
 				if(u.ugangr < 0) u.ugangr = 0;

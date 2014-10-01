@@ -29,7 +29,7 @@ STATIC_DCL struct obj *FDECL(touchfood, (struct obj *));
 STATIC_DCL void NDECL(do_reset_eat);
 STATIC_DCL void FDECL(done_eating, (BOOLEAN_P));
 STATIC_DCL int FDECL(intrinsic_possible, (int,struct permonst *));
-STATIC_DCL void FDECL(givit, (int,struct permonst *, unsigned short));
+STATIC_DCL void FDECL(givit, (int,struct permonst *, unsigned short, boolean));
 STATIC_DCL void FDECL(start_tin, (struct obj *));
 STATIC_DCL int FDECL(eatcorpse, (struct obj *));
 STATIC_DCL void FDECL(start_eating, (struct obj *));
@@ -536,8 +536,7 @@ boolean message;
 		  "eating", food_xname(victual.piece, TRUE));
 
 	if(victual.piece->otyp == CORPSE) {
-		if (!victual.piece->odrained || (Race_if(PM_VAMPIRE) && !rn2(5)))
-		cpostfx(victual.piece->corpsenm, FALSE, FALSE);
+		cpostfx(victual.piece->corpsenm, FALSE, FALSE,!victual.piece->odrained);
 	} else
 		fpostfx(victual.piece);
 
@@ -843,10 +842,11 @@ register struct permonst *ptr;
  * Energy resistence intrinsics time out now - CM
  */
 STATIC_OVL void
-givit(type, ptr, nutval)
+givit(type, ptr, nutval, drained)
 int type;
 register struct permonst *ptr;
 unsigned short nutval;
+boolean drained;
 {
 	int chance = 0; //starts at 0. Changing it indicates a non-energy resistence
 	int multiplier = 1;
@@ -891,6 +891,9 @@ unsigned short nutval;
 			break;
 	}
 
+	if(chance && drained && rn2(5))
+		return;		/* drain chance */
+	
 	if (chance && ptr->mlevel <= rn2(chance))
 		return;		/* failed die roll */
 
@@ -1090,9 +1093,9 @@ unsigned short nutval;
 }
 
 void
-cpostfx(pm, tin, nobadeffects)		/* called after completely consuming a corpse */
+cpostfx(pm, tin, nobadeffects, drained)		/* called after completely consuming a corpse */
 register int pm;
-BOOLEAN_P tin, nobadeffects;
+BOOLEAN_P tin, nobadeffects, drained;
 {
 	register int tmp = 0;
 	boolean catch_lycanthropy = FALSE;
@@ -1104,7 +1107,7 @@ BOOLEAN_P tin, nobadeffects;
 	switch(pm) {
 	    case PM_NEWT:
 		/* MRKR: "eye of newt" may give small magical energy boost */
-		if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
+		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
 		    int old_uen = u.uen;
 		    u.uen += d(2,10);
 		    if (u.uen > u.uenmax) {
@@ -1118,7 +1121,7 @@ BOOLEAN_P tin, nobadeffects;
 		}
 		break;
 	    case PM_AOA_DROPLET: //Aoas are drops of pure magic
-		if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
+		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
 		    int old_uen = u.uen;
 		    u.uen += d(4,10);
 		    if (u.uen > u.uenmax) {
@@ -1132,7 +1135,7 @@ BOOLEAN_P tin, nobadeffects;
 		}
 		break;
 	    case PM_AOA: //Aoas are drops of pure magic
-		if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
+		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
 		    int old_uen = u.uen;
 			int bonus = d(6,10);
 			u.uen = u.uen + 10 > (u.uenmax - 40) ? u.uen + 10 : (u.uenmax - 40);
@@ -1148,10 +1151,10 @@ BOOLEAN_P tin, nobadeffects;
 		}
 		break;
 	    case PM_WRAITH:
-			pluslvl(FALSE);
+			if(!drained || !rn2(5)) pluslvl(FALSE);
 		break;
 	    case PM_DEEP_DRAGON:
-			pluslvl(FALSE);
+			if(!drained || !rn2(5)) pluslvl(FALSE);
 		break;
 	    case PM_HUMAN_WERERAT:
 			if(!nobadeffects){
@@ -1183,13 +1186,13 @@ BOOLEAN_P tin, nobadeffects;
 			flags.botl = 1;
 		break;
 		case PM_SEWER_RAT:
-			if(!nobadeffects){
+			if(!nobadeffects && !drained){
 			if(d(1,10) > 9 && !Sick_resistance) make_vomiting(Vomiting+d(10,4), TRUE);
 			}
 		break;
 		case PM_RABID_RAT:
 			if(!nobadeffects){
-			if(d(1,20) > 19 && Sick_resistance){
+			if(!rn2(20)){
 				if (!Sick_resistance) {
 					char buf[BUFSZ];
 					long sick_time;
@@ -1207,7 +1210,7 @@ BOOLEAN_P tin, nobadeffects;
 			}
 		break;
 	    case PM_STALKER:
-			if(!nobadeffects){
+			if(!drained || !rn2(5)) if(!nobadeffects){
 			if(!Invis) {
 				set_itimeout(&HInvis, (long)rn1(100, 50));
 				if (!Blind && !BInvis) self_invis_message();
@@ -1272,7 +1275,7 @@ BOOLEAN_P tin, nobadeffects;
 		}
 		break;
 		case PM_GUG:
-			gainstr((struct obj *)0, 0);
+			if(!drained || !rn2(5)) gainstr((struct obj *)0, 0);
 		break;
 	    case PM_MANDRAKE:
 	    case PM_LIZARD:
@@ -1280,6 +1283,7 @@ BOOLEAN_P tin, nobadeffects;
 			if (HConfusion > 2)  make_confused(2L,FALSE);
 		break;
 		case PM_BEHOLDER:
+			if(!drained || !rn2(5)) {
 			You(Hallucination ? "can see your own insides!"
 				: "feel as though you can see the world from a whole new angle!");
 			if (!BClairvoyant)
@@ -1289,6 +1293,7 @@ BOOLEAN_P tin, nobadeffects;
 			    You("sense a pointy hat on top of your %s.",
 				body_part(HEAD));
 		    incr_itimeout(&HClairvoyant, rn1(500,500));
+			}
 		break;
 	    case PM_CHAMELEON:
 	    case PM_DOPPELGANGER:
@@ -1300,6 +1305,7 @@ BOOLEAN_P tin, nobadeffects;
 		break;
 	    case PM_MIND_FLAYER:
 	    case PM_MASTER_MIND_FLAYER:
+		if(!drained || !rn2(5)) {
 		if (ABASE(A_INT) < ATTRMAX(A_INT)) {
 			if (!rn2(2)) {
 				pline("Yum! That was real brain food!");
@@ -1309,6 +1315,7 @@ BOOLEAN_P tin, nobadeffects;
 		}
 		else {
 			pline("For some reason, that tasted bland.");
+		}
 		}
 		/* fall through to default case */
 	    default: {
@@ -1320,7 +1327,8 @@ BOOLEAN_P tin, nobadeffects;
 			pline ("Oh wow!  Great stuff!");
 			make_hallucinated(HHallucination + 200,FALSE,0L);
 		}
-		if(is_giant(ptr)) gainstr((struct obj *)0, 0);
+		
+		if(!drained || !rn2(5)) if(is_giant(ptr)) gainstr((struct obj *)0, 0);
 
 		/* Check the monster for all of the intrinsics.  If this
 		 * monster can give more than one, pick one to try to give
@@ -1348,8 +1356,8 @@ BOOLEAN_P tin, nobadeffects;
 		 for (i = 1; i <= LAST_PROP; i++) {
 			if (intrinsic_possible(i, ptr)) {
 				count++;
-					if(u.sealsActive&SEAL_AHAZU) givit(i, ptr, (tin && ptr->cnutrit > 45) ? 45 : ptr->cnutrit*0.9);
-					else givit(i, ptr, (tin && ptr->cnutrit > 50) ? 50 : ptr->cnutrit);
+					if(u.sealsActive&SEAL_AHAZU) givit(i, ptr, (tin && ptr->cnutrit > 45) ? 45 : ptr->cnutrit*0.9, drained);
+					else givit(i, ptr, (tin && ptr->cnutrit > 50) ? 50 : ptr->cnutrit, drained);
 			}
 		 }
 
@@ -1470,7 +1478,7 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 			You("drain energy from %s %s.", tintxts[r].txt,
 				mons[tin.tin->corpsenm].mname);
 			cprefx(tin.tin->corpsenm, TRUE, FALSE);
-			cpostfx(tin.tin->corpsenm, FALSE, FALSE);
+			cpostfx(tin.tin->corpsenm, FALSE, FALSE, FALSE);
 			costly_tin((const char*)0);
            goto use_me;
          }
@@ -1494,7 +1502,7 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 
 	    tin.tin->dknown = tin.tin->known = TRUE;
 	    cprefx(tin.tin->corpsenm, FALSE, FALSE);
-		cpostfx(tin.tin->corpsenm, TRUE, FALSE);
+		cpostfx(tin.tin->corpsenm, TRUE, FALSE, FALSE);
 
 	    /* charge for one at pre-eating cost */
 	    costly_tin((const char*)0);
@@ -2587,7 +2595,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					u.uconduct.food++;
 					You("drain the %s.", xname(otmp));
 					cprefx(otmp->corpsenm, TRUE, FALSE);
-					cpostfx(otmp->corpsenm, FALSE, FALSE);
+					cpostfx(otmp->corpsenm, FALSE, FALSE, !otmp->odrained);
 					if (carried(otmp)) useup(otmp);
 					else useupf(otmp, 1L);
 				}

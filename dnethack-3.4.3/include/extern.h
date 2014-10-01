@@ -580,7 +580,7 @@ E int NDECL(opentin);
 E int NDECL(unfaint);
 #endif
 E void FDECL(cprefx, (int, BOOLEAN_P, BOOLEAN_P));
-E void FDECL(cpostfx, (int, BOOLEAN_P, BOOLEAN_P));
+E void FDECL(cpostfx, (int, BOOLEAN_P, BOOLEAN_P, BOOLEAN_P));
 E boolean FDECL(is_edible, (struct obj *));
 E void NDECL(init_uhunger);
 E int NDECL(Hear_again);
