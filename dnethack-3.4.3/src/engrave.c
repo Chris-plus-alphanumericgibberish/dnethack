@@ -212,12 +212,20 @@ static const char *haluMesg[] = {
 		"This thing all things devours.",
 		"Not all those who wander are lost.",
 	"No Fate", /*Terminator*/
+	"When the world is in darkness Four Warriors will come....", /*FF I*/
 	"This world can have but one Emperor.", /*FF II*/
-	"We shall devour your light, and use it to return this world to the Void!", /*FFIII*/
-	"My hatred will not be stanched until it has consumed all else!", /*FFV*/
-	"Life... dreams... hope... Where do they come from? And where do they go...?", /*FFVI*/
-	"I will NEVER be a memory.", /*FFVII Advent Children*/
-	"Servant of time. Daughter of chaos. Unto the world unseen, the untamed you guide.", /*FFXIII-2*/
+	"We shall devour your light, and use it to return this world to the Void!", /*FF III*/
+	"My hatred will not be stanched until it has consumed all else!", /*FF V*/
+	"Life... dreams... hope... Where do they come from? And where do they go...?", /*FF VI*/
+	"Mine is special. It's good for absolutely nothing!", /*FF VII*/
+	"I will NEVER be a memory.", /*FF VII Advent Children*/
+	"Even if the world becomes your enemy... I'll be your knight, I'll protect you.", /*FF VIII*/
+	"You don't need a reason to help someone.", /*FF IX*/
+	"Memories are nice, but that's all they are.", /*FF X*/
+	"Better to leave things lost.", /*FF X-2*/
+	"The thirteen days after we awoke were the beginning of the end.", /*FF XIII*/
+	"Servant of time. Daughter of chaos. Unto the world unseen, the untamed you guide.", /*FF XIII-2*/
+	"One day, the light touched me.", /*FF XIII-3*/
 	"All the world will be your enemy, Prince With A Thousand Enemies...", /*Watership Down*/
 		"...and when they catch you they will kill you...",
 		"but first they must catch you.",
@@ -225,7 +233,8 @@ static const char *haluMesg[] = {
 	"Quod Erat Demonstrandum", "anno Domini", "per centum", /* QED, AD, percent */
 	"I was so surprised, I CLASSIFIED INFORMATION, I really did!", /*Haruhi Suzumiya*/
 	"[REDACTED]", "[DATA EXPUNGED]", "[DATA PLUNGED]", "[DATA EXPANDED]", "I am a toaster!", /* SCP Foundation */
-		"Special Containment Procedures: You're going to die, you poor dumb fuck.", /*SCP-1983*/
+		"Special Containment Procedures: You're going to die, you poor dumb fuck.", /* SCP-1983 */
+		"Hello.", "You are no longer lost.", "Here is the map for your journey up.", /* Anabasis */
 	"I prepared Explosive Runes this morning.", /*Order of the Stick*/
 		"In any battle, there's always a level of force against which no tactics can succeed.",
 	"1002: He is Not that Which He Says He Is.", /*Good Omens*/
