@@ -439,19 +439,18 @@ register struct edog *edog;
 	    /* We're hungry; check if we're carrying anything we can eat
 	       Intelligent pets should be able to carry such food */
 	    register struct obj *otmp, *obest = (struct obj *)0;
-	    int cur_nutrit = -1, best_nutrit = -1;
+	    int best_nutrit = -1; //cur_nutrit = -1,
 	    int cur_food = APPORT, best_food = APPORT;
 	    for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 	    {
-	        cur_nutrit = dog_nutrition(mtmp, otmp);
-		cur_food = dogfood(mtmp, otmp);
-	        if (cur_food < best_food &&
-		    cur_nutrit > best_nutrit)
-		{
-		    best_nutrit = cur_nutrit;
-		    best_food = cur_food;
-		    obest = otmp;
-		}
+//	        cur_nutrit = dog_nutrition(mtmp, otmp);
+			cur_food = dogfood(mtmp, otmp);
+	        if (cur_food < best_food) /*&& cur_nutrit > best_nutrit)*/
+			{
+//			    best_nutrit = cur_nutrit;
+			    best_food = cur_food;
+			    obest = otmp;
+			}
 	    }
 	    if (obest != (struct obj *)0)
 	    {
