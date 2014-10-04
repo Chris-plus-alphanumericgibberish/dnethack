@@ -2343,6 +2343,17 @@ register int	mmflags;
 			    mtmp->minvis = TRUE;
 			}
 		break;
+		case S_GNOME:
+			if(mndx == PM_CLOCKWORK_SOLDIER || mndx == PM_CLOCKWORK_DWARF || 
+			   mndx == PM_FABERGE_SPHERE || mndx == PM_FIREWORK_CART || 
+			   mndx == PM_JUGGERNAUT || mndx == PM_ID_JUGGERNAUT
+			) mtmp->mextra[0] = rn2(8);
+			
+			if(mndx == PM_ID_JUGGERNAUT) {
+				mtmp->perminvis = TRUE;
+				mtmp->minvis = TRUE;
+			}
+		break;
 		case S_WRAITH:
 			if (mndx == PM_PHANTASM){
 			    mtmp->mhpmax = mtmp->mhp = d(1,10);

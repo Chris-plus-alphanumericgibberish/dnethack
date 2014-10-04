@@ -350,6 +350,107 @@ register struct monst *mtmp;
 		    otmp->spe = -3;
 			place_object(otmp, x, y);
 		break;
+	    case PM_TINKER_GNOME:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(1,4);
+			if(!mtmp->mrevived && !rn2(20)){
+				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
+			} else if(!mtmp->mrevived && !rn2(10)){
+				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
+			}
+			mtmp->mnamelth = 0;
+		goto default_1;
+	    case PM_CLOCKWORK_DWARF:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(1,4);
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_FABERGE_SPHERE:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(1,3);
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_FIREWORK_CART:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(1,4);
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_CLOCKWORK_SOLDIER:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(1,3);
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_GOLDEN_HEART:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(1,4);
+			obj = mksobj_at(SUBETHAIC_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = 1;
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_JUGGERNAUT:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(3,4);
+			if(!rn2(20)){
+				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
+			} else if(!rn2(10)){
+				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
+			}
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_CLOCKWORK_FACTORY:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(3,4);
+			if(!rn2(20)){
+				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
+			} else if(!rn2(10)){
+				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
+			}
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_ID_JUGGERNAUT:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(4,4);
+			obj = mksobj_at(SUBETHAIC_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(1,4);
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_SCRAP_TITAN:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(4,4);
+			mtmp->mnamelth = 0;
+			num = d(2,4);
+			while (num--){
+				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj->oeroded = 3;
+				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj->oeroded = 3;
+				obj = mksobj_at(IRON_BAR, x, y, TRUE, FALSE);
+				obj->oeroded = 3;
+				obj = mksobj_at(LARGE_SHIELD, x, y, TRUE, FALSE);
+				obj->oeroded = 3;
+			}
+			if(!rn2(20)){
+				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
+			} else if(!rn2(10)){
+				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
+			}
+		break;
+	    case PM_HELLFIRE_COLOSSUS:
+			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(4,4);
+			num = d(2,6);
+			while (num--){
+				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(IRON_BAR, x, y, TRUE, FALSE);
+			}
+			mtmp->mnamelth = 0;
+			if(!rn2(20)){
+				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
+			} else if(!rn2(10)){
+				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
+			}
+		break;
 	    case PM_IRON_GOLEM:
 			num = d(2,6);
 			while (num--){
@@ -1392,7 +1493,16 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 #endif
 	       ))
 		continue;
-		
+		if(mdat == &mons[PM_CLOCKWORK_SOLDIER] || mdat == &mons[PM_CLOCKWORK_DWARF] || 
+		   mdat == &mons[PM_FABERGE_SPHERE] || mdat == &mons[PM_FIREWORK_CART] || 
+		   mdat == &mons[PM_JUGGERNAUT] || mdat == &mons[PM_ID_JUGGERNAUT]
+		) if(x + xdir[(int)mon->mextra[0]] != nx || 
+			   y + ydir[(int)mon->mextra[0]] != ny 
+			) continue;
+		if(mdat == &mons[PM_HOOLOOVOO] && 
+			IS_WALL(levl[mon->mx][mon->my].typ) &&
+			!IS_WALL(levl[nx][ny].typ)
+		) continue;
 		//Weeping angels should avoid stepping into corredors, where they can be forced into a standoff.
 		if(quantumlock && IS_ROOM(levl[mon->mx][mon->my].typ) && !IS_ROOM(ntyp) ) continue;
 		
@@ -1677,6 +1787,11 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	else if (magr->data == &mons[PM_GITHYANKI_PIRATE] &&
 		u.ukinghill)
 	    return ALLOW_M|ALLOW_TM;
+	else if (mdef->data != &mons[PM_TINKER_GNOME] && 
+			(magr->data == &mons[PM_CLOCKWORK_SOLDIER] || magr->data == &mons[PM_CLOCKWORK_DWARF] || 
+			 magr->data == &mons[PM_FABERGE_SPHERE] || magr->data == &mons[PM_FIREWORK_CART] || 
+			 magr->data == &mons[PM_JUGGERNAUT] || magr->data == &mons[PM_ID_JUGGERNAUT]))
+	    return ALLOW_M|ALLOW_TM;
 	/* Various other combinations such as dog vs cat, cat vs rat, and
 	   elf vs orc have been suggested.  For the time being we don't
 	   support those. */
@@ -1691,6 +1806,26 @@ register int x,y;
 {
 	register int distance = dist2(mon->mx, mon->my, x, y);
 	if (distance==2 && (mon->data==&mons[PM_GRID_BUG] || mon->data==&mons[PM_BEBELITH])) return 0;
+	if(mon->data == &mons[PM_CLOCKWORK_SOLDIER] || mon->data == &mons[PM_CLOCKWORK_DWARF] || 
+	   mon->data == &mons[PM_FABERGE_SPHERE]
+	) if(mon->mx + xdir[(int)mon->mextra[0]] != x || 
+		   mon->my + ydir[(int)mon->mextra[0]] != y 
+		) return 0;
+	if(mon->data == &mons[PM_FIREWORK_CART] || 
+	   mon->data == &mons[PM_JUGGERNAUT] || 
+	   mon->data == &mons[PM_ID_JUGGERNAUT]
+	){
+		if(mon->mx + xdir[(int)mon->mextra[0]] == x && 
+		   mon->my + ydir[(int)mon->mextra[0]] == y 
+		) return ((boolean)(distance < 3));
+		else if(rn2(2) && mon->mx + xdir[((int)mon->mextra[0] + 1)%8] == x && 
+		   mon->my + ydir[((int)mon->mextra[0] + 1)%8] == y 
+		) return (!rn2(2) && (distance < 3));
+		else if(mon->mx + xdir[((int)mon->mextra[0] - 1)%8] == x && 
+		   mon->my + ydir[((int)mon->mextra[0] - 1)%8] == y 
+		) return (!rn2(2) && (distance < 3));
+		else return 0;
+	}
 	return((boolean)(distance < 3));
 }
 
@@ -2065,6 +2200,15 @@ boolean was_swallowed;			/* digestion */
 			}
 			else if(mdat->mattk[i].adtyp == AD_ELEC){//mdat == &mons[PM_SHOCKING_SPHERE]){
 				explode(mon->mx, mon->my, 5, tmp, MON_EXPLODE, EXPL_MAGICAL);
+			}
+			else if(mdat->mattk[i].adtyp == AD_FRWK){
+				int x,y,i = rn2(3)+2;
+				for(i; i > 0; i--){
+					x = rn2(7)-3;
+					y = rn2(7)-3;
+					explode(mon->mx+x, mon->my+y, 8, tmp, -1, rn2(7));		//-1 is unspecified source. 8 is physical
+				}
+				tmp=0;
 			}
 			else if(mdat->mattk[i].adtyp == AD_SPNL){
 				explode(mon->mx, mon->my, 2, tmp, MON_EXPLODE, EXPL_WET);

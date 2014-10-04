@@ -1753,6 +1753,7 @@ boolean in_view;
 		case R_LYEHIAN_FACEPLATE:
 		case MIRROR:
 		case CRYSTAL_BALL:
+		case SUBETHAIC_COMPONENT:
 #ifdef TOURIST
 		case EXPENSIVE_CAMERA:
 #endif

@@ -737,7 +737,34 @@ mattacku(mtmp)
 			/* Note: firemu takes care of displacement */
 					 }
 		} break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AT_TNKR:{
+			if(range2 && !mtmp->mspec_used){
+				struct monst *mlocal;
+				int mdx=0, mdy=0, i;
+				
+				if(mtmp->mux - mtmp->mx < 0) mdx = -1;
+				else if(mtmp->mux - mtmp->mx > 0) mdx = +1;
+				if(mtmp->muy - mtmp->my < 0) mdy = -1;
+				else if(mtmp->muy - mtmp->my > 0) mdy = +1;
+				
+				if(mtmp->data == &mons[PM_HOOLOOVOO]){
+					if(rn2(4)) mlocal = makemon(&mons[PM_GOLDEN_HEART], mtmp->mx+mdx, mtmp->my+mdy, MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+					else mlocal = makemon(&mons[PM_ID_JUGGERNAUT], mtmp->mx+mdx, mtmp->my+mdy, MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				} else {
+					if(u.ulevel > 10 && !rn2(10)) mlocal = makemon(&mons[PM_FIREWORK_CART], mtmp->mx+mdx, mtmp->my+mdy, MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+					else mlocal = makemon(&mons[PM_CLOCKWORK_SOLDIER+rn2(3)], mtmp->mx+mdx, mtmp->my+mdy, MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				}
+				
+				if(mlocal){
+					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
+					mlocal->mextra[0] = i;
 
+					mtmp->mspec_used = rnd(6);
+				}
+			}
+			mtmp->mflee = 1;
+		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_LNCK:
 		case AT_LRCH:{
@@ -832,6 +859,7 @@ mattacku(mtmp)
 			if( mdat == &mons[PM_DEMOGORGON] && rn2(3) ) mtmp->mspec_used = 0;
 			if( mdat == &mons[PM_ELDER_PRIEST] && rn2(2) ) mtmp->mspec_used = 0;
 			if( mdat == &mons[PM_ALHOON] && rn2(2) ) mtmp->mspec_used = 0;
+			if( mdat == &mons[PM_HOOLOOVOO] && rn2(2) ) break;
 //			if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;
 //			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_SPEL && rn2(2) ) return 0;
 //			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_FIRE && rn2(2) ) return 0;
@@ -2551,6 +2579,16 @@ dopois:
 			u.ustdy = max(dmg,u.ustdy);
 			dmg = 0;
 		}break;
+///////////////////////////////////////////////////////////////////////////////////////////
+		case AD_FRWK:{
+			int x,y,i = rn2(3)+2;
+			for(i; i > 0; i--){
+				x = rn2(3)-1;
+				y = rn2(3)-1;
+				explode(mtmp->mx+x, mtmp->my+y, 8, dmg, -1, rn2(7));		//-1 is unspecified source. 8 is physical
+			}
+			dmg=0;
+		} break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 /*		case AD_VMSL:	//vorlon missile.  triple damage
 			mondead(mtmp);

@@ -3654,7 +3654,15 @@ register struct monst *shkp;
 	    remove_damage(shkp, FALSE);
 
 	if((udist = distu(omx,omy)) < 3 &&
-	   ((shkp->data != &mons[PM_GRID_BUG] && shkp->data != &mons[PM_BEBELITH]) || (omx==u.ux || omy==u.uy))) {
+		((shkp->data != &mons[PM_GRID_BUG] && shkp->data != &mons[PM_BEBELITH]) || (omx==u.ux || omy==u.uy)) &&
+		((shkp->data != &mons[PM_CLOCKWORK_SOLDIER] && shkp->data != &mons[PM_CLOCKWORK_DWARF] && 
+		   shkp->data != &mons[PM_FABERGE_SPHERE] && shkp->data != &mons[PM_FIREWORK_CART] && 
+		   shkp->data != &mons[PM_JUGGERNAUT] && shkp->data != &mons[PM_ID_JUGGERNAUT]) ||
+			(omx + xdir[(int)shkp->mextra[0]] == u.ux && 
+			   omy + ydir[(int)shkp->mextra[0]] == u.uy 
+			)
+		)
+	){
 		if(ANGRY(shkp) ||
 		   (Conflict && !resist(shkp, RING_CLASS, 0, 0))) {
 			if(Displaced)

@@ -33,6 +33,7 @@
 #define AT_ILUR		23	/* Two stage swallow attack, currently belongs to Illurien only */
 #define AT_HITS		24	/* Automatic hit, no contact */
 #define AT_WISP		25	/* Attack with wisps of mist, no contact */
+#define AT_TNKR		26	/* Tinker attacks */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */
@@ -139,6 +140,8 @@
 #define AD_VAMP		136	/* Vampire's blood drain attack */
 #define AD_WEBS		137	/* Vampire's blood drain attack */
 #define AD_ILUR		138 /* memory draining engulf attack belonging to Illurien */
+#define AD_TNKR		139 /* Tinker attacks */
+#define AD_FRWK		140 /* "Firework" explosions */
 #define AD_STDY		141 /* Monster studies you, other monsters do more damage. */
 #define AD_OONA		142 /* Oona's variable energy type and v and e spawning */
 

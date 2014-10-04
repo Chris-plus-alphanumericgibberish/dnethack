@@ -2448,7 +2448,15 @@ register struct attack *mattk;
 				mdef->mstun = 1;
 			}
 		break;
-		
+		case AD_FRWK:{
+			int x,y,i = rn2(3)+2;
+			for(i; i > 0; i--){
+				x = rn2(3)-1;
+				y = rn2(3)-1;
+				explode(u.ux+x, u.uy+y, 8, tmp, -1, rn2(7));		//-1 is unspecified source. 8 is physical
+			}
+			tmp=0;
+		} break;
 /*		case AD_VMSL:	//vorlon missile.  triple damage
 			rehumanize();
 			explode(u.ux, u.uy, 5, tmp, -1, EXPL_WET);		//-1 is unspecified source. 5 is electrical

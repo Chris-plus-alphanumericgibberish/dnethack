@@ -221,6 +221,13 @@ mattackm(magr, mdef)
     if ((pa == &mons[PM_GRID_BUG] || pa == &mons[PM_BEBELITH]) && magr->mx != mdef->mx
 						&& magr->my != mdef->my) return(MM_MISS);
 
+	if(pa == &mons[PM_CLOCKWORK_SOLDIER] || pa == &mons[PM_CLOCKWORK_DWARF] || 
+	   pa == &mons[PM_FABERGE_SPHERE] || pa == &mons[PM_FIREWORK_CART] || 
+	   pa == &mons[PM_JUGGERNAUT] || pa == &mons[PM_ID_JUGGERNAUT]
+	) if(magr->mx + xdir[(int)magr->mextra[0]] != mdef->mx || 
+		   magr->my + ydir[(int)magr->mextra[0]] != mdef->my 
+		) return(MM_MISS);
+	
     /* Calculate the armour class differential. */
     tmp = find_mac(mdef) + magr->m_lev;
     if (mdef->mconf || !mdef->mcanmove || mdef->msleeping) {
@@ -395,6 +402,27 @@ meleeattack:
 		else res[i] = MM_MISS;
 		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
+		}break;
+		
+	    case AT_TNKR:{
+			if(!magr->mspec_used){
+				struct monst *mlocal;
+				int mdx=0, mdy=0, i;
+				
+				if(mdef->mx - magr->mx < 0) mdx = -1;
+				else if(mdef->mx - magr->mx > 0) mdx = +1;
+				if(mdef->my - magr->my < 0) mdy = -1;
+				else if(mdef->my - magr->my > 0) mdy = +1;
+				
+				mlocal = makemon(&mons[PM_CLOCKWORK_SOLDIER+rn2(3)], magr->mx + mdx, magr->my + mdy, MM_ADJACENTSTRICT);
+				
+				if(mlocal){
+					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
+					mlocal->mextra[0] = i;
+					
+					magr->mspec_used = rnd(6);
+				}
+			}
 		}break;
 #endif /* TAME_RANGED_ATTACKS */
 
@@ -1569,6 +1597,15 @@ mdamagem(magr, mdef, mattk)
 		/* there's no msomearmor() function, so just do damage */
 	     /* if (cancelled) break; */
 		break;
+		case AD_FRWK:{
+			int x,y,i = rn2(3)+2;
+			for(i; i > 0; i--){
+				x = rn2(3)-1;
+				y = rn2(3)-1;
+				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(7));		//-1 is unspecified source. 8 is physical
+			}
+			tmp=0;
+		} break;
 /*		case AD_VMSL:	//vorlon missile.  triple damage
 			magr->mhp = -1;
 			mondead(magr);

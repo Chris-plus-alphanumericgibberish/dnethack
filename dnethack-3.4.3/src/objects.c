@@ -1067,6 +1067,10 @@ OBJECT(OBJ("heavy iron ball", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,
 						/* +d4 when "very heavy" */
 OBJECT(OBJ("iron chain", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
 		CHAIN_CLASS, 1000, 0,  120,  0,  4,  4, 0, 0,  200, HI_METAL),
+OBJECT(OBJ("clockwork component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,COPPER), 0,
+		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   20, HI_COPPER),
+OBJECT(OBJ("subethaic component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,GLASS), 0,
+		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   20, HI_GLASS),
 						/* +1 both l & s */
 
 OBJECT(OBJ("blinding venom", "splash of venom"),
