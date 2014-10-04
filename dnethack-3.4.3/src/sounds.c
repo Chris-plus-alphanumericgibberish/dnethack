@@ -2898,11 +2898,16 @@ int tx,ty;
 				pline("A brilliantly colored bird with iron claws flies high overhead.");
 				if(u.sealCounts < numSlots){
 					pline("It swoops down and lands on your shoulder.");
+					pline("Its radiant rainbow feathers reflect in its eyes,");
+					pline("becoming images of roaring flames and sparkling snow,");
+					pline("harsh radiance on barren clifs");
+					pline("and swolen suns in empty black skies.");
 					bindspirit(ep->ward_id);
 					u.sealTimeout[SIMURGH-FIRST_SEAL] = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
-					pline("Loose feathers rain down around your blade.");
+					pline("Loose feathers rain down around your blade,");
+					pline("each feather a memory of ruin and of loss.");
 					uwep->ovar1 |= SEAL_SIMURGH;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_SIMURGH;
