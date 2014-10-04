@@ -173,8 +173,13 @@ register struct obj *obj;
 void
 init_uhunger()
 {
-	if(Race_if(PM_INCANTIFIER)) u.uen = u.uenmax/2;
-	else u.uhunger = 900;
+	if(Race_if(PM_INCANTIFIER)){
+		u.uenmax += 900;
+		u.uen = u.uenmax/2;
+	} else {
+		u.uhungermax = 2000;
+		u.uhunger = 900;
+	}
 	u.uhs = NOT_HUNGRY;
 }
 
@@ -1904,7 +1909,7 @@ struct obj *otmp;
 		if(YouHunger <= 200)
 		    pline(Hallucination ? "Oh wow, like, superior, man!" :
 			  "That food really hit the spot!");
-		else if(YouHunger <= 700) pline("That satiated your %s!",
+		else if(YouHunger <= u.uhungermax/2 - 300) pline("That satiated your %s!",
 						body_part(STOMACH));
 		break;
 	    case TRIPE_RATION:
@@ -2626,7 +2631,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		/* Note: gold weighs 1 pt. for each 1000 pieces (see */
 		/* pickup.c) so gold and non-gold is consistent. */
 	    if (otmp->oclass == COIN_CLASS)
-		basenutrit = ((otmp->quan > 200000L) ? 2000
+		basenutrit = ((otmp->quan > ((long)u.uhungermax)*100L) ? u.uhungermax
 			: (int)(otmp->quan/100L));
 	    else if(otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS)
 		basenutrit = weight(otmp);
@@ -2899,7 +2904,7 @@ bite()
 {
 	if(victual.canchoke && 
 		((Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax) ||
-		 (!Race_if(PM_INCANTIFIER)&& u.uhunger >= 2000) )
+		 (!Race_if(PM_INCANTIFIER)&& u.uhunger >= u.uhungermax) )
 		) {
 		choke(victual.piece);
 		return 1;
@@ -2932,7 +2937,6 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if ((!u.usleep || !rn2(10))	/* slow metabolic rate while asleep */
 		&& (carnivorous(youmonst.data) 
 			|| herbivorous(youmonst.data) 
-			|| uclockwork 
 			|| maybe_polyd(is_vampire(youmonst.data), 
 							Race_if(PM_VAMPIRE)))
 #ifdef CONVICT
@@ -2940,9 +2944,9 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
         && (!Role_if(PM_CONVICT) || (moves % 2) || (u.uhs < HUNGRY))
 #endif /* CONVICT */
         && (!Race_if(PM_VAMPIRE) || !(moves % (u.ulevel/10 + 1)))
-		&& !( (Slow_digestion && !Race_if(PM_INCANTIFIER) ||
-				(Race_if(PM_INCANTIFIER) && moves%10) ) || 
-				(uclockwork && u.ucspeed == SLOW_CLOCKSPEED) ))
+		&& !( (Slow_digestion && !Race_if(PM_INCANTIFIER)) ||
+				(Race_if(PM_INCANTIFIER) && moves%10) || 
+				(uclockwork) ))
 			(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);		/* ordinary food consumption */
 	if(uwep && (
 			uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youmonst.data)))
@@ -2950,7 +2954,14 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 		if(Race_if(PM_INCANTIFIER)) u.uen -= 9;
 		else u.uhunger -= 9;
 	}
-	if(uclockwork && u.ucspeed == SLOW_CLOCKSPEED && !(moves%10)) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+	if(uclockwork){
+		if(u.ucspeed == SLOW_CLOCKSPEED && !(moves%(10+u.slowclock))) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+		else{
+			if(u.slowclock < 10){
+				if(moves%10 <= u.slowclock) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+			} else if(!(moves%u.slowclock)) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+		}
+	}
 	if (moves % 2) {	/* odd turns */
 	    /* Regeneration uses up food, unless due to an artifact */
 	    if ( (HRegeneration && !maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) || ((ERegeneration & (~W_ART)) &&
@@ -3010,7 +3021,7 @@ register int num;
 	if(Race_if(PM_INCANTIFIER)) u.uen += num;
 	else u.uhunger += num;
 	if(((Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax) ||
-		 (!Race_if(PM_INCANTIFIER)&& u.uhunger >= 2000) )
+		 (!Race_if(PM_INCANTIFIER)&& u.uhunger >= u.uhungermax) )
 		) {
 	    if (!iseating || victual.canchoke) {
 		if (iseating) {
@@ -3035,7 +3046,7 @@ register int num;
 	     * warns when you're about to choke.
 	     */
 	    if ((Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax * 3/4) ||
-			(!Race_if(PM_INCANTIFIER) && u.uhunger >= 1500)) {
+			(!Race_if(PM_INCANTIFIER) && u.uhunger >= u.uhungermax * 3/4)) {
 		if (!victual.eating || (victual.eating && !victual.fullwarn)) {
 				if(!uclockwork){
 		    pline("You're having a hard time getting all of it down.");
@@ -3192,7 +3203,7 @@ windclock()
     victual.piece = 0;
     victual.mon = 0;
     return 0;
-  }else if(victual.canchoke && u.uhunger >= 2000) {
+  }else if(victual.canchoke && u.uhunger >= u.uhungermax) {
     Your("mainspring is wound too tight!");
     Your("clockwork breaks apart!");
     killer_format = KILLED_BY;
@@ -3202,7 +3213,7 @@ windclock()
     victual.mon = 0;
     return 0;
   }
-  else if (u.uhunger >= 1500 && !victual.fullwarn) {
+  else if (u.uhunger >= u.uhungermax * 3/4 && !victual.fullwarn) {
     pline("%s is having a hard time cranking the key.",Monnam(victual.mon));
     victual.fullwarn = TRUE;
   }
@@ -3253,7 +3264,7 @@ boolean incr;
 	int h = YouHunger;
      boolean clockwork = uclockwork;
 
-	newhs = (h > (Race_if(PM_INCANTIFIER) ? max(u.uenmax/2,200) : 1000) ) ? SATIATED :
+	newhs = (h > (Race_if(PM_INCANTIFIER) ? max(u.uenmax/2,200) : u.uhungermax/2) ) ? SATIATED :
 		(h > 150) ? NOT_HUNGRY :
 		(h > 50) ? HUNGRY :
 		(h > 0) ? WEAK : FAINTING;

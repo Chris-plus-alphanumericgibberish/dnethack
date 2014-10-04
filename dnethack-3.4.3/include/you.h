@@ -292,6 +292,7 @@ struct you {
 	char	ushops_left[5]; /* ditto, shops exited this turn */
 
 	int	 uhunger;	/* refd only in eat.c and shk.c */
+	int	 uhungermax;/*  */
 #define YouHunger	(Race_if(PM_INCANTIFIER) ? u.uen : u.uhunger)
 	unsigned uhs;		/* hunger state - see eat.c */
 
@@ -329,10 +330,13 @@ struct you {
 			mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */
 	short ucspeed;
-	 
 #define	HIGH_CLOCKSPEED	1
 #define	NORM_CLOCKSPEED	2
 #define	SLOW_CLOCKSPEED	3
+	long clockworkUpgrades;
+	
+	int slowclock;
+	
 	unsigned ucreamed;
 	unsigned uswldtim;		/* time you have been swallowed */
 

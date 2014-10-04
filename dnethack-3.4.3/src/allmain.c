@@ -240,7 +240,9 @@ moveloop()
 			/* your speed doesn't augment steed's speed */
 			moveamt = mcalcmove(u.usteed);
 			if(uclockwork && u.ucspeed == HIGH_CLOCKSPEED){
-				morehungry(3); /*You are still burning spring tension, even if it doesn't affect your speed!*/
+				/*You are still burning spring tension, even if it doesn't affect your speed!*/
+				if(u.slowclock < 3) morehungry(3-u.slowclock);
+				else if(!(moves%(u.slowclock - 2))) morehungry(1);
 			}
 		    } else
 #endif
@@ -323,8 +325,11 @@ moveloop()
 			}
 			
 			if(uclockwork && u.ucspeed == HIGH_CLOCKSPEED){
+				int hungerup;
 				moveamt *= 2;
-				morehungry(2*moveamt/NORMAL_SPEED - 1);
+				hungerup = 2*moveamt/NORMAL_SPEED - 1;
+				if(u.slowclock < hungerup) morehungry(hungerup-u.slowclock);
+				else if(!(moves%(u.slowclock - hungerup + 1))) morehungry(1);
 			}
 			}
 
