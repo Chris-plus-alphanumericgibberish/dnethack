@@ -271,6 +271,15 @@ MONSTER:';',"jellyfish",random
 MONSTER:';',"jellyfish",random
 MONSTER:';',"jellyfish",random
 # Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 OBJECT:'!',random,random
 OBJECT:'!',random,random
 OBJECT:'!',random,random
@@ -407,6 +416,15 @@ OBJECT:'!',random,random
 OBJECT:'%',random,random
 OBJECT:'%',random,random
 OBJECT:'%',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 OBJECT:'`',"boulder",random
 #
 # The Orcus Level
@@ -649,6 +667,16 @@ OBJECT:'?',random,random
 OBJECT:'?',random,random
 OBJECT:'?',random,random
 OBJECT:'?',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 # Some monsters.
 MONSTER:'&',"horned devil",(14,12),hostile
 MONSTER:'&',"barbed devil",(18,08),hostile
@@ -756,6 +784,12 @@ MONSTER:'i',"legion devil grunt",random
 MONSTER:'i',"legion devil grunt",random
 MONSTER:'i',"legion devil grunt",random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY:center,center
 MAP
 0--S--
@@ -772,6 +806,9 @@ MAZEWALK:(02,04), south
 MONSTER:'&',"Bael",(02,02)
 MONSTER:'&',"pit fiend",(01,01)
 MONSTER:'&',"pit fiend",(02,03)
+
+#Some random objects
+OBJECT:random,random,random
 
 GEOMETRY:right,center
 
@@ -848,6 +885,13 @@ MONSTER:'i',"legion devil soldier",random
 MONSTER:'i',"legion devil soldier",random
 MONSTER:'i',"legion devil soldier",random
 MONSTER:'i',"legion devil soldier",random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 #          1         2         3         4         5         6         7
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
@@ -966,6 +1010,17 @@ MONSTER:'i',"legion devil captain",(66,18)
 MONSTER:'&',"pit fiend",(70,18)
 
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 ##          1         2         3         4         5         6         7
 ##01234567890123456789012345678901234567890123456789012345678901234567890123456
 #0|------|--------|----------|-|-------------------------------|--------------
@@ -1027,6 +1082,18 @@ REGION:(62,01,74,02),lit,"wand shop"
 MONSTER:'i',"legion devil captain",(63,02)
 MONSTER:'i',"legion devil captain",(66,02)
 MONSTER:'&',"pit fiend",(70,02)
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 
 #MAZE: "minauros",random
 MAZE: "hell-3",random
@@ -1093,6 +1160,17 @@ DOOR:locked,(28,07)
 DOOR:locked,(28,13)
 DOOR:locked,(27,08)
 DOOR:locked,(27,12)
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 OBJECT:  '$', random, (19,13)
 OBJECT:  '$', random, (22,13)
@@ -1553,6 +1631,20 @@ DOOR:locked,(69,11)
 DOOR:locked,(68,07)
 DOOR:locked,(69,07)
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 #MAZE: "stygia",random
 MAZE: "hell2-1",random
@@ -1641,6 +1733,21 @@ MONSTER:'E',"water elemental", random
 MONSTER:'E',"water elemental", random
 MONSTER:'E',"water elemental", random
 
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 #MAZE: "malblg",random
 MAZE: "hell2-2",random
@@ -1762,6 +1869,21 @@ MONSTER:'E',"earth elemental", random
 MONSTER:'E',"earth elemental", random
 MONSTER:'E',"earth elemental", random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 #MAZE: "mdomini",random
 MAZE: "hell2-3",random
 FLAGS: noteleport,hardfloor,nommap,shortsighted
@@ -1873,6 +1995,21 @@ OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: right,center
 #0         1         2   	 3	     4	   5		 6	     7
@@ -2073,6 +2210,13 @@ MONSTER:'v',"ice vortex",random
 MONSTER:'v',"ice vortex",random
 
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY: right,center
 
 #0          1        2     	 3	     4	   5		 6	     7
@@ -2141,6 +2285,12 @@ MONSTER:'v',"steam vortex",random
 MONSTER:'v',"steam vortex",random
 MONSTER:'v',"steam vortex",random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY: right,center
 
 #0          1        2     	 3	     4	   5		 6	     7
@@ -2189,6 +2339,12 @@ MONSTER:'\'',"iron golem",random
 MONSTER:'\'',"iron golem",random
 MONSTER:'\'',"iron golem",random
 MONSTER:'\'',"iron golem",random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: right,center
 
@@ -2345,31 +2501,42 @@ MONSTER:'i',"legion devil sergeant",random
 MONSTER:'i',"legion devil sergeant",random
 MONSTER:'i',"legion devil sergeant",random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY: right,center
 
 #0          1         2   	 3	     4	   5		 6	     7
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
 MAP
 0----------------------------------------------------------------------------
-1|.............S.....|..................................|.....S.............|
-2|---S------------...|. . . . . . . . .. . . . . . . . .|...------------S---|
-3|.....|.........|-S--..................................--S-|.........|.....|
-4|..---|.........|...|. . . .--------------------. . . .|...|.........|---..|
-5|..|..S.........|.L.........|............|.....|.........L.|.........S..|..|
-6|..|..|.........|...|. . . .|............S.....|. . . .|...|.........|..|..|
-7|..|..|.........|-S--.......|---------------...|.......--S-|.........|..|..|
-8|..|..-----------...|. . . .|.....S........|-S--. . . .|...-----------..|..|
-9|..S..........|.....|.......|..---|........|L.L|.......|.....|..........S..|
-0---------------------. . . .|..|..|........|...S. ... .---------------------
-1|.............S.....|.......|..|..|........|L.L|.......|.....S.............|
-2|---S------------...|. . . .|..|..|........|-S--. . . .|...------------S---|
-3|.....|.........|-S--.......|..|..----------...|.......--S-|.........|.....|
-4|..---|.........|...|. . . .|..|.........S.....|. . . .|...|.........|---..|
-5|..|..S.........|.L.........-..S.........|.....|.........L.|.........S..|..|
-6|..|..|.........|...|. . . .--------------------. . . .|...|.........|..|..|
-7|..|..|.........|-S--..................................--S-|.........|..|..|
-8|..|..-----------...|. . . . . . . . .. . . . . . . . .|...-----------..|..|
-9|..S..........|.....|..................................|.....|..........S..|
+1|.............S.....|                                  |.....S.............|
+2|---S------------...|                                  |...------------S---|
+3|.....|.........|-S--                                  --S-|.........|.....|
+4|..---|.........|...|       --------------------       |...|.........|---..|
+5|..|..S.........|.L..       |............|.....|       ..L.|.........S..|..|
+6|..|..|.........|...|       |............S.....|       |...|.........|..|..|
+7|..|..|.........|-S--       |---------------...|       --S-|.........|..|..|
+8|..|..-----------...|       |.....S........|-S--       |...-----------..|..|
+9|..S..........|.....|       |..---|........|L.L|       |.....|..........S..|
+0---------------------       |..|..|........|...S       ---------------------
+1|.............S.....|       |..|..|........|L.L|       |.....S.............|
+2|---S------------...|       |..|..|........|-S--       |...------------S---|
+3|.....|.........|-S--       |..|..----------...|       --S-|.........|.....|
+4|..---|.........|...|       |..|.........S.....|       |...|.........|---..|
+5|..|..S.........|.L..       -..S.........|.....|       ..L.|.........S..|..|
+6|..|..|.........|...|       --------------------       |...|.........|..|..|
+7|..|..|.........|-S--                                  --S-|.........|..|..|
+8|..|..-----------...|                                  |...-----------..|..|
+9|..S..........|.....|                                  |.....|..........S..|
 0----------------------------------------------------------------------------
 ENDMAP
 
@@ -2418,6 +2585,21 @@ MONSTER:'&',"pit fiend", place[3], "Zaebos"
 MONSTER:'&',"pit fiend", place[3], "Zapan"
 MONSTER:'&',"pit fiend", place[3], "Pearza"
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: right,center
 
@@ -2781,6 +2963,21 @@ MONSTER:'A',"Archon", place[9], hostile, "mad archon", asleep
 MONSTER:'A',"Aleax", place[9], hostile, "mad aleax"
 
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 
 MAZE: "brine-2",random
@@ -2851,6 +3048,22 @@ MONSTER:'b',random,random
 MONSTER:'b',"shoggoth",random
 MONSTER:'b',"shoggoth",random
 MONSTER:'b',"shoggoth",random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: right,center
 #0         1         2		   3	     4		   5		 6		   7
@@ -3026,6 +3239,17 @@ MONSTER:'&',random,random
 MONSTER:'&',random,random
 MONSTER:'&',random,random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 MAZE: "abyss-4",random
 #MAZE: "baph",random
 FLAGS: noteleport,hardfloor,nommap,shortsighted
@@ -3136,6 +3360,16 @@ MONSTER:'o',"hill orc",(37,11)
 MONSTER:'o',"hill orc",(37,11)
 MONSTER:'o',"hill orc",(37,11)
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: center,center
 #0         1         2   	  3	      4	    5		  6	      7
@@ -3318,6 +3552,17 @@ MONSTER:'Z',"skeleton",(10,12)
 MONSTER:'Z',"skeleton",(11,12)
 MONSTER:'Z',"skeleton",(12,12)
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 MAZE: "abys2-2",random
 #MAZE: "malc",random
 FLAGS: noteleport,hardfloor,nommap,shortsighted
@@ -3373,6 +3618,17 @@ MONSTER:'&',"incubus",random
 MONSTER:'&',"incubus",random
 MONSTER:'&',"incubus",random
 MONSTER:'&',"incubus",random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: center,center
 #0         1         2         3         4         5         6         7
@@ -3517,6 +3773,16 @@ MONSTER:'&',"succubus",random
 MONSTER:'&',"succubus",random
 MONSTER:'&',"succubus",random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: center,center
 #0         1         2         3         4         5         6         7
@@ -3677,6 +3943,17 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY: center,center
 #0         1         2         3         4         5         6         7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -3764,6 +4041,17 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY: center,center
 #0         1         2         3         4         5         6         7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -3847,6 +4135,17 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: center,center
 #0         1         2         3         4         5         6         7
@@ -3932,6 +4231,17 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 GEOMETRY: center,center
 #0         1         2         3         4         5         6         7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -4015,6 +4325,17 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 GEOMETRY: center,center
 #0         1         2         3         4         5         6         7
