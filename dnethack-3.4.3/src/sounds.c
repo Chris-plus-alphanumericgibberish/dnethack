@@ -2864,7 +2864,7 @@ int tx,ty;
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis))){
 					if(!Blind) pline("A beautiful woman walks into the seal.");
 					pline("\"Somtimes, a subtle aproach is better.\"");
-					if(!Blind) pline("She dips her fingers into the ink of %s and writes on your weapon.");
+					if(!Blind) pline("She dips her fingers into the ink of %s and writes on your weapon.", xname(o));
 					o->spestudied++;
 					uwep->ovar1 |= SEAL_PAIMON;
 					if(!u.spiritTineA){ 
