@@ -198,6 +198,7 @@ static const char *haluMesg[] = {
 		"The walled-up abomination seems friendly enough.",
 		"Kill you... Take your face...",
 	"You are lost. You can never go home.", /* Gollum's Song */
+	"But now, we dance this grim fandango, and will for years until we rest.", /* Grim Fandango */
 	"Bad Wolf", /* Dr. Who */
 	"It's only the end if you want it to be.", /*Batgirl*/
 	"Mistakes were made.",
@@ -250,6 +251,7 @@ static const char *haluMesg[] = {
 		"Ahahahahaha! Ahahahaha! Aahahaha!\nBEWARE!!!!!\nYrs sincerely\nThe Opera Ghost",
 		"Bee There Orr Bee A Rectangular Thyng",
 		"We're certainly dwarves",
+		"There is no doubt being human is incredibly difficult and cannot be mastered in one lifetime.",
 	"NOT A Secret Base", /*Gunnerkrigg Court*/
 	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
 	"I SAW THE EYE. Over the horizon, like a rising sun!", /* Dresden Codak */
@@ -286,7 +288,10 @@ static const char *haluMesg[] = {
 	"Why are you sad?", /*Blood-C*/
 	"Only accurate information has practical application.", /* not sure where this originated, possibly Aron Ra?*/
 	"Now watch what you say or they'll be calling you a radical!", /* The Logical Song, Supertramp */
-	"Never tell me the odds!" /* Starwars */
+	"Do what thou wilt shall be the whole of the Law", /* Aleister Crowley */
+	"Oh, 'great warrior...' Wars not make one great!", /*Star Wars*/
+		"I've got a bad feeling about this...",
+		"Never tell me the odds!"
 };
 
 const int wardStrokes[][7] = {
