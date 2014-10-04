@@ -693,48 +693,90 @@ gcrownu()
 	} else {
     switch (u.ualign.type) {
     case A_LAWFUL:
-	u.uevent.uhand_of_elbereth = 1;
 	if(Role_if(PM_MONK)){
+		u.uevent.uhand_of_elbereth = 4;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
+		verbalize("I dub thee...  The Sage of Law!");
 	} else if(Role_if(PM_WIZARD)){
+		u.uevent.uhand_of_elbereth = 10;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+		verbalize("I dub thee...  The Magister of Law!");
+	} else if(Role_if(PM_NOBLEMAN)){
+		in_hand = FALSE;
+		if(Race_if(PM_VAMPIRE)) already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
+		else already_exists = exist_artifact(find_gcirclet(), artiname(ART_CROWN_OF_THE_SAINT_KING));
+		if(Race_if(PM_VAMPIRE)){
+			u.uevent.uhand_of_elbereth = 9;
+			verbalize("I crown thee...  The Dark %s!", flags.female ? "Lady" : "Lord");
+		} else {
+			u.uevent.uhand_of_elbereth = 7;
+			verbalize("I crown thee...  The Saint %s!", flags.female ? "Queen" : "King");
 	}
+	} else {
+		u.uevent.uhand_of_elbereth = 1;
 #ifdef ELBERETH
 	verbalize("I crown thee...  The Hand of Elbereth!");
+		// if(Race_if(PM_ELF)) verbalize("I crown thee...  The Hand of Elbereth!");
+		// else verbalize("I dub thee...  The Arm of the Law!");
 #else
 		verbalize("I dub thee...  The Arm of the Law!");
 #endif
+	}
 	break;
     case A_NEUTRAL:
-	u.uevent.uhand_of_elbereth = 2;
 	if(Role_if(PM_MONK)){
+		u.uevent.uhand_of_elbereth = 5;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
+		verbalize("Thou shalt be the Grandmaster of Balance!");
 	} else if(Role_if(PM_WIZARD)){
+		u.uevent.uhand_of_elbereth = 11;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+		verbalize("Thou shalt be the Wizard of Balance!");
+	} else if(Role_if(PM_NOBLEMAN)){
+		in_hand = FALSE;
+		if(Race_if(PM_VAMPIRE)) already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
+		else already_exists = exist_artifact(find_gcirclet(), artiname(ART_CROWN_OF_THE_SAINT_KING));
+		if(Race_if(PM_VAMPIRE)){
+			u.uevent.uhand_of_elbereth = 9;
+			verbalize("I crown thee...  Dark %s!", flags.female ? "Lady" : "Lord");
+		} else {
+			u.uevent.uhand_of_elbereth = 8;
+			verbalize("I dub thee...  The Grey Saint!");
+		}
 	} else {
+		u.uevent.uhand_of_elbereth = 2;
 	in_hand = (uwep && uwep->oartifact == ART_VORPAL_BLADE);
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_VORPAL_BLADE));
+		verbalize("Thou shalt be my Envoy of Balance!");
 	}
-	verbalize("Thou shalt be my Envoy of Balance!");
 	break;
     case A_CHAOTIC:
-	u.uevent.uhand_of_elbereth = 3;
 	if(Role_if(PM_MONK)){
+		u.uevent.uhand_of_elbereth = 6;
 		in_hand = FALSE;
-		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
+		already_exists = exist_artifact(ROBE, artiname(ART_ROBE_OF_THE_ARCHMAGI));
+		verbalize("Thou art chosen to cause dismay in My Name!");
 	} else if(Role_if(PM_WIZARD)){
+		u.uevent.uhand_of_elbereth = 12;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+		verbalize("Thou art chosen to take lives for My Glory!");
+	} else if(Role_if(PM_NOBLEMAN)){
+		u.uevent.uhand_of_elbereth = 9;
+		in_hand = FALSE;
+		already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
+		verbalize("I crown thee...  Dark %s!", flags.female ? "Lady" : "Lord");
 	} else {
+		u.uevent.uhand_of_elbereth = 3;
 	in_hand = (uwep && uwep->oartifact == ART_STORMBRINGER);
 	already_exists = exist_artifact(RUNESWORD, artiname(ART_STORMBRINGER));
-	}
 	verbalize("Thou art chosen to %s for My Glory!",
 		  already_exists && !in_hand ? "take lives" : "steal souls");
+	}
 	break;
     }
 	}
@@ -776,7 +818,11 @@ gcrownu()
 			;		/* already got bonus above for some reason */
 		} else if (!already_exists) {
 			obj = mksobj(ROBE, FALSE, FALSE);
+			if(u.ualign.type != A_CHAOTIC){
 			obj = oname(obj, artiname(ART_GRANDMASTER_S_ROBE));
+			} else {
+				obj = oname(obj, artiname(ART_ROBE_OF_THE_ARCHMAGI));
+			}
 			obj->spe = 1;
 			at_your_feet("A robe");
 			dropy(obj);
@@ -784,6 +830,37 @@ gcrownu()
 		}
 		if (obj && obj->oartifact == ART_GRANDMASTER_S_ROBE)
 			discover_artifact(ART_GRANDMASTER_S_ROBE);
+		else if(obj && obj->oartifact == ART_ROBE_OF_THE_ARCHMAGI)
+			discover_artifact(ART_ROBE_OF_THE_ARCHMAGI);
+	} else if (Role_if(PM_NOBLEMAN)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if(u.uevent.uhand_of_elbereth != 9){
+				obj = mksobj(find_gcirclet(), FALSE, FALSE);
+				obj = oname(obj, artiname(ART_CROWN_OF_THE_SAINT_KING));
+			} else {
+				obj = mksobj(find_gcirclet(), FALSE, FALSE);
+				obj = oname(obj, artiname(ART_HELM_OF_THE_DARK_LORD));
+			}
+			if(obj){
+				obj->spe = 1;
+				obj = hold_another_object(obj, 
+					"A %s appears at your feet", 
+					u.uevent.uhand_of_elbereth != 9 ? "crown" : "helm",
+					(const char *)0);
+				if(carried(obj)){
+					if(uarmh) remove_worn_item(uarmh, TRUE);
+					setworn(obj, W_ARMH);
+					Helmet_on();
+				}
+			}
+			u.ugifts++;
+		}
+		if (obj && obj->oartifact == ART_CROWN_OF_THE_SAINT_KING)
+			discover_artifact(ART_CROWN_OF_THE_SAINT_KING);
+		else if(obj && obj->oartifact == ART_HELM_OF_THE_DARK_LORD)
+			discover_artifact(ART_HELM_OF_THE_DARK_LORD);
     } else if( Role_if(PM_PIRATE) ){
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */

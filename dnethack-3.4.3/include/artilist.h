@@ -71,6 +71,18 @@ A("Vorpal Blade",		LONG_SWORD,
 	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, /*Vorpal Blade also uses exploading dice (roll again if maximum number is rolled)*/
 	0,0,0),							 /*According to an article on 1d4Chan, the average of an exploading die is roughly that of a die one size larger*/
 									 /*So vorpal sword is effectively 2d10+2/2d14+2*/
+A("Crown of the Saint King",	HELMET, /*Actually gold circlet*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	LEADERSHIP, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
+	0,0,WSFX_PLUSSEV),
+A("Helm of the Dark Lord",	HELMET, /*Actually visored helmet*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	LEADERSHIP, A_CHAOTIC, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
+	0,0,WSFX_PLUSSEV),
+
+
 A("The Marauder's Map", SCR_MAGIC_MAPPING, /* needs quote */
 	(SPFX_RESTR), 0, 0, NO_ATTK,	NO_DFNS,	NO_CARY,
 	OBJECT_DET,	A_CHAOTIC, PM_PIRATE, NON_PM, 2000L,

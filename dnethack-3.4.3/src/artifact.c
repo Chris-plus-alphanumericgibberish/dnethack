@@ -124,6 +124,8 @@ hack_artifacts()
 	struct artifact *art;
 	int alignmnt = aligns[flags.initalign].value;
 
+	int gcircletsa = find_gcirclet();
+	
 	/* Fix up the alignments of "gift" artifacts */
 	for (art = artilist+1; art->otyp; art++)
 	    if (art->role == Role_switch && art->alignment != A_NONE)
@@ -136,18 +138,42 @@ hack_artifacts()
 	}
 	artilist[ART_MANTLE_OF_HEAVEN].otyp = find_cope();
 	artilist[ART_VESTMENT_OF_HELL].otyp = find_opera_cloak();
+	artilist[ART_CROWN_OF_THE_SAINT_KING].otyp = gcircletsa;
+	artilist[ART_HELM_OF_THE_DARK_LORD].otyp = find_vhelm();
+	
+	/* Fix up the crown */
+	if(gcircletsa == HELMET){
+		obj_descr[HELMET].oc_name = "circlet";
+	} else if(gcircletsa == HELM_OF_BRILLIANCE){
+		obj_descr[HELM_OF_BRILLIANCE].oc_name = "crown of cognizance";
+	} else if(gcircletsa == HELM_OF_OPPOSITE_ALIGNMENT){
+		obj_descr[HELM_OF_OPPOSITE_ALIGNMENT].oc_name = "tiara of treachery";
+	} else if(gcircletsa == HELM_OF_TELEPATHY){
+		obj_descr[HELM_OF_TELEPATHY].oc_name = "tiara of telepathy";
+	} else if(gcircletsa == HELM_OF_DRAIN_RESISTANCE){
+		obj_descr[HELM_OF_DRAIN_RESISTANCE].oc_name = "diadem of drain resistance";
+	}
+	
 	/* Fix up the quest artifact */
-	if(Role_if(PM_NOBLEMAN) && Race_if(PM_VAMPIRE)){
+	if(Role_if(PM_NOBLEMAN)){
+		if(Race_if(PM_VAMPIRE)){
 		urole.questarti = ART_VESTMENT_OF_HELL;
+			artilist[ART_HELM_OF_THE_DARK_LORD].alignment = alignmnt;
+		} 
+		if(alignmnt == A_NEUTRAL) {
+			artilist[ART_CROWN_OF_THE_SAINT_KING].alignment = alignmnt;
+		}
 	}
 	if (Role_if(PM_MONK)) {
 	    artilist[ART_GRANDMASTER_S_ROBE].alignment = alignmnt;
+	    artilist[ART_ROBE_OF_THE_ARCHMAGI].alignment = alignmnt;
+	    artilist[ART_ROBE_OF_THE_ARCHMAGI].role = Role_switch;
 	}
 	if (urole.questarti) {
 	    artilist[urole.questarti].alignment = alignmnt;
 	    artilist[urole.questarti].role = Role_switch;
 	}
-	artilist[ART_PEN_OF_THE_VOID].alignment = A_VOID; //something changed this??? Change it back.
+	artilist[ART_PEN_OF_THE_VOID].alignment = A_VOID; //something changes this??? Change it back.
 	return;
 }
 

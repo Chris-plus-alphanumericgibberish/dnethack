@@ -533,6 +533,8 @@ boolean pets_only;	/* true for ascension or final escape */
 	    if (pets_only && !mtmp->mtame) continue;
 	    if (((monnear(mtmp, u.ux, u.uy) && levl_follower(mtmp)) ||
 			 (mtmp->mtame && u.specialSealsActive&SEAL_COSMOS) ||
+			 (mtmp->mtame && uarmh && uarmh->oartifact == ART_CROWN_OF_THE_SAINT_KING) ||
+			 (mtmp->mtame && uarmh && uarmh->oartifact == ART_HELM_OF_THE_DARK_LORD) ||
 #ifdef STEED
 			(mtmp == u.usteed) ||
 #endif

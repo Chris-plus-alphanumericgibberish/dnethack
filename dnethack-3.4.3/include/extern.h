@@ -1495,6 +1495,8 @@ E void NDECL(synch_cursor);
 /* ### o_init.c ### */
 
 E void NDECL(init_objects);
+E int NDECL(find_gcirclet);
+E int NDECL(find_vhelm);
 E int NDECL(find_skates);
 E int NDECL(find_cboots);
 E int NDECL(find_mboots);

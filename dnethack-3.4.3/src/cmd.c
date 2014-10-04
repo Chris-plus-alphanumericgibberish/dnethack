@@ -1015,20 +1015,51 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	}
 	if (u.uevent.uhand_of_elbereth) {
 #ifdef ELBERETH
-	    static const char * const hofe_titles[3] = {
+	    static const char * const hofe_titles[12] = {
+				/* Default */
 				"the Hand of Elbereth",
 				"the Envoy of Balance",
-				"the Glory of Arioch"
+				"the Glory of Arioch",
+				/* Monk */
+				"the Sage of Law",
+				"the Grandmaster of Balance",
+				"the Glory of Eequor",
+				/* Noble */
+				"the Saint %s",
+				"the Grey Saint",
+				"the Dark %s",
+				/* Wizard */
+				"the Magister of Law",
+				"the Wizard of Balance",
+				"the Glory of Chardros"
 	    };
 #else
-	    static const char * const hofe_titles[3] = {
+	    static const char * const hofe_titles[12] = {
 				"the Arm of the Law",
 				"the Envoy of Balance",
-				"the Glory of Arioch"
+				"the Glory of Arioch",
+				/* Monk */
+				"the Sage of Law",
+				"the Grandmaster of Balance",
+				"the Glory of Eequor",
+				/* Noble */
+				"the Saint %s",
+				"the Grey Saint",
+				"the Dark %s",
+				/* Wizard */
+				"the Magister of Law",
+				"the Wizard of Balance",
+				"the Glory of Chardros"
 	    };
 #endif
 	    if(Role_if(PM_PIRATE)) you_are("the Pirate King");
 	    else if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
+	    else if(Role_if(PM_NOBLEMAN)){
+			if(u.uevent.uhand_of_elbereth == 9) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Lady" : "Lord");
+			else if(u.uevent.uhand_of_elbereth == 7) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Queen" : "King");
+			else Sprintf(buf, " %s", hofe_titles[u.uevent.uhand_of_elbereth - 1]);
+			enl_msg("You ", "are ", "were ", buf);
+		}
 		else you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
 	}
 	

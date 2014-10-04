@@ -325,14 +325,16 @@ HELM("dunce cap", "conical hat",
 HELM("flack helmet", "green bowel",
 		1, 0,  0,	2, 0, 10,   20, 8, 1, PLASTIC, CLR_GREEN),
 /* With shuffled appearances... */
-HELM("helmet", "plumed helmet",
-		0, 0,  0,      10, 1, 30,  10, 9, 0, IRON, CLR_RED),
-HELM("helm of brilliance", "etched helmet",
+HELM("helmet", "plumed helmet", /* circlet */
+		0, 0,  0,      8, 1, 30,  10, 9, 0, IRON, CLR_RED),
+HELM("helm of brilliance", "etched helmet", /* crown of cognizance */
 		0, 1,  0,	6, 1, 50,  50, 9, 0, IRON, CLR_BRIGHT_GREEN),
-HELM("helm of opposite alignment", "crested helmet",
+HELM("helm of opposite alignment", "crested helmet", /* tiara of treachery */
 		0, 1,  0,	6, 1, 50,  50, 9, 0, IRON, HI_METAL),
-HELM("helm of telepathy", "visored helmet",
+HELM("helm of telepathy", "visored helmet", /*tiara of telepathy*/
 		0, 1,  TELEPAT, 2, 1, 50,  50, 9, 0, IRON, HI_METAL),
+HELM("helm of drain resistance", "gold circlet", /*diadem of drain resistance*/
+		0, 1,  DRAIN_RES, 2, 1, 50,  50, 9, 0, GOLD, HI_GOLD),
 
 /* suits of armor */
 /*
