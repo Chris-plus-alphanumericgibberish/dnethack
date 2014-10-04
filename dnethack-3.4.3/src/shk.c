@@ -5511,7 +5511,7 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
 		if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || 
 												 (moves>20000 && !(uarmc && uarmg && uarmf)) || (moves>50000 && !(uarmc && uarmg && uarmf && uarm && uarmh)) || 
-												 (moves>100000 && !(uarmc && uarmg && uarmf && uarm && uarmh && ublindf && ublindf->otyp==MASK))
+												 (moves>100000 && !(uarmc && uarmg && uarmf && uarm && uarmh && ublindf && (ublindf->otyp==MASK || ublindf->otyp == R_LYEHIAN_FACEPLATE)))
 												)) count++;
 		if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis && dahlverNarVis()) count++;
 		if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !ublindf) count++;
@@ -5530,7 +5530,7 @@ struct monst *mon;
 {
 	int count=countFarSigns(mon);
 	if(couldsee(mon->mx, mon->my) && mon->mcansee){
-		if(u.sealsActive&SEAL_AHAZU && !(ublindf && ublindf->otyp==MASK)) count++;
+		if(u.sealsActive&SEAL_AHAZU && !(ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE))) count++;
 		// if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
 		if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
 		if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
@@ -5538,7 +5538,7 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_BALAM && !Invis && (uarmc || uarm) && !(uarmg && uarmf)) count++;
 		// if(u.sealsActive&SEAL_BERITH && !Invis && (u.usteed || !(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))) count++;
 		// if(u.sealsActive&SEAL_BUER && !Invis && !uarmf) count++;
-		if(u.sealsActive&SEAL_CHUPOCLOPS && !NoBInvis && !(ublindf && ublindf->otyp==MASK)) count++;
+		if(u.sealsActive&SEAL_CHUPOCLOPS && !NoBInvis && !(ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE))) count++;
 		// if(u.sealsActive&SEAL_DANTALION && !NoBInvis && !(uarmc || (uarm && uarm != CRYSTAL_PLATE_MAIL))) count++;
 		// if(u.sealsActive&SEAL_SHIRO);
 		// if(u.sealsActive&SEAL_ECHIDNA && !Invis && !(uarmf && (uarmc || uarm))) count++;
@@ -5550,10 +5550,10 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_HUGINN_MUNINN && !NoBInvis && !uarmh) count++;
 		// if(u.sealsActive&SEAL_IRIS && !NoBInvis && !((uarm && moves > u.irisAttack+5) || (uarmc && moves > u.irisAttack+1))) count++;
 		// if(u.sealsActive&SEAL_JACK && !NoBInvis && !uarmc) count++;
-		if(u.sealsActive&SEAL_MALPHAS && !NoBInvis && !(ublindf && ublindf->otyp==MASK)) count++;
+		if(u.sealsActive&SEAL_MALPHAS && !NoBInvis && !(ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE))) count++;
 		// if(u.sealsActive&SEAL_MARIONETTE && !NoBInvis && !(uarm && is_metallic(uarm))) count++;
 		// if(u.sealsActive&SEAL_MOTHER && !uarmg) count++;
-		if(u.sealsActive&SEAL_NABERIUS && !NoBInvis && !(ublindf && ublindf->otyp==MASK)) count++;
+		if(u.sealsActive&SEAL_NABERIUS && !NoBInvis && !(ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE))) count++;
 		// if(u.sealsActive&SEAL_ORTHOS && !NoBInvis && !(!uarmc || uarmc->otyp == MUMMY_WRAPPING)) count++;
 		// if(u.sealsActive&SEAL_OSE && !BClairvoyant && !(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_TELEPATHY)) count++;
 		// if(u.sealsActive&SEAL_OTIAX && !Invis && !(moves > u.otiaxAttack+5)) count++;

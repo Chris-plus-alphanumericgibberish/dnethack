@@ -516,7 +516,9 @@ struct you {
 	
 	int sealCounts;
 	long sealsActive;
+	long sealsUsed;
 	long specialSealsActive;
+	long specialSealsUsed;
 	
 	int wisSpirits, intSpirits;
 	

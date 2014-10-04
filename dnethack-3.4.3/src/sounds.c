@@ -1136,7 +1136,7 @@ dochat()
 	   any objects other than just gold.
 	*/
 	price_quote(otmp);
-	return(1);
+//	return(1); //proceed with chat code (maybe you want to speak to the shopkeep about something else, maybe not. shouldn't block either way)
     }
 
     if (!getdir("Talk to whom? (in what direction)")) {
@@ -3209,6 +3209,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[AHAZU-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_FLAIL);
 				u.sealsActive |= SEAL_AHAZU;
+				u.sealsUsed |= SEAL_AHAZU;
 				u.spirit[u.sealCounts] = SEAL_AHAZU;
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
 				set_spirit_powers(SEAL_AHAZU);
@@ -3220,6 +3221,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[AMON-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_CLERIC_SPELL);
 				u.sealsActive |= SEAL_AMON;
+				u.sealsUsed |= SEAL_AMON;
 				u.spirit[u.sealCounts] = SEAL_AMON;
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
 				set_spirit_powers(SEAL_AMON);
@@ -3232,6 +3234,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[ANDREALPHUS-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_ESCAPE_SPELL);
 				u.sealsActive |= SEAL_ANDREALPHUS;
+				u.sealsUsed |= SEAL_ANDREALPHUS;
 				u.spirit[u.sealCounts] = SEAL_ANDREALPHUS;
 				set_spirit_powers(SEAL_ANDREALPHUS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3244,6 +3247,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[ANDROMALIUS-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_DAGGER);
 				u.sealsActive |= SEAL_ANDROMALIUS;
+				u.sealsUsed |= SEAL_ANDROMALIUS;
 				u.spirit[u.sealCounts] = SEAL_ANDROMALIUS;
 				set_spirit_powers(SEAL_ANDROMALIUS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3256,6 +3260,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_CROSSBOW);
 				unrestrict_weapon_skill(P_SHURIKEN);
 				u.sealsActive |= SEAL_ASTAROTH;
+				u.sealsUsed |= SEAL_ASTAROTH;
 				u.spirit[u.sealCounts] = SEAL_ASTAROTH;
 				set_spirit_powers(SEAL_ASTAROTH);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3267,6 +3272,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[BALAM-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_WHIP);
 				u.sealsActive |= SEAL_BALAM;
+				u.sealsUsed |= SEAL_BALAM;
 				u.spirit[u.sealCounts] = SEAL_BALAM;
 				set_spirit_powers(SEAL_BALAM);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3280,6 +3286,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_LANCE);
 				unrestrict_weapon_skill(P_RIDING);
 				u.sealsActive |= SEAL_BERITH;
+				u.sealsUsed |= SEAL_BERITH;
 				u.spirit[u.sealCounts] = SEAL_BERITH;
 				set_spirit_powers(SEAL_BERITH);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3293,6 +3300,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
 				u.umartial = TRUE;
 				u.sealsActive |= SEAL_BUER;
+				u.sealsUsed |= SEAL_BUER;
 				u.spirit[u.sealCounts] = SEAL_BUER;
 				set_spirit_powers(SEAL_BUER);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3305,6 +3313,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[CHUPOCLOPS-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_KNIFE);
 				u.sealsActive |= SEAL_CHUPOCLOPS;
+				u.sealsUsed |= SEAL_CHUPOCLOPS;
 				u.spirit[u.sealCounts] = SEAL_CHUPOCLOPS;
 				set_spirit_powers(SEAL_CHUPOCLOPS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3318,6 +3327,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_TWO_HANDED_SWORD);
 				unrestrict_weapon_skill(P_SCIMITAR);
 				u.sealsActive |= SEAL_DANTALION;
+				u.sealsUsed |= SEAL_DANTALION;
 				u.spirit[u.sealCounts] = SEAL_DANTALION;
 				set_spirit_powers(SEAL_DANTALION);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3329,6 +3339,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[SHIRO-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_POLEARMS);
 				u.sealsActive |= SEAL_SHIRO;
+				u.sealsUsed |= SEAL_SHIRO;
 				u.spirit[u.sealCounts] = SEAL_SHIRO;
 				set_spirit_powers(SEAL_SHIRO);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3340,6 +3351,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[ECHIDNA-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_UNICORN_HORN);
 				u.sealsActive |= SEAL_ECHIDNA;
+				u.sealsUsed |= SEAL_ECHIDNA;
 				u.spirit[u.sealCounts] = SEAL_ECHIDNA;
 				set_spirit_powers(SEAL_ECHIDNA);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3351,6 +3363,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[EDEN-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_LONG_SWORD);
 				u.sealsActive |= SEAL_EDEN;
+				u.sealsUsed |= SEAL_EDEN;
 				u.spirit[u.sealCounts] = SEAL_EDEN;
 				set_spirit_powers(SEAL_EDEN);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3368,6 +3381,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_BOOMERANG);
 				HSwimming |= INTRINSIC;
 				u.sealsActive |= SEAL_ENKI;
+				u.sealsUsed |= SEAL_ENKI;
 				u.spirit[u.sealCounts] = SEAL_ENKI;
 				set_spirit_powers(SEAL_ENKI);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3379,6 +3393,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[EURYNOME-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
 				u.sealsActive |= SEAL_EURYNOME;
+				u.sealsUsed |= SEAL_EURYNOME;
 				u.spirit[u.sealCounts] = SEAL_EURYNOME;
 				set_spirit_powers(SEAL_EURYNOME);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3391,6 +3406,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_BOW);
 				unrestrict_weapon_skill(P_HARVEST);
 				u.sealsActive |= SEAL_EVE;
+				u.sealsUsed |= SEAL_EVE;
 				u.spirit[u.sealCounts] = SEAL_EVE;
 				set_spirit_powers(SEAL_EVE);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3402,6 +3418,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[FAFNIR-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_PICK_AXE);
 				u.sealsActive |= SEAL_FAFNIR;
+				u.sealsUsed |= SEAL_FAFNIR;
 				u.spirit[u.sealCounts] = SEAL_FAFNIR;
 				set_spirit_powers(SEAL_FAFNIR);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3413,6 +3430,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[HUGINN_MUNINN-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_SPEAR);
 				u.sealsActive |= SEAL_HUGINN_MUNINN;
+				u.sealsUsed |= SEAL_HUGINN_MUNINN;
 				u.spirit[u.sealCounts] = SEAL_HUGINN_MUNINN;
 				set_spirit_powers(SEAL_HUGINN_MUNINN);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3424,6 +3442,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[IRIS-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_MORNING_STAR);
 				u.sealsActive |= SEAL_IRIS;
+				u.sealsUsed |= SEAL_IRIS;
 				u.spirit[u.sealCounts] = SEAL_IRIS;
 				set_spirit_powers(SEAL_IRIS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3434,6 +3453,7 @@ bindspirit(seal_id)
 		case JACK:{
 			if(u.sealTimeout[JACK-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_JACK;
+				u.sealsUsed |= SEAL_JACK;
 				u.spirit[u.sealCounts] = SEAL_JACK;
 				set_spirit_powers(SEAL_JACK);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3444,6 +3464,7 @@ bindspirit(seal_id)
 		case MALPHAS:{
 			if(u.sealTimeout[MALPHAS-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_MALPHAS;
+				u.sealsUsed |= SEAL_MALPHAS;
 				u.spirit[u.sealCounts] = SEAL_MALPHAS;
 				set_spirit_powers(SEAL_MALPHAS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3454,6 +3475,7 @@ bindspirit(seal_id)
 		case MARIONETTE:{
 			if(u.sealTimeout[MARIONETTE-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_MARIONETTE;
+				u.sealsUsed |= SEAL_MARIONETTE;
 				u.spirit[u.sealCounts] = SEAL_MARIONETTE;
 				set_spirit_powers(SEAL_MARIONETTE);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3465,6 +3487,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[MOTHER-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_DIVINATION_SPELL);
 				u.sealsActive |= SEAL_MOTHER;
+				u.sealsUsed |= SEAL_MOTHER;
 				u.spirit[u.sealCounts] = SEAL_MOTHER;
 				set_spirit_powers(SEAL_MOTHER);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3478,6 +3501,7 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_QUARTERSTAFF);
 				unrestrict_weapon_skill(P_ATTACK_SPELL);
 				u.sealsActive |= SEAL_NABERIUS;
+				u.sealsUsed |= SEAL_NABERIUS;
 				u.spirit[u.sealCounts] = SEAL_NABERIUS;
 				set_spirit_powers(SEAL_NABERIUS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3489,6 +3513,7 @@ bindspirit(seal_id)
 		case ORTHOS:{
 			if(u.sealTimeout[ORTHOS-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_ORTHOS;
+				u.sealsUsed |= SEAL_ORTHOS;
 				u.spirit[u.sealCounts] = SEAL_ORTHOS;
 				set_spirit_powers(SEAL_ORTHOS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3500,6 +3525,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[OSE-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_TRIDENT);
 				u.sealsActive |= SEAL_OSE;
+				u.sealsUsed |= SEAL_OSE;
 				u.spirit[u.sealCounts] = SEAL_OSE;
 				set_spirit_powers(SEAL_OSE);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3511,6 +3537,7 @@ bindspirit(seal_id)
 		case OTIAX:{
 			if(u.sealTimeout[OTIAX-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_OTIAX;
+				u.sealsUsed |= SEAL_OTIAX;
 				u.spirit[u.sealCounts] = SEAL_OTIAX;
 				set_spirit_powers(SEAL_OTIAX);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3521,6 +3548,7 @@ bindspirit(seal_id)
 		case PAIMON:{
 			if(u.sealTimeout[PAIMON-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_PAIMON;
+				u.sealsUsed |= SEAL_PAIMON;
 				u.spirit[u.sealCounts] = SEAL_PAIMON;
 				set_spirit_powers(SEAL_PAIMON);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3533,6 +3561,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[SIMURGH-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_ENCHANTMENT_SPELL);
 				u.sealsActive |= SEAL_SIMURGH;
+				u.sealsUsed |= SEAL_SIMURGH;
 				u.spirit[u.sealCounts] = SEAL_SIMURGH;
 				set_spirit_powers(SEAL_SIMURGH);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3544,6 +3573,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[TENEBROUS-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_MACE);
 				u.sealsActive |= SEAL_TENEBROUS;
+				u.sealsUsed |= SEAL_TENEBROUS;
 				u.spirit[u.sealCounts] = SEAL_TENEBROUS;
 				set_spirit_powers(SEAL_TENEBROUS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3555,6 +3585,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[YMIR-FIRST_SEAL] < moves){
 				unrestrict_weapon_skill(P_CLUB);
 				u.sealsActive |= SEAL_YMIR;
+				u.sealsUsed |= SEAL_YMIR;
 				u.spirit[u.sealCounts] = SEAL_YMIR;
 				set_spirit_powers(SEAL_YMIR);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -3569,6 +3600,7 @@ bindspirit(seal_id)
 					if(u.specialSealsActive&SEAL_ACERERAK) unbind(SEAL_SPECIAL|SEAL_ACERERAK,TRUE);
 					}
 					u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
+				u.specialSealsUsed |= SEAL_DAHLVER_NAR;
 					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
 					set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
 					u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
@@ -3583,6 +3615,7 @@ bindspirit(seal_id)
 					if(u.specialSealsActive&SEAL_DAHLVER_NAR) unbind(SEAL_SPECIAL|SEAL_DAHLVER_NAR,TRUE);
 					}
 					u.specialSealsActive |= SEAL_SPECIAL|SEAL_ACERERAK;
+				u.specialSealsUsed |= SEAL_ACERERAK;
 					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_ACERERAK;
 					set_spirit_powers(SEAL_SPECIAL|SEAL_ACERERAK);
 					u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
@@ -3592,6 +3625,7 @@ bindspirit(seal_id)
 	}break;
 		case COUNCIL: /*Council of Elements == crowning*/
 			u.specialSealsActive |= SEAL_SPECIAL|SEAL_COUNCIL;
+			u.specialSealsUsed |= SEAL_COUNCIL;
 			set_spirit_powers(SEAL_SPECIAL|SEAL_COUNCIL);
 		break;
 		case COSMOS:
@@ -3601,6 +3635,7 @@ bindspirit(seal_id)
 					unbind(u.spirit[ALIGN_SPIRIT],TRUE);
 				}
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_COSMOS;
+				u.specialSealsUsed |= SEAL_COSMOS;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_COSMOS);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_COSMOS;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
@@ -3614,6 +3649,7 @@ bindspirit(seal_id)
 					unbind(u.spirit[ALIGN_SPIRIT],TRUE);
 				}
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_MISKA;
+				u.specialSealsUsed |= SEAL_MISKA;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_MISKA);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_MISKA;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
@@ -3627,6 +3663,7 @@ bindspirit(seal_id)
 					unbind(u.spirit[ALIGN_SPIRIT],TRUE);
 				}
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_NUDZIARTH;
+				u.specialSealsUsed |= SEAL_NUDZIARTH;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_NUDZIARTH);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_NUDZIARTH;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
@@ -3640,6 +3677,7 @@ bindspirit(seal_id)
 					unbind(u.spirit[ALIGN_SPIRIT],TRUE);
 				}
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_ALIGNMENT_THING;
+				u.specialSealsUsed |= SEAL_ALIGNMENT_THING;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_ALIGNMENT_THING);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_ALIGNMENT_THING;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
@@ -3653,6 +3691,7 @@ bindspirit(seal_id)
 					unbind(u.spirit[ALIGN_SPIRIT],TRUE);
 				}
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_UNKNOWN_GOD;
+				u.specialSealsUsed |= SEAL_UNKNOWN_GOD;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_UNKNOWN_GOD);
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_UNKNOWN_GOD;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
@@ -3667,6 +3706,7 @@ bindspirit(seal_id)
 			}
 			u.spirit[OUTER_SPIRIT] = SEAL_SPECIAL|SEAL_NUMINA;
 			u.specialSealsActive |= SEAL_SPECIAL|SEAL_NUMINA;
+				u.specialSealsUsed |= SEAL_NUMINA;
 			set_spirit_powers(SEAL_SPECIAL|SEAL_NUMINA);
 			} else You("can't hear the numina.");
 	}break;
