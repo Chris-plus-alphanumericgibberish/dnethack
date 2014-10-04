@@ -421,7 +421,7 @@ A("The Book of Lost Names", SPE_SECRETS,
 	SPIRITNAMES,	A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
-A("Scroll of Infinite Spells", SPE_SECRETS,
+A("Book of Infinite Spells", SPE_SECRETS,
 	(SPFX_NOGEN|SPFX_RESTR), 0,0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	INFINITESPELLS,	A_NONE, NON_PM, NON_PM, 5000L, 
@@ -537,7 +537,7 @@ A("Field Marshal's Baton",	MACE,
 /*//////////Chaos Quest Artifacts//////////*/
 
 A("Werebuster",			LONG_SWORD, //needs quote
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DFLAG2), 0, M2_WERE,/*should not be gifted or gened randomly*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DFLAG2), 0, M2_WERE,/*should not be gifted or gened randomly*/
 	PHYS(10,20),	NO_DFNS,	NO_CARY,
 	0, A_NONE, NON_PM, NON_PM, 1500L, /*does not protect agains lycathropy*/
 	0,SPFX3_NOCNT,0), /*does not count against artifacts generated*/
@@ -657,7 +657,7 @@ A("The Hand-Mirror of Cthylla", MIRROR, /*from the works of HP Lovecraft*/
 
 A("The Silver Key", UNIVERSAL_KEY, /*from the works of HP Lovecraft*/
 	(SPFX_NOGEN|SPFX_RESTR), (SPFX_EREGEN|SPFX_TCTRL),0,
-	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
+	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CREATE_PORTAL,	A_NEUTRAL, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_PCTRL,0),  /*polymorph control*/
 
@@ -839,13 +839,13 @@ A("The Eye of the Aethiopica",	AMULET_OF_ESP,
 /*//////////Special High-Level Artifacts//////////*/
 
 A("Staff of the Archmagi",			QUARTERSTAFF,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_SEARCH|SPFX_LUCK|SPFX_DISPL|SPFX_INTEL), 0, 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_SEARCH|SPFX_LUCK|SPFX_INTEL), 0, 0,
 	STUN(20,4),	NO_DFNS,	NO_CARY,	
 	ENERGY_BOOST, A_NONE, PM_WIZARD, NON_PM, 9000L, 
 	SPFX2_DIG|SPFX2_FIRE|SPFX2_COLD|SPFX2_ELEC|SPFX2_RAM2,0,0),
 
 A("Robe of the Archmagi",			ROBE,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_INTEL), 0, 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_DISPL|SPFX_INTEL), 0, 0,
 	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,	
 	ENERGY_BOOST, A_NONE, PM_WIZARD, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
@@ -875,7 +875,7 @@ A("The Kusanagi no Tsurugi",	LONG_SWORD,
  */
 
  A("Snickersnee",		SHORT_SWORD, /*wakizashi to samurai*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_BEHEAD), 0, 0, /* currently wishable, or nameable by advanced tourists */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_BEHEAD), 0, 0, /* currently nameable by advanced tourists */
 	PHYS(3,6),	NO_DFNS,	NO_CARY,						/* Tourists and Samurai can twoweapon Snickersnee */
 	0, A_NONE, PM_SAMURAI, NON_PM, 1200L, 
 	0,0,0),

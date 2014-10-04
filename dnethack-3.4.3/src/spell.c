@@ -523,7 +523,7 @@ struct obj *spellbook;
 	boolean too_hard = FALSE;
 
 	if(spellbook->oartifact){ //this is the primary artifact-book check.
-		if(spellbook->oartifact != ART_SCROLL_OF_INFINITE_SPELLS){
+		if(spellbook->oartifact != ART_BOOK_OF_INFINITE_SPELLS){
 		doparticularinvoke(spellbook);//there is a redundant check in the spell learning code
 		return 1;					//which should never be reached, and only catches books of secrets anyway.
 		} else {

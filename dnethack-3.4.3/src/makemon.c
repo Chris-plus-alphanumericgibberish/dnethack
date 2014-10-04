@@ -1310,7 +1310,7 @@ register struct	monst	*mtmp;
 				if(!rn2(3)){
 					otmp = oname(otmp, artiname(ART_BOOK_OF_LOST_NAMES));		
 				} else if(!rn2(2)){
-					otmp = oname(otmp, artiname(ART_SCROLL_OF_INFINITE_SPELLS));		
+				otmp = oname(otmp, artiname(ART_BOOK_OF_INFINITE_SPELLS));		
 				} else {
 					otmp = oname(otmp, artiname(ART_NECRONOMICON));		
 				}

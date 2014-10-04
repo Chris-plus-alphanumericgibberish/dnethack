@@ -799,9 +799,9 @@ gcrownu()
 			if (obj && obj->oartifact == ART_NECRONOMICON){
 				obj->ovar1 |= SP_DEATH;
 				discover_artifact(ART_NECRONOMICON);
-			} else if (obj && obj->oartifact == ART_SCROLL_OF_INFINITE_SPELLS){
+			} else if (obj && obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS){
 				obj->ovar1 = SPE_FINGER_OF_DEATH;
-				discover_artifact(ART_SCROLL_OF_INFINITE_SPELLS);
+				discover_artifact(ART_BOOK_OF_INFINITE_SPELLS);
     		}
 		}
 		else{
@@ -809,9 +809,8 @@ gcrownu()
 				if(obj->oartifact == ART_NECRONOMICON) 
 					obj->ovar1 |= SP_DEATH;
 			if(!obj) for(obj = invent; obj; obj=obj->nobj)
-				if(obj->oartifact == ART_SCROLL_OF_INFINITE_SPELLS) 
+				if(obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS) 
 					obj->ovar1 = SPE_FINGER_OF_DEATH;
-
 		}
 	} else if (Role_if(PM_MONK)) {
 		if (class_gift != STRANGE_OBJECT) {
