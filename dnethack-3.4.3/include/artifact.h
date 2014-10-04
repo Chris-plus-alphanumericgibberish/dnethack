@@ -249,7 +249,7 @@ struct artifact {
 			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\
 			|| (a == &artilist[ART_SNICKERSNEE] && Role_if(PM_TOURIST) && (u.ulevel > 18 || u.uevent.qcompleted) )\
 			|| (a == &artilist[ART_KUSANAGI_NO_TSURUGI] && Role_if(PM_SAMURAI) && u.ulevel >= 22 )\
-			|| (a == &artilist[ART_GRANDMASTER_S_ROBE] && P_SKILL(P_MARTIAL_ARTS) >= P_GRAND_MASTER )\
+			|| (a == &artilist[ART_GRANDMASTER_S_ROBE] && P_SKILL(P_MARTIAL_ARTS) >= P_GRAND_MASTER && u.ulevel >= 30 )\
 			|| (a == &artilist[ART_STAFF_OF_THE_ARCHMAGI] && Role_if(PM_WIZARD) && u.ulevel == 30 )\
 			|| (a == &artilist[ART_ROBE_OF_THE_ARCHMAGI] && Role_if(PM_WIZARD) && u.ulevel == 30 )\
 			|| (a == &artilist[ART_HAT_OF_THE_ARCHMAGI] && Role_if(PM_WIZARD) && u.ulevel == 30 )\

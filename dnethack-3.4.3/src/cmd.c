@@ -1967,6 +1967,23 @@ signs_enlightenment()
 		putstr(en_win, 0, "Your eyes feel odd.");
 		message = TRUE;
 	}
+	if(u.specialSealsActive&SEAL_COSMOS){
+		putstr(en_win, 0, "You feel like something is behind you, but you can't see anything.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_MISKA){
+		putstr(en_win, 0, "You have 4 arms, and a wolf head growing from both hips.");
+		message = TRUE;
+	}
+	// if(u.specialSealsActive&SEAL_NUDZIARTH){
+		// putstr(en_win, 0, "Your eyes feel odd.");
+		// message = TRUE;
+	// }
+	if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
+		putstr(en_win, 0, "You feel like someone is staring at the back of your head.");
+		putstr(en_win, 0, "You hear an argument raging in the distance.");
+		message = TRUE;
+	}
 	if(u.specialSealsActive&SEAL_NUMINA){
 		putstr(en_win, 0, "You are surounded by whispers.");
 		message = TRUE;
@@ -2251,6 +2268,22 @@ signs_mirror()
 			putstr(en_win, 0, "Your star-like eyes shine through your mask.");
 		else
 			putstr(en_win, 0, "Your star-like eyes are covered by your blindfold.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_COSMOS && !NoBInvis){
+		putstr(en_win, 0, "A bright, crystaline aureola hangs behind you.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_MISKA && !NoBInvis){
+		putstr(en_win, 0, "You have 4 arms, and a wolf's head grows from either hip.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_NUDZIARTH && !NoBInvis){
+		putstr(en_win, 0, "A nimbus of tiny mirrored shards surrounds your head.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_ALIGNMENT_THING && !NoBInvis){
+		putstr(en_win, 0, "You see a small black halo just behind your head. Their is an eye in the center, staring at you!");
 		message = TRUE;
 	}
 	
@@ -3707,8 +3740,8 @@ char def;
 	unsigned truncspot, reduction = sizeof(" [N]  ?") + 1;
 	
 	/*Ben Collver's fixes*/
-	if(Role_if(PM_PIRATE)) query = piratesay(plainquery);
-	else query = plainquery;
+//	if(Role_if(PM_PIRATE)) query = piratesay(plainquery);
+//	else query = plainquery;
 	query = plainquery;
 	
 	if (resp) reduction += strlen(resp) + sizeof(" () ");

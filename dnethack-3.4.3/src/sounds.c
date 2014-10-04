@@ -2741,7 +2741,7 @@ int tx,ty;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
 					u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod;
-				// } else u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod/10;
+				} // else u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod/10;
 			} else{
 				pline("For an instant you are falling.");
 				// u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod/10;

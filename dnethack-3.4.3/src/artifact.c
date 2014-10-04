@@ -1595,6 +1595,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	const char *wepdesc;
 	static const char you[] = "you";
 	char hittee[BUFSZ];
+#ifdef PARANOID
+	char buf[BUFSZ];
+	int really_bdown = FALSE;
+#endif
 
 	Strcpy(hittee, youdefend ? you : mon_nam(mdef));
 
@@ -2738,14 +2742,28 @@ arti_invoke(obj)
 				pline("Silence Wall!");
 				cast_protection();
 			}
-			else if(u.dz > 0 && (yn("Are you sure?") == 'y') ){
+#ifdef PARANOID
+			else if(u.dz > 0 ){
+				if (iflags.paranoid_quit) {
+				  getlin ("Are you sure you want to bring down the Silence Glaive? [yes/no]?",buf);
+				  (void) lcase (buf);
+						  if (!(strcmp (buf, "yes"))) really_bdown = TRUE;
+				} else {
+						if (yn("Are you sure you want to bring down the Silence Glaive?") == 'y') {
+						    really_bdown = TRUE;
+				  }
+				}
+				if (really_bdown) {
+#else
+			else if(u.dz > 0 && (yn("Are you sure you want to bring down the Silence Glaive?") == 'y') ){
+#endif
 				register struct monst *mtmp, *mtmp2;
 				int gonecnt = 0;
 				You("touch the tip of the Silence Glaive to the ground.");
-				pline("The walls of the dungeon quake!");
+				// pline("The walls of the dungeon quake!");
 				do_earthquake(100);
-				do_earthquake(100);
-				do_earthquake(100);
+				// do_earthquake(100);
+				// do_earthquake(100);
 				You("call out to the souls and spirits inhabiting this land.");
 				for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 					mtmp2 = mtmp->nmon;
