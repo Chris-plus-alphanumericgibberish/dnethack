@@ -294,14 +294,15 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 
 	/* check if wearing a visor (only checked if visor might help) */
 	if (check_visor) {
+		static int vhelmsa = 0;
+		if (!vhelmsa) vhelmsa = find_vhelm();
 	    o = (mdef == &youmonst) ? invent : mdef->minvent;
 	    for ( ; o; o = o->nobj)
 		if ((o->owornmask & W_ARMH) &&
-		    (s = OBJ_DESCR(objects[o->otyp])) != (char *)0 &&
-		    !strcmp(s, "visored helmet"))
+			o->otyp == vhelmsa
+		)
 		    return FALSE;
 	}
-
 	return TRUE;
 }
 
