@@ -163,7 +163,7 @@ NON_DIGGABLE:(00,00,18,12)
 # Grounds and entrance to Vlad's tower
 MAZE:"tower4",' '
 FLAGS: noteleport,hardfloor
-MESSAGE:"You are standing on the surface, albeit at the bottom of a shear ravine.  You hear ravens croaking in the trees, beyond which rise a windowless tower."
+MESSAGE:"You are standing on the surface, albeit at the bottom of a shear ravine.  You hear ravens croaking in the trees, beyond which rises a windowless tower."
 
 GEOMETRY:center,center
 #          1         2         3         4         5         6         7
