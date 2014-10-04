@@ -1775,7 +1775,7 @@ signs_enlightenment()
 	if(u.sealsActive&SEAL_ASTAROTH && !Invis){
 		if(!ublindf || ublindf->otyp == LENSES)
 			putstr(en_win, 0, "A black liquid leaks from around your eyes.");
-		else if(ublindf && ublindf->otyp == MASK)
+		else if(ublindf && (ublindf->otyp == MASK || ublindf->otyp == R_LYEHIAN_FACEPLATE))
 			putstr(en_win, 0, "The black liquid leaking from your eyes is hidden by your mask.");
 		else
 			putstr(en_win, 0, "The black liquid leaking from your eyes is soaked up by your blindfold.");
@@ -2066,7 +2066,7 @@ signs_mirror()
 	if(u.sealsActive&SEAL_ASTAROTH && !Invis){
 		if(!ublindf || ublindf->otyp == LENSES)
 			putstr(en_win, 0, "A black liquid leaks from around your eyes.");
-		else if(ublindf && ublindf->otyp == MASK)
+		else if(ublindf && (ublindf->otyp == MASK || ublindf->otyp == R_LYEHIAN_FACEPLATE))
 			putstr(en_win, 0, "The black liquid leaking from your eyes is hidden by your mask.");
 		else
 			putstr(en_win, 0, "The black liquid leaking from your eyes is soaked up by your blindfold.");
@@ -2295,8 +2295,10 @@ signs_mirror()
 	if(u.specialSealsActive&SEAL_COUNCIL && !NoBInvis){
 		if(!ublindf || ublindf->otyp == LENSES)
 			putstr(en_win, 0, "Your eyes shine like stars.");
-		else if(ublindf && ublindf->otyp == MASK)
+		else if(ublindf && (ublindf->otyp == MASK))
 			putstr(en_win, 0, "Your star-like eyes shine through your mask.");
+		else if(ublindf && (ublindf->otyp == R_LYEHIAN_FACEPLATE))
+			putstr(en_win, 0, "Your star-like eyes are covered by your opaque mask.");
 		else
 			putstr(en_win, 0, "Your star-like eyes are covered by your blindfold.");
 		message = TRUE;

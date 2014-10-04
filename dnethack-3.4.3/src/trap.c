@@ -2754,9 +2754,15 @@ register boolean force, here, forcelethe;
 	boolean obj_destroyed = FALSE;
 //	int is_lethe = level.flags.lethe || forcelethe;
 	int is_lethe = 0;
-	if( uarmc
+	if((uarmc
 		&& uarmc->otyp == OILSKIN_CLOAK
-		&& (!uarmc->cursed || rn2(3))) {
+		&& (!uarmc->cursed || rn2(3))
+	   ) || (
+		ublindf
+		&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+		&& (!ublindf->cursed || rn2(3))
+	   )
+	) {
 			return 0;
 	}	/* Scrolls, spellbooks, potions, weapons and
 	   pieces of armor may get affected by the water */

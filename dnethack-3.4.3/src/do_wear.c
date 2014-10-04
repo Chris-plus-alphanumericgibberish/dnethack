@@ -448,6 +448,7 @@ Gloves_on(VOID_ARGS)
 
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
+	case ORIHALCYON_GAUNTLETS:
 		break;
 	case GAUNTLETS_OF_FUMBLING:
 		if (!oldprop && !(HFumbling & ~TIMEOUT))
@@ -475,6 +476,7 @@ Gloves_off(VOID_ARGS)
 
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
+	case ORIHALCYON_GAUNTLETS:
 	    break;
 	case GAUNTLETS_OF_FUMBLING:
 	    if (!oldprop && !(HFumbling & ~TIMEOUT))
@@ -1041,7 +1043,7 @@ register struct obj *otmp;
 	    if (was_blind) {
 		/* "still cannot see" makes no sense when removing lenses
 		   since they can't have been the cause of your blindness */
-		if (otmp->otyp != LENSES)
+		if (otmp->otyp != LENSES && otmp->otyp != MASK && otmp->otyp != R_LYEHIAN_FACEPLATE)
 		    You("still cannot see.");
 	    } else {
 		changed = TRUE;	/* !was_blind */
@@ -1604,7 +1606,7 @@ doputon()
 		Your("%s%s are full, and you're already wearing an amulet and %s.",
 			humanoid(youmonst.data) ? "ring-" : "",
 			makeplural(body_part(FINGER)),
-			ublindf->otyp==LENSES ? "some lenses" : ublindf->otyp==MASK ? "a mask" : "a blindfold");
+			ublindf->otyp==LENSES ? "some lenses" : (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE) ? "a mask" : "a blindfold");
 		return(0);
 	}
 	otmp = getobj(accessories, "put on");
@@ -1705,10 +1707,12 @@ doputon()
 				else
 					already_wearing("some lenses");
 			} else
-				already_wearing(something); /* ??? */
+				already_wearing(something);
 			return(0);
 		}
-		if (otmp->otyp != MASK && otmp->otyp != BLINDFOLD && otmp->otyp != TOWEL && otmp->otyp != LENSES) {
+		if (otmp->otyp != MASK && otmp->otyp != R_LYEHIAN_FACEPLATE && 
+			otmp->otyp != BLINDFOLD && otmp->otyp != TOWEL && otmp->otyp != LENSES
+		) {
 			You_cant("wear that!");
 			return(0);
 		}

@@ -1498,6 +1498,7 @@ int whodidit;	/* 1==hero, 0=other, -1==just check whether it'll pass thru */
 			obj_type != TALLOW_CANDLE &&
 			obj_type != WAX_CANDLE &&
 			obj_type != LENSES &&
+			obj_type != R_LYEHIAN_FACEPLATE &&
 			obj_type != TIN_WHISTLE &&
 			obj_type != MAGIC_WHISTLE);
 		break;

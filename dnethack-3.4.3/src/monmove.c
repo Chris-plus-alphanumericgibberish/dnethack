@@ -1953,7 +1953,8 @@ struct monst *mtmp;
 		    typ != SACK && typ != BAG_OF_HOLDING &&
 		    typ != BAG_OF_TRICKS && !Is_candle(obj) &&
 		    typ != OILSKIN_SACK && typ != LEASH &&
-		    typ != STETHOSCOPE && typ != BLINDFOLD && typ != TOWEL &&
+		    typ != STETHOSCOPE && typ != BLINDFOLD && 
+			typ != TOWEL && typ != R_LYEHIAN_FACEPLATE &&
 		    typ != TIN_WHISTLE && typ != MAGIC_WHISTLE &&
 		    typ != MAGIC_MARKER && typ != TIN_OPENER &&
 		    typ != SKELETON_KEY && typ != UNIVERSAL_KEY &&

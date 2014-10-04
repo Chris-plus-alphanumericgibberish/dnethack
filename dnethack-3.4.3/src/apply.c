@@ -244,7 +244,7 @@ use_towel(obj)
 			make_blinded(Blinded + (long)u.ucreamed - old, TRUE);
 		    } else {
 			const char *what = (ublindf->otyp == LENSES) ?
-					    "lenses" : (ublindf->otyp == MASK) ? "mask" : "blindfold";
+					    "lenses" : (ublindf->otyp == MASK || ublindf->otyp == R_LYEHIAN_FACEPLATE) ? "mask" : "blindfold";
 			if (ublindf->cursed) {
 			    You("push your %s %s.", what,
 				rn2(2) ? "cock-eyed" : "crooked");
@@ -3472,6 +3472,110 @@ pick_carvee()
 	return ( n > 0 ) ? selected[0].item.a_char : 0;
 }
 
+STATIC_OVL boolean
+clockwork_location_checks(obj, cc, quietly)
+struct obj *obj;
+coord *cc;
+boolean quietly;
+{
+	xchar x,y;
+
+	if (carried(obj) && u.uswallow) {
+		if (!quietly)
+			You("don't have enough room in here to build a clockwork.");
+		return FALSE;
+	}
+	x = cc->x; y = cc->y;
+	if (!isok(x,y)) {
+		if (!quietly)
+			You("cannot build a clockwork there.");
+		return FALSE;
+	}
+	if (IS_ROCK(levl[x][y].typ) &&
+	    !(passes_walls(&mons[obj->corpsenm]) && may_passwall(x,y))) {
+		if (!quietly)
+		    You("cannot build a clockwork in %s!",
+			IS_TREES(levl[x][y].typ) ? "a tree" : "solid rock");
+		return FALSE;
+	}
+	if (boulder_at(x,y) && !passes_walls(&mons[obj->corpsenm])
+			&& !throws_rocks(&mons[obj->corpsenm])) {
+		if (!quietly)
+			You("cannot fit a clockwork under the %s.",xname(boulder_at(x,y)));
+		return FALSE;
+	}
+	if (m_at(x,y)) {
+		if (!quietly)
+			You("cannot fit a clockwork there!");
+		return FALSE;
+	}
+	return TRUE;
+}
+
+STATIC_OVL struct permonst *
+clockworkMenu(obj)
+struct obj *obj;
+{
+}
+
+STATIC_OVL int
+doUseComponents(optr)
+struct obj **optr;
+{
+	struct obj *obj = *optr;
+	struct monst *mm;
+	xchar x, y;
+	coord cc;
+
+	if(!getdir((char *)0)) {
+		flags.move = multi = 0;
+		return;
+	}
+	if(u.dx || u.dy || u.dz){
+		if (u.uswallow) {
+			/* can't activate a figurine while swallowed */
+			if (!clockwork_location_checks(obj, (coord *)0, FALSE))
+				return;
+		}
+		x = u.ux + u.dx; y = u.uy + u.dy;
+		if(mm = m_at(x,y)){
+			if(is_clockwork(mm->data)){
+				if(mm->mhp < mm->mhpmax){
+					if(yn("Repair it?") == 'y'){
+						mm->mhp += mm->m_lev;
+						if(mm->mhp > mm->mhpmax) mm->mhp = mm->mhpmax;
+						useup(obj);
+					}
+				} else pline("It doesn't need repairs.");
+			} else pline("It isn't made of clockwork.");
+		}
+		cc.x = x; cc.y = y;
+		/* Passing FALSE arg here will result in messages displayed */
+		if (!clockwork_location_checks(obj, &cc, FALSE)) return;
+		You("build a clockwork and %s.",
+			(u.dx||u.dy) ? "set it beside you" :
+			(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
+			 is_pool(cc.x, cc.y)) ?
+			"release it" :
+			(u.dz < 0 ?
+			"toss it into the air" :
+			"set it on the ground"));
+		
+		mm = makemon(clockworkMenu(obj), u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+		if(mm){
+			initedog(mm);
+			mm->m_lev = u.ulevel / 2 + 1;
+			mm->mhpmax = (mm->m_lev * 8) - 4;
+			mm->mhp =  mm->mhpmax;
+			mm->mtame = 10;
+			mm->mpeaceful = 1;
+		}
+		useup(obj);
+		*optr = 0;
+	} else {
+	}
+}
+
 int
 doapply()
 {
@@ -3513,6 +3617,7 @@ doapply()
 	else switch(obj->otyp){
 	case BLINDFOLD:
 	case LENSES:
+	case R_LYEHIAN_FACEPLATE:
 	case MASK:
 		if (obj == ublindf) {
 		    if (!cursed(obj)) Blindf_off(obj);
@@ -3520,7 +3625,7 @@ doapply()
 		    Blindf_on(obj);
 		else You("are already %s.",
 			ublindf->otyp == TOWEL ?     "covered by a towel" :
-			ublindf->otyp == MASK ?      "wearing a mask" :
+			(ublindf->otyp == MASK || ublindf->otyp == R_LYEHIAN_FACEPLATE ) ? "wearing a mask" :
 			ublindf->otyp == BLINDFOLD ? "wearing a blindfold" :
 						     "wearing lenses");
 		break;

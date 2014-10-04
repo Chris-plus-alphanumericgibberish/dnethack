@@ -999,7 +999,8 @@ register const char *let,*word;
 		else if ((putting_on(word) &&
 		    ((otmp->oclass == FOOD_CLASS && otmp->otyp != MEAT_RING) ||
 		    (otmp->oclass == TOOL_CLASS &&
-		     otyp != BLINDFOLD && otyp != MASK && otyp != TOWEL && otyp != LENSES)))
+		     otyp != BLINDFOLD && otyp != MASK && otyp != R_LYEHIAN_FACEPLATE && 
+			 otyp != TOWEL && otyp != LENSES)))
 		|| (!strcmp(word, "wield") &&
 		    (otmp->oclass == TOOL_CLASS && !is_weptool(otmp)))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
@@ -1286,7 +1287,8 @@ struct obj *otmp;
 		s1 = "T", s2 = "take", s3 = " off";
 	} else if ((ocls == RING_CLASS || otyp == MEAT_RING) ||
 		ocls == AMULET_CLASS ||
-		(otyp == BLINDFOLD || otyp == TOWEL || otyp == LENSES)) {
+		(otyp == BLINDFOLD || otyp == TOWEL || otyp == LENSES || 
+		otyp == MASK || otyp == R_LYEHIAN_FACEPLATE)) {
 	    if (!strcmp(word, "wear"))
 		s1 = "P", s2 = "put", s3 = " on";
 	    else if (!strcmp(word, "take off"))

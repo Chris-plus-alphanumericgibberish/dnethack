@@ -740,6 +740,9 @@ int thrown;
 	unconventional[0] = '\0';
 	saved_oname[0] = '\0';
 	
+    static int tgloves = 0;
+    if (!tgloves) tgloves = find_tgloves();
+	
 	wakeup(mon);
 	if(!obj) {	/* attack with bare hands */
 	    if (mdat->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS || u.sealsActive&SEAL_EDEN)) tmp = 0;
@@ -751,9 +754,13 @@ int thrown;
 			else{
 				tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,rnd(5)*2+2,0) : rnd(4);	/* bonus for martial arts */
 			}
+			if(uarmf && uarmf->otyp == tgloves) tmp += 2;
 		}
-	    else tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,rnd(5)*2,0) : rnd(2);
+	    else {
+			tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,rnd(5)*2,0) : rnd(2);
+		}
 		if(u.specialSealsActive&SEAL_DAHLVER_NAR) tmp += d(2,6)+min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
+		if(uarmf && uarmf->otyp == tgloves) tmp += 1;
 	    valid_weapon_attack = (tmp > 1);
 		if(uarmg){
 	    /* blessed gloves give bonuses when fighting 'bare-handed' */

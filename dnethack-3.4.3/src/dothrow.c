@@ -1750,6 +1750,7 @@ boolean in_view;
 		case DROVEN_DAGGER:
 		case DROVEN_SHORT_SWORD:
 		case LENSES:
+		case R_LYEHIAN_FACEPLATE:
 		case MIRROR:
 		case CRYSTAL_BALL:
 #ifdef TOURIST

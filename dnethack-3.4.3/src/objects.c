@@ -459,7 +459,7 @@ CLOAK("robe", (char *)0,
 CLOAK("alchemy smock", "apron",
 		0, 1,	POISON_RES, 9, 0, 10, 50,  9, 1, CLOTH, CLR_WHITE),
 CLOAK("Leo Nemaeus hide", "lion skin",
-		0, 1,	HALF_PHDAM,	    0, 10, 200, 1200,  7, 0, DRAGON_HIDE, HI_GOLD),
+		0, 1,	HALF_PHDAM,	    0, 10, 60, 1200,  7, 0, DRAGON_HIDE, HI_GOLD),
 CLOAK("leather cloak", (char *)0,
 		1, 0,	0,	    8, 0, 15, 40,  8, 1, LEATHER, CLR_BROWN),
 /* With shuffled appearances... */
@@ -510,13 +510,15 @@ DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, CLR_YELLOW),
  * CLR_BROWN (== HI_LEATHER)
  */
 GLOVES("leather gloves", "old gloves",
-		0, 0,  0,	  16, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
+		0, 0,  0,	  12, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of fumbling", "padded gloves",
-		0, 1,  FUMBLING,   8, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
+		0, 1,  FUMBLING,   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of power", "riding gloves",
-		0, 1,  0,	   8, 1, 30, 50,  9, 0, IRON, CLR_BROWN),
+		0, 1,  0,	   7, 1, 30, 50,  9, 0, IRON, CLR_BROWN),
+GLOVES("orihalcyon gauntlets", "fighting gloves",
+		0, 1,  ANTIMAGIC,  7, 1, 10, 50,  9, 0, METAL, CLR_BROWN),
 GLOVES("gauntlets of dexterity", "fencing gloves",
-		0, 1,  0,	   8, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
+		0, 1,  0,	   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
 
 /* boots */
 BOOTS("low boots", "walking shoes",
@@ -619,6 +621,11 @@ OBJECT(OBJ("Amulet of Yendor",	/* note: description == name */
 
 /* tools ... */
 /* tools with weapon characteristics come last */
+#define TOOLMASK(name,desc,prop,kn,mrg,mgc,chg,prob,wt,cost,mat,color) \
+	OBJECT( OBJ(name,desc), \
+		BITS(kn,mrg,chg,0,mgc,chg,0,0,0,0,0,P_NONE,mat), \
+		prop, TOOL_CLASS, prob, 0, \
+		wt, cost, 0, 0, 0, 0, wt, color )
 #define TOOL(name,desc,kn,mrg,mgc,chg,prob,wt,cost,mat,color) \
 	OBJECT( OBJ(name,desc), \
 		BITS(kn,mrg,chg,0,mgc,chg,0,0,0,0,0,P_NONE,mat), \
@@ -681,6 +688,8 @@ TOOL("mirror", "looking glass", 0, 0, 0, 0,  60, 13,  10, GLASS, HI_SILVER),
 TOOL("crystal ball", "glass orb",
 								0, 0, 1, 1,  15,150, 200, GLASS, HI_GLASS),
 TOOL("mask", (char *)0,			1, 0, 0, 0,  10, 10,  80, LEATHER, CLR_WHITE),
+TOOLMASK("R'lyehian faceplate", "warped mask", POISON_RES,
+								0, 0, 0, 0,   0,150,  80, GLASS, CLR_WHITE),
 TOOL("lenses", (char *)0,	1, 0, 0, 0,   5,  3,  80, GLASS, HI_GLASS),
 TOOL("blindfold", (char *)0,    1, 0, 0, 0,  50,  2,  20, CLOTH, CLR_BLACK),
 TOOL("towel", (char *)0,        1, 0, 0, 0,  50,  2,  50, CLOTH, CLR_MAGENTA),

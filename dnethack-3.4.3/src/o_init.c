@@ -226,7 +226,7 @@ shuffle_all()
 	}
 	
 	/* shuffle the helmets */
-	shuffle(HELMET, HELM_OF_TELEPATHY, FALSE);
+	shuffle(HELMET, HELM_OF_DRAIN_RESISTANCE, TRUE);
 
 	/* shuffle the gloves */
 	shuffle(LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY, FALSE);
@@ -236,6 +236,38 @@ shuffle_all()
 
 	/* shuffle the boots [if they change, update find_skates() below] */
 	shuffle(SPEED_BOOTS, LEVITATION_BOOTS, FALSE);
+}
+
+/* find the object index for gold circlet */
+int
+find_gcirclet()
+{
+    register int i;
+    register const char *s;
+
+    for (i = HELMET; i <= HELM_OF_DRAIN_RESISTANCE; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "gold circlet")
+		)) return i;
+
+    impossible("gold circlet not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
+/* find the object index for visored helmet */
+int
+find_vhelm()
+{
+    register int i;
+    register const char *s;
+
+    for (i = HELMET; i <= HELM_OF_DRAIN_RESISTANCE; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && 
+			!strcmp(s, "visored helmet")
+		) return i;
+
+    impossible("visored helmet not found?");
+    return -1;	/* not 0, or caller would try again each move */
 }
 
 /* find the object index for snow boots; used [once] by slippery ice code */
@@ -652,6 +684,21 @@ find_ogloves()
 	    return i;
 
     impossible("old gloves not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
+/* find the object index for fighting gloves */
+int
+find_tgloves()
+{
+    register int i;
+    register const char *s;
+
+    for (i = LEATHER_GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
+	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "fighting gloves"))
+	    return i;
+
+    impossible("fighting gloves not found?");
     return -1;	/* not 0, or caller would try again each move */
 }
 

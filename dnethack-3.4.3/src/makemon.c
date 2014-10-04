@@ -909,7 +909,8 @@ register struct monst *mtmp;
 				(void) mpickobj(mtmp, otmp);
 			}
 		 }
-		}else if((mm == PM_MIND_FLAYER || mm == PM_MASTER_MIND_FLAYER) && on_level(&rlyeh_level,&u.uz)){
+		}else if((mm == PM_MIND_FLAYER || mm == PM_MASTER_MIND_FLAYER)){
+			if(on_level(&rlyeh_level,&u.uz)){
 			otmp = mksobj(BULLWHIP, TRUE, FALSE);
 			otmp->oerodeproof = 1;
 			otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 0;
@@ -937,6 +938,12 @@ register struct monst *mtmp;
 			(void) mongets(mtmp, rnd_attack_potion(mtmp));
 			(void) mongets(mtmp, rnd_attack_potion(mtmp));
 			(void) mongets(mtmp, rnd_attack_potion(mtmp));
+				
+				if(mm == PM_MASTER_MIND_FLAYER || !rn2(3)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
+			} else {
+				if(mm == PM_MASTER_MIND_FLAYER && !rn2(3)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
+				else if(mm == PM_MIND_FLAYER && !rn2(20)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
+			}
 		} else if(mm == PM_GITHYANKI_PIRATE){
 			(void)mongets(mtmp, TWO_HANDED_SWORD);
 			(void)mongets(mtmp, BRONZE_PLATE_MAIL);
