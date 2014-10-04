@@ -1950,6 +1950,16 @@ struct alt_spellings {
 	{ "no-dachi", TWO_HANDED_SWORD },
 	{ "dai tsuchi", WAR_HAMMER },
 	{ "koto", WOODEN_HARP },
+	{ "helmet", HELMET },
+	{ "circlet", HELMET },
+	{ "helm of brilliance", HELM_OF_BRILLIANCE },
+	{ "crown of cognizance", HELM_OF_BRILLIANCE },
+	{ "helm of opposite alignment", HELM_OF_OPPOSITE_ALIGNMENT },
+	{ "tiara of treachery", HELM_OF_OPPOSITE_ALIGNMENT },
+	{ "helm of telepathy", HELM_OF_TELEPATHY },
+	{ "tiara of telepathy", HELM_OF_TELEPATHY },
+	{ "helm of drain resistance", HELM_OF_DRAIN_RESISTANCE },
+	{ "diadem of drain resistance", HELM_OF_DRAIN_RESISTANCE },
 	{ (const char *)0, 0 },
 };
 
