@@ -1373,11 +1373,11 @@ int tx,ty;
 				}
 				else{
 					pline("A voice whispers from bellow, but you don't catch what it says.");
-					u.sealTimeout[AHAZU-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[AHAZU-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				pline("Thoughts of falling and of narrow skies come unbidden into your mind.");
-				u.sealTimeout[AHAZU-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[AHAZU-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -1416,7 +1416,7 @@ int tx,ty;
 				}
 				else{
 					pline("No sooner are the shadows born than they rise up against their creator, smothering the flame under a tide of darkness.");
-					u.sealTimeout[AMON-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[AMON-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}
 			else{
@@ -1463,11 +1463,11 @@ int tx,ty;
 				else{
 					pline("\"I am Andrealphus, born of angles. In this soft world of curves, I alone am straight and true.\"");
 					pline("\"You, born of dishonest curves, are unworthy of my measure.\"");
-					u.sealTimeout[ANDREALPHUS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[ANDREALPHUS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				pline("Thoughts intersecting lines rise to the forefront of your mind.");
-				u.sealTimeout[ANDREALPHUS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[ANDREALPHUS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -1695,7 +1695,7 @@ int tx,ty;
 					pline("Suddenly, the hands toss one of the whrilling objects at you.");
 					You("see %s pass far over your %s, out of reach.", andromaliusItems[i3], body_part(HEAD));
 					pline("When your attention returns to the seal, the hands have gone.");
-					u.sealTimeout[ANDROMALIUS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[ANDROMALIUS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 				if(o1){
 					if(o1->quan > 1) o1->quan--; 
@@ -1724,7 +1724,7 @@ int tx,ty;
 				pline("With your mind's eye, you watch as they make a show of prestidigitation,");
 				pline("palming and unpalming %s. Suddenly, they throw %s at your face!", andromaliusItems[i1], andromaliusItems[i2]);
 				You("come out of your revere with a start.");
-				u.sealTimeout[ANDROMALIUS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[ANDROMALIUS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -1804,10 +1804,10 @@ int tx,ty;
 					if(uwep->oeroded2) uwep->oeroded2--;
 					pline("The Pen of the Void drips black oil, as if in sympathy.");
 				}
-				u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
 			} else{
 				pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
-				u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -1855,12 +1855,12 @@ int tx,ty;
 					} else {
 						pline("A woman's scream drifts through your mind, but nothing else occurs....");
 					}
-					u.sealTimeout[BALAM-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[BALAM-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				if(!uwep) Your("weapon-hand itches.");
 				You("shiver violently.");
-				u.sealTimeout[BALAM-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[BALAM-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -1913,11 +1913,11 @@ int tx,ty;
 				else{
 					You("think you can hear faint hoofbeats from within the seal.");
 					pline("But they fade away before you can be sure.");
-					u.sealTimeout[BERITH-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[BERITH-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("think of cavalry and silver rings.");
-				u.sealTimeout[BERITH-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[BERITH-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -1954,7 +1954,7 @@ int tx,ty;
 			else{
 				pline("I wish you well as you walk your path.\"");
 				healup(d(5,spiritDsize()), 0, TRUE, TRUE);
-				u.sealTimeout[BUER-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[BUER-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2004,11 +2004,11 @@ int tx,ty;
 						levl[tx][ty].typ = ROOM;
 						digfarhole(TRUE,tx,ty);
 					}
-					u.sealTimeout[CHUPOCLOPS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[CHUPOCLOPS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				pline("Thoughts of death and despair almost overcome you.");
-				u.sealTimeout[CHUPOCLOPS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[CHUPOCLOPS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2052,11 +2052,11 @@ int tx,ty;
 					if(!Blind) {
 						pline("His myriad faces study you with disapproval, and he departs as suddenly as he arived.");
 					}
-					u.sealTimeout[DANTALION-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[DANTALION-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else {
 				You_hear("royal trumpets.");
-				u.sealTimeout[DANTALION-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[DANTALION-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2100,11 +2100,11 @@ int tx,ty;
 				else{
 					pline("\"Well, I'm certain a person as distinctive as you has better things to do than talk to me.\"");
 					pline("\"I hope you visit again some time.\"");
-					u.sealTimeout[SHIRO-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[SHIRO-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				pline("For some reason you want to arrange rocks in a circle.");
-				u.sealTimeout[SHIRO-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[SHIRO-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2143,11 +2143,11 @@ int tx,ty;
 					} else {
 						pline("Something hisses at you, then slithers away.");
 					}
-					u.sealTimeout[ECHIDNA-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[ECHIDNA-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("hear scales scraping against stone echo through a cave.");
-				u.sealTimeout[ECHIDNA-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[ECHIDNA-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2188,11 +2188,11 @@ int tx,ty;
 				else{
 					pline("But before they do, the whole construct jerks suddenly upwards,");
 					pline("out of sight.");
-					u.sealTimeout[EDEN-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[EDEN-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You_hear("water splashing.");
-				u.sealTimeout[EDEN-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[EDEN-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2234,11 +2234,11 @@ int tx,ty;
 				else{
 					pline("But the figure is asleep,");
 					pline("and sinks again without saying a word.");
-					u.sealTimeout[ENKI-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[ENKI-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("dream of wide open spaces.");
-				u.sealTimeout[ENKI-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[ENKI-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2281,11 +2281,11 @@ int tx,ty;
 				}
 				else{
 					if(!Blind) pline("but it pays you no heed.");
-					u.sealTimeout[EURYNOME-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[EURYNOME-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("daydream of dancing across waves.");
-				u.sealTimeout[EURYNOME-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[EURYNOME-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2320,11 +2320,11 @@ int tx,ty;
 				}
 				else{
 					pline("In fact, you don't think she can move.");
-					u.sealTimeout[EVE-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[EVE-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You_hear("wind in the trees.");
-				u.sealTimeout[EVE-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[EVE-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2365,11 +2365,11 @@ int tx,ty;
 				}
 				else{
 					pline("It roars at you to leave it alone.");
-					u.sealTimeout[FAFNIR-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[FAFNIR-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You_hear("the clink of coins.");
-				u.sealTimeout[FAFNIR-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[FAFNIR-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2415,7 +2415,7 @@ int tx,ty;
 			}
 			else{
 				if(!Blind) pline("They stare at you for a moment, and then leave just as suddenly as they came.");
-				u.sealTimeout[HUGINN_MUNINN-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[HUGINN_MUNINN-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2447,11 +2447,11 @@ int tx,ty;
 				}
 				else{
 					pline("Apparently it was nothing.");
-					u.sealTimeout[IRIS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[IRIS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("smell sulfur.");
-				u.sealTimeout[IRIS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[IRIS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2483,11 +2483,11 @@ int tx,ty;
 				}
 				else{
 					You_hear("aimless footsteps and creaking joints.");
-					u.sealTimeout[JACK-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[JACK-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("think of the wide earth.");
-				u.sealTimeout[JACK-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[JACK-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2583,13 +2583,13 @@ int tx,ty;
 				}
 				else{
 					if(!Blind) pline("But it does not make itself known to you.");
-					u.sealTimeout[MALPHAS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[MALPHAS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 				useupf(otmp, 1L);
 				newsym(tx,ty);
 			} else{
 				You("smell fresh blood.");
-				u.sealTimeout[MALPHAS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[MALPHAS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2624,11 +2624,11 @@ int tx,ty;
 				}
 				else{
 					pline("But they don't do anything interesting.");
-					u.sealTimeout[MARIONETTE-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[MARIONETTE-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You_hear("the sounds of digging, and of bones rattling together.");
-				u.sealTimeout[MARIONETTE-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[MARIONETTE-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2659,11 +2659,11 @@ int tx,ty;
 				}
 				else{
 					pline("The itching subsides.");
-					u.sealTimeout[MOTHER-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[MOTHER-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("blink.");
-				u.sealTimeout[MOTHER-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[MOTHER-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2707,11 +2707,11 @@ int tx,ty;
 				}
 				else{
 					pline("The sound fades away.");
-					u.sealTimeout[NABERIUS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[NABERIUS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You_hear("retoric and sage advice.");
-				u.sealTimeout[NABERIUS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[NABERIUS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2741,10 +2741,10 @@ int tx,ty;
 						u.spiritTineTB= moves + bindingPeriod;
 					}
 					u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod;
-				} else u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// } else u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod/10;
 			} else{
 				pline("For an instant you are falling.");
-				u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[ORTHOS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2785,11 +2785,11 @@ int tx,ty;
 				}
 				else{
 					if(!Blind) pline("The silt in the seal swirls a bit. Otherwise, nothing happens.");
-					u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("feel wet....");
-				u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2822,11 +2822,11 @@ int tx,ty;
 				}
 				else{
 					if(!Blind) pline("They fade away without incident.");
-					u.sealTimeout[OTIAX-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[OTIAX-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("instinctively look around for a door to open.");
-				u.sealTimeout[OTIAX-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[OTIAX-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2887,7 +2887,7 @@ int tx,ty;
 				}
 			} else{
 				You("dream briefly of a library in the northwest kingdom.");
-				u.sealTimeout[PAIMON-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[PAIMON-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2916,11 +2916,11 @@ int tx,ty;
 				}
 				else{
 					pline("It leaves");
-					u.sealTimeout[SIMURGH-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[SIMURGH-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
 				You("yearn for open skies.");
-				u.sealTimeout[SIMURGH-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[SIMURGH-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -2955,11 +2955,11 @@ int tx,ty;
 				}
 				else{
 					if(!Blind)  pline("Gradually, the lighting returns to normal.");
-					u.sealTimeout[TENEBROUS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[TENEBROUS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
-				You("feel that Tenebrous exists only in darkness.");
-				u.sealTimeout[TENEBROUS-FIRST_SEAL] = moves + bindingPeriod/10;
+				You("think briefly of the dying of the light.");
+				// u.sealTimeout[TENEBROUS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -3019,11 +3019,11 @@ int tx,ty;
 				} else {
 					if(!Blind) pline("The eye closes.");
 					else pline("But nothing else occurs.");
-					u.sealTimeout[YMIR-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[YMIR-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}  else{
 				pline("Rot calls rot, and poison calls poison.");
-				u.sealTimeout[YMIR-FIRST_SEAL] = moves + bindingPeriod/10;
+				// u.sealTimeout[YMIR-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -3034,7 +3034,7 @@ int tx,ty;
 				pline("The bloody, tooth-torn corpse of Dahlver-Nar hanges over the seal.");
 				pline("He moans and reaches out to you.");
 				bindspirit(ep->ward_id);
-				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + bindingPeriod/10;
+				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + bindingPeriod;
 			}
 		} else pline("You hear distant moaning.");
 	}break;
@@ -3047,7 +3047,7 @@ int tx,ty;
 				pline("\"Now I am trapped outside of time,");
 				pline("beyond life, motion, and thought.\"");
 				bindspirit(ep->ward_id);
-				u.sealTimeout[ACERERAK-FIRST_SEAL] = moves + bindingPeriod/10;
+				u.sealTimeout[ACERERAK-FIRST_SEAL] = moves + bindingPeriod;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -3072,7 +3072,7 @@ int tx,ty;
 				u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod;
 				} else {
 					You("think of shining crystal.");
-					u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}
 		} else pline("You can't feel the spirit.");
@@ -3097,7 +3097,7 @@ int tx,ty;
 				u.sealTimeout[MISKA-FIRST_SEAL] = moves + bindingPeriod;
 				} else {
 					You("think of burning lava.");
-					u.sealTimeout[MISKA-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[MISKA-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}
 		} else pline("You can't feel the spirit.");
@@ -3134,7 +3134,7 @@ int tx,ty;
 					newsym(tx,ty);
 				} else {
 					You("are nearly deafened by the sound of mirrors breaking!");
-					u.sealTimeout[NUDZIARTH-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[NUDZIARTH-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}
 		} else pline("You can't feel the spirit.");
