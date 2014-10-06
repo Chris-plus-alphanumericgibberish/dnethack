@@ -1621,10 +1621,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	const char *wepdesc;
 	static const char you[] = "you";
 	char hittee[BUFSZ];
-#ifdef PARANOID
-	char buf[BUFSZ];
-	int really_bdown = FALSE;
-#endif
 
 	Strcpy(hittee, youdefend ? you : mon_nam(mdef));
 
@@ -2770,6 +2766,8 @@ arti_invoke(obj)
 			}
 #ifdef PARANOID
 			else if(u.dz > 0 ){
+				char buf[BUFSZ];
+				int really_bdown = FALSE;
 				if (iflags.paranoid_quit) {
 				  getlin ("Are you sure you want to bring down the Silence Glaive? [yes/no]?",buf);
 				  (void) lcase (buf);
@@ -2805,6 +2803,9 @@ arti_invoke(obj)
 				killer = "leading departed souls to another world";
 				done(DIED);
 				You("return, having delivered your followers to their final destination.");
+#ifdef PARANOID
+				}
+#endif
 			}
 			else{
 				obj->age = 0;
