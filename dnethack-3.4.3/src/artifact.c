@@ -2525,7 +2525,6 @@ arti_invoke(obj)
 	if( /* some properties can be used as often as desired, or track cooldowns in a different way */
 		oart->inv_prop != FIRE_SHIKAI &&
 		oart->inv_prop != ICE_SHIKAI &&
-		oart->inv_prop != BLESS &&
 		oart->inv_prop != NECRONOMICON &&
 		oart->inv_prop != SPIRITNAMES &&
 		oart->inv_prop != LORDLY &&
@@ -3101,14 +3100,21 @@ arti_invoke(obj)
 		   }
     break;
 	case BLESS:
-		You("bless your artifact.");
-		if(cansee(u.ux, u.uy)) pline("Holy light shines upon it!");
-		obj->cursed = 0;
-		obj->blessed = 1;
-		obj->oeroded = 0;
-		obj->oeroded2= 0;
-		obj->oerodeproof = 1;
-		if(obj->spe < 3) obj->spe = 3;
+		if(obj->owornmask&(~(W_ART|W_ARTI))){
+			You("can't bless your artifact while it is worn, wielded, or readied.");
+			obj->age = 0;
+		} else {
+			You("bless your artifact.");
+			if(cansee(u.ux, u.uy)) pline("Holy light shines upon it!");
+			obj->cursed = 0;
+			obj->blessed = 1;
+			obj->oeroded = 0;
+			obj->oeroded2= 0;
+			obj->oerodeproof = 1;
+			if(obj->spe < 3){
+				obj->spe = 3;
+			}
+		}
     break;
 	case CANNONADE:
 		You_hear("a voice shouting\"By your order, Sah!\"");
