@@ -1719,7 +1719,8 @@ const char *oldstr;
 	    /* but don't singularize "gauntlets", "boots", "Eyes of the.." */
 	    if (BSTRNCMPI(bp, p-3, "Eye", 3) &&
 		BSTRNCMP(bp, p-4, "boot", 4) &&
-		BSTRNCMP(bp, p-8, "gauntlet", 8))
+		BSTRNCMP(bp, p-8, "gauntlet", 8) &&
+		BSTRNCMP(bp, p-8, "Gauntlet", 8))
 		while ((*p = *(p+1)) != 0) p++;
 	    return bp;
 	}
@@ -1769,6 +1770,7 @@ const char *oldstr;
 
 		} else if (!BSTRCMP(bp, p-5, "boots") ||
 			   !BSTRCMP(bp, p-9, "gauntlets") ||
+			   !BSTRCMP(bp, p-9, "Gauntlets") ||
 			   !BSTRCMP(bp, p-6, "tricks") ||
 			   !BSTRCMP(bp, p-9, "paralysis") ||
 			   !BSTRCMP(bp, p-5, "glass") ||
