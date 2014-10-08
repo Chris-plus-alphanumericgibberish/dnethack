@@ -2509,6 +2509,9 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	if(Race_if(PM_INCANTIFIER)){
 		int curspe;
 		if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+		if(Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax * 3/4 && yn("You feel overcharged. Continue eating?") != 'y'){
+			return 0;
+		}
 		if (otmp->quan > 1L) {
 		    if(!carried(otmp))
 			(void) splitobj(otmp, otmp->quan - 1L);
@@ -2533,7 +2536,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				curspe = otmp->spe;
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
-					You("drain the %s%s.", xname(otmp),otmp->spe==0 ? "":" dry");
+					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2570,7 +2573,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				curspe = otmp->spe;
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
-					You("drain the %s%s.", xname(otmp),otmp->spe==0 ? "":" dry");
+					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2581,7 +2584,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				curspe = otmp->spe;
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
-					You("drain the %s%s.", xname(otmp),otmp->spe==0 ? "":" dry");
+					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2609,7 +2612,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				curspe = otmp->spe;
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
-					You("drain the %s%s.", xname(otmp),otmp->spe==0 ? "":" dry");
+					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(10);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
