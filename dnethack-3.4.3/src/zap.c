@@ -3995,12 +3995,13 @@ boolean *shopdamage;
 		default:
 		def_case:
 		    if(cansee(x,y)) {
-			pline_The("door absorbs %s %s!",
+			pline_The("door absorbs the blast!");
+/*			pline_The("door absorbs %s %s!",
 			      (type < 0) ? "the" : "your",
 			      abs(type) < ZT_SPELL(0) ? "bolt" :
 			      abs(type) < ZT_BREATH(0) ? "spell" :
 			      "blast");
-		    } else You_feel("vibrations.");
+*/		    } else You_feel("vibrations.");
 		    break;
 		}
 		if (new_doormask >= 0) {	/* door gets broken */
@@ -4038,7 +4039,7 @@ boolean *shopdamage;
 		/* Cannot use wakeup() which also angers the monster */
 		mon->msleeping = 0;
 		if(mon->m_ap_type) seemimic(mon);
-		if(type >= 0) {
+		if(type >= 0 && !flags.mon_moving) {
 		    setmangry(mon);
 		    if(mon->ispriest && *in_rooms(mon->mx, mon->my, TEMPLE))
 			ghod_hitsu(mon);
