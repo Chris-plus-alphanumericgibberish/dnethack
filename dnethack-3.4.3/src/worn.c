@@ -366,6 +366,12 @@ struct monst *mon;
 		if(mon->mextra[1] & 0x4L) base = -125; //Fully Quantum Locked
 		if(mon->mextra[1] & 0x2L) base = -20; //Partial Quantum Lock
 	}
+	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
+	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
+		if(mwep){
+			base += base*10;
+		}
+	}
 	return base;
 }
 
@@ -388,6 +394,12 @@ struct monst *mon;
 	}
 	else if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
 		base -= 15;
+	}
+	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
+	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
+		if(mwep){
+			base += base*10;
+		}
 	}
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
