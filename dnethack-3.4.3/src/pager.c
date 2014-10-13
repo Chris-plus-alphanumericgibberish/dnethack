@@ -720,6 +720,7 @@ static const char * const bogusobjects[] = {
 	   "spellbook named The Testament of Solomon",
 	   "spellbook named The Book of Enoch",
 	   "spellbook named The Uruk Tablets",
+	   "spellbook named The Book of the Law",
 	   "spellbook named the Book of Shadows",
 	   "spellbook named the Book of Mirrors",
        "dead sea scroll",
