@@ -69,7 +69,7 @@ register struct attack *mattk;
 			break;
 		case AT_KICK:
 			pline("%s kicks%c", Monnam(mtmp),
-				    (thick_skinned(youmonst.data) || u.sealsActive&SEAL_ENKI) ? '.' : '!');
+				    (thick_skinned(youmonst.data) || u.sealsActive&SEAL_ECHIDNA) ? '.' : '!');
 			break;
 		case AT_STNG:
 			pline("%s stings!", Monnam(mtmp));
@@ -607,7 +607,7 @@ mattacku(mtmp)
 			    if (foundyou) {
 				if(tmp > (j = rnd(20+i))) {
 				    if (mattk->aatyp != AT_KICK ||
-					    !(thick_skinned(youmonst.data) || u.sealsActive&SEAL_ENKI))
+					    !(thick_skinned(youmonst.data) || u.sealsActive&SEAL_ECHIDNA))
 					sum[i] = hitmu(mtmp, mattk);
 				} else
 				    missmu(mtmp, (tmp == j), mattk);

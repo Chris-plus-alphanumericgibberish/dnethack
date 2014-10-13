@@ -2761,7 +2761,7 @@ register boolean force, here, forcelethe;
 		ublindf
 		&& ublindf->otyp == R_LYEHIAN_FACEPLATE
 		&& (!ublindf->cursed || rn2(3))
-	   )
+	   ) || u.sealsActive&SEAL_ENKI
 	) {
 			return 0;
 	}	/* Scrolls, spellbooks, potions, weapons and
