@@ -3648,6 +3648,7 @@ bindspirit(seal_id)
 					//Eject current alignment quest spirit
 					unbind(u.spirit[ALIGN_SPIRIT],TRUE);
 				}
+				unrestrict_weapon_skill(P_TWO_WEAPON_COMBAT);
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_MISKA;
 				u.specialSealsUsed |= SEAL_MISKA;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_MISKA);
@@ -3884,6 +3885,7 @@ int p_skill;
 	if(p_skill == P_MATTER_SPELL) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
 	if(p_skill == P_RIDING) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
 	if(p_skill == P_BARE_HANDED_COMBAT) return u.sealsActive & (SEAL_EURYNOME|SEAL_BUER)? TRUE : FALSE;
+	if(p_skill == P_TWO_WEAPON_COMBAT) return u.specialSealsActive & (SEAL_MISKA)? TRUE : FALSE;
 	return FALSE;
 }
 #ifdef USER_SOUNDS
