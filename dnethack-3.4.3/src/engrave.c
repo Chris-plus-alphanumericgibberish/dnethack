@@ -752,7 +752,7 @@ char * sealTitles[] =  {
 	", the Demi-Lich", /* 32 */
 	"", /* 33 */
 	", goddess of crystal", /* 34 */
-	", the wolf-spider", /* 35 */
+	" the wolf-spider", /* 35 */
 	", the mirrored destroyer", /* 36 */
 	"", /* 37 */
 	"", /* 38 */
