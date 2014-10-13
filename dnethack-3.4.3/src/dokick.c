@@ -167,7 +167,7 @@ register xchar x, y;
 	if (Upolyd && attacktype(youmonst.data, AT_KICK)) {
 	    struct attack *uattk;
 	    int sum;
-	    schar tmp = find_roll_to_hit(mon);
+	    schar tmp = find_roll_to_hit(mon, (uarmf && arti_shining(uarmf)) || u.sealsActive&SEAL_CHUPOCLOPS);
 
 	    for (i = 0; i < NATTK; i++) {
 		/* first of two kicks might have provoked counterattack

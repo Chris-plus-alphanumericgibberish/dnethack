@@ -2294,7 +2294,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		int extrahits = rn2(6);
 		int monAC, extrahit=1;
 		while(extrahits--){
-			monAC = find_roll_to_hit(mdef)-2*extrahits-2;
+			monAC = find_roll_to_hit(mdef,(uwep && arti_shining(uwep)) || u.sealsActive&SEAL_CHUPOCLOPS)-2*extrahits-2;
 			if(u.uswallow || monAC > rnd(20)){
 				*dmgptr += dmgval(otmp, mdef, 0);
 				extrahit++;

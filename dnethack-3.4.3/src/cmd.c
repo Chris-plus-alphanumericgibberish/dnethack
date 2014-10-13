@@ -608,7 +608,7 @@ use_reach_attack()
 
 	    bhitpos = cc;
 	    check_caitiff(mtmp);
-	    (void) hmonas(mtmp, find_roll_to_hit(mtmp));
+	    (void) hmonas(mtmp, find_roll_to_hit(mtmp,(uwep && arti_shining(uwep)) || u.sealsActive&SEAL_CHUPOCLOPS));
 	} else
 	    /* Now you know that nothing is there... */
 	    pline("%s", nothing_happens);

@@ -257,18 +257,21 @@ struct monst *mtmp;
 }
 
 schar
-find_roll_to_hit(mtmp)
-register struct monst *mtmp;
+find_roll_to_hit(mtmp, phasing)
+struct monst *mtmp;
+boolean phasing;
 {
 	schar tmp;
 	int tmp2;
+	static double bab = 0;
+	if(!bab) bab = base_attack_bonus;
 
-	if(u.sealsActive&SEAL_CHUPOCLOPS){
+	if(phasing){
 		tmp = 1 + Luck + abon() + base_mac(mtmp) + u.uhitinc + u.spiritAttk +
-			maybe_polyd(youmonst.data->mlevel, u.ulevel);
+			maybe_polyd(youmonst.data->mlevel, u.ulevel)*bab;
 	} else {
 		tmp = 1 + Luck + abon() + find_mac(mtmp) + u.uhitinc + u.spiritAttk +
-			maybe_polyd(youmonst.data->mlevel, u.ulevel);
+			maybe_polyd(youmonst.data->mlevel, u.ulevel)*bab;
 	}
 
 	if(u.sealsActive&SEAL_DANTALION && tp_sensemon(mtmp)) tmp += max(0,(ACURR(A_INT)-10)/2);
@@ -475,7 +478,7 @@ register struct monst *mtmp;
 	   mtmp->mx != u.ux+u.dx || mtmp->my != u.uy+u.dy)) /* it moved */
 		return(FALSE);
 
-	tmp = find_roll_to_hit(mtmp);
+	tmp = find_roll_to_hit(mtmp, (uwep && arti_shining(uwep)) || u.sealsActive&SEAL_CHUPOCLOPS);
 	
 	if (Upolyd || Race_if(PM_VAMPIRE))
 		keepattacking = hmonas(mtmp, tmp);
@@ -656,9 +659,6 @@ int tmp;
 struct attack *uattk;
 {
 	boolean malive;
-	if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-		tmp -= find_mac(mon) - base_mac(mon);
-	}
 	int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 
 	if(tmp > dieroll) exercise(A_DEX, TRUE);
@@ -668,9 +668,6 @@ struct attack *uattk;
 	if(u.sealsActive&SEAL_MARIONETTE && uwep){
 		struct monst *m2 = m_at(mon->mx+u.dx,mon->my+u.dy);
 		if(!m2 || DEADMONSTER(m2) || m2==mon) return(malive);
-		if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-			tmp -= find_mac(m2) - base_mac(m2);
-		}
 		int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 
 		if(tmp > dieroll) exercise(A_DEX, TRUE);
@@ -2799,9 +2796,6 @@ use_weapon:
 			if (uwep) {
 			    hittmp = hitval(uwep, mon);
 			    hittmp += weapon_hit_bonus(uwep);
-				if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-					hittmp -= find_mac(mon) - base_mac(mon);
-				}
 			    tmp += hittmp;
 			}
 			dhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
@@ -2826,9 +2820,6 @@ use_weapon:
 				if(!m2 || DEADMONSTER(m2) || m2==mon) break;
 				hittmp = hitval(uwep, m2);
 				hittmp += weapon_hit_bonus(uwep);
-				if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-					hittmp -= find_mac(m2) - base_mac(m2);
-				}
 				tmp += hittmp;
 				dhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 				/* KMH -- Don't accumulate to-hit bonuses */
@@ -3069,9 +3060,6 @@ use_weapon:
 				if(!m2 || DEADMONSTER(m2) || m2==mon) break;
 				hittmp = hitval(uwep, m2);
 				hittmp += weapon_hit_bonus(uwep);
-				if(uwep && arti_shining(uwep) && !(u.sealsActive&SEAL_CHUPOCLOPS)){
-					hittmp -= find_mac(m2) - base_mac(m2);
-				}
 				tmp += hittmp;
 				dhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 				/* KMH -- Don't accumulate to-hit bonuses */

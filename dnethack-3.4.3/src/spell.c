@@ -1631,7 +1631,7 @@ spiriteffects(power, atme)
 					You("need a free hand to make a touch attack!");
 					return 0;
 				}
-				if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) <= rnd(20)){
+				if(find_roll_to_hit(mon, TRUE) + find_mac(mon) - base_mac(mon) <= rnd(20)){
 					You("miss.");
 					break;
 				}
@@ -2007,7 +2007,7 @@ spiriteffects(power, atme)
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				t = t_at(u.ux+u.dx, u.uy+u.dy);
 				if(mon){
-					if(find_roll_to_hit(mon) <= rnd(20)){
+					if(find_roll_to_hit(mon, FALSE) <= rnd(20)){
 						pline("A sudden geyser from the abzu washes over %s!", mon_nam(mon));
 						dmg = d(rnd(5), dsize);
 					} else {
@@ -2679,7 +2679,7 @@ spiriteffects(power, atme)
 				if(!mon){
 					if(!opennewdoor(u.ux+u.dx, u.uy+u.dy) && !masterDoorBox(u.ux+u.dx,u.uy+u.dy)) return 0;
 					else break;
-				} if(find_roll_to_hit(mon) <= rnd(20)){
+				} if(find_roll_to_hit(mon, (uarmg && arti_shining(uarmg)) || u.sealsActive&SEAL_CHUPOCLOPS) <= rnd(20)){
 					You("miss.");
 					break;
 				} else if(unsolid(mon->data)){
@@ -2808,7 +2808,7 @@ spiriteffects(power, atme)
 				You("need a free hand to make a touch attack!");
 				return 0;
 			}
-			if(find_roll_to_hit(mon) + find_mac(mon) - base_mac(mon) <= rnd(20)){
+			if(find_roll_to_hit(mon, TRUE) + find_mac(mon) - base_mac(mon) <= rnd(20)){
 				You("miss.");
 				break;
 			}

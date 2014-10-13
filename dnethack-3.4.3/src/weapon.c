@@ -366,7 +366,7 @@ int spec;
 		if (tmp < 0) tmp = 0;
 	}
 
-	if (objects[otyp].oc_material <= LEATHER && thick_skinned(ptr))
+	if (objects[otyp].oc_material <= LEATHER && (thick_skinned(ptr) || (mon == &youmonst && u.sealsActive&SEAL_ECHIDNA)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
 	if (ptr->mlet == S_SHADE && objects[otyp].oc_material != SILVER)

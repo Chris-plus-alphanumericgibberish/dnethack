@@ -631,6 +631,10 @@ struct you {
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
+#define base_attack_bonus	((Role_if(PM_BARBARIAN) || Role_if(PM_CONVICT) || Role_if(PM_KNIGHT) || (!uwep && Role_if(PM_MONK)) || Role_if(PM_PIRATE) || Role_if(PM_SAMURAI) || Role_if(PM_VALKYRIE)) ? 1.00 :\
+							 (Role_if(PM_ARCHEOLOGIST) || Role_if(PM_EXILE) || Role_if(PM_CAVEMAN) || Role_if(PM_MONK) || Role_if(PM_NOBLEMAN) || Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER)) ? 0.75 :\
+							 (Role_if(PM_HEALER) || Role_if(PM_TOURIST) || Role_if(PM_WIZARD)) ? 0.50:\
+							  .5) /* Failsafe */
 
 extern long sealKey[34]; /*Defined in u_init.c*/
 extern char *wardDecode[26]; /*Defined in spell.c*/
