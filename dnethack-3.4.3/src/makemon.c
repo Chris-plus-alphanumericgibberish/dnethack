@@ -126,7 +126,7 @@ register int x, y, n;
 	mm.x = x;
 	mm.y = y;
 	mndx = monsndx(mtmp->data);
-	if(!u.uevent.uaxus_foe || mndx > PM_QUINON || mndx < PM_MONOTON){
+	if(!(u.uevent.uaxus_foe) || mndx > PM_QUINON || mndx < PM_MONOTON){
 	 while(cnt--) {
 		if (peace_minded(mtmp->data)) continue;
 		/* Don't create groups of peaceful monsters since they'll get
@@ -3489,7 +3489,7 @@ register struct permonst *ptr;
 	if(ual == A_VOID) return FALSE;
 	
 	if ((mndx <= PM_QUINON && mndx >= PM_MONOTON) && sgn(mal) == sgn(ual)){
-		if(!u.uevent.uaxus_foe){
+		if(!(u.uevent.uaxus_foe)){
 			return TRUE;
 		} else return FALSE;
 	}
