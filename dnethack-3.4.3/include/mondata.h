@@ -64,6 +64,7 @@
 				 (ptr) == &mons[PM_WINGED_GARGOYLE] || \
 				 (ptr) == &mons[PM_XORN])
 #define is_anhydrous(ptr)	(flaming(ptr)  || \
+							 is_clockwork(ptr) || \
 							 is_stone(ptr) || \
 							 is_auton(ptr) || \
 				 (ptr)->mlet == S_KETER || \
