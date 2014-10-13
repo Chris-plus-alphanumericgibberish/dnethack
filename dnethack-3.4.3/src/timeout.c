@@ -319,20 +319,22 @@ nh_timeout()
 		 * 
 		 * distance	timeout
 		 * --------------------
-		 *  1		24800
-		 *  2		24200
-		 *  3		23200
-		 *  4		21800
-		 *  5		20000
-		 *  6		17800
-		 *  7		15200
-		 *  8		12200
-		 *  9		8800
-		 *  10		5000
-		 *  11		800
+		 *  1		20000
+		 *  2		18000
+		 *  3		16000
+		 *  4		14000
+		 *  5		12000
+		 *  6		10000
+		 *  7		 8000
+		 *  8		 6000
+		 *  9		 4000
+		 *  10		 2000
+		 *  11		(600)
 		 */ 
 		int base_dist = u.uluck - baseluck;
-		int slow_timeout = 25000 - 200 * (base_dist * base_dist);
+		int slow_timeout;
+		if(base_dist < 0) base_dist *= -1; /* magnitude only */
+		slow_timeout = 22000 - 2000 * (base_dist);
 		if (slow_timeout > timeout) timeout = slow_timeout;
 	    }
 
