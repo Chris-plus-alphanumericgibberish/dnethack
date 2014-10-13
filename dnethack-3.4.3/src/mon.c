@@ -989,7 +989,7 @@ movemon()
 		is_auton(mtmp->data) && 
 		mtmp->mpeaceful
 	){
-		pline("%s gets angry...", Amonnam(mtmp));
+		if(canseemon(mtmp)) pline("%s gets angry...", mon_nam(mtmp));
 		mtmp->mpeaceful = 0;
 	}
 	if(u.uevent.udemigod && 
@@ -2317,7 +2317,7 @@ boolean was_swallowed;			/* digestion */
 		  for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 			mndx = monsndx(mtmp->data);
 			if((mndx <= PM_QUINON || mndx >= PM_MONOTON) && mtmp->mpeaceful){
-				pline("%s gets angry...", Amonnam(mtmp));
+				if(canseemon(mtmp)) pline("%s gets angry...", mon_nam(mtmp));
 				mtmp->mpeaceful = 0;
 			}
 		   }
