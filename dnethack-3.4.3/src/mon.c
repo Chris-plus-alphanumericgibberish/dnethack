@@ -2167,7 +2167,10 @@ boolean was_swallowed;			/* digestion */
 			else if(mdat==&mons[PM_SWAMP_FERN_SPORE]){
 	    	  explode(mon->mx, mon->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 			}
-			else if(mdat->mattk[i].adtyp == AD_FIRE){
+			else if(mdat->mattk[i].adtyp == AD_PHYS){
+				if(mdat == &mons[PM_FABERGE_SPHERE]) explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, rn2(7));
+				else explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_MUDDY);
+			} else if(mdat->mattk[i].adtyp == AD_FIRE){
 				//mdat == &mons[PM_BALROG] || mdat == &mons[PM_MEPHISTOPHELES] || mdat == &mons[PM_FLAMING_SPHERE]){
 				explode(mon->mx, mon->my, 1, tmp, MON_EXPLODE, EXPL_FIERY);
 			}
@@ -2242,7 +2245,7 @@ boolean was_swallowed;			/* digestion */
 				} else shieldeff(u.ux,u.uy);
 			}
 			else{
-			  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MUDDY);
+			  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MAGICAL);
 			}
 	    	if(mdat == &mons[PM_GARO_MASTER] || mdat == &mons[PM_GARO]) return (TRUE);
 			else return (FALSE);
