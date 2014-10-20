@@ -1432,7 +1432,7 @@ struct obj	*sobj;
 		if((sobj->blessed || sobj->oartifact) && Is_paradise(&u.uz)){
 			struct obj* obj;
 			for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
-				if(obj->otyp == CHEST){
+				if(obj->otyp == CHEST || obj->otyp == MAGIC_LAMP){
 					int x = obj->ox, y = obj->oy;
 					extra = TRUE;
 					make_engr_at(x,y,"X",moves,BURN);
@@ -1440,6 +1440,9 @@ struct obj	*sobj;
 					if(isok(x+1,y-1)) make_engr_at(x+1,y-1,"/",moves,BURN);
 					if(isok(x-1,y+1)) make_engr_at(x-1,y+1,"/",moves,BURN);
 					if(isok(x-1,y-1)) make_engr_at(x-1,y-1,"\\",moves,BURN);
+				} else if(obj->otyp == FIGURINE){
+					int x = obj->ox, y = obj->oy;
+					make_engr_at(x,y,"x",moves,BURN);
 				}
 			}
 		}
