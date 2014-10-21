@@ -2022,6 +2022,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 				    defsyms[trap_to_defsym(tt)].explanation);
 			    break;	/* don't activate it after all */
 			}
+			if(mtmp->mhp <= 0) break;
 			if (is_flyer(mptr) || is_floater(mptr) ||
 				mptr == &mons[PM_WUMPUS] ||
 				(mtmp->wormno && count_wsegs(mtmp) > 5) ||
@@ -2042,6 +2043,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 		case MAGIC_PORTAL:
 			{
 			    int mlev_res;
+				if(mtmp->mhp <= 0) break;
 			    mlev_res = mlevel_tele_trap(mtmp, trap,
 							inescapable, in_sight);
 			    if (mlev_res) return(mlev_res);
