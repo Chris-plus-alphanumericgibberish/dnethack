@@ -3201,7 +3201,7 @@ int turns;
   victual.mon = mon;
   mon->moccupation = 1;
   mon->mcanmove = 0;
-  Sprintf(msgbuf, "winding");
+  Sprintf(msgbuf, "being wound");
   set_occupation(windclock, msgbuf, 0);
   return 1;
 }
@@ -3241,8 +3241,13 @@ windclock()
     victual.fullwarn = TRUE;
   }
   else {
-    u.uhunger += 10;
-    victual.usedtime ++;
+	if(victual.reqtime - victual.usedtime >= 10){
+		u.uhunger += 100;
+		victual.usedtime += 10;
+	} else {
+		u.uhunger += (victual.reqtime - victual.usedtime) * 10;
+		victual.usedtime += (victual.reqtime - victual.usedtime);
+	}
   }
   flags.botl = 1;
   return 1;
