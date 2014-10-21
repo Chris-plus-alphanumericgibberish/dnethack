@@ -1268,6 +1268,7 @@ register struct obj   *obj;
 	/* gloves are a hinderance to proper use of bows */
 	if (uarmg && uwep && objects[uwep->otyp].oc_skill == P_BOW) {
 	    switch (uarmg->otyp) {
+	    case ORIHALCYON_GAUNTLETS:    /* metal */
 	    case GAUNTLETS_OF_POWER:    /* metal */
 		tmp -= 2;
 		break;
