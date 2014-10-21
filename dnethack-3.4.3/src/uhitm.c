@@ -324,12 +324,17 @@ boolean phasing;
     }
 #endif /* CONVICT */
 	if(Role_if(PM_MONK) && !Upolyd) {
+		static boolean armmessage = TRUE;
 	    if (uarm) {
-		Your("armor is rather cumbersome...");
-		tmp -= urole.spelarmr;
-	    } else if (!uwep && !uarms) {
-		tmp += (u.ulevel / 3) + 2;
-	    }
+			if(armmessage) Your("armor is rather cumbersome...");
+			armmessage = FALSE;
+			tmp -= 20; /*flat -20 for monks in armor*/
+	    } else {
+			if(!armmessage) armmessage = TRUE;
+			if (!uwep && !uarms) {
+			tmp += (u.ulevel / 3) + 2;
+		    }
+		}
 	}
 
 /*	with a lot of luggage, your agility diminishes */
