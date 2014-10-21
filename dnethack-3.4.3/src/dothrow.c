@@ -1401,14 +1401,19 @@ register struct obj   *obj;
 		     * but we need ammo to stay around longer on average.
 		     */
 		    int broken, chance;
-		    chance = 3 + greatest_erosion(obj) - obj->spe;
-		    if (chance > 1)
-			broken = rn2(chance);
-		    else
-			broken = !rn2(4);
-		    if (obj->blessed && !rnl(4))
-			broken = 0;
-
+			if(uwep && ammo_and_launcher(obj, uwep) && 
+				(uwep->oartifact==ART_HELLFIRE)
+			){
+				broken = 1;
+			} else {
+			    chance = 3 + greatest_erosion(obj) - obj->spe;
+			    if (chance > 1)
+				broken = rn2(chance);
+			    else
+				broken = !rn2(4);
+			    if (obj->blessed && !rnl(4))
+				broken = 0;
+			}
 		    if (broken) {
 			if (*u.ushops)
 			    check_shop_obj(obj, bhitpos.x,bhitpos.y, TRUE);
