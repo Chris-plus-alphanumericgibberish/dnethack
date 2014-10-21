@@ -1072,8 +1072,13 @@ register const char *let,*word;
 		))
 			allowall = TRUE;
 	    }
-		//Make an exception for the Rod, so you can read the inscription.
-		if ((otmp->oartifact == ART_ROD_OF_SEVEN_PARTS || otmp->oartifact == ART_PEN_OF_THE_VOID) && !strcmp(word, "read")){
+		//Make an exception for readable artifacts.
+		if (otmp->oartifact && 
+			(otmp->oartifact == ART_EXCALIBUR || 
+			 otmp->oartifact == ART_ROD_OF_SEVEN_PARTS ||
+			 otmp->oartifact == ART_PEN_OF_THE_VOID
+			) && !strcmp(word, "read")
+		){
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;//for whatever reason, must allow all in order to get message other than "silly"
 		}

@@ -45,76 +45,76 @@ doread()
 	scroll = getobj(readable, "read");
 	if(!scroll) return(0);
 
-	if(scroll->oartifact == ART_ROD_OF_SEVEN_PARTS){
-	    if (Blind) {
-			You_cant("see the writing!");
-			exercise(A_WIS, FALSE); //The rod is critial of such logical blunders.
-			return 0;
-		}
-		else{//Ruat Coelum, Fiat Justitia.  Ecce!  Lex Rex!
-			pline(scroll->spe < 7 ? "The Rod is badly scarred, mute testimony to a tumultuous history." :
-"The surface of the Rod, once badly defaced, is now shiny and smooth, its mathematical perfection testament to the overriding power of Law.");
-			switch(scroll->spe){
-				case(-5):
-				case(-4):
-				case(-3):
-					pline("The damage seems heaviest around the point, but the whole rod is really pretty messed up.");
-				break;
-				case(-2):
-				case(-1):
-				case(0):
-					pline("It seems that at one point, an inscription spiralled around the Rod, but it can no longer be read.");
-				break;
-				case(1):
-					pline("The damage is lighter further from the point, and looking close you can just make out the word \"Ruat\" near the pommel.");
-					u.uconduct.literate++;
-				break;
-				case(2):
-					pline("The damage is lighter further from the point.");
-					pline("Looking close, you can just make out the phrase \"Ruat Coelum\" near the pommel.");
-					pline("It seems to be part of a longer inscription, but the Rod has been thoroughly defaced.");
-					u.uconduct.literate++;
-				break;
-				case(3):
-					pline("The damage is lighter near the pommel, and an inscription spirals around the rod.");
-					pline("You can make out the phrase \"Ruat Coelum, Fiat\", but the rest of the inscription is defaced.");
-					u.uconduct.literate++;
-				break;
-				case(4):
-					pline("The damage is lighter on the half nearest the pommel.");
-					pline("You can make out the phrase \"Ruat Coelum, Fiat Justitia.\"");
-					pline("There's more, but the rest of it is illegible.");
-					u.uconduct.literate++;
-				break;
-				case(5):
-					pline("The damage is heaviest near the tip.");
-					pline("You read part of an inscription: \"Ruat Coelum, Fiat Justitia. Ecce!\"");
-					pline("There's more, but the rest of it is illegible.");
-					u.uconduct.literate++;
-				break;
-				case(6):
-					pline("The damage is heaviest near the tip.");
-					pline("You read most of the inscription: \"Ruat Coelum, Fiat Justitia. Ecce! Lex\"");
-					pline("There's more, but the rest of it is scratched out.");
-					u.uconduct.literate++;
-				break;
-				case(7):
-					pline("An inscription spirals around the Rod, from pommel to tip:");
-					pline("\"Ruat Coelum, Fiat Justitia. Ecce! Lex Rex!\"");
-					u.uconduct.literate++;
-				break;
+	if(scroll->oartifact){
+		if(scroll->oartifact == ART_ROD_OF_SEVEN_PARTS){
+		    if (Blind) {
+				You_cant("see the writing!");
+				exercise(A_WIS, FALSE); //The rod is critial of such logical blunders.
+				return 0;
 			}
-			if(u.RoSPflights > 0){
-				static const char *numbers[]={
-					"no", "a singe", "two","three","four","five","six","seven"
-				};
-				pline("Around the pommel, there is a crownlike decoration, with %s raised segment%s.",
-					numbers[u.RoSPflights], u.RoSPflights>1 ? "s" : "");
+			else{//Ruat Coelum, Fiat Justitia.  Ecce!  Lex Rex!
+				pline(scroll->spe < 7 ? "The Rod is badly scarred, mute testimony to a tumultuous history." :
+		"The surface of the Rod, once badly defaced, is now shiny and smooth, its mathematical perfection testament to the overriding power of Law.");
+				switch(scroll->spe){
+					case(-5):
+					case(-4):
+					case(-3):
+						pline("The damage seems heaviest around the point, but the whole rod is really pretty messed up.");
+					break;
+					case(-2):
+					case(-1):
+					case(0):
+						pline("It seems that at one point, an inscription spiralled around the Rod, but it can no longer be read.");
+					break;
+					case(1):
+						pline("The damage is lighter further from the point, and looking close you can just make out the word \"Ruat\" near the pommel.");
+						u.uconduct.literate++;
+					break;
+					case(2):
+						pline("The damage is lighter further from the point.");
+						pline("Looking close, you can just make out the phrase \"Ruat Coelum\" near the pommel.");
+						pline("It seems to be part of a longer inscription, but the Rod has been thoroughly defaced.");
+						u.uconduct.literate++;
+					break;
+					case(3):
+						pline("The damage is lighter near the pommel, and an inscription spirals around the rod.");
+						pline("You can make out the phrase \"Ruat Coelum, Fiat\", but the rest of the inscription is defaced.");
+						u.uconduct.literate++;
+					break;
+					case(4):
+						pline("The damage is lighter on the half nearest the pommel.");
+						pline("You can make out the phrase \"Ruat Coelum, Fiat Justitia.\"");
+						pline("There's more, but the rest of it is illegible.");
+						u.uconduct.literate++;
+					break;
+					case(5):
+						pline("The damage is heaviest near the tip.");
+						pline("You read part of an inscription: \"Ruat Coelum, Fiat Justitia. Ecce!\"");
+						pline("There's more, but the rest of it is illegible.");
+						u.uconduct.literate++;
+					break;
+					case(6):
+						pline("The damage is heaviest near the tip.");
+						pline("You read most of the inscription: \"Ruat Coelum, Fiat Justitia. Ecce! Lex\"");
+						pline("There's more, but the rest of it is scratched out.");
+						u.uconduct.literate++;
+					break;
+					case(7):
+						pline("An inscription spirals around the Rod, from pommel to tip:");
+						pline("\"Ruat Coelum, Fiat Justitia. Ecce! Lex Rex!\"");
+						u.uconduct.literate++;
+					break;
+				}
+				if(u.RoSPflights > 0){
+					static const char *numbers[]={
+						"no", "a singe", "two","three","four","five","six","seven"
+					};
+					pline("Around the pommel, there is a crownlike decoration, with %s raised segment%s.",
+						numbers[u.RoSPflights], u.RoSPflights>1 ? "s" : "");
+				}
+				return(1);
 			}
-			return(1);
-		}
-	}
-	else if(scroll->oartifact == ART_PEN_OF_THE_VOID){
+		} else if(scroll->oartifact == ART_PEN_OF_THE_VOID){
 	    if (Blind) {
 			You_cant("see the blade!");
 			return 0;
@@ -138,8 +138,18 @@ doread()
 			}
 			return(1);
 		}
-	}
-	else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
+		} else if(scroll->oartifact == ART_EXCALIBUR){
+			if (Blind) {
+				You_cant("see the blade!");
+				return 0;
+			} else if(scroll == uwep) {
+				pline("\"Cast me away\"");
+			} else {
+				pline("\"Take me up\"");
+			}
+			return(1);
+		}
+	} else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
 		if(! (u.wardsknown & scroll->ovar1) ){
 			You("have learned a new warding stave!");
