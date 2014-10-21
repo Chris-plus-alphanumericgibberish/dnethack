@@ -1684,7 +1684,10 @@ register struct obj *obj;
 						  doname(can), (const char *)0);
 		} else impossible("Bottling failed.");
 	} else{
-		if(yn("This corpse does not have blood. Tin it?") == 'y'){
+		if(!(Race_if(PM_VAMPIRE) || Race_if(PM_INCANTIFIER) || 
+				Race_if(PM_CLOCKWORK_AUTOMATON))
+			|| yn("This corpse does not have blood. Tin it?") == 'y'
+		){
 			if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
 			    static const char you_buy_it[] = "You tin it, you bought it!";
 		
