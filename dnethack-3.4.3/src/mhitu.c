@@ -1125,6 +1125,8 @@ hitmu(mtmp, mattk)
 	if (!canspotmon(mtmp))
 	    map_invisible(mtmp->mx, mtmp->my);
 
+	/* Nearby monsters may be awakened */
+	wake_nearto(u.ux, u.uy, 5);
 /*	If the monster is undetected & hits you, you should know where
  *	the attack came from.
  */

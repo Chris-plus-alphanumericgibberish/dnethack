@@ -741,6 +741,7 @@ int thrown;
     if (!tgloves) tgloves = find_tgloves();
 	
 	wakeup(mon);
+	wake_nearto(mon->mx, mon->my, 5); //Nearby monsters may be awakened
 	if(!obj) {	/* attack with bare hands */
 	    if (mdat->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS || u.sealsActive&SEAL_EDEN)) tmp = 0;
 		else if (martial_bonus()){
