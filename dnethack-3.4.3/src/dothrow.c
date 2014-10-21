@@ -1284,7 +1284,7 @@ register struct obj   *obj;
 	    }
 	}
 
-	if(obj->otyp == BALL_OF_WEBBING) tmp -= 1000; //nasty hack :c
+	if(obj->otyp == BALL_OF_WEBBING) tmp -= 2000; //nasty hack :c
 	
 	tmp += omon_adj(mon, obj, TRUE);
 	if (is_orc(mon->data) && maybe_polyd(is_elf(youmonst.data),
