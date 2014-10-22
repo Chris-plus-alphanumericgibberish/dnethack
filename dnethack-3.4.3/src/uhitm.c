@@ -347,7 +347,7 @@ boolean phasing;
 	if (uwep && !Upolyd) {
 		tmp += hitval(uwep, mtmp);
 		tmp += weapon_hit_bonus(uwep);
-	}
+	} else if(!uarm) tmp += weapon_hit_bonus(uwep); /*Add to hit bonus for martial arts, if you aren't wearing body armor.*/
 	
     static int cbootsa = 0;
     if (!cbootsa) cbootsa = find_cboots();
@@ -2803,7 +2803,8 @@ use_weapon:
 			    hittmp = hitval(uwep, mon);
 			    hittmp += weapon_hit_bonus(uwep);
 			    tmp += hittmp;
-			}
+			} else if(!uarm) tmp += weapon_hit_bonus(uwep); /*Add to hit bonus for martial arts, if you aren't wearing body armor.*/
+			
 			dhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 			/* KMH -- Don't accumulate to-hit bonuses */
 			if (uwep) tmp -= hittmp;
@@ -3043,7 +3044,7 @@ use_weapon:
 			    hittmp = hitval(uwep, mon);
 			    hittmp += weapon_hit_bonus(uwep);
 			    tmp += hittmp;
-			}
+		} else if(!uarm) tmp += weapon_hit_bonus(uwep); /*Add to hit bonus for martial arts, if you aren't wearing body armor.*/
 			dhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 			/* KMH -- Don't accumulate to-hit bonuses */
 			if (uwep) tmp -= hittmp;
