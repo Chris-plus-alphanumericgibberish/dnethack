@@ -314,14 +314,34 @@ align_str(alignment)
 	if (Hallucination) {
 		return hallu_alignments[rn2(SIZE(hallu_alignments))];
 	}
-    switch ((int)alignment) {
-	case A_CHAOTIC: return "chaotic";
-	case A_NEUTRAL: return "neutral";
-	case A_LAWFUL:	return "lawful";
-	case A_NONE:	return "unaligned";
-	case A_VOID:	return "non-aligned";
-//	case A_UNKNOWN:	return "unknown";
-    }
+	if(Role_if(PM_EXILE) && Is_astralevel(&u.uz)){
+		switch ((int)alignment) {
+		case A_CHAOTIC: return "xaotic";
+		case A_NEUTRAL: return "gnostic";
+		case A_LAWFUL:	return "mundane";
+		case A_NONE:	return "unaligned";
+		case A_VOID:	return "non-aligned";
+//		case A_UNKNOWN:	return "unknown";
+		}
+    } else if(Role_if(PM_EXILE) && In_quest(&u.uz)){
+		switch ((int)alignment) {
+		case A_CHAOTIC: return "chaotic";
+		case A_NEUTRAL: return "neutral";
+		case A_LAWFUL:	return "lawful";
+		case A_NONE:	return "mundane";
+		case A_VOID:	return "non-aligned";
+//		case A_UNKNOWN:	return "unknown";
+		}
+    } else {
+	    switch ((int)alignment) {
+		case A_CHAOTIC: return "chaotic";
+		case A_NEUTRAL: return "neutral";
+		case A_LAWFUL:	return "lawful";
+		case A_NONE:	return "unaligned";
+		case A_VOID:	return "non-aligned";
+//		case A_UNKNOWN:	return "unknown";
+	    }
+	}
     return "unknown";
 }
 

@@ -2408,7 +2408,8 @@ minimal_enlightenment()
 		&& u.ualign.type == A_CHAOTIC) ? " (s,c)" :
 	    (u.ualignbase[A_ORIGINAL] == A_CHAOTIC)       ? " (s)" :
 	    (u.ualign.type   == A_CHAOTIC)       ? " (c)" : "");
-	Sprintf(buf, fmtstr, "Chaotic", buf2);
+	if(Role_if(PM_EXILE) && Is_astralevel(&u.uz)) Sprintf(buf, fmtstr, "Xaotic", buf2);
+	else Sprintf(buf, fmtstr, "Chaotic", buf2);
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, FALSE);
 
 	Sprintf(buf2, deity_fmtstr, align_gname(A_NEUTRAL),
@@ -2416,7 +2417,8 @@ minimal_enlightenment()
 		&& u.ualign.type == A_NEUTRAL) ? " (s,c)" :
 	    (u.ualignbase[A_ORIGINAL] == A_NEUTRAL)       ? " (s)" :
 	    (u.ualign.type   == A_NEUTRAL)       ? " (c)" : "");
-	Sprintf(buf, fmtstr, "Neutral", buf2);
+	if(Role_if(PM_EXILE) && Is_astralevel(&u.uz)) Sprintf(buf, fmtstr, "Gnostic", buf2);
+	else Sprintf(buf, fmtstr, "Neutral", buf2);
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, FALSE);
 
 	Sprintf(buf2, deity_fmtstr, align_gname(A_LAWFUL),
@@ -2424,7 +2426,8 @@ minimal_enlightenment()
 		u.ualign.type == A_LAWFUL)  ? " (s,c)" :
 	    (u.ualignbase[A_ORIGINAL] == A_LAWFUL)        ? " (s)" :
 	    (u.ualign.type   == A_LAWFUL)        ? " (c)" : "");
-	Sprintf(buf, fmtstr, "Lawful", buf2);
+	if(Role_if(PM_EXILE) && Is_astralevel(&u.uz)) Sprintf(buf, fmtstr, "Mundane", buf2);
+	else Sprintf(buf, fmtstr, "Lawful", buf2);
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, FALSE);
 
 	end_menu(tmpwin, "Base Attributes");
