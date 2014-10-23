@@ -1003,6 +1003,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 {
 	int ltmp;
 	char buf[BUFSZ];
+	char prebuf[BUFSZ];
 
 	en_win = create_nhwindow(NHW_MENU);
 	putstr(en_win, 0, final ? "Final Attributes:" : "Current Attributes:");
@@ -1140,10 +1141,10 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		Sprintf(buf, "special seals active: %lx", u.specialSealsActive);
 		you_have(buf);
 	}
+#endif
 	
 	if(u.sealsActive || u.specialSealsActive){
 		int i,j,numBound,numFound=0;
-		char prebuf[BUFSZ];
 		numBound = u.sealCounts;
 		if(u.spirit[QUEST_SPIRIT]) numBound++;
 		if(Role_if(PM_EXILE) && u.uevent.uhand_of_elbereth) numBound++;
@@ -1262,7 +1263,32 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		}
 		enl_msg(prebuf, "is", "was", buf);
 	}
-#endif
+	if(u.sealsKnown || u.specialSealsKnown){
+		int numSlots;
+		if(Role_if(PM_EXILE)){
+			if(u.ulevel <= 2) numSlots=1;
+			else if(u.ulevel <= 9) numSlots=2;
+			else if(u.ulevel <= 18) numSlots=3;
+			else if(u.ulevel <= 25) numSlots=4;
+			else numSlots=5;
+		} else {
+			numSlots=1;
+		}
+		if(!u.spirit[QUEST_SPIRIT] && u.specialSealsKnown&(SEAL_DAHLVER_NAR|SEAL_ACERERAK)){
+			you_are("able to bind with a quest spirit");
+		}
+		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIARTH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
+			you_are("able to bind with an aligned spirit");
+		}
+		if(!u.spirit[OUTER_SPIRIT] && u.ulevel == 30){
+			you_are("able to bind with the Numina");
+		}
+		if(u.sealCounts < numSlots){
+			Sprintf(prebuf, "You ");
+			Sprintf(buf, " bind to %d more spirit%s", numSlots-u.sealCounts, (numSlots-u.sealCounts)>1 ? "s" : "");
+			enl_msg(prebuf, "can", "could", buf);
+		}
+	}
 
 	/*** Resistances to troubles ***/
 	if (Fire_resistance) you_are("fire resistant");
@@ -1279,6 +1305,10 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		you_are("petrification resistant");
 	if (Invulnerable) you_are("invulnerable");
 	if (u.uedibility || u.sealsActive&SEAL_BUER) you_can("recognize detrimental food");
+	if ( (ublindf && ublindf->otyp == R_LYEHIAN_FACEPLATE && !ublindf->cursed) || 
+		 (uarmc && uarmc->otyp == OILSKIN_CLOAK && !uarmc->cursed) ||
+		 (u.sealsActive&SEAL_ENKI)
+	) you_are("waterproof");
 
 	/*** Troubles ***/
 	if (Halluc_resistance)
@@ -1565,6 +1595,14 @@ resistances_enlightenment()
 	if (Acid_resistance) putstr(en_win, 0, "Your skin feels leathery.");
 	if (Displaced) putstr(en_win, 0, "Your outline shimmers and shifts.");
 	if (Drain_resistance) putstr(en_win, 0, "You feel especially energetic.");
+	if (u.uinwater){
+		if(ublindf && ublindf->otyp == R_LYEHIAN_FACEPLATE && !ublindf->cursed)
+			putstr(en_win, 0, "Your faceplate wraps you in a waterproof field.");
+		else if(uarmc && uarmc->otyp == OILSKIN_CLOAK && !uarmc->cursed)
+			putstr(en_win, 0, "Your waterproof cloak protects your gear.");
+		else if(u.sealsActive&SEAL_ENKI)
+			putstr(en_win, 0, "YOU'RE soaked, but the water doesn't wet your gear.");
+	}
 /*
 	if (Sick_resistance) you_are("immune to sickness");
 	if (Antimagic) you_are("magic-protected");
