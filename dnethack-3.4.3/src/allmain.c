@@ -136,7 +136,10 @@ moveloop()
 				&&!(viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)
 			){
 				if(++u.orthocounts>5) unbind(SEAL_ORTHOS,TRUE);
-				else You_feel("increasingly panicked about being in the dark!");
+				else if(Hallucination){
+					if(u.orthocounts == 1) pline("It is now pitch black. You are likely to be eaten by a grue.");
+					else pline("You are likely to be eaten by a grue.");
+				} else You_feel("increasingly panicked about being in the dark!");
 			}
 			if(u.sealsActive&SEAL_NABERIUS && u.udrunken<u.ulevel) unbind(SEAL_NABERIUS,TRUE);
 			if(u.specialSealsActive&SEAL_NUMINA && u.ulevel<30) unbind(SEAL_SPECIAL|SEAL_NUMINA,TRUE);

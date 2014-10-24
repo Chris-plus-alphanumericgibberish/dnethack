@@ -197,7 +197,8 @@ boolean forced;
 		pline("Unfortunatly, your soul is torn to shreds.");
 	}
 	if(forced && !gnosis){
-		losexp("shredding of the soul",TRUE,TRUE,TRUE);
+		if(spir == SEAL_ORTHOS && Hallucination) losexp("being eaten by a grue",TRUE,TRUE,TRUE);
+		else losexp("shredding of the soul",TRUE,TRUE,TRUE);
 		if(flags.run) nomul(0, NULL);
 		stop_occupation();
 	}
@@ -207,6 +208,8 @@ boolean forced;
 		You("are shaken to your core!");
 		return;
 	}
+	
+	if(spir == SEAL_ORTHOS && Hallucination) pline("Orthos has been eaten by a grue!");
 	
 	if(spir&SEAL_SPECIAL){
 		for(i=0;i<(NUMINA-QUEST_SPIRITS);i++){
@@ -291,7 +294,7 @@ boolean forced;
 	return;
 }
 
-char *spiritFadeTerms[] = {"starting to fade","growing weaker","very faint","fading fast","about to break"};
+char *spiritFadeTerms[] = {"starting to weaken","growing weaker","very faint","fading fast","about to break"};
 
 void
 nh_timeout()
