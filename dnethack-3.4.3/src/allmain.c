@@ -411,36 +411,44 @@ moveloop()
 			    rehumanize();
 			else if (Regeneration ||
 				    (wtcap < MOD_ENCUMBER && !(moves%20))) {
-			    flags.botl = 1;
-			    u.mh++;
+				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) {
+				    flags.botl = 1;
+				    u.mh++;
+				}
 			}
 		    } else if (u.uhp < u.uhpmax &&
 			 (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
 			if (u.ulevel > 9 && !(moves % 3) && 
 				!(Race_if(PM_INCANTIFIER) || uclockwork)) {
 			    int heal, Con = (int) ACURR(A_CON);
-
-			    if (Con <= 12) {
-				heal = 1;
-			    } else {
-				heal = rnd(Con);
-				if (heal > u.ulevel-9) heal = u.ulevel-9;
-			    }
-			    flags.botl = 1;
-			    u.uhp += heal;
-			    if(u.uhp > u.uhpmax)
-				u.uhp = u.uhpmax;
+				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) {
+				    if (Con <= 12) {
+					heal = 1;
+				    } else {
+					heal = rnd(Con);
+					if (heal > u.ulevel-9) heal = u.ulevel-9;
+				    }
+				    flags.botl = 1;
+				    u.uhp += heal;
+				    if(u.uhp > u.uhpmax)
+					u.uhp = u.uhpmax;
+				}
 			} else if (Regeneration ||
 			     (u.ulevel <= 9 &&
 				 !(Race_if(PM_INCANTIFIER) || uclockwork) &&
 			      !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
-			    flags.botl = 1;
-			    u.uhp++;
-			}
+			    if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)){
+				    flags.botl = 1;
+				    u.uhp++;
+				}
+		    }
 		    }
 			if(u.sealsActive&SEAL_BUER){
-				if(Upolyd && u.mh < u.mhmax) u.mh++;
-				else if(u.uhp < u.uhpmax) u.uhp++;
+				if(Upolyd && u.mh < u.mhmax){
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) u.mh++;
+				} else if(u.uhp < u.uhpmax){
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) u.uhp++;
+				}
 			}
 
 			if(u.sealsActive&SEAL_YMIR && (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)){
