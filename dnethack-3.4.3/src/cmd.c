@@ -1055,7 +1055,11 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 #endif
 	    if(Role_if(PM_PIRATE)) you_are("the Pirate King");
 	    else if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
-	    else if(Role_if(PM_NOBLEMAN)){
+	    else if(Role_if(PM_SAMURAI)){
+			strcpy(buf, "Nasu no ");
+			strcat(buf, plname);
+			you_are(buf);
+		} else if(Role_if(PM_NOBLEMAN)){
 			if(u.uevent.uhand_of_elbereth == 9) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Lady" : "Lord");
 			else if(u.uevent.uhand_of_elbereth == 7) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Queen" : "King");
 			else Sprintf(buf, " %s", hofe_titles[u.uevent.uhand_of_elbereth - 1]);
