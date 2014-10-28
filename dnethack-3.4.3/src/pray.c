@@ -714,6 +714,11 @@ gcrownu()
 			u.uevent.uhand_of_elbereth = 7;
 			verbalize("I crown thee...  The Saint %s!", flags.female ? "Queen" : "King");
 	}
+	} else if(Role_if(PM_SAMURAI)){
+		u.uevent.uhand_of_elbereth = 4;
+		in_hand = FALSE;
+		already_exists = exist_artifact(YUMI, artiname(ART_YOICHI_NO_YUMI));
+		verbalize("I crown thee...  The Hand of Elbereth!");
 	} else {
 		u.uevent.uhand_of_elbereth = 1;
 #ifdef ELBERETH
@@ -879,6 +884,18 @@ gcrownu()
 		unrestrict_weapon_skill(P_SCIMITAR);
 		if (obj && obj->oartifact == ART_REAVER)
 			discover_artifact(ART_REAVER);
+	} else if (Role_if(PM_SAMURAI)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			obj = mksobj(YUMI, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_YOICHI_NO_YUMI));
+			obj->spe = 1;
+			at_your_feet("A yumi");
+			dropy(obj);
+			u.ugifts++;
+		}
+        discover_artifact(ART_YOICHI_NO_YUMI);
 	} else {
     switch (u.ualign.type) {
     case A_LAWFUL:
