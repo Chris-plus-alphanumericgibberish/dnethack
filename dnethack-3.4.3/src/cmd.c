@@ -1010,9 +1010,9 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	putstr(en_win, 0, "");
 
 	if (uclockwork){
-		if(u.ucspeed==HIGH_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to high speed.");
-		if(u.ucspeed==NORM_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to normal speed.");
-		if(u.ucspeed==SLOW_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to low speed.");
+		if(u.ucspeed==HIGH_CLOCKSPEED) you_are("set to high clockspeed.");
+		if(u.ucspeed==NORM_CLOCKSPEED) you_are("set to normal clockspeed.");
+		if(u.ucspeed==SLOW_CLOCKSPEED) you_are("set to low clockspeed.");
 	}
 	if (u.uevent.uhand_of_elbereth) {
 #ifdef ELBERETH
