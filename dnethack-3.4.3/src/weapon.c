@@ -1546,7 +1546,7 @@ struct obj *weapon;
 	/* KMH -- It's harder to hit while you are riding */
 	if (u.usteed) {
 		switch (P_SKILL(P_RIDING)) {
-		    case P_ISRESTRICTED:
+		    case P_ISRESTRICTED:bonus -= 5; break;
 		    case P_UNSKILLED:   bonus -= 2; break;
 		    case P_BASIC:       bonus -= 1; break;
 		    case P_SKILLED:     break;
@@ -1582,8 +1582,8 @@ struct obj *weapon;
 	    case P_ISRESTRICTED:	bonus = -5; break;
 	    case P_UNSKILLED:	bonus = -2; break;
 	    case P_BASIC:	bonus =  0; break;
-	    case P_SKILLED:	bonus =  1; break;
-	    case P_EXPERT:	bonus =  3; break;
+	    case P_SKILLED:	bonus =  2; break;
+	    case P_EXPERT:	bonus =  5; break;
 	}
     } else if (type == P_TWO_WEAPON_COMBAT) {
 	skill = P_SKILL(P_TWO_WEAPON_COMBAT);
@@ -1591,10 +1591,10 @@ struct obj *weapon;
 	switch (skill) {
 	    default:
 	    case P_ISRESTRICTED:
-	    case P_UNSKILLED:	bonus = -3; break;
-	    case P_BASIC:	bonus = -1; break;
-	    case P_SKILLED:	bonus = 0; break;
-	    case P_EXPERT:	bonus = 2; break;
+	    case P_UNSKILLED:	bonus = -5; break;
+	    case P_BASIC:	bonus = -3; break;
+	    case P_SKILLED:	bonus = -1; break;
+	    case P_EXPERT:	bonus =  0; break;
 	}
     } else if (type == P_BARE_HANDED_COMBAT) {
 	// /*
