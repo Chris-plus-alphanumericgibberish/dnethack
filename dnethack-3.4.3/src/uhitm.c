@@ -267,10 +267,10 @@ boolean phasing;
 	if(!bab) bab = base_attack_bonus;
 
 	if(phasing){
-		tmp = 1 + Luck + abon() + base_mac(mtmp) + u.uhitinc + u.spiritAttk +
+		tmp = 1 + rnd(Luck) + abon() + base_mac(mtmp) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*bab;
 	} else {
-		tmp = 1 + Luck + abon() + find_mac(mtmp) + u.uhitinc + u.spiritAttk +
+		tmp = 1 + rnd(Luck) + abon() + find_mac(mtmp) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*bab;
 	}
 
