@@ -1069,7 +1069,7 @@ struct obj *otmp;
 	int str = ACURR(A_STR);
 	int bonus = 0;
 
-	if (Upolyd) return(0);
+	if (Upolyd || otmp == uswapwep) return(0);
 
 	if (str < 6) bonus = -6+str;
 	else if (str < 16) bonus = 0;
