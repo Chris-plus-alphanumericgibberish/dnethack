@@ -2050,6 +2050,7 @@ donull()
 				You("complete your repairs.");
 				lastreped = -13;
 				stop_occupation();
+				occupation = 0; /*redundant failsafe? why doesn't stop_occupation work?*/
 			}
 		} else if(Upolyd && u.mh<u.mhmax){
 			if(lastreped < monstermoves-100) You("attempt to make repairs.");
@@ -2060,6 +2061,7 @@ donull()
 				You("complete your repairs.");
 				lastreped = -13;
 				stop_occupation();
+				occupation = 0; /*redundant failsafe? why doesn't stop_occupation work?*/
 			}
 		} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
 	} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
