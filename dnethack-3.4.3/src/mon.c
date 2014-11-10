@@ -2322,7 +2322,7 @@ boolean was_swallowed;			/* digestion */
 			u.uevent.uaxus_foe = 1;//enemy of the modrons
 		  for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 			mndx = monsndx(mtmp->data);
-			if((mndx <= PM_QUINON || mndx >= PM_MONOTON) && mtmp->mpeaceful){
+			if(mndx <= PM_QUINON && mndx >= PM_MONOTON && mtmp->mpeaceful){
 				if(canseemon(mtmp)) pline("%s gets angry...", mon_nam(mtmp));
 				mtmp->mpeaceful = 0;
 			}
