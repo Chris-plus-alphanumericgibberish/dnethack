@@ -1388,7 +1388,7 @@ defaultvalue:
 			adjalign(-sgn(u.ualign.type)*5); //stiffer penalty
 			u.ualign.sins++;
 			u.hod++;
-	    } else if ((u.ualign.type == A_LAWFUL) && (u.ualign.record > -10)) {
+	    } else if ((u.ualign.type == A_LAWFUL) && !Race_if(PM_DROW) && (u.ualign.record > -10)) {
 			You_feel("like an evil coward for using a poisoned weapon.");
 			adjalign(-2);//stiffer penalty
 			if(rn2(2)) u.hod++;
