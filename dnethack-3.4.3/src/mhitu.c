@@ -3200,7 +3200,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		 //else succeeded = 0
 		}
 		else if (!mtmp->mcan && multi >= 0 && !rn2(3) && mtmp->mcansee && canseemon(mtmp)) {
-		    if (Blind || (Free_action && rn2(10)) ) {
+		    if (Blind || Free_action ) {
 				You("momentarily stiffen.");
 				succeeded=0;
 		    }
