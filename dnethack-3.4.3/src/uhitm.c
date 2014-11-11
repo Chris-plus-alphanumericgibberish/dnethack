@@ -264,13 +264,17 @@ boolean phasing;
 	schar tmp;
 	int tmp2;
 	static double bab = 0;
-	if(!bab) bab = base_attack_bonus;
+	int luckbon = 0;
+	
+	if(!bab) bab = BASE_ATTACK_BONUS;
+	
+	if(Luck) luckbon = sgn(Luck)*rnd(abs(Luck));
 
 	if(phasing){
-		tmp = 1 + rnd(Luck) + abon() + base_mac(mtmp) + u.uhitinc + u.spiritAttk +
+		tmp = 1 + luckbon + abon() + base_mac(mtmp) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*bab;
 	} else {
-		tmp = 1 + rnd(Luck) + abon() + find_mac(mtmp) + u.uhitinc + u.spiritAttk +
+		tmp = 1 + luckbon + abon() + find_mac(mtmp) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*bab;
 	}
 
@@ -765,6 +769,9 @@ int thrown;
 		if(u.specialSealsActive&SEAL_DAHLVER_NAR) tmp += d(2,6)+min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 		if(uarmf && uarmf->otyp == tgloves) tmp += 1;
 	    valid_weapon_attack = (tmp > 1);
+		if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
+			dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
+		}
 		if(uarmg){
 	    /* blessed gloves give bonuses when fighting 'bare-handed' */
 			if (uarmg->blessed && (is_undead(mdat) || is_demon(mdat))) tmp += rnd(4);
@@ -1030,7 +1037,9 @@ int thrown;
 				}
 				hittxt = TRUE;
 		    }
-
+			if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
+				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
+			}
 		    if (obj->oartifact &&
 				artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
 				if(mon->mhp <= 0) /* artifact killed monster */
@@ -1075,9 +1084,6 @@ int thrown;
 				if(mon->mhp <= 0) /* flung weapon killed monster */
 				    return FALSE;
 				hittxt = TRUE;
-			}
-			if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
-				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
 			}
 		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj)  || 
 					(thrown && obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) )
