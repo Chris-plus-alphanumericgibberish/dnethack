@@ -3817,9 +3817,11 @@ int p_skill;
 		} else if((u.sealsActive&SEAL_EURYNOME) || (u.sealsActive&SEAL_BUER)){
 			curskill += 1;
 		}
-	} else if(spiritSkill(p_skill) || roleSkill(p_skill)){
+	} else if(roleSkill(p_skill)){
 		curskill += 1;
 		maxskill += 1;
+	} else if(spiritSkill(p_skill)){
+		curskill += 1;
 	}
 	return min(curskill, maxskill);
 }
