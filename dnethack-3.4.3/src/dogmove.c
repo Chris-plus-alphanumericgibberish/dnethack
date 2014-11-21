@@ -436,36 +436,38 @@ register struct edog *edog;
 {
         if (monstermoves > edog->hungrytime)
 	{
-	    /* We're hungry; check if we're carrying anything we can eat
-	       Intelligent pets should be able to carry such food */
-	    register struct obj *otmp, *obest = (struct obj *)0;
-	    int best_nutrit = -1; //cur_nutrit = -1,
-	    int cur_food = APPORT, best_food = APPORT;
-	    for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
-	    {
-//	        cur_nutrit = dog_nutrition(mtmp, otmp);
-			cur_food = dogfood(mtmp, otmp);
-	        if (cur_food < best_food) /*&& cur_nutrit > best_nutrit)*/
-			{
-//			    best_nutrit = cur_nutrit;
-			    best_food = cur_food;
-			    obest = otmp;
-			}
-	    }
-	    if (obest != (struct obj *)0)
-	    {
-	        obj_extract_self(obest);
-		place_object(obest, mtmp->mx, mtmp->my);
-	        if (dog_eat(mtmp, obest, mtmp->mx, mtmp->my, FALSE) == 2)
-	            return(TRUE);
-	        return(FALSE);
-	    }
+		if (!carnivorous(mtmp->data) && !herbivorous(mtmp->data)) {
+			edog->hungrytime = monstermoves + 100;
+			/* but not too high; it might polymorph */
+	    } else {
+		    /* We're hungry; check if we're carrying anything we can eat
+		       Intelligent pets should be able to carry such food */
+		    register struct obj *otmp, *obest = (struct obj *)0;
+		    int best_nutrit = -1; //cur_nutrit = -1,
+		    int cur_food = APPORT, best_food = APPORT;
+		    for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
+		    {
+//		        cur_nutrit = dog_nutrition(mtmp, otmp);
+				cur_food = dogfood(mtmp, otmp);
+		        if (cur_food < best_food) /*&& cur_nutrit > best_nutrit)*/
+				{
+//				    best_nutrit = cur_nutrit;
+				    best_food = cur_food;
+				    obest = otmp;
+				}
+		    }
+		    if (obest != (struct obj *)0)
+		    {
+		        obj_extract_self(obest);
+				place_object(obest, mtmp->mx, mtmp->my);
+		        if (dog_eat(mtmp, obest, mtmp->mx, mtmp->my, FALSE) == 2)
+		            return(TRUE);
+		        return(FALSE);
+		    }
+		}
 	}
 	if (monstermoves > edog->hungrytime + 500) {
-	    if (!carnivorous(mtmp->data) && !herbivorous(mtmp->data)) {
-		edog->hungrytime = monstermoves + 500;
-		/* but not too high; it might polymorph */
-	    } else if (!edog->mhpmax_penalty) {
+		if (!edog->mhpmax_penalty) {
 		/* starving pets are limited in healing */
 		int newmhpmax = mtmp->mhpmax / 3;
 		mtmp->mconf = 1;
@@ -992,8 +994,8 @@ register int after;	/* this is extra fast monster movement */
 		    int mstatus;
 		    register struct monst *mtmp2 = m_at(nx,ny);
 
-                    if (!acceptable_pet_target(mtmp, mtmp2, FALSE))
-			continue;
+        	if (!acceptable_pet_target(mtmp, mtmp2, FALSE))
+				continue;
 
 		    if (after) return(0); /* hit only once each move */
 
