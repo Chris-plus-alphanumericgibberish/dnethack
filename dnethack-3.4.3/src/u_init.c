@@ -1932,7 +1932,7 @@ register struct trobj *trop;
 			    obj->opoisoned = 0;
 			if (obj->ovar1){
 				if(obj->oclass == WEAPON_CLASS && objects[(obj)->otyp].oc_material == WOOD) u.wardsknown |= obj->ovar1;
-				else if(obj->oclass == RING_CLASS && isEngrRing((obj)->otyp) && !(obj->ohaluengr)) u.wardsknown |= decode_wardID(obj->ovar1);
+				else if(obj->oclass == RING_CLASS && isEngrRing((obj)->otyp) && !(obj->ohaluengr)) u.wardsknown |= get_wardID(obj->ovar1);
 			}
 			if (obj->oclass == WEAPON_CLASS ||
 				obj->oclass == TOOL_CLASS) {
