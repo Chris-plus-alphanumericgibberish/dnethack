@@ -609,10 +609,6 @@ gazemm(magr, mdef, mattk)
 			pline("%s %s...", buf, mon_nam(mdef));
 		}
 	}
-	if(vis) {
-		Sprintf(buf,"%s gazes at", Monnam(magr));
-		pline("%s %s...", buf, mon_nam(mdef));
-	}
 
 	if (magr->mcan || !magr->mcansee ||
 	    (magr->minvis && !perceives(mdef->data)) ||
@@ -1413,7 +1409,7 @@ mdamagem(magr, mdef, mattk)
 #endif
 	    case AD_SITM:	/* for now these are the same */
 	    case AD_SEDU:
-		if (magr->mcan) break;
+		if (magr->mcan || dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2) break;
 		/* find an object to steal, non-cursed if magr is tame */
 		for (obj = mdef->minvent; obj; obj = obj->nobj)
 		    if (!magr->mtame || !obj->cursed)
