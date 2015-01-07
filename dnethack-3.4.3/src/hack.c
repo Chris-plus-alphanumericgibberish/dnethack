@@ -2411,6 +2411,8 @@ inv_weight()
 		(int)((u.ugold + 50L) / 100L);
 #endif
 	while (otmp) {
+		//Correct artifact weights before adding them.  Because that code isn't being run.
+		if(otmp->oartifact) otmp->owt = weight(otmp);
 #ifndef GOLDOBJ
 		if (!is_boulder(otmp) || !(throws_rocks(youmonst.data) || u.sealsActive&SEAL_YMIR))
 #else
