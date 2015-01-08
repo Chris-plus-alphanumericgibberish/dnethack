@@ -1458,6 +1458,7 @@ mdamagem(magr, mdef, mattk)
 			    if (vis && !canspotmon(magr))
 				pline("%s suddenly disappears!", buf);
 			}
+			m_dowear(magr, FALSE);
 		}
 		tmp = 0;
 		break;

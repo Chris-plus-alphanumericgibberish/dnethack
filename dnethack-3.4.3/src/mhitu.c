@@ -1885,6 +1885,7 @@ dopois:
 			if(mdat == &mons[PM_DEMOGORGON]){
 				buf[0] = '\0';
 				steal(mtmp, buf,FALSE);
+				m_dowear(mtmp, FALSE);
 				return 1;
 			}
 			if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
@@ -1934,6 +1935,7 @@ dopois:
 				monflee(mtmp, 0, FALSE, FALSE);
 				return 3;
 			}
+			m_dowear(mtmp, FALSE);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 #ifdef SEDUCE
@@ -3105,6 +3107,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				if(mdat == &mons[PM_DEMOGORGON]){
 					buf[0] = '\0';
 					steal(mtmp, buf,FALSE);
+					m_dowear(mtmp, FALSE);
 					return 1;
 				}
 				if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
@@ -3154,6 +3157,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					monflee(mtmp, 0, FALSE, FALSE);
 					return 3;
 				}
+				m_dowear(mtmp, FALSE);
 			break;
 			case AD_DEAD:
 			   if(!Blind && mtmp->mcansee && canseemon(mtmp)){

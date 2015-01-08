@@ -157,12 +157,13 @@ boolean check_if_better;
 	else
 	{
 	    /* Check if you've got one.
-	       If you don't, don't hoard it. */
+	       If you DO, don't hoard it. */
             register struct obj *otmp2;
 	    for(otmp2 = invent; otmp2; otmp2 = otmp2->nobj)
 	        if (otmp->otyp == otmp2->otyp ||
 	            (otmp->otyp == FOOD_CLASS && otmp2->otyp == FOOD_CLASS))
-	            return TRUE;
+	            return FALSE;
+		return TRUE;
 	}
     }
 
@@ -564,20 +565,20 @@ int udist;
 	        boolean can_use = could_use_item(mtmp, obj, TRUE);
 	        if (can_use ||
 		        (!droppables && rn2(20) < edog->apport+3)) {
-		    if (can_use || rn2(udist) || !rn2(edog->apport)) {
-			    if (cansee(omx, omy) && flags.verbose)
-				pline("%s picks up %s.", Monnam(mtmp),
-				    distant_name(obj, doname));
-			    obj_extract_self(obj);
-			    newsym(omx,omy);
-			    (void) mpickobj(mtmp,obj);
-			    if (attacktype(mtmp->data, AT_WEAP) &&
-					mtmp->weapon_check == NEED_WEAPON) {
-				mtmp->weapon_check = NEED_HTH_WEAPON;
-				(void) mon_wield_item(mtmp);
-			    }
-			    m_dowear(mtmp, FALSE);
-			}
+				if (can_use || rn2(udist) || !rn2(edog->apport)) {
+					if (cansee(omx, omy) && flags.verbose)
+					pline("%s picks up %s.", Monnam(mtmp),
+						distant_name(obj, doname));
+					obj_extract_self(obj);
+					newsym(omx,omy);
+					(void) mpickobj(mtmp,obj);
+					if (attacktype(mtmp->data, AT_WEAP) &&
+						mtmp->weapon_check == NEED_WEAPON) {
+					mtmp->weapon_check = NEED_HTH_WEAPON;
+					(void) mon_wield_item(mtmp);
+					}
+					m_dowear(mtmp, FALSE);
+				}
 		    }
 		}
 	    }
