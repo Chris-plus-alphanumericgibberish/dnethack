@@ -1334,7 +1334,7 @@ int spellnum;
                   Your("%s shape in your %s.", aobjnam(otmp, "change"), hands);
                   poly_obj(otmp, BANANA);
                }
-        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE && otmp->oartifact != ART_GLAMDRING){
+        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE){
 			if(mtmp){
 				if(rn2(acurrstr()) < (((int)mtmp->m_lev+1)/2)) {
 					Your("%s knocked out of your %s!",
