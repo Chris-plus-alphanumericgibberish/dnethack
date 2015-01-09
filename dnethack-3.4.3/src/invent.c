@@ -1069,8 +1069,10 @@ register const char *let,*word;
 		    (otmp->otyp == FORTUNE_COOKIE
 			|| otmp->otyp == T_SHIRT
 		    )
-		))
+		)){
+			bp[foo++] = otmp->invlet;
 			allowall = TRUE;
+		}
 	    }
 		//Make an exception for readable artifacts.
 		if (otmp->oartifact && 
