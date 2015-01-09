@@ -391,7 +391,7 @@ choose_magic_special(mtmp, type)
 struct monst *mtmp;
 unsigned int type;
 {
-     if (rn2(2)) {
+    if (rn2(2)) {
        switch(monsndx(mtmp->data)) {
        case PM_WIZARD_OF_YENDOR:
            return (rn2(4) ? rnd(STRANGLE) :
@@ -680,7 +680,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			) {
 //				if (foundyou)
 //					impossible("spellcasting monster found you and doesn't know it?");
-			return 0;
+				return 0;
 		    }
 		    break;
 		}
@@ -744,9 +744,15 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			   Monnam(mtmp), mattk->adtyp);
 		return(0);
 	    }
-	} else if (mattk->damd)
-	    dmg = d((int)((ml/2) + mattk->damn), (int)mattk->damd);
-	else dmg = d((int)((ml/2) + 1), 6);
+	} else {
+		int dmd = 6, dmn = ml/2;
+		if (mattk->damd) dmd = (int)(mattk->damd);
+		
+		if (mattk->damn) dmn+= (int)(mattk->damn);
+		else dmn += 1;
+		
+	    dmg = d(dmn, dmd);
+	}
 	if (Half_spell_damage) dmg = (dmg+1) / 2;
 
 	ret = 1;
@@ -873,7 +879,7 @@ int spellnum;
 	}
 		//else end with no message.
 	break;
-     case FILTH:
+    case FILTH:
     {
        struct monst *mtmp2;
        long old;
@@ -897,8 +903,8 @@ int spellnum;
            if(!DEADMONSTER(mtmp2) && (mtmp2 != mtmp))
            monflee(mtmp2, 0, FALSE, FALSE);
 	}
-       vomit();
-       dmg = rnd(Half_physical_damage ? 5 : 10);
+    vomit();
+    dmg = rnd(Half_physical_damage ? 5 : 10);
 	stop_occupation();
 	break;
 	}
@@ -935,20 +941,20 @@ int spellnum;
 	break;
     }
      case TURN_TO_STONE:
-          if (malediction) /* give a warning to the player */
-               verbalize(rn2(2) ? "I shall make a statue of thee!" :
-                                  "I condemn thee to eternity unmoving!");
+		if (malediction) /* give a warning to the player */
+		   verbalize(rn2(2) ? "I shall make a statue of thee!" :
+							  "I condemn thee to eternity unmoving!");
         if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
            if(!Stone_resistance && (!rn2(10) || !(have_lizard() || Free_action)) ){
-           You_feel("less limber.");
-           Stoned = 5;
+			You_feel("less limber.");
+			Stoned = 5;
 		   }else{
 			You_feel("a momentary stiffness.");
 		   }
         } 
 		dmg = 0;
 	 stop_occupation();
-        break;
+     break;
      case MAKE_VISIBLE:
        HInvis &= ~INTRINSIC;
        You_feel("paranoid.");
@@ -965,7 +971,7 @@ int spellnum;
        break;
 	 stop_occupation();
      case PUNISH:
-        if (!Punished) {
+    if (!Punished) {
             punish((struct obj *)0);
            if (mtmp && is_prince(mtmp->data)) uball->owt += 160;
 	} else {
@@ -977,20 +983,21 @@ int spellnum;
 	stop_occupation();
 	break;
      case EARTHQUAKE:
-       pline_The("entire %s is shaking around you!",
+		pline_The("entire %s is shaking around you!",
                In_endgame(&u.uz) ? "plane" : "dungeon");
         /* Quest nemesis maledictions */
-        if (malediction && (!In_endgame(&u.uz) || Is_earthlevel(&u.uz))) {
-           if (rn2(2)) verbalize("The earth trembles before my %s!",
+		if (malediction && (!In_endgame(&u.uz) || Is_earthlevel(&u.uz))) {
+			if (rn2(2)) verbalize("The earth trembles before my %s!",
                                     rn2(2) ? "power" : "might");
             else verbalize("Open thy maw, mighty earth!");
-	}
+		}
 		mtmp ? 
 			do_earthquake(((int)mtmp->m_lev - 1) / 6 + 1, TRUE, mtmp)
 		:	do_earthquake(rnd(5), TRUE, 1); //Fixme: true "not my fault" flag needed.
-        aggravate(); /* wake up without scaring */
-       dmg = 0;
-	   stop_occupation();
+		aggravate(); /* wake up without scaring */
+		dmg = 0;
+		stop_occupation();
+		doredraw();
 	break;
     case ACID_RAIN: /* as seen in the Lethe patch */
        pline("A torrent of burning acid rains down on you!");
@@ -1001,7 +1008,7 @@ int spellnum;
 		dmg = 0;
 		} else {
 			destroy_item(POTION_CLASS, AD_FIRE);
-    	}
+		}
        erode_obj(uwep, TRUE, FALSE);
        erode_obj(uswapwep, TRUE, FALSE);
        erode_armor(&youmonst, TRUE);
@@ -1011,10 +1018,10 @@ int spellnum;
                  body_part(EYE) : makeplural(body_part(EYE)));
            make_blinded((long)rnd(Acid_resistance ? 10 : 50),FALSE);
            if (!Blind) Your(vision_clears);
-    }
+		}
        /* TODO: corrode floor objects */
 	stop_occupation();
-       break;
+    break;
     case AGGRAVATION:
 	You_feel("that monsters are aware of your presence.");
 	aggravate();
@@ -1022,11 +1029,28 @@ int spellnum;
 	stop_occupation();
 	break;
     case GEYSER:
+	dmg = 0;
 	/* this is physical damage, not magical damage */
-	pline("A sudden geyser slams into you from nowhere!");
-	dmg = d(8, 6);
-	water_damage(invent, FALSE, FALSE, FALSE);
-	if (Half_physical_damage) dmg = (dmg + 1) / 2;
+	if(uarmf && uarmf->otyp == WATER_WALKING_BOOTS){
+		pline("A sudden geyser erupts under your feet!");
+		if(ACURR(A_DEX) >= 14){
+			You("put the added momentum to good use.");
+			if(ACURR(A_DEX) == 25) youmonst.movement += 12;
+			else if(ACURR(A_DEX) >= 18) youmonst.movement += 8;
+			else youmonst.movement += 6;
+		} else if(ACURR(A_DEX) <= 10){
+			You("are knocked around by the geyser's force!");
+			if(ACURR(A_DEX) <= 3) dmg = d(8, 6);
+			else if(ACURR(A_DEX) <= 6) dmg = d(4, 6);
+			else if(ACURR(A_DEX) <= 10) dmg = rnd(6);
+		}
+		makeknown(uarmf->otyp);
+	} else {
+		pline("A sudden geyser slams into you from nowhere!");
+		dmg = d(8, 6);
+		water_damage(invent, FALSE, FALSE, FALSE);
+		if (Half_physical_damage) dmg = (dmg + 1) / 2;
+	}
 	stop_occupation();
 	break;
     case FIRE_PILLAR:
@@ -1078,7 +1102,7 @@ int spellnum;
        struct monst *mtmp2;
 	   if(!mtmp) goto psibolt;
 	   mtmp2 = mk_roamer(&mons[PM_ANGEL],
-               mtmp->data->maligntyp, mtmp->mux, mtmp->muy, FALSE);
+               sgn(mtmp->data->maligntyp), mtmp->mux, mtmp->muy, FALSE);
        if (mtmp2) {
            if (canspotmon(mtmp2))
                pline("%s %s!",
@@ -1145,15 +1169,16 @@ int spellnum;
 	struct monst *mtmp2 = (struct monst *)0;
 	char let;
 	boolean success;
-	int i;
+	int i,j;
 	coord bypos;
 	int quan;
-
+	
 	if(is_drow(mdat)){
-		pm = mkclass(S_SPIDER,G_NOHELL|G_HELL);
+		j = 0;
+		do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
+		while(!is_spider(pm) && j++ < 30);
 		let = (pm ? S_SPIDER : S_SNAKE);
-	}
-	else{
+	} else{
 		pm = mkclass(S_ANT,G_NOHELL|G_HELL);
 		let = (pm ? S_ANT : S_SNAKE);
 	}
@@ -1161,18 +1186,25 @@ int spellnum;
 	if (quan < 3) quan = 3;
 	success = pm ? TRUE : FALSE;
 	for (i = 0; i <= quan; i++) {
-	    if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data))
-		break;
-	    if ((pm = mkclass(let,G_NOHELL|G_HELL)) != 0 &&
-		    (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
-		success = TRUE;
-		mtmp2->msleeping = mtmp2->mpeaceful = mtmp2->mtame = 0;
-               /* arbitrarily strengthen enemies in astral and sanctum */
-               if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) {
-                   mtmp2->m_lev += rn1(3,3);
-                   mtmp2->mhp = (mtmp2->mhpmax += rn1((int)mtmp->m_lev,20));
-               }
-		set_malign(mtmp2);
+	    if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data)) break;
+		if(is_drow(mdat)){
+			j = 0;
+			do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
+			while(!is_spider(pm) && j++ < 30);
+			let = (pm ? S_SPIDER : S_SNAKE);
+		} else{
+			pm = mkclass(S_ANT,G_NOHELL|G_HELL);
+			let = (pm ? S_ANT : S_SNAKE);
+		}
+	    if (pm != 0 && (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
+			success = TRUE;
+			mtmp2->msleeping = mtmp2->mpeaceful = mtmp2->mtame = 0;
+				   /* arbitrarily strengthen enemies in astral and sanctum */
+				   if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) {
+					   mtmp2->m_lev += rn1(3,3);
+					   mtmp2->mhp = (mtmp2->mhpmax += rn1((int)mtmp->m_lev,20));
+				   }
+			set_malign(mtmp2);
 	    }
 	}
 	/* Not quite right:
@@ -1302,26 +1334,29 @@ int spellnum;
                   Your("%s shape in your %s.", aobjnam(otmp, "change"), hands);
                   poly_obj(otmp, BANANA);
                }
-        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE){
-			if(rn2(acurrstr()) < (((int)mtmp->m_lev+1)/2)) {
-                Your("%s knocked out of your %s!",
-                    aobjnam(otmp,"are"), hands);
-                setuwep((struct obj *)0);
-                dropx(otmp);
+        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE && otmp->oartifact != ART_GLAMDRING){
+			if(mtmp){
+				if(rn2(acurrstr()) < (((int)mtmp->m_lev+1)/2)) {
+					Your("%s knocked out of your %s!",
+						aobjnam(otmp,"are"), hands);
+					setuwep((struct obj *)0);
+					dropx(otmp);
+				}
+				else Your("%s for a moment.", aobjnam(otmp, "shudder"));
+			} else {
+				if(rn2(acurrstr()) < rnd(15) ){
+					Your("%s knocked out of your %s!",
+						aobjnam(otmp,"are"), hands);
+					setuwep((struct obj *)0);
+					dropx(otmp);
+				}
+				else Your("%s for a moment.", aobjnam(otmp, "shudder"));
 			}
-			else if(rn2(acurrstr()) < rnd(15) ){
-                Your("%s knocked out of your %s!",
-                    aobjnam(otmp,"are"), hands);
-                setuwep((struct obj *)0);
-                dropx(otmp);
-			}
-			else Your("%s for a moment.", aobjnam(otmp, "shudder"));
         } else{
             Your("%s for a moment.", aobjnam(otmp, "shudder"));
         } dmg = 0;
 	   stop_occupation();
-        break;
-     }
+    } break;
     case DESTRY_ARMR:
        if (Antimagic) {
            shieldeff(u.ux, u.uy);
@@ -1338,7 +1373,7 @@ int spellnum;
        break;
     case EVIL_EYE:
 		if(mtmp){
-			struct attack evilEye = {AT_GAZE, AD_LUCK, 0, 0};
+			struct attack evilEye = {AT_GAZE, AD_LUCK, 1, 1};
 			gazemu(mtmp, &evilEye);
 		}
 		else{
@@ -1349,19 +1384,19 @@ int spellnum;
     break;
     case DRAIN_LIFE:  /* simulates player spell "drain life" */
 		if(!mtmp || distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2){
-        if (Drain_resistance) {
-            /* note: magic resistance doesn't protect
-	     * against "drain life" spell
-	     */
-            shieldeff(u.ux, u.uy);
-            You_feel("momentarily frail.");
-        } else {
-            Your("body deteriorates!");
-            exercise(A_CON, FALSE);
-            losexp("life drainage",TRUE,FALSE,FALSE);
-        }
-        dmg = 0;
-	    stop_occupation();
+			if (Drain_resistance) {
+				/* note: magic resistance doesn't protect
+			 * against "drain life" spell
+			 */
+				shieldeff(u.ux, u.uy);
+				You_feel("momentarily frail.");
+			} else {
+				Your("body deteriorates!");
+				exercise(A_CON, FALSE);
+				losexp("life drainage",TRUE,FALSE,FALSE);
+			}
+			dmg = 0;
+			stop_occupation();
 		}
         break;
     case WEAKEN_YOU:		/* drain strength */
@@ -1377,12 +1412,11 @@ int spellnum;
 	    }else You_feel("momentarily weakened.");
 	} else {
 	    You("suddenly feel weaker!");
-	    dmg = mtmp ? mtmp->m_lev - 6 : rnd(15);
-		if(dmg<3)dmg = 3;
+	    dmg = rnd(4);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
-	    losestr(rnd(dmg));
+			losestr(dmg);
 	    if (u.uhp < 1 && mtmp)
-		done_in_by(mtmp);
+			done_in_by(mtmp);
 	}
 	dmg = 0;
 	stop_occupation();
@@ -1394,22 +1428,22 @@ int spellnum;
           int typ = 0;
           boolean change = FALSE;
           do {
-              if (adjattrib(typ, -rnd(ACURR(typ))+3, -1)) change = TRUE;
+              if (adjattrib(typ, -rnd(4), -1)) change = TRUE;
           } while (++typ < A_MAX);
           if (!change) goto drainhp;
        } else {
           int typ = rn2(A_MAX);
-           dmg = mtmp ? min(mtmp->m_lev - 6,15) : rnd(15);
-		   if(dmg < 3) dmg = 3;
+           dmg = rnd(4);
            if (Half_spell_damage) dmg = (dmg + 1) / 2;
            if (dmg < 1) dmg = 1;
           /* try for a random stat */
-           if (adjattrib(typ, -rnd(dmg), -1)) {
+           if (adjattrib(typ, -dmg, -1)) {
                /* Quest nemesis maledictions */
               if (malediction) verbalize("Thy powers are waning, %s!", plname);
            } else { /* if that fails, drain max HP a bit */
 drainhp:
               You_feel("your life force draining away...");
+			  dmg*=5;
               if (dmg > 20) dmg = 20;
               if (Upolyd) {
                   u.mh -= dmg;
@@ -1857,9 +1891,9 @@ int spellnum;
 	    return TRUE;
        /* make visible spell by spellcaster with see invisible. */
        /* also won't cast it if your invisibility isn't intrinsic. */
-       if ((!(HInvis & INTRINSIC) || perceives(mtmp->data))
-               && spellnum == MAKE_VISIBLE)
-	    return TRUE;
+	if ((!(HInvis & INTRINSIC) || perceives(mtmp->data))
+		   && spellnum == MAKE_VISIBLE)
+		return TRUE;
 	/* blindness spell on blinded player */
 	if (Blinded && spellnum == BLIND_YOU)
 	    return TRUE;
@@ -1935,10 +1969,16 @@ castmm(mtmp, mdef, mattk)
 		  is_undirected_spell(mattk->adtyp, spellnum) ? "" : buf);
 	}
 
-	if (mattk->damd)
-	    dmg = d((int)((ml/2) + mattk->damn), (int)mattk->damd);
-	else dmg = d((int)((ml/2) + 1), 6);
-
+	{
+		int dmd = 6, dmn = ml/2;
+		if (mattk->damd) dmd = (int)(mattk->damd);
+		
+		if (mattk->damn) dmn+= (int)(mattk->damn);
+		else dmn += 1;
+		
+	    dmg = d(dmn, dmd);
+	}
+	
 	ret = 1;
 
 	switch (mattk->adtyp) {
@@ -1953,6 +1993,7 @@ castmm(mtmp, mdef, mattk)
 			        mhe(mdef));
 			dmg = 0;
 		}
+		break;
 	    case AD_FIRE:
 	        if (canspotmon(mdef))
 		    pline("%s is enveloped in flames.", Monnam(mdef));
@@ -2078,10 +2119,17 @@ int spellnum;
 #define ad_to_typ(k) (10 + (int)k - 1)
 
 int
-buzzmu(mtmp, mattk)		/* monster uses spell (ranged) */
+buzzmu(mtmp, mattk, ml)		/* monster uses spell (ranged) */
 	register struct monst *mtmp;
 	register struct attack  *mattk;
+	int ml;
 {
+	int dmn = (int)(ml/2);
+	
+	if(mattk->damn) dmn += mattk->damn;
+	else dmn += 1;
+	
+	
 	/* don't print constant stream of curse messages for 'normal'
 	   spellcasting monsters at range */
 	if (mattk->adtyp > AD_SPC2)
@@ -2097,7 +2145,7 @@ buzzmu(mtmp, mattk)		/* monster uses spell (ranged) */
 		if(canseemon(mtmp))
 		    pline("%s zaps you with a %s!", Monnam(mtmp),
 			  flash_types[ad_to_typ(mattk->adtyp)]);
-		buzz(-ad_to_typ(mattk->adtyp), (int)mattk->damn,
+		buzz(-ad_to_typ(mattk->adtyp), dmn,
 		     mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
 	    } else impossible("Monster spell %d cast", mattk->adtyp-1);
 	}
@@ -2196,9 +2244,15 @@ castum(mtmp, mattk)
  *	As these are spells, the damage is related to the level
  *	of the monster casting the spell.
  */
-	if (mattk->damd)
-	    dmg = d((int)((ml/2) + mattk->damn), (int)mattk->damd);
-	else dmg = d((int)((ml/2) + 1), 6);
+	{
+		int dmd = 6, dmn = ml/2;
+		if (mattk->damd) dmd = (int)(mattk->damd);
+		
+		if (mattk->damn) dmn+= (int)(mattk->damn);
+		else dmn += 1;
+		
+	    dmg = d(dmn, dmd);
+	}
 
 	ret = 1;
 
@@ -2480,10 +2534,11 @@ int spellnum;
 	    impossible("weaken spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) { 
+	if (resist(mtmp, 0, 0, FALSE)) {
 	    shieldeff(mtmp->mx, mtmp->my);
 	    if (yours || canseemon(mtmp)) pline("%s looks momentarily weakened.", Monnam(mtmp));
 	} else {
+		dmg = rnd(4)*5;
 	    if (mtmp->mhp < 1)
 	    {
 	        impossible("trying to drain monster that's already dead");
@@ -2568,16 +2623,35 @@ uspsibolt:
 	if (canseemon(mtmp))
 	    pline("%s winces%s", Monnam(mtmp), (dmg <= 5) ? "." : "!");
 	break;
-    case GEYSER:
-	/* this is physical damage, not magical damage */
-	if (!mtmp || mtmp->mhp < 1) {
-	    impossible("geyser spell with no mtmp");
-	    return;
-	}
-	if (yours || canseemon(mtmp))
-	    pline("A sudden geyser slams into %s from nowhere!", mon_nam(mtmp));
-	dmg = d(8, 6);
-	break;
+    case GEYSER:{
+		struct obj* boots;
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("geyser spell with no mtmp");
+			return;
+		}
+		dmg = 0;
+		boots = which_armor(mtmp, W_ARMF);
+		if(boots && boots->otyp == WATER_WALKING_BOOTS){
+			if (yours || canseemon(mtmp)){
+				pline("A sudden geyser erupts under %s's feet!", mon_nam(mtmp));
+				if(mtmp->data->mmove >= 14) pline("%s puts the added monmentum to good use!", Monnam(mtmp));
+				else if(mtmp->data->mmove <=10) pline("%s is knocked around by the geyser's force!", Monnam(mtmp));
+				if(canseemon(mtmp)) makeknown(boots->otyp);
+			}
+			if(mtmp->data->mmove >= 25) mtmp->movement += 12;
+			else if(mtmp->data->mmove >= 18) mtmp->movement += 8;
+			else if(mtmp->data->mmove >= 14) mtmp->movement += 6;
+			else if(mtmp->data->mmove <= 3) dmg = d(8, 6);
+			else if(mtmp->data->mmove <= 6) dmg = d(4, 6);
+			else if(mtmp->data->mmove <=10) dmg = rnd(6);
+		} else {
+			if (yours || canseemon(mtmp))
+				pline("A sudden geyser slams into %s from nowhere!", mon_nam(mtmp));
+			/* this is physical damage, not magical damage */
+			dmg = d(8, 6);
+			water_damage(mtmp->minvent, FALSE, FALSE, FALSE);
+		}
+	}break;
     case FIRE_PILLAR:
 	if (!mtmp || mtmp->mhp < 1) {
 	    impossible("firepillar spell with no mtmp");
@@ -2631,30 +2705,41 @@ uspsibolt:
 	struct monst *mtmp2 = (struct monst *)0;
 	char let;
 	boolean success;
-	int i;
+	int i,j;
 	coord bypos;
 	int quan;
-        
+    
 	if((yours && Race_if(PM_DROW)) || 
-		(!yours && is_drow((mattk->data)) )){ /*summoning is determined by your actual race*/
-		pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
+		(!yours && is_drow((mattk->data)) )
+	){ /*summoning is determined by your actual race*/\
+		j = 0;
+		do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
+		while(!is_spider(pm) && j++ < 30);
 		let = (pm ? S_SPIDER : S_SNAKE);
-	}
-	else{
+	} else {
 		pm = mkclass(S_ANT,G_NOHELL|G_HELL);
 		let = (pm ? S_ANT : S_SNAKE);
 	}
-
+	
 	if(yours) quan = (mons[u.umonnum].mlevel < 2) ? 1 : 
 	       rnd(mons[u.umonnum].mlevel / 2);
 	else quan = (mattk->m_lev < 2) ? 1 : rnd((int)mattk->m_lev / 2);
 	if (quan < 3) quan = 3;
 	success = pm ? TRUE : FALSE;
 	for (i = 0; i <= quan; i++) {
-	    if (!enexto(&bypos, mtmp->mx, mtmp->my, mtmp->data))
-		break;
-	    if ((pm = mkclass(let,G_NOHELL|G_HELL)) != 0 &&
-		    (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
+	    if (!enexto(&bypos, mtmp->mx, mtmp->my, mtmp->data)) break;
+		if((yours && Race_if(PM_DROW)) || 
+			(!yours && is_drow((mattk->data)) )
+		){ /*summoning is determined by your actual race*/\
+			j = 0;
+			do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
+			while(!is_spider(pm) && j++ < 30);
+			let = (pm ? S_SPIDER : S_SNAKE);
+		} else {
+			pm = mkclass(S_ANT,G_NOHELL|G_HELL);
+			let = (pm ? S_ANT : S_SNAKE);
+		}
+	    if (pm && (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
 		success = TRUE;
 		mtmp2->msleeping = 0;
 		if (yours || mattk->mtame)

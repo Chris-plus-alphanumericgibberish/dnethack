@@ -870,7 +870,7 @@ mattacku(mtmp)
 			}
 			if( mdat == &mons[PM_DEMOGORGON] && !range2 && !mtmp->mflee && rn2(6)) break; //cast spells more rarely if he's in melee range
 			if (range2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
-			    sum[i] = buzzmu(mtmp, mattk);
+			    sum[i] = buzzmu(mtmp, mattk, mtmp->m_lev);
 			else {
 			    if (foundyou){
 					if(couldsee(mtmp->mx, mtmp->my) && dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= BOLT_LIM*BOLT_LIM)
