@@ -152,10 +152,10 @@
 				 (ptr) == &mons[PM_GIANT_BAT] || \
 				 (ptr) == &mons[PM_VAMPIRE_BAT])
 #define is_social_insect(ptr) ((ptr)->mlet == S_ANT && (ptr)->maligntyp > 0)
-#define is_spider(ptr) ((ptr)->mlet == S_SPIDER && (\
-				 (ptr) == &mons[PM_CAVE_SPIDER]\
-				 (ptr) == &mons[PM_GIANT_SPIDER]\
-				 (ptr) == &mons[PM_PHASE_SPIDER]\
+#define is_spider(ptr)	((ptr)->mlet == S_SPIDER && (\
+				 (ptr) == &mons[PM_CAVE_SPIDER] ||\
+				 (ptr) == &mons[PM_GIANT_SPIDER] ||\
+				 (ptr) == &mons[PM_PHASE_SPIDER] \
 				 ))
 #define is_rat(ptr)		((ptr) == &mons[PM_SEWER_RAT] || \
 				 (ptr) == &mons[PM_GIANT_RAT] || \
