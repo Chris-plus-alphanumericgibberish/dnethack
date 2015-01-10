@@ -673,7 +673,7 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 		    (otmp == hwep || otmp == rwep || otmp == proj ||
 		    would_prefer_hwep(mtmp, otmp) || /*cursed item in hand?*/
 		    would_prefer_rwep(mtmp, otmp) ||
-		    could_use_item(mtmp, otmp, FALSE) ||
+		    could_use_item(mtmp, otmp, TRUE) ||
 		    ((!rwep || rwep == &zeroobj) &&
 		        (is_ammo(otmp) || is_launcher(otmp))) ||
 		    (rwep && rwep != &zeroobj &&
