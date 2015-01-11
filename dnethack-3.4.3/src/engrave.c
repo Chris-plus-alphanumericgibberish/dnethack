@@ -4251,19 +4251,38 @@ pick_seal()
 	start_menu(tmpwin);
 	any.a_void = 0;		/* zero out all bits */
 	
-	Sprintf(buf, "Known Seals");
+	Sprintf(buf,	"Known Seals");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	
 	for(i = 0; i < (QUEST_SPIRITS-FIRST_SEAL); i++){
 		seal_flag = 0x1L << i;
-		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && u.sealTimeout[i] < moves){
-			Sprintf(buf,	"%s%s", sealNames[i], sealTitles[i]);
+		if(u.sealsKnown&seal_flag){
+			if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+				Sprintf(buf,	"%s (active; timeout:%d)", 
+					sealNames[i], 
+					u.sealTimeout[i] - moves
+				);
+			} else if(u.sealsActive&seal_flag) {
+				Sprintf(buf,	"%s (active)", 
+					sealNames[i] 
+				);
+			} else if(u.sealTimeout[i] > moves){
+				Sprintf(buf,	"%s (timeout:%d)", 
+					sealNames[i], 
+					u.sealTimeout[i] - moves
+				);
+			} else {
+				Sprintf(buf,	"%s%s", 
+					sealNames[i], 
+					sealTitles[i]
+				);
+			}
 			any.a_int = (i+FIRST_SEAL);	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
-	}
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+		}
 	}
 	if(Role_if(PM_EXILE) && quest_status.got_quest && !(u.specialSealsActive&SEAL_DAHLVER_NAR) && u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] < moves){
 		Sprintf(buf,	"%s%s", sealNames[DAHLVER_NAR-FIRST_SEAL], sealTitles[DAHLVER_NAR-FIRST_SEAL]);
@@ -4329,7 +4348,7 @@ pick_seal()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	end_menu(tmpwin, "Choose seal:");
+	end_menu(tmpwin,	"Choose seal:");
 
 	how = PICK_ONE;
 	n = select_menu(tmpwin, how, &selected);
