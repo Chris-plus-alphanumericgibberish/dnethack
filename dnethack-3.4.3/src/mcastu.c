@@ -2368,7 +2368,7 @@ int spellnum;
 	if (nonliving(mtmp->data) || is_demon(mtmp->data)) {
 	    if (yours || canseemon(mtmp))
 	        pline("%s seems no deader than before.", Monnam(mtmp));
-	} else if (!(resisted = resist(mtmp, 0, 0, FALSE)) ||
+	} else if (!(resisted = (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE))) ||
 	           rn2(mons[u.umonnum].mlevel) > 12) {
             mtmp->mhp = -1;
 	    if (yours) killed(mtmp);
@@ -2495,7 +2495,7 @@ int spellnum;
 	    impossible("destroy spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) { 
+	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    if (yours || canseemon(mtmp))
 	        pline("A field of force surrounds %s!",
@@ -2534,7 +2534,7 @@ int spellnum;
 	    impossible("weaken spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) {
+	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) {
 	    shieldeff(mtmp->mx, mtmp->my);
 	    if (yours || canseemon(mtmp)) pline("%s looks momentarily weakened.", Monnam(mtmp));
 	} else {
@@ -2572,7 +2572,7 @@ int spellnum;
 	    impossible("stun spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) { 
+	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    if (yours || canseemon(mtmp))
 	        pline("%s seems momentarily disoriented.", Monnam(mtmp));
@@ -2616,7 +2616,7 @@ uspsibolt:
 	    impossible("psibolt spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) { 
+	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    dmg = (dmg + 1) / 2;
 	}
@@ -2799,7 +2799,7 @@ uspsibolt:
 	    impossible("paralysis spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) { 
+	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    if (yours || canseemon(mtmp))
 	        pline("%s stiffens briefly.", Monnam(mtmp));
@@ -2817,7 +2817,7 @@ uspsibolt:
 	    impossible("confusion spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) { 
+	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    if (yours || canseemon(mtmp))
 	        pline("%s seems momentarily dizzy.", Monnam(mtmp));
@@ -2834,7 +2834,7 @@ uspsibolt:
 	    impossible("wound spell with no mtmp");
 	    return;
 	}
-	if (resist(mtmp, 0, 0, FALSE)) { 
+	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    dmg = (dmg + 1) / 2;
 	}
