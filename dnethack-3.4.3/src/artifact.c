@@ -4693,7 +4693,7 @@ read_necro(VOID_ARGS)
 			} else if (spellid(i) == NO_SPELL)  {
 				spl_book[i].sp_id = booktype;
 				spl_book[i].sp_lev = objects[booktype].oc_level;
-				spl_book[i].sp_know = 5000;
+				spl_book[i].sp_know = 20000;
 				You(i > 0 ? "add %s to your repertoire." : "learn %s.",
 					splname);
 				makeknown((int)booktype);
@@ -4738,12 +4738,12 @@ read_necro(VOID_ARGS)
 			case SELECT_SPIRITS1:{
 				int i;
 				You("read the first half of the testament of whispers.");
-				for(i=0; i<16; i++) u.sealsKnown &= sealKey[u.sealorder[i]];
+				for(i=0; i<16; i++) u.sealsKnown |= sealKey[u.sealorder[i]];
 			}break;
 			case SELECT_SPIRITS2:{
 				int i;
 				You("read the second half of the testament of whispers.");
-				for(i=15; i<32; i++) u.sealsKnown &= sealKey[u.sealorder[i]];
+				for(i=15; i<32; i++) u.sealsKnown |= sealKey[u.sealorder[i]];
 			}break;
 		}
 	}
