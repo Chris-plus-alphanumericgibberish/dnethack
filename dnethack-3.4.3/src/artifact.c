@@ -4681,7 +4681,7 @@ read_necro(VOID_ARGS)
 			if (spellid(i) == booktype)  {
 				if (spellknow(i) <= 1000) {
 					Your("knowledge of %s is keener.", splname);
-					spl_book[i].sp_know += 5000;
+					spl_book[i].sp_know += 20000;
 					exercise(A_WIS,TRUE);
 				} else {
 					You("know %s quite well already.", splname);
