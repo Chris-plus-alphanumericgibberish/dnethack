@@ -3823,6 +3823,11 @@ int p_skill;
 	} else if(spiritSkill(p_skill)){
 		curskill += 1;
 	}
+	
+	if(u.sealsActive&SEAL_NABERIUS && (curskill<P_BASIC || maxskill<P_BASIC)){
+		return P_BASIC;
+	}
+	
 	return min(curskill, maxskill);
 }
 
