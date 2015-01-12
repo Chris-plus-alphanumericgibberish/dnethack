@@ -3084,13 +3084,13 @@ use_weapon:
 		break;
 		case AT_CLAW:
 		case AT_LRCH: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
-			if (i==0 && uwep && !cantwield(youmonst.data)) goto use_weapon;
+		// if (i==0 && uwep && !cantwield(youmonst.data)) goto use_weapon;
 #ifdef SEDUCE
 			/* succubi/incubi are humanoid, but their _second_
 			 * attack is AT_CLAW, not their first...
 			 */
-			if (i==1 && uwep && (u.umonnum == PM_SUCCUBUS ||
-				u.umonnum == PM_INCUBUS)) goto use_weapon;
+		// if (i==1 && uwep && (u.umonnum == PM_SUCCUBUS ||
+			// u.umonnum == PM_INCUBUS)) goto use_weapon;
 #endif
 		case AT_KICK:
 		case AT_BITE:
