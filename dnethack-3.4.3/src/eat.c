@@ -541,7 +541,7 @@ boolean message;
 		  "eating", food_xname(victual.piece, TRUE));
 
 	if(victual.piece->otyp == CORPSE) {
-		cpostfx(victual.piece->corpsenm, FALSE, FALSE,!victual.piece->odrained);
+		cpostfx(victual.piece->corpsenm, FALSE, FALSE, victual.piece->odrained);
 	} else
 		fpostfx(victual.piece);
 
@@ -2623,7 +2623,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					u.uconduct.food++;
 					You("drain the %s.", xname(otmp));
 					cprefx(otmp->corpsenm, TRUE, FALSE);
-					cpostfx(otmp->corpsenm, FALSE, FALSE, !otmp->odrained);
+					cpostfx(otmp->corpsenm, FALSE, FALSE, otmp->odrained);
 					if (carried(otmp)) useup(otmp);
 					else useupf(otmp, 1L);
 				}
