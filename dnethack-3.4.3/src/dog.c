@@ -182,6 +182,11 @@ makedog()
 	mtmp = makemon(&mons[pettype], u.ux, u.uy, MM_EDOG);
 
 	if(!mtmp) return((struct monst *) 0); /* pets were genocided */
+	
+	if(mtmp->m_lev < mtmp->data->mlevel) mtmp->m_lev = mtmp->data->mlevel;
+	
+	if(mtmp->m_lev) mtmp->mhpmax = 8*(mtmp->m_lev-1)+rnd(8);
+	mtmp->mhp = mtmp->mhpmax;
 
 #ifdef STEED
 	/* Horses already wear a saddle */
