@@ -2403,7 +2403,7 @@ struct obj *otmp;
 	 * Breaks conduct, but otherwise safe.
 	 */
 	 
-	if (!u.uconduct.unvegan &&
+	if (!u.uconduct.unvegan && !Race_if(PM_INCANTIFIER) &&
 	    ((material == LEATHER || material == BONE ||
 	      material == DRAGON_HIDE || material == WAX) ||
 	     (cadaver && !vegan(&mons[mnum])))) {
