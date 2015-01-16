@@ -1136,6 +1136,7 @@ register struct attack *mattk;
 				ammo_type = SILVER_ARROW;
 			break;
 			case AD_BALL:
+ironball:
 				ammo_type = HEAVY_IRON_BALL;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;
@@ -1143,6 +1144,7 @@ register struct attack *mattk;
 				rngmod = 8;
 			break;
 			case AD_LOAD:
+				if(near_capacity()>UNENCUMBERED) goto ironball;
 				ammo_type = LOADSTONE;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;
