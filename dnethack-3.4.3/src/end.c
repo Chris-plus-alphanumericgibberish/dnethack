@@ -597,15 +597,15 @@ int how;
 	if (Lifesaved && (how <= GENOCIDED)) {
 		pline("But wait...");
 		if(uamul && uamul->otyp == AMULET_OF_LIFE_SAVING){
-		makeknown(AMULET_OF_LIFE_SAVING);
-		Your("medallion %s!",
-		      !Blind ? "begins to glow" : "feels warm");
-		if (how == CHOKING) You("vomit ...");
-		if (how == DISINTEGRATED) You("reconstitute!");
-		else if (how == OVERWOUND) You("reassemble!");
-		else You_feel("much better!");
+			makeknown(AMULET_OF_LIFE_SAVING);
+			Your("medallion %s!",
+				  !Blind ? "begins to glow" : "feels warm");
+			if (how == CHOKING) You("vomit ...");
+			if (how == DISINTEGRATED) You("reconstitute!");
+			else if (how == OVERWOUND) You("reassemble!");
+			else You_feel("much better!");
 
-		pline_The("medallion crumbles to dust!");
+			pline_The("medallion crumbles to dust!");
 			if (uamul) useup(uamul);
 		} else if(u.sealsActive&SEAL_JACK){
 			int i;
@@ -625,6 +625,14 @@ int how;
 						u.spiritT[i]=0;
 						u.sealCounts--;
 					}
+				}
+			}
+			if(!foundJack){
+				if(u.spirit[CROWN_SPIRIT] == SEAL_JACK){
+					u.spirit[CROWN_SPIRIT] = 0;
+				}
+				else if(u.spirit[GPREM_SPIRIT] == SEAL_JACK){
+					u.spirit[GPREM_SPIRIT] = 0;
 				}
 			}
 			if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID){
