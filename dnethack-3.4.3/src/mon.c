@@ -810,7 +810,12 @@ mcalcdistress()
 	if (mtmp->cham && !rn2(6))
 	    (void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 	were_change(mtmp);
-
+	
+	if(!mtmp->mcansee && mtmp->data == &mons[PM_SHOGGOTH]){
+		if(canspotmon(mtmp)) pline("%s forms new eyes!",Monnam(mtmp));
+		mtmp->mblinded = 1;
+	}
+	
 	/* gradually time out temporary problems */
 	if (mtmp->mblinded && !--mtmp->mblinded)
 	    mtmp->mcansee = 1;
