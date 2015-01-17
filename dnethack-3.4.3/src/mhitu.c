@@ -1701,16 +1701,19 @@ dopois:
 	    case AD_VAMP:
 			hitmsg(mtmp, mattk);
 			/* if vampire biting (and also a pet) */
-			if (is_vampire(mtmp->data) && mattk->aatyp == AT_BITE &&
-				has_blood(youmonst.data)) {
-				   Your("blood is being drained!");
-				   /* Get 1/20th of full corpse value
-				    * Therefore 4 bites == 1 drink
-				    */
-				    if (mtmp->mtame && !mtmp->isminion)
-				    	EDOG(mtmp)->hungrytime += ((int)((youmonst.data)->cnutrit / 20) + 1);
+			if (mattk->aatyp == AT_BITE &&
+				has_blood(youmonst.data) && !uclockwork
+			) {
+			   Your("blood is being drained!");
+			   /* Get 1/20th of full corpse value
+				* Therefore 4 bites == 1 drink
+				*/
+				if (mtmp->mtame && !mtmp->isminion)
+					EDOG(mtmp)->hungrytime += ((int)((youmonst.data)->cnutrit / 20) + 1);
+
 			}
 			if (!mtmp->mcan && !rn2(3) && !Drain_resistance) {
+				if(!has_blood(youmonst.data) || uclockwork) pline("%s feeds on you life force!",Monnam(mtmp));
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 			}
 		break;
