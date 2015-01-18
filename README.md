@@ -2,11 +2,11 @@ dNetHack
 ========
 A variant of nethack 3.4.3
 
-In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash�em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, Bulwersator, Karl Garrison, probably others (wasn�t always good about documenting who�s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past. The Chokhmah Sephirah is based on the Recoudut, an epic inevitable posted to some message board by someone, years ago, somewhere out there on the internet. That original source has long since vanished. The other Keter Sephiroth are based on the DnD inevitables.
+In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash'em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, Bulwersator, Karl Garrison, probably others (wasn't always good about documenting whose code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past. The Chokhmah Sephirah is based on the Recoudut, an epic inevitable posted to some message board by someone, years ago, somewhere out there on the internet. That original source has long since vanished. The other Keter Sephiroth are based on the DnD inevitables.
 
 Implemented YANI's from rec.games.roguelike.nethack and the nethack wiki, including several of Jonadab the Unsightly One's suggestions.
 
-dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re-organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi-level alignment �quest� branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight-up maze levels. Characters of any alignment may enter any alignment �quest.� To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
+dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re-organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi-level alignment 'quest' branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight-up maze levels. Characters of any alignment may enter any alignment 'quest.' To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
 
 Overall, dnethack is more difficult than vanilla nethack, as there are more ways to get into trouble as a late-game character, and several ways to go from ascension-ready character to tombstone in just a few rounds. The design goal is for all such threats to be counterable, so that the late game is more difficult and dangerous but not randomly lethal.
 
@@ -177,7 +177,7 @@ Only your quest Nemeses will deliberately steal your quest artifact, other monst
 
 	-Makes QA a dependable source of extrinsics, deepening differences between classes.
 	
--Foo-Bane artifacts are better (don�t need to be enchanted to be effective), and can be wielded in the off-hand behind a second artifact.
+-Foo-Bane artifacts are better (don't need to be enchanted to be effective), and can be wielded in the off-hand behind a second artifact.
 
 
 (ha. ha.)
