@@ -232,6 +232,7 @@ struct obj *corpse;
 	    mptr = mtmp->data;
 	    if (mtmp->iswiz || mptr == &mons[PM_MEDUSA] ||
 		    mptr->msound == MS_NEMESIS || mptr->msound == MS_LEADER ||
+			quest_status.leader_m_id == mtmp->m_id || 
 		    mptr == &mons[PM_VLAD_THE_IMPALER] || 
 			(is_dprince(mptr) && !Inhell) || 
 			(is_dlord(mptr) && !Inhell)
