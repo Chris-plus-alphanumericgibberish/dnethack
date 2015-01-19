@@ -125,14 +125,16 @@ spec_levs: ../util/lev_comp \
 	touch spec_levs
 
 quest_levs: ../util/lev_comp \
-	Arch.des Barb.des Binder.des Caveman.des Convict.des Healer.des Knight.des Monk.des \
+	Arch.des Barb.des Binder.des Caveman.des Convict.des Elf.des Healer.des Knight.des Monk.des \
 	Pirate.des Noble.des Priest.des Ranger.des Rogue.des Samurai.des Tourist.des \
-	Valkyrie.des Wizard.des
+	Valkyrie.des Wizard.des Erebor.des Moria.des Drow.des Drow\ Noble.des Hedrow.des \
+	Hedrow\ Noble.des
 	../util/lev_comp Arch.des
 	../util/lev_comp Barb.des
 	../util/lev_comp Binder.des
 	../util/lev_comp Caveman.des
 	../util/lev_comp Convict.des
+	../util/lev_comp Elf.des
 	../util/lev_comp Healer.des
 	../util/lev_comp Knight.des
 	../util/lev_comp Monk.des
@@ -145,6 +147,12 @@ quest_levs: ../util/lev_comp \
 	../util/lev_comp Tourist.des
 	../util/lev_comp Valkyrie.des
 	../util/lev_comp Wizard.des
+	../util/lev_comp Erebor.des
+	../util/lev_comp Moria.des
+	../util/lev_comp Drow.des
+	../util/lev_comp Drow\ Noble.des
+	../util/lev_comp Hedrow.des
+	../util/lev_comp Hedrow\ Noble.des
 	touch quest_levs
 
 dungeon: dungeon.def ../util/makedefs ../util/dgn_comp

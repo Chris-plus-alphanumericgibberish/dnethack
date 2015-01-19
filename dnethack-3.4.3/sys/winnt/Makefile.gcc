@@ -34,7 +34,7 @@
 # Set to Y for a graphical version
 # Set to anything else (or undefine) for a tty version
 
-#GRAPHICAL = Y
+GRAPHICAL = N
 
 # Debug
 # Set to Y for Debug support (to produce debug information)
@@ -527,11 +527,18 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/law.des     $(DAT)/chaos.des    $(DAT)/neutrality.des \
 	 $(DAT)/tomb.des    $(DAT)/blacktemple.des $(DAT)/sunlesssea.des \
 	 $(DAT)/storage.des \
+	 $(DAT)/labr.des \
 	 $(DAT)/convict.des \
 	 $(DAT)/noble.des \
 	 $(DAT)/pirate.des \
 	 $(DAT)/binder.des \
-	 $(DAT)/labr.des
+	 $(DAT)/erebor.des \
+	 $(DAT)/moria.des \
+	 $(DAT)/drow.des \
+	 $(DAT)/drow\ noble.des \
+	 $(DAT)/hedrow.des \
+	 $(DAT)/hedrow\ noble.des \
+	 $(DAT)/elf.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/endgame.des)
@@ -563,11 +570,18 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/blacktemple.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/sunlesssea.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/storage.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/labr.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/convict.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/noble.des)
-	$(subst /,\,$(U)lev_comp $(DAT)/binder.des)
-	$(subst /,\,$(U)lev_comp $(DAT)/labr.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/pirate.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/binder.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/erebor.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/moria.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/drow.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/drow\ noble.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/hedrow.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/hedrow\ noble.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/elf.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)
 	$(subst /,\,echo sp_levs done > $(O)sp_lev.tag)

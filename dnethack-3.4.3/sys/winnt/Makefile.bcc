@@ -561,7 +561,8 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)\bigroom.des  $(DAT)\castle.des \
 	$(DAT)\caveman.des $(DAT)\healer.des   $(DAT)\knight.des \
 	$(DAT)\monk.des    $(DAT)\priest.des   $(DAT)\ranger.des \
 	$(DAT)\rogue.des   $(DAT)\samurai.des  $(DAT)\sokoban.des \
-	$(DAT)\tourist.des $(DAT)\valkyrie.des $(DAT)\wizard.des
+	$(DAT)\tourist.des $(DAT)\valkyrie.des $(DAT)\wizard.des \
+	$(DAT)\law.des     $(DAT)\chaos.des    $(DAT)\neutrality.des 
 	cd $(DAT)
 	$(U)lev_comp bigroom.des
 	$(U)lev_comp castle.des
@@ -587,6 +588,9 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)\bigroom.des  $(DAT)\castle.des \
 	$(U)lev_comp tourist.des
 	$(U)lev_comp valkyrie.des
 	$(U)lev_comp wizard.des
+	$(U)lev_comp law.des
+	$(U)lev_comp chaos.des
+	$(U)lev_comp neutrality.des
 	cd $(SRC)
 	echo sp_levs done > $(O)sp_lev.tag
 
@@ -1375,4 +1379,3 @@ $(O)write.o: write.c $(HACK_H)
 $(O)zap.o: zap.c $(HACK_H)
 
 # end of file
-

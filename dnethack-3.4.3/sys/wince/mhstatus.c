@@ -252,16 +252,16 @@ void FormatStatusString(char* text, int format)
 	/* forth line */
 	if(flags.time)
 	    Sprintf(nb = eos(nb), "T:%ld ", moves);
-
+	
 	if(uclockwork){
 		if(strcmp(ca_hu_stat[u.uhs], "        ")) {
 			Strcat(text, ca_hu_stat[u.uhs]);
 			Sprintf(nb = eos(nb), " ");
 		}
 	}else{
-	if(strcmp(hu_stat[u.uhs], "        ")) {
-		Strcat(text, hu_stat[u.uhs]);
-		Sprintf(nb = eos(nb), " ");
+		if(strcmp(hu_stat[u.uhs], "        ")) {
+			Strcat(text, hu_stat[u.uhs]);
+			Sprintf(nb = eos(nb), " ");
 		}
 	}
 	if(Confusion)	   Sprintf(nb = eos(nb), "Conf");

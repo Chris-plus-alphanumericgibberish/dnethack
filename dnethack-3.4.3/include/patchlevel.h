@@ -9,8 +9,9 @@
    release as 3.5.
    
    Incremented to 3.7 with the advent of the Binder role.
+   Incremented to 3.8 with the introduction of Clockwork upgrades and the finished Drow quests.
 */
-#define VERSION_MINOR	7
+#define VERSION_MINOR	8
 /*
  * PATCHLEVEL is updated for each release.
  *
@@ -18,7 +19,7 @@
  *
  * 3.7.0 -> 3.7.1 indicates the advent of the true Binder quest goal level and Alignment spirits, as well as myriad bugfixes fixes
  */
-#define PATCHLEVEL	1
+#define PATCHLEVEL	0
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
