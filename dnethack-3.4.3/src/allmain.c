@@ -20,8 +20,8 @@ void
 moveloop()
 {
 #if defined(MICRO) || defined(WIN32)
-    char ch;
-    int abort_lev;
+	char ch;
+	int abort_lev;
 #endif
     struct monst *mtmp, *nxtmon;
 	struct obj *pobj;
@@ -30,6 +30,7 @@ moveloop()
 	int oldspiritAC=0;
 	int tx,ty;
 	int nmonsclose,nmonsnear,enkispeedlim;
+	static boolean oldBlind = 0;
 
     flags.moonphase = phase_of_the_moon();
     if(flags.moonphase == FULL_MOON) {
@@ -84,7 +85,7 @@ moveloop()
 				youmonst.movement -= NORMAL_SPEED;
 			}
 		} else {
-	    youmonst.movement -= NORMAL_SPEED;
+			youmonst.movement -= NORMAL_SPEED;
 		}
 	    do { /* hero can't move this turn loop */
 		wtcap = encumber_msg();
@@ -92,6 +93,17 @@ moveloop()
 		flags.mon_moving = TRUE;
 		do { /* Monster turn loop */
 		    monscanmove = movemon();
+			  /****************************************/
+			 /*once-per-monster-moving things go here*/
+			/****************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////
+			if (!oldBlind ^ !Blind) {  /* one or the other but not both */
+				see_monsters();
+				flags.botl = 1;
+				vision_full_recalc = 1;	/* blindness just got toggled */
+				if (Blind_telepat || Infravision) see_monsters();
+				oldBlind = !!Blind;
+			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			oldspiritAC = u.spiritAC;
 			u.spiritAC = 0; /* reset temporary spirit AC bonuses. Do this once per monster turn */
@@ -186,6 +198,7 @@ moveloop()
 		    /* reallocate movement rations to monsters */
 		    for (mtmp = fmon; mtmp; mtmp = nxtmon){
 				nxtmon = mtmp->nmon;
+				/* Possibly vanish */
 				if(mtmp->mvanishes>-1){
 					if(mtmp->mvanishes-- == 0){
 						mongone(mtmp);
@@ -196,6 +209,18 @@ moveloop()
 				if(mtmp->moccupation && !occupation){
 					mtmp->moccupation = 0;
 					mtmp->mcanmove = 1;
+				}
+				if(!mtmp->mnotlaugh){
+					if(!is_silent(mtmp->data)){
+						wake_nearto_noisy(mtmp->mx, mtmp->my, combatNoise(mtmp->data));
+						if(sensemon(mtmp) || ((cansee(mtmp->mx,mtmp->my) || see_with_infrared(mtmp)) && canspotmon(mtmp) && !mtmp->mundetected)){
+							pline("%s is laughing hysterically.", Monnam(mtmp));
+						} else if(couldsee(mtmp->mx,mtmp->my)){
+							You_hear("hysterical laughter.");
+						} else {
+							You_hear("laughter in the distance.");
+						}
+					} else pline("%s is trembling hysterically.", Monnam(mtmp));
 				}
 				if(mtmp->data == &mons[PM_GREAT_CTHULHU] || mtmp->data == &mons[PM_ZUGGTMOY] 
 					|| mtmp->data == &mons[PM_SWAMP_FERN]) mtmp->mspec_used = 0;
@@ -223,7 +248,7 @@ moveloop()
 						mtmp->movement = -12;
 					}
 				}
-			}
+			} /* movement rations */
 
 		    if(!rn2(u.uevent.udemigod ? 25 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)
@@ -242,10 +267,15 @@ moveloop()
 		    if (u.usteed && u.umoved) {
 			/* your speed doesn't augment steed's speed */
 			moveamt = mcalcmove(u.usteed);
-			if(uclockwork && u.ucspeed == HIGH_CLOCKSPEED){
-				/*You are still burning spring tension, even if it doesn't affect your speed!*/
-				if(u.slowclock < 3) morehungry(3-u.slowclock);
-				else if(!(moves%(u.slowclock - 2))) morehungry(1);
+			if(uclockwork){
+				if(u.ucspeed == HIGH_CLOCKSPEED){
+					/*You are still burning spring tension, even if it doesn't affect your speed!*/
+					if(u.slowclock < 3) morehungry(3-u.slowclock);
+					else if(!(moves%(u.slowclock - 2))) morehungry(1);
+				}
+				if(u.phasengn){
+					morehungry(10);
+				}
 			}
 		    } else
 #endif
@@ -265,14 +295,14 @@ moveloop()
 					if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
 				}
 			} else {
-			if (Very_fast) {	/* speed boots or potion */
-			    /* average movement is 1.67 times normal */
-			    moveamt += NORMAL_SPEED / 2;
-			    if (rn2(3) == 0) moveamt += NORMAL_SPEED / 2;
-			} else if (Fast) {
-			    /* average movement is 1.33 times normal */
-			    if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
-			}
+				if (Very_fast) {	/* speed boots or potion */
+					/* average movement is 1.67 times normal */
+					moveamt += NORMAL_SPEED / 2;
+					if (rn2(3) == 0) moveamt += NORMAL_SPEED / 2;
+				} else if (Fast) {
+					/* average movement is 1.33 times normal */
+					if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
+				}
 			}
 			if(u.sealsActive&SEAL_ENKI){
 				nmonsclose = nmonsnear = 0;
@@ -336,6 +366,10 @@ moveloop()
 			}
 			}
 
+			if(uclockwork && u.phasengn){
+				morehungry(10);
+			}
+			
 			if(uclockwork && u.ucspeed == SLOW_CLOCKSPEED)
 				moveamt /= 2; /*Even if you are mounted, a slow clockspeed affects how 
 								fast you can issue commands to the mount*/
@@ -348,7 +382,7 @@ moveloop()
 			case EXT_ENCUMBER: moveamt -= ((moveamt * 7) / 8); break;
 			default: break;
 		    }
-
+			
 		    youmonst.movement += moveamt;
 			//floor how far into movement-debt you can fall.
 		    if (youmonst.movement < -2*NORMAL_SPEED) youmonst.movement = -2*NORMAL_SPEED;
@@ -357,21 +391,58 @@ moveloop()
 		    monstermoves++;
 		    moves++;
 
-		    /********************************/
-		    /* once-per-turn things go here */
+		      /********************************/
+		     /* once-per-turn things go here */
 		    /********************************/
 
 		    if (flags.bypasses) clear_bypasses();
 		    if(Glib) glibr();
 		    nh_timeout();
 		    run_regions();
-
+			
 			move_gliders();
 
 		    if (u.ublesscnt)  u.ublesscnt--;
 		    if(flags.time && !flags.run)
 			flags.botl = 1;
-
+			
+			if(uclockwork){
+				if(u.ustove){
+					if(u.uboiler){
+						int steam = min(10,min(u.ustove,u.uboiler));
+						lesshungry(steam);
+						u.ustove-=steam;
+						u.uboiler-=steam;
+						flags.cth_attk=TRUE;//state machine stuff.
+						create_gas_cloud(u.ux+rn2(3)-1, u.uy+rn2(3)-1, 1, rnd(3));
+						flags.cth_attk=FALSE;
+						if(u.utemp && moves%2) u.utemp--;
+					} else {
+						u.utemp++;
+						flags.cth_attk=TRUE;//state machine stuff.
+						create_gas_cloud(u.ux+rn2(3)-1, u.uy+rn2(3)-1, 1, rnd(6)); //Longer-lived smoke
+						flags.cth_attk=FALSE;
+					}
+				} else if(u.utemp) u.utemp--;
+				if(u.utemp > BURNING_HOT){
+					if((u.utemp-5)*2 > rnd(10)) destroy_item(SCROLL_CLASS, AD_FIRE);
+					if((u.utemp-5)*2 > rnd(10)) destroy_item(POTION_CLASS, AD_FIRE);
+					if((u.utemp-5)*2 > rnd(10)) destroy_item(SPBOOK_CLASS, AD_FIRE);
+					
+					if(u.utemp >= MELTING && !(HFire_resistance || u.sealsActive&SEAL_FAFNIR)){
+						You("are melting!");
+						losehp(u.ulevel, "melting from extreme heat", KILLED_BY);
+						if(u.utemp >= MELTED){
+							if(Upolyd) losehp(u.mhmax*2, "melting to slag", KILLED_BY);
+							else { /* May have been rehumanized by previous damage. In that case, still die from left over bronze on your skin! */
+								if(uclockwork) losehp(u.uhpmax*2, "melting to slag", KILLED_BY);
+								else if(!(HFire_resistance || u.sealsActive&SEAL_FAFNIR)) losehp(u.uhpmax*2, "molten bronze", KILLED_BY);
+							}
+						}
+					}
+				}
+			} else if(u.utemp) u.utemp = 0;
+			
 			if(u.ukinghill){
 				if(u.protean > 0) u.protean--;
 				else{
@@ -411,43 +482,43 @@ moveloop()
 			    rehumanize();
 			else if (Regeneration ||
 				    (wtcap < MOD_ENCUMBER && !(moves%20))) {
-				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) {
-				    flags.botl = 1;
-				    u.mh++;
+				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
+					flags.botl = 1;
+					u.mh++;
 				}
 			}
 		    } else if (u.uhp < u.uhpmax &&
 			 (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
 			if (u.ulevel > 9 && !(moves % 3) && 
-				!(Race_if(PM_INCANTIFIER) || uclockwork)) {
+				!(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz))) {
 			    int heal, Con = (int) ACURR(A_CON);
-				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) {
-				    if (Con <= 12) {
+				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
+					if (Con < 12) {
 					heal = 1;
-				    } else {
-					heal = rnd(Con);
+					} else {
+					heal = rnd(Con-10);
 					if (heal > u.ulevel-9) heal = u.ulevel-9;
-				    }
-				    flags.botl = 1;
-				    u.uhp += heal;
-				    if(u.uhp > u.uhpmax)
+					}
+					flags.botl = 1;
+					u.uhp += heal;
+					if(u.uhp > u.uhpmax)
 					u.uhp = u.uhpmax;
 				}
 			} else if (Regeneration ||
-			     (u.ulevel <= 9 &&
-				 !(Race_if(PM_INCANTIFIER) || uclockwork) &&
+			     (u.ulevel <= 9 && 
+				 !(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz)) &&
 			      !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
-			    if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)){
-				    flags.botl = 1;
-				    u.uhp++;
+			    if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)){
+					flags.botl = 1;
+					u.uhp++;
 				}
-		    }
+			}
 		    }
 			if(u.sealsActive&SEAL_BUER){
 				if(Upolyd && u.mh < u.mhmax){
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) u.mh++;
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) u.mh++;
 				} else if(u.uhp < u.uhpmax){
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || !rn2(4)) u.uhp++;
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) u.uhp++;
 				}
 			}
 
@@ -481,15 +552,20 @@ moveloop()
 			}
 		    }
 
-		    if ((u.uen < u.uenmax) &&
+		    if ((u.uen < u.uenmax) && 
 			((wtcap < MOD_ENCUMBER && !Race_if(PM_INCANTIFIER) &&
-			  (!(moves%((MAXULEV + 8 - u.ulevel) *
+			  (!(moves%((MAXULEV - u.ulevel) *
 				    (Role_if(PM_WIZARD) ? 3 : 4) / 6))))
 			 || Energy_regeneration)) {
-			u.uen += rn1((int)(ACURR(A_WIS) + ACURR(A_INT)) / 15 + 1,1);
-			if (u.uen > u.uenmax)  u.uen = u.uenmax;
-			flags.botl = 1;
+				u.uen += rn1((int)(ACURR(A_WIS) + ACURR(A_INT)) / 10 + 1,1);
+				if (u.uen > u.uenmax)  u.uen = u.uenmax;
+				flags.botl = 1;
 		    }
+			if(u.uen < u.uenmax && (Role_if(PM_WIZARD) || Race_if(PM_INCANTIFIER)) && uarmh && uarmh->otyp == CORNUTHAUM && uarmh->spe > 0){
+				u.uen += rnd(uarmh->spe);
+				if (u.uen > u.uenmax)  u.uen = u.uenmax;
+				flags.botl = 1;
+			}
 
 		    if(!u.uinvulnerable) {
 			if(Teleportation && !rn2(85)) {
@@ -539,11 +615,18 @@ moveloop()
 		    if (!rn2(40+(int)(ACURR(A_DEX)*3)))
 			u_wipe_engr(rnd(3));
 		    if (u.uevent.udemigod && !u.uinvulnerable) {
-			if (u.udg_cnt) u.udg_cnt--;
-			if (!u.udg_cnt) {
-			    intervene();
-			    u.udg_cnt = rn1(200, 50);
-			}
+				if (u.udg_cnt) u.udg_cnt--;
+				if (!u.udg_cnt) {
+					intervene();
+					u.udg_cnt = rn1(200, 50);
+				}
+		    }
+		    if (u.uevent.ukilled_illurien && !u.uinvulnerable) {
+				if (u.ill_cnt) u.ill_cnt--;
+				if (!u.ill_cnt) {
+					illur_intervene();
+					u.ill_cnt = rn1(1000, 250);
+				}
 		    }
 		    restore_attrib();
 		    /* underwater and waterlevel vision are done here */
@@ -565,13 +648,13 @@ moveloop()
 		}
 	    } while (youmonst.movement<NORMAL_SPEED); /* hero can't move loop */
 
-	    /******************************************/
-	    /* once-per-hero-took-time things go here */
+	      /******************************************/
+	     /* once-per-hero-took-time things go here */
 	    /******************************************/
 		u.ustdy /= 2;
-
-	if(u.utrap && u.utraptype == TT_LAVA) {
-	    if(!is_lava(u.ux,u.uy))
+		
+		if(u.utrap && u.utraptype == TT_LAVA) {
+			if(!is_lava(u.ux,u.uy))
 			    u.utrap = 0;
 		    else if (!u.uinvulnerable) {
 			    u.utrap -= 1<<8;
@@ -592,23 +675,30 @@ moveloop()
 	/****************************************/
 	/* once-per-player-input things go here */
 	/****************************************/
-
 	find_ac();
-	if(!flags.mv || Blind) {
+	if(!flags.mv || Blind || oldBlind != (!!Blind)) {
 	    /* redo monsters if hallu or wearing a helm of telepathy */
 	    if (Hallucination) {	/* update screen randomly */
-		see_monsters();
-		see_objects();
-		see_traps();
-		if (u.uswallow) swallowed(0);
-	    } else if (Unblind_telepat) {
-		see_monsters();
+			see_monsters();
+			see_objects();
+			see_traps();
+			if (u.uswallow) swallowed(0);
+		} else if (Unblind_telepat) {
+			see_monsters();
 	    } else if (Warning || Warn_of_mon)
 	     	see_monsters();
 
+		if (!oldBlind ^ !Blind) {  /* one or the other but not both */
+			see_monsters();
+			flags.botl = 1;
+			vision_full_recalc = 1;	/* blindness just got toggled */
+			if (Blind_telepat || Infravision) see_monsters();
+		}
+		
 	    if (vision_full_recalc) vision_recalc(0);	/* vision! */
 	}
-
+	oldBlind = !!Blind;
+	
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
 		/* Update the bottom line if the number of minutes has
@@ -786,14 +876,14 @@ newgame()
 		mvitals[i].mvflags = mons[i].geno & G_NOCORPSE;
 
 	init_objects();		/* must be before u_init() */
-
+	
 	flags.pantheon = -1;	/* role_init() will reset this */
 	flags.panLgod = -1;	/* role_init() will reset this */
 	flags.panNgod = -1;	/* role_init() will reset this */
 	flags.panCgod = -1;	/* role_init() will reset this */
 	role_init();		/* must be before init_dungeons(), u_init(),
 				 * and init_artifacts() */
-
+	
 	init_dungeons();	/* must be before u_init() to avoid rndmonst()
 				 * creating odd monsters for any tins and eggs
 				 * in hero's initial inventory */
@@ -857,7 +947,7 @@ newgame()
 			com_pager(205);
 			com_pager(206);
 		} else {
-		com_pager(1);
+			com_pager(1);
 		}
 	}
 
@@ -879,9 +969,9 @@ newgame()
 
 #endif /* RECORD_REALTIME || REALTIME_ON_BOTL */
 
+	if(Race_if(PM_DROW)) litroom(FALSE,NULL);
 	/* Success! */
 	welcome(TRUE);
-	if(Race_if(PM_DROW)) litroom(FALSE,NULL);
 	return;
 }
 
