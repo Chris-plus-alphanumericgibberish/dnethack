@@ -1043,7 +1043,7 @@ boolean pit_only;
 	struct obj *boulder_here;
 	schar typ;
 	boolean nohole = !Can_dig_down(&u.uz);
-
+	
 	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL)) ||
 	   /* ALI - artifact doors from slash'em */
 	   (IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
@@ -1275,7 +1275,7 @@ fakerocktrap()
 	  body_part(HEAD));
 
 	if (uarmh) {
-	if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET) {
+	if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
 		pline("Fortunately, you are wearing a hard helmet.");
 		dmg = 2;
 	} else if (flags.verbose) {
@@ -1377,9 +1377,15 @@ dig_up_grave(x,y)
 int x, y;
 {
 	struct obj *otmp;
-
-	/* Grave-robbing is frowned upon... */
-	exercise(A_WIS, FALSE);
+	boolean revenancer = (uarmg && uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER);
+	
+	if(Race_if(PM_VAMPIRE) || revenancer){
+		/* Wise to find allies */
+		exercise(A_WIS, TRUE);
+	} else {
+		/* Grave-robbing is frowned upon... */
+		exercise(A_WIS, FALSE);
+	}
 	if (Role_if(PM_ARCHEOLOGIST)) {
 	    adjalign(-sgn(u.ualign.type)*3);
 		u.ualign.sins++;
@@ -1403,25 +1409,25 @@ int x, y;
 	    	otmp->age -= 100;		/* this is an *OLD* corpse */;
 	    break;
 	case 2:
-		if(!Race_if(PM_VAMPIRE)){
-	    if (!Blind) pline(Hallucination ? "Dude!  The living dead!" :
- 			"The grave's owner is very upset!");
- 	    (void) makemon(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+		if(!Race_if(PM_VAMPIRE) && !revenancer){
+			if (!Blind) pline(Hallucination ? "Dude!  The living dead!" :
+				"The grave's owner is very upset!");
+			(void) makemon(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
 		} else{
 			You("unearth a minion.");
 			(void) initedog(makemon(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL), x, y, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH));
 		}
-	    break;
+	break;
 	case 3:
-		if(!Race_if(PM_VAMPIRE)){
-	    if (!Blind) pline(Hallucination ? "I want my mummy!" :
- 			"You've disturbed a tomb!");
- 	    (void) makemon(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+		if(!Race_if(PM_VAMPIRE) && !revenancer){
+			if (!Blind) pline(Hallucination ? "I want my mummy!" :
+				"You've disturbed a tomb!");
+			(void) makemon(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
 		} else {
 			You("recruit a follower from this tomb.");
 			(void) initedog(makemon(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL), x, y, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH));
 		}
-	    break;
+    break;
 	default:
 	    /* No corpse */
 	    pline_The("grave seems unused.  Strange....");
@@ -2051,7 +2057,7 @@ genericptr_t arg;
 long timeout;	/* unused */
 {
 	struct obj *obj = (struct obj *) arg;
-
+	
 	while (Has_contents(obj)) {
 	    /* We don't need to place contained object on the floor
 	       first, but we do need to update its map coordinates. */
@@ -2104,7 +2110,10 @@ long timeout;	/* unused */
 		MON_NOWEP(obj->ocarry);
 	    }
 	}
-	rot_organic(arg, timeout);
+	// rot_organic(arg, timeout); //This is not for corpses, it is for burried containers.
+	obj_extract_self(obj);
+	obfree(obj, (struct obj *) 0);
+	
 	if (on_floor) newsym(x, y);
 	else if (in_invent) update_inventory();
 }
