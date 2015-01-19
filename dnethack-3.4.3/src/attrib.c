@@ -68,7 +68,7 @@ const struct innate {
 		     {  15, &(HShock_resistance), "insulated", "conductive" },
 		     {  17, &(HTeleport_control), "controlled","uncontrolled" },
 		     {  19, &(HAcid_resistance), "thick-skinned","soft-skinned" },
-		     {  21, &(HSee_invisible), "keen-eyed","shortsighted" },
+		     {  21, &(EWwalking), "light on your feet","heavy" },
 		     {  23, &(HSick_resistance), "immunized","immunocompromised" },
 		     {  25, &(EDisint_resistance), "firm","less firm" },
 		     {  27, &(HStone_resistance), "limber","stiff" },
@@ -130,11 +130,11 @@ const struct innate {
 			 {	11, &(HCold_resistance), "the chill of the grave", "the warmth of life" },
 		     {	 21, &(HPolymorph_control), "in control", "out of control" },
 		     {	 0, 0, 0, 0 } },
-	
+
 	inc_abil[] = { {	1, &(HAntimagic), "", "" },
 		     {	 0, 0, 0, 0 } };
 
-static long next_check = 600L;	/* arbitrary first setting */
+#define	next_check u.exerchkturn
 STATIC_DCL void NDECL(exerper);
 STATIC_DCL void FDECL(postadjabil, (long *));
 
@@ -180,7 +180,7 @@ adjattrib(ndx, incr, msgflg)
 			u.ugrave_arise = temparise;
 		} else {
 			if (msgflg == 0 && flags.verbose)
-			    pline("You're already as %s as you can get.",
+				pline("You're already as %s as you can get.",
 				  minusattr[ndx]);
 		}
 		ABASE(ndx) = ATTRMIN(ndx); /* just in case */
@@ -327,7 +327,7 @@ boolean	inc_or_dec;
 	if (i == A_CHA) return;	/* can't exercise cha */
 	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
 	if(u.sealsActive&SEAL_HUGINN_MUNINN && (i == A_INT || i == A_WIS)) return; /* don't excercise int or wis while artificially maxed */
-
+	
 	/* no physical exercise while polymorphed; the body's temporary */
 	if (Upolyd && i != A_WIS && i != A_INT) return;
 
@@ -428,7 +428,7 @@ void
 exerchk()
 {
 	int	i, mod_val;
-
+	
 	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
 	/*	Check out the periodic accumulations */
 	exerper();
@@ -464,9 +464,12 @@ exerchk()
 		 *	Law of diminishing returns (Part III):
 		 *
 		 *	You don't *always* gain by exercising.
-		 *	[MRS 92/10/28 - Treat Wisdom specially for balance.]
 		 */
-		if(rn2(AVAL) > ((i != A_WIS) ? abs(AEXE(i)*2/3) : abs(AEXE(i))))
+
+		 //	[MRS 92/10/28 - Treat Wisdom specially for balance.]
+		// if(rn2(AVAL) > ((i != A_WIS) ? abs(AEXE(i)*2/3) : abs(AEXE(i))))
+		    // continue;
+		if(rn2(AVAL) > (abs(AEXE(i)*2/3)) )
 		    continue;
 		mod_val = sgn(AEXE(i));
 
@@ -516,11 +519,12 @@ exerchk()
 	}
 }
 
-/* next_check will otherwise have its initial 600L after a game restore */
+/* OBSOLETE: next_check will otherwise have its initial 600L after a game restore */
+/* next_check is now stored in the you struct, and is persistent from session to session. */
 void
 reset_attribute_clock()
 {
-	if (moves > 600L) next_check = moves + rn1(50,800);
+	/* if (moves > 600L) next_check = moves + rn1(50,800); */
 }
 
 
