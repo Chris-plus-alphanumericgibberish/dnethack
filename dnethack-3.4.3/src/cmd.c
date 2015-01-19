@@ -112,7 +112,6 @@ STATIC_PTR int NDECL(timed_occupation);
 STATIC_PTR int NDECL(doextcmd);
 STATIC_PTR int NDECL(domonability);
 STATIC_PTR int NDECL(dooverview_or_wiz_where);
-STATIC_PTR int NDECL(dotravel);
 # ifdef WIZARD
 STATIC_PTR int NDECL(wiz_wish);
 STATIC_PTR int NDECL(wiz_identify);
@@ -605,10 +604,14 @@ use_reach_attack()
 	/* Attack the monster there */
 	if ((mtmp = m_at(cc.x, cc.y)) != (struct monst *)0) {
 	    int oldhp = mtmp->mhp;
+		int tmp, tmpw, tmpt;
 
 	    bhitpos = cc;
 	    check_caitiff(mtmp);
-	    (void) hmonas(mtmp, find_roll_to_hit(mtmp,(uwep && arti_shining(uwep)) || u.sealsActive&SEAL_CHUPOCLOPS));
+		
+		find_to_hit_rolls(mtmp, &tmp, &tmpw, &tmpt);
+		
+	    (void) hmonas(mtmp, tmp, tmpw, tmpt);
 	} else
 	    /* Now you know that nothing is there... */
 	    pline("%s", nothing_happens);
@@ -1009,79 +1012,64 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	putstr(en_win, 0, final ? "Final Attributes:" : "Current Attributes:");
 	putstr(en_win, 0, "");
 
-	if (uclockwork){
-		if(u.ucspeed==HIGH_CLOCKSPEED) you_are("set to high clockspeed.");
-		if(u.ucspeed==NORM_CLOCKSPEED) you_are("set to normal clockspeed.");
-		if(u.ucspeed==SLOW_CLOCKSPEED) you_are("set to low clockspeed.");
-	}
 	if (u.uevent.uhand_of_elbereth) {
-#ifdef ELBERETH
-	    static const char * const hofe_titles[12] = {
+	    static const char * const hofe_titles[27] = {
 				/* Default */
-				"the Hand of Elbereth",
-				"the Envoy of Balance",
-				"the Glory of Arioch",
+				"the Arm of the Law",		 /*01*/
+				"the Envoy of Balance",		 /*02*/
+				"the Glory of Arioch",		 /*03*/
 				/* Monk */
-				"the Sage of Law",
-				"the Grandmaster of Balance",
-				"the Glory of Eequor",
-				/* Noble */
-				"the Saint %s",
-				"the Grey Saint",
-				"the Dark %s",
+				"the Sage of Law",			 /*04*/
+				"the Grandmaster of Balance",/*05*/
+				"the Glory of Eequor",		 /*06*/
+				/* Noble (human, vampire, incant) */
+				"the Saint %s",				 /*07*/
+				"the Grey Saint",			 /*08*/
+				"the Dark %s",				 /*09*/
 				/* Wizard */
-				"the Magister of Law",
-				"the Wizard of Balance",
-				"the Glory of Chardros"
+				"the Magister of Law",		 /*10*/
+				"the Wizard of Balance",	 /*11*/
+				"the Glory of Chardros",	 /*12*/
+				/* Elf */
+				"the Hand of Elbereth",		 /*13*/
+				"the Doomspeaker of Vaire",	 /*14*/
+				"the Whisperer of Este",	 /*15*/
+				/* Drow */
+				"the Hand of Eilistraee",	 /*16*/
+				"the Hand of Kiaransali",	 /*17*/
+				"the Hand of Lolth",		 /*18*/
+				/* Hedrow */
+				"the Shepherd of spiders",	 /*19*/
+				"the Sword of Vhaeraun",	 /*20*/
+				"the Fang of Lolth",		 /*21*/
+				/* Drow Noble */
+				"the Blade of Ver'tas",		 /*22*/
+				"the Hand of Kiaransali",	 /*23*/
+				"the Hand of Lolth",		 /*24*/
+				/* Hedrow Noble */
+				"the Sword of Selvetarm",	 /*25*/
+				"the Hand of Keptolo",		 /*26*/
+				"the Maw of Ghaunadaur",	 /*27*/
+				
+				/* uhand_of_elbereth max == 31 */
 	    };
-#else
-	    static const char * const hofe_titles[12] = {
-				"the Arm of the Law",
-				"the Envoy of Balance",
-				"the Glory of Arioch",
-				/* Monk */
-				"the Sage of Law",
-				"the Grandmaster of Balance",
-				"the Glory of Eequor",
-				/* Noble */
-				"the Saint %s",
-				"the Grey Saint",
-				"the Dark %s",
-				/* Wizard */
-				"the Magister of Law",
-				"the Wizard of Balance",
-				"the Glory of Chardros"
-	    };
-#endif
-	    if(Role_if(PM_PIRATE)) you_are("the Pirate King");
-	    else if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
-	    else if(Role_if(PM_SAMURAI)){
+		
+	    if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
+	    else if(Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE)) you_are("the Pirate King");
+	    else if((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) you_are("the Daughter of Skadi");
+	    else if(Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)){
+			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD) you_are("King under the Mountain");
+			else if(urole.ldrnum == PM_DAIN_II_IRONFOOT) you_are("Lord of Moria");
+	    } else if((Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)) && u.uevent.uhand_of_elbereth == 1){
 			strcpy(buf, "Nasu no ");
 			strcat(buf, plname);
 			you_are(buf);
-		} else if(Role_if(PM_NOBLEMAN)){
+		} else if(Role_if(PM_NOBLEMAN) && !Race_if(PM_DROW)){
 			if(u.uevent.uhand_of_elbereth == 9) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Lady" : "Lord");
 			else if(u.uevent.uhand_of_elbereth == 7) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Queen" : "King");
 			else Sprintf(buf, " %s", hofe_titles[u.uevent.uhand_of_elbereth - 1]);
 			enl_msg("You ", "are ", "were ", buf);
-		}
-		else you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
-	}
-	
-	if(u.wimage){
-		if(ACURR(A_WIS) < 6){
-			Sprintf(buf, " filled with the image of a weeping angel");
-			enl_msg("Your mind ", "is","was",buf);
-		} else if(ACURR(A_WIS) < 9){
-			Sprintf(buf, " ever on your mind");
-			enl_msg("The image of a weeping angel ", "is","was",buf);
-		} else if(ACURR(A_WIS) < 12){
-			Sprintf(buf, " seem to shake the image of a weeping angel from your mind");
-			enl_msg("You ", "can't","couldn't",buf);
-		} else {
-			Sprintf(buf, " in the back of your mind");
-			enl_msg("The image of a weeping angel ", "lurks","lurked",buf);
-		}
+		} else you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
 	}
 	
 	if(u.lastprayed){
@@ -1108,7 +1096,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 			}
 		}
 	}
-
+	
 	/* note: piousness 20 matches MIN_QUEST_ALIGN (quest.h) */
 	if (u.ualign.record >= 20)	you_are("piously aligned");
 	else if (u.ualign.record > 13)	you_are("devoutly aligned");
@@ -1128,6 +1116,9 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		enl_msg("You ", "carry", "carried", buf);
 		Sprintf(buf, " %d", (int) ALIGNLIM);
 		enl_msg("Your max alignment ", "is", "was", buf);
+		if(flags.stag) enl_msg("You ", "have","had"," turned stag on your quest leader");
+		else enl_msg("You ", "have","had"," stayed true to your quest");
+		if(flags.leader_backstab) enl_msg("You ", "have","had"," been betrayed by your quest leader");
 		Sprintf(buf, "a hod wantedness of %d", u.hod);
 		you_have(buf);
 		Sprintf(buf, "a gevurah wantedness of %d", u.gevurah);
@@ -1135,8 +1126,8 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		Sprintf(buf, "a chokhmah wantedness of %d", u.keter);
 		you_have(buf);
 		Sprintf(buf, "%d chokhmah sephiroth ", u.chokhmah);
-		enl_msg(buf, "are", "were", " deployed.");
-		Sprintf(buf, "%d weakness from being studied.", u.ustdy);
+		enl_msg(buf, "are", "were", " deployed");
+		Sprintf(buf, "%d weakness from being studied", u.ustdy);
 		you_have(buf);
 		Sprintf(buf, "spirits bound: %d", u.sealCounts);
 		you_have(buf);
@@ -1256,6 +1247,15 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_BLACK_WEB){
+			Strcat(buf, sealNames[(BLACK_WEB) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_NUMINA){
 			Strcat(buf, sealNames[(NUMINA) - (FIRST_SEAL)]);
 			numFound++;
@@ -1278,7 +1278,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		} else {
 			numSlots=1;
 		}
-		if(!u.spirit[QUEST_SPIRIT] && u.specialSealsKnown&(SEAL_DAHLVER_NAR|SEAL_ACERERAK)){
+		if(!u.spirit[QUEST_SPIRIT] && u.specialSealsKnown&(SEAL_DAHLVER_NAR|SEAL_ACERERAK|SEAL_BLACK_WEB)){
 			you_are("able to bind with a quest spirit");
 		}
 		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIARTH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
@@ -1295,19 +1295,21 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	}
 
 	/*** Resistances to troubles ***/
-	if (Fire_resistance) you_are("fire resistant");
-	if (Cold_resistance) you_are("cold resistant");
-	if (Sleep_resistance) you_are("sleep resistant");
-	if (Disint_resistance) you_are("disintegration-resistant");
-	if (Shock_resistance) you_are("shock resistant");
-	if (Poison_resistance) you_are("poison resistant");
-	if (Drain_resistance) you_are("level-drain resistant");
-	if (Sick_resistance) you_are("immune to sickness");
-	if (Antimagic) you_are("magic-protected");
 	if (Acid_resistance) you_are("acid resistant");
+	if (Cold_resistance) you_are("cold resistant");
+	if (Disint_resistance) you_are("disintegration-resistant");
+	if (Fire_resistance) you_are("fire resistant");
+	if (Halluc_resistance)
+		you_are("resistant to hallucinations");
+	if (Invulnerable) you_are("invulnerable");
+	if (Drain_resistance) you_are("level-drain resistant");
+	if (Antimagic) you_are("magic-protected");
 	if (Stone_resistance)
 		you_are("petrification resistant");
-	if (Invulnerable) you_are("invulnerable");
+	if (Poison_resistance) you_are("poison resistant");
+	if (Shock_resistance) you_are("shock resistant");
+	if (Sick_resistance) you_are("immune to sickness");
+	if (Sleep_resistance) you_are("sleep resistant");
 	if (u.uedibility || u.sealsActive&SEAL_BUER) you_can("recognize detrimental food");
 	if ( (ublindf && ublindf->otyp == R_LYEHIAN_FACEPLATE && !ublindf->cursed) || 
 		 (uarmc && uarmc->otyp == OILSKIN_CLOAK && !uarmc->cursed) ||
@@ -1315,8 +1317,6 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	) you_are("waterproof");
 
 	/*** Troubles ***/
-	if (Halluc_resistance)
-		enl_msg("You resist", "", "ed", " hallucinations");
 	if (final) {
 		if (Hallucination) you_are("hallucinating");
 		if (Stunned) you_are("stunned");
@@ -1360,6 +1360,21 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 #endif
 	if (Sleeping) enl_msg("You ", "fall", "fell", " asleep");
 	if (Hunger) enl_msg("You hunger", "", "ed", " rapidly");
+	if(u.wimage){
+		if(ACURR(A_WIS) < 6){
+			Sprintf(buf, " filled with the image of a weeping angel");
+			enl_msg("Your mind ", "is","was",buf);
+		} else if(ACURR(A_WIS) < 9){
+			Sprintf(buf, " ever on your mind");
+			enl_msg("The image of a weeping angel ", "is","was",buf);
+		} else if(ACURR(A_WIS) < 12){
+			Sprintf(buf, " seem to shake the image of a weeping angel from your mind");
+			enl_msg("You ", "can't","couldn't",buf);
+		} else {
+			Sprintf(buf, " in the back of your mind");
+			enl_msg("The image of a weeping angel ", "lurks","lurked",buf);
+		}
+	}
 
 	/*** Vision and senses ***/
 	if (See_invisible) enl_msg(You_, "see", "saw", " invisible");
@@ -1415,7 +1430,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	else if (Levitation) you_are("levitating");	/* without control */
 	else if (Flying) you_can("fly");
 	if (Wwalking) you_can("walk on water");
-	if (Swimming) you_can("swim");        
+	if (Swimming) you_can("swim");
 	if (Breathless) you_can("survive without air");
 	else if (Amphibious) you_can("breathe water");
 	if (Passes_walls) you_can("walk through walls");
@@ -1442,6 +1457,12 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	}
 
 	/*** Physical attributes ***/
+	if (uclockwork){
+		if(u.ucspeed==HIGH_CLOCKSPEED) you_are("set to high clockspeed.");
+		if(u.ucspeed==NORM_CLOCKSPEED) you_are("set to normal clockspeed.");
+		if(u.ucspeed==SLOW_CLOCKSPEED) you_are("set to low clockspeed.");
+		if(u.phasengn) you_are("in phase mode.");
+	}
 	if (u.uhitinc)
 	    you_have(enlght_combatinc("to hit", u.uhitinc, final, buf));
 	if (u.udaminc)
@@ -1511,11 +1532,11 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		enl_msg("Good luck ", "times", "timed", " out slowly for you");
 	}
 
-	if (u.ugangr) {
+	if (u.ugangr[Align2gangr(u.ualign.type)]) {
 	    Sprintf(buf, " %sangry with you",
-		    u.ugangr > 6 ? "extremely " : u.ugangr > 3 ? "very " : "");
+		    u.ugangr[Align2gangr(u.ualign.type)] > 6 ? "extremely " : u.ugangr[Align2gangr(u.ualign.type)] > 3 ? "very " : "");
 #ifdef WIZARD
-	    if (wizard) Sprintf(eos(buf), " (%d)", u.ugangr);
+	    if (wizard) Sprintf(eos(buf), " (%d)", u.ugangr[Align2gangr(u.ualign.type)]);
 #endif
 	    enl_msg(u_gname(), " is", " was", buf);
 	} else
@@ -1584,6 +1605,7 @@ resistances_enlightenment()
 		if(u.ucspeed==HIGH_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to high speed.");
 		if(u.ucspeed==NORM_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to normal speed.");
 		if(u.ucspeed==SLOW_CLOCKSPEED) putstr(en_win, 0, "Your clock is set to low speed.");
+		if(u.phasengn) putstr(en_win, 0, "Your phase engine is activated.");
 	}
 	/*** Resistances to troubles ***/
 	/* It is important to inform the player as to the status of any resistances that can expire */
@@ -1757,6 +1779,15 @@ resistances_enlightenment()
 		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_UNKNOWN_GOD){
 			Strcat(buf, sealNames[(UNKNOWN_GOD) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_BLACK_WEB){
+			Strcat(buf, sealNames[(BLACK_WEB) - (FIRST_SEAL)]);
 			numFound++;
 			if(numBound==2 && numFound==1) Strcat(buf," and ");
 			else if(numBound>=3){
@@ -2628,7 +2659,7 @@ static const struct func_tab cmdlist[] = {
 	{C('l'), TRUE, doredraw}, /* if number_pad is set */
 	{C('n'), TRUE, donamelevel}, /* if number_pad is set */
 	{C('o'), TRUE, dooverview_or_wiz_where}, /* depending on wizard status */
-	{C('p'), TRUE, doprev_message},
+ 	{C('p'), TRUE, doprev_message},
 	{C('r'), TRUE, doredraw},
 	{C('t'), TRUE, dotele},
 #ifdef WIZARD
@@ -2791,7 +2822,7 @@ struct ext_func_tab extcmdlist[] = {
 	{(char *)0, (char *)0, donull, TRUE},
 #endif
 	{(char *)0, (char *)0, donull, TRUE},
-        {(char *)0, (char *)0, donull, TRUE},
+    {(char *)0, (char *)0, donull, TRUE},
 	{(char *)0, (char *)0, donull, TRUE},
 	{(char *)0, (char *)0, donull, TRUE},
 	{(char *)0, (char *)0, donull, TRUE},
@@ -3723,7 +3754,7 @@ readchar()
 	return((char) sym);
 }
 
-STATIC_PTR int
+int
 dotravel(VOID_ARGS)
 {
 	/* Keyboard travel command */
