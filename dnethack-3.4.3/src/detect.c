@@ -443,21 +443,21 @@ int		class;		/* an object class, 0 for all */
     if (do_dknown) for(obj = invent; obj; obj = obj->nobj) do_dknown_of(obj);
 
     for (obj = fobj; obj; obj = obj->nobj) {
-	if ((!class && !boulder) || o_in(obj, class) || o_in(obj, boulder)) {
-	    if (obj->ox == u.ux && obj->oy == u.uy) ctu++;
-	    else ct++;
+		if ((!class && !boulder) || o_in(obj, class) || o_in(obj, boulder)) {
+			if (obj->ox == u.ux && obj->oy == u.uy) ctu++;
+			else ct++;
+		}
+		if (do_dknown) do_dknown_of(obj);
 	}
-	if (do_dknown) do_dknown_of(obj);
-    }
 
     if (!Is_paradise(&u.uz)){
-    for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
-	if (!class || o_in(obj, class)) {
-	    if (obj->ox == u.ux && obj->oy == u.uy) ctu++;
-	    else ct++;
-	}
-	if (do_dknown) do_dknown_of(obj);
-    }
+		for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
+		if (!class || o_in(obj, class)) {
+		if (obj->ox == u.ux && obj->oy == u.uy) ctu++;
+		else ct++;
+		}
+		if (do_dknown) do_dknown_of(obj);
+		}
 	}
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
@@ -497,16 +497,16 @@ int		class;		/* an object class, 0 for all */
  *	Map all buried objects first.
  */
     if (!Is_paradise(&u.uz)){
-    for (obj = level.buriedobjlist; obj; obj = obj->nobj)
-	if (!class || (otmp = o_in(obj, class))) {
-	    if (class) {
-		if (otmp != obj) {
-		    otmp->ox = obj->ox;
-		    otmp->oy = obj->oy;
-		}
-		map_object(otmp, 1);
-	    } else
-		map_object(obj, 1);
+		for (obj = level.buriedobjlist; obj; obj = obj->nobj)
+		if (!class || (otmp = o_in(obj, class))) {
+			if (class) {
+			if (otmp != obj) {
+				otmp->ox = obj->ox;
+				otmp->oy = obj->oy;
+			}
+			map_object(otmp, 1);
+			} else
+			map_object(obj, 1);
 		}
 	}
     /*
@@ -621,17 +621,17 @@ struct obj	*detector;	/* object doing the detecting */
     if (do_dknown) for(obj = invent; obj; obj = obj->nobj) if(obj->oartifact) do_dknown_of(obj);
 
     for (obj = fobj; obj; obj = obj->nobj) {
-	if (obj && obj->oartifact) {
-	    if (obj->ox != u.ux || obj->oy != u.uy) ct++;
+		if (obj && obj->oartifact) {
+			if (obj->ox != u.ux || obj->oy != u.uy) ct++;
 			if (do_dknown) do_dknown_of(obj);
-	}
+		}
     }
 
     for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
-	if (obj && obj->oartifact) {
-	    if (obj->ox != u.ux || obj->oy != u.uy) ct++;
+		if (obj && obj->oartifact) {
+			if (obj->ox != u.ux || obj->oy != u.uy) ct++;
 			if (do_dknown) do_dknown_of(obj);
-	}
+		}
     }
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
@@ -639,9 +639,9 @@ struct obj	*detector;	/* object doing the detecting */
 		for (obj = mtmp->minvent; obj; obj = obj->nobj) {
 			if (obj && obj->oartifact){
 				ct++;
-			if (do_dknown) do_dknown_of(obj);
+				if (do_dknown) do_dknown_of(obj);
+			}
 		}
-	}
 	}
 
     if (!clear_stale_map(ALL_CLASSES, 0) && !ct) {
@@ -1103,7 +1103,7 @@ struct obj *obj;
     oops = (rnd(obj->blessed ? 16 : 20) > ACURR(A_INT) || obj->cursed);
     if (oops && (obj->spe > 0)) {
 	switch (rnd(obj->oartifact ? 4 : 5)) {
-	case 1 : pline("%s too much to comprehend!", Tobjnam(obj, "are"));
+		case 1 : pline("%s too much to comprehend!", Tobjnam(obj, "are"));
 	    break;
 	case 2 : pline("%s you!", Tobjnam(obj, "confuse"));
 	    make_confused(HConfusion + rnd(100),FALSE);
@@ -1381,7 +1381,7 @@ genericptr_t num;
 				cansee(zx, zy) ? "see" :
 				   (flags.soundok ? "hear" :
 						"feel the shock of"));
-		    wake_nearto(zx, zy, 11*11);
+		    wake_nearto_noisy(zx, zy, 11*11);
 		    levl[zx][zy].doormask = D_NODOOR;
 		} else
 		    levl[zx][zy].doormask = D_ISOPEN;
@@ -1496,13 +1496,14 @@ register int aflag;
 	      for(y = u.uy-1; y < u.uy+2; y++) {
 		if(!isok(x,y)) continue;
 		if(x != u.ux || y != u.uy) {
-		    if (Blind && !aflag) feel_location(x,y);
+		    // if (Blind && !aflag) feel_location(x,y);
+		    if (!cansee(x,y) && !aflag) feel_location(x,y);
 		    if(levl[x][y].typ == SDOOR) {
 			if(rnl(7-fund)) continue;
 			cvt_sdoor_to_door(&levl[x][y]);	/* .typ = DOOR */
 			exercise(A_WIS, TRUE);
 			nomul(0, NULL);
-			if (Blind && !aflag)
+			if (!cansee(x,y) && !aflag)
 			    feel_location(x,y);	/* make sure it shows up */
 			else
 			    newsym(x,y);
@@ -1517,7 +1518,7 @@ register int aflag;
 		/* Be careful not to find anything in an SCORR or SDOOR */
 			if((mtmp = m_at(x, y)) && !aflag) {
 			    if(mtmp->m_ap_type) {
-				seemimic(mtmp);
+					seemimic(mtmp);
 		find:		exercise(A_WIS, TRUE);
 				if (!canspotmon(mtmp)) {
 				    if (glyph_is_invisible(levl[x][y].glyph)) {
@@ -1532,6 +1533,15 @@ register int aflag;
 				    } else {
 					You_feel("an unseen monster!");
 					map_invisible(x, y);
+					/* It used to take time to find a single
+					 * monster this made pets very irritating
+					 * if moving around blind, since the pet
+					 * would be dancing all around you and
+					 * obstructing all your search attempts.
+					 * Since Drow especially spend a LOT of
+					 * time blind, this has to go.
+					 */
+					continue;
 				    }
 				} else if (!sensemon(mtmp))
 				    You("find %s.", a_monnam(mtmp));
