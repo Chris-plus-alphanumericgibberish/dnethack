@@ -265,7 +265,9 @@ struct entity *etmp;
 		etmp->ex = x;
 		etmp->ey = y;
 		if (mtmp->wormno && (x != mtmp->mx || y != mtmp->my))
-			etmp->edata = &mons[PM_LONG_WORM_TAIL];
+			etmp->edata = mtmp->data == &mons[PM_HUNTING_HORROR] ? 
+				&mons[PM_HUNTING_HORROR_TAIL] :
+				&mons[PM_LONG_WORM_TAIL];
 		else
 			etmp->edata = mtmp->data;
 	} else
@@ -883,7 +885,7 @@ int x,y;
 		lev1->icedpool =
 			((lev1->drawbridgemask & DB_ICE) ? ICED_MOAT : 0);
 	}
-	wake_nearto(x, y, 500);
+	wake_nearto_noisy(x, y, 500);
 	lev2->typ = DOOR;
 	lev2->doormask = D_NODOOR;
 	if ((t = t_at(x, y)) != 0) deltrap(t);
