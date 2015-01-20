@@ -298,7 +298,7 @@ struct obj *obj;
 				(achieve.get_keys&0x080) && //Second key #3 (was 0x1C0)
 				!(u.specialSealsKnown&SEAL_ALIGNMENT_THING)
 		){
-			You("realize that, taken together, the patterns on the three third keys form a seal!");
+			You("realize that, taken together, the patterns on the three keys form a seal!");
 			u.specialSealsKnown |= SEAL_ALIGNMENT_THING;
 		}
 		set_artifact_intrinsic(obj, 1, W_ART);
@@ -954,7 +954,7 @@ register const char *let,*word;
 #endif
 	if(bp > buf && bp[-1] == '-') *bp++ = ' ';
 	ap = altlets;
-
+	
 	ilet = 'a';
 	for (otmp = invent; otmp; otmp = otmp->nobj) {
 	    if (!flags.invlet_constant)
@@ -1000,25 +1000,31 @@ register const char *let,*word;
 		    ((otmp->oclass == FOOD_CLASS && otmp->otyp != MEAT_RING) ||
 		    (otmp->oclass == TOOL_CLASS &&
 		     otyp != BLINDFOLD && otyp != MASK && otyp != R_LYEHIAN_FACEPLATE && 
-			 otyp != TOWEL && otyp != LENSES)))
+			 otyp != TOWEL && otyp != LENSES) ||
+			 (otmp->oclass == CHAIN_CLASS)
+			))
 		|| (!strcmp(word, "wield") &&
-		    (otmp->oclass == TOOL_CLASS && !is_weptool(otmp)))
+		    (otmp->oclass == TOOL_CLASS && !is_weptool(otmp)) ||
+			(otmp->oclass == CHAIN_CLASS && otmp->otyp != IRON_CHAIN))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
-		|| (!strcmp(word, "wind with") && (otmp->oclass == TOOL_CLASS &&
-		     otyp != SKELETON_KEY))
+		|| (!strcmp(word, "wind with") && ((otmp->oclass == TOOL_CLASS &&
+		     otyp != SKELETON_KEY) ||
+			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strcmp(word, "sacrifice") &&
 		    (otyp != CORPSE &&
 		     otyp != AMULET_OF_YENDOR && otyp != FAKE_AMULET_OF_YENDOR))
 		|| (!strcmp(word, "write with") &&
-		    (otmp->oclass == TOOL_CLASS &&
-		     otyp != MAGIC_MARKER && otyp != TOWEL && !spec_ability3(otmp, SPFX3_ENGRV)))
+		    ((otmp->oclass == TOOL_CLASS &&
+		     otyp != MAGIC_MARKER && otyp != TOWEL && !spec_ability3(otmp, SPFX3_ENGRV)) ||
+			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strcmp(word, "tin") &&
 		    (otyp != CORPSE || !tinnable(otmp)))
 		|| (!strcmp(word, "rub") &&
 		    ((otmp->oclass == TOOL_CLASS &&
 		      otyp != OIL_LAMP && otyp != MAGIC_LAMP &&
 		      otyp != BRASS_LANTERN) ||
-		     (otmp->oclass == GEM_CLASS && !is_graystone(otmp))))
+		     (otmp->oclass == GEM_CLASS && !is_graystone(otmp)) ||
+			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strncmp(word, "rub on the stone", 16) &&
 		    *let == GEM_CLASS &&	/* using known touchstone */
 		    otmp->dknown && objects[otyp].oc_name_known)
@@ -1028,6 +1034,9 @@ register const char *let,*word;
 		    ((otmp->oclass == WEAPON_CLASS && !is_pick(otmp) &&
 		      !is_axe(otmp) && !is_pole(otmp) && otyp != BULLWHIP &&
 			  !is_knife(otmp) && otmp->oartifact != ART_SILVER_STARLIGHT) ||
+			 (otmp->oclass == CHAIN_CLASS && 
+				(otyp == IRON_CHAIN || otyp == SHEAF_OF_HAY)
+			 ) ||
 		     (otmp->oclass == POTION_CLASS &&
 		     /* only applicable potion is oil, and it will only
 			be offered as a choice when already discovered */
@@ -1051,8 +1060,25 @@ register const char *let,*word;
 		     (otyp != OIL_LAMP ||	/* don't list known oil lamp */
 		      (otmp->dknown && objects[OIL_LAMP].oc_name_known))))
 		|| (!strcmp(word, "untrap with") &&
-		    (otmp->oclass == TOOL_CLASS && otyp != CAN_OF_GREASE))
+		    ((otmp->oclass == TOOL_CLASS && otyp != CAN_OF_GREASE) ||
+			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strcmp(word, "charge") && !is_chargeable(otmp))
+		|| (!strcmp(word, "upgrade your stove with") &&
+		    (otyp != TINNING_KIT))
+		|| (!strcmp(word, "upgrade your switch with") &&
+		    (otyp != CROSSBOW))
+		|| (!strcmp(word, "upgrade your spring with") &&
+			(otyp != CLOCKWORK_COMPONENT))
+		|| (!strcmp(word, "upgrade your armor with") &&
+		    (otyp != BRONZE_PLATE_MAIL))
+		|| (!strcmp(word, "build a phase engine with") &&
+		    (otyp != SUBETHAIC_COMPONENT))
+		|| (!strcmp(word, "build a magic furnace with") &&
+		    (otyp != CORPSE || otmp->corpsenm != PM_DISENCHANTER))
+		|| (!strcmp(word, "build a hellfire furnace with") &&
+		    (otyp != HELLFIRE_COMPONENT))
+		|| (!strcmp(word, "build a scrap maw with") &&
+		    (otyp != SCRAP))
 		    )
 			foo--;
 		/* ugly check for unworn armor that can't be worn */
@@ -1077,7 +1103,9 @@ register const char *let,*word;
 		//Make an exception for readable artifacts.
 		if (otmp->oartifact && 
 			(otmp->oartifact == ART_EXCALIBUR || 
+			 otmp->oartifact == ART_GLAMDRING || 
 			 otmp->oartifact == ART_ROD_OF_SEVEN_PARTS ||
+			 otmp->oartifact == ART_BOW_OF_SKADI ||
 			 otmp->oartifact == ART_PEN_OF_THE_VOID
 			) && !strcmp(word, "read")
 		){
@@ -1094,7 +1122,8 @@ register const char *let,*word;
 			&& otmp->ohaluengr
 			&& otmp->ovar1
 			&& (   otmp->otyp == DROVEN_PLATE_MAIL 
-				|| otmp->otyp == DROVEN_CHAIN_MAIL)
+				|| otmp->otyp == DROVEN_CHAIN_MAIL
+				|| otmp->otyp == CONSORT_S_SUIT)
 			&& otmp->ovar1 && !strcmp(word, "read")
 		){
 			bp[foo++] = otmp->invlet;
@@ -1191,7 +1220,7 @@ register const char *let,*word;
 			if(!(allowcnt == 2 && cnt < u.ugold))
 				cnt = u.ugold;
 			if (cnt)
-			return(mkgoldobj(cnt));
+			    return(mkgoldobj(cnt));
 			else return((struct obj *)0);
 #endif
 		}
@@ -1655,7 +1684,7 @@ fully_identify_obj(otmp)
 struct obj *otmp;
 {
     makeknown(otmp->otyp);
-    if (otmp->oartifact) discover_artifact((xchar)otmp->oartifact);
+    if (otmp->oartifact) discover_artifact(otmp->oartifact);
     otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
     if (otmp->otyp == EGG && otmp->corpsenm != NON_PM)
 	learn_egg_type(otmp->corpsenm);
