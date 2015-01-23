@@ -468,7 +468,7 @@ moveloop()
 		     * Another possible result is rehumanization, which requires
 		     * that encumbrance and movement rate be recalculated.
 		     */
-		    if (u.uinvulnerable) {
+		    if (u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
 			/* for the moment at least, you're in tiptop shape */
 			wtcap = UNENCUMBERED;
 		    } else if (Upolyd && youmonst.data->mlet == S_EEL && !is_pool(u.ux,u.uy) && !Is_waterlevel(&u.uz)) {
@@ -567,7 +567,7 @@ moveloop()
 				flags.botl = 1;
 			}
 
-		    if(!u.uinvulnerable) {
+		    if(!(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
 			if(Teleportation && !rn2(85)) {
 			    xchar old_ux = u.ux, old_uy = u.uy;
 			    tele();
@@ -614,14 +614,14 @@ moveloop()
 		    if (u.uhave.amulet) amulet();
 		    if (!rn2(40+(int)(ACURR(A_DEX)*3)))
 			u_wipe_engr(rnd(3));
-		    if (u.uevent.udemigod && !u.uinvulnerable) {
+		    if (u.uevent.udemigod && !(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
 				if (u.udg_cnt) u.udg_cnt--;
 				if (!u.udg_cnt) {
 					intervene();
 					u.udg_cnt = rn1(200, 50);
 				}
 		    }
-		    if (u.uevent.ukilled_illurien && !u.uinvulnerable) {
+		    if (u.uevent.ukilled_illurien && !(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
 				if (u.ill_cnt) u.ill_cnt--;
 				if (!u.ill_cnt) {
 					illur_intervene();
@@ -656,18 +656,18 @@ moveloop()
 		if(u.utrap && u.utraptype == TT_LAVA) {
 			if(!is_lava(u.ux,u.uy))
 			    u.utrap = 0;
-		    else if (!u.uinvulnerable) {
+		    else if (!(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
 			    u.utrap -= 1<<8;
-			if(u.utrap < 1<<8) {
-				    killer_format = KILLED_BY;
-				    killer = "molten lava";
-				    You("sink below the surface and die.");
-				    done(DISSOLVED);
-			} else if(didmove && !u.umoved) {
-				    Norep("You sink deeper into the lava.");
-				    u.utrap += rnd(4);
-			    }
-		    }
+				if(u.utrap < 1<<8) {
+					killer_format = KILLED_BY;
+					killer = "molten lava";
+					You("sink below the surface and die.");
+					done(DISSOLVED);
+				} else if(didmove && !u.umoved) {
+					Norep("You sink deeper into the lava.");
+					u.utrap += rnd(4);
+				}
+			}
 	    }
 
 	} /* actual time passed */
@@ -932,14 +932,14 @@ newgame()
 		} else if (Role_if(PM_CONVICT)) {
 		    com_pager(199);
 #endif /* CONVICT */
-        } else if(Race_if(PM_ELF)){
-			com_pager(201);
-		} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER))){
+        // } else if(Race_if(PM_ELF)){
+			// com_pager(201);
+		} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD))){
 			com_pager(201);
 		} else if(Race_if(PM_WORM_THAT_WALKS)){
 			if(Role_if(PM_CONVICT)){
 				com_pager(204);
-			} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER))){
+			} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD))){
 				com_pager(203);
 			} else{
 				com_pager(202);
