@@ -636,7 +636,7 @@ enter_explore_mode(VOID_ARGS)
 		  (void) lcase (buf);
 		  if (!(strcmp (buf, "yes"))) really_xplor = TRUE;
 		} else {
-		if (yn("Do you want to enter explore mode?") == 'y') {
+		  if (yn("Do you want to enter explore mode?") == 'y') {
 		    really_xplor = TRUE;
 		  }
 		}
@@ -1049,7 +1049,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				/* Hedrow Noble */
 				"the Sword of Selvetarm",	 /*25*/
 				"the Hand of Keptolo",		 /*26*/
-				"the Maw of Ghaunadaur",	 /*27*/
+				"the Hammer of Ghaunadaur",	 /*27*/
 				
 				/* uhand_of_elbereth max == 31 */
 	    };
