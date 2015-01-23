@@ -5,7 +5,7 @@
 #ifndef QTEXT_H
 #define QTEXT_H
 
-#define N_HDR	18		/* Maximum number of categories */
+#define N_HDR	25		/* Maximum number of categories */
 				/* (i.e., num roles + 1) */
 #define LEN_HDR 3		/* Maximum length of a category name */
 
@@ -18,7 +18,7 @@ struct qtmsg {
 
 #ifdef MAKEDEFS_C	/***** MAKEDEFS *****/
 
-#define N_MSG	100		/* arbitrary */
+#define N_MSG	200		/* arbitrary (was 100) */
 
 struct msghdr {
 	int	n_msg;
@@ -71,6 +71,8 @@ struct	qtlists {
 #define QT_BADALIGN	20
 #define QT_ASSIGNQUEST	21
 
+#define QT_PISSED_OFF	22
+
 #define QT_ENCOURAGE	25	/* 1-10 random encouragement messages */
 
 #define QT_FIRSTLOCATE	35
@@ -90,10 +92,14 @@ struct	qtlists {
 
 #define QT_KILLEDNEM	80
 #define QT_OFFEREDIT	81
-#define QT_OFFEREDIT2	82
+#define QT_OFFEREDIT2	82	/* if you throw artifact to leader after #81 */
+
+#define QT_OFFERART2	83	/* if you throw the alternate artifact to leader after #81 */
 
 #define QT_POSTHANKS	90
 #define QT_HASAMULET	91
+
+#define QT_TURNEDSTAG	100 /* offset if you turn stag on your original quest leader */
 
 /*
  *	Message defines for common text used in maledictions.
