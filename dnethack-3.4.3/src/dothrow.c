@@ -16,8 +16,9 @@ STATIC_DCL void FDECL(breakobj, (struct obj *,XCHAR_P,XCHAR_P,BOOLEAN_P,BOOLEAN_
 STATIC_DCL void FDECL(breakmsg, (struct obj *,BOOLEAN_P));
 STATIC_DCL boolean FDECL(toss_up,(struct obj *, BOOLEAN_P));
 STATIC_DCL boolean FDECL(throwing_weapon, (struct obj *));
-STATIC_DCL void FDECL(sho_obj_return_to_u, (struct obj *obj));
+STATIC_DCL void FDECL(sho_obj_return_to_u, (struct obj *obj, int, int));
 STATIC_DCL boolean FDECL(mhurtle_step, (genericptr_t,int,int));
+STATIC_DCL boolean FDECL(quest_arti_hits_leader, (struct obj *,struct monst *));
 
 
 static NEARDATA const char toss_objs[] =
@@ -115,8 +116,8 @@ int shotlimit;
 	/* Multishot calculations
 	 */
 	skill = objects[obj->otyp].oc_skill;
-	if ((ammo_and_launcher(obj, uwep) || (skill == P_DAGGER && !Role_if(PM_WIZARD)) ||
-			skill == -P_DART || skill == -P_SHURIKEN || skill == -P_BOOMERANG ) &&
+	if (((ammo_and_launcher(obj, uwep) && skill != -P_CROSSBOW) || (skill == P_DAGGER && !Role_if(PM_WIZARD)) ||
+			skill == -P_DART || skill == -P_SHURIKEN || skill == -P_BOOMERANG || obj->oartifact == ART_SICKLE_MOON ) &&
 		!(Confusion || Stunned)) {
 	    /* Bonus if the player is proficient in this weapon... */
 	    switch (P_SKILL(weapon_type(obj))) {
@@ -146,26 +147,35 @@ int shotlimit;
 	    /* ...or using their race's special bow */
 	    switch (Race_switch) {
 	    case PM_ELF:
-		if (obj->otyp == ELVEN_ARROW && uwep &&
-				uwep->otyp == ELVEN_BOW) multishot++;
-		if(ammo_and_launcher(obj, uwep) && uwep->oartifact == ART_BELTHRONDING) multishot++;//double bonus for Elves
+			if (obj->otyp == ELVEN_ARROW && uwep &&
+					uwep->otyp == ELVEN_BOW) multishot++;
+			if(obj->oartifact == ART_SICKLE_MOON) multishot++;
+			if(ammo_and_launcher(obj, uwep) && uwep->oartifact == ART_BELTHRONDING) multishot++;//double bonus for Elves
+		break;
+	    case PM_DROW:
+			if(obj->oartifact == ART_SICKLE_MOON) multishot++;
 		break;
 	    case PM_ORC:
-		if (obj->otyp == ORCISH_ARROW && uwep &&
-				uwep->otyp == ORCISH_BOW) multishot++;
+			if (obj->otyp == ORCISH_ARROW && uwep &&
+					uwep->otyp == ORCISH_BOW) multishot++;
+		break;
+	    case PM_GNOME:
+			if (obj->otyp == CROSSBOW_BOLT && uwep &&
+					uwep->otyp == CROSSBOW) multishot++;
 		break;
 	    default:
 		break;	/* No bonus */
 	    }
 	}
-
+	
 	if(!barage) multishot = rnd(multishot);
 	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barage
-	if(ammo_and_launcher(obj, uwep) && uwep->oartifact == ART_WRATHFUL_SPIDER) multishot+=rnd(8);
+	if(ammo_and_launcher(obj, uwep) && uwep->oartifact == ART_WRATHFUL_SPIDER) multishot += rn2(8);
 	
-	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER) multishot = (int)obj->quan;
+	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
+		&& obj->oartifact != ART_SICKLE_MOON) multishot = (int)obj->quan;
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
-
+	
 	m_shot.s = ammo_and_launcher(obj,uwep) ? TRUE : FALSE;
 	/* give a message if shooting more than one, or if player
 	   attempted to specify a count */
@@ -316,6 +326,20 @@ dofire()
 	    You("are physically incapable of doing that.");
 	    return 0;
 	}
+	
+	if(uwep && (!uquiver || (!is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && uwep->oartifact && 
+		(
+		(uwep->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE) && ACURR(A_STR) == STR19(25)) ||
+		(uwep->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && Race_if(PM_DWARF) && ACURR(A_STR) == STR19(25))
+		// (uwep->oartifact == ART_SICKLE_MOON)
+		)
+	){
+		/*See below for shotlimit*/
+		shotlimit = (multi || save_cm) ? multi + 1 : 0;
+		multi = 0;		/* reset; it's been used up */
+
+		return throw_obj(uwep, shotlimit);
+	}
 
 	if(check_capacity((char *)0)) return(0);
 	if (!uquiver) {
@@ -325,17 +349,17 @@ dofire()
 			if (iflags.quiver_fired)
 			  dowieldquiver(); /* quiver_fired */
 			if (!uquiver)
-			return(dothrow());
+			  return(dothrow());
 		} else {
-		autoquiver();
-		if (!uquiver) {
+		  autoquiver();
+		  if (!uquiver) {
 			You("have nothing appropriate for your quiver!");
 			return(dothrow());
-		} else {
+		  } else {
 			You("fill your quiver:");
 			prinv((char *)0, uquiver, 0L);
+		  }
 		}
-	}
 	}
 
 	/*
@@ -828,7 +852,7 @@ boolean hitsroof;
 
 	if (uarmh) {
 	    if (less_damage && dmg < (Upolyd ? u.mh : u.uhp)) {
-		if (!artimsg && (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET))
+		if (!artimsg && (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM))
 		    pline("Fortunately, you are wearing a hard helmet.");
 	    } else if (flags.verbose &&
 		    !(obj->otyp == CORPSE && touch_petrifies(&mons[obj->corpsenm])))
@@ -866,15 +890,17 @@ struct obj *obj;
 
 /* the currently thrown object is returning to you (not for boomerangs) */
 STATIC_OVL void
-sho_obj_return_to_u(obj)
+sho_obj_return_to_u(obj, destx, desty)
 struct obj *obj;
+int destx;
+int desty;
 {
     /* might already be our location (bounced off a wall) */
-    if (bhitpos.x != u.ux || bhitpos.y != u.uy) {
+    if (bhitpos.x != destx || bhitpos.y != desty) {
 	int x = bhitpos.x - u.dx, y = bhitpos.y - u.dy;
 
 	tmp_at(DISP_FLASH, obj_to_glyph(obj));
-	while(x != u.ux || y != u.uy) {
+	while(x != destx || y != desty) {
 	    tmp_at(x, y);
 	    delay_output();
 	    x -= u.dx; y -= u.dy;
@@ -893,6 +919,7 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 	register int range, urange;
 	boolean impaired = (Confusion || Stunned || Blind ||
 			   Hallucination || Fumbling);
+	int startX = u.ux, startY = u.uy;
 
        obj->was_thrown = 1;
 
@@ -941,17 +968,18 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 				 Role_if(PM_VALKYRIE)) || 
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
-				 obj->oartifact == ART_WINDRIDER
+				 obj->oartifact == ART_WINDRIDER ||
+				 obj->oartifact == ART_SICKLE_MOON
 			  ) && !impaired) {
 		pline("%s the %s and returns to your hand!",
 		      Tobjnam(obj, "hit"), ceiling(u.ux,u.uy));
 		obj = addinv(obj);
 		(void) encumber_msg();
-		if(obj->oartifact == ART_WINDRIDER){
+		if(obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON){
 			setuqwep(obj);
 		} else{
-		setuwep(obj);
-		u.twoweap = twoweap;
+			setuwep(obj);
+			u.twoweap = twoweap;
 		}
 	    } else if (u.dz < 0 && !Is_airlevel(&u.uz) &&
 		    !Underwater && !Is_waterlevel(&u.uz)) {
@@ -1065,21 +1093,57 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 				 Role_if(PM_VALKYRIE)) || 
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
+				 obj->oartifact == ART_SICKLE_MOON ||
 				 obj->oartifact == ART_WINDRIDER
 			  )
 		) {
 		    /* we must be wearing Gauntlets of Power to get here */
-		    if(obj->oartifact != ART_WINDRIDER) sho_obj_return_to_u(obj);	    /* display its flight */
+		    if(obj->oartifact != ART_WINDRIDER) sho_obj_return_to_u(obj, startX, startY);	    /* display its flight */
+			
+			if(obj->oartifact != ART_WINDRIDER && (u.ux != startX || u.uy != startY)){
+				if(flooreffects(obj,startX,startY,"fall")) return;
+				obj_no_longer_held(obj);
+				if (mon && mon->isshk && is_pick(obj)) {
+					if (cansee(startX, startY))
+					pline("%s snatches up %s.",
+						  Monnam(mon), the(xname(obj)));
+					if(*u.ushops)
+					check_shop_obj(obj, startX, startY, FALSE);
+					(void) mpickobj(mon, obj);	/* may merge and free obj */
+					thrownobj = (struct obj*)0;
+					return;
+				}
+				(void) snuff_candle(obj);
+				if (!mon && ship_object(obj, startX, startY, FALSE)) {
+					thrownobj = (struct obj*)0;
+					return;
+				}
+				thrownobj = (struct obj*)0;
+				place_object(obj, startX, startY);
+				if(*u.ushops && obj != uball)
+					check_shop_obj(obj, startX, startY, FALSE);
 
+				stackobj(obj);
+				if (obj == uball)
+					drop_ball(startX, startY);
+				if (cansee(startX, startY))
+					newsym(startX,startY);
+				if (obj_sheds_light(obj))
+					vision_full_recalc = 1;
+				if (!IS_SOFT(levl[startX][startY].typ))
+					container_impact_dmg(obj);
+				return;
+			}
+			
 		    if (!impaired && (obj->blessed || rn2(100))) {
 			pline("%s to your hand!", Tobjnam(obj, "return"));
 			obj = addinv(obj);
 			(void) encumber_msg();
-			if(obj->oartifact == ART_WINDRIDER){
+			if(obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON){
 				setuqwep(obj);
 			} else{
-			setuwep(obj);
-			u.twoweap = twoweap;
+				setuwep(obj);
+				u.twoweap = twoweap;
 			}
 			if(cansee(bhitpos.x, bhitpos.y))
 			    newsym(bhitpos.x,bhitpos.y);
@@ -1114,6 +1178,54 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 
 		if (!IS_SOFT(levl[bhitpos.x][bhitpos.y].typ) &&
 			breaktest(obj)) {
+			int dmg, dsize = spiritDsize(), sx, sy;
+			struct monst *msmon;
+			sx = bhitpos.x;
+			sy = bhitpos.y;
+			if(objects[obj->otyp].oc_material == GLASS && u.specialSealsActive&SEAL_NUDZIARTH){
+				if(obj->otyp == MIRROR){
+					if(u.spiritPColdowns[PWR_MIRROR_SHATTER] < monstermoves && !u.uswallow && uwep && uwep->otyp == MIRROR && !(uwep->oartifact)){
+						useup(uwep);
+						explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+						explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+						
+						while(sx != u.ux && sy != u.uy){
+							sx -= u.dx;
+							sy -= u.dy;
+							if(!isok(sx,sy)) break; //shouldn't need this, but....
+							else {
+								msmon = m_at(sx, sy);
+								/* reveal/unreveal invisible msmonsters before tmp_at() */
+								if (msmon && !canspotmon(msmon) && cansee(sx,sy))
+									map_invisible(sx, sy);
+								else if (!msmon && glyph_is_invisible(levl[sx][sy].glyph)) {
+									unmap_object(sx, sy);
+									newsym(sx, sy);
+								}
+								if (msmon) {
+									if (resists_magm(msmon)) {	/* match effect on player */
+										shieldeff(msmon->mx, msmon->my);
+									} else {
+										dmg = d(5,dsize);
+										if(hates_silver(msmon->data)){
+											dmg += rnd(20);
+											pline("The flying shards of mirror sear %s!", mon_nam(msmon));
+										} else {
+											pline("The flying shards of mirror hit %s.", mon_nam(msmon));
+											u_teleport_mon(msmon, TRUE);
+										}
+										msmon->mhp -= dmg;
+										if (msmon->mhp <= 0){
+											xkilled(msmon, 1);
+										}
+									}
+								}
+							}
+						}
+						u.spiritPColdowns[PWR_MIRROR_SHATTER] = monstermoves + 25;
+					} else explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), TOOL_CLASS, EXPL_DARK);
+				} else if(obj->oclass == WEAPON_CLASS && obj->otyp != CRYSTAL_SWORD) explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), WEAPON_CLASS, EXPL_DARK);
+			}
 		    tmp_at(DISP_FLASH, obj_to_glyph(obj));
 		    tmp_at(bhitpos.x, bhitpos.y);
 		    delay_output();
@@ -1184,10 +1296,10 @@ boolean mon_notices;
 	switch (obj->otyp) {
 	case HEAVY_IRON_BALL:
 	    if (obj != uball) tmp += 2;
-	    break;
+    break;
 	case BOULDER:
 	    tmp += 6;
-	    break;
+    break;
 	case STATUE:
 	    if(is_boulder(obj)) tmp += 6;
     break;
@@ -1195,7 +1307,7 @@ boolean mon_notices;
 	    if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 		    obj->oclass == GEM_CLASS)
 		tmp += hitval(obj, mon);
-	    break;
+    break;
 	}
 	return tmp;
 }
@@ -1221,9 +1333,33 @@ struct monst *mon;
     return;
 }
 
-#define quest_arti_hits_leader(obj,mon)	\
-  (obj->oartifact && is_quest_artifact(obj) && (mon->data->msound == MS_LEADER))
 
+STATIC_OVL
+boolean
+quest_arti_hits_leader(obj,mon)
+struct obj *obj;
+struct monst *mon;
+{
+	if(obj->oartifact && is_quest_artifact(obj) && (mon->data == &mons[urole.ldrnum])) return TRUE;
+	else if(Race_if(PM_ELF)){
+		if((obj->oartifact == ART_PALANTIR_OF_WESTERNESSE || obj->oartifact == ART_BELTHRONDING) &&
+			(mon->data == &mons[PM_CELEBORN] || mon->data == &mons[PM_GALADRIEL])
+		) return TRUE;
+	} else if(Race_if(PM_DROW)){
+		if(((obj->oartifact == ART_SILVER_STARLIGHT || obj->oartifact == ART_WRATHFUL_SPIDER) &&
+			(flags.initgend && mon->data == &mons[PM_ECLAVDRA])) || 
+			((obj->oartifact == ART_DARKWEAVER_S_CLOAK || obj->oartifact == ART_SPIDERSILK) &&
+			(!flags.initgend && mon->data == &mons[PM_ECLAVDRA])) ||
+			
+			((obj->oartifact == ART_TENTACLE_ROD || obj->oartifact == ART_CRESCENT_BLADE) &&
+			(flags.initgend && mon->data == &mons[PM_SEYLL_AUZKOVYN])) ||
+			((obj->oartifact == ART_TENTACLE_ROD || obj->oartifact == ART_WEBWEAVER_S_CROOK) &&
+			(!flags.initgend && mon->data == &mons[PM_DARUTH_XAXOX]))
+		) return TRUE;
+	}
+	return FALSE;
+}
+  
 /*
  * Object thrown by player arrives at monster's location.
  * Return 1 if obj has disappeared or otherwise been taken care of,
@@ -1238,6 +1374,7 @@ register struct obj   *obj;
 	register int	disttmp; /* distance modifier */
 	int otyp = obj->otyp;
 	boolean guaranteed_hit = (u.uswallow && mon == u.ustuck);
+	int startX = u.ux, startY = u.uy;
 
 	/* Differences from melee weapons:
 	 *
@@ -1283,7 +1420,7 @@ register struct obj   *obj;
 		break;
 	    }
 	}
-
+	
 	if(obj->otyp == BALL_OF_WEBBING) tmp -= 2000; //nasty hack :c
 	
 	tmp += omon_adj(mon, obj, TRUE);
@@ -1312,21 +1449,122 @@ register struct obj   *obj;
 	    mon->mstrategy &= ~STRAT_WAITMASK;
 
 	    if (mon->mcanmove) {
-		pline("%s catches %s.", Monnam(mon), the(xname(obj)));
-		if (mon->mpeaceful) {
-		    boolean next2u = monnear(mon, u.ux, u.uy);
-
-		    finish_quest(obj);	/* acknowledge quest completion */
-		    pline("%s %s %s back to you.", Monnam(mon),
-			  (next2u ? "hands" : "tosses"), the(xname(obj)));
-		    if (!next2u) sho_obj_return_to_u(obj);
-		    obj = addinv(obj);	/* back into your inventory */
-		    (void) encumber_msg();
-		} else {
-		    /* angry leader caught it and isn't returning it */
-		    (void) mpickobj(mon, obj);
-		}
-		return 1;		/* caller doesn't need to place it */
+			pline("%s catches %s.", Monnam(mon), the(xname(obj)));
+			if (mon->mpeaceful) {
+				if(Race_if(PM_ELF) && mon->data == &mons[PM_CELEBORN]){
+					boolean next2u = monnear(mon, u.ux, u.uy);
+					if(obj->oartifact == ART_PALANTIR_OF_WESTERNESSE && 
+						yn("If you prefer, we can use the Palantir to secure the city, and you can use my bow in your travels.") == 'y'
+					){
+						obfree(obj, (struct obj *)0);
+						obj = mksobj(ELVEN_BOW, TRUE, FALSE);
+						obj = oname(obj, artiname(ART_BELTHRONDING));
+						obj->oerodeproof = TRUE;
+						obj->blessed = TRUE;
+						obj->cursed = FALSE;
+						obj->spe = rn2(8);
+						pline("%s %s %s to you.", Monnam(mon),
+						  (next2u ? "hands" : "tosses"), the(xname(obj)));
+						if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+						obj = addinv(obj);	/* into your inventory */
+						(void) encumber_msg();
+					} else {
+						pline("%s %s %s back to you.", Monnam(mon),
+						  (next2u ? "hands" : "tosses"), the(xname(obj)));
+						if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+						obj = addinv(obj);	/* back into your inventory */
+						(void) encumber_msg();
+					}
+				} else if(Race_if(PM_DROW)){
+					boolean next2u = monnear(mon, u.ux, u.uy);
+					if(quest_status.got_thanks) finish_quest(obj);
+					if(obj->oartifact == ART_SILVER_STARLIGHT && quest_status.got_thanks && mon->data == &mons[PM_ECLAVDRA] && 
+						yn("Do you wish to take the Wrathful Spider, instead of this?") == 'y'
+					){
+						obfree(obj, (struct obj *)0);
+						obj = mksobj(DROVEN_CROSSBOW, TRUE, FALSE);
+						obj = oname(obj, artiname(ART_WRATHFUL_SPIDER));
+						obj->oerodeproof = TRUE;
+						obj->blessed = TRUE;
+						obj->cursed = FALSE;
+						obj->spe = rn2(8);
+						finish_quest(obj);
+						pline("%s %s %s to you.", Monnam(mon),
+						  (next2u ? "hands" : "tosses"), the(xname(obj)));
+						if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+						obj = addinv(obj);	/* into your inventory */
+						(void) encumber_msg();
+					} else if(obj->oartifact == ART_TENTACLE_ROD && quest_status.got_thanks && mon->data == &mons[PM_SEYLL_AUZKOVYN] && 
+						yn("Do you wish to take the Crescent Blade, instead of this?") == 'y'
+					){
+						obfree(obj, (struct obj *)0);
+						obj = mksobj(SILVER_SABER, TRUE, FALSE);
+						obj = oname(obj, artiname(ART_CRESCENT_BLADE));
+						obj->oerodeproof = TRUE;
+						obj->blessed = TRUE;
+						obj->cursed = FALSE;
+						obj->spe = rnd(7);
+						finish_quest(obj);
+						pline("%s %s %s to you.", Monnam(mon),
+						  (next2u ? "hands" : "tosses"), the(xname(obj)));
+						if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+						obj = addinv(obj);	/* into your inventory */
+						(void) encumber_msg();
+					} else if(obj->oartifact == ART_DARKWEAVER_S_CLOAK && quest_status.got_thanks && mon->data == &mons[PM_ECLAVDRA] && 
+						yn("Do you wish to take Spidersilk, instead of this?") == 'y'
+					){
+						obfree(obj, (struct obj *)0);
+						obj = mksobj(ELVEN_MITHRIL_COAT, TRUE, FALSE);
+						obj = oname(obj, artiname(ART_SPIDERSILK));
+						obj->oerodeproof = TRUE;
+						obj->blessed = TRUE;
+						obj->cursed = FALSE;
+						obj->spe = rn2(8);
+						finish_quest(obj);
+						pline("%s %s %s to you.", Monnam(mon),
+						  (next2u ? "hands" : "tosses"), the(xname(obj)));
+						if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+						obj = addinv(obj);	/* into your inventory */
+						(void) encumber_msg();
+					} else if(obj->oartifact == ART_TENTACLE_ROD && quest_status.got_thanks && mon->data == &mons[PM_DARUTH_XAXOX] && 
+						yn("Do you wish to take the Webweaver's Crook, instead of this?") == 'y'
+					){
+						obfree(obj, (struct obj *)0);
+						obj = mksobj(FAUCHARD, TRUE, FALSE);
+						obj = oname(obj, artiname(ART_WEBWEAVER_S_CROOK));
+						obj->oerodeproof = TRUE;
+						obj->blessed = TRUE;
+						obj->cursed = FALSE;
+						obj->spe = rnd(3)+rnd(4);
+						finish_quest(obj);
+						pline("%s %s %s to you.", Monnam(mon),
+						  (next2u ? "hands" : "tosses"), the(xname(obj)));
+						if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+						obj = addinv(obj);	/* into your inventory */
+						(void) encumber_msg();
+					} else {
+						if(!quest_status.got_thanks) finish_quest(obj);	/* acknowledge quest completion */
+						pline("%s %s %s back to you.", Monnam(mon),
+						  (next2u ? "hands" : "tosses"), the(xname(obj)));
+						if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+						obj = addinv(obj);	/* back into your inventory */
+						(void) encumber_msg();
+					}
+				} else {
+					boolean next2u = monnear(mon, u.ux, u.uy);
+					
+					finish_quest(obj);	/* acknowledge quest completion */
+					pline("%s %s %s back to you.", Monnam(mon),
+					  (next2u ? "hands" : "tosses"), the(xname(obj)));
+					if (!next2u) sho_obj_return_to_u(obj, startX, startY);
+					obj = addinv(obj);	/* back into your inventory */
+					(void) encumber_msg();
+				}
+			} else {
+				/* angry leader caught it and isn't returning it */
+				(void) mpickobj(mon, obj);
+			}
+			return 1;		/* caller doesn't need to place it */
 	    }
 	    return(0);
 	}
@@ -1391,27 +1629,32 @@ register struct obj   *obj;
 		}
 		exercise(A_DEX, TRUE);
 		/* projectiles other than magic stones
-		   sometimes disappear when thrown */
-		if (objects[otyp].oc_skill < P_NONE &&
-				objects[otyp].oc_skill > -P_BOOMERANG &&
-				!(obj->oartifact) && 
-				!objects[otyp].oc_magic) {
+		 * sometimes disappear when thrown
+		 * WAC - Spoon always disappears after doing damage
+		 */
+		if ((objects[otyp].oc_skill < P_NONE &&
+			objects[otyp].oc_skill > -P_BOOMERANG &&
+			obj->oclass != GEM_CLASS && 
+			!objects[otyp].oc_magic) ||
+			(obj->oartifact && obj->oartifact == ART_HOUCHOU)
+		) {
 		    /* we were breaking 2/3 of everything unconditionally.
 		     * we still don't want anything to survive unconditionally,
 		     * but we need ammo to stay around longer on average.
 		     */
 		    int broken, chance;
-			if(uwep && ammo_and_launcher(obj, uwep) && 
-				(uwep->oartifact==ART_HELLFIRE)
+			if((uwep && ammo_and_launcher(obj, uwep) && 
+				(uwep->oartifact==ART_HELLFIRE || uwep->oartifact==ART_BOW_OF_SKADI))
+				|| obj->oartifact == ART_HOUCHOU
 			){
 				broken = 1;
 			} else {
-			    chance = 3 + greatest_erosion(obj) - obj->spe;
-			    if (chance > 1)
+				chance = 3 + greatest_erosion(obj) - obj->spe;
+				if (chance > 1)
 				broken = rn2(chance);
-			    else
+				else
 				broken = !rn2(4);
-			    if (obj->blessed && !rnl(4))
+				if (obj->blessed && !rnl(4))
 				broken = 0;
 			}
 		    if (broken) {
@@ -1426,7 +1669,7 @@ register struct obj   *obj;
 		   && rn2(3)) || mon->mhp-tmp <= 0){
 			  pline("%s collapses into a puddle of water!", Monnam(mon));
 			  passive_obj(mon, obj, (struct attack *)0);
-			  killed(mon);
+			  if(mon->mhp-tmp > 0) killed(mon);
 		  }
 		} else passive_obj(mon, obj, (struct attack *)0);
 	    } else {
@@ -1648,8 +1891,10 @@ boolean from_invent;
 {
 	switch (obj->oclass == POTION_CLASS ? POT_WATER : obj->otyp) {
 		case MIRROR:
-			if (hero_caused)
-			    change_luck(-2);
+			if (hero_caused){
+			    if((u.specialSealsActive&SEAL_NUDZIARTH)) change_luck(+2);
+				else change_luck(-2);
+			}
 			break;
 		case POT_WATER:		/* really, all potions */
 			if (obj->otyp == POT_OIL && obj->lamplit) {
@@ -1718,8 +1963,8 @@ boolean
 breaktest(obj)
 struct obj *obj;
 {
-	if (obj_resists(obj, 1, 99)) return 0;
-	if (objects[obj->otyp].oc_material == GLASS && !obj->oartifact &&
+	if (obj_resists(obj, 0, 100)) return 0;
+	if (objects[obj->otyp].oc_material == GLASS &&
 		obj->oclass != GEM_CLASS)
 	    return 1;
 	switch (obj->oclass == POTION_CLASS ? POT_WATER : obj->otyp) {
@@ -1752,9 +1997,13 @@ boolean in_view;
 		    if (obj->oclass != WAND_CLASS)
 			impossible("breaking odd object?");
 		case CRYSTAL_PLATE_MAIL:
+		case CRYSTAL_SWORD:
 		case DROVEN_BOLT:
 		case DROVEN_DAGGER:
 		case DROVEN_SHORT_SWORD:
+		case DROVEN_LANCE:
+		case DROVEN_GREATSWORD:
+		case DROVEN_SPEAR:
 		case LENSES:
 		case R_LYEHIAN_FACEPLATE:
 		case MIRROR:
@@ -1776,14 +2025,14 @@ boolean in_view;
 		case MELON:
 		case BALL_OF_WEBBING:
 			pline("Splat!");
-			break;
+		break;
 		case CREAM_PIE:
 			if (in_view) pline("What a mess!");
-			break;
+		break;
 		case ACID_VENOM:
 		case BLINDING_VENOM:
 			pline("Splash!");
-			break;
+		break;
 	}
 }
 
