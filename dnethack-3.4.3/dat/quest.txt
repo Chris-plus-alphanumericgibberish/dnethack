@@ -43,15 +43,19 @@
 #	QT_OFFEREDIT	81
 #	QT_OFFEREDIT2	82	/* if you throw artifact to leader after #81 */
 #
+#	QT_OFFERART2	83	/* if you throw the alternate 
+#	                     artifact to leader after #81 */
 #	QT_POSTHANKS	90
 #	QT_HASAMULET	91
 #
+#	QT_TURNEDSTAG	100 /* offset if you turn stag on 
+#	                      your original quest leader */
 #
 #	Archeologist
 #
 %Cc Arc 00001
 You are suddenly in familiar surroundings.  The buildings in the distance
-appear to be those of your old alma mater, but something is wrong.  It looks
+seem to be those of your old alma mater, but something is wrong.  It feels
 as if there has been a riot recently, or %H has
 been under siege.
 
@@ -286,7 +290,7 @@ regain the Amulet of Yendor for %d?"
 the Wizard and the minions of Moloch.  Now, you must embark on one
 final adventure.
 
-"Take the Amulet, and find your way onto the astral plane.
+"Take the Amulet, and find your way onto the Astral Plane.
 There you must find the altar of %d and sacrifice the
 Amulet on that altar to fulfill your destiny.
 
@@ -711,7 +715,7 @@ Some strange magic is at work, for your village is not located near
 the Lost Library. At least, you don't think it is, you never were
 a traveler. You resolve to pass quickly through the village. You 
 know of a passage to the woods outside town, through the church
-catacombs
+catacombs.
 %E
 %Cp Bin 00036
 You stand again in the waking world, in the village of your birth.
@@ -776,9 +780,11 @@ at once, even though you are holding it.
 %E
 %Cc Bin 00080
 %nC falls to the ground, and utters a last curse at you.
+
     You fool! You have killed me, and all you love.
-	There is an Enemy in the Void. She comes from outside
-	the world, to drown it all in waves of Chaos!
+    There is an Enemy in the Void. She comes from outside
+    the world, to drown it all in waves of Chaos!
+
 His golden skull shatters to jewelled fragments when it hits.
 The whispers on the wind grow more distinct, and the fragments
 are drawn together by the breeze. You can here them clearly now.
@@ -1347,6 +1353,1333 @@ the Astral plane.  There you must offer the Amulet
 to %d."
 %E
 #
+#	Drow general quest
+#
+%Cc Dro 00001
+You arrive in familiar surroundings.  In the distance, you %x 
+%H, a great city of the Drow.
+
+Your house's fortress is close before you. Something is wrong,
+though.  The silver star of Lolth, token of the high council of
+the matron mothers, is set over the gates.
+%E
+%Cp Dro 00002
+Once again, you stand outside %H.
+%E
+%Cp Dro 00003
+You have the oddest feeling that this may be the last time you
+are to vist %H.
+%E
+%Cp Dro 00005
+"You have been granted an audience with %l.  Don't keep her waiting!"
+%E
+%Cp Dro 00006
+"The heretics of Eilistraee are besieging the city!"
+%E
+%Cp Dro 00007
+"%lC will see to those pale-elf loving freaks."
+%E
+%Cp Dro 00008
+"The path to the surface passes through %iC. 
+Those failed priestesses have little respect for their betters!"
+%E
+%Cp Dro 00009
+"Hail Lolth!"
+%E
+%Cp Dro 00010
+"You have been granted an audience with %l.  Don't keep her waiting!"
+%E
+%Cp Dro 00011
+"The heretics of Eilistraee have been routed, praise be to Lolth!"
+%E
+%Cp Dro 00012
+"%lC certainly saw to those pale-elf loving freaks."
+%E
+%Cp Dro 00013
+"I hope you taught those acursed driders some respect!"
+%E
+%Cp Dro 00014
+"Hail Lolth!"
+%E
+%Cc Dro 00015
+"%pC!  It is good that you have answered my summons.
+%d requires your talents.
+
+"But first, I must evaluate your abilities, to see if you 
+have the required abilities to take on this holy mission."
+%E
+%Cp Dro 00016
+"Once again, %p, you stand in our midst.  Are you ready now?"
+%E
+%Cp Dro 00017
+"Ah, you are here again, %p.  I will test your readiness..."
+%E
+%Cc Dro 00018
+"%pC!  You have doomed yourself.  You fairly radiate %L influences,
+showing your treachery for all to see.
+
+"You are hereby banished!  I revoke the grace of Lolth from you!"
+%E
+%Cc Dro 00019
+"%p, you are yet too inexperienced to withstand the demands of
+Lolth's holy mission.  %RA might just be able to do this thing.
+
+"Return to us when you are worthy of this honor."
+%E
+%Cc Dro 00020
+"You have strayed, %p!  You know that %d requires
+that we maintain a pure devotion to things %a!
+
+"Return when you have purified yourself, and not before!"
+%E
+%Cc Dro 00021
+"You are indeed ready, %p.  This is your mission,
+your holy quest from %d:
+
+"The heretics of Eilistraee, treacherous daughter of Lolth,
+have been sending missionaries into the city, infecting
+our citizens with their debased teachings.
+
+"This outrage cannot be alowed to stand. Your mission is
+to travel through %i and up to the surface,
+locate the grove of Eilistraee, and kill her heretic
+priestess.  Bring me %o, her unholy sword,
+as proof of your deed!
+
+"Do this, and know the glory of Lolth! Fail, and know
+everlasting torment! Go now!"
+%E
+%Cp Dro 00025
+"There are many secret passages in %i."
+%E
+%Cp Dro 00026
+"Why are you still here?  Get on with it, or face the wrath of Lolth!"
+%E
+%Cp Dro 00027
+"Go now!"
+%E
+%Cp Dro 00028
+"Serve Lolth in all things!"
+%E
+%Cp Dro 00029
+"The Eilistraee heretics seek to bring down the clergy of Lolth."
+%E
+%Cp Dro 00030
+"Eilistraee and her followers have always hated us."
+%E
+%Cp Dro 00031
+"The blasphemous missionaries have set off a quake that shall bury
+them alive!"
+%E
+%Cp Dro 00032
+"Driders are strong, but they enjoy not the favor of Lolth."
+%E
+%Cp Dro 00033
+"You tempt the wrath of Lolth with your delay."
+%E
+%Cp Dro 00034
+"The heretics have formed a blasphemous alliance with the surface
+elves."
+%E
+%Cc Dro 00035
+You descend into the outer regions of %i.  You can hear
+scuffling sounds in the corridors, and vague mumblings in the distance.
+
+You know that there were many secret passageways in this complex.
+%E
+%Cc Dro 00036
+Once again, you descend into %i.
+%E
+%Cc Dro 00040
+You have arrived at the Grove of Eilistraee.  The accursed sunlight still
+fills your eyes with painful darkness, but in the center of the trees 
+you can hear voices raised in song, singing naive, heathen melodies in
+honor of the bitch-goddess Eilistraee.
+%E
+%Cp Dro 00041
+Once again, you enter the Grove of Eilistraee.
+%E
+%Cc Dro 00050
+"Wait, %p!?  %p, is it really you?  It's me, %n!
+
+"We were friends as girls, do you not recall?  Has %l sent you to 
+kill me?  She is using you, decieving you. She fears to come and 
+confront me herself, fears to leave the Underdark and face the sunlight.
+
+"Please, give me a chance!  What we were taught as girls is not the truth.
+Lolth is a wicked deity, not worthy of our service.  She has turned 
+generations of drow against one another for her own amusement, just as she
+has turned us against each other now.  Think, what the drow could do,
+if we did not kill nine-tenths of our daughters in futile fratricide and
+assassinations!
+
+"We have a chance to break this cycle!  If we can free %H from
+the clergy of Lolth, our acts will reverberate from one side of the 
+Underdark to the other!"
+%E
+%Cp Dro 00051
+"Please, speak to me!"
+%E
+%Cp Dro 00052
+"Lolth is not worthy of your service!"
+%E
+%Cp Dro 00053
+"That blade was a gift from Eilistraee!"
+%E
+%Cp Dro 00060
+"Lolth has turned us against each other!"
+%E
+%Cp Dro 00061
+"Think of your daughters! Do you want their blood spilt in petty squabbles!?"
+%E
+%Cp Dro 00062
+"Help us end this!"
+%E
+%Cp Dro 00063
+"Please don't make me kill you!"
+%E
+%Cp Dro 00064
+"We have a chance to break this cycle!"
+%E
+%Cp Dro 00065
+"%l is using you!"
+%E
+%Cp Dro 00066
+"Help me free %H!"
+%E
+%Cp Dro 00067
+"What we were taught as girls is not the truth!"
+%E
+%Cp Dro 00068
+"Don't you remember your sister!?  Did you truly feel nothing, when you
+drove the blade into her heart!?  Help me put an end to the killing!"
+%E
+%Cp Dro 00069
+"You must not stop me.  I'll kill you, if I must!  But please, trust 
+me!  Talk to me instead!"
+%E
+%Cc Dro 00070
+The wind plays a mornful tune as it blows over %o, 
+but it stops when you pick it up.  %lC will accept this blade
+as proof that you have truly killed %n.
+%E
+%Cc Dro 00080
+%nC falls to her knees, her life's-blood running down her chest and
+onto the grass.
+
+    Perhaps- *cough* Perhaps I was a fool to think I could change
+    the drow.  Perhaps I was a fool to stand against Lolth.
+    
+    But please, %p, don't forget me!  Remember what I told you,
+    and you may yet escape the knife!
+
+She shivers for a moment longer, then lies still.
+%E
+%Cc Dro 00081
+"%pC!  You have destroyed the foul heretics!  I only wish %n 
+had been taken alive, I would have liked to ... instruct her as to 
+the error of her ways.
+
+"Your name will be entered in the annals of Lolth, and the tale of how
+we bested the hordes of the traitor goddess Eilistraee will be told for
+generations to come.
+
+"You must now return to the Dungeons of Doom and your quest for the 
+Amulet of Yendor.  With that divine relic, Lolth will finally be able
+to put down her rebellious daughter!
+
+"Take %o with you, if you wish.  Otherwise, you can take the 
+Wrathful Spider, with which to kill your foes from a distance."
+%E
+# assumes Silver Starlight
+%Cc Dro 00082
+"This weapon was made by the surface elves for the high priestess
+of Eilistraee, %n.  Befitting their obsession with frivolous music,
+it has a flute built into the handle.  It can also be used to create
+throwing stars, and imparts a silvery sheen to such weapons.
+
+"Would you like to use this weapon in your quest, or would you 
+prefer the ancient droven crossbow, the Wrathful Spider?"
+%E
+# assumes Wrathful Spider
+%Cc Dro 00083
+"This crossbow was made in the earliest days of our empire in
+the Underdark.  With it, one need never run out of bolts.  
+Unlike lesser crossbows, it can also fire multiple bolts in
+one volley, though the damage inflicted by each bolt is not
+so great."
+%E
+%Cp Dro 00090
+"How have you fared on your holy quest for the Amulet
+of Yendor?  Lolth does not tolerate failure!"
+%E
+%Cc Dro 00091
+"You have it!  You have recovered the Amulet of Yendor!
+
+"Whoever brings that to Lolth's high altar in the astral plane will
+be exhalted above all others, and shall even be granted the rank of
+demigoddess!
+
+"I have been searching for that Amulet for many long years.  To 
+think a mere %r would find it first!
+
+"Well, I thank you for bringing it to me.  Your part in this
+is done.
+
+"Now DIE!"
+%E
+%Cc Dro 00101
+You have returned to you house's fortress on the outskirts of
+%i.  The silver star of Lolth is still set over the gates, token of
+%n and the high council of the matron-mothers.
+
+The hour of reckoning is at hand.
+%E
+%Cp Dro 00102
+Once again, you have returned to %i.
+%E
+%Cp Dro 00103
+IF YOU SEE THIS, IT IS A BUG
+%E
+%Cp Dro 00105
+"We are so glad that you were able to shake off the webs of Lolth!"
+%E
+%Cp Dro 00106
+"The followers of Lolth have launched several assaults on this Grove!"
+%E
+%Cp Dro 00107
+"%lC was so relieved that you sided with us."
+%E
+%Cp Dro 00108
+"You will have to go back through the Drider caves to reach
+%iC. Though Lolth has betrayed them, the driders 
+have little use for the followers of Eilistraee!"
+%E
+%Cp Dro 00109
+"Eilistraee is not like her mother.  She saved us from the dark."
+%E
+%Cp Dro 00110
+"We are so very glad that you were able to shake off the webs of Lolth!"
+%E
+%Cp Dro 00111
+"The followers of Lolth have been thrown into disarray!"
+%E
+%Cp Dro 00112
+"It's been a long time since I've seen %lC so happy."
+%E
+%Cp Dro 00113
+"I you didn't have to kill many of those unfortunate driders."
+%E
+%Cp Dro 00114
+"You have saved us and our goddess from the dark."
+%E
+%Cc Dro 00115
+"%pC!  I am so glad that you decided to trust us!
+
+"I think you already know what I must ask you to do:"
+%E
+%Cp Dro 00116
+"%pC!  I am so glad that you decided to trust us!
+
+"I think you already know what I must ask you to do:"
+%E
+%Cp Dro 00117
+"%pC!  I am so glad that you decided to trust us!
+
+"I think you already know what I must ask you to do:"
+%E
+%Cc Dro 00118
+"%pC!  I thought I could trust you!  In your treachery, you have
+doomed yourself.  Lolth has revoked her grace from you, and now
+you have turned your back on Eilistraee as well.  I banish you
+to %Z, and I pray to all the gods you one day find peace!
+%E
+%Cc Dro 00119
+IF YOU SEE THIS, IT IS A BUG
+%E
+%Cc Dro 00120
+IF YOU SEE THIS, IT IS A BUG
+%E
+%Cc Dro 00121
+"We had initially hoped to avoid bloodshed altogether,
+sending missionaries into %i to start an underground
+religious countermovement.  And, indeed, met with some 
+initial success.  However, our efforts enraged Lolth, and
+%n, high priestess of Lolth, led a bloody purge of 
+our missionaries and converts.
+
+"%nC has since taken the offensive against us,
+orchestrating a wide variety of assassination attempts
+and outright assaults.  I now see that we must carry the
+fight to %n and the matron-mothers if we are to have
+any chance of freeing %i from Lolth's webs.
+
+"You must be our sword in this.  You will be able to 
+pass through the perimeter of %i unchallenged.
+With a little good fortune, no one will know you've 
+joined Eilistraee before you confront %n!
+%E
+%Cp Dro 00125
+"There are many secret passages in the drider caves."
+%E
+%Cp Dro 00126
+"Good luck!"
+%E
+%Cp Dro 00127
+"Eilistraee will be with you, I know it."
+%E
+%Cp Dro 00128
+"Lolth and her clergy must fall!"
+%E
+%Cp Dro 00129
+"We must free the drow!"
+%E
+%Cp Dro 00130
+"Go swiftly and silently."
+%E
+%Cp Dro 00131
+"For the sake of all drow, we must not fail!"
+%E
+%Cp Dro 00132
+"Watch out for driders."
+%E
+%Cp Dro 00133
+"Beware the wrath of Lolth.  %nC will not be an easy opponent."
+%E
+%Cp Dro 00134
+"%nC made a critical error, coming to the outskirts of %i."
+%E
+%Cc Dro 00135
+You descend into the outer regions of %i.  You can hear
+scuffling sounds in the corridors, and vague mumblings in the distance.
+
+You know that there were many secret passageways in this complex.
+%E
+%Cc Dro 00136
+Once again, you descend into %i.
+%E
+%Cc Dro 00140
+You have returned to the Grove of Eilistraee, home base of the 
+rebellion against the clergy of Lolth.
+%E
+%Cp Dro 00141
+Once again, you have returned to the Grove of Eilistraee, 
+home base of the rebellion against the clergy of Lolth.
+%E
+%Cc Dro 00150
+"%pC!  Lolth has told us of your treachery!  Prepare to die!
+%E
+%Cp Dro 00151
+"Now you die!"
+%E
+%Cp Dro 00152
+"Accept your fate!  Die now!"
+%E
+%Cp Dro 00153
+"Give that back!"
+%E
+%Cp Dro 00160
+"You dare turn against Lolth!?  Even in death you shall not know peace!"
+%E
+%Cp Dro 00161
+""%l is using you.  You won't survive this fight!"
+%E
+%Cp Dro 00162
+"Even a drider's fate is too good for you!"
+%E
+%Cp Dro 00163
+"I'll flay your soul!"
+%E
+%Cp Dro 00164
+"Even a zombie's fate is too good for you!"
+%E
+%Cp Dro 00165
+"You will never know peace!"
+%E
+%Cp Dro 00166
+"I'll kill you and anyone who ever gave you shelter!"
+%E
+%Cp Dro 00167
+"Your fate will be wispered of for generations to come!"
+%E
+%Cp Dro 00168
+"You, a hero?  Don't make me laugh!  You killed two of your sisters,
+stabbed one in the back and shot the other in the head, from ambush 
+no less!  It was masterfully done!  What makes you think that 
+Eilistraee would accept one such as you!"
+%E
+%Cp Dro 00169
+"Your hands are as bloody as any of us!  Eilistraee or Lolth, you
+will burn!"
+%E
+%Cc Dro 00170
+The Rod's tentacles wave languidly at you as you pick it up.  There
+is something unwholesome about this weapon.  You almost fear to let
+it sense you.
+%E
+%Cc Dro 00180
+%nC falls to her knees, blood running down her forehead and into
+her eyes.  She curses you:
+
+    You haven't seen the last of me.  You shall never escape
+    the webs of Lolth...  and there are others still who would
+    avenge me, who are bound to my aid by pacts sealed in blood!
+    Gods of rot and decay and lust.  Enjoy your brief victory,
+    I will have my re-
+
+Her eyes go wide, and she vomits black ichor onto the ground.
+Tentacles sprout from the stain, and from the corruption spreading
+from her shadow.  The tentacles wave languidly for a moment, then
+strike with frightening speed, dragging her down into the suddenly
+contracting patch of corruption.
+%E
+%Cc Dro 00181
+"%pC!  You did it!  We'll use the opening you have given us to send
+the missionaries back in.  With a little help from Eilistraee, 
+we'll free this whole city from Lolth's foul webs!
+
+"If you're willing, you should now return to the Dungeons of Doom 
+and your quest for the Amulet of Yendor.  With that divine relic, 
+Eilistraee will finally be able to battle Lolth on equal footing,
+or even from a position of greater power!"
+
+"Take %o with you, if you wish.  Otherwise, Eilistraee will gift
+you her greatest instrument, the Crescent Blade, that can cleave
+even the necks of goddesses!"
+%E
+# assumes Tentacle Rod
+%Cc Dro 00182
+"This rod was gifted to %n while she served Zuggtmoy, demon
+lady of rot and corruption, then consort of the Elder Elemental
+Eye, the chained god Tharizdun, who seeks to consume all the
+worlds and all the gods thereof.
+
+%n and Zuggtmoy both betrayed the Eye, and each other, having 
+planned from the beginning to use it for their own ends.  Any 
+interaction with the Chained One is perilous, however, and its
+service is not easy to foreswear.  It was likely Tharizdun who
+sent the black tentacles that claimed %n as she lay dying.
+
+"The Rod itself seems free of the taint of its father, however,
+and there is little doubt that it is a powerful tool, 
+capable of augmenting spellcasting and multiple debilitating 
+attacks in melee.
+
+"Would you like to use this weapon in your quest, or would you
+prefer the Crescent Blade of Eilistraee?"
+%E
+# assumes Crescent Blade
+%Cc Dro 00183
+"This blade was forged by Eilistraee as a weapon against her
+mother, Lolth.  It's pale moon-fires pass through armor, and
+it can cleave even the head of a goddess from her shoulders."
+%E
+%Cp Dro 00190
+"Welcome back, %pC.  How have you fared on your quest for the
+Amulet of Yendor?"
+%E
+%Cc Dro 00191
+"You have it!  You have recovered the Amulet of Yendor!
+Now, I will tell you what must be done:
+
+"The Amulet has within it magic, the capability to transport you to
+the Astral Plane, where the high altar of Eilistraee resides.
+
+"To activate this magic, you must travel upwards as far as you can.
+When you reach the temple, sacrifice the Amulet to %d.
+
+"Thus will you fulfill your destiny."
+%E
+#
+#	Dwarf Noble A - Erebor
+#	Note: Contains many direct or near-direct quotes from 
+#		the Hobbit, by J. R. R. Tolkien.
+#
+%Cc Dna 00001
+You arrive in familiar surroundings, standing at the foot
+of Erebor, the Lonely Mountain.
+
+Something is wrong, though.  Where once lay the bustling
+city of Dale, there is now a burned out ruin, and a new
+town of men has been built out on the lake.
+
+What strange work of %d acount for such changes,
+in the short time you have been gone?
+%E
+%Cp Dna 00002
+Once again, you stand outside %H.
+%E
+%Cp Dna 00003
+You have the oddest feeling that this may be the last time you
+are to visit %H.
+%E
+%Cp Dna 00005
+"Who are you?"
+%E
+%Cp Dna 00006
+"The dwarves of yore made mighty spells,
+While hammers fell like rining bells
+In places deep, where dark things sleep,
+In hollow halls beneath the fells."
+%E
+%Cp Dna 00007
+"We make good armour and keen swords,
+but we cannot again make mail or blade
+to match those that were made before
+the dragon came.  Many of our father's
+secrets are lost."
+%E
+%Cp Dna 00008
+"This is a dark buisness."
+%E
+%Cp Dna 00009
+"We are the Dwarves of Erebor."
+%E
+%Cp Dna 00010
+"%pC!  I am glad you returned to us."
+%E
+%Cp Dna 00011
+"Goblets they carved there for themselves
+And harps of gold; where no man delves
+There lay they long, and many a song
+Was sung unheard by men or elves."
+%E
+%Cp Dna 00012
+"That was a dark buisness."
+%E
+%Cp Dna 00013
+"We are the Dwarves of Erebor."
+%E
+%Cp Dna 00014
+"You have found armor from the deepest
+vaults of our fathers."
+%E
+%Cc Dna 00015
+"Who are you? A dwarf warrior of Erebor, you say?
+That kingdom fell long ago, its folk scattered to
+the far corners of the world.
+
+"You may be able to help us on our quest.  But 
+first, I must take your measure, I must see if you 
+have the required abilities to join us in this venture."
+%E
+%Cp Dna 00016
+"Once again, %p, you have been returned.  Are you ready now?"
+%E
+%Cp Dna 00017
+"Ah, you are here again, %p.  Allow me to determine your readiness..."
+%E
+%Cc Dna 00018
+"%pC!  You seem unable to reform yourself, so I must select another 
+to take your place.
+
+"Begone from %H!  You have betrayed Erebor by choosing
+the path of the %C over the true path of the %L.
+%E
+%Cc Dna 00019
+"%p, you are yet too inexperienced to withstand the demands of that
+which we need you to do.  %RA might just be able to do this thing.
+%E
+%Cc Dna 00020
+"%pC!  You have wandered from the path of the %a!
+If you venture into %i in this state, you will surely be
+lost in the darkness below the world.  Your only hope, lies in your
+purification.  Go forth, and return when you feel ready."
+%E
+%Cc Dna 00021
+"You are indeed ready, %p.  I shall tell you what has transpired,
+and why we so desperately need your help:
+
+"There were lots of dragons in the North in the old days, and
+gold was probably getting scarce up there, with the dwarves 
+flying south or getting killed, and all the general waste and
+destruction that dragons make going from bad to worse.  There
+was a most specially greedy, strong and wicked worm called Smaug.
+One day he flew up into the air and came south.
+
+"Some of the dwarves who happened to be outside - well, from a
+good way off we saw the dragon settle on our mountain in a spout
+of flame.  The dwarves rushed out of their great gate; but there
+was the dragon waiting for them.  None escaped that way.  Then he
+crept in through the Front Gate and routed out all the halls, and
+lanes, and tunnels, alleys, cellars, mansions and passages. After
+that there were no more dwarves left alive inside, and he took 
+all their wealth for himself.  Probably has piled it all up in a
+great heap far inside, and sleeps on it for a bed.
+
+"The few of us that were well outside sat and wept in hiding, and
+cursed Smaug; and there we were unexpectedly joined by my father
+and grandfather with singed beards.
+
+"I had often wondered about my father's and my grandfather's
+escape, but then I was given a map and a key by Gandalf the Grey,
+and now I see that they had a private Side-door which only they 
+knew about.  And now we mean to get back our stolen treasure,
+and bring our curses home to Smaug - if we can.
+
+"I'm still unclear how you came to be here, but if you will help
+us, and avenge your people, you have my blessing.  The key is in
+this sack here."
+%E
+%Cp Dna 00025
+"Smaug blocked up the front gate long ago."
+%E
+%Cp Dna 00026
+"The side-door is on the west side of the mountain."
+%E
+%Cp Dna 00027
+"If you can find some of our ancestral armor, it will help you 
+survive to return to us."
+%E
+%Cp Dna 00028
+"Remember, trust in %d."
+%E
+%Cp Dna 00029
+"Smaug has not been seen for many years, and now many eyes turn
+to the mountain."
+%E
+%Cp Dna 00030
+"My father and grand-father escaped through a secret door on the
+Western slopes."
+%E
+%Cp Dna 00031
+"Curse Smaug, and all his kind!"
+%E
+%Cp Dna 00032
+"The dragon surely guards a great treasure-horde."
+%E
+%Cp Dna 00033
+"Never laugh at live dragons."
+%E
+%Cp Dna 00034
+"You may want to put any flamable materials in a sack before
+confronting Smaug."
+%E
+%Cc Dna 00035
+You stand before the Front Gate of Erebor, and marvel anew at 
+what time has wrought.  All the trees have been burned off the
+mountain, and the gate is ruined and collapsed.  You recall
+the side entrance mentioned by Thorin, and feel for the key
+in your pack.
+%E
+%Cc Dna 00036
+Once again, you stand before the Front Gate.
+%E
+%Cc Dna 00040
+As you exit the mountain, you are shocked to see an army of
+orcs marching up the side.  Their banners show that they 
+have come from all up and down the Misty Mountains.
+%E
+%Cp Dna 00041
+Once again, you exit high up on the side of the mountain.
+%E
+%Cc Dna 00050
+"Get'em boys!  They invaded our homes and killed the Great
+Goblin!"
+%E
+%Cp Dna 00051
+"I'll avenge my father!"
+%E
+%Cp Dna 00052
+"I will wipe out the line of Durin!"
+%E
+%Cp Dna 00053
+"Die!"
+%E
+%Cp Dna 00060
+"Perish!"
+%E
+%Cp Dna 00061
+"Come on, boys!"
+%E
+%Cp Dna 00062
+"First I will kill you, then %l and all your folk!"
+%E
+%Cp Dna 00063
+"I'll make you squeal!"
+%E
+%Cp Dna 00064
+"Bring up the bone-breaker!"
+%E
+%Cp Dna 00065
+"For Azog!"
+%E
+%Cp Dna 00066
+"For the glory of the Great Eye!"
+%E
+%Cp Dna 00067
+"Fall, and be forgotten!"
+%E
+%Cp Dna 00068
+"You shall never again return to Erebor!"
+%E
+%Cp Dna 00069
+"The treasure is MINE!"
+%E
+%Cc Dna 00070
+This armor was made by the most skilled armorers of the old
+Kingdom of Erebor, made for the King under the Mountain.
+If Thror had managed to reach the armory before the dragon,
+things might have been different.
+%E
+%Cc Dna 00080
+The battered and bleeding %n slumps to the ground and gasps
+out one last curse:
+
+    You have defeated me, %p, but you shall never
+    defeat the orcs.  We multiply like a raging fire, sweeping
+    over the weak folk of elves, and men, and dwarves.  You 
+    shall never be free of our hate!
+%E
+%Cc Dna 00081
+"At last, Smaug is dead, and the orcs have been driven from
+Erebor.  I do not know what strange work of %d brought
+you to us, %p, but I am glad that brought you were."
+%E
+%Cc Dna 00082
+"This is armor forged by our fathers in Erebor.  You must
+take it with you on your quest for the Amulet, for you
+will find no better armor."
+%E
+%Cp Dna 00090
+"Welcome, %p.  How have you fared on your quest 
+for the Amulet of Yendor?"
+%E
+%Cc Dna 00091
+"You have it!  You have recovered the Amulet of Yendor!
+Now attend to me, %p, and I will tell you what must be done:
+
+"The Amulet has within it magic, the capability to transport you to
+the Astral Plane, where the primary circle of %d resides.
+
+"To activate this magic, you must travel upwards as far as you can.
+When you reach the temple, sacrifice the Amulet to %d.
+
+"Thus will you fulfill your destiny."
+%E
+#
+#	Dwarf Noble B - Moria
+#	Note: Contains many direct or near-direct quotes from the 
+#		Lord of the Rings, by J. R. R. Tolkien.
+#
+%Cc Dnb 00001
+You arrive in familiar surroundings.  You stand at the foot
+of %H.
+
+Your heart troubles you, though.  You know %d would not 
+have guided you here, without great need.
+%E
+%Cp Dnb 00002
+Once again, you stand at the foot of %H.
+%E
+%Cp Dnb 00003
+You have the oddest feeling that this may be the last time you
+are to enter %H.
+%E
+%Cp Dnb 00005
+"%pC!  Well met."
+%E
+%Cp Dnb 00006
+"The world was young, the mountains green,
+No stain yet on the Moon was seen,
+No words were laid on stream or stone
+When Durin woke and walked alone."
+%E
+%Cp Dnb 00007
+"The wealth of Moria was not in gold and jewels, but in mithril."
+%E
+%Cp Dnb 00008
+"This is a dark buisness."
+%E
+%Cp Dnb 00009
+"War is gathering."
+%E
+%Cp Dnb 00010
+"%pC!  I have not seen you in many moons.  How do you fare?"
+%E
+%Cp Dnb 00011
+"Balin is dead, then.  I feared it was so."
+%E
+%Cp Dnb 00012
+"That was a dark buisness."
+%E
+%Cp Dnb 00013
+"War is gathering."
+%E
+%Cp Dnb 00014
+"Is that truely %o that I see you carrying?"
+%E
+%Cc Dnb 00015
+"%pC!  Thank %d you have been called back.
+
+"We are troubled.  But first, I must see if you have the
+required abilities to redress our great woe."
+%E
+%Cp Dnb 00016
+"Once again, %p, you have been called.  Are you ready now?"
+%E
+%Cp Dnb 00017
+"Ah, you are here again, %p.  Allow me to determine your readiness..."
+%E
+%Cc Dnb 00018
+"%pC!  You seem unable to reform yourself, so I must select another 
+to take your place.
+
+"Begone from %H!  You have betrayed us by choosing
+the path of the %C over the true path of the %L.
+%E
+%Cc Dnb 00019
+"%p, you are yet too inexperienced to withstand the demands of that
+which we need you to do.  %RA might just be able to do this thing.
+%E
+%Cc Dnb 00020
+"%pC!  You have wandered from the path of the %a!
+If you venture into %i in this state, you will surely be
+lost in the darkness below the world.  Your only hope, lies in your
+purification.  Go forth, and return when you feel ready."
+%E
+%Cc Dnb 00021
+"You are indeed ready, %p.  I shall tell you what has transpired,
+and why we so desperately need your help:
+
+"It is now many years ago that a shadow of disquiet fell upon
+our people. Words began to be whispered in secret: it was
+said that we were hemmed in a narrow place, and that greater
+wealth and splendour would be found in a wider world. Some
+spoke of Moria: the mighty works of our fathers that are called
+in our own tongue Khazad-dum; and they declared that now at last
+we had the power and numbers to return.
+
+"Moria! Moria! Wonder of the northern world! Too deep we delved
+there, and woke the nameless fear. Long have its vast mansions 
+lain empty since the children of Durin fled. At last, however,
+Balin listened to the whispers, and resolved to go; and though
+I did not give leave willingly, he took with him Ori and Oin and
+many of our folk, and they went away south.
+
+"For a while we had news and it seemed good: messages reported 
+that Moria had been entered and a great work begun there. Then
+there was silence, and no word has ever come from Moria since.
+
+"It falls to you to travel south to the gates of Moria, to find
+what has become of Balin and our people. The forces of the Enemy
+are gathering on our eastern borders, and war grows near. Should
+we be attacked unlooked for out of the south, by orcs marching
+in force from Moria, it would go ill for us indeed."
+%E
+%Cp Dnb 00025
+"It is rumored that the gate-stream has dried up."
+%E
+%Cp Dnb 00026
+"Beware the nameless terror."
+%E
+%Cp Dnb 00027
+"If you can find %o, it will help you survive to return to us."
+%E
+%Cp Dnb 00028
+"Remember, trust in %d."
+%E
+%Cp Dnb 00029
+"War grows near."
+%E
+%Cp Dnb 00030
+"Balin and his folk entered Moria through the East-gate,
+in Dimrill Dale."
+%E
+%Cp Dnb 00031
+"Too deep we delved in Moria, and woke a nameless fear."
+%E
+%Cp Dnb 00032
+"Great treasures of the Dwarf-sires of old may still be
+found in Moria."
+%E
+%Cp Dnb 00033
+"There may yet be some small pieces of mithil unmined in
+Moria."
+%E
+%Cp Dnb 00034
+"Beware Durin's Bane."
+%E
+%Cc Dnb 00035
+You find that the Gate-stream has been dammed, turning the 
+shallow  valley before the Walls of Moria into a dark still 
+lake. Neither sky nor sun is reflected on its sullen 
+surface.
+
+Once upon a time, the Elven Door stood open in those walls,
+and through it flowed trade and traffic between the Elf-
+lords of Hollin and the Dwarf Lords of Moria.  But that
+Door was shut and lost long ago, and their maker and all
+his kin have since vanished from the earth.
+%E
+%Cc Dnb 00036
+Once again, you stand before the Walls of Moria.
+%E
+%Cc Dnb 00040
+You have come to the one of the oldest portions of Moria: the
+Second Hall of Old Khazad-dum.  Between the First and Second
+Halls there is a great chasm, crossed by a single narrow bridge,
+the Bridge of Khazad-dum.
+
+There is a great fire in the depths, and on the bridge stands
+a demon of the old world, a Balrog of Morgoth.
+%E
+%Cp Dnb 00041
+Once again, you enter the second hall of Old Moria.
+%E
+%Cc Dnb 00050
+The dark figure streaming with fire moves towards you. The 
+shadow about it reaches out like two vast wings, and fire comes
+from its nostrils.
+%E
+%Cp Dnb 00051
+"Roar!"
+%E
+%Cp Dnb 00052
+"Roar!"
+%E
+%Cp Dnb 00053
+"Roar!"
+%E
+%Cp Dnb 00060
+"Roar!"
+%E
+%Cp Dnb 00061
+"Roar!"
+%E
+%Cp Dnb 00062
+"Roar!"
+%E
+%Cp Dnb 00063
+"Roar!"
+%E
+%Cp Dnb 00064
+"Roar!"
+%E
+%Cp Dnb 00065
+"Roar!"
+%E
+%Cp Dnb 00066
+"Roar!"
+%E
+%Cp Dnb 00067
+"Roar!"
+%E
+%Cp Dnb 00068
+"Roar!"
+%E
+%Cp Dnb 00069
+"Roar!"
+%E
+%Cc Dnb 00070
+As you pick up the War-mask of Durin, your breath is stolen by awe. 
+Long ago, in the First Age of the Sun and the Moon, the ancient 
+Dwarf-Fathers wore masks such as this into battle against the 
+first dragons, the wingless fire drakes of Morgoth.
+%E
+%Cc Dnb 00080
+With a terrible cry, the Balrog falls forward, and its shadow
+pluges down and vanishes.
+%E
+%Cc Dnb 00081
+"So, Balin is dead, then. I feared it was so. Their end was
+cruel, I fear. With the Balrog's fire blocking the East-gate
+and the Watcher at the West-door, there was no where for them
+to go to escape the teeming orcs. Their last stand was valiant,
+but futile.
+
+"You have done a great service for our people. Your actions
+have greatly weakened the orcs, and though it may be many long
+years before we once again attempt to reclaim the halls of 
+Durin, you have at least slowed them from attacking Erebor
+from the south."
+%E
+%Cc Dnb 00082
+"The War-mask of Durin! This is a find beyond any that we had
+hoped for in Moria! You must take this on your quest,
+for it will keep you from harm."
+%E
+%Cp Dnb 00090
+"Welcome, %p.  How have you fared on your quest 
+for the Amulet of Yendor?"
+%E
+%Cc Dnb 00091
+"You have it!  You have recovered the Amulet of Yendor!
+Now attend to me, %p, and I will tell you what must be done:
+
+"The Amulet has within it magic, the capability to transport you to
+the Astral Plane, where the high temple of %d is located.
+
+"To activate this magic, you must travel upwards as far as you can.
+When you reach the temple, sacrifice the Amulet to %d.
+
+"Thus will you fulfill your destiny."
+%E
+#
+#	Elf
+#
+%Cc Elf 00001
+You arrive in familiar surroundings.  In the distance, you %x 
+%H, the place of worship to %d.
+
+Something is wrong, though.  Surrounding the city are orcs!
+And they've noticed you!
+%E
+%Cp Elf 00002
+Once again, you stand before %H.
+%E
+%Cp Elf 00003
+You have the oddest feeling that this may be the last time you
+are to enter %H.
+%E
+%Cp Elf 00005
+"A Elbereth Gilthoniel,
+silivren penna miriel
+o menel aglar elenath!"
+%E
+%Cp Elf 00006
+"%nC continues to threaten the city.  But we hold fast."
+%E
+%Cp Elf 00007
+"%lC is growing weak.  The magic required to defend the city drains us."
+%E
+%Cp Elf 00008
+"Remember %i are hard to enter.  Beware the
+monstrous spiders that live there."
+%E
+%Cp Elf 00009
+"We must regain %o.  Without it we will be overrun."
+%E
+%Cp Elf 00010
+"%pC!  I have not seen you in many moons.  How do you fare?"
+%E
+%Cp Elf 00011
+"Birdsong has returned to the city, surely this means you have defeated %n."
+%E
+%Cp Elf 00012
+"%lC seems to have regained some of her strength."
+%E
+%Cp Elf 00013
+"So, tell us how you entered %i, in case some new evil arises there."
+%E
+%Cp Elf 00014
+"Is that truely %o that I see you carrying?"
+%E
+%Cc Elf 00015
+"%pC!  You have returned!  Thank %d.
+
+"We have great need of you.  But first, I must see if you have the
+required abilities to take on this responsibility."
+%E
+%Cp Elf 00016
+"Once again, %p, you stand in our midst.  Are you ready now?"
+%E
+%Cp Elf 00017
+"Ah, you are here again, %p.  Allow me to determine your readiness..."
+%E
+%Cc Elf 00018
+"%pC!  You have doomed us all.  You fairly radiate %L influences
+and weaken the power we have raised in this city as a result!
+
+"Begone!  We renounce your %shood with us!  You are an outcast now!"
+%E
+%Cc Elf 00019
+"%p, you are yet too inexperienced to withstand the demands of that
+which we need you to do.  %RA might just be able to do this thing.
+
+"Return to us when you have learned more, my %S."
+%E
+%Cc Elf 00020
+"You have strayed, %p!  You know that %d requires that
+we maintain a pure devotion to things %a!
+
+"You must go from us.  Return when you have purified yourself."
+%E
+%Cc Elf 00021
+"You are indeed ready, %p.  I shall tell you what has transpired,
+and why we so desperately need your help:
+
+"A short time ago, a great darkness fell over the greenwood,
+and yrch tribes and monstrous spiders came out of the east in
+droves. Under their leader, %n, they established
+a fortress on Amon Lanc in the south of this... mirkwood.
+
+"During the new moon, we were beset by hordes of orcs and goblins,
+as you witnessed.  In the first onslaught a group, headed by 
+%n himself, managed to breach the city and
+steal %o.
+
+"Since then, we have been besieged.  We do not know how much longer
+we will be able to maintain our magical barriers.
+
+"If we are to survive, you, %p, must infiltrate
+%i.  There, you will find a pathway down, to the
+underground castle of %n.  He has always coveted
+%o, and will surely keep it on his person.
+
+"Recover %o for us, %p!  Only then will %d be safe."
+%E
+%Cp Elf 00025
+"It is rumored that the Uruk-hai have a pact 
+with the Hill Ogres."
+%E
+%Cp Elf 00026
+"%nC is strong, and very smart."
+%E
+%Cp Elf 00027
+"Use %o, when you find it.  It will help you survive
+to reach us."
+%E
+%Cp Elf 00028
+"Remember, let %d be your guide."
+%E
+%Cp Elf 00029
+"Call upon %d when you face %n.
+The very act of doing so will infuriate him, and give you advantage."
+%E
+%Cp Elf 00030
+"%n and his kind have always hated us."
+%E
+%Cp Elf 00031
+"We cannot hold the grove much longer, %p.  Hurry!"
+%E
+%Cp Elf 00032
+"To infiltrate %i, you must be very stealthy."
+%E
+%Cp Elf 00033
+"Remember that %n is a braggart.  Trust not what he says."
+%E
+%Cp Elf 00034
+"You can triumph, %p, if you trust in %d."
+%E
+%Cc Elf 00035
+You descend into the outer regions of %i.  You can hear
+scuffling sounds in the corridors, and vague mumblings in the distance.
+
+You remember that a %g once told you that there were many secret
+passageways in this complex.
+%E
+%Cc Elf 00036
+Once again, you descend into %i.
+%E
+%Cc Elf 00040
+You descend into a weird place, in which roughly cut cave-like walls
+join with smooth, finished ones, as if someone was in the midst of
+finishing off the construction of a subterranean complex.
+
+Off in the distance, you hear the sounds of a large, raucous gathering.
+%E
+%Cp Elf 00041
+Once again, you enter the distorted castle of the %n.
+%E
+%Cc Elf 00050
+"So, %c.  %lC has sent you to recover %o.
+
+"Well, I shall keep that bauble.  It pleases me.  You, %c, shall die."
+%E
+%Cp Elf 00051
+"Back again, eh?  Well, a mere %r is no threat to me!  Die, %c!"
+%E
+%Cp Elf 00052
+"You haven't learned your lesson, %c.  You can't kill me!  You shall die now."
+%E
+%Cp Elf 00053
+"I shall have %o from you, %r.  Then I shall
+kill you."
+%E
+%Cp Elf 00060
+"Your %d is nothing, %c.  You are mine now!"
+%E
+%Cp Elf 00061
+"Run away little %c!  You can never hope to defeat %n!"
+%E
+%Cp Elf 00062
+"My orcish servants will rip you to shreds!"
+%E
+%Cp Elf 00063
+"I shall display your head as a trophy.  What do you think about that wall?"
+%E
+%Cp Elf 00064
+"I shall break your %ls city, and destroy all the %gP!"
+%E
+%Cp Elf 00065
+"%d has abandoned you, %c.  You are doomed."
+%E
+%Cp Elf 00066
+"%rA?  %lC sends a mere %r against me?  Hah!"
+%E
+%Cp Elf 00067
+"%lC has failed, %c.  %oC will never leave here."
+%E
+%Cp Elf 00068
+"You really think you can defeat me, eh %c?  You are wrong!"
+%E
+%Cp Elf 00069
+"You weaken, %c.  I shall kill you now."
+%E
+%Cc Elf 00070
+As you pick up %o, it seems to glow, and a warmth
+fills you completely.  You realize that its power is what has protected
+your %sp against their enemies for so long.
+
+You must now return it to %l without delay -- their lives depend
+on your speed.
+%E
+%Cc Elf 00080
+%nC collapses to the ground, cursing you and %l, then says:
+
+    You have defeated me, %r!  But I curse you one final time, with my
+    dying breath!  You shall die before you leave my castle!
+%E
+%Cc Elf 00081
+"%pC!  You have succeeded!  I feared it was not possible!
+
+"You have returned with %o!
+
+"I fear, now, that the Enemy will rise again and plot yet another raid.
+But this will take some time, and if you can recover the Amulet of 
+Yendor for %d before that happens, we will be eternally safe.
+
+"Take %o with you.  It will aid in your quest for
+the Amulet."
+%E
+# assumes crystal
+%Cc Elf 00082
+"The palantiri came from beyond Westernesse, from Eldamar. 
+Feanor himself, maybe, wrought them in days so long ago that 
+the time cannot be measured in years.
+
+"This is the last of the seven. You are its keeper now, 
+and the time has come for it to aid you in your search for 
+the Amulet.  %Z await your return through 
+the magic portal that brought you here."
+%E
+# assumes Longbow
+%Cc Elf 00083
+%l flexs %o reverently.
+
+"With this wondrous bow, one need never run out of arrows.
+You are its keeper now, and the time has come to resume your
+search for the Amulet.  %Z await your return
+through the magic portal that brought you here."
+%E
+%Cp Elf 00090
+"Welcome, %p.  How have you fared on your quest for the Amulet
+of Yendor?"
+%E
+%Cc Elf 00091
+"You have it!  You have recovered the Amulet of Yendor!
+Now attend to me, %p, and I will tell you what must be done:
+
+"The Amulet has within it magic, the capability to transport you to
+the Astral Plane, where the primary circle of %d resides.
+
+"To activate this magic, you must travel upwards as far as you can.
+When you reach the temple, sacrifice the Amulet to %d.
+
+"Thus will you fulfill your destiny."
+%E
+#
 #	Healer
 #
 %Cc Hea 00001
@@ -1395,7 +2728,7 @@ to unleash a new disease we call 'the cold' on Gehennom."
 "Paint a red caduceus on your shield and monsters won't hit you."
 %E
 %Cp Hea 00012
-"How are you feeling?  Perhaps a good bleeding will improve your sprits."
+"How are you feeling?  Perhaps a good bleeding will improve your spirits."
 %E
 %Cp Hea 00013
 "Have you heard the absurd new theory that diseases are caused by
@@ -1610,9 +2943,600 @@ absence, yes?  How fare you upon your quest for the Amulet?"
 %Cc Hea 00091
 "Ah, you have recovered the Amulet, %p.  Well done!
 
-"Now, you should know that you must travel through the elemental planes
-to the astral, and there return the Amulet to %d.  Go forth and
+"Now, you should know that you must travel through the Elemental Planes
+to the Astral, and there return the Amulet to %d.  Go forth and
 may our prayers be as a wind upon your back."
+%E
+#
+#	Hedrow general quest
+#
+%Cc Hdr 00001
+You arrive in familiar surroundings.  In the distance, you %x 
+%H, a great city of the Drow.
+
+The twin towers of Sorcere and Magthere, the schools of sorcery
+and combat, are close before you.  Something is wrong, though.  
+The silver star of Lolth, token of the high council of the 
+matron mothers, is set over the gates.
+%E
+%Cp Hdr 00002
+Once again, you stand outside %H.
+%E
+%Cp Hdr 00003
+You have the oddest feeling that this may be the last time you
+are to vist %H.
+%E
+%Cp Hdr 00005
+"You have been granted an audience with %l.  Don't keep her waiting!"
+%E
+%Cp Hdr 00006
+"There was a disturbance at the ruins of the Vast Gate."
+%E
+%Cp Hdr 00007
+"Tower Xaxox has been sighted near Firestorm Peak."
+%E
+%Cp Hdr 00008
+"The path to the surface passes through %iC. 
+The failed priestesses have been attacking any who pass near their domain!"
+%E
+%Cp Hdr 00009
+"We have been attacked by heretic drow, bearing the symbol of a black web."
+%E
+%Cp Hdr 00010
+"You have been granted an audience with %l.  Don't keep her waiting!"
+%E
+%Cp Hdr 00011
+"The Vast Gate has gone quiet again."
+%E
+%Cp Hdr 00012
+"Tower Xaxox was once a school devoted to alienism."
+%E
+%Cp Hdr 00013
+"I hope you taught those acursed driders some respect!"
+%E
+%Cp Hdr 00014
+"%lC certainly saw to those black-web heretics!"
+%E
+%Cc Hdr 00015
+"%rC!  It is good that you have answered my summons.
+Lolth requires your talents.
+
+"But first, I must evaluate your abilities, to see if you 
+have the required abilities to take on this holy mission."
+%E
+%Cp Hdr 00016
+"Once again, %r, you stand before us.  You had best be ready."
+%E
+%Cp Hdr 00017
+"You are here again, %r.  I will test your readiness..."
+%E
+%Cc Hdr 00018
+"%rC!  You have doomed yourself, showing your treachery for 
+all to see.
+
+"You are hereby banished!  I revoke the grace of Lolth from you!"
+%E
+%Cc Hdr 00019
+"%rC, you are yet too inexperienced to withstand the demands of
+Lolth's holy mission.  %RA might just be able to do this thing.
+
+"Return to us when you are worthy of this honor."
+%E
+%Cc Hdr 00020
+"You have strayed, %r!
+
+"Return when you have purified yourself, and not before!"
+%E
+%Cc Hdr 00021
+"You are indeed ready, %r.  This is your mission,
+your holy quest from Lolth:
+
+"Many hundreds of years ago, there was a tower school 
+dedicated to the art of alienism, of the art of calling
+and controlling beings alien to the near planes of 
+existance, the familliar heavens and hells.
+
+"The last master of that school, Daruth, sought 
+knowledge beyond his stature, knowledge concerning an
+ancient artifact known as the Vast Gate.  Daruth was
+censured by Lolth for his hubris, but he chose to 
+continue down the forbidden path.  His obsession 
+resulted in the destruction of the tower school 
+entrusted to him:  Xaxox was consumed by the very 
+creatures it existed to control.
+
+"For centuries, it was believed that the Xaxox school
+was no more.  Recently, however, the tower has 
+reappeared on the surface of the world, near Firestorm
+Peak, the secret site of the ancient Vast Gate.
+
+"Lolth has revealed to us, the sacred council of the
+matron-mothers, that Daruth Xaxox has returned with 
+his tower, and that he plans to spread his heretical
+teachings accross the Underdark.  Already we have been
+attacked by his followers, who bear a black-web sigil
+as a token of their treachery.
+
+"You have been choosen as Lolth's instrument in this.
+Travel to the surface of the world, locate Tower
+Xaxox near Firestorm Peak, and bring justice to Daruth
+before he can endanger more of your brothers with his
+heresy.
+
+"Daruth Xaxox brought with him a cloak of woven 
+darkness.  Bring this to me as proof of your deed.
+Go now!  Bring honor to your house!  Fail, and know 
+torment everlasting!"
+
+"Do this, and know the glory of Lolth!  Fail, and know
+everlasting torment! Go now!"
+%E
+%Cp Hdr 00025
+"There are many secret passages in %i."
+%E
+%Cp Hdr 00026
+"Why are you still here?  Get on with it, or face the wrath of Lolth!"
+%E
+%Cp Hdr 00027
+"Go now!"
+%E
+%Cp Hdr 00028
+"Serve Lolth in all things!"
+%E
+%Cp Hdr 00029
+"The Xaxox heretics sought knowledge forbidden by Lolth."
+%E
+%Cp Hdr 00030
+"Daruth Xaxox made a pact with a dark power to gain his freedom."
+%E
+%Cp Hdr 00031
+"Show those heretics the wrath of Lolth!"
+%E
+%Cp Hdr 00032
+"Driders are strong, but they enjoy not the favor of Lolth."
+%E
+%Cp Hdr 00033
+"You tempt the wrath of Lolth with your delay."
+%E
+%Cp Hdr 00034
+"The heretics have formed a blasphemous alliance with creatures from
+beyond the Vast Gate."
+%E
+%Cc Hdr 00035
+You descend into the outer regions of %i.  You can hear
+scuffling sounds in the corridors, and vague mumblings in the distance.
+
+You know that there were many secret passageways in this complex.
+%E
+%Cc Hdr 00036
+Once again, you descend into %i.
+%E
+%Cc Hdr 00040
+You have arrived at the foothills of Firestorm Peak.  The accursed 
+sunlight still fills your eyes with painful darkness, but you can 
+neverless sense the overwhelming wrongness of Tower Xaxox in the 
+distance.
+%E
+%Cp Hdr 00041
+Once again, you approach Tower Xaxox at the base of Firestorm Peak.
+%E
+%Cc Hdr 00050
+"Who are you?  Another assassin sent by Eclavdra?  I see that she has
+learned to stop sending matrons against me.  But, in sending you, 
+I wonder, has she made a fatal mistake?
+
+"Tell me, how do you feel about your lot in life?  Are you a happy
+little serf of the Spider Queen?  Are you content with the knowledge
+that, no matter what you do, no matter what rank you rise to, you 
+will always be subservient to the least of the priestesses?
+
+"Or do you yearn for something more, as I once did?  
+
+"Together, we can overthrow the Spider Goddess and free our drow 
+brothers from the dominion of the priestesses, establishing a new 
+order across the Underdark!"
+%E
+%Cp Hdr 00051
+"Join me!"
+%E
+%Cp Hdr 00052
+"Lolth is not worthy of your service!"
+%E
+%Cp Hdr 00053
+"That cloak is mine!"
+%E
+%Cp Hdr 00060
+"Why serve Lolth!?"
+%E
+%Cp Hdr 00061
+"Are you happy as a slave!?"
+%E
+%Cp Hdr 00062
+"Help me put an end to the dominion of Lolth!"
+%E
+%Cp Hdr 00063
+"I won't kill you if I don't have too."
+%E
+%Cp Hdr 00064
+"We have a chance to overthrow the Spider Queen!"
+%E
+%Cp Hdr 00065
+"%l is just using you."
+%E
+%Cp Hdr 00066
+"Help me free our brothers!"
+%E
+%Cp Hdr 00067
+"Join me, and together we will rule the Drow!"
+%E
+%Cp Hdr 00068
+"My ally can defeat Lolth, with your help."
+%E
+%Cp Hdr 00069
+"You will not stop me.!"
+%E
+%Cc Hdr 00070
+Dark and light are woven together in %o.
+
+What strange power could have crafted such a thing? %lC 
+will accept this cloak as proof that you have truly killed 
+%n.
+%E
+%Cc Hdr 00080
+%nC sighs and shakes his head at you, spiders fleeing out
+of the great rents in his flesh.
+
+    This is not the end for me, but you, I fear, will be
+    dead long before I gather the strength for another
+    escape from the Far Realm.
+
+He falls to the ground like a puppet with its strings cut;
+dead.
+%E
+%Cc Hdr 00081
+"%rC!  You have destroyed the foul heretics!  I only wish %n 
+had been taken alive, I would have liked to ... instruct him as to 
+the error of his ways.
+
+"The name of your house will be entered in the annals of Lolth, and the 
+tale of how we bested the hordes of Tower Xaxox will be told for
+generations to come.
+
+"You must now return to the Dungeons of Doom and your quest for the 
+Amulet of Yendor.  With that divine relic, Lolth will be able to wipe
+out all vestiges of the Xaxox heretics!
+
+"Take %o with you, if you wish.  Otherwise, I will give you Spidersilk,
+a mithril coat that once belonged to my favorite consort, the previous
+master of Tower Sorcere."
+%E
+# assumes Darkweaver Cloak
+%Cc Hdr 00082
+"This cloak was brought by %n from whatever cursed realm he was hiding
+in for the centuries of his absense.  Little is known about the creation
+of this artifact, though it seems related to the black web symbol used
+by his followers.
+
+"Would you like to use this armor in your quest, or would you 
+prefer the mithril coat, Spidersilk?"
+%E
+# assumes Spidersilk
+%Cc Hdr 00083
+"This mithril coat was once owned by a great wizard of the surface
+elves.  He fell in combat with my daughters, and his armor was taken
+as a trophy.  Lolth sanctified this armor as a boon to me, and it was
+used by a favored consort of mine for many years.  You should feel
+honored to wear it."
+%E
+%Cp Hdr 00090
+"How have you fared on your holy quest for the Amulet
+of Yendor?  Lolth does not tolerate failure!"
+%E
+%Cc Hdr 00091
+"You have it!  You have recovered the Amulet of Yendor!
+
+"Whoever brings that to Lolth's high altar in the astral plane will
+be exhalted above all others, and shall even be granted the rank of
+demigoddess!
+
+"I have been searching for that Amulet for many long years.  To 
+think a mere %r would find it first!
+
+"Well, I thank you for bringing it to me.  I have one final task
+for you:  Die for me!"
+%E
+%Cc Hdr 00101
+You have returned to the twin towers of Sorcere and Magthere on the 
+outskirts of %i.  The silver star of Lolth is still set over the 
+doors, token of %n and the high council of the matron-
+mothers.
+
+The hour of reckoning is at hand.
+%E
+%Cp Hdr 00102
+Once again, you have returned to %i.
+%E
+%Cp Hdr 00103
+IF YOU SEE THIS, IT IS A BUG
+%E
+%Cp Hdr 00105
+"The black web will lead us to freedom."
+%E
+%Cp Hdr 00106
+"The followers of Lolth have launched several assaults on this Tower,
+only to fall before the might of %l."
+%E
+%Cp Hdr 00107
+"%lC is powerful, but even he can not yet leave the intrusion zone 
+around the Vast Gate."
+%E
+%Cp Hdr 00108
+"You will have to go back through the Drider caves to reach
+%iC. Though Lolth has betrayed them, the driders 
+still rebel against the black web."
+%E
+%Cp Hdr 00109
+"The shepherds of spiders will reclaim their flock at last."
+%E
+%Cp Hdr 00110
+"The black web will lead us to freedom."
+%E
+%Cp Hdr 00111
+"The followers of Lolth have been thrown into disarray!"
+%E
+%Cp Hdr 00112
+"%lC will soon be able to leave the intrusion zone 
+around the Vast Gate."
+%E
+%Cp Hdr 00113
+"Alive or dead, the driders will serve the black web."
+%E
+%Cp Hdr 00114
+"The shepherds of spiders will reclaim their flock at last."
+%E
+%Cc Hdr 00115
+"%p.  Are you ready to take the first step?
+
+"Here is what you must do:"
+%E
+%Cp Hdr 00116
+"%p.  Are you ready to take the first step?
+
+"Here is what you must do:"
+%E
+%Cp Hdr 00117
+"%p.  Are you ready to take the first step?
+
+"Here is what you must do:"
+%E
+%Cc Hdr 00118
+"%pC.  It is unfortunate that you seek to betray me.  In your 
+treachery, you have doomed yourself.  To turn on both Lolth and
+the Eddergud will be your undoing.  I banish you to 
+%Z.  
+
+"May you die in pain."
+%E
+%Cc Hdr 00119
+IF YOU SEE THIS, IT IS A BUG
+%E
+%Cc Hdr 00120
+IF YOU SEE THIS, IT IS A BUG
+%E
+%Cc Hdr 00121
+"I have learned that the foundation of Lolth's 
+current power is an ancient pact with a great 
+matriarch of spiders; a demon of the old world, 
+who's name is forgotten.
+
+"The story of Lolth, then, has two threads: 
+
+"In one, there is a goddess named Araushnee,
+a member of the elven pantheon, who tried to
+murder and supplant her fellows.  For this,
+she was thrown bound and powerless into the 
+endless Abyss of the demons, to find 
+torment in their clutches.
+
+"In the other thread, there is a Far Realm, 
+in which sits a great black web of poison 
+strands, of darkness unpierceable, of plots 
+indecipherable.  True spiders are the 
+servants of this web.  One spider, however, 
+stole secrets from the web, and fled with 
+her followers across the Realities.
+
+"The threads come together when the fleeing
+thief meets the fallen goddess.  The 
+goddess took a new name, Lolth; and 
+together their followers have spun their
+white counterfeit webs for many ages of 
+the world.
+
+"But I met the black web, and have told him
+the location of his flocks, and he has sent
+the shepherds of spiders, the poison-cups 
+of the poison-god, to gather them up.
+
+"If we can help them in their task, then
+Lolth shall be Araushnee once more, and 
+we will be masters of our own fate.
+
+"It falls to you to strike the first blow
+in this war, for I am not able to leave
+the area surrounding the Vast Gate.  You
+must return to %i, and defeat %n, 
+greatest priestess of Lolth and one of
+the few who might hinder our quest."
+%E
+%Cp Hdr 00125
+"There are many secret passages in the drider caves."
+%E
+%Cp Hdr 00126
+"Strike well."
+%E
+%Cp Hdr 00127
+"Use an altar to make a personal pact with the Eddergud."
+%E
+%Cp Hdr 00128
+"Lolth and her priestesses will be swept away."
+%E
+%Cp Hdr 00129
+"We will free the drow from the Spider Queen."
+%E
+%Cp Hdr 00130
+"Go swiftly and silently."
+%E
+%Cp Hdr 00131
+"For the sake of all our brothers, do not fail."
+%E
+%Cp Hdr 00132
+"Watch out for driders."
+%E
+%Cp Hdr 00133
+"%nC will not be an easy opponent."
+%E
+%Cp Hdr 00134
+"%nC made a critical error, coming to the tower schools."
+%E
+%Cc Hdr 00135
+You descend into the outer regions of %i.  You can hear
+scuffling sounds in the corridors, and vague mumblings in the distance.
+
+You know that there were many secret passageways in this complex.
+%E
+%Cc Hdr 00136
+Once again, you descend into %i.
+%E
+%Cc Hdr 00140
+You have returned to Tower Xaxox, which now rises in the shaddow of
+Firestorm Peak, in the aura of the Vast Gate.
+
+The forces of the black web entity, the Eddergud, marshal at its 
+base.
+%E
+%Cp Hdr 00141
+Once again, you have returned to Tower Xaxox.
+%E
+%Cc Hdr 00150
+"%c!  Lolth has told us of your heresy!  Prepare to die!
+%E
+%Cp Hdr 00151
+"Now you die!"
+%E
+%Cp Hdr 00152
+"Accept your fate!  Die now!"
+%E
+%Cp Hdr 00153
+"Give that back!"
+%E
+%Cp Hdr 00160
+"You dare turn against Lolth!?  Even in death you shall not know peace!"
+%E
+%Cp Hdr 00161
+""%l is using you.  You won't survive this fight!"
+%E
+%Cp Hdr 00162
+"Even a drider's fate is too good for you!"
+%E
+%Cp Hdr 00163
+"I'll flay your soul!"
+%E
+%Cp Hdr 00164
+"Even a zombie's fate is too good for you!"
+%E
+%Cp Hdr 00165
+"You will never know peace!"
+%E
+%Cp Hdr 00166
+"I'll kill you and anyone who ever gave you shelter!"
+%E
+%Cp Hdr 00167
+"Your fate will be wispered of for generations to come!"
+%E
+%Cp Hdr 00168
+"Your actions have disgraced your house!"
+%E
+%Cp Hdr 00169
+"What do you hope to gain?  Your actions have made an enemy of
+every loyal drow?"
+%E
+%Cc Hdr 00170
+The Rod's tentacles wave a languid greeting to you as you pick 
+it up.
+%E
+%Cc Hdr 00180
+%nC staggers back, shaking her head as if to clear it.  Not a
+drop of blood flows from her wounds.  Instead, strands of black
+webbing spread out from each injury, forming strange patterns
+as they join up, engulfing ever more of her body.  She opens 
+her mouth as if to curse you, but gags on the black web as
+it spreads over her face.  Now totally engulfed, she is yanked
+up and vanishes from the world.
+%E
+%Cc Hdr 00181
+"%p!  You did it!  We were able to use the distraction you 
+provided to snare %n in the folds of the black web.  She has been
+ensnared too by its darkness and its plots, and under its 
+skilled questioning has divulged much she meant to keep secret.
+
+"With her knowledge, we can stage invasions of more drow cities
+across the underdark.  For your part, you must now return to the 
+Dungeons of Doom and to your quest for the Amulet of Yendor.  
+With that divine relic, the Eddergud will be able to fully
+engulf the demonweb of Lolth and all the counterfeit webs of
+his flock."
+
+"Take %o with you, if you wish.  Otherwise, I will gift
+you the Webweaver's Crook, a tool of the Spider Shepherds
+crafted from a recovered claw of the primordial spider-demon
+herself."
+%E
+# assumes Tentacle Rod
+%Cc Hdr 00182
+"This rod was gifted to %n while she served Zuggtmoy, demon
+lady of rot and corruption, then consort of the Elder Elemental
+Eye, the chained god Tharizdun, who seeks to consume all the
+worlds and all the gods thereof.  %n and Zuggtmoy both
+betrayed the Eye, and each other, having planned from the 
+beginning to use it for their own ends.  Any interaction with
+the Chained One is perilous, however, and its service is not 
+easy to foreswear.  %n is fortunate to have been captured
+by the Eddergud, for her soul is marked by Tharizdun, and
+she was being followed by a spawn of Shothragot.
+
+"The Rod itself is free of the taint of its nominal father, 
+however, for its parents are in truth Zuggtmoy of the Fungi 
+and %n herself.  The rod is a powerful weapon, capable of 
+augmenting spellcasting and delivering multiple debilitating 
+attacks in melee.
+
+"Would you like to use this weapon in your quest, or would you
+prefer the Webweaver's Crook?"
+%E
+# assumes Webweaver's Crook
+%Cc Hdr 00183
+"This weapon was recently crafted by the Shepherds of Spiders,
+from a covered claw of the primordial demon-spider.  It can be
+used both in melee and as a pole weapon, and contains many 
+fell poisons."
+%E
+%Cp Hdr 00190
+"How have you fared on your quest for the Amulet of Yendor?  It
+is crucial for you to succeed, if we are to fully free the drow."
+%E
+%Cc Hdr 00191
+"You have it!  You have recovered the Amulet of Yendor!
+Now, I will tell you what must be done:
+
+"The Amulet has within it magic, the capability to transport you to
+the Astral Plane, where a seed of the Eddergud has been prepared for
+you:  a high altar dedicated to the black web.
+
+"To activate this magic, you must travel upwards as far as you can.
+When you reach the temple, sacrifice the Amulet to the black web.
+
+"Thus will you fulfill your destiny at last."
 %E
 #
 #	Knight
@@ -1803,7 +3727,7 @@ puny %r.  Thou wilt die in agony!"
 "I shall suck the marrow from thy bones, %c."
 %E
 %Cp Kni 00067
-"Let's see...  Broiled?  No.  Fried?  Nay.  Baked?  Yea verily,
+"Let's see...  Baked?  No.  Fried?  Nay.  Broiled?  Yea verily,
 that is the way I like my %c for dinner."
 %E
 %Cp Kni 00068
@@ -1853,10 +3777,10 @@ return through the magic portal that brought thee here."
 %E
 %Cc Kni 00091
 "Thou hast succeeded, We see, %p!  Now thou art commanded to take
-the Amulet to be sacrificed to %d in the plane of the astral.
+the Amulet to be sacrificed to %d in the Plane of the Astral.
 
 "Merlin hath counseled Us that thou must travel always upwards through
-the planes of the elements, to achieve this goal.
+the Planes of the Elements, to achieve this goal.
 
 "Go with %d, %p."
 %E
@@ -2097,8 +4021,543 @@ that brought you here."
 %Cc Mon 00091
 "You have prevailed, %p!  %d is surely with you.  Now,
 you must take the amulet, and sacrifice it on %ds altar on
-the Astral plane.  I suspect that I shall never see you again in this
+the Astral Plane.  I suspect that I shall never see you again in this
 life, but I hope to at %ds feet."
+%E
+#
+#	Drow Noble quest
+#
+%Cc Ndr 00001
+You arrive in familiar surroundings. You're house's fortress is 
+close before you.  
+
+The psychic call of your mother rings loud in your mind.
+%E
+%Cp Ndr 00002
+Once again, you stand outside %H.
+%E
+%Cp Ndr 00003
+You have the oddest feeling that this may be the last time you
+are to vist %H.
+%E
+%Cp Ndr 00005
+"Oh, %pC!  You're back.  Well, %l wanted to speak with you."
+%E
+%Cp Ndr 00006
+"Oh, its you.  I thought you died in that dungeon."
+%E
+%Cp Ndr 00007
+"The life-cavern colony went silent cycles ago."
+%E
+%Cp Ndr 00008
+"I'd hate to see someone put a dagger in your pretty little back.
+Perhaps you should consider an alliance between with me."
+%E
+%Cp Ndr 00009
+"%oC represents the favor of Lolth."
+%E
+%Cp Ndr 00010
+"Oh, %pC!  You're back.  %lC was just talking about you. She does
+that quite a bit, now."
+%E
+%Cp Ndr 00011
+"You again?  I heard you were on your way to gehennom!"
+%E
+%Cp Ndr 00012
+"So it was the illithids that destroyed the life-cavern colony."
+%E
+%Cp Ndr 00013
+"(...You're %l's favorite now.  You should leave, any ally 
+you tried to make would just stick a dagger in your back.)"
+%E
+%Cp Ndr 00014
+"Is that truely %o that I see you carrying?  YOU are the favored
+of Lolth?"
+%E
+%Cc Ndr 00015
+"%pC!  I am glad %d returned you to me.
+
+"A great opportunity lies before us.  But first, I must see if 
+you have the required abilities to sieze this chance."
+%E
+%Cp Ndr 00016
+"Once again you kneel before me, %p.  Are you ready know?"
+%E
+%Cp Ndr 00017
+"Ah, back again, %p?  I will determine your readiness..."
+%E
+%Cc Ndr 00018
+"%pC!  You have failed me for the last time!
+
+"You are no longer my daughter!  Go now into exile!"
+%E
+%Cc Ndr 00019
+"%p, you are yet too inexperienced to withstand the demands of that
+which I need you to do.  %RA might be able to do this thing.
+
+"Return to me when you have learned more, daughter."
+%E
+%Cc Ndr 00020
+"You have strayed, %p!  You know that %d requires that
+we maintain a pure devotion to things %a!
+
+"Return when you have purified yourself."
+%E
+%Cc Ndr 00021
+"You are indeed ready, %p.  I shall tell you what has transpired,
+and what you must do:
+
+"A short time ago, the life-cavern colony went suddenly silent.
+The my greatest rival, sensing an opportunity for further glory,
+sent her most talented daughter to the colony, the girl recently
+taken by Lolth as her Chosen priestess.  Her mission was to 
+learn the cause of the silence and to bring justice to those 
+responsible.
+
+"The girl failed, for that was the last anyone has heard of her.
+I have been grooming you as her rival to the title of Chosen.
+It is too late for you to best her in life, but you can still
+can still prove your superiority.
+
+"Go, travel to the life-cavern colony, learn the cause of the 
+silence and bring justice to those responsible.  Recover
+%o and bring glory to our house, and shame
+to my rival's."
+%E
+%Cp Ndr 00025
+"Why are you still here?  Get on with it, or face my wrath!"
+%E
+%Cp Ndr 00026
+"Go now!"
+%E
+%Cp Ndr 00027
+"Others will also be seeking %o."
+%E
+%Cp Ndr 00028
+"Let %d be your guide."
+%E
+%Cp Ndr 00029
+"Do not delay."
+%E
+%Cp Ndr 00030
+"That colony is an important food producer."
+%E
+%Cp Ndr 00031
+"Fungi grow freely in the life caverns."
+%E
+%Cp Ndr 00032
+"To infiltrate %i, you must be very stealthy."
+%E
+%Cp Ndr 00033
+"Go, my daughter."
+%E
+%Cp Ndr 00034
+"You can triumph, %p, if you trust in %d."
+%E
+%Cc Ndr 00035
+You have arrived at the life cavern colony.  The smell of death is
+heavy in the air, and you hear the crash of colapsing walls in the
+distance.
+%E
+%Cc Ndr 00036
+Once again, you descend into the life-cavern.
+%E
+%Cc Ndr 00040
+You descend into a weird place, in which the rough cave walls take on
+the complex, wrinkled appearance of a humanoid brain.
+
+LITTLE DROWLING, YOU ARE LOST.  FOR NONE BUT THE LOST COME TO 
+%i, FRAGMENT OF PENUMBRA.  YOUR MIND, YOUR THOUGHTS
+AND MEMORIES, BELONG TO US NOW.  YOU ARE LOST.
+%E
+%Cp Ndr 00041
+Once again, you enter the wrinkled caverns of the illithids.
+%E
+%Cc Ndr 00050
+YOU SHOULD KNEEL.  FOR YOU STAND BEFORE THE ELDER BRAIN OF
+%i, SEED OF PENUMBRA.
+%E
+%Cp Ndr 00051
+ALL TIME IS ONE BEFORE ME.  THE MOMENT OF YOUR BIRTH AND
+DEATH IS ONE TO ME.
+%E
+%Cp Ndr 00052
+SUBMIT
+%E
+%Cp Ndr 00053
+ABANDON YOUR SELF
+%E
+%Cp Ndr 00060
+GIVE IN TO ME
+%E
+%Cp Ndr 00061
+REST
+%E
+%Cp Ndr 00062
+GIVE UP
+%E
+%Cp Ndr 00063
+WHY DO YOU STRUGGLE
+%E
+%Cp Ndr 00064
+DO NOT BE AFRAID
+%E
+%Cp Ndr 00065
+WE HAVE AND SHALL RULE ALL.  EVEN LOLTH HAS AND SHALL 
+SUBMIT TO US.
+%E
+%Cp Ndr 00066
+YOU PROLONG YOUR SUFFERING.
+%E
+%Cp Ndr 00067
+TO WHAT END DO YOU STRIVE?
+%E
+%Cp Ndr 00068
+PENUMBRA HANGS OVER ALL.
+%E
+%Cp Ndr 00069
+WE RULED AND SHALL RULE ALL.
+%E
+%Cc Ndr 00070
+You fill with pride as you pick up %o.
+
+You shall succeed where you're rival has failed, and claim the
+Amulet of Yendor besides.
+%E
+%Cc Ndr 00080
+I SHALL HAUNT Y O U  T I L L   T  H  E   E  N  D    O   F   
+T   I    M     E      .       .        .
+%E
+%Cc Ndr 00081
+"%pC!  You have succeeded!  I feared it was not possible!
+
+"You have returned with %o!
+
+"My daughter, Chosen of Lolth, I know that great things
+lie ahead of you.  Go now, return to %Z
+and your quest for the Amulet of Yendor."
+%E
+# assumes crystal
+%Cc Ndr 00082
+"The silver Web of the Chosen guards Lolth's champion
+against lightning and acid, and reflects beams and
+lessens the impact of magical spells.
+
+"That you are its bearer brings great honor to our
+house.  Go now, return with it to your quest for
+the Amulet of Yendor?"
+%E
+%Cp Ndr 00090
+"Welcome, daughter.  How have you fared on your quest for the
+Amulet of Yendor?"
+%E
+%Cc Ndr 00091
+"You have it!  You have recovered the Amulet of Yendor!
+Now attend to me, daughter, and I will tell you what must be done:
+
+"The Amulet has within it magic, the capability to transport you to
+the Astral Plane, where the High Altar of %d resides.
+
+"To activate this magic, you must travel upwards as far as you can.
+When you reach the temple, sacrifice the Amulet to %d.
+
+"Thus will you fulfill your destiny."
+%E
+#
+#	Hedrow Noble quest
+#
+%Cc Nhd 00001
+You arrive in familiar surroundings.  You are standing outside
+the gates of %H.  In the distance, you %x %i,
+a great city of the Drow.
+
+Something is seriously wrong, though.  The walls of %H
+have been destroyed, and a deathly silence hangs in the air.
+%E
+%Cp Nhd 00002
+Once again, you stand outside %H.
+%E
+%Cp Nhd 00003
+You have the oddest feeling that this may be the last time you
+are to vist %H.
+%E
+%Cp Nhd 00005
+"%n?  I've heard she's taken refuge with the followers of Ver'tas."
+%E
+%Cp Nhd 00006
+"%n?  Never heard of her."
+%E
+%Cp Nhd 00007
+"%n?  She used to hang around the city.  She always looked so grim."
+%E
+%Cp Nhd 00008
+"%n?  I saw her talking to some missionaries of Ver'tas."
+%E
+%Cp Nhd 00009
+"%n?  Why, has something happened?  Haven't seen her."
+%E
+%Cp Nhd 00010
+"Hey, weren't you asking about %n?  I've heard she was killed, in
+the a stronghold of Ver'tas."
+%E
+%Cp Nhd 00011
+"I've been hearing a lot about %n lately."
+%E
+%Cp Nhd 00012
+"She killed her mother?  I guess that was why she looked so grim.
+Stupid way to go about it, though; the house was wiped out!"
+%E
+%Cp Nhd 00013
+"I think those Ver'tasites put her up to it."
+%E
+%Cp Nhd 00014
+"Did you ask about %n?  I think something happend to her!"
+%E
+%Cc Nhd 00015
+You find a young drow novice hidding in a hidden compartment.
+She looks terrified by the sudden intrusion, but sags in 
+relief when she sees it's you.
+
+"I know you, you're %p!  You came back!
+
+"We've- we've been attacked.  I think that- that I'm the only
+one left.  My oldest sister, she shut me in here when she saw 
+the walls had been broken.
+
+"I know who did this, I heard the others... what they said 
+at the height of the attack.
+
+"As the last warrior of our house, as the... former consort
+of the matron-mother, I know you want to know who it was;
+to avenge this, and reclaim our honor.
+
+"Before I tell you, though, I have to see if you are ready
+for this task.  We'll only get one chance at this."
+%E
+%Cp Nhd 00016
+"You came back again.  Are you ready now?"
+%E
+%Cp Nhd 00017
+"I'm glad.  That you keep coming back.  Are you ready?"
+%E
+%Cc Nhd 00018
+"This isn't going to work.  I shouldn't have called you back.
+
+"Please, run.  Never come back."
+%E
+%Cc Nhd 00019
+"%rC, you aren't yet strong enough to do what must be done.
+As %RA you might have a chance.
+
+"Please, survive and grow stronger.  Don't leave me alone."
+%E
+%Cc Nhd 00020
+"It seems you do not enjoy the favor of %d. Unless you walk
+the %a path, you will be easy prey for those whom you 
+must fight.
+
+"You must go from here, and regain the favor of %d."
+%E
+%Cc Nhd 00021
+"You are ready, %p.  I can tell you who did this, and what
+you must do:
+
+"The house's walls were attacked by the illithids, and their
+Umber Hulk slaves.  But they are not your true enemy.  I'm sure
+that M- That the matron-mother would have led our forces to 
+victory.  But- She was killed.  At the height of the battle,
+an assassin came through the walls from the other side, and 
+killed her.
+
+"It was %n, %p.  The second daughter of our house.  She 
+killed our mother, and many of our sisters as well.  She had 
+a wand, whatever she pointed it at, died.
+
+"Her target was %o.  It was a gift, 
+you remember, a gift from Eclavdra, High Priestess of Lolth, 
+to show the favor in which our house was held.  You wore it 
+yourself, I- I've heard.  But when you left, you left it behind.
+
+"If you can reclaim the cloak before Eclavdra and the ruling
+council find out what has happend here, we may be able to
+salvage something from this.  You'll probably have to kill
+%n to get the cloak back, but... In fact I think it 
+would be best if you did kill her.
+
+"I don't know where %n is hiding.  She came from %i when
+she attacked, someone amoung the houseless there must know
+more.
+
+"Good luck, %p!  Go swiftly and stealthily.
+Remember what your priorities are, and you'll succeed.
+
+"...I know you will."
+%E
+%Cp Nhd 00022
+"Why?"
+%E
+%Cp Nhd 00025
+"Go swiftly and stealthily."
+%E
+%Cp Nhd 00026
+"Start your search for %n in %i."
+%E
+%Cp Nhd 00027
+"Use %o, when get it back.  It will help you make it back."
+%E
+%Cp Nhd 00028
+"Please, don't leave me alone."
+%E
+%Cp Nhd 00029
+"I don't know where %n is hiding."
+%E
+%Cp Nhd 00030
+"Why did she do it?  She gained nothing from this."
+%E
+%Cp Nhd 00031
+"Eclavdra will not remain in the light forever.
+Reclaim the cloak before she learns what happened!"
+%E
+%Cp Nhd 00032
+"Don't hesitate when you face %n."
+%E
+%Cp Nhd 00033
+"I never thought that I would outlive my older
+sisters."
+%E
+%Cp Nhd 00034
+"Why did she save me?"
+%E
+%Cc Nhd 00035
+You have reached the outskirts of %i, where the 
+houseless drow live.  Someone here may have seen where %n 
+went after her attack on your house.
+
+...There is no way the girl could have known this, but this
+is where it all began.  You and Cinder were both born in
+these slums.  You hadn't thought it would end here, too.
+Not for many years.
+%E
+%Cc Nhd 00036
+Once again, reach the slums outside %i.
+%E
+%Cc Nhd 00040
+You have found the fortress of the Ver'tasites, where %n 
+is hiding.  From within, you hear the sounds of a large, 
+raucous gathering.
+%E
+%Cp Nhd 00041
+Once again, you near the fortress of Ver'tas.
+%E
+%Cc Nhd 00050
+"You!  F- Fool!  After all this time, NOW is when
+you come back?
+
+"Well, you're too late.  It's already over."
+%E
+%Cp Nhd 00051
+"Why do you keep coming back!  Why can't you leave me alone!"
+%E
+%Cp Nhd 00052
+"I'm done with you."
+%E
+%Cp Nhd 00053
+"What does %o matter now!?  Our house has fallen, it's over!"
+%E
+%Cp Nhd 00060
+"Worthless!  Why did you desert us!"
+%E
+%Cp Nhd 00061
+"You think you can come back now!"
+%E
+%Cp Nhd 00062
+"It's too late!"
+%E
+%Cp Nhd 00063
+"What did you hope to achieve!"
+%E
+%Cp Nhd 00064
+"What do you hope to achieve!"
+%E
+%Cp Nhd 00065
+"Do you want to kill me, too!"
+%E
+%Cp Nhd 00066
+"Why do you care, you left!"
+%E
+%Cp Nhd 00067
+"How dare you come back now!"
+%E
+%Cp Nhd 00068
+"I hate you!  I'll kill you!"
+%E
+%Cp Nhd 00069
+"Just die!"
+%E
+%Cc Nhd 00070
+%oC is heavy with the weight of memories.  It is possible you can
+salvage something of you house with this.
+
+You must now return with it without delay.  The girl's life may
+depend on your haste.
+%E
+%Cc Nhd 00080
+%nC stumbles, stands, then falls heavily.  She speaks, with tears in
+her eyes:
+
+    I'm so, so sorry.  I regretted it as soon as I did it.
+    
+    I was afraid.  The other houses were plotting against us,
+    and Mother refused to produce more daughters.  They were 
+    getting stronger, and us weaker.  I thought I could save
+    myself, but I fear I am damned.
+    
+    I wish... I wish I had turned the wand on myself. And 
+    that is the Truth.
+%E
+%Cc Nhd 00081
+It is clear that %l has been crying:
+
+"F- Former consort!  You came back!
+
+"But it's too late.  The ruling council has heard everything
+that has transpired here, and they are not impressed by our 
+efforts.
+
+"They are coming here, they will kill you if you stay.
+
+"Take %o with you, on your quest for
+the Amulet.
+
+"Thank you, F- Farewell"
+%E
+%Cc Nhd 00082
+"You must go, now!
+
+"This cloak was once the sign of the favor
+that our house was held in, one of the original
+Cloaks of the Consorts.  But that favor is gone
+now.  They are coming for you, you must flee
+and never come back."
+%E
+%Cp Nhd 00090
+
+%E
+%Cc Nhd 00091
+It is clear that %l has been crying:
+
+"F- Former consort!  You came back!
+
+"But it's too late.  The ruling council has heard everything
+that has transpired here, and they are not impressed by our 
+efforts.
+
+"They are coming here, they will kill you if you stay.
+
+"Take %o with you, on your quest for
+the Amulet.
+
+"Thank you, F- Farewell"
 %E
 #
 #       Noble
@@ -2255,7 +4714,7 @@ Again, you approach %i.
 %Cc Nob 00040
 You have found %i.
 
-The rebel leaders will be in  one of the houses.
+The rebel leaders will be in one of the houses.
 %E
 %Cp Nob 00041
 Again, you have invaded %ns stronghold.
@@ -2288,7 +4747,7 @@ Again, you have invaded %ns stronghold.
 "You shall oppress us no more!"
 %E
 %Cp Nob 00065
-"You will die here, %r %c"
+"You will die here, %r %c."
 %E
 %Cp Nob 00066
 "You cannot defeat me, for I have justice on my side."
@@ -2313,8 +4772,8 @@ once again, if just for a short time.
 %nC sinks to her knees, coughing blood. She gasps:
 
     "Bastard. You may kill me, but you can't kill justice!
-	The rebellion is greater than any one person. These people shall
-	be free of your tyrany yet!"
+    The rebellion is greater than any one person. These people shall
+    be free of your tyrany yet!"
 
 %nC is silent after that, but you remain prudently out of arm's reach
 until you are certain she has bled out.
@@ -2374,7 +4833,7 @@ Locker!"
 "Ol' %l once sailed with the Dread Pirate Roberts, or so they say."
 %E
 %Cp Pir 00008
-"%n has risen and scattered the soldiers sent to %i.
+"%nC has risen and scattered the soldiers sent to %i.
 Now the dead attack %H as well!"
 %E
 %Cp Pir 00009
@@ -2824,7 +5283,7 @@ that brought you here."
 %Cc Pri 00091
 "You have prevailed, %p!  %d is surely with you.  Now,
 you must take the amulet, and sacrifice it on %ds altar on
-the Astral plane.  I suspect that I shall never see you again in this
+the Astral Plane.  I suspect that I shall never see you again in this
 life, but I hope to at %ds feet."
 %E
 #
@@ -2873,7 +5332,7 @@ distraction of leatherwings."
 "So, tell us how you entered %i, in case some new evil arises there."
 %E
 %Cp Ran 00014
-"Is that truely %o that I see you carrying?"
+"Is that truly %o that I see you carrying?"
 %E
 %Cc Ran 00015
 "%pC!  You have returned!  Thank %d.
@@ -3325,7 +5784,7 @@ is yours for the asking."
 "I see that with your abilities, and my brains, we could rule this world.
 
 "All that we would need to be all-powerful is for you to take that little
-trinket you've got there up to the Astral plane.  From there, %d will
+trinket you've got there up to the Astral Plane.  From there, %d will
 show you what to do with it.  Once that's done, we will be invincible!"
 %E
 #
@@ -3365,7 +5824,7 @@ the kami of %H before you return again.
 "%nC has hired the Ninja -- be careful."
 %E
 %Cp Sam 00009
-"If %o is not returned, we will all be ninja."
+"If %o is not returned, we will all be ronin."
 %E
 %Cp Sam 00010
 "Come, join us in celebrating with some sake."
@@ -3400,7 +5859,7 @@ to figure out what I need from a samurai?"
 "You are no longer my samurai, %p.
 
 "Hara-kiri is denied.  You are ordered to shave your head and then to
-become a monk.  Your fief and family are forfeit.  Wakarimasu?"
+become a monk.  Your fief and family are forfeit.  Wakarimasu ka?"
 %E
 %Cc Sam 00019
 "%p-san, you have learned well and honored your family.
@@ -3431,7 +5890,7 @@ request that I commit seppuku.
 emperor's property.  Be quick!  The emperor will be here for the
 cha-no-you in 5 sticks.
 
-"Wakarimasu?"
+"Wakarimasu ka?"
 %E
 %Cp Sam 00025
 "To defeat %n you must overcome the seven emotions:
@@ -3596,7 +6055,7 @@ You quickly notice that things do not appear the way they did when you
 left.  The town is dark and quiet.  There are no sounds coming from
 behind the town walls, and no campfires burning in the fields.  As a
 matter of fact, you do not %x any movement in the fields at all, and
-the crops look as though they have been untended for many weeks.
+the crops seem as though they have been untended for many weeks.
 %E
 %Cp Tou 00002
 Once again, you are back at %H.
@@ -3639,7 +6098,7 @@ Things appear to have become so bad that you fear that soon
 %Cc Tou 00015
 "Is it really you, %p!  I had given up hope for your return.
 As you can %x, we are desperately in need of your talents.  Someone must
-defeat %n if our town is become what it once was.
+defeat %n if our town is to become what it once was.
 
 "Let me see if you are ready to be that someone."
 %E
@@ -4073,7 +6532,7 @@ your search for the Amulet as I have wished.  How do you fare?"
 "Excellent, %p.  I see you have recovered the Amulet!
 
 "You must take the Amulet to the Great Temple of %d, on the Astral
-plane.  There you must offer the Amulet to %d.
+Plane.  There you must offer the Amulet to %d.
 
 "Go now, my %S.  I cannot tell you your fate, as the power of the
 Amulet interferes with mine.  I hope for your success."
@@ -4294,7 +6753,7 @@ and attack the Wizard of Yendor, you know you must return it to its
 rightful owner, %l.
 %E
 %Cc Wiz 00080
-%nC croaks out, as his body begins to shrivel up:
+%nC, whose body begins to shrivel up, croaks out:
 
     I shall haunt your progress until the end of time.  A thousand
     curses on you and %l.
@@ -4328,9 +6787,9 @@ So, have you succeeded in your quest for the Amulet of Yendor?"
 "Congratulations, %p.  I always knew that if anyone could succeed
 in defeating the Wizard of Yendor and his minions, it would be you.
 
-"Go now, and take the Amulet to the astral plane.  Once there, present
+"Go now, and take the Amulet to the Astral Plane.  Once there, present
 the Amulet on the altar of %d.  Along the way you shall pass through the
-four elemental planes.  These planes are like nothing you have ever
+four Elemental Planes.  These planes are like nothing you have ever
 experienced before, so be prepared!
 
 "For this you were born, %s!  I am very proud of you."
