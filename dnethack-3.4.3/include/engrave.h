@@ -97,7 +97,8 @@ struct engr {
 #define NUDZIARTH					(LAST_WARD+37)
 #define ALIGNMENT_THING				(LAST_WARD+38)
 #define UNKNOWN_GOD					(LAST_WARD+39)
-#define NUMINA						(LAST_WARD+40)
+#define BLACK_WEB					(LAST_WARD+40)
+#define NUMINA						(LAST_WARD+41)
 
 /*Some hallucinatory engravings have special properties. Keep track of them here*/
 /*Functional halucinatory wards, keep in sync with engrave.c!*/
@@ -110,6 +111,7 @@ struct engr {
 #define DEAD_GLIDER			7
 /*These engravings correspond to active drow houses*/
 #define BAENRE				8
+#define FIRST_DROW_SYM		BAENRE
 #define BARRISON_DEL_ARMGO	9
 #define XORLARRIN 			10
 #define FAEN_TLABBAR 		11
@@ -143,11 +145,22 @@ struct engr {
 #define MAGTHERE			32
 #define XAXOX				33
 #define FIRST_TOWER			SORCERE
-#define LAST_TOWER			XAXOX
+#define LAST_TOWER			MAGTHERE
+#define HOSTILE_TOWER		XAXOX
 
+	/*Special behavior, these identify drow gods*/
 #define LOLTH_SYMBOL		34
-#define EILISTRAEE_SYMBOL	35
-#define EDDER_SYMBOL		36
+#define KIARANSALEE_SYMBOL	35
+#define PEN_A_SYMBOL		36
+#define VER_TAS_SYMBOL		37
+#define FIRST_GODDESS	LOLTH_SYMBOL
+#define LAST_GODDESS	VER_TAS_SYMBOL
+
+#define EILISTRAEE_SYMBOL	38
+#define EDDER_SYMBOL		39
+
+
+#define LAST_DROW_SYM		EDDER_SYMBOL
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 
