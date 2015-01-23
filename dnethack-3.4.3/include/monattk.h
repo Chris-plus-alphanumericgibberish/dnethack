@@ -34,6 +34,7 @@
 #define AT_HITS		24	/* Automatic hit, no contact */
 #define AT_WISP		25	/* Attack with wisps of mist, no contact */
 #define AT_TNKR		26	/* Tinker attacks */
+#define AT_SHDW		27	/* Phased non-contact attack */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */
@@ -144,6 +145,9 @@
 #define AD_FRWK		140 /* "Firework" explosions */
 #define AD_STDY		141 /* Monster studies you, other monsters do more damage. */
 #define AD_OONA		142 /* Oona's variable energy type and v and e spawning */
+#define AD_NTZC		143 /* netzach sephiroth's anti-equipment attack */
+#define AD_WTCH		144 /* The Watcher in the water's tentacle-spawning gaze */
+#define AD_SHDW		145 /* Black Web shadow weapons */
 
 
 //#define AD_AHAZU	150 /*  */
