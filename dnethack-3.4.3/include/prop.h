@@ -20,8 +20,8 @@
 #define SEARCHING		11
 #define SEE_INVIS		12
 #define INVIS			13
-#define TELEPORT		14
-#define TELEPORT_CONTROL	15
+#define TELEPORT_CONTROL	14
+#define TELEPORT		15
 #define POLYMORPH		16
 #define POLYMORPH_CONTROL	17
 #define LEVITATION		18
@@ -61,7 +61,7 @@
 #define ADORNED			52
 #define REGENERATION	53
 #define WARN_UNDEAD		54
-#define INVULNERABLE		55
+#define INVULNERABLE	55
 #define FREE_ACTION		56
 #define SWIMMING		57
 #define SLIMED			58
