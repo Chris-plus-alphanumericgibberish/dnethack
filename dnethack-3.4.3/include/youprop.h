@@ -115,12 +115,16 @@
 #define HConfusion		u.uprops[CONFUSION].intrinsic
 #define Confusion		(HConfusion && !(u.specialSealsActive&SEAL_NUMINA))
 
+#define LightBlind		((Race_if(PM_DROW) && !(u.sealsActive&SEAL_AMON)) && (viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit))
 #define Blinded			u.uprops[BLINDED].intrinsic
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK)
 		/* ...means blind because of a cover */
-#define Blind	((Blinded || Blindfolded || !haseyes(youmonst.data)) && \
+#define NoLightBlind	((Blinded || Blindfolded || !haseyes(youmonst.data)) && \
 		 !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp != CRYSTAL_PLATE_MAIL)) && \
-		 !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD))
+		 !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) && !forcesight)
+#define Blind	((Blinded || Blindfolded || !haseyes(youmonst.data) || LightBlind) && \
+		 !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp != CRYSTAL_PLATE_MAIL)) && \
+		 !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) && !forcesight)
 		/* ...the Eyes operate even when you really are blind
 		    or don't have any eyes */
 
@@ -231,7 +235,7 @@
 
 #define HStealth		u.uprops[STEALTH].intrinsic
 #define EStealth		u.uprops[STEALTH].extrinsic
-#define BStealth		u.uprops[STEALTH].blocked
+#define BStealth		(u.uprops[STEALTH].blocked || (uwep && uwep->otyp == SILVER_KHAKKHARA))
 #define Stealth			((HStealth || EStealth || Underwater || u.sealsActive&SEAL_SHIRO || \
 						 (flags.run != 0 && uwep && uwep->oartifact == ART_TOBIUME)) && !BStealth)
 
@@ -282,8 +286,12 @@
 #endif
 	/* May touch surface; does not override any others */
 
-#define Wwalking		((u.uprops[WWALKING].extrinsic || u.sealsActive&SEAL_EURYNOME) && \
+#define Wwalking		((HWwalking || EWwalking || u.sealsActive&SEAL_EURYNOME) && \
 				 !Is_waterlevel(&u.uz))
+
+#define HWwalking	u.uprops[WWALKING].intrinsic
+#define EWwalking	u.uprops[WWALKING].extrinsic
+
 	/* Don't get wet, can't go under water; overrides others except levitation */
 	/* Wwalking is meaningless on water level */
 
@@ -329,7 +337,7 @@
 #define HPasses_walls		u.uprops[PASSES_WALLS].intrinsic
 #define EPasses_walls		u.uprops[PASSES_WALLS].extrinsic
 #define Passes_walls		(HPasses_walls || EPasses_walls || \
-				 passes_walls(youmonst.data))
+				 (uclockwork && u.phasengn)|| passes_walls(youmonst.data))
 #ifdef CONVICT
 # define Phasing            u.uprops[PASSES_WALLS].intrinsic
 #endif /* CONVICT */
