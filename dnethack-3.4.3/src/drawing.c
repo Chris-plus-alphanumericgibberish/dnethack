@@ -191,7 +191,7 @@ const char * const monexplain[MAXMCLASSES] = {
     "apelike creature",		"zombie",
 
     "human or elf",		"ghost",		"shade",	"golem",
-    "major demon",		"sea monster",		"lizard", "plant",
+    "major demon",		"sea monster",	"lizard",	"plant",
     "long worm tail",		"mimic"
 };
 
@@ -211,7 +211,7 @@ const struct symdef def_warnsyms[WARNCOUNT] = {
  *  Note:  {ibm|dec|mac}_graphics[] arrays also depend on this symbol order.
  */
 const struct symdef defsyms[MAXPCHARS] = {
-/* 0*/	{' ', "dark part of a room",C(NO_COLOR)},	/* stone */
+/* 0*/	{' ', "unknown area",C(NO_COLOR)},	/* stone */
 	{'|', "wall",		C(CLR_GRAY)},	/* vwall */
 	{'-', "wall",		C(CLR_GRAY)},	/* hwall */
 	{'-', "wall",		C(CLR_GRAY)},	/* tlcorn */
@@ -231,7 +231,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'#', "iron bars",	C(HI_METAL)},	/* bars */
 	{'#', "tree",		C(CLR_GREEN)},	/* tree */
 	{'#', "dead tree",	C(CLR_BLACK)},	/* dead tree */
-	{'.', "floor of a room",C(CLR_GRAY)},	/* room */
+	{'.', "floor of a dark room", C(CLR_BLACK)},	/* drkroom */
+	{'.', "floor of a room",C(CLR_GRAY)},	/* litroom */
+	{'#', "bright room",C(CLR_WHITE)},	/* brightrm */
 /*20*/	{'#', "corridor",	C(CLR_GRAY)},	/* dark corr */
 	{'#', "lit corridor",	C(CLR_GRAY)},	/* lit corr (see mapglyph.c) */
 	{'<', "staircase up",	C(CLR_GRAY)},	/* upstair */
@@ -347,7 +349,9 @@ static uchar ibm_graphics[MAXPCHARS] = {
 	240,	/* S_bars:	equivalence symbol */
 	241,	/* S_tree:	plus or minus symbol */
 	241,	/* S_deadtree:	plus or minus symbol */
-	0xfa,	/* S_room:	meta-z, centered dot */
+	0xfa,	/* S_drkroom:	meta-z, centered dot */
+	0xfa,	/* S_litroom:	centered circle */
+	0xfe,	/* S_brightrm:	centered square */
 /*20*/	0xb0,	/* S_corr:	meta-0, light shading */
 	0xb1,	/* S_litcorr:	meta-1, medium shading */
 	g_FILLER(S_upstair),
@@ -447,7 +451,9 @@ static uchar dec_graphics[MAXPCHARS] = {
 	0xfb,	/* S_bars:	meta-{, small pi */
 	0xe7,	/* S_tree:	meta-g, plus-or-minus */
 	0xe7,	/* S_deadtree:	meta-g, plus-or-minus */
-	0xfe,	/* S_room:	meta-~, centered dot */
+	0xfe,	/* S_drkroom:	meta-~, centered dot */
+	0xfe,	/* S_litroom:	meta-~, centered dot */
+	g_FILLER(S_brightrm),
 /*20*/	g_FILLER(S_corr),
 	g_FILLER(S_litcorr),
 	g_FILLER(S_upstair),
@@ -545,7 +551,9 @@ static uchar mac_graphics[MAXPCHARS] = {
 	0xf0,	/* S_bars:	equivalency symbol */
 	0xf1,	/* S_tree:	plus-or-minus */
 	0xf1,	/* S_deadtree:	plus-or-minus */
-	g_FILLER(S_Room),
+	g_FILLER(S_drkroom),
+	g_FILLER(S_litroom),
+	g_FILLER(S_brightrm),
 /*20*/	0xB0,	/* S_corr */
 	g_FILLER(S_litcorr),
 	g_FILLER(S_upstair),
@@ -663,7 +671,7 @@ int glth, maxlen, offset;
     for (i = 0; i < maxlen; i++)
 	showsyms[i+offset] = (((i < glth) && graph_chars[i]) ?
 		       graph_chars[i] : defsyms[i+offset].sym);
-	monsyms[S_GHOST] = showsyms[S_room];
+	monsyms[S_GHOST] = showsyms[S_litroom];
 }
 
 #ifdef USER_DUNGEONCOLOR
@@ -883,7 +891,9 @@ boolean is_rlevel;
 	    showsyms[S_ndoor]   = 0xce;
 	    showsyms[S_vodoor]  = 0xce;
 	    showsyms[S_hodoor]  = 0xce;
-	    showsyms[S_room]    = 0xfa; /* centered dot */
+	    showsyms[S_drkroom] = 0xfa; /* centered dot */
+	    showsyms[S_litroom] = 0xfa; /* centered open circle */
+	    showsyms[S_brightrm]= 0xfe; /* centered square */
 	    showsyms[S_corr]    = 0xb1;
 	    showsyms[S_litcorr] = 0xb2;
 	    showsyms[S_upstair] = 0xf0; /* Greek Xi */
@@ -912,7 +922,7 @@ boolean is_rlevel;
 	    showsyms[S_anti_magic_trap] = 0x04;
 	    showsyms[S_polymorph_trap] = 0x04;
 #endif
-		monsyms[S_GHOST] = showsyms[S_room];
+		monsyms[S_GHOST] = showsyms[S_litroom];
 	}
 #endif /* ASCIIGRAPH */
 
