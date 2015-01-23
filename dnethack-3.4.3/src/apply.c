@@ -4209,6 +4209,10 @@ doapply()
 	case MIRROR:
 		res = use_mirror(obj);
 		break;
+	case SPOON:
+		if(Role_if(PM_CONVICT)) pline("The guards used to hand these out with our food rations.  No one was ever able to figure out why.");
+		else pline("You have never in your life seen such an odd item.  You have no idea how to use it.");
+	break;
 	case BELL:
 	case BELL_OF_OPENING:
 		use_bell(&obj);
