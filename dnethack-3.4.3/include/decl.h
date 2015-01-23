@@ -58,7 +58,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 	/*Medusa's Island*/
     d_level	d_medusa_level;
 	/*Castle*/
-    d_level	d_stronghold_level;
+	d_level	d_stronghold_level;
 	/*Gehennom*/
     d_level	d_valley_level;
     d_level	d_stair1_level;
@@ -75,14 +75,14 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define DISPATER_LEVEL	2
 #define MAMMON_LEVEL	3
 #define BELIAL_LEVEL	4
-    d_level	d_hell2_level;
+	d_level	d_hell2_level;
 	int		hell2_variant;
 #define LEVIATHAN_LEVEL	1
 #define LILITH_LEVEL	2
 #define BAALZEBUB_LEVEL	3
 #define MEPHISTOPHELES_LEVEL	4
-    d_level	d_hell3_level;
-    d_level	d_abyss_level;
+	d_level	d_hell3_level;
+	d_level	d_abyss_level;
 	int		abyss_variant;
 #define JUIBLEX_LEVEL	1
 #define JUIBLEX_RES		1
@@ -92,12 +92,12 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define BAPHOMET_LEVEL	4
 #define NIGHT_LEVEL		5
 #define NIGHT_RES		3
-    d_level	d_abys2_level;
+	d_level	d_abys2_level;
 	int		abys2_variant;
 #define ORCUS_LEVEL		1
 #define MALCANTHET_LEVEL	2
 #define GRAZ_ZT_LEVEL	3
-    d_level	d_brine_level;
+	d_level	d_brine_level;
 	int		brine_variant;
 #define DEMOGORGON_LEVEL	1
 #define DAGON_LEVEL		2
