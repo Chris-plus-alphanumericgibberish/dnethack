@@ -42,7 +42,7 @@ struct objclass {
 
 	Bitfield(oc_material,5);
 #define LIQUID		1	/* currently only for venom */
-#define WAX		2
+#define WAX			2
 #define VEGGY		3	/* foodstuffs */
 #define FLESH		4	/*   ditto    */
 #define PAPER		5
@@ -74,7 +74,7 @@ struct objclass {
 /* secondary damage: rot/acid/acid */
 #define is_corrodeable(otmp)	(objects[otmp->otyp].oc_material == COPPER || objects[otmp->otyp].oc_material == IRON)
 
-#define is_evaporable(otmp)	(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL)
+#define is_evaporable(otmp)	(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == DROVEN_HELM || otmp->otyp == NOBLE_S_DRESS)
 
 #define is_damageable(otmp) (is_rustprone(otmp) || is_flammable(otmp) || \
 				is_rottable(otmp) || is_corrodeable(otmp) || is_evaporable(otmp))
