@@ -26,7 +26,7 @@ extern boolean notonhead;	/* for long worms */
 STATIC_DCL void NDECL(cast_protection);
 STATIC_DCL int NDECL(throweffect);
 STATIC_DCL void FDECL(awaken_monsters,(int));
-STATIC_DCL void FDECL(do_earthquake,(int));
+STATIC_DCL void FDECL(do_earthquake_at,(int, int, int));
 
 int FDECL(donecromenu, (const char *,struct obj *));
 int FDECL(dopetmenu, (const char *,struct obj *));
@@ -969,16 +969,16 @@ touch_artifact(obj,mon)
 //	if (oart == &artilist[ART_CLARENT]  && (!yours || ) )
 #ifdef CONVICT
     /* This is a kludge, but I'm not sure where else to put it */
-    if (oart == &artilist[ART_IRON_BALL_OF_LIBERATION]) {
-	if (Role_if(PM_CONVICT) && (!obj->oerodeproof)) {
-	    obj->oerodeproof = TRUE;
-	    obj->owt = 300; /* Magically lightened, but still heavy */
-	}
+    // if (oart == &artilist[ART_IRON_BALL_OF_LIBERATION]) {
+	// if (Role_if(PM_CONVICT) && (!obj->oerodeproof)) {
+	    // obj->oerodeproof = TRUE;
+	    // obj->owt = 300; /* Magically lightened, but still heavy */
+	// }
 
-	if (Punished && (obj != uball)) {
-	    unpunish(); /* Remove a mundane heavy iron ball */
-	}
-    }
+	// if (Punished && (obj != uball)) {
+	    // unpunish(); /* Remove a mundane heavy iron ball */
+	// }
+    // }
 #endif /* CONVICT */
 
     return 1;
@@ -2831,23 +2831,23 @@ arti_invoke(obj)
 #ifdef CONVICT
 	case PHASING:   /* Walk through walls and stone like a xorn */
         if (Passes_walls) goto nothing_special;
-	    if (oart == &artilist[ART_IRON_BALL_OF_LIBERATION]) {
-		if (Punished && (obj != uball)) {
-		    unpunish(); /* Remove a mundane heavy iron ball */
-		}
+	    // if (oart == &artilist[ART_IRON_BALL_OF_LIBERATION]) {
+		// if (Punished && (obj != uball)) {
+		    // unpunish(); /* Remove a mundane heavy iron ball */
+		// }
 		
-		if (!Punished) {
-		    setworn(mkobj(CHAIN_CLASS, TRUE), W_CHAIN);
-		    setworn(obj, W_BALL);
-		    uball->spe = 1;
-		    if (!u.uswallow) {
-			placebc();
-			if (Blind) set_bc(1);	/* set up ball and chain variables */
-			newsym(u.ux,u.uy);		/* see ball&chain if can't see self */
-		    }
-		    Your("%s chains itself to you!", xname(obj));
-		}
-	    }
+		// if (!Punished) {
+		    // setworn(mkobj(CHAIN_CLASS, TRUE), W_CHAIN);
+		    // setworn(obj, W_BALL);
+		    // uball->spe = 1;
+		    // if (!u.uswallow) {
+			// placebc();
+			// if (Blind) set_bc(1);	/* set up ball and chain variables */
+			// newsym(u.ux,u.uy);		/* see ball&chain if can't see self */
+		    // }
+		    // Your("%s chains itself to you!", xname(obj));
+		// }
+	    // }
         if (!Hallucination) {    
             Your("body begins to feel less solid.");
         } else {
@@ -2903,9 +2903,9 @@ arti_invoke(obj)
 				int gonecnt = 0;
 				You("touch the tip of the Silence Glaive to the ground.");
 				// pline("The walls of the dungeon quake!");
-				do_earthquake(100);
-				// do_earthquake(100);
-				// do_earthquake(100);
+				do_earthquake_at(12,u.ux, u.uy);
+				do_earthquake_at(6,u.ux, u.uy);
+				do_earthquake_at(3,u.ux, u.uy);
 				You("call out to the souls and spirits inhabiting this land.");
 				for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 					mtmp2 = mtmp->nmon;
@@ -3340,7 +3340,39 @@ arti_invoke(obj)
 				}
 				pline_The("entire dungeon is quaking around you!");
 				do_earthquake(u.ulevel / 4 + 1);
-				do_earthquake(u.ulevel / 2 + 1);
+				do_earthquake(u.ulevel / 3 + 1);
+				awaken_monsters(ROWNO * COLNO);
+			   }
+	break;
+	case FALLING_STARS:{
+				int starfall = rnd(u.ulevel/10+1), x, y, n;
+				coord cc;
+				verbalize("Even Stars Fall");
+				for (starfall; starfall > 0; starfall--) {
+					x = rn2(COLNO-2)+1;
+					y = rn2(ROWNO-2)+1;
+					cc.x=x;cc.y=y;
+					n=rnd(4)+1;
+					explode(x, y,
+						8, //1 = AD_PHYS, explode uses nonstandard damage type flags...
+						d(5,6), 0,
+						EXPL_MUDDY);
+					while(n--) {
+						explode(x, y,
+							1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
+							d(5,6), 0,
+							EXPL_FIERY);
+						
+						x = cc.x+rnd(3)-1; y = cc.y+rnd(3)-1;
+						if (!isok(x,y)) {
+							/* Spell is reflected back to center */
+							x = cc.x;
+							y = cc.y;
+						}
+					}
+						do_earthquake_at(10, cc.x, cc.y);
+						do_earthquake_at(6, cc.x, cc.y);
+				}
 				awaken_monsters(ROWNO * COLNO);
 			   }
 	break;
@@ -3959,13 +3991,19 @@ arti_invoke(obj)
 			update_inventory();
 			if(obj->ovar1 && yn("Contact a known spirit?") == 'y'){
 				long yourseals = u.sealsKnown;
+				long yourspecial = u.specialSealsKnown;
 				u.sealsKnown = obj->ovar1;
 				u.uconduct.literate++;
 				lostname = pick_seal();
-				if(!lostname) break;
+				if(!lostname){
+					u.sealsKnown = yourseals;
+					u.specialSealsKnown = yourspecial;
+					break;
+				}
 				delay = -25;
 				artiptr = obj;
 				u.sealsKnown = yourseals;
+				u.specialSealsKnown = yourspecial;
 				set_occupation(read_lost, "studying", 0);
 			}
 			else if(yn("Risk your name amongst the Lost?") == 'y'){
@@ -5738,8 +5776,8 @@ int distance;
  */
 
 STATIC_OVL void
-do_earthquake(force)
-int force;
+do_earthquake_at(force,sx,sy)
+int force,sx,sy;
 {
 	register int x,y;
 	struct monst *mtmp;
@@ -5747,10 +5785,10 @@ int force;
 	struct trap *chasm;
 	int start_x, start_y, end_x, end_y;
 
-	start_x = u.ux - (force * 2);
-	start_y = u.uy - (force * 2);
-	end_x = u.ux + (force * 2);
-	end_y = u.uy + (force * 2);
+	start_x = sx - (force * 2);
+	start_y = sy - (force * 2);
+	end_x = sx + (force * 2);
+	end_y = sy + (force * 2);
 	if (start_x < 1) start_x = 1;
 	if (start_y < 1) start_y = 1;
 	if (end_x >= COLNO) end_x = COLNO - 1;
@@ -5765,7 +5803,7 @@ int force;
 							    Amonnam(mtmp));
 		    else
 			You_hear("a thumping sound.");
-		    if (x==u.ux && y==u.uy)
+		    if (x==sx && y==sy)
 			You("easily dodge the falling %s.",
 							    mon_nam(mtmp));
 		    newsym(x,y);
@@ -5819,7 +5857,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 		    if ((otmp = boulder_at(x, y)) != 0) {
 			if (cansee(x, y))
 			   pline("KADOOM! The %s falls into a chasm%s!", xname(boulder_at(x,y)),
-			      ((x == u.ux) && (y == u.uy)) ? " below you" : "");
+			      ((x == sx) && (y == sy)) ? " below you" : "");
 			if (mtmp)
 				mtmp->mtrapped = 0;
 			obj_extract_self(otmp);
@@ -5851,7 +5889,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 				    xkilled(mtmp,0);
 				}
 			}
-		    } else if (x == u.ux && y == u.uy) {
+		    } else if (x == sx && y == sy) {
 			    if (Levitation || Flying ||
 						is_clinger(youmonst.data)) {
 				    pline("A chasm opens up under you!");
