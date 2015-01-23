@@ -181,6 +181,8 @@ MONSTER:';',"shark",(05,16)
 MONSTER:';',"shark",(57,00)
 MONSTER:';',"shark",(57,16)
 # The throne room and the court monsters
+# MONSTER:'L',"master lich",(36,08),asleep,hostile
+
 MONSTER:monster[0],random,(27,05)
 MONSTER:monster[1],random,(30,05)
 MONSTER:monster[2],random,(33,05)
@@ -430,6 +432,8 @@ MONSTER:';',"shark",(05,00)
 MONSTER:';',"shark",(57,18)
 MONSTER:';',"shark",(57,00)
 # The throne room and the court monsters 31-37 06-12
+# MONSTER:'L',"death knight",(36,09),asleep,hostile
+
 MONSTER:monster[0],random,(37,06)
 MONSTER:monster[1],random,(31,06)
 MONSTER:monster[2],random,(33,06)
@@ -531,15 +535,15 @@ MAP
 5 |.......|----.|..........----......  ... }}}.}.}.}.}}................|---|
 6 |.......+.....|----------|..|            }..}.}.}.}..T......T............|
 7 |.......|----.|.+........+..S.  .......... }}}}}}}}  ............T...|---|
-8 |...\...|..+....|   H    ----...........    }}}}}}     ............  H### 
-9 ---------..------#######                     }}}}                    #### 
+8 |...\...|..+....|   H    --S-...........    }}}}}}     ............  H### 
+9 ---------..------#######   #                 }}}}                    #### 
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #          1         2         3         4         5         6         7    7
 # Randomize some monsters
 # Random registers initialisation
 RANDOM_OBJECTS:'[',')','*','%'
-RANDOM_PLACES:(10,14),(10,18),(27,16),(28,18)
+RANDOM_PLACES:(10,14),(10,18),(27,16),(28,19)
 RANDOM_MONSTERS:'L','N','E','H','M','O','R','T','X','Z'
 
 TELEPORT_REGION:(00,00,06,03),(07,00,68,19),down
@@ -744,7 +748,7 @@ MONSTER:monster[5],random,(08,15),asleep
 MONSTER:monster[6],random,(08,16),asleep
 MONSTER:monster[7],random,(08,17),asleep
 # Custodians
-MONSTER:'L',"master lich",(05,18),asleep,hostile
+# MONSTER:'L',"master lich",(05,18),asleep,hostile
 OBJECT:'?',random,(05,18)
 MONSTER:''',"iron golem",(03,18),asleep,hostile
 MONSTER:''',"iron golem",(08,18),asleep,hostile
@@ -941,8 +945,8 @@ MONSTER:'@',"soldier",(58,13)
 # The four dragons that are guarding the storerooms
 MONSTER:'D',random,(48,07)
 MONSTER:'D',random,(50,07)
-MONSTER:'D',random,(49,11)
 MONSTER:'D',random,(50,11)
+MONSTER:'D',random,(51,11)
 # Sea monsters in the moat
 MONSTER:';',"giant eel",(13,08)
 MONSTER:';',"giant eel",(06,03)
@@ -953,6 +957,8 @@ MONSTER:';',"shark",(10,18)
 MONSTER:';',"shark",(51,00)
 MONSTER:';',"shark",(57,18)
 # The throne room and the court monsters
+# MONSTER:'L',"master lich",(05,18),asleep,hostile
+
 MONSTER:monster[0],random,(34,11)
 MONSTER:monster[1],random,(36,11)
 MONSTER:monster[2],random,(38,11)
@@ -1040,7 +1046,7 @@ REGION:(57,08,57,10),unlit,"ordinary"
 MAZE: "castle-5",random
 FLAGS: noteleport
 GEOMETRY:center,center
-
+ 
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
