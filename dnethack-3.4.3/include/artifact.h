@@ -65,6 +65,7 @@
 #define SPFX2_SPELLUP	0x1000000L	/* increases spell power */
 #define SPFX2_TENTROD	0x2000000L	/* various effects */
 #define SPFX2_SHINING	0x4000000L	/* passes through armor */
+#define SPFX2_THREEHEAD	0x8000000L	/* 2 extra attacks plus stunning if all three hit */
 
 #define SPFX3_ENGRV		0x0000001L	/* Allows fast engraving (as for Athame) */
 #define SPFX3_PCTRL		0x0000002L	/* grants polymorph control (caried or wielded) */
@@ -125,7 +126,7 @@
 #define	R_NAMES_2		0x04000000L	//Other half of the spirits
 
 
-#define	LAST_PAGE	0x40000000L
+#define	LAST_PAGE		0x40000000L
 
 //	-Summon 
 #define	SELECT_BYAKHEE		1
@@ -181,14 +182,27 @@
 #define COMMAND_MACE			 3
 #define COMMAND_SPEAR			 4
 #define COMMAND_LANCE			 5
-#define COMMAND_LADDER			 6
-#define COMMAND_CLAIRVOYANCE	 7
-#define COMMAND_FEAR			 8
-#define COMMAND_LIFE			 9
-#define COMMAND_KNEEL			10
+
+#define COMMAND_D_GREAT			 6
+#define COMMAND_MOON_AXE		 7
+#define COMMAND_KHAKKHARA		 8
+#define COMMAND_DROVEN_SPEAR	 9
+#define COMMAND_D_LANCE			10
+
+#define COMMAND_E_SWORD			11
+#define COMMAND_E_SICKLE		12
+#define COMMAND_E_MACE			13
+#define COMMAND_E_SPEAR			14
+#define COMMAND_E_LANCE			15
+
+#define COMMAND_LADDER			16
+#define COMMAND_CLAIRVOYANCE	17
+#define COMMAND_FEAR			18
+#define COMMAND_LIFE			19
+#define COMMAND_KNEEL			20
 
 struct artifact {
-	short	    otyp;
+	int	    otyp;
 	const char  *name;
 	unsigned long spfx;	/* special effect from wielding/wearing */
 	unsigned long cspfx;	/* special effect just from carrying obj */
@@ -244,6 +258,7 @@ struct artifact {
 #define VOID_CHIME	(LAST_PROP+37)
 #define INFINITESPELLS	(LAST_PROP+38)
 #define SPIRITNAMES	(LAST_PROP+39)
+#define RAISE_UNDEAD	(LAST_PROP+40)
 
 #define is_nameable_artifact(a) (\
 			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\
