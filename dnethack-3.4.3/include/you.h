@@ -16,8 +16,8 @@
 /*** Substructures ***/
 
 struct RoleName {
-	const char	*m;	/* name when character is male */
-	const char	*f;	/* when female; null if same as male */
+	char	*m;	/* name when character is male */
+	char	*f;	/* when female; null if same as male */
 };
 
 struct RoleAdvance {
@@ -49,7 +49,7 @@ struct u_event {
 
 	Bitfield(invoked,1);		/* invoked Gate to the Sanctum level */
 	Bitfield(gehennom_entered,1);	/* entered Gehennom via Valley */
-	Bitfield(uhand_of_elbereth,4);	/* became Hand of Elbereth */
+	Bitfield(uhand_of_elbereth,5);	/* became Hand of Elbereth */
 	Bitfield(udemigod,1);		/* killed the wiz */
 	Bitfield(ukilled_apollyon,1);		/* killed the angel of the pit.  Lucifer should spawn on Astral */
 	Bitfield(ukilled_illurien,1);		/* Harassment */
@@ -150,6 +150,7 @@ struct Role {
 extern const struct Role roles[];	/* table of available roles */
 extern struct Role urole;
 #define Role_if(X)	(urole.malenum == (X))
+#define Pantheon_if(X)	(roles[flags.pantheon].malenum == (X))
 #define Role_switch	(urole.malenum)
 
 /* used during initialization for race, gender, and alignment
@@ -206,6 +207,7 @@ struct Race {
 	struct RoleAdvance enadv; /* energy advancement */
 	int   nv_range;		/* night vision range */
 #define NO_NIGHTVISION	0
+#define NORMALNIGHTVIS	1
 #define NIGHTVISION2	2
 #define NIGHTVISION3	3
 #if 0	/* DEFERRED */
@@ -294,13 +296,14 @@ struct you {
 	int	 uhunger;	/* refd only in eat.c and shk.c */
 	int	 uhungermax;/*  */
 #define YouHunger	(Race_if(PM_INCANTIFIER) ? u.uen : u.uhunger)
+#define DEFAULT_HMAX	2000
 	unsigned uhs;		/* hunger state - see eat.c */
 
 	boolean ukinghill; /* records if you are carying the pirate treasure (and are therefor king of the hill) */
 	int protean; /* counter for the auto-polypiling power of the pirate treasure*/
 	int uhouse; /* drow house info */
 	struct prop uprops[LAST_PROP+1];
-
+	
 	unsigned umconf;
 	char usick_cause[PL_PSIZ+20]; /* sizeof "unicorn horn named "+1 */
 	Bitfield(usick_type,2);
@@ -334,6 +337,26 @@ struct you {
 #define	NORM_CLOCKSPEED	2
 #define	SLOW_CLOCKSPEED	3
 	long clockworkUpgrades;
+	int uboiler;
+#define	MAX_BOILER	2000
+	int ustove;
+	int utemp;
+#define	WARM			 1
+#define	HOT				 2
+#define	BURNING_HOT		 5
+#define	MELTING			10
+#define	MELTED			20
+/*Note: because clockwork_eat_menu uses ints instead of longs, all upgrades that change how you eat must fit in an int.*/
+#define OIL_STOVE			0x000001L
+#define WOOD_STOVE			0x000002L
+#define FAST_SWITCH			0x000004L
+#define EFFICIENT_SWITCH	0x000008L
+#define ARMOR_PLATING		0x000010L
+#define PHASE_ENGINE		0x000020L
+#define MAGIC_FURNACE		0x000040L
+#define HELLFIRE_FURNACE	0x000080L
+#define SCRAP_MAW			0x000100L
+#define HIGH_TENSION		0x000200L
 	
 	int slowclock;
 	
@@ -353,10 +376,12 @@ struct you {
 	Bitfield(stumbin,2);		/* Whether the stumbling horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
 	Bitfield(wandein,2);		/* Whether the wandering horror has normal innards, undifferentiated innards, or solid/nonexistent innards */
 	Bitfield(umartial,1);		/* blessed food detection; sense unsafe food */
-	/* 25 free bits */
-
+	Bitfield(phasengn,1);		/* clockwork phase engine */
+	/* 24 free bits */
+	
 	int oonaenergy;				/* Record the energy type used by Oona in your game. (Worm that Walks switches?) */
-	unsigned udg_cnt;		/* how long you have been demigod */
+	unsigned udg_cnt;		/* timer for wizard intervention WRONG?:how long you have been demigod */
+	unsigned ill_cnt;		/* timer for illurien intervention */
 	struct u_event	uevent;		/* certain events have happened */
 	struct u_have	uhave;		/* you're carrying special objects */
 	struct u_conduct uconduct;	/* KMH, conduct */
@@ -366,6 +391,7 @@ struct you {
 			amax,		/* your max attributes (eg. str) */
 			atemp,		/* used for temporary loss/gain */
 			atime;		/* used for loss/gain countdown */
+	long exerchkturn;	/* Stat Excercise: What turn is the next exerchk? */		
 	align	ualign;			/* character alignment */
 #define CONVERT		2
 #define A_ORIGINAL	1
@@ -390,7 +416,7 @@ struct you {
 	uchar	sowdisc;		/* sowing discord (spirit special attack) */
 	int	uhp,uhpmax,uhpmax_real;
 	int	uen, uenmax,uenmax_real;		/* magical energy - M. Stephenson */
-	int ugangr;			/* if the gods are angry at you */
+	int ugangr[GA_NUM];			/* if the gods are angry at you */
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */
 	long lastprayed;
@@ -426,7 +452,7 @@ struct you {
 	int	umortality;		/* how many times you died */
 	int ugrave_arise; /* you die and become something aside from a ghost */
 	time_t	ubirthday;		/* real world time when game began */
-
+	
 	int	weapon_slots;		/* unused skill slots */
 	int	skills_advanced;		/* # of advances made so far */
 	xchar	skill_record[P_SKILL_LIMIT];	/* skill advancements */
@@ -460,7 +486,7 @@ struct you {
 #define WARD_VEIOISTAFUR	0x0400000L
 #define WARD_THJOFASTAFUR	0x0800000L
 
-
+	
 	int sealorder[31];
 	long	sealsKnown;
 	long	specialSealsKnown;
@@ -513,6 +539,7 @@ struct you {
 #define SEAL_NUDZIARTH				0x00000020L
 #define SEAL_ALIGNMENT_THING		0x00000040L
 #define SEAL_UNKNOWN_GOD			0x00000080L
+#define SEAL_BLACK_WEB				0x00000100L
 #define SEAL_NUMINA					0x40000000L
 //	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
 	
@@ -604,18 +631,21 @@ struct you {
 #define	PWR_EMBASSY_OF_ELEMENTS		58
 #define	PWR_SUMMON_MONSTER			59
 #define	PWR_MIRROR_SHATTER			60
-#define	PWR_PHASE_STEP				61
-#define	PWR_IDENTIFY_INVENTORY		62
-#define	PWR_CLAIRVOYANCE			63
-#define	PWR_FIND_PATH				64
-#define	PWR_GNOSIS_PREMONITION		65
-#define	NUMBER_POWERS				66
+#define	PWR_FLOWING_FORMS			61
+#define	PWR_PHASE_STEP				62
+#define	PWR_BLACK_BOLT				63
+#define	PWR_WEAVE_BLACK_WEB			64
+#define	PWR_IDENTIFY_INVENTORY		65
+#define	PWR_CLAIRVOYANCE			66
+#define	PWR_FIND_PATH				67
+#define	PWR_GNOSIS_PREMONITION		68
+#define	NUMBER_POWERS				69
 
 	int spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
 //	char spiritPLetters[NUMBER_POWERS];
 	long spiritPColdowns[NUMBER_POWERS];
 	
-
+	
 	/* 	variable that keeps track of summoning in your vicinity.
 		Only allow 1 per turn, to help reduce summoning cascades. */
 	boolean summonMonster;
@@ -627,16 +657,17 @@ struct you {
 	int voidChime;
 	short RoSPkills, RoSPflights;
 	/*Keter counters*/
-	int keter, chokhmah, binah, gevurah, hod, daat;
+	int keter, chokhmah, binah, gevurah, hod, daat, netzach;
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
-#define base_attack_bonus	((Role_if(PM_BARBARIAN) || Role_if(PM_CONVICT) || Role_if(PM_KNIGHT) || (!uwep && Role_if(PM_MONK)) || Role_if(PM_PIRATE) || Role_if(PM_SAMURAI) || Role_if(PM_VALKYRIE)) ? 1.00 :\
+#define BASE_ATTACK_BONUS	((Role_if(PM_BARBARIAN) || Role_if(PM_CONVICT) || Role_if(PM_KNIGHT) || (!uwep && Role_if(PM_MONK)) || Role_if(PM_PIRATE) || Role_if(PM_SAMURAI) || Role_if(PM_VALKYRIE)) ? 1.00 :\
 							 (Role_if(PM_ARCHEOLOGIST) || Role_if(PM_EXILE) || Role_if(PM_CAVEMAN) || Role_if(PM_MONK) || Role_if(PM_NOBLEMAN) || Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER)) ? 0.75 :\
 							 (Role_if(PM_HEALER) || Role_if(PM_TOURIST) || Role_if(PM_WIZARD)) ? 0.50:\
 							  .5) /* Failsafe */
 
 extern long sealKey[34]; /*Defined in u_init.c*/
+extern boolean forcesight; /*Defined in u_init.c*/
 extern char *wardDecode[26]; /*Defined in spell.c*/
 extern int wardMax[18]; /*Defined in engrave.c*/
 extern char *sealNames[]; /*Defined in engrave.c*/
