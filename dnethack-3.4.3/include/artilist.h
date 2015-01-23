@@ -42,6 +42,7 @@ A("",				STRANGE_OBJECT,
 	0, 0, 0, NO_ATTK, NO_DFNS, NO_CARY, 0, A_NONE, NON_PM, NON_PM, 0L, 0,0 ,0),
 
 //////////////////////Crowning Gifts///////////////////////////////////////
+/*Take Me Up/Cast Me Away*/
 A("Excalibur",			LONG_SWORD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
 	PHYS(5,10),	DRLI(0,0),	NO_CARY,	
@@ -51,6 +52,7 @@ A("Excalibur",			LONG_SWORD,
  *	Stormbringer only has a 2 because it can drain a level,
  *	providing 8 more.
  */
+
 A("Stormbringer",		RUNESWORD,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL|SPFX_DRLI), 0, 0,
 	DRLI(5,2),	DRLI(0,0),	NO_CARY,	
@@ -60,6 +62,7 @@ A("Reaver",			SCIMITAR,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,0,
 	PHYS(5,8),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_PIRATE, NON_PM, 6000L,
 	SPFX2_STEAL, 0, 0 ),
+
 /*
  *	Two problems:  1) doesn't let trolls regenerate heads,
  *	2) doesn't give unusual message for 2-headed monsters (but
@@ -71,12 +74,17 @@ A("Vorpal Blade",		LONG_SWORD,
 	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, /*Vorpal Blade also uses exploading dice (roll again if maximum number is rolled)*/
 	0,0,0),							 /*According to an article on 1d4Chan, the average of an exploading die is roughly that of a die one size larger*/
 									 /*So vorpal sword is effectively 2d10+2/2d14+2*/
-A("Crown of the Saint King",	HELMET, /*Actually gold circlet*/
+A("The Bow of Skadi",	BOW,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK), 0, 0,
+	COLD(1,24),	NO_DFNS,	CARY(AD_COLD),
+	0, A_LAWFUL, PM_VALKYRIE, NON_PM, 4000L, /*Read to learn Cone of Cold (Skadi's Galdr) */
+	SPFX2_COLD2,0,0),
+A("The Crown of the Saint King",	HELMET, /*Actually gold circlet*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	LEADERSHIP, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
 	0,0,WSFX_PLUSSEV),
-A("Helm of the Dark Lord",	HELMET, /*Actually visored helmet*/
+A("The Helm of the Dark Lord",	HELMET, /*Actually visored helmet*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	LEADERSHIP, A_CHAOTIC, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
@@ -115,11 +123,11 @@ A("Sting",			ELVEN_DAGGER,
 
 A("Grimtooth",			ORCISH_DAGGER, //needs quote
     (SPFX_WARN|SPFX_DFLAG2), 0, (M2_ELF|M2_HUMAN|M2_MINION),
-	PHYS(5,0),	NO_DFNS,	NO_CARY,	
+	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	0, A_CHAOTIC, NON_PM, PM_ORC, 300L, 
 	0,0,0),
 
-A("Slave to Armok",			DWARVISH_MATTOCK, /*two handed, so no twoweaponing.*/
+A("The Slave to Armok",			DWARVISH_MATTOCK, /*two handed, so no twoweaponing.*/
 	(SPFX_DFLAG2), 0, (M2_ELF|M2_LORD|M2_PEACEFUL|M2_ORC), /*DF Dwarves can be a nasty lot.*/
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	0, A_LAWFUL, NON_PM, PM_DWARF, 2500L, 
@@ -235,7 +243,7 @@ A("Clarent",			LONG_SWORD, /*quote (sorta)*/
 	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
 	SPFX2_DIG,0,0), 
 
-A("Rod of Lordly Might", MACE, /*needs quote*/
+A("The Rod of Lordly Might", MACE, /*needs quote*/
 	(SPFX_RESTR|SPFX_DEFN), 0, 0,
 	PHYS(3,0),	NO_DFNS,	NO_CARY,
 	LORDLY,	A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, 
@@ -279,9 +287,9 @@ A("Mirror Brand",	LONG_SWORD,
 	SPFX2_SILVERED,0,0),
 
 A("Sunsword",			LONG_SWORD,	
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_SEARCH|SPFX_ATTK|SPFX_BEHEAD), 0, (M2_UNDEAD|M2_DEMON),
+	(SPFX_RESTR|SPFX_DFLAG2|SPFX_SEARCH|SPFX_ATTK), 0, (M2_UNDEAD|M2_DEMON),
 	PHYS(1,0),	DFNS(AD_BLND),	NO_CARY,	/*also petrifies trolls, making this weapon strictly better than*/
-	0, A_LAWFUL, NON_PM, NON_PM, 1500L, 	/*trollsbane.  But trollsbane can be twoweaponed.  And is silver.*/
+	0, A_LAWFUL, NON_PM, NON_PM, 1500L, 	/*trollsbane.  But trollsbane can be twoweaponed.*/
 	SPFX2_SHINING|SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,0,0), 
 
 A("The Axe of the Dwarvish Lords", BATTLE_AXE, /*can be thrown by dwarves*/
@@ -296,7 +304,7 @@ A("Windrider",	BOOMERANG, /*returns to your hand.*/
 	0,	A_NONE, NON_PM, NON_PM, 4000L, 
 	0,0,0),
 
-A("Rod of the Ram",			MACE, /* Wolf, Ram, and Hart? Ram demon? */
+A("The Rod of the Ram",			MACE, /* Wolf, Ram, and Hart? Ram demon? */
 	(SPFX_RESTR), 0, 0,
 	PHYS(1,0),	NO_DFNS,	NO_CARY, //needs quote	
 	0, A_NEUTRAL, NON_PM, NON_PM, 3000L, 
@@ -308,9 +316,15 @@ A("Atma Weapon", 		BEAMSWORD, /*Sword whose attack power is bound to its wielder
 	0, A_NONE, NON_PM, NON_PM, 6660L, 
 	0,0,0),
 
+A("Limited Moon", 		MOON_AXE, /*Axe whose attack power is bound to its wielder's magical energy*/
+	(SPFX_RESTR), 0, 0,
+	PHYS(1,0),	NO_DFNS,	NO_CARY, //needs quote
+	0, A_CHAOTIC, NON_PM, NON_PM, 6660L, 
+	0,0,0),
+
 A("Tensa Zangetsu",		TSURUGI,
 	(SPFX_RESTR|SPFX_HSPDAM), 0, 0, /*also has a haste effect when wielded, but massively increases hunger and damages the wielder*/
-	PHYS(1,0),	NO_DFNS,	NO_CARY, /*The damage effect is cripplingly bad, really...*/
+	PHYS(1,0),	NO_DFNS,	NO_CARY,
 	SPEED_BANKAI, A_NEUTRAL, NON_PM, NON_PM, 4444L,/*The invoked attack is very powerful*/
 	0,0,0), 
 
@@ -337,7 +351,7 @@ A("The Lance of Longinus",			SILVER_SPEAR,
 
 A("The Arkenstone", DIAMOND,
     SPFX_RESTR, SPFX_AGGRM, 0,
-    NO_ATTK, NO_DFNS, NO_CARY, 
+    NO_ATTK, NO_DFNS, NO_CARY,
 	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
 	0,SPFX3_LIGHT,0),
 
@@ -349,7 +363,7 @@ A("The Silence Glaive",		GLAIVE, //needs quote
 
 A("The Garnet Rod",		UNIVERSAL_KEY, //needs quote
 	(SPFX_RESTR|SPFX_EREGEN|SPFX_REGEN), 0, 0, /*also has a haste effect when wielded, but massively increases hunger*/
-	NO_ATTK,	NO_ATTK,	NO_CARY,	
+	NO_ATTK,	NO_ATTK,	NO_CARY,
 	PLUTO, A_NONE, NON_PM, NON_PM, 8000L, 
 	0,0,0),
 
@@ -359,19 +373,19 @@ A("Helping Hand",			GRAPPLING_HOOK, //needs quote
 	UNTRAP, A_LAWFUL, NON_PM, NON_PM, 2000L, 
 	SPFX2_STLTH,SPFX3_ENGRV,0),
 
-A("Blade Singer's Spear",		SILVER_SPEAR,//needs quote
+A("The Blade Singer's Spear",		SILVER_SPEAR,//needs quote
 	(SPFX_RESTR|SPFX_DEFN), 0, 0,
 	PHYS(6,6),	NO_DFNS,	NO_CARY,
 	DANCE_DAGGER, A_NONE, NON_PM, NON_PM, 1500L, 
 	SPFX2_DANCER,0,0),
 
-A("Blade Dancer's Dagger",		SILVER_DAGGER,//needs quote
+A("The Blade Dancer's Dagger",		SILVER_DAGGER,//needs quote
 	(SPFX_RESTR|SPFX_DEFN), 0, 0,
 	PHYS(4,4),	NO_DFNS,	NO_CARY,
 	SING_SPEAR, A_NONE, NON_PM, NON_PM, 1500L, 
 	SPFX2_DANCER,SPFX3_NOCNT,0),
 
-A("Limb of the Black Tree",			CLUB,//needs quote
+A("The Limb of the Black Tree",			CLUB,//needs quote
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN), 0, 0,
 	FIRE(4,1),	NO_DFNS,	FIRE(0,0),
 	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
@@ -383,7 +397,7 @@ A("Hellfire",			CROSSBOW,/*adapted from Slash'em*/
 	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
 	SPFX2_FIRE2,0,0),
 
-A("Lash of the Cold Waste",		BULLWHIP,
+A("The Lash of the Cold Waste",		BULLWHIP,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN), 0, 0,
 	COLD(4,1),	NO_DFNS,	COLD(0,0),	
 	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
@@ -421,7 +435,7 @@ A("The Book of Lost Names", SPE_SECRETS,
 	SPIRITNAMES,	A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
-A("Book of Infinite Spells", SPE_SECRETS,
+A("The Book of Infinite Spells", SPE_SECRETS,
 	(SPFX_NOGEN|SPFX_RESTR), 0,0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	INFINITESPELLS,	A_NONE, NON_PM, NON_PM, 5000L, 
@@ -431,49 +445,55 @@ A("Book of Infinite Spells", SPE_SECRETS,
 /*//////////Artifact Armors//////////*/
 
 #ifdef TOURIST
-A("Tie-Dye Shirt of Shambhala",			T_SHIRT, //needs quote
-	(SPFX_RESTR), 0, 0,
+A("The Tie-Dye Shirt of Shambhala",	T_SHIRT, //needs quote
+	(SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	ENLIGHTENING, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,SPFX3_MANDALA,(WSFX_LIGHTEN|WSFX_WCATRIB|WSFX_PLUSSEV)),
 #endif
-A("Grandmaster's Robe",			ROBE, /*double robe effect*/
+A("The Grandmaster's Robe",	ROBE, /*double robe effect*/
 	(SPFX_RESTR), 0, 0,/*martial arts attacks use exploding dice and get extra damage*/
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	0, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,0,(WSFX_PLUSSEV)),
 
-A("Platinum Dragon Plate",			SILVER_DRAGON_SCALE_MAIL,/*heavier than normal, and causes spell penalties*/
-	(SPFX_RESTR), 0, 0, //needs quote
+A("The Platinum Dragon Plate",	SILVER_DRAGON_SCALE_MAIL,/*heavier than normal, and causes spell penalties*/
+	(SPFX_RESTR|SPFX_INTEL), 0, 0, //needs quote
 	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
 	0, A_LAWFUL, NON_PM, NON_PM, 9000L, 
 	0,0,0),
 
-A("Beastmaster's Duster",			LEATHER_JACKET, //needs quote
+A("The Chromatic Dragon Scales",	BLACK_DRAGON_SCALES,
+	(SPFX_RESTR|SPFX_INTEL), 0, 0, //needs quote
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0, A_CHAOTIC, NON_PM, NON_PM, 9000L, 
+	0,0,0),
+
+A("Beastmaster's Duster", LEATHER_JACKET, //needs quote
 	(SPFX_RESTR), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	PETMASTER, A_LAWFUL, NON_PM, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
-A("Mirrorbright",			SHIELD_OF_REFLECTION,/*adapted from Slash'em*/
+A("Mirrorbright",	SHIELD_OF_REFLECTION,/*adapted from Slash'em*/
 	(SPFX_RESTR|SPFX_HALRES), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message
 	0,0,WSFX_PLUSSEV),
 
-A("Shield of the All-Seeing", ORCISH_SHIELD, //needs quote
+A("The Shield of the All-Seeing", ORCISH_SHIELD, //needs quote
 	(SPFX_RESTR|SPFX_SEEK|SPFX_SEARCH|SPFX_WARN), 0, M2_ELF,
      NO_ATTK, DFNS(AD_FIRE), NO_CARY,
 	 PROT_FROM_SHAPE_CHANGERS, A_NONE, NON_PM, PM_ORC, 3000L,//needs message
 	 0,0,WSFX_PLUSSEV),
 
-A("Shield of Yggdrasil", ELVEN_SHIELD, //needs quote
+A("The Shield of Yggdrasil", ELVEN_SHIELD, //needs quote
 	(SPFX_RESTR|SPFX_REGEN), 0, 0,
      NO_ATTK, DFNS(AD_DRST), NO_CARY,
 	 HEALING, A_NONE, NON_PM, PM_ELF, 3000L,
-	0,0,WSFX_PLUSSEV),
+	 0,0,WSFX_PLUSSEV),
 
-A("Whisperfeet",			SPEED_BOOTS,/*adapted from Slash'em*/
+A("Whisperfeet", SPEED_BOOTS,/*adapted from Slash'em*/
 	(SPFX_RESTR), 0, 0, //needs quote
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	INVIS, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
@@ -491,13 +511,13 @@ A("Hammerfeet", KICKING_BOOTS,
 	0, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
 	SPFX2_RAM2,0,WSFX_PLUSSEV),
 
-A("Shield of the Resolute Heart",		GAUNTLETS_OF_DEXTERITY,
+A("The Shield of the Resolute Heart",		GAUNTLETS_OF_DEXTERITY,
 	(SPFX_RESTR|SPFX_HPHDAM), 0, 0, //needs quote
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	BLESS, A_NONE, NON_PM, NON_PM, 4000L, 
 	0,0,WSFX_PLUSSEV),
 
-A("Gauntlets of Spell Power",		GAUNTLETS_OF_POWER, /*Note: it is quite deliberate that these cause */
+A("The Gauntlets of Spell Power",		GAUNTLETS_OF_POWER, /*Note: it is quite deliberate that these cause */
 	(SPFX_RESTR|SPFX_HSPDAM), 0, 0,						/*		a spellcasting penalty. */
 	NO_ATTK,	NO_DFNS,	NO_CARY, //needs quote
 	0, A_NONE, NON_PM, NON_PM, 4000L, 
@@ -515,7 +535,7 @@ A("Hellrider's Saddle",			SADDLE,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	INVIS, A_NONE, NON_PM, NON_PM, 4000L, 
 	0,0),
- */
+	*/
 /*
  *	The artifacts for the quest dungeon, all self-willed.
  */
@@ -528,13 +548,17 @@ A("The Rod of Seven Parts",	SILVER_SPEAR, /*From D&D*/
 	SEVENFOLD,	A_LAWFUL, NON_PM, NON_PM, 7777L, 
 	0,0,0),
 
-A("Field Marshal's Baton",	MACE,
+A("The Field Marshal's Baton",	MACE,
 	(SPFX_NOGEN|SPFX_RESTR), SPFX_WARN, M2_MERC,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CANNONADE,	A_LAWFUL, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_NOCNT,0),
 
 /*//////////Chaos Quest Artifacts//////////*/
+
+A("Houchou",                SPOON,
+	(SPFX_RESTR), 0, 0,
+        NO_ATTK,      NO_DFNS,        NO_CARY,        0, A_CHAOTIC, NON_PM, NON_PM, 50000L,0,0,0 ),
 
 A("Werebuster",			LONG_SWORD, //needs quote
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_DFLAG2), 0, M2_WERE,/*should not be gifted or gened randomly*/
@@ -579,7 +603,7 @@ A("The Air Crystal", CRYSTAL_BALL,
 		0,SPFX3_NOCNT,0),
 
 A("Nighthorn",	UNICORN_HORN, /*from SLASH'EM, although modified from its original form*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_INTEL), SPFX_LUCK,0, //needs quote
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_INTEL|SPFX_LUCK), 0,0, //needs quote
 	FIRE(12,24),	FIRE(0,0),	NO_CARY,
 	LEVITATION,	A_CHAOTIC, NON_PM, NON_PM, 5000L, 
 	SPFX2_FIRE2,SPFX3_FEAR,0), /*Fire explosion and acts as a scroll of scare monster against non-chaotic monsters.*/
@@ -672,7 +696,7 @@ A("The Orb of Detection",	CRYSTAL_BALL,
 */
 A("Itlachiayaque", SHIELD_OF_REFLECTION,/*From archeologist patch*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_ESP|SPFX_HSPDAM), 0,
-     NO_ATTK, NO_DFNS, CARY(AD_FIRE),
+     NO_ATTK, DFNS(AD_FIRE), CARY(AD_MAGM),
 	 SMOKE_CLOUD, A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
 	0,0,0),
 
@@ -689,39 +713,45 @@ A("The Sceptre of Might",	MACE,
 	CONFLICT,	A_LAWFUL, PM_CAVEMAN, NON_PM, 2500L, 
 	SPFX2_RAM,0,0),
 #ifdef CONVICT
-A("The Iron Ball of Liberation", HEAVY_IRON_BALL,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),
+// A("The Iron Ball of Liberation", HEAVY_IRON_BALL,
+	// (SPFX_NOGEN|SPFX_RESTR|SPFX_LUCK|SPFX_INTEL),
+		// (SPFX_SEARCH|SPFX_SEEK|SPFX_WARN), 0,
+	// NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
+	// PHASING,	A_CHAOTIC, PM_CONVICT, NON_PM, 5000L,
+	// SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
+A("The Iron Spoon of Liberation", SPOON,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_LUCK|SPFX_INTEL),
 		(SPFX_SEARCH|SPFX_SEEK|SPFX_WARN), 0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	PHASING,	A_CHAOTIC, PM_CONVICT, NON_PM, 5000L,
-	SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
+	SPFX2_STLTH|SPFX2_DIG,SPFX3_ENGRV,0), /*Note: it had caried stealth before*/
 #endif	/* CONVICT */
 
 A("Silver Starlight",		RAPIER,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	PHYS(4,4),	NO_DFNS,	NO_CARY,
 	CREATE_AMMO, A_NONE, NON_PM, PM_DROW, 5000L, /*Creates throwing stars. Makes throwing stars count as silver if wielded */
-	SPFX2_SILVERED|SPFX2_SHINING,0,0),			/*Also can be (a)pplied as a magic flute.*/
+	SPFX2_SILVERED|SPFX2_SHINING,0,0),			/*Also can be (a)pplied as a magic flute.								  */
 
 A("Wrathful Spider",		DROVEN_CROSSBOW,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
-	PHYS(1,0),	NO_DFNS,	NO_CARY,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CREATE_AMMO, A_CHAOTIC, NON_PM, PM_DROW, 5000L,
 	SPFX2_STLTH,0,0),
 
-A("Tentacle Rod",		FLAIL,
+A("The Tentacle Rod",		FLAIL,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
-	PHYS(6,1),	NO_DFNS,	NO_CARY,
+	PHYS(7,1),	NO_DFNS,	NO_CARY,
 	0, A_NONE, NON_PM, PM_DROW, 5000L,
 	SPFX2_TENTROD,0,0),
 
-A("Crescent Blade",		SILVER_SABER,
+A("The Crescent Blade",		SILVER_SABER,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_BEHEAD), SPFX_REFLECT, 0,
 	FIRE(4,0),	NO_DFNS,	NO_CARY,
 	0, A_LAWFUL, NON_PM, PM_DROW, 5000L,
 	SPFX2_SHINING,0,0),
 
-A("Darkweaver's Cloak",	DROVEN_CLOAK,
+A("The Darkweaver's Cloak",	DROVEN_CLOAK,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY, 
 	0,	A_NONE,	 NON_PM, PM_DROW, 5000L,
@@ -729,7 +759,7 @@ A("Darkweaver's Cloak",	DROVEN_CLOAK,
 
 A("Spidersilk",	ELVEN_MITHRIL_COAT,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
-	NO_ATTK,	NO_DFNS,	NO_CARY,
+	NO_ATTK,	NO_DFNS,	NO_CARY, 
 	0,	A_CHAOTIC,	 NON_PM, PM_DROW, 5000L,
 	SPFX2_SPELLUP,0,WSFX_PLUSSEV), /*Adds sleep poison to unarmed attacks*/
 
@@ -738,6 +768,63 @@ A("Webweaver's Crook",	FAUCHARD,
 	PHYS(1,0),	NO_DFNS,	CARY(AD_MAGM), 
 	0,	A_LAWFUL,	 NON_PM, PM_DROW, 5000L,
 	SPFX2_POISONED,0,0), /*Adds poison to all attacks*/
+
+A("Lolth's Fang",		DROVEN_SHORT_SWORD, /* Hedrow crowning gift, chaotic or neutral */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL), 0, 0,
+	ACID(5,10),	DRLI(0,0),	NO_CARY,
+	0, A_NONE, NON_PM, PM_DROW, 8000L, 
+	SPFX2_SILVERED|SPFX2_POISONED,0,0),
+
+A("The Web of Lolth",	ELVEN_MITHRIL_COAT, /* Drow crowning gift, chaotic */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DFLAG2|SPFX_INTEL|SPFX_WARN), 0, M2_ELF,
+	NO_ATTK,	DRLI(0,0),	CARY(AD_MAGM),
+	ENERGY_BOOST,	A_CHAOTIC, NON_PM, PM_DROW, 2000L, 
+	SPFX2_SILVERED|SPFX2_SPELLUP,0,WSFX_PLUSSEV),
+
+A("The Claws of the Revenancer",		GAUNTLETS_OF_DEXTERITY, /* Drow crowning gift, neutral */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_EREGEN|SPFX_DRLI|SPFX_DEFN|SPFX_INTEL), 0, 0,
+	DRLI(1,1),	DRLI(0,0),	NO_CARY,
+	RAISE_UNDEAD, A_NEUTRAL, NON_PM, PM_DROW, 8000L, 
+	SPFX2_SILVERED,0,0),
+
+A("Liecleaver",		DROVEN_CROSSBOW, /* Drow noble crowning gift, lawful */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),SPFX_HALRES,0,
+	PHYS(5,10),	DRLI(0,0),	NO_CARY,	
+	CREATE_AMMO, A_LAWFUL, NON_PM, PM_DROW, 8000L, 
+	0,0,0),
+
+A("The Ruinous Descent of Stars",		MORNING_STAR, /* Herow noble crowning gift, Chaotic */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL),0,0,
+	PHYS(1,0),	NO_DFNS,	CARY(AD_MAGM),	
+	FALLING_STARS, A_CHAOTIC, NON_PM, PM_DROW, 8000L, 
+	SPFX2_SILVERED,0,0),
+
+/** lawful drow crowning gift */
+A("Sickle Moon",	SICKLE, /*returns to your hand.*/
+	SPFX_RESTR, 0,0,
+	PHYS(1,0),	NO_DFNS,	NO_CARY,//needs quote
+	0,	A_NONE, NON_PM, NON_PM, 4000L, 
+	SPFX2_SILVERED,0,0),
+
+/** Indwelling of the Black Web entity, lawful hedrow crowning gift */
+
+A("Arcor Kerym",		LONG_SWORD, /* Lawful Elf crowning gift */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL), 0, 0,
+	PHYS(5,0),	DRLI(0,0),	NO_CARY,
+	HEALING, A_LAWFUL, NON_PM, PM_ELF, 8000L, 
+	0,0,0),
+
+A("Aryfaern Kerym",		RUNESWORD, /* Neutral Elf crowning gift */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL), 0, 0,
+	ELEC(5,10),	ELEC(0,0),	NO_CARY,
+	0, A_NEUTRAL, NON_PM, PM_ELF, 8000L, 
+	SPFX2_SPELLUP,0,0),
+
+A("Aryvelahr Kerym",		CRYSTAL_SWORD, /* Chaotic Elf crowning gift */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL|SPFX_REFLECT), 0, 0,
+	PHYS(5,0),	DRLI(0,0),	NO_CARY,
+	0, A_CHAOTIC, NON_PM, PM_ELF, 8000L, 
+	SPFX2_SILVERED,0,0),
 
 A("The Staff of Aesculapius",	QUARTERSTAFF,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_INTEL|SPFX_DRLI|SPFX_REGEN), 0,0,
@@ -769,6 +856,62 @@ A("The Vestment of Hell",	LEATHER_CLOAK, /*Actually an opera cloak in game*/
 	0,	A_CHAOTIC,	 PM_NOBLEMAN, NON_PM, 2500L,
 	0,0,0),
 
+A("The Armor of Khazad-dum",	DWARVISH_MITHRIL_COAT, /*Moria dwarf noble first gift */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
+	0,	A_LAWFUL,	 PM_NOBLEMAN, PM_DWARF, 2500L,
+	0,0,WSFX_PLUSSEV),
+
+A("The War-mask of Durin",	MASK, /*Moria dwarf noble */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HSPDAM), 0, 0, /*+5 attk and damage*/
+	NO_ATTK,	NO_DFNS,	NO_CARY, /* Gives Fire, Acid, and Poison resistance */
+	0,	A_LAWFUL,	 PM_NOBLEMAN, PM_DWARF, 2500L,
+	0,0,0),
+
+A("Durin's Axe",			AXE, /*Moria dwarf noble crowning */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
+	PHYS(5,10),	DRLI(0,0),	NO_CARY,	
+	0, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, 
+	SPFX2_DIG|SPFX2_SILVERED,0,0),
+
+A("Glamdring",			ELVEN_BROADSWORD, /*Lonely Mountain dwarf noble first gift */
+	(SPFX_NOGEN|SPFX_WARN|SPFX_RESTR), 0, (M2_ORC|M2_DEMON), /* the old elves fought balrogs too. */
+	PHYS(5,10),	NO_DFNS,	NO_CARY,	
+	0, A_LAWFUL, PM_NOBLEMAN, NON_PM, 2000L, 
+	0,0,0),
+
+A("The Key of Erebor", SKELETON_KEY,
+	(SPFX_NOGEN|SPFX_RESTR), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0,		A_NONE, NON_PM, NON_PM, 1500L, 
+	0,SPFX3_NOCNT,0),
+
+A("The Armor of Erebor",	PLATE_MAIL, /*Lonely Mountain dwarf noble */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_HPHDAM), 0, 0,  /*+10 AC*/
+	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY, /*Also gives Fire and Cold*/
+	0,	A_LAWFUL,	 PM_NOBLEMAN, PM_DWARF, 2500L,
+	0,0,0),
+
+/*Arkenstone*/ /*Lonely Mountain dwarf noble crown*/
+
+A("The Sceptre of Lolth", SILVER_KHAKKHARA, /* Drow noble first gift (hedrow get lordly might) */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL), 0, 0, /*needs quote*/
+	PHYS(1,0),	NO_DFNS,	NO_CARY,
+	LORDLY,	A_CHAOTIC, PM_NOBLEMAN, PM_DROW, 4000L, 
+	SPFX2_SILVERED,SPFX3_ENGRV,0), 
+
+A("The Web of the Chosen",	DROVEN_CLOAK, /* Drow noble quest */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HSPDAM|SPFX_REFLECT), 0, 0,
+	NO_ATTK,	ACID(0,0),	ELEC(0,0), /* Plus double AC bonus */
+	0,	A_CHAOTIC,	 PM_NOBLEMAN, PM_DROW, 2500L,
+	SPFX2_SILVERED,0,0),
+
+A("The Cloak of the Consort",	DROVEN_CLOAK, /* Hedrow noble quest */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HPHDAM), 0, 0,
+	NO_ATTK,	DRLI(0,0),	COLD(0,0), /* Plus double AC bonus */
+	0,	A_NEUTRAL,	 PM_NOBLEMAN, PM_DROW, 2500L,
+	0,0,0),
+
 A("The Mitre of Holiness",	HELM_OF_BRILLIANCE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_DFLAG2|SPFX_INTEL), 0, M2_UNDEAD,
 	NO_ATTK,	NO_DFNS,	CARY(AD_FIRE),
@@ -776,7 +919,7 @@ A("The Mitre of Holiness",	HELM_OF_BRILLIANCE,
 	0,0,0),
 
 A("The Treasury of Proteus",	CHEST,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_LUCK), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_LUCK), 0, 0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	0,	A_CHAOTIC,	 PM_PIRATE, NON_PM, 2500L,
 	0,0,0 ),
@@ -799,6 +942,12 @@ A("Belthronding", ELVEN_BOW,
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	CREATE_AMMO, A_CHAOTIC, NON_PM, PM_ELF, 4000L, 
 	SPFX2_STLTH,0,0),
+
+A("The Rod of the Elvish Lords", ELVEN_MACE, /* Elf noble first gift */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL), 0, 0, /*needs quote*/
+	PHYS(3,0),	NO_DFNS,	NO_CARY,
+	LORDLY,	A_CHAOTIC, PM_NOBLEMAN, PM_ELF, 4000L, 
+	0,SPFX3_ENGRV,0), 
 
 A("The Master Key of Thievery", SKELETON_KEY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SPEAK),
@@ -829,6 +978,12 @@ A("The Orb of Fate",		CRYSTAL_BALL,
 	LEV_TELE,	A_NEUTRAL, PM_VALKYRIE, NON_PM, 3500L, 
 	0,0,0),
 
+A("Sol Valtiva",			TWO_HANDED_SWORD,		/* The Sun of the Gods of the Dead */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK),  0, 0,
+	FIRE(5,24),	NO_DFNS,	NO_CARY,	
+	0, A_CHAOTIC, NON_PM, PM_FIRE_GIANT, 4000L, 
+	SPFX2_FIRE|SPFX2_BLIND|SPFX2_BRIGHT,0,0),
+
 A("The Eye of the Aethiopica",	AMULET_OF_ESP,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_EREGEN|SPFX_HSPDAM), 0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
@@ -838,19 +993,19 @@ A("The Eye of the Aethiopica",	AMULET_OF_ESP,
 
 /*//////////Special High-Level Artifacts//////////*/
 
-A("Staff of the Archmagi",			QUARTERSTAFF,
+A("The Staff of the Archmagi",			QUARTERSTAFF,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_SEARCH|SPFX_LUCK|SPFX_INTEL), 0, 0,
-	STUN(20,4),	NO_DFNS,	NO_CARY,	
+	STUN(20,4),	NO_DFNS,	NO_CARY,
 	ENERGY_BOOST, A_NONE, PM_WIZARD, NON_PM, 9000L, 
 	SPFX2_DIG|SPFX2_FIRE|SPFX2_COLD|SPFX2_ELEC|SPFX2_RAM2,0,0),
 
-A("Robe of the Archmagi",			ROBE,
+A("The Robe of the Archmagi",			ROBE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_DISPL|SPFX_INTEL), 0, 0,
 	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,	
 	ENERGY_BOOST, A_NONE, PM_WIZARD, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
-A("Hat of the Archmagi",			CORNUTHAUM,
+A("The Hat of the Archmagi",			CORNUTHAUM,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_SPEAK|SPFX_WARN|SPFX_XRAY|SPFX_INTEL), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,	
 	ENERGY_BOOST, A_NONE, PM_WIZARD, NON_PM, 9000L, 
@@ -860,7 +1015,7 @@ A("Hat of the Archmagi",			CORNUTHAUM,
  * only a level 30 (Shogun) samurai or one who is carying the amulet can wield the sword.
  */
 A("The Kusanagi no Tsurugi",	LONG_SWORD,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_EREGEN|SPFX_BEHEAD), (SPFX_SEARCH|SPFX_SEEK|SPFX_LUCK), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_EREGEN|SPFX_BEHEAD|SPFX_LUCK), (SPFX_SEARCH|SPFX_SEEK), 0,
 	PHYS(20,12),	NO_DFNS,	NO_CARY,
 	0,		A_LAWFUL, PM_SAMURAI, NON_PM, 4500L, 
 	0,0,0),
@@ -890,7 +1045,7 @@ A("Genocide", TWO_HANDED_SWORD,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_FIRE|SPFX2_BLDTHRST,SPFX3_NOCNT,0),
 
-A("Rod of Dis", MACE,
+A("The Rod of Dis", MACE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	PHYS(10,8),	NO_DFNS,	NO_CARY,
 	TAMING,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
@@ -908,7 +1063,7 @@ A("Fire of Heaven", TRIDENT,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_SILVERED|SPFX2_FIRE2|SPFX2_ELEC,SPFX3_NOCNT,0),
 
-A("Diadem of Amnesia", DUNCE_CAP,
+A("The Diadem of Amnesia", DUNCE_CAP,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CONFLICT,	A_LAWFUL, NON_PM, NON_PM, 9999L, /*was DRAIN_MEMORIES*/ 
@@ -927,7 +1082,7 @@ A("Serpent's Tooth", ATHAME,
 	SPFX2_POISONED,SPFX3_NOCNT,0),
 
 A("Unblemished Soul", UNICORN_HORN,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), SPFX_LUCK, 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_LUCK), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	0,	A_LAWFUL, NON_PM, NON_PM, 3333L, 
 	SPFX2_SILVERED,SPFX3_NOCNT,0),
@@ -938,7 +1093,7 @@ A("Wrath of Heaven", LONG_SWORD,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_SILVERED|SPFX2_FIRE|SPFX2_ELEC2,SPFX3_NOCNT,0),
 
-A("All-seeing Eye of the Fly", HELM_OF_TELEPATHY,
+A("The All-seeing Eye of the Fly", HELM_OF_TELEPATHY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	SHADOW_FLARE,	A_LAWFUL, NON_PM, NON_PM, 9999L, /* Was SLAY_LIVING */
@@ -950,7 +1105,7 @@ A("Cold Soul", RANSEUR,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_ELEC|SPFX2_COLD|SPFX2_FIRE,SPFX3_NOCNT,0),
 
-A("Sceptre of the Frozen Floor of Hell", IRON_BAR,
+A("The Sceptre of the Frozen Floor of Hell", IRON_BAR,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK), 0, 0,
 	COLD(1,0),	NO_DFNS,	NO_CARY,
 	BLIZAGA,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
@@ -968,11 +1123,35 @@ A("The Iconoclast", SILVER_SABER,  /*Weapon of Lixer, Prince of Hell, from Dicef
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	0,SPFX3_NOCNT,0),
 
-A("Sting of the Poison Queen", FLAIL,
+A("The Three-Headed Flail", FLAIL,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
+	SPFX2_THREEHEAD,SPFX3_NOCNT,0),
+
+A("Heartcleaver", HALBERD,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(1,0),	NO_DFNS,	NO_CARY,
+	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
+	0,SPFX3_NOCNT,0),
+
+A("Wrathful Wind", CLUB,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK), 0, 0,
+	COLD(10,0),	NO_DFNS,	NO_CARY,
+	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
+	SPFX2_SILVERED|SPFX2_COLD,SPFX3_NOCNT,0),
+
+A("The Sting of the Poison Queen", FLAIL,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), 0, 0,
 	PHYS(4,12),	DFNS(AD_MAGM),	NO_CARY,
 	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
 	SPFX2_POISONED,SPFX3_NOCNT,0),
+
+A("The Scourge of Lolth", BULLWHIP,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(1,0),	NO_DFNS,	NO_CARY,
+	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
+	SPFX2_SILVERED,SPFX3_NOCNT,0),
 
 A("Doomscreamer", TWO_HANDED_SWORD,  /*Weapon of Graz'zt, from Gord the Rogue*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_DEFN), 0, 0,
@@ -980,37 +1159,43 @@ A("Doomscreamer", TWO_HANDED_SWORD,  /*Weapon of Graz'zt, from Gord the Rogue*/
 	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
 	0,SPFX3_NOCNT,0),
 
-A("Sword of Erathaol",			LONG_SWORD,		/*  */
+A("The Wand of Orcus", WAN_DEATH,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_DRLI), 0, 0,
+	DRLI(5,12),	NO_DFNS,	NO_CARY,
+	0, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
+	SPFX2_BLDTHRST,SPFX3_NOCNT,0),
+
+A("The Sword of Erathaol",			LONG_SWORD,		/*  */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH), 0, 0,
 	PHYS(7,0),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/
 	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
-A("Saber of Sabaoth",			SILVER_SABER,		/*  */
+A("The Saber of Sabaoth",			SILVER_SABER,		/*  */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH), 0, 0,
 	PHYS(7,0),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/
 	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
-A("Sword of Onoel",			TWO_HANDED_SWORD,		/*  */
+A("The Sword of Onoel",			TWO_HANDED_SWORD,		/*  */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH), 0, 0,
 	PHYS(7,0),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/
 	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
-A("Glaive of Shamsiel",			GLAIVE,		/*  */
+A("The Glaive of Shamsiel",			GLAIVE,		/*  */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH), 0, 0,
 	PHYS(7,0),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/
 	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
-A("Lance of Uriel",			LANCE,		/*  */
+A("The Lance of Uriel",			LANCE,		/*  */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH), 0, 0,
 	PHYS(7,0),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/
 	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
-A("Hammer of Barquiel",			LUCERN_HAMMER,		/* Yes, I know it's bladed ;-) */
+A("The Hammer of Barquiel",			LUCERN_HAMMER,		/* Yes, I know it's bladed ;-) */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH), 0, 0,
 	PHYS(7,0),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7500L, 	/**/
