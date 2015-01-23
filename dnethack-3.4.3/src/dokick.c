@@ -40,7 +40,7 @@ register boolean clumsy;
 
 	if (uarmf && uarmf->otyp == KICKING_BOOTS)
 	    dmg += 5;
-
+	
 	/* excessive wt affects dex, so it affects dmg */
 	if (clumsy) dmg /= 2;
 
@@ -167,13 +167,13 @@ register xchar x, y;
 	if (Upolyd && attacktype(youmonst.data, AT_KICK)) {
 	    struct attack *uattk;
 	    int sum;
-	    schar tmp = find_roll_to_hit(mon, (uarmf && arti_shining(uarmf)) || u.sealsActive&SEAL_CHUPOCLOPS);
-
+	    int tmp = find_roll_to_hit(mon, (uarmf && arti_shining(uarmf)) || u.sealsActive&SEAL_CHUPOCLOPS);
+		
 	    for (i = 0; i < NATTK; i++) {
 		/* first of two kicks might have provoked counterattack
 		   that has incapacitated the hero (ie, floating eye) */
 		if (multi < 0) break;
-
+		
 		uattk = &youmonst.data->mattk[i];
 		/* we only care about kicking attacks here */
 		if (uattk->aatyp != AT_KICK) continue;
@@ -505,6 +505,7 @@ xchar x, y;
 
 	/* Mjollnir is magically too heavy to kick */
 	if(kickobj->oartifact == ART_MJOLLNIR || 
+		kickobj->oartifact == ART_SICKLE_MOON || 
 		kickobj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) range = 1;
 
 	/* see if the object has a place to move into */
@@ -1010,6 +1011,58 @@ dokick()
 					return(1);
 				}
 			    goto ouch;
+			} else if(In_quest(&u.uz) && (Race_if(PM_DROW) || (Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)))){
+			    if (rn2(15) && !(maploc->looted & TREE_LOOTED) &&
+				  (treefruit = rnd_treefruit_at(x, y))) {
+					long nfruit = 8L-rnl(7), nfall;
+					short frtype = treefruit->otyp;
+					int frtspe = treefruit->spe;
+					if(u.sealsActive&SEAL_EVE) nfruit *= 1.5L;
+					else if(uwep && uwep->oartifact==ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_EVE) nfruit *= 1.2L;
+					treefruit->quan = nfruit;
+					if (is_plural(treefruit))
+					    pline("Some %s fall from the tree!", xname(treefruit));
+					else
+					    pline("%s falls from the tree!", An(xname(treefruit)));
+					nfall = scatter(x,y,2,MAY_HIT,treefruit);
+					if (nfall != nfruit) {
+					    /* scatter left some in the tree, but treefruit
+					     * may not refer to the correct object */
+					    treefruit = mksobj(frtype, TRUE, FALSE);
+					    treefruit->quan = nfruit-nfall;
+						treefruit->spe = frtspe;
+					    pline("%ld %s got caught in the branches.",
+						nfruit-nfall, xname(treefruit));
+					    dealloc_obj(treefruit);
+					}
+					exercise(A_DEX, TRUE);
+					exercise(A_WIS, TRUE);	/* discovered a new food source! */
+					newsym(x, y);
+					maploc->looted |= TREE_LOOTED;
+					return(1);
+			    } else if (rn2(3)) {
+					if ( !rn2(3) && !(mvitals[PM_MIRKWOOD_SPIDER].mvflags & G_GONE) )
+					    You_hear("skittering legs."); /* a warning */
+					goto ouch;
+			    } else if (!(maploc->looted & TREE_SWARM)) {
+			    	int cnt = rnl(4) + 2;
+					int made = 0;
+			    	coord mm;
+			    	mm.x = x; mm.y = y;
+					while (cnt--) {
+					    if (enexto(&mm, mm.x, mm.y, &mons[PM_MIRKWOOD_SPIDER])
+						&& makemon(&mons[PM_MIRKWOOD_SPIDER],
+							       mm.x, mm.y, MM_ANGRY)
+						) made++;
+					}
+					if ( made )
+					    pline("You've disturbed the spiders nesting high in the tree's branches!");
+					else
+					    pline("Some scraps of webbing drift down.");
+					maploc->looted |= TREE_SWARM;
+					return(1);
+				}
+			    goto ouch;
 			} else if(u.uz.dnum == chaos_dnum) {
 			    if (rn2(6)) {
 					if ( !rn2(3) && !(mvitals[PM_DRYAD].mvflags & G_GONE) )
@@ -1030,7 +1083,9 @@ dokick()
 				}
 			    goto ouch;
 			} else if(u.uz.dnum == neutral_dnum || (In_quest(&u.uz) && 
-				(Role_if(PM_NOBLEMAN) || Race_if(PM_DROW) || (Role_if(PM_RANGER) && Race_if(PM_ELF)))
+				(Role_if(PM_NOBLEMAN) || 
+					Race_if(PM_DROW) || 
+					((Role_if(PM_RANGER) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD)) && Race_if(PM_ELF)))
 			)) {
 					goto ouch;
 			} else if(u.uz.dnum == law_dnum) {
@@ -1166,7 +1221,7 @@ dokick()
 				else
 					newsym(x,y);
 				}
-				break;
+			break;
 			case 4: {
 				coord mm;
 				mm.x = x; mm.y = y;
