@@ -24,7 +24,7 @@ struct obj {
 	struct obj *cobj;	/* contents list for containers */
 	unsigned o_id;
 	xchar ox,oy;
-	short otyp;		/* object class number */
+	int otyp;		/* object class number */
 	unsigned owt;
 	long quan;		/* number of items */
 
@@ -41,7 +41,7 @@ struct obj {
 #define STATUE_FEMALE   0x04
 	char	oclass;		/* object class */
 	char	invlet;		/* designation in inventory */
-	char	oartifact;	/* artifact array index */
+	int		oartifact;	/* artifact array index */
 	schar 	altmode; 	/* alternate modes - eg. SMG, double Lightsaber */
 
 	xchar where;		/* where the object thinks it is */
@@ -103,14 +103,14 @@ struct obj {
 	/* 0 free bits */
 	Bitfield(fromsink,1);
 	/* 31 free bits in this field, I think -CM */
-
+	
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
 					/* Class of mask */
-#define leashmon  corpsenm	/* gets m_id of attached pet */
-#define spestudied corpsenm	/* # of times a spellbook has been studied */
+#define leashmon	corpsenm	/* gets m_id of attached pet */
+#define spestudied	corpsenm	/* # of times a spellbook has been studied */
 //define fromsink  corpsenm	/* a potion from a sink */
 #define opoisonchrgs corpsenm	/* number of poison doses left */
-
+	
 	int opoisoned; /* poisons smeared on the weapon*/
 #define OPOISON_NONE	 0
 #define OPOISON_BASIC	 1 /* Deadly Poison */
@@ -133,7 +133,14 @@ struct obj {
 	   be (or follow) a long int */
 	long owornmask;
 	long ovar1;		/* extra variable. Specifies the contents of Books of Secrets, and the warding sign of spellbooks. */
-			/* Also, records special features for weapons. Currently, the only special feature is runes on wooden weapons. */
+			/* Also, records special features for weapons. */
+			/* 	Records runes for wooden weapons */
+			/* 	Records moon phase for moon axes */
+#define ECLIPSE_MOON	0
+#define CRESCENT_MOON	1
+#define HALF_MOON		2
+#define GIBBOUS_MOON	3
+#define FULL_MOON	 	4
 			/* Rings: specifies engraving on certain rings */
 			/* Cloaks: Droven: Tattered level.  */
 			/* Acid venom: nonstandard damage amount */
@@ -141,7 +148,7 @@ struct obj {
 			/* Rocks: rummor */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
-
+	
 	struct mask_properties *mp;
 
 	long oextra[1];		/* used for name of ordinary objects - length
@@ -221,13 +228,15 @@ struct obj {
 			otmp->oclass == TOOL_CLASS) && \
 			 (objects[otmp->otyp].oc_skill == P_POLEARMS || \
 			  objects[otmp->otyp].oc_skill == P_LANCE || \
+			  otmp->otyp==AKLYS || \
+			  otmp->oartifact==ART_SOL_VALTIVA || \
 			  (otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE ) \
 			 ))
 #define is_spear(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= P_SPEAR && \
 			 objects[otmp->otyp].oc_skill <= P_JAVELIN)
 #define is_farm(otmp)	(otmp->oclass == WEAPON_CLASS && \
-			 objects[otmp->otyp].oc_skill >= P_HARVEST)
+			 objects[otmp->otyp].oc_skill == P_HARVEST)
 #define is_launcher(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= P_BOW && \
 			 objects[otmp->otyp].oc_skill <= P_CROSSBOW)
@@ -430,6 +439,10 @@ struct obj {
 /* material */
 #define is_flimsy(otmp)		(objects[(otmp)->otyp].oc_material <= LEATHER)
 #define is_wood(otmp)		(objects[(otmp)->otyp].oc_material == WOOD)
+#define is_veggy(otmp)		(objects[otmp->otyp].oc_material == VEGGY)
+#define is_flesh(otmp)		(objects[otmp->otyp].oc_material == FLESH)
+#define is_paper(otmp)		(objects[otmp->otyp].oc_material == PAPER)
+
 /* misc */
 #define is_boulder(otmp)		((otmp)->otyp == BOULDER || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
 
