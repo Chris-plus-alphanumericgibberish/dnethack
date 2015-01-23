@@ -516,7 +516,8 @@ NON_DIGGABLE:(56,15,75,20)
 #
 
 MAZE: "Pir-goal", ' '
-FLAGS: noteleport
+FLAGS: noteleport,hardfloor
+
 
 GEOMETRY:center,center
 #0         1         2   	   3	     4		   5		 6	       7
@@ -738,7 +739,8 @@ MONSTER: 'Z',"skeletal pirate",random
 #
 
 MAZE: "Pir-fila",' '
-FLAGS: noteleport,shortsighted
+FLAGS: noteleport,shortsighted,hardfloor
+
 INIT_MAP: '.' , '}' , false, false , lit , false
 NOMAP
 STAIR: (20,00,75,20), (0,0,20,20), down
@@ -772,7 +774,8 @@ STAIR: (01,01), up
 REGION:(00,00,03,02),  lit,"ordinary"
 
 MAZE: "Pir-filb",' '
-FLAGS: noteleport
+FLAGS: noteleport,hardfloor
+
 INIT_MAP: '#' , ' ' , true , true , unlit, true
 NOMAP
 #
