@@ -286,7 +286,7 @@ ENDMAP
 
 NON_DIGGABLE:(00,00,75,20)
 
-PORTAL:(35,10,35,10),(00,00,00,00),"chaoss"
+PORTAL:(35,10,35,10),(00,00,00,00),"chaosm"
 OBJECT:'0',"heavy iron ball",(35,10)
 
 BRANCH:(35,19,35,19),(0,0,0,0)
@@ -323,6 +323,154 @@ DOOR:locked,(54,10)
 
 
 MAZE:"chaoss",' '
+FLAGS: nommap,hardfloor, shortsighted
+GEOMETRY:center,center
+#0         1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0               |---|            |-----|            |---|                    
+1               |...|------------|.....|------------|...|                    
+2               |.......................................|                    
+3               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
+4                 |...................................|                      
+5                 |...---------....-.-....---------...|                      
+6                 |.|.-.......-...........-.......-.|.|                      
+7                --...----+---|-----------|---+----...--                     
+8                |............|...........|............|                     
+9                |..|..-..-..-|....---....|-..-..-..|..|                     
+0                |............|...-...-...|............|                     
+1                |..|..-..-..-|....-.-....|-..-..-..|..|                     
+2                |............|...........|............|                     
+3                --...--------|-----+-----|--------...--                     
+4                 |.|.|.......|...........-.......-.|.|                      
+5                 |...|---+---|....-.-....----+----...|                      
+6                 |...................................|                      
+7               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
+8               |.......................................|                    
+9               |...|------------|.....|------------|...|                    
+0               |---|            |-----|            |---|                    
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+
+RANDOM_PLACES:(16,01),(16,19),(54,01),(54,19)
+
+NON_DIGGABLE:(00,00,75,20)
+
+STAIR:place[0],down
+LADDER:(35,10),down
+
+CONTAINER: '(', "chest"  , (31,08)
+OBJECT:'?',"charging", contained
+
+CONTAINER: '(', "chest"  , (39,08)
+OBJECT:'!',"extra healing", contained, blessed, 0
+
+MONSTER: 'w', "purple worm", random, hostile
+MONSTER: 'w', "purple worm", random, hostile
+
+MONSTER: 'h', "mind flayer", random, hostile
+MONSTER: 'h', "mind flayer", random, hostile
+MONSTER: 'h', "mind flayer", random, hostile
+MONSTER: 'h', "mind flayer", random, hostile
+
+MONSTER: 'D', "green dragon", random, hostile
+MONSTER: 'D', "green dragon", random, hostile
+MONSTER: 'D', "green dragon", random, hostile
+
+MONSTER: 'y', "black light", random, hostile
+MONSTER: 'y', "black light", random, hostile
+MONSTER: 'y', "black light", random, hostile
+MONSTER: 'y', "black light", random, hostile
+
+MONSTER: 'e', "beholder", random, hostile
+MONSTER: 'e', "beholder", random, hostile
+MONSTER: 'e', "beholder", random, hostile
+MONSTER: 'e', "beholder", random, hostile
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+MAZE:"chaost",' '
+FLAGS: nommap,hardfloor, shortsighted
+GEOMETRY:center,center
+#0         1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0               |---|            |-----|            |---|                    
+1               |...|------------|.....|------------|...|                    
+2               |.......................................|                    
+3               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
+4                 |...................................|                      
+5                 |...---------....-.-....---------...|                      
+6                 |.|.-.......-...........-.......-.|.|                      
+7                --...----+---|-----------|---+----...--                     
+8                |............|...........|............|                     
+9                |..|..-..-..-|..-------..|-..-..-..|..|                     
+0                |............|..-.....-..|............|                     
+1                |..|..-..-..-|..---+---..|-..-..-..|..|                     
+2                |............|....-.-....|............|                     
+3                --...--------|-----.-----|--------...--                     
+4                 |.|.|.......|...........-.......-.|.|                      
+5                 |...|---+---|....-.-....----+----...|                      
+6                 |...................................|                      
+7               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
+8               |.......................................|                    
+9               |...|------------|.....|------------|...|                    
+0               |---|            |-----|            |---|                    
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+
+RANDOM_PLACES:(16,01),(16,19),(54,01),(54,19)
+
+NON_DIGGABLE:(00,00,75,20)
+
+STAIR:(30,08),down
+STAIR:(40,08),up
+LADDER:place[0],down
+LADDER:(35,10),up
+
+OBJECT:'+',random, random
+OBJECT:'?',random, random
+OBJECT:')',random, random
+OBJECT:')',random, random
+OBJECT:'/',random, random
+OBJECT:'[',random, random
+
+MONSTER: 'w', "purple worm", random, hostile
+MONSTER: 'w', "purple worm", random, hostile
+
+MONSTER: 'h', "mind flayer", random, hostile
+MONSTER: 'h', "mind flayer", random, hostile
+MONSTER: 'h', "mind flayer", random, hostile
+MONSTER: 'h', "mind flayer", random, hostile
+
+MONSTER: 'D', "white dragon", random, hostile
+MONSTER: 'D', "white dragon", random, hostile
+MONSTER: 'D', "white dragon", random, hostile
+
+MONSTER: 'y', "black light", random, hostile
+MONSTER: 'y', "black light", random, hostile
+MONSTER: 'y', "black light", random, hostile
+MONSTER: 'y', "black light", random, hostile
+
+#MONSTER: 'e', "beholder", random, hostile, "Death Eye"
+MONSTER: 'e', "beholder", random, hostile
+MONSTER: 'e', "beholder", random, hostile
+MONSTER: 'e', "beholder", random, hostile
+MONSTER: 'e', "beholder", random, hostile
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+MAZE:"chaosm",' '
 FLAGS: nommap,hardfloor, shortsighted
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
@@ -466,9 +614,10 @@ ENDMAP
 NON_DIGGABLE:(00,00,75,20)
 
 PORTAL:(35,10,35,10),(00,00,00,00),"chaosf"
-STAIR:(54,19),down
-LADDER:(54,01),down
-PORTAL:(16,01,16,01),(00,00,00,00),"chaosfrh"
+STAIR:(54,19),up
+LADDER:(54,01),up
+STAIR:(16,19),down
+LADDER:(16,01),down
 
 ALTAR:(35,09),noalign,altar
 OBJECT:'0',"heavy iron ball",(35,10)
@@ -502,154 +651,6 @@ OBJECT: '[', "plate mail", (55,09)
 MONSTER: '@', "knight", (55,11), hostile, "Black Knight"
 OBJECT: '[', "plate mail", (55,11)
 
-MAZE:"chaost",' '
-FLAGS: nommap,hardfloor, shortsighted
-GEOMETRY:center,center
-#0         1         2   	  3	      4	    5		  6	      7
-#0123456789012345678901234567890123456789012345678901234567890123456789012345
-MAP
-0               |---|            |-----|            |---|                    
-1               |...|------------|.....|------------|...|                    
-2               |.......................................|                    
-3               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
-4                 |...................................|                      
-5                 |...---------....-.-....---------...|                      
-6                 |.|.-.......-...........-.......-.|.|                      
-7                --...----+---|-----------|---+----...--                     
-8                |............|...........|............|                     
-9                |..|..-..-..-|..-------..|-..-..-..|..|                     
-0                |............|..-.....-..|............|                     
-1                |..|..-..-..-|..---+---..|-..-..-..|..|                     
-2                |............|....-.-....|............|                     
-3                --...--------|-----.-----|--------...--                     
-4                 |.|.|.......|...........-.......-.|.|                      
-5                 |...|---+---|....-.-....----+----...|                      
-6                 |...................................|                      
-7               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
-8               |.......................................|                    
-9               |...|------------|.....|------------|...|                    
-0               |---|            |-----|            |---|                    
-ENDMAP
-#01234567890123456789012345678901234567890123456789012345678901234567890123456
-
-RANDOM_PLACES:(16,01),(16,19),(54,01),(54,19)
-
-NON_DIGGABLE:(00,00,75,20)
-
-STAIR:(30,08),up
-STAIR:(40,08),down
-LADDER:place[0],up
-LADDER:(35,10),down
-
-OBJECT:'+',random, random
-OBJECT:'?',random, random
-OBJECT:')',random, random
-OBJECT:')',random, random
-OBJECT:'/',random, random
-OBJECT:'[',random, random
-
-MONSTER: 'w', "purple worm", random, hostile
-MONSTER: 'w', "purple worm", random, hostile
-
-MONSTER: 'h', "mind flayer", random, hostile
-MONSTER: 'h', "mind flayer", random, hostile
-MONSTER: 'h', "mind flayer", random, hostile
-MONSTER: 'h', "mind flayer", random, hostile
-
-MONSTER: 'D', "white dragon", random, hostile
-MONSTER: 'D', "white dragon", random, hostile
-MONSTER: 'D', "white dragon", random, hostile
-
-MONSTER: 'y', "black light", random, hostile
-MONSTER: 'y', "black light", random, hostile
-MONSTER: 'y', "black light", random, hostile
-MONSTER: 'y', "black light", random, hostile
-
-#MONSTER: 'e', "beholder", random, hostile, "Death Eye"
-MONSTER: 'e', "beholder", random, hostile
-MONSTER: 'e', "beholder", random, hostile
-MONSTER: 'e', "beholder", random, hostile
-MONSTER: 'e', "beholder", random, hostile
-
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-
-MAZE:"chaosm",' '
-FLAGS: nommap,hardfloor, shortsighted
-GEOMETRY:center,center
-#0         1         2   	  3	      4	    5		  6	      7
-#0123456789012345678901234567890123456789012345678901234567890123456789012345
-MAP
-0               |---|            |-----|            |---|                    
-1               |...|------------|.....|------------|...|                    
-2               |.......................................|                    
-3               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
-4                 |...................................|                      
-5                 |...---------....-.-....---------...|                      
-6                 |.|.-.......-...........-.......-.|.|                      
-7                --...----+---|-----------|---+----...--                     
-8                |............|...........|............|                     
-9                |..|..-..-..-|....---....|-..-..-..|..|                     
-0                |............|...-...-...|............|                     
-1                |..|..-..-..-|....-.-....|-..-..-..|..|                     
-2                |............|...........|............|                     
-3                --...--------|-----+-----|--------...--                     
-4                 |.|.|.......|...........-.......-.|.|                      
-5                 |...|---+---|....-.-....----+----...|                      
-6                 |...................................|                      
-7               --|.|..-..-..-..-..-.-..-..-..-..-..|.|--                    
-8               |.......................................|                    
-9               |...|------------|.....|------------|...|                    
-0               |---|            |-----|            |---|                    
-ENDMAP
-#01234567890123456789012345678901234567890123456789012345678901234567890123456
-
-RANDOM_PLACES:(16,01),(16,19),(54,01),(54,19)
-
-NON_DIGGABLE:(00,00,75,20)
-
-STAIR:place[0],up
-LADDER:(35,10),up
-
-CONTAINER: '(', "chest"  , (31,08)
-OBJECT:'?',"charging", contained
-
-CONTAINER: '(', "chest"  , (39,08)
-OBJECT:'!',"extra healing", contained, blessed, 0
-
-MONSTER: 'w', "purple worm", random, hostile
-MONSTER: 'w', "purple worm", random, hostile
-
-MONSTER: 'h', "mind flayer", random, hostile
-MONSTER: 'h', "mind flayer", random, hostile
-MONSTER: 'h', "mind flayer", random, hostile
-MONSTER: 'h', "mind flayer", random, hostile
-
-MONSTER: 'D', "green dragon", random, hostile
-MONSTER: 'D', "green dragon", random, hostile
-MONSTER: 'D', "green dragon", random, hostile
-
-MONSTER: 'y', "black light", random, hostile
-MONSTER: 'y', "black light", random, hostile
-MONSTER: 'y', "black light", random, hostile
-MONSTER: 'y', "black light", random, hostile
-
-MONSTER: 'e', "beholder", random, hostile
-MONSTER: 'e', "beholder", random, hostile
-MONSTER: 'e', "beholder", random, hostile
-MONSTER: 'e', "beholder", random, hostile
-
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-
 MAZE:"chaosfrh",' '
 FLAGS: nommap,hardfloor, shortsighted
 GEOMETRY:center,center
@@ -674,7 +675,7 @@ MAP
 5                 |.|.-..-..-..-..|-.-|..-..-..-..-.|.|                      
 6                 |.|.............|...|.............|.|                      
 7               --|.|-+-------------.-------------+-|.|--                    
-8               |...|...................................|                    
+8               |...|..|................................|                    
 9               |...|-------------------------------|...|                    
 0               |---|                               |---|                    
 ENDMAP
@@ -682,8 +683,9 @@ ENDMAP
 
 NON_DIGGABLE:(00,00,75,20)
 
+STAIR:(20,18),up
+LADDER:(17,19),up
 STAIR:(53,19),down
-PORTAL:(18,18,18,18),(00,00,00,00),"chaoss"
 
 REGION:(35,08,35,12),  lit,"ordinary",unfilled
 
