@@ -53,6 +53,8 @@ struct permonst {
 	short		pxlth;			/* length of extension */
 	uchar		msound;			/* noise it makes (6 bits) */
 	uchar		msize;			/* physical size (3 bits) */
+/* Assumes that vocalizations from the monster account for some combat noise */
+#define combatNoise(dat) (dat->msound ? dat->msize*2+1 : dat->msize+1)
 	unsigned int	mresists;		/* resistances */
 	unsigned int	mconveys;		/* conveyed by eating */
 	unsigned long	mflags1,		/* boolean bitflags */
