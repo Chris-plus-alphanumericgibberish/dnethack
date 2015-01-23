@@ -435,36 +435,43 @@ dog_hunger(mtmp, edog)
 register struct monst *mtmp;
 register struct edog *edog;
 {
-        if (monstermoves > edog->hungrytime)
+	if (monstermoves+900 > edog->hungrytime && (
+		(!carnivorous(mtmp->data) && !herbivorous(mtmp->data)) || 
+		(In_quest(&u.uz) && 
+			((Is_qstart(&u.uz) && !flags.stag) || 
+			 (Is_nemesis(&u.uz) && flags.stag)) &&
+		 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN))
+		)
+	)) {
+		/* Pets don't get hungery on quest home */
+		edog->hungrytime = monstermoves + 1000;
+		/* but not too high; it might polymorph */
+	}
+    if (monstermoves > edog->hungrytime)
 	{
-		if (!carnivorous(mtmp->data) && !herbivorous(mtmp->data)) {
-			edog->hungrytime = monstermoves + 100;
-			/* but not too high; it might polymorph */
-	    } else {
-		    /* We're hungry; check if we're carrying anything we can eat
-		       Intelligent pets should be able to carry such food */
-		    register struct obj *otmp, *obest = (struct obj *)0;
-		    int best_nutrit = -1; //cur_nutrit = -1,
-		    int cur_food = APPORT, best_food = APPORT;
-		    for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
-		    {
-//		        cur_nutrit = dog_nutrition(mtmp, otmp);
-				cur_food = dogfood(mtmp, otmp);
-		        if (cur_food < best_food) /*&& cur_nutrit > best_nutrit)*/
-				{
-//				    best_nutrit = cur_nutrit;
-				    best_food = cur_food;
-				    obest = otmp;
-				}
-		    }
-		    if (obest != (struct obj *)0)
-		    {
-		        obj_extract_self(obest);
-				place_object(obest, mtmp->mx, mtmp->my);
-		        if (dog_eat(mtmp, obest, mtmp->mx, mtmp->my, FALSE) == 2)
-		            return(TRUE);
-		        return(FALSE);
-		    }
+		/* We're hungry; check if we're carrying anything we can eat
+		   Intelligent pets should be able to carry such food */
+		register struct obj *otmp, *obest = (struct obj *)0;
+		int best_nutrit = -1; //cur_nutrit = -1,
+		int cur_food = APPORT, best_food = APPORT;
+		for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
+		{
+//	        cur_nutrit = dog_nutrition(mtmp, otmp);
+			cur_food = dogfood(mtmp, otmp);
+			if (cur_food < best_food) /*&& cur_nutrit > best_nutrit)*/
+			{
+//			    best_nutrit = cur_nutrit;
+				best_food = cur_food;
+				obest = otmp;
+			}
+		}
+		if (obest != (struct obj *)0)
+		{
+			obj_extract_self(obest);
+			place_object(obest, mtmp->mx, mtmp->my);
+			if (dog_eat(mtmp, obest, mtmp->mx, mtmp->my, FALSE) == 2)
+				return(TRUE);
+			return(FALSE);
 		}
 	}
 	if (monstermoves > edog->hungrytime + 500) {
@@ -547,7 +554,7 @@ int udist;
 #endif
 									){
 		int edible = dogfood(mtmp, obj);
-
+		
 	    if (!droppables && (edible <= CADAVER ||
 			/* starving pet is more aggressive about eating */
 			(edog->mhpmax_penalty && edible == ACCFOOD)) &&
@@ -687,6 +694,9 @@ int after, udist, whappr;
 		if(appr == 0 && u.sealsActive&SEAL_ECHIDNA && !mindless(mtmp->data) && (is_animal(mtmp->data) || slithy(mtmp->data) || nohands(mtmp->data))){
 			appr = 1;
 		}
+		if(appr == 0 && Race_if(PM_DROW) && is_spider(mtmp->data)){
+			appr = 1;
+		}
 		/* if you have dog food it'll follow you more closely */
 		if (appr == 0) {
 			obj = invent;
@@ -759,9 +769,10 @@ boolean ranged;
 		(!ranged &&
 		 max_passive_dmg(mtmp2, mtmp) >= mtmp->mhp) ||
 		((mtmp->mhp*4 < mtmp->mhpmax
-		  || mtmp2->data->msound == MS_GUARDIAN
-		  || mtmp2->data->msound == MS_LEADER
+		  || mtmp2->data == &mons[urole.guardnum]
+		  || mtmp2->data == &mons[urole.ldrnum]
 		  || (Role_if(PM_NOBLEMAN) && (mtmp->data == &mons[PM_KNIGHT] || mtmp->data == &mons[PM_MAID] || mtmp->data == &mons[PM_PEASANT]) && mtmp->mpeaceful)
+		  || (Race_if(PM_DROW) && (mtmp->data == &mons[PM_GROMPH] || mtmp->data == &mons[PM_DANTRAG]) && mtmp->mpeaceful)
 		  || (Role_if(PM_KNIGHT) && (mtmp->data == &mons[PM_KNIGHT]) && mtmp->mpeaceful)
 		  || always_peaceful(mtmp2->data)) &&
 		 mtmp2->mpeaceful && !Conflict) ||
