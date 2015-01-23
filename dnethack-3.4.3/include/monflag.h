@@ -73,38 +73,38 @@
 #define MR2_FUMBLING	0x4000	/* clumsy */
 
 
-#define M1_FLY		0x00000001L	/* can fly or float */
-#define M1_SWIM		0x00000002L	/* can traverse water */
+#define M1_FLY			0x00000001L	/* can fly or float */
+#define M1_SWIM			0x00000002L	/* can traverse water */
 #define M1_AMORPHOUS	0x00000004L	/* can flow under doors */
-#define M1_WALLWALK	0x00000008L	/* can phase thru rock */
-#define M1_CLING	0x00000010L	/* can cling to ceiling */
-#define M1_TUNNEL	0x00000020L	/* can tunnel thru rock */
-#define M1_NEEDPICK	0x00000040L	/* needs pick to tunnel */
-#define M1_CONCEAL	0x00000080L	/* hides under objects */
-#define M1_HIDE		0x00000100L	/* mimics, blends in with ceiling */
+#define M1_WALLWALK		0x00000008L	/* can phase thru rock */
+#define M1_CLING		0x00000010L	/* can cling to ceiling */
+#define M1_TUNNEL		0x00000020L	/* can tunnel thru rock */
+#define M1_NEEDPICK		0x00000040L	/* needs pick to tunnel */
+#define M1_CONCEAL		0x00000080L	/* hides under objects */
+#define M1_HIDE			0x00000100L	/* mimics, blends in with ceiling */
 #define M1_AMPHIBIOUS	0x00000200L	/* can survive underwater */
 #define M1_BREATHLESS	0x00000400L	/* doesn't need to breathe */
-#define M1_NOTAKE	0x00000800L	/* cannot pick up objects */
-#define M1_NOEYES	0x00001000L	/* no eyes to gaze into or blind */
-#define M1_NOHANDS	0x00002000L	/* no hands to handle things */
-#define M1_NOLIMBS	0x00006000L	/* no arms/legs to kick/wear on */
-#define M1_NOHEAD	0x00008000L	/* no head to behead */
-#define M1_MINDLESS	0x00010000L	/* has no mind--golem, zombie, mold */
-#define M1_HUMANOID	0x00020000L	/* has humanoid head/arms/torso */
-#define M1_ANIMAL	0x00040000L	/* has animal body */
-#define M1_SLITHY	0x00080000L	/* has serpent body */
-#define M1_UNSOLID	0x00100000L	/* has no solid or liquid body */
+#define M1_NOTAKE		0x00000800L	/* cannot pick up objects */
+#define M1_NOEYES		0x00001000L	/* no eyes to gaze into or blind */
+#define M1_NOHANDS		0x00002000L	/* no hands to handle things */
+#define M1_NOLIMBS		0x00006000L	/* no arms/legs to kick/wear on */
+#define M1_NOHEAD		0x00008000L	/* no head to behead */
+#define M1_MINDLESS		0x00010000L	/* has no mind--golem, zombie, mold */
+#define M1_HUMANOID		0x00020000L	/* has humanoid head/arms/torso */
+#define M1_ANIMAL		0x00040000L	/* has animal body */
+#define M1_SLITHY		0x00080000L	/* has serpent body */
+#define M1_UNSOLID		0x00100000L	/* has no solid or liquid body */
 #define M1_THICK_HIDE	0x00200000L	/* has thick hide or scales */
 #define M1_OVIPAROUS	0x00400000L	/* can lay eggs */
-#define M1_REGEN	0x00800000L	/* regenerates hit points */
+#define M1_REGEN		0x00800000L	/* regenerates hit points */
 #define M1_SEE_INVIS	0x01000000L	/* can see invisible creatures */
-#define M1_TPORT	0x02000000L	/* can teleport */
+#define M1_TPORT		0x02000000L	/* can teleport */
 #define M1_TPORT_CNTRL	0x04000000L	/* controls where it teleports to */
-#define M1_ACID		0x08000000L	/* acidic to eat */
-#define M1_POIS		0x10000000L	/* poisonous to eat */
+#define M1_ACID			0x08000000L	/* acidic to eat */
+#define M1_POIS			0x10000000L	/* poisonous to eat */
 #define M1_CARNIVORE	0x20000000L	/* eats corpses */
 #define M1_HERBIVORE	0x40000000L	/* eats fruits */
-#define M1_OMNIVORE	0x60000000L	/* eats both */
+#define M1_OMNIVORE		0x60000000L	/* eats both */
 #ifdef NHSTDC
 #define M1_METALLIVORE	0x80000000UL	/* eats metal */
 #else
@@ -167,13 +167,14 @@
 
 /* Infravision is currently implemented for players only */
 #define M3_INFRAVISION	0x00000100L		/* has infravision */
-#define M3_INFRAVISIBLE 0x00000200L		/* visible by infravision */
-#define M3_TRAITOR		0x00000400L		/* slash'em tag. */
-#define M3_OPAQUE		0x00000800L		/* Monster blocks line of sight */
-#define M3_TENGTPORT	0x00001000L		/* Monster teleports as Tengu */
-#define M3_CHILL		0x00002000L		/* cold to eat */
-#define M3_TOSTY		0x00004000L		/* hot to eat */
-#define M3_STATIONARY	0x00008000L		/* does not move. */
+#define M3_INFRAVISIBLE	0x00000200L		/* visible by infravision */
+#define M3_DARKSIGHT	0x00000400L		/* sees in the dark, blinded by light */
+#define M3_TRAITOR		0x00000800L		/* slash'em tag. */
+#define M3_OPAQUE		0x00001000L		/* Monster blocks line of sight */
+#define M3_TENGTPORT	0x00002000L		/* Monster teleports as Tengu */
+#define M3_CHILL		0x00004000L		/* cold to eat */
+#define M3_TOSTY		0x00008000L		/* hot to eat */
+#define M3_STATIONARY	0x00010000L		/* does not move. */
 
 #define MZ_TINY		0		/* < 2' */
 #define MZ_SMALL	1		/* 2-4' */
