@@ -3745,6 +3745,83 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+MAZE: "abyss-6",' '
+#MAZE: "kost",' '
+FLAGS: noteleport,hardfloor,nommap,shortsighted
+INIT_MAP: 'I' , '.' , false, false, random, false
+GEOMETRY: center,center
+#0         1 
+#012345678901234
+MAP
+0---F---F---F---
+1-.............-
+2-.............-
+3F..---F--S--..F
+4-..|....|..|..-
+5-..S.-S---.|..-
+6-..|-|...S.F..-
+7F..|.|...|.|..F
+8-..F.S...|-|..-
+9-..|.---S-.S..-
+0-..|..|....|..-
+1F..--S--F---..F
+2-.............-
+3-.............-
+4---F---F---F---
+ENDMAP
+#012345678901234
+#0         1 
+REGION:(00,00,14,14),lit,"ordinary"
+MONSTER:'&',"Kostchtchie",(07,07)
+STAIR:levregion(01,00,74,19),(00,00,14,14),up
+STAIR:levregion(01,00,74,19),(00,00,14,14),down
+
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+MONSTER:'H',"frost giant",random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 
 MAZE: "abys2-2",random
 #MAZE: "malc",random
@@ -3803,6 +3880,15 @@ MONSTER:'&',"incubus",random
 MONSTER:'&',"incubus",random
 
 #Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -3957,6 +4043,15 @@ MONSTER:'&',"succubus",random
 MONSTER:'&',"succubus",random
 
 #Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -4127,15 +4222,6 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 
 #Some random objects
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
