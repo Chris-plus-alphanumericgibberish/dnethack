@@ -89,10 +89,10 @@ struct monst {
 	Bitfield(permspeed,2);	/* intrinsic mspeed value */
 	Bitfield(mrevived,1);	/* has been revived from the dead */
 	Bitfield(mavenge,1);	/* did something to deserve retaliation */
-
+	
 	Bitfield(mflee,1);	/* fleeing */
 	Bitfield(mfleetim,7);	/* timeout for mflee */
-
+	
 	Bitfield(mcrazed,1);	/* monster is crazed */
 
 	Bitfield(mcansee,1);	/* cansee 1, temp.blinded 0, blind 0 */
@@ -100,7 +100,7 @@ struct monst {
 
 	Bitfield(mcanmove,1);	/* paralysis, similar to mblinded */
 	Bitfield(mfrozen,7);
-
+	
 	Bitfield(mnotlaugh,1);	/* collapsed from laughter, similar to mblinded */
 	Bitfield(mlaughing,7);
 	
@@ -113,7 +113,7 @@ struct monst {
 	Bitfield(mtraitor,1);	/* Former pet that turned traitor */
 	Bitfield(isshk,1);	/* is shopkeeper */
 	Bitfield(isminion,1);	/* is a minion */
-
+	
 	Bitfield(isgd,1);	/* is guard */
 	Bitfield(ispriest,1);	/* is a priest */
 	Bitfield(iswiz,1);	/* is the Wizard of Yendor */
@@ -125,7 +125,8 @@ struct monst {
 	Bitfield(mhurtu,1);		/* has injured you */
 	Bitfield(housealert,1);	/* won't accept house-based pacification */
 	
-
+#define helpless(mon) (mon->msleeping || !(mon->mcanmove) || !(mon->mnotlaugh))	
+	
 	long mstrategy;		/* for monsters with mflag3: current strategy */
 #define STRAT_ARRIVE	0x40000000L	/* just arrived on current level */
 #define STRAT_WAITFORU	0x20000000L
