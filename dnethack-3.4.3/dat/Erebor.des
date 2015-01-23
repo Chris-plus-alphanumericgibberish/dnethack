@@ -1,0 +1,409 @@
+
+MAZE: "Dna-strt", ' '
+FLAGS: hardfloor
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7    
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0......}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+1....}}}}}}}}}}}}}}}}}}}----------------------P#P#P#P----------------}}}}}}}}
+2.P...}}}}}}}}}}}}}}}}}}|.......|...S...|...|#P#P#P#P|..|...|...|...|}}}}}}}}
+3.....}}}}}}}}}}}}}}}}}}|.......|...|...|...+#P#P#P#P|..|...|...|...|}}}}}}}}
+4......}}}}}}}}}}}}}}}}}|----...|...|...|...|#P#P#P#P|..|...|...|...|}}}}}}}}
+5....}.}}}}}}}}}}}}}}}}}|...|-+---S----+-----########-+---+---+---+-|}}}}}}}}
+6..P..}}}}}}}}}}}}}}}}}}|...|###|.....|#############################F}}}}}}}}
+7.....}}}}}}}}}}}}}}}}}}|...|###|.....|#---+-------------#######----|}}}}}}}}
+8......}}}}}}}}}}}}}}}}}|-+--###-------#|...............|---####|...|}}}}}}}}
+9.PP...#################################|...............|..|####+...|}}}}}}}}
+0..P...#######################-----#####|........\......S..|####|...|}}}}}}}}
+1.....}}}}}}}}}}}}}}}}}}|----#|...|#####|...............|---#---|...|}}}}}}}}
+2.....}}}}}}}}}}}}}}}}}}|...|#|...+#####-----------------####|..|...|}}}}}}}}
+3.....}}}}}}}}}}}}}}}}}}|...+#|...|##########################|..|...|}}}}}}}}
+4......}}}}}}}}}}}}}}}}}|...|------+--+---+------+----------#-S-|...|}}}}}}}}
+5.PPP...}}}}}}}}}}}}}}}}|..-|.......|...|...|...|..+..|....|#|..|...|}}}}}}}}
+6..PP....}}}}}}}}}}}}}}}|...|.......|...|...|...-+--..---..+#+..|...|}}}}}}}}
+7......}}}}}}}}}}}}}}}}}|...|.......|...|...|.....|.....|..|#|..|...|}}}}}}}}
+8..PP.}}}}}}}}}}}}}}}}}}------------------------------------F--------}}}}}}}}
+9....}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7    
+
+# Dungeon Description
+REGION:(00,00,75,19),lit,"ordinary"
+NON_DIGGABLE:(00,00,75,19)
+
+# Portal arrival point
+BRANCH:(00,00,05,19),(0,0,0,0)
+
+# Stairs
+STAIR:(48,01),down
+
+# Doors
+DOOR:closed,(25,08)
+DOOR:closed,(27,13)
+DOOR:closed,(29,05)
+DOOR:closed,(33,12)
+DOOR:closed,(34,14)
+DOOR:closed,(37,14)
+DOOR:closed,(38,05)
+DOOR:closed,(41,14)
+DOOR:closed,(42,07)
+DOOR:closed,(43,03)
+DOOR:closed,(48,14)
+DOOR:closed,(48,16)
+DOOR:closed,(50,15)
+DOOR:closed,(53,05)
+DOOR:closed,(57,05)
+DOOR:closed,(58,16)
+DOOR:closed,(60,16)
+DOOR:closed,(61,05)
+DOOR:closed,(63,09)
+DOOR:closed,(65,05)
+
+# The Quest Leader
+MONSTER:'h',"Thorin II Oakenshield",(48,10)
+CONTAINER:'(',"sack",(48,10)
+OBJECT:'(',"skeleton key",contained, uncursed, 0, "The Key of Erebor"
+
+# guards for the audience chamber
+MONSTER:'h',"dwarf warrior",(45,10)
+MONSTER:'h',"dwarf warrior",(46,10)
+MONSTER:'h',"dwarf warrior",(48,08)
+
+MONSTER:'h',"dwarf warrior",(48,11)
+MONSTER:'h',"dwarf warrior",(50,10)
+MONSTER:'h',"dwarf warrior",(51,10)
+
+MONSTER:'h',"dwarf warrior",(44,10)
+MONSTER:'h',"dwarf warrior",(45,09)
+MONSTER:'h',"dwarf warrior",(46,09)
+
+MONSTER:'h',"dwarf warrior",(50,09)
+MONSTER:'h',"dwarf warrior",(51,09)
+
+MONSTER:'@',"human",(36,11),peaceful
+MONSTER:'@',"human",(36,11),peaceful
+MONSTER:'@',"human",(37,03),peaceful
+MONSTER:'@',"human",(41,04),peaceful
+MONSTER:'@',"human",(42,04),peaceful
+MONSTER:'@',"human",(54,04),peaceful
+MONSTER:'@',"human",(57,03),peaceful
+MONSTER:'@',"human",(65,02),peaceful
+
+# Shops
+REGION:(24,12,26,17),lit,"food shop"
+REGION:(40,02,42,04),lit,"food shop"
+REGION:(30,11,32,13),lit,"ring shop"
+REGION:(24,05,26,07),lit,"potion shop"
+
+# Monsters on siege duty.
+MONSTER: 'o',"orc shaman",(00,02)
+MONSTER: 'o',"orc-captain",(01,03)
+MONSTER: 'o',"hill orc",(01,03)
+MONSTER: 'o',"hill orc",(01,03)
+MONSTER: 'o',"hill orc",(01,03)
+MONSTER: 'o',"hill orc",(01,03)
+
+MONSTER: 'o',"orc shaman",(00,19)
+MONSTER: 'o',"orc-captain",(01,17)
+MONSTER: 'o',"hill orc",(01,17)
+MONSTER: 'o',"hill orc",(01,17)
+MONSTER: 'o',"hill orc",(01,17)
+MONSTER: 'o',"hill orc",(01,17)
+
+MONSTER: 'o',"orc shaman",(04,09)
+MONSTER: 'o',"orc-captain",(04,10)
+MONSTER: 'o',"hill orc",(04,10)
+MONSTER: 'o',"hill orc",(04,10)
+MONSTER: 'o',"hill orc",(04,10)
+MONSTER: 'o',"hill orc",(04,10)
+
+MAZE: "Dna-loca", ' '
+FLAGS:hardfloor,noteleport
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7    
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0..       |...|---|-...BB...........................BB...- ##########+..|   .
+1..       |...|...||-...BB.........................BB...-| #       # |..|  ..
+2... ..   --+-|...| |-...BB.......................BB...-|  #  -----+----- ...
+3.......    # |...|  |-...BB.....................BB...-|   ###+..|..|     .. 
+4........H+H# --+--   |-...BB...................BB...-|  ###  |..|..|   .... 
+5..         #   #      |-...BB.................BB...-|   #   --------  ....  
+6....       ########### |-...BBBBBBBBBBBBBBBBBBB...-|----#---|..|     .....  
+7....        #  #  #  #  |-.......................-| |..+#|..|..|   ........ 
+8......      # -+--+--####|-.....................-|  |..|#+..|+--   ........ 
+9   ....     # |..|..|+--# |----------#----------|   ----#----#   .........  
+0.    ...    # |..|..|..|###################################### ..........   
+1...    ..   # ------|..|---#--------###--+---+---+--+-          .........   
+2.........   #####|..---|..|#|..|...+#  |...|...|..|..|       ............   
+3.... ......     #+..|..|..|#+..|...|   |...|...|..|..|    ... ............. 
+4...   .......    ---|..|-+-#|..|...|## |...|...|------  ................... 
+5.      .........    --+- # #-------- ##---------       .........  ..........
+6.       ...........   ######        ###             ....   ....   ......... 
+7 .        ...........              ......       .........    ..  ........   
+8.      .................................................    ...........     
+9..  .................................................................       
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+# Dungeon Description
+REGION:(37,19,37,19),lit,"ordinary",unfilled,true
+
+# Stairs
+STAIR:(00,17,75,19), (0,0,0,0),up
+STAIR:(37,01),down
+
+# Artifact Door
+DOOR:locked,(09,04),1
+
+# Boulders
+OBJECT:'`',"boulder",(38,11)
+OBJECT:'`',"boulder",(36,12)
+OBJECT:'`',"boulder",(36,14)
+OBJECT:'`',"boulder",(37,14)
+OBJECT:'`',"boulder",(38,15)
+
+# All the other doors should be empty, Smaug has destroyed them.
+
+#   The Vault
+#   Using unfilled morgue for
+#   identification in mkmaze.c
+REGION:(37,01,37,01),unlit,"morgue",unfilled, true
+
+# Monsters
+MONSTER:'D',"Smaug",(37,01),asleep
+OBJECT:'[',"plate mail",(37,01),uncursed,0,"The Armor of Erebor"
+
+MAZE: "Dna-goal", ' '
+FLAGS:noteleport,hardfloor
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7 
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                      ..                                   
+1                                     ....                                  
+2                                     .....                                 
+3                                    .....                                  
+4                                   .....                                   
+5                                    ......                                 
+6                                    ......                                 
+7                                 ........                                  
+8                                 ........                                  
+9                                  .........                                
+0                                ..........                                 
+1                                   ..........                              
+2                                  ..........                               
+3                               ...........                                 
+4                                 .............                             
+5                             ...............                               
+6                            ................                               
+7                              .................                            
+8                                .................                          
+9                                 .................                         
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+# Dungeon Description
+REGION:(00,00,74,19),lit,"ordinary"
+TELEPORT_REGION:(00,00,70,01),(0,0,0,0),down
+
+# Stairs
+#STAIR:(37,19),up
+PORTAL:(37,19,37,19),(00,00,00,00),"Dna-strt"
+OBJECT:'`',"boulder",(37,19)
+
+# Monsters
+MONSTER:'o',"Bolg",(41,19)
+
+#1 - 5 orc-captains
+
+#1.5 - 5 orc shamans
+
+#2
+MONSTER:'o',"orc-captain",(41,19)
+MONSTER:'o',"orc shaman",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#3
+MONSTER:'o',"orc-captain",(41,19)
+MONSTER:'o',"orc shaman",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#4
+MONSTER:'o',"orc-captain",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#5
+MONSTER:'o',"orc-captain",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#6
+MONSTER:'o',"orc-captain",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#7
+MONSTER:'o',"orc shaman",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#8
+MONSTER:'o',"orc shaman",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#9
+MONSTER:'o',"orc shaman",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+#10
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+MONSTER:'o',"hill orc",(41,19)
+
+MAZE: "Dna-fila",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: ' ' , '.' , false, false, lit , false
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+#
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+#
+MONSTER: 'T', random, random, hostile
+MONSTER: 'T', random, random, hostile
+MONSTER: 'T', random, random, hostile
+MONSTER: 'T', random, random, hostile
+MONSTER: 'T', random, random, hostile
+MONSTER: 'T', random, random, hostile
+MONSTER: 'T', random, random, hostile
+MONSTER: 'T', random, random, hostile
+
+
+LEVEL: "Dna-filb"
+#
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random,random,random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+TRAP: "hole", random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+RANDOM_CORRIDORS

@@ -9,7 +9,7 @@
 #	and receive your quest assignment.
 #
 MAZE: "Elf-strt",' '
-FLAGS: noteleport,hardfloor
+FLAGS: noteleport,hardfloor,shortsighted
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -18,8 +18,8 @@ MAP
 1TTTTTTT.....T...TTTT...TTT....TTTTTTTTT...TTTT.TT...TTTT......TTTTT.T......T
 2TT........TT......TT..TT.........................T...TTTT......TT...T..T...T
 3TT...TT....T...T............TTTTTTTTTTTTTTTTTTT.......TTT...T..T...T...TT..T
-4T..TTT.......T..T...TT....TTT.................TTT..T.TTTT..TT..T..........TT
-5T...T.....TTT...TTT..T...TT...}}}}}}}.}}}}}}}...TT..TTTTT..TTT.....TTT...TTT
+4T..TTT.......T..T...TT....TT...................TT..T.TTTT..TT..T..........TT
+5T...T.....TTT...TTT..T...T....}}}}}}}.}}}}}}}....T..TTTTT..TTT.....TTT...TTT
 6TT...TT..TTTTT...TT......T..}}}|----T.T----|}}}..T...TTT...TTT...TTTTTTTTTTT
 7TTT...TT.TTTTTT....T.....T.}}|--T.........T--|}}.T....T...TTTT..TTT....TTTTT
 8TT.T...T..TTT..T.....T...T.}|-T..T.......T..T-|}.T........TTTTT...........TT
@@ -29,8 +29,8 @@ MAP
 2T.TT.....T........T..T...T.}|-T..T.......T..T-|}.T.T.....TTTT.TTT.........TT
 3TTT.......T..T........T..T.}}|--T.........T--|}}.T......TTT.T...TTTT....TTTT
 4TTT.......T..TT..........T..}}}|----T.T----|}}}..T.....TTTT......T..TTT...TT
-5TT.........T...TT....T...TT...}}}}}}}.}}}}}}}...TT....TTTT..TT...T........TT
-6TTT.......TT...T....TTT...TTT.................TTT....TTTTTT.TT..T..........T
+5TT.........T...TT....T...T....}}}}}}}.}}}}}}}....T....TTTT..TT...T........TT
+6TTT.......TT...T....TTT...TT...................TT....TTTTTT.TT..T..........T
 7TTTTT...TTTT.T...T.TTTTT....TTTTTTTTTTTTTTTTTTT.....TTTTTTT.TTT.T...TT....TT
 8TTTTTTTTTTTTT.TTTTTTTTT.TT.......................TT.TTTTTTTT......TTTTTT.TTT
 9TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -40,7 +40,7 @@ REGION:(00,00,75,19),lit,"ordinary"
 # Stairs
 STAIR:(40,13),down
 # Portal arrival point
-BRANCH:(00,14,00,14),(0,0,0,0)
+BRANCH:(00,00,75,19),(25,03,49,17)
 # Altar
 ALTAR:(37,10),chaos,altar
 # Celeborn/Galadriel
@@ -71,20 +71,20 @@ TRAP:random,random
 MONSTER: '@',"Grey-elf",random,peaceful
 
 # Monsters on siege duty.
-MONSTER: 'o',"Uruk-hai",random,hostile
-MONSTER: 'o',"Uruk-hai",random,hostile
+MONSTER: 'o',"Mordor orc",random,hostile
+MONSTER: 'o',"Mordor orc",random,hostile
 MONSTER: 'o',"goblin",random,hostile
 MONSTER: 'o',"goblin",random,hostile
 MONSTER: 'o',"goblin",random,hostile
-MONSTER: 'o',"Uruk-hai",random,hostile
+MONSTER: 'o',"Mordor orc",random,hostile
 MONSTER: 'o',"goblin",random,hostile
 MONSTER: 'o',"goblin",random,hostile
-MONSTER: 'o',"Uruk-hai",random,hostile
-MONSTER: 'o',"Uruk-hai",random,hostile
+MONSTER: 'o',"Mordor orc",random,hostile
+MONSTER: 'o',"Mordor orc",random,hostile
 MONSTER: 'o',"goblin",random,hostile
 MONSTER: 'o',"goblin",random,hostile
 MONSTER: 'o',"goblin",random,hostile
-MONSTER: 'o',"Uruk-hai",random,hostile
+MONSTER: 'o',"Mordor orc",random,hostile
 MONSTER: 'o',"goblin",random,hostile
 MONSTER: 'o',"goblin",random,hostile
 
@@ -96,39 +96,39 @@ MONSTER: 'o',"goblin",random,hostile
 #
 
 MAZE: "Elf-loca",' '
-FLAGS: hardfloor
+FLAGS: hardfloor,shortsighted
 GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-                                                                            
- ..       ....            ......            ...        .......         ..   
-  ..     ......S...     ..........         .....       ........       ....  
-   ..    .. ...   .    ......... ..          .           .....       ....   
-    ..  ..        .      .....    ..         .             ..       .....   
-     ....         .         ..     ..        S               ..        ..   
-    ....          S        ..       ..      ....               ..      ..   
-    .....        ...      ..         ..    ........              ..    ..   
-   ......      ......   ...           ..  ............           ...  ...   
-    ....      .. ....   ....       ........................S....S......     
-       ..    ..   ..     ...     ........................         ..        
-        ..  ..          ..       ........................          ..       
-  ....   ....          ..         ........................         ..       
- ......   ..          ..    ...    ....................           ..        
-  ....   ....        ..    .....    ............                 ..         
-   ..   ..  ..      ..       ...  .S    ............          ....     ...  
-   .. ..     ..............    ....      ............      ....  ..   ..... 
-    ...                   ..            ..     ....    .....      ..   .... 
-                           ..............         ......           .....    
-                                                                            
+0                                                                            
+1 ..       ....            ......            ...        .......         ..   
+2  ..     ......H...     ..........         .....       ........       ....  
+3   ..    .. ...   .    ......... ..          .           .....       ....   
+4    ..  ..        .      .....    ..         .             ..       .....   
+5     ....         .         ..     ..        H               ..        ..   
+6    ....          H        ..       ..      ....               ..      ..   
+7    .....        ...      ..         ..    ........              ..    ..   
+8   ......      ......   ...           ..  ............           ...  ...   
+9    ....      .. ....   ....       ........................H....H......     
+0       ..    ..   ..     ...     ........................         ..        
+1        ..  ..          ..       ........................          ..       
+2  ....   ....          ..         ........................         ..       
+3 ......   ..          ..    ...    ....................           ..        
+4  ....   ....        ..    .....    ............                 ..         
+5   ..   ..  ..      ..       ...  .H    ............          ....     ...  
+6   .. ..     ..............    ....      ............      ....  ..   ..... 
+7    ...                   ..            ..     ....    .....      ..   .... 
+8                           ..............         ......           .....    
+9                                                                            
 ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
+
 # Dungeon Description
 REGION:(00,00,75,19),unlit,"ordinary"
 # Doors
-DOOR:closed,(15,02)
-DOOR:closed,(18,06)
-DOOR:closed,(35,15)
-DOOR:closed,(45,05)
-DOOR:closed,(59,09)
-DOOR:closed,(64,09)
+
 # Stairs
 STAIR:(01,01),up
 STAIR:(45,01),down
@@ -158,10 +158,11 @@ TRAP:"magic",(60,09)
 TRAP:random,random
 TRAP:random,random
 # Random monsters.
-MONSTER:'o',"Uruk-hai",(40,10),hostile
-MONSTER:'o',"Uruk-hai",(41,10),hostile
-MONSTER:'o',"Uruk-hai",(42,10),hostile
-MONSTER:'o',"Uruk-hai",(43,10),hostile
+MONSTER:'o',"orc shaman",random,hostile
+MONSTER:'o',"Mordor orc",(40,10),hostile
+MONSTER:'o',"Mordor orc",(41,10),hostile
+MONSTER:'o',"Mordor orc",(42,10),hostile
+MONSTER:'o',"Mordor orc",(43,10),hostile
 MONSTER:'o',"goblin",(44,10),hostile
 MONSTER:'o',"goblin",(45,10),hostile
 MONSTER:'o',"goblin",(40,11),hostile
@@ -181,8 +182,123 @@ MONSTER:'O',"ogre",(42,13),hostile
 MONSTER:'O',"ogre",(43,13),hostile
 MONSTER:'O',"ogre",(44,13),hostile
 MONSTER:'O',"ogre",random,hostile
+GOLD: random, random
+GOLD: random, random
+GOLD: random, random
+GOLD: random, random
+GOLD: random, random
+#
 
-WALLIFY
+MONSTER: 'C', "drider", random, hostile
+MONSTER: 'C', "drider", random, hostile
+
+MONSTER: 'C', "drider", random, hostile
+MONSTER: 'C', "drider", random, hostile
+
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+
+MONSTER: 's', "mirkwood elder", random, hostile
+MONSTER: 's', "mirkwood elder", random, hostile
+MONSTER: 's', "mirkwood elder", random, hostile
+
+#
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
 
 #
 #	The "goal" level for the quest.
@@ -194,28 +310,32 @@ WALLIFY
 
 MAZE: "Elf-goal", ' '
 GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
- -----                                                                ----- 
---...------------------------------------------------------------------...--
--..........................................................................-
---...--------------------------------+---------------------------------...--
- --.--   ............     .......    #                   .......      --.-- 
-  -.- .............................  #       ........   .........S..   -.-  
-  -.-  ............    .  ......     #       .      .    .......   ..  -.-  
-  -.-    .........     .   .... -----+-----  . ...  .               .. -.-  
-  -.-       S          .        |.........|  .S.    .S...............  -.-  
-  -.- ...   .     ...  .        |.........|         .                  -.-  
-  -.-........    .....S.+#######+....\....+########+.                  -.-  
-  -.- ...         ...    S      |.........|          ..      .....     -.-  
-  -.-                   ..      |.........|           ..      ......   -.-  
-  -.-     .......     ...       -----+-----  ....    ....    ..........-.-  
-  -.-..............  ..              #      ......  ..  .............  -.-  
- --.--   .............               #     ..........          ...... --.-  
---...--------------------------------+---------------------------------..---
--..........................................................................-
---...------------------------------------------------------------------...--
- -----                                                                ----- 
+0 -----                                                                ----- 
+1--...------------------------------------------------------------------...--
+2-..........................................................................-
+3--...------------------------S-------+---------------------------------...--
+4 --.--   ............     .......    #                   .......      --.-- 
+5  -.- .............................  ########........   .........H..   -.-  
+6  -.-  ............    .  ......             .      .    .......   ..  -.-  
+7  -.-    .........     .   .... -----+-----  . ...  .               .. -.-  
+8  -.-       H    ----- .        |.........|  .H.    .H...............  -.-  
+9  -.- ...   .   --...--.        |.........|         .                  -.-  
+0  -.-........   -.....S.+####H #+....\....+####HH##H.                  -.-  
+1  -.- ...       --...--  H      |.........|          ..      .....     -.-  
+2  -.-            -----  ..      |.........|           ..      ......   -.-  
+3  -.-     .......     ...       -----+-----  ....    ....    ..........S.-  
+4  -.-..............  ..              #      ......  ..  .............  -.-  
+5 --.--   .............                     ..........          ...... --.-  
+6--...--------S-----------------------+---------------------------------..---
+7-..........................................................................-
+8--...------------------------------------------------------------------...--
+9 -----                                                                ----- 
 ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
 # Stairs
@@ -246,36 +366,29 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 # doors
-DOOR:locked,(12,08)
-DOOR:closed,(22,10)
 DOOR:locked,(24,10)
-DOOR:closed,(25,11)
 DOOR:closed,(32,10)
 DOOR:closed,(37,03)
 DOOR:closed,(37,07)
 DOOR:closed,(37,13)
 DOOR:closed,(37,16)
 DOOR:closed,(42,10)
-DOOR:locked,(46,08)
-DOOR:closed,(51,10)
-DOOR:locked,(53,08)
-DOOR:closed,(65,05)
 # Random monsters.
-MONSTER:'o',"The Necromancer",(37,10),hostile
-MONSTER:'o',"Uruk-hai",(36,09),hostile
-MONSTER:'o',"Uruk-hai",(36,10),hostile
-MONSTER:'o',"Uruk-hai",(36,11),hostile
-MONSTER:'o',"Uruk-hai",(37,09),hostile
-MONSTER:'o',"Uruk-hai",(37,11),hostile
-MONSTER:'o',"Uruk-hai",(38,09),hostile
+MONSTER:'W',"Necromancer",(37,10),hostile
+MONSTER:'o',"Mordor orc",(36,09),hostile
+MONSTER:'o',"Mordor orc",(36,10),hostile
+MONSTER:'o',"Mordor orc",(36,11),hostile
+MONSTER:'o',"Mordor orc",(37,09),hostile
+MONSTER:'o',"Mordor orc",(37,11),hostile
+MONSTER:'o',"Mordor orc",(38,09),hostile
 MONSTER:'o',"goblin",(38,10),hostile
 MONSTER:'o',"goblin",(38,11),hostile
 MONSTER:'o',"goblin",(02,02),hostile
 MONSTER:'o',"goblin",(71,02),hostile
 MONSTER:'o',"goblin",(02,16),hostile
 MONSTER:'o',"goblin",(71,16),hostile
-MONSTER:'o',"Uruk-hai",random,hostile
-MONSTER:'o',"Uruk-hai",random,hostile
+MONSTER:'o',"Mordor orc",random,hostile
+MONSTER:'o',"Mordor orc",random,hostile
 MONSTER:'o',"goblin",random,hostile
 MONSTER:'o',"goblin",random,hostile
 MONSTER:'o',random,random,hostile
@@ -290,7 +403,19 @@ MONSTER:'O',"ogre",random,hostile
 MONSTER:'O',"ogre",random,hostile
 MONSTER:'O',random,random,hostile
 
-WALLIFY
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+
+MONSTER: 's', "mirkwood elder", random, hostile
+MONSTER: 's', "mirkwood elder", random, hostile
+MONSTER: 's', "mirkwood elder", random, hostile
+
 
 #
 #	The "fill" levels for the quest.
@@ -302,6 +427,7 @@ WALLIFY
 #
 
 MAZE: "Elf-fila" , ' '
+FLAGS: shortsighted,hardfloor
 INIT_MAP: '.' , 'T', true, true, random, true
 NOMAP
 #
@@ -325,11 +451,32 @@ MONSTER: 'o', "goblin", random, hostile
 MONSTER: 'o', "goblin", random, hostile
 MONSTER: 'o', "goblin", random, hostile
 MONSTER: 'o', "goblin", random, hostile
-MONSTER: 'o', "Uruk-hai", random, hostile
+MONSTER: 'o', "Mordor orc", random, hostile
 MONSTER: 'o', random, random, hostile
 MONSTER: 'O', "ogre", random, hostile
 
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+MONSTER: 's', "mirkwood spider", random, hostile
+
+MONSTER: 's', "mirkwood elder", random, hostile
+
 MAZE: "Elf-filb" , ' '
+FLAGS: shortsighted
 INIT_MAP: '.' , ' ', true, true, random, true
 NOMAP
 #
@@ -354,9 +501,9 @@ TRAP: random, random
 TRAP: random, random
 #
 MONSTER: 'o', "goblin", random, hostile
-MONSTER: 'o', "Uruk-hai", random, hostile
-MONSTER: 'o', "Uruk-hai", random, hostile
-MONSTER: 'o', "Uruk-hai", random, hostile
+MONSTER: 'o', "Mordor orc", random, hostile
+MONSTER: 'o', "Mordor orc", random, hostile
+MONSTER: 'o', "Mordor orc", random, hostile
 MONSTER: 'o', random, random, hostile
 MONSTER: 'O', "ogre", random, hostile
 MONSTER: 'O', "ogre", random, hostile

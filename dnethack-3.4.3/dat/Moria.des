@@ -1,0 +1,879 @@
+
+MAZE: "Dnb-strt", ' '
+FLAGS:hardfloor,noteleport
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7    
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0         |...|---|-        .....................        -           +..|    
+1         |...|...||-        .........\.........        -|           |..|    
+2         --+-|...| |-        .................        -|     -----+-----    
+3             |...|  |-        ...............        -|      +..|..|        
+4             --+--   |-                             -|       |..|..|        
+5                      |-                           -|       --------        
+6                       |-                         -|---- ---|..|            
+7                        |-                       -| |..+ |..|..|            
+8              -+--+--    |-                     -|  |..| +..|+--            
+9              |..|..|+--  |----------+----------|   ---- ----               
+0              |..|..|..|                                                    
+1              ------|..|--- --------   --+---+---+--+-                      
+2                 |..---|..| |..|...+   |...|...|..|..|                      
+3                 +..|..|..| +..|...|   |...|...|..|..|                      
+4                 ---|..|-+- |..|...|   |...|...|------                      
+5                    --+-    --------   ---------                            
+6                                                                            
+7                                                                            
+8                                                                            
+9                                                                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7    
+
+# The Quest Leader
+MONSTER:'h',"Dain II Ironfoot",(37,01)
+# guards for the audience chamber
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+MONSTER:'h',"dwarf warrior",random
+
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+MONSTER:'h',"dwarf",random,peaceful
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7    
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0..       |...|---|-.....................................- ##########+..|   .
+1..       |...|...||-.................\.................-| #       # |..|  ..
+2...      --+-|...| |-.................................-|  #  -----+----- ...
+3.....      # |...|  |-...............................-|   ###+..|..|     .. 
+4....      ## --+--   |-.............................-|  ###  |..|..|   .... 
+5..         #   #      |-...........................-|   #   --------  ....  
+6....       ########### |-.........................-|----#---|..|     .....  
+7....        #  #  #  #  |-.......................-| |..+#|..|..|   ........ 
+8......      # -+--+--####|-.....................-|  |..|#+..|+--   ........ 
+9   ....     # |..|..|+--# |----------+----------|   ----#----#   .........  
+0.    ...    # |..|..|..|###################################### ..........   
+1...    ..   # ------|..|---#--------###--+---+---+--+-          .........   
+2.........   #####|..---|..|#|..|...+###|...|...|..|..|       ............   
+3.... ......     #+..|..|..|#+..|...|###|...|...|..|..|    ... ............. 
+4...   .......    ---|..|-+-#|..|...|###|...|...|------  ................... 
+5.      .........    --+- # #--------###---------       .........  ..........
+6.       ...........   ######        ###             ....   ....   ......... 
+7 .        ...........              ......       .........    ..  ........   
+8.      .................................................    ...........     
+9..  .................................................................       
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7    
+
+# Dungeon Description
+REGION:(00,00,75,19),lit,"ordinary"
+NON_DIGGABLE:(00,00,75,19)
+
+
+# Portal arrival point
+BRANCH:(00,17,75,19), (0,0,0,0)
+
+# Stairs
+STAIR:(00,10,75,19),(12,10,61,19),down
+
+# Doors
+DOOR:closed,(11,02)
+DOOR:closed,(17,13)
+DOOR:closed,(15,04)
+DOOR:closed,(15,08)
+DOOR:closed,(18,08)
+DOOR:closed,(21,09)
+DOOR:closed,(22,15)
+DOOR:closed,(25,14)
+DOOR:closed,(35,12)
+DOOR:closed,(37,09)
+
+DOOR:closed,(41,11)
+DOOR:closed,(45,11)
+DOOR:closed,(49,11)
+DOOR:closed,(52,11)
+
+DOOR:closed,(55,07)
+DOOR:closed,(57,08)
+DOOR:closed,(61,08)
+DOOR:closed,(61,03)
+DOOR:closed,(66,02)
+DOOR:closed,(68,00)
+
+MAZE: "Dnb-loca", ' '
+FLAGS:hardfloor,noteleport
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7    
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                              ----------------------------------------------
+1  .....      .............. . |                           |    |           |
+2 ............................ |                                            |
+3 ...........................  |                           |    |           |
+4 ............................ |                           |    |--  ---  --|
+5 ..................... ...... |                           |    |           |
+6 ............................ |                           |    |           |
+7 ............................ ------------------ ---------------           |
+8 .............................  ||                                         |
+9 ..............................                                            |
+0 .............................  ||                                         |
+1 ............................ ------------------ --------------------------|
+2 ............................ |                        | | | | |  | | | |  |
+3 ...........................  |--- ----|               |       |          -|
+4 ............................ |        |               |       |           |
+5 ......................... .. |-      -|                                  -|
+6 ............................ |        |               |       |           |
+7 ............................ |-      -|               |       |          -|
+8   .... ... ..   ...... ....  |        |               | | | | |  | | | |  |
+9                              ----------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+OBJECT:')',random,random
+OBJECT:'[',"dwarvish iron helm",random
+OBJECT:'[',"dwarvish roundshield",random
+OBJECT:'[',"plate mail",random
+OBJECT:'[',"iron shoes",random
+
+OBJECT:')',random,random
+OBJECT:'[',"dwarvish iron helm",random
+OBJECT:'[',"dwarvish roundshield",random
+OBJECT:'[',"plate mail",random
+OBJECT:'[',"iron shoes",random
+
+OBJECT:')',random,random
+OBJECT:'[',"dwarvish iron helm",random
+OBJECT:'[',"dwarvish roundshield",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"iron shoes",random
+
+OBJECT:')',random,random
+OBJECT:'[',"dwarvish iron helm",random
+OBJECT:'[',"dwarvish roundshield",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"iron shoes",random
+
+OBJECT:')',random,random
+OBJECT:'[',"dwarvish iron helm",random
+OBJECT:'[',"dwarvish roundshield",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"iron shoes",random
+
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+OBJECT:'(',random,random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7    
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0 ......      ................ ----------------------------------------------
+1 .}}}}}......}}}}}}}}}}}}}}T}.|...........................|....|...........|
+2.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|...........................S....S...........|
+3.}}}}}}}}}}}}}}}}}}}}}}}}}}}T.|...........................|....|...........|
+4.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|...........................|....|--FF---FF--|
+5.}}}}}}}}}}}}}}}}}}}}}T}}}}}}.|...........................|....|...........|
+6.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|...........................|....|...........|
+7.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.------------------+---------------...........|
+8.}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.T||...................................{.....|
+9..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.S+.........................................|
+0.}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.T||.........................................|
+1}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.------------------+--------------------------|
+2}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|........S...............|.|.|.|.|..|.|.|.|..|
+3}}}}}}}}}}}}}}}}}}}}}}}}}}}}T.|---+----|...............|.......|..........-|
+4}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|........|...............|.......|...........|
+5}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|-......-|...............S.......+..........-|
+6}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|........|...............|.......|...........|
+7}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|-......-|...............|.......|..........-|
+8}}}}}}}}}}}}}}}}}}}}}}}}}}}}. |........|...............|.|.|.|.|..|.|.|.|..|
+9}}}}}}}}}}}}}}}}}}}}}}}}}}}}  ----------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+OBJECT:'*',"rock",random
+
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+
+CONTAINER:'`',"statue",(71,18), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+
+CONTAINER:'`',"statue",(58,12), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+CONTAINER:'`',"statue",(60,12), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+
+CONTAINER:'`',"statue",(67,12), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+CONTAINER:'(',"chest",(69,12)
+OBJECT:'+',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+CONTAINER:'`',"statue",(71,12), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+
+CONTAINER:'(',"chest",(74,14)
+OBJECT:'+',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+CONTAINER:'(',"chest",(74,16)
+OBJECT:'+',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7    
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0 ......      ................ ----------------------------------------------
+1 .}}}}}......}}}}}}}}}}}}}}T}.|...........................|....|...........|
+2.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|...........................S....S...........|
+3.}}}}}}}}}}}}}}}}}}}}}}}}}}}T.|...........................|....|...........|
+4.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|...........................|....|--FF---FF--|
+5.}}}}}}}}}}}}}}}}}}}}}T}}}}}}.|...........................|....|...........|
+6.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|...........................|....|...........|
+7.}}}}}}}}}}}}}}}}}}}}}}}}}}}}.------------------+---------------...........|
+8.}}}}}}}}}}}}}}}}}}}}}}}}}}}}}..||...................................{.....|
+9..}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.S+.........................................|
+0.}}}}}}}}}}}}}}}}}}}}}}}}}}}}}..||.........................................|
+1}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.------------------+--------------------------|
+2}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|........S...............|.|.|.|.|..|.|.|.|..|
+3}}}}}}}}}}}}}}}}}}}}}}}}}}}}T.|---+----|...............|.......|..........-|
+4}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|........|...............|.......|...........|
+5}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|-......-|...............S.......+..........-|
+6}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|........|...............|.......|...........|
+7}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.|-......-|...............|.......|..........-|
+8}}}}}}}}}}}}}}}}}}}}}}}}}}}}. |........|...............|.|.|.|.|..|.|.|.|..|
+9}}}}}}}}}}}}}}}}}}}}}}}}}}}}  ----------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+# Dungeon Description
+REGION:(29,00,75,19),unlit,"morgue",unfilled
+REGION:(00,00,29,19),lit,"ordinary"
+REGION:(29,08,31,10),lit,"ordinary"
+NON_DIGGABLE:(00,00,75,19)
+
+# Stairs
+STAIR:(00,09), up
+STAIR:(69,02), down
+
+# Artifact Door
+ENGRAVING:(32,09),engrave,"pedo 'Mellon' a minno"
+DOOR:locked,(33,09),1
+
+# Doors
+DOOR:closed,(34,13)
+DOOR:closed,(63,15)
+
+CONTAINER:'`',"statue",(31,14), "dwarf lord", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+CONTAINER:'(',"chest",(31,16)
+OBJECT:'+',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+CONTAINER:'`',"statue",(31,18), "dwarf lord", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+
+CONTAINER:'`',"statue",(38,14), "dwarf lord", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+CONTAINER:'(',"chest",(38,16)
+OBJECT:'+',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+CONTAINER:'`',"statue",(38,18), "dwarf lord", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+
+#Chamber of Mazarbul
+ENGRAVING:(69,15),engrave,"BALIN SON OF FUNDIN LORD OF MORIA"
+OBJECT:')',"battle-axe",(69,15)
+OBJECT:'[',"dwarvish iron helm",(69,15)
+OBJECT:'(',"mask",(69,15),uncursed,0,"The War-mask of Durin"
+OBJECT:'[',"dwarvish iron helm",(69,15)
+OBJECT:'[',"dwarvish roundshield",(69,15)
+OBJECT:'[',"plate mail",(69,15)
+OBJECT:'[',"dwarvish mithril-coat",(69,15)
+OBJECT:'[',"iron shoes",(69,15)
+OBJECT:'[',"dwarvish cloak",(69,15)
+
+CONTAINER:'`',"statue",(58,18), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+CONTAINER:'`',"statue",(60,18), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+
+CONTAINER:'`',"statue",(67,18), "dwarf king", 1
+OBJECT:')',random,contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish iron helm",contained
+OBJECT:'[',"dwarvish roundshield",contained
+OBJECT:'[',"plate mail",contained
+OBJECT:'[',"iron shoes",contained
+CONTAINER:'(',"chest",(69,18)
+OBJECT:'+',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+# Watcher
+MONSTER:';',"Watcher in the Water",(10,15),hostile
+
+MAZE: "Dnb-goal", ' '
+FLAGS:noteleport,hardfloor
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7 
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0---------------------------------------------------------------------------
+1|          ...............................................................|
+2|          .............................................................. |
+3|          .............................................................  |
+4|          ............................................................   |
+5|          ...........................................................  ---
+6------     .........................................................  ---..
+7....-----  ........................................................  ---...
+8.------     ......................................................   ------
+9.|                                                                        |
+0.------     ......................................................   ------
+1..------   ........................................................  ---...
+2----       .........................................................  ---..
+3|          ...........................................................  ---
+4|          .............................................................  |
+5|          .............................................................. |
+6|          ...............................................................|
+7|          ...............................................................|
+8---------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0---------------------------------------------------------------------------
+1|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL|
+2|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL.|
+3|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..|
+4|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL...|
+5|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..---
+6------.....LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..---  
+7    -----..LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..---   
+8 ------.....LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL...------
+9 |........................................................................|
+0 ------.....LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL...------
+1  ------...LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..---   
+2----.......LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..---  
+3|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..---
+4|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL..|
+5|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL.|
+6|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL|
+7|..........LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL|
+8---------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+# Stairs
+STAIR:(02,09), up
+PORTAL:(73,09,73,09),(00,00,00,00),"Dnb-strt"
+
+# Balrog
+MONSTER:'&',"Durin's Bane",(40,09),hostile
+
+MONSTER:'o',"orc-captain",(03,03),hostile
+MONSTER:'o',"orc-captain",(03,03),hostile
+MONSTER:'o',"orc-captain",(03,03),hostile
+
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+MONSTER:'o',"hill orc",(03,03),hostile
+
+MONSTER:'o',"orc-captain",(03,16),hostile
+MONSTER:'o',"orc-captain",(03,16),hostile
+MONSTER:'o',"orc-captain",(03,16),hostile
+
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+MONSTER:'o',"hill orc",(03,16),hostile
+
+MAZE: "Dnb-fila",' '
+FLAGS: shortsighted,hardfloor
+
+GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1----------------------------------------------------------------------------
+2                                                                            
+3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+1 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+8                                                                            
+9----------------------------------------------------------------------------
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+
+# Stairs
+STAIR:(00,00,20,18),(0,0,0,0), up
+STAIR:(54,00,74,18),(0,0,0,0), down
+
+MAZEWALK:(04,10),east
+
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+MONSTER: 's', "mirkwood spider", random, hostile, asleep
+
+MONSTER: 's', "mirkwood elder", random, hostile, asleep
+MONSTER: 's', "mirkwood elder", random, hostile, asleep
+MONSTER: 's', "mirkwood elder", random, hostile, asleep
+
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+
+MAZE: "Dnb-filb",' '
+FLAGS:noteleport,hardfloor
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0---------------------------------------------------------------------------
+1|                                                                         |
+2|                                                                         |
+3|        ---      ---      ---      ---      ---      ---      ---        |
+4|        |.|      |.|      |.|      |.|      |.|      |.|      |.|        |
+5|        ---      ---      ---      ---      ---      ---      ---        |
+6|                                                                         |
+7|                                                                         |
+8|        ---      ---      ---      ---      ---      ---      ---        |
+9|        |.|      |.|      |.|      |.|      |.|      |.|      |.|        |
+0|        ---      ---      ---      ---      ---      ---      ---        |
+1|                                                                         |
+2|                                                                         |
+3|        ---      ---      ---      ---      ---      ---      ---        |
+4|        |.|      |.|      |.|      |.|      |.|      |.|      |.|        |
+5|        ---      ---      ---      ---      ---      ---      ---        |
+6|                                                                         |
+7|                                                                         |
+8---------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"small piece of unrefined mithril",random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0---------------------------------------------------------------------------
+1|.........................................................................|
+2|.........................................................................|
+3|........---......---......---......---......---......---......---........|
+4|........| |......| |......| |......| |......| |......| |......| |........|
+5|........---......---......---......---......---......---......---........|
+6|.........................................................................|
+7|.........................................................................|
+8|........---......---......---......---......---......---......---........|
+9|........| |......| |......| |......| |......| |......| |......| |........|
+0|........---......---......---......---......---......---......---........|
+1|.........................................................................|
+2|.........................................................................|
+3|........---......---......---......---......---......---......---........|
+4|........| |......| |......| |......| |......| |......| |......| |........|
+5|........---......---......---......---......---......---......---........|
+6|.........................................................................|
+7|.........................................................................|
+8---------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+# Stairs
+STAIR:(00,00,20,18),(0,0,0,0), up
+STAIR:(54,00,74,18),(0,0,0,0), down
+
+
+#1
+MONSTER:'o',"orc-captain",random
+MONSTER:'o',"orc-captain",random
+MONSTER:'o',"orc-captain",random
+MONSTER:'o',"orc-captain",random
+MONSTER:'o',"orc-captain",random
+
+#1.5
+MONSTER:'o',"orc shaman",random
+MONSTER:'o',"orc shaman",random
+MONSTER:'o',"orc shaman",random
+MONSTER:'o',"orc shaman",random
+MONSTER:'o',"orc shaman",random
+
+#2
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#3
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#4
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#5
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#6
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#7
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#8
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#9
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+#10
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+MONSTER:'o',"hill orc",random
+
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
+OBJECT:'[',"dwarvish mithril-coat",random
