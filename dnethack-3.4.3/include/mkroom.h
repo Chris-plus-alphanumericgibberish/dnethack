@@ -60,7 +60,7 @@ extern NEARDATA struct door doors[DOORMAX];
 #define BEEHIVE		 5	/* contains killer bees and royal jelly */
 #define MORGUE		 6	/* contains corpses, undead and ghosts */
 #define BARRACKS	 7	/* contains soldiers and their gear */
-#define ZOO		 8	/* floor covered with treasure and monsters */
+#define ZOO			 8	/* floor covered with treasure and monsters */
 #define DELPHI		 9	/* contains Oracle and peripherals */
 #define TEMPLE		10	/* contains a shrine */
 #define LEPREHALL	11	/* leprechaun hall (Tom Proudfoot) */
