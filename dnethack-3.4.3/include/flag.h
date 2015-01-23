@@ -54,6 +54,7 @@ struct flag {
 	boolean  mon_moving;	/* monsters' turn to move */
 	boolean  cth_attk;		/* for use with stinking cloud, mark when 
 							 'thulhu makes a cloud sos the comp knows he did it */
+	boolean  drgn_brth;		/* for use with breath weapons, indicates that a dragon is breathing */
 	boolean  move;
 	boolean  mv;
 	boolean  bypasses;	/* bypass flag is set on at least one fobj */
@@ -117,6 +118,12 @@ struct flag {
 	AMII_COLOR_TYPE amii_curmap[ AMII_MAXCOLORS ]; /* colormap */
 #endif
 
+	int	 questvar;	/* quest variant */
+	boolean	 stag;	/* turned stag during the quest */
+	boolean leader_backstab;		/* your leader is attacking you */
+	boolean made_bell;		/* the bell of opening has been created */
+
+	
 	/* KMH, role patch -- Variables used during startup.
 	 *
 	 * If the user wishes to select a role, race, gender, and/or alignment
