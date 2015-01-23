@@ -130,7 +130,9 @@ enum {
     S_bars,	/* KMH -- iron bars */
     S_tree,	/* KMH */
     S_deadtree,	/* youkan */
-    S_room,
+    S_drkroom,
+    S_litroom,
+    S_brightrm,
     S_corr,
     S_litcorr,
     S_upstair,
@@ -263,7 +265,7 @@ extern const struct symdef def_warnsyms[WARNCOUNT];
 /*
  * Thrones should only be looted once.
  */
-#define T_LOOTED	1
+#define T_LOOTED	 1
 /*
  * Flags for special throne in the noble quest.
  */
