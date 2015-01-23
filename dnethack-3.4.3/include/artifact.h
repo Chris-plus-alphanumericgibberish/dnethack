@@ -259,6 +259,7 @@ struct artifact {
 #define INFINITESPELLS	(LAST_PROP+38)
 #define SPIRITNAMES	(LAST_PROP+39)
 #define RAISE_UNDEAD	(LAST_PROP+40)
+#define FALLING_STARS	(LAST_PROP+41)
 
 #define is_nameable_artifact(a) (\
 			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\
