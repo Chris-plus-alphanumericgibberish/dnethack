@@ -527,7 +527,7 @@ const char *name;
 	 * will retain its current name. */
 	if (obj->oartifact || (lth && exist_artifact(obj->otyp, name)))
 		return obj;
-
+	
 	if(!strcmp((&artilist[ART_MANTLE_OF_HEAVEN])->name,name) &&
 	   obj && obj->otyp == LEATHER_CLOAK){
 		if(!Race_if(PM_VAMPIRE)) obj = poly_obj(obj,find_cope());
@@ -684,7 +684,7 @@ static const char * const ghostnames[] = {
 const char *
 rndghostname()
 {
-    return rn2(7) ? ghostnames[rn2(SIZE(ghostnames))] : (const char *)plname;
+	return rn2(7) ? ghostnames[rn2(SIZE(ghostnames))] : (const char *)plname;
 }
 
 /* Monster naming functions:
@@ -807,7 +807,7 @@ boolean called;
 		if(is_drow(mdat)){
 			struct obj *otmp;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
-				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL) 
+				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
 					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
 			}
 		}
@@ -839,8 +839,8 @@ boolean called;
 	    char *name = NAME(mtmp);
 
 	    if (mdat == &mons[PM_GHOST]) {
-		Sprintf(eos(buf), "%s ghost", s_suffix(name));
-		name_at_start = TRUE;
+			Sprintf(eos(buf), "%s ghost", s_suffix(name));
+			name_at_start = TRUE;
 	    } else if (mdat == &mons[PM_SHADE]) {
 			Sprintf(eos(buf), "%s shade", s_suffix(name));
 			name_at_start = TRUE;
@@ -848,7 +848,7 @@ boolean called;
 			Sprintf(eos(buf), "%s broken shadow", s_suffix(name));
 			name_at_start = TRUE;
 	    } else if (called) {
-		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Sprintf(eos(buf), "frumious ");
+			if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Sprintf(eos(buf), "frumious ");
 			if (u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)){
 				if(mtmp->mhp == mtmp->mhpmax) Strcat(buf, "uninjured ");
 				else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
@@ -860,12 +860,12 @@ boolean called;
 			if(is_drow(mdat)){
 				struct obj *otmp;
 				for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
-					if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL) 
+					if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
 						&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
 				}
 			}
-		Sprintf(eos(buf), "%s called %s", mdat->mname, name);
-		name_at_start = (boolean)type_is_pname(mdat);
+			Sprintf(eos(buf), "%s called %s", mdat->mname, name);
+			name_at_start = (boolean)type_is_pname(mdat);
 	    } else if (is_mplayer(mdat) && (bp = strstri(name, " the ")) != 0) {
 		/* <name> the <adjective> <invisible> <saddled> <rank> */
 		char pbuf[BUFSZ];
@@ -902,7 +902,7 @@ boolean called;
 		if(is_drow(mdat)){
 			struct obj *otmp;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
-				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL) 
+				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
 					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
 			}
 		}
@@ -1174,8 +1174,14 @@ long hnum;
 		/*holy symbols*/
 		case LOLTH_SYMBOL:
 			return "silver star bearing";
+		case KIARANSALEE_SYMBOL:
+			return "silver hand bearing";
+		case PEN_A_SYMBOL:
+			return "silver matron bearing";
+		case VER_TAS_SYMBOL:
+			return "silver feather bearing";
 		case EILISTRAEE_SYMBOL:
-			return "dancing drow bearing";
+			return "silver dancer bearing";
 		case EDDER_SYMBOL:
 			return u.uevent.knoweddergud ? "Edderkirke" : "black-webbed";
 	}
@@ -1206,7 +1212,7 @@ static const char * const bogusmons[] = {
 	"harpy", 
 	"lion-dog", "rat-ant", 
 	"bot for announcing commits", "bot for evaluating code", "message-sending bot", "bot for hugging people",
-	"channel-occupying bot",
+		"channel-occupying bot",
 	"Y2K bug", "foo",
 						/* misc. */
 	"neutral twin", "vampiric half-dragon half-troll lycanthropic fiendish snail", 
