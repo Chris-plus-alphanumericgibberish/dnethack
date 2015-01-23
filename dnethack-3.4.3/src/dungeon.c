@@ -158,11 +158,11 @@ save_dungeon(fd, perform_write, free_data)
     }
 
     if (free_data) {
-	for (curr = branches; curr; curr = next) {
-	    next = curr->next;
-	    free((genericptr_t) curr);
-	}
-	branches = 0;
+		for (curr = branches; curr; curr = next) {
+			next = curr->next;
+			free((genericptr_t) curr);
+		}
+		branches = 0;
 		for (curr_ms = mapseenchn; curr_ms; curr_ms = next_ms) {
 			next_ms = curr_ms->next;
 			if (curr_ms->custom)
@@ -715,7 +715,7 @@ struct level_map {
 	{ "chaosffh",	&chaosffh_level },
 	{ "chaossth",	&chaossth_level },
 	{ "chaosvth",	&chaosvth_level },
-	{ "chaose",	&chaose_level },
+	{ "chaose",		&chaose_level },
 	/*Fort Knox*/
 	{ "knox",	&knox_level },
 	{ "",		(d_level *)0 }
@@ -1332,21 +1332,21 @@ int levnum;
 				dgn = tower_dnum;
 			}
 			else{
-		do {
-		    /*
-		     * Find the parent dungeon of this dungeon.
-		     *
-		     * This assumes that end2 is always the "child" and it is
-		     * unique.
-		     */
-		    for (br = branches; br; br = br->next)
-			if (br->end2.dnum == dgn) break;
-		    if (!br)
-			panic("get_level: can't find parent dungeon");
+				do {
+					/*
+					 * Find the parent dungeon of this dungeon.
+					 *
+					 * This assumes that end2 is always the "child" and it is
+					 * unique.
+					 */
+					for (br = branches; br; br = br->next)
+						if (br->end2.dnum == dgn) break;
+					if (!br)
+						panic("get_level: can't find parent dungeon");
 
-		    dgn = br->end1.dnum;
-		} while (levnum < dungeons[dgn].depth_start);
-	    }
+					dgn = br->end1.dnum;
+				} while (levnum < dungeons[dgn].depth_start);
+			}
 	    }
 	    /* We're within the same dungeon; calculate the level. */
 	    levnum = levnum - dungeons[dgn].depth_start + 1;
@@ -1380,7 +1380,9 @@ d_level *lev;
 			return lev->dlevel <= qlocate_level.dlevel;
 		} else if(Role_if(PM_HEALER) || Role_if(PM_NOBLEMAN)){
 			return TRUE;
-		} else if(Role_if(PM_KNIGHT) || Role_if(PM_RANGER)){
+		} else if(Role_if(PM_RANGER)){
+			return lev->dlevel < qlocate_level.dlevel;
+		} else if(Role_if(PM_KNIGHT)){
 			return lev->dlevel < nemesis_level.dlevel;
 		} else if(Role_if(PM_TOURIST)) {
 			return on_level(lev, &qlocate_level) || on_level(lev, &qstart_level);
@@ -1394,6 +1396,33 @@ d_level *lev;
 	} else if(Is_arcadia_woods(lev)) return TRUE;
 	else if(In_cha) {
 		return on_level(lev, &chaosf_level) || on_level(lev, &chaoss_level);
+	}
+	return FALSE;
+}
+
+boolean
+In_cave(lev)
+d_level *lev;
+{
+	if(In_mines(&u.uz) || (Inhell && !on_level(&valley_level, &u.uz))) return TRUE;
+	if(In_quest(lev)){
+		if(Role_if(PM_BARBARIAN)
+		|| Role_if(PM_PIRATE) || Role_if(PM_PRIEST) || Role_if(PM_SAMURAI)
+		|| Role_if(PM_VALKYRIE)){
+			return lev->dlevel > qlocate_level.dlevel;
+		} else if(Role_if(PM_RANGER)){
+			return lev->dlevel >= qlocate_level.dlevel;
+		} else if(Role_if(PM_CAVEMAN)){
+			return TRUE;
+		} else if(Role_if(PM_KNIGHT) || Role_if(PM_PRIEST)){
+			return lev->dlevel == nemesis_level.dlevel;
+		} else if(Role_if(PM_MONK)) {
+			return on_level(lev, &qlocate_level);
+		}
+	}
+	else if(Is_sunsea(lev)) return TRUE;
+	else if(In_neu(lev)){
+		return lev->dlevel >= sum_of_all_level.dlevel;
 	}
 	return FALSE;
 }
@@ -1778,17 +1807,17 @@ xchar *rdgn;
 	 * this dungeon.
 	 */
 	for (slev = sp_levchn, last_level = 0; slev; slev = slev->next) {
-	    if (slev->dlevel.dnum != i) continue;
-
-	    /* print any branches before this level */
-	    print_branch(win, i, last_level, slev->dlevel.dlevel, bymenu, &lchoices);
-
-	    Sprintf(buf, "   %s: %d", slev->proto, depth(&slev->dlevel));
-	    if (Is_stronghold(&slev->dlevel))
+		if (slev->dlevel.dnum != i) continue;
+		
+		/* print any branches before this level */
+		print_branch(win, i, last_level, slev->dlevel.dlevel, bymenu, &lchoices);
+		
+		Sprintf(buf, "   %s: %d", slev->proto, depth(&slev->dlevel));
+		if (Is_stronghold(&slev->dlevel))
 		Sprintf(eos(buf), " (tune %s)", tune);
-	    if (bymenu) {
-	    	/* If other floating branches are added, this will need to change */
-	    	if (i != knox_level.dnum) {
+		if (bymenu) {
+			/* If other floating branches are added, this will need to change */
+			if (i != knox_level.dnum) {
 			lchoices.lev[lchoices.idx] = slev->dlevel.dlevel;
 			lchoices.dgn[lchoices.idx] = i;
 		} else {
@@ -1803,10 +1832,10 @@ xchar *rdgn;
 		if (lchoices.menuletter == 'z') lchoices.menuletter = 'A';
 		else lchoices.menuletter++;
 		lchoices.idx++;
-	    } else
+		} else
 		putstr(win, 0, buf);
-
-	    last_level = slev->dlevel.dlevel;
+		
+		last_level = slev->dlevel.dlevel;
 	}
 	/* print branches after the last special level */
 	print_branch(win, i, last_level, MAXLEVEL, bymenu, &lchoices);
