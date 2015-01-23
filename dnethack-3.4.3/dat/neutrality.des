@@ -7,7 +7,7 @@
 MAZE:"neulev",' '
 FLAGS: nommap
 GEOMETRY:center,center
-#0         1         2   	3	 4	   5	     6	      7
+#0         1         2   	   3	 	 4	       5	     6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
 0----------------------------------------------------------------------------
@@ -401,8 +401,8 @@ MONSTER:'\'', random, random
 MONSTER:'\'', random, random
 MONSTER:'\'', random, random
 
-STAIR:random,up
-STAIR:random,down
+#STAIR:random,up
+#STAIR:random,down
 
 GEOMETRY:center,center
 #0123456
@@ -417,6 +417,10 @@ MAP
 ENDMAP
 #01234567890
 REGION:(00,00,06,06),lit,"ordinary"
+
+STAIR:  levregion(37,00,75,19), (0,0,6,6), up
+STAIR:  (03,03), down
+
 WALLIFY
 MONSTER:'\'',"argentum golem",(01,03)
 MONSTER:'\'',"argentum golem",(02,02)
@@ -1355,15 +1359,15 @@ OBJECT:'(',"chest",(24,09)
 OBJECT:'(',"chest",(26,09)
 OBJECT:'(',"chest",(28,09)
 # Throne Room Extras
-MONSTER:'h',"mind flayer",(45,11),asleep
+MONSTER:'h',"master mind flayer",(45,11),asleep
 OBJECT:'/',"lightning",(45,11)
 OBJECT:'(',"chest",(48,12)
-MONSTER:'h',"master mind flayer",(46,14),asleep
+MONSTER:'L',"alhoon",(46,14)
 OBJECT:'/',"cancellation",(46,14)
 OBJECT:'+',"secrets",(46,14),"Necronomicon",0
 TRAP[75%]:"magic",(47,14)
 OBJECT:'(',"chest",(48,14)
-MONSTER:'h',"mind flayer",(45,17),asleep
+MONSTER:'h',"master mind flayer",(45,17),asleep
 OBJECT:'/',"sleep",(45,17)
 OBJECT:'(',"chest",(48,16)
 # Decorations
@@ -1521,17 +1525,17 @@ OBJECT:'(',"chest",(24,09)
 OBJECT:'(',"chest",(26,09)
 OBJECT:'(',"chest",(28,09)
 # Throne Room Extras
-MONSTER:'L',"lich",(45,11),asleep
+MONSTER:'L',"master lich",(45,11),asleep
 OBJECT:'/',"lightning",(45,11)
 OBJECT:'(',"chest",(48,12)
-MONSTER:'L',"master lich",(46,14),asleep
+MONSTER:'L',"alhoon",(46,14)
 OBJECT:'/',"cancellation",(46,14)
 OBJECT:'+',"secrets",(46,14),"Necronomicon",0
 TRAP[75%]:"magic",(47,14)
 OBJECT:'(',"chest",(48,14)
 MONSTER:'&',"succubus",(46,13),asleep
 MONSTER:'&',"succubus",(46,15),asleep
-MONSTER:'L',"lich",(45,17),asleep
+MONSTER:'L',"master lich",(45,17),asleep
 OBJECT:'/',"sleep",(45,17)
 OBJECT:'(',"chest",(48,16)
 # Decorations
@@ -1935,6 +1939,8 @@ DOOR:locked,(15,04)
 DOOR:locked,(48,04)
 DOOR:locked,(70,02)
 # A few statues
+CONTAINER:'`',"statue",(03,02),"elder priest",1
+OBJECT:'%',"fortune cookie",contained
 CONTAINER:'`',"statue",(04,01),"lethe elemental",1
 CONTAINER:'`',"statue",(04,03),"lethe elemental",1
 CONTAINER:'`',"statue",(06,01),"Angel",1
@@ -1958,11 +1964,9 @@ CONTAINER:'`',"statue",(55,03),"deepest one",1
 CONTAINER:'`',"statue",(62,01),"hobbit",1
 CONTAINER:'`',"statue",(62,03),"mind flayer",1
 # Final Room
-CONTAINER:'`',"statue",(71,02),"high priest",1
-CONTAINER:'`',"statue",(72,01),"high priest",1
-CONTAINER:'`',"statue",(72,03),"high priest",1
-CONTAINER:'`',"statue",(74,02),"elder priest",1
-OBJECT:'%',"fortune cookie",(72,02)
+CONTAINER:'`',"statue",(73,01),"high priest",1
+CONTAINER:'`',"statue",(73,03),"high priest",1
+CONTAINER:'`',"statue",(74,02),"high priest",1
 # A few traps
 TRAP:"pit",(21,02)
 TRAP:"pit",(30,02)
@@ -2028,7 +2032,7 @@ OBJECT:'!',"full healing",(73,17)
 OBJECT:'!',"full healing",(73,18)
 OBJECT:'!',"full healing",(73,18)
 OBJECT:'!',"gain energy",(73,18)
-OBJECT:'[',"levitation boots",(73,12),cursed,0
+OBJECT:'[',"flying boots",(73,12),cursed,0
 # A few monsters (other than migo)
 MONSTER:'t',random,(18,02)
 MONSTER:'t',random,(44,02)
@@ -2482,7 +2486,7 @@ TRAP:"board",random
 #
 
 #
-# The level with the alhoon's fortress...
+# The level with the ???'s fortress...
 #
 MAZE: "nkai-b",' '
 FLAGS: lethe
@@ -2520,14 +2524,15 @@ TRAP:"hole",random
 TRAP:"hole",random
 TRAP:"hole",random
 TRAP:"hole",random
-# The alhoon gets a drawbridge...
+# The ??? gets a drawbridge...
 DRAWBRIDGE:(28,16),west,closed
 # One secret door
 DOOR:locked,(23,18)
-MONSTER:'L',"alhoon",(22,18),asleep,hostile
+#MONSTER:'?',"???",(22,18),asleep,hostile
+ENGRAVING:(22,18),burn,"This space for rent."
 # One sneaky trap
 TRAP:"magic",(24,16)
-# The alhoon has some guards
+# The ??? has some guards
 MONSTER:''',"iron golem",(22,16),hostile
 MONSTER:'d',"hell hound",(24,14),hostile,asleep
 MONSTER:'P',"green slime",(24,18),hostile,asleep
