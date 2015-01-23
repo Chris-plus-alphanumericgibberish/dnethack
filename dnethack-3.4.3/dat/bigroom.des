@@ -7,6 +7,7 @@
 #
 
 MAZE:"bigrm-1",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 MAP
 ---------------------------------------------------------------------------
@@ -91,6 +92,7 @@ MONSTER:random,random,random
 #	Here, just play with the lighting...
 
 MAZE:"bigrm-2",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 MAP
 ---------------------------------------------------------------------------
@@ -183,6 +185,7 @@ MONSTER:random,random,random
 #	Now, let's get fancy...
 
 MAZE:"bigrm-3",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 MAP
 ---------------------------------------------------------------------------
@@ -264,6 +267,7 @@ MONSTER:random,random,(49,16)
 MONSTER:random,random,(61,16)
 MONSTER:random,random,(73,16)
 MAZE:"bigrm-4",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 MAP
 -----------                                                     -----------
@@ -353,6 +357,7 @@ MONSTER:random,random,random
 #	Try an oval room...
 
 MAZE:"bigrm-5",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 MAP
                             ------------------                            
@@ -437,6 +442,7 @@ MONSTER:random,random,random
 
 
 MAZE:"bgrmb-1",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -526,6 +532,7 @@ MONSTER:random,random,random
 #	Now, let's get fancy...
 
 MAZE:"bgrmb-2",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -618,6 +625,7 @@ MONSTER:random,random,(49,16)
 MONSTER:random,random,(61,16)
 MONSTER:random,random,(73,16)
 MAZE:"bgrmb-3",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 MAP
 -----------                                                     -----------
@@ -707,6 +715,7 @@ MONSTER:random,random,random
 #	Try an oval room...
 
 MAZE:"bgrmb-4",' '
+FLAGS:shortsighted
 GEOMETRY:center,center
 MAP
                             ------------------                            
