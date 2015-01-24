@@ -242,7 +242,8 @@ dosave0()
 		}
 		mark_synch();
 #endif
-		ofd = open_levelfile(ltmp, whynot);
+		ofd = open_levelfile((int)ltmp, whynot);
+//		pline("%d",(int)ltmp);
 		if (ofd < 0) {
 		    HUP pline("%s", whynot);
 			abort();
@@ -864,9 +865,9 @@ register struct obj *otmp;
 	while(otmp) {
 	    otmp2 = otmp->nobj;
 	    if (perform_bwrite(mode)) {
-		xl = otmp->oxlth + otmp->onamelth;
-		bwrite(fd, (genericptr_t) &xl, sizeof(int));
-		bwrite(fd, (genericptr_t) otmp, xl + sizeof(struct obj));
+			xl = otmp->oxlth + otmp->onamelth;
+			bwrite(fd, (genericptr_t) &xl, sizeof(int));
+			bwrite(fd, (genericptr_t) otmp, xl + sizeof(struct obj));
 			if(otmp->mp){
 				bwrite(fd, (genericptr_t) otmp->mp, (unsigned) sizeof(struct mask_properties));
 //				bwrite(fd, (genericptr_t) otmp->mp->mskacurr, sizeof(struct attribs));
