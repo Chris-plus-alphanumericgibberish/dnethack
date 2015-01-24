@@ -10,8 +10,10 @@ void
 were_change(mon)
 register struct monst *mon;
 {
-	if (!is_were(mon->data))
-	    return;
+	if( !is_were(mon->data) && 
+		!(is_eladrin(mon->data) && mon->mhp < .5*mon->mhpmax && rn2(2)) && 
+		!(mon->data == &mons[PM_BALL_OF_LIGHT] && mon->mhp > .5*mon->mhpmax)
+	) return;
 
 	if (is_human(mon->data)) {
 	    if (!Protection_from_shape_changers &&
@@ -31,7 +33,14 @@ register struct monst *mon;
 			You_hear("a %s howling at the moon.", howler);
 		}
 	    }
-	} else if (!rn2(30) || Protection_from_shape_changers) {
+	} else if (!rn2(30) || Protection_from_shape_changers 
+		|| is_eladrin(mon->data) 
+		|| (mon->data == &mons[PM_BALL_OF_LIGHT] && mon->mhp >= mon->mhpmax)
+	) {
+		if(mon->data == &mons[PM_BALL_OF_LIGHT]){
+			mon->mflee = 0;
+			mon->mfleetim = 0;
+		}
 	    new_were(mon);		/* change back into human form */
 	}
 }
@@ -54,7 +63,15 @@ int pm;
 	    case PM_HUMAN_WERERAT:    return(PM_WERERAT);
 		case PM_ANUBITE:		  return(PM_ANUBAN_JACKAL);
 		case PM_ANUBAN_JACKAL:	  return(PM_ANUBITE);
-	    default:		      return(0);
+		case PM_FIRRE:			  return(PM_DANCING_FLAME);
+		case PM_DANCING_FLAME:	  return(PM_FIRRE);
+		case PM_SHIERE:			  return(PM_BALL_OF_LIGHT);
+		case PM_BALL_OF_LIGHT:	  return(PM_SHIERE);
+		case PM_GHAELE:			  return(PM_LUMINOUS_CLOUD);
+		case PM_LUMINOUS_CLOUD:	  return(PM_GHAELE);
+		case PM_TULANI:			  return(PM_BALL_OF_RADIANCE);
+		case PM_BALL_OF_RADIANCE: return(PM_TULANI);
+	    default:			      return(0);
 	}
 }
 
@@ -71,7 +88,12 @@ register struct monst *mon;
 	}
 
 	if(canseemon(mon) && !Hallucination) {
-		if(mon->data != &mons[PM_ANUBITE] && mon->data != &mons[PM_ANUBAN_JACKAL])
+		if(mon->data != &mons[PM_ANUBITE] && mon->data != &mons[PM_ANUBAN_JACKAL] &&
+		   mon->data != &mons[PM_FIRRE] && mon->data != &mons[PM_DANCING_FLAME] &&
+		   mon->data != &mons[PM_SHIERE] && mon->data != &mons[PM_BALL_OF_LIGHT] &&
+		   mon->data != &mons[PM_GHAELE] && mon->data != &mons[PM_LUMINOUS_CLOUD] &&
+		   mon->data != &mons[PM_TULANI] && mon->data != &mons[PM_BALL_OF_RADIANCE]
+		)
 	    pline("%s changes into a %s.", Monnam(mon),
 			is_human(&mons[pm]) ? "human" :
 			mons[pm].mname+4);
