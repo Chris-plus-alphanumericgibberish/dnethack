@@ -20,6 +20,7 @@ STATIC_PTR void FDECL(costly_tin, (const char*));
 STATIC_PTR int NDECL(opentin);
 STATIC_PTR int NDECL(unfaint);
 STATIC_PTR int NDECL(windclock);
+STATIC_PTR int FDECL(clockwork_eat_menu, (boolean,boolean));
 
 #ifdef OVLB
 STATIC_DCL const char *FDECL(food_xname, (struct obj *,BOOLEAN_P));
@@ -45,6 +46,7 @@ STATIC_DCL const char *FDECL(foodword, (struct obj *));
 STATIC_DCL boolean FDECL(maybe_cannibal, (int,BOOLEAN_P));
 
 char msgbuf[BUFSZ];
+int etype;			/* Clockwork's eat type */
 
 #endif /* OVLB */
 
@@ -111,7 +113,7 @@ register struct obj *obj;
 		if(obj->oclass == ARMOR_CLASS) return TRUE;
 		if(obj->oclass == TOOL_CLASS && is_weptool(obj)) return TRUE;
 	}
-	if(obj->oclass == SCROLL_CLASS && obj->otyp != SCR_BLANK_PAPER && 
+	if(obj->oclass == SCROLL_CLASS && obj->otyp != SCR_BLANK_PAPER && obj->otyp != SCR_GOLD_SCROLL_OF_LAW && 
 #ifdef MAIL
 		obj->otyp != SCR_MAIL && 
 #endif
@@ -122,6 +124,69 @@ register struct obj *obj;
 	if(obj->oclass == WAND_CLASS && obj->spe > 0 && obj->otyp != WAN_NOTHING) return TRUE;
 	if(obj->otyp == CORPSE && (obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET || obj->corpsenm == PM_NEWT)) return TRUE;
 	if(obj->otyp == TIN && (!obj->known || obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET || obj->corpsenm == PM_NEWT)) return TRUE;
+	
+	return FALSE;
+}
+
+boolean
+uclockwork_edible(obj)
+struct obj *obj;
+{
+	/* protect invocation tools but not Rider corpses (handled elsewhere)*/
+     /* if (obj->oclass != FOOD_CLASS && obj_resists(obj, 0, 0)) */
+	 /* Repeating this check in the name of futureproofing */
+	if (objects[obj->otyp].oc_unique)
+		return FALSE;
+	
+	
+	if(etype == SCRAP_MAW && is_metallic(obj) && is_corrodeable(obj) && !(obj->oartifact))
+		return TRUE;
+	
+	if(etype == WOOD_STOVE && !(obj->oartifact)){
+		if(obj->otyp == EUCALYPTUS_LEAF ||
+		   obj->otyp == SPRIG_OF_WOLFSBANE ||
+		   obj->otyp == FORTUNE_COOKIE ||
+		   obj->otyp == LEMBAS_WAFER ||
+		   obj->otyp == SHEAF_OF_HAY ||
+		   is_wood(obj) ||
+		   (is_paper(obj) 
+#ifdef MAIL
+			&& obj->otyp != SCR_MAIL
+#endif
+		   )
+		) return TRUE;
+	}
+	
+	if(etype == HELLFIRE_FURNACE && !(obj->oartifact)){
+		if(objects[obj->otyp].oc_material >= WAX && objects[obj->otyp].oc_material <= BONE 
+#ifdef MAIL
+			&& obj->otyp != SCR_MAIL
+#endif
+		)
+			return TRUE;
+	}
+	
+	if(etype == MAGIC_FURNACE && !(objects[obj->otyp].oc_merge && 
+											  obj->otyp != CORPSE && 
+											  obj->otyp != TIN && 
+											  obj->oclass != SCROLL_CLASS)
+	){
+		if(obj->spe > 0){
+			if(obj->oclass == WEAPON_CLASS) return TRUE;
+			if(obj->oclass == ARMOR_CLASS) return TRUE;
+			if(obj->oclass == TOOL_CLASS && is_weptool(obj)) return TRUE;
+		}
+		if(obj->oclass == SCROLL_CLASS && obj->otyp != SCR_BLANK_PAPER && obj->otyp != SCR_GOLD_SCROLL_OF_LAW && 
+#ifdef MAIL
+			obj->otyp != SCR_MAIL && 
+#endif
+			!obj->oartifact) return TRUE;
+		if(obj->oclass == SPBOOK_CLASS && obj->otyp != SPE_BLANK_PAPER && !obj->oartifact) return TRUE;
+		if(obj->oclass == AMULET_CLASS && obj->spe >= 0 && !obj->oartifact) return TRUE;
+		if(obj->oclass == RING_CLASS && obj->spe >= 0 && !obj->oartifact) return TRUE;
+		if(obj->oclass == WAND_CLASS && obj->spe > 0 && obj->otyp != WAN_NOTHING) return TRUE;
+		if(obj->otyp == CORPSE && (obj->corpsenm == PM_AOA || obj->corpsenm == PM_AOA_DROPLET || obj->corpsenm == PM_NEWT)) return TRUE;
+	}
 	
 	return FALSE;
 }
@@ -141,6 +206,7 @@ register struct obj *obj;
 	   allow fake amulets to be eaten either [which is already the case] */
 
 	if(Race_if(PM_INCANTIFIER)) return incantifier_edible(obj);
+	if(uclockwork) return uclockwork_edible(obj);
 	
 	if (metallivorous(youmonst.data) && is_metallic(obj) &&
 	    (youmonst.data != &mons[PM_RUST_MONSTER] || is_rustprone(obj)))
@@ -151,6 +217,12 @@ register struct obj *obj;
 	    !Has_contents(obj))
 		return TRUE;
 
+	/* a sheaf of straw is VEGGY, but only edible for herbivorous animals */
+	if (obj->otyp == SHEAF_OF_HAY && herbivorous(youmonst.data))
+		return !carnivorous(youmonst.data);
+	if (herbivorous(youmonst.data) && is_veggy(obj))
+		return TRUE;
+		
 	/* Ghouls only eat corpses */
 	if (u.umonnum == PM_GHOUL)
 	   	return (boolean)(obj->otyp == CORPSE);
@@ -175,10 +247,21 @@ init_uhunger()
 {
 	if(Race_if(PM_INCANTIFIER)){
 		u.uenmax += 900;
-		u.uen = u.uenmax/2;
+		u.uen = u.uenmax*.45;
 	} else {
-		u.uhungermax = 2000;
-		u.uhunger = 900;
+		u.uhungermax = DEFAULT_HMAX;
+		u.uhunger = u.uhungermax*.45;
+	}
+	u.uhs = NOT_HUNGRY;
+}
+
+void
+reset_uhunger()
+{
+	if(Race_if(PM_INCANTIFIER)){
+		u.uen = u.uenmax*.45;
+	} else {
+		u.uhunger = u.uhungermax*.45;
 	}
 	u.uhs = NOT_HUNGRY;
 }
@@ -195,6 +278,7 @@ static const struct { const char *txt; int nut; } tintxts[] = {
 	{"stir fried",   80},
 	{"candied",      100},
 	{"boiled",       50},
+#define DRIED_TIN 9
 	{"dried",        55},
 	{"szechuan",     70},
 #define FRENCH_FRIED_TIN 11
@@ -338,7 +422,7 @@ choke(food)	/* To a full belly all food is bad. (It.) */
 		}
 		You("die...");
 		done(CHOKING);
-	}
+	 }
 	}
 }
 
@@ -561,13 +645,13 @@ boolean allowmsg;
 {
 	if(your_race(&mons[pm])){
 		if (!CANNIBAL_ALLOWED()) {
-		if (allowmsg) {
-			if (Upolyd)
-				You("have a bad feeling deep inside.");
-			You("cannibal!  You will regret this!");
-		}
-		HAggravate_monster |= FROMOUTSIDE;
-		change_luck(-rn1(4,2));		/* -5..-2 */
+			if (allowmsg) {
+				if (Upolyd)
+					You("have a bad feeling deep inside.");
+				You("cannibal!  You will regret this!");
+			}
+			HAggravate_monster |= FROMOUTSIDE;
+			change_luck(-rn1(4,2));		/* -5..-2 */
 		} else if (Role_if(PM_CAVEMAN)) {
 			adjalign(sgn(u.ualign.type));
 			You("honour the dead.");
@@ -616,7 +700,10 @@ BOOLEAN_P bld, nobadeffects;
 		}
 		break;
 	    case PM_LIZARD:
-		if (Stoned) fix_petrification();
+	    case PM_SMALL_CAVE_LIZARD:
+	    case PM_CAVE_LIZARD:
+	    case PM_LARGE_CAVE_LIZARD:
+			if (Stoned) fix_petrification();
 		break;
 	    case PM_MANDRAKE:
 			if(!nobadeffects){
@@ -633,12 +720,12 @@ BOOLEAN_P bld, nobadeffects;
 	    case PM_FAMINE:
 		{ char buf[BUFSZ];
 			if(!nobadeffects){
-		    pline("Eating that is instantly fatal.");
-		    Sprintf(buf, "unwisely ate the body of %s",
-			    mons[pm].mname);
-		    killer = buf;
-		    killer_format = NO_KILLER_PREFIX;
-		    done(DIED);
+				pline("Eating that is instantly fatal.");
+				Sprintf(buf, "unwisely ate the body of %s",
+					mons[pm].mname);
+				killer = buf;
+				killer_format = NO_KILLER_PREFIX;
+				done(DIED);
 			}
 		    /* It so happens that since we know these monsters */
 		    /* cannot appear in tins, victual.piece will always */
@@ -684,6 +771,9 @@ struct monst *mon;
 {
     switch(monsndx(mon->data)) {
 	case PM_LIZARD:
+	case PM_SMALL_CAVE_LIZARD:
+	case PM_CAVE_LIZARD:
+	case PM_LARGE_CAVE_LIZARD:
 	    if (Stoned) fix_petrification();
 	    break;
 	case PM_DEATH:
@@ -867,7 +957,7 @@ boolean drained;
 		case COLD_RES:
 		case SHOCK_RES:
 		case ACID_RES:
-			chance = 0;//skip role, give atribute.
+			chance = 0;//skip roll, give atribute.
 		break;
 		case POISON_RES:
 			if ((ptr == &mons[PM_KILLER_BEE] ||
@@ -895,7 +985,7 @@ boolean drained;
 			chance = 15;
 			break;
 	}
-
+	
 	if(chance && drained && rn2(5))
 		return;		/* drain chance */
 	
@@ -1112,17 +1202,17 @@ BOOLEAN_P tin, nobadeffects, drained;
 	switch(pm) {
 	    case PM_NEWT:
 		/* MRKR: "eye of newt" may give small magical energy boost */
-		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
-		    int old_uen = u.uen;
-		    u.uen += d(2,10);
-		    if (u.uen > u.uenmax) {
+		if(!drained || !rn2(5)){
+			int old_uen = u.uen;
+			u.uen += d(2,10);
+			if (u.uen > u.uenmax){
 				u.uenmax++;
 				u.uen = u.uenmax;
-		    }
-		    if (old_uen != u.uen) {
-			    You_feel("a mild buzz.");
-			    flags.botl = 1;
-		    }
+			}
+			if (old_uen != u.uen){
+				You_feel("a mild buzz.");
+				flags.botl = 1;
+			}
 		}
 		break;
 	    case PM_AOA_DROPLET: //Aoas are drops of pure magic
@@ -1163,26 +1253,26 @@ BOOLEAN_P tin, nobadeffects, drained;
 		break;
 	    case PM_HUMAN_WERERAT:
 			if(!nobadeffects){
-			catch_lycanthropy = TRUE;
-			u.ulycn = PM_WERERAT;
+				catch_lycanthropy = TRUE;
+				u.ulycn = PM_WERERAT;
 			}
 		break;
 	    case PM_HUMAN_WEREJACKAL:
 			if(!nobadeffects){
-			catch_lycanthropy = TRUE;
-			u.ulycn = PM_WEREJACKAL;
+				catch_lycanthropy = TRUE;
+				u.ulycn = PM_WEREJACKAL;
 			}
 		break;
 	    case PM_HUMAN_WEREWOLF:
 			if(!nobadeffects){
-			catch_lycanthropy = TRUE;
-			u.ulycn = PM_WEREWOLF;
+				catch_lycanthropy = TRUE;
+				u.ulycn = PM_WEREWOLF;
 			}
 		break;
 	    case PM_ANUBITE:
 			if(!nobadeffects){
-			catch_lycanthropy = TRUE;
-			u.ulycn = PM_WEREJACKAL;
+				catch_lycanthropy = TRUE;
+				u.ulycn = PM_WEREJACKAL;
 			}
 		break;
 	    case PM_NURSE:
@@ -1192,7 +1282,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 		break;
 		case PM_SEWER_RAT:
 			if(!nobadeffects && !drained){
-			if(d(1,10) > 9 && !Sick_resistance) make_vomiting(Vomiting+d(10,4), TRUE);
+				if(d(1,10) > 9 && !Sick_resistance) make_vomiting(Vomiting+d(10,4), TRUE);
 			}
 		break;
 		case PM_RABID_RAT:
@@ -1216,15 +1306,15 @@ BOOLEAN_P tin, nobadeffects, drained;
 		break;
 	    case PM_STALKER:
 			if(!drained || !rn2(5)) if(!nobadeffects){
-			if(!Invis) {
-				set_itimeout(&HInvis, (long)rn1(100, 50));
-				if (!Blind && !BInvis) self_invis_message();
-			} else {
-				if (!(HInvis & INTRINSIC)) You_feel("hidden!");
-				HInvis |= FROMOUTSIDE;
-				HSee_invisible |= FROMOUTSIDE;
-			}
-			newsym(u.ux, u.uy);
+				if(!Invis) {
+					set_itimeout(&HInvis, (long)rn1(100, 50));
+					if (!Blind && !BInvis) self_invis_message();
+				} else {
+					if (!(HInvis & INTRINSIC)) You_feel("hidden!");
+					HInvis |= FROMOUTSIDE;
+					HSee_invisible |= FROMOUTSIDE;
+				}
+				newsym(u.ux, u.uy);
 			}
 		/* fall into next case */
 	    case PM_YELLOW_LIGHT:
@@ -1268,36 +1358,53 @@ BOOLEAN_P tin, nobadeffects, drained;
 		    display_nhwindow(WIN_MAP, TRUE);
 		}
 		break;
+	    case PM_MERCURIAL_DRAGON:
+		    if (!(HFast & INTRINSIC)) {
+				if (!Fast)
+					You("speed up.");
+				else
+					Your("quickness feels more natural.");
+				HFast |= FROMOUTSIDE;
+			}
+			exercise(A_DEX, TRUE);
+		break;
 	    case PM_QUANTUM_MECHANIC:
 		if (HFast & INTRINSIC) {
-			HFast &= ~INTRINSIC;
-			Your("velocity suddenly seems very uncertain!");
-			You("seem slower.");
-		} else if(!nobadeffects){
+			if(!nobadeffects){
+				HFast &= ~INTRINSIC;
+				Your("velocity suddenly seems very uncertain!");
+				You("seem slower.");
+			}
+		} else {
 			HFast |= FROMOUTSIDE;
 			Your("velocity suddenly seems very uncertain!");
 			You("seem faster.");
 		}
 		break;
 		case PM_GUG:
-			if(!drained || !rn2(5)) gainstr((struct obj *)0, 0);
+			if(!drained || !rn2(5)){
+				gainstr((struct obj *)0, 0);
+			}
 		break;
 	    case PM_MANDRAKE:
 	    case PM_LIZARD:
+	    case PM_SMALL_CAVE_LIZARD:
+	    case PM_CAVE_LIZARD:
+	    case PM_LARGE_CAVE_LIZARD:
 			if (HStun > 2)  make_stunned(2L,FALSE);
 			if (HConfusion > 2)  make_confused(2L,FALSE);
 		break;
 		case PM_BEHOLDER:
 			if(!drained || !rn2(5)) {
-			You(Hallucination ? "can see your own insides!"
-				: "feel as though you can see the world from a whole new angle!");
-			if (!BClairvoyant)
-			    do_vicinity_map(u.ux,u.uy);
-			/* at present, only one thing blocks clairvoyance */
-			else if (uarmh && uarmh->otyp == CORNUTHAUM)
-			    You("sense a pointy hat on top of your %s.",
-				body_part(HEAD));
-		    incr_itimeout(&HClairvoyant, rn1(500,500));
+				You(Hallucination ? "can see your own insides!"
+					: "feel as though you can see the world from a whole new angle!");
+				if (!BClairvoyant)
+					do_vicinity_map(u.ux,u.uy);
+				/* at present, only one thing blocks clairvoyance */
+				else if (uarmh && uarmh->otyp == CORNUTHAUM)
+					You("sense a pointy hat on top of your %s.",
+					body_part(HEAD));
+				incr_itimeout(&HClairvoyant, rn1(500,500));
 			}
 		break;
 	    case PM_CHAMELEON:
@@ -1311,16 +1418,16 @@ BOOLEAN_P tin, nobadeffects, drained;
 	    case PM_MIND_FLAYER:
 	    case PM_MASTER_MIND_FLAYER:
 		if(!drained || !rn2(5)) {
-		if (ABASE(A_INT) < ATTRMAX(A_INT)) {
-			if (!rn2(2)) {
-				pline("Yum! That was real brain food!");
-				(void) adjattrib(A_INT, 1, FALSE);
-				break;	/* don't give them telepathy, too */
+			if (ABASE(A_INT) < ATTRMAX(A_INT)) {
+				if (!rn2(2)) {
+					pline("Yum! That was real brain food!");
+					(void) adjattrib(A_INT, 1, FALSE);
+					break;	/* don't give them telepathy, too */
+				}
 			}
-		}
-		else {
-			pline("For some reason, that tasted bland.");
-		}
+			else {
+				pline("For some reason, that tasted bland.");
+			}
 		}
 		/* fall through to default case */
 	    default: {
@@ -1373,8 +1480,8 @@ BOOLEAN_P tin, nobadeffects, drained;
 
 	if (catch_lycanthropy && spec_ability2(uwep, SPFX2_NOWERE)) {
 	    if (!touch_artifact(uwep, &youmonst)) {
-		dropx(uwep);
-		uwepgone();
+			dropx(uwep);
+			uwepgone();
 	    }
 	}
 
@@ -1443,9 +1550,10 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 	    r = tin.tin->cursed ? ROTTEN_TIN :	/* always rotten if cursed */
 		    (tin.tin->spe == -1) ? HOMEMADE_TIN :  /* player made it */
 			rn2(TTSZ-1);		/* else take your pick */
-	    if (r == ROTTEN_TIN && (tin.tin->corpsenm == PM_LIZARD ||
+	    if (r == ROTTEN_TIN && (tin.tin->corpsenm == PM_LIZARD || tin.tin->corpsenm == PM_SMALL_CAVE_LIZARD ||
+			tin.tin->corpsenm == PM_CAVE_LIZARD || tin.tin->corpsenm == PM_LARGE_CAVE_LIZARD ||
 			tin.tin->corpsenm == PM_LICHEN || tin.tin->corpsenm == PM_BEHOLDER))
-		r = HOMEMADE_TIN;		/* lizards don't rot */
+		r = DRIED_TIN;		/* lizards don't rot */
 	    else if (tin.tin->spe == -1 && !tin.tin->blessed && !rn2(7))
 		r = ROTTEN_TIN;			/* some homemade tins go bad */
 	    which = 0;	/* 0=>plural, 1=>as-is, 2=>"the" prefix */
@@ -1459,24 +1567,90 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 	    if (which == 0) what = makeplural(what);
 	    pline("It smells like %s%s.", (which == 2) ? "the " : "", what);
         if (uclockwork){
-           You("have no way to eat, so you discard the tin instead.");
-           if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
-		   costly_tin((const char*)0);
-           goto use_me;
+			int eatHow;
+			if(Hallucination && u.clockworkUpgrades&(WOOD_STOVE|MAGIC_FURNACE|HELLFIRE_FURNACE|SCRAP_MAW)){
+				You("try to put it in your intake hopper, but you hallucinate and dump it instead!");
+				costly_tin((const char*)0);
+				goto use_me;
+			} else if((eatHow = clockwork_eat_menu(r == DRIED_TIN || is_burnable(&mons[tin.tin->corpsenm]),	
+						u.clockworkUpgrades&MAGIC_FURNACE && 
+						(tin.tin->corpsenm == PM_NEWT || 
+						 tin.tin->corpsenm == PM_AOA_DROPLET || 
+						 tin.tin->corpsenm == PM_AOA))
+			)){
+				if(eatHow == WOOD_STOVE){
+					/* KMH, conduct */
+					u.uconduct.food++;
+					if (!vegan(&mons[tin.tin->corpsenm]))
+					u.uconduct.unvegan++;
+					if (!vegetarian(&mons[tin.tin->corpsenm]))
+					violated_vegetarian();
+					
+					tin.tin->dknown = tin.tin->known = TRUE;
+					
+					u.ustove += tintxts[r].nut;
+					costly_tin((const char*)0);
+					goto use_me;
+				} else if(eatHow == MAGIC_FURNACE){
+					/* KMH, conduct */
+					u.uconduct.food++;
+					if (!vegan(&mons[tin.tin->corpsenm]))
+					u.uconduct.unvegan++;
+					if (!vegetarian(&mons[tin.tin->corpsenm]))
+					violated_vegetarian();
+					
+					tin.tin->dknown = tin.tin->known = TRUE;
+					
+					cpostfx(tin.tin->corpsenm, FALSE, FALSE, FALSE);
+					costly_tin((const char*)0);
+					goto use_me;
+				} else if(eatHow == HELLFIRE_FURNACE){
+					/* KMH, conduct */
+					u.uconduct.food++;
+					if (!vegan(&mons[tin.tin->corpsenm]))
+					u.uconduct.unvegan++;
+					if (!vegetarian(&mons[tin.tin->corpsenm]))
+					violated_vegetarian();
+					
+					tin.tin->dknown = tin.tin->known = TRUE;
+					
+					u.ustove += (tintxts[r].nut)/10;
+					costly_tin((const char*)0);
+					goto use_me;
+				} else if(eatHow == SCRAP_MAW){
+					You("crunch up the tin can");
+					if(!Upolyd){
+						u.uhp += 5;
+						if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+					} else {
+						u.mh += 5;
+						if (u.mh > u.mhmax) u.mh = u.mhmax;
+					}
+					tin.tin->dknown = tin.tin->known = TRUE;
+					costly_tin((const char*)0);
+					goto use_me;
+				}
+			} else {
+				You("discard the tin.");
+				tin.tin->dknown = tin.tin->known = TRUE;
+				costly_tin((const char*)0);
+				goto use_me;
+			}
         } else if(Race_if(PM_INCANTIFIER) && 
 			((tin.tin->corpsenm != PM_NEWT && 
 			tin.tin->corpsenm != PM_AOA_DROPLET && 
 			tin.tin->corpsenm != PM_AOA) ||
-			Hallucination) ){
+			Hallucination) 
+		){
 				You("would not derive any nutrition from eating that, so you discard it instead.");
 				costly_tin((const char*)0);
 				goto use_me;
 		}
 	    if (yn("Eat it?") == 'n') {
-		if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
-		if (flags.verbose) You("discard the open tin.");
-		costly_tin((const char*)0);
-		goto use_me;
+			if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
+			if (flags.verbose) You("discard the open tin.");
+			costly_tin((const char*)0);
+			goto use_me;
 	    }
 		if(Race_if(PM_INCANTIFIER)){
 			u.uconduct.food++;
@@ -1485,17 +1659,17 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 			cprefx(tin.tin->corpsenm, TRUE, FALSE);
 			cpostfx(tin.tin->corpsenm, FALSE, FALSE, FALSE);
 			costly_tin((const char*)0);
-           goto use_me;
-         }
+			goto use_me;
+		}
 	    /* in case stop_occupation() was called on previous meal */
 	    victual.piece = (struct obj *)0;
 	    victual.fullwarn = victual.eating = victual.doreset = FALSE;
-
+		
 		if(tin.tin->corpsenm == PM_JUBJUB_BIRD && tin.tin->blessed){
 			You("consume symmetrical %s", mons[tin.tin->corpsenm].mname);
 		} else {
-	    You("consume %s %s.", tintxts[r].txt,
-			mons[tin.tin->corpsenm].mname);
+			You("consume %s %s.", tintxts[r].txt,
+				mons[tin.tin->corpsenm].mname);
 		}
 
 	    /* KMH, conduct */
@@ -1531,7 +1705,46 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 			Blind ? "" : " ", Blind ? "" : hcolor(NH_GREEN));
 	    else
 		pline("It contains spinach.");
-		if(Race_if(PM_INCANTIFIER) ){
+        if (uclockwork){
+			if(u.clockworkUpgrades&HELLFIRE_FURNACE &&
+				yn("Burn it in your hellfire furnace?") == 'y'
+			){
+				/* KMH, conduct */
+				u.uconduct.food++;
+				tin.tin->dknown = tin.tin->known = TRUE;
+				u.ustove += 60;
+				costly_tin((const char*)0);
+				goto use_me;
+			} else if(u.clockworkUpgrades&SCRAP_MAW &&
+				yn("Feed it to your scrap maw?") == 'y'
+			){
+				You("crunch up the tin can");
+				if(!Upolyd){
+					u.uhp += 5;
+					if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+				} else {
+					u.mh += 5;
+					if (u.mh > u.mhmax) u.mh = u.mhmax;
+				}
+				tin.tin->dknown = tin.tin->known = TRUE;
+				costly_tin((const char*)0);
+				goto use_me;
+			} else if(u.clockworkUpgrades&WOOD_STOVE && (r == DRIED_TIN || is_burnable(&mons[tin.tin->corpsenm]) )){
+				/* KMH, conduct */
+				pline("Sadly, the spinach is much too damp to burn.");
+				You("reluctantly discard the spinach");
+				tin.tin->dknown = tin.tin->known = TRUE;
+				costly_tin((const char*)0);
+				goto use_me;
+			} else {
+				You("have no way to eat%s.", 
+					u.clockworkUpgrades&(WOOD_STOVE|OIL_STOVE|MAGIC_FURNACE|HELLFIRE_FURNACE|SCRAP_MAW) ? " that" : "");
+				You("reluctantly discard the spinach");
+				tin.tin->dknown = tin.tin->known = TRUE;
+				costly_tin((const char*)0);
+				goto use_me;
+			}
+        } else if(Race_if(PM_INCANTIFIER) ){
 				pline("Sadly, you would not derive any nutrition from eating it.");
 				You("reluctantly discard the spinach");
 				costly_tin((const char*)0);
@@ -1542,8 +1755,8 @@ opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
 		    tin.tin->dknown = tin.tin->known = TRUE;
 		if (flags.verbose)
 		    You("discard the open tin.");
-		costly_tin((const char*)0);
-		goto use_me;
+			costly_tin((const char*)0);
+			goto use_me;
 	    }
 
 	    tin.tin->dknown = tin.tin->known = TRUE;
@@ -1695,7 +1908,9 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	if (!vegan(&mons[mnum])) u.uconduct.unvegan++;
 	if (!vegetarian(&mons[mnum])) violated_vegetarian();
 
-	if (mnum != PM_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER) {
+	if (mnum != PM_LIZARD && mnum != PM_SMALL_CAVE_LIZARD && mnum != PM_CAVE_LIZARD 
+		&& mnum != PM_LARGE_CAVE_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER
+	) {
 		long age = peek_at_iced_corpse_age(otmp);
 
 		rotted = (monstermoves - age)/(10L + rn2(20));
@@ -1750,7 +1965,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		boolean cannibal = maybe_cannibal(mnum, FALSE);
 			pline("The corpse liquefies into a putrid broth, and you slurp it down%s!",
 			cannibal ? ", cannibal" : "");
-	    } else {	    
+		} else {
 		pline("Ulch - that %s was tainted%s!",
 		      mons[mnum].mlet == S_FUNGUS ? "fungoid vegetation" :
 		      !vegetarian(&mons[mnum]) ? "meat" : "protoplasm",
@@ -1816,7 +2031,8 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	victual.reqtime = (u.sealsActive&SEAL_AHAZU) ? 1 : (3 + (mons[mnum].cwt >> 6));
 	if (otmp->odrained) victual.reqtime = (u.sealsActive&SEAL_AHAZU) ? 1 : rounddiv(victual.reqtime, 5);
 
-	if (!tp && mnum != PM_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER &&
+	if (!tp && mnum != PM_LIZARD && mnum != PM_SMALL_CAVE_LIZARD && mnum != PM_CAVE_LIZARD 
+		&& mnum != PM_LARGE_CAVE_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER &&
 			(otmp->orotten || !rn2(7))) {
 	    if ( (monstermoves - peek_at_iced_corpse_age(otmp)) > 5 && rottenfood(otmp)) {
 		otmp->orotten = TRUE;
@@ -1825,36 +2041,36 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	    }
 
 	    if (!mons[otmp->corpsenm].cnutrit) {
-		/* no nutrution: rots away, no message if you passed out */
-		if (!retcode) pline_The("corpse rots away completely.");
-		if (carried(otmp)) useup(otmp);
-		else useupf(otmp, 1L);
-		retcode = 2;
+			/* no nutrution: rots away, no message if you passed out */
+			if (!retcode) pline_The("corpse rots away completely.");
+			if (carried(otmp)) useup(otmp);
+			else useupf(otmp, 1L);
+			retcode = 2;
 	    } else {
-	    if (!retcode) consume_oeaten(otmp, 2);	/* oeaten >>= 2 */
-	    if (otmp->odrained && otmp->oeaten < drainlevel(otmp))
-	        otmp->oeaten = drainlevel(otmp);
+			if (!retcode) consume_oeaten(otmp, 2);	/* oeaten >>= 2 */
+			if (otmp->odrained && otmp->oeaten < drainlevel(otmp))
+				otmp->oeaten = drainlevel(otmp);
 		}
 	} else if (maybe_polyd(!is_vampire(youmonst.data), !Race_if(PM_VAMPIRE))) {
 		if(is_rat(&mons[mnum]) && Race_if(PM_DWARF)){
-		if(u.uconduct.ratseaten<SIZE(eatrat)) pline("%s", eatrat[u.uconduct.ratseaten++]);
-		else{
-			u.uconduct.ratseaten++;
-			pline("%s", eatrat[SIZE(eatrat)-1]);
+			if(u.uconduct.ratseaten<SIZE(eatrat)) pline("%s", eatrat[u.uconduct.ratseaten++]);
+			else{
+				u.uconduct.ratseaten++;
+				pline("%s", eatrat[SIZE(eatrat)-1]);
+			}
+		} else if(mnum == PM_LONG_WORM){
+			pline("This tastes spicy!");
+		} else if(mnum == PM_CROW){
+			You("eat crow!");
+		} else {
+		    pline("%s%s %s!",
+			  !uniq ? "This " : !type_is_pname(&mons[mnum]) ? "The " : "",
+			  food_xname(otmp, FALSE),
+			  (vegan(&mons[mnum]) ?
+			   (!carnivorous(youmonst.data) && herbivorous(youmonst.data)) :
+			   (carnivorous(youmonst.data) && !herbivorous(youmonst.data)))
+			  ? "is delicious" : "tastes terrible");
 		}
-	} else if(mnum == PM_LONG_WORM){
-		pline("This tastes spicy!");
-	} else if(mnum == PM_CROW){
-		You("eat crow!");
-	} else {
-	    pline("%s%s %s!",
-		  !uniq ? "This " : !type_is_pname(&mons[mnum]) ? "The " : "",
-		  food_xname(otmp, FALSE),
-		  (vegan(&mons[mnum]) ?
-		   (!carnivorous(youmonst.data) && herbivorous(youmonst.data)) :
-		   (carnivorous(youmonst.data) && !herbivorous(youmonst.data)))
-		  ? "is delicious" : "tastes terrible");
-	}
 	}
 
 	return(retcode);
@@ -2022,7 +2238,7 @@ struct obj *otmp;
 	    if (u.uhp <= 0) return; /* died from sink fall */
 	}
 	otmp->known = otmp->dknown = 1; /* by taste */
-	if (!rn2(otmp->oclass == RING_CLASS ? 3 : 5)) {
+	if (otmp->otyp == AMULET_OF_DRAIN_RESISTANCE || !rn2(otmp->oclass == RING_CLASS ? 3 : 5)) {
 	  switch (otmp->otyp) {
 	    default:
 	        if (!objects[typ].oc_oprop) break; /* should never happen */
@@ -2044,12 +2260,16 @@ struct obj *otmp;
 		    }
 		    break;
 		  case RIN_INVISIBILITY:
-		    if (!oldprop && !EInvis && !BInvis &&
-					!See_invisible && !Blind) {
-			newsym(u.ux,u.uy);
-			Your("body takes on a %s transparency...",
-				Hallucination ? "normal" : "strange");
-			makeknown(typ);
+		    if (!oldprop && !EInvis && !BInvis && !Blind) {
+				if(See_invisible){
+					Your("body takes on a %s transparency...",
+						Hallucination ? "normal" : "strange");
+					makeknown(typ);
+				} else {
+					newsym(u.ux,u.uy);
+					Your("body fades out of view.");
+					makeknown(typ);
+				}
 		    }
 		    break;
 		  case RIN_PROTECTION_FROM_SHAPE_CHAN:
@@ -2238,8 +2458,13 @@ register struct obj *otmp;
 {
 	if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax && otmp->otyp >= CREAM_PIE && otmp->otyp <= TIN){
 		pline("The fruits of civilization give you strength!");
-	    u.uhp += objects[otmp->otyp].oc_nutrition;
-	    if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+		if(!Upolyd){
+			u.uhp += objects[otmp->otyp].oc_nutrition;
+			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+		} else {
+			u.mh += objects[otmp->otyp].oc_nutrition;
+			if (u.mh > u.mhmax) u.mh = u.mhmax;
+		}
 	}
 	switch(otmp->otyp) {
 	    case SPRIG_OF_WOLFSBANE:
@@ -2251,8 +2476,8 @@ register struct obj *otmp;
 		break;
 	    case FORTUNE_COOKIE:
 	   	if (yn("Read the fortune?") == 'y') {
-		outrumor(bcsign(otmp), BY_COOKIE);
-		if (!Blind) u.uconduct.literate++;
+			outrumor(bcsign(otmp), BY_COOKIE);
+			if (!Blind) u.uconduct.literate++;
 		}
 		break;
 	    case LUMP_OF_ROYAL_JELLY:
@@ -2336,7 +2561,8 @@ struct obj *otmp;
 		    stoneorslime = (!Unchanging && !flaming(youmonst.data) &&
 			youmonst.data != &mons[PM_GREEN_SLIME]);
 
-		if (cadaver && mnum != PM_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER ) {
+		if (cadaver && mnum != PM_LIZARD && mnum != PM_SMALL_CAVE_LIZARD && mnum != PM_CAVE_LIZARD 
+		&& mnum != PM_LARGE_CAVE_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER ) {
 			long age = peek_at_iced_corpse_age(otmp);
 			/* worst case rather than random
 			   in this calculation to force prompt */
@@ -2412,7 +2638,7 @@ struct obj *otmp;
 		if (yn_function(buf,ynchars,'n')=='n') return 1;
 		else return 2;
 	}
-	if (!u.uconduct.unvegetarian &&
+	if (!u.uconduct.unvegetarian && !Race_if(PM_INCANTIFIER) &&
 	    ((material == LEATHER || material == BONE ||
 	      material == DRAGON_HIDE) ||
 	     (cadaver && !vegetarian(&mons[mnum])))) {
@@ -2438,6 +2664,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	register struct obj *otmp;
 	int basenutrit;			/* nutrition of full item */
 	int nutrit;			/* nutrition available */
+	etype = 0;
 	char qbuf[QBUFSZ];
 	char c;
 	
@@ -2449,8 +2676,16 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	}
 
 	if(uclockwork){
-		pline("You are metal and springs, not flesh and blood. You cannot eat.");
-		return 0;
+		long uUpgrades = (u.clockworkUpgrades&(WOOD_STOVE|MAGIC_FURNACE|HELLFIRE_FURNACE|SCRAP_MAW));
+		if(!uUpgrades){
+			pline("You are metal and springs, not flesh and blood. You cannot eat.");
+			return 0;
+		} else if(uUpgrades == WOOD_STOVE || 
+				uUpgrades == MAGIC_FURNACE || 
+				uUpgrades == HELLFIRE_FURNACE || 
+				uUpgrades == SCRAP_MAW
+		) etype = uUpgrades;
+		else etype = clockwork_eat_menu(TRUE,TRUE);
 	}
 	if (!(otmp = floorfood("eat", 0))) return 0;
 	if (check_capacity((char *)0)) return 0;
@@ -2459,9 +2694,9 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		int res = edibility_prompts(otmp);
 		if (res) {
 			if(!u.sealsActive&SEAL_BUER){
-		    Your("%s stops tingling and your sense of smell returns to normal.",
-			body_part(NOSE));
-		    u.uedibility = 0;
+				Your("%s stops tingling and your sense of smell returns to normal.",
+					body_part(NOSE));
+				u.uedibility = 0;
 			}
 		    if (res == 1) return 0;
 		}
@@ -2635,6 +2870,481 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		}
 		return 1;
 	}
+	if(uclockwork){
+		if(etype == MAGIC_FURNACE && !otmp->oartifact){
+			int curspe;
+			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			if (otmp->quan > 1L) {
+				if(!carried(otmp))
+				(void) splitobj(otmp, otmp->quan - 1L);
+				else
+				otmp = splitobj(otmp, 1L);
+			if (carried(otmp)) {
+				freeinv(otmp);
+				if (inv_cnt() >= 52) {
+				sellobj_state(SELL_DONTSELL);
+				dropy(otmp);
+				sellobj_state(SELL_NORMAL);
+				} else {
+				otmp->oxlth++;		/* hack to prevent merge */
+				otmp = addinv(otmp);
+				otmp->oxlth--;
+				}
+			}
+			}
+			switch(otmp->oclass){
+				case WEAPON_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + otmp->spe*50);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case RING_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + 50);
+					eataccessory(otmp);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case AMULET_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + 50);
+					eataccessory(otmp);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case ARMOR_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + otmp->spe*50);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case TOOL_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + otmp->spe*50);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SCROLL_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + 50);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SPBOOK_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + 150);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case WAND_CLASS:
+					u.uconduct.food++;
+					u.uen = min(u.uenmax, u.uen + otmp->spe*10);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case FOOD_CLASS:
+					if(otmp->otyp == CORPSE){
+						u.uconduct.food++;
+						cpostfx(otmp->corpsenm, FALSE, FALSE, otmp->odrained);
+						if (otmp == uwep && otmp->quan == 1L) uwepgone();
+						if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+						if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+						if (carried(otmp)) useup(otmp);
+						else useupf(otmp, 1L);
+					}
+				break;
+			}
+			return 1;
+		}
+		if(etype == WOOD_STOVE && !otmp->oartifact){
+			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			if (otmp->quan > 1L) {
+				if(!carried(otmp))
+					(void) splitobj(otmp, otmp->quan - 1L);
+				else
+					otmp = splitobj(otmp, 1L);
+				if (carried(otmp)) {
+					freeinv(otmp);
+					if (inv_cnt() >= 52) {
+						sellobj_state(SELL_DONTSELL);
+						dropy(otmp);
+						sellobj_state(SELL_NORMAL);
+					} else {
+						otmp->oxlth++;		/* hack to prevent merge */
+						otmp = addinv(otmp);
+						otmp->oxlth--;
+					}
+				}
+			}
+			switch(otmp->oclass){
+				case WEAPON_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case RING_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case AMULET_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case ARMOR_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case TOOL_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SCROLL_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SPBOOK_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case WAND_CLASS:
+					u.uconduct.food++;
+					u.ustove += objects[otmp->otyp].oc_nutrition;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case FOOD_CLASS:
+					if(otmp->otyp == CORPSE){
+						u.uconduct.food++;
+						if (!vegan(&mons[otmp->corpsenm])) u.uconduct.unvegan++;
+						if (!vegetarian(&mons[otmp->corpsenm])) violated_vegetarian();
+						u.ustove += otmp->oeaten ? otmp->oeaten : mons[otmp->corpsenm].cnutrit;
+						if (otmp == uwep && otmp->quan == 1L) uwepgone();
+						if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+						if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+						if (carried(otmp)) useup(otmp);
+						else useupf(otmp, 1L);
+					} else {
+						u.uconduct.food++;
+						u.ustove += objects[otmp->otyp].oc_nutrition;
+						if (otmp == uwep && otmp->quan == 1L) uwepgone();
+						if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+						if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+						if (carried(otmp)) useup(otmp);
+						else useupf(otmp, 1L);
+					}
+				break;
+			}
+			return 1;
+		}
+		if(etype == HELLFIRE_FURNACE && !otmp->oartifact){
+			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			if (otmp->quan > 1L) {
+				if(!carried(otmp))
+					(void) splitobj(otmp, otmp->quan - 1L);
+				else
+					otmp = splitobj(otmp, 1L);
+				if (carried(otmp)) {
+					freeinv(otmp);
+					if (inv_cnt() >= 52) {
+						sellobj_state(SELL_DONTSELL);
+						dropy(otmp);
+						sellobj_state(SELL_NORMAL);
+					} else {
+						otmp->oxlth++;		/* hack to prevent merge */
+						otmp = addinv(otmp);
+						otmp->oxlth--;
+					}
+				}
+			}
+			switch(otmp->oclass){
+				case WEAPON_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case RING_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case AMULET_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case ARMOR_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case TOOL_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SCROLL_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SPBOOK_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case WAND_CLASS:
+					u.uconduct.food++;
+					u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case FOOD_CLASS:
+					if(otmp->otyp == CORPSE){
+						u.uconduct.food++;
+						if (!vegan(&mons[otmp->corpsenm])) u.uconduct.unvegan++;
+						if (!vegetarian(&mons[otmp->corpsenm])) violated_vegetarian();
+						u.ustove += otmp->oeaten ? ((otmp->oeaten)/10+1) : ((mons[otmp->corpsenm].cnutrit)/10+1);
+						if (otmp == uwep && otmp->quan == 1L) uwepgone();
+						if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+						if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+						if (carried(otmp)) useup(otmp);
+						else useupf(otmp, 1L);
+					} else {
+						u.uconduct.food++;
+						u.ustove += (objects[otmp->otyp].oc_nutrition)/10+1;
+						if (otmp == uwep && otmp->quan == 1L) uwepgone();
+						if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+						if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+						if (carried(otmp)) useup(otmp);
+						else useupf(otmp, 1L);
+					}
+				break;
+			}
+			return 1;
+		}
+		if(etype == SCRAP_MAW && !otmp->oartifact){
+			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			if (otmp->quan > 1L) {
+				if(!carried(otmp))
+					(void) splitobj(otmp, otmp->quan - 1L);
+				else
+					otmp = splitobj(otmp, 1L);
+				if (carried(otmp)) {
+					freeinv(otmp);
+					if (inv_cnt() >= 52) {
+						sellobj_state(SELL_DONTSELL);
+						dropy(otmp);
+						sellobj_state(SELL_NORMAL);
+					} else {
+						otmp->oxlth++;		/* hack to prevent merge */
+						otmp = addinv(otmp);
+						otmp->oxlth--;
+					}
+				}
+			}
+			switch(otmp->oclass){
+				case WEAPON_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case RING_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case AMULET_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case ARMOR_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case TOOL_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SCROLL_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case SPBOOK_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case WAND_CLASS:
+					u.uconduct.food++;
+					if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+					else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+					if (otmp == uwep && otmp->quan == 1L) uwepgone();
+					if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+					if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+					if (carried(otmp)) useup(otmp);
+					else useupf(otmp, 1L);
+				break;
+				case FOOD_CLASS:
+					if(otmp->otyp == CORPSE){
+						u.uconduct.food++;
+						if (!vegan(&mons[otmp->corpsenm])) u.uconduct.unvegan++;
+						if (!vegetarian(&mons[otmp->corpsenm])) violated_vegetarian();
+						if(Upolyd) u.mh += otmp->oeaten ? ((otmp->oeaten)/10+1) : ((mons[otmp->corpsenm].cnutrit)/10+1);
+						else u.uhp += otmp->oeaten ? ((otmp->oeaten)/10+1) : ((mons[otmp->corpsenm].cnutrit)/10+1);
+						if(Upolyd) u.mh = min(u.mhmax, u.mh);
+						else u.uhp = min(u.uhpmax, u.uhp);
+						if (otmp == uwep && otmp->quan == 1L) uwepgone();
+						if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+						if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+						if (carried(otmp)) useup(otmp);
+						else useupf(otmp, 1L);
+					} else {
+						u.uconduct.food++;
+						if(Upolyd) u.mh = min(u.mhmax, u.mh+objects[otmp->otyp].oc_nutrition);
+						else u.uhp = min(u.uhpmax, u.uhp+objects[otmp->otyp].oc_nutrition);
+						if (otmp == uwep && otmp->quan == 1L) uwepgone();
+						if (otmp == uquiver && otmp->quan == 1L) uqwepgone();
+						if (otmp == uswapwep && otmp->quan == 1L) uswapwepgone();
+						if (carried(otmp)) useup(otmp);
+						else useupf(otmp, 1L);
+					}
+				break;
+			}
+			return 1;
+		}
+	}
 	/* KMH -- Slow digestion is... indigestible */
 	if (otmp->otyp == RIN_SLOW_DIGESTION) {
 		pline("This ring is indigestible!");
@@ -2656,7 +3366,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    if (otmp->oclass == COIN_CLASS)
 		basenutrit = ((otmp->quan > ((long)u.uhungermax)*100L) ? u.uhungermax
 			: (int)(otmp->quan/100L));
-	    else if(otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS)
+	    else if(otmp->oclass == BALL_CLASS || (otmp->oclass == CHAIN_CLASS && weight(otmp) > objects[otmp->otyp].oc_nutrition))
 		basenutrit = weight(otmp);
 	    /* oc_nutrition is usually weight anyway */
 	    else basenutrit = objects[otmp->otyp].oc_nutrition;
@@ -2669,7 +3379,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		u.uconduct.unvegan++;
 		violated_vegetarian();
 	    } else if (material == WAX)
-		u.uconduct.unvegan++;
+			u.uconduct.unvegan++;
 	    u.uconduct.food++;
 	    
 	    if (otmp->cursed)
@@ -2677,12 +3387,12 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 	    if (otmp->oclass == WEAPON_CLASS && otmp->opoisoned) {
 			if(otmp->opoisoned & OPOISON_BASIC){
-		pline("Ecch - that must have been poisonous!");
-		if(!Poison_resistance) {
-		    losestr(rnd(4));
-		    losehp(rnd(15), xname(otmp), KILLED_BY_AN);
-		} else
-		    You("seem unaffected by the poison.");
+				pline("Ecch - that must have been poisonous!");
+				if(!Poison_resistance) {
+					losestr(rnd(4));
+					losehp(rnd(15), xname(otmp), KILLED_BY_AN);
+				} else
+					You("seem unaffected by the poison.");
 			}
 			else if(otmp->opoisoned & OPOISON_FILTH){
 				pline("Ulch - that was tainted with filth!");
@@ -2756,7 +3466,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				} else
 					exercise(A_WIS, FALSE);
 			}
-	    } else if (!otmp->cursed)
+		} else if (!otmp->cursed)
 		pline("This %s is delicious!",
 		      otmp->oclass == COIN_CLASS ? foodword(otmp) :
 		      singular(otmp, xname));
@@ -2802,7 +3512,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 	/* KMH, conduct */
 	u.uconduct.food++;
-
+	
 	if(otmp->otyp == EGG && u.sealsActive&SEAL_ECHIDNA) unbind(SEAL_ECHIDNA,TRUE);
 	if(otmp->otyp >= APPLE && otmp->otyp <= BANANA && u.sealsActive&SEAL_EVE) unbind(SEAL_EVE,TRUE);
 	if(is_giant(&mons[otmp->corpsenm]) && u.sealsActive&SEAL_YMIR) unbind(SEAL_YMIR,TRUE);
@@ -2955,8 +3665,8 @@ bite()
 void
 gethungry()	/* as time goes by - called by moveloop() and domove() */
 {
-	if (u.uinvulnerable) return;	/* you don't feel hungrier */
-
+	if (u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) return;	/* you don't feel hungrier */
+	
 	if ((!u.usleep || !rn2(10))	/* slow metabolic rate while asleep */
 		&& (carnivorous(youmonst.data) 
 			|| herbivorous(youmonst.data) 
@@ -2972,7 +3682,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 				(uclockwork) ))
 			(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);		/* ordinary food consumption */
 	if(uwep && (
-			uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youmonst.data)))
+		uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youmonst.data)))
 	){
 		if(Race_if(PM_INCANTIFIER)) u.uen -= 9;
 		else u.uhunger -= 9;
@@ -2998,6 +3708,8 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	    if (u.sealsActive&SEAL_AHAZU) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	    /* Conflict uses up food too */
 	    if (HConflict || (EConflict & (~W_ARTI))) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+	    /* Alacrity uses up food too */
+	    if (EFast & (W_RINGL|W_RINGR)) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	    /* +0 charged rings don't do anything, so don't affect hunger */
 	    /* Slow digestion still uses ring hunger */
 	    switch ((int)(moves % 20)) {	/* note: use even cases only */
@@ -3070,28 +3782,28 @@ register int num;
 	     */
 	    if ((Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax * 3/4) ||
 			(!Race_if(PM_INCANTIFIER) && u.uhunger >= u.uhungermax * 3/4)) {
-		if (!victual.eating || (victual.eating && !victual.fullwarn)) {
+			if (!victual.eating || (victual.eating && !victual.fullwarn)) {
 				if(!uclockwork){
-		    pline("You're having a hard time getting all of it down.");
-		    nomovemsg = "You're finally finished.";
+					pline("You're having a hard time getting all of it down.");
+					nomovemsg = "You're finally finished.";
 				}
 				else{
 					Your("mainspring is being overwound!");
 					nomovemsg = "The winding finally stopped.";
 				}
-		    if (!victual.eating)
-			multi = -2;
-		    else {
-			victual.fullwarn = TRUE;
-			if (victual.canchoke && victual.reqtime > 1) {
-			    /* a one-gulp food will not survive a stop */
-			    if (yn_function("Stop eating?",ynchars,'y')=='y') {
-				reset_eat();
-				nomovemsg = (char *)0;
-			    }
+				if (!victual.eating)
+					multi = -2;
+				else {
+					victual.fullwarn = TRUE;
+					if (victual.canchoke && victual.reqtime > 1) {
+						/* a one-gulp food will not survive a stop */
+						if (yn_function("Stop eating?",ynchars,'y')=='y') {
+						reset_eat();
+						nomovemsg = (char *)0;
+						}
+					}
+				}
 			}
-		    }
-		}
 	    }
 	}
 	newuhs(FALSE);
@@ -3146,22 +3858,22 @@ int perturn;
 	Sprintf(qbuf, "That will be %ld %s. (Pay?)", price, currency(price));
 	if(yn(qbuf)=='y'){
 #ifndef GOLDOBJ
-	if (price >= u.ugold) {
-		You("don't have enough %s!", currency(price));
-		return 0;
-	} else {
-		You("give %s %ld %s.", mon_nam(mon), price, currency(price));
-	}
-	u.ugold -= price;
-	mon->mgold += price;
+		if (price >= u.ugold) {
+			You("don't have enough %s!", currency(price));
+			return 0;
+		} else {
+			You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+		}
+		u.ugold -= price;
+		mon->mgold += price;
 #else
-	if (price >= umoney) {
-		You("don't have enough %s!", currency(price));
-		return 0;
-	} else {
-		You("give %s %ld %s.", mon_nam(mon), price, currency(price));
-	}
-	(void) money2mon(mon, price);
+		if (price >= umoney) {
+			You("don't have enough %s!", currency(price));
+			return 0;
+		} else {
+			You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+		}
+		(void) money2mon(mon, price);
 #endif
 	return turns;
 	} else{
@@ -3169,6 +3881,67 @@ int perturn;
 	}
 	}
 	else return turns;
+}
+
+int
+ask_cp(mon, flatrate)
+struct monst *mon;
+int flatrate;
+{
+	int ret, howmany;
+	long price;
+	char buf[BUFSZ], qbuf[QBUFSZ];
+	boolean pay;
+	
+	Sprintf(qbuf, "How many components?");
+	getlin(qbuf, buf);
+	(void)mungspaces(buf);
+	if (buf[0] == '\033' || buf[0] == '\0') ret = 0;
+	else ret = sscanf(buf, "%d", &howmany);
+	
+	if (ret != 1 || howmany <= 0){
+		return 0;
+	}
+	
+	if(howmany > 100){
+		pline("\"That's too many all at once.\"");
+		return 0;
+	}
+	
+	price = (long)(howmany*flatrate);
+	
+	if(price < 0){
+		You("couldn't have enough %s to pay for that!", currency(price));
+		return 0;
+	}
+	
+	if(price){
+	Sprintf(qbuf, "That will be %ld %s. (Pay?)", price, currency(price));
+	if(yn(qbuf)=='y'){
+#ifndef GOLDOBJ
+		if (price >= u.ugold) {
+			You("don't have enough %s!", currency(price));
+			return 0;
+		} else {
+			You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+		}
+		u.ugold -= price;
+		mon->mgold += price;
+#else
+		if (price >= umoney) {
+			You("don't have enough %s!", currency(price));
+			return 0;
+		} else {
+			You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+		}
+		(void) money2mon(mon, price);
+#endif
+	return howmany;
+	} else{
+		return 0;
+	}
+	}
+	else return howmany;
 }
 
 int
@@ -3211,7 +3984,7 @@ int turns;
 STATIC_PTR
 int
 windclock()
-{ 
+{
   if (victual.reqtime == victual.usedtime){
     occupation = 0;
 	pline("%s finishes winding up your clockwork.", Monnam(victual.mon));
@@ -3226,7 +3999,7 @@ windclock()
     victual.piece = 0;
     victual.mon = 0;
     return 0;
-  }else if(victual.canchoke && u.uhunger >= u.uhungermax) {
+  }else if(victual.canchoke && u.uhunger >= u.uhungermax && !Race_if(PM_INCANTIFIER)) {
     Your("mainspring is wound too tight!");
     Your("clockwork breaks apart!");
     killer_format = KILLED_BY;
@@ -3236,16 +4009,16 @@ windclock()
     victual.mon = 0;
     return 0;
   }
-  else if (u.uhunger >= u.uhungermax * 3/4 && !victual.fullwarn) {
+  else if (u.uhunger >= u.uhungermax * 3/4 && !victual.fullwarn && !Race_if(PM_INCANTIFIER)) {
     pline("%s is having a hard time cranking the key.",Monnam(victual.mon));
     victual.fullwarn = TRUE;
   }
   else {
 	if(victual.reqtime - victual.usedtime >= 10){
-		u.uhunger += 100;
+		if(!Race_if(PM_INCANTIFIER)) u.uhunger += 100;
 		victual.usedtime += 10;
 	} else {
-		u.uhunger += (victual.reqtime - victual.usedtime) * 10;
+		if(!Race_if(PM_INCANTIFIER)) u.uhunger += (victual.reqtime - victual.usedtime) * 10;
 		victual.usedtime += (victual.reqtime - victual.usedtime);
 	}
   }
@@ -3345,11 +4118,11 @@ boolean incr;
 				  nomul(-2, "immobilized by slipping gears.");
 	              nomovemsg = "Your clockwork catches again.";
 	            } else {
-				You("faint from lack of food.");
-				flags.soundok = 0;
+					You("faint from lack of food.");
+					flags.soundok = 0;
 					nomul(-10+YouHunger/10, "fainted from lack of food");
-				nomovemsg = "You regain consciousness.";
-				afternmv = unfaint;
+					nomovemsg = "You regain consciousness.";
+					afternmv = unfaint;
             	}
 				newhs = FAINTED;
 			}
@@ -3361,13 +4134,13 @@ boolean incr;
 			  killer = "unwound spring";
 			  done(DIED);
             } else {
-			u.uhs = STARVED;
-			flags.botl = 1;
-			bot();
-			You("die from starvation.");
-			killer_format = KILLED_BY;
-			killer = "starvation";
-			done(STARVING);
+				u.uhs = STARVED;
+				flags.botl = 1;
+				bot();
+				You("die from starvation.");
+				killer_format = KILLED_BY;
+				killer = "starvation";
+				done(STARVING);
 			}
 			/* if we return, we lifesaved, and that calls newuhs */
 			return;
@@ -3403,7 +4176,7 @@ boolean incr;
 			if (incr && occupation &&
 			    (occupation != eatfood && occupation != opentin))
 			    stop_occupation();
-			break;
+		break;
 		case WEAK:
 	        if (clockwork){
 	          You_feel("your mainspring %s and your gears %s.",
@@ -3436,7 +4209,7 @@ boolean incr;
 			if (incr && occupation &&
 			    (occupation != eatfood && occupation != opentin))
 			    stop_occupation();
-			break;
+		break;
 		case SATIATED:
 	        if (clockwork){
 			  if(u.ucspeed == SLOW_CLOCKSPEED){
@@ -3493,7 +4266,7 @@ floorfood(verb,corpsecheck)	/* get food from floor or pack */
 			(Flying && !Breathless))))
 	    goto skipfloor;
 
-	if (feeding && metallivorous(youmonst.data)) {
+	if (feeding && (metallivorous(youmonst.data) || (uclockwork && u.clockworkUpgrades&SCRAP_MAW))) {
 	    struct obj *gold;
 	    struct trap *ttmp = t_at(u.ux, u.uy);
 
@@ -3514,6 +4287,7 @@ floorfood(verb,corpsecheck)	/* get food from floor or pack */
 	    }
 
 	    if (youmonst.data != &mons[PM_RUST_MONSTER] &&
+			!(uclockwork && u.clockworkUpgrades&SCRAP_MAW) &&
 		(gold = g_at(u.ux, u.uy)) != 0) {
 		if (gold->quan == 1L)
 		    Sprintf(qbuf, "There is 1 gold piece here; eat it?");
@@ -3637,6 +4411,66 @@ int amt;
 	    victual.reqtime = victual.usedtime;	/* no bites left */
 	obj->oeaten = 1;	/* smallest possible positive value */
     }
+}
+
+int
+clockwork_eat_menu(dry,mgc)
+	boolean dry;
+	boolean mgc;
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+	
+	if(!(dry||mgc||u.clockworkUpgrades&(SCRAP_MAW|HELLFIRE_FURNACE))) return 0;
+	
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf, "Installed Upgrades");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(u.clockworkUpgrades & WOOD_STOVE && dry){
+		Sprintf(buf, "wood stove");
+		any.a_int = (int) WOOD_STOVE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(u.clockworkUpgrades & HELLFIRE_FURNACE){
+		Sprintf(buf, "hellfire furnace");
+		any.a_int = (int) HELLFIRE_FURNACE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(u.clockworkUpgrades & MAGIC_FURNACE && mgc){
+		Sprintf(buf, "magic furnace");
+		any.a_int = (int) MAGIC_FURNACE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(u.clockworkUpgrades & SCRAP_MAW){
+		Sprintf(buf, "scrap maw");
+		any.a_int = (int) SCRAP_MAW;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	end_menu(tmpwin, "Choose upgrade:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_int : 0;
 }
 
 #endif /* OVLB */

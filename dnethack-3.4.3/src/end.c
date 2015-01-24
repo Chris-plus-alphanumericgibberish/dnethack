@@ -446,7 +446,7 @@ int how;
 	    u.usick_type = 0;
 	    Sick = 0;
 	}
-	if (how == CHOKING) init_uhunger();
+	if (how == CHOKING) reset_uhunger();
 	nomovemsg = "You survived that attempt on your life.";
 	flags.move = 0;
 	if(multi > 0) multi = 0; else multi = -1;
