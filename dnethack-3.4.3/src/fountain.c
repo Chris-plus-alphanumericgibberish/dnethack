@@ -546,10 +546,10 @@ drinksink()
 				    (Luck <= 0 && !maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))))) {
 					otmp = mksobj(POT_BLOOD,FALSE,FALSE);
 				} else {
-				otmp = mkobj(POTION_CLASS,FALSE);
-				if (otmp->otyp == POT_WATER) {
-					obfree(otmp, (struct obj *)0);
-					otmp = (struct obj *) 0;
+					otmp = mkobj(POTION_CLASS,FALSE);
+					if (otmp->otyp == POT_WATER) {
+						obfree(otmp, (struct obj *)0);
+						otmp = (struct obj *) 0;
 					}
 				}
 			} while(!otmp);
