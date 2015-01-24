@@ -568,7 +568,7 @@ level_tele()
 	char buf[BUFSZ];
 	boolean force_dest = FALSE;
 
-	if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz))
+	if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz) || In_quest(&u.uz))
 #ifdef WIZARD
 						&& !wizard
 #endif
@@ -595,16 +595,16 @@ level_tele()
 		}
 		getlin(qbuf, buf);
 		if (!strcmp(buf,"\033")) {	/* cancelled */
-		    if (Confusion && rnl(5)) {
+			if (Confusion && rnl(5)) {
 			pline("Oops...");
 			goto random_levtport;
-		    }
-		    return;
+			}
+			return;
 		} else if (!strcmp(buf,"*")) {
-		    goto random_levtport;
+			goto random_levtport;
 		} else if (Confusion && rnl(5)) {
-		    pline("Oops...");
-		    goto random_levtport;
+			pline("Oops...");
+			goto random_levtport;
 		}
 #ifdef WIZARD
 		if (wizard && !strcmp(buf,"?")) {
@@ -640,30 +640,30 @@ level_tele()
 
 	    /* no dungeon escape via this route */
 	    if (newlev == 0 /*&& dungeons[u.uz.dnum].depth_start > 0*/) {
-		if (trycnt >= 10)
-		    goto random_levtport;
-		if (ynq("Go to Nowhere.  Are you sure?") != 'y') return;
-		You("%s in agony as your body begins to warp...",
-		    is_silent(youmonst.data) ? "writhe" : "scream");
-		display_nhwindow(WIN_MESSAGE, FALSE);
-		You("cease to exist.");
-		if (invent) Your("possessions land on the %s with a thud.",
-				surface(u.ux, u.uy));
-		killer_format = NO_KILLER_PREFIX;
-		killer = "committed suicide";
-		done(DIED);
-		pline("An energized cloud of dust begins to coalesce.");
-		Your("body rematerializes%s.", invent ?
-			", and you gather up all your possessions" : "");
-		return;
+			if (trycnt >= 10)
+				goto random_levtport;
+			if (ynq("Go to Nowhere.  Are you sure?") != 'y') return;
+			You("%s in agony as your body begins to warp...",
+				is_silent(youmonst.data) ? "writhe" : "scream");
+			display_nhwindow(WIN_MESSAGE, FALSE);
+			You("cease to exist.");
+			if (invent) Your("possessions land on the %s with a thud.",
+					surface(u.ux, u.uy));
+			killer_format = NO_KILLER_PREFIX;
+			killer = "committed suicide";
+			done(DIED);
+			pline("An energized cloud of dust begins to coalesce.");
+			Your("body rematerializes%s.", invent ?
+				", and you gather up all your possessions" : "");
+			return;
 	    }
 
 	    /* if in Knox and the requested level > 0, stay put.
 	     * we let negative values requests fall into the "heaven" loop.
 	     */
 	    if (Is_knox(&u.uz) && newlev > 0) {
-		You(shudder_for_moment);
-		return;
+			You(shudder_for_moment);
+			return;
 	    }
 	    /* if in Quest, the player sees "Home 1", etc., on the status
 	     * line, instead of the logical depth of the level.  controlled
@@ -679,8 +679,9 @@ level_tele()
  random_levtport:
 	    newlev = random_teleport_level();
 	    if (newlev == depth(&u.uz)) {
-		You(shudder_for_moment);
-		return;
+			tele();
+			You(shudder_for_moment);
+			return;
 	    }
 	}
 
@@ -743,7 +744,7 @@ level_tele()
 		}
 	}
 	if(newlev<0) newlev++;//Dungeon levels should skip from 1 to -1, 0 should always be nowhere.
-
+	
 	if (killer) {	/* the chosen destination was not survivable */
 	    d_level lsav;
 
