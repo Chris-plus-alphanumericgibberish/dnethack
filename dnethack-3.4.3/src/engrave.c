@@ -2,9 +2,9 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#include "hack.h"
-#include "lev.h"
-#include "artifact.h"
+#include	"hack.h"
+#include	"lev.h"
+#include	"artifact.h"
 #include <ctype.h>
 
 STATIC_VAR NEARDATA struct engr *head_engr;
@@ -59,10 +59,11 @@ static const char *random_mesg[] = {
 	
 	"4 8 15 16 23 42", /* Lost */
 	
-	"stth was here", /* First ascension */
-	"allihaveismymind followed stth", /* Second ascension */
-	"Khor followed allihaveismymind", /* Third ascension */
-	"ChrisANG followed Khor", /* Fourth ascension */
+	"stth was here", /* First ascender */
+	"allihaveismymind followed stth", /* Second ascender */
+	"Khor followed allihaveismymind", /* Third ascender */
+	"ChrisANG followed Khor", /* Fourth ascender */
+	"FIQ followed ChrisANG", /* Fifth ascender */
 	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */
@@ -135,7 +136,7 @@ static const char *haluMesg[] = {
 	"Mairzy Doats And Dozy Doats And Liddle Lamzy Divey A kiddley divey too, wouldn't you?",
 	"Madam, I may be drunk, but you are ugly, and in the morning I shall be sober.",
 	"Outside of a dog, a book is a man's best friend.",
-	"Inside of a dog, it's too dark to read." ,
+		"Inside of a dog, it's too dark to read." ,
 	"You are superior in only one aspect. You are better at dying.",
 	"No McFly ever amounted to anything in the history of Hill Valley!",
 	"You've got to ask yourself one question: 'Do I feel lucky?' Well, do ya, punk?",
@@ -152,7 +153,7 @@ static const char *haluMesg[] = {
 	"It pays to be obvious, especially if you have a reputation for subtlety.",
 	"Bother. I've left my new torch in Narnia",
 	"If you put into the machine wrong figures, will the right answers come out?",
-	"I am not able rightly to apprehend the kind of confusion of ideas that could provoke such a question.",
+		"I am not able rightly to apprehend the kind of confusion of ideas that could provoke such a question.",
 	"Colorless green ideas sleep furiously",
 	"We fear a few dwarf watercraft stewardesses were regarded as desegregated after a great Texas tweezer war.",
 	"I'll kill him in Honolulu, you unhook my pink kimono.",
@@ -188,8 +189,34 @@ static const char *haluMesg[] = {
 		"OK TH3N WH4T?",
 		"WH3R3 1S 1T?",
 	
+	"The eclipse will shatter the sky and from the remnants will bleed a storm of fire to engulf the earth.",	/* Gone with the Blastwave */
+		"The spirits of past sins will char the land and cleanse the planet.",
+		"As humans shed their former selves their true form shall be revealed.",
+		"Join us in the dancing lights. Join us in the Celebration!",
+		"Burn them! Burn ALL!",
+		
+	"Speak not the Watchers.",	/* Drakengard */
+		"Draw not the Watchers.",
+		"Write not the Watchers.",
+		"Sculpt not the Watchers.",
+		"Sing not the Watchers.",
+		"Call not the Watchers' name.",
+	"Should you encounter God on your quest, God will be cut.", /*Kill Bill*/
+	"Generally, when one is conducting an experiment, it is worth noting that the observers went insane, killed each other, and then rose from the dead.", 
+		/*Pyro627, regarding an experiment in creating undead bacon in Dwarf Fortress. An "accident" with an axe led to a zombified army, 
+			which the poster didn't even comment on.*/
+		"Today, in 'poor word choice': 'Urist, go make a new table with our mason.'", /*Swonnrr, regarding a fell mood.*/
+	"All the world's cracked but me and thee; and I'm not too sure about thee.",
+	"Some walls are made of fear, but some are made from wall material.", /*Clash of Clans metro advert */
+	"No gods, no masters.", /*Anarchist slogan*/
+	"No matter where you go, there you are.",
+	"You noticed them, and they noticed that you noticed them.", /*The Mothman Prophecies*/
 	"Well, how did I get here?", /*Once In A Lifetime*/
 	"You can be me when I'm gone.", /*Sandman*/
+	"Have been unavoidably detained by the world. Expect us when you see us.", /* Stardust */
+		"There was once a young man who wished to gain his Heart’s Desire.",
+		"Time, the thief, eventually takes all things into his dusty storehouse.",
+		"Scuse me, but would you mind dreamin' a bit quieter?",
 	"He who is valiant and pure of spirit may find the holy grail in the Castle of Aaaaarrrrrrggghhh...", /*Monty Python*/
 	"If someone is reading this...I must have failed.", /*The Guardian Legend*/
 	"The psychic efficacy of evil magic swords is vastly overrated.", /* The Water Phoenix King*/
@@ -203,12 +230,13 @@ static const char *haluMesg[] = {
 	"It's only the end if you want it to be.", /*Batgirl*/
 	"Mistakes were made.",
 	"But at what cost?",
+	"Live. Die. Repeat.", /*Edge of Tomorrow*/
 	"For we wrestle not against flesh and blood, but against principalities and powers.", /* Ephesians 6:12 */
 	"Life is truth, and never a dream...", /* Persona 4 */
 	"fire, walk with me.", /*Twin Peaks*/
 	"redefine happiness", /* Blue Oyster Cult */
 	"no more sadness, no more anger, no more envy...", /*Halo*/
-	"Even false things are true", "FIVE TONS OF FLAX!", "Fnord", /*Discordianism*/
+	"Even false things are true",	"FIVE TONS OF FLAX!",	"Fnord", /*Discordianism*/
 	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
 		"This thing all things devours.",
 		"Not all those who wander are lost.",
@@ -216,24 +244,33 @@ static const char *haluMesg[] = {
 	"When the world is in darkness Four Warriors will come....", /*FF I*/
 	"This world can have but one Emperor.", /*FF II*/
 	"We shall devour your light, and use it to return this world to the Void!", /*FF III*/
+	"You tread the path of darkness.",/*FF IV*/
 	"My hatred will not be stanched until it has consumed all else!", /*FF V*/
 	"Life... dreams... hope... Where do they come from? And where do they go...?", /*FF VI*/
 	"Mine is special. It's good for absolutely nothing!", /*FF VII*/
 	"I will NEVER be a memory.", /*FF VII Advent Children*/
+	"Trees fade with time, as do many things in this world.", /*FF VII Dirge of Cerberus*/
 	"Even if the world becomes your enemy... I'll be your knight, I'll protect you.", /*FF VIII*/
 	"You don't need a reason to help someone.", /*FF IX*/
 	"Memories are nice, but that's all they are.", /*FF X*/
 	"Better to leave things lost.", /*FF X-2*/
+	"Benighted child, Unchosen, with life so short, This tower freely may you tread.", /*FF XII*/
 	"The thirteen days after we awoke were the beginning of the end.", /*FF XIII*/
 	"Servant of time. Daughter of chaos. Unto the world unseen, the untamed you guide.", /*FF XIII-2*/
 	"One day, the light touched me.", /*FF XIII-3*/
+	"Do not call up any that you can not put down.", /*HP Lovecraft*/
 	"All the world will be your enemy, Prince With A Thousand Enemies...", /*Watership Down*/
 		"...and when they catch you they will kill you...",
 		"but first they must catch you.",
 	"This statement is false.", /*Logical contradiction*/
-	"Quod Erat Demonstrandum", "anno Domini", "per centum", /* QED, AD, percent */
+	"Quod Erat Demonstrandum",	"anno Domini",	"per centum", /* QED, AD, percent */
 	"I was so surprised, I CLASSIFIED INFORMATION, I really did!", /*Haruhi Suzumiya*/
-	"[REDACTED]", "[DATA EXPUNGED]", "[DATA PLUNGED]", "[DATA EXPANDED]", "I am a toaster!", /* SCP Foundation */
+		"Problems that cannot be solved do not exist in this world.",
+		"Feelings of love are just a temporary lapse in judgment.",
+	"He hides who he really is and pretends to be someone else forever.", /*FLCL*/
+		"So in time he becomes that person, so his lie becomes the truth, see?  He transcends the mask.",
+		"Well, don't you get it? That's how he finds happiness. That's pretty good, right?",
+	"[REDACTED]",	"[DATA EXPUNGED]",	"[DATA PLUNGED]",	"[DATA EXPANDED]",	"I am a toaster!", /* SCP Foundation */
 		"Special Containment Procedures: You're going to die, you poor dumb fuck.", /* SCP-1983 */
 		"Hello.", "You are no longer lost.", "Here is the map for your journey up.", /* Anabasis */
 	"I prepared Explosive Runes this morning.", /*Order of the Stick*/
@@ -255,8 +292,8 @@ static const char *haluMesg[] = {
 	"NOT A Secret Base", /*Gunnerkrigg Court*/
 	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
 	"I SAW THE EYE. Over the horizon, like a rising sun!", /* Dresden Codak */
-	"That's Science, isn't it? The perpetual horizon.\nBut we found a way, haha, we found a way around that!",
-	"What would YOU give up to... to see it through?",
+		"That's Science, isn't it? The perpetual horizon.\nBut we found a way, haha, we found a way around that!",
+		"What would YOU give up to... to see it through?",
 		"Nothing. A shadow is nothing. It is merely a question not yet answered. We only fear the dark if we have no means of lighting our way.",
 		"The world turns, and dawn comes. And under the light of the sun I shall slay giants.",
 	"Don't trust the skull.", /* Cynarfpncr: Gbezrag (mild spoiler) */
@@ -268,7 +305,7 @@ static const char *haluMesg[] = {
 		"You will return to where you started, and you will become what you hate.",
 		"And in doing so, you will restore the world to what it was.",
 	"Fall in a more hardboiled manner.", /* MS Paint Adventures */
-		"Since you are reading this, chances are you have already installed this game on your computer.\nIf this is true, you have just participated in bringing about the end of the world.\nBut don't beat yourself up about it.",
+		"Since you are reading this, chances are you have already installed this game on your computer.  If this is true, you have just participated in bringing about the end of the world.  But don't beat yourself up about it.",
 		"YOU HATE TIME TRAVEL YOU HATE TIME TRAVEL YOU HATE....",
 		"It begins to dawn on you that everything you just did may have been a colossal waste of time.",
 	"We will BUILD heroes!", /* THE PROTOMEN */
@@ -277,7 +314,7 @@ static const char *haluMesg[] = {
 	"To right the countless wrongs of our day,\nwe shine this light of true redemption,\nthat this place may become as paradise.",/*It's a Wonderful World/The World Ends with You*/
 		"What a wonderful world such would be...",
 		"Please...Don't kill me...",
-		"Another world awaits. ...And you're going! ",
+		"Another world awaits. ...And you're going!",
 		"You have seven days.",
 	"But the future refused to change.", /*Chrono Trigger*/
 	"I wonder... If you do the right thing... Does it really make... everybody... happy?",/*Majora's Mask*/
@@ -288,6 +325,7 @@ static const char *haluMesg[] = {
 	"Why are you sad?", /*Blood-C*/
 	"Only accurate information has practical application.", /* not sure where this originated, possibly Aron Ra?*/
 	"Now watch what you say or they'll be calling you a radical!", /* The Logical Song, Supertramp */
+	"I took a walk around the world, to ease my troubled mind.", /* Kryptonite */
 	"Do what thou wilt shall be the whole of the Law", /* Aleister Crowley */
 	"Oh, 'great warrior...' Wars not make one great!", /*Star Wars*/
 		"I've got a bad feeling about this...",
@@ -358,30 +396,30 @@ int wardMax[18] = {
 };
 
 //const int wardDesc[] = {0, 0,0,0, 0,0,0, 0,0,0, 0,1}
-//const char * descOfWards[] = {"There is ", "The "}
+//const char * descOfWards[] = {"There is	",	"The	"}
 //There is ? inscribed here.
 const char * wardText[][7] =  {
-	{"a one", "a two", "a three", "a four", "a five","a six", "a seven"},
-	{"a heptagram", "a two-fold heptagram", "a three-fold heptagram", "a four-fold heptagram", 
-		"a five-fold heptagram","a six-fold heptagram", "a seven-fold heptagram"},
-	{"a Gorgoneion", "a pair of Gorgoneia", "a trio of Gorgoneia", "too many (4) Gorgoneia", 
-		"too many (5) Gorgoneia", "too many (6) Gorgoneia", "too many (7) Gorgoneia"},
-	{"a circle of Acheron", "a two-level circle of Acheron", "a three-level circle of Acheron", 
-		"a four-level circle of Acheron", "too many (5) circles of Acheron",
-		"too many (6) circles of Acheron", "too many (7) circles of Acheron"},
-	{"a pentagram", "a two-fold pentagram", "a three-fold pentagram", "a four-fold pentagram", 
-		"a five-fold pentagram","a six-fold pentagram", "a seven-fold pentagram"},
-	{"a hexagram", "a two-fold hexagram", "a three-fold hexagram", "a four-fold hexagram", 
-		"a five-fold hexagram","a six-fold hexagram", "a seven-fold hexagram"},
-	{"a hamsa mark", "a pair of hamsa marks", "a three-handed hamsa mark", 
-		"a four-handed hamsa mark", "a five-handed hamsa mark","a six-handed hamsa mark", 
+	{"a one",	"a two",	"a three",	"a four",	"a five","a six",	"a seven"},
+	{"a heptagram",	"a two-fold heptagram",	"a three-fold heptagram",	"a four-fold heptagram", 
+		"a five-fold heptagram","a six-fold heptagram",	"a seven-fold heptagram"},
+	{"a Gorgoneion",	"a pair of Gorgoneia",	"a trio of Gorgoneia",	"too many (4) Gorgoneia", 
+		"too many (5) Gorgoneia",	"too many (6) Gorgoneia",	"too many (7) Gorgoneia"},
+	{"a circle of Acheron",	"a two-level circle of Acheron",	"a three-level circle of Acheron", 
+		"a four-level circle of Acheron",	"too many (5) circles of Acheron",
+		"too many (6) circles of Acheron",	"too many (7) circles of Acheron"},
+	{"a pentagram",	"a two-fold pentagram",	"a three-fold pentagram",	"a four-fold pentagram", 
+		"a five-fold pentagram","a six-fold pentagram",	"a seven-fold pentagram"},
+	{"a hexagram",	"a two-fold hexagram",	"a three-fold hexagram",	"a four-fold hexagram", 
+		"a five-fold hexagram","a six-fold hexagram",	"a seven-fold hexagram"},
+	{"a hamsa mark",	"a pair of hamsa marks",	"a three-handed hamsa mark", 
+		"a four-handed hamsa mark",	"a five-handed hamsa mark","a six-handed hamsa mark", 
 		"an overabundance of hamsa marks"},
-	{"an elder sign", "a one-armed elder sign", "a two-armed elder sign", "a three-armed elder sign", 
+	{"an elder sign",	"a one-armed elder sign",	"a two-armed elder sign",	"a three-armed elder sign", 
 		"a four-armed elder sign","an eye of Yggdrasil",	"an extra-dimensional elder sign"},
-	{"an elder elemental eye", "a two-lobed elder elemental eye", "a three-lobed elder elemental eye",
-		"a four-lobed elder elemental eye", "a five-lobed elder elemental eye",
-		"a six-lobed elder elmental eye", "a seven-lobed elder elemental eye"},
-	{"a sign of the Scion Queen Mother", "a reinforced sign of the Scion Queen Mother", 
+	{"an elder elemental eye",	"a two-lobed elder elemental eye",	"a three-lobed elder elemental eye",
+		"a four-lobed elder elemental eye",	"a five-lobed elder elemental eye",
+		"a six-lobed elder elmental eye",	"a seven-lobed elder elemental eye"},
+	{"a sign of the Scion Queen Mother",	"a reinforced sign of the Scion Queen Mother", 
 		"a doubly reinforced sign of the Scion Queen Mother", 
 		"a triply reinforced sign of the Scion Queen Mother", 
 		"a quadruply reinforced sign of the Scion Queen Mother",
@@ -445,22 +483,22 @@ const char * wardText[][7] =  {
 		""},
 };
 const char * wardNames[][2] = {
-	{"digit", "digits"},
-	{"heptagram", "heptagrams"},
-	{"Gorgoneion", "Gorgoneia"},
-	{"circle of Acheron", "circles of Acheron"},
-	{"pentagram", "pentagrams"},
-	{"hexagram", "hexagrams"},
-	{"hamsa mark", "hamsa marks"},
-	{"elder sign", "elder signs"},
-	{"elder elemental eye", "elder elemental eyes"},
-	{"sign of the Scion Queen Mother", "signs of the Scion Queen Mother"},
-	{"hieroglyph", "hieroglyphs"},
-	{"wing of Garuda", "wings of Garuda"},
-	{"sigil of Cthugha", "sigils of Cthugha"},
-	{"brand of Ithaqua", "brands of Ithaqua"},
+	{"digit",	"digits"},
+	{"heptagram",	"heptagrams"},
+	{"Gorgoneion",	"Gorgoneia"},
+	{"circle of Acheron",	"circles of Acheron"},
+	{"pentagram",	"pentagrams"},
+	{"hexagram",	"hexagrams"},
+	{"hamsa mark",	"hamsa marks"},
+	{"elder sign",	"elder signs"},
+	{"elder elemental eye",	"elder elemental eyes"},
+	{"sign of the Scion Queen Mother",	"signs of the Scion Queen Mother"},
+	{"hieroglyph",	"hieroglyphs"},
+	{"wing of Garuda",	"wings of Garuda"},
+	{"sigil of Cthugha",	"sigils of Cthugha"},
+	{"brand of Ithaqua",	"brands of Ithaqua"},
 	{"tracery of Karakal",	"traceries of Karakal"},
-	{"yellow sign", "yellow signs"},
+	{"yellow sign",	"yellow signs"},
 	{"Hypergeometric transit equation", "Hypergeometric transit equations"},
 	{"Hypergeometric stabilization equation", "Hypergeometric stabilization equations"},
 };
@@ -473,7 +511,7 @@ const char * haluWard[] =  {
 
 	/*DnD*/
 	"a cerulean weeping-willow", /* it's magic. Unlike the others, this one works. Keep in sync with engrave.h!*/
-
+	
 	/*Special behavior, these move across the floor, keep in sync with allmain.c*/
 	"a north-east facing glider",
 	"a north-west facing glider",
@@ -508,6 +546,7 @@ const char * haluWard[] =  {
 	"a House Thaeyalla crest",
 	"a House X'larraz'et'soj crest",
 	
+		
 	/*Special behavior, these identify hedrow towers*/
 	"a Tower Sorcere crest",
 	"a Tower Magthere crest",
@@ -515,6 +554,15 @@ const char * haluWard[] =  {
 	
 	/* Special behavior, Lolth holy symbol */
 	"a silver spider-like star",
+	
+	/* Special behavior, Kiaransalee holy symbol */
+	"a pair of silver-beringed hands",
+	
+	/* Special behavior, Pen'a holy symbol */
+	"a silver matron",
+	
+	/* Special behavior, Ver'tas holy symbol */
+	"a silver feather tearing a web",
 	
 	/* Special behavior, Eilistraee holy symbol */
 	"a pair of dancing silver drow",
@@ -535,42 +583,43 @@ const char * haluWard[] =  {
 	"a groovy rendition of the wings of Gargula",
 	
 	/* books */
-	"a set of holy horns", "a Summoning Dark mine-sign", "a Long Dark mine-sign",
-	"a Following Dark mine-sign", "a Closing Dark mine-sign", "an Opening Dark mine-sign",
-	"a Breathing Dark mine-sign", "a Speaking Dark mine-sign", "a Catching Dark mine-sign",
-	"a Secret Dark mine-sign", "a Calling Dark mine-sign", "a Waiting Dark mine-sign",
+	"a set of holy horns",	"a Summoning Dark mine-sign",	"a Long Dark mine-sign",
+	"a Following Dark mine-sign",	"a Closing Dark mine-sign",	"an Opening Dark mine-sign",
+	"a Breathing Dark mine-sign",	"a Speaking Dark mine-sign",	"a Catching Dark mine-sign",
+	"a Secret Dark mine-sign",	"a Calling Dark mine-sign",	"a Waiting Dark mine-sign",
 	"a florid crest dominated by a double-headed bat",
-	"a Guarding Dark mine-sign", "the mark of the Caller of Eight", /* Discworld */
+	"a Guarding Dark mine-sign",	"the mark of the Caller of Eight", /* Discworld */
 	"a lidless eye", /* Lord of the Rings */
 	"a white tree", /* Gondor, Lord of the Rings */
 	"a triangle enclosing a circle and bisected by a line", /* Harry Potter */
 	"a set of three trefoils, the lower most inverted", /* describes the three of clubs. Too Many Magicians*/
-	"a Trump of Doom", "a Sign of Chaos", "a Pattern of Amber", "a Ghostwheel",
+	"a Trump of Doom",	"a Sign of Chaos",	"a Pattern of Amber",	"a Ghostwheel",
 	"a mockingjay", /* Hunger Games */
 	"a Sharuan Mindharp", /* Star Wars expanded universe */
 	"a winged blade of light", /* Jedi Order symbol */
 	
 	/* webcomics */
-	"a Court symbol", "a Forest symbol", "the sign of the Wandering Eye", /* Gunnerkrigg Court */
+	"a Court symbol",	"a Forest symbol",	"the sign of the Wandering Eye", /* Gunnerkrigg Court */
 	"a winged tower", /* Girl Genius */
 		"a stylised trilobite",
 	"a setting (rising?) sun", /* Dresden Codak */
-
+	
 	/* anime and manga */
 	"a Robotech Defense Force insignia", /*...Robotech*/
 	"a Black Knights insignia", /* Code Geass */
 	"a rose crest", /* Revolutionary Girl Utena */
 	"an inverted triangle flanked by seven eyes", /* NGE */
 	"a laughing man", /* Ghost in the Shell */
-	"an alchemic array", "a human transmutation circle", /* Fullmetal Alchemist */
+	"an alchemic array",	"a human transmutation circle", /* Fullmetal Alchemist */
 	"an asymmetric, stylized arrowhead, point upwards", /* Star Trek*/
-	"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
-	"an image of a white lotus", /* Avatar, the Last Airbender */
+		"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
+	"a white lotus", /* Avatar, the Last Airbender */
 	
+	"a winged and a tear of blood", /*02, Kirby*/
 	"an angular S before a segmented circle",/*a screw attack symbol*/
 	"a stylized umbrella", /* Resident Evil */
 	"an Imperium Aquilas", /* Warhammer 40k */
-	"more dakka",
+		"more dakka",
 	"a triangle composed of three smaller triangles",	"an eye and single tear", /*Zelda*/
 		"a circle enclosing four swirling lines",	"a flame inside a circle",
 		"a snowflake within a circle",	"an inverted triangle with a dot above each face, enclosed by a circle",
@@ -621,20 +670,20 @@ const char * haluWard[] =  {
 	"a zorkmid",
 	
 	"a diagram of the bridges of Konigsberg",
-
+	
 	"a hand-mirror of Aphrodite",
 	"a shield and spear of Ares", /* alchemy/male/female */
 	
 	"a black moon lilith sign",
-
+	
 	"a window", /* op-sys*/
 	"a no symbol",
 	"a test pattern",
 	"a work of modern art",
 	"a flag of Neverland",
 	"a hyped-up duck dressed in a sailor's shirt and hat", /* Disney */
-	"a mouse with 2d ears",
-	"a set of three circles in the shape of a mouse's head",
+		"a mouse with 2d ears",
+		"a set of three circles in the shape of a mouse's head",
 	"a meaningless coincidence",
 	
 	/*Corporate Logos*/
@@ -643,20 +692,23 @@ const char * haluWard[] =  {
 	"a pair of arches meeting to form an \"M\"",
 	"a Swoosh mark",
 	
-	"a set of five interlocked rings", /*Olympics logo*/
+	"a dream of the Fallen",
 	"a sign of the world to come",
+	"a thousandfold eye",
+	"a set of five interlocked rings", /*Olympics logo*/
+	"a tree diagram",
 	"a running man", /* Exit */
 	"a running man holding a cane",
 	"a one-and-zero", /* Power toggle */
-	"a thick soup of mist", "a pattern of squared circles", 
-	"a void", "a notable lack of images", "a stark absence of pictures", "nothing much",
-	"a convergence of parallel lines", "a sphere", /* How did you manage that? */
-	"a yin-yang", "a taijitu",/* Taoist */
+	"a thick soup of mist",	"a pattern of squared circles", 
+	"a void",	"a notable lack of images",	"a stark absence of pictures",	"nothing much",
+	"a convergence of parallel lines",	"a sphere", /* How did you manage that? */
+	"a yin-yang",	"a taijitu",/* Taoist */
 	"a hand of Eris", /* Discordian */
 	"a butterfly of death and rebirth",
-	"an ichthus", "a Cross", /* Christian*/
+	"an ichthus",	"a Cross", /* Christian*/
 	"a wheel with eight spokes", /* Budhism */
-	"a fish with legs", "a fat fish", "a fish with tentacles, legs, and wings",
+	"a fish with legs",	"a fat fish",	"a fish with tentacles, legs, and wings",
 		/* ichthus parodies/derivitives: darwin, buddha, and Cthulhu. */
 	"an Eye of Horus", /*...*/
 	"a set of seven concentric circles",
@@ -665,9 +717,9 @@ const char * haluWard[] =  {
 	"a rough circle enclosing an A", /* Anarchy */
 	"a Tree of Life", /* Kabbalah */
 	"a winged oak",
-	"a wheel cross", "a labyrinth", "sign of Shamash", 
+	"a wheel cross",	"a labyrinth",	"sign of Shamash", 
 	"a naudh rune", /* misery */
-	"an Eye of Providence", "a pyramid surmounted by an eye", /* Christian */
+	"an Eye of Providence",	"a pyramid surmounted by an eye", /* Christian */
 	"a one-way staircase",
 	"an 'a' encircled by its own tail" /* meta */
 };
@@ -713,6 +765,7 @@ char * sealNames[] =  {
 	"Nudziarth", /* 36 */
 	"the Alignment Thing", /* 37 */
 	"the Unknown God", /* 38 */
+	"Eddergud", /* 38 */
 	"Numina" /* 39 */
 };
 
@@ -756,7 +809,8 @@ char * sealTitles[] =  {
 	", the mirrored destroyer", /* 36 */
 	"", /* 37 */
 	"", /* 38 */
-	", The Whispering Multitude" /* 39 */
+	", The Black Web Entity", /* 39 */
+	", The Whispering Multitude" /* 40 */
 };
 
 char *
@@ -765,7 +819,7 @@ char *outbuf;
 {
 	const char *rumor;
 
-	/* a random engraving may come from the "rumors" file,
+	/* a random engraving may come from the	"rumors" file,
 	   or from the list above */
 	if (!rn2(4) || !(rumor = getrumor(0, outbuf, TRUE)) || !*rumor)
 	    Strcpy(outbuf, random_mesg[rn2(SIZE(random_mesg))]);
@@ -1348,7 +1402,7 @@ register int x,y;
 				else et = haluMesg[haluDex];
 			}
 			You("%s: \"%s\"",
-				  (Blind) ? "feel the words" : "read",  et);
+				  (Blind) ?	"feel the words" :	"read",  et);
 			if(flags.run > 1) nomul(0, NULL);
 		}
 	}
@@ -1358,7 +1412,7 @@ register int x,y;
 	    case DUST:
 		if(!Blind) {
 			sensed = 1;
-			word = is_ice(x,y) ? "drawn here in the frost." : 
+			word = is_ice(x,y) ?	"drawn here in the frost." : 
 					"drawn here in the dust.";
 		}
 		break;
@@ -1366,13 +1420,13 @@ register int x,y;
 	    case HEADSTONE:
 		if (!Blind || can_reach_floor()) {
 			sensed = 1;
-			word = "carved here.";
+			word =	"carved here.";
 		}
 		break;
 	    case BURN:
 		if (!Blind || can_reach_floor()) {
 			sensed = 1;
-			word = is_ice(x,y) ? "melted into the ice here." : 
+			word = is_ice(x,y) ?	"melted into the ice here." : 
 					"burned into the floor here.";
 		
 		}
@@ -1380,63 +1434,63 @@ register int x,y;
 	    case MARK:
 		if(!Blind) {
 			sensed = 1;
-			word = "drawn in ink here.";
+			word =	"drawn in ink here.";
 		}
 		break;
 	    case ENGR_BLOOD:
-		/* "It's a message!  Scrawled in blood!"
-		 * "What's it say?"
-		 * "It says... `See you next Wednesday.'" -- Thriller
+		/*	"It's a message!  Scrawled in blood!"
+		 *	"What's it say?"
+		 *	"It says... `See you next Wednesday.'" -- Thriller
 		 */
 		if(!Blind) {
 			sensed = 1;
-			word = "drawn in blood here.";
+			word =	"drawn in blood here.";
 		}
 		break;
 	    default:
 			sensed = 1;
-			word = "drawn here in a very strange way.";
+			word =	"drawn here in a very strange way.";
 	    }
 	    if (sensed) {
 		 if(!Hallucination){
 		  if(!(ep->halu_ward)){
 				if( ep->ward_id < FIRST_SEAL ){
-			int sum;
-			if(ep->complete_wards){
+					int sum;
+					if(ep->complete_wards){
 						long wardhere = get_wardID(ep->ward_id);
-				pline("There is %s %s", 
-					wardText[ep->ward_id][ep->complete_wards-1],
-					word);
+						pline("There is %s %s", 
+							wardText[ep->ward_id][ep->complete_wards-1],
+							word);
 						if( !(u.wardsknown & wardhere) && ep->ward_id < DONTLEARNWARD ){
-					You("have learned a new warding!");
-					u.wardsknown |= wardhere;
-				}
-			}
-			sum = ep->scuffed_wards + ep->degraded_wards + ep->partial_wards;
-			if(sum){
-				char wardbuf[BUFSZ];
-				int wardbuflen = 0;
-				wardbuf[0] = (char)0;
-				if(ep->complete_wards) wardbuflen += sprintf(&wardbuf[wardbuflen], "There %s also", sum > 1 ? "are" : "is");
-				else wardbuflen += sprintf(&wardbuf[wardbuflen], "There %s", sum > 1 ? "are" : "is");
-				if(ep->scuffed_wards)
-					wardbuflen += sprintf(&wardbuf[wardbuflen]," %d scuffed%s", ep->scuffed_wards, ep->degraded_wards && ep->partial_wards ? 
-													"," : 
-													ep->degraded_wards || ep->partial_wards ? 
-													" and" : "");
-				if(ep->degraded_wards)
-					wardbuflen += sprintf(&wardbuf[wardbuflen]," %d degraded%s", ep->degraded_wards, ep->scuffed_wards && ep->partial_wards ? 
-													", and" : 
-													ep->partial_wards ? 
-													" and" : "");
-				if(ep->partial_wards)
-					wardbuflen += sprintf(&wardbuf[wardbuflen]," %d fragmentary", ep->partial_wards);
-				/*if(!(ep->complete_wards))*/ 
-				wardbuflen += sprintf(&wardbuf[wardbuflen]," %s",
-											wardNames[ep->ward_id][sum>1 ? 1 : 0]);
-				//pline("%d",wardbuflen);
-				pline("%s %s", wardbuf, word);
-			}
+							You("have learned a new warding!");
+							u.wardsknown |= wardhere;
+						}
+					}
+					sum = ep->scuffed_wards + ep->degraded_wards + ep->partial_wards;
+					if(sum){
+						char wardbuf[BUFSZ];
+						int wardbuflen = 0;
+						wardbuf[0] = (char)0;
+						if(ep->complete_wards) wardbuflen += sprintf(&wardbuf[wardbuflen],	"There %s also", sum > 1 ?	"are" :	"is");
+						else wardbuflen += sprintf(&wardbuf[wardbuflen],	"There %s", sum > 1 ?	"are" :	"is");
+						if(ep->scuffed_wards)
+							wardbuflen += sprintf(&wardbuf[wardbuflen]," %d scuffed%s", ep->scuffed_wards, ep->degraded_wards && ep->partial_wards ? 
+															"," : 
+															ep->degraded_wards || ep->partial_wards ? 
+															" and" :	"");
+						if(ep->degraded_wards)
+							wardbuflen += sprintf(&wardbuf[wardbuflen]," %d degraded%s", ep->degraded_wards, ep->scuffed_wards && ep->partial_wards ? 
+															", and" : 
+															ep->partial_wards ? 
+															" and" :	"");
+						if(ep->partial_wards)
+							wardbuflen += sprintf(&wardbuf[wardbuflen]," %d fragmentary", ep->partial_wards);
+						/*if(!(ep->complete_wards))*/ 
+						wardbuflen += sprintf(&wardbuf[wardbuflen]," %s",
+													wardNames[ep->ward_id][sum>1 ? 1 : 0]);
+						//pline("%d",wardbuflen);
+						pline("%s %s", wardbuf, word);
+					}
 				}else{
 //					pline("%d-%d=%d", ep->ward_id, FIRST_SEAL, ((int)ep->ward_id)-((int)FIRST_SEAL));
 					if(ep->complete_wards){
@@ -1522,10 +1576,10 @@ xchar e_type;
 	ep->engr_y = y;
 	ep->engr_txt = (char *)(ep + 1);
 	Strcpy(ep->engr_txt, s);
-	/* engraving Elbereth shows wisdom */
-	if (!in_mklev && !strcmp(s, "Elbereth")){
-		exercise(A_WIS, TRUE);
-	}
+	// /* engraving Elbereth shows wisdom */
+	// if (!in_mklev && !strcmp(s,	"Elbereth")){
+		// exercise(A_WIS, TRUE);
+	// }
 	ep->ward_type = exist_ward_type;
 	ep->ward_id = exist_ward_id;
 	ep->halu_ward = exist_halu_ward;
@@ -1700,7 +1754,7 @@ doengrave()
 	 * Edited by GAN 10/20/86 so as not to change weapon wielded.
 	 */
 
-	otmp = getobj(styluses, "write with");
+	otmp = getobj(styluses,	"write with");
 	if(!otmp) return(0);		/* otmp == zeroobj if fingers */
 
 	if (otmp == &zeroobj) writer = makeplural(body_part(FINGER));
@@ -2095,7 +2149,7 @@ doengrave()
 		if(randWard){
 			oep = engr_at(u.ux,u.uy);
 			if(!oep){
-				make_engr_at(u.ux, u.uy, "", moves, DUST);
+				make_engr_at(u.ux, u.uy,	"", moves, DUST);
 				oep = engr_at(u.ux,u.uy);
 			}
 			oep->ward_id = randWard;
@@ -2238,7 +2292,7 @@ doengrave()
 	    if (zapwand) {
 		if (!Blind)
 		    pline("%s, then %s.",
-			  Tobjnam(otmp, "glow"), otense(otmp, "fade"));
+			  Tobjnam(otmp,	"glow"), otense(otmp,	"fade"));
 		return(1);
 	    } else {
 			pline(Never_mind);
@@ -2273,11 +2327,11 @@ doengrave()
 	switch(type){
 	    default:
 		multi = -(len/10);
-		if (multi) nomovemsg = "You finish your weird engraving.";
+		if (multi) nomovemsg =	"You finish your weird engraving.";
 		break;
 	    case DUST:
 		multi = -(len/10);
-		if (multi) nomovemsg = "You finish writing in the dust.";
+		if (multi) nomovemsg =	"You finish writing in the dust.";
 		break;
 	    case HEADSTONE:
 	    case ENGRAVE:
@@ -2285,27 +2339,30 @@ doengrave()
 			if ((otmp->oclass == WEAPON_CLASS || spec_ability3(otmp, SPFX3_ENGRV)) &&
 				((otmp->otyp != ATHAME && !spec_ability3(otmp, SPFX3_ENGRV)) || otmp->cursed)) {
 				multi = -len;
-				maxelen = ((otmp->spe + 3) * 2) + 1;
+				if(otmp->otyp == CRYSTAL_SWORD) maxelen = len;
+				else maxelen = ((otmp->spe + 3) * 2) + 1;
 				/* -2 = 3, -1 = 5, 0 = 7, +1 = 9, +2 = 11
 				 * Note: this does not allow a +0 anything (except
-				 *	 an athame) to engrave "Elbereth" all at once.
-				 *	 However, you could now engrave "Elb", then
-				 *	 "ere", then "th".
+				 *	 an athame) to engrave	"Elbereth" all at once.
+				 *	 However, you could now engrave	"Elb", then
+				 *		"ere", then	"th".
 				 */
-				Your("%s dull.", aobjnam(otmp, "get"));
-				if (otmp->unpaid) {
-				struct monst *shkp = shop_keeper(*u.ushops);
-				if (shkp) {
-					You("damage it, you pay for it!");
-					bill_dummy_object(otmp);
+				if(otmp->otyp != CRYSTAL_SWORD){
+					Your("%s dull.", aobjnam(otmp,	"get"));
+					if (otmp->unpaid) {
+					struct monst *shkp = shop_keeper(*u.ushops);
+					if (shkp) {
+						You("damage it, you pay for it!");
+						bill_dummy_object(otmp);
+					}
+					}
+					if (len > maxelen) {
+					multi = -maxelen;
+					otmp->spe = -3;
+					} else if (len > 1)
+					otmp->spe -= len >> 1;
+					else otmp->spe -= 1; /* Prevent infinite engraving */
 				}
-				}
-				if (len > maxelen) {
-				multi = -maxelen;
-				otmp->spe = -3;
-				} else if (len > 1)
-				otmp->spe -= len >> 1;
-				else otmp->spe -= 1; /* Prevent infinite engraving */
 		} else
 		    if ( (otmp->oclass == RING_CLASS) ||
 			 (otmp->oclass == GEM_CLASS) )
@@ -2332,11 +2389,11 @@ doengrave()
 			if (len > 1) otmp->spe -= len >> 1;
 			else otmp->spe -= 1; /* Prevent infinite grafitti */
 		}
-		if (multi) nomovemsg = "You finish defacing the dungeon.";
+		if (multi) nomovemsg =	"You finish defacing the dungeon.";
 		break;
 	    case ENGR_BLOOD:
 		multi = -(len/10);
-		if (multi) nomovemsg = "You finish scrawling.";
+		if (multi) nomovemsg =	"You finish scrawling.";
 		break;
 	}
 
@@ -2346,7 +2403,7 @@ doengrave()
 		if (!isspace(*sp)) maxelen--;
 	    if (!maxelen && *sp) {
 		*sp = (char)0;
-		if (multi) nomovemsg = "You cannot write any more.";
+		if (multi) nomovemsg =	"You cannot write any more.";
 		You("only are able to write \"%s\"", ebuf);
 	    }
 	}
@@ -2451,7 +2508,7 @@ doward()
 	 * Edited by GAN 10/20/86 so as not to change weapon wielded.
 	 */
 
-	otmp = getobj(styluses, "draw with");
+	otmp = getobj(styluses,	"draw with");
 	if(!otmp) return(0);		/* otmp == zeroobj if fingers */
 
 	if (otmp == &zeroobj) writer = makeplural(body_part(FINGER));
@@ -2496,7 +2553,7 @@ doward()
 		break;
 
 	    case RING_CLASS:
-		/* "diamond" rings and others should work */
+		/*	"diamond" rings and others should work */
 	    case GEM_CLASS:
 		/* diamonds & other hard gems should work */
 		if (objects[otmp->otyp].oc_tough) {
@@ -2524,7 +2581,7 @@ doward()
 	    case SCROLL_CLASS:
 	    case SPBOOK_CLASS:
 		Your("%s would get %s.", xname(otmp),
-			is_ice(u.ux,u.uy) ? "all frosty" : "too dirty");
+			is_ice(u.ux,u.uy) ?	"all frosty" :	"too dirty");
 		ptext = FALSE;
 		break;
 
@@ -2535,7 +2592,7 @@ doward()
 	     * the engraving text, because all kinds of setup decisions
 	     * and pre-engraving messages are based upon knowing what type
 	     * of engraving the wand is going to do.  Also, the player
-	     * will have potentially seen "You wrest .." message, and
+	     * will have potentially seen	"You wrest .." message, and
 	     * therefore will know they are using a charge.
 	     */
 	    case WAND_CLASS:
@@ -2559,7 +2616,7 @@ doward()
 			break;
 
 			/* IMMEDIATE wands */
-			/* If wand is "IMMEDIATE", remember to affect the
+			/* If wand is	"IMMEDIATE", remember to affect the
 			 * previous engraving even if turning to dust.
 			 */
 		    case WAN_STRIKING:
@@ -2570,14 +2627,14 @@ doward()
 		    case WAN_SLOW_MONSTER:
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The bugs on the %s slow down!",
+				  	"The bugs on the %s slow down!",
 				   surface(u.ux, u.uy));
 			}
 			break;
 		    case WAN_SPEED_MONSTER:
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The bugs on the %s speed up!",
+				  	"The bugs on the %s speed up!",
 				   surface(u.ux, u.uy));
 			}
 			break;
@@ -2633,7 +2690,7 @@ doward()
 			ptext = TRUE;
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The %s is riddled by bullet holes!",
+				  	"The %s is riddled by bullet holes!",
 				   surface(u.ux, u.uy));
 			}
 			break;
@@ -2643,7 +2700,7 @@ doward()
 		    case WAN_DEATH:
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The bugs on the %s stop moving!",
+				  	"The bugs on the %s stop moving!",
 				   surface(u.ux, u.uy));
 			}
 			break;
@@ -2690,7 +2747,7 @@ doward()
 				"Ice chips fly up from the ice surface!" :
 				"Gravel flies up from the floor.");
 			else
-			    Strcpy(post_engr_text, "You hear drilling!");
+			    Strcpy(post_engr_text,	"You hear drilling!");
 			break;
 
 		    /* type = BURN wands */
@@ -2703,7 +2760,7 @@ doward()
 			    doknown = TRUE;
 			}
 			Strcpy(post_engr_text,
-				Blind ? "You feel the wand heat up." :
+				Blind ?	"You feel the wand heat up." :
 					"Flames fly from the wand.");
 			break;
 		    case WAN_LIGHTNING:
@@ -2717,10 +2774,10 @@ doward()
 			}
 			if (!Blind) {
 			    Strcpy(post_engr_text,
-				    "Lightning arcs from the wand.");
+				   	"Lightning arcs from the wand.");
 			    doblind = TRUE;
 			} else
-			    Strcpy(post_engr_text, "You hear crackling!");
+			    Strcpy(post_engr_text,	"You hear crackling!");
 			break;
 
 		    /* type = MARK wands */
@@ -2769,16 +2826,16 @@ doward()
 				    You("wipe out the message here.");
 				else
 				    Your("%s %s %s.", xname(otmp),
-					 otense(otmp, "get"),
+					 otense(otmp,	"get"),
 					 is_ice(u.ux,u.uy) ?
-					 "frosty" : "dusty");
+						"frosty" :	"dusty");
 				dengr = TRUE;
 			    } else
 				Your("%s can't wipe out this engraving.",
 				     xname(otmp));
 			else{
-			    Your("%s %s %s.", xname(otmp), otense(otmp, "get"),
-				  is_ice(u.ux,u.uy) ? "frosty" : "dusty");
+			    Your("%s %s %s.", xname(otmp), otense(otmp,	"get"),
+				  is_ice(u.ux,u.uy) ?	"frosty" :	"dusty");
 			}
 			break;
 		    default:
@@ -2803,7 +2860,7 @@ doward()
 	    if (type == ENGRAVE || type == 0)
 		type = HEADSTONE;
 	    else {
-		// ensures the "cannot wipe out" case
+		// ensures the	"cannot wipe out" case
 		type = DUST;
 		dengr = FALSE;
 		teleengr = FALSE;
@@ -2838,7 +2895,7 @@ doward()
 		if(randWard){
 			oep = engr_at(u.ux,u.uy);
 			if(!oep){
-				make_engr_at(u.ux, u.uy, "", moves, DUST);
+				make_engr_at(u.ux, u.uy,	"", moves, DUST);
 				oep = engr_at(u.ux,u.uy);
 			}
 			oep->ward_id = randWard;
@@ -2856,10 +2913,10 @@ doward()
 
 	if (zapwand && (otmp->spe < 0)) {
 	    pline("%s %sturns to dust.",
-		  The(xname(otmp)), Blind ? "" : "glows violently, then ");
+		  The(xname(otmp)), Blind ?	"" :	"glows violently, then	");
 	    if (!IS_GRAVE(levl[u.ux][u.uy].typ))
 		You("are not going to get anywhere trying to draw in the %s with your dust.",
-		    is_ice(u.ux,u.uy) ? "frost" : "dust");
+		    is_ice(u.ux,u.uy) ?	"frost" :	"dust");
 	    useup(otmp);
 	    ptext = FALSE;
 	}
@@ -2883,7 +2940,7 @@ doward()
 			pline("This headstone is not big enough for drawing one");
 		    return(0);
 	    } else*/ if ( (type == oep->ward_type) && !Hallucination && (!Blind ||
-		 (oep->ward_type == BURN) || (oep->ward_type == ENGRAVE)) ) {
+		 (oep->ward_type == BURN) || (oep->ward_type == ENGRAVE)) && oep->ward_id <= LAST_WARD) {
 			c = yn_function("Do you want to reinforce the existing ward?",
 					ynqchars, 'y');
 			if (c == 'q') {
@@ -2898,9 +2955,9 @@ doward()
 				(oep->ward_type == MARK) ) {
 				if (!Blind) {
 				You("wipe out the ward that was %s here.",
-					((oep->ward_type == DUST)  ? "drawn in the dust" :
-					((oep->ward_type == ENGR_BLOOD) ? "painted in blood"   :
-								 "drawn")));
+					((oep->ward_type == DUST)  ?	"drawn in the dust" :
+					((oep->ward_type == ENGR_BLOOD) ?	"painted in blood"   :
+									"drawn")));
 				del_ward(oep);
 				oep = engr_at(u.ux,u.uy);
 				} else
@@ -2909,10 +2966,10 @@ doward()
 			} else{
 				if ( (type == DUST) || (type == MARK) || (type == ENGR_BLOOD) ) {
 				You(
-				 "cannot wipe out the ward that is %s the %s here.",
+					"cannot wipe out the ward that is %s the %s here.",
 				 oep->ward_type == BURN ?
-				   (is_ice(u.ux,u.uy) ? "melted into" : "burned into") :
-				   "engraved in", surface(u.ux,u.uy));
+				   (is_ice(u.ux,u.uy) ?	"melted into" :	"burned into") :
+				  	"engraved in", surface(u.ux,u.uy));
 				return(1);
 				} else
 				if ( (type != oep->ward_type) || (c == 'n') ) {
@@ -2958,35 +3015,35 @@ doward()
 	eloc = surface(u.ux,u.uy);
 	switch(type){
 	    default:
-		everb = (oep && !eow ? "add to the weird drawing on" :
-				       "draw strangely on");
+		everb = (oep && !eow ?	"add to the weird drawing on" :
+				      	"draw strangely on");
 		break;
 	    case DUST:
-		everb = (oep && !eow ? "add to the drawing in" :
-				       "draw in");
-		eloc = is_ice(u.ux,u.uy) ? "frost" : "dust";
+		everb = (oep && !eow ?	"add to the drawing in" :
+				      	"draw in");
+		eloc = is_ice(u.ux,u.uy) ?	"frost" :	"dust";
 		break;
 	    case HEADSTONE:
-		everb = (oep && !eow ? "add to the drawing on" :
-				       "draw on");
+		everb = (oep && !eow ?	"add to the drawing on" :
+				      	"draw on");
 		break;
 	    case ENGRAVE:
-		everb = (oep && !eow ? "add to the drawing in" :
-				       "draw in");
+		everb = (oep && !eow ?	"add to the drawing in" :
+				      	"draw in");
 		break;
 	    case BURN:
 		everb = (oep && !eow ?
-			( is_ice(u.ux,u.uy) ? "add to the drawing melted into" :
-					      "add to the drawing burned into") :
-			( is_ice(u.ux,u.uy) ? "melt into" : "burn into"));
+			( is_ice(u.ux,u.uy) ?	"add to the drawing melted into" :
+					     	"add to the drawing burned into") :
+			( is_ice(u.ux,u.uy) ?	"melt into" :	"burn into"));
 		break;
 	    case MARK:
-		everb = (oep && !eow ? "add to the graffiti on" :
-				       "draw on");
+		everb = (oep && !eow ?	"add to the graffiti on" :
+				      	"draw on");
 		break;
 	    case ENGR_BLOOD:
-		everb = (oep && !eow ? "add to the drawing on" :
-				       "draw on");
+		everb = (oep && !eow ?	"add to the drawing on" :
+				      	"draw on");
 		break;
 	}
 
@@ -3006,7 +3063,7 @@ doward()
 	    if (zapwand) {
 			if (!Blind)
 				pline("%s, then %s.",
-				  Tobjnam(otmp, "glow"), otense(otmp, "fade"));
+				  Tobjnam(otmp,	"glow"), otense(otmp,	"fade"));
 			return(1);
 	    } else {
 			pline(Never_mind);
@@ -3022,11 +3079,11 @@ doward()
 	switch(type){
 	    default:
 			multi = -(len/10);
-			if (multi) nomovemsg = "You finish your weird drawing.";
+			if (multi) nomovemsg =	"You finish your weird drawing.";
 		break;
 	    case DUST:
 			multi = -(len/10);
-			if (multi) nomovemsg = "You finish drawing in the dust.";
+			if (multi) nomovemsg =	"You finish drawing in the dust.";
 		break;
 	    case HEADSTONE:
 	    case ENGRAVE:
@@ -3034,23 +3091,26 @@ doward()
 			if ((otmp->oclass == WEAPON_CLASS || spec_ability3(otmp, SPFX3_ENGRV)) &&
 				((otmp->otyp != ATHAME && !spec_ability3(otmp, SPFX3_ENGRV)) || otmp->cursed)) {
 				multi = -len;
-				maxelen = ((otmp->spe + 3) * 2) + 1;
+				if(otmp->otyp == CRYSTAL_SWORD) maxelen = len;
+				else maxelen = ((otmp->spe + 3) * 2) + 1;
 				/* -2 = 3, -1 = 5, 0 = 7, +1 = 9, +2 = 11
 				 */
-				Your("%s dull.", aobjnam(otmp, "get"));
-				if (otmp->unpaid) {
-					struct monst *shkp = shop_keeper(*u.ushops);
-					if (shkp) {
-						You("damage it, you pay for it!");
-						bill_dummy_object(otmp);
+				if(otmp->otyp == CRYSTAL_SWORD){
+					Your("%s dull.", aobjnam(otmp,	"get"));
+					if (otmp->unpaid) {
+						struct monst *shkp = shop_keeper(*u.ushops);
+						if (shkp) {
+							You("damage it, you pay for it!");
+							bill_dummy_object(otmp);
+						}
 					}
+					if (len > maxelen) {
+						multi = -maxelen;
+						otmp->spe = -3;
+					} else if (len > 1)
+						otmp->spe -= len >> 1;
+					else otmp->spe -= 1; /* Prevent infinite engraving */
 				}
-				if (len > maxelen) {
-					multi = -maxelen;
-					otmp->spe = -3;
-				} else if (len > 1)
-					otmp->spe -= len >> 1;
-				else otmp->spe -= 1; /* Prevent infinite engraving */
 		} else
 		    if ( (otmp->oclass == RING_CLASS) ||
 			 (otmp->oclass == GEM_CLASS) )
@@ -3077,11 +3137,11 @@ doward()
 				if (len > 1) otmp->spe -= len >> 1;
 				else otmp->spe -= 1; /* Prevent infinite grafitti */
 			}
-			if (multi) nomovemsg = "You finish defacing the dungeon.";
+			if (multi) nomovemsg =	"You finish defacing the dungeon.";
 		break;
 	    case ENGR_BLOOD:
 			multi = -(len/10);
-			if (multi) nomovemsg = "You finish scrawling.";
+			if (multi) nomovemsg =	"You finish scrawling.";
 		break;
 	}
 
@@ -3128,7 +3188,7 @@ doward()
 		}
 	}
 	else{
-		make_engr_at(u.ux, u.uy, "", (moves - multi), DUST); /* absense of text =  dust */
+		make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
 		oep = engr_at(u.ux,u.uy);
 		if(!Hallucination){
 			oep->ward_id = ward;
@@ -3238,10 +3298,10 @@ pick_ward()
 	start_menu(tmpwin);
 	any.a_void = 0;		/* zero out all bits */
 
-	Sprintf(buf, "Known Wards");
+	Sprintf(buf,	"Known Wards");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	if(u.wardsknown & WARD_HEPTAGRAM){
-		Sprintf(buf, "Heptagram");
+		Sprintf(buf,	"Heptagram");
 		any.a_int = HEPTAGRAM;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3249,7 +3309,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_GORGONEION){
-		Sprintf(buf, "Gorgoneion");
+		Sprintf(buf,	"Gorgoneion");
 		any.a_int = GORGONEION;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3257,7 +3317,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_ACHERON){
-		Sprintf(buf, "Circle of Acheron");
+		Sprintf(buf,	"Circle of Acheron");
 		any.a_int = CIRCLE_OF_ACHERON;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3265,7 +3325,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_PENTAGRAM){
-		Sprintf(buf, "Pentagram");
+		Sprintf(buf,	"Pentagram");
 		any.a_int = PENTAGRAM;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3273,7 +3333,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_HEXAGRAM){
-		Sprintf(buf, "Hexagram");
+		Sprintf(buf,	"Hexagram");
 		any.a_int = HEXAGRAM;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3281,7 +3341,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_HAMSA){
-		Sprintf(buf, "Hamsa");
+		Sprintf(buf,	"Hamsa");
 		any.a_int = HAMSA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3289,7 +3349,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_ELDER_SIGN){
-		Sprintf(buf, "Elder Sign");
+		Sprintf(buf,	"Elder Sign");
 		any.a_int = ELDER_SIGN;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3297,7 +3357,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_EYE){
-		Sprintf(buf, "Elder Elemental Eye");
+		Sprintf(buf,	"Elder Elemental Eye");
 		any.a_int = ELDER_ELEMENTAL_EYE;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3305,7 +3365,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_QUEEN){
-		Sprintf(buf, "Sign of the Scion Queen Mother");
+		Sprintf(buf,	"Sign of the Scion Queen Mother");
 		any.a_int = SIGN_OF_THE_SCION_QUEEN;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3313,7 +3373,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_CAT_LORD){
-		Sprintf(buf, "Cartouche of the Cat Lord");
+		Sprintf(buf,	"Cartouche of the Cat Lord");
 		any.a_int = CARTOUCHE_OF_THE_CAT_LORD;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3321,7 +3381,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_GARUDA){
-		Sprintf(buf, "The Wings of Garuda");
+		Sprintf(buf,	"The Wings of Garuda");
 		any.a_int = WINGS_OF_GARUDA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3329,7 +3389,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_CTHUGHA){
-		Sprintf(buf, "The Sigil of Cthugha");
+		Sprintf(buf,	"The Sigil of Cthugha");
 		any.a_int = SIGIL_OF_CTHUGHA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3337,7 +3397,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_ITHAQUA){
-		Sprintf(buf, "The Brand of Ithaqua");
+		Sprintf(buf,	"The Brand of Ithaqua");
 		any.a_int = BRAND_OF_ITHAQUA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3353,7 +3413,7 @@ pick_ward()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.wardsknown & WARD_YELLOW){
-		Sprintf(buf, "The Yellow Sign");
+		Sprintf(buf,	"The Yellow Sign");
 		any.a_int = YELLOW_SIGN;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3376,7 +3436,7 @@ pick_ward()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	end_menu(tmpwin, "Choose ward:");
+	end_menu(tmpwin,	"Choose ward:");
 
 	how = PICK_ONE;
 	n = select_menu(tmpwin, how, &selected);
@@ -3541,7 +3601,7 @@ doseal()
 
 	/* Can the adventurer engrave at all? */
 	if(Role_if(PM_EXILE)) binderup(); //reaply all known seals, in case of memory loss.
-	if(!u.sealsKnown){
+	if(!u.sealsKnown && !u.specialSealsKnown){
 		You("don't know any seals.");
 		return 0;
 	}
@@ -3578,7 +3638,7 @@ doseal()
 	 * Edited by GAN 10/20/86 so as not to change weapon wielded.
 	 */
 
-	otmp = getobj(styluses, "draw with");
+	otmp = getobj(styluses,	"draw with");
 	if(!otmp) return(0);		/* otmp == zeroobj if fingers */
 
 	if (otmp == &zeroobj) writer = makeplural(body_part(FINGER));
@@ -3623,7 +3683,7 @@ doseal()
 		break;
 
 	    case RING_CLASS:
-		/* "diamond" rings and others should work */
+		/*	"diamond" rings and others should work */
 	    case GEM_CLASS:
 		/* diamonds & other hard gems should work */
 		if (objects[otmp->otyp].oc_tough) {
@@ -3651,7 +3711,7 @@ doseal()
 	    case SCROLL_CLASS:
 	    case SPBOOK_CLASS:
 		Your("%s would get %s.", xname(otmp),
-			is_ice(u.ux,u.uy) ? "all frosty" : "too dirty");
+			is_ice(u.ux,u.uy) ?	"all frosty" :	"too dirty");
 		ptext = FALSE;
 		break;
 
@@ -3662,7 +3722,7 @@ doseal()
 	     * the engraving text, because all kinds of setup decisions
 	     * and pre-engraving messages are based upon knowing what type
 	     * of engraving the wand is going to do.  Also, the player
-	     * will have potentially seen "You wrest .." message, and
+	     * will have potentially seen	"You wrest .." message, and
 	     * therefore will know they are using a charge.
 	     */
 	    case WAND_CLASS:
@@ -3686,7 +3746,7 @@ doseal()
 			break;
 
 			/* IMMEDIATE wands */
-			/* If wand is "IMMEDIATE", remember to affect the
+			/* If wand is	"IMMEDIATE", remember to affect the
 			 * previous engraving even if turning to dust.
 			 */
 		    case WAN_STRIKING:
@@ -3697,14 +3757,14 @@ doseal()
 		    case WAN_SLOW_MONSTER:
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The bugs on the %s slow down!",
+				  	"The bugs on the %s slow down!",
 				   surface(u.ux, u.uy));
 			}
 			break;
 		    case WAN_SPEED_MONSTER:
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The bugs on the %s speed up!",
+				  	"The bugs on the %s speed up!",
 				   surface(u.ux, u.uy));
 			}
 			break;
@@ -3760,7 +3820,7 @@ doseal()
 			ptext = TRUE;
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The %s is riddled by bullet holes!",
+				  	"The %s is riddled by bullet holes!",
 				   surface(u.ux, u.uy));
 			}
 			break;
@@ -3770,7 +3830,7 @@ doseal()
 		    case WAN_DEATH:
 			if (!Blind) {
 			   Sprintf(post_engr_text,
-				   "The bugs on the %s stop moving!",
+				  	"The bugs on the %s stop moving!",
 				   surface(u.ux, u.uy));
 			}
 			break;
@@ -3817,7 +3877,7 @@ doseal()
 				"Ice chips fly up from the ice surface!" :
 				"Gravel flies up from the floor.");
 			else
-			    Strcpy(post_engr_text, "You hear drilling!");
+			    Strcpy(post_engr_text,	"You hear drilling!");
 			break;
 
 		    /* type = BURN wands */
@@ -3830,7 +3890,7 @@ doseal()
 			    doknown = TRUE;
 			}
 			Strcpy(post_engr_text,
-				Blind ? "You feel the wand heat up." :
+				Blind ?	"You feel the wand heat up." :
 					"Flames fly from the wand.");
 			break;
 		    case WAN_LIGHTNING:
@@ -3844,10 +3904,10 @@ doseal()
 			}
 			if (!Blind) {
 			    Strcpy(post_engr_text,
-				    "Lightning arcs from the wand.");
+				   	"Lightning arcs from the wand.");
 			    doblind = TRUE;
 			} else
-			    Strcpy(post_engr_text, "You hear crackling!");
+			    Strcpy(post_engr_text,	"You hear crackling!");
 			break;
 
 		    /* type = MARK wands */
@@ -3896,16 +3956,16 @@ doseal()
 				    You("wipe out the message here.");
 				else
 				    Your("%s %s %s.", xname(otmp),
-					 otense(otmp, "get"),
+					 otense(otmp,	"get"),
 					 is_ice(u.ux,u.uy) ?
-					 "frosty" : "dusty");
+						"frosty" :	"dusty");
 				dengr = TRUE;
 			    } else
 				Your("%s can't wipe out this engraving.",
 				     xname(otmp));
 			else{
-			    Your("%s %s %s.", xname(otmp), otense(otmp, "get"),
-				  is_ice(u.ux,u.uy) ? "frosty" : "dusty");
+			    Your("%s %s %s.", xname(otmp), otense(otmp,	"get"),
+				  is_ice(u.ux,u.uy) ?	"frosty" :	"dusty");
 			}
 			break;
 		    default:
@@ -3930,7 +3990,7 @@ doseal()
 	    if (type == ENGRAVE || type == 0)
 		type = HEADSTONE;
 	    else {
-		// ensures the "cannot wipe out" case 
+		// ensures the	"cannot wipe out" case 
 		type = DUST;
 		dengr = FALSE;
 		teleengr = FALSE;
@@ -3965,7 +4025,7 @@ doseal()
 		if(randWard){
 			oep = engr_at(u.ux,u.uy);
 			if(!oep){
-				make_engr_at(u.ux, u.uy, "", moves, DUST);
+				make_engr_at(u.ux, u.uy,	"", moves, DUST);
 				oep = engr_at(u.ux,u.uy);
 			}
 			oep->ward_id = randWard;
@@ -3983,10 +4043,10 @@ doseal()
 
 	if (zapwand && (otmp->spe < 0)) {
 	    pline("%s %sturns to dust.",
-		  The(xname(otmp)), Blind ? "" : "glows violently, then ");
+		  The(xname(otmp)), Blind ?	"" :	"glows violently, then	");
 	    if (!IS_GRAVE(levl[u.ux][u.uy].typ))
 		You("are not going to get anywhere trying to draw in the %s with your dust.",
-		    is_ice(u.ux,u.uy) ? "frost" : "dust");
+		    is_ice(u.ux,u.uy) ?	"frost" :	"dust");
 	    useup(otmp);
 	    ptext = FALSE;
 	}
@@ -4005,9 +4065,9 @@ doseal()
 			(oep->ward_type == MARK) ) {
 			if (!Blind) {
 			You("wipe out the drawing that was %s here.",
-				((oep->ward_type == DUST)  ? "drawn in the dust" :
-				((oep->ward_type == ENGR_BLOOD) ? "painted in blood"   :
-							 "drawn")));
+				((oep->ward_type == DUST)  ?	"drawn in the dust" :
+				((oep->ward_type == ENGR_BLOOD) ?	"painted in blood"   :
+								"drawn")));
 			del_ward(oep);
 			oep = engr_at(u.ux,u.uy);
 			} else
@@ -4016,10 +4076,10 @@ doseal()
 		} else{
 			if ( (type == DUST) || (type == MARK) || (type == ENGR_BLOOD) ) {
 			You(
-			 "cannot wipe out the drawing that is %s the %s here.",
+				"cannot wipe out the drawing that is %s the %s here.",
 			 oep->ward_type == BURN ?
-			   (is_ice(u.ux,u.uy) ? "melted into" : "burned into") :
-			   "engraved in", surface(u.ux,u.uy));
+			   (is_ice(u.ux,u.uy) ?	"melted into" :	"burned into") :
+			  	"engraved in", surface(u.ux,u.uy));
 			return(1);
 			} else
 			if ( (type != oep->ward_type) ) {
@@ -4033,35 +4093,35 @@ doseal()
 	eloc = surface(u.ux,u.uy);
 	switch(type){
 	    default:
-		everb = (oep && !eow ? "add to the weird drawing on" :
-				       "draw strangely on");
+		everb = (oep && !eow ?	"add to the weird drawing on" :
+				      	"draw strangely on");
 		break;
 	    case DUST:
-		everb = (oep && !eow ? "add to the drawing in" :
-				       "draw in");
-		eloc = is_ice(u.ux,u.uy) ? "frost" : "dust";
+		everb = (oep && !eow ?	"add to the drawing in" :
+				      	"draw in");
+		eloc = is_ice(u.ux,u.uy) ?	"frost" :	"dust";
 		break;
 	    case HEADSTONE:
-		everb = (oep && !eow ? "add to the drawing on" :
-				       "draw on");
+		everb = (oep && !eow ?	"add to the drawing on" :
+				      	"draw on");
 		break;
 	    case ENGRAVE:
-		everb = (oep && !eow ? "add to the drawing in" :
-				       "draw in");
+		everb = (oep && !eow ?	"add to the drawing in" :
+				      	"draw in");
 		break;
 	    case BURN:
 		everb = (oep && !eow ?
-			( is_ice(u.ux,u.uy) ? "add to the drawing melted into" :
-					      "add to the drawing burned into") :
-			( is_ice(u.ux,u.uy) ? "melt into" : "burn into"));
+			( is_ice(u.ux,u.uy) ?	"add to the drawing melted into" :
+					     	"add to the drawing burned into") :
+			( is_ice(u.ux,u.uy) ?	"melt into" :	"burn into"));
 		break;
 	    case MARK:
-		everb = (oep && !eow ? "add to the graffiti on" :
-				       "draw on");
+		everb = (oep && !eow ?	"add to the graffiti on" :
+				      	"draw on");
 		break;
 	    case ENGR_BLOOD:
-		everb = (oep && !eow ? "add to the drawing on" :
-				       "draw on");
+		everb = (oep && !eow ?	"add to the drawing on" :
+				      	"draw on");
 		break;
 	}
 
@@ -4081,7 +4141,7 @@ doseal()
 	    if (zapwand) {
 			if (!Blind)
 				pline("%s, then %s.",
-				  Tobjnam(otmp, "glow"), otense(otmp, "fade"));
+				  Tobjnam(otmp,	"glow"), otense(otmp,	"fade"));
 			return(1);
 	    } else {
 			pline(Never_mind);
@@ -4095,11 +4155,11 @@ doseal()
 	switch(type){
 	    default:
 			multi = -(len/10);
-			if (multi) nomovemsg = "You finish your weird drawing.";
+			if (multi) nomovemsg =	"You finish your weird drawing.";
 		break;
 	    case DUST:
 			multi = -(len/10);
-			if (multi) nomovemsg = "You finish drawing in the dust.";
+			if (multi) nomovemsg =	"You finish drawing in the dust.";
 		break;
 	    case HEADSTONE:
 	    case ENGRAVE:
@@ -4107,23 +4167,26 @@ doseal()
 			if ((otmp->oclass == WEAPON_CLASS || spec_ability3(otmp, SPFX3_ENGRV)) &&
 				((otmp->otyp != ATHAME && !spec_ability3(otmp, SPFX3_ENGRV)) || otmp->cursed)) {
 				multi = -len;
-				maxelen = ((otmp->spe + 3) * 2) + 1;
+				if(otmp->otyp == CRYSTAL_SWORD) maxelen = len;
+				else maxelen = ((otmp->spe + 3) * 2) + 1;
 				/* -2 = 3, -1 = 5, 0 = 7, +1 = 9, +2 = 11
 				 */
-				Your("%s dull.", aobjnam(otmp, "get"));
-				if (otmp->unpaid) {
-					struct monst *shkp = shop_keeper(*u.ushops);
-					if (shkp) {
-						You("damage it, you pay for it!");
-						bill_dummy_object(otmp);
+				if(otmp->otyp == CRYSTAL_SWORD){
+					Your("%s dull.", aobjnam(otmp,	"get"));
+					if (otmp->unpaid) {
+						struct monst *shkp = shop_keeper(*u.ushops);
+						if (shkp) {
+							You("damage it, you pay for it!");
+							bill_dummy_object(otmp);
+						}
 					}
+					if (len > maxelen) {
+						multi = -maxelen;
+						otmp->spe = -3;
+					} else if (len > 1)
+						otmp->spe -= len >> 1;
+					else otmp->spe -= 1; /* Prevent infinite engraving */
 				}
-				if (len > maxelen) {
-					multi = -maxelen;
-					otmp->spe = -3;
-				} else if (len > 1)
-					otmp->spe -= len >> 1;
-				else otmp->spe -= 1; /* Prevent infinite engraving */
 		} else
 		    if ( (otmp->oclass == RING_CLASS) ||
 			 (otmp->oclass == GEM_CLASS) )
@@ -4150,11 +4213,11 @@ doseal()
 				if (len > 1) otmp->spe -= len >> 1;
 				else otmp->spe -= 1; /* Prevent infinite grafitti */
 			}
-			if (multi) nomovemsg = "You finish defacing the dungeon.";
+			if (multi) nomovemsg =	"You finish defacing the dungeon.";
 		break;
 	    case ENGR_BLOOD:
 			multi = -(len/10);
-			if (multi) nomovemsg = "You finish scrawling.";
+			if (multi) nomovemsg =	"You finish scrawling.";
 		break;
 	}
 
@@ -4200,7 +4263,7 @@ doseal()
 		}
 	}
 	else{
-		make_engr_at(u.ux, u.uy, "", (moves - multi), DUST); /* absense of text =  dust */
+		make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
 		oep = engr_at(u.ux,u.uy);
 		if(!Hallucination){
 			oep->ward_id = ward;
@@ -4284,64 +4347,233 @@ pick_seal()
 			incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 		}
 	}
-	if(Role_if(PM_EXILE) && quest_status.got_quest && !(u.specialSealsActive&SEAL_DAHLVER_NAR) && u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] < moves){
-		Sprintf(buf,	"%s%s", sealNames[DAHLVER_NAR-FIRST_SEAL], sealTitles[DAHLVER_NAR-FIRST_SEAL]);
+	if(Role_if(PM_EXILE) && quest_status.got_quest){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[DAHLVER_NAR-FIRST_SEAL], 
+				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[DAHLVER_NAR-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[DAHLVER_NAR-FIRST_SEAL], 
+				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[DAHLVER_NAR-FIRST_SEAL], 
+				sealTitles[DAHLVER_NAR-FIRST_SEAL]
+			);
+		}
 		any.a_int = DAHLVER_NAR;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && quest_status.killed_nemesis && !(u.specialSealsActive&SEAL_ACERERAK) && u.sealTimeout[ACERERAK-FIRST_SEAL] < moves){
-		Sprintf(buf,	"%s%s", sealNames[ACERERAK-FIRST_SEAL], sealTitles[ACERERAK-FIRST_SEAL]);
+	if(Role_if(PM_EXILE) && quest_status.killed_nemesis){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[ACERERAK-FIRST_SEAL], 
+				u.sealTimeout[ACERERAK-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[ACERERAK-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[ACERERAK-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[ACERERAK-FIRST_SEAL], 
+				u.sealTimeout[ACERERAK-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[ACERERAK-FIRST_SEAL], 
+				sealTitles[ACERERAK-FIRST_SEAL]
+			);
+		}
 		any.a_int = ACERERAK;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_COSMOS && !(u.specialSealsActive&SEAL_COSMOS) && u.sealTimeout[COSMOS-FIRST_SEAL] < moves){
-		Sprintf(buf,	"%s%s", sealNames[COSMOS-FIRST_SEAL], sealTitles[COSMOS-FIRST_SEAL]);
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_COSMOS){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[COSMOS-FIRST_SEAL], 
+				u.sealTimeout[COSMOS-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[COSMOS-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[COSMOS-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[COSMOS-FIRST_SEAL], 
+				u.sealTimeout[COSMOS-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[COSMOS-FIRST_SEAL], 
+				sealTitles[COSMOS-FIRST_SEAL]
+			);
+		}
 		any.a_int = COSMOS;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_MISKA && !(u.specialSealsActive&SEAL_MISKA) && u.sealTimeout[MISKA-FIRST_SEAL] < moves){
-		Sprintf(buf,	"%s%s", sealNames[MISKA-FIRST_SEAL], sealTitles[MISKA-FIRST_SEAL]);
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_MISKA){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[MISKA-FIRST_SEAL], 
+				u.sealTimeout[MISKA-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[MISKA-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[MISKA-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[MISKA-FIRST_SEAL], 
+				u.sealTimeout[MISKA-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[MISKA-FIRST_SEAL], 
+				sealTitles[MISKA-FIRST_SEAL]
+			);
+		}
 		any.a_int = MISKA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIARTH && !(u.specialSealsActive&SEAL_NUDZIARTH) && u.sealTimeout[NUDZIARTH-FIRST_SEAL] < moves){
-		Sprintf(buf,	"%s%s", sealNames[NUDZIARTH-FIRST_SEAL], sealTitles[NUDZIARTH-FIRST_SEAL]);
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIARTH){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[NUDZIARTH-FIRST_SEAL], 
+				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[NUDZIARTH-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[NUDZIARTH-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[NUDZIARTH-FIRST_SEAL], 
+				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[NUDZIARTH-FIRST_SEAL], 
+				sealTitles[NUDZIARTH-FIRST_SEAL]
+			);
+		}
 		any.a_int = NUDZIARTH;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_ALIGNMENT_THING && !(u.specialSealsActive&SEAL_ALIGNMENT_THING) && u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] < moves){
-		Sprintf(buf,	"%s%s", sealNames[ALIGNMENT_THING-FIRST_SEAL], sealTitles[ALIGNMENT_THING-FIRST_SEAL]);
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_ALIGNMENT_THING){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[ALIGNMENT_THING-FIRST_SEAL], 
+				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[ALIGNMENT_THING-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[ALIGNMENT_THING-FIRST_SEAL], 
+				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[ALIGNMENT_THING-FIRST_SEAL], 
+				sealTitles[ALIGNMENT_THING-FIRST_SEAL]
+			);
+		}
 		any.a_int = ALIGNMENT_THING;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_UNKNOWN_GOD && !(u.specialSealsActive&SEAL_UNKNOWN_GOD) && u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] < moves){
-		Sprintf(buf,	"%s%s", sealNames[UNKNOWN_GOD-FIRST_SEAL], sealTitles[UNKNOWN_GOD-FIRST_SEAL]);
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_UNKNOWN_GOD){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[UNKNOWN_GOD-FIRST_SEAL], 
+				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[UNKNOWN_GOD-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[UNKNOWN_GOD-FIRST_SEAL], 
+				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[UNKNOWN_GOD-FIRST_SEAL], 
+				sealTitles[UNKNOWN_GOD-FIRST_SEAL]
+			);
+		}
 		any.a_int = UNKNOWN_GOD;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.ulevel == 30 && !(u.specialSealsActive&SEAL_NUMINA)){
-		Sprintf(buf,	"%s%s", sealNames[NUMINA-FIRST_SEAL], sealTitles[NUMINA-FIRST_SEAL]);
+	if(u.specialSealsKnown&SEAL_BLACK_WEB){
+		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+			Sprintf(buf,	"%s (active; timeout:%d)", 
+				sealNames[BLACK_WEB-FIRST_SEAL], 
+				u.sealTimeout[BLACK_WEB-FIRST_SEAL] - moves
+			);
+		} else if(u.sealsActive&seal_flag) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[BLACK_WEB-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[BLACK_WEB-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%d)", 
+				sealNames[BLACK_WEB-FIRST_SEAL], 
+				u.sealTimeout[BLACK_WEB-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[BLACK_WEB-FIRST_SEAL], 
+				sealTitles[BLACK_WEB-FIRST_SEAL]
+			);
+		}
+		any.a_int = BLACK_WEB;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.ulevel == 30){
+		if((u.sealsActive&seal_flag)){
+			Sprintf(buf,	"%s (active)", 
+				sealNames[NUMINA-FIRST_SEAL]
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[NUMINA-FIRST_SEAL], 
+				sealTitles[NUMINA-FIRST_SEAL]
+			);
+		}
 		any.a_int = NUMINA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -4525,6 +4757,7 @@ struct engr *ep;
 
 /* Epitaphs for random headstones */
 static const char *epitaphs[] = {
+	"Genuine Exploding Gravestone.  (c)Acme Gravestones Inc.",
 	"Rest in peace",
 	"R.I.P.",
 	"Rest In Pieces",
@@ -4560,371 +4793,383 @@ static const char *epitaphs[] = {
 	"Hold my beer and watch this!", /* Rango */
 	"Of course, you realize, this means war.",
 	
+	"FIQ:  One step from divinity.",
+	
 	"Package contains: One posthumous worm feeder",
 	
-        "Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
-        "Applaud, my friends, the comedy is finished.",
-        "At last... a nice long sleep.",
-        "Audi Partem Alteram",
-        "Basil, assaulted by bears",
-        "Burninated",
-        "Confusion will be my epitaph",
-        "Do not open until Christmas",
-        "Don't be daft, they couldn't hit an elephant at this dist-",
-        "Don't forget to stop and smell the roses",
-        "Don't let this happen to you!",
-        "Dulce et decorum est pro patria mori",
-        "Et in Arcadia ego",
-        "Fatty and skinny went to bed.  Fatty rolled over and skinny was dead.  Skinny Smith 1983-2000.",
-        "Finally I am becoming stupider no more",
-        "Follow me to hell",
-        "...for famous men have the whole earth as their memorial",
-        "Game over, man.  Game over.",
-        "Go away!  I'm trying to take a nap in here!  Bloody adventurers...",
-        "Gone fishin'",
-        "Good night, sweet prince: And flights of angels sing thee to thy rest!",
-        "Go Team Ant!",
-        "He farmed his way here",
-        "Here lies a programmer.  Killed by a fatal error.",
-        "Here lies Bob - decided to try an acid blob",
-        "Here lies Dudley, killed by another %&#@#& newt.",
-        "Here lies Gregg, choked on an egg",
-        "Here lies Lies. It's True",
-        "Here lies The Lady's maid, died of a Vorpal Blade",
-        "Here lies the left foot of Jack, killed by a land mine.  Let us know if you find any more of him",
-        "He waited too long",
-        "I'd rather be sailing",
-        "If a man's deeds do not outlive him, of what value is a mark in stone?",
-        "I'm gonna make it!",
-        "I took both pills!",
-        "I will survive!",
-        "Killed by a black dragon -- This grave is empty",
-        "Let me out of here!",
-        "Lookin' good, Medusa.",
-        "Mrs. Smith, choked on an apple.  She left behind grieving husband, daughter, and granddaughter.",
-        "Nobody believed her when she said her feet were killing her",
-        "No!  I don't want to see my damn conduct!",
-        "One corpse, sans head",
-        "On the whole, I'd rather be in Minetown",
-        "On vacation",
-        "Oops.",
-        "Out to Lunch",
-        "SOLD",
-        "Someone set us up the bomb!",
-        "Take my stuff, I don't need it anymore",
-        "Taking a year dead for tax reasons",
-        "The reports of my demise are completely accurate",
-        "(This space for sale)",
-        "This was actually just a pit, but since there was a corpse, we filled it",
-        "This way to the crypt",
-        "Tu quoque, Brute?",
-        "VACANCY",
-        "Welcome!",
-        "Wish you were here!",
-        "Yea, it got me too",
-        "You should see the other guy",
-        "...and they made me engrave my own headstone too!",
-        "...but the blood has stopped pumping and I am left to decay...",
-        "<Expletive Deleted>",
-        "A masochist is never satisfied.",
-        "Ach, 'twas a wee monster in the loch",
-        "Adapt.  Enjoy.  Survive.",
-        "Adventure, hah!  Excitement, hah!",
-        "After all, what are friends for...",
-        "After this, nothing will shock me",
-        "After three days, fish and guests stink",
-        "Age and treachery will always overcome youth and skill",
-        "Ageing is not so bad.  The real killer is when you stop.",
-        "Ain't I a stinker?",
-        "Algernon",
-        "All else failed...",
-        "All hail RNG",
-        "All right, we'll call it a draw!",
-        "All's well that end well",
-        "Alone at last!",
-        "Always attack a floating eye from behind!",
-        "Am I having fun yet?",
-        "And I can still crawl, I'm not dead yet!",
-        "And all I wanted was a free lunch",
-        "And all of the signs were right there on your face",
-        "And don't give me that innocent look either!",
-        "And everyone died.  Boo hoo hoo.",
-        "And here I go again...",
-        "And nobody cares until somebody famous dies...",
-        "And so it ends?",
-        "And so... it begins.",
-        "And sometimes the bear eats you.",
-        "And then 'e nailed me 'ead to the floor!",
-        "And they said it couldn't be done!",
-        "And what do I look like?  The living?",
-        "And yes, it was ALL his fault!",
-        "And you said it was pretty here...",
-        "Another lost soul",
-        "Any day above ground is a good day!",
-        "Any more of this and I'll die of a stroke before I'm 30.",
-        "Anybody seen my head?",
-        "Anyone for deathmatch?",
-        "Anything for a change.",
-        "Anything that kills you makes you ... well, dead",
-        "Anything worth doing is worth overdoing.",
-        "Are unicorns supposedly peaceful if you're a virgin?  Hah!",
-        "Are we all being disintegrated, or is it just me?",
-        "At least I'm good at something",
-        "Attempted suicide",
+	"Used no net, knew no fear, made mis-step, wound up here.", /*Balder's Gate gravestones*/
+		"Here lies the body of Rob.  If not, please notify the undertakers at once.",
+		"When I can no longer stand alone, then it will be time to die.",
+		"I feel my body rising towards the bright light...wait, now it's falling, What the HELL!",
+		"Reader if cash thou art in want of any, dig four feet deep and find a penny",
+		"A lesson learned. Too bad I'm dead.",
+	
+	"I beat you in the human race.", /*Fable*/
+	
+	"Nobody expects the Spanish Inquisition!", /*Monty Python*/
+	
+       	"Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
+       	"Applaud, my friends, the comedy is finished.",
+       	"At last... a nice long sleep.",
+       	"Audi Partem Alteram",
+       	"Basil, assaulted by bears",
+       	"Burninated",
+       	"Confusion will be my epitaph",
+       	"Do not open until Christmas",
+       	"Don't be daft, they couldn't hit an elephant at this dist-",
+       	"Don't forget to stop and smell the roses",
+       	"Don't let this happen to you!",
+       	"Dulce et decorum est pro patria mori",
+       	"Et in Arcadia ego",
+       	"Fatty and skinny went to bed.  Fatty rolled over and skinny was dead.  Skinny Smith 1983-2000.",
+       	"Finally I am becoming stupider no more",
+       	"Follow me to hell",
+       	"...for famous men have the whole earth as their memorial",
+       	"Game over, man.  Game over.",
+       	"Go away!  I'm trying to take a nap in here!  Bloody adventurers...",
+       	"Gone fishin'",
+       	"Good night, sweet prince: And flights of angels sing thee to thy rest!",
+       	"Go Team Ant!",
+       	"He farmed his way here",
+       	"Here lies a programmer.  Killed by a fatal error.",
+       	"Here lies Bob - decided to try an acid blob",
+       	"Here lies Dudley, killed by another %&#@#& newt.",
+       	"Here lies Gregg, choked on an egg",
+       	"Here lies Lies. It's True",
+       	"Here lies The Lady's maid, died of a Vorpal Blade",
+       	"Here lies the left foot of Jack, killed by a land mine.  Let us know if you find any more of him",
+       	"He waited too long",
+       	"I'd rather be sailing",
+       	"If a man's deeds do not outlive him, of what value is a mark in stone?",
+       	"I'm gonna make it!",
+       	"I took both pills!",
+       	"I will survive!",
+       	"Killed by a black dragon -- This grave is empty",
+       	"Let me out of here!",
+       	"Lookin' good, Medusa.",
+       	"Mrs. Smith, choked on an apple.  She left behind grieving husband, daughter, and granddaughter.",
+       	"Nobody believed her when she said her feet were killing her",
+       	"No!  I don't want to see my damn conduct!",
+       	"One corpse, sans head",
+       	"On the whole, I'd rather be in Minetown",
+       	"On vacation",
+       	"Oops.",
+       	"Out to Lunch",
+       	"SOLD",
+       	"Someone set us up the bomb!",
+       	"Take my stuff, I don't need it anymore",
+       	"Taking a year dead for tax reasons",
+       	"The reports of my demise are completely accurate",
+       	"(This space for sale)",
+       	"This was actually just a pit, but since there was a corpse, we filled it",
+       	"This way to the crypt",
+       	"Tu quoque, Brute?",
+       	"VACANCY",
+       	"Welcome!",
+       	"Wish you were here!",
+       	"Yea, it got me too",
+       	"You should see the other guy",
+       	"...and they made me engrave my own headstone too!",
+       	"...but the blood has stopped pumping and I am left to decay...",
+       	"<Expletive Deleted>",
+       	"A masochist is never satisfied.",
+       	"Ach, 'twas a wee monster in the loch",
+       	"Adapt.  Enjoy.  Survive.",
+       	"Adventure, hah!  Excitement, hah!",
+       	"After all, what are friends for...",
+       	"After this, nothing will shock me",
+       	"After three days, fish and guests stink",
+       	"Age and treachery will always overcome youth and skill",
+       	"Ageing is not so bad.  The real killer is when you stop.",
+       	"Ain't I a stinker?",
+       	"Algernon",
+       	"All else failed...",
+       	"All hail RNG",
+       	"All right, we'll call it a draw!",
+       	"All's well that end well",
+       	"Alone at last!",
+       	"Always attack a floating eye from behind!",
+       	"Am I having fun yet?",
+       	"And I can still crawl, I'm not dead yet!",
+       	"And all I wanted was a free lunch",
+       	"And all of the signs were right there on your face",
+       	"And don't give me that innocent look either!",
+       	"And everyone died.  Boo hoo hoo.",
+       	"And here I go again...",
+       	"And nobody cares until somebody famous dies...",
+       	"And so it ends?",
+       	"And so... it begins.",
+       	"And sometimes the bear eats you.",
+       	"And then 'e nailed me 'ead to the floor!",
+       	"And they said it couldn't be done!",
+       	"And what do I look like?  The living?",
+       	"And yes, it was ALL his fault!",
+       	"And you said it was pretty here...",
+       	"Another lost soul",
+       	"Any day above ground is a good day!",
+       	"Any more of this and I'll die of a stroke before I'm 30.",
+       	"Anybody seen my head?",
+       	"Anyone for deathmatch?",
+       	"Anything for a change.",
+       	"Anything that kills you makes you ... well, dead",
+       	"Anything worth doing is worth overdoing.",
+       	"Are unicorns supposedly peaceful if you're a virgin?  Hah!",
+       	"Are we all being disintegrated, or is it just me?",
+       	"At least I'm good at something",
+       	"Attempted suicide",
 	"Auri sacra fames",
-        "Auribus teneo lupum",
-        "Be prepared",
-        "Beauty survives",
-        "Been Here. Now Gone. Had a Good Time.",
-        "Been through Hell, eh?  What did you bring me?",
-        "Beg your pardon, didn't recognize you, I've changed a lot.",
-        "Being dead builds character",
-        "Beloved daughter, a treasure, buried here.",
-        "Best friends come and go...  Mine just die.",
-        "Better be dead than a fat slave",
-        "Better luck next time",
-        "Beware of Discordians bearing answers",
-        "Beware the ...",
-        "Bloody Hell...",
-        "Bloody barbarians!",
-        "Blown upward out of sight: He sought the leak by candlelight",
-        "Brains... Brains... Fresh human brains...",
-        "Buried the cat.  Took an hour.  Damn thing kept fighting.",
-        "But I disarmed the trap!",
-        "CONNECT 1964 - NO CARRIER 1994",
-        "Call me if you need my phone number!",
-        "Can YOU fly?",
-        "Can you believe that thing is STILL moving?",
-        "Can you come up with some better ending for this?",
-        "Can you feel anything when I do this?",
-        "Can you give me mouth to mouth, you just took my breath away.",
-        "Can't I just have a LITTLE peril?",
-        "Can't eat, can't sleep, had to bury the husband here.",
-        "Can't you hit me?!",
-        "Chaos, panic and disorder.  My work here is done.",
-        "Check enclosed.",
-        "Check this out!  It's my brain!",
-        "Chivalry is only reasonably dead",
-        "Coffin for sale.  Lifetime guarantee.",
-        "Come Monday, I'll be all right.",
-        "Come and see the violence inherent in the system",
-        "Come back here!  I'll bite your bloody knees off!",
-        "Commodore Business Machines, Inc.   Died for our sins.",
-        "Complain to one who can help you",
-        "Confess my sins to god?  Which one?",
-        "Confusion will be my epitaph",
-        "Cooties?  Ain't no cooties on me!",
-        "Could somebody get this noose off me?",
-        "Could you check again?  My name MUST be there.",
-        "Could you please take a breath mint?",
-        "Couldn't I be sedated for this?",
-        "Courage is looking at your setbacks with serenity",
-        "Cover me, I'm going in!",
-        "Crash course in brain surgery",
-        "Cross my fingers for me.",
-        "Curse god and die",
-        "Cut to fit",
-        "De'Ath",
-        "Dead Again?  Pardon me for not getting it right the first time!",
-        "Dead and loving every moment!",
-        "Dear wife of mine. Died of a broken heart, after I took it out of her.",
-        "Don't tread on me!",
-        "Dragon? What dragon?",
-        "Drawn and quartered",
-        "Either I'm dead or my watch has stopped.",
-        "Eliza -- Was I really alive, or did I just think I was?",
-        "Elvis",
-        "Enter not into the path of the wicked",
-        "Eris?  I don't need Eris",
-        "Eternal Damnation, Come and stay a long while!",
-        "Even The Dead pay taxes (and they aren't Grateful).",
-        "Even a tomb stone will say good things when you're down!",
-        "Ever notice that live is evil backwards?",
-        "Every day is starting to look like Monday",
-        "Every day, in every way, I am getting better and better.",
-        "Every survival kit should include a sense of humor",
-        "Evil I did dwell;  lewd did I live",
-        "Ex post fucto",
-        "Excellent day to have a rotten day.",
-        "Excuse me for not standing up.",
-        "Experience isn't everything. First, You've got to survive",
-        "First shalt thou pull out the Holy Pin",
-        "For a Breath, I Tarry...",
-        "For recreational use only.",
-        "For sale: One soul, slightly used. Asking for 3 wishes.",
-        "For some moments in life, there are no words.",
-        "Forget Disney World, I'm going to Hell!",
-        "Forget about the dog, Beware of my wife.",
-        "Funeral - Real fun.",
-        "Gawd, it's depressing in here, isn't it?",
-        "Genuine Exploding Gravestone.  (c)Acme Gravestones Inc.",
-        "Get back here!  I'm not finished yet...",
-        "Go ahead, I dare you to!",
-        "Go ahead, it's either you or him.",
-        "Goldilocks -- This casket is just right",
-        "Gone But Not Forgotten",
-        "Gone Underground For Good",
-        "Gone away owin' more than he could pay.",
-        "Gone, but not forgiven",
-        "Got a life. Didn't know what to do with it.",
-        "Grave?  But I was cremated!",
-        "Greetings from Hell - Wish you were here.",
-        "HELP! It's dark in here... Oh, my eyes are closed - sorry",
-        "Ha! I NEVER pay income tax!",
-        "Have you come to raise the dead?",
-        "Having a good time can be deadly.",
-        "Having a great time. Where am I exactly??",
-        "He died of the flux.",
-        "He died today... May we rest in peace!",
-        "He got the upside, I got the downside.",
-        "He lost his face when he was beheaded.",
-        "He missed me first.",
-        "He's not dead, he just smells that way.",
-        "Help! I've fallen and I can't get up!",
-        "Help, I can't wake up!",
-        "Here lies Pinocchio",
-        "Here lies the body of John Round. Lost at sea and never found.",
-        "Here there be dragons",
-        "Hey, I didn't write this stuff!",
+       	"Auribus teneo lupum",
+       	"Be prepared",
+       	"Beauty survives",
+       	"Been Here. Now Gone. Had a Good Time.",
+       	"Been through Hell, eh?  What did you bring me?",
+       	"Beg your pardon, didn't recognize you, I've changed a lot.",
+       	"Being dead builds character",
+       	"Beloved daughter, a treasure, buried here.",
+       	"Best friends come and go...  Mine just die.",
+       	"Better be dead than a fat slave",
+       	"Better luck next time",
+       	"Beware of Discordians bearing answers",
+       	"Beware the ...",
+       	"Bloody Hell...",
+       	"Bloody barbarians!",
+       	"Blown upward out of sight: He sought the leak by candlelight",
+       	"Brains... Brains... Fresh human brains...",
+       	"Buried the cat.  Took an hour.  Damn thing kept fighting.",
+       	"But I disarmed the trap!",
+       	"CONNECT 1964 - NO CARRIER 1994",
+       	"Call me if you need my phone number!",
+       	"Can YOU fly?",
+       	"Can you believe that thing is STILL moving?",
+       	"Can you come up with some better ending for this?",
+       	"Can you feel anything when I do this?",
+       	"Can you give me mouth to mouth, you just took my breath away.",
+       	"Can't I just have a LITTLE peril?",
+       	"Can't eat, can't sleep, had to bury the husband here.",
+       	"Can't you hit me?!",
+       	"Chaos, panic and disorder.  My work here is done.",
+       	"Check enclosed.",
+       	"Check this out!  It's my brain!",
+       	"Chivalry is only reasonably dead",
+       	"Coffin for sale.  Lifetime guarantee.",
+       	"Come Monday, I'll be all right.",
+       	"Come and see the violence inherent in the system",
+       	"Come back here!  I'll bite your bloody knees off!",
+       	"Commodore Business Machines, Inc.   Died for our sins.",
+       	"Complain to one who can help you",
+       	"Confess my sins to god?  Which one?",
+       	"Confusion will be my epitaph",
+       	"Cooties?  Ain't no cooties on me!",
+       	"Could somebody get this noose off me?",
+       	"Could you check again?  My name MUST be there.",
+       	"Could you please take a breath mint?",
+       	"Couldn't I be sedated for this?",
+       	"Courage is looking at your setbacks with serenity",
+       	"Cover me, I'm going in!",
+       	"Crash course in brain surgery",
+       	"Cross my fingers for me.",
+       	"Curse god and die",
+       	"Cut to fit",
+       	"De'Ath",
+       	"Dead Again?  Pardon me for not getting it right the first time!",
+       	"Dead and loving every moment!",
+       	"Dear wife of mine. Died of a broken heart, after I took it out of her.",
+       	"Don't tread on me!",
+       	"Dragon? What dragon?",
+       	"Drawn and quartered",
+       	"Either I'm dead or my watch has stopped.",
+       	"Eliza -- Was I really alive, or did I just think I was?",
+       	"Elvis",
+       	"Enter not into the path of the wicked",
+       	"Eris?  I don't need Eris",
+       	"Eternal Damnation, Come and stay a long while!",
+       	"Even The Dead pay taxes (and they aren't Grateful).",
+       	"Even a tomb stone will say good things when you're down!",
+       	"Ever notice that live is evil backwards?",
+       	"Every day is starting to look like Monday",
+       	"Every day, in every way, I am getting better and better.",
+       	"Every survival kit should include a sense of humor",
+       	"Evil I did dwell;  lewd did I live",
+       	"Ex post fucto",
+       	"Excellent day to have a rotten day.",
+       	"Excuse me for not standing up.",
+       	"Experience isn't everything. First, You've got to survive",
+       	"First shalt thou pull out the Holy Pin",
+       	"For a Breath, I Tarry...",
+       	"For recreational use only.",
+       	"For sale: One soul, slightly used. Asking for 3 wishes.",
+       	"For some moments in life, there are no words.",
+       	"Forget Disney World, I'm going to Hell!",
+       	"Forget about the dog, Beware of my wife.",
+       	"Funeral - Real fun.",
+       	"Gawd, it's depressing in here, isn't it?",
+       	"Get back here!  I'm not finished yet...",
+       	"Go ahead, I dare you to!",
+       	"Go ahead, it's either you or him.",
+       	"Goldilocks -- This casket is just right",
+       	"Gone But Not Forgotten",
+       	"Gone Underground For Good",
+       	"Gone away owin' more than he could pay.",
+       	"Gone, but not forgiven",
+       	"Got a life. Didn't know what to do with it.",
+       	"Grave?  But I was cremated!",
+       	"Greetings from Hell - Wish you were here.",
+       	"HELP! It's dark in here... Oh, my eyes are closed - sorry",
+       	"Ha! I NEVER pay income tax!",
+       	"Have you come to raise the dead?",
+       	"Having a good time can be deadly.",
+       	"Having a great time. Where am I exactly??",
+       	"He died of the flux.",
+       	"He died today... May we rest in peace!",
+       	"He got the upside, I got the downside.",
+       	"He lost his face when he was beheaded.",
+       	"He missed me first.",
+       	"He's not dead, he just smells that way.",
+       	"Help! I've fallen and I can't get up!",
+       	"Help, I can't wake up!",
+       	"Here lies Pinocchio",
+       	"Here lies the body of John Round. Lost at sea and never found.",
+       	"Here there be dragons",
+       	"Hey, I didn't write this stuff!",
 	"Hodie mihi, cras tibi",
-        "Hold my calls",
-        "Home Sweet Hell",
-        "Humpty Dumpty, a Bad Egg.  He was pushed off the wall.",
-        "I KNEW this would happen if I lived long enough.",
-        "I TOLD you I was sick!",
-        "I ain't broke but I am badly bent.",
-        "I ain't old. I'm chronologically advantaged.",
-        "I am NOT a vampire. I just like to bite..nibble, really!",
-        "I am here. Wish you were fine.",
-        "I am not dead yet, but watch for further reports.",
-        "I believe them bones are me.",
-        "I broke his brain.",
-        "I can feel it.  My mind.  It's going.  I can feel it.",
-        "I can't go to Hell. They're afraid I'm gonna take over!",
-        "I can't go to hell, they don't want me.",
-        "I didn't believe in reincarnation the last time, either.",
-        "I didn't mean it when I said 'Bite me'",
-        "I died laughing",
-        "I disbelieved in reincarnation in my last life, too.",
-        "I hacked myself to death",
-        "I have all the time in the world",
-        "I knew I'd find a use for this gravestone!",
-        "I know my mind. And it's around here someplace.",
-        "I lied!  I'll never be alright!",
-        "I like it better in the dark.",
-        "I like to be here when I can.",
-        "I may rise but I refuse to shine.",
-        "I never get any either.",
-        "I said hit HIM with the fireball, not me!",
-        "I told you I would never say goodbye.",
-        "I used to be amusing. Now I'm just disgusting.",
-        "I used up all my sick days, so now I'm calling in dead.",
-        "I was killed by <illegible scrawl>",
-        "I was somebody. Who, is no business of yours.",
-        "I will not go quietly.",
-        "I'd give you a piece of my mind... but I can't find it.",
-        "I'd rather be breathing",
-        "I'll be back!",
-        "I'll be mellow when I'm dead. For now, let's PARTY!",
-        "I'm doing this only for tax purposes.",
-        "I'm not afraid of Death!  What's he gonna do? Kill me?",
-        "I'm not getting enough money, so I'm not going to engrave anything useful here.",
-        "I'm not saying anything.",
-        "I'm weeth stupeed --->",
-        "If you thought you had problems...",
-        "Ignorance kills daily.",
-        "Ignore me... I'm just here for my looks!",
-        "Ilene Toofar -- Fell off a cliff",
-        "Is that all?",
-        "Is there life before Death?",
-        "Is this a joke, or a grave matter?",
-        "It happens sometimes. People just explode.",
-        "It must be Thursday. I never could get the hang of Thursdays.",
-        "It wasn't a fair fight",
-        "It wasn't so easy.",
-        "It's Loot, Pillage and THEN Burn...",
-        "Just doing my job here",
-        "Killed by diarrhea of mouth and constipation of brain.",
-        "Let her RIP",
-        "Let it be; I am dead.",
-        "Let's play Hide the Corpse",
-        "Life is NOT a dream",
-        "Madge Ination -- It wasn't all in my head",
-        "Meet me in Heaven",
-        "Move on, there's nothing to see here.",
-        "Mr. Flintstone -- Yabba-dabba-done",
-        "My heart is not in this",
-        "No one ever died from it",
-        "No, you want room 12A, next door.",
-        "Nope.  No trap on that chest.  I swear.",
-        "Not again!",
-        "Not every soil can bear all things",
-        "Now I have a life",
-        "Now I lay thee down to sleep... wanna join me?",
-        "OK, here is a question: Where ARE your tanlines?",
-        "Obesa Cantavit",
-        "Oh! An untimely death.",
-        "Oh, by the way, how was my funeral?",
-        "Oh, honey..I missed you! She said, and fired again.",
-        "Ok, so the light does go off. Now let me out of here.",
-        "One stone brain",
-        "Ooh! Somebody STOP me!",
-        "Oops!",
-        "Out for the night.  Leave a message.",
-        "Ow!  Do that again!",
-        "Pardon my dust.",
-        "Part of me still works.",
-        "Please, not in front of those orcs!",
-        "Prepare to meet me in Heaven",
-        "R2D2 -- Rest, Tin Piece",
-        "Relax.  Nothing ever happens on the first level.",
-        "Res omnia mea culpa est",
-        "Rest In Pieces",
-        "Rest, rest, perturbed spirit.",
-        "Rip Torn",
-        "She always said her feet were killing her but nobody believed her.",
-        "She died of a chest cold.",
-        "So let it be written, so let it be done!",
-        "So then I says, How do I know you're the real angel of death?",
-        "Some patients insist on dying.",
-        "Some people have it dead easy, don't they?",
-        "Some things are better left buried.",
-        "Sure, trust me, I'm a lawyer...",
-        "Thank God I wore my corset, because I think my sides have split.",
-        "That is all",
-        "The Gods DO have a sense of humor: I'm living proof!",
-        "The frog's dead. He Kermitted suicide.",
-        "This dungeon is a pushover",
-        "This elevator doesn't go to Heaven",
-        "This gravestone is shareware. To register, please send me 10 zorkmids",
-        "This gravestone provided by The Yendorian Grave Services Inc.",
-        "This is not an important part of my life.",
-        "This one's on me.",
-        "This side up",
-        "Tim Burr -- Smashed by a tree",
-        "Tone it down a bit, I'm trying to get some rest here.",
-        "Virtually Alive",
-        "We Will Meet Again.",
-        "Weep not, he is at rest",
-        "Welcome to Dante's.  What level please?",
-        "Well, at least they listened to my sermon...",
-        "Went to be an angel.",
-        "What are you doing over there?",
-        "What are you smiling at?",
-        "What can you say, Death's got appeal...!",
-        "What health care?",
-        "What pit?",
-        "When the gods want to punish you, they answer your prayers.",
-        "Where e'er you be let your wind go free. Keeping it in was the death of me!",
-        "Where's my refund?",
-        "Will let you know for sure in a day or two...",
-        "Wizards are wimps",
-        "Worms at work, do not disturb!",
-        "Would you mind moving a bit?  I'm short of breath down here.",
-        "Would you quit being evil over my shoulder?",
-        "Ya really had me going baby, but now I'm gone.",
-        "Yes Dear, just a few more minutes...",
-        "You said it wasn't poisonous!",
+       	"Hold my calls",
+       	"Home Sweet Hell",
+       	"Humpty Dumpty, a Bad Egg.  He was pushed off the wall.",
+       	"I KNEW this would happen if I lived long enough.",
+       	"I TOLD you I was sick!",
+       	"I ain't broke but I am badly bent.",
+       	"I ain't old. I'm chronologically advantaged.",
+       	"I am NOT a vampire. I just like to bite..nibble, really!",
+       	"I am here. Wish you were fine.",
+       	"I am not dead yet, but watch for further reports.",
+       	"I believe them bones are me.",
+       	"I broke his brain.",
+       	"I can feel it.  My mind.  It's going.  I can feel it.",
+       	"I can't go to Hell. They're afraid I'm gonna take over!",
+       	"I can't go to hell, they don't want me.",
+       	"I didn't believe in reincarnation the last time, either.",
+       	"I didn't mean it when I said 'Bite me'",
+       	"I died laughing",
+       	"I disbelieved in reincarnation in my last life, too.",
+       	"I hacked myself to death",
+       	"I have all the time in the world",
+       	"I knew I'd find a use for this gravestone!",
+       	"I know my mind. And it's around here someplace.",
+       	"I lied!  I'll never be alright!",
+       	"I like it better in the dark.",
+       	"I like to be here when I can.",
+       	"I may rise but I refuse to shine.",
+       	"I never get any either.",
+       	"I said hit HIM with the fireball, not me!",
+       	"I told you I would never say goodbye.",
+       	"I used to be amusing. Now I'm just disgusting.",
+       	"I used up all my sick days, so now I'm calling in dead.",
+       	"I was killed by <illegible scrawl>",
+       	"I was somebody. Who, is no business of yours.",
+       	"I will not go quietly.",
+       	"I'd give you a piece of my mind... but I can't find it.",
+       	"I'd rather be breathing",
+       	"I'll be back!",
+       	"I'll be mellow when I'm dead. For now, let's PARTY!",
+       	"I'm doing this only for tax purposes.",
+       	"I'm not afraid of Death!  What's he gonna do? Kill me?",
+       	"I'm not getting enough money, so I'm not going to engrave anything useful here.",
+       	"I'm not saying anything.",
+       	"I'm weeth stupeed --->",
+       	"If you thought you had problems...",
+       	"Ignorance kills daily.",
+       	"Ignore me... I'm just here for my looks!",
+       	"Ilene Toofar -- Fell off a cliff",
+       	"Is that all?",
+       	"Is there life before Death?",
+       	"Is this a joke, or a grave matter?",
+       	"It happens sometimes. People just explode.",
+       	"It must be Thursday. I never could get the hang of Thursdays.",
+       	"It wasn't a fair fight",
+       	"It wasn't so easy.",
+       	"It's Loot, Pillage and THEN Burn...",
+       	"Just doing my job here",
+       	"Killed by diarrhea of mouth and constipation of brain.",
+       	"Let her RIP",
+       	"Let it be; I am dead.",
+       	"Let's play Hide the Corpse",
+       	"Life is NOT a dream",
+       	"Madge Ination -- It wasn't all in my head",
+       	"Meet me in Heaven",
+       	"Move on, there's nothing to see here.",
+       	"Mr. Flintstone -- Yabba-dabba-done",
+       	"My heart is not in this",
+       	"No one ever died from it",
+       	"No, you want room 12A, next door.",
+       	"Nope.  No trap on that chest.  I swear.",
+       	"Not again!",
+       	"Not every soil can bear all things",
+       	"Now I have a life",
+       	"Now I lay thee down to sleep... wanna join me?",
+       	"OK, here is a question: Where ARE your tanlines?",
+       	"Obesa Cantavit",
+       	"Oh! An untimely death.",
+       	"Oh, by the way, how was my funeral?",
+       	"Oh, honey..I missed you! She said, and fired again.",
+       	"Ok, so the light does go off. Now let me out of here.",
+       	"One stone brain",
+       	"Ooh! Somebody STOP me!",
+       	"Oops!",
+       	"Out for the night.  Leave a message.",
+       	"Ow!  Do that again!",
+       	"Pardon my dust.",
+       	"Part of me still works.",
+       	"Please, not in front of those orcs!",
+       	"Prepare to meet me in Heaven",
+       	"R2D2 -- Rest, Tin Piece",
+       	"Relax.  Nothing ever happens on the first level.",
+       	"Res omnia mea culpa est",
+       	"Rest In Pieces",
+       	"Rest, rest, perturbed spirit.",
+       	"Rip Torn",
+       	"She always said her feet were killing her but nobody believed her.",
+       	"She died of a chest cold.",
+       	"So let it be written, so let it be done!",
+       	"So then I says, How do I know you're the real angel of death?",
+       	"Some patients insist on dying.",
+       	"Some people have it dead easy, don't they?",
+       	"Some things are better left buried.",
+       	"Sure, trust me, I'm a lawyer...",
+       	"Thank God I wore my corset, because I think my sides have split.",
+       	"That is all",
+       	"The Gods DO have a sense of humor: I'm living proof!",
+       	"The frog's dead. He Kermitted suicide.",
+       	"This dungeon is a pushover",
+       	"This elevator doesn't go to Heaven",
+       	"This gravestone is shareware. To register, please send me 10 zorkmids",
+       	"This gravestone provided by The Yendorian Grave Services Inc.",
+       	"This is not an important part of my life.",
+       	"This one's on me.",
+       	"This side up",
+       	"Tim Burr -- Smashed by a tree",
+       	"Tone it down a bit, I'm trying to get some rest here.",
+       	"Virtually Alive",
+       	"We Will Meet Again.",
+       	"Weep not, he is at rest",
+       	"Welcome to Dante's.  What level please?",
+       	"Well, at least they listened to my sermon...",
+       	"Went to be an angel.",
+       	"What are you doing over there?",
+       	"What are you smiling at?",
+       	"What can you say, Death's got appeal...!",
+       	"What health care?",
+       	"What pit?",
+       	"When the gods want to punish you, they answer your prayers.",
+       	"Where e'er you be let your wind go free. Keeping it in was the death of me!",
+       	"Where's my refund?",
+       	"Will let you know for sure in a day or two...",
+       	"Wizards are wimps",
+       	"Worms at work, do not disturb!",
+       	"Would you mind moving a bit?  I'm short of breath down here.",
+       	"Would you quit being evil over my shoulder?",
+       	"Ya really had me going baby, but now I'm gone.",
+       	"Yes Dear, just a few more minutes...",
+       	"You said it wasn't poisonous!",
         "You set my heart aflame. You gave me heartburn."
 };
 
@@ -4949,6 +5194,25 @@ const char *str;
 	return;
 }
 
+boolean
+allied_faction(f1, f2)
+int f1,f2;
+{
+	if(f1 > f2){
+		int tmp = f1;
+		f1 = f2;
+		f2 = f1;
+	}
+	if(f1 >= FIRST_HOUSE && f1 <= LAST_HOUSE){
+		return (f2 >= FIRST_TOWER && f2 <= LAST_TOWER) || (f2 == LOLTH_SYMBOL || f2 == PEN_A_SYMBOL);
+	} else if(f1 >= FIRST_FALLEN_HOUSE && f1 <= LAST_FALLEN_HOUSE){
+		return (f2 >= FIRST_TOWER && f2 <= LAST_TOWER) || (f2 == KIARANSALEE_SYMBOL || f2 == PEN_A_SYMBOL);
+	} else if(f1 >= FIRST_TOWER && f1 <= LAST_TOWER){
+		return (f2 >= FIRST_GODDESS && f2 <= LAST_GODDESS) || f2 == XAXOX;
+	} else if(f1 == XAXOX){
+		return (f2 == EDDER_SYMBOL);
+	}
+}
 
 #endif /* OVLB */
 
