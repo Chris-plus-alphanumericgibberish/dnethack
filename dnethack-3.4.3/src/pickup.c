@@ -651,7 +651,7 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
            if (!*otypes || index(otypes, curr->oclass) || (iflags.pickup_thrown && curr->was_thrown))
 #else
 	     if (((!*otypes || index(otypes, curr->oclass) ||
-		 is_autopickup_exception(curr, TRUE)) &&
+		   is_autopickup_exception(curr, TRUE)) &&
 		  !is_autopickup_exception(curr, FALSE)) || (iflags.pickup_thrown && curr->was_thrown))
 #endif
 		n++;
@@ -663,7 +663,7 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
                if (!*otypes || index(otypes, curr->oclass) || (iflags.pickup_thrown && curr->was_thrown)) {
 #else
 		 if (((!*otypes || index(otypes, curr->oclass) ||
-		 is_autopickup_exception(curr, TRUE)) &&
+		       is_autopickup_exception(curr, TRUE)) &&
 		      !is_autopickup_exception(curr, FALSE)) || (iflags.pickup_thrown && curr->was_thrown)) {
 #endif
 		    pi[n].item.a_obj = curr;
@@ -751,10 +751,10 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 
 		    /* if sorting, print type name (once only) */
 		    if (qflags & INVORDER_SORT && !printed_type_name) {
-			any.a_obj = (struct obj *) 0;
-			add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
+				any.a_obj = (struct obj *) 0;
+				add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
 						Hallucination ? rand_class_name() : let_to_name(*pack, FALSE), MENU_UNSELECTED);
-			printed_type_name = TRUE;
+				printed_type_name = TRUE;
 		    }
 
 		    any.a_obj = curr;
@@ -1986,7 +1986,7 @@ register struct obj *obj;
 			}
 		}
 	}
-
+	
 	if (obj->otyp == CORPSE) {
 	    if ( (touch_petrifies(&mons[obj->corpsenm])) && !uarmg
 		 && !Stone_resistance) {

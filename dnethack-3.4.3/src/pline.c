@@ -333,14 +333,14 @@ align_str(alignment)
 //		case A_UNKNOWN:	return "unknown";
 		}
     } else {
-	    switch ((int)alignment) {
+		switch ((int)alignment) {
 		case A_CHAOTIC: return "chaotic";
 		case A_NEUTRAL: return "neutral";
 		case A_LAWFUL:	return "lawful";
 		case A_NONE:	return "unaligned";
 		case A_VOID:	return "non-aligned";
 //		case A_UNKNOWN:	return "unknown";
-	    }
+		}
 	}
     return "unknown";
 }
