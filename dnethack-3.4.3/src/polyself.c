@@ -278,7 +278,7 @@ boolean forcecontrol;
 	boolean hasmask = (ublindf && ublindf->otyp==MASK && polyok(&mons[ublindf->corpsenm]));
 	boolean was_floating = (Levitation || Flying);
 
-	if(!Polymorph_control && !forcecontrol && !draconian && !iswere && !isvamp && !hasmask) {
+	if(!Polymorph_control && !forcecontrol && !draconian && !iswere && !isvamp && !hasmask && !(u.specialSealsActive&SEAL_ALIGNMENT_THING)) {
 	    if (rn2(20) > ACURR(A_CON)) {
 		You("%s", shudder_for_moment);
 		losehp(rnd(30), "system shock", KILLED_BY_AN);
@@ -370,8 +370,10 @@ boolean forcecontrol;
 	/* The below polyok() fails either if everything is genocided, or if
 	 * we deliberately chose something illegal to force newman().
 	 */
-	if (!polyok(&mons[mntmp]) || !rn2(5) || your_race(&mons[mntmp]))
-		newman();
+	if ( !polyok(&mons[mntmp]) || 
+		(!(u.specialSealsActive&SEAL_ALIGNMENT_THING) && !rn2(5)) || 
+		(!(u.specialSealsActive&SEAL_ALIGNMENT_THING) && your_race(&mons[mntmp]))
+	) newman();
 	else if(!polymon(mntmp)) return;
 
 	if (!uarmg) selftouch("No longer petrify-resistant, you");
@@ -858,9 +860,12 @@ dobreathe(mdat)
 	mattk = attacktype_fordmg(mdat, AT_BREA, AD_ANY);
 	if (!mattk)
 	    impossible("bad breath attack?");	/* mouthwash needed... */
-	else
+	else{
+		if(is_dragon(mdat)) flags.drgn_brth = 1;
 	    buzz((int) (20 + mattk->adtyp-1), (int)mattk->damn,
-		u.ux, u.uy, u.dx, u.dy,0,0);
+			u.ux, u.uy, u.dx, u.dy,0,0);
+		flags.drgn_brth = 0;
+	}
 	return(1);
 }
 
@@ -1229,8 +1234,16 @@ int
 doclockspeed()
 {
 	short newspeed = doclockmenu();
-	if(newspeed != u.ucspeed){
-		if(newspeed == HIGH_CLOCKSPEED && u.uhs < WEAK) morehungry(10);
+	if(newspeed == PHASE_ENGINE){
+		if(u.phasengn){
+			u.phasengn = 0;
+			You("switch off your phase engine.");
+		} else {
+			u.phasengn = 1;
+			You("activate your phase engine.");
+		}
+	} else if(newspeed != u.ucspeed){
+		if(newspeed == HIGH_CLOCKSPEED && u.uhs < WEAK && !(u.clockworkUpgrades&EFFICIENT_SWITCH)) morehungry(10);
 		/*Note: that adjustment may have put you at weak*/
 		if(newspeed == HIGH_CLOCKSPEED && u.uhs >= WEAK){
 			pline("There is insufficient tension left in your mainspring for you to move at high speed.");
@@ -1254,7 +1267,8 @@ doclockspeed()
 			break;
 			}
 		}
-		return 1;
+		if(u.clockworkUpgrades&FAST_SWITCH) return 0;
+		else return 1;
 	} else{
 		You("leave your clock at its current speed.");
 		return 0;
@@ -1487,6 +1501,9 @@ int atyp;
 	    case SILVER_DRAGON_SCALE_MAIL:
 	    case SILVER_DRAGON_SCALES:
 		return PM_SILVER_DRAGON;
+	    case MERCURIAL_DRAGON_SCALE_MAIL:
+	    case MERCURIAL_DRAGON_SCALES:
+		return PM_MERCURIAL_DRAGON;
 	    case SHIMMERING_DRAGON_SCALE_MAIL:
 	    case SHIMMERING_DRAGON_SCALES:
 		return PM_SHIMMERING_DRAGON;
@@ -1536,7 +1553,10 @@ doclockmenu()
 
 	Sprintf(buf, "To what speed will you set your clock?");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
-	Sprintf(buf, "High speed");
+	if(u.clockworkUpgrades&EFFICIENT_SWITCH)
+		Sprintf(buf, "High speed (efficient switch)");
+	else
+		Sprintf(buf, "High speed");
 	any.a_int = HIGH_CLOCKSPEED;	/* must be non-zero */
 	incntlet = 'a';
 	add_menu(tmpwin, NO_GLYPH, &any,
@@ -1558,6 +1578,22 @@ doclockmenu()
 		incntlet, 0, ATR_NONE, buf,
 		MENU_UNSELECTED);
 	
+	if(u.clockworkUpgrades&PHASE_ENGINE && !u.phasengn){
+		Sprintf(buf, "Activate phase engine");
+		incntlet = 'd';
+		any.a_int = PHASE_ENGINE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(u.clockworkUpgrades&PHASE_ENGINE && u.phasengn){
+		Sprintf(buf, "Switch off phase engine");
+		incntlet = 'd';
+		any.a_int = PHASE_ENGINE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
 	
 	end_menu(tmpwin, "Change your clock-speed");
 
