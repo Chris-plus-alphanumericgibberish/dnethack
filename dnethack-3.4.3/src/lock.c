@@ -164,18 +164,18 @@ forcelock(VOID_ARGS)	/* try to force a locked chest */
 	if((xlock.box->ox != u.ux) || (xlock.box->oy != u.uy))
 		return((xlock.usedtime = 0));		/* you or it moved */
 
-	if (xlock.usedtime++ >= 50 || !uwep || nohands(youmonst.data)) {
+	if (xlock.usedtime++ >= 50 || (!uwep && xlock.picktyp != 3) || nohands(youmonst.data)) {
 	    You("give up your attempt to force the lock.");
 	    if(xlock.usedtime >= 50)		/* you made the effort */
 	      exercise((xlock.picktyp) ? A_DEX : A_STR, TRUE);
 	    return((xlock.usedtime = 0));
 	}
-
+	
 	
 	if(xlock.picktyp == 1) {	/* blade */
 
-	    if(rn2(1000-(int)uwep->spe) > (992-greatest_erosion(uwep)*10) &&
-	       !uwep->cursed && !obj_resists(uwep, 0, 99)) {
+	    if((objects[uwep->otyp].oc_material == GLASS || (rn2(1000-(int)uwep->spe) > (992-greatest_erosion(uwep)*10) &&
+	       !uwep->cursed)) && !uwep->oartifact) {
 		/* for a +0 weapon, probability that it survives an unsuccessful
 		 * attempt to force the lock is (.992)^50 = .67
 		 */
@@ -212,7 +212,7 @@ forcelock(VOID_ARGS)	/* try to force a locked chest */
 		}else if(xlock.box->spe == 4){
 			open_coffin(xlock.box, TRUE); //TRUE: use past tense
 		}
-	    while ((otmp = xlock.box->cobj) != 0) {
+		while ((otmp = xlock.box->cobj) != 0) {
 		obj_extract_self(otmp);
 		if(!rn2(3) || otmp->oclass == POTION_CLASS) {
 		    chest_shatter_msg(otmp);
@@ -270,7 +270,7 @@ forcedoor()      /* try to break/pry open a door */
 	    exercise(A_STR, TRUE);      /* even if you don't succeed */
 	    return((xlock.usedtime = 0));
 	}
-
+	
 	if(xlock.picktyp == 3) u.otiaxAttack = moves;
 	
 	if(rn2(100) > xlock.chance) return(1);          /* still busy */
@@ -287,7 +287,7 @@ forcedoor()      /* try to break/pry open a door */
 	} else if (xlock.picktyp == 1)
 	    xlock.door->doormask = D_BROKEN;
 	else xlock.door->doormask = D_NODOOR;
-	unblock_point(u.ux+u.dx, u.uy+u.dy);
+		unblock_point(u.ux+u.dx, u.uy+u.dy);
 	if (*in_rooms(u.ux+u.dx, u.uy+u.dy, SHOPBASE))
 	    add_damage(u.ux+u.dx, u.uy+u.dy, 0L);
 	newsym(u.ux+u.dx, u.uy+u.dy);
@@ -527,16 +527,23 @@ pick_lock(pick) /* pick a lock with a given object */
 		    xlock.key = pick->oartifact;
 			if (key){
 				if(!In_quest(&u.uz) && xlock.key >= ART_FIRST_KEY_OF_LAW && xlock.key <= ART_THIRD_KEY_OF_NEUTRALITY) {
-				register struct rm *here;
-				here = &levl[cc.x][cc.y];
-				here->typ = ROOM;
-				useupall(pick);
-				make_engr_at(cc.x, cc.y,
-				     gates_of_hell[key%4], 0L, BURN); //mod 4 the array index so people can mess up the des file without
-				newsym(cc.x,cc.y);					  //wierd problems.
-			    return(0);
-				}
-				else if (picktyp == SKELETON_KEY || picktyp == UNIVERSAL_KEY) {
+					register struct rm *here;
+					here = &levl[cc.x][cc.y];
+					here->typ = ROOM;
+					useupall(pick);
+					make_engr_at(cc.x, cc.y,
+						 gates_of_hell[key%4], 0L, BURN); //mod 4 the array index so people can mess up the des file without causing problems
+					unblock_point(cc.x,cc.y);
+					newsym(cc.x,cc.y);
+					return(0);
+				} else if(In_quest(&u.uz) && urole.neminum == PM_BOLG && xlock.key == ART_KEY_OF_EREBOR){
+					register struct rm *here;
+					here = &levl[cc.x][cc.y];
+					here->doormask = D_ISOPEN;
+					unblock_point(cc.x,cc.y);
+					newsym(cc.x,cc.y);
+					return(1);
+				} else if (picktyp == SKELETON_KEY || picktyp == UNIVERSAL_KEY) {
 					Your("key doesn't seem to fit.");
 					return(0);
 				}
@@ -597,13 +604,13 @@ doforce()		/* try to force a chest with your weapon */
 	else if (is_lightsaber(uwep))
 	    picktyp = 2;
 	else
-	picktyp = is_blade(uwep) ? 1 : 0;
+		picktyp = is_blade(uwep) ? 1 : 0;
 	if(xlock.usedtime && picktyp == xlock.picktyp) {
 	    if (xlock.box) {
-	    You("resume your attempt to force the lock.");
-	    set_occupation(forcelock, "forcing the lock", 0);
-	    return(1);
-	}
+		    You("resume your attempt to force the lock.");
+		    set_occupation(forcelock, "forcing the lock", 0);
+		    return(1);
+	    } 
 		else if (xlock.door) {
 			You("resume your attempt to force the door.");
 			set_occupation(forcedoor, "forcing the door", 0);
@@ -678,10 +685,10 @@ doforce()		/* try to force a chest with your weapon */
 #ifdef LIGHTSABERS
 		    is_lightsaber(uwep) ||
 #endif
-		    is_axe(uwep))) 
+		    is_axe(uwep)))
 	    	return use_pick_axe2(uwep);
 
-	    if(!IS_DOOR(door->typ)) { 
+	    if(!IS_DOOR(door->typ)) {
 		if (is_drawbridge_wall(x,y) >= 0)
 		    pline("The drawbridge is too solid to force open.");
 		else
@@ -713,15 +720,15 @@ doforce()		/* try to force a chest with your weapon */
 				You("insert your mist tendrils into the door's lock.");
 				u.otiaxAttack = moves;
 		    } else if(picktyp == 1)
-			You("force your %s into a crack and pry.", xname(uwep));
+				You("force your %s into a crack and pry.", xname(uwep));
 		    else
-			You("start bashing it with your %s.", xname(uwep));
+				You("start bashing it with your %s.", xname(uwep));
 		    if (picktyp == 3)
 				xlock.chance = spiritDsize() * 10;
 		    else if (is_lightsaber(uwep))
-			xlock.chance = uwep->spe + 38;
+				xlock.chance = uwep->spe + 38;
 		    else
-			xlock.chance = uwep->spe + objects[uwep->otyp].oc_wldam;
+				xlock.chance = uwep->spe + objects[uwep->otyp].oc_wldam;
 		    xlock.picktyp = picktyp;
 		    xlock.usedtime = 0;    
 		    xlock.door = door;
@@ -1047,25 +1054,25 @@ int x, y;
 		if (key)
 		    msg = "The door closes!";
 		else{
-		msg = "The door locks!";
+			msg = "The door locks!";
 			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
 		}break;
 	    case D_ISOPEN:
 		if (key)
 		    msg = "The door swings shut!";
 		else{
-		msg = "The door swings shut, and locks!";
+			msg = "The door swings shut, and locks!";
 			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
 		}break;
 	    case D_BROKEN:
-		msg = "The broken door reassembles and locks!";
+			msg = "The broken door reassembles and locks!";
 			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
 		break;
 	    case D_NODOOR:
 		if (key)
 		    msg = "The broken door reassembles!";
 		else{
-		msg = "The broken door reassembles and locks!";
+			msg = "The broken door reassembles and locks!";
 			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
 		}break;
 		break;
@@ -1124,7 +1131,7 @@ int x, y;
 	if (msg && cansee(x,y)) pline(msg);
 	if (loudness > 0) {
 	    /* door was destroyed */
-	    wake_nearto(x, y, loudness);
+	    wake_nearto_noisy(x, y, loudness);
 	    if (*in_rooms(x, y, SHOPBASE)) add_damage(x, y, 0L);
 	}
 
