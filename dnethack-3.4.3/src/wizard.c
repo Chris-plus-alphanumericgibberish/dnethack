@@ -313,12 +313,22 @@ tactics(mtmp)
 		/* if wounded, hole up on or near the stairs (to block them) */
 		/* unless, of course, there are no stairs (e.g. endlevel) */
 		mtmp->mavenge = 1; /* covetous monsters attack while fleeing */
-		if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
-			(mtmp->iswiz && !xupstair && !mon_has_amulet(mtmp))) {
-		    if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
-		} else if (xupstair &&
-			 (mtmp->mx != xupstair || mtmp->my != yupstair)) {
-		    (void) mnearto(mtmp, xupstair, yupstair, TRUE);
+		if(flags.stag && In_quest(&u.uz)){
+			if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
+				(mtmp->iswiz && !xdnstair && !mon_has_amulet(mtmp))) {
+				if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
+			} else if (xdnstair &&
+				 (mtmp->mx != xdnstair || mtmp->my != ydnstair)) {
+				(void) mnearto(mtmp, xdnstair, ydnstair, TRUE);
+			}
+		} else {
+			if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
+				(mtmp->iswiz && !xupstair && !mon_has_amulet(mtmp))) {
+				if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
+			} else if (xupstair &&
+				 (mtmp->mx != xupstair || mtmp->my != yupstair)) {
+				(void) mnearto(mtmp, xupstair, yupstair, TRUE);
+			}
 		}
 		/* if you're not around, cast healing spells */
 		if (distu(mtmp->mx,mtmp->my) > (BOLT_LIM * BOLT_LIM))
@@ -522,6 +532,46 @@ resurrect()
 
 }
 
+void
+illur_resurrect()
+{
+	struct monst *mtmp, **mmtmp;
+	long elapsed;
+	const char *verb;
+
+	/* look for a migrating Wizard */
+	verb = "elude";
+	mmtmp = &migrating_mons;
+	while ((mtmp = *mmtmp) != 0) {
+		if (mtmp->data==&mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES]) {
+			if((elapsed = monstermoves - mtmp->mlstmv) > 0L){
+				mon_catchup_elapsed_time(mtmp, elapsed);
+				if (elapsed >= LARGEST_INT) elapsed = LARGEST_INT - 1;
+				elapsed /= 50L;
+			} else elapsed = 1;
+			if (mtmp->msleeping && rn2((int)elapsed + 1))
+				mtmp->msleeping = 0;
+			if (mtmp->mfrozen == 1) /* would unfreeze on next move */
+				mtmp->mfrozen = 0,  mtmp->mcanmove = 1;
+			if (mtmp->mcanmove && !mtmp->msleeping) {
+				*mmtmp = mtmp->nmon;
+				mon_arrive(mtmp, TRUE);
+				break;
+			}
+		}
+		mmtmp = &mtmp->nmon;
+	}
+	
+	if(!mtmp) mtmp = makemon(&mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES], u.ux, u.uy, MM_NOWAIT|MM_NOCOUNTBIRTH);
+	
+	if (mtmp) {
+		mtmp->msleeping = mtmp->mtame = mtmp->mpeaceful = 0;
+		set_malign(mtmp);
+		verbalize("You thought to steal memories from ME, she of the Myriad Glimpses!?");
+	}
+
+}
+
 STATIC_PTR void
 dowizdarken()
 {
@@ -637,6 +687,24 @@ intervene()
 }
 
 void
+illur_intervene()
+{
+	if(Is_astralevel(&u.uz)) return;
+	switch (rnd(4)) {
+	    case 1:	
+	    case 2:
+			You_feel("vaguely nervous.");
+		break;
+	    case 3:
+			aggravate();
+		break;
+	    case 4:
+			illur_resurrect();
+		break;
+	}
+}
+
+void
 wizdead()
 {
 	flags.no_of_wizards--;
@@ -735,6 +803,18 @@ const char * const random_apollyon[] = {
 	"You viper.  I shall sentence you to Gehennom!", /*10*/
 	"Cower, mortal.  I am the Jailer of Heaven!" /*11*/
 };
+const char * const random_mirkwood[] = {
+	"A sharp struggle, but worth it, I'll wager!", /*0*/
+	"What nasty thick skin you have!", /*1*/
+	"I'll wager there is good juice inside you!", /*2*/
+	"You'll make fine eating, when you've been hung a bit!", /*3*/
+	"You're not as fat as you might be. Been feeding none to well of late?", /*4*/
+	"Alive and kicking? I'll soon put an end to that!", /*5*/
+	"I'll kill you, and hang your corpse to soften!", /*6*/
+	"You nasty little creature! I'll eat you and leave your bones and skin hanging on a tree!", /*7*/
+	"Got a sting, have you? Well, I'll get you all the same!", /*8*/
+	"I'll hang you head down for a day or two, that will take the fight out of you!" /*9*/
+};
 
 /* Insult or intimidate the player */
 void
@@ -761,29 +841,26 @@ register struct monst	*mtmp;
 		    verbalize("%s %s!",
 			  random_malediction[rn2(SIZE(random_malediction))],
 			  random_insult[rn2(SIZE(random_insult))]);
-	}
-	else if(mtmp->data == &mons[PM_CHAOS]){
+	} else if(mtmp->data == &mons[PM_CHAOS]){
 		if(mtmp->mextra[1]<5){
 			verbalize("%s", random_chaosism[mtmp->mextra[1]+5]);
 			mtmp->mextra[1]++;
 		}
 		else verbalize("%s", random_chaosism[rn2(5)]);
-	}
-	else if(mtmp->data == &mons[PM_GARLAND]){
+	} else if(mtmp->data == &mons[PM_GARLAND]){
 		verbalize("%s", random_chaos_garlandism[rn2(SIZE(random_chaos_garlandism))]);
-	}
-	else if(mtmp->data == &mons[PM_SIR_GARLAND]){
+	} else if(mtmp->data == &mons[PM_SIR_GARLAND]){
 		verbalize("%s", random_garlandism[rn2(SIZE(random_garlandism))]);
-	}
-	else if(mtmp->data == &mons[PM_APOLLYON]){
+	} else if(mtmp->data == &mons[PM_APOLLYON]){
 		verbalize("%s", random_apollyon[rn2(SIZE(random_apollyon))]);
-	}
-	else if(is_lminion(mtmp)) {
+	} else if(is_spider(mtmp->data)){
+		verbalize("%s", random_mirkwood[rn2(SIZE(random_mirkwood))]);
+	} else if(is_lminion(mtmp)) {
 		com_pager(rn2(QTN_ANGELIC - 1 + (Hallucination ? 1 : 0)) +
 			      QT_ANGELIC);
 	} else {
 	    if (!rn2(5))
-		pline("%s casts aspersions on your ancestry.", Monnam(mtmp));
+			pline("%s casts aspersions on your %s.", Monnam(mtmp), Hallucination ? "asparagus" : "ancestry");
 	    else
 	        com_pager(rn2(QTN_DEMONIC) + QT_DEMONIC);
 	}
