@@ -82,7 +82,7 @@ register struct obj *pen;
 	boolean by_descr = FALSE;
 	const char *typeword;
 	int theward;
-
+	
 	if (nohands(youmonst.data)) {
 	    You("need hands to be able to write!");
 	    return 0;
@@ -228,21 +228,21 @@ register struct obj *pen;
 		i = SCR_WARD;
 		goto found_ward;
 	} else{
-	first = bases[(int)paper->oclass];
-	last = bases[(int)paper->oclass + 1] - 1;
-	for (i = first; i <= last; i++) {
-		/* extra shufflable descr not representing a real object */
-		if (!OBJ_NAME(objects[i])) continue;
+		first = bases[(int)paper->oclass];
+		last = bases[(int)paper->oclass + 1] - 1;
+		for (i = first; i <= last; i++) {
+			/* extra shufflable descr not representing a real object */
+			if (!OBJ_NAME(objects[i])) continue;
 
-		if (!strcmpi(OBJ_NAME(objects[i]), nm))
-			goto found;
-		if (!strcmpi(OBJ_DESCR(objects[i]), nm)) {
-			by_descr = TRUE;
-			goto found;
+			if (!strcmpi(OBJ_NAME(objects[i]), nm))
+				goto found;
+			if (!strcmpi(OBJ_DESCR(objects[i]), nm)) {
+				by_descr = TRUE;
+				goto found;
+			}
 		}
-	}
-	There("is no such %s!", typeword);
-	return 1;
+		There("is no such %s!", typeword);
+		return 1;
 	}
 found:
 	if(i == SCR_WARD){
