@@ -554,7 +554,7 @@ static const char * const bogusobjects[] = {
        "pair of hiking boots",
        "pair of wild hiking boots",
        "pair of muddy boots",
-		
+	   
 	   "can of Greece",
 	   "can of crease",
 	   "can of Grease",
@@ -612,7 +612,7 @@ static const char * const bogusobjects[] = {
        "blessed 9 helm of Des Lynam",     /* Bottom */
 	   "oscillation overthruster",
 	   "magic device",
-
+	   
 	   "Infinity Gauntlet",
 
         /* Geekery */
@@ -632,7 +632,7 @@ static const char * const bogusobjects[] = {
 	   "thermal detinator", /* Star Wars */
        "thing that is not tea",/*"no tea here!", "no tea, sadly",*/ /* HGttG */
 		"potion almost, but not quite, entirely unlike tea",
-	   "potion of Pan-Galactic Gargle Blaster", "black scroll-case labled DON'T PANIC", /* HGttG */
+		"potion of Pan-Galactic Gargle Blaster", "black scroll-case labled DON'T PANIC", /* HGttG */
 	   "ridiculously dangerous epaulet [it's armed]", /* Schlock Mercenary*/
 	   "pokeball", /* Pokemon */
 	   "scroll of oxygen-destroyer plans", /* Godzilla */
@@ -661,7 +661,8 @@ static const char * const bogusobjects[] = {
 	   /* Interwebs */
 	   "memetic kill agent",				/* SCP Foundation */
 	   "bottle of squid pro quo ink",		/* MSPA */
-	   "highly indulgent self-insert",
+		"highly indulgent self-insert",
+	   "cursed -1 phillips head",			/* xkcd nethack joke */
 	   
 	   /* Mythology */
 	   "sampo",
@@ -675,7 +676,7 @@ static const char * const bogusobjects[] = {
 	   "Chaos Emerald",
 	   "bronze sphere",
 	   "modron cube",
-
+	   
 	   /* Books */
        "monster manual",                   /* D&D */
        "monster book of monsters",         /* Harry Potter */
@@ -712,7 +713,7 @@ static const char * const bogusobjects[] = {
 	   "spellbook called Unpronouncable Cults",					/*  The other thing "Unaussprechlichen" translates to */
 	   "spellbook named The Diary of Drenicus the Wise",		/*  Dicefreaks, The Gates of Hell */
 	   "spellbook named Clavicula Salomonis Regis",				/* ie, The Lesser Key of Solomon */
-	   "copy of The Five Books of Moses",				/* aka the Torah */
+	   "copy of The Five Books of Moses",						/* aka the Torah */
 	   "spellbook named The Six and Seventh Books of Moses",	/* 18th- or 19th-century magical text allegedly written by Moses */
 	   "spellbook named The Book of Coming Forth by Day", "spellbook named The Book of emerging forth into the Light",
 	   "spellbook named Sepher Ha-Razim",						/* Book given to Noah by the angel Raziel */
@@ -814,10 +815,10 @@ static const char * const bogusobjects[] = {
 const char *
 rndobjnam()
 {
-       int name;
+    int name;
 	if(!rn2(3)){
-       name = rn2(SIZE(bogusobjects));
-       return bogusobjects[name];
+		name = rn2(SIZE(bogusobjects));
+		return bogusobjects[name];
 //	} else if(!rn2(2)){
 //		name = rn2(TIN);
 //		return OBJ_DESCR(objects[name]);
@@ -954,7 +955,7 @@ do_look(quick)
 	if ((from_screen ?
 		(sym == monsyms[S_HUMAN] && cc.x == u.ux && cc.y == u.uy) :
 		(sym == def_monsyms[S_HUMAN] && !iflags.showrace)) &&
-	    !(Race_if(PM_HUMAN) || Race_if(PM_ELF)) && !Upolyd)
+	    !(Race_if(PM_HUMAN) || Race_if(PM_ELF) || Race_if(PM_DROW)) && !Upolyd)
 	    found += append_str(out_str, "you");	/* tack on "or you" */
 
 	/*
@@ -1009,7 +1010,7 @@ do_look(quick)
 	    x_str = defsyms[i].explanation;
 	    if (sym == (from_screen ? showsyms[i] : defsyms[i].sym) && *x_str) {
 		/* avoid "an air", "a water", or "a floor of a room" */
-		int article = (i == S_room) ? 2 :		/* 2=>"the" */
+		int article = (i == S_drkroom || i == S_litroom) ? 2 :		/* 2=>"the" */
 			      !(strcmp(x_str, "air") == 0 ||	/* 1=>"an"  */
 				strcmp(x_str, "water") == 0);	/* 0=>(none)*/
 
