@@ -54,10 +54,10 @@ BRANCH:levregion(01,00,79,20),(30,06,46,13)
 NON_DIGGABLE:(30,06,46,13)
 # Objects
 CONTAINER:'`',"statue",(36,10),uncursed,"knight",3,"Perseus"
-OBJECT[75%]:'[',"shield of reflection",contained,cursed,+0
-OBJECT[25%]:'[',"flying boots",contained,random,+0
-OBJECT[50%]:')',"scimitar",contained,blessed,+2
-OBJECT[50%]:'(',"sack",contained
+OBJECT:'[',"shield of reflection",contained,cursed,+0
+OBJECT:'[',"flying boots",contained,random,+0
+OBJECT:')',"scimitar",contained,blessed,+2
+OBJECT:'(',"sack",contained
 # These aren't really containers, but specifying CONTAINER forces them to be
 # empty, since CONTAINERs contain only what is explicitly specified.
 CONTAINER:'`',"statue",random
@@ -152,10 +152,10 @@ NON_DIGGABLE:(01,02,06,17)
 NON_DIGGABLE:(60,02,73,17)
 # Objects
 CONTAINER:'`',"statue",(68,10),uncursed,"knight",3,"Perseus"
-OBJECT[25%]:'[',"shield of reflection",contained,cursed,+0
-OBJECT[75%]:'[',"flying boots",contained,random,+0
-OBJECT[50%]:')',"scimitar",contained,blessed,+2
-OBJECT[50%]:'(',"sack",contained
+OBJECT:'[',"shield of reflection",contained,cursed,+0
+OBJECT:'[',"flying boots",contained,random,+0
+OBJECT:')',"scimitar",contained,blessed,+2
+OBJECT:'(',"sack",contained
 CONTAINER:'`',"statue",(64,08)
 CONTAINER:'`',"statue",(65,08)
 CONTAINER:'`',"statue",(64,09)
@@ -263,10 +263,10 @@ DOOR:locked,(48,15)
 FOUNTAIN:place[1]
 #
 CONTAINER:'`',"statue",place[2],uncursed,"knight",1,"Perseus"
-OBJECT[75%]:'[',"shield of reflection",contained,cursed,+0
-OBJECT[25%]:'[',"flying boots",contained,random,+0
-OBJECT[50%]:')',"scimitar",contained,blessed,+2
-OBJECT[50%]:'(',"sack",contained
+OBJECT:'[',"shield of reflection",contained,cursed,+0
+OBJECT:'[',"flying boots",contained,random,+0
+OBJECT:')',"scimitar",contained,blessed,+2
+OBJECT:'(',"sack",contained
 #
 CONTAINER:'`',"statue",random
 CONTAINER:'`',"statue",random
@@ -394,10 +394,10 @@ NON_DIGGABLE:(01,01,22,14)
 OBJECT:'(',"crystal ball",(07,08)
 #
 CONTAINER:'`',"statue",place[1],uncursed,"knight",1,"Perseus"
-OBJECT[75%]:'[',"shield of reflection",contained,cursed,+0
-OBJECT[25%]:'[',"flying boots",contained,random,+0
-OBJECT[50%]:')',"scimitar",contained,blessed,+2
-OBJECT[50%]:'(',"sack",contained
+OBJECT:'[',"shield of reflection",contained,cursed,+0
+OBJECT:'[',"flying boots",contained,random,+0
+OBJECT:')',"scimitar",contained,blessed,+2
+OBJECT:'(',"sack",contained
 #
 CONTAINER:'`',"statue",random
 CONTAINER:'`',"statue",random
