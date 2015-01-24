@@ -45,7 +45,7 @@ STATIC_OVL void
 setgemprobs(dlev)
 d_level *dlev;
 {
-	int j, first, lev;
+	int j, first, lev, totalprob=0;
 
 	if (dlev)
 	    lev = (ledger_no(dlev) > maxledgerno())
@@ -54,17 +54,19 @@ d_level *dlev;
 	    lev = 0;
 	first = bases[GEM_CLASS];
 
-	for(j = 0; j < 9-lev/3; j++)
+	for(j = 0; j < 9-lev/3; j++){
+		totalprob += objects[first+j].oc_prob;
 		objects[first+j].oc_prob = 0;
+	}/*j=0;*/ //turned off gem limitation by dungeon level. Then turned it back on.
 	first += j;
 	if (first > LAST_GEM || objects[first].oc_class != GEM_CLASS ||
 	    OBJ_NAME(objects[first]) == (char *)0) {
-		raw_printf("Not enough gems? - first=%d j=%d LAST_GEM=%d",
-			first, j, LAST_GEM);
+		raw_printf("Not enough gems? - level=%d first=%d j=%d LAST_GEM=%d",
+			lev, first, j, LAST_GEM);
 		wait_synch();
 	    }
 	for (j = first; j <= LAST_GEM; j++)
-		objects[j].oc_prob = (171+j-first)/(LAST_GEM+1-first);
+		objects[j].oc_prob = (175+j-first)/(LAST_GEM+1-first);
 }
 
 /* shuffle descriptions on objects o_low to o_high */
@@ -211,7 +213,7 @@ shuffle_all()
 			shuffle(first, j, TRUE);
 		}
 	}
-
+	
 	/* check signet ring */
 	
 	signetring = find_signet_ring();
@@ -227,7 +229,7 @@ shuffle_all()
 	
 	/* shuffle the helmets */
 	shuffle(HELMET, HELM_OF_DRAIN_RESISTANCE, TRUE);
-
+	
 	/* shuffle the gloves */
 	shuffle(LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY, FALSE);
 
@@ -235,7 +237,7 @@ shuffle_all()
 	shuffle(CLOAK_OF_PROTECTION, CLOAK_OF_DISPLACEMENT, FALSE);
 
 	/* shuffle the boots [if they change, update find_skates() below] */
-	shuffle(SPEED_BOOTS, LEVITATION_BOOTS, FALSE);
+	shuffle(SPEED_BOOTS, FLYING_BOOTS, FALSE);
 }
 
 /* find the object index for gold circlet */
@@ -277,7 +279,7 @@ find_skates()
     register int i;
     register const char *s;
 
-    for (i = SPEED_BOOTS; i <= LEVITATION_BOOTS; i++)
+    for (i = SPEED_BOOTS; i <= FLYING_BOOTS; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "snow boots"))
 	    return i;
 
@@ -292,7 +294,7 @@ find_cboots()
     register int i;
     register const char *s;
 
-    for (i = SPEED_BOOTS; i <= LEVITATION_BOOTS; i++)
+    for (i = SPEED_BOOTS; i <= FLYING_BOOTS; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "combat boots"))
 	    return i;
 
@@ -307,7 +309,7 @@ find_mboots()
     register int i;
     register const char *s;
 
-    for (i = SPEED_BOOTS; i <= LEVITATION_BOOTS; i++)
+    for (i = SPEED_BOOTS; i <= FLYING_BOOTS; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "mud boots"))
 	    return i;
 
@@ -322,7 +324,7 @@ find_hboots()
     register int i;
     register const char *s;
 
-    for (i = SPEED_BOOTS; i <= LEVITATION_BOOTS; i++)
+    for (i = SPEED_BOOTS; i <= FLYING_BOOTS; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "hiking boots"))
 	    return i;
 
@@ -337,7 +339,7 @@ find_bboots()
     register int i;
     register const char *s;
 
-    for (i = SPEED_BOOTS; i <= LEVITATION_BOOTS; i++)
+    for (i = SPEED_BOOTS; i <= FLYING_BOOTS; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "buckled boots"))
 	    return i;
 
@@ -352,7 +354,7 @@ find_jboots()
     register int i;
     register const char *s;
 
-    for (i = SPEED_BOOTS; i <= LEVITATION_BOOTS; i++)
+    for (i = SPEED_BOOTS; i <= FLYING_BOOTS; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "jungle boots"))
 	    return i;
 
@@ -413,8 +415,8 @@ find_engagement_ring()
     register const char *s;
 
     for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
-	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "engagement"))
-	    return i;
+		if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "engagement"))
+			return i;
 
     impossible("engagement ring not found?");
     return -1;	/* not 0, or caller would try again each move */
