@@ -36,6 +36,7 @@ STATIC_OVL NEARDATA const char *breathwep[] = {
 int destroy_thrown = 0; /*state variable, if nonzero drop_throw always destroys object.  This is necessary 
 						 because the throw code doesn't report the identity of the thrown object, so it can only
 						 be destroyed in the throw code itself */
+int bypassDR=0;
 
 /* hero is hit by something other than a monster */
 int
@@ -66,7 +67,7 @@ const char *name;	/* if null, then format `obj' */
 			    (obj && obj->quan > 1L) ? name : an(name);
 	is_acid = (obj && obj->otyp == ACID_VENOM);
 
-	if(u.uac + tlev <= rnd(20)) {
+	if((bypassDR && (AC_VALUE(base_uac()) + tlev <= rnd(20))) || (!bypassDR && (AC_VALUE(u.uac) + tlev <= rnd(20)))) {
 		if(Blind || !flags.verbose) pline("It misses.");
 		else You("are almost hit by %s.", onm);
 		return(0);
@@ -109,7 +110,7 @@ int x,y;
 	struct trap *t;
 
 	if (breaks(obj, x, y)) return 1;
-	if (destroy_thrown){ //destroy_thrown is a state variable set in firemu
+	if (destroy_thrown || (ohit && obj->oartifact == ART_HOUCHOU)){ //destroy_thrown is a state variable set in firemu
 		if(ohit && x == u.ux && y == u.uy && obj->otyp == LOADSTONE && !rn2(3) ){
 			create = 1;
 			autopickup = 1;
@@ -134,9 +135,9 @@ int x,y;
 			if (!flooreffects(obj,x,y,"fall")) { /* don't double-dip on damage */
 			    place_object(obj, x, y);
 			    if (!mtmp && x == u.ux && y == u.uy)
-				mtmp = &youmonst;
+					mtmp = &youmonst;
 			    if (mtmp && ohit)
-				passive_obj(mtmp, obj, (struct attack *)0);
+					passive_obj(mtmp, obj, (struct attack *)0);
 				if(mtmp == &youmonst && obj->otyp == LOADSTONE && (!rn2(3) || autopickup) ){
 					pickup_object(obj,1,FALSE);
 				}
@@ -168,8 +169,9 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 
 	ismimic = mtmp->m_ap_type && mtmp->m_ap_type != M_AP_MONSTER;
 	vis = cansee(bhitpos.x, bhitpos.y);
-
-	tmp = 5 + find_mac(mtmp) + omon_adj(mtmp, otmp, FALSE);
+	
+	if(bypassDR) tmp = 5 + base_mac(mtmp) + omon_adj(mtmp, otmp, FALSE);
+	else tmp = 5 + find_mac(mtmp) + omon_adj(mtmp, otmp, FALSE);
 	if (tmp < rnd(20)) {
 	    if (!ismimic) {
 		if (vis) miss(distant_name(otmp, mshot_xname), mtmp);
@@ -197,17 +199,17 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 
 	    if (otmp->opoisoned && is_poisonable(otmp)) {
 			if(otmp->opoisoned & OPOISON_BASIC){
-		if (resists_poison(mtmp)) {
-		    if (vis) pline_The("poison doesn't seem to affect %s.",
-				   mon_nam(mtmp));
-		} else {
-		    if (rn2(30)) {
-			damage += rnd(6);
-		    } else {
-			if (vis) pline_The("poison was deadly...");
-			damage = mtmp->mhp;
-		    }
-		}
+				if (resists_poison(mtmp)) {
+					if (vis) pline_The("poison doesn't seem to affect %s.",
+						   mon_nam(mtmp));
+				} else {
+					if (rn2(30)) {
+						damage += rnd(6);
+					} else {
+					if (vis) pline_The("poison was deadly...");
+						damage = mtmp->mhp;
+					}
+				}
 				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_BASIC;
 			}
 			if(otmp->opoisoned & OPOISON_FILTH){
@@ -405,7 +407,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 	    || (levl[bhitpos.x + dx][bhitpos.y + dy].typ == IRONBARS &&
 			((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, 0, 0)))
 		) {
-	    (void) drop_throw(singleobj, 0, bhitpos.x, bhitpos.y);
+	    if(singleobj) drop_throw(singleobj, 0, bhitpos.x, bhitpos.y); /*may have been broken by bars*/
 	    return;
 	}
 
@@ -462,6 +464,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			    break;
 			default:
 			    dam = dmgval(singleobj, &youmonst, 0);
+				if(!bypassDR && u.uac<0) dam += AC_VALUE(u.uac);
 			    hitv = 3 - distmin(u.ux,u.uy, mon->mx,mon->my);
 			    if (hitv < -4) hitv = (hitv+4)/2-4;
 			    if (hitv < -8) hitv = (hitv+8)*2/3-8;
@@ -605,9 +608,9 @@ struct monst *mtmp;
 	        if(mon_wield_item(mtmp) != 0) return;
 	    } else {
 			mtmp->combat_mode = RANGED_MODE;
-		    mtmp->weapon_check = NEED_RANGED_WEAPON;
-		    /* mon_wield_item resets weapon_check as appropriate */
-		    if(mon_wield_item(mtmp) != 0) return;
+			mtmp->weapon_check = NEED_RANGED_WEAPON;
+			/* mon_wield_item resets weapon_check as appropriate */
+			if(mon_wield_item(mtmp) != 0) return;
 		}
 	}
 	/* Pick a weapon */
@@ -623,7 +626,7 @@ struct monst *mtmp;
 
 	    if (canseemon(mtmp)) {
 		onm = xname(otmp);
-		pline("%s thrusts %s.", Monnam(mtmp),
+		pline("%s %s %s.", Monnam(mtmp), otmp->otyp == AKLYS ? "throws" : "thrusts",
 		      obj_is_pname(otmp) ? the(onm) : an(onm));
 	    }
 
@@ -821,39 +824,39 @@ struct monst *mtmp;
 	        /* i > 0 ensures this is not a close range attack */
 	        if (mtmp->mtame && !mat->mtame &&
 		    acceptable_pet_target(mtmp, mat, TRUE) && i > 0) {
-		    if ((!oldmret) ||
-		        (monstr[monsndx(mat->data)] >
-			 monstr[monsndx(oldmret->data)]))
-		    	mret = mat;
-		}
-		else if ((mm_aggression(mtmp, mat) & ALLOW_M)
-		    || conflicted)
-		{
-		    if (mtmp->mtame && !conflicted &&
-		        !acceptable_pet_target(mtmp, mat, TRUE))
-		    {
-		        mret = oldmret;
-		        break; /* not willing to attack in that direction */
-		    }
+				if ((!oldmret) ||
+					(monstr[monsndx(mat->data)] >
+				 monstr[monsndx(oldmret->data)]))
+					mret = mat;
+			}
+			else if ((mm_aggression(mtmp, mat) & ALLOW_M)
+				|| conflicted)
+			{
+				if (mtmp->mtame && !conflicted &&
+					!acceptable_pet_target(mtmp, mat, TRUE))
+				{
+					mret = oldmret;
+					break; /* not willing to attack in that direction */
+				}
 
-		    /* Can't make some pairs work together
-		       if they hate each other on principle. */
-		    if ((conflicted ||
-		        (!(mtmp->mtame && mat->mtame) || !rn2(5))) &&
-			i > 0) {
-		    	if ((!oldmret) ||
-		            (monstr[monsndx(mat->data)] >
-			     monstr[monsndx(oldmret->data)]))
-		        	mret = mat;
-		    }
+				/* Can't make some pairs work together
+				   if they hate each other on principle. */
+				if ((conflicted ||
+					(!(mtmp->mtame && mat->mtame) || !rn2(5))) &&
+				i > 0) {
+					if ((!oldmret) ||
+						(monstr[monsndx(mat->data)] >
+					 monstr[monsndx(oldmret->data)]))
+						mret = mat;
+				}
+			}
+			if (mtmp->mtame && mat->mtame)
+			{
+				mret = oldmret;
+				break;  /* Not going to hit friendlies unless they
+						   already hate them, as above. */
+			}
 		}
-		if (mtmp->mtame && mat->mtame)
-		{
-		    mret = oldmret;
-		    break;  /* Not going to hit friendlies unless they
-		               already hate them, as above. */
-	        }
-	    }
 	}
 	oldmret = mret;
     }
@@ -901,7 +904,7 @@ struct monst *mdef;
 
 	    if (canseemon(mtmp)) {
 		onm = xname(otmp);
-		pline("%s thrusts %s.", Monnam(mtmp),
+		pline("%s %s %s.", Monnam(mtmp), otmp->otyp == AKLYS ? "throws" : "thrusts",
 		      obj_is_pname(otmp) ? the(onm) : an(onm));
 	    }
 
@@ -1024,13 +1027,13 @@ register struct attack *mattk;
 			break;
 		    case AD_BLND:
 		    case AD_DRST:
-			otmp = mksobj(BLINDING_VENOM, TRUE, FALSE);
+				otmp = mksobj(BLINDING_VENOM, TRUE, FALSE);
 			break;
 		    default:
 			impossible("bad attack type in spitmu");
 				/* fall through */
 		    case AD_ACID:
-			otmp = mksobj(ACID_VENOM, TRUE, FALSE);
+				otmp = mksobj(ACID_VENOM, TRUE, FALSE);
 				if(mattk->damn && mattk->damd) otmp->ovar1 = d(mattk->damn,mattk->damd);
 			break;
 		}
@@ -1056,6 +1059,13 @@ int value;
 {
 	destroy_thrown = value;
 	return destroy_thrown;
+}
+
+int set_bypassDR(value)
+int value;
+{
+	bypassDR = value;
+	return bypassDR;
 }
 
 int
@@ -1084,7 +1094,7 @@ register struct attack *mattk;
 			break;
 		    case AD_BLND:
 		    case AD_DRST:
-			otmp = mksobj(BLINDING_VENOM, TRUE, FALSE);
+				otmp = mksobj(BLINDING_VENOM, TRUE, FALSE);
 			break;
 		    default:
 			impossible("bad attack type in spitmu");
@@ -1100,9 +1110,9 @@ register struct attack *mattk;
 		    nomul(0, NULL);
 		    }
 			destroy_thrown = 1; //state variable referenced in drop_throw
-		    m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
+				m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
 					distmin(mtmp->mx,mtmp->my,mdef->mx,mdef->my), otmp,
-			FALSE);
+					FALSE);
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		    return 0;
 		}
@@ -1122,7 +1132,18 @@ register struct attack *mattk;
 		int yadj, xadj, rngmod;
 		yadj = xadj = 0;
 		rngmod = 0;
+		bypassDR = 0;
 		switch (mattk->adtyp) {
+		    case AD_SHDW:
+				ammo_type = DROVEN_BOLT;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 0;
+			    qvr->quan = 1;
+			    qvr->spe = 8;
+				qvr->opoisoned = (OPOISON_BASIC|OPOISON_BLIND);
+				bypassDR = 1;
+			break;
 		    case AD_SOLR:
 				ammo_type = SILVER_ARROW;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
@@ -1178,20 +1199,38 @@ ironball:
 			break;
 		}
 		if(!qvr){
-		for(qvr = mtmp->minvent; qvr; qvr=qvr->nobj){
-				if(qvr->otyp==ammo_type) break;
-		}
+			for(qvr = mtmp->minvent; qvr; qvr=qvr->nobj){
+					if(qvr->otyp==ammo_type) break;
+			}
 		}
 		if(!qvr){
 			return 0; //no ammo of the right type found.
 		}
 		if(BOLT_LIM + rngmod >= distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy)) {
 			destroy_thrown = autodestroy; //state variable referenced in drop_throw
-				m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
-					BOLT_LIM + rngmod, qvr,TRUE);
+				if(mattk->adtyp == AD_SHDW){
+					struct trap *ttmp2;
+					m_throw(mtmp, mtmp->mux + (-sgn(tbx)) + xadj, mtmp->muy + (-sgn(tby)) + yadj, sgn(tbx), sgn(tby),
+						1, qvr,TRUE);
+					ttmp2 = maketrap(mtmp->mux, mtmp->muy, WEB);
+					if (mtmp->mux == u.ux && mtmp->muy == u.uy && ttmp2) {
+						pline_The("webbing sticks to you. You're caught!");
+						dotrap(ttmp2, NOWEBMSG);
+#ifdef STEED
+						if (u.usteed && u.utrap) {
+						/* you, not steed, are trapped */
+						dismount_steed(DISMOUNT_FELL);
+						}
+#endif
+					}
+				} else {
+					m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
+						BOLT_LIM + rngmod, qvr,TRUE);
+				}
 			    /*nomul(0);*/ //Copy paste error?
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		}
+		bypassDR = 0;
 	}
 	return 0;
 }
@@ -1208,7 +1247,18 @@ register struct attack *mattk;
 		int yadj, xadj, rngmod;
 		yadj = xadj = 0;
 		rngmod = 0;
+		bypassDR = 0;
 		switch (mattk->adtyp) {
+		    case AD_SHDW:
+				ammo_type = DROVEN_BOLT;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 0;
+			    qvr->quan = 1;
+			    qvr->spe = 8;
+				qvr->opoisoned = (OPOISON_BASIC|OPOISON_BLIND);
+				bypassDR = 1;
+			break;
 		    case AD_SOLR:
 				ammo_type = SILVER_ARROW;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
@@ -1249,9 +1299,9 @@ register struct attack *mattk;
 			    qvr->blessed = 0;
 			    qvr->cursed = 0;
 				rngmod = 8;
-				if(mtmp->muy == mtmp->my) yadj = d(1,3)-2;
-				else if(mtmp->mux == mtmp->mx) xadj = d(1,3)-2;
-				else if(mtmp->mux - mtmp->mx == mtmp->muy - mtmp->my){
+				if(mdef->my == mtmp->my) yadj = d(1,3)-2;
+				else if(mdef->mx == mtmp->mx) xadj = d(1,3)-2;
+				else if(mdef->mx - mtmp->mx == mdef->my - mtmp->my){
 					xadj = d(1,3)-2;
 					yadj = -1*xadj;
 				}
@@ -1271,11 +1321,20 @@ register struct attack *mattk;
 		}
 		if(BOLT_LIM + rngmod >= distmin(mtmp->mx,mtmp->my,mdef->mx,mdef->my)) {
 			destroy_thrown = autodestroy; //state variable referenced in drop_throw
-				m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
-					BOLT_LIM + rngmod, qvr,TRUE);
+				if(mattk->adtyp == AD_SHDW){
+					struct trap *ttmp2;
+					m_throw(mtmp, mdef->mx + (-sgn(tbx)) + xadj, mdef->my + (-sgn(tby)) + yadj, sgn(tbx), sgn(tby),
+						1, qvr,TRUE);
+					ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
+					if (ttmp2) mintrap(mdef);
+				} else {
+					m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
+						BOLT_LIM + rngmod, qvr,TRUE);
+				}
 			    /*nomul(0);*/ //Copy paste error?
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		}
+		bypassDR = 0;
 	}
 	return 0;
 }
