@@ -1327,6 +1327,8 @@ hitmu(mtmp, mattk)
 				(is_missile(otmp) || is_ammo(otmp)) ||
 				/* lightsaber that isn't lit ;) */
 				(is_lightsaber(otmp) && !otmp->lamplit) ||
+				/* houchou not thrown */
+				(otmp->oartifact == ART_HOUCHOU) ||
 				/* WAC -- or using a pole at short range... */
 				(is_pole(otmp) &&
 					otmp->otyp != AKLYS && 

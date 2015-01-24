@@ -928,6 +928,8 @@ mdamagem(magr, mdef, mattk)
 			    is_launcher(otmp) ||
 			    /* or strike with a missile in your hand... */
 			    (is_missile(otmp) || is_ammo(otmp)) ||
+				/* houchou not thrown */
+				(otmp->oartifact == ART_HOUCHOU) ||
 			    /* lightsaber that isn't lit ;) */
 			    (is_lightsaber(otmp) && !otmp->lamplit) ||
 			    /* WAC -- or using a pole at short range... */

@@ -1005,6 +1005,8 @@ int thrown;
 			) ||
 		    /* lightsaber that isn't lit ;) */
 		    (is_lightsaber(obj) && !obj->lamplit) ||
+		    /* houchou that isn't thrown */
+		    (!thrown && obj->oartifact == ART_HOUCHOU) ||
 		    /* or throw a missile without the proper bow... */
 		    (is_ammo(obj) && !ammo_and_launcher(obj, uwep))) {
 			

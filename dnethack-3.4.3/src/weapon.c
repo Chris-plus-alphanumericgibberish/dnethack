@@ -139,9 +139,11 @@ struct monst *mon;
 
 	if (Is_weapon)
 		tmp += otmp->spe;
+		//But DON'T double the to hit bonus from spe for double lightsabers in dual bladed mode. It gets harder to use, not easier.
 
 /*	Put weapon specific "to hit" bonuses in below:		*/
 	tmp += objects[otmp->otyp].oc_hitbon;
+	if (otmp->otyp == DOUBLE_LIGHTSABER && otmp->altmode) tmp += objects[otmp->otyp].oc_hitbon;
 
 /*	Put weapon vs. monster type "to hit" bonuses in below:	*/
 
@@ -220,12 +222,15 @@ int spec;
 	else ptr = mon->data;
 
 	if (otyp == CREAM_PIE) return 0;
+	if (otmp->oartifact == ART_HOUCHOU)
+	        return 9999;
 
 	if (bigmonst(ptr)) {
 		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wldam,1);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 															unlucky_exploding_d(1,objects[otyp].oc_wldam,0) : 
 															lucky_exploding_d(1,objects[otyp].oc_wldam,0);
+	    else if (otyp == MOON_AXE && otmp->ovar1) tmp = d(2,objects[otyp].oc_wldam + 2*(otmp->ovar1-1));
 	    else if (objects[otyp].oc_wldam) tmp = rnd(objects[otyp].oc_wldam);
 		
 		if(spec & SPEC_MARIONETTE){
@@ -236,12 +241,13 @@ int spec;
 			else if (objects[otyp].oc_wldam) tmp += rnd(objects[otyp].oc_wldam+2);
 		}
 	    switch (otyp) {
+		case ELVEN_BROADSWORD:
+			tmp++;
 		case IRON_CHAIN:
 		case CROSSBOW_BOLT:
 		case MORNING_STAR:
 		case PARTISAN:
 		case RUNESWORD:
-		case ELVEN_BROADSWORD:
 		case BROADSWORD:	
 			tmp++; 
 			break;
@@ -257,6 +263,9 @@ int spec;
 			if(otmp->ovar1) tmp = otmp->ovar1;
 			else tmp += rnd(6);
 		break;
+		
+		case CRYSTAL_SWORD:	tmp += d(1,12); break;
+		
 		case BATTLE_AXE:
 		case BARDICHE:
 		case TRIDENT:		tmp += d(2,4); break;
@@ -283,18 +292,23 @@ int spec;
 			break;
 		case DOUBLE_LIGHTSABER: 
 			tmp += d(2, objects[otyp].oc_wldam); 
-			if (otmp->altmode) tmp += d(2, objects[otyp].oc_wldam);
+			if (otmp->altmode) tmp += d(3, objects[otyp].oc_wldam);
 			break;
 		case WAR_HAMMER:
 			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4); break;
 		case BULLWHIP:
-			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += d(1,10); break;
+			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += d(1,10);
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(2,2,0);
+		break;
+		case RAPIER:
+			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(2,4); break;
 	    }
 	} else {
 		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wsdam,1);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 															unlucky_exploding_d(1,objects[otyp].oc_wsdam,0) : 
 															lucky_exploding_d(1,objects[otyp].oc_wsdam,0);
+	    else if (otyp == MOON_AXE) tmp = d(2,otmp->ovar1 ? objects[otyp].oc_wsdam + 2*(otmp->ovar1-1) : 12);
 	    else if (objects[otyp].oc_wsdam) tmp = rnd(objects[otyp].oc_wsdam);
 		
 		if(spec & SPEC_MARIONETTE){
@@ -308,17 +322,23 @@ int spec;
 		case IRON_CHAIN:
 		case CROSSBOW_BOLT:
 		case MACE:
+		case ELVEN_MACE:
 		case WAR_HAMMER:
 		case FLAIL:
 		case SPETUM:
 		case TRIDENT:		tmp++; if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4)+2; break;
 
 		case BULLWHIP:
-			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += 10; break;
+			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += 10;
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(4,4,0);
+		break;
 
 		case LONG_SWORD:	
 			if(otmp->oartifact == ART_TOBIUME) tmp -= 2;
 		break;
+		
+		case CRYSTAL_SWORD:	tmp += d(1,8); break;
+		
 		case BATTLE_AXE:
 		case BARDICHE:
 		case BILL_GUISARME:
@@ -355,13 +375,18 @@ int spec;
 		break;
 		case SCIMITAR:
 			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
+		case RAPIER:
+			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(1,6)+d(1,4); break;
 	    }
 	}
+	
 	if(otmp->oartifact == ART_PEN_OF_THE_VOID){
 		tmp += pendamage(otmp, mon);
 	}
+	
 	if (Is_weapon) {
-		tmp += otmp->spe;
+		if(otmp->oartifact != ART_TENTACLE_ROD) tmp += otmp->spe;
+		if (otmp->otyp == DOUBLE_LIGHTSABER && otmp->altmode) tmp += otmp->spe;
 		/* negative enchantment mustn't produce negative damage */
 		if (tmp < 0) tmp = 0;
 	}
@@ -382,7 +407,7 @@ int spec;
 		if (tmp > 25) tmp = 25;	/* objects[].oc_wldam */
 	    }
 	}
-
+	
 	if(is_farm(otmp) && ptr->mlet == S_PLANT) tmp *= 2;
 	if(u.sealsActive&SEAL_EVE && ptr->mlet == S_PLANT) tmp *= 2;
 /*	Put weapon vs. monster type damage bonuses in below:	*/
@@ -394,9 +419,12 @@ int spec;
 		bonus += rnd(4);
 	    if (is_axe(otmp) && is_wooden(ptr))
 		bonus += rnd(4);
-	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(ptr))
-		bonus += rnd(20);
-
+	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(ptr)){
+			if(otyp == SILVER_KHAKKHARA) bonus += d(rnd(3),20);
+			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
+			else bonus += rnd(20);
+		}
+		
 		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && 
 			(otmp->ovar1 & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);
 			
@@ -483,7 +511,7 @@ struct monst *mon;
 		else if(!youdef && !(nonliving(mon->data) || amphibious(mon->data))) dmg += d(dnum,4);
 	}
 	if(pen->ovar1&SEAL_OSE){
-		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,4);
+		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,15);
 		else if(!youdef && !mindless(mon->data) && (telepathic(mon->data) || !rn2(5))) dmg += d(dnum,15);
 	}
 	if(pen->ovar1&SEAL_NABERIUS){
@@ -532,11 +560,11 @@ int x;
 			!touch_petrifies(&mons[otmp->corpsenm])) &&
                     (!is_lightsaber(otmp) || otmp->age) &&
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
-            {
-	        if (!obest ||
+		{
+			if (!obest ||
 				dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0))
-		    obest = otmp;
-	}
+					obest = otmp;
+		}
 	}
 	return obest;
 }
@@ -560,16 +588,52 @@ struct monst *mtmp;
 }
 
 static NEARDATA const int rwep[] =
-{	LOADSTONE, DWARVISH_SPEAR, SILVER_SPEAR, ELVEN_SPEAR, SPEAR, ORCISH_SPEAR,
-	JAVELIN, SHURIKEN, YA, SILVER_ARROW, ELVEN_ARROW, ARROW,
-	ORCISH_ARROW, CROSSBOW_BOLT, SILVER_DAGGER, ELVEN_DAGGER, DAGGER,
-	ORCISH_DAGGER, KNIFE, FLINT, ROCK, LUCKSTONE, DART,
-	/* BOOMERANG, */ CREAM_PIE
+{	LOADSTONE/*1d30*/, 
+	DWARVISH_SPEAR/*1d9/1d9*/, 
+	DROVEN_BOLT/*1d9/1d6*/, 
+	SHURIKEN/*1d8/1d6*/, 
+	DROVEN_DAGGER/*1d8/1d6*/, 
+	YA,/*1d7/1d7*/ 
+	ELVEN_ARROW/*1d7/1d5*/, 
+	ELVEN_SPEAR/*1d7/1d7*/, 
+	JAVELIN/*1d6/1d6*/, 
+	SILVER_ARROW/*1d6/1d6*/, 
+	SILVER_SPEAR/*1d6/1d8*/, 
+	ARROW/*1d6/1d6*/,
+	FLINT/*1d6/1d6*/, 
+	LUCKSTONE/*1d3/1d3*/, /*Because they think it's flint*/
+	TOUCHSTONE/*1d3/1d3*/, 
+	SPEAR/*1d6/1d8*/, 
+	ORCISH_SPEAR/*1d5/1d10*/,
+	ORCISH_ARROW/*1d5/1d8*/, 
+	CROSSBOW_BOLT/*1d4/1d6*/, 
+	SILVER_DAGGER/*1d4/1d3*/, 
+	ELVEN_DAGGER/*1d5/1d3*/, 
+	DAGGER/*1d4/1d3*/,
+	ORCISH_DAGGER/*1d3/1d5*/, 
+	ROCK/*1d3/1d3*/, 
+	DART/*1d3/1d2*/,
+	KNIFE/*1d3/1d2*/, 
+	/* BOOMERANG, */ 
+	CREAM_PIE/*0*/
 };
 
 static NEARDATA const int pwep[] =
-{	HALBERD, BARDICHE, SPETUM, BILL_GUISARME, VOULGE, RANSEUR, GUISARME,
-	GLAIVE, LUCERN_HAMMER, BEC_DE_CORBIN, FAUCHARD, PARTISAN, LANCE
+{	HALBERD, 
+	BARDICHE, 
+	SPETUM, 
+	BILL_GUISARME, 
+	VOULGE, 
+	DROVEN_LANCE,
+	RANSEUR, 
+	GUISARME,
+	GLAIVE, 
+	LUCERN_HAMMER, 
+	BEC_DE_CORBIN, 
+	FAUCHARD, 
+	ELVEN_LANCE,
+	PARTISAN, 
+	LANCE
 };
 
 boolean
@@ -607,7 +671,7 @@ struct obj *otmp;
         }
     }
 
-    if (is_pole(otmp)) return FALSE; /* If we get this far,
+    if (is_pole(otmp) && otmp->otyp != AKLYS) return FALSE; /* If we get this far,
                                         we failed the polearm strength check */
 
     for (i = 0; i < SIZE(rwep); i++)
@@ -679,16 +743,16 @@ register struct monst *mtmp;
 	    /* (shooting rocks is already handled via the rwep[] ordering) */
 	    if (rwep[i] == DART && !likes_gems(mtmp->data) &&
 		    m_carrying(mtmp, SLING)) {		/* propellor */
-		for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
-		    if (otmp->oclass == GEM_CLASS &&
-			    (otmp->otyp != LOADSTONE || !otmp->cursed)) {
-			propellor = m_carrying(mtmp, SLING);
-			return otmp;
-		    }
+			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
+				if (otmp->oclass == GEM_CLASS &&
+					(otmp->otyp != LOADSTONE || !otmp->cursed)) {
+				propellor = m_carrying(mtmp, SLING);
+				return otmp;
+				}
 	    }
 
 		/* KMH -- This belongs here so darts will work */
-	    propellor = &zeroobj;
+		propellor = &zeroobj;
 
 	    prop = (objects[rwep[i]]).oc_skill;
 	    if (prop < 0) {
@@ -703,7 +767,8 @@ register struct monst *mtmp;
 		  propellor = (oselect(mtmp, SLING));
 		  break;
 		case P_CROSSBOW:
-		  propellor = (oselect(mtmp, CROSSBOW));
+		  propellor = (oselect(mtmp, DROVEN_CROSSBOW));
+		  if(!propellor) propellor = (oselect(mtmp, CROSSBOW));
 		}
 		if (!tmpprop) tmpprop = propellor;
 		if (((otmp = MON_WEP(mtmp)) && otmp->cursed && otmp != propellor
@@ -715,21 +780,21 @@ register struct monst *mtmp;
 	     * propellor = 0, needed one and didn't have one
 	     */
 	    if (propellor != 0) {
-		/* Note: cannot use m_carrying for loadstones, since it will
-		 * always select the first object of a type, and maybe the
-		 * monster is carrying two but only the first is unthrowable.
-		 */
-		if (rwep[i] != LOADSTONE) {
-			/* Don't throw a cursed weapon-in-hand or an artifact */
-			if ((otmp = oselect(mtmp, rwep[i])) && !otmp->oartifact
-			    && (!otmp->cursed || otmp != MON_WEP(mtmp)))
-				return(otmp);
-		} else for(otmp=mtmp->minvent; otmp; otmp=otmp->nobj) {
-		    if (otmp->otyp == LOADSTONE && !otmp->cursed)
-			return otmp;
-		}
+			/* Note: cannot use m_carrying for loadstones, since it will
+			 * always select the first object of a type, and maybe the
+			 * monster is carrying two but only the first is unthrowable.
+			 */
+			if (rwep[i] != LOADSTONE) {
+				/* Don't throw a cursed weapon-in-hand or an artifact */
+				if ((otmp = oselect(mtmp, rwep[i])) && !otmp->oartifact
+					&& (!otmp->cursed || otmp != MON_WEP(mtmp)))
+					return(otmp);
+			} else for(otmp=mtmp->minvent; otmp; otmp=otmp->nobj) {
+				if (otmp->otyp == LOADSTONE && !otmp->cursed)
+				return otmp;
+			}
 	    }
-	  }
+	}
 
 	/* failure */
 	if (tmpprop) propellor = tmpprop;
@@ -739,17 +804,62 @@ register struct monst *mtmp;
 /* Weapons in order of preference */
 static const NEARDATA short hwep[] = {
 	  CORPSE,  /* cockatrice corpse */
-	  TSURUGI, RUNESWORD, DWARVISH_MATTOCK, TWO_HANDED_SWORD, BATTLE_AXE,
-	  DOUBLE_LIGHTSABER, BEAMSWORD,
-	  LIGHTSABER,
-	  KATANA, UNICORN_HORN, CRYSKNIFE, TRIDENT, LONG_SWORD,
-	  ELVEN_BROADSWORD, BROADSWORD, SCIMITAR, SILVER_SABER,
-	  MORNING_STAR, ELVEN_SHORT_SWORD, DWARVISH_SHORT_SWORD, SHORT_SWORD,
-	  ORCISH_SHORT_SWORD, MACE, AXE, DWARVISH_SPEAR, SILVER_SPEAR,
-	  ELVEN_SPEAR, SPEAR, ORCISH_SPEAR, FLAIL, BULLWHIP, QUARTERSTAFF,
-	  JAVELIN, AKLYS, CLUB, PICK_AXE,
-	  WAR_HAMMER, SILVER_DAGGER, ELVEN_DAGGER, STILETTO, DAGGER, ORCISH_DAGGER,
-	  ATHAME, SCALPEL, KNIFE, WORM_TOOTH
+	  DOUBLE_LIGHTSABER/*6d8*/, BEAMSWORD/*3d10*/,
+	  LIGHTSABER/*3d8*/,
+	  CRYSTAL_SWORD/*2d8/2d12*/,
+	  DROVEN_GREATSWORD/*1d18/1d30*/, 
+	  TSURUGI/*1d16/1d8+2d6*/, 
+	  MOON_AXE/*variable, 2d6 to 2d12*/,
+	  RUNESWORD/*1d10+1d4/1d10+1*/, 
+	  BATTLE_AXE/*1d8+1d4/1d6+2d4*/,
+	  TWO_HANDED_SWORD/*1d12/3d6*/, 
+	  DROVEN_SPEAR/*1d12/1d12*/,
+	  UNICORN_HORN/*1d12/1d12*/,
+	  DWARVISH_MATTOCK/*1d12/1d8*/, 
+	  ELVEN_BROADSWORD/*1d6+1d4/1d6+2*/, 
+	  KATANA/*1d10/1d12*/,
+	  CRYSKNIFE/*1d10/1d10*/, 
+	  DROVEN_SHORT_SWORD/*1d9/1d9*/, 
+	  DWARVISH_SPEAR/*1d9/1d9*/, 
+	  SCYTHE/*2d4*/, 
+	  BROADSWORD/*2d4/1d6+1*/, 
+	  MORNING_STAR/*2d4/1d6+1*/, 
+	  SILVER_SABER/*1d8/1d8*/,
+	  TRIDENT/*1d6+1/3d4*/, 
+	  LONG_SWORD/*1d8/1d12*/,
+	  FLAIL/*1d6+1/2d4*/, 
+	  SCIMITAR/*1d8/1d8*/,
+	  DWARVISH_SHORT_SWORD/*1d8/1d7*/, 
+	  DROVEN_DAGGER/*1d8/1d6*/, 
+	  MACE/*1d6+1/1d6*/, 
+	  ELVEN_SHORT_SWORD/*1d7/1d7*/, 
+	  ELVEN_MACE/*1d7/1d7*/, 
+	  ELVEN_SPEAR/*1d7/1d7*/, 
+	  SILVER_SPEAR/*1d6/1d8*/,
+	  SHORT_SWORD/*1d6/1d8*/,
+	  SPEAR/*1d6/1d8*/, 
+	  AXE/*1d6/1d4*/, 
+	  ORCISH_SHORT_SWORD/*1d5/1d10*/, 
+	  ORCISH_SPEAR/*1d5/1d10*/, 
+	  SILVER_KHAKKHARA/*1d6/1d4*/,
+	  BULLWHIP/*1d2/1d1*/, 
+	  QUARTERSTAFF/*1d6/1d6*/,
+	  JAVELIN/*1d6/1d6*/, 
+	  WAR_HAMMER/*1d4+1/1d4*/, 
+	  AKLYS/*1d6/1d3*/, 
+	  CLUB/*1d6/1d3*/, 
+	  PICK_AXE/*1d6/1d3*/,
+	  ELVEN_SICKLE/*1d6/1d3*/,
+	  STILETTO/*1d6/1d2*/, 
+	  ELVEN_DAGGER/*1d5/1d3*/, 
+	  SILVER_DAGGER/*1d4/1d3*/, 
+	  ATHAME/*1d4/1d4*/, 
+	  DAGGER/*1d4/1d3*/, 
+	  SICKLE/*1d4/1d1*/, 
+	  ORCISH_DAGGER/*1d3/1d5*/,
+	  KNIFE/*1d3/1d2*/, 
+	  SCALPEL/*1d3/1d1*/, 
+	  WORM_TOOTH/*1d2/1d2*/
 	};
 
 boolean
@@ -1049,9 +1159,6 @@ abon()		/* attack bonus for strength & dexterity */
 	else if (str < STR18(100)) sbon = 2;
 	else sbon = 3;
 
-/* Game tuning kludge: make it a bit easier for a low level character to hit */
-	sbon += (u.ulevel < 3) ? 1 : 0;
-
 	if (dex < 4) return(sbon-3);
 	else if (dex < 6) return(sbon-2);
 	else if (dex < 8) return(sbon-1);
@@ -1068,9 +1175,11 @@ struct obj *otmp;
 {
 	int str = ACURR(A_STR);
 	int bonus = 0;
-
+	
+	
+	
 	if (Upolyd || otmp == uswapwep) return(0);
-
+	
 	if (str < 6) bonus = -6+str;
 	else if (str < 16) bonus = 0;
 	else if (str < 18) bonus = 1;
@@ -1081,7 +1190,7 @@ struct obj *otmp;
 	else if (str < 22) bonus = 6;
 	else if (str < 25) bonus = 7;
 	else /*  str ==25*/bonus = 8;
-
+	
 	if(otmp && objects[otmp->otyp].oc_bimanual) bonus *= 2;
 	
 	if(uwep && otmp==uwep && otmp->otyp==RAPIER){
@@ -1189,11 +1298,11 @@ STATIC_OVL void
 skill_advance(skill)
 int skill;
 {
-    u.weapon_slots -= slots_required(skill);
+	u.weapon_slots -= slots_required(skill);
 	OLD_P_SKILL(skill)++;
-    u.skill_record[u.skills_advanced++] = skill;
-    /* subtly change the advance message to indicate no more advancement */
-    You("are now %s skilled in %s.",
+	u.skill_record[u.skills_advanced++] = skill;
+	/* subtly change the advance message to indicate no more advancement */
+	You("are now %s skilled in %s.",
 	P_SKILL(skill) >= P_MAX_SKILL(skill) ? "most" : "more",
 	P_NAME(skill));
 }
@@ -1236,12 +1345,12 @@ enhance_weapon_skill()
 	    /* find longest available skill name, count those that can advance */
 	    to_advance = eventually_advance = maxxed_cnt = 0;
 	    for (longest = 0, i = 0; i < P_NUM_SKILLS; i++) {
-		if (P_RESTRICTED(i)) continue;
-		if ((len = strlen(P_NAME(i))) > longest)
-		    longest = len;
-		if (can_advance(i, speedy)) to_advance++;
-		else if (could_advance(i)) eventually_advance++;
-		else if (peaked_skill(i)) maxxed_cnt++;
+			if (P_RESTRICTED(i)) continue;
+			if ((len = strlen(P_NAME(i))) > longest)
+				longest = len;
+			if (can_advance(i, speedy)) to_advance++;
+			else if (could_advance(i)) eventually_advance++;
+			else if (peaked_skill(i)) maxxed_cnt++;
 	    }
 
 	    win = create_nhwindow(NHW_MENU);
@@ -1368,7 +1477,7 @@ int skill;
     if (skill < P_NUM_SKILLS && OLD_P_RESTRICTED(skill)) {
 		OLD_P_SKILL(skill) = P_UNSKILLED;
 		OLD_P_MAX_SKILL(skill) = P_BASIC;
-	P_ADVANCE(skill) = 0;
+		P_ADVANCE(skill) = 0;
     }
 }
 
@@ -1473,7 +1582,9 @@ weapon_hit_bonus(weapon)
 struct obj *weapon;
 {
     int type, wep_type, skill, bonus = 0;
+	unsigned int maxweight = 0;
     static const char bad_skill[] = "weapon_hit_bonus: bad skill %d";
+	static boolean twowepwarn = TRUE;
 
     wep_type = weapon_type(weapon);
     /* use two weapon skill only if attacking with one of the wielded weapons */
@@ -1496,8 +1607,8 @@ struct obj *weapon;
 	switch (skill) {
 	    default: impossible(bad_skill, skill); /* fall through */
 	    case P_ISRESTRICTED:
-	    case P_UNSKILLED:   bonus = -9; break;
-	    case P_BASIC:	bonus = -7; break;
+	    case P_UNSKILLED:   bonus = -10; break;
+	    case P_BASIC:	bonus = -8; break;
 	    case P_SKILLED:	bonus = -5; break;
 	    case P_EXPERT:	bonus = -2; break;
 	}
@@ -1540,8 +1651,30 @@ struct obj *weapon;
 			}
 		}
     }
-
-	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
+	
+	if(type == P_TWO_WEAPON_COMBAT){
+		/* Sporkhack:
+		 * Heavy things are hard to use in your offhand unless you're
+		 * very good at what you're doing.
+		 *
+		 * No real need to restrict unskilled here since knives and such
+		 * are very hard to find and people who are restricted can't
+		 * #twoweapon even at unskilled...
+		 */
+		switch (P_SKILL(P_TWO_WEAPON_COMBAT)) {
+			default: impossible(bad_skill, P_SKILL(P_TWO_WEAPON_COMBAT));
+			case P_ISRESTRICTED:
+			case P_UNSKILLED:	 maxweight = 10; break;	 /* not silver daggers */
+			case P_BASIC:		 maxweight = 20; break;	 /* daggers, crysknife, sickle, aklys, flail, bullwhip, unicorn horn */
+			case P_SKILLED:	 	 maxweight = 30; break;	 /* shortswords and spears (inc silver), mace, club, lightsaber, grappling hook */
+			case P_EXPERT:		 maxweight = 40; break;	 /* sabers and long swords, axe weighs 60, war hammer 50, pickaxe 80, beamsword */
+		}
+		if (uswapwep->owt > maxweight) {
+			if(twowepwarn) pline("Your %s seem%s very unwieldy.",xname(uswapwep),uswapwep->quan == 1 ? "s" : "");
+			twowepwarn = FALSE;
+			bonus += -20;
+		} else if(!twowepwarn) twowepwarn = TRUE;
+	} else if(!twowepwarn) twowepwarn = TRUE;
 #ifdef STEED
 	/* KMH -- It's harder to hit while you are riding */
 	if (u.usteed) {
@@ -1555,7 +1688,10 @@ struct obj *weapon;
 		if (u.twoweap) bonus -= 2;
 	}
 #endif
-
+	
+	if(wep_type == P_AXE && Race_if(PM_DWARF) && ublindf && ublindf->oartifact == ART_WAR_MASK_OF_DURIN) bonus += 5;
+	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
+	
     return bonus;
 }
 
@@ -1568,6 +1704,7 @@ weapon_dam_bonus(weapon)
 struct obj *weapon;
 {
     int type, wep_type, skill, bonus = 0;
+	unsigned int maxweight = 0;
 
     wep_type = weapon_type(weapon);
     /* use two weapon skill only if attacking with one of the wielded weapons */
@@ -1635,9 +1772,29 @@ struct obj *weapon;
 			}
 		}
     }
-
-	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
 	
+	if(type == P_TWO_WEAPON_COMBAT){
+		/* Sporkhack:
+		 * Heavy things are hard to use in your offhand unless you're
+		 * very good at what you're doing.
+		 *
+		 * No real need to restrict unskilled here since knives and such
+		 * are very hard to find and people who are restricted can't
+		 * #twoweapon even at unskilled...
+		 */
+		switch (P_SKILL(P_TWO_WEAPON_COMBAT)) {
+			default:
+			case P_ISRESTRICTED:
+			case P_UNSKILLED:	 maxweight = 10; break;	 /* not silver daggers */
+			case P_BASIC:		 maxweight = 20; break;	 /* daggers, crysknife, sickle, aklys, flail, bullwhip, unicorn horn */
+			case P_SKILLED:	 	 maxweight = 30; break;	 /* shortswords and spears (inc silver), mace, club, lightsaber, grappling hook */
+			case P_EXPERT:		 maxweight = 40; break;	 /* sabers and long swords, axe weighs 60, war hammer 50, pickaxe 80, beamsword */
+		}
+		if (uswapwep->owt > maxweight) {
+			bonus += max(-20, -5 * (uswapwep->owt-maxweight)/maxweight);
+		}
+	}
+
 #ifdef STEED
 	/* KMH -- Riding gives some thrusting damage */
 	if (u.usteed && type != P_TWO_WEAPON_COMBAT) {
@@ -1651,7 +1808,10 @@ struct obj *weapon;
 	}
 #endif
 
-    return bonus;
+	if(wep_type == P_AXE && Race_if(PM_DWARF) && ublindf && ublindf->oartifact == ART_WAR_MASK_OF_DURIN) bonus += 5;
+	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && type != P_TWO_WEAPON_COMBAT) bonus = max(bonus,0);
+	
+	return bonus;
 }
 
 /*
@@ -1699,7 +1859,7 @@ const struct def_skill *class_skill;
 	for (skill = 0; skill < P_NUM_SKILLS; skill++) {
 		OLD_P_SKILL(skill) = P_ISRESTRICTED;
 		OLD_P_MAX_SKILL(skill) = P_ISRESTRICTED;
-	    P_ADVANCE(skill) = 0;
+		P_ADVANCE(skill) = 0;
 	}
 
 	/* Set skill for all weapons in inventory to be basic */
