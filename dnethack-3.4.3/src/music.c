@@ -68,14 +68,24 @@ int distance;
 		distm = distu(mtmp->mx, mtmp->my);
 		if (distm < distance) {
 		    mtmp->msleeping = 0;
-	      if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee)){
+			if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee)){
 			    mtmp->mcanmove = 1;
 			    mtmp->mfrozen = 0;
 			}
-		    /* May scare some monsters */
-		    if (distm < distance/3 &&
-			    !resist(mtmp, TOOL_CLASS, 0, NOTELL))
-			monflee(mtmp, 0, FALSE, TRUE);
+		    /* May scare or deafen some monsters */
+			if(sensitive_ears(mtmp->data)){
+				if (distm < distance/3 &&
+					!resist(mtmp, TOOL_CLASS, 0, NOTELL)
+				){
+					mtmp->mstun = 1;
+					mtmp->mconf = 1;
+					mtmp->uhurtm = 1;
+				}
+			} else {
+				if (distm < distance/3 &&
+					!resist(mtmp, TOOL_CLASS, 0, NOTELL))
+				monflee(mtmp, 0, FALSE, TRUE);
+			}
 		}
 	    }
 	    mtmp = mtmp->nmon;
@@ -339,7 +349,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 			}
 		    } else if (x == u.ux && y == u.uy) {
 			    if (Levitation || Flying ||
-						is_clinger(youmonst.data)) {
+						is_clinger(youmonst.data) || u.sealsActive&SEAL_SIMURGH) {
 				    pline("A chasm opens up under you!");
 				    You("don't fall in!");
 			    } else {
@@ -419,7 +429,7 @@ struct obj *instr;
 	    pline("What you produce is quite far from music...");
 	else
 	    You("start playing %s.", the(xname(instr)));
-
+	
 	if(instr->oartifact == ART_SILVER_STARLIGHT){
 	    if (do_spec && instr->spe > 0) {
 			if(instr->age > monstermoves) consume_obj_charge(instr, TRUE);
@@ -478,6 +488,7 @@ struct obj *instr;
 	    break;
 	case BUGLE:			/* Awaken & attract soldiers */
 	    You("extract a loud noise from %s.", the(xname(instr)));
+	    awaken_monsters(u.ulevel * 30);
 	    awaken_soldiers();
 	    exercise(A_WIS, FALSE);
 	    break;
