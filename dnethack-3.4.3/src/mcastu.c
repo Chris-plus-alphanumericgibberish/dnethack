@@ -48,7 +48,8 @@ extern void demonpet();
 #define INSECTS                CURSE_ITEMS+1
 #define RAISE_DEAD             INSECTS+1
 #define SUMMON_ANGEL           RAISE_DEAD+1
-#define PLAGUE                 SUMMON_ANGEL+1
+#define SUMMON_ALIEN           SUMMON_ANGEL+1
+#define PLAGUE                 SUMMON_ALIEN+1
 #define PUNISH                 PLAGUE+1
 #define AGGRAVATION			   PUNISH+1
        /* escape spells */
@@ -669,7 +670,11 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	 */
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;
-
+		
+		if(Race_if(PM_DROW) && mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !Role_if(PM_EXILE) && !mtmp->mpeaceful){
+			u.ugangr[Align2gangr(A_CHAOTIC)]++;
+			angrygods(A_CHAOTIC);
+		}
            do {
                spellnum = choose_magic_special(mtmp, mattk->adtyp);
 				if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
@@ -690,7 +695,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || mtmp->mspec_used || !ml || u.uinvulnerable) {
+	if(mtmp->mcan || mtmp->mspec_used || !ml || u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
 	    cursetxt(mtmp, is_undirected_spell(mattk->adtyp, spellnum));
 	    return(0);
 	}
@@ -1000,26 +1005,31 @@ int spellnum;
 		doredraw();
 	break;
     case ACID_RAIN: /* as seen in the Lethe patch */
-       pline("A torrent of burning acid rains down on you!");
-        dmg = d(8, 6);
-       if (Acid_resistance) {
-	    shieldeff(u.ux, u.uy);
-           pline("It feels mildly uncomfortable.");
-		dmg = 0;
+		pline("A torrent of burning acid rains down on you!");
+		if(uarmh && uarmh->otyp == SEDGE_HAT){
+			pline("It runs off the brim of your wide straw hat.");
+			dmg = 0;
 		} else {
-			destroy_item(POTION_CLASS, AD_FIRE);
+			dmg = d(8, 6);
+			if (Acid_resistance) {
+				shieldeff(u.ux, u.uy);
+				pline("It feels mildly uncomfortable.");
+				dmg = 0;
+			} else {
+				destroy_item(POTION_CLASS, AD_FIRE);
+			}
+			erode_obj(uwep, TRUE, FALSE);
+			erode_obj(uswapwep, TRUE, FALSE);
+			erode_armor(&youmonst, TRUE);
+			water_damage(invent, FALSE, FALSE, FALSE);
+			if (!resists_blnd(&youmonst) && rn2(2)) {
+				pline_The("acid gets into your %s!", eyecount(youmonst.data) == 1 ?
+						body_part(EYE) : makeplural(body_part(EYE)));
+				make_blinded((long)rnd(Acid_resistance ? 10 : 50),FALSE);
+				if (!Blind) Your(vision_clears);
+			}
 		}
-       erode_obj(uwep, TRUE, FALSE);
-       erode_obj(uswapwep, TRUE, FALSE);
-       erode_armor(&youmonst, TRUE);
-	   water_damage(invent, FALSE, FALSE, FALSE);
-       if (!resists_blnd(&youmonst) && rn2(2)) {
-           pline_The("acid gets into your %s!", eyecount(youmonst.data) == 1 ?
-                 body_part(EYE) : makeplural(body_part(EYE)));
-           make_blinded((long)rnd(Acid_resistance ? 10 : 50),FALSE);
-           if (!Blind) Your(vision_clears);
-		}
-       /* TODO: corrode floor objects */
+		/* TODO: corrode floor objects */
 	stop_occupation();
     break;
     case AGGRAVATION:
@@ -1031,7 +1041,7 @@ int spellnum;
     case GEYSER:
 	dmg = 0;
 	/* this is physical damage, not magical damage */
-	if(uarmf && uarmf->otyp == WATER_WALKING_BOOTS){
+	if(Wwalking){
 		pline("A sudden geyser erupts under your feet!");
 		if(ACURR(A_DEX) >= 14){
 			You("put the added momentum to good use.");
@@ -1101,6 +1111,7 @@ int spellnum;
     {
        struct monst *mtmp2;
 	   if(!mtmp) goto psibolt;
+	   if(is_alienist(mtmp->data)) goto summon_alien;
 	   mtmp2 = mk_roamer(&mons[PM_ANGEL],
                sgn(mtmp->data->maligntyp), mtmp->mux, mtmp->muy, FALSE);
        if (mtmp2) {
@@ -1116,10 +1127,39 @@ int spellnum;
        dmg = 0;
        break;
     }
+    case SUMMON_ALIEN: /* special only */
+summon_alien:
+    {
+       struct monst *mtmp2;
+	   int tries = 0;
+	   static struct permonst *aliens[] = {&mons[PM_HOOLOOVOO],
+									&mons[PM_SHAMBLING_HORROR],
+									&mons[PM_STUMBLING_HORROR],
+									&mons[PM_WANDERING_HORROR],
+									&mons[PM_MASTER_MIND_FLAYER],
+									&mons[PM_EDDERKOP],
+									&mons[PM_AOA],
+									&mons[PM_HUNTING_HORROR],
+									&mons[PM_BYAKHEE],
+									&mons[PM_UVUUDAUM]};
+	   if(!mtmp) goto psibolt;
+	   while (!(mtmp2 = makemon(aliens[rn2(SIZE(aliens))], mtmp->mux, mtmp->muy, MM_ADJACENTOK|MM_NOCOUNTBIRTH)) && tries++ < 10);
+       if (mtmp2) {
+           if (canspotmon(mtmp2))
+               pline("The world tears open, and %s steps through!",
+                       an(Hallucination ? rndmonnam() : "alien"));
+           else
+               You("sense the arrival of %s.",
+                       an(Hallucination ? rndmonnam() : "alien"));
+       }
+       dmg = 0;
+       break;
+    }
     case SUMMON_DEVIL: /* cleric only */
     {
        struct monst *mtmp2;
 	   if(!mtmp) goto psibolt;
+	   if(is_alienist(mtmp->data)) goto summon_alien;
 	   if(!(mtmp->data->maligntyp)) mtmp2 = summon_minion(A_NEUTRAL, FALSE, TRUE);
 	   else if((mtmp->data->maligntyp) > 0) mtmp2 = summon_minion(A_LAWFUL, FALSE, TRUE);
 	   else mtmp2 = summon_minion(A_CHAOTIC, FALSE, TRUE);
@@ -1300,7 +1340,7 @@ int spellnum;
                 iron ? "nowhere" : the(ceiling(u.ux,u.uy)));
         dmg = dmgval(otmp, &youmonst, 0);
         if (uarmh) {
-            if (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET) {
+            if (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
                 pline("Fortunately, you are wearing a hard helmet.");
                 if (dmg > 2) dmg = 2;
             } else if (flags.verbose) {
@@ -1760,6 +1800,8 @@ int spellnum;
 	case CLONE_WIZ:
 	case RAISE_DEAD:
 	case SUMMON_ANGEL:
+	case SUMMON_ALIEN:
+	case SUMMON_DEVIL:
 	case SUMMON_MONS:
 	case DISAPPEAR:
 	case HASTE_SELF:
@@ -1883,11 +1925,11 @@ int spellnum;
        if ((!mcouldseeu || mtmp->mpeaceful) &&
              (spellnum == SUMMON_MONS || spellnum == INSECTS ||
                spellnum == SUMMON_SPHERE || spellnum == RAISE_DEAD ||
-               spellnum == CLONE_WIZ || spellnum == SUMMON_ANGEL))
+               spellnum == CLONE_WIZ || spellnum == SUMMON_ANGEL || 
+			   spellnum == SUMMON_ALIEN || spellnum == SUMMON_DEVIL))
 	    return TRUE;
-       /* angels can't be summoned in Gehennom or by quest nemeses */
-       if (spellnum == SUMMON_ANGEL && (In_hell(&u.uz) ||
-	   monsndx(mtmp->data) == MS_NEMESIS))
+       /* angels can't be summoned in Gehennom */
+       if (spellnum == SUMMON_ANGEL && (In_hell(&u.uz)))
 	    return TRUE;
        /* make visible spell by spellcaster with see invisible. */
        /* also won't cast it if your invisibility isn't intrinsic. */
@@ -2079,6 +2121,10 @@ int spellnum;
 	    return TRUE;
         if (spellnum == SUMMON_ANGEL)
 	    return TRUE;
+        if (spellnum == SUMMON_ALIEN)
+	    return TRUE;
+        if (spellnum == SUMMON_DEVIL)
+	    return TRUE;
         if (spellnum == INSECTS)
 	    return TRUE;
 #endif
@@ -2181,7 +2227,7 @@ castum(mtmp, mattk)
 	 */
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;
-
+		
 	    if (!spellnum) do {
 	        spellnum = choose_magic_special(&youmonst, mattk->adtyp);
              if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
@@ -2345,6 +2391,8 @@ int spellnum;
     }
 	if(spellnum == RAISE_DEAD) spellnum = CURE_SELF;
 	else if(spellnum == SUMMON_ANGEL) spellnum = CURE_SELF;
+	else if(spellnum == SUMMON_ALIEN) spellnum = CURE_SELF;
+	else if(spellnum == SUMMON_DEVIL) spellnum = CURE_SELF;
     switch (spellnum) {
     case DEATH_TOUCH:
 	if (!mtmp || mtmp->mhp < 1) {
@@ -2394,13 +2442,21 @@ int spellnum;
        boolean created = FALSE;
        struct monst *mpet;
 	   if(!yours && !(mattk && mtmp && mattk->mtame != mtmp->mtame)) goto uspsibolt;
-       if (!(mvitals[sphere].mvflags & G_GONE) &&
-		(mpet = makemon(&mons[sphere],
-			u.ux, u.uy, MM_EDOG|NO_MINVENT)) != 0){
-				if (canspotmon(mpet)) created++;
-				initedog(mpet);
+	   if(yours || mattk->mtame){
+		   if (!(mvitals[sphere].mvflags & G_GONE) &&
+			(mpet = makemon(&mons[sphere],
+				u.ux, u.uy, MM_EDOG|NO_MINVENT)) != 0){
+					if (canspotmon(mpet)) created++;
+					initedog(mpet);
+			}
+		} else {
+		   if (!(mvitals[sphere].mvflags & G_GONE) &&
+			(mpet = makemon(&mons[sphere],
+				u.ux, u.uy, NO_MINVENT)) != 0){
+					if (canspotmon(mpet)) created++;
+			}
 		}
-       if (created)
+		if (created)
            pline("%s is created!",
                       Hallucination ? rndmonnam() : Amonnam(mpet));
        dmg = 0;
@@ -2412,22 +2468,22 @@ int spellnum;
         register struct monst *mpet;
 
         if (!rn2(10) && Inhell) {
-	    if (yours) demonpet();
-	    else msummon(mattk);
-	} else {
-	    register int i, j;
-            int makeindex, tmp = (u.ulevel > 3) ? u.ulevel / 3 : 1;
-	    coord bypos;
+			if (yours) demonpet();
+			else msummon(mattk);
+		} else {
+			register int i, j;
+				int makeindex, tmp = (u.ulevel > 3) ? u.ulevel / 3 : 1;
+			coord bypos;
 
-	    if (mtmp)
-	        bypos.x = mtmp->mx, bypos.y = mtmp->my;
-	    else if (yours)
-	        bypos.x = u.ux, bypos.y = u.uy;
-            else
-	        bypos.x = mattk->mx, bypos.y = mattk->my;
+			if (mtmp)
+				bypos.x = mtmp->mx, bypos.y = mtmp->my;
+			else if (yours)
+				bypos.x = u.ux, bypos.y = u.uy;
+				else
+				bypos.x = mattk->mx, bypos.y = mattk->my;
 
-	    for (i = rnd(tmp); i > 0; --i)
-	        for(j=0; j<20; j++) {
+			for (i = rnd(tmp); i > 0; --i)
+				for(j=0; j<20; j++) {
 
 	            do {
 	                makeindex = pick_nasty();
@@ -2631,7 +2687,7 @@ uspsibolt:
 		}
 		dmg = 0;
 		boots = which_armor(mtmp, W_ARMF);
-		if(boots && boots->otyp == WATER_WALKING_BOOTS){
+		if(Wwalking){
 			if (yours || canseemon(mtmp)){
 				pline("A sudden geyser erupts under %s's feet!", mon_nam(mtmp));
 				if(mtmp->data->mmove >= 14) pline("%s puts the added monmentum to good use!", Monnam(mtmp));
