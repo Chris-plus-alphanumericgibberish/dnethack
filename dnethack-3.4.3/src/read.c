@@ -32,8 +32,6 @@ static void FDECL(randomize,(int *, int));
 static void FDECL(forget_single_object, (int));
 static void FDECL(maybe_tame, (struct monst *,struct obj *));
 
-STATIC_PTR void FDECL(set_lit, (int,int,genericptr_t));
-
 int
 doread()
 {
@@ -47,14 +45,14 @@ doread()
 	
 	if(scroll->oartifact && !arti_mandala(scroll)){
 		if(scroll->oartifact == ART_ROD_OF_SEVEN_PARTS){
-		    if (Blind) {
+			if (Blind) {
 				You_cant("see the writing!");
 				exercise(A_WIS, FALSE); //The rod is critial of such logical blunders.
 				return 0;
 			}
 			else{//Ruat Coelum, Fiat Justitia.  Ecce!  Lex Rex!
 				pline(scroll->spe < 7 ? "The Rod is badly scarred, mute testimony to a tumultuous history." :
-		"The surface of the Rod, once badly defaced, is now shiny and smooth, its mathematical perfection testament to the overriding power of Law.");
+			"The surface of the Rod, once badly defaced, is now shiny and smooth, its mathematical perfection testament to the overriding power of Law.");
 				switch(scroll->spe){
 					case(-5):
 					case(-4):
@@ -115,29 +113,29 @@ doread()
 				return(1);
 			}
 		} else if(scroll->oartifact == ART_PEN_OF_THE_VOID){
-	    if (Blind) {
-			You_cant("see the blade!");
-			return 0;
-		}
-		else{
-			int j;
-			if(!quest_status.killed_nemesis) pline("It seems this athame once had dual blades, but one blade has been snapped off at the hilt.");
-			else pline("The dual-bladed athame vibrates faintly.");
-			if(u.spiritTineA) for(j=0;j<32;j++){
-				if((u.spiritTineA >> j) == 1){
-					if(!quest_status.killed_nemesis) pline("The blade bears the seal of %s.",sealNames[j]);
-					else pline("The first blade bears the seal of %s.",sealNames[j]);
-					break;
-				}
+			if (Blind) {
+				You_cant("see the blade!");
+				return 0;
 			}
-			if(quest_status.killed_nemesis && u.spiritTineB) for(j=0;j<32;j++){
-				if((u.spiritTineB >> j) == 1){
-					pline("The second blade bears the seal of %s.",sealNames[j]);
-					break;
+			else{
+				int j;
+				if(!quest_status.killed_nemesis && Role_if(PM_EXILE)) pline("It seems this athame once had dual blades, but one blade has been snapped off at the hilt.");
+				else pline("The dual-bladed athame vibrates faintly.");
+				if(u.spiritTineA) for(j=0;j<32;j++){
+					if((u.spiritTineA >> j) == 1){
+						if(!quest_status.killed_nemesis) pline("The blade bears the seal of %s.",sealNames[j]);
+						else pline("The first blade bears the seal of %s.",sealNames[j]);
+						break;
+					}
 				}
+				if(quest_status.killed_nemesis && u.spiritTineB) for(j=0;j<32;j++){
+					if((u.spiritTineB >> j) == 1){
+						pline("The second blade bears the seal of %s.",sealNames[j]);
+						break;
+					}
+				}
+				return(1);
 			}
-			return(1);
-		}
 		} else if(scroll->oartifact == ART_EXCALIBUR){
 			if (Blind) {
 				You_cant("see the blade!");
@@ -148,6 +146,44 @@ doread()
 				pline("\"Take me up\"");
 			}
 			return(1);
+		} else if(scroll->oartifact == ART_GLAMDRING){
+			if (Blind) {
+				You_cant("see the blade!");
+				return 0;
+			} else if(Race_if(PM_ELF)) {
+				pline("\"Turgon, king of Gondolin, wields, has, and holds the sword Foe-hammer, Foe of Morgoth's realm, Hammer of the Orcs\".");
+			} else {
+				pline("\"Turgon aran Gondolin tortha gar a matha i vegil Glamdring gud daedheloth, dam an Glamhoth\".");
+			}
+			return(1);
+		} else if(scroll->oartifact == ART_BOW_OF_SKADI){
+			if (Blind) {
+				You_cant("see the bow!");
+				return 0;
+			} else {
+				int i;
+				You("read the Galdr of Skadi!");
+				for (i = 0; i < MAXSPELL; i++)  {
+					if (spellid(i) == SPE_CONE_OF_COLD)  {
+						if (spellknow(i) <= 1000) {
+							Your("knowledge of Cone of Cold is keener.");
+							spl_book[i].sp_know = 20000;
+							exercise(A_WIS,TRUE);       /* extra study */
+						} else { /* 1000 < spellknow(i) <= MAX_SPELL_STUDY */
+							You("know Cone of Cold quite well already.");
+						}
+						break;
+					} else if (spellid(i) == NO_SPELL)  {
+						spl_book[i].sp_id = SPE_CONE_OF_COLD;
+						spl_book[i].sp_lev = objects[SPE_CONE_OF_COLD].oc_level;
+						spl_book[i].sp_know = 20000;
+						You("learn to cast Cone of Cold!");
+						break;
+					}
+				}
+				if (i == MAXSPELL) impossible("Too many spells memorized!");
+				return 1;
+			}
 		}
 	} else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
@@ -162,8 +198,8 @@ doread()
 			pline("A %s is engraved on the ring.",wardDecode[scroll->ovar1]);
 			if( !(u.wardsknown & get_wardID(scroll->ovar1)) ){
 				You("have learned a new warding sign!");
-			u.wardsknown |= get_wardID(scroll->ovar1);
-		}
+				u.wardsknown |= get_wardID(scroll->ovar1);
+			}
 		}
 		else{
 			pline("There is %s engraved on the ring.",fetchHaluWard((int)scroll->ovar1));
@@ -185,6 +221,7 @@ doread()
 		&& scroll->ovar1
 		&& (scroll->otyp == DROVEN_PLATE_MAIL
 			|| scroll->otyp == DROVEN_CHAIN_MAIL
+			|| scroll->otyp == CONSORT_S_SUIT
 		)
 	){
 		pline("There is %s engraved on the armor.",fetchHaluWard((int)scroll->ovar1));
@@ -371,7 +408,7 @@ doread()
 		scroll->otyp != SPE_BLANK_PAPER &&
 		scroll->otyp != SCR_BLANK_PAPER){
 			if(scroll->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
-		    u.uconduct.literate++;
+			u.uconduct.literate++;
 		}
 
 	confused = (Confusion != 0);
@@ -398,8 +435,8 @@ doread()
 	    if (Hallucination)
 		pline("Being so trippy, you screw up...");
 	    else{
-		pline("Being confused, you mis%s the magic words...",
-			is_silent(youmonst.data) ? "understand" : "pronounce");
+			pline("Being confused, you mis%s the magic words...",
+				is_silent(youmonst.data) ? "understand" : "pronounce");
 			if(u.sealsActive&SEAL_PAIMON) unbind(SEAL_PAIMON,TRUE);
 		}
 	  }
@@ -508,13 +545,13 @@ int curse_bless;
 	     *	7 : 100     100
 	     */
 	    n = (int)obj->recharged;
-	    if (n > 0 && (obj->otyp == WAN_WISHING ||
+	    if (!(obj->oartifact) && n > 0 && (obj->otyp == WAN_WISHING ||
 		    (n * n * n > rn2(7*7*7)))) {	/* recharge_limit */
 		wand_explode(obj);
 		return;
 	    }
 	    /* didn't explode, so increment the recharge count */
-	    obj->recharged = (unsigned)(n + 1);
+	    if(n < 7) obj->recharged = (unsigned)(n + 1);
 
 	    /* now handle the actual recharging */
 	    if (is_cursed) {
@@ -779,7 +816,7 @@ forget_objects(percent)
 {
 	int i, count;
 	int indices[NUM_OBJECTS];
-
+	
 	return; //Disable object forgetting
 	
 	if (percent == 0) return;
@@ -794,7 +831,7 @@ forget_objects(percent)
 		indices[count++] = i;
 
 	randomize(indices, count);
-
+	
 	/* forget first % of randomized indices */
 	count = ((count * percent) + 50) / 100;
 	for (i = 0; i < count; i++)
@@ -816,13 +853,13 @@ forget_map(howmuch)
 
 	known = TRUE;
 	for(zx = 0; zx < COLNO; zx++) for(zy = 0; zy < ROWNO; zy++)
-	    if (howmuch & ALL_MAP || rn2(7)) {
-		/* Zonk all memory of this location. */
-		levl[zx][zy].seenv = 0;
-		levl[zx][zy].waslit = 0;
-		levl[zx][zy].glyph = cmap_to_glyph(S_stone);
+		if (howmuch & ALL_MAP || rn2(7)) {
+			/* Zonk all memory of this location. */
+			levl[zx][zy].seenv = 0;
+			levl[zx][zy].waslit = 0;
+			levl[zx][zy].glyph = cmap_to_glyph(S_stone);
 			levl[zx][zy].styp = STONE;
-	    }
+		}
 }
 
 /* Forget all traps on the level. */
@@ -1013,26 +1050,26 @@ struct obj	*sobj;
 				setworn(otmp, W_ARMS);
 				break;
 			} else {
-			if(Blind) {
-			    otmp->rknown = FALSE;
-			    Your("%s %s warm for a moment.",
-				xname(otmp), otense(otmp, "feel"));
-			} else {
-			    otmp->rknown = TRUE;
-			    Your("%s %s covered by a %s %s %s!",
-				xname(otmp), otense(otmp, "are"),
-				sobj->cursed ? "mottled" : "shimmering",
-				 hcolor(sobj->cursed ? NH_BLACK : NH_GOLDEN),
-				sobj->cursed ? "glow" :
-				  (is_shield(otmp) ? "layer" : "shield"));
-			}
-			if (otmp->oerodeproof &&
-			    (otmp->oeroded || otmp->oeroded2)) {
-			    otmp->oeroded = otmp->oeroded2 = 0;
-			    Your("%s %s as good as new!",
-				 xname(otmp),
-				 otense(otmp, Blind ? "feel" : "look"));
-			}
+				if(Blind) {
+					otmp->rknown = FALSE;
+					Your("%s %s warm for a moment.",
+					xname(otmp), otense(otmp, "feel"));
+				} else {
+					otmp->rknown = TRUE;
+					Your("%s %s covered by a %s %s %s!",
+					xname(otmp), otense(otmp, "are"),
+					sobj->cursed ? "mottled" : "shimmering",
+					 hcolor(sobj->cursed ? NH_BLACK : NH_GOLDEN),
+					sobj->cursed ? "glow" :
+					  (is_shield(otmp) ? "layer" : "shield"));
+				}
+				if (otmp->oerodeproof &&
+					(otmp->oeroded || otmp->oeroded2)) {
+					otmp->oeroded = otmp->oeroded2 = 0;
+					Your("%s %s as good as new!",
+					 xname(otmp),
+					 otense(otmp, Blind ? "feel" : "look"));
+				}
 			}
 			break;
 		}
@@ -1585,7 +1622,7 @@ struct obj	*sobj;
 				}
 	    	    	    	mdmg = dmgval(otmp2, mtmp, 0) * otmp2->quan;
 				if (helmet) {
-				    if(is_metallic(helmet) || helmet->otyp == FLACK_HELMET) {
+				    if(is_metallic(helmet) || helmet->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
 					if (canspotmon(mtmp))
 					    pline("Fortunately, %s is wearing a hard helmet.", mon_nam(mtmp));
 					else if (flags.soundok)
@@ -1629,7 +1666,7 @@ struct obj	*sobj;
 			You("are hit by %s!", doname(otmp2));
 			dmg = dmgval(otmp2, &youmonst, 0) * otmp2->quan;
 			if (uarmh && !sobj->cursed) {
-			    if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET) {
+			    if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
 				pline("Fortunately, you are wearing a hard helmet.");
 				if (dmg > 2) dmg = 2;
 			    } else if (flags.verbose) {
@@ -1694,7 +1731,7 @@ struct obj	*sobj;
 		known = TRUE;
 		del_engr_ward_at(u.ux,u.uy);
 		make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
-		
+			
 		engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
 		if(Hallucination){
 			//Scribe hallucinatory ward
@@ -1704,21 +1741,21 @@ struct obj	*sobj;
 	break;
 		}
 		else{
-		engrHere->ward_id = sobj->ovar1;
-		if(sobj->cursed){
-			if(is_pool(u.ux, u.uy)){
-				pline("The lines of blood quickly disperse into the water.");
-		break;
-			}
-			engrHere->ward_type = ENGR_BLOOD;
-		} else engrHere->ward_type = ENGRAVE;
+			engrHere->ward_id = sobj->ovar1;
+			if(sobj->cursed){
+				if(is_pool(u.ux, u.uy)){
+					pline("The lines of blood quickly disperse into the water.");
+	break;
+				}
+				engrHere->ward_type = ENGR_BLOOD;
+			} else engrHere->ward_type = ENGRAVE;
 			engrHere->complete_wards = sobj->blessed ? 
 										wardMax[sobj->ovar1] : 
 										get_num_wards_added(engrHere->ward_id,0);
-		if( !(u.wardsknown & get_wardID(sobj->ovar1)) ){
-			You("have learned a new warding sign!");
-			u.wardsknown |= get_wardID(sobj->ovar1);
-		}
+			if( !(u.wardsknown & get_wardID(sobj->ovar1)) ){
+				You("have learned a new warding sign!");
+				u.wardsknown |= get_wardID(sobj->ovar1);
+			}
 		}
 	break;}
 	case SCR_WARDING:{
@@ -1761,7 +1798,7 @@ struct obj	*sobj;
 		known = TRUE;
 		if(!engrHere){
 			make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
-		engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
+			engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
 		}
 		
 		if(wardNum == -1){ /*Confused reading of scroll with no unknown wards remaining. Engrave Cerulean Sign, which can't be learned*/
@@ -1772,8 +1809,8 @@ struct obj	*sobj;
 		}
 		else if(engrHere->ward_id != wardNum 
 				|| engrHere->ward_type != BURN){
-		engrHere->ward_id = wardNum;
-		engrHere->ward_type = BURN;
+			engrHere->ward_id = wardNum;
+			engrHere->ward_type = BURN;
 			engrHere->complete_wards = sobj->blessed ? 
 										wardMax[wardNum] : 
 										get_num_wards_added(engrHere->ward_id,0);
@@ -1883,11 +1920,11 @@ struct obj	*sobj;
 			You_feel("guilty for destroying such a valuable text.");
 			u.ualign.record -= 20;
 			u.ualign.sins += 10;
-		}
+		 }
 		}
 		else{//chaotic or poorly aligned lawful
 		 You("find it quite confusing.");
-		    incr_itimeout(&HConfusion, max(u.ualign.record, -1*u.ualign.record));
+		 incr_itimeout(&HConfusion, max(u.ualign.record, -1*u.ualign.record));
 		 if(u.ualign.type == A_LAWFUL){
 			You_feel("unworthy of such a lawful text.");
 			u.ualign.record -= 8;
@@ -1917,7 +1954,7 @@ register struct obj *obj;
 /*
  * Low-level lit-field update routine.
  */
-STATIC_PTR void
+void
 set_lit(x,y,val)
 int x, y;
 genericptr_t val;
@@ -1985,7 +2022,7 @@ do_it:
 	 *  blind, then we have to pick up and replace the ball and chain so
 	 *  that we don't remember them if they are out of sight.
 	 */
-	if (Punished && !on && !Blind)
+	if (Punished && (Race_if(PM_DROW) ? on : !on) && !Blind)
 	    move_bc(1, 0, uball->ox, uball->oy, uchain->ox, uchain->oy);
 
 #ifdef REINCARNATION
@@ -2018,8 +2055,8 @@ do_it:
 	    vision_recalc(2);
 
 	    /* replace ball&chain */
-	    if (Punished && !on)
-		move_bc(0, 0, uball->ox, uball->oy, uchain->ox, uchain->oy);
+	    if (Punished && (Race_if(PM_DROW) ? on : !on))
+			move_bc(0, 0, uball->ox, uball->oy, uchain->ox, uchain->oy);
 	}
 
 	vision_full_recalc = 1;	/* delayed vision recalculation */
@@ -2356,17 +2393,17 @@ register struct obj	*sobj;
 		return;
 	}
 	setworn(mkobj(CHAIN_CLASS, TRUE), W_CHAIN);
-#ifdef CONVICT
-    if (((otmp = carrying(HEAVY_IRON_BALL)) != 0) &&(otmp->oartifact ==
-     ART_IRON_BALL_OF_LIBERATION)) {
-        setworn(otmp, W_BALL);
-        Your("%s chains itself to you!", xname(otmp));
-    } else {
+// #ifdef CONVICT
+    // if (((otmp = carrying(HEAVY_IRON_BALL)) != 0) &&(otmp->oartifact ==
+     // ART_IRON_BALL_OF_LIBERATION)) {
+        // setworn(otmp, W_BALL);
+        // Your("%s chains itself to you!", xname(otmp));
+    // } else {
+		// setworn(mkobj(BALL_CLASS, TRUE), W_BALL);
+    // }
+// #else
 	setworn(mkobj(BALL_CLASS, TRUE), W_BALL);
-    }
-#else
-	setworn(mkobj(BALL_CLASS, TRUE), W_BALL);
-#endif /* CONVICT */
+// #endif /* CONVICT */
 	uball->spe = 1;		/* special ball (see save) */
 
 	/*
@@ -2410,6 +2447,9 @@ boolean revival;
 		return TRUE;
 	} else if (*mtype==PM_LONG_WORM_TAIL) {	/* for create_particular() */
 		*mtype = PM_LONG_WORM;
+		return TRUE;
+	} else if (*mtype==PM_HUNTING_HORROR_TAIL) {	/* for create_particular() */
+		*mtype = PM_HUNTING_HORROR;
 		return TRUE;
 	}
 	return FALSE;
