@@ -32,7 +32,7 @@ struct monst *mon;
 	    ptr = &mons[PM_WIZARD_OF_YENDOR];
 	    atyp = (ptr->maligntyp==A_NONE) ? A_NONE : sgn(ptr->maligntyp);
 	}
-	    
+	
 	if(ptr == &mons[PM_SHAKTARI]) {
 	    dtype = PM_MARILITH;
 		cnt = d(1,6);
