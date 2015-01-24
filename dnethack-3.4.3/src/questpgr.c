@@ -178,10 +178,39 @@ intermed()	/* return your intermediate target string */
 }
 
 boolean
+is_primary_quest_artifact(otmp)
+struct obj *otmp;
+{
+	return((boolean)(otmp->oartifact == urole.questarti || 
+		(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && (
+			  otmp->oartifact == ART_TENTACLE_ROD || 
+			 (otmp->oartifact == ART_SILVER_STARLIGHT && flags.initgend) || 
+			 (otmp->oartifact == ART_DARKWEAVER_S_CLOAK && !flags.initgend)
+		))
+	));
+}
+
+boolean
 is_quest_artifact(otmp)
 struct obj *otmp;
 {
-	return((boolean)(otmp->oartifact == urole.questarti));
+	return((boolean)(otmp->oartifact == urole.questarti || 
+		(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && 
+			(otmp->oartifact == ART_TENTACLE_ROD || 
+			 ((otmp->oartifact == ART_SILVER_STARLIGHT || 
+				otmp->oartifact == ART_CRESCENT_BLADE || 
+				otmp->oartifact == ART_WRATHFUL_SPIDER)
+				&& flags.initgend) || 
+			 ((otmp->oartifact == ART_DARKWEAVER_S_CLOAK || 
+				otmp->oartifact == ART_WEBWEAVER_S_CROOK ||
+				otmp->oartifact == ART_SPIDERSILK)
+				&& !flags.initgend)
+			)
+		) ||
+		(Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN)) && 
+			(otmp->oartifact == ART_BELTHRONDING || otmp->oartifact == ART_PALANTIR_OF_WESTERNESSE)
+		)
+	));
 }
 
 STATIC_OVL const char *
@@ -391,12 +420,12 @@ com_pager(msgnum)
 int	msgnum;
 {
 	struct qtmsg *qt_msg;
-
+	
 	if (!(qt_msg = msg_in(qt_list.common, msgnum))) {
 		impossible("com_pager: message %d not found.", msgnum);
 		return;
 	}
-
+	
 	(void) dlb_fseek(msg_file, qt_msg->offset, SEEK_SET);
 	if (qt_msg->delivery == 'p') deliver_by_pline(qt_msg);
 	else if (msgnum == 1 || msgnum == 199) deliver_by_window(qt_msg, NHW_MENU);
@@ -426,6 +455,11 @@ struct permonst *
 qt_montype()
 {
 	int qpm;
+	if(Race_if(PM_DROW) && !flags.initgend && Role_if(PM_NOBLEMAN) && on_level(&u.uz, &qstart_level)) return (struct permonst *)-1;
+	else if(In_quest(&u.uz) && Race_if(PM_DWARF) && 
+		urole.neminum == PM_BOLG && Is_qlocate(&u.uz) && 
+		!(mvitals[PM_SMAUG].mvflags & G_GENOD || mvitals[PM_SMAUG].died > 0)
+	) return (struct permonst *)-1;
 	if(rn2(5)){
 	  if(Role_if(PM_EXILE)){
 		switch(rn2(4)){
@@ -479,7 +513,7 @@ qt_montype()
 	} else {
 		qpm = urole.enemy2num;
 		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-		    return (&mons[qpm]);
+			return (&mons[qpm]);
 		return (mkclass(urole.enemy2sym, G_NOHELL|G_HELL));
 	}
 }

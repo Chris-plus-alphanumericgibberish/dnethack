@@ -3,6 +3,8 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "artifact.h"
+#include "artilist.h"
 
 /*  quest dungeon branch routines. */
 
@@ -28,11 +30,11 @@ STATIC_OVL void
 on_start()
 {
   if(!Qstat(first_start)) {
-    qt_pager(QT_FIRSTTIME);
+    qt_pager(QT_FIRSTTIME + (flags.stag ? QT_TURNEDSTAG : 0));
     Qstat(first_start) = TRUE;
   } else if((u.uz0.dnum != u.uz.dnum) || (u.uz0.dlevel < u.uz.dlevel)) {
-    if(Qstat(not_ready) <= 2) qt_pager(QT_NEXTTIME);
-    else	qt_pager(QT_OTHERTIME);
+    if(Qstat(not_ready) <= 2) qt_pager(QT_NEXTTIME + (flags.stag ? QT_TURNEDSTAG : 0));
+    else	qt_pager(QT_OTHERTIME + (flags.stag ? QT_TURNEDSTAG : 0));
   }
 }
 
@@ -40,10 +42,10 @@ STATIC_OVL void
 on_locate()
 {
   if(!Qstat(first_locate)) {
-    qt_pager(QT_FIRSTLOCATE);
+    qt_pager(QT_FIRSTLOCATE + (flags.stag ? QT_TURNEDSTAG : 0));
     Qstat(first_locate) = TRUE;
   } else if(u.uz0.dlevel < u.uz.dlevel && !Qstat(killed_nemesis))
-	qt_pager(QT_NEXTLOCATE);
+	qt_pager(QT_NEXTLOCATE + (flags.stag ? QT_TURNEDSTAG : 0));
 }
 
 STATIC_OVL void
@@ -52,10 +54,10 @@ on_goal()
   if (Qstat(killed_nemesis)) {
     return;
   } else if (!Qstat(made_goal)) {
-    qt_pager(QT_FIRSTGOAL);
+    qt_pager(QT_FIRSTGOAL + (flags.stag ? QT_TURNEDSTAG : 0));
     Qstat(made_goal) = 1;
   } else {
-    qt_pager(QT_NEXTGOAL);
+    qt_pager(QT_NEXTGOAL + (flags.stag ? QT_TURNEDSTAG : 0));
     if(Qstat(made_goal) < 7) Qstat(made_goal)++;
   }
 }
@@ -78,7 +80,7 @@ nemdead()
 	if(!Qstat(killed_nemesis)) {
 	    Qstat(killed_nemesis) = TRUE;
 		if(Role_if(PM_EXILE)) u.uevent.qcompleted = TRUE;
-	    qt_pager(QT_KILLEDNEM);
+	    qt_pager(QT_KILLEDNEM + (flags.stag ? QT_TURNEDSTAG : 0));
 	}
 }
 
@@ -87,7 +89,7 @@ artitouch()
 {
 	if(!Qstat(touched_artifact)) {
 	    Qstat(touched_artifact) = TRUE;
-	    qt_pager(QT_GOTIT);
+	    qt_pager(QT_GOTIT + (flags.stag ? QT_TURNEDSTAG : 0));
 	    exercise(A_WIS, TRUE);
 	}
 }
@@ -129,10 +131,14 @@ boolean talk;
 	}
     }
 #endif
-    purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod) &&
-	      u.ualign.type == original_alignment &&
-	      u.ualignbase[A_CURRENT] == original_alignment) ?  1 :
-	     (u.ualignbase[A_CURRENT] != original_alignment) ? -1 : 0;
+	if(Race_if(PM_ELF) && !(Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN))){
+		purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod))  ?  1 : 0;
+	} else {
+		purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod) &&
+			  u.ualign.type == original_alignment &&
+			  u.ualignbase[A_CURRENT] == original_alignment) ?  1 :
+			 (u.ualignbase[A_CURRENT] != original_alignment) ? -1 : 0;
+	}
     return purity;
 }
 
@@ -183,12 +189,37 @@ struct obj *obj;	/* quest artifact; possibly null if carrying Amulet */
 	struct obj *otmp;
 
 	if (u.uhave.amulet) {	/* unlikely but not impossible */
-	    qt_pager(QT_HASAMULET);
+	    qt_pager(QT_HASAMULET + (flags.stag ? QT_TURNEDSTAG : 0));
 	    /* leader IDs the real amulet but ignores any fakes */
 	    if ((otmp = carrying(AMULET_OF_YENDOR)) != 0)
-		fully_identify_obj(otmp);
+			fully_identify_obj(otmp);
+		if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && !flags.stag){
+			struct monst *tm;
+			flags.leader_backstab = TRUE;
+			mons[urole.ldrnum].msound = MS_CUSS;
+			mons[urole.ldrnum].mflags2 &= ~(M2_PEACEFUL);
+			mons[urole.ldrnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+			mons[urole.ldrnum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+			
+			mons[urole.guardnum].msound = MS_CUSS;
+			mons[urole.guardnum].mflags2 &= ~(M2_PEACEFUL);
+			mons[urole.guardnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+			mons[urole.guardnum].mflags3 |= M3_WAITFORU;
+			for(tm = fmon; tm; tm = tm->nmon){
+				if(tm->mfaction != EILISTRAEE_SYMBOL && 
+					tm->mfaction != XAXOX && tm->mfaction != EDDER_SYMBOL && 
+					is_drow(tm->data) && !tm->mtame 
+				){
+					tm->housealert = 1;
+					tm->mpeaceful = 0;
+					tm->mtraitor = 1;
+					tm->mstrategy &= ~STRAT_WAITMASK;
+					set_malign(tm);
+				}
+			}
+		}
 	} else {
-	    qt_pager(!Qstat(got_thanks) ? QT_OFFEREDIT : QT_OFFEREDIT2);
+	    qt_pager((!Qstat(got_thanks) ? QT_OFFEREDIT : is_primary_quest_artifact(obj) ? QT_OFFEREDIT2 : QT_OFFERART2) + (flags.stag ? QT_TURNEDSTAG : 0));
 	    /* should have obtained bell during quest;
 	       if not, suggest returning for it now */
 	    if ((otmp = carrying(BELL_OF_OPENING)) == 0)
@@ -208,9 +239,9 @@ struct obj *obj;	/* quest artifact; possibly null if carrying Amulet */
 STATIC_OVL void
 chat_with_leader()
 {
-/*	Rule 0:	Cheater checks.					*/
-	if(u.uhave.questart && !Qstat(met_nemesis))
-	    Qstat(cheater) = TRUE;
+/*	Rule 0:	Cheater checks.		No -C_ANG			*/
+	// if(u.uhave.questart && !Qstat(met_nemesis))
+	    // Qstat(cheater) = TRUE;
 
 /*	It is possible for you to get the amulet without completing
  *	the quest.  If so, try to induce the player to quest.
@@ -220,7 +251,7 @@ chat_with_leader()
 	    if(u.uhave.amulet)	finish_quest((struct obj *)0);
 
 /*	Rule 2:	You've gone back before going for the amulet.	*/
-	    else		qt_pager(QT_POSTHANKS);
+	    else		qt_pager(QT_POSTHANKS + (flags.stag ? QT_TURNEDSTAG : 0));
 	}
 
 /*	Rule 3: You've got the artifact and are back to return it. */
@@ -234,30 +265,31 @@ chat_with_leader()
 
 /*	Rule 4: You haven't got the artifact yet.	*/
 	} else if(Qstat(got_quest)) {
-	    qt_pager(rn1(10, QT_ENCOURAGE));
+	    qt_pager(rn1(10, QT_ENCOURAGE + (flags.stag ? QT_TURNEDSTAG : 0)));
 
 /*	Rule 5: You aren't yet acceptable - or are you? */
 	} else {
 	  if(!Qstat(met_leader)) {
-	    qt_pager(QT_FIRSTLEADER);
+	    qt_pager(QT_FIRSTLEADER + (flags.stag ? QT_TURNEDSTAG : 0));
 	    Qstat(met_leader) = TRUE;
 	    Qstat(not_ready) = 0;
-	  } else qt_pager(QT_NEXTLEADER);
+	  } else if(Qstat(not_ready) < 3) qt_pager(QT_NEXTLEADER + (flags.stag ? QT_TURNEDSTAG : 0));
+	   else qt_pager(QT_OTHERLEADER + (flags.stag ? QT_TURNEDSTAG : 0));
 	  /* the quest leader might have passed through the portal into
 	     the regular dungeon; none of the remaining make sense there */
-	  if (!on_level(&u.uz, &qstart_level)) return;
+	  if (!on_level(&u.uz, &qstart_level) && !(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)))) return;
 
-	  if(not_capable()) {
-	    qt_pager(QT_BADLEVEL);
+	  if(not_capable() && !flags.stag) {
+	    qt_pager(QT_BADLEVEL + (flags.stag ? QT_TURNEDSTAG : 0));
 	    exercise(A_WIS, TRUE);
 	    expulsion(FALSE);
-	  } else if(is_pure(TRUE) < 0) {
-	    com_pager(QT_BANISHED);
+	  } else if(is_pure(TRUE) < 0 && !flags.stag) {
+	    com_pager(QT_BANISHED + (flags.stag ? QT_TURNEDSTAG : 0));
 	    expulsion(TRUE);
-	  } else if(is_pure(TRUE) == 0) {
-	    qt_pager(QT_BADALIGN);
+	  } else if(is_pure(TRUE) == 0 && !flags.stag) {
+	    qt_pager(QT_BADALIGN + (flags.stag ? QT_TURNEDSTAG : 0));
 	    if(Qstat(not_ready) == MAX_QUEST_TRIES) {
-	      qt_pager(QT_LASTLEADER);
+	      qt_pager(QT_LASTLEADER + (flags.stag ? QT_TURNEDSTAG : 0));
 	      expulsion(TRUE);
 	    } else {
 	      if(!Role_if(PM_EXILE)) Qstat(not_ready)++;
@@ -265,7 +297,7 @@ chat_with_leader()
 	      expulsion(FALSE);
 	    }
 	  } else {	/* You are worthy! */
-	    qt_pager(QT_ASSIGNQUEST);
+	    qt_pager(QT_ASSIGNQUEST + (flags.stag ? QT_TURNEDSTAG : 0));
 	    exercise(A_WIS, TRUE);
 	    Qstat(got_quest) = TRUE;
 		if(Role_if(PM_EXILE)){
@@ -298,10 +330,11 @@ leader_speaks(mtmp)
 	}
 	/* the quest leader might have passed through the portal into the
 	   regular dungeon; if so, mustn't perform "backwards expulsion" */
-	if (!on_level(&u.uz, &qstart_level)) return;
+	/* Some leaders (Eclavdra, currently) can attack the player under certain conditions */
+	if (!on_level(&u.uz, &qstart_level) || flags.leader_backstab) return;
 
 	if(Qstat(pissed_off)) {
-	  qt_pager(QT_LASTLEADER);
+	  qt_pager(QT_LASTLEADER + (flags.stag ? QT_TURNEDSTAG : 0));
 	  expulsion(TRUE);
 	} else chat_with_leader();
 }
@@ -310,7 +343,7 @@ STATIC_OVL void
 chat_with_nemesis()
 {
 /*	The nemesis will do most of the talking, but... */
-	qt_pager(rn1(10, QT_DISCOURAGE));
+	qt_pager(rn1(10, QT_DISCOURAGE + (flags.stag ? QT_TURNEDSTAG : 0)));
 	if(!Qstat(met_nemesis)) Qstat(met_nemesis++);
 }
 
@@ -318,16 +351,50 @@ void
 nemesis_speaks()
 {
 	if(!Qstat(in_battle)) {
-	  if(u.uhave.questart) qt_pager(QT_NEMWANTSIT);
-	  else if(Qstat(made_goal) == 1 || !Qstat(met_nemesis))
-	      qt_pager(QT_FIRSTNEMESIS);
-	  else if(Qstat(made_goal) < 4) qt_pager(QT_NEXTNEMESIS);
-	  else if(Qstat(made_goal) < 7) qt_pager(QT_OTHERNEMESIS);
-	  else if(!rn2(5))	qt_pager(rn1(10, QT_DISCOURAGE));
+	  if(u.uhave.questart && 
+		(Qstat(met_nemesis) || 
+		!((Race_if(PM_DROW) && Role_if(PM_NOBLEMAN && flags.initgend)) || (Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)) || (Role_if(PM_EXILE)))
+		)
+	  ) qt_pager(QT_NEMWANTSIT + (flags.stag ? QT_TURNEDSTAG : 0));
+	  else if(!Qstat(met_nemesis))
+	      qt_pager(QT_FIRSTNEMESIS + (flags.stag ? QT_TURNEDSTAG : 0));
+	  else if(Qstat(made_goal) < 4) qt_pager(QT_NEXTNEMESIS + (flags.stag ? QT_TURNEDSTAG : 0));
+	  else if(Qstat(made_goal) < 7) qt_pager(QT_OTHERNEMESIS + (flags.stag ? QT_TURNEDSTAG : 0));
+	  else if(!rn2(5))	qt_pager(rn1(10, QT_DISCOURAGE + (flags.stag ? QT_TURNEDSTAG : 0)));
 	  if(Qstat(made_goal) < 7) Qstat(made_goal)++;
+	  if(!Qstat(met_nemesis) && Race_if(PM_DROW) && 
+		(Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && 
+		!flags.stag && (yn("Betray your current quest leader and join the uprising?") == 'y')){
+		turn_stag();
+	  }
 	  Qstat(met_nemesis) = TRUE;
-	} else /* he will spit out random maledictions */
-	  if(!rn2(5))	qt_pager(rn1(10, QT_DISCOURAGE));
+	} else {
+		if(!Qstat(met_nemesis)){
+			qt_pager(QT_FIRSTNEMESIS + (flags.stag ? QT_TURNEDSTAG : 0));
+			  Qstat(met_nemesis) = TRUE;
+			  if(Race_if(PM_DROW) && 
+				(Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && 
+				!flags.stag && (yn("Betray your current quest leader and join the uprising?") == 'y')){
+				turn_stag();
+			  }
+		/* he will spit out random maledictions */
+		} else if(!rn2(5))	qt_pager(rn1(10, QT_DISCOURAGE + (flags.stag ? QT_TURNEDSTAG : 0)));
+	}
+	if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && flags.stag){
+	/*Correct peacefulness settings*/
+		struct monst *tm;
+		for(tm = fmon; tm; tm = tm->nmon){
+			if(tm->mfaction != EILISTRAEE_SYMBOL && 
+				tm->mfaction != XAXOX && tm->mfaction != EDDER_SYMBOL && 
+				is_drow(tm->data) && !tm->mtame 
+			){
+				tm->housealert = 1;
+				tm->mpeaceful = 0;
+				tm->mstrategy &= ~STRAT_WAITMASK;
+				set_malign(tm);
+			}
+		}
+	}
 }
 
 STATIC_OVL void
@@ -335,13 +402,13 @@ chat_with_guardian()
 {
 /*	These guys/gals really don't have much to say... */
 	if (u.uhave.questart && Qstat(killed_nemesis))
-	    qt_pager(rn1(5, QT_GUARDTALK2));
+	    qt_pager(rn1(5, QT_GUARDTALK2 + (flags.stag ? QT_TURNEDSTAG : 0)));
 	else
-	    qt_pager(rn1(5, QT_GUARDTALK));
+	    qt_pager(rn1(5, QT_GUARDTALK + (flags.stag ? QT_TURNEDSTAG : 0)));
 }
 
 STATIC_OVL void
-prisoner_speaks (mtmp)
+prisoner_speaks(mtmp)
 	register struct monst *mtmp;
 {
 	if (mtmp->data == &mons[PM_PRISONER] &&
@@ -358,6 +425,13 @@ prisoner_speaks (mtmp)
 
 		/* ...But the guards are not */
 	    (void) angry_guards(FALSE);
+	} else if ((mtmp->data == &mons[PM_MINDLESS_THRALL] || mtmp->data == &mons[PM_A_GONE]) &&
+			(mtmp->mstrategy & STRAT_WAITMASK)) {
+	    /* Awaken the prisoner */
+	    if (canseemon(mtmp))
+	    	pline("%s speaks:", Monnam(mtmp));
+	    domonnoise(mtmp);
+	    mtmp->mstrategy &= ~STRAT_WAITMASK;
 	}
 	return;
 }
@@ -375,17 +449,19 @@ quest_chat(mtmp)
 		(mtmp->data == &mons[PM_KNIGHT] 
 			|| mtmp->data == &mons[PM_MAID]) && 
 		mtmp->mpeaceful) ||
+		(Race_if(PM_DROW) && 
+		is_drow(mtmp->data)) ||
 		(Role_if(PM_EXILE) && 
 		mtmp->data == &mons[PM_PEASANT] && 
 		mtmp->mpeaceful)
 	){
 		chat_with_guardian();
 	} else {
-    switch(mtmp->data->msound) {
-	    case MS_NEMESIS:	chat_with_nemesis(); break;
-	    case MS_GUARDIAN:	chat_with_guardian(); break;
-	    default:	impossible("quest_chat: Unknown quest character %s.",
-				   mon_nam(mtmp));
+		switch(mtmp->data->msound) {
+			case MS_NEMESIS:	chat_with_nemesis(); break;
+			case MS_GUARDIAN:	chat_with_guardian(); break;
+			default:	impossible("quest_chat: Unknown quest character %s.",
+					   mon_nam(mtmp));
 		}
 	}
 }
@@ -412,6 +488,171 @@ quest_stat_check(mtmp)
     if(mtmp->data->msound == MS_NEMESIS)
 	Qstat(in_battle) = (mtmp->mcanmove && mtmp->mnotlaugh && !mtmp->msleeping &&
 			    monnear(mtmp, u.ux, u.uy));
+}
+
+void
+turn_stag()
+{
+	flags.stag = TRUE;
+	/*Convert to new alignment (Even if already did once before) */
+	if(u.ualignbase[A_CURRENT] != A_LAWFUL){
+		You("have a strong feeling that Lolth is angry...");
+		u.ugangr[Align2gangr(A_CHAOTIC)]+=20;
+		u.ugangr[Align2gangr(A_NEUTRAL)]+=20;
+		if(flags.initgend) pline("Eilistraee accepts your allegiance.");
+		else pline("The black web enfolds you.");
+		if (uarmh && uarmh->otyp == HELM_OF_OPPOSITE_ALIGNMENT)
+		u.ualignbase[A_CURRENT] = A_LAWFUL;
+		else
+		u.ualign.type = u.ualignbase[A_CURRENT] = A_LAWFUL;
+		u.ublessed = 0;
+		flags.botl = 1;
+
+		You("have a sudden sense of a new direction.");
+		/* Beware, Conversion is costly */
+		change_luck(-3);
+		u.ublesscnt += 300;
+		u.lastprayed = moves;
+		u.reconciled = REC_NONE;
+		u.lastprayresult = PRAY_CONV;
+		adjalign((int)(u.ualignbase[A_ORIGINAL] * (ALIGNLIM / 2)));
+	}
+	/*Eliminate old monster tags*/
+	    mons[urole.ldrnum].msound = MS_CUSS;
+	    mons[urole.ldrnum].mflags2 &= ~(M2_PEACEFUL);
+	    mons[urole.ldrnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+	    mons[urole.ldrnum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+		
+	    mons[urole.guardnum].msound = MS_CUSS;
+	    mons[urole.guardnum].mflags2 &= ~(M2_PEACEFUL);
+	    mons[urole.guardnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+	    mons[urole.guardnum].mflags3 |= M3_WAITFORU;
+		
+	    mons[urole.neminum].msound = MS_DJINNI;
+	    mons[urole.neminum].mflags2 |= M2_PEACEFUL;
+	    mons[urole.neminum].mflags2 &= ~(M2_NASTY|M2_STALK|M2_HOSTILE);
+	    mons[urole.neminum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+	/*Fix up role*/
+		if(flags.initgend){
+			/*true = female*/
+			urole.homebase = "the Grove of Eilistraee";
+			urole.intermed = "Erelhei-Cinlu";
+			urole.questarti = ART_TENTACLE_ROD;
+			
+			urole.ldrnum = PM_SEYLL_AUZKOVYN;
+			urole.guardnum = PM_STJARNA_ALFAR;
+			urole.neminum = PM_ECLAVDRA;
+			
+			urole.enemy1num = PM_HEDROW_WARRIOR;
+			urole.enemy2num = PM_DROW_MATRON;
+			urole.enemy1sym = S_IMP;
+			urole.enemy2sym = S_DEMON;
+		} else{
+			urole.lgod = "the Eddergud";
+			
+			urole.homebase = "Tower Xaxox";
+			urole.intermed = "Menzoberranzan";
+			urole.questarti = ART_TENTACLE_ROD;
+			
+			urole.ldrnum = PM_DARUTH_XAXOX;
+			urole.guardnum = PM_DROW_ALIENIST;
+			urole.neminum = PM_ECLAVDRA;
+			
+			urole.enemy1num = PM_DROW_MATRON;
+			urole.enemy2num = PM_DROW_ZOMBIE;
+			urole.enemy1sym = S_DEMON;
+			urole.enemy2sym = S_ZOMBIE;
+		}
+	/*Fix up artifacts*/
+	{
+		struct artifact *art;
+		int alignmnt = flags.stag ? u.ualign.type : aligns[flags.initalign].value;
+		/* Fix up the alignments of "gift" artifacts */
+		for (art = artilist+1; art->otyp; art++)
+			if (art->role == Role_switch && art->alignment != A_NONE)
+				art->alignment = alignmnt;
+		if (urole.questarti) {
+			artilist[urole.questarti].alignment = alignmnt;
+			artilist[urole.questarti].role = Role_switch;
+		}
+	}
+	/*Fix monster flags*/
+	{
+	    mons[urole.ldrnum].msound = MS_LEADER;
+	    mons[urole.ldrnum].mflags2 |= (M2_PEACEFUL);
+	    mons[urole.ldrnum].mflags3 |= M3_CLOSE;
+	    mons[urole.ldrnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+		
+	    mons[urole.guardnum].mflags2 |= (M2_PEACEFUL);
+	    mons[urole.guardnum].msound = MS_GUARDIAN;
+	    mons[urole.guardnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+		
+	    mons[urole.neminum].msound = MS_NEMESIS;
+	    mons[urole.neminum].mflags2 &= ~(M2_PEACEFUL);
+	    mons[urole.neminum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+	    mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+	}
+	/*Correct Qstat settings*/
+	{
+		struct monst *tm;
+		for(tm = fmon; tm; tm = tm->nmon){
+			if(tm->data == &mons[urole.ldrnum]){
+				tm->housealert = 1;
+				tm->mpeaceful = 1;
+				tm->mstrategy = STRAT_CLOSE;
+				Qstat(leader_m_id) = tm->m_id;
+				set_malign(tm);
+				break;
+			}
+		}
+		Qstat(met_leader) = 0;
+		Qstat(pissed_off) = 0;
+		Qstat(got_quest) = 0;
+		Qstat(got_final) = 0;
+		Qstat(first_start) = 0;
+		Qstat(made_goal) = 0;
+		Qstat(met_nemesis) = 0;
+		Qstat(killed_nemesis) = 0;
+		Qstat(in_battle) = 0;
+		Qstat(touched_artifact) = 0;
+		Qstat(offered_artifact) = 0;
+		Qstat(got_thanks) = 0;
+		u.uhave.questart = 0; /*Maybe will flip if you got Tent rod fist somehow*/
+		u.uevent.qcompleted = 0;	/* you didn't do it! */
+	}
+	/*Correct peacefulness settings*/
+	{
+		struct monst *tm;
+		if(flags.initgend){
+			for(tm = fmon; tm; tm = tm->nmon){
+				if(tm->mfaction == EILISTRAEE_SYMBOL || is_elf(tm->data)){
+					tm->housealert = 1;
+					tm->mpeaceful = 1;
+					set_malign(tm);
+				}
+			}
+		} else {
+			for(tm = fmon; tm; tm = tm->nmon){
+				if(tm->mfaction == EDDER_SYMBOL || 
+					tm->mfaction == XAXOX || 
+					tm->data == &mons[PM_EDDERKOP]
+				){
+					tm->housealert = 1;
+					tm->mpeaceful = 1;
+					set_malign(tm);
+				}
+			}
+		}
+	}
+	/*Give you an appropriate signet ring*/
+	{
+		struct obj *otmp;
+		otmp = mksobj(find_signet_ring(), TRUE, FALSE);
+		otmp->ohaluengr = TRUE;
+		otmp->ovar1 = flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
+		pline("\"Take this, to identify you as one of ours!  You should take off any armor with another faction's crest, though.\"");
+		hold_another_object(otmp, "You drop %s!",
+							  doname(otmp), (const char *)0);	}
 }
 
 /*quest.c*/
