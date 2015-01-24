@@ -941,14 +941,14 @@ genericptr_t p2;
 	if (!nonliving(mtmp->data) && !breathless(mtmp->data) &&
 		!resists_poison(mtmp)) {
 	    if (cansee(mtmp->mx, mtmp->my))
-		pline("%s coughs!", Monnam(mtmp));
+			pline("%s coughs!", Monnam(mtmp));
 	    setmangry(mtmp);
 	    if (haseyes(mtmp->data) && mtmp->mcansee) {
-		mtmp->mblinded = 1;
-		mtmp->mcansee = 0;
+			mtmp->mblinded = 1;
+			mtmp->mcansee = 0;
 	    }
 	    if (resists_poison(mtmp))
-		return FALSE;
+			return FALSE;
 	    mtmp->mhp -= rnd(dam) + 5;
 	    if (mtmp->mhp <= 0) {
 		if (heros_fault(reg))
@@ -989,7 +989,7 @@ int damage;
     }
     cloud->ttl = rn1(3,4);
     if (!in_mklev && !flags.mon_moving && !flags.cth_attk)
-	set_heros_fault(cloud);		/* assume player has created it */
+		set_heros_fault(cloud);		/* assume player has created it */
     cloud->inside_f = INSIDE_GAS_CLOUD;
     cloud->expire_f = EXPIRE_GAS_CLOUD;
     cloud->arg = (genericptr_t) damage;
