@@ -4051,7 +4051,7 @@ are to vist %H.
 %E
 %Cp Ndr 00008
 "I'd hate to see someone put a dagger in your pretty little back.
-Perhaps you should consider an alliance between with me."
+Perhaps you should consider an alliance with me."
 %E
 %Cp Ndr 00009
 "%oC represents the favor of Lolth."
