@@ -374,8 +374,8 @@ register struct mkroom *aroom;
 	if(broom->hx < 0)
 	    tmp = doorindex;
 	else
-	    for(tmp = doorindex; tmp > broom->fdoor; tmp--)
-		doors[tmp] = doors[tmp-1];
+		for(tmp = doorindex; tmp > broom->fdoor; tmp--)
+			doors[tmp] = doors[tmp-1];
 	doorindex++;
 	doors[tmp].x = x;
 	doors[tmp].y = y;
@@ -605,7 +605,7 @@ clear_level_structures()
 	level.flags.is_maze_lev = 0;
 	level.flags.is_cavernous_lev = 0;
 	level.flags.lethe = 0;
-
+	
 	/* Not currently used */
 	level.flags.slime = 0;
 	level.flags.fungi = 0;
@@ -803,7 +803,7 @@ makelevel()
 			walking boots, I'm allowing Islands+rivers. */
 	if (u_depth > 3 && !rn2(4) &&
 		!level.flags.has_vault) mkroom(RIVER);
-    }
+	}
 
 skiprooms:
 
