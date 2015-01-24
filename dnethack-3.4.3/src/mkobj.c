@@ -410,10 +410,39 @@ boolean artif;
 			curse(otmp);
 			otmp->spe = -rne(3);
 		} else	blessorcurse(otmp, 10);
+		
+		if(otmp->otyp == MOON_AXE){
+			switch(phase_of_the_moon()){
+				case 0:
+					otmp->ovar1 = ECLIPSE_MOON;
+				break;
+				case 1:
+				case 7:
+					otmp->ovar1 = CRESCENT_MOON;
+				break;
+				case 2:
+				case 6:
+					otmp->ovar1 = HALF_MOON;
+				break;
+				case 3:
+				case 5:
+					otmp->ovar1 = GIBBOUS_MOON;
+				break;
+				case 4:
+					otmp->ovar1 = FULL_MOON;
+				break;
+			}
+		}
+		if (artif && !rn2(20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
+		
 		if (is_poisonable(otmp) && ((is_ammo(otmp) && !rn2(100)) || !rn2(1000) )){
 			if(!rn2(100)) otmp->opoisoned = OPOISON_FILTH; /* Once a game or once every few games */
 			else otmp->opoisoned = OPOISON_BASIC;
-		} else if(objects[(otmp)->otyp].oc_material == WOOD && !rn2(100)){
+		} else if(objects[(otmp)->otyp].oc_material == WOOD 
+			&& otmp->oartifact != ART_BOW_OF_SKADI
+			&& !rn2(100)
+		){
 			switch(d(1,4)){
 				case 1: otmp->ovar1 = WARD_TOUSTEFNA; break;
 				case 2: otmp->ovar1 = WARD_DREPRUN; break;
@@ -421,9 +450,6 @@ boolean artif;
 				case 4: otmp->ovar1 = WARD_THJOFASTAFUR; break;
 			}
 		}
-
-		if (artif && !rn2(20))
-		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		break;
 	case FOOD_CLASS:
 	    otmp->odrained = 0;
@@ -562,13 +588,13 @@ boolean artif;
 						}
 					} else {
 						int tryct2 = 0;
-					do
-					    otmp->corpsenm = rndmonnum();
-					while(is_human(&mons[otmp->corpsenm])
-						&& tryct2++ < 30);
+						do
+							otmp->corpsenm = rndmonnum();
+						while(is_human(&mons[otmp->corpsenm])
+							&& tryct2++ < 30);
 					}
 					blessorcurse(otmp, 4);
-					break;
+				break;
 				}
 		case BELL_OF_OPENING:   otmp->spe = 3;
 					break;
@@ -578,7 +604,7 @@ boolean artif;
 		case FIRE_HORN:
 		case DRUM_OF_EARTHQUAKE:
 					otmp->spe = rn1(5,4);
-					break;
+		break;
 	    case MASK:
 			if(rn2(4)){
 				int tryct2 = 0;
@@ -594,7 +620,7 @@ boolean artif;
 			}
 			doMaskStats(otmp);
 		break;
-	    }
+		}
 	    break;
 	case AMULET_CLASS:
 		if (otmp->otyp == AMULET_OF_YENDOR) flags.made_amulet = TRUE;
@@ -683,7 +709,7 @@ boolean artif;
 				if( !(rn2(5)) ) otmp->ovar1 = WARD_EYE;
 				else if( !(rn2(4)) ) otmp->ovar1 = WARD_QUEEN;
 				else if( !(rn2(3)) )otmp->ovar1 = WARD_GARUDA;
-				else if( rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
+				else if(   rn2(2) )otmp->ovar1 = WARD_ELDER_SIGN;
 				else otmp->ovar1 = WARD_CAT_LORD;
 			}
 			else if(rn2(2)){
@@ -771,7 +797,6 @@ boolean artif;
 	break;
 	case ARMOR_CLASS:
 		if(rn2(10) && (otmp->otyp == FUMBLE_BOOTS ||
-		   otmp->otyp == LEVITATION_BOOTS ||
 		   otmp->otyp == HELM_OF_OPPOSITE_ALIGNMENT ||
 		   otmp->otyp == GAUNTLETS_OF_FUMBLING ||
 		   !rn2(11))) {
@@ -781,7 +806,7 @@ boolean artif;
 			otmp->blessed = rn2(2);
 			otmp->spe = rne(3);
 		} else	blessorcurse(otmp, 10);
-		if (artif && !rn2(40))                
+		if (artif && !rn2(40))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		/* simulate lacquered armor for samurai */
 		if (Role_if(PM_SAMURAI) && otmp->otyp == SPLINT_MAIL &&
@@ -810,14 +835,15 @@ boolean artif;
 		    otmp->age = (long) rn1(50,50);
 		    otmp->lamplit = 0;
 		}
-		if(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL){
+		if(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT){
 			otmp->ohaluengr = TRUE;
-			if(!(rn2(10))) otmp->ovar1 = LOLTH_SYMBOL;
+			if(Race_if(PM_DROW) && Is_qstart(&u.uz)) otmp->ovar1 = u.uhouse;
+			else if(!(rn2(10))) otmp->ovar1 = rn2(EDDER_SYMBOL+1-LOLTH_SYMBOL)+LOLTH_SYMBOL;
 			else if(!(rn2(4))) otmp->ovar1 = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
 			else otmp->ovar1 = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
 		}
 
-		break;
+	break;
 	case WAND_CLASS:
 		if(otmp->otyp == WAN_WISHING) otmp->spe = rnd(3); else
 		otmp->spe = rn1(5,
@@ -844,7 +870,7 @@ boolean artif;
 		}
 		if(isSignetRing(otmp->otyp)){
 			otmp->ohaluengr = TRUE;
-			if(!(rn2(100))) otmp->ovar1 = LOLTH_SYMBOL;
+			if(!(rn2(100))) otmp->ovar1 = rn2(EDDER_SYMBOL+1-LOLTH_SYMBOL)+LOLTH_SYMBOL;
 			else if(!(rn2(4))) otmp->ovar1 = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
 			else otmp->ovar1 = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
 		}
@@ -998,27 +1024,27 @@ start_corpse_timeout(body)
 			when = age;
 			break;
 		    }
-	} 
+	}
 	
 	if (action == ROT_CORPSE && !acidic(&mons[body->corpsenm])) {
 		/* Corpses get moldy
 		 */
 		chance = Is_zuggtmoy_level(&u.uz) ? FULL_MOLDY_CHANCE : BASE_MOLDY_CHANCE;
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
-				if (!rn2(chance)) {    /* "revives" as a random s_fungus */
-			action = MOLDY_CORPSE;
-			when = age;
-			break;
-		    }
+			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
+				action = MOLDY_CORPSE;
+				when = age;
+				break;
+			}
 	}
 	if(action == ROT_CORPSE && Is_juiblex_level(&u.uz)) {
 		chance = FULL_MOLDY_CHANCE;
-			for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
-				if (!rn2(chance)) {    /* "revives" as a random s_fungus */
-					action = SLIMY_CORPSE;
-					when = age;
-					break;
-				}
+		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
+			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
+				action = SLIMY_CORPSE;
+				when = age;
+				break;
+			}
 	}
 	if(action == ROT_CORPSE && Is_night_level(&u.uz)){
 		chance = FULL_MOLDY_CHANCE;
@@ -1036,7 +1062,7 @@ start_corpse_timeout(body)
 				action = SHADY_CORPSE;
 				when = age;
 				break;
-		}
+			}
 	}
 	
 	if (body->norevive) body->norevive = 0;
@@ -1188,17 +1214,23 @@ register struct obj *obj;
 	else if(obj->oartifact == ART_BLACK_CRYSTAL){
 		wt = 40; //200 total
 	}
-	else if(obj->oartifact == ART_DRAGON_PLATE){
-		wt =  (int)(wt * 1.5); //225
+	else if(obj->oartifact == ART_DRAGON_PLATE || obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
+		wt =  (int)(wt * 2); //300
+	} else if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
+		wt =  150; /* Same as a crystal ball (ie, the Orb of Weight) */
+	} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
+		obj->corpsenm = PM_DWARF;
 	}
 
-	if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
-		wt =  150; /* Same as a crystal ball (ie, the Orb of Weight) */
+
+	if(obj->otyp == MOON_AXE){
+		if(obj->ovar1) wt =  wt/4*obj->ovar1;
+		else wt = wt/4;
 	}
 
 	if (obj->otyp == LARGE_BOX && obj->spe){ /* Schroedinger's Cat */
 		if(obj->spe == 1){
-		wt += mons[PM_HOUSECAT].cwt;
+			wt += mons[PM_HOUSECAT].cwt;
 		}else if(obj->spe == 4){
 			wt += mons[PM_VAMPIRE].cwt;
 		}
@@ -1264,6 +1296,19 @@ int x, y;
 		otmp = mksobj_at(SLIME_MOLD, x, y,TRUE,FALSE);
 		otmp->spe = fruitadd("slime mold");
 		return otmp;
+	} else if(In_quest(&u.uz) && (Race_if(PM_DROW) || (Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)))){
+		int chance = rn2(50);
+		if(chance < 20){
+			otmp = mksobj_at(EGG, x, y,TRUE,FALSE);
+			otmp->corpsenm = PM_CAVE_SPIDER;
+			return otmp;
+		} else if(chance < 45){
+			return mksobj_at(EUCALYPTUS_LEAF, x, y, TRUE, FALSE);
+		} else {
+			otmp = mksobj_at(SLIME_MOLD, x, y,TRUE,FALSE);
+			otmp->spe = fruitadd("moldy remains");
+			return otmp;
+		}
 	} else if((In_quest(&u.uz) && Role_if(PM_PIRATE)) || Is_paradise(&u.uz)){
 		int chance = rn2(100);
 		if(chance < 10){
@@ -1627,52 +1672,52 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 
     /* Check for corpses just placed on or in ice */
     if (otmp->otyp == CORPSE && (on_floor || buried) && is_ice(x,y)) {
-	tleft = stop_timer(action, (genericptr_t)otmp);
-	if (tleft == 0L) {
-		action = REVIVE_MON;
 		tleft = stop_timer(action, (genericptr_t)otmp);
-	} 
-	if (tleft != 0L) {
-	    long age;
-	    
-	    tleft = tleft - monstermoves;
-	    /* mark the corpse as being on ice */
-	    ON_ICE(otmp) = 1;
+		if (tleft == 0L) {
+			action = REVIVE_MON;
+			tleft = stop_timer(action, (genericptr_t)otmp);
+		} 
+		if (tleft != 0L) {
+			long age;
+			
+			tleft = tleft - monstermoves;
+			/* mark the corpse as being on ice */
+			ON_ICE(otmp) = 1;
 #ifdef DEBUG_EFFECTS
-	    pline("%s is now on ice at %d,%d.", The(xname(otmp)),x,y);
+			pline("%s is now on ice at %d,%d.", The(xname(otmp)),x,y);
 #endif
-	    /* Adjust the time remaining */
-	    tleft *= ROT_ICE_ADJUSTMENT;
-	    restart_timer = TRUE;
-	    /* Adjust the age; must be same as in obj_ice_age() */
-	    age = monstermoves - otmp->age;
-	    otmp->age = monstermoves - (age * ROT_ICE_ADJUSTMENT);
-	}
+			/* Adjust the time remaining */
+			tleft *= ROT_ICE_ADJUSTMENT;
+			restart_timer = TRUE;
+			/* Adjust the age; must be same as in obj_ice_age() */
+			age = monstermoves - otmp->age;
+			otmp->age = monstermoves - (age * ROT_ICE_ADJUSTMENT);
+		}
     }
     /* Check for corpses coming off ice */
     else if ((force < 0) ||
 	     (otmp->otyp == CORPSE && ON_ICE(otmp) &&
 	     ((on_floor && !is_ice(x,y)) || !on_floor))) {
-	tleft = stop_timer(action, (genericptr_t)otmp);
-	if (tleft == 0L) {
-		action = REVIVE_MON;
 		tleft = stop_timer(action, (genericptr_t)otmp);
-	}
-	if (tleft != 0L) {
-		long age;
+		if (tleft == 0L) {
+			action = REVIVE_MON;
+			tleft = stop_timer(action, (genericptr_t)otmp);
+		}
+		if (tleft != 0L) {
+			long age;
 
-		tleft = tleft - monstermoves;
-		ON_ICE(otmp) = 0;
+			tleft = tleft - monstermoves;
+			ON_ICE(otmp) = 0;
 #ifdef DEBUG_EFFECTS
-	    	pline("%s is no longer on ice at %d,%d.", The(xname(otmp)),x,y);
+				pline("%s is no longer on ice at %d,%d.", The(xname(otmp)),x,y);
 #endif
-		/* Adjust the remaining time */
-		tleft /= ROT_ICE_ADJUSTMENT;
-		restart_timer = TRUE;
-		/* Adjust the age */
-		age = monstermoves - otmp->age;
-		otmp->age = otmp->age + (age / ROT_ICE_ADJUSTMENT);
-	}
+			/* Adjust the remaining time */
+			tleft /= ROT_ICE_ADJUSTMENT;
+			restart_timer = TRUE;
+			/* Adjust the age */
+			age = monstermoves - otmp->age;
+			otmp->age = otmp->age + (age / ROT_ICE_ADJUSTMENT);
+		}
     }
     /* now re-start the timer with the appropriate modifications */ 
     if (restart_timer)
@@ -1779,7 +1824,11 @@ extract_nobj(obj, head_ptr)
 	    break;
 	}
     }
-    if (!curr) panic("extract_nobj: object lost");
+    if (!curr){
+		struct obj *crash;
+		crash->spe++;
+		panic("extract_nobj: object lost");
+	}
     obj->where = OBJ_FREE;
 }
 
