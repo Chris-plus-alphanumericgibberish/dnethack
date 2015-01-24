@@ -4089,6 +4089,11 @@ register struct permonst *ptr;
 	
 	if(Race_if(PM_CLOCKWORK_AUTOMATON) && (mndx == PM_TINKER_GNOME || mndx == PM_HOOLOOVOO) ) return TRUE;
 	
+	if(Race_if(PM_DROW) && 
+		((ual == A_CHAOTIC && (!Role_if(PM_NOBLEMAN) || flags.initgend)) || (ual == A_NEUTRAL && !flags.initgend)) && 
+		mndx == PM_AVATAR_OF_LOLTH && 
+		u.ualign.record >= 20
+	) return TRUE;
 	
 	if (ptr == &mons[urole.ldrnum] || ptr->msound == MS_GUARDIAN)
 		return TRUE;
