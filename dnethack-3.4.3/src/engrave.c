@@ -267,6 +267,8 @@ static const char *haluMesg[] = {
 	"I was so surprised, I CLASSIFIED INFORMATION, I really did!", /*Haruhi Suzumiya*/
 		"Problems that cannot be solved do not exist in this world.",
 		"Feelings of love are just a temporary lapse in judgment.",
+	"I'm not going there to die. I'm going to find out if I'm really alive.", /*Cowboy Bebop*/
+		"There is nothing left to believe in.",
 	"He hides who he really is and pretends to be someone else forever.", /*FLCL*/
 		"So in time he becomes that person, so his lie becomes the truth, see?  He transcends the mask.",
 		"Well, don't you get it? That's how he finds happiness. That's pretty good, right?",
