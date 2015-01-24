@@ -172,8 +172,14 @@ struct monst *mon;
 {
 	struct permonst *ptr = mon->data;
 	struct obj *o;
-
+	
 	if(mon == u.usteed && u.sealsActive&SEAL_BERITH && Antimagic) return TRUE;
+	
+	if(mon->data == &mons[PM_WATCHER_IN_THE_WATER] ||
+		mon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || 
+		mon->data == &mons[PM_LONG_SINUOUS_TENTACLE] ||
+		mon->data == &mons[PM_DARUTH_XAXOX]
+	) return TRUE;
 	
 	/* as of 3.2.0:  gray dragons, Angels, Oracle, Yeenoghu */
 	if (dmgtype(ptr, AD_MAGM) || ptr == &mons[PM_BABY_GRAY_DRAGON] ||
@@ -201,7 +207,7 @@ struct monst *mon;
 	boolean is_you = (mon == &youmonst);
 	struct obj *o;
 
-	if (is_you ? (Blind || u.usleep) :
+	if (is_you ? (NoLightBlind || u.usleep) :
 		(mon->mblinded || !mon->mcansee || !haseyes(ptr) ||
 		    /* BUG: temporary sleep sets mfrozen, but since
 			    paralysis does too, we can't check it */
@@ -301,7 +307,7 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 		if ((o->owornmask & W_ARMH) &&
 			o->otyp == vhelmsa
 		)
-		    return FALSE;
+			return FALSE;
 	}
 	return TRUE;
 }
@@ -683,7 +689,7 @@ static const short grownups[][2] = {
 	{PM_GIANT_RAT, PM_ENORMOUS_RAT},
 	{PM_ENORMOUS_RAT, PM_RODENT_OF_UNUSUAL_SIZE},
 #endif	/* CONVICT */
-	{PM_CAVE_SPIDER, PM_GIANT_SPIDER},
+	{PM_CAVE_SPIDER, PM_GIANT_SPIDER}, {PM_GIANT_SPIDER, PM_MIRKWOOD_SPIDER}, {PM_MIRKWOOD_SPIDER, PM_MIRKWOOD_ELDER},
 	{PM_OGRE, PM_OGRE_LORD}, {PM_OGRE_LORD, PM_OGRE_KING},
 	{PM_ELF, PM_ELF_LORD}, {PM_WOODLAND_ELF, PM_ELF_LORD},
 	{PM_GREEN_ELF, PM_ELF_LORD}, {PM_GREY_ELF, PM_ELF_LORD},
@@ -696,6 +702,7 @@ static const short grownups[][2] = {
 	{PM_VAMPIRE, PM_VAMPIRE_LORD}, {PM_BAT, PM_GIANT_BAT},
 	{PM_BABY_GRAY_DRAGON, PM_GRAY_DRAGON},
 	{PM_BABY_SILVER_DRAGON, PM_SILVER_DRAGON},
+	{PM_BABY_MERCURIAL_DRAGON, PM_MERCURIAL_DRAGON},
 	{PM_BABY_DEEP_DRAGON, PM_DEEP_DRAGON},
 	{PM_BABY_SHIMMERING_DRAGON, PM_SHIMMERING_DRAGON},
 	{PM_BABY_RED_DRAGON, PM_RED_DRAGON},
@@ -713,6 +720,7 @@ static const short grownups[][2] = {
 	{PM_BABY_LONG_WORM, PM_LONG_WORM},
 	{PM_BABY_PURPLE_WORM, PM_PURPLE_WORM},
 	{PM_BABY_CROCODILE, PM_CROCODILE},
+	{PM_SMALL_CAVE_LIZARD, PM_CAVE_LIZARD}, {PM_CAVE_LIZARD, PM_LARGE_CAVE_LIZARD},
 	{PM_SOLDIER, PM_SERGEANT},
 	{PM_SERGEANT, PM_LIEUTENANT},
 	{PM_LIEUTENANT, PM_CAPTAIN},
