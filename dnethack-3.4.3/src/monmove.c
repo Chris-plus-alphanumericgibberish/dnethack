@@ -29,7 +29,7 @@ register struct monst *mtmp;
 	    else if (flags.soundok)
 		You_hear("a distant explosion.");
 	}
-	wake_nearto(mtmp->mx, mtmp->my, 7*7);
+	wake_nearto_noisy(mtmp->mx, mtmp->my, 7*7);
 	mtmp->mstun = 1;
 	mtmp->mhp -= rnd(15);
 	if(mtmp->mhp <= 0) {
@@ -143,7 +143,7 @@ struct monst *mtmp;
 	struct obj *alignedfearobj = aligned_sartprop3_at(SPFX3_FEAR, x, y);
 	
 
-	return (boolean)( 
+	return (boolean)(
 				((
 					sobj_at(SCR_SCARE_MONSTER, x, y)
 				 || (alignedfearobj && !touch_artifact(alignedfearobj,mtmp))
@@ -548,7 +548,7 @@ struct monst *mtmp;
 				|| mtmp->data->mlet == S_TROLL || mtmp->data == &mons[PM_NAZGUL];
   }
 	
-			
+
 }
 #endif /* OVL2 */
 #ifdef OVL0
@@ -637,13 +637,13 @@ boolean fleemsg;
 		fleetime += mtmp->mfleetim;
 		/* ensure monster flees long enough to visibly stop fighting */
 		if (fleetime == 1) fleetime++;
-		mtmp->mfleetim = min(fleetime, 127);
+			mtmp->mfleetim = min(fleetime, 127);
 	    }
-           if( !mtmp->mflee && mtmp->data == &mons[PM_GIANT_TURTLE]){
-             mtmp->mcanmove=0;
-			 // mtmp->mfrozen = mtmp->mfleetim;
-             if(canseemon(mtmp)) 
-               pline("%s hides in %s shell!",Monnam(mtmp),mhis(mtmp));
+		if( !mtmp->mflee && mtmp->data == &mons[PM_GIANT_TURTLE]){
+		 mtmp->mcanmove=0;
+		 // mtmp->mfrozen = mtmp->mfleetim;
+		 if(canseemon(mtmp)) 
+		   pline("%s hides in %s shell!",Monnam(mtmp),mhis(mtmp));
 		} else if (!mtmp->mflee && fleemsg && canseemon(mtmp) && !mtmp->mfrozen) 
 			mtmp->data == &mons[PM_BANDERSNATCH] ? pline("%s becomes frumious!", (Monnam(mtmp)))
 												 : pline("%s turns to flee!", (Monnam(mtmp)));
@@ -679,7 +679,9 @@ int *inrange, *nearby, *scared;
 	*scared = (*nearby && (onscary(seescaryx, seescaryy, mtmp) ||
 			       (!mtmp->mpeaceful &&
 				    in_your_sanctuary(mtmp, 0, 0))));
-
+	
+	if(mtmp->data == &mons[PM_BALL_OF_LIGHT]) *scared = TRUE;
+	
 	if(*scared) {
 		if (rn2(7))
 		    monflee(mtmp, rnd(10), TRUE, TRUE);
@@ -715,10 +717,11 @@ register struct monst *mtmp;
         struct obj *ygold = 0, *lepgold = 0;
 #endif
 
+	
 /*	Pre-movement adjustments	*/
 
 	mdat = mtmp->data;
-
+		
 	if(mdat == &mons[PM_GNOLL_MATRIARCH]){
 		if(!rn2(20)){
 			makemon(&mons[PM_GNOLL], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
@@ -736,6 +739,22 @@ register struct monst *mtmp;
 
 	/* update quest status flags */
 	quest_stat_check(mtmp);
+	
+	if(mdat == &mons[PM_CENTER_OF_ALL] && (near_capacity()>UNENCUMBERED || u.ulevel < 14) && !rn2(4)){
+		int nlev;
+		d_level flev;
+
+		if (!(mon_has_amulet(mtmp) || In_endgame(&u.uz))) {
+			nlev = random_teleport_level();
+			pline("going to %d",nlev);
+			if (nlev != depth(&u.uz)) {
+				get_level(&flev, nlev);
+				migrate_to_level(mtmp, ledger_no(&flev), MIGR_RANDOM,
+					(coord *)0);
+			}
+			return 0;
+		}
+	}
 
    if (mdat != &mons[PM_GIANT_TURTLE] || !mtmp->mflee)
 	if (!(mtmp->mcanmove && mtmp->mnotlaugh) || (mtmp->mstrategy & STRAT_WAITMASK)) {
@@ -748,7 +767,7 @@ register struct monst *mtmp;
 
 	if (mdat == &mons[PM_GREAT_CTHULHU]){
 		if(couldsee(mtmp->mx, mtmp->my)) //Great Cthulu drives investigators mad when gazed upon.
-	    m_respond(mtmp);
+			m_respond(mtmp);
 		if(mtmp->movement > 0) //Great Cthulu moves only once every few turns.
 			return 0;
 	}
@@ -766,10 +785,14 @@ register struct monst *mtmp;
 	if (mtmp->mconf && !rn2(50)) mtmp->mconf = 0;
 
 	if (mtmp->mcrazed){
-		if(!rn2(10))mtmp->mconf = 1;
+		if(!rn2(4))mtmp->mconf = 1;
 		(void) set_apparxy(mtmp);
+		if(!rn2(10)){
+			mtmp->mnotlaugh=0;
+			mtmp->mlaughing=rnd(5);
+		}
 	}
-
+	
 	/* stunned monsters get un-stunned with larger probability */
 	if (mtmp->mstun && !rn2(10)) mtmp->mstun = 0;
 
@@ -780,7 +803,7 @@ register struct monst *mtmp;
 		return(0);
 	}
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
-		(mdat->msound == MS_JUBJUB && (!rn2(100) || (!um_dist(mtmp->mx, mtmp->my, 3) && !rn2(10))))
+		(mdat->msound == MS_JUBJUB && (!rn2(10) || (!um_dist(mtmp->mx, mtmp->my, 3) && !rn2(10))))
 	) m_respond(mtmp);
 	if (mdat == &mons[PM_MEDUSA] && couldsee(mtmp->mx, mtmp->my))
 	    m_respond(mtmp);
@@ -820,6 +843,17 @@ register struct monst *mtmp;
 	} else if(find_misc(mtmp)) {
 		if (use_misc(mtmp) != 0)
 			return 1;
+	}
+	
+	if(is_drow(mtmp->data) && (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
+		&& !mtmp->mcan && mtmp->mspec_used < 4
+	){
+		if(cansee(mtmp->mx,mtmp->my)) pline("%s invokes the darkness.",Monnam(mtmp));
+	    do_clear_area(mtmp->mx,mtmp->my, 5, set_lit, (genericptr_t)0);
+		doredraw();
+	    if(mtmp->data == &mons[PM_HEDROW_WARRIOR]) mtmp->mspec_used += d(4,4);
+		else mtmp->mspec_used += 10 - mtmp->m_lev;
+	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
 	}
 
 	/* Demonic Blackmail! */
@@ -915,13 +949,13 @@ register struct monst *mtmp;
 		}
 	} else if (is_mind_flayer(mdat) && !rn2(20)) {
 		struct monst *m2, *nmon = (struct monst *)0;
-
+		
 		if (canseemon(mtmp))
 			pline("%s concentrates.", Monnam(mtmp));
-		if (distu(mtmp->mx, mtmp->my) > BOLT_LIM * BOLT_LIM) {
-			You("sense a faint wave of psychic energy.");
-			goto toofar;
-		}
+		// if (distu(mtmp->mx, mtmp->my) > BOLT_LIM * BOLT_LIM) {
+			// You("sense a faint wave of psychic energy.");
+			// goto toofar;
+		// }
 		pline("A wave of psychic energy pours over you!");
 		if (mtmp->mpeaceful &&
 		    (!Conflict || resist(mtmp, RING_CLASS, 0, 0)))
@@ -934,9 +968,10 @@ register struct monst *mtmp;
 				pline("It locks on to your %s!",
 					m_sen ? "telepathy" :
 					Blind_telepat ? "latent telepathy" : "mind");
-				dmg = mdat == &mons[PM_GREAT_CTHULHU] ? d(5,15) : rnd(15);
+				dmg = (mdat == &mons[PM_GREAT_CTHULHU]) ? d(5,15) : (mdat == &mons[PM_ELDER_BRAIN]) ? d(3,15) : rnd(15);
 				if (Half_spell_damage) dmg = (dmg+1) / 2;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
+				if(mdat == &mons[PM_ELDER_BRAIN]) u.ustdy = max(u.ustdy,dmg/3);
 			}
 		}
 		for(m2=fmon; m2; m2 = nmon) {
@@ -978,26 +1013,35 @@ toofar:
 	    if (!(scared && mw_tmp && is_pick(mw_tmp)) &&
 		mtmp->weapon_check == NEED_WEAPON &&
 		!(mtmp->mtrapped && !nearby && select_rwep(mtmp))) {
-		mtmp->combat_mode = HNDHND_MODE;
-		mtmp->weapon_check = NEED_HTH_WEAPON;
-		if (mon_wield_item(mtmp) != 0) return(0);
+			mtmp->combat_mode = HNDHND_MODE;
+			mtmp->weapon_check = NEED_HTH_WEAPON;
+			if (mon_wield_item(mtmp) != 0) return(0);
 	    }
 	}
 
 /*      Look for other monsters to fight (at a distance) */
 	if (( 
 	      attacktype(mtmp->data, AT_GAZE) ||
+	      attacktype(mtmp->data, AT_ARRW) ||
 	      (!mtmp->mspec_used && 
 			(attacktype(mtmp->data, AT_SPIT) ||
 			 attacktype(mtmp->data, AT_BREA)
 			)
 		  )||
 	     (attacktype(mtmp->data, AT_MMGC) &&
-	      (((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp
+			(((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp
 	         <= AD_SPC2))
 	      ) ||
 	     (attacktype(mtmp->data, AT_MAGC) &&
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
+	         <= AD_SPC2))
+	      ) ||
+	     (attacktype(mtmp->data, AT_LNCK) && distu(mtmp->mx,mtmp->my) <= 8 &&
+	      (((attacktype_fordmg(mtmp->data, AT_LNCK, AD_ANY))->adtyp
+	         <= AD_SPC2))
+	      ) ||
+	     (attacktype(mtmp->data, AT_LRCH) && distu(mtmp->mx,mtmp->my) <= 8 &&
+	      (((attacktype_fordmg(mtmp->data, AT_LRCH, AD_ANY))->adtyp
 	         <= AD_SPC2))
 	      ) ||
 	     (attacktype(mtmp->data, AT_WEAP) &&
@@ -1008,15 +1052,15 @@ toofar:
 	    register struct monst *mtmp2 = mfind_target(mtmp);
 	    if (mtmp2 && 
 	        (mtmp2 != &youmonst || 
-		 dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) > 2) &&
+				dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) > 2) &&
 			(mtmp2 != mtmp)
 		){
 	        int res;
-		res = (mtmp2 == &youmonst) ? mattacku(mtmp)
+			res = (mtmp2 == &youmonst) ? mattacku(mtmp)
 		                           : mattackm(mtmp, mtmp2);
 	        if (res & MM_AGR_DIED) return 1; /* Oops. */
 
-		return 0; /* that was our move for the round */
+			return 0; /* that was our move for the round */
 	    }
 	}
 
@@ -1027,7 +1071,7 @@ toofar:
 	   mtmp->mconf || mtmp->mstun || (mtmp->minvis && !rn2(3)) ||
 	   (mdat->mlet == S_LEPRECHAUN && !u.ugold && (mtmp->mgold || rn2(2))) ||
 #else
-        if (mdat->mlet == S_LEPRECHAUN) {
+    if (mdat->mlet == S_LEPRECHAUN) {
 	    ygold = findgold(invent);
 	    lepgold = findgold(mtmp->minvent);
 	}
@@ -1052,7 +1096,7 @@ toofar:
 					dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= BOLT_LIM*BOLT_LIM
 				){
 					if(castmu(mtmp, a, TRUE, TRUE)){
-				tmp = 3;
+						tmp = 3;
 						if(mdat != &mons[PM_DEMOGORGON]) break;
 					}
 			    } else {
@@ -1060,7 +1104,7 @@ toofar:
 						tmp = 3;
 						if(mdat != &mons[PM_DEMOGORGON]) break;
 					}
-			    }
+				}
 			}
 		    }
 		}
@@ -1240,10 +1284,10 @@ register int after;
 	     */
 	    if((dist2(mtmp->mx, mtmp->my, tx, ty) < 2) &&
 	       intruder && (intruder != mtmp)) {
-		notonhead = (intruder->mx != tx || intruder->my != ty);
-		if(mattackm(mtmp, intruder) == 2) return(2);
-		mmoved = 1;
-	    goto postmov;
+			notonhead = (intruder->mx != tx || intruder->my != ty);
+			if(mattackm(mtmp, intruder) == 2) return(2);
+			mmoved = 1;
+			goto postmov;
 		} else if(mtmp->data != &mons[PM_DEMOGORGON] 
 			   && mtmp->data!=&mons[PM_ELDER_PRIEST]
 			   /*&& mtmp->data!=&mons[PM_SHAMI_AMOURAE]*/
@@ -1304,7 +1348,7 @@ not_special:
 		    (youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == STRANGE_OBJECT) || u.uundetected ||
 		    (youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == GOLD_PIECE && !likes_gold(ptr)) ||
 		    (mtmp->mpeaceful && !mtmp->isshk) ||  /* allow shks to follow */
-		    ((monsndx(ptr) == PM_STALKER || ptr->mlet == S_BAT ||
+		    ((monsndx(ptr) == PM_STALKER || is_bat(ptr) || monsndx(ptr) == PM_HUNTING_HORROR ||
 		      ptr->mlet == S_LIGHT) && !rn2(3)))
 			appr = 0;
 
@@ -1467,7 +1511,9 @@ not_special:
 	else flag |= ALLOW_U;
 	if (is_minion(ptr) || is_rider(ptr)) flag |= ALLOW_SANCT;
 	/* unicorn may not be able to avoid hero on a noteleport level */
-	if ((is_unicorn(ptr) && !level.flags.noteleport) || ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH]) flag |= NOTONL;
+	if ((is_unicorn(ptr) && !level.flags.noteleport) 
+		|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH] 
+		|| ptr == &mons[PM_WATCHER_IN_THE_WATER]) flag |= NOTONL;
 	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
 	if (passes_bars(ptr) && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz)) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
@@ -1493,7 +1539,8 @@ not_special:
 	    if((!mtmp->mpeaceful || mtmp->data == &mons[PM_NURSE]) && level.flags.shortsighted &&
 	       nidist > (couldsee(nix,niy) ? 144 : 36) && appr == 1) appr = 0;
 	    if ((is_unicorn(ptr) && level.flags.noteleport) 
-			|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH]){
+			|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH] 
+			|| ptr == &mons[PM_WATCHER_IN_THE_WATER]){
 			/* on noteleport levels, perhaps we cannot avoid hero */
 			for(i = 0; i < cnt; i++)
 				if(!(info[i] & NOTONL)) avoid=TRUE;
@@ -1618,8 +1665,8 @@ not_special:
 	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp) && 
 			!(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz))
 		) {
-		(void) rloc(mtmp, FALSE);
-		return(1);
+			(void) rloc(mtmp, FALSE);
+			return(1);
 	    }
 	    if(mtmp->wormno) worm_nomove(mtmp);
 	}
