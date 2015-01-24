@@ -204,7 +204,7 @@ boolean forced;
 	}
 	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
-	if(spir != SEAL_JACK && forced && gnosis){
+	if(forced && gnosis){
 		You("are shaken to your core!");
 		return;
 	}
@@ -301,9 +301,9 @@ nh_timeout()
 {
 	register struct prop *upp;
 	int sleeptime, i, m_idx, baseluck = (flags.moonphase == FULL_MOON) ? 1 : 0;
-
+	
 	if (flags.friday13) baseluck -= 1;
-
+		
 	if (u.uluck != baseluck) {
 	    int timeout = 600;
 	    int time_luck = stone_luck(FALSE);
@@ -341,7 +341,7 @@ nh_timeout()
 		if (slow_timeout > timeout) timeout = slow_timeout;
 	    }
 
-	    if (u.uhave.amulet || u.ugangr) timeout = timeout / 2;
+	    if (u.uhave.amulet || u.ugangr[Align2gangr(u.ualign.type)]) timeout = timeout / 2;
 
 	    if (moves >= u.luckturn + timeout) {
 		if(u.uluck > baseluck)
@@ -354,7 +354,7 @@ nh_timeout()
 #ifdef CONVICT
     if(Phasing) phasing_dialogue();
 #endif /* CONVICT */
-	if(u.uinvulnerable) return; /* things past this point could kill you */
+	if(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) return; /* things past this point could kill you */
 	if(Stoned) stoned_dialogue();
 	if(Slimed) slime_dialogue();
 	if(Vomiting) vomiting_dialogue();
@@ -378,7 +378,7 @@ nh_timeout()
 			  u.uspellprot ? "becomes less dense" : "disappears");
 	    }
 	}
-
+	
 	if(u.sowdisc) u.sowdisc--; //timeout for discord
 	if(u.voidChime){
 		u.voidChime--;
@@ -402,7 +402,7 @@ nh_timeout()
 				uswapwep->ovar1 |= u.spiritTineB;
 				// if(artifact_light(uswapwep) && !uswapwep->lamplit) begin_burn(uswapwep, FALSE);
 				// else if(!artifact_light(uswapwep) && uswapwep->lamplit) end_burn(uswapwep, TRUE);
-	}
+			}
 		}
 	}
 	if(!u.voidChime){
@@ -434,7 +434,7 @@ nh_timeout()
 			if(remaining){
 				int j;
 				if(u.spirit[i]&SEAL_SPECIAL){
-				for(j=0;j<32;j++){
+					for(j=0;j<32;j++){
 						if(((u.spirit[i]&(~SEAL_SPECIAL)) >> j) == 1L){
 							Your("link with %s is %s.", sealNames[j+(QUEST_SPIRITS-FIRST_SEAL)], spiritFadeTerms[remaining-1]);
 						}
@@ -442,12 +442,12 @@ nh_timeout()
 				} else {
 					for(j=0;j<32;j++){
 						if((u.spirit[i] >> j) == 1L){
-						Your("link with %s is %s.", sealNames[j], spiritFadeTerms[remaining-1]);
+							Your("link with %s is %s.", sealNames[j], spiritFadeTerms[remaining-1]);
+						}
 					}
 				}
 			}
 		}
-	}
 	}
 	
 	if(u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){
@@ -1365,7 +1365,7 @@ long timeout;
 		    	((!uwep || uwep != obj) &&
 		    	 (!u.twoweap || !uswapwep || obj != uswapwep))))
 	            lightsaber_deactivate(obj, FALSE);
-		switch (obj->age) {			
+		switch (obj->age) {
 		    case 100:
 			/* Single warning time */
 			if (canseeit) {
@@ -1471,64 +1471,72 @@ begin_burn(obj, already_lit)
 	struct obj *obj;
 	boolean already_lit;
 {
-	int radius = 3;
+	int radius, nvmult = u.nv_range;
 	long turns = 0;
 	boolean do_timer = TRUE;
+	
+	if(nvmult < 1) nvmult = 1;
+	radius = 3*nvmult;
 
 	if (obj->age == 0 && 
 		obj->otyp != MAGIC_LAMP && 
 		!artifact_light(obj) && 
 		!arti_light(obj) && 
-		!obj->oartifact == ART_ATMA_WEAPON
+		obj->oartifact != ART_ATMA_WEAPON
 	) return;
-
+	
 	switch (obj->otyp) {
 	    case MAGIC_LAMP:
 		obj->lamplit = 1;
 		do_timer = FALSE;
 		break;
 	    case DOUBLE_LIGHTSABER:
-	    	if (!obj->oartifact && obj->altmode && obj->age > 1) 
-		    obj->age--; /* Double power usage */
+	    	if (obj->altmode && obj->age > 1) 
+				obj->age--; /* Double power usage */
 	    case LIGHTSABER:
 	    case BEAMSWORD:
-			if(obj->oartifact){
-				obj->lamplit = 1;
-				do_timer = FALSE;
-			} else turns = 1;
-    	    	radius = 1;
+			if(obj->oartifact == ART_ATMA_WEAPON){
+				if(obj->age == 0){
+					if(Drain_resistance) return;
+					losexp("life force drain",TRUE,TRUE,TRUE);
+					obj->cursed = FALSE;
+					obj->age = 1500;
+				} else if(!Drain_resistance) obj->age++;
+			}
+			turns = 1;
+    	    radius = 1*nvmult;
 		break;
 
 	    case POT_OIL:
 		turns = obj->age;
-		radius = 1;	/* very dim light */
+		radius = 1*nvmult;	/* very dim light */
 		break;
 
 		case GNOMISH_POINTY_HAT:
 			turns = obj->age;
-			radius = 2;
+			radius = 2*nvmult;
 			if (obj->age > 75L)
-			    turns = obj->age - 75L;
+				turns = obj->age - 75L;
 			else if (obj->age > 15L)
-			    turns = obj->age - 15L;
+				turns = obj->age - 15L;
 		break;
-
+		
 	    case DWARVISH_IRON_HELM:
 	    case BRASS_LANTERN:
 	    case OIL_LAMP:
 		/* magic times are 150, 100, 50, 25, and 0 */
 		if (obj->age > 150L)
-		    turns = obj->age - 150L;
+			turns = obj->age - 150L;
 		else if (obj->age > 100L)
-		    turns = obj->age - 100L;
+			turns = obj->age - 100L;
 		else if (obj->age > 50L)
-		    turns = obj->age - 50L;
+			turns = obj->age - 50L;
 		else if (obj->age > 25L)
-		    turns = obj->age - 25L;
+			turns = obj->age - 25L;
 		else
-		    turns = obj->age;
+			turns = obj->age;
 		break;
-
+		
 	    case CANDELABRUM_OF_INVOCATION:
 	    case TALLOW_CANDLE:
 	    case WAX_CANDLE:
@@ -1539,7 +1547,7 @@ begin_burn(obj, already_lit)
 		    turns = obj->age - 15L;
 		else
 		    turns = obj->age;
-		radius = candle_light_range(obj);
+		radius = candle_light_range(obj)*nvmult;
 		break;
 
 	    default:
@@ -1547,7 +1555,7 @@ begin_burn(obj, already_lit)
         if (artifact_light(obj) || arti_light(obj)) {
 		    obj->lamplit = 1;
 		    do_timer = FALSE;
-			radius = (obj->blessed ? 3 : (obj->cursed ? 1 : 2));
+			radius = (obj->blessed ? 3 : (obj->cursed ? 1 : 2))*nvmult;
 		} else {
 		    impossible("begin burn: unexpected %s", xname(obj));
 		    turns = obj->age;
@@ -1596,8 +1604,7 @@ end_burn(obj, timer_attached)
 
 	if (obj->otyp == MAGIC_LAMP 
 		|| artifact_light(obj)
-		|| obj->oartifact == ART_ATMA_WEAPON)
-	    timer_attached = FALSE;
+	) timer_attached = FALSE;
 
 	if (!timer_attached) {
 	    /* [DS] Cleanup explicitly, since timer cleanup won't happen */
@@ -1607,6 +1614,7 @@ end_burn(obj, timer_attached)
 		update_inventory();
 	} else if (!stop_timer(BURN_OBJECT, (genericptr_t) obj))
 	    impossible("end_burn: obj %s not timed!", xname(obj));
+	if(Race_if(PM_DROW)) doredraw();
 }
 
 #endif /* OVL1 */
@@ -1672,7 +1680,7 @@ do_storms()
     if(levl[u.ux][u.uy].typ == CLOUD) {
 	/* inside a cloud during a thunder storm is deafening */
 	pline("Kaboom!!!  Boom!!  Boom!!");
-	if(!u.uinvulnerable) {
+	if(!(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
 	    stop_occupation();
 	    nomul(-3, "hiding from thunderstorm");
 	}
@@ -1769,10 +1777,10 @@ typedef struct {
 static const ttable timeout_funcs[NUM_TIME_FUNCS] = {
     TTAB(rot_organic,	(timeout_proc)0,	"rot_organic"),
     TTAB(rot_corpse,	(timeout_proc)0,	"rot_corpse"),
-    TTAB(moldy_corpse,  (timeout_proc)0,	"moldy_corpse"),
+    TTAB(moldy_corpse,	(timeout_proc)0,	"moldy_corpse"),
     TTAB(revive_mon,	(timeout_proc)0,	"revive_mon"),
     TTAB(burn_object,	cleanup_burn,		"burn_object"),
-    TTAB(hatch_egg,	(timeout_proc)0,	"hatch_egg"),
+    TTAB(hatch_egg,		(timeout_proc)0,	"hatch_egg"),
     TTAB(fig_transform,	(timeout_proc)0,	"fig_transform"),
     TTAB(light_damage,	(timeout_proc)0,	"light_damage"),
     TTAB(slimy_corpse,	(timeout_proc)0,	"slimy_corpse"),
