@@ -349,7 +349,7 @@ struct monst *mtmp;
 	}
 
 	if (levl[x][y].typ == STAIRS && !stuck && !immobile) {
-		if (x == xdnstair && y == ydnstair && !is_floater(mtmp->data))
+		if (x == xdnstair && y == ydnstair && !is_floater(mtmp->data) && mtmp->data != &mons[PM_SMAUG])
 			m.has_defense = MUSE_DOWNSTAIRS;
 		if (x == xupstair && y == yupstair && ledger_no(&u.uz) != 1)
 	/* Unfair to let the monsters leave the dungeon with the Amulet */
@@ -553,7 +553,7 @@ struct monst *mtmp;
 	case MUSE_UNICORN_HORN:
 		if (vismon) {
 		    if (otmp)
-			pline("%s %s a unicorn horn!", is_weeping(mtmp->data) ? "is using" : "uses", Monnam(mtmp));
+			pline("%s %s a unicorn horn!", Monnam(mtmp), is_weeping(mtmp->data) ? "is using" : "uses");
 		    else
 			pline_The("tip of %s's horn glows!", mon_nam(mtmp));
 		}
@@ -1176,25 +1176,21 @@ register struct obj *otmp;
 			if (Antimagic) {
 			    shieldeff(u.ux, u.uy);
 			    pline("Boing!");
-			} else if (rnd(20) < 10 + u.uac) {
+			} else {
 			    pline_The("wand hits you!");
 			    tmp = d(2,12);
 			    if(Half_spell_damage) tmp = (tmp+1) / 2;
 			    losehp(tmp, "wand", KILLED_BY_AN);
-			} else pline_The("wand misses you.");
+			}
 			stop_occupation();
 			nomul(0, NULL);
 		} else if (resists_magm(mtmp)) {
 			shieldeff(mtmp->mx, mtmp->my);
 			pline("Boing!");
-		} else if (rnd(20) < 10+find_mac(mtmp)) {
+		} else {
 			tmp = d(2,12);
 			hit("wand", mtmp, exclam(tmp));
 			(void) resist(mtmp, otmp->oclass, tmp, TELL);
-			if (cansee(mtmp->mx, mtmp->my) && zap_oseen)
-				makeknown(WAN_STRIKING);
-		} else {
-			miss("wand", mtmp);
 			if (cansee(mtmp->mx, mtmp->my) && zap_oseen)
 				makeknown(WAN_STRIKING);
 		}
@@ -1225,10 +1221,9 @@ register struct obj *otmp;
 			if (Drain_resistance) {
 				shieldeff(u.ux, u.uy);
 				pline("Boing!");
-			} else if (rnd(20) < 10 + u.uac) {
-			    pline_The("wand hits you!");
+			} else {
 				losexp("life drainage", TRUE, FALSE, FALSE);
-			} else pline_The("wand misses you.");
+			}
 			if (zap_oseen)
 				makeknown(WAN_DRAINING);
 			stop_occupation();
@@ -1484,7 +1479,7 @@ struct monst *mtmp;
 				}
 	    	    	    	mdmg = dmgval(otmp2, mtmp2, 0) * otmp2->quan;
 				if (helmet) {
-				    if(is_metallic(helmet) || helmet->otyp == FLACK_HELMET) {
+				    if(is_metallic(helmet) || helmet->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
 					if (canspotmon(mtmp2))
 					    pline("Fortunately, %s is wearing a hard helmet.", mon_nam(mtmp2));
 					else if (flags.soundok)
@@ -1531,7 +1526,7 @@ struct monst *mtmp;
 			You("are hit by %s!", doname(otmp2));
 			dmg = dmgval(otmp2, &youmonst, 0) * otmp2->quan;
 			if (uarmh) {
-			    if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET) {
+			    if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
 				pline("Fortunately, you are wearing a hard helmet.");
 				if (dmg > 2) dmg = 2;
 			    } else if (flags.verbose) {
@@ -2167,7 +2162,7 @@ struct monst *mtmp;
 	int difficulty = monstr[(monsndx(pm))];
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
-			|| pm->mlet == S_GHOST 
+			|| pm->mlet == S_GHOST
 			|| pm->mlet == S_SHADE
 			|| pm->mlet == S_KETER
 		) return 0;
