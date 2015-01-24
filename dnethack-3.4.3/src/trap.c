@@ -615,7 +615,7 @@ unsigned trflags;
 	    	a_your[trap->madeby_u],
 	    	defsyms[trap_to_defsym(ttype)].explanation);
 	    /* then proceed to normal trap effect */
-	} else if (already_seen) {
+	} else if (already_seen || ((ttype == HOLE || ttype == TRAPDOOR || ttype == PIT || ttype == SPIKED_PIT) && u.sealsActive&SEAL_SIMURGH)) {
 	    if ((Levitation || Flying) &&
 		    (ttype == PIT || ttype == SPIKED_PIT || ttype == HOLE ||
 		    ttype == BEAR_TRAP)) {
@@ -728,7 +728,7 @@ unsigned trflags;
 			  body_part(HEAD));
 
 		    if (uarmh) {
-			if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET) {
+			if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
 			    pline("Fortunately, you are wearing a hard helmet.");
 			    dmg = 2;
 			} else if (flags.verbose) {
@@ -930,7 +930,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    You("%s into %s pit!", verbbuf, a_your[trap->madeby_u]);
 		}
 		/* wumpus reference */
-		if (Role_if(PM_RANGER) && !trap->madeby_u && !trap->once &&
+		if (Role_if(PM_RANGER) && !Race_if(PM_DROW) && !trap->madeby_u && !trap->once &&
 			In_quest(&u.uz) && Is_qlocate(&u.uz)) {
 		    pline("Fortunately it has a bottom after all...");
 		    trap->once = 1;
@@ -1025,12 +1025,12 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    char verbbuf[BUFSZ];
 		    verbbuf[0] = '\0';
 #ifdef STEED
-		    if (u.usteed)
-		   	Sprintf(verbbuf,"lead %s",
-				x_monnam(u.usteed,
-					 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-				 	 "poor", SUPPRESS_SADDLE, FALSE));
-		    else
+		    if (u.usteed && !webmaker(u.usteed->data)){
+				Sprintf(verbbuf,"lead %s",
+					x_monnam(u.usteed,
+						 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
+						 "poor", SUPPRESS_SADDLE, FALSE));
+		    } else
 #endif
 			
 		    Sprintf(verbbuf, "%s", Levitation ? (const char *)"float" :
@@ -1323,7 +1323,7 @@ struct trap *trap;
 		MAY_DESTROY | MAY_HIT | MAY_FRACTURE | VIS_EFFECTS,
 		(struct obj *)0);
 	del_engr_ward_at(trap->tx, trap->ty);
-	wake_nearto(trap->tx, trap->ty, 400);
+	wake_nearto_noisy(trap->tx, trap->ty, 400);
 	/* ALI - artifact doors from Slash'em */
 	if (IS_DOOR(levl[trap->tx][trap->ty].typ) &&
 		!artifact_door(trap->tx, trap->ty))
@@ -1550,7 +1550,7 @@ int style;
 			place_object(singleobj, bhitpos.x, bhitpos.y);
 			singleobj = otmp2;
 			otmp2 = (struct obj *)0;
-			wake_nearto(bhitpos.x, bhitpos.y, 10*10);
+			wake_nearto_noisy(bhitpos.x, bhitpos.y, 10*10);
 		    }
 		}
 		if (otyp == BOULDER && closed_door(bhitpos.x,bhitpos.y)) {
@@ -1827,7 +1827,7 @@ register struct monst *mtmp;
 			} else
 			   You_hear("a distant squeak.");
 			/* wake up nearby monsters */
-			wake_nearto(mtmp->mx, mtmp->my, 40);
+			wake_nearto_noisy(mtmp->mx, mtmp->my, 40);
 			break;
 
 		case BEAR_TRAP:
@@ -2676,9 +2676,6 @@ xchar x, y;
 	    case LARGE_BOX:
 		chance = 30;
 		break;
-//		case DISTRESSED_PRINCESS:
-//			chance=0;
-		break;
 	    default:
 		chance = 20;
 		break;
@@ -3006,7 +3003,7 @@ drown()
 	boolean inpool_ok = FALSE, crawl_ok;
 	int i, x, y;
 	const char *sparkle = level.flags.lethe? "sparkling " : "";
-
+	
 	if(u.sealsActive&SEAL_OSE) unbind(SEAL_OSE,TRUE);
 	
 	/* happily wading in the same contiguous pool */
@@ -3024,8 +3021,8 @@ drown()
 		Amphibious || Swimming ? '.' : '!');
 	}
 	if (!u.usubwater && !Swimming && !Is_waterlevel(&u.uz))
-		    You("sink like %s.",
-			Hallucination ? "the Titanic" : "a rock");
+		You("sink like %s.",
+		Hallucination ? "the Titanic" : "a rock");
 
 	// if (level.flags.lethe) {
 	    // /* Bad idea */
@@ -3052,7 +3049,7 @@ drown()
 			(i > 1) ? "" : "s");
 		unleash_all();
 	}
-
+	
 	if (Amphibious || Swimming) {
 		u.uinwater = 1;
 		if (Swimming && ACURR(A_CON) > 11 && yn("Dive underwater?")=='y') {
@@ -3183,11 +3180,11 @@ dodeepswim()
 		} else { 
 			if(ACURR(A_CON) > 11){
 				You("dive below the surface.");
-			u.usubwater = 1;
+				u.usubwater = 1;
 				u.divetimer = (ACURR(A_CON)-10)/2 + 1; /* limited duration dive */
-			under_water(1);
-			vision_recalc(2);	/* unsee old position */
-			vision_full_recalc = 1;
+				under_water(1);
+				vision_recalc(2);	/* unsee old position */
+				vision_full_recalc = 1;
 				return 1;
 			} else You("can't hold your breath for very long.");
 			return 0;
@@ -3516,15 +3513,15 @@ genericptr_t poolcnt;
 {
 	register struct monst *mtmp;
 	register struct trap *ttmp;
-
+	
 	if (( (((webxprime-cx)+(webyprime-cy))%2) && 
 			distmin(webxprime, webyprime, cx, cy)%2)  ||
 	    !(SPACE_POS(levl[cx][cy].typ))
 	) return;
-
+		
 	if ((ttmp = t_at(cx, cy)) != 0)
 		return;
-
+	
 	/* Put a web at cx, cy */
 	ttmp = maketrap(cx, cy, WEB);
 	if(ttmp){
