@@ -670,16 +670,19 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 		/* (It is a coincidence that these can also be wielded.) */
 		if (otmp->owornmask || otmp == wep ||
 		    (intelligent && 
-		    (otmp == hwep || otmp == rwep || otmp == proj ||
-		    would_prefer_hwep(mtmp, otmp) || /*cursed item in hand?*/
-		    would_prefer_rwep(mtmp, otmp) ||
-		    could_use_item(mtmp, otmp, TRUE) ||
-		    ((!rwep || rwep == &zeroobj) &&
-		        (is_ammo(otmp) || is_launcher(otmp))) ||
-		    (rwep && rwep != &zeroobj &&
-		     ammo_and_launcher(otmp, rwep)))) ||
+				(otmp == hwep || otmp == rwep || otmp == proj ||
+				would_prefer_hwep(mtmp, otmp) || /*cursed item in hand?*/
+				would_prefer_rwep(mtmp, otmp) ||
+				could_use_item(mtmp, otmp, TRUE) ||
+				((!rwep || rwep == &zeroobj) &&
+					(is_ammo(otmp) || is_launcher(otmp))) ||
+				(rwep && rwep != &zeroobj &&
+				 ammo_and_launcher(otmp, rwep))
+				)
+			) ||
 		    ((!item1 && otmp->otyp == PICK_AXE) ||
-		     (!item2 && otmp->otyp == UNICORN_HORN && !otmp->cursed))) {
+		     (!item2 && otmp->otyp == UNICORN_HORN && !otmp->cursed))
+		) {
 			if (is_pet) { /* dont drop worn/wielded item */
 				if (otmp->otyp == PICK_AXE)
 					item1 = TRUE;

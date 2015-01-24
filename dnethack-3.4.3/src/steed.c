@@ -20,10 +20,6 @@ static NEARDATA const char orc_steeds[] = {
 	S_DOG, S_DEMON, '\0'
 };
 
-static NEARDATA const char valk_steeds[] = {
-	S_DOG, '\0'
-};
-
 STATIC_DCL boolean FDECL(landing_spot, (coord *, int, int));
 
 /* caller has decided that hero can't reach something while mounted */
@@ -42,8 +38,7 @@ can_saddle(mtmp)
 {
 	struct permonst *ptr = mtmp->data;
 
-	return ((index(steeds, ptr->mlet) || 
-				(Role_if(PM_VALKYRIE) && index(valk_steeds, ptr->mlet)) ||
+	return ((index(steeds, ptr->mlet) ||
 				(Race_if(PM_ORC) && index(orc_steeds, ptr->mlet)) ||
 				(Race_if(PM_DROW) && index(drow_steeds, ptr->mlet))) && 
 			(ptr->msize >= MZ_MEDIUM) &&
@@ -143,15 +138,15 @@ use_saddle(otmp)
 	    chance -= 20;
 	else{
 		if (uarmg &&
-		(s = OBJ_DESCR(objects[uarmg->otyp])) != (char *)0 &&
-		!strncmp(s, "riding ", 7))
-	    /* Bonus for wearing "riding" (but not fumbling) gloves */
-	    chance += 10;
+			(s = OBJ_DESCR(objects[uarmg->otyp])) != (char *)0 &&
+			!strncmp(s, "riding ", 7))
+			/* Bonus for wearing "riding" (but not fumbling) gloves */
+			chance += 10;
 		if (uarmf &&
-		(s = OBJ_DESCR(objects[uarmf->otyp])) != (char *)0 &&
-		!strncmp(s, "riding ", 7))
+			(s = OBJ_DESCR(objects[uarmf->otyp])) != (char *)0 &&
+			!strncmp(s, "riding ", 7))
 			/* ... and for "riding boots" */
-	    chance += 10;
+			chance += 10;
 	}
 	if (otmp->cursed)
 	    chance -= 50;
@@ -352,8 +347,8 @@ mount_steed(mtmp, force)
 		chance += 10;
 	if (!force && (otmp->cursed || chance < rnd(MAXULEV/2+5))) {
 	    if (Levitation) {
-		pline("%s slips away from you.", Monnam(mtmp));
-		return FALSE;
+			pline("%s slips away from you.", Monnam(mtmp));
+			return FALSE;
 	    }
 	    You("slip while trying to get on %s.", mon_nam(mtmp));
 
