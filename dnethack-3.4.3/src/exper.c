@@ -64,7 +64,7 @@ int en;
 	case PM_KNIGHT:
 	    return((3 * en) / 2);
 	case PM_BARBARIAN:
-	case PM_VALKYRIE:
+	case PM_PIRATE:
 	    return((3 * en) / 4);
 	default:
 	    return (en);
@@ -81,6 +81,11 @@ experience(mtmp, nk)	/* return # of exp points for mtmp after nk killed */
 {
 	register struct permonst *ptr = mtmp->data;
 	int	i, tmp, tmp2;
+	
+	if(mtmp->data == &mons[PM_LONG_SINUOUS_TENTACLE] || mtmp->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES]) return 0;
+	
+/*	Dungeon fern spores give no experience */
+	if(is_fern_spore(mtmp->data)) tmp = 0;
 
 	tmp = 1 + mtmp->m_lev * mtmp->m_lev;
 
