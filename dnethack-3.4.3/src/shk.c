@@ -606,7 +606,7 @@ struct monst *shkp;
 			u.hod++; /* It is deliberate that non-rogues increment hod twice*/
 		}
 	}
-
+	
 	u.hod++;
 	hot_pursuit(shkp);
 	return TRUE;
@@ -677,9 +677,18 @@ register char *enterstring;
 	seenSeals = countFarSigns(shkp);
 	if(seenSeals && strcmp(shkname(shkp), "Izchak") == 0) seenSeals = 0;
 	eshkp->signspotted = max(seenSeals, eshkp->signspotted);
-	if(seenSeals > 1){
+	if(seenSeals > 1 || (Role_if(PM_EXILE) && In_quest(&u.uz))){
 		eshkp->pbanned = TRUE;
-		if(seenSeals == 4){
+		if(Role_if(PM_EXILE) && In_quest(&u.uz)){
+			coord mm;
+			verbalize("Foul heretic! Iconoclast against the Great Contract! The Crown's servants shall make you pay!");
+			make_angry_shk(shkp,shkp->mx,shkp->my);
+			mm.x = u.ux;
+			mm.y = u.uy;
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
+			makeketer(&mm);
+		} else if(seenSeals == 4){
 			verbalize("Foul heretic!");
 			make_angry_shk(shkp,shkp->mx,shkp->my);
 		} else if(seenSeals == 5){
@@ -727,11 +736,11 @@ register char *enterstring;
 	} else if (eshkp->pbanned || seenSeals) {
 	    verbalize("I don't sell to your kind.");
 	} else {
-	    verbalize("%s, %s!  Welcome%s to %s %s!",
-		      Hello(shkp), plname,
-		      eshkp->visitct++ ? " again" : "",
-		      s_suffix(shkname(shkp)),
-		      shtypes[rt - SHOPBASE].name);
+		verbalize("%s, %s!  Welcome%s to %s %s!",
+			  Hello(shkp), plname,
+			  eshkp->visitct++ ? " again" : "",
+			  s_suffix(shkname(shkp)),
+			  shtypes[rt - SHOPBASE].name);
 		verbalize("Feel free to browse my wares, or chat with me about other services!");
 	}
 	/* can't do anything about blocking if teleported in */
@@ -1369,22 +1378,22 @@ dopay()
 proceed:
 	eshkp = ESHK(shkp);
 	ltmp = eshkp->robbed;
-
+	
 	if(!shkp->mnotlaugh) return 0;
 	
 	/* wake sleeping shk when someone who owes money offers payment */
 	if (ltmp || eshkp->billct || eshkp->debit) 
 	    rouse_shk(shkp, TRUE);
-
+	
 	if (!shkp->mcanmove || shkp->msleeping) { /* still asleep/paralyzed */
 		pline("%s %s.", Monnam(shkp),
 		      rn2(2) ? "seems to be napping" : "doesn't respond");
 		return 0;
 	}
-
+	
 	if(shkp != resident && NOTANGRY(shkp)) {
 #ifdef GOLDOBJ
-                umoney = money_cnt(invent);
+        umoney = money_cnt(invent);
 #endif
 		if(!ltmp)
 		    You("do not owe %s anything.", mon_nam(shkp));
@@ -1513,7 +1522,7 @@ proceed:
 		impossible("dopay: not to shopkeeper?");
 		if(resident) setpaid(resident);
 		return(0);
-	}        
+	}
 	seenSeals = countFarSigns(shkp);
 	if(seenSeals && strcmp(shkname(shkp), "Izchak") == 0) seenSeals = 0;
 	eshkp->signspotted = max(seenSeals, eshkp->signspotted);
@@ -1723,7 +1732,7 @@ shk_other_services()
 	anything any;
 	menu_item *selected;
 	int n, seenSeals;
-
+	
 	/* Init your name */
 	if (!is_human(youmonst.data))
 		slang = "ugly";
@@ -3011,7 +3020,7 @@ xchar x, y;
 	    ltmp = set_cost(obj, shkp);
 
 	offer = ltmp + cltmp;
-
+	
 	/* get one case out of the way: nothing to sell, and no gold */
 	if(!isgold &&
 	   ((offer + gltmp) == 0L || sell_how == SELL_DONTSELL)) {
@@ -4708,7 +4717,7 @@ shk_identify(slang, shkp)
 			mon_nam(shkp));
 		return;
 	    } else if (Confusion) {
-		pline("%s tells you but you forget.", mon_nam(shkp));
+			pline("%s tells you but you forget.", mon_nam(shkp));
 		return;
 	    }
 	}
@@ -5519,6 +5528,7 @@ struct monst *mon;
 		if(u.specialSealsActive&SEAL_COSMOS) count++;
 		if(u.specialSealsActive&SEAL_MISKA && !Invis) count++;
 		if(u.specialSealsActive&SEAL_NUDZIARTH) count++;
+		// if(u.sealsActive&SEAL_BLACK_WEB);
 		// if(u.specialSealsActive&SEAL_NUMINA);
 	}
 	return count;
@@ -5565,6 +5575,7 @@ struct monst *mon;
 		// if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !ublindf) count++;
 		if(u.specialSealsActive&SEAL_COUNCIL && !Blind) count++;
 		if(u.specialSealsActive&SEAL_ALIGNMENT_THING) count++;
+		if(u.sealsActive&SEAL_BLACK_WEB && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
 	} if(u.specialSealsActive&SEAL_NUMINA) count++;
 //	if(u.specialSealsActive&SEAL_UNKNOWN_GOD) count++;
 	return count;

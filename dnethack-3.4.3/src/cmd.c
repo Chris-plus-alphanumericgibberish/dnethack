@@ -2071,6 +2071,10 @@ signs_enlightenment()
 		putstr(en_win, 0, "Your eyes feel odd.");
 		message = TRUE;
 	}
+	if(u.specialSealsActive&SEAL_BLACK_WEB){
+		putstr(en_win, 0, "Your shaddow is wrapped in the black web.");
+		message = TRUE;
+	}
 	if(u.specialSealsActive&SEAL_COSMOS){
 		putstr(en_win, 0, "You feel like something is behind you, but you can't see anything.");
 		message = TRUE;
