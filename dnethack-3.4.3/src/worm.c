@@ -198,10 +198,17 @@ worm_move(worm)
 {
     register struct wseg *seg, *new_seg;	/* new segment */
     register int	 wnum = worm->wormno;	/* worm number */
+	boolean twoLong, hh = worm->data == &mons[PM_HUNTING_HORROR];
 
 
 /*  if (!wnum) return;  bullet proofing */
 
+    /*
+     *  Figure if worm is shorter than two
+     */
+    seg = wtails[wnum];
+	twoLong = !(seg->nseg && seg->nseg->nseg);
+	
     /*
      *  Place a segment at the old worm head.  The head has already moved.
      */
@@ -212,6 +219,7 @@ worm_move(worm)
     /*
      *  Create a new dummy segment head and place it at the end of the list.
      */
+	
     new_seg       = newseg();
     new_seg->wx   = worm->mx;
     new_seg->wy   = worm->my;
@@ -220,7 +228,8 @@ worm_move(worm)
     wheads[wnum]  = new_seg;		/* move the end pointer */
 
 
-    if (wgrowtime[wnum] <= moves) {
+    if ((!hh && wgrowtime[wnum] <= moves) || 
+		( hh && twoLong)) {
 	if (!wgrowtime[wnum])
 	    wgrowtime[wnum] = moves + rnd(5);
 	else
@@ -385,9 +394,11 @@ cutworm(worm, x, y, weap)
      */
 
     /* Sometimes the tail end dies. */
-    if (rn2(3) || !(new_wnum = get_wormno())) {
-	cutoff(worm, new_tail);
-	return;
+    if (worm->data == &mons[PM_HUNTING_HORROR] ||
+		rn2(3) || !(new_wnum = get_wormno())
+	) {
+		cutoff(worm, new_tail);
+		return;
     }
 
     remove_monster(x, y);		/* clone_mon puts new head here */
@@ -462,7 +473,10 @@ detect_wsegs(worm, use_detection_glyph)
 /*  if (!mtmp->wormno) return;  bullet proofing */
 
     while (curr != wheads[worm->wormno]) {
-	num = use_detection_glyph ?
+	if(worm->data == &mons[PM_HUNTING_HORROR]) num = use_detection_glyph ?
+		detected_monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL)) :
+		monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL));
+	else num = use_detection_glyph ?
 		detected_monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL)) :
 		monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
 	show_glyph(curr->wx,curr->wy,num);
