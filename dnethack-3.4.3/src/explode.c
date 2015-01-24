@@ -87,6 +87,8 @@ int expltype;
 			break;
 		case 8:
 			if(olet == TOOL_CLASS) str = "flying shards of mirror";
+			else if(olet == WEAPON_CLASS) str = "flying shards of obsidian";
+			// else if(olet == ARMOR_CLASS) str = "flying shards of crystal";
 			else str = "blast";
 			adtyp = AD_PHYS;
 			break;
@@ -408,7 +410,7 @@ int expltype;
 	/* explosions are noisy */
 	i = dam * dam;
 	if (i < 50) i = 50;	/* in case random damage is very small */
-	wake_nearto(x, y, i);
+	wake_nearto_noisy(x, y, 2*i);
 }
 #endif /* OVL0 */
 #ifdef OVL1
