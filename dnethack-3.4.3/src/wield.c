@@ -3,6 +3,8 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "artifact.h"
+#include "artilist.h"
 
 /* KMH -- Differences between the three weapon slots.
  *
@@ -101,12 +103,16 @@ register struct obj *obj;
 	 */
 	if (obj) {
 		unweapon = (obj->oclass == WEAPON_CLASS) ?
-				is_launcher(obj) || is_ammo(obj) ||
-				is_missile(obj) || (is_pole(obj)
+				(is_launcher(obj) || is_ammo(obj) ||
+				is_missile(obj) || (is_pole(obj))
 #ifdef STEED
 				&& !u.usteed
 #endif
-				&& obj->oartifact != ART_WEBWEAVER_S_CROOK && obj->oartifact != ART_PEN_OF_THE_VOID)
+				&& obj->otyp != AKLYS
+				&& obj->oartifact != ART_WEBWEAVER_S_CROOK
+				&& obj->oartifact != ART_HEARTCLEAVER
+				&& obj->oartifact != ART_SOL_VALTIVA
+				&& obj->oartifact != ART_PEN_OF_THE_VOID)
 					: !is_weptool(obj);
 	} else
 		unweapon = TRUE;	/* for "bare hands" message */
@@ -119,12 +125,15 @@ struct obj *wep;
 {
 	/* Separated function so swapping works easily */
 	int res = 0;
-
+	boolean stealthy = Stealth;
+	
+	
 	if (!wep) {
 	    /* No weapon */
 	    if (uwep) {
 		You("are empty %s.", body_part(HANDED));
 		setuwep((struct obj *) 0);
+		if(!stealthy && Stealth) pline("Now you can move stealthily.");
 		res++;
 	    } else
 		You("are already empty %s.", body_part(HANDED));
@@ -175,11 +184,13 @@ struct obj *wep;
 	    arti_speak(wep);
 
 	    if (artifact_light(wep) && !wep->lamplit) {
-		begin_burn(wep, FALSE);
+			begin_burn(wep, FALSE);
 		if (!Blind)
 			pline("%s to %s%s!", Tobjnam(wep, "begin"),
 				(wep->blessed ? "shine very" : "glow"), (wep->cursed ? "" : " brilliantly"));
 		}
+		if(stealthy && wep->otyp == SILVER_KHAKKHARA) pline("The silver rings chime together.");
+		else if(!stealthy && Stealth) pline("Now you can move stealthily.");
 
 #if 0
 	    /* we'll get back to this someday, but it's not balanced yet */
@@ -476,7 +487,12 @@ can_twoweapon()
 	struct obj *otmp;
 
 #define NOT_WEAPON(obj) (!is_weptool(obj) && obj->oclass != WEAPON_CLASS)
-	if (!could_twoweap(youmonst.data) && !(u.specialSealsActive&SEAL_MISKA)) {
+	if (!could_twoweap(youmonst.data) && !(u.specialSealsActive&SEAL_MISKA) && 
+		!(!Upolyd && uwep && uswapwep && 
+			(artilist[uwep->oartifact].inv_prop == DANCE_DAGGER && artilist[uswapwep->oartifact].inv_prop == SING_SPEAR) ||
+			(artilist[uswapwep->oartifact].inv_prop == DANCE_DAGGER && artilist[uwep->oartifact].inv_prop == SING_SPEAR)
+		 )
+	) {
 		if (Upolyd)
 		    You_cant("use two weapons in your current form.");
 		else
