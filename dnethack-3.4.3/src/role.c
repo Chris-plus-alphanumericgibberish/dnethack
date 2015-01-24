@@ -145,8 +145,9 @@ const struct Role roles[] = {
 	PM_CONVICT, NON_PM, PM_SEWER_RAT,
 	PM_ROBERT_THE_LIFER, PM_INMATE, PM_WARDEN_ARIANNA,
 	PM_SOLDIER_ANT, PM_MALKUTH_SEPHIRAH, S_RODENT, S_SPIDER,
-	ART_IRON_BALL_OF_LIBERATION,
-	MH_HUMAN|MH_DWARF|MH_GNOME|MH_ORC|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
+	ART_IRON_SPOON_OF_LIBERATION,
+	// ART_IRON_BALL_OF_LIBERATION,
+	MH_HUMAN|MH_DWARF|MH_GNOME|MH_ORC|MH_ELF|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{  10,  7,  7,  7, 13,  6 },
@@ -198,7 +199,7 @@ const struct Role roles[] = {
 	PM_KING_ARTHUR, PM_PAGE, PM_IXOTH,
 	PM_QUASIT, PM_OCHRE_JELLY, S_IMP, S_JELLY,
 	ART_MAGIC_MIRROR_OF_MERLIN,
-	MH_HUMAN|MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
+	MH_DWARF|MH_HUMAN|MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
 	/* Str Int Wis Dex Con Cha */
 	{  13,  7, 14,  8, 10, 17 },
 	{  30, 15, 15, 10, 20, 10 },
@@ -251,7 +252,7 @@ const struct Role roles[] = {
 	PM_OLD_GYPSY_WOMAN, PM_SERVANT, PM_REBEL_RINGLEADER,
 	PM_SOLDIER, PM_PEASANT, S_HUMANOID, S_HUMAN,
 	ART_MANTLE_OF_HEAVEN,
-	MH_HUMAN|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
+	MH_DWARF|MH_ELF|MH_HUMAN|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{   10,10,  7, 10,  7,  7 },
@@ -331,7 +332,7 @@ const struct Role roles[] = {
 	PM_MASTER_OF_THIEVES, PM_THUG, PM_MASTER_ASSASSIN,
 	PM_LEPRECHAUN, PM_GUARDIAN_NAGA, S_NYMPH, S_NAGA,
 	ART_MASTER_KEY_OF_THIEVERY,
-	MH_HUMAN|MH_ORC|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
+	MH_HUMAN|MH_ORC|MH_VAMPIRE|MH_ELF | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{   7,  7,  7, 10,  7,  6 },
@@ -407,7 +408,7 @@ const struct Role roles[] = {
 	"Tou", "Ankh-Morpork", "the Thieves' Guild Hall",
 	PM_TOURIST, NON_PM, NON_PM,
 	PM_TWOFLOWER, PM_GUIDE, PM_MASTER_OF_THIEVES,
-//	PM_GIANT_SPIDER, PM_FOREST_CENTAUR, S_SPIDER, S_CENTAUR,
+
 	PM_DWARF, PM_ROCK_TROLL, S_RODENT, S_HUMANOID,
 	ART_YENDORIAN_EXPRESS_CARD,
 	MH_HUMAN | ROLE_MALE|ROLE_FEMALE | ROLE_NEUTRAL,
@@ -438,8 +439,8 @@ const struct Role roles[] = {
 	ART_ORB_OF_FATE,
 	MH_HUMAN|MH_DWARF | ROLE_FEMALE | ROLE_LAWFUL|ROLE_NEUTRAL,
 	/* Str Int Wis Dex Con Cha */
-	{  10,  7,  7,  7, 10,  7 },
-	{  30,  6,  7, 20, 30,  7 },
+	{  12,  10, 12, 10, 10, 12 },
+	{  18,  14, 16, 18, 20, 14 },
 	/* Init   Lower  Higher */
 	{ 14, 0,  0, 8,  2, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
@@ -454,7 +455,7 @@ const struct Role roles[] = {
 	{"Sorcerer",    "Sorceress"},
 	{"Necromancer", 0},
 	{"Wizard",      0},
-	{"Mage",        0} },
+	{"Archmage",        0} },
 	"Ptah", "Thoth", "Anhur", /* Egyptian */
 	"Wiz", "the Lonely Tower", "the Tower of Darkness",
 	PM_WIZARD, NON_PM, PM_KITTEN,
@@ -531,10 +532,23 @@ const struct Role WtWrole = {
 	10, 9, 2, 1, 10, A_INT, SPE_INVISIBILITY,   -13
 } 
 */
+struct RoleName DwarfRanks[9] = {
+	{"Khuzd",       	0},
+	{"Khuzd",       	0},  /* dwarf */
+	{"Felakgundu",		0},	 /* cave digger (Q.) ['a] */
+	{"Azaghal",     	0},  /* warrior? */
+	{"Khuzdu-barak",	0},	 /* Dwarf of Axes - guess */
+	{"Khuzdu-ganad",	0},  /* Dwarf of Halls - guess */
+	{"Khuzdu-kibil",	0},  /* Dwarf of silver - guess */
+	{"Khuzdu-gathal",	0},  /* Dwarf of fortresses - guess */
+	{"Zubd",     		0}}; /* Lord (as in lord of moria) - guess */
+	
+
 int ElfRangerFavoredSpell = SPE_DETECT_MONSTERS;
 int ElfRangerFavoredBonus = -26;
 
-struct RoleName ElfRangerRanks[9] = {{"Edhel",       "Elleth"},
+struct RoleName ElfRangerRanks[9] = {
+	{"Edhel",       "Elleth"},
 	{"Edhel",       "Elleth"},      /* elf-maid */
 	{"Ohtar",       "Ohtie"},       /* warrior */
 	{"Kano",			/* commander (Q.) ['a] */
@@ -547,29 +561,52 @@ struct RoleName ElfRangerRanks[9] = {{"Edhel",       "Elleth"},
 	{"Elentar",     "Elentari"}};	/* Star-king, -queen (Q.) */
 	
 const char *ElfRangerLgod = "Orome",
-		   *ElfRangerNgod = "_Yavanna", 
+		   *ElfRangerNgod = "_Yavanna",
 		   *ElfRangerCgod = "Tulkas"; /* Elven */
 
-const char *ElfPriestessLgod = "_Vaire",
-		   *ElfPriestessNgod = "_Varda Elentari",
+const char *ElfPriestessLgod = "_Varda Elentari",
+		   *ElfPriestessNgod = "_Vaire",
 		   *ElfPriestessCgod = "_Nessa"; /* Elven */
 
 const char *ElfPriestLgod = "Manwe Sulimo",
 		   *ElfPriestNgod = "Mandos",
 		   *ElfPriestCgod = "Lorien"; /* Elven */
 
-const char *DrowMaleLgodKnown = "Eddergud",
+int DrowPriestessFavoredSpell = SPE_CREATE_FAMILIAR;
+int DrowPriestessFavoredBonus = -20;
+
+struct RoleName DrowRanks[9] = {
+	{"Wiu",			"Ligrr"},		/* boy, girl */
+	{"Wanre",		"Wenress"},		/* servant, maiden */
+	{"Glenn",		"Kyorl"},		/* soldier, */
+	{"Elg'hasek",	"Venta'kyorl"},	/* ranger, captain */
+	{"Beldrar",		"An'kin"},		/* builder, teacher */
+	{"Helothann",		"Jallil"},	/* traveler, lady */
+	{"Linthar",     "Sil'in"},		/* bard, noble */
+	{"Kas'ka",       "Qu'ess"},		/* merchant, prince */
+	{"Zil",     "Val'sharess"}};	/* Consort, Queen */
+	
+const char *DrowMaleLgodKnown = "the Eddergud",
 		   *DrowMaleLgodUknwn = "the black web",
 		   *DrowMaleNgod = "Vhaeraun",
 		   *DrowMaleCgod = "_Lolth"; /* Hedroven */
 
+const char *DrowNobMaleLgod = "Selvetarm", /*Nevermind, using Ver'tas instead*/
+		   *DrowNobMaleNgod = "Keptolo",
+		   *DrowNobMaleCgod = "Ghaunadaur"; /* Hedroven Nobles */
+
 const char *DrowFemaleLgod = "_Eilistraee",
+		   *DrowNobFemaleLgod = "_Ver'tas",
 		   *DrowFemaleNgod = "_Kiaransali", 
 		   *DrowFemaleCgod = "_Lolth"; /* Droven */
 
 const char *BinLgod = "Yaldabaoth",
 		   *BinNgod = "the void",
 		   *BinCgod = "_Sophia"; /* Gnostic */
+
+const char *DwarfLgod = "Mahal",
+		   *DwarfNgod = "Holashner",
+		   *DwarfCgod = "Armok"; /* Dwarven */
 
 /* The player's role, created at runtime from initial
  * choices.  This may be munged in role_init().
@@ -606,7 +643,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  2, 0,  0, 2,  1, 0 },	/* Hit points */
 	{  1, 0,  2, 0,  2, 0 },		/* Energy */
-	NO_NIGHTVISION
+	NORMALNIGHTVIS
 },
 {	"incantifier", "incantifier", "wanterkind", "Inc",
 	{0, 0},
@@ -620,7 +657,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  2, 0,  0, 2,  0, 2 },	/* Hit points */
 	{  0, 0,  10, 0, 10, 0 },		/* Energy */
-	NO_NIGHTVISION
+	NORMALNIGHTVIS
 },
 {	"elf", "elven", "elvenkind", "Elf",
 	{"elf", "elf-maid"},
@@ -646,7 +683,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  4, 0,  0, 3,  2, 0 },	/* Hit points */
 	{  0, 0,  0, 0,  0, 0 },	/* Energy */
-	NO_NIGHTVISION
+	NORMALNIGHTVIS
 },
 {	"Drow", "droven", "drovenkind", "Dro",
 	{"hedrow", "drow"},
@@ -659,7 +696,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  1, 0 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
-	NIGHTVISION2
+	NO_NIGHTVISION
 },
 {	"gnome", "gnomish", "gnomehood", "Gno",
 	{0, 0},
@@ -672,7 +709,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  0, 0 },	/* Hit points */
 	{  2, 0,  2, 0,  2, 0 },	/* Energy */
-	NO_NIGHTVISION
+	NIGHTVISION2
 },
 {	"orc", "orcish", "orcdom", "Orc",
 	{0, 0},
@@ -685,7 +722,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  0, 0 },	/* Hit points */
 	{  1, 0,  1, 0,  1, 0 },	/* Energy */
-	NO_NIGHTVISION
+	NORMALNIGHTVIS
 },
 {	"vampire", "vampiric", "vampirehood", "Vam",
 	{"vampire", "vampiress"},
@@ -698,7 +735,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  3, 0,  0, 3,  2, 0 },	/* Hit points */
 	{  3, 0,  4, 0,  4, 0 },	/* Energy */
-	NO_NIGHTVISION
+	NORMALNIGHTVIS
 },
 {	"clockwork automaton", "automatic", "clockwork-kind", "Clk",
 	{0, 0},
@@ -711,7 +748,7 @@ const struct Race races[] = {
 	/* Init   Lower  Higher */
 	{  3, 0,  3, 0,  3, 0 },	/* Hit points */
 	{  3, 0,  3, 0,  3, 0 },	/* Energy */
-	NO_NIGHTVISION
+	NORMALNIGHTVIS
 },
 /* Array terminator */
 { 0, 0, 0, 0, 0 }};
@@ -1057,24 +1094,24 @@ int rolenum, racenum, gendnum, alignnum;
 		|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
 	))
-	    return FALSE;
+		return FALSE;
 	return TRUE;
     } else {
 	for (i = 0; i < SIZE(roles)-1; i++) {
 	    allow = roles[i].allow;
 	    if (racenum >= 0 && racenum < SIZE(races)-1 &&
 		    !(allow & races[racenum].allow & ROLE_RACEMASK))
-		continue;
+			continue;
 	    if (gendnum >= 0 && gendnum < ROLE_GENDERS &&
 		    !(allow & genders[gendnum].allow & ROLE_GENDMASK))
-		continue;
+			continue;
 	    if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
 		    !(allow & aligns[alignnum].allow & ROLE_ALIGNMASK
 #ifdef CONVICT
 			|| (roles[rolenum].malenum==PM_CONVICT && aligns[alignnum].allow & allow & ROLE_ALIGNMASK && allow & races[racenum].allow & ROLE_RACEMASK)
 #endif
 		))
-		continue;
+			continue;
 	    return TRUE;
 	}
 	return FALSE;
@@ -1693,36 +1730,17 @@ role_init()
 	urole = roles[flags.initrole];
 	urace = races[flags.initrace];
 
-	/* Fix up the quest leader */
-	if (urole.ldrnum != NON_PM) {
-	    mons[urole.ldrnum].msound = MS_LEADER;
-	    mons[urole.ldrnum].mflags2 |= (M2_PEACEFUL);
-	    mons[urole.ldrnum].mflags3 |= M3_CLOSE;
-	    mons[urole.ldrnum].maligntyp = alignmnt * 3;
-	}
-
-	/* Fix up the quest guardians */
-	if (urole.guardnum != NON_PM) {
-	    mons[urole.guardnum].mflags2 |= (M2_PEACEFUL);
-	    mons[urole.guardnum].maligntyp = alignmnt * 3;
-	}
-
-	/* Fix up the quest nemesis */
-	if (urole.neminum != NON_PM) {
-	    mons[urole.neminum].msound = MS_NEMESIS;
-	    mons[urole.neminum].mflags2 &= ~(M2_PEACEFUL);
-	    mons[urole.neminum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-	    mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
-	}
-
 	/* Fix up the god names */
 	if (flags.pantheon == -1) {		/* new game */
 	    flags.pantheon = flags.initrole;	/* use own gods */
-	    flags.panLgod = flags.initrole;	/* use own gods */
-	    flags.panNgod = flags.initrole;	/* use own gods */
-	    flags.panCgod = flags.initrole;	/* use own gods */
-	    while (!roles[flags.pantheon].lgod)	/* unless they're missing */
-		flags.pantheon = randrole(0);
+	    while (!roles[flags.pantheon].lgod 	/* unless they're missing */
+			&& !Race_if(PM_DROW) 
+			&& !Race_if(PM_ELF) 
+			&& !Role_if(PM_EXILE)
+		) flags.pantheon = randrole(0);
+	    flags.panLgod = flags.pantheon;
+	    flags.panNgod = flags.pantheon;
+	    flags.panCgod = flags.pantheon;
 		if(Role_if(PM_EXILE)){
 			do{
 				do flags.panLgod = randrole(AM_LAWFUL); while (!roles[flags.panLgod].lgod);
@@ -1756,25 +1774,149 @@ role_init()
 			mons[roles[flags.panCgod].guardnum].mflags3 &= ~M3_CLOSE;
 			mons[roles[flags.panCgod].guardnum].msound = MS_CUSS;
 		}
-	} else if(Race_if(PM_DROW)){
-		if(flags.initgend){ /*true = female*/
-			urole.lgod = DrowFemaleLgod;
-			urole.ngod = DrowFemaleNgod;
-			urole.cgod = DrowFemaleCgod;
-		} else{
-			urole.lgod = DrowMaleLgodUknwn;
-			urole.ngod = DrowMaleNgod;
-			urole.cgod = DrowMaleCgod;
+	} else if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_NOBLEMAN))){
+		urole.rank[0] = DrowRanks[0];
+		urole.rank[1] = DrowRanks[1];
+		urole.rank[2] = DrowRanks[2];
+		urole.rank[3] = DrowRanks[3];
+		urole.rank[4] = DrowRanks[4];
+		urole.rank[5] = DrowRanks[5];
+		urole.rank[6] = DrowRanks[6];
+		urole.rank[7] = DrowRanks[7];
+		urole.rank[8] = DrowRanks[8];
+		if(flags.initgend){
+			/*true = female*/
+			if(Role_if(PM_NOBLEMAN)){
+				urole.filecode = "Ndr";
+				
+				urole.lgod = DrowNobFemaleLgod;
+				urole.ngod = DrowFemaleNgod;
+				urole.cgod = DrowFemaleCgod;
+				
+				urole.homebase = "your house";
+				urole.intermed = "DRA-MUR-SHOU";
+				urole.questarti = ART_WEB_OF_THE_CHOSEN;
+				
+				urole.ldrnum = PM_MOTHER;
+				urole.guardnum = PM_SISTER;
+				urole.neminum = PM_ELDER_BRAIN;
+				
+				urole.enemy1num = PM_GRIMLOCK;
+				urole.enemy2num = PM_UMBER_HULK;
+				urole.enemy1sym = S_WORM;
+				urole.enemy2sym = S_HUMANOID;
+			} else {
+				urole.filecode = "Dro";
+				
+				if(Role_if(PM_PRIEST)){
+					urole.spelspec = DrowPriestessFavoredSpell;
+					urole.spelsbon = DrowPriestessFavoredBonus;
+				}
+				if(flags.stag == 0){
+					urole.lgod = DrowFemaleLgod;
+					urole.ngod = DrowFemaleNgod;
+					urole.cgod = DrowFemaleCgod;
+					
+					urole.homebase = "Erelhei-Cinlu";
+					urole.intermed = "the drider caves";
+					urole.questarti = ART_SILVER_STARLIGHT;
+					
+					urole.ldrnum = PM_ECLAVDRA;
+					urole.guardnum = PM_DROW_MATRON_MOTHER;
+					urole.neminum = PM_SEYLL_AUZKOVYN;
+					
+					urole.enemy1num = PM_GREY_ELF;
+					urole.enemy2num = PM_ELF_LORD;
+					urole.enemy1sym = S_QUADRUPED;
+					urole.enemy2sym = S_ANGEL;
+				} else {
+					urole.lgod = DrowFemaleLgod;
+					urole.ngod = DrowFemaleNgod;
+					urole.cgod = DrowFemaleCgod;
+					
+					urole.homebase = "the Grove of Eilistraee";
+					urole.intermed = "Erelhei-Cinlu";
+					urole.questarti = ART_TENTACLE_ROD;
+					
+					urole.ldrnum = PM_SEYLL_AUZKOVYN;
+					urole.guardnum = PM_STJARNA_ALFAR;
+					urole.neminum = PM_ECLAVDRA;
+					
+					urole.enemy1num = PM_HEDROW_WARRIOR;
+					urole.enemy2num = PM_DROW_MATRON;
+					urole.enemy1sym = S_IMP;
+					urole.enemy2sym = S_DEMON;
+				}
+			}
+		} else {
+			if(Role_if(PM_NOBLEMAN)){
+				urole.filecode = "Nhd";
+				
+				urole.lgod = DrowNobFemaleLgod;
+				urole.ngod = DrowNobMaleNgod;
+				urole.cgod = DrowNobMaleCgod;
+				
+				urole.homebase = "your house";
+				urole.intermed = "Eryndlyn";
+				urole.questarti = ART_CLOAK_OF_THE_CONSORT;
+				
+				urole.ldrnum = PM_DROW_NOVICE;
+				urole.guardnum = PM_PEASANT;
+				urole.neminum = PM_A_SALOM;
+				
+				urole.enemy1num = PM_DROW_ZOMBIE;
+				urole.enemy2num = PM_DROW_MUMMY;
+				urole.enemy1sym = S_FUNGUS;
+				urole.enemy2sym = S_DEMON;
+			} else {
+				urole.filecode = "Hdr";
+				
+				if(flags.stag == 0){
+					urole.lgod = DrowMaleLgodUknwn;
+					urole.ngod = DrowMaleNgod;
+					urole.cgod = DrowMaleCgod;
+					
+					urole.homebase = "Menzoberranzan";
+					urole.intermed = "the drider caves";
+					urole.questarti = ART_DARKWEAVER_S_CLOAK;
+					
+					urole.ldrnum = PM_ECLAVDRA;
+					urole.guardnum = PM_DROW_MATRON_MOTHER;
+					urole.neminum = PM_DARUTH_XAXOX;
+					
+					urole.enemy1num = PM_HEDROW_WARRIOR;
+					urole.enemy2num = PM_EDDERKOP;
+					urole.enemy1sym = S_SPIDER;
+					urole.enemy2sym = S_UMBER;
+				} else {
+					urole.lgod = DrowMaleLgodKnown;
+					urole.ngod = DrowMaleNgod;
+					urole.cgod = DrowMaleCgod;
+					
+					urole.homebase = "Tower Xaxox";
+					urole.intermed = "Menzoberranzan";
+					urole.questarti = ART_TENTACLE_ROD;
+					
+					urole.ldrnum = PM_DARUTH_XAXOX;
+					urole.guardnum = PM_DROW_ALIENIST;
+					urole.neminum = PM_ECLAVDRA;
+					
+					urole.enemy1num = PM_DROW_MATRON;
+					urole.enemy2num = PM_DROW_ZOMBIE;
+					urole.enemy1sym = S_DEMON;
+					urole.enemy2sym = S_ZOMBIE;
+				}
+			}
 		}
-	} else if(Race_if(PM_ELF) && Role_if(PM_RANGER)){
-//		urole.filecode = "Elf";
-		urole.lgod = ElfRangerLgod;
-		urole.ngod = ElfRangerNgod;
-		urole.cgod = ElfRangerCgod;
-		urole.enemy1num = PM_MORDOR_ORC;
-		urole.enemy2num = PM_ORC_SHAMAN;
-		urole.enemy1sym = S_TROLL;
-		urole.enemy2sym = S_WRAITH;
+	} else if(Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_NOBLEMAN))){
+		urole.filecode = "Elf";
+		
+		if(Role_if(PM_RANGER)){
+			urole.spelspec = ElfRangerFavoredSpell;
+			urole.spelsbon = ElfRangerFavoredBonus;
+		}
+		
+		urole.rank[0] = ElfRangerRanks[0];
 		urole.rank[1] = ElfRangerRanks[1];
 		urole.rank[2] = ElfRangerRanks[2];
 		urole.rank[3] = ElfRangerRanks[3];
@@ -1783,8 +1925,34 @@ role_init()
 		urole.rank[6] = ElfRangerRanks[6];
 		urole.rank[7] = ElfRangerRanks[7];
 		urole.rank[8] = ElfRangerRanks[8];
-		urole.rank[9] = ElfRangerRanks[9];
+		
+		urole.lgod = ElfRangerLgod;
+		urole.ngod = ElfRangerNgod;
+		urole.cgod = ElfRangerCgod;
+		
+		urole.homebase = "Caras Galadhon";
+		urole.intermed = "the Mirkwood caves";
+		urole.questarti = ART_PALANTIR_OF_WESTERNESSE;
+		
+		urole.ldrnum = PM_GALADRIEL;
+		urole.guardnum = PM_HIGH_ELF;
+		urole.neminum = PM_NECROMANCER;
+		
+		urole.enemy1num = PM_MORDOR_ORC;
+		urole.enemy2num = PM_ORC_SHAMAN;
+		urole.enemy1sym = S_SPIDER;
+		urole.enemy2sym = S_TROLL;
 	}  else if(Race_if(PM_ELF) && Role_if(PM_PRIEST)){
+		urole.filecode = "Elf";
+		
+		urole.homebase = "Caras Galadhon";
+		urole.intermed = "the Mirkwood caves";
+		urole.questarti = ART_PALANTIR_OF_WESTERNESSE;
+		
+		urole.ldrnum = PM_GALADRIEL;
+		urole.guardnum = PM_HIGH_ELF;
+		urole.neminum = PM_NECROMANCER;
+		
 		if(flags.initgend){ /*true = female*/
 			urole.lgod = ElfPriestessLgod;
 			urole.ngod = ElfPriestessNgod;
@@ -1794,10 +1962,99 @@ role_init()
 			urole.ngod = ElfPriestNgod;
 			urole.cgod = ElfPriestCgod;
 		}
+		urole.enemy1num = PM_ELF_ZOMBIE;
+		urole.enemy2num = PM_ORC_SHAMAN;
+		urole.enemy1sym = S_SPIDER;
+		urole.enemy2sym = S_TROLL;
+	} else if(Race_if(PM_DWARF) && (Role_if(PM_NOBLEMAN) || Role_if(PM_KNIGHT))){
+		// if(flags.questvar == 0){
+			// // pline("picking dwarf quest");
+			// flags.questvar = rnd(2);
+		// }
+		// if(flags.questvar == 1){
+		if(Role_if(PM_KNIGHT)){
+			urole.filecode = "Dna";
+			
+			urole.homebase = "Lake Town";
+			urole.intermed = "Erebor";
+			urole.questarti = ART_ARMOR_OF_EREBOR;
+			
+			urole.ldrnum = PM_THORIN_II_OAKENSHIELD;
+			urole.guardnum = PM_DWARF_WARRIOR;
+			urole.neminum = PM_BOLG;
+		} else {
+			urole.filecode = "Dnb";
+			
+			urole.homebase = "Erebor";
+			urole.intermed = "Khazad-dum";
+			urole.questarti = ART_WAR_MASK_OF_DURIN;
+			
+			urole.ldrnum = PM_DAIN_II_IRONFOOT;
+			urole.guardnum = PM_DWARF_WARRIOR;
+			urole.neminum = PM_DURIN_S_BANE;
+		}
+		urole.rank[0] = DwarfRanks[0];
+		urole.rank[1] = DwarfRanks[1];
+		urole.rank[2] = DwarfRanks[2];
+		urole.rank[3] = DwarfRanks[3];
+		urole.rank[4] = DwarfRanks[4];
+		urole.rank[5] = DwarfRanks[5];
+		urole.rank[6] = DwarfRanks[6];
+		urole.rank[7] = DwarfRanks[7];
+		urole.rank[8] = DwarfRanks[8];
+		
+		urole.lgod = DwarfLgod;
+		urole.ngod = DwarfNgod;
+		urole.cgod = DwarfCgod;
+		
+		urole.enemy1num = PM_HILL_ORC;
+		urole.enemy2num = PM_ORC_SHAMAN;
+		urole.enemy1sym = S_TROLL;
+		urole.enemy2sym = S_ORC;
 	} else if (!urole.lgod) {
 	    urole.lgod = roles[flags.pantheon].lgod;
 	    urole.ngod = roles[flags.pantheon].ngod;
 	    urole.cgod = roles[flags.pantheon].cgod;
+	}
+	if(flags.leader_backstab){
+		mons[urole.ldrnum].msound = MS_CUSS;
+		mons[urole.ldrnum].mflags2 &= ~(M2_PEACEFUL);
+		mons[urole.ldrnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+		mons[urole.ldrnum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+		
+		mons[urole.guardnum].msound = MS_CUSS;
+		mons[urole.guardnum].mflags2 &= ~(M2_PEACEFUL);
+		mons[urole.guardnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+		mons[urole.guardnum].mflags3 |= M3_WAITFORU;
+	} else {
+		/* Fix up the quest leader */
+		if (urole.ldrnum != NON_PM) {
+			mons[urole.ldrnum].msound = MS_LEADER;
+			mons[urole.ldrnum].mflags2 |= (M2_PEACEFUL);
+			mons[urole.ldrnum].mflags3 |= M3_CLOSE;
+			mons[urole.ldrnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+		}
+
+		/* Fix up the quest guardians */
+		if (urole.guardnum != NON_PM) {
+			mons[urole.guardnum].mflags2 |= (M2_PEACEFUL);
+			mons[urole.guardnum].msound = MS_GUARDIAN;
+			mons[urole.guardnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+		}
+		if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD))){
+			mons[PM_HEDROW_MASTER_WIZARD].msound = MS_GUARDIAN;
+		}
+	}
+
+	/* Fix up the quest nemesis */
+	if (urole.neminum != NON_PM && 
+		!(Race_if(PM_DWARF) && (Role_if(PM_KNIGHT) || Role_if(PM_NOBLEMAN))) && 
+		!(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && flags.initgend)
+	) {
+	    mons[urole.neminum].msound = MS_NEMESIS;
+	    mons[urole.neminum].mflags2 &= ~(M2_PEACEFUL);
+	    mons[urole.neminum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
+	    mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
 	}
 
 	/* Fix up infravision */
