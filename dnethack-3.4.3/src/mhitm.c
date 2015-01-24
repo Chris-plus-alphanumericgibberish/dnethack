@@ -212,7 +212,7 @@ mattackm(magr, mdef)
 		    res[NATTK];	/* results of all attacks */
     struct attack   *mattk, alt_attk;
     struct permonst *pa, *pd;
-
+	
     if (!magr || !mdef) return(MM_MISS);		/* mike@genat */
     if (!magr->mcanmove || magr->msleeping) return(MM_MISS);
     pa = magr->data;  pd = mdef->data;
@@ -220,7 +220,7 @@ mattackm(magr, mdef)
     /* Grid bugs and Bebeliths cannot attack at an angle. */
     if ((pa == &mons[PM_GRID_BUG] || pa == &mons[PM_BEBELITH]) && magr->mx != mdef->mx
 						&& magr->my != mdef->my) return(MM_MISS);
-
+	
 	if(pa == &mons[PM_CLOCKWORK_SOLDIER] || pa == &mons[PM_CLOCKWORK_DWARF] || 
 	   pa == &mons[PM_FABERGE_SPHERE] || pa == &mons[PM_FIREWORK_CART] || 
 	   pa == &mons[PM_JUGGERNAUT] || pa == &mons[PM_ID_JUGGERNAUT]
@@ -230,10 +230,11 @@ mattackm(magr, mdef)
 	
     /* Calculate the armour class differential. */
     tmp = find_mac(mdef) + magr->m_lev;
+	if(magr->data == &mons[PM_UVUUDAUM]) tmp += 20;
     if (mdef->mconf || !mdef->mcanmove || mdef->msleeping) {
 		if(mdef->data != &mons[PM_GIANT_TURTLE] || !mdef->mflee)
-	tmp += 4;
-	mdef->msleeping = 0;
+			tmp += 4;
+		mdef->msleeping = 0;
     }
 
     /* undetect monsters become un-hidden if they are attacked */
@@ -291,13 +292,13 @@ mattackm(magr, mdef)
 #ifdef TAME_RANGED_ATTACKS
 		if (!MON_WEP(magr) ||
 		    is_launcher(MON_WEP(magr))) {
-		    /* implies no melee weapon found */
+				/* implies no melee weapon found */
 			if(thrwmm(magr, mdef)){
-			    if (tmphp > mdef->mhp) res[i] = MM_HIT;
-			    else res[i] = MM_MISS;
-			    if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
-			    if (magr->mhp < 1) res[i] = MM_AGR_DIED;
-			    break;
+				if (tmphp > mdef->mhp) res[i] = MM_HIT;
+				else res[i] = MM_MISS;
+				if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
+				if (magr->mhp < 1) res[i] = MM_AGR_DIED;
+				break;
 			}
 		}
 #endif
@@ -379,7 +380,9 @@ meleeattack:
 
 #ifdef TAME_RANGED_ATTACKS
 	    case AT_BREA:
+			if(is_dragon(magr->data)) flags.drgn_brth = 1;
 	        breamm(magr, mdef, mattk);
+			flags.drgn_brth = 0;
 		if (tmphp > mdef->mhp) res[i] = MM_HIT;
 		else res[i] = MM_MISS;
 		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
@@ -395,13 +398,23 @@ meleeattack:
 		break;
 
 	    case AT_ARRW:{
-			int n;
-		    if (canseemon(magr)) pline("%s shoots.", Monnam(magr));
-	        for(n = d(mattk->damn, mattk->damd); n > 0; n--) firemm(magr, mdef, mattk);
-		if (tmphp > mdef->mhp) res[i] = MM_HIT;
-		else res[i] = MM_MISS;
-		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
-		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
+			if(mattk->adtyp != AD_SHDW || dist2(magr->mx,magr->my,mdef->mx,mdef->my)>2){
+				int n;
+				if (canseemon(magr)) pline("%s shoots.", Monnam(magr));
+				for(n = d(mattk->damn, mattk->damd); n > 0; n--) firemm(magr, mdef, mattk);
+				if(res[i] == MM_MISS){
+					if (tmphp > mdef->mhp) res[i] = MM_HIT;
+					else res[i] = MM_MISS;
+				}
+				if (mdef->mhp < 1){
+					res[i] = MM_DEF_DIED;
+					break;
+				}
+				if (magr->mhp < 1){
+					res[i] = MM_AGR_DIED;
+					break;
+				}
+			}
 		}break;
 		
 	    case AT_TNKR:{
@@ -414,7 +427,7 @@ meleeattack:
 				if(mdef->my - magr->my < 0) mdy = -1;
 				else if(mdef->my - magr->my > 0) mdy = +1;
 				
-				mlocal = makemon(&mons[PM_CLOCKWORK_SOLDIER+rn2(3)], magr->mx + mdx, magr->my + mdy, MM_ADJACENTSTRICT);
+				mlocal = makemon(&mons[PM_CLOCKWORK_SOLDIER+rn2(3)], magr->mx + mdx, magr->my + mdy, MM_ADJACENTOK|MM_ADJACENTSTRICT);
 				
 				if(mlocal){
 					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
@@ -465,14 +478,31 @@ meleeattack:
 
 #ifdef TAME_RANGED_ATTACKS
             case AT_MAGC:
-            case AT_MMGC:
-		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2) break;
+            case AT_MMGC:{
+				int temp=0;
+				if( pa == &mons[PM_ASMODEUS] ) magr->mspec_used = 0;
+				else if( pa == &mons[PM_DEMOGORGON] && rn2(3) ) magr->mspec_used = 0;
+				else if( pa == &mons[PM_ELDER_PRIEST] && rn2(2) ) magr->mspec_used = 0;
+				else if( pa == &mons[PM_ALHOON] && rn2(2) ) magr->mspec_used = 0;
+				else if( pa == &mons[PM_EMBRACED_DROWESS]) magr->mspec_used = 0;
+				else if( pa == &mons[PM_HOOLOOVOO] && rn2(2) ) break;
+				if( pa == &mons[PM_GRAZ_ZT]) temp = magr->mspec_used;
+				if( pa == &mons[PM_QUINON] ) {
+					temp = magr->mspec_used;
+					magr->mspec_used = 0;
+				}
+				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2) break;
 
-	        res[i] = castmm(magr, mdef, mattk);
-		if (res[i] & MM_DEF_DIED)
-			return (MM_DEF_DIED |
-				(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
-		break;
+					res[i] = castmm(magr, mdef, mattk);
+				if (res[i] & MM_DEF_DIED)
+				if( pa == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
+				if( pa == &mons[PM_QUINON] ) {
+					magr->mspec_used = temp;
+				}
+				if( pa == &mons[PM_GRAZ_ZT] && temp == 0) magr->mspec_used = 4;
+				return (MM_DEF_DIED |
+					(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
+			}break;
 #endif /* TAME_RANGED_ATTACKS */
 
 	    default:		/* no attack */
@@ -522,6 +552,9 @@ hitmm(magr, mdef, mattk)
 	register struct monst *magr,*mdef;
 	struct	attack *mattk;
 {
+	/* Nearby monsters may be awakened */
+	if(!is_silent(magr->data) || !helpless(mdef)) wake_nearto(mdef->mx, mdef->my, combatNoise(magr->data));
+	
 	if(vis){
 		int compat;
 		char buf[BUFSZ], mdef_name[BUFSZ];
@@ -556,8 +589,10 @@ hitmm(magr, mdef, mattk)
 			case AT_TUCH:
 				if (is_weeping(magr->data)) {
 					Sprintf(buf,"%s is touching", magr_name);
+				} else if(magr->data == &mons[PM_EDDERKOP]){
+					Sprintf(buf,"%s slashes", magr_name);
 				} else {
-				Sprintf(buf,"%s touches", magr_name);
+					Sprintf(buf,"%s touches", magr_name);
 				}
 				break;
 			case AT_TENT:
@@ -576,8 +611,8 @@ hitmm(magr, mdef, mattk)
 				if (is_weeping(magr->data)) {
 					Sprintf(buf,"%s is hitting", magr_name);
 				} else {
-				Sprintf(buf,"%s hits", magr_name);
-		    }
+					Sprintf(buf,"%s hits", magr_name);
+				}
 				break;
 		    }
 		    pline("%s %s.", buf, mon_nam_too(mdef_name, mdef, magr));
@@ -728,7 +763,7 @@ explmm(magr, mdef, mattk)
 	if(cansee(magr->mx, magr->my))
 		pline("%s explodes!", Monnam(magr));
 	else	noises(magr, mattk);
-
+	
 	if(!is_fern_spore(magr->data)) result = mdamagem(magr, mdef, mattk);
 	else{
 		mondead(magr);
@@ -896,7 +931,13 @@ mdamagem(magr, mdef, mattk)
 			    /* lightsaber that isn't lit ;) */
 			    (is_lightsaber(otmp) && !otmp->lamplit) ||
 			    /* WAC -- or using a pole at short range... */
-			    (is_pole(otmp))) {
+			    (is_pole(otmp) &&
+					otmp->otyp != AKLYS && 
+					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
+					otmp->oartifact != ART_HEARTCLEAVER && 
+					otmp->oartifact != ART_SOL_VALTIVA && 
+					otmp->oartifact != ART_PEN_OF_THE_VOID
+				)) {
 			    /* then do only 1-2 points of damage */
 			    if (mdef->data->mlet == S_SHADE && otmp->otyp != SILVER_ARROW)
 				tmp = 0;
@@ -1380,9 +1421,13 @@ mdamagem(magr, mdef, mattk)
 	    case AD_DRLI:
 		if (!cancelled && magr->mtame && !magr->isminion &&
 			is_vampire(pa) && mattk->aatyp == AT_BITE &&
-			has_blood(pd))
-		    EDOG(magr)->hungrytime += ((int)((mdef->data)->cnutrit / 20) + 1);
+			has_blood(pd)
+		) EDOG(magr)->hungrytime += ((int)((mdef->data)->cnutrit / 20) + 1);
 		
+		if(has_blood(pd) && magr->data == &mons[PM_BLOOD_BLOATER]){
+			magr->mhp += tmp;
+			if (magr->mhpmax < magr->mhp) magr->mhpmax = magr->mhp;
+		}
 		if (!cancelled && rn2(2) && !resists_drli(mdef)) {
 			tmp = d(2,6);
 			if (vis)
@@ -1401,6 +1446,9 @@ mdamagem(magr, mdef, mattk)
 					if(magr->mtame){
 						EDOG(magr)->hungrytime += pd->cnutrit/4;  //400/4 = human nut/4
 					}
+			}
+			if(magr->data == &mons[PM_BLOOD_BLOATER]){
+				(void)split_mon(magr, 0);
 			}
 		}
 		break;
@@ -1462,6 +1510,8 @@ mdamagem(magr, mdef, mattk)
 		}
 		tmp = 0;
 		break;
+	    case AD_SHDW:
+			tmp = d(rnd(8),rnd(5)+1);
 	    case AD_DRST:
 	    case AD_DRDX:
 	    case AD_DRCO:
@@ -1620,7 +1670,7 @@ mdamagem(magr, mdef, mattk)
 	}
    if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp=tmp/2; 
 	if(!tmp) return(MM_MISS);
-
+	
 	if(mdef->mstdy){
 		tmp += mdef->mstdy;
 		mdef->mstdy -= 1;
@@ -1832,8 +1882,8 @@ int mdead;
 	    case AD_DRCO:
 		if (!rn2(8)) {
 		    if (vis)
-			pline("%s blood was poisoned!", s_suffix(Monnam(magr)));
-		    if (resists_poison(mdef)) {
+			pline("%s shadow was poisoned!", s_suffix(Monnam(mdef)));
+		    if (resists_poison(magr)) {
 			if (vis)
 			    pline_The("poison doesn't seem to affect %s.",
 				mon_nam(mdef));
