@@ -1810,6 +1810,10 @@ int base_uac()
 		dexbonus = min(dexbonus-2,0);
 	}
 	
+	if(uarm && uarm->otyp == CONSORT_S_SUIT){
+		dexbonus = min(dexbonus,0);
+	}
+	
 	if(dexbonus > 0 && uarm){
 		if(uarm->otyp == BRONZE_PLATE_MAIL || uarm->otyp == DROVEN_CHAIN_MAIL || uarm->otyp == CHAIN_MAIL || uarm->otyp == SCALE_MAIL || 
 			uarm->otyp == STUDDED_LEATHER_ARMOR || uarm->otyp == LEATHER_ARMOR || uarm->otyp == BANDED_MAIL || uarm->otyp == NOBLE_S_DRESS)
