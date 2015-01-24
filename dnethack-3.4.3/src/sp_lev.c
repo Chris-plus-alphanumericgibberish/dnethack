@@ -1021,18 +1021,18 @@ struct mkroom	*croom;
 		/* makemon without rndmonst() might create a group */
 		was = makemon(&mons[wastyp], 0, 0, NO_MM_FLAGS);
 		if (was) {
-		if (!resists_ston(was)) break;
-		mongone(was);
-	    }
+		    if (!resists_ston(was)) break;
+		    mongone(was);
+		}
 		wastyp = rndmonnum();
 	    }
 	    if (was) {
 	    otmp->corpsenm = wastyp;
 	    while(was->minvent) {
-		obj = was->minvent;
-		obj->owornmask = 0;
-		obj_extract_self(obj);
-		(void) add_to_container(otmp, obj);
+		    obj = was->minvent;
+		    obj->owornmask = 0;
+		    obj_extract_self(obj);
+		    (void) add_to_container(otmp, obj);
 
 	    }
 	    otmp->owt = weight(otmp);
@@ -2687,7 +2687,7 @@ const char *name;
 	boolean result = FALSE;
 	char c;
 	struct version_info vers_info;
-
+	
 	fd = dlb_fopen(name, RDBMODE);
 	if (!fd) return FALSE;
 	Fread((genericptr_t) &vers_info, sizeof vers_info, 1, fd);
