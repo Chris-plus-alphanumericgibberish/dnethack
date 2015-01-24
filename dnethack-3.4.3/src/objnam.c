@@ -47,6 +47,7 @@ STATIC_OVL struct Jitem Japanese_items[] = {
 	{ DWARVISH_MATTOCK, "dwarvish zaghnal" },
 	{ FLAIL, "nunchaku" },
 	{ FOOD_RATION, "gunyoki" },
+	{ SEDGE_HAT, "sugegasa" },
 	{ GAUNTLETS_OF_FUMBLING, "kote of fumbling" },
 	{ GAUNTLETS_OF_POWER, "kote of power" },
 	{ GLAIVE, "naginata" },
@@ -320,6 +321,30 @@ register struct obj *obj;
 			if(obj->opoisoned & OPOISON_BLIND) Strcpy(buf, "stained ");
 			if(obj->opoisoned & OPOISON_PARAL) Strcpy(buf, "envenomed ");
 			if(obj->opoisoned & OPOISON_AMNES) Strcpy(buf, "lethe-rusted ");
+		}
+		if(obj->otyp == MOON_AXE && nn){
+			switch(obj->ovar1){
+				case ECLIPSE_MOON:
+					if(obj->opoisoned) Strcat(buf, "eclipse ");
+					else Strcpy(buf, "eclipse ");
+				break;
+				case CRESCENT_MOON:
+					if(obj->opoisoned) Strcat(buf, "crescent ");
+					else Strcpy(buf, "crescent ");
+				break;
+				case HALF_MOON:
+					if(obj->opoisoned) Strcat(buf, "half ");
+					else Strcpy(buf, "half ");
+				break;
+				case GIBBOUS_MOON:
+					if(obj->opoisoned) Strcat(buf, "gibbous ");
+					else Strcpy(buf, "gibbous ");
+				break;
+				case FULL_MOON:
+					if(obj->opoisoned) Strcat(buf, "full ");
+					else Strcpy(buf, "full ");
+				break;
+			}
 		}
 		if(objects[(obj)->otyp].oc_material == WOOD && obj->ovar1) Strcpy(buf, "carved ");
 	    case VENOM_CLASS:
@@ -639,11 +664,11 @@ register struct obj *obj;
 		ispoisoned = OPOISON_AMNES;
 	}
 	if (!strncmp(bp, "envenomed ", 10) && obj->opoisoned & OPOISON_PARAL) {
-		bp += 9;
+		bp += 10;
 		ispoisoned = OPOISON_PARAL;
 	}
 	if (!strncmp(bp, "stained ", 8) && obj->opoisoned & OPOISON_BLIND) {
-		bp += 9;
+		bp += 8;
 		ispoisoned = OPOISON_BLIND;
 	}
 	if (!strncmp(bp, "drug-coated ", 12) && obj->opoisoned & OPOISON_BASIC) {
@@ -658,7 +683,7 @@ register struct obj *obj;
 		bp += 9;
 		ispoisoned = OPOISON_BASIC;
 	}
-
+	
 	if(obj->quan != 1L)
 		Sprintf(prefix, "%ld ", obj->quan);
 	else if (obj_is_pname(obj) || the_unique_obj(obj)) {
@@ -726,6 +751,25 @@ register struct obj *obj;
 			Strcat(prefix, "drug-coated ");
 		if(ispoisoned & OPOISON_AMNES)
 			Strcat(prefix, "lethe-rusted ");
+		if(obj->otyp == MOON_AXE && obj->known && obj->oartifact){
+			switch(obj->ovar1){
+				case ECLIPSE_MOON:
+					Strcat(prefix, "eclipse ");
+				break;
+				case CRESCENT_MOON:
+					Strcat(prefix, "crescent ");
+				break;
+				case HALF_MOON:
+					Strcat(prefix, "half ");
+				break;
+				case GIBBOUS_MOON:
+					Strcat(prefix, "gibbous ");
+				break;
+				case FULL_MOON:
+					Strcat(prefix, "full ");
+				break;
+			}
+		}
 plus:
 		add_erosion_words(obj, prefix);
 		if(obj->known || Race_if(PM_INCANTIFIER)) {
@@ -1237,6 +1281,7 @@ static const char * const special_subjs[] = {
 	"aklys",
 	"amnesia",
 	"paralysis",
+	"dress",
 	0
 };
 
@@ -1666,7 +1711,7 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 	{ "helm",	ARMOR_CLASS,  ELVEN_LEATHER_HELM, HELM_OF_TELEPATHY },
 	{ "gloves",	ARMOR_CLASS,  LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY },
 	{ "gauntlets",	ARMOR_CLASS,  LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY },
-	{ "boots",	ARMOR_CLASS,  LOW_BOOTS,      LEVITATION_BOOTS },
+	{ "boots",	ARMOR_CLASS,  LOW_BOOTS,      FLYING_BOOTS },
 	{ "shoes",	ARMOR_CLASS,  LOW_BOOTS,      IRON_SHOES },
 	{ "cloak",	ARMOR_CLASS,  MUMMY_WRAPPING, CLOAK_OF_DISPLACEMENT },
 #ifdef TOURIST
@@ -1777,10 +1822,13 @@ const char *oldstr;
 			   !BSTRCMP(bp, p-4, "ness") ||
 			   !BSTRCMP(bp, p-14, "shape changers") ||
 			   !BSTRCMP(bp, p-15, "detect monsters") ||
+			   !BSTRCMP(bp, p-5, "chaos") ||
+			   !BSTRCMP(bp, p-5, "Chaos") ||
 			   !BSTRCMPI(bp, p-11, "Aesculapius") || /* staff */
 			   !BSTRCMPI(bp, p-8, "Longinus") || 	/* spear */
 			   !BSTRCMPI(bp, p-13, "Water Flowers") || 	/* boots */
 			   !BSTRCMPI(bp, p-14, "Dwarvish Lords") || /* axe */
+			   !BSTRCMPI(bp, p-12, "Elvish Lords") || /* mace */
 			   !BSTRCMPI(bp, p-11, "Seven Parts") || /* spear */
 			   !BSTRCMPI(bp, p-10, "Lost Names") || /* book */
 			   !BSTRCMPI(bp, p-10, "Infinite Spells") || /* book */
@@ -1789,6 +1837,7 @@ const char *oldstr;
 			   !BSTRCMP(bp, p-9, "iron bars") ||
 #endif
 			   !BSTRCMP(bp, p-5, "aklys") ||
+			   !BSTRCMP(bp, p-5, "dress") ||
 			   !BSTRCMP(bp, p-6, "fungus"))
 				return bp;
 	mins:
@@ -1935,6 +1984,7 @@ struct alt_spellings {
 	{ "bisento", HALBERD },
 	{ "kabuto", HELMET },
 	{ "shito", KNIFE },
+	{ "sugegasa", SEDGE_HAT },
 	{ "uma-yari", LANCE },
 	{ "yugake", LEATHER_GLOVES },
 	{ "osaku", LOCK_PICK },
@@ -1962,6 +2012,13 @@ struct alt_spellings {
 	{ "tiara of telepathy", HELM_OF_TELEPATHY },
 	{ "helm of drain resistance", HELM_OF_DRAIN_RESISTANCE },
 	{ "diadem of drain resistance", HELM_OF_DRAIN_RESISTANCE },
+	{ "mirror shield", SHIELD_OF_REFLECTION },
+	{ "black dress", BLACK_DRESS },
+	{ "dress", BLACK_DRESS },
+	{ "noble's dress", NOBLE_S_DRESS },
+	{ "armored dress", NOBLE_S_DRESS },
+	{ "armored black dress", NOBLE_S_DRESS },
+	{ "droven dress", NOBLE_S_DRESS },
 	{ (const char *)0, 0 },
 };
 
@@ -1984,6 +2041,7 @@ boolean from_user;
 	register struct obj *otmp;
 	int cnt, spe, spesgn, typ, very, rechrg;
 	int blessed, uncursed, iscursed, ispoisoned, isgreased, isdrained, stolen;
+	int moonphase = -1;
 	int eroded, eroded2, eroded3, erodeproof;
 #ifdef INVISIBLE_OBJECTS
 	int isinvisible;
@@ -2192,6 +2250,16 @@ boolean from_user;
 			isdiluted = 1;
 		} else if(!strncmpi(bp, "empty ", l=6)) {
 			contents = EMPTY;
+		} else if (!strncmpi(bp, "eclipse ", l=8)) {
+			moonphase = ECLIPSE_MOON;
+		} else if (!strncmpi(bp, "crescent ", l=9)) {
+			moonphase = CRESCENT_MOON;
+		} else if (!strncmpi(bp, "half ", l=5)) {
+			moonphase = HALF_MOON;
+		} else if (!strncmpi(bp, "gibbous ", l=8)) {
+			moonphase = GIBBOUS_MOON;
+		} else if (!strncmpi(bp, "full ", l=5) && strncmpi(bp, "full healing", 12)) {
+			moonphase = FULL_MOON;
 		} else break;
 		bp += l;
 	}
@@ -2423,7 +2491,7 @@ boolean from_user;
 		oclass = i;
 		goto any;
 	}
-
+	
 	/* Search for class names: XXXXX potion, scroll of XXXXX.  Avoid */
 	/* false hits on, e.g., rings for "ring mail". */
 	if(strncmpi(bp, "enchant ", 8) &&
@@ -2436,6 +2504,11 @@ boolean from_user;
 	   strncmpi(bp, "food ration", 11) &&
 	   strncmpi(bp, "meat ring", 9) && 
 	   strncmpi(bp, "rod of lordly might", 19) && 
+	   strncmpi(bp, "rod of the elvish lords", 23) && 
+	   strncmpi(bp, "glamdring", 9) && 
+	   strncmpi(bp, "black dress", 11) && 
+	   strncmpi(bp, "noble's dress", 13) &&
+	   strncmpi(bp, "sceptre of lolth", 16) && 
 	   strncmpi(bp, "atma weapon", 11)
 	)
 	for (i = 0; i < (int)(sizeof wrpsym); i++) {
@@ -2756,6 +2829,12 @@ srch:
 			al = A_LAWFUL;
 		    else if(!strncmpi(bp, "unaligned ", 10))
 			al = A_NONE;
+		    else if(!strncmpi(bp, "void ", 8))
+			al = A_VOID;
+		    else if(!strncmpi(bp, "non-aligned ", 8))
+			al = A_VOID;
+		    else if(!strncmpi(bp, "gnostic ", 8))
+			al = A_VOID;
 		    else /* -1 - A_CHAOTIC, 0 - A_NEUTRAL, 1 - A_LAWFUL */
 			al = (!rn2(6)) ? A_NONE : rn2((int)A_LAWFUL+2) - 1;
 		    levl[u.ux][u.uy].altarmask = Align2amask( al );
@@ -2926,6 +3005,7 @@ typfnd:
 	/* set otmp->corpsenm or dragon scale [mail] */
 	if (mntmp >= LOW_PM) {
 		if (mntmp == PM_LONG_WORM_TAIL) mntmp = PM_LONG_WORM;
+		if (mntmp == PM_HUNTING_HORROR_TAIL) mntmp = PM_HUNTING_HORROR;
 
 		switch (typ) {
 		case TIN:
@@ -3133,6 +3213,11 @@ typfnd:
 		}
 	}
 
+	/* set moon phase */
+	if(moonphase != -1 && otmp->otyp == MOON_AXE){
+		otmp->ovar1 = moonphase;
+	}
+	
 	/* more wishing abuse: don't allow wishing for certain artifacts */
 	/* and make them pay; charge them for the wish anyway! */
 	if ((is_quest_artifact(otmp) || //redundant failsafe.  You can't wish for ANY quest artifacts
