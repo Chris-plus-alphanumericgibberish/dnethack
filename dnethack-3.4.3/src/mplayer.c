@@ -152,7 +152,7 @@ register boolean special;
 	    switch(monsndx(ptr)) {
 		case PM_ARCHEOLOGIST:
 		    if (rn2(2)) weapon = BULLWHIP;
-		    break;
+		break;
 		case PM_BARBARIAN:
 		    if (rn2(2)) {
 		    	weapon = rn2(2) ? TWO_HANDED_SWORD : BATTLE_AXE;
@@ -160,13 +160,13 @@ register boolean special;
 		    }
 		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
 		    if (helm == HELM_OF_BRILLIANCE) helm = STRANGE_OBJECT;
-		    break;
+		break;
 		case PM_CAVEMAN:
 		case PM_CAVEWOMAN:
 		    if (rn2(4)) weapon = MACE;
 		    else weapon = CLUB;
 		    if (helm == HELM_OF_BRILLIANCE) helm = STRANGE_OBJECT;
-		    break;
+		break;
 		case PM_CLOCKWORK_AUTOMATON:
 		    weapon = LONG_SWORD;
 		    armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
@@ -186,7 +186,7 @@ register boolean special;
 		    else if (rn2(2)) weapon = rn2(2) ? UNICORN_HORN : SCALPEL;
 		    if (rn2(4)) helm = rn2(2) ? HELM_OF_BRILLIANCE : HELM_OF_TELEPATHY;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
-		    break;
+		break;
 		case PM_INCANTIFIER:
 		    if (rn2(4)) weapon = rn2(2) ? QUARTERSTAFF : ATHAME;
 	    	armor = rn2(2) ? BLACK_DRAGON_SCALE_MAIL :
@@ -198,13 +198,13 @@ register boolean special;
 		case PM_KNIGHT:
 		    if (rn2(4)) weapon = LONG_SWORD;
 		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
-		    break;
+		break;
 		case PM_MONK:
 		    weapon = STRANGE_OBJECT;
 		    armor = STRANGE_OBJECT;
 		    cloak = ROBE;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
-		    break;
+		break;
 		case PM_NOBLEMAN:
 		case PM_NOBLEWOMAN:
 		    weapon = RAPIER;
@@ -219,7 +219,7 @@ register boolean special;
 		    if (rn2(4)) cloak = ROBE;
 		    if (rn2(4)) helm = rn2(2) ? HELM_OF_BRILLIANCE : HELM_OF_TELEPATHY;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
-		    break;
+		break;
 		case PM_PIRATE:
 			weapon = SCIMITAR;
 			armor = LEATHER_JACKET;
@@ -227,22 +227,22 @@ register boolean special;
 	    break;
 		case PM_RANGER:
 		    if (rn2(2)) weapon = ELVEN_DAGGER;
-		    break;
+		break;
 		case PM_ROGUE:
 		    if (rn2(2)) weapon = SHORT_SWORD;
-		    break;
+		break;
 		case PM_SAMURAI:
 		    if (rn2(2)) weapon = KATANA;
-		    break;
+		break;
 #ifdef TOURIST
 		case PM_TOURIST:
 		    /* Defaults are just fine */
-		    break;
+		break;
 #endif
 		case PM_VALKYRIE:
 		    if (rn2(2)) weapon = WAR_HAMMER;
 		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
-		    break;
+		break;
 		case PM_WORM_THAT_WALKS:
 		    weapon = ATHAME;
 			armor = BRONZE_PLATE_MAIL;
@@ -255,10 +255,10 @@ register boolean special;
 		    	armor = rn2(2) ? BLACK_DRAGON_SCALE_MAIL :
 		    			SILVER_DRAGON_SCALE_MAIL;
 		    }
-		    	cloak = CLOAK_OF_MAGIC_RESISTANCE;
+	    	cloak = CLOAK_OF_MAGIC_RESISTANCE;
 		    if (rn2(4)) helm = HELM_OF_BRILLIANCE;
 		    shield = STRANGE_OBJECT;
-		    break;
+		break;
 		default:
 			pline("Recieved %d.",monsndx(ptr));
 			impossible("bad mplayer monster");
@@ -290,7 +290,7 @@ register boolean special;
 		    mk_mplayer_armor(mtmp, rnd_class(LEATHER_GLOVES,
 					       GAUNTLETS_OF_DEXTERITY));
 		if (rn2(8))
-		    mk_mplayer_armor(mtmp, rnd_class(LOW_BOOTS, LEVITATION_BOOTS));
+		    mk_mplayer_armor(mtmp, rnd_class(LOW_BOOTS, FLYING_BOOTS));
 		m_dowear(mtmp, TRUE);
 
 		quan = rn2(3) ? rn2(3) : rn2(16);
