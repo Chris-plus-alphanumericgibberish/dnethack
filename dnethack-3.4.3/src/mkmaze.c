@@ -457,7 +457,28 @@ fixup_special()
 		if (!rn2(3) && !is_pool(x,y))
 		    (void)maketrap(x, y, rn2(3) ? LANDMINE : SPIKED_PIT);
 	    }
-    } else if (Role_if(PM_PRIEST) && In_quest(&u.uz)) {
+    } else if(urole.neminum == PM_BOLG && In_quest(&u.uz) && Is_qlocate(&u.uz)) {
+	/* using an unfilled morgue for rm id */
+	croom = search_special(MORGUE);
+	/* avoid inappropriate morgue-related messages */
+	level.flags.graveyard = level.flags.has_morgue = 0;
+	croom->rtype = OROOM;	/* perhaps it should be set to VAULT? */
+	/* stock the main vault */
+	for(x = croom->lx; x <= croom->hx; x++)
+	    for(y = croom->ly; y <= croom->hy; y++) {
+		if(rn2(2)) mkobj_at(WEAPON_CLASS, x, y, FALSE);
+		if(rn2(2)) mkobj_at(ARMOR_CLASS, x, y, FALSE);
+		if(rn2(6)) mkobj_at(RING_CLASS, x, y, FALSE);
+		if(!rn2(3))mkobj_at(TOOL_CLASS, x, y, FALSE);
+		if(rn2(6)) mkobj_at(SCROLL_CLASS, x, y, FALSE);
+		if(!rn2(4))mkobj_at(GEM_CLASS, x, y, FALSE);
+		if(!rn2(3))mkobj_at(GEM_CLASS, x, y, FALSE);
+		if(!rn2(2))mkobj_at(GEM_CLASS, x, y, FALSE);
+		if(rn2(3)) mkobj_at(GEM_CLASS, x, y, FALSE);
+		if(rn2(4)) mkobj_at(GEM_CLASS, x, y, FALSE);
+		(void) mkgold((long) rn1(1000, 100), x, y);
+    }
+	} else if (Role_if(PM_PRIEST) && In_quest(&u.uz)) {
 	/* less chance for undead corpses (lured from lower morgues) */
 	level.flags.graveyard = 1;
     } else if (Is_stronghold(&u.uz)) {
@@ -503,23 +524,23 @@ register const char *s;
 	coord mm;
 	int levvar = 0;
 	if(*s) {
-	    if(sp && sp->rndlevs){ 
+	    if(sp && sp->rndlevs){
 			levvar = rnd((int) sp->rndlevs);
 			Sprintf(protofile, "%s-%d", s, levvar);
 		}
-	    else		 Strcpy(protofile, s);
+	    else Strcpy(protofile, s);
 	} else if(*(dungeons[u.uz.dnum].proto)) {
 	    if(dunlevs_in_dungeon(&u.uz) > 1) {
 			if(sp && sp->rndlevs){
 				levvar = rnd((int) sp->rndlevs);
-		     Sprintf(protofile, "%s%d-%d", dungeons[u.uz.dnum].proto,
-						dunlev(&u.uz),
+				Sprintf(protofile, "%s%d-%d", dungeons[u.uz.dnum].proto,
+						 dunlev(&u.uz),
 						 levvar);
 			}else Sprintf(protofile, "%s%d", dungeons[u.uz.dnum].proto,
-						dunlev(&u.uz));
+							dunlev(&u.uz));
 	    } else if(sp && sp->rndlevs) {
 			levvar = rnd((int) sp->rndlevs);
-		     Sprintf(protofile, "%s-%d", dungeons[u.uz.dnum].proto,
+		    Sprintf(protofile, "%s-%d", dungeons[u.uz.dnum].proto,
 						levvar);
 	    } else Strcpy(protofile, dungeons[u.uz.dnum].proto);
 
