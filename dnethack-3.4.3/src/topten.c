@@ -960,7 +960,7 @@ encodeachieve(void)
   if(achieve.get_luckstone)      r |= 1L << 9;
   if(achieve.finish_sokoban)     r |= 1L << 10;
   if(achieve.killed_medusa)      r |= 1L << 11;
-
+  
   return r;
 }
 #endif
@@ -1128,6 +1128,13 @@ classmon(plch, fem)
 		else
 		    return PM_HUMAN;
 	    }
+	if (!strcmp(plch, "Elf")) return PM_ELF;
+	if (!strcmp(plch, "Dro")) return PM_DROW_MATRON;
+	if (!strcmp(plch, "Hdr")) return PM_HEDROW_WARRIOR;
+	if (!strcmp(plch, "Dna")) return PM_DWARF_LORD;
+	if (!strcmp(plch, "Dnb")) return PM_DWARF_LORD;
+	if (!strcmp(plch, "Ndr")) return PM_DROW_MATRON;
+	if (!strcmp(plch, "Nhd")) return PM_HEDROW_WARRIOR;
 	/* this might be from a 3.2.x score for former Elf class */
 	if (!strcmp(plch, "E")) return PM_RANGER;
 
