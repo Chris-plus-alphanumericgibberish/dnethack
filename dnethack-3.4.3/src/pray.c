@@ -68,6 +68,11 @@ static int p_type; /* (-1)-3: (-1)=really naughty, 3=really good */
 #define DEVOUT 14
 #define FERVENT 9
 #define STRIDENT 4
+#define ALIGNED 3
+#define HALTING 1
+#define NOMINAL 0
+#define STRAYED -3
+#define SINNED -8
 
 /*
  * The actual trouble priority is determined by the order of the
@@ -163,8 +168,7 @@ in_trouble()
 	if (count == 8 && !Passes_walls)
 		return(TROUBLE_STUCK_IN_WALL);
 
-	if (Cursed_obj(uarmf, LEVITATION_BOOTS) ||
-		stuck_ring(uleft, RIN_LEVITATION) ||
+	if (stuck_ring(uleft, RIN_LEVITATION) ||
 		stuck_ring(uright, RIN_LEVITATION))
 		return(TROUBLE_CURSED_LEVITATION);
 	if (nohands(youmonst.data) || !freehand()) {
@@ -313,8 +317,8 @@ register int trouble;
 	    case TROUBLE_HUNGRY:
 		    Race_if(PM_CLOCKWORK_AUTOMATON) ? 
 				Your("mainspring is miraculously wound!") :
-		    Your("%s feels content.", body_part(STOMACH));
-		    init_uhunger();
+				Your("%s feels content.", body_part(STOMACH));
+		    reset_uhunger();
 		    flags.botl = 1;
 		    break;
 	    case TROUBLE_SICK:
@@ -346,12 +350,10 @@ register int trouble;
 		    (void) safe_teleds(FALSE);
 		    break;
 	    case TROUBLE_CURSED_LEVITATION:
-		    if (Cursed_obj(uarmf, LEVITATION_BOOTS)) {
-			otmp = uarmf;
-		    } else if ((otmp = stuck_ring(uleft,RIN_LEVITATION)) !=0) {
-			if (otmp == uleft) what = leftglow;
+		    if ((otmp = stuck_ring(uleft,RIN_LEVITATION)) !=0) {
+				if (otmp == uleft) what = leftglow;
 		    } else if ((otmp = stuck_ring(uright,RIN_LEVITATION))!=0) {
-			if (otmp == uright) what = rightglow;
+				if (otmp == uright) what = rightglow;
 		    }
 		    goto decurse;
 	    case TROUBLE_UNUSEABLE_HANDS:
@@ -569,9 +571,10 @@ aligntyp resp_god;
 
 	if(Role_if(PM_EXILE) && resp_god == u.ualign.type) return;
 	
-	if(Inhell) resp_god = A_NONE;
+	if(Inhell && !(Race_if(PM_DROW) && resp_god == A_CHAOTIC)) resp_god = A_NONE;
+	
 	u.ublessed = 0;
-
+	
 	if(u.ualign.type == resp_god){
 		u.lastprayed = moves;
 		u.lastprayresult = PRAY_ANGER;
@@ -580,13 +583,14 @@ aligntyp resp_god;
 	/* changed from tmp = u.ugangr + abs (u.uluck) -- rph */
 	/* added test for alignment diff -dlc */
 	if(resp_god != u.ualign.type)
-	    maxanger =  u.ualign.record/2 + (Luck > 0 ? -Luck/3 : -Luck);
+	    maxanger =  3*u.ugangr[Align2gangr(resp_god)] +
+		((Luck > 0 || u.ualign.record <= STRAYED) ? -Luck/3 : -Luck);
 	else
-	    maxanger =  3*u.ugangr +
+	    maxanger =  3*u.ugangr[Align2gangr(resp_god)] +
 		((Luck > 0 || u.ualign.record >= STRIDENT) ? -Luck/3 : -Luck);
 	if (maxanger < 1) maxanger = 1; /* possible if bad align & good luck */
 	else if (maxanger > 15) maxanger = 15;	/* be reasonable */
-
+	
 	switch (rn2(maxanger)) {
 	    case 0:
 	    case 1:	You_feel("that %s is %s.", align_gname(resp_god),
@@ -662,25 +666,41 @@ gcrownu()
     short class_gift;
     int sp_no;
 #define ok_wep(o) ((o) && ((o)->oclass == WEAPON_CLASS || is_weptool(o)))
-
+	
 	if(!Role_if(PM_EXILE)){
-	    HSee_invisible |= FROMOUTSIDE;
-	    HFire_resistance |= FROMOUTSIDE;
-	    HCold_resistance |= FROMOUTSIDE;
-	    HShock_resistance |= FROMOUTSIDE;
-	    HSleep_resistance |= FROMOUTSIDE;
-	    HPoison_resistance |= FROMOUTSIDE;
+		HSee_invisible |= FROMOUTSIDE;
+		HFire_resistance |= FROMOUTSIDE;
+		HCold_resistance |= FROMOUTSIDE;
+		HShock_resistance |= FROMOUTSIDE;
+		HSleep_resistance |= FROMOUTSIDE;
+		HPoison_resistance |= FROMOUTSIDE;
 		u.wardsknown |= WARD_HEPTAGRAM;
-	    godvoice(u.ualign.type, (char *)0);
+		godvoice(u.ualign.type, (char *)0);
 	}
 
     obj = ok_wep(uwep) ? uwep : 0;
     already_exists = in_hand = FALSE;	/* lint suppression */
-	if( Role_if(PM_PIRATE) ){
+	if( Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE) ){
 		u.uevent.uhand_of_elbereth = 2; /* Alignment of P King is treated as neutral */
 		in_hand = (uwep && uwep->oartifact == ART_REAVER);
 		already_exists = exist_artifact(SCIMITAR, artiname(ART_REAVER));
 		verbalize("Hurrah for our Pirate King!");
+	} else if((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend){
+		u.uevent.uhand_of_elbereth = 2; /* Alignment of Skadi is treated as neutral */
+		in_hand = FALSE;
+		already_exists = exist_artifact(BOW, artiname(ART_BOW_OF_SKADI));
+		verbalize("I greet you, my daughter.");
+	} else if(Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)){
+		u.uevent.uhand_of_elbereth = 1; /* Alignment of Dwarf king is treated as lawful */
+		if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
+			in_hand = FALSE;
+			already_exists = exist_artifact(DIAMOND, artiname(ART_ARKENSTONE));
+			verbalize("Hail, King under the Mountain!");
+		} else if(urole.ldrnum == PM_DAIN_II_IRONFOOT){
+			in_hand = FALSE;
+			already_exists = exist_artifact(AXE, artiname(ART_DURIN_S_AXE));
+			verbalize("Hail, Lord of Moria!");
+		}
 	} else if(Role_if(PM_EXILE)){
 		u.uevent.uhand_of_elbereth = 2; /* Alignment of emissary is treated as neutral */
 		You("suddenly perceive 15 pairs of star-like eyes, staring at you from within your head.");
@@ -693,7 +713,33 @@ gcrownu()
 	} else {
     switch (u.ualign.type) {
     case A_LAWFUL:
-	if(Role_if(PM_MONK)){
+	if(Race_if(PM_DROW)){
+		if(Role_if(PM_NOBLEMAN)){
+			u.uevent.uhand_of_elbereth = 22;
+			in_hand = FALSE;
+			already_exists = exist_artifact(DROVEN_CROSSBOW, artiname(ART_LIECLEAVER));
+			verbalize("I dub thee...  The Blade of Ver'tas!");
+		} else {
+			if(flags.initgend){ /*Female*/
+				u.uevent.uhand_of_elbereth = 16;
+				in_hand = FALSE;
+				already_exists = exist_artifact(SICKLE, artiname(ART_SICKLE_MOON));
+				verbalize("I dub thee...  The Hand of Eilistraee!");
+			} else { /*male*/
+				in_hand = FALSE;
+				u.uevent.uhand_of_elbereth = 19;
+				verbalize("As shadows define the light, so to do webs define the spider.");
+				verbalize("You shall be my shepherd, to wrap the world in webs of shadow!");
+				u.specialSealsKnown |= SEAL_BLACK_WEB;
+				return;
+			}
+		}
+	} else if(Race_if(PM_ELF)){
+		u.uevent.uhand_of_elbereth = 13;
+		in_hand = FALSE;
+		already_exists = exist_artifact(LONG_SWORD, artiname(ART_ARCOR_KERYM));
+		verbalize("I crown thee...  The Hand of Elbereth!");
+	} else if(Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 4;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
@@ -702,8 +748,9 @@ gcrownu()
 		u.uevent.uhand_of_elbereth = 10;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+		if(already_exists) already_exists = exist_artifact(SPE_SECRETS, artiname(ART_BOOK_OF_INFINITE_SPELLS));
 		verbalize("I dub thee...  The Magister of Law!");
-	} else if(Role_if(PM_NOBLEMAN)){
+	} else if(Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)){
 		in_hand = FALSE;
 		if(Race_if(PM_VAMPIRE)) already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
 		else already_exists = exist_artifact(find_gcirclet(), artiname(ART_CROWN_OF_THE_SAINT_KING));
@@ -714,7 +761,7 @@ gcrownu()
 			u.uevent.uhand_of_elbereth = 7;
 			verbalize("I crown thee...  The Saint %s!", flags.female ? "Queen" : "King");
 		}
-	} else if(Role_if(PM_SAMURAI)){
+	} else if(Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)){
 		char crown_msg[BUFSZ];
 		u.uevent.uhand_of_elbereth = 1; /* Alignment of Nasu clan is treated as lawful */
 		in_hand = FALSE;
@@ -725,17 +772,42 @@ gcrownu()
 		verbalize(crown_msg);
 	} else {
 		u.uevent.uhand_of_elbereth = 1;
-#ifdef ELBERETH
-	verbalize("I crown thee...  The Hand of Elbereth!");
-		// if(Race_if(PM_ELF)) verbalize("I crown thee...  The Hand of Elbereth!");
-		// else verbalize("I dub thee...  The Arm of the Law!");
-#else
 		verbalize("I dub thee...  The Arm of the Law!");
-#endif
 	}
 	break;
     case A_NEUTRAL:
-	if(Role_if(PM_MONK)){
+	if(Race_if(PM_DROW)){
+		if(Role_if(PM_NOBLEMAN)){
+			if(flags.initgend){ /*Female*/
+				u.uevent.uhand_of_elbereth = 23;
+				in_hand = FALSE;
+				already_exists = exist_artifact(GAUNTLETS_OF_DEXTERITY, artiname(ART_CLAWS_OF_THE_REVENANCER));
+				verbalize("I dub thee...  The Hand of Kiaransali!");
+			} else { /*male*/
+				u.uevent.uhand_of_elbereth = 26;
+				in_hand = FALSE;
+				already_exists = exist_artifact(DROVEN_SHORT_SWORD, artiname(ART_LOLTH_S_FANG));
+				verbalize("I dub thee...  The Hand of Keptolo!");
+			}
+		} else {
+			if(flags.initgend){ /*Female*/
+				u.uevent.uhand_of_elbereth = 17;
+				in_hand = FALSE;
+				already_exists = exist_artifact(GAUNTLETS_OF_DEXTERITY, artiname(ART_CLAWS_OF_THE_REVENANCER));
+				verbalize("I dub thee...  The Hand of Kiaransali!");
+			} else { /*male*/
+				u.uevent.uhand_of_elbereth = 20;
+				in_hand = FALSE;
+				already_exists = exist_artifact(DROVEN_SHORT_SWORD, artiname(ART_LOLTH_S_FANG));
+				verbalize("I dub thee...  The Sword of Vhaeraun!");
+			}
+		}
+	} else if(Race_if(PM_ELF)){
+		u.uevent.uhand_of_elbereth = 14;
+		in_hand = FALSE;
+		already_exists = exist_artifact(RUNESWORD, artiname(ART_ARYFAERN_KERYM));
+		verbalize("I dub thee...  The Doomspeaker of Vaire!");
+	} else if(Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 5;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
@@ -744,8 +816,9 @@ gcrownu()
 		u.uevent.uhand_of_elbereth = 11;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+		if(already_exists) already_exists = exist_artifact(SPE_SECRETS, artiname(ART_BOOK_OF_INFINITE_SPELLS));
 		verbalize("Thou shalt be the Wizard of Balance!");
-	} else if(Role_if(PM_NOBLEMAN)){
+	} else if(Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)){
 		in_hand = FALSE;
 		if(Race_if(PM_VAMPIRE)) already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
 		else already_exists = exist_artifact(find_gcirclet(), artiname(ART_CROWN_OF_THE_SAINT_KING));
@@ -758,13 +831,44 @@ gcrownu()
 		}
 	} else {
 		u.uevent.uhand_of_elbereth = 2;
-	in_hand = (uwep && uwep->oartifact == ART_VORPAL_BLADE);
+		in_hand = (uwep && uwep->oartifact == ART_VORPAL_BLADE);
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_VORPAL_BLADE));
 		verbalize("Thou shalt be my Envoy of Balance!");
 	}
 	break;
     case A_CHAOTIC:
-	if(Role_if(PM_MONK)){
+	if(Race_if(PM_DROW)){
+		if(Role_if(PM_NOBLEMAN)){
+			if(flags.initgend){ /*Female*/
+				u.uevent.uhand_of_elbereth = 24;
+				in_hand = FALSE;
+				already_exists = exist_artifact(ELVEN_MITHRIL_COAT, artiname(ART_WEB_OF_LOLTH));
+				verbalize("I crown thee...  The Hand of Lolth!");
+			} else { /*male*/
+				u.uevent.uhand_of_elbereth = 27;
+				in_hand = FALSE;
+				already_exists = exist_artifact(MORNING_STAR, artiname(ART_RUINOUS_DESCENT_OF_STARS));
+				verbalize("I dub thee...  The Hammer of Ghaunadaur!");
+			}
+		} else {
+			if(flags.initgend){ /*Female*/
+				u.uevent.uhand_of_elbereth = 18;
+				in_hand = FALSE;
+				already_exists = exist_artifact(ELVEN_MITHRIL_COAT, artiname(ART_WEB_OF_LOLTH));
+				verbalize("I crown thee...  The Hand of Lolth!");
+			} else { /*male*/
+				u.uevent.uhand_of_elbereth = 21;
+				in_hand = FALSE;
+				already_exists = exist_artifact(DROVEN_SHORT_SWORD, artiname(ART_LOLTH_S_FANG));
+				verbalize("I dub thee...  The Fang of Lolth!");
+			}
+		}
+	} else if(Race_if(PM_ELF)){
+		u.uevent.uhand_of_elbereth = 15;
+		in_hand = FALSE;
+		already_exists = exist_artifact(ELVEN_BROADSWORD, artiname(ART_ARYVELAHR_KERYM));
+		verbalize("I dub thee...  The Whisperer of Este!");
+	} else if(Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 6;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_ROBE_OF_THE_ARCHMAGI));
@@ -773,18 +877,19 @@ gcrownu()
 		u.uevent.uhand_of_elbereth = 12;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
+		if(already_exists) already_exists = exist_artifact(SPE_SECRETS, artiname(ART_BOOK_OF_INFINITE_SPELLS));
 		verbalize("Thou art chosen to take lives for My Glory!");
-	} else if(Role_if(PM_NOBLEMAN)){
+	} else if(Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)){
 		u.uevent.uhand_of_elbereth = 9;
 		in_hand = FALSE;
 		already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
 		verbalize("I crown thee...  Dark %s!", flags.female ? "Lady" : "Lord");
 	} else {
 		u.uevent.uhand_of_elbereth = 3;
-	in_hand = (uwep && uwep->oartifact == ART_STORMBRINGER);
-	already_exists = exist_artifact(RUNESWORD, artiname(ART_STORMBRINGER));
-	verbalize("Thou art chosen to %s for My Glory!",
-		  already_exists && !in_hand ? "take lives" : "steal souls");
+		in_hand = (uwep && uwep->oartifact == ART_STORMBRINGER);
+		already_exists = exist_artifact(RUNESWORD, artiname(ART_STORMBRINGER));
+		verbalize("Thou art chosen to %s for My Glory!",
+			  already_exists && !in_hand ? "take lives" : "steal souls");
 	}
 	break;
     }
@@ -793,33 +898,61 @@ gcrownu()
     class_gift = STRANGE_OBJECT;
     /* 3.3.[01] had this in the A_NEUTRAL case below,
        preventing chaotic wizards from receiving a spellbook */
-    if (Role_if(PM_WIZARD)) {
-		if(!already_exists){
-			if (class_gift != STRANGE_OBJECT) {
-				;		/* already got bonus above for some reason */
-			} else if (!already_exists) {
-				obj = mksobj(SPE_SECRETS, FALSE, FALSE);
-				obj = oname(obj, artiname(ART_NECRONOMICON));
-				obj->spe = 1;
-				at_your_feet("A spellbook");
-				dropy(obj);
-				u.ugifts++;
-		    }
-			if (obj && obj->oartifact == ART_NECRONOMICON){
-				obj->ovar1 |= SP_DEATH;
-				discover_artifact(ART_NECRONOMICON);
-			} else if (obj && obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS){
-				obj->ovar1 = SPE_FINGER_OF_DEATH;
-				discover_artifact(ART_BOOK_OF_INFINITE_SPELLS);
-    		}
+	if( Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE) ){
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (in_hand) {
+			Your("%s rings with the sound of waves!", xname(obj));
+			obj->dknown = TRUE;
+		} else if (!already_exists) {
+			obj = mksobj(SCIMITAR, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_REAVER));
+			obj->spe = 1;
+			at_your_feet("A sword");
+			dropy(obj);
+			u.ugifts++;
 		}
-		else{
-			for(obj = invent; obj; obj=obj->nobj)
-				if(obj->oartifact == ART_NECRONOMICON) 
-					obj->ovar1 |= SP_DEATH;
-			if(!obj) for(obj = invent; obj; obj=obj->nobj)
-				if(obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS) 
-					obj->ovar1 = SPE_FINGER_OF_DEATH;
+		/* acquire Reaver's skill regardless of weapon or gift, 
+			although pirates are already good at using scimitars */
+		unrestrict_weapon_skill(P_SCIMITAR);
+		if (obj && obj->oartifact == ART_REAVER)
+			discover_artifact(ART_REAVER);
+	} else if ((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			obj = mksobj(BOW, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_BOW_OF_SKADI));
+			obj->spe = 1;
+			at_your_feet("A bow");
+			dropy(obj);
+			u.ugifts++;
+		}
+		/* acquire Reaver's skill regardless of weapon or gift, 
+			although pirates are already good at using scimitars */
+		unrestrict_weapon_skill(P_BOW);
+		if (obj && obj->oartifact == ART_BOW_OF_SKADI)
+			discover_artifact(ART_BOW_OF_SKADI);
+	} else if (Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
+				obj = mksobj(DIAMOND, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARKENSTONE));
+				obj->spe = 1;
+				at_your_feet("A shining diamond");
+				discover_artifact(ART_DURIN_S_AXE);
+			} else if(urole.ldrnum == PM_DAIN_II_IRONFOOT){
+				obj = mksobj(AXE, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_DURIN_S_AXE));
+				obj->spe = 1;
+				at_your_feet("A silver axe");
+				unrestrict_weapon_skill(P_AXE);
+				discover_artifact(ART_DURIN_S_AXE);
+			}
+			dropy(obj);
+			u.ugifts++;
 		}
 	} else if (Role_if(PM_MONK)) {
 		if (class_gift != STRANGE_OBJECT) {
@@ -827,7 +960,7 @@ gcrownu()
 		} else if (!already_exists) {
 			obj = mksobj(ROBE, FALSE, FALSE);
 			if(u.ualign.type != A_CHAOTIC){
-			obj = oname(obj, artiname(ART_GRANDMASTER_S_ROBE));
+				obj = oname(obj, artiname(ART_GRANDMASTER_S_ROBE));
 			} else {
 				obj = oname(obj, artiname(ART_ROBE_OF_THE_ARCHMAGI));
 			}
@@ -840,7 +973,120 @@ gcrownu()
 			discover_artifact(ART_GRANDMASTER_S_ROBE);
 		else if(obj && obj->oartifact == ART_ROBE_OF_THE_ARCHMAGI)
 			discover_artifact(ART_ROBE_OF_THE_ARCHMAGI);
-	} else if (Role_if(PM_NOBLEMAN)) {
+	} else if (Race_if(PM_ELF)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if(u.ualign.type == A_CHAOTIC){
+				obj = mksobj(CRYSTAL_SWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARYVELAHR_KERYM));
+			} else if(u.ualign.type == A_NEUTRAL){
+				obj = mksobj(RUNESWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARYFAERN_KERYM));
+			} else {
+				obj = mksobj(LONG_SWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARCOR_KERYM));
+			}
+			obj->spe = 1;
+			at_your_feet("An Elfblade of Cormanthyr");
+			dropy(obj);
+			u.ugifts++;
+		}
+		if (obj && obj->oartifact == ART_ARYVELAHR_KERYM)
+			discover_artifact(ART_ARYVELAHR_KERYM);
+		else if(obj && obj->oartifact == ART_ARYFAERN_KERYM)
+			discover_artifact(ART_ARYFAERN_KERYM);
+		else if(obj && obj->oartifact == ART_ARCOR_KERYM)
+			discover_artifact(ART_ARCOR_KERYM);
+		
+		if(u.ualign.type == A_CHAOTIC){
+			unrestrict_weapon_skill(P_BROAD_SWORD);
+		} else if(u.ualign.type == A_NEUTRAL){
+			unrestrict_weapon_skill(P_BROAD_SWORD);
+		} else if(u.ualign.type == A_LAWFUL){
+			unrestrict_weapon_skill(P_LONG_SWORD);
+		}
+	} else if (Role_if(PM_WIZARD)) {
+		if(!already_exists){
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above for some reason */
+			} else if (!already_exists) {
+				obj = mksobj(SPE_SECRETS, FALSE, FALSE);
+				if(!exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON))) obj = oname(obj, artiname(ART_NECRONOMICON));
+				else obj = oname(obj, artiname(ART_BOOK_OF_INFINITE_SPELLS));
+				obj->spe = 1;
+				at_your_feet("A spellbook");
+				dropy(obj);
+				u.ugifts++;
+			}
+			if (obj && obj->oartifact == ART_NECRONOMICON){
+				obj->ovar1 |= SP_DEATH;
+				discover_artifact(ART_NECRONOMICON);
+			} else if (obj && obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS){
+				obj->ovar1 = SPE_FINGER_OF_DEATH;
+				discover_artifact(ART_BOOK_OF_INFINITE_SPELLS);
+			}
+		} else{
+			for(obj = invent; obj; obj=obj->nobj)
+				if(obj->oartifact == ART_NECRONOMICON) 
+					obj->ovar1 |= SP_DEATH;
+			if(!obj) for(obj = invent; obj; obj=obj->nobj)
+				if(obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS) 
+					obj->ovar1 = SPE_FINGER_OF_DEATH;
+		}
+	} else if(Race_if(PM_DROW)){
+		if(flags.initgend){ /*Female*/
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above for some reason */
+			} else if (!already_exists) {
+				if(u.ualign.type == A_CHAOTIC){
+					obj = mksobj(ELVEN_MITHRIL_COAT, FALSE, FALSE);
+					obj = oname(obj, artiname(ART_WEB_OF_LOLTH));
+					discover_artifact(ART_WEB_OF_LOLTH);
+				} else if(u.ualign.type == A_NEUTRAL){
+					obj = mksobj(GAUNTLETS_OF_DEXTERITY, FALSE, FALSE);
+					obj = oname(obj, artiname(ART_CLAWS_OF_THE_REVENANCER));
+					discover_artifact(ART_CLAWS_OF_THE_REVENANCER);
+				} else {
+					if(Role_if(PM_NOBLEMAN)){
+						obj = mksobj(DROVEN_CROSSBOW, FALSE, FALSE);
+						obj = oname(obj, artiname(ART_LIECLEAVER));
+						discover_artifact(ART_LIECLEAVER);
+					} else {
+						obj = mksobj(SICKLE, FALSE, FALSE);
+						obj = oname(obj, artiname(ART_SICKLE_MOON));
+						discover_artifact(ART_SICKLE_MOON);
+					}
+				}
+				obj->spe = 1;
+				at_your_feet("An object");
+				dropy(obj);
+				u.ugifts++;
+			}
+			if(u.ualign.type == A_CHAOTIC){
+				//unrestrict_weapon_skill();
+			} else if(u.ualign.type == A_NEUTRAL){
+				unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
+				u.umartial = TRUE;
+			} else if(u.ualign.type == A_LAWFUL){
+				if(Role_if(PM_NOBLEMAN)) unrestrict_weapon_skill(P_CROSSBOW);
+				else unrestrict_weapon_skill(P_HARVEST);
+			}
+		} else { /*male*/
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above for some reason */
+			} else if (!already_exists) {
+				obj = mksobj(DROVEN_SHORT_SWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_LOLTH_S_FANG));
+				discover_artifact(ART_LOLTH_S_FANG);
+				obj->spe = 1;
+				at_your_feet("A sword");
+				dropy(obj);
+				u.ugifts++;
+			}
+			unrestrict_weapon_skill(P_SHORT_SWORD);
+		}
+	} else if (Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)) {
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */
 		} else if (!already_exists) {
@@ -848,7 +1094,7 @@ gcrownu()
 				obj = mksobj(find_gcirclet(), FALSE, FALSE);
 				obj = oname(obj, artiname(ART_CROWN_OF_THE_SAINT_KING));
 			} else {
-				obj = mksobj(find_gcirclet(), FALSE, FALSE);
+				obj = mksobj(find_vhelm(), FALSE, FALSE);
 				obj = oname(obj, artiname(ART_HELM_OF_THE_DARK_LORD));
 			}
 			if(obj){
@@ -869,99 +1115,82 @@ gcrownu()
 			discover_artifact(ART_CROWN_OF_THE_SAINT_KING);
 		else if(obj && obj->oartifact == ART_HELM_OF_THE_DARK_LORD)
 			discover_artifact(ART_HELM_OF_THE_DARK_LORD);
-    } else if( Role_if(PM_PIRATE) ){
-		if (class_gift != STRANGE_OBJECT) {
-			;		/* already got bonus above for some reason */
-		} else if (in_hand) {
-			Your("%s rings with the sound of waves!", xname(obj));
-			obj->dknown = TRUE;
-		} else if (!already_exists) {
-			obj = mksobj(SCIMITAR, FALSE, FALSE);
-			obj = oname(obj, artiname(ART_REAVER));
-			obj->spe = 1;
-			at_your_feet("A sword");
-			dropy(obj);
-			u.ugifts++;
-		}
-		/* acquire Reaver's skill regardless of weapon or gift, 
-			although pirates are already good at using scimitars */
-		unrestrict_weapon_skill(P_SCIMITAR);
-		if (obj && obj->oartifact == ART_REAVER)
-			discover_artifact(ART_REAVER);
-	} else if (Role_if(PM_SAMURAI)) {
+	} else if ((Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)) && u.uevent.uhand_of_elbereth == 1) {
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */
 		} else if (!already_exists) {
 			obj = mksobj(YUMI, FALSE, FALSE);
 			obj = oname(obj, artiname(ART_YOICHI_NO_YUMI));
 			obj->spe = 1;
-			at_your_feet("A yumi");
+			at_your_feet("A bow");
 			dropy(obj);
 			u.ugifts++;
 		}
-        discover_artifact(ART_YOICHI_NO_YUMI);
-	} else {
-    switch (u.ualign.type) {
-    case A_LAWFUL:
-	if (class_gift != STRANGE_OBJECT) {
-	    ;		/* already got bonus above */
-	} else if (obj && obj->otyp == LONG_SWORD && !obj->oartifact) {
-	    if (!Blind) Your("sword shines brightly for a moment.");
-	    obj = oname(obj, artiname(ART_EXCALIBUR));
-	    if (obj && obj->oartifact == ART_EXCALIBUR) u.ugifts++;
-	}
-	/* acquire Excalibur's skill regardless of weapon or gift */
-	unrestrict_weapon_skill(P_LONG_SWORD);
-	if (obj && obj->oartifact == ART_EXCALIBUR)
-	    discover_artifact(ART_EXCALIBUR);
-	break;
-    case A_NEUTRAL:
-	if (class_gift != STRANGE_OBJECT) {
-	    ;		/* already got bonus above */
-	} else if (in_hand) {
-	    Your("%s goes snicker-snack!", xname(obj));
-	    obj->dknown = TRUE;
-	} else if (!already_exists) {
-			obj = mksobj(LONG_SWORD, FALSE, FALSE);
-	    obj = oname(obj, artiname(ART_VORPAL_BLADE));
-	    obj->spe = 1;
-	    at_your_feet("A sword");
-	    dropy(obj);
-	    u.ugifts++;
-	}
-	/* acquire Vorpal Blade's skill regardless of weapon or gift */
-	unrestrict_weapon_skill(P_LONG_SWORD);
-	if (obj && obj->oartifact == ART_VORPAL_BLADE)
-	    discover_artifact(ART_VORPAL_BLADE);
-	break;
-    case A_CHAOTIC:
-      {
-	char swordbuf[BUFSZ];
+		unrestrict_weapon_skill(P_BOW);
+		if (obj && obj->oartifact == ART_YOICHI_NO_YUMI)
+			discover_artifact(ART_YOICHI_NO_YUMI);
+    } else {
+		switch (u.ualign.type) {
+			case A_LAWFUL:
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above */
+			} else if (obj && obj->otyp == LONG_SWORD && !obj->oartifact) {
+				if (!Blind) Your("sword shines brightly for a moment.");
+				obj = oname(obj, artiname(ART_EXCALIBUR));
+				if (obj && obj->oartifact == ART_EXCALIBUR) u.ugifts++;
+			}
+			/* acquire Excalibur's skill regardless of weapon or gift */
+			unrestrict_weapon_skill(P_LONG_SWORD);
+			if (obj && obj->oartifact == ART_EXCALIBUR)
+				discover_artifact(ART_EXCALIBUR);
+			break;
+			case A_NEUTRAL:
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above */
+			} else if (in_hand) {
+				Your("%s goes snicker-snack!", xname(obj));
+				obj->dknown = TRUE;
+			} else if (!already_exists) {
+					obj = mksobj(LONG_SWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_VORPAL_BLADE));
+				obj->spe = 1;
+				at_your_feet("A sword");
+				dropy(obj);
+				u.ugifts++;
+			}
+			/* acquire Vorpal Blade's skill regardless of weapon or gift */
+			unrestrict_weapon_skill(P_LONG_SWORD);
+			if (obj && obj->oartifact == ART_VORPAL_BLADE)
+				discover_artifact(ART_VORPAL_BLADE);
+			break;
+			case A_CHAOTIC:
+			  {
+			char swordbuf[BUFSZ];
 
-	Sprintf(swordbuf, "%s sword", hcolor(NH_BLACK));
-	if (class_gift != STRANGE_OBJECT) {
-	    ;		/* already got bonus above */
-	} else if (in_hand) {
-	    Your("%s hums ominously!", swordbuf);
-	    obj->dknown = TRUE;
-	} else if (!already_exists) {
-	    obj = mksobj(RUNESWORD, FALSE, FALSE);
-	    obj = oname(obj, artiname(ART_STORMBRINGER));
-	    at_your_feet(An(swordbuf));
-	    obj->spe = 1;
-	    dropy(obj);
-	    u.ugifts++;
-	}
-	/* acquire Stormbringer's skill regardless of weapon or gift */
-	unrestrict_weapon_skill(P_BROAD_SWORD);
-	if (obj && obj->oartifact == ART_STORMBRINGER)
-	    discover_artifact(ART_STORMBRINGER);
-	break;
-      }
-    default:
-	obj = 0;	/* lint */
-	break;
-    }
+			Sprintf(swordbuf, "%s sword", hcolor(NH_BLACK));
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above */
+			} else if (in_hand) {
+				Your("%s hums ominously!", swordbuf);
+				obj->dknown = TRUE;
+			} else if (!already_exists) {
+				obj = mksobj(RUNESWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_STORMBRINGER));
+				at_your_feet(An(swordbuf));
+				obj->spe = 1;
+				dropy(obj);
+				u.ugifts++;
+			}
+			/* acquire Stormbringer's skill regardless of weapon or gift */
+			unrestrict_weapon_skill(P_BROAD_SWORD);
+			if (obj && obj->oartifact == ART_STORMBRINGER)
+				discover_artifact(ART_STORMBRINGER);
+			break;
+			  }
+			default:
+			obj = 0;	/* lint */
+			break;
+		}
 	}
 
     /* enhance weapon regardless of alignment or artifact status */
@@ -1126,7 +1355,13 @@ pleased(g_align)
 	    u.uhp = u.uhpmax;
 	    if (Upolyd) u.mh = u.mhmax;
 	    ABASE(A_STR) = AMAX(A_STR);
-	    if (YouHunger < 900) init_uhunger();
+		if(Race_if(PM_INCANTIFIER)){
+			if (u.uen < u.uenmax*.45) u.uen = u.uenmax*.45;
+			u.uhs = NOT_HUNGRY;
+		} else {
+			if (u.uhunger < u.uhungermax*.45) u.uhunger = u.uhungermax*.45;
+			u.uhs = NOT_HUNGRY;
+		}
 	    if (u.uluck < 0) u.uluck = 0;
 	    make_blinded(0L,TRUE);
 	    flags.botl = 1;
@@ -1273,10 +1508,10 @@ godvoice(g_align, words)
 	quot = "\"";
     else
 	words = "";
-
+	
 	if(g_align != A_VOID){
-    pline_The("voice of %s %s: %s%s%s", align_gname(g_align),
-	  godvoices[rn2(SIZE(godvoices))], quot, words, quot);
+		pline_The("voice of %s %s: %s%s%s", align_gname(g_align),
+		  godvoices[rn2(SIZE(godvoices))], quot, words, quot);
 	} else {
 		You("think you hear a voice in the distance: %s%s%s", quot, words, quot);
 	}
@@ -1295,8 +1530,11 @@ gods_upset(g_align)
 	aligntyp g_align;
 {
 	if(Role_if(PM_EXILE)) return;
-	if(g_align == u.ualign.type) u.ugangr++;
-	else if(u.ugangr) u.ugangr--;
+	if(g_align == u.ualign.type) u.ugangr[Align2gangr(u.ualign.type)]++;
+	else if(u.ugangr[Align2gangr(u.ualign.type)]){
+		u.ugangr[Align2gangr(u.ualign.type)]--;
+		u.ugangr[Align2gangr(g_align)]++;
+	}
 	angrygods(g_align);
 }
 
@@ -1432,193 +1670,197 @@ dosacrifice()
 #define MAXVALUE 24 /* Highest corpse value (besides Wiz) */
 
     if (otmp->otyp == CORPSE) {
-	register struct permonst *ptr = &mons[otmp->corpsenm];
-	struct monst *mtmp;
-	extern const int monstr[];
+		register struct permonst *ptr = &mons[otmp->corpsenm];
+		struct monst *mtmp;
+		extern const int monstr[];
 
-	/* KMH, conduct */
-	u.uconduct.gnostic++;
+		/* KMH, conduct */
+		u.uconduct.gnostic++;
 
-	/* you're handling this corpse, even if it was killed upon the altar */
-	feel_cockatrice(otmp, TRUE);
+		/* you're handling this corpse, even if it was killed upon the altar */
+		feel_cockatrice(otmp, TRUE);
 
-	if (otmp->corpsenm == PM_ACID_BLOB
-		|| (monstermoves <= peek_at_iced_corpse_age(otmp) + 50)) {
-	    value = monstr[otmp->corpsenm] + 1;
-	    if (otmp->oeaten)
-		value = eaten_stat(value, otmp);
-	}
-
-	if (your_race(ptr)) {
-	    if (is_demon(youmonst.data)) {
-		You("find the idea very satisfying.");
-		exercise(A_WIS, TRUE);
-	    } else if (u.ualign.type != A_CHAOTIC) {
-		    pline("You'll regret this infamous offense!");
-		    exercise(A_WIS, FALSE);
-	    }
-
-	    if (altaralign != A_CHAOTIC && altaralign != A_NONE) {
-		/* curse the lawful/neutral altar */
-		pline_The("altar is stained with %s blood.", urace.adj);
-		if(!Is_astralevel(&u.uz))
-		    levl[u.ux][u.uy].altarmask = AM_CHAOTIC;
-		angry_priest();
-	    } else {
-		struct monst *dmon;
-		const char *demonless_msg;
-
-		/* Human sacrifice on a chaotic or unaligned altar */
-		/* is equivalent to demon summoning */
-		if (altaralign == A_CHAOTIC && u.ualign.type != A_CHAOTIC) {
-		    pline(
-		     "The blood floods the altar, which vanishes in %s cloud!",
-			  an(hcolor(NH_BLACK)));
-		    levl[u.ux][u.uy].typ = ROOM;
-		    levl[u.ux][u.uy].altarmask = 0;
-		    newsym(u.ux, u.uy);
-		    angry_priest();
-		    demonless_msg = "cloud dissipates";
-		} else {
-		    /* either you're chaotic or altar is Moloch's or both */
-		    pline_The("blood covers the altar!");
-		    change_luck(altaralign == A_NONE ? -2 : 2);
-		    demonless_msg = "blood coagulates";
+		if ((otmp->corpsenm == PM_ACID_BLOB
+			|| (monstermoves <= peek_at_iced_corpse_age(otmp) + 50)
+			) && mons[otmp->corpsenm].mlet != S_PLANT
+		) {
+			value = monstr[otmp->corpsenm] + 1;
+			if (otmp->oeaten)
+			value = eaten_stat(value, otmp);
 		}
-		if ((pm = dlord(altaralign)) != NON_PM &&
-		    (dmon = makemon(&mons[pm], u.ux, u.uy, NO_MM_FLAGS))) {
-		    You("have summoned %s!", a_monnam(dmon));
-		    if (sgn(u.ualign.type) == sgn(dmon->data->maligntyp))
-			dmon->mpeaceful = TRUE;
-		    You("are terrified, and unable to move.");
-		    nomul(-3, "being terrified of a demon");
-		} else pline_The("%s.", demonless_msg);
-	    }
 
-	    if (u.ualign.type != A_CHAOTIC) {
-		adjalign(-5);
-		u.ugangr += 3;
-		(void) adjattrib(A_WIS, -1, TRUE);
-		if (!Inhell) angrygods(u.ualign.type);
-		change_luck(-5);
-	    } else adjalign(5);
-	    if (carried(otmp)) useup(otmp);
-	    else useupf(otmp, 1L);
-	    return(1);
-	} else if (otmp->oxlth && otmp->oattached == OATTACHED_MONST
-		    && ((mtmp = get_mtraits(otmp, FALSE)) != (struct monst *)0)
-		    && mtmp->mtame) {
-	    /* mtmp is a temporary pointer to a tame monster's attributes,
-	     * not a real monster */
-	    pline("So this is how you repay loyalty?");
-	    adjalign(-3);
-	    value = -1;
-	    HAggravate_monster |= FROMOUTSIDE;
-	} else if (is_undead(ptr)) { /* Not demons--no demon corpses */
-	    if (u.ualign.type != A_CHAOTIC)
-		value += 1;
-	} else if (is_unicorn(ptr)) {
-	    int unicalign = sgn(ptr->maligntyp);
+		if (your_race(ptr) && !Role_if(PM_EXILE)) {
+			if (is_demon(youmonst.data)) {
+			You("find the idea very satisfying.");
+			exercise(A_WIS, TRUE);
+			} else if (u.ualign.type != A_CHAOTIC) {
+				pline("You'll regret this infamous offense!");
+				exercise(A_WIS, FALSE);
+			}
 
-	    /* If same as altar, always a very bad action. */
-	    if (unicalign == altaralign) {
-		pline("Such an action is an insult to %s!",
-		      (unicalign == A_CHAOTIC)
-		      ? "chaos" : unicalign ? "law" : "balance");
-		(void) adjattrib(A_WIS, -1, TRUE);
-		value = -5;
-	    } else if (u.ualign.type == altaralign) {
-		/* If different from altar, and altar is same as yours, */
-		/* it's a very good action */
-		if (u.ualign.record < ALIGNLIM)
-		    You_feel("appropriately %s.", align_str(u.ualign.type));
-		else You_feel("you are thoroughly on the right path.");
-		adjalign(5);
-		value += 3;
-	    } else
-		/* If sacrificing unicorn of your alignment to altar not of */
-		/* your alignment, your god gets angry and it's a conversion */
-		if (unicalign == u.ualign.type) {
-		    u.ualign.record = -1;
-		    value = 1;
-		} else value += 3;
-	}
+			if (altaralign != A_CHAOTIC && altaralign != A_NONE) {
+			/* curse the lawful/neutral altar */
+			if(Race_if(PM_INCANTIFIER)) pline_The("altar is stained with human blood, the blood of your birth race.");
+			else pline_The("altar is stained with %s blood.", urace.adj);
+			if(!Is_astralevel(&u.uz))
+				levl[u.ux][u.uy].altarmask = AM_CHAOTIC;
+			angry_priest();
+			} else {
+			struct monst *dmon;
+			const char *demonless_msg;
+
+			/* Human sacrifice on a chaotic or unaligned altar */
+			/* is equivalent to demon summoning */
+			if (altaralign == A_CHAOTIC && u.ualign.type != A_CHAOTIC) {
+				pline(
+				 "The blood floods the altar, which vanishes in %s cloud!",
+				  an(hcolor(NH_BLACK)));
+				levl[u.ux][u.uy].typ = ROOM;
+				levl[u.ux][u.uy].altarmask = 0;
+				newsym(u.ux, u.uy);
+				angry_priest();
+				demonless_msg = "cloud dissipates";
+			} else {
+				/* either you're chaotic or altar is Moloch's or both */
+				pline_The("blood covers the altar!");
+				change_luck(altaralign == A_NONE ? -2 : 2);
+				demonless_msg = "blood coagulates";
+			}
+			if ((pm = dlord(altaralign)) != NON_PM &&
+				(dmon = makemon(&mons[pm], u.ux, u.uy, NO_MM_FLAGS))) {
+				You("have summoned %s!", a_monnam(dmon));
+				if (sgn(u.ualign.type) == sgn(dmon->data->maligntyp))
+				dmon->mpeaceful = TRUE;
+				You("are terrified, and unable to move.");
+				nomul(-3, "being terrified of a demon");
+			} else pline_The("%s.", demonless_msg);
+			}
+
+			if (u.ualign.type != A_CHAOTIC) {
+			adjalign(-5);
+			u.ugangr[Align2gangr(u.ualign.type)] += 3;
+			(void) adjattrib(A_WIS, -1, TRUE);
+			if (!Inhell) angrygods(u.ualign.type);
+			change_luck(-5);
+			} else adjalign(5);
+			if (carried(otmp)) useup(otmp);
+			else useupf(otmp, 1L);
+			return(1);
+		} else if (otmp->oxlth && otmp->oattached == OATTACHED_MONST
+				&& ((mtmp = get_mtraits(otmp, FALSE)) != (struct monst *)0)
+				&& mtmp->mtame) {
+			/* mtmp is a temporary pointer to a tame monster's attributes,
+			 * not a real monster */
+			pline("So this is how you repay loyalty?");
+			adjalign(-3);
+			value = -1;
+			HAggravate_monster |= FROMOUTSIDE;
+		} else if (is_undead(ptr)) { /* Not demons--no demon corpses */
+			if (u.ualign.type != A_CHAOTIC)
+			value += 1;
+		} else if (is_unicorn(ptr)) {
+			int unicalign = sgn(ptr->maligntyp);
+
+			/* If same as altar, always a very bad action. */
+			if (unicalign == altaralign) {
+			pline("Such an action is an insult to %s!",
+				  (unicalign == A_CHAOTIC)
+				  ? "chaos" : unicalign ? "law" : "balance");
+			(void) adjattrib(A_WIS, -1, TRUE);
+			value = -5;
+			} else if (u.ualign.type == altaralign) {
+			/* If different from altar, and altar is same as yours, */
+			/* it's a very good action */
+			if (u.ualign.record < ALIGNLIM)
+				You_feel("appropriately %s.", align_str(u.ualign.type));
+			else You_feel("you are thoroughly on the right path.");
+			adjalign(5);
+			value += 3;
+			} else
+			/* If sacrificing unicorn of your alignment to altar not of */
+			/* your alignment, your god gets angry and it's a conversion */
+			if (unicalign == u.ualign.type) {
+				u.ualign.record = -1;
+				value = 1;
+			} else value += 3;
+		}
     } /* corpse */
 
     if (otmp->otyp == AMULET_OF_YENDOR) {
-	if (!Is_astralevel(&u.uz)) {
-	    if (Hallucination)
-		    You_feel("homesick.");
-	    else
-		    You_feel("an urge to return to the surface.");
-	    return 1;
-	} else {
-	    /* The final Test.	Did you win? */
-	    if(uamul == otmp) Amulet_off();
-	    u.uevent.ascended = 1;
-	    if(carried(otmp)) useup(otmp); /* well, it's gone now */
-	    else useupf(otmp, 1L);
-	    You("offer the Amulet of Yendor to %s...", a_gname());
-		if(!Role_if(PM_EXILE)){
-	    if (u.ualign.type != altaralign) {
-		/* And the opposing team picks you up and
-		   carries you off on their shoulders */
-		adjalign(-99);
-		pline("%s accepts your gift, and gains dominion over %s...",
-		      a_gname(), u_gname());
-		pline("%s is enraged...", u_gname());
-		pline("Fortunately, %s permits you to live...", a_gname());
-		pline("A cloud of %s smoke surrounds you...",
-		      hcolor((const char *)"orange"));
-		done(ESCAPED);
-	    } else { /* super big win */
-		adjalign(10);
-#ifdef RECORD_ACHIEVE
-		achieve.ascended = 1;
-#endif
-pline("An invisible choir sings, and you are bathed in radiance...");
-		godvoice(altaralign, "Congratulations, mortal!");
-		display_nhwindow(WIN_MESSAGE, FALSE);
-verbalize("In return for thy service, I grant thee the gift of Immortality!");
-		You("ascend to the status of Demigod%s...",
-		    flags.female ? "dess" : "");
-		done(ASCENDED);
-	    }
+		if (!Is_astralevel(&u.uz)) {
+			if (Hallucination)
+				You_feel("homesick.");
+			else
+				You_feel("an urge to return to the surface.");
+			return 1;
 		} else {
-	    if (altaralign == A_LAWFUL) {
-		/* And the opposing team picks you up and
-		   carries you off on their shoulders */
-		adjalign(-99);
-		pline("%s accepts your gift, and regains complete control over his creation.", a_gname());
-		pline("In that instant, you loose all your powers as %s shuts the Gate.", a_gname());
-		pline("Fortunately, %s permits you to live...", a_gname());
-		pline("Occasionally, you may even be able to remeber that you have forgoten something.");
-		pline("A cloud of %s smoke surrounds you...",
-		      hcolor((const char *)"orange"));
-		done(ESCAPED);
-	    } else if(altaralign == A_CHAOTIC) {
-		/* And the opposing team picks you up and
-		   carries you off on their shoulders */
-		adjalign(-99);
-		pline("%s accepts your gift, and gains complete control over creation.", a_gname());
-		pline("In the next instant, she destroys it.", a_gname());
-		pline("You are functionally dead, your soul shorn from its earthly husk...");
-		pline("...as well as everything that made you YOU.");
-		killer_format = KILLED_BY;
-		killer = "the end of the world."; //8-bit theater
-		done(DISINTEGRATED);
-	    } else { /* super big win */
-		adjalign(10);
+			/* The final Test.	Did you win? */
+			if(uamul == otmp) Amulet_off();
+			u.uevent.ascended = 1;
+			if(carried(otmp)) useup(otmp); /* well, it's gone now */
+			else useupf(otmp, 1L);
+			You("offer the Amulet of Yendor to %s...", a_gname());
+			if(!Role_if(PM_EXILE)){
+				if (u.ualign.type != altaralign) {
+					/* And the opposing team picks you up and
+					   carries you off on their shoulders */
+					adjalign(-99);
+					pline("%s accepts your gift, and gains dominion over %s...",
+						  a_gname(), u_gname());
+					pline("%s is enraged...", u_gname());
+					pline("Fortunately, %s permits you to live...", a_gname());
+					pline("A cloud of %s smoke surrounds you...",
+						  hcolor((const char *)"orange"));
+					done(ESCAPED);
+				} else { /* super big win */
+					adjalign(10);
 #ifdef RECORD_ACHIEVE
-		achieve.ascended = 1;
+					achieve.ascended = 1;
 #endif
-		pline("From the threshold of the Gate, you look back at the world");
-		pline("You don't know what awaits you in the Void,");
-		pline("But you think that you can handle it.");
-		done(ASCENDED);
-	    }
+					pline("An invisible choir sings, and you are bathed in radiance...");
+					godvoice(altaralign, "Congratulations, mortal!");
+					display_nhwindow(WIN_MESSAGE, FALSE);
+					verbalize("In return for thy service, I grant thee the gift of Immortality!");
+					You("ascend to the status of Demigod%s...",
+						flags.female ? "dess" : "");
+					done(ASCENDED);
+				}
+			} else {
+				if (altaralign == A_LAWFUL) {
+					/* And the opposing team picks you up and
+					carries you off on their shoulders */
+					adjalign(-99);
+					pline("%s accepts your gift, and regains complete control over his creation.", a_gname());
+					pline("In that instant, you loose all your powers as %s shuts the Gate.", a_gname());
+					pline("Fortunately, %s permits you to live...", a_gname());
+					pline("Occasionally, you may even be able to remeber that you have forgoten something.");
+					pline("A cloud of %s smoke surrounds you...",
+						hcolor((const char *)"orange"));
+					done(ESCAPED);
+				} else if(altaralign == A_CHAOTIC) {
+					/* And the opposing team picks you up and
+					carries you off on their shoulders */
+					adjalign(-99);
+					pline("%s accepts your gift, and gains complete control over creation.", a_gname());
+					pline("In the next instant, she destroys it.", a_gname());
+					pline("You are functionally dead, your soul shorn from its earthly husk...");
+					pline("...as well as everything that made you YOU.");
+					killer_format = KILLED_BY;
+					killer = "the end of the world."; //8-bit theater
+					done(DISINTEGRATED);
+				} else { /* super big win */
+					adjalign(10);
+#ifdef RECORD_ACHIEVE
+					achieve.ascended = 1;
+#endif
+					pline("From the threshold of the Gate, you look back at the world");
+					pline("You don't know what awaits you in the Void,");
+					pline("but whatever happens, they way shall remain open behind you,");
+					pline("that others may make their own choice.");
+					done(ASCENDED);
+				}
+			}
 		}
-	}
     } /* real Amulet */
 
     if (otmp->otyp == FAKE_AMULET_OF_YENDOR) {
@@ -1634,9 +1876,9 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		/* don't you dare try to fool the gods */
 		change_luck(-3);
 		if(!Role_if(PM_EXILE)){
-		adjalign(-1);
-		u.ugangr += 3;
-		value = -3;
+			adjalign(-1);
+			u.ugangr[Align2gangr(u.ualign.type)] += 3;
+			value = -3;
 			u.lastprayresult = PRAY_ANGER;
 			u.lastprayed = moves;
 			u.reconciled = REC_NONE;
@@ -1663,7 +1905,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
     } else if (value < 0) { /* I don't think the gods are gonna like this... */
 	gods_upset(altaralign);
     } else {
-	int saved_anger = u.ugangr;
+	int saved_anger = u.ugangr[Align2gangr(u.ualign.type)];
 	int saved_cnt = u.ublesscnt;
 	int saved_luck = u.uluck;
 
@@ -1680,7 +1922,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 				angrygods(altaralign);
 				return 1;
 			} 
-		    consume_offering(otmp);
+			consume_offering(otmp);
 		    pline("%s accepts your allegiance.", a_gname());
 
 		    /* The player wears a helm of opposite alignment? */
@@ -1700,7 +1942,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    u.lastprayresult = PRAY_CONV;
 		    adjalign((int)(u.ualignbase[A_ORIGINAL] * (ALIGNLIM / 2)));
 		} else {
-		    u.ugangr += 3;
+		    u.ugangr[Align2gangr(u.ualign.type)] += 3;
 		    adjalign(-5);
 		    u.lastprayed = moves;
 		    u.lastprayresult = PRAY_ANGER;
@@ -1720,7 +1962,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		}
 		consume_offering(otmp);
 		You("sense a conflict between %s and %s.",
-		    u_gname(), a_gname());
+			u_gname(), a_gname());
 		if (rn2(8 + u.ulevel) > 5) {
 		    struct monst *pri;
 		    You_feel("the power of %s increase.", u_gname());
@@ -1784,16 +2026,16 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		pline("A pulse of darkness radiates from your sacrifice!");
 		angrygods(altaralign);
 		return 1;
-	} 
+	}
 	consume_offering(otmp);
 	/*if(altaralign == A_UNKNOWN) return(1);*/
 	/* OK, you get brownie points. */
-	if(u.ugangr) {
-	    u.ugangr -=
+	if(u.ugangr[Align2gangr(u.ualign.type)]) {
+	    u.ugangr[Align2gangr(u.ualign.type)] -=
 		((value * (u.ualign.type == A_CHAOTIC ? 2 : 3)) / MAXVALUE);
-	    if(u.ugangr < 0) u.ugangr = 0;
-	    if(u.ugangr != saved_anger) {
-		if (u.ugangr) {
+	    if(u.ugangr[Align2gangr(u.ualign.type)] < 0) u.ugangr[Align2gangr(u.ualign.type)] = 0;
+	    if(u.ugangr[Align2gangr(u.ualign.type)] != saved_anger) {
+		if (u.ugangr[Align2gangr(u.ualign.type)]) {
 		    pline("%s seems %s.", u_gname(),
 			  Hallucination ? "groovy" : "slightly mollified");
 
@@ -1927,7 +2169,7 @@ boolean praying;	/* false means no messages should be given */
 	alignment = u.ualign.record / 2;	/* Different alignment altar */
     else alignment = u.ualign.record;
 
-    if ((int)Luck < 0 || u.ugangr || alignment < 0)
+    if ((int)Luck < 0 || u.ugangr[Align2gangr(u.ualign.type)] || alignment < 0)
         p_type = 0;             /* too naughty... */
     else if ((p_trouble > 0) ? (u.ublesscnt > 200) : /* big trouble */
 	(p_trouble < 0) ? (u.ublesscnt > 100) : /* minor difficulties */
@@ -1968,7 +2210,7 @@ dopray()
 
     /* set up p_type and p_alignment */
     if (!can_pray(TRUE)) return 0;
-
+	
 	u.lastprayed = moves;
 	u.reconciled = REC_NONE;
 #ifdef WIZARD
@@ -1977,7 +2219,7 @@ dopray()
 	    u.ublesscnt = 0;
 	    if (u.uluck < 0) u.uluck = 0;
 	    if (u.ualign.record <= 0) u.ualign.record = 1;
-	    u.ugangr = 0;
+	    u.ugangr[Align2gangr(u.ualign.type)] = 0;
 	    if(p_type < 2) p_type = 3;
 	}
     }
@@ -2004,16 +2246,16 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
     u.uinvulnerable = FALSE;
 	u.lastprayresult = PRAY_GOOD;
     if(p_type == -1) {
-	godvoice(alignment,
-		 alignment == A_LAWFUL ?
-		 "Vile creature, thou durst call upon me?" :
-		 "Walk no more, perversion of nature!");
-	You_feel("like you are falling apart.");
+		godvoice(alignment,
+			 alignment == A_LAWFUL ?
+			 "Vile creature, thou durst call upon me?" :
+			 "Walk no more, perversion of nature!");
+		You_feel("like you are falling apart.");
 	/* KMH -- Gods have mastery over unchanging */
 	if (!Race_if(PM_VAMPIRE)) {
 		u.lastprayresult = PRAY_GOOD;
-	rehumanize();
-	losehp(rnd(20), "residual undead turning effect", KILLED_BY_AN);
+		rehumanize();
+		losehp(rnd(20), "residual undead turning effect", KILLED_BY_AN);
 	} else {
 		u.lastprayresult = PRAY_BAD;
 	   /* Starting vampires are inherently vampiric */
@@ -2032,7 +2274,7 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
 	}
 	return(1);
     }
-    if (Inhell && u.ualign.type != A_VOID) {
+    if (Inhell && u.ualign.type != A_VOID && !(Race_if(PM_DROW) && alignment == A_CHAOTIC)) {
 	pline("Since you are in Gehennom, %s won't help you.",
 	      align_gname(alignment));
 	/* haltingly aligned is least likely to anger */
@@ -2076,7 +2318,7 @@ doturn()
 	int once, range, xlev;
 	short fast = 0;
 
-	if (!Role_if(PM_PRIEST) && !Role_if(PM_KNIGHT) && !Race_if(PM_VAMPIRE)) {
+	if (!Role_if(PM_PRIEST) && !Role_if(PM_KNIGHT) && !Race_if(PM_VAMPIRE) && !(Role_if(PM_NOBLEMAN) && Race_if(PM_ELF))){
 		/* Try to use turn undead spell. */
 		if (objects[SPE_TURN_UNDEAD].oc_name_known) {
 		    register int sp_no;
@@ -2097,10 +2339,10 @@ doturn()
 	if(!Race_if(PM_VAMPIRE) && u.uen >= 30 && yn("Use abbreviated liturgy?") == 'y'){
 		fast = 1;
 	}
-
+	
 	if ((u.ualign.type != A_CHAOTIC && !Race_if(PM_VAMPIRE) &&
 		    (is_demon(youmonst.data) || is_undead(youmonst.data))) ||
-				u.ugangr > 6 /* "Die, mortal!" */) {
+				u.ugangr[Align2gangr(u.ualign.type)] > 6 /* "Die, mortal!" */) {
 
 		pline("For some reason, %s seems to ignore you.", u_gname());
 		aggravate();
@@ -2155,7 +2397,7 @@ doturn()
 			case S_ZOMBIE:
 			    if (u.ulevel >= xlev &&
 				    !resist(mtmp, '\0', 0, NOTELL)) {
-				if (u.ualign.type == A_CHAOTIC) {
+				if (u.ualign.type == A_CHAOTIC || Race_if(PM_VAMPIRE)){
 				    mtmp->mpeaceful = 1;
 				    set_malign(mtmp);
 					if(PM_VAMPIRE) tamedog(mtmp, (struct obj *)0);
@@ -2299,6 +2541,7 @@ const char * const hallu_gods[] = {
 	"Khor the ranger",
 	"ChrisANG the fourth demigod",
 	"ChrisANG the binder",
+	"FIQ the fifth demigod",
 	
 	"Dudley",
 	"the RNG"
@@ -2322,7 +2565,7 @@ aligntyp alignment;
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
 			else gnam = BlackMother;
 		}
-		else gnam = Moloch; 
+		else gnam = Moloch;
 	 break;
      case A_LAWFUL:
 		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
