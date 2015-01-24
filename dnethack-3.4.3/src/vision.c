@@ -504,16 +504,16 @@ vision_recalc(control)
     int start, stop;	/* inner loop starting/stopping index */
     int dx, dy;		/* one step from a lit door or lit wall (see below) */
     register int col;	/* inner loop counter */
-    register struct rm *lev;	/* pointer to current pos */
+    register struct rm *lev, *ulev;	/* pointer to current pos and your position */
     struct rm *flev;	/* pointer to position in "front" of current pos */
     extern unsigned char seenv_matrix[3][3];	/* from display.c */
     static unsigned char colbump[COLNO+1];	/* cols to bump sv */
     unsigned char *sv;				/* ptr to seen angle bits */
     int oldseenv;				/* previous seenv value */
     int oldxray;				/* previous xray range value */
-	struct monst *mon, *nmon;
+	struct monst *mon, *nmon, *mat;
 	
-
+	
     vision_full_recalc = 0;			/* reset flag */
     if (in_mklev || !iflags.vision_inited) return;
 
@@ -543,15 +543,19 @@ vision_recalc(control)
 	 *	  level.
 	 *
 	 *	+ Monsters can see you even when you're in a pit.
+	 *
+	 *	Also do light sources
 	 */
 	view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
 		0, (void FDECL((*),(int,int,genericptr_t)))0, (genericptr_t)0);
 
+    do_light_sources(next_array);
 	/*
 	 * Our own version of the update loop below.  We know we can't see
 	 * anything, so we only need update positions we used to be able
 	 * to see.
 	 */
+	
 	temp_array = viz_array;	/* set viz_array so newsym() will work */
 	viz_array = next_array;
 
@@ -575,7 +579,7 @@ vision_recalc(control)
     }
 #endif
     else {
-	int has_night_vision = 1;	/* hero has night vision */
+	int has_night_vision = u.nv_range;	/* hero has night vision */
 
 	if (Underwater && !Is_waterlevel(&u.uz)) {
 	    /*
@@ -610,7 +614,7 @@ vision_recalc(control)
 	} else
 	    view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
 		0, (void FDECL((*),(int,int,genericptr_t)))0, (genericptr_t)0);
-
+	
 	
 	/*
 	 * Set the IN_SIGHT bit for xray and night vision.
@@ -646,19 +650,19 @@ vision_recalc(control)
 		}
 
 	    } else {	/* range is 0 */
-		next_array[u.uy][u.ux] |= IN_SIGHT;
-		levl[u.ux][u.uy].seenv = SVALL;
-		next_rmin[u.uy] = min(u.ux, next_rmin[u.uy]);
-		next_rmax[u.uy] = max(u.ux, next_rmax[u.uy]);
-	    }
+			next_array[u.uy][u.ux] |= IN_SIGHT;
+			levl[u.ux][u.uy].seenv = SVALL;
+			next_rmin[u.uy] = min(u.ux, next_rmin[u.uy]);
+			next_rmax[u.uy] = max(u.ux, next_rmax[u.uy]);
+		}
 	}
-
+	
 	if (has_night_vision && u.xray_range < u.nv_range) {
 	    if (!u.nv_range) {	/* range is 0 */
-		next_array[u.uy][u.ux] |= IN_SIGHT;
-		levl[u.ux][u.uy].seenv = SVALL;
-		next_rmin[u.uy] = min(u.ux, next_rmin[u.uy]);
-		next_rmax[u.uy] = max(u.ux, next_rmax[u.uy]);
+			next_array[u.uy][u.ux] |= IN_SIGHT;
+			levl[u.ux][u.uy].seenv = SVALL;
+			next_rmin[u.uy] = min(u.ux, next_rmin[u.uy]);
+			next_rmax[u.uy] = max(u.ux, next_rmax[u.uy]);
 	    } else if (u.nv_range > 0) {
 		ranges = circle_ptr(u.nv_range);
 
@@ -716,6 +720,7 @@ vision_recalc(control)
 	start = min(viz_rmin[row], next_rmin[row]);
 	stop  = max(viz_rmax[row], next_rmax[row]);
 	lev = &levl[start][row];
+	ulev= &levl[u.ux][u.uy];
 
 	sv = &seenv_matrix[dy+1][start < u.ux ? 0 : (start > u.ux ? 2:1)];
 
@@ -733,12 +738,18 @@ vision_recalc(control)
 		    newsym(col,row);
 	    }
 
-	    else if ((next_row[col] & COULD_SEE)
-				&& (lev->lit || (next_row[col] & TEMP_LIT) || u.sealsActive&SEAL_AMON)) {
+	    else if ((!Race_if(PM_DROW) && (next_row[col] & COULD_SEE)
+				&& (lev->lit || (next_row[col] & TEMP_LIT) || u.sealsActive&SEAL_AMON)) ||
+				 ( Race_if(PM_DROW) && (next_row[col] & COULD_SEE)
+				&& (!(ulev->lit|| (next_array[u.uy][u.ux] & TEMP_LIT)) || u.sealsActive&SEAL_AMON)
+				&& (!(lev->lit || (next_row[col] & TEMP_LIT)) || 
+					(lev->typ < CORR && !((mat = m_at(col,row)) && emits_light(mat->data))) || 
+					u.sealsActive&SEAL_AMON))
+		) {
 		/*
 		 * We see this position because it is lit.
 		 */
-		if ((IS_DOOR(lev->typ) || lev->typ == SDOOR ||
+		if ((/*IS_DOOR(lev->typ) || lev->typ == SDOOR || */ /*allow doors to be seen due to light through the cracks -ChrisANG*/
 		     IS_WALL(lev->typ)) && !viz_clear[row][col]) {
 		    /*
 		     * Make sure doors, walls, boulders or mimics don't show up
@@ -748,18 +759,19 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if (flev->lit || next_array[row+dy][col+dx] & TEMP_LIT || u.sealsActive&SEAL_AMON) {
-			next_row[col] |= IN_SIGHT;	/* we see it */
+		    if ((!Race_if(PM_DROW) &&  (flev->lit || next_array[row+dy][col+dx] & TEMP_LIT))
+			   ||(Race_if(PM_DROW) && !((mat = m_at(col,row)) && emits_light(mat->data)))
+			   || u.sealsActive&SEAL_AMON
+			){
+				next_row[col] |= IN_SIGHT;	/* we see it */
 
-			oldseenv = lev->seenv;
-			lev->seenv |= new_angle(lev,sv,row,col);
+				oldseenv = lev->seenv;
+				lev->seenv |= new_angle(lev,sv,row,col);
 
-			/* Update pos if previously not in sight or new angle.*/
-			if (!(old_row[col] & IN_SIGHT) || oldseenv!=lev->seenv)
-			    newsym(col,row);
-		    } else
-			goto not_in_sight;	/* we don't see it */
-
+				/* Update pos if previously not in sight or new angle.*/
+				if (!(old_row[col] & IN_SIGHT) || oldseenv!=lev->seenv)
+					newsym(col,row);
+		    } else goto not_in_sight;	/* we don't see it */
 		} else {
 		    next_row[col] |= IN_SIGHT;	/* we see it */
 
@@ -798,8 +810,9 @@ vision_recalc(control)
 not_in_sight:
 		if ((old_row[col] & IN_SIGHT)
 			|| ((next_row[col] & COULD_SEE)
-				^ (old_row[col] & COULD_SEE)))
-		    newsym(col,row);
+				^ (old_row[col] & COULD_SEE))
+			|| Race_if(PM_DROW)
+		) newsym(col,row);
 	    }
 
 	} /* end for col . . */
