@@ -7,6 +7,11 @@
 STATIC_DCL void FDECL(m_lose_armor, (struct monst *,struct obj *));
 STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P));
 
+const static int CHROMATIC_RES[] = {FIRE_RES, COLD_RES, DISINT_RES, SHOCK_RES, POISON_RES};
+const static int EREBOR_RES[] = {FIRE_RES, COLD_RES};
+const static int DURIN_RES[] = {FIRE_RES, ACID_RES, POISON_RES};
+const static int REV_PROPS[] = {COLD_RES, REGENERATION, FIXED_ABIL, POISON_RES, SEE_INVIS};
+
 const struct worn {
 	long w_mask;
 	struct obj **w_obj;
@@ -50,7 +55,7 @@ long mask;
 	register const struct worn *wp;
 	register struct obj *oobj;
 	register int p;
-
+	
 	/*Handle the pen of the void here*/
 	if(obj && obj->oartifact == ART_PEN_OF_THE_VOID){
 		if(obj->ovar1 && !Role_if(PM_EXILE)){
@@ -84,8 +89,15 @@ long mask;
 			/* leave as "x = x <op> y", here and below, for broken
 			 * compilers */
 			p = objects[oobj->otyp].oc_oprop;
-			u.uprops[p].extrinsic =
-					u.uprops[p].extrinsic & ~wp->w_mask;
+			if(oobj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
+				for(p = 0; p < 5; p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic & ~wp->w_mask;
+			} else if(oobj->oartifact == ART_WAR_MASK_OF_DURIN){
+				for(p = 0; p < 3; p++) u.uprops[DURIN_RES[p]].extrinsic = u.uprops[DURIN_RES[p]].extrinsic & ~wp->w_mask;
+			} else if(oobj->oartifact == ART_ARMOR_OF_EREBOR){
+				for(p = 0; p < 2; p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic & ~wp->w_mask;
+			} else if(oobj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
+				for(p = 0; p < 5; p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
+			} else u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
 			if ((p = w_blocks(oobj,mask)) != 0)
 			    u.uprops[p].blocked &= ~wp->w_mask;
 			if (oobj->oartifact)
@@ -104,8 +116,15 @@ long mask;
 			if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 					    mask != W_WEP) {
 			    p = objects[obj->otyp].oc_oprop;
-			    u.uprops[p].extrinsic =
-					u.uprops[p].extrinsic | wp->w_mask;
+				if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
+					for(p = 0; p < 5; p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
+					for(p = 0; p < 3; p++) u.uprops[DURIN_RES[p]].extrinsic = u.uprops[DURIN_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->oartifact == ART_ARMOR_OF_EREBOR){
+					for(p = 0; p < 2; p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
+					for(p = 0; p < 5; p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic | wp->w_mask;
+				} else u.uprops[p].extrinsic = u.uprops[p].extrinsic | wp->w_mask;
 			    if ((p = w_blocks(obj, mask)) != 0)
 				u.uprops[p].blocked |= wp->w_mask;
 			}
@@ -134,7 +153,15 @@ register struct obj *obj;
 	    if(obj == *(wp->w_obj)) {
 		*(wp->w_obj) = 0;
 		p = objects[obj->otyp].oc_oprop;
-		u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
+		if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
+			for(p = 0; p < 5; p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic & ~wp->w_mask;
+		} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
+			for(p = 0; p < 3; p++) u.uprops[DURIN_RES[p]].extrinsic = u.uprops[DURIN_RES[p]].extrinsic & ~wp->w_mask;
+		} else if(obj->oartifact == ART_ARMOR_OF_EREBOR){
+			for(p = 0; p < 2; p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic & ~wp->w_mask;
+		} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
+			for(p = 0; p < 5; p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
+		} else u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
 		obj->owornmask &= ~wp->w_mask;
 		if (obj->oartifact)
 		    set_artifact_intrinsic(obj, 0, wp->w_mask);
@@ -215,13 +242,13 @@ struct obj *obj;	/* item to make known if effect can be seen */
 	    if (is_weeping(mon->data)) {
 		pline("%s is suddenly changing positions %sfaster.", Monnam(mon), howmuch);
 	    } else {
-	    pline("%s is suddenly moving %sfaster.", Monnam(mon), howmuch);
+		pline("%s is suddenly moving %sfaster.", Monnam(mon), howmuch);
 	    }
 	else
 	    if (is_weeping(mon->data)) {
 		pline("%s is suddenly changing positions %sslower.", Monnam(mon), howmuch);
 	    } else {
-	    pline("%s seems to be moving %sslower.", Monnam(mon), howmuch);
+		pline("%s seems to be moving %sslower.", Monnam(mon), howmuch);
 	    }
 
 	/* might discover an object if we see the speed change happen, but
@@ -232,21 +259,14 @@ struct obj *obj;	/* item to make known if effect can be seen */
     }
 }
 
-/* armor put on or taken off; might be magical variety */
-void
-update_mon_intrinsics(mon, obj, on, silently)
+update_mon_intrinsic(mon, obj, which, on, silently)
 struct monst *mon;
 struct obj *obj;
+int which;
 boolean on, silently;
 {
-    int unseen;
     uchar mask;
     struct obj *otmp;
-    int which = (int) objects[obj->otyp].oc_oprop;
-
-    unseen = !canseemon(mon);
-    if (!which) goto maybe_blocks;
-
     if (on) {
 	switch (which) {
 	 case INVIS:
@@ -328,6 +348,30 @@ boolean on, silently;
 	    break;
 	}
     }
+}
+
+/* armor put on or taken off; might be magical variety */
+void
+update_mon_intrinsics(mon, obj, on, silently)
+struct monst *mon;
+struct obj *obj;
+boolean on, silently;
+{
+    int unseen;
+    int which = (int) objects[obj->otyp].oc_oprop;
+	
+    unseen = !canseemon(mon);
+    if (!which) goto maybe_blocks;
+	
+	if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
+		for(which = 0; which < 5; which++) update_mon_intrinsic(mon, obj, CHROMATIC_RES[which], on, silently);
+	} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
+		for(which = 0; which < 3; which++) update_mon_intrinsic(mon, obj, DURIN_RES[which], on, silently);
+	} else if(obj->oartifact == ART_ARMOR_OF_EREBOR){
+		for(which = 0; which < 2; which++) update_mon_intrinsic(mon, obj, EREBOR_RES[which], on, silently);
+	} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
+		for(which = 0; which < 5; which++) update_mon_intrinsic(mon, obj, REV_PROPS[which], on, silently);
+	} else update_mon_intrinsic(mon, obj, which, on, silently);
 
  maybe_blocks:
     /* obj->owornmask has been cleared by this point, so we can't use it.
@@ -352,7 +396,8 @@ boolean on, silently;
 	newsym(mon->mx, mon->my);
 }
 
-int base_mac(mon)
+int 
+base_mac(mon)
 struct monst *mon;
 {
 	int base = mon->data->ac, armac = 0;
@@ -382,7 +427,7 @@ struct monst *mon;
 	struct obj *obj;
 	int base = mon->data->ac, armac = 0;
 	long mwflags = mon->misc_worn_check;
-
+	
 	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
 	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
@@ -884,7 +929,7 @@ long timeout;
  	xchar x = 0, y = 0;
 	boolean on_floor = obj->where == OBJ_FLOOR,
 		in_invent = obj->where == OBJ_INVENT;
-
+	
 	if(obj->shopOwned){
 		start_timer(1, TIMER_OBJECT,
 					LIGHT_DAMAGE, (genericptr_t)obj);
@@ -896,7 +941,7 @@ long timeout;
 	    x = obj->ox;
 	    y = obj->oy;
 		if(levl[x][y].lit == 0 && !(viz_array[y][x]&TEMP_LIT)){
-			if(obj->oeroded && obj->oerodeproof && !rn2(20)) obj->oeroded--;
+			if(obj->oeroded && obj->oerodeproof) obj->oeroded--;
 			start_timer(1, TIMER_OBJECT,
 						LIGHT_DAMAGE, (genericptr_t)obj);
 			return;
@@ -907,9 +952,13 @@ long timeout;
 						LIGHT_DAMAGE, (genericptr_t)obj);
 			return;
 		}else{
-			// useup(obj);
-			obj_extract_self(obj);
-			obfree(obj, (struct obj *)0);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+			} else {
+				obj_extract_self(obj);
+				obfree(obj, (struct obj *)0);
+			}
 		}
 	} else if (in_invent) {
 //		pline("object in invent");
@@ -921,9 +970,9 @@ long timeout;
 				objects[uarmc->otyp].a_can - uarmc->ovar1 :
 				objects[uarmc->otyp].a_can;
 		}
-		if((levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_LIT)) == 0 || ((rn2(3) < armpro) && rn2(50))){
+		if((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT)) || ((rn2(3) < armpro) && rn2(50))){
 			if(obj->oeroded && obj->oerodeproof && 
-				!rn2(20) && levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT)) obj->oeroded--;
+				levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT)) obj->oeroded--;
 			start_timer(1, TIMER_OBJECT,
 						LIGHT_DAMAGE, (genericptr_t)obj);
 			return;
@@ -939,33 +988,66 @@ long timeout;
 		}
 	    if (flags.verbose && !isarmor) {
 			char *name = obj->otyp == CORPSE ? corpse_xname(obj, FALSE) : xname(obj);
-			Your("%s%s %s away%c",
-				 obj == uwep ? "wielded " : nul, name,
-				 otense(obj, "evaporate"), obj == uwep ? '!' : '.');
+			Your("%s%s%s %s away%c",
+				 obj == uwep ? "wielded " : nul, name, obj->otyp == NOBLE_S_DRESS ? "'s armored plates" : "",
+				 obj->otyp == NOBLE_S_DRESS ? "evaporate" : otense(obj, "evaporate"), obj == uwep ? '!' : '.');
 	    }
 	    if (obj == uwep) {
 			uwepgone();	/* now bare handed */
 			stop_occupation();
 			if(flags.run) nomul(0, NULL);
-			useupall(obj);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+			} else {
+				useupall(obj);
+			}
 	    } else if (obj == uswapwep) {
 			uswapwepgone();
 			stop_occupation();
 			if(flags.run) nomul(0, NULL);
-			useupall(obj);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+			} else {
+				useupall(obj);
+				obj->oeroded = 0;
+			}
 	    } else if (obj == uquiver) {
 			uqwepgone();
 			stop_occupation();
 			if(flags.run) nomul(0, NULL);
-			useupall(obj);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+			} else {
+				useupall(obj);
+			}
 	    } else if (isarmor) {
 			stop_occupation();
 			if(flags.run) nomul(0, NULL);
-			destroy_arm(obj);
+			if(obj->otyp == NOBLE_S_DRESS){
+				pline("The armored plates on your dress turn to dust and blow away.");
+				remove_worn_item(obj, TRUE);
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+				if(!uarmu){
+					setworn(obj, W_ARMU);
+					Shirt_on();
+				} else {
+					setworn(obj, W_ARM);
+					Armor_on();
+				}
+			} else destroy_arm(obj);
 	    } else{
 			stop_occupation();
 			if(flags.run) nomul(0, NULL);
-			useupall(obj);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+			} else {
+				useupall(obj);
+			}
 		}
 	} else if (obj->where == OBJ_MINVENT && obj->owornmask) {
 		struct obj *armor = which_armor(obj->ocarry, W_ARMC);
@@ -980,7 +1062,7 @@ long timeout;
 		if((levl[obj->ocarry->mx][obj->ocarry->my].lit == 0 && !(viz_array[obj->ocarry->my][obj->ocarry->mx]&TEMP_LIT))
 			 || ((rn2(3) < armpro) && rn2(50))){
 			if(obj->oeroded && obj->oerodeproof 
-				&& !rn2(20) && levl[obj->ocarry->mx][obj->ocarry->my].lit == 0 && !(viz_array[obj->ocarry->my][obj->ocarry->mx]&TEMP_LIT)) 
+				&& levl[obj->ocarry->mx][obj->ocarry->my].lit == 0 && !(viz_array[obj->ocarry->my][obj->ocarry->mx]&TEMP_LIT)) 
 					obj->oeroded--;
 			start_timer(1, TIMER_OBJECT,
 						LIGHT_DAMAGE, (genericptr_t)obj);
@@ -995,27 +1077,43 @@ long timeout;
 	    if (obj == MON_WEP(obj->ocarry)) {
 			setmnotwielded(obj->ocarry,obj);
 			MON_NOWEP(obj->ocarry);
-			m_useup(obj->ocarry, obj);
-			//useup(obj);
-			// obj_extract_self(obj);
-			// obfree(obj, (struct obj *)0);
-	    }
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+				place_object(obj, mtmp->mx, mtmp->my);
+				/* call stackobj() if we ever drop anything that can merge */
+				newsym(mtmp->mx, mtmp->my);
+			} else {
+				m_useup(obj->ocarry, obj);
+			}
+		}
 		else if((unwornmask = obj->owornmask) != 0L){
 			mtmp = obj->ocarry;
 			obj_extract_self(obj);
 			mtmp->misc_worn_check &= ~unwornmask;
 			obj->owornmask = 0L;
 			update_mon_intrinsics(mtmp, obj, FALSE, FALSE);
-			m_useup(obj->ocarry, obj);
-			// useup(obj);
-			// obj_extract_self(obj);
-			// obfree(obj, (struct obj *)0);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+				place_object(obj, mtmp->mx, mtmp->my);
+				/* call stackobj() if we ever drop anything that can merge */
+				newsym(mtmp->mx, mtmp->my);
+			} else {
+				m_useup(obj->ocarry, obj);
+			}
 		}
 		else{
 			obj_extract_self(obj);
-			m_useup(obj->ocarry, obj);
-			// useup(obj);
-			// obfree(obj, (struct obj *)0);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+				place_object(obj, mtmp->mx, mtmp->my);
+				/* call stackobj() if we ever drop anything that can merge */
+				newsym(mtmp->mx, mtmp->my);
+			} else {
+				m_useup(obj->ocarry, obj);
+			}
 		}
 	}
 	if (on_floor) newsym(x, y);
