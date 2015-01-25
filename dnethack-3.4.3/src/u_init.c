@@ -130,12 +130,28 @@ static struct trobj Monk[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Noble[] = {
-#define NOB_SHIRT	1
 	{ RAPIER, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define NOB_SHIRT	1
 	{ RUFFLED_SHIRT, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
+	{ APPLE, 0, FOOD_CLASS, 10, 0 },
+	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj DNoble[] = {
+	{ BULLWHIP, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
+//define NOB_SHIRT	1
+	{ VICTORIAN_UNDERWEAR, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ BOW, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
+	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
+#define DNB_TWO_ARROWS	6
+	{ ARROW, 2, WEAPON_CLASS, 50, UNDEF_BLESS },
+#define DNB_ZERO_ARROWS	7
+	{ ARROW, 0, WEAPON_CLASS, 30, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 10, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -623,9 +639,9 @@ static const struct def_skill Skill_ENob[] = {
 };
 
 static const struct def_skill Skill_DNob[] = {
-    { P_DAGGER, P_BASIC },		{ P_KNIFE, P_EXPERT },
-    { P_AXE, P_EXPERT },
-    { P_SHORT_SWORD, P_SKILLED },	{ P_LONG_SWORD, P_SKILLED },
+    { P_DAGGER, P_SKILLED },		{ P_KNIFE, P_BASIC },
+    { P_WHIP, P_EXPERT },
+    { P_SHORT_SWORD, P_EXPERT },	{ P_LONG_SWORD, P_SKILLED },
     { P_TWO_HANDED_SWORD, P_EXPERT },
     { P_SCIMITAR, P_SKILLED },		{ P_SABER, P_BASIC },
     { P_CLUB, P_BASIC },		{ P_MACE, P_BASIC },
@@ -1316,7 +1332,11 @@ u_init()
 			Noble[NOB_SHIRT].trotyp = VICTORIAN_UNDERWEAR;
 		}
 		if(Race_if(PM_DWARF)) ini_inv(DwarfNoble);
-		else ini_inv(Noble);
+		else if(Race_if(PM_DROW) && flags.female){
+			DNoble[DNB_TWO_ARROWS].trquan = rn1(10, 50);
+			DNoble[DNB_ZERO_ARROWS].trquan = rn1(10, 30);
+			ini_inv(DNoble);
+		} else ini_inv(Noble);
 		// knows_class(ARMOR_CLASS);
 		if(Race_if(PM_DROW) && flags.female) skill_init(Skill_DNob);
 		else if(Race_if(PM_DWARF)) skill_init(Skill_DwaNob);
