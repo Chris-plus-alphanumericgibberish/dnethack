@@ -50,6 +50,7 @@ const struct innate {
 #endif	/* CONVICT */
 
 	hea_abil[] = { {	 1, &(HPoison_resistance), "", "" },
+		     {	 1, &(HSick_resistance), "", "" },
 		     {	15, &(HWarning), "sensitive", "" },
 		     {	 0, 0, 0, 0 } },
 
