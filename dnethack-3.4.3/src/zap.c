@@ -3404,25 +3404,67 @@ xchar sx, sy;
 	}break;
 	case ZT_DEATH:
 	    if (abs(type) == ZT_BREATH(ZT_DEATH)) {
-		if (Disint_resistance) {
-		    You("are not disintegrated.");
-		    break;
-		} else if (uarms) {
-		    /* destroy shield; other possessions are safe */
-		    (void) destroy_arm(uarms);
-		    break;
-		} else if (uarm) {
-		    /* destroy suit; if present, cloak goes too */
-		    if (uarmc) (void) destroy_arm(uarmc);
-		    (void) destroy_arm(uarm);
-		    break;
-		}
-		/* no shield or suit, you're dead; wipe out cloak
-		   and/or shirt in case of life-saving or bones */
-		if (uarmc) (void) destroy_arm(uarmc);
-#ifdef TOURIST
-		if (uarmu) (void) destroy_arm(uarmu);
-#endif
+			int i;
+			if (Disint_resistance) {
+				You("are not disintegrated.");
+				break;
+			} else if (uarms) {
+				/* destroy shield; other possessions are safe */
+				 i = d(1,4);
+				 for(i; i>0; i--){
+					if(uarms->spe > -1*objects[(uarms)->otyp].a_ac){
+						damage_item(uarms);
+						if(i==1) Your("%s damaged by the beam.", aobjnam(uarms, "seem"));
+					}
+					else {
+					 (void) destroy_arm(uarms);
+					 i = 0;
+					}
+				 }
+				break;
+			} else if (uarmc) {
+				/* destroy cloak */
+				 i = d(1,4);
+				 for(i; i>0; i--){
+					if(uarmc->spe > -1*objects[(uarmc)->otyp].a_ac){
+						damage_item(uarmc);
+						if(i==1) Your("%s damaged by the beam.", aobjnam(uarmc, "seem"));
+					}
+					else {
+					 (void) destroy_arm(uarmc);
+					 i = 0;
+					}
+				 }
+				break;
+			} else if (uarm) {
+				/* destroy suit */
+				 i = d(1,4);
+				 for(i; i>0; i--){
+					if(uarm->spe > -1*objects[(uarm)->otyp].a_ac){
+						damage_item(uarm);
+						if(i==1) Your("%s damaged by the beam.", aobjnam(uarm, "seem"));
+					}
+					else {
+					 (void) destroy_arm(uarm);
+					 i = 0;
+					}
+				 }
+				break;
+			} else if(uarmu && objects[uarmu->otyp].a_can > 0){
+				/* destroy underwear */
+				 i = d(1,4);
+				 for(i; i>0; i--){
+					if(uarmu->spe > -1*objects[(uarmu)->otyp].a_ac){
+						damage_item(uarmu);
+						if(i==1) Your("%s damaged by the beam.", aobjnam(uarmu, "seem"));
+					}
+					else {
+					 (void) destroy_arm(uarmu);
+					 i = 0;
+					}
+				 }
+				break;
+			}
 	    } else if (nonliving(youmonst.data) || is_demon(youmonst.data) || u.sealsActive&SEAL_OSE) {
 		shieldeff(sx, sy);
 		You("seem unaffected.");
