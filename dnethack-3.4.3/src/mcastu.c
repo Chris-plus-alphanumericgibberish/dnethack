@@ -763,8 +763,15 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	ret = 1;
 
 	switch (mattk->adtyp) {
-
+		case AD_RBRE:
+			switch(rnd(3)){
+				case 1: goto elec_spell;
+				case 2: goto fire_spell;
+				case 3: goto cold_spell;
+			}
+		break;
 	    case AD_ELEC:
+elec_spell:
 		pline("Lightning crackles around you.");
 		if(Shock_resistance) {
 			shieldeff(u.ux, u.uy);
@@ -779,6 +786,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		stop_occupation();
 		break;
 	    case AD_FIRE:
+fire_spell:
 		pline("You're enveloped in flames.");
 		if(Fire_resistance) {
 			shieldeff(u.ux, u.uy);
@@ -796,6 +804,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		stop_occupation();
 		break;
 	    case AD_COLD:
+cold_spell:
 		pline("You're covered in frost.");
 		if(Cold_resistance) {
 			shieldeff(u.ux, u.uy);
@@ -2024,8 +2033,15 @@ castmm(mtmp, mdef, mattk)
 	ret = 1;
 
 	switch (mattk->adtyp) {
-
+		case AD_RBRE:
+			switch(rnd(3)){
+				case 1: goto elec_mm;
+				case 2: goto fire_mm;
+				case 3: goto cold_mm;
+			}
+		break;
 		case AD_ELEC:
+elec_mm:
 	        if (canspotmon(mdef))
 		    pline("Lightning crackles around %s.", Monnam(mdef));
 		if(resists_elec(mdef)) {
@@ -2037,6 +2053,7 @@ castmm(mtmp, mdef, mattk)
 		}
 		break;
 	    case AD_FIRE:
+fire_mm:
 	        if (canspotmon(mdef))
 		    pline("%s is enveloped in flames.", Monnam(mdef));
 		if(resists_fire(mdef)) {
@@ -2048,6 +2065,7 @@ castmm(mtmp, mdef, mattk)
 		}
 		break;
 	    case AD_COLD:
+cold_mm:
 	        if (canspotmon(mdef))
 		    pline("%s is covered in frost.", Monnam(mdef));
 		if(resists_fire(mdef)) {
@@ -2171,29 +2189,44 @@ buzzmu(mtmp, mattk, ml)		/* monster uses spell (ranged) */
 	int ml;
 {
 	int dmn = (int)(ml/2);
+	int type = mattk->adtyp;
 	
 	if(mattk->damn) dmn += mattk->damn;
 	else dmn += 1;
 	
+	if(type == AD_RBRE){
+		switch(rnd(3)){
+			case 1:
+				type = AD_ELEC;
+			break;
+			case 2:
+				type = AD_COLD;
+			break;
+			case 3:
+				type = AD_FIRE;
+			break;
+		}
+	}
+
 	
 	/* don't print constant stream of curse messages for 'normal'
 	   spellcasting monsters at range */
-	if (mattk->adtyp > AD_SPC2)
+	if (type > AD_SPC2)
 	    return(0);
-
+	
 	if (mtmp->mcan) {
 	    cursetxt(mtmp, FALSE);
 	    return(0);
 	}
 	if(lined_up(mtmp) && rn2(3)) {
 	    nomul(0, NULL);
-	    if(mattk->adtyp && (mattk->adtyp < 11)) { /* no cf unsigned >0 */
+	    if(type && (type < 11)) { /* no cf unsigned >0 */
 		if(canseemon(mtmp))
 		    pline("%s zaps you with a %s!", Monnam(mtmp),
-			  flash_types[ad_to_typ(mattk->adtyp)]);
-		buzz(-ad_to_typ(mattk->adtyp), dmn,
+			  flash_types[ad_to_typ(type)]);
+		buzz(-ad_to_typ(type), dmn,
 		     mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
-	    } else impossible("Monster spell %d cast", mattk->adtyp-1);
+	    } else impossible("Monster spell %d cast", type-1);
 	}
 	return(1);
 }
@@ -2303,7 +2336,15 @@ castum(mtmp, mattk)
 	ret = 1;
 
 	switch (mattk->adtyp) {
+		case AD_RBRE:
+			switch(rnd(3)){
+				case 1: goto elec_um;
+				case 2: goto fire_um;
+				case 3: goto cold_um;
+			}
+		break;
 		case AD_ELEC:
+elec_um:
 	        if (canspotmon(mtmp))
 		    pline("Lightning crackles around %s.", Monnam(mtmp));
 		if(resists_elec(mtmp)) {
@@ -2314,6 +2355,7 @@ castum(mtmp, mattk)
 			dmg = 0;
 		}
 	    case AD_FIRE:
+fire_um:
 		pline("%s is enveloped in flames.", Monnam(mtmp));
 		if(resists_fire(mtmp)) {
 			shieldeff(mtmp->mx, mtmp->my);
@@ -2323,6 +2365,7 @@ castum(mtmp, mattk)
 		}
 		break;
 	    case AD_COLD:
+cold_um:
 		pline("%s is covered in frost.", Monnam(mtmp));
 		if(resists_fire(mtmp)) {
 			shieldeff(mtmp->mx, mtmp->my);
