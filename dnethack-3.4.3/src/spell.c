@@ -2230,7 +2230,7 @@ spiriteffects(power, atme)
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
 				dmg = d(rnd(5),dsize);
-				if(haseyes(mon->data) && mon->mcansee){
+				if(haseyes(mon->data) && mon->mcansee && can_blnd(&youmonst, mon, AT_CLAW, (struct obj*)0)){
 					if(mon->data == &mons[PM_FLOATING_EYE]){
 						You("claw at %s.", mon_nam(mon));
 						dmg += d(5,dsize); //Bonus damage, since this renders wards inefective and is single target.
