@@ -221,7 +221,7 @@ WEAPON("lance", (char *)0,
 WEAPON("elven lance", (char *)0,
 	1, 0, 0,  0,140, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
 WEAPON("droven lance", "obsidian lance",
-	0, 0, 1,  0,140, 10, 10, 10, 2, P,   P_LANCE, GLASS, CLR_BLACK),
+	0, 0, 1,  0,200, 10, 10, 10, 2, P,   P_LANCE, GLASS, CLR_BLACK),
 /* axe-type */
 WEAPON("halberd", "angled poleaxe",
 	0, 0, 1,  8,150, 10, 10,  6, 0, P|S, P_POLEARMS, IRON, HI_METAL),
