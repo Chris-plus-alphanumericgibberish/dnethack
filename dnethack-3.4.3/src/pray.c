@@ -690,7 +690,7 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(BOW, artiname(ART_BOW_OF_SKADI));
 		verbalize("I greet you, my daughter.");
-	} else if(Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)){
+	} else if(Race_if(PM_DWARF) && (urole.ldrnum == PM_THORIN_II_OAKENSHIELD || urole.ldrnum == PM_DAIN_II_IRONFOOT)){
 		u.uevent.uhand_of_elbereth = 1; /* Alignment of Dwarf king is treated as lawful */
 		if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
 			in_hand = FALSE;
@@ -898,143 +898,7 @@ gcrownu()
     class_gift = STRANGE_OBJECT;
     /* 3.3.[01] had this in the A_NEUTRAL case below,
        preventing chaotic wizards from receiving a spellbook */
-	if( Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE) ){
-		if (class_gift != STRANGE_OBJECT) {
-			;		/* already got bonus above for some reason */
-		} else if (in_hand) {
-			Your("%s rings with the sound of waves!", xname(obj));
-			obj->dknown = TRUE;
-		} else if (!already_exists) {
-			obj = mksobj(SCIMITAR, FALSE, FALSE);
-			obj = oname(obj, artiname(ART_REAVER));
-			obj->spe = 1;
-			at_your_feet("A sword");
-			dropy(obj);
-			u.ugifts++;
-		}
-		/* acquire Reaver's skill regardless of weapon or gift, 
-			although pirates are already good at using scimitars */
-		unrestrict_weapon_skill(P_SCIMITAR);
-		if (obj && obj->oartifact == ART_REAVER)
-			discover_artifact(ART_REAVER);
-	} else if ((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) {
-		if (class_gift != STRANGE_OBJECT) {
-			;		/* already got bonus above for some reason */
-		} else if (!already_exists) {
-			obj = mksobj(BOW, FALSE, FALSE);
-			obj = oname(obj, artiname(ART_BOW_OF_SKADI));
-			obj->spe = 1;
-			at_your_feet("A bow");
-			dropy(obj);
-			u.ugifts++;
-		}
-		/* acquire Reaver's skill regardless of weapon or gift, 
-			although pirates are already good at using scimitars */
-		unrestrict_weapon_skill(P_BOW);
-		if (obj && obj->oartifact == ART_BOW_OF_SKADI)
-			discover_artifact(ART_BOW_OF_SKADI);
-	} else if (Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)) {
-		if (class_gift != STRANGE_OBJECT) {
-			;		/* already got bonus above for some reason */
-		} else if (!already_exists) {
-			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
-				obj = mksobj(DIAMOND, FALSE, FALSE);
-				obj = oname(obj, artiname(ART_ARKENSTONE));
-				obj->spe = 1;
-				at_your_feet("A shining diamond");
-				discover_artifact(ART_DURIN_S_AXE);
-			} else if(urole.ldrnum == PM_DAIN_II_IRONFOOT){
-				obj = mksobj(AXE, FALSE, FALSE);
-				obj = oname(obj, artiname(ART_DURIN_S_AXE));
-				obj->spe = 1;
-				at_your_feet("A silver axe");
-				unrestrict_weapon_skill(P_AXE);
-				discover_artifact(ART_DURIN_S_AXE);
-			}
-			dropy(obj);
-			u.ugifts++;
-		}
-	} else if (Role_if(PM_MONK)) {
-		if (class_gift != STRANGE_OBJECT) {
-			;		/* already got bonus above for some reason */
-		} else if (!already_exists) {
-			obj = mksobj(ROBE, FALSE, FALSE);
-			if(u.ualign.type != A_CHAOTIC){
-				obj = oname(obj, artiname(ART_GRANDMASTER_S_ROBE));
-			} else {
-				obj = oname(obj, artiname(ART_ROBE_OF_THE_ARCHMAGI));
-			}
-			obj->spe = 1;
-			at_your_feet("A robe");
-			dropy(obj);
-			u.ugifts++;
-		}
-		if (obj && obj->oartifact == ART_GRANDMASTER_S_ROBE)
-			discover_artifact(ART_GRANDMASTER_S_ROBE);
-		else if(obj && obj->oartifact == ART_ROBE_OF_THE_ARCHMAGI)
-			discover_artifact(ART_ROBE_OF_THE_ARCHMAGI);
-	} else if (Race_if(PM_ELF)) {
-		if (class_gift != STRANGE_OBJECT) {
-			;		/* already got bonus above for some reason */
-		} else if (!already_exists) {
-			if(u.ualign.type == A_CHAOTIC){
-				obj = mksobj(CRYSTAL_SWORD, FALSE, FALSE);
-				obj = oname(obj, artiname(ART_ARYVELAHR_KERYM));
-			} else if(u.ualign.type == A_NEUTRAL){
-				obj = mksobj(RUNESWORD, FALSE, FALSE);
-				obj = oname(obj, artiname(ART_ARYFAERN_KERYM));
-			} else {
-				obj = mksobj(LONG_SWORD, FALSE, FALSE);
-				obj = oname(obj, artiname(ART_ARCOR_KERYM));
-			}
-			obj->spe = 1;
-			at_your_feet("An Elfblade of Cormanthyr");
-			dropy(obj);
-			u.ugifts++;
-		}
-		if (obj && obj->oartifact == ART_ARYVELAHR_KERYM)
-			discover_artifact(ART_ARYVELAHR_KERYM);
-		else if(obj && obj->oartifact == ART_ARYFAERN_KERYM)
-			discover_artifact(ART_ARYFAERN_KERYM);
-		else if(obj && obj->oartifact == ART_ARCOR_KERYM)
-			discover_artifact(ART_ARCOR_KERYM);
-		
-		if(u.ualign.type == A_CHAOTIC){
-			unrestrict_weapon_skill(P_BROAD_SWORD);
-		} else if(u.ualign.type == A_NEUTRAL){
-			unrestrict_weapon_skill(P_BROAD_SWORD);
-		} else if(u.ualign.type == A_LAWFUL){
-			unrestrict_weapon_skill(P_LONG_SWORD);
-		}
-	} else if (Role_if(PM_WIZARD)) {
-		if(!already_exists){
-			if (class_gift != STRANGE_OBJECT) {
-				;		/* already got bonus above for some reason */
-			} else if (!already_exists) {
-				obj = mksobj(SPE_SECRETS, FALSE, FALSE);
-				if(!exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON))) obj = oname(obj, artiname(ART_NECRONOMICON));
-				else obj = oname(obj, artiname(ART_BOOK_OF_INFINITE_SPELLS));
-				obj->spe = 1;
-				at_your_feet("A spellbook");
-				dropy(obj);
-				u.ugifts++;
-			}
-			if (obj && obj->oartifact == ART_NECRONOMICON){
-				obj->ovar1 |= SP_DEATH;
-				discover_artifact(ART_NECRONOMICON);
-			} else if (obj && obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS){
-				obj->ovar1 = SPE_FINGER_OF_DEATH;
-				discover_artifact(ART_BOOK_OF_INFINITE_SPELLS);
-			}
-		} else{
-			for(obj = invent; obj; obj=obj->nobj)
-				if(obj->oartifact == ART_NECRONOMICON) 
-					obj->ovar1 |= SP_DEATH;
-			if(!obj) for(obj = invent; obj; obj=obj->nobj)
-				if(obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS) 
-					obj->ovar1 = SPE_FINGER_OF_DEATH;
-		}
-	} else if(Race_if(PM_DROW)){
+	if(Race_if(PM_DROW) && (Role_if(PM_NOBLEMAN) || Role_if(PM_RANGER) || Role_if(PM_ROGUE) || Role_if(PM_PRIEST) || Role_if(PM_WIZARD))){
 		if(flags.initgend){ /*Female*/
 			if (class_gift != STRANGE_OBJECT) {
 				;		/* already got bonus above for some reason */
@@ -1075,6 +939,31 @@ gcrownu()
 		} else { /*male*/
 			if (class_gift != STRANGE_OBJECT) {
 				;		/* already got bonus above for some reason */
+			}
+			else if(Role_if(PM_NOBLEMAN)){
+				if (!already_exists){
+					if(u.ualign.type == A_CHAOTIC){
+						obj = mksobj(MORNING_STAR, FALSE, FALSE);
+						obj = oname(obj, artiname(ART_RUINOUS_DESCENT_OF_STARS));
+						discover_artifact(ART_RUINOUS_DESCENT_OF_STARS);
+					} else if(u.ualign.type == A_NEUTRAL){
+						obj = mksobj(GAUNTLETS_OF_DEXTERITY, FALSE, FALSE);
+						obj = oname(obj, artiname(ART_CLAWS_OF_THE_REVENANCER));
+						discover_artifact(ART_CLAWS_OF_THE_REVENANCER);
+					} else if(u.ualign.type == A_LAWFUL){
+						obj = mksobj(DROVEN_CROSSBOW, FALSE, FALSE);
+						obj = oname(obj, artiname(ART_LIECLEAVER));
+						discover_artifact(ART_LIECLEAVER);
+					}
+				}
+				if(u.ualign.type == A_CHAOTIC){
+					unrestrict_weapon_skill(P_MORNING_STAR);
+				} else if(u.ualign.type == A_NEUTRAL){
+					unrestrict_weapon_skill(P_SHORT_SWORD);
+					u.umartial = TRUE;
+				} else if(u.ualign.type == A_LAWFUL){
+					unrestrict_weapon_skill(P_CROSSBOW);
+				}
 			} else if (!already_exists) {
 				obj = mksobj(DROVEN_SHORT_SWORD, FALSE, FALSE);
 				obj = oname(obj, artiname(ART_LOLTH_S_FANG));
@@ -1085,6 +974,142 @@ gcrownu()
 				u.ugifts++;
 			}
 			unrestrict_weapon_skill(P_SHORT_SWORD);
+		}
+	} else if (Race_if(PM_DWARF) && (urole.ldrnum == PM_THORIN_II_OAKENSHIELD || urole.ldrnum == PM_DAIN_II_IRONFOOT)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
+				obj = mksobj(DIAMOND, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARKENSTONE));
+				obj->spe = 1;
+				at_your_feet("A shining diamond");
+				discover_artifact(ART_DURIN_S_AXE);
+			} else if(urole.ldrnum == PM_DAIN_II_IRONFOOT){
+				obj = mksobj(AXE, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_DURIN_S_AXE));
+				obj->spe = 1;
+				at_your_feet("A silver axe");
+				unrestrict_weapon_skill(P_AXE);
+				discover_artifact(ART_DURIN_S_AXE);
+			}
+			dropy(obj);
+			u.ugifts++;
+		}
+	} else if (Race_if(PM_ELF) && !Role_if(PM_PIRATE)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if(u.ualign.type == A_CHAOTIC){
+				obj = mksobj(CRYSTAL_SWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARYVELAHR_KERYM));
+			} else if(u.ualign.type == A_NEUTRAL){
+				obj = mksobj(RUNESWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARYFAERN_KERYM));
+			} else {
+				obj = mksobj(LONG_SWORD, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_ARCOR_KERYM));
+			}
+			obj->spe = 1;
+			at_your_feet("An Elfblade of Cormanthyr");
+			dropy(obj);
+			u.ugifts++;
+		}
+		if (obj && obj->oartifact == ART_ARYVELAHR_KERYM)
+			discover_artifact(ART_ARYVELAHR_KERYM);
+		else if(obj && obj->oartifact == ART_ARYFAERN_KERYM)
+			discover_artifact(ART_ARYFAERN_KERYM);
+		else if(obj && obj->oartifact == ART_ARCOR_KERYM)
+			discover_artifact(ART_ARCOR_KERYM);
+		
+		if(u.ualign.type == A_CHAOTIC){
+			unrestrict_weapon_skill(P_BROAD_SWORD);
+		} else if(u.ualign.type == A_NEUTRAL){
+			unrestrict_weapon_skill(P_BROAD_SWORD);
+		} else if(u.ualign.type == A_LAWFUL){
+			unrestrict_weapon_skill(P_LONG_SWORD);
+		}
+	} else if( Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE) ){
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (in_hand) {
+			Your("%s rings with the sound of waves!", xname(obj));
+			obj->dknown = TRUE;
+		} else if (!already_exists) {
+			obj = mksobj(SCIMITAR, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_REAVER));
+			obj->spe = 1;
+			at_your_feet("A sword");
+			dropy(obj);
+			u.ugifts++;
+		}
+		/* acquire Reaver's skill regardless of weapon or gift, 
+			although pirates are already good at using scimitars */
+		unrestrict_weapon_skill(P_SCIMITAR);
+		if (obj && obj->oartifact == ART_REAVER)
+			discover_artifact(ART_REAVER);
+	} else if ((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			obj = mksobj(BOW, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_BOW_OF_SKADI));
+			obj->spe = 1;
+			at_your_feet("A bow");
+			dropy(obj);
+			u.ugifts++;
+		}
+		/* acquire Reaver's skill regardless of weapon or gift, 
+			although pirates are already good at using scimitars */
+		unrestrict_weapon_skill(P_BOW);
+		if (obj && obj->oartifact == ART_BOW_OF_SKADI)
+			discover_artifact(ART_BOW_OF_SKADI);
+	} else if (Role_if(PM_MONK)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			obj = mksobj(ROBE, FALSE, FALSE);
+			if(u.ualign.type != A_CHAOTIC){
+				obj = oname(obj, artiname(ART_GRANDMASTER_S_ROBE));
+			} else {
+				obj = oname(obj, artiname(ART_ROBE_OF_THE_ARCHMAGI));
+			}
+			obj->spe = 1;
+			at_your_feet("A robe");
+			dropy(obj);
+			u.ugifts++;
+		}
+		if (obj && obj->oartifact == ART_GRANDMASTER_S_ROBE)
+			discover_artifact(ART_GRANDMASTER_S_ROBE);
+		else if(obj && obj->oartifact == ART_ROBE_OF_THE_ARCHMAGI)
+			discover_artifact(ART_ROBE_OF_THE_ARCHMAGI);
+	} else if (Role_if(PM_WIZARD)) {
+		if(!already_exists){
+			if (class_gift != STRANGE_OBJECT) {
+				;		/* already got bonus above for some reason */
+			} else if (!already_exists) {
+				obj = mksobj(SPE_SECRETS, FALSE, FALSE);
+				if(!exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON))) obj = oname(obj, artiname(ART_NECRONOMICON));
+				else obj = oname(obj, artiname(ART_BOOK_OF_INFINITE_SPELLS));
+				obj->spe = 1;
+				at_your_feet("A spellbook");
+				dropy(obj);
+				u.ugifts++;
+			}
+			if (obj && obj->oartifact == ART_NECRONOMICON){
+				obj->ovar1 |= SP_DEATH;
+				discover_artifact(ART_NECRONOMICON);
+			} else if (obj && obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS){
+				obj->ovar1 = SPE_FINGER_OF_DEATH;
+				discover_artifact(ART_BOOK_OF_INFINITE_SPELLS);
+			}
+		} else{
+			for(obj = invent; obj; obj=obj->nobj)
+				if(obj->oartifact == ART_NECRONOMICON) 
+					obj->ovar1 |= SP_DEATH;
+			if(!obj) for(obj = invent; obj; obj=obj->nobj)
+				if(obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS) 
+					obj->ovar1 = SPE_FINGER_OF_DEATH;
 		}
 	} else if (Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)) {
 		if (class_gift != STRANGE_OBJECT) {
