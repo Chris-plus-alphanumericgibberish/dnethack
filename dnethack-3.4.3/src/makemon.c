@@ -717,7 +717,7 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, HIGH_BOOTS);
 					(void)mongets(mtmp, SILVER_DAGGER);
 					(void)mongets(mtmp, SMALL_SHIELD);
-					(void)mongets(mtmp, RAPIER);
+					(void)mongets(mtmp, BULLWHIP);
 				} else if(mm == PM_MOTHER){
 					otmp = mksobj(NOBLE_S_DRESS, TRUE, FALSE);
 					otmp->ohaluengr = TRUE;
@@ -772,6 +772,31 @@ register struct monst *mtmp;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
+				} else if(PM_STJARNA_ALFAR){
+					otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
+					otmp->ohaluengr = TRUE;
+					otmp->ovar1 = EILISTRAEE_SYMBOL;
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
+					otmp->ohaluengr = TRUE;
+					otmp->ovar1 = curhouse;
+					(void) mpickobj(mtmp, otmp);
+					(void) mongets(mtmp, ELVEN_CLOAK);
+					(void)mongets(mtmp, DROVEN_HELM);
+					(void)mongets(mtmp, ELVEN_BOOTS);
+					(void)mongets(mtmp, ELVEN_DAGGER);
+					if(!rn2(20)){
+						(void)mongets(mtmp, SILVER_KHAKKHARA);
+						(void)mongets(mtmp, ELVEN_DAGGER);
+						(void)mongets(mtmp, ELVEN_DAGGER);
+						(void)mongets(mtmp, ELVEN_DAGGER);
+					} else {
+						(void)mongets(mtmp, ELVEN_BROADSWORD);
+						(void)mongets(mtmp, ELVEN_SHIELD);
+					}
+					(void)mongets(mtmp, ELVEN_BOW);
+					m_initthrow(mtmp, ELVEN_ARROW, 24);
+					if (!rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
 				} else {
 					otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
 					otmp->ohaluengr = TRUE;
