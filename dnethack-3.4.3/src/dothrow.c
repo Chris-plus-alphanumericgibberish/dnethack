@@ -1996,8 +1996,11 @@ boolean in_view;
 		default: /* glass or crystal wand */
 		    if (obj->oclass != WAND_CLASS)
 			impossible("breaking odd object?");
+		case CRYSTAL_HELM:
 		case CRYSTAL_PLATE_MAIL:
 		case CRYSTAL_SWORD:
+		case CRYSTAL_SHIELD:
+		case CRYSTAL_BOOTS:
 		case DROVEN_BOLT:
 		case DROVEN_DAGGER:
 		case DROVEN_SHORT_SWORD:

@@ -95,6 +95,7 @@ Boots_on(VOID_ARGS)
 	case LOW_BOOTS:
 	case IRON_SHOES:
 	case HIGH_BOOTS:
+	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
 		break;
@@ -178,6 +179,7 @@ Boots_off(VOID_ARGS)
 	case LOW_BOOTS:
 	case IRON_SHOES:
 	case HIGH_BOOTS:
+	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
 		break;
@@ -326,6 +328,7 @@ Helmet_on(VOID_ARGS)
 	case HELMET:
 	case DROVEN_HELM:
 	case FLACK_HELMET:
+	case CRYSTAL_HELM:
 	case SEDGE_HAT:
 	case ELVEN_LEATHER_HELM:
 	case DWARVISH_IRON_HELM:
@@ -396,6 +399,7 @@ Helmet_off(VOID_ARGS)
 	case HELMET:
 	case DROVEN_HELM:
 	case FLACK_HELMET:
+	case CRYSTAL_HELM:
 	case SEDGE_HAT:
 	case ELVEN_LEATHER_HELM:
 	case DWARVISH_IRON_HELM:
