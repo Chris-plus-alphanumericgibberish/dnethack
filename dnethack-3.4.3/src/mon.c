@@ -1721,7 +1721,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Role_if(PM_KNIGHT) && ma == &mons[PM_KNIGHT] && magr->mpeaceful)
 		  || (Race_if(PM_DROW) && is_drow(ma) && magr->mfaction == u.uhouse)
 		)
-		&& !((Race_if(PM_DROW) && !flags.stag && !Role_if(PM_NOBLEMAN)) || !is_drow(md))
+		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(md)))
 		&& magr->mpeaceful==TRUE 
 		&& mdef->mpeaceful==FALSE
 	) return ALLOW_M|ALLOW_TM;
@@ -1731,7 +1731,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Role_if(PM_KNIGHT) && md == &mons[PM_KNIGHT] && mdef->mpeaceful)
 		  || (Race_if(PM_DROW) && is_drow(md) && mdef->mfaction == u.uhouse)
 		)
-		&& !((Race_if(PM_DROW) && !flags.stag && !Role_if(PM_NOBLEMAN)) || !is_drow(ma))
+		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(ma)))
 		&& mdef->mpeaceful==TRUE 
 		&& magr->mpeaceful==FALSE 
 		&& rn2(2)
