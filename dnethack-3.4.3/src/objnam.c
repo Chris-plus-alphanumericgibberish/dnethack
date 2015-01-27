@@ -1838,6 +1838,7 @@ const char *oldstr;
 #endif
 			   !BSTRCMP(bp, p-5, "aklys") ||
 			   !BSTRCMP(bp, p-5, "dress") ||
+			   !BSTRCMP(bp, p-16, "descent of stars") ||
 			   !BSTRCMP(bp, p-6, "fungus"))
 				return bp;
 	mins:
