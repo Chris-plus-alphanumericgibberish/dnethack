@@ -799,7 +799,7 @@ register int amount;
 		uwep->spe = 7;
 		Your("%s faintly for a moment.",aobjnam(uwep, "rattle"));
 	}
-	if(uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->spe > 5 && !(quest_status.killed_nemesis)){
+	if(uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->spe > 5 && !(quest_status.killed_nemesis && Role_if(PM_EXILE))){
 		uwep->spe = 5;
 	} else if(uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->spe > 10){
 		uwep->spe = 10;
