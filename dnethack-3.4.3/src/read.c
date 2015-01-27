@@ -1078,7 +1078,10 @@ struct obj	*sobj;
 			arti_plussev(otmp) || /* special artifact armors */
 			(Role_if(PM_WIZARD) && otmp->otyp == CORNUTHAUM) ||
 			(Role_if(PM_WIZARD) && otmp->otyp == ROBE && otmp->oartifact == ART_ROBE_OF_THE_ARCHMAGI) ||
+			otmp->otyp == CRYSTAL_HELM ||
 			otmp->otyp == CRYSTAL_PLATE_MAIL ||
+			otmp->otyp == CRYSTAL_SHIELD ||
+			otmp->otyp == CRYSTAL_BOOTS ||
 			otmp->otyp == PLATE_MAIL || /*plate mails have finer manufacturing and can be more highly enchanted*/
 			otmp->otyp == BRONZE_PLATE_MAIL ||
 			otmp->otyp == CLOAK_OF_PROTECTION;//Cloaks of protection are specialized defensive items.

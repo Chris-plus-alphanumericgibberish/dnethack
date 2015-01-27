@@ -712,6 +712,7 @@ register int amount;
 	const char *color = hcolor((amount < 0) ? NH_BLACK : NH_BLUE);
 	const char *xtime;
 	int otyp = STRANGE_OBJECT;
+	int safelim;
 
 	if(!uwep || (uwep->oclass != WEAPON_CLASS && !is_weptool(uwep))) {
 		char buf[BUFSZ];
@@ -748,7 +749,8 @@ register int amount;
 	    return(1);
 	}
 	/* there is a (soft) upper and lower limit to uwep->spe */
-	if(((uwep->spe > 5 && amount >= 0) || (uwep->spe < -5 && amount < 0))
+	safelim = uwep->otyp == CRYSTAL_SWORD ? 7 : 5;
+	if(((uwep->spe > safelim && amount >= 0) || (uwep->spe < -safelim && amount < 0))
 								&& rn2(3) && uwep->oartifact != ART_ROD_OF_SEVEN_PARTS
 								&& uwep->oartifact != ART_PEN_OF_THE_VOID
 	) {
