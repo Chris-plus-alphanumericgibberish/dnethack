@@ -300,6 +300,11 @@ static struct trobj MRGloves[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 
+static struct trobj DarkWand[] = {
+	{ WAN_DARKNESS, UNDEF_SPE, WAND_CLASS, 1, 1 },
+	{ 0, 0, 0, 0, 0 }
+};
+
 static struct trobj ExtraBook[] = {
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },
 	{ 0, 0, 0, 0, 0 }
@@ -1336,6 +1341,7 @@ u_init()
 			DNoble[DNB_TWO_ARROWS].trquan = rn1(10, 50);
 			DNoble[DNB_ZERO_ARROWS].trquan = rn1(10, 30);
 			ini_inv(DNoble);
+			ini_inv(DarkWand);
 		} else ini_inv(Noble);
 		// knows_class(ARMOR_CLASS);
 		if(Race_if(PM_DROW) && flags.female) skill_init(Skill_DNob);
@@ -1371,6 +1377,7 @@ u_init()
 				ini_inv(DrainBook);
 				ini_inv(FamBook);
 			}
+			ini_inv(DarkWand);
 		}
 		// if(!rn2(10)) ini_inv(Magicmarker);
 		// else if(!rn2(10)) ini_inv(Lamp);
@@ -1450,6 +1457,7 @@ u_init()
 			if(flags.female){
 				ini_inv(ExtraBook);
 			}
+			ini_inv(DarkWand);
 		}
 		if(!rn2(5)) ini_inv(Magicmarker);
 		// if(!rn2(5)) ini_inv(Blindfold);

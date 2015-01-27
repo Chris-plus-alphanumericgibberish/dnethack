@@ -286,6 +286,7 @@ struct obj *otmp;
 	    }
 		break;
 	case WAN_LIGHT:	/* (broken wand) */
+	case WAN_DARKNESS:	/* (broken wand) */
 		if (flash_hits_mon(mtmp, otmp)) {
 		    makeknown(WAN_LIGHT);
 		    reveal_invis = TRUE;
@@ -1933,6 +1934,11 @@ register struct obj *obj;
 			if(!(obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
 			if (!Blind) known = TRUE;
 		break;
+		case WAN_DARKNESS:
+			litroom((obj->cursed),obj);
+			if((obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+			if (!Blind) known = TRUE;
+		break;
 		case WAN_SECRET_DOOR_DETECTION:
 		case SPE_DETECT_UNSEEN:
 			if(!findit()) return;
@@ -2262,6 +2268,10 @@ boolean ordinary;
 		    You_feel("%sbetter.",
 			obj->otyp == SPE_EXTRA_HEALING ? "much " : "");
 		    break;
+		case WAN_DARKNESS:	/* (broken wand) */
+		 /* assert( !ordinary ); */
+		    damage = d(obj->spe, 25);
+		break;
 		case WAN_LIGHT:	/* (broken wand) */
 		 /* assert( !ordinary ); */
 		    damage = d(obj->spe, 25);

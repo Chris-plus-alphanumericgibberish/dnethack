@@ -994,7 +994,8 @@ OBJECT(OBJ("secrets", "ragged leather"), BITS(0,0,1,0,1,0,1,1,0,0,0,P_NONE,PAPER
 #define WAND(name,typ,prob,cost,mgc,dir,metal,color) OBJECT( \
 		OBJ(name,typ), BITS(0,0,1,0,mgc,1,0,0,0,0,dir,P_NONE,metal), 0, \
 		WAND_CLASS, prob, 0, 7, cost, 0, 0, 0, 0, 30, color )
-WAND("light",          "glass",   100, 100, 1, NODIR,     GLASS,    HI_GLASS),
+WAND("light",          "glass",    90, 100, 1, NODIR,     GLASS,    CLR_WHITE),
+WAND("darkness",       "obsidian", 10, 100, 1, NODIR,     GLASS,    CLR_BLACK),
 WAND("wishing",        "pine",      5, 500, 1, NODIR,     WOOD,     HI_WOOD),
 WAND("secret door detection", "balsa",
 				   50, 150, 1, NODIR,	  WOOD,     HI_WOOD),

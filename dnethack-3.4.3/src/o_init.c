@@ -198,6 +198,8 @@ shuffle_all()
 
 			if (oclass == POTION_CLASS)
 			    j -= 3;  /* water, amnesia, and blood have fixed descriptions */
+			if (oclass == WAND_CLASS)
+			    first += 2;  /* light and darkness have fixed descriptions */
 			else if (oclass == AMULET_CLASS ||
 				 oclass == SCROLL_CLASS ||
 				 oclass == SPBOOK_CLASS) {

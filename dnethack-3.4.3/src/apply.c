@@ -3365,6 +3365,9 @@ do_break_wand(obj)
 		litroom(TRUE, obj);	/* only needs to be done once */
 		if(u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
 	}
+    else if (obj->otyp == WAN_DARKNESS){
+		litroom(FALSE, obj);	/* only needs to be done once */
+	}
 
  discard_broken_wand:
     obj = current_wand;		/* [see dozap() and destroy_item()] */
