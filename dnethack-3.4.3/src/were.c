@@ -77,9 +77,10 @@ int pm;
 
 void
 new_were(mon)
-register struct monst *mon;
+struct monst *mon;
 {
-	register int pm;
+	int pm;
+	struct permonst *olddata = mon->data;
 
 	pm = counter_were(monsndx(mon->data));
 	if(!pm) {
@@ -111,6 +112,15 @@ register struct monst *mon;
 	}
 	/* regenerate by 1/4 of the lost hit points */
 	mon->mhp += (mon->mhpmax - mon->mhp) / 4;
+	if (emits_light(olddata) != emits_light(mon->data)) {
+	    /* used to give light, now doesn't, or vice versa,
+	       or light's range has changed */
+	    if (emits_light(olddata))
+		del_light_source(LS_MONSTER, (genericptr_t)mon);
+	    if (emits_light(mon->data))
+		new_light_source(mon->mx, mon->my, emits_light(mon->data),
+				 LS_MONSTER, (genericptr_t)mon);
+	}
 	newsym(mon->mx,mon->my);
 	mon_break_armor(mon, FALSE);
 	possibly_unwield(mon, FALSE);

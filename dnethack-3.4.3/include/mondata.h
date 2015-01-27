@@ -320,10 +320,14 @@
 #define emits_light(ptr)	(((ptr)->mlet == S_LIGHT || \
 				  (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				  (ptr) == &mons[PM_SHOCKING_SPHERE] || \
+				  (ptr) == &mons[PM_BALL_OF_LIGHT] || \
+				  (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 				  (ptr) == &mons[PM_HOOLOOVOO] || \
 				  (ptr) == &mons[PM_FALLEN_ANGEL] || \
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
-				 ((ptr) == &mons[PM_FIRE_ELEMENTAL]) ? 2 : \
+				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
+				  (ptr) == &mons[PM_DANCING_FLAME] ||\
+				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
 				 ((ptr) == &mons[PM_SOLAR]|| \
 				  (ptr) == &mons[PM_LUCIFER]) ? 7 : 0)
 /*	[note: the light ranges above were reduced to 1 for performance...] */
