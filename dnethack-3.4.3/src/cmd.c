@@ -1057,7 +1057,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	    if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
 	    else if(Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE)) you_are("the Pirate King");
 	    else if((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) you_are("the Daughter of Skadi");
-	    else if(Race_if(PM_DWARF) && Role_if(PM_NOBLEMAN)){
+	    else if(Race_if(PM_DWARF) && (urole.ldrnum == PM_THORIN_II_OAKENSHIELD || urole.ldrnum == PM_DAIN_II_IRONFOOT)){
 			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD) you_are("King under the Mountain");
 			else if(urole.ldrnum == PM_DAIN_II_IRONFOOT) you_are("Lord of Moria");
 	    } else if((Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)) && u.uevent.uhand_of_elbereth == 1){

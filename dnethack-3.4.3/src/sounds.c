@@ -982,7 +982,7 @@ asGuardian:
 		    break;
 #endif
 		default:
-			if(Role_if(PM_NOBLEMAN) && In_quest(&u.uz)){
+			if((Role_if(PM_NOBLEMAN) || Role_if(PM_KNIGHT)) && In_quest(&u.uz)){
 				if(Race_if(PM_DWARF)) pline_msg = "talks about fishing.";
 				else pline_msg = "talks about farming.";
 			} else pline_msg = "discusses dungeon exploration.";
