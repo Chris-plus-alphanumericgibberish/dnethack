@@ -1806,7 +1806,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	/* the four basic attacks: fire, cold, shock and missiles */
 	if (attacks(AD_FIRE, otmp)) {
 	    if (realizes_damage)
-			pline_The("fiery %s %s %s%c", otmp->oartifact == ART_LIMB_OF_THE_BLACK_TREE ? "tree-branch" : "blade",
+			pline_The("fiery %s %s %s%c", otmp->oartifact == ART_LIMB_OF_THE_BLACK_TREE ? "tree-branch" : 
+										  otmp->oartifact == ART_NIGHTHORN ? "horn" :
+										  "blade",
 				!spec_dbon_applies ? "hits" :
 				(mdef->data == &mons[PM_WATER_ELEMENTAL] || mdef->data == &mons[PM_LETHE_ELEMENTAL]) ?
 				"vaporizes part of" : "burns",
@@ -1820,7 +1822,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	if (attacks(AD_COLD, otmp) && (get_artifact(otmp)->inv_prop != ICE_SHIKAI || u.SnSd3duration > monstermoves) ) {
 	    if (realizes_damage)
 			pline_The("ice-cold %s %s %s%c", otmp->oartifact == ART_LASH_OF_THE_COLD_WASTE ? "whip" : 
-											 otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO ? "staff" : "blade",
+											 otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO ? "staff" : 
+											 "blade",
 				!spec_dbon_applies ? "hits" : "freezes",
 				hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
@@ -1829,6 +1832,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	if (attacks(AD_ELEC, otmp)) {
 	    if (realizes_damage)
 			pline_The("%s hits%s %s%c", otmp->oartifact == ART_CARESS ? "lashing whip" : 
+										otmp->oartifact == ART_ARYFAERN_KERYM ? "crackling sword-shaped void" : 
 										otmp->oartifact == ART_RAMIEL ? "thundering polearm" : 
 										"massive hammer",
 			  !spec_dbon_applies ? "" : "!  Lightning strikes",
