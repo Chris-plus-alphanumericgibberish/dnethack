@@ -140,6 +140,7 @@
 #define is_gnome(ptr)		(((ptr)->mflags2 & M2_GNOME) != 0L)
 #define is_orc(ptr)		(((ptr)->mflags2 & M2_ORC) != 0L)
 #define is_ogre(ptr)		((ptr)->mlet == S_OGRE)
+#define is_troll(ptr)		((ptr)->mlet == S_TROLL)
 #define is_kobold(ptr)		((ptr)->mlet == S_KOBOLD)
 #define is_ettin(ptr)		((ptr) == &mons[PM_ETTIN])
 #define is_human(ptr)		(((ptr)->mflags2 & M2_HUMAN) != 0L)
