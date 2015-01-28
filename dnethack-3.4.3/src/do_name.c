@@ -1213,6 +1213,7 @@ static const char * const bogusmons[] = {
 	"lion-dog", "rat-ant", 
 	"bot for announcing commits", "bot for evaluating code", "message-sending bot", "bot for hugging people",
 		"channel-occupying bot","verbally abusive bot (with great taste in endgame-content)", "discordian bot",
+		"smartbot overlord",
 	"Y2K bug", "foo",
 						/* misc. */
 	"neutral twin", "vampiric half-dragon half-troll lycanthropic fiendish snail", 
