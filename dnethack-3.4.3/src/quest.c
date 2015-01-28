@@ -130,7 +130,7 @@ boolean talk;
 	}
     }
 #endif
-	if(Race_if(PM_ELF) && !(Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN))){
+	if(Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN))){
 		purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod))  ?  1 : 0;
 	} else {
 		purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod) &&
