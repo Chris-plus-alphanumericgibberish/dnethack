@@ -98,8 +98,7 @@ artitouch()
 boolean
 ok_to_quest()
 {
-	return((boolean)((Qstat(got_quest) || Qstat(got_thanks)))
-			&& (is_pure(FALSE) > 0));
+	return((boolean)((Qstat(got_quest) || Qstat(got_thanks))));
 }
 
 STATIC_OVL boolean
