@@ -1744,6 +1744,13 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(is_elf(md) && (is_orc(ma) || is_ogre(ma) || is_undead(ma)) && !is_undead(md))
 		return ALLOW_M|ALLOW_TM;
 
+	/* dwarves vs. orcs */
+	if(is_dwarf(ma) && (is_orc(md) || is_ogre(md) || is_troll(md)) && !is_undead(ma))
+		return ALLOW_M|ALLOW_TM;
+	/* and vice versa */
+	if(is_elf(md) && (is_orc(ma) || is_ogre(ma) || is_troll(ma)) && !is_undead(md))
+		return ALLOW_M|ALLOW_TM;
+
 	/* elves vs. drow */
 	if( (is_elf(ma) || is_elf(md)) && (is_drow(ma) || is_drow(md)) && magr->mfaction != EILISTRAEE_SYMBOL && mdef->mfaction != EILISTRAEE_SYMBOL)
 		return ALLOW_M|ALLOW_TM;
