@@ -2079,6 +2079,17 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    }
 			    break;
 			}
+			{
+				struct obj *mwep;
+				mwep = MON_WEP(mtmp);
+				if(mwep && (mwep->oartifact == ART_STING || mwep->oartifact == ART_LIECLEAVER)){
+					pline("%s slices through %s spider web.",
+						  Monnam(mtmp),
+						  a_your[trap->madeby_u]);
+					deltrap(trap);
+					break;
+				}
+			}
 			tear_web = FALSE;
 			switch (monsndx(mptr)) {
 			    case PM_OWLBEAR: /* Eric Backus */
