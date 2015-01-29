@@ -1514,7 +1514,7 @@ defaultvalue:
 			u.ualign.sins++;
 			u.hod++;
 	    } else if ((u.ualign.type == A_LAWFUL) && 
-				!(Race_if(PM_DROW) && flags.initgend && 
+				!(Race_if(PM_DROW) && !flags.initgend && 
 					(Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD))
 				 ) && 
 			(u.ualign.record > -10)
