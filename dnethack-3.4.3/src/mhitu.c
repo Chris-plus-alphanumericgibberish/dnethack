@@ -146,7 +146,7 @@ struct attack *mattk;
 	    return (!mwep || !mwep->opoisoned) ? "attack" : "weapon";
 	} 
 	else if(mattk->adtyp == AD_SHDW){
-		return "shadow blades";
+		return "shadow blade";
 	} 
 	else if(mattk->aatyp == AT_HODS){
 	    struct obj *mwep = uwep;
