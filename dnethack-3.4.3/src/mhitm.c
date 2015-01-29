@@ -398,7 +398,7 @@ meleeattack:
 		break;
 
 	    case AT_ARRW:{
-			if(mattk->adtyp != AD_SHDW || dist2(magr->mx,magr->my,mdef->mx,mdef->my)>2){
+			if((mattk->adtyp != AD_SHDW || dist2(magr->mx,magr->my,mdef->mx,mdef->my)>2) && mlined_up(magr, mdef, FALSE)){
 				int n;
 				if (canseemon(magr)) pline("%s shoots.", Monnam(magr));
 				for(n = d(mattk->damn, mattk->damd); n > 0; n--) firemm(magr, mdef, mattk);

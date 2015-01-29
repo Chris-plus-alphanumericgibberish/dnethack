@@ -802,7 +802,7 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_ARRW:{
 			int n;
-			if(mattk->adtyp != AD_SHDW || range2){
+			if((mattk->adtyp != AD_SHDW || range2) && lined_up(mtmp)){
 				if (canseemon(mtmp)) pline("%s shoots at you!", Monnam(mtmp));
 				for(n = d(mattk->damn, mattk->damd); n > 0; n--) sum[i] = firemu(mtmp, mattk);
 			/* Note: firemu takes care of displacement */
