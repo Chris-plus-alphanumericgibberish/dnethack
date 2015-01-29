@@ -1197,6 +1197,7 @@ domove()
 		return;
 	}
 	if(u.utrap) {
+		boolean usedmove = TRUE;
 		if(u.utraptype == TT_PIT) {
 			if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20){
 				You("phase through the wall of the pit.");
@@ -1271,6 +1272,7 @@ domove()
 					deltrap(trap);
 					newsym(u.ux,u.uy);
 				}
+				usedmove = FALSE;
 			} else {
 		    if(--u.utrap) {
 			if(flags.verbose) {
@@ -1339,7 +1341,7 @@ domove()
 		    if((u.dx || u.dy) || !rn2(5)) u.utrap--; //was dx && dy, I think this was a typo
 			}
 		}
-		if(!(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20))return;
+		if(!(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) && usedmove)return;
 	}
 
 	if (!test_move(u.ux, u.uy, x-u.ux, y-u.uy, DO_MOVE)) {
