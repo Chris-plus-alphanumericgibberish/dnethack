@@ -1491,14 +1491,14 @@ defaultvalue:
 		){
 			if(objects[wep->otyp].oc_skill == P_CROSSBOW && !(noncorporeal(mdat) || amorphous(mdat) || stationary(mdat))){
 				int dambonus = weapon_dam_bonus(wep);
-				int i;
+				int i=max(P_SKILL(P_CROSSBOW)-2,0);
+				if(Race_if(PM_GNOME)) i++;
 				if(dambonus > 0) dambonus *= 3;
 				tmp += dambonus;
-				if(P_SKILL(P_CROSSBOW)-2>0)
-					for(i=P_SKILL(P_CROSSBOW)-2;i>0;i--){
-						// pline("%d",i);
-						tmp += dmgval(obj, mon, 0);
-					}
+				for(i;i>0;i--){
+					// pline("%d",i);
+					tmp += dmgval(obj, mon, 0);
+				}
 			}
 			//else tmp += 0;
 		} else tmp += weapon_dam_bonus(wep);
