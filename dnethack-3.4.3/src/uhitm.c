@@ -1013,7 +1013,7 @@ int thrown;
 		    /* then do only 1-2 points of damage */
 		    if (mdat->mlet == S_SHADE && !(objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
 				tmp = 0;
-		    else if(obj->oartifact == ART_LIECLEAVER) tmp = rnd(12) + obj->spe;
+		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
 			else tmp = rnd(2);
 			
 			
@@ -1498,6 +1498,7 @@ defaultvalue:
 				for(i;i>0;i--){
 					// pline("%d",i);
 					tmp += dmgval(obj, mon, 0);
+					if(wep->oartifact == ART_LIECLEAVER) tmp += rnd(10);
 				}
 			}
 			//else tmp += 0;

@@ -2800,6 +2800,7 @@ arti_invoke(obj)
 			otmp = mksobj(SHURIKEN, TRUE, FALSE);
 		} else if(obj->oartifact == ART_YOICHI_NO_YUMI) otmp = mksobj(YA, TRUE, FALSE);
 		else if(obj->oartifact == ART_WRATHFUL_SPIDER) otmp = mksobj(DROVEN_BOLT, TRUE, FALSE);
+		else if(obj->oartifact == ART_LIECLEAVER) otmp = mksobj(DROVEN_BOLT, TRUE, FALSE);
 		else if(obj->oartifact == ART_BELTHRONDING) otmp = mksobj(ELVEN_ARROW, TRUE, FALSE);
 		else otmp = mksobj(ROCK, TRUE, FALSE);
 
