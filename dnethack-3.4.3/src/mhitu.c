@@ -1338,7 +1338,9 @@ hitmu(mtmp, mattk)
 			    /* then do only 1-2 points of damage */
 			    if (u.umonnum == PM_SHADE && otmp->otyp != SILVER_ARROW)
 				dmg = 0;
-			    else
+				else if(otmp->oartifact == ART_LIECLEAVER)
+				dmg = 2*(rnd(12) + rnd(10) + otmp->spe);
+				else
 				dmg = rnd(2);
 			} else dmg += dmgval(otmp, &youmonst, 0);
 			

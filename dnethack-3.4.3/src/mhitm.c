@@ -943,7 +943,9 @@ mdamagem(magr, mdef, mattk)
 			    /* then do only 1-2 points of damage */
 			    if (mdef->data->mlet == S_SHADE && otmp->otyp != SILVER_ARROW)
 				tmp = 0;
-			    else
+				else if(otmp->oartifact == ART_LIECLEAVER)
+				tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
+				else 
 				tmp = rnd(2);
 			} else tmp += dmgval(otmp, mdef, 0);
 			
