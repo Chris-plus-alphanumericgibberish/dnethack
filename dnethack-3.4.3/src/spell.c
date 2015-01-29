@@ -3191,9 +3191,25 @@ spiriteffects(power, atme)
 			set_destroy_thrown(0);  //state variable referenced in drop_throw
 			set_bypassDR(0);  //state variable referenced in drop_throw
 		}break;
-		case PWR_WEAVE_BLACK_WEB:
+		case PWR_WEAVE_BLACK_WEB:{
 		    pline("The poison shadow of the Black Web flows in your wake.");
-		break;
+			static struct attack webattack[] = 
+			{
+				{AT_SHDW,AD_SHDW,4,6},
+				{0,0,0,0}
+			};
+			struct monst *mon;
+			int i, tmp, weptmp, tchtmp;
+			for(i=0; i<8;i++){
+				if(isok(u.ux+xdir[i],u.uy+ydir[i])){
+					mon = m_at(u.ux+xdir[i],u.uy+ydir[i]);
+					if(mon && !mon->mpeaceful){
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, webattack, 1);
+					}
+				}
+			}
+		} break;
 		case PWR_IDENTIFY_INVENTORY:
 		    identify_pack(0);
 		break;
