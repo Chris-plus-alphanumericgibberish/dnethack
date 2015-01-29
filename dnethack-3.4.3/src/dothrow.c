@@ -159,10 +159,10 @@ int shotlimit;
 			if (obj->otyp == ORCISH_ARROW && uwep &&
 					uwep->otyp == ORCISH_BOW) multishot++;
 		break;
-	    case PM_GNOME:
-			if (obj->otyp == CROSSBOW_BOLT && uwep &&
-					uwep->otyp == CROSSBOW) multishot++;
-		break;
+	    // case PM_GNOME:
+			// if (obj->otyp == CROSSBOW_BOLT && uwep &&
+					// uwep->otyp == CROSSBOW) multishot++;
+		// break;
 	    default:
 		break;	/* No bonus */
 	    }
