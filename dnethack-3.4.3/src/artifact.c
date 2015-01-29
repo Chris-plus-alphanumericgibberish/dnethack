@@ -2458,8 +2458,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 		if(extrahit == 7){
 			if (realizes_damage) pline_The("%s hits %s with a storm of energy!", artilist[otmp->oartifact].name, hittee);
-			if(!resists_fire(mdef)) *dmgptr += d(1, 7);
-			if(!resists_cold(mdef)) *dmgptr += d(1, 7);
+			if(!(resists_fire(mdef) && resists_cold(mdef))) 
+				*dmgptr += d(2, 7);
 			if(!resists_elec(mdef)) *dmgptr += d(1, 7);
 			if(!resists_acid(mdef)) *dmgptr += d(1, 7);
 			if(!resists_magm(mdef)) *dmgptr += d(1, 7);
