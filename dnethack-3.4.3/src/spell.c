@@ -601,7 +601,10 @@ struct obj *spellbook;
 			return 0;
 		}
 		RoSbook = doreadstudy("You open the spellbook.");
-		if(!RoSbook) return 0;
+		if(!RoSbook){
+			delay = 0;
+			return 0;
+		}
 		/* Books are often wiser than their readers (Rus.) */
 		spellbook->in_use = TRUE;
 		if (!spellbook->blessed &&
