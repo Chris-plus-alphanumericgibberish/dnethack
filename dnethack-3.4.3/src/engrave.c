@@ -3098,7 +3098,7 @@ doward()
 				else maxelen = ((otmp->spe + 3) * 2) + 1;
 				/* -2 = 3, -1 = 5, 0 = 7, +1 = 9, +2 = 11
 				 */
-				if(otmp->otyp == CRYSTAL_SWORD){
+				if(otmp->otyp != CRYSTAL_SWORD){
 					Your("%s dull.", aobjnam(otmp,	"get"));
 					if (otmp->unpaid) {
 						struct monst *shkp = shop_keeper(*u.ushops);
@@ -4174,7 +4174,7 @@ doseal()
 				else maxelen = ((otmp->spe + 3) * 2) + 1;
 				/* -2 = 3, -1 = 5, 0 = 7, +1 = 9, +2 = 11
 				 */
-				if(otmp->otyp == CRYSTAL_SWORD){
+				if(otmp->otyp != CRYSTAL_SWORD){
 					Your("%s dull.", aobjnam(otmp,	"get"));
 					if (otmp->unpaid) {
 						struct monst *shkp = shop_keeper(*u.ushops);
