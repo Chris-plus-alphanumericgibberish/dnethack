@@ -2729,13 +2729,15 @@ register int	mmflags;
 			if((ptr == &mons[urole.ldrnum] && ptr != &mons[PM_ECLAVDRA]) || 
 				(ptr == &mons[urole.guardnum] && ptr != &mons[PM_DROW_MATRON_MOTHER] && ptr != &mons[PM_HEDROW_MASTER_WIZARD])
 			){
-				curhouse = u.uhouse;
+				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = u.uhouse;
+				else curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_MINDLESS_THRALL] || ptr == &mons[PM_A_GONE] || ptr == &mons[PM_PEASANT]){
 				curhouse = PEN_A_SYMBOL;
 			} else if(ptr == &mons[PM_ECLAVDRA] || ptr == &mons[PM_AVATAR_OF_LOLTH]){
 				curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_DROW_MATRON_MOTHER]){
-				curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.uhouse - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE)) : LOLTH_SYMBOL;
+				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.uhouse - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE)) : LOLTH_SYMBOL;
+				else curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_SEYLL_AUZKOVYN] || ptr == &mons[PM_STJARNA_ALFAR]){
 				curhouse = EILISTRAEE_SYMBOL;
 			} else if(ptr == &mons[PM_DARUTH_XAXOX] || ptr == &mons[PM_DROW_ALIENIST]){
@@ -2769,7 +2771,9 @@ register int	mmflags;
 				}
 				else curhouse = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
 			} else if(In_quest(&u.uz)){
-				if(in_mklev || rn2(3)){
+				if(Race_if(PM_DROW) && Role_if(PM_EXILE)){
+					curhouse = PEN_A_SYMBOL;
+				} else if(Race_if(PM_DROW) && (in_mklev || rn2(3))){
 					if(Is_qstart(&u.uz)) curhouse = u.uhouse;
 					else if(Role_if(PM_NOBLEMAN)){
 						if(flags.initgend) curhouse = u.uhouse;
