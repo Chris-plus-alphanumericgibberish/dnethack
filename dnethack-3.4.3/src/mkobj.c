@@ -1217,7 +1217,7 @@ register struct obj *obj;
 		wt = 40; //200 total
 	}
 	else if(obj->oartifact == ART_DRAGON_PLATE || obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
-		wt =  (int)(wt * 2); //300
+		wt =  (int)(wt * 1.5); //225
 	} else if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
 		wt =  150; /* Same as a crystal ball (ie, the Orb of Weight) */
 	} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
