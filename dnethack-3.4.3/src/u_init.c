@@ -700,6 +700,23 @@ static const struct def_skill Skill_P[] = {
     { P_NONE, 0 }
 };
 
+static const struct def_skill Skill_Dro_M_P[] = {
+    { P_CLUB, P_EXPERT },		{ P_MACE, P_EXPERT },
+    { P_MORNING_STAR, P_EXPERT },	{ P_FLAIL, P_EXPERT },
+    { P_HAMMER, P_EXPERT },		{ P_QUARTERSTAFF, P_EXPERT },
+	{ P_TWO_HANDED_SWORD, P_SKILLED },
+    { P_POLEARMS, P_SKILLED },		{ P_SPEAR, P_SKILLED },
+    { P_JAVELIN, P_SKILLED },		{ P_TRIDENT, P_SKILLED },
+    { P_LANCE, P_BASIC },		{ P_BOW, P_BASIC },
+    { P_SLING, P_BASIC },		{ P_CROSSBOW, P_BASIC },
+    { P_DART, P_BASIC },		{ P_SHURIKEN, P_BASIC },
+    { P_BOOMERANG, P_BASIC },		{ P_UNICORN_HORN, P_SKILLED },
+    { P_HEALING_SPELL, P_EXPERT },	{ P_DIVINATION_SPELL, P_EXPERT },
+    { P_CLERIC_SPELL, P_EXPERT },
+    { P_BARE_HANDED_COMBAT, P_BASIC },
+    { P_NONE, 0 }
+};
+
 static const struct def_skill Skill_Pir[] = {
     { P_DAGGER, P_SKILLED },	{ P_KNIFE,  P_EXPERT },
     { P_AXE, P_SKILLED },	    { P_SHORT_SWORD, P_BASIC },
@@ -1382,7 +1399,8 @@ u_init()
 		// if(!rn2(10)) ini_inv(Magicmarker);
 		// else if(!rn2(10)) ini_inv(Lamp);
 		knows_object(POT_WATER);
-		skill_init(Skill_P);
+		if(Race_if(PM_DROW) && !flags.female) skill_init(Skill_Dro_M_P);
+		else skill_init(Skill_P);
 		if(Race_if(PM_DROW) && flags.female){
 			skill_add(Skill_DP);
 			ini_inv(ExtraBook);
