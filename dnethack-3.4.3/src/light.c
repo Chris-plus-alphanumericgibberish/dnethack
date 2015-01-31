@@ -451,32 +451,28 @@ void
 snuff_light_source(x, y)
     int x, y;
 {
-    light_source *ls;
+    light_source *ls, *nls;
     struct obj *obj;
 
-    for (ls = light_base; ls; ls = ls->next)
-	/*
-	Is this position check valid??? Can I assume that the positions
-	will always be correct because the objects would have been
-	updated with the last vision update?  [Is that recent enough???]
-	*/
-	if (ls->type == LS_OBJECT && ls->x == x && ls->y == y) {
-	    obj = (struct obj *) ls->id;
-	    if (obj_is_burning(obj)) {
-		/* The only way to snuff Sunsword is to unwield it.  Darkness
-		 * scrolls won't affect it.  (If we got here because it was
-		 * dropped or thrown inside a monster, this won't matter anyway
-		 * because it will go out when dropped.)
-		 */
-		if (artifact_light(obj)) continue;
-		end_burn(obj, obj->otyp != MAGIC_LAMP);
+    for (ls = light_base; ls; ls = nls){
+		nls = ls->next;
 		/*
-		 * The current ls element has just been removed (and
-		 * ls->next is now invalid).  Return assuming that there
-		 * is only one light source attached to each object.
-		 */
-		return;
-	    }
+		Is this position check valid??? Can I assume that the positions
+		will always be correct because the objects would have been
+		updated with the last vision update?  [Is that recent enough???]
+		*/
+		if (ls->type == LS_OBJECT && ls->x == x && ls->y == y) {
+			obj = (struct obj *) ls->id;
+			if (obj_is_burning(obj)) {
+				/* The only way to snuff Sunsword is to unwield it.  Darkness
+				 * scrolls won't affect it.  (If we got here because it was
+				 * dropped or thrown inside a monster, this won't matter anyway
+				 * because it will go out when dropped.)
+				 */
+				if (artifact_light(obj)) continue;
+				end_burn(obj, obj->otyp != MAGIC_LAMP);
+			}
+		}
 	}
 }
 
