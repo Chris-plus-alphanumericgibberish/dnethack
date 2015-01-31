@@ -1881,12 +1881,14 @@ const struct def_skill *class_skill;
 
 	/* walk through array to set skill maximums */
 	for (; class_skill->skill != P_NONE; class_skill++) {
-	    skmax = class_skill->skmax;
-	    skill = class_skill->skill;
+		if(!Race_if(PM_VAMPIRE) || class_skill->skill != P_TWO_WEAPON_COMBAT){
+			skmax = class_skill->skmax;
+			skill = class_skill->skill;
 
-	    OLD_P_MAX_SKILL(skill) = skmax;
-	    if (OLD_P_SKILL(skill) == P_ISRESTRICTED)	/* skill pre-set */
-			OLD_P_SKILL(skill) = P_UNSKILLED;
+			OLD_P_MAX_SKILL(skill) = skmax;
+			if (OLD_P_SKILL(skill) == P_ISRESTRICTED)	/* skill pre-set */
+				OLD_P_SKILL(skill) = P_UNSKILLED;
+		}
 	}
 
 	/* High potential fighters already know how to use their hands. */
