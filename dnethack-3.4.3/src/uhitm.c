@@ -1397,6 +1397,7 @@ int thrown;
 						}
 						if (thrown) obfree(obj, (struct obj *)0);
 						else useup(obj);
+						obj = (struct obj *) 0;
 						hittxt = TRUE;
 						get_dmg_bonus = FALSE;
 						tmp = 0;
@@ -1412,6 +1413,7 @@ int thrown;
 						}
 						if (thrown) obfree(obj, (struct obj *)0);
 						else useup(obj);
+						obj = (struct obj *) 0;
 						hittxt = TRUE;
 						get_dmg_bonus = FALSE;
 					break;
