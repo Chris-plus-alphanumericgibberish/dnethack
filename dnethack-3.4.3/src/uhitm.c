@@ -1091,8 +1091,7 @@ int thrown;
 						) &&
 						((monwep = MON_WEP(mon)) != 0 &&
 							!is_flimsy(monwep) &&
-							!obj_resists(monwep,
-								50 + 15 * greatest_erosion(obj), 100))) {
+							!obj_resists(monwep, 0, 100))) {
 				/*
 				 * 5% chance of shattering defender's weapon when
 				 * using a two-handed weapon; less if uwep is rusted.
