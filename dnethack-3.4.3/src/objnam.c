@@ -1839,6 +1839,7 @@ const char *oldstr;
 			   !BSTRCMP(bp, p-5, "aklys") ||
 			   !BSTRCMP(bp, p-5, "dress") ||
 			   !BSTRCMP(bp, p-16, "descent of stars") ||
+			   !BSTRCMP(bp, p-13, "dragon scales") ||
 			   !BSTRCMP(bp, p-6, "fungus"))
 				return bp;
 	mins:
@@ -2387,6 +2388,7 @@ boolean from_user;
 	if (strncmpi(bp, "master key", 10)) /* not the "master" rank */
 	if (strncmpi(bp, "rod of lordly might", 19)) /* not the "lord" rank */
 	if (strncmpi(bp, "magenta", 7)) /* not the "mage" rank */
+	if (strncmpi(bp, "chromatic dragon scales", 23)) /* not a "dragon" */
 	if (mntmp < LOW_PM && strlen(bp) > 2 &&
 	    (mntmp = name_to_mon(bp)) >= LOW_PM) {
 		int mntmptoo, mntmplen;	/* double check for rank title */
