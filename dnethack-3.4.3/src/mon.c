@@ -1039,7 +1039,7 @@ movemon()
 	}
 
 	/* continue if the monster died fighting */
-	if (!mtmp->iswiz && mtmp->mcansee) {
+	if (!mtmp->iswiz && !is_blind(mtmp)) {
 	    /* Note:
 	     *  Conflict does not take effect in the first round.
 	     *  Therefore, A monster when stepping into the area will
@@ -1489,7 +1489,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		flag |= ALLOW_ALL;
 		flag &= ~NOTONL;
 	}
-	if(!mon->mcansee)
+	if(is_blind(mon))
 		flag |= ALLOW_SSM;
 	maxx = min(x+1,COLNO-1);
 	maxy = min(y+1,ROWNO-1);
@@ -1543,7 +1543,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		if((is_pool(nx,ny) == wantpool || poolok) &&
 			(lavaok || !is_lava(nx,ny))) {
 		int dispx, dispy;
-		boolean monseeu = (mon->mcansee && (!Invis || perceives(mdat)));
+		boolean monseeu = (!is_blind(mon) && (!Invis || perceives(mdat)));
 		boolean checkobj = OBJ_AT(nx,ny);
 		
 		/* Displacement also displaces the Elbereth/scare monster,

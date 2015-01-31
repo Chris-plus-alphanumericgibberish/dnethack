@@ -3720,7 +3720,7 @@ register struct monst *shkp;
 		gy = u.uy;
 	} else if(ANGRY(shkp)) {
 		/* Move towards the hero if the shopkeeper can see him. */
-		if(shkp->mcansee && m_canseeu(shkp)) {
+		if(!is_blind(shkp) && m_canseeu(shkp)) {
 			gx = u.ux;
 			gy = u.uy;
 		}
@@ -5487,7 +5487,7 @@ countFarSigns(mon)
 struct monst *mon;
 {
 	int count=0;
-	if(couldsee(mon->mx, mon->my) && mon->mcansee){
+	if(couldsee(mon->mx, mon->my) && !is_blind(mon)){
 		// if(u.sealsActive&SEAL_AHAZU);
 		if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
 		// if(u.sealsActive&SEAL_ANDREALPHUS);
@@ -5539,7 +5539,7 @@ countCloseSigns(mon)
 struct monst *mon;
 {
 	int count=countFarSigns(mon);
-	if(couldsee(mon->mx, mon->my) && mon->mcansee){
+	if(couldsee(mon->mx, mon->my) && !is_blind(mon)){
 		if(u.sealsActive&SEAL_AHAZU && !(ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE))) count++;
 		// if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
 		if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;

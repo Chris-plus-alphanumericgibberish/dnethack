@@ -469,7 +469,7 @@ struct monst *mtmp;
 		    }
 		}
 		nomore(MUSE_SCR_TELEPORTATION);
-		if(obj->otyp == SCR_TELEPORTATION && mtmp->mcansee
+		if(obj->otyp == SCR_TELEPORTATION && !is_blind(mtmp)
 		   && haseyes(mtmp->data) && !is_weeping(mtmp->data)
 		   && (!obj->cursed ||
 		       (!(mtmp->isshk && inhishop(mtmp))
@@ -1128,7 +1128,7 @@ struct monst *mtmp;
 				noncorporeal(mtmp->data) ||
 				unsolid(mtmp->data) || !rn2(10))
 		       && dist2(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy) <= 2
-		       && mtmp->mcansee && haseyes(mtmp->data)
+		       && !is_blind(mtmp) && haseyes(mtmp->data)
 #ifdef REINCARNATION
 		       && !Is_rogue_level(&u.uz)
 #endif
@@ -1145,7 +1145,7 @@ struct monst *mtmp;
 		nomore(MUSE_SCR_FIRE);
 		if (obj->otyp == SCR_FIRE && resists_fire(mtmp)
 		   && dist2(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy) <= 2
-		   && mtmp->mcansee && haseyes(mtmp->data)) {
+		   && !is_blind(mtmp) && haseyes(mtmp->data)) {
 			m.offensive = obj;
 			m.has_offense = MUSE_SCR_FIRE;
 		}

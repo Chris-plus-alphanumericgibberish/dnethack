@@ -957,7 +957,7 @@ struct obj *obj;
 		if (vis)
 		    pline ("%s is too tired to look at your mirror.",
 			    Monnam(mtmp));
-	} else if (!mtmp->mcansee) {
+	} else if (is_blind(mtmp)) {
 	    if (vis)
 		pline("%s can't see anything right now.", Monnam(mtmp));
 	/* some monsters do special things */

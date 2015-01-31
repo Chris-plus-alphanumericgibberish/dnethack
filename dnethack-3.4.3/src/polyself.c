@@ -1087,7 +1087,7 @@ dogaze()
 			setmangry(mtmp);
 		    }
 		    if (!mtmp->mcanmove || !mtmp->mnotlaugh || mtmp->mstun || mtmp->msleeping ||
-				    !mtmp->mcansee || !haseyes(mtmp->data)) {
+				    is_blind(mtmp) || !haseyes(mtmp->data)) {
 			looked--;
 			continue;
 		    }
@@ -1200,7 +1200,7 @@ domindblast()
 			continue;
 		if(mtmp->mpeaceful)
 			continue;
-		u_sen = telepathic(mtmp->data) && !mtmp->mcansee;
+		u_sen = telepathic(mtmp->data) && is_blind(mtmp);
 		if (u_sen || (telepathic(mtmp->data) && rn2(2)) || !rn2(10)) {
 			You("lock in on %s %s.", s_suffix(mon_nam(mtmp)),
 				u_sen ? "telepathy" :

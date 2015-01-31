@@ -1453,12 +1453,13 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			else pline_The("unholy blade drains your life!");
 			losexp("life drainage",TRUE,FALSE,FALSE);
 		}
-		else if(mdef->mcansee && haseyes(mdef->data)){
+		else if(!is_blind(mdef) && haseyes(mdef->data)){
 			if (vis) {
 				pline_The("unholy blade draws the life from %s!",
 				      mon_nam(mdef));
 			}
-			if (mdef->m_lev == 0) {
+			if (mdef->m_lev <= 0) {
+				mdef->m_lev = 0;
 			    *dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 			} else {
 			    int drain = rnd(8);
@@ -2371,7 +2372,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		tmp += magr->m_lev;
 		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) tmp += u.chokhmah;
 		if(multi < 0) tmp += 4;
-		if((Invis && !perceives(magr->data)) || !magr->mcansee)
+		if((Invis && !perceives(magr->data)) || is_blind(magr))
 			tmp -= 2;
 		if(magr->mtrapped) tmp -= 2;
 		if(tmp <= 0) tmp = 1;
@@ -2473,7 +2474,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		tmp += magr->m_lev;
 		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) tmp += u.chokhmah;
 		if(multi < 0) tmp += 4;
-		if((Invis && !perceives(magr->data)) || !magr->mcansee)
+		if((Invis && !perceives(magr->data)) || is_blind(magr))
 			tmp -= 2;
 		if(magr->mtrapped) tmp -= 2;
 		if(tmp <= 0) tmp = 1;
@@ -4157,7 +4158,7 @@ arti_invoke(obj)
 							obj->oartifact == ART_ROD_OF_LORDLY_MIGHT ? "Might" : "majesty");
 						for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 							if (DEADMONSTER(mtmp)) continue;
-							if(mtmp->mcansee && couldsee(mtmp->mx,mtmp->my)) {
+							if(!is_blind(mtmp) && couldsee(mtmp->mx,mtmp->my)) {
 //								if (! resist(mtmp, sobj->oclass, 0, NOTELL))
 								monflee(mtmp, 0, FALSE, FALSE);
 							}

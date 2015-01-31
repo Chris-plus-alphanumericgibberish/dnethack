@@ -173,7 +173,7 @@ register struct monst *priest;
 			return(0);
 		} else if(index(u.urooms, temple)) {
 			/* chase player if inside temple & can see him */
-			if(priest->mcansee && m_canseeu(priest)) {
+			if(!is_blind(priest) && m_canseeu(priest)) {
 				gx = u.ux;
 				gy = u.uy;
 			}

@@ -886,7 +886,7 @@ asGuardian:
 		pline_msg = "moans.";
 	    else if (mtmp->mconf || mtmp->mstun)
 		verbl_msg = !rn2(3) ? "Huh?" : rn2(2) ? "What?" : "Eh?";
-	    else if (!mtmp->mcansee)
+	    else if (is_blind(mtmp))
 		verbl_msg = "I can't see!";
 	    else if (mtmp->mtrapped) {
 			struct trap *t = t_at(mtmp->mx, mtmp->my);

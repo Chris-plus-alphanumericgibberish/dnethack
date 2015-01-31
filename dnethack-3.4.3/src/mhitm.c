@@ -567,7 +567,7 @@ hitmm(magr, mdef, mattk)
 		if(magr->m_ap_type) seemimic(magr);
 		if((compat = could_seduce(magr,mdef,mattk)) && !magr->mcan) {
 			Sprintf(buf, "%s %s", Monnam(magr),
-				mdef->mcansee ? "smiles at" : "talks to");
+				!is_blind(mdef) ? "smiles at" : "talks to");
 			pline("%s %s %s.", buf, mon_nam(mdef),
 				compat == 2 ?
 					"engagingly" : "seductively");
@@ -645,9 +645,9 @@ gazemm(magr, mdef, mattk)
 		}
 	}
 
-	if (magr->mcan || !magr->mcansee ||
+	if (magr->mcan || is_blind(magr) ||
 	    (magr->minvis && !perceives(mdef->data)) ||
-	    !mdef->mcansee || mdef->msleeping) {
+	    is_blind(mdef) || mdef->msleeping) {
 	    if(vis && !is_weeping(magr->data)) pline("but nothing happens.");
 	    return(MM_MISS);
 	}
@@ -656,7 +656,7 @@ gazemm(magr, mdef, mattk)
 	    if (canseemon(mdef))
 		(void) mon_reflects(mdef,
 				    "The gaze is reflected away by %s %s.");
-	    if (mdef->mcansee) {
+	    if (!is_blind(mdef)) {
 		if (mon_reflects(magr, (char *)0)) {
 		    if (canseemon(magr))
 			(void) mon_reflects(magr,
@@ -1023,7 +1023,7 @@ mdamagem(magr, mdef, mattk)
 		break;
 /////////////////////////////////////////////////
 		case AD_STDY:
-			if (!magr->mcan && magr->mcansee) {
+			if (!magr->mcan && !is_blind(magr)) {
 				mdef->mstdy = max(tmp,mdef->mstdy);
 				tmp = 0;
 			}
@@ -1331,7 +1331,7 @@ mdamagem(magr, mdef, mattk)
 		if (can_blnd(magr, mdef, mattk->aatyp, (struct obj*)0)) {
 		    register unsigned rnd_tmp;
 
-		    if (vis && mdef->mcansee)
+		    if (vis && !is_blind(mdef))
 			pline("%s is blinded.", Monnam(mdef));
 		    rnd_tmp = d((int)mattk->damn, (int)mattk->damd);
 		    if ((rnd_tmp += mdef->mblinded) > 127) rnd_tmp = 127;
@@ -1344,7 +1344,7 @@ mdamagem(magr, mdef, mattk)
 	    case AD_BLNK:
 		/* Weeping angels using their gaze attack on each
 		   other has unfortunate effects for both of them */
-		if (is_weeping(pd) && mdef->mcansee && magr->mcansee) {
+		if (is_weeping(pd) && !is_blind(mdef) && !is_blind(magr)) {
 		    if (vis) {
 			Strcpy(buf, Monnam(mdef));
 			pline("%s and %s are permanently quantum-locked!", buf, mon_nam(magr));
@@ -1355,7 +1355,7 @@ mdamagem(magr, mdef, mattk)
 		}
 		break;
 	    case AD_HALU:
-		if (!magr->mcan && haseyes(pd) && mdef->mcansee) {
+		if (!magr->mcan && haseyes(pd) && !is_blind(mdef)) {
 		    if (vis) pline("%s looks %sconfused.",
 				    Monnam(mdef), mdef->mconf ? "more " : "");
 		    mdef->mconf = 1;
@@ -1945,7 +1945,7 @@ int mdead;
 		if (tmp > 127) tmp = 127;
 		if (mddat == &mons[PM_FLOATING_EYE]) {
 		    if (!rn2(4)) tmp = 127;
-		    if (magr->mcansee && haseyes(madat) && mdef->mcansee &&
+		    if (!is_blind(magr) && haseyes(madat) && !is_blind(mdef) &&
 			(perceives(madat) || !mdef->minvis)) {
 			Sprintf(buf, "%s gaze is reflected by %%s %%s.",
 				s_suffix(mon_nam(mdef)));

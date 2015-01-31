@@ -385,6 +385,7 @@ register struct monst *mtmp;
 	if (mtmp->mcrazed)	  Strcat(info, ", crazed");
 	if (mtmp->mblinded || !mtmp->mcansee)
 				  Strcat(info, ", blind");
+	else if(is_blind(mtmp)) Strcat(info, ", dazzled");
 	if (mtmp->mstun)	  Strcat(info, ", stunned");
 	if (mtmp->msleeping)	  Strcat(info, ", asleep");
 #if 0	/* unfortunately mfrozen covers temporary sleep and being busy

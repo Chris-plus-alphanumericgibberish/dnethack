@@ -762,7 +762,7 @@ boolean ranged;
 		!attacktype(mtmp->data, AT_EXPL)) ||
 		(!ranged &&
 		 mtmp2->data == &mons[PM_FLOATING_EYE] && rn2(10) &&
-		 mtmp->mcansee && haseyes(mtmp->data) && mtmp2->mcansee
+		 !is_blind(mtmp) && haseyes(mtmp->data) && !is_blind(mtmp2)
 		 && (perceives(mtmp->data) || !mtmp2->minvis)) ||
 		(!ranged &&
 		 mtmp2->data==&mons[PM_GELATINOUS_CUBE] && rn2(10)) ||

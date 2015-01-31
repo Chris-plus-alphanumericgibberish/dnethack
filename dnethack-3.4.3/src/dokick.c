@@ -227,7 +227,7 @@ register xchar x, y;
 doit:
 	You("kick %s.", mon_nam(mon));
 	if(!rn2(clumsy ? 3 : 4) && (clumsy || !bigmonst(mon->data)) &&
-	   mon->mcansee && !mon->mtrapped && !thick_skinned(mon->data) &&
+	   !is_blind(mon) && !mon->mtrapped && !thick_skinned(mon->data) &&
 	   mon->data->mlet != S_EEL && haseyes(mon->data) && mon->mcanmove &&
 	   !mon->mstun && !mon->mconf && !mon->msleeping &&
 	   mon->data->mmove >= 12) {

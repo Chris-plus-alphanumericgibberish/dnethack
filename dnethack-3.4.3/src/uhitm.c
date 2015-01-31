@@ -512,7 +512,7 @@ register struct monst *mtmp;
 
 	/* Is the "it died" check actually correct? */
 	if(mdat->mlet == S_LEPRECHAUN && !mtmp->mfrozen && !mtmp->msleeping &&
-	   !mtmp->mconf && mtmp->mcansee && !rn2(7) &&
+	   !mtmp->mconf && !is_blind(mtmp) && !rn2(7) &&
 	   (m_move(mtmp, 0) == 2 ||			    /* it died */
 	   mtmp->mx != u.ux+u.dx || mtmp->my != u.uy+u.dy)) /* it moved */
 		return(FALSE);
@@ -1061,7 +1061,7 @@ int thrown;
 			if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
 			} else if (!(noncorporeal(mdat) || amorphous(mdat) || stationary(mdat)) && (
-						((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || !mon->mcansee || !mon->mcanmove || !mon->mnotlaugh || 
+						((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh || 
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) && 
@@ -1073,7 +1073,7 @@ int thrown;
 					(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 					&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
 				) You("strike %s from behind!", mon_nam(mon));
-				else if(!mon->mcansee) You("strike the blinded %s!", l_monnam(mon));
+				else if(is_blind(mon)) You("strike the blinded %s!", l_monnam(mon));
 				else if(mon->mtrapped) You("strike the trapped %s!", l_monnam(mon));
 				else You("strike the helpless %s!", l_monnam(mon));
 				if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
@@ -2633,7 +2633,7 @@ register struct attack *mattk;
 					else shieldeff(mdef->mx, mdef->my);
 				break;
 			}
-			if(mdef->mcansee && haseyes(mdef->data)){
+			if(!is_blind(mdef) && haseyes(mdef->data)){
 				mdef->mstun = 1;
 			}
 		break;
@@ -3055,7 +3055,7 @@ wisp_shdw_dhit:
 			    if (!u.uswallow &&
 				(compat=could_seduce(&youmonst, mon, mattk))) {
 				You("%s %s %s.",
-				    mon->mcansee && haseyes(mon->data)
+				    !is_blind(mon) && haseyes(mon->data)
 				    ? "smile at" : "talk to",
 				    mon_nam(mon),
 				    compat == 2 ? "engagingly":"seductively");
@@ -3294,7 +3294,7 @@ wisp_shdw_dhit2:
 			if (!u.uswallow &&
 			(compat=could_seduce(&youmonst, mon, mattk))) {
 			You("%s %s %s.",
-				mon->mcansee && haseyes(mon->data)
+				!is_blind(mon) && haseyes(mon->data)
 				? "smile at" : "talk to",
 				mon_nam(mon),
 				compat == 2 ? "engagingly":"seductively");
@@ -3677,7 +3677,7 @@ dobpois:
 		  int mndx = 0;
 		  struct monst *mtmp;
 		   if(ward_at(u.ux,u.uy) != HAMSA){
-		    if(canseemon(mon) && mon->mcansee) {//paralysis gaze
+		    if(canseemon(mon) && !is_blind(mon)) {//paralysis gaze
 				if (Free_action)
 				    You("momentarily stiffen under %s gaze!",
 					    s_suffix(mon_nam(mon)));
@@ -3815,7 +3815,7 @@ dobpois:
 		    if (!canseemon(mon)) {
 				break;
 		    }
-		    if(mon->mcansee) {
+		    if(!is_blind(mon)) {
 				if (ureflects("%s gaze is reflected by your %s.",
 					    s_suffix(Monnam(mon))));
 				else if (Free_action)

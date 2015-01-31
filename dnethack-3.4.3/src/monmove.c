@@ -52,7 +52,7 @@ register struct monst *mtmp;
 	int	x, y;
 
 	if(mtmp->mpeaceful && in_town(u.ux+u.dx, u.uy+u.dy) &&
-	   mtmp->mcansee && m_canseeu(mtmp) && !rn2(3)) {
+	   !is_blind(mtmp) && m_canseeu(mtmp) && !rn2(3)) {
 
 #ifdef CONVICT
 		if(Role_if(PM_CONVICT) && !Upolyd) {
@@ -489,7 +489,7 @@ boolean
 scaryItem(mtmp)
 struct monst *mtmp;
 {
-	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
+	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || is_blind(mtmp) ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
 	    is_rider(mtmp->data) || mtmp->data == &mons[PM_MINOTAUR])
@@ -506,17 +506,17 @@ scaryLol(mtmp)
 struct monst *mtmp;
 {
   if(Race_if(PM_DROW)){
-	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
+	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || is_blind(mtmp) ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    (is_rider(mtmp->data))
 	)
 		return(FALSE);
-	return (boolean) (mtmp->m_lev < u.ulevel) &&
-					(mtmp->data != &mons[PM_ELDER_PRIEST]) &&
+	return (boolean) (mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
-					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
+					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9)) &&
+					(mtmp->m_lev < u.ulevel || u.ualign.record-- > 0);
   } else return(FALSE);
 }
 
@@ -525,7 +525,7 @@ scaryElb(mtmp)
 struct monst *mtmp;
 {
   if(Race_if(PM_ELF)){
-	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
+	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || is_blind(mtmp) ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
 	    (is_rider(mtmp->data) && !(mtmp->data == &mons[PM_NAZGUL])) || 
@@ -538,7 +538,7 @@ struct monst *mtmp;
 					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
   }
   else{
-	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
+	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || is_blind(mtmp) ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
 	    (is_rider(mtmp->data) && !(mtmp->data == &mons[PM_NAZGUL])) || 
@@ -669,7 +669,7 @@ int *inrange, *nearby, *scared;
 	 * running into you by accident but possibly attacking the spot
 	 * where it guesses you are.
 	 */
-	if (!mtmp->mcansee || (Invis && !perceives(mtmp->data))) {
+	if (is_blind(mtmp) || (Invis && !perceives(mtmp->data))) {
 		seescaryx = mtmp->mux;
 		seescaryy = mtmp->muy;
 	} else {
@@ -1084,7 +1084,7 @@ toofar:
 	   (mdat->mlet == S_LEPRECHAUN && !ygold && (lepgold || rn2(2))) ||
 #endif
 	   (is_wanderer(mdat) && !rn2(4)) || (Conflict && !mtmp->iswiz) ||
-	   (!mtmp->mcansee && !rn2(4)) || (mtmp->mpeaceful && mdat != &mons[PM_NURSE])) {
+	   (is_blind(mtmp) && !rn2(4)) || (mtmp->mpeaceful && mdat != &mons[PM_NURSE])) {
 		/* Possibly cast an undirected spell if not attacking you */
 		/* note that most of the time castmu() will pick a directed
 		   spell and do nothing, so the monster moves normally */
@@ -1347,7 +1347,7 @@ not_special:
 				       !levl[omx][omy].lit) &&
 				      (dist2(omx, omy, gx, gy) <= 36));
 
-		if (!mtmp->mcansee ||
+		if (is_blind(mtmp) ||
 		    (should_see && Invis && !perceives(ptr) && rn2(11)) ||
 		    (youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == STRANGE_OBJECT) || u.uundetected ||
 		    (youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == GOLD_PIECE && !likes_gold(ptr)) ||
@@ -1908,7 +1908,7 @@ register struct monst *mtmp;
 	   if you haven't moved away.  Assuming they aren't crazy. */
 	if (mx == u.ux && my == u.uy && (!mtmp->mcrazed || rn2(4))) goto found_you;
 
-	notseen = (!mtmp->mcansee || (Invis && !perceives(mtmp->data)));
+	notseen = (is_blind(mtmp) || (Invis && !perceives(mtmp->data)));
 	/* add cases as required.  eg. Displacement ... */
 	if (notseen || Underwater) {
 	    /* Xorns can smell valuable metal like gold, treat as seen */

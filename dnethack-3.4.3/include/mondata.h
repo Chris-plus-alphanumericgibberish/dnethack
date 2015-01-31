@@ -22,6 +22,8 @@
 // #define resists_drain(mon)	(((mon)->mintrinsics & MR_DRAIN) != 0)
 // #define resists_sickness(mon)	(((mon)->mintrinsics & MR_SICK) != 0)
 
+#define is_blind(mon)		(!((mon)->mcansee) || (is_drow((mon)->data) && (viz_array[(mon)->my][(mon)->mx]&TEMP_LIT || levl[(mon)->mx][(mon)->my].lit)))
+
 #define is_lminion(mon)		(is_minion((mon)->data) && \
 				 (mon)->data->maligntyp >= A_COALIGNED && \
 				 ((mon)->data != &mons[PM_ANGEL] || \
