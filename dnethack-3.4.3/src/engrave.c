@@ -4797,6 +4797,7 @@ static const char *epitaphs[] = {
 	"Of course, you realize, this means war.",
 	
 	"FIQ:  One step from divinity.",
+	"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
 	
 	"Package contains: One posthumous worm feeder",
 	
