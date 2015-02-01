@@ -739,12 +739,12 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_ARCOR_KERYM));
 		verbalize("I crown thee...  The Hand of Elbereth!");
-	} else if(Role_if(PM_MONK)){
+	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 4;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
 		verbalize("I dub thee...  The Sage of Law!");
-	} else if(Role_if(PM_WIZARD)){
+	} else if(Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)){
 		u.uevent.uhand_of_elbereth = 10;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
@@ -807,12 +807,12 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(RUNESWORD, artiname(ART_ARYFAERN_KERYM));
 		verbalize("I dub thee...  The Doomspeaker of Vaire!");
-	} else if(Role_if(PM_MONK)){
+	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 5;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
 		verbalize("Thou shalt be the Grandmaster of Balance!");
-	} else if(Role_if(PM_WIZARD)){
+	} else if(Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)){
 		u.uevent.uhand_of_elbereth = 11;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
@@ -868,12 +868,12 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(ELVEN_BROADSWORD, artiname(ART_ARYVELAHR_KERYM));
 		verbalize("I dub thee...  The Whisperer of Este!");
-	} else if(Role_if(PM_MONK)){
+	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 6;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_ROBE_OF_THE_ARCHMAGI));
 		verbalize("Thou art chosen to cause dismay in My Name!");
-	} else if(Role_if(PM_WIZARD)){
+	} else if(Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)){
 		u.uevent.uhand_of_elbereth = 12;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
@@ -1064,7 +1064,7 @@ gcrownu()
 		unrestrict_weapon_skill(P_BOW);
 		if (obj && obj->oartifact == ART_BOW_OF_SKADI)
 			discover_artifact(ART_BOW_OF_SKADI);
-	} else if (Role_if(PM_MONK)) {
+	} else if (Pantheon_if(PM_MONK) || Role_if(PM_MONK)) {
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */
 		} else if (!already_exists) {
@@ -1083,7 +1083,7 @@ gcrownu()
 			discover_artifact(ART_GRANDMASTER_S_ROBE);
 		else if(obj && obj->oartifact == ART_ROBE_OF_THE_ARCHMAGI)
 			discover_artifact(ART_ROBE_OF_THE_ARCHMAGI);
-	} else if (Role_if(PM_WIZARD)) {
+	} else if (Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)) {
 		if(!already_exists){
 			if (class_gift != STRANGE_OBJECT) {
 				;		/* already got bonus above for some reason */

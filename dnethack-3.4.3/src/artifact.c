@@ -128,7 +128,7 @@ hack_artifacts()
 	
 	/* Fix up the alignments of "gift" artifacts */
 	for (art = artilist+1; art->otyp; art++)
-	    if (art->role == Role_switch && art->alignment != A_NONE)
+	    if ((art->role == Role_switch || Pantheon_if(art->role)) && art->alignment != A_NONE)
 			art->alignment = alignmnt;
 
 	/* Excalibur can be used by any lawful character, not just knights */
@@ -260,7 +260,7 @@ aligntyp alignment;	/* target alignment, or A_NONE */
 			(a->alignment == A_NONE && (u.ugifts > 0 || alignment == A_VOID )))) &&
 		(!(a->spfx & SPFX_NOGEN) || unique || (m==ART_PEN_OF_THE_VOID && Role_if(PM_EXILE))) && !artiexist[m]
 		) {
-			if (by_align && Role_if(a->role)){
+			if (by_align && (Role_if(a->role) || Pantheon_if(a->role))){
 				goto make_artif;	/* 'a' points to the desired one */
 			} else if (by_align && a->race != NON_PM && race_hostile(&mons[a->race])){
 				continue;	/* skip enemies' equipment */
