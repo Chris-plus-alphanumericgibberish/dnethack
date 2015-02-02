@@ -1072,7 +1072,10 @@ int in_sight;
 	char *monname;
 
 	if (tele_restrict(mtmp)) return;
-	if (teleport_pet(mtmp, FALSE)) {
+	else if(resists_magm(mtmp)){
+		shieldeff(mtmp->mx, mtmp->my);
+		return;
+	} else if (teleport_pet(mtmp, FALSE)) {
 	    /* save name with pre-movement visibility */
 	    monname = Monnam(mtmp);
 
@@ -1106,7 +1109,10 @@ int in_sight;
 
 	if (mtmp == u.ustuck)	/* probably a vortex */
 	    return 0;		/* temporary? kludge */
-	if (teleport_pet(mtmp, force_it)) {
+	else if(resists_magm(mtmp)){
+		shieldeff(mtmp->mx, mtmp->my);
+		return 0;
+	} else if (teleport_pet(mtmp, force_it)) {
 	    d_level tolevel;
 	    int migrate_typ = MIGR_RANDOM;
 
