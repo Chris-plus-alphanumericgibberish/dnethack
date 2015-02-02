@@ -527,140 +527,140 @@ chaos_montype()
 			return mkclass(S_ZOMBIE, G_NOHELL);
 		}
 		else if(chance < 30){
-			return &mons[PM_HUMAN_ZOMBIE];
+			return !(mvitals[PM_HUMAN_ZOMBIE].mvflags & G_GENOD) ? &mons[PM_HUMAN_ZOMBIE] : mkclass(S_ZOMBIE, G_NOHELL);
 		}
 		else if(chance < 50){
-			return &mons[PM_HOBGOBLIN];
+			return !(mvitals[PM_HOBGOBLIN].mvflags & G_GENOD) ? &mons[PM_HOBGOBLIN] : mkclass(S_ORC, G_NOHELL);
 		}
 		else{
-			return &mons[PM_GOBLIN];
+			return !(mvitals[PM_GOBLIN].mvflags & G_GENOD) ? &mons[PM_GOBLIN] : mkclass(S_ORC, G_NOHELL);
 		}
 	}
-	else if(on_level(&chaoss_level,&u.uz)){
+	else if(on_level(&chaosm_level,&u.uz)){
 		//Mordor orcs, orc shaman, orc-captain, ogre, rock troll, stone golem, clay golem
 		int chance = d(1,100);
 		if(chance < 10){
-			return &mons[PM_STONE_GOLEM];
+			return !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD) ? &mons[PM_STONE_GOLEM] : mkclass(S_GOLEM, G_NOHELL);
 		}
 		else if(chance < 30){
-			return &mons[PM_CLAY_GOLEM];
+			return !(mvitals[PM_CLAY_GOLEM].mvflags & G_GENOD) ? &mons[PM_CLAY_GOLEM] : mkclass(S_GOLEM, G_NOHELL);
 		}
 		else if(chance < 40){
-			return &mons[PM_ROCK_TROLL];
+			return !(mvitals[PM_ROCK_TROLL].mvflags & G_GENOD) ? &mons[PM_ROCK_TROLL] : mkclass(S_TROLL, G_NOHELL);
 		}
 		else if(chance < 50){
-			return &mons[PM_ORC_CAPTAIN];
+			return !(mvitals[PM_ORC_CAPTAIN].mvflags & G_GENOD) ? &mons[PM_ORC_CAPTAIN] : mkclass(S_ORC, G_NOHELL);
 		}
 		else if(chance < 60){
-			return &mons[PM_ORC_SHAMAN];
+			return !(mvitals[PM_ORC_SHAMAN].mvflags & G_GENOD) ? &mons[PM_ORC_SHAMAN] : mkclass(S_ORC, G_NOHELL);
 		}
 		else if(chance < 70){
-			return &mons[PM_OGRE];
+			return !(mvitals[PM_OGRE].mvflags & G_GENOD) ? &mons[PM_OGRE] : mkclass(S_OGRE, G_NOHELL);
 		}
 		else{
-			return &mons[PM_MORDOR_ORC];
+			return !(mvitals[PM_MORDOR_ORC].mvflags & G_GENOD) ? &mons[PM_MORDOR_ORC] : mkclass(S_ORC, G_NOHELL);
 		}
 	}
 	else if(on_level(&chaost_level,&u.uz)){
 //		purple worm, mind flayer, white dragon, black light, beholders
 		int chance = d(1,100);
 		if(chance < 10){
-			return &mons[PM_WHITE_DRAGON];
+			return !(mvitals[PM_WHITE_DRAGON].mvflags & G_GENOD) ? &mons[PM_WHITE_DRAGON] : mkclass(S_DRAGON, G_NOHELL);
 		}
 		else if(chance < 20){
-			return &mons[PM_PURPLE_WORM];
+			return !(mvitals[PM_PURPLE_WORM].mvflags & G_GENOD) ? &mons[PM_PURPLE_WORM] : mkclass(S_WORM, G_NOHELL);
 		}
 		else if(chance < 30){
-			return &mons[PM_BEHOLDER];
+			return !(mvitals[PM_BEHOLDER].mvflags & G_GENOD) ? &mons[PM_BEHOLDER] : mkclass(S_UMBER, G_NOHELL);
 		}
 		else if(chance < 65){
-			return &mons[PM_MIND_FLAYER];
+			return !(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD) ? &mons[PM_MIND_FLAYER] : mkclass(S_UMBER, G_NOHELL);
 		}
 		else{
-			return &mons[PM_BLACK_LIGHT];
+			return !(mvitals[PM_BLACK_LIGHT].mvflags & G_GENOD) ? &mons[PM_BLACK_LIGHT] : mkclass(S_LIGHT, G_NOHELL);
 		}
 	}
-	else if(on_level(&chaosm_level,&u.uz)){
+	else if(on_level(&chaoss_level,&u.uz)){
 //		purple worm, mind flayer, GREEN dragon, black light, beholders
 		int chance = d(1,100);
 		if(chance < 10){
-			return &mons[PM_GREEN_DRAGON];
+			return !(mvitals[PM_GREEN_DRAGON].mvflags & G_GENOD) ? &mons[PM_GREEN_DRAGON] : mkclass(S_DRAGON, G_NOHELL);
 		}
 		else if(chance < 20){
-			return &mons[PM_PURPLE_WORM];
+			return !(mvitals[PM_PURPLE_WORM].mvflags & G_GENOD) ? &mons[PM_PURPLE_WORM] : mkclass(S_WORM, G_NOHELL);
 		}
 		else if(chance < 30){
-			return &mons[PM_BEHOLDER];
+			return !(mvitals[PM_BEHOLDER].mvflags & G_GENOD) ? &mons[PM_BEHOLDER] : mkclass(S_UMBER, G_NOHELL);
 		}
 		else if(chance < 65){
-			return &mons[PM_MIND_FLAYER];
+			return !(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD) ? &mons[PM_MIND_FLAYER] : mkclass(S_UMBER, G_NOHELL);
 		}
 		else{
-			return &mons[PM_BLACK_LIGHT];
+			return !(mvitals[PM_BLACK_LIGHT].mvflags & G_GENOD) ? &mons[PM_BLACK_LIGHT] : mkclass(S_LIGHT, G_NOHELL);
 		}
 	}
 	else if(on_level(&chaosfrh_level,&u.uz)){
 		//vampire lord, vampire, earth elemental, zombie
 		int chance = d(1,100);
 		if(chance < 10){
-			return &mons[PM_VAMPIRE_LORD];
+			return !(mvitals[PM_VAMPIRE_LORD].mvflags & G_GENOD) ? &mons[PM_VAMPIRE_LORD] : mkclass(S_VAMPIRE, G_NOHELL);
 		}
 		else if(chance < 20){
-			return &mons[PM_EARTH_ELEMENTAL];
+			return !(mvitals[PM_EARTH_ELEMENTAL].mvflags & G_GENOD) ? &mons[PM_EARTH_ELEMENTAL] : mkclass(S_ELEMENTAL, G_NOHELL);
 		}
 		else if(chance < 30){
 			return mkclass(S_ZOMBIE, G_NOHELL);
 		}
 		else if(chance < 65){
-			return &mons[PM_VAMPIRE];
+			return !(mvitals[PM_VAMPIRE].mvflags & G_GENOD) ? &mons[PM_VAMPIRE] : mkclass(S_VAMPIRE, G_NOHELL);
 		}
 		else{
-			return &mons[PM_HUMAN_ZOMBIE];
+			return !(mvitals[PM_HUMAN_ZOMBIE].mvflags & G_GENOD) ? &mons[PM_HUMAN_ZOMBIE] : mkclass(S_ZOMBIE, G_NOHELL);
 		}
 	}
 	else if(on_level(&chaosffh_level,&u.uz)){
 		//fire giant, salamander, imps, fire elemtal
 		int chance = d(1,100);
 		if(chance < 10){
-			return &mons[PM_FIRE_GIANT];
+			return !(mvitals[PM_FIRE_GIANT].mvflags & G_GENOD) ? &mons[PM_FIRE_GIANT] : mkclass(S_GIANT, G_NOHELL);
 		}
 		else if(chance < 20){
-			return &mons[PM_FIRE_ELEMENTAL];
+			return !(mvitals[PM_FIRE_ELEMENTAL].mvflags & G_GENOD) ? &mons[PM_FIRE_ELEMENTAL] : mkclass(S_ELEMENTAL, G_NOHELL);
 		}
 		else if(chance < 30){
-			return &mons[PM_SALAMANDER];
+			return !(mvitals[PM_SALAMANDER].mvflags & G_GENOD) ? &mons[PM_SALAMANDER] : mkclass(S_LIZARD, G_NOHELL);
 		}
 		else{
-			return &mons[PM_IMP];
+			return !(mvitals[PM_IMP].mvflags & G_GENOD) ? &mons[PM_IMP] : mkclass(S_IMP, G_NOHELL);
 		}
 	}
 	else if(on_level(&chaossth_level,&u.uz)){
 		//winter wolf, water troll, python, water moccasin, water elemental
 		int chance = d(1,100);
 		if(chance < 10){
-			return &mons[PM_WATER_ELEMENTAL];
+			return !(mvitals[PM_WATER_ELEMENTAL].mvflags & G_GENOD) ? &mons[PM_WATER_ELEMENTAL] : mkclass(S_ELEMENTAL, G_NOHELL);
 		}
 		else if(chance < 30){
-			return &mons[PM_WINTER_WOLF];
+			return !(mvitals[PM_WINTER_WOLF].mvflags & G_GENOD) ? &mons[PM_WINTER_WOLF] : mkclass(S_DOG, G_NOHELL);
 		}
 		else if(chance < 50){
-			return &mons[PM_PYTHON];
+			return !(mvitals[PM_PYTHON].mvflags & G_GENOD) ? &mons[PM_PYTHON] : mkclass(S_SNAKE, G_NOHELL);
 		}
 		else if(chance < 70){
-			return &mons[PM_WATER_TROLL];
+			return !(mvitals[PM_WATER_TROLL].mvflags & G_GENOD) ? &mons[PM_WATER_TROLL] : mkclass(S_TROLL, G_NOHELL);
 		}
 		else{
-			return &mons[PM_WATER_MOCCASIN];
+			return !(mvitals[PM_WATER_MOCCASIN].mvflags & G_GENOD) ? &mons[PM_WATER_MOCCASIN] : mkclass(S_SNAKE, G_NOHELL);
 		}
 	}
 	else if(on_level(&chaosvth_level,&u.uz)){
 		//iron golem, air elemental
 		int chance = d(1,8);
 		if(chance == 1){
-			return &mons[PM_AIR_ELEMENTAL];
+			return !(mvitals[PM_AIR_ELEMENTAL].mvflags & G_GENOD) ? &mons[PM_AIR_ELEMENTAL] : mkclass(S_ELEMENTAL, G_NOHELL);
 		}
 		else if(chance == 2){
-			return &mons[PM_IRON_GOLEM];
+			return !(mvitals[PM_IRON_GOLEM].mvflags & G_GENOD) ? &mons[PM_IRON_GOLEM] : mkclass(S_GOLEM, G_NOHELL);
 		}
 		else{
 			return (struct permonst *)0;
@@ -684,19 +684,25 @@ neutral_montype()
 		if(rn2(20)) return (struct permonst *)0; /*GREATLY reduce monster generation*/
 		if(chance < 2){
 				num = d(2,3);
-				for(num; num >= 0; num--) makemon(&mons[PM_HUNTING_HORROR], xupstair, yupstair, MM_ADJACENTOK);
+				for(num; num >= 0; num--) !(mvitals[PM_HUNTING_HORROR].mvflags & G_GENOD) ? 
+										makemon(&mons[PM_HUNTING_HORROR], xupstair, yupstair, MM_ADJACENTOK):
+										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
 				return (struct permonst *)0;
 		}
 		else if(chance < 6){
 				num = d(2,4);
-				for(num; num >= 0; num--) makemon(&mons[PM_BYAKHEE], xupstair, yupstair, MM_ADJACENTOK);
+				for(num; num >= 0; num--) !(mvitals[PM_BYAKHEE].mvflags & G_GENOD) ?
+										makemon(&mons[PM_BYAKHEE], xupstair, yupstair, MM_ADJACENTOK):
+										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
 				return (struct permonst *)0;
 		}
 		else if(chance < 8){
-				makemon(&mons[PM_SHOGGOTH], xupstair, yupstair, MM_ADJACENTOK);
+				!(mvitals[PM_SHOGGOTH].mvflags & G_GENOD) ? 
+						makemon(&mons[PM_SHOGGOTH], xupstair, yupstair, MM_ADJACENTOK):
+						makemon(mkclass(S_BLOB, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
 				return (struct permonst *)0;
 		}
-		else if(chance < 10){
+		else if(chance < 10){ /*Deep ones can't be genocided*/
 				makemon(&mons[PM_DEEPEST_ONE], xupstair, yupstair, MM_ADJACENTOK);
 				num = rnd(4);
 				for(num; num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], xupstair, yupstair, MM_ADJACENTOK);
@@ -706,20 +712,24 @@ neutral_montype()
 		}
 		else if(chance < 30){
 				num = rnd(3);
-				for(num; num >= 0; num--) makemon(&mons[PM_MASTER_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK);
+				for(num; num >= 0; num--) !(mvitals[PM_MASTER_MIND_FLAYER].mvflags & G_GENOD) ?
+										makemon(&mons[PM_MASTER_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK):
+										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
 				return (struct permonst *)0;
 		}
 		else if(chance < 50){
 				num = rn1(2,2);
-				for(num; num >= 0; num--) makemon(&mons[PM_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK);
+				for(num; num >= 0; num--) !(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD) ?
+										makemon(&mons[PM_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK):
+										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
 				return (struct permonst *)0;
 		}
-		else if(chance < 70){
+		else if(chance < 70){/*Deep ones can't be genocided*/
 				num = rnd(6);
 				for(num; num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], xupstair, yupstair, MM_ADJACENTOK);
 				return (struct permonst *)0;
 		}
-		else{
+		else{/*Deep ones can't be genocided*/
 				num = rn1(4,3);
 				for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], xupstair, yupstair, MM_ADJACENTOK);
 				return (struct permonst *)0;
@@ -750,7 +760,7 @@ law_montype()
 				return rn2(2) ? &mons[PM_SHOCKING_SPHERE] : &mons[PM_ENERGY_VORTEX];
 			}
 		}
-		else{
+		else{ /*Can't be genocided*/
 			chance = d(1,31);
 			if(chance == 1){
 				return &mons[PM_QUINON];
@@ -863,18 +873,18 @@ law_montype()
 	else if(on_level(&arcadia1_level,&u.uz)){
 		int chance = d(1,100);
 		if(chance <= 20){
-			return &mons[PM_KILLER_BEE];
+			return !(mvitals[PM_KILLER_BEE].mvflags & G_GENOD) ? &mons[PM_KILLER_BEE] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 40){
-			return &mons[PM_SOLDIER_ANT];
+			return !(mvitals[PM_SOLDIER_ANT].mvflags & G_GENOD) ? &mons[PM_SOLDIER_ANT] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 70){
-			return &mons[PM_GIANT_ANT];
+			return !(mvitals[PM_GIANT_ANT].mvflags & G_GENOD) ? &mons[PM_GIANT_ANT] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 90){
 			chance = d(1,6);
-			if(chance <= 5) return &mons[PM_DWARF];
-			else if(chance <= 9) return &mons[PM_DWARF_LORD];
+			if(chance <= 5) return !(mvitals[PM_DWARF].mvflags & G_GENOD) ? &mons[PM_DWARF] : mkclass(S_HUMANOID, 0);
+			else if(chance <= 9) return !(mvitals[PM_DWARF_LORD].mvflags & G_GENOD) ? &mons[PM_DWARF_LORD] : mkclass(S_HUMANOID, 0);
 		}
 		else{
 			chance = d(1,31);
@@ -898,54 +908,54 @@ law_montype()
 	else if(on_level(&arcadia2_level,&u.uz)){
 		int chance = d(1,100);
 		if(chance <= 20){
-			return &mons[PM_KILLER_BEE];
+			return !(mvitals[PM_KILLER_BEE].mvflags & G_GENOD) ? &mons[PM_KILLER_BEE] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 40){
-			return &mons[PM_SOLDIER_ANT];
+			return !(mvitals[PM_SOLDIER_ANT].mvflags & G_GENOD) ? &mons[PM_SOLDIER_ANT] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 70){
-			return &mons[PM_GIANT_ANT];
+			return !(mvitals[PM_GIANT_ANT].mvflags & G_GENOD) ? &mons[PM_GIANT_ANT] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 90){
 			chance = d(1,6);
-			if(chance <= 5) return &mons[PM_DWARF];
-			else if(chance <= 9) return &mons[PM_DWARF_LORD];
+			if(chance <= 5) return !(mvitals[PM_DWARF].mvflags & G_GENOD) ? &mons[PM_DWARF] : mkclass(S_HUMANOID, 0);
+			else if(chance <= 9) return !(mvitals[PM_DWARF_LORD].mvflags & G_GENOD) ? &mons[PM_DWARF_LORD] : mkclass(S_HUMANOID, 0);
 		}
 		else{
 			chance = d(1,6);
-			if(chance <= 5) return &mons[PM_SOLDIER];
-			else return &mons[PM_SERGEANT];
+			if(chance <= 5) return !(mvitals[PM_SOLDIER].mvflags & G_GENOD) ? &mons[PM_SOLDIER] : mkclass(S_HUMAN, 0);
+			else return !(mvitals[PM_SERGEANT].mvflags & G_GENOD) ? &mons[PM_SERGEANT] : mkclass(S_HUMAN, 0);
 		}
 	}
 	else if(on_level(&arcadia3_level,&u.uz)){
 		int chance = d(1,100);
 		if(chance <= 20){
-			return &mons[PM_KILLER_BEE];
+			return !(mvitals[PM_KILLER_BEE].mvflags & G_GENOD) ? &mons[PM_KILLER_BEE] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 40){
-			return &mons[PM_SOLDIER_ANT];
+			return !(mvitals[PM_SOLDIER_ANT].mvflags & G_GENOD) ? &mons[PM_SOLDIER_ANT] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 70){
-			return &mons[PM_GIANT_ANT];
+			return !(mvitals[PM_GIANT_ANT].mvflags & G_GENOD) ? &mons[PM_GIANT_ANT] : mkclass(S_ANT, 0);
 		}
 		else{
 			chance = d(1,6);
-			if(chance <= 5) return &mons[PM_SOLDIER];
-			else return &mons[PM_SERGEANT];
+			if(chance <= 5) return !(mvitals[PM_SOLDIER].mvflags & G_GENOD) ? &mons[PM_SOLDIER] : mkclass(S_HUMAN, 0);
+			else return !(mvitals[PM_SERGEANT].mvflags & G_GENOD) ? &mons[PM_SERGEANT] : mkclass(S_HUMAN, 0);
 		}
 	}
 	else if(on_level(&arcward_level,&u.uz) || on_level(&arcfort_level,&u.uz)){
 		int chance = d(1,100);
 		if(chance <= 20){
-			return &mons[PM_KILLER_BEE];
+			return !(mvitals[PM_KILLER_BEE].mvflags & G_GENOD) ? &mons[PM_KILLER_BEE] : mkclass(S_ANT, 0);
 		}
 		else if(chance <= 50){
-			return &mons[PM_SOLDIER_ANT];
+			return !(mvitals[PM_SOLDIER_ANT].mvflags & G_GENOD) ? &mons[PM_SOLDIER_ANT] : mkclass(S_ANT, 0);
 		}
 		else{
 			chance = d(1,6);
-			if(chance <= 5) return &mons[PM_SOLDIER];
-			else return &mons[PM_SERGEANT];
+			if(chance <= 5) return !(mvitals[PM_SOLDIER].mvflags & G_GENOD) ? &mons[PM_SOLDIER] : mkclass(S_HUMAN, 0);
+			else return !(mvitals[PM_SERGEANT].mvflags & G_GENOD) ? &mons[PM_SERGEANT] : mkclass(S_HUMAN, 0);
 		}
 	} else if(mvitals[PM_OONA].died == 0){
 		if(u.oonaenergy == AD_FIRE){
