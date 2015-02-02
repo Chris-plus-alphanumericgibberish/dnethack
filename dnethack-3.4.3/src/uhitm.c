@@ -3538,12 +3538,11 @@ uchar aatyp;
 		if(mon->data==&mons[PM_NAIAD]){
 		  if((malive && mon->mhp < .5*mon->mhpmax
 		   && rn2(3)) || !malive){
-			  pline("%d", mon->mhp);
 			  pline("%s collapses into a puddle of water!", Monnam(mon));
 			  if(malive){
-				// killed(mon);
-				malive = 0;
-				mon->mhp = 0;
+				killed(mon);
+				// malive = 0;
+				// mon->mhp = 0;
 			  }
 		  } else break;
 		}
@@ -3651,8 +3650,9 @@ dobpois:
   				  pline("A cloud of spores is released!");
 				  diseasemu(mon->data);
 				  pline("%s collapses in a puddle of noxious fluid!", Monnam(mon));
-				  malive = 0;
-				  mon->mhp = 0;
+				  if(malive) killed(mon);
+				  // malive = 0;
+				  // mon->mhp = 0;
 			  }
 		  }
 		  else if(mon->data==&mons[PM_SWAMP_FERN] && !mon->mspec_used){
