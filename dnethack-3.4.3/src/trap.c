@@ -462,8 +462,7 @@ int *fail_reason;
 				(void) newcham(mon, mptr, FALSE, FALSE);
 		}
 	    } else
-		mon = makemon(mptr, x, y, (cause == ANIMATE_SPELL) ?
-			(NO_MINVENT | MM_ADJACENTOK) : NO_MINVENT);
+		mon = makemon(mptr, x, y, (NO_MINVENT | MM_ADJACENTOK));
 	}
 
 	if (!mon) {
@@ -496,22 +495,21 @@ int *fail_reason;
 	if ((x == u.ux && y == u.uy) || cause == ANIMATE_SPELL) {
 	    const char *comes_to_life = nonliving(mon->data) ?
 					"moves" : "comes to life"; 
-	    if (cause == ANIMATE_SPELL)
-	    	pline("%s %s!", upstart(statuename),
+	    if (cause == ANIMATE_SPELL){
+	    	if(cansee(x,y)) pline("%s %s!", upstart(statuename),
 	    		canspotmon(mon) ? comes_to_life : "disappears");
-	    else
-		pline_The("statue %s!",
+	    } else if(cansee(x,y)) pline_The("statue %s!",
 			canspotmon(mon) ? comes_to_life : "disappears");
 	    if (historic) {
 		    You_feel("guilty that the historic statue is now gone.");
 		    adjalign(-1);
 	    }
-	} else if (cause == ANIMATE_SHATTER)
-	    pline("Instead of shattering, the statue suddenly %s!",
-		canspotmon(mon) ? "comes to life" : "disappears");
-	else { /* cause == ANIMATE_NORMAL */
-	    You("find %s posing as a statue.",
-		canspotmon(mon) ? a_monnam(mon) : something);
+	} else if (cause == ANIMATE_SHATTER){
+	    if(cansee(x,y)) pline("Instead of shattering, the statue suddenly %s!",
+			canspotmon(mon) ? "comes to life" : "disappears");
+	} else { /* cause == ANIMATE_NORMAL */
+	    if(cansee(x,y)) You("spot %s posing as a statue.",
+			canspotmon(mon) ? a_monnam(mon) : something);
 	    stop_occupation();
 	}
 	/* avoid hiding under nothing */
@@ -1088,7 +1086,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		break;
 
 	    case STATUE_TRAP:
-		(void) activate_statue_trap(trap, u.ux, u.uy, FALSE);
+			(void) activate_statue_trap(trap, trap->tx, trap->ty, FALSE);
 		break;
 
 	    case MAGIC_TRAP:	    /* A magic trap. */
@@ -1735,8 +1733,8 @@ register struct monst *mtmp;
 	} else {
 	    register int tt = trap->ttyp;
 	    boolean in_sight, tear_web, see_it,
-		    inescapable = ((tt == HOLE || tt == PIT) &&
-				   In_sokoban(&u.uz) && !trap->madeby_u);
+		    inescapable = (((tt == HOLE || tt == PIT) &&
+				   In_sokoban(&u.uz) && !trap->madeby_u) || tt == STATUE_TRAP);
 	    const char *fallverb;
 
 #ifdef STEED
@@ -2142,8 +2140,9 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			}
 			break;
 
-		case STATUE_TRAP:
-			break;
+	    case STATUE_TRAP:
+			(void) activate_statue_trap(trap, trap->tx, trap->ty, FALSE);
+		break;
 
 		case MAGIC_TRAP:
 			/* A magic trap.  Monsters usually immune. */
@@ -2479,7 +2478,8 @@ long hmask, emask;     /* might cancel timeout */
 	if(trap)
 		switch(trap->ttyp) {
 		case STATUE_TRAP:
-			break;
+			(void) activate_statue_trap(trap, trap->tx, trap->ty, FALSE);
+		break;
 		case HOLE:
 		case TRAPDOOR:
 			if(!Can_fall_thru(&u.uz) || u.ustuck)
