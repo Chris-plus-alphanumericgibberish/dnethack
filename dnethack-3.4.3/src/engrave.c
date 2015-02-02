@@ -4799,6 +4799,8 @@ static const char *epitaphs[] = {
 	"FIQ:  One step from divinity.",
 	"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
 	
+	"Khor:  \"Wait, did that axe just fall off the edge of the world?\"",
+	
 	"Package contains: One posthumous worm feeder",
 	
 	"Used no net, knew no fear, made mis-step, wound up here.", /*Balder's Gate gravestones*/
