@@ -391,7 +391,7 @@ struct monst *mtmp;
 				trapx = xx;
 				trapy = yy;
 				m.has_defense = MUSE_TRAPDOOR;
-			} else if (t->ttyp == TELEP_TRAP && m.has_defense != MUSE_TRAPDOOR) {
+			} else if (t->ttyp == TELEP_TRAP && m.has_defense != MUSE_TRAPDOOR && !resists_magm(mtmp)) {
 				trapx = xx;
 				trapy = yy;
 				m.has_defense = MUSE_TELEPORT_TRAP;
