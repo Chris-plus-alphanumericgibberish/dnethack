@@ -443,7 +443,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 14, 0,  0, 8,  2, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
-	0, 10,-2, 0,  9, A_WIS, SPE_CONE_OF_COLD,    -32
+	0, 10,-2, 0,  9, A_WIS, SPE_CONE_OF_COLD,    -1000 /*Valks CAN ALWAYS cast Cone of Cold*/
 },
 {	{"Wizard", 0}, {
 	{"Evoker",      0},
