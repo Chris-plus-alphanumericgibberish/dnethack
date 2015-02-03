@@ -397,6 +397,7 @@ register struct monst *mtmp;
 				if (!w2 && w1 != DAGGER && !rn2(4)) w2 = KNIFE;
 				if (w2) (void)mongets(mtmp, w2);
 			} else if(is_drow(ptr)){
+				mtmp->mspec_used = d(4,4);
 				if(mm != PM_DROW_MATRON && mm != PM_DROW_MATRON_MOTHER && mm != PM_DROW_NOVICE 
 					&& mm != PM_A_SALOM && mm != PM_SISTER && mm != PM_MOTHER 
 					&& mm != PM_ECLAVDRA && mm != PM_SEYLL_AUZKOVYN && mm != PM_STJARNA_ALFAR
@@ -2721,6 +2722,7 @@ register int	mmflags;
 	mtmp->mclone  = FALSE;
 	mtmp->mvanishes  = -1;
 
+	mtmp->mspec_used = 3;
 	/* Ok, here's the deal: I'm using a global to coordinate the house emblems on the drow's armor. 
 	   It needs to be set up here so that everyone created as part of the group gets the same emblem, 
 	   and then unset after this creature's armor is created. */
