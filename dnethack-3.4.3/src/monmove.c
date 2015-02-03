@@ -1020,7 +1020,7 @@ toofar:
 	}
 
 /*      Look for other monsters to fight (at a distance) */
-	if (( 
+	if ((
 	      attacktype(mtmp->data, AT_GAZE) ||
 	      attacktype(mtmp->data, AT_ARRW) ||
 	      (!mtmp->mspec_used && 
@@ -1134,7 +1134,7 @@ toofar:
 			if (mtmp->msleeping || !(mtmp->mcanmove && mtmp->mnotlaugh)) return(0);
 			if(!nearby &&
 			  (ranged_attk(mdat) || find_offensive(mtmp)))
-			    break;
+			    return(0);
  			else if(u.uswallow && mtmp == u.ustuck) {
 			    /* a monster that's digesting you can move at the
 			     * same time -dlc
