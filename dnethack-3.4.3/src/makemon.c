@@ -773,7 +773,7 @@ register struct monst *mtmp;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
-				} else if(PM_STJARNA_ALFAR){
+				} else if(mm == PM_STJARNA_ALFAR){
 					otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
 					otmp->ohaluengr = TRUE;
 					otmp->ovar1 = EILISTRAEE_SYMBOL;
