@@ -491,7 +491,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_A_SALOM){
 					otmp = mksobj(NOBLE_S_DRESS, TRUE, FALSE);
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
 					otmp->ohaluengr = TRUE;
@@ -507,7 +507,7 @@ register struct monst *mtmp;
 					otmp->opoisoned = OPOISON_FILTH;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(SMALL_SHIELD, TRUE, FALSE);
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(WAN_DEATH, TRUE, FALSE);
 					otmp->spe = 1;
@@ -530,7 +530,7 @@ register struct monst *mtmp;
 					otmp->ovar1 = LOLTH_SYMBOL;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
-					otmp->spe = 14;
+					otmp->spe = 6;
 					(void) mpickobj(mtmp, otmp);
 					/*Dress*/
 					otmp = mksobj(BLACK_DRESS, TRUE, FALSE);
@@ -549,35 +549,35 @@ register struct monst *mtmp;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Helm*/
 					otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*boots*/
 					otmp = mksobj(IRON_SHOES, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_SEYLL_AUZKOVYN){
 					/*Plate Mail*/
 					otmp = mksobj(ELVEN_MITHRIL_COAT, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
-					otmp->spe = 7;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Dress*/
 					otmp = mksobj(VICTORIAN_UNDERWEAR, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 1;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Ring*/
 					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
@@ -589,21 +589,21 @@ register struct monst *mtmp;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Helm*/
 					otmp = mksobj(ELVEN_LEATHER_HELM, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 7;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*boots*/
 					otmp = mksobj(ELVEN_BOOTS, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_DARUTH_XAXOX){
 					/*Body*/
@@ -618,7 +618,7 @@ register struct monst *mtmp;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 1;
 					(void) mpickobj(mtmp, otmp);
 					/*Ring*/
 					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
@@ -630,21 +630,21 @@ register struct monst *mtmp;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 7;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Helm*/
 					otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 7;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*boots*/
 					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_DROW_ALIENIST){
 					/*Plate Mail*/
@@ -654,7 +654,7 @@ register struct monst *mtmp;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 7;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Ring*/
 					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
@@ -666,28 +666,28 @@ register struct monst *mtmp;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Helm*/
 					otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*boots*/
 					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 3;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*weapon*/
 					otmp = mksobj(SILVER_KHAKKHARA, TRUE, FALSE);
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 7;
+					otmp->spe = 5;
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_HEDROW_MASTER_WIZARD){
 					otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
@@ -734,25 +734,25 @@ register struct monst *mtmp;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(LEATHER_GLOVES, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(SILVER_DAGGER, TRUE, FALSE);
 					otmp->blessed = TRUE;
@@ -765,7 +765,7 @@ register struct monst *mtmp;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 5;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(SILVER_SABER, TRUE, FALSE);
 					otmp->blessed = TRUE;
