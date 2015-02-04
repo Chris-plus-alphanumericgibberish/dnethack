@@ -163,7 +163,7 @@ struct monst *mtmp;
 			 || (ward_at(x,y) == WINGS_OF_GARUDA && scaryWings(num_wards_at(x,y), mtmp))
 			 || (ward_at(x,y) == YELLOW_SIGN && scaryYellow(num_wards_at(x,y), mtmp))
 			 || (scaryElb(mtmp) && sengr_at("Elbereth", x, y))
-			 || (scaryLol(mtmp) && sengr_at("Lolth", x, y))
+			 || (scaryLol(mtmp) && sengr_at("Lolth", x, y) && (mtmp->m_lev < u.ulevel || u.ualign.record-- > 0))
 			 || (scaryTou(mtmp) && toustefna_at(x,y))
 			 || (scaryDre(mtmp) && dreprun_at(x,y))
 			 || (scaryVei(mtmp) && veioistafur_at(x,y))
@@ -505,7 +505,7 @@ boolean
 scaryLol(mtmp)
 struct monst *mtmp;
 {
-  if(Race_if(PM_DROW)){
+  if(Race_if(PM_DROW) && !flags.stag){
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || is_blind(mtmp) ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    (is_rider(mtmp->data))
@@ -515,8 +515,7 @@ struct monst *mtmp;
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
-					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9)) &&
-					(mtmp->m_lev < u.ulevel || u.ualign.record-- > 0);
+					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
   } else return(FALSE);
 }
 
