@@ -2862,6 +2862,7 @@ struct obj *obj;			/* object tossed/used */
 boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may be NULL */
 {
 	struct monst *mtmp;
+	struct trap *trap;
 	uchar typ;
 	boolean shopdoor = FALSE, point_blank = TRUE;
 	if (obj_destroyed) { *obj_destroyed = FALSE; }
@@ -2883,7 +2884,7 @@ boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may b
 
 	while(range-- > 0) {
 	    int x,y;
-
+		
 	    bhitpos.x += ddx;
 	    bhitpos.y += ddy;
 	    x = bhitpos.x; y = bhitpos.y;
@@ -2893,7 +2894,11 @@ boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may b
 		bhitpos.y -= ddy;
 		break;
 	    }
+		
+		trap = t_at(x, y);
 
+		if (trap && trap->ttyp == STATUE_TRAP) activate_statue_trap(trap, x, y, (obj->otyp == WAN_STRIKING || obj->otyp == SPE_FORCE_BOLT) ? TRUE : FALSE);
+		
 	    if(is_pick(obj) && inside_shop(x, y) &&
 					   (mtmp = shkcatch(obj, x, y))) {
 		tmp_at(DISP_END, 0);
