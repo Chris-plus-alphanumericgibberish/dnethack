@@ -2775,7 +2775,7 @@ register int	mmflags;
 			} else if(In_quest(&u.uz)){
 				if(Race_if(PM_DROW) && Role_if(PM_EXILE)){
 					curhouse = PEN_A_SYMBOL;
-				} else if(Race_if(PM_DROW) && (in_mklev || rn2(3))){
+				} else if(Race_if(PM_DROW) && (in_mklev || flags.stag || rn2(3))){
 					if(Is_qstart(&u.uz)) curhouse = u.uhouse;
 					else if(Role_if(PM_NOBLEMAN)){
 						if(flags.initgend) curhouse = u.uhouse;
@@ -3825,8 +3825,11 @@ int	spc;
 	    return((struct permonst *) 0);
 	}
 	if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) &&
-		!flags.initgend && flags.stag == 0 && In_quest(&u.uz) && !(mvitals[PM_DROW_MUMMY].mvflags & G_GENOD)
+		!flags.initgend && flags.stag == 0 && In_quest(&u.uz) && class == S_MUMMY && !(mvitals[PM_DROW_MUMMY].mvflags & G_GENOD)
 	) return &mons[PM_DROW_MUMMY];
+	if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) &&
+		!flags.initgend && flags.stag == 0 && In_quest(&u.uz) && class == S_ZOMBIE && !(mvitals[PM_DROW_ZOMBIE].mvflags & G_GENOD)
+	) return &mons[PM_DROW_ZOMBIE];
 /*	Assumption #1:	monsters of a given class are contiguous in the
  *			mons[] array.
  */

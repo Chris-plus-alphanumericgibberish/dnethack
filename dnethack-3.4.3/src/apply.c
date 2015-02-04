@@ -233,6 +233,9 @@ do_present_ring(obj)
 						if(is_drow(tm->data)) tm->mfaction = EDDER_SYMBOL;
 						tm->housealert = 1;
 						tm->mpeaceful = 1;
+					} else if(is_drow(tm->data) && !(obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction)) && mtmp->female){
+						tm->housealert = 1;
+						tm->mpeaceful = 0;
 					}
 				}
 			} else if((obj->ovar1 == mtmp->mfaction) || 
@@ -286,10 +289,10 @@ do_present_ring(obj)
 					}
 				} else {
 					if(((obj->ovar1 <= LAST_TOWER && obj->ovar1 >= FIRST_TOWER) && 
-						(!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1)) ||
+						(!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1 || allied_faction(uarm->ovar1,obj->ovar1))) ||
 					   ((obj->ovar1 == EDDER_SYMBOL || 
 					     obj->ovar1 == XAXOX || 
-						 obj->ovar1 == EILISTRAEE_SYMBOL) && (!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1)) ||
+						 obj->ovar1 == EILISTRAEE_SYMBOL) && (!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1 || allied_faction(uarm->ovar1,obj->ovar1))) ||
 					   (uarm && uarm->ovar1 && uarm->ovar1 == obj->ovar1)
 					){
 						verbalize("He's one of ours!");
