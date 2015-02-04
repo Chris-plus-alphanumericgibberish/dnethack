@@ -1803,7 +1803,7 @@ role_init()
 				urole.enemy1num = PM_GRIMLOCK;
 				urole.enemy2num = PM_UMBER_HULK;
 				urole.enemy1sym = S_WORM;
-				urole.enemy2sym = S_HUMANOID;
+				urole.enemy2sym = S_UMBER;
 			} else {
 				urole.filecode = "Dro";
 				
@@ -1843,7 +1843,7 @@ role_init()
 					
 					urole.enemy1num = PM_HEDROW_WARRIOR;
 					urole.enemy2num = PM_DROW_MATRON;
-					urole.enemy1sym = S_IMP;
+					urole.enemy1sym = S_SPIDER;
 					urole.enemy2sym = S_DEMON;
 				}
 			}
@@ -1883,9 +1883,9 @@ role_init()
 					urole.guardnum = PM_DROW_MATRON_MOTHER;
 					urole.neminum = PM_DARUTH_XAXOX;
 					
-					urole.enemy1num = PM_HEDROW_WARRIOR;
-					urole.enemy2num = PM_EDDERKOP;
-					urole.enemy1sym = S_SPIDER;
+					urole.enemy1num = PM_EDDERKOP;
+					urole.enemy2num = PM_HEDROW_WIZARD;
+					urole.enemy1sym = S_MUMMY;
 					urole.enemy2sym = S_UMBER;
 				} else {
 					urole.lgod = DrowMaleLgodKnown;
@@ -1900,8 +1900,8 @@ role_init()
 					urole.guardnum = PM_DROW_ALIENIST;
 					urole.neminum = PM_ECLAVDRA;
 					
-					urole.enemy1num = PM_DROW_MATRON;
-					urole.enemy2num = PM_DROW_ZOMBIE;
+					urole.enemy1num = PM_DROW_ZOMBIE;
+					urole.enemy2num = PM_DROW_MATRON;
 					urole.enemy1sym = S_DEMON;
 					urole.enemy2sym = S_ZOMBIE;
 				}
