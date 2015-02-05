@@ -431,7 +431,11 @@ register struct monst *mtmp;
 				obj->oeroded = 3;
 				obj = mksobj_at(IRON_BAR, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
-				obj = mksobj_at(LARGE_SHIELD, x, y, TRUE, FALSE);
+				obj = mksobj_at(SCRAP, x, y, TRUE, FALSE);
+				obj->oeroded = 3;
+				obj = mksobj_at(SCRAP, x, y, TRUE, FALSE);
+				obj->oeroded = 3;
+				obj = mksobj_at(SCRAP, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
 			}
 			if(!rn2(20)){
@@ -442,6 +446,8 @@ register struct monst *mtmp;
 		break;
 	    case PM_HELLFIRE_COLOSSUS:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			obj->quan = d(4,4);
+			obj = mksobj_at(HELLFIRE_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(4,4);
 			num = d(2,6);
 			while (num--){
