@@ -333,7 +333,9 @@ tty_player_selection()
 	/* Should we randomly pick for the player? */
 	if (!flags.randomall &&
 	    (flags.initrole == ROLE_NONE || flags.initrace == ROLE_NONE ||
-	     flags.initgend == ROLE_NONE || flags.initalign == ROLE_NONE)) {
+	     flags.initgend == ROLE_NONE || 
+			(flags.initalign == ROLE_NONE && !(flags.initrole != ROLE_NONE && roles[flags.initrole].malenum == PM_EXILE))
+	)) {
 	    int echoline;
 	    char *prompt = build_plselection_prompt(pbuf, QBUFSZ, flags.initrole,
 				flags.initrace, flags.initgend, flags.initalign);
@@ -587,7 +589,9 @@ give_up:	/* Quit */
 	if (flags.initalign < 0 || !validalign(flags.initrole, flags.initrace,
 							flags.initalign)) {
 	    /* pre-selected alignment not valid */
-	    if (pick4u == 'y' || flags.initalign == ROLE_RANDOM || flags.randomall) {
+	    if (pick4u == 'y' || flags.initalign == ROLE_RANDOM || flags.randomall || 
+			(flags.initrole != ROLE_NONE && roles[flags.initrole].malenum == PM_EXILE)
+		) {
 		flags.initalign = pick_align(flags.initrole, flags.initrace,
 							flags.initgend, PICK_RANDOM);
 		if (flags.initalign < 0) {

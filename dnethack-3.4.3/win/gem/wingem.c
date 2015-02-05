@@ -233,7 +233,9 @@ Gem_player_selection()
 	/* Should we randomly pick for the player? */
 	if (!flags.randomall &&
 	    (flags.initrole == ROLE_NONE || flags.initrace == ROLE_NONE ||
-		flags.initgend == ROLE_NONE || flags.initalign == ROLE_NONE)) {
+		flags.initgend == ROLE_NONE || 
+			(flags.initalign == ROLE_NONE && !(flags.initrole != ROLE_NONE && roles[flags.initrole].malenum == PM_EXILE))
+	)) {
 /*		pick4u = yn_function("Shall I pick a character for you? [ynq]",ynqchars,'n');*/
 		pick4u = yn_function(
 			build_plselection_prompt(pbuf, QBUFSZ, flags.initrole,flags.initrace,
@@ -260,7 +262,7 @@ give_up:		/* Just quit */
 			if (flags.initrole < 0) {
 				mar_add_message("Incompatible role!");
 				mar_display_nhwindow(WIN_MESSAGE);
-				flags.initrole = randrole();
+				flags.initrole = randrole(0);
 			}
 		}else{
 			/* Prompt for a role */
@@ -282,7 +284,7 @@ give_up:		/* Just quit */
 			any.a_int = pick_role(flags.initrace, flags.initgend,
 					    flags.initalign, PICK_RANDOM)+1;
 			if (any.a_int == 0)	/* must be non-zero */
-			    any.a_int = randrole()+1;
+			    any.a_int = randrole(0)+1;
 			add_menu(win, NO_GLYPH, &any , '*', 0, ATR_NONE,
 				"Random", MENU_UNSELECTED);
 			any.a_int = i+1;	/* must be non-zero */
@@ -442,7 +444,9 @@ give_up:		/* Just quit */
 	if (flags.initalign < 0 || !validalign(flags.initrole, flags.initrace,
 							flags.initalign)) {
 		/* pre-selected alignment not valid */
-		if (pick4u == 'y' || flags.initalign == ROLE_RANDOM || flags.randomall) {
+		if (pick4u == 'y' || flags.initalign == ROLE_RANDOM || flags.randomall || 
+			(flags.initrole != ROLE_NONE && roles[flags.initrole].malenum == PM_EXILE)
+		) {
 			flags.initalign = pick_align(flags.initrole, flags.initrace,
 							flags.initgend, PICK_RANDOM);
 			if (flags.initalign < 0) {
