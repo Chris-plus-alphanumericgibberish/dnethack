@@ -141,7 +141,7 @@ xchar x, y;
 		ispick && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
 		closed_door(x, y) ? DIGTYP_DOOR :
 		IS_TREES(levl[x][y].typ) ?
-			(ispick ? DIGTYP_UNDIGGABLE : DIGTYP_TREE) :
+			((ispick && !is_axe(otmp)) ? DIGTYP_UNDIGGABLE : DIGTYP_TREE) :
 		ispick && IS_ROCK(levl[x][y].typ) &&
 			(!level.flags.arboreal || IS_WALL(levl[x][y].typ)) ?
 			DIGTYP_ROCK : DIGTYP_UNDIGGABLE);
