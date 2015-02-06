@@ -3063,6 +3063,7 @@ drown()
 	
 	if (Amphibious || Swimming) {
 		u.uinwater = 1;
+		if(uclockwork) u.uboiler = MAX_BOILER;
 		if (Swimming && ACURR(A_CON) > 11 && yn("Dive underwater?")=='y') {
 			u.divetimer = (ACURR(A_CON)-10)/2 + 1;
 		} else u.divetimer = 0;

@@ -418,7 +418,13 @@ moveloop()
 						flags.cth_attk=FALSE;
 						if(u.utemp && moves%2) u.utemp--;
 					} else {
-						u.utemp++;
+						if(u.utemp<=WARM || 
+							(u.utemp<=HOT && (moves%4)) ||
+							(u.utemp>HOT && u.utemp<=BURNING_HOT && (moves%3)) ||
+							(u.utemp>BURNING_HOT && u.utemp<=MELTING && (moves%2)) ||
+							(u.utemp>MELTING && u.utemp<=MELTED && !(moves%3)) ||
+							(u.utemp>MELTED && !(moves%4))
+						) u.utemp++;
 						flags.cth_attk=TRUE;//state machine stuff.
 						create_gas_cloud(u.ux+rn2(3)-1, u.uy+rn2(3)-1, 1, rnd(6)); //Longer-lived smoke
 						flags.cth_attk=FALSE;
@@ -442,6 +448,8 @@ moveloop()
 					}
 				}
 			} else if(u.utemp) u.utemp = 0;
+			
+			if(u.uinwater) u.uboiler = MAX_BOILER;
 			
 			if(u.ukinghill){
 				if(u.protean > 0) u.protean--;
