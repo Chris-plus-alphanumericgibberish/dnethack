@@ -3735,6 +3735,7 @@ struct obj **optr;
 								mm->mhp += mm->m_lev;
 								if(mm->mhp > mm->mhpmax) mm->mhp = mm->mhpmax;
 								useup(obj);
+								*optr = 0;
 							}
 						} else pline("It doesn't need repairs.");
 					}
@@ -3748,6 +3749,7 @@ struct obj **optr;
 							mm->mhp += mm->m_lev;
 							if(mm->mhp > mm->mhpmax) mm->mhp = mm->mhpmax;
 							useup(obj);
+							*optr = 0;
 						}
 					} else pline("It doesn't need repairs.");
 				} else if(obj->otyp == SUBETHAIC_COMPONENT && (
@@ -3760,6 +3762,7 @@ struct obj **optr;
 							mm->mhp += mm->m_lev;
 							if(mm->mhp > mm->mhpmax) mm->mhp = mm->mhpmax;
 							useup(obj);
+							*optr = 0;
 						}
 					} else pline("It doesn't need repairs.");
 				} else pline("This device can't take this part.");
@@ -3815,6 +3818,8 @@ struct obj **optr;
 				You("don't need repairs.");
 				return 0;
 			}
+			useup(obj);
+			*optr = 0;
 		} else {
 			You("aren't made of clockwork!");
 			return 0;
