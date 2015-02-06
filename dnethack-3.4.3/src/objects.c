@@ -525,7 +525,7 @@ SHIELD("shield of reflection", "polished silver shield",
 /*#define SHIELD(name,desc,kn,mgc,blk,power,prob,delay,wt,cost,ac,can,metal,c) \
      ARMOR(name,desc,kn,mgc,blk,power,prob,delay,wt,cost,ac,can,ARM_SHIELD,metal,c) */
 #define DRGN_SHIELD(name,mgc,power,cost,ac,color)						\
-	ARMOR(name,(char *)0,1,mgc,1,power,0,0,150,cost,ac,0,ARM_SHIELD,DRAGON_HIDE,color)
+	ARMOR(name,(char *)0,1,mgc,1,power,0,0,75,cost,ac,0,ARM_SHIELD,DRAGON_HIDE,color)
 /* 3.4.1: dragon scale mail reclassified as "magic" since magic is
    needed to create them */
 DRGN_SHIELD("gray dragon scale shield", 1, ANTIMAGIC,  1200, 7, CLR_GRAY),
