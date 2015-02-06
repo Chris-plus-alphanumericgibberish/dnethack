@@ -1735,13 +1735,23 @@ struct monst *mtmp;
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
-	switch (rnd(6)) {
+	switch (rnd(16)) {
 		case 1:	return POT_INVISIBILITY;
-		case 2: return POT_SPEED;
-		case 3: return POT_CONFUSION;
-		case 4: return POT_GAIN_LEVEL;
-		case 5: return POT_EXTRA_HEALING;
-		case 6: return POT_FULL_HEALING;
+		case 2:	return POT_INVISIBILITY;
+		case 3: return POT_SPEED;
+		case 4: return POT_SPEED;
+		case 5: return POT_CONFUSION;
+		case 6: return POT_CONFUSION;
+		case 7: return POT_CONFUSION;
+		case 8: return POT_GAIN_LEVEL;
+		case 9: return POT_GAIN_LEVEL;
+		case 10: return POT_EXTRA_HEALING;
+		case 11: return POT_EXTRA_HEALING;
+		case 12: return POT_FULL_HEALING;
+		case 13: return POT_FULL_HEALING;
+		case 14: return POT_FULL_HEALING;
+		case 15: return POT_GAIN_ENERGY;
+		case 16: return SCR_REMOVE_CURSE;
 	}
 	/*NOTREACHED*/
 	return 0;
@@ -1757,6 +1767,7 @@ struct monst *mtmp;
 #define MUSE_BULLWHIP 8
 #define MUSE_POT_POLYMORPH 9
 #define MUSE_SCR_REMOVE_CURSE 10
+#define MUSE_POT_GAIN_ENERGY 11
 
 boolean
 find_misc(mtmp)
@@ -1821,6 +1832,11 @@ struct monst *mtmp;
 			    (!mtmp->isgd && !mtmp->isshk && !mtmp->ispriest))) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_GAIN_LEVEL;
+		}
+		nomore(MUSE_POT_GAIN_ENERGY);
+		if((mtmp->mcan || (mtmp->mhp <= .5*(mtmp->mhpmax) && mtmp->mspec_used > 2)) && obj->otyp == POT_GAIN_ENERGY) {
+			m.misc = obj;
+			m.has_misc = MUSE_POT_GAIN_ENERGY;
 		}
 		nomore(MUSE_BULLWHIP);
 		if(obj->otyp == BULLWHIP && (MON_WEP(mtmp) == obj) &&
@@ -1999,6 +2015,12 @@ skipmsg:
 		   player's character becomes "very fast" temporarily;
 		   monster becomes "one stage faster" permanently */
 		mon_adjust_speed(mtmp, 1, otmp);
+		m_useup(mtmp, otmp);
+		return 2;
+	case MUSE_POT_GAIN_ENERGY:
+		mquaffmsg(mtmp, otmp);
+		mtmp->mspec_used = 0;
+		mtmp->mcan = 0;
 		m_useup(mtmp, otmp);
 		return 2;
 	case MUSE_WAN_POLYMORPH:
