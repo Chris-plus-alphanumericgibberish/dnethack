@@ -2714,7 +2714,9 @@ register int	mmflags;
 	place_monster(mtmp, x, y);
 	mtmp->mcansee = mtmp->mcanmove = mtmp->mnotlaugh = TRUE;
 	mtmp->mblinded = mtmp->mfrozen = mtmp->mlaughing = 0;
-	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && ptr == &mons[PM_SPROW]) mtmp->mpeaceful = TRUE;
+	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
+		(ptr == &mons[PM_SPROW]|| ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
+	) mtmp->mpeaceful = TRUE;
 	else mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : peace_minded(ptr);
 	mtmp->mtraitor  = FALSE;
 	mtmp->mferal  = FALSE;
