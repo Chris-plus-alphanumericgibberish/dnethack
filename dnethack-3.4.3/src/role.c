@@ -75,7 +75,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 14, 0,  0,10,  2, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
-	10, 14, 0, 0,  8, A_INT, SPE_HASTE_SELF,      -18
+	10, 14, 0, 0,  8, A_INT, SPE_HASTE_SELF,      -1000
 },
 {	{"Binder", 		 0}, {
 	{"Exile",        0},
@@ -127,7 +127,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 14, 0,  0, 8,  2, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
-	0, 12, 0, 1,  8, A_INT, SPE_DIG, -24
+	0, 12, 0, 1,  8, A_INT, SPE_DIG, -1000
 },
 #ifdef CONVICT
 {	{"Convict", 0}, {
@@ -206,7 +206,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 14, 0,  0, 8,  2, 0 },	/* Hit points */
 	{  1, 4,  0, 1,  0, 2 },10,	/* Energy */
-	10, 8,-2, 0,  9, A_WIS, SPE_TURN_UNDEAD, -26
+	10, 8,-2, 0,  9, A_WIS, SPE_TURN_UNDEAD, -1000
 },
 {	{"Monk", 0}, {
 	{"Candidate",         0},
@@ -260,7 +260,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  2, 2,  0, 2,  0, 2 },10,	/* Energy */
-	10, 4,-4, 4, 8, A_INT, SPE_PROTECTION, -24
+	10, 4,-4, 4, 8, A_INT, SPE_PROTECTION, -1000
 },
 {	{"Priest", "Priestess"}, {
 	{"Aspirant",    0},
@@ -312,7 +312,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },12,	/* Energy */
-	10, 8, 0, 2,  9, A_INT, SPE_CAUSE_FEAR,    -21
+	10, 8, 0, 2,  9, A_INT, SPE_CAUSE_FEAR,    -1000
 },
   /* Note:  Rogue precedes Ranger so that use of `-R' on the command line
      retains its traditional meaning. */
@@ -340,7 +340,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },11,	/* Energy */
-	10, 8, 0, 1,  9, A_INT, SPE_DETECT_TREASURE, -30
+	10, 8, 0, 1,  9, A_INT, SPE_DETECT_TREASURE, -1000
 },
 {	{"Ranger", 0}, {
 	{"Tenderfoot",    0},
@@ -366,7 +366,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 13, 0,  0, 6,  1, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },12,	/* Energy */
-	10, 9, 2, 1, 10, A_INT, SPE_INVISIBILITY,   -13
+	10, 9, 2, 1, 10, A_INT, SPE_INVISIBILITY,   -1000
 },
 {	{"Samurai", 0}, {
 	{"Hatamoto",    0},  /* Banner Knight */
