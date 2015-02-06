@@ -256,7 +256,10 @@ moveloop()
 				if (u.uevent.udemigod && xupstair && rn2(10)) {
 					(void) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTOK);
 				} //TEAM ATTACKS
-				(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
+				if(In_sokoban(&u.uz)){
+					if(u.uz.dlevel != 1 && u.uz.dlevel != 4) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTSTRICT);
+				}
+				else (void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 			}
 
 		    /* reset summon monster block. */
