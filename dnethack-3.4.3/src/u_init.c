@@ -1503,8 +1503,8 @@ u_init()
 
 	case PM_CLOCKWORK_AUTOMATON:
 		ini_inv(Key);
-		objects[SKELETON_KEY].oc_prob -= 40;
-		objects[UPGRADE_KIT].oc_prob += 40;
+		objects[SKELETON_KEY].oc_prob -= 70; /* is 80 by default */
+		objects[UPGRADE_KIT].oc_prob += 70; /* is 80 by default */
     break;
 
 	case PM_INCANTIFIER:
