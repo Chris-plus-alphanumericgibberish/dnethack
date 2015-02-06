@@ -718,7 +718,7 @@ newsym(x,y)
 	if (x == u.ux && y == u.uy) {
 	    feel_location(u.ux, u.uy);		/* forces an update */
 		
-	    if (senseself()) display_self();
+	    if (!restoring && senseself()) display_self();
 	}
 	else if ((mon = m_at(x,y))
 		&& ((see_it = (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)
