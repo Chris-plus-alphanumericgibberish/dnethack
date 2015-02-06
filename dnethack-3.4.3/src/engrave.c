@@ -274,8 +274,9 @@ static const char *haluMesg[] = {
 		"Well, don't you get it? That's how he finds happiness. That's pretty good, right?",
 	"[REDACTED]",	"[DATA EXPUNGED]",	"[DATA PLUNGED]",	"[DATA EXPANDED]",	"I am a toaster!", /* SCP Foundation */
 		"Special Containment Procedures: You're going to die, you poor dumb fuck.", /* SCP-1983 */
-		"Hello.", "You are no longer lost.", "Here is the map for your journey up.", /* Anabasis */
+		"Hello.", "You are no longer lost.", "Here is the map for your journey up.", /* SCP-2084 - Anabasis */
 		"A war, whoever was left alive, was Clean.", /* Red Sea Object */
+		"Let the depths rise up and sweep over the shores, rendering the works of man to dust.", /* SCP-1014 - Jonah Crusoe */
 	"I prepared Explosive Runes this morning.", /*Order of the Stick*/
 		"In any battle, there's always a level of force against which no tactics can succeed.",
 	"1002: He is Not that Which He Says He Is.", /*Good Omens*/
