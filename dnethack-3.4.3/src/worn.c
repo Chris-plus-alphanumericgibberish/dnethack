@@ -468,6 +468,51 @@ struct monst *mon;
 	return base;
 }
 
+int
+full_mac(mon)
+struct monst *mon;
+{
+	struct obj *obj;
+	int base = mon->data->ac, armac = 0;
+	long mwflags = mon->misc_worn_check;
+	
+	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
+		base -= u.chokhmah;
+	}
+	else if(is_weeping(mon->data)){
+		if(mon->mextra[1] & 0x4L) base = -125; //Fully Quantum Locked
+		if(mon->mextra[1] & 0x2L) base = -20; //Partial Quantum Lock
+	}
+	else if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
+		base -= 15;
+	}
+	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
+	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
+		if(mwep){
+			base += base*10;
+		}
+	}
+	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
+		if(uarm) armac += ARM_BONUS(uarm);
+		if(uarmf) armac += ARM_BONUS(uarmf);
+		if(uarmg) armac += ARM_BONUS(uarmg);
+		if(uarmu) armac += ARM_BONUS(uarmu);
+		if(uarms) armac += ARM_BONUS(uarms);
+		if(uarmh) armac += ARM_BONUS(uarmh);
+		if(uarmc) armac += ARM_BONUS(uarmc);
+		
+		if(armac < 0) armac *= -1;
+	}
+	else for (obj = mon->minvent; obj; obj = obj->nobj) {
+	    if (obj->owornmask & mwflags)
+		armac += ARM_BONUS(obj);
+	}
+
+	base -= armac;
+	/* since ARM_BONUS is positive, subtracting it increases AC */
+	return base;
+}
+
 /* weapons are handled separately; rings and eyewear aren't used by monsters */
 
 /* Wear the best object of each type that the monster has.  During creation,
