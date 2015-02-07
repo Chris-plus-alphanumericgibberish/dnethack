@@ -863,7 +863,7 @@ A("The Armor of Khazad-dum",	DWARVISH_MITHRIL_COAT, /*Moria dwarf noble first gi
 	0,0,WSFX_PLUSSEV),
 
 A("The War-mask of Durin",	MASK, /*Moria dwarf noble */
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HSPDAM), 0, 0, /*+5 attk and damage*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HSPDAM), 0, 0, /*+5 attk and damage with axes*/
 	NO_ATTK,	NO_DFNS,	NO_CARY, /* Gives Fire, Acid, and Poison resistance */
 	0,	A_LAWFUL,	 PM_NOBLEMAN, PM_DWARF, 2500L,
 	0,0,0),
