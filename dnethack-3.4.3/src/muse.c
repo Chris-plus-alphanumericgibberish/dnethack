@@ -2019,8 +2019,12 @@ skipmsg:
 		return 2;
 	case MUSE_POT_GAIN_ENERGY:
 		mquaffmsg(mtmp, otmp);
-		mtmp->mspec_used = 0;
-		mtmp->mcan = 0;
+		if(!otmp->cursed){
+			mtmp->mspec_used = 0;
+			mtmp->mcan = 0;
+		} else {
+			mtmp->mcan = 1;
+		}
 		m_useup(mtmp, otmp);
 		return 2;
 	case MUSE_WAN_POLYMORPH:

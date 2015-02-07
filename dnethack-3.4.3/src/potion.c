@@ -900,7 +900,7 @@ as_extra_healing:
 			if(u.uen > u.uenmax) u.uen = u.uenmax;
 			if(u.uen <= 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 			flags.botl = 1;
-			exercise(A_WIS, TRUE);
+			if(!otmp->cursed) exercise(A_WIS, TRUE);
 		}
 		break;
 	case POT_OIL:				/* P. Winner */
