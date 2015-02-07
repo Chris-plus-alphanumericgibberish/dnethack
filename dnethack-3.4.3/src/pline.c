@@ -429,7 +429,7 @@ register struct monst *mtmp;
 		mtmp->m_lev,
 		mtmp->mhp,
 		mtmp->mhpmax,
-		find_mac(mtmp),
+		full_mac(mtmp),
 		info);
 }
 
