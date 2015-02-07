@@ -860,6 +860,10 @@ int x;
 #else
 		else return((schar)((tmp >= 125) ? 125 : (tmp <= 3) ? 3 : tmp));
 #endif
+	} else if (x == A_DEX) {
+		if (
+			(uarmg && uarmg->oartifact == ART_PREMIUM_HEART)
+		) return(25);
 	} else if (x == A_CHA) {
 		if (tmp < 18 && youmonst.data && (youmonst.data->mlet == S_NYMPH ||
 		    u.umonnum==PM_SUCCUBUS || u.umonnum == PM_INCUBUS))

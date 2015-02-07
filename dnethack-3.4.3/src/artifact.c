@@ -1102,7 +1102,21 @@ int tmp;
 //		pline("dbon applies");
 	}
 	if (spec_dbon_applies){
-	    return weap->attk.damd ? rnd((int)weap->attk.damd) : max(tmp,1);
+		if(otmp && otmp==uarmg && otmp->oartifact == ART_PREMIUM_HEART){
+			int multiplier = 1;
+			if(Blind) multiplier++;
+			if(Stunned) multiplier++;
+			if(Confusion) multiplier++;
+			if(Sick) multiplier++;
+			if(Stoned) multiplier++;
+			if(Strangled) multiplier++;
+			if(Vomiting) multiplier++;
+			if(Slimed) multiplier++;
+			if(Hallucination) multiplier++;
+			if(Fumbling) multiplier++;
+			if(Wounded_legs) multiplier++;
+			return weap->attk.damd ? d(multiplier, (int)weap->attk.damd) : max(multiplier*tmp,multiplier);
+		} else return weap->attk.damd ? rnd((int)weap->attk.damd) : max(tmp,1);
 	}
 	return 0;
 }

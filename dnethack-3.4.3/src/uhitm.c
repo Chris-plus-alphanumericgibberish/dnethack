@@ -788,6 +788,7 @@ int thrown;
 	    else {
 			tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,rnd(5)*2,0) : rnd(2);
 		}
+		if(uarmg && uarmg->oartifact == ART_PREMIUM_HEART) tmp += uarmg->spe;
 		if(u.specialSealsActive&SEAL_DAHLVER_NAR) tmp += d(2,6)+min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 		if(uarmg && uarmg->otyp == tgloves) tmp += 1;
 	    valid_weapon_attack = (tmp > 1);
