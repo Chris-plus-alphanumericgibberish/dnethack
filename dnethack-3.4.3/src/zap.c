@@ -135,7 +135,7 @@ struct obj *otmp;
 		break;
 	case WAN_SLOW_MONSTER:
 	case SPE_SLOW_MONSTER:
-		if (!resist(mtmp, otmp->oclass, 0, NOTELL)) {
+		if (!resist(mtmp, otmp->oclass, 0, TELL)) {
 			mon_adjust_speed(mtmp, -1, otmp);
 			m_dowear(mtmp, FALSE); /* might want speed boots */
 			if (u.uswallow && (mtmp == u.ustuck) &&
@@ -144,13 +144,13 @@ struct obj *otmp;
 				pline("A huge hole opens up...");
 				expels(mtmp, mtmp->data, TRUE);
 			}
-		}
+		} else if(cansee(mtmp->mx,mtmp->my)) shieldeff(mtmp->mx, mtmp->my);
 		break;
 	case WAN_SPEED_MONSTER:
-		if (!resist(mtmp, otmp->oclass, 0, NOTELL)) {
+		if (!resist(mtmp, otmp->oclass, 0, TELL)) {
 			mon_adjust_speed(mtmp, 1, otmp);
 			m_dowear(mtmp, FALSE); /* might want speed boots */
-		}
+		} else if(cansee(mtmp->mx,mtmp->my)) shieldeff(mtmp->mx, mtmp->my);
 		break;
 	case WAN_UNDEAD_TURNING:
 	case SPE_TURN_UNDEAD:
@@ -164,9 +164,9 @@ struct obj *otmp;
 			if (otyp == SPE_TURN_UNDEAD)
 				dmg += spell_damage_bonus();
 			flags.bypasses = TRUE;	/* for make_corpse() */
-			if (!resist(mtmp, otmp->oclass, dmg, NOTELL)) {
+			if (!resist(mtmp, otmp->oclass, dmg, TELL)) {
 			    if (mtmp->mhp > 0) monflee(mtmp, 0, FALSE, TRUE);
-			}
+			} else if(cansee(mtmp->mx,mtmp->my)) shieldeff(mtmp->mx, mtmp->my);
 		}
 		break;
 	case WAN_POLYMORPH:
@@ -176,7 +176,7 @@ struct obj *otmp;
 		    /* magic resistance protects from polymorph traps, so make
 		       it guard against involuntary polymorph attacks too... */
 		    shieldeff(mtmp->mx, mtmp->my);
-		} else if (!resist(mtmp, otmp->oclass, 0, NOTELL)) {
+		} else if (!resist(mtmp, otmp->oclass, 0, TELL)) {
 		    /* natural shapechangers aren't affected by system shock
 		       (unless protection from shapechangers is interfering
 		       with their metabolism...) */
@@ -196,7 +196,7 @@ struct obj *otmp;
 			if (!Hallucination && canspotmon(mtmp))
 			    makeknown(otyp);
 		    }
-		}
+		} else if(cansee(mtmp->mx,mtmp->my)) shieldeff(mtmp->mx, mtmp->my);
 		break;
 	case WAN_CANCELLATION:
 	case SPE_CANCELLATION:
@@ -325,7 +325,7 @@ struct obj *otmp;
 		if (resists_drli(mtmp)){
 		    shieldeff(mtmp->mx, mtmp->my);
 	break;	/* skip makeknown */
-		}else if (!resist(mtmp, otmp->oclass, dmg, NOTELL) &&
+		}else if (!resist(mtmp, otmp->oclass, dmg, TELL) &&
 				mtmp->mhp > 0) {
 		    mtmp->mhp -= dmg;
 		    mtmp->mhpmax -= dmg;
@@ -336,7 +336,7 @@ struct obj *otmp;
 			if (canseemon(mtmp))
 			    pline("%s suddenly seems weaker!", Monnam(mtmp));
 		    }
-		}
+		} else if(cansee(mtmp->mx,mtmp->my)) shieldeff(mtmp->mx, mtmp->my);
 		makeknown(otyp);
 	break;
 	default:
@@ -2427,8 +2427,10 @@ int gaze_cancel;
 	static const char your[] = "your";	/* should be extern */
 
 	if (youdefend ? (!youattack && Antimagic)
-		      : resist(mdef, obj->oclass, 0, NOTELL))
+		      : resist(mdef, obj->oclass, 0, TELL)){
+		if(cansee(mdef->mx,mdef->my)) shieldeff(mdef->mx, mdef->my);
 		return FALSE;	/* resisted cancellation */
+	}
 
 	if (self_cancel) {	/* 1st cancel inventory */
 	    struct obj *otmp;
