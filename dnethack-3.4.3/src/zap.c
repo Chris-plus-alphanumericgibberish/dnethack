@@ -4290,6 +4290,8 @@ register int osym, dmgtyp;
 	register int dindx;
 	const char *mult;
 
+	if(osym == RING_CLASS && dmgtyp == AD_ELEC) return 0;
+	
 	for(obj = invent; obj; obj = obj2) {
 	    obj2 = obj->nobj;
 	    if(obj->oclass != osym) continue; /* test only objs of type osym */
@@ -4417,6 +4419,8 @@ int osym, dmgtyp;
 	long i, cnt, quan;
 	int dindx;
 	boolean vis;
+	
+	if(osym == RING_CLASS && dmgtyp == AD_ELEC) return 0;
 
 	if (mtmp == &youmonst) {	/* this simplifies artifact_hit() */
 	    destroy_item(osym, dmgtyp);
