@@ -1063,7 +1063,7 @@ int spellnum;
 			else if(ACURR(A_DEX) <= 6) dmg = d(4, 6);
 			else if(ACURR(A_DEX) <= 10) dmg = rnd(6);
 		}
-		makeknown(uarmf->otyp);
+		if(uarmf && uarmf->otyp == WATER_WALKING_BOOTS) makeknown(uarmf->otyp);
 	} else {
 		pline("A sudden geyser slams into you from nowhere!");
 		dmg = d(8, 6);
@@ -2730,7 +2730,7 @@ uspsibolt:
 		}
 		dmg = 0;
 		boots = which_armor(mtmp, W_ARMF);
-		if(Wwalking){
+		if(boots && boots->otyp == WATER_WALKING_BOOTS){
 			if (yours || canseemon(mtmp)){
 				pline("A sudden geyser erupts under %s's feet!", mon_nam(mtmp));
 				if(mtmp->data->mmove >= 14) pline("%s puts the added monmentum to good use!", Monnam(mtmp));
