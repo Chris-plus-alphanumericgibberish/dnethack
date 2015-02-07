@@ -618,7 +618,7 @@ register struct monst *mtmp;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 1;
+					otmp->spe = 5;
 					(void) mpickobj(mtmp, otmp);
 					/*Ring*/
 					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
@@ -630,17 +630,17 @@ register struct monst *mtmp;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 0;
+					otmp->spe = 5;
 					(void) mpickobj(mtmp, otmp);
 					/*Helm*/
-					otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
+					otmp = mksobj(CORNUTHAUM, TRUE, FALSE);
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 0;
+					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
 					/*boots*/
-					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
+					otmp = mksobj(LOW_BOOTS, TRUE, FALSE);
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
