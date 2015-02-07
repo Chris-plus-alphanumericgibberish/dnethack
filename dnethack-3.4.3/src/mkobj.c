@@ -539,8 +539,14 @@ boolean artif;
 					blessorcurse(otmp, 2);
 					break;
 		case CHEST:
-		case LARGE_BOX:		otmp->olocked = !!(rn2(5));
-					otmp->otrapped = !(rn2(10));
+		case LARGE_BOX:
+			if(Is_stronghold(&u.uz) && in_mklev){
+				otmp->olocked = 1;
+				otmp->otrapped = 0;
+			} else {
+				otmp->olocked = !!(rn2(5));
+				otmp->otrapped = !(rn2(10));
+			}
 		case ICE_BOX:
 		case SACK:
 		case OILSKIN_SACK:
