@@ -142,15 +142,16 @@ static struct trobj Noble[] = {
 };
 static struct trobj DNoble[] = {
 	{ BULLWHIP, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
-//define NOB_SHIRT	1
+	{ SILVER_DAGGER, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ VICTORIAN_UNDERWEAR, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ DROVEN_HELM, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ BOW, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
-#define DNB_TWO_ARROWS	6
+#define DNB_TWO_ARROWS	8
 	{ ARROW, 2, WEAPON_CLASS, 50, UNDEF_BLESS },
-#define DNB_ZERO_ARROWS	7
+#define DNB_ZERO_ARROWS	9
 	{ ARROW, 0, WEAPON_CLASS, 30, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 10, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
@@ -1357,7 +1358,7 @@ u_init()
 		skill_init(Skill_Mon);
 		break;
 	case PM_NOBLEMAN:
-		if(flags.female){
+		if(flags.female && !Race_if(PM_DROW)){
 			Noble[NOB_SHIRT].trotyp = VICTORIAN_UNDERWEAR;
 		}
 		if(Race_if(PM_DWARF)) ini_inv(DwarfNoble);
