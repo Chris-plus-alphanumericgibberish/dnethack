@@ -1104,6 +1104,8 @@ int tmp;
 	if (spec_dbon_applies){
 		if(otmp && otmp==uarmg && otmp->oartifact == ART_PREMIUM_HEART){
 			int multiplier = 1;
+			if(!Upolyd && u.uhp<u.uhpmax/4) multiplier++;
+			if(!Upolyd && u.uhp<u.uhpmax/16) multiplier++;
 			if(Blind) multiplier++;
 			if(Stunned) multiplier++;
 			if(Confusion) multiplier++;
