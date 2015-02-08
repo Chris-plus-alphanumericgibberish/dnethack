@@ -2339,7 +2339,7 @@ boolean was_swallowed;			/* digestion */
 				else pline("%s lets out a terrible shriek!", Monnam(mon));
 				for (mtmp = fmon; mtmp; mtmp = mtmp2){
 					mtmp2 = mtmp->nmon;
-					if(mtmp->data->geno & G_GENO && !nonliving(mon->data) && !is_demon(mon->data) && !is_keter(mon->data)){
+					if(mtmp->data->geno & G_GENO && !nonliving(mon->data) && !is_demon(mon->data) && !is_keter(mon->data) && mtmp->mhp <= 100){
 						if (DEADMONSTER(mtmp)) continue;
 						mtmp->mhp = -10;
 						monkilled(mtmp,"",AD_DRLI);
@@ -2348,7 +2348,7 @@ boolean was_swallowed;			/* digestion */
 				/* And a finger of death type attack on you */
 				if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
 					You("seem no deader than before.");
-				} else if (rn2(mon->m_lev) > 12 && !(u.sealsActive&SEAL_OSE)) {
+				} else if ((Upolyd ? u.mh : u.uhp) <= 100 && !(u.sealsActive&SEAL_OSE)) {
 					if (Hallucination) {
 					You("have an out of body experience.");
 					} else {
