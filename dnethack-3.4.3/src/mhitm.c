@@ -491,9 +491,14 @@ meleeattack:
 					temp = magr->mspec_used;
 					magr->mspec_used = 0;
 				}
-				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2) break;
-
+				
+				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > BOLT_LIM*BOLT_LIM) break;
+				
+				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
+					res[i] = buzzmm(magr, mdef, mattk, magr->m_lev);
+				else {
 					res[i] = castmm(magr, mdef, mattk);
+				}
 				if (res[i] & MM_DEF_DIED)
 				if( pa == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
 				if( pa == &mons[PM_QUINON] ) {

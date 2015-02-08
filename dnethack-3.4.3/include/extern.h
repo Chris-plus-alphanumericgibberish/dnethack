@@ -1055,6 +1055,7 @@ E void FDECL(mapglyph, (int, int *, int *, unsigned *, int, int));
 
 E int FDECL(castmu, (struct monst *,struct attack *,BOOLEAN_P,BOOLEAN_P));
 E int FDECL(buzzmu, (struct monst *,struct attack *, int));
+E int FDECL(buzzmm, (struct monst *,struct monst *,struct attack *, int));
 E int FDECL(castmm, (struct monst *,struct monst *,struct attack *));
 E int FDECL(castum, (struct monst *,struct attack *));
 

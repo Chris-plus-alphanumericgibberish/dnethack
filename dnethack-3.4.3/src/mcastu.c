@@ -2231,6 +2231,56 @@ buzzmu(mtmp, mattk, ml)		/* monster uses spell (ranged) */
 	return(1);
 }
 
+int
+buzzmm(magr, mdef, mattk, ml)		/* monster uses spell (ranged) */
+	struct monst *magr;
+	struct monst *mdef;
+	struct attack  *mattk;
+	int ml;
+{
+	int dmn = (int)(ml/2);
+	int type = mattk->adtyp;
+	
+	if(mattk->damn) dmn += mattk->damn;
+	else dmn += 1;
+	
+	if(type == AD_RBRE){
+		switch(rnd(3)){
+			case 1:
+				type = AD_ELEC;
+			break;
+			case 2:
+				type = AD_COLD;
+			break;
+			case 3:
+				type = AD_FIRE;
+			break;
+		}
+	}
+
+	
+	/* don't print constant stream of curse messages for 'normal'
+	   spellcasting monsters at range */
+	if (type > AD_SPC2)
+	    return(0);
+	
+	if (magr->mcan) {
+	    cursetxt(magr, FALSE);
+	    return(0);
+	}
+	if(mlined_up(magr, mdef, TRUE) && rn2(3)) {
+	    // nomul(0, NULL);
+	    if(type && (type < 11)) { /* no cf unsigned >0 */
+		if(canseemon(magr))
+		    pline("%s zaps %s with a %s!", Monnam(magr), mon_nam(mdef),
+			  flash_types[ad_to_typ(type)]);
+		buzz(-ad_to_typ(type), dmn,
+		     magr->mx, magr->my, sgn(mdef->mx - magr->mx), sgn(mdef->my - magr->my),0,0);
+	    } else impossible("Monster spell %d cast", type-1);
+	}
+	return(1);
+}
+
 /* return values:
  * 2: target died
  * 1: successful spell
