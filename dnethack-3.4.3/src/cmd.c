@@ -611,7 +611,7 @@ use_reach_attack()
 		
 		find_to_hit_rolls(mtmp, &tmp, &tmpw, &tmpt);
 		
-	    (void) hmonas(mtmp, tmp, tmpw, tmpt);
+	    (void) hmonas(mtmp, youmonst.data, tmp, tmpw, tmpt);
 	} else
 	    /* Now you know that nothing is there... */
 	    pline("%s", nothing_happens);

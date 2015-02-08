@@ -522,7 +522,7 @@ register struct monst *mtmp;
 	check_caitiff(mtmp);
 	
 	if (Upolyd || Race_if(PM_VAMPIRE)){
-		keepattacking = hmonas(mtmp, tmp, weptmp, tchtmp);
+		keepattacking = hmonas(mtmp, youmonst.data, tmp, weptmp, tchtmp);
 		attacksmade = 1;
 	} else {
 		keepattacking = hitum(mtmp, weptmp, youmonst.data->mattk);
@@ -2962,8 +2962,9 @@ register struct attack *mattk;
 }
 
 boolean
-hmonas(mon, tmp, weptmp, tchtmp)		/* attack monster as a monster. */
+hmonas(mon, mas, tmp, weptmp, tchtmp)		/* attack monster as a monster. */
 register struct monst *mon;
+register struct permonst *mas;
 register int tmp, weptmp, tchtmp;
 {
 	struct attack *mattk, alt_attk;
@@ -2974,7 +2975,7 @@ register int tmp, weptmp, tchtmp;
 
 	for(i = 0; i < NATTK; i++) {
 	    sum[i] = 0;
-	    mattk = getmattk(youmonst.data, i, sum, &alt_attk);
+	    mattk = getmattk(mas, i, sum, &alt_attk);
 	    switch(mattk->aatyp) {
 		case AT_WEAP:
 use_weapon:
@@ -3013,7 +3014,7 @@ use_weapon:
 		break;
 		case AT_CLAW:
 		case AT_LRCH: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
-			if (i==0 && uwep && !cantwield(youmonst.data)) goto use_weapon;
+			if (i==0 && uwep && !cantwield(mas)) goto use_weapon;
 #ifdef SEDUCE
 			/* succubi/incubi are humanoid, but their _second_
 			 * attack is AT_CLAW, not their first...
@@ -3027,7 +3028,7 @@ use_weapon:
 			/* [ALI] Vampires are also smart. They avoid biting
 			   monsters if doing so would be fatal */
 			if ((uwep || (u.twoweap && uswapwep) || uarmg) &&
-				maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) &&
+				maybe_polyd(is_vampire(mas), Race_if(PM_VAMPIRE)) &&
 				(is_rider(mon->data) ||
 				 mon->data == &mons[PM_GREEN_SLIME])){
 			    	break;
@@ -3037,7 +3038,7 @@ use_weapon:
 		case AT_BUTT:
 		case AT_TENT:
 		case AT_WHIP:
-			if (i==0 && uwep && (youmonst.data->mlet==S_LICH)) goto use_weapon;
+			if (i==0 && uwep && (mas->mlet==S_LICH)) goto use_weapon;
 			if ((uwep || (u.twoweap && uswapwep) || uarmg) &&
 				(touch_petrifies(mon->data) ||
 				 mon->data == &mons[PM_MEDUSA])){
@@ -3089,7 +3090,7 @@ wisp_shdw_dhit:
 			    else if (mattk->aatyp == AT_WHIP)
 				    Your("barbed whips lash %s.", mon_nam(mon));
 				else if(mattk->adtyp == AT_SHDW) {
-					if(youmonst.data == &mons[PM_EDDERKOP]) You("slash %s with bladed shadows.", mon_nam(mon));
+					if(mas == &mons[PM_EDDERKOP]) You("slash %s with bladed shadows.", mon_nam(mon));
 					else Your("bladed shadow srikes %s.", mon_nam(mon));
 				} else if(mattk->aatyp == AT_WISP) 
 					Your("mist tendrils lash %s.", mon_nam(mon));
@@ -3156,9 +3157,9 @@ wisp_shdw_dhit:
 			 * do the normal 1-2 points bare hand damage...
 			 */
 			/*
-			if (i==0 && (youmonst.data->mlet==S_KOBOLD
-				|| youmonst.data->mlet==S_ORC
-				|| youmonst.data->mlet==S_GNOME
+			if (i==0 && (mas->mlet==S_KOBOLD
+				|| mas->mlet==S_ORC
+				|| mas->mlet==S_GNOME
 				)) goto use_weapon;
 			*/
 			sum[i] = castum(mon, mattk);

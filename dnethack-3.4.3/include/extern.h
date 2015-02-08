@@ -2290,7 +2290,7 @@ E int FDECL(passive, (struct monst *,BOOLEAN_P,int,UCHAR_P));
 E void FDECL(passive_obj, (struct monst *,struct obj *,struct attack *));
 E void FDECL(stumble_onto_mimic, (struct monst *));
 E int FDECL(flash_hits_mon, (struct monst *,struct obj *));
-E boolean FDECL(hmonas, (struct monst *,int,int,int));
+E boolean FDECL(hmonas, (struct monst *,struct permonst *,int,int,int));
 E boolean FDECL(hmonwith, (struct monst *, int, int, int, struct attack *, int));
 
 /* ### unixmain.c ### */
