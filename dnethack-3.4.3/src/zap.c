@@ -3821,7 +3821,11 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			) {
 				range -= 2;
 				pline("%s hits you!", The(fltxt));
-				if (Reflecting && ((!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || (uarms && uarms->otyp == SILVER_DRAGON_SCALE_SHIELD))) {
+				if (Reflecting && ((
+					!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || 
+					 (uarms && uarms->otyp == SILVER_DRAGON_SCALE_SHIELD) ||
+					 (uwep && uwep->oartifact == ART_DRAGONLANCE))
+				) {
 					if (!Blind) {
 						(void) ureflects("But %s reflects from your %s!", "it");
 					} else
