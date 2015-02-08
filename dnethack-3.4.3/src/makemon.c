@@ -1199,8 +1199,11 @@ register struct monst *mtmp;
 					begin_burn(otmp, FALSE);
 			    }	
 			}
-			else
+			else {
 			    (void)mongets(mtmp, DWARVISH_IRON_HELM);
+				/* CM: Dwarves OUTSIDE the mines have booze. */
+				mongets(mtmp, POT_BOOZE);
+			}
  			if (!rn2(3))
 			    (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
 		}else if(mm == PM_DEEP_ONE || mm == PM_DEEPER_ONE) {
