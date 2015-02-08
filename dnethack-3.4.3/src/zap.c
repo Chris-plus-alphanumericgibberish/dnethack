@@ -3384,15 +3384,15 @@ xchar sx, sy;
 			if (!rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
 			if (!rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
 			if (!rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
+			burnarmor(&youmonst);
 	    }
-		if(flags.drgn_brth){
+		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
 			destroy_item(POTION_CLASS, AD_FIRE);
 			destroy_item(SCROLL_CLASS, AD_FIRE);
 			destroy_item(SPBOOK_CLASS, AD_FIRE);
+			burnarmor(&youmonst);
 		}
 	    burn_away_slime();
-	    if (burnarmor(&youmonst)) {	/* "body hit" */
-	    }
     break;
 	case ZT_COLD:
 	    if (Cold_resistance) {
@@ -3404,7 +3404,7 @@ xchar sx, sy;
 			else dam = flat;
 			if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
 	    }
-		if(flags.drgn_brth){
+		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
 			destroy_item(POTION_CLASS, AD_COLD);
 			destroy_item(POTION_CLASS, AD_COLD);
 		}
@@ -3509,7 +3509,7 @@ xchar sx, sy;
 	    if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 	    if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 	    }
-		if(flags.drgn_brth){
+		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
 			destroy_item(WAND_CLASS, AD_ELEC);
 			destroy_item(RING_CLASS, AD_ELEC);
 		}
@@ -3519,18 +3519,25 @@ xchar sx, sy;
 	    break;
 	case ZT_ACID:
 	    if (Acid_resistance) {
-		dam = 0;
+			dam = 0;
 	    } else {
-		pline_The("acid burns!");
-		if(!flat) dam = d(nd,6);
-		else dam = flat;
-		exercise(A_STR, FALSE);
+			pline_The("acid burns!");
+			if(!flat) dam = d(nd,6);
+			else dam = flat;
+			exercise(A_STR, FALSE);
+			if(!flags.drgn_brth){
+				/* using two weapons at once makes both of them more vulnerable */
+				if (!rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, TRUE, TRUE);
+				if (u.twoweap && !rn2(3)) erode_obj(uswapwep, TRUE, TRUE);
+				if (!rn2(6)) erode_armor(&youmonst, TRUE);
+			}
 	    }
-	    /* using two weapons at once makes both of them more vulnerable */
-	    if (!rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, TRUE, TRUE);
-	    if (u.twoweap && !rn2(3)) erode_obj(uswapwep, TRUE, TRUE);
-	    if (!rn2(6)) erode_armor(&youmonst, TRUE);
-	    break;
+		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
+			erode_obj(uwep, TRUE, TRUE);
+			if (u.twoweap) erode_obj(uswapwep, TRUE, TRUE);
+			erode_armor(&youmonst, TRUE);
+		}
+	break;
 	}
 
 	if (Half_spell_damage && dam &&
@@ -3809,10 +3816,12 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				goto buzzmonst;
 			} else
 #endif
-			if (zap_hit((int) u.uac, 0) || (flags.drgn_brth && abs(type) != ZT_BREATH(ZT_DEATH)) || abs(type) == ZT_BREATH(ZT_SLEEP)) {
+			if (zap_hit((int) u.uac, 0) || (((flags.drgn_brth && abs(type) != ZT_BREATH(ZT_DEATH))
+				|| abs(type) == ZT_BREATH(ZT_SLEEP)) && !(uarms && Is_dragon_shield(uarms)))
+			) {
 				range -= 2;
 				pline("%s hits you!", The(fltxt));
-				if (Reflecting && !(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) {
+				if (Reflecting && ((!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || (uarms && uarms->otyp == SILVER_DRAGON_SCALE_SHIELD))) {
 					if (!Blind) {
 						(void) ureflects("But %s reflects from your %s!", "it");
 					} else
@@ -4290,7 +4299,7 @@ register int osym, dmgtyp;
 	register int dindx;
 	const char *mult;
 
-	if(osym == RING_CLASS && dmgtyp == AD_ELEC) return 0;
+	if(osym == RING_CLASS && dmgtyp == AD_ELEC) return;
 	
 	for(obj = invent; obj; obj = obj2) {
 	    obj2 = obj->nobj;
