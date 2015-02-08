@@ -1633,7 +1633,6 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 			}
 			if ((ttmp->ttyp != RUST_TRAP
 					|| mdat == &mons[PM_IRON_GOLEM])
-				&& ttmp->ttyp != STATUE_TRAP
 				&& ((ttmp->ttyp != PIT
 				    && ttmp->ttyp != SPIKED_PIT
 				    && ttmp->ttyp != TRAPDOOR

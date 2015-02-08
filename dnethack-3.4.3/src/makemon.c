@@ -2713,6 +2713,8 @@ register int	mmflags;
 	    mtmp->mtrapseen = (1L << (PIT - 1)) | (1L << (HOLE - 1));
 	if (ptr == &mons[urole.ldrnum])		/* leader knows about portal */
 	    mtmp->mtrapseen |= (1L << (MAGIC_PORTAL-1));
+	if (ptr == &mons[PM_OONA])  /* don't trigger statue traps */
+	    mtmp->mtrapseen |= (1L << (STATUE_TRAP-1));
 
 	place_monster(mtmp, x, y);
 	mtmp->mcansee = mtmp->mcanmove = mtmp->mnotlaugh = TRUE;
