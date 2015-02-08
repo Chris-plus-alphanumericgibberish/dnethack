@@ -1373,7 +1373,12 @@ summon_alien:
        hands = bimanual(otmp) ? makeplural(body_part(HAND)) : body_part(HAND);
         if (otmp->oclass == WEAPON_CLASS && !Antimagic && !otmp->oartifact) {
                /* Quest nemesis maledictions */
-               if (rn2(3)) {
+			   if(otmp->spe > -7){
+					otmp->spe -= 1;
+					if(otmp->spe < -7) otmp->spe = -7;
+					pline("Your %s has been damaged!", xname(otmp));
+			   }
+               else if ((rn2(3) && mtmp->data->maligntyp < 0) && !Hallucination) {
                    if (malediction)
                        verbalize("%s, your %s broken!", plname, aobjnam(otmp,"are"));
                    Your("%s to pieces in your %s!", aobjnam(otmp, "shatter"), hands);
@@ -1406,20 +1411,29 @@ summon_alien:
         } dmg = 0;
 	   stop_occupation();
     } break;
-    case DESTRY_ARMR:
-       if (Antimagic) {
-           shieldeff(u.ux, u.uy);
-           pline("A field of force surrounds you!");
-       } else if (!destroy_arm(some_armor(&youmonst))) {
-           Your("skin itches.");
-        /* Quest nemesis maledictions */
-       } else if (malediction) {
-           if (rn2(2)) verbalize("Thy defenses are useless!");
-           else verbalize("Thou might as well be naked!");
-       }
-       dmg = 0;
-	   stop_occupation();
-       break;
+    case DESTRY_ARMR:{
+		struct obj *smarm;
+		if (Antimagic) {
+		   shieldeff(u.ux, u.uy);
+		   pline("A field of force surrounds you!");
+		} else if ((smarm = some_armor(&youmonst)) == (struct obj *)0) {
+		   Your("skin itches.");
+		/* Quest nemesis maledictions */
+		} else {
+			if(smarm->spe <= -1*objects[smarm->otyp].a_ac) destroy_arm(smarm);
+			else{
+				smarm->spe -= 1;
+				if(smarm->spe < -1*objects[smarm->otyp].a_ac) smarm->spe = -1*objects[smarm->otyp].a_ac;
+				pline("A field of force surrounds your %s!", xname(smarm));
+			}
+			if (malediction) {
+				if (rn2(2)) verbalize("Thy defenses are useless!");
+				else verbalize("Thou might as well be naked!");
+			}
+		}
+		dmg = 0;
+		stop_occupation();
+	} break;
     case EVIL_EYE:
 		if(mtmp){
 			struct attack evilEye = {AT_GAZE, AD_LUCK, 1, 1};
@@ -1461,7 +1475,7 @@ summon_alien:
 	    }else You_feel("momentarily weakened.");
 	} else {
 	    You("suddenly feel weaker!");
-	    dmg = rnd(4);
+	    dmg = rnd(2);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 			losestr(dmg);
 	    if (u.uhp < 1 && mtmp)
@@ -1477,7 +1491,7 @@ summon_alien:
           int typ = 0;
           boolean change = FALSE;
           do {
-              if (adjattrib(typ, -rnd(4), -1)) change = TRUE;
+              if (adjattrib(typ, -rnd(2), -1)) change = TRUE;
           } while (++typ < A_MAX);
           if (!change) goto drainhp;
        } else {
@@ -1511,6 +1525,7 @@ drainhp:
 	   stop_occupation();
        break;
     case NIGHTMARE:
+	    dmg = mtmp ? rnd((int)mtmp->m_lev) : rnd(10);
        You_hear("%s laugh menacingly as the world blurs around you...", mtmp ? mon_nam(mtmp) : "Someone");
        if(Antimagic||Half_spell_damage) dmg = (dmg + 1) / ((Antimagic + Half_spell_damage) * 2);
        make_confused(HConfusion + dmg*10, FALSE);
@@ -1597,7 +1612,7 @@ ray:
 	} else {
 	    if (multi >= 0)
 		You("are frozen in place!");
-	    dmg = 4 + mtmp ? (int)mtmp->m_lev : rnd(30);
+	    dmg = rnd(4) + mtmp ? rnd((int)mtmp->m_lev) : rnd(30);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	    nomul(-dmg, "paralyzed by a monster");
 	}
@@ -1611,7 +1626,7 @@ ray:
 	} else {
 	    boolean oldprop = !!Confusion;
 
-           dmg = 4 + mtmp ? (int)mtmp->m_lev : rnd(30);
+	    dmg = rnd(10) + mtmp ? rnd((int)mtmp->m_lev) : rnd(30);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	    make_confused(HConfusion + dmg, TRUE);
 	    if (Hallucination)
