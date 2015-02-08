@@ -109,6 +109,7 @@ STATIC_DCL int FDECL(pendamage, (struct obj *,struct monst *));
 #ifdef OVL1
 
 STATIC_DCL char *FDECL(skill_level_name, (int,char *));
+STATIC_DCL char *FDECL(max_skill_level_name, (int,char *));
 STATIC_DCL void FDECL(skill_advance, (int));
 
 #endif	/* OVL1 */
@@ -1227,6 +1228,28 @@ char *buf;
     return buf;
 }
 
+/* copy the skill level name into the given buffer */
+STATIC_OVL char *
+max_skill_level_name(skill, buf)
+int skill;
+char *buf;
+{
+    const char *ptr;
+
+    switch (P_MAX_SKILL(skill)) {
+	case P_UNSKILLED:    ptr = "Unskilled"; break;
+	case P_BASIC:	     ptr = "Basic";     break;
+	case P_SKILLED:	     ptr = "Skilled";   break;
+	case P_EXPERT:	     ptr = "Expert";    break;
+	/* these are for unarmed combat/martial arts only */
+	case P_MASTER:	     ptr = "Master";    break;
+	case P_GRAND_MASTER: ptr = "Grand Master"; break;
+	default:	     ptr = "Unknown";	break;
+    }
+    Strcpy(buf, ptr);
+    return buf;
+}
+
 /* return the # of slots required to advance the skill */
 STATIC_OVL int
 slots_required(skill)
@@ -1329,7 +1352,7 @@ enhance_weapon_skill()
 {
     int pass, i, n, len, longest,
 	to_advance, eventually_advance, maxxed_cnt;
-    char buf[BUFSZ], sklnambuf[BUFSZ];
+    char buf[BUFSZ], sklnambuf[BUFSZ], maxsklnambuf[BUFSZ];
     const char *prefix;
     menu_item *selected;
     anything any;
@@ -1412,6 +1435,7 @@ enhance_weapon_skill()
 		    prefix = (to_advance + eventually_advance +
 				maxxed_cnt > 0) ? "    " : "";
 		(void) skill_level_name(i, sklnambuf);
+		(void) max_skill_level_name(i, maxsklnambuf);
 #ifdef WIZARD
 		if (wizard) {
 		    if (!iflags.menu_tab_sep)
@@ -1428,11 +1452,11 @@ enhance_weapon_skill()
 #endif
 		{
 		    if (!iflags.menu_tab_sep)
-			Sprintf(buf, " %s %-*s [%s]",
-			    prefix, longest, P_NAME(i), sklnambuf);
+			Sprintf(buf, " %s %-*s [%s / %s]",
+			    prefix, longest, P_NAME(i), sklnambuf,maxsklnambuf);
 		    else
-			Sprintf(buf, " %s%s\t[%s]",
-			    prefix, P_NAME(i), sklnambuf);
+			Sprintf(buf, " %s%s\t[%s / %s]",
+			    prefix, P_NAME(i), sklnambuf,maxsklnambuf);
 		}
 		any.a_int = can_advance(i, speedy) ? i+1 : 0;
 		add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
