@@ -1458,10 +1458,10 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 
 	/*** Physical attributes ***/
 	if (uclockwork){
-		if(u.ucspeed==HIGH_CLOCKSPEED) you_are("set to high clockspeed.");
-		if(u.ucspeed==NORM_CLOCKSPEED) you_are("set to normal clockspeed.");
-		if(u.ucspeed==SLOW_CLOCKSPEED) you_are("set to low clockspeed.");
-		if(u.phasengn) you_are("in phase mode.");
+		if(u.ucspeed==HIGH_CLOCKSPEED) you_are("set to high clockspeed");
+		if(u.ucspeed==NORM_CLOCKSPEED) you_are("set to normal clockspeed");
+		if(u.ucspeed==SLOW_CLOCKSPEED) you_are("set to low clockspeed");
+		if(u.phasengn) you_are("in phase mode");
 	}
 	if (u.uhitinc)
 	    you_have(enlght_combatinc("to hit", u.uhitinc, final, buf));
