@@ -1915,21 +1915,23 @@ int mdead;
 		    /* No message */
 		}
 		break;
-	    case AD_OONA:
+	    case AD_OONA:{
+			struct monst *omon;
 //			pline("hp: %d x: %d y: %d", (mon->mhp*100)/mon->mhpmax, mon->mx, mon->my);
 			if(!mhit) break; //didn't draw blood, forget it.
 			
 			if(u.oonaenergy == AD_FIRE){
-				if(rn2(2)) makemon(&mons[PM_FLAMING_SPHERE], mdef->mx, mdef->my, MM_ADJACENTOK);
-				else makemon(&mons[PM_FIRE_VORTEX], mdef->mx, mdef->my, MM_ADJACENTOK);
+				if(rn2(2)) omon = makemon(&mons[PM_FLAMING_SPHERE], mdef->mx, mdef->my, mdef->mtame ? MM_ADJACENTOK|MM_EDOG : MM_ADJACENTOK);
+				else omon = makemon(&mons[PM_FIRE_VORTEX], mdef->mx, mdef->my, mdef->mtame ? MM_ADJACENTOK|MM_EDOG : MM_ADJACENTOK);
 			} else if(u.oonaenergy == AD_COLD){
-				if(rn2(2)) makemon(&mons[PM_FREEZING_SPHERE], mdef->mx, mdef->my, MM_ADJACENTOK);
-				else makemon(&mons[PM_ICE_VORTEX], mdef->mx, mdef->my, MM_ADJACENTOK);
+				if(rn2(2)) omon = makemon(&mons[PM_FREEZING_SPHERE], mdef->mx, mdef->my, mdef->mtame ? MM_ADJACENTOK|MM_EDOG : MM_ADJACENTOK);
+				else omon = makemon(&mons[PM_ICE_VORTEX], mdef->mx, mdef->my, mdef->mtame ? MM_ADJACENTOK|MM_EDOG : MM_ADJACENTOK);
 			} else if(u.oonaenergy == AD_ELEC){
-				if(rn2(2)) makemon(&mons[PM_SHOCKING_SPHERE], mdef->mx, mdef->my, MM_ADJACENTOK);
-				else makemon(&mons[PM_ENERGY_VORTEX], mdef->mx, mdef->my, MM_ADJACENTOK);
+				if(rn2(2)) omon = makemon(&mons[PM_SHOCKING_SPHERE], mdef->mx, mdef->my, mdef->mtame ? MM_ADJACENTOK|MM_EDOG : MM_ADJACENTOK);
+				else omon = makemon(&mons[PM_ENERGY_VORTEX], mdef->mx, mdef->my, mdef->mtame ? MM_ADJACENTOK|MM_EDOG : MM_ADJACENTOK);
 			}
-		break;
+			if(mdef->mtame) initedog(omon);
+		} break;
 	    case AD_HLBD:
 //		pline("hp: %d x: %d y: %d", (mon->mhp*100)/mon->mhpmax, mon->mx, mon->my);
 	    if(!mhit) break; //didn't draw blood, forget it.
