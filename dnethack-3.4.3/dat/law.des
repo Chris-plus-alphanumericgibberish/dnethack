@@ -1705,11 +1705,11 @@ OBJECT:random,random,contained
 TRAP:"statue", (2,1)
 
 CONTAINER:'`',"statue",(1,3),uncursed,"Tulani",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
+OBJECT:'[',"elven robes",contained,blessed,+5
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
+OBJECT:'[',"elven boots",contained,blessed,+5
 OBJECT:'[',"crystal helm",contained,blessed,+3
-OBJECT:'[',"crystal shield",contained,blessed,+3
+OBJECT:'[',"leather gloves",contained,blessed,+5
 OBJECT:'(',"lightsaber",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
@@ -1720,11 +1720,11 @@ OBJECT:random,random,contained
 OBJECT:random,random,contained
 TRAP:"statue", (1,3)
 CONTAINER:'`',"statue",(1,5),uncursed,"Tulani",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
+OBJECT:'[',"elven robes",contained,blessed,+5
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
+OBJECT:'[',"elven boots",contained,blessed,+5
 OBJECT:'[',"crystal helm",contained,blessed,+3
-OBJECT:'[',"crystal shield",contained,blessed,+3
+OBJECT:'[',"leather gloves",contained,blessed,+5
 OBJECT:'(',"lightsaber",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
