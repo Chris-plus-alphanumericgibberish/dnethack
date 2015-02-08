@@ -431,7 +431,7 @@ STAIR:(00,00,20,18),(0,0,0,0), up
 MAZEWALK:(04,10),east
 
 MONSTER: '@', "Daruth Xaxox", (65,10), hostile
-OBJECT:'[',"droven cloak",(65,10),blessed,0,"Darkweaver's Cloak"
+OBJECT:'[',"droven cloak",(65,10),blessed,0,"The Darkweaver's Cloak"
 MONSTER: '@', "drow alienist", (65,10), hostile
 MONSTER: '@', "drow alienist", (65,10), hostile
 MONSTER: '@', "drow alienist", (65,10), hostile
