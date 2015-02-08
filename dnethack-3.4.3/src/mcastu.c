@@ -2255,6 +2255,7 @@ buzzmm(magr, mdef, mattk, ml)		/* monster uses spell (ranged) */
 {
 	int dmn = (int)(ml/2);
 	int type = mattk->adtyp;
+    char buf[BUFSZ];
 	
 	if(mattk->damn) dmn += mattk->damn;
 	else dmn += 1;
@@ -2286,9 +2287,10 @@ buzzmm(magr, mdef, mattk, ml)		/* monster uses spell (ranged) */
 	if(mlined_up(magr, mdef, TRUE) && rn2(3)) {
 	    // nomul(0, NULL);
 	    if(type && (type < 11)) { /* no cf unsigned >0 */
-		if(canseemon(magr))
-		    pline("%s zaps %s with a %s!", Monnam(magr), mon_nam(mdef),
-			  flash_types[ad_to_typ(type)]);
+		Sprintf(buf,"%s zaps ",Monnam(magr));
+		Sprintf(buf,"%s%s with a ",buf,mon_nam(mdef));
+		Sprintf(buf,"%s%s!",buf,flash_types[ad_to_typ(type)]);
+		if(canseemon(magr)) pline(buf);
 		buzz(-ad_to_typ(type), dmn,
 		     magr->mx, magr->my, sgn(mdef->mx - magr->mx), sgn(mdef->my - magr->my),0,0);
 	    } else impossible("Monster spell %d cast", type-1);
