@@ -1631,6 +1631,8 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 			    continue;
 			}
+			struct obj *mwep;
+			mwep = MON_WEP(mon);
 			if ((ttmp->ttyp != RUST_TRAP
 					|| mdat == &mons[PM_IRON_GOLEM])
 				&& ((ttmp->ttyp != PIT
@@ -1650,7 +1652,14 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 				    !resists_fire(mon))
 				&& (ttmp->ttyp != SQKY_BOARD || !is_flyer(mdat))
 				&& (ttmp->ttyp != WEB || (!amorphous(mdat) &&
-				    !webmaker(mdat)))
+				    !webmaker(mdat) && !(
+						 mdat->mlet == S_GIANT ||
+						(mdat->mlet == S_DRAGON &&
+						extra_nasty(mdat)) || /* excl. babies */
+						(mon->wormno && count_wsegs(mon) > 5)
+					) && 
+					!(mwep && (mwep->oartifact == ART_STING || 
+						mwep->oartifact == ART_LIECLEAVER))))
 			) {
 			    if (!(flag & ALLOW_TRAPS)) {
 				if (mon->mtrapseen & (1L << (ttmp->ttyp - 1)))
