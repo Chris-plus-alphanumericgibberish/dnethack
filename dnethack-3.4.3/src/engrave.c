@@ -308,6 +308,8 @@ static const char *haluMesg[] = {
 		"In the end, you will fly away and live forever, and you will leave the world shattered in your wake.",
 		"You will return to where you started, and you will become what you hate.",
 		"And in doing so, you will restore the world to what it was.",
+		">^ N^T R3A> T||1S S1<N",
+		">^ R3A> T||1S ^N3",
 	"Fall in a more hardboiled manner.", /* MS Paint Adventures */
 		"Since you are reading this, chances are you have already installed this game on your computer.  If this is true, you have just participated in bringing about the end of the world.  But don't beat yourself up about it.",
 		"YOU HATE TIME TRAVEL YOU HATE TIME TRAVEL YOU HATE....",
