@@ -3228,29 +3228,29 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 				type == ZT_WAND(ZT_SLEEP) ? WAND_CLASS : '\0');
 		break;
 	case ZT_DEATH:		/* death/disintegration */
-		if(mon->data==&mons[PM_METROID]){
-			pline("The metroid is irradiated with pure energy!  It divides!");
-			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
-			break;
-		}
-		else if(mon->data==&mons[PM_ALPHA_METROID]||mon->data==&mons[PM_GAMMA_METROID]){
-			pline("The metroid is irradiated with pure energy!  It buds off a baby metroid!");
-			makemon(&mons[PM_BABY_METROID], mon->mx, mon->my, MM_ADJACENTOK);
-			break;
-		}
-		else if(mon->data==&mons[PM_ZETA_METROID]||mon->data==&mons[PM_OMEGA_METROID]){
-			pline("The metroid is irradiated with pure energy!  It buds off another metroid!");
-			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
-			break;
-		}
-		else if(mon->data==&mons[PM_METROID_QUEEN]){
-			pline("The metroid queen is irradiated with pure energy!  She buds off more metroids!");
-			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
-			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
-			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
-			break;
-		}
 		if(abs(type) != ZT_BREATH(ZT_DEATH)) {	/* death */
+			if(mon->data==&mons[PM_METROID]){
+				pline("The metroid is irradiated with pure energy!  It divides!");
+				makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
+				break;
+			}
+			else if(mon->data==&mons[PM_ALPHA_METROID]||mon->data==&mons[PM_GAMMA_METROID]){
+				pline("The metroid is irradiated with pure energy!  It buds off a baby metroid!");
+				makemon(&mons[PM_BABY_METROID], mon->mx, mon->my, MM_ADJACENTOK);
+				break;
+			}
+			else if(mon->data==&mons[PM_ZETA_METROID]||mon->data==&mons[PM_OMEGA_METROID]){
+				pline("The metroid is irradiated with pure energy!  It buds off another metroid!");
+				makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
+				break;
+			}
+			else if(mon->data==&mons[PM_METROID_QUEEN]){
+				pline("The metroid queen is irradiated with pure energy!  She buds off more metroids!");
+				makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
+				makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
+				makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
+				break;
+			}
 		    if(mon->data == &mons[PM_DEATH]) {
 			mon->mhpmax += mon->mhpmax/2;
 			if (mon->mhpmax >= MAGIC_COOKIE)
@@ -3271,23 +3271,25 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 		    if (resists_disint(mon)) {
 			sho_shieldeff = TRUE;
 		    } else if (mon->misc_worn_check & W_ARMS) {
-			/* destroy shield; victim survives */
-			*ootmp = which_armor(mon, W_ARMS);
+				/* destroy shield; victim survives */
+				*ootmp = which_armor(mon, W_ARMS);
+				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
+		    } else if (mon->misc_worn_check & W_ARMC) {
+				/* destroy cloak */
+				*ootmp = which_armor(mon, W_ARMC);
+				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
 		    } else if (mon->misc_worn_check & W_ARM) {
-			/* destroy body armor, also cloak if present */
-			*ootmp = which_armor(mon, W_ARM);
-			if ((otmp2 = which_armor(mon, W_ARMC)) != 0)
-			    m_useup(mon, otmp2);
+				/* destroy body armor */
+				*ootmp = which_armor(mon, W_ARM);
+				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
+		    } else if (mon->misc_worn_check & W_ARMU) {
+				/* destroy underwear */
+				*ootmp = which_armor(mon, W_ARMU);
+				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
 		    } else {
-			/* no body armor, victim dies; destroy cloak
-			   and shirt now in case target gets life-saved */
-			tmp = MAGIC_COOKIE;
-			if ((otmp2 = which_armor(mon, W_ARMC)) != 0)
-			    m_useup(mon, otmp2);
-#ifdef TOURIST
-			if ((otmp2 = which_armor(mon, W_ARMU)) != 0)
-			    m_useup(mon, otmp2);
-#endif
+				/* no body armor, victim dies; destroy cloak
+				   and shirt now in case target gets life-saved */
+				tmp = MAGIC_COOKIE;
 		    }
 		    type = -1;	/* no saving throw wanted */
 		    break;	/* not ordinary damage */
@@ -3793,12 +3795,24 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 							/* normal non-fatal hit */
 							hit(fltxt, mon, exclam(tmp));
 						} else {
-							/* some armor was destroyed; no damage done */
-							if (canseemon(mon))
-							pline("%s %s is disintegrated!",
-								  s_suffix(Monnam(mon)),
-								  distant_name(otmp, xname));
-							m_useup(mon, otmp);
+							/* some armor was damaged or destroyed; no damage done */
+							 int i = d(1,4);
+							 for(i; i>0; i--){
+								if(otmp->spe > -1*objects[(otmp)->otyp].a_ac){
+									damage_item(otmp);
+									if (i==1 && canseemon(mon))
+										pline("%s %s is damaged!",
+											  s_suffix(Monnam(mon)),
+											  distant_name(otmp, xname));
+								} else {
+									if (canseemon(mon))
+										pline("%s %s is disintegrated!",
+											  s_suffix(Monnam(mon)),
+											  distant_name(otmp, xname));
+									m_useup(mon, otmp);
+									i = 0;
+								}
+							 }
 						}
 						if (mon_could_move && !mon->mcanmove)	/* ZT_SLEEP */
 							slept_monst(mon);
