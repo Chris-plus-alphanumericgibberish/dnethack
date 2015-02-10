@@ -7,7 +7,7 @@
 #
 
 MAZE:"medusa-1",' '
-FLAGS: noteleport
+FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 MAP
 }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
@@ -107,7 +107,7 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 
 MAZE:"medusa-2",' '
-FLAGS: noteleport
+FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 MAP
 }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
@@ -217,7 +217,7 @@ MONSTER:random,random,random
 
 ##Medusa 3&4:  From the new medusa levels patch
 MAZE:"medusa-3",' '
-FLAGS: noteleport
+FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 #
 # Here you disturb ravens nesting in the trees.
@@ -334,7 +334,7 @@ MONSTER:'B',"raven",random,hostile
 
 
 MAZE:"medusa-4",' '
-FLAGS: noteleport
+FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 #
 # Here the Medusa rules some slithery monsters from her 'palace', with
