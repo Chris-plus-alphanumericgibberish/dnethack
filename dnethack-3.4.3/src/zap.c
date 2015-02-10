@@ -4141,10 +4141,12 @@ boolean *shopdamage;
 		obj_ice_effects(x,y,TRUE);
 	}
 	else if (abstype == ZT_POISON_GAS) {
-		flags.cth_attk=type<0;//state machine stuff.
-		create_gas_cloud(x, y, 1, 8);
-		flags.cth_attk=FALSE;
-	    // (void) create_gas_cloud(x, y, 1, 8, rn1(20, 5));
+		if(flags.drgn_brth){
+			flags.cth_attk=type<0;//state machine stuff.
+			create_gas_cloud(x, y, 1, 8);
+			flags.cth_attk=FALSE;
+			// (void) create_gas_cloud(x, y, 1, 8, rn1(20, 5));
+		}
 	}
 	else if (abstype == ZT_ACID && levl[x][y].typ == IRONBARS && !rn2(5)) {
 	    if (cansee(x, y))
