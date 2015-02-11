@@ -104,7 +104,7 @@ A("The Marauder's Map", SCR_MAGIC_MAPPING, /* needs quote */
  *	Orcrist and Sting have same alignment as elves.
  */
 A("Orcrist",			ELVEN_BROADSWORD,
-	(SPFX_WARN|SPFX_DFLAG2), 0, (M2_ORC|M2_DEMON), /* the old elves fought balrogs too. */
+	(SPFX_DFLAG2), SPFX_WARN, (M2_ORC|M2_DEMON), /* the old elves fought balrogs too. */
 	PHYS(5,0),	NO_DFNS,	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, PM_ELF, 2000L, 
 	0,0,0),
@@ -116,13 +116,13 @@ A("Orcrist",			ELVEN_BROADSWORD,
  *	for M2_ORC monsters.
  */
 A("Sting",			ELVEN_DAGGER,
-	(SPFX_WARN|SPFX_DFLAG2), 0, M2_ORC, /*note: some code in artifact.c also aplies the damage bonus to s_spiders */
+	(SPFX_DFLAG2), SPFX_WARN, M2_ORC, /*note: some code in artifact.c also aplies the damage bonus to s_spiders */
 	PHYS(5,0),	NO_DFNS,	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, PM_ELF, 800L, 
 	0,0,0),
 
 A("Grimtooth",			ORCISH_DAGGER, //needs quote
-    (SPFX_WARN|SPFX_DFLAG2), 0, (M2_ELF|M2_HUMAN|M2_MINION),
+    (SPFX_DFLAG2), SPFX_WARN, (M2_ELF|M2_HUMAN|M2_MINION),
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	0, A_CHAOTIC, NON_PM, PM_ORC, 300L, 
 	0,0,0),
@@ -137,25 +137,25 @@ A("The Slave to Armok",			DWARVISH_MATTOCK, /*two handed, so no twoweaponing.*/
 /*banes can be twoweaponed, look in obj.h*/
 
 A("Dragonlance",			LANCE,
-	(SPFX_RESTR|SPFX_DCLAS|SPFX_REFLECT|SPFX_WARN), 0, S_DRAGON, /* also makes a handy weapon for knights, since it can't break */
+	(SPFX_RESTR|SPFX_DCLAS|SPFX_REFLECT), SPFX_WARN, S_DRAGON, /* also makes a handy weapon for knights, since it can't break */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,				/* plus, reflection */
 	0, A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
 A("Demonbane",			SILVER_SABER,
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, M2_DEMON, /* blocks summoning and is a silver saber. */
+	(SPFX_RESTR|SPFX_DFLAG2), SPFX_WARN, M2_DEMON, /* blocks summoning and is a silver saber. */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,			/* Plus, demons are nasty. */
 	0, A_LAWFUL, NON_PM, NON_PM, 2500L, 
 	SPFX2_NOCALL,0,0),
 
 A("Werebane",			SILVER_SABER, //needs quote
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, M2_WERE, /* protects against lycathropy and is silver */
+	(SPFX_RESTR|SPFX_DFLAG2), SPFX_WARN, M2_WERE, /* protects against lycathropy and is silver */
 	PHYS(10,20),	DFNS(AD_WERE),	NO_CARY,			/*works against many demihumans, including */
 	0, A_NONE, NON_PM, NON_PM, 1500L,					/*a few late game enemies */
 	(SPFX2_DEMIBANE|SPFX2_NOWERE),0,0),
 
 A("Giantslayer",		AXE,
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, (M2_GIANT|M2_ROCKTHROW), /* deducts move from hit giants. */
+	(SPFX_RESTR|SPFX_DFLAG2), SPFX_WARN, (M2_GIANT|M2_ROCKTHROW), /* deducts move from hit giants. */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,								/* also works vs a few late game enemies. */
 	0, A_NONE, NON_PM, NON_PM, 2000L, 
 	0,0,0),
@@ -167,13 +167,13 @@ A("Vampire Killer",			BULLWHIP,
 	SPFX2_NOWERE,0,0),									/* and raise enchantment to +3. */
 
 A("Kingslayer",		STILETTO,
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, (M2_LORD|M2_PRINCE), /* works against just about all the late game badies */
+	(SPFX_RESTR|SPFX_DFLAG2), SPFX_WARN, (M2_LORD|M2_PRINCE), /* works against just about all the late game badies */
 	PHYS(10,20),	NO_DFNS,	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, NON_PM, 2500L, 
 	SPFX2_POISONED,0,0),
 
 A("Peace Keeper",		ATHAME, 
-	(SPFX_RESTR|SPFX_DFLAG2|SPFX_WARN), 0, (M2_HOSTILE), /* speaks for itself */
+	(SPFX_RESTR|SPFX_DFLAG2), SPFX_WARN, (M2_HOSTILE), /* speaks for itself */
 	PHYS(5,10),	NO_DFNS,	NO_CARY,	/*Weaker attack and damage */
 	0, A_LAWFUL, NON_PM, NON_PM, 2500L, 
 	0,0,0),
