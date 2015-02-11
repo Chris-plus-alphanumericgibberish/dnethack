@@ -640,7 +640,26 @@ asGuardian:
 					urace.individual.f : (urace.individual.m) ?
 					urace.individual.m : urace.noun;
 
-		if (mtmp->mtame) {
+	    if (mtmp->mpeaceful && uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				break;
+			}
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20 + 100, u.ulevel/10+1);
+			else turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
+		else if (mtmp->mtame) {
 			if (kindred) {
 				Sprintf(verbuf, "Good %s to you Master%s",
 					isnight ? "evening" : "day",
@@ -700,7 +719,26 @@ asGuardian:
 	    }
 	    break;
 	case MS_WERE:
-	    if (flags.moonphase == FULL_MOON && (night() ^ !rn2(13))) {
+	    if (mtmp->mpeaceful && uclockwork && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline(Never_mind);
+				break;
+			}
+			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*10 + 100, u.ulevel/5+1);
+			else turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
+	    else if (flags.moonphase == FULL_MOON && (night() ^ !rn2(13))) {
 		pline("%s throws back %s head and lets out a blood curdling %s!",
 		      Monnam(mtmp), mhis(mtmp),
 		      ptr == &mons[PM_HUMAN_WERERAT] ? "shriek" : "howl");
