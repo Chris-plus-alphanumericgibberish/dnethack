@@ -22,10 +22,11 @@ struct Jitem {
 };
 
 /* true for gems/rocks that should have " stone" appended to their names */
-#define GemStone(typ)	(typ == FLINT ||				\
+#define GemStone(typ)	(typ == FLINT || \
 			 (objects[typ].oc_material == GEMSTONE &&	\
 			  (typ != DILITHIUM_CRYSTAL && typ != RUBY &&	\
 			   typ != DIAMOND && typ != SAPPHIRE &&		\
+			   typ != MAGICITE_CRYSTAL && 	\
 			   typ != BLACK_OPAL && 	\
 			   typ != EMERALD && typ != OPAL)))
 
