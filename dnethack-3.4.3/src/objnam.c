@@ -178,7 +178,9 @@ register int otyp;
 		} else {
 			Strcpy(buf, dn ? dn : actualn);
 			if(ocl->oc_class == GEM_CLASS)
-				Strcat(buf, (ocl->oc_material == MINERAL) ?
+				Strcat(buf, (ocl->oc_material == MITHRIL || 
+							 ocl->oc_material == SILVER || 
+							 ocl->oc_material == MINERAL) ?
 						" stone" : " gem");
 			if(un)
 				Sprintf(eos(buf), " called %s", un);
@@ -534,7 +536,10 @@ register struct obj *obj;
 	case GEM_CLASS:
 	    {
 		const char *rock =
-			    (ocl->oc_material == MINERAL) ? "stone" : "gem";
+			    (ocl->oc_material == MINERAL ||
+				 ocl->oc_material == MITHRIL ||
+				 ocl->oc_material == SILVER
+				) ? "stone" : "gem";
 		if (!obj->dknown) {
 		    Strcpy(buf, rock);
 		} else if (!nn) {
