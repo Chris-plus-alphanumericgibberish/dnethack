@@ -2974,7 +2974,7 @@ STAIR: (03,01), up
 STAIR: (74,20), down
 
 # Non diggable walls - everywhere!
-NON_DIGGABLE:(00,00,75,19)
+NON_DIGGABLE:(00,00,75,20)
 
 MONSTER:'&',"Demogorgon",(60,10)
 MONSTER:'&',"nessian pit fiend",(61,10), "traitor pit fiend", asleep
