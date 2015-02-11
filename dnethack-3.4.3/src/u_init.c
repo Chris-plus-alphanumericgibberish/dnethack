@@ -1435,7 +1435,7 @@ u_init()
 		u.umoney0 = 0;
 #endif
 		ini_inv(Rogue);
-		if(!rn2(5)) ini_inv(Blindfold);
+		ini_inv(Blindfold);
 		knows_object(SACK);
 		skill_init(Skill_R);
 		break;
