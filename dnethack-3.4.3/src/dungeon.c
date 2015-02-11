@@ -961,6 +961,7 @@ init_dungeons()		/* initialize the "dungeon" structs */
  */
 	quest_dnum = dname_to_dnum("The Quest");
 	neutral_dnum = dname_to_dnum("Neutral Quest");
+	rlyeh_dnum = dname_to_dnum("The Lost Cities");
 	chaos_dnum = dname_to_dnum("Chaos Quest");
 	law_dnum = dname_to_dnum("Law Quest");
 	sokoban_dnum = dname_to_dnum("Sokoban");
@@ -1438,7 +1439,7 @@ boolean
 In_neu(lev)	/* are you on the neutral quest? */
 d_level	*lev;
 {
-	return((boolean)(lev->dnum == neutral_dnum));
+	return((boolean)(lev->dnum == neutral_dnum || lev->dnum == rlyeh_dnum));
 }
 
 boolean

@@ -58,7 +58,7 @@ typedef struct dungeon {	/* basic dungeon identifier */
 	char	boneid;		/* character to id dungeon in bones files */
 	d_flags flags;		/* dungeon flags */
 	xchar	entry_lev;	/* entry level */
-	xchar	num_dunlevs;	/* number of levels in this dungeon */
+	int	num_dunlevs;	/* number of levels in this dungeon */
 	xchar	dunlev_ureached; /* how deep you have been in this dungeon */
 	int	ledger_start,	/* the starting depth in "real" terms */
 		depth_start;	/* the starting depth in "logical" terms */

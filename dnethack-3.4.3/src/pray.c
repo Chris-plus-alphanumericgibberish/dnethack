@@ -2588,7 +2588,7 @@ aligntyp alignment;
 		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
 		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
 		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
-		else if(u.uz.dnum == neutral_dnum){
+		else if(In_neu(&u.uz)){
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
 			else gnam = BlackMother;
 		}

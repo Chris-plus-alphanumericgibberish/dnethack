@@ -2650,7 +2650,7 @@ dlb *fd;
 				(void) makemon(&mons[PM_MINOTAUR], mm.x, mm.y, NO_MM_FLAGS);
 			}
 	    }
-		if(u.uz.dnum != neutral_dnum || !on_level(&rlyeh_level,&u.uz)){/*Note, this was suposed to stop spawn on level-load random monsters, but does nothing*/
+		if(!In_neu(&u.uz) || !on_level(&rlyeh_level,&u.uz)){/*Note, this was suposed to stop spawn on level-load random monsters, but does nothing*/
 			for(x = rnd((int) (12 * mapfact) / 100); x; x--) {
 				maze1xy(&mm, WET|DRY);
 				(void) makemon((struct permonst *) 0, mm.x, mm.y, NO_MM_FLAGS);

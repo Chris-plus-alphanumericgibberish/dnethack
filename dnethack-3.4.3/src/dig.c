@@ -375,7 +375,7 @@ dig()
 			    digtxt = "You cut down the tree.";
 			    lev->typ = ROOM;
 			    if (!(lev->looted & TREE_LOOTED) && !rn2(5)){
-					if(u.uz.dnum != neutral_dnum &&
+					if(!In_neu(&u.uz) &&
 						u.uz.dnum != chaos_dnum &&
 						!on_level(&medusa_level,&u.uz) &&
 						!(In_quest(&u.uz) && (Role_if(PM_NOBLEMAN) ||

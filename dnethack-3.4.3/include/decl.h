@@ -132,6 +132,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_qstart_level, d_qlocate_level, d_nemesis_level;
 	/*Neutral Quest*/
 	xchar	d_neutral_dnum;
+	xchar	d_rlyeh_dnum;
     d_level	d_gatetown_level, d_spire_level, d_sum_of_all_level, d_rlyeh_level;
 	/*Chaos Quest*/
 	xchar	d_chaos_dnum;
@@ -208,6 +209,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define nemesis_level		(dungeon_topology.d_nemesis_level)
 	/*Neutral Quest*/
 #define neutral_dnum		(dungeon_topology.d_neutral_dnum)
+#define rlyeh_dnum		(dungeon_topology.d_rlyeh_dnum)
 #define gatetown_level		(dungeon_topology.d_gatetown_level)
 #define spire_level		(dungeon_topology.d_spire_level)
 #define sum_of_all_level		(dungeon_topology.d_sum_of_all_level)

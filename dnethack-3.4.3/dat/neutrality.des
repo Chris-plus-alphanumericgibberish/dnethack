@@ -419,7 +419,7 @@ ENDMAP
 REGION:(00,00,06,06),lit,"ordinary"
 
 STAIR:  levregion(37,00,75,19), (0,0,6,6), up
-STAIR:  (03,03), down
+BRANCH:(03,03,03,03),(0,0,0,0)
 
 WALLIFY
 MONSTER:'\'',"argentum golem",(01,03)
@@ -507,7 +507,6 @@ REGION:(58,01,65,04),unlit,"ordinary"
 REGION:(69,01,74,07),unlit,"ordinary"
 REGION:(51,16,56,18),unlit,"ordinary"
 # Stairs
-STAIR:(04,03),up
 STAIR:(72,02),down
 # Doors
 DOOR:locked,(09,03)
@@ -555,11 +554,17 @@ MONSTER:';',random,(30,12)
 MONSTER:';',random,(28,11)
 MONSTER:';',random,(52,10)
 MONSTER:';',random,(69,15)
-# Gargoles living on the island
-MONSTER:'g',"gargoyle",(35,10),asleep
-MONSTER:'g',"gargoyle",(42,10),asleep
-MONSTER[75%]:'g',"gargoyle",(38,09),asleep
-MONSTER[50%]:'g',"gargoyle",(40,11),asleep
+# Nightgaunts living on the island
+MONSTER:'g',"nightgaunt",(34,09)
+MONSTER:'g',"nightgaunt",(42,10)
+MONSTER:'g',"nightgaunt",(38,11)
+MONSTER:'g',"nightgaunt",(39,09)
+MONSTER:'g',"nightgaunt",(34,10)
+MONSTER:'g',"nightgaunt",(43,10)
+MONSTER:'g',"nightgaunt",(35,10),asleep
+MONSTER:'g',"nightgaunt",(42,09),asleep
+MONSTER[75%]:'g',"nightgaunt",(38,09),asleep
+MONSTER[50%]:'g',"nightgaunt",(40,11),asleep
 # And some (empty) decorations
 CONTAINER:'`',"statue",(33,10)
 CONTAINER:'`',"statue",(35,09)
@@ -651,7 +656,6 @@ REGION:(58,01,65,04),unlit,"ordinary"
 REGION:(69,01,74,07),unlit,"ordinary"
 REGION:(51,16,56,18),unlit,"ordinary"
 # Stairs
-STAIR:(04,03),up
 STAIR:(72,02),down
 # Doors
 DOOR:locked,(09,03)
@@ -670,13 +674,17 @@ MONSTER:';',random,(30,12)
 MONSTER:';',random,(28,11)
 MONSTER:';',random,(52,10)
 MONSTER:';',random,(69,15)
-# 'Trices living on the island
-MONSTER:'c',"cockatrice",(34,09)
-MONSTER:'c',"pyrolisk",(42,10)
-MONSTER:'c',random,(38,11)
-MONSTER:'c',random,(39,09)
-MONSTER:'c',random,(34,10)
-MONSTER:'c',random,(43,10)
+# Nightgaunts living on the island
+MONSTER:'g',"nightgaunt",(34,09)
+MONSTER:'g',"nightgaunt",(42,10)
+MONSTER:'g',"nightgaunt",(38,11)
+MONSTER:'g',"nightgaunt",(39,09)
+MONSTER:'g',"nightgaunt",(34,10)
+MONSTER:'g',"nightgaunt",(43,10)
+MONSTER:'g',"nightgaunt",(35,10),asleep
+MONSTER:'g',"nightgaunt",(42,09),asleep
+MONSTER[75%]:'g',"nightgaunt",(38,09),asleep
+MONSTER[50%]:'g',"nightgaunt",(40,11),asleep
 # And some (empty) decorations
 CONTAINER:'`',"statue",(33,10)
 CONTAINER:'`',"statue",(35,09)
@@ -819,7 +827,7 @@ REGION:(65,14,70,16),unlit,"ordinary"
 REGION:(64,03,68,05),unlit,"ordinary"
 REGION:(70,02,73,04),unlit,"ordinary"
 # Arrival point
-#BRANCH:(32,16,33,17),(0,0,0,0)
+BRANCH:(32,16,33,17),(0,0,0,0)
 # Stairs
 STAIR:(04,02),up
 STAIR:(72,03),down
@@ -2920,7 +2928,7 @@ GEOMETRY:center,center
 MAP
 0                .........         }}...          -----  }}}}}}}}}---------}}
 1  .......     ...............    ...}}}..        |...|...}}}}}}..|.......|.}
-2 ....}}...###S................   ...}}.  .       |...+...}}}}}...+.......+.}
+2 ....}}...H##H................   ...}}.  .       |...+...}}}}}...+.......+.}
 3  .......     ...........   ...         .        |...|..}}}}}}}..|.......|.}
 4                .......      ...  ----- .  ----- -----}}}}}}}}}..---------}}
 5     ........   ++            ..  |...|-S--|...|    |}}}}}}}}}}..}}}}}}}}}}}
@@ -2935,7 +2943,7 @@ MAP
 4     ........   ++            ..   .|...|----|..|   |}}}}}}}}}}..}}}}}}}}}}}
 5                .......      ...   .-----    ---------}}}}}}}}}..---------}}
 6  .......     ...........   ...    .      ...    |...|..}}}}}}}..|.......|.}
-7 ....}}...###S................      ...  ..}..   |...+...}}}}}...+.......+.}
+7 ....}}...H##H................      ...  ..}..   |...+...}}}}}...+.......+.}
 8  .......     ...............          .. ...    |...|...}}}}}}..|.......|.}
 9                .........                        -----  }}}}}}}}}---------}}
 0                                                       }}}}}}}}           }}
@@ -3029,8 +3037,6 @@ DOOR:locked,(30,07)
 DOOR:locked,(31,07)
 DOOR:locked,(30,12)
 DOOR:locked,(31,12)
-DOOR:locked,(13,02)
-DOOR:locked,(13,17)
 DOOR:locked,(28,07)
 DOOR:locked,(28,12)
 

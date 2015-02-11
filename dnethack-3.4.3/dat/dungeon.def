@@ -139,7 +139,7 @@ LEVEL:		"path1" "A" @ (13,0)
 
 # Neutral Quest
 
-DUNGEON:		"Neutral Quest" "N" (20, 0)
+DUNGEON:		"Neutral Quest" "N" (7, 0)
 DESCRIPTION:    mazelike
 ALIGNMENT:      neutral
 LEVEL:		"gatetwn" "none" @ (1,0)
@@ -149,20 +149,30 @@ LEVEL:		"out3" "C" @ (4,0)
 LEVEL:		"out4" "D" @ (5,0)
 LEVEL:		"spire" "E" @ (6,0)
 LEVEL:		"sumall" "none" @ (7,0)
-RNDLEVEL:		"leth-a" "F" @ (8, 0) 2
-LEVEL:		"lethe-b" "G" @ (9, 0)
-RNDLEVEL:		"leth-c" "H" @ (10, 0) 2
-RNDLEVEL:		"leth-d" "I" @ (11, 0) 2
-LEVEL:		"lethe-e" "J" @ (12, 0)
-LEVEL:		"lethe-f" "K" @ (13, 0)
-LEVEL:		"lethe-g" "L" @ (14, 0)
-LEVEL:		"lethe-z" "M" @ (15, 0)
-RNDLEVEL:		"nkai-a" "N" @ (16, 0) 2
-LEVEL:		"nkai-b" "O" @ (17, 0)
-LEVEL:		"nkai-c" "P" @ (18, 0)
-LEVEL:		"nkai-z" "Q" @ (19, 0)
-LEVEL:		"rlyeh" "none" @ (20, 0)
 BRANCH:		"The Dispensary" @ (2, 5)
+BRANCH:		"The Lost Cities" @ (-1, 0)
+
+
+#
+#       Lethe Gorge and R'lyeh
+#
+DUNGEON:        "The Lost Cities" "R" (13, 0)
+DESCRIPTION:    mazelike
+ALIGNMENT:      neutral
+RNDLEVEL:		"leth-a" "F" @ (1, 0) 2
+LEVEL:		"lethe-b" "G" @ (2, 0)
+RNDLEVEL:		"leth-c" "H" @ (3, 0) 2
+RNDLEVEL:		"leth-d" "I" @ (4, 0) 2
+LEVEL:		"lethe-e" "J" @ (5, 0)
+LEVEL:		"lethe-f" "K" @ (6, 0)
+LEVEL:		"lethe-g" "L" @ (7, 0)
+LEVEL:		"lethe-z" "M" @ (8, 0)
+RNDLEVEL:		"nkai-a" "N" @ (9, 0) 2
+LEVEL:		"nkai-b" "O" @ (10, 0)
+LEVEL:		"nkai-c" "P" @ (11, 0)
+LEVEL:		"nkai-z" "Q" @ (12, 0)
+LEVEL:		"rlyeh" "none" @ (13, 0)
+ENTRY:		2
 
 
 # Chaos Quest

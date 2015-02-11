@@ -1082,7 +1082,7 @@ dokick()
 					return(1);
 				}
 			    goto ouch;
-			} else if(u.uz.dnum == neutral_dnum || (In_quest(&u.uz) && 
+			} else if(In_neu(&u.uz) || (In_quest(&u.uz) && 
 				(Role_if(PM_NOBLEMAN) || 
 					Race_if(PM_DROW) || 
 					((Role_if(PM_RANGER) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD)) && Race_if(PM_ELF)))
