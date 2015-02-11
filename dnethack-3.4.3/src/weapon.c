@@ -368,7 +368,7 @@ int spec;
 			break;
 		case DOUBLE_LIGHTSABER: 
 			tmp += d(2, objects[otyp].oc_wsdam);
-			if (otmp->altmode) tmp += d(2, objects[otyp].oc_wsdam);
+			if (otmp->altmode) tmp += d(3, objects[otyp].oc_wsdam);
 			break;
 		case ACID_VENOM:
 			if(otmp->ovar1) tmp = otmp->ovar1;
