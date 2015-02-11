@@ -1029,9 +1029,9 @@ A("The Kusanagi no Tsurugi",	LONG_SWORD,
  *			  (From Sir W.S. Gilbert's "The Mikado")
  */
 
- A("Snickersnee",		SHORT_SWORD, /*wakizashi to samurai*/
+ A("Snickersnee",		KNIFE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_BEHEAD), 0, 0, /* currently nameable by advanced tourists */
-	PHYS(3,6),	NO_DFNS,	NO_CARY,						/* Tourists and Samurai can twoweapon Snickersnee */
+	PHYS(3,10),	NO_DFNS,	NO_CARY,						/* Tourists and Samurai can twoweapon Snickersnee */
 	0, A_NONE, PM_SAMURAI, NON_PM, 1200L, 
 	0,0,0),
 

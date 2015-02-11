@@ -227,7 +227,7 @@ int spec;
 	        return 9999;
 
 	if (bigmonst(ptr)) {
-		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wldam,1);
+		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,objects[otyp].oc_wldam,1);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 															unlucky_exploding_d(1,objects[otyp].oc_wldam,0) : 
 															lucky_exploding_d(1,objects[otyp].oc_wldam,0);
@@ -235,7 +235,7 @@ int spec;
 	    else if (objects[otyp].oc_wldam) tmp = rnd(objects[otyp].oc_wldam);
 		
 		if(spec & SPEC_MARIONETTE){
-			if(otmp->oartifact == ART_VORPAL_BLADE) tmp += exploding_d(1,objects[otyp].oc_wldam+2,1);
+			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,objects[otyp].oc_wldam+2,1);
 			else if(otmp->oartifact == ART_LUCK_BLADE) tmp += youdefend ? 
 															unlucky_exploding_d(1,objects[otyp].oc_wldam+2,0) : 
 															lucky_exploding_d(1,objects[otyp].oc_wldam+2,0);
@@ -305,7 +305,7 @@ int spec;
 			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(2,4); break;
 	    }
 	} else {
-		if(otmp->oartifact == ART_VORPAL_BLADE) tmp = exploding_d(2,objects[otyp].oc_wsdam,1);
+		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,objects[otyp].oc_wsdam,1);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 															unlucky_exploding_d(1,objects[otyp].oc_wsdam,0) : 
 															lucky_exploding_d(1,objects[otyp].oc_wsdam,0);
@@ -313,7 +313,7 @@ int spec;
 	    else if (objects[otyp].oc_wsdam) tmp = rnd(objects[otyp].oc_wsdam);
 		
 		if(spec & SPEC_MARIONETTE){
-			if(otmp->oartifact == ART_VORPAL_BLADE) tmp += exploding_d(1,objects[otyp].oc_wsdam+2,1);
+			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,objects[otyp].oc_wsdam+2,1);
 			else if(otmp->oartifact == ART_LUCK_BLADE) tmp += youdefend ? 
 															unlucky_exploding_d(1,objects[otyp].oc_wsdam+2,0) : 
 															lucky_exploding_d(1,objects[otyp].oc_wsdam+2,0);
