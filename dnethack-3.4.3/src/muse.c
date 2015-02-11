@@ -2261,6 +2261,7 @@ struct obj *obj;
 		    typ == POT_PARALYSIS ||
 		    typ == POT_SLEEPING ||
 		    typ == POT_ACID ||
+		    typ == POT_GAIN_ENERGY ||
 		    typ == POT_CONFUSION)
 		return TRUE;
 	    if (typ == POT_BLINDNESS && !attacktype(mon->data, AT_GAZE))
