@@ -344,8 +344,10 @@ level_range(dgn, base, rand, chain, pd, adjusted_base)
 	    if (base < 0) base = (lmax + base + 1);
 	}
 
-	if (base < 1 || base > lmax)
-	    panic("level_range: base value out of range");
+	if (base < 1)
+	    panic("level_range: base value out of range (<0)");
+	if (base > lmax)
+	    panic("level_range: base value out of range (base:%d > lmax:%d)", base, lmax);
 
 	*adjusted_base = base;
 
