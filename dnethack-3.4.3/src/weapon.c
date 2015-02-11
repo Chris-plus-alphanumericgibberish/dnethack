@@ -657,7 +657,7 @@ struct obj *otmp;
     }
     
     if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
-	    || !objects[pwep[i]].oc_bimanual) &&
+	    || !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON]) &&
         (objects[pwep[i]].oc_material != SILVER
  	    || !hates_silver(mtmp->data)))
     {
@@ -722,7 +722,7 @@ register struct monst *mtmp;
 		 * All monsters can wield the remaining weapons.
 		 */
 		if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
-			|| !objects[pwep[i]].oc_bimanual) &&
+			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON]) &&
 		    (objects[pwep[i]].oc_material != SILVER
 			|| !hates_silver(mtmp->data))) {
 		    if ((otmp = oselect(mtmp, pwep[i])) != 0) {
@@ -912,7 +912,7 @@ register struct monst *mtmp;
 		if (otmp->oclass == WEAPON_CLASS
 			&& otmp->oartifact && touch_artifact(otmp,mtmp)
 			&& ((strong && !wearing_shield)
-			    || !objects[otmp->otyp].oc_bimanual))
+			    || !objects[otmp->otyp].oc_bimanual || mtmp->data == &mons[PM_ARCHON]))
 		    return otmp;
 	}
 
@@ -926,7 +926,7 @@ register struct monst *mtmp;
 	    if (hwep[i] == CORPSE && !(mtmp->misc_worn_check & W_ARMG))
 		continue;
 	    if (((strong && !wearing_shield)
-			|| !objects[hwep[i]].oc_bimanual) &&
+			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON]) &&
 		    (objects[hwep[i]].oc_material != SILVER
 			|| !hates_silver(mtmp->data)))
 		Oselect(hwep[i]);
