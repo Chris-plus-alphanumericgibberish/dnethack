@@ -950,7 +950,11 @@ doMaskStats(mask)
 //		mask->mp->mskhpmax = mask->mp->mskhp;
 //		mask->mp->msken = 
 //		mask->mp->mskenmax = mask->mp->msken;
-		mask->mp->mskgangr = 0;
+		mask->mp->mskgangr[0] = 0;
+		mask->mp->mskgangr[1] = 0;
+		mask->mp->mskgangr[2] = 0;
+		mask->mp->mskgangr[3] = 0;
+		mask->mp->mskgangr[4] = 0;
 //		mask->mp->mskexp = 
 		mask->mp->mskrexp = mask->mp->msklevel-1;
 		mask->mp->mskweapon_slots = 0;

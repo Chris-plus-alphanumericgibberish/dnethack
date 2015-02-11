@@ -170,7 +170,7 @@ struct mask_properties {
 	schar mskluck;
 	int mskhp,mskhpmax;
 	int msken,mskenmax;
-	int mskgangr;
+	int mskgangr[GA_NUM];
 	long mskexp, mskrexp;
 	int	mskweapon_slots;		/* unused skill slots */
 	int	mskskills_advanced;		/* # of advances made so far */
