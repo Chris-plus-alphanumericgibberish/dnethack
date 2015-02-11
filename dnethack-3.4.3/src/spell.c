@@ -3971,7 +3971,17 @@ int spell;
 	 * and no matter how able, learning is always required.
 	 */
 	chance = chance * (20-splcaster) / 15 - splcaster;
-
+	
+	if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
+		if(u.uz.dlevel == spire_level.dlevel) chance = 0;
+		else if(u.uz.dlevel == sum_of_all_level.dlevel) chance += 100 - 10*spellev(spell);
+		else if(u.uz.dlevel == spire_level.dlevel-1) chance -= 50*spellev(spell);
+		else if(u.uz.dlevel == spire_level.dlevel-2) chance -= 40*spellev(spell);
+		else if(u.uz.dlevel == spire_level.dlevel-3) chance -= 30*spellev(spell);
+		else if(u.uz.dlevel == spire_level.dlevel-4) chance -= 20*spellev(spell);
+		else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10*spellev(spell);
+	}
+	
 	/* Clamp to percentile */
 	if (chance > 100) chance = 100;
 	if (chance < 0) chance = 0;
