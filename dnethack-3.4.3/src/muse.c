@@ -2198,8 +2198,10 @@ struct monst *mtmp;
 	 */
 	if (difficulty < 6 && !rn2(30))
 	    return rn2(6) ? POT_POLYMORPH : WAN_POLYMORPH;
-
+	
 	if (!rn2(40) && !nonliving(pm)) return AMULET_OF_LIFE_SAVING;
+
+	if(difficulty > 6 && rn2(50) < difficulty) return rnd_utility_potion(mtmp);
 
 	switch (rn2(3)) {
 		case 0:
