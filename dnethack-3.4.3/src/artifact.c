@@ -21,6 +21,7 @@ extern boolean notonhead;	/* for long worms */
 #define get_artifact(o) \
 		(((o)&&(o)->oartifact) ? &artilist[(o)->oartifact] : 0)
 
+const static int AHRIMAN_PROPS[] = {AD_FIRE, AD_DRLI, AD_DRST};
 
 //duplicates of other functions, created due to problems with the linker
 STATIC_DCL void NDECL(cast_protection);
@@ -675,45 +676,62 @@ long wp_mask;
 	register const struct artifact *oart = get_artifact(otmp);
 	uchar dtyp;
 	long spfx, spfx2, spfx3;
+	int p = 0, r;
 
 	if (!oart) return;
 
 	/* effects from the defn field */
 	dtyp = (wp_mask != W_ART) ? oart->defn.adtyp : oart->cary.adtyp;
-	
-	if (dtyp == AD_FIRE)
-	    mask = &EFire_resistance;
-	else if (dtyp == AD_COLD)
-	    mask = &ECold_resistance;
-	else if (dtyp == AD_ELEC)
-	    mask = &EShock_resistance;
-	else if (dtyp == AD_ACID)
-	    mask = &EAcid_resistance;
-	else if (dtyp == AD_MAGM)
-	    mask = &EAntimagic;
-	else if (dtyp == AD_DISN)
-	    mask = &EDisint_resistance;
-	else if (dtyp == AD_DRST)
-	    mask = &EPoison_resistance;
-
-	if (mask && wp_mask == W_ART && !on) {
-	    /* find out if some other artifact also confers this intrinsic */
-	    /* if so, leave the mask alone */
-	    register struct obj* obj;
-	    for(obj = invent; obj; obj = obj->nobj)
-		if(obj != otmp && obj->oartifact) {
-		    register const struct artifact *art = get_artifact(obj);
-		    if(art->cary.adtyp == dtyp) {
-			mask = (long *) 0;
+	do{
+		// pline("%d: %d",p,(int)dtyp);
+		if (dtyp == AD_FIRE)
+			mask = &EFire_resistance;
+		else if (dtyp == AD_COLD)
+			mask = &ECold_resistance;
+		else if (dtyp == AD_ELEC)
+			mask = &EShock_resistance;
+		else if (dtyp == AD_ACID)
+			mask = &EAcid_resistance;
+		else if (dtyp == AD_MAGM)
+			mask = &EAntimagic;
+		else if (dtyp == AD_DISN)
+			mask = &EDisint_resistance;
+		else if (dtyp == AD_DRST)
+			mask = &EPoison_resistance;
+		else if (dtyp == AD_DRLI)
+			mask = &EDrain_resistance;
+		
+		if (mask && wp_mask == W_ART && !on) {
+			/* find out if some other artifact also confers this intrinsic */
+			/* if so, leave the mask alone */
+			register struct obj* obj;
+			for(obj = invent; obj; obj = obj->nobj)
+			if(obj != otmp && obj->oartifact) {
+				register const struct artifact *art = get_artifact(obj);
+				if(art->cary.adtyp == dtyp) {
+					mask = (long *) 0;
 			break;
-		    }
+				}
+				if(obj->oartifact == ART_HEART_OF_AHRIMAN){
+					for(r=0;r<3;r++){
+						if(AHRIMAN_PROPS[r] == dtyp)
+							mask = (long *) 0;
+					break;
+					}
+					if(mask == 0L)
+			break;
+				}
+			}
 		}
-	}
-	if (mask) {
-	    if (on) *mask |= wp_mask;
-	    else *mask &= ~wp_mask;
-	}
-
+		if (mask) {
+			if (on) *mask |= wp_mask;
+			else *mask &= ~wp_mask;
+		}
+		
+		if(otmp->oartifact == ART_HEART_OF_AHRIMAN && p<3) dtyp = AHRIMAN_PROPS[p++];
+		else dtyp = 255;
+	} while(dtyp != 255);
+	
 	/* intrinsics from the spfx field; there could be more than one */
 	spfx = (wp_mask != W_ART) ? oart->spfx : oart->cspfx;
 	spfx2 = (wp_mask != W_ART) ? oart->spfx2 : 0;
@@ -795,7 +813,7 @@ long wp_mask;
 	    else u.xray_range = -1;
 	    vision_full_recalc = 1;
 	}
-	if ((spfx & SPFX_REFLECT) && (wp_mask & W_WEP)) {
+	if ((spfx & SPFX_REFLECT)) {
 	    if (on) EReflecting |= wp_mask;
 	    else EReflecting &= ~wp_mask;
 	}

@@ -700,10 +700,10 @@ A("Itlachiayaque", SHIELD_OF_REFLECTION,/*From archeologist patch*/
 	 SMOKE_CLOUD, A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
 	0,0,0),
 
-A("The Heart of Ahriman",	LUCKSTONE,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_EREGEN|SPFX_INTEL), SPFX_DISPL|SPFX_HSPDAM, 0,
+A("The Heart of Ahriman",	RUBY,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_REFLECT|SPFX_HSPDAM), 0,
 	/* this stone does double damage if used as a projectile weapon */
-	PHYS(10,0),	NO_DFNS,	NO_CARY,
+	PHYS(10,0),	NO_DFNS,	CARY(AD_MAGM),
 	LEVITATION,	A_NEUTRAL, PM_BARBARIAN, NON_PM, 2500L, 
 	0,0,0),
 
