@@ -280,6 +280,7 @@ make_artif:
 		if (by_align){
 			otmp = mksobj((int)a->otyp, TRUE, FALSE);
 		} else if(a->otyp == BEAMSWORD){
+			dealloc_obj(otmp);
 			otmp = mksobj((int)a->otyp, TRUE, FALSE);
 		}
 	    otmp = oname(otmp, a->name);
