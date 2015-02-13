@@ -18,7 +18,8 @@
  * dNethack started at .0
  *
  * 3.7.0 -> 3.7.1 indicates the advent of the true Binder quest goal level and Alignment spirits, as well as myriad bugfixes fixes
- * 3.8.1 indicates addition of wands of darkness
+ * 3.8.1 indicates addition of wands of darkness, 
+ * 3.8.2 is for addition of berserk status, correct anger tracking for masks, 6th castle, silver bullets for slings, beast mastery, lost cities branch
  */
 #define PATCHLEVEL	2
 /*
