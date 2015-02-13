@@ -3965,7 +3965,7 @@ struct monst *mtmp, *victim;
 	    // if (mtmp->mhpmax + max_increase > hp_threshold + 1)
 			// max_increase = max((hp_threshold + 1) - mtmp->mhpmax, 0);
 	    // cur_increase = (max_increase > 0) ? rn2(max_increase)+1 : 0;
-		if(mtmp->m_lev < victim->m_lev + d(2,5)){
+		if(mtmp->mhp < hp_threshold-8 || mtmp->m_lev < victim->m_lev + d(2,5)){ /*allow monsters to quickly gain hp up to around their HP limit*/
 			max_increase = 1;
 			cur_increase = 1;
 		} else {
