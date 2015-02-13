@@ -1103,7 +1103,8 @@ register struct monst *mtmp;
 				otmp = oname(otmp, artiname(angelweps[artnum]));
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
-			    spe2 = rn2(4);
+			    if(is_lord(ptr)) spe2 = 7;
+				else spe2 = rn2(4);
 			    otmp->spe = max(otmp->spe, spe2);
 			    (void) mpickobj(mtmp, otmp);
 	
