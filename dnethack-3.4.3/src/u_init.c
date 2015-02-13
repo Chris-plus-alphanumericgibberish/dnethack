@@ -565,6 +565,7 @@ static const struct def_skill Skill_I[] = {
 
 static const struct def_skill Skill_Drow_Unarmed[] = {
     { P_BARE_HANDED_COMBAT, P_GRAND_MASTER },
+    { P_NONE, 0 }
 };
 
 static const struct def_skill Skill_DP[] = {
