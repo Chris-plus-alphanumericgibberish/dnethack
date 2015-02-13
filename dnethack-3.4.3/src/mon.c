@@ -1699,7 +1699,9 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	ma = magr->data;
 	md = mdef->data;
 	
-	if(magr->mpeaceful && mdef->mpeaceful && (magr->mtame || mdef->mtame)) return 0L;
+	// if(magr->mpeaceful && mdef->mpeaceful && (magr->mtame || mdef->mtame)) return 0L;
+	
+	if(magr->mberserk) return ALLOW_M|ALLOW_TM;
 	
 	if(is_drow(ma) && is_drow(md) && (magr->mfaction == mdef->mfaction)) return 0L;
 	

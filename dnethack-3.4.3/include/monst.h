@@ -94,7 +94,9 @@ struct monst {
 	Bitfield(mfleetim,7);	/* timeout for mflee */
 	
 	Bitfield(mcrazed,1);	/* monster is crazed */
-
+	
+	Bitfield(mberserk,1);	/* monster is crazed */
+	
 	Bitfield(mcansee,1);	/* cansee 1, temp.blinded 0, blind 0 */
 	Bitfield(mblinded,7);	/* cansee 0, temp.blinded n, blind 0 */
 
