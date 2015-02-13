@@ -368,7 +368,12 @@ moveloop()
 				else if(!(moves%(u.slowclock - hungerup + 1))) morehungry(1);
 			}
 			}
-
+			
+			if(u.petattacked){
+				u.petattacked = FALSE;
+				use_skill(P_BEAST_MASTERY, 1);
+			}
+			
 			if(uclockwork && u.phasengn){
 				morehungry(10);
 			}

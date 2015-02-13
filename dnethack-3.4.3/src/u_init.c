@@ -534,6 +534,7 @@ static const struct def_skill Skill_Con[] = {
     { P_ATTACK_SPELL, P_BASIC },	{ P_ESCAPE_SPELL, P_EXPERT },
     { P_TWO_WEAPON_COMBAT, P_SKILLED },
     { P_BARE_HANDED_COMBAT, P_SKILLED },
+    { P_BEAST_MASTERY, P_BASIC },
     { P_NONE, 0 }
 };
 #endif  /* CONVICT */
@@ -550,6 +551,7 @@ static const struct def_skill Skill_H[] = {
     { P_SHURIKEN, P_SKILLED },		{ P_UNICORN_HORN, P_EXPERT },
     { P_HEALING_SPELL, P_EXPERT },
     { P_BARE_HANDED_COMBAT, P_BASIC },
+    { P_BEAST_MASTERY, P_SKILLED },
     { P_NONE, 0 }
 };
 
@@ -567,6 +569,7 @@ static const struct def_skill Skill_Drow_Unarmed[] = {
 
 static const struct def_skill Skill_DP[] = {
     { P_ATTACK_SPELL, P_EXPERT },
+    { P_BEAST_MASTERY, P_BASIC },
     { P_NONE, 0 }
 };
 
@@ -594,6 +597,7 @@ static const struct def_skill Skill_K[] = {
 #endif
     { P_TWO_WEAPON_COMBAT, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_EXPERT },
+    { P_BEAST_MASTERY, P_BASIC },
     { P_NONE, 0 }
 };
 
@@ -627,6 +631,7 @@ static const struct def_skill Skill_Nob[] = {
     { P_RIDING, P_SKILLED },
 #endif
     { P_BARE_HANDED_COMBAT, P_SKILLED },
+    { P_BEAST_MASTERY, P_EXPERT },
     { P_NONE, 0 }
 };
 
@@ -648,6 +653,7 @@ static const struct def_skill Skill_ENob[] = {
     { P_RIDING, P_SKILLED },
 #endif
     { P_BARE_HANDED_COMBAT, P_SKILLED },
+    { P_BEAST_MASTERY, P_EXPERT },
     { P_NONE, 0 }
 };
 
@@ -670,6 +676,7 @@ static const struct def_skill Skill_DNob[] = {
     { P_RIDING, P_SKILLED },
 #endif
     { P_BARE_HANDED_COMBAT, P_SKILLED },
+    { P_BEAST_MASTERY, P_EXPERT },
     { P_NONE, 0 }
 };
 
@@ -689,6 +696,7 @@ static const struct def_skill Skill_DwaNob[] = {
 #endif
     { P_TWO_WEAPON_COMBAT, P_SKILLED },
     { P_BARE_HANDED_COMBAT, P_MASTER },
+    { P_BEAST_MASTERY, P_SKILLED },
     { P_NONE, 0 }
 };
 
@@ -783,6 +791,7 @@ static const struct def_skill Skill_Ran[] = {
     { P_RIDING, P_BASIC },
 #endif
     { P_BARE_HANDED_COMBAT, P_BASIC },
+    { P_BEAST_MASTERY, P_SKILLED },
     { P_NONE, 0 }
 };
 
@@ -829,6 +838,7 @@ static const struct def_skill Skill_T[] = {
 #endif
     { P_TWO_WEAPON_COMBAT, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_BASIC },
+    { P_BEAST_MASTERY, P_SKILLED },
     { P_NONE, 0 }
 };
 #endif /* TOURIST */

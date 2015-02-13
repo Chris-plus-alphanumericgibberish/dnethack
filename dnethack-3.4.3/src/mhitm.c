@@ -28,6 +28,7 @@ STATIC_DCL void FDECL(mswingsm, (struct monst *, struct monst *, struct obj *));
 STATIC_DCL void FDECL(noises,(struct monst *,struct attack *));
 STATIC_DCL void FDECL(missmm,(struct monst *,struct monst *,struct attack *));
 STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, BOOLEAN_P, int));
+STATIC_DCL int NDECL(beastmastery);
 
 /* Needed for the special case of monsters wielding vorpal blades (rare).
  * If we use this a lot it should probably be a parameter to mdamagem()
@@ -236,6 +237,8 @@ mattackm(magr, mdef)
 			tmp += 4;
 		mdef->msleeping = 0;
     }
+	
+	if(magr->mtame && !mdef->mtame) tmp += beastmastery();
 
     /* undetect monsters become un-hidden if they are attacked */
     if (mdef->mundetected) {
@@ -276,8 +279,10 @@ mattackm(magr, mdef)
 		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2)
 		{
 		    thrwmm(magr, mdef);
-		    if (tmphp > mdef->mhp) res[i] = MM_HIT;
-		    else res[i] = MM_MISS;
+		    if (tmphp > mdef->mhp){
+				res[i] = MM_HIT;
+				u.petattacked = TRUE;
+		    } else res[i] = MM_MISS;
 		    if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		    if (magr->mhp < 1) res[i] = MM_AGR_DIED;
 		    break;
@@ -294,8 +299,10 @@ mattackm(magr, mdef)
 		    is_launcher(MON_WEP(magr))) {
 				/* implies no melee weapon found */
 			if(thrwmm(magr, mdef)){
-				if (tmphp > mdef->mhp) res[i] = MM_HIT;
-				else res[i] = MM_MISS;
+				if (tmphp > mdef->mhp){
+					res[i] = MM_HIT;
+					u.petattacked = TRUE;
+				} else res[i] = MM_MISS;
 				if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 				if (magr->mhp < 1) res[i] = MM_AGR_DIED;
 				break;
@@ -354,6 +361,7 @@ meleeattack:
 		    tmp -= hitval(otmp, mdef);
 		if (strike) {
 		    res[i] = hitmm(magr, mdef, mattk);
+			if(res[i]) u.petattacked = TRUE;
 		    if((mdef->data == &mons[PM_BLACK_PUDDING] || mdef->data == &mons[PM_BROWN_PUDDING])
 		       && otmp && objects[otmp->otyp].oc_material == IRON
 		       && mdef->mhp > 1 && !mdef->mcan)
@@ -373,9 +381,10 @@ meleeattack:
 
 	    case AT_HUGS:	/* automatic if prev two attacks succeed */
 		strike = (i >= 2 && res[i-1] == MM_HIT && res[i-2] == MM_HIT);
-		if (strike)
+		if (strike){
 		    res[i] = hitmm(magr, mdef, mattk);
-
+//			u.petattacked = TRUE;
+		}
 		break;
 
 #ifdef TAME_RANGED_ATTACKS
@@ -383,16 +392,20 @@ meleeattack:
 			if(is_dragon(magr->data)) flags.drgn_brth = 1;
 	        breamm(magr, mdef, mattk);
 			flags.drgn_brth = 0;
-		if (tmphp > mdef->mhp) res[i] = MM_HIT;
-		else res[i] = MM_MISS;
+		if (tmphp > mdef->mhp){
+			res[i] = MM_HIT;
+			u.petattacked = TRUE;
+		} else res[i] = MM_MISS;
 		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
 		break;
 
 	    case AT_SPIT:
 	        spitmm(magr, mdef, mattk);
-		if (tmphp > mdef->mhp) res[i] = MM_HIT;
-		else res[i] = MM_MISS;
+		if (tmphp > mdef->mhp){
+			res[i] = MM_HIT;
+			u.petattacked = TRUE;
+		} else res[i] = MM_MISS;
 		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
 		break;
@@ -403,8 +416,10 @@ meleeattack:
 				if (canseemon(magr)) pline("%s shoots.", Monnam(magr));
 				for(n = d(mattk->damn, mattk->damd); n > 0; n--) firemm(magr, mdef, mattk);
 				if(res[i] == MM_MISS){
-					if (tmphp > mdef->mhp) res[i] = MM_HIT;
-					else res[i] = MM_MISS;
+					if (tmphp > mdef->mhp){
+						res[i] = MM_HIT;
+						u.petattacked = TRUE;
+					} else res[i] = MM_MISS;
 				}
 				if (mdef->mhp < 1){
 					res[i] = MM_DEF_DIED;
@@ -442,11 +457,13 @@ meleeattack:
 	    case AT_GAZE:
 		strike = 0;	/* will not wake up a sleeper */
 		res[i] = gazemm(magr, mdef, mattk);
+		if(res[i]) u.petattacked = TRUE;
 		break;
 
 	    case AT_EXPL:
 		if (distmin(magr->mx,magr->my,mdef->mx,mdef->my) > 1) break;
 		res[i] = explmm(magr, mdef, mattk);
+		if(res[i]) u.petattacked = TRUE;
 		if (is_fern_spore(magr->data)) spore_dies(magr);
 		if (res[i] == MM_MISS) { /* cancelled--no attack */
 		    strike = 0;
@@ -469,10 +486,11 @@ meleeattack:
 		if (u.uswallow && magr == u.ustuck)
 		    strike = 0;
 		else {
-		    if ((strike = (tmp > rnd(20+i))))
-			res[i] = gulpmm(magr, mdef, mattk);
-		    else
-			missmm(magr, mdef, mattk);
+		    if ((strike = (tmp > rnd(20+i)))){
+				res[i] = gulpmm(magr, mdef, mattk);
+				u.petattacked = TRUE;
+		    } else
+				missmm(magr, mdef, mattk);
 		}
 		break;
 
@@ -499,6 +517,7 @@ meleeattack:
 				else {
 					res[i] = castmm(magr, mdef, mattk);
 				}
+				if(res[i]) u.petattacked = TRUE;
 				if (res[i] & MM_DEF_DIED)
 				if( pa == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
 				if( pa == &mons[PM_QUINON] ) {
@@ -520,6 +539,7 @@ meleeattack:
 	    dist2(magr->mx, magr->my, mdef->mx, mdef->my) < 3)
 	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED);
 
+	if(res[i]) u.petattacked = TRUE;
 	if (res[i] & MM_DEF_DIED) return res[i];
 
 	/*
@@ -1685,6 +1705,8 @@ mdamagem(magr, mdef, mattk)
 		mdef->mstdy -= 1;
 	}
 	
+	if(tmp && magr->mtame && !mdef->mtame) tmp += beastmastery();
+	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (m_at(mdef->mx, mdef->my) == magr) {  /* see gulpmm() */
 		remove_monster(mdef->mx, mdef->my);
@@ -2083,6 +2105,19 @@ int aatyp;
     }
     return w_mask;
 }
+
+STATIC_OVL int
+beastmastery()
+{
+	switch (P_SKILL(P_BEAST_MASTERY)) {
+		case P_ISRESTRICTED: return 0; break;
+		case P_UNSKILLED:    return 0; break;
+		case P_BASIC:        return 2; break;
+		case P_SKILLED:      return 5; break;
+		case P_EXPERT:       return 10; break;
+	}
+}
+
 
 #endif /* OVLB */
 

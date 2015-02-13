@@ -444,6 +444,7 @@ struct you {
 	uchar 	wimage;		/* to record if you have the image of a Weeping Angel in your mind */
 	int uinvault;
 	struct monst *ustuck;
+	boolean petattacked;
 #ifdef STEED
 	struct monst *usteed;
 	long ugallop;

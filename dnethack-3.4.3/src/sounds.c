@@ -3631,6 +3631,7 @@ bindspirit(seal_id)
 		}break;
 		case MALPHAS:{
 			if(u.sealTimeout[MALPHAS-FIRST_SEAL] < moves){
+				unrestrict_weapon_skill(P_BEAST_MASTERY);
 				u.sealsActive |= SEAL_MALPHAS;
 				u.sealsUsed |= SEAL_MALPHAS;
 				u.spirit[u.sealCounts] = SEAL_MALPHAS;
@@ -4074,6 +4075,7 @@ int p_skill;
 	if(p_skill == P_MATTER_SPELL) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
 	if(p_skill == P_RIDING) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
 	if(p_skill == P_BARE_HANDED_COMBAT) return u.sealsActive & (SEAL_EURYNOME|SEAL_BUER)? TRUE : FALSE;
+	if(p_skill == P_BEAST_MASTERY) return u.sealsActive & SEAL_MALPHAS ? TRUE : FALSE;
 	if(p_skill == P_TWO_WEAPON_COMBAT) return u.specialSealsActive & (SEAL_MISKA)? TRUE : FALSE;
 	return FALSE;
 }

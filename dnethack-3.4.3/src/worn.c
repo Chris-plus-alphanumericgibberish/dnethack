@@ -6,6 +6,7 @@
 
 STATIC_DCL void FDECL(m_lose_armor, (struct monst *,struct obj *));
 STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P));
+STATIC_DCL int NDECL(def_beastmastery);
 
 const static int CHROMATIC_RES[] = {FIRE_RES, COLD_RES, DISINT_RES, SHOCK_RES, POISON_RES};
 const static int EREBOR_RES[] = {FIRE_RES, COLD_RES};
@@ -417,6 +418,9 @@ struct monst *mon;
 			base += base*10;
 		}
 	}
+	
+	if(mon->mtame) base += rnd(def_beastmastery());
+	
 	return base;
 }
 
@@ -446,6 +450,9 @@ struct monst *mon;
 			base += base*10;
 		}
 	}
+	
+	if(mon->mtame) base += rnd(def_beastmastery());
+	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
 		if(uarmf) armac += ARM_BONUS(uarmf);
@@ -492,6 +499,9 @@ struct monst *mon;
 			base += base*10;
 		}
 	}
+	
+	if(mon->mtame) base += def_beastmastery();
+	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
 		if(uarmf) armac += ARM_BONUS(uarmf);
@@ -1164,4 +1174,17 @@ long timeout;
 	if (on_floor) newsym(x, y);
 	else if (in_invent) update_inventory();
 }
+
+STATIC_OVL int
+def_beastmastery()
+{
+	switch (P_SKILL(P_BEAST_MASTERY)) {
+		case P_ISRESTRICTED: return 0; break;
+		case P_UNSKILLED:    return 0; break;
+		case P_BASIC:        return 2; break;
+		case P_SKILLED:      return 5; break;
+		case P_EXPERT:       return 10; break;
+	}
+}
+
 /*worn.c*/

@@ -26,6 +26,7 @@
 #define PN_ESCAPE_SPELL			(-13)
 #define PN_MATTER_SPELL			(-14)
 #define PN_HARVEST			(-15)
+#define PN_BEAST_MASTERY		(-16)
 static void FDECL(mon_ignite_lightsaber, (struct obj *, struct monst *));
 
 STATIC_DCL void FDECL(give_may_advance_msg, (int));
@@ -55,6 +56,7 @@ STATIC_VAR NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
 	PN_CLERIC_SPELL,     PN_ESCAPE_SPELL,
 	PN_MATTER_SPELL,
 	PN_BARE_HANDED,   PN_TWO_WEAPONS,
+	PN_BEAST_MASTERY,
 #ifdef STEED
 	PN_RIDING
 #endif
@@ -78,6 +80,7 @@ STATIC_VAR NEARDATA const char * const odd_skill_names[] = {
     "escape spells",
     "matter spells",
 	"farm implements",
+	"beast mastery",
 };
 /* indexed vis `is_martial() */
 STATIC_VAR NEARDATA const char * const barehands_or_martial[] = {
