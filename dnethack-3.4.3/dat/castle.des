@@ -1264,3 +1264,260 @@ REGION:(47,10,47,11),unlit,"ordinary"
 #	Bloody Hallway hack/patch
 REGION:(06,06,12,06),lit,"ordinary"
 
+##
+##Castle 6
+##
+
+MAZE:"castle-6",' '
+FLAGS: noteleport,lethe
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0      .}}}}}}}}}}}}}}}}}}}}}}....|.....|.....|....}}}}}}}}}}}}}}}}}}}}.     
+1 ... .}}-------}}}}}}}}}}}}}}....S.}}}.|.}}}.S....}}}}}}}}}}}}-------}.  .. 
+2 ... .}}|.....|-----------------------+-+---------------------|.....|}. ... 
+3 ..  .}}|.....+..................|.....|......................+.....|}. ..  
+4  # ..}}-------------------+----------+-+----------------------------}.  .  
+5 ## ...}}}}}}|........|..........+...........|.......S.S.......|}}}}}}..... 
+6 #   .......}|........|..........|...........|.......|.|.......|}...... ....
+7... ........}|........------------...........---------S---------}......  ...
+8............}|...{....+..........+.........\.S.................+........ .. 
+9 ....  .....}|........------------...........---------S---------}.......... 
+0  ... ......}|........|..........|...........|.......|.|.......|}......  ...
+1 .....}}}}}}}|........|..........+...........|.......S.S.......|}}}}}}}}  ..
+2.....}}}-------------------+----------+-+----------------------------}}}}}}.
+3.}}}}}}}|.....+..................|.....|......................+.....|}}}}}}}
+4}}}}}}}}|.....|-----------------------+-+---------------------|.....|}}}}}}.
+5.}}}}}}}-------}}}}}}}}}}}}}}....S.}}}.|.}}}.S....}}}}}}}}}}}}-------}}}}}..
+6....}}}}}}}}}}}}}}}}}}}}}}}}}....|.....|.....|....}}}}}}}}}}}}}}}}}}}}}}....
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
+
+# Random registers initialisation
+RANDOM_OBJECTS:'[',')','*','%'
+RANDOM_PLACES:(11,02),(65,02),(11,14),(65,14)
+RANDOM_MONSTERS:'L','N','E','H','M','O','R','T','X','Z'
+
+TELEPORT_REGION:(00,00,03,16),(0,0,0,0),down
+TELEPORT_REGION:(70,00,75,16),(0,0,0,0),up
+STAIR:(00,00,03,13),(0,0,0,0),up
+
+# Doors
+DOOR:locked,(33,01)
+DOOR:locked,(38,02)
+DOOR:locked,(40,02)
+DOOR:locked,(45,01)
+DOOR:locked,(33,15)
+DOOR:locked,(38,14)
+DOOR:locked,(40,14)
+DOOR:locked,(45,15)
+DOOR:closed,(14,03)
+DOOR:closed,(62,03)
+DOOR:locked,(27,04)
+DOOR:locked,(38,04)
+DOOR:closed,(40,04)
+DOOR:closed,(33,05)
+DOOR:locked,(53,05)
+DOOR:locked,(55,05)
+DOOR:locked,(54,07)
+DOOR:closed,(22,08)
+DOOR:closed,(33,08)
+DOOR:locked,(45,08)
+DOOR:locked,(63,08)
+DOOR:locked,(54,09)
+DOOR:closed,(33,11)
+DOOR:locked,(53,11)
+DOOR:locked,(55,11)
+DOOR:closed,(40,12)
+DOOR:locked,(27,12)
+DOOR:locked,(38,12)
+DOOR:closed,(14,13)
+DOOR:closed,(62,13)
+# The drawbridge
+DRAWBRIDGE:(12,08),east,closed
+# Storeroom number 1
+OBJECT:object[0],random,(46,05)
+OBJECT:object[0],random,(47,05)
+OBJECT:object[0],random,(48,05)
+OBJECT:object[0],random,(49,05)
+OBJECT:object[0],random,(50,05)
+OBJECT:object[0],random,(51,05)
+OBJECT:object[0],random,(52,05)
+OBJECT:object[0],random,(46,06)
+OBJECT:object[0],random,(47,06)
+OBJECT:object[0],random,(48,06)
+OBJECT:object[0],random,(49,06)
+OBJECT:object[0],random,(50,06)
+OBJECT:object[0],random,(51,06)
+OBJECT:object[0],random,(52,06)
+# Storeroom number 2
+OBJECT:object[1],random,(56,05)
+OBJECT:object[1],random,(57,05)
+OBJECT:object[1],random,(58,05)
+OBJECT:object[1],random,(59,05)
+OBJECT:object[1],random,(60,05)
+OBJECT:object[1],random,(61,05)
+OBJECT:object[1],random,(62,05)
+OBJECT:object[1],random,(56,06)
+OBJECT:object[1],random,(57,06)
+OBJECT:object[1],random,(58,06)
+OBJECT:object[1],random,(59,06)
+OBJECT:object[1],random,(60,06)
+OBJECT:object[1],random,(61,06)
+OBJECT:object[1],random,(62,06)
+# Storeroom number 3
+OBJECT:object[2],random,(46,10)
+OBJECT:object[2],random,(47,10)
+OBJECT:object[2],random,(48,10)
+OBJECT:object[2],random,(49,10)
+OBJECT:object[2],random,(50,10)
+OBJECT:object[2],random,(51,10)
+OBJECT:object[2],random,(52,10)
+OBJECT:object[2],random,(46,11)
+OBJECT:object[2],random,(47,11)
+OBJECT:object[2],random,(48,11)
+OBJECT:object[2],random,(49,11)
+OBJECT:object[2],random,(50,11)
+OBJECT:object[2],random,(51,11)
+OBJECT:object[2],random,(52,11)
+# Storeroom number 4
+OBJECT:object[3],random,(56,10)
+OBJECT:object[3],random,(57,10)
+OBJECT:object[3],random,(58,10)
+OBJECT:object[3],random,(59,10)
+OBJECT:object[3],random,(60,10)
+OBJECT:object[3],random,(61,10)
+OBJECT:object[3],random,(62,10)
+OBJECT:object[3],random,(56,11)
+OBJECT:object[3],random,(57,11)
+OBJECT:object[3],random,(58,11)
+OBJECT:object[3],random,(59,11)
+OBJECT:object[3],random,(60,11)
+OBJECT:object[3],random,(61,11)
+OBJECT:object[3],random,(62,11)
+# THE WAND OF WISHING in 1 of the 4 towers
+CONTAINER:'(',"chest",place[0]
+OBJECT:'/',"wishing",contained
+# Prevent monsters from eating it.(@'s never eat objects)
+ENGRAVING:place[0],burn,"Elbereth"
+OBJECT:'?',"scare monster",place[0]
+# The treasure of the lord
+OBJECT:'(',"chest",(44,08)
+# Traps
+TRAP:"trap door",(47,08)
+TRAP:"trap door",(51,08)
+TRAP:"trap door",(55,08)
+TRAP:"trap door",(59,08)
+TRAP:"trap door",(62,08)
+# Soldiers guarding outer towers...
+MONSTER:'@',"soldier",(31,00)
+MONSTER:'@',"soldier",(31,01)
+OBJECT:'/',"lightning",(31,01)
+OBJECT:'(',"bugle",(31,00)
+MONSTER:'@',"soldier",(31,16)
+MONSTER:'@',"soldier",(31,15)
+OBJECT:'/',"lightning",(31,15)
+OBJECT:'(',"bugle",(31,16)
+MONSTER:'@',"soldier",(47,00)
+MONSTER:'@',"soldier",(47,01)
+OBJECT:'/',"lightning",(47,01)
+MONSTER:'@',"soldier",(47,16)
+MONSTER:'@',"soldier",(47,15)
+OBJECT:'/',"lightning",(47,15)
+# Soldiers guarding the entry hall
+MONSTER:'@',"soldier",(15,06)
+MONSTER:'@',"soldier",(16,05)
+MONSTER:'@',"soldier",(18,05)
+MONSTER:'@',"soldier",(19,06)
+MONSTER:'@',"soldier",(15,10)
+MONSTER:'@',"soldier",(16,11)
+MONSTER:'@',"soldier",(18,11)
+MONSTER:'@',"soldier",(19,10)
+MONSTER:'@',"lieutenant",(16,08)
+# Soldiers guarding the towers
+MONSTER:'@',"soldier",(10,02)
+MONSTER:'@',"soldier",(12,02)
+MONSTER:'@',"soldier",(64,02)
+MONSTER:'@',"soldier",(66,02)
+MONSTER:'@',"soldier",(10,14)
+MONSTER:'@',"soldier",(12,14)
+MONSTER:'@',"soldier",(64,14)
+MONSTER:'@',"soldier",(66,14)
+# The four dragons that are guarding the storerooms
+MONSTER:'D',random,(54,05)
+MONSTER:'D',random,(54,06)
+MONSTER:'D',random,(54,10)
+MONSTER:'D',random,(54,11)
+# Sea monsters in the moat
+MONSTER:';',"giant eel",(12,07)
+MONSTER:';',"giant eel",(12,09)
+MONSTER:';',"giant eel",(64,07)
+MONSTER:';',"giant eel",(64,09)
+MONSTER:';',"shark",(12,00)
+MONSTER:';',"shark",(12,16)
+MONSTER:';',"shark",(64,00)
+MONSTER:';',"shark",(64,16)
+# The throne room and the court monsters
+MONSTER:monster[0],random,(34,05)
+MONSTER:monster[1],random,(37,05)
+MONSTER:monster[2],random,(40,05)
+MONSTER:monster[3],random,(43,05)
+MONSTER:monster[4],random,(35,06)
+MONSTER:monster[5],random,(38,06)
+MONSTER:monster[6],random,(41,06)
+MONSTER:monster[7],random,(44,06)
+MONSTER:monster[8],random,(34,07)
+MONSTER:monster[9],random,(37,07)
+MONSTER:monster[0],random,(40,07)
+MONSTER:monster[1],random,(43,07)
+MONSTER:monster[2],random,(35,08)
+MONSTER:monster[3],random,(38,08)
+MONSTER:monster[4],random,(41,08)
+MONSTER:monster[5],random,(34,09)
+MONSTER:monster[6],random,(37,09)
+MONSTER:monster[7],random,(40,09)
+MONSTER:monster[8],random,(43,09)
+MONSTER:monster[9],random,(35,10)
+MONSTER:monster[0],random,(38,10)
+MONSTER:monster[1],random,(41,10)
+MONSTER:monster[2],random,(44,10)
+MONSTER:monster[3],random,(34,11)
+MONSTER:monster[4],random,(37,11)
+MONSTER:monster[5],random,(40,11)
+MONSTER:monster[6],random,(43,11)
+# Non diggable walls
+NON_DIGGABLE:(08,00,68,16)
+# Subrooms:
+# Entire castle area
+REGION:(00,00,74,16),unlit,"ordinary"
+# Courtyards
+REGION:(07,05,12,11),lit,"ordinary"
+REGION:(64,05,69,11),lit,"ordinary"
+# Throne room
+REGION:(34,05,44,11),lit,"throne",unfilled
+# Antechamber
+REGION:(12,05,21,11),lit,"ordinary"
+# Storerooms
+REGION:(46,05,52,06),lit,"ordinary"
+REGION:(46,10,52,11),lit,"ordinary"
+REGION:(56,05,62,06),lit,"ordinary"
+REGION:(56,10,62,11),lit,"ordinary"
+# Corners
+REGION:(09,02,13,03),lit,"ordinary"
+REGION:(63,02,67,03),lit,"ordinary"
+REGION:(09,13,13,14),lit,"ordinary"
+REGION:(63,13,67,14),lit,"ordinary"
+# Barracks
+REGION:(23,05,32,06),lit,"barracks"
+REGION:(23,10,32,11),lit,"barracks"
+# Hallways
+REGION:(15,03,61,03),unlit,"ordinary"
+REGION:(15,13,61,13),unlit,"ordinary"
+REGION:(23,08,32,08),unlit,"ordinary"
+REGION:(46,08,62,08),unlit,"ordinary"
+# Storeroom alcoves
+REGION:(54,05,54,06),unlit,"ordinary"
+REGION:(54,10,54,11),unlit,"ordinary"
+

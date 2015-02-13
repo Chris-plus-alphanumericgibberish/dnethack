@@ -34,7 +34,7 @@ BRANCH: 	"The Temple of Moloch" @ (5, 25)
 
 RNDLEVEL:	"medusa" "none" @ (-5, 4) 4
 LEVALIGN:	chaotic
-RNDLEVEL:	"castle" "none" @ (-1, 0) 5
+RNDLEVEL:	"castle" "none" @ (-1, 0) 6
 CHAINBRANCH:	"Gehennom" "castle" + (0, 0) no_down
 
 RNDLEVEL:		"lawlev" "none" @ (12, 8) 3
