@@ -486,10 +486,11 @@ register struct monst *mtmp;
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_ARGENTUM_GOLEM:
-			num = d(2,3);
+			num = d(1,3);
 			while (num--){
-				obj = mksobj_at(DWARVISH_MITHRIL_COAT, x, y, TRUE, FALSE); //balance of law
-				obj = mksobj_at(ELVEN_MITHRIL_COAT, x, y, TRUE, FALSE);  //and chaos
+				obj = mksobj_at(SILVER_BULLET, x, y, TRUE, FALSE);
+				obj->quan = d(10,5);
+				obj->owt = weight(obj);
 			}
 			mtmp->mnamelth = 0;
 		break;
