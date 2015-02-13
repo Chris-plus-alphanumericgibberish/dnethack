@@ -358,6 +358,7 @@ register struct monst *mtmp;
 	    case PM_TINKER_GNOME:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(1,4);
+			obj->owt = weight(obj);
 			if(!mtmp->mrevived && !rn2(20)){
 				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
 			} else if(!mtmp->mrevived && !rn2(10)){
@@ -368,33 +369,40 @@ register struct monst *mtmp;
 	    case PM_CLOCKWORK_DWARF:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(1,4);
+			obj->owt = weight(obj);
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_FABERGE_SPHERE:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(1,3);
+			obj->owt = weight(obj);
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_FIREWORK_CART:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(1,4);
+			obj->owt = weight(obj);
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_CLOCKWORK_SOLDIER:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(1,3);
+			obj->owt = weight(obj);
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_GOLDEN_HEART:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(1,4);
+			obj->owt = weight(obj);
 			obj = mksobj_at(SUBETHAIC_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = 1;
+			obj->owt = weight(obj);
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_JUGGERNAUT:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(3,4);
+			obj->owt = weight(obj);
 			if(!rn2(20)){
 				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
 			} else if(!rn2(10)){
@@ -405,6 +413,7 @@ register struct monst *mtmp;
 	    case PM_CLOCKWORK_FACTORY:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(3,4);
+			obj->owt = weight(obj);
 			if(!rn2(20)){
 				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
 			} else if(!rn2(10)){
@@ -415,13 +424,16 @@ register struct monst *mtmp;
 	    case PM_ID_JUGGERNAUT:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(4,4);
+			obj->owt = weight(obj);
 			obj = mksobj_at(SUBETHAIC_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(1,4);
+			obj->owt = weight(obj);
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_SCRAP_TITAN:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(4,4);
+			obj->owt = weight(obj);
 			mtmp->mnamelth = 0;
 			num = d(2,4);
 			while (num--){
@@ -447,8 +459,10 @@ register struct monst *mtmp;
 	    case PM_HELLFIRE_COLOSSUS:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(4,4);
+			obj->owt = weight(obj);
 			obj = mksobj_at(HELLFIRE_COMPONENT, x, y, TRUE, FALSE);
 			obj->quan = d(4,4);
+			obj->owt = weight(obj);
 			num = d(2,6);
 			while (num--){
 				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
