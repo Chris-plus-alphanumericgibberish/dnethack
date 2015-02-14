@@ -1403,7 +1403,7 @@ register struct obj   *obj;
 	tmp += disttmp;
 
 	/* gloves are a hinderance to proper use of bows */
-	if (uarmg && uwep && objects[uwep->otyp].oc_skill == P_BOW) {
+	if (uarmg && uwep && objects[uwep->otyp].oc_skill == P_BOW && ammo_and_launcher(obj, uwep)) {
 	    switch (uarmg->otyp) {
 	    case ORIHALCYON_GAUNTLETS:    /* metal */
 	    case GAUNTLETS_OF_POWER:    /* metal */
