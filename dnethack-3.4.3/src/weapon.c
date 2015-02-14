@@ -156,7 +156,7 @@ struct monst *mon;
 	   (is_demon(ptr) || is_undead(ptr))) tmp += 2;
 
 	if (is_spear(otmp) &&
-	   index(kebabable, ptr->mlet)) tmp += 2;
+	   index(kebabable, ptr->mlet)) tmp += (ptr == &mons[PM_SMAUG]) ? 20 : 2;
 
 	if (is_farm(otmp) &&
 	    ptr->mlet == S_PLANT) tmp += 6;
@@ -412,8 +412,11 @@ int spec;
 	    }
 	}
 	
-	if(is_farm(otmp) && ptr->mlet == S_PLANT) tmp *= 2;
-	if(u.sealsActive&SEAL_EVE && ptr->mlet == S_PLANT) tmp *= 2;
+	if(is_stabbing(otmp) && ptr == &mons[PM_SMAUG]) tmp += rnd(20);
+	if(is_farm(otmp) && ptr->mlet == S_PLANT){
+		tmp *= 2;
+		tmp += rnd(20);
+	} if(u.sealsActive&SEAL_EVE && ptr->mlet == S_PLANT) tmp *= 2;
 /*	Put weapon vs. monster type damage bonuses in below:	*/
 	if (Is_weapon || otmp->oclass == GEM_CLASS ||
 		otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS) {

@@ -1421,6 +1421,8 @@ register struct obj   *obj;
 	    }
 	}
 	
+	if(is_stabbing(obj) && is_ammo(obj) && (!uwep || ammo_and_launcher(obj, uwep)) && mon->data == &mons[PM_SMAUG]) tmp += 20;
+	
 	if(obj->otyp == BALL_OF_WEBBING) tmp -= 2000; //nasty hack :c
 	
 	tmp += omon_adj(mon, obj, TRUE);
