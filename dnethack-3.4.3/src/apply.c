@@ -35,7 +35,7 @@ STATIC_DCL void FDECL(use_figurine, (struct obj **));
 STATIC_DCL void FDECL(use_grease, (struct obj *));
 STATIC_DCL void FDECL(use_trap, (struct obj *));
 STATIC_DCL void FDECL(use_stone, (struct obj *));
-STATIC_DCL int FDECL(use_droven_cloak, (struct obj *));
+STATIC_DCL int FDECL(use_droven_cloak, (struct obj **));
 STATIC_DCL int FDECL(use_darkweavers_cloak, (struct obj *));
 STATIC_PTR int NDECL(set_trap);		/* occupation callback */
 STATIC_DCL int FDECL(use_whip, (struct obj *));
@@ -2501,16 +2501,17 @@ set_trap()
 }
 
 STATIC_OVL int
-use_droven_cloak(otmp)
-struct obj *otmp;
+use_droven_cloak(optr)
+struct obj **optr;
 {
+	struct obj *otmp = *optr;
 	int ttyp, tmp, rx, ry;
 	boolean gone = FALSE;
 	const char *what = (char *)0;
 	struct trap *ttmp;
 	struct monst *mtmp;
 
-    if (!getdir((char *)0) || !(u.dx || u.dy)) return;
+    if (!getdir((char *)0) || !(u.dx || u.dy)) return 0;
 
     if (Stunned || (Confusion && !rn2(5))) confdir();
     rx = u.ux + u.dx;
@@ -2543,7 +2544,7 @@ struct obj *otmp;
 	if (what && !(ttmp && ttmp->ttyp == WEB)) {
 	    You_cant("set a trap %s!",what);
 	    reset_trapset();
-	    return;
+	    return 0;
 	}
 	
 	if(ttmp) {
@@ -2570,12 +2571,15 @@ struct obj *otmp;
 		if(++otmp->ovar1 > 3){
 			gone = TRUE;
 			useup(otmp);
+			*optr = 0;
 			pline("The thoroughly tattered cloak falls to pieces");
 		}
-	} else pline("The cloak cannot spin any more webs.");
+	} else {
+		pline("The cloak cannot spin any more webs.");
+		return 0;
+	}
 	reset_trapset();
-	if(gone) return 0;
-	else return 1;
+	return 1;
 }
 
 STATIC_OVL int
@@ -4349,7 +4353,7 @@ doapply()
 	break;
 	case DROVEN_CLOAK:
 		if(obj->oartifact == ART_DARKWEAVER_S_CLOAK) res = use_darkweavers_cloak(obj);
-		else res = use_droven_cloak(obj);
+		else res = use_droven_cloak(&obj);
 	break;
 	case FLINT:
 	case LUCKSTONE:
