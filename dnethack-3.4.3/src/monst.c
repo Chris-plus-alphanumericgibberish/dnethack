@@ -5637,7 +5637,7 @@ is a red right hand
 	M2_UNDEAD|M2_HOSTILE|M2_MAGIC, M3_WAITFORU|M3_INFRAVISION, CLR_GRAY),
     MON("Great Cthulhu", S_DEMON,//51
 	LVL(100, 15, 0, 127, 0), (G_NOGEN|G_UNIQ), /*Great cthulhu only takes a step 1/4 turns */
-	A(ATTK(AT_CLAW, AD_PHYS, 400, 1), ATTK(AT_GAZE, AD_WISD, 1, 10), /*You might survive one melee hit from cthulhu, but prob not two*/
+	A(ATTK(AT_CLAW, AD_PHYS, 100, 4), ATTK(AT_GAZE, AD_WISD, 1, 10), /*You might survive one melee hit from cthulhu, but prob not two*/
 	  ATTK(AT_NONE, AD_POSN, 8, 8), NO_ATTK,
 	  NO_ATTK, NO_ATTK),
 	SIZ(10000, 4000, 0, MS_HISS, MZ_GIGANTIC), 
