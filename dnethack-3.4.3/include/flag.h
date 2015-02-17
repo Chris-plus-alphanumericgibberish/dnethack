@@ -231,6 +231,8 @@ struct instance_flags {
 #endif
 	boolean  quiver_fired;
        boolean  pickup_thrown;
+    boolean role_obj_names;
+    boolean dnethack_start_text;
     boolean dnethack_dungeon_colors;
 /*
  * Window capability support.

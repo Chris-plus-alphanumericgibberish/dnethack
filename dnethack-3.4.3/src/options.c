@@ -101,6 +101,8 @@ static struct Bool_Opt
 	{"fullscreen", &iflags.wc2_fullscreen, FALSE, SET_IN_FILE},
 	{"help", &flags.help, TRUE, SET_IN_GAME},
 	{"hilite_pet",    &iflags.wc_hilite_pet, TRUE, SET_IN_GAME},	/*WC*/
+	{"dnethack_start_text",    &iflags.dnethack_start_text, TRUE, DISP_IN_GAME},
+	{"role_obj_names",    &iflags.role_obj_names, TRUE, SET_IN_GAME},
 	{"dnethack_dungeon_colors",    &iflags.dnethack_dungeon_colors, TRUE, SET_IN_GAME},
 #ifdef ASCIIGRAPH
 	{"IBMgraphics", &iflags.IBMgraphics, FALSE, SET_IN_GAME},

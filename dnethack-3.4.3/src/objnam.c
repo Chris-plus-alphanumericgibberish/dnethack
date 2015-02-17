@@ -134,9 +134,9 @@ register int otyp;
 	register const char *un = ocl->oc_uname;
 	register int nn = ocl->oc_name_known;
 
-	if (Role_if(PM_SAMURAI) && Alternate_item_name(otyp,Japanese_items))
+	if (Role_if(PM_SAMURAI) && iflags.role_obj_names && Alternate_item_name(otyp,Japanese_items))
 		actualn = Alternate_item_name(otyp,Japanese_items);
-	if (Role_if(PM_PIRATE) && Alternate_item_name(otyp,Pirate_items))
+	if (Role_if(PM_PIRATE) && iflags.role_obj_names && Alternate_item_name(otyp,Pirate_items))
 		actualn = Alternate_item_name(otyp,Pirate_items);
 	switch(ocl->oc_class) {
 	case COIN_CLASS:
@@ -283,9 +283,9 @@ register struct obj *obj;
 	register const char *un = ocl->oc_uname;
 
 	buf = nextobuf() + PREFIX;	/* leave room for "17 -3 " */
-	if (Role_if(PM_SAMURAI) && Alternate_item_name(typ,Japanese_items))
+	if (Role_if(PM_SAMURAI) && iflags.role_obj_names && Alternate_item_name(typ,Japanese_items))
 		actualn = Alternate_item_name(typ,Japanese_items);
-	if (Role_if(PM_PIRATE) && Alternate_item_name(typ,Pirate_items))
+	if (Role_if(PM_PIRATE) && iflags.role_obj_names && Alternate_item_name(typ,Pirate_items))
 		actualn = Alternate_item_name(typ,Pirate_items);
 
 	buf[0] = '\0';

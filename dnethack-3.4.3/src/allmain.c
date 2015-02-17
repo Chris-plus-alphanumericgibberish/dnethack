@@ -1019,6 +1019,7 @@ boolean new_game;	/* false => restoring an old game */
 		   : "%s %s, the%s %s %s, welcome back to dNetHack!",
 	  Hello((struct monst *) 0), plname, buf, urace.adj,
 	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
+	if(iflags.dnethack_start_text){
 	pline("Press Ctrl^W or type #ward to engrave a warding sign.");
 	if(Role_if(PM_PIRATE)) You("can swim! Type #swim while swimming on the surface to dive down to the bottom.");
 	else if(Role_if(PM_EXILE)){
@@ -1036,6 +1037,7 @@ boolean new_game;	/* false => restoring an old game */
 	}
 	else if(Race_if(PM_INCANTIFIER)){
 		pline("Incantifiers eat magic, not food, and do not heal naturally.");
+	}
 	}
 }
 
