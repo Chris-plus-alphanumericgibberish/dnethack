@@ -3333,7 +3333,7 @@ boolean atme;
 			energy += rnd(2*energy);
 		}
 		if(energy > u.uen)  {
-			You("don't have enough energy to cast that spell (need %d).", u.uen);
+			You("don't have enough energy to cast that spell (need %d).", energy);
 			return(0);
 		} else {
 			if (spellid(spell) != SPE_DETECT_FOOD) {
