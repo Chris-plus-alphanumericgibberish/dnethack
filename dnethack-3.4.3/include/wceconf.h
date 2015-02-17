@@ -197,7 +197,7 @@ extern void NDECL(toggle_mouse_support);
 #endif
 
 /* UNICODE stuff */
-#define NHSTR_BUFSIZE	255
+#define NHSTR_BUFSIZE	512
 #ifdef UNICODE
 	#define NH_W2A(w, a, cb)     ( WideCharToMultiByte(                              \
 												   CP_ACP,                      \
