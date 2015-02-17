@@ -774,16 +774,15 @@ WEPTOOL("pick-axe", (char *)0,
  * Lightsabers get 3x dice when lit 
  */
 WEPTOOL("lightsaber", "silver sword hilt",
-	0, 0, 0, 0,  0, 30, 500, 8,  8, -3, SLASH, P_SABER, SILVER, HI_SILVER),
+	0, 1, 1, 0,  0, 30, 500, 8,  8, -3, SLASH, P_SABER, SILVER, HI_SILVER),
 WEPTOOL("beamsword",  "gold sword hilt",
-	0, 0, 0, 0,  0, 40, 500, 10,10, -3, SLASH, P_BROAD_SWORD, GOLD, HI_GOLD),
+	0, 1, 1, 0,  0, 40, 500, 10,10, -3, SLASH, P_BROAD_SWORD, GOLD, HI_GOLD),
 WEPTOOL("double lightsaber",  "platinum grip",
-	0, 0, 1, 1,  0, 60,1000, 8, 8,  -6, SLASH, P_QUARTERSTAFF, PLATINUM, HI_METAL),
+	0, 1, 1, 1,  0, 60,1000, 8, 8,  -6, SLASH, P_QUARTERSTAFF, PLATINUM, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
 	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
 /* 3.4.1: unicorn horn left classified as "magic" */
 WEPTOOL("unicorn horn", (char *)0,
-	1, 1, 0, 1,  0,  20, 100, 12, 12, 0, PIERCE, P_UNICORN_HORN, BONE, CLR_WHITE),
 WEPTOOL("spoon", (char *)0,
 	1, 0, 0, 0,  0,  1,    1,  1,  1, 0, PIERCE,  P_KNIFE, IRON, HI_METAL),
 
