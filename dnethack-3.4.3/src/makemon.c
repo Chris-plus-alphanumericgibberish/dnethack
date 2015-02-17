@@ -2822,6 +2822,7 @@ register int	mmflags;
 			}
 		break;
 		case S_EYE:
+			if(!(mmflags & MM_EDOG)){
 			if (mndx == PM_QUINON){
 				mtmp->movement = d(1,6);
 				if(anymon){
@@ -2853,12 +2854,14 @@ register int	mmflags;
 			} else if (mndx == PM_BEHOLDER){
 				if(anymon) m_initsgrp(makemon(&mons[PM_GAS_SPORE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
 			}
+			}
 /*			if(mndx == PM_VORLON_MISSILE){
 				mtmp->mhpmax = 3;
 				mtmp->mhp = 3;
 			}
 */		break;
 		case S_IMP:
+			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_LEGION_DEVIL_SERGEANT){
 				int num = 0;
 				num = 10;
@@ -2874,6 +2877,7 @@ register int	mmflags;
 				num = 2;
 				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SERGEANT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
+			}
 		break;
 		case S_ANGEL:
 			if(is_weeping(mtmp->data)){
@@ -2887,6 +2891,7 @@ register int	mmflags;
 			}
 		break;
 	    case S_GIANT:
+			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_DEEPEST_ONE){
 				int num = 0;
 				num = rn1(3,3);
@@ -2894,8 +2899,10 @@ register int	mmflags;
 				num = rn1(10,10);
 				for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
+			}
 		break;
 		case S_HUMAN:
+			if(!(mmflags & MM_EDOG)){
 			if(anymon){
 				if (mndx == PM_DROW_MATRON){
 					m_initlgrp(makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
@@ -2907,8 +2914,10 @@ register int	mmflags;
 					for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				}
 			}
+			}
 		break;
 		case S_HUMANOID:
+			if(!(mmflags & MM_EDOG)){
 			if(anymon){
 				if (mndx == PM_DEEPER_ONE){
 					int num = 0;
@@ -2916,8 +2925,10 @@ register int	mmflags;
 					for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				}
 			}
+			}
 		break;
 		case S_FUNGUS:
+			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_MIGO_QUEEN){
 				int num = 0;
 				num = rn2(2)+1;
@@ -2927,6 +2938,7 @@ register int	mmflags;
 				num = rn2(5)+5;
 				for(num; num >= 0; num--) makemon(&mons[PM_MIGO_WORKER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 
+			}
 			}
 			if (mndx == PM_PHANTOM_FUNGUS) {
 			    mtmp->perminvis = TRUE;
@@ -3009,7 +3021,7 @@ register int	mmflags;
 			}
 		break;
 		case S_TRAPPER:
-			{
+			if(!(mmflags & MM_EDOG)){
 				int num=6;
 				if(mndx==PM_METROID_QUEEN) 
 					if(anymon) for(num; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
@@ -3036,6 +3048,7 @@ register int	mmflags;
 				mtmp->mhpmax = 1+u.chokhmah*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
+			if(!(mmflags & MM_EDOG)){
 			if(mndx != PM_MALKUTH_SEPHIRAH && mndx != PM_DAAT_SEPHIRAH && mndx != PM_BINAH_SEPHIRAH){
 				coord mm;
 				mm.x = xdnstair;
@@ -3045,6 +3058,7 @@ register int	mmflags;
 				mm.x = xupstair;
 				mm.y = yupstair;
 				makeketer(&mm);
+			}
 			}
 		break;
 		case S_EEL:
@@ -3070,6 +3084,7 @@ register int	mmflags;
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
+			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_ORC_CAPTAIN){
 				int num = 0;
 				num = rn1(10,3);
@@ -3079,6 +3094,7 @@ register int	mmflags;
 				int num = 0;
 				num = rnd(3);
 				for(num; num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+			}
 			}
 		break;
 		case S_UNICORN:
@@ -3150,7 +3166,7 @@ register int	mmflags;
 				pline("Demogorgon, Prince of Demons, is near!");
 				com_pager(200);
 			}
-			else if(mndx == PM_DURIN_S_BANE){ 
+			else if(mndx == PM_DURIN_S_BANE){
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
