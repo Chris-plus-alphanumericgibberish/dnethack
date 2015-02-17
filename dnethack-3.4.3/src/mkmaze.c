@@ -474,6 +474,7 @@ fixup_special()
 		if(!rn2(4))mkobj_at(GEM_CLASS, x, y, FALSE);
 		if(!rn2(3))mkobj_at(GEM_CLASS, x, y, FALSE);
 		if(!rn2(2))mkobj_at(GEM_CLASS, x, y, FALSE);
+		if(!rn2(4))mksobj_at(SILVER_BULLET, x, y, TRUE, FALSE);
 		if(rn2(3)) mkobj_at(GEM_CLASS, x, y, FALSE);
 		if(rn2(4)) mkobj_at(GEM_CLASS, x, y, FALSE);
 		(void) mkgold((long) rn1(1000, 100), x, y);

@@ -905,7 +905,7 @@ mineralize()
 {
 	s_level *sp;
 	struct obj *otmp;
-	int goldprob, gemprob, x, y, cnt;
+	int goldprob, gemprob, silverprob, x, y, cnt;
 
 
 	/* Place kelp, except on the plane of water */
@@ -930,14 +930,17 @@ mineralize()
 	/* basic level-related probabilities */
 	goldprob = 20 + depth(&u.uz) / 3;
 	gemprob = goldprob / 4;
+	silverprob = gemprob / 2;
 
 	/* mines have ***MORE*** goodies - otherwise why mine? */
 	if (In_mines(&u.uz)) {
 	    goldprob *= 2;
 	    gemprob *= 3;
+	    silverprob *= 4;
 	} else if (In_quest(&u.uz)) {
 	    goldprob /= 4;
 	    gemprob /= 6;
+	    silverprob /= 8;
 	}
 
 	/*
@@ -975,6 +978,15 @@ mineralize()
 				if (!rn2(3)) add_to_buried(otmp);
 				else place_object(otmp, x, y);
 			    }
+		    }
+		}
+		if (rn2(1000) < silverprob) {
+			if ((otmp = mksobj(SILVER_BULLET, FALSE, FALSE)) != 0) {
+				otmp->quan = 1L + rn2(dunlev(&u.uz));
+				otmp->owt = weight(otmp);
+				otmp->ox = x,  otmp->oy = y;
+				if (!rn2(3)) add_to_buried(otmp);
+				else place_object(otmp, x, y);
 		    }
 		}
 	    }
