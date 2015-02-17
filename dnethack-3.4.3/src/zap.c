@@ -4151,7 +4151,7 @@ boolean *shopdamage;
 			// (void) create_gas_cloud(x, y, 1, 8, rn1(20, 5));
 		}
 	}
-	else if (abstype == ZT_ACID && levl[x][y].typ == IRONBARS && !rn2(5)) {
+	else if (abstype == ZT_ACID && levl[x][y].typ == IRONBARS && (flags.drgn_brth || !rn2(5))) {
 	    if (cansee(x, y))
 		pline_The("iron bars are dissolved!");
 	    else
