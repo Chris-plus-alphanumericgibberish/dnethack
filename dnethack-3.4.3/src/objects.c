@@ -783,6 +783,7 @@ WEPTOOL("grappling hook", "iron hook",
 	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
 /* 3.4.1: unicorn horn left classified as "magic" */
 WEPTOOL("unicorn horn", (char *)0,
+	1, 1, 0, 0,  0,  20, 100, 12, 12, 0, PIERCE, P_UNICORN_HORN, BONE, CLR_WHITE),
 WEPTOOL("spoon", (char *)0,
 	1, 0, 0, 0,  0,  1,    1,  1,  1, 0, PIERCE,  P_KNIFE, IRON, HI_METAL),
 
