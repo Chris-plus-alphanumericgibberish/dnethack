@@ -2148,6 +2148,9 @@ dosacrifice()
 				otmp->oerodeproof = TRUE;
 				dropy(otmp);
 			}
+			else if(otmp->oartifact == ART_BEASTMASTER_S_DUSTER){
+				unrestrict_weapon_skill(P_BEAST_MASTERY);
+			}
 		    return(1);
 		}
 	    }
