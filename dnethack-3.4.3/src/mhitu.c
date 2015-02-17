@@ -2404,7 +2404,8 @@ dopois:
 		    pline_The("slime burns away!");
 		    dmg = 0;
 		} else if (Unchanging ||
-				youmonst.data == &mons[PM_GREEN_SLIME]) {
+				youmonst.data == &mons[PM_GREEN_SLIME] ||
+				youmonst.data == &mons[PM_FLUX_SLIME]) {
 		    You("are unaffected.");
 		    dmg = 0;
 		} else if (!Slimed) {

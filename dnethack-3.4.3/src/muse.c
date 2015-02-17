@@ -2294,7 +2294,8 @@ struct obj *obj;
 				(!resists_ston(mon) &&
 				    (obj->corpsenm == PM_LIZARD ||
 					(acidic(&mons[obj->corpsenm]) &&
-					 obj->corpsenm != PM_GREEN_SLIME))));
+					 obj->corpsenm != PM_GREEN_SLIME &&
+					 obj->corpsenm != PM_FLUX_SLIME))));
 	    if (typ == EGG)
 		return (boolean)(touch_petrifies(&mons[obj->corpsenm]));
 	    break;
@@ -2409,7 +2410,7 @@ boolean by_you;
 	for(obj = mon->minvent; obj; obj = obj->nobj) {
 	    /* Monsters can also use potions of acid */
 	    if ((obj->otyp == POT_ACID) || (obj->otyp == CORPSE &&
-	    		(obj->corpsenm == PM_LIZARD || (acidic(&mons[obj->corpsenm]) && obj->corpsenm != PM_GREEN_SLIME)))) {
+	    		(obj->corpsenm == PM_LIZARD || (acidic(&mons[obj->corpsenm]) && obj->corpsenm != PM_GREEN_SLIME && obj->corpsenm != PM_FLUX_SLIME)))) {
 		mon_consume_unstone(mon, obj, by_you, TRUE);
 		return TRUE;
 	    }

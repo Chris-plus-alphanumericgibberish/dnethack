@@ -746,6 +746,7 @@ BOOLEAN_P bld, nobadeffects;
 		    return;
 		break;
 	    case PM_GREEN_SLIME:
+	    case PM_FLUX_SLIME:
 		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youmonst.data) &&
 			youmonst.data != &mons[PM_GREEN_SLIME]) {
 		    You("don't feel very well.");
@@ -784,6 +785,7 @@ struct monst *mon;
 	    return TRUE;		/* lifesaved */
 
 	case PM_GREEN_SLIME:
+	case PM_FLUX_SLIME:
 	    if (!Unchanging && youmonst.data != &mons[PM_FIRE_VORTEX] &&
 			    youmonst.data != &mons[PM_FIRE_ELEMENTAL] &&
 			    youmonst.data != &mons[PM_GREEN_SLIME]) {
@@ -2557,7 +2559,7 @@ struct obj *otmp;
 				!Stone_resistance &&
 				!poly_when_stoned(youmonst.data));
 
-		if (mnum == PM_GREEN_SLIME)
+		if (mnum == PM_GREEN_SLIME || mnum == PM_FLUX_SLIME)
 		    stoneorslime = (!Unchanging && !flaming(youmonst.data) &&
 			youmonst.data != &mons[PM_GREEN_SLIME]);
 

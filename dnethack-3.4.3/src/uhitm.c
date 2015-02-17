@@ -2365,7 +2365,7 @@ register struct attack *mattk;
 		if (notonhead || !has_head(mdef->data)) {
 		    pline("%s doesn't seem harmed.", Monnam(mdef));
 		    tmp = 0;
-		    if (!Unchanging && mdef->data == &mons[PM_GREEN_SLIME]) {
+		    if (!Unchanging && mdef->data == &mons[PM_GREEN_SLIME] && mdef->data == &mons[PM_FLUX_SLIME]) {
 			if (!Slimed) {
 			    You("suck in some slime and don't feel very well.");
 			    Slimed = 10L;
@@ -2464,7 +2464,7 @@ register struct attack *mattk;
 	    case AD_SLIM:
 		if (negated) break;	/* physical damage only */
 		if (!rn2(4) && !flaming(mdef->data) &&
-				mdef->data != &mons[PM_GREEN_SLIME] && !is_rider(mdef->data)) {
+				mdef->data != &mons[PM_GREEN_SLIME] && mdef->data != &mons[PM_FLUX_SLIME] && !is_rider(mdef->data)) {
 		    You("turn %s into slime.", mon_nam(mdef));
 		    (void) newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, FALSE);
 		    tmp = 0;
@@ -2848,7 +2848,7 @@ register struct attack *mattk;
 				nomul(-tmp, "digesting a victim");
 				nomovemsg = msgbuf;
 			    } else pline("%s", msgbuf);
-			    if (mdef->data == &mons[PM_GREEN_SLIME]) {
+			    if (mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME]) {
 				Sprintf(msgbuf, "%s isn't sitting well with you.",
 					The(mdef->data->mname));
 				if (!Unchanging) {
@@ -3030,7 +3030,8 @@ use_weapon:
 			if ((uwep || (u.twoweap && uswapwep) || uarmg) &&
 				maybe_polyd(is_vampire(mas), Race_if(PM_VAMPIRE)) &&
 				(is_rider(mon->data) ||
-				 mon->data == &mons[PM_GREEN_SLIME])){
+				 mon->data == &mons[PM_GREEN_SLIME] ||
+				 mon->data == &mons[PM_FLUX_SLIME])){
 			    	break;
 				}
 		case AT_STNG:
@@ -3270,7 +3271,8 @@ use_weapon:
 		if ((uwep || (u.twoweap && uswapwep)  || uarmg) &&
 			maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) &&
 			(is_rider(mon->data) ||
-			 mon->data == &mons[PM_GREEN_SLIME])){
+			 mon->data == &mons[PM_GREEN_SLIME] ||
+			 mon->data == &mons[PM_FLUX_SLIME])){
 				break;
 			}
 	case AT_STNG:

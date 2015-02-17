@@ -1653,7 +1653,7 @@ mdamagem(magr, mdef, mattk)
 	    case AD_SLIM:
 		if (cancelled) break;	/* physical damage only */
 		if (!rn2(4) && !flaming(mdef->data) &&
-				mdef->data != &mons[PM_GREEN_SLIME] && !is_rider(mdef->data)) {
+				mdef->data != &mons[PM_GREEN_SLIME] && mdef->data != &mons[PM_FLUX_SLIME] && !is_rider(mdef->data)) {
 		    (void) newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, vis);
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    tmp = 0;
@@ -1722,7 +1722,7 @@ mdamagem(magr, mdef, mattk)
 		 * after monkilled() to provide better message ordering */
 		if (mdef->cham != CHAM_ORDINARY) {
 		    (void) newcham(magr, (struct permonst *)0, FALSE, TRUE);
-		} else if (mdef->data == &mons[PM_GREEN_SLIME]) {
+		} else if (mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME]) {
 		    (void) newcham(magr, &mons[PM_GREEN_SLIME], FALSE, TRUE);
 		} else if (mdef->data == &mons[PM_WRAITH]) {
 		    (void) grow_up(magr, (struct monst *)0);
