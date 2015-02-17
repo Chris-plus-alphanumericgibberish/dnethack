@@ -783,8 +783,13 @@ register struct monst *mtmp;
 	/* confused monsters get unconfused with small probability */
 	if (mtmp->mconf && !rn2(50)) mtmp->mconf = 0;
 
+	/* berserk monsters calm down with small probability */
+	if (mtmp->mberserk && !rn2(50)) mtmp->mberserk = 0;
+
 	if (mtmp->mcrazed){
 		if(!rn2(4))mtmp->mconf = 1;
+		(void) set_apparxy(mtmp);
+		if(!rn2(4))mtmp->mberserk = 1;
 		(void) set_apparxy(mtmp);
 		if(!rn2(10)){
 			mtmp->mnotlaugh=0;
