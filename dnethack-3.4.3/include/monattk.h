@@ -139,7 +139,7 @@
 #define AD_BARB		134	/* Physical damage retalitory attack */
 #define AD_LUCK		135	/* Luck-draining gaze (UnNetHack) */
 #define AD_VAMP		136	/* Vampire's blood drain attack */
-#define AD_WEBS		137	/* Vampire's blood drain attack */
+#define AD_WEBS		137	/* Spreads webbing on a hit */
 #define AD_ILUR		138 /* memory draining engulf attack belonging to Illurien */
 #define AD_TNKR		139 /* Tinker attacks */
 #define AD_FRWK		140 /* "Firework" explosions */
