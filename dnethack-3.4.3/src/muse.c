@@ -1768,6 +1768,8 @@ struct monst *mtmp;
 #define MUSE_POT_POLYMORPH 9
 #define MUSE_SCR_REMOVE_CURSE 10
 #define MUSE_POT_GAIN_ENERGY 11
+#define MUSE_SCR_AMNESIA 12
+#define MUSE_POT_AMNESIA 13
 
 boolean
 find_misc(mtmp)
@@ -1903,6 +1905,16 @@ struct monst *mtmp;
 			    } 
 			}
 		}
+		nomore(MUSE_SCR_AMNESIA);
+		nomore(MUSE_POT_AMNESIA);
+		if((mtmp->mcrazed || mtmp->mberserk) && (obj->otyp == SCR_AMNESIA)) {
+			m.misc = obj;
+			m.has_misc = MUSE_SCR_AMNESIA;
+		}
+		if((mtmp->mcrazed || mtmp->mberserk) && (obj->otyp == POT_AMNESIA)) {
+			m.misc = obj;
+			m.has_misc = MUSE_POT_AMNESIA;
+		}
 	}
 	return((boolean)(!!m.has_misc));
 #undef nomore
@@ -2020,10 +2032,41 @@ skipmsg:
 	case MUSE_POT_GAIN_ENERGY:
 		mquaffmsg(mtmp, otmp);
 		if(!otmp->cursed){
+			if (vismon) pline("%s looks lackluster.", Monnam(mtmp));
 			mtmp->mspec_used = 0;
 			mtmp->mcan = 0;
 		} else {
+			if (vismon) pline("%s looks full of energy.", Monnam(mtmp));
 			mtmp->mcan = 1;
+		}
+		if (oseen) makeknown(POT_GAIN_ENERGY);
+		m_useup(mtmp, otmp);
+		return 2;
+	case MUSE_POT_AMNESIA:
+		mquaffmsg(mtmp, otmp);
+		if (oseen) makeknown(POT_AMNESIA);
+		goto museamnesia;
+	case MUSE_SCR_AMNESIA:
+		mreadmsg(mtmp, otmp);
+		if (oseen) makeknown(SCR_AMNESIA);
+museamnesia:
+		if(!otmp->cursed){
+			if (vismon) pline("%s looks more tranquil.", Monnam(mtmp));
+			if(!otmp->blessed){
+				mtmp->mtame = 0;
+				mtmp->mferal = 0;
+				mtmp->mpeaceful = 1;
+			}
+			mtmp->mcrazed = 0;
+			mtmp->mberserk = 0;
+		} else {
+			if (vismon) pline("%s looks angry and confused!", Monnam(mtmp));
+			mtmp->mcrazed = 1;
+			mtmp->mberserk = 1;
+			mtmp->mconf = 1;
+			mtmp->mtame = 0;
+			mtmp->mferal = 0;
+			mtmp->mpeaceful = 0;
 		}
 		m_useup(mtmp, otmp);
 		return 2;
@@ -2262,6 +2305,7 @@ struct obj *obj;
 		    typ == POT_SLEEPING ||
 		    typ == POT_ACID ||
 		    typ == POT_GAIN_ENERGY ||
+		    typ == POT_AMNESIA ||
 		    typ == POT_CONFUSION)
 		return TRUE;
 	    if (typ == POT_BLINDNESS && !attacktype(mon->data, AT_GAZE))
@@ -2270,6 +2314,7 @@ struct obj *obj;
 	case SCROLL_CLASS:
 	    if (typ == SCR_TELEPORTATION || typ == SCR_CREATE_MONSTER
 		    || typ == SCR_EARTH
+		    || typ == SCR_AMNESIA
 		    || typ == SCR_REMOVE_CURSE)
 		return TRUE;
 	    break;
