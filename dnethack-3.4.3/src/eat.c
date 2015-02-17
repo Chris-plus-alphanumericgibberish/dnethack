@@ -2876,6 +2876,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		if(etype == MAGIC_FURNACE && !otmp->oartifact){
 			int curspe;
 			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			You("place the %s in your magic furnace.", xname(otmp));
 			if (otmp->quan > 1L) {
 				if(!carried(otmp))
 				(void) splitobj(otmp, otmp->quan - 1L);
@@ -2985,6 +2986,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		}
 		if(etype == WOOD_STOVE && !otmp->oartifact){
 			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			You("place the %s in your wood stove.", xname(otmp));
 			if (otmp->quan > 1L) {
 				if(!carried(otmp))
 					(void) splitobj(otmp, otmp->quan - 1L);
@@ -3102,6 +3104,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		}
 		if(etype == HELLFIRE_FURNACE && !otmp->oartifact){
 			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			You("place the %s in your hellfire furnace.", xname(otmp));
 			if (otmp->quan > 1L) {
 				if(!carried(otmp))
 					(void) splitobj(otmp, otmp->quan - 1L);
@@ -3219,6 +3222,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		}
 		if(etype == SCRAP_MAW && !otmp->oartifact){
 			if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
+			You("crunch up the %s with your scrap maw.", xname(otmp));
 			if (otmp->quan > 1L) {
 				if(!carried(otmp))
 					(void) splitobj(otmp, otmp->quan - 1L);
