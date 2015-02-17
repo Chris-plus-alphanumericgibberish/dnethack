@@ -1929,14 +1929,17 @@ register struct obj *obj;
 
 	switch(obj->otyp) {
 		case WAN_LIGHT:
+			litroom(TRUE,obj);
+			if(u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+			if (!Blind) known = TRUE;
+		break;
 		case SPE_LIGHT:
 			litroom(!(obj->cursed),obj);
 			if(!(obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
 			if (!Blind) known = TRUE;
 		break;
 		case WAN_DARKNESS:
-			litroom((obj->cursed),obj);
-			if((obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+			litroom(FALSE,obj);
 			if (!Blind) known = TRUE;
 		break;
 		case WAN_SECRET_DOOR_DETECTION:
