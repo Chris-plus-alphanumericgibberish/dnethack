@@ -1138,8 +1138,10 @@ toofar:
 			/* Maybe it stepped on a trap and fell asleep... */
 			if (mtmp->msleeping || !(mtmp->mcanmove && mtmp->mnotlaugh)) return(0);
 			if(!nearby &&
-			  (ranged_attk(mdat) || find_offensive(mtmp)))
-			    return(0);
+			  (ranged_attk(mdat) || find_offensive(mtmp))){
+				if(mdat == &mons[PM_GREAT_CTHULHU]) break;
+			    else return(0);
+			}
  			else if(u.uswallow && mtmp == u.ustuck) {
 			    /* a monster that's digesting you can move at the
 			     * same time -dlc
