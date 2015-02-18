@@ -1371,7 +1371,7 @@ summon_alien:
         struct obj *otmp = uwep;
         const char *hands;
        hands = bimanual(otmp) ? makeplural(body_part(HAND)) : body_part(HAND);
-        if (otmp->oclass == WEAPON_CLASS && !Antimagic && !otmp->oartifact) {
+        if (otmp->oclass == WEAPON_CLASS && !Antimagic && !otmp->oartifact && rn2(4)) {
                /* Quest nemesis maledictions */
 			   if(otmp->spe > -7){
 					otmp->spe -= 1;
@@ -1388,9 +1388,9 @@ summon_alien:
                   Your("%s shape in your %s.", aobjnam(otmp, "change"), hands);
                   poly_obj(otmp, BANANA);
                }
-        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE){
+        } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE && (!Antimagic || !rn2(4))){
 			if(mtmp){
-				if(rn2(acurrstr()) < (((int)mtmp->m_lev+1)/2)) {
+				if(rn2(((int)mtmp->m_lev)) > (acurrstr())) {
 					Your("%s knocked out of your %s!",
 						aobjnam(otmp,"are"), hands);
 					setuwep((struct obj *)0);
@@ -1398,7 +1398,7 @@ summon_alien:
 				}
 				else Your("%s for a moment.", aobjnam(otmp, "shudder"));
 			} else {
-				if(rn2(acurrstr()) < rnd(15) ){
+				if(acurrstr() < rnd(25) ){
 					Your("%s knocked out of your %s!",
 						aobjnam(otmp,"are"), hands);
 					setuwep((struct obj *)0);
