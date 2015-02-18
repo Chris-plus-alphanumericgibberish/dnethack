@@ -1626,31 +1626,35 @@ rnd_offensive_item(mtmp)
 struct monst *mtmp;
 {
 	struct permonst *pm = mtmp->data;
-	int difficulty = monstr[(monsndx(pm))];
+	int difficulty = monstr[(monsndx(pm))], diesize;
 
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	if (difficulty > 7 && !rn2(35)) return WAN_DEATH;
-	switch (rn2(9 - (difficulty < 4) + 4 * (difficulty > 6))) {
+	
+	diesize = 9;
+	if(difficulty < 4) diesize -= 4;
+	else if(difficulty < 7) diesize -= (7-difficulty);
+	else diesize += 3;
+	switch (rn2(diesize)) {
 		case 0: {
 		    struct obj *helmet = which_armor(mtmp, W_ARMH);
 
 		    if ((helmet && is_metallic(helmet)) || amorphous(pm) || passes_walls(pm) || noncorporeal(pm) || unsolid(pm))
 			return SCR_EARTH;
 		} /* fall through */
-		case 1: return WAN_STRIKING;
+		case 1: return WAN_MAGIC_MISSILE;
 		case 2: return POT_ACID;
 		case 3: return POT_CONFUSION;
 		case 4: return POT_BLINDNESS;
 		case 5: return POT_SLEEPING;
 		case 6: return POT_PARALYSIS;
-		case 7: return WAN_MAGIC_MISSILE;
+		case 7: return WAN_STRIKING;
 		case 8: return WAN_SLEEP;
 		case 9: return WAN_FIRE;
 		case 10: return WAN_COLD;
 		case 11: return WAN_LIGHTNING;
-		case 12: return WAN_DRAINING;
 	}
 	/*NOTREACHED*/
 	return 0;
