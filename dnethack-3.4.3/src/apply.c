@@ -4205,7 +4205,7 @@ doapply()
 		    use_magic_whistle(obj);
 		    /* sometimes the blessing will be worn off */
 		    if (!rn2(49)) {
-			obj = splitobj(obj, 1L);
+			if(obj->quan > 1) obj = splitobj(obj, 1L);
 
 			if (!Blind) {
 			    char buf[BUFSZ];
