@@ -510,6 +510,7 @@ static const char * const bogusobjects[] = {
        "fauchard",
        "mysarme",
        "uisarme",
+       "bob-guisarme",
        "lucifer's hammer",
        "bec de corwin",
        "yet another poorly-differentiated polearm",
