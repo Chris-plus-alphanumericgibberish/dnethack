@@ -724,6 +724,15 @@ moveloop()
 	    if (vision_full_recalc) vision_recalc(0);	/* vision! */
 	}
 	oldBlind = !!Blind;
+////////////////////////////////////////////////////////////////////////////////////////////////
+			if (!oldCon != ACURR(A_CON)) {
+				int condif = conplus(ACURR(A_CON)) - conplus(oldCon);
+				if(condif != 0) u.uhpmax += u.ulevel*condif;
+				if(u.uhpmax < 1) u.uhpmax = 1;
+				if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+				oldCon = ACURR(A_CON);
+			}
+////////////////////////////////////////////////////////////////////////////////////////////////
 	
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
