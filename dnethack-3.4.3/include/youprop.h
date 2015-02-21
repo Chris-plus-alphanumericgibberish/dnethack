@@ -115,7 +115,8 @@
 #define HConfusion		u.uprops[CONFUSION].intrinsic
 #define Confusion		(HConfusion && !(u.specialSealsActive&SEAL_NUMINA))
 
-#define LightBlind		((Race_if(PM_DROW) && !(u.sealsActive&SEAL_AMON)) && (viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit))
+#define LightBlind		((Race_if(PM_DROW) && !(u.sealsActive&SEAL_AMON)) && (viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)\
+						&& !(ublindf && (ublindf->otyp == LENSES || ublindf->otyp == MASK)))
 #define Blinded			u.uprops[BLINDED].intrinsic
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK)
 		/* ...means blind because of a cover */
