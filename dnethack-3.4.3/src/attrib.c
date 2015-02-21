@@ -779,7 +779,7 @@ int oldlevel, newlevel;
 int
 newhp()
 {
-	int	hp, conplus;
+	int	hp;
 
 
 	if (u.ulevel == 0) {
@@ -804,17 +804,31 @@ newhp()
 	    	if (urace.hpadv.hirnd > 0) hp += rnd(urace.hpadv.hirnd);
 	    }
 	}
+	
+	hp += conplus(ACURR(A_CON));
+	
+	return((hp <= 0) ? 1 : hp);
+}
 
-	if (ACURR(A_CON) <= 3) conplus = -2;
-	else if (ACURR(A_CON) <= 6) conplus = -1;
-	else if (ACURR(A_CON) <= 14) conplus = 0;
-	else if (ACURR(A_CON) <= 16) conplus = 1;
-	else if (ACURR(A_CON) == 17) conplus = 2;
-	else if (ACURR(A_CON) == 18) conplus = 3;
+int
+conplus(con)
+	int con;
+{
+	int conplus;
+	
+	if (con <= 3) conplus = -2;
+	else if (con <= 6) conplus = -1;
+	else if (con <= 14) conplus = 0;
+	else if (con <= 16) conplus = 1;
+	else if (con == 17) conplus = 2;
+	else if (con == 18) conplus = 3;
+	else if (con == 19) conplus = 4;
+	else if (con <= 21) conplus = 5;
+	else if (con <= 24) conplus = 6;
+	else if (con == 25) conplus = 7;
 	else conplus = 4;
 	
-	hp += conplus;
-	return((hp <= 0) ? 1 : hp);
+	return conplus;
 }
 
 #endif /* OVLB */
