@@ -238,7 +238,8 @@ moveloop()
 						} else {
 							You_hear("laughter in the distance.");
 						}
-					} else pline("%s is trembling hysterically.", Monnam(mtmp));
+					} else if(sensemon(mtmp) || ((cansee(mtmp->mx,mtmp->my) || see_with_infrared(mtmp)) && canspotmon(mtmp) && !mtmp->mundetected))
+						pline("%s is trembling hysterically.", Monnam(mtmp));
 				}
 				if(mtmp->data == &mons[PM_GREAT_CTHULHU] || mtmp->data == &mons[PM_ZUGGTMOY] 
 					|| mtmp->data == &mons[PM_SWAMP_FERN]) mtmp->mspec_used = 0;
