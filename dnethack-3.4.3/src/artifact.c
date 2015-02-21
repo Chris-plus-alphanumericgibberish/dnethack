@@ -1118,7 +1118,7 @@ int tmp;
 	    spec_dbon_applies = FALSE;
 	else{
 	    spec_dbon_applies = spec_applies(weap, mon);
-//		pline("dbon applies");
+		// if(spec_dbon_applies) pline("dbon applies");
 	}
 	if (spec_dbon_applies){
 		if(otmp && otmp==uarmg && otmp->oartifact == ART_PREMIUM_HEART){
