@@ -4483,7 +4483,7 @@ LolthAttacks:
 				}
 				break;
 				case 1:
-					You("she injects you with her poison!");
+					pline("She injects you with her poison!");
 					if(Poison_resistance) pline_The("poison doesn't seem to affect you.");
 					else {
 					(void) adjattrib(A_CON, -4, TRUE);
