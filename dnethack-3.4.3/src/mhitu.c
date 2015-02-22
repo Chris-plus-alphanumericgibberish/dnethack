@@ -1631,7 +1631,7 @@ dopois:
 			&& rn2(100) >= 4){	return 0;
 		}
 		hitmsg(mtmp, mattk);
-		if (defends(AD_DRIN, uwep) || !has_head(youmonst.data)) {
+		if (defends(AD_DRIN, uwep) || !has_head(youmonst.data) || uclockwork) {
 		    You("don't seem harmed.");
 		    /* Not clear what to do for green slimes */
 		    break;
@@ -1668,7 +1668,7 @@ dopois:
 				 Your("brain has been removed!");
 		    else Your("brain is eaten!");
 		    /* No such thing as mindless players... */
-		    if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
+		    if (ABASE(A_INT) <= 3) {
 				int lifesaved = 0;
 				struct obj *wore_amulet = uamul;
 				
@@ -2975,7 +2975,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 
 				exercise(A_WIS, FALSE);
 			}
-			if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
+			if (ABASE(A_INT) <= 3) {
 				int lifesaved = 0;
 				struct obj *wore_amulet = uamul;
 				
@@ -6489,7 +6489,7 @@ int dmg;
 				}
 				//begin moved brain removal messages
 				Your("brain is cored like an apple!");
-				if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
+				if (ABASE(A_INT) <= 3) {
 					int lifesaved = 0;
 					struct obj *wore_amulet = uamul;
 					while(1) {
