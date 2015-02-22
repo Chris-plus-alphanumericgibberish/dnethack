@@ -2563,6 +2563,8 @@ const char * const hallu_gods[] = {
 	"stth the wizard",
 	"stth the valkyrie",
 	"stth the barbarian",
+	"stth the tourist",
+	"stth the healer",
 	"allihaveismymind the second demigod",
 	"allihaveismymind the vanilla valkyrie",
 	"Khor the third demigod",
