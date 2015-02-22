@@ -4240,7 +4240,9 @@ register struct monst *mon;
 						pline(Never_mind);
 						goto pay;
 					}
-					lesshungry((.8 + ((double)rn2(5))) * (turns*10));
+					turns = (.8 + ((double)rn2(5))) * (turns);
+					lesshungry(turns*10);
+					You("notice %s wound your clockwork %d times.",noit_mon_nam(mon),turns);
 					goto pay;
 				}
 			}
@@ -6182,7 +6184,9 @@ register struct monst *mon;
 					pline(Never_mind);
 					goto pay;
 				}
-				lesshungry((.8 + ((double)rn2(5))) * (turns*10));
+				turns = (.8 + ((double)rn2(5))) * (turns);
+				lesshungry(turns*10);
+				You("notice %s wound your clockwork %d times.",noit_mon_nam(mon),turns);
 				goto pay;
 			}
 		}
