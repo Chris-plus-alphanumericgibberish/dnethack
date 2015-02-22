@@ -4464,7 +4464,7 @@ LolthAttacks:
 			int tmp;
 			pline("After wrapping you up, she bites into your helpless form!");
 				exercise(A_STR, FALSE);
-			tmp = rn1(8, 4);
+			tmp = d(6, 8);
 			if(Half_physical_damage) tmp = (tmp+1) / 2;
 			losehp(tmp, "Lolth's bite", KILLED_BY);
 			switch (rn2(2)) {
