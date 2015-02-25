@@ -136,6 +136,8 @@ struct obj {
 			/* Also, records special features for weapons. */
 			/* 	Records runes for wooden weapons */
 			/* 	Records moon phase for moon axes */
+			/* 	Records theft type for stealing artifacts (reaver (scimitar) and averice (shortsword) */
+			
 #define ECLIPSE_MOON	0
 #define CRESCENT_MOON	1
 #define HALF_MOON		2

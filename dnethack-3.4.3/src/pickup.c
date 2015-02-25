@@ -387,6 +387,7 @@ int what;		/* should be a long */
 	int i, n, res, count, n_tried = 0, n_picked = 0;
 	menu_item *pick_list = (menu_item *) 0;
 	boolean autopickup = what > 0;
+	boolean skipmessages = what == 2;
 	struct obj *objchain;
 	int traverse_how;
 
@@ -433,14 +434,12 @@ int what;		/* should be a long */
 		 * teleported onto the object.  They shouldn't pick it up.
 		 */
 		if ((multi && !flags.run) || (autopickup && !flags.pickup)) {
-		    check_here(FALSE);
+		    if(!skipmessages) check_here(FALSE);
 		    return (0);
 		}
 		if (notake(youmonst.data)) {
-		    if (!autopickup)
-			You("are physically incapable of picking anything up.");
-		    else
-			check_here(FALSE);
+		    if (!autopickup) You("are physically incapable of picking anything up.");
+		    else if(!skipmessages) check_here(FALSE);
 		    return (0);
 		}
 
@@ -595,7 +594,7 @@ end_query:
 		if (n_picked) newsym(u.ux,u.uy);
 
 		/* see whether there's anything else here, after auto-pickup is done */
-		if (autopickup) check_here(n_picked > 0);
+		if (autopickup && !skipmessages) check_here(n_picked > 0);
 	}
 	return (n_tried > 0);
 }

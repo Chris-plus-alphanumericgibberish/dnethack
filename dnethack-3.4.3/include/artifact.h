@@ -265,6 +265,7 @@ struct artifact {
 #define SPIRITNAMES	(LAST_PROP+39)
 #define RAISE_UNDEAD	(LAST_PROP+40)
 #define FALLING_STARS	(LAST_PROP+41)
+#define THEFT_TYPE		(LAST_PROP+42)
 
 #define is_nameable_artifact(a) (\
 			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\
