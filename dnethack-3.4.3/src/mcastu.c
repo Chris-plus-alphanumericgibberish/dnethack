@@ -1304,7 +1304,7 @@ summon_alien:
      case ARROW_RAIN: /* actually other things as well */
      {
        struct obj *otmp;
-       int weap, i;
+       int weap, i, tdmg;
        if (!rn2(3)) weap = ARROW;
        else if (!rn2(3)) weap = DAGGER;
        else if (!rn2(3)) weap = SPEAR;
@@ -1322,14 +1322,22 @@ summon_alien:
                rn2(2) ? "shower" : "hail", xname(otmp));
        dmg = 0;
        for (i = 0; i < otmp->quan; i++) {
-          dmg += dmgval(otmp, &youmonst, 0);
+			tdmg = dmgval(otmp, &youmonst, 0);
+			if (tdmg && u.uac < 0) {
+				if(u.sealsActive&SEAL_BALAM) tdmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+				else tdmg -= rnd(-u.uac);
+				
+				if (tdmg < 1) tdmg = 1;
+				
+			}
+			if (Half_physical_damage) tdmg = (tdmg + 1) / 2;
+			dmg += tdmg;
        }
         if (!flooreffects(otmp, u.ux, u.uy, "fall")) {
             place_object(otmp, u.ux, u.uy);
             stackobj(otmp);
             newsym(u.ux, u.uy);
         }
-        if (Half_physical_damage) dmg = (dmg + 1) / 2;
 	   stop_occupation();
      } break;
      case DROP_BOULDER:
