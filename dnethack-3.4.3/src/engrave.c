@@ -4801,7 +4801,7 @@ static const char *epitaphs[] = {
 	
 	"FIQ:  One step from divinity.",
 	"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
-	"FIQ killed by a clockwork bug.",
+	"FIQ, killed by a clockwork bug.",
 	
 	"Khor:  \"Wait, did that axe just fall off the edge of the world?\"",
 	

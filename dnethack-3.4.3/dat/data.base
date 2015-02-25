@@ -844,24 +844,27 @@ blob
 * blob
 ooze
 * ooze
-*pudding
 	These giant amoeboid creatures look like nothing more than
 	puddles of slime, but they both live and move, feeding on
 	metal or wood as well as the occasional dungeon explorer to
 	supplement their diet.
+blood bloater
+	The most distinguishing feature of Bloodbloaters which set them
+	apart from other Oozes is their red, egg yolk-like center, which
+	stands out starkly from their clear, circular bodies that measure
+	about 4 inches in diameter.
 	
-	But we were not on a station platform.  We were on the track ahead
-	as the nightmare, plastic column of fetid black iridescence oozed
-	tightly onward through its fifteen-foot sinus, gathering unholy
-	speed and driving before it a spiral, re-thickening cloud of the
-	pallid abyss vapor.  It was a terrible, indescribable thing vaster
-	than any subway train -- a shapeless congeries of protoplasmic
-	bubbles, faintly self-luminous, and with myriads of temporary eyes
-	forming and unforming as pustules of greenish light all over the
-	tunnel-filling front that bore down upon us, crushing the frantic
-	penguins and slithering over the glistening floor that it and its
-	kind had swept so evilly free of all litter.
-		[ At the Mountains of Madness, by H.P. Lovecraft ]
+	When in contact with prey, Bloodbloaters move into contact as a 
+	swarm and exude digestive enzymes from thin red flagellum that are
+	attached to the brain. The digestive enzymes eat through cloth and
+	flesh as a acid - and once in contact with the blood-stream, act 
+	as a anesthetic. Thus - it is not unheard of for a person to 
+	undertake massive damage or even death from a Bloodbloater swarm 
+	without feeling anything.
+	
+	Bloodbloaters are parthenogenic organisms, and reproduce 
+	constantly, wherever food is most plentiful.
+		[ The Clock Strikes 12 ]
 bo*shuriken
 	A thin, metal dart.
 bone devil
@@ -966,6 +969,23 @@ bugbear
 	larger and more hairy.  They are aggressive carnivores and
 	sometimes kill just for the treasure their victims may be
 	carrying.
+
+	Bugbears are giant, hairy  cousins of goblins who frequent the same
+	areas  as  their smaller  relatives.  Bugbears are  large and  very
+	muscular, standing 7' tall.  Their hides range from light yellow to
+	yellow brown  and their  thick coarse  hair varies  in colour  from
+	brown  to  brick  red.  Though  vaguely   humanoid  in  appearance,
+	bugbears seem to contain the  blood of some large  carnivore. Their
+	eyes recall  those of  some savage  bestial animal, being  greenish
+	white with  red pupils, while their  ears are  wedge shaped, rising
+	from the  top of  their heads. A  bugbear's mouth  is full of  long
+	sharp fangs.
+	Bugbears have two main goals  in life: survival and  treasure. They
+	are  superb  carnivores,  winnowing  out  the   weak  and  careless
+	adventurer, monster, and animal. Goblins  are always on  their toes
+	when  bugbears are present, for  the weak or  stupid quickly end up
+	in the stewpot.
+		[ Monstrous Manual, by TSR, Inc. ]
 bugle
 	'I read you by your bugle horn
 	And by your palfrey good,
@@ -1356,7 +1376,7 @@ cobra
 	hood to keep the sun off Brahm as he slept.  Look, and be
 	afraid!'
 		[ Rikki-tikki-tavi, by Rudyard Kipling ]
-c*ckatrice
+cockatrice
 	Once in a great while, when the positions of the stars are
 	just right, a seven-year-old rooster will lay an egg.  Then,
 	along will come a snake, to coil around the egg, or a toad,
@@ -2243,6 +2263,7 @@ elbereth
 	it very quick to engrave, and may be reinforced up to seven
 	times.
 *elder sign
+*eye of yggdrasil
 	An strange symbol that has come down to the younger races out
 	of the forgotten past, the elder sign resembles a six-branched
 	limb: a curved stroke with three branches above and two below.
@@ -5746,6 +5767,10 @@ olog-hai
 	Twilight they could endure the Sun....  They spoke little,
 	and the only tongue they knew was the Black Speech of Barad-dur.
 		[ The Return of the King, by J.R.R. Tolkien ]
+oona
+	The Morwel is the queen of the Eladrin.
+	The Morwel has always been queen.
+	The Eladrin took no side in the war of Law and Chaos.
 oracle
 delphi
 p*thia
@@ -6353,6 +6378,30 @@ ptah
 	consisting of a staff surmounted by the _ankh_ symbol of
 	life.  He is otherwise symbolized by his sacred animal, the
 	bull.
+*pudding
+	   " It's all very fine," said the Puddin' gloomily, " singing about
+	the joys of being penguins and pirates, but how'd you like to be a
+	Puddin' and be eaten all day long? "
+	   And in a very gruff voice he sang as follows :--
+	      " O, who would be a puddin',
+		  A puddin' in a pot,
+		A puddin' which is stood on
+		  A fire which is hot ?
+		O sad indeed the lot
+		Of puddin's in a pot.
+	...
+	      " But as I am a puddin',
+		  A puddin' in a pot,
+		I hope you get the stomachache
+		  For eatin' me a lot.
+		I hope you get it hot,
+		  You puddin'-eatin' lot ! "
+	   " Very well sung, Albert," said Bill encouragingly, " though you're
+	a trifle husky in your undertones, which is no doubt due to the gravy
+	in your innards.  However, as a reward for bein' a bright little
+	feller we shall have a slice of you all round before turnin' in for
+	the night."
+	[ The Magic Pudding: The Adventures of Bunyip Bluegum. Norman Lindsay ]
 *purple worm
 	A gargantuan version of the harmless rain-worm, the purple
 	worm poses a huge threat to the ordinary adventurer.  It is
@@ -7652,6 +7701,10 @@ tensa zangetsu
 	the blade, however, are far beyond what a mortal can endure.
 	Any living creature that wields this sword will find their
 	body and bones gradually ground into dust.
+thorin
+	Known as 'Thorin Oakenshield' because in the Battle of Azanulbizar
+	he used an oak-branch as a shield and club.  He is the King of
+	Durin's folk in exile, and wears a golden necklace and a belt.
 thoth
 	The Egyptian god of the moon and wisdom, Thoth is the patron
 	deity of scribes and of knowledge, including scientific,
@@ -7953,15 +8006,15 @@ tsurugi
 ~*spellbook
 turquoise*
 	TUBAL: There came divers of Antonio's creditors in my company
-	to Venice that swear he cannot choose but break.
+		to Venice that swear he cannot choose but break.
 	SHYLOCK: I am very glad of it; I'll plague him, I'll torture him;
-	I am glad of it.
+		I am glad of it.
 	TUBAL: One of them showed me a ring that he had of your
-	daughter for a monkey.
+		daughter for a monkey.
 	SHYLOCK: Out upon her! Thou torturest me, Tubal. It was my
-	turquoise; I had it of Leah when I was a bachelor; I would
-	not have given it for a wilderness of monkeys.
-		[ The Merchant of Venice, by William Shakespeare ]
+		turquoise; I had it of Leah when I was a bachelor; I 
+		would not have given it for a wilderness of monkeys.
+	[ The Merchant of Venice, by William Shakespeare ]
 twoflower
 guide
 	"Rincewind!"
