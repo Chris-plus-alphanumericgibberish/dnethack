@@ -4223,7 +4223,7 @@ register struct monst *mon;
 					pline("That was a very educational experience.");
 					pluslvl(FALSE);
 					goto pay;
-				} else{
+				} else if(u.uhunger < .5*u.uhungermax){
 					You("persuade %s to wind your clockwork.",
 						noit_mon_nam(mon));
 					struct obj *key;
@@ -4243,6 +4243,10 @@ register struct monst *mon;
 					turns = (.8 + ((double)rn2(5))) * (turns);
 					lesshungry(turns*10);
 					You("notice %s wound your clockwork %d times.",noit_mon_nam(mon),turns);
+					goto pay;
+				} else {
+					pline("%s looks happy, but confused.",
+						noit_Monnam(mon));
 					goto pay;
 				}
 			}
@@ -4728,7 +4732,7 @@ struct monst *mon;
 				pluslvl(FALSE);
 				pluslvl(FALSE);
 				goto pay;
-			} else{
+			} else if(u.uhunger < .5*u.uhungermax){
 				You("persuade %s to wind your clockwork.",
 					noit_mon_nam(mon));
 				struct obj *key;
@@ -4746,6 +4750,11 @@ struct monst *mon;
 					goto pay;
 				}
 				lesshungry(turns*10);
+				You("notice %s wound your clockwork %d times.",noit_mon_nam(mon),turns);
+				goto pay;
+			} else {
+				pline("%s looks happy, but confused.",
+					noit_Monnam(mon));
 				goto pay;
 			}
 		}
@@ -4963,7 +4972,7 @@ struct monst *mon;
 				pluslvl(FALSE);
 				pluslvl(FALSE);
 				goto pay;
-			} else{
+			} else if(u.uhunger < .5*u.uhungermax){
 				You("persuade %s to wind your clockwork.",
 					noit_mon_nam(mon));
 				struct obj *key;
@@ -4981,6 +4990,11 @@ struct monst *mon;
 					goto pay;
 				}
 				lesshungry(turns*10);
+				You("notice %s wound your clockwork %d times.",noit_mon_nam(mon),turns);
+				goto pay;
+			} else {
+				pline("%s looks happy, but confused.",
+					noit_Monnam(mon));
 				goto pay;
 			}
 		}
@@ -6167,7 +6181,7 @@ register struct monst *mon;
 				pline("That was a very educational experience.");
 				pluslvl(FALSE);
 				goto pay;
-			} else{
+			} else if(u.uhunger < .5*u.uhungermax){
 				You("persuade %s to wind your clockwork.",
 					noit_mon_nam(mon));
 				struct obj *key;
@@ -6187,6 +6201,10 @@ register struct monst *mon;
 				turns = (.8 + ((double)rn2(5))) * (turns);
 				lesshungry(turns*10);
 				You("notice %s wound your clockwork %d times.",noit_mon_nam(mon),turns);
+				goto pay;
+			} else {
+				pline("%s looks happy, but confused.",
+					noit_Monnam(mon));
 				goto pay;
 			}
 		}
