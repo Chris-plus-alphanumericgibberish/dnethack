@@ -3353,8 +3353,8 @@ boolean atme;
 				 * understand quite well how to cast spells.
 				 */
 				intell = acurr(A_INT);
-				if (!Role_if(PM_WIZARD)){
-					if(Race_if(PM_INCANTIFIER)) intell -= 6;
+				if (!Role_if(PM_WIZARD) && !(Race_if(PM_INCANTIFIER) && u.sealsActive&SEAL_PAIMON)){
+					if(Race_if(PM_INCANTIFIER) || u.sealsActive&SEAL_PAIMON) intell -= 6;
 					else intell -= 10;
 				}
 				if(intell < 15);
@@ -3863,16 +3863,16 @@ int spell;
 		else statused = ACURR(urole.spelstat);
 	} else {
 		if(u.specialSealsActive&SEAL_NUMINA){
-		if(abs(u.wisSpirits - u.intSpirits) <= 1) statused = max(ACURR(A_WIS), ACURR(A_INT));
+			if(abs(u.wisSpirits - u.intSpirits) <= 1) statused = max(ACURR(A_WIS), ACURR(A_INT));
 		} else if(u.wisSpirits > u.intSpirits){
-		statused = ACURR(A_WIS);
+			statused = ACURR(A_WIS);
 		} else if(u.wisSpirits < u.intSpirits){
-		statused = ACURR(A_INT);
+			statused = ACURR(A_INT);
 		} else if(u.wisSpirits || u.intSpirits){
-		statused = max(ACURR(A_WIS), ACURR(A_INT));
+			statused = max(ACURR(A_WIS), ACURR(A_INT));
 		} else {
-		if(Race_if(PM_INCANTIFIER)) statused = ACURR(A_INT);
-		else statused = min(ACURR(A_WIS), ACURR(A_INT));
+			if(Race_if(PM_INCANTIFIER)) statused = ACURR(A_INT);
+			else statused = min(ACURR(A_WIS), ACURR(A_INT));
 		}
 	}
 
