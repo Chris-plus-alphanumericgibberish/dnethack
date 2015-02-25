@@ -224,7 +224,22 @@ struct Race {
 	/* dictionary entries (dat/data.bas) */
 };
 
+struct Monrace {
+	xchar attrbase[A_MAX];	/* lowest initial attributes */
+	xchar attrdist[A_MAX];	/* distribution of initial attributes */
+	struct RoleAdvance chpadv; /* "class" hit point advancement */
+	struct RoleAdvance cenadv; /* "class" energy advancement */
+	
+	xchar start_points;		/* default stat points */
+	
+	xchar attrmin[A_MAX];	/* minimum allowable attribute */
+	xchar attrmax[A_MAX];	/* maximum allowable attribute */
+	struct RoleAdvance rhpadv; /* "racial" hit point advancement */
+	struct RoleAdvance renadv; /* "racial" energy advancement */
+};
+
 extern const struct Race races[];	/* Table of available races */
+extern const struct Monrace mraces[];	/* Table of default monster races */
 extern struct Race urace;
 #define Race_if(X)	(urace.malenum == (X))
 #define Race_switch	(urace.malenum)
