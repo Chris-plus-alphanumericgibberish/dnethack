@@ -4135,6 +4135,10 @@ arti_invoke(obj)
 					break;
 					case COMMAND_E_LANCE:
 						uwep->otyp = ELVEN_LANCE;
+					case COMMAND_SCIMITAR:
+						uwep->otyp = SCIMITAR;
+					case COMMAND_WHIP:
+						uwep->otyp = BULLWHIP;
 					break;
 					/*These effects are limited by timeout*/
 					case COMMAND_LADDER:
@@ -4223,6 +4227,33 @@ arti_invoke(obj)
 								}
 								healup(2*dmg, 0, FALSE, TRUE);
 								You_feel("better.");
+							}
+						}
+					break;
+					case COMMAND_STRIKE:
+						if(!getdir((char *)0) ||
+							(!u.dx && !u.dy) ||
+							((mtmp = m_at(u.ux+u.dx,u.uy+u.dy)) == 0)
+						){
+							You("swing wildly.");
+						} else {
+							int dmg = d(5,6);
+							int rcvr;
+							if (resists_poison(mtmp)){
+								shieldeff(mtmp->mx, mtmp->my);
+					break;
+							} else {
+								if(!rn2(10)) dmg += mtmp->mhp;
+								mtmp->mhp -= dmg;
+								mtmp->mhpmax -= dmg;
+								mtmp->m_lev -= (int)(dmg/4.5);
+								if(mtmp->m_lev < 0) mtmp->m_lev = 0; 
+								if (mtmp->mhp <= 0 || mtmp->mhpmax <= 0 || mtmp->m_lev < 1)
+									xkilled(mtmp, 1);
+								else {
+								if (canseemon(mtmp))
+									pline("%s suddenly seems weaker!", Monnam(mtmp));
+								}
 							}
 						}
 					break;
@@ -4747,6 +4778,22 @@ struct obj *obj;
 				'l', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		}
+	} else if(obj->oartifact == ART_GILDED_SWORD_OF_Y_HA_TALLA){
+		if(obj->otyp != SCIMITAR){
+			Sprintf(buf, "Become a sword");
+			any.a_int = COMMAND_SCIMITAR;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				's', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
+		
+		if(obj->otyp != BULLWHIP){
+			Sprintf(buf, "Become a scorpion whip");
+			any.a_int = COMMAND_WHIP;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'w', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
 	} else {
 		if(obj->otyp != RAPIER){
 			Sprintf(buf, "Become a rapier");
@@ -4790,43 +4837,51 @@ struct obj *obj;
 	}
 	
 	if(obj->age < monstermoves){
-		if((obj->otyp == MACE || obj->otyp == ELVEN_MACE || obj->otyp == SILVER_KHAKKHARA) && (
-		   u.uswallow || 
-		   (!u.uhave.amulet && Can_rise_up(u.ux, u.uy, &u.uz)) || 
-		   (u.uhave.amulet && !Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) && !Underwater) 
-		  )){
-			Sprintf(buf, "Become a ladder");
-			any.a_int = COMMAND_LADDER;	/* must be non-zero */
+		if(obj->oartifact == ART_GILDED_SWORD_OF_Y_HA_TALLA){
+			Sprintf(buf, "Strike");
+			any.a_int = COMMAND_STRIKE;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
-				'L', 0, ATR_NONE, buf,
+				'S', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		} else {
+			if((obj->otyp == MACE || obj->otyp == ELVEN_MACE || obj->otyp == SILVER_KHAKKHARA) && (
+			   u.uswallow || 
+			   (!u.uhave.amulet && Can_rise_up(u.ux, u.uy, &u.uz)) || 
+			   (u.uhave.amulet && !Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) && !Underwater) 
+			  )){
+				Sprintf(buf, "Become a ladder");
+				any.a_int = COMMAND_LADDER;	/* must be non-zero */
+				add_menu(tmpwin, NO_GLYPH, &any,
+					'L', 0, ATR_NONE, buf,
+					MENU_UNSELECTED);
+			}
+			
+			Sprintf(buf, "Show me my surroundings");
+			any.a_int = COMMAND_CLAIRVOYANCE;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'S', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			
+			Sprintf(buf, "Inspire fear");
+			any.a_int = COMMAND_FEAR;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'F', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			
+			if((obj->otyp == SPEAR || obj->otyp == DROVEN_SPEAR || obj->otyp == SILVER_KHAKKHARA || obj->otyp == ELVEN_SPEAR)){
+				Sprintf(buf, "Give me your life");
+				any.a_int = COMMAND_LIFE;	/* must be non-zero */
+				add_menu(tmpwin, NO_GLYPH, &any,
+					'G', 0, ATR_NONE, buf,
+					MENU_UNSELECTED);
+			}
+			
+			Sprintf(buf, "Kneel");
+			any.a_int = COMMAND_KNEEL;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'K', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		}
-		
-		Sprintf(buf, "Show me my surroundings");
-		any.a_int = COMMAND_CLAIRVOYANCE;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			'S', 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		
-		Sprintf(buf, "Inspire fear");
-		any.a_int = COMMAND_FEAR;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			'F', 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		
-		if((obj->otyp == SPEAR || obj->otyp == DROVEN_SPEAR || obj->otyp == SILVER_KHAKKHARA || obj->otyp == ELVEN_SPEAR)){
-			Sprintf(buf, "Give me your life");
-			any.a_int = COMMAND_LIFE;	/* must be non-zero */
-			add_menu(tmpwin, NO_GLYPH, &any,
-				'G', 0, ATR_NONE, buf,
-				MENU_UNSELECTED);
-		}
-		
-		Sprintf(buf, "Kneel");
-		any.a_int = COMMAND_KNEEL;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			'K', 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
 	}
 	end_menu(tmpwin, prompt);
 

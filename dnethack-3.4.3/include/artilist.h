@@ -26,6 +26,7 @@ static const char *artifact_names[] = {
 #define     ELEC(a,b)	{0,AD_ELEC,a,b}		/* electrical shock */
 #define     ACID(a,b)	{0,AD_ACID,a,b}
 #define     STUN(a,b)	{0,AD_STUN,a,b}		/* magical attack */
+#define     DRST(a,b)	{0,AD_DRST,a,b}		
 
 STATIC_OVL NEARDATA struct artifact artilist[] = {
 #endif	/* MAKEDEFS_C */
@@ -279,6 +280,12 @@ A("Fire Brand",			LONG_SWORD,
 	FIRE(1,0),	FIRE(0,0),	NO_CARY,	
 	0, A_NONE, NON_PM, NON_PM, 3000L, 
 	0,0,0),
+
+A("Gilded Sword of Y'ha-Talla",			SCIMITAR,
+	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN), 0, 0,
+	DRST(5,0),	DRST(0,0),	NO_CARY,
+	LORDLY, A_NONE, NON_PM, NON_PM, 3000L, 
+	SPFX2_POISONED,0,0),
 
 A("Mirror Brand",	LONG_SWORD,	
 	(SPFX_ATTK|SPFX_RESTR|SPFX_DALIGN|SPFX_REFLECT), 0,0,

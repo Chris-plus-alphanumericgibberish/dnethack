@@ -201,6 +201,11 @@
 #define COMMAND_LIFE			19
 #define COMMAND_KNEEL			20
 
+#define COMMAND_SCIMITAR		21
+#define COMMAND_WHIP			22
+#define COMMAND_STRIKE			23
+
+
 struct artifact {
 	int	    otyp;
 	const char  *name;
