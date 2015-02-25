@@ -297,7 +297,7 @@ struct obj {
 				|| (otmp)->otyp == ELVEN_MITHRIL_COAT\
 				|| (otmp)->otyp == ELVEN_CLOAK\
 				|| (otmp)->otyp == ELVEN_SHIELD\
-				|| (otmp)->otyp == ELVEN_ROBES\
+				|| (otmp)->otyp == ELVEN_TOGA\
 				|| (otmp)->otyp == ELVEN_BOOTS)
 #define is_orcish_armor(otmp)	((otmp)->otyp == ORCISH_HELM\
 				|| (otmp)->otyp == ORCISH_CHAIN_MAIL\

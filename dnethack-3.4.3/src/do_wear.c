@@ -651,7 +651,7 @@ Armor_on(VOID_ARGS)
 		ABON(A_CHA) += 2 + uarm->spe;
 		flags.botl = 1;
 	}
-	else if(uarm->otyp == ELVEN_ROBES){
+	else if(uarm->otyp == ELVEN_TOGA){
 		You("%s very elegant in your %s.", Blind ||
 				(Invis && !See_invisible) ? "feel" : "look",
 				OBJ_NAME(objects[uarm->otyp]));
@@ -676,7 +676,7 @@ Armor_off(VOID_ARGS)
 		ABON(A_CHA) -= (2 + uarm->spe);
 		flags.botl = 1;
 	}
-	else if(uarm->otyp == ELVEN_ROBES && !cancelled_don){
+	else if(uarm->otyp == ELVEN_TOGA && !cancelled_don){
 		ABON(A_CHA) -= 2;
 		flags.botl = 1;
 	}
@@ -1828,7 +1828,7 @@ int base_uac()
 						)
 					);
 		else if(uarm->otyp != DWARVISH_MITHRIL_COAT && uarm->otyp != ELVEN_MITHRIL_COAT &&
-			uarm->otyp != LEATHER_JACKET && uarm->otyp != ELVEN_ROBES && uarm->otyp != BLACK_DRESS)
+			uarm->otyp != LEATHER_JACKET && uarm->otyp != ELVEN_TOGA && uarm->otyp != BLACK_DRESS)
 				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
 	}
 	uac -= dexbonus;
