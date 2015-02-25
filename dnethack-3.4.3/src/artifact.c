@@ -3394,57 +3394,63 @@ arti_invoke(obj)
 			   }
 	break;
 	case FALLING_STARS:{
-				int starfall = rnd(u.ulevel/10+1), x, y, n;
-				coord cc;
-				verbalize("Even Stars Fall");
-				for (starfall; starfall > 0; starfall--) {
-					x = rn2(COLNO-2)+1;
-					y = rn2(ROWNO-2)+1;
-					cc.x=x;cc.y=y;
-					n=rnd(4)+1;
-					explode(x, y,
-						8, //1 = AD_PHYS, explode uses nonstandard damage type flags...
-						d(5,6), 0,
-						EXPL_MUDDY);
-					while(n--) {
-						explode(x, y,
-							1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-							d(5,6), 0,
-							EXPL_FIERY);
-						
-						x = cc.x+rnd(3)-1; y = cc.y+rnd(3)-1;
-						if (!isok(x,y)) {
-							/* Spell is reflected back to center */
-							x = cc.x;
-							y = cc.y;
-						}
-					}
-						do_earthquake_at(10, cc.x, cc.y);
-						do_earthquake_at(6, cc.x, cc.y);
+		int starfall = rnd(u.ulevel/10+1), x, y, n;
+		coord cc;
+		verbalize("Even Stars Fall");
+		for (starfall; starfall > 0; starfall--){
+			x = rn2(COLNO-2)+1;
+			y = rn2(ROWNO-2)+1;
+			cc.x=x;cc.y=y;
+			n=rnd(4)+1;
+			explode(x, y,
+				8, //1 = AD_PHYS, explode uses nonstandard damage type flags...
+				d(5,6), 0,
+				EXPL_MUDDY);
+			while(n--) {
+				explode(x, y,
+					1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
+					d(5,6), 0,
+					EXPL_FIERY);
+				
+				x = cc.x+rnd(3)-1; y = cc.y+rnd(3)-1;
+				if (!isok(x,y)) {
+					/* Spell is reflected back to center */
+					x = cc.x;
+					y = cc.y;
 				}
-				awaken_monsters(ROWNO * COLNO);
-			   }
+			}
+				do_earthquake_at(10, cc.x, cc.y);
+				do_earthquake_at(6, cc.x, cc.y);
+		}
+		awaken_monsters(ROWNO * COLNO);
+	} break;
+	case THEFT_TYPE:
+		if(obj->ovar1 == 0){
+			if(yn("Switch to autopickup mode")) obj->ovar1 = 1;
+		} else {
+			if(yn("Switch to interactive mode")) obj->ovar1 = 0;
+		}
 	break;
 	case SHADOW_FLARE:
-				if( (obj->spe > 0) && throweffect()){
-					exercise(A_WIS, TRUE);
-					cc.x=u.dx;cc.y=u.dy;
-					n=3;
-					while(n--) {
-						int type = d(1,3);
-						explode(u.dx, u.dy,
-							4, //4 = AD_DISN, explode uses nonstandard damage type flags...
-							u.ulevel + 10 + spell_damage_bonus(), 0,
-							EXPL_DARK);
-						u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
-						if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||
-							IS_STWALL(levl[u.dx][u.dy].typ) || u.uswallow) {
-							/* Spell is reflected back to center */
-								u.dx = cc.x;
-								u.dy = cc.y;
-						}
-					}
+		if( (obj->spe > 0) && throweffect()){
+			exercise(A_WIS, TRUE);
+			cc.x=u.dx;cc.y=u.dy;
+			n=3;
+			while(n--) {
+				int type = d(1,3);
+				explode(u.dx, u.dy,
+					4, //4 = AD_DISN, explode uses nonstandard damage type flags...
+					u.ulevel + 10 + spell_damage_bonus(), 0,
+					EXPL_DARK);
+				u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
+				if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||
+					IS_STWALL(levl[u.dx][u.dy].typ) || u.uswallow) {
+					/* Spell is reflected back to center */
+						u.dx = cc.x;
+						u.dy = cc.y;
 				}
+			}
+		}
 	break;
 	case SING_SPEAR:
 		if(!exist_artifact(SILVER_SPEAR, "Blade Singer's Spear") ){
