@@ -146,7 +146,7 @@ struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 		    if(!u.ustuck && !mtmp->mflee && dmgtype(mtmp->data,AD_STCK))
 			u.ustuck = mtmp;
 		}
-		wakeup(mtmp); /* always necessary; also un-mimics mimics */
+		if(!mtmp->mpeaceful) wakeup(mtmp); /* always necessary; also un-mimics mimics */
 		return TRUE;
 	}
 
