@@ -749,7 +749,7 @@ register int amount;
 	    return(1);
 	}
 	/* there is a (soft) upper and lower limit to uwep->spe */
-	safelim = uwep->otyp == CRYSTAL_SWORD ? 7 : 5;
+	safelim = uwep->otyp == CRYSTAL_SWORD ? 8 : 5;
 	if(((uwep->spe > safelim && amount >= 0) || (uwep->spe < -safelim && amount < 0))
 								&& rn2(3) && uwep->oartifact != ART_ROD_OF_SEVEN_PARTS
 								&& uwep->oartifact != ART_PEN_OF_THE_VOID
