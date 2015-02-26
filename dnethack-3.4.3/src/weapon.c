@@ -270,6 +270,9 @@ int spec;
 		
 		case CRYSTAL_SWORD:	tmp += d(1,12); break;
 		
+		case AXE:
+			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(2,4);
+		break;
 		case BATTLE_AXE:
 		case BARDICHE:
 		case TRIDENT:		tmp += d(2,4); break;
@@ -342,6 +345,10 @@ int spec;
 		break;
 		
 		case CRYSTAL_SWORD:	tmp += d(1,8); break;
+		
+		case AXE:
+			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(1,4);
+		break;
 		
 		case BATTLE_AXE:
 		case BARDICHE:
