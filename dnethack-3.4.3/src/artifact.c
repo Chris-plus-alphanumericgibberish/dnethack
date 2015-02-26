@@ -1027,6 +1027,8 @@ struct monst *mtmp;
 	yours = (mtmp == &youmonst);
 	ptr = mtmp->data;
 	
+	if(weap == &artilist[ART_GIANTSLAYER] && bigmonst(ptr)) return TRUE;
+	
 	if (weap->spfx & SPFX_DMONS) {
 	    return (ptr == &mons[(int)weap->mtype]);
 	} else if (weap->spfx & SPFX_DCLAS) {
@@ -2163,9 +2165,11 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	 }
 	}
-	if(otmp->oartifact == ART_GIANTSLAYER){//If we're here, the target has the apropriate flag.
+	if(
+		otmp->oartifact == ART_GIANTSLAYER && (throws_rocks(mdef->data) || is_giant(mdef->data))
+	){
 		mdef->movement -= NORMAL_SPEED / 2;
-		if (!youdefend) pline("The great axe hamstrings %s!",mon_nam(mdef));
+		if (!youdefend) pline("The axe hamstrings %s!",mon_nam(mdef));
 		else pline("The hateful axe hamstrings you!");
 	}
 	if(spec_ability2(otmp, SPFX2_DANCER)){
