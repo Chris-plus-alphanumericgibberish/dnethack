@@ -1947,11 +1947,11 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			   messaged = TRUE;
 		  }
 	}
-	if( (Hallucination && youattack) &&
-			(is_covetous(mdef->data)) && 
-			otmp->oartifact == ART_TROLLSBANE){
-				You("flame the nasty troll!");  //trollsbane hits monsters that pop in to ruin your day.
-				*dmgptr += d(2,20) + 2*otmp->spe; //boosts power better than demonbane hitting silver hating.
+	if( youattack && is_covetous(mdef->data) && 
+			otmp->oartifact == ART_TROLLSBANE
+	){
+		if(Hallucination) You("flame the nasty troll!");  //trollsbane hits monsters that pop in to ruin your day.
+		*dmgptr += d(2,20) + 2*otmp->spe; //boosts power better than demonbane hitting silver hating.
 	}
     if ( spec_ability2(otmp, SPFX2_BLIND) && !resists_blnd(mdef) && !rn2(3)) {
           long rnd_tmp;
