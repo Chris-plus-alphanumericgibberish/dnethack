@@ -158,8 +158,8 @@ A("Werebane",			SILVER_SABER, //needs quote
 
 A("Giantslayer",		AXE,
 	(SPFX_RESTR|SPFX_DFLAG2), SPFX_WARN, (M2_GIANT|M2_ROCKTHROW), /* deducts move from hit giants. */
-	PHYS(10,20),	NO_DFNS,	NO_CARY,								/* also works vs a few late game enemies. */
-	0, A_NONE, NON_PM, NON_PM, 2000L, 
+	PHYS(10,20),	NO_DFNS,	NO_CARY, /* also works vs a few late game enemies, and the bonus damage aplies to all large monsters. */
+	0, A_NONE, NON_PM, NON_PM, 2000L, 	 /* also gets bonus damage, +1d4/+2d4, for d6+d4/3d4 total. */
 	0,0,0),
 
 A("Vampire Killer",			BULLWHIP,
@@ -182,12 +182,12 @@ A("Peace Keeper",		ATHAME,
 
 A("Ogresmasher",		WAR_HAMMER, //needs quote
 	(SPFX_RESTR|SPFX_DCLAS|SPFX_BEHEAD), 0, S_OGRE, //BEHEAD code smashes ogres
-	PHYS(10,20),	NO_DFNS,	NO_CARY,			//set str to 25, and smashing ogres excercises str and wis
-	0, A_NONE, NON_PM, NON_PM, 2000L, 				//overall maybe weakest of the banes
+	PHYS(10,20),	NO_DFNS,	NO_CARY,			//set str and con to 25, and smashing ogres excercises str and wis
+	0, A_NONE, NON_PM, NON_PM, 2000L,
 	0,0,0),
 
 A("Trollsbane",			MORNING_STAR, //code early in attack petrifies trolls
-	(SPFX_RESTR|SPFX_DFLAG1), 0, M1_REGEN, //sometimes gives bonus damage against monsters who pop in to ruin your day.
+	(SPFX_RESTR|SPFX_DFLAG1), 0, M1_REGEN, //also gives bonus damage against monsters who pop in to ruin your day.
 	PHYS(10,20),	NO_DFNS,	NO_CARY, //needs quote
 	0, A_NONE, NON_PM, NON_PM, 2000L, 
 	SPFX2_SILVERED|SPFX2_BRIGHT,0,0),//Silvered
