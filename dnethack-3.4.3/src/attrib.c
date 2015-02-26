@@ -868,12 +868,19 @@ int x;
 	if (x == A_STR) {
 		if ((uarmg && uarmg->otyp == GAUNTLETS_OF_POWER) || 
 			(uwep && uwep->oartifact == ART_SCEPTRE_OF_MIGHT) || 
-			(uwep && uwep->oartifact == ART_OGRESMASHER) ) return(125);
+			(uwep && uwep->oartifact == ART_OGRESMASHER) ||
+			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER)
+		) return(125);
 #ifdef WIN32_BUG
 		else return(x=((tmp >= 125) ? 125 : (tmp <= 3) ? 3 : tmp));
 #else
 		else return((schar)((tmp >= 125) ? 125 : (tmp <= 3) ? 3 : tmp));
 #endif
+	} else if (x == A_CON) {
+		if (
+			(uwep && uwep->oartifact == ART_OGRESMASHER) ||
+			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER)
+		) return(25);
 	} else if (x == A_DEX) {
 		if (
 			(uarmg && uarmg->oartifact == ART_PREMIUM_HEART)
