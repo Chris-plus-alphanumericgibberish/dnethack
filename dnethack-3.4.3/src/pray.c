@@ -2565,6 +2565,9 @@ const char * const hallu_gods[] = {
 	"stth the barbarian",
 	"stth the tourist",
 	"stth the healer",
+	"stth the pirate", /* <stth> LOL RIGHT... FIRST DNETHACK STREAK
+						  <stth> tiny 2-game streak, but it's a streak lol 
+					   */
 	"allihaveismymind the second demigod",
 	"allihaveismymind the vanilla valkyrie",
 	"Khor the third demigod",
