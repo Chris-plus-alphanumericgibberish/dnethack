@@ -1786,6 +1786,7 @@ struct monst *mtmp;
 	int xx, yy;
 	boolean immobile = (mdat->mmove == 0);
 	boolean stuck = (mtmp == u.ustuck);
+	boolean nomouth = mdat==&mons[PM_NIGHTGAUNT];
 
 	m.misc = (struct obj *)0;
 	m.has_misc = 0;
@@ -1834,13 +1835,13 @@ struct monst *mtmp;
 	for(obj=mtmp->minvent; obj; obj=obj->nobj) {
 		/* Monsters shouldn't recognize cursed items; this kludge is */
 		/* necessary to prevent serious problems though... */
-		if(obj->otyp == POT_GAIN_LEVEL && (!obj->cursed ||
+		if(!nomouth && obj->otyp == POT_GAIN_LEVEL && (!obj->cursed ||
 			    (!mtmp->isgd && !mtmp->isshk && !mtmp->ispriest))) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_GAIN_LEVEL;
 		}
 		nomore(MUSE_POT_GAIN_ENERGY);
-		if((mtmp->mcan || (mtmp->mhp <= .5*(mtmp->mhpmax) && mtmp->mspec_used > 2)) && obj->otyp == POT_GAIN_ENERGY) {
+		if(!nomouth && (mtmp->mcan || (mtmp->mhp <= .5*(mtmp->mhpmax) && mtmp->mspec_used > 2)) && obj->otyp == POT_GAIN_ENERGY) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_GAIN_ENERGY;
 		}
@@ -1862,7 +1863,7 @@ struct monst *mtmp;
 			m.has_misc = MUSE_WAN_MAKE_INVISIBLE;
 		}
 		nomore(MUSE_POT_INVISIBILITY);
-		if(obj->otyp == POT_INVISIBILITY &&
+		if(!nomouth && obj->otyp == POT_INVISIBILITY &&
 		    !mtmp->minvis && !mtmp->invis_blkd &&
 		    (!mtmp->mpeaceful || See_invisible) &&
 		    (!attacktype(mtmp->data, AT_GAZE) || mtmp->mcan)) {
@@ -1876,7 +1877,7 @@ struct monst *mtmp;
 			m.has_misc = MUSE_WAN_SPEED_MONSTER;
 		}
 		nomore(MUSE_POT_SPEED);
-		if(obj->otyp == POT_SPEED && mtmp->mspeed != MFAST
+		if(!nomouth && obj->otyp == POT_SPEED && mtmp->mspeed != MFAST
 							&& !mtmp->isgd) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_SPEED;
@@ -1888,7 +1889,7 @@ struct monst *mtmp;
 			m.has_misc = MUSE_WAN_POLYMORPH;
 		}
 		nomore(MUSE_POT_POLYMORPH);
-		if(obj->otyp == POT_POLYMORPH && !mtmp->cham
+		if(!nomouth && obj->otyp == POT_POLYMORPH && !mtmp->cham
 				&& monstr[monsndx(mdat)] < 6) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_POLYMORPH;
@@ -1915,7 +1916,7 @@ struct monst *mtmp;
 			m.misc = obj;
 			m.has_misc = MUSE_SCR_AMNESIA;
 		}
-		if((mtmp->mcrazed || mtmp->mberserk) && (obj->otyp == POT_AMNESIA)) {
+		if(!nomouth && (mtmp->mcrazed || mtmp->mberserk) && (obj->otyp == POT_AMNESIA)) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_AMNESIA;
 		}
