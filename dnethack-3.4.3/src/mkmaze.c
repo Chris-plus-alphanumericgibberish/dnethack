@@ -1170,22 +1170,30 @@ register int fd;
 	mread(fd,(genericptr_t)&ymin,sizeof(int));
 	mread(fd,(genericptr_t)&xmax,sizeof(int));
 	mread(fd,(genericptr_t)&ymax,sizeof(int));
-	for (i = 0; i < n; i++) {
-		btmp = b;
-		b = (struct bubble *)alloc(sizeof(struct bubble));
-		mread(fd,(genericptr_t)b,sizeof(struct bubble));
-		if (bbubbles) {
-			btmp->next = b;
-			b->prev = btmp;
-		} else {
-			bbubbles = b;
-			b->prev = (struct bubble *)0;
+	// pline("bubble size: %d",n);
+	if(n > 0){
+		for (i = 0; i < n; i++) {
+			btmp = b;
+			b = (struct bubble *)alloc(sizeof(struct bubble));
+			mread(fd,(genericptr_t)b,sizeof(struct bubble));
+			if (bbubbles) {
+				btmp->next = b;
+				b->prev = btmp;
+			} else {
+				bbubbles = b;
+				b->prev = (struct bubble *)0;
+			}
+			mv_bubble(b,0,0,TRUE);
 		}
-		mv_bubble(b,0,0,TRUE);
+		ebubbles = b;
+		b->next = (struct bubble *)0;
+		was_waterlevel = TRUE;
+	} else {
+		setup_waterlevel();
+		set_wportal();
+		was_waterlevel = TRUE;
 	}
-	ebubbles = b;
-	b->next = (struct bubble *)0;
-	was_waterlevel = TRUE;
+	return;
 }
 
 const char *waterbody_name(x, y)
