@@ -96,11 +96,11 @@ MONSTER:'@',"hedrow warrior",random
 MONSTER:'@',"hedrow warrior",random
 MONSTER:'@',"hedrow warrior",random
 
-MONSTER:'C',"sprow",(63,02)
+MONSTER:'C',"drider",(63,02)
 MONSTER:'C',"sprow",(67,02)
 MONSTER:'C',"sprow",(71,02)
 
-MONSTER:'C',"sprow",(63,17)
+MONSTER:'C',"drider",(63,17)
 MONSTER:'C',"sprow",(67,17)
 MONSTER:'C',"sprow",(71,17)
 

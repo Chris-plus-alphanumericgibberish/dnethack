@@ -2527,7 +2527,7 @@ register int	mmflags;
 	boolean unsethouse = FALSE;
 	
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
-		(ptr == &mons[PM_SPROW]|| ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
+		(ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
 	)
 		mmflags |= MM_EDOG;
 
@@ -2636,7 +2636,7 @@ register int	mmflags;
 	if (!mtmp->m_id) mtmp->m_id = flags.ident++;	/* ident overflowed */
 	set_mon_data(mtmp, ptr, 0);
 	
-	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && (ptr == &mons[PM_SPROW] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])){
+	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && (ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])){
 		struct obj *otmp;
 		initedog(mtmp);
 		if (otmp = mksobj(SADDLE, TRUE, FALSE)) {
@@ -2647,7 +2647,7 @@ register int	mmflags;
 			otmp->leashmon = mtmp->m_id;
 			update_mon_intrinsics(mtmp, otmp, TRUE, TRUE);
 		}
-		if(ptr == &mons[PM_SPROW]){
+		if(ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER]){
 			otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
 			otmp->ovar1 = (long)u.uhouse;
 			otmp->oerodeproof = TRUE;
@@ -2717,7 +2717,7 @@ register int	mmflags;
 	mtmp->mcansee = mtmp->mcanmove = mtmp->mnotlaugh = TRUE;
 	mtmp->mblinded = mtmp->mfrozen = mtmp->mlaughing = 0;
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
-		(ptr == &mons[PM_SPROW]|| ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
+		(ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
 	) mtmp->mpeaceful = TRUE;
 	else mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : peace_minded(ptr);
 	mtmp->mtraitor  = FALSE;
@@ -2760,7 +2760,7 @@ register int	mmflags;
 				curhouse = MAGTHERE;
 			} else if(ptr == &mons[PM_HEDROW_MASTER_WIZARD]){
 				curhouse = SORCERE;
-			} else if(ptr->mlet != S_HUMAN && !(ptr == &mons[PM_SPROW] && In_quest(&u.uz) && Is_qstart(&u.uz))){
+			} else if(ptr->mlet != S_HUMAN && !((ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER]) && in_mklev && In_quest(&u.uz) && Is_qstart(&u.uz))){
 				if(ptr == &mons[PM_DROW_MUMMY]){
 					if(!(rn2(10))){
 						if(!rn2(6)) curhouse = LOLTH_SYMBOL;
