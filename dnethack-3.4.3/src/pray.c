@@ -2578,6 +2578,7 @@ const char * const hallu_gods[] = {
 	"ChrisANG the fourth demigod",
 	"ChrisANG the binder",
 	"FIQ the fifth demigod",
+	"Tariru the elven noble",
 	
 	"Dudley",
 	"the RNG"
