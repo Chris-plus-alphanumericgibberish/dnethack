@@ -738,9 +738,9 @@ vision_recalc(control)
 		    newsym(col,row);
 	    }
 
-	    else if ((!Race_if(PM_DROW) && (next_row[col] & COULD_SEE)
+	    else if ((!(Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && (next_row[col] & COULD_SEE)
 				&& (lev->lit || (next_row[col] & TEMP_LIT) || u.sealsActive&SEAL_AMON)) ||
-				 ( Race_if(PM_DROW) && (next_row[col] & COULD_SEE)
+				 ( Race_if(PM_DROW)  && !Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)
 				&& (!(ulev->lit|| (next_array[u.uy][u.ux] & TEMP_LIT)) || u.sealsActive&SEAL_AMON)
 				&& (!(lev->lit || (next_row[col] & TEMP_LIT)) || 
 					(lev->typ < CORR && !((mat = m_at(col,row)) && emits_light(mat->data))) || 
@@ -759,8 +759,8 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if ((!Race_if(PM_DROW) &&  (flev->lit || next_array[row+dy][col+dx] & TEMP_LIT))
-			   ||(Race_if(PM_DROW) && !((mat = m_at(col,row)) && emits_light(mat->data)))
+		    if ((!(Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) &&  (flev->lit || next_array[row+dy][col+dx] & TEMP_LIT))
+			   ||(Race_if(PM_DROW) && !Is_waterlevel(&u.uz) && !((mat = m_at(col,row)) && emits_light(mat->data)))
 			   || u.sealsActive&SEAL_AMON
 			){
 				next_row[col] |= IN_SIGHT;	/* we see it */
@@ -811,7 +811,7 @@ not_in_sight:
 		if ((old_row[col] & IN_SIGHT)
 			|| ((next_row[col] & COULD_SEE)
 				^ (old_row[col] & COULD_SEE))
-			|| Race_if(PM_DROW)
+			|| (Race_if(PM_DROW) && !Is_waterlevel(&u.uz))
 		) newsym(col,row);
 	    }
 
