@@ -378,8 +378,8 @@ exerper()
 #endif
 		switch (hs) {
 		    case SATIATED:	if (maybe_polyd(!is_vampire(youmonst.data),
-						!Race_if(PM_VAMPIRE)))  /* undead */
-					    exercise(A_DEX, FALSE);
+						!Race_if(PM_VAMPIRE)) && !Race_if(PM_INCANTIFIER))  /* undead/magic metabolism */
+							exercise(A_DEX, FALSE);
 					if (Role_if(PM_MONK))
 					    exercise(A_WIS, FALSE);
 					break;
