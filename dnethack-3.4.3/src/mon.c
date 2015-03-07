@@ -926,7 +926,7 @@ movemon()
 				  !rn2(4)
 		){
 			struct monst *sprout = (struct monst *) 0;
-			sprout = makemon(mtmp->data,mtmp->mx,mtmp->my,MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH|NO_MINVENT);
+			sprout = makemon(mtmp->data,(mtmp->mx-1)+rn2(3),(mtmp->my-1)+rn2(3),MM_NOCOUNTBIRTH|NO_MINVENT);
 			if(sprout) sprout->mhp = In_hell(&u.uz) ? sprout->mhp*3/4 : sprout->mhp/2;
 		}
 	}
@@ -1859,6 +1859,9 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		return ALLOW_M|ALLOW_TM;
 	/* and everything hates them */
 	if(is_fern_spore(md) && !is_fern_spore(ma) && !is_vegetation(ma))
+		return ALLOW_M|ALLOW_TM;
+	/* everything attacks razorvine */
+	if(md == &mons[PM_RAZORVINE] && !is_vegetation(ma))
 		return ALLOW_M|ALLOW_TM;
 
 	else if (magr->data == &mons[PM_SKELETAL_PIRATE] &&
