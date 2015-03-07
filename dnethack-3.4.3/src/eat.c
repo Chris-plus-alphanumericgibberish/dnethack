@@ -1029,7 +1029,7 @@ boolean drained;
 			You_feel("wide awake.");
 		}
 		if( (HSleep_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = max((HSleep_resistance & TIMEOUT), (long)(nutval*multiplier));
 			HSleep_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HSleep_resistance |= timer; //set new timer
 		}
@@ -1048,7 +1048,7 @@ boolean drained;
 			You_feel("full of hot air.");
 		}
 		if( (HCold_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = max((HCold_resistance & TIMEOUT), (long)(nutval*multiplier));
 			HCold_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HCold_resistance |= timer; //set new timer
 		}
@@ -1081,7 +1081,7 @@ boolean drained;
 				You_feel("well grounded.");
 		}
 		if( (HShock_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = max((HShock_resistance & TIMEOUT), (long)(nutval*multiplier));
 			HShock_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HShock_resistance |= timer; //set new timer
 		}
@@ -1103,7 +1103,7 @@ boolean drained;
 				Your("skin feels leathery.");
 		}
 		if( (HAcid_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = max((HAcid_resistance & TIMEOUT), (long)(nutval*multiplier));
 			HAcid_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HAcid_resistance |= timer; //set new timer
 		}
