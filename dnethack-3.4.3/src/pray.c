@@ -960,7 +960,6 @@ gcrownu()
 					unrestrict_weapon_skill(P_MORNING_STAR);
 				} else if(u.ualign.type == A_NEUTRAL){
 					unrestrict_weapon_skill(P_SHORT_SWORD);
-					u.umartial = TRUE;
 				} else if(u.ualign.type == A_LAWFUL){
 					unrestrict_weapon_skill(P_CROSSBOW);
 				}
@@ -2147,9 +2146,11 @@ dosacrifice()
 				if (otmp->cursed) uncurse(otmp);
 				otmp->oerodeproof = TRUE;
 				dropy(otmp);
-			}
-			else if(otmp->oartifact == ART_BEASTMASTER_S_DUSTER){
+			} else if(otmp->oartifact == ART_BEASTMASTER_S_DUSTER){
 				unrestrict_weapon_skill(P_BEAST_MASTERY);
+			} else if(otmp->oartifact == ART_GRANDMASTER_S_ROBE || otmp->oartifact == ART_PREMIUM_HEART){
+				unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
+				u.umartial = TRUE;
 			}
 		    return(1);
 		}
