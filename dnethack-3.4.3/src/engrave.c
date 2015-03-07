@@ -220,6 +220,7 @@ static const char *haluMesg[] = {
 		"Scuse me, but would you mind dreamin' a bit quieter?",
 	"He who is valiant and pure of spirit may find the holy grail in the Castle of Aaaaarrrrrrggghhh...", /*Monty Python*/
 	"If someone is reading this...I must have failed.", /*The Guardian Legend*/
+	"\"Wasn't somebody's father?\"", /*The main plot point of Star Wars, according to one who hasn't seen it*/
 	"The psychic efficacy of evil magic swords is vastly overrated.", /* The Water Phoenix King*/
 		"It is dangerous to be right when the gods are wrong.",
 		"Here are blind idiot children playing with a magic that hates them.",
