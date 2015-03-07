@@ -251,7 +251,7 @@ fnd:
 	    return;
 	}
 #ifdef CONVICT
-    if (Role_if(PM_CONVICT) && !Upolyd) {
+    if (Role_if(PM_CONVICT) && !Upolyd && !(ublindf && ublindf->otyp != LENSES)) {
         setmangry(guard);
         verbalize("I saw your pic on the wanted poster!");
 		if (!MON_WEP(guard)) {

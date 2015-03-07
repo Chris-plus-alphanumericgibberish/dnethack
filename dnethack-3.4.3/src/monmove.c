@@ -55,7 +55,7 @@ register struct monst *mtmp;
 	   !is_blind(mtmp) && m_canseeu(mtmp) && !rn2(3)) {
 
 #ifdef CONVICT
-		if(Role_if(PM_CONVICT) && !Upolyd) {
+		if(Role_if(PM_CONVICT) && !Upolyd && !(ublindf && ublindf->otyp != LENSES)) {
             verbalize("%s yells: Hey!  You are the one from the wanted poster!",
              Amonnam(mtmp));
             (void) angry_guards(!(flags.soundok));
