@@ -151,6 +151,7 @@ ENDMAP
 
 # Dungeon Description
 REGION:(37,19,37,19),lit,"ordinary",unfilled,true
+NON_DIGGABLE:(00,00,75,19)
 
 # Stairs
 STAIR:(00,17,75,19), (0,0,0,0),up
