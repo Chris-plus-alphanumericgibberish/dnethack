@@ -34,9 +34,9 @@ MONSTER: 'G', "gnome", random
 MONSTER: 'G', "gnome lord", random
 MONSTER: 'h', "dwarf", random
 MONSTER: 'h', "dwarf", random
-MONSTER: 'G', random, random
-MONSTER: 'G', random, random
-MONSTER: 'h', random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
 #
 TRAP: random, random
 TRAP: random, random
@@ -342,7 +342,7 @@ MONSTER: 'G', "gnomish wizard", random
 
 SUBROOM:"ordinary",random,(19,2),(2,2),"town"
 DOOR: false,closed,south,random
-MONSTER: 'G', random, random
+MONSTER: random, random, random
 
 SUBROOM:"candle shop",lit,(22,2),(3,3),"town"
 DOOR:false,closed,south,random
@@ -471,12 +471,12 @@ DOOR:closed,(04,14)
 DOOR:locked,(01,17)
 MONSTER: 'G', "gnomish wizard", (02,19)
 DOOR:locked,(20,16)
-MONSTER: 'G', random, (20,18)
+MONSTER: random, random, (20,18)
 DOOR:random,(21,14)
 DOOR:random,(25,14)
 DOOR:random,(42,08)
 DOOR:locked,(40,05)
-MONSTER: 'G', random, (38,07)
+MONSTER: random, random, (38,07)
 DOOR:random,(59,03)
 DOOR:random,(58,06)
 DOOR:random,(63,03)
