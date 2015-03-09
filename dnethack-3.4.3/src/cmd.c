@@ -2072,7 +2072,7 @@ signs_enlightenment()
 		message = TRUE;
 	}
 	if(u.specialSealsActive&SEAL_BLACK_WEB){
-		putstr(en_win, 0, "Your shaddow is wrapped in the black web.");
+		putstr(en_win, 0, "Your shadow is wrapped in the black web.");
 		message = TRUE;
 	}
 	if(u.specialSealsActive&SEAL_COSMOS){
