@@ -777,8 +777,8 @@ boolean ranged;
 		  || (Role_if(PM_KNIGHT) && (mtmp->data == &mons[PM_KNIGHT]) && mtmp->mpeaceful)
 		  || always_peaceful(mtmp2->data)) &&
 		 mtmp2->mpeaceful && !Conflict) ||
-		   (!ranged && touch_petrifies(mtmp2->data) &&
-			!resists_ston(mtmp)));
+	   (!ranged && touch_petrifies(mtmp2->data) &&
+		!resists_ston(mtmp)));
 }
 
 boolean
