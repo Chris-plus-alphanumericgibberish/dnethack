@@ -759,7 +759,7 @@ boolean ranged;
 {
     return !((!ranged &&
                 (int)mtmp2->m_lev >= (int)mtmp->m_lev+2 &&
-		!attacktype(mtmp->data, AT_EXPL)) ||
+		!(attacktype(mtmp->data, AT_EXPL) || extra_nasty(mtmp->data))) ||
 		(!ranged &&
 		 mtmp2->data == &mons[PM_FLOATING_EYE] && rn2(10) &&
 		 !is_blind(mtmp) && haseyes(mtmp->data) && !is_blind(mtmp2)
