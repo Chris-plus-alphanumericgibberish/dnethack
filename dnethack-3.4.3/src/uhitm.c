@@ -691,6 +691,11 @@ struct attack *uattk;
 {
 	boolean malive;
 	int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
+	
+	if(mhit && is_displacer(mon->data) && rn2(2)){
+		You("hit a displaced image!");
+		return TRUE;
+	}
 
 	if(tmp > dieroll) exercise(A_DEX, TRUE);
 	malive = known_hitum(mon, &mhit, uattk);
@@ -2972,7 +2977,12 @@ register int tmp, weptmp, tchtmp;
 	int	nsum = 0;
 	int	dhit = 0;
 	boolean Old_Upolyd = Upolyd;
-
+	
+	if(is_displacer(mon->data) && rn2(2)){
+		You("attack a displaced image!");
+		return TRUE;
+	}
+	
 	for(i = 0; i < NATTK; i++) {
 	    sum[i] = 0;
 	    mattk = getmattk(mas, i, sum, &alt_attk);
@@ -3213,7 +3223,12 @@ int nattk;
 	int	dhit = 0;
 	struct attack *mattk;
 	boolean Old_Upolyd = Upolyd;
-
+	
+	if(is_displacer(mon->data) && rn2(2)){
+		You("attack a displaced image!");
+		return TRUE;
+	}
+	
 	for(i = 0; i < nattk; i++) {
 	mattk = &attacklist[i];
 	sum[i] = 0;

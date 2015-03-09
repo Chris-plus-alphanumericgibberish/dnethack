@@ -1150,7 +1150,8 @@ domove()
 		/* new displacer beast thingie -- by [Tom] */
 		/* sometimes, instead of attacking, you displace it. */
 		/* Good joke, huh? */
-		if (is_displacer(mtmp->data) && !rn2(2)) displacer = TRUE;
+		/* Good joke, but players find it irritating */
+		// if (is_displacer(mtmp->data) && !rn2(2)) displacer = TRUE;
 		if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) displacer = TRUE;
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
