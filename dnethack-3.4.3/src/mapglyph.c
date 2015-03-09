@@ -167,9 +167,11 @@ unsigned *ospecial;
 					color = CLR_BROWN;
 				}
 			} else if(Is_paradise(&u.uz)){
-				if(offset >= S_drkroom){
+				if(offset >= S_water){
+					color = CLR_BRIGHT_BLUE;
+				} else if(offset == S_drkroom || offset == S_corr || offset <= S_hcdoor){
 					color = CLR_BROWN;
-				} else if(offset >= S_litroom && offset <= S_litcorr){
+				} else if(offset >= S_litroom && offset <= S_dnladder){
 					color = CLR_YELLOW;
 				}
 			} else if(Is_sunkcity(&u.uz)){
