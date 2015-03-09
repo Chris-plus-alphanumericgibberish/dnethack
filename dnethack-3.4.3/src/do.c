@@ -305,6 +305,9 @@ giveback:
 	    case RIN_CONFLICT:
 		You_hear("loud noises coming from the drain.");
 		break;
+	    case RIN_ALACRITY:
+		pline_The("water flow seems faster now.");
+		break;
 	    case RIN_SUSTAIN_ABILITY:	/* KMH */
 		pline_The("water flow seems fixed.");
 		break;
