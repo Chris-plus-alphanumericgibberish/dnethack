@@ -273,6 +273,7 @@ moverock()
 	    if (Blind) feel_location(sx, sy);
 	cannot_push:
 		if(u.sealsActive&SEAL_MARIONETTE){
+			if (yn("Your fingers stretch and grow like roots. Fracture the boulder?") != 'y') return (-1);
 			Your("fingers dig into %s like roots!", the(xname(otmp)));
 			fracture_rock(otmp);
 			break;
@@ -289,6 +290,7 @@ moverock()
 		    pline("However, you can easily %s.",
 			(flags.pickup && !In_sokoban(&u.uz))
 			    ? "pick it up" : "push it aside");
+			if (yn("Do it?") != 'y') return (-1);
 		    if (In_sokoban(&u.uz))
 			change_luck(-1);	/* Sokoban guilt */
 		    break;
@@ -304,7 +306,8 @@ moverock()
 		 (!u.dx || !u.dy || (IS_ROCK(levl[u.ux][sy].typ)
 				     && IS_ROCK(levl[sx][u.uy].typ))))
 		|| verysmall(youmonst.data))) {
-		pline("However, you can squeeze yourself into a small opening.");
+		if (yn("However, you can squeeze yourself into a small opening. Do it?") != 'y') return (-1);
+
 		if (In_sokoban(&u.uz))
 		    change_luck(-1);	/* Sokoban guilt */
 		break;
