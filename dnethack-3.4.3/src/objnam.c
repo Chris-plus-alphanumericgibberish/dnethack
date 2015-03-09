@@ -620,7 +620,7 @@ char *prefix;
 		switch (obj->oeroded) {
 			case 2:	Strcat(prefix, "very "); break;
 			case 3:	Strcat(prefix, "thoroughly "); break;
-		}			
+		}
 		Strcat(prefix, is_rustprone(obj) ? "rusty " : 
 					   is_evaporable(obj) ? "tenuous " : "burnt ");
 	}
@@ -628,7 +628,7 @@ char *prefix;
 		switch (obj->oeroded2) {
 			case 2:	Strcat(prefix, "very "); break;
 			case 3:	Strcat(prefix, "thoroughly "); break;
-		}			
+		}
 		Strcat(prefix, is_corrodeable(obj) ? "corroded " :
 			"rotted ");
 	}
@@ -636,8 +636,15 @@ char *prefix;
 		switch (obj->ovar1) {
 			case 2:	Strcat(prefix, "very "); break;
 			case 3:	Strcat(prefix, "thoroughly "); break;
-		}			
+		}
 		Strcat(prefix, "tattered ");
+	}
+	if (obj->ovar1 && obj->otyp == MASK) {
+		switch (obj->ovar1) {
+			case 1:	Strcat(prefix, "cracked "); break;
+			case 2:	Strcat(prefix, "chipped "); break;
+			case 3:	Strcat(prefix, "fragmentary "); break;
+		}
 	}
 	if (obj->rknown && obj->oerodeproof)
 		Strcat(prefix,

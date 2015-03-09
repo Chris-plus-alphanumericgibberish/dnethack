@@ -348,20 +348,32 @@ moveloop()
 			if (uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				moveamt += NORMAL_SPEED;
 				if(!is_undead(youmonst.data) && u.ZangetsuSafe-- < 1){
-					losehp(5, "inadvisable haste", KILLED_BY);
-					if (Upolyd) {
-						if(u.mhmax > u.ulevel && moves % 2) u.mhmax--;
-						if (u.mh > u.mhmax) u.mh = u.mhmax;
+					if(ublindf && ublindf->otyp == MASK && is_undead(&mons[ublindf->corpsenm])){
+						u.ZangetsuSafe = mons[ublindf->corpsenm].mlevel;
+						if(ublindf->ovar1>=3){
+							Your("mask shatters!");
+							useup(ublindf);
+						} else {
+							Your("mask cracks.");
+							ublindf->ovar1++;
+						}
+					} else {
+						u.ZangetsuSafe = 0;
+						losehp(5, "inadvisable haste", KILLED_BY);
+						if (Upolyd) {
+							if(u.mhmax > u.ulevel && moves % 2) u.mhmax--;
+							if (u.mh > u.mhmax) u.mh = u.mhmax;
+						}
+						else{
+							if(u.uhpmax > u.ulevel && moves % 2) u.uhpmax--;
+							if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+						}
+	//					if( !(moves % 5) )
+						You_feel("your %s %s!", 
+							body_part(BONES), rnd(6) ? body_part(CREAK) : body_part(CRACK));
+						exercise(A_CON, FALSE);
+						exercise(A_STR, FALSE);
 					}
-					else{
-						if(u.uhpmax > u.ulevel && moves % 2) u.uhpmax--;
-						if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
-					}
-//					if( !(moves % 5) )
-					You_feel("your %s %s!", 
-						body_part(BONES), rnd(6) ? body_part(CREAK) : body_part(CRACK));
-					exercise(A_CON, FALSE);
-					exercise(A_STR, FALSE);
 				}
 			}
 			else if(u.ZangetsuSafe < u.ulevel && !(moves%10)) u.ZangetsuSafe++;

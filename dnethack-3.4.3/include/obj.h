@@ -148,6 +148,7 @@ struct obj {
 			/* Acid venom: nonstandard damage amount */
 			/* Corpses: rummor */
 			/* Rocks: rummor */
+			/* Masks: fracturing level */
 
 	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
 	
