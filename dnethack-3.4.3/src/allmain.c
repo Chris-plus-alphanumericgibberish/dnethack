@@ -347,7 +347,7 @@ moveloop()
 			if (uwep && uwep->oartifact == ART_GARNET_ROD) moveamt += NORMAL_SPEED / 2;
 			if (uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				moveamt += NORMAL_SPEED;
-				if(!is_undead(youmonst.data) && u.ZangetsuSafe-- < 1){
+				if(u.ZangetsuSafe-- < 1){
 					if(ublindf && ublindf->otyp == MASK && is_undead(&mons[ublindf->corpsenm])){
 						u.ZangetsuSafe = mons[ublindf->corpsenm].mlevel;
 						if(ublindf->ovar1>=3){
