@@ -1718,6 +1718,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	
 	if(magr->mberserk) return ALLOW_M|ALLOW_TM;
 	
+	if(touch_petrifies(md) && !resists_ston(magr)) return 0L;
 	if(is_drow(ma) && is_drow(md) && (magr->mfaction == mdef->mfaction)) return 0L;
 	
 	if (u.sowdisc && !mdef->mtame)
