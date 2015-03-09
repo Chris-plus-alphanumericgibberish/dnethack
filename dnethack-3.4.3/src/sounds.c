@@ -2979,9 +2979,9 @@ int tx,ty;
 			for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
 				if(otmp->oclass == SPBOOK_CLASS && 
 					!(
-					  otmp->corpsenm == SPE_BLANK_PAPER ||
-					  otmp->corpsenm == SPE_BOOK_OF_THE_DEAD ||
-					  otmp->corpsenm == SPE_SECRETS
+					  otmp->otyp == SPE_BLANK_PAPER ||
+					  otmp->otyp == SPE_BOOK_OF_THE_DEAD ||
+					  otmp->otyp == SPE_SECRETS
 					) && !(otmp->oartifact)
 				){
 					o = otmp;
