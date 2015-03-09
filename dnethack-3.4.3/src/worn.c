@@ -8,6 +8,7 @@ STATIC_DCL void FDECL(m_lose_armor, (struct monst *,struct obj *));
 STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P));
 STATIC_DCL int NDECL(def_beastmastery);
 
+const static int ORANGE_RES[] = {SLEEP_RES};
 const static int CHROMATIC_RES[] = {FIRE_RES, COLD_RES, DISINT_RES, SHOCK_RES, POISON_RES};
 const static int EREBOR_RES[] = {FIRE_RES, COLD_RES};
 const static int DURIN_RES[] = {FIRE_RES, ACID_RES, POISON_RES};
@@ -90,6 +91,10 @@ long mask;
 			/* leave as "x = x <op> y", here and below, for broken
 			 * compilers */
 			p = objects[oobj->otyp].oc_oprop;
+			if(oobj->otyp == ORANGE_DRAGON_SCALES || oobj->otyp == ORANGE_DRAGON_SCALE_MAIL || oobj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
+				for(p = 0; p < 1; p++) u.uprops[ORANGE_RES[p]].extrinsic = u.uprops[ORANGE_RES[p]].extrinsic & ~wp->w_mask;
+			}
+			
 			if(oobj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 				for(p = 0; p < 5; p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic & ~wp->w_mask;
 			} else if(oobj->oartifact == ART_WAR_MASK_OF_DURIN){
@@ -154,6 +159,10 @@ register struct obj *obj;
 	    if(obj == *(wp->w_obj)) {
 		*(wp->w_obj) = 0;
 		p = objects[obj->otyp].oc_oprop;
+		if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
+			for(p = 0; p < 1; p++) u.uprops[ORANGE_RES[p]].extrinsic = u.uprops[ORANGE_RES[p]].extrinsic & ~wp->w_mask;
+		}
+		
 		if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 			for(p = 0; p < 5; p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic & ~wp->w_mask;
 		} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
@@ -363,6 +372,10 @@ boolean on, silently;
 	
     unseen = !canseemon(mon);
     if (!which) goto maybe_blocks;
+	
+	if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
+		for(which = 0; which < 1; which++) update_mon_intrinsic(mon, obj, ORANGE_RES[which], on, silently);
+	}
 	
 	if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 		for(which = 0; which < 5; which++) update_mon_intrinsic(mon, obj, CHROMATIC_RES[which], on, silently);
