@@ -746,7 +746,9 @@ struct monst *mtmp;
 
     struct monst *mat, *mret = (struct monst *)0, *oldmret = (struct monst *)0;
 
-    boolean conflicted = Conflict && !resist(mtmp, RING_CLASS, 0, 0);
+    boolean conflicted = Conflict && couldsee(mtmp->mx,mtmp->my) && 
+						(distu(mtmp->mx,mtmp->my) <= BOLT_LIM*BOLT_LIM) &&
+						!resist(mtmp, RING_CLASS, 0, 0);
 
     if (is_covetous(mtmp->data) && !mtmp->mtame)
     {
