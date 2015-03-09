@@ -819,18 +819,10 @@ plus:
 			Strcat(prefix, "etched ");
 		}
 		if(obj->otyp == MASK){
-		    if (mons[obj->corpsenm].geno & G_UNIQ) {
-			Sprintf(prefix, "%s%s ",
-				(type_is_pname(&mons[obj->corpsenm]) ?
-					"" : "the "),
-				s_suffix(mons[obj->corpsenm].mname));
-			Strcat(prefix, tmpbuf);
-		    } else {
+		    add_erosion_words(obj, prefix);
 			Strcat(prefix, mons[obj->corpsenm].mname);
 			Strcat(prefix, " ");
-		    }
-		}
-		if (!is_weptool(obj))
+		} else if (!is_weptool(obj))
 		    add_erosion_words(obj, prefix);
 		if(obj->owornmask & (W_TOOL /* blindfold */
 #ifdef STEED
