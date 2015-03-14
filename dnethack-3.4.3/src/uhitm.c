@@ -4229,20 +4229,26 @@ boolean *druggedmon;
 			if(otmp->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 				if(!rn2(10)) pline("Irridescent energy radiates from your %s.", aobjnam(otmp, (char *)0) );
 				if(!resists_fire(mon)){
-					*dmgptr += d(1,10) + otmp->spe;
+					*dmgptr += d(1,8) + otmp->spe;
 					success = TRUE;
+				    if (!rn2(10)) (void) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
 				    if (!rn2(10)) (void) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
 				    if (!rn2(10)) (void) destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
 				    if (!rn2(10)) (void) destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
 				}
+				if(!resists_acid(mon)){
+					*dmgptr += d(1,8) + otmp->spe;
+					success = TRUE;
+				    if (!rn2(6)) (void) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
+				}
 				if(!resists_elec(mon)){
-					*dmgptr += d(1,10) + otmp->spe;
+					*dmgptr += d(1,8) + otmp->spe;
 					success = TRUE;
 				    if (!rn2(10)) (void) destroy_mitem(mon, RING_CLASS, AD_ELEC);
 				    if (!rn2(10)) (void) destroy_mitem(mon, WAND_CLASS, AD_ELEC);
 				}
 				if(!resists_cold(mon)){
-					*dmgptr += d(1,10) + otmp->spe;
+					*dmgptr += d(1,8) + otmp->spe;
 					if (!rn2(4)) (void) destroy_mitem(mon, POTION_CLASS, AD_COLD);
 					success = TRUE;
 				}
@@ -4287,20 +4293,25 @@ boolean *druggedmon;
 			boolean success = FALSE;
 			if(otmp->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 				if(!resists_fire(mon)){
-					*dmgptr += d(1,4) + otmp->spe;
+					*dmgptr += d(1,3) + otmp->spe;
 					success = TRUE;
 				    if (!rn2(10)) (void) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
 				    if (!rn2(10)) (void) destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
 				    if (!rn2(10)) (void) destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
 				}
+				if(!resists_acid(mon)){
+					*dmgptr += d(1,3) + otmp->spe;
+					success = TRUE;
+				    if (!rn2(6)) (void) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
+				}
 				if(!resists_elec(mon)){
-					*dmgptr += d(1,4) + otmp->spe;
+					*dmgptr += d(1,3) + otmp->spe;
 					success = TRUE;
 				    if (!rn2(10)) (void) destroy_mitem(mon, RING_CLASS, AD_ELEC);
 				    if (!rn2(10)) (void) destroy_mitem(mon, WAND_CLASS, AD_ELEC);
 				}
 				if(!resists_cold(mon)){
-					*dmgptr += d(1,4) + otmp->spe;
+					*dmgptr += d(1,3) + otmp->spe;
 					if (!rn2(4)) (void) destroy_mitem(mon, POTION_CLASS, AD_COLD);
 					success = TRUE;
 				}
