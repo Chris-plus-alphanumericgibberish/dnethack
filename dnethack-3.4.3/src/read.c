@@ -2385,7 +2385,7 @@ register struct obj	*sobj;
 		return;
 	}
 	You("are being punished for your misbehavior!");
-	if(Punished){
+	if(Punished && uball->owt < 1600){
 		Your("iron ball gets heavier.");
 		uball->owt += 160 * (1 + sobj->cursed);
 		return;
