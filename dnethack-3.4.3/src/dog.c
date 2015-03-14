@@ -922,7 +922,7 @@ register struct obj *obj;
 	if (mtmp->mtame || !mtmp->mcanmove ||
 	    /* monsters with conflicting structures cannot be tamed */
 	    mtmp->isshk || mtmp->isgd || mtmp->ispriest || mtmp->isminion ||
-	    is_covetous(mtmp->data) || is_human(mtmp->data) ||
+	    is_covetous(mtmp->data) || is_human(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
 	    (is_demon(mtmp->data) && !is_demon(youmonst.data)) ||
 	    (obj && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
 
