@@ -3902,7 +3902,7 @@ int spell;
 	if(uarmf && is_metallic(uarmf)) splcaster += uarmfbon;
 
 	if(Race_if(PM_INCANTIFIER))
-		splcaster -= 3*urole.spelarmr;
+		splcaster += max(-3*urole.spelarmr,urole.spelsbon);
 	if(spellid(spell) == urole.spelspec)
 		splcaster += urole.spelsbon;
 

@@ -717,11 +717,11 @@ const struct Race races[] = {
 	MH_ORC, 0, MH_HUMAN|MH_ELF|MH_DWARF,
 	/*  Str    Int Wis Dex Con Cha */
 	{   3,      3,  3,  3,  3,  3 },
-	{STR18(50),16, 16, 18, 18, 16 },
+	{   18 ,   16, 16, 18, 18, 16 },
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  0, 0 },	/* Hit points */
 	{  1, 0,  1, 0,  1, 0 },	/* Energy */
-	NORMALNIGHTVIS
+	NIGHTVISION2
 },
 {	"vampire", "vampiric", "vampirehood", "Vam",
 	{"vampire", "vampiress"},

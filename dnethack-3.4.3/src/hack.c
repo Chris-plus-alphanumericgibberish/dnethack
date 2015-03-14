@@ -2446,7 +2446,12 @@ weight_cap()
 		carrcap = MAX_CARR_CAP;
 	else {
 		if(carrcap > MAX_CARR_CAP) carrcap = MAX_CARR_CAP;
-		carrcap += u.ucarinc; /* note that carinc bonues can push you over the normal limit! */
+
+		/* note that carinc bonues can push you over the normal limit! */
+		carrcap += u.ucarinc;
+		if(Race_if(PM_ORC)){
+			carrcap += (u.ulevel/3)*10;
+		}
 		static int hboots = 0;
 		if (!hboots) hboots = find_hboots();
 		if (uarmf && uarmf->otyp == hboots) carrcap += uarmf->cursed ? 0 : 100; 

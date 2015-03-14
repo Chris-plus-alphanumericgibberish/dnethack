@@ -1705,7 +1705,7 @@ u_init()
 	u.umoney0 += hidden_gold();	/* in case sack has gold in it */
 #endif
 
-	if(Role_if(PM_EXILE)){
+	if(Role_if(PM_EXILE) || Race_if(PM_ORC)){
 		init_attr(55);
 	} else if (Role_if(PM_VALKYRIE)){
 		init_attr(80);

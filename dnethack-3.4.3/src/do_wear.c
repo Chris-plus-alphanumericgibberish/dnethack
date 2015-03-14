@@ -1797,6 +1797,9 @@ int base_uac()
 	if (HProtection & INTRINSIC) uac -= u.ublessed;
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
+	if(Race_if(PM_ORC)){
+		uac -= (u.ulevel+1)/3;
+	}
 	if(u.sealsActive&SEAL_ECHIDNA) uac -= (ACURR(A_CON)-10)/2;
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
@@ -1885,6 +1888,10 @@ find_ac()
 	if (HProtection & INTRINSIC) uac -= u.ublessed;
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
+	if(Race_if(PM_ORC)){
+		uac -= (u.ulevel+1)/3;
+		uac -= (u.ulevel+2)/3;
+	}
 	if(u.sealsActive&SEAL_ECHIDNA) uac -= (ACURR(A_CON)-10)/2;
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);

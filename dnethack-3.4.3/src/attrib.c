@@ -117,6 +117,7 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	orc_abil[] = { {	1, &(HPoison_resistance), "", "" },
+		     {  15, &(HAntimagic), "magic resistant","magic-sensative" },
 		     {	 0, 0, 0, 0 } },
 
 	clk_abil[] = { {	1, &(HPoison_resistance), "", "" },
@@ -866,6 +867,10 @@ int x;
 #endif	/*TOURIST*/
 
 	if (x == A_STR) {
+		if(Race_if(PM_ORC)){
+			tmp += u.ulevel/3;
+			if(tmp > 18) tmp = STR19(tmp);
+		}
 		if ((uarmg && uarmg->otyp == GAUNTLETS_OF_POWER) || 
 			(uwep && uwep->oartifact == ART_SCEPTRE_OF_MIGHT) || 
 			(uwep && uwep->oartifact == ART_OGRESMASHER) ||
@@ -881,10 +886,16 @@ int x;
 			(uwep && uwep->oartifact == ART_OGRESMASHER) ||
 			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER)
 		) return(25);
+		if(Race_if(PM_ORC)){
+			tmp += u.ulevel/3;
+		}
 	} else if (x == A_DEX) {
 		if (
 			(uarmg && uarmg->oartifact == ART_PREMIUM_HEART)
 		) return(25);
+		if(Race_if(PM_ORC)){
+			tmp += u.ulevel/3;
+		}
 	} else if (x == A_CHA) {
 		if (tmp < 18 && youmonst.data && (youmonst.data->mlet == S_NYMPH ||
 		    u.umonnum==PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
@@ -896,6 +907,7 @@ int x;
 		if (uarmh && uarmh->otyp == DUNCE_CAP) return(6);
 		else if(u.sealsActive&SEAL_HUGINN_MUNINN) return 25;
 	}
+	
 #ifdef WIN32_BUG
 	return(x=((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp));
 #else
