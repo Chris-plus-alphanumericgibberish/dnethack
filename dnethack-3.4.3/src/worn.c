@@ -432,7 +432,7 @@ struct monst *mon;
 		}
 	}
 	
-	if(mon->mtame) base += rnd(def_beastmastery());
+	if(mon->mtame) base -= rnd(def_beastmastery());
 	
 	return base;
 }
