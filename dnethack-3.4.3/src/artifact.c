@@ -4052,6 +4052,7 @@ arti_invoke(obj)
 				long yourseals = u.sealsKnown;
 				long yourspecial = u.specialSealsKnown;
 				u.sealsKnown = obj->ovar1;
+				u.specialSealsKnown = 0;
 				u.uconduct.literate++;
 				lostname = pick_seal();
 				if(!lostname){
