@@ -1708,7 +1708,7 @@ u_init()
 	if(Role_if(PM_EXILE) || Race_if(PM_ORC)){
 		init_attr(55);
 	} else if (Role_if(PM_VALKYRIE)){
-		init_attr(80);
+		init_attr(85);
 	} else init_attr(75);	/* init attribute values */
 	find_ac();				/* get initial ac value */
 	max_rank_sz();			/* set max str size for class ranks */
