@@ -1938,12 +1938,16 @@ register boolean newlev;
 		case ZOO:
 		    pline("Welcome to David's treasure zoo!");
 			wake = TRUE;
-		    break;
+	    break;
 		case GARDEN:
 		    if (Blind) pline_The("air here smells nice and fresh!");
 		    else You("enter a beautiful garden.");
 			rt = 0;
 			wake = TRUE;
+	    break;
+		case LIBRARY:
+		    if (Blind) pline_The("air here smells of mildew.");
+		    else You("enter a musty, water damaged-library.");
 	    break;
 		case SWAMP:
 		    pline("It %s rather %s down here.",

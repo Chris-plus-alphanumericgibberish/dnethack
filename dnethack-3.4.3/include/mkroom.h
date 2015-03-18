@@ -67,22 +67,23 @@ extern NEARDATA struct door doors[DOORMAX];
 #define COCKNEST	12	/* cockatrice nest (Tom Proudfoot) */
 #define ANTHOLE		13	/* ants (Tom Proudfoot) */
 #define GARDEN		14	/* nymphs, trees and fountains */
-#define ISLAND 		15 /* ringed by water, contains items */
-#define RIVER 		16 /* "room" is really a river running through the level*/
-#define POOLROOM	17	/*  */
-#define SHOPBASE	18	/* everything above this is a shop */
-#define ARMORSHOP	19	/* specific shop defines for level compiler */
-#define SCROLLSHOP	20
-#define POTIONSHOP	21
-#define WEAPONSHOP 	22
-#define FOODSHOP  	23
-#define RINGSHOP	24
-#define WANDSHOP	25
-#define TOOLSHOP	26
-#define BOOKSHOP	27
-#define UNIQUESHOP	28	/* shops here & above not randomly gen'd. */
-#define CANDLESHOP	28
-#define MAXRTYPE	28	/* maximum valid room type */
+#define LIBRARY		15	/* nymphs, trees and fountains */
+#define ISLAND 		16 /* ringed by water, contains items */
+#define RIVER 		17 /* "room" is really a river running through the level*/
+#define POOLROOM	18	/*  */
+#define SHOPBASE	19	/* everything above this is a shop */
+#define ARMORSHOP	20	/* specific shop defines for level compiler */
+#define SCROLLSHOP	21
+#define POTIONSHOP	22
+#define WEAPONSHOP 	23
+#define FOODSHOP  	24
+#define RINGSHOP	25
+#define WANDSHOP	26
+#define TOOLSHOP	27
+#define BOOKSHOP	28
+#define UNIQUESHOP	29	/* shops here & above not randomly gen'd. */
+#define CANDLESHOP	29
+#define MAXRTYPE	29	/* maximum valid room type */
 
 /* Special type for search_special() */
 #define ANY_TYPE	(-1)

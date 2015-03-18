@@ -214,6 +214,16 @@ dosounds()
 	You_hear("%s", garden_msg[rn2(2) + 2 * hallu]);
 	return;
     }
+    if (level.flags.has_library && !rn2(200)) {
+	static const char *library_msg[4] = {
+		"dripping water.",
+		"pages turning.",
+		"audible silence.",
+		"a librarian yelling at someone to be SILENT!",
+	};
+	You_hear("%s", library_msg[rn2(2) + 2 * hallu]);
+	return;
+    }
     if (level.flags.has_swamp && !rn2(200)) {
 	static const char * const swamp_msg[3] = {
 		"hear mosquitoes!",

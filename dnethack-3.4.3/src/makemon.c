@@ -4108,6 +4108,7 @@ int type;
 		case PM_LEATHER_GOLEM: return 40;
 		case PM_GOLD_GOLEM: return 40;
 		case PM_WOOD_GOLEM: return 50;
+		case PM_LIVING_LECTURN: return 50;
 		case PM_FLESH_GOLEM: return 40;
 		case PM_SPELL_GOLEM: return 20;
 //		case PM_SAURON_THE_IMPRISONED: return 45;
