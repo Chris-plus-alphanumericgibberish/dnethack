@@ -194,6 +194,9 @@ hack_artifacts()
 	    artilist[urole.questarti].alignment = alignmnt;
 	    artilist[urole.questarti].role = Role_switch;
 	}
+	if(aligns[flags.initalign].value == artilist[ART_CARNWENNAN].alignment){
+		artilist[ART_CARNWENNAN].spfx &= ~(SPFX_NOGEN|SPFX_RESTR);
+	}
 	artilist[ART_PEN_OF_THE_VOID].alignment = A_VOID; //something changes this??? Change it back.
 	return;
 }

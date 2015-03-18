@@ -1191,13 +1191,17 @@ long timeout;
 STATIC_OVL int
 def_beastmastery()
 {
+	int bm;
 	switch (P_SKILL(P_BEAST_MASTERY)) {
-		case P_ISRESTRICTED: return 0; break;
-		case P_UNSKILLED:    return 0; break;
-		case P_BASIC:        return 2; break;
-		case P_SKILLED:      return 5; break;
-		case P_EXPERT:       return 10; break;
+		case P_ISRESTRICTED: bm =  0; break;
+		case P_UNSKILLED:    bm =  0; break;
+		case P_BASIC:        bm =  2; break;
+		case P_SKILLED:      bm =  5; break;
+		case P_EXPERT:       bm = 10; break;
 	}
+	if((uwep && uwep->oartifact == ART_CLARENT) || (uswapwep && uswapwep->oartifact == ART_CLARENT))
+		bm *= 2;
+	return bm;
 }
 
 /*worn.c*/

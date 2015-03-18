@@ -49,6 +49,17 @@ A("Excalibur",			LONG_SWORD,
 	PHYS(5,10),	DRLI(0,0),	NO_CARY,	
 	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
 	0,0,0),
+/* Clarent patch (Greyknight): Note that Clarent's SPFX2_DIG gives it another +2 to hit against thick-skinned
+	monsters, as well as against wall-passers. Another special effect of Clarent
+	is that it can be pulled out of a wall it is stuck in (by #untrapping towards
+	it) if you are devoutly lawful. */
+	/*Clarent has been modified to make it the Knight crowning-gift*/
+A("Clarent",			LONG_SWORD, /*quote (sorta)*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DFLAG1), 0, M1_THICK_HIDE,
+	PHYS(4,20),	NO_DFNS,		NO_CARY,
+	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
+	SPFX2_DIG,0,0), 
+
 /*
  *	Stormbringer only has a 2 because it can drain a level,
  *	providing 8 more.
@@ -128,6 +139,12 @@ A("Grimtooth",			ORCISH_DAGGER, //needs quote
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
 	0, A_CHAOTIC, NON_PM, PM_ORC, 300L, 
 	0,0,0),
+
+A("Carnwennan",			DAGGER, /*needs quote*/
+	(SPFX_RESTR|SPFX_NOGEN|SPFX_DFLAG2), SPFX_WARN, M2_MAGIC,
+	PHYS(5,10),	NO_DFNS,		NO_CARY,
+	INVIS,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
+	SPFX2_STLTH,0,0), 
 
 A("The Slave to Armok",			DWARVISH_MATTOCK, /*two handed, so no twoweaponing.*/
 	(SPFX_DFLAG2), 0, (M2_ELF|M2_LORD|M2_PEACEFUL|M2_ORC), /*DF Dwarves can be a nasty lot.*/
@@ -234,16 +251,11 @@ A("Kiku-ichimonji",		KATANA,
 	0, A_LAWFUL, PM_SAMURAI, NON_PM, 1200L,
 	0,0,0), 
 
-/* Clarent patch (Greyknight): Note that Clarent's SPFX2_DIG gives it another +2 to hit against thick-skinned
-	monsters, as well as against wall-passers. Another special effect of Clarent
-	is that it can be pulled out of a wall it is stuck in (by #untrapping towards
-	it) if you are devoutly lawful. */
-	/*Clarent has been modified to make it the Knight sac-gift*/
-A("Clarent",			LONG_SWORD, /*quote (sorta)*/
-	(SPFX_RESTR|SPFX_DFLAG1), 0, M1_THICK_HIDE,
-	PHYS(4,8),	NO_DFNS,		NO_CARY,
-	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
-	SPFX2_DIG,0,0), 
+A("Rhongomyniad",			LANCE, /*needs quote*/
+	(SPFX_RESTR), 0, 0,
+	PHYS(3,0),	NO_DFNS,		NO_CARY,
+	0,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
+	0,0,0), 
 
 A("The Rod of Lordly Might", MACE, /*needs quote*/
 	(SPFX_RESTR|SPFX_DEFN), 0, 0,

@@ -739,6 +739,11 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_ARCOR_KERYM));
 		verbalize("I crown thee...  The Hand of Elbereth!");
+	} else if(Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)){
+		u.uevent.uhand_of_elbereth = 1;
+		in_hand = FALSE;
+		already_exists = exist_artifact(LONG_SWORD, artiname(ART_CLARENT));
+		verbalize("I crown thee...  King of the Angles!");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 4;
 		in_hand = FALSE;
@@ -2145,8 +2150,12 @@ dosacrifice()
 			} else if(otmp->oartifact == ART_GRANDMASTER_S_ROBE || otmp->oartifact == ART_PREMIUM_HEART){
 				unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
 				u.umartial = TRUE;
+			} else if(otmp->oartifact == ART_RHONGOMYNIAD){
+				unrestrict_weapon_skill(P_RIDING);
+				mksobj_at(SADDLE, u.ux, u.uy, FALSE, FALSE);
+				u.umartial = TRUE;
 			}
-		    return(1);
+			return(1);
 		}
 	    }
 	    change_luck((value * LUCKMAX) / (MAXVALUE * 2));
