@@ -2518,6 +2518,9 @@ inv_weight()
 #endif
 			wt += otmp->owt;
 
+		if(otmp->oartifact == ART_IRON_BALL_OF_LEVITATION)
+			wt -= 2*otmp->owt;
+		
 		if(u.uleadamulet && (otmp->otyp == AMULET_OF_YENDOR || otmp->otyp == FAKE_AMULET_OF_YENDOR))
 			wt += 24*otmp->owt; /* Same as loadstone by default. Only affects fake amulets in open inventory */
 		otmp = otmp->nobj;

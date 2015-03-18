@@ -302,12 +302,32 @@ chat_with_leader()
 		if(Role_if(PM_EXILE)){
 			bindspirit(DAHLVER_NAR);
 			u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + 5000;
-			// u.specialSealsActive |= SEAL_SPECIAL|SEAL_DAHLVER_NAR;
-			// u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_DAHLVER_NAR;
-			// set_spirit_powers(SEAL_SPECIAL|SEAL_DAHLVER_NAR);
-			// u.spiritT[QUEST_SPIRIT] = moves + 5000;
-			// u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + 5000;
-			// u.wisSpirits++;
+		} else if(Role_if(PM_CONVICT)){
+			struct obj *obj;
+			obj = mksobj(HEAVY_IRON_BALL, TRUE, FALSE);
+			obj = oname(obj, artiname(ART_IRON_BALL_OF_LEVITATION));
+			obj->oerodeproof = TRUE;
+			obj->blessed = TRUE;
+			obj->cursed = FALSE;
+			pline("\"I had enchanted my iron ball for a later part of the escape, take it with you on your quest!\"");
+			pline("He hands %s to you.", the(xname(obj)));
+			obj = addinv(obj);	/* into your inventory */
+			(void) encumber_msg();
+			if (Punished && (obj != uball)) {
+				unpunish(); /* Remove a mundane heavy iron ball */
+			}
+			
+			if (!Punished) {
+				setworn(mkobj(CHAIN_CLASS, TRUE), W_CHAIN);
+				setworn(obj, W_BALL);
+				uball->spe = 1;
+				if (!u.uswallow) {
+				placebc();
+				if (Blind) set_bc(1);	/* set up ball and chain variables */
+				newsym(u.ux,u.uy);		/* see ball&chain if can't see self */
+				}
+				Your("%s chains itself to you!", xname(obj));
+			}
 		}
 	  }
 	}

@@ -993,16 +993,15 @@ touch_artifact(obj,mon)
 //	if (oart == &artilist[ART_CLARENT]  && (!yours || ) )
 #ifdef CONVICT
     /* This is a kludge, but I'm not sure where else to put it */
-    // if (oart == &artilist[ART_IRON_BALL_OF_LIBERATION]) {
-	// if (Role_if(PM_CONVICT) && (!obj->oerodeproof)) {
-	    // obj->oerodeproof = TRUE;
-	    // obj->owt = 300; /* Magically lightened, but still heavy */
-	// }
+    if (oart == &artilist[ART_IRON_BALL_OF_LEVITATION]) {
+		if (Role_if(PM_CONVICT) && (!obj->oerodeproof)) {
+			obj->oerodeproof = TRUE;
+		}
 
-	// if (Punished && (obj != uball)) {
-	    // unpunish(); /* Remove a mundane heavy iron ball */
-	// }
-    // }
+		if (Punished && (obj != uball)) {
+			unpunish(); /* Remove a mundane heavy iron ball */
+		}
+    }
 #endif /* CONVICT */
 
     return 1;
@@ -2887,23 +2886,6 @@ arti_invoke(obj)
 #ifdef CONVICT
 	case PHASING:   /* Walk through walls and stone like a xorn */
         if (Passes_walls) goto nothing_special;
-	    // if (oart == &artilist[ART_IRON_BALL_OF_LIBERATION]) {
-		// if (Punished && (obj != uball)) {
-		    // unpunish(); /* Remove a mundane heavy iron ball */
-		// }
-		
-		// if (!Punished) {
-		    // setworn(mkobj(CHAIN_CLASS, TRUE), W_CHAIN);
-		    // setworn(obj, W_BALL);
-		    // uball->spe = 1;
-		    // if (!u.uswallow) {
-			// placebc();
-			// if (Blind) set_bc(1);	/* set up ball and chain variables */
-			// newsym(u.ux,u.uy);		/* see ball&chain if can't see self */
-		    // }
-		    // Your("%s chains itself to you!", xname(obj));
-		// }
-	    // }
         if (!Hallucination) {    
             Your("body begins to feel less solid.");
         } else {
@@ -4385,6 +4367,23 @@ nothing_special:
 		
 	}
     }
+	if (oart == &artilist[ART_IRON_BALL_OF_LEVITATION]) {
+	if (Punished && (obj != uball)) {
+		unpunish(); /* Remove a mundane heavy iron ball */
+	}
+	
+	if (!Punished) {
+		setworn(mkobj(CHAIN_CLASS, TRUE), W_CHAIN);
+		setworn(obj, W_BALL);
+		uball->spe = 1;
+		if (!u.uswallow) {
+		placebc();
+		if (Blind) set_bc(1);	/* set up ball and chain variables */
+		newsym(u.ux,u.uy);		/* see ball&chain if can't see self */
+		}
+		Your("%s chains itself to you!", xname(obj));
+	}
+	}
 
     return 1;
 }
