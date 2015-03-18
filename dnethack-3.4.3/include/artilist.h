@@ -895,13 +895,13 @@ A("The War-mask of Durin",	MASK, /*Moria dwarf noble */
 A("Durin's Axe",			AXE, /*Moria dwarf noble crowning */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
 	PHYS(5,10),	DRLI(0,0),	NO_CARY,	
-	0, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, 
+	0, A_LAWFUL, PM_NOBLEMAN, PM_DWARF, 4000L, 
 	SPFX2_DIG|SPFX2_SILVERED,0,0),
 
 A("Glamdring",			ELVEN_BROADSWORD, /*Lonely Mountain dwarf noble first gift */
 	(SPFX_NOGEN|SPFX_WARN|SPFX_RESTR), 0, (M2_ORC|M2_DEMON), /* the old elves fought balrogs too. */
 	PHYS(5,10),	NO_DFNS,	NO_CARY,	
-	0, A_LAWFUL, PM_NOBLEMAN, NON_PM, 2000L, 
+	0, A_LAWFUL, PM_KNIGHT, NON_PM, 2000L, 
 	0,0,0),
 
 A("The Key of Erebor", SKELETON_KEY,
@@ -913,7 +913,7 @@ A("The Key of Erebor", SKELETON_KEY,
 A("The Armor of Erebor",	PLATE_MAIL, /*Lonely Mountain dwarf noble */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_HPHDAM), 0, 0,  /*+10 AC*/
 	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY, /*Also gives Fire and Cold*/
-	0,	A_LAWFUL,	 PM_NOBLEMAN, PM_DWARF, 2500L,
+	0,	A_LAWFUL,	 NON_PM, PM_DWARF, 2500L,
 	0,0,0),
 
 /*Arkenstone*/ /*Lonely Mountain dwarf noble crown*/
