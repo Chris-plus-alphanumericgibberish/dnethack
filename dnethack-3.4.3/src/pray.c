@@ -1298,188 +1298,182 @@ pleased(g_align)
     /* note: can't get pat_on_head unless all troubles have just been
        fixed or there were no troubles to begin with; hallucination
        won't be in effect so special handling for it is superfluous */
-    if(pat_on_head)
-	switch(rn2((Luck + 6)>>1)) {
-	case 0:	break;
-	case 1:
-	    if (uwep && (welded(uwep) || uwep->oclass == WEAPON_CLASS ||
-			 is_weptool(uwep))) {
-		char repair_buf[BUFSZ];
+    if(pat_on_head){
+		//Note: Luck > 10 means that you have a luckitem in open inventory.  To avoid crowning, just drop the luckitem.
+	    if (Luck > 10 && u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth && u.uevent.qcompleted) 
+			gcrownu();
+		else switch(rn2((Luck + 6)>>1)) {
+		case 0:	break;
+		case 1:
+			if (uwep && (welded(uwep) || uwep->oclass == WEAPON_CLASS ||
+				 is_weptool(uwep))) {
+			char repair_buf[BUFSZ];
 
-		*repair_buf = '\0';
-		if (uwep->oeroded || uwep->oeroded2)
-		    Sprintf(repair_buf, " and %s now as good as new",
-			    otense(uwep, "are"));
+			*repair_buf = '\0';
+			if (uwep->oeroded || uwep->oeroded2)
+				Sprintf(repair_buf, " and %s now as good as new",
+					otense(uwep, "are"));
 
-		if (uwep->cursed) {
-		    uncurse(uwep);
-		    uwep->bknown = TRUE;
-		    if (!Blind)
-			Your("%s %s%s.", aobjnam(uwep, "softly glow"),
-			     hcolor(NH_AMBER), repair_buf);
-		    else You_feel("the power of %s over your %s.",
-			u_gname(), xname(uwep));
-		    *repair_buf = '\0';
-		} else if (!uwep->blessed) {
-		    bless(uwep);
-		    uwep->bknown = TRUE;
-		    if (!Blind)
-			Your("%s with %s aura%s.",
-			     aobjnam(uwep, "softly glow"),
-			     an(hcolor(NH_LIGHT_BLUE)), repair_buf);
-		    else You_feel("the blessing of %s over your %s.",
-			u_gname(), xname(uwep));
-		    *repair_buf = '\0';
-		}
+			if (uwep->cursed) {
+				uncurse(uwep);
+				uwep->bknown = TRUE;
+				if (!Blind)
+				Your("%s %s%s.", aobjnam(uwep, "softly glow"),
+					 hcolor(NH_AMBER), repair_buf);
+				else You_feel("the power of %s over your %s.",
+				u_gname(), xname(uwep));
+				*repair_buf = '\0';
+			} else if (!uwep->blessed) {
+				bless(uwep);
+				uwep->bknown = TRUE;
+				if (!Blind)
+				Your("%s with %s aura%s.",
+					 aobjnam(uwep, "softly glow"),
+					 an(hcolor(NH_LIGHT_BLUE)), repair_buf);
+				else You_feel("the blessing of %s over your %s.",
+				u_gname(), xname(uwep));
+				*repair_buf = '\0';
+			}
 
-		/* fix any rust/burn/rot damage, but don't protect
-		   against future damage */
-		if (uwep->oeroded || uwep->oeroded2) {
-		    uwep->oeroded = uwep->oeroded2 = 0;
-		    /* only give this message if we didn't just bless
-		       or uncurse (which has already given a message) */
-		    if (*repair_buf)
-			Your("%s as good as new!",
-			     aobjnam(uwep, Blind ? "feel" : "look"));
-		}
-		update_inventory();
-	    }
-	    break;
-	case 3:
-	    /* takes 2 hints to get the music to enter the stronghold */
-	    if (!u.uevent.uopened_dbridge) {
-		if (u.uevent.uheard_tune < 1) {
-		    godvoice(g_align,(char *)0);
-		    verbalize("Hark, %s!",
-			  youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
-		    verbalize(
-			"To enter the castle, thou must play the right tune!");
-		    u.uevent.uheard_tune++;
-		    break;
-		} else if (u.uevent.uheard_tune < 2) {
-		    You_hear("a divine music...");
-		    pline("It sounds like:  \"%s\".", tune);
-		    u.uevent.uheard_tune++;
-		    break;
-		}
-	    }
-	    /* Otherwise, falls into next case */
-	case 2:
-	    if (!Blind)
-		You("are surrounded by %s glow.", an(hcolor(NH_GOLDEN)));
-	    /* if any levels have been lost (and not yet regained),
-	       treat this effect like blessed full healing */
-	    if (u.ulevel < u.ulevelmax) {
-		u.ulevelmax -= 1;	/* see potion.c */
-		pluslvl(FALSE);
-	    } else {
-		u.uhpmax += 5;
-		if (Upolyd) u.mhmax += 5;
-	    }
-	    u.uhp = u.uhpmax;
-	    if (Upolyd) u.mh = u.mhmax;
-	    ABASE(A_STR) = AMAX(A_STR);
-		if(Race_if(PM_INCANTIFIER)){
-			if (u.uen < u.uenmax*.45) u.uen = u.uenmax*.45;
-			u.uhs = NOT_HUNGRY;
-		} else {
-			if (u.uhunger < u.uhungermax*.45) u.uhunger = u.uhungermax*.45;
-			u.uhs = NOT_HUNGRY;
-		}
-	    if (u.uluck < 0) u.uluck = 0;
-	    make_blinded(0L,TRUE);
-	    flags.botl = 1;
-	    break;
-	case 4: {
-	    register struct obj *otmp;
-	    int any = 0;
+			/* fix any rust/burn/rot damage, but don't protect
+			   against future damage */
+			if (uwep->oeroded || uwep->oeroded2) {
+				uwep->oeroded = uwep->oeroded2 = 0;
+				/* only give this message if we didn't just bless
+				   or uncurse (which has already given a message) */
+				if (*repair_buf)
+				Your("%s as good as new!",
+					 aobjnam(uwep, Blind ? "feel" : "look"));
+			}
+			update_inventory();
+			}
+			break;
+		case 3:
+			/* takes 2 hints to get the music to enter the stronghold */
+			if (!u.uevent.uopened_dbridge) {
+			if (u.uevent.uheard_tune < 2) {
+				godvoice(g_align,(char *)0);
+				verbalize("Hark, %s!",
+				  youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
+				verbalize(
+				"To enter the castle, thou must play the right tune!");
+				You_hear("a divine music...");
+				pline("It sounds like:  \"%s\".", tune);
+				u.uevent.uheard_tune = 2;
+				break;
+			}
+			}
+			/* Otherwise, falls into next case */
+		case 2:
+			if (!Blind)
+			You("are surrounded by %s glow.", an(hcolor(NH_GOLDEN)));
+			/* if any levels have been lost (and not yet regained),
+			   treat this effect like blessed full healing */
+			if (u.ulevel < u.ulevelmax) {
+			u.ulevelmax -= 1;	/* see potion.c */
+			pluslvl(FALSE);
+			} else {
+			u.uhpmax += 5;
+			if (Upolyd) u.mhmax += 5;
+			}
+			u.uhp = u.uhpmax;
+			if (Upolyd) u.mh = u.mhmax;
+			ABASE(A_STR) = AMAX(A_STR);
+			if(Race_if(PM_INCANTIFIER)){
+				if (u.uen < u.uenmax*.45) u.uen = u.uenmax*.45;
+				u.uhs = NOT_HUNGRY;
+			} else {
+				if (u.uhunger < u.uhungermax*.45) u.uhunger = u.uhungermax*.45;
+				u.uhs = NOT_HUNGRY;
+			}
+			if (u.uluck < 0) u.uluck = 0;
+			make_blinded(0L,TRUE);
+			flags.botl = 1;
+			break;
+		case 4: {
+			register struct obj *otmp;
+			int any = 0;
 
-	    if (Blind)
-		You_feel("the power of %s.", u_gname());
-	    else You("are surrounded by %s aura.",
-		     an(hcolor(NH_LIGHT_BLUE)));
-	    for(otmp=invent; otmp; otmp=otmp->nobj) {
-		if (otmp->cursed) {
-		    uncurse(otmp);
-		    if (!Blind) {
-			Your("%s %s.", aobjnam(otmp, "softly glow"),
-			     hcolor(NH_AMBER));
-			otmp->bknown = TRUE;
-			++any;
-		    }
+			if (Blind)
+			You_feel("the power of %s.", u_gname());
+			else You("are surrounded by %s aura.",
+				 an(hcolor(NH_LIGHT_BLUE)));
+			for(otmp=invent; otmp; otmp=otmp->nobj) {
+			if (otmp->cursed) {
+				uncurse(otmp);
+				if (!Blind) {
+				Your("%s %s.", aobjnam(otmp, "softly glow"),
+					 hcolor(NH_AMBER));
+				otmp->bknown = TRUE;
+				++any;
+				}
+			}
+			}
+			if (any) update_inventory();
+			if(u.sealsActive&SEAL_MARIONETTE) unbind(SEAL_MARIONETTE,TRUE);
+			break;
 		}
-	    }
-	    if (any) update_inventory();
-		if(u.sealsActive&SEAL_MARIONETTE) unbind(SEAL_MARIONETTE,TRUE);
-	    break;
+		case 5: {
+			const char *msg="\"and thus I grant thee the gift of %s!\"";
+			godvoice(u.ualign.type, "Thou hast pleased me with thy progress,");
+			if (!(HTelepat & INTRINSIC))  {
+			HTelepat |= FROMOUTSIDE;
+			pline(msg, "Telepathy");
+			if (Blind) see_monsters();
+			} else if (!(HFast & INTRINSIC))  {
+			HFast |= FROMOUTSIDE;
+			pline(msg, "Speed");
+			} else if (!(HStealth & INTRINSIC))  {
+			HStealth |= FROMOUTSIDE;
+			pline(msg, "Stealth");
+			} else if(!(u.wardsknown & WARD_HAMSA)){
+				u.wardsknown |= WARD_HAMSA;
+				pline(msg, "the Hamsa ward");
+			} else if(!(u.wardsknown & WARD_HEXAGRAM)){
+				u.wardsknown |= WARD_HEXAGRAM;
+				pline(msg, "the Hexagram ward");
+			}else {
+			if (!(HProtection & INTRINSIC))  {
+				HProtection |= FROMOUTSIDE;
+				if (!u.ublessed)  u.ublessed = rn1(3, 2);
+			} else u.ublessed++;
+			pline(msg, "my protection");
+			}
+			verbalize("Use it wisely in my name!");
+			break;
+		}
+		case 7:
+		case 8:
+		case 9:		/* KMH -- can occur during full moons */
+		case 6:	{
+			struct obj *otmp;
+			int sp_no, trycnt = u.ulevel + 1;
+
+			at_your_feet("An object");
+			/* not yet known spells given preference over already known ones */
+			/* Also, try to grant a spell for which there is a skill slot */
+			otmp = mkobj(SPBOOK_CLASS, TRUE);
+			while (--trycnt > 0) {
+			if (otmp->otyp != SPE_BLANK_PAPER) {
+				for (sp_no = 0; sp_no < MAXSPELL; sp_no++)
+				if (spl_book[sp_no].sp_id == otmp->otyp) break;
+				if (sp_no == MAXSPELL &&
+				!P_RESTRICTED(spell_skilltype(otmp->otyp)))
+				break;	/* usable, but not yet known */
+			} else {
+				if (!objects[SPE_BLANK_PAPER].oc_name_known ||
+					carrying(MAGIC_MARKER)) break;
+			}
+			otmp->otyp = rnd_class(bases[SPBOOK_CLASS], SPE_BLANK_PAPER);
+			}
+			bless(otmp);
+			place_object(otmp, u.ux, u.uy);
+			break;
+		}
+		default:	impossible("Confused deity!");
+			break;
+		}
 	}
-	case 5: {
-	    const char *msg="\"and thus I grant thee the gift of %s!\"";
-	    godvoice(u.ualign.type, "Thou hast pleased me with thy progress,");
-	    if (!(HTelepat & INTRINSIC))  {
-		HTelepat |= FROMOUTSIDE;
-		pline(msg, "Telepathy");
-		if (Blind) see_monsters();
-	    } else if (!(HFast & INTRINSIC))  {
-		HFast |= FROMOUTSIDE;
-		pline(msg, "Speed");
-	    } else if (!(HStealth & INTRINSIC))  {
-		HStealth |= FROMOUTSIDE;
-		pline(msg, "Stealth");
-	    } else if(!(u.wardsknown & WARD_HAMSA)){
-			u.wardsknown |= WARD_HAMSA;
-			pline(msg, "the Hamsa ward");
-	    } else if(!(u.wardsknown & WARD_HEXAGRAM)){
-			u.wardsknown |= WARD_HEXAGRAM;
-			pline(msg, "the Hexagram ward");
-		}else {
-		if (!(HProtection & INTRINSIC))  {
-		    HProtection |= FROMOUTSIDE;
-		    if (!u.ublessed)  u.ublessed = rn1(3, 2);
-		} else u.ublessed++;
-		pline(msg, "my protection");
-	    }
-	    verbalize("Use it wisely in my name!");
-	    break;
-	}
-	case 7:
-	case 8:
-	case 9:		/* KMH -- can occur during full moons */
-//ifdef ELBERETH
-	    if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth) {
-		gcrownu();
-		break;
-	    } /* else FALLTHRU */
-//endif	/*ELBERETH*/
-	case 6:	{
-	    struct obj *otmp;
-	    int sp_no, trycnt = u.ulevel + 1;
-
-	    at_your_feet("An object");
-	    /* not yet known spells given preference over already known ones */
-	    /* Also, try to grant a spell for which there is a skill slot */
-	    otmp = mkobj(SPBOOK_CLASS, TRUE);
-	    while (--trycnt > 0) {
-		if (otmp->otyp != SPE_BLANK_PAPER) {
-		    for (sp_no = 0; sp_no < MAXSPELL; sp_no++)
-			if (spl_book[sp_no].sp_id == otmp->otyp) break;
-		    if (sp_no == MAXSPELL &&
-			!P_RESTRICTED(spell_skilltype(otmp->otyp)))
-			break;	/* usable, but not yet known */
-		} else {
-		    if (!objects[SPE_BLANK_PAPER].oc_name_known ||
-			    carrying(MAGIC_MARKER)) break;
-		}
-		otmp->otyp = rnd_class(bases[SPBOOK_CLASS], SPE_BLANK_PAPER);
-	    }
-	    bless(otmp);
-	    place_object(otmp, u.ux, u.uy);
-	    break;
-	}
-	default:	impossible("Confused deity!");
-	    break;
-	}
-
 	u.ublesscnt = rnz(350);
 	kick_on_butt = u.uevent.udemigod ? 1 : 0;
 #ifdef ELBERETH
