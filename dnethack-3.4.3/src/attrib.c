@@ -117,7 +117,7 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	orc_abil[] = { {	1, &(HPoison_resistance), "", "" },
-		     {  15, &(HAntimagic), "magic resistant","magic-sensative" },
+		     {  15, &(HAntimagic), "magic resistant","magic-sensitive" },
 		     {	 0, 0, 0, 0 } },
 
 	clk_abil[] = { {	1, &(HPoison_resistance), "", "" },
@@ -308,7 +308,7 @@ restore_attrib()
 		    if(ATEMP(i)) /* reset timer */
 			ATIME(i) = 100 / ACURR(A_CON);
 		}
-	    }
+	   }
 	}
 	(void)encumber_msg();
 }
