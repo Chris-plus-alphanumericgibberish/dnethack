@@ -309,10 +309,11 @@ found_ward:
 	pen->spe -= actualcost;
 
 	/* can't write if we don't know it - unless we're lucky */
-	if(!(objects[new_obj->otyp].oc_name_known) &&
+	if(new_obj->otyp == SPE_SECRETS ||
+	  (!(objects[new_obj->otyp].oc_name_known) &&
 	   !(objects[new_obj->otyp].oc_uname) &&
-	   (rnl(Role_if(PM_WIZARD) ? 3 : 15))) {
-		You("%s to write that!", by_descr ? "fail" : "don't know how");
+	   (rnl(Role_if(PM_WIZARD) ? 3 : 15)))) {
+		if(new_obj->otyp != SPE_SECRETS) You("%s to write that!", by_descr ? "fail" : "don't know how");
 		/* scrolls disappear, spellbooks don't */
 		if (paper->oclass == SPBOOK_CLASS) {
 			You(
