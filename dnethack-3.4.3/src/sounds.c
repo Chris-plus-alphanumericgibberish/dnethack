@@ -344,12 +344,13 @@ dosounds()
 	}
     }
 	if (level.flags.has_island && !rn2(200)) {
-		static const char *island_msg[3] = {
+		static const char *island_msg[4] = {
 			"hear seagulls.",
+			"waves on sand.",
 			"hear burly voices singing shanties.",
 			"here someone ask about warez.",
 		};
-		You(island_msg[rn2(2)+hallu]);
+		You(island_msg[rn2(2)+2*hallu]);
 		return;
 	}
     if (level.flags.has_zoo && !rn2(200)) {
