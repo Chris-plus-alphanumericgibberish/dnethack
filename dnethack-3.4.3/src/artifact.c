@@ -944,7 +944,7 @@ touch_artifact(obj,mon)
     }
     /* weapons which attack specific categories of monsters are
        bad for them even if their alignments happen to match */
-    if (!badalign && (oart->spfx & SPFX_DBONUS) != 0) {
+    if (!badalign && (oart->spfx & SPFX_DBONUS) != 0 && (obj->oartifact != ART_WEB_OF_LOLTH) || !Race_if(PM_DROW)) {
 		struct artifact tmp;
 	
 		tmp = *oart;
