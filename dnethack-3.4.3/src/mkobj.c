@@ -1039,7 +1039,9 @@ start_corpse_timeout(body)
 	if (action == ROT_CORPSE && !acidic(&mons[body->corpsenm])) {
 		/* Corpses get moldy
 		 */
-		chance = Is_zuggtmoy_level(&u.uz) ? FULL_MOLDY_CHANCE : BASE_MOLDY_CHANCE;
+		chance = (Is_zuggtmoy_level(&u.uz) && flags.spore_level) ? FULL_MOLDY_CHANCE : 
+				 (Is_zuggtmoy_level(&u.uz) || flags.spore_level) ? HALF_MOLDY_CHANCE : 
+				 BASE_MOLDY_CHANCE;
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
 			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
 				action = MOLDY_CORPSE;
@@ -1047,8 +1049,10 @@ start_corpse_timeout(body)
 				break;
 			}
 	}
-	if(action == ROT_CORPSE && Is_juiblex_level(&u.uz)) {
-		chance = FULL_MOLDY_CHANCE;
+	chance = (Is_juiblex_level(&u.uz) && flags.slime_level) ? FULL_MOLDY_CHANCE : 
+			 (Is_juiblex_level(&u.uz) || flags.slime_level) ? HALF_MOLDY_CHANCE : 
+			 0;
+	if(action == ROT_CORPSE && chance) {
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
 			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
 				action = SLIMY_CORPSE;
@@ -1056,8 +1060,10 @@ start_corpse_timeout(body)
 				break;
 			}
 	}
-	if(action == ROT_CORPSE && Is_night_level(&u.uz)){
-		chance = FULL_MOLDY_CHANCE;
+	chance = (Is_night_level(&u.uz) && flags.walky_level) ? FULL_MOLDY_CHANCE : 
+			 (Is_night_level(&u.uz) || flags.walky_level) ? HALF_MOLDY_CHANCE : 
+			 0;
+	if(action == ROT_CORPSE && chance) {
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
 			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
 				action = ZOMBIE_CORPSE;
@@ -1065,7 +1071,10 @@ start_corpse_timeout(body)
 				break;
 			}
 	}
-	if(action == ROT_CORPSE && Is_orcus_level(&u.uz)){
+	chance = (Is_orcus_level(&u.uz) && flags.shade_level) ? FULL_MOLDY_CHANCE : 
+			 (Is_orcus_level(&u.uz) || flags.shade_level) ? HALF_MOLDY_CHANCE : 
+			 0;
+	if(action == ROT_CORPSE && chance) {
 		chance = FULL_MOLDY_CHANCE;
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
 			if (!rn2(chance)) {    /* "revives" as a random s_fungus */

@@ -252,8 +252,12 @@ register struct monst *mtmp;
 		u.ugrave_arise = urace.mummynum;
 	else if (mtmp->data->mlet == S_VAMPIRE && Race_if(PM_HUMAN))
 		u.ugrave_arise = PM_VAMPIRE;
-	else if (mtmp->data == &mons[PM_GHOUL])
+	else if (mtmp->data == &mons[PM_GHOUL] || mtmp->data == &mons[PM_GNOLL_GHOUL])
 		u.ugrave_arise = PM_GHOUL;
+	else if (mtmp->data == &mons[PM_DREADBLOSSOM_SWARM])
+		u.ugrave_arise = PM_DREADBLOSSOM_SWARM;
+	else if (mtmp->data == &mons[PM_DREAD_SERAPH])
+		u.ugrave_arise = PM_SKELETON;
 	if (u.ugrave_arise >= LOW_PM &&
 				(mvitals[u.ugrave_arise].mvflags & G_GENOD))
 		u.ugrave_arise = NON_PM;
