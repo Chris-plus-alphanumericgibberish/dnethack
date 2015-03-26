@@ -214,6 +214,10 @@ moveloop()
 		    mcalcdistress();	/* adjust monsters' trap, blind, etc */
 
 		    /* reallocate movement rations to monsters */
+			flags.spore_level=0;
+			flags.slime_level=0;
+			flags.walky_level=0;
+			flags.shade_level=0;
 		    for (mtmp = fmon; mtmp; mtmp = nxtmon){
 				nxtmon = mtmp->nmon;
 				/* Possibly vanish */
@@ -223,6 +227,10 @@ moveloop()
 						continue;
 					}
 				}
+				if(mtmp->data == &mons[PM_ZUGGTMOY]) flags.spore_level=1;
+				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
+				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH]) flags.walky_level=1;
+				if(mtmp->data == &mons[PM_ORCUS] || mtmp->data == &mons[PM_NAZGUL]) flags.shade_level=1;
 				mtmp->movement += mcalcmove(mtmp);
 				if(mtmp->moccupation && !occupation){
 					mtmp->moccupation = 0;

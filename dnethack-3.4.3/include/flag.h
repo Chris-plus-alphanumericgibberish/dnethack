@@ -123,6 +123,10 @@ struct flag {
 	boolean leader_backstab;		/* your leader is attacking you */
 	boolean made_bell;		/* the bell of opening has been created */
 
+	boolean spore_level;		/* the current level has a spore-spreading monster */
+	boolean slime_level;		/* the current level has a slime-spreading monster */
+	boolean walky_level;		/* the current level has a undead-raising monster */
+	boolean shade_level;		/* the current level has a shade-casting monster */
 	
 	/* KMH, role patch -- Variables used during startup.
 	 *
