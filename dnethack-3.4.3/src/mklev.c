@@ -805,7 +805,13 @@ makelevel()
 			walking boots, I'm allowing Islands+rivers. */
 	if (u_depth > 3 && !rn2(4) &&
 		!level.flags.has_vault) mkroom(RIVER);
+	
+		/* Part four: very late modifications */
+	if (u_depth > 14 && !rn2(8)){
+		mksepulcher();
 	}
+	
+	} /*end u_depth*/
 
 skiprooms:
 

@@ -58,12 +58,43 @@ register struct mkroom *sroom;
 }
 
 void
+mksepulcher()
+{
+	int x,y,tries=0;
+	int i,j;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-7)+3;
+		y = rn2(ROWNO-7)+3;
+		tries++;
+		okspot = TRUE;
+		for(i=-1;i<2;i++) for(j=-1;j<2;j++) if(levl[x+i][y+j].typ != STONE) okspot = FALSE;
+		for(i=-2;i<3;i++) for(j=-2;j<3;j++) if(levl[x+i][y+j].typ >= CORR) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=-1;i<2;i++) for(j=-1;j<2;j++) levl[x+i][y+j].typ = STONE;
+			levl[x+2][y+2].typ = BRCORNER;
+			levl[x-2][y+2].typ = BLCORNER;
+			for(i=-1;i<2;i++) levl[x+i][y+2].typ = HWALL;
+			for(i=-1;i<2;i++) levl[x+i][y-2].typ = HWALL;
+			for(i=-1;i<2;i++) levl[x+2][y+i].typ = VWALL;
+			for(i=-1;i<2;i++) levl[x-2][y+i].typ = VWALL;
+			levl[x+2][y-2].typ = TRCORNER;
+			levl[x-2][y-2].typ = TLCORNER;
+			levl[x][y].typ = ROOM;
+			for(i=-2;i<3;i++) for(j=-2;j<3;j++) levl[x][y].lit = 0;
+			makemon(&mons[PM_DREAD_SERAPH], x, y, 0);
+		}
+	}
+}
+
+void
 mkroom(roomtype)
 /* make and stock a room of a given type */
 int	roomtype;
 {
     if (roomtype >= SHOPBASE)
-	mkshop();	/* someday, we should be able to specify shop type */
+		mkshop();	/* someday, we should be able to specify shop type */
     else switch(roomtype) {
 	case COURT:	mkzoo(COURT); break;
 	case ZOO:	mkzoo(ZOO); break;
