@@ -3222,6 +3222,7 @@ register int	mmflags;
 		}
 	} else if (mndx == PM_WIZARD_OF_YENDOR) {
 		mtmp->iswiz = TRUE;
+		mtmp->mspec_used = 0; /*Wizard can cast spells right off the bat*/
 		flags.no_of_wizards++;
 		if (flags.no_of_wizards == 1 && Is_earthlevel(&u.uz))
 			mitem = SPE_DIG;
