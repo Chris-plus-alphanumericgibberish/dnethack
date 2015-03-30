@@ -2593,7 +2593,29 @@ register int	mmflags;
 		} else 
 			return((struct monst *) 0);
 	}
-
+	
+	if(ptr && mmflags & MM_CHECK_GOODPOS){
+	 struct monst fakemon;
+	 fakemon.data = ptr;	/* set up for goodpos */
+	 if(!goodpos(x, y, &fakemon, gpflags)){
+		if ((mmflags & MM_ADJACENTOK) != 0) {
+			coord bypos;
+			if(enexto_core(&bypos, x, y, ptr, gpflags)) {
+				if( !(mmflags & MM_ADJACENTSTRICT) || (
+					bypos.x - x <= 1 && bypos.x - x >= -1 &&
+					bypos.y - y <= 1 && bypos.y - y >= -1
+				)){
+					x = bypos.x;
+					y = bypos.y;
+				}
+				else return((struct monst *) 0);
+			} else
+				return((struct monst *) 0);
+		} else 
+			return((struct monst *) 0);
+	 }
+	}
+	
 	if(ptr){
 		mndx = monsndx(ptr);
 		/* if you are to make a specific monster and it has

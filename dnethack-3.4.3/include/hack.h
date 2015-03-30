@@ -170,6 +170,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define MM_IGNOREWATER	  0x80	/* ignore water when positioning */
 #define MM_ADJACENTOK	  0x100 /* it is acceptable to use adjacent coordinates */
 #define MM_ADJACENTSTRICT 0x200 /* ...but only ONE removed.*/
+#define MM_CHECK_GOODPOS  0x400 /* Don't create a monster where it shouldn't be.*/
 
 /* special mhpmax value when loading bones monster to flag as extinct or genocided */
 #define DEFUNCT_MONSTER	(-100)

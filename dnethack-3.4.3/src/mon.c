@@ -877,6 +877,7 @@ mcalcdistress()
     }
 }
 
+
 int
 movemon()
 {
@@ -938,7 +939,7 @@ movemon()
 				  !rn2(4)
 		){
 			struct monst *sprout = (struct monst *) 0;
-			sprout = makemon(mtmp->data,(mtmp->mx-1)+rn2(3),(mtmp->my-1)+rn2(3),MM_NOCOUNTBIRTH|NO_MINVENT);
+			sprout = makemon(mtmp->data,(mtmp->mx-1)+rn2(3),(mtmp->my-1)+rn2(3),MM_CHECK_GOODPOS|MM_NOCOUNTBIRTH|NO_MINVENT);
 			if(sprout) sprout->mhp = In_hell(&u.uz) ? sprout->mhp*3/4 : sprout->mhp/2;
 		}
 	}
