@@ -3952,7 +3952,7 @@ is a red right hand
  * shades
  */
     MON("broken shadow", S_SHADE,//
-	LVL(10, 10, 10, 0, -10), (G_NOCORPSE|G_NOGEN),
+	LVL(10, 3, 10, 0, -10), (G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_TUCH, AD_PLYS, 1, 1), ATTK(AT_TUCH, AD_SLOW, 1, 1),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_HUMAN, 0, 0, MS_WAIL, MZ_HUMAN),
