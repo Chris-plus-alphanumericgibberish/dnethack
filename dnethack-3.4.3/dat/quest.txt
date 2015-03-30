@@ -3546,8 +3546,9 @@ You materialize in the shadows of %H.  Immediately, you notice
 that something is wrong.  The fields around the castle are trampled and
 withered, as if some great battle has been recently fought.
 
-Looking closer, you %x long gouges in the walls of %H.
-You know of only one creature that makes those kinds of marks...
+You quicken your pace.  Surely Merlin would have not allowed the 
+enemies of %l to gain such advantage as to be able to
+besiege %H itself?  Something must be very wrong.
 %E
 %Cp Kni 00002
 Once again you stand in the shadows of %H.

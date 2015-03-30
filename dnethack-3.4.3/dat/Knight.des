@@ -308,7 +308,7 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 # Random monsters.
-MONSTER:'D',"Ixoth",(50,06),hostile
+MONSTER:'n',"Nimune",(50,06),hostile
 MONSTER:'i',"quasit",random,hostile
 MONSTER:'i',"quasit",random,hostile
 MONSTER:'i',"quasit",random,hostile

@@ -424,8 +424,11 @@ unsigned int type;
        case PM_CHROMATIC_DRAGON:
            return (rn2(2) ? DESTRY_WEPN : EARTHQUAKE);
 
-       case PM_IXOTH:
-           return NIGHTMARE;
+       // case PM_IXOTH:
+       case PM_NIMUNE:
+           if(!rn2(3)) return NIGHTMARE;
+		   else if(rn2(2)) return MASS_CURE_CLOSE;
+		   else return SLEEP;
 
 	case PM_CHAOS:
 		switch(rn2(10)){
