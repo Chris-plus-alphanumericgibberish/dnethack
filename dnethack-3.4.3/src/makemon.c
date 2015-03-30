@@ -3138,6 +3138,13 @@ register int	mmflags;
 				mtmp->mhp = mtmp->mhpmax;
 			}
 		break;
+		case S_ZOMBIE:
+			if (mndx == PM_DREAD_SERAPH){
+				mtmp->m_lev = max(mtmp->m_lev,30);
+				mtmp->mhpmax = 4*8*mtmp->m_lev;
+				mtmp->mhp = mtmp->mhpmax;
+			}
+		break;
 		case S_DEMON:
 //			pline("%d\n",mtmp->mhpmax);
 			if(mndx == PM_JUIBLEX){

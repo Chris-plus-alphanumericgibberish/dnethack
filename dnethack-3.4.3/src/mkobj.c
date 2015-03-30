@@ -1060,8 +1060,8 @@ start_corpse_timeout(body)
 				break;
 			}
 	}
-	chance = (Is_night_level(&u.uz) && flags.walky_level) ? FULL_MOLDY_CHANCE : 
-			 (Is_night_level(&u.uz) || flags.walky_level) ? HALF_MOLDY_CHANCE : 
+	chance = (flags.walky_level) ? FULL_MOLDY_CHANCE : 
+			 (Is_night_level(&u.uz)) ? HALF_MOLDY_CHANCE : 
 			 0;
 	if(action == ROT_CORPSE && chance) {
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)

@@ -368,6 +368,16 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 							   case 4:(void) makemon(&mons[PM_DROW_MUMMY],x, y, NO_MM_FLAGS);
 							   default:(void) makemon(&mons[PM_DROW_ZOMBIE],x, y, NO_MM_FLAGS);
 						   }
+					   } else if(flags.walky_level){
+						   switch(rn2(7)) {
+							   case 1:(void) makemon(mkclass(S_MUMMY,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+							   case 2:(void) makemon(mkclass(S_VAMPIRE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+							   case 3:(void) makemon(mkclass(S_LICH,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+							   case 4:(void) makemon(mkclass(S_GHOST,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+							   case 5:(void) makemon(mkclass(S_SHADE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+							   case 6:(void) makemon(mkclass(S_WRAITH,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+							   default:(void) makemon(mkclass(S_ZOMBIE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+						   }
 					   } else {
 						   switch(rn2(In_hell(&u.uz) ? 7 : 5)) {
 							  case 2:(void) makemon(&mons[PM_ROCK_MOLE], x, y, NO_MM_FLAGS);

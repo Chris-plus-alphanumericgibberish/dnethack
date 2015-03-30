@@ -533,10 +533,11 @@ int x, y;
 }
 
 void
-digactualhole(x, y, madeby, ttyp)
+digactualhole(x, y, madeby, ttyp, forceknown)
 register int	x, y;
 struct monst	*madeby;
 int ttyp;
+boolean forceknown;
 {
 	struct obj *oldobjs, *newobjs;
 	register struct trap *ttmp;
@@ -590,7 +591,7 @@ int ttyp;
 	ttmp = maketrap(x, y, ttyp);
 	if (!ttmp) return;
 	newobjs = level.objects[x][y];
-	ttmp->tseen = (madeby_u || cansee(x,y));
+	ttmp->tseen = (forceknown || madeby_u || cansee(x,y));
 	ttmp->madeby_u = madeby_u;
 	newsym(ttmp->tx,ttmp->ty);
 
@@ -932,7 +933,7 @@ boolean pit_only;
 		return TRUE;
 
 	} else if (IS_GRAVE(lev->typ)) {        
-	    digactualhole(u.ux, u.uy, BY_YOU, PIT);
+	    digactualhole(u.ux, u.uy, BY_YOU, PIT, FALSE);
 	    dig_up_grave(u.ux, u.uy);
 	    return TRUE;
 	} else if (lev->typ == DRAWBRIDGE_UP) {
@@ -985,9 +986,9 @@ boolean pit_only;
 
 		/* finally we get to make a hole */
 		if (nohole || pit_only)
-			digactualhole(u.ux, u.uy, BY_YOU, PIT);
+			digactualhole(u.ux, u.uy, BY_YOU, PIT, FALSE);
 		else
-			digactualhole(u.ux, u.uy, BY_YOU, HOLE);
+			digactualhole(u.ux, u.uy, BY_YOU, HOLE, FALSE);
 
 		return TRUE;
 	}
@@ -2180,7 +2181,7 @@ int y;
 		return TRUE;
 
 	} else if (IS_GRAVE(lev->typ)) {        
-	    digactualhole(x, y, BY_YOU, PIT);
+	    digactualhole(x, y, BY_YOU, PIT, FALSE);
 	    dig_up_grave(x,y);
 	    return TRUE;
 	} else if (lev->typ == DRAWBRIDGE_UP) {
@@ -2234,9 +2235,9 @@ int y;
 
 		/* finally we get to make a hole */
 		if (nohole || pit_only)
-			digactualhole(x, y, BY_YOU, PIT);
+			digactualhole(x, y, BY_YOU, PIT, FALSE);
 		else
-			digactualhole(x, y, BY_YOU, HOLE);
+			digactualhole(x, y, BY_YOU, HOLE, FALSE);
 
 		return TRUE;
 	}

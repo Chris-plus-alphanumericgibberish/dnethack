@@ -947,9 +947,9 @@ register struct monst *mtmp;
 				}
 			}
 			if (nohole || !ttmp || (ttmp->ttyp != PIT && ttmp->ttyp != SPIKED_PIT && ttmp->ttyp != TRAPDOOR))
-				digactualhole(mtmp->mx, mtmp->my, mtmp, PIT);
+				digactualhole(mtmp->mx, mtmp->my, mtmp, PIT, FALSE);
 			else
-				digactualhole(mtmp->mx, mtmp->my, mtmp, HOLE);
+				digactualhole(mtmp->mx, mtmp->my, mtmp, HOLE, FALSE);
 		}
 	} else if (is_mind_flayer(mdat) && !rn2(20)) {
 		struct monst *m2, *nmon = (struct monst *)0;

@@ -16,6 +16,230 @@ STATIC_DCL void NDECL(do_positionbar);
 
 #ifdef OVL0
 
+STATIC_OVL void
+digXchasm(mtmp)
+	struct monst *mtmp;
+{
+	int x,y;
+	struct trap *ttmp;
+	int inty = rn2(4)+2;
+	int dy = rn2(2) ? 1 : -1;
+	y = mtmp->my;
+	x = mtmp->mx;
+	if(isok(x,y)){
+		ttmp = t_at(x, y);
+		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+			levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+			if(ttmp) delfloortrap(ttmp);
+			digactualhole(x, y, mtmp, HOLE, TRUE);
+		}
+	}
+	y=y+1;
+	if(isok(x,y)){
+		ttmp = t_at(x, y);
+		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+			levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+			if(ttmp) delfloortrap(ttmp);
+			digactualhole(x, y, mtmp, PIT, TRUE);
+		}
+	}
+	y=y-1;
+	y=y-1;
+	if(isok(x,y)){
+		ttmp = t_at(x, y);
+		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+			levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+			if(ttmp) delfloortrap(ttmp);
+			digactualhole(x, y, mtmp, PIT, TRUE);
+		}
+	}
+	y=y+1;
+	for(x = mtmp->mx + 1; x < COLNO; x++){
+		if(!(x%inty)) y += dy;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, HOLE, TRUE);
+			}
+		}
+		y=y+1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		y=y-1;
+		y=y-1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		y=y+1;
+	}
+	y = mtmp->my;
+	for(x = mtmp->mx - 1; x >= 0; x--){
+		if(!(x%inty)) y -= dy;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, HOLE, TRUE);
+			}
+		}
+		y=y+1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		y=y-1;
+		y=y-1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		y=y+1;
+	}
+}
+
+STATIC_OVL void
+digYchasm(mtmp)
+	struct monst *mtmp;
+{
+	int x,y;
+	struct trap *ttmp;
+	int intx = rn2(4)+2;
+	int dx = rn2(2) ? 1 : -1;
+	x = mtmp->mx;
+	y = mtmp->my;
+	if(isok(x,y)){
+		ttmp = t_at(x, y);
+		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+			levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+			if(ttmp) delfloortrap(ttmp);
+			digactualhole(x, y, mtmp, HOLE, TRUE);
+		}
+	}
+	x=x+1;
+	if(isok(x,y)){
+		ttmp = t_at(x, y);
+		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+			levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+			if(ttmp) delfloortrap(ttmp);
+			digactualhole(x, y, mtmp, PIT, TRUE);
+		}
+	}
+	x=x-1;
+	x=x-1;
+	if(isok(x,y)){
+		ttmp = t_at(x, y);
+		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+			levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+			if(ttmp) delfloortrap(ttmp);
+			digactualhole(x, y, mtmp, PIT, TRUE);
+		}
+	}
+	x=x+1;
+	for(y = mtmp->my + 1; y < COLNO; y++){
+		if(!(y%intx)) x += dx;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, HOLE, TRUE);
+			}
+		}
+		x=x+1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		x=x-1;
+		x=x-1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		x=x+1;
+	}
+	x = mtmp->mx;
+	for(y = mtmp->my - 1; y >= 0; y--){
+		if(!(y%intx)) x -= dx;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, HOLE, TRUE);
+			}
+		}
+		x=x+1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		x=x-1;
+		x=x-1;
+		if(isok(x,y)){
+			ttmp = t_at(x, y);
+			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+				levl[x][y].typ = CORR;
+			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+				if(ttmp) delfloortrap(ttmp);
+				digactualhole(x, y, mtmp, PIT, TRUE);
+			}
+		}
+		x=x+1;
+	}
+}
+
 void
 moveloop()
 {
@@ -231,6 +455,17 @@ moveloop()
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
 				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH]) flags.walky_level=1;
 				if(mtmp->data == &mons[PM_ORCUS] || mtmp->data == &mons[PM_NAZGUL]) flags.shade_level=1;
+				if(mtmp->data == &mons[PM_DREAD_SERAPH] && (mtmp->mstrategy & STRAT_WAITFORU) && u.uevent.udemigod){
+					mtmp->mstrategy &= ~STRAT_WAITFORU;
+					pline_The("entire %s is shaking around you!",
+						   In_endgame(&u.uz) ? "plane" : "dungeon");
+					do_earthquake(((int)mtmp->m_lev - 1) / 6 + 1, TRUE, mtmp);
+					if(rn2(2)){ //Do for x
+						digXchasm(mtmp);
+					} else { //Do for y
+						digYchasm(mtmp);
+					}
+				}
 				mtmp->movement += mcalcmove(mtmp);
 				if(mtmp->moccupation && !occupation){
 					mtmp->moccupation = 0;
