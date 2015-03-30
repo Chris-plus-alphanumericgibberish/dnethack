@@ -141,9 +141,14 @@ struct monst *mon;
 	struct permonst *ptr = mon->data;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
 
-	if (Is_weapon)
-		tmp += otmp->spe;
-		//But DON'T double the to hit bonus from spe for double lightsabers in dual bladed mode. It gets harder to use, not easier.
+	//But DON'T double the to hit bonus from spe for double lightsabers in dual bladed mode. It gets harder to use, not easier.
+	if (Is_weapon){
+		if(Race_if(PM_ORC)){
+			tmp += max((u.ulevel+2)/3, otmp->spe);
+		} else {
+			tmp += otmp->spe;
+		}
+	}
 
 /*	Put weapon specific "to hit" bonuses in below:		*/
 	tmp += objects[otmp->otyp].oc_hitbon;
@@ -396,8 +401,16 @@ int spec;
 	}
 	
 	if (Is_weapon) {
-		if(otmp->oartifact != ART_TENTACLE_ROD) tmp += otmp->spe;
-		if (otmp->otyp == DOUBLE_LIGHTSABER && otmp->altmode) tmp += otmp->spe;
+		if(otmp->oartifact != ART_TENTACLE_ROD){
+			if(Race_if(PM_ORC)){
+				tmp += max((u.ulevel+1)/3,otmp->spe);
+			} else tmp += otmp->spe;
+		}
+		if (otmp->otyp == DOUBLE_LIGHTSABER && otmp->altmode){
+			if(Race_if(PM_ORC)){
+				tmp += max((u.ulevel+1)/3,otmp->spe);
+			} else tmp += otmp->spe;
+		}
 		/* negative enchantment mustn't produce negative damage */
 		if (tmp < 0) tmp = 0;
 	}
