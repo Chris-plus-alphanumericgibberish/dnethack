@@ -3333,7 +3333,7 @@ register struct monst *mtmp;
 		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 			if(tmpm != mtmp){
 				if(tmpm->mtame && tmpm->mtame<20) tmpm->mtame++;
-				if(d(1,tmpm->mhp) < mtmp->mhpmax){
+				if(tmpm->mhp > 0 && d(1,tmpm->mhp) < mtmp->mhpmax){
 					tmpm->mflee = 1;
 				}
 			}
