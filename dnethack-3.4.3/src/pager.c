@@ -704,6 +704,8 @@ static const char * const bogusobjects[] = {
 	   "spellbook of Noncommutative Hyperdimensional Geometry Made (Merely!) Complicated",
 	   "heavily obfuscated spellbook",
 	   "scroll of abstruse logic",
+			"scroll of identity", /*deepy*/
+			"scroll of cure blindness",
 	   "spellbook of sub-formal introtransreductive logic [for Dummies!]",
 	   "spellbook named A Brief History of Time",
 	   "spellbook named The Book of Eibon", 					/* Clark Ashton Smith */
