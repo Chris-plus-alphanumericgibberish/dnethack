@@ -1953,12 +1953,10 @@ dopois:
 					killer = buf;
 					done(DROWNING);
 				} else if(mattk->aatyp == AT_HUGS){
-					water_damage(invent, FALSE, FALSE, FALSE);
-					pline("%s is crushing you and trying to drown you.", Monnam(mtmp));
+					pline("%s is crushing you.", Monnam(mtmp));
 				} else {
 					dmg = 0;
-					water_damage(invent, FALSE, FALSE, FALSE);
-					pline("%s tries to drown you.", Monnam(mtmp));
+					pline("%s is wrapped tight around you.", Monnam(mtmp));
 				}
 		    } else {
 				dmg = 0;
