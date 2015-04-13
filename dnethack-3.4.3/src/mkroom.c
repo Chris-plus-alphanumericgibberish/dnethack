@@ -84,8 +84,8 @@ mksepulcher()
 			levl[x][y].typ = ROOM;
 			for(i=-2;i<3;i++) {
 				for(j=-2;j<3;j++) {
-					levl[x][y].lit = 0;
-					levl[x][y].wall_info |= W_NONDIGGABLE;
+					levl[x+i][y+j].lit = 0;
+					levl[x+i][y+j].wall_info |= W_NONDIGGABLE;
 				}
 			}
 			makemon(&mons[PM_DREAD_SERAPH], x, y, 0);
