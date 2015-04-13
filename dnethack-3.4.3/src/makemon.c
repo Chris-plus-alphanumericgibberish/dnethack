@@ -852,6 +852,11 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, PICK_AXE);
 				if (!rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
 				}
+				if(In_quest(&u.uz) && Role_if(PM_KNIGHT)){
+					if (mm == PM_ELF_LORD) {
+						(void)mongets(mtmp, CRYSTAL_SWORD);
+					}
+				}
 			} else if (ptr->msound == MS_PRIEST ||
 				quest_mon_represents_role(ptr,PM_PRIEST)) {
 				otmp = mksobj(MACE, FALSE, FALSE);
@@ -3094,11 +3099,11 @@ register int	mmflags;
 			break;
 		case S_JABBERWOCK:
 		case S_NYMPH:
-			if (rn2(5) && !u.uhave.amulet) mtmp->msleeping = 1;
+			if (rn2(5) && !u.uhave.amulet && mndx != PM_NIMUNE) mtmp->msleeping = 1;
 		break;
 		case S_ORC:
 			if (Race_if(PM_ELF)) mtmp->mpeaceful = FALSE;
-			else if(mndx == PM_BOLG){ 
+			else if(mndx == PM_BOLG){
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
