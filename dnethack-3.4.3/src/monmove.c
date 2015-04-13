@@ -807,7 +807,8 @@ register struct monst *mtmp;
 		return(0);
 	}
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
-		(mdat->msound == MS_JUBJUB && (!rn2(10) || (!um_dist(mtmp->mx, mtmp->my, 3) && !rn2(10))))
+		(mdat->msound == MS_JUBJUB && (!rn2(10) || (!um_dist(mtmp->mx, mtmp->my, 3) && !rn2(10)))) ||
+		(mdat->msound == MS_DREAD && !rn2(4))
 	) m_respond(mtmp);
 	if ((mdat == &mons[PM_MEDUSA] || mdat == &mons[PM_GREAT_CTHULHU]) && couldsee(mtmp->mx, mtmp->my))
 	    m_respond(mtmp);
