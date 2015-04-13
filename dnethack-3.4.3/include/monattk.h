@@ -148,6 +148,7 @@
 #define AD_NTZC		143 /* netzach sephiroth's anti-equipment attack */
 #define AD_WTCH		144 /* The Watcher in the water's tentacle-spawning gaze */
 #define AD_SHDW		145 /* Black Web shadow weapons */
+#define AD_STTP		146 /* Steal by Teleportation: Teleports your gear away */
 
 
 //#define AD_AHAZU	150 /*  */
