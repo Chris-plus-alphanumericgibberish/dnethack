@@ -593,6 +593,18 @@ register const char *s;
 		/* some levels can end up with monsters
 		   on dead mon list, including light source monsters */
 		dmonsfree();
+		/*Post-level-loading modification, convert half the swamp to a forest on the knight locate level*/
+		if(Role_if(PM_KNIGHT) && 
+			In_quest(&u.uz) && 
+			Is_qlocate(&u.uz)
+		){
+			int x, y;
+			for(x = 0; x<COLNO/2; x++){
+				for(y = 0; y<ROWNO; y++){
+					if(levl[x][y].typ == POOL) levl[x][y].typ = TREE;
+				}
+			}
+		}
 		return;	/* no mazification right now */
 	    }
 	    impossible("Couldn't load \"%s\" - making a maze.", protofile);
