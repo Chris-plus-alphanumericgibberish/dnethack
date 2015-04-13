@@ -47,6 +47,7 @@
 #define MS_SPELL	38	/* spellcaster not matching any of the above */
 #define MS_WERE		39	/* lycanthrope in human form */
 #define MS_BOAST	40	/* giants */
+#define MS_DREAD	41	/* song of the dread seraphim */
 
 
 #define MR_FIRE		0x001	/* 1 resists fire */
