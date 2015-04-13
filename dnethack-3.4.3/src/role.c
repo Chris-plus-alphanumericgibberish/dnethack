@@ -197,7 +197,7 @@ const struct Role roles[] = {
 	"Kni", "Camelot Castle", "the Isle of Glass",
 	PM_KNIGHT, NON_PM, PM_PONY,
 	PM_KING_ARTHUR, PM_PAGE, PM_NIMUNE,
-	PM_QUASIT, PM_OCHRE_JELLY, S_IMP, S_JELLY,
+	PM_QUASIT, PM_ELF_LORD, S_IMP, S_NYMPH, /*demons and fairies*/
 	ART_MAGIC_MIRROR_OF_MERLIN,
 	MH_DWARF|MH_HUMAN|MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
 	/* Str Int Wis Dex Con Cha */
