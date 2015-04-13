@@ -94,7 +94,7 @@ RNDLEVEL:		"abys2" "C" @ (-12,9) 3
 LEVALIGN:		chaotic
 RNDLEVEL:		"abyss" "D" @ (-12,9) 6
 LEVALIGN:		chaotic
-RNDLEVEL:		"brine" "none" @ (-12,9) 2
+RNDLEVEL:		"brine" "none" @ (-12,9) 3
 LEVALIGN:		chaotic
 LEVEL:		"fakewiz1" "E" @ (-12,9)
 LEVEL:		"fakewiz2" "F" @ (-12,9)

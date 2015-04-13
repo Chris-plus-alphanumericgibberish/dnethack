@@ -152,6 +152,7 @@ typedef struct branch {
 #define Is_abyss3(x)		(on_level(x, &abyss3_level))
 #define Is_demogorgon_level(x)	(on_level(x, &abyss3_level) && dungeon_topology.brine_variant == DEMOGORGON_LEVEL)
 #define Is_dagon_level(x)	(on_level(x, &abyss3_level) && dungeon_topology.brine_variant == DAGON_LEVEL)
+#define Is_lamashtu_level(x)	(on_level(x, &abyss3_level) && dungeon_topology.brine_variant == LAMASHTU_LEVEL)
 
 #define Is_wiz1_level(x)	(on_level(x, &wiz1_level))
 #define Is_wiz2_level(x)	(on_level(x, &wiz2_level))

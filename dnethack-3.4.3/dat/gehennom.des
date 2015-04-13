@@ -3300,6 +3300,200 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 
+MAZE: "brine-3",random
+FLAGS: noteleport,hardfloor,nommap
+
+GEOMETRY: center,center
+#0         1         2		   3	     4		   5		 6		   7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0............................................................................
+1.......................................................... ----.............
+2.....................................................-.--.||..||.----.......
+3.. . . . . . . . . . . . . . ... . . . . . . . . . .||..|||....|||..||......
+4...............................................----.|................|.----.
+5.... . . . . . . ... . . . . . . . . . . . . .||..|||....|||..|||....|||..||
+6..............................................|....|||..||}}}}}}||..|||....|
+7.. . . . . . . . . . . . . ... . . . . . . . .|....P}-P--}}----}}--P-}P....|
+8..............................................||..||}}}}}}||..||}}}}}}||..||
+9.. . . . . . . . . . . . . . . . . . . . . . . -.--}}}}}}}|....|}}}}}}}--.-.
+0...............................................-.--}}}}}}}|....|}}}}}}}--.-.
+1.. . . . . . . . . . . . ... . . . . . ... . .||..||}}}}}}||..||}}}}}}||..||
+2..............................................|....P}-P--}}----}}--P-}P....|
+3.. . . . . . . . . . . . . . . . . . . . . . .|....|||..||}}}}}}||..|||....|
+4..............................................||..|||....|||..|||....|||..||
+5.. . . . . . . . . . . . . . ... . . . . . . . ----.|................|.---- 
+6....................................................||..|||....|||..||...   
+7.. . . . . . . . . . . . . . . ... . ... . . . . . . ----.||..||.--.-.....  
+8...........................................................----............ 
+9.. . . . . . . . . . . . . . . . . . . . . . . . . . . . ...   ............ 
+0.............................................................      .........
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2		   3	     4		   5		 6		   7
+
+STAIR: (03,01), up
+STAIR: (74,20), down
+
+# Non diggable walls - everywhere!
+NON_DIGGABLE:(00,00,75,20)
+
+MONSTER:'&',"Lamashtu",(60,10)
+
+MONSTER:'&',"marilith",random
+MONSTER:'&',"marilith",random
+MONSTER:'&',"marilith",random
+
+MONSTER:'&',"marilith",random
+MONSTER:'&',"marilith",random
+MONSTER:'&',"marilith",random
+
+MONSTER:'&',"marilith",random
+MONSTER:'&',"marilith",random
+MONSTER:'&',"marilith",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+
+MONSTER:'H',"minotaur",random
+MONSTER:'H',"minotaur",random
+MONSTER:'H',"minotaur",random
+
+MONSTER:'H',"minotaur",random
+MONSTER:'H',"minotaur",random
+MONSTER:'H',"minotaur",random
+
+MONSTER:'H',"minotaur",random
+MONSTER:'H',"minotaur",random
+MONSTER:'H',"minotaur",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+MONSTER:'g',"grimlock",random
+
+MONSTER:'h',"anubite",random
+MONSTER:'h',"anubite",random
+MONSTER:'h',"anubite",random
+
+MONSTER:'h',"anubite",random
+MONSTER:'h',"anubite",random
+MONSTER:'h',"anubite",random
+
+MONSTER:'h',"anubite",random
+MONSTER:'h',"anubite",random
+MONSTER:'h',"anubite",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+MONSTER:'h',"gnoll",random
+
+TELEPORT_REGION:(00,00,46,20),(0,0,0,0),down
+TELEPORT_REGION:(00,00,46,20),(0,0,0,0),up
+
+DRAWBRIDGE:(60,06),south,open
+DRAWBRIDGE:(61,06),south,open
+DRAWBRIDGE:(60,13),north,open
+DRAWBRIDGE:(61,13),north,open
+
+MAZEWALK:(50,01), west
+
 MAZE: "abyss-3", ' '
 FLAGS: noteleport,hardfloor,nommap,shortsighted
 

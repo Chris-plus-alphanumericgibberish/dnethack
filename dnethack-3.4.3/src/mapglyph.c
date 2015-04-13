@@ -314,7 +314,11 @@ unsigned *ospecial;
 							color = CLR_BROWN;
 					}
 				} else if(Is_abyss3(&u.uz)){
-					if(offset >= S_vwall && offset <= S_hcdoor)
+					if(Is_lamashtu_level(&u.uz) && 
+						offset >= S_vwall && 
+						offset <= S_hcdoor
+					) color = CLR_BROWN;
+					else if(offset >= S_vwall && offset <= S_hcdoor)
 						color = CLR_GREEN;
 				} else if(Is_abyss3(&u.uz)){
 					if(offset >= S_vwall && offset <= S_hcdoor)

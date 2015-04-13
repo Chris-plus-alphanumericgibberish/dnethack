@@ -101,6 +101,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 	int		brine_variant;
 #define DEMOGORGON_LEVEL	1
 #define DAGON_LEVEL		2
+#define LAMASHTU_LEVEL		3
 //    d_level	d_baalzebub_level;	/* unused */
 //    d_level	d_asmodeus_level;	/* unused */
     d_level	d_portal_level;		/* only in goto_level() [do.c] */
