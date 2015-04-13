@@ -265,6 +265,7 @@ static const char *haluMesg[] = {
 		"...and when they catch you they will kill you...",
 		"but first they must catch you.",
 	"This statement is false.", /*Logical contradiction*/
+	"History is an account, mostly false, of events, mostly unimportant, which are brought about by rulers, mostly knaves, and soldiers, mostly fools",  /*Ambrose Bierce*/
 	"Quod Erat Demonstrandum",	"anno Domini",	"per centum", /* QED, AD, percent */
 	"I was so surprised, I CLASSIFIED INFORMATION, I really did!", /*Haruhi Suzumiya*/
 		"Problems that cannot be solved do not exist in this world.",
