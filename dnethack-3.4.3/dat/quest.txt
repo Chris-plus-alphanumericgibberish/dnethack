@@ -3626,21 +3626,20 @@ been.  Hear now Our words:
 
 "As thou noticed as thou approached %H, a great battle hath
 been fought recently in these fields.  Know thou that Merlin himself
-came to aid Us here as We battled the foul %n.  In the midst of that
-battle, %n struck Merlin a great blow, felling him.  Then, as Our
-forces were pressed back, %n stole %o.
+came to aid Us here as We battled the foul Ixoth.  In the midst of that
+battle, Ixoth struck Merlin a great blow, felling him.  Merlin was 
+taken off by his apprentice, %n, but hath not recovered.
 
-"We eventually turned the tide, but lost many %cP in doing so.
-Merlin was taken off by his apprentice, but hath not recovered.  We have
-been told that so long as %n possesseth %o,
-Merlin will not regain his health.
+"Withiout Merlin's aid, Our forces were pressed back, and We have been
+beseiged here in %H.  Thy return hath turned the tide, but many %cP 
+were lost in the battle, and Our rule remaineth imperiled as long 
+as Merlin is away.
 
 "We hereby charge thee with this most important of duties:
 
 "Go forth from this place, to the fens, and there thou wilt find
-%i.  From there, thou must track down %n.  Destroy the
-beast, and return to Us %o.  Only then can
-We restore Merlin to health."
+%i.  From there, thou must track down %n.  Only from her will
+thou learn what is required, that Merlin may regain his health.
 %E
 %Cp Kni 00025
 "Remember, %p, follow always the path of %d."
@@ -3652,11 +3651,11 @@ We restore Merlin to health."
 "Beware, for %n hath surrounded himself with hordes of foul creatures."
 %E
 %Cp Kni 00028
-"Great treasure, 'tis said, is hoarded in the lair of %n."
+"Great treasure, 'tis said, is hoarded on %i."
 %E
 %Cp Kni 00029
-"If thou possessest %o, %p, %ns magic
-shall therewith be thwarted."
+"If thou possessest %o, %p, the magic of thine
+enemies shall therewith be thwarted."
 %E
 %Cp Kni 00030
 "The gates of %i are guarded by forces unseen, %p.
