@@ -3324,21 +3324,9 @@ register struct monst *mtmp;
 	}
 	aggravate();
     } else if(mtmp->data->msound == MS_JUBJUB && !(mtmp->mspec_used)) {
-		struct monst *tmpm;
-		mtmp->mspec_used = 10;
-		if(flags.soundok) {
-			pline("%s screams high and shrill.", Monnam(mtmp));
-			stop_occupation();
-		}
-		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
-			if(tmpm != mtmp){
-				if(tmpm->mtame && tmpm->mtame<20) tmpm->mtame++;
-				if(tmpm->mhp > 0 && d(1,tmpm->mhp) < mtmp->mhpmax){
-					tmpm->mflee = 1;
-				}
-			}
-		}
-		make_stunned(HStun + mtmp->mhp/10, TRUE);
+		domonnoise(mtmp);
+    } else if(mtmp->data->msound == MS_DREAD && !(mtmp->mspec_used)) {
+		domonnoise(mtmp);
     }
     if(mtmp->data == &mons[PM_MEDUSA]) {
 		register int i;
