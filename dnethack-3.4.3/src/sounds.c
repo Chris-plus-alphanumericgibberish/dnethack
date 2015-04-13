@@ -848,6 +848,175 @@ asGuardian:
 			make_stunned(HStun + mtmp->mhp/10, TRUE);
 		}
 	}break;
+	case MS_DREAD:{
+		struct monst *tmpm;
+		int ix, iy;
+		if(!(mtmp->mspec_used)){
+			pline_msg = "sings, and the world ripples and trembles around you.";
+			mtmp->mspec_used = rnd(4);
+			switch(rnd(5)){
+				case 1:{
+				// pline("death\n");
+				boolean resisted;
+				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(tmpm != mtmp){
+						if (nonliving(tmpm->data) || is_demon(tmpm->data)) {
+							// if (canseemon(tmpm))
+								// pline("%s seems no deader than before.", Monnam(tmpm));
+						} else if (!(resisted = (resists_magm(tmpm) || resist(tmpm, 0, 0, FALSE))) &&
+								   rn2(mtmp->m_lev) > 12) {
+								tmpm->mhp = -1;
+							monkilled(tmpm, "", AD_SPEL);
+						} else {
+							if (resisted) shieldeff(tmpm->mx, tmpm->my);
+						}
+					}
+				}
+				if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
+					// You("seem no deader than before.");
+				} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12) && !(u.sealsActive&SEAL_OSE)) {
+					if (Hallucination) {
+						You("have an out of body experience.");
+					} else {
+						killer_format = KILLED_BY_AN;
+						killer = "song of death";
+						done(DIED);
+					}
+				} else if(!(u.sealsActive&SEAL_OSE)){
+					if (Antimagic) shieldeff(u.ux, u.uy);
+					Your("%s flutters!", body_part(HEART));
+					losehp(rnd(mtmp->m_lev), "song of death", KILLED_BY_AN);
+				} else shieldeff(u.ux, u.uy);
+				stop_occupation();
+				}break;
+				case 2:{
+				// pline("unturn dead\n");
+				struct obj *ispe = mksobj(SPE_TURN_UNDEAD,TRUE,FALSE);
+				for(ix = 0; ix < COLNO; ix++){
+					for(iy = 0; iy < ROWNO; iy++){
+						bhitpile(ispe, bhito, ix, iy);
+					}
+				}
+				}break;
+				case 3:
+				// pline("nightmare\n");
+				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(tmpm != mtmp){
+						if(!mindless(tmpm->data)){
+							tmpm->mstun = 1;
+							tmpm->mconf = 1;
+							tmpm->mberserk = 1;
+						}
+					}
+				}
+				ix = mtmp ? rnd((int)mtmp->m_lev) : rnd(10);
+				if(Antimagic || Half_spell_damage) ix = (ix + 1) / ((Antimagic + Half_spell_damage) * 2);
+				make_confused(HConfusion + ix*10, FALSE);
+				make_stunned(HStun + ix*5, FALSE);
+				make_hallucinated(HHallucination + ix*15, FALSE, 0L);
+				stop_occupation();
+				break;
+				case 4:
+				// pline("earthquake\n");
+				do_earthquake(((int)mtmp->m_lev - 1) / 6 + 1, TRUE, mtmp);
+				aggravate(); /* wake up without scaring */
+				stop_occupation();
+				doredraw();
+				break;
+				case 5:{
+				// pline("locking\n");
+				struct obj *ispe = mksobj(SPE_WIZARD_LOCK,TRUE,FALSE);
+				struct trap *ttmp;
+				struct rm *door;
+				boolean res = TRUE, vis;
+				int loudness = 0;
+				const char *msg = (const char *)0;
+				const char *dustcloud = "A cloud of dust";
+				const char *quickly_dissipates = "quickly dissipates";
+				int key = artifact_door(ix, iy);		/* ALI - Artifact doors from slash'em */
+				for(ix = 0; ix < COLNO; ix++){
+					for(iy = 0; iy < ROWNO; iy++){
+						door = &levl[ix][iy];
+						ttmp = t_at(ix, iy); /* trap if there is one */
+						vis = cansee(ix,iy);
+						if (levl[ix][iy].typ == DRAWBRIDGE_DOWN)
+							close_drawbridge(ix,iy);
+						if (ttmp && ttmp->ttyp == TRAPDOOR) {
+							deltrap(ttmp);
+							ttmp = (struct trap *)0;
+							newsym(ix, iy);
+						}
+						bhitpile(ispe, bhito, ix, iy);
+						if(!IS_DOOR(door->typ))
+					continue;
+#ifdef REINCARNATION
+						if (Is_rogue_level(&u.uz)) {
+							/* Can't have real locking in Rogue, so just hide doorway */
+							if (cansee(ix,iy)) pline("%s springs up in the older, more primitive doorway.",
+								dustcloud);
+							else
+								You_hear("a swoosh.");
+							if (m_at(ix, iy) || !OBJ_AT(ix,iy)) {
+								if (vis) pline_The("cloud %s.",quickly_dissipates);
+					continue;
+							}
+							block_point(ix, iy);
+							door->typ = SDOOR;
+							if (vis) pline_The("doorway vanishes!");
+							newsym(ix,iy);
+					continue;
+						}
+#endif
+						// pline("%d %d",ix,iy);
+						if (m_at(ix, iy) || OBJ_AT(ix,iy))
+					continue;
+						/* Don't allow doors to close over traps.  This is for pits */
+						/* & trap doors, but is it ever OK for anything else? */
+						if (ttmp) {
+						/* maketrap() clears doormask, so it should be NODOOR */
+					continue;
+						}
+						switch (((int)door->doormask) & ~D_TRAPPED) {
+							case D_CLOSED:
+							if (key)
+								msg = "The door closes!";
+							else{
+								msg = "The door locks!";
+							}break;
+							case D_ISOPEN:
+							if (key)
+								msg = "The door swings shut!";
+							else{
+								msg = "The door swings shut, and locks!";
+							}break;
+							case D_BROKEN:
+								msg = "The broken door reassembles and locks!";
+							break;
+							case D_NODOOR:
+							if (key)
+								msg = "The broken door reassembles!";
+							else{
+								msg = "The broken door reassembles and locks!";
+							}
+							break;
+							default:
+							res = FALSE;
+							break;
+						}
+						if(res){
+							block_point(ix, iy);
+							if (key)
+								door->doormask = D_CLOSED | (door->doormask & D_TRAPPED);
+							else
+								door->doormask = D_LOCKED | (door->doormask & D_TRAPPED);
+							newsym(ix,iy);
+						}
+					}
+				}
+				}break;
+			}
+		}
+	}break;
 	case MS_SHRIEK:
 	    pline_msg = "shrieks.";
 	    aggravate();
