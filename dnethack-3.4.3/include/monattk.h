@@ -104,7 +104,7 @@
 #define AD_CNCL		60	/* same effect as a wand of cancelation */
 #define AD_DEAD		61	/* deadly gaze (gaze ONLY, please!) */
 #define AD_SUCK		62	/* tries to suck you appart */
-#define AD_MALK		63	/* tries immobalizes you and destroys wands and rings */
+#define AD_MALK		63	/* tries immobalizes you and destroys wands */
 #define AD_UVUU		64	/* Uvuudaum head spike attack */
 #define AD_ABDC		65	/* Abduction attack, teleports you regardless of monster cancellation */
 
