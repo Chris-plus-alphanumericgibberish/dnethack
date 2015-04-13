@@ -424,7 +424,8 @@ unsigned int type;
        case PM_CHROMATIC_DRAGON:
            return (rn2(2) ? DESTRY_WEPN : EARTHQUAKE);
 
-       // case PM_IXOTH:
+       case PM_IXOTH:
+			return FIRE_PILLAR;
        case PM_NIMUNE:
            if(!rn2(3)) return NIGHTMARE;
 		   else if(rn2(2)) return MASS_CURE_CLOSE;
@@ -1536,15 +1537,15 @@ drainhp:
 	   stop_occupation();
        break;
     case NIGHTMARE:
-	    dmg = mtmp ? rnd((int)mtmp->m_lev) : rnd(10);
-       You_hear("%s laugh menacingly as the world blurs around you...", mtmp ? mon_nam(mtmp) : "Someone");
-       if(Antimagic||Half_spell_damage) dmg = (dmg + 1) / ((Antimagic + Half_spell_damage) * 2);
-       make_confused(HConfusion + dmg*10, FALSE);
-       make_stunned(HStun + dmg*5, FALSE);
-       make_hallucinated(HHallucination + dmg*15, FALSE, 0L);
-       dmg = 0;
-	   stop_occupation();
-       break;
+		dmg = mtmp ? rnd((int)mtmp->m_lev) : rnd(10);
+		You_hear("%s laugh menacingly as the world blurs around you...", mtmp ? mon_nam(mtmp) : "Someone");
+		if(Antimagic||Half_spell_damage) dmg = (dmg + 1) / ((Antimagic + Half_spell_damage) * 2);
+		make_confused(HConfusion + dmg*10, FALSE);
+		make_stunned(HStun + dmg*5, FALSE);
+		make_hallucinated(HHallucination + dmg*15, FALSE, 0L);
+		dmg = 0;
+		stop_occupation();
+	break;
     case MAKE_WEB:
        You("become entangled in hundreds of %s!",
                Hallucination ? "two-minute noodles" : "thick cobwebs");
