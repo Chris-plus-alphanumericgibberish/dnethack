@@ -818,7 +818,7 @@ rock:
 	    if (hates_silver(mon->data) &&
 		objects[obj->otyp].oc_material == SILVER)
 		return(TABU);
-	    if (herbi && obj->otyp == SHEAF_OF_HAY)
+	    if (herbi && (obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT))
 		return CADAVER;
 	    if (mon->data == &mons[PM_GELATINOUS_CUBE] && is_organic(obj))
 		return(ACCFOOD);

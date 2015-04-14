@@ -148,6 +148,7 @@ struct obj *obj;
 		   obj->otyp == FORTUNE_COOKIE ||
 		   obj->otyp == LEMBAS_WAFER ||
 		   obj->otyp == SHEAF_OF_HAY ||
+		   obj->otyp == SEDGE_HAT ||
 		   is_wood(obj) ||
 		   (is_paper(obj) 
 #ifdef MAIL
@@ -218,7 +219,7 @@ register struct obj *obj;
 		return TRUE;
 
 	/* a sheaf of straw is VEGGY, but only edible for herbivorous animals */
-	if (obj->otyp == SHEAF_OF_HAY && herbivorous(youmonst.data))
+	if ((obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT) && herbivorous(youmonst.data))
 		return !carnivorous(youmonst.data);
 	if (herbivorous(youmonst.data) && is_veggy(obj))
 		return TRUE;
