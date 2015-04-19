@@ -1140,7 +1140,7 @@ toofar:
 			if (mtmp->msleeping || !(mtmp->mcanmove && mtmp->mnotlaugh)) return(0);
 			if(!nearby &&
 			  (ranged_attk(mdat) || find_offensive(mtmp))){
-				if(mdat == &mons[PM_GREAT_CTHULHU]) break;
+				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER]) break;
 			    else return(0);
 			}
  			else if(u.uswallow && mtmp == u.ustuck) {
