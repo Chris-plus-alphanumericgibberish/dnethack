@@ -779,7 +779,10 @@ mon_tele:
 		}
 		m_flee(mtmp);
 		if (Inhell && mon_has_amulet(mtmp) && !rn2(4) &&
-			(dunlev(&u.uz) < dunlevs_in_dungeon(&u.uz) - 3)) {
+			(dunlev(&u.uz) < dunlevs_in_dungeon(&u.uz) - 3) &&
+			(u.uz.dlevel < wiz1_level.dlevel) &&
+			(u.uz.dlevel > valley_level.dlevel) 
+		) {
 		    if (vismon) pline(
      "As %s climbs the stairs, a mysterious force momentarily surrounds %s...",
 				     mon_nam(mtmp), mhim(mtmp));
