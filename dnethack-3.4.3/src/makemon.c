@@ -3904,7 +3904,8 @@ int	spc;
 					&& !is_placeholder(&mons[last])) {
 		/* consider it */
 		if(num && toostrong(last, maxmlev) &&
-		   monstr[last] != monstr[last-1] && rn2(2)) break;
+		   monstr[last] != monstr[last-1] && (rn2(2) || monstr[last] > maxmlev+5)
+		) break;
 		num += mons[last].geno & G_FREQ;
 	    }
 
