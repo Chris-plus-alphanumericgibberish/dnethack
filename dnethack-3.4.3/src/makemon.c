@@ -1185,10 +1185,11 @@ register struct monst *mtmp;
 			if (!rn2(4)) {
 				(void)mongets(mtmp, DWARVISH_SHORT_SWORD);
 			} else {
-				(void)mongets(mtmp, DAGGER);
+				if(!rn2(3)) (void)mongets(mtmp, DWARVISH_SPEAR);
+				else (void)mongets(mtmp, DAGGER);
 			}
 			/* note: you can't use a mattock with a shield */
-			if (rn2(2)) (void)mongets(mtmp, DWARVISH_MATTOCK);
+			if (!rn2(3)) (void)mongets(mtmp, DWARVISH_MATTOCK);
 			else {
 				(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
 				(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
