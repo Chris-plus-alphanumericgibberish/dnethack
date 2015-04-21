@@ -26,7 +26,7 @@ digXchasm(mtmp)
 	int dy = rn2(2) ? 1 : -1;
 	y = mtmp->my;
 	x = mtmp->mx;
-	if(isok(x,y)){
+	if(isok(x,y) && x != u.ux && y != u.uy){
 		ttmp = t_at(x, y);
 		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
 			levl[x][y].typ = CORR;
@@ -59,7 +59,7 @@ digXchasm(mtmp)
 	y=y+1;
 	for(x = mtmp->mx + 1; x < COLNO; x++){
 		if(!(x%inty)) y += dy;
-		if(isok(x,y)){
+		if(isok(x,y) && x != u.ux && y != u.uy){
 			ttmp = t_at(x, y);
 			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
 				levl[x][y].typ = CORR;
@@ -94,7 +94,7 @@ digXchasm(mtmp)
 	y = mtmp->my;
 	for(x = mtmp->mx - 1; x >= 0; x--){
 		if(!(x%inty)) y -= dy;
-		if(isok(x,y)){
+		if(isok(x,y) && x != u.ux && y != u.uy){
 			ttmp = t_at(x, y);
 			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
 				levl[x][y].typ = CORR;
@@ -138,7 +138,7 @@ digYchasm(mtmp)
 	int dx = rn2(2) ? 1 : -1;
 	x = mtmp->mx;
 	y = mtmp->my;
-	if(isok(x,y)){
+	if(isok(x,y) && x != u.ux && y != u.uy){
 		ttmp = t_at(x, y);
 		if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
 			levl[x][y].typ = CORR;
@@ -171,7 +171,7 @@ digYchasm(mtmp)
 	x=x+1;
 	for(y = mtmp->my + 1; y < COLNO; y++){
 		if(!(y%intx)) x += dx;
-		if(isok(x,y)){
+		if(isok(x,y) && x != u.ux && y != u.uy){
 			ttmp = t_at(x, y);
 			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
 				levl[x][y].typ = CORR;
@@ -206,7 +206,7 @@ digYchasm(mtmp)
 	x = mtmp->mx;
 	for(y = mtmp->my - 1; y >= 0; y--){
 		if(!(y%intx)) x -= dx;
-		if(isok(x,y)){
+		if(isok(x,y) && x != u.ux && y != u.uy){
 			ttmp = t_at(x, y);
 			if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
 				levl[x][y].typ = CORR;
