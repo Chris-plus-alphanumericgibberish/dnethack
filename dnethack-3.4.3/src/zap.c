@@ -1750,8 +1750,10 @@ struct obj *obj, *otmp;
 		break;
 	case SPE_STONE_TO_FLESH:
 		refresh_x = obj->ox; refresh_y = obj->oy;
-		if (objects[obj->otyp].oc_material != MINERAL &&
-			objects[obj->otyp].oc_material != GEMSTONE) {
+		if ((objects[obj->otyp].oc_material != MINERAL &&
+			objects[obj->otyp].oc_material != GEMSTONE) ||
+			obj->oartifact
+		) {
 		    res = 0;
 		    break;
 		}
