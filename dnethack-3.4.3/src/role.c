@@ -736,6 +736,19 @@ const struct Race races[] = {
 	{  3, 0,  4, 0,  4, 0 },	/* Energy */
 	NORMALNIGHTVIS
 },
+{	"Half-dragon", "Half-dragon", "Half-dragonhood", "Hlf",
+	{0, 0},
+	PM_HALF_DRAGON, NON_PM, PM_HALF_DRAGON_MUMMY, PM_HALF_DRAGON_ZOMBIE,
+	MH_CLOCK|MH_ORC | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL|ROLE_CHAOTIC|ROLE_NEUTRAL,
+	MH_HUMAN, MH_GNOME|MH_ORC, MH_ELF|MH_DWARF,
+	/*    Str     Int Wis Dex Con Cha */
+	{      3,      3,  3,  3,  3,  3 },
+	{ STR19(25),  20, 20, 10, 20, 20 },
+	/* Init   Lower  Higher */
+	{  4, 0,  0, 4,  2, 0 },	/* Hit points */
+	{  4, 0,  0, 4,  2, 0 },	/* Energy */
+	NORMALNIGHTVIS
+},
 {	"clockwork automaton", "automatic", "clockwork-kind", "Clk",
 	{0, 0},
 	PM_CLOCKWORK_AUTOMATON, NON_PM, NON_PM, NON_PM,

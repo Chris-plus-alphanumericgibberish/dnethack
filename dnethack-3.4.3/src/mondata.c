@@ -23,6 +23,28 @@ int flag;
 		mon->mintrinsics |= (ptr->mresists & 0x03FF);
     else
 		mon->mintrinsics = (ptr->mresists & 0x03FF);
+	if(is_half_dragon(ptr)){
+		switch(flags.HDbreath){
+			case AD_FIRE:
+				mon->mintrinsics |= MR_FIRE;
+			break;
+			case AD_COLD:
+				mon->mintrinsics |= MR_COLD;
+			break;
+			case AD_ELEC:
+				mon->mintrinsics |= MR_ELEC;
+			break;
+			case AD_ACID:
+				mon->mintrinsics |= MR_ACID;
+			break;
+			case AD_SLEE:
+				mon->mintrinsics |= MR_SLEEP;
+			break;
+			case AD_DRST:
+				mon->mintrinsics |= MR_POISON;
+			break;
+		}
+	}
     return;
 }
 

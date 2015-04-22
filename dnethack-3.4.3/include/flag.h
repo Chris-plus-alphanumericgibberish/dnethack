@@ -163,6 +163,7 @@ struct flag {
 	int	 panLgod;	/* deity selection for binder character */
 	int	 panNgod;	/* deity selection for binder character */
 	int	 panCgod;	/* deity selection for binder character */
+	int  HDbreath;	/* half-dragon breath weapon type*/
 };
 
 /*

@@ -1988,6 +1988,26 @@ u_init()
 	}
 	
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
+	switch(rnd(6)){
+		case 1:
+			flags.HDbreath = AD_COLD;
+		break;
+		case 2:
+			flags.HDbreath = AD_FIRE;
+		break;
+		case 3:
+			flags.HDbreath = AD_SLEE;
+		break;
+		case 4:
+			flags.HDbreath = AD_ELEC;
+		break;
+		case 5:
+			flags.HDbreath = AD_DRST;
+		break;
+		case 6:
+			flags.HDbreath = AD_ACID;
+		break;
+	}
 	/* Fix up the alignment quest nemesi */
 	mons[PM_OONA].mcolor = (u.oonaenergy == AD_FIRE) ? CLR_RED 
 						 : (u.oonaenergy == AD_COLD) ? CLR_CYAN 

@@ -133,6 +133,9 @@ const struct innate {
 		     {	 21, &(HPolymorph_control), "in control", "out of control" },
 		     {	 0, 0, 0, 0 } },
 
+	hlf_abil[] = { {	14, &(HFlying), "wings sprout from your back", "your wings shrivel and die" },
+		     {	 0, 0, 0, 0 } },
+
 	inc_abil[] = { {	1, &(HAntimagic), "", "" },
 		     {	 0, 0, 0, 0 } };
 
@@ -707,6 +710,7 @@ int oldlevel, newlevel;
 	case PM_CLOCKWORK_AUTOMATON:rabil = clk_abil;	break;
 	case PM_INCANTIFIER:	rabil = inc_abil;	break;
 	case PM_VAMPIRE:		rabil = vam_abil;	break;
+	case PM_HALF_DRAGON:	rabil = hlf_abil;	break;
 	case PM_HUMAN:
 	case PM_DWARF:
 	case PM_GNOME:

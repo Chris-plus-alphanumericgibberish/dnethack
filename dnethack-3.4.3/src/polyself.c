@@ -858,11 +858,14 @@ dobreathe(mdat)
 	if (!getdir((char *)0)) return(0);
 
 	mattk = attacktype_fordmg(mdat, AT_BREA, AD_ANY);
+	if(!mattk && Race_if(PM_HALF_DRAGON)) mattk = attacktype_fordmg(&mons[PM_HALF_DRAGON], AT_BREA, AD_ANY);
 	if (!mattk)
 	    impossible("bad breath attack?");	/* mouthwash needed... */
 	else{
+		int type = mattk->adtyp;
+		if(type == AD_HDRG) type = flags.HDbreath;
 		if(is_dragon(mdat)) flags.drgn_brth = 1;
-	    buzz((int) (20 + mattk->adtyp-1), (int)mattk->damn,
+	    buzz((int) (20 + type-1), (int)mattk->damn,
 			u.ux, u.uy, u.dx, u.dy,0,0);
 		flags.drgn_brth = 0;
 	}

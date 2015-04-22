@@ -136,6 +136,7 @@
 							 (ptr) == &mons[PM_TULANI] \
 							)
 #define is_vampire(ptr)		(((ptr)->mflags2 & M2_VAMPIRE) != 0L)
+#define is_half_dragon(ptr)		attacktype_fordmg(ptr, AT_BREA, AD_HDRG)
 #define is_elf(ptr)			(((ptr)->mflags2 & M2_ELF) != 0L && !is_drow(ptr))
 #define is_drow(ptr)		(((ptr)->mflags2 & M2_ELF) != 0L && ((ptr)->mflags3 & M3_DARKSIGHT) != 0L)
 #define is_dwarf(ptr)		(((ptr)->mflags2 & M2_DWARF) != 0L)

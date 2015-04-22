@@ -28,18 +28,19 @@
 #define HFire_resistance	u.uprops[FIRE_RES].intrinsic
 #define EFire_resistance	u.uprops[FIRE_RES].extrinsic
 #define Fire_resistance		(HFire_resistance || EFire_resistance || \
-				 resists_fire(&youmonst) || \
+				 resists_fire(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_FIRE) ||\
 				 ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA || u.sealsActive&SEAL_FAFNIR)
 
 #define HCold_resistance	u.uprops[COLD_RES].intrinsic
 #define ECold_resistance	u.uprops[COLD_RES].extrinsic
-#define Cold_resistance		(HCold_resistance || ECold_resistance || \
+#define Cold_resistance		(HCold_resistance || ECold_resistance || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_COLD) ||\
 				 resists_cold(&youmonst) || \
 				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON)
 
 #define HSleep_resistance	u.uprops[SLEEP_RES].intrinsic
 #define ESleep_resistance	u.uprops[SLEEP_RES].extrinsic
 #define Sleep_resistance	(HSleep_resistance || ESleep_resistance || \
+				 (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_SLEE) || \
 				 resists_sleep(&youmonst) || u.sealsActive&SEAL_CHUPOCLOPS)
 
 #define HDisint_resistance	u.uprops[DISINT_RES].intrinsic
@@ -50,19 +51,19 @@
 #define HShock_resistance	u.uprops[SHOCK_RES].intrinsic
 #define EShock_resistance	u.uprops[SHOCK_RES].extrinsic
 #define Shock_resistance	(HShock_resistance || EShock_resistance || \
-				 resists_elec(&youmonst) || \
+				 resists_elec(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ELEC) ||\
 				 ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || u.sealsActive&SEAL_ASTAROTH)
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
 #define Poison_resistance	(HPoison_resistance || EPoison_resistance || \
-				 resists_poison(&youmonst) || \
+				 resists_poison(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_DRST) ||\
 				 (ward_at(u.ux,u.uy) == WINGS_OF_GARUDA && num_wards_at(u.ux, u.uy) > rn2(7))\
 				 || u.sealsActive&SEAL_YMIR)
 
 #define HAcid_resistance	u.uprops[ACID_RES].intrinsic
 #define EAcid_resistance	u.uprops[ACID_RES].extrinsic
-#define Acid_resistance		(HAcid_resistance || EAcid_resistance || \
+#define Acid_resistance		(HAcid_resistance || EAcid_resistance || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ACID) ||\
 							 resists_acid(&youmonst) || u.sealsActive&SEAL_ECHIDNA)
 
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
@@ -278,12 +279,13 @@
 				 (ELevitation & ~W_ARTI) == 0L && \
 				 !is_floater(youmonst.data))
 
+#define HFlying			u.uprops[FLYING].intrinsic
 #define EFlying			u.uprops[FLYING].extrinsic
 #ifdef STEED
-# define Flying			(EFlying || is_flyer(youmonst.data) || \
+# define Flying			(EFlying || HFlying || is_flyer(youmonst.data) || \
 				 (u.usteed && is_flyer(u.usteed->data)))
 #else
-# define Flying			(EFlying || is_flyer(youmonst.data))
+# define Flying			(EFlying || HFlying || is_flyer(youmonst.data))
 #endif
 	/* May touch surface; does not override any others */
 

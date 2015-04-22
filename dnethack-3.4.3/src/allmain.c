@@ -546,6 +546,9 @@ moveloop()
 #endif
 		    {
 			moveamt = youmonst.data->mmove;
+			if(Race_if(PM_HALF_DRAGON)) moveamt = (moveamt*2)/3;
+			if(!moveamt) moveamt = 1;
+			
 			if(u.sealsActive&SEAL_EURYNOME && IS_POOL(levl[u.ux][u.uy].typ)){
 				if (Very_fast) {	/* speed boots or potion */
 					/* average movement is 1.78 times normal */
