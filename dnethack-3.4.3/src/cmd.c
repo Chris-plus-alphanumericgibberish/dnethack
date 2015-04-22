@@ -454,49 +454,245 @@ extcmd_via_menu()	/* here after # - now show pick-list of possible commands */
 STATIC_PTR int
 domonability(VOID_ARGS)
 {
-	if (can_breathe(youmonst.data)) return dobreathe(youmonst.data);
-	else if(uarm && uarms && 
-			Is_dragon_armor(uarm) && Is_dragon_shield(uarms) && 
-			Have_same_dragon_armor_and_shield &&
-			uarm->age < monstermoves && uarms->age < monstermoves &&
-			yn("Use dragonbreath?") == 'y'
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+	boolean atleastone = FALSE;
+	
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf, "Attacks");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(uarm && uarms && 
+		Is_dragon_armor(uarm) && Is_dragon_shield(uarms) && 
+		Have_same_dragon_armor_and_shield &&
+		uarm->age < monstermoves && uarms->age < monstermoves
 	){
+		Sprintf(buf, "Armor's Breath Weapon");
+		any.a_int = MATTK_DSCALE;	/* must be non-zero */
+		incntlet = 'a';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(is_were(youmonst.data)){
+		Sprintf(buf, "Summon Aid");
+		any.a_int = MATTK_SUMM;	/* must be non-zero */
+		incntlet = 'A';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(can_breathe(youmonst.data) || Race_if(PM_HALF_DRAGON)){
+		Sprintf(buf, "Breath Weapon");
+		any.a_int = MATTK_BREATH;	/* must be non-zero */
+		incntlet = 'b';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(youmonst.data == &mons[PM_TOVE]){
+		Sprintf(buf, "Bore Hole");
+		any.a_int = MATTK_HOLE;	/* must be non-zero */
+		incntlet = 'B';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(uclockwork){
+		Sprintf(buf, "Adjust Clock");
+		any.a_int = MATTK_CLOCK;	/* must be non-zero */
+		incntlet = 'c';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(attacktype(youmonst.data, AT_GAZE)){
+		Sprintf(buf, "Gaze");
+		any.a_int = MATTK_GAZE;	/* must be non-zero */
+		incntlet = 'g';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(is_hider(youmonst.data)){
+		Sprintf(buf, "Hide");
+		any.a_int = MATTK_HIDE;	/* must be non-zero */
+		incntlet = 'h';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(is_drow(youmonst.data)){
+		Sprintf(buf, "Invoke Darkness");
+		any.a_int = MATTK_DARK;	/* must be non-zero */
+		incntlet = 'i';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(youmonst.data->mlet == S_NYMPH){
+		Sprintf(buf, "Remove Iron Ball");
+		any.a_int = MATTK_REMV;	/* must be non-zero */
+		incntlet = 'I';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(is_mind_flayer(youmonst.data)){
+		Sprintf(buf, "Mind Blast");
+		any.a_int = MATTK_MIND;	/* must be non-zero */
+		incntlet = 'm';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(attacktype(youmonst.data, AT_MAGC)){
+		Sprintf(buf, "Monster Spells");
+		any.a_int = MATTK_MAGIC;	/* must be non-zero */
+		incntlet = 'M';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(youmonst.data == &mons[PM_BANDERSNATCH]){
+		Sprintf(buf, "Reach Attack");
+		any.a_int = MATTK_REACH;	/* must be non-zero */
+		incntlet = 'r';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(u.umonnum == PM_GREMLIN){
+		Sprintf(buf, "Replicate");
+		any.a_int = MATTK_REPL;	/* must be non-zero */
+		incntlet = 'R';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(attacktype(youmonst.data, AT_SPIT)){
+		Sprintf(buf, "Spit");
+		any.a_int = MATTK_SPIT;	/* must be non-zero */
+		incntlet = 's';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(youmonst.data->msound == MS_SHRIEK){
+		Sprintf(buf, "Shriek");
+		any.a_int = MATTK_SHRIEK;	/* must be non-zero */
+		incntlet = 'S';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(youmonst.data->msound == MS_JUBJUB){
+		Sprintf(buf, "Scream");
+		any.a_int = MATTK_SCREAM;	/* must be non-zero */
+		incntlet = 'S';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(is_unicorn(youmonst.data)){
+		Sprintf(buf, "Unicorn Horn");
+		any.a_int = MATTK_UHORN;	/* must be non-zero */
+		incntlet = 'u';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(webmaker(youmonst.data)){
+		Sprintf(buf, "Make Web");
+		any.a_int = MATTK_WEBS;	/* must be non-zero */
+		incntlet = 'w';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
+	if(!atleastone){
+		if(Upolyd) pline("Any special ability you may have is purely reflexive.");
+		else You("don't have a special ability in your normal form!");
+		return 0;
+	}
+	
+	end_menu(tmpwin, "Choose which attack to use");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	
+	if(n <= 0) return 0;
+	
+	switch (selected[0].item.a_int) {
+	case MATTK_BREATH: return dobreathe(youmonst.data);
+	case MATTK_DSCALE:{
 		int res;
 		if(res = dobreathe(Dragon_shield_to_pm(uarms))){
 			uarm->age = monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
 			uarms->age= monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
 		}
 		return res;
-	} else if (attacktype(youmonst.data, AT_SPIT)) return dospit();
-	else if (attacktype(youmonst.data, AT_MAGC))
-	    return castum((struct monst *)0,
+	}
+	case MATTK_SPIT: return dospit();
+	case MATTK_MAGIC: return castum((struct monst *)0,
 	                   &youmonst.data->mattk[attackindex(youmonst.data, 
 			                         AT_MAGC,AD_ANY)]);
-	else if (youmonst.data->mlet == S_NYMPH) return doremove();
-	else if (attacktype(youmonst.data, AT_GAZE)) return dogaze();
-	else if (is_were(youmonst.data)) return dosummon();
-	else if (webmaker(youmonst.data)) return dospinweb();
-	else if (is_hider(youmonst.data)) return dohide();
-	else if (is_mind_flayer(youmonst.data)) return domindblast();
-	else if (uclockwork) return doclockspeed();
-	else if (is_drow(youmonst.data) || (!Upolyd && Race_if(PM_DROW))) return dodarken();
-	else if (u.umonnum == PM_GREMLIN) {
+	case MATTK_REMV: return doremove();
+	case MATTK_GAZE: return dogaze();
+	case MATTK_SUMM: return dosummon();
+	case MATTK_WEBS: return dospinweb();
+	case MATTK_HIDE: return dohide();
+	case MATTK_MIND: return domindblast();
+	case MATTK_CLOCK: return doclockspeed();
+	case MATTK_DARK: return dodarken();
+	case MATTK_REPL: {
 	    if(IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
-		if (split_mon(&youmonst, (struct monst *)0))
-		    dryup(u.ux, u.uy, TRUE);
-	    } else There("is no fountain here.");
-	} else if (is_unicorn(youmonst.data)) {
+			if (split_mon(&youmonst, (struct monst *)0))
+				dryup(u.ux, u.uy, TRUE);
+			return 1;
+	    } else {
+			There("is no fountain here.");
+			return 0;
+		}
+	}
+	case MATTK_UHORN: {
 	    use_unicorn_horn((struct obj *)0);
 	    return 1;
-	} else if (youmonst.data->msound == MS_SHRIEK) {
+	}
+	case MATTK_SHRIEK: {
 	    You("shriek.");
-	    if(u.uburied)
-		pline("Unfortunately sound does not carry well through rock.");
+	    if(u.uburied) pline("Unfortunately sound does not carry well through rock.");
 	    else aggravate();
-	} else if (youmonst.data->msound == MS_JUBJUB) {
+		return 1;
+	}
+	case MATTK_SCREAM: {
 	    You("scream high and shrill.");
-	    if(u.uburied)
-		pline("Unfortunately sound does not carry well through rock.");
+	    if(u.uburied) pline("Unfortunately sound does not carry well through rock.");
 	    else{
 			struct monst *tmpm;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
@@ -506,7 +702,8 @@ domonability(VOID_ARGS)
 				}
 			}
 		}
-	} else if (youmonst.data == &mons[PM_TOVE]) {
+	}
+	case MATTK_HOLE: {
 		struct trap *ttmp = t_at(u.ux, u.uy);
 		struct rm *lev = &levl[u.ux][u.uy];
 		schar typ;
@@ -549,12 +746,14 @@ domonability(VOID_ARGS)
 				digactualhole(u.ux, u.uy, &youmonst, PIT, FALSE);
 			else
 				digactualhole(u.ux, u.uy, &youmonst, HOLE, FALSE);
+			return 1;
+		} else {
+			You("gyre and gimble, but the %s is too hard!", surface(u.ux,u.uy));
+			return 1;
 		}
-	} else if(youmonst.data == &mons[PM_BANDERSNATCH]){
-		use_reach_attack();
-	} else if (Upolyd)
-		pline("Any special ability you may have is purely reflexive.");
-	else You("don't have a special ability in your normal form!");
+	}
+	case MATTK_REACH: use_reach_attack();
+	}
 	return 0;
 }
 

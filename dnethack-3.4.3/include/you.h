@@ -344,6 +344,24 @@ struct you {
 	int umonnum;			/* current monster number */
 
 	int mh, mhmax, mtimedone;	/* for polymorph-self */
+#define MATTK_DSCALE 1
+#define MATTK_BREATH 2
+#define MATTK_SPIT 3
+#define MATTK_MAGIC 4
+#define MATTK_REMV 5
+#define MATTK_GAZE 6
+#define MATTK_SUMM 7
+#define MATTK_WEBS 8
+#define MATTK_HIDE 9
+#define MATTK_MIND 10
+#define MATTK_CLOCK 11
+#define MATTK_DARK 12
+#define MATTK_REPL 13
+#define MATTK_UHORN 14
+#define MATTK_SHRIEK 15
+#define MATTK_SCREAM 16
+#define MATTK_HOLE 17
+#define MATTK_REACH 18
 	struct attribs	macurr,		/* for monster attribs */
 			mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */
