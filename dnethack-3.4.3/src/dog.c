@@ -49,10 +49,8 @@ pet_type()
 	}
 	else if (urole.petnum != NON_PM)
 	    return (urole.petnum);
-	else if (preferred_pet == 'c')
-	    return (PM_KITTEN);
-	else if (preferred_pet == 'd')
-	    return (PM_LITTLE_DOG);
+	else if(Race_if(PM_HALF_DRAGON))
+		return PM_TINY_PSEUDODRAGON;
 	else if (Role_if(PM_PIRATE)) {
 		if (preferred_pet == 'B')
 			return (PM_PARROT);
@@ -61,6 +59,10 @@ pet_type()
 		else
 			return (rn2(2) ? PM_PARROT : PM_MONKEY);
 	}
+	else if (preferred_pet == 'c')
+	    return (PM_KITTEN);
+	else if (preferred_pet == 'd')
+	    return (PM_LITTLE_DOG);
 	else
 	    return (rn2(2) ? PM_KITTEN : PM_LITTLE_DOG);
 }
@@ -162,6 +164,16 @@ makedog()
 		petname = dogname;
 	else if (pettype == PM_PONY)
 		petname = horsename;
+	else if (pettype == PM_PARROT)
+		petname = parrotname;
+	else if (pettype == PM_MONKEY)
+		petname = monkeyname;
+	else if(is_spider(&mons[pettype]))
+		petname = spidername;
+	else if(is_dragon(&mons[pettype]))
+		petname = dragonname;
+	else if(mons[pettype].mlet == S_LIZARD)
+		petname = lizardname;
 #ifdef CONVICT
 	else if (pettype == PM_SEWER_RAT)
 		petname = ratname;
@@ -176,6 +188,12 @@ makedog()
 	    if(Role_if(PM_SAMURAI)) petname = "Hachi";     /* Shibuya Station */
 	    if(Role_if(PM_BARBARIAN)) petname = "Idefix";  /* Obelix */
 	    if(Role_if(PM_RANGER)) petname = "Sirius";     /* Orion's dog */
+	}
+
+	if (!*petname && pettype == PM_KITTEN) {
+	    if(Role_if(PM_NOBLEMAN)) petname = "Puss";   /* Puss in Boots */
+	    if(Role_if(PM_WIZARD) && flags.female) petname = rn2(2) ? "Crookshanks" : "Greebo";     /* Hermione and Nanny Ogg */
+	    if(Role_if(PM_WIZARD) && !flags.female) petname = rn2(2) ? "Tom Kitten" : "Mister";     /* Beatrix Potter and Harry Dresden */
 	}
 
 #ifdef CONVICT

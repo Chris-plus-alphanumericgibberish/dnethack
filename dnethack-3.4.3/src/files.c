@@ -1789,6 +1789,16 @@ char		*tmp_levels;
 	    (void) strncpy(dogname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "CATNAME", 3)) {
 	    (void) strncpy(catname, bufp, PL_PSIZ-1);
+	} else if (match_varname(buf, "LIZARDNAME", 3)) {
+	    (void) strncpy(lizardname, bufp, PL_PSIZ-1);
+	} else if (match_varname(buf, "DRAGONNAME", 3)) {
+	    (void) strncpy(dragonname, bufp, PL_PSIZ-1);
+	} else if (match_varname(buf, "SPIDERNAME", 3)) {
+	    (void) strncpy(spidername, bufp, PL_PSIZ-1);
+	} else if (match_varname(buf, "PARROTNAME", 3)) {
+	    (void) strncpy(parrotname, bufp, PL_PSIZ-1);
+	} else if (match_varname(buf, "MONKEYNAME", 3)) {
+	    (void) strncpy(monkeyname, bufp, PL_PSIZ-1);
 #ifdef CONVICT
 	} else if (match_varname(buf, "RATNAME", 3)) {
 	    (void) strncpy(catname, bufp, PL_PSIZ-1);

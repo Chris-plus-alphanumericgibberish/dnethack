@@ -204,6 +204,11 @@ NEARDATA struct obj zeroobj = DUMMY;
 /* originally from dog.c */
 NEARDATA char dogname[PL_PSIZ] = DUMMY;
 NEARDATA char catname[PL_PSIZ] = DUMMY;
+NEARDATA char parrotname[PL_PSIZ] = DUMMY;
+NEARDATA char monkeyname[PL_PSIZ] = DUMMY;
+NEARDATA char spidername[PL_PSIZ] = DUMMY;
+NEARDATA char lizardname[PL_PSIZ] = DUMMY;
+NEARDATA char dragonname[PL_PSIZ] = DUMMY;
 NEARDATA char horsename[PL_PSIZ] = DUMMY;
 #ifdef CONVICT
 NEARDATA char ratname[PL_PSIZ] = DUMMY;
