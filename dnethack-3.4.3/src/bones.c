@@ -236,6 +236,7 @@ struct obj *corpse;
 			quest_status.leader_m_id == mtmp->m_id || 
 		    mptr == &mons[PM_VLAD_THE_IMPALER] || 
 		    is_keter(mptr) || 
+			(mptr == &mons[PM_DREAD_SERAPH] && !(mtmp->mstrategy & STRAT_WAITFORU)) || 
 			(mptr == &mons[PM_WEEPING_ANGEL] && angelnum > 0) || 
 			(is_dprince(mptr) && !Inhell) || 
 			(is_dlord(mptr) && !Inhell)
