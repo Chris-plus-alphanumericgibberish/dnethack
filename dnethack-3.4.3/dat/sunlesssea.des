@@ -454,3 +454,116 @@ MONSTER: 'B',"crow",random
 MONSTER: 'B',"crow",random
 MONSTER: 'B',"crow",random
 MONSTER: 'B',"crow",random
+
+#Khor's Peanut Island
+MAZE:"sea-4",' '
+GEOMETRY:center,center
+###########1#########2#########3#########4#########5#########6#########7#####
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+1}}}}}}}}}||}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+2}}}}}}}}----}}}}}}}}}}}}......}}}}}}}}}}}}}}}}}}......}}}}}}}}}}}}..}}}}}}}}
+3}}}}}}--....--}}}}}}}}..........}}}}}}}}}}}}}}..........}}}}}}}}}....}}}}}}}
+4}}}}}|........|}}}}}...............}}}}}}}}..............}}}}}}}}....}}}}}}}
+5}}}}}|.---|...|}}}}.......................................}}}}}}}}}..}}}}}}}
+6}}}}|..|..|....|}}}.......................................}}}}}}}}}}}}}}}}}}
+7}}}}|..S..|....|}}}........................................}}}}}}}}}}}}}}}}}
+8}}}}|------....|}}.........................................}}}}}}}}}}}}}}}}}
+9}}}}|..........|}}.........................................}}}}}}}}}}}}}}}}}
+0}}}}|.---------|}}.........................................}}}}}}}}}}}}}.}}}
+1}}}}|....--....|}..........................................}}}}}}}}}}}}}..}}
+2}}}}|..........|}}.........................................}}}}}}}}}}}}}}}}}
+3}}}}|.|--------|}}}.......................................}}}}}}}}}}}}}}}}}}
+4}}}}|.|.|.|..S.|}}}}......................................}}}}}}}}}}}}}}}}}}
+5}}}}|.|.|.|..|.|}}}}}..............}}}}}}}}..............}}}}}..}}}}}}}}}}}}
+6}}}}|.|.|.|---.|}}}}}}..........}}}}}}}}}}}}}}..........}}}}}}....}}}}}}}}}}
+7}}}}|...|......|}}}}}}}}......}}}}}}}}}}}}}}}}}}......}}}}}}}}}......}}}}}}}
+8}}}}}----------}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}...}}}}}}}}
+9}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+###########1#########2#########3#########4#########5#########6#########7#####
+RANDOM_PLACES:(11,15),(09,06)
+
+# Dungeon Description
+REGION:(01,01,73,16),lit,"ordinary"
+# Stairs
+STAIR:(19,02,58,07), (19,10,20,12), up
+# STAIR:(19,02,58,07), (19,10,20,12), down
+# The gangplank
+DRAWBRIDGE:(16,11),west,closed
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,19)
+
+CONTAINER:'(',"chest",place[0]
+OBJECT:'$',random,contained
+OBJECT:'$',random,contained
+OBJECT:'$',random,contained
+OBJECT:'$',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'*',random,contained
+OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'=',random,contained
+OBJECT:'=',random,contained
+OBJECT[50%]:')',"silver dagger", contained
+OBJECT[10%]:')',"silver saber", contained
+OBJECT:'(',"magic lamp",contained
+OBJECT:'(',"oil lamp",contained
+
+# Objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+# Random traps
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+# Random monsters.
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+

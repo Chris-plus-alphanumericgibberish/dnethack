@@ -233,7 +233,7 @@ LEVEL:          "tomb" "L" @ (1, 0)
 DUNGEON:        "The Sunless Sea" "none" (1, 0)
 ALIGNMENT:      chaotic
 DESCRIPTION:    mazelike
-RNDLEVEL:         "sea" "none" @ (1, 0) 3
+RNDLEVEL:         "sea" "none" @ (1, 0) 4
 
 ### The Temple of Moloch ###
 DUNGEON:        "The Temple of Moloch" "none" (1, 0)
