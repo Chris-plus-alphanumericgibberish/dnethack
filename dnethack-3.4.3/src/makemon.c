@@ -3348,7 +3348,7 @@ register int	mmflags;
 		/*At this point, we have FINALLY created the inventory for the initial creature and all its associates, so the global should be unset now.*/
 		curhouse = 0;
 	}
-	if ((ptr->mflags3 & M3_WAITMASK) && !(mmflags & MM_NOWAIT)) {
+	if ((ptr->mflags3 & M3_WAITMASK) && !(mmflags & MM_NOWAIT) && !u.udemigod) {
 		if (ptr->mflags3 & M3_WAITFORU)
 			mtmp->mstrategy |= STRAT_WAITFORU;
 		if (ptr->mflags3 & M3_CLOSE)
