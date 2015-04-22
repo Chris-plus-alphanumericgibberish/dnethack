@@ -165,7 +165,7 @@ struct mask_properties {
 	Bitfield(mskfemale,1);
 	struct attribs	mskacurr,
 					mskaexe,
-					mskamask;
+					mskamax;
 	align	mskalign;
 	schar mskluck;
 	int mskhp,mskhpmax;
@@ -447,8 +447,8 @@ struct you {
 	uchar	usptime;		/* #moves until uspellprot-- */
 	uchar	uspmtime;		/* #moves between uspellprot-- */
 	uchar	sowdisc;		/* sowing discord (spirit special attack) */
-	int	uhp,uhpmax,uhpmax_real;
-	int	uen, uenmax,uenmax_real;		/* magical energy - M. Stephenson */
+	int	uhp,uhpmax,uhp_real,uhpmax_real;
+	int	uen,uenmax,uen_real,uenmax_real;		/* magical energy - M. Stephenson */
 	int ugangr[GA_NUM];			/* if the gods are angry at you */
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */

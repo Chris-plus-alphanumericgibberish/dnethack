@@ -959,7 +959,8 @@ doMaskStats(mask)
 		mask->mp->mskrexp = mask->mp->msklevel-1;
 		mask->mp->mskweapon_slots = 0;
 		mask->mp->mskskills_advanced = 0;
-		
+		// mask->mp->mskskill_record;
+		// mask->mp->mskweapon_skills;
 //	} else {
 	}
 }

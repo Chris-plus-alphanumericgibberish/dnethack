@@ -668,6 +668,17 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 		/* special case: pick-axe and unicorn horn are non-worn */
 		/* items that we also want pets to keep 1 of */
 		/* (It is a coincidence that these can also be wielded.) */
+		// pline("worn %d, weapon %d, intelligent %d, hwep %d, rwep %d, proj %d, would_prefer_hwep %d, would_prefer_rwep %d, could_use_item %d",
+			// (int)otmp->owornmask, 
+			// (int)otmp == wep, 
+			// (int)intelligent, 
+			// (int)otmp == hwep, 
+			// (int)otmp == rwep, 
+			// (int)otmp == proj, 
+			// (int)would_prefer_hwep(mtmp, otmp),
+			// (int)would_prefer_rwep(mtmp, otmp), 
+			// (int)(0 || could_use_item(mtmp, otmp, TRUE))
+		// );
 		if (otmp->owornmask || otmp == wep ||
 		    (intelligent && 
 				(otmp == hwep || otmp == rwep || otmp == proj ||

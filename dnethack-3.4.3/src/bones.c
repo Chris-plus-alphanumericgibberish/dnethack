@@ -201,6 +201,7 @@ struct obj *corpse;
 	struct monst *mtmp;
 	struct permonst *mptr;
 	struct fruit *f;
+	struct obj *mask;
 	char c, *bonesid;
 	char whynot[BUFSZ];
 
@@ -253,7 +254,50 @@ struct obj *corpse;
 
 	/* check iron balls separately--maybe they're not carrying it */
 	if (uball) uball->owornmask = uchain->owornmask = 0;
-
+	
+	if(!Race_if(PM_WORM_THAT_WALKS)){
+		mask = mksobj(MASK, TRUE, FALSE);
+		mask->mp->msklevel = u.ulevel;
+		mask->mp->mskmonnum = urace.malenum;
+		mask->corpsenm = urole.malenum;
+		mask->mp->mskrolenum = urole.malenum;
+		mask->mp->mskfemale = flags.female;
+		mask->mp->mskacurr.a[A_STR] = u.acurr.a[A_STR];
+		mask->mp->mskacurr.a[A_INT] = u.acurr.a[A_INT];
+		mask->mp->mskacurr.a[A_WIS] = u.acurr.a[A_WIS];
+		mask->mp->mskacurr.a[A_DEX] = u.acurr.a[A_DEX];
+		mask->mp->mskacurr.a[A_CON] = u.acurr.a[A_CON];
+		mask->mp->mskacurr.a[A_CHA] = u.acurr.a[A_CHA];
+		mask->mp->mskaexe.a[A_STR] = u.aexe.a[A_STR];
+		mask->mp->mskaexe.a[A_INT] = u.aexe.a[A_INT];
+		mask->mp->mskaexe.a[A_WIS] = u.aexe.a[A_WIS];
+		mask->mp->mskaexe.a[A_DEX] = u.aexe.a[A_DEX];
+		mask->mp->mskaexe.a[A_CON] = u.aexe.a[A_CON];
+		mask->mp->mskaexe.a[A_CHA] = u.aexe.a[A_CHA];
+		mask->mp->mskamax.a[A_STR] = u.amax.a[A_STR];
+		mask->mp->mskamax.a[A_INT] = u.amax.a[A_INT];
+		mask->mp->mskamax.a[A_WIS] = u.amax.a[A_WIS];
+		mask->mp->mskamax.a[A_DEX] = u.amax.a[A_DEX];
+		mask->mp->mskamax.a[A_CON] = u.amax.a[A_CON];
+		mask->mp->mskamax.a[A_CHA] = u.amax.a[A_CHA];
+		mask->mp->mskalign = u.ualign;
+		mask->mp->mskluck = u.uluck;
+		mask->mp->mskhp = u.uhp;
+		mask->mp->mskhpmax = u.uhpmax;
+		mask->mp->msken = u.uen;
+		mask->mp->mskenmax = u.uenmax;
+		mask->mp->mskgangr[0] = u.ugangr[0];
+		mask->mp->mskgangr[1] = u.ugangr[1];
+		mask->mp->mskgangr[2] = u.ugangr[2];
+		mask->mp->mskgangr[3] = u.ugangr[3];
+		mask->mp->mskgangr[4] = u.ugangr[4];
+		mask->mp->mskexp = u.uexp;
+		mask->mp->mskrexp = u.urexp;
+		mask->mp->mskweapon_slots = u.weapon_slots;
+		mask->mp->mskskills_advanced = u.skills_advanced;
+		//skills_record
+		//weapon_skills
+	} else mask = (struct obj *) 0;
 	/* dispose of your possessions, usually cursed */
 	if (u.ugrave_arise == (NON_PM - 1)) {
 		struct obj *otmp;
