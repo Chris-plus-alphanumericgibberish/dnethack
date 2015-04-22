@@ -2071,8 +2071,8 @@ then fill new spaces with our spawn!’
 	0, CLR_CYAN),
     MON("deep dragon", S_DRAGON, //26
 	LVL(15, 9, -4, 20, -6), (G_GENO|1),
-	A(ATTK(AT_BREA, AD_DRST, 4, 6), ATTK(AT_BITE, AD_DRLI, 2, 8),
-	  ATTK(AT_CLAW, AD_DRLI, 1, 4), ATTK(AT_CLAW, AD_DRLI, 1, 4),
+	A(ATTK(AT_BEAM, AD_DRLI, 2, 8), ATTK(AT_BITE, AD_DRLI, 2, 8),
+	  ATTK(AT_CLAW, AD_PHYS, 3, 4), ATTK(AT_CLAW, AD_PHYS, 3, 4),
 	  NO_ATTK, NO_ATTK),
 	SIZ(WT_DRAGON, 1500, 0, MS_ROAR, MZ_GIGANTIC),
 	MR_DRAIN|MR_POISON, 0,/* gain level */
