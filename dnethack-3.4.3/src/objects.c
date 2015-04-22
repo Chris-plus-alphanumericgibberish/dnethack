@@ -102,6 +102,8 @@ WEAPON("shuriken", "throwing star",
 	0, 1, 0, 35,  1,  5,  8,  6, 2, P,   -P_SHURIKEN, IRON, HI_METAL),
 WEAPON("boomerang", (char *)0,
 	1, 1, 0, 15,  5, 20,  9,  9, 0, 0,   -P_BOOMERANG, WOOD, HI_WOOD),
+WEAPON("spike", (char *)0,
+	1, 1, 0,  0,  1,  2,  3,  2, 0, P,   -P_DART, BONE, CLR_WHITE),
 
 /* spears */
 WEAPON("spear", (char *)0,

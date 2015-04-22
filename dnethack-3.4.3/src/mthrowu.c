@@ -1146,6 +1146,14 @@ register struct attack *mattk;
 				qvr->opoisoned = (OPOISON_BASIC|OPOISON_BLIND);
 				bypassDR = 1;
 			break;
+		    case AD_PLYS:
+				ammo_type = SPIKE;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+			    qvr->blessed = 0;
+			    qvr->cursed = 0;
+			    qvr->quan = 1;
+				qvr->opoisoned = (OPOISON_PARAL);
+			break;
 		    case AD_SOLR:
 				ammo_type = SILVER_ARROW;
 				qvr = mksobj(ammo_type, TRUE, FALSE);

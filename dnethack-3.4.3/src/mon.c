@@ -256,6 +256,16 @@ register struct monst *mtmp;
 		    obj = mksobj_at(BLACK_DRAGON_SCALES, x, y, FALSE, FALSE);
 			obj = oname(obj, artiname(ART_CHROMATIC_DRAGON_SCALES));
 		goto default_1;
+	    case PM_MANTICORE:
+		if (mtmp->mrevived ? !rn2(6) : TRUE) {
+			obj = mksobj_at(SPIKE, x, y, TRUE, FALSE);
+			obj->blessed = 0;
+			obj->cursed = 0;
+			obj->quan = d(4,6);
+			obj->spe = 0;
+			obj->opoisoned = (OPOISON_PARAL);
+		}
+		goto default_1;
 	    case PM_SON_OF_TYPHON:
 		if (!rn2(mtmp->mrevived ? 20 : 3)) {
 			obj = mksobj_at(LEO_NEMAEUS_HIDE, x, y, FALSE, FALSE);
