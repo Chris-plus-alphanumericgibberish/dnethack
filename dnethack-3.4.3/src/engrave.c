@@ -260,6 +260,8 @@ static const char *haluMesg[] = {
 	"The thirteen days after we awoke were the beginning of the end.", /*FF XIII*/
 	"Servant of time. Daughter of chaos. Unto the world unseen, the untamed you guide.", /*FF XIII-2*/
 	"One day, the light touched me.", /*FF XIII-3*/
+	"What greater weapon is there than to turn an enemy to your cause? To use their own knowledge against them?", /* Knights of the Old Republic */
+	"That is a lesson I will never learn, for I do not believe it.", /* Knights of the Old Republic II */
 	"Do not call up any that you can not put down.", /*HP Lovecraft*/
 	"All the world will be your enemy, Prince With A Thousand Enemies...", /*Watership Down*/
 		"...and when they catch you they will kill you...",
