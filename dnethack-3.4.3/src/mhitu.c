@@ -63,6 +63,9 @@ register struct attack *mattk;
 			compat == 2 ? "engagingly" : "seductively");
 	} else
 	    switch (mattk->aatyp) {
+		case AT_BEAM:
+			pline("%s blasts!", Monnam(mtmp));
+			break;
 		case AT_LNCK:
 		case AT_BITE:
 			pline("%s bites!", Monnam(mtmp));
@@ -837,6 +840,11 @@ mattacku(mtmp)
 			mtmp->mflee = 1;
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AT_BEAM:
+			if(lined_up(mtmp) && dist2(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy) <= BOLT_LIM*BOLT_LIM){
+				if (foundyou) sum[i] = hitmu(mtmp, mattk);
+				else wildmiss(mtmp, mattk);
+			}
 		case AT_LNCK:
 		case AT_LRCH:{
 			if(dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8 && couldsee(mtmp->mx, mtmp->my)){
@@ -6812,9 +6820,10 @@ register struct attack *mattk;
 		/* wielded weapon gives same protection as gloves here */
 		if (MON_WEP(mtmp) != 0) wornitems |= W_ARMG;
 
-		if (!resists_ston(mtmp) && (protector == 0L ||
-			(protector != ~0L &&
-			    (wornitems & protector) != protector))) {
+		if (!resists_ston(mtmp) && 
+			(protector == 0L || (protector != ~0L &&
+			    (wornitems & protector) != protector))
+		) {
 		    if (poly_when_stoned(mtmp->data)) {
 			mon_to_stone(mtmp);
 			return (1);

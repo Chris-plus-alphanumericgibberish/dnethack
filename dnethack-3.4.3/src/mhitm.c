@@ -334,6 +334,14 @@ mattackm(magr, mdef)
 #endif /* TAME_RANGED_ATTACKS */
 		}
 		else goto meleeattack;
+		case AT_BEAM:
+		if(!mlined_up(magr, mdef, FALSE) || dist2(magr->mx,magr->my,mdef->mx,mdef->my) > BOLT_LIM*BOLT_LIM){
+#ifdef TAME_RANGED_ATTACKS
+                    break; /* might have more ranged attacks */
+#else
+		    return MM_MISS;
+#endif /* TAME_RANGED_ATTACKS */
+		} goto meleeattack;
 		case AT_LRCH:
 		case AT_LNCK:
 		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 5)
@@ -350,7 +358,9 @@ meleeattack:
 		 * players, or under conflict or confusion. 
 		 */
 		if (!magr->mconf && !Conflict && otmp &&
-		    mattk->aatyp != AT_WEAP && touch_petrifies(mdef->data)) {
+		    mattk->aatyp != AT_WEAP && mattk->aatyp != AT_BEAM && 
+			touch_petrifies(mdef->data)
+		) {
 		    strike = 0;
 		    break;
 		}
@@ -601,6 +611,9 @@ hitmm(magr, mdef, mattk)
 
 		    Strcpy(magr_name, Monnam(magr));
 		    switch (mattk->aatyp) {
+			case AT_BEAM:
+				Sprintf(buf,"%s blasts", magr_name);
+				break;
 			case AT_LNCK:
 			case AT_BITE:
 				Sprintf(buf,"%s bites", magr_name);
@@ -834,7 +847,9 @@ mdamagem(magr, mdef, mattk)
 	    if (otmp != 0) wornitems |= W_ARMG;
 
 	    if (protector == 0L ||
-		  (protector != ~0L && (wornitems & protector) != protector)) {
+		  (protector != ~0L && 
+		  (wornitems & protector) != protector)
+		) {
 		if (poly_when_stoned(pa)) {
 		    mon_to_stone(magr);
 		    return MM_HIT; /* no damage during the polymorph */
@@ -2078,6 +2093,9 @@ int aatyp;
     case AT_BREA:
     case AT_MAGC:
     case AT_MMGC:
+    case AT_BEAM:
+    case AT_SHDW:
+    case AT_WISP:
 	w_mask = ~0L;		/* special case; no defense needed */
 	break;
     case AT_CLAW:

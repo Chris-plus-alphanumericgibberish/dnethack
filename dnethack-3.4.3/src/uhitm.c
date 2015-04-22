@@ -3184,6 +3184,7 @@ wisp_shdw_dhit:
 			/* Not break--avoid passive attacks from enemy */
 
 		case AT_BREA:
+		case AT_BEAM:
 		case AT_SPIT:
 		case AT_GAZE:	/* all done using #monster command */
 			dhit = 0;
@@ -3431,6 +3432,7 @@ wisp_shdw_dhit2:
 		/* Not break--avoid passive attacks from enemy */
 
 	case AT_BREA:
+	case AT_BEAM:
 	case AT_SPIT:
 	case AT_GAZE:	/* all done using #monster command */
 		dhit = 0;

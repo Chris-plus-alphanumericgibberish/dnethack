@@ -1031,6 +1031,7 @@ toofar:
 	      (!mtmp->mspec_used && 
 			(attacktype(mtmp->data, AT_SPIT) ||
 			 attacktype(mtmp->data, AT_TNKR) ||
+			 attacktype(mtmp->data, AT_BEAM) ||
 			 attacktype(mtmp->data, AT_BREA)
 			)
 		  )||
