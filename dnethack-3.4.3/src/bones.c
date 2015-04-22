@@ -196,7 +196,7 @@ void
 savebones(corpse)
 struct obj *corpse;
 {
-	int fd, x, y;
+	int fd, x, y, angelnum=0;
 	struct trap *ttmp;
 	struct monst *mtmp;
 	struct permonst *mptr;
@@ -235,9 +235,11 @@ struct obj *corpse;
 			quest_status.leader_m_id == mtmp->m_id || 
 		    mptr == &mons[PM_VLAD_THE_IMPALER] || 
 		    is_keter(mptr) || 
+			(mptr == &mons[PM_WEEPING_ANGEL] && angelnum > 0) || 
 			(is_dprince(mptr) && !Inhell) || 
 			(is_dlord(mptr) && !Inhell)
 		) mongone(mtmp);
+		if(mptr == &mons[PM_WEEPING_ANGEL]) angelnum++;
 	}
 #ifdef STEED
 	if (u.usteed) dismount_steed(DISMOUNT_BONES);
