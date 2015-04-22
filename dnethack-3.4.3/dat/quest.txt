@@ -3571,7 +3571,7 @@ near %i."
 "Verily, %l could have no better champion, %p."
 %E
 %Cp Kni 00009
-"Many brave %cP died when %n attacked."
+"Many brave %cP died when Ixoth attacked."
 %E
 %Cp Kni 00010
 "Hail, %p!  Verily, thou lookest well."
@@ -3610,7 +3610,7 @@ Begone from Our sight!"
 "Verily, %p, thou hast done well.  That thou hast survived thus
 far is a credit to thy valor, but thou art yet unprepared for
 the demands required as Our Champion.  %rA, no matter how
-pure, could never hope to defeat the foul %n.
+pure, could never hope to aid the great Merlin.
 
 "Journey forth from this place, and hone thy skills.  Return to
 Our presence when thou hast attained the noble title of %R."
@@ -3645,10 +3645,10 @@ thou learn what is required, that Merlin may regain his health.
 "Remember, %p, follow always the path of %d."
 %E
 %Cp Kni 00026
-"Though %n is verily a mighty foe, We have confidence in thy victory."
+"Ixoth was verily a mighty foe, We gained confidence through thy victory."
 %E
 %Cp Kni 00027
-"Beware, for %n hath surrounded himself with hordes of foul creatures."
+"Beware, for hordes of foul creatures have pursued Merlin."
 %E
 %Cp Kni 00028
 "Great treasure, 'tis said, is hoarded on %i."
@@ -3692,49 +3692,47 @@ pieces of rusted metal and broken weapons show above the surface.
 Again, you stand at the entrance to %ns lair.
 %E
 %Cc Kni 00050
-"Hah!  Another puny %c seeks death.  I shall dine well tonight,
-then tomorrow, %H shall fall!"
+
 %E
 %Cp Kni 00051
-"Again, thou challengest me, %r?  So be it.  Thou wilt die here."
+
 %E
 %Cp Kni 00052
-"Thou art truly foolish, %r.  I shall dispatch thee anon."
+
 %E
 %Cp Kni 00053
 "So, thou darest touch MY property!  I shall have that bauble back,
 puny %r.  Thou wilt die in agony!"
 %E
 %Cp Kni 00060
-"A mere %r can never withstand me!"
+
 %E
 %Cp Kni 00061
-"I shall kill thee now, and feast!"
+
 %E
 %Cp Kni 00062
-"Puny %c.  What manner of death dost thou wish?"
+
 %E
 %Cp Kni 00063
-"First thee, %p, then I shall feast upon %l."
+
 %E
 %Cp Kni 00064
-"Hah!  Thou hast failed, %r.  Now thou shalt die."
+
 %E
 %Cp Kni 00065
-"Die, %c.  Thou art as nothing against my might."
+
 %E
 %Cp Kni 00066
-"I shall suck the marrow from thy bones, %c."
+
 %E
 %Cp Kni 00067
-"Let's see...  Baked?  No.  Fried?  Nay.  Broiled?  Yea verily,
-that is the way I like my %c for dinner."
+
 %E
 %Cp Kni 00068
-"Thy strength waneth, %p.  The time of thy death draweth near."
+
 %E
 %Cp Kni 00069
-"Call upon thy precious %d, %p.  It shall not avail thee."
+
 %E
 %Cc Kni 00070
 As you pick up %o, you feel its protective fields
@@ -3743,14 +3741,14 @@ as if you are in two places at once, and in the second, you are waking
 from a long sleep.
 %E
 %Cc Kni 00080
-As %n sinks to the ground, blood gushing from his open mouth, he
+As %n sinks to the ground, blood gushing from her open mouth, she
 defiantly curses you and %l:
 
     Thou hast not won yet, %r.  By the gods, I shall return and dog
     thy steps to the grave!
 
-His tail flailing madly, %n tries to crawl towards you, but slumps
-to the ground and dies in a pool of his own blood.
+Flailing madly about, %n tries to crawl towards you, but slumps
+to the ground and dies in a pool of her own blood.
 %E
 %Cc Kni 00081
 As you approach %l, he beams at you and says:

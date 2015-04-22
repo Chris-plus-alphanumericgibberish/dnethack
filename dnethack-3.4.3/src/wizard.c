@@ -815,6 +815,21 @@ const char * const random_mirkwood[] = {
 	"Got a sting, have you? Well, I'll get you all the same!", /*8*/
 	"I'll hang you head down for a day or two, that will take the fight out of you!" /*9*/
 };
+const char * const random_Ixoth[] = {
+	"Hah!  Another puny knight seeks death.  I shall dine well tonight, then tomorrow, Arthur shall fall!",
+	"Thou challengest me, knight?  So be it.  Thou wilt die here.",
+	"Thou art truly foolish, sir.  I shall dispatch thee anon.",
+	"A mere knight can never withstand me!",
+	"I shall kill thee now, and feast!",
+	"Puny knight.  What manner of death dost thou wish?",
+	"First thee, knight, then I shall feast upon Arthur.",
+	"Hah!  Thou hast failed, sir.  Now thou shalt die.",
+	"Die, knight.  Thou art as nothing against my might.",
+	"I shall suck the marrow from thy bones, knight.",
+	"Let's see...  Baked?  No.  Fried?  Nay.  Broiled?  Yea verily, that is the way I like my knights for dinner.",
+	"Thy strength waneth, sir.  The time of thy death draweth near.",
+	"Call upon thy precious god, sir.  It shall not avail thee."
+};
 
 /* Insult or intimidate the player */
 void
@@ -853,6 +868,8 @@ register struct monst	*mtmp;
 		verbalize("%s", random_garlandism[rn2(SIZE(random_garlandism))]);
 	} else if(mtmp->data == &mons[PM_APOLLYON]){
 		verbalize("%s", random_apollyon[rn2(SIZE(random_apollyon))]);
+	} else if(mtmp->data == &mons[PM_IXOTH]){
+		verbalize("%s", random_Ixoth[rn2(SIZE(random_Ixoth))]);
 	} else if(is_spider(mtmp->data)){
 		verbalize("%s", random_mirkwood[rn2(SIZE(random_mirkwood))]);
 	} else if(is_lminion(mtmp)) {
