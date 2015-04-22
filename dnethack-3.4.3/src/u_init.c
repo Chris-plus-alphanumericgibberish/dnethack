@@ -928,6 +928,7 @@ int randSpecialAttackTypes[] =
 						 AT_ENGL, 
 						 AT_ARRW, 
 						 AT_BREA, 
+						 AT_BEAM, 
 						 AT_MAGC };
 
 int randMeleeDamageTypes[] = 
