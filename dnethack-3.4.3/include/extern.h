@@ -264,7 +264,7 @@ E int NDECL(holetime);
 E boolean FDECL(dig_check, (struct monst *, BOOLEAN_P, int, int));
 E void FDECL(openactualrocktrap, (int,int,struct monst *));
 E void FDECL(openactualdoor, (int,int,struct monst *,int));
-E void FDECL(digactualhole, (int,int,struct monst *,int,boolean));
+E void FDECL(digactualhole, (int,int,struct monst *,int,boolean,boolean));
 E boolean NDECL(openrocktrap);
 E boolean FDECL(opennewdoor, (int,int));
 E boolean FDECL(opentrapdoor, (BOOLEAN_P));
