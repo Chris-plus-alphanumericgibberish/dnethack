@@ -3202,6 +3202,12 @@ register int	mmflags;
 				pline("Demogorgon, Prince of Demons, is near!");
 				com_pager(200);
 			}
+			else if(mndx == PM_LAMASHTU){ 
+				mtmp->mhpmax = 2*mtmp->mhpmax;
+				mtmp->mhp = mtmp->mhpmax;
+				pline("Lamashtu, the Demon Queen, is near!");
+				com_pager(201);
+			}
 			else if(mndx == PM_DURIN_S_BANE){
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;

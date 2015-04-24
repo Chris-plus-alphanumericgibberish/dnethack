@@ -407,6 +407,36 @@ unsigned int type;
 		break;
        case PM_DEMOGORGON:
            return (!rn2(3) ? HASTE_SELF : rn2(2) ? FILTH : WEAKEN_YOU);
+		   
+       case PM_LAMASHTU:
+			// pline("favored");
+			switch(rnd(8)){
+				case 1:
+					return SUMMON_ANGEL;
+				break;
+				case 2:
+					return SUMMON_DEVIL;
+				break;
+				case 3:
+					return SUMMON_ALIEN;
+				break;
+				case 4:
+					return NIGHTMARE;
+				break;
+				case 5:
+					return FILTH;
+				break;
+				case 6:
+					return CURSE_ITEMS;
+				break;
+				case 7:
+					return DEATH_TOUCH;
+				break;
+				case 8:
+					return EVIL_EYE;
+				break;
+			}
+		break;
 
        case PM_APPRENTICE:
           if (rn2(3)) return SUMMON_SPHERE;

@@ -1237,25 +1237,25 @@ newgame()
 	if (flags.legacy) {
 		flush_screen(1);
         if(Role_if(PM_EXILE)){
-			com_pager(207);
+			com_pager(217);
 #ifdef CONVICT
 		} else if (Role_if(PM_CONVICT)) {
 		    com_pager(199);
 #endif /* CONVICT */
         // } else if(Race_if(PM_ELF)){
-			// com_pager(201);
+			// com_pager(211);
 		} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD))){
-			com_pager(201);
+			com_pager(211);
 		} else if(Race_if(PM_WORM_THAT_WALKS)){
 			if(Role_if(PM_CONVICT)){
-				com_pager(204);
+				com_pager(214);
 			} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD))){
-				com_pager(203);
+				com_pager(213);
 			} else{
-				com_pager(202);
+				com_pager(212);
 			}
-			com_pager(205);
-			com_pager(206);
+			com_pager(215);
+			com_pager(216);
 		} else {
 			com_pager(1);
 		}

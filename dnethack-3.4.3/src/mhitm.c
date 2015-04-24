@@ -510,6 +510,7 @@ meleeattack:
 				int temp=0;
 				if( pa == &mons[PM_ASMODEUS] ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_DEMOGORGON] && rn2(3) ) magr->mspec_used = 0;
+				else if( pa == &mons[PM_LAMASHTU] && rn2(3) ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_ELDER_PRIEST] && rn2(2) ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_ALHOON] && rn2(2) ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_EMBRACED_DROWESS]) magr->mspec_used = 0;

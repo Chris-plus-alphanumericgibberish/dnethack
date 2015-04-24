@@ -3740,7 +3740,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					mon->mhp = mon->mhpmax;
 					break; /* Out of while loop */
 					}
-					if((mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_ASMODEUS]) && abs(type) == ZT_BREATH(ZT_DEATH)){
+					if((mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_ASMODEUS]) && abs(type) == ZT_BREATH(ZT_DEATH)){
 						shieldeff(sx, sy);
 						break; /* Out of while loop */
 					}

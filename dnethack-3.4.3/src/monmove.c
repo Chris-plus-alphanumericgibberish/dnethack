@@ -278,6 +278,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_ELDER_PRIEST]) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU]) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
+			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && rn2(9))
 		) return FALSE;
 	return 	mtmp->data == &mons[PM_FREEZING_SPHERE] ||
@@ -370,6 +371,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_ELDER_PRIEST]) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU]) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
+			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && complete <= d(1,8))
 		) return FALSE;
 	return 	(mtmp->data == &mons[PM_HELL_HOUND] || 
@@ -395,6 +397,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_ELDER_PRIEST]) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU]) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
+			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && !rn2(9))
 		) return FALSE;
 	return 	(mtmp->data == &mons[PM_HELL_HOUND] || 
@@ -440,6 +443,7 @@ struct monst *mtmp;
 			(mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 			(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 			(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
+			(mtmp->data != &mons[PM_LAMASHTU] || !rn2(3)) &&
 			(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
 	
 }
@@ -458,6 +462,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_ELDER_PRIEST] && complete <= d(2,4)+2) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU] && complete <= d(2,4)+2) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
+			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && complete <= d(1,10))
 		) return FALSE;
 	return( !(is_human(mtmp->data) || is_elf(mtmp->data) || is_dwarf(mtmp->data) ||
@@ -498,6 +503,7 @@ struct monst *mtmp;
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || rn2(3)) &&
+					(mtmp->data != &mons[PM_LAMASHTU] || rn2(3)) &&
 					(mtmp->data != &mons[PM_ASMODEUS]);
 }
 
@@ -515,6 +521,7 @@ struct monst *mtmp;
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
+					(mtmp->data != &mons[PM_LAMASHTU]) &&
 					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
   } else return(FALSE);
 }
@@ -534,6 +541,7 @@ struct monst *mtmp;
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
+					(mtmp->data != &mons[PM_LAMASHTU]) &&
 					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
   }
   else{
@@ -808,7 +816,8 @@ register struct monst *mtmp;
 	}
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
 		(mdat->msound == MS_JUBJUB && (!rn2(10) || (!um_dist(mtmp->mx, mtmp->my, 3) && !rn2(10)))) ||
-		(mdat->msound == MS_DREAD && !rn2(4))
+		(mdat->msound == MS_DREAD && !rn2(4)) ||
+		(mdat == &mons[PM_LAMASHTU] && !rn2(7))
 	) m_respond(mtmp);
 	if ((mdat == &mons[PM_MEDUSA] || mdat == &mons[PM_GREAT_CTHULHU]) && couldsee(mtmp->mx, mtmp->my))
 	    m_respond(mtmp);

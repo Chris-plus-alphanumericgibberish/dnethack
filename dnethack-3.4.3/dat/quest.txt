@@ -7013,9 +7013,15 @@ the sake of us all:  Go bravely with %d!
 Demogorgon, Prince of Demons, is near!
 %E
 #
-#	Alternate legacy text for Elves
+# Lamashtu warning
 #
 %Cc - 00201
+Lamashtu, the Demon Queen, is near!
+%E
+#
+#	Alternate legacy text for Elves
+#
+%Cc - 00211
 It is written in the Book of %d:
 
     After the Creation, the cruel Vala Morgoth rebelled
@@ -7037,7 +7043,7 @@ of us all:  Go bravely with %d!
 #
 #	Worm that Walks General
 #
-%Cc - 00202
+%Cc - 00212
 It is written in the Book of %d:
 
     After the Creation, the cruel god Moloch rebelled
@@ -7058,7 +7064,7 @@ attempt.  Your hour of destiny has come.
 #
 #	Alternate legacy text for Worm that Walks Elf
 #
-%Cc - 00203
+%Cc - 00213
 It is written in the Book of %d:
 
     After the Creation, the cruel Vala Morgoth rebelled
@@ -7079,7 +7085,7 @@ attempt.  Your hour of destiny has come.
 #
 # Alternate legacy text for Worm that Walks Convict
 #
-%Cc - 00204
+%Cc - 00214
 It is written in the Book of %d:
 
     After the Creation, the cruel god Moloch rebelled
@@ -7100,7 +7106,7 @@ in the attempt.  Your hour of destiny has come.
 #
 # Legacy text 2 for Worm that Walks
 #
-%Cc - 00205
+%Cc - 00215
 Shame about the bandits, really.
 
 Ambushed and overpowered, your looted corpse was left
@@ -7109,7 +7115,7 @@ to rot in a shallow grave.
 #
 # Legacy text 3 for Worm that Walks
 #
-%Cc - 00206
+%Cc - 00216
 But destiny is a strange and winding road.
 
 And things have learnt to walk that once did crawl.
@@ -7117,7 +7123,7 @@ And things have learnt to walk that once did crawl.
 #
 #	Legacy text for Binders
 #
-%Cc - 00207
+%Cc - 00217
 The priests tell a story:
 
     After the Creation, the cruel god Moloch rebelled

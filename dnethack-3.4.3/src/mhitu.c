@@ -934,6 +934,7 @@ mattacku(mtmp)
 			int temp=0;
 			if( mdat == &mons[PM_ASMODEUS] ) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_DEMOGORGON] && rn2(3) ) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_LAMASHTU] && rn2(3) ) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_ELDER_PRIEST] && rn2(2) ) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_ALHOON] && rn2(2) ) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_EMBRACED_DROWESS]) mtmp->mspec_used = 0;
@@ -2511,6 +2512,12 @@ dopois:
 				pline("%s rips %s apart!",
 				      mon_nam(mtmp), "you");
 			}
+		} break;
+///////////////////////////////////////////////////////////////////////////////////////////
+		case AD_STTP:{
+		    struct obj *obj = some_armor(&youmonst);
+			hitmsg(mtmp, mattk);
+			teleport_arm(obj);
 		} break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 		case AD_VORP:

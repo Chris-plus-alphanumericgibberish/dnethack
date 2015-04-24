@@ -2126,6 +2126,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    case PM_CHAOS:
 			    case PM_GREAT_CTHULHU:
 			    case PM_DEMOGORGON:
+			    case PM_LAMASHTU:
 			    case PM_BALROG:
 			    case PM_KRAKEN:
 			    case PM_MASTODON:

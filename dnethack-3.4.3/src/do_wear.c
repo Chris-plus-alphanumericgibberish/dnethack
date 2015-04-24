@@ -2566,6 +2566,75 @@ register struct obj *atmp;
 }
 
 int
+teleport_arm(atmp)
+register struct obj *atmp;
+{
+	register struct obj *otmp;
+#define TELEPORT_ARM(o) ((otmp = (o)) != 0 && \
+			(!atmp || atmp == otmp) && \
+			(!obj_resists(otmp, 66, 90)))
+
+	if (TELEPORT_ARM(uarmc)) {
+		if (donning(otmp)) cancel_don();
+		Your("%s vanishes!",
+		     cloak_simple_name(uarmc));
+		(void) Cloak_off();
+		obj_extract_self(otmp);
+		dropy(otmp);
+		rloco(otmp);
+	} else if (TELEPORT_ARM(uarm)) {
+		if (donning(otmp)) cancel_don();
+		Your("armor vanishes!");
+		(void) Armor_gone();
+		obj_extract_self(otmp);
+		dropy(otmp);
+		rloco(otmp);
+	} else if (TELEPORT_ARM(uarmu)) {
+		if (donning(otmp)) cancel_don();
+		Your("shirt vanishes!");
+		(void) Shirt_off();
+		obj_extract_self(otmp);
+		dropy(otmp);
+		rloco(otmp);
+	} else if (TELEPORT_ARM(uarmh)) {
+		if (donning(otmp)) cancel_don();
+		Your("helmet vanishes!");
+		(void) Helmet_off();
+		obj_extract_self(otmp);
+		dropy(otmp);
+		rloco(otmp);
+	} else if (TELEPORT_ARM(uarmg)) {
+		if (donning(otmp)) cancel_don();
+		Your("gloves vanish!");
+		(void) Gloves_off();
+		obj_extract_self(otmp);
+		dropy(otmp);
+		rloco(otmp);
+		selftouch("You");
+	} else if (TELEPORT_ARM(uarmf)) {
+		if (donning(otmp)) cancel_don();
+		Your("boots vanish!");
+		(void) Boots_off();
+		obj_extract_self(otmp);
+		dropy(otmp);
+		rloco(otmp);
+	} else if (TELEPORT_ARM(uarms)) {
+		if (donning(otmp)) cancel_don();
+		Your("shield vanishes!");
+		(void) Shield_off();
+		obj_extract_self(otmp);
+		dropy(otmp);
+		rloco(otmp);
+	} else {
+		return 0;		/* could not destroy anything */
+	}
+
+#undef DESTROY_ARM
+	stop_occupation();
+	return(1);
+}
+
+int
 tent_destroy_arm(atmp)
 register struct obj *atmp;
 {

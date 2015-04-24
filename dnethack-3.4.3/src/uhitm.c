@@ -4131,7 +4131,7 @@ boolean *druggedmon;
 				if(!resists_disint(mon) && !rn2(60)){ //One third the rate of vorpal sword/black dragon plate
 					pline("Divine light shines from your %s!", aobjnam(otmp, (char *)0));
 					touch_artifact(otmp,&youmonst);
-				    if ( (is_rider(mon->data) || mon->data == &mons[PM_DEMOGORGON])) {
+				    if ( (is_rider(mon->data) || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_DEMOGORGON])) {
 						*dmgptr *= 2; /* Reintegrating monster are instead heavily damaged */
 					}
 					else{
@@ -4261,7 +4261,7 @@ boolean *druggedmon;
 			}
 			if(!resists_disint(mon) && !rn2(20)){
 				pline("Black light shines from your %s!", aobjnam(otmp, (char *)0));
-			    if ( (is_rider(mon->data) || mon->data == &mons[PM_DEMOGORGON])) {
+			    if ( (is_rider(mon->data) || mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_LAMASHTU])) {
 					if (canseemon(mon)) {
 					    pline("%s disintegrates.", Monnam(mon));
 					    pline("%s body reintegrates before your %s!",
@@ -4320,7 +4320,7 @@ boolean *druggedmon;
 			}
 			if(!resists_disint(mon) && !rn2(20)){
 				pline("Your %s glows with black light.", aobjnam(otmp, (char *)0));
-			    if ( (is_rider(mon->data) || mon->data == &mons[PM_DEMOGORGON])) {
+			    if ( (is_rider(mon->data) || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_DEMOGORGON])) {
 					if (canseemon(mon)) {
 					    pline("%s wounds flow and regenerate before your %s!",
 						  s_suffix(Monnam(mon)),
