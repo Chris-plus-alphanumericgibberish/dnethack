@@ -32,7 +32,7 @@ digXchasm(mtmp)
 			levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 			if(ttmp) delfloortrap(ttmp);
-			digactualhole(x, y, mtmp, HOLE, TRUE);
+			digactualhole(x, y, mtmp, HOLE, TRUE, FALSE);
 		}
 	}
 	y=y+1;
@@ -42,7 +42,7 @@ digXchasm(mtmp)
 			levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 			if(ttmp) delfloortrap(ttmp);
-			digactualhole(x, y, mtmp, PIT, TRUE);
+			digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 		}
 	}
 	y=y-1;
@@ -53,7 +53,7 @@ digXchasm(mtmp)
 			levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 			if(ttmp) delfloortrap(ttmp);
-			digactualhole(x, y, mtmp, PIT, TRUE);
+			digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 		}
 	}
 	y=y+1;
@@ -65,7 +65,7 @@ digXchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, HOLE, TRUE);
+				digactualhole(x, y, mtmp, HOLE, TRUE, FALSE);
 			}
 		}
 		y=y+1;
@@ -75,7 +75,7 @@ digXchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		y=y-1;
@@ -86,7 +86,7 @@ digXchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		y=y+1;
@@ -100,7 +100,7 @@ digXchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, HOLE, TRUE);
+				digactualhole(x, y, mtmp, HOLE, TRUE, FALSE);
 			}
 		}
 		y=y+1;
@@ -110,7 +110,7 @@ digXchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		y=y-1;
@@ -121,7 +121,7 @@ digXchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		y=y+1;
@@ -144,7 +144,7 @@ digYchasm(mtmp)
 			levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 			if(ttmp) delfloortrap(ttmp);
-			digactualhole(x, y, mtmp, HOLE, TRUE);
+			digactualhole(x, y, mtmp, HOLE, TRUE, FALSE);
 		}
 	}
 	x=x+1;
@@ -154,7 +154,7 @@ digYchasm(mtmp)
 			levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 			if(ttmp) delfloortrap(ttmp);
-			digactualhole(x, y, mtmp, PIT, TRUE);
+			digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 		}
 	}
 	x=x-1;
@@ -165,7 +165,7 @@ digYchasm(mtmp)
 			levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 			if(ttmp) delfloortrap(ttmp);
-			digactualhole(x, y, mtmp, PIT, TRUE);
+			digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 		}
 	}
 	x=x+1;
@@ -177,7 +177,7 @@ digYchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, HOLE, TRUE);
+				digactualhole(x, y, mtmp, HOLE, TRUE, FALSE);
 			}
 		}
 		x=x+1;
@@ -187,7 +187,7 @@ digYchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		x=x-1;
@@ -198,7 +198,7 @@ digYchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		x=x+1;
@@ -212,7 +212,7 @@ digYchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, HOLE, TRUE);
+				digactualhole(x, y, mtmp, HOLE, TRUE, FALSE);
 			}
 		}
 		x=x+1;
@@ -222,7 +222,7 @@ digYchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		x=x-1;
@@ -233,7 +233,7 @@ digYchasm(mtmp)
 				levl[x][y].typ = CORR;
 			if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
 				if(ttmp) delfloortrap(ttmp);
-				digactualhole(x, y, mtmp, PIT, TRUE);
+				digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
 			}
 		}
 		x=x+1;

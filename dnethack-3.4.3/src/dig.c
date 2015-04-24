@@ -533,11 +533,12 @@ int x, y;
 }
 
 void
-digactualhole(x, y, madeby, ttyp, forceknown)
+digactualhole(x, y, madeby, ttyp, forceknown, msgs)
 register int	x, y;
 struct monst	*madeby;
 int ttyp;
 boolean forceknown;
+boolean msgs;
 {
 	struct obj *oldobjs, *newobjs;
 	register struct trap *ttmp;
@@ -600,9 +601,9 @@ boolean forceknown;
 	    if(madeby_u) {
 		You("dig a pit in the %s.", surface_type);
 		if (shopdoor) pay_for_damage("ruin", FALSE);
-	    } else if (!madeby_obj && canseemon(madeby))
+	    } else if (!madeby_obj && canseemon(madeby) && msgs)
 		pline("%s digs a pit in the %s.", Monnam(madeby), surface_type);
-	    else if (cansee(x, y) && flags.verbose)
+	    else if (cansee(x, y) && flags.verbose && msgs)
 		pline("A pit appears in the %s.", surface_type);
 
 	    if(at_u) {
@@ -628,10 +629,10 @@ boolean forceknown;
 
 	    if(madeby_u)
 		You("dig a hole through the %s.", surface_type);
-	    else if(!madeby_obj && canseemon(madeby))
+	    else if(!madeby_obj && canseemon(madeby) && msgs)
 		pline("%s digs a hole through the %s.",
 		      Monnam(madeby), surface_type);
-	    else if(cansee(x, y) && flags.verbose)
+	    else if(cansee(x, y) && flags.verbose && msgs)
 		pline("A hole appears in the %s.", surface_type);
 
 	    if (at_u) {
@@ -688,7 +689,7 @@ boolean forceknown;
 			if (Is_stronghold(&u.uz)) {
 			    assign_level(&tolevel, &valley_level);
 			} else if (Is_botlevel(&u.uz)) {
-			    if (canseemon(mtmp))
+			    if (canseemon(mtmp) && msgs)
 				pline("%s avoids the trap.", Monnam(mtmp));
 			    return;
 			} else {
@@ -933,7 +934,7 @@ boolean pit_only;
 		return TRUE;
 
 	} else if (IS_GRAVE(lev->typ)) {        
-	    digactualhole(u.ux, u.uy, BY_YOU, PIT, FALSE);
+	    digactualhole(u.ux, u.uy, BY_YOU, PIT, FALSE, TRUE);
 	    dig_up_grave(u.ux, u.uy);
 	    return TRUE;
 	} else if (lev->typ == DRAWBRIDGE_UP) {
@@ -986,9 +987,9 @@ boolean pit_only;
 
 		/* finally we get to make a hole */
 		if (nohole || pit_only)
-			digactualhole(u.ux, u.uy, BY_YOU, PIT, FALSE);
+			digactualhole(u.ux, u.uy, BY_YOU, PIT, FALSE, TRUE);
 		else
-			digactualhole(u.ux, u.uy, BY_YOU, HOLE, FALSE);
+			digactualhole(u.ux, u.uy, BY_YOU, HOLE, FALSE, TRUE);
 
 		return TRUE;
 	}
@@ -2181,7 +2182,7 @@ int y;
 		return TRUE;
 
 	} else if (IS_GRAVE(lev->typ)) {        
-	    digactualhole(x, y, BY_YOU, PIT, FALSE);
+	    digactualhole(x, y, BY_YOU, PIT, FALSE, TRUE);
 	    dig_up_grave(x,y);
 	    return TRUE;
 	} else if (lev->typ == DRAWBRIDGE_UP) {
@@ -2235,9 +2236,9 @@ int y;
 
 		/* finally we get to make a hole */
 		if (nohole || pit_only)
-			digactualhole(x, y, BY_YOU, PIT, FALSE);
+			digactualhole(x, y, BY_YOU, PIT, FALSE, TRUE);
 		else
-			digactualhole(x, y, BY_YOU, HOLE, FALSE);
+			digactualhole(x, y, BY_YOU, HOLE, FALSE, TRUE);
 
 		return TRUE;
 	}

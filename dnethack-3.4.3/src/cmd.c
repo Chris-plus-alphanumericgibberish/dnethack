@@ -743,9 +743,9 @@ domonability(VOID_ARGS)
 				}
 			}
 			if (nohole || !ttmp || (ttmp->ttyp != PIT && ttmp->ttyp != SPIKED_PIT && ttmp->ttyp != TRAPDOOR))
-				digactualhole(u.ux, u.uy, &youmonst, PIT, FALSE);
+				digactualhole(u.ux, u.uy, &youmonst, PIT, FALSE, TRUE);
 			else
-				digactualhole(u.ux, u.uy, &youmonst, HOLE, FALSE);
+				digactualhole(u.ux, u.uy, &youmonst, HOLE, FALSE, TRUE);
 			return 1;
 		} else {
 			You("gyre and gimble, but the %s is too hard!", surface(u.ux,u.uy));

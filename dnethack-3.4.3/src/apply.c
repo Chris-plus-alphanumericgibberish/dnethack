@@ -3324,12 +3324,12 @@ do_break_wand(obj)
 		    if (*in_rooms(x,y,SHOPBASE)) shop_damage = TRUE;
 		}
 		if(IS_GRAVE(levl[x][y].typ)){
-			digactualhole(x, y, BY_OBJECT, PIT, FALSE);
+			digactualhole(x, y, BY_OBJECT, PIT, FALSE, TRUE);
 			dig_up_grave(x,y);
 		} else{
 			digactualhole(x, y, BY_OBJECT,
 					  (rn2(obj->spe) < 3 || !Can_dig_down(&u.uz)) ?
-					   PIT : HOLE, FALSE);
+					   PIT : HOLE, FALSE, TRUE);
 			}
 		}
 	    continue;
