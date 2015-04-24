@@ -3680,6 +3680,30 @@ rndmonst()
 				break;
 			}
 		}
+		else if(Is_peanut(&u.uz)){
+			switch(rn2(10)){
+				case 0:
+				case 1:
+					return mkclass(S_EEL, G_NOHELL);
+				break;
+				case 2:
+				case 3:
+				case 4:
+					return &mons[PM_PARROT];
+				break;
+				case 5:
+				case 6:
+				case 7:
+					return &mons[PM_SKELETAL_PIRATE];
+				break;
+				case 8:
+					return &mons[PM_MONKEY];
+				break;
+				case 9:
+					return mkclass(S_LIZARD,G_NOHELL);
+				break;
+			}
+		}
 	}
 
 	if (rndmonst_state.choice_count < 0) {	/* need to recalculate */

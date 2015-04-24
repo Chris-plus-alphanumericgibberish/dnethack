@@ -178,6 +178,16 @@ unsigned *ospecial;
 				if(offset >= S_drkroom && offset <= S_litcorr){
 					color = CLR_BRIGHT_GREEN;
 				}
+			} else if(Is_peanut(&u.uz)){
+				if(offset >= S_vwall && offset <= S_trwall){
+					color = CLR_BROWN;
+				} else if(offset >= S_water){
+					color = CLR_BRIGHT_BLUE;
+				} else if(offset == S_drkroom || offset == S_corr || offset <= S_hcdoor){
+					color = CLR_BROWN;
+				} else if(offset >= S_litroom && offset <= S_dnladder){
+					color = CLR_YELLOW;
+				}
 			} else if(In_moloch_temple(&u.uz)){
 				if(offset >= S_vwall && offset <= S_trwall){
 					color = CLR_RED;
