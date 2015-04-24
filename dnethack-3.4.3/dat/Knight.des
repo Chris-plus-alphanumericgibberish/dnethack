@@ -249,25 +249,119 @@ MONSTER:'j',random,random,hostile
 MAZE: "Kni-goal", ' '
 GEOMETRY:center,center
 MAP
+                                                                            
+                  ..........     .................................          
+                 ...........    ...................................         
+               ...........    ......................................        
+                 .........     ...............   .....................      
+               ............    ............     ......................      
+               .............      .......     .....................         
+                ..............            .........................         
+                ...............   ..................................        
+               ..............    ....................................       
+               ....................................................         
+              .....................................................         
+                ....................................................        
+                ..............   ....................................       
+                .............    .....................................      
+                 ............    ......................................     
+                   ..........     ..................................        
+                    ..........     ..............................           
+                      .........     ..........................              
+                                                                            
+ENDMAP
+
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+
+GEOMETRY:center,center
+MAP
 ....TTTT..TTT..                                                             
-.TTTTT...TT..     ..........     .................................          
-..TTTTT...T..    ...........    ...................................         
-..TTT.......   ...........    ......................................        
-...TTT.......    .........     ...............   .....................      
-...........    ............    ............     ......................      
-............   .............      .......     .....................         
-..............................            .........................         
-...............................   ..................................        
-.............................    ....................................       
-.........    ......................................................         
-.....TT...    .....................................................         
-.....TTT....    ....................................................        
-......TTT....   ..............   ....................................       
-.......TTT....  .............    .....................................      
-........TT...    ............    ......................................     
-...TTT........     ..........     ..................................        
-..TTTTT........     ..........     ..............................           
-....TTTTT......       .........     ..........................              
+.TTTTT...TT..     I........I     II............II............IIIII          
+..TTTTT...T..    I.........I    II............III...............III         
+..TTT.......   I..........    III..........IIIIII................III        
+...TTT.......    .........     III.......IIIII   ................IIIII      
+...........    I...........    IIIIIIIIIIII     I................IIIII      
+............   .............      IIIIIII     II................III         
+.............................I            IIII..................III         
+..............................I   I..............................III        
+............................I    I.........II....................IIII       
+.........    I...............IIII.........IIIII.................III         
+.....TT...    I............................III...III............III         
+.....TTT....    ..............III.....III.......IIIII............III        
+......TTT....   .............I   ....IIIII....IIIII...............III       
+.......TTT....  .............    ...IIIII......III.................III      
+........TT...    I...........    .IIIIII.....I....................IIIII     
+...TTT........     I.........     .IIII.....II.................IIIII        
+..TTTTT........     I........I     ........IIII.............IIIII           
+....TTTTT......       I.......I     ......IIIIII..........IIII              
 .......TTTT...                                                              
 ENDMAP
 # Dungeon Description
