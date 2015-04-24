@@ -3681,7 +3681,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 							Race_if(PM_VAMPIRE)))
 #ifdef CONVICT
         /* Convicts can last twice as long at hungry and below */
-        && (!Role_if(PM_CONVICT) || (moves % 2) || (u.uhs < HUNGRY))
+        && (!Role_if(PM_CONVICT) || (u.uhs < HUNGRY) || (moves % 2 && u.uhs == HUNGRY) || (moves % 5))
 #endif /* CONVICT */
         && (!Race_if(PM_VAMPIRE) || !(moves % (u.ulevel/10 + 1)))
 		&& !( (Slow_digestion && !Race_if(PM_INCANTIFIER)) ||
@@ -4053,9 +4053,9 @@ sync_hunger()
 {
 
 	if(is_fainted()) {
-
 		flags.soundok = 0;
-		nomul(-10+( YouHunger/10), "fainted from lack of food");
+		if(Role_if(PM_CONVICT)) nomul(-1+( YouHunger/20), "fainted from lack of food");
+		else nomul(-10+( YouHunger/10), "fainted from lack of food");
 		nomovemsg = "You regain consciousness.";
 		afternmv = unfaint;
 	}
@@ -4127,7 +4127,8 @@ boolean incr;
 	            } else {
 					You("faint from lack of food.");
 					flags.soundok = 0;
-					nomul(-10+YouHunger/10, "fainted from lack of food");
+					if(Role_if(PM_CONVICT)) nomul(-1+YouHunger/20, "fainted from lack of food");
+					else nomul(-10+YouHunger/10, "fainted from lack of food");
 					nomovemsg = "You regain consciousness.";
 					afternmv = unfaint;
             	}

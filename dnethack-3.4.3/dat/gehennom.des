@@ -637,7 +637,7 @@ REGION:(15,07,21,10),lit,"temple"
 ALTAR:(18,08),noalign,sanctum
 REGION:(41,06,48,11),unlit,"morgue",filled,true
 # Non diggable walls
-OBJECT[10%]:'+',"secrets",random,"Necronomicon",0
+OBJECT[10%]:'+',"secrets",(18,08),"Necronomicon",0
 NON_DIGGABLE:(00,00,75,19)
 # Invisible barrier separating the left & right halves of the level
 NON_PASSWALL:(37,00,39,20)
