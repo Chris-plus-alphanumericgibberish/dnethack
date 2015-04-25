@@ -229,7 +229,7 @@ close_library(lp)
  * keep track of the file position.
  */
 static boolean
-lib_dlb_init(VOID_ARGS)
+lib_dlb_init()
 {
     /* zero out array */
     (void) memset((char *)&dlb_libs[0], 0, sizeof(dlb_libs));
@@ -246,7 +246,7 @@ lib_dlb_init(VOID_ARGS)
 }
 
 static void
-lib_dlb_cleanup(VOID_ARGS)
+lib_dlb_cleanup()
 {
     int i;
 
