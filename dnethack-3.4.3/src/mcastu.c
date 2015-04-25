@@ -913,7 +913,10 @@ int spellnum;
 //	    pline("Lucky for you, it didn't work!");
 		Your("%s flutters!", body_part(HEART));
 		dmg = mtmp ? rnd(mtmp->m_lev) : 10; //you still take damage
-	} else shieldeff(u.ux, u.uy);
+	} else{
+		dmg = 0;
+		shieldeff(u.ux, u.uy);
+	}
 	stop_occupation();
 	break;
     case CLONE_WIZ:
@@ -1486,6 +1489,7 @@ summon_alien:
 			change_luck(-1);
 		}
     stop_occupation();
+	dmg = 0;
     break;
     case DRAIN_LIFE:  /* simulates player spell "drain life" */
 		if(!mtmp || distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2){
