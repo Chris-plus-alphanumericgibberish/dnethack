@@ -10,8 +10,9 @@
    
    Incremented to 3.7 with the advent of the Binder role.
    Incremented to 3.8 with the introduction of Clockwork upgrades and the finished Drow quests.
+   Incremented to 3.9 with the introduction of.... many things, including dread seraphs, half dragons, and another demon level.
 */
-#define VERSION_MINOR	8
+#define VERSION_MINOR	9
 /*
  * PATCHLEVEL is updated for each release.
  *
@@ -21,7 +22,7 @@
  * 3.8.1 indicates addition of wands of darkness, 
  * 3.8.2 is for addition of berserk status, correct anger tracking for masks, 6th castle, silver bullets for slings, beast mastery, lost cities branch
  */
-#define PATCHLEVEL	2
+#define PATCHLEVEL	0
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
