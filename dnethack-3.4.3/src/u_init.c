@@ -257,6 +257,7 @@ static struct trobj Wizard[] = {
 #define W_MULTSTART	2
 #define W_MULTEND	6
 	{ QUARTERSTAFF, 1, WEAPON_CLASS, 1, 1 },
+	{ ATHAME, -1, WEAPON_CLASS, 1, 1 },
 	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, WAND_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 2, UNDEF_BLESS },
@@ -384,6 +385,7 @@ static struct trobj Money[] = {
 /* race-based substitutions for initial inventory;
    the weaker cloak for elven rangers is intentional--they shoot better */
 static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
+    { PM_ELF,	ATHAME,			ELVEN_DAGGER	      },
     { PM_ELF,	DAGGER,			ELVEN_DAGGER	      },
     { PM_ELF,	KNIFE,			ELVEN_DAGGER	      },
     { PM_ELF,	SPEAR,			ELVEN_SPEAR	      },
@@ -397,6 +399,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ELF,	VICTORIAN_UNDERWEAR,		ELVEN_TOGA  },
     { PM_ELF,	RUFFLED_SHIRT,		ELVEN_TOGA  },
     { PM_ELF,	RAPIER,		ELVEN_SPEAR  },
+    { PM_ORC,	ATHAME,			ORCISH_DAGGER	      },
     { PM_ORC,	DAGGER,			ORCISH_DAGGER	      },
     { PM_ORC,	KNIFE,			ORCISH_DAGGER	      },
     { PM_ORC,	SPEAR,			ORCISH_SPEAR	      },
@@ -424,6 +427,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	CLOAK_OF_MAGIC_RESISTANCE,	DROVEN_CHAIN_MAIL  },
     { PM_DROW,	LEATHER_ARMOR,	DROVEN_CHAIN_MAIL  },
     { PM_DROW,	ROBE,						DROVEN_PLATE_MAIL  },
+    { PM_DROW,	ATHAME,			DROVEN_DAGGER	      },
     { PM_DROW,	DAGGER,			DROVEN_DAGGER	      },
     { PM_DROW,	KNIFE,			DROVEN_DAGGER	      },
     { PM_DROW,	SPEAR,			DROVEN_SHORT_SWORD	      },
@@ -450,6 +454,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_INCANTIFIER,	BANANA,				SCR_FOOD_DETECTION    	  },
     { PM_INCANTIFIER,	ORANGE,				SCR_FOOD_DETECTION    	  },
     { PM_INCANTIFIER,	POT_BOOZE,			SCR_FOOD_DETECTION   	  },
+    { PM_VAMPIRE,	ATHAME,				DAGGER    	  },
     { PM_VAMPIRE,	FOOD_RATION,		POT_BLOOD    	  },
     { PM_VAMPIRE,	CRAM_RATION,		POT_BLOOD    	  },
     { PM_VAMPIRE,	POT_FRUIT_JUICE,	POT_BLOOD	      },
