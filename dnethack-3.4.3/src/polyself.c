@@ -865,8 +865,8 @@ dobreathe(mdat)
 		int type = mattk->adtyp;
 		if(type == AD_HDRG) type = flags.HDbreath;
 		if(is_dragon(mdat)) flags.drgn_brth = 1;
-	    buzz((int) (20 + type-1), (int)mattk->damn,
-			u.ux, u.uy, u.dx, u.dy,0,0);
+	    buzz((int) (20 + type-1), (int)mattk->damn + (u.ulevel/2),
+			u.ux, u.uy, u.dx, u.dy,0, mattk->damd ? d((int)mattk->damn + (u.ulevel/2), (int)mattk->damd) : 0);
 		flags.drgn_brth = 0;
 	}
 	return(1);
@@ -1221,7 +1221,7 @@ int
 dodarken()
 {
 
-	if (u.uen < 15 && u.uen<u.uenmax) {
+	if (u.uen < 10 && u.uen<u.uenmax) {
 	    You("lack the energy to invoke the darkness.");
 	    return(0);
 	}
