@@ -4190,7 +4190,7 @@ boolean incr;
 	          You_feel("your mainspring %s and your gears %s.",
 	              (Hallucination)?"sprunging":"unwinding",
 	              (!incr)?"still slipping":
-	              (u.uhunger < 45 ) ? "slipping":
+	              (YouHunger < 45 ) ? "slipping":
 	              "starting to slip");  
 	          if (incr && occupation && occupation != windclock)
 	            stop_occupation();
