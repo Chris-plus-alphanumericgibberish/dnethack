@@ -4237,7 +4237,7 @@ register struct monst *mon;
 					pline("That was a very educational experience.");
 					pluslvl(FALSE);
 					goto pay;
-				} else if(u.uhunger < .5*u.uhungermax){
+				} else if(u.uhunger < .5*u.uhungermax && !Race_if(PM_INCANTIFIER)){
 					You("persuade %s to wind your clockwork.",
 						noit_mon_nam(mon));
 					struct obj *key;
@@ -4746,7 +4746,7 @@ struct monst *mon;
 				pluslvl(FALSE);
 				pluslvl(FALSE);
 				goto pay;
-			} else if(u.uhunger < .5*u.uhungermax){
+			} else if(u.uhunger < .5*u.uhungermax && !Race_if(PM_INCANTIFIER)){
 				You("persuade %s to wind your clockwork.",
 					noit_mon_nam(mon));
 				struct obj *key;
@@ -4986,7 +4986,7 @@ struct monst *mon;
 				pluslvl(FALSE);
 				pluslvl(FALSE);
 				goto pay;
-			} else if(u.uhunger < .5*u.uhungermax){
+			} else if(u.uhunger < .5*u.uhungermax && !Race_if(PM_INCANTIFIER)){
 				You("persuade %s to wind your clockwork.",
 					noit_mon_nam(mon));
 				struct obj *key;
@@ -6195,7 +6195,7 @@ register struct monst *mon;
 				pline("That was a very educational experience.");
 				pluslvl(FALSE);
 				goto pay;
-			} else if(u.uhunger < .5*u.uhungermax){
+			} else if(u.uhunger < .5*u.uhungermax && !Race_if(PM_INCANTIFIER)){
 				You("persuade %s to wind your clockwork.",
 					noit_mon_nam(mon));
 				struct obj *key;
