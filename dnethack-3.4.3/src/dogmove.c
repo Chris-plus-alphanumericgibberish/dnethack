@@ -561,8 +561,15 @@ int udist;
 		    could_reach_item(mtmp, obj->ox, obj->oy))
 		{
 #ifdef PET_SATIATION
-		    /* Don't eat if satiated.  (arbitrary) */
-		    if (edog->hungrytime < monstermoves + DOG_SATIATED) 
+		    /* Don't eat if satiated.  (arbitrary) 
+				Non-mindless pets can sense if you are hungry or starving, and will eat less.
+			*/
+		    if (edog->hungrytime < monstermoves + DOG_SATIATED || 
+				(!mindless(mtmp->data) && 
+					((YouHunger < HUNGRY && edog->hungrytime < monstermoves + DOG_SATIATED/3) || 
+					(YouHunger < WEAK && edog->hungrytime < monstermoves))
+				)
+			) 
 #endif /* PET_SATIATION */
 		    return dog_eat(mtmp, obj, omx, omy, FALSE);
 		}
