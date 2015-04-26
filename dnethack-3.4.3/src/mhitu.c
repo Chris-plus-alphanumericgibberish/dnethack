@@ -1996,6 +1996,11 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SITM:	/* for now these are the same */
 	    case AD_SEDU: //duplicated bellow, in the gaze section.
+		{
+			static int engagering4 = 0;
+			boolean engring = FALSE;
+			if (!engagering4) engagering4 = find_engagement_ring();
+			if ( (uleft && uleft->otyp == engagering4) || (uright && uright->otyp == engagering4)) engring = TRUE;
 			if(u.sealsActive&SEAL_ANDROMALIUS) break;
 //pline("test string!");
 			if(mdat == &mons[PM_DEMOGORGON]){
@@ -2019,7 +2024,7 @@ dopois:
 			    "makes some remarks about how difficult theft is lately");
 				if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);
 				return 3;
-			} else if (mtmp->mcan) {
+			} else if (mtmp->mcan || engring) {
 			    if (!Blind) {
 				pline("%s tries to %s you, but you seem %s.",
 				    Adjmonnam(mtmp, "plain"),
@@ -2052,6 +2057,7 @@ dopois:
 				return 3;
 			}
 			m_dowear(mtmp, FALSE);
+		}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 #ifdef SEDUCE
@@ -3225,6 +3231,11 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 								return 3;
 			}break;
 			case AD_SITM: //duplicate the whole nine yards, just cause
+			{
+				static int engagering5 = 0;
+				boolean engring = FALSE;
+				if (!engagering5) engagering5 = find_engagement_ring();
+				if ( (uleft && uleft->otyp == engagering5) || (uright && uright->otyp == engagering5)) engring = TRUE;
 				if(u.sealsActive&SEAL_ANDROMALIUS) break;
 				if(distu(mtmp->mx,mtmp->my) > 1 ||
 					mtmp->mcan ||
@@ -3254,7 +3265,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				    "makes some remarks about how difficult theft is lately");
 					if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);
 					return 3;
-				} else if (mtmp->mcan) {
+				} else if (mtmp->mcan || engring) {
 				    if (!Blind) {
 					pline("%s tries to %s you, but you seem %s.",
 					    Adjmonnam(mtmp, "plain"),
@@ -3287,6 +3298,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					return 3;
 				}
 				m_dowear(mtmp, FALSE);
+			}
 			break;
 			case AD_DEAD:
 			   if(!Blind && !is_blind(mtmp) && canseemon(mtmp)){
