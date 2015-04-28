@@ -1888,7 +1888,7 @@ then fill new spaces with our spawn!’
 	 * with infravision.  Red dragons are the exception.
 	 */
     MON("tiny pseudodragon", S_DRAGON,//3
-	LVL(2, 9, 6, 0, -5), (G_GENO|1),
+	LVL(2, 9, 6, 0, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 1, 4),
 	  ATTK(AT_BREA, AD_HDRG, 1, 1), 
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
