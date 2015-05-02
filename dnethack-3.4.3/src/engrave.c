@@ -33,7 +33,9 @@ static const char *random_mesg[] = {
 	"Two thumbs up!", /* Siskel & Ebert */
 	"Hello, World!", /* The First C Program */
 	"Dare mighty things.", /* Moto of the Mars Science Laboratory */
-	"I seem to be having tremendous difficulty with my lifestyle",
+	"are we cool yet?", /* SCP Foundation */
+	"I seem to be having tremendous difficulty with my lifestyle", /* Hitchhiker's Guide to the Galaxy */
+	"The flow of time itself is convoluted, with heroes centuries old phasing in and out.", /* Dark Souls */
 #ifdef MAIL
 	"You've got mail!", /* AOL */
 #endif
@@ -215,7 +217,7 @@ static const char *haluMesg[] = {
 	"Well, how did I get here?", /*Once In A Lifetime*/
 	"You can be me when I'm gone.", /*Sandman*/
 	"Have been unavoidably detained by the world. Expect us when you see us.", /* Stardust */
-		"There was once a young man who wished to gain his Heart’s Desire.",
+		"There was once a young man who wished to gain his Heart's Desire.",
 		"Time, the thief, eventually takes all things into his dusty storehouse.",
 		"Scuse me, but would you mind dreamin' a bit quieter?",
 	"He who is valiant and pure of spirit may find the holy grail in the Castle of Aaaaarrrrrrggghhh...", /*Monty Python*/
@@ -322,7 +324,7 @@ static const char *haluMesg[] = {
 	"We will BUILD heroes!", /* THE PROTOMEN */
 		"If you replace the working parts, you get a different machine.",
 		"If you destroy the working parts, what you get is a broken machine.",
-	"To right the countless wrongs of our day,\nwe shine this light of true redemption,\nthat this place may become as paradise.",/*It's a Wonderful World/The World Ends with You*/
+	"To right the countless wrongs of our day, we shine this light of true redemption, that this place may become as paradise.",/*It's a Wonderful World/The World Ends with You*/
 		"What a wonderful world such would be...",
 		"Please...Don't kill me...",
 		"Another world awaits. ...And you're going!",
@@ -335,6 +337,9 @@ static const char *haluMesg[] = {
 		"You've met with a terrible fate, haven't you?",
 	"Why are you sad?", /*Blood-C*/
 	"Only accurate information has practical application.", /* not sure where this originated, possibly Aron Ra?*/
+	"We will come for you again  When you are alone  In the dark  Without your sword", /*Jake Wyatt's Necropolis*/
+		"My sword is only steel in a useful shape. It's me you should fear, you stupid, dead things.",
+		"There are horrors.  But also the sun, the grass... And the road I wish to travel.",
 	"Now watch what you say or they'll be calling you a radical!", /* The Logical Song, Supertramp */
 	"I took a walk around the world, to ease my troubled mind.", /* Kryptonite */
 	"Do what thou wilt shall be the whole of the Law", /* Aleister Crowley */
