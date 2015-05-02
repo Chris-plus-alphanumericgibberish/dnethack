@@ -264,6 +264,11 @@
 #define is_longworm(ptr)	(((ptr) == &mons[PM_BABY_LONG_WORM]) || \
 				 ((ptr) == &mons[PM_LONG_WORM]) || \
 				 ((ptr) == &mons[PM_LONG_WORM_TAIL]))
+#define wants_bell(ptr)	((ptr->mflags3 & M3_WANTSBELL))
+#define wants_book(ptr)	((ptr->mflags3 & M3_WANTSBOOK))
+#define wants_cand(ptr)	((ptr->mflags3 & M3_WANTSCAND))
+#define wants_qart(ptr)	((ptr->mflags3 & M3_WANTSARTI))
+#define wants_amul(ptr)	((ptr->mflags3 & M3_COVETOUS))
 #define is_covetous(ptr)	((ptr->mflags3 & M3_COVETOUS))
 #define infravision(ptr)	((ptr->mflags3 & M3_INFRAVISION))
 #define infravisible(ptr)	((ptr->mflags3 & M3_INFRAVISIBLE))
