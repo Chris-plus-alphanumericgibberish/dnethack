@@ -2834,6 +2834,8 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				You("drain the ink from the %s.", xname(otmp));
 				costly_cancel(otmp);
 	    	    otmp->otyp = SCR_BLANK_PAPER;
+	    	    otmp->spe = 0;
+	    	    otmp->ovar1 = 0;
 				lesshungry(50);
 			break;
 			case SPBOOK_CLASS:

@@ -2017,6 +2017,7 @@ boolean amnesia;
 			}
 			obj->otyp = SCR_BLANK_PAPER;
 			obj->spe = 0;
+			obj->ovar1 = 0;
 			used = TRUE;
 		} 
 		break;
