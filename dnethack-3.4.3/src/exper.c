@@ -139,6 +139,69 @@ experience(mtmp, nk)	/* return # of exp points for mtmp after nk killed */
 	return(tmp);
 }
 
+int
+ptrexperience(ptr)	/* return # of exp points for mtmp after nk killed */
+	register struct permonst *ptr;
+{
+	int	i, tmp, tmp2;
+	
+	if(ptr == &mons[PM_LONG_SINUOUS_TENTACLE] || ptr == &mons[PM_SWARM_OF_SNAKING_TENTACLES]) return 0;
+	
+/*	Dungeon fern spores give no experience */
+	if(is_fern_spore(ptr)) tmp = 0;
+
+	tmp = 1 + ptr->mlevel * ptr->mlevel;
+
+/*	For higher ac values, give extra experience */
+	if ((i = ptr->ac) < 3) tmp += (7 - i) * ((i < 0) ? 2 : 1);
+
+/*	For very fast monsters, give extra experience */
+	if (ptr->mmove > NORMAL_SPEED)
+	    tmp += (ptr->mmove > (3*NORMAL_SPEED/2)) ? 5 : 3;
+
+/*	For each "special" attack type give extra experience */
+	for(i = 0; i < NATTK; i++) {
+
+	    tmp2 = ptr->mattk[i].aatyp;
+	    if(tmp2 > AT_BUTT) {
+
+		if(tmp2 == AT_WEAP) tmp += 5;
+		else if(tmp2 == AT_MAGC || tmp2 == AT_MMGC) tmp += 10;
+		else tmp += 3;
+	    }
+	}
+
+/*	For each "special" damage type give extra experience */
+	for(i = 0; i < NATTK; i++) {
+	    tmp2 = ptr->mattk[i].adtyp;
+	    if(tmp2 > AD_PHYS && tmp2 < AD_BLND) tmp += 2*ptr->mlevel;
+	    else if((tmp2 == AD_DRLI) || (tmp2 == AD_STON) ||
+	    		(tmp2 == AD_SLIM)) tmp += 50;
+	    else if(tmp != AD_PHYS) tmp += ptr->mlevel;
+		/* extra heavy damage bonus */
+	    if((int)(ptr->mattk[i].damd * ptr->mattk[i].damn) > 23)
+		tmp += ptr->mlevel;
+	    if (tmp2 == AD_WRAP && ptr->mlet == S_EEL && !Amphibious)
+		tmp += 1000;
+	}
+
+/*	For certain "extra nasty" monsters, give even more */
+	if (extra_nasty(ptr)) tmp += (7 * ptr->mlevel);
+
+/*	For higher level monsters, an additional bonus is given */
+	if(ptr->mlevel > 8) tmp += 50;
+
+/*	Dungeon fern spores give no experience */
+	if(is_fern_spore(ptr)) tmp = 0;
+
+#ifdef MAIL
+	/* Mail daemons put up no fight. */
+	if(ptr == &mons[PM_MAIL_DAEMON]) tmp = 1;
+#endif
+
+	return(tmp);
+}
+
 void
 more_experienced(exp, rexp)
 	register int exp, rexp;

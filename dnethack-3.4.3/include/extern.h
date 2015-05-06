@@ -680,6 +680,7 @@ E boolean FDECL(allied_faction, (int,int));
 /* ### exper.c ### */
 
 E int FDECL(experience, (struct monst *,int));
+E int FDECL(ptrexperience, (struct permonst *));
 E void FDECL(more_experienced, (int,int));
 E void FDECL(losexp, (const char *,BOOLEAN_P,BOOLEAN_P,BOOLEAN_P));
 E void NDECL(newexplevel);
