@@ -14,7 +14,13 @@
 STATIC_DCL void NDECL(do_positionbar);
 #endif
 
+STATIC_DCL void NDECL(printMons);
+STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
+STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
+
 #ifdef OVL0
+
+extern const int monstr[];
 
 STATIC_OVL void
 digXchasm(mtmp)
@@ -292,6 +298,7 @@ moveloop()
 
 	oldCon = ACURR(A_CON);
 	oldWisBon = ACURR(A_WIS)/4;
+	printMons();
     for(;;) {/////////////////////////MAIN LOOP/////////////////////////////////
 	get_nh_event();
 #ifdef POSITIONBAR
@@ -1417,6 +1424,461 @@ get_realtime(void)
 }
 #endif /* REALTIME_ON_BOTL || RECORD_REALTIME */
 
+STATIC_DCL
+void
+printMons(){
+	FILE *rfile;
+	register int i;
+	char pbuf[BUFSZ*100];
+	char attkbuf[BUFSZ];
+	char sizebuf[BUFSZ];
+	char resbuf[BUFSZ];
+	char convbuf[BUFSZ];
+	struct permonst *ptr;
+	attkbuf[0]=0;
+	sizebuf[0]=0;
+	resbuf[0]=0;
+	convbuf[0]=0;
+	rfile = fopen_datafile("wikiMonsters.txt", "w", SCOREPREFIX);
+	if (rfile) {
+		char *colorstr;
+		for(i=0;i<NUMMONS;i++){
+			// pline("%s\n",mons[i].mname);
+			// if(i == PM_OBOX_OB || i == PM_CHROMATIC_DRAGON || i == PM_AXUS || i == PM_LUCIFER) continue;
+			ptr = &mons[i];
+			switch(mons[i].mcolor){
+				case CLR_BLACK:
+					colorstr = "black";
+				break;
+				case CLR_RED:
+					colorstr = "red";
+				break;
+				case CLR_GREEN:
+					colorstr = "green";
+				break;
+				case CLR_BROWN:
+					colorstr = "brown";
+				break;
+				case CLR_BLUE:
+					colorstr = "blue";
+				break;
+				case CLR_MAGENTA:
+					colorstr = "magenta";
+				break;
+				case CLR_CYAN:
+					colorstr = "cyan";
+				break;
+				case CLR_GRAY:
+					colorstr = "gray";
+				break;
+				case CLR_ORANGE:
+					colorstr = "orange";
+				break;
+				case CLR_BRIGHT_MAGENTA:
+					colorstr = "brightmagenta";
+				break;
+				case CLR_BRIGHT_GREEN:
+					colorstr = "brightgreen";
+				break;
+				case CLR_YELLOW:
+					colorstr = "yellow";
+				break;
+				case CLR_BRIGHT_BLUE:
+					colorstr = "brightblue";
+				break;
+				case CLR_BRIGHT_CYAN:
+					colorstr = "brightcyan";
+				break;
+				case CLR_WHITE:
+					colorstr = "white";
+				break;
+			}
+			printAttacks(attkbuf,&mons[i]);
+			switch(mons[i].msize){
+				case MZ_TINY:
+					Sprintf(sizebuf,"tiny");
+				break;
+				case MZ_SMALL:
+					Sprintf(sizebuf,"small");
+				break;
+				case MZ_MEDIUM:
+					Sprintf(sizebuf,"medium");
+				break;
+				case MZ_LARGE:
+					Sprintf(sizebuf,"large");
+				break;
+				case MZ_HUGE:
+					Sprintf(sizebuf,"huge");
+				break;
+				default:
+					Sprintf(sizebuf,"gigantic");
+				break;
+			}
+			resFlags(resbuf, mons[i].mresists);
+			resFlags(convbuf, mons[i].mconveys);
+			Sprintf(pbuf,"{{monster\n");
+			Sprintf(eos(pbuf)," |name=%s\n", mons[i].mname);
+			Sprintf(eos(pbuf)," |symbol={{%s|%c}}\n", colorstr, def_monsyms[mons[i].mlet]);
+			Sprintf(eos(pbuf)," |tile=\n");
+			Sprintf(eos(pbuf)," |difficulty=%d\n", monstr[i]);
+			Sprintf(eos(pbuf)," |level=%d\n", mons[i].mlevel);
+			Sprintf(eos(pbuf)," |experience=%d\n", ptrexperience(ptr));
+			Sprintf(eos(pbuf)," |speed=%d\n", mons[i].mmove);
+			Sprintf(eos(pbuf)," |AC=%d\n", mons[i].ac);
+			Sprintf(eos(pbuf)," |MR=%d\n", mons[i].mr);
+			Sprintf(eos(pbuf)," |align=%d\n", mons[i].maligntyp);
+			Sprintf(eos(pbuf)," |frequency=%d\n", (int)(mons[i].geno & G_FREQ));
+			Sprintf(eos(pbuf)," |genocidable=%s\n", (mons[i].geno & G_GENO != 0) ? "Yes":"No");
+			Sprintf(eos(pbuf)," |attacks=%s\n", attkbuf);
+			Sprintf(eos(pbuf)," |weight=%d\n", (int) mons[i].cwt);
+			Sprintf(eos(pbuf)," |nutr=%d\n", (int) mons[i].cnutrit);
+			Sprintf(eos(pbuf)," |size=%s\n", sizebuf);
+			Sprintf(eos(pbuf)," |resistances=%s\n", resbuf);
+			Sprintf(eos(pbuf)," |resistances conveyed=%s\n", convbuf);
+			Sprintf(eos(pbuf)," |attributes=\n");
+			Sprintf(eos(pbuf)," |attributes={{attributes\n");
+			Sprintf(eos(pbuf)," |%s|=\n", Aptrnam(ptr));
+			Sprintf(eos(pbuf)," |fly=%s\n", is_flyer(&mons[i]) ? "1":"");
+			Sprintf(eos(pbuf)," |swim=%s\n", is_swimmer(&mons[i]) ? "1":"");
+			Sprintf(eos(pbuf)," |amorphous=%s\n", amorphous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wallwalk=%s\n", passes_walls(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |cling=%s\n", is_clinger(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |tunnel=%s\n", tunnels(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |needpick=%s\n", needspick(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |conceal=%s\n", hides_under(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |hide=%s\n",  is_hider(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |amphibious=%s\n",  amphibious(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |breathless=%s\n",  breathless(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |notake=%s\n", notake(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |noeyes=%s\n", !haseyes(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |nohands=%s\n", nohands(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |nolimbs=%s\n", nolimbs(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |nohead=%s\n", !has_head(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |mindless=%s\n", mindless(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |humanoid=%s\n", humanoid(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |animal=%s\n", is_animal(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |slithy=%s\n", slithy(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |unsolid=%s\n", unsolid(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |thick=%s\n", thick_skinned(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |oviparous=%s\n", lays_eggs(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |regen=%s\n", regenerates(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |seeinvis=%s\n", perceives(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |tport=%s\n", can_teleport(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |tportcntrl=%s\n", control_teleport(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |acid=%s\n", acidic(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |pois=%s\n", poisonous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |carnivore=%s\n", carnivorous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |herbivore=%s\n", herbivorous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |omnivore=%s\n", carnivorous(ptr)&&herbivorous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |metallivore=%s\n", metallivorous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |nopoly=%s\n", !polyok(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |undead=%s\n", is_undead(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |were=%s\n", is_were(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |human=%s\n", is_human(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |elf=%s\n", is_elf(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |dwarf=%s\n", is_dwarf(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |gnome=%s\n", is_gnome(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |orc=%s\n", is_orc(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |demon=%s\n", is_demon(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |merc=%s\n", is_mercenary(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |lord=%s\n", is_lord(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |prince=%s\n", is_prince(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |giant=%s\n", is_giant(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |male=%s\n", is_male(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |female=%s\n", is_female(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |neuter=%s\n", is_neuter(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |hostile=%s\n", always_hostile(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |peaceful=%s\n", always_peaceful(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |domestic=%s\n", is_domestic(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wander=%s\n", is_wanderer(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |stalk=%s\n", (((ptr)->mflags2 & M2_STALK) != 0L) ? "1":"");
+			Sprintf(eos(pbuf)," |nasty=%s\n", extra_nasty(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |strong=%s\n", strongmonst(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |rockthrow=%s\n", throws_rocks(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |greedy=%s\n", likes_gold(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |jewels=%s\n", likes_gems(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |collect=%s\n", likes_objs(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |magic=%s\n", likes_magic(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wantsamul=%s\n", wants_amul(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wantsbell=%s\n", wants_bell(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wantsbook=%s\n", wants_book(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wantscand=%s\n", wants_cand(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wantsarti=%s\n", wants_qart(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |wantsall=%s\n", is_covetous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |waitsforu=%s\n", (((ptr)->mflags3 & M3_WAITFORU) != 0L) ? "1":"");
+			Sprintf(eos(pbuf)," |close=%s\n", (((ptr)->mflags3 & M3_CLOSE) != 0L) ? "1":"");
+			Sprintf(eos(pbuf)," |covetous=%s\n", is_covetous(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |infravision=%s\n", infravision(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |infravisible=%s\n", infravisible(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |nohell=%s\n", (mons[i].geno & G_NOHELL) ? "1":"");
+			Sprintf(eos(pbuf)," |hell=%s\n", (mons[i].geno & G_HELL != 0) ? "1":"");
+			Sprintf(eos(pbuf)," |moria=\n");
+			Sprintf(eos(pbuf)," |sgroup=%s\n", (mons[i].geno & G_SGROUP) ? "1":"");
+			Sprintf(eos(pbuf)," |lgroup=%s\n", (mons[i].geno & G_LGROUP) ? "1":"");
+			Sprintf(eos(pbuf)," |vlgroup=\n");
+			Sprintf(eos(pbuf)," |nocorpse=%s\n", (mons[i].geno & G_NOCORPSE) ? "1":"");
+			Sprintf(eos(pbuf)," |oldcorpse=%s\n", (is_undead(ptr) && !(mons[i].geno & G_NOCORPSE)) ? "1":"");
+			Sprintf(eos(pbuf)," |light=%s\n", emits_light(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |death=%s\n", (nonliving(ptr) || is_demon(ptr)) ? "1":"");
+			Sprintf(eos(pbuf)," |drain=%s\n", (mons[i].mresists & MR_DRAIN) ? "1":"");
+			Sprintf(eos(pbuf)," |plusone=\n");
+			Sprintf(eos(pbuf)," |plustwo=\n");
+			Sprintf(eos(pbuf)," |plusthree=\n");
+			Sprintf(eos(pbuf)," |plusfour=\n");
+			Sprintf(eos(pbuf)," |hitasone=\n");
+			Sprintf(eos(pbuf)," |hitastwo=\n");
+			Sprintf(eos(pbuf)," |hitasthree=\n");
+			Sprintf(eos(pbuf)," |hitasfour=\n");
+			Sprintf(eos(pbuf)," |vampire=%s\n", is_vampire(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |traitor=%s\n", can_betray(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," |notame=%s\n", (!(is_covetous(ptr) || is_human(ptr))) ? "1":"");
+			Sprintf(eos(pbuf)," |light1=%s\n", (emits_light(ptr) == 1) ? "1":"");
+			Sprintf(eos(pbuf)," |light2=%s\n", (emits_light(ptr) == 2) ? "1":"");
+			Sprintf(eos(pbuf)," |light3=%s\n", (emits_light(ptr) == 3) ? "1":"");
+			Sprintf(eos(pbuf)," |groupattack=\n");
+			Sprintf(eos(pbuf)," |blinker=\n");
+			Sprintf(eos(pbuf)," |noregen=%s\n", (!regenerates(ptr) && nonliving(ptr)) ? "1":"");
+			Sprintf(eos(pbuf)," |stationary=%s\n", stationary(ptr) ? "1":"");
+			Sprintf(eos(pbuf)," }}\n");
+			Sprintf(eos(pbuf)," |refline=\n");
+			Sprintf(eos(pbuf),"}}\n\n");
+			fprintf(rfile, pbuf);
+		}
+	}
+}
+
+STATIC_DCL
+void
+resFlags(buf, rflags)
+	char *buf;
+	unsigned int rflags;
+{
+	int i;
+	boolean b = FALSE;
+	static char *mrKey[] = {
+		"[[fire]]",
+		"[[cold]]",
+		"[[sleep]]",
+		"[[disintegration]]",
+		"[[shock]]",
+		"[[poison]]",
+		"[[acid]]",
+		"[[petrification]]",
+		"[[level drain]]",
+		"[[disease]]"
+	};
+	Sprintf(buf,"");
+	for(i = 0; i<10; i++){
+		if(rflags & (1 << i)){
+			if(!b){
+				b = TRUE;
+				Sprintf(buf, "%s", mrKey[i]);
+			} else {
+				Sprintf(eos(buf), ", %s", mrKey[i]);
+			}
+		}
+	}
+}
+
+STATIC_DCL
+void
+printAttacks(buf, ptr)
+	char *buf;
+	struct permonst *ptr;
+{
+	int i;
+	struct attack *attk;
+	static char *attackKey[] = {
+		"Passive",	/*0*/
+		"Claw",		/*1*/
+		"Bite",		/*2*/
+		"Kick",		/*3*/
+		"Butt",		/*4*/
+		"Touch",	/*5*/
+		"Sting",	/*6*/
+		"Bearhug",	/*7*/
+		"NA",		/*8*/
+		"NA",		/*9*/
+		"Spit",		/*10*/
+		"Engulf",	/*11*/
+		"Breath weapon",	/*12*/
+		"Suicidal explosion",	/*13*/
+		"Explode on death",	/*14*/
+		"Gaze attack",	/*15*/
+		"Tentacle",	/*16*/
+		"Arrow",	/*17*/
+		"Whip",	/*18*/
+		"Reach",	/*19*/
+		"Your weapon",	/*20*/
+		"Reach",	/*21*/
+		"Magic",	/*22*/
+		"Engulf",	/*23*/
+		"Automatic hit",	/*24*/
+		"Mist tendrils",	/*25*/
+		"Tinker",	/*26*/
+		"Shadow blades",	/*27*/
+		"Beam"	/*28*/
+	};
+	static char *damageKey[] = {
+		"physical",				/*0*/
+		"[[magic missile]]s",	/*1*/
+		"[[fire]]",				/*2*/
+		"[[cold]]",				/*3*/
+		"[[sleep]]",			/*4*/
+		"[[disintegration]]",	/*5*/
+		"[[shock]]",			/*6*/
+		"[[poison]] (strength)",/*7*/
+		"[[acid]]",				/*8*/
+		"Unused 1",				/*9*/
+		"Unused 2",				/*10*/
+		"[[blind]]ing",			/*11*/
+		"[[stun]]ning",			/*12*/
+		"[[slow]]ing",			/*13*/
+		"[[paralysis]]",		/*14*/
+		"[[life drain]]",		/*15*/
+		"[[energy drain]]",		/*16*/
+		"[[leg wounding]]",		/*17*/
+		"[[petrifcation]]",		/*18*/
+		"[[sticky]]",			/*19*/
+		"[[steal gold]]",		/*20*/
+		"[[steal item]]",		/*21*/
+		"[[steal item|seduction]]",/*22*/
+		"[[teleportation]]",	/*23*/
+		"[[rust]]",				/*24*/
+		"[[confusion]]",		/*25*/
+		"[[digestion]]",		/*26*/
+		"[[healing]]",			/*27*/
+		"[[drowning]]",			/*28*/
+		"[[lycanthropy]]",		/*29*/
+		"[[poison]] (dexterity)",/*30*/
+		"[[poison]] (constitution)",/*31*/
+		"[[int drain]]",		/*32*/
+		"[[disease]]",			/*33*/
+		"[[rotting]]",			/*34*/
+		"[[seduction]]",		/*35*/
+		"[[hallucination]]",	/*36*/
+		"[[Death's touch]]",	/*37*/
+		"[[Pestilence]]",		/*38*/
+		"[[Famine]]",			/*39*/
+		"[[sliming]]",			/*40*/
+		"[[disenchant]]",		/*41*/
+		"[[corrosion]]",		/*42*/
+		"[[poison]] (HP damage)",/*43*/
+		"[[wis drain]]",		/*44*/
+		"[[vorpal]]",			/*45*/
+		"[[armor shredding]]",	/*46*/
+		"[[silver]]",			/*47*/
+		"[[cannon ball]]",		/*48*/
+		"[[boulder]]",			/*49*/
+		"[[random boulder]]",	/*50*/
+		"[[tickling]]",			/*51*/
+		"[[soaking]]",			/*52*/
+		"[[lethe]]",			/*53*/
+		"[[bisection]]",		/*54*/
+		"NA",					/*55*/
+		"NA",					/*56*/
+		"NA",					/*57*/
+		"NA",					/*58*/
+		"NA",					/*59*/
+		"[[cancellation]]",		/*60*/
+		"[[deadly]]",			/*61*/
+		"[[sucktion]]",			/*62*/
+		"[[malkuth]]",			/*63*/
+		"[[uvuudaum brainspike]]",/*64*/
+		"[[abduction]]",		/*65*/
+		"[[spawn Chaos]]",		/*66*/
+		"[[seduction]]",		/*67*/
+		"[[hellblood]]",		/*68*/
+		"[[spawn Leviathan]]",	/*69*/
+		"[[mist projection]]",	/*70*/
+		"[[teleport away]]",	/*71*/
+		"[[baleful polymorph]]",/*72*/
+		"[[psionic]]",			/*73*/
+		"[[promotion]]",		/*74*/
+		"[[shared soul]]",		/*75*/
+		"[[intrusion]]",		/*76*/
+		"[[jailer]]",			/*77*/
+		"[[special]]",			/*78*/
+		"[[take artifact]]",	/*79*/
+		"[[silver]]",			/*80*/
+		"[[special]]",			/*81*/
+		"[[your weapon]]",		/*82*/
+		"[[cursed unicorn horn]]",/*83*/
+		"[[loadstone]]",		/*84*/
+		"[[garo report]]",		/*85*/
+		"[[garo report]]",		/*86*/
+		"[[level teleport]]",	/*87*/
+		"[[blink]]",			/*88*/
+		"[[angel's touch]]",	/*89*/
+		"[[spore]]",			/*90*/
+		"[[explosive spore]]",	/*91*/
+		"[[sunlight]]",			/*92*/
+		"[[deadly shriek]]",	/*93*/
+		"[[barbs]]",			/*94*/
+		"[[luck drain]]",		/*95*/
+		"[[vampiric]]",			/*96*/
+		"[[webbing]]",			/*97*/
+		"[[special]]",			/*98*/
+		"[[spawn gizmos]]",		/*99*/
+		"[[fireworks]]",		/*100*/
+		"[[study]]",			/*101*/
+		"[[fire]], [[cold]], or [[shock]]",/*102*/
+		"[[netzach]]",			/*103*/
+		"[[special]]",			/*104*/
+		"[[shadow]]",			/*105*/
+		"[[armor teleportation]]",/*106*/
+		"[[half-dragon breath]]",/*107*/
+		"[[ahazu abduction]]",	/*108*/
+		"[[stone choir]]",		/*109*/
+		"[[water vampire]]",	/*110*/
+		"[[bloody fangs]]",		/*111*/
+		"[[item freeing]]",		/*112*/
+		"[[rainbow feathers]]",	/*113*/
+		"[[Vorlon explosion]]",	/*114*/
+		"[[cold explosion]]",	/*115*/
+		"[[fire explosion]]",	/*116*/
+		"[[shock explosion]]",	/*117*/
+		"[[physical explosion]]",/*118*/
+		"[[Vorlon missile]]",	/*119*/
+		"[[Warmachine missile]]",/*120*/
+		"[[clerical spell]]",	/*121*/
+		"[[mage spell]]",		/*122*/
+		"[[random breath type]]",/*123*/
+		"[[random gaze type]]",	/*124*/
+		"[[random elemental gaze]]",/*125*/
+		"[[Amulet theft]]",		/*126*/
+		"[[Intrinsic theft]]",	/*127*/
+		"[[Quest Artifact theft]]"/*128*/
+	};
+	for(i = 0; i<6; i++){
+		attk = &ptr->mattk[i];
+		if(attk->aatyp == 0 &&
+			attk->adtyp == 0 &&
+			attk->damn == 0 &&
+			attk->damd == 0
+		) return;
+		if(!i){
+			Sprintf(buf, "%s %dd%d %s",
+				attk->aatyp == AT_WEAP ? "Weapon" :
+				attk->aatyp == AT_MAGC ? "Cast" :
+				attackKey[((int)attk->aatyp)],
+				attk->damn,
+				attk->damd,
+				damageKey[((int)attk->adtyp)]
+			);
+		} else {
+			Sprintf(eos(buf), ", %s %dd%d %s",
+				attk->aatyp == AT_WEAP ? "Weapon" :
+				attk->aatyp == AT_MAGC ? "Cast" :
+				attackKey[((int)attk->aatyp)],
+				attk->damn,
+				attk->damd,
+				damageKey[((int)attk->adtyp)]
+			);
+		}
+	}
+	return;
+}
 
 #endif /* OVLB */
 
