@@ -942,6 +942,78 @@ boolean called;
 	}
 }
 
+char *
+x_ptrnam(ptr, article, adjective, called)
+register struct permonst *ptr;
+int article;
+/* ARTICLE_NONE, ARTICLE_THE, ARTICLE_A: obvious
+ * ARTICLE_YOUR: "your" on pets, "the" on everything else
+ *
+ * If the monster would be referred to as "it" or if the monster has a name
+ * _and_ there is no adjective, "invisible", "saddled", etc., override this
+ * and always use no article.
+ */
+const char *adjective;
+boolean called;
+{
+#ifdef LINT	/* static char buf[BUFSZ]; */
+	char buf[BUFSZ];
+#else
+	static char buf[BUFSZ];
+#endif
+	struct permonst *mdat = ptr;
+	boolean name_at_start, has_adjectives;
+	char *bp;
+
+	buf[0] = 0;
+
+	/* Put the adjectives in the buffer */
+	if (adjective)
+	    Strcat(strcat(buf, adjective), " ");
+	if (buf[0] != 0)
+	    has_adjectives = TRUE;
+	else
+	    has_adjectives = FALSE;
+
+	/* Put the actual monster name or type into the buffer now */
+	/* Be sure to remember whether the buffer starts with a name */
+	{
+	    Strcat(buf, mdat->mname);
+	    name_at_start = (boolean)type_is_pname(mdat);
+	}
+
+	if (name_at_start && (article == ARTICLE_YOUR || !has_adjectives)) {
+	    if (mdat == &mons[PM_WIZARD_OF_YENDOR])
+		article = ARTICLE_THE;
+	    else
+		article = ARTICLE_NONE;
+	} else if ((mdat->geno & G_UNIQ) && article == ARTICLE_A) {
+	    article = ARTICLE_THE;
+	}
+
+	{
+	    char buf2[BUFSZ];
+
+	    switch(article) {
+		case ARTICLE_YOUR:
+		    Strcpy(buf2, "your ");
+		    Strcat(buf2, buf);
+		    Strcpy(buf, buf2);
+		    return buf;
+		case ARTICLE_THE:
+		    Strcpy(buf2, "the ");
+		    Strcat(buf2, buf);
+		    Strcpy(buf, buf2);
+		    return buf;
+		case ARTICLE_A:
+		    return(an(buf));
+		case ARTICLE_NONE:
+		default:
+		    return buf;
+	    }
+	}
+}
+
 #endif /* OVL0 */
 #ifdef OVLB
 
@@ -1082,10 +1154,27 @@ register struct monst *mtmp;
 }
 
 char *
+a_ptrnam(ptr)
+register struct permonst *ptr;
+{
+	return x_ptrnam(ptr, ARTICLE_A, (char *)0, FALSE);
+}
+
+char *
 Amonnam(mtmp)
 register struct monst *mtmp;
 {
 	register char *bp = a_monnam(mtmp);
+
+	*bp = highc(*bp);
+	return(bp);
+}
+
+char *
+Aptrnam(ptr)
+register struct permonst *ptr;
+{
+	register char *bp = a_ptrnam(ptr);
 
 	*bp = highc(*bp);
 	return(bp);
