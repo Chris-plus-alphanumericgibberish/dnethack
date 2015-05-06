@@ -108,79 +108,78 @@
 #define AD_MALK		63	/* tries immobalizes you and destroys wands */
 #define AD_UVUU		64	/* Uvuudaum head spike attack */
 #define AD_ABDC		65	/* Abduction attack, teleports you regardless of monster cancellation */
+#define AD_KAOS		66  /* Spawn Chaos */
+#define AD_LSEX		67	/* DEPRICATED? Lilith's seduction (extended) */
+#define AD_HLBD		68  /* Asmodeus's blood */
+#define AD_SPNL		69	/* Spawns Leviathan when used with AT_BOOM*/
+#define AD_MIST		70 /* Mi-go mist projector.  Works with AT_GAZE */
+#define AD_TELE		71 /* Monster teleports away.  Use for hit and run attacks */
+#define AD_POLY		72	/* Monster alters your DNA (was for the now-defunct genetic enginier Q) */
+#define AD_PSON		73 /* DEFERED psionic attacks.  uses some from cleric and wiz */
+#define AD_GROW		74 /* Monster causes a child to grow up upon death.  'ton special */
+#define AD_SOUL		75 /* Monster causes like monsters to power up upon death.  Deep One special */
+#define AD_TENT		76	/* extended tentacle invasion (elder priest) */
+#define AD_JAILER	77	/* Sets Lucifer to apear and drops third key of law when killed */
+#define AD_AXUS		78 /* Multi-element counterattack, angers 'tons */
+#define AD_UNKNWN	79	/* Priest of an unknown God */
+#define AD_SOLR		80	/* Solar's silver arrow attack */
+#define AD_CHKH		81 /* Chokhmah Sephirah's escalating damage attack */
+#define AD_HODS		82 /* Hod Sephirah's mirror attack */
+#define AD_CHRN		83 /* Nightmare's horn attack */
+#define AD_LOAD		84 /* throws loadstones */
+#define AD_GARO		85 /* blows up after dispensing rumor */
+#define AD_GARO_MASTER	86 /* blows up after dispensing oracle */
+#define AD_LVLT		87	/* level teleport (was weeping angel) */
+#define AD_BLNK		88	/* mental invasion (weeping angel) */
+#define AD_WEEP		89	/* Level teleport and drain (weeping angel) */
+#define AD_SPOR		90	/* generate spore */
+#define AD_FNEX		91	/* FerN spore EXplosion */
+#define AD_SSUN		92	/* Slaver Sunflower gaze */
+#define AD_MAND		93	/* Mandrake's dying shriek (kills all on level, use w/ AT_BOOM) */
+#define AD_BARB		94	/* Physical damage retalitory attack */
+#define AD_LUCK		95	/* Luck-draining gaze (UnNetHack) */
+#define AD_VAMP		96	/* Vampire's blood drain attack */
+#define AD_WEBS		97	/* Spreads webbing on a hit */
+#define AD_ILUR		98 /* memory draining engulf attack belonging to Illurien */
+#define AD_TNKR		99 /* Tinker attacks */
+#define AD_FRWK		100 /* "Firework" explosions */
+#define AD_STDY		101 /* Monster studies you, other monsters do more damage. */
+#define AD_OONA		102 /* Oona's variable energy type and v and e spawning */
+#define AD_NTZC		103 /* netzach sephiroth's anti-equipment attack */
+#define AD_WTCH		104 /* The Watcher in the water's tentacle-spawning gaze */
+#define AD_SHDW		105 /* Black Web shadow weapons */
+#define AD_STTP		106 /* Steal by Teleportation: Teleports your gear away */
+#define AD_HDRG		107 /* Half-dragon breath weapon */
 
-#define AD_KAOS		96  /* Spawn Chaos */
-#define AD_LSEX		97	/* DEPRICATED? Lilith's seduction (extended) */
-#define AD_HLBD		99  /* Asmodeus's blood */
-#define AD_SPNL		100	/* Spawns Leviathan when used with AT_BOOM*/
-#define AD_MIST		110 /* Mi-go mist projector.  Works with AT_GAZE */
-#define AD_TELE		111 /* Monster teleports away.  Use for hit and run attacks */
-#define AD_POLY		112	/* Monster alters your DNA (was for the now-defunct genetic enginier Q) */
-#define AD_PSON		113 /* DEFERED psionic attacks.  uses some from cleric and wiz */
-#define AD_GROW		114 /* Monster causes a child to grow up upon death.  'ton special */
-#define AD_SOUL		115 /* Monster causes like monsters to power up upon death.  Deep One special */
-#define AD_TENT		116	/* extended tentacle invasion (elder priest) */
-#define AD_JAILER	117	/* Sets Lucifer to apear and drops third key of law when killed */
-#define AD_AXUS		118 /* Multi-element counterattack, angers 'tons */
-#define AD_UNKNWN	119	/* Priest of an unknown God */
-#define AD_SOLR		120	/* Solar's silver arrow attack */
-#define AD_CHKH		121 /* Chokhmah Sephirah's escalating damage attack */
-#define AD_HODS		122 /* Hod Sephirah's mirror attack */
-#define AD_CHRN		123 /* Nightmare's horn attack */
-#define AD_LOAD		124 /* throws loadstones */
-#define AD_GARO		125 /* blows up after dispensing rumor */
-#define AD_GARO_MASTER	126 /* blows up after dispensing oracle */
-#define AD_LVLT		127	/* level teleport (was weeping angel) */
-#define AD_BLNK		128	/* mental invasion (weeping angel) */
-#define AD_WEEP		129	/* Level teleport and drain (weeping angel) */
-#define AD_SPOR		130	/* generate spore */
-#define AD_FNEX		131	/* FerN spore EXplosion */
-#define AD_SSUN		132	/* Slaver Sunflower gaze */
-#define AD_MAND		133	/* Mandrake's dying shriek (kills all on level, use w/ AT_BOOM) */
-#define AD_BARB		134	/* Physical damage retalitory attack */
-#define AD_LUCK		135	/* Luck-draining gaze (UnNetHack) */
-#define AD_VAMP		136	/* Vampire's blood drain attack */
-#define AD_WEBS		137	/* Spreads webbing on a hit */
-#define AD_ILUR		138 /* memory draining engulf attack belonging to Illurien */
-#define AD_TNKR		139 /* Tinker attacks */
-#define AD_FRWK		140 /* "Firework" explosions */
-#define AD_STDY		141 /* Monster studies you, other monsters do more damage. */
-#define AD_OONA		142 /* Oona's variable energy type and v and e spawning */
-#define AD_NTZC		143 /* netzach sephiroth's anti-equipment attack */
-#define AD_WTCH		144 /* The Watcher in the water's tentacle-spawning gaze */
-#define AD_SHDW		145 /* Black Web shadow weapons */
-#define AD_STTP		146 /* Steal by Teleportation: Teleports your gear away */
-#define AD_HDRG		147 /* Half-dragon breath weapon */
 
-
-//#define AD_AHAZU	150 /*  */
+//#define AD_AHAZU	108 /*  */
 //Amon is a headbutt (AT_BUTT/AD_PHYS)
 //Chupoclops is a poisonous bite (AT_BITE/AD_DRST)
-#define AD_DUNSTAN	150
-#define AD_IRIS		151
-#define AD_NABERIUS	152
-#define AD_OTIAX	153
-#define AD_SIMURGH	154
+#define AD_DUNSTAN	109
+#define AD_IRIS		110
+#define AD_NABERIUS	111
+#define AD_OTIAX	112
+#define AD_SIMURGH	113
 
 
-//#define AD_VMSL		180 //Vorlon missile: elect, disintegration, blast.  Triple damage.
-#define AD_CMSL		181 //Cold missile
-#define AD_FMSL		182 //Fire missile
-#define AD_EMSL		183 //Electric missile
-#define AD_SMSL		184 //Shrapnel missile: physical
+//#define AD_VMSL		114 //Vorlon missile: elect, disintegration, blast.  Triple damage.
+#define AD_CMSL		115 //Cold missile
+#define AD_FMSL		116 //Fire missile
+#define AD_EMSL		117 //Electric missile
+#define AD_SMSL		118 //Shrapnel missile: physical
 
-//#define AD_VTGT		200 //Vorlon targeting GAZE
-#define AD_WMTG		201 //War machine targeting GAZE
+//#define AD_VTGT		119 //Vorlon targeting GAZE
+#define AD_WMTG		120 //War machine targeting GAZE
 
-#define AD_CLRC		240	/* random clerical spell */
-#define AD_SPEL		241	/* random magic spell */
-#define AD_RBRE		242	/* random breath weapon */
-#define AD_RGAZ		242	/* random gaze attack */
-#define AD_RETR		243 /* elemental gaze attack */
+#define AD_CLRC		121	/* random clerical spell */
+#define AD_SPEL		122	/* random magic spell */
+#define AD_RBRE		123	/* random breath weapon */
+#define AD_RGAZ		124	/* random gaze attack */
+#define AD_RETR		125 /* elemental gaze attack */
 
-#define AD_SAMU		252	/* hits, may steal Amulet (Wizard) */
-#define AD_CURS		253	/* random curse (ex. gremlin) */
-#define AD_SQUE		254	/* hits, may steal Quest Art or Amulet (Nemeses) */
+#define AD_SAMU		126	/* hits, may steal Amulet (Wizard) */
+#define AD_CURS		127	/* random curse (ex. gremlin) */
+#define AD_SQUE		128	/* hits, may steal Quest Art or Amulet (Nemeses) */
 
 
 /*
