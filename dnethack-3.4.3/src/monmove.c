@@ -976,7 +976,9 @@ register struct monst *mtmp;
 			pline("It feels quite soothing.");
 		else {
 			register boolean m_sen = sensemon(mtmp);
-
+			
+			if(mdat == &mons[PM_ELDER_BRAIN]) quest_chat(mtmp);
+			
 			if (m_sen || (Blind_telepat && rn2(2)) || !rn2(10)) {
 				int dmg;
 				pline("It locks on to your %s!",

@@ -363,7 +363,7 @@ chat_with_nemesis()
 {
 /*	The nemesis will do most of the talking, but... */
 	qt_pager(rn1(10, QT_DISCOURAGE + (flags.stag ? QT_TURNEDSTAG : 0)));
-	if(!Qstat(met_nemesis)) Qstat(met_nemesis++);
+	// if(!Qstat(met_nemesis)) Qstat(met_nemesis++);
 }
 
 void
