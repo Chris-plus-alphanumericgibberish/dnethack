@@ -1225,7 +1225,7 @@ dodarken()
 	    You("lack the energy to invoke the darkness.");
 	    return(0);
 	}
-	u.uen = max(u.uen-15,0);
+	u.uen = max(u.uen-10,0);
 	flags.botl = 1;
 	You("invoke the darkness.");
 	litroom(FALSE,NULL);
