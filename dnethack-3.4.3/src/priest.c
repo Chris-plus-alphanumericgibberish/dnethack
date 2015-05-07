@@ -165,7 +165,7 @@ register struct monst *priest;
 
 	if(!priest->mpeaceful ||
 	   (Conflict && !resist(priest, RING_CLASS, 0, 0))) {
-		if(monnear(priest, u.ux, u.uy)) {
+		if(monnear(priest, u.ux, u.uy) && !priest->mflee) {
 			if(Displaced)
 				Your("displaced image doesn't fool %s!",
 					mon_nam(priest));
@@ -177,7 +177,7 @@ register struct monst *priest;
 				gx = u.ux;
 				gy = u.uy;
 			}
-			avoid = FALSE;
+			avoid = priest->mflee;
 		}
 	} else if(Invis) avoid = FALSE;
 
