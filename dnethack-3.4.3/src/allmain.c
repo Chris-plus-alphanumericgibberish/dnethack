@@ -868,7 +868,19 @@ moveloop()
 			}
 
 		    if(!(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
-			if(Teleportation && !rn2(85)) {
+			if(Teleportation && !rn2(85) && !(
+#ifdef WIZARD
+				(
+#endif
+				 (u.uhave.amulet || On_W_tower_level(&u.uz)
+#ifdef STEED
+				  || (u.usteed && mon_has_amulet(u.usteed))
+#endif
+				 )
+#ifdef WIZARD
+				 && (!wizard) )
+#endif
+			)) {
 			    xchar old_ux = u.ux, old_uy = u.uy;
 			    tele();
 			    if (u.ux != old_ux || u.uy != old_uy) {
