@@ -119,6 +119,8 @@ int mndx;
 #if 0	/* DEFERRED */
 	case PM_VAMPIRE_MAGE:
 #endif
+	case PM_DROW_ZOMBIE:	mndx = PM_DROW;  break;
+	case PM_DROW_MUMMY:	mndx = PM_DROW_MATRON;  break;
 	case PM_HUMAN_ZOMBIE:
 	case PM_HUMAN_MUMMY:	mndx = PM_HUMAN;  break;
 	case PM_GIANT_ZOMBIE:
@@ -339,6 +341,8 @@ register struct monst *mtmp;
 	    case PM_ORC_MUMMY:
 	    case PM_ELF_MUMMY:
 	    case PM_HUMAN_MUMMY:
+	    case PM_DROW_MUMMY:
+	    case PM_HALF_DRAGON_MUMMY:
 	    case PM_GIANT_MUMMY:
 	    case PM_ETTIN_MUMMY:
 	    case PM_KOBOLD_ZOMBIE:
@@ -347,6 +351,8 @@ register struct monst *mtmp;
 	    case PM_ORC_ZOMBIE:
 	    case PM_ELF_ZOMBIE:
 	    case PM_HUMAN_ZOMBIE:
+	    case PM_DROW_ZOMBIE:
+	    case PM_HALF_DRAGON_ZOMBIE:
 	    case PM_GIANT_ZOMBIE:
 	    case PM_ETTIN_ZOMBIE:
 		num = undead_to_corpse(mndx);
