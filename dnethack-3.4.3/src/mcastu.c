@@ -1021,19 +1021,21 @@ int spellnum;
        dmg = 0;
        break;
 	 stop_occupation();
-     case PUNISH:
-    if (!Punished) {
-            punish((struct obj *)0);
-           if (mtmp && is_prince(mtmp->data)) uball->owt += 160;
-	} else {
-                Your("iron ball gets heavier!");
-				if (mtmp && is_prince(mtmp->data)) uball->owt += 240;
-                else uball->owt += 160;
-	}
-	dmg = 0;
-	stop_occupation();
+    case PUNISH:
+		if(u.ualign.record <= 1 || !rn2(min(u.ualign.record,20))){
+			if (!Punished) {
+					punish((struct obj *)0);
+				   if (mtmp && is_prince(mtmp->data)) uball->owt += 160;
+			} else {
+						Your("iron ball gets heavier!");
+						if (mtmp && is_prince(mtmp->data)) uball->owt += 240;
+						else uball->owt += 160;
+			}
+		} else Your("sins do not demand punishment.");
+		dmg = 0;
+		stop_occupation();
 	break;
-     case EARTHQUAKE:
+    case EARTHQUAKE:
 		pline_The("entire %s is shaking around you!",
                In_endgame(&u.uz) ? "plane" : "dungeon");
         /* Quest nemesis maledictions */
