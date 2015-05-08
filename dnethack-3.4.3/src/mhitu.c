@@ -6273,7 +6273,8 @@ int dmg;
 	char buf[BUFSZ];
 	register struct obj *otmp;
 	int i; //multipurpose local variable
-	int n, ln; //loop control variable for attacks;
+	int n, ln, trycount; //loop control variables for attacks;
+	int allreadydone = 0; //don't repeat the same special case;
 	struct attack bodyblow = {AT_TENT, AD_WRAP, 2, 10};
 	struct attack headshot = {AT_TENT, AD_DRIN, 2, 10};
 	struct attack handshit = {AT_TENT, AD_DRDX, 2, 10};
@@ -6281,7 +6282,7 @@ int dmg;
 
 	n = 4; //4 actions
 	ln = n;
-
+	trycount = 0;
 
 /* First it makes one attempt to remove body armor.  It starts with the cloak,
  * followed by body armor and then the shirt.  It can only remove one per round.
@@ -6375,13 +6376,15 @@ int dmg;
 				}
 			}
 		}
-	  while(n > 0){
+	  while(n > 0 && trycount++ < 50){
 		   if(n < ln && (d(1,100) > 85)){ //it's useless to struggle, but...
 			   yn("Struggle against the tentacles' grasp?");
 			   ln = n;
 		   }
 		   switch(d(1,12)){
 			case 1:
+			if(allreadydone&(0x1<<1)) break;
+			allreadydone |= 0x1<<1;
 			if(uarmf){
 				n--;
 				if(!u_slip_free(mon, &legblast)){
@@ -6414,6 +6417,8 @@ int dmg;
 			}
 			break;
 			case 2:
+			if(allreadydone&(0x1<<2)) break;
+			allreadydone |= 0x1<<2;
 			if(uwep){
 				n--;
 				You_feel("the tentacles wrap around your weapon.");
@@ -6430,6 +6435,8 @@ int dmg;
 			}
 			break;
 			case 3:
+			if(allreadydone&(0x1<<3)) break;
+			allreadydone |= 0x1<<3;
 			if(uarmg){
 				n--;
 				if(!u_slip_free(mon, &handshit)){
@@ -6458,6 +6465,8 @@ int dmg;
 			}
 			break;
 			case 4:
+			if(allreadydone&(0x1<<4)) break;
+			allreadydone |= 0x1<<4;
 			if(uarms){
 				n--;
 				You_feel("the tentacles wrap around your shield.");
@@ -6475,6 +6484,8 @@ int dmg;
 			}
 			break;
 			case 5:
+			if(allreadydone&(0x1<<5)) break;
+			allreadydone |= 0x1<<5;
 			if(uarmh){
 				n--;
 				if(!u_slip_free(mon, &headshot)){
@@ -6505,6 +6516,8 @@ int dmg;
 			case 6:
 				if(u.uenmax == 0) 
 			break;
+				if(allreadydone&(0x1<<6)) break;
+				allreadydone |= 0x1<<6;
 				n--; //else commit to the attack.
 				if(uarmc || uarm || uarmu || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)){
 					You_feel("the tentacles sucking on your %s", uarm ? "armor" : "clothes");
@@ -6517,6 +6530,8 @@ int dmg;
 				if (u.uenmax < 0) u.uenmax = 0;
 			break;
 			case 7:
+				if(allreadydone&(0x1<<7)) break;
+				allreadydone |= 0x1<<7;
 				n--;
 				if(uarmh){
 					You_feel("the tentacles squirm over your helmet");
@@ -6569,6 +6584,8 @@ int dmg;
 				
 			break;
 			case 8:
+				if(allreadydone&(0x1<<8)) break;
+				allreadydone |= 0x1<<8;
 				n--;
 				if(uarmc || uarm || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)){
 					You_feel("a tentacle squirm over your %s.", uarmc ? "cloak" : (uwep && uwep->oartifact==ART_TENSA_ZANGETSU) ? "shihakusho" : "armor");
@@ -6595,6 +6612,8 @@ int dmg;
 				losehp(Half_physical_damage ? dmg/4+1 : dmg/2+1, "drilling tentacles", KILLED_BY);
 			break;
 			case 9:
+				if(allreadydone&(0x1<<9)) break;
+				allreadydone |= 0x1<<9;
 				n--;
 				if(uarmc || uarm  || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)){
 					You_feel("the tentacles press into your %s", uarmc ? "cloak" : (uwep && uwep->oartifact==ART_TENSA_ZANGETSU) ? "shihakusho" : "armor");
@@ -6607,8 +6626,14 @@ int dmg;
 				You_feel("weak and helpless in their grip!");
 			break;
 			case 10:
+				if(allreadydone&(0x1<<10)) break;
+				allreadydone |= 0x1<<10;
 			case 11:
+				if(allreadydone&(0x1<<11)) break;
+				allreadydone |= 0x1<<11;
 			case 12:
+				// if(allreadydone&(0x1<<12)) break; //earth any remaining attempts
+				// allreadydone |= 0x1<<12;
 				if(uarmc || (uwep && uwep->oartifact==ART_TENSA_ZANGETSU)) {
 					n--;//while you have your cloak, this burns attacks at a high rate.
 					You_feel("the tentacles writhe over your %s.", uarmc ? "cloak" : "shihakusho");
@@ -6616,7 +6641,7 @@ int dmg;
 				} //else
 				if(invent && !uarmc && !uarm && !uarmu && !uarmf && !uarmg && !uarms && !uarmh && !uwep
 					){ //only steal if you have at least one item and everything else of interest is already gone.
-					n--;
+					n = 0;
 					You_feel("the tentacles pick through your remaining possessions.");
 					buf[0] = '\0';
 					steal(mon, buf,FALSE);
