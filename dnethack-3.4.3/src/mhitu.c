@@ -2893,6 +2893,15 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 	switch(mattk->adtyp) {
 
 		case AD_DGST:
+			if (mdat == &mons[PM_METROID_QUEEN] && !Drain_resistance) {
+			    losexp("life force drain",TRUE,FALSE,FALSE);
+				mtmp->mhpmax += d(1,4);
+				mtmp->mhp += d(1,6);
+				if(mtmp->mhp > mtmp->mhpmax) mtmp->mhp = mtmp->mhpmax;
+				if(mtmp->mtame){
+					EDOG(mtmp)->hungrytime += 100;  //400/4 = human nut/4
+				}
+			}
 		    if (Slow_digestion) {
 			/* Messages are handled below */
 			u.uswldtim = 0;
