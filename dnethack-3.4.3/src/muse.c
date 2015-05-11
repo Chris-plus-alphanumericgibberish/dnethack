@@ -1881,19 +1881,22 @@ struct monst *mtmp;
 		}
 		nomore(MUSE_POT_SPEED);
 		if(!nomouth && obj->otyp == POT_SPEED && mtmp->mspeed != MFAST
-							&& !mtmp->isgd) {
+				&& !mtmp->isgd && !resists_poly(mtmp->data)
+		) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_SPEED;
 		}
 		nomore(MUSE_WAN_POLYMORPH);
 		if(obj->otyp == WAN_POLYMORPH && obj->spe > 0 && !mtmp->cham
-				&& monstr[monsndx(mdat)] < 6) {
+				&& monstr[monsndx(mdat)] < 6 && !resists_poly(mtmp->data)
+		) {
 			m.misc = obj;
 			m.has_misc = MUSE_WAN_POLYMORPH;
 		}
 		nomore(MUSE_POT_POLYMORPH);
 		if(!nomouth && obj->otyp == POT_POLYMORPH && !mtmp->cham
-				&& monstr[monsndx(mdat)] < 6) {
+				&& monstr[monsndx(mdat)] < 6 && !resists_poly(mtmp->data)
+		) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_POLYMORPH;
 		}
@@ -1930,6 +1933,8 @@ struct monst *mtmp;
 
 /* type of monster to polymorph into; defaults to one suitable for the
    current level rather than the totally arbitrary choice of newcham() */
+
+/* Now not used, was causing weak monsters to poly to very similar weak monsters */
 static struct permonst *
 muse_newcham_mon(mon)
 struct monst *mon;
@@ -2081,13 +2086,13 @@ museamnesia:
 	case MUSE_WAN_POLYMORPH:
 		mzapmsg(mtmp, otmp, TRUE);
 		otmp->spe--;
-		(void) newcham(mtmp, muse_newcham_mon(mtmp), TRUE, FALSE);
+		if(!resists_poly(mtmp->data)) newcham(mtmp, (struct permonst *) 0, TRUE, FALSE);
 		if (oseen) makeknown(WAN_POLYMORPH);
 		return 2;
 	case MUSE_POT_POLYMORPH:
 		mquaffmsg(mtmp, otmp);
 		if (vismon) pline("%s suddenly mutates!", Monnam(mtmp));
-		(void) newcham(mtmp, muse_newcham_mon(mtmp), FALSE, FALSE);
+		if(!resists_poly(mtmp->data)) newcham(mtmp, (struct permonst *) 0, FALSE, FALSE);
 		if (oseen) makeknown(POT_POLYMORPH);
 		m_useup(mtmp, otmp);
 		return 2;
@@ -2105,7 +2110,7 @@ museamnesia:
 		if (mtmp->wormno) worm_move(mtmp);
 		newsym(trapx, trapy);
 
-		(void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
+		if(!resists_poly(mtmp->data)) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 		return 2;
 	case MUSE_BULLWHIP:
 		/* attempt to disarm hero */

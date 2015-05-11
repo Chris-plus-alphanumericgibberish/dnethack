@@ -1188,7 +1188,7 @@ meatmetal(mtmp)
 		    } else if (otmp == uchain) {
 			unpunish();	/* frees uchain */
 		    } else {
-			poly = polyfodder(otmp);
+			poly = polyfodder(otmp) && !resists_poly(mtmp->data);
 			grow = mlevelgain(otmp);
 			heal = mhealup(otmp);
 			mstone = mstoning(otmp);
@@ -1275,7 +1275,7 @@ meatobj(mtmp)		/* for gelatinous cubes */
 			(void) mpickobj(mtmp, otmp3);
 		    }
 		}
-		poly = polyfodder(otmp);
+		poly = polyfodder(otmp) && !resists_poly(mtmp->data);
 		grow = mlevelgain(otmp);
 		heal = mhealup(otmp);
 		delobj(otmp);		/* munch */

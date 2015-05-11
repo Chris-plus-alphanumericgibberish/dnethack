@@ -310,7 +310,7 @@ boolean devour;
 	    edog->hungrytime = monstermoves;
 #endif /* PET_SATIATION */
 	nutrit = dog_nutrition(mtmp, obj);
-	poly = polyfodder(obj);
+	poly = polyfodder(obj) && !resists_poly(mtmp->data);
 	grow = mlevelgain(obj);
 	heal = mhealup(obj);
 	if (devour) {

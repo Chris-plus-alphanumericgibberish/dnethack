@@ -1670,7 +1670,9 @@ mdamagem(magr, mdef, mattk)
 	    case AD_SLIM:
 		if (cancelled) break;	/* physical damage only */
 		if (!rn2(4) && !flaming(mdef->data) &&
-				mdef->data != &mons[PM_GREEN_SLIME] && mdef->data != &mons[PM_FLUX_SLIME] && !is_rider(mdef->data)) {
+				mdef->data != &mons[PM_GREEN_SLIME] && mdef->data != &mons[PM_FLUX_SLIME] && 
+				!is_rider(mdef->data) && !resists_poly(magr->data)
+		) {
 		    (void) newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, vis);
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    tmp = 0;
@@ -1737,9 +1739,9 @@ mdamagem(magr, mdef, mattk)
 	    if (mattk->adtyp == AD_DGST) {
 		/* various checks similar to dog_eat and meatobj.
 		 * after monkilled() to provide better message ordering */
-		if (mdef->cham != CHAM_ORDINARY) {
+		if (mdef->cham != CHAM_ORDINARY && !resists_poly(magr->data)) {
 		    (void) newcham(magr, (struct permonst *)0, FALSE, TRUE);
-		} else if (mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME]) {
+		} else if (mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME] && !resists_poly(magr->data)) {
 		    (void) newcham(magr, &mons[PM_GREEN_SLIME], FALSE, TRUE);
 		} else if (mdef->data == &mons[PM_WRAITH]) {
 		    (void) grow_up(magr, (struct monst *)0);

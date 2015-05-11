@@ -172,7 +172,7 @@ struct obj *otmp;
 	case WAN_POLYMORPH:
 	case SPE_POLYMORPH:
 	case POT_POLYMORPH:
-		if (resists_magm(mtmp)) {
+		if (resists_magm(mtmp) || resists_poly(mtmp->data)) {
 		    /* magic resistance protects from polymorph traps, so make
 		       it guard against involuntary polymorph attacks too... */
 		    shieldeff(mtmp->mx, mtmp->my);

@@ -3123,7 +3123,7 @@ spiriteffects(power, atme)
 			}
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
-			if (resist(mon, '\0', 0, NOTELL)){
+			if (resist(mon, '\0', 0, NOTELL) || resists_poly(mon->data)){
 				shieldeff(mon->mx, mon->my);
 				break;
 			} else {

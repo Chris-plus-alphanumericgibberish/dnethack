@@ -563,8 +563,8 @@ register struct obj *obj;
 	    if (obj != uball) {		/* mon doesn't pick up ball */
 		if (obj->otyp == CORPSE) {
 		    could_petrify = touch_petrifies(&mons[obj->corpsenm]);
-		    could_poly = polyfodder(obj);
-		    could_slime = (obj->corpsenm == PM_GREEN_SLIME || obj->corpsenm == PM_FLUX_SLIME);
+		    could_poly = polyfodder(obj) && !resists_poly(u.ustuck->data);
+		    could_slime = (obj->corpsenm == PM_GREEN_SLIME || obj->corpsenm == PM_FLUX_SLIME) &&  !resists_poly(u.ustuck->data);
 		    could_grow = (obj->corpsenm == PM_WRAITH);
 		    could_heal = (obj->corpsenm == PM_NURSE);
 		}
