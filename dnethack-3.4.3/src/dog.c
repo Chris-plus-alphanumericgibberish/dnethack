@@ -47,10 +47,10 @@ pet_type()
 		else 
 			return (rn2(3) ? PM_CAVE_SPIDER : PM_BABY_CROCODILE);
 	}
-	else if (urole.petnum != NON_PM)
+	else if (urole.petnum != NON_PM && urole.petnum != PM_LITTLE_DOG && urole.petnum != PM_KITTEN && urole.petnum != PM_PONY)
 	    return (urole.petnum);
 	else if(Race_if(PM_HALF_DRAGON))
-		return PM_TINY_PSEUDODRAGON;
+		return urole.petnum == PM_PONY ? PM_RIDING_PSEUDODRAGON : PM_TINY_PSEUDODRAGON;
 	else if (Role_if(PM_PIRATE)) {
 		if (preferred_pet == 'B')
 			return (PM_PARROT);
@@ -212,7 +212,7 @@ makedog()
 
 #ifdef STEED
 	/* Horses already wear a saddle */
-	if ((pettype == PM_PONY || pettype == PM_GIANT_SPIDER || pettype == PM_SMALL_CAVE_LIZARD)
+	if ((pettype == PM_PONY || pettype == PM_GIANT_SPIDER || pettype == PM_SMALL_CAVE_LIZARD || pettype == PM_RIDING_PSEUDODRAGON)
 		&& !!(otmp = mksobj(SADDLE, TRUE, FALSE))
 	) {
 	    if (mpickobj(mtmp, otmp))
