@@ -469,7 +469,7 @@ MONSTER:'\'',"argentum golem",(02,04)
 MAZE: "leth-a-1",' '
 FLAGS: hardfloor,lethe
 GEOMETRY:center,center
-#0         1         2   	  3	      4	    5		  6	      7
+#0         1         2         3         4         5         6         7     
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
 0                                                                            
@@ -494,7 +494,7 @@ MAP
 9                                                                            
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
-#0         1         2   	  3	      4	    5		  6	      7
+#0         1         2         3         4         5         6         7     
 #The altar of the unknown god
 MONSTER:'&',"priest of an unknown god",(35,10)
 ALTAR:(35,10),noalign,altar
@@ -574,6 +574,14 @@ CONTAINER:'`',"statue",(36,11)
 CONTAINER:'(',"chest",(39,10)
 OBJECT[25%]:'(',"magic lamp",contained,cursed,0
 OBJECT:'!',"oil",contained
+# Ruins of a library
+OBJECT:'(',"magic marker",random
+OBJECT[50%]:'?',"blank paper",(37,10)
+OBJECT[50%]:'+',"blank paper",(37,10)
+OBJECT[50%]:'?',"blank paper",(41,11)
+OBJECT[50%]:'+',"blank paper",(41,11)
+MONSTER:'\'',"living lecturn",(41,10)
+MONSTER[25%]:'\'',"living lecturn",(38,10)
 #
 # A few random flapping things
 MONSTER:'B',"vampire bat",random
@@ -685,6 +693,14 @@ MONSTER:'g',"nightgaunt",(35,10),asleep
 MONSTER:'g',"nightgaunt",(42,09),asleep
 MONSTER[75%]:'g',"nightgaunt",(38,09),asleep
 MONSTER[50%]:'g',"nightgaunt",(40,11),asleep
+# Ruins of a library
+OBJECT:'(',"magic marker",random
+OBJECT[50%]:'?',"blank paper",(37,10)
+OBJECT[50%]:'+',"blank paper",(37,10)
+OBJECT[50%]:'?',"blank paper",(41,11)
+OBJECT[50%]:'+',"blank paper",(41,11)
+MONSTER:'\'',"living lecturn",(41,10)
+MONSTER[25%]:'\'',"living lecturn",(38,10)
 # And some (empty) decorations
 CONTAINER:'`',"statue",(33,10)
 CONTAINER:'`',"statue",(35,09)
