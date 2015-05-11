@@ -1393,7 +1393,7 @@ hitmu(mtmp, mattk)
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SHDW:
-			dmg = d(rnd(8),rnd(5)+1);
+			// dmg = d(rnd(8),rnd(5)+1);
 			ptmp = A_STR;
 			goto dopois;
 		break;

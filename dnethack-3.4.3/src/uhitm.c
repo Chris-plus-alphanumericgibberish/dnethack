@@ -3625,6 +3625,9 @@ uchar aatyp;
 		passive_obj(mon, obj, &(ptr->mattk[i]));
 	    }
 	    break;
+	    case AD_SHDW:
+		pline("It's bladed shaddow falls on you!");
+		mdamageu(mon, tmp);
 	    case AD_DRST:
 		ptmp = A_STR;
 		goto dobpois;
@@ -3638,8 +3641,12 @@ uchar aatyp;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 dobpois:
 		if (!rn2(8)) {
-			Sprintf(buf, "%s shadow",
+			if(ptr->mattk[i].adtyp == AD_SHDW) Sprintf(buf, "%s shadow",
 				s_suffix(Monnam(mon)));
+			else {
+				if(!mhit) break; //didn't draw blood, forget it.
+				Sprintf(buf, "%s blood", s_suffix(Monnam(mon)));
+			}
 		    poisoned(buf, ptmp, mon->data->mname, 30, 0);
 		}
 	  break;
