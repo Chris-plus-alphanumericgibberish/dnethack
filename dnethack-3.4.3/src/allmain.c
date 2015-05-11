@@ -298,7 +298,7 @@ moveloop()
 
 	oldCon = ACURR(A_CON);
 	oldWisBon = ACURR(A_WIS)/4;
-	printMons();
+	// printMons();
     for(;;) {/////////////////////////MAIN LOOP/////////////////////////////////
 	get_nh_event();
 #ifdef POSITIONBAR
@@ -1455,8 +1455,6 @@ printMons(){
 	if (rfile) {
 		char *colorstr;
 		for(i=0;i<NUMMONS;i++){
-			// pline("%s\n",mons[i].mname);
-			// if(i == PM_OBOX_OB || i == PM_CHROMATIC_DRAGON || i == PM_AXUS || i == PM_LUCIFER) continue;
 			ptr = &mons[i];
 			switch(mons[i].mcolor){
 				case CLR_BLACK:
