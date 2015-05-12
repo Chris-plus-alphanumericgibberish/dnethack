@@ -3492,7 +3492,7 @@ uchar aatyp;
 	else
 	    tmp = 0;
 	
-	if(u.sealsActive&SEAL_IRIS && mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.")){
+	if(u.sealsActive&SEAL_IRIS && mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.") && !Blind && canseemon(mon)){
 		if(u.sealsActive&SEAL_IRIS) unbind(SEAL_IRIS,TRUE);
 	}
 	
