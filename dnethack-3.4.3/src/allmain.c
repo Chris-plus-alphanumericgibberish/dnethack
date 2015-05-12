@@ -260,7 +260,7 @@ moveloop()
 	int oldspiritAC=0;
 	int tx,ty;
 	int nmonsclose,nmonsnear,enkispeedlim;
-	static boolean oldBlind = 0;
+	static boolean oldBlind = 0, oldLightBlind = 0;
 	static int oldCon, oldWisBon;
 
     flags.moonphase = phase_of_the_moon();
@@ -337,6 +337,14 @@ moveloop()
 				vision_full_recalc = 1;	/* blindness just got toggled */
 				if (Blind_telepat || Infravision) see_monsters();
 				oldBlind = !!Blind;
+			}
+////////////////////////////////////////////////////////////////////////////////////////////////
+			if (!oldLightBlind ^ !LightBlind) {  /* one or the other but not both */
+				see_monsters();
+				flags.botl = 1;
+				vision_full_recalc = 1;	/* blindness just got toggled */
+				if (Blind_telepat || Infravision) see_monsters();
+				oldLightBlind = !!LightBlind;
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			if (!oldCon != ACURR(A_CON)) {
@@ -988,6 +996,7 @@ moveloop()
 	/* once-per-player-input things go here */
 	/****************************************/
 	find_ac();
+////////////////////////////////////////////////////////////////////////////////////////////////
 	if(!flags.mv || Blind || oldBlind != (!!Blind)) {
 	    /* redo monsters if hallu or wearing a helm of telepathy */
 	    if (Hallucination) {	/* update screen randomly */
@@ -1010,6 +1019,29 @@ moveloop()
 	    if (vision_full_recalc) vision_recalc(0);	/* vision! */
 	}
 	oldBlind = !!Blind;
+////////////////////////////////////////////////////////////////////////////////////////////////
+	if(!flags.mv || LightBlind || oldLightBlind != (!!LightBlind)) {
+	    /* redo monsters if hallu or wearing a helm of telepathy */
+	    if (Hallucination) {	/* update screen randomly */
+			see_monsters();
+			see_objects();
+			see_traps();
+			if (u.uswallow) swallowed(0);
+		} else if (Unblind_telepat) {
+			see_monsters();
+	    } else if (Warning || Warn_of_mon)
+	     	see_monsters();
+
+		if (!oldLightBlind ^ !LightBlind) {  /* one or the other but not both */
+			see_monsters();
+			flags.botl = 1;
+			vision_full_recalc = 1;	/* blindness just got toggled */
+			if (Blind_telepat || Infravision) see_monsters();
+		}
+		
+	    if (vision_full_recalc) vision_recalc(0);	/* vision! */
+	}
+	oldLightBlind = !!LightBlind;
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			if (!oldCon != ACURR(A_CON)) {
 				int condif = conplus(ACURR(A_CON)) - conplus(oldCon);
