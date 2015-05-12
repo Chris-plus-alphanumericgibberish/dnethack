@@ -307,10 +307,10 @@ const struct Role roles[] = {
 	MH_HUMAN|MH_ELF | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_CHAOTIC|ROLE_NEUTRAL,
 	/* Str Int Wis Dex Con Cha */
-	{   8,  7, 7,  8,  8,  7 },
-	{  20, 15, 10, 20, 25, 10 },
+	{  10,  7, 7,  10, 10,  7 },
+	{  22, 15, 10, 22, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
+	{ 20, 0,  0, 6,  1, 0 },	/* Hit points (10 +d8 for 11 levels comes up a bit over 20 +d6 for 11 levels) */
 	{  1, 0,  0, 1,  0, 1 },12,	/* Energy */
 	10, 8, 0, 2,  9, A_INT, SPE_CAUSE_FEAR,    -1000
 },

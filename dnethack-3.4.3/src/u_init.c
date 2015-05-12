@@ -173,7 +173,7 @@ static struct trobj Pirate[] = {
 #define PIR_JEWELRY 7
 #define PIR_TOOL 8
 	{ SCIMITAR, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
-	{ KNIFE, 1, WEAPON_CLASS, 2, 0 },
+	{ KNIFE, 0, WEAPON_CLASS, 2, 0 },
 	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ CRAM_RATION, 0, FOOD_CLASS, 2, UNDEF_BLESS },
@@ -745,11 +745,11 @@ static const struct def_skill Skill_Pir[] = {
 	{ P_BROAD_SWORD, P_EXPERT },{ P_LONG_SWORD, P_BASIC },
 	{ P_SCIMITAR, P_EXPERT },	{ P_SABER, P_EXPERT },
 	{ P_CLUB, P_BASIC },		{ P_MORNING_STAR, P_SKILLED },
-    { P_FLAIL, P_EXPERT },		{ P_SPEAR, P_SKILLED },
-	{ P_JAVELIN, P_SKILLED },	{ P_TRIDENT, P_EXPERT },
+    { P_FLAIL, P_EXPERT },		{ P_SPEAR, P_BASIC },
+	{ P_JAVELIN, P_EXPERT },	{ P_TRIDENT, P_EXPERT },
     { P_CROSSBOW, P_EXPERT },   { P_DART, P_SKILLED },
     { P_WHIP, P_SKILLED },   	{ P_UNICORN_HORN, P_BASIC },
-	{ P_PICK_AXE, P_BASIC },
+	{ P_PICK_AXE, P_SKILLED },
 
 	{ P_ATTACK_SPELL, P_BASIC },{ P_DIVINATION_SPELL, P_BASIC },
 	{ P_ENCHANTMENT_SPELL, P_BASIC },{ P_ESCAPE_SPELL, P_SKILLED },
@@ -1397,7 +1397,7 @@ u_init()
 #else
 		u.umoney0 = rnd(300);
 #endif
-		Pirate[PIR_KNIVES].trquan = rn1(2, 2);
+		Pirate[PIR_KNIVES].trquan = rn1(3, 4);
 		if(!rn2(4)) Pirate[PIR_SNACK].trotyp = KELP_FROND;
 		Pirate[PIR_SNACK].trquan += rn2(4);
 		if(rn2(100)<50)	Pirate[PIR_JEWELRY].trotyp = RIN_ADORNMENT;
@@ -2198,6 +2198,7 @@ register struct trobj *trop;
 			}else{
 				obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
 				if (objects[otyp].oc_uses_known) obj->known = 1;
+				if(Role_if(PM_PIRATE) && objects[otyp].oc_material == IRON) obj->oerodeproof = 1;
 			}
 			obj->cursed = 0;
 			if(obj->otyp == DROVEN_PLATE_MAIL  ||

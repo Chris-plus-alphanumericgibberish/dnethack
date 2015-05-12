@@ -1916,7 +1916,7 @@ const struct def_skill *class_skill;
 	if(!Role_if(PM_EXILE)) for (obj = invent; obj; obj = obj->nobj) {
 	    skill = weapon_type(obj);
 	    if (skill != P_NONE)
-			OLD_P_SKILL(skill) = P_BASIC;
+			OLD_P_SKILL(skill) = Role_if(PM_PIRATE) ? P_SKILLED : P_BASIC;
 	}
 
 	/* set skills for magic */
