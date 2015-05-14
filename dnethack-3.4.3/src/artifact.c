@@ -4345,6 +4345,10 @@ nothing_special:
 	    return 1;
 	}
 	switch(oart->inv_prop) {
+	case FAST:
+	    if(on) You("speed up.");
+	    else You("slow down.");
+	    break;
 	case CONFLICT:
 	    if(on) You_feel("like a rabble-rouser.");
 	    else You_feel("the tension decrease around you.");

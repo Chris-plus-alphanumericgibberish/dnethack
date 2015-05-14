@@ -2081,6 +2081,7 @@ boolean ordinary;
 
 		case WAN_LIGHTNING:
 		    makeknown(WAN_LIGHTNING);
+		case SPE_LIGHTNING_BOLT:
 		    if (!Shock_resistance) {
 			You("shock yourself!");
 			damage = d(12,6);
@@ -2726,7 +2727,7 @@ register struct	obj	*obj;
 
 	    if (otyp == WAN_DIGGING || otyp == SPE_DIG)
 		zap_dig(-1,-1,-1);//-1-1-1 = "use defaults"
-	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_FINGER_OF_DEATH){
+	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_LIGHTNING_BOLT){
 		if(u.sealsActive&SEAL_BUER && (otyp == SPE_FINGER_OF_DEATH || otyp == WAN_DEATH )) unbind(SEAL_BUER,TRUE);
 		buzz(otyp - SPE_MAGIC_MISSILE + 10,
 		     u.ulevel / 2 + 1,

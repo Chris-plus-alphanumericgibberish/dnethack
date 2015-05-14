@@ -983,6 +983,22 @@ docast()
 {
 	int spell_no;
 	
+	if(uarmh && uarmh->oartifact == ART_STORMHELM){
+		int i;
+		for (i = 0; i < MAXSPELL; i++) {
+			if (spellid(i) == SPE_LIGHTNING_BOLT) {
+				if(spl_book[i].sp_know < 1) spl_book[i].sp_know = 1;
+				break;
+			}
+			if (spellid(i) == NO_SPELL)  {
+				spl_book[i].sp_id = SPE_LIGHTNING_BOLT;
+				spl_book[i].sp_lev = objects[SPE_LIGHTNING_BOLT].oc_level;
+				spl_book[i].sp_know = 1;
+				break;
+			}
+		}
+	}
+	
 	if (getspell(&spell_no))
 					return spelleffects(spell_no, FALSE, 0);
 	return 0;
@@ -3417,6 +3433,7 @@ boolean atme;
 	 * effects, e.g. more damage, further distance, and so on, without
 	 * additional cost to the spellcaster.
 	 */
+	case SPE_LIGHTNING_BOLT:
 	case SPE_CONE_OF_COLD:
 	case SPE_FIREBALL:
 	    if (role_skill >= P_SKILLED) { //if you're skilled, do meteor storm version of spells
@@ -3436,7 +3453,10 @@ boolean atme;
 						    pseudo->otyp - SPE_MAGIC_MISSILE + 10,
 						    u.ulevel/2 + 1 + spell_damage_bonus(), 0,
 							(pseudo->otyp == SPE_CONE_OF_COLD) ?
-								EXPL_FROSTY : EXPL_FIERY);
+								EXPL_FROSTY : 
+							(pseudo->otyp == SPE_LIGHTNING_BOLT) ? 
+								EXPL_MAGICAL : 
+								EXPL_FIERY);
 					}
 					u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
 					if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||

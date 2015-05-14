@@ -429,6 +429,24 @@ A("Ramiel",			PARTISAN,
 	0, A_LAWFUL, NON_PM, NON_PM, 3000L, /*So it's your job to use it right!*/
 	SPFX2_ELEC2,0,0),
 
+A("Spineseeker",	SHORT_SWORD,
+	SPFX_RESTR, 0, 0,
+	PHYS(1,6),	NO_DFNS,	NO_CARY,
+	0, A_CHAOTIC, NON_PM, NON_PM, 1200L,
+	SPFX2_STLTH,0,0),
+
+A("Quicksilver",	FLAIL,
+	SPFX_RESTR, 0, 0,
+	PHYS(4,8),	NO_DFNS,	NO_CARY,
+	FAST, A_NONE, NON_PM, NON_PM, 1200L,
+	SPFX2_SILVERED,0,0),
+
+A("Sky Render",		KATANA,
+	SPFX_RESTR, SPFX_DISPL, 0,
+	PHYS(10,10),	NO_DFNS,	NO_CARY,
+	0, A_LAWFUL, NON_PM, NON_PM, 1200L,
+	0,0,0),
+
 A("Fuma-itto no Ken",		BROADSWORD, //needs quote
 	(SPFX_RESTR|SPFX_DALIGN), 0, 0,   
 	PHYS(1,8),	NO_DFNS,	NO_CARY,
@@ -547,6 +565,12 @@ A("Premium Heart",		GAUNTLETS_OF_POWER,
 	(SPFX_RESTR), 0, 0,
 	PHYS(1,0),	NO_DFNS,	NO_CARY, //needs quote
 	0, A_NONE, NON_PM, NON_PM, 4000L, 
+	0,0,WSFX_PLUSSEV),
+	
+A("Stormhelm",		HELM_OF_BRILLIANCE,
+	(SPFX_RESTR), 0, 0,
+	NO_ATTK,	COLD(0,0),	ELEC(0,0), //needs quote
+	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
 	0,0,WSFX_PLUSSEV),
 
 /*	Doesn't Work...

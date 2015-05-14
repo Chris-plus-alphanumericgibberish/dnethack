@@ -528,6 +528,14 @@ register struct monst *mtmp;
 		keepattacking = hitum(mtmp, weptmp, youmonst.data->mattk);
 		attacksmade = 1;
 	}
+	if(uwep && uwep->oartifact == ART_QUICKSILVER){
+		if(keepattacking && u.ulevel > 10 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+			keepattacking = hitum(mtmp, weptmp-10, youmonst.data->mattk);
+		if(keepattacking && u.ulevel > 20 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+			keepattacking = hitum(mtmp, weptmp-20, youmonst.data->mattk);
+		if(keepattacking && u.ulevel ==30 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+			keepattacking = hitum(mtmp, weptmp-30, youmonst.data->mattk);
+	}
 	if(Role_if(PM_BARBARIAN) && !Upolyd){
 		if(keepattacking && u.ulevel > 10 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
 			keepattacking = hitum(mtmp, weptmp-10, youmonst.data->mattk);
@@ -1082,6 +1090,10 @@ int thrown;
 				else if(is_blind(mon)) You("strike the blinded %s!", l_monnam(mon));
 				else if(mon->mtrapped) You("strike the trapped %s!", l_monnam(mon));
 				else You("strike the helpless %s!", l_monnam(mon));
+				if(uwep && uwep->oartifact == ART_SPINESEEKER && !Upolyd) tmp += rnd(u.ulevel + (
+					mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+					(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
+					&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) ? u.ulevel : 0);
 				if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
 				if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
 				if(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON) tmp += rnd(u.ulevel);
