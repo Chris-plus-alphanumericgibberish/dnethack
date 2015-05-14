@@ -61,6 +61,8 @@ static const char *random_mesg[] = {
 	
 	"4 8 15 16 23 42", /* Lost */
 	
+	"This too shall pass.", /* medieval Persian adage */
+	
 	"stth was here", /* First ascender */
 	"allihaveismymind followed stth", /* Second ascender */
 	"Khor followed allihaveismymind", /* Third ascender */
@@ -727,6 +729,7 @@ const char * haluWard[] =  {
 	"a fish with legs",	"a fat fish",	"a fish with tentacles, legs, and wings",
 		/* ichthus parodies/derivitives: darwin, buddha, and Cthulhu. */
 	"an Eye of Horus", /*...*/
+	"a device to make the happy man sad and the sad man happy", /*"This too shall pass"*/
 	"a set of seven concentric circles",
 	"a left-handed trefoil knot",
 	"a triskelion", /* Ancient Symbol */
