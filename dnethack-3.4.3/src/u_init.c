@@ -740,7 +740,7 @@ static const struct def_skill Skill_Dro_M_P[] = {
 };
 
 static const struct def_skill Skill_Pir[] = {
-    { P_DAGGER, P_SKILLED },	{ P_KNIFE,  P_EXPERT },
+    { P_DAGGER, P_EXPERT },		{ P_KNIFE,  P_EXPERT },
     { P_AXE, P_SKILLED },	    { P_SHORT_SWORD, P_BASIC },
 	{ P_BROAD_SWORD, P_EXPERT },{ P_LONG_SWORD, P_BASIC },
 	{ P_SCIMITAR, P_EXPERT },	{ P_SABER, P_EXPERT },
