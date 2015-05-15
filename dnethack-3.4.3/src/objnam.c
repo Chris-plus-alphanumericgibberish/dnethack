@@ -2928,6 +2928,12 @@ typfnd:
 						)
 	    typ = OIL_LAMP;
 
+	if(typ == SPE_LIGHTNING_BOLT
+#ifdef WIZARD
+				&& !wizard
+#endif
+	) return (struct obj *)0;
+	
 	if(typ) {
 		otmp = mksobj(typ, TRUE, FALSE);
 	} else {
@@ -3249,7 +3255,7 @@ typfnd:
 		  something,
 		  makeplural(body_part(HAND)));
 	}
-
+	
 	if (halfeaten && otmp->oclass == FOOD_CLASS) {
 		if (otmp->otyp == CORPSE)
 			otmp->oeaten = mons[otmp->corpsenm].cnutrit;
