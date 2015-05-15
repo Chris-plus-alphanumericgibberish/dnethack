@@ -173,7 +173,7 @@ static struct trobj Pirate[] = {
 #define PIR_JEWELRY 7
 #define PIR_TOOL 8
 	{ SCIMITAR, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
-	{ KNIFE, 0, WEAPON_CLASS, 2, 0 },
+	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
 	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ CRAM_RATION, 0, FOOD_CLASS, 2, UNDEF_BLESS },
@@ -439,7 +439,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	SMALL_SHIELD,				DROVEN_HELM  },
     { PM_DROW,	VICTORIAN_UNDERWEAR,		NOBLE_S_DRESS  },
     { PM_DROW,	RUFFLED_SHIRT,		CONSORT_S_SUIT  },
-    { PM_DROW,	SCIMITAR,		DROVEN_SPEAR  },
+    // { PM_DROW,	SCIMITAR,		DROVEN_SPEAR  },
     { PM_DROW,	APPLE,		TRIPE_RATION  },
     { PM_INCANTIFIER,CLOAK_OF_MAGIC_RESISTANCE,		ROBE  },
     { PM_INCANTIFIER,CLOAK_OF_DISPLACEMENT,		ROBE  },
@@ -1397,12 +1397,21 @@ u_init()
 #else
 		u.umoney0 = rnd(300);
 #endif
-		Pirate[PIR_KNIVES].trquan = rn1(3, 4);
+		if(Race_if(PM_DROW)) Pirate[PIR_KNIVES].trotyp = DROVEN_CROSSBOW;
+		else Pirate[PIR_KNIVES].trquan = rn1(3, 4);
 		if(!rn2(4)) Pirate[PIR_SNACK].trotyp = KELP_FROND;
 		Pirate[PIR_SNACK].trquan += rn2(4);
 		if(rn2(100)<50)	Pirate[PIR_JEWELRY].trotyp = RIN_ADORNMENT;
 		if(rn2(100)<50)	Pirate[PIR_TOOL].trotyp = GRAPPLING_HOOK;
 		ini_inv(Pirate);
+		if(Race_if(PM_DROW)){
+			struct obj *otmp;
+			otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+			otmp->quan = rn1(12, 16);
+			otmp->spe = otmp->cursed = otmp->blessed = 0;
+			otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+			addinv(otmp);
+		}
 		knows_object(SACK);
 		knows_object(OILSKIN_SACK);
 		knows_object(OILSKIN_CLOAK);
