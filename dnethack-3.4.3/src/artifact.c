@@ -502,7 +502,9 @@ boolean
 arti_bright(obj)
 struct obj *obj;
 {
-    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_BRIGHT));
+    return (obj && obj->oartifact && (spec_ability2(obj, SPFX2_BRIGHT) || 
+									  (obj->oartifact == ART_PEN_OF_THE_VOID &&
+									   obj->ovar1 & SEAL_JACK)));
 }
 
 boolean
