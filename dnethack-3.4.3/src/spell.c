@@ -3436,6 +3436,7 @@ boolean atme;
 	case SPE_LIGHTNING_BOLT:
 	case SPE_CONE_OF_COLD:
 	case SPE_FIREBALL:
+	case SPE_ACID_BLAST:
 	    if (role_skill >= P_SKILLED) { //if you're skilled, do meteor storm version of spells
 		  if(yn("Cast advanced spell?") == 'y'){
 	        if (throwspell()) {
@@ -3456,6 +3457,8 @@ boolean atme;
 								EXPL_FROSTY : 
 							(pseudo->otyp == SPE_LIGHTNING_BOLT) ? 
 								EXPL_MAGICAL : 
+							(pseudo->otyp == SPE_ACID_BLAST) ? 
+								EXPL_NOXIOUS : 
 								EXPL_FIERY);
 					}
 					u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
@@ -3487,6 +3490,7 @@ boolean atme;
 	case SPE_TELEPORT_AWAY:
 	case SPE_CANCELLATION:
 	case SPE_FINGER_OF_DEATH:
+	case SPE_POISON_SPRAY:
 	case SPE_LIGHT:
 	case SPE_DETECT_UNSEEN:
 	case SPE_HEALING:

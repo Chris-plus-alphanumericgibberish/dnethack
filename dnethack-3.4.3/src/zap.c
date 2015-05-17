@@ -77,9 +77,9 @@ const char * const flash_types[] = {	/* also used in buzzmu(mcastu.c) */
 	"cone of cold",
 	"sleep ray",
 	"finger of death",
-	"bolt of lightning",	/* There is no spell, used for retribution */
-	"",
-	"",
+	"bolt of lightning",	/* used for retribution */
+	"poison spray",
+	"acid blast",
 	"",
 	"",
 
@@ -2136,6 +2136,10 @@ boolean ordinary;
 		    destroy_item(POTION_CLASS, AD_COLD);
 		    }
 		    break;
+		case SPE_ACID_BLAST:
+		    You("explode an acid blast on top of yourself!");
+		    explode(u.ux, u.uy, 17, d(6,6), WAND_CLASS, EXPL_NOXIOUS);
+		    break;
 
 		case WAN_MAGIC_MISSILE:
 		    makeknown(WAN_MAGIC_MISSILE);
@@ -2252,6 +2256,20 @@ boolean ordinary;
 		    killer = buf;
 		    killer_format = NO_KILLER_PREFIX;
 		    You("irradiate yourself with pure energy!");
+		    You("die.");
+		    makeknown(obj->otyp);
+			/* They might survive with an amulet of life saving */
+		    done(DIED);
+		    break;
+		case SPE_POISON_SPRAY:
+		    if (nonliving(youmonst.data) || Poison_resistance) {
+				You("shoot yourself with an apparently harmless spray of droplets.");
+				break;
+			}
+		    Sprintf(buf, "shot %sself with a posion spray", uhim());
+		    killer = buf;
+		    killer_format = NO_KILLER_PREFIX;
+		    You("mist yourself with pure poison!");
 		    You("die.");
 		    makeknown(obj->otyp);
 			/* They might survive with an amulet of life saving */
@@ -2727,7 +2745,7 @@ register struct	obj	*obj;
 
 	    if (otyp == WAN_DIGGING || otyp == SPE_DIG)
 		zap_dig(-1,-1,-1);//-1-1-1 = "use defaults"
-	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_LIGHTNING_BOLT){
+	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_ACID_BLAST){
 		if(u.sealsActive&SEAL_BUER && (otyp == SPE_FINGER_OF_DEATH || otyp == WAN_DEATH )) unbind(SEAL_BUER,TRUE);
 		buzz(otyp - SPE_MAGIC_MISSILE + 10,
 		     u.ulevel / 2 + 1,
@@ -3335,8 +3353,13 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 		    sho_shieldeff = TRUE;
 		    break;
 		}
-		if(!flat) tmp = d(nd,6);
-		else tmp = flat;
+		if(abs(type) == ZT_SPELL(ZT_POISON_GAS)){
+			tmp = mon->mhpmax;
+			mon->mhp = 1;
+		} else {
+			if(!flat) tmp = d(nd,6);
+			else tmp = flat;
+		}
 	break;
 	case ZT_ACID:
 		if (resists_acid(mon)) {
@@ -3524,7 +3547,21 @@ xchar sx, sy;
 		}
 	    break;
 	case ZT_POISON_GAS:
-	    poisoned("blast", A_DEX, "poisoned blast", 15, 0);
+		if(abs(type) == ZT_SPELL(ZT_POISON_GAS)){
+			if(Poison_resistance) {
+				shieldeff(u.ux, u.uy);
+				pline_The("poison doesn't seem to affect you.");
+				break;
+			}
+			u.uhp = -1;
+			pline_The("poison was deadly...");
+			// killer_format = kprefix;
+			// killer = pname;
+			/* "Poisoned by a poisoned ___" is redundant */
+			done(POISONING);
+		} else {
+			poisoned("blast", A_DEX, "poisoned blast", 15, 0);
+		}
 	    break;
 	case ZT_ACID:
 	    if (Acid_resistance) {
@@ -3706,12 +3743,12 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 
 		/* hit() and miss() need bhitpos to match the target */
 		bhitpos.x = sx,  bhitpos.y = sy;
-		/* Fireballs only damage when they explode */
-		if (type != ZT_SPELL(ZT_FIRE))
+		/* Fireballs and Acid Blasts only damage when they explode */
+		if (type != ZT_SPELL(ZT_FIRE) && type != ZT_SPELL(ZT_ACID))
 			range += zap_over_floor(sx, sy, type, &shopdamage);
 
 		if (mon) {
-			if (type == ZT_SPELL(ZT_FIRE)) break;
+			if (type == ZT_SPELL(ZT_FIRE) || type == ZT_SPELL(ZT_ACID)) break;
 			if (type >= 0) mon->mstrategy &= ~STRAT_WAITMASK;
 #ifdef STEED
 			buzzmonst:
@@ -3946,7 +3983,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				}
 				if(shopdoor || shopwall) pay_for_damage(shopdoor ? "destroy" : "dig into", FALSE);
 			} else {
-				if (type == ZT_SPELL(ZT_FIRE)) {
+				if (type == ZT_SPELL(ZT_FIRE) || type == ZT_SPELL(ZT_ACID) || type == ZT_SPELL(ZT_POISON_GAS)) {
 				sx = lsx;
 				sy = lsy;
 				break; /* fireballs explode before the wall */
@@ -3986,6 +4023,8 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     tmp_at(DISP_END,0);
     if (type == ZT_SPELL(ZT_FIRE))
 		explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_FIERY);
+    else if (type == ZT_SPELL(ZT_ACID))
+		explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_NOXIOUS);
     if (shopdamage)
 	pay_for_damage(abstype == ZT_FIRE ?  "burn away" :
 		       abstype == ZT_COLD ?  "shatter" :

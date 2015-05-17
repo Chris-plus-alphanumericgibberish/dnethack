@@ -2928,7 +2928,10 @@ typfnd:
 						)
 	    typ = OIL_LAMP;
 
-	if(typ == SPE_LIGHTNING_BOLT
+	if((typ == SPE_LIGHTNING_BOLT ||
+		typ == SPE_POISON_SPRAY ||
+		typ == SPE_ACID_BLAST
+		)
 #ifdef WIZARD
 				&& !wizard
 #endif
