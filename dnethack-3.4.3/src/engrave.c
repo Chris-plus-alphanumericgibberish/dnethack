@@ -2067,6 +2067,10 @@ doengrave()
 		if (is_lightsaber(otmp)) {
 			if (otmp->lamplit) type = BURN;
 			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if (otmp->oartifact == ART_PEN_OF_THE_VOID &&
+				mvitals[PM_ACERERAK].died > 0 && otmp->ovar1 & SEAL_ANDREALPHUS
+		) {
+			type = BURN;
 		} else if (is_blade(otmp)) {
 		    if ((int)otmp->spe > -3)
 			type = ENGRAVE;
@@ -2810,9 +2814,13 @@ doward()
 		break;
 
 	    case WEAPON_CLASS:
-				if (is_lightsaber(otmp)) {
+		if (is_lightsaber(otmp)) {
 			if (otmp->lamplit) type = BURN;
 			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if (otmp->oartifact == ART_PEN_OF_THE_VOID &&
+				mvitals[PM_ACERERAK].died > 0 && otmp->ovar1 & SEAL_ANDREALPHUS
+		) {
+			type = BURN;
 		} else if (is_blade(otmp)) {
 		    if ((int)otmp->spe > -3)
 			type = ENGRAVE;
@@ -3940,9 +3948,13 @@ doseal()
 		break;
 
 	    case WEAPON_CLASS:
-				if (is_lightsaber(otmp)) {
+		if (is_lightsaber(otmp)) {
 			if (otmp->lamplit) type = BURN;
 			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if (otmp->oartifact == ART_PEN_OF_THE_VOID &&
+				mvitals[PM_ACERERAK].died > 0 && otmp->ovar1 & SEAL_ANDREALPHUS
+		) {
+			type = BURN;
 		} else if (is_blade(otmp)) {
 		    if ((int)otmp->spe > -3)
 			type = ENGRAVE;
