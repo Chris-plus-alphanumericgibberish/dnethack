@@ -448,6 +448,7 @@ int spec;
 		bonus += rnd(4);
 	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(ptr)){
 			if(otyp == SILVER_KHAKKHARA) bonus += d(rnd(3),20);
+			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
 			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
 			else bonus += rnd(20);
 		}
@@ -556,7 +557,7 @@ struct monst *mon;
 			}
 		}
 		else if(!youdef){
-			if(mon->mcansee){
+			if(mon->mcansee && haseyes(mon->data)){
 				dmg += d(dnum,4);
 				mon->mcansee = 0;
 				mon->mblinded = 1;
@@ -1218,7 +1219,9 @@ struct obj *otmp;
 	else if (str < 25) bonus = 7;
 	else /*  str ==25*/bonus = 8;
 	
-	if(otmp && objects[otmp->otyp].oc_bimanual) bonus *= 2;
+	if(otmp && (objects[otmp->otyp].oc_bimanual ||
+		(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
+	)) bonus *= 2;
 	
 	if(uwep && otmp==uwep && otmp->otyp==RAPIER){
 		int dex = ACURR(A_DEX);
