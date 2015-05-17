@@ -1024,7 +1024,9 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
 
 		if (is_ammo(obj)) {
 			if (ammo_and_launcher(obj, uwep)) //make range of longbow of diana effectively unlimited
-				if(uwep->oartifact == ART_LONGBOW_OF_DIANA) range = 1000;
+				if(uwep->oartifact == ART_LONGBOW_OF_DIANA || 
+					(uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_EVE && mvitals[PM_ACERERAK].died > 0)
+				) range = 1000;
 				else range++;
 		    else if (obj->oclass != GEM_CLASS)
 			range /= 2;

@@ -249,7 +249,8 @@ struct obj {
 			 objects[otmp->otyp].oc_skill <= -P_BOW)
 #define ammo_and_launcher(otmp,ltmp) \
 			 (is_ammo(otmp) && (ltmp) && \
-			 objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill)
+			 (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill ||\
+			 ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE))
 #define is_missile(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 objects[otmp->otyp].oc_skill >= -P_BOOMERANG && \
