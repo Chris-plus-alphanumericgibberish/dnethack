@@ -2583,6 +2583,10 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 				return FALSE;
 	}
 
+	/* poisons must be the same */
+	if (obj->opoisoned != otmp->opoisoned)
+	    return FALSE;
+	
 	/* hatching eggs don't merge; ditto for revivable corpses */
 	if ((obj->otyp == EGG && (obj->timed || otmp->timed)) ||
 	    (obj->otyp == CORPSE && otmp->corpsenm >= LOW_PM &&
