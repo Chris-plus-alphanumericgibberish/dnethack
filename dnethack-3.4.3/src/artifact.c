@@ -1959,7 +1959,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	}
 		//sunlight code adapted from Sporkhack
-	if ((mdef->data == &mons[PM_GREMLIN]) && arti_bright(otmp)) {
+	if ((mdef->data == &mons[PM_GREMLIN] || mdef->data == &mons[PM_HUNTING_HORROR]) && arti_bright(otmp)){
           wepdesc = artilist[otmp->oartifact].name;
 			   /* Sunlight kills gremlins */
 		  if (realizes_damage)
