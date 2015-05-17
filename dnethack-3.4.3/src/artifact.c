@@ -1023,7 +1023,7 @@ struct monst *mtmp;
 
 	if(!mtmp) return FALSE; //Invoked with a null monster while calculating hypothetical data (I think)
 
-	if(weap == &artilist[ART_PEN_OF_THE_VOID]) return (quest_status.killed_nemesis && Role_if(PM_EXILE));
+	if(weap == &artilist[ART_PEN_OF_THE_VOID]) return (mvitals[PM_ACERERAK].died > 0);
 	
 	if(!(weap->spfx & (SPFX_DBONUS | SPFX_ATTK)))
 	    return(weap->attk.adtyp == AD_PHYS);
@@ -1255,8 +1255,30 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	boolean youattack = magr == &youmonst;
 	boolean and = FALSE;
 	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 4 : 1; /* Die number is doubled after the quest */
+	int berithdamage = 0;
 	
 	buf[0] = '\0';
+	
+	if(pen->ovar1&SEAL_BERITH){
+		berithdamage = d(dnum,4);
+#ifndef GOLDOBJ
+		if (!youattack || u.ugold >= berithdamage)
+#else
+		if (!youattack || money_cnt(invent) >= berithdamage)
+#endif
+		{
+			if(youattack)
+#ifndef GOLDOBJ
+				u.ugold -= berithdamage;
+#else
+				money2none(berithdamage);
+#endif
+			*dmgptr += berithdamage;
+		} else {
+			berithdamage = 0;
+		}
+	}
+	
 	if(u.voidChime){
 		pline("The ringing blade hits %s.", hittee);
 	} else {
@@ -1285,10 +1307,24 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
 	    if (!rn2(5)) (void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
 	}
+	if(pen->ovar1&SEAL_BERITH && berithdamage > 0){
+		if(vis){
+			if(pen->ovar1&SEAL_AMON) and ? Strcat(buf, " blood-crusted") : Sprintf(buf, "blood-crusted");
+			else and ? Strcat(buf, " blood-soaked") : Sprintf(buf, "blood-soaked");
+			and = TRUE;
+		}
+	}
 	if (pen->ovar1&SEAL_ENKI) {
 	    if (vis){ 
 			if(pen->ovar1&SEAL_AMON) and ? Strcat(buf, " and steaming") : Sprintf(buf, "steaming");
 			else and ? Strcat(buf, " and dripping") : Sprintf(buf, "dripping");
+			and = TRUE;
+		}
+		/*water damage?*/
+	}
+	if (pen->ovar1&SEAL_IRIS) {
+	    if (vis){ 
+			and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
 			and = TRUE;
 		}
 		/*water damage?*/
@@ -1301,7 +1337,10 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 	}
 	
-	if(vis && (and || (pen->ovar1&SEAL_FAFNIR))) pline("The %s%s blade hits %s.", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
+	if(vis && (and || (pen->ovar1&SEAL_FAFNIR))){
+		pline("The %s%s blade hits %s.", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
+		and = TRUE;
+	}
 	}
 	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
 	    *dmgptr += d(dnum,4);
@@ -1335,9 +1374,9 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		if(youdefend) aggravate();
 	    else probe_monster(mdef);
 	}
-	if(pen->ovar1&SEAL_SHIRO && dieroll < ACURR(A_CHA)){
+	if(pen->ovar1&SEAL_SHIRO){
 		struct obj *otmp;
-		otmp = mksobj(ROCK, TRUE, FALSE);
+		otmp = mksobj((mvitals[PM_ACERERAK].died > 0) ? BOULDER : ROCK, TRUE, FALSE);
 		otmp->blessed = 0;
 		otmp->cursed = 0;
 		set_destroy_thrown(1); //state variable referenced in drop_throw
@@ -1345,7 +1384,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		set_destroy_thrown(0);  //state variable referenced in drop_throw
 		if(mdef->mhp <= 0) return vis;//Monster was killed by throw and we should stop.
 	}
-	if(pen->ovar1&SEAL_MOTHER && dieroll < 2){
+	if(pen->ovar1&SEAL_MOTHER && dieroll <= dnum){
 		if(youdefend) nomul(5,"held by the pen of the void");
 	    else if(mdef->mcanmove || mdef->mfrozen){
 			mdef->mcanmove = 0;
@@ -1365,9 +1404,9 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		}
 		and = TRUE;
 	}
-	if(pen->ovar1&SEAL_OTIAX && dieroll < 2){
-	    *dmgptr += d(dnum,4);
-		if(youattack){
+	if(pen->ovar1&SEAL_OTIAX){
+	    *dmgptr += d(1,dnum);
+		if(youattack && dieroll == 1){
 			struct obj *otmp2, **minvent_ptr;
 			long unwornmask;
 
@@ -1397,16 +1436,8 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 						update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);
 					}
 				}
-				dx = rn2(3) - 1;
-				dy = rn2(3) - 1;
-				if(dx || dy){
-					Your("winds toss %s away.",doname(otmp2));
-					m_throw(&youmonst, mdef->mx, mdef->my, dx, dy, 1, otmp2,TRUE);
-				}
-				else{
-					Your("winds drop %s at your feet.",doname(otmp2));
-					(void) dropy(otmp2);
-				}
+				Your("blade's mist tendril frees %s.",doname(otmp2));
+				mdrop_obj(mdef,otmp2,FALSE);
 				/* more take-away handling, after theft message */
 				if (unwornmask & W_WEP) {		/* stole wielded weapon */
 					possibly_unwield(mdef, FALSE);
@@ -1479,22 +1510,24 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		if(youdefend && !Blind){
 			You("are dazzled by prismatic feathers!");
 			make_stunned((HStun + 5), FALSE);
+			if(mvitals[PM_ACERERAK].died > 0) *dmgptr += d(2,4);
 		}
 		else if(mdef->mcansee && haseyes(mdef->data)){
 			pline("%s is dazzled by prismatic feathers!", Monnam(mdef));
 			mdef->mstun = 1;
 			mdef->mconf = 1;
+			if(mvitals[PM_ACERERAK].died > 0) *dmgptr += d(2,4);
 		}
 		and = TRUE;
 	}
 	if(pen->ovar1&SEAL_TENEBROUS && dieroll <= dnum){
-		if(youdefend && !Blind){
+		if(youdefend && !Drain_resistance){
 			if (Blind)
 				You_feel("an unholy blade drain your life!");
 			else pline_The("unholy blade drains your life!");
 			losexp("life drainage",TRUE,FALSE,FALSE);
 		}
-		else if(!is_blind(mdef) && haseyes(mdef->data)){
+		else if(!resists_drli(mdef)){
 			if (vis) {
 				pline_The("unholy blade draws the life from %s!",
 				      mon_nam(mdef));
