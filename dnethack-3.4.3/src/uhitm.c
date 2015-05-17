@@ -1081,6 +1081,8 @@ int thrown;
 								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) && 
 						((Role_if(PM_ROGUE) && !Upolyd) ||
 							u.sealsActive&SEAL_ANDROMALIUS ||
+							(uwep && uwep->oartifact == ART_SPINESEEKER) ||
+							(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
 							(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON))
 			)) {
 				if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
@@ -1094,6 +1096,8 @@ int thrown;
 					mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
 					(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 					&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) ? u.ulevel : 0);
+				if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) 
+					tmp += rnd(u.ulevel + ((mvitals[PM_ACERERAK].died > 0 ? u.ulevel/2 : 0)));
 				if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
 				if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
 				if(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON) tmp += rnd(u.ulevel);
@@ -1102,7 +1106,8 @@ int thrown;
 						  obj == uwep &&
 						  obj->oclass == WEAPON_CLASS &&
 						  (bimanual(obj) ||
-						    (Role_if(PM_SAMURAI) && obj->otyp == KATANA && !uarms)) &&
+						    (Role_if(PM_SAMURAI) && obj->otyp == KATANA && !uarms) ||
+							(obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_BERITH)) &&
 						  ((wtype = uwep_skill_type()) != P_NONE &&
 						  P_SKILL(wtype) >= P_SKILLED)
 						 ) || arti_shattering(obj)
