@@ -69,6 +69,7 @@ static const char *random_mesg[] = {
 	"ChrisANG followed Khor", /* Fourth ascender */
 	"FIQ followed ChrisANG", /* Fifth ascender */
 	"Tariru followed FIQ", /* Sixth ascender */
+	"VOR followed Tariru", /* Seventh ascender */
 	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */
