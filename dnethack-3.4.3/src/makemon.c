@@ -3478,7 +3478,8 @@ rndmonst()
 	
 	zlevel = level_difficulty();
 	/* determine the level of the weakest monster to make. */
-	minmlev = zlevel / 6;
+	if(u.uevent.udemigod) minmlev = zlevel / 3;
+	else minmlev = zlevel / 6;
 	/* determine the level of the strongest monster to make. */
 	maxmlev = (zlevel + u.ulevel) / 2;
 
