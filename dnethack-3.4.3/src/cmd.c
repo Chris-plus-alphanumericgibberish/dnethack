@@ -1212,7 +1212,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	putstr(en_win, 0, "");
 
 	if (u.uevent.uhand_of_elbereth) {
-	    static const char * const hofe_titles[27] = {
+	    static const char * const hofe_titles[30] = {
 				/* Default */
 				"the Arm of the Law",		 /*01*/
 				"the Envoy of Balance",		 /*02*/
@@ -1270,6 +1270,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 			you_are(buf);
 		} else if(u.uevent.uhand_of_elbereth >= 28 && u.uevent.uhand_of_elbereth <= 30){
 			Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Priestess" : "Priest");
+			enl_msg("You ", "are ", "were ", buf);
 		} else if(Role_if(PM_NOBLEMAN) && !Race_if(PM_DROW)){
 			if(u.uevent.uhand_of_elbereth == 9) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Lady" : "Lord");
 			else if(u.uevent.uhand_of_elbereth == 7) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Queen" : "King");

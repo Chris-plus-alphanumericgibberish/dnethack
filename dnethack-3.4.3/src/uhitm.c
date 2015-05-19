@@ -1532,7 +1532,7 @@ defaultvalue:
 	    wtype = thrown ? weapon_type(wep) : uwep_skill_type();
 	    use_skill(wtype, 1);
 	}
-	if (ispoisoned || (obj && (arti_poisoned(obj) || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == MOONBEAM))) {
+	if (ispoisoned || (obj && (arti_poisoned(obj) || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM))) {
 	    if Role_if(PM_SAMURAI) {
 			You("dishonorably use a poisoned weapon!");
 			adjalign(-sgn(u.ualign.type)*5); //stiffer penalty
@@ -1556,17 +1556,17 @@ defaultvalue:
 				tmp += rnd(6);
 			else poiskilled = TRUE;
 		}
-		if(obj && (obj->opoisoned & OPOISON_FILTH || obj->oartifact == SUNBEAM)){
+		if(obj && (obj->opoisoned & OPOISON_FILTH || obj->oartifact == ART_SUNBEAM)){
 			if (resists_sickness(mon))
 				needfilthmsg = TRUE;
 			else if (rn2(10))
 				tmp += rnd(12);
 			else filthkilled = TRUE;
 		}
-		if(obj && (obj->opoisoned & OPOISON_SLEEP || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == MOONBEAM)){
+		if(obj && (obj->opoisoned & OPOISON_SLEEP || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM)){
 			if (resists_poison(mon) || resists_sleep(mon))
 				needdrugmsg = TRUE;
-			else if((obj->oartifact == MOONBEAM || !rn2(5)) && 
+			else if((obj->oartifact == ART_MOONBEAM || !rn2(5)) && 
 				sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
 		}
 		if(obj && obj->opoisoned & OPOISON_BLIND || obj->oartifact == ART_WEBWEAVER_S_CROOK){

@@ -744,7 +744,7 @@ gcrownu()
 	) {
 		u.uevent.uhand_of_elbereth = 28;
 		in_hand = FALSE;
-		already_exists = exist_artifact(GOLDEN_ARROW, artiname(SUNBEAM));
+		already_exists = exist_artifact(GOLDEN_ARROW, artiname(ART_SUNBEAM));
 		verbalize("I anoint thee...  High %s of Apollo!", flags.female ? "Priestess" : "Priest");
 	} else if(Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)){
 		u.uevent.uhand_of_elbereth = 1;
@@ -892,7 +892,7 @@ gcrownu()
 	) {
 		u.uevent.uhand_of_elbereth = 30;
 		in_hand = FALSE;
-		already_exists = exist_artifact(SILVER_ARROW, artiname(MOONBEAM));
+		already_exists = exist_artifact(SILVER_ARROW, artiname(ART_MOONBEAM));
 		verbalize("I anoint thee...  High %s of Diana!", flags.female ? "Priestess" : "Priest");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 6;
@@ -1097,12 +1097,12 @@ gcrownu()
 		} else if (!already_exists) {
 			if(u.ualign.type == A_CHAOTIC){
 				obj = mksobj(SILVER_ARROW, FALSE, FALSE);
-				obj = oname(obj, artiname(MOONBEAM));
+				obj = oname(obj, artiname(ART_MOONBEAM));
 				obj->quan = 20;
 				obj->spe = 6;
 				at_your_feet("Silver arrows");
 				dropy(obj);
-				discover_artifact(MOONBEAM);
+				discover_artifact(ART_MOONBEAM);
 				unrestrict_weapon_skill(P_BOW);
 			} else if(u.ualign.type == A_NEUTRAL){
 				obj = mksobj(CLOAK_OF_INVISIBILITY, FALSE, FALSE);
@@ -1113,12 +1113,12 @@ gcrownu()
 				discover_artifact(ART_VEIL_OF_LATONA);
 			} else if(u.ualign.type == A_LAWFUL){
 				obj = mksobj(GOLDEN_ARROW, FALSE, FALSE);
-				obj = oname(obj, artiname(SUNBEAM));
+				obj = oname(obj, artiname(ART_SUNBEAM));
 				obj->quan = 20;
 				obj->spe = 7;
 				at_your_feet("Golden arrows");
 				dropy(obj);
-				discover_artifact(SUNBEAM);
+				discover_artifact(ART_SUNBEAM);
 				unrestrict_weapon_skill(P_BOW);
 			}
 			u.ugifts++;
