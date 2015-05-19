@@ -1249,8 +1249,12 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				"the Sword of Selvetarm",	 /*25*/
 				"the Hand of Keptolo",		 /*26*/
 				"the Hammer of Ghaunadaur",	 /*27*/
+				/* Ranger */
+				"the High %s of Apollo",	 /*28*/
+				"the High %s of Latona",	 /*29*/
+				"the High %s of Diana",	 	 /*30*/
 				
-				/* uhand_of_elbereth max == 31 */
+				/* uhand_of_elbereth max == 31 *AS IN, YOU'RE NOW OUT OF ROOM* */
 	    };
 		
 	    if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
@@ -1264,6 +1268,8 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 			strcpy(buf, "Nasu no ");
 			strcat(buf, plname);
 			you_are(buf);
+		} else if(u.uevent.uhand_of_elbereth >= 28 && u.uevent.uhand_of_elbereth <= 30){
+			Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Priestess" : "Priest");
 		} else if(Role_if(PM_NOBLEMAN) && !Race_if(PM_DROW)){
 			if(u.uevent.uhand_of_elbereth == 9) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Lady" : "Lord");
 			else if(u.uevent.uhand_of_elbereth == 7) Sprintf(buf, hofe_titles[u.uevent.uhand_of_elbereth - 1], flags.female ? "Queen" : "King");

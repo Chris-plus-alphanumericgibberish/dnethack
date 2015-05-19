@@ -739,6 +739,13 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_ARCOR_KERYM));
 		verbalize("I crown thee...  The Hand of Elbereth!");
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
+	) {
+		u.uevent.uhand_of_elbereth = 28;
+		in_hand = FALSE;
+		already_exists = exist_artifact(GOLDEN_ARROW, artiname(SUNBEAM));
+		verbalize("I anoint thee...  High %s of Apollo!", flags.female ? "Priestess" : "Priest");
 	} else if(Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)){
 		u.uevent.uhand_of_elbereth = 1;
 		in_hand = FALSE;
@@ -812,6 +819,13 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(RUNESWORD, artiname(ART_ARYFAERN_KERYM));
 		verbalize("I dub thee...  The Doomspeaker of Vaire!");
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
+	) {
+		u.uevent.uhand_of_elbereth = 29;
+		in_hand = FALSE;
+		already_exists = exist_artifact(CLOAK_OF_INVISIBILITY, artiname(ART_VEIL_OF_LATONA));
+		verbalize("I anoint thee...  High %s of Latona!", flags.female ? "Priestess" : "Priest");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 5;
 		in_hand = FALSE;
@@ -873,6 +887,13 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(ELVEN_BROADSWORD, artiname(ART_ARYVELAHR_KERYM));
 		verbalize("I dub thee...  The Whisperer of Este!");
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
+	) {
+		u.uevent.uhand_of_elbereth = 30;
+		in_hand = FALSE;
+		already_exists = exist_artifact(SILVER_ARROW, artiname(MOONBEAM));
+		verbalize("I anoint thee...  High %s of Diana!", flags.female ? "Priestess" : "Priest");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 6;
 		in_hand = FALSE;
@@ -1068,6 +1089,40 @@ gcrownu()
 		unrestrict_weapon_skill(P_BOW);
 		if (obj && obj->oartifact == ART_BOW_OF_SKADI)
 			discover_artifact(ART_BOW_OF_SKADI);
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
+	){
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if(u.ualign.type == A_CHAOTIC){
+				obj = mksobj(SILVER_ARROW, FALSE, FALSE);
+				obj = oname(obj, artiname(MOONBEAM));
+				obj->quan = 20;
+				obj->spe = 6;
+				at_your_feet("Silver arrows");
+				dropy(obj);
+				discover_artifact(MOONBEAM);
+				unrestrict_weapon_skill(P_BOW);
+			} else if(u.ualign.type == A_NEUTRAL){
+				obj = mksobj(CLOAK_OF_INVISIBILITY, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_VEIL_OF_LATONA));
+				obj->spe = 7;
+				at_your_feet("A cloak");
+				dropy(obj);
+				discover_artifact(ART_VEIL_OF_LATONA);
+			} else if(u.ualign.type == A_LAWFUL){
+				obj = mksobj(GOLDEN_ARROW, FALSE, FALSE);
+				obj = oname(obj, artiname(SUNBEAM));
+				obj->quan = 20;
+				obj->spe = 7;
+				at_your_feet("Golden arrows");
+				dropy(obj);
+				discover_artifact(SUNBEAM);
+				unrestrict_weapon_skill(P_BOW);
+			}
+			u.ugifts++;
+		}
 	} else if (Pantheon_if(PM_MONK) || Role_if(PM_MONK)) {
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */

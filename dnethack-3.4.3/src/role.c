@@ -352,7 +352,7 @@ const struct Role roles[] = {
 	{"Archer",        0},
 	{"Sharpshooter",  0},
 	{"Marksman",      "Markswoman"} },
-	"Mercury", "_Venus", "Mars", /* Roman/planets */
+	"Apollo", "_Latona", "_Diana", /* Roman */
 	"Ran", "Orion's camp", "the cave of the wumpus",
 	PM_RANGER, NON_PM, PM_LITTLE_DOG /* Orion & canis major */,
 	PM_ORION, PM_HUNTER, PM_SCORPIUS,
