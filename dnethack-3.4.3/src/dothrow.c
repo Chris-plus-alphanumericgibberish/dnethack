@@ -1647,7 +1647,9 @@ register struct obj   *obj;
 		     * but we need ammo to stay around longer on average.
 		     */
 		    int broken, chance;
-			if((uwep && ammo_and_launcher(obj, uwep) && 
+			if(obj->oartifact && obj->oartifact != ART_HOUCHOU){
+				broken = 0;
+			} else if((uwep && ammo_and_launcher(obj, uwep) && 
 				(uwep->oartifact==ART_HELLFIRE || uwep->oartifact==ART_BOW_OF_SKADI))
 				|| obj->oartifact == ART_HOUCHOU
 			){
@@ -1655,11 +1657,11 @@ register struct obj   *obj;
 			} else {
 				chance = 3 + greatest_erosion(obj) - obj->spe;
 				if (chance > 1)
-				broken = rn2(chance);
+					broken = rn2(chance);
 				else
-				broken = !rn2(4);
+					broken = !rn2(4);
 				if (obj->blessed && !rnl(4))
-				broken = 0;
+					broken = 0;
 			}
 		    if (broken) {
 			if (*u.ushops)
