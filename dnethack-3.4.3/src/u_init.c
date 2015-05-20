@@ -441,6 +441,8 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	RUFFLED_SHIRT,		CONSORT_S_SUIT  },
     // { PM_DROW,	SCIMITAR,		DROVEN_SPEAR  },
     { PM_DROW,	APPLE,		TRIPE_RATION  },
+    { PM_HALF_DRAGON,	APPLE,		TRIPE_RATION  },
+    { PM_HALF_DRAGON,	CARROT,		TRIPE_RATION  },
     { PM_INCANTIFIER,CLOAK_OF_MAGIC_RESISTANCE,		ROBE  },
     { PM_INCANTIFIER,CLOAK_OF_DISPLACEMENT,		ROBE  },
     { PM_INCANTIFIER,	LEATHER_ARMOR,		ROBE  },
