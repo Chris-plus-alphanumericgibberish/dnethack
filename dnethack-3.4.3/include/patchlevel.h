@@ -23,8 +23,9 @@
  * 3.8.2 is for addition of berserk status, correct anger tracking for masks, 6th castle, silver bullets for slings, beast mastery, lost cities branch
  * 3.9.1: winged kobold, sky render, stormhelm, quicksilver, and spineseeker
  * 3.9.2: added poison spray and acid blast spells.
+ * 3.9.3: added bard, hungry dead, dokkalfar matriarch.
  */
-#define PATCHLEVEL	2
+#define PATCHLEVEL	3
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
