@@ -1096,7 +1096,11 @@ register struct monst *mtmp;
 
 			}
 */
-			/*else*/ {
+			if(ptr == &mons[PM_ARCADIAN_AVENGER]){
+				(void)mongets(mtmp, SHORT_SWORD);
+				(void)mongets(mtmp, SHORT_SWORD);
+				return;//no random stuff
+			} else {
 				int spe2;
 				int artnum = rn2(8);
 	
