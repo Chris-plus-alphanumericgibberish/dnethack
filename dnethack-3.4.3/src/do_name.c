@@ -1271,6 +1271,8 @@ long hnum;
 			return "silver feather bearing";
 		case EILISTRAEE_SYMBOL:
 			return "silver dancer bearing";
+		case LOST_HOUSE:
+			return "silver-sign bearing";
 		case EDDER_SYMBOL:
 			return u.uevent.knoweddergud ? "Edderkirke" : "black-webbed";
 	}

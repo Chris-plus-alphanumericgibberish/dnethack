@@ -1932,6 +1932,49 @@ register struct	monst	*mtmp;
 			otmp->cursed = TRUE;
 			otmp->spe = 5;
 			(void) mpickobj(mtmp,otmp);
+		} else if(ptr == &mons[PM_DOKKALFAR_ETERNAL_MATRIARCH]){
+			/*Plate Mail*/
+			otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
+			otmp->ohaluengr = TRUE;
+			otmp->ovar1 = LOLTH_SYMBOL;
+			otmp->blessed = TRUE;
+			otmp->cursed = FALSE;
+			otmp->spe = 9;
+			otmp->ovar1 = curhouse;
+			(void) mpickobj(mtmp, otmp);
+			/*Dress*/
+			otmp = mksobj(BLACK_DRESS, TRUE, FALSE);
+			otmp->blessed = TRUE;
+			otmp->cursed = FALSE;
+			otmp->oerodeproof = TRUE;
+			otmp->spe = 5;
+			(void) mpickobj(mtmp, otmp);
+			/*Ring*/
+			otmp = mksobj(find_signet_ring(), TRUE, FALSE);
+			otmp->ohaluengr = TRUE;
+			otmp->ovar1 = curhouse;
+			(void) mpickobj(mtmp, otmp);
+			/*Cloak*/
+			otmp = mksobj(CLOAK_OF_MAGIC_RESISTANCE, TRUE, FALSE);
+			otmp->blessed = TRUE;
+			otmp->cursed = FALSE;
+			otmp->oerodeproof = TRUE;
+			otmp->spe = 5;
+			(void) mpickobj(mtmp, otmp);
+			/*Helm*/
+			otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
+			otmp->blessed = TRUE;
+			otmp->cursed = FALSE;
+			otmp->oerodeproof = TRUE;
+			otmp->spe = 5;
+			(void) mpickobj(mtmp, otmp);
+			/*boots*/
+			otmp = mksobj(IRON_SHOES, TRUE, FALSE);
+			otmp->blessed = TRUE;
+			otmp->cursed = FALSE;
+			otmp->oerodeproof = TRUE;
+			otmp->spe = 3;
+			(void) mpickobj(mtmp, otmp);
 		}
 		break;
 	    case S_MUMMY:
