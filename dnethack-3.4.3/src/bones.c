@@ -238,6 +238,7 @@ struct obj *corpse;
 		    is_keter(mptr) || 
 			(mptr == &mons[PM_DREAD_SERAPH] && !(mtmp->mstrategy & STRAT_WAITFORU)) || 
 			(mptr == &mons[PM_WEEPING_ANGEL] && angelnum > 0) || 
+			(is_drow(mptr) && mtmp->mfaction == LOST_HOUSE) ||
 			(is_dprince(mptr) && !Inhell) || 
 			(is_dlord(mptr) && !Inhell)
 		) mongone(mtmp);
