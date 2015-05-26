@@ -557,6 +557,7 @@ struct mkroom *croom; /* NULL == choose random room */
 			if (!MON_AT(pos.x, pos.y)) {
 			struct monst *mtmp = makemon(&mons[PM_WEEPING_ANGEL], pos.x,pos.y, NO_MM_FLAGS);
 			if (mtmp) mtmp->msleeping = 1;
+			mtmp->mextra[2] = 1;
 			i--;
 			}
 		}
