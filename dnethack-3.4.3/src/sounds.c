@@ -3872,6 +3872,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[ORTHOS-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_ORTHOS;
 				u.sealsUsed |= SEAL_ORTHOS;
+				unrestrict_weapon_skill(P_MUSICALIZE);
 				u.spirit[u.sealCounts] = SEAL_ORTHOS;
 				set_spirit_powers(SEAL_ORTHOS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -4264,7 +4265,8 @@ int p_skill;
 	if(p_skill == P_MATTER_SPELL) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
 	if(p_skill == P_RIDING) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
 	if(p_skill == P_BARE_HANDED_COMBAT) return u.sealsActive & (SEAL_EURYNOME|SEAL_BUER)? TRUE : FALSE;
-	if(p_skill == P_BEAST_MASTERY) return u.sealsActive & SEAL_MALPHAS ? TRUE : FALSE;
+	if(p_skill == P_BEAST_MASTERY) return u.sealsActive & SEAL_MALPHAS? TRUE : FALSE;
+	if(p_skill == P_MUSICALIZE) return u.sealsActive & SEAL_ORTHOS? TRUE : FALSE;
 	if(p_skill == P_TWO_WEAPON_COMBAT) return u.specialSealsActive & (SEAL_MISKA)? TRUE : FALSE;
 	return FALSE;
 }
