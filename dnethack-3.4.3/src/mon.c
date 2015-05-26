@@ -2280,9 +2280,8 @@ boolean was_swallowed;			/* digestion */
 		struct monst *mtmp, *mtmp2;
 		for (mtmp = fmon; mtmp; mtmp = mtmp2){
 			mtmp2 = mtmp->nmon;
-			pline("%d == %d?",mon->mextra[0],mtmp->m_id);
 			if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
-				if((unsigned)mon->mextra[0] == mtmp->m_id){
+				if(mon->mextra[0] == (long)mtmp->m_id){
 					mtmp->mhp = 0;
 					mondied(mtmp);
 					break;
@@ -2292,9 +2291,8 @@ boolean was_swallowed;			/* digestion */
 		if(!mtmp){
 			for (mtmp = migrating_mons; mtmp; mtmp = mtmp2){
 				mtmp2 = mtmp->nmon;
-				pline("%d == %d?",mon->mextra[0],mtmp->m_id);
 				if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
-					if((unsigned)mon->mextra[0] == mtmp->m_id){
+					if(mon->mextra[0] == (long)mtmp->m_id){
 						mon_arrive(mtmp, TRUE);
 						mtmp->mhp = 0;
 						mondied(mtmp);
