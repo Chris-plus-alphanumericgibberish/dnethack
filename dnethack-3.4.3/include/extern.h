@@ -1481,6 +1481,7 @@ E void NDECL(awaken_soldiers);
 E int FDECL(do_play_instrument, (struct obj *));
 #ifdef BARD
 E int FDECL(pet_can_sing, (struct monst *,BOOLEAN_P));
+E int FDECL(mon_can_counter_sing, (struct monst *,BOOLEAN_P));
 #endif
 
 /* ### nhlan.c ### */
