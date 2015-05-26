@@ -25,7 +25,7 @@ C       Call (name) a particular monster
 d       Drop an item
 D       Drop specific item types
 e       Eat something
-E       Engrave writing or a ward on the floor
+E       Engrave writing on the floor
 f       Fire ammunition from quiver
 F       Followed by direction, fight a monster (even if you don't sense it)
 g       Followed by direction, move until you are near something
