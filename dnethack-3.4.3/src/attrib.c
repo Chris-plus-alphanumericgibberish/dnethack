@@ -884,6 +884,7 @@ int x;
 		}
 		if ((uarmg && uarmg->otyp == GAUNTLETS_OF_POWER) || 
 			(uwep && uwep->oartifact == ART_SCEPTRE_OF_MIGHT) || 
+			(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_YMIR && mvitals[PM_ACERERAK].died > 0) ||
 			(uwep && uwep->oartifact == ART_OGRESMASHER) ||
 			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER)
 		) return(125);
