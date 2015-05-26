@@ -829,6 +829,10 @@ register struct monst *mtmp;
 				if (rn2(2)) (void)mongets(mtmp, ELVEN_LEATHER_HELM);
 				else if (!rn2(4)) (void)mongets(mtmp, ELVEN_BOOTS);
 				if (rn2(2)) (void)mongets(mtmp, ELVEN_DAGGER);
+#ifdef BARD
+			    if (mm == PM_ELVENKING || mm == PM_ELF_LORD ? !rn2(10) : !rn2(50))
+					(void)mongets(mtmp, (rn2(2) ? WOODEN_FLUTE : WOODEN_HARP));
+#endif
 				switch (rn2(3)) {
 				case 0:
 					if (!rn2(4)) (void)mongets(mtmp, ELVEN_SHIELD);
@@ -1368,6 +1372,10 @@ register struct monst *mtmp;
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHIELD);
 			if(!rn2(3)) (void)mongets(mtmp, KNIFE);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_CHAIN_MAIL);
+#ifdef BARD
+			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50))
+			    (void)mongets(mtmp, LEATHER_DRUM);
+#endif
 			break;
 		    case PM_URUK_HAI:
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_CLOAK);
@@ -1378,6 +1386,10 @@ register struct monst *mtmp;
 			    m_initthrow(mtmp, ORCISH_ARROW, 12);
 			}
 			if(!rn2(3)) (void)mongets(mtmp, URUK_HAI_SHIELD);
+#ifdef BARD
+			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50))
+			    (void)mongets(mtmp, LEATHER_DRUM);
+#endif
 			break;
 		    default:
 			if (mm != PM_ORC_SHAMAN && rn2(2))

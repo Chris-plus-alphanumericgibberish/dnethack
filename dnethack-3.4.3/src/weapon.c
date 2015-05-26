@@ -27,6 +27,9 @@
 #define PN_MATTER_SPELL			(-14)
 #define PN_HARVEST			(-15)
 #define PN_BEAST_MASTERY		(-16)
+#ifdef BARD
+#define PN_MUSICALIZE			(-17)
+#endif
 static void FDECL(mon_ignite_lightsaber, (struct obj *, struct monst *));
 
 STATIC_DCL void FDECL(give_may_advance_msg, (int));
@@ -55,6 +58,9 @@ STATIC_VAR NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
 	PN_DIVINATION_SPELL, PN_ENCHANTMENT_SPELL,
 	PN_CLERIC_SPELL,     PN_ESCAPE_SPELL,
 	PN_MATTER_SPELL,
+#ifdef BARD
+	PN_MUSICALIZE,
+#endif
 	PN_BARE_HANDED,   PN_TWO_WEAPONS,
 	PN_BEAST_MASTERY,
 #ifdef STEED
@@ -81,6 +87,9 @@ STATIC_VAR NEARDATA const char * const odd_skill_names[] = {
     "matter spells",
 	"farm implements",
 	"beast mastery",
+#ifdef BARD
+	"musicalize spell",
+#endif
 };
 /* indexed vis `is_martial() */
 STATIC_VAR NEARDATA const char * const barehands_or_martial[] = {
@@ -1931,6 +1940,12 @@ const struct def_skill *class_skill;
 		OLD_P_SKILL(P_ATTACK_SPELL) = P_BASIC;
 		OLD_P_SKILL(P_ENCHANTMENT_SPELL) = P_BASIC;
 	}
+#ifdef BARD
+	if (Role_if(PM_BARD)) {
+	  OLD_P_SKILL(P_MUSICALIZE) = P_BASIC;
+	  OLD_P_SKILL(P_BARE_HANDED_COMBAT) = P_BASIC;
+	}
+#endif
 
 	/* walk through array to set skill maximums */
 	for (; class_skill->skill != P_NONE; class_skill++) {

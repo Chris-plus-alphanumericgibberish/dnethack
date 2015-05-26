@@ -388,6 +388,8 @@ typedef unsigned char	uchar;
 /*#define GOLDOBJ */	/* Gold is kept on obj chains - Helge Hafting */
 /*#define AUTOPICKUP_EXCEPTIONS */ /* exceptions to autopickup */
 
+#define BARD		/* Bards and songs - Andre Bertelli */
+
 /* End of Section 5 */
 
 #include "global.h"	/* Define everything else according to choices above */

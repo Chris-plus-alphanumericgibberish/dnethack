@@ -27,6 +27,12 @@ struct edog {
 	int revivals;			/* count pet deaths */
 	int mhpmax_penalty;		/* while starving, points reduced */
 	Bitfield(killed_by_u, 1);	/* you attempted to kill him */
+#ifdef BARD
+#define EDOG_ENCOURAGED_MAX		7
+	Bitfield(encouraged, 3);	/* affected by Encourage song */
+	Bitfield(friend, 1);		/* tamed by song - will lose tameness */
+	Bitfield(waspeaceful, 1);      	/* was peaceful before tame song */
+#endif
 };
 #define EDOG(mon)	((struct edog *)&(mon)->mextra[0])
 

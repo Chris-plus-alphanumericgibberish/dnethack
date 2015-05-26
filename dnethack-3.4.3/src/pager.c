@@ -7,6 +7,9 @@
 
 #include "hack.h"
 #include "dlb.h"
+#ifdef BARD
+#include "edog.h"
+#endif
 
 STATIC_DCL boolean FDECL(is_swallow_sym, (int));
 STATIC_DCL int FDECL(append_str, (char *, const char *));
@@ -138,7 +141,12 @@ lookat(x, y, buf, monbuf)
 		    (mtmp->mx != x || mtmp->my != y) ?
 			((mtmp->isshk && accurate)
 				? "tail of " : "tail of a ") : "",
-		    (mtmp->mtame && accurate) ? "tame " :
+		    (mtmp->mtame && accurate) ? 
+#ifdef BARD
+		    (EDOG(mtmp)->friend ? "friendly " : "tame ") :
+#else
+		    "tame " :
+#endif
 		    (mtmp->mpeaceful && accurate) ? (mtmp->data==&mons[PM_UVUUDAUM]) ? "meditating " : "peaceful " : "",
 		    name);
 	    if (u.ustuck == mtmp)

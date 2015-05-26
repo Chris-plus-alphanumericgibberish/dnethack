@@ -420,6 +420,34 @@ const struct Role roles[] = {
 	0, 5, 1, 2, 10, A_INT, SPE_CHARM_MONSTER,   -15
 },
 #endif
+#ifdef BARD
+{	{"Troubadour", 0}, {
+	{"Rhymer",      0},
+	{"Lyrist",      0},
+	{"Sonneteer",   0},
+	{"Jongleur",    0},
+	{"Troubadour",  0},
+	{"Minstrel",    0},
+	{"Lorist",      0},
+	{"Bard",        0},
+	{"Master Bard", 0} },
+	"Apollon", "Pan", "Dionysus", /* Thracian? */
+	"Brd", "the Conservatorium", "the Island of Anthemoessa",
+	PM_BARD, NON_PM, NON_PM,
+	PM_PINDAR, PM_RHYMER, PM_AGLAOPE,
+	PM_SNAKE, PM_WHITE_UNICORN, S_SNAKE, S_UNICORN,
+	ART_LYRE_OF_ORPHEUS,
+	MH_HUMAN|MH_ELF|MH_GNOME | ROLE_MALE|ROLE_FEMALE |
+	  ROLE_NEUTRAL|ROLE_CHAOTIC,
+	/* Str Int Wis Dex Con Cha */
+	{   7,  7,  7, 10,  6, 10 },
+	{  10, 10, 15, 25, 10, 30 },
+	/* Init   Lower  Higher */
+	{ 11, 0,  0, 8,  1, 0 },	/* Hit points */
+	{  4, 3,  0, 1,  0, 2 },10,	/* Energy */
+	10, 3,-3, 2, 9, A_INT, SPE_SLEEP, -4
+},
+#endif
 {	{"Valkyrie", 0}, {
 	{"Stripling",   0},
 	{"Skirmisher",  0},

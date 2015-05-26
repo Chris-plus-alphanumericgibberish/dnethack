@@ -170,6 +170,17 @@ static const char * const shkgeneral[] = {
     0
 };
 
+#ifdef BARD
+static const char * const shkmusic[] = {
+    /* Brazil */
+    "Andre", "Daniel", "Tiago", "Alexandre", "Joao", 
+    "Carlos", "Fabio", "Ricardo", "Gustavo", "Rafael",
+    "Felipe", "Anderson", "Jorge", "Paulo", "Jose",
+    "Rogerio", "Roberto", "Marcos", "Luis", "Luciano",
+    0
+};
+#endif
+
 /*
  * To add new shop types, all that is necessary is to edit the shtypes[] array.
  * See mkroom.h for the structure definition.  Typically, you'll have to lower
@@ -187,7 +198,11 @@ static const char * const shkgeneral[] = {
  */
 
 const struct shclass shtypes[] = {
+#ifdef BARD
+	{"general store", RANDOM_CLASS, 41,
+#else
 	{"general store", RANDOM_CLASS, 44,
+#endif
 	    D_SHOP, {{100, RANDOM_CLASS}, {0, 0}, {0, 0}}, shkgeneral},
 	{"used armor dealership", ARMOR_CLASS, 14,
 	    D_SHOP, {{90, ARMOR_CLASS}, {10, WEAPON_CLASS}, {0, 0}},
@@ -215,6 +230,12 @@ const struct shclass shtypes[] = {
 	 */
 	{"rare books", SPBOOK_CLASS, 3, D_SHOP,
 	    {{90, SPBOOK_CLASS}, {10, SCROLL_CLASS}, {0, 0}}, shkbooks},
+#ifdef BARD
+	{"music shop", TOOL_CLASS, 3, D_SHOP,
+	    {{32, -WOODEN_FLUTE}, {32, -WOODEN_HARP}, {32, -LEATHER_DRUM}, 
+	     {2, -MAGIC_HARP}, {2, -MAGIC_FLUTE}},
+	     shkmusic},
+#endif
 	/* Shops below this point are "unique".  That is they must all have a
 	 * probability of zero.  They are only created via the special level
 	 * loader.

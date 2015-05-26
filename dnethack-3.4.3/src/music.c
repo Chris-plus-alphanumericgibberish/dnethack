@@ -6,7 +6,7 @@
  * This file contains the different functions designed to manipulate the
  * musical instruments and their various effects.
  *
- * Actually the list of instruments / effects is :
+ * Currently the list of instruments / effects is :
  *
  * (wooden) flute	may calm snakes if player has enough dexterity
  * magic flute		may put monsters to sleep:  area of effect depends
@@ -24,9 +24,16 @@
  * drum of earthquake	Will initiate an earthquake whose intensity depends
  *			on player level.  That is, it creates random pits
  *			called here chasms.
+ *
+ * If BARD is #defined, there is a new skill called 'musicalize', referring to
+ * the ability of 'casting' spells in the form of songs. -- ABA
  */
 
 #include "hack.h"
+#ifdef BARD
+#include "skills.h"
+#include "edog.h"
+#endif
 
 STATIC_DCL void FDECL(awaken_monsters,(int));
 STATIC_DCL void FDECL(put_monsters_to_sleep,(int));
@@ -34,6 +41,16 @@ STATIC_DCL void FDECL(charm_snakes,(int));
 STATIC_DCL void FDECL(calm_nymphs,(int));
 STATIC_DCL void FDECL(charm_monsters,(int));
 STATIC_DCL int FDECL(do_improvisation,(struct obj *));
+#ifdef BARD
+STATIC_DCL void FDECL(tame_song,(int));
+STATIC_DCL void FDECL(sleep_song,(int));
+STATIC_DCL void FDECL(scary_song,(int));
+STATIC_DCL void FDECL(confusion_song,(int));
+STATIC_DCL unsigned char FDECL(songs_menu,(struct obj *));
+STATIC_PTR int NDECL(play_song);
+STATIC_DCL void FDECL(slowness_song,(int));
+STATIC_DCL void FDECL(encourage_pets,(int));
+#endif
 
 #ifdef UNIX386MUSIC
 STATIC_DCL int NDECL(atconsole);
@@ -51,6 +68,672 @@ void FDECL( pc_speaker, ( struct obj *, char * ) );
 #ifdef AMIGA
 void FDECL( amii_speaker, ( struct obj *, char *, int ) );
 #endif
+
+
+#ifdef BARD
+
+struct songspell {
+	short	sp_id;
+	char	*name;
+	xchar	level;
+	xchar	turns;
+	int	instr1; /* this instrument can play this music */
+	int	instr2; /* this one has a bonus to successfully play this song */
+};	
+
+#endif /* BARD */
+/* we need at least these defines (so they're outside #define BARD) */
+#define SNG_NONE            0
+#define SNG_IMPROVISE       99
+#define SNG_NOTES           98
+#define SNG_PASSTUNE        97
+#ifdef BARD
+/* same order and indices as below */
+#define SNG_SLEEP		1
+#define SNG_CONFUSION		2
+#define SNG_SLOW		3
+#define SNG_FEAR		4
+#define SNG_TAME		5
+#define SNG_COURAGE		6
+#define SNG_FIRST		SNG_SLEEP
+#define SNG_LAST_ENCHANTMENT	SNG_COURAGE	/* last song based on an enchantment spell */
+#define SNG_LAST		SNG_COURAGE
+#define SNG_IMPROVISE_CHAR	'i'
+#define SNG_NOTES_CHAR		'n'
+#define SNG_PASSTUNE_CHAR	'p'
+
+/* songs based on enchantment spells must be the first ones on list, because of
+   SNG_LAST_ENCHANTMENT */
+NEARDATA const struct songspell songs[] = {
+	/* sp_id		name	    level turns instr1		instr2 */
+	{ 0,			"None",		0, 1,	0,		0 },
+	{ SPE_SLEEP,		"Lullaby",	1, 4,	WOODEN_HARP,	WOODEN_FLUTE },
+	{ SPE_CONFUSE_MONSTER,	"Cacophony",	2, 5,	TOOLED_HORN,	LEATHER_DRUM },
+	{ SPE_SLOW_MONSTER,	"Drowsiness",	2, 5,	WOODEN_FLUTE, 	WOODEN_HARP },
+	{ SPE_CAUSE_FEAR,	"Despair",	3, 6,	LEATHER_DRUM, 	TOOLED_HORN },
+	{ SPE_CHARM_MONSTER,	"Friendship",	3, 6,	WOODEN_FLUTE, 	WOODEN_HARP },
+	{ SPE_CAUSE_FEAR,	"Inspire Courage",3,6,	LEATHER_DRUM, 	BUGLE }
+/*	random ideas that weren't implemented -- based in spells from other schools
+	{ SPE_HASTE_SELF,	"Haste Pets"
+	{ SPE_CURE_BLINDNESS,	"Cause Blindness"
+	{ SPE_CURE_SICKNESS,	"Cause Sickness"
+	{ SPE_POLYMORPH,	"Change?", poly pets to higher level monster temporarily
+	{ SPE_FORCE_BOLT,	"Shatter", shatter glass/wood/stone objects
+	not spell based
+	{ ?		       	"Shout/Sound Burst", area damage
+	{ ?			"Silence", monster spells fail
+	{ ?			"Ventriloquism", makes monster think you're at a given location
+	{ ?			"Rage", pet uses special attack
+*/
+};
+
+static NEARDATA schar song_delay;	/* moves left for this song */
+struct obj *song_instr;			/* musical instrument being played */
+uchar song_played = SNG_NONE;	/* song being played (songs[] index)*/
+boolean song_penalty;			/* instrument penalty (see do_play_instrument) */
+static NEARDATA int petsing;		/* effect of pets singing with the player */
+static NEARDATA long petsing_lastcheck = 0L; /* last time pets were checked */
+static NEARDATA char msgbuf[BUFSZ];
+
+
+/*
+ * Ugly kludge. Returns the song being played at the moment.
+ * We cannot check song_played directly because if the song was interrupted,
+ * we have no means to reset song_played.
+ */
+int inline
+song_being_played()
+{
+    if (occupation != play_song)
+		song_played = SNG_NONE;
+    return song_played;
+}
+
+STATIC_PTR int
+reset_song()
+{
+    song_played = SNG_NONE;
+    song_delay = 0;
+    song_penalty = 0;
+/*	song_lastturn = 0L;*/
+    return;
+}
+
+/* music being played is at its last turn? */
+#define	SNG_FIRST_TURN	(song_being_played() == SNG_NONE ? \
+			 FALSE : (song_delay == songs[song_being_played()].turns))
+
+
+/**
+ * Checks if this pet can sing, helping the player, returning a bonus
+ */
+int
+pet_can_sing(mtmp, domsg)
+struct monst *mtmp;
+boolean domsg;
+{
+    int r = 0;
+
+    if (song_being_played() == SNG_NONE) return 0;
+
+    if ((mtmp->mcanmove) && (!mtmp->msleeping) && (!Conflict)
+	&& (!mtmp->mconf) && (!mtmp->mflee) && (!mtmp->mcan)
+	&& (distu(mtmp->mx, mtmp->my) <= 25)) {
+	    /* nymphs and some elves sing along harps */
+	    if ((song_instr->otyp == WOODEN_HARP || song_instr->otyp == MAGIC_HARP)
+		&& (mtmp->data->mlet == S_NYMPH 
+		    || (mtmp->data >= &mons[PM_ELF] && mtmp->data <= &mons[PM_ELVENKING])) 
+		&& (mtmp->mhp*2 > mtmp->mhpmax))
+		    r = max(10,(mtmp->data->mlet == S_NYMPH ? mtmp->m_lev*2 : mtmp->m_lev));
+	    /* undeads sing along horns */
+	    else if ((song_instr->otyp == TOOLED_HORN)
+		     && (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_MUMMY
+			 || mtmp->data->mlet == S_VAMPIRE || mtmp->data->mlet == S_WRAITH
+			 || mtmp->data->mlet == S_DEMON || mtmp->data->mlet == S_GHOST))
+		    r = max(10,(mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON
+				? mtmp->m_lev*2 : mtmp->m_lev));
+	    /* orcs and ogres sing along (shout, actually) drums and bugles */
+	    else if ((song_instr->otyp == LEATHER_DRUM || song_instr->otyp == BUGLE)
+		     && (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE))
+		    r = max(10, mtmp->m_lev);
+    }
+
+    if (domsg && (r > 0))
+		if (canseemon(mtmp)) {
+			if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
+				|| mtmp->data->mlet == S_VAMPIRE)
+				pline("%s's dreadful voice chants your song!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
+					 || mtmp->data->mlet == S_WRAITH)
+				pline("%s mourns while you play!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_NYMPH)
+				pline("%s's charming voice sings along!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE)
+				pline("%s shouts!", Monnam(mtmp));
+			else
+				pline("%s sings while you play!", Monnam(mtmp));
+		}
+	else
+		if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
+			|| mtmp->data->mlet == S_VAMPIRE)
+			You_hear("a horrible voice chanting your song!");
+		else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
+				 || mtmp->data->mlet == S_WRAITH)
+			You_hear("someone mourning while you play!", Monnam(mtmp));
+		else if (mtmp->data->mlet == S_NYMPH)
+			You_hear("a charming voice singing along!");
+		else if (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE)
+			You_hear("a shout!");
+		else
+			You_hear("someone singing while you play!");
+
+    return r;
+}
+
+/** Singing pets bonus for this turn.
+ * Calculates the bonus of all singing pets (see above), if not yet done
+ * for this turn
+ */
+STATIC_DCL int
+singing_pets_effect()
+{
+    register struct monst *mtmp;
+
+    if (song_being_played() == SNG_NONE) return 0;
+    if (monstermoves != petsing_lastcheck) {
+	petsing_lastcheck = monstermoves;
+	petsing = 0;
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+	    if (mtmp->mtame)
+		petsing += pet_can_sing(mtmp, TRUE);
+    }
+
+    return petsing;
+}
+
+
+/** Chance of succesfully playing a song. 
+ * Depends on dexterity, different from the chance of the song actually affecting
+ * the creature, which depends more on charisma than dexterity.
+ */
+int
+song_success(song_id, instr, know_spell)
+int song_id;
+struct obj *instr;
+int know_spell;
+{
+	int a;
+	int chance;
+
+	//TODO: must check if the spell is still memorized
+
+	if (!know_spell)
+		return 0;
+
+	chance = ( ACURR(A_DEX) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
+		- (songs[song_id].level * (instr->blessed ? 15 : 20));
+
+	if (instr->oartifact || instr->otyp == songs[song_id].instr2)
+		chance = (chance*3)/2;
+
+	/* not easy to play 'peaceful' music when badly injured */
+	if (u.uhp < u.uhpmax * 0.3) chance /= 2;
+
+	/* it's also difficult to play some instruments while wearing a shield. */
+	if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM)) 
+		chance /= 2;
+
+	/* but it's easier with the eyes closed */
+	if (Blind) chance += u.ulevel;
+
+	if (instr->oartifact == ART_LYRE_OF_ORPHEUS && (song_id != SNG_SLEEP && song_id != SNG_TAME))
+		chance /= 2;
+
+	if (chance > 100) chance = 100;
+	if (chance < 0) chance = 0;
+
+	return chance;
+}
+
+/**
+ * Shows the music menu.
+ * Returns a SNG_* identifier
+ */
+STATIC_DCL unsigned char
+songs_menu(instr)
+struct obj *instr;
+{
+	char buf[BUFSZ];
+	winid tmpwin;
+	anything any;
+	menu_item *selected;
+	int a,b;
+	int song, know_spell;
+	char hardtoplay;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;  /* zero out all bits */
+	Sprintf(buf, "(songs marked with # have a bonus with this instrument)");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, "", MENU_UNSELECTED);
+	Sprintf(buf, "    Song             Level Turns   Fail");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+
+	/* improvise option */
+	any.a_int = SNG_IMPROVISE;
+	add_menu(tmpwin, NO_GLYPH, &any, SNG_IMPROVISE_CHAR, 0, ATR_NONE,
+		 "improvise", MENU_UNSELECTED);
+	/* play notes option */
+	any.a_int = SNG_NOTES;
+	add_menu(tmpwin, NO_GLYPH, &any, SNG_NOTES_CHAR, 0, ATR_NONE,
+		 "a sequence of notes", MENU_UNSELECTED);
+	/* play the passtune option */
+	if (u.uevent.uheard_tune == 2) {
+		any.a_int = SNG_PASSTUNE;
+		add_menu(tmpwin, NO_GLYPH, &any, SNG_PASSTUNE_CHAR, 0, ATR_NONE,
+			 "passtune", MENU_UNSELECTED);
+	}
+
+	for (a = SNG_FIRST; a <= SNG_LAST; a++) {
+		/* For a song to be available in the menu:
+		   - Need a suitable instrument (the Lyre of Orpheus can play any song)
+		   - Must know the related spell (Bards already know any enchantment based song)
+		*/
+		know_spell = (Role_if(PM_BARD) && a <= SNG_LAST_ENCHANTMENT);
+		if (!know_spell)
+			for (b = 0; b < MAXSPELL; b++)
+				if (spl_book[b].sp_id == songs[a].sp_id)
+					know_spell = TRUE;
+		
+		if (know_spell && (instr->oartifact == ART_LYRE_OF_ORPHEUS
+				   || instr->otyp == songs[a].instr1 || instr->otyp == songs[a].instr2)) {
+			any.a_int = a+1;
+			if (instr->oartifact == ART_LYRE_OF_ORPHEUS)
+				hardtoplay = (a == SNG_FEAR || a == SNG_COURAGE || a == SNG_CONFUSION || a == SNG_SLOW ? ' ' : '#');
+			else
+				hardtoplay = (songs[a].instr1 == instr->otyp ? ' ' : '#');
+					
+			Sprintf(buf, "%-20s %i     %i %c %3i%%", songs[a].name, 
+				songs[a].level,	songs[a].turns,
+				hardtoplay,
+				100 - song_success(a, instr, know_spell));
+			add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
+				 buf, MENU_UNSELECTED);
+		}
+	}
+
+	Sprintf(buf, "Play which song with the %s?", xname(instr));
+	end_menu(tmpwin, buf);
+	a = select_menu(tmpwin, PICK_ONE, &selected);
+	if (a > 0)
+		song = selected[0].item.a_int - (selected[0].item.a_int >= SNG_PASSTUNE ? 0 : 1);
+	else
+		song = SNG_NONE;
+	/*  if (song > 0) song--; */
+	free((genericptr_t)selected);
+	destroy_nhwindow(tmpwin);
+	
+	return song;
+}
+
+
+/** Returns a positive number if monster is affected by song, or a negative number
+ * if monster resisted it. 
+ * The number means the difference between the song 'attack' level and the monster
+ * resistance level against it.
+ * Charisma weights more than dexterity, different from the chance of 
+ * successfully playing the song, which depends on dexterity.
+ */
+int
+resist_song(mtmp, song, instr)
+struct monst *mtmp;
+int song;
+struct obj * instr;
+{
+	/* atack level, defense level, defense level before modifiers */
+	int alev, dlev, dlev0;
+	int showmsg;
+	char *msg;
+
+	showmsg = (song_delay == songs[song_played].level + 3) && canseemon(mtmp);
+	msg = (void *)0;
+
+	/* Attack level */
+	//alev = min(P_SKILL(P_MUSICALIZE) - songs[song].level + 1, 0);
+	alev = P_SKILL(P_MUSICALIZE) - P_UNSKILLED + 1;
+	alev = ( (alev * ACURR(A_CHA)) + ACURR(A_DEX) ) / 3;
+	// blessed/cursed instruments make it a little easier/harder to 'cast' the song
+	alev += bcsign(instr)*5;
+	// account for pets that can sing with the bard's song
+	alev += max(0, singing_pets_effect() - song_delay);
+	// polymorphed into something that can't sing
+	if (is_silent(youmonst.data)) alev /= 2;
+
+	/* Defense level */
+	dlev = (int)mtmp->m_lev*2;
+	if (is_golem(mtmp->data)) dlev = 100;
+	dlev0 = dlev;
+
+	/* "peaceful" songs */
+	if (song == SNG_SLEEP || song == SNG_TAME) {
+		if (mindless(mtmp->data)) dlev += dlev0/10;
+		if (is_animal(mtmp->data)) dlev -= dlev0/10; // music calm the beasts
+		if (is_domestic(mtmp->data)) dlev -= dlev0/10;
+		if (likes_magic(mtmp->data)) dlev += dlev0/5;
+		if (your_race(mtmp->data)) dlev -= dlev0/10;
+
+		// undead and demons don't care about 'peaceful' music
+		if (is_undead(mtmp->data) || is_demon(mtmp->data)) dlev += 50;
+		if (always_hostile(mtmp->data)) dlev += dlev0/10;
+		if (race_peaceful(mtmp->data)) dlev -= dlev0/10;
+
+		// rats like music from flutes (The Pied Piper of Hamelin)
+		if (mtmp->data->mlet == S_RODENT && instr->otyp == WOODEN_FLUTE) {
+			dlev -= dlev0/5;
+			if (showmsg) msg = "%s seems to briefly swing with your music.";
+		}
+		// angels like the sound of harps
+		if ((mtmp->data->mlet == S_ANGEL) && (mtmp->malign >= A_COALIGNED)
+		    && (instr->otyp == WOODEN_HARP))
+			dlev -= dlev0/5;
+		// snakes (and nagas) also like music from flutes
+		if (((mtmp->data->mlet == S_SNAKE) || (mtmp->data->mlet == S_NAGA))
+		    && (instr->otyp == WOODEN_FLUTE)) {
+			dlev -= dlev0/5;
+			if (showmsg) msg = "%s briefly dances with your music.";
+		}
+		// the Lyre of Orpheus is very good at peaceful music
+		if (instr->oartifact == ART_LYRE_OF_ORPHEUS)
+			alev += (P_SKILL(P_MUSICALIZE) - P_UNSKILLED) * 5;
+
+		// finally, music will do little effect on monsters if they're badly injured
+		if (mtmp->mhp < mtmp->mhpmax*0.6) {
+			dlev *= 2;
+			if (showmsg && !rn2(10)) msg = "%s is too hurt to listen to your song.";
+		}
+		if (mtmp->mhp < mtmp->mhpmax*0.3) {
+			dlev *= 5;
+			if (showmsg && !rn2(20)) 
+				msg = "%s cares more about surviving than listening to your music!";
+		}
+	
+	} else if (song == SNG_FEAR || song == SNG_CONFUSION) {
+		int canseeu;
+
+		// the Lyre isn't so good to scare people or to sow confusion
+		if (instr->oartifact == ART_LYRE_OF_ORPHEUS) alev /= 2;
+		// undeads and demons like scary music
+		if (song == SNG_FEAR && is_undead(mtmp->data)) dlev -= dlev0/3;
+		if (song == SNG_FEAR && is_demon(mtmp->data)) dlev -= dlev0/5;
+		// monster is scared/confused easily if it can't see you
+		canseeu = m_canseeu(mtmp);
+		if (!canseeu) dlev -= dlev0/5;
+		// but its harder to confuse it if it can see you
+		if (song == SNG_CONFUSION && canseeu) dlev += dlev0/5;
+
+	} else if (song == SNG_COURAGE) {
+		/* when badly injured, it's easier to encourage others */
+		if (u.uhp < u.uhpmax * 0.6) alev *= 2;
+		if (u.uhp < u.uhpmax * 0.3) alev *= 3;
+		/* hostile monsters are easily encouraged */
+		if (always_hostile(mtmp->data)) dlev -= dlev0/5;
+		if (race_hostile(mtmp->data)) dlev -= dlev0/5;
+		if (is_mercenary(mtmp->data)) dlev -= dlev0/5;
+	}
+
+    if (dlev < 1) dlev = is_mplayer(mtmp->data) ? u.ulevel : 1;
+    if (song_penalty) alev /= 2;
+
+    if (wizard)
+	    pline("[%s:%i/%i]", mon_nam(mtmp), alev, dlev);
+
+    if (alev >= dlev && msg != (void *)0)
+	    pline(msg, Monnam(mtmp));
+
+    return (alev - dlev);
+}
+
+
+
+
+STATIC_PTR int
+play_song()
+{
+	register struct monst *mtmp;
+	int distance;
+
+	distance = (P_SKILL(P_MUSICALIZE) - P_UNSKILLED + 1) * 9 + (u.ulevel/2);
+
+	/* songs only have effect after the 1st turn */
+	//if (song_delay <= songs[song_played].level+2) 
+	switch (song_being_played()) {
+		case SNG_SLEEP: 
+			sleep_song(distance);
+			break;
+		case SNG_CONFUSION:
+			confusion_song(distance);
+			break;
+		case SNG_SLOW:
+			slowness_song(distance);
+			break;
+		case SNG_FEAR:
+			scary_song(distance);
+			break;
+		case SNG_COURAGE:
+			encourage_pets(distance);
+			break;
+		case SNG_TAME:
+			tame_song(distance);
+			break;
+		}
+
+	song_delay--;
+	if (song_delay <= 0) {
+		reset_song();
+		use_skill(P_MUSICALIZE, 1);
+		exercise(A_DEX, TRUE);
+		/*if (songs[song_played].turns > 1)*/
+		You("finish the song.");
+		return 0;
+	}
+	return 1;
+}
+
+
+/* monster is affected by song if:
+   - not tamed; or
+   - if tamed, player's musicalize skill is only basic, AND tamed monster
+     isn't of any kind that sings with your song (considering peaceful
+	 songs only)
+   Rationale: a skilled musician must be able to, say, make enemies sleep but
+   not his/her pets, but a less skilled one will end up affecting pets too.
+*/
+#define mon_affected_by_peace_song(mtmp) \
+	(!mtmp->mtame || \
+	(mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_SKILLED) &&				\
+	 mtmp->data->mlet != S_NYMPH &&										\
+	 (mtmp->data < &mons[PM_ELF] || mtmp->data > &mons[PM_ELVENKING])))
+#define mon_affected_by_song(mtmp) \
+	(!mtmp->mtame || \
+	 (mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_SKILLED)))
+
+
+/** Fear song effects.
+ * Contributed by Johanna Ploog
+ */
+void
+scary_song(distance)
+int distance;
+{
+	register struct monst *mtmp, *m = fmon;
+	register int r;
+
+	while(m) {
+		mtmp = m;
+		m = m->nmon;
+		r = resist_song(mtmp, SNG_FEAR, song_instr);
+
+		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
+			mon_affected_by_song(mtmp) && r >= 0) {
+
+			if (is_undead(mtmp->data) || is_demon(mtmp->data)) {
+				// small chance of side effect
+				r = r/songs[song_being_played()].turns;
+				if (wizard) pline("[%i%% side effect]", r);
+			}
+	
+			/* fear song actually can pacify undead */
+			if (is_undead(mtmp->data)) {
+				if (rn2(100) < r) {
+					if (canseemon(mtmp))
+						pline((Hallucination ? "%s starts to coreograph a dance!" 
+						       : (mtmp->data->mlet == S_LICH ? 
+							  "%s makes a sinister grin in approval of your music."
+							  : "%s groans in the rhythm of your music.")),
+						      Monnam(mtmp));
+					mtmp->mpeaceful = 1;
+					mtmp->mavenge = 0;
+				} else {
+					if (canseemon(mtmp) && SNG_FIRST_TURN)
+						pline("%s stops to %s your music for a moment.", Monnam(mtmp),
+						      (Hallucination ? "smell" : "hear"));
+					mtmp->movement = 0;
+				}
+			} else if (is_demon(mtmp->data)) {
+				/* but angers demon lords */
+				if (is_dlord(mtmp->data) || is_dprince(mtmp->data)) {
+					pline("%s laughs fiendishly!", Monnam(mtmp));
+					verbalize("Thou playest thy own funeral march, weakling!");
+					mtmp->mpeaceful = 0;
+					mtmp->mavenge = 1;
+				} else if (rn2(100) < r) {
+					/* and can pacify normal demons */
+					if (canseemon(mtmp))
+						pline("%s makes a sinister grin in approval of your music.", Monnam(mtmp));
+					mtmp->mpeaceful = 1;
+					mtmp->mavenge = 0;
+				} else {
+					if (canseemon(mtmp) && SNG_FIRST_TURN)
+						pline("%s to %s your music for a moment.", Monnam(mtmp),
+						      (Hallucination ? "smell" : "hear"));
+					mtmp->movement = 0;
+				}
+			} else {
+				monflee(mtmp, 
+					min(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED) * 3, 
+					FALSE, TRUE);
+				if (mtmp->mpeaceful && rn2(10)) {
+					mtmp->mpeaceful = 0;
+				}
+			}
+			/*
+			  possible additions:
+			  + aggravate undeads
+			  + chance to unpacify peaceful (non-deaf) monsters
+			  (humans are not affected by this, they're used to worse... ;-) )
+			*/
+		}
+	}
+}
+
+
+STATIC_OVL void
+slowness_song(distance)
+int distance;
+{
+	register struct monst *mtmp = fmon;
+	register int distm;
+
+	while(mtmp) {
+		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
+			mon_affected_by_peace_song(mtmp) &&
+		    resist_song(mtmp, SNG_SLOW, song_instr) >= 0) {
+			switch (P_SKILL(P_MUSICALIZE)) {
+			case P_UNSKILLED:
+			case P_BASIC:
+				mtmp->movement -= (NORMAL_SPEED/2);
+				break;
+			case P_SKILLED:
+				mtmp->movement -= (NORMAL_SPEED*3/4);
+				break;
+			case P_EXPERT:
+				mtmp->movement -= (NORMAL_SPEED-1);
+				break;
+			}
+			//mtmp->movement -= NORMAL_SPEED / (5 - max(1,P_SKILL(P_MUSICALIZE)-P_UNSKILLED));
+			if (song_delay == songs[SNG_SLOW].turns && canseemon(mtmp))
+				pline("%s seems slower.", Monnam(mtmp));
+
+			if (u.uswallow && (mtmp == u.ustuck) &&
+			    is_whirly(mtmp->data)) {
+				You("disrupt %s!", mon_nam(mtmp));
+				pline("A huge hole opens up...");
+				expels(mtmp, mtmp->data, TRUE);
+			}
+		}
+	    mtmp = mtmp->nmon;
+	}
+}
+
+
+STATIC_OVL void
+encourage_pets(distance)
+int distance;
+{
+	register struct monst *mtmp = fmon;
+
+	while(mtmp) {
+		if (!DEADMONSTER(mtmp) && mtmp->mtame && distu(mtmp->mx, mtmp->my) < distance &&
+		    resist_song(mtmp, SNG_TAME, song_instr) >= 0) {
+			if (EDOG(mtmp)->encouraged < EDOG_ENCOURAGED_MAX)
+				EDOG(mtmp)->encouraged += (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) * 6;
+			if (mtmp->mflee)
+				switch (P_SKILL(P_MUSICALIZE)) {
+				case P_UNSKILLED:
+				case P_BASIC:
+					mtmp->mfleetim /= 2;
+					break;
+				case P_SKILLED:
+					mtmp->mfleetim /= 4;
+					break;
+				case P_EXPERT:
+					mtmp->mfleetim = 0;
+					break;
+				}
+			if (canseemon(mtmp))
+				if (Hallucination)
+					pline("%s looks %s!", Monnam(mtmp),
+					      EDOG(mtmp)->encouraged == EDOG_ENCOURAGED_MAX ? "way cool" :
+					      EDOG(mtmp)->encouraged > (EDOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
+				else
+					pline("%s looks %s!", Monnam(mtmp),
+					      EDOG(mtmp)->encouraged == EDOG_ENCOURAGED_MAX ? "berserk" :
+					      EDOG(mtmp)->encouraged > (EDOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
+		}
+		mtmp = mtmp->nmon;
+	}
+}
+
+STATIC_OVL void
+confusion_song(distance)
+int distance;
+{
+	register struct monst *mtmp = fmon;
+
+	while(mtmp) {
+		if (!DEADMONSTER(mtmp) && !mtmp->mtame && !mtmp->mconf &&
+		    distu(mtmp->mx, mtmp->my) < distance &&
+		    resist_song(mtmp, SNG_SLOW, song_instr) >= 0) {
+			if (canseemon(mtmp))
+				pline("%s seems confused.", Monnam(mtmp));
+			mtmp->mconf = 1;
+		}
+		mtmp = mtmp->nmon;
+	}
+}
+#endif  /* BARD */
+
 
 /*
  * Wake every monster in range...
@@ -95,6 +778,38 @@ int distance;
 /*
  * Make monsters fall asleep.  Note that they may resist the spell.
  */
+#ifdef BARD
+STATIC_OVL void
+sleep_song(distance)
+int distance;
+{
+	register struct monst *mtmp = fmon;
+// to do: peaceful music can aggravate demons
+
+	while(mtmp) {
+		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
+			mon_affected_by_peace_song(mtmp) &&
+		    resist_song(mtmp, SNG_SLEEP, song_instr) >= 0) {
+			/* pets, if affected, sleep less time */
+			mtmp->mfrozen = min( mtmp->mfrozen +
+					     max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)
+					     * (mtmp->mtame ? 2 : 3), 127);
+			if (wizard)
+				pline("[%s:%i turns]", mon_nam(mtmp), mtmp->mfrozen);
+			if (!mtmp->mcanmove) {
+				if (canseemon(mtmp) && flags.verbose && !rn2(10))
+					pline("%s moves while sleeping.", Monnam(mtmp));
+			} else {
+				mtmp->mcanmove = 0;
+				if (canseemon(mtmp) && flags.verbose)
+					pline("%s sleeps.", Monnam(mtmp));
+			}
+			slept_monst(mtmp);
+		}
+		mtmp = mtmp->nmon;
+	}
+}
+#endif /* BARD */
 
 STATIC_OVL void
 put_monsters_to_sleep(distance)
@@ -195,6 +910,50 @@ awaken_soldiers()
 /* Charm monsters in range.  Note that they may resist the spell.
  * If swallowed, range is reduced to 0.
  */
+#ifdef BARD
+STATIC_OVL void
+tame_song(distance)
+int distance;
+{
+	struct monst *mtmp, *mtmp2, *m, *m2;
+	xchar tame, waspeaceful;
+
+	if (u.uswallow) {
+		if (resist_song(u.ustuck, SNG_TAME, song_instr) >= 0) {
+			mtmp = tamedog(u.ustuck, (struct obj *) 0);
+			EDOG(mtmp)->friend = 1;
+		}
+	} else {
+		for (mtmp = fmon; mtmp; mtmp = mtmp2) {
+			mtmp2 = mtmp->nmon;
+			m = mtmp;
+			if (!DEADMONSTER(m) && distu(m->mx, m->my) <= distance &&
+			    resist_song(m, SNG_TAME, song_instr) >= 0) {
+				m->mflee = 0;
+				/* no other effect if monster was already tame by other means */
+				if (m->mtame && !(EDOG(m)->friend))
+					continue;
+				tame = m->mtame;
+				waspeaceful = m->mpeaceful;
+				if (!tame) {
+					m2 = tamedog(m, (struct obj *) 0);
+					if (m2) m = m2;
+					EDOG(m)->waspeaceful = waspeaceful;
+					if (canseemon(m) && flags.verbose && !m->msleeping)
+						pline("%s seems to like your song.", Monnam(m));
+				}
+				EDOG(m)->friend = 1;
+
+				/* tameness of song is temporary. uses tameness
+				 as timeout counter */
+				m->mtame = min(m->mtame
+					       + max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2,
+					       255);
+			}
+		}
+	}
+}
+#endif /* BARD */
 
 STATIC_OVL void
 charm_monsters(distance)
@@ -562,32 +1321,120 @@ struct obj *instr;
     char buf[BUFSZ], c = 'y';
     char *s;
     int x,y;
+    int a;
+    unsigned char song = SNG_NONE;
     boolean ok;
 
     if (Underwater) {
 	You_cant("play music underwater!");
 	return(0);
     }
-    if (instr->otyp != LEATHER_DRUM && instr->otyp != DRUM_OF_EARTHQUAKE) {
-	c = yn("Improvise?");
+#ifdef BARD
+    if (nohands(youmonst.data)) {
+	You("have no hands!");
+	return 0;
     }
-    if (c == 'n') {
-	if (u.uevent.uheard_tune == 2 && yn("Play the passtune?") == 'y') {
-	    Strcpy(buf, tune);
-	} else {
-	    getlin("What tune are you playing? [5 notes, A-G]", buf);
-	    (void)mungspaces(buf);
-	    /* convert to uppercase and change any "H" to the expected "B" */
-	    for (s = buf; *s; s++) {
-#ifndef AMIGA
-		*s = highc(*s);
-#else
-		/* The AMIGA supports two octaves of notes */
-		if (*s == 'h') *s = 'b';
+    /*
+    if (uarms) {
+	You_cant("play music while wearing a shield!");
+      	return(0);
+    }
+    */
+    if (welded(uwep)) {
+	You("need free hands to play music!");
+	return(0);
+    }
+    /* also cursed gauntlets should mean your song will go bad */
+
+    /* Another possibility would be playing only scary music
+       while being thus affected. */
+    if (Confusion > 0 || Stunned || Hallucination) {
+	You_cant("play music while %s!", Confusion > 0 ? "confused" : 
+		 (Stunned ? "stunned" : "stoned"));
+	return 0;
+    }
+
+    if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM))
+	    You("can't play properly while wearing a shield.");
+    if (is_silent(youmonst.data))
+	    pline("While in this form, you can't sing along your songs.");
+    
+    if (!P_RESTRICTED(P_MUSICALIZE)) {
+	song = songs_menu(instr);
+	if (song == SNG_NONE)
+	    return 0;
+    } else {
 #endif
-		if (*s == 'H') *s = 'B';
-	    }
+    if (instr->otyp != LEATHER_DRUM && instr->otyp != DRUM_OF_EARTHQUAKE) {
+	    if (yn("Improvise?") == 'y') song = SNG_IMPROVISE;
+	    else if (u.uevent.uheard_tune == 2 && yn("Play the passtune?") == 'y')
+		song = SNG_PASSTUNE;
+	    else
+		song = SNG_NONE;
+    }
+#ifdef BARD
+    }
+#endif
+    
+    switch (song) {
+    case SNG_NONE:
+	return 0;
+	break;
+    case SNG_IMPROVISE:
+	return do_improvisation(instr);
+	break;
+    case SNG_NOTES:
+	getlin("What tune are you playing? [what 5 notes]", buf);
+	break;
+    case SNG_PASSTUNE:
+	    Strcpy(buf, tune);
+	break;
+    default:
+#ifdef BARD
+/*
+	a = songs[song].level * (Role_if(PM_BARD) ? 2 : 5);
+	if (a > u.uen) {
+	    You("don't have enough energy to play that song.");
+	    return 0;
 	}
+	u.uen -= a;
+	flags.botl = 1;
+*/
+	    if (rnd(100) > song_success(song, instr, 1)) {
+		    pline("What you produce is quite far from music...");
+		    return 1;
+	    }
+	
+	    song_played = song;
+	    song_instr = instr;
+	    song_delay = songs[song_played].turns;
+
+	song_penalty = (songs[song_played].instr1 == instr->otyp);
+	if (song_played == SNG_TAME && instr->oartifact == ART_LYRE_OF_ORPHEUS)
+		song_penalty = 0;
+
+	Sprintf(msgbuf, "playing %s", the(xname(instr)));
+	if (instr->oartifact == ART_LYRE_OF_ORPHEUS)
+		pline("%s the \"%s\" song!", Tobjnam(instr, "sing"), songs[song].name);
+	else
+		You("play the \"%s\" song...", songs[song].name);
+	set_occupation(play_song, msgbuf, 0);
+	return 0;
+#endif	/* BARD */
+    }
+    
+    (void)mungspaces(buf);
+    /* convert to uppercase and change any "H" to the expected "B" */
+    for (s = buf; *s; s++) {
+#ifndef AMIGA
+	*s = highc(*s);
+#else
+	/* The AMIGA supports two octaves of notes */
+	if (*s == 'h') *s = 'b';
+#endif
+	if (*s == 'H') *s = 'B';
+    }
+    
 	You("extract a strange sound from %s!", the(xname(instr)));
 #ifdef UNIX386MUSIC
 	/* if user is at the console, play through the console speaker */
@@ -688,8 +1535,6 @@ struct obj *instr;
 	  }
 	nomul(-1,"guessing at the passtune");
 	return 1;
-    } else
-	    return do_improvisation(instr);
 }
 
 #ifdef UNIX386MUSIC

@@ -63,14 +63,19 @@
 #define P_MATTER_SPELL      37
 #define P_FIRST_SPELL		P_ATTACK_SPELL
 #define P_LAST_SPELL		P_MATTER_SPELL
+#ifdef BARD
+#define P_MUSICALIZE		38	/* 'cast' spells as songs */
+#undef P_LAST_SPELL
+#define P_LAST_SPELL		P_MUSICALIZE
+#endif
 
 /* Other types of combat */
-#define P_BARE_HANDED_COMBAT	38
+#define P_BARE_HANDED_COMBAT	39
 #define P_MARTIAL_ARTS		P_BARE_HANDED_COMBAT	/* Role distinguishes */
-#define P_TWO_WEAPON_COMBAT	39	/* Finally implemented */
-#define P_BEAST_MASTERY	40	/* Finally implemented */
+#define P_TWO_WEAPON_COMBAT	40	/* Finally implemented */
+#define P_BEAST_MASTERY	41	/* Finally implemented */
 #ifdef STEED
-#define P_RIDING		41	/* How well you control your steed */
+#define P_RIDING		42	/* How well you control your steed */
 #define P_LAST_H_TO_H		P_RIDING
 #else
 #define P_LAST_H_TO_H		P_TWO_WEAPON_COMBAT
