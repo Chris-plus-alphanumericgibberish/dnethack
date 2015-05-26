@@ -1274,7 +1274,7 @@ register int after;
 	    can_tunnel = tunnels(ptr);
 	can_open = !(nohands(ptr) || verysmall(ptr));
 	can_unlock = ((can_open && (m_carrying(mtmp, SKELETON_KEY)||m_carrying(mtmp, UNIVERSAL_KEY))) ||
-		      mtmp->iswiz || is_rider(ptr));
+		      mtmp->iswiz || is_rider(ptr) || ptr==&mons[PM_DREAD_SERAPH]);
 	doorbuster = is_giant(ptr);
 	if(mtmp->wormno) goto not_special;
 	/* my dog gets special treatment */

@@ -851,7 +851,34 @@ asGuardian:
 	case MS_DREAD:{
 		struct monst *tmpm;
 		int ix, iy;
-		if(!(mtmp->mspec_used)){
+		if(!mtmp->mextra[0] < moves && (
+			mtmp->mhp < mtmp->mhpmax/4 || mtmp->mcrazed
+		)){
+			mtmp->mextra[0] = moves + rnz(350);
+			mtmp->mextra[1] = moves + 5;
+		}
+		if(mtmp->mextra[1]){
+			if(mtmp->mextra[1] < moves){
+				mtmp->mextra[1] = 0;
+				mtmp->mhp = mtmp->mhpmax;
+				mtmp->mspec_used = 0;
+				mtmp->mcan = 0;
+				mtmp->mflee = 0; mtmp->mfleetim = 0;
+				mtmp->mcrazed = 0; mtmp->mberserk = 0;
+				mtmp->mcansee = 1; mtmp->mblinded = 0;
+				mtmp->mcanmove = 1; mtmp->mfrozen = 0;
+				mtmp->mnotlaugh = 1; mtmp->mlaughing = 0;
+				mtmp->msleeping = 0;
+				mtmp->mstun = 0; mtmp->mconf = 0;
+				mtmp->mpeaceful = 0; mtmp->mtame = 0;
+				
+				u.ustdy = 54;
+				pline_msg = "ends its prayer.";
+			} else {
+				pline_msg = "prays, and the whispers fill the world.";
+			}
+		}
+		else if(!(mtmp->mspec_used)){
 			pline_msg = "sings, and the world ripples and trembles around you.";
 			mtmp->mspec_used = rnd(4);
 			switch(rnd(5)){
