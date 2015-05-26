@@ -157,10 +157,12 @@ struct engr {
 #define LAST_GODDESS	VER_TAS_SYMBOL
 
 #define EILISTRAEE_SYMBOL	38
-#define EDDER_SYMBOL		39
+#define LOST_HOUSE			39
+#define EDDER_SYMBOL		40
 
 
-#define LAST_DROW_SYM		EDDER_SYMBOL
+#define LAST_DROW_SYM		LOST_HOUSE
+
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 

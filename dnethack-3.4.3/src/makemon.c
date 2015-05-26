@@ -2784,6 +2784,8 @@ register int	mmflags;
 				else curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_MINDLESS_THRALL] || ptr == &mons[PM_A_GONE] || ptr == &mons[PM_PEASANT]){
 				curhouse = PEN_A_SYMBOL;
+			} else if(ptr == &mons[PM_DOKKALFAR_ETERNAL_MATRIARCH]){
+				curhouse = LOST_HOUSE;
 			} else if(ptr == &mons[PM_ECLAVDRA] || ptr == &mons[PM_AVATAR_OF_LOLTH]){
 				curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_DROW_MATRON_MOTHER]){
@@ -2947,6 +2949,11 @@ register int	mmflags;
 			if(anymon){
 				if (mndx == PM_DROW_MATRON){
 					m_initlgrp(makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+				} else if (mndx == PM_DOKKALFAR_ETERNAL_MATRIARCH){
+					m_initsgrp(makemon(&mons[PM_DROW_MATRON], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+					m_initlgrp(makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+					m_initlgrp(makemon(&mons[PM_DROW_MUMMY], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+					m_initlgrp(makemon(&mons[PM_DROW_ZOMBIE], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
 				} else if (mndx == PM_ELVENKING){
 					int num = 0;
 					num = rnd(2);

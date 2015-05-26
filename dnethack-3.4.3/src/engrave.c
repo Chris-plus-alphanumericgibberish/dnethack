@@ -586,8 +586,11 @@ const char * haluWard[] =  {
 	/* Special behavior, Eilistraee holy symbol */
 	"a pair of dancing silver drow",
 	
+	/* eternal matriarch symbol */
+	"a crest of a lost house of Svartalfheim",
+
 	/* Eddergud holy symbol */
-	"an obsidian spiderweb",
+	"an obsidian spiderweb",	
 	
 	/* Not quite */
 	"a heptagenarian",
@@ -5248,6 +5251,7 @@ int f1,f2;
 	} else if(f1 == XAXOX){
 		return (f2 == EDDER_SYMBOL);
 	}
+	else return FALSE;
 }
 
 #endif /* OVLB */
