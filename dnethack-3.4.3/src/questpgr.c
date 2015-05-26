@@ -889,7 +889,7 @@ law_montype()
 			if(chance <= 5) return !(mvitals[PM_DWARF].mvflags & G_GENOD) ? &mons[PM_DWARF] : mkclass(S_HUMANOID, 0);
 			else if(chance <= 9) return !(mvitals[PM_DWARF_LORD].mvflags & G_GENOD) ? &mons[PM_DWARF_LORD] : mkclass(S_HUMANOID, 0);
 		}
-		else{
+		else if(chance <= 99){
 			chance = d(1,31);
 			if(chance == 1){
 				return &mons[PM_QUINON];
@@ -906,6 +906,8 @@ law_montype()
 			else{
 				return &mons[PM_MONOTON];
 			}
+		} else {
+			return &mons[PM_ARCADIAN_AVENGER];
 		}
 	}
 	else if(on_level(&arcadia2_level,&u.uz)){
@@ -924,10 +926,12 @@ law_montype()
 			if(chance <= 5) return !(mvitals[PM_DWARF].mvflags & G_GENOD) ? &mons[PM_DWARF] : mkclass(S_HUMANOID, 0);
 			else if(chance <= 9) return !(mvitals[PM_DWARF_LORD].mvflags & G_GENOD) ? &mons[PM_DWARF_LORD] : mkclass(S_HUMANOID, 0);
 		}
-		else{
+		else if(chance <= 98){
 			chance = d(1,6);
 			if(chance <= 5) return !(mvitals[PM_SOLDIER].mvflags & G_GENOD) ? &mons[PM_SOLDIER] : mkclass(S_HUMAN, 0);
 			else return !(mvitals[PM_SERGEANT].mvflags & G_GENOD) ? &mons[PM_SERGEANT] : mkclass(S_HUMAN, 0);
+		} else {
+			return &mons[PM_ARCADIAN_AVENGER];
 		}
 	}
 	else if(on_level(&arcadia3_level,&u.uz)){
@@ -941,10 +945,12 @@ law_montype()
 		else if(chance <= 70){
 			return !(mvitals[PM_GIANT_ANT].mvflags & G_GENOD) ? &mons[PM_GIANT_ANT] : mkclass(S_ANT, 0);
 		}
-		else{
+		else if(chance <= 90){
 			chance = d(1,6);
 			if(chance <= 5) return !(mvitals[PM_SOLDIER].mvflags & G_GENOD) ? &mons[PM_SOLDIER] : mkclass(S_HUMAN, 0);
 			else return !(mvitals[PM_SERGEANT].mvflags & G_GENOD) ? &mons[PM_SERGEANT] : mkclass(S_HUMAN, 0);
+		} else {
+			return &mons[PM_ARCADIAN_AVENGER];
 		}
 	}
 	else if(on_level(&arcward_level,&u.uz) || on_level(&arcfort_level,&u.uz)){
@@ -955,10 +961,12 @@ law_montype()
 		else if(chance <= 50){
 			return !(mvitals[PM_SOLDIER_ANT].mvflags & G_GENOD) ? &mons[PM_SOLDIER_ANT] : mkclass(S_ANT, 0);
 		}
-		else{
+		else if(chance <= 80){
 			chance = d(1,6);
 			if(chance <= 5) return !(mvitals[PM_SOLDIER].mvflags & G_GENOD) ? &mons[PM_SOLDIER] : mkclass(S_HUMAN, 0);
 			else return !(mvitals[PM_SERGEANT].mvflags & G_GENOD) ? &mons[PM_SERGEANT] : mkclass(S_HUMAN, 0);
+		} else {
+			return &mons[PM_ARCADIAN_AVENGER];
 		}
 	} else if(mvitals[PM_OONA].died == 0){
 		if(u.oonaenergy == AD_FIRE){
