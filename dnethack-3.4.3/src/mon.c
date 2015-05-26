@@ -2672,6 +2672,7 @@ boolean was_swallowed;			/* digestion */
 		   || is_rider(mdat)
 		   || mdat == &mons[PM_SEYLL_AUZKOVYN]
 		   || mdat == &mons[PM_DARUTH_XAXOX]
+		   || mdat == &mons[PM_ORION]
 //		   || mdat == &mons[PM_UNICORN_OF_AMBER]
 		   || mdat == &mons[PM_NIGHTMARE]
 //		   || mdat == &mons[PM_PINK_UNICORN]
