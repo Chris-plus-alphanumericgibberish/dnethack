@@ -834,7 +834,7 @@ asGuardian:
 	    break;
 	case MS_JUBJUB:{
 		struct monst *tmpm;
-		if(!(mtmp->mspec_used)){
+		if(!(mtmp->mspec_used || mtmp->mcan)){
 			pline_msg = "screams high and shrill.";
 			mtmp->mspec_used = 10;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
