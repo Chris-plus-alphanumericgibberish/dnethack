@@ -1957,6 +1957,12 @@ E const char *FDECL(Hello, (struct monst *));
 E const char *NDECL(Goodbye);
 E char *FDECL(build_plselection_prompt, (char *, int, int, int, int, int));
 E char *FDECL(root_plselection_prompt, (char *, int, int, int, int, int));
+E const char *NDECL(getDnDElfLgod);
+E const char *NDECL(getDnDElfNgod);
+E const char *NDECL(getDnDElfCgod);
+E const char *NDECL(getDnDHumLgod);
+E const char *NDECL(getDnDHumNgod);
+E const char *NDECL(getDnDHumCgod);
 
 /* ### rumors.c ### */
 

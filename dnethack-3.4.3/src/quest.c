@@ -104,7 +104,8 @@ ok_to_quest()
 STATIC_OVL boolean
 not_capable()
 {
-	return((boolean)(u.ulevel < MIN_QUEST_LEVEL));
+	if(Pantheon_if(PM_GNOME)) return((boolean)(u.ulevel < GNOMISH_MIN_QUEST_LEVEL));
+	else return((boolean)(u.ulevel < MIN_QUEST_LEVEL));
 }
 
 STATIC_OVL int

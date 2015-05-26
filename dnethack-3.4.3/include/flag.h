@@ -160,6 +160,7 @@ struct flag {
 	int	 initalign;	/* starting alignment (index into aligns[])  */
 	int	 randomall;	/* randomly assign everything not specified */
 	int	 pantheon;	/* deity selection for priest character */
+	int	 racial_pantheon;	/* racial deity selection */
 	int	 panLgod;	/* deity selection for binder character */
 	int	 panNgod;	/* deity selection for binder character */
 	int	 panCgod;	/* deity selection for binder character */

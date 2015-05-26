@@ -5736,6 +5736,7 @@ artifact_light(obj)
     return	(get_artifact(obj) && 
 				(obj->oartifact == ART_SUNSWORD ||
 				 obj->oartifact == ART_SOL_VALTIVA ||
+				 // obj->oartifact == ART_VEIL_OF_LATONA ||
 				 (obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_JACK) ||
 				 (obj->oartifact >= ART_ARCOR_KERYM &&
 				  obj->oartifact <= ART_ARYVELAHR_KERYM) ||

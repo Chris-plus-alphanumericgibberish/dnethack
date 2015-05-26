@@ -42,6 +42,7 @@ struct q_score {			/* Quest "scorecard" */
   /* note: align 20 matches "pious" as reported by enlightenment (cmd.c) */
 #endif
 #define MIN_QUEST_LEVEL 14	/* at least this u.ulevel to start */
+#define GNOMISH_MIN_QUEST_LEVEL 6	/* at least this u.ulevel to start */
   /* note: exp.lev. 14 is threshold level for 5th rank (class title, role.c) */
 
 #endif /* QUEST_H */

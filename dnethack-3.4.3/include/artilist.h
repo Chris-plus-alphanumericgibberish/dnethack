@@ -1001,6 +1001,36 @@ A("The Longbow of Diana", BOW,
 	CREATE_AMMO, A_CHAOTIC, PM_RANGER, NON_PM, 4000L, 
 	SPFX2_SILVERED,0,0), /*silver is the moon's metal... but bows don't enter this code...*/
 
+A("The Rogue Gear-spirits", BOW,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_REFLECT|SPFX_SPEAK), SPFX_ESP, 0,
+	PHYS(5,0),	NO_DFNS,	NO_CARY,
+	0, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
+	0,0,0),
+
+A("The Moonbow of Sehanine", ELVEN_BOW,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(5,0),	NO_DFNS,	NO_CARY,
+	CREATE_AMMO, A_CHAOTIC, PM_RANGER, PM_ELF, 4000L, 
+	SPFX2_SILVERED,0,0), /*silver is the moon's metal... but bows don't enter this code...*/
+
+A("The Spellsword of Corellon", ELVEN_BROADSWORD,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(1,10),	NO_DFNS,	NO_CARY,
+	0, A_CHAOTIC, NON_PM, PM_ELF, 4000L, 
+	0,0,0),
+
+A("The Warhammer of Vandria", WAR_HAMMER,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
+	PHYS(5,0),	NO_DFNS,	NO_CARY,
+	0, A_CHAOTIC, NON_PM, PM_ELF, 4000L, 
+	0,0,0),
+
+A("The Shield of Saint Cuthbert", SHIELD_OF_REFLECTION,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_HSPDAM|SPFX_HPHDAM), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0, A_LAWFUL, NON_PM, NON_PM, 4000L, 
+	0,0,0),
+
 A("The Palantir of Westernesse",	CRYSTAL_BALL,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),
 		(SPFX_WARN|SPFX_ESP|SPFX_REFLECT|SPFX_XRAY), 0,

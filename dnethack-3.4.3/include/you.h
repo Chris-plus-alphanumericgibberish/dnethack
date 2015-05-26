@@ -150,7 +150,7 @@ struct Role {
 extern const struct Role roles[];	/* table of available roles */
 extern struct Role urole;
 #define Role_if(X)	(urole.malenum == (X))
-#define Pantheon_if(X)	(roles[flags.pantheon].malenum == (X))
+#define Pantheon_if(X)	(flags.racial_pantheon != 0 ? flags.racial_pantheon == (X) : roles[flags.pantheon].malenum == (X))
 #define Role_switch	(urole.malenum)
 
 /* used during initialization for race, gender, and alignment

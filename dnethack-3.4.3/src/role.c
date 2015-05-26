@@ -635,6 +635,22 @@ const char *DwarfLgod = "Mahal",
 		   *DwarfNgod = "Holashner",
 		   *DwarfCgod = "Armok"; /* Dwarven */
 
+const char *GnomeLgod = "Kurtulmak",
+		   *GnomeNgod = "Garl Glittergold",
+		   *GnomeCgod = "Urdlen"; /* Gnomish */
+
+const char *OrcLgod = "Ilneval",
+		   *OrcNgod = "_Luthic",
+		   *OrcCgod = "Gruumsh"; /* Orcish */
+
+const char *DnDElfLgod = "_Vandria",
+		   *DnDElfNgod = "Corellon",
+		   *DnDElfCgod = "_Sehanine"; /* DnD elf pantheon */
+
+const char *DnDHumLgod = "Saint Cuthbert",
+		   *DnDHumNgod = "Helm",
+		   *DnDHumCgod = "_Mask"; /* DnD human pantheon */
+
 /* The player's role, created at runtime from initial
  * choices.  This may be munged in role_init().
  */
@@ -1815,6 +1831,7 @@ role_init()
 			mons[roles[flags.panCgod].guardnum].msound = MS_CUSS;
 		}
 	} else if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_NOBLEMAN))){
+		flags.racial_pantheon = PM_DROW;
 		urole.rank[0] = DrowRanks[0];
 		urole.rank[1] = DrowRanks[1];
 		urole.rank[2] = DrowRanks[2];
@@ -1948,7 +1965,8 @@ role_init()
 				}
 			}
 		}
-	} else if(Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_NOBLEMAN))){
+	} else if((Race_if(PM_ELF) || Pantheon_if(PM_ELF)) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_NOBLEMAN))){
+		flags.racial_pantheon = PM_ELF;
 		urole.filecode = "Elf";
 		
 		if(Role_if(PM_RANGER)){
@@ -1983,6 +2001,7 @@ role_init()
 		urole.enemy1sym = S_SPIDER;
 		urole.enemy2sym = S_TROLL;
 	}  else if(Race_if(PM_ELF) && Role_if(PM_PRIEST)){
+		flags.racial_pantheon = PM_ELF;
 		urole.filecode = "Elf";
 		
 		urole.homebase = "Caras Galadhon";
@@ -2006,7 +2025,8 @@ role_init()
 		urole.enemy2num = PM_ORC_SHAMAN;
 		urole.enemy1sym = S_SPIDER;
 		urole.enemy2sym = S_TROLL;
-	} else if(Race_if(PM_DWARF) && (Role_if(PM_NOBLEMAN) || Role_if(PM_KNIGHT))){
+	} else if((Race_if(PM_DWARF) || Pantheon_if(PM_DWARF)) && (Role_if(PM_NOBLEMAN) || Role_if(PM_KNIGHT))){
+		flags.racial_pantheon = PM_DWARF;
 		// if(flags.questvar == 0){
 			// // pline("picking dwarf quest");
 			// flags.questvar = rnd(2);
@@ -2051,6 +2071,46 @@ role_init()
 		urole.enemy2num = PM_ORC_SHAMAN;
 		urole.enemy1sym = S_TROLL;
 		urole.enemy2sym = S_ORC;
+	} else if ((Race_if(PM_GNOME) || Pantheon_if(PM_GNOME)) && (Role_if(PM_RANGER)) ) {
+		flags.racial_pantheon = PM_GNOME;
+		urole.filecode = "Rgn";
+		
+		urole.homebase = "the Golden Halls";
+		urole.intermed = "Caverns of Kurtulmak";
+		urole.questarti = ART_ROGUE_GEAR_SPIRITS;
+		
+		urole.ldrnum = PM_DAMAGED_ARCADIAN_AVENGER;
+		urole.guardnum = PM_GNOME_COMRADE;
+		urole.neminum = PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK;
+		
+		urole.lgod = GnomeLgod;
+		urole.ngod = GnomeNgod;
+		urole.cgod = GnomeCgod;
+		
+		urole.enemy1num = PM_KOBOLD;
+		urole.enemy2num = PM_LARGE_KOBOLD;
+		urole.enemy1sym = S_IMP;
+		urole.enemy2sym = S_KOBOLD;
+	} else if ((Race_if(PM_ORC) || Pantheon_if(PM_ORC)) && (Role_if(PM_RANGER)) ) {
+		flags.racial_pantheon = PM_ORC;
+		urole.filecode = "Ror";
+		
+		urole.homebase = "";
+		urole.intermed = "";
+		urole.questarti = 0;/*Determined by first loot you obtain*/
+		
+		urole.ldrnum = PM_ORC_WARCHIEF;
+		urole.guardnum = PM_ORC_WARRIOR;
+		urole.neminum = 0;/*Determined by first loot you obtain*/
+		
+		urole.lgod = OrcLgod;
+		urole.ngod = OrcNgod;
+		urole.cgod = OrcCgod;
+		
+		urole.enemy1num = PM_WOLF;
+		urole.enemy2num = PM_MASTODON;
+		urole.enemy1sym = S_QUADRUPED;
+		urole.enemy2sym = S_ANGEL;
 	} else if (!urole.lgod) {
 	    urole.lgod = roles[flags.pantheon].lgod;
 	    urole.ngod = roles[flags.pantheon].ngod;
@@ -2165,4 +2225,38 @@ Goodbye()
 	}
 }
 
+const char *
+getDnDElfLgod()
+{
+	return DnDElfLgod;
+}
+
+const char *
+getDnDElfNgod()
+{
+	return DnDElfNgod;
+}
+
+const char *
+getDnDElfCgod()
+{
+	return DnDElfCgod;
+}
+const char *
+getDnDHumLgod()
+{
+	return DnDHumLgod;
+}
+
+const char *
+getDnDHumNgod()
+{
+	return DnDHumNgod;
+}
+
+const char *
+getDnDHumCgod()
+{
+	return DnDHumCgod;
+}
 /* role.c */

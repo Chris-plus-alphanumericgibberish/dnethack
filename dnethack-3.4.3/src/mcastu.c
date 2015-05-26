@@ -525,6 +525,8 @@ unsigned int type;
 	
 	//100% favored spells
 	switch(monsndx(mtmp->data)) {
+	case PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK:
+		return SUMMON_DEVIL; 
 	case PM_SHOGGOTH:
 		if(!rn2(20)) return SUMMON_MONS; 
 		else return 0;

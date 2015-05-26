@@ -5576,7 +5576,7 @@ are to enter %H.
 "%nC continues to threaten the grove.  But we hold fast."
 %E
 %Cp Ran 00007
-"%lC is growing weak.  The magic required to defend the grove drains us."
+"%lC is growing weak, and the defense of the grove has claimed many of our best."
 %E
 %Cp Ran 00008
 "Remember %i is hard to enter.  Beware the
@@ -5592,7 +5592,7 @@ distraction of leatherwings."
 "Birdsong has returned to the grove, surely this means you have defeated %n."
 %E
 %Cp Ran 00012
-"%lC seems to have regained some of his strength."
+"%lC seemed happier."
 %E
 %Cp Ran 00013
 "So, tell us how you entered %i, in case some new evil arises there."
