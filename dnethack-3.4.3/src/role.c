@@ -2016,7 +2016,7 @@ role_init()
 			urole.lgod = ElfPriestessLgod;
 			urole.ngod = ElfPriestessNgod;
 			urole.cgod = ElfPriestessCgod;
-		} else{
+		} else {
 			urole.lgod = ElfPriestLgod;
 			urole.ngod = ElfPriestNgod;
 			urole.cgod = ElfPriestCgod;
@@ -2071,46 +2071,46 @@ role_init()
 		urole.enemy2num = PM_ORC_SHAMAN;
 		urole.enemy1sym = S_TROLL;
 		urole.enemy2sym = S_ORC;
-	} else if ((Race_if(PM_GNOME) || Pantheon_if(PM_GNOME)) && (Role_if(PM_RANGER)) ) {
-		flags.racial_pantheon = PM_GNOME;
-		urole.filecode = "Rgn";
+	// } else if ((Race_if(PM_GNOME) || Pantheon_if(PM_GNOME)) && (Role_if(PM_RANGER)) ) {
+		// flags.racial_pantheon = PM_GNOME;
+		// urole.filecode = "Rgn";
 		
-		urole.homebase = "the Golden Halls";
-		urole.intermed = "Caverns of Kurtulmak";
-		urole.questarti = ART_ROGUE_GEAR_SPIRITS;
+		// urole.homebase = "the Golden Halls";
+		// urole.intermed = "Caverns of Kurtulmak";
+		// urole.questarti = ART_ROGUE_GEAR_SPIRITS;
 		
-		urole.ldrnum = PM_DAMAGED_ARCADIAN_AVENGER;
-		urole.guardnum = PM_GNOME_COMRADE;
-		urole.neminum = PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK;
+		// urole.ldrnum = PM_DAMAGED_ARCADIAN_AVENGER;
+		// urole.guardnum = PM_GNOME_COMRADE;
+		// urole.neminum = PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK;
 		
-		urole.lgod = GnomeLgod;
-		urole.ngod = GnomeNgod;
-		urole.cgod = GnomeCgod;
+		// urole.lgod = GnomeLgod;
+		// urole.ngod = GnomeNgod;
+		// urole.cgod = GnomeCgod;
 		
-		urole.enemy1num = PM_KOBOLD;
-		urole.enemy2num = PM_LARGE_KOBOLD;
-		urole.enemy1sym = S_IMP;
-		urole.enemy2sym = S_KOBOLD;
-	} else if ((Race_if(PM_ORC) || Pantheon_if(PM_ORC)) && (Role_if(PM_RANGER)) ) {
-		flags.racial_pantheon = PM_ORC;
-		urole.filecode = "Ror";
+		// urole.enemy1num = PM_KOBOLD;
+		// urole.enemy2num = PM_LARGE_KOBOLD;
+		// urole.enemy1sym = S_IMP;
+		// urole.enemy2sym = S_KOBOLD;
+	// } else if ((Race_if(PM_ORC) || Pantheon_if(PM_ORC)) && (Role_if(PM_RANGER)) ) {
+		// flags.racial_pantheon = PM_ORC;
+		// urole.filecode = "Ror";
 		
-		urole.homebase = "";
-		urole.intermed = "";
-		urole.questarti = 0;/*Determined by first loot you obtain*/
+		// urole.homebase = "";
+		// urole.intermed = "";
+		// urole.questarti = 0;/*Determined by first loot you obtain*/
 		
-		urole.ldrnum = PM_ORC_WARCHIEF;
-		urole.guardnum = PM_ORC_WARRIOR;
-		urole.neminum = 0;/*Determined by first loot you obtain*/
+		// urole.ldrnum = PM_ORC_WARCHIEF;
+		// urole.guardnum = PM_ORC_WARRIOR;
+		// urole.neminum = 0;/*Determined by first loot you obtain*/
 		
-		urole.lgod = OrcLgod;
-		urole.ngod = OrcNgod;
-		urole.cgod = OrcCgod;
+		// urole.lgod = OrcLgod;
+		// urole.ngod = OrcNgod;
+		// urole.cgod = OrcCgod;
 		
-		urole.enemy1num = PM_WOLF;
-		urole.enemy2num = PM_MASTODON;
-		urole.enemy1sym = S_QUADRUPED;
-		urole.enemy2sym = S_ANGEL;
+		// urole.enemy1num = PM_WOLF;
+		// urole.enemy2num = PM_MASTODON;
+		// urole.enemy1sym = S_QUADRUPED;
+		// urole.enemy2sym = S_ANGEL;
 	} else if (!urole.lgod) {
 	    urole.lgod = roles[flags.pantheon].lgod;
 	    urole.ngod = roles[flags.pantheon].ngod;
