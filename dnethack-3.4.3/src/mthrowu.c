@@ -197,8 +197,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	    if (vis) hit(distant_name(otmp,mshot_xname), mtmp, exclam(damage));
 	    else if (verbose) pline("%s is hit%s", Monnam(mtmp), exclam(damage));
 
-	    if (otmp->opoisoned && is_poisonable(otmp)) {
-			if(otmp->opoisoned & OPOISON_BASIC){
+	    if ((otmp->opoisoned && is_poisonable(otmp)) || arti_poisoned(otmp) || 
+			otmp->oartifact == ART_WEBWEAVER_S_CROOK || otmp->oartifact == ART_MOONBEAM
+		) {
+			if(otmp->opoisoned & OPOISON_BASIC || arti_poisoned(otmp)){
 				if (resists_poison(mtmp)) {
 					if (vis) pline_The("poison doesn't seem to affect %s.",
 						   mon_nam(mtmp));
@@ -212,7 +214,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 				}
 				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_BASIC;
 			}
-			if(otmp->opoisoned & OPOISON_FILTH){
+			if(otmp->opoisoned & OPOISON_FILTH || otmp->oartifact == ART_SUNBEAM){
 				if (resists_sickness(mtmp)) {
 					if (vis) pline_The("filth doesn't seem to affect %s.",
 						   mon_nam(mtmp));
@@ -226,8 +228,8 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 				}
 				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_FILTH;
 			}
-			if(otmp->opoisoned & OPOISON_SLEEP){
-				if (resists_poison(mtmp) || resists_sleep(mtmp) || rn2(10)) {
+			if(otmp->opoisoned & OPOISON_SLEEP || otmp->oartifact == ART_WEBWEAVER_S_CROOK || otmp->oartifact == ART_MOONBEAM){
+				if (resists_poison(mtmp) || resists_sleep(mtmp) || (otmp->oartifact != ART_MOONBEAM && rn2(10))){
 					if (vis) pline_The("drug doesn't seem to affect %s.",
 						   mon_nam(mtmp));
 				} else {
@@ -238,7 +240,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 				}
 				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_SLEEP;
 			}
-			if(otmp->opoisoned & OPOISON_BLIND){
+			if(otmp->opoisoned & OPOISON_BLIND || otmp->oartifact == ART_WEBWEAVER_S_CROOK){
 				if (resists_poison(mtmp)) {
 					if (vis) pline_The("poison doesn't seem to affect %s.",
 						   mon_nam(mtmp));
@@ -258,7 +260,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 				}
 				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_BLIND;
 			}
-			if(otmp->opoisoned & OPOISON_PARAL){
+			if(otmp->opoisoned & OPOISON_PARAL || otmp->oartifact == ART_WEBWEAVER_S_CROOK){
 				if (resists_poison(mtmp)) {
 					if (vis) pline_The("venom doesn't seem to affect %s.",
 						   mon_nam(mtmp));
