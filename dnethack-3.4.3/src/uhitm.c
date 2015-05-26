@@ -834,7 +834,7 @@ int thrown;
 					|| arti_silvered(uleft) 
 					|| (uleft->ohaluengr
 						&& (isEngrRing(uleft->otyp) || isSignetRing(uleft->otyp))
-						&& uleft->ovar1 >= LOLTH_SYMBOL && uleft->ovar1 <= EILISTRAEE_SYMBOL
+						&& uleft->ovar1 >= LOLTH_SYMBOL && uleft->ovar1 <= LOST_HOUSE
 					   )
 				)
 			) barehand_silver_rings++;
@@ -844,7 +844,7 @@ int thrown;
 					|| arti_silvered(uright)
 					|| (uright->ohaluengr
 						&& (isEngrRing(uright->otyp) || isSignetRing(uright->otyp))
-						&& uright->ovar1 >= LOLTH_SYMBOL && uright->ovar1 <= EILISTRAEE_SYMBOL
+						&& uright->ovar1 >= LOLTH_SYMBOL && uright->ovar1 <= LOST_HOUSE
 					   )
 				)
 			) barehand_silver_rings++;
@@ -1029,7 +1029,6 @@ int thrown;
 				tmp = 0;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
 			else tmp = rnd(2);
-			
 			
 		    // if (tmp && obj->oartifact &&
 				// artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
@@ -1490,6 +1489,9 @@ defaultvalue:
 	    }
 	}
 
+	if(resist_attacks(mdat))
+		tmp = 0;
+	
 	/****** NOTE: perhaps obj is undefined!! (if !thrown && BOOMERANG)
 	 *      *OR* if attacking bare-handed!! */
 
@@ -1614,15 +1616,15 @@ defaultvalue:
 	       in inadvertently boosting the victim's hit points */
 	    tmp = 0;
 	    if (mdat->mlet == S_SHADE) {
-		if (!hittxt) {
-		    const char *what = unconventional[0] ? unconventional : "attack";
-		    Your("%s %s harmlessly through %s.",
-		    	what, vtense(what, "pass"),
-			mon_nam(mon));
-		    hittxt = TRUE;
-		}
+			if (!hittxt) {
+				const char *what = unconventional[0] ? unconventional : "attack";
+				Your("%s %s harmlessly through %s.",
+					what, vtense(what, "pass"),
+				mon_nam(mon));
+				hittxt = TRUE;
+			}
 	    } else {
-		if (get_dmg_bonus) tmp = 1;
+			if (get_dmg_bonus) tmp = 1;
 	    }
 	}
 
