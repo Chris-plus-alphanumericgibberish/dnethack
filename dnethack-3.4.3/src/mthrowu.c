@@ -756,8 +756,13 @@ struct monst *mtmp;
         register int gx = STRAT_GOALX(mtmp->mstrategy),
                      gy = STRAT_GOALY(mtmp->mstrategy);
         register struct monst *mtmp2 = m_at(gx, gy);
-	if (mtmp2 && mlined_up(mtmp, mtmp2, FALSE))
-	{
+	if (mtmp2 && 
+		(mlined_up(mtmp, mtmp2, FALSE) ||
+			attacktype(mtmp->data, AT_GAZE) ||
+			attacktype(mtmp->data, AT_LRCH) ||
+			attacktype(mtmp->data, AT_LNCK)
+		)
+	){
 	    return mtmp2;
 	}
 	
@@ -769,10 +774,14 @@ struct monst *mtmp;
 #endif
     	if (!mtmp->mpeaceful && !conflicted &&
 	   ((mtmp->mstrategy & STRAT_STRATMASK) == STRAT_NONE) &&
-	    lined_up(mtmp)) {
+	    (lined_up(mtmp) ||
+			attacktype(mtmp->data, AT_GAZE) ||
+			attacktype(mtmp->data, AT_LRCH) ||
+			attacktype(mtmp->data, AT_LNCK) )
+		) {
         	return &youmonst;  /* kludge - attack the player first
 				      if possible */
-	}
+		}
 
 	for (dir = 0; dir < 8; dir++)
 		if (dirx[dir] == sgn(gx-mtmp->mx) &&
@@ -787,12 +796,12 @@ struct monst *mtmp;
 	origdir = -1;
     } else {
     	dir = rn2(8);
-	origdir = -1;
+		origdir = -1;
 
     	if (!mtmp->mpeaceful && !conflicted && lined_up(mtmp)) {
         	return &youmonst;  /* kludge - attack the player first
 				      if possible */
-	}
+		}
     }
 
     for (; dir != origdir; dir = ((dir + 1) % 8))
