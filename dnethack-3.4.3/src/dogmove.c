@@ -780,8 +780,7 @@ boolean ranged;
 		(mtmp2->data == &mons[PM_MANDRAKE]) ||
 		(!ranged &&
 		 max_passive_dmg(mtmp2, mtmp) >= mtmp->mhp) ||
-		((mtmp->mhp*4 < mtmp->mhpmax
-		  || mtmp2->data == &mons[urole.guardnum]
+		((   mtmp2->data == &mons[urole.guardnum]
 		  || mtmp2->data == &mons[urole.ldrnum]
 		  || (Role_if(PM_NOBLEMAN) && (mtmp->data == &mons[PM_KNIGHT] || mtmp->data == &mons[PM_MAID] || mtmp->data == &mons[PM_PEASANT]) && mtmp->mpeaceful)
 		  || (Race_if(PM_DROW) && (mtmp->data == &mons[PM_GROMPH] || mtmp->data == &mons[PM_DANTRAG]) && mtmp->mpeaceful)
@@ -966,9 +965,12 @@ register int after;	/* this is extra fast monster movement */
 	}
 	else
 	if (( attacktype(mtmp->data, AT_BREA) ||
+	      attacktype(mtmp->data, AT_BEAM) ||
 	      attacktype(mtmp->data, AT_GAZE) ||
 	      attacktype(mtmp->data, AT_SPIT) ||
 	      attacktype(mtmp->data, AT_ARRW) ||
+	      attacktype(mtmp->data, AT_LRCH) ||
+	      attacktype(mtmp->data, AT_LNCK) ||
 	      attacktype(mtmp->data, AT_TNKR) ||
 	     ( (attacktype(mtmp->data, AT_MAGC) &&
 			(attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp <= AD_SPC2
