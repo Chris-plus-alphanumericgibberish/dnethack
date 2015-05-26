@@ -221,6 +221,10 @@ BDFILES1= $(SLIB)Bar-fila.lev $(SLIB)Bar-filb.lev $(SLIB)Bar-loca.lev \
 	$(SLIB)Bar-strt.lev
 BDFILES= $(SLIB)Bar-goal.lev $(BDFILES1)
 
+BARDFILES1= $(SLIB)Brd-fila.lev $(SLIB)Brd-filb.lev $(SLIB)Brd-loca.lev \
+	$(SLIB)Brd-strt.lev
+BARDFILES= $(SLIB)Brd-goal.lev $(BARDFILES1)
+
 CDFILES1= $(SLIB)Cav-fila.lev $(SLIB)Cav-filb.lev $(SLIB)Cav-loca.lev \
 	$(SLIB)Cav-strt.lev
 CDFILES= $(SLIB)Cav-goal.lev $(CDFILES1)
@@ -265,7 +269,7 @@ WDFILES1= $(SLIB)Wiz-fila.lev $(SLIB)Wiz-filb.lev $(SLIB)Wiz-loca.lev \
 	$(SLIB)Wiz-strt.lev
 WDFILES= $(SLIB)Wiz-goal.lev $(WDFILES1)
 
-XDFILES=	$(ADFILES) $(BDFILES) $(CDFILES) $(HDFILES) $(KDFILES) \
+XDFILES=	$(ADFILES) $(BDFILES) $(BARDFILES) $(CDFILES) $(HDFILES) $(KDFILES) \
 		$(MDFILES) $(PDFILES) $(RDFILES) $(RANFILES) $(SDFILES) $(TDFILES) \
 		$(VDFILES) $(WDFILES)
 
@@ -399,6 +403,7 @@ spotless:  clean
 #	-delete $(SLIB)soko4-1.lev $(SLIB)soko4-2.lev
 #	-delete $(ADFILES)
 #	-delete $(BDFILES)
+#	-delete $(BARDFILES)
 #	-delete $(CDFILES)
 #	-delete $(HDFILES)
 #	-delete $(KDFILES)
@@ -835,6 +840,10 @@ $(SLIB)Arc-goal.lev:	$(DAT)Arch.des $(SBIN)lev_comp
 $(BDFILES1):	$(SLIB)Bar-goal.lev
 
 $(SLIB)Bar-goal.lev:	$(DAT)Barb.des $(SBIN)lev_comp
+
+$(BARDFILES1):	$(SLIB)Brd-goal.lev
+
+$(SLIB)Brd-goal.lev:	$(DAT)Bard.des $(SBIN)lev_comp
 
 $(CDFILES1):	$(SLIB)Cav-goal.lev
 

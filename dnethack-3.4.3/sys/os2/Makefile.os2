@@ -529,6 +529,7 @@ SPEC_LEVS = \
 QUEST_LEVS = \
  Arc-goal.lev Arc-fila.lev Arc-filb.lev Arc-loca.lev Arc-strt.lev \
  Bar-goal.lev Bar-fila.lev Bar-filb.lev Bar-loca.lev Bar-strt.lev \
+ Brd-goal.lev Brd-fila.lev Brd-filb.lev Brd-loca.lev Brd-strt.lev \
  Cav-goal.lev Cav-fila.lev Cav-filb.lev Cav-loca.lev Cav-strt.lev \
  Hea-goal.lev Hea-fila.lev Hea-filb.lev Hea-loca.lev Hea-strt.lev \
  Kni-goal.lev Kni-fila.lev Kni-filb.lev Kni-loca.lev Kni-strt.lev \
@@ -1276,6 +1277,7 @@ $(GAMEDIR)\dungeon : $(DAT)\dungeon.def $(TEMP)\makedefs.exe $(TEMP)\dgn_comp.ex
 
 AFILES = $(GAMEDIR)\Arc-goal.lev
 BFILES = $(GAMEDIR)\Bar-goal.lev
+BARDFILES = $(GAMEDIR)\Brd-goal.lev
 CFILES = $(GAMEDIR)\Cav-goal.lev
 HFILES = $(GAMEDIR)\Hea-goal.lev
 KFILES = $(GAMEDIR)\Kni-goal.lev
@@ -1288,7 +1290,7 @@ TFILES = $(GAMEDIR)\Tou-goal.lev
 VFILES = $(GAMEDIR)\Val-goal.lev
 WFILES = $(GAMEDIR)\Wiz-goal.lev
 
-XFILES = $(AFILES) $(BFILES) $(CFILES) $(HFILES) $(KFILES) $(MFILES) \
+XFILES = $(AFILES) $(BFILES) $(BARDFILES) $(CFILES) $(HFILES) $(KFILES) $(MFILES) \
 	 $(PFILES) $(RANFILES) $(RFILES) $(SFILES) $(TFILES) $(VFILES) $(WFILES)
 
 spec_lev : $(GAMEDIR)\astral.lev $(GAMEDIR)\bigrm-1.lev $(GAMEDIR)\castle.lev \
@@ -1383,6 +1385,8 @@ $(AFILES) : $(DAT)\Arch.des $(TEMP)\lev_comp.exe
 	$(MAKEB) QQ=Arc QF=Arch do_quest
 $(BFILES) : $(DAT)\Barb.des $(TEMP)\lev_comp.exe
 	$(MAKEB) QQ=Bar QF=Barb do_quest
+$(BARDFILES) : $(DAT)\Bard.des $(TEMP)\lev_comp.exe
+	$(MAKEB) QQ=Brd QF=Bard do_quest
 $(CFILES) : $(DAT)\Caveman.des $(TEMP)\lev_comp.exe
 	$(MAKEB) QQ=Cav QF=Caveman do_quest
 $(HFILES) : $(DAT)\Healer.des $(TEMP)\lev_comp.exe
