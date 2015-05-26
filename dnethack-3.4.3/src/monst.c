@@ -1568,6 +1568,15 @@ then fill new spaces with our spawn!’
 /*
  * Angels and other lawful minions
  */
+    MON("arcadian avenger", S_ANGEL,//11
+	LVL(6, 12, 1, 0, 5), (G_SGROUP|G_NOCORPSE|G_NOGEN),
+	A(ATTK(AT_WEAP, AD_PHYS, 1, 6), ATTK(AT_WEAP, AD_PHYS, 1, 6),
+	  ATTK(AT_HUGS, AD_PHYS, 2, 6), ATTK(AT_GAZE, AD_STDY, 2, 6),
+	  NO_ATTK, NO_ATTK),
+	SIZ(WT_HUMAN, 0, 0, MS_SILENT, MZ_HUMAN), MR_POISON, 0,
+	M1_HUMANOID|M1_FLY,
+	M2_FEMALE|M2_MINION|M2_STALK|M2_STRONG|M2_NASTY, M3_INFRAVISION,
+	CLR_BRIGHT_CYAN),
     MON("couatl", S_ANGEL,//11
 	LVL(8, 10, 5, 30, 7), (G_NOHELL|G_SGROUP|G_NOCORPSE|1),
 	A(ATTK(AT_BITE, AD_DRST, 2, 4), ATTK(AT_BITE, AD_PHYS, 1, 3),

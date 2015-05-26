@@ -2935,6 +2935,8 @@ register int	mmflags;
 					if(u.uevent.udemigod) m_initlgrp(mtmp, 0, 0);
 					else mtmp->mextra[2] = 1; //Set to 1 to initiallize
 				}
+			} else if(mtmp->data == &mons[PM_ARCADIAN_AVENGER]){
+				if(anymon) m_initsgrp(makemon(&mons[PM_ARCADIAN_AVENGER], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
 			}
 		break;
 	    case S_GIANT:
