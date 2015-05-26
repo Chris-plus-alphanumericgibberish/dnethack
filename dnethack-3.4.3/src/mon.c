@@ -2268,7 +2268,7 @@ boolean was_swallowed;			/* digestion */
 		u.keter++;
 		return FALSE;
 	}
-	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_MALPHAS && rn2(20) <= spiritDsize()){
+	if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_MALPHAS && rn2(20) <= (mvitals[PM_ACERERAK].died > 0 ? 4 : 1)){
 		struct monst *mtmp;
 		mtmp = makemon(&mons[PM_CROW], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 		initedog(mtmp);
