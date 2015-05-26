@@ -103,6 +103,7 @@ static struct Bool_Opt
 	{"hilite_pet",    &iflags.wc_hilite_pet, TRUE, SET_IN_GAME},	/*WC*/
 	{"dnethack_start_text",    &iflags.dnethack_start_text, TRUE, DISP_IN_GAME},
 	{"role_obj_names",    &iflags.role_obj_names, TRUE, SET_IN_GAME},
+	{"obscure_role_obj_names",    &iflags.obscure_role_obj_names, FALSE, SET_IN_GAME},
 	{"dnethack_dungeon_colors",    &iflags.dnethack_dungeon_colors, TRUE, SET_IN_GAME},
 #ifdef ASCIIGRAPH
 	{"IBMgraphics", &iflags.IBMgraphics, FALSE, SET_IN_GAME},

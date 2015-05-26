@@ -33,11 +33,12 @@ struct Jitem {
 #ifndef OVLB
 
 STATIC_DCL struct Jitem Japanese_items[];
+STATIC_DCL struct Jitem ObscureJapanese_items[];
 STATIC_OVL struct Jitem Pirate_items[];
 
 #else /* OVLB */
 
-STATIC_OVL struct Jitem Japanese_items[] = {
+STATIC_OVL struct Jitem ObscureJapanese_items[] = {
 	{ BATTLE_AXE, "ono" },
 	{ BROADSWORD, "ninja-to" },
 	{ BRONZE_PLATE_MAIL, "tanko" },
@@ -72,6 +73,33 @@ STATIC_OVL struct Jitem Japanese_items[] = {
 	{ TRIDENT, "magari yari" },
 	{ TWO_HANDED_SWORD, "no-dachi" },
 	{ WAR_HAMMER, "dai tsuchi" },
+	{ WOODEN_HARP, "koto" },
+	{0, "" }
+};
+
+STATIC_OVL struct Jitem Japanese_items[] = {
+	{ BROADSWORD, "ninja-to" },
+	{ CRYSTAL_PLATE_MAIL, "crystal tanko" },
+	{ BRONZE_PLATE_MAIL, "bronze tanko" },
+	{ PLATE_MAIL, "tanko" },
+	{ DAGGER, "kunai" },
+	{ DART, "bo-shuriken" },
+	{ FLAIL, "nunchaku" },
+	{ FOOD_RATION, "gunyoki" },
+	{ SEDGE_HAT, "sugegasa" },
+	{ GAUNTLETS_OF_FUMBLING, "kote of fumbling" },
+	{ GAUNTLETS_OF_POWER, "kote of power" },
+	{ GLAIVE, "naginata" },
+	{ HELMET, "kabuto" },
+	{ KNIFE, "shito" },
+	{ LEATHER_GLOVES, "yugake" },
+	{ LOCK_PICK, "osaku" },
+	{ POT_BOOZE, "sake" },
+	{ QUARTERSTAFF, "bo staff" },
+	{ SHORT_SWORD, "wakizashi" },
+	{ SHURIKEN, "hira-shuriken" },
+	{ SPLINT_MAIL, "dou-maru" },
+	{ SILVER_DAGGER, "silver kunai" },
 	{ WOODEN_HARP, "koto" },
 	{0, "" }
 };
@@ -135,6 +163,8 @@ register int otyp;
 	register int nn = ocl->oc_name_known;
 
 	if (Role_if(PM_SAMURAI) && iflags.role_obj_names && Alternate_item_name(otyp,Japanese_items))
+		actualn = Alternate_item_name(otyp,Japanese_items);
+	if (Role_if(PM_SAMURAI) && iflags.obscure_role_obj_names && Alternate_item_name(otyp,ObscureJapanese_items))
 		actualn = Alternate_item_name(otyp,Japanese_items);
 	if (Role_if(PM_PIRATE) && iflags.role_obj_names && Alternate_item_name(otyp,Pirate_items))
 		actualn = Alternate_item_name(otyp,Pirate_items);
