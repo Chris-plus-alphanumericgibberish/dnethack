@@ -845,6 +845,8 @@ boolean hitsroof;
 		    objects[obj->otyp].oc_material != SILVER)
 		dmg = 0;
 	}
+	if(resist_attacks(youmonst.data))
+		dmg = 0;
 	if (dmg > 1 && less_damage) dmg = 1;
 	if (dmg > 0) dmg += u.udaminc;
 	if (dmg < 0) dmg = 0;	/* beware negative rings of increase damage */

@@ -657,7 +657,10 @@ boolean pets_only;	/* true for ascension or final escape */
 			mongone(mtmp);
 	    } else if(u.uevent.qcompleted && mtmp->data == &mons[PM_ORION]){
 			mondied(mtmp);
-	    } else if (mtmp->iswiz || mtmp->data == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES]) {
+	    } else if (mtmp->iswiz || 
+			mtmp->data == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] || 
+			mtmp->data == &mons[PM_HUNGRY_DEAD]
+		) {
 			/* we want to be able to find him when his next resurrection
 			   chance comes up, but have him resume his present location
 			   if player returns to this level before that time */

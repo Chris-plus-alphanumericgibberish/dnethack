@@ -2276,6 +2276,34 @@ boolean was_swallowed;			/* digestion */
 		mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
 		mtmp->mhp =  mtmp->mhpmax;
 	}
+	if(mdat == &mons[PM_BLOB_OF_PRESERVED_ORGANS]){
+		struct monst *mtmp, *mtmp2;
+		for (mtmp = fmon; mtmp; mtmp = mtmp2){
+			mtmp2 = mtmp->nmon;
+			pline("%d == %d?",mon->mextra[0],mtmp->m_id);
+			if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
+				if((unsigned)mon->mextra[0] == mtmp->m_id){
+					mtmp->mhp = 0;
+					mondied(mtmp);
+					break;
+				}
+			}
+		}
+		if(!mtmp){
+			for (mtmp = migrating_mons; mtmp; mtmp = mtmp2){
+				mtmp2 = mtmp->nmon;
+				pline("%d == %d?",mon->mextra[0],mtmp->m_id);
+				if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
+					if((unsigned)mon->mextra[0] == mtmp->m_id){
+						mon_arrive(mtmp, TRUE);
+						mtmp->mhp = 0;
+						mondied(mtmp);
+						break;
+					}
+				}
+			}
+		}
+	}
 	/* Gas spores always explode upon death */
 	for(i = 0; i < NATTK; i++) {
 		if(mdat->mattk[i].aatyp == AT_NONE &&  mdat->mattk[i].adtyp == AD_OONA){

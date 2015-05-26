@@ -988,16 +988,17 @@ mdamagem(magr, mdef, mattk)
 					otmp->oartifact != ART_HEARTCLEAVER && 
 					otmp->oartifact != ART_SOL_VALTIVA && 
 					otmp->oartifact != ART_PEN_OF_THE_VOID
-				)) {
+			)) {
 			    /* then do only 1-2 points of damage */
-			    if (mdef->data->mlet == S_SHADE && otmp->otyp != SILVER_ARROW)
-				tmp = 0;
+			    if (mdef->data->mlet == S_SHADE && objects[otmp->otyp].oc_material != SILVER)
+					tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
-				tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
-				else 
-				tmp = rnd(2);
+					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
+				else tmp = rnd(2);
 			} else tmp += dmgval(otmp, mdef, 0);
 			
+			if(resist_attacks(mdef->data))
+				tmp = 0;
             /* WAC Weres get seared */
             if(otmp && objects[otmp->otyp].oc_material == SILVER &&
               (hates_silver(pd))) {

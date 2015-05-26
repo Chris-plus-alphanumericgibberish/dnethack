@@ -50,6 +50,9 @@ register boolean clumsy;
 	/* attacking a shade is useless */
 	if (mon->data->mlet == S_SHADE)
 	    dmg = 0;
+	
+	if(resist_attacks(mon->data))
+		dmg = 0;
 
 	if ((is_undead(mon->data) || is_demon(mon->data)) && uarmf &&
 		uarmf->blessed)

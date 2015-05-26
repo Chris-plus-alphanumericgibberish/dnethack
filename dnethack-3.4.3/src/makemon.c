@@ -1951,6 +1951,10 @@ register struct	monst	*mtmp;
 				otmp->ohaluengr = TRUE;
 				otmp->ovar1 = mtmp->mfaction;
 				(void) mpickobj(mtmp, otmp);
+			} else if(ptr == &mons[PM_HUNGRY_DEAD]){
+				struct monst *blbtmp;
+				blbtmp = makemon(&mons[PM_BLOB_OF_PRESERVED_ORGANS], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+				blbtmp->mextra[0] = mtmp->m_id;
 			}
 		break;
 	    case S_QUANTMECH:
