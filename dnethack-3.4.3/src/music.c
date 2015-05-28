@@ -49,6 +49,8 @@ STATIC_DCL void FDECL(confusion_song,(int));
 STATIC_DCL unsigned char FDECL(songs_menu,(struct obj *));
 STATIC_PTR int NDECL(play_song);
 STATIC_DCL void FDECL(slowness_song,(int));
+STATIC_DCL void FDECL(haste_song,(int));
+STATIC_DCL void FDECL(heal_song,(int));
 STATIC_DCL void FDECL(encourage_pets,(int));
 #endif
 
@@ -97,7 +99,9 @@ struct songspell {
 #define SNG_COURAGE		6
 #define SNG_FIRST		SNG_SLEEP
 #define SNG_LAST_ENCHANTMENT	SNG_COURAGE	/* last song based on an enchantment spell */
-#define SNG_LAST		SNG_COURAGE
+#define SNG_HASTE		7
+#define SNG_HEAL		8
+#define SNG_LAST		SNG_HEAL
 #define SNG_IMPROVISE_CHAR	'i'
 #define SNG_NOTES_CHAR		'n'
 #define SNG_PASSTUNE_CHAR	'p'
@@ -112,9 +116,10 @@ NEARDATA const struct songspell songs[] = {
 	{ SPE_SLOW_MONSTER,	"Drowsiness",	2, 5,	WOODEN_FLUTE, 	WOODEN_HARP },
 	{ SPE_CAUSE_FEAR,	"Despair",	3, 6,	LEATHER_DRUM, 	TOOLED_HORN },
 	{ SPE_CHARM_MONSTER,	"Friendship",	3, 6,	WOODEN_FLUTE, 	WOODEN_HARP },
-	{ SPE_CAUSE_FEAR,	"Inspire Courage",3,6,	LEATHER_DRUM, 	BUGLE }
+	{ SPE_CAUSE_FEAR,	"Inspire Courage",3,6,	LEATHER_DRUM, 	BUGLE },
+	{ SPE_HASTE_SELF,	"Charge", 2, 5, TOOLED_HORN,	LEATHER_DRUM },
+	{ SPE_EXTRA_HEALING,	"Meditative Healing", 1,4,WOODEN_HARP,WOODEN_FLUTE}
 /*	random ideas that weren't implemented -- based in spells from other schools
-	{ SPE_HASTE_SELF,	"Haste Pets"
 	{ SPE_CURE_BLINDNESS,	"Cause Blindness"
 	{ SPE_CURE_SICKNESS,	"Cause Sickness"
 	{ SPE_POLYMORPH,	"Change?", poly pets to higher level monster temporarily
@@ -460,7 +465,8 @@ struct obj *instr;
 		   - Need a suitable instrument (the Lyre of Orpheus can play any song)
 		   - Must know the related spell (Bards already know any enchantment based song)
 		*/
-		know_spell = (Role_if(PM_BARD) && a <= SNG_LAST_ENCHANTMENT);
+		// know_spell = (Role_if(PM_BARD) && a <= SNG_LAST_ENCHANTMENT);
+		know_spell = (Role_if(PM_BARD));
 		if (!know_spell)
 			for (b = 0; b < MAXSPELL; b++)
 				if (spl_book[b].sp_id == songs[a].sp_id)
@@ -542,7 +548,7 @@ struct obj * instr;
 	dlev0 = dlev;
 
 	/* "peaceful" songs */
-	if (song == SNG_SLEEP || song == SNG_TAME) {
+	if (song == SNG_SLEEP || song == SNG_TAME || song == SNG_HASTE || song == SNG_HEAL) {
 		if (mindless(mtmp->data)) dlev += dlev0/10;
 		if (is_animal(mtmp->data)) dlev -= dlev0/10; // music calm the beasts
 		if (is_domestic(mtmp->data)) dlev -= dlev0/10;
@@ -574,16 +580,17 @@ struct obj * instr;
 			alev += (P_SKILL(P_MUSICALIZE) - P_UNSKILLED) * 5;
 
 		// finally, music will do little effect on monsters if they're badly injured
-		if (mtmp->mhp < mtmp->mhpmax*0.6) {
-			dlev *= 2;
-			if (showmsg && !rn2(10)) msg = "%s is too hurt to listen to your song.";
-		}
 		if (mtmp->mhp < mtmp->mhpmax*0.3) {
 			dlev *= 5;
-			if (showmsg && !rn2(20)) 
+			if(song == SNG_HEAL) dlev *= -1;
+			else if (song_delay == songs[song].turns && showmsg)
 				msg = "%s cares more about surviving than listening to your music!";
+		} else if (mtmp->mhp < mtmp->mhpmax*0.6) {
+			dlev *= 2;
+			if(song == SNG_HEAL) dlev *= -1;
+			else if (song_delay == songs[song].turns && showmsg)
+				msg = "%s is too hurt to care about your song.";
 		}
-	
 	} else if (song == SNG_FEAR || song == SNG_CONFUSION) {
 		int canseeu;
 
@@ -643,6 +650,12 @@ play_song()
 		case SNG_SLOW:
 			slowness_song(distance);
 			break;
+		case SNG_HASTE:
+			haste_song(distance);
+			break;
+		case SNG_HEAL:
+			heal_song(distance);
+			break;
 		case SNG_FEAR:
 			scary_song(distance);
 			break;
@@ -677,9 +690,8 @@ play_song()
 */
 #define mon_affected_by_peace_song(mtmp) \
 	(!mtmp->mtame || \
-	(mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_SKILLED) &&				\
-	 mtmp->data->mlet != S_NYMPH &&										\
-	 (mtmp->data < &mons[PM_ELF] || mtmp->data > &mons[PM_ELVENKING])))
+	(mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_SKILLED) && \
+	 mtmp->data->mlet != S_NYMPH &&	 is_elf(mtmp->data)))
 #define mon_affected_by_song(mtmp) \
 	(!mtmp->mtame || \
 	 (mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_SKILLED)))
@@ -797,6 +809,53 @@ int distance;
 				pline("A huge hole opens up...");
 				expels(mtmp, mtmp->data, TRUE);
 			}
+		}
+	    mtmp = mtmp->nmon;
+	}
+}
+
+
+STATIC_OVL void
+haste_song(distance)
+int distance;
+{
+	register struct monst *mtmp = fmon;
+	register int distm;
+	
+	while(mtmp) {
+		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
+			mtmp->mtame && resist_song(mtmp, SNG_HASTE, song_instr) >= 0
+		) {
+			mtmp->movement += max(1,P_SKILL(P_MUSICALIZE))*3;
+			if (song_delay == songs[SNG_HASTE].turns && canseemon(mtmp))
+				pline("%s moves quickly to attack.", Monnam(mtmp));
+		}
+	    mtmp = mtmp->nmon;
+	}
+}
+
+
+STATIC_OVL void
+heal_song(distance)
+int distance;
+{
+	register struct monst *mtmp = fmon;
+	register int distm;
+	
+	while(mtmp) {
+		if (!DEADMONSTER(mtmp) && mtmp->mtame && mtmp->mhp < mtmp->mhpmax &&
+			distu(mtmp->mx, mtmp->my) < distance && 
+			resist_song(mtmp, SNG_HEAL, song_instr) >= 0
+		) {
+			mtmp->mcanmove = 0;
+			mtmp->mfrozen = 1;
+			if(song_delay - max(1,P_SKILL(P_MUSICALIZE)) > 0){
+				mtmp->mhp++;
+			} else {
+				mtmp->mhp += mtmp->m_lev;
+				if (canseemon(mtmp)) pline("%s looks %s!", Monnam(mtmp), Hallucination ? "mellow" : "well rested");
+			}
+			if(mtmp->mhp > mtmp->mhpmax) mtmp->mhp = mtmp->mhpmax;
 		}
 	    mtmp = mtmp->nmon;
 	}
