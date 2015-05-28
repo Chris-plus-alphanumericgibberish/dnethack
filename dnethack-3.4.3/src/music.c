@@ -1041,42 +1041,47 @@ STATIC_OVL void
 tame_song(distance)
 int distance;
 {
-	struct monst *mtmp, *mtmp2, *m, *m2;
+	struct monst *mtmp=0, *mtmp2;
 	xchar tame, waspeaceful;
 
 	if (u.uswallow) {
 		if (resist_song(u.ustuck, SNG_TAME, song_instr) >= 0) {
 			mtmp = tamedog(u.ustuck, (struct obj *) 0);
-			EDOG(mtmp)->friend = 1;
+			if(mtmp){
+				EDOG(mtmp)->friend = 1;
+			}
 		}
 	} else {
 		for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 			mtmp2 = mtmp->nmon;
-			m = mtmp;
-			if (!DEADMONSTER(m) && distu(m->mx, m->my) <= distance &&
-			    resist_song(m, SNG_TAME, song_instr) >= 0) {
-				m->mflee = 0;
+			if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) <= distance &&
+			    resist_song(mtmp, SNG_TAME, song_instr) >= 0) {
+				mtmp->mflee = 0;
 				/* no other effect if monster was already tame by other means */
-				if (m->mtame && !(EDOG(m)->friend))
+				if (mtmp->mtame && !(EDOG(mtmp)->friend))
 					continue;
-				tame = m->mtame;
-				waspeaceful = m->mpeaceful;
+				tame = mtmp->mtame;
+				waspeaceful = mtmp->mpeaceful;
 				if (!tame) {
-					m2 = tamedog(m, (struct obj *) 0);
-					if (m2) m = m2;
-					EDOG(m)->waspeaceful = waspeaceful;
-					if (canseemon(m) && flags.verbose && !m->msleeping)
-						pline("%s seems to like your song.", Monnam(m));
+					mtmp = tamedog(mtmp, (struct obj *) 0);
+					if (mtmp){
+						EDOG(mtmp)->waspeaceful = waspeaceful;
+						if (canseemon(mtmp) && flags.verbose && !mtmp->msleeping)
+							pline("%s seems to like your song.", Monnam(mtmp));
+						EDOG(mtmp)->friend = 1;
+					}
+				} else {
+					EDOG(mtmp)->friend = 1;
 				}
-				EDOG(m)->friend = 1;
-
-				/* tameness of song is temporary. uses tameness
-				 as timeout counter */
-				m->mtame = min(m->mtame
-					       + max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2,
-					       255);
 			}
 		}
+	}
+	if(mtmp){
+		/* tameness of song is temporary. uses tameness
+		 as timeout counter */
+		mtmp->mtame = min(mtmp->mtame
+				   + max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2,
+				   255);
 	}
 }
 #endif /* BARD */
