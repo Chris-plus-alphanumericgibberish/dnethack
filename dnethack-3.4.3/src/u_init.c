@@ -1416,6 +1416,8 @@ u_init()
 		knows_object(SPE_CHARM_MONSTER);
 		/* Bards also know a lot about legendary & magical stuff. */
 		know_random_obj();
+		/* Bards also know all the basic wards. */
+		u.wardsknown = WARD_ACHERON|WARD_HAMSA|WARD_ELDER_SIGN|WARD_EYE|WARD_QUEEN|WARD_CAT_LORD|WARD_GARUDA;
 		skill_init(Skill_Bard);
 		break;
 #endif
