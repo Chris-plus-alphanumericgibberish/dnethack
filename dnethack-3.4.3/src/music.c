@@ -1049,6 +1049,7 @@ int distance;
 			mtmp = tamedog(u.ustuck, (struct obj *) 0);
 			if(mtmp){
 				EDOG(mtmp)->friend = 1;
+				mtmp->mtame = min(max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2, 255);
 			}
 		}
 	} else {
@@ -1073,15 +1074,15 @@ int distance;
 				} else {
 					EDOG(mtmp)->friend = 1;
 				}
+				if(mtmp){
+					/* tameness of song is temporary. uses tameness
+					 as timeout counter */
+					mtmp->mtame = min(mtmp->mtame
+							   + max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2,
+							   255);
+				}
 			}
 		}
-	}
-	if(mtmp){
-		/* tameness of song is temporary. uses tameness
-		 as timeout counter */
-		mtmp->mtame = min(mtmp->mtame
-				   + max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2,
-				   255);
 	}
 }
 #endif /* BARD */
