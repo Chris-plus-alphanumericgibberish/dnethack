@@ -99,7 +99,7 @@ lock_action()
 
 STATIC_PTR
 int
-picklock(VOID_ARGS)	/* try to open/close a lock */
+picklock()	/* try to open/close a lock */
 {
 
 	if (xlock.box) {
@@ -156,7 +156,7 @@ picklock(VOID_ARGS)	/* try to open/close a lock */
 
 STATIC_PTR
 int
-forcelock(VOID_ARGS)	/* try to force a locked chest */
+forcelock()	/* try to force a locked chest */
 {
 
 	register struct obj *otmp;

@@ -85,7 +85,7 @@ register struct obj *otmp;
 
 
 int
-Boots_on(VOID_ARGS)
+Boots_on()
 {
     long oldprop;
     if (!uarmf) return 0;
@@ -134,7 +134,7 @@ Boots_on(VOID_ARGS)
 }
 
 int
-Boots_off(VOID_ARGS)
+Boots_off()
 {
     int otyp = uarmf->otyp;
     long oldprop = u.uprops[objects[otyp].oc_oprop].extrinsic & ~WORN_BOOTS;
@@ -258,7 +258,7 @@ Cloak_on()
 }
 
 int
-Cloak_off(VOID_ARGS)
+Cloak_off()
 {
     int otyp = uarmc->otyp;
 	boolean checkweight = FALSE;
@@ -318,7 +318,7 @@ Cloak_off(VOID_ARGS)
 
 
 int
-Helmet_on(VOID_ARGS)
+Helmet_on()
 {
 	static int gcircletsa = 0;
 	if(!gcircletsa) gcircletsa = find_gcirclet();
@@ -387,7 +387,7 @@ Helmet_on(VOID_ARGS)
 }
 
 int
-Helmet_off(VOID_ARGS)
+Helmet_off()
 {
 	static int gcircletsa = 0;
 	if(!gcircletsa) gcircletsa = find_gcirclet();
@@ -444,7 +444,7 @@ Helmet_off(VOID_ARGS)
 
 STATIC_PTR
 int
-Gloves_on(VOID_ARGS)
+Gloves_on()
 {
     long oldprop;
     if (!uarmg) return 0;
@@ -472,7 +472,7 @@ Gloves_on(VOID_ARGS)
 }
 
 int
-Gloves_off(VOID_ARGS)
+Gloves_off()
 {
     long oldprop =
 	u.uprops[objects[uarmg->otyp].oc_oprop].extrinsic & ~WORN_GLOVES;
@@ -549,7 +549,7 @@ Shield_on()
 }
 
 int
-Shield_off(VOID_ARGS)
+Shield_off()
 {
     takeoff_mask &= ~W_ARMS;
 /*
@@ -570,7 +570,7 @@ Shield_off(VOID_ARGS)
 }
 
 int
-Shirt_on(VOID_ARGS)
+Shirt_on()
 {
 /*
     switch (uarmu->otyp) {
@@ -603,7 +603,7 @@ Shirt_on(VOID_ARGS)
 }
 
 int
-Shirt_off(VOID_ARGS)
+Shirt_off()
 {
 	boolean checkweight = FALSE;
     takeoff_mask &= ~W_ARMU;
@@ -639,7 +639,7 @@ Shirt_off(VOID_ARGS)
  * since worn.c will check it before returning.
  */
 int
-Armor_on(VOID_ARGS)
+Armor_on()
 {
 	if(uarm->otyp == NOBLE_S_DRESS || uarm->otyp == BLACK_DRESS) {
 		pline("%s complements your figure nicely.", The(xname(uarm)));
@@ -663,7 +663,7 @@ Armor_on(VOID_ARGS)
 }
 
 int
-Armor_off(VOID_ARGS)
+Armor_off()
 {
 	boolean checkweight = FALSE;
     takeoff_mask &= ~W_ARM;
@@ -2252,7 +2252,7 @@ static const char *disrobing = "";
 
 STATIC_PTR
 int
-take_off(VOID_ARGS)
+take_off()
 {
 	register int i;
 	register struct obj *otmp;

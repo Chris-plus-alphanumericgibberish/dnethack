@@ -580,7 +580,7 @@ do_reset_eat()
 
 STATIC_PTR
 int
-eatfood(VOID_ARGS)		/* called each move during eating process */
+eatfood()		/* called each move during eating process */
 {
 	if(!victual.piece ||
 	 (!carried(victual.piece) && !obj_here(victual.piece, u.ux, u.uy))) {
@@ -1521,7 +1521,7 @@ costly_tin(verb)
 
 STATIC_PTR
 int
-opentin(VOID_ARGS)		/* called during each move whilst opening a tin */
+opentin()		/* called during each move whilst opening a tin */
 {
 	register int r;
 	const char *what;
