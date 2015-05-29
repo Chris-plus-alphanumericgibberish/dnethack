@@ -3179,13 +3179,8 @@ doward()
 	/* Chop engraving down to size if necessary */
 	if (len > maxelen) {
 		int perc = (len*100)/maxelen;
-		
 		if (multi) nomovemsg =	"Unfortunatly, you can't complete the ward.";
 		else You("can't complete the ward.");
-		
-		if(perc >= 90) oep->scuffed_wards += get_num_wards_added(oep->ward_id, oep->scuffed_wards);
-		else if(perc >= 75) oep->degraded_wards += get_num_wards_added(oep->ward_id, oep->degraded_wards);
-		else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, oep->partial_wards);
 	} else perc = 100;
 	
 	if (oep && oep->ward_id){
@@ -3218,7 +3213,7 @@ doward()
 			else if(perc >= 50) oep->partial_wards += get_num_wards_added(oep->ward_id, 0);
 		}
 	}
-	else{
+	else if(perc > 50){
 		make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
 		oep = engr_at(u.ux,u.uy);
 		if(!Hallucination){
