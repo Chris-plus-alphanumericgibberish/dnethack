@@ -1624,9 +1624,9 @@ struct obj *instr;
     /* Another possibility would be playing only scary music
        while being thus affected. */
     if (Confusion > 0 || Stunned || Hallucination) {
-	You_cant("play music while %s!", Confusion > 0 ? "confused" : 
-		 (Stunned ? "stunned" : "stoned"));
-	return 0;
+		You_cant("play music while %s!", Confusion > 0 ? "confused" : 
+			 (Stunned ? "stunned" : "stoned"));
+		return 0;
     }
 
     if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM))
