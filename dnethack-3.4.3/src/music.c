@@ -626,6 +626,8 @@ struct obj * instr;
     if (dlev < 1) dlev = is_mplayer(mtmp->data) ? u.ulevel : 1;
     if (song_penalty) alev /= 2;
 
+	alev += rnd(20);
+	
     if (wizard)
 	    pline("[%s:%i/%i]", mon_nam(mtmp), alev, dlev);
 
