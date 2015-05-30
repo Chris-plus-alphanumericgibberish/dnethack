@@ -884,7 +884,7 @@ int distance;
 
 	while(mtmp) {
 		if (!DEADMONSTER(mtmp) && mtmp->mtame && distu(mtmp->mx, mtmp->my) < distance &&
-		    resist_song(mtmp, SNG_TAME, song_instr) >= 0) {
+		    resist_song(mtmp, SNG_COURAGE, song_instr) >= 0) {
 			if (EDOG(mtmp)->encouraged < EDOG_ENCOURAGED_MAX)
 				EDOG(mtmp)->encouraged += (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) * 6;
 			if (mtmp->mflee)
@@ -923,7 +923,7 @@ int distance;
 	while(mtmp) {
 		if (!DEADMONSTER(mtmp) && !mtmp->mtame && !mtmp->mconf &&
 		    distu(mtmp->mx, mtmp->my) < distance &&
-		    resist_song(mtmp, SNG_SLOW, song_instr) >= 0) {
+		    resist_song(mtmp, SNG_CONFUSION, song_instr) >= 0) {
 			if (canseemon(mtmp))
 				pline("%s seems confused.", Monnam(mtmp));
 			mtmp->mconf = 1;
