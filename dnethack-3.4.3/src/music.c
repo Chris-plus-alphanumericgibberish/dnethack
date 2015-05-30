@@ -402,7 +402,9 @@ int know_spell;
 		chance = (chance*3)/2;
 
 	/* not easy to play 'peaceful' music when badly injured */
-	if (u.uhp < u.uhpmax * 0.3) chance /= 2;
+	if (u.uhp < u.uhpmax * 0.3 && 
+		(song_id == SNG_SLEEP || song_id == SNG_TAME || song_id == SNG_HASTE || song_id == SNG_HEAL)
+	) chance /= 2;
 
 	/* it's also difficult to play some instruments while wearing a shield. */
 	if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM)) 
