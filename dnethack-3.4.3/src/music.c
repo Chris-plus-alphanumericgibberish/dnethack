@@ -648,7 +648,7 @@ play_song()
 
 	distance = (P_SKILL(P_MUSICALIZE) - P_UNSKILLED + 1) * 9 + (u.ulevel/2);
 
-	/* songs only have effect after the 1st turn */
+	///* songs only have effect after the 1st turn */
 	//if (song_delay <= songs[song_played].level+2) 
 	switch (song_being_played()) {
 		case SNG_SLEEP: 
