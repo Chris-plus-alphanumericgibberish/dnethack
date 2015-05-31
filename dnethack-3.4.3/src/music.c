@@ -552,7 +552,7 @@ struct obj * instr;
 	
 	/* Defense level */
 	dlev = (int)mtmp->m_lev*2;
-	if (is_golem(mtmp->data)) dlev = 100;
+	if (nonliving(mtmp->data) && mindless(mtmp->data)) dlev = 100;
 	dlev0 = dlev;
 
 	/* "peaceful" songs */
