@@ -1060,6 +1060,7 @@ int distance;
 	while(mtmp) {
 		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
 			mon_affected_by_peace_song(mtmp) &&
+			!resists_sleep(mtmp) &&
 		    resist_song(mtmp, SNG_SLEEP, song_instr) >= 0) {
 			/* pets, if affected, sleep less time */
 			mtmp->mfrozen = min( mtmp->mfrozen +
