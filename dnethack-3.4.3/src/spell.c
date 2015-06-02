@@ -366,7 +366,7 @@ raise_dead:
 }
 
 STATIC_PTR int
-learn(VOID_ARGS)
+learn()
 {
 	int i;
 	short booktype;
