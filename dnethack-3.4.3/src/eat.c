@@ -3700,7 +3700,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 		if(u.ucspeed == SLOW_CLOCKSPEED && !(moves%(10+u.slowclock))) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 		else{
 			if(u.slowclock < 10){
-				if(moves%10 <= u.slowclock) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+				if(moves%10 >= u.slowclock) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 			} else if(!(moves%u.slowclock)) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 		}
 	}
