@@ -2127,6 +2127,7 @@ E void FDECL(book_disappears, (struct obj *));
 E void FDECL(book_substitution, (struct obj *,struct obj *));
 E void NDECL(age_spells);
 E int NDECL(docast);
+E boolean FDECL(tt_findadjacent, (coord *, struct monst *));
 E int NDECL(spiritDsize);
 E int NDECL(dospirit);
 E int FDECL(spell_skilltype, (int));
