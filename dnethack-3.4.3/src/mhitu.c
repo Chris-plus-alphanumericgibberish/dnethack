@@ -4024,7 +4024,12 @@ struct attack *mattk;
 		defperc = perceives(mdef->data);
 		gendef = gender(mdef);
 	}
-
+	
+	if(mattk && mattk->adtyp != AD_SSEX && mattk->adtyp != AD_LSEX && 
+		mattk->adtyp != AD_SEDU && mattk->adtyp != AD_SITM
+	) return 0;
+	
+	
 	if(agrinvis && !defperc
 #ifdef SEDUCE
 		&& mattk && mattk->adtyp != AD_SSEX && mattk->adtyp != AD_LSEX
