@@ -575,15 +575,24 @@ boolean pets_only;	/* true for ascension or final escape */
 	register struct obj *obj;
 	int num_segs;
 	boolean stay_behind;
-
+	boolean all_pets = FALSE;
+	if(u.specialSealsActive&SEAL_COSMOS ||
+		(uarmh && uarmh->oartifact == ART_CROWN_OF_THE_SAINT_KING) ||
+		(uarmh && uarmh->oartifact == ART_HELM_OF_THE_DARK_LORD)
+	) all_pets = TRUE;
+	
+	if(!all_pets) for(obj = invent; obj; obj=obj->nobj)
+		if(obj->oartifact == ART_LYRE_OF_ORPHEUS){
+			all_pets = TRUE;
+			break;
+		}
 	for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 	    mtmp2 = mtmp->nmon;
 	    if (DEADMONSTER(mtmp)) continue;
 	    if (pets_only && !mtmp->mtame) continue;
 	    if (((monnear(mtmp, u.ux, u.uy) && levl_follower(mtmp)) || 
-			 (mtmp->mtame && u.specialSealsActive&SEAL_COSMOS) ||
-			 (mtmp->mtame && uarmh && uarmh->oartifact == ART_CROWN_OF_THE_SAINT_KING) ||
-			 (mtmp->mtame && uarmh && uarmh->oartifact == ART_HELM_OF_THE_DARK_LORD) ||
+			(mtmp->mtame && all_pets) ||
+			 
 #ifdef STEED
 			(mtmp == u.usteed) ||
 #endif
