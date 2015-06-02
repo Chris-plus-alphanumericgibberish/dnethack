@@ -39,7 +39,6 @@ STATIC_DCL int NDECL(throwspell);
 STATIC_DCL int NDECL(throwgaze);
 STATIC_DCL void NDECL(cast_protection);
 STATIC_DCL boolean FDECL(sightwedge, (int,int, int,int, int,int));
-STATIC_DCL boolean FDECL(tt_findadjacent, (coord *, struct monst *));
 STATIC_DCL void FDECL(spell_backfire, (int));
 STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
 STATIC_DCL int FDECL(isqrt, (int));
@@ -1303,7 +1302,7 @@ masterDoorBox(x,y)
 	return FALSE;
 }
 
-STATIC_OVL boolean
+boolean
 tt_findadjacent(cc, mon)
 coord *cc;
 struct monst *mon;

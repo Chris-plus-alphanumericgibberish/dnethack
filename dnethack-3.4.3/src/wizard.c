@@ -313,21 +313,25 @@ tactics(mtmp)
 		/* if wounded, hole up on or near the stairs (to block them) */
 		/* unless, of course, there are no stairs (e.g. endlevel) */
 		mtmp->mavenge = 1; /* covetous monsters attack while fleeing */
-		if(flags.stag && In_quest(&u.uz)){
-			if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
-				(mtmp->iswiz && !xdnstair && !mon_has_amulet(mtmp))) {
-				if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
-			} else if (xdnstair &&
-				 (mtmp->mx != xdnstair || mtmp->my != ydnstair)) {
-				(void) mnearto(mtmp, xdnstair, ydnstair, TRUE);
-			}
+		if(mtmp->data == &mons[PM_AGLAOPE]){
+			//don't move from current location, post-theft warp does that for you.
 		} else {
-			if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
-				(mtmp->iswiz && !xupstair && !mon_has_amulet(mtmp))) {
-				if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
-			} else if (xupstair &&
-				 (mtmp->mx != xupstair || mtmp->my != yupstair)) {
-				(void) mnearto(mtmp, xupstair, yupstair, TRUE);
+			if(flags.stag && In_quest(&u.uz)){
+				if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
+					(mtmp->iswiz && !xdnstair && !mon_has_amulet(mtmp))) {
+					if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
+				} else if (xdnstair &&
+					 (mtmp->mx != xdnstair || mtmp->my != ydnstair)) {
+					(void) mnearto(mtmp, xdnstair, ydnstair, TRUE);
+				}
+			} else {
+				if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
+					(mtmp->iswiz && !xupstair && !mon_has_amulet(mtmp))) {
+					if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
+				} else if (xupstair &&
+					 (mtmp->mx != xupstair || mtmp->my != yupstair)) {
+					(void) mnearto(mtmp, xupstair, yupstair, TRUE);
+				}
 			}
 		}
 		/* if you're not around, cast healing spells */
@@ -339,7 +343,17 @@ tactics(mtmp)
 		/* fall through :-) */
 
 	    case STRAT_NONE:	/* harrass */
-		if (!rn2((!mtmp->mflee || mtmp->data == &mons[PM_BANDERSNATCH]) ? 5 : 33)) mnexto(mtmp);
+		if (!rn2((!mtmp->mflee || mtmp->data == &mons[PM_BANDERSNATCH]) ? 5 : 33)){
+			if(mtmp->data == &mons[PM_AGLAOPE]){
+				coord cc;
+				pline("%s's song warps space to draw you together.",Monnam(mtmp));
+				if( tt_findadjacent(&cc, mtmp) ){
+					teleds(cc.x, cc.y, FALSE);
+					return(0);
+				}
+			}
+			mnexto(mtmp);
+		}
 		return(0);
 
 	    default:		/* kill, maim, pillage! */
@@ -355,7 +369,15 @@ tactics(mtmp)
 		}
 		if((u.ux == tx && u.uy == ty) || where == STRAT_PLAYER) {
 		    /* player is standing on it (or has it) */
-		    mnexto(mtmp);
+			if(mtmp->data == &mons[PM_AGLAOPE]){
+				coord cc;
+				pline("%s's song warps space to draw you together.",Monnam(mtmp));
+				if( tt_findadjacent(&cc, mtmp) ){
+					teleds(cc.x, cc.y, FALSE);
+					return(0);
+				}
+			}
+			mnexto(mtmp);
 		    return(0);
 		}
 		if(where == STRAT_GROUND) {
