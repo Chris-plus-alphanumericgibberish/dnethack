@@ -49,6 +49,7 @@ static struct trobj Barbarian[] = {
 #ifdef BARD
 static struct trobj Bard[] = {
 #define BARD_INSTR 0
+#define BARD_CLOAK 1
 #define BARD_BOOZE 4
 #define BARD_WHISTLE 5
 	{ WOODEN_HARP, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
@@ -1402,6 +1403,7 @@ u_init()
 	case PM_BARD:
 		if (rn2(100) >= 50) Bard[BARD_INSTR].trotyp = WOODEN_FLUTE;
 		if (rn2(100) >= 85) Bard[BARD_WHISTLE].trotyp = BELL;
+		if (Race_if(PM_DROW)) Bard[BARD_CLOAK].trotyp = DROVEN_CHAIN_MAIL;
 		Bard[BARD_BOOZE].trquan = rn1(2, 5);
 		ini_inv(Bard);
 		/* This depends on the order in objects.c */
@@ -1419,7 +1421,7 @@ u_init()
 		/* Bards also know all the basic wards. */
 		u.wardsknown = WARD_ACHERON|WARD_HAMSA|WARD_ELDER_SIGN|WARD_EYE|WARD_QUEEN|WARD_CAT_LORD|WARD_GARUDA;
 		skill_init(Skill_Bard);
-		break;
+	break;
 #endif
 	case PM_EXILE:
 		ini_inv(Binder);
