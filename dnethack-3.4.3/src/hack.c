@@ -2387,7 +2387,7 @@ set_uhpmax(new_hpmax, poly)
 int new_hpmax;
 boolean poly;
 {
-	if (new_hpmax < 1) {
+	if (new_hpmax > 1) {
 		if (!poly) u.uhpmax = new_hpmax;
 		else       u.mhmax = new_hpmax;
 		return;
