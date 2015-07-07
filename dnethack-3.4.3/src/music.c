@@ -140,6 +140,7 @@ NEARDATA const struct songspell songs[] = {
 
 static NEARDATA schar song_delay;	/* moves left for this song */
 struct obj *song_instr;			/* musical instrument being played */
+int instr_otyp;					/* type of musical instrument being played */
 uchar song_played = SNG_NONE;	/* song being played (songs[] index)*/
 boolean song_penalty;			/* instrument penalty (see do_play_instrument) */
 static NEARDATA int petsing;		/* effect of pets singing with the player */
@@ -192,15 +193,22 @@ boolean domsg;
     if ((mtmp->mcanmove) && (!mtmp->msleeping) && (!Conflict)
 	&& (!mtmp->mconf) && (!mtmp->mflee) && (!mtmp->mcan)
 	&& (distu(mtmp->mx, mtmp->my) <= 25)) {
+	    /* lillendii sing */
+		if(mtmp->data == &mons[PM_LILLEND])
+			r = rnd(20) + mtmp->m_lev;
 	    /* nymphs and some elves sing along harps */
-	    if ((song_instr->otyp == WOODEN_HARP || song_instr->otyp == MAGIC_HARP)
+	    else if ((instr_otyp == WOODEN_HARP)
 		&& (mtmp->data->mlet == S_NYMPH || is_elf(mtmp->data)
-			|| (mtmp->data->mlet == S_NYMPH && !is_drow(mtmp->data))
-			|| mtmp->data == &mons[PM_PARROT]) 
+			|| (mtmp->data->mlet == S_NYMPH && !is_drow(mtmp->data))) 
+		&& (mtmp->mhp*2 > mtmp->mhpmax))
+		    r = max(10,(mtmp->data->mlet == S_NYMPH ? mtmp->m_lev*2 : mtmp->m_lev));
+	    /* parrots (and other birds?) sing along flutes */
+	    if ((instr_otyp == WOODEN_FLUTE)
+		&& (mtmp->data == &mons[PM_PARROT])
 		&& (mtmp->mhp*2 > mtmp->mhpmax))
 		    r = max(10,(mtmp->data->mlet == S_NYMPH ? mtmp->m_lev*2 : mtmp->m_lev));
 	    /* undeads sing along horns */
-	    else if ((song_instr->otyp == TOOLED_HORN)
+	    else if ((instr_otyp == TOOLED_HORN)
 		     && (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_MUMMY
 			 || mtmp->data->mlet == S_VAMPIRE || mtmp->data->mlet == S_WRAITH
 			 || mtmp->data->mlet == S_DEMON || mtmp->data->mlet == S_GHOST
@@ -209,14 +217,16 @@ boolean domsg;
 		    r = max(10,(mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON
 				? mtmp->m_lev*2 : mtmp->m_lev));
 	    /* orcs and ogres sing along (shout, actually) drums and bugles */
-	    else if ((song_instr->otyp == LEATHER_DRUM || song_instr->otyp == BUGLE)
+	    else if ((instr_otyp == LEATHER_DRUM || instr_otyp == BUGLE)
 		     && (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT))
 		    r = max(10, mtmp->m_lev);
     }
 
     if (domsg && (r > 0)){
 		if (canseemon(mtmp)) {
-			if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
+			if (mtmp->data == &mons[PM_LILLEND])
+				pline("%s's lovely voice sings your song!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
 				|| mtmp->data->mlet == S_VAMPIRE)
 				pline("%s's dreadful voice chants your song!", Monnam(mtmp));
 			else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
@@ -235,14 +245,16 @@ boolean domsg;
 			else
 				pline("%s sings while you play!", Monnam(mtmp));
 		} else {
-			if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
+			if (mtmp->data == &mons[PM_LILLEND])
+				You_hear("a lovely voice singing your song!");
+			else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
 				|| mtmp->data->mlet == S_VAMPIRE)
 				You_hear("a horrible voice chanting your song!");
 			else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
 					 || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
 				You_hear("someone mourning while you play!", Monnam(mtmp));
 			else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
-				You_hear("something caws and croak while you play!");
+				You_hear("something caw and croak while you play!");
 			else if (mtmp->data == &mons[PM_PARROT])
 				You_hear("something whistle while you play!");
 			else if (mtmp->data->mlet == S_NYMPH)
@@ -272,72 +284,67 @@ boolean domsg;
 	&& (!mtmp->mconf) && (!mtmp->mflee) && (!mtmp->mcan)
 	&& (distu(mtmp->mx, mtmp->my) <= 25)) {
 		if(mtmp->data == &mons[PM_DREAD_SERAPH])
-			r = -1*mtmp->m_lev;
-	    // /* nymphs and some elves sing along harps */
-	    // else if ((song_instr->otyp == WOODEN_HARP || song_instr->otyp == MAGIC_HARP)
-		// && (mtmp->data->mlet == S_NYMPH || is_elf(mtmp->data)
-			// || (mtmp->data->mlet == S_NYMPH && !is_drow(mtmp->data))
-			// || mtmp->data == &mons[PM_PARROT]) 
-		// && (mtmp->mhp*2 > mtmp->mhpmax))
-		    // r = max(10,(mtmp->data->mlet == S_NYMPH ? mtmp->m_lev*2 : mtmp->m_lev));
-	    // /* undeads sing along horns */
-	    // else if ((song_instr->otyp == TOOLED_HORN)
-		     // && (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_MUMMY
-			 // || mtmp->data->mlet == S_VAMPIRE || mtmp->data->mlet == S_WRAITH
-			 // || mtmp->data->mlet == S_DEMON || mtmp->data->mlet == S_GHOST
-			 // || mtmp->data->mlet == S_SHADE
-			 // || mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN]))
-		    // r = max(10,(mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON
-				// ? mtmp->m_lev*2 : mtmp->m_lev));
-	    // /* orcs and ogres sing along (shout, actually) drums and bugles */
-	    // else if ((song_instr->otyp == LEATHER_DRUM || song_instr->otyp == BUGLE)
-		     // && (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT))
-		    // r = max(10, mtmp->m_lev);
+			r = -2*mtmp->m_lev;
+		else if(mtmp->data == &mons[PM_AGLAOPE] || mtmp->data == &mons[PM_ELVENKING] || mtmp->data == &mons[PM_BAELNORN])
+			r = -1*(rnd(20) + mtmp->m_lev/3);
+		else if(mtmp->data == &mons[PM_LILLEND])
+			r = -1*(rnd(20) + mtmp->m_lev);
+	    else if ((instr_otyp == WOODEN_HARP || instr_otyp == WOODEN_FLUTE)
+		     && (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN]))
+			r = -1*(mtmp->m_lev);
     }
 
     if (domsg && (r < 0)){
 		if (canseemon(mtmp)) {
 			if(mtmp->data == &mons[PM_DREAD_SERAPH])
 				pline("%s's terrible voice sings in opposition to your song!", Monnam(mtmp));
-			// else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
-				// || mtmp->data->mlet == S_VAMPIRE)
-				// pline("%s's dreadful voice chants your song!", Monnam(mtmp));
-			// else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
-					 // || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
-				// pline("%s mourns while you play!", Monnam(mtmp));
-			// else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
-				// pline("%s caws and croaks while you play!", Monnam(mtmp));
-			// else if (mtmp->data == &mons[PM_PARROT])
-				// pline("%s whistles while you play!", Monnam(mtmp));
-			// else if (mtmp->data->mlet == S_NYMPH)
-				// pline("%s's charming voice sings along!", Monnam(mtmp));
-			// else if (mtmp->data->mlet == S_CENTAUR)
-				// pline("%s's strong voice sings along!", Monnam(mtmp));
-			// else if (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT)
-				// pline("%s shouts!", Monnam(mtmp));
-			// else
-				// pline("%s sings while you play!", Monnam(mtmp));
+			else if (mtmp->data == &mons[PM_LILLEND])
+				pline("%s's lovely voice sings in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data == &mons[PM_AGLAOPE])
+				pline("%s's mocking voice sings in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
+				|| mtmp->data->mlet == S_VAMPIRE)
+				pline("%s's dreadful voice chants in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
+					 || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
+				pline("%s wails in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
+				pline("%s caws and croaks in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data == &mons[PM_PARROT])
+				pline("%s squaks in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_NYMPH)
+				pline("%s's charming voice sings in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_CENTAUR)
+				pline("%s's strong voice sings in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT)
+				pline("%s shouts down your song!", Monnam(mtmp));
+			else
+				pline("%s sings in opposition to your song!", Monnam(mtmp));
 		} else {
 			if(mtmp->data == &mons[PM_DREAD_SERAPH])
 				You_hear("a terrible voice singing in opposition to your song!");
-			// else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
-				// || mtmp->data->mlet == S_VAMPIRE)
-				// You_hear("a horrible voice chanting your song!");
-			// else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
-					 // || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
-				// You_hear("someone mourning while you play!", Monnam(mtmp));
-			// else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
-				// You_hear("something caws and croak while you play!");
-			// else if (mtmp->data == &mons[PM_PARROT])
-				// You_hear("something whistle while you play!");
-			// else if (mtmp->data->mlet == S_NYMPH)
-				// You_hear("a charming voice singing along!");
-			// else if (mtmp->data->mlet == S_CENTAUR)
-				// You_hear("a strong voice sing along!");
-			// else if (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT)
-				// You_hear("a shout!");
-			// else
-				// You_hear("someone singing while you play!");
+			else if (mtmp->data == &mons[PM_LILLEND])
+				You_hear("a lovely voice singing in opposition to your song!");
+			else if (mtmp->data == &mons[PM_AGLAOPE])
+				You_hear("a mocking voice singing in opposition to your song!");
+			else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
+				|| mtmp->data->mlet == S_VAMPIRE)
+				You_hear("a horrible voice chanting in opposition to your song!");
+			else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
+					 || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
+				You_hear("someone wailing in opposition to your song!", Monnam(mtmp));
+			else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
+				You_hear("something caws and croaks in opposition to your song!");
+			else if (mtmp->data == &mons[PM_PARROT])
+				You_hear("something squak in opposition to your song!");
+			else if (mtmp->data->mlet == S_NYMPH)
+				You_hear("a charming voice singing in opposition to your song!");
+			else if (mtmp->data->mlet == S_CENTAUR)
+				You_hear("a strong voice sing in opposition to your song!");
+			else if (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT)
+				You_hear("something shouting down your song!");
+			else
+				You_hear("someone singing in opposition to your song!");
 		}
 	}
 
@@ -404,7 +411,7 @@ int know_spell;
 	chance = ( ACURR(A_DEX) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
 		- (songs[song_id].level * (instr->blessed ? 15 : 20));
 
-	if (instr->oartifact || instr->otyp == songs[song_id].instr2)
+	if (instr->oartifact || instr_otyp == songs[song_id].instr2)
 		chance = (chance*3)/2;
 
 	/* not easy to play 'peaceful' music when badly injured */
@@ -413,7 +420,7 @@ int know_spell;
 	) chance /= 2;
 
 	/* it's also difficult to play some instruments while wearing a shield. */
-	if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM)) 
+	if (uarms && (instr_otyp == WOODEN_HARP || instr_otyp == LEATHER_DRUM)) 
 		chance /= 2;
 
 	/* but it's easier with the eyes closed */
@@ -481,12 +488,12 @@ struct obj *instr;
 					know_spell = TRUE;
 		
 		if (know_spell && (instr->oartifact == ART_LYRE_OF_ORPHEUS
-				   || instr->otyp == songs[a].instr1 || instr->otyp == songs[a].instr2)) {
+				   || instr_otyp == songs[a].instr1 || instr_otyp == songs[a].instr2)) {
 			any.a_int = a+1;
 			if (instr->oartifact == ART_LYRE_OF_ORPHEUS)
 				hardtoplay = (a == SNG_FEAR || a == SNG_COURAGE || a == SNG_CONFUSION || a == SNG_SLOW || a == SNG_CNCL ? ' ' : '#');
 			else
-				hardtoplay = (songs[a].instr1 == instr->otyp ? ' ' : '#');
+				hardtoplay = (songs[a].instr1 == instr_otyp ? ' ' : '#');
 					
 			Sprintf(buf, "%-20s %i     %i %c %3i%%", songs[a].name, 
 				songs[a].level,	songs[a].turns,
@@ -569,17 +576,17 @@ struct obj * instr;
 		if (race_peaceful(mtmp->data)) dlev -= dlev0/10;
 
 		// rats like music from flutes (The Pied Piper of Hamelin)
-		if (mtmp->data->mlet == S_RODENT && instr->otyp == WOODEN_FLUTE) {
+		if (mtmp->data->mlet == S_RODENT && instr_otyp == WOODEN_FLUTE) {
 			dlev -= dlev0/5;
 			if (showmsg) msg = "%s seems to briefly swing with your music.";
 		}
 		// angels like the sound of harps
 		if ((mtmp->data->mlet == S_ANGEL) && (mtmp->malign >= A_COALIGNED)
-		    && (instr->otyp == WOODEN_HARP))
+		    && (instr_otyp == WOODEN_HARP))
 			dlev -= dlev0/5;
 		// snakes (and nagas) also like music from flutes
 		if (((mtmp->data->mlet == S_SNAKE) || (mtmp->data->mlet == S_NAGA))
-		    && (instr->otyp == WOODEN_FLUTE)) {
+		    && (instr_otyp == WOODEN_FLUTE)) {
 			dlev -= dlev0/5;
 			if (showmsg) msg = "%s briefly dances with your music.";
 		}
@@ -1603,6 +1610,12 @@ struct obj *instr;
     unsigned char song = SNG_NONE;
     boolean ok;
 
+	instr_otyp = instr->otyp;
+	if(instr_otyp == MAGIC_HARP) instr_otyp = WOODEN_HARP;
+	else if(instr_otyp == MAGIC_FLUTE) instr_otyp = WOODEN_FLUTE;
+	else if(instr_otyp == FIRE_HORN) instr_otyp = TOOLED_HORN;
+	else if(instr_otyp == FROST_HORN) instr_otyp = TOOLED_HORN;
+		
     if (Underwater) {
 	You_cant("play music underwater!");
 	return(0);
@@ -1685,9 +1698,14 @@ struct obj *instr;
 	
 	    song_played = song;
 	    song_instr = instr;
+		instr_otyp = song_instr->otyp;
+		if(instr_otyp == MAGIC_HARP) instr_otyp = WOODEN_HARP;
+		else if(instr_otyp == MAGIC_FLUTE) instr_otyp = WOODEN_FLUTE;
+		else if(instr_otyp == FIRE_HORN) instr_otyp = TOOLED_HORN;
+		else if(instr_otyp == FROST_HORN) instr_otyp = TOOLED_HORN;
 	    song_delay = songs[song_played].turns;
 
-	song_penalty = (songs[song_played].instr1 == instr->otyp);
+	song_penalty = (songs[song_played].instr1 == instr_otyp);
 	if (song_played == SNG_TAME && instr->oartifact == ART_LYRE_OF_ORPHEUS)
 		song_penalty = 0;
 
