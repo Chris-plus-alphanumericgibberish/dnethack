@@ -1661,7 +1661,7 @@ struct obj *instr;
 	    else if (u.uevent.uheard_tune == 2 && yn("Play the passtune?") == 'y')
 		song = SNG_PASSTUNE;
 	    else
-		song = SNG_NONE;
+		song = SNG_NOTES;
     }
 #ifdef BARD
     }
