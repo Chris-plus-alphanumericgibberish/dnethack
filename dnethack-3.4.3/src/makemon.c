@@ -2035,7 +2035,7 @@ register struct	monst	*mtmp;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
 				(void)mongets(mtmp, ORIHALCYON_GAUNTLETS);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_YEENOGHU:
 				otmp = mksobj(FLAIL, TRUE, FALSE);
@@ -2044,7 +2044,7 @@ register struct	monst	*mtmp;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
 				(void)mongets(mtmp, GAUNTLETS_OF_DEXTERITY);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_BAPHOMET:
 				otmp = mksobj(HALBERD, TRUE, FALSE);
@@ -2055,15 +2055,15 @@ register struct	monst	*mtmp;
 				(void)mongets(mtmp, SPE_MAGIC_MAPPING);
 				(void)mongets(mtmp, SCR_MAGIC_MAPPING);
 				(void)mongets(mtmp, SCR_MAGIC_MAPPING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_JUIBLEX:
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_ZUGGTMOY:
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 ///////////////////////////////
 			case PM_ORCUS:
@@ -2076,7 +2076,7 @@ register struct	monst	*mtmp;
 			case PM_MALCANTHET:
 				(void) mongets(mtmp, BULLWHIP);
 				(void) mongets(mtmp, AMULET_OF_DRAIN_RESISTANCE);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_AVATAR_OF_LOLTH:
 				otmp = mksobj(BULLWHIP, TRUE, FALSE);
@@ -2114,9 +2114,9 @@ register struct	monst	*mtmp;
 				otmp->oerodeproof = TRUE;
 				otmp->spe = 5;
 				(void) mpickobj(mtmp, otmp);
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_GRAZ_ZT:
 				otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
@@ -2125,7 +2125,7 @@ register struct	monst	*mtmp;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
 				(void) mongets(mtmp, AMULET_OF_REFLECTION);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 ///////////////////////////////
 			case PM_BAEL:
@@ -2137,7 +2137,7 @@ register struct	monst	*mtmp;
 				(void) mpickobj(mtmp, otmp);
 				(void) mongets(mtmp, TWO_HANDED_SWORD);
 				(void) mongets(mtmp, GAUNTLETS_OF_POWER);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 		    case PM_DISPATER:
 //				(void)mongets(mtmp, WAN_STRIKING);
@@ -2152,7 +2152,7 @@ register struct	monst	*mtmp;
 				(void) mongets(mtmp, SPE_CHARM_MONSTER);
 				(void) mongets(mtmp, SCR_TAMING);
 				(void) mongets(mtmp, SCR_TAMING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 		    case PM_MAMMON:
 //				(void)mongets(mtmp, WAN_STRIKING);
@@ -2167,11 +2167,11 @@ register struct	monst	*mtmp;
 				(void) mongets(mtmp, SPE_DETECT_TREASURE);
 				(void) mongets(mtmp, SCR_GOLD_DETECTION);
 				(void) mongets(mtmp, SCR_GOLD_DETECTION);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_FIERNA:
 				(void)mongets(mtmp, WAN_DIGGING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_BELIAL:
 				otmp = mksobj(TRIDENT, TRUE, FALSE);
@@ -2182,8 +2182,8 @@ register struct	monst	*mtmp;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, WAN_DIGGING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 ////////////////////////////////////////
 			case PM_LEVIATHAN:
@@ -2198,7 +2198,7 @@ register struct	monst	*mtmp;
 				(void)mongets(mtmp, POT_AMNESIA);
 				(void)mongets(mtmp, POT_AMNESIA);
 				(void)mongets(mtmp, POT_AMNESIA);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_DAUGHTER_LILITH:
 				(void)mongets(mtmp, OILSKIN_CLOAK);
@@ -2209,7 +2209,7 @@ register struct	monst	*mtmp;
 				otmp->spe = 6;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_MOTHER_LILITH:
 				(void)mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
@@ -2221,7 +2221,7 @@ register struct	monst	*mtmp;
 				otmp->spe = 6;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_CRONE_LILITH:
 				(void)mongets(mtmp, BOULDER);
@@ -2236,7 +2236,7 @@ register struct	monst	*mtmp;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, CRYSTAL_BALL);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_BAALZEBUB:
 				otmp = mksobj(LONG_SWORD, TRUE, FALSE);
@@ -2255,7 +2255,7 @@ register struct	monst	*mtmp;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, RIN_FREE_ACTION);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_MEPHISTOPHELES:
 				otmp = mksobj(RANSEUR, TRUE, FALSE);
@@ -2266,7 +2266,7 @@ register struct	monst	*mtmp;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, HELM_OF_BRILLIANCE);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_BAALPHEGOR:
 				otmp = mksobj(IRON_BAR, TRUE, FALSE);
@@ -2277,8 +2277,8 @@ register struct	monst	*mtmp;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, AMULET_OF_REFLECTION);
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 /////////////////////////////////////////
 			case PM_ASMODEUS:
@@ -2287,9 +2287,9 @@ register struct	monst	*mtmp;
 				(void)mongets(mtmp, ROBE);
 				(void)mongets(mtmp, SPEED_BOOTS);
 				(void)mongets(mtmp, SCR_CHARGING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
-				(void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 ////////////////////////////////////////
 		    case PM_DURIN_S_BANE:
