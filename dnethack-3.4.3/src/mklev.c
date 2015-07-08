@@ -807,7 +807,7 @@ makelevel()
 		!level.flags.has_vault) mkroom(RIVER);
 	
 		/* Part four: very late modifications */
-	if (u_depth > 14 && !rn2(8)){
+	if (u_depth > 12 && !rn2(8)){
 		mksepulcher();
 	}
 	
