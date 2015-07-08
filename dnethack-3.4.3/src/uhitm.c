@@ -577,7 +577,7 @@ register struct monst *mtmp;
 			otmp = mksobj(ROCK, TRUE, FALSE);
 			otmp->blessed = 0;
 			otmp->cursed = 0;
-			if(dx||dy){
+			if((dx||dy) && !DEADMONSTER(mtmp)){
 				set_destroy_thrown(1); //state variable referenced in drop_throw
 					m_throw(&youmonst, mtmp->mx + dx, mtmp->my + dy, -dx, -dy,
 						1, otmp,TRUE);
