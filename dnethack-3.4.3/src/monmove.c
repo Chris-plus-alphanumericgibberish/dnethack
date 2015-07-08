@@ -1257,7 +1257,7 @@ register int after;
 			pline("ERROR RECOVERY: Overlong meating timer (%d) truncated to 100 turns", mtmp->meating);
 			mtmp->meating = 0;
 		}
-	    mtmp->meating--;
+	    else mtmp->meating--;
 	    return 3;			/* still eating */
 	}
 	if (hides_under(ptr) && OBJ_AT(mtmp->mx, mtmp->my) && rn2(10))
