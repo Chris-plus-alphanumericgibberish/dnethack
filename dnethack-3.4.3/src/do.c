@@ -2057,7 +2057,10 @@ donull()
 	if(uclockwork){
 		if(!Upolyd && u.uhp<u.uhpmax){
 			if(lastreped < monstermoves-13) You("attempt to make repairs.");
-			if(!rn2(15-u.ulevel/2)) u.uhp += rnd(10);
+			if(!rn2(15-u.ulevel/2)){
+				u.uhp += rnd(10);
+				flags.botl = 1;
+			}
 			if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 			lastreped = monstermoves;
 			if(u.uhp == u.uhpmax){
@@ -2068,7 +2071,10 @@ donull()
 			}
 		} else if(Upolyd && u.mh<u.mhmax){
 			if(lastreped < monstermoves-100) You("attempt to make repairs.");
-			if(!rn2(15-u.ulevel/2)) u.mh += rnd(10);
+			if(!rn2(15-u.ulevel/2)){
+				u.mh += rnd(10);
+				flags.botl = 1;
+			}
 			if(u.mh > u.mhmax) u.mh = u.mhmax;
 			lastreped = monstermoves;
 			if(u.mh == u.mhmax){
