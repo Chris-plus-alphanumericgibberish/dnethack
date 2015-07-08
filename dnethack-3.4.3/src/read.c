@@ -184,6 +184,9 @@ doread()
 				if (i == MAXSPELL) impossible("Too many spells memorized!");
 				return 1;
 			}
+		} else {
+			pline(silly_thing_to, "read");
+			return(0);
 		}
 	} else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
