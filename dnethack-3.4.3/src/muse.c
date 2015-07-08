@@ -884,7 +884,8 @@ mon_tele:
 	case MUSE_POT_FULL_HEALING:
 		mquaffmsg(mtmp, otmp);
 		if (otmp->otyp == POT_SICKNESS) unbless(otmp); /* Pestilence */
-		mtmp->mhp = (mtmp->mhpmax += (otmp->blessed ? 8 : 4));
+		if(mtmp->mhpmax - mtmp->mhp > 400) mtmp->mhp += 400;
+		else mtmp->mhp = (mtmp->mhpmax += (otmp->blessed ? 8 : 4));
 		if (!mtmp->mcansee && otmp->otyp != POT_SICKNESS) {
 			mtmp->mcansee = 1;
 			mtmp->mblinded = 0;
