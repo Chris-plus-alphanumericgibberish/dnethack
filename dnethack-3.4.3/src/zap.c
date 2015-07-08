@@ -3954,6 +3954,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					redrawneeded = TRUE;
 				} else if (IS_ROCK(room->typ)) {
 					if (!may_dig(sx,sy)){
+						pline_The("rock glows then fades!");
 						break;
 					}
 					if (IS_WALL(room->typ) || room->typ == SDOOR) {
