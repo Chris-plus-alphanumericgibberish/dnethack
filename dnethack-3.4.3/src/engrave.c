@@ -63,6 +63,8 @@ static const char *random_mesg[] = {
 	
 	"This too shall pass.", /* medieval Persian adage */
 	
+	"Romanes Eunt Domus", /* Life of Brian */
+	
 	"stth was here", /* First ascender */
 	"allihaveismymind followed stth", /* Second ascender */
 	"Khor followed allihaveismymind", /* Third ascender */
@@ -172,10 +174,14 @@ static const char *haluMesg[] = {
 	"How about a little fire, scarecrow?",
 	"And if you're the kind of person who parties with a bathtub full of pasta, I suspect you don't care much about cholesterol anyway.",
 	"I AM A SEXY SHOELESS GOD OF WAR!!!",
+	"Jesus was here 2/15/57 B.C.", /* Family Guy */
+	"If you have time to read this, you should get to the down stairs immediately!" /* Zelda 3 */
+	"Gary was here! Ash is a loser!" /* Pokemon */
 	
 	"I see you...",
 		"...do you see me?",
 		"That was a mistake.",
+	"Everything dies.",
 	
 	"Listen at us, won't you?", /* All Our Friends Are Dead */
 		"Share with us your head",
@@ -219,6 +225,12 @@ static const char *haluMesg[] = {
 	"You noticed them, and they noticed that you noticed them.", /*The Mothman Prophecies*/
 	"Well, how did I get here?", /*Once In A Lifetime*/
 	"You can be me when I'm gone.", /*Sandman*/
+		"You can stop being anything.",
+		"Sometimes you wake up. Sometimes the fall kills you. And sometimes, when you fall, you fly.",
+		"To absent friends, lost loves, old gods and the season of mists.",
+		"And may each and everyone of us always give the devil his due.",
+		"Innocence, once lost, can never be regained.",
+		"In the pale light of the Moon I play the game of you. Whoever I am. Whoever you are.",
 	"Have been unavoidably detained by the world. Expect us when you see us.", /* Stardust */
 		"There was once a young man who wished to gain his Heart's Desire.",
 		"Time, the thief, eventually takes all things into his dusty storehouse.",
@@ -247,6 +259,11 @@ static const char *haluMesg[] = {
 	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
 		"This thing all things devours.",
 		"Not all those who wander are lost.",
+	"This is the curse of the Buddha-you will never again be the same as once you were.", /*Lord of Light*/
+		"Tricky and brilliant and heartfelt and dangerous.",
+		"Death is mighty, and is no one's friend.",
+		"It is the difference between the unknown and the unknowable, between science and fantasy-it is a matter of essence.",
+		"Go away. This is not a place to be.",
 	"No Fate", /*Terminator*/
 	"When the world is in darkness Four Warriors will come....", /*FF I*/
 	"This world can have but one Emperor.", /*FF II*/
@@ -306,7 +323,7 @@ static const char *haluMesg[] = {
 	"NOT A Secret Base", /*Gunnerkrigg Court*/
 	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
 	"I SAW THE EYE. Over the horizon, like a rising sun!", /* Dresden Codak */
-		"That's Science, isn't it? The perpetual horizon.\nBut we found a way, haha, we found a way around that!",
+		"That's Science, isn't it? The perpetual horizon. But we found a way, haha, we found a way around that!",
 		"What would YOU give up to... to see it through?",
 		"Nothing. A shadow is nothing. It is merely a question not yet answered. We only fear the dark if we have no means of lighting our way.",
 		"The world turns, and dawn comes. And under the light of the sun I shall slay giants.",
@@ -637,7 +654,7 @@ const char * haluWard[] =  {
 		"a set of three blades, the top blade straight, the dexter curved down, the sinister curved up",
 	"a white lotus", /* Avatar, the Last Airbender */
 	
-	"a winged and a tear of blood", /*02, Kirby*/
+	"a winged eye and a tear of blood", /*02, Kirby*/
 	"an angular S before a segmented circle",/*a screw attack symbol*/
 	"a stylized umbrella", /* Resident Evil */
 	"an Imperium Aquilas", /* Warhammer 40k */
@@ -713,6 +730,26 @@ const char * haluWard[] =  {
 	"a bitten apple",
 	"a pair of arches meeting to form an \"M\"",
 	"a Swoosh mark",
+	
+/* Digimon Adventure */
+	"a Crest of Courage",
+	"a Crest of Friendship",
+	"a Crest of Love",
+	"a Crest of Knowledge",
+	"a Crest of Purity",
+	"a Crest of Sincerity",
+	"a Crest of Hope",
+	"a Crest of Light",
+	"a Crest of Miracles",
+	"a Crest of Kindness",
+
+	"a Zeon crest", /* Mobile Suit Gundam */
+
+        /* Umineko no Naku Koro ni */
+	"the Ushiromiya family crest",
+        "the first magic circle of the moon",
+        "the third magic circle of Mars",
+        "the fifth magic circle of Mars",
 	
 	"a dream of the Fallen",
 	"a sign of the world to come",

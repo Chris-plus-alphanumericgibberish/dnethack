@@ -295,6 +295,11 @@ const char * const hallu_alignments[] = {
 	"chilly",
 	"standoffish",
 	
+	"Jello",
+	"Spam",
+	"tastes like orange Tang",
+	"doesn't taste like orange Tang",
+	
 	"currently not available",
 	"gone swimming",
 	"not listening",

@@ -2547,26 +2547,26 @@ const char * const hallu_gods[] = {
 	
 	//Games
 	"Armok",
-	"Hylia",
-	"the three golden goddesses",
-	"the Lady of Pain",
+	"_Hylia",
+	"_the three golden goddesses",
+	"_the Lady of Pain",
 	"the Outsider",
 	"Yevon",
 	"Bhunivelze",
-	"Etro",
+	"_Etro",
 	"the Transcendent One",
-	"the Mana Tree",
+	"_the Mana Tree",
 	"Golden Silver",
-	"Luna",
+	"_Luna",
 	"Arceus",
 	"the Composer",
 	"the Conductor",
 	"Chakravartin",
 	"Chattur'gha",
 	"Ulyaoth",
-	"Xel'lo'tath",
+	"_Xel'lo'tath",
 	"Mantorok",
-	"Martel",
+	"_Martel",
 	
 	//Literature
 	"Mahasamatman",
@@ -2583,15 +2583,25 @@ const char * const hallu_gods[] = {
 	"Orannis",
 	
 	"The Water Phoenix King",
-	"Ailari, Goddess of Safe Journeys",
-	"Yuenki, Dark Lady of Apotheosis",
-	"Zeth Kahl, Dark Empress of The Gift Given to Bind",
+	"_Ailari, Goddess of Safe Journeys",
+	"_Yuenki, Dark Lady of Apotheosis",
+	"_Zeth Kahl, Dark Empress of The Gift Given to Bind",
 	
 	"the Data Overmind",
 	"the Sky Canopy Domain",
 	
 	"the Truth and the Gate",
 	
+	"Ceiling Cat", /* Lolcats */
+	"Zoamelgustar", /* Slayers */
+	"Brohm", /* Ultima */
+	"Xenu", /* Scientology */
+	"the God of Cabbage", /* K-On! */
+	"Bill Cipher", /* Gravity Falls */
+	"Gades", "Amon", "_Erim", "Daos", /* Lufia series */
+        "_Beatrice", /* Umineko no Naku Koro ni */
+	"Spongebob Squarepants", /* should be obvious, right? :) */
+
 	//Internet
 	"SCP-343",
 	"the Slender Man",
@@ -2600,7 +2610,7 @@ const char * const hallu_gods[] = {
 	//atheism
 	"the universe",
 	"the Flying Spaghetti Monster",
-	"the Invisible Pink Unicorn",
+	"_the Invisible Pink Unicorn",
 	"last thursday",
 	
 	//Economic systems
@@ -2621,7 +2631,7 @@ const char * const hallu_gods[] = {
 	"whatchamacallit",
 	"whosamawhatsit",
 	"some guy",
-	"some gal",
+	"_some gal",
 	
 	//nethack
 	"the gnome with the wand of death",
@@ -2631,7 +2641,7 @@ const char * const hallu_gods[] = {
 	
 	"stth the first demigod",
 	"stth the wizard",
-	"stth the valkyrie",
+	"_stth the valkyrie",
 	"stth the barbarian",
 	"stth the tourist",
 	"stth the healer",
@@ -2665,7 +2675,9 @@ aligntyp alignment;
     const char *gnam;
 
 	if (Hallucination) {
-		return hallu_gods[rn2(SIZE(hallu_gods))];
+		gnam = hallu_gods[rn2(SIZE(hallu_gods))];
+		if (*gnam == '_') ++gnam;
+		return gnam;
 	}
     switch (alignment) {
      case A_NONE:
