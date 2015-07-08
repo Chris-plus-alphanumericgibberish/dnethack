@@ -605,7 +605,7 @@ int DrowPriestessFavoredBonus = -20;
 struct RoleName DrowRanks[9] = {
 	{"Wiu",			"Ligrr"},		/* boy, girl */
 	{"Wanre",		"Wenress"},		/* servant, maiden */
-	{"Glenn",		"Kyorl"},		/* soldier, */
+	{"Glenn",		"Kyorl"},		/* soldier, guard*/
 	{"Elg'hasek",	"Venta'kyorl"},	/* ranger, captain */
 	{"Beldrar",		"An'kin"},		/* builder, teacher */
 	{"Helothann",		"Jallil"},	/* traveler, lady */
@@ -1984,9 +1984,21 @@ role_init()
 		urole.rank[7] = ElfRangerRanks[7];
 		urole.rank[8] = ElfRangerRanks[8];
 		
-		urole.lgod = ElfRangerLgod;
-		urole.ngod = ElfRangerNgod;
-		urole.cgod = ElfRangerCgod;
+		if(Role_if(PM_RANGER)){
+			urole.lgod = ElfRangerLgod;
+			urole.ngod = ElfRangerNgod;
+			urole.cgod = ElfRangerCgod;
+		} else {
+			if(flags.initgend){ /*true = female*/
+				urole.lgod = ElfPriestessLgod;
+				urole.ngod = ElfPriestessNgod;
+				urole.cgod = ElfPriestessCgod;
+			} else {
+				urole.lgod = ElfPriestLgod;
+				urole.ngod = ElfPriestNgod;
+				urole.cgod = ElfPriestCgod;
+			}
+		}
 		
 		urole.homebase = "Caras Galadhon";
 		urole.intermed = "the Mirkwood caves";
