@@ -3266,8 +3266,8 @@ int  typ, fatal, opoistype;
 		}
 		i = rn2(fatal + 20*thrown_weapon);
 		if(i == 0 && typ != A_CHA) {
-			u.uhp = -1;
-			pline_The("poison was deadly...");
+			if (adjattrib(A_CON, typ==A_CON ? -2 : -rn1(3,3), 1))
+				pline_The("poison was quite debilitating...");
 		} else if(i <= 5) {
 			/* Check that a stat change was made */
 			if (adjattrib(typ, thrown_weapon ? -1 : -rn1(3,3), 1))
