@@ -1420,6 +1420,8 @@ u_init()
 		know_random_obj();
 		/* Bards also know all the basic wards. */
 		u.wardsknown = WARD_ACHERON|WARD_HAMSA|WARD_ELDER_SIGN|WARD_EYE|WARD_QUEEN|WARD_CAT_LORD|WARD_GARUDA;
+		u.wardsknown |= WARD_TOUSTEFNA;
+		u.wardsknown |= WARD_DREPRUN;
 		skill_init(Skill_Bard);
 	break;
 #endif
