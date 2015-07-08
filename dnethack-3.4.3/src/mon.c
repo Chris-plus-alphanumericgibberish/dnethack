@@ -1926,7 +1926,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		magr->data == &mons[PM_SERGEANT])
 	    return ALLOW_M|ALLOW_TM;
 
-	else if (magr->data == &mons[PM_DAMNED_PIRATE] &&
+	else if (magr->data == &mons[PM_SKELETAL_PIRATE] &&
 		u.ukinghill)
 	    return ALLOW_M|ALLOW_TM;
 	else if (magr->data == &mons[PM_DAMNED_PIRATE] &&
