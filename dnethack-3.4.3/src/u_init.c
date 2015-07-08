@@ -1714,7 +1714,6 @@ u_init()
 		skill_add(Skill_Drow_Unarmed);
 		
 		if(Role_if(PM_NOBLEMAN)){
-			ini_inv(DrovenHelm);
 			if(!flags.female) u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 				u.ualign.type = A_NEUTRAL; /* Males are neutral */
 		} else if(!Role_if(PM_EXILE)){
