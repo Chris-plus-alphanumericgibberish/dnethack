@@ -474,7 +474,7 @@ moveloop()
 					mtmp->mstrategy &= ~STRAT_WAITFORU;
 					pline_The("entire %s is shaking around you!",
 						   In_endgame(&u.uz) ? "plane" : "dungeon");
-					do_earthquake(((int)mtmp->m_lev - 1) / 6 + 1, TRUE, mtmp);
+					do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp);
 					if(rn2(2)){ //Do for x
 						digXchasm(mtmp);
 					} else { //Do for y

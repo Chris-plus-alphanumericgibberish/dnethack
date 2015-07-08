@@ -1047,7 +1047,7 @@ int spellnum;
             else verbalize("Open thy maw, mighty earth!");
 		}
 		mtmp ? 
-			do_earthquake(((int)mtmp->m_lev - 1) / 6 + 1, TRUE, mtmp)
+			do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp)
 		:	do_earthquake(rnd(5), TRUE, 1); //Fixme: true "not my fault" flag needed.
 		aggravate(); /* wake up without scaring */
 		dmg = 0;

@@ -945,7 +945,7 @@ asGuardian:
 				break;
 				case 4:
 				// pline("earthquake\n");
-				do_earthquake(((int)mtmp->m_lev - 1) / 6 + 1, TRUE, mtmp);
+				do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp);
 				aggravate(); /* wake up without scaring */
 				stop_occupation();
 				doredraw();
