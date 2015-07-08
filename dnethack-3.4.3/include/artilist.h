@@ -347,7 +347,7 @@ A("The Rod of the Ram",			MACE, /* Wolf, Ram, and Hart? Ram demon? */
 
 A("Atma Weapon", 		BEAMSWORD, /*Sword whose attack power is bound to its wielder's life force*/
 	(SPFX_RESTR|SPFX_DFLAG2), 0, M2_NASTY,
-	PHYS(6,0),	NO_DFNS,	NO_CARY, //needs quote
+	PHYS(6,6),	NO_DFNS,	NO_CARY, //needs quote
 	0, A_NONE, NON_PM, NON_PM, 6660L, 
 	0,0,0),
 
