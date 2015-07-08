@@ -390,7 +390,8 @@
 /* Used for conduct with corpses, tins, and digestion attacks */
 /* G_NOCORPSE monsters might still be swallowed as a purple worm */
 /* Maybe someday this could be in mflags... */
-#define vegan(ptr)		((ptr)->mlet == S_BLOB || \
+#define vegan(ptr)		(((ptr)->mlet == S_BLOB && \
+							(ptr) != &mons[PM_BLOB_OF_PRESERVED_ORGANS]) || \
 				 (ptr)->mlet == S_JELLY ||            \
 				((ptr)->mlet == S_FUNGUS && 		  \
 					!is_migo(ptr)) ||				  \
