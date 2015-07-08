@@ -1565,6 +1565,8 @@ int degree;
 {
     boolean advance_before;
 
+	if(skill < 0) skill *= -1;
+	
     if (skill != P_NONE && !P_RESTRICTED(skill)) {
 	advance_before = can_advance(skill, FALSE);
 	P_ADVANCE(skill)+=degree;
