@@ -726,7 +726,7 @@ unsigned trflags;
 			  body_part(HEAD));
 
 		    if (uarmh) {
-			if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
+			if(is_hard(uarmh)) {
 			    pline("Fortunately, you are wearing a hard helmet.");
 			    dmg = 2;
 			} else if (flags.verbose) {

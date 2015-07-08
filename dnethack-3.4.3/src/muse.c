@@ -1125,7 +1125,7 @@ struct monst *mtmp;
 		 */
 		nomore(MUSE_SCR_EARTH);
 		if (obj->otyp == SCR_EARTH
-		       && ((helmet && is_metallic(helmet)) ||
+		       && ((helmet && is_hard(helmet)) ||
 				mtmp->mconf || amorphous(mtmp->data) ||
 				passes_walls(mtmp->data) ||
 				noncorporeal(mtmp->data) ||
@@ -1482,7 +1482,7 @@ struct monst *mtmp;
 				}
 	    	    	    	mdmg = dmgval(otmp2, mtmp2, 0) * otmp2->quan;
 				if (helmet) {
-				    if(is_metallic(helmet) || helmet->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
+				    if(is_hard(helmet)) {
 					if (canspotmon(mtmp2))
 					    pline("Fortunately, %s is wearing a hard helmet.", mon_nam(mtmp2));
 					else if (flags.soundok)
@@ -1529,7 +1529,7 @@ struct monst *mtmp;
 			You("are hit by %s!", doname(otmp2));
 			dmg = dmgval(otmp2, &youmonst, 0) * otmp2->quan;
 			if (uarmh) {
-			    if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
+			    if(is_hard(uarmh)) {
 				pline("Fortunately, you are wearing a hard helmet.");
 				if (dmg > 2) dmg = 2;
 			    } else if (flags.verbose) {
@@ -1644,7 +1644,7 @@ struct monst *mtmp;
 		case 0: {
 		    struct obj *helmet = which_armor(mtmp, W_ARMH);
 
-		    if ((helmet && is_metallic(helmet)) || amorphous(pm) || passes_walls(pm) || noncorporeal(pm) || unsolid(pm))
+		    if ((helmet && is_hard(helmet)) || amorphous(pm) || passes_walls(pm) || noncorporeal(pm) || unsolid(pm))
 			return SCR_EARTH;
 		} /* fall through */
 		case 1: return WAN_MAGIC_MISSILE;

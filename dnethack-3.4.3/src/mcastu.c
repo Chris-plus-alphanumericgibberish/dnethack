@@ -1398,7 +1398,7 @@ summon_alien:
                 iron ? "nowhere" : the(ceiling(u.ux,u.uy)));
         dmg = dmgval(otmp, &youmonst, 0);
         if (uarmh) {
-            if (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
+            if (is_hard(uarmh)) {
                 pline("Fortunately, you are wearing a hard helmet.");
                 if (dmg > 2) dmg = 2;
             } else if (flags.verbose) {

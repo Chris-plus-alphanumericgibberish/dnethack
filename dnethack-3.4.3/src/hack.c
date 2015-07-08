@@ -1722,7 +1722,7 @@ stillinwater:;
 			      Amonnam(mtmp), ceiling(u.ux,u.uy));
 			if(mtmp->mtame) /* jumps to greet you, not attack */
 			    ;
-			else if(uarmh && is_metallic(uarmh)){
+			else if(uarmh && is_hard(uarmh)){
 			    int dmg;
 			    pline("Its blow glances off your helmet.");
 				if(((mtmp->m_lev) - 8) > 0){

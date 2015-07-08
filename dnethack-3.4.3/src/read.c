@@ -1625,7 +1625,7 @@ struct obj	*sobj;
 				}
 	    	    	    	mdmg = dmgval(otmp2, mtmp, 0) * otmp2->quan;
 				if (helmet) {
-				    if(is_metallic(helmet) || helmet->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
+				    if(is_hard(helmet)) {
 					if (canspotmon(mtmp))
 					    pline("Fortunately, %s is wearing a hard helmet.", mon_nam(mtmp));
 					else if (flags.soundok)
@@ -1669,7 +1669,7 @@ struct obj	*sobj;
 			You("are hit by %s!", doname(otmp2));
 			dmg = dmgval(otmp2, &youmonst, 0) * otmp2->quan;
 			if (uarmh && !sobj->cursed) {
-			    if(is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM) {
+			    if(is_hard(uarmh)) {
 				pline("Fortunately, you are wearing a hard helmet.");
 				if (dmg > 2) dmg = 2;
 			    } else if (flags.verbose) {

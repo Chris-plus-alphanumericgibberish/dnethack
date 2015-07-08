@@ -829,7 +829,7 @@ boolean hitsroof;
 	}
 	return FALSE;
     } else {		/* neither potion nor other breaking object */
-	boolean less_damage = uarmh && is_metallic(uarmh), artimsg = FALSE;
+	boolean less_damage = uarmh && is_hard(uarmh), artimsg = FALSE;
 	int dmg = dmgval(obj, &youmonst, 0);
 
 	if (obj->oartifact)
@@ -854,7 +854,7 @@ boolean hitsroof;
 
 	if (uarmh) {
 	    if (less_damage && dmg < (Upolyd ? u.mh : u.uhp)) {
-		if (!artimsg && (is_metallic(uarmh) || uarmh->otyp == FLACK_HELMET || uarmh->otyp == DROVEN_HELM))
+		if (!artimsg && (is_hard(uarmh)))
 		    pline("Fortunately, you are wearing a hard helmet.");
 	    } else if (flags.verbose &&
 		    !(obj->otyp == CORPSE && touch_petrifies(&mons[obj->corpsenm])))
