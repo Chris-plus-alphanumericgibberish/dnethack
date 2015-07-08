@@ -3326,9 +3326,13 @@ boolean atme;
 			pline("It invokes nightmarish images in your mind...");
 			spell_backfire(spell);
 			return(0);
-		} else if (spellknow(spell) <= 200) { /* 1% */
+		} else if (spellknow(spell) <= 200 && 
+			!(spellid(spell) == SPE_LIGHTNING_BOLT || !uarmh || uarmh->oartifact != ART_STORMHELM)
+		) { /* 1% */
 			You("strain to recall the spell.");
-		} else if (spellknow(spell) <= 1000) { /* 5% */
+		} else if (spellknow(spell) <= 1000 && 
+			!(spellid(spell) == SPE_LIGHTNING_BOLT || !uarmh || uarmh->oartifact != ART_STORMHELM)
+		) { /* 5% */
 			Your("knowledge of this spell is growing faint.");
 		}
 		energy = (spellev(spell) * 5);    /* 5 <= energy <= 35 */
