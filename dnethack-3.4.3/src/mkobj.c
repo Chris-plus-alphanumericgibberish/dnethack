@@ -535,7 +535,7 @@ boolean artif;
 		case LIGHTSABER:
 		case BEAMSWORD:
 					otmp->lamplit = 0;
-					otmp->age = (long) rn1(500,1000);
+					otmp->age = (long) rn1(50000,100000);
 					blessorcurse(otmp, 2);
 					break;
 		case CHEST:

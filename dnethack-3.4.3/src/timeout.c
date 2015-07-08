@@ -1348,16 +1348,16 @@ long timeout;
 		break;
 
 	    case DOUBLE_LIGHTSABER:
-	    	if (obj->altmode && obj->cursed && !rn2(25)) {
+	    	if (obj->altmode && obj->cursed && !rn2(125)) {
 		    obj->altmode = FALSE;
 		    pline("%s %s reverts to single blade mode!",
 			    whose, xname(obj));
 	    	}
 	    case LIGHTSABER: 
 	    case BEAMSWORD:
-	        /* Callback is checked every 5 turns - 
+	        /* Callback is checked every 1 turns - 
 	        	lightsaber automatically deactivates if not wielded */
-	        if ((obj->cursed && !rn2(50)) ||
+	        if ((obj->cursed && !rn2(250)) ||
 	            (obj->where == OBJ_FLOOR) || 
 		    (obj->where == OBJ_MINVENT && 
 		    	(!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)) ||
@@ -1365,34 +1365,9 @@ long timeout;
 		    	((!uwep || uwep != obj) &&
 		    	 (!u.twoweap || !uswapwep || obj != uswapwep))))
 	            lightsaber_deactivate(obj, FALSE);
-		switch (obj->age) {
-		    case 100:
-			/* Single warning time */
-			if (canseeit) {
-			    switch (obj->where) {
-				case OBJ_INVENT:
-				case OBJ_MINVENT:
-				    pline("%s %s dims!",whose, xname(obj));
-				    break;
-				case OBJ_FLOOR:
-				    You("see %s dim!", an(xname(obj)));
-				    break;
-			    }
-			} else {
-			    You("hear the hum of %s change!", an(xname(obj)));
-			}
-			break;
-		    case 0:
-			lightsaber_deactivate(obj, FALSE);
-			break;
-
-		    default:
-			/*
-			 * Someone added fuel to the lightsaber while it was
-			 * lit.  Just fall through and let begin burn
-			 * handle the new age.
-			 */
-			break;
+			if(obj->age <= 0){
+				obj->age = 0;//From hitting targets
+				lightsaber_deactivate(obj, FALSE);
 		}
 		if (obj && obj->age && obj->lamplit) /* might be deactivated */
 		    begin_burn(obj, TRUE);
@@ -1496,11 +1471,11 @@ begin_burn(obj, already_lit)
 	    case LIGHTSABER:
 	    case BEAMSWORD:
 			if(obj->oartifact == ART_ATMA_WEAPON){
-				if(obj->age == 0){
+				if(obj->age <= 0){
 					if(Drain_resistance) return;
 					losexp("life force drain",TRUE,TRUE,TRUE);
 					obj->cursed = FALSE;
-					obj->age = 1500;
+					obj->age = 150000;
 				} else if(!Drain_resistance) obj->age++;
 			}
 			turns = 1;

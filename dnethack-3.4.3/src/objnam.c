@@ -823,7 +823,11 @@ plus:
 			Sprintf(eos(bp), " (%s)", OBJ_NAME(objects[obj->otyp]));
 		}
 		if (is_lightsaber(obj)) {
-		    if (obj->lamplit) Strcat(bp, " (lit)");
+		    if (obj->lamplit){
+				if(obj->age > 1000) Strcat(bp, " (lit)");
+				else Strcat(bp, " (flickering)");
+				// Sprintf(eos(bp), " (%d)", obj->age);
+			}
 #  ifdef DEBUG
 		    Sprintf(eos(bp), " (%d)", obj->age);		
 #  endif
