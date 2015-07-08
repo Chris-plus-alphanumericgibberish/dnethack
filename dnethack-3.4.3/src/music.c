@@ -713,11 +713,11 @@ play_song()
 */
 #define mon_affected_by_peace_song(mtmp) \
 	(!mtmp->mtame || \
-	(mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_SKILLED) && \
+	(mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_BASIC) && \
 	 mtmp->data->mlet != S_NYMPH &&	!is_elf(mtmp->data)))
 #define mon_affected_by_song(mtmp) \
 	(!mtmp->mtame || \
-	 (mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_SKILLED)))
+	 (mtmp->mtame && (P_SKILL(P_MUSICALIZE) < P_BASIC)))
 
 
 /** Fear song effects.
