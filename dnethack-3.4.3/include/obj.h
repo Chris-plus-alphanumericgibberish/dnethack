@@ -450,6 +450,10 @@ struct obj {
 #define is_veggy(otmp)		(objects[otmp->otyp].oc_material == VEGGY)
 #define is_flesh(otmp)		(objects[otmp->otyp].oc_material == FLESH)
 #define is_paper(otmp)		(objects[otmp->otyp].oc_material == PAPER)
+#define is_metal(otmp)		(objects[otmp->otyp].oc_material == METAL || \
+							 objects[otmp->otyp].oc_material == COPPER || \
+							 objects[otmp->otyp].oc_material == SILVER || \
+							 objects[otmp->otyp].oc_material == IRON)
 
 /* misc */
 #define is_boulder(otmp)		((otmp)->otyp == BOULDER || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
