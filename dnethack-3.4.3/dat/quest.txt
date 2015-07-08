@@ -4700,7 +4700,7 @@ houseless drow live.  Someone here may have seen where %n
 went after her attack on your house.
 
 ...There is no way the girl could have known this, but this
-is where it all began.  You and Cinder were both born in
+is where it all began.  You and Cind'r were both born in
 these slums.  You hadn't thought it would end here, too.
 Not for many years.
 %E
@@ -4746,7 +4746,7 @@ you come back?
 "What do you hope to achieve!"
 %E
 %Cp Nhd 00065
-"Do you want to kill me, too!"
+"Do you want to kill me, too!?"
 %E
 %Cp Nhd 00066
 "Why do you care, you left!"
