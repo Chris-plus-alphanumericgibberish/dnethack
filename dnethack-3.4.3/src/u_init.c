@@ -1928,6 +1928,7 @@ u_init()
 				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
 			break;
 			default:
+				attkptr->adtyp = AD_PHYS;
 			break;
 		}
 		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
@@ -1973,6 +1974,7 @@ u_init()
 				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
 			break;
 			default:
+				attkptr->adtyp = AD_PHYS;
 			break;
 		}
 		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
@@ -2017,6 +2019,7 @@ u_init()
 				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
 			break;
 			default:
+				attkptr->adtyp = AD_PHYS;
 			break;
 		}
 		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
