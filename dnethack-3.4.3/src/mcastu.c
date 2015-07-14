@@ -73,10 +73,10 @@ STATIC_DCL void FDECL(cursetxt,(struct monst *,BOOLEAN_P));
 STATIC_DCL int FDECL(choose_magic_spell, (int,int,boolean));
 STATIC_DCL int FDECL(choose_clerical_spell, (int,int,boolean));
 STATIC_DCL void FDECL(cast_spell,(struct monst *, int,int));
-STATIC_DCL boolean FDECL(is_undirected_spell,(unsigned int,int));
+STATIC_DCL boolean FDECL(is_undirected_spell,(int));
 STATIC_DCL boolean FDECL(spell_would_be_useless,(struct monst *,int));
 STATIC_DCL boolean FDECL(mspell_would_be_useless,(struct monst *,struct monst *,int));
-STATIC_DCL boolean FDECL(uspell_would_be_useless,(int));
+STATIC_DCL boolean FDECL(uspell_would_be_useless,(struct monst *,int));
 STATIC_DCL void FDECL(ucast_spell,(struct monst *,struct monst *,int,int));
 
 #ifdef OVL0
@@ -716,7 +716,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 				if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
 		/* not trying to attack?  don't allow directed spells */
 		if (!thinks_it_foundyou) {
-		    if (!is_undirected_spell(mattk->adtyp, spellnum) ||
+				if (!is_undirected_spell(spellnum) ||
                        spell_would_be_useless(mtmp, spellnum)
 			) {
 //				if (foundyou)
@@ -732,7 +732,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 
 	/* monster unable to cast spells? */
 	if(mtmp->mcan || mtmp->mspec_used || !ml || u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
-	    cursetxt(mtmp, is_undirected_spell(mattk->adtyp, spellnum));
+	    cursetxt(mtmp, is_undirected_spell(spellnum));
 	    return(0);
 	}
 
@@ -746,7 +746,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	   wrong place?  If so, give a message, and return.  Do this *after*
 	   penalizing mspec_used. */
 	if (!foundyou && thinks_it_foundyou &&
-		!is_undirected_spell(mattk->adtyp, spellnum)) {
+		!is_undirected_spell(spellnum)) {
 	    pline("%s casts a spell at %s!",
 		canseemon(mtmp) ? Monnam(mtmp) : "Something",
 		levl[mtmp->mux][mtmp->muy].typ == WATER
@@ -761,10 +761,10 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		pline_The("air crackles around %s.", mon_nam(mtmp));
 	    return(0);
 	}
-	if (canspotmon(mtmp) || !is_undirected_spell(mattk->adtyp, spellnum)) {
+	if (canspotmon(mtmp) || !is_undirected_spell(spellnum)) {
 	    pline("%s casts a spell%s!",
 		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
-		  is_undirected_spell(mattk->adtyp, spellnum) ? "" :
+		  is_undirected_spell(spellnum) ? "" :
 		  (Invisible && !perceives(mtmp->data) && 
 		   (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
 		  " at a spot near you" :
@@ -890,7 +890,7 @@ int spellnum;
     boolean malediction = (mtmp && (mtmp->iswiz || (mtmp->data->msound == MS_NEMESIS && rn2(2))));
     int zap; /* used for ray spells */
     
-    if (dmg == 0 && !is_undirected_spell(AD_SPEL, spellnum)) {
+    if (dmg == 0 && !is_undirected_spell(spellnum)) {
 	impossible("cast directed wizard spell (%d) with dmg=0?", spellnum);
 	return;
     }
@@ -1866,8 +1866,7 @@ ray:
 
 STATIC_DCL
 boolean
-is_undirected_spell(adtyp, spellnum)
-unsigned int adtyp;
+is_undirected_spell(spellnum)
 int spellnum;
 {
 	switch (spellnum) {
@@ -1895,6 +1894,7 @@ spell_would_be_useless(mtmp, spellnum)
 struct monst *mtmp;
 int spellnum;
 {
+	int wardAt = ward_at(mtmp->mux,mtmp->muy);
     /* Some spells don't require the player to really be there and can be cast
      * by the monster when you're invisible, yet still shouldn't be cast when
      * the monster doesn't even think you're there.
@@ -1903,6 +1903,13 @@ int spellnum;
      */
     boolean mcouldseeu = couldsee(mtmp->mx, mtmp->my);
 
+	/*Don't cast at warded spaces*/
+	if(onscary(mtmp->mux, mtmp->muy, mtmp) && !is_undirected_spell(spellnum))
+		return TRUE;
+	
+	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
+		return TRUE;
+	
        /* only the wiz makes a clone */
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == CLONE_WIZ) return TRUE;
 	/* aggravate monsters won't be cast by peaceful monsters */
@@ -2051,7 +2058,7 @@ castmm(mtmp, mdef, mattk)
                 char buf[BUFSZ];
 		Sprintf(buf, Monnam(mtmp));
 
-		if (is_undirected_spell(mattk->adtyp, spellnum))
+		if (is_undirected_spell(spellnum))
 	            pline("%s points all around, then curses.", buf);
 		else
 	            pline("%s points at %s, then curses.",
@@ -2075,14 +2082,14 @@ castmm(mtmp, mdef, mattk)
 	}
 	if (cansee(mtmp->mx, mtmp->my) ||
 	    canseemon(mtmp) ||
-	    (!is_undirected_spell(mattk->adtyp, spellnum) &&
+	    (!is_undirected_spell(spellnum) &&
 	     (cansee(mdef->mx, mdef->my) || canseemon(mdef)))) {
             char buf[BUFSZ];
 	    Sprintf(buf, " at ");
 	    Strcat(buf, mon_nam(mdef));
 	    pline("%s casts a spell%s!",
 		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
-		  is_undirected_spell(mattk->adtyp, spellnum) ? "" : buf);
+		  is_undirected_spell(spellnum) ? "" : buf);
 	}
 
 	{
@@ -2156,7 +2163,7 @@ cold_mm:
 	    /*aggravation is a special case;*/
 		/*it's undirected but should still target the*/
 		/*victim so as to aggravate you*/
-	        if (is_undirected_spell(mattk->adtyp, spellnum)
+	        if (is_undirected_spell(spellnum)
 		&& (spellnum != AGGRAVATION &&
 		      spellnum != SUMMON_MONS))
 		    cast_spell(mtmp, dmg, spellnum);
@@ -2182,6 +2189,15 @@ struct monst *mtmp;
 struct monst *mdef;
 int spellnum;
 {
+	int wardAt = ward_at(mdef->mx, mdef->my);
+	
+	/*Don't cast at warded spaces*/
+	if(onscary(mdef->mx, mdef->my, mtmp) && !is_undirected_spell(spellnum))
+		return TRUE;
+	
+	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
+		return TRUE;
+	
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == CLONE_WIZ) 
 		return TRUE;
  	/* haste self when already fast */
@@ -2220,9 +2236,19 @@ int spellnum;
 
 STATIC_DCL
 boolean
-uspell_would_be_useless(spellnum)
+uspell_would_be_useless(mdef, spellnum)
+struct monst *mdef;
 int spellnum;
 {
+	int wardAt = ward_at(mdef->mx, mdef->my);
+	
+	/*Don't cast at warded spaces*/
+	if(onscary(mdef->mx, mdef->my, &youmonst) && !is_undirected_spell(spellnum))
+		return TRUE;
+	
+	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
+		return TRUE;
+	
 	/* aggravate monsters, etc. won't be cast by peaceful monsters */
 	if (spellnum == CLONE_WIZ)
 	    return TRUE;
@@ -2383,14 +2409,14 @@ castum(mtmp, mattk)
              if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
 //		/* not trying to attack?  don't allow directed spells */
 //		if (!mtmp || mtmp->mhp < 1) {
-//		    if (is_undirected_spell(mattk->adtyp, spellnum) && 
-//			!uspell_would_be_useless(spellnum)) {
+//		    if (is_undirected_spell(spellnum) && 
+//			!uspell_would_be_useless(mtmp, spellnum)) {
 //		        break;
 //		    }
 //		}
 	    } while(--cnt > 0 &&
-	            ((!mtmp && !is_undirected_spell(mattk->adtyp, spellnum))
-		    || uspell_would_be_useless(spellnum)));
+	            ((!mtmp && !is_undirected_spell(spellnum))
+		    || uspell_would_be_useless(mtmp, spellnum)));
 	    if (cnt == 0) {
 	        You("have no spells to cast right now!");
 		return 0;
@@ -2412,7 +2438,7 @@ castum(mtmp, mattk)
 	    }
 	}
 
-	directed = mtmp && !is_undirected_spell(mattk->adtyp, spellnum);
+	directed = mtmp && !is_undirected_spell(spellnum);
 
 	/* unable to cast spells? */
 	if(u.uen < ml) {
@@ -2539,7 +2565,7 @@ int spellnum;
     boolean resisted = FALSE;
     boolean yours = (mattk == &youmonst);
 
-    if (dmg == 0 && !is_undirected_spell(AD_SPEL, spellnum)) {
+    if (dmg == 0 && !is_undirected_spell(spellnum)) {
 	impossible("cast directed wizard spell (%d) with dmg=0?", spellnum);
 	return;
     }
