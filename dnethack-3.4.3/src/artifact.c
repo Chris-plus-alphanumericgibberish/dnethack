@@ -4175,8 +4175,10 @@ arti_invoke(obj)
 					break;
 					case COMMAND_E_LANCE:
 						uwep->otyp = ELVEN_LANCE;
+					break;
 					case COMMAND_SCIMITAR:
 						uwep->otyp = SCIMITAR;
+					break;
 					case COMMAND_WHIP:
 						uwep->otyp = BULLWHIP;
 					break;
