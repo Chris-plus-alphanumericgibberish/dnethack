@@ -138,6 +138,7 @@ hack_artifacts()
 	    //artilist[ART_CLARENT].role = NON_PM; Clarent is Knight-only
 	} else if(Race_if(PM_DWARF) && urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
 		artilist[ART_EXCALIBUR].role = NON_PM;
+		artilist[ART_RHONGOMYNIAD].role = NON_PM;
 		artilist[ART_CLARENT].role = NON_PM;
 		artilist[ART_GLAMDRING].spfx &= ~(SPFX_NOGEN);
 		artilist[ART_GLAMDRING].role = PM_KNIGHT;
