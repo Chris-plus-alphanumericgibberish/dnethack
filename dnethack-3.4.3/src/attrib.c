@@ -25,9 +25,14 @@ const struct innate {
 	schar	ulevel;
 	long	*ability;
 	const char *gainstr, *losestr;
-}	arc_abil[] = { {	 1, &(HStealth), "", "" },
+}
+	arc_abil[] = { {	 1, &(HStealth), "", "" },
 		     {   1, &(HFast), "", "" },
 		     {  10, &(HSearching), "perceptive", "" },
+		     {	 0, 0, 0, 0 } },
+
+	ana_abil[] = { {   7, &(HFast), "quick", "slow" },
+		     {	15, &(HWarning), "precognitive", "" },
 		     {	 0, 0, 0, 0 } },
 
 	bar_abil[] = { {	 1, &(HPoison_resistance), "", "" },
@@ -685,6 +690,7 @@ int oldlevel, newlevel;
 
 	switch (Role_switch) {
 	case PM_ARCHEOLOGIST:   abil = arc_abil;	break;
+	case PM_ANACHRONIST:    abil = ana_abil;	break;
 	case PM_BARBARIAN:      abil = bar_abil;	break;
 #ifdef BARD
 	case PM_BARD:           abil = brd_abil;	break;

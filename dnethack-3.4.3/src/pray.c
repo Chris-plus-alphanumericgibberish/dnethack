@@ -1745,6 +1745,11 @@ dosacrifice()
       of your alignment, is strongly discouraged.
      */
 
+	if(Role_if(PM_ANACHRONIST) && otmp->otyp != AMULET_OF_YENDOR){
+		You("do not give offerings to the God of the future.");
+		return 0;
+	}
+	
 #define MAXVALUE 24 /* Highest corpse value (besides Wiz) */
 
     if (otmp->otyp == CORPSE) {
@@ -2283,6 +2288,12 @@ int
 dopray()
 {
     /* Confirm accidental slips of Alt-P */
+	if(Role_if(PM_ANACHRONIST)){
+		pline("There is but one God in the future.");
+		pline("And to It, you do not pray.");
+		return 0;
+	}
+	
     if (flags.prayconfirm)
 	if (yn("Are you sure you want to pray?") == 'n')
 	    return 0;

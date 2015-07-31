@@ -8,7 +8,7 @@ struct trobj {
 	short trotyp;
 	schar trspe;
 	char trclass;
-	Bitfield(trquan,6);
+	Bitfield(trquan,8);
 	Bitfield(trbless,2);
 };
 
@@ -35,6 +35,81 @@ static struct trobj Archeologist[] = {
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ TOUCHSTONE, 0, GEM_CLASS, 1, 0 },
 	{ SACK, 0, TOOL_CLASS, 1, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Anachronist_Hu[] = {
+	{ ARM_BLASTER, 0, WEAPON_CLASS, 1, 0 },
+	{ FORCE_PIKE,  0, WEAPON_CLASS, 1, 0 },
+	{ HAND_BLASTER, 0, WEAPON_CLASS, 1, 0 },
+	{ PLASTEEL_ARMOR, 0, ARMOR_CLASS, 1, 0 },
+	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_HELM, 0, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_BOOTS, 0, ARMOR_CLASS, 1, 0 },
+	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS, 5, 0 },
+	{ PROTEIN_PILL, 0, FOOD_CLASS, 20, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Anachronist_Inc[] = {
+	{ HAND_BLASTER, 1, WEAPON_CLASS, 1, 0 },
+	{ HAND_BLASTER, 1, WEAPON_CLASS, 1, 0 },
+	{ LIGHTSABER,  1, WEAPON_CLASS, 1, 0 },
+	{ PLASTEEL_ARMOR, 1, ARMOR_CLASS, 1, 0 },
+	{ BODYGLOVE, 1, ARMOR_CLASS, 1, 0 },
+	{ FLACK_HELMET, 1, ARMOR_CLASS, 1, 0 },
+	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, 0 },
+	{ CLOAK_OF_PROTECTION, 1, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_BOOTS, 1, ARMOR_CLASS, 1, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS, 10, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Anachronist_Vam[] = {
+	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
+	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
+	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
+	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
+	{ STUDDED_LEATHER_ARMOR, 0, ARMOR_CLASS, 1, 0 },
+	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
+	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, 0 },
+	{ CLOAK_OF_DISPLACEMENT, 0, ARMOR_CLASS, 1, 0 },
+	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS, 5, 0 },
+	{ BULLET, 0, TOOL_CLASS, 200, 0 },
+	{ SILVER_BULLET, 0, TOOL_CLASS, 50, 0 },
+	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
+	{ FOOD_RATION, 0, FOOD_CLASS, 5, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Anachronist_Dro[] = {
+	{ SNIPER_RIFLE, 0, WEAPON_CLASS, 1, 0 },
+	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
+	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
+	{ PLASTEEL_ARMOR, 0, ARMOR_CLASS, 1, 0 },
+	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
+	{ FLACK_HELMET, 0, ARMOR_CLASS, 1, 0 },
+	{ ORIHALCYON_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
+	{ CLOAK_OF_INVISIBILITY, 0, ARMOR_CLASS, 1, 0 },
+	{ ELVEN_BOOTS, 0, ARMOR_CLASS, 1, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS,  5, 0 },
+	{ BULLET, 0, TOOL_CLASS, 60, 0 },
+	{ SILVER_BULLET, 0, TOOL_CLASS, 30, 0 },
+	{ BULLET_FABBER, UNDEF_SPE, TOOL_CLASS, 1, 0 },
+	{ PROTEIN_PILL, 0, FOOD_CLASS, 20, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Anachronist_Elf[] = {
+	{ RAYGUN,  0, WEAPON_CLASS, 1, 0 },
+	{ SCALPEL,  0, WEAPON_CLASS, 1, 0 },
+	{ SENSOR_PACK,  0, WEAPON_CLASS, 1, 0 },
+	{ JUMPSUIT, 0, ARMOR_CLASS, 1, 0 },
+	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
+	{ ORIHALCYON_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
+	{ JUMPING_BOOTS, 0, ARMOR_CLASS, 1, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS, 10, 0 },
+	{ FOOD_RATION, 0, FOOD_CLASS, 5, 0 },
+	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, 0 },
+	{ TIN_OPENER, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Barbarian[] = {
@@ -183,11 +258,13 @@ static struct trobj DwarfNoble[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Pirate[] = {
-#define PIR_KNIVES	1
-#define PIR_SNACK 5
-#define PIR_JEWELRY 7
-#define PIR_TOOL 8
+#define PIR_KNIVES	2
+#define PIR_SNACK 6
+#define PIR_JEWELRY 8
+#define PIR_TOOL 9
+#define PIR_BULLETS 10
 	{ SCIMITAR, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
+	{ FLINTLOCK, 0, WEAPON_CLASS, 1, 0 },
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
 	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
@@ -197,6 +274,7 @@ static struct trobj Pirate[] = {
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 	{ PICK_AXE, 0, TOOL_CLASS, 1, 0 },
 	{ OILSKIN_SACK, 0, TOOL_CLASS, 1, 0 },
+	{ BULLET,  0, TOOL_CLASS, 20, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Priest[] = {
@@ -494,6 +572,9 @@ static const struct def_skill Skill_A[] = {
     { P_PICK_AXE, P_EXPERT },		{ P_SHORT_SWORD, P_BASIC },
     { P_SCIMITAR, P_SKILLED },		{ P_SABER, P_EXPERT },
     { P_CLUB, P_SKILLED },		{ P_QUARTERSTAFF, P_SKILLED },
+//#ifdef FIREARMS
+    { P_FIREARM, P_SKILLED },
+//#endif
     { P_SLING, P_SKILLED },		{ P_DART, P_BASIC },
     { P_BOOMERANG, P_EXPERT },		{ P_WHIP, P_EXPERT },
     { P_UNICORN_HORN, P_SKILLED },	{ P_HARVEST, P_BASIC },
@@ -504,6 +585,26 @@ static const struct def_skill Skill_A[] = {
 #endif
     { P_TWO_WEAPON_COMBAT, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_EXPERT },
+    { P_NONE, 0 }
+};
+
+static const struct def_skill Skill_Ana[] = {
+    { P_DAGGER, P_EXPERT },		{ P_KNIFE,  P_EXPERT },
+    { P_SHORT_SWORD, P_EXPERT },{ P_LANCE,  P_EXPERT },
+    { P_SABER, P_EXPERT },		{ P_LONG_SWORD,  P_SKILLED },
+    { P_CLUB, P_SKILLED },		{ P_QUARTERSTAFF, P_SKILLED },
+#ifdef FIREARMS
+    { P_FIREARM, P_EXPERT },
+#endif
+    { P_DART, P_BASIC },		{ P_CROSSBOW, P_BASIC },
+    { P_WHIP, P_SKILLED },
+    { P_ATTACK_SPELL, P_SKILLED },	{ P_HEALING_SPELL, P_SKILLED },
+    { P_DIVINATION_SPELL, P_SKILLED},	{ P_MATTER_SPELL, P_SKILLED},
+#ifdef STEED
+    { P_RIDING, P_BASIC },
+#endif
+    { P_TWO_WEAPON_COMBAT, P_EXPERT },
+    { P_BARE_HANDED_COMBAT, P_BASIC },
     { P_NONE, 0 }
 };
 
@@ -794,7 +895,9 @@ static const struct def_skill Skill_Pir[] = {
     { P_CROSSBOW, P_EXPERT },   { P_DART, P_SKILLED },
     { P_WHIP, P_SKILLED },   	{ P_UNICORN_HORN, P_BASIC },
 	{ P_PICK_AXE, P_SKILLED },
-
+//#ifdef FIREARMS
+    { P_FIREARM, P_EXPERT },
+//#endif
 	{ P_ATTACK_SPELL, P_BASIC },{ P_DIVINATION_SPELL, P_BASIC },
 	{ P_ENCHANTMENT_SPELL, P_BASIC },{ P_ESCAPE_SPELL, P_SKILLED },
     { P_TWO_WEAPON_COMBAT, P_SKILLED },
@@ -877,6 +980,9 @@ static const struct def_skill Skill_T[] = {
     { P_SPEAR, P_BASIC },		{ P_JAVELIN, P_BASIC },
     { P_TRIDENT, P_BASIC },		{ P_LANCE, P_BASIC },
     { P_BOW, P_BASIC },			{ P_SLING, P_BASIC },
+//#ifdef FIREARMS
+    { P_FIREARM, P_BASIC },
+//#endif
     { P_CROSSBOW, P_BASIC },		{ P_DART, P_EXPERT },
     { P_SHURIKEN, P_BASIC },		{ P_BOOMERANG, P_EXPERT },
     { P_WHIP, P_BASIC },		{ P_HARVEST, P_SKILLED },
@@ -1388,6 +1494,39 @@ u_init()
 		knows_object(TOUCHSTONE);
 		skill_init(Skill_A);
 		break;
+	case PM_ANACHRONIST:
+		if(Race_if(PM_DROW)) ini_inv(Anachronist_Dro);
+		else if(Race_if(PM_ELF)) ini_inv(Anachronist_Elf);
+		else if(Race_if(PM_INCANTIFIER)) ini_inv(Anachronist_Inc);
+		else if(Race_if(PM_VAMPIRE)) ini_inv(Anachronist_Vam);
+		else ini_inv(Anachronist_Hu);
+		knows_object(PISTOL);
+		knows_object(SUBMACHINE_GUN);
+		knows_object(HEAVY_MACHINE_GUN);
+		knows_object(RIFLE);
+		knows_object(ASSAULT_RIFLE);
+		knows_object(SNIPER_RIFLE);
+		knows_object(SHOTGUN);
+		knows_object(AUTO_SHOTGUN);
+		knows_object(ROCKET_LAUNCHER);
+		knows_object(GRENADE_LAUNCHER);
+		knows_object(BFG);
+		knows_object(CUTTING_LASER);
+		knows_object(HAND_BLASTER);
+		knows_object(ARM_BLASTER);
+		knows_object(RAYGUN);
+		knows_object(BULLET);
+		knows_object(SILVER_BULLET);
+		knows_object(SHOTGUN_SHELL);
+		knows_object(ROCKET);
+		knows_object(FRAG_GRENADE);
+		knows_object(GAS_GRENADE);
+		knows_object(STICK_OF_DYNAMITE);
+		knows_object(HEAVY_BLASTER_BOLT);
+		knows_object(BLASTER_BOLT);
+		knows_object(LASER_BEAM);
+		skill_init(Skill_Ana);
+	break;
 	case PM_BARBARIAN:
 		if (rn2(100) >= 50) {	/* see above comment */
 		    Barbarian[B_MAJOR].trotyp = BATTLE_AXE;
@@ -1524,6 +1663,7 @@ u_init()
 		else Pirate[PIR_KNIVES].trquan = rn1(3, 4);
 		if(!rn2(4)) Pirate[PIR_SNACK].trotyp = KELP_FROND;
 		Pirate[PIR_SNACK].trquan += rn2(4);
+		Pirate[PIR_BULLETS].trquan += rn2(Pirate[PIR_BULLETS].trquan/2);
 		if(rn2(100)<50)	Pirate[PIR_JEWELRY].trotyp = RIN_ADORNMENT;
 		if(rn2(100)<50)	Pirate[PIR_TOOL].trotyp = GRAPPLING_HOOK;
 		ini_inv(Pirate);
@@ -2170,6 +2310,7 @@ int otyp;
 
     switch (Role_switch) {
      case PM_ARCHEOLOGIST:	skills = Skill_A; break;
+     case PM_ANACHRONIST:	skills = Skill_Ana; break;
      case PM_BARBARIAN:		skills = Skill_B; break;
 #ifdef BARD
      case PM_BARD:		skills = Skill_Bard; break;

@@ -2039,7 +2039,7 @@ const struct def_skill *class_skill;
 
 	/* walk through array to set skill maximums */
 	for (; class_skill->skill != P_NONE; class_skill++) {
-		if(!Race_if(PM_VAMPIRE) || class_skill->skill != P_TWO_WEAPON_COMBAT){
+		if(!(Race_if(PM_VAMPIRE) && !Role_if(PM_ANACHRONIST)) || class_skill->skill != P_TWO_WEAPON_COMBAT){
 			skmax = class_skill->skmax;
 			skill = class_skill->skill;
 

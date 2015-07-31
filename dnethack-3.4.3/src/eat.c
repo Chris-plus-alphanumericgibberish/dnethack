@@ -208,6 +208,7 @@ register struct obj *obj;
 
 	if(Race_if(PM_INCANTIFIER)) return incantifier_edible(obj);
 	if(uclockwork) return uclockwork_edible(obj);
+	if(Role_if(PM_ANACHRONIST) && !Upolyd) return ((obj->otyp >= SLIME_MOLD && obj->otyp <= TIN)); /*Processed foods only*/
 	
 	if (metallivorous(youmonst.data) && is_metallic(obj) &&
 	    (youmonst.data != &mons[PM_RUST_MONSTER] || is_rustprone(obj)))
