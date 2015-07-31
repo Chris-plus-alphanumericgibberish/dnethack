@@ -873,6 +873,11 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, SCIMITAR);
 				(void)mongets(mtmp, LEATHER_ARMOR);
 				(void)mongets(mtmp, HIGH_BOOTS);
+				(void)mongets(mtmp, FLINTLOCK);
+				otmp = mksobj(BULLET, FALSE, FALSE);
+				otmp->quan += 10;
+				otmp->owt = weight(otmp);
+				(void) mpickobj(mtmp, otmp);
 			} else if (mm == PM_MAYOR_CUMMERBUND){
 				int spe2;
 				otmp = mksobj(SCIMITAR, FALSE, FALSE);
@@ -1447,14 +1452,25 @@ register struct monst *mtmp;
 	    case S_ZOMBIE:
 		if(mm == PM_SKELETAL_PIRATE){
 		    otmp = rn2(2) ? mksobj(SCIMITAR, FALSE, FALSE) : mksobj(KNIFE, FALSE, FALSE);
-		    curse(otmp);
+		    // curse(otmp);
 			otmp->oeroded = 1;
 		    (void) mpickobj(mtmp, otmp);
 			
 		    otmp = rn2(2) ? mksobj(HIGH_BOOTS, FALSE, FALSE) : mksobj(LEATHER_JACKET, FALSE, FALSE);
-		    curse(otmp);
+		    // curse(otmp);
 			otmp->oeroded2 = 1;
 		    (void) mpickobj(mtmp, otmp);
+			
+		    otmp = rn2(2) ? mksobj(FLINTLOCK, FALSE, FALSE) : mksobj(KNIFE, FALSE, FALSE);
+		    // curse(otmp);
+			otmp->oeroded = 1;
+		    (void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(BULLET, FALSE, FALSE);
+			otmp->quan += rnd(10);
+			otmp->oeroded = 1;
+			otmp->owt = weight(otmp);
+			(void) mpickobj(mtmp, otmp);
 			break;
 		}
 		if (!rn2(4)) (void)mongets(mtmp, LEATHER_ARMOR);
@@ -1479,6 +1495,16 @@ register struct monst *mtmp;
 				curse(otmp);
 				otmp->oeroded = 1;
 				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(FLINTLOCK, FALSE, FALSE);
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(BULLET, FALSE, FALSE);
+				otmp->quan += 10;
+				otmp->owt = weight(otmp);
+				(void) mpickobj(mtmp, otmp);
+				
 				return; //bypass general weapons
 			break;
 		    case PM_BALROG:
@@ -1656,7 +1682,7 @@ register struct	monst	*mtmp;
 		    if (mac < 10 && rn2(3))
 			mac += 1 + mongets(mtmp, HELMET);
 		    else if (mac < 10 && rn2(2))
-			mac += 1 + mongets(mtmp, FLACK_HELMET);
+			mac += 1 + mongets(mtmp, SKULLCAP);
 		    if (mac < 10 && rn2(3))
 			mac += 1 + mongets(mtmp, SMALL_SHIELD);
 		    else if (mac < 10 && rn2(2))

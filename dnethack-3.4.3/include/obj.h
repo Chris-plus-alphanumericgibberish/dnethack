@@ -43,6 +43,10 @@ struct obj {
 	char	invlet;		/* designation in inventory */
 	int		oartifact;	/* artifact array index */
 	schar 	altmode; 	/* alternate modes - eg. SMG, double Lightsaber */
+				/* WP_MODEs are in decreasing speed */
+#define WP_MODE_AUTO	0	/* Max firing speed */
+#define WP_MODE_BURST	1	/* 1/3 of max rate */
+#define WP_MODE_SINGLE 	2	/* Single shot */
 
 	xchar where;		/* where the object thinks it is */
 #define OBJ_FREE	0		/* object not attached to anything */
@@ -75,6 +79,7 @@ struct obj {
 #define norevive oeroded2
 	Bitfield(oerodeproof,1); /* erodeproof weapon/armor */
 	Bitfield(olocked,1);	/* object is locked */
+#define oarmed olocked
 #define odrained olocked	/* drained corpse */
 	Bitfield(obroken,1);	/* lock has been broken */
 #define ohaluengr obroken	/* engraving on ring isn't a ward */
@@ -102,7 +107,8 @@ struct obj {
     Bitfield(was_thrown,1); /* for pickup_thrown */
 	/* 0 free bits */
 	Bitfield(fromsink,1);
-	/* 31 free bits in this field, I think -CM */
+	Bitfield(yours,1);	/* obj is yours (eg. thrown by you) */
+	/* 30 free bits in this field, I think -CM */
 	
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
 					/* Class of mask */
@@ -132,11 +138,19 @@ struct obj {
 	/* in order to prevent alignment problems oextra should
 	   be (or follow) a long int */
 	long owornmask;
-	long ovar1;		/* extra variable. Specifies the contents of Books of Secrets, and the warding sign of spellbooks. */
-			/* Also, records special features for weapons. */
+	long ovar1;		/* extra variable. Specifies: */
+			/*Records the contents of Books of Secrets*/
+			/*Records the warding sign of spellbooks. */
+			/*Records the warding sign of scrolls of ward. */
+			/*Records the warding sign of rings. */
+			/*Records the tatteredness level of droven cloaks. */
+			/*Records the cracked level of masks. */
+			/*Records special features for weapons. */
 			/* 	Records runes for wooden weapons */
 			/* 	Records moon phase for moon axes */
 			/* 	Records theft type for stealing artifacts (reaver (scimitar) and averice (shortsword) */
+			/* 	Records remaining ammo for blasters and force pikes */
+			/* 	Records the hilt-type for lightsabers */
 			
 #define ECLIPSE_MOON	0
 #define CRESCENT_MOON	1
@@ -247,8 +261,11 @@ struct obj {
 			 otmp->oclass == GEM_CLASS) && \
 			 objects[otmp->otyp].oc_skill >= -P_CROSSBOW && \
 			 objects[otmp->otyp].oc_skill <= -P_BOW)
+#define is_grenade(otmp)	(is_ammo(otmp) && \
+			 	 objects[(otmp)->otyp].w_ammotyp == WP_GRENADE)
 #define ammo_and_launcher(otmp,ltmp) \
 			 (is_ammo(otmp) && (ltmp) && \
+			  (objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
 			 (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill ||\
 			 ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE))
 #define is_missile(otmp)	((otmp->oclass == WEAPON_CLASS || \
@@ -269,7 +286,14 @@ struct obj {
 // define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 // objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
 			 // objects[otmp->otyp].oc_skill <= -P_BOW)
+//#ifdef FIREARMS
+#define is_unpoisonable_firearm_ammo(otmp)	\
+			 (is_bullet(otmp) || (otmp)->otyp == STICK_OF_DYNAMITE)
+//#else
+//#define is_unpoisonable_firearm_ammo(otmp)	0
+//#endif
 #define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
+			!is_unpoisonable_firearm_ammo(otmp) &&\
 			objects[otmp->otyp].oc_dir != WHACK)
 #define uslinging()	(uwep && objects[uwep->otyp].oc_skill == P_SLING)
 #define is_bludgeon(otmp)	(otmp->oclass == SPBOOK_CLASS || \
@@ -281,6 +305,17 @@ struct obj {
 #define is_slashing(otmp)	(otmp->oclass != SPBOOK_CLASS && \
 			otmp->oclass != WAND_CLASS && \
 			objects[otmp->otyp].oc_dir | SLASH) //Pierce == 2
+//#ifdef FIREARMS
+#define is_blaster(otmp) \
+			((otmp)->oclass == WEAPON_CLASS && \
+			 objects[(otmp)->otyp].w_ammotyp == WP_BLASTER && \
+			 objects[(otmp)->otyp].oc_skill == P_FIREARM)
+#define is_firearm(otmp) \
+			((otmp)->oclass == WEAPON_CLASS && \
+			 objects[(otmp)->otyp].oc_skill == P_FIREARM)
+#define is_bullet(otmp)	((otmp)->oclass == WEAPON_CLASS && \
+			 objects[(otmp)->otyp].oc_skill == -P_FIREARM)
+//#endif
 
 /* Armor */
 #define is_shield(otmp) (otmp->oclass == ARMOR_CLASS && \
@@ -413,6 +448,7 @@ struct obj {
 				|| (otmp)->otyp == LIGHTSABER\
 				|| (otmp)->otyp == BEAMSWORD\
 				|| (otmp)->otyp == DOUBLE_LIGHTSABER\
+				|| (otmp)->otyp == FORCE_ARMOR\
 				|| (otmp)->otyp == GNOMISH_POINTY_HAT\
 				|| (otmp)->otyp == CANDELABRUM_OF_INVOCATION\
 				|| (otmp)->otyp == TALLOW_CANDLE\

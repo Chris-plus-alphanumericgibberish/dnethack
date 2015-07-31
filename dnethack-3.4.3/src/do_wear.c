@@ -95,6 +95,7 @@ Boots_on()
 	case LOW_BOOTS:
 	case IRON_SHOES:
 	case HIGH_BOOTS:
+	case PLASTEEL_BOOTS:
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
@@ -179,6 +180,7 @@ Boots_off()
 	case LOW_BOOTS:
 	case IRON_SHOES:
 	case HIGH_BOOTS:
+	case PLASTEEL_BOOTS:
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
@@ -328,6 +330,8 @@ Helmet_on()
 	case HELMET:
 	case DROVEN_HELM:
 	case FLACK_HELMET:
+	case SKULLCAP:
+	case PLASTEEL_HELM:
 	case CRYSTAL_HELM:
 	case SEDGE_HAT:
 	case ELVEN_LEATHER_HELM:
@@ -399,6 +403,7 @@ Helmet_off()
 	case HELMET:
 	case DROVEN_HELM:
 	case FLACK_HELMET:
+	case PLASTEEL_HELM:
 	case CRYSTAL_HELM:
 	case SEDGE_HAT:
 	case ELVEN_LEATHER_HELM:
@@ -453,6 +458,7 @@ Gloves_on()
 
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
+	case PLASTEEL_GAUNTLETS:
 	case ORIHALCYON_GAUNTLETS:
 		break;
 	case GAUNTLETS_OF_FUMBLING:
@@ -481,6 +487,7 @@ Gloves_off()
 
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
+	case PLASTEEL_GAUNTLETS:
 	case ORIHALCYON_GAUNTLETS:
 	    break;
 	case GAUNTLETS_OF_FUMBLING:
@@ -1520,6 +1527,10 @@ boolean noisy;
 			if (noisy) You("cannot wear gloves over your %s.",
 				   is_sword(uwep) ? c_sword : c_weapon);
 			err++;
+		} else if (uwep && uwep->otyp == ARM_BLASTER && is_metal(otmp)) {
+			if (noisy) pline("%s too tightly to allow such bulky, rigid gloves.",
+				   Tobjnam(uwep, "fit"));
+			err++;
 		} else if (otmp->oartifact == ART_CLAWS_OF_THE_REVENANCER && uright) {
 			if (noisy) You("cannot wear a ring on your right hand with this artifact.");
 			err++;
@@ -1973,7 +1984,7 @@ glibr()
 	}
 
 	otmp = uswapwep;
-	if (u.twoweap && otmp) {
+	if (u.twoweap && otmp && otmp->otyp != ARM_BLASTER) {
 		otherwep = is_sword(otmp) ? c_sword :
 		    makesingular(oclass_names[(int)otmp->oclass]);
 		Your("%s %sslips from your %s.",
@@ -1986,7 +1997,7 @@ glibr()
 			dropx(otmp);
 	}
 	otmp = uwep;
-	if (otmp && !welded(otmp)) {
+	if (otmp && !welded(otmp) && otmp->otyp != ARM_BLASTER) {
 		const char *thiswep;
 
 		/* nice wording if both weapons are the same type */

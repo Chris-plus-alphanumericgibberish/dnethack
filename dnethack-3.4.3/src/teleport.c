@@ -176,6 +176,85 @@ full:
 }
 
 /*
+/*
+ * "entity path to"
+ *
+ * Attempt to find nc good places for the given monster type with the shortest
+ * path to (xx,yy).  Where there is more than one valid set of positions, one
+ * will be chosen at random.  Return the number of positions found.
+ * Warning:  This routine is much slower than enexto and should be used
+ * with caution.
+ */
+
+#define EPATHTO_UNSEEN		0x0
+#define EPATHTO_INACCESSIBLE	0x1
+#define EPATHTO_DONE		0x2
+#define EPATHTO_TAIL(n)		(0x3 + ((n) & 7))
+
+#define EPATHTO_XY(x,y)		(((y) + 1) * COLNO + (x))
+#define EPATHTO_Y(xy)		((xy) / COLNO - 1)
+#define EPATHTO_X(xy)		((xy) % COLNO)
+
+/*
+ * func should return 1 if the location should be counted as inaccessible
+ * (path won't continue through this point) or 0 if it is accessible.
+ */
+
+void
+xpathto(r, xx, yy, func, data)
+int r;
+register xchar xx, yy;
+int (*func)(genericptr_t, int, int);
+genericptr_t data;
+{
+    int i, j, dir, xy, x, y;
+    int path_len, postype;
+    int first_col, last_col;
+    int nd, n;
+    unsigned char *map;
+    static const int dirs[8] =
+      /* N, S, E, W, NW, NE, SE, SW */
+      { -COLNO, COLNO, 1, -1, -COLNO-1, -COLNO+1, COLNO+1, COLNO-1};
+    map = (unsigned char *)alloc(COLNO * (ROWNO + 2));
+    (void) memset((genericptr_t)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
+    for(i = 1; i < COLNO; i++)
+	for(j = 0; j < ROWNO; j++)
+	    map[EPATHTO_XY(i, j)] = EPATHTO_UNSEEN;
+    map[EPATHTO_XY(xx, yy)] = EPATHTO_TAIL(0);
+    if (func(data, xx, yy) == 0)
+	nd = n = 1;
+    else
+	nd = n = 0;
+    for(path_len = 0; path_len < r; path_len++)
+    {
+	first_col = max(1, xx - path_len);
+	last_col = min(COLNO - 1, xx + path_len);
+	for(j = max(0, yy - path_len); j <= min(ROWNO - 1, yy + path_len); j++)
+	    for(i = first_col; i <= last_col; i++)
+		if (map[EPATHTO_XY(i, j)] == EPATHTO_TAIL(path_len)) {
+		    map[EPATHTO_XY(i, j)] = EPATHTO_DONE;
+		    for(dir = 0; dir < 8; dir++) {
+			xy = EPATHTO_XY(i, j) + dirs[dir];
+			if (map[xy] == EPATHTO_UNSEEN) {
+			    x = EPATHTO_X(xy);
+			    y = EPATHTO_Y(xy);
+			    postype = func(data, x, y);
+			    map[xy] = postype ? EPATHTO_INACCESSIBLE :
+				    EPATHTO_TAIL(path_len + 1);
+			    if (postype == 0)
+				++n;
+			}
+		    }
+		}
+	if (nd == n)
+	    break;	/* No more positions */
+	else
+	    nd = n;
+    }
+    free((genericptr_t)map);
+}
+
+/*
  * Check for restricted areas present in some special levels.  (This might
  * need to be augmented to allow deliberate passage in wizard mode, but
  * only for explicitly chosen destinations.)

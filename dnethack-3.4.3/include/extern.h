@@ -490,15 +490,15 @@ E void FDECL(impact_drop, (struct obj *,XCHAR_P,XCHAR_P,XCHAR_P));
 
 /* ### dothrow.c ### */
 
-E int FDECL(throw_obj, (struct obj *,int));
+E int FDECL(throw_obj, (struct obj *,int, int));
 E int NDECL(dothrow);
 E int NDECL(dofire);
 E void FDECL(hitfloor, (struct obj *));
 E void FDECL(hurtle, (int,int,int,BOOLEAN_P));
 E void FDECL(mhurtle, (struct monst *,int,int,int));
-E void FDECL(throwit, (struct obj *,long,BOOLEAN_P));
+E void FDECL(throwit, (struct obj *,long,BOOLEAN_P,int));
 E int FDECL(omon_adj, (struct monst *,struct obj *,BOOLEAN_P));
-E int FDECL(thitmonst, (struct monst *,struct obj *));
+E int FDECL(thitmonst, (struct monst *,struct obj *,int));
 E int FDECL(hero_breaks, (struct obj *,XCHAR_P,XCHAR_P,BOOLEAN_P));
 E int FDECL(breaks, (struct obj *,XCHAR_P,XCHAR_P));
 E boolean FDECL(breaktest, (struct obj *));
@@ -693,6 +693,10 @@ E long FDECL(rndexp, (BOOLEAN_P));
 E void FDECL(explode, (int,int,int,int,CHAR_P,int));
 E long FDECL(scatter, (int, int, int, unsigned int, struct obj *));
 E void FDECL(splatter_burning_oil, (int, int));
+//#ifdef FIREARMS
+E void FDECL(grenade_explode, (struct obj *, int, int, BOOLEAN_P, int));
+E void FDECL(arm_bomb, (struct obj *, BOOLEAN_P));
+//#endif
 
 /* ### extralev.c ### */
 
@@ -1073,6 +1077,7 @@ E int FDECL(noattacks, (struct permonst *));
 E int FDECL(sleep_monst, (struct monst *,int,int));
 E void FDECL(slept_monst, (struct monst *));
 E long FDECL(attk_protection, (int));
+E int FDECL(thrwmm, (struct monst *, struct monst *));
 
 /* ### mhitu.c ### */
 
@@ -1433,9 +1438,8 @@ E void FDECL(Delay, (int));
 E int FDECL(set_bypassDR, (int));
 E int FDECL(set_destroy_thrown, (int));
 E int FDECL(thitu, (int,int,struct obj *,const char *));
-E int FDECL(ohitmon, (struct monst *,struct obj *,int,BOOLEAN_P));
+E int FDECL(ohitmon, (struct monst *,struct monst *,struct obj *,int,BOOLEAN_P));
 E void FDECL(thrwmu, (struct monst *));
-E boolean FDECL(thrwmm, (struct monst *, struct monst *));
 E int FDECL(spitmu, (struct monst *,struct attack *));
 E int FDECL(firemu, (struct monst *,struct attack *));
 E int FDECL(firemm, (struct monst *,struct monst *,struct attack *));
@@ -1448,6 +1452,7 @@ E boolean FDECL(linedup, (XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P));
 E boolean FDECL(lined_up, (struct monst *));
 E boolean FDECL(mlined_up, (struct monst *,struct monst *,BOOLEAN_P));
 E struct obj *FDECL(m_carrying, (struct monst *,int));
+E struct obj *FDECL(m_carrying_charged, (struct monst *,int));
 E void FDECL(m_useup, (struct monst *,struct obj *));
 E void FDECL(m_throw, (struct monst *,int,int,int,int,int,struct obj *,BOOLEAN_P));
 E boolean FDECL(hits_bars, (struct obj **,int,int,int,int));
@@ -1555,6 +1560,7 @@ E void NDECL(objects_init);
 
 /* ### objnam.c ### */
 
+E char *FDECL(lightsaber_colorText, (struct obj *));
 E char *FDECL(obj_typename, (int));
 E char *FDECL(simple_typename, (int));
 E boolean FDECL(obj_is_pname, (struct obj *));
@@ -2183,6 +2189,7 @@ E boolean FDECL(teleok, (int,int,BOOLEAN_P));
 E boolean FDECL(goodpos, (int,int,struct monst *,unsigned));
 E boolean FDECL(enexto, (coord *,XCHAR_P,XCHAR_P,struct permonst *));
 E boolean FDECL(enexto_core, (coord *,XCHAR_P,XCHAR_P,struct permonst *,unsigned));
+E void FDECL(xpathto, (int,XCHAR_P,XCHAR_P,int (*)(genericptr_t,int,int),void *));
 E void FDECL(teleds, (int,int,BOOLEAN_P));
 E boolean FDECL(safe_teleds, (BOOLEAN_P));
 E boolean FDECL(teleport_pet, (struct monst *,BOOLEAN_P));

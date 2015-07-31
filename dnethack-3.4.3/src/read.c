@@ -507,6 +507,10 @@ struct obj *obj;
 			(obj->known || objects[obj->otyp].oc_uname));
 	if (is_lightsaber(obj))
 	    return TRUE;
+//#ifdef FIREARMS
+	if (is_blaster(obj))
+	    return TRUE;
+//#endif
 	if (is_weptool(obj))	/* specific check before general tools */
 	    return FALSE;
 	if (obj->oclass == TOOL_CLASS)
@@ -603,7 +607,7 @@ int curse_bless;
 		   ever created the above will need to be revised  */
 	    }
 
-	} else if (obj->oclass == TOOL_CLASS 
+	} else if (obj->oclass == TOOL_CLASS || is_blaster(obj)
 		   || obj->otyp == DWARVISH_IRON_HELM) {
 	    int rechrg = (int)obj->recharged;
 
@@ -685,6 +689,24 @@ int curse_bless;
 				obj->spe = 1;
 		    }
 		}
+//#ifdef FIREARMS
+	    case CUTTING_LASER:
+	    case HAND_BLASTER:
+	    case ARM_BLASTER:
+			if(obj->recharged > 4){
+				obj->recharged = 4;
+			} else {
+				if(is_blessed) obj->ovar1 = 100L;
+				else if(is_cursed) obj->ovar1 = 10L;
+				else obj->ovar1 = 80L + rn2(20);
+			}
+		break;
+	    case RAYGUN:
+			if(is_blessed) obj->ovar1 = 160L;
+			else if(is_cursed) obj->ovar1 = 10L;
+			else obj->ovar1 = (8 + rn2(8))*10L;
+		break;
+//#endif
 	    case LIGHTSABER:
 	    case BEAMSWORD:
 	    case DOUBLE_LIGHTSABER:

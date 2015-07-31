@@ -1019,6 +1019,8 @@ register const char *let,*word;
 			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strcmp(word, "tin") &&
 		    (otyp != CORPSE || !tinnable(otmp)))
+		|| (!strcmp(word, "feed to the fabber") &&
+		    (otyp != ROCK && otyp != SILVER_SLINGSTONE && otyp != FLINT && otyp != LOADSTONE))
 		|| (!strcmp(word, "rub") &&
 		    ((otmp->oclass == TOOL_CLASS &&
 		      otyp != OIL_LAMP && otyp != MAGIC_LAMP &&
@@ -1032,6 +1034,16 @@ register const char *let,*word;
 			!strcmp(word, "untrap with")) &&
 		     /* Picks, axes, pole-weapons, bullwhips */
 		    ((otmp->oclass == WEAPON_CLASS && !is_pick(otmp) &&
+//ifdef FIREARMS
+		      otyp != RAYGUN &&
+		      otyp != SUBMACHINE_GUN &&
+		      otyp != AUTO_SHOTGUN &&
+		      otyp != ASSAULT_RIFLE &&
+		      otyp != ARM_BLASTER &&
+		      otyp != FRAG_GRENADE &&
+		      otyp != GAS_GRENADE &&
+		      otyp != STICK_OF_DYNAMITE &&
+//endif
 		      !is_axe(otmp) && !is_pole(otmp) && otyp != BULLWHIP &&
 			  !is_knife(otmp) && otmp->oartifact != ART_SILVER_STARLIGHT) ||
 			 (otmp->oclass == CHAIN_CLASS && 

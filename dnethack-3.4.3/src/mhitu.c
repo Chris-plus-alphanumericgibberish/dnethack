@@ -1339,6 +1339,7 @@ hitmu(mtmp, mattk)
 				/* WAC -- or using a pole at short range... */
 				(is_pole(otmp) &&
 					otmp->otyp != AKLYS && 
+					otmp->otyp != FORCE_PIKE && 
 					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
 					otmp->oartifact != ART_HEARTCLEAVER && 
 					otmp->oartifact != ART_SOL_VALTIVA && 

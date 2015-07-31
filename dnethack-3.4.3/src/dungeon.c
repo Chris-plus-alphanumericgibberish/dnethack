@@ -2391,8 +2391,8 @@ int rtype;
 
 /* some utility macros for print_mapseen */
 #define TAB "   "
-#define BULLET ""
-#define PREFIX TAB TAB BULLET
+#define SBULLET ""
+#define PREFIX TAB TAB SBULLET
 #define COMMA (i++ > 0 ? ", " : PREFIX)
 #define ADDNTOBUF(nam, var) { if (var) \
 	Sprintf(eos(buf), "%s%s " nam "%s", COMMA, seen_string((var), (nam)), \

@@ -582,6 +582,145 @@ meleeattack:
     return(struck ? MM_HIT : MM_MISS);
 }
 
+/* monster attempts ranged weapon attack against monster */
+int
+thrwmm(magr, mdef)
+struct monst *magr;
+struct monst *mdef;
+{
+	struct obj *otmp, *mwep;
+	xchar x, y;
+	schar skill;
+    int multishot, mhp;
+	const char *onm;
+
+	if(magr->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	
+	/* Rearranged beginning so monsters can use polearms not in a line */
+	if (magr->weapon_check == NEED_WEAPON || !MON_WEP(magr)) {
+	    magr->weapon_check = NEED_RANGED_WEAPON;
+	    /* mon_wield_item resets weapon_check as appropriate */
+	if(mon_wield_item(magr) != 0) return MM_MISS;
+	}
+
+	/* Pick a weapon */
+	otmp = select_rwep(magr);
+    if (!otmp) return MM_MISS;
+
+	if (is_pole(otmp)) {
+		int dam, hitv, vis = canseemon(magr);
+
+		if (dist2(magr->mx, magr->my, mdef->mx, mdef->my) > POLE_LIM ||
+			!m_cansee(magr, mdef->mx, mdef->my))
+	    	return MM_MISS;	/* Out of range, or intervening wall */
+
+		if (vis) {
+			onm = xname(otmp);
+			pline("%s %s %s.", Monnam(magr), otmp->otyp == AKLYS ? "throws" : "thrusts",
+			      obj_is_pname(otmp) ? the(onm) : an(onm));
+	    }
+
+	    return ohitmon(magr, mdef, otmp, 0, FALSE);
+
+	}
+
+	x = magr->mx;
+	y = magr->my;
+	
+	/*
+	 * Check for being lined up and for friendlies in the line
+	 * of fire:
+	 */
+	if (!mlined_up(magr, mdef, FALSE))
+	    return MM_MISS;
+
+	skill = objects[otmp->otyp].oc_skill;
+	mwep = MON_WEP(magr);		/* wielded weapon */
+
+	/* Multishot calculations */
+	multishot = 1;
+	if ((ammo_and_launcher(otmp, mwep) || skill == P_DAGGER ||
+		skill == -P_DART || skill == -P_SHURIKEN) && !magr->mconf) {
+	    /* Assumes lords are skilled, princes are expert */
+	    if (is_prince(magr->data)) multishot += 2;
+	    else if (is_lord(magr->data)) multishot++;
+
+	    switch (monsndx(magr->data)) {
+	    case PM_RANGER:
+		    multishot++;
+		    break;
+	    case PM_ROGUE:
+		    if (skill == P_DAGGER) multishot++;
+		    break;
+	    case PM_NINJA:
+	    case PM_SAMURAI:
+		    if (otmp->otyp == YA && mwep &&
+			mwep->otyp == YUMI) multishot++;
+		    break;
+	    default:
+		break;
+	    }
+	    /* racial bonus */
+	    if ((is_elf(magr->data) &&
+		    otmp->otyp == ELVEN_ARROW &&
+		    mwep && mwep->otyp == ELVEN_BOW) ||
+		(is_orc(magr->data) &&
+		    otmp->otyp == ORCISH_ARROW &&
+		    mwep && mwep->otyp == ORCISH_BOW))
+		multishot++;
+
+	    if ((long)multishot > otmp->quan) multishot = (int)otmp->quan;
+	    if (multishot < 1) multishot = 1;
+	    else multishot = rnd(multishot);
+#ifdef FIREARMS
+		if (mwep && objects[mwep->otyp].oc_rof && is_launcher(mwep))
+		    multishot += objects[mwep->otyp].oc_rof;
+#endif
+	    if ((long)multishot > otmp->quan) multishot = (int)otmp->quan;
+	    if (multishot < 1) multishot = 1;
+	}
+
+	if (canseemon(magr)) {
+	    char onmbuf[BUFSZ];
+
+	    if (multishot > 1) {
+		/* "N arrows"; multishot > 1 implies otmp->quan > 1, so
+		   xname()'s result will already be pluralized */
+		Sprintf(onmbuf, "%d %s", multishot, xname(otmp));
+		onm = onmbuf;
+	    } else {
+		/* "an arrow" */
+		onm = singular(otmp, xname);
+		onm = obj_is_pname(otmp) ? the(onm) : an(onm);
+	    }
+	    m_shot.s = ammo_and_launcher(otmp,mwep) ? TRUE : FALSE;
+	    pline("%s %s %s!", Monnam(magr),
+#ifdef FIREARMS
+	      m_shot.s ? is_bullet(otmp) ? "fires" : "shoots" : "throws",
+	      onm);
+#else
+		  m_shot.s ? "shoots" : "throws", onm);
+#endif
+	    m_shot.o = otmp->otyp;
+	} else {
+	    m_shot.o = STRANGE_OBJECT;	/* don't give multishot feedback */
+	}
+
+    mhp = mdef->mhp;
+	m_shot.n = multishot;
+	for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++)
+	    m_throw(magr, magr->mx, magr->my, sgn(tbx), sgn(tby),
+		    distmin(magr->mx, magr->my, mdef->mx, mdef->my), otmp, FALSE);
+	m_shot.n = m_shot.i = 0;
+	m_shot.o = STRANGE_OBJECT;
+	m_shot.s = FALSE;
+
+	//nomul(0, NULL); this is the monster function
+
+    return (mdef->mhp < 1 ? MM_DEF_DIED : 0) | (mdef->mhp < mhp ? MM_HIT : 0) |
+	   (magr->mhp < 1 ? MM_AGR_DIED : 0);
+}
+
 /* Returns the result of mdamagem(). */
 STATIC_OVL int
 hitmm(magr, mdef, mattk)
@@ -984,6 +1123,7 @@ mdamagem(magr, mdef, mattk)
 			    /* WAC -- or using a pole at short range... */
 			    (is_pole(otmp) &&
 					otmp->otyp != AKLYS && 
+					otmp->otyp != FORCE_PIKE && 
 					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
 					otmp->oartifact != ART_HEARTCLEAVER && 
 					otmp->oartifact != ART_SOL_VALTIVA && 
@@ -1002,7 +1142,7 @@ mdamagem(magr, mdef, mattk)
             /* WAC Weres get seared */
             if(otmp && objects[otmp->otyp].oc_material == SILVER &&
               (hates_silver(pd))) {
-            	tmp += 8;
+            	tmp += rnd(20);
             	if (vis) pline("The silver sears %s!", mon_nam(mdef));
             }
 			if (otmp->oartifact) {

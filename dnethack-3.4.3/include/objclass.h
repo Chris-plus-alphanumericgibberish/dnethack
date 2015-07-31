@@ -29,13 +29,14 @@ struct objclass {
 #define oc_bulky	oc_big	/* for armor */
 	Bitfield(oc_tough,1);	/* hard gems/rings */
 
-	Bitfield(oc_dir,2);
+	Bitfield(oc_dir,3);
 #define NODIR		1	/* for wands/spells: non-directional */
 #define IMMEDIATE	2	/*		     directional */
 #define RAY		3	/*		     zap beams */
 
 #define PIERCE		1	/* for weapons & tools used as weapons */
 #define SLASH		2	/* (latter includes iron ball & chain) */
+#define EXPLOSION	4	/* (rockets,  grenades) */
 #define WHACK		0
 
 	/*Bitfield(oc_subtyp,3);*/	/* Now too big for a bitfield... see below */
@@ -102,8 +103,18 @@ struct objclass {
 /* Check the AD&D rules!  The FIRST is small monster damage. */
 /* for weapons, and tools, rocks, and gems useful as weapons */
 	schar	oc_wsdam, oc_wldam;	/* max small/large monster damage */
+#define oc_range	oc_wsdam	/* for strength independant ranged weapons */
+#define oc_rof		oc_wldam	/* rate of fire bonus for ranged weapons */
+	
 	schar	oc_oc1, oc_oc2;
 #define oc_hitbon	oc_oc1		/* weapons: "to hit" bonus */
+#define w_ammotyp	oc_oc2		/* type of ammo taken by ranged weapon */
+#define WP_GENERIC	0
+#define WP_BULLET	1
+#define WP_SHELL	2
+#define WP_ROCKET	4
+#define WP_GRENADE	8
+#define WP_BLASTER	16
 
 #define a_ac		oc_oc1	/* armor class, used in ARM_BONUS in do.c */
 #define a_can		oc_oc2		/* armor: used in mhitu.c */
@@ -117,8 +128,14 @@ struct objdescr {
 	const char *oc_descr;		/* description when name unknown */
 };
 
+struct colorTextClr {
+	const char *colorText;	/* text name of color */
+	const uchar colorClr;	/* displayed color */
+};
+
 extern NEARDATA struct objclass objects[];
 extern NEARDATA struct objdescr obj_descr[];
+extern NEARDATA struct colorTextClr LightsaberColor[];
 
 /*
  * All objects have a class. Make sure that all classes have a corresponding

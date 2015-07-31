@@ -1456,14 +1456,25 @@ light_cocktail(obj)
 	struct obj *obj;	/* obj is a potion of oil */
 {
 	char buf[BUFSZ];
+	const char *objnam =
+//#ifdef FIREARMS
+	    obj->otyp == POT_OIL ? "potion" : "stick";
+//#else
+//	    "potion";
+//#endif
 
 	if (u.uswallow) {
 	    You(no_elbow_room);
 	    return;
 	}
 
+	if(Underwater) {
+		You("can't light this underwater!");
+		return;
+	}
+
 	if (obj->lamplit) {
-	    You("snuff the lit potion.");
+	    You("snuff the lit %s.", objnam);
 	    end_burn(obj, TRUE);
 	    /*
 	     * Free & add to re-merge potion.  This will average the
@@ -1478,17 +1489,29 @@ light_cocktail(obj)
 	    return;
 	}
 
-	You("light %s potion.%s", shk_your(buf, obj),
+	You("light %s %s.%s", shk_your(buf, obj), objnam,
 	    Blind ? "" : "  It gives off a dim light.");
 	if (obj->unpaid && costly_spot(u.ux, u.uy)) {
 	    /* Normally, we shouldn't both partially and fully charge
 	     * for an item, but (Yendorian Fuel) Taxes are inevitable...
 	     */
+//#ifdef FIREARMS
+	    if (obj->otyp != STICK_OF_DYNAMITE) {
+//#endif
 	    check_unpaid(obj);
 	    verbalize("That's in addition to the cost of the potion, of course.");
+//#ifdef FIREARMS
+	    } else {
+		const char *ithem = obj->quan > 1L ? "them" : "it";
+		verbalize("You burn %s, you bought %s!", ithem, ithem);
+	    }
+//#endif
 	    bill_dummy_object(obj);
 	}
 	makeknown(obj->otyp);
+//#ifdef FIREARMS
+	if (obj->otyp == STICK_OF_DYNAMITE) obj->yours=TRUE;
+//#endif
 
 	if (obj->quan > 1L) {
 	    obj = splitobj(obj, 1L);
@@ -1568,15 +1591,19 @@ int magic; /* 0=Physical, otherwise skill level */
 		if (magic) {
 			You("bounce around a little.");
 			return 1;
+		} else {
+			pline("You've got to be kidding!");
+		return 0;
 		}
-		pline("You've got to be kidding!");
 		return 0;
 	} else if (u.uinwater) {
 		if (magic) {
 			You("swish around a little.");
 			return 1;
+		} else {
+			pline("This calls for swimming, not jumping!");
+		return 0;
 		}
-		pline("This calls for swimming, not jumping!");
 		return 0;
 	} else if (u.ustuck) {
 		if (u.ustuck->mtame && !Conflict && !u.ustuck->mconf) {
@@ -1587,16 +1614,20 @@ int magic; /* 0=Physical, otherwise skill level */
 		if (magic) {
 			You("writhe a little in the grasp of %s!", mon_nam(u.ustuck));
 			return 1;
+		} else {
+			You("cannot escape from %s!", mon_nam(u.ustuck));
+			return 0;
 		}
-		You("cannot escape from %s!", mon_nam(u.ustuck));
+
 		return 0;
 	} else if (Levitation || Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
 		if (magic) {
 			You("flail around a little.");
 			return 1;
-		}
+		} else {
 		You("don't have enough traction to jump.");
 		return 0;
+		}
 	} else if (!magic && near_capacity() > UNENCUMBERED) {
 		You("are carrying too much to jump!");
 		return 0;
@@ -2929,7 +2960,7 @@ use_pole (obj)
 
 	    bhitpos = cc;
 	    check_caitiff(mtmp);
-	    (void) thitmonst(mtmp, uwep);
+	    (void) thitmonst(mtmp, uwep, 0);
 	    /* check the monster's HP because thitmonst() doesn't return
 	     * an indication of whether it hit.  Not perfect (what if it's a
 	     * non-silver weapon on a shade?)
@@ -3079,7 +3110,7 @@ use_grapple (obj)
 		return (1);
 	    } else if ((!bigmonst(mtmp->data) && !strongmonst(mtmp->data)) ||
 		       rn2(4)) {
-		(void) thitmonst(mtmp, uwep);
+		(void) thitmonst(mtmp, uwep, 0);
 		return (1);
 	    }
 	    /* FALL THROUGH */
@@ -4246,6 +4277,43 @@ doapply()
 	case GNOMISH_POINTY_HAT:
 		use_candle(&obj);
 		break;
+	case BULLET_FABBER:{
+		static const char all_count[] = { ALLOW_COUNT, GEM_CLASS, 0 };
+		struct obj *otmp = getobj(all_count, "feed to the fabber");
+		if (!otmp) break;
+		switch(otmp->otyp){
+			case ROCK:
+				poly_obj(otmp,BULLET);
+			break;
+			case SILVER_SLINGSTONE:
+				poly_obj(otmp,SILVER_BULLET);
+			break;
+			case FLINT:
+				poly_obj(otmp,SHOTGUN_SHELL);
+			break;
+			case LOADSTONE:
+				poly_obj(otmp,ROCKET);
+			break;
+		}
+	}break;
+	case POWER_PACK:{
+		static const char all_count[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
+		struct obj *otmp = getobj(all_count, "charge");
+		if (!otmp) break;
+		if(otmp == obj){
+			if(obj->quan > 1) pline("That seems rather pointless.");
+			else pline("That seems rather difficult.");
+		}
+		You("press %s up against %s.", the(singular(obj,xname)), the(xname(otmp)));
+		recharge(otmp, obj->cursed ? -1 : (obj->blessed ? 1 : 0));
+		pline("%s is used up!",The(singular(obj,xname)));
+		if(obj->quan>1)
+			useup(obj);
+		else{
+			useup(obj);
+			obj = 0;
+		}
+	}break;
 	case LIGHTSABER:
   	case BEAMSWORD:
 	case DOUBLE_LIGHTSABER:
@@ -4361,6 +4429,58 @@ doapply()
 	case TOUCHSTONE:
 		use_stone(obj);
 	break;
+//ifdef FIREARMS
+	case RAYGUN:
+		if(obj->altmode == ZT_FIRE){
+			obj->altmode = ZT_LIGHTNING;
+			You("set %s to disintegrate.", yname(obj));
+		} else if(obj->altmode == ZT_LIGHTNING){
+			obj->altmode = ZT_DEATH;
+			You("set %s to kill.", yname(obj));
+		} else if(obj->altmode == ZT_DEATH){
+			obj->altmode = ZT_SLEEP;
+			You("set %s to stun.", yname(obj));
+		} else {
+			obj->altmode = ZT_FIRE;
+			You("set %s to wound.", yname(obj));
+		}
+	break;
+	case ARM_BLASTER:
+	case ASSAULT_RIFLE:
+		/* Switch between WP_MODE_SINGLE, WP_MODE_BURST and WP_MODE_AUTO */
+
+		if (obj->altmode == WP_MODE_AUTO) {
+			obj->altmode = WP_MODE_BURST;
+		} else if (obj->altmode == WP_MODE_BURST) {
+			obj->altmode = WP_MODE_SINGLE;
+		} else {
+			obj->altmode = WP_MODE_AUTO;
+		}
+		
+		You("switch %s to %s mode.", yname(obj), 
+			((obj->altmode == WP_MODE_SINGLE) ? "single shot" : 
+			 ((obj->altmode == WP_MODE_BURST) ? "burst" :
+			  "full automatic")));
+		break;	
+	case BFG:
+	case AUTO_SHOTGUN:
+	case SUBMACHINE_GUN:
+		if (obj->altmode == WP_MODE_AUTO) obj-> altmode = WP_MODE_SINGLE;
+		else obj->altmode = WP_MODE_AUTO;
+		You("switch %s to %s mode.", yname(obj), 
+			(obj->altmode ? "semi-automatic" : "full automatic"));
+		break;
+	case FRAG_GRENADE:
+	case GAS_GRENADE:
+		if (!obj->oarmed) {
+			You("arm %s.", yname(obj));
+			arm_bomb(obj, TRUE);
+		} else pline("It's already armed!");
+		break;
+	case STICK_OF_DYNAMITE:
+		light_cocktail(obj);
+		break;
+//endif
 	case CLOCKWORK_COMPONENT:
 	case SUBETHAIC_COMPONENT:
 	case HELLFIRE_COMPONENT:

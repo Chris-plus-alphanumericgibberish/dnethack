@@ -1012,6 +1012,7 @@ int thrown;
 #endif
 				is_pole(obj) && 
 				obj->otyp != AKLYS && 
+				obj->otyp != FORCE_PIKE && 
 				obj->oartifact != ART_WEBWEAVER_S_CROOK && 
 				obj->oartifact != ART_HEARTCLEAVER && 
 				obj->oartifact != ART_SOL_VALTIVA && 
@@ -1515,9 +1516,12 @@ defaultvalue:
 	    if((thrown && objects[wep->otyp].oc_skill != P_LANCE && objects[wep->otyp].oc_skill != P_POLEARMS)
 			|| (wep && wep->oartifact == ART_TENTACLE_ROD)
 		){
-			if(objects[wep->otyp].oc_skill == P_CROSSBOW && !(noncorporeal(mdat) || amorphous(mdat) || stationary(mdat))){
+			if((objects[wep->otyp].oc_skill == P_CROSSBOW ||
+				wep->otyp == SNIPER_RIFLE
+			  ) && !(noncorporeal(mdat) || amorphous(mdat) || stationary(mdat))
+			){
 				int dambonus = weapon_dam_bonus(wep);
-				int i=max(P_SKILL(P_CROSSBOW)-2,0);
+				int i=max(P_SKILL(objects[wep->otyp].oc_skill)-2,0);
 				if(Race_if(PM_GNOME)) i++;
 				if(dambonus > 0) dambonus *= 3;
 				tmp += dambonus;

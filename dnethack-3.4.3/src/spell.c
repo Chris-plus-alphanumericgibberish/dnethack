@@ -1867,7 +1867,7 @@ spiriteffects(power, atme)
 				otmp->cursed = 0;
 				otmp->spe = 1; /* to indicate it's yours */
 				otmp->ovar1 = 1 + u.ulevel/10;
-				throwit(otmp, 0L, FALSE);
+				throwit(otmp, 0L, FALSE, 0);
 				// m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy,
 					// rn1(5,5), otmp,TRUE);
 				nomul(0, NULL);
@@ -1920,7 +1920,7 @@ spiriteffects(power, atme)
 			otmp->ovar1 = d(5,dsize); /* save the damge this should do */
 			You("spit venom.");
 			m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy, 10, otmp,TRUE);
-			// throwit(otmp, 0L, FALSE);
+			// throwit(otmp, 0L, FALSE, 0);
 		}break;
 		case PWR_SUCKLE_MONSTER:{
 			struct monst *mon;
@@ -2178,7 +2178,7 @@ spiriteffects(power, atme)
 		case PWR_BARAGE:
 			You("get ready to fire a barrage.");
 			barage = TRUE; //state variable
-			if(uquiver) throw_obj(uquiver, 0);
+			if(uquiver) throw_obj(uquiver, 0, 1);
 			else{
 				You("have nothing quivered.");
 				return;

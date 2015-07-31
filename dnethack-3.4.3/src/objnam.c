@@ -401,6 +401,12 @@ register struct obj *obj;
 		    Sprintf(eos(buf), " of a%s %s",
 			index(vowels,*(mons[obj->corpsenm].mname)) ? "n" : "",
 			mons[obj->corpsenm].mname);
+		else if(is_blaster(obj) && obj->known)
+		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
+		else if(obj->otyp == FORCE_PIKE && obj->known)
+		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
+		else if(obj->otyp == VIBROBLADE && obj->known)
+		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
 		break;
 	    case ARMOR_CLASS:
 		/* depends on order of the dragon scales objects */
@@ -822,6 +828,20 @@ plus:
 		if(obj->known && obj->oartifact == ART_ROD_OF_LORDLY_MIGHT){
 			Sprintf(eos(bp), " (%s)", OBJ_NAME(objects[obj->otyp]));
 		}
+//#ifdef FIREARMS
+	if(obj->otyp == STICK_OF_DYNAMITE) {
+	    if (obj->lamplit) Strcat(bp, " (lit)");
+#  ifdef DEBUG
+		    Sprintf(eos(bp), " (%d)", obj->age);		
+#  endif
+		} else if (is_grenade(obj)){
+		    if (obj->oarmed) Strcat(bp, " (armed)");
+#  ifdef DEBUG
+		    Sprintf(eos(bp), " (%d)", obj->age);		
+#  endif
+		}
+//#endif	/* FIREARMS */
+
 		if (is_lightsaber(obj)) {
 		    if (obj->lamplit){
 				if(obj->age > 1000) Strcat(bp, " (lit)");
@@ -1765,6 +1785,11 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 	{ "dragon scale mail",
 			ARMOR_CLASS,  GRAY_DRAGON_SCALE_MAIL, YELLOW_DRAGON_SCALE_MAIL },
 	{ "sword",	WEAPON_CLASS, SHORT_SWORD,    KATANA },
+//#ifdef FIREARMS
+	{ "firearm", 	WEAPON_CLASS, PISTOL, AUTO_SHOTGUN },
+	{ "gun", 	WEAPON_CLASS, PISTOL, AUTO_SHOTGUN },
+	{ "grenade", 	WEAPON_CLASS, FRAG_GRENADE, GAS_GRENADE },
+//#endif
 #ifdef WIZARD
 	{ "venom",	VENOM_CLASS,  BLINDING_VENOM, ACID_VENOM },
 #endif
@@ -2001,6 +2026,14 @@ struct alt_spellings {
 	{ "kelp", KELP_FROND },
 	{ "eucalyptus", EUCALYPTUS_LEAF },
 	{ "grapple", GRAPPLING_HOOK },
+//#ifdef FIREARMS
+	{ "handgun", PISTOL },
+	{ "hand gun", PISTOL },
+	{ "revolver", PISTOL },
+	{ "bazooka", ROCKET_LAUNCHER },
+	{ "hand grenade", FRAG_GRENADE },
+	{ "dynamite", STICK_OF_DYNAMITE },
+//#endif
 	{ "rum", POT_BOOZE },
 	{ "sea biscuit", CRAM_RATION },
 	{ "cutlass", SCIMITAR },

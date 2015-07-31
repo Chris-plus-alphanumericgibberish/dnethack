@@ -989,7 +989,7 @@ mineralize()
 		    }
 		}
 		if (rn2(1000) < silverprob) {
-			if ((otmp = mksobj(SILVER_BULLET, FALSE, FALSE)) != 0) {
+			if ((otmp = mksobj(SILVER_SLINGSTONE, FALSE, FALSE)) != 0) {
 				otmp->quan = 1L + rn2(dunlev(&u.uz));
 				otmp->owt = weight(otmp);
 				otmp->ox = x,  otmp->oy = y;

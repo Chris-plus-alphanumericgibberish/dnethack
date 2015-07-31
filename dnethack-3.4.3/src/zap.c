@@ -38,19 +38,7 @@ STATIC_DCL void FDECL(backfire, (struct obj *));
 STATIC_DCL int FDECL(spell_hit_bonus, (int));
 #endif
 
-#define ZT_MAGIC_MISSILE	(AD_MAGM-1)
-#define ZT_FIRE			(AD_FIRE-1)
-#define ZT_COLD			(AD_COLD-1)
-#define ZT_SLEEP		(AD_SLEE-1)
-#define ZT_DEATH		(AD_DISN-1)	/* or disintegration */
-#define ZT_LIGHTNING		(AD_ELEC-1)
-#define ZT_POISON_GAS		(AD_DRST-1)
-#define ZT_ACID			(AD_ACID-1)
-/* 8 and 9 are currently unassigned */
-
-#define ZT_WAND(x)		(x)
-#define ZT_SPELL(x)		(10+(x))
-#define ZT_BREATH(x)		(20+(x))
+/* WAC -- ZT_foo #defines moved to spell.h, since explode uses these types */
 
 #define is_hero_spell(type)	((type) >= 10 && (type) < 20)
 
@@ -92,7 +80,30 @@ const char * const flash_types[] = {	/* also used in buzzmu(mcastu.c) */
 	"blast of poison gas",
 	"blast of acid",
 	"",
+	"",
+	
+	"mega magic?",	/* Mega? equivalents must be 30-39 */
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+
+	"magic ray",	/* Spell equivalents must be 40-49 */
+	"heat ray",
+	"cold ray",
+	"stun ray",
+	"death ray",
+	"disintegration ray",
+	"",
+	"",
+	"",
 	""
+
 };
 
 /* Routines for IMMEDIATE wands and spells. */
@@ -3251,8 +3262,13 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 		tmp = 0;
 		(void)sleep_monst(mon, flat ? flat : d(nd, 25),
 				type == ZT_WAND(ZT_SLEEP) ? WAND_CLASS : '\0');
+		if(abs(type) == ZT_RAYGUN(ZT_SLEEP)){
+			mon->mstun = 1;
+			mon->mconf = 1;
+		}
 		break;
 	case ZT_DEATH:		/* death/disintegration */
+death_blast:
 		if(abs(type) != ZT_BREATH(ZT_DEATH)) {	/* death */
 			if(mon->data==&mons[PM_METROID]){
 				pline("The metroid is irradiated with pure energy!  It divides!");
@@ -3326,9 +3342,15 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 		    sho_shieldeff = TRUE;
 		    tmp = 0;
 		    /* can still blind the monster */
-		} else
+		} else{
+			if(abs(type) == ZT_RAYGUN(ZT_LIGHTNING)){
+				if(type < 0) type = -1*ZT_BREATH(ZT_DEATH);
+				else type = ZT_BREATH(ZT_DEATH);
+				goto death_blast;
+			}
 			if(!flat) tmp = d(nd,6);
 			else tmp = flat;
+		}
 		if (spellcaster)
 		    tmp += spell_damage_bonus();
 #ifdef WIZ_PATCH_DEBUG
@@ -3672,9 +3694,11 @@ int type;	/* either hero cast spell type or 0 */
 /* type ==   0 to   9 : you shooting a wand */
 /* type ==  10 to  19 : you casting a spell */
 /* type ==  20 to  29 : you breathing as a monster */
+/* type ==  40 to  49 : you firing a raygun */
 /* type == -10 to -19 : monster casting spell */
 /* type == -20 to -29 : monster breathing at you */
 /* type == -30 to -39 : monster shooting a wand */
+/* type == -40 to -49 : monster firing a raygun */
 /* called with dx = dy = 0 with vertical bolts */
 /* a range of 0 means "random range rn1(7,7), which is the default behavior */
 /* 0 flat damage means nd6 damage, nozero flat damage means that much damage only */
@@ -3697,7 +3721,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     /* if its a Hero Spell then get its SPE_TYPE */
     spell_type = is_hero_spell(type) ? SPE_MAGIC_MISSILE + abstype : 0;
 
-    fltxt = flash_types[(type <= -30) ? abstype : abs(type)];
+    fltxt = flash_types[(type <= -30 && type > -40) ? abstype : abs(type)];
     if(u.uswallow) {
 	register int tmp;
 
@@ -3766,7 +3790,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					boolean mon_could_move = mon->mcanmove;
 					int tmp = zhitm(mon, type, nd, flat, &otmp);
 
-					if ( is_rider(mon->data) && abs(type) == ZT_BREATH(ZT_DEATH)) {
+					if ( is_rider(mon->data) && (abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING))) {
 					if (canseemon(mon)) {
 						hit(fltxt, mon, ".");
 						pline("%s disintegrates.", Monnam(mon));
@@ -3779,7 +3803,9 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					mon->mhp = mon->mhpmax;
 					break; /* Out of while loop */
 					}
-					if((mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_ASMODEUS]) && abs(type) == ZT_BREATH(ZT_DEATH)){
+					if((mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_ASMODEUS]) && 
+						(abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING))
+					){
 						shieldeff(sx, sy);
 						break; /* Out of while loop */
 					}
@@ -3793,10 +3819,11 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					}
 					break; /* Out of while loop */
 					}
-					if(type == ZT_WAND(ZT_DEATH) && (mon->data == &mons[PM_METROID]
+					if(type == (ZT_WAND(ZT_DEATH) || ZT_RAYGUN(ZT_DEATH)) && (mon->data == &mons[PM_METROID]
 					 ||mon->data == &mons[PM_ALPHA_METROID]||mon->data == &mons[PM_GAMMA_METROID]
 					 ||mon->data == &mons[PM_ZETA_METROID]||mon->data == &mons[PM_OMEGA_METROID]
-					 ||mon->data == &mons[PM_METROID_QUEEN])) range=0;//end while loop after this
+					 ||mon->data == &mons[PM_METROID_QUEEN])
+					) range=0;//end while loop after this
 
 					if (tmp == MAGIC_COOKIE) { /* disintegration */
 						struct obj *otmp2, *m_amulet = mlifesaver(mon);
@@ -3923,7 +3950,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			uchar rmn;
 
 	 make_bounce:
-			if(abs(type) == ZT_BREATH(ZT_DEATH) && (!ZAP_POS(lev->typ) || !isok(sx,sy) || !lev->typ)){
+			if((abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING)) && (!ZAP_POS(lev->typ) || !isok(sx,sy) || !lev->typ)){
 				struct rm *room;
 				boolean shopdoor, shopwall;
 				if (!isok(sx,sy)){

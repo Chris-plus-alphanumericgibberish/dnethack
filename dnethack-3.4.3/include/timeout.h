@@ -40,7 +40,12 @@ typedef void FDECL((*timeout_proc), (genericptr_t, long));
 #define SLIMY_CORPSE	8
 #define ZOMBIE_CORPSE	9
 #define SHADY_CORPSE	10
-#define NUM_TIME_FUNCS	11
+//# ifdef FIREARMS
+#define BOMB_BLOW	11
+#define NUM_TIME_FUNCS	12
+//# else /* FIREARMS */
+//#define NUM_TIME_FUNCS	11
+//# endif /* FIREARMS */
 
 /* used in timeout.c */
 typedef struct fe {

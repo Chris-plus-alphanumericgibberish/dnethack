@@ -109,6 +109,7 @@ register struct obj *obj;
 				&& !u.usteed
 #endif
 				&& obj->otyp != AKLYS
+				&& obj->otyp != FORCE_PIKE
 				&& obj->oartifact != ART_WEBWEAVER_S_CROOK
 				&& obj->oartifact != ART_HEARTCLEAVER
 				&& obj->oartifact != ART_SOL_VALTIVA
@@ -150,6 +151,8 @@ struct obj *wep;
 	    You("cannot wield a two-handed %s while wearing a shield.",
 		is_sword(wep) ? "sword" :
 		    wep->otyp == BATTLE_AXE ? "axe" : "weapon");
+	else if (wep->otyp == ARM_BLASTER && uarmg && is_metal(uarmg))
+		You("cannot fit the bracer over such bulky, rigid gloves.");
 	else if (wep->oartifact && !touch_artifact(wep, &youmonst)) {
 	    res++;	/* takes a turn even though it doesn't get wielded */
 	} else {
@@ -507,11 +510,16 @@ can_twoweapon()
 		otmp = NOT_WEAPON(uwep) ? uwep : uswapwep;
 		pline("%s %s.", Yname2(otmp),
 		    is_plural(otmp) ? "aren't weapons" : "isn't a weapon");
-	} else if (bimanual(uwep) || bimanual(uswapwep)) {
+	} else if (bimanual(uwep) || bimanual(uswapwep) || 
+		(is_launcher(uwep) && !is_firearm(uwep)) || 
+		(is_launcher(uswapwep) && !is_firearm(uswapwep))
+	) {
 		otmp = bimanual(uwep) ? uwep : uswapwep;
 		pline("%s isn't one-handed.", Yname2(otmp));
 	} else if (uarms)
 		You_cant("use two weapons while wearing a shield.");
+	else if (uswapwep->otyp == ARM_BLASTER && uarmg && is_metal(uarmg))
+		You("cannot fit the bracer over such bulky, rigid gloves.");
 	else if (uswapwep->oartifact && !is_twoweapable_artifact(uswapwep))
 		pline("%s %s being held second to another weapon!",
 			Yname2(uswapwep), otense(uswapwep, "resist"));

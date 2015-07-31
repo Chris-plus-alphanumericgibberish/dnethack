@@ -411,7 +411,19 @@ boolean artif;
 			otmp->spe = -rne(3);
 		} else	blessorcurse(otmp, 10);
 		
-		if(otmp->otyp == MOON_AXE){
+		if(otmp->otyp == FORCE_PIKE || otmp->otyp == VIBROBLADE){
+			otmp->ovar1 = 80L + rnd(20);
+		}
+		else if(otmp->otyp == RAYGUN){
+			otmp->ovar1 = (8 + rnd(8))*10L;
+			otmp->altmode = ZT_SLEEP;
+		}
+		else if(is_blaster(otmp)){ //Rayguns are also blasters, so this has to go under that case
+			otmp->ovar1 = 80L + rnd(20);
+			if(otmp->otyp == ARM_BLASTER) otmp->altmode = WP_MODE_SINGLE;
+			if(otmp->otyp == RAYGUN) otmp->altmode = ZT_FIRE;
+		}
+		else if(otmp->otyp == MOON_AXE){
 			switch(phase_of_the_moon()){
 				case 0:
 					otmp->ovar1 = ECLIPSE_MOON;
@@ -435,7 +447,12 @@ boolean artif;
 		}
 		if (artif && !rn2(20))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
-		
+//#ifdef FIREARMS
+		if (otmp->otyp == STICK_OF_DYNAMITE) {
+			otmp->age = (otmp->cursed ? rn2(15) + 2 : 
+					(otmp->blessed ? 15 : rn2(10) + 10));
+		}
+//#endif
 		if (is_poisonable(otmp) && ((is_ammo(otmp) && !rn2(100)) || !rn2(1000) )){
 			if(!rn2(100)) otmp->opoisoned = OPOISON_FILTH; /* Once a game or once every few games */
 			else otmp->opoisoned = OPOISON_BASIC;
@@ -537,6 +554,13 @@ boolean artif;
 					otmp->lamplit = 0;
 					otmp->age = (long) rn1(50000,100000);
 					blessorcurse(otmp, 2);
+					{
+						struct obj *gem = mksobj(rn2(6) ? BLUE_FLUORITE : GREEN_FLUORITE, TRUE, FALSE);
+						gem->quan = 1;
+						gem->owt = weight(gem);
+						add_to_container(otmp, gem);
+						container_weight(otmp);
+					}
 					break;
 		case CHEST:
 		case LARGE_BOX:

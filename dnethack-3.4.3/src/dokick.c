@@ -608,7 +608,7 @@ xchar x, y;
 		return 1;	/* alert shk caught it */
 	    notonhead = (mon->mx != bhitpos.x || mon->my != bhitpos.y);
 	    if (isgold ? ghitm(mon, kickobj) :	/* caught? */
-		    thitmonst(mon, kickobj))	/* hit && used up? */
+		    thitmonst(mon, kickobj, 0))	/* hit && used up? */
 		return(1);
 	}
 

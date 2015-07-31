@@ -88,9 +88,9 @@
 #define Stone_resistance	(HStone_resistance || EStone_resistance ||\
 							u.sealsActive&SEAL_MARIONETTE || resists_ston(&youmonst))
 
-/* Intrinsics only */
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic
-#define Sick_resistance		(HSick_resistance || \
+#define ESick_resistance	u.uprops[SICK_RES].extrinsic
+#define Sick_resistance		(HSick_resistance || ESick_resistance || \
 				 defends(AD_DISE,uwep) || \
 				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) == 7 && \
 					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \
@@ -98,6 +98,8 @@
 						(mvitals[PM_LARGE_CAT].mvflags & G_GENOD || mvitals[PM_LARGE_CAT].died >= 120) \
 					) \
 				 ) || u.sealsActive&SEAL_IRIS)
+
+/* Intrinsics only */
 #define Invulnerable		u.uprops[INVULNERABLE].intrinsic    /* [Tom] */
 
 /* Extrinsics only */

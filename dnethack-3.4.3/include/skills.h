@@ -43,39 +43,43 @@
 #define P_LANCE             21
 #define P_BOW               22
 #define P_SLING             23
-#define P_CROSSBOW          24
-#define P_DART              25
-#define P_SHURIKEN          26
-#define P_BOOMERANG         27
-#define P_WHIP              28
-#define P_HARVEST 		    29
-#define P_UNICORN_HORN      30	/* last weapon */
+//#ifdef FIREARMS
+#define P_FIREARM			24	/* KMH */
+//#endif
+#define P_CROSSBOW          25
+#define P_DART              26
+#define P_SHURIKEN          27
+#define P_BOOMERANG         28
+#define P_WHIP              29
+#define P_HARVEST 		    30
+#define P_UNICORN_HORN      31	/* last weapon */
 #define P_FIRST_WEAPON      P_DAGGER
 #define P_LAST_WEAPON       P_UNICORN_HORN
 
 /* Spell Skills added by Larry Stewart-Zerba */
-#define P_ATTACK_SPELL      31
-#define P_HEALING_SPELL     32
-#define P_DIVINATION_SPELL  33
-#define P_ENCHANTMENT_SPELL 34
-#define P_CLERIC_SPELL      35
-#define P_ESCAPE_SPELL      36
-#define P_MATTER_SPELL      37
+#define P_ATTACK_SPELL		(P_LAST_WEAPON + 1)
+#define P_HEALING_SPELL		(P_LAST_WEAPON + 2)
+#define P_DIVINATION_SPELL	(P_LAST_WEAPON + 3)
+#define P_ENCHANTMENT_SPELL	(P_LAST_WEAPON + 4)
+
+#define P_CLERIC_SPELL      (P_LAST_WEAPON + 5)
+#define P_ESCAPE_SPELL      (P_LAST_WEAPON + 6)
+#define P_MATTER_SPELL      (P_LAST_WEAPON + 7)
 #define P_FIRST_SPELL		P_ATTACK_SPELL
-#define P_LAST_SPELL		P_MATTER_SPELL
 #ifdef BARD
-#define P_MUSICALIZE		38	/* 'cast' spells as songs */
-#undef P_LAST_SPELL
+#define P_MUSICALIZE		(P_LAST_WEAPON + 8)	/* 'cast' spells as songs */
 #define P_LAST_SPELL		P_MUSICALIZE
+#else
+#define P_LAST_SPELL		P_MATTER_SPELL
 #endif
 
 /* Other types of combat */
-#define P_BARE_HANDED_COMBAT	39
+#define P_BARE_HANDED_COMBAT	(P_LAST_SPELL + 1)
 #define P_MARTIAL_ARTS		P_BARE_HANDED_COMBAT	/* Role distinguishes */
-#define P_TWO_WEAPON_COMBAT	40	/* Finally implemented */
-#define P_BEAST_MASTERY	41	/* Finally implemented */
+#define P_TWO_WEAPON_COMBAT	(P_LAST_SPELL + 2)	/* Finally implemented */
+#define P_BEAST_MASTERY	(P_LAST_SPELL + 3)	/* Finally implemented */
 #ifdef STEED
-#define P_RIDING		42	/* How well you control your steed */
+#define P_RIDING		(P_LAST_SPELL + 4)	/* How well you control your steed */
 #define P_LAST_H_TO_H		P_RIDING
 #else
 #define P_LAST_H_TO_H		P_TWO_WEAPON_COMBAT

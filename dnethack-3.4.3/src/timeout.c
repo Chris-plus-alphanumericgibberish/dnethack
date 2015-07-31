@@ -689,6 +689,134 @@ boolean wakeup_msg;
 	nomovemsg = wakeup_msg ? "You wake up." : You_can_move_again;
 }
 
+//#ifdef FIREARMS
+/* Attach an explosion timeout to a given explosive device */
+void
+attach_bomb_blow_timeout(bomb, fuse, yours)
+struct obj *bomb;
+int fuse;
+boolean yours;
+{
+	long expiretime;	
+
+	if (bomb->cursed && !rn2(2)) return; /* doesn't arm if not armed */
+
+	/* Now if you play with other people's property... */
+	if (yours && (!carried(bomb) && costly_spot(bomb->ox, bomb->oy) &&
+		!bomb->no_charge || bomb->unpaid)) {
+	    verbalize("You play with it, you pay for it!");
+	    bill_dummy_object(bomb);
+	}
+
+	expiretime = stop_timer(BOMB_BLOW, (genericptr_t) bomb);
+	if (expiretime > 0L) fuse = fuse - (expiretime - monstermoves);
+	bomb->yours = yours;
+	bomb->oarmed = TRUE;
+
+	(void) start_timer((long)fuse, TIMER_OBJECT, BOMB_BLOW, (genericptr_t)bomb);
+}
+
+/* timer callback routine: detonate the explosives */
+void
+bomb_blow(arg, timeout)
+genericptr_t arg;
+long timeout;
+{
+	struct obj *bomb;
+	xchar x,y;
+	boolean silent, underwater;
+	struct monst *mtmp = (struct monst *)0;
+
+	bomb = (struct obj *) arg;
+
+	silent = (timeout != monstermoves);     /* exploded while away */
+
+	if (get_obj_location(bomb, &x, &y, BURIED_TOO | CONTAINED_TOO)) {
+		switch(bomb->where) {		
+		    case OBJ_MINVENT:
+		    	mtmp = bomb->ocarry;
+			if (bomb == MON_WEP(mtmp)) {
+			    bomb->owornmask &= ~W_WEP;
+			    MON_NOWEP(mtmp);
+			}
+			if (!silent) {
+			    if (canseemon(mtmp))
+				You("see %s engulfed in an explosion!", mon_nam(mtmp));
+			}
+		    	mtmp->mhp -= d(2,5);
+			if(mtmp->mhp < 1) {
+				if(!bomb->yours) 
+					monkilled(mtmp, 
+						  (silent ? "" : "explosion"),
+						  AD_PHYS);
+				else xkilled(mtmp, !silent);
+			}
+			break;
+		    case OBJ_INVENT:
+		    	/* This shouldn't be silent! */
+			pline("Something explodes inside your knapsack!");
+			if (bomb == uwep) {
+			    uwepgone();
+			    stop_occupation();
+			} else if (bomb == uswapwep) {
+			    uswapwepgone();
+			    stop_occupation();
+			} else if (bomb == uquiver) {
+			    uqwepgone();
+			    stop_occupation();
+			}
+		    	losehp(d(2,5), "carrying live explosives", KILLED_BY);
+		    	break;
+		    case OBJ_FLOOR:
+			underwater = is_pool(x, y);
+			if (!silent) {
+			    if (x == u.ux && y == u.uy) {
+				if (underwater && (Flying || Levitation))
+				    pline_The("water boils beneath you.");
+				else if (underwater && Wwalking)
+				    pline_The("water erupts around you.");
+				else pline("A bomb explodes under your %s!",
+				  makeplural(body_part(FOOT)));
+			    } else if (cansee(x, y))
+				You(underwater ?
+				    "see a plume of water shoot up." :
+				    "see a bomb explode.");
+			}
+			if (underwater && (Flying || Levitation || Wwalking)) {
+			    if (Wwalking && x == u.ux && y == u.uy) {
+				struct trap trap;
+				trap.ntrap = NULL;
+				trap.tx = x;
+				trap.ty = y;
+				trap.launch.x = -1;
+				trap.launch.y = -1;
+				trap.ttyp = RUST_TRAP;
+				trap.tseen = 0;
+				trap.once = 0;
+				trap.madeby_u = 0;
+				trap.dst.dnum = -1;
+				trap.dst.dlevel = -1;
+				dotrap(&trap, 0);
+			    }
+			    goto free_bomb;
+			}
+		    	break;
+		    default:	/* Buried, contained, etc. */
+			if (!silent)
+			    You_hear("a muffled explosion.");
+			goto free_bomb;
+			break;
+		}
+		grenade_explode(bomb, x, y, bomb->yours, silent ? 2 : 0);
+		return;
+	} /* Migrating grenades "blow up in midair" */
+
+free_bomb:
+	obj_extract_self(bomb);
+	obfree(bomb, (struct obj *)0);
+}
+//#endif
+
 /* Attach an egg hatch timeout to the given egg. */
 void
 attach_egg_hatch_timeout(egg)
@@ -1085,6 +1213,11 @@ long timeout;
 			    obj_extract_self(obj);
 			    obfree(obj, (struct obj *)0);
 			    obj = (struct obj *) 0;
+//#ifdef FIREARMS
+		} else if (obj->otyp == STICK_OF_DYNAMITE) {
+			bomb_blow((genericptr_t) obj, timeout);
+			return;
+//#endif
 			}
 		} else {
 			obj->age -= how_long;
@@ -1372,6 +1505,12 @@ long timeout;
 		if (obj && obj->age && obj->lamplit) /* might be deactivated */
 		    begin_burn(obj, TRUE);
 		break;
+//#ifdef FIREARMS
+	    case STICK_OF_DYNAMITE:
+		end_burn(obj, FALSE);
+		bomb_blow((genericptr_t) obj, timeout);
+		return;
+//#endif
 	    default:
 		impossible("burn_object: unexpeced obj %s", xname(obj));
 		break;
@@ -1760,7 +1899,10 @@ static const ttable timeout_funcs[NUM_TIME_FUNCS] = {
     TTAB(light_damage,	(timeout_proc)0,	"light_damage"),
     TTAB(slimy_corpse,	(timeout_proc)0,	"slimy_corpse"),
 	TTAB(zombie_corpse,	(timeout_proc)0,	"zombie_corpse"),
-    TTAB(shady_corpse,	(timeout_proc)0,	"shady_corpse")
+    TTAB(shady_corpse,	(timeout_proc)0,	"shady_corpse"),
+//#ifdef FIREARMS
+    TTAB(bomb_blow,     (timeout_proc)0,	"bomb_blow")
+//#endif
 };
 #undef TTAB
 

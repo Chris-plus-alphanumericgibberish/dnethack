@@ -511,7 +511,7 @@ register struct monst *mtmp;
 	    case PM_ARGENTUM_GOLEM:
 			num = d(1,3);
 			while (num--){
-				obj = mksobj_at(SILVER_BULLET, x, y, TRUE, FALSE);
+				obj = mksobj_at(SILVER_SLINGSTONE, x, y, TRUE, FALSE);
 				obj->quan = d(10,5);
 				obj->owt = weight(obj);
 			}
