@@ -51,6 +51,32 @@ const struct Role roles[] = {
 	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
 	10, 5, 0, 2, 10, A_INT, SPE_MAGIC_MAPPING,   -9
 },
+{	{"Anachronist", 0}, {
+	{"Survivor",   0},
+	{"Recruit",0},
+	{"Insurgent",0},
+	{"Trooper",     0},
+	{"Rebel Leader",   0},
+	{"Chrono Commandant",   0},
+	{"Anachronist",0},
+	{"Fatebreaker",   0},
+	{"Hope of the Future",     0} },
+	0, 0, 0, /* chosen randomly from among the other roles */
+	"Ana", "the Last Redoubt", "Ground Zero",
+	PM_ANACHRONIST, NON_PM, NON_PM,
+	PM_SARA__THE_LAST_ORACLE, PM_TROOPER, PM_MINION_OF_HUHETOTL,
+	PM_DOPPELGANGER, PM_MIND_FLAYER, S_TRAPPER, S_UMBER,
+	ART_ITLACHIAYAQUE,
+	MH_HUMAN|MH_ELF|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
+	  ROLE_NEUTRAL|ROLE_CHAOTIC,
+	/* Str Int Wis Dex Con Cha */
+	{  10, 10,  7, 10,  7,  7 },
+	{  15, 17, 15, 12, 15, 15 },
+	/* Init   Lower  Higher */
+	{ 11, 0,  0, 8,  1, 0 },	/* Hit points */
+	{  2, 0,  0, 2,  0, 2 },14,	/* Energy */
+	10, 5, 0, 2, 10, A_INT, SPE_SLOW_MONSTER,   -9
+},
 {	{"Barbarian", 0}, {
 	{"Plunderer",   "Plunderess"},
 	{"Pillager",    0},
