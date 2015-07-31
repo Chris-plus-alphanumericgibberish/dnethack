@@ -25,6 +25,8 @@ STATIC_DCL int NDECL(dig);
 #define DIGTYP_BOULDER    3
 #define DIGTYP_DOOR       4
 #define DIGTYP_TREE       5
+#define DIGTYP_BARS       6
+#define DIGTYP_BRIDGE     7
 
 
 STATIC_OVL boolean
@@ -135,16 +137,25 @@ dig_typ(otmp, x, y)
 struct obj *otmp;
 xchar x, y;
 {
-	boolean ispick = is_pick(otmp);
+	boolean ispick = is_pick(otmp),
+		is_saber = is_lightsaber(otmp),
+		is_axe = is_axe(otmp);
 
-	return (ispick && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
-		ispick && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
-		closed_door(x, y) ? DIGTYP_DOOR :
+	return ((ispick||is_saber) && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
+		(ispick||is_saber) && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
+		(closed_door(x, y) ||
+			levl[x][y].typ == SDOOR) ? DIGTYP_DOOR :
 		IS_TREES(levl[x][y].typ) ?
-			((ispick && !is_axe(otmp)) ? DIGTYP_UNDIGGABLE : DIGTYP_TREE) :
+			((ispick && !(is_axe || is_saber)) ? DIGTYP_UNDIGGABLE : DIGTYP_TREE) :
 		ispick && IS_ROCK(levl[x][y].typ) &&
 			(!level.flags.arboreal || IS_WALL(levl[x][y].typ)) ?
-			DIGTYP_ROCK : DIGTYP_UNDIGGABLE);
+			DIGTYP_ROCK : 
+		is_saber && (levl[x][y].typ == DRAWBRIDGE_DOWN || is_drawbridge_wall(x, y) >= 0) ?
+			DIGTYP_BRIDGE : 
+		is_saber && IS_WALL(levl[x][y].typ) ?
+			DIGTYP_ROCK : 
+		is_saber && levl[x][y].typ == IRONBARS ? DIGTYP_BARS : 
+			DIGTYP_UNDIGGABLE);
 }
 
 boolean
@@ -235,21 +246,23 @@ dig()
 		!is_axe(uwep)) ||
 	    !on_level(&digging.level, &u.uz) ||
 	    ((digging.down ? (dpx != u.ux || dpy != u.uy)
-			   : (distu(dpx,dpy) > 2))))
-		return(0);
+			   : (distu(dpx,dpy) > 2)))
+	) return(0);
 
 	if (digging.down) {
 	    if(!dig_check(BY_YOU, TRUE, u.ux, u.uy)) return(0);
 	} else { /* !digging.down */
 	    if (IS_TREES(lev->typ) && !may_dig(dpx,dpy) &&
-			dig_typ(uwep, dpx, dpy) == DIGTYP_TREE) {
+			dig_typ(uwep, dpx, dpy) == DIGTYP_TREE
+		) {
 		pline("This tree seems to be petrified.");
 		return(0);
 	    }
 	    /* ALI - Artifact doors from Slash'em */
 	    if (IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
 	    		dig_typ(uwep, dpx, dpy) == DIGTYP_ROCK ||
-		    (IS_DOOR(lev->typ) && artifact_door(dpx, dpy))) {
+			(IS_DOOR(lev->typ) && artifact_door(dpx, dpy))
+		) {
 		pline("This %s is too hard to %s.",
 			IS_DOOR(lev->typ) ? "door" : "wall", verb);
 		return(0);
@@ -357,8 +370,17 @@ dig()
 			    place_object(bobj, dpx, dpy);
 			}
 			digtxt = "The boulder falls apart.";
+		} else if (lev->typ == DRAWBRIDGE_DOWN) {
+		    destroy_drawbridge(dpx, dpy);
+			spoteffects(FALSE);
+		} else if ((is_drawbridge_wall(dpx, dpy) >= 0)) {
+		    int x = dpx, y = dpy;
+		    /* if under the portcullis, the bridge is adjacent */
+		    (void) find_drawbridge(&x, &y);
+		    destroy_drawbridge(x, y);
+			spoteffects(FALSE);
 		} else if (lev->typ == STONE || lev->typ == SCORR ||
-				IS_TREES(lev->typ)) {
+				IS_TREES(lev->typ) || lev->typ == IRONBARS) {
 			if(Is_earthlevel(&u.uz)) {
 			    if(uwep->blessed && !rn2(3)) {
 				mkcavearea(FALSE);
@@ -391,6 +413,16 @@ dig()
 					staff->cursed = staff->blessed = FALSE;
 				}
 				if(u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+			} else if (lev->typ == IRONBARS) {
+				int numbars;
+				struct obj *bars;
+			    digtxt = "You cut through the bars.";
+			    lev->typ = ROOM;
+				for(numbars = d(2,4)-1; numbars > 0; numbars--){
+					bars = mksobj_at(IRON_BAR, dpx, dpy, FALSE, FALSE);
+					bars->spe = 0;
+					bars->cursed = bars->blessed = FALSE;
+				}
 			} else {
 			    digtxt = "You succeed in cutting away some rock.";
 			    lev->typ = CORR;
@@ -464,11 +496,13 @@ cleanup:
 		digging.level.dlevel = -1;
 		return(0);
 	} else {		/* not enough effort has been spent yet */
-		static const char *const d_target[6] = {
-			"", "rock", "statue", "boulder", "door", "tree"
+		static const char *const d_target[8] = {
+			"", "rock", "statue", "boulder", "door", "tree", "bars", "chains"
 		};
 		int dig_target = dig_typ(uwep, dpx, dpy);
 
+		if(uwep && is_lightsaber(uwep)) uwep->age -= 100;
+		
 		if (IS_WALL(lev->typ) || dig_target == DIGTYP_DOOR) {
 		    if(*in_rooms(dpx, dpy, SHOPBASE)) {
 			pline("This %s seems too hard to %s.",
@@ -1507,12 +1541,12 @@ struct obj *obj;
 	int dig_target, digtyp;
 	boolean ispick = is_pick(obj);
 	const char *verbing = ispick ? "digging" :
-		is_lightsaber(uwep) ? "cutting" :
+		is_lightsaber(obj) ? "cutting" :
 		"chopping";
 
 	/* 0 = pick, 1 = lightsaber, 2 = axe */
-	digtyp = (is_pick(uwep) ? 0 :
-		is_lightsaber(uwep) ? 1 : 
+	digtyp = (is_pick(obj) ? 0 :
+		is_lightsaber(obj) ? 1 : 
 		2);
 
 	if (u.uswallow && attack(u.ustuck)) {
@@ -1534,7 +1568,7 @@ struct obj *obj;
 
 		dam = rnd(2) + dbon(obj) + obj->spe;
 		if (dam <= 0) dam = 1;
-		You("hit yourself with %s.", yname(uwep));
+		You("hit yourself with %s.", yname(obj));
 		Sprintf(buf, "%s own %s", uhis(),
 				OBJ_NAME(objects[obj->otyp]));
 		losehp(dam, buf, KILLED_BY);
@@ -1563,12 +1597,19 @@ struct obj *obj;
 				seetrap(trap);
 				There("is a spider web there!");
 			    }
+				if(digtyp == 1){
+					Your("%s through in the web.",
+					aobjnam(obj, "burn"));
+					deltrap(trap);
+					newsym(rx, ry);
+				} else {
 			    Your("%s entangled in the web.",
 				aobjnam(obj, "become"));
 			    /* you ought to be able to let go; tough luck */
 			    /* (maybe `move_into_trap()' would be better) */
 			    nomul(-d(2,2), "entangled in a web");
 			    nomovemsg = "You pull free.";
+				}
 			} else if (lev->typ == IRONBARS) {
 			    pline("Clang!");
 			    wake_nearby();
@@ -1588,13 +1629,15 @@ struct obj *obj;
 			    You("swing your %s through thin air.",
 				aobjnam(obj, (char *)0));
 		} else {
-			static const char * const d_action[6][2] = {
+			static const char * const d_action[8][2] = {
 			    {"swinging","slicing the air"},
 			    {"digging","cutting through the wall"},
 			    {"chipping the statue","cutting the statue"},
 			    {"hitting the boulder","cutting through the boulder"},
 			    {"chopping at the door","burning through the door"},
-			    {"cutting the tree","razing the tree"}
+			    {"cutting the tree","razing the tree"},
+			    {"chopping at the bars","cutting through the bars"},
+			    {"chopping at the drawbridge","cutting through the drawbridge chains"}
 			};
 			did_dig_msg = FALSE;
 			digging.quiet = FALSE;

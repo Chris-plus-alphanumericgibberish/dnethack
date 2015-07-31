@@ -38,6 +38,59 @@ STATIC_OVL struct Jitem Pirate_items[];
 
 #else /* OVLB */
 
+/*"mirrored": Lightsabers reflect incident light.  A 'black' lightsaber
+blade would therefore actually look like a cylindrical mirror.*/
+NEARDATA struct colorTextClr LightsaberColor[] = {
+	{"brilliant blue",CLR_BRIGHT_BLUE},	/*MAGICITE_CRYSTAL*/
+	{"twisting rainbow",CLR_WHITE},		/*DILITHIUM_CRYSTAL*/
+	{"coruscating white",CLR_WHITE},	/*DIAMOND*/
+	{"star blue",CLR_BLUE},				/*STAR_SAPPHIRE*/
+	{"ruby",CLR_RED},					/*RUBY*/
+	{"sunset",CLR_ORANGE},				/*JACINTH*/
+	{"sapphire",CLR_BLUE},				/*SAPPHIRE*/
+	{"smoke",CLR_BLACK},				/*BLACK_OPAL*/
+	{"emerald",CLR_GREEN},				/*EMERALD*/
+	{"turquoise",CLR_GREEN},			/*TURQUOISE*/
+	{"pink",CLR_ORANGE},				/*MORGANITE*/
+	{"citrine",CLR_YELLOW},				/*CITRINE*/
+	{"aquamarine",CLR_GREEN},			/*AQUAMARINE*/
+	{"amber",CLR_BROWN},				/*AMBER*/
+	{"brown",CLR_BROWN},				/*TOPAZ*/
+	{"mirrored",CLR_BLACK},				/*JET*/
+	{"rainbow",CLR_WHITE},				/*OPAL*/
+	{"yellow",CLR_YELLOW},				/*CHRYSOBERYL*/
+	{"deep red",CLR_RED},					/*GARNET*/
+	{"amethyst",CLR_MAGENTA},			/*AMETHYST*/
+	{"crimson",CLR_RED},				/*JASPER*/
+	{"violet",CLR_MAGENTA},				/*FLUORITE*/
+	{"blue",CLR_BLUE},					/*FLUORITE*/
+	{"white",CLR_WHITE},				/*FLUORITE*/
+	{"green",CLR_GREEN},				/*FLUORITE*/
+	{"gray",CLR_GRAY},					/*OBSIDIAN*/
+	{"orange",CLR_ORANGE},				/*AGATE*/
+	{"jade",CLR_GREEN},					/*JADE*/
+	{"red",CLR_RED},					/*white glass*/
+	{"red",CLR_RED},					/*blue glass*/
+	{"red",CLR_RED},					/*red glass*/
+	{"red",CLR_RED},					/*yellowish brown glass*/
+	{"red",CLR_RED},					/*orange glass*/
+	{"red",CLR_RED},					/*yellow glass*/
+	{"red",CLR_RED},					/*black glass*/
+	{"red",CLR_RED},					/*green glass*/
+	{"red",CLR_RED}						/*violet glass*/
+};
+
+// STATIC_OVL char *SaberHilts[] = {
+	// "This %s has a curved hilt, making it particularly suited for use in duels.",
+	// "This %s's grip is composed of a hard, woody substance.",
+	// "This %s's grip is composed of verticle black ridges.",
+	// "This %s is fasioned to appear much like a branch of coral.",
+	// "This %s has an electrum grip and pommel.",
+	// "There is a winged blade of light carved into the pommel of this %s.",
+	// "There is a ring of bronze sea-creatures above the grip of this %s.",
+	// "This %s is quite intricate in its design, covered in delicate runes and inlaid with black markings."
+// }
+
 STATIC_OVL struct Jitem ObscureJapanese_items[] = {
 	{ BATTLE_AXE, "ono" },
 	{ BROADSWORD, "ninja-to" },
@@ -149,6 +202,13 @@ nextobuf()
 
 	bufidx = (bufidx + 1) % NUMOBUF;
 	return bufs[bufidx];
+}
+
+char *
+lightsaber_colorText(otmp)
+struct obj *otmp;
+{
+	return Hallucination ? hcolor(0) : LightsaberColor[((int)otmp->cobj->otyp) - MAGICITE_CRYSTAL].colorText;
 }
 
 char *
@@ -846,6 +906,10 @@ plus:
 		    if (obj->lamplit){
 				if(obj->age > 1000) Strcat(bp, " (lit)");
 				else Strcat(bp, " (flickering)");
+				if(obj->cobj){
+					Strcat(prefix, lightsaber_colorText(obj));
+					Strcat(prefix, " ");
+				}
 				// Sprintf(eos(bp), " (%d)", obj->age);
 			}
 #  ifdef DEBUG

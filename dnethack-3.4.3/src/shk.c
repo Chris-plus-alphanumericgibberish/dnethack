@@ -2334,7 +2334,7 @@ register struct monst *shkp;	/* if angry, impose a surcharge */
 			    i = pseudorand ? EMERALD : JADE;
 			    break;
 			case 9: /* violet */
-			    i = pseudorand ? AMETHYST : FLUORITE;
+			    i = pseudorand ? AMETHYST : VIOLET_FLUORITE;
 			    break;
 			default: impossible("bad glass gem %d?", obj->otyp);
 			    i = STRANGE_OBJECT;

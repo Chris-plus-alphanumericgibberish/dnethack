@@ -54,7 +54,7 @@ d_level *dlev;
 	    lev = 0;
 	first = bases[GEM_CLASS];
 
-	for(j = 0; j < 9-lev/3; j++){
+	for(j = 0; j < 11-lev/3; j++){
 		totalprob += objects[first+j].oc_prob;
 		objects[first+j].oc_prob = 0;
 	}/*j=0;*/ //turned off gem limitation by dungeon level. Then turned it back on.
@@ -65,6 +65,7 @@ d_level *dlev;
 			lev, first, j, LAST_GEM);
 		wait_synch();
 	    }
+	//Note, 175 is the sum of the oc_probs for the true gems
 	for (j = first; j <= LAST_GEM; j++)
 		objects[j].oc_prob = (175+j-first)/(LAST_GEM+1-first);
 }
@@ -146,18 +147,18 @@ register char oclass;
 			if (rn2(2)) { /* change aquamarine from green to blue? */
 			    COPY_OBJ_DESCR(objects[AQUAMARINE],objects[SAPPHIRE]);
 			}
-			switch (rn2(4)) { /* change fluorite from violet? */
-			    case 0:  break;
-			    case 1:	/* blue */
-				COPY_OBJ_DESCR(objects[FLUORITE],objects[SAPPHIRE]);
-				break;
-			    case 2:	/* white */
-				COPY_OBJ_DESCR(objects[FLUORITE],objects[DIAMOND]);
-				break;
-			    case 3:	/* green */
-				COPY_OBJ_DESCR(objects[FLUORITE],objects[EMERALD]);
-				break;
-			}
+			// switch (rn2(4)) { /* change fluorite from violet? */
+			    // case 0:  break;
+			    // case 1:	/* blue */
+				// COPY_OBJ_DESCR(objects[FLUORITE],objects[SAPPHIRE]);
+				// break;
+			    // case 2:	/* white */
+				// COPY_OBJ_DESCR(objects[FLUORITE],objects[DIAMOND]);
+				// break;
+			    // case 3:	/* green */
+				// COPY_OBJ_DESCR(objects[FLUORITE],objects[EMERALD]);
+				// break;
+			// }
 		}
 	check:
 		sum = 0;

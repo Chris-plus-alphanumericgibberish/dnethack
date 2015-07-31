@@ -591,7 +591,7 @@ int mode;
 	    /* Eat the rock. */
 	    if (mode == DO_MOVE && still_chewing(x,y)) return FALSE;
 	} else if (flags.autodig && !flags.run && !flags.nopick &&
-		   uwep && is_pick(uwep)) {
+		   uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) {
 	/* MRKR: Automatic digging when wielding the appropriate tool */
 	    if (mode == DO_MOVE)
 		(void) use_pick_axe2(uwep);

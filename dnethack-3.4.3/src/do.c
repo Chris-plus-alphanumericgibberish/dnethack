@@ -803,7 +803,7 @@ dodown()
 			|| !Can_fall_thru(&u.uz) || !trap->tseen) {
 
 			if (flags.autodig && !flags.nopick &&
-				uwep && is_pick(uwep)) {
+				uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) {
 				return use_pick_axe2(uwep);
 			} else {
 				if(levl[u.ux][u.uy].typ == STAIRS) pline("These stairs don't go down!");
@@ -2092,7 +2092,7 @@ donull()
 #ifdef OVLB
 
 STATIC_PTR int
-wipeoff(VOID_ARGS)
+wipeoff()
 {
 	if(u.ucreamed < 4)	u.ucreamed = 0;
 	else			u.ucreamed -= 4;
