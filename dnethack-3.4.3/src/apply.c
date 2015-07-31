@@ -4432,12 +4432,12 @@ doapply()
 //ifdef FIREARMS
 	case RAYGUN:
 		if(obj->altmode == ZT_FIRE){
-			obj->altmode = ZT_LIGHTNING;
-			You("set %s to disintegrate.", yname(obj));
-		} else if(obj->altmode == ZT_LIGHTNING){
 			obj->altmode = ZT_DEATH;
 			You("set %s to kill.", yname(obj));
 		} else if(obj->altmode == ZT_DEATH){
+			obj->altmode = ZT_LIGHTNING;
+			You("set %s to disintegrate.", yname(obj));
+		} else if(obj->altmode == ZT_LIGHTNING){
 			obj->altmode = ZT_SLEEP;
 			You("set %s to stun.", yname(obj));
 		} else {
