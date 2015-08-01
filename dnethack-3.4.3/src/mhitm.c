@@ -7,6 +7,7 @@
 #include "edog.h"
 
 extern boolean notonhead;
+#define POLE_LIM 5	/* How far monsters can use pole-weapons */
 
 #ifdef OVLB
 
