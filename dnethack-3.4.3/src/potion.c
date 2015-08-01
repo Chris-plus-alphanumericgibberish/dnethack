@@ -1782,7 +1782,9 @@ register struct obj *o1, *o2;
 	    /* here we just want to return something non-zero */
 	    return POT_WATER;
 	    break;
+	  case MAGICITE_CRYSTAL:
 	  case DIAMOND:
+	  default:
 	    /* won't dissolve */
 	    break;
 	  case OPAL:
@@ -1846,6 +1848,7 @@ register struct obj *o1, *o2;
 	    /* blue */
 
 	  case SAPPHIRE:
+	  case STAR_SAPPHIRE:
 	    potion_descr = "brilliant blue";
 	    break;
 
@@ -1854,7 +1857,10 @@ register struct obj *o1, *o2;
 	  case AMETHYST:
 	    potion_descr = "magenta";
 	    break;
-	  case FLUORITE:
+	  case VIOLET_FLUORITE:
+	  case BLUE_FLUORITE:
+	  case GREEN_FLUORITE:
+	  case WHITE_FLUORITE:
 	    potion_descr = "white";
 	    break;
 
