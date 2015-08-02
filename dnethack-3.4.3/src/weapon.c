@@ -1304,7 +1304,8 @@ struct obj *otmp;
 	
 	
 	
-	if (Upolyd || otmp == uswapwep) return(0);
+	// if (Upolyd || otmp == uswapwep) return(0);
+	if (otmp == uswapwep) return(0);
 	
 	if (str < 6) bonus = -6+str;
 	else if (str < 16) bonus = 0;
