@@ -14,7 +14,7 @@
 #		number of choices for its branch level _first_.
 #
 
-DUNGEON:	"The Dungeons of Doom" "D" (25, 6)
+DUNGEON:	"The Dungeons of Doom" "D" (25, 5)
 ALIGNMENT:	unaligned
 BRANCH:		"The Gnomish Mines" @ (2, 3)
 %REINCARNATION LEVEL:		"rogue" "R" @ (15, 4)
@@ -103,7 +103,7 @@ LEVEL:		"fakewiz3" "G" @ (-12,9)
 #
 #	The Mines of the Gnomes of Zurich.
 #
-DUNGEON:	"The Gnomish Mines" "M" (9, 2)
+DUNGEON:	"The Gnomish Mines" "M" (9, 1)
 ALIGNMENT:	lawful
 DESCRIPTION:	mazelike
 BRANCH:		"Vlad's Tower" @ (1, 0) up
