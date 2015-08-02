@@ -2,7 +2,7 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-/* NetHack 3.4.3, dNethack version 3.7.0 */
+/* NetHack 3.4.3, dNethack version 3.10.0 */
 #define VERSION_MAJOR	3
 /* Started at 3.4.3, for the nethack version. Incremented straight 
    to 3.6 with the advent of the Noble role, counting the initial
@@ -12,7 +12,7 @@
    Incremented to 3.8 with the introduction of Clockwork upgrades and the finished Drow quests.
    Incremented to 3.9 with the introduction of.... many things, including dread seraphs, half dragons, and another demon level.
 */
-#define VERSION_MINOR	9
+#define VERSION_MINOR	10
 /*
  * PATCHLEVEL is updated for each release.
  *
@@ -24,8 +24,9 @@
  * 3.9.1: winged kobold, sky render, stormhelm, quicksilver, and spineseeker
  * 3.9.2: added poison spray and acid blast spells.
  * 3.9.3: added bard, hungry dead, dokkalfar matriarch.
+ * 3.10.0: belated increment of minor version, Bugfixed bard, bards gain exp by watching their pets level up.
  */
-#define PATCHLEVEL	3
+#define PATCHLEVEL	0
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
