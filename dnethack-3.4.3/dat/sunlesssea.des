@@ -490,7 +490,7 @@ ENDMAP
 RANDOM_PLACES:(11,15),(09,06)
 
 # Dungeon Description
-REGION:(01,01,73,16),lit,"ordinary"
+REGION:(01,01,73,19),lit,"ordinary"
 # Stairs
 STAIR:(19,02,58,07), (19,10,20,12), up
 # STAIR:(19,02,58,07), (19,10,20,12), down
