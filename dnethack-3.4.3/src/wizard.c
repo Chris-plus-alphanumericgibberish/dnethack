@@ -807,8 +807,7 @@ const char * const random_chaosism[] = {
 	"But I have ever been reborn here!",													//6
 	"Many times have you followed me!",														//7
 	"Many times, have you DIED!",															//8
-	"So even as you die again and again, I shall return!\n\
-	Born forever into this endless circle that I have created, here, writ with your BLOOD!"	//9
+	"So even as you die again and again, I shall return! Born forever into this endless circle that I have created, here, writ with your BLOOD!"	//9
 
 };
 const char * const random_apollyon[] = {
@@ -879,9 +878,9 @@ register struct monst	*mtmp;
 			  random_malediction[rn2(SIZE(random_malediction))],
 			  random_insult[rn2(SIZE(random_insult))]);
 	} else if(mtmp->data == &mons[PM_CHAOS]){
-		if(mtmp->mextra[1]<5){
-			verbalize("%s", random_chaosism[mtmp->mextra[1]+5]);
-			mtmp->mextra[1]++;
+		if(mtmp->mextra[0]<5){
+			verbalize("%s", random_chaosism[mtmp->mextra[0]+5]);
+			mtmp->mextra[0]++;
 		}
 		else verbalize("%s", random_chaosism[rn2(5)]);
 	} else if(mtmp->data == &mons[PM_GARLAND]){
