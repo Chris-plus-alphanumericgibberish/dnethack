@@ -744,7 +744,7 @@ vision_recalc(control)
 				 ( Race_if(PM_DROW)  && !Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)
 				&& (!(ulev->lit|| (next_array[u.uy][u.ux] & TEMP_LIT)) || u.sealsActive&SEAL_AMON)
 				&& (!(lev->lit || (next_row[col] & TEMP_LIT)) || 
-					(lev->typ < CORR && !((mat = m_at(col,row)) && emits_light(mat->data))) || 
+					((lev->typ < CORR || lev->typ==STAIRS) && !((mat = m_at(col,row)) && emits_light(mat->data))) || 
 					u.sealsActive&SEAL_AMON))
 		) {
 		/*
