@@ -2903,11 +2903,9 @@ spiriteffects(power, atme)
 				dmg = d(lvls,8);
 				mon->mhp -= dmg;
 				mon->mhpmax -= dmg;
-				mon->m_lev -= lvls;
-				if(mon->m_lev < 1){
-					mon->m_lev = 1; /* >_< Thanks bcode */
-					mon->mhp = 0;
-				}
+				if(lvls >= mon->m_lev) mon->mhp = 0; /* >_< Thanks bcode */
+				else mon->m_lev -= lvls;
+				
 				if (mon->mhp <= 0 || mon->mhpmax <= 0) {
 					xkilled(mon, 1);
 				} else {
@@ -3009,7 +3007,7 @@ spiriteffects(power, atme)
 						mon->mconf = 1;
 						if(u.ulevel >= mon->m_lev+5){
 							if(canseemon(mon)) pline("%s goes insane.", Monnam(mon));
-							mon->mcrazed;
+							mon->mcrazed = 1;
 						} else if(canseemon(mon)) pline("%s looks dizzy.", Monnam(mon));
 					}
 					monflee(mon, d(5,dsize), FALSE, TRUE);
