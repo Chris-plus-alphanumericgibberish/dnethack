@@ -210,7 +210,7 @@ A("Peace Keeper",		ATHAME,
 	(SPFX_RESTR|SPFX_DFLAG2), SPFX_WARN, (M2_HOSTILE), /* speaks for itself */
 	PHYS(5,10),	NO_DFNS,	NO_CARY,	/*Weaker attack and damage */
 	0, A_LAWFUL, NON_PM, NON_PM, 2500L, 
-	0,0,0),
+	SPFX2_SILVERED,0,0),
 
 A("Ogresmasher",		WAR_HAMMER, //needs quote
 	(SPFX_RESTR|SPFX_DCLAS|SPFX_BEHEAD), 0, S_OGRE, //BEHEAD code smashes ogres
