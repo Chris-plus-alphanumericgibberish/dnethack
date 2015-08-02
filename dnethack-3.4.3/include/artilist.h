@@ -46,7 +46,7 @@ A("",				STRANGE_OBJECT,
 /*Take Me Up/Cast Me Away*/
 A("Excalibur",			LONG_SWORD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
-	PHYS(5,10),	DRLI(0,0),	NO_CARY,	
+	PHYS(20,10),	DRLI(0,0),	NO_CARY,	//Excalibur is a very accurate weapon, a property that almost doesn't matter except for vs high level demons
 	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
 	0,0,0),
 /* Clarent patch (Greyknight): Note that Clarent's SPFX2_DIG gives it another +2 to hit against thick-skinned
@@ -56,7 +56,7 @@ A("Excalibur",			LONG_SWORD,
 	/*Clarent has been modified to make it the Knight crowning-gift*/
 A("Clarent",			LONG_SWORD, /*quote (sorta)*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_DFLAG1), 0, M1_THICK_HIDE,
-	PHYS(4,20),	NO_DFNS,		NO_CARY,
+	PHYS(10,20),	NO_DFNS,		NO_CARY,
 	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
 	SPFX2_DIG,0,0), 
 
@@ -133,7 +133,7 @@ A("The Marauder's Map", SCR_MAGIC_MAPPING, /* needs quote */
  */
 A("Orcrist",			ELVEN_BROADSWORD,
 	(SPFX_DFLAG2), SPFX_WARN, (M2_ORC|M2_DEMON), /* the old elves fought balrogs too. */
-	PHYS(5,0),	NO_DFNS,	NO_CARY,	
+	PHYS(10,0),	NO_DFNS,	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, PM_ELF, 2000L, 
 	0,0,0),
 
@@ -848,7 +848,7 @@ A("Webweaver's Crook",	FAUCHARD,
 
 A("Lolth's Fang",		DROVEN_SHORT_SWORD, /* Hedrow crowning gift, chaotic or neutral */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL), 0, 0,
-	ACID(5,10),	DRLI(0,0),	NO_CARY,
+	ACID(10,10),	DRLI(0,0),	NO_CARY,
 	0, A_NONE, NON_PM, PM_DROW, 8000L, 
 	SPFX2_SILVERED|SPFX2_POISONED,0,0),
 
@@ -953,7 +953,7 @@ A("Durin's Axe",			AXE, /*Moria dwarf noble crowning */
 
 A("Glamdring",			ELVEN_BROADSWORD, /*Lonely Mountain dwarf noble first gift */
 	(SPFX_NOGEN|SPFX_WARN|SPFX_RESTR), 0, (M2_ORC|M2_DEMON), /* the old elves fought balrogs too. */
-	PHYS(5,10),	NO_DFNS,	NO_CARY,	
+	PHYS(10,10),	NO_DFNS,	NO_CARY,
 	0, A_LAWFUL, PM_KNIGHT, NON_PM, 2000L, 
 	0,0,0),
 
