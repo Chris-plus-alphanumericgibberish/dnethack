@@ -2845,7 +2845,7 @@ register int	mmflags;
 	    mtmp->mtrapseen = (1L << (PIT - 1)) | (1L << (HOLE - 1));
 	if (Is_firelevel(&u.uz))  /* know about fire traps here */
 	    mtmp->mtrapseen = (1L << (PIT - 1)) | (1L << (FIRE_TRAP - 1));
-	if (ptr == &mons[urole.ldrnum])		/* leader knows about all traps */
+	if (ptr == &mons[urole.ldrnum] || ptr == &mons[urole.guardnum])		/* leader and guards knows about all traps */
 	    mtmp->mtrapseen |= ~0;
 	mtmp->mtrapseen |= (1L << (STATUE_TRAP-1)); /* all monsters should avoid statue traps */
 
