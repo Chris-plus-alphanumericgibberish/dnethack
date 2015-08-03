@@ -288,7 +288,7 @@ mattackm(magr, mdef)
 		    thrwmm(magr, mdef);
 		    if (tmphp > mdef->mhp){
 				res[i] = MM_HIT;
-				if(magr->mtame) u.petattacked = TRUE;
+				if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		    } else res[i] = MM_MISS;
 		    if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		    if (magr->mhp < 1) res[i] = MM_AGR_DIED;
@@ -308,7 +308,7 @@ mattackm(magr, mdef)
 			if(thrwmm(magr, mdef)){
 				if (tmphp > mdef->mhp){
 					res[i] = MM_HIT;
-					if(magr->mtame) u.petattacked = TRUE;
+					if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 				} else res[i] = MM_MISS;
 				if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 				if (magr->mhp < 1) res[i] = MM_AGR_DIED;
@@ -378,7 +378,7 @@ meleeattack:
 		    tmp -= hitval(otmp, mdef);
 		if (strike) {
 		    res[i] = hitmm(magr, mdef, mattk);
-			if(res[i] && magr->mtame) u.petattacked = TRUE;
+			if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		    if((mdef->data == &mons[PM_BLACK_PUDDING] || mdef->data == &mons[PM_BROWN_PUDDING])
 		       && otmp && objects[otmp->otyp].oc_material == IRON
 		       && mdef->mhp > 1 && !mdef->mcan)
@@ -400,7 +400,7 @@ meleeattack:
 		strike = (i >= 2 && res[i-1] == MM_HIT && res[i-2] == MM_HIT);
 		if (strike){
 		    res[i] = hitmm(magr, mdef, mattk);
-//			if(magr->mtame) u.petattacked = TRUE;
+//			if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		}
 		break;
 
@@ -411,7 +411,7 @@ meleeattack:
 			flags.drgn_brth = 0;
 		if (tmphp > mdef->mhp){
 			res[i] = MM_HIT;
-			if(magr->mtame) u.petattacked = TRUE;
+			if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		} else res[i] = MM_MISS;
 		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
@@ -421,7 +421,7 @@ meleeattack:
 	        spitmm(magr, mdef, mattk);
 		if (tmphp > mdef->mhp){
 			res[i] = MM_HIT;
-			if(magr->mtame) u.petattacked = TRUE;
+			if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		} else res[i] = MM_MISS;
 		if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
 		if (magr->mhp < 1) res[i] = MM_AGR_DIED;
@@ -435,7 +435,7 @@ meleeattack:
 				if(res[i] == MM_MISS){
 					if (tmphp > mdef->mhp){
 						res[i] = MM_HIT;
-						if(magr->mtame) u.petattacked = TRUE;
+						if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 					} else res[i] = MM_MISS;
 				}
 				if (mdef->mhp < 1){
@@ -474,13 +474,13 @@ meleeattack:
 	    case AT_GAZE:
 		strike = 0;	/* will not wake up a sleeper */
 		res[i] = gazemm(magr, mdef, mattk);
-		if(res[i] && magr->mtame) u.petattacked = TRUE;
+		if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		break;
 
 	    case AT_EXPL:
 		if (distmin(magr->mx,magr->my,mdef->mx,mdef->my) > 1) break;
 		res[i] = explmm(magr, mdef, mattk);
-		if(res[i] && magr->mtame) u.petattacked = TRUE;
+		if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		if (is_fern_spore(magr->data)) spore_dies(magr);
 		if (res[i] == MM_MISS) { /* cancelled--no attack */
 		    strike = 0;
@@ -505,7 +505,7 @@ meleeattack:
 		else {
 		    if ((strike = (tmp > rnd(20+i)))){
 				res[i] = gulpmm(magr, mdef, mattk);
-				if(magr->mtame) u.petattacked = TRUE;
+				if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		    } else
 				missmm(magr, mdef, mattk);
 		}
@@ -535,7 +535,7 @@ meleeattack:
 				else {
 					res[i] = castmm(magr, mdef, mattk);
 				}
-				if(res[i] && magr->mtame) u.petattacked = TRUE;
+				if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 				if (res[i] & MM_DEF_DIED)
 				if( pa == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
 				if( pa == &mons[PM_QUINON] ) {
@@ -557,7 +557,7 @@ meleeattack:
 	    dist2(magr->mx, magr->my, mdef->mx, mdef->my) < 3)
 	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED);
 
-	if(res[i] && magr->mtame) u.petattacked = TRUE;
+	if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 	if (res[i] & MM_DEF_DIED) return res[i];
 
 	/*
