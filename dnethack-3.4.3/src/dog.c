@@ -48,9 +48,9 @@ pet_type()
 		if(preferred_pet == 's')
 			return (PM_CAVE_SPIDER);
 		else if(preferred_pet == ':' || preferred_pet == 'l')
-			return (PM_BABY_CROCODILE);
+			return (PM_BABY_CAVE_LIZARD);
 		else 
-			return (rn2(3) ? PM_CAVE_SPIDER : PM_BABY_CROCODILE);
+			return (rn2(3) ? PM_CAVE_SPIDER : PM_BABY_CAVE_LIZARD);
 	}
 	else if (urole.petnum != NON_PM && urole.petnum != PM_LITTLE_DOG && urole.petnum != PM_KITTEN && urole.petnum != PM_PONY)
 	    return (urole.petnum);
@@ -806,6 +806,7 @@ register struct obj *obj;
 rock:
 		   if ((peek_at_iced_corpse_age(obj) + 50L <= monstermoves
 					    && obj->corpsenm != PM_LIZARD
+					    && obj->corpsenm != PM_BABY_CAVE_LIZARD
 					    && obj->corpsenm != PM_SMALL_CAVE_LIZARD
 					    && obj->corpsenm != PM_CAVE_LIZARD
 					    && obj->corpsenm != PM_LARGE_CAVE_LIZARD

@@ -702,6 +702,7 @@ BOOLEAN_P bld, nobadeffects;
 		}
 		break;
 	    case PM_LIZARD:
+	    case PM_BABY_CAVE_LIZARD:
 	    case PM_SMALL_CAVE_LIZARD:
 	    case PM_CAVE_LIZARD:
 	    case PM_LARGE_CAVE_LIZARD:
@@ -774,6 +775,7 @@ struct monst *mon;
 {
     switch(monsndx(mon->data)) {
 	case PM_LIZARD:
+	case PM_BABY_CAVE_LIZARD:
 	case PM_SMALL_CAVE_LIZARD:
 	case PM_CAVE_LIZARD:
 	case PM_LARGE_CAVE_LIZARD:
@@ -1392,6 +1394,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 		break;
 	    case PM_MANDRAKE:
 	    case PM_LIZARD:
+	    case PM_BABY_CAVE_LIZARD:
 	    case PM_SMALL_CAVE_LIZARD:
 	    case PM_CAVE_LIZARD:
 	    case PM_LARGE_CAVE_LIZARD:
@@ -1555,7 +1558,8 @@ opentin()		/* called during each move whilst opening a tin */
 		    (tin.tin->spe == -1) ? HOMEMADE_TIN :  /* player made it */
 			rn2(TTSZ-1);		/* else take your pick */
 	    if (r == ROTTEN_TIN && (tin.tin->corpsenm == PM_LIZARD || tin.tin->corpsenm == PM_SMALL_CAVE_LIZARD ||
-			tin.tin->corpsenm == PM_CAVE_LIZARD || tin.tin->corpsenm == PM_LARGE_CAVE_LIZARD ||
+			tin.tin->corpsenm == PM_CAVE_LIZARD || tin.tin->corpsenm == PM_BABY_CAVE_LIZARD || 
+			tin.tin->corpsenm == PM_LARGE_CAVE_LIZARD ||
 			tin.tin->corpsenm == PM_LICHEN || tin.tin->corpsenm == PM_BEHOLDER))
 		r = DRIED_TIN;		/* lizards don't rot */
 	    else if (tin.tin->spe == -1 && !tin.tin->blessed && !rn2(7))
