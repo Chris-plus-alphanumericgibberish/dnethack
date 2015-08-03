@@ -1910,6 +1910,13 @@ int spellnum;
 	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
 		return TRUE;
 	
+	if(is_drow(mtmp->data)){
+		if(!Race_if(PM_DROW)){
+			if(sengr_at("Elbereth", mtmp->mux, mtmp->muy)) return TRUE;
+		} else {
+			if(sengr_at("Lolth", mtmp->mux, mtmp->muy) && (mtmp->m_lev < u.ulevel || u.ualign.record-- > 0)) return TRUE;
+		}
+	}
        /* only the wiz makes a clone */
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == CLONE_WIZ) return TRUE;
 	/* aggravate monsters won't be cast by peaceful monsters */
@@ -2198,6 +2205,14 @@ int spellnum;
 	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
 		return TRUE;
 	
+	if(is_drow(mdef->data)){
+		if(!is_drow(mtmp->data)){
+			if(sengr_at("Elbereth", mdef->mux, mdef->muy)) return TRUE;
+		} else {
+			if(sengr_at("Lolth", mdef->mux, mdef->muy) && (mdef->m_lev < mtmp->m_lev)) return TRUE;
+		}
+	}
+	
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == CLONE_WIZ) 
 		return TRUE;
  	/* haste self when already fast */
@@ -2248,6 +2263,8 @@ int spellnum;
 	
 	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
 		return TRUE;
+	
+	/* PC drow can't be warded off this way */
 	
 	/* aggravate monsters, etc. won't be cast by peaceful monsters */
 	if (spellnum == CLONE_WIZ)
