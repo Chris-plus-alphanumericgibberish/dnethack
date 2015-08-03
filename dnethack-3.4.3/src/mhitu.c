@@ -2245,6 +2245,7 @@ dopois:
 		hitmsg(mtmp, mattk);
 		if (mtmp->mcan) break;
 		if (u.umonnum == PM_WOOD_GOLEM ||
+			u.umonnum == PM_GROVE_GUARDIAN ||
 			u.umonnum == PM_LIVING_LECTURN ||
 		    u.umonnum == PM_LEATHER_GOLEM) {
 			You("rot!");

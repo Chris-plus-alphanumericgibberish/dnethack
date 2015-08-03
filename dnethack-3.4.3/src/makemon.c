@@ -251,6 +251,11 @@ register struct monst *mtmp;
 			(void) mongets(mtmp, WAR_HAMMER);
 			return;
 	}
+	if(mm==PM_GROVE_GUARDIAN){
+		    if(rn2(20))(void) mongets(mtmp, MOON_AXE);
+			else (void) mongets(mtmp, SILVER_KHAKKHARA);
+			return;
+	}
 
 /*	if(mm==PM_SERVANT_OF_THE_UNKNOWN_GOD){
 		mongets(mtmp, CLUB);
@@ -3248,6 +3253,19 @@ register int	mmflags;
 			    mtmp->minvis = TRUE;
 			    mtmp->perminvis = TRUE;
 			}
+			if(mndx == PM_GROVE_GUARDIAN){
+				if(!(mmflags & MM_EDOG)){
+					if (anymon){
+						int num = 0;
+						if(!rn2(10)) makemon(&mons[PM_ELVENKING], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(rn2(4)) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						num = rn2(5);
+						for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						num = d(2,4);
+						for(num; num >= 0; num--) makemon(&mons[PM_WOODLAND_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					}
+				}
+			}
 		break;
 		case S_PUDDING:
 			if(mndx == PM_DARKNESS_GIVEN_HUNGER){
@@ -4283,6 +4301,7 @@ int type;
 		case PM_GOLD_GOLEM: return 40;
 		case PM_WOOD_GOLEM: return 50;
 		case PM_LIVING_LECTURN: return 50;
+		case PM_GROVE_GUARDIAN: return 60;
 		case PM_FLESH_GOLEM: return 40;
 		case PM_SPELL_GOLEM: return 20;
 //		case PM_SAURON_THE_IMPRISONED: return 45;

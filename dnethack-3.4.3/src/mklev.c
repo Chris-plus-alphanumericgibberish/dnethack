@@ -938,7 +938,7 @@ mineralize()
 	/* basic level-related probabilities */
 	goldprob = 20 + depth(&u.uz) / 3;
 	gemprob = goldprob / 4;
-	silverprob = gemprob / 2;
+	silverprob = gemprob * 2;
 
 	/* mines have ***MORE*** goodies - otherwise why mine? */
 	if (In_mines(&u.uz)) {

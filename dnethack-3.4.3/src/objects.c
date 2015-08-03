@@ -170,11 +170,11 @@ WEAPON("elven sickle", (char *)0, /* Vs plants: +6 to hit and double damage */
 	1, 1, 0,  0, 20,  4,  6,  3,  0, S,   P_HARVEST, WOOD, HI_WOOD),
 
 WEAPON("axe", (char *)0,
-	1, 0, 0, 36, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
+	1, 0, 0, 20, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
 WEAPON("battle-axe", "double-headed axe",/* "double-bitted" ? */
-	0, 0, 1, 10,120, 40,  8,  6, 0, S,   P_AXE, IRON, HI_METAL), /*+1d4/+2d4*/
+	0, 0, 1, 16,120, 40,  8,  6, 0, S,   P_AXE, IRON, HI_METAL), /*+1d4/+2d4*/
 WEAPON("moon axe", "large silver axe",
-	0, 0, 1,  2,160, 40,  6,  6, 0, S,   P_AXE, SILVER, HI_SILVER),
+	0, 0, 1, 12,160, 40,  6,  6, 0, S,   P_AXE, SILVER, HI_SILVER),
 
 /* swords */
 WEAPON("short sword", (char *)0,

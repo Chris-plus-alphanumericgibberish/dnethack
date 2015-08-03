@@ -540,6 +540,14 @@ register struct monst *mtmp;
 			}
 			mtmp->mnamelth = 0;
 		break;
+	    case PM_GROVE_GUARDIAN:
+			num = d(3,4);
+			while(num--) {
+				obj = mksobj_at(QUARTERSTAFF, x, y, TRUE, FALSE);
+				obj->spe = rnd(3);
+			}
+			mtmp->mnamelth = 0;
+		break;
 	    case PM_LIVING_LECTURN:
 			num = d(2,3);
 			while(num--) {
