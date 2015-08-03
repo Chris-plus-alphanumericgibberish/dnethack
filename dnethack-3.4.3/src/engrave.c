@@ -182,6 +182,8 @@ static const char *haluMesg[] = {
 		"...do you see me?",
 		"That was a mistake.",
 	"Everything dies.",
+	"What is lost might not be found.",
+	"What was washed away might never return."
 	
 	"Listen at us, won't you?", /* All Our Friends Are Dead */
 		"Share with us your head",
@@ -200,6 +202,8 @@ static const char *haluMesg[] = {
 		"B3C4US3!!! R3D 1S TH3 B3ST 4ND T4ST3S TH3 B3ST!!! <3",
 		"OK TH3N WH4T?",
 		"WH3R3 1S 1T?",
+	
+	"And there shall be laughter and magic and blood, and we shall dance our dance until the end of time...", /*Incursion, Halls of the Goblin King*/
 	
 	"The eclipse will shatter the sky and from the remnants will bleed a storm of fire to engulf the earth.",	/* Gone with the Blastwave */
 		"The spirits of past sins will char the land and cleanse the planet.",
@@ -4857,7 +4861,9 @@ static const char *epitaphs[] = {
 	"Go away!",
 	
 	"Summer Rose - Thus Kindly I Scatter", /* RWBY */
+	
 	"Hold my beer and watch this!", /* Rango */
+	
 	"Of course, you realize, this means war.",
 	
 	"FIQ:  One step from divinity.",
@@ -4865,6 +4871,7 @@ static const char *epitaphs[] = {
 	"FIQ, killed by a clockwork bug.",
 	
 	"Khor:  \"Wait, did that axe just fall off the edge of the world?\"",
+		"Khor:  Balancing dNethack, one sleeping potion to the face at a time.",
 	
 	"Package contains: One posthumous worm feeder",
 	
@@ -4878,6 +4885,8 @@ static const char *epitaphs[] = {
 	"I beat you in the human race.", /*Fable*/
 	
 	"Nobody expects the Spanish Inquisition!", /*Monty Python*/
+	
+	"Omnes una manet nox", /*One night awaits us all*/
 	
        	"Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
        	"Applaud, my friends, the comedy is finished.",

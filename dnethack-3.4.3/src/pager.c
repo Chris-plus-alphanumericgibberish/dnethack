@@ -579,6 +579,19 @@ static const char * const bogusobjects[] = {
 		
        "blessed greased +5 silly object of hilarity",
 	   "kinda lame joke",
+	   
+	   "brazier of commanding fire elementals",
+	   "brassiere of commanding fire elementals",
+	   
+	   "bowl of commanding water elementals",
+	   "bowel of commanding water elementals",
+	   
+	   "censer of controlling air elementals",
+	   "censure of controlling air elementals",
+	   
+	   "stone of controlling earth elementals",
+	   "loan of controlling earth elementals",
+	   
 # ifdef TOURIST
        /* Modern */
        "polo mallet",
