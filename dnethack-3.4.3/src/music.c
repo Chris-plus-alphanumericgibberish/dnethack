@@ -1351,7 +1351,7 @@ struct monst *mon;
 		  case TREE:
 			if (cansee(x,y))
 				pline_The("tree topples into a chasm.");
-			if(!mon && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+			if(!mon && !flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 			goto do_pit;
 		  case DEADTREE:
 			if (cansee(x,y))

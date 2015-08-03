@@ -6039,7 +6039,7 @@ int force,sx,sy;
 		  case TREE:
 			if (cansee(x,y))
 				pline_The("tree topples into a chasm.");
-			if(u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+			if(!flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 			goto do_pit;
 		  case DEADTREE:
 			if (cansee(x,y))

@@ -3941,7 +3941,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			newsym(sx,sy);
 		    }
 		    range = 0;
-			if(type<20 && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+			if(type<20 && !flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 		    break;
 		}
 
@@ -4002,7 +4002,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					} else if (IS_TREE(room->typ)) {
 						room->typ = ROOM;
 						redrawneeded = TRUE;
-						if(type >=0 && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+						if(type >=0 && !flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 					} else {	/* IS_ROCK but not IS_WALL or SDOOR */
 						room->typ = CORR;
 						redrawneeded = TRUE;
