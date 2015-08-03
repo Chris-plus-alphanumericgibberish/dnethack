@@ -4151,6 +4151,9 @@ struct monst *mtmp, *victim;
 		if(mtmp->mhp < hp_threshold-8 || mtmp->m_lev < victim->m_lev + d(2,5)){ /*allow monsters to quickly gain hp up to around their HP limit*/
 			max_increase = 1;
 			cur_increase = 1;
+			if(Role_if(PM_BARD) && mtmp->mtame && canseemon(mtmp)){
+				u.pethped = TRUE;
+			}
 		} else {
 			max_increase = 0;
 			cur_increase = 0;

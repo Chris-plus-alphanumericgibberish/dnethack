@@ -773,7 +773,7 @@ A("The Heart of Ahriman",	RUBY,
 	0,0,0),
 
 #ifdef BARD
-A("The Lyre of Orpheus",	WOODEN_HARP,
+A("The Lyre of Orpheus",	MAGIC_HARP,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SPEAK), 0, 0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	TAMING,		A_NEUTRAL, PM_BARD, NON_PM, 5000L,

@@ -210,7 +210,7 @@ STAIR:(69,06),up
 # Non diggable walls
 NON_DIGGABLE:(00,00,75,19)
 # Objects
-OBJECT:'(',"wooden harp",(38,10),blessed,0,"The Lyre of Orpheus"
+OBJECT:'(',"magic harp",(38,10),blessed,0,"The Lyre of Orpheus"
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random

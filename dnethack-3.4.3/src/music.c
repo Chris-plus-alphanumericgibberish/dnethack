@@ -292,6 +292,22 @@ boolean domsg;
 	    else if ((instr_otyp == WOODEN_HARP || instr_otyp == WOODEN_FLUTE)
 		     && (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN]))
 			r = -1*(mtmp->m_lev);
+		else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
+			 || mtmp->data->mlet == S_VAMPIRE)
+			r = -1*(mtmp->m_lev);
+		else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
+				 || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
+			r = -2*(mtmp->m_lev);
+		else if (mtmp->data == &mons[PM_PARROT])
+			r = -1*(mtmp->m_lev);
+		else if (!(instr_otyp == WOODEN_HARP || instr_otyp == WOODEN_FLUTE)
+		     && mtmp->data->mlet == S_NYMPH)
+			r = -3*(mtmp->m_lev);
+		else if (mtmp->data->mlet == S_CENTAUR)
+			r = -1*(mtmp->m_lev);
+		else if (instr_otyp != LEATHER_DRUM 
+			 && (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT))
+			r = (instr_otyp == WOODEN_HARP || instr_otyp == WOODEN_FLUTE) ? -2*(mtmp->m_lev) : -1*(mtmp->m_lev);
     }
 
     if (domsg && (r < 0)){
@@ -633,7 +649,7 @@ struct obj * instr;
     if (dlev < 1) dlev = is_mplayer(mtmp->data) ? u.ulevel : 1;
     if (song_penalty) alev /= 2;
 
-	alev += rnd(20);
+	alev += rnd(20)-10; /*Almost the same average, more variability*/
 	
     if (wizard)
 	    pline("[%s:%i/%i]", mon_nam(mtmp), alev, dlev);
@@ -892,10 +908,10 @@ int distance;
 	register struct monst *mtmp = fmon;
 
 	while(mtmp) {
-		if (!DEADMONSTER(mtmp) && mtmp->mtame && distu(mtmp->mx, mtmp->my) < distance &&
+		if (!DEADMONSTER(mtmp) && mtmp->mtame && !mtmp->isminion && distu(mtmp->mx, mtmp->my) < distance &&
 		    resist_song(mtmp, SNG_COURAGE, song_instr) >= 0) {
 			if (EDOG(mtmp)->encouraged < EDOG_ENCOURAGED_MAX)
-				EDOG(mtmp)->encouraged += (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) * 6;
+				EDOG(mtmp)->encouraged = min(EDOG_ENCOURAGED_MAX, EDOG(mtmp)->encouraged+(P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1));
 			if (mtmp->mflee)
 				switch (P_SKILL(P_MUSICALIZE)) {
 				case P_UNSKILLED:
@@ -981,6 +997,7 @@ int distance;
 				mtmp->mcan = 0;
 				mtmp->mspec_used = 0;
 				mtmp->mcrazed = 0;
+				if(!mtmp->isminion && EDOG(mtmp)->apport < 10) EDOG(mtmp)->apport++;
 			case P_SKILLED:
 				if(!mtmp->mnotlaugh && mtmp->mlaughing){
 					mtmp->mnotlaugh = 1;
@@ -991,6 +1008,7 @@ int distance;
 					mtmp->mblinded = 0;
 				}
 				mtmp->mberserk = 0;
+				if(mtmp->mhp < mtmp->mhpmax && mtmp->mhp < mtmp->m_lev) mtmp->mhp = min(mtmp->m_lev,mtmp->mhpmax);
 			case P_BASIC:
 				if(!mtmp->mcanmove && mtmp->mfrozen){
 					mtmp->mcanmove = 1;
@@ -1212,12 +1230,14 @@ int distance;
 			    resist_song(mtmp, SNG_TAME, song_instr) >= 0) {
 				mtmp->mflee = 0;
 				/* no other effect if monster was already tame by other means */
-				if (mtmp->mtame && !(EDOG(mtmp)->friend))
+				if (mtmp->mtame && !mtmp->isminion && !(EDOG(mtmp)->friend)){
+					if(mtmp->mtame < P_SKILL(P_MUSICALIZE)*P_SKILL(P_MUSICALIZE)) mtmp->mtame++;
 					continue;
+				}
 				tame = mtmp->mtame;
 				waspeaceful = mtmp->mpeaceful;
 				if (!tame) {
-					mtmp = tamedog(mtmp, (struct obj *) 0);
+					mtmp = tamedog(mtmp, song_instr);
 					if (mtmp){
 						EDOG(mtmp)->waspeaceful = waspeaceful;
 						if (canseemon(mtmp) && flags.verbose && !mtmp->msleeping)

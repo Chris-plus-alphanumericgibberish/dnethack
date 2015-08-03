@@ -463,7 +463,7 @@ const struct Role roles[] = {
 	PM_PINDAR, PM_RHYMER, PM_AGLAOPE,
 	PM_SNAKE, PM_WHITE_UNICORN, S_SNAKE, S_UNICORN,
 	ART_LYRE_OF_ORPHEUS,
-	MH_HUMAN|MH_ELF|MH_GNOME | ROLE_MALE|ROLE_FEMALE |
+	MH_HUMAN|MH_ELF|MH_GNOME|MH_ORC|MH_CLOCK | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{   7,  7,  7, 10,  6, 10 },
@@ -822,7 +822,7 @@ const struct Race races[] = {
 {	"clockwork automaton", "automatic", "clockwork-kind", "Clk",
 	{0, 0},
 	PM_CLOCKWORK_AUTOMATON, NON_PM, NON_PM, NON_PM,
-	MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
+	MH_CLOCK | ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL|ROLE_NEUTRAL,
 	MH_CLOCK, MH_DWARF, MH_GNOME,
 	/*    Str     Int Wis Dex Con Cha */
 	{      8,      8,  8,  8,  8,  8 },

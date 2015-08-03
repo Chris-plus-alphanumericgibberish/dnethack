@@ -454,6 +454,13 @@ static struct trobj Xtra_food[] = {
 	{ UNDEF_TYP, UNDEF_SPE, FOOD_CLASS, 2, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj Orc_Brd_equip[] = {
+	{ ORCISH_SHORT_SWORD, 0, WEAPON_CLASS, 1, 0 },
+	{ ORCISH_DAGGER, 0, WEAPON_CLASS, 4, 0 },
+	{ ORCISH_SHIELD, 0, WEAPON_CLASS, 1, 0 },
+	{ ORCISH_HELM, 0, WEAPON_CLASS, 1, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 #ifdef TOURIST
 static struct trobj Leash[] = {
 	{ LEASH, 0, TOOL_CLASS, 1, 0 },
@@ -707,6 +714,12 @@ static const struct def_skill Skill_Elf_Music[] = {
     { P_NONE, 0 }
 };
 #endif
+static const struct def_skill Skill_Orc_Brd[] = {
+    { P_DAGGER, P_EXPERT },
+    { P_SHORT_SWORD, P_EXPERT },
+    { P_NONE, 0 }
+};
+
 static const struct def_skill Skill_Drow_Unarmed[] = {
     { P_BARE_HANDED_COMBAT, P_GRAND_MASTER },
     { P_NONE, 0 }
@@ -1540,7 +1553,9 @@ u_init()
 		break;
 #ifdef BARD
 	case PM_BARD:
-		if (rn2(100) >= 50) Bard[BARD_INSTR].trotyp = WOODEN_FLUTE;
+		if (Race_if(PM_ORC) || (Race_if(PM_HALF_DRAGON)) 
+		) Bard[BARD_INSTR].trotyp = (rn2(100) >= 50) ? LEATHER_DRUM : TOOLED_HORN;
+		else if (rn2(100) >= 50) Bard[BARD_INSTR].trotyp = WOODEN_FLUTE;
 		if (rn2(100) >= 85) Bard[BARD_WHISTLE].trotyp = BELL;
 		if (Race_if(PM_DROW)) Bard[BARD_CLOAK].trotyp = DROVEN_CHAIN_MAIL;
 		Bard[BARD_BOOZE].trquan = rn1(2, 5);
@@ -1958,6 +1973,19 @@ u_init()
 	    knows_object(ORCISH_SHIELD);
 	    knows_object(URUK_HAI_SHIELD);
 	    knows_object(ORCISH_CLOAK);
+		if(Role_if(PM_BARD)){
+			skill_add(Skill_Orc_Brd);
+			ini_inv(Orc_Brd_equip);
+		}
+    break;
+	case PM_HALF_DRAGON:
+		if(Role_if(PM_BARD)){
+			u.umartial = TRUE;
+			u.uenmax += 30;
+			u.uen = u.uenmax;
+		} else if(u.uenmax < 15) {
+			u.uen = u.uenmax = 15;
+		}
     break;
 	case PM_VAMPIRE:
 	    /* Vampires start off with gods not as pleased, luck penalty */

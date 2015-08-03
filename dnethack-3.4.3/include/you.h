@@ -478,6 +478,7 @@ struct you {
 	int uinvault;
 	struct monst *ustuck;
 	boolean petattacked;
+	boolean pethped;
 #ifdef STEED
 	struct monst *usteed;
 	long ugallop;

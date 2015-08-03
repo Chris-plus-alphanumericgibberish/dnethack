@@ -665,6 +665,11 @@ moveloop()
 				u.petattacked = FALSE;
 				use_skill(P_BEAST_MASTERY, 1);
 			}
+			if(u.pethped){
+				u.pethped = FALSE;
+				more_experienced(u.ulevel,0);
+				newexplevel();
+			}
 			
 			if(uclockwork && u.phasengn){
 				morehungry(10);
