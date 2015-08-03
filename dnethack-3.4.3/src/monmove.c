@@ -141,6 +141,7 @@ int x, y;
 struct monst *mtmp;
 {
 	struct obj *alignedfearobj = aligned_sartprop3_at(SPFX3_FEAR, x, y);
+	int wardAt = ward_at(x,y);
 	
 
 	return (boolean)(
@@ -150,18 +151,18 @@ struct monst *mtmp;
 				 ) && scaryItem(mtmp)
 				)
 			 || (u.umonnum == PM_GHOUL && mtmp->data == &mons[PM_GUG])
-			 || (ward_at(x,y) == HEPTAGRAM && scaryHept(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == GORGONEION && scaryGorg(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == CIRCLE_OF_ACHERON && scaryCircle(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == PENTAGRAM && scaryPent(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == HEXAGRAM && scaryHex(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == HAMSA && scaryHam(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == ELDER_SIGN && scarySign(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == ELDER_ELEMENTAL_EYE && scaryEye(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == SIGN_OF_THE_SCION_QUEEN && scaryQueen(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == CARTOUCHE_OF_THE_CAT_LORD && scaryCat(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == WINGS_OF_GARUDA && scaryWings(num_wards_at(x,y), mtmp))
-			 || (ward_at(x,y) == YELLOW_SIGN && scaryYellow(num_wards_at(x,y), mtmp))
+			 || (wardAt == HEPTAGRAM && scaryHept(num_wards_at(x,y), mtmp))
+			 || (wardAt == GORGONEION && scaryGorg(num_wards_at(x,y), mtmp))
+			 || (wardAt == CIRCLE_OF_ACHERON && scaryCircle(num_wards_at(x,y), mtmp))
+			 || (wardAt == PENTAGRAM && scaryPent(num_wards_at(x,y), mtmp))
+			 || (wardAt == HEXAGRAM && scaryHex(num_wards_at(x,y), mtmp))
+			 || (wardAt == HAMSA && scaryHam(num_wards_at(x,y), mtmp))
+			 || (wardAt == ELDER_SIGN && scarySign(num_wards_at(x,y), mtmp))
+			 || (wardAt == ELDER_ELEMENTAL_EYE && scaryEye(num_wards_at(x,y), mtmp))
+			 || (wardAt == SIGN_OF_THE_SCION_QUEEN && scaryQueen(num_wards_at(x,y), mtmp))
+			 || (wardAt == CARTOUCHE_OF_THE_CAT_LORD && scaryCat(num_wards_at(x,y), mtmp))
+			 || (wardAt == WINGS_OF_GARUDA && scaryWings(num_wards_at(x,y), mtmp))
+			 || (wardAt == YELLOW_SIGN && scaryYellow(num_wards_at(x,y), mtmp))
 			 || (scaryElb(mtmp) && sengr_at("Elbereth", x, y))
 			 || (scaryLol(mtmp) && sengr_at("Lolth", x, y) && (mtmp->m_lev < u.ulevel || u.ualign.record-- > 0))
 			 || (scaryTou(mtmp) && toustefna_at(x,y))
