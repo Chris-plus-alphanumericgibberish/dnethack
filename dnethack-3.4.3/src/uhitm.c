@@ -2372,9 +2372,16 @@ register struct attack *mattk;
 		hurtmarmor(mdef, AD_DCAY);
 		tmp = 0;
 		break;
+	    case AD_STAR:
+			if(hates_silver(pd)){
+				tmp += rnd(20);
+            	pline("The rapier of silver light sears %s!", mon_nam(mdef));
+			}
+			tmp += dtypbon(RAPIER);
+		break;
 	    case AD_SHDW:
 			if(u.specialSealsActive&SEAL_BLACK_WEB) tmp = d(rnd(8),spiritDsize()+1);
-			else tmp = d(rnd(8),rnd(5)+1);
+			// else tmp = d(rnd(8),rnd(5)+1);
 			tmp += dbon((struct obj *)0);
 	    case AD_DRST:
 	    case AD_DRDX:
@@ -3131,6 +3138,8 @@ wisp_shdw_dhit:
 				else if(mattk->adtyp == AT_SHDW) {
 					if(mas == &mons[PM_EDDERKOP]) You("slash %s with bladed shadows.", mon_nam(mon));
 					else Your("bladed shadow srikes %s.", mon_nam(mon));
+				} else if(mattk->adtyp == AT_SHDW) {
+					You("slash %s with a starlight rapier.", mon_nam(mon));
 				} else if(mattk->aatyp == AT_WISP) 
 					Your("mist tendrils lash %s.", mon_nam(mon));
 			    else You("hit %s.", mon_nam(mon));
@@ -3651,7 +3660,7 @@ uchar aatyp;
 	    }
 	    break;
 	    case AD_SHDW:
-		pline("It's bladed shaddow falls on you!");
+		pline("Its bladed shadow falls on you!");
 		mdamageu(mon, tmp);
 	    case AD_DRST:
 		ptmp = A_STR;

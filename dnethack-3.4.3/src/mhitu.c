@@ -151,6 +151,9 @@ struct attack *mattk;
 	else if(mattk->adtyp == AD_SHDW){
 		return "shadow blade";
 	} 
+	else if(mattk->adtyp == AD_STAR){
+		return "starlight rapier";
+	} 
 	else if(mattk->aatyp == AT_HODS){
 	    struct obj *mwep = uwep;
 	    /* "Foo's attack was poisoned." is pretty lame, but at least
@@ -1391,6 +1394,13 @@ hitmu(mtmp, mattk)
 				mtmp != u.ustuck)
 			hitmsg(mtmp, mattk);
 		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_STAR:
+			if(maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
+            	dmg += rnd(20);
+            	pline("The rapier of silver light sears your flesh!");
+            }
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SHDW:
@@ -2756,7 +2766,7 @@ dopois:
 /*	Negative armor class reduces damage done instead of fully protecting
  *	against hits.  The bladed shadows of the black web pierce your armor.
  */
-	if (dmg && u.uac < 0 && mattk->adtyp != AD_SHDW) {
+	if (dmg && u.uac < 0 && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR) {
 		dmg += AC_VALUE(u.uac);
 		if (dmg < 1) dmg = 1;
 	}

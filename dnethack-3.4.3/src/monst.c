@@ -1689,7 +1689,7 @@ then fill new spaces with our spawn!’
 */
     MON("Tulani", S_ANGEL,//12
 	LVL(18, 14, -7, 30, -12), (G_NOHELL|G_NOCORPSE|G_NOGEN),
-	A(ATTK(AT_WEAP, AD_PHYS, 2, 8), ATTK(AT_WEAP, AD_PHYS, 2, 8),
+	A(ATTK(AT_TUCH, AD_STAR, 4, 8), ATTK(AT_TUCH, AD_STAR, 4, 8),
 	  ATTK(AT_GAZE, AD_STUN, 2,10), ATTK(AT_MAGC, AD_RBRE, 0, 6), 
 	  NO_ATTK, NO_ATTK),
 	SIZ(WT_ELF, 350, 0, MS_HUMANOID, MZ_HUMAN), 

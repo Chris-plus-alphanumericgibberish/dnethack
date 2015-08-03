@@ -774,8 +774,9 @@ hitmm(magr, mdef, mattk)
 			case AT_TUCH:
 				if (is_weeping(magr->data)) {
 					Sprintf(buf,"%s is touching", magr_name);
-				} else if(magr->data == &mons[PM_EDDERKOP]){
-					Sprintf(buf,"%s slashes", magr_name);
+				} else if(mattk->adtyp == AD_SHDW || mattk->adtyp == AD_STAR){
+					if(magr->mcan) goto defaultmmhit;
+					else Sprintf(buf,"%s slashes", magr_name);
 				} else {
 					Sprintf(buf,"%s touches", magr_name);
 				}
@@ -793,6 +794,7 @@ hitmm(magr, mdef, mattk)
 				    break;
 				}
 			default:
+defaultmmhit:
 				if (is_weeping(magr->data)) {
 					Sprintf(buf,"%s is hitting", magr_name);
 				} else {
@@ -1108,7 +1110,7 @@ mdamagem(magr, mdef, mattk)
 	    case AD_MALK:
 	    case AD_UVUU:
 	    case AD_TELE:
- physical:
+physical:
 		if (mattk->aatyp == AT_KICK && thick_skinned(pd)) {
 		    tmp = 0;
 		} else if(mattk->aatyp == AT_WEAP) {
@@ -1712,8 +1714,14 @@ mdamagem(magr, mdef, mattk)
 		}
 		tmp = 0;
 		break;
+	    case AD_STAR:
+			if(hates_silver(pd)) {
+            	tmp += rnd(20);
+            	if (vis) pline("The rapier of silver light sears %s!", mon_nam(mdef));
+            }
+		break;
 	    case AD_SHDW:
-			tmp = d(rnd(8),rnd(5)+1);
+			// tmp = d(rnd(8),rnd(5)+1);
 	    case AD_DRST:
 	    case AD_DRDX:
 	    case AD_DRCO:

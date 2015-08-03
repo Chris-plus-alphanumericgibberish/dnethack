@@ -11,8 +11,8 @@ were_change(mon)
 register struct monst *mon;
 {
 	if( !is_were(mon->data) && 
-		!(is_eladrin(mon->data) && mon->mhp < .5*mon->mhpmax && rn2(2)) && 
-		!(mon->data == &mons[PM_BALL_OF_LIGHT] && mon->mhp > .5*mon->mhpmax)
+		!(is_heladrin(mon->data) && mon->mhp < .5*mon->mhpmax && rn2(2)) && 
+		!(is_eeladrin(mon->data) && mon->mhp > .5*mon->mhpmax)
 	) return;
 
 	if (is_human(mon->data)) {
@@ -34,8 +34,8 @@ register struct monst *mon;
 		}
 	    }
 	} else if (!rn2(30) || Protection_from_shape_changers 
-		|| is_eladrin(mon->data) 
-		|| (mon->data == &mons[PM_BALL_OF_LIGHT] && mon->mhp >= mon->mhpmax)
+		|| is_heladrin(mon->data) 
+		|| (is_eeladrin(mon->data) && mon->mhp >= mon->mhpmax)
 	) {
 		if(mon->data == &mons[PM_BALL_OF_LIGHT]){
 			mon->mflee = 0;
@@ -81,6 +81,7 @@ struct monst *mon;
 {
 	int pm;
 	struct permonst *olddata = mon->data;
+	struct obj *otmp;
 
 	pm = counter_were(monsndx(mon->data));
 	if(!pm) {
@@ -100,7 +101,6 @@ struct monst *mon;
 			mons[pm].mname+4);
 		else pline("%s changes into a %s.", Monnam(mon),
 			mons[pm].mname);
-		
 	}
 
 	set_mon_data(mon, &mons[pm], 0);
@@ -122,7 +122,16 @@ struct monst *mon;
 				 LS_MONSTER, (genericptr_t)mon);
 	}
 	newsym(mon->mx,mon->my);
-	mon_break_armor(mon, FALSE);
+	if(is_eeladrin(mon->data)){
+		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
+			mon->misc_worn_check &= ~otmp->owornmask;
+			if (otmp->owornmask)
+				update_mon_intrinsics(mon, otmp, FALSE, FALSE);
+			otmp->owornmask = 0L;
+		}
+	} else if(is_heladrin(mon->data)){
+		m_dowear(mon, TRUE);
+	} else mon_break_armor(mon, FALSE);
 	possibly_unwield(mon, FALSE);
 }
 

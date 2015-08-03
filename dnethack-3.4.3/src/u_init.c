@@ -1155,6 +1155,7 @@ int randSpecialAttackTypes[] =
 int randMeleeDamageTypes[] = 
 						{AD_PHYS, 
 						 AD_SHDW, 
+						 AD_STAR, 
 						 AD_FIRE, 
 						 AD_COLD,
 						 AD_SLEE,

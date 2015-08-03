@@ -1333,6 +1333,38 @@ struct obj *otmp;
 	return bonus;
 }
 
+int
+dtypbon(otyp)		/* damage bonus for strength */
+int otyp;
+{
+	int str = ACURR(A_STR);
+	int bonus = 0;
+	
+	
+	if (str < 6) bonus = -6+str;
+	else if (str < 16) bonus = 0;
+	else if (str < 18) bonus = 1;
+	else if (str == 18) bonus = 2;		/* up to 18 */
+	else if (str <= STR18(75)) bonus = 3;		/* up to 18/75 */
+	else if (str <= STR18(90)) bonus = 4;		/* up to 18/90 */
+	else if (str < STR18(100)) bonus = 5;		/* up to 18/99 */
+	else if (str < 22) bonus = 6;
+	else if (str < 25) bonus = 7;
+	else /*  str ==25*/bonus = 8;
+	
+	if(otyp && objects[otyp].oc_bimanual) bonus *= 2;
+	
+	if(otyp==RAPIER){
+		int dex = ACURR(A_DEX);
+		bonus/=2; /*Half strength bonus/penalty*/
+		
+		bonus += (dex-11)/2;
+	}
+	
+	if(u.sealsActive&SEAL_DANTALION) bonus += max(0,(ACURR(A_INT)-10)/2);
+	return bonus;
+}
+
 
 /* copy the skill level name into the given buffer */
 STATIC_OVL char *

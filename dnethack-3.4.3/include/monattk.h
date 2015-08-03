@@ -150,36 +150,37 @@
 #define AD_SHDW		105 /* Black Web shadow weapons */
 #define AD_STTP		106 /* Steal by Teleportation: Teleports your gear away */
 #define AD_HDRG		107 /* Half-dragon breath weapon */
+#define AD_STAR		108 /* Tulani silver starlight rapier */
 
 
-//#define AD_AHAZU	108 /*  */
+//#define AD_AHAZU	109 /*  */
 //Amon is a headbutt (AT_BUTT/AD_PHYS)
 //Chupoclops is a poisonous bite (AT_BITE/AD_DRST)
-#define AD_DUNSTAN	109
-#define AD_IRIS		110
-#define AD_NABERIUS	111
-#define AD_OTIAX	112
-#define AD_SIMURGH	113
+#define AD_DUNSTAN	110
+#define AD_IRIS		111
+#define AD_NABERIUS	112
+#define AD_OTIAX	113
+#define AD_SIMURGH	114
 
 
-//#define AD_VMSL		114 //Vorlon missile: elect, disintegration, blast.  Triple damage.
-#define AD_CMSL		115 //Cold missile
-#define AD_FMSL		116 //Fire missile
-#define AD_EMSL		117 //Electric missile
-#define AD_SMSL		118 //Shrapnel missile: physical
+//#define AD_VMSL		239 //Vorlon missile: elect, disintegration, blast.  Triple damage.
+#define AD_CMSL		240 //Cold missile
+#define AD_FMSL		241 //Fire missile
+#define AD_EMSL		242 //Electric missile
+#define AD_SMSL		243 //Shrapnel missile: physical
 
-//#define AD_VTGT		119 //Vorlon targeting GAZE
-#define AD_WMTG		120 //War machine targeting GAZE
+//#define AD_VTGT		244 //Vorlon targeting GAZE
+#define AD_WMTG		245 //War machine targeting GAZE
 
-#define AD_CLRC		121	/* random clerical spell */
-#define AD_SPEL		122	/* random magic spell */
-#define AD_RBRE		123	/* random breath weapon */
-#define AD_RGAZ		124	/* random gaze attack */
-#define AD_RETR		125 /* elemental gaze attack */
+#define AD_CLRC		246	/* random clerical spell */
+#define AD_SPEL		247	/* random magic spell */
+#define AD_RBRE		248	/* random breath weapon */
+#define AD_RGAZ		249	/* random gaze attack */
+#define AD_RETR		250 /* elemental gaze attack */
 
-#define AD_SAMU		126	/* hits, may steal Amulet (Wizard) */
-#define AD_CURS		127	/* random curse (ex. gremlin) */
-#define AD_SQUE		128	/* hits, may steal Quest Art or Amulet (Nemeses) */
+#define AD_SAMU		251	/* hits, may steal Amulet (Wizard) */
+#define AD_CURS		252	/* random curse (ex. gremlin) */
+#define AD_SQUE		253	/* hits, may steal Quest Art or Amulet (Nemeses) */
 
 
 /*

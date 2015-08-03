@@ -134,10 +134,16 @@
 							 ptr == &mons[PM_HALF_ELF_RANGER])
 #define is_undead(ptr)		(((ptr)->mflags2 & M2_UNDEAD) != 0L)
 #define is_were(ptr)		(((ptr)->mflags2 & M2_WERE) != 0L)
-#define is_eladrin(ptr)		((ptr) == &mons[PM_FIRRE] || \
+#define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
+#define is_heladrin(ptr)		((ptr) == &mons[PM_FIRRE] || \
 							 (ptr) == &mons[PM_SHIERE] || \
 							 (ptr) == &mons[PM_GHAELE] || \
 							 (ptr) == &mons[PM_TULANI] \
+							)
+#define is_eeladrin(ptr)	((ptr) == &mons[PM_DANCING_FLAME] || \
+							 (ptr) == &mons[PM_BALL_OF_LIGHT] || \
+							 (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
+							 (ptr) == &mons[PM_BALL_OF_RADIANCE] \
 							)
 #define is_vampire(ptr)		(((ptr)->mflags2 & M2_VAMPIRE) != 0L)
 #define is_half_dragon(ptr)		attacktype_fordmg(ptr, AT_BREA, AD_HDRG)

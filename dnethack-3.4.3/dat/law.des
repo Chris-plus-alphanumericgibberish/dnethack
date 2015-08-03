@@ -1710,9 +1710,6 @@ OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+5
 OBJECT:'[',"crystal helm",contained,blessed,+3
 OBJECT:'[',"leather gloves",contained,blessed,+5
-OBJECT:'(',"lightsaber",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
@@ -1725,9 +1722,6 @@ OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+5
 OBJECT:'[',"crystal helm",contained,blessed,+3
 OBJECT:'[',"leather gloves",contained,blessed,+5
-OBJECT:'(',"lightsaber",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
