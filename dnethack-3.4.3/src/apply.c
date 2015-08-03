@@ -49,8 +49,8 @@ STATIC_DCL boolean FDECL(figurine_location_checks,
 STATIC_DCL boolean NDECL(uhave_graystone);
 STATIC_DCL void FDECL(add_class, (char *, CHAR_P));
 STATIC_DCL int FDECL(do_carve_obj, (struct obj *));
-STATIC_PTR int NDECL(pick_rune);		/* occupation callback */
-STATIC_PTR char NDECL(pick_carvee);		/* occupation callback */
+STATIC_PTR int NDECL(pick_rune);
+STATIC_PTR char NDECL(pick_carvee);
 
 
 #ifdef	AMIGA
@@ -3618,7 +3618,7 @@ pick_carvee()
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for(otmp = invent; otmp; otmp = otmp->nobj){
 		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && otmp->oartifact != ART_BOW_OF_SKADI){
-			Sprintf(buf, xname(otmp));
+			Sprintf(buf, doname(otmp));
 			any.a_char = otmp->invlet;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
 				otmp->invlet, 0, ATR_NONE, buf,
