@@ -1945,6 +1945,7 @@ const char *oldstr;
 			   !BSTRCMP(bp, p-9, "gauntlets") ||
 			   !BSTRCMP(bp, p-9, "Gauntlets") ||
 			   !BSTRCMP(bp, p-6, "tricks") ||
+			   !BSTRCMP(bp, p-13, "versus curses") ||
 			   !BSTRCMP(bp, p-9, "paralysis") ||
 			   !BSTRCMP(bp, p-5, "glass") ||
 			   !BSTRCMP(bp, p-4, "ness") ||

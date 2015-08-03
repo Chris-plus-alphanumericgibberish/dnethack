@@ -372,7 +372,10 @@ rndcurse()			/* curse a few inventory items at random! */
 	struct	obj	*otmp;
 	static const char mal_aura[] = "feel a malignant aura surround %s.";
 
-	if (uwep && (uwep->oartifact == ART_MAGICBANE) && rn2(20)) {
+	if (uamul && (uamul->otyp == AMULET_VERSUS_CURSES)) {
+	    You(mal_aura, "your amulet");
+	    return;
+	} else if (uwep && (uwep->oartifact == ART_MAGICBANE) && rn2(20)) {
 	    You(mal_aura, "the magic-absorbing blade");
 	    return;
 	} else if(uwep && (uwep->oartifact == ART_TENTACLE_ROD) && rn2(20)){

@@ -724,12 +724,13 @@ RING("protection from shape changers", PROT_FROM_SHAPE_CHANGERS, "black signet",
 		AMULET_CLASS, prob, 0, 20, 150, 0, 0, 0, 0, 20, HI_METAL )
 
 AMULET("amulet of drain resistance","warped",   DRAIN_RES,   60),
-AMULET("amulet of ESP",           "circular",   TELEPAT,    140),
+AMULET("amulet of ESP",           "circular",   TELEPAT,    130),
 AMULET("amulet of life saving",   "spherical",  LIFESAVED,   70),
-AMULET("amulet of strangulation", "oval",       STRANGLED,  135),
-AMULET("amulet of restful sleep", "triangular", SLEEPING,   135),
-AMULET("amulet versus poison",    "pyramidal",  POISON_RES, 155),
-AMULET("amulet of change",        "square",     0,          130),
+AMULET("amulet of strangulation", "oval",       STRANGLED,  120),
+AMULET("amulet of restful sleep", "triangular", SLEEPING,   120),
+AMULET("amulet versus poison",    "pyramidal",  POISON_RES, 140),
+AMULET("amulet of change",        "square",     0,          125),
+AMULET("amulet versus curses",    "convex",     0,           60),
 						/* POLYMORPH */
 AMULET("amulet of unchanging",    "concave",    UNCHANGING,	 45),
 AMULET("amulet of reflection",    "hexagonal",  REFLECTING,  70),
