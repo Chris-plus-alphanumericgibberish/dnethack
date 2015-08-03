@@ -362,10 +362,10 @@ register struct monst *mtmp;
 				otmp = mksobj(POT_FULL_HEALING, TRUE, FALSE);
 				bless(otmp);
 				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(POT_EXTRA_HEALING, TRUE, FALSE);
-				bless(otmp);
-				otmp->quan = 3;
-				(void) mpickobj(mtmp, otmp);
+				// otmp = mksobj(POT_EXTRA_HEALING, TRUE, FALSE);
+				// bless(otmp);
+				// otmp->quan = 3;
+				// (void) mpickobj(mtmp, otmp);
 			}
 			else if(is_mercenary(ptr)) {
 				int w1 = 0, w2 = 0;
