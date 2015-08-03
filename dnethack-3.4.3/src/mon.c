@@ -1905,8 +1905,8 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(is_fern_spore(md) && !is_fern_spore(ma) && !is_vegetation(ma))
 		return ALLOW_M|ALLOW_TM;
 	/* everything attacks razorvine */
-	if(md == &mons[PM_RAZORVINE] && !is_vegetation(ma))
-		return ALLOW_M|ALLOW_TM;
+	// if(md == &mons[PM_RAZORVINE] && !is_vegetation(ma))
+		// return ALLOW_M|ALLOW_TM;
 
 	else if (magr->data == &mons[PM_SKELETAL_PIRATE] &&
 		mdef->data == &mons[PM_SOLDIER])
