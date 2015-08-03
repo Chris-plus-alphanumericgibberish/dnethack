@@ -688,6 +688,8 @@ int *inrange, *nearby, *scared;
 			       (!mtmp->mpeaceful &&
 				    in_your_sanctuary(mtmp, 0, 0))));
 	
+	if(*scared && mtmp->mvanishes > 0) mtmp->mvanishes = mtmp->mvanishes/2 + 1;
+	
 	if(mtmp->data == &mons[PM_BALL_OF_LIGHT]) *scared = TRUE;
 	
 	if(*scared) {
