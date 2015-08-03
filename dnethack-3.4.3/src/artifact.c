@@ -797,6 +797,15 @@ long wp_mask;
 	    		flags.warntype &= ~spec_m2(otmp);
 		}
 		see_monsters();
+	    } else if (spec_s(otmp)) {
+	    	if (on) {
+				EWarn_of_mon |= wp_mask;
+				flags.montype |= (long long int)((long long int)1 << (int)(spec_s(otmp))); //spec_s(otmp);
+	    	} else {
+				EWarn_of_mon &= ~wp_mask;
+					flags.montype &= ~(long long int)((long long int)1 << (int)(spec_s(otmp)));
+			}
+			see_monsters();
 	    } else {
 		if (on) EWarning |= wp_mask;
 	    	else EWarning &= ~wp_mask;
@@ -1089,7 +1098,18 @@ spec_m2(otmp)
 struct obj *otmp;
 {
 	register const struct artifact *artifact = get_artifact(otmp);
-	if (artifact)
+	if (artifact && artifact->spfx & SPFX_DFLAG2)
+		return artifact->mtype;
+	return 0L;
+}
+
+/* return the S number of monster that an artifact's special attacks apply against */
+long
+spec_s(otmp)
+struct obj *otmp;
+{
+	register const struct artifact *artifact = get_artifact(otmp);
+	if (artifact && artifact->spfx & SPFX_DCLAS)
 		return artifact->mtype;
 	return 0L;
 }

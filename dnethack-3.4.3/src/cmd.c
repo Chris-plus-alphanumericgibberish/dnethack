@@ -1587,7 +1587,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (See_invisible) enl_msg(You_, "see", "saw", " invisible");
 	if (Blind_telepat) you_are("telepathic");
 	if (Warning) you_are("warned");
-	if (Warn_of_mon && flags.warntype) {
+	if (Warn_of_mon && (flags.warntype||flags.montype)) {
 		Sprintf(buf, "aware of the presence of %s",
 			(flags.warntype & M2_ORC) ? "orcs" :
 			(flags.warntype & M2_DEMON) ? "demons" :
