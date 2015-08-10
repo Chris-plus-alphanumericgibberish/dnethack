@@ -3819,7 +3819,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					}
 					break; /* Out of while loop */
 					}
-					if(type == (ZT_WAND(ZT_DEATH) || ZT_RAYGUN(ZT_DEATH)) && (mon->data == &mons[PM_METROID]
+					if(abstype == ZT_DEATH && type != ZT_BREATH(ZT_DEATH) && (mon->data == &mons[PM_METROID]
 					 ||mon->data == &mons[PM_ALPHA_METROID]||mon->data == &mons[PM_GAMMA_METROID]
 					 ||mon->data == &mons[PM_ZETA_METROID]||mon->data == &mons[PM_OMEGA_METROID]
 					 ||mon->data == &mons[PM_METROID_QUEEN])
