@@ -588,6 +588,58 @@ boolean artif;
 		case CRYSTAL_BALL:	otmp->spe = rnd(5);
 					blessorcurse(otmp, 2);
 					break;
+		case SENSOR_PACK:
+			otmp->spe = rnd(5) + 20;
+		break;
+		case HYPOSPRAY_AMPULE:{
+			int pick;
+			switch(rn2(14)){
+				case 0:
+					pick = POT_GAIN_ABILITY;
+				break;
+				case 1:
+					pick = POT_RESTORE_ABILITY;
+				break;
+				case 2:
+					pick = POT_BLINDNESS;
+				break;
+				case 3:
+					pick = POT_CONFUSION;
+				break;
+				case 4:
+					pick = POT_PARALYSIS;
+				break;
+				case 5:
+					pick = POT_SPEED;
+				break;
+				case 6:
+					pick = POT_HALLUCINATION;
+				break;
+				case 7:
+					pick = POT_HEALING;
+				break;
+				case 8:
+					pick = POT_EXTRA_HEALING;
+				break;
+				case 9:
+					pick = POT_GAIN_ENERGY;
+				break;
+				case 10:
+					pick = POT_SLEEPING;
+				break;
+				case 11:
+					pick = POT_FULL_HEALING;
+				break;
+				case 12:
+					pick = POT_POLYMORPH;
+				break;
+				case 13:
+					pick = POT_AMNESIA;
+				break;
+			}
+			// otmp->ovar1 = (long)(rn2(POT_POLYMORPH - POT_GAIN_ABILITY + 1) + POT_GAIN_ABILITY);
+			otmp->ovar1 = (long)(pick);
+		}break;
 		case HORN_OF_PLENTY:
 		case BAG_OF_TRICKS:	otmp->spe = rnd(20);
 					break;
