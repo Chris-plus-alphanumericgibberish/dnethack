@@ -52,14 +52,12 @@ static struct trobj Anachronist_Hu[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Anachronist_Inc[] = {
-	{ HAND_BLASTER, 1, WEAPON_CLASS, 1, 0 },
-	{ HAND_BLASTER, 1, WEAPON_CLASS, 1, 0 },
 	{ LIGHTSABER,  1, WEAPON_CLASS, 1, 0 },
+	{ HAND_BLASTER, 1, WEAPON_CLASS, 1, 0 },
 	{ PLASTEEL_ARMOR, 1, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 1, ARMOR_CLASS, 1, 0 },
-	{ FLACK_HELMET, 1, ARMOR_CLASS, 1, 0 },
 	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, 0 },
-	{ CLOAK_OF_PROTECTION, 1, ARMOR_CLASS, 1, 0 },
+	{ ROBE, 1, ARMOR_CLASS, 1, 0 },
 	{ PLASTEEL_BOOTS, 1, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -67,8 +65,8 @@ static struct trobj Anachronist_Inc[] = {
 static struct trobj Anachronist_Vam[] = {
 	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
 	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
-	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
+	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
 	{ STUDDED_LEATHER_ARMOR, 0, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
 	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, 0 },
@@ -83,8 +81,8 @@ static struct trobj Anachronist_Vam[] = {
 };
 static struct trobj Anachronist_Dro[] = {
 	{ SNIPER_RIFLE, 0, WEAPON_CLASS, 1, 0 },
-	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
+	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
 	{ PLASTEEL_ARMOR, 0, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
 	{ FLACK_HELMET, 0, ARMOR_CLASS, 1, 0 },
@@ -100,14 +98,15 @@ static struct trobj Anachronist_Dro[] = {
 };
 static struct trobj Anachronist_Elf[] = {
 	{ RAYGUN,  0, WEAPON_CLASS, 1, 0 },
-	{ SCALPEL,  0, WEAPON_CLASS, 1, 0 },
-	{ SENSOR_PACK,  0, WEAPON_CLASS, 1, 0 },
+	{ SENSOR_PACK,  25, WEAPON_CLASS, 1, 0 },
 	{ JUMPSUIT, 0, ARMOR_CLASS, 1, 0 },
-	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
-	{ ORIHALCYON_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
 	{ JUMPING_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS, 10, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 5, 0 },
+	{ HYPOSPRAY, 0, FOOD_CLASS, 1, 0 },
+	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 5, 0 },
+	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 3, 0 },
+	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 1, 0 },
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ TIN_OPENER, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -600,9 +599,9 @@ static const struct def_skill Skill_Ana[] = {
     { P_SHORT_SWORD, P_EXPERT },{ P_LANCE,  P_EXPERT },
     { P_SABER, P_EXPERT },		{ P_LONG_SWORD,  P_SKILLED },
     { P_CLUB, P_SKILLED },		{ P_QUARTERSTAFF, P_SKILLED },
-#ifdef FIREARMS
+//#ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
-#endif
+//#endif
     { P_DART, P_BASIC },		{ P_CROSSBOW, P_BASIC },
     { P_WHIP, P_SKILLED },
     { P_ATTACK_SPELL, P_SKILLED },	{ P_HEALING_SPELL, P_SKILLED },
@@ -714,6 +713,11 @@ static const struct def_skill Skill_Elf_Music[] = {
     { P_NONE, 0 }
 };
 #endif
+static const struct def_skill Skill_Elf_Ana[] = {
+    { P_MARTIAL_ARTS, P_GRAND_MASTER },
+    { P_NONE, 0 }
+};
+
 static const struct def_skill Skill_Orc_Brd[] = {
     { P_DAGGER, P_EXPERT },
     { P_SHORT_SWORD, P_EXPERT },
@@ -1551,6 +1555,7 @@ u_init()
 		else if(Race_if(PM_INCANTIFIER)) ini_inv(Anachronist_Inc);
 		else if(Race_if(PM_VAMPIRE)) ini_inv(Anachronist_Vam);
 		else ini_inv(Anachronist_Hu);
+		knows_object(FLINTLOCK);
 		knows_object(PISTOL);
 		knows_object(SUBMACHINE_GUN);
 		knows_object(HEAVY_MACHINE_GUN);
@@ -1562,9 +1567,9 @@ u_init()
 		knows_object(ROCKET_LAUNCHER);
 		knows_object(GRENADE_LAUNCHER);
 		knows_object(BFG);
-		knows_object(CUTTING_LASER);
 		knows_object(HAND_BLASTER);
 		knows_object(ARM_BLASTER);
+		knows_object(CUTTING_LASER);
 		knows_object(RAYGUN);
 		knows_object(BULLET);
 		knows_object(SILVER_BULLET);
@@ -1576,6 +1581,12 @@ u_init()
 		knows_object(HEAVY_BLASTER_BOLT);
 		knows_object(BLASTER_BOLT);
 		knows_object(LASER_BEAM);
+		knows_object(BULLET_FABBER);
+		knows_object(SENSOR_PACK);
+		knows_object(HYPOSPRAY);
+		knows_object(HYPOSPRAY_AMPULE);
+		knows_object(POWER_PACK);
+		knows_object(PROTEIN_PILL);
 		skill_init(Skill_Ana);
 	break;
 	case PM_BARBARIAN:
@@ -1876,6 +1887,10 @@ u_init()
 #ifdef BARD
 		if(!Role_if(PM_BARD)) skill_add(Skill_Elf_Music);
 #endif
+		if(Role_if(PM_ANACHRONIST)){
+			u.umartial = TRUE;
+			skill_add(Skill_Elf_Ana);
+		}
 	    /* Elves can recognize all elvish objects */
 	    knows_object(ELVEN_SHORT_SWORD);
 	    knows_object(ELVEN_ARROW);
@@ -2450,6 +2465,9 @@ register struct trobj *trop;
 			static NEARDATA short nocreate5 = STRANGE_OBJECT;
 			static NEARDATA short nocreate6 = STRANGE_OBJECT;
 			static NEARDATA short nocreate7 = STRANGE_OBJECT;
+			
+			static NEARDATA short nocreateam1 = STRANGE_OBJECT;
+			static NEARDATA short nocreateam2 = STRANGE_OBJECT;
 		/*
 		 * For random objects, do not create certain overly powerful
 		 * items: wand of wishing, ring of levitation, or the
@@ -2471,6 +2489,8 @@ register struct trobj *trop;
 				|| otyp == nocreate5
 				|| otyp == nocreate6
 				|| otyp == nocreate7
+				|| (obj->otyp == HYPOSPRAY_AMPULE && nocreateam1 == (short)obj->ovar1)
+				|| (obj->otyp == HYPOSPRAY_AMPULE && nocreateam2 == (short)obj->ovar1)
 				|| otyp == RIN_LEVITATION
 				/* 'useless' items */
 				|| otyp == POT_HALLUCINATION
@@ -2535,6 +2555,10 @@ register struct trobj *trop;
 				else if(nocreate5 == STRANGE_OBJECT) nocreate5 = otyp;
 				else if(nocreate6 == STRANGE_OBJECT) nocreate6 = otyp;
 				else if(nocreate7 == STRANGE_OBJECT) nocreate7 = otyp;
+			/* or ampule */
+			if (obj->otyp == HYPOSPRAY_AMPULE)
+				if(nocreateam1 == STRANGE_OBJECT) nocreateam1 = (short)obj->ovar1;
+				else if(nocreateam2 == STRANGE_OBJECT) nocreateam2 = (short)obj->ovar1;
 		}
 
 #ifdef GOLDOBJ
