@@ -251,6 +251,17 @@ char *buf;
 	else if (In_endgame(&u.uz))
 		Sprintf(buf,
 			Is_astralevel(&u.uz) ? "Astral Plane " : "End Game ");
+	else if (In_tower(&u.uz)) {
+		if(dunlev(&u.uz) == 4) Sprintf(buf, "Ravine ");
+		else Sprintf(buf, "Tower %d ", 5 - dunlev(&u.uz));
+	} else if (In_law(&u.uz))
+		Sprintf(buf, "Arcadia %d ", (path1_level.dlevel - u.uz.dlevel)+1);
+	else if (In_neu(&u.uz)){
+		if(u.uz.dnum == rlyeh_dnum) Sprintf(buf, "Depths %d ", dunlev(&u.uz)+dungeons[neutral_dnum].num_dunlevs-1);
+		else Sprintf(buf, "Outlands %d ", dunlev(&u.uz));
+	} else if (In_cha(&u.uz))
+		if(dungeons[chaos_dnum].entry_lev == u.uz.dlevel) Sprintf(buf, "Ruined Temple ");
+		else Sprintf(buf, "Temple %d ", dunlev(&u.uz));
 	else {
 		/* ports with more room may expand this one */
 		Sprintf(buf, "Dlvl:%-2d ", depth(&u.uz) > 0 ? depth(&u.uz) : depth(&u.uz)-1);

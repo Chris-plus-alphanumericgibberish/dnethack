@@ -660,7 +660,7 @@ level_tele()
 	char buf[BUFSZ];
 	boolean force_dest = FALSE;
 
-	if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz) || In_quest(&u.uz))
+	if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz) || In_quest(&u.uz) || In_law(&u.uz) || In_neu(&u.uz) || In_cha(&u.uz))
 #ifdef WIZARD
 						&& !wizard
 #endif
@@ -765,7 +765,15 @@ level_tele()
 	     *
 	     * we let negative values requests fall into the "heaven" loop.
 	     */
-	    if (In_quest(&u.uz) && newlev > 0)
+	    if (In_quest(&u.uz) && newlev > 0) newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
+		else if (In_tower(&u.uz)) {
+			if(newlev > 4) newlev = 4;
+			newlev = dungeons[u.uz.dnum].depth_start + 4 - newlev;
+		} else if (In_law(&u.uz))
+			newlev =  dungeons[u.uz.dnum].depth_start + (path1_level.dlevel - newlev);
+		else if (In_neu(&u.uz))
+			newlev =  newlev + dungeons[neutral_dnum].depth_start - 1;
+		else if (In_cha(&u.uz))
 		newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
 	} else { /* involuntary level tele */
  random_levtport:
