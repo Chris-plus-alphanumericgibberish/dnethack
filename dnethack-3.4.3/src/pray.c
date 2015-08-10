@@ -1938,7 +1938,7 @@ dosacrifice()
 #endif
 					pline("From the threshold of the Gate, you look back at the world");
 					pline("You don't know what awaits you in the Void,");
-					pline("but whatever happens, they way shall remain open behind you,");
+					pline("but whatever happens, the way shall remain open behind you,");
 					pline("that others may make their own choice.");
 					done(ASCENDED);
 				}
