@@ -35,6 +35,8 @@ STATIC_DCL void FDECL(use_figurine, (struct obj **));
 STATIC_DCL void FDECL(use_grease, (struct obj *));
 STATIC_DCL void FDECL(use_trap, (struct obj *));
 STATIC_DCL void FDECL(use_stone, (struct obj *));
+STATIC_DCL int FDECL(use_sensor, (struct obj *));
+// STATIC_DCL int FDECL(use_hypospray, (struct obj *));
 STATIC_DCL int FDECL(use_droven_cloak, (struct obj **));
 STATIC_DCL int FDECL(use_darkweavers_cloak, (struct obj *));
 STATIC_PTR int NDECL(set_trap);		/* occupation callback */
@@ -2395,6 +2397,16 @@ struct obj *tstone;
     return;
 }
 
+STATIC_OVL int
+use_sensor(sensor)
+struct obj *sensor;
+{
+	if(sensor->spe <= 0){
+		pline("It seems inert.");
+		return 0;
+	}
+}
+
 /* Place a landmine/bear trap.  Helge Hafting */
 STATIC_OVL void
 use_trap(otmp)
@@ -4430,6 +4442,12 @@ doapply()
 		use_stone(obj);
 	break;
 //ifdef FIREARMS
+	case SENSOR_PACK:
+		res = use_sensor(obj);
+	break;
+	case HYPOSPRAY:
+		// res = use_hypospray(obj);
+	break;
 	case RAYGUN:
 		if(obj->altmode == ZT_FIRE){
 			obj->altmode = ZT_DEATH;
