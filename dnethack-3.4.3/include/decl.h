@@ -428,6 +428,7 @@ E NEARDATA struct mvitals {
 	uchar	born;
 	uchar	died;
 	uchar	mvflags;
+	Bitfield(seen,1);
 } mvitals[NUMMONS];
 
 E NEARDATA struct c_color_names {

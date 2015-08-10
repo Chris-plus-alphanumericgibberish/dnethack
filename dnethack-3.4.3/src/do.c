@@ -1148,6 +1148,19 @@ boolean at_stairs, falling, portal;
 		}
 		mklev();
 		new = TRUE;	/* made the level */
+		if(Role_if(PM_TOURIST)){
+			int dungeon_depth = 1;
+			if (In_quest(&u.uz)) dungeon_depth = dunlev(&u.uz);
+			else if (In_endgame(&u.uz) || Is_rlyeh(&u.uz) || Is_valley(&u.uz)) dungeon_depth = 100;
+			else if (In_tower(&u.uz)) dungeon_depth = (5 - dunlev(&u.uz))*5;
+			else if (In_law(&u.uz)) dungeon_depth = (path1_level.dlevel - u.uz.dlevel) + depth(&path1_level);
+			else if (In_sokoban(&u.uz)) dungeon_depth = (5 - dunlev(&u.uz))*5;
+			else dungeon_depth = depth(&u.uz) > 0 ? depth(&u.uz) : depth(&u.uz)-1;
+			
+			// more_experienced(u.ulevel*u.ulevel,0);
+			more_experienced(u.ulevel*dungeon_depth,0);
+			newexplevel();
+		}
 	} else {
 		/* returning to previously visited level; reload it */
 		fd = open_levelfile(new_ledger, whynot);
