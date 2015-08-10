@@ -20,7 +20,8 @@ extern void demonpet();
 #define FIRE_PILLAR            LIGHTNING+1
 #define GEYSER                 FIRE_PILLAR+1
 #define ACID_RAIN              GEYSER+1
-#define SUMMON_MONS            ACID_RAIN+1
+#define ICE_STORM              ACID_RAIN+1
+#define SUMMON_MONS            ICE_STORM+1
 #define SUMMON_DEVIL           SUMMON_MONS+1
 #define DEATH_TOUCH			   SUMMON_DEVIL+1
        /* healing spells */
@@ -66,6 +67,18 @@ extern void demonpet();
 #define FILTH                  NIGHTMARE+1
 #define CLONE_WIZ              FILTH+1
 #define STRANGLE               CLONE_WIZ+1
+//Not yet implemented
+#define MON_FIRE               STRANGLE+1
+#define MON_FIRA               MON_FIRE+1
+#define MON_FIRAGA             MON_FIRA+1
+#define MON_BLIZZARD           MON_FIRAGA+1
+#define MON_BLIZZARA           MON_BLIZZARD+1
+#define MON_BLIZZAGA           MON_BLIZZARA+1
+#define MON_THUNDER            MON_BLIZZAGA+1
+#define MON_THUNDARA           MON_THUNDER+1
+#define MON_THUNDAGA           MON_THUNDARA+1
+#define MON_FLARE              MON_THUNDAGA+1
+#define MON_WARP               MON_FLARE+1
 
 extern void you_aggravate(struct monst *);
 
@@ -360,7 +373,7 @@ boolean hostile;
 		//case "12"
 		if(spellnum == ((mid+3)%5)+9) return ( (mid/11) % 2) ? GEYSER : ACID_RAIN;
 		//case "11"
-		if(spellnum == ((mid+2)%5)+9) return FIRE_PILLAR;
+		if(spellnum == ((mid+2)%5)+9) return ( (mid/13) % 2) ? FIRE_PILLAR : ICE_STORM;
 		//case "10"
 		//Cure/Inflict
 		//case "9"
@@ -1128,6 +1141,33 @@ int spellnum;
 	burn_away_slime();
 	(void) burnarmor(&youmonst);
 	(void) burn_floor_paper(u.ux, u.uy, TRUE, FALSE);
+	stop_occupation();
+	break;
+    case ICE_STORM:
+	pline("Chunks of ice pummel you from all sides!");
+	if (Cold_resistance) {
+	    shieldeff(u.ux, u.uy);
+	    dmg = d(4, 8);
+		
+		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+		else dmg -= rnd(-u.uac);
+		
+		if (dmg < 1) dmg = 1;
+		
+		if (Half_physical_damage) dmg = (dmg + 1) / 2;
+	} else{
+	    dmg = d(4, 8);
+		
+		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+		else dmg -= rnd(-u.uac);
+		
+		if (dmg < 1) dmg = 1;
+		
+		if (Half_physical_damage) dmg = (dmg + 1) / 2;
+		
+	    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
+		destroy_item(POTION_CLASS, AD_COLD);
+	}
 	stop_occupation();
 	break;
     case LIGHTNING:

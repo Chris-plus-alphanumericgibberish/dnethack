@@ -2360,33 +2360,33 @@ register struct	monst	*mtmp;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
 
-				mlocal = makemon(&mons[PM_KRAKEN], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
-				bless(otmp);
-				otmp->oerodeproof = TRUE;
-				if(mlocal) (void) mpickobj(mlocal, otmp);
+				// mlocal = makemon(&mons[PM_KRAKEN], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				// otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
+				// otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
+				// bless(otmp);
+				// otmp->oerodeproof = TRUE;
+				// if(mlocal) (void) mpickobj(mlocal, otmp);
 
-				mlocal = makemon(&mons[PM_MARILITH], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
-				bless(otmp);
-				otmp->oerodeproof = TRUE;
-				if(mlocal) (void) mpickobj(mlocal, otmp);
+				// mlocal = makemon(&mons[PM_MARILITH], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				// otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
+				// otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
+				// bless(otmp);
+				// otmp->oerodeproof = TRUE;
+				// if(mlocal) (void) mpickobj(mlocal, otmp);
 
-				mlocal = makemon(&mons[PM_TIAMAT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
-				bless(otmp);
-				otmp->oerodeproof = TRUE;
-				if(mlocal) (void) mpickobj(mlocal, otmp);
+				// mlocal = makemon(&mons[PM_TIAMAT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				// otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
+				// otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
+				// bless(otmp);
+				// otmp->oerodeproof = TRUE;
+				// if(mlocal) (void) mpickobj(mlocal, otmp);
 
-				mlocal = makemon(&mons[PM_LICH], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
-				bless(otmp);
-				otmp->oerodeproof = TRUE;
-				if(mlocal) (void) mpickobj(mlocal, otmp);
+				// mlocal = makemon(&mons[PM_LICH], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				// otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
+				// otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
+				// bless(otmp);
+				// otmp->oerodeproof = TRUE;
+				// if(mlocal) (void) mpickobj(mlocal, otmp);
 				}
 			break;
 			case PM_GREAT_CTHULHU:
@@ -3631,10 +3631,10 @@ rndmonst()
 	    if(!in_mklev) return neutral_montype();
 		else return (struct permonst *)0;/*NOTE: ugly method to stop monster generation durning level creation, since I can't find a better way*/
 	}
-	else if (u.uz.dnum == chaos_dnum){
+	else if (In_cha(&u.uz)){
 	    return chaos_montype();
 	}
-	else if (u.uz.dnum == law_dnum){
+	else if (In_law(&u.uz)){
 	    return law_montype();
 	}
 	else if (u.uz.dnum == mines_dnum){
