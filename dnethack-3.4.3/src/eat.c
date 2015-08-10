@@ -2701,7 +2701,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	if (u.uedibility || u.sealsActive&SEAL_BUER) {
 		int res = edibility_prompts(otmp);
 		if (res) {
-			if(!u.sealsActive&SEAL_BUER){
+			if(!(u.sealsActive&SEAL_BUER)){
 				Your("%s stops tingling and your sense of smell returns to normal.",
 					body_part(NOSE));
 				u.uedibility = 0;
