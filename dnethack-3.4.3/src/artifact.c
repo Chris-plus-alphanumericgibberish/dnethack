@@ -966,19 +966,19 @@ touch_artifact(obj,mon)
 	if(badalign){
 		if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
 			badalign = FALSE;
-			badclass = FALSE;
+			// badclass = FALSE;
 		}
 		else if(oart->alignment == A_LAWFUL && u.specialSealsActive&SEAL_COSMOS){
 			badalign = FALSE;
-			badclass = FALSE;
+			// badclass = FALSE;
 		}
 		else if(oart->alignment == A_CHAOTIC && u.specialSealsActive&SEAL_MISKA){
 			badalign = FALSE;
-			badclass = FALSE;
+			// badclass = FALSE;
 		}
 		else if(oart->alignment == A_NEUTRAL && u.specialSealsActive&SEAL_NUDZIARTH){
 			badalign = FALSE;
-			badclass = FALSE;
+			// badclass = FALSE;
 		}
 	}
 	if(mon->data == &mons[PM_DAEMON]) badclass = badalign = FALSE;
