@@ -914,6 +914,9 @@ int spellnum;
 	if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
 	    You("seem no deader than before.");
 		dmg = 0; //you don't take damage
+	} else if (ward_at(u.ux,u.uy) == CIRCLE_OF_ACHERON) {
+	    You("are already beyond Acheron.");
+		dmg = 0; //you don't take damage
 	} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12) && !(u.sealsActive&SEAL_OSE)) {
 	    if (Hallucination) {
 		You("have an out of body experience.");
