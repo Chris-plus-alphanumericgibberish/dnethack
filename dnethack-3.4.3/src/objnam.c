@@ -499,7 +499,7 @@ register struct obj *obj;
 			Sprintf(buf, "set of %s", actualn);
 			break;
 		}
-		if (typ == VICTORIAN_UNDERWEAR) {
+		if ((typ == VICTORIAN_UNDERWEAR && nn) || (typ == JUMPSUIT && !nn) || (typ == BODYGLOVE && !nn)) {
 			Sprintf(buf, "set of %s", actualn);
 			break;
 		}
