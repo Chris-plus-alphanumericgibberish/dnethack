@@ -117,8 +117,8 @@ NEARDATA const struct songspell songs[] = {
 	{ 0,				"None",				0, 1,	0,				0 },
 	{ SPE_SLEEP,		"Lullaby",			1, 4,	WOODEN_HARP,	WOODEN_FLUTE },
 	{ SPE_CONFUSE_MONSTER,	"Cacophony",	2, 5,	LEATHER_DRUM,	TOOLED_HORN },
-	{ SPE_SLOW_MONSTER,	"Drowsiness",		2, 5,	WOODEN_FLUTE,	WOODEN_HARP },
-	{ SPE_CAUSE_FEAR,	"Despair",			3, 6,	LEATHER_DRUM,	TOOLED_HORN },
+	{ SPE_SLOW_MONSTER,	"Lethargy",			2, 5,	WOODEN_FLUTE,	WOODEN_HARP },
+	{ SPE_CAUSE_FEAR,	"Fear",				1, 6,	LEATHER_DRUM,	TOOLED_HORN },
 	{ SPE_CHARM_MONSTER,"Friendship",		3, 6,	WOODEN_FLUTE,	WOODEN_HARP },
 	{ SPE_CAUSE_FEAR,	"Inspire Courage",	3,6,	LEATHER_DRUM,	BUGLE },
 	{ SPE_HASTE_SELF,	"Charge", 			2, 5,	LEATHER_DRUM,	BUGLE },
@@ -424,7 +424,10 @@ int know_spell;
 	if (!know_spell)
 		return 0;
 
-	chance = ( ACURR(A_DEX) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
+	if(instr->otyp == LEATHER_DRUM || instr->otyp == DRUM_OF_EARTHQUAKE)
+		chance = ( ACURR(A_STR) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
+		- (songs[song_id].level * (instr->blessed ? 15 : 20));
+	else chance = ( ACURR(A_DEX) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
 		- (songs[song_id].level * (instr->blessed ? 15 : 20));
 
 	if (instr->oartifact || instr_otyp == songs[song_id].instr2)

@@ -1591,8 +1591,8 @@ u_init()
 		break;
 #ifdef BARD
 	case PM_BARD:
-		if (Race_if(PM_ORC) || (Race_if(PM_HALF_DRAGON)) 
-		) Bard[BARD_INSTR].trotyp = (rn2(100) >= 50) ? LEATHER_DRUM : TOOLED_HORN;
+		if (Race_if(PM_ORC)) Bard[BARD_INSTR].trotyp = (rn2(100) >= 50) ? BUGLE : TOOLED_HORN;
+		else if (Race_if(PM_HALF_DRAGON)) Bard[BARD_INSTR].trotyp = LEATHER_DRUM;
 		else if (rn2(100) >= 50) Bard[BARD_INSTR].trotyp = WOODEN_FLUTE;
 		if (rn2(100) >= 85) Bard[BARD_WHISTLE].trotyp = BELL;
 		if (Race_if(PM_DROW)) Bard[BARD_CLOAK].trotyp = DROVEN_CHAIN_MAIL;
