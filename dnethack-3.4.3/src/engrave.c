@@ -183,7 +183,7 @@ static const char *haluMesg[] = {
 		"That was a mistake.",
 	"Everything dies.",
 	"What is lost might not be found.",
-	"What was washed away might never return."
+	"What was washed away might never return.",
 	
 	"Listen at us, won't you?", /* All Our Friends Are Dead */
 		"Share with us your head",
