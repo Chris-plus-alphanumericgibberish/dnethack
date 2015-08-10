@@ -306,10 +306,8 @@ boolean phasing;
 {
 	int tmp;
 	int tmp2;
-	static double bab = 0;
+	double bab = BASE_ATTACK_BONUS;
 	int luckbon = 0;
-	
-	if(!bab) bab = BASE_ATTACK_BONUS;
 	
 	if(Luck) luckbon = sgn(Luck)*rnd(abs(Luck));
 	
