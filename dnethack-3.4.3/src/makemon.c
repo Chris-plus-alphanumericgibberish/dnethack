@@ -281,20 +281,20 @@ register struct monst *mtmp;
 			case PM_LEGION_DEVIL_GRUNT:
 			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
 			      w2 = rn2(2) ? DAGGER : KNIFE;
-				  (void)mongets(mtmp, BOW);
-				  m_initthrow(mtmp, ARROW, 5);
+				  (void)mongets(mtmp, CROSSBOW);
+				  m_initthrow(mtmp, BOLT, 5);
 			break;
 			case PM_LEGION_DEVIL_SOLDIER:
 			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
 			      w2 = rn2(2) ? DAGGER : KNIFE;
-				  (void)mongets(mtmp, BOW);
-				  m_initthrow(mtmp, ARROW, 10);
+				  (void)mongets(mtmp, CROSSBOW);
+				  m_initthrow(mtmp, BOLT, 10);
 			break;
 			case PM_LEGION_DEVIL_SERGEANT:
 			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
 			      w2 = rn2(2) ? DAGGER : KNIFE;
-				  (void)mongets(mtmp, BOW);
-				  m_initthrow(mtmp, ARROW, 20);
+				  (void)mongets(mtmp, CROSSBOW);
+				  m_initthrow(mtmp, BOLT, 20);
 			break;
 			case PM_LEGION_DEVIL_CAPTAIN:
 			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
@@ -375,13 +375,24 @@ register struct monst *mtmp;
 				  if (!rn2(3)) {
 					  w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
 					  w2 = rn2(2) ? DAGGER : KNIFE;
+				  } else if(!rn2(2)){
+					  w1 = CROSSBOW;
+					  m_initthrow(mtmp, BOLT, 24);
 				  } else w1 = rn2(2) ? SPEAR : SHORT_SWORD;
 				  break;
 				case PM_SERGEANT:
 				  w1 = rn2(2) ? FLAIL : MACE;
+				  if(rn2(2)){
+					  w2 = CROSSBOW;
+					  m_initthrow(mtmp, BOLT, 36);
+				  }
 				  break;
 				case PM_LIEUTENANT:
 				  w1 = rn2(2) ? BROADSWORD : LONG_SWORD;
+				  if(rn2(2)){
+					  w2 = BOW;
+					  m_initthrow(mtmp, ARROW, 36);
+				  }
 				  break;
 #ifdef CONVICT
 				case PM_PRISON_GUARD:
@@ -389,6 +400,11 @@ register struct monst *mtmp;
 				case PM_CAPTAIN:
 				case PM_WATCH_CAPTAIN:
 				  w1 = rn2(2) ? LONG_SWORD : SILVER_SABER;
+				  if(rn2(2)){
+					  w2 = BOW;
+					  if(w1 != SILVER_SABER) m_initthrow(mtmp, !rn2(4) ? GOLDEN_ARROW : ARROW, 48);
+					  else m_initthrow(mtmp, ARROW, 48);
+				  }
 				  break;
 				default:
 				  if (!rn2(4)) w1 = DAGGER;
@@ -1149,7 +1165,7 @@ register struct monst *mtmp;
 		int bias;
 
 		bias = is_lord(ptr) + is_prince(ptr) * 2 + extra_nasty(ptr);
-		switch(rnd(14 - (2 * bias))) {
+		switch(rnd(10 - (2 * bias))) {
 		    case 1:
 				m_initthrow(mtmp, DART, 12);
 			break;
@@ -1199,6 +1215,7 @@ register struct monst *mtmp;
 			    break;
 			case 2:
 			    (void)mongets(mtmp, SLING);
+			    m_initthrow(mtmp, ROCK, 6);
 			    break;
 		      }
 		    if (!rn2(10)) (void)mongets(mtmp, ELVEN_MITHRIL_COAT);
@@ -1393,24 +1410,33 @@ register struct monst *mtmp;
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHIELD);
 			if(!rn2(3)) (void)mongets(mtmp, KNIFE);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_CHAIN_MAIL);
-#ifdef BARD
-			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50))
+//ifdef BARD
+			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50)){
 			    (void)mongets(mtmp, LEATHER_DRUM);
-#endif
+				if(!rn2(3)) {
+					(void)mongets(mtmp, ORCISH_BOW);
+					m_initthrow(mtmp, ORCISH_ARROW, 12);
+				}
+			}
+//endif
 			break;
 		    case PM_URUK_HAI:
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_CLOAK);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHORT_SWORD);
 			if(!rn2(3)) (void)mongets(mtmp, IRON_SHOES);
-			if(!rn2(3)) {
-			    (void)mongets(mtmp, ORCISH_BOW);
-			    m_initthrow(mtmp, ORCISH_ARROW, 12);
-			}
 			if(!rn2(3)) (void)mongets(mtmp, URUK_HAI_SHIELD);
-#ifdef BARD
-			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50))
+//ifdef BARD
+			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50)){
 			    (void)mongets(mtmp, LEATHER_DRUM);
-#endif
+				(void)mongets(mtmp, CROSSBOW);
+				m_initthrow(mtmp, BOLT, 12);
+			} else {
+			if(!rn2(3)) {
+					(void)mongets(mtmp, CROSSBOW);
+					m_initthrow(mtmp, BOLT, 12);
+			}
+			}
+//endif
 			break;
 		    default:
 			if (mm != PM_ORC_SHAMAN && rn2(2))
