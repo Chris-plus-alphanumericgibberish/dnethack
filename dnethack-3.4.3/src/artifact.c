@@ -918,8 +918,8 @@ touch_artifact(obj,mon)
 			}
 		} else {
 			badclass = self_willed && 
-			   ((oart->role != NON_PM && !Role_if(oart->role)) ||
-				(oart->role != NON_PM && !Pantheon_if(oart->role)) ||
+			   (((oart->role != NON_PM && !Role_if(oart->role)) &&
+				 (oart->role != NON_PM && !Pantheon_if(oart->role))) ||
 			    (oart->race != NON_PM && !Race_if(oart->race)));
 			badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
 			   ((oart->alignment != u.ualign.type && obj->otyp != HELM_OF_OPPOSITE_ALIGNMENT) || u.ualign.record < 0);
