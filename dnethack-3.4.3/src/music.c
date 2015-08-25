@@ -1685,7 +1685,7 @@ struct obj *instr;
 		song = SNG_PASSTUNE;
 	    else
 		song = SNG_NOTES;
-    }
+    } else song = SNG_IMPROVISE;
 #ifdef BARD
     }
 #endif
