@@ -5241,7 +5241,7 @@ read_necro(VOID_ARGS)
 			case SELECT_SPIRITS2:{
 				int i;
 				You("read the second half of the testament of whispers.");
-				for(i=15; i<32; i++) u.sealsKnown |= sealKey[u.sealorder[i]];
+				for(i=15; i<31; i++) u.sealsKnown |= sealKey[u.sealorder[i]];
 			}break;
 		}
 	}
