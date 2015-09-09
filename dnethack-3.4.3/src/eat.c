@@ -3680,20 +3680,25 @@ bite()
 void
 gethungry()	/* as time goes by - called by moveloop() and domove() */
 {
+	int hungermod = 1;
 	if (u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) return;	/* you don't feel hungrier */
 	
-	if ((!u.usleep || !rn2(10))	/* slow metabolic rate while asleep */
-		&& (carnivorous(youmonst.data) 
+	if(u.usleep) hungermod *= 10; /* slow metabolic rate while asleep */
+	/* Convicts can last twice as long at hungry and below */
+	if(Role_if(PM_CONVICT)){
+		if(u.uhs == HUNGRY) hungermod *= 2;
+		else if(u.uhs < HUNGRY) hungermod *=5;
+	}
+	if(maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)))
+		hungermod *= (maybe_polyd(youmonst.data->mlevel, u.ulevel)/10 + 1);
+	if(Race_if(PM_INCANTIFIER)) hungermod *= 10;
+
+	if ((carnivorous(youmonst.data) 
 			|| herbivorous(youmonst.data) 
 			|| maybe_polyd(is_vampire(youmonst.data), 
 							Race_if(PM_VAMPIRE)))
-#ifdef CONVICT
-        /* Convicts can last twice as long at hungry and below */
-        && (!Role_if(PM_CONVICT) || (u.uhs < HUNGRY) || (moves % 2 && u.uhs == HUNGRY) || (moves % 5))
-#endif /* CONVICT */
-        && (!Race_if(PM_VAMPIRE) || !(moves % (u.ulevel/10 + 1)))
+		&& !(moves % hungermod)
 		&& !( (Slow_digestion && !Race_if(PM_INCANTIFIER)) ||
-				(Race_if(PM_INCANTIFIER) && moves%10) || 
 				(uclockwork) ))
 			(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);		/* ordinary food consumption */
 	if(uwep && (
