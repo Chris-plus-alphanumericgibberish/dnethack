@@ -1039,6 +1039,7 @@ register const char *let,*word;
 		     /* Picks, axes, pole-weapons, bullwhips */
 		    ((otmp->oclass == WEAPON_CLASS && !is_pick(otmp) &&
 //ifdef FIREARMS
+		      otyp != BFG &&
 		      otyp != RAYGUN &&
 		      otyp != SUBMACHINE_GUN &&
 		      otyp != AUTO_SHOTGUN &&
