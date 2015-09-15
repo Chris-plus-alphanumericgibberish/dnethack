@@ -100,7 +100,7 @@ poly_when_stoned(ptr)
     struct permonst *ptr;
 {
     return((boolean)(is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] &&
-	    !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD)));
+	    !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD && !In_quest(&u.uz))));
 	    /* allow G_EXTINCT */
 }
 

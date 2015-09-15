@@ -65,12 +65,12 @@ set_uasmon()
 boolean
 is_playermon_genocided()
 {
-	return ((mvitals[urole.malenum].mvflags & G_GENOD) ||
+	return ((mvitals[urole.malenum].mvflags & G_GENOD && !In_quest(&u.uz)) ||
 			(urole.femalenum != NON_PM &&
-			(mvitals[urole.femalenum].mvflags & G_GENOD)) ||
-			(mvitals[urace.malenum].mvflags & G_GENOD) ||
+			(mvitals[urole.femalenum].mvflags & G_GENOD && !In_quest(&u.uz))) ||
+			(mvitals[urace.malenum].mvflags & G_GENOD && !In_quest(&u.uz)) ||
 			(urace.femalenum != NON_PM &&
-			(mvitals[urace.femalenum].mvflags & G_GENOD)));
+			(mvitals[urace.femalenum].mvflags & G_GENOD && !In_quest(&u.uz))));
 }
 
 /* make a (new) human out of the player */
@@ -315,7 +315,7 @@ boolean forcecontrol;
 		if (draconian) {
 		    do_merge:
 			mntmp = armor_to_dragon(uarm->otyp);
-			if (!(mvitals[mntmp].mvflags & G_GENOD)) {
+			if (!(mvitals[mntmp].mvflags & G_GENOD && !In_quest(&u.uz))) {
 				/* allow G_EXTINCT */
 				You("merge with your scaly armor.");
 				uskin = uarm;
@@ -327,7 +327,7 @@ boolean forcecontrol;
 		else if(leonine) {
 			do_lion_merge:
 			mntmp = PM_SON_OF_TYPHON;
-			if (!(mvitals[mntmp].mvflags & G_GENOD)) {
+			if (!(mvitals[mntmp].mvflags & G_GENOD && !In_quest(&u.uz))) {
 				/* allow G_EXTINCT */
 				You("merge with lion skin cloak.");
 				uskin = uarmc;
@@ -404,7 +404,7 @@ int	mntmp;
 	int mlvl;
 	const char *s;
 
-	if (mvitals[mntmp].mvflags & G_GENOD) {	/* allow G_EXTINCT */
+	if (mvitals[mntmp].mvflags & G_GENOD && !In_quest(&u.uz)) {	/* allow G_EXTINCT */
 		You_feel("rather %s-ish.",mons[mntmp].mname);
 		exercise(A_WIS, TRUE);
 		return(0);

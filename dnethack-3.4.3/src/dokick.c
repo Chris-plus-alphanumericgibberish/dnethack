@@ -940,7 +940,7 @@ dokick()
 		    struct obj *treefruit;
 			if(u.uz.dnum == tower_dnum || on_level(&medusa_level,&u.uz)){
 			    if (rn2(3)) {
-					if ( !rn2(3) && !(mvitals[PM_CROW].mvflags & G_GONE) )
+					if ( !rn2(3) && !(mvitals[PM_CROW].mvflags & G_GONE && !In_quest(&u.uz)) )
 					    You_hear("flapping wings."); /* a warning */
 					goto ouch;
 			    } else if (!(maploc->looted & TREE_SWARM)) {
@@ -992,7 +992,7 @@ dokick()
 					maploc->looted |= TREE_LOOTED;
 					return(1);
 			    } else if (rn2(3)) {
-					if ( !rn2(3) && !(mvitals[PM_PARROT].mvflags & G_GONE) )
+					if ( !rn2(3) && !(mvitals[PM_PARROT].mvflags & G_GONE && !In_quest(&u.uz)) )
 					    You_hear("flapping wings."); /* a warning */
 					goto ouch;
 			    } else if (!(maploc->looted & TREE_SWARM)) {
@@ -1044,7 +1044,7 @@ dokick()
 					maploc->looted |= TREE_LOOTED;
 					return(1);
 			    } else if (rn2(3)) {
-					if ( !rn2(3) && !(mvitals[PM_MIRKWOOD_SPIDER].mvflags & G_GONE) )
+					if ( !rn2(3) && !(mvitals[PM_MIRKWOOD_SPIDER].mvflags & G_GONE && !In_quest(&u.uz)) )
 					    You_hear("skittering legs."); /* a warning */
 					goto ouch;
 			    } else if (!(maploc->looted & TREE_SWARM)) {
@@ -1068,7 +1068,7 @@ dokick()
 			    goto ouch;
 			} else if(u.uz.dnum == chaos_dnum) {
 			    if (rn2(6)) {
-					if ( !rn2(3) && !(mvitals[PM_DRYAD].mvflags & G_GONE) )
+					if ( !rn2(3) && !(mvitals[PM_DRYAD].mvflags & G_GONE && !In_quest(&u.uz)) )
 					    pline("The tree shifts slightly."); /* a warning */
 					goto ouch;
 			    } else if (!(maploc->looted & TREE_SWARM)) {
@@ -1093,7 +1093,7 @@ dokick()
 					goto ouch;
 			} else if(u.uz.dnum == law_dnum) {
 			    if (rn2(3)) {
-					if ( !rn2(6) && !(mvitals[PM_KILLER_BEE].mvflags & G_GONE) )
+					if ( !rn2(6) && !(mvitals[PM_KILLER_BEE].mvflags & G_GONE && !In_quest(&u.uz)) )
 					    You_hear("insects crawling."); /* a warning */
 					goto ouch;
 			    }
@@ -1146,7 +1146,7 @@ dokick()
 			} else{
 			    /* nothing, fruit or trouble? 75:23.5:1.5% */
 			    if (rn2(3)) {
-					if ( !rn2(6) && !(mvitals[PM_KILLER_BEE].mvflags & G_GONE) )
+					if ( !rn2(6) && !(mvitals[PM_KILLER_BEE].mvflags & G_GONE && !In_quest(&u.uz)) )
 					    You_hear("a low buzzing."); /* a warning */
 					goto ouch;
 			    }
@@ -1250,7 +1250,7 @@ dokick()
 			exercise(A_DEX, TRUE);
 			return(1);
 		    } else if(!(maploc->looted & S_LPUDDING) && !rn2(3) &&
-			  !(mvitals[PM_BLACK_PUDDING].mvflags & G_GONE)) {
+			  !(mvitals[PM_BLACK_PUDDING].mvflags & G_GONE && !In_quest(&u.uz))) {
 			if (Blind)
 			    You_hear("a gushing sound.");
 			else
@@ -1263,7 +1263,7 @@ dokick()
 			maploc->looted |= S_LPUDDING;
 			return(1);
 		    } else if(!(maploc->looted & S_LDWASHER) && !rn2(3) &&
-			      !(mvitals[washerndx].mvflags & G_GONE)) {
+			      !(mvitals[washerndx].mvflags & G_GONE && !In_quest(&u.uz))) {
 			/* can't resist... */
 			pline("%s returns!", (Blind ? Something :
 							"The dish washer"));

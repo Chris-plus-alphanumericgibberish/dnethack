@@ -1061,7 +1061,7 @@ boolean at_stairs, falling, portal;
 	// }
 	if (In_quest(&u.uz) && Race_if(PM_DWARF) &&  !up &&
 		urole.neminum == PM_BOLG && Is_qlocate(&u.uz) && 
-		!(mvitals[PM_SMAUG].mvflags & G_GENOD || mvitals[PM_SMAUG].died > 0)
+		!((mvitals[PM_SMAUG].mvflags & G_GENOD && !In_quest(&u.uz)) || mvitals[PM_SMAUG].died > 0)
 	) {
 		pline("A mysterious force prevents you from descending.");
 		return;

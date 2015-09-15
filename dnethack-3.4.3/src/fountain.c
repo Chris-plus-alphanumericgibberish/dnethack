@@ -25,7 +25,7 @@ dowatersnakes() /* Fountain of snakes! */
     register int num = rn1(5,2);
     struct monst *mtmp;
 
-    if (!(mvitals[PM_WATER_MOCCASIN].mvflags & G_GONE)) {
+    if (!(mvitals[PM_WATER_MOCCASIN].mvflags & G_GONE && !In_quest(&u.uz))) {
 	if (!Blind)
 	    pline("An endless stream of %s pours forth!",
 		  Hallucination ? makeplural(rndmonnam()) : "snakes");
@@ -45,7 +45,7 @@ dowaterdemon() /* Water demon */
 {
     register struct monst *mtmp;
 
-    if(!(mvitals[PM_WATER_DEMON].mvflags & G_GONE)) {
+    if(!(mvitals[PM_WATER_DEMON].mvflags & G_GONE && !In_quest(&u.uz))) {
 	if((mtmp = makemon(&mons[PM_WATER_DEMON],u.ux,u.uy, NO_MM_FLAGS))) {
 	    if (!Blind)
 		You("unleash %s!", a_monnam(mtmp));
@@ -70,7 +70,7 @@ dowaternymph() /* Water Nymph */
 {
 	register struct monst *mtmp;
 
-	if(!(mvitals[PM_NAIAD].mvflags & G_GONE) &&
+	if(!(mvitals[PM_NAIAD].mvflags & G_GONE && !In_quest(&u.uz)) &&
 	   (mtmp = makemon(&mons[PM_NAIAD],u.ux,u.uy, NO_MM_FLAGS))) {
 		if (!Blind)
 		   You("attract %s!", a_monnam(mtmp));
@@ -529,7 +529,7 @@ drinksink()
 				pline("It seems quite tasty.");
 			else losehp(rnd(6), "sipping boiling water", KILLED_BY);
 			break;
-		case 3: if (mvitals[PM_SEWER_RAT].mvflags & G_GONE)
+		case 3: if (mvitals[PM_SEWER_RAT].mvflags & G_GONE && !In_quest(&u.uz))
 				pline_The("sink seems quite dirty.");
 			else {
 				mtmp = makemon(&mons[PM_SEWER_RAT],
@@ -574,7 +574,7 @@ drinksink()
 		case 6: breaksink(u.ux,u.uy);
 			break;
 		case 7: pline_The("water moves as though of its own will!");
-			if ((mvitals[PM_WATER_ELEMENTAL].mvflags & G_GONE)
+			if ((mvitals[PM_WATER_ELEMENTAL].mvflags & G_GONE && !In_quest(&u.uz))
 			    || !makemon(&mons[PM_WATER_ELEMENTAL],
 					u.ux, u.uy, NO_MM_FLAGS))
 				pline("But it quiets down.");

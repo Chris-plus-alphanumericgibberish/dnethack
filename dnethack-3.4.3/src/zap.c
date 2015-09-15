@@ -1287,7 +1287,7 @@ create_polymon(obj, okind)
 	    break;
 	}
 
-	if (!(mvitals[pm_index].mvflags & G_GENOD))
+	if (!(mvitals[pm_index].mvflags & G_GENOD && !In_quest(&u.uz)))
 		mdat = &mons[pm_index];
 
 	mtmp = makemon(mdat, obj->ox, obj->oy, NO_MM_FLAGS);

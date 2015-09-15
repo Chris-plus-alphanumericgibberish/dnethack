@@ -2501,7 +2501,7 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 	struct monst *m2;
 
 	/* may be too weak or have been extinguished for population control */
-	if (mon->mhp <= 1 || (mvitals[monsndx(mon->data)].mvflags & G_EXTINCT))
+	if (mon->mhp <= 1 || (mvitals[monsndx(mon->data)].mvflags & G_EXTINCT && !In_quest(&u.uz)))
 	    return (struct monst *)0;
 
 	if (x == 0) {
@@ -2618,7 +2618,7 @@ boolean ghostly;
 {
 	boolean result;
 	uchar lim = mbirth_limit(mndx);
-	boolean gone = (mvitals[mndx].mvflags & G_GONE); /* genocided or extinct */
+	boolean gone = (mvitals[mndx].mvflags & G_GONE && !In_quest(&u.uz)); /* genocided or extinct */
 
 	result = (((int) mvitals[mndx].born < lim) && !gone) ? TRUE : FALSE;
 
@@ -2628,7 +2628,7 @@ boolean ghostly;
 	if (mvitals[mndx].born < 255 && tally && (!ghostly || (ghostly && result)))
 		 mvitals[mndx].born++;
 	if ((int) mvitals[mndx].born >= lim && !(mons[mndx].geno & G_NOGEN) &&
-		!(mvitals[mndx].mvflags & G_EXTINCT)) {
+		!(mvitals[mndx].mvflags & G_EXTINCT && !In_quest(&u.uz))) {
 #if defined(DEBUG) && defined(WIZARD)
 		if (wizard) pline("Automatically extinguished %s.",
 					makeplural(mons[mndx].mname));
@@ -2755,9 +2755,9 @@ register int	mmflags;
 		mndx = monsndx(ptr);
 		/* if you are to make a specific monster and it has
 		   already been genocided, return */
-		if (mvitals[mndx].mvflags & G_GENOD) return((struct monst *) 0);
+		if (mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) return((struct monst *) 0);
 #if defined(WIZARD) && defined(DEBUG)
-		if (wizard && (mvitals[mndx].mvflags & G_EXTINCT))
+		if (wizard && (mvitals[mndx].mvflags & G_EXTINCT && !In_quest(&u.uz)))
 		    pline("Explicitly creating extinct monster %s.",
 			mons[mndx].mname);
 #endif
@@ -3575,7 +3575,7 @@ uncommon(mndx)
 int mndx;
 {
 	if (mons[mndx].geno & (G_NOGEN | G_UNIQ)) return TRUE;
-	if (mvitals[mndx].mvflags & G_GONE) return TRUE;
+	if (mvitals[mndx].mvflags & G_GONE && !In_quest(&u.uz)) return TRUE;
 	if (Inhell)
 		return(mons[mndx].maligntyp > A_NEUTRAL);
 	else
@@ -4068,10 +4068,10 @@ int	spc;
 	    return((struct permonst *) 0);
 	}
 	if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) &&
-		!flags.initgend && flags.stag == 0 && In_quest(&u.uz) && class == S_MUMMY && !(mvitals[PM_DROW_MUMMY].mvflags & G_GENOD)
+		!flags.initgend && flags.stag == 0 && In_quest(&u.uz) && class == S_MUMMY && !(mvitals[PM_DROW_MUMMY].mvflags & G_GENOD && !In_quest(&u.uz))
 	) return &mons[PM_DROW_MUMMY];
 	if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) &&
-		!flags.initgend && flags.stag == 0 && In_quest(&u.uz) && class == S_ZOMBIE && !(mvitals[PM_DROW_ZOMBIE].mvflags & G_GENOD)
+		!flags.initgend && flags.stag == 0 && In_quest(&u.uz) && class == S_ZOMBIE && !(mvitals[PM_DROW_ZOMBIE].mvflags & G_GENOD && !In_quest(&u.uz))
 	) return &mons[PM_DROW_ZOMBIE];
 /*	Assumption #1:	monsters of a given class are contiguous in the
  *			mons[] array.
@@ -4082,7 +4082,7 @@ int	spc;
 
 	for (last = first;
 		last < SPECIAL_PM && mons[last].mlet == class; last++)
-	    if (!(mvitals[last].mvflags & G_GONE) && !(mons[last].geno & mask)
+	    if (!(mvitals[last].mvflags & G_GONE && !In_quest(&u.uz)) && !(mons[last].geno & mask)
 					&& !is_placeholder(&mons[last])) {
 		/* consider it */
 		if(num && toostrong(last, maxmlev) &&
@@ -4097,7 +4097,7 @@ int	spc;
  *			order of strength.
  */
 	for(num = rnd(num); num > 0; first++)
-	    if (!(mvitals[first].mvflags & G_GONE) && !(mons[first].geno & mask)
+	    if (!(mvitals[first].mvflags & G_GONE && !In_quest(&u.uz)) && !(mons[first].geno & mask)
 					&& !is_placeholder(&mons[first])) {
 		/* skew towards lower value monsters at lower exp. levels */
 		num -= mons[first].geno & G_FREQ;
@@ -4231,7 +4231,7 @@ struct monst *mtmp, *victim;
 
 	if ((int)++mtmp->m_lev >= mons[newtype].mlevel && newtype != oldtype) {
 	    ptr = &mons[newtype];
-	    if (mvitals[newtype].mvflags & G_GENOD) {	/* allow G_EXTINCT */
+	    if (mvitals[newtype].mvflags & G_GENOD && !In_quest(&u.uz)) {	/* allow G_EXTINCT */
 		if (sensemon(mtmp))
 		    pline("As %s grows up into %s, %s %s!", mon_nam(mtmp),
 			an(ptr->mname), mhe(mtmp),
@@ -4338,6 +4338,7 @@ int type;
 		case PM_LIVING_LECTURN: return 50;
 		case PM_GROVE_GUARDIAN: return 60;
 		case PM_FLESH_GOLEM: return 40;
+		case PM_BRAIN_GOLEM: return 40;
 		case PM_SPELL_GOLEM: return 20;
 //		case PM_SAURON_THE_IMPRISONED: return 45;
 		case PM_CLAY_GOLEM: return 50;
@@ -4346,6 +4347,7 @@ int type;
 		case PM_GLASS_GOLEM: return 60;
 		case PM_ARGENTUM_GOLEM: return 70;
 		case PM_IRON_GOLEM: return 80;
+		case PM_SEMBLANCE: return 80;
 		case PM_ARSENAL: return 88;
 		case PM_CENTER_OF_ALL: return 88;
 		case PM_RETRIEVER: return 120;

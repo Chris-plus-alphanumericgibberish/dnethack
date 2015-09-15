@@ -880,7 +880,7 @@ long timeout;
 	    hatchcount = rnd((int)egg->quan);
 	    cansee_hatchspot = cansee(x, y) && !silent;
 	    if (!(mons[mnum].geno & G_UNIQ) &&
-		   !(mvitals[mnum].mvflags & (G_GENOD | G_EXTINCT))) {
+		   !(mvitals[mnum].mvflags & G_GONE && !In_quest(&u.uz))) {
 		for (i = hatchcount; i > 0; i--) {
 		    if (!enexto(&cc, x, y, &mons[mnum]) ||
 			 !(mon = makemon(&mons[mnum], cc.x, cc.y, NO_MINVENT)))
@@ -897,7 +897,7 @@ long timeout;
 				mon->mtame = 20;
 			}
 		    }
-		    if (mvitals[mnum].mvflags & G_EXTINCT)
+		    if (mvitals[mnum].mvflags & G_EXTINCT && !In_quest(&u.uz))
 			break;	/* just made last one */
 		    mon2 = mon;	/* in case makemon() fails on 2nd egg */
 		}

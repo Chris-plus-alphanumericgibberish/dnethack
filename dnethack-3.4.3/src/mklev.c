@@ -420,9 +420,9 @@ register int type;
 		struct monst *mtmp;
 
 		if (level_difficulty() >= 9 && !rn2(5) &&
-		   !((mvitals[PM_SMALL_MIMIC].mvflags & G_GONE) &&
-		     (mvitals[PM_LARGE_MIMIC].mvflags & G_GONE) &&
-		     (mvitals[PM_GIANT_MIMIC].mvflags & G_GONE))) {
+		   !((mvitals[PM_SMALL_MIMIC].mvflags & G_GONE && !In_quest(&u.uz)) &&
+		     (mvitals[PM_LARGE_MIMIC].mvflags & G_GONE && !In_quest(&u.uz)) &&
+		     (mvitals[PM_GIANT_MIMIC].mvflags & G_GONE && !In_quest(&u.uz)))) {
 		    /* make a mimic instead */
 		    levl[x][y].doormask = D_NODOOR;
 		    mtmp = makemon(mkclass(S_MIMIC, Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
@@ -780,18 +780,18 @@ makelevel()
 	/* Zoos */
 	if (u_depth > 4 && !rn2(8)) mkroom(COURT);
 	else if (u_depth > 5 && !rn2(10) &&
-	   !(mvitals[PM_LEPRECHAUN].mvflags & G_GONE)) mkroom(LEPREHALL);
+	   !(mvitals[PM_LEPRECHAUN].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(LEPREHALL);
 	else if (u_depth > 6 && !rn2(9)) mkroom(ZOO);
 	else if (u_depth > 7 && !rn2(8)) mkroom(GARDEN);
 	else if (u_depth > 8 && !rn2(8)) mkroom(LIBRARY);
 	else if (u_depth > 9 && !rn2(7) &&
-	   !(mvitals[PM_KILLER_BEE].mvflags & G_GONE)) mkroom(BEEHIVE);
+	   !(mvitals[PM_KILLER_BEE].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(BEEHIVE);
 	else if (u_depth > 11 && !rn2(8)) mkroom(MORGUE);
 	else if (u_depth > 12 && !rn2(10)) mkroom(ANTHOLE);
 	else if (u_depth > 14 && !rn2(6) &&
-	   !(mvitals[PM_SOLDIER].mvflags & G_GONE)) mkroom(BARRACKS);
+	   !(mvitals[PM_SOLDIER].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(BARRACKS);
 	else if (u_depth > 16 && !rn2(10) &&
-	   !(mvitals[PM_COCKATRICE].mvflags & G_GONE)) mkroom(COCKNEST);
+	   !(mvitals[PM_COCKATRICE].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(COCKNEST);
 
 	/* Terrain */
 	if (u_depth > 2 && !rn2(8)) mkroom(ISLAND);

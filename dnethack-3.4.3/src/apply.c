@@ -1080,9 +1080,9 @@ struct obj **optr;
 #endif
 	    if (obj->cursed && !rn2(4) &&
 		    /* note: once any of them are gone, we stop all of them */
-		    !(mvitals[PM_DRYAD].mvflags & G_GONE) &&
-		    !(mvitals[PM_NAIAD].mvflags & G_GONE) &&
-		    !(mvitals[PM_OREAD].mvflags & G_GONE) &&
+		    !(mvitals[PM_DRYAD].mvflags & G_GONE && !In_quest(&u.uz)) &&
+		    !(mvitals[PM_NAIAD].mvflags & G_GONE && !In_quest(&u.uz)) &&
+		    !(mvitals[PM_OREAD].mvflags & G_GONE && !In_quest(&u.uz)) &&
 		    (mtmp = makemon(mkclass(S_NYMPH, Inhell ? G_HELL : G_NOHELL),
 					u.ux, u.uy, NO_MINVENT)) != 0) {
 		You("summon %s!", a_monnam(mtmp));

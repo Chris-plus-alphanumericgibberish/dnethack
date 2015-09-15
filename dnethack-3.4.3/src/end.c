@@ -259,7 +259,7 @@ register struct monst *mtmp;
 	else if (mtmp->data == &mons[PM_DREAD_SERAPH])
 		u.ugrave_arise = PM_SKELETON;
 	if (u.ugrave_arise >= LOW_PM &&
-				(mvitals[u.ugrave_arise].mvflags & G_GENOD))
+				(mvitals[u.ugrave_arise].mvflags & G_GENOD && !In_quest(&u.uz)))
 		u.ugrave_arise = NON_PM;
 	if (touch_petrifies(mtmp->data))
 		done(STONING);

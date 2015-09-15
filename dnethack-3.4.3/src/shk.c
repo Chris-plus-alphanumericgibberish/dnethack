@@ -427,8 +427,8 @@ register boolean nearshop;
 	if (flags.soundok)
 	    pline("An alarm sounds!");
 
-	noketer = ((mvitals[PM_MALKUTH_SEPHIRAH].mvflags & G_GONE) &&
-		  (mvitals[PM_YESOD_SEPHIRAH].mvflags & G_GONE) );
+	noketer = ((mvitals[PM_MALKUTH_SEPHIRAH].mvflags & G_GONE && !In_quest(&u.uz)) &&
+		  (mvitals[PM_YESOD_SEPHIRAH].mvflags & G_GONE && !In_quest(&u.uz)) );
 
 	if(!angry_guards(!flags.soundok) && noketer) {
 	    if(flags.verbose && flags.soundok)

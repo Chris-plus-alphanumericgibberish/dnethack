@@ -783,7 +783,7 @@ struct mkroom	*croom;
 	    g_mvflags = (unsigned) mvitals[monsndx(pm)].mvflags;
 	    if ((pm->geno & G_UNIQ) && (g_mvflags & G_EXTINCT))
 		goto m_done;
-	    else if (g_mvflags & G_GONE)	/* genocided or extinct */
+	    else if (g_mvflags & G_GONE && !In_quest(&u.uz))	/* genocided or extinct */
 		pm = (struct permonst *) 0;	/* make random monster */
 	} else {
 	    pm = mkclass(class,Inhell ? G_HELL|G_NOGEN : G_NOHELL|G_NOGEN);

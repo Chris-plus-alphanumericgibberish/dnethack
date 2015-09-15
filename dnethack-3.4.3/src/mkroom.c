@@ -522,7 +522,7 @@ antholemon()
 	case 0:		mtyp = PM_SOLDIER_ANT; break;
 	case 1:		mtyp = PM_FIRE_ANT; break;
 	}
-	return ((mvitals[mtyp].mvflags & G_GONE) ?
+	return ((mvitals[mtyp].mvflags & G_GONE && !In_quest(&u.uz)) ?
 			(struct permonst *)0 : &mons[mtyp]);
 }
 
@@ -1149,8 +1149,8 @@ squadmon()		/* return soldier types. */
 	}
 	mndx = squadprob[rn2(NSTYPES)].pm;
 gotone:
-//	if (!(mvitals[mndx].mvflags & G_GONE)) return(&mons[mndx]);
-	if (!(mvitals[mndx].mvflags & G_GENOD)) return(&mons[mndx]);//empty if genocided
+//	if (!(mvitals[mndx].mvflags & G_GONE && !In_quest(&u.uz))) return(&mons[mndx]);
+	if (!(mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz))) return(&mons[mndx]);//empty if genocided
 	else			    return((struct permonst *) 0);
 }
 
