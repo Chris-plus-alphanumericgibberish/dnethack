@@ -515,6 +515,10 @@ boolean artif;
 	    case KELP_FROND:
 		otmp->quan = (long) rnd(2);
 		break;
+		case PROTEIN_PILL:
+			otmp->quan = rnd(5) + 5;
+			otmp->owt = weight(otmp);
+		break;
 	    }
 	    if (otmp->otyp == CORPSE || otmp->otyp == MEAT_RING ||
 		otmp->otyp == KELP_FROND) break;
@@ -589,6 +593,10 @@ boolean artif;
 		case CRYSTAL_BALL:	otmp->spe = rnd(5);
 					blessorcurse(otmp, 2);
 					break;
+		case POWER_PACK:
+			otmp->quan = rnd(5) + 5;
+			otmp->owt = weight(otmp);
+		break;
 		case SENSOR_PACK:
 			otmp->spe = rnd(5) + 20;
 		break;
