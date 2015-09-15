@@ -697,11 +697,11 @@ struct you {
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
 #define BASE_ATTACK_BONUS	((Role_if(PM_BARBARIAN) || Role_if(PM_CONVICT) || Role_if(PM_KNIGHT) || (!uwep && Role_if(PM_MONK)) || \
-								Role_if(PM_PIRATE) || Role_if(PM_SAMURAI) || Role_if(PM_VALKYRIE) || \
+								Role_if(PM_PIRATE) || Role_if(PM_SAMURAI) || Role_if(PM_VALKYRIE) || (u.sealsActive&SEAL_BERITH) || \
 								(uwep && is_lightsaber(uwep) && (Unblind_telepat || (Blind && Blind_telepat)))) ? 1.00 :\
 							 (Role_if(PM_ARCHEOLOGIST) || Role_if(PM_EXILE) || Role_if(PM_CAVEMAN) || Role_if(PM_MONK) || \
 								Role_if(PM_NOBLEMAN) || Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || \
-								(Blind_telepat && uwep && is_lightsaber(uwep))) ? 0.75 :\
+								(u.sealsActive&SEAL_ENKI) || (Blind_telepat && uwep && is_lightsaber(uwep))) ? 0.75 :\
 							 (Role_if(PM_BARD) || Role_if(PM_HEALER) || Role_if(PM_TOURIST) || Role_if(PM_WIZARD)) ? 0.50:\
 							  .5) /* Failsafe */
 
