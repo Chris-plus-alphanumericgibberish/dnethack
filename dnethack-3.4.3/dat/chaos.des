@@ -709,7 +709,7 @@ MONSTER:'Z',random, random
 MONSTER:'Z',random, random
 MONSTER:'Z',random, random
 
-MONSTER:'L',"lich", (53, 19), asleep
+MONSTER:'L',"Lich, the Fiend of Earth", (53, 19), asleep
 
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -815,7 +815,7 @@ OBJECT:'=',"protection", contained, blessed, +1
 CONTAINER: '(', "chest"  , (51,17)
 OBJECT:'[',"cloak of protection", contained, blessed, +1
 
-MONSTER:'&',"marilith", (58, 11),asleep
+MONSTER:'&',"Kary, the Fiend of Fire", (58, 11),asleep
 
 MAZE:"chaossth",' '
 FLAGS: nommap,hardfloor, shortsighted
@@ -921,7 +921,7 @@ MONSTER:';',"giant eel", random
 MONSTER:';',"giant eel", random
 MONSTER:';',"shark", random
 MONSTER:';',"shark", random
-MONSTER:';',"kraken", (35, 01)
+MONSTER:';',"Kraken, the Fiend of Water", (35, 01)
 
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -1020,7 +1020,7 @@ NON_DIGGABLE:(00,00,75,20)
 STAIR:(16,02),up
 STAIR:(51,02),down
 
-MONSTER:'D',"Tiamat", (35, 06), asleep
+MONSTER:'D',"Tiamat, the Fiend of Wind", (35, 06), asleep
 
 CONTAINER: '(', "chest"  , (60,03)
 OBJECT:')',"tsurugi", contained, blessed, +8, "Masamune"
