@@ -7095,7 +7095,7 @@ cloneu()
 	int mndx = monsndx(youmonst.data);
 
 	if (u.mh <= 1) return(struct monst *)0;
-	if (mvitals[mndx].mvflags & G_EXTINCT) return(struct monst *)0;
+	if (mvitals[mndx].mvflags & G_EXTINCT && !In_quest(&u.uz)) return(struct monst *)0;
 	mon = makemon(youmonst.data, u.ux, u.uy, NO_MINVENT|MM_EDOG);
 	if (mon) {
 		mon = christen_monst(mon, plname);
