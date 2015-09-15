@@ -653,7 +653,7 @@ struct monst *mdef;
 
 	/* Multishot calculations */
 	multishot = 1;
-	if ((ammo_and_launcher(otmp, mwep) || skill == P_DAGGER ||
+	if ((ammo_and_launcher(otmp, mwep) || is_blaster(otmp) || skill == P_DAGGER ||
 		skill == -P_DART || skill == -P_SHURIKEN) && !magr->mconf) {
 	    /* Assumes lords are skilled, princes are expert */
 	    if (is_prince(magr->data)) multishot += 2;
@@ -683,15 +683,38 @@ struct monst *mdef;
 		    mwep && mwep->otyp == ORCISH_BOW))
 		multishot++;
 
-	    if ((long)multishot > otmp->quan) multishot = (int)otmp->quan;
+		if(is_blaster(otmp) && otmp == mwep){
+			if((long)multishot > otmp->ovar1) multishot = (int)otmp->ovar1;
+		} else if ((long)multishot > otmp->quan) multishot = (int)otmp->quan;
 	    if (multishot < 1) multishot = 1;
 	    else multishot = rnd(multishot);
-#ifdef FIREARMS
-		if (mwep && objects[mwep->otyp].oc_rof && is_launcher(mwep))
-		    multishot += objects[mwep->otyp].oc_rof;
-#endif
-	    if ((long)multishot > otmp->quan) multishot = (int)otmp->quan;
+// #ifdef FIREARMS
+		// if (mwep && objects[mwep->otyp].oc_rof && is_launcher(mwep))
+		    // multishot += objects[mwep->otyp].oc_rof;
+		if (((is_blaster(otmp) && otmp == mwep) || ammo_and_launcher(otmp, mwep))
+			&& objects[(mwep->otyp)].oc_rof && mwep->otyp != RAYGUN && mwep->altmode != WP_MODE_SINGLE
+		) {
+			if (mwep->otyp != RAYGUN && mwep->altmode == WP_MODE_BURST)
+				multishot += objects[(mwep->otyp)].oc_rof / 3;
+			/* else it is full auto */
+			else multishot += (objects[(mwep->otyp)].oc_rof - 1);
+		}
+		/* single shot, don't add anything */
+// #endif
+		if(is_blaster(otmp) && otmp == mwep){
+			if((long)multishot > otmp->ovar1) multishot = (int)otmp->ovar1;
+		} else if ((long)multishot > otmp->quan) multishot = (int)otmp->quan;
+		
 	    if (multishot < 1) multishot = 1;
+	}
+
+	if(is_blaster(otmp) && otmp == mwep){
+		otmp = mksobj(otmp->otyp == ARM_BLASTER ? HEAVY_BLASTER_BOLT : BLASTER_BOLT, TRUE, FALSE);
+		otmp->blessed = mwep->blessed;
+		otmp->cursed = mwep->cursed;
+		otmp->spe = mwep->spe;
+		otmp->quan = multishot;
+		mwep->ovar1 -= multishot;
 	}
 
 	if (canseemon(magr)) {
@@ -723,8 +746,12 @@ struct monst *mdef;
     mhp = mdef->mhp;
 	m_shot.n = multishot;
 	for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++)
-	    m_throw(magr, magr->mx, magr->my, sgn(tbx), sgn(tby),
-		    distmin(magr->mx, magr->my, mdef->mx, mdef->my), otmp, FALSE);
+	    if(m_shot.s && objects[(mwep->otyp)].oc_range) m_throw(magr, magr->mx, magr->my, sgn(tbx), sgn(tby),
+		    objects[(mwep->otyp)].oc_range, otmp,
+		    TRUE);
+		else m_throw(magr, magr->mx, magr->my, sgn(tbx), sgn(tby),
+		    distmin(magr->mx, magr->my, mdef->mux, mdef->muy), otmp,
+		    TRUE);
 	m_shot.n = m_shot.i = 0;
 	m_shot.o = STRANGE_OBJECT;
 	m_shot.s = FALSE;
