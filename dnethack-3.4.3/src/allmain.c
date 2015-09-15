@@ -528,6 +528,7 @@ moveloop()
 			} /* movement rations */
 
 		    if(!rn2(u.uevent.udemigod ? 25 :
+				(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)) ? 35 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)
 			){
 				if (u.uevent.udemigod && xupstair && rn2(10)) {
@@ -535,6 +536,8 @@ moveloop()
 				} //TEAM ATTACKS
 				if(In_sokoban(&u.uz)){
 					if(u.uz.dlevel != 1 && u.uz.dlevel != 4) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTSTRICT);
+				} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
+					(void) makemon((struct permonst *)0, xdnstair, ydnstair, MM_ADJACENTOK);
 				}
 				else (void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 			}
