@@ -450,7 +450,6 @@ struct obj {
 				|| (otmp)->otyp == LIGHTSABER\
 				|| (otmp)->otyp == BEAMSWORD\
 				|| (otmp)->otyp == DOUBLE_LIGHTSABER\
-				|| (otmp)->otyp == FORCE_ARMOR\
 				|| (otmp)->otyp == GNOMISH_POINTY_HAT\
 				|| (otmp)->otyp == CANDELABRUM_OF_INVOCATION\
 				|| (otmp)->otyp == TALLOW_CANDLE\
