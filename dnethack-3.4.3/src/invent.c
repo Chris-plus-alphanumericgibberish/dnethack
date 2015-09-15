@@ -1008,6 +1008,7 @@ register const char *let,*word;
 		    (otmp->oclass == TOOL_CLASS && !is_weptool(otmp)) ||
 			(otmp->oclass == CHAIN_CLASS && otmp->otyp != IRON_CHAIN))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
+		|| (!strcmp(word, "inject") && !(otmp->otyp == HYPOSPRAY_AMPULE))
 		|| (!strcmp(word, "wind with") && ((otmp->oclass == TOOL_CLASS &&
 		     otyp != SKELETON_KEY) ||
 			(otmp->oclass == CHAIN_CLASS)))

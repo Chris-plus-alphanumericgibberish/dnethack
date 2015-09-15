@@ -37,7 +37,7 @@ STATIC_DCL void FDECL(use_trap, (struct obj *));
 STATIC_DCL void FDECL(use_stone, (struct obj *));
 STATIC_DCL int FDECL(use_sensor, (struct obj *));
 STATIC_DCL int NDECL(sensorMenu);
-// STATIC_DCL int FDECL(use_hypospray, (struct obj *));
+STATIC_DCL int FDECL(use_hypospray, (struct obj *));
 STATIC_DCL int FDECL(use_droven_cloak, (struct obj **));
 STATIC_DCL int FDECL(use_darkweavers_cloak, (struct obj *));
 STATIC_PTR int NDECL(set_trap);		/* occupation callback */
@@ -2532,6 +2532,361 @@ sensorMenu()
 	destroy_nhwindow(tmpwin);
 	return ( n > 0 ) ? selected[0].item.a_int : 0;
 }
+
+STATIC_OVL int
+use_hypospray(hypo)
+struct obj *hypo;
+{
+	struct obj *amp = getobj(tools, "inject");
+	int i, ii, nothing=0;
+	if(!amp) return 0;
+    if (!getdir((char *)0)) return 0;
+	if(u.dz < 0){
+		You("don't see a patient up there.");
+		return 0;
+	} else if(u.dz > 0){
+		You("doubt the floor will respond to drugs.");
+		return 0;
+	} else if(u.dx || u.dy){
+		struct monst *mtarg = m_at(u.ux+u.dx,u.uy+u.dy);
+		if(!mtarg){
+			You("don't find a patient there.");
+			return 1;
+		}
+		switch(amp->ovar1){
+			case POT_HEALING:
+				if (mtarg->data == &mons[PM_PESTILENCE]){
+					mtarg->mhp -= d(6 + 2 * bcsign(amp), 4);
+					if(mtarg->mhp <= 0) xkilled(mtarg,1);
+					break;
+				}
+				if(mtarg->mhp < mtarg->mhpmax) {
+					mtarg->mhp = min_ints(mtarg->mhpmax,mtarg->mhp+d(6 + 2 * bcsign(amp), 4));
+					if (canseemon(mtarg))
+					pline("%s looks better.", Monnam(mtarg));
+				}
+			break;
+			case POT_EXTRA_HEALING:
+				if (mtarg->data == &mons[PM_PESTILENCE]){
+					mtarg->mhp -= d(6 + 2 * bcsign(amp), 8);
+					if(mtarg->mhp <= 0) xkilled(mtarg,1);
+					break;
+				}
+				if(mtarg->mhp < mtarg->mhpmax) {
+					mtarg->mhp = min_ints(mtarg->mhpmax,mtarg->mhp+d(6 + 2 * bcsign(amp), 8));
+					if (canseemon(mtarg))
+					pline("%s looks much better.", Monnam(mtarg));
+				}
+			break;
+			case POT_FULL_HEALING:
+				if (mtarg->data == &mons[PM_PESTILENCE]){
+				if((mtarg->mhpmax > 3) && !resist(mtarg, POTION_CLASS, 0, NOTELL))
+					mtarg->mhpmax /= 2;
+				if((mtarg->mhp > 2) && !resist(mtarg, POTION_CLASS, 0, NOTELL))
+					mtarg->mhp /= 2;
+				if (mtarg->mhp > mtarg->mhpmax) mtarg->mhp = mtarg->mhpmax;
+				if(mtarg->mhp <= 0) xkilled(mtarg,1);
+				if (canseemon(mtarg))
+					pline("%s looks rather ill.", Monnam(mtarg));
+					break;
+				}
+			case POT_GAIN_ABILITY:
+			case POT_RESTORE_ABILITY:
+				if(mtarg->mhp < mtarg->mhpmax) {
+					mtarg->mhp = min(mtarg->mhpmax,mtarg->mhp+400);
+					if (canseemon(mtarg))
+					pline("%s looks sound and hale again.", Monnam(mtarg));
+				}
+			break;
+			case POT_BLINDNESS:
+				if(haseyes(mtarg->data)) {
+					register int btmp = rn1(200, 250 - 125 * bcsign(amp));
+					btmp += mtarg->mblinded;
+					mtarg->mblinded = min(btmp,127);
+					mtarg->mcansee = 0;
+				}
+			break;
+			case POT_HALLUCINATION:
+				if(!resist(mtarg, POTION_CLASS, 0, NOTELL)) 
+					mtarg->mstun = TRUE;
+			case POT_CONFUSION:
+				if(!resist(mtarg, POTION_CLASS, 0, NOTELL)) 
+					mtarg->mconf = TRUE;
+			break;
+			case POT_PARALYSIS:
+				if (mtarg->mcanmove) {
+					mtarg->mcanmove = 0;
+					mtarg->mfrozen = rn1(10, 25 - 12*bcsign(amp));
+				}
+			break;
+			case POT_SPEED:
+				mon_adjust_speed(mtarg, 1, amp);
+			break;
+			case POT_GAIN_ENERGY:
+				if(!amp->cursed){
+					if (canseemon(mtarg))
+						pline("%s looks lackluster.", Monnam(mtarg));
+					mtarg->mspec_used = 0;
+					mtarg->mcan = 0;
+				} else {
+					if (canseemon(mtarg))
+						pline("%s looks full of energy.", Monnam(mtarg));
+					mtarg->mcan = 1;
+				}
+			break;
+			case POT_SLEEPING:
+				if (sleep_monst(mtarg, rn1(10, 25 - 12*bcsign(amp)), POTION_CLASS)) {
+					pline("%s falls asleep.", Monnam(mtarg));
+					slept_monst(mtarg);
+				}
+			break;
+			case POT_POLYMORPH:
+				if (canseemon(mtarg)) pline("%s suddenly mutates!", Monnam(mtarg));
+				if(!resists_poly(mtarg->data))
+					newcham(mtarg, (struct permonst *) 0, FALSE, FALSE);
+			break;
+			case POT_AMNESIA:
+				if(!amp->cursed){
+					if (canseemon(mtarg))
+						pline("%s looks more tranquil.", Monnam(mtarg));
+					if(!amp->blessed){
+						mtarg->mtame = 0;
+						mtarg->mferal = 0;
+						mtarg->mpeaceful = 1;
+					}
+					mtarg->mcrazed = 0;
+					mtarg->mberserk = 0;
+				} else {
+					if (canseemon(mtarg))
+						pline("%s looks angry and confused!", Monnam(mtarg));
+					mtarg->mcrazed = 1;
+					mtarg->mberserk = 1;
+					mtarg->mconf = 1;
+					mtarg->mtame = 0;
+					mtarg->mferal = 0;
+					mtarg->mpeaceful = 0;
+				}
+			break;
+		}
+	} else {
+		switch(amp->ovar1){
+			case POT_GAIN_ABILITY:
+				if(amp->cursed) {
+					//poison
+				} else if (Fixed_abil) {
+					nothing++;
+				} else {      /* If blessed, increase all; if not, try up to */
+					int itmp; /* 6 times to find one which can be increased. */
+					i = -1;		/* increment to 0 */
+					for (ii = A_MAX; ii > 0; ii--) {
+					i = (amp->blessed ? i + 1 : rn2(A_MAX));
+					/* only give "your X is already as high as it can get"
+					   message on last attempt (except blessed potions) */
+					itmp = (amp->blessed || ii == 1) ? 0 : -1;
+					if (adjattrib(i, 1, itmp) && !amp->blessed)
+						break;
+					}
+				}
+			break;
+			case POT_RESTORE_ABILITY:
+				if (amp->blessed && u.ulevel < u.ulevelmax) {
+					///* when multiple levels have been lost, drinking
+					//   multiple potions will only get half of them back */
+					// u.ulevelmax -= 1;
+					pluslvl(FALSE);
+				}
+				if(amp->cursed) {
+					pline("Ulch!  This makes you feel mediocre!");
+					break;
+				} else {
+					int lim;
+					pline("Wow!  This makes you feel %s!",
+					  (amp->blessed) ?
+						(unfixable_trouble_count(FALSE) ? "better" : "great")
+					  : "good");
+					i = rn2(A_MAX);		/* start at a random point */
+					for (ii = 0; ii < A_MAX; ii++) {
+					lim = AMAX(i);
+					if (i == A_STR && u.uhs >= 3) --lim;	/* WEAK */
+					if (ABASE(i) < lim) {
+						ABASE(i) = lim;
+						flags.botl = 1;
+						/* only first found if not blessed */
+						if (!amp->blessed) break;
+					}
+					if(++i >= A_MAX) i = 0;
+					}
+				}
+			break;
+			case POT_BLINDNESS:
+				if(Blind) nothing++;
+				make_blinded(itimeout_incr(Blinded,
+							   rn1(200, 250 - 125 * bcsign(amp))),
+						 (boolean)!Blind);
+			break;
+			case POT_CONFUSION:
+				if(!Confusion)
+					if (Hallucination) {
+						pline("What a trippy feeling!");
+					} else pline("Huh, What?  Where am I?");
+				else nothing++;
+				make_confused(itimeout_incr(HConfusion,
+								rn1(7, 16 - 8 * bcsign(amp))),
+						  FALSE);
+			break;
+			case POT_PARALYSIS:
+				if (Free_action)
+					You("stiffen momentarily.");
+				else {
+					if (Levitation || Is_airlevel(&u.uz)||Is_waterlevel(&u.uz))
+					You("are motionlessly suspended.");
+#ifdef STEED
+					else if (u.usteed)
+					You("are frozen in place!");
+#endif
+					else
+					Your("%s are frozen to the %s!",
+						 makeplural(body_part(FOOT)), surface(u.ux, u.uy));
+					nomul(-(rn1(10, 25 - 12*bcsign(amp))), "frozen by a potion");
+					nomovemsg = You_can_move_again;
+					exercise(A_DEX, FALSE);
+				}
+			break;
+			case POT_SPEED:
+				if(Wounded_legs && !amp->cursed
+#ifdef STEED
+				&& !u.usteed	/* heal_legs() would heal steeds legs */
+#endif
+								) {
+					heal_legs();
+					break;
+				}
+				if (!(HFast & INTRINSIC)) {
+					if (!Fast) You("speed up.");
+					else Your("quickness feels more natural.");
+					HFast |= FROMOUTSIDE;
+				} else nothing++;
+				exercise(A_DEX, TRUE);
+			break;
+			case POT_HALLUCINATION:
+				if (Hallucination || Halluc_resistance) nothing++;
+				(void) make_hallucinated(itimeout_incr(HHallucination,
+							   rn1(200, 600 - 300 * bcsign(amp))),
+						  TRUE, 0L);
+			break;
+			case POT_HEALING:
+				forget((!amp->blessed? ALL_SPELLS : 0) | ALL_MAP);
+				if (Hallucination)
+					pline("Hakuna matata!");
+				else
+					You_feel("your memories dissolve.");
+
+				/* Blessed amnesia makes you forget lycanthropy, sickness */
+				if (amp->blessed) {
+					if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF)) {
+					You("forget your affinity to %s!",
+							makeplural(mons[u.ulycn].mname));
+					if (youmonst.data == &mons[u.ulycn])
+						you_unwere(FALSE);
+					u.ulycn = NON_PM;	/* cure lycanthropy */
+					}
+					make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+
+					/* You feel refreshed */
+					if(Race_if(PM_INCANTIFIER)) u.uen += 50 + rnd(50);
+					else u.uhunger += 50 + rnd(50);
+					
+					newuhs(FALSE);
+				} else
+					exercise(A_WIS, FALSE);
+			break;
+			case POT_EXTRA_HEALING:
+				You_feel("much better.");
+				healup(d(6 + 2 * bcsign(amp), 8),
+					   amp->blessed ? 5 : !amp->cursed ? 2 : 0,
+					   !amp->cursed, TRUE);
+				(void) make_hallucinated(0L,TRUE,0L);
+				exercise(A_CON, TRUE);
+				exercise(A_STR, TRUE);
+			break;
+			case POT_GAIN_ENERGY:
+			{	register int num;
+				if(amp->cursed)
+					You_feel("lackluster.");
+				else
+					pline("Magical energies course through your body.");
+				num = rnd(5) + 5 * amp->blessed + 1;
+				u.uenmax += (amp->cursed) ? -num : num;
+				u.uen += (amp->cursed) ? -100 : (amp->blessed) ? 200 : 100;
+				if(u.uenmax <= 0) u.uenmax = 0;
+				if(u.uen > u.uenmax) u.uen = u.uenmax;
+				if(u.uen <= 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
+				flags.botl = 1;
+				if(!amp->cursed) exercise(A_WIS, TRUE);
+			}
+			break;
+			case POT_SLEEPING:
+				if(Sleep_resistance || Free_action)
+					You("yawn.");
+				else {
+					You("suddenly fall asleep!");
+					fall_asleep(-rn1(10, 25 - 12*bcsign(amp)), TRUE);
+				}
+			break;
+			case POT_FULL_HEALING:
+				You_feel("completely healed.");
+				healup(400, 4+4*bcsign(amp), !amp->cursed, TRUE);
+				/* Restore one lost level if blessed */
+				if (amp->blessed && u.ulevel < u.ulevelmax) {
+					///* when multiple levels have been lost, drinking
+					//   multiple potions will only get half of them back */
+					// u.ulevelmax -= 1;
+					pluslvl(FALSE);
+				}
+				(void) make_hallucinated(0L,TRUE,0L);
+				exercise(A_STR, TRUE);
+				exercise(A_CON, TRUE);
+			break;
+			case POT_POLYMORPH:
+				You_feel("a little %s.", Hallucination ? "normal" : "strange");
+				if (!Unchanging) polyself(FALSE);
+			break;
+			case POT_AMNESIA:
+				pline(Hallucination? "This tastes like champagne!" :
+					"This liquid bubbles and fizzes as you drink it.");
+				forget((!amp->blessed? ALL_SPELLS : 0) | ALL_MAP);
+				if (Hallucination)
+					pline("Hakuna matata!");
+				else
+					You_feel("your memories dissolve.");
+
+				/* Blessed amnesia makes you forget lycanthropy, sickness */
+				if (amp->blessed) {
+					if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF)) {
+					You("forget your affinity to %s!",
+							makeplural(mons[u.ulycn].mname));
+					if (youmonst.data == &mons[u.ulycn])
+						you_unwere(FALSE);
+					u.ulycn = NON_PM;	/* cure lycanthropy */
+					}
+					make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+
+					/* You feel refreshed */
+					if(Race_if(PM_INCANTIFIER)) u.uen += 50 + rnd(50);
+					else u.uhunger += 50 + rnd(50);
+					
+					newuhs(FALSE);
+				} else
+					exercise(A_WIS, FALSE);
+			break;
+		}
+		if(nothing) {
+			You("have a %s feeling for a moment, then it passes.",
+			  Hallucination ? "normal" : "peculiar");
+		}
+	}
+	useup(amp);
+	return 1;
 }
 
 /* Place a landmine/bear trap.  Helge Hafting */
@@ -4573,7 +4928,7 @@ doapply()
 		res = use_sensor(obj);
 	break;
 	case HYPOSPRAY:
-		// res = use_hypospray(obj);
+		res = use_hypospray(obj);
 	break;
 	case RAYGUN:
 		if(obj->altmode == ZT_FIRE){
