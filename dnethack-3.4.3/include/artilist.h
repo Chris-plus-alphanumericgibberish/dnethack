@@ -379,7 +379,7 @@ A("Sode no Shirayuki",		KATANA,
 
 A("Tobiume",		LONG_SWORD,
 	(SPFX_RESTR|SPFX_ATTK), 0, 0,
-	FIRE(1,1),	FIRE(0,0),	NO_CARY,/*Tobiume is an awkward weapon.  It looses 3 damage vs large and 2 vs small*/
+	FIRE(1,1),	FIRE(0,0),	NO_CARY,/*Tobiume is an awkward weapon.  It loses 3 damage vs large and 2 vs small*/
 	FIRE_SHIKAI, A_CHAOTIC, NON_PM, NON_PM, 8000L,
 	SPFX2_DISARM|SPFX2_FIRE2|SPFX2_RAM2,0,0),/*Ram and Fire blast only trigger if enemy is low hp*/
 
@@ -766,7 +766,7 @@ A("The Orb of Detection",	CRYSTAL_BALL,
 	INVIS,		A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 2500L ),
 */
 A("Itlachiayaque", SHIELD_OF_REFLECTION,/*From archeologist patch*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_ESP|SPFX_HSPDAM), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), (SPFX_ESP|SPFX_HSPDAM), 0,
      NO_ATTK, DFNS(AD_FIRE), CARY(AD_MAGM),
 	 SMOKE_CLOUD, A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
 	0,0,0),
@@ -778,7 +778,7 @@ A("The Annulus", SILVER_CHAKRAM,
 	0,0,0),
 
 A("The Heart of Ahriman",	RUBY,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_REFLECT|SPFX_HSPDAM), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), (SPFX_REFLECT|SPFX_HSPDAM), 0,
 	/* this stone does double damage if used as a projectile weapon */
 	PHYS(10,0),	NO_DFNS,	CARY(AD_MAGM),
 	LEVITATION,	A_NEUTRAL, PM_BARBARIAN, NON_PM, 2500L, 
@@ -786,14 +786,14 @@ A("The Heart of Ahriman",	RUBY,
 
 #ifdef BARD
 A("The Lyre of Orpheus",	MAGIC_HARP,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SPEAK), 0, 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SPEAK|SPFX_DEFN), 0, 0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	TAMING,		A_NEUTRAL, PM_BARD, NON_PM, 5000L,
 	0,0,0),
 #endif
 
 A("The Sceptre of Might",	MACE,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DALIGN), 0, 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DALIGN|SPFX_DEFN), 0, 0,
 	PHYS(5,0),	NO_DFNS,	CARY(AD_MAGM),
 	CONFLICT,	A_LAWFUL, PM_CAVEMAN, NON_PM, 2500L, 
 	SPFX2_RAM,0,0),
@@ -805,7 +805,7 @@ A("The Sceptre of Might",	MACE,
 	// PHASING,	A_CHAOTIC, PM_CONVICT, NON_PM, 5000L,
 	// SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
 A("The Iron Ball of Levitation", HEAVY_IRON_BALL,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_LUCK|SPFX_INTEL), (SPFX_WARN), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_DALIGN|SPFX_LUCK|SPFX_INTEL), (SPFX_WARN), 0,
 	PHYS(5,0),	NO_DFNS,	CARY(AD_DRLI),
 	LEVITATION,	A_CHAOTIC, PM_CONVICT, NON_PM, 5000L,
 	SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
