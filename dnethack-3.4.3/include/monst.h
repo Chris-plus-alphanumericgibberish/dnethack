@@ -126,7 +126,8 @@ struct monst {
 	Bitfield(uhurtm,1);		/* injured by you */
 	Bitfield(mhurtu,1);		/* has injured you */
 	Bitfield(housealert,1);	/* won't accept house-based pacification */
-	
+#define BASE_DOG_ENCOURAGED_MAX		7
+	int encouraged;	/* affected by Encourage song */
 #define helpless(mon) (mon->msleeping || !(mon->mcanmove) || !(mon->mnotlaugh))	
 	
 	long mstrategy;		/* for monsters with mflag3: current strategy */
