@@ -929,15 +929,56 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, HIGH_BOOTS);
 				(void)mongets(mtmp, LEATHER_GLOVES);
 			}
-#ifdef CONVICT
+// #ifdef CONVICT
 			else if (mm == PM_MINER) {
 				(void)mongets(mtmp, PICK_AXE);
 				otmp = mksobj(BRASS_LANTERN, TRUE, FALSE);
 				(void) mpickobj(mtmp, otmp);
 				begin_burn(otmp, FALSE);
 			}
-#endif /* CONVICT */
-			else{
+// #endif /* CONVICT */
+			else if (mm == PM_TROOPER){
+				otmp = mksobj(ARM_BLASTER, TRUE, FALSE);
+				otmp->spe = 0;
+				otmp->ovar1 = 50 + d(5,10);
+				otmp->recharged = 4;
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(VIBROBLADE, TRUE, FALSE);
+				otmp->spe = 0;
+				otmp->ovar1 = 50 + d(5,10);
+				otmp->recharged = rn1(3,3);
+				(void) mpickobj(mtmp, otmp);
+
+				otmp = mksobj(HAND_BLASTER, TRUE, FALSE);
+				otmp->spe = 0;
+				otmp->ovar1 = 50 + d(5,10);
+				otmp->recharged = rn1(2,2);
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(SMALL_SHIELD, TRUE, FALSE);
+				otmp->spe = 0;
+				(void) mpickobj(mtmp, otmp);
+				
+				(void)mongets(mtmp, LEATHER_CLOAK);
+				(void)mongets(mtmp, PLASTEEL_HELM);
+				(void)mongets(mtmp, PLASTEEL_ARMOR);
+				(void)mongets(mtmp, BODYGLOVE);
+				(void)mongets(mtmp, PLASTEEL_GAUNTLETS);
+				(void)mongets(mtmp, PLASTEEL_BOOTS);
+			} else if (mm == PM_SARA__THE_LAST_ORACLE){
+				otmp = mksobj(BLINDFOLD, TRUE, FALSE);
+				otmp->spe = 0;
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(STRAITJACKET, TRUE, FALSE);
+				otmp->spe = 5;
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				(void) mpickobj(mtmp, otmp);
+			} else {
 				switch(mm){
 				case PM_SIR_GARLAND:
 					(void) mongets(mtmp, LONG_SWORD);
@@ -1250,8 +1291,112 @@ register struct monst *mtmp;
 			}
  			if (!rn2(3))
 			    (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
+		}else if(mm == PM_CHANGED) {
+			(void)mongets(mtmp, STILETTO);			
 		}else if(mm == PM_DEEP_ONE || mm == PM_DEEPER_ONE) {
-		 if(!on_level(&rlyeh_level,&u.uz)){
+		 if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
+		    switch (rn2(3)) {
+				case 0:
+					(void)mongets(mtmp, LEATHER_JACKET);
+				break;
+				case 1:
+					(void)mongets(mtmp, LEATHER_ARMOR);
+				break;
+				case 2:
+					(void)mongets(mtmp, PLASTEEL_ARMOR);
+				break;
+			}
+			(void)mongets(mtmp, FLACK_HELMET);
+			(void)mongets(mtmp, LEATHER_GLOVES);
+			(void)mongets(mtmp, HIGH_BOOTS);
+			(void)mongets(mtmp, LEATHER_CLOAK);
+		    switch (rn2(6)) {
+				case 0:
+					otmp = mksobj(ASSAULT_RIFLE, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					
+					otmp = mksobj(KNIFE, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 1:
+					otmp = mksobj(PISTOL, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, BULLET);
+					
+					otmp = mksobj(SCIMITAR, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 2:
+					otmp = mksobj(HEAVY_MACHINE_GUN, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					
+					otmp = mksobj(KNIFE, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 3:
+					otmp = mksobj(SUBMACHINE_GUN, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					
+					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 4:
+					otmp = mksobj(SHOTGUN, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+
+					(void)mongets(mtmp, SHOTGUN_SHELL);
+					(void)mongets(mtmp, SHOTGUN_SHELL);
+					
+					otmp = mksobj(KNIFE, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+				case 5:
+					otmp = mksobj(SNIPER_RIFLE, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					(void)mongets(mtmp, BULLET);
+					
+					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+					otmp->oeroded = 3;
+					(void) mpickobj(mtmp, otmp);
+				break;
+			}
+			if(!rn2(6)){
+				if(rn2(3)) (void)mongets(mtmp, FRAG_GRENADE);
+				else if(rn2(2)) (void)mongets(mtmp, GAS_GRENADE);
+				else {
+					(void)mongets(mtmp, ROCKET_LAUNCHER);
+					(void)mongets(mtmp, ROCKET);
+				}
+			}
+		 } else if(!on_level(&rlyeh_level,&u.uz)){
 		    switch (rn2(3)) {
 				case 0:
 					(void)mongets(mtmp, LEATHER_JACKET);
@@ -1381,6 +1526,46 @@ register struct monst *mtmp;
 				(void) mongets(mtmp, rnd_attack_potion(mtmp));
 				
 				if(mm == PM_MASTER_MIND_FLAYER || !rn2(3)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
+			} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
+				if(mm == PM_MASTER_MIND_FLAYER){
+					otmp = mksobj(DOUBLE_LIGHTSABER, TRUE, FALSE);
+					otmp->oerodeproof = 1;
+					otmp->spe = 4;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(ROBE, TRUE, FALSE);
+					otmp->spe = 4;
+					otmp->blessed = FALSE;
+					otmp->cursed = TRUE;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
+					otmp->spe = 4;
+					otmp->blessed = FALSE;
+					otmp->cursed = TRUE;
+					(void) mpickobj(mtmp, otmp);
+				} else {
+					otmp = mksobj(LIGHTSABER, TRUE, FALSE);
+					otmp->oerodeproof = 1;
+					otmp->spe = 1;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(ROBE, TRUE, FALSE);
+					otmp->spe = 1;
+					otmp->blessed = FALSE;
+					otmp->cursed = TRUE;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
+					otmp->spe = 1;
+					otmp->blessed = FALSE;
+					otmp->cursed = TRUE;
+					(void) mpickobj(mtmp, otmp);
+				}
 			} else {
 				if(mm == PM_MASTER_MIND_FLAYER && !rn2(3)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
 				else if(mm == PM_MIND_FLAYER && !rn2(20)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
@@ -2943,6 +3128,8 @@ register int	mmflags;
 			} else if(In_quest(&u.uz)){
 				if(Race_if(PM_DROW) && Role_if(PM_EXILE)){
 					curhouse = PEN_A_SYMBOL;
+				} else if(Role_if(PM_ANACHRONONAUT)){
+					curhouse = LAST_BASTION_SYMBOL;
 				} else if(Race_if(PM_DROW) && (in_mklev || flags.stag || rn2(3))){
 					if(Is_qstart(&u.uz)) curhouse = u.uhouse;
 					else if(Role_if(PM_NOBLEMAN)){
