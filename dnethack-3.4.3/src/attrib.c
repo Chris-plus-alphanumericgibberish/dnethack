@@ -690,7 +690,7 @@ int oldlevel, newlevel;
 
 	switch (Role_switch) {
 	case PM_ARCHEOLOGIST:   abil = arc_abil;	break;
-	case PM_ANACHRONIST:    abil = ana_abil;	break;
+	case PM_ANACHRONONAUT:    abil = ana_abil;	break;
 	case PM_BARBARIAN:      abil = bar_abil;	break;
 #ifdef BARD
 	case PM_BARD:           abil = brd_abil;	break;
