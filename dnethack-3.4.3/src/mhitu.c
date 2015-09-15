@@ -626,6 +626,16 @@ mattacku(mtmp)
 	    mattk = getmattk(mdat, i, sum, &alt_attk);
 	    if (u.uswallow && (mattk->aatyp != AT_ENGL && mattk->aatyp != AT_ILUR))
 		continue;
+		
+		/*Plasteel helms cover the face and prevent bite attacks*/
+		if((mtmp->misc_worn_check & W_ARMH) && 
+			(((which_armor(mtmp, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mtmp, W_ARMH))->otyp) == CRYSTAL_HELM) && 
+			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || 
+				(mattk->aatyp == AT_ENGL && !u.uswallow) ||
+				(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
+			)
+		) continue;
+		
 	    switch(mattk->aatyp) {
 		case AT_CLAW:	/* "hand to hand" attacks */
 		case AT_KICK:
@@ -1660,7 +1670,7 @@ dopois:
 		}
 		if (u_slip_free(mtmp,mattk)) break;
 
-		if (uarmh && rn2(8)) {
+		if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || rn2(8))) {
 		    /* not body_part(HEAD) */
 		    Your("helmet blocks the attack to your head.");
 		    break;

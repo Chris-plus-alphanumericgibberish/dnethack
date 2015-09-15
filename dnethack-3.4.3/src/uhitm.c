@@ -3031,6 +3031,14 @@ register int tmp, weptmp, tchtmp;
 	for(i = 0; i < NATTK; i++) {
 	    sum[i] = 0;
 	    mattk = getmattk(mas, i, sum, &alt_attk);
+		
+		/*Plasteel helms cover the face and prevent bite attacks*/
+		if(uarmh && 
+			(uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM) && 
+			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || 
+				(mattk->aatyp == AT_TENT && is_mind_flayer((&youmonst)->data)))
+		) continue;
+		
 	    switch(mattk->aatyp) {
 		case AT_WEAP:
 use_weapon:

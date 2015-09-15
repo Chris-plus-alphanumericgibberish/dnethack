@@ -280,6 +280,13 @@ mattackm(magr, mdef)
 	mattk = getmattk(pa, i, res, &alt_attk);
 	otmp = (struct obj *)0;
 	attk = 1;
+	
+	/*Plasteel helms cover the face and prevent bite attacks*/
+	if((magr->misc_worn_check & W_ARMH) && 
+		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM) && 
+		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
+	) continue;
+	
 	switch (mattk->aatyp) {
 	    case AT_WEAP:		/* weapon attacks */
 #ifdef TAME_RANGED_ATTACKS
@@ -1750,7 +1757,9 @@ physical:
 		    tmp = 0;
 		    break;
 		}
-		if ((mdef->misc_worn_check & W_ARMH) && rn2(8)) {
+		if ((mdef->misc_worn_check & W_ARMH) && 
+			(rn2(8) || ((which_armor(mdef, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mdef, W_ARMH))->otyp) == CRYSTAL_HELM )
+		) {
 		    if (vis) {
 			Strcpy(buf, s_suffix(Monnam(mdef)));
 			pline("%s helmet blocks %s attack to %s head.",

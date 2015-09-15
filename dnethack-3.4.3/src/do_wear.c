@@ -1769,6 +1769,11 @@ doputon()
 			You_cant("wear that!");
 			return(0);
 		}
+		if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM) && uarmh->cursed){
+			pline("The %s covers your whole face. You need to remove it first.", xname(uarmh));
+			display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
+			return 0;
+		}
 		if (otmp->oartifact && !touch_artifact(otmp, &youmonst))
 		    return 1;
 		Blindf_on(otmp);
