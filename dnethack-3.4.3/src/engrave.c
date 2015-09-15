@@ -592,6 +592,9 @@ const char * haluWard[] =  {
 	"a Tower Magthere crest",
 	"a Tower Xaxox crest",
 	
+	/* Special behavior, Last Bastion symbol */
+	"a Last Bastion insignia",
+	
 	/* Special behavior, Lolth holy symbol */
 	"a silver spider-like star",
 	
@@ -607,6 +610,9 @@ const char * haluWard[] =  {
 	/* Special behavior, Eilistraee holy symbol */
 	"a pair of dancing silver drow",
 	
+	/* Special behavior, Ghaunadaur holy symbol */
+	"a faintly luminous purple eye",
+
 	/* eternal matriarch symbol */
 	"a crest of a lost house of Svartalfheim",
 

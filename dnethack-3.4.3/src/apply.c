@@ -241,7 +241,7 @@ do_present_ring(obj)
 						tm->mpeaceful = 0;
 					}
 				}
-			} else if((obj->ovar1 == mtmp->mfaction) || 
+			} else if((obj->ovar1 == mtmp->mfaction || allied_faction(obj->ovar1, mtmp->mfaction)) || 
 				(obj->ovar1 == EILISTRAEE_SYMBOL && is_elf(mtmp->data)) || 
 				((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  mtmp->data == &mons[PM_EDDERKOP])
 			){
@@ -295,6 +295,8 @@ do_present_ring(obj)
 						(!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1 || allied_faction(uarm->ovar1,obj->ovar1))) ||
 					   ((obj->ovar1 == EDDER_SYMBOL || 
 					     obj->ovar1 == XAXOX || 
+					     obj->ovar1 == GHAUNADAUR_SYMBOL || 
+					     obj->ovar1 == LAST_BASTION_SYMBOL || 
 						 obj->ovar1 == EILISTRAEE_SYMBOL) && (!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1 || allied_faction(uarm->ovar1,obj->ovar1))) ||
 					   (uarm && uarm->ovar1 && uarm->ovar1 == obj->ovar1)
 					){

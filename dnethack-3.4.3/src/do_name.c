@@ -1260,6 +1260,8 @@ long hnum;
 			return "Tower Magthere";
 		case XAXOX:
 			return "Tower Xaxox";
+		case LAST_BASTION_SYMBOL:
+			return "Last Bastion";
 		/*holy symbols*/
 		case LOLTH_SYMBOL:
 			return "silver star bearing";
@@ -1271,6 +1273,8 @@ long hnum;
 			return "silver feather bearing";
 		case EILISTRAEE_SYMBOL:
 			return "silver dancer bearing";
+		case GHAUNADAUR_SYMBOL:
+			return "purple eye bearing";
 		case LOST_HOUSE:
 			return "silver-sign bearing";
 		case EDDER_SYMBOL:
