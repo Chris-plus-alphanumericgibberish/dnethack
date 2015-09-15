@@ -494,12 +494,12 @@ MAP
 |AA|AAAAAAA|AAA-| |-AAAAAAA-|   -|---+---|-   |-AAAAAAA-| |-AAA|AAAAAAA|AA|
 |AA---------AA-|   |---+---|    |-AAAAAAA-|    |---+---|   |-AA---------AA|
 |AAAAAAAAAAAAA|      |AAA|-----|-AAAA.AAAA-|-----|AAA|      |AAAAAAAAAAAAA|
----------------      |AAAAAAAAA|AAAA...AAAA|AAAAAAAAA|      ---------------
+---------------      |.AAAAAAAA|AAAA...AAAA|AAAAAAAA.|      ---------------
                      -------AAA|-AAAA.AAAA-|AAA-------                     
-                           |AAAA|-AAAAAAA-|AAAA|                           
+                           |.AAA|-AAAAAAA-|AAA.|                           
                            ---AAA|---+---|AAA---                           
                              |AAAAAAAAAAAAAAA|                             
-                             --AAAAAAAAAAAAA--                             
+                             --.AAAAAAAAAAA.--                             
                               ---------------                              
 ENDMAP
 # Rider locations
