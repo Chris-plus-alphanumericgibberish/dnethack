@@ -389,14 +389,13 @@ int shotlimit;
 	     * Only for valid launchers 
 	     * (currently oc_rof conflicts with wsdam)
 	     */
-	if (objects[(blaster->otyp)].oc_rof) 
-		multishot += (objects[(blaster->otyp)].oc_rof - 1);
-	if (blaster->otyp != RAYGUN && blaster->altmode == WP_MODE_SINGLE)
-	  /* weapons switchable b/w full/semi auto */
-		multishot = 1;
-	else if (blaster->otyp != RAYGUN && blaster->altmode == WP_MODE_BURST)
-		multishot = ((multishot > 3) ? (multishot / 3) : 1);
-	/* else it is auto == no change */
+	if (objects[(blaster->otyp)].oc_rof && blaster->otyp != RAYGUN && blaster->altmode != WP_MODE_SINGLE) {
+		if (blaster->otyp != RAYGUN && blaster->altmode == WP_MODE_BURST)
+			multishot += objects[(blaster->otyp)].oc_rof / 3;
+		/* else it is full auto */
+		else multishot += (objects[(blaster->otyp)].oc_rof - 1);
+	}
+	/* single shot, don't add anything */
 
 	if(blaster->otyp == RAYGUN)
 		return zap_raygun(blaster,multishot,shotlimit); 

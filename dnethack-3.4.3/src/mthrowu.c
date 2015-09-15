@@ -900,14 +900,20 @@ struct monst *mtmp;
 		    mwep && mwep->otyp == ORCISH_BOW))
 		multishot++;
 
-		if(is_blaster(otmp) && otmp == mwep){
-			if((long)multishot > otmp->ovar1) multishot = (int)otmp->ovar1;
-		} else if ((long)multishot > otmp->quan) multishot = (int)otmp->quan;
 	    if (multishot < 1) multishot = 1;
 	    else multishot = rnd(multishot);
 //#ifdef FIREARMS
-	    if (mwep && objects[mwep->otyp].oc_rof && is_launcher(mwep))
-		multishot += objects[mwep->otyp].oc_rof;
+	    // if (mwep && objects[mwep->otyp].oc_rof && is_launcher(mwep))
+		// multishot += objects[mwep->otyp].oc_rof;
+		if (((is_blaster(otmp) && otmp == mwep) || ammo_and_launcher(otmp, mwep))
+			&& objects[(mwep->otyp)].oc_rof && mwep->otyp != RAYGUN && mwep->altmode != WP_MODE_SINGLE
+		) {
+			if (mwep->otyp != RAYGUN && mwep->altmode == WP_MODE_BURST)
+				multishot += objects[(mwep->otyp)].oc_rof / 3;
+			/* else it is full auto */
+			else multishot += (objects[(mwep->otyp)].oc_rof - 1);
+		}
+		/* single shot, don't add anything */
 //#endif
 	    if(is_blaster(otmp) && otmp == mwep){
 			if((long)multishot > otmp->ovar1) multishot = (int)otmp->ovar1;
