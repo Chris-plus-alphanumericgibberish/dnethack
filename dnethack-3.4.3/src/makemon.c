@@ -3430,7 +3430,10 @@ register int	mmflags;
 			break;
 		case S_JABBERWOCK:
 		case S_NYMPH:
-			if (rn2(5) && !u.uhave.amulet && mndx != PM_NIMUNE) mtmp->msleeping = 1;
+			if (rn2(5) && !u.uhave.amulet 
+				&& mndx != PM_NIMUNE && mndx != PM_INTONER 
+				&& !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))
+			) mtmp->msleeping = 1;
 		break;
 		case S_ORC:
 			if (Race_if(PM_ELF)) mtmp->mpeaceful = FALSE;
@@ -3514,6 +3517,9 @@ register int	mmflags;
 				mtmp->m_lev = max(mtmp->m_lev,30);
 				mtmp->mhpmax = 4*8*mtmp->m_lev;
 				mtmp->mhp = mtmp->mhpmax;
+			}
+			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
+				mtmp->mstrategy &= ~(STRAT_WAITFORU|STRAT_CLOSE);
 			}
 		break;
 		case S_DEMON:
@@ -4577,7 +4583,7 @@ register struct permonst *ptr;
 	if (ptr->msound == MS_NEMESIS)	return FALSE;
 	
 	if (always_peaceful(ptr)) return TRUE;
-	if(!u.uevent.udemigod && mndx==PM_UVUUDAUM) return TRUE;
+	if(!u.uevent.udemigod && mndx==PM_UVUUDAUM && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))) return TRUE;
 	
 	if(ual == A_VOID) return FALSE;
 	
