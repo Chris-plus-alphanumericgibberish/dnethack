@@ -831,6 +831,13 @@ register struct monst *mtmp;
 		}
 	}
 	
+	if(mtmp->data == &mons[PM_MAD_SEER]){
+		if(!rn2(80)){
+			mtmp->mnotlaugh=0;
+			mtmp->mlaughing=rnd(5);
+		}
+	}
+	
 	/* stunned monsters get un-stunned with larger probability */
 	if (mtmp->mstun && !rn2(10)) mtmp->mstun = 0;
 
