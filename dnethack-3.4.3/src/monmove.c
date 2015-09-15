@@ -567,7 +567,22 @@ mon_regen(mon, digest_meal)
 struct monst *mon;
 boolean digest_meal;
 {
-	if (mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
+	if(!DEADMONSTER(mon) && mon->mhp < mon->mhpmax/2 && (mon->data == &mons[PM_CHANGED] || mon->data == &mons[PM_WARRIOR_CHANGED])){
+		mon->mhp -= 1;
+		flags.cth_attk=TRUE;//state machine stuff.
+		create_gas_cloud(mon->mx+rn2(3)-1, mon->my+rn2(3)-1, rnd(3), rnd(3)+1);
+		flags.cth_attk=FALSE;
+		if(mon->mhp == 0){
+			mondied(mon);
+			return;
+		}
+		if (mon->mspec_used) mon->mspec_used--;
+		if (digest_meal) {
+			if (mon->meating) mon->meating--;
+		}
+		return;
+	}
+	if(mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
 	if(!nonliving(mon->data)){
 		if (mon->mhp < mon->mhpmax && (moves % 20 == 0)) mon->mhp += mon->m_lev;
 	}

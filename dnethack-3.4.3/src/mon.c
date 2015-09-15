@@ -611,6 +611,18 @@ register struct monst *mtmp;
 			obj->corpsenm = PM_GARO_MASTER;
 		goto default_1;
 		break;
+	    case PM_CHANGED:
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_gas_cloud(x, y, 4, rnd(3)+1);
+			flags.cth_attk=FALSE;
+		goto default_1;
+		break;
+	    case PM_WARRIOR_CHANGED:
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_gas_cloud(x, y, 5, rnd(3)+1);
+			flags.cth_attk=FALSE;
+		goto default_1;
+		break;
 	    default_1:
 	    default:
 		if (mvitals[mndx].mvflags & G_NOCORPSE)
