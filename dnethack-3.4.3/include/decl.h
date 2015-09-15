@@ -149,6 +149,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 		d_tower6, d_tower7, d_tower8, d_tower9, d_towertop;
 	/*Fort Knox*/
     d_level	d_knox_level;
+	d_level d_minetown_level;
 #ifdef RECORD_ACHIEVE
     d_level     d_mineend_level;
     d_level     d_sokoend_level;
@@ -250,6 +251,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define towertop_level	(dungeon_topology.d_towertop)
 	/*Fort Knox*/
 #define knox_level		(dungeon_topology.d_knox_level)
+#define minetown_level           (dungeon_topology.d_minetown_level)
 #ifdef RECORD_ACHIEVE
 #define mineend_level           (dungeon_topology.d_mineend_level)
 #define sokoend_level           (dungeon_topology.d_sokoend_level)
