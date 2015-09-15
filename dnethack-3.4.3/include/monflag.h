@@ -48,6 +48,7 @@
 #define MS_WERE		39	/* lycanthrope in human form */
 #define MS_BOAST	40	/* giants */
 #define MS_DREAD	41	/* song of the dread seraphim */
+#define MS_SONG		43	/* other singers */
 
 
 #define MR_FIRE		0x001	/* 1 resists fire */
