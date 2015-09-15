@@ -2736,6 +2736,7 @@ arti_invoke(obj)
 	int n, damage;
 	struct permonst *pm;
 	struct monst *mtmp = 0;
+	int sring = find_sring();
    if(!oart || !oart->inv_prop) {
 	if(obj->otyp == CRYSTAL_BALL)
 	    use_crystal_ball(obj);
