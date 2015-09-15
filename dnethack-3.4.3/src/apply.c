@@ -36,6 +36,7 @@ STATIC_DCL void FDECL(use_grease, (struct obj *));
 STATIC_DCL void FDECL(use_trap, (struct obj *));
 STATIC_DCL void FDECL(use_stone, (struct obj *));
 STATIC_DCL int FDECL(use_sensor, (struct obj *));
+STATIC_DCL int NDECL(sensorMenu);
 // STATIC_DCL int FDECL(use_hypospray, (struct obj *));
 STATIC_DCL int FDECL(use_droven_cloak, (struct obj **));
 STATIC_DCL int FDECL(use_darkweavers_cloak, (struct obj *));
@@ -2401,10 +2402,136 @@ STATIC_OVL int
 use_sensor(sensor)
 struct obj *sensor;
 {
+	int scantype = 0;
 	if(sensor->spe <= 0){
 		pline("It seems inert.");
 		return 0;
+	} else {
+		scantype = sensorMenu();
+		if(!scantype) return 0;
+		
+		switch(scantype){
+			case POT_MONSTER_DETECTION:
+				monster_detect(sensor, 0);
+			break;
+			case POT_OBJECT_DETECTION:
+				object_detect(sensor, 0);
+			break;
+			case SPE_CLAIRVOYANCE:
+				do_vicinity_map(u.ux,u.uy);
+			break;
+			case WAN_PROBING:{
+				struct obj *pobj;
+				if (!getdir((char *)0)) return 0;
+				if (u.dz < 0) {
+					You("scan the %s thoroughly.  It seems it is %s.", ceiling(u.ux,u.uy), an(ceiling(u.ux,u.uy)));
+				} else if(u.dz > 0) {
+					pobj = level.objects[u.ux][u.uy];
+					for(pobj; pobj; pobj = pobj->nexthere){
+						/* target object has now been "seen (up close)" */
+						pobj->dknown = 1;
+						if (Is_container(pobj) || pobj->otyp == STATUE) {
+							if (!pobj->cobj)
+							pline("%s empty.", Tobjnam(pobj, "are"));
+							else {
+							struct obj *o;
+							/* view contents (not recursively) */
+							for (o = pobj->cobj; o; o = o->nobj)
+								o->dknown = 1;	/* "seen", even if blind */
+							(void) display_cinventory(pobj);
+							}
+						}
+					}
+					You("probe beneath the %s.", surface(u.ux,u.uy));
+					display_binventory(u.ux, u.uy, TRUE);
+				} else {
+					struct monst *mat = m_at(u.ux+u.dx,u.uy+u.dy);
+					if(mat) probe_monster(mat);
+					pobj = level.objects[u.ux+u.dx][u.uy+u.dy];
+					for(pobj; pobj; pobj = pobj->nexthere){
+						/* target object has now been "seen (up close)" */
+						pobj->dknown = 1;
+						if (Is_container(pobj) || pobj->otyp == STATUE) {
+							if (!pobj->cobj)
+							pline("%s empty.", Tobjnam(pobj, "are"));
+							else {
+							struct obj *o;
+							/* view contents (not recursively) */
+							for (o = pobj->cobj; o; o = o->nobj)
+								o->dknown = 1;	/* "seen", even if blind */
+							(void) display_cinventory(pobj);
+							}
+						}
+					}
+				}
+			} break;
+			case WAN_SECRET_DOOR_DETECTION:
+				findit();
+			break;
 	}
+	}
+	sensor->spe--;
+}
+
+STATIC_OVL int
+sensorMenu()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet;
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf, "Functions");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	incntlet = 'c';
+	Sprintf(buf, "Scan for creatures");
+	any.a_int = POT_MONSTER_DETECTION;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+
+	incntlet = 'd';
+	Sprintf(buf, "Scan for secret doors");
+	any.a_int = WAN_SECRET_DOOR_DETECTION;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+
+	incntlet = 'o';
+	Sprintf(buf, "Scan for objects");
+	any.a_int = POT_OBJECT_DETECTION;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+
+	incntlet = 'p';
+	Sprintf(buf, "Focused probe");
+	any.a_int = WAN_PROBING;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+
+	incntlet = 't';
+	Sprintf(buf, "Survey terrain");
+	any.a_int = SPE_CLAIRVOYANCE;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	
+	end_menu(tmpwin, "Choose function:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_int : 0;
+}
 }
 
 /* Place a landmine/bear trap.  Helge Hafting */
