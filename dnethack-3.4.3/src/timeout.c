@@ -1501,9 +1501,9 @@ long timeout;
 			if(obj->age <= 0){
 				obj->age = 0;//From hitting targets
 				lightsaber_deactivate(obj, FALSE);
-		}
-		if (obj && obj->age && obj->lamplit) /* might be deactivated */
-		    begin_burn(obj, TRUE);
+			}
+			if (obj && obj->age && obj->lamplit) /* might be deactivated */
+			    begin_burn(obj, TRUE);
 		break;
 //#ifdef FIREARMS
 	    case STICK_OF_DYNAMITE:
@@ -1545,7 +1545,8 @@ lightsaber_deactivate (obj, timer_attached)
 		You("hear a lightsaber deactivate.");
 	    }
 	}
-	if (obj->otyp == DOUBLE_LIGHTSABER) obj->altmode = FALSE;
+	// if (obj->otyp == DOUBLE_LIGHTSABER)
+	obj->altmode = FALSE;
 	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = TRUE;
 	end_burn(obj, timer_attached);
 }
@@ -1605,10 +1606,10 @@ begin_burn(obj, already_lit)
 		do_timer = FALSE;
 		break;
 	    case DOUBLE_LIGHTSABER:
-	    	if (obj->altmode && obj->age > 1) 
-				obj->age--; /* Double power usage */
 	    case LIGHTSABER:
 	    case BEAMSWORD:
+	    	if (obj->altmode && obj->age > 1) 
+				obj->age--; /* Double power usage */
 			if(obj->oartifact == ART_ATMA_WEAPON){
 				if(obj->age <= 0){
 					if(Drain_resistance) return;

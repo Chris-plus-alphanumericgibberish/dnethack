@@ -1387,7 +1387,7 @@ struct obj *obj;
 		   obj->otyp == DWARVISH_IRON_HELM)
 		    pline("%s lamp is now off.", Shk_Your(buf, obj));
 		else if(is_lightsaber(obj)) {
-		    if (obj->otyp == DOUBLE_LIGHTSABER) {
+		    if (obj->otyp == DOUBLE_LIGHTSABER || obj->oartifact == ART_ANNULUS) {
 			/* Do we want to activate dual bladed mode? */
 			if (!obj->altmode && (!obj->cursed || rn2(4))) {
 			    You("ignite the second blade of %s.", yname(obj));

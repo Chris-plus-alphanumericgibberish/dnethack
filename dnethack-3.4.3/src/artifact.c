@@ -513,7 +513,10 @@ boolean
 arti_shattering(obj)
 struct obj *obj;
 {
-    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_SHATTER));
+    return (obj && (
+		(obj->oartifact && spec_ability2(obj, SPFX2_SHATTER)) ||
+		(is_lightsaber(obj) && obj->lamplit)
+	));
 }
 
 boolean
@@ -555,7 +558,10 @@ boolean
 arti_shining(obj)
 struct obj *obj;
 {
-    return (obj && obj->oartifact && spec_ability2(obj, SPFX2_SHINING));
+    return (obj && (
+		(obj->oartifact && spec_ability2(obj, SPFX2_SHINING)) ||
+		(is_lightsaber(obj) && obj->lamplit)
+	));
 }
 
 boolean

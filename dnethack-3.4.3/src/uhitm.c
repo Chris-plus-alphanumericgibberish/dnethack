@@ -1132,7 +1132,9 @@ int thrown;
 				setmnotwielded(mon,monwep);
 				MON_NOWEP(mon);
 				mon->weapon_check = NEED_WEAPON;
-				pline("%s %s %s from the force of your blow!",
+				if(is_lightsaber(obj)) Your("energy blade slices %s %s in two!",
+				      s_suffix(mon_nam(mon)), xname(monwep));
+				else pline("%s %s %s from the force of your blow!",
 				      s_suffix(Monnam(mon)), xname(monwep),
 				      otense(monwep, "shatter"));
 				m_useup(mon, monwep);
@@ -1461,9 +1463,10 @@ defaultvalue:
 					 * Things like silver wands can arrive here so
 					 * so we need another silver check.
 					 */
-					if ( (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || 
+					if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || 
 							(thrown && obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) )
-								&& hates_silver(mdat)) {
+								&& hates_silver(mdat)
+					) {
 						tmp += rnd(20);
 						if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
 						else silvermsg = TRUE;

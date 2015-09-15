@@ -1017,7 +1017,9 @@ register const char *let,*word;
 		     otyp != AMULET_OF_YENDOR && otyp != FAKE_AMULET_OF_YENDOR))
 		|| (!strcmp(word, "write with") &&
 		    ((otmp->oclass == TOOL_CLASS &&
-		     otyp != MAGIC_MARKER && otyp != TOWEL && !spec_ability3(otmp, SPFX3_ENGRV)) ||
+		     otyp != MAGIC_MARKER && otyp != TOWEL 
+			 && otyp != LIGHTSABER && otyp != BEAMSWORD && otyp != DOUBLE_LIGHTSABER 
+			 && !spec_ability3(otmp, SPFX3_ENGRV)) ||
 			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strcmp(word, "tin") &&
 		    (otyp != CORPSE || !tinnable(otmp)))
@@ -1114,6 +1116,12 @@ register const char *let,*word;
 			allowall = TRUE;
 		}
 	    }
+		
+		//Make exceptions for lightsabers (examines hilt)
+		if (otmp->otyp == LIGHTSABER && !strcmp(word, "read")){
+			bp[foo++] = otmp->invlet;
+			allowall = TRUE;//for whatever reason, must allow all in order to get message other than "silly"
+		}
 		//Make an exception for readable artifacts.
 		if (otmp->oartifact && 
 			(otmp->oartifact == ART_EXCALIBUR || 
