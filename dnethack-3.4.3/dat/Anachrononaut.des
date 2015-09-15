@@ -1,0 +1,1201 @@
+#	SCCS Id: @(#)Priest.des	3.4	2002/04/08
+#	Copyright (c) 1989 by Jean-Christophe Collet
+#	Copyright (c) 1991-2 by M. Stephenson
+# NetHack may be freely redistributed.  See license for details.
+#
+#	The "start" level for the quest.
+#
+#	Here you meet your (besieged) class leader, the last oracle
+#	and receive your quest assignment.
+#
+
+MAZE: "Ana-strt",' '
+FLAGS: noteleport,shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0--------------------------------------------------------------------------- 
+1|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+2|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+3|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|T...+.........+.|..|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|..|.|.........|....|.----------------------------------------------------- 
+7|..|.|.---F-F-.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|..|.|.F.|.|.|.|....|.-----------------------.....------------------------- 
+9|..+.|.|-|-|-|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+0|--|.|.F.| |.F.|....+...---------------------.....--------------------...-- 
+1|..+.|.|-|---|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+2|..|.|.|.|.|.F.|....|.-----------------------.....------------------------- 
+3|..|.|.-F-F---.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|..|.|.........|....|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|T...+.........+.|..|.----------------------------------------------------- 
+7|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+9|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+0--------------------------------------------------------------------------- 
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+CONTAINER:'(',"chest",(16,01)
+	OBJECT:')',"arm blaster",contained, uncursed, 0
+	OBJECT:')',"hand blaster",contained, uncursed, 0
+	OBJECT:')',"hand blaster",contained, uncursed, 0
+	OBJECT:')',"hand blaster",contained, uncursed, 0
+	OBJECT:')',"hand blaster",contained, uncursed, 0
+	OBJECT:'(',"power pack",contained, uncursed, 0
+	OBJECT:'(',"power pack",contained, uncursed, 0
+CONTAINER:'(',"chest",(17,01)
+	OBJECT:')',"assault rifle",contained, uncursed, 0
+	OBJECT:')',"assault rifle",contained, uncursed, 0
+	OBJECT:')',"assault rifle",contained, uncursed, 0
+	OBJECT:')',"assault rifle",contained, uncursed, 0
+	OBJECT:')',"rifle",contained, uncursed, 0
+	OBJECT:')',"rifle",contained, uncursed, 0
+	OBJECT:')',"rifle",contained, uncursed, 0
+	OBJECT:')',"rifle",contained, uncursed, 0
+	OBJECT:')',"bullet",contained, uncursed, 0
+	OBJECT:')',"bullet",contained, uncursed, 0
+	OBJECT:')',"bullet",contained, uncursed, 0
+	OBJECT:')',"bullet",contained, uncursed, 0
+	OBJECT:')',"bullet",contained, uncursed, 0
+	OBJECT:')',"bullet",contained, uncursed, 0
+	OBJECT:')',"silver bullet",contained, uncursed, 0
+	OBJECT:')',"silver bullet",contained, uncursed, 0
+	OBJECT:')',"silver bullet",contained, uncursed, 0
+CONTAINER:'(',"chest",(18,01)
+	OBJECT:')',"shotgun",contained, uncursed, 0
+	OBJECT:')',"shotgun",contained, uncursed, 0
+	OBJECT:')',"shotgun",contained, uncursed, 0
+	OBJECT:')',"shotgun",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+	OBJECT:')',"shotgun shell",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,01)
+	OBJECT:')',"grenade launcher",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+	OBJECT:')',"frag grenade",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,02)
+	OBJECT:')',"grenade launcher",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+	OBJECT:')',"gas grenade",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,03)
+	OBJECT:')',"force pike",contained, uncursed, 2
+	OBJECT:')',"force pike",contained, uncursed, 2
+	OBJECT:')',"force pike",contained, uncursed, 2
+	OBJECT:')',"vibroblade",contained, uncursed, 0
+	OBJECT:')',"vibroblade",contained, uncursed, 0
+	OBJECT:')',"vibroblade",contained, uncursed, 0
+	OBJECT:')',"vibroblade",contained, uncursed, 0
+	OBJECT:')',"vibroblade",contained, uncursed, 0
+	OBJECT:')',"vibroblade",contained, uncursed, 0
+	OBJECT:')',"vibroblade",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,04)
+	OBJECT:'(',"lightsaber",contained, uncursed, 3
+	OBJECT:'(',"lightsaber",contained, uncursed, 3
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0--------------------------------------------------------------------------- 
+1|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+2|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+3|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|T...+.........+.|..|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|..|.|.........|....|.----------------------------------------------------- 
+7|..|.|.---F-F-.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|..|.|.F.|.|.|.|....|.-----------------------.....------------------------- 
+9|..+.|.|-|-|-|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+0|--|.|.F.| |.F.|....+...---------------------.....--------------------...-- 
+1|..+.|.|-|---|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+2|..|.|.|.|.|.F.|....|.-----------------------.....------------------------- 
+3|..|.|.-F-F---.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|..|.|.........|....|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|T...+.........+.|..|.----------------------------------------------------- 
+7|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+9|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+0--------------------------------------------------------------------------- 
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+CONTAINER:'(',"chest",(16,19)
+	OBJECT:')',"cutting laser",contained, uncursed, 0
+	OBJECT:')',"cutting laser",contained, uncursed, 0
+	OBJECT:'(',"pick-axe",contained, uncursed, 0
+	OBJECT:'(',"pick-axe",contained, uncursed, 0
+	OBJECT:'(',"pick-axe",contained, uncursed, 0
+	OBJECT:'(',"power pack",contained, uncursed, 0
+CONTAINER:'(',"chest",(17,19)
+	OBJECT:'(',"sensor pack",contained, uncursed, 0
+	OBJECT:'(',"sensor pack",contained, uncursed, 0
+	OBJECT:'(',"sensor pack",contained, uncursed, 0
+	OBJECT:'(',"power pack",contained, uncursed, 0
+CONTAINER:'(',"chest",(18,19)
+	OBJECT:'(',"hypospray",contained, uncursed, 0
+	OBJECT:'(',"hypospray",contained, uncursed, 0
+	OBJECT:'(',"hypospray",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,19)
+	OBJECT:'(',"bullet fabber",contained, uncursed, 0
+	OBJECT:'(',"bullet fabber",contained, uncursed, 0
+	OBJECT:'(',"bullet fabber",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,18)
+	OBJECT:'[',"plasteel helm",contained, uncursed, 0
+	OBJECT:'[',"plasteel armor",contained, uncursed, 0
+	OBJECT:'[',"plasteel gauntlets",contained, uncursed, 0
+	OBJECT:'[',"plasteel boots",contained, uncursed, 0
+	OBJECT:'[',"plasteel helm",contained, uncursed, 0
+	OBJECT:'[',"plasteel armor",contained, uncursed, 0
+	OBJECT:'[',"plasteel gauntlets",contained, uncursed, 0
+	OBJECT:'[',"plasteel boots",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,17)
+	OBJECT:'[',"jumpsuit",contained, uncursed, 0
+	OBJECT:'[',"jumpsuit",contained, uncursed, 0
+	OBJECT:'[',"bodyglove",contained, uncursed, 0
+	OBJECT:'[',"bodyglove",contained, uncursed, 0
+	OBJECT:'[',"bodyglove",contained, uncursed, 0
+	OBJECT:'[',"bodyglove",contained, uncursed, 0
+CONTAINER:'(',"chest",(19,16)
+	OBJECT:'(',"expensive camera",contained, uncursed, 0
+	OBJECT:'(',"expensive camera",contained, uncursed, 0
+	OBJECT:'(',"credit card",contained, uncursed, 0
+	OBJECT:'(',"credit card",contained, uncursed, 0
+	OBJECT:'(',"credit card",contained, uncursed, 0
+	OBJECT:'(',"credit card",contained, uncursed, 0
+	OBJECT:'(',"mirror",contained, uncursed, 0
+	OBJECT:'(',"mirror",contained, uncursed, 0
+	OBJECT:'(',"mirror",contained, uncursed, 0
+	OBJECT:'(',"towel",contained, uncursed, 0
+	OBJECT:'(',"towel",contained, uncursed, 0
+	OBJECT:'(',"towel",contained, uncursed, 0
+	OBJECT:'(',"towel",contained, uncursed, 0
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0--------------------------------------------------------------------------- 
+1|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+2|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+3|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|T...+.........+.|..|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|..|.|.........|....|.----------------------------------------------------- 
+7|..|.|.---F-F-.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|..|.|.F.|.|.|.|....|.-----------------------.....------------------------- 
+9|..+.|.|-|-|-|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+0|--|.|.F.| |.F.|....+...---------------------.....--------------------...-- 
+1|..+.|.|-|---|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+2|..|.|.|.|.|.F.|....|.-----------------------.....------------------------- 
+3|..|.|.-F-F---.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|..|.|.........|....|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|T...+.........+.|..|.----------------------------------------------------- 
+7|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+9|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+0--------------------------------------------------------------------------- 
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+CONTAINER:'(',"chest",(01,06)
+	OBJECT:'%',"K-ration",contained
+	OBJECT:'%',"protein pill",contained
+	OBJECT:'%',"protein pill",contained
+CONTAINER:'(',"chest",(01,07)
+	OBJECT:'%',"C-ration",contained
+	OBJECT:'%',"protein pill",contained
+	OBJECT:'%',"protein pill",contained
+CONTAINER:'(',"chest",(01,08)
+	OBJECT:'%',"C-ration",contained
+	OBJECT:'%',"protein pill",contained
+	OBJECT:'%',"protein pill",contained
+CONTAINER:'(',"chest",(01,09)
+	OBJECT:'%',"K-ration",contained
+	OBJECT:'%',"protein pill",contained
+	OBJECT:'%',"protein pill",contained
+CONTAINER:'(',"tinning kit",(01,09)
+
+CONTAINER:'(',"chest",(01,11)
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+CONTAINER:'(',"chest",(01,12)
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+CONTAINER:'(',"chest",(01,13)
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+CONTAINER:'(',"chest",(01,14)
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'+',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+	OBJECT:'?',random,contained
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0--------------------------------------------------------------------------- 
+1|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+2|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+3|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|T...+.........+.|..|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|..|.|.........|....|.----------------------------------------------------- 
+7|..|.|.---F-F-.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|..|.|.F.|.|.|.|....|.-----------------------.....------------------------- 
+9|..+.|.|-|-|-|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+0|--|.|.F.| |.F.|....+...---------------------.....--------------------...-- 
+1|..+.|.|-|---|.|....|. . - - - - - - - - - - . . . - - - - - - - - - - . -- 
+2|..|.|.|.|.|.F.|....|.-----------------------.....------------------------- 
+3|..|.|.-F-F---.|....|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+4|..|.|.........|....|.----------------------------------------------------- 
+5----+-+---------+----. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+6|T...+.........+.|..|.----------------------------------------------------- 
+7|P{T.|S-S-S-S-S|S-..|. - - - - - - - - - - - - - - - - - - - - - - - - - -- 
+8|PT{.|.|.|.|.|.|....|------------------------------------------------------ 
+9|PPPT|.|.|.|.|.|....|------------------------------------------------------ 
+0--------------------------------------------------------------------------- 
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+# Portal arrival point
+BRANCH:(20,00,75,18),(0,0,0,0)
+MAZEWALK:(22,09),north
+MAZEWALK:(22,11),south
+# Stairs
+STAIR: (72,10,72,10), (0,0,0,0), down
+
+REGION:(00,00,20,20),lit,"ordinary"
+REGION:(21,09,23,11),lit,"ordinary"
+
+REGION:(01,06,02,09),lit,"food shop"
+REGION:(01,11,02,14),lit,"book shop"
+# NON_DIGGABLE:(00,00,20,20)
+
+# Doors
+DOOR:closed,(03,09)
+DOOR:closed,(03,11)
+
+DOOR:closed,(04,05)
+DOOR:closed,(05,04)
+DOOR:locked,(06,05)
+DOOR:locked,(06,15)
+DOOR:closed,(05,16)
+DOOR:closed,(04,15)
+
+DOOR:closed,(15,04)
+DOOR:closed,(16,05)
+DOOR:closed,(16,15)
+DOOR:closed,(15,16)
+
+DOOR:locked,(20,10)
+
+# Leader
+MONSTER:'@',"Sara, the Last Oracle",(08,10)
+MONSTER:'@',"nurse",(06,10),peaceful
+MONSTER:'@',"nurse",(06,09),peaceful
+MONSTER:'@',"mad seer",(08,08), peaceful
+MONSTER:'@',"mad seer",(10,08), peaceful
+MONSTER:'@',"mad seer",(12,08), peaceful
+MONSTER:'@',"mad seer",(12,10), peaceful
+MONSTER:'@',"mad seer",(12,12), peaceful
+MONSTER:'@',"mad seer",(10,12), peaceful
+MONSTER:'@',"mad seer",(08,12), peaceful
+
+MONSTER:'@',"trooper",(16,06)
+MONSTER:'@',"trooper",(17,06)
+MONSTER:'@',"trooper",(18,06)
+MONSTER:'@',"trooper",(16,07)
+MONSTER:'@',"trooper",(17,07)
+MONSTER:'@',"trooper",(16,08)
+MONSTER:'@',"trooper",(16,09)
+
+MONSTER:'@',"trooper",(16,10)
+MONSTER:'@',"trooper",(16,11)
+MONSTER:'@',"trooper",(17,12)
+MONSTER:'@',"trooper",(16,12)
+MONSTER:'@',"trooper",(18,13)
+MONSTER:'@',"trooper",(17,13)
+MONSTER:'@',"trooper",(16,13)
+
+
+MONSTER:'@',"trooper",(46,10)
+MONSTER:'@',"trooper",(47,10)
+MONSTER:'@',"trooper",(48,10)
+
+MONSTER:'@',"trooper",(47,11)
+MONSTER:'@',"trooper",(47,09)
+
+
+MONSTER:'@',"hedrow warrior",(06,01),peaceful
+MONSTER:'C',"drider",(08,01),peaceful
+MONSTER:'@',"drow",(10,01),peaceful
+MONSTER:'@',"drow",(12,01),peaceful
+MONSTER:'@',"hedrow warrior",(14,01),peaceful
+
+MONSTER:'@',"hedrow warrior",(06,01)
+MONSTER:'@',"hedrow warrior",(06,01)
+
+MONSTER:'@',"human",(06,19),peaceful
+MONSTER:'@',"elf",(08,19),peaceful
+MONSTER:'@',"human",(10,19),peaceful
+MONSTER:'@',"human",(12,19),peaceful
+MONSTER:'@',"incantifier",(14,19),peaceful
+
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#------------     -----------------------------------------------------------
+#|    |     |     |   |     |   |     |     |   |   |   |     |             |
+#|    |     |     |   |     |   |     |     |   |   |   |     |             |
+#| * *|* * *|* * *|* *|* * *|* *|* * *|* * *|* *|* *|* *|* * *|* * *-*-*-*-*|
+#|    |     |     |   |     |   |     |     |   |   |   |     |      -------|
+#--*-*-*-*-*-* * *|* *|--*--|* *|*-*-----*-*|* *|* *|* *|*-*-*|* * *-*-*-*-*|
+#                 -----     -----           -------------     |      -------|
+#  *-*-*-*-*-*-*-*-* * *-*-* * * * * * * * * * * * * * * * * *|* * * *-*-*-*|
+#        - - - - - ---------------------    --------------    ---------------
+#  *.*.*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* * *-*-*-*-*-*-*-* * * * * * * * * * 
+#  ..... - - - - - ---------------------    --------------   --------------- 
+#  *.*.*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* * * * * * * * * * * * *-*-*-*-*-*-*-* 
+#  - - - - - - - - -------------------    -----------        --------------- 
+#  * * * * *-*-*-*-*-* * * * * * * * * * *|* * * * *|* * * * * *-*-*-*-*-*-* 
+#----------           -----     -----     |         |--------                
+#| * *|* *|*---*---*--|* *|*-*-*|* *|--*--|* * * * *|* *|* *|* * * *-*---*---
+#|    |   |     |     |   |     |   |     |         |   |   |-------|       |
+#| * *|* *|* * *|* * *|* *|* * *|* *|* * *|* * * * *|* *|* *|* * * *|* * * *|
+#|    |   |     |     |   |     |   |     |         |   |   |       |       |
+#| * *|* *|* * *|* * *|* *|* * *|* *|* * *|* * * * *|* *|* *|* * * *|* * * *|
+#----------------------------------------------------------------------------
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+MAZE:"Ana-loca",' '
+FLAGS: noteleport,shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0------------.....-----------------------------------------------------------
+1|....|.....|.....|...|.....|...|.....|.....|...|...|...|.....|.............|
+2|....|.....|.....|...|.....|...|.....|.....|...|...|...|.....|.............|
+3|. . | . . | . . | . | . . | . | . . | . . | . | . | . | . . | . . - - - - |
+4|....|.....|.....|...|.....|...|.....|.....|...|...|...|.....|......-------|
+5-- - - - - - . . | . |-- --| . | - ----- - | . | . | . | - - | . . - - - - |
+6.................-----.....-----...........-------------.....|......-------|
+7.. - - - - - - - - . . - - . . . . . . . . . . . . . . . . . | . . . - - - |
+8........-.-.-.-.-.---------------------....--------------....---------------
+9.. . . - - - - - - - - - - - - - - - - . . - - - - - - - . . . . . . . . . .
+0........-.-.-.-.-.---------------------....--------------...---------------.
+1.. . . - - - - - - - - - - - - - - - . . . . . . . . . . . . - - - - - - - .
+2..-.-.-.-.-.-.-.-.-------------------....-----------........---------------.
+3.. . . . . - - - - - . . . . . . . . . . | . . . . | . . . . . - - - - - - .
+4----------...........-----.....-----.....|.........|--------................
+5|. . | . | --- --- --| . | - - | . |-- --| . . . . | . | . | . . . - --- ---
+6|....|...|.....|.....|...|.....|...|.....|.........|...|...|-------|.......|
+7|. . | . | . . | . . | . | . . | . | . . | . . . . | . | . | . . . | . . . |
+8|....|...|.....|.....|...|.....|...|.....|.........|...|...|.......|.......|
+9|. . | . | . . | . . | . | . . | . | . . | . . . . | . | . | . . . | . . . |
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+STAIR: (00,00,25,20),(00,00,00,00), up
+STAIR: (45,00,75,20),(00,00,00,00), down
+MAZEWALK:(02,09),east
+
+# MONSTER:'U',"umber hulk",random
+# MONSTER:'U',"umber hulk",random
+# MONSTER:'U',"umber hulk",random
+# MONSTER:'U',"umber hulk",random
+# MONSTER:'U',"umber hulk",random
+# MONSTER:'U',"umber hulk",random
+
+# MONSTER:'U',"hooloovoo",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+
+# MONSTER: 'h', "mind flayer", random
+# MONSTER: 'h', "mind flayer", random
+# MONSTER: 'h', "mind flayer", random
+# MONSTER: 'h', "mind flayer", random
+# MONSTER: 'h', "master mind flayer", random
+
+# MONSTER: '\'', "brain golem", random
+# MONSTER: '\'', "brain golem", random
+# MONSTER: '\'', "brain golem", random
+# MONSTER: '\'', "brain golem", random
+# MONSTER: '\'', "semblance", random
+
+MONSTER:'w',"long worm",random
+MONSTER:'w',"long worm",random
+MONSTER:'w',"long worm",random
+MONSTER:'w',"long worm",random
+MONSTER:'w',"long worm",random
+
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+
+# MONSTER:'w',"purple worm",random
+# MONSTER:'w',"purple worm",random
+# MONSTER:'w',"purple worm",random
+# MONSTER:'w',"purple worm",random
+# MONSTER:'w',"purple worm",random
+
+
+# MONSTER: 'h', "changed", random
+# MONSTER: 'h', "changed", random
+# MONSTER: 'h', "changed", random
+# MONSTER: 'h', "changed", random
+# MONSTER: 'h', "changed", random
+# MONSTER: 'h', "changed", random
+# MONSTER: 'h', "changed", random
+# MONSTER: 'h', "changed", random
+
+# MONSTER: 'H', "warrior changed", random
+# MONSTER: 'H', "warrior changed", random
+
+# MONSTER: 'h', "deep one", random
+# MONSTER: 'h', "deep one", random
+# MONSTER: 'h', "deep one", random
+# MONSTER: 'h', "deep one", random
+# MONSTER: 'h', "deep one", random
+# MONSTER: 'h', "deeper one", random
+# MONSTER: 'H', "deepest one", random
+
+# MONSTER: 'h', "edderkop", random
+# MONSTER: 'h', "edderkop", random
+# MONSTER: 'h', "edderkop", random
+# MONSTER: 'h', "edderkop", random
+# MONSTER: 'h', "edderkop", random
+# MONSTER: '@', "embraced drowess", random
+
+OBJECT:'[',"plasteel helm",random
+OBJECT:'[',"plasteel helm",random
+
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"plasteel armor",random
+
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"plasteel gauntlets",random
+
+OBJECT[60%]:'[',"robe",random
+OBJECT[60%]:'[',"cloak of protection",random
+OBJECT[60%]:'[',"cloak of invisibility",random
+OBJECT[60%]:'[',"cloak of magic resistance",random
+OBJECT[60%]:'[',"cloak of displacement",random
+OBJECT[60%]:'[',"Leo Nemaeus hide",random
+
+OBJECT:'(',"power pack",random
+
+OBJECT:'(',"hypospray",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+
+OBJECT:'(',"bullet fabber",random
+OBJECT:'(',"bullet fabber",random
+
+OBJECT:'(',"tinning kit",random
+
+OBJECT:'(',"R'lyehian faceplate",random
+
+OBJECT:')',"arm blaster",random
+OBJECT:')',"hand blaster",random
+OBJECT:')',"hand blaster",random
+
+OBJECT:')',"cutting laser",random
+OBJECT:')',"cutting laser",random
+
+OBJECT:')',"pistol",random
+OBJECT:')',"pistol",random
+OBJECT:')',"pistol",random
+OBJECT:')',"pistol",random
+
+OBJECT:')',"sniper rifle",random
+OBJECT:')',"sniper rifle",random
+
+OBJECT:')',"heavy machine gun",random
+
+OBJECT:')',"rifle",random
+OBJECT:')',"rifle",random
+OBJECT:')',"rifle",random
+OBJECT:')',"rifle",random
+OBJECT:')',"bullet",random
+OBJECT:')',"bullet",random
+OBJECT:')',"bullet",random
+
+OBJECT:')',"assault rifle",random
+OBJECT:')',"assault rifle",random
+OBJECT:')',"assault rifle",random
+OBJECT:')',"bullet",random
+OBJECT:')',"bullet",random
+OBJECT:')',"bullet",random
+
+OBJECT:')',"shotgun",random
+OBJECT:')',"shotgun",random
+OBJECT:')',"shotgun",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+
+OBJECT:')',"auto shotgun",random
+
+OBJECT:')',"rocket launcher",random
+OBJECT:')',"rocket",random
+OBJECT:')',"rocket",random
+OBJECT:')',"rocket",random
+
+OBJECT:')',"grenade launcher",random
+OBJECT:')',"grenade launcher",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+
+OBJECT:')',"raygun",random
+
+OBJECT:')',"submachine gun",random
+OBJECT:')',"submachine gun",random
+
+OBJECT:')',"force pike",random
+OBJECT:')',"force pike",random
+
+OBJECT:')',"vibroblade",random
+OBJECT:')',"vibroblade",random
+
+OBJECT:'(',"lightsaber",random
+OBJECT:'(',"lightsaber",random
+
+OBJECT:'(',"double lightsaber",random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+MAZE:"Ana-goal",' '
+FLAGS: noteleport,hardfloor
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0...........................................................................
+1...........................................................................
+2....................................------.................................
+3.........................................|.................................
+4----.......----..................|.     ....................---.........---
+5|.............|...............|..|.     ....|...............|.............|
+6|..---------.............--|..|..|.     ....|..|.......|...|-..--------...|
+7|..|.......|...-|.|-.......-|.|..|... ...|..|.|-.......-|.|-...|.......|..|
+8|..|.     .|....-|-....#....-||..----+----..||-.... ....-|-....|.     .|..|
+9|....      +.....+....###....||.............||....   ....+.....+      .|..|
+0|....     .|....-|-....#....-|--|.........|--|-.... ....-|-....|.     .|..|
+1|..........|...-|-|-.......-|...-|---+---|-...|-.......-|-|-...........|..|
+2|....-------..-|---|---+---|....|-.......-|....|.--+---|---|-..----...--..|
+3|- . . . . . .|- . . . . . . . |-. . # . .-| . . . . . . . -|- . . . . . .|
+4--.-.-.-.-.-.---.-.-.-.-.-.-.-.|....###....|.-.-.-.-.|.-.-.---.-.-.-.-.-.---
+5-- . . . . . . . . . . . . . . |-. . # . .-| . . . . . . . . . . . . . . . -
+6--.-.-.-.-.-.-.-.-.-.-.-.-.|.-.-|---------|-.-.|.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+7-- . . . . . . . . . . . . . . . | - + - | . . . . . . . . . . . . . . . . -
+8--.-.-.-.-.-.-.-.-.-.-.-.-.--|---------------|.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+9-- . . . . . . . . . . . . . --. . . . . . .-- . . . . . . . . . . . . . . -
+0----------------------------------------------------------------------------
+ENDMAP
+
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"plasteel armor",random
+
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"plasteel gauntlets",random
+
+OBJECT:'(',"power pack",random
+OBJECT:'(',"power pack",random
+
+OBJECT:'(',"R'lyehian faceplate",random
+OBJECT:'(',"R'lyehian faceplate",random
+OBJECT:'(',"R'lyehian faceplate",random
+
+OBJECT:')',"arm blaster",random
+OBJECT:')',"arm blaster",random
+OBJECT:')',"arm blaster",random
+OBJECT:')',"hand blaster",random
+OBJECT:')',"hand blaster",random
+OBJECT:')',"hand blaster",random
+OBJECT:')',"hand blaster",random
+
+OBJECT:')',"cutting laser",random
+OBJECT:')',"cutting laser",random
+
+OBJECT:')',"pistol",random
+OBJECT:')',"pistol",random
+OBJECT:')',"pistol",random
+OBJECT:')',"pistol",random
+
+OBJECT:')',"sniper rifle",random
+OBJECT:')',"sniper rifle",random
+
+OBJECT:')',"heavy machine gun",random
+
+OBJECT:')',"rifle",random
+OBJECT:')',"rifle",random
+OBJECT:')',"rifle",random
+OBJECT:')',"rifle",random
+
+OBJECT:')',"assault rifle",random
+OBJECT:')',"assault rifle",random
+OBJECT:')',"assault rifle",random
+OBJECT:')',"bullet",random
+OBJECT:')',"bullet",random
+OBJECT:')',"bullet",random
+
+OBJECT:')',"auto shotgun",random
+OBJECT:')',"auto shotgun",random
+OBJECT:')',"shotgun",random
+OBJECT:')',"shotgun",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+OBJECT:')',"shotgun shell",random
+
+OBJECT:')',"rocket launcher",random
+OBJECT:')',"rocket",random
+
+OBJECT:')',"grenade launcher",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+
+OBJECT:')',"raygun",random
+
+OBJECT:')',"submachine gun",random
+OBJECT:')',"submachine gun",random
+
+OBJECT:')',"force pike",random
+OBJECT:')',"force pike",random
+OBJECT:')',"force pike",random
+OBJECT:')',"force pike",random
+
+OBJECT:')',"vibroblade",random
+OBJECT:')',"vibroblade",random
+
+OBJECT:'(',"lightsaber",random
+OBJECT:'(',"lightsaber",random
+OBJECT:'(',"lightsaber",random
+OBJECT:'(',"lightsaber",random
+
+OBJECT:'(',"double lightsaber",random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+#The annulus should be at the top of any piles
+OBJECT:')',"silver chakram",random,blessed,0,"The Annulus"
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0...........................................................................
+1...........................................................................
+2....................................------.................................
+3.........................................|.................................
+4----.......----..................|.#####....................---.........---
+5|.............|...............|..|.#####....|...............|.............|
+6|..---------.............--|..|..|.#####....|..|.......|...|-..--------...|
+7|..|.......|...-|.|-.......-|.|..|...#...|..|.|-.......-|.|-...|.......|..|
+8|..|.#####.|....-|-....#....-||..----+----..||-.... ....-|-....|.#####.|..|
+9|....######+.....+....###....||.............||....   ....+.....+######.|..|
+0|....#####.|....-|-....#....-|--|.........|--|-.... ....-|-....|.#####.|..|
+1|..........|...-|-|-.......-|...-|---+---|-...|-.......-|-|-...........|..|
+2|....-------..-|---|---+---|....|-.......-|....|.--+---|---|-..----...--..|
+3|- - - - - - -|- - - | . | - - |-. . # . .-| - - | . | - - -|- - - - - - -|
+4-------------------------------|....###....|---------|----------------------
+5-- - - - - - - - - - - - - - . |-. . # . .-| . - - - - - - - - - - - - - - -
+6---------------------------|----|---------|----|----------------------------
+7-- - - - - - - - - - - - - - - . | - + - | . - - - - - - - - - - - - - - - -
+8-----------------------------|---------------|------------------------------
+9-- - - - - - - - - - - - - - --. . . . . . .-- - - - - - - - - - - - - - - -
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+# Stairs
+STAIR: (00,10,75,20),(00,00,00,00), up
+MAZEWALK:(36,19),east
+
+# Doors
+DOOR:closed,(11,09)
+DOOR:closed,(17,09)
+DOOR:locked,(23,12)
+DOOR:locked,(37,08)
+DOOR:closed,(37,11)
+DOOR:closed,(37,17)
+DOOR:locked,(51,12)
+DOOR:locked,(57,09)
+DOOR:closed,(63,09)
+# Non diggable and phazeable everywhere
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
+
+# Monsters
+MONSTER: 'U', "elder brain", (07,09), hostile
+MONSTER: 'U', "elder brain", (37,05), hostile
+MONSTER: 'U', "elder brain", (67,09), hostile
+
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "master mind flayer", random
+
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "master mind flayer", random
+
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "semblance", random
+MONSTER: '\'', "semblance", random
+MONSTER: '\'', "semblance", random
+MONSTER: '\'', "semblance", random
+MONSTER: '\'', "semblance", random
+
+# MONSTER: 'U', "umber hulk", random
+# MONSTER: 'U', "umber hulk", random
+# MONSTER: 'U', "umber hulk", random
+# MONSTER: 'U', "umber hulk", random
+# MONSTER: 'U', "umber hulk", random
+# MONSTER: 'U', "umber hulk", random
+# MONSTER: 'U', "hooloovoo", random
+
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+
+# MONSTER: 'w', "long worm", random
+# MONSTER: 'w', "long worm", random
+# MONSTER: 'w', "long worm", random
+
+MAZE: "Ana-fila", random
+FLAGS: noteleport,shortsighted,hardfloor
+GEOMETRY:center,center
+MAP
+.........
+.}}}}}}}.
+.}}-+-}}.
+.}--.--}.
+.}+...+}.
+.}--.--}.
+.}}-+-}}.
+.}}}}}}}.
+ENDMAP
+STAIR:levregion(01,00,79,20),(0,0,8,7),up
+STAIR:levregion(01,00,79,20),(0,0,8,7),down
+TELEPORT_REGION:levregion(01,00,79,20),(2,2,6,6)
+MAZEWALK:(08,05),east
+REGION:(04,03,06,06),unlit,"ordinary",unfilled,true
+MONSTER:'L',random,(04,04)
+MONSTER:'V',"vampire lord",(03,04)
+MONSTER:';',"kraken",(06,06)
+#
+# Monsters
+
+MAZE:"Ana-filb",' '
+FLAGS:noteleport,shortsighted,hardfloor
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012
+MAP
+0                            -----------------                            
+1                    ---------               ---------                    
+2              -------                               -------              
+3         ------         ---------S-----S---------         ------         
+4      ----        -------|######| |###| |######|-------        ----      
+5    ---      ------######S######| ----- |######S######------      ---    
+6  ---     ----####S######|-------       -------|######S####----     ---  
+7---     ---##S####---------        }}}        ---------####S##---     ---
+8|       |####------               }}}}}               ------####|       |
+9|       |####S                   }}} }}}                   S####|       |
+0|       |####------               }}}}}               ------####|       |
+1---     ---##S####---------        }}}        ---------####S##---     ---
+2  ---     ----####S######|-------       -------|######S####----     ---  
+3    ---      ------######S######| ----- |######S######------      ---    
+4      ----        -------|######| |###| |######|-------        ----      
+5         ------         ---------S-----S---------         ------         
+6              -------                               -------              
+7                    ---------               ---------                    
+8                            -----------------                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012
+#0         1         2         3         4         5         6         7     
+
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "mind flayer", random
+MONSTER: 'h', "master mind flayer", random
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012
+MAP
+0                            -----------------                            
+1                    ---------               ---------                    
+2              -------                               -------              
+3         ------         ---------S-----S---------         ------         
+4      ----        -------|      | |   | |      |-------        ----      
+5    ---      ------      S      | ----- |      S      ------      ---    
+6  ---     ----    S      |-------.......-------|      S    ----     ---  
+7---     ---  S    ---------........}}}........---------    S  ---     ---
+8|       |    ------...............}}}}}...............------    |       |
+9|       |    S...................}}} }}}...................S    |       |
+0|       |    ------...............}}}}}...............------    |       |
+1---     ---  S    ---------........}}}........---------    S  ---     ---
+2  ---     ----    S      |-------.......-------|      S    ----     ---  
+3    ---      ------      S      | ----- |      S      ------      ---    
+4      ----        -------|      | |   | |      |-------        ----      
+5         ------         ---------S-----S---------         ------         
+6              -------                               -------              
+7                    ---------...............---------                    
+8                            -----------------                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012
+#0         1         2         3         4         5         6         7     
+
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+MONSTER: '@', "mindless thrall", random
+
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "brain golem", random
+MONSTER: '\'', "semblance", random
+MONSTER: '\'', "semblance", random
+MONSTER: '\'', "semblance", random
+
+MONSTER: 'U', "umber hulk", random
+MONSTER: 'U', "umber hulk", random
+MONSTER: 'U', "umber hulk", random
+MONSTER: 'U', "hooloovoo", random
+
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012
+MAP
+0                            -----------------                            
+1                    ---------...............---------                    
+2              -------...............................-------              
+3         ------.........---------S-----S---------.........------         
+4      ----........-------|######|.|###|.|######|-------........----      
+5    ---......------######S######|.--S--.|######S######------......---    
+6  ---.....----####S######|-------.......-------|######S####----.....---  
+7---.....---##S####---------........}}}........---------####S##---.....---
+8|.......|####------...............}}}}}...............------####|.......|
+9|.......|####S...................}}}.}}}...................S####|.......|
+0|.......|####------...............}}}}}...............------####|.......|
+1---.....---##S####---------........}}}........---------####S##---.....---
+2  ---.....----####S######|-------.......-------|######S####----.....---  
+3    ---......------######S######|.--S--.|######S######------......---    
+4      ----........-------|######|.|###|.|######|-------........----      
+5         ------.........---------S-----S---------.........------         
+6              -------...............................-------              
+7                    ---------...............---------                    
+8                            -----------------                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012
+#0         1         2         3         4         5         6         7     
+
+STAIR: (00,00,72,18),(09,04,63,14), up
+STAIR: (36,09,36,09),(0,0,0,0), down
+
+MONSTER: 'U', "elder brain", (36,09), hostile
+
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+# MONSTER:'U',"uvuudaum",random
+
+
+OBJECT:'[',"plasteel helm",random
+OBJECT:'[',"plasteel helm",random
+OBJECT:'[',"droven helm",random
+
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"plasteel armor",random
+OBJECT:'[',"droven plate mail",random
+OBJECT:'[',"droven plate mail",random
+
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"plasteel gauntlets",random
+OBJECT:'[',"droven chain mail",random
+
+OBJECT[10%]:'[',"robe",random
+OBJECT[10%]:'[',"cloak of protection",random
+OBJECT[10%]:'[',"cloak of invisibility",random
+OBJECT[10%]:'[',"cloak of magic resistance",random
+OBJECT[10%]:'[',"cloak of displacement",random
+OBJECT[10%]:'[',"Leo Nemaeus hide",random
+OBJECT:'[',"droven cloak",random
+OBJECT:'[',"droven cloak",random
+
+OBJECT:'(',"power pack",random
+
+OBJECT:')',"droven bolt",random
+
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+
+OBJECT:'(',"R'lyehian faceplate",random
+OBJECT:'(',"R'lyehian faceplate",random
+OBJECT:'(',"R'lyehian faceplate",random
+
+OBJECT:')',"hand blaster",random
+OBJECT:')',"hand blaster",random
+
+OBJECT:')',"droven greatsword",random
+OBJECT:')',"droven greatsword",random
+
+OBJECT:')',"cutting laser",random
+OBJECT:')',"cutting laser",random
+OBJECT:')',"droven lance",random
+
+OBJECT:')',"droven crossbow",random
+OBJECT:')',"grenade launcher",random
+OBJECT:')',"grenade launcher",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+
+OBJECT:')',"submachine gun",random
+OBJECT:')',"submachine gun",random
+
+OBJECT:')',"force pike",random
+OBJECT:')',"force pike",random
+
+OBJECT:')',"vibroblade",random
+OBJECT:')',"vibroblade",random
+
+OBJECT:'(',"lightsaber",random
+OBJECT:'(',"lightsaber",random
+OBJECT:'(',"lightsaber",random
+OBJECT:'(',"lightsaber",random
+
+OBJECT:'(',"double lightsaber",random
+
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
