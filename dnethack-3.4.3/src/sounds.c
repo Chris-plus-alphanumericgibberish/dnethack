@@ -1044,6 +1044,8 @@ asGuardian:
 			}
 		}
 	}break;
+	case MS_SONG:{
+	}break;
 	case MS_SHRIEK:
 	    pline_msg = "shrieks.";
 	    aggravate();
