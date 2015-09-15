@@ -330,11 +330,20 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_LURKER_ABOVE] ||
 			mtmp->data == &mons[PM_NIGHTGAUNT] ||
 			mtmp->data == &mons[PM_BYAKHEE] ||
+			(mtmp->data == &mons[PM_HUNTING_HORROR] && complete == 6) ||
 			mtmp->data == &mons[PM_MIND_FLAYER] ||
 			(mtmp->data == &mons[PM_MASTER_MIND_FLAYER] && complete == 6) ||
 			mtmp->data == &mons[PM_DEEP_ONE] ||
 			mtmp->data == &mons[PM_DEEPER_ONE] ||
 			(mtmp->data == &mons[PM_DEEPEST_ONE] && complete == 6) ||
+			mtmp->data == &mons[PM_CHANGED] ||
+			(mtmp->data == &mons[PM_WARRIOR_CHANGED] && complete == 6) ||
+			mtmp->data == &mons[PM_EDDERKOP] ||
+			mtmp->data == &mons[PM_NEVERWAS] ||
+			mtmp->data == &mons[PM_INTONER] ||
+			(mtmp->data == &mons[PM_BLACK_FLOWER] && complete == 6) ||
+			mtmp->data == &mons[PM_DARK_YOUNG] ||
+			mtmp->data == &mons[PM_WEEPING_ANGEL] ||
 			(mtmp->data == &mons[PM_JUIBLEX] && complete == 6) ||
 			(mtmp->data == &mons[PM_PALE_NIGHT] && complete == 6) ||
 			(mtmp->data == &mons[PM_LEVIATHAN] && complete == 6) ||
@@ -344,8 +353,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_DEMOGORGON] && complete == 6 && !rn2(3)) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU] && complete == 6) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST] && complete == 6) ||
-			(mtmp->data == &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD] && complete == 6)
-			;
+			(mtmp->data == &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD] && complete == 6);
 }
 boolean
 scaryHam(complete, mtmp)
