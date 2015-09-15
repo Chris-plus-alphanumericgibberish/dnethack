@@ -148,20 +148,22 @@ struct engr {
 #define LAST_TOWER			MAGTHERE
 #define HOSTILE_TOWER		XAXOX
 
+#define LAST_BASTION_SYMBOL	34
 	/*Special behavior, these identify drow gods*/
-#define LOLTH_SYMBOL		34
-#define KIARANSALEE_SYMBOL	35
-#define PEN_A_SYMBOL		36
-#define VER_TAS_SYMBOL		37
+#define LOLTH_SYMBOL		35
+#define KIARANSALEE_SYMBOL	36
+#define PEN_A_SYMBOL		37
+#define VER_TAS_SYMBOL		38
 #define FIRST_GODDESS	LOLTH_SYMBOL
 #define LAST_GODDESS	VER_TAS_SYMBOL
 
-#define EILISTRAEE_SYMBOL	38
-#define LOST_HOUSE			39
-#define EDDER_SYMBOL		40
+#define EILISTRAEE_SYMBOL	39
+#define GHAUNADAUR_SYMBOL	40
+#define LOST_HOUSE			41
+#define EDDER_SYMBOL		42
 
 
-#define LAST_DROW_SYM		LOST_HOUSE
+#define LAST_DROW_SYM		EDDER_SYMBOL
 
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
