@@ -70,13 +70,14 @@ struct monst {
 	Bitfield(minvis,1);	/* currently invisible */
 	Bitfield(invis_blkd,1); /* invisibility blocked */
 	Bitfield(perminvis,1);	/* intrinsic minvis value */
-	Bitfield(cham,3);	/* shape-changer */
+	Bitfield(cham,4);	/* shape-changer */
 /* note: lychanthropes are handled elsewhere */
 #define CHAM_ORDINARY		0	/* not a shapechanger */
 #define CHAM_CHAMELEON		1	/* animal */
 #define CHAM_DOPPELGANGER	2	/* demi-human */
 #define CHAM_SANDESTIN		3	/* demon */
-#define CHAM_MAX_INDX		CHAM_SANDESTIN
+#define CHAM_DREAM			4	/* anything */
+#define CHAM_MAX_INDX		CHAM_DREAM
 	Bitfield(mundetected,1);	/* not seen in present hiding place */
 				/* implies one of M1_CONCEAL or M1_HIDE,
 				 * but not mimic (that is, snake, spider,
