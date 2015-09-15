@@ -297,6 +297,252 @@ Amulet on that altar to fulfill your destiny.
 "Remember, your path now should always be upwards."
 %E
 #
+#	Anachrononaut
+#
+%Cc Ana 00001
+You are suddenly in familiar surroundings.  The buildings in the distance
+seem to be those of your old alma mater, but something is wrong.  It feels
+as if there has been a riot recently, or %H has
+been under siege.
+
+All of the windows are boarded up, and there are objects scattered around
+the entrance.
+
+Strange forbidding shapes seem to be moving in the distance.
+%E
+%Cp Ana 00002
+Once again, you are back at %H.
+%E
+%Cp Ana 00003
+You are back at %H.
+You have an odd feeling this may be the last time you ever come here.
+%E
+%Cp Ana 00005
+"Did you see Lash LaRue in 'Song of Old Wyoming' the other night?"
+%E
+%Cp Ana 00006
+"Hey man, got any potions of hallucination for sale?"
+%E
+%Cp Ana 00007
+"Did you see the artifact %l brought back from the last dig?"
+%E
+%Cp Ana 00008
+"So what species do *you* think we evolved from?"
+%E
+%Cp Ana 00009
+"So you're %ls prize pupil!  I don't know what he sees in you."
+%E
+%Cp Ana 00010
+"Did you see Lash LaRue in 'Song of Old Wyoming' the other night?"
+%E
+%Cp Ana 00011
+"Hey man, got any potions of hallucination for sale?"
+%E
+%Cp Ana 00012
+"I guess you are guaranteed to make full professor now."
+%E
+%Cp Ana 00013
+"So, what was worse, %n or your entrance exams?"
+%E
+%Cp Ana 00014
+"%oC is impressive, but nothing like the bones I dug up!"
+%E
+%Cc Ana 00015
+"Finally you have returned, %p.  You were always
+my most promising student.  Allow me to see if you are ready for the
+most difficult task of your career."
+%E
+%Cp Ana 00016
+"Again, %p, you stand before me.
+Let me see if you have gained experience in the interim."
+%E
+%Cp Ana 00017
+"Once more, %p, you have returned from the field.
+Are you finally ready for the task that must be accomplished?"
+%E
+%Cc Ana 00018
+"%p, you have failed us.  All of my careful training has been in
+vain.  Begone!  Your tenure at this college has been revoked!
+
+"You are a disgrace to the profession!"
+%E
+%Cc Ana 00019
+"%p, you are yet too inexperienced to undertake such a demanding
+quest.  A mere %r could not possibly face the rigors demanded and
+survive.  Go forth, and come here again when your adventures have further
+taught you."
+%E
+%Cc Ana 00020
+"%pC!  I've heard that you've been using sloppy techniques.  Your
+results lately can hardly be called suitable for %ra!
+
+"How could you have strayed from the %a path?  Go from here, and come
+back only when you have purified yourself."
+%E
+%Cc Ana 00021
+"Grave times have befallen the college, for %na has
+stolen %o.  Without it, the board of directors of
+the university will soon have no choice but to revoke our research grants.
+
+"You must locate the entrance to %i.  Within it,
+you will find %n.
+
+"You must then defeat %n and return %o
+to me.
+
+"Only in this way will we be able to prevent the budget cuts that could
+close this college.
+
+"May the wisdom of %d be your guide."
+%E
+%Cp Ana 00025
+"Beware, for %n is powerful and cunning."
+%E
+%Cp Ana 00026
+"To locate the entrance to %i, you must pass
+many traps."
+%E
+%Cp Ana 00027
+"A %nt may be vulnerable to attacks by magical cold."
+%E
+%Cp Ana 00028
+"Call upon %d when you encounter %n."
+%E
+%Cp Ana 00029
+"You must destroy %n.  It will pursue you otherwise."
+%E
+%Cp Ana 00030
+"%oC is a mighty talisman.  With it you
+can destroy %n."
+%E
+%Cp Ana 00031
+"Go forth with the blessings of %d."
+%E
+%Cp Ana 00032
+"I will have my %gP watch for your return."
+%E
+%Cp Ana 00033
+"Remember not to stray from the true %a path."
+%E
+%Cp Ana 00034
+"You may be able to sense %o when you are near."
+%E
+%Cc Ana 00035
+A plain opens before you.  Beyond the plain lies a foreboding edifice.
+
+You have the feeling that you will soon find the entrance to
+%i.
+%E
+%Cp Ana 00036
+Once again, you are near the entrance to %i.
+%E
+%Cc Ana 00040
+A strange feeling washes over you, and you think back to things you
+learned during the many lectures of %l.
+
+You realize the feeling must be the presence of %o.
+%E
+%Cp Ana 00041
+The familiar presence of %o is in the ether.
+%E
+%Cc Ana 00050
+"So, %p, you think that you can succeed in recovering
+%o, when your teacher, %l, has already failed.
+
+"Come, try your best!  I shall destroy you, and gnaw on your bones."
+%E
+%Cc Ana 00051
+"Again you try to best me, eh %p?  Well, you shall fail again.
+
+"You shall never recover %o.
+
+"I shall bear your soul to the Plane of Origins for my master's pleasure."
+%E
+%Cp Ana 00052
+"You persist yet %p!  Good.  Now, you shall die!"
+%E
+%Cp Ana 00053
+"I shall have %o from you, %p, then feast
+upon your entrails!"
+%E
+%Cp Ana 00060
+"Try your best, %p.  You cannot defeat me."
+%E
+%Cp Ana 00061
+"I shall rend the flesh from your body whilst you still breathe!"
+%E
+%Cp Ana 00062
+"First you, %p, then I shall destroy your mentor, %l."
+%E
+%Cp Ana 00063
+"Tiring yet, %p?  I draw my power from my master and cannot
+falter!"
+%E
+%Cp Ana 00064
+"I shall rend thy soul from thy body and consume it!"
+%E
+%Cp Ana 00065
+"You are far too %a -- it weakens you.  You shall die in this place."
+%E
+%Cp Ana 00066
+"%d has forsaken you!  You are lost now!"
+%E
+%Cp Ana 00067
+"A mere %r cannot hope to defeat me!"
+%E
+%Cp Ana 00068
+"If you are the best %l can send, I have nothing to fear."
+%E
+%Cp Ana 00069
+"Die %c!  I shall exhibit your carcass as a trophy."
+%E
+%Cc Ana 00070
+The power of %o flows through your body!  You feel
+as if you could now take on the Wizard of Yendor himself and win, but
+you know you must return %o to %l.
+%E
+%Cp Ana 00080
+The body of %n dissipates in a cloud of noxious fumes.
+%E
+%Cc Ana 00081
+%lC touches %o briefly, gazes into it,
+then smiles at you and says:
+
+"Well done, %p.  You have defeated %n and
+recovered %o.  But I fear that it shall never be safe
+here.
+
+Please take %o with you.  You, %p, can
+guard it now far better than I.
+
+May the blessings of %d follow you and guard you."
+%E
+# Assumes Itlachiayaque (smooth shield)
+%Cc Ana 00082
+%l looks over %os polished surface.
+
+"Of all the items that have been excavated from %i,
+this one has given us the greatest insight into Toltec civilisation.
+Understand that guarding this artifact is no small responsibility,
+%p. Now, it is time that you resumed your expedition for the
+Amulet. %Z await you through the portal which brought you here."
+%E
+%Cc Ana 00090
+"Welcome back, %p.  Have you progressed with your quest to
+regain the Amulet of Yendor for %d?"
+%E
+%Cc Ana 00091
+"Congratulations, %p.  I wondered if anyone could prevail against
+the Wizard and the minions of Moloch.  Now, you must embark on one
+final adventure.
+
+"Take the Amulet, and find your way onto the Astral Plane.
+There you must find the altar of %d and sacrifice the
+Amulet on that altar to fulfill your destiny.
+
+"Remember, your path now should always be upwards."
+%E
+#
 #	Barbarian
 #
 %Cc Bar 00001
