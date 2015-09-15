@@ -1802,9 +1802,9 @@ physical:
 		    if (vis) pline("%s doesn't notice.", Monnam(mdef));
 		    break;
 		}
-		tmp += rnd(10); /* fakery, since monsters lack INT scores */
+		tmp += d(tmp,10); /* fakery, since monsters lack INT scores. NOTE: 1d10 PER POINT OF INT */
 		if (magr->mtame && !magr->isminion) {
-		    EDOG(magr)->hungrytime += rnd(60);
+		    EDOG(magr)->hungrytime += tmp*11; /*aprox 60 points of hunger per 1d10*/
 		    magr->mconf = 0;
 		}
 		if (tmp >= mdef->mhp && vis)

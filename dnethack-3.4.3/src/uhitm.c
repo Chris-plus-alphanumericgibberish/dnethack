@@ -2446,8 +2446,8 @@ register struct attack *mattk;
 		    pline("%s doesn't notice.", Monnam(mdef));
 		    break;
 		}
-		tmp += rnd(10);
-		morehungry(-rnd(30)); /* cannot choke */
+		tmp += d(tmp-dbon((struct obj *)0),10); /*subtract out the damage bonus.  NOTE: I'm allowing this for incants*/
+		morehungry(-rnd((tmp-dbon((struct obj *)0))*6)); /* cannot choke; aprox 30 points of hunger per point of 'int' drained */
 		if (ABASE(A_INT) < AMAX(A_INT)) {
 			ABASE(A_INT) += rnd(4);
 			if (ABASE(A_INT) > AMAX(A_INT))
@@ -2455,6 +2455,7 @@ register struct attack *mattk;
 			flags.botl = 1;
 		}
 		exercise(A_WIS, TRUE);
+		exercise(A_INT, TRUE);
 		break;
 	    case AD_STCK:
 		if (!negated && !sticks(mdef->data))
