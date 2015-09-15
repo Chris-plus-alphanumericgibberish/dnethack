@@ -1124,6 +1124,10 @@ struct monst *mon;
 	register const struct artifact *weap = get_artifact(otmp);
 	/* no need for an extra check for `NO_ATTK' because this will
 	   always return 0 for any artifact which has that attribute */
+	if(otmp->oartifact == ART_BLACK_ARROW){
+		return 1000;
+	}
+	
 	if(Role_if(PM_PRIEST)) return weap->attk.damn; //priests always get the maximum to-hit bonus.
 
 	if (weap && weap->attk.damn && spec_applies(weap, mon))
@@ -1139,6 +1143,10 @@ struct monst *mon;
 int tmp;
 {
 	register const struct artifact *weap = get_artifact(otmp);
+	
+	if (otmp->oartifact == ART_BLACK_ARROW){
+		return mon->mhpmax+100;
+	}
 	
 	if (!weap || (weap->attk.adtyp == AD_PHYS && /* check for `NO_ATTK' */
 			weap->attk.damn == 0 && weap->attk.damd == 0) 

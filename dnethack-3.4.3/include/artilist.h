@@ -357,6 +357,12 @@ A("Limited Moon", 		MOON_AXE, /*Axe whose attack power is bound to its wielder's
 	0, A_CHAOTIC, NON_PM, NON_PM, 6660L, 
 	0,0,0),
 
+A("The Black Arrow",		ANCIENT_ARROW,
+	(SPFX_RESTR), 0, 0,
+	PHYS(1,0),	NO_DFNS,	NO_CARY,
+	0, A_NONE, NON_PM, NON_PM, 4444L,
+	0,0,0), 
+
 A("Tensa Zangetsu",		TSURUGI,
 	(SPFX_RESTR|SPFX_HSPDAM), 0, 0, /*also has a haste effect when wielded, but massively increases hunger and damages the wielder*/
 	PHYS(1,0),	NO_DFNS,	NO_CARY,
