@@ -164,8 +164,6 @@ struct monst {
 
 	uchar mnamelth;		/* length of name (following mxlth) */
 	short mxlth;		/* length of following data */
-	/* in order to prevent alignment problems mextra should
-	   be (or follow) a long int */
 	int meating;		/* monster is eating timeout */
 	int mfaction;		/* faction to which monster belongs */
 	int mvanishes;
@@ -176,6 +174,11 @@ struct monst {
 	//	time:  AT_LARVA+x, where x=time, and AT_LARVA is large, 10000 or so.
 	//utype = PM_HATCHLING_NAME
 	//inventory
+	long mvar1;
+	long mvar2;
+	long mvar3;
+	/* in order to prevent alignment problems mextra should
+	   be (or follow) a long int */
 	long mextra[1]; /* monster dependent info */
 };
 
