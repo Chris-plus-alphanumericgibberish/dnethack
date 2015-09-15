@@ -1158,7 +1158,9 @@ physical:
 			if (/* if you strike with a bow... */
 			    is_launcher(otmp) ||
 			    /* or strike with a missile in your hand... */
-			    (is_missile(otmp) || is_ammo(otmp)) ||
+			    ((is_missile(otmp) || is_ammo(otmp)) &&
+					!(otmp->otyp == SILVER_CHAKRAM)
+				) ||
 				/* houchou not thrown */
 				(otmp->oartifact == ART_HOUCHOU) ||
 			    /* lightsaber that isn't lit ;) */

@@ -1344,7 +1344,9 @@ hitmu(mtmp, mattk)
 			if (/* if you strike with a bow... */
 				is_launcher(otmp) ||
 				/* or strike with a missile in your hand... */
-				(is_missile(otmp) || is_ammo(otmp)) ||
+			    ((is_missile(otmp) || is_ammo(otmp)) &&
+					!(otmp->otyp == SILVER_CHAKRAM)
+				) ||
 				/* lightsaber that isn't lit ;) */
 				(is_lightsaber(otmp) && !otmp->lamplit) ||
 				/* houchou not thrown */

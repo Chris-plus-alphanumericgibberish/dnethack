@@ -1010,7 +1010,9 @@ int thrown;
 		if (/* if you strike with a bow... */
 		    is_launcher(obj) ||
 		    /* or strike with a missile in your hand... */
-		    (!thrown && (is_missile(obj) || is_ammo(obj))) ||
+		    (!thrown && obj->otyp != SILVER_CHAKRAM &&
+				(is_missile(obj) || is_ammo(obj))
+			) ||
 		    /* or use a pole at short range and not mounted... */
 		    (	!thrown &&
 #ifdef STEED
