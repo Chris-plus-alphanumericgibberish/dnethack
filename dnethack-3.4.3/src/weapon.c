@@ -165,7 +165,7 @@ struct monst *mon;
 
 /*	Put weapon specific "to hit" bonuses in below:		*/
 	tmp += objects[otmp->otyp].oc_hitbon;
-	if (otmp->otyp == DOUBLE_LIGHTSABER && otmp->altmode) tmp += objects[otmp->otyp].oc_hitbon;
+	if (is_lightsaber(otmp) && otmp->altmode) tmp += objects[otmp->otyp].oc_hitbon;
 
 /*	Put weapon vs. monster type "to hit" bonuses in below:	*/
 
@@ -322,7 +322,7 @@ int spec;
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
-			tmp += d(2, objects[otyp].oc_wldam)+2*otmp->spe;
+			tmp += d(2, objects[otyp].oc_wldam);
 			otmp->age -= 100;
 			if(otmp->oartifact == ART_ATMA_WEAPON &&
 				!Drain_resistance
@@ -333,12 +333,16 @@ int spec;
 						((float)u.mh)/u.mhmax  :
 						((float)u.uhp)/u.uhpmax;
 			}
+			if(otmp->altmode){ //Probably just the Annulus
+				tmp += d(3, 3);
+				otmp->age -= 100;
+			}
 			break;
 		case DOUBLE_LIGHTSABER: 
-			tmp += d(2, objects[otyp].oc_wldam)+2*otmp->spe;
+			tmp += d(2, objects[otyp].oc_wldam);
 			otmp->age -= 100;
 			if (otmp->altmode){
-				tmp += d(3, objects[otyp].oc_wldam)+3*otmp->spe;
+				tmp += d(3, objects[otyp].oc_wldam);
 				otmp->age -= 100;
 			}
 			break;
@@ -424,7 +428,7 @@ int spec;
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
-			tmp += d(2, objects[otyp].oc_wsdam)+2*otmp->spe;
+			tmp += d(2, objects[otyp].oc_wsdam);
 			otmp->age -= 100;
 			if(otmp->oartifact == ART_ATMA_WEAPON &&
 				!Drain_resistance
@@ -435,12 +439,16 @@ int spec;
 						((float)u.mh)/u.mhmax  :
 						((float)u.uhp)/u.uhpmax;
 			}
+			if(otmp->altmode){ //Probably just the Annulus
+				tmp += d(3, 3);
+				otmp->age -= 100;
+			}
 			break;
 		case DOUBLE_LIGHTSABER: 
-			tmp += d(2, objects[otyp].oc_wsdam)+2*otmp->spe;
+			tmp += d(2, objects[otyp].oc_wsdam);
 			otmp->age -= 100;
 			if (otmp->altmode){
-				tmp += d(3, objects[otyp].oc_wsdam)+3*otmp->spe;
+				tmp += d(3, objects[otyp].oc_wsdam);
 				otmp->age -= 100;
 			}
 			break;
@@ -460,15 +468,20 @@ int spec;
 	}
 	
 	if (Is_weapon) {
-		if(otmp->oartifact != ART_TENTACLE_ROD){
+		if(is_lightsaber(otmp)){
+			if(Race_if(PM_ORC)){
+				tmp += 3*max((u.ulevel+1)/3,otmp->spe);
+			} else tmp += 3*otmp->spe;
+		} else if(otmp->oartifact != ART_TENTACLE_ROD){
 			if(Race_if(PM_ORC)){
 				tmp += max((u.ulevel+1)/3,otmp->spe);
 			} else tmp += otmp->spe;
 		}
-		if (otmp->otyp == DOUBLE_LIGHTSABER && otmp->altmode){
+		
+		if (is_lightsaber(otmp) && otmp->altmode){
 			if(Race_if(PM_ORC)){
-				tmp += max((u.ulevel+1)/3,otmp->spe);
-			} else tmp += otmp->spe;
+				tmp += 3*max((u.ulevel+1)/3,otmp->spe);
+			} else tmp += 3*otmp->spe;
 		}
 		/* negative enchantment mustn't produce negative damage */
 		if (tmp < 0) tmp = 0;
@@ -505,10 +518,15 @@ int spec;
 		bonus += rnd(4);
 	    if (is_axe(otmp) && is_wooden(ptr))
 		bonus += rnd(4);
-	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(ptr)){
+	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) 
+			&& (hates_silver(ptr) || (youdefend && maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))))
+			&& !(is_lightsaber(otmp) && otmp->lamplit && otmp->oartifact != ART_ANNULUS)
+			&& (!youdefend || !(u.sealsActive&SEAL_EDEN))
+		){
 			if(otyp == SILVER_KHAKKHARA) bonus += d(rnd(3),20);
 			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
 			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
+			else if(otmp->altmode && otmp->oartifact == ART_ANNULUS && is_lightsaber(otmp)) bonus += d(2,20);
 			else bonus += rnd(20);
 		}
 		
@@ -930,8 +948,11 @@ register struct monst *mtmp;
 /* Weapons in order of preference */
 static const NEARDATA short hwep[] = {
 	  CORPSE,  /* cockatrice corpse */
-	  DOUBLE_LIGHTSABER/*6d8*/, BEAMSWORD/*3d10*/,
+	  DOUBLE_LIGHTSABER/*6d8*/, 
+	  BEAMSWORD/*3d10*/,
+	  FORCE_PIKE,/*2d6+6/2d8+8*/
 	  LIGHTSABER/*3d8*/,
+	  VIBROBLADE,/*2d6+3/2d8+4*/
 	  CRYSTAL_SWORD/*2d8/2d12*/,
 	  DROVEN_GREATSWORD/*1d18/1d30*/, 
 	  TSURUGI/*1d16/1d8+2d6*/, 
@@ -1258,7 +1279,10 @@ struct monst * mon;
 	    }
 	} else {
 		/* Double Lightsaber in single mode? Ignite second blade */
-		if (obj->otyp == DOUBLE_LIGHTSABER && !obj->altmode) {
+		if (is_lightsaber(obj) && 
+			(obj->otyp == DOUBLE_LIGHTSABER || obj->oartifact == ART_ANNULUS) && 
+			!obj->altmode
+		) {
 		    /* Do we want to activate dual bladed mode? */
 		    if (!obj->altmode && (!obj->cursed || rn2(4))) {
 			if (canseemon(mon)) pline("%s ignites the second blade of %s.", 
@@ -1322,7 +1346,7 @@ struct obj *otmp;
 		(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
 	)) bonus *= 2;
 	
-	if(uwep && otmp==uwep && otmp->otyp==RAPIER){
+	if(uwep && otmp==uwep && (otmp->otyp==RAPIER || (otmp->otyp == LIGHTSABER && otmp->oartifact != ART_ANNULUS && otmp->ovar1 == 0))){
 		int dex = ACURR(A_DEX);
 		bonus/=2; /*Half strength bonus/penalty*/
 		

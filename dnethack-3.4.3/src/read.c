@@ -43,7 +43,9 @@ doread()
 	scroll = getobj(readable, "read");
 	if(!scroll) return(0);
 	
-	if(scroll->oartifact && !arti_mandala(scroll)){
+	if((scroll->oartifact && !(scroll->oclass == SCROLL_CLASS) && !arti_mandala(scroll)) 
+		|| scroll->otyp==LIGHTSABER
+	){
 		if(scroll->oartifact == ART_ROD_OF_SEVEN_PARTS){
 			if (Blind) {
 				You_cant("see the writing!");
@@ -184,6 +186,14 @@ doread()
 				if (i == MAXSPELL) impossible("Too many spells memorized!");
 				return 1;
 			}
+		} else if(scroll->otyp == LIGHTSABER){
+			if (Blind) {
+				You_cant("see it!");
+				return 0;
+			} else {
+				pline(lightsaber_hiltText(scroll),xname(scroll));
+			}
+			return(1);
 		} else {
 			pline(silly_thing_to, "read");
 			return(0);
@@ -587,7 +597,8 @@ int curse_bless;
 	    boolean is_on = (obj == uleft || obj == uright);
 
 	    /* destruction depends on current state, not adjustment */
-	    if (obj->spe > rn2(7) || obj->spe <= -5) {
+	    if (obj->spe > (6-rnl(7)) || obj->spe <= -5) {
+			if(obj->oartifact != ART_ANNULUS){
 		Your("%s %s momentarily, then %s!",
 		     xname(obj), otense(obj,"pulsate"), otense(obj,"explode"));
 		if (is_on) Ring_gone(obj);
@@ -597,6 +608,17 @@ int curse_bless;
 	    } else {
 		long mask = is_on ? (obj == uleft ? LEFT_RING :
 				     RIGHT_RING) : 0L;
+				Your("%s %s momentarily!", xname(obj), otense(obj,"pulsate"));
+				/* cause attributes and/or properties to be updated */
+				if (is_on) Ring_off(obj);
+				obj->spe = 0;	/* update the ring while it's off */
+				if (is_on) setworn(obj, mask), Ring_on(obj);
+				/* oartifact: if a touch-sensitive artifact ring is
+				   ever created the above will need to be revised  */
+			}
+		} else {
+			long mask = is_on ? (obj == uleft ? LEFT_RING :
+						 RIGHT_RING) : 0L;
 		Your("%s spins %sclockwise for a moment.",
 		     xname(obj), s < 0 ? "counter" : "");
 		/* cause attributes and/or properties to be updated */

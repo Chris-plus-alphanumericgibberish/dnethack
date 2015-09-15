@@ -185,7 +185,8 @@ int thrown;
 	if(ammo_and_launcher(obj, launcher) && launcher->oartifact == ART_WRATHFUL_SPIDER) multishot += rn2(8);
 	
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
-		&& obj->oartifact != ART_SICKLE_MOON) multishot = (int)obj->quan;
+		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS
+	) multishot = (int)obj->quan;
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 	
 //#ifdef FIREARMS
@@ -569,6 +570,7 @@ dofire()
 	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && uwep->oartifact && 
 		(
 		(uwep->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE) && ACURR(A_STR) == STR19(25)) ||
+		(uwep->oartifact == ART_ANNULUS && (uwep->otyp == SILVER_CHAKRAM || uwep->otyp == LIGHTSABER)) ||
 		(uwep->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && Race_if(PM_DWARF) && ACURR(A_STR) == STR19(25))
 		// (uwep->oartifact == ART_SICKLE_MOON)
 		)
@@ -1253,6 +1255,7 @@ int thrown;
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
 				 obj->oartifact == ART_WINDRIDER ||
+				 obj->oartifact == ART_ANNULUS ||
 				 obj->oartifact == ART_SICKLE_MOON
 			  ) && !impaired
 		) {
@@ -1260,7 +1263,7 @@ int thrown;
 		      Tobjnam(obj, "hit"), ceiling(u.ux,u.uy));
 		obj = addinv(obj);
 		(void) encumber_msg();
-		if(obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON){
+			if(obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON || obj->oartifact == ART_ANNULUS){
 			setuqwep(obj);
 		} else{
 			setuwep(obj);
@@ -1301,10 +1304,10 @@ int thrown;
 	    thrownobj = (struct obj*)0;
 	    return;
 
-	} else if(obj->otyp == BOOMERANG && !Underwater) {
+	} else if(is_boomerang(obj) && !Underwater) {
 		if(Is_airlevel(&u.uz) || Levitation)
 		    hurtle(-u.dx, -u.dy, 1, TRUE);
-		mon = boomhit(u.dx, u.dy);
+		mon = boomhit(obj, u.dx, u.dy);
 		if(mon == &youmonst) {		/* the thing was caught */
 			exercise(A_DEX, TRUE);
 			obj = addinv(obj);
@@ -1435,13 +1438,14 @@ int thrown;
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
 				 obj->oartifact == ART_SICKLE_MOON ||
+				 obj->oartifact == ART_ANNULUS ||
 				 obj->oartifact == ART_WINDRIDER
 			  )
 		) {
 		    /* we must be wearing Gauntlets of Power to get here */
-		    if(obj->oartifact != ART_WINDRIDER) sho_obj_return_to_u(obj, startX, startY);	    /* display its flight */
+		    if(!is_boomerang(obj)) sho_obj_return_to_u(obj, startX, startY);	    /* display its flight */
 			
-			if(obj->oartifact != ART_WINDRIDER && (u.ux != startX || u.uy != startY)){
+			if(!is_boomerang(obj) && (u.ux != startX || u.uy != startY)){
 				if(flooreffects(obj,startX,startY,"fall")) return;
 				obj_no_longer_held(obj);
 				if (mon && mon->isshk && is_pick(obj)) {
@@ -1963,7 +1967,7 @@ int thrown;
 		    }
 		}
 	    } else {
-		if (otyp == BOOMERANG)		/* arbitrary */
+		if (is_boomerang(obj))		/* arbitrary */
 		    tmp += 4;
 		else if (throwing_weapon(obj))	/* meant to be thrown */
 		    tmp += 2;

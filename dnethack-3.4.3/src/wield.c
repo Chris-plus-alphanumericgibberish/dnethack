@@ -192,7 +192,9 @@ struct obj *wep;
 			pline("%s to %s%s!", Tobjnam(wep, "begin"),
 				(wep->blessed ? "shine very" : "glow"), (wep->cursed ? "" : " brilliantly"));
 		}
-		if(stealthy && wep->otyp == SILVER_KHAKKHARA) pline("The silver rings chime together.");
+		if(stealthy && wep->otyp == SILVER_KHAKKHARA) (wep->oartifact == ART_ANNULUS) ? 
+			pline("The hollow silver rod chimes at the slightest touch.") : 
+			pline("The silver rings chime together.");
 		else if(!stealthy && Stealth) pline("Now you can move stealthily.");
 
 #if 0
@@ -764,6 +766,7 @@ register int amount;
 	if(((uwep->spe > safelim && amount >= 0) || (uwep->spe < -safelim && amount < 0))
 								&& rn2(3) && uwep->oartifact != ART_ROD_OF_SEVEN_PARTS
 								&& uwep->oartifact != ART_PEN_OF_THE_VOID
+								&& uwep->oartifact != ART_ANNULUS
 	) {
 	    if (!Blind)
 	    Your("%s %s for a while and then %s.",
@@ -800,10 +803,11 @@ register int amount;
 
 	/* an elven magic clue, cookie@keebler */
 	/* elven weapons vibrate warningly when enchanted beyond a limit */
-	if ((uwep->otyp == CRYSTAL_SWORD ? (uwep->spe > 8) : (uwep->spe > 5)) && uwep->oartifact != ART_PEN_OF_THE_VOID &&
+	if ((uwep->otyp == CRYSTAL_SWORD ? (uwep->spe > 8) : (uwep->spe > 5)) 
+		&& uwep->oartifact != ART_PEN_OF_THE_VOID && uwep->oartifact != ART_ANNULUS &&
 		(is_elven_weapon(uwep) || uwep->oartifact || !rn2(7)) &&
-		uwep->oartifact != ART_ROD_OF_SEVEN_PARTS)
-	    Your("%s unexpectedly.",
+		uwep->oartifact != ART_ROD_OF_SEVEN_PARTS
+	) Your("%s unexpectedly.",
 		aobjnam(uwep, "suddenly vibrate"));
 	
 	if(uwep->oartifact == ART_ROD_OF_SEVEN_PARTS && uwep->spe > 7){
@@ -814,6 +818,8 @@ register int amount;
 		uwep->spe = 5;
 	} else if(uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->spe > 10){
 		uwep->spe = 10;
+	} else if(uwep->oartifact == ART_ANNULUS && uwep->spe > 7){
+		uwep->spe = 7;
 	}
 
 	return(1);

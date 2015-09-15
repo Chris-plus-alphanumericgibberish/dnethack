@@ -32,6 +32,7 @@ STATIC_DCL void FDECL(do_earthquake_at,(int, int, int));
 int FDECL(donecromenu, (const char *,struct obj *));
 int FDECL(dopetmenu, (const char *,struct obj *));
 int FDECL(dolordsmenu, (const char *,struct obj *));
+int FDECL(doannulmenu, (const char *,struct obj *));
 
 static NEARDATA schar delay;		/* moves left for this spell */
 static NEARDATA struct obj *artiptr;/* last/current artifact being used */
@@ -2734,6 +2735,7 @@ arti_invoke(obj)
 	if(obj->age > monstermoves && 
 		oart->inv_prop != FIRE_SHIKAI && 
 		oart->inv_prop != SEVENFOLD && 
+		oart->inv_prop != ANNUL && 
 		oart->inv_prop != LORDLY
 	) {
 	    /* the artifact is tired :-) */
@@ -2757,6 +2759,7 @@ arti_invoke(obj)
 		oart->inv_prop != NECRONOMICON &&
 		oart->inv_prop != SPIRITNAMES &&
 		oart->inv_prop != LORDLY &&
+		oart->inv_prop != ANNUL &&
 		oart->inv_prop != VOID_CHIME &&
 		oart->inv_prop != SEVENFOLD
 	)obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
@@ -4338,6 +4341,205 @@ arti_invoke(obj)
 				if(lordlydictum >= COMMAND_LADDER) obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1)); 
 			} else You_feel("that you should be wielding %s", the(xname(obj)));;
 		break;
+		case ANNUL:
+			if(uwep && uwep == obj){
+				//struct obj *otmp;
+				int annulusFunc = doannulmenu("Select function.", obj);
+				switch(annulusFunc){
+					case 0:
+					break;
+					/*These effects can be used at any time*/
+					case COMMAND_SABER:
+						uwep->oclass = TOOL_CLASS;
+						uwep->altmode = FALSE;
+						uwep->otyp = LIGHTSABER;
+					break;
+					// case COMMAND_ARM:
+						// if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
+						// uwep->otyp = ARM_BLASTER;
+					// break;
+					// case COMMAND_RAY:
+						// if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
+						// uwep->otyp = RAYGUN;
+					// break;
+					case COMMAND_RING:
+						if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
+						uwep->oclass = RING_CLASS;
+						uwep->altmode = FALSE;
+						uwep->otyp = sring;
+					break;
+					case COMMAND_KHAKKHARA:
+						if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
+						uwep->oclass = WEAPON_CLASS;
+						uwep->altmode = FALSE;
+						uwep->otyp = SILVER_KHAKKHARA;
+					break;
+					case COMMAND_BFG:
+						if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
+						uwep->oclass = WEAPON_CLASS;
+						uwep->altmode = WP_MODE_BURST;
+						uwep->otyp = BFG;
+					break;
+					case COMMAND_ANNULUS:
+						if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
+						uwep->oclass = WEAPON_CLASS;
+						uwep->altmode = FALSE;
+						uwep->otyp = SILVER_CHAKRAM;
+					break;
+					/*These effects are limited by timeout*/
+					case COMMAND_BELL:{
+						boolean wakem = FALSE,
+							invoking = invocation_pos(u.ux, u.uy) && !On_stairs(u.ux, u.uy);
+						You("ring %s.", the(xname(obj)));
+						
+						if (Underwater) {
+#ifdef	AMIGA
+							amii_speaker( obj, "AhDhGqEqDhEhAqDqFhGw", AMII_MUFFLED_VOLUME );
+#endif
+							pline("But the sound is muffled.");
+						}
+						/* charged Bell of Opening */
+						if (u.uswallow) {
+							if (!obj->cursed)
+								(void) openit();
+							else
+								pline("%s", nothing_happens);
+						} else if (obj->cursed) {
+							coord mm;
+
+							mm.x = u.ux;
+							mm.y = u.uy;
+							pline("Graves open around you...");
+							mkundead(&mm, FALSE, NO_MINVENT);
+							wakem = TRUE;
+
+						} else  if (invoking) {
+							pline("%s an unsettling shrill sound...",
+								  Tobjnam(obj, "issue"));
+#ifdef	AMIGA
+							amii_speaker( obj, "aefeaefeaefeaefeaefe", AMII_LOUDER_VOLUME );
+#endif
+							u.voidChime = 5;
+							wakem = TRUE;
+						} else if (obj->blessed) {
+							int res = 0;
+
+#ifdef	AMIGA
+							amii_speaker( obj, "ahahahDhEhCw", AMII_SOFT_VOLUME );
+#endif
+							if (uchain) {
+								unpunish();
+								res = 1;
+							}
+							res += openit();
+							switch (res) {
+							  case 0:  pline("%s", nothing_happens); break;
+							  case 1:  pline("%s opens...", Something); break;
+							  default: pline("Things open around you..."); break;
+							}
+
+						} else {  /* uncursed */
+#ifdef	AMIGA
+							amii_speaker( obj, "AeFeaeFeAefegw", AMII_OKAY_VOLUME );
+#endif
+							if (findit() == 0) pline("%s", nothing_happens);
+						}
+						/* charged BofO */
+					}break;
+					case COMMAND_BULLETS:{
+						otmp = mksobj(SILVER_BULLET, TRUE, FALSE);
+						otmp->blessed = obj->blessed;
+						otmp->cursed = obj->cursed;
+						otmp->bknown = obj->bknown;
+						if (obj->blessed) {
+							if (otmp->spe < 0) otmp->spe = 0;
+							otmp->quan += 10+rnd(10);
+						} else if (obj->cursed) {
+							if (otmp->spe > 0) otmp->spe = 0;
+						} else
+							otmp->quan += rnd(5);
+						otmp->quan += 20+rnd(20);
+						otmp->owt = weight(otmp);
+						otmp = hold_another_object(otmp, "Suddenly %s out.",
+							aobjnam(otmp, "fall"), (const char *)0);
+					}break;
+					case COMMAND_ROCKETS:{
+						otmp = mksobj(ROCKET, TRUE, FALSE);
+						otmp->blessed = obj->blessed;
+						otmp->cursed = obj->cursed;
+						otmp->bknown = obj->bknown;
+						if (obj->blessed) {
+							if (otmp->spe < 0) otmp->spe = 0;
+						} else if (obj->cursed) {
+							if (otmp->spe > 0) otmp->spe = 0;
+						}
+						otmp->quan = 3+rnd(5);
+						otmp->owt = weight(otmp);
+						otmp = hold_another_object(otmp, "Suddenly %s out.",
+							aobjnam(otmp, "fall"), (const char *)0);
+					}break;
+					case COMMAND_BEAM:{
+						if (!getdir((char *)0)) {
+							annulusFunc = 0;
+							break;
+						}
+						otmp = mksobj(RAYGUN, TRUE, FALSE);
+						otmp->blessed = obj->blessed;
+						otmp->cursed = obj->cursed;
+						otmp->bknown = obj->bknown;
+						otmp->altmode = ZT_LIGHTNING;
+						otmp->ovar1 = 100;
+						zap_raygun(otmp,1,0);
+					}break;
+					case COMMAND_ANNUL:{
+						struct monst *mtmp = fmon, *ntmp;
+						
+						You("raise the Annulus into the %s, and it releases a rapidly-expanding ring of energy.", Underwater ? "water" : "air");
+						for(mtmp; mtmp; mtmp = ntmp){
+							ntmp = mtmp->nmon;
+							if(telepathic(mtmp->data) && couldsee(mtmp->mx,mtmp->my)){
+								killed(mtmp);
+							} else if(is_magical(mtmp->data) && couldsee(mtmp->mx,mtmp->my) 
+								&& !resist(mtmp, WEAPON_CLASS, 0, NOTELL)
+							){
+								killed(mtmp);
+							} else if(!rn2(5)){
+								mtmp->mhp -= d(5,15);
+								if (mtmp->mhp <= 0) xkilled(mtmp, 1);
+								else {
+									setmangry(mtmp);
+									mtmp->mstun = 1;
+									mtmp->mconf = 1;
+								}
+							}
+						}
+						if(HTelepat & INTRINSIC){
+							Your("inner eye is blinded by the flash!");
+							HTelepat &= ~INTRINSIC;
+							if (Blind && !Blind_telepat)
+								see_monsters(); /* Can't sense monsters any more. */
+							make_stunned(HStun + d(5,15), FALSE);
+							make_confused(HConfusion + d(5,15), FALSE);
+						}
+					}break;
+					case COMMAND_CHARGE: {
+						boolean b_effect;
+						
+						b_effect = obj->blessed &&
+							(Role_switch == oart->role || !oart->role);
+						recharge(uwep, b_effect ? 1 : obj->cursed ? -1 : 0);
+						update_inventory();
+						break;
+					  }
+					break;
+					default:
+						pline("What is this strange function.");
+					break;
+				}
+				if(annulusFunc >= COMMAND_ANNUL) obj->ovar1 = monstermoves + (long)(rnz(1000)*(Role_if(PM_PRIEST) ? .8 : 1)); 
+				else if(annulusFunc >= COMMAND_BELL) obj->ovar1 = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1)); 
+			} else You_feel("that you should be wielding %s", the(xname(obj)));
+		break;
 		case VOID_CHIME:
 			if(quest_status.killed_nemesis){
 				int i;
@@ -4986,6 +5188,109 @@ struct obj *obj;
 			any.a_int = COMMAND_KNEEL;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
 				'K', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
+	}
+	end_menu(tmpwin, prompt);
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? selected[0].item.a_int : 0;
+}
+
+int
+doannulmenu(prompt, obj)
+const char *prompt;
+struct obj *obj;
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Function list:");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(obj->otyp != SILVER_KHAKKHARA && !uarms && !u.twoweap){
+		Sprintf(buf, "Become a khakkhara");
+		any.a_int = COMMAND_KHAKKHARA;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'k', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->otyp != LIGHTSABER){
+		Sprintf(buf, "Become a lightsaber");
+		any.a_int = COMMAND_SABER;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			's', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->oclass != RING_CLASS){
+		Sprintf(buf, "Become a ring");
+		any.a_int = COMMAND_RING;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'r', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->otyp != BFG && !uarms && !u.twoweap){
+		Sprintf(buf, "Become a gun");
+		any.a_int = COMMAND_BFG;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'g', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->otyp != SILVER_CHAKRAM){
+		Sprintf(buf, "Become a chakram");
+		any.a_int = COMMAND_ANNULUS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'c', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+
+	if(obj->ovar1 < monstermoves){
+		if((obj->otyp == SILVER_KHAKKHARA)){
+			Sprintf(buf, "Ring Out");
+			any.a_int = COMMAND_BELL;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'R', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
+		
+		if((obj->otyp == BFG)){
+			Sprintf(buf, "Create Bullets");
+			any.a_int = COMMAND_BULLETS;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'B', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			Sprintf(buf, "Create Rockets");
+			any.a_int = COMMAND_ROCKETS;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'R', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			Sprintf(buf, "Fire Beam");
+			any.a_int = COMMAND_BEAM;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'F', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
+		if((obj->otyp == SILVER_CHAKRAM)){
+			Sprintf(buf, "Annul");
+			any.a_int = COMMAND_ANNUL;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'A', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
+		
+		if((obj->otyp == LIGHTSABER)){
+			Sprintf(buf, "Recharge");
+			any.a_int = COMMAND_CHARGE;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'R', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		}
 	}

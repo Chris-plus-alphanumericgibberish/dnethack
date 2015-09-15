@@ -765,6 +765,12 @@ A("Itlachiayaque", SHIELD_OF_REFLECTION,/*From archeologist patch*/
 	 SMOKE_CLOUD, A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
 	0,0,0),
 
+A("The Annulus", SILVER_CHAKRAM,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), (SPFX_HSPDAM), 0,
+     PHYS(1,1), NO_DFNS, CARY(AD_MAGM),
+	 ANNUL, A_CHAOTIC, PM_ANACHRONONAUT, NON_PM, 3000L, 
+	0,0,0),
+
 A("The Heart of Ahriman",	RUBY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_REFLECT|SPFX_HSPDAM), 0,
 	/* this stone does double damage if used as a projectile weapon */

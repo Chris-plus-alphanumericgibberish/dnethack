@@ -1357,9 +1357,11 @@ hitmu(mtmp, mattk)
 				dmg = rnd(2);
 			} else dmg += dmgval(otmp, &youmonst, 0);
 			
-			if (objects[otmp->otyp].oc_material == SILVER &&
+			if (otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
 				!(u.sealsActive&SEAL_EDEN) &&
-				maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
+				maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE)) &&
+				!(is_lightsaber(otmp) && otmp->lamplit && otmp->oartifact != ART_ANNULUS)
+			) {
 			    pline("The silver sears your flesh!");
 			}
 			

@@ -285,7 +285,7 @@ struct obj *book2;
 			else arti_cursed = TRUE;
 	    }
 	}
-	if(u.voidChime && u.sealsActive&SEAL_OTIAX){
+	if(u.voidChime && (u.sealsActive&SEAL_OTIAX || Role_if(PM_ANACHRONONAUT))){
 		arti2_primed = TRUE;
 	}
 	if(!arti2_primed && !arti_cursed && uwep && uwep->oartifact == ART_SILVER_KEY){
@@ -994,6 +994,33 @@ docast()
 			if (spellid(i) == NO_SPELL)  {
 				spl_book[i].sp_id = SPE_LIGHTNING_BOLT;
 				spl_book[i].sp_lev = objects[SPE_LIGHTNING_BOLT].oc_level;
+				spl_book[i].sp_know = 1;
+				break;
+			}
+		}
+	}
+	if(uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM){
+		int i;
+		for (i = 0; i < MAXSPELL; i++) {
+			if (spellid(i) == SPE_MAGIC_MISSILE) {
+				if(spl_book[i].sp_know < 1) spl_book[i].sp_know = 1;
+				break;
+			}
+			if (spellid(i) == NO_SPELL) {
+				spl_book[i].sp_id = SPE_MAGIC_MISSILE;
+				spl_book[i].sp_lev = objects[SPE_MAGIC_MISSILE].oc_level;
+				spl_book[i].sp_know = 1;
+				break;
+			}
+		}
+		for (i = 0; i < MAXSPELL; i++) {
+			if (spellid(i) == SPE_FORCE_BOLT) {
+				if(spl_book[i].sp_know < 1) spl_book[i].sp_know = 1;
+				break;
+			}
+			if (spellid(i) == NO_SPELL) {
+				spl_book[i].sp_id = SPE_FORCE_BOLT;
+				spl_book[i].sp_lev = objects[SPE_FORCE_BOLT].oc_level;
 				spl_book[i].sp_know = 1;
 				break;
 			}
@@ -3324,14 +3351,18 @@ boolean atme;
 			pline("It invokes nightmarish images in your mind...");
 			spell_backfire(spell);
 			return(0);
-		} else if (spellknow(spell) <= 200 && 
-			!(spellid(spell) == SPE_LIGHTNING_BOLT || !uarmh || uarmh->oartifact != ART_STORMHELM)
-		) { /* 1% */
+		} else if (
+			!(spellid(spell) == SPE_LIGHTNING_BOLT && uarmh && uarmh->oartifact == ART_STORMHELM) &&
+			!((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 
+				uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM)
+		) {
+			if(spellknow(spell) <= 200) { /* 1% */
 			You("strain to recall the spell.");
 		} else if (spellknow(spell) <= 1000 && 
 			!(spellid(spell) == SPE_LIGHTNING_BOLT || !uarmh || uarmh->oartifact != ART_STORMHELM)
 		) { /* 5% */
 			Your("knowledge of this spell is growing faint.");
+		}
 		}
 		energy = (spellev(spell) * 5);    /* 5 <= energy <= 35 */
 
@@ -3883,6 +3914,11 @@ int spell;
 	int difficulty;
 	int skill;
 
+	if(
+		((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 
+			uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM)
+	) return 100;
+	
 	/* Calculate intrinsic ability (splcaster) */
 
 	splcaster = urole.spelbase;

@@ -81,6 +81,8 @@ struct objclass {
 #define is_damageable(otmp) (is_rustprone(otmp) || is_flammable(otmp) || \
 				is_rottable(otmp) || is_corrodeable(otmp) || is_evaporable(otmp))
 
+#define is_boomerang(otmp) (objects[(otmp)->otyp].oc_skill == -P_BOOMERANG)
+
 	schar	oc_subtyp;
 #define oc_skill	oc_subtyp   /* Skills of weapons, spellbooks, tools, gems */
 #define oc_armcat	oc_subtyp   /* for armor */
@@ -109,12 +111,12 @@ struct objclass {
 	schar	oc_oc1, oc_oc2;
 #define oc_hitbon	oc_oc1		/* weapons: "to hit" bonus */
 #define w_ammotyp	oc_oc2		/* type of ammo taken by ranged weapon */
-#define WP_GENERIC	0
-#define WP_BULLET	1
-#define WP_SHELL	2
-#define WP_ROCKET	4
-#define WP_GRENADE	8
-#define WP_BLASTER	16
+#define WP_GENERIC	1
+#define WP_BULLET	2
+#define WP_SHELL	4
+#define WP_ROCKET	8
+#define WP_GRENADE	16
+#define WP_BLASTER	32
 
 #define a_ac		oc_oc1	/* armor class, used in ARM_BONUS in do.c */
 #define a_can		oc_oc2		/* armor: used in mhitu.c */

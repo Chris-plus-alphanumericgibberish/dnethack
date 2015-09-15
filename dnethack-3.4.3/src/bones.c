@@ -117,6 +117,15 @@ boolean restore;
 			    otmp->otyp = SPE_BLANK_PAPER;
 			    curse(otmp);
 			}
+			if(is_lightsaber(otmp)){
+				if(otmp->lamplit) lightsaber_deactivate(otmp,TRUE);
+			}
+			if (otmp->oartifact == ART_ANNULUS) { /*Convert the Annulus to an ordinary whatever*/
+				otmp->oartifact = 0;
+				otmp->onamelth = 0;
+				*ONAME(otmp) = '\0';
+				otmp->owt = weight(otmp);
+			}
 		}
 	}
 }

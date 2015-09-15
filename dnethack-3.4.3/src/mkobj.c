@@ -548,9 +548,9 @@ boolean artif;
 					blessorcurse(otmp, 2);
 					break;
 		case DOUBLE_LIGHTSABER:
-					otmp->altmode = FALSE;
 		case LIGHTSABER:
 		case BEAMSWORD:
+					otmp->altmode = FALSE;
 					otmp->lamplit = 0;
 					otmp->age = (long) rn1(50000,100000);
 					blessorcurse(otmp, 2);
@@ -561,6 +561,7 @@ boolean artif;
 						add_to_container(otmp, gem);
 						container_weight(otmp);
 					}
+					otmp->ovar1 = random_saber_hilt();
 					break;
 		case CHEST:
 		case LARGE_BOX:
@@ -1295,6 +1296,7 @@ register struct obj *obj;
 {
 	int wt = objects[obj->otyp].oc_weight;
 	if(obj->oartifact == ART_ROD_OF_LORDLY_MIGHT) wt = objects[MACE].oc_weight;
+	else if(obj->oartifact == ART_ANNULUS) wt = objects[BFG].oc_weight;
 	else if(obj->oartifact == ART_SCEPTRE_OF_LOLTH) wt = 3*objects[MACE].oc_weight;
 	else if(obj->oartifact == ART_ROD_OF_THE_ELVISH_LORDS) wt = objects[ELVEN_MACE].oc_weight;
 	else if(obj->oartifact == ART_EARTH_CRYSTAL){

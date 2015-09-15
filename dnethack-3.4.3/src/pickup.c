@@ -1469,7 +1469,9 @@ boolean countem;
 	
 	for(cobj = level.objects[x][y]; cobj; cobj = nobj) {
 		nobj = cobj->nexthere;
-		if(Is_container(cobj) || is_lightsaber(cobj)) {
+		if(Is_container(cobj) || 
+			(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS)
+		) {
 			container_count++;
 			if (!countem) break;
 		}
@@ -1582,7 +1584,11 @@ lootcont:
 		You("carefully open %s...", the(xname(cobj)));
 		timepassed |= use_container(cobj, 0);
 		if (multi < 0) return 1;		/* chest trap */
-	    } else if(is_lightsaber(cobj)){
+	    } else if(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS){
+			Sprintf(qbuf, "There is %s here, open it?",an(xname(cobj)));
+			c = ynq(qbuf);
+			if (c == 'q') return (timepassed);
+			if (c == 'n') continue;
 			timepassed |= use_lightsaber(cobj, 0);
 			if(timepassed) underfoot = TRUE;
 	    }
@@ -1817,6 +1823,7 @@ register struct obj *obj;
 		   obj->oartifact == ART_SILVER_KEY ||
 		   (obj->oartifact >= ART_FIRST_KEY_OF_LAW && obj->oartifact <= ART_THIRD_KEY_OF_NEUTRALITY) ||
 		   obj->oartifact == ART_PEN_OF_THE_VOID ||
+		   obj->oartifact == ART_ANNULUS ||
 		   obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 	/* Prohibit Amulets in containers; if you allow it, monsters can't
 	 * steal them.  It also becomes a pain to check to see if someone

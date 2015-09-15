@@ -205,6 +205,19 @@
 #define COMMAND_WHIP			22
 #define COMMAND_STRIKE			23
 
+#define COMMAND_SABER			24
+#define COMMAND_RING			25
+#define COMMAND_ARM				26
+#define COMMAND_RAY				27
+#define COMMAND_BFG				28
+#define COMMAND_ANNULUS			29
+#define COMMAND_BELL			30
+#define COMMAND_BULLETS			31
+#define COMMAND_ROCKETS			32
+#define COMMAND_BEAM			33
+#define COMMAND_ANNUL			34
+#define COMMAND_CHARGE			35
+
 
 struct artifact {
 	int	    otyp;
@@ -266,6 +279,7 @@ struct artifact {
 #define RAISE_UNDEAD	(LAST_PROP+40)
 #define FALLING_STARS	(LAST_PROP+41)
 #define THEFT_TYPE		(LAST_PROP+42)
+#define ANNUL		(LAST_PROP+43)
 
 #define is_nameable_artifact(a) (\
 			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\

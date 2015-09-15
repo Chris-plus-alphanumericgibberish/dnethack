@@ -617,6 +617,7 @@ register struct obj *obj;
 			obj->otyp == BELL_OF_OPENING ||
 			obj->oartifact == ART_SILVER_KEY ||
 			obj->oartifact == ART_PEN_OF_THE_VOID ||
+			obj->oartifact == ART_ANNULUS ||
 			(obj->oartifact >= ART_FIRST_KEY_OF_LAW && obj->oartifact <= ART_THIRD_KEY_OF_NEUTRALITY) ||
 			obj->otyp == SPE_BOOK_OF_THE_DEAD) {
 		/* player might be doing something stupid, but we

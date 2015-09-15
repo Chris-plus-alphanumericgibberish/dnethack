@@ -3,6 +3,12 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "artifact.h"
+#ifdef OVLB
+#include "artilist.h"
+#else
+STATIC_DCL struct artifact artilist[];
+#endif
 
 /* "an uncursed greased partly eaten guardian naga hatchling [corpse]" */
 #define PREFIX	125	/* (56) */
@@ -80,16 +86,28 @@ NEARDATA struct colorTextClr LightsaberColor[] = {
 	{"red",CLR_RED}						/*violet glass*/
 };
 
-// STATIC_OVL char *SaberHilts[] = {
-	// "This %s has a curved hilt, making it particularly suited for use in duels.",
-	// "This %s's grip is composed of a hard, woody substance.",
-	// "This %s's grip is composed of verticle black ridges.",
-	// "This %s is fasioned to appear much like a branch of coral.",
-	// "This %s has an electrum grip and pommel.",
-	// "There is a winged blade of light carved into the pommel of this %s.",
-	// "There is a ring of bronze sea-creatures above the grip of this %s.",
-	// "This %s is quite intricate in its design, covered in delicate runes and inlaid with black markings."
-// }
+STATIC_OVL char *SaberHilts[] = {
+	"This %s has a curved hilt, making it particularly suited for use in duels.",
+	"This %s has a classic grip and exposed emitter disk.",
+	"This %s projects a single quillon blade.",
+	"This %s projects a pair of quillon blades.",
+	"This %s has smooth, flowing design.",
+	"This %s has smooth hilt with a recessed emitter disk.",
+	"Six little claws grip the emitter disk of this %s.",
+	"This %s's grip is composed of a hard, woody substance.",
+	"This %s's grip is a set of verticle black ridges.",
+	"This %s's hilt is fasioned to appear much like a branch of coral.",
+	"This %s has an electrum grip and pommel.",
+	"This %s has a black grip and silver details.",
+	"This %s has a long, fabric-wrapped grip and jade buttons.",
+	"This %s has a rough, worn-looking leather grip.",
+	"The focusing chamber of this %s can be seen through a viewport.",
+	"A thin red ribbon hangs from the pommel of this %s.",
+	"This %s has a crude hilt fashoned from crystalized metal.",
+	"There is a winged blade of light carved into the pommel of this %s.",
+	"There is a ring of bronze sea-creatures above the grip of this %s.",
+	"This %s is quite intricate in its design, covered in delicate runes and inlaid with black markings.",
+};
 
 STATIC_OVL struct Jitem ObscureJapanese_items[] = {
 	{ BATTLE_AXE, "ono" },
@@ -208,7 +226,22 @@ char *
 lightsaber_colorText(otmp)
 struct obj *otmp;
 {
+	if(otmp->oartifact == ART_ANNULUS) return Hallucination ? hcolor(0) : "silver";
 	return Hallucination ? hcolor(0) : LightsaberColor[((int)otmp->cobj->otyp) - MAGICITE_CRYSTAL].colorText;
+}
+
+char *
+lightsaber_hiltText(otmp)
+struct obj *otmp;
+{
+	if(otmp->oartifact == ART_ANNULUS) return "This %s is just a hollow silver pipe.";
+	return SaberHilts[(int)otmp->ovar1];
+}
+
+int
+random_saber_hilt()
+{
+	return rn2(SIZE(SaberHilts));
 }
 
 char *
@@ -910,7 +943,9 @@ plus:
 			Strcat(prefix, sitoa(obj->spe));
 			Strcat(prefix, " ");
 		}
-		if(obj->known && obj->oartifact == ART_ROD_OF_LORDLY_MIGHT){
+		if(obj->known && obj->oartifact && 
+			(oart->inv_prop == LORDLY || oart->inv_prop == ANNUL)
+		){
 			Sprintf(eos(bp), " (%s)", OBJ_NAME(objects[obj->otyp]));
 		}
 //#ifdef FIREARMS
@@ -931,7 +966,7 @@ plus:
 		    if (obj->lamplit){
 				if(obj->age > 1000) Strcat(bp, " (lit)");
 				else Strcat(bp, " (flickering)");
-				if(obj->cobj){
+				if(obj->cobj || obj->oartifact == ART_ANNULUS){
 					Strcat(prefix, lightsaber_colorText(obj));
 					Strcat(prefix, " ");
 				}
@@ -1980,6 +2015,7 @@ const char *oldstr;
 			   !BSTRCMP(bp, p-5, "Chaos") ||
 			   !BSTRCMPI(bp, p-11, "Aesculapius") || /* staff */
 			   !BSTRCMPI(bp, p-7, "Orpheus") || /* lyre */
+			   !BSTRCMPI(bp, p-7, "Annulus") || /* Ring */
 			   !BSTRCMPI(bp, p-8, "Longinus") || 	/* spear */
 			   !BSTRCMPI(bp, p-13, "Water Flowers") || 	/* boots */
 			   !BSTRCMPI(bp, p-14, "Dwarvish Lords") || /* axe */
