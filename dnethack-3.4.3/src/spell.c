@@ -3976,7 +3976,10 @@ int spell;
 	    spellid(spell) == SPE_CURE_BLINDNESS ||
 	    spellid(spell) == SPE_CURE_SICKNESS ||
 	    spellid(spell) == SPE_RESTORE_ABILITY ||
-	    spellid(spell) == SPE_REMOVE_CURSE) splcaster += special;
+	    spellid(spell) == SPE_REMOVE_CURSE
+	) (uarm && uarm->otyp == HEALER_UNIFORM) ? 
+		(splcaster += 2*special) :
+		(splcaster += special);
 
 	if(splcaster > 20) splcaster = 20;
 

@@ -529,9 +529,10 @@ ARMOR("leather armor", (char *)0,
 	1, 0, 0, 0,	82, 3, 75,   5,  8, 0, ARM_SUIT, LEATHER, HI_LEATHER),
 ARMOR("leather jacket", (char *)0,
 	1, 0, 0, 0,	12, 0,	30,  10,  9, 2, ARM_SUIT, LEATHER, CLR_BLACK),
-/*ARMOR("healer uniform", "clean white clothes",
-	1, 0, 0, 0,	0, 0,	30,  10,  9, 0, ARM_SUIT, CLOTH, CLR_WHITE),
-*/
+ARMOR("straitjacket", "long-sleeved jacket",
+	0, 0, 0, 0,	0, 0,	30,  10,  9, 2, ARM_SUIT, CLOTH, CLR_WHITE),
+ARMOR("healer uniform","clean white clothes",
+	0, 0, 0, SICK_RES,	0, 0,	30,  10,  9, 0, ARM_SUIT, CLOTH, CLR_WHITE),
 #ifdef TOURIST
 /* shirts */
 /*ARMOR("Hawaiian shorts", "flowery shorts and lei",
@@ -1207,9 +1208,11 @@ OBJECT(OBJ("statue", (char *)0), BITS(1,0,0,1,0,0,0,0,0,0,0,P_NONE,MINERAL), 0,
 		ROCK_CLASS,   900, 0, 2500,  0, 20, 20, 0, 0, 2500, CLR_WHITE),
 /*
 OBJECT(OBJ("bed",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,WOOD), 0,
-		BED_CLASS,   100, 0, 2000,  1000, 20, 20, 0, 0, 2000, HI_WOOD),
+		BED_CLASS,   900, 0, 2000,  1000, 20, 20, 0, 0, 2000, HI_WOOD),
 OBJECT(OBJ("knapsack",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,PLASTIC), 0,
-		BED_CLASS,   900, 0, 60,  100, 20, 20, 0, 0, 2000, CLR_GREEN),
+		BED_CLASS,   100, 0, 60,  100, 20, 20, 0, 0, 2000, CLR_GREEN),
+OBJECT(OBJ("gurney",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,PLASTIC), 0,
+		BED_CLASS,     0, 0, 60,  100, 20, 20, 0, 0, 2000, CLR_WHITE),
 */
 #ifdef CONVICT
 OBJECT(OBJ("heavy iron ball", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_FLAIL,IRON), 0,
