@@ -2729,9 +2729,9 @@ arti_invoke(obj)
     register const struct artifact *oart = get_artifact(obj);
     char buf[BUFSZ];
  	struct obj *pseudo, *otmp, *pseudo2, *pseudo3;
-	int summons[9] = {0, PM_FOG_CLOUD, PM_DUST_VORTEX, 
+	int summons[10] = {0, PM_FOG_CLOUD, PM_DUST_VORTEX, PM_STALKER, 
 					  PM_ICE_VORTEX, PM_ENERGY_VORTEX, PM_STEAM_VORTEX, 
-					  PM_FIRE_VORTEX, PM_STALKER, PM_AIR_ELEMENTAL};
+					  PM_FIRE_VORTEX, PM_AIR_ELEMENTAL, PM_LIGHTNING_PARAELEMENTAL};
 	coord cc;
 	int n, damage;
 	struct permonst *pm;
@@ -3821,7 +3821,7 @@ arti_invoke(obj)
 					n=u.ulevel/5 + 1;
 					cast_protection();
 					while(n--) {
-						pm = &mons[summons[d(1,8)]];
+						pm = &mons[summons[d(1,7)]];
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
 						if(mtmp){
 							initedog(mtmp);
@@ -3850,7 +3850,7 @@ arti_invoke(obj)
 					}
 					healup(u.uhpmax - u.uhp, 0, TRUE, TRUE); //heal spell
 					while(n--) {
-						pm = &mons[summons[d(1,8)]];
+						pm = &mons[summons[d(1,6)+3]];
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 						if(mtmp){
 							initedog(mtmp);
