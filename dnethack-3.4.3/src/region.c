@@ -869,6 +869,7 @@ int radius, ttl;
     ff->ttl = ttl;
     if (!in_mklev && !flags.mon_moving)
 	set_heros_fault(ff);		/* assume player has created it */
+	else clear_heros_fault(ff);
  /* ff->can_enter_f = enter_force_field; */
  /* ff->can_leave_f = enter_force_field; */
     add_region(ff);
@@ -942,7 +943,7 @@ genericptr_t p2;
 		!resists_poison(mtmp)) {
 	    if (cansee(mtmp->mx, mtmp->my))
 			pline("%s coughs!", Monnam(mtmp));
-	    setmangry(mtmp);
+	    if(heros_fault(reg)) setmangry(mtmp);
 	    if (haseyes(mtmp->data) && mtmp->mcansee) {
 			mtmp->mblinded = 1;
 			mtmp->mcansee = 0;
@@ -990,6 +991,7 @@ int damage;
     cloud->ttl = rn1(3,4);
     if (!in_mklev && !flags.mon_moving && !flags.cth_attk)
 		set_heros_fault(cloud);		/* assume player has created it */
+	else clear_heros_fault(cloud);
     cloud->inside_f = INSIDE_GAS_CLOUD;
     cloud->expire_f = EXPIRE_GAS_CLOUD;
     cloud->arg = (genericptr_t) damage;
