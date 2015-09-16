@@ -3137,7 +3137,8 @@ boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may b
 }
 
 struct monst *
-boomhit(dx, dy)
+boomhit(obj, dx, dy)
+struct obj *obj;
 int dx, dy;
 {
 	register int i, ct;
@@ -3170,7 +3171,7 @@ int dx, dy;
 			break;
 		}
 		if(bhitpos.x == u.ux && bhitpos.y == u.uy) { /* ct == 9 */
-			if(Fumbling || rn2(18) >= ACURR(A_DEX)) {
+			if(Fumbling || (!obj->oartifact && rn2(18) >= ACURR(A_DEX))) {
 				/* we hit ourselves */
 				(void) thitu(10, rnd(10), (struct obj *)0,
 					"boomerang");
