@@ -499,6 +499,14 @@ moveloop()
 					} else if(sensemon(mtmp) || ((cansee(mtmp->mx,mtmp->my) || see_with_infrared(mtmp)) && canspotmon(mtmp) && !mtmp->mundetected))
 						pline("%s is trembling hysterically.", Monnam(mtmp));
 				}
+//ifdef BARD
+				if (mtmp->encouraged && (!rn2(4))) {
+					if(mtmp->encouraged > 0) mtmp->encouraged--;
+					else mtmp->encouraged++;
+					if (!(mtmp->encouraged) && canseemon(mtmp) && mtmp->mtame) 
+						pline("%s looks calm again.", Monnam(mtmp));
+				}
+//endif
 				if(mtmp->data == &mons[PM_GREAT_CTHULHU] || mtmp->data == &mons[PM_ZUGGTMOY] 
 					|| mtmp->data == &mons[PM_SWAMP_FERN]) mtmp->mspec_used = 0;
 				if(is_weeping(mtmp->data)) mtmp->mspec_used = 0;

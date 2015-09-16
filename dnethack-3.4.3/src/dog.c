@@ -30,11 +30,10 @@ register struct monst *mtmp;
 	EDOG(mtmp)->revivals = 0;
 	EDOG(mtmp)->mhpmax_penalty = 0;
 	EDOG(mtmp)->killed_by_u = 0;
-#ifdef BARD
-	EDOG(mtmp)->encouraged = 0;
+//ifdef BARD
 	EDOG(mtmp)->friend = 0;
 	EDOG(mtmp)->waspeaceful = 0;
-#endif
+//endif
 }
 
 STATIC_OVL int

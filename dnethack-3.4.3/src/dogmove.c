@@ -766,7 +766,7 @@ boolean ranged;
 {
     return !((!ranged &&
 #ifdef BARD
-                (int)mtmp2->m_lev >= (int)mtmp->m_lev+2 + EDOG(mtmp)->encouraged*2 &&
+                (int)mtmp2->m_lev >= (int)mtmp->m_lev+2 + (mtmp->encouraged)*2 &&
 #else
                 (int)mtmp2->m_lev >= (int)mtmp->m_lev+2 &&
 #endif
@@ -1206,13 +1206,6 @@ dognext:
 		newsym(cc.x,cc.y);
 		set_apparxy(mtmp);
 	}
-#ifdef BARD
-	if (EDOG(mtmp)->encouraged && (!rn2(4))) {
-	    EDOG(mtmp)->encouraged--;
-	    if (!(EDOG(mtmp)->encouraged) && canseemon(mtmp))
-		pline("%s looks calm again.", Monnam(mtmp));
-	}
-#endif
 	return(1);
 }
 

@@ -241,11 +241,9 @@ mattackm(magr, mdef)
 	
 	if(magr->mtame && !mdef->mtame) tmp += beastmastery();
 
-	if (magr->mtame && !magr->isminion && EDOG(magr)) {
-		tmp += EDOG(magr)->encouraged;
-		if (wizard && EDOG(magr)->encouraged)
-			pline("[%s +%d]", Monnam(magr), EDOG(magr)->encouraged);
-	}
+	tmp += magr->encouraged;
+	if (wizard && magr->encouraged)
+		pline("[%s +%d]", Monnam(magr), magr->encouraged);
 	
     /* undetect monsters become un-hidden if they are attacked */
     if (mdef->mundetected) {
@@ -1022,13 +1020,9 @@ mdamagem(magr, mdef, mattk)
 
 	if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
 
-#ifdef BARD
-	if (magr->mtame && !magr->isminion && EDOG(magr)) {
-		tmp += EDOG(magr)->encouraged;
-		if (wizard && EDOG(magr)->encouraged)
-			pline("[%s +%d]", Monnam(magr), EDOG(magr)->encouraged);
-	}
-#endif
+//ifdef BARD
+	tmp += magr->encouraged;
+//endif
 
 	if (touch_petrifies(pd) && !resists_ston(magr)) {
 	    long protector = attk_protection((int)mattk->aatyp),

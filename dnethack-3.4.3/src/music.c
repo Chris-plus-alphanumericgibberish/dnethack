@@ -911,10 +911,10 @@ int distance;
 	register struct monst *mtmp = fmon;
 
 	while(mtmp) {
-		if (!DEADMONSTER(mtmp) && mtmp->mtame && !mtmp->isminion && distu(mtmp->mx, mtmp->my) < distance &&
+		if (!DEADMONSTER(mtmp) && mtmp->mtame && distu(mtmp->mx, mtmp->my) < distance &&
 		    resist_song(mtmp, SNG_COURAGE, song_instr) >= 0) {
-			if (EDOG(mtmp)->encouraged < EDOG_ENCOURAGED_MAX)
-				EDOG(mtmp)->encouraged = min(EDOG_ENCOURAGED_MAX, EDOG(mtmp)->encouraged+(P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1));
+			if (mtmp->encouraged < BASE_DOG_ENCOURAGED_MAX)
+				mtmp->encouraged = min(BASE_DOG_ENCOURAGED_MAX, mtmp->encouraged+(P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1));
 			if (mtmp->mflee)
 				switch (P_SKILL(P_MUSICALIZE)) {
 				case P_UNSKILLED:
@@ -931,12 +931,12 @@ int distance;
 			if (canseemon(mtmp))
 				if (Hallucination)
 					pline("%s looks %s!", Monnam(mtmp),
-					      EDOG(mtmp)->encouraged == EDOG_ENCOURAGED_MAX ? "way cool" :
-					      EDOG(mtmp)->encouraged > (EDOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
+					      mtmp->encouraged == BASE_DOG_ENCOURAGED_MAX ? "way cool" :
+					      mtmp->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
 				else
 					pline("%s looks %s!", Monnam(mtmp),
-					      EDOG(mtmp)->encouraged == EDOG_ENCOURAGED_MAX ? "berserk" :
-					      EDOG(mtmp)->encouraged > (EDOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
+					      mtmp->encouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" :
+					      mtmp->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
 		}
 		mtmp = mtmp->nmon;
 	}

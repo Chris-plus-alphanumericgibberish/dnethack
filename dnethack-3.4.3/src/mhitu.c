@@ -515,6 +515,11 @@ mattacku(mtmp)
 	tchtmp += mtmp->m_lev;
 	tmp += u.ustdy;
 	tchtmp += u.ustdy;
+//ifdef BARD
+	tmp += mtmp->encouraged;
+	if (wizard && mtmp->encouraged)
+		pline("[%s +%d]", Monnam(mtmp), mtmp->encouraged);
+//endif
 	if(mtmp->data == &mons[PM_UVUUDAUM]){
 		tmp += 20;
 		tchtmp += 20;
@@ -3963,6 +3968,9 @@ register int n;
 {
 	flags.botl = 1;
 	if(n > 0) mtmp->mhurtu = TRUE;
+//ifdef BARD
+	n += mtmp->encouraged;
+//endif
 	if (Upolyd) {
 		u.mh -= n;
 		if (u.mh < 1) rehumanize();
