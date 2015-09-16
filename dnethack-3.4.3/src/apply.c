@@ -1885,7 +1885,7 @@ struct obj *obj;
 	if (obj && obj->cursed) {
 	    long lcount = (long) rnd(100);
 
-	    switch (rn2(6)) {
+	    switch (rn2(5)) {
 	    case 0: make_sick(Sick ? Sick/3L + 1L : (long)rn1(ACURR(A_CON),20),
 			xname(obj), TRUE, SICK_NONVOMITABLE);
 		    break;
@@ -1898,9 +1898,9 @@ struct obj *obj;
 		    break;
 	    case 3: make_stunned(HStun + lcount, TRUE);
 		    break;
-	    case 4: (void) adjattrib(rn2(A_MAX), -1, FALSE);
-		    break;
-	    case 5: (void) make_hallucinated(HHallucination + lcount, TRUE, 0L);
+	    // case 4: (void) adjattrib(rn2(A_MAX), -1, FALSE);
+		    // break;
+	    case 4: (void) make_hallucinated(HHallucination + lcount, TRUE, 0L);
 		    break;
 	    }
 	    return;
@@ -1926,19 +1926,19 @@ struct obj *obj;
 
 	unfixable_trbl = unfixable_trouble_count(TRUE);
 
-	/* collect attribute troubles */
-	for (idx = 0; idx < A_MAX; idx++) {
-	    val_limit = AMAX(idx);
-	    /* don't recover strength lost from hunger */
-	    if (idx == A_STR && u.uhs >= WEAK) val_limit--;
-	    /* don't recover more than 3 points worth of any attribute */
-	    if (val_limit > ABASE(idx) + 3) val_limit = ABASE(idx) + 3;
+	// /* collect attribute troubles */
+	// for (idx = 0; idx < A_MAX; idx++) {
+	    // val_limit = AMAX(idx);
+	    // /* don't recover strength lost from hunger */
+	    // if (idx == A_STR && u.uhs >= WEAK) val_limit--;
+	    // /* don't recover more than 3 points worth of any attribute */
+	    // if (val_limit > ABASE(idx) + 3) val_limit = ABASE(idx) + 3;
 
-	    for (val = ABASE(idx); val < val_limit; val++)
-		attr_trouble(idx);
-	    /* keep track of unfixed trouble, for message adjustment below */
-	    unfixable_trbl += (AMAX(idx) - val_limit);
-	}
+	    // for (val = ABASE(idx); val < val_limit; val++)
+		// attr_trouble(idx);
+	    // /* keep track of unfixed trouble, for message adjustment below */
+	    // unfixable_trbl += (AMAX(idx) - val_limit);
+	// }
 
 	if (trouble_count == 0) {
 	    pline(nothing_happens);
