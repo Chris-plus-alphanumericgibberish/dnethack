@@ -153,7 +153,7 @@ register boolean special;
 		case PM_ARCHEOLOGIST:
 		    if (rn2(2)) weapon = BULLWHIP;
 		break;
-		case PM_ANACHRONIST:
+		case PM_ANACHRONONAUT:
 		    if (!rn2(2)) weapon = ARM_BLASTER;
 		    else weapon = FORCE_PIKE;
 	    	shield = STRANGE_OBJECT;
