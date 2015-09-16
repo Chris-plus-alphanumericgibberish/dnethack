@@ -520,6 +520,8 @@ struct obj *obj;
 //#ifdef FIREARMS
 	if (is_blaster(obj))
 	    return TRUE;
+	if ((obj->otyp == FORCE_PIKE || obj->otyp == VIBROBLADE))
+	    return TRUE;
 //#endif
 	if (is_weptool(obj))	/* specific check before general tools */
 	    return FALSE;
@@ -630,7 +632,8 @@ int curse_bless;
 	    }
 
 	} else if (obj->oclass == TOOL_CLASS || is_blaster(obj)
-		   || obj->otyp == DWARVISH_IRON_HELM) {
+		   || obj->otyp == DWARVISH_IRON_HELM || obj->otyp == VIBROBLADE 
+		   || obj->otyp == FORCE_PIKE) {
 	    int rechrg = (int)obj->recharged;
 
 	    if (objects[obj->otyp].oc_charged) {
@@ -722,6 +725,12 @@ int curse_bless;
 				else if(is_cursed) obj->ovar1 = 10L;
 				else obj->ovar1 = 80L + rn2(20);
 			}
+		break;
+	    case VIBROBLADE:
+	    case FORCE_PIKE:
+			if(is_blessed) obj->ovar1 = 100L;
+			else if(is_cursed) obj->ovar1 = 10L;
+			else obj->ovar1 = 80L + rn2(20);
 		break;
 	    case RAYGUN:
 			if(is_blessed) obj->ovar1 = 160L;
