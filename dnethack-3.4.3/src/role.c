@@ -51,22 +51,21 @@ const struct Role roles[] = {
 	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
 	10, 5, 0, 2, 10, A_INT, SPE_MAGIC_MAPPING,   -9
 },
-{	{"Anachronist", 0}, {
+{	{"Anachrononaut", 0}, {
 	{"Survivor",   0},
 	{"Recruit",0},
 	{"Insurgent",0},
 	{"Trooper",     0},
 	{"Rebel Leader",   0},
 	{"Chrono Commandant",   0},
-	{"Anachronist",0},
+	{"Anachrononaut",0},
 	{"Fatebreaker",   0},
 	{"Hope of the Future",     0} },
 	0, 0, 0, /* chosen randomly from among the other roles */
 	"Ana", "the Last Redoubt", "Ground Zero",
-	PM_ANACHRONIST, NON_PM, NON_PM,
-	PM_SARA__THE_LAST_ORACLE, PM_TROOPER, PM_MINION_OF_HUHETOTL,
-	PM_DOPPELGANGER, PM_MIND_FLAYER, S_TRAPPER, S_UMBER,
-	ART_ITLACHIAYAQUE,
+	PM_ANACHRONONAUT, NON_PM, NON_PM,
+	PM_SARA__THE_LAST_ORACLE, PM_TROOPER, NON_PM,
+	NON_PM, NON_PM, NON_PM, NON_PM,
 	ART_ANNULUS,
 	MH_HUMAN|MH_ELF|MH_VAMPIRE | ROLE_MALE|ROLE_FEMALE |
 	  ROLE_NEUTRAL|ROLE_CHAOTIC,
@@ -625,6 +624,8 @@ const char *ElfPriestessLgod = "_Varda Elentari",
 const char *ElfPriestLgod = "Manwe Sulimo",
 		   *ElfPriestNgod = "Mandos",
 		   *ElfPriestCgod = "Lorien"; /* Elven */
+
+const char *AnachrononautLgod = "Illsensine";
 
 int DrowPriestessFavoredSpell = SPE_CREATE_FAMILIAR;
 int DrowPriestessFavoredBonus = -20;
