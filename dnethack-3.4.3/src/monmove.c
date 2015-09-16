@@ -995,7 +995,7 @@ register struct monst *mtmp;
 			else
 				digactualhole(mtmp->mx, mtmp->my, mtmp, HOLE, FALSE, TRUE);
 		}
-	} else if (is_mind_flayer(mdat) && !rn2(20)) {
+	} else if (has_mind_blast(mdat) && !rn2(20)) {
 		struct monst *m2, *nmon = (struct monst *)0;
 		
 		if (canseemon(mtmp))
@@ -1022,6 +1022,7 @@ register struct monst *mtmp;
 				if (Half_spell_damage) dmg = (dmg+1) / 2;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
 				if(mdat == &mons[PM_ELDER_BRAIN]) u.ustdy = max(u.ustdy,dmg/3);
+				if(mdat == &mons[PM_SEMBLANCE]) make_hallucinated(HHallucination + dmg, FALSE, 0L);
 			}
 		}
 		for(m2=fmon; m2; m2 = nmon) {
