@@ -2678,11 +2678,6 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	
 	boolean dont_start = FALSE;
 	
-	if (Strangled) {
-		pline("If you can't breathe air, how can you consume solids?");
-		return 0;
-	}
-
 	if(uclockwork){
 		long uUpgrades = (u.clockworkUpgrades&(WOOD_STOVE|MAGIC_FURNACE|HELLFIRE_FURNACE|SCRAP_MAW));
 		if(!uUpgrades){
@@ -2694,6 +2689,11 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				uUpgrades == SCRAP_MAW
 		) etype = uUpgrades;
 		else etype = clockwork_eat_menu(TRUE,TRUE);
+	}
+	
+	if (Strangled) {
+		pline("If you can't breathe air, how can you consume solids?");
+		return 0;
 	}
 	if (!(otmp = floorfood("eat", 0))) return 0;
 	if (check_capacity((char *)0)) return 0;
