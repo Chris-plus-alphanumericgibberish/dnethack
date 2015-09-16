@@ -873,6 +873,54 @@ dobreathe(mdat)
 }
 
 int
+doelementalbreath(mdat)
+	struct permonst *mdat;
+{
+	struct monst *mon = 0;
+	int type;
+	
+	if (Strangled) {
+	    You_cant("breathe.  Sorry.");
+	    return(0);
+	}
+	if (u.uen < 45) {
+	    You("don't have enough energy to sing an elemental!");
+	    return(0);
+	}
+	u.uen -= 45;
+	flags.botl = 1;
+
+	type = flags.HDbreath;
+	switch(type){
+		case AD_FIRE:
+			mon = makemon(&mons[PM_FIRE_ELEMENTAL], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+		break;
+		case AD_COLD:
+			mon = makemon(&mons[PM_ICE_PARAELEMENTAL], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+		break;
+		case AD_ELEC:
+			mon = makemon(&mons[PM_LIGHTNING_PARAELEMENTAL], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+		break;
+		case AD_ACID:
+			mon = makemon(&mons[PM_ACID_PARAELEMENTAL], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+		break;
+		case AD_DRST:
+			mon = makemon(&mons[PM_POISON_PARAELEMENTAL], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+		break;
+		case AD_SLEE:
+			mon = makemon(&mons[PM_DREAM_QUASIELEMENTAL], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+		break;
+	}
+	if(mon){
+		initedog(mon);
+		mon->m_lev = (mon->m_lev+u.ulevel)/2;
+		mon->mhpmax = (mon->m_lev * 8) - 4;
+		mon->mhp =  mon->mhpmax;
+	}
+	return(1);
+}
+
+int
 dospit()
 {
 	struct obj *otmp;

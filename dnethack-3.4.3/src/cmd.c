@@ -517,6 +517,15 @@ domonability(VOID_ARGS)
 			MENU_UNSELECTED);
 		atleastone = TRUE;
 	}
+	if(Race_if(PM_HALF_DRAGON) && Role_if(PM_BARD)){
+		Sprintf(buf, "Sing an Elemental into being");
+		any.a_int = MATTK_ELMENTAL;	/* must be non-zero */
+		incntlet = 'E';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
 	if(attacktype(youmonst.data, AT_GAZE)){
 		Sprintf(buf, "Gaze");
 		any.a_int = MATTK_GAZE;	/* must be non-zero */
@@ -669,6 +678,7 @@ domonability(VOID_ARGS)
 	case MATTK_HIDE: return dohide();
 	case MATTK_MIND: return domindblast();
 	case MATTK_CLOCK: return doclockspeed();
+	case MATTK_ELMENTAL: return doelementalbreath();
 	case MATTK_DARK: return dodarken();
 	case MATTK_REPL: {
 	    if(IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
