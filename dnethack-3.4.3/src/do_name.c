@@ -1312,7 +1312,7 @@ static const char * const bogusmons[] = {
 	"Y2K bug", "foo",
 						/* misc. */
 	"neutral twin", "vampiric half-dragon half-troll lycanthropic fiendish snail", 
-		"squid thingy", "allegedly-matriarchal drow", /* Order of the Stick */
+		"squid thingy", "allegedly-matriarchal drow", "ranch dressing semielemental", /* Order of the Stick */
 	
 	"grue", "Christmas-tree monster", "luck sucker", "paskald",
 	"brogmoid", "dornbeast",		/* Quendor (Zork, &c.) */
