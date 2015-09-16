@@ -927,6 +927,7 @@ struct monst *mtmp;
 		otmp->cursed = mwep->cursed;
 		otmp->spe = mwep->spe;
 		otmp->quan = multishot;
+		mwep->ovar1 -= multishot;
 	}
 
 	if (canseemon(mtmp)) {
