@@ -37,7 +37,7 @@ static struct trobj Archeologist[] = {
 	{ SACK, 0, TOOL_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
-static struct trobj Anachronist_Hu[] = {
+static struct trobj Anachrononaut_Hu[] = {
 	{ ARM_BLASTER, 0, WEAPON_CLASS, 1, 0 },
 	{ FORCE_PIKE,  0, WEAPON_CLASS, 1, 0 },
 	{ HAND_BLASTER, 0, WEAPON_CLASS, 1, 0 },
@@ -48,11 +48,11 @@ static struct trobj Anachronist_Hu[] = {
 	{ PLASTEEL_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS, 5, 0 },
-	{ PROTEIN_PILL, 0, FOOD_CLASS, 20, 0 },
+	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
-static struct trobj Anachronist_Inc[] = {
-	{ LIGHTSABER,  1, WEAPON_CLASS, 1, 0 },
+static struct trobj Anachrononaut_Inc[] = {
+	{ LIGHTSABER,  3, WEAPON_CLASS, 1, 0 },
 	{ HAND_BLASTER, 1, WEAPON_CLASS, 1, 0 },
 	{ PLASTEEL_ARMOR, 1, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 1, ARMOR_CLASS, 1, 0 },
@@ -62,7 +62,7 @@ static struct trobj Anachronist_Inc[] = {
 	{ POWER_PACK, 0, TOOL_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
-static struct trobj Anachronist_Vam[] = {
+static struct trobj Anachrononaut_Vam[] = {
 	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
 	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
@@ -76,10 +76,10 @@ static struct trobj Anachronist_Vam[] = {
 	{ BULLET, 0, TOOL_CLASS, 200, 0 },
 	{ SILVER_BULLET, 0, TOOL_CLASS, 50, 0 },
 	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
-	{ FOOD_RATION, 0, FOOD_CLASS, 5, 0 },
+	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ 0, 0, 0, 0, 0 }
 };
-static struct trobj Anachronist_Dro[] = {
+static struct trobj Anachrononaut_Dro[] = {
 	{ SNIPER_RIFLE, 0, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
 	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
@@ -93,20 +93,20 @@ static struct trobj Anachronist_Dro[] = {
 	{ BULLET, 0, TOOL_CLASS, 60, 0 },
 	{ SILVER_BULLET, 0, TOOL_CLASS, 30, 0 },
 	{ BULLET_FABBER, UNDEF_SPE, TOOL_CLASS, 1, 0 },
-	{ PROTEIN_PILL, 0, FOOD_CLASS, 20, 0 },
+	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
-static struct trobj Anachronist_Elf[] = {
+static struct trobj Anachrononaut_Elf[] = {
 	{ RAYGUN,  0, WEAPON_CLASS, 1, 0 },
 	{ SENSOR_PACK,  25, WEAPON_CLASS, 1, 0 },
 	{ JUMPSUIT, 0, ARMOR_CLASS, 1, 0 },
 	{ JUMPING_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS, 10, 0 },
-	{ FOOD_RATION, 0, FOOD_CLASS, 5, 0 },
+	{ LEMBAS_WAFER, 0, FOOD_CLASS, 3, 0 },
 	{ HYPOSPRAY, 0, FOOD_CLASS, 1, 0 },
+	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 15, 0 },
+	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 10, 0 },
 	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 5, 0 },
-	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 3, 0 },
-	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 1, 0 },
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ TIN_OPENER, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -1549,12 +1549,12 @@ u_init()
 		knows_object(TOUCHSTONE);
 		skill_init(Skill_A);
 		break;
-	case PM_ANACHRONIST:
-		if(Race_if(PM_DROW)) ini_inv(Anachronist_Dro);
-		else if(Race_if(PM_ELF)) ini_inv(Anachronist_Elf);
-		else if(Race_if(PM_INCANTIFIER)) ini_inv(Anachronist_Inc);
-		else if(Race_if(PM_VAMPIRE)) ini_inv(Anachronist_Vam);
-		else ini_inv(Anachronist_Hu);
+	case PM_ANACHRONONAUT:
+		if(Race_if(PM_DROW)) ini_inv(Anachrononaut_Dro);
+		else if(Race_if(PM_ELF)) ini_inv(Anachrononaut_Elf);
+		else if(Race_if(PM_INCANTIFIER)) ini_inv(Anachrononaut_Inc);
+		else if(Race_if(PM_VAMPIRE)) ini_inv(Anachrononaut_Vam);
+		else ini_inv(Anachrononaut_Hu);
 		knows_object(FLINTLOCK);
 		knows_object(PISTOL);
 		knows_object(SUBMACHINE_GUN);
@@ -1587,6 +1587,9 @@ u_init()
 		knows_object(HYPOSPRAY_AMPULE);
 		knows_object(POWER_PACK);
 		knows_object(PROTEIN_PILL);
+		knows_object(LIGHTSABER);
+		knows_object(BEAMSWORD);
+		knows_object(DOUBLE_LIGHTSABER);
 		skill_init(Skill_Ana);
 	break;
 	case PM_BARBARIAN:
@@ -1887,7 +1890,7 @@ u_init()
 #ifdef BARD
 		if(!Role_if(PM_BARD)) skill_add(Skill_Elf_Music);
 #endif
-		if(Role_if(PM_ANACHRONIST)){
+		if(Role_if(PM_ANACHRONONAUT)){
 			u.umartial = TRUE;
 			skill_add(Skill_Elf_Ana);
 		}
@@ -1944,7 +1947,8 @@ u_init()
 	    knows_object(DROVEN_CLOAK);
 	    knows_object(find_signet_ring());
 		
-		u.uhouse = !(Role_if(PM_EXILE) || (Role_if(PM_NOBLEMAN) && !flags.initgend) || Role_if(PM_CONVICT) || Role_if(PM_PIRATE)) ?
+		if(Role_if(PM_ANACHRONONAUT)) u.uhouse = LAST_BASTION_SYMBOL;
+		else u.uhouse = !(Role_if(PM_EXILE) || (Role_if(PM_NOBLEMAN) && !flags.initgend) || Role_if(PM_CONVICT) || Role_if(PM_PIRATE)) ?
 				rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE :
 				rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
 		for(pobj = invent; pobj; pobj=pobj->nobj){
@@ -2400,7 +2404,7 @@ int otyp;
 
     switch (Role_switch) {
      case PM_ARCHEOLOGIST:	skills = Skill_A; break;
-     case PM_ANACHRONIST:	skills = Skill_Ana; break;
+     case PM_ANACHRONONAUT:	skills = Skill_Ana; break;
      case PM_BARBARIAN:		skills = Skill_B; break;
 #ifdef BARD
      case PM_BARD:		skills = Skill_Bard; break;
