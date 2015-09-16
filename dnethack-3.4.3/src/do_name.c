@@ -1028,35 +1028,35 @@ register struct monst *mtmp;
 #endif /* OVLB */
 #ifdef OVL0
 
-char *
+const char *
 sheheit(mtmp)
 register struct monst *mtmp;
 {
 	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "it" : mtmp->female ? "she" : "he";
 }
 
-char *
+const char *
 SheHeIt(mtmp)
 register struct monst *mtmp;
 {
 	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "It" : mtmp->female ? "She" : "He";
 }
 
-char *
+const char *
 hisherits(mtmp)
 register struct monst *mtmp;
 {
 	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "its" : mtmp->female ? "her" : "his";
 }
 
-char *
+const char *
 himherit(mtmp)
 register struct monst *mtmp;
 {
 	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "it" : mtmp->female ? "her" : "him";
 }
 
-char *
+const char *
 HisHerIts(mtmp)
 register struct monst *mtmp;
 {
