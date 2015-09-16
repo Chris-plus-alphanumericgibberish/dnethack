@@ -420,7 +420,7 @@ HELM("flack helmet", "green bowel",
 HELM("droven helm", "spider shaped helm",
 		0, 0,  0,	0, 1, 50,   5, 7, 0, MINERAL, CLR_BLACK),
 HELM("plasteel helm", "white skull helm",
-		0, 0,  0,   0, 2, 25,  50, 8, 2, PLASTIC, CLR_WHITE),
+		0, 0,  0,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
 HELM("crystal helm", "fish bowl",
 		0, 0,  0,   0, 1,150, 300, 6, 1, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
@@ -767,7 +767,7 @@ OBJECT(OBJ("Amulet of Yendor",	/* note: description == name */
 	OBJECT( OBJ(name,desc), \
 		BITS(kn,0,1,chg,mgc,1,0,0,bi,0,typ,sub,mat), \
 		0, TOOL_CLASS, prob, 0, \
-		wt, cost, sdam, ldam, hitbon, 0, wt, clr )
+		wt, cost, sdam, ldam, hitbon, WP_GENERIC, wt, clr )
 /* containers */
 CONTAINER("large box", (char *)0,       1, 0, 0,  40,350,   8, WOOD, HI_WOOD),
 CONTAINER("chest", (char *)0,           1, 0, 0,  35,600,  16, WOOD, HI_WOOD),
@@ -813,7 +813,7 @@ TOOL("mirror", "looking glass", 0, 0, 0, 0,  45, 13,  10, GLASS, HI_SILVER),
 TOOL("mirror", "looking glass", 0, 0, 0, 0,  60, 13,  10, GLASS, HI_SILVER),
 #endif
 TOOL("crystal ball", "glass orb",
-								0, 0, 1, 1,  15,150, 200, GLASS, HI_GLASS),
+								0, 0, 1, 1,  15, 50, 200, GLASS, HI_GLASS),
 TOOL("sensor pack", "small rigid box",
 								0, 0, 1, 1,   0, 15,2000, PLASTIC,CLR_WHITE),
 TOOL("hypospray", "hammer-shaped device",
