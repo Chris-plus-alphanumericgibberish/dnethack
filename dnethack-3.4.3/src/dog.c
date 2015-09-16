@@ -30,10 +30,11 @@ register struct monst *mtmp;
 	EDOG(mtmp)->revivals = 0;
 	EDOG(mtmp)->mhpmax_penalty = 0;
 	EDOG(mtmp)->killed_by_u = 0;
-//ifdef BARD
+#ifdef BARD
+	EDOG(mtmp)->encouraged = 0;
 	EDOG(mtmp)->friend = 0;
 	EDOG(mtmp)->waspeaceful = 0;
-//endif
+#endif
 }
 
 STATIC_OVL int
@@ -89,7 +90,7 @@ boolean quietly;
 		   maximum number of the target critter created--unless
 		   it has a special limit (erinys, Nazgul) */
 		if ((mvitals[mndx].mvflags & G_EXTINCT) &&
-			mbirth_limit(mndx) != MAXMONNO) {
+			mbirth_limit(mndx) < MAXMONNO) {
 		    if (!quietly)
 			/* have just been given "You <do something with>
 			   the figurine and it transforms." message */
