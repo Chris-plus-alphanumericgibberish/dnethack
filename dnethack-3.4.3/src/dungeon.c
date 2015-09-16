@@ -679,6 +679,7 @@ struct level_map {
 	
 	{ "sanctum",	&sanctum_level },
 
+	{ "minetn",     &minetown_level },
 #ifdef RECORD_ACHIEVE
 	{ "minend",     &mineend_level },
 	{ "soko1",      &sokoend_level },

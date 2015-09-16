@@ -1271,12 +1271,14 @@ register struct monst *mtmp;
 				else (void)mongets(mtmp, DAGGER);
 			}
 			/* note: you can't use a mattock with a shield */
+			if(!Is_minetown_level(&u.uz)){
 			if (!rn2(3)) (void)mongets(mtmp, DWARVISH_MATTOCK);
 			else {
 				(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
 				(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
 			}
-			if (In_mines(&u.uz)) {
+			}
+			if (In_mines(&u.uz) && !Is_minetown_level(&u.uz)) {
 			/* MRKR: Dwarves in dark mines have their lamps on. */
 			    otmp = mksobj(DWARVISH_IRON_HELM, TRUE, FALSE);
 			    (void) mpickobj(mtmp, otmp);
