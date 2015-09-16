@@ -1119,6 +1119,7 @@ struct obj **optr;
 
 		mm.x = u.ux;
 		mm.y = u.uy;
+		pline("Graves open around you...");
 		mkundead(&mm, FALSE, NO_MINVENT);
 		wakem = TRUE;
 
