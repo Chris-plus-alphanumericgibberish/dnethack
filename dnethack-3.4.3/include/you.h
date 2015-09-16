@@ -356,12 +356,13 @@ struct you {
 #define MATTK_MIND 10
 #define MATTK_CLOCK 11
 #define MATTK_DARK 12
-#define MATTK_REPL 13
-#define MATTK_UHORN 14
-#define MATTK_SHRIEK 15
-#define MATTK_SCREAM 16
-#define MATTK_HOLE 17
-#define MATTK_REACH 18
+#define MATTK_ELMENTAL 13
+#define MATTK_REPL 14
+#define MATTK_UHORN 15
+#define MATTK_SHRIEK 16
+#define MATTK_SCREAM 17
+#define MATTK_HOLE 18
+#define MATTK_REACH 19
 	struct attribs	macurr,		/* for monster attribs */
 			mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */
