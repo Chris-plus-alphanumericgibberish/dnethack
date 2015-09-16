@@ -454,70 +454,112 @@ int	msgnum;
 struct permonst *
 qt_montype()
 {
-	int qpm;
-	if(Race_if(PM_DROW) && !flags.initgend && Role_if(PM_NOBLEMAN) && on_level(&u.uz, &qstart_level)) return (struct permonst *)-1;
-	else if(Race_if(PM_DROW) && flags.initgend && Role_if(PM_NOBLEMAN) && Is_nemesis(&u.uz) && !rn2(4)) 
-		return !(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD) ? &mons[PM_MIND_FLAYER] : mkclass(S_UMBER, G_NOHELL);
-	else if(In_quest(&u.uz) && Race_if(PM_DWARF) && 
-		urole.neminum == PM_BOLG && Is_qlocate(&u.uz) && 
-		!(mvitals[PM_SMAUG].mvflags & G_GENOD || mvitals[PM_SMAUG].died > 0)
-	) return (struct permonst *)-1;
-	
-	if(rn2(5)){
-	  if(Role_if(PM_EXILE)){
-		switch(rn2(4)){
+	if(Role_if(PM_ANACHRONONAUT)){
+		switch(rn2(7)){
 			case 0:
-				qpm = roles[flags.panLgod].guardnum;
+				if(rn2(5)) return &mons[PM_CHANGED];
+				else return &mons[PM_WARRIOR_CHANGED];
 			break;
 			case 1:
-				qpm = roles[flags.panNgod].guardnum;
+				if(rn2(2)) return &mons[PM_BRAIN_GOLEM];
+				else if(rn2(2)) return &mons[PM_UMBER_HULK];
+				else if(rn2(2)) return &mons[PM_MIND_FLAYER];
+				else return &mons[PM_MASTER_MIND_FLAYER];
 			break;
 			case 2:
-				qpm = roles[flags.panCgod].guardnum;
+				if(rn2(100)) return &mons[PM_EDDERKOP];
+				else return &mons[PM_EMBRACED_DROWESS];
 			break;
 			case 3:
-				qpm = urole.enemy1num;
+				if(rn2(5)) return mkclass(S_UMBER, G_NOHELL|G_HELL);
+				else return &mons[PM_DOPPELGANGER];
+			break;
+			case 4:
+				if(rn2(4)) return mkclass(S_VAMPIRE, G_NOHELL|G_HELL);
+				else if(rn2(4)) return mkclass(S_WRAITH, G_NOHELL|G_HELL);
+				else if(rn2(4)) return mkclass(S_LICH, G_NOHELL|G_HELL);
+				else if(rn2(4)) return &mons[PM_DARKNESS_GIVEN_HUNGER];
+				else return &mons[PM_DREAD_SERAPH];
+			break;
+			case 5:
+				if(rn2(4)) return &mons[PM_DEEP_ONE];
+				else if(rn2(4)) return &mons[PM_DEEPER_ONE];
+				else if(rn2(2)) return &mons[PM_MIND_FLAYER];
+				else return &mons[PM_DEEPEST_ONE];
+			break;
+			case 6:
+				if(rn2(4)) return &mons[PM_PHANTASM];
+				else if(rn2(4)) return &mons[PM_NEVERWAS];
+				else if(rn2(3)) return &mons[PM_INTONER];
+				else return &mons[PM_BLACK_FLOWER];
 			break;
 		}
-		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-			return (&mons[qpm]);
-		return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
-	  } else {
-	    qpm = urole.enemy1num;
-	    if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-	    	return (&mons[qpm]);
-	    return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
-	  }
-	}
-	if(Role_if(PM_EXILE)){
-		switch(rn2(4)){
-			case 0:
-				qpm = (roles[flags.panLgod].femalenum == NON_PM || !rn2(2)) ? 
-					roles[flags.panLgod].malenum : 
-					roles[flags.panLgod].femalenum;
-			break;
-			case 1:
-				qpm = (roles[flags.panNgod].femalenum == NON_PM || !rn2(2)) ? 
-					roles[flags.panNgod].malenum : 
-					roles[flags.panNgod].femalenum;
-			break;
-			case 2:
-				qpm = (roles[flags.panCgod].femalenum == NON_PM || !rn2(2)) ? 
-					roles[flags.panCgod].malenum : 
-					roles[flags.panCgod].femalenum;
-			break;
-			case 3:
-				qpm = urole.enemy1num;
-			break;
-		}
-		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-			return (&mons[qpm]);
-		return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
 	} else {
-		qpm = urole.enemy2num;
-		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-			return (&mons[qpm]);
-		return (mkclass(urole.enemy2sym, G_NOHELL|G_HELL));
+		int qpm;
+		if(Race_if(PM_DROW) && !flags.initgend && Role_if(PM_NOBLEMAN) && on_level(&u.uz, &qstart_level)) return (struct permonst *)-1;
+		else if(Race_if(PM_DROW) && flags.initgend && Role_if(PM_NOBLEMAN) && Is_nemesis(&u.uz) && !rn2(4)) 
+			return !(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD && !In_quest(&u.uz)) ? &mons[PM_MIND_FLAYER] : mkclass(S_UMBER, G_NOHELL);
+		else if(In_quest(&u.uz) && Race_if(PM_DWARF) && 
+			urole.neminum == PM_BOLG && Is_qlocate(&u.uz) && 
+			!((mvitals[PM_SMAUG].mvflags & G_GENOD && !In_quest(&u.uz)) || mvitals[PM_SMAUG].died > 0)
+		) return (struct permonst *)-1;
+		
+		if(rn2(5)){
+		  if(Role_if(PM_EXILE)){
+			switch(rn2(4)){
+				case 0:
+					qpm = roles[flags.panLgod].guardnum;
+				break;
+				case 1:
+					qpm = roles[flags.panNgod].guardnum;
+				break;
+				case 2:
+					qpm = roles[flags.panCgod].guardnum;
+				break;
+				case 3:
+					qpm = urole.enemy1num;
+				break;
+			}
+			if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD && !In_quest(&u.uz)))
+				return (&mons[qpm]);
+			return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
+		  } else {
+		    qpm = urole.enemy1num;
+			if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD && !In_quest(&u.uz)))
+		    	return (&mons[qpm]);
+		    return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
+		  }
+		}
+		if(Role_if(PM_EXILE)){
+			switch(rn2(4)){
+				case 0:
+					qpm = (roles[flags.panLgod].femalenum == NON_PM || !rn2(2)) ? 
+						roles[flags.panLgod].malenum : 
+						roles[flags.panLgod].femalenum;
+				break;
+				case 1:
+					qpm = (roles[flags.panNgod].femalenum == NON_PM || !rn2(2)) ? 
+						roles[flags.panNgod].malenum : 
+						roles[flags.panNgod].femalenum;
+				break;
+				case 2:
+					qpm = (roles[flags.panCgod].femalenum == NON_PM || !rn2(2)) ? 
+						roles[flags.panCgod].malenum : 
+						roles[flags.panCgod].femalenum;
+				break;
+				case 3:
+					qpm = urole.enemy1num;
+				break;
+			}
+			if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD && !In_quest(&u.uz)))
+				return (&mons[qpm]);
+			return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
+		} else {
+			qpm = urole.enemy2num;
+			if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD && !In_quest(&u.uz)))
+				return (&mons[qpm]);
+			return (mkclass(urole.enemy2sym, G_NOHELL|G_HELL));
+		}
 	}
 }
 
