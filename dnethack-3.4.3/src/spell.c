@@ -3174,7 +3174,7 @@ spiriteffects(power, atme)
 				while (++tryct <= 100) {
 				mndx = rn2(PM_LONG_WORM_TAIL); /* Old polymorph method */
 				mdat = &mons[mndx];
-				if ((mvitals[mndx].mvflags & G_GENOD) != 0 ||
+				if ((mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) != 0 ||
 					is_placeholder(mdat)) continue;
 				/* polyok rules out all M2_PNAME and M2_WERE's;
 				   select_newcham_form might deliberately pick a player
