@@ -1479,7 +1479,7 @@ int thrown;
 				return;
 			}
 			
-		    if (!impaired && (obj->blessed || rn2(100))) {
+		    if (!impaired) {
 			pline("%s to your hand!", Tobjnam(obj, "return"));
 			obj = addinv(obj);
 			(void) encumber_msg();
