@@ -259,6 +259,22 @@ find_gcirclet()
     return -1;	/* not 0, or caller would try again each move */
 }
 
+/* find the object index for silver ring */
+int
+find_sring()
+{
+    register int i;
+    register const char *s;
+
+    for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "silver")
+		)) return i;
+
+    impossible("silver ring not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
 /* find the object index for visored helmet */
 int
 find_vhelm()
