@@ -494,7 +494,7 @@ can_twoweapon()
 
 #define NOT_WEAPON(obj) (!is_weptool(obj) && obj->oclass != WEAPON_CLASS)
 	if (!could_twoweap(youmonst.data) && 
-		!(!Upolyd && Role_if(PM_ANACHRONIST)) && 
+		!(!Upolyd && Role_if(PM_ANACHRONONAUT)) && 
 		!(u.specialSealsActive&SEAL_MISKA) && 
 		!(!Upolyd && uwep && uswapwep && 
 			((artilist[uwep->oartifact].inv_prop == DANCE_DAGGER && artilist[uswapwep->oartifact].inv_prop == SING_SPEAR) ||
