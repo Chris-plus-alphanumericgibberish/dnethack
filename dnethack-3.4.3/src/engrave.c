@@ -183,7 +183,9 @@ static const char *haluMesg[] = {
 		"That was a mistake.",
 	"Everything dies.",
 	"What is lost might not be found.",
-	"What was washed away might never return.",
+	"What was drowned and washed away need never return.",
+	
+	"Game Balance: Closing barn doors since day two.",
 	
 	"Listen at us, won't you?", /* All Our Friends Are Dead */
 		"Share with us your head",
@@ -204,6 +206,7 @@ static const char *haluMesg[] = {
 		"WH3R3 1S 1T?",
 	
 	"And there shall be laughter and magic and blood, and we shall dance our dance until the end of time...", /*Incursion, Halls of the Goblin King*/
+		"May you find beauty in endings.",
 	
 	"The eclipse will shatter the sky and from the remnants will bleed a storm of fire to engulf the earth.",	/* Gone with the Blastwave */
 		"The spirits of past sins will char the land and cleanse the planet.",
@@ -287,8 +290,12 @@ static const char *haluMesg[] = {
 	"Servant of time. Daughter of chaos. Unto the world unseen, the untamed you guide.", /*FF XIII-2*/
 	"One day, the light touched me.", /*FF XIII-3*/
 	"What greater weapon is there than to turn an enemy to your cause? To use their own knowledge against them?", /* Knights of the Old Republic */
+		"Sand stays.  All else changes.",
+		"We will remember you when you are sand too.",
 	"That is a lesson I will never learn, for I do not believe it.", /* Knights of the Old Republic II */
 	"Do not call up any that you can not put down.", /*HP Lovecraft*/
+		"That is not dead, that can eternal lie,",
+		"for with strange aeons even death may die.",
 	"All the world will be your enemy, Prince With A Thousand Enemies...", /*Watership Down*/
 		"...and when they catch you they will kill you...",
 		"but first they must catch you.",
