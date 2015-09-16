@@ -1738,8 +1738,14 @@ int thrown;
 	else if (thrown == 2) launcher = uswapwep;
 	else launcher = (struct obj *)0;
 
-	tmp = -1 + Luck + find_mac(mon) + u.uhitinc + u.spiritAttk +
+	if(Role_if(PM_RANGER) || (u.sealsActive&SEAL_EVE) ||
+		(obj->otyp == DAGGER && Role_if(PM_ROGUE)) ||
+		(obj->otyp == DART && Role_if(PM_TOURIST)) ||
+		(obj->otyp == HEAVY_IRON_BALL && Role_if(PM_CONVICT))
+	) tmp = -1 + Luck + find_mac(mon) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel);
+	else tmp = -1 + Luck + find_mac(mon) + u.uhitinc + u.spiritAttk +
+			maybe_polyd(youmonst.data->mlevel, u.ulevel)*BASE_ATTACK_BONUS;
 	if (ACURR(A_DEX) < 4) tmp -= 3;
 	else if (ACURR(A_DEX) < 6) tmp -= 2;
 	else if (ACURR(A_DEX) < 8) tmp -= 1;
