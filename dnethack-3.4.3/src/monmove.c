@@ -1607,6 +1607,19 @@ not_special:
 				if(!(info[i] & NOTONL)) avoid=TRUE;
 	    }
 
+		if(appr == 0 && !mtmp->mpeaceful && Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
+			struct monst *m2 = (struct monst *)0;
+			for(m2=fmon; m2; m2 = m2->nmon){
+				if(m2->m_id == quest_status.leader_m_id){
+					/*make a beeline for the leader*/
+					gx = m2->mx;
+					gy = m2->my;
+					appr = 1;
+					break;
+				}
+			}
+		}
+		
 	    for(i=0; i < cnt; i++) {
 		if (avoid && (info[i] & NOTONL)) continue;
 		nx = poss[i].x;
