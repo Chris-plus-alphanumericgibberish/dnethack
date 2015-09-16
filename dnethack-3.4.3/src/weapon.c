@@ -310,10 +310,10 @@ int spec;
 			tmp += rnd(objects[otyp].oc_wldam)+4;
 		break;
 		case VIBROBLADE:
-			if(otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wldam)+4; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wldam)+4; 
 		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wldam)+8; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wldam)+8; 
 		break;
 		case LASER_BEAM:
 		case BLASTER_BOLT:
@@ -416,10 +416,10 @@ int spec;
 			tmp += rnd(objects[otyp].oc_wsdam)+4;
 		break;
 		case VIBROBLADE:
-			if(otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wsdam)+3; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wsdam)+3; 
 		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wsdam)+6; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wsdam)+6; 
 		break;
 		case LASER_BEAM:
 		case BLASTER_BOLT:
@@ -2097,7 +2097,7 @@ const struct def_skill *class_skill;
 
 	/* walk through array to set skill maximums */
 	for (; class_skill->skill != P_NONE; class_skill++) {
-		if(!(Race_if(PM_VAMPIRE) && !Role_if(PM_ANACHRONIST)) || class_skill->skill != P_TWO_WEAPON_COMBAT){
+		if(!(Race_if(PM_VAMPIRE) && !Role_if(PM_ANACHRONONAUT)) || class_skill->skill != P_TWO_WEAPON_COMBAT){
 			skmax = class_skill->skmax;
 			skill = class_skill->skill;
 
