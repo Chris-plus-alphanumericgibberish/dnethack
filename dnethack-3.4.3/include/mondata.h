@@ -121,8 +121,9 @@
 #define can_teleport(ptr)	(((ptr)->mflags1 & M1_TPORT) != 0L)
 #define control_teleport(ptr)	(((ptr)->mflags1 & M1_TPORT_CNTRL) != 0L)
 #define telepathic(ptr)		((ptr) == &mons[PM_FLOATING_EYE] || \
-				 (ptr) == &mons[PM_MIND_FLAYER] || \
-				 (ptr) == &mons[PM_MASTER_MIND_FLAYER])
+				 (ptr) == &mons[PM_BRAIN_GOLEM] || \
+				 (ptr) == &mons[PM_SEMBLANCE] || \
+				 is_mind_flayer(ptr))
 #define is_armed(ptr)		attacktype(ptr, AT_WEAP)
 #define crpsdanger(ptr)		(acidic(ptr) || poisonous(ptr) ||\
 							 freezing(ptr) || burning(ptr))
@@ -394,6 +395,10 @@
 								 (ptr) == &mons[PM_DARUTH_XAXOX] ||\
 								 (ptr) == &mons[PM_EMBRACED_DROWESS]\
 								)
+#define has_mind_blast(ptr)	(is_mind_flayer(ptr) || \
+				 (ptr) == &mons[PM_BRAIN_GOLEM] || \
+				 (ptr) == &mons[PM_SEMBLANCE] \
+				)
 
 #define is_mind_flayer(ptr)	((ptr) == &mons[PM_MIND_FLAYER] || \
 				 (ptr) == &mons[PM_MASTER_MIND_FLAYER]|| \
