@@ -1266,6 +1266,7 @@ register struct attack *mattk;
 		bypassDR = 0;
 		switch (mattk->adtyp) {
 		    case AD_SHDW:
+				if(onscary(mtmp->mux,mtmp->muy,mtmp)) return 0; //Warded
 				ammo_type = DROVEN_BOLT;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;
@@ -1389,6 +1390,7 @@ register struct attack *mattk;
 		bypassDR = 0;
 		switch (mattk->adtyp) {
 		    case AD_SHDW:
+				if(onscary(mdef->mx,mdef->my,mtmp)) return 0; //Warded
 				ammo_type = DROVEN_BOLT;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;
