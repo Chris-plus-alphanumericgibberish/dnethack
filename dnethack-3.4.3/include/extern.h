@@ -782,6 +782,7 @@ E void NDECL(drinksink);
 
 /* ### hack.c ### */
 
+E int FDECL(max_ints, (int,int));
 E int FDECL(min_ints, (int,int));
 E boolean FDECL(revive_nasty, (int,int,const char*));
 E void FDECL(movobj, (struct obj *,XCHAR_P,XCHAR_P));
@@ -1520,6 +1521,7 @@ E void NDECL(synch_cursor);
 
 E void NDECL(init_objects);
 E int NDECL(find_gcirclet);
+E int NDECL(find_sring);
 E int NDECL(find_vhelm);
 E int NDECL(find_skates);
 E int NDECL(find_cboots);
@@ -1562,6 +1564,8 @@ E void NDECL(objects_init);
 /* ### objnam.c ### */
 
 E char *FDECL(lightsaber_colorText, (struct obj *));
+E char *FDECL(lightsaber_hiltText, (struct obj *));
+E int NDECL(random_saber_hilt);
 E char *FDECL(obj_typename, (int));
 E char *FDECL(simple_typename, (int));
 E boolean FDECL(obj_is_pname, (struct obj *));
@@ -1762,6 +1766,7 @@ E void FDECL(ugolemeffects, (int,int));
 
 E void FDECL(set_itimeout, (long *,long));
 E void FDECL(incr_itimeout, (long *,int));
+E long FDECL(itimeout_incr, (long,int));
 E void FDECL(make_confused, (long,BOOLEAN_P));
 E void FDECL(make_stunned, (long,BOOLEAN_P));
 E void FDECL(make_blinded, (long,BOOLEAN_P));
@@ -2645,7 +2650,7 @@ E void FDECL(hit, (const char *,struct monst *,const char *));
 E void FDECL(miss, (const char *,struct monst *));
 E struct monst *FDECL(bhit, (int,int,int,int,int (*)(MONST_P,OBJ_P),
 			     int (*)(OBJ_P,OBJ_P),struct obj *, boolean *));
-E struct monst *FDECL(boomhit, (int,int));
+E struct monst *FDECL(boomhit, (struct obj *,int,int));
 E int FDECL(burn_floor_paper, (int,int,BOOLEAN_P,BOOLEAN_P));
 E void FDECL(buzz, (int,int,XCHAR_P,XCHAR_P,int,int,int,int));
 E void FDECL(melt_ice, (XCHAR_P,XCHAR_P));

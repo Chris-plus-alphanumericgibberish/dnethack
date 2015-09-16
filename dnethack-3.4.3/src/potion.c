@@ -11,7 +11,6 @@ static NEARDATA int nothing, unkn;
 static NEARDATA const char beverages[] = { POTION_CLASS, 0 };
 
 STATIC_DCL long FDECL(itimeout, (long));
-STATIC_DCL long FDECL(itimeout_incr, (long,int));
 STATIC_DCL void NDECL(ghost_from_bottle);
 STATIC_DCL short FDECL(mixtype, (struct obj *,struct obj *));
 
@@ -27,7 +26,7 @@ long val;
 }
 
 /* increment `old' by `incr' and force result to be valid intrinsic timeout */
-STATIC_OVL long
+long
 itimeout_incr(old, incr)
 long old;
 int incr;
