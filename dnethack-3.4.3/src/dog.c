@@ -609,7 +609,7 @@ boolean pets_only;	/* true for ascension or final escape */
 		/* monster won't follow if it hasn't noticed you yet */
 		&& !(mtmp->mstrategy & STRAT_WAITFORU)) {
 			stay_behind = FALSE;
-			if (mtmp->mtame && mtmp->meating) {
+			if (mtmp->mtame && mtmp->meating && mtmp != u.usteed) {
 				if (canseemon(mtmp))
 					pline("%s is still eating.", Monnam(mtmp));
 				stay_behind = TRUE;
@@ -618,13 +618,17 @@ boolean pets_only;	/* true for ascension or final escape */
 					pline("%s seems very disoriented for a moment.",
 					Monnam(mtmp));
 				stay_behind = TRUE;
-			} else if (mtmp->mtame && mtmp->mtrapped) {
+			} else if (mtmp->mtame && mtmp->mtrapped && mtmp != u.usteed) {
 				if (canseemon(mtmp))
 					pline("%s is still trapped.", Monnam(mtmp));
 				stay_behind = TRUE;
 			}
 #ifdef STEED
-			if (mtmp == u.usteed) stay_behind = FALSE;
+			// if (mtmp == u.usteed) stay_behind = FALSE;
+			if (mtmp == u.usteed && stay_behind) {
+			    pline("%s vanishes from underneath you.", Monnam(mtmp));
+				dismount_steed(DISMOUNT_VANISHED);
+			}
 #endif
 			if (stay_behind) {
 				if (mtmp->mleashed) {
