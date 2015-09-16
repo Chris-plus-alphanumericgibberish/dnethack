@@ -4272,8 +4272,9 @@ arti_invoke(obj)
 						do_vicinity_map(u.ux,u.uy); /*Note that this is not blocked by pointy hats*/
 					break;
 					case COMMAND_FEAR:
-						You("thrust the %s into the air, that all may know of your %s.", 
+						You("thrust the %s into the %s, that all may know of your %s.", 
 							obj->oartifact == ART_SCEPTRE_OF_LOLTH ? "Sceptre" : "Rod", 
+							Underwater ? "water" : "air",
 							obj->oartifact == ART_ROD_OF_LORDLY_MIGHT ? "Might" : "majesty");
 						for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 							if (DEADMONSTER(mtmp)) continue;
