@@ -36,6 +36,7 @@
 #define AT_TNKR		26	/* Tinker attacks */
 #define AT_SHDW		27	/* Phased non-contact attack */
 #define AT_BEAM		28	/* non-contact ranged beam attack */
+#define AT_DEVA		29	/* million-arm weapon attack */
 
 #define AT_WEAP		254	/* uses weapon */
 #define AT_MAGC		255	/* uses magic spell(s) */

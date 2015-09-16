@@ -465,6 +465,7 @@ E void FDECL(keepdogs, (BOOLEAN_P));
 E void FDECL(migrate_to_level, (struct monst *,XCHAR_P,XCHAR_P,coord *));
 E int FDECL(dogfood, (struct monst *,struct obj *));
 E struct monst *FDECL(tamedog, (struct monst *,struct obj *));
+E struct monst *FDECL(make_pet_minion, (int,aligntyp));
 E void FDECL(abuse_dog, (struct monst *));
 E void FDECL(wary_dog, (struct monst *, BOOLEAN_P));
 
@@ -1106,7 +1107,8 @@ E int FDECL(dotent, (struct monst *, int));
 /* ### minion.c ### */
 
 E void FDECL(msummon, (struct monst *));
-E struct monst * FDECL(summon_minion, (ALIGNTYP_P,BOOLEAN_P,BOOLEAN_P));
+E struct monst * FDECL(summon_god_minion, (const char *,ALIGNTYP_P,BOOLEAN_P));
+E struct monst * FDECL(summon_minion, (ALIGNTYP_P,BOOLEAN_P,BOOLEAN_P,BOOLEAN_P));
 E int FDECL(demon_talk, (struct monst *));
 E long FDECL(bribe, (struct monst *));
 E int FDECL(dprince, (ALIGNTYP_P));
@@ -1114,6 +1116,8 @@ E int FDECL(dlord, (ALIGNTYP_P));
 E int NDECL(llord);
 E int FDECL(ndemon, (ALIGNTYP_P));
 E int NDECL(lminion);
+E int NDECL(nminion);
+E int NDECL(cminion);
 
 /* ### mklev.c ### */
 
@@ -1307,6 +1311,7 @@ E boolean FDECL(resists_ston, (struct monst *));
 E boolean FDECL(resists_drain, (struct monst *));
 E boolean FDECL(resists_sickness, (struct monst *));
 E boolean FDECL(resists_magm, (struct monst *));
+E boolean FDECL(resists_death, (struct monst *));
 E boolean FDECL(resists_blnd, (struct monst *));
 E boolean FDECL(can_blnd, (struct monst *,struct monst *,UCHAR_P,struct obj *));
 E boolean FDECL(ranged_attk, (struct permonst *));
@@ -1465,6 +1470,7 @@ E boolean FDECL(find_defensive, (struct monst *));
 E int FDECL(use_defensive, (struct monst *));
 E int FDECL(rnd_defensive_item, (struct monst *));
 E boolean FDECL(find_offensive, (struct monst *));
+E struct permonst * FDECL(find_mask, (struct monst *));
 #ifdef USE_TRAMPOLI
 E int FDECL(mbhitm, (struct monst *,struct obj *));
 #endif
@@ -1802,6 +1808,7 @@ E int NDECL(doturn);
 E const char *NDECL(a_gname);
 E const char *FDECL(a_gname_at, (XCHAR_P x,XCHAR_P y));
 E const char *FDECL(align_gname, (ALIGNTYP_P));
+E const char *FDECL(align_gname_full, (ALIGNTYP_P));
 E const char *FDECL(halu_gname, (ALIGNTYP_P));
 E const char *FDECL(align_gtitle, (ALIGNTYP_P));
 E void FDECL(altar_wrath, (int,int));
@@ -1950,6 +1957,7 @@ E int FDECL(randrole, (int));
 E int FDECL(randrace, (int));
 E int FDECL(randgend, (int, int));
 E int FDECL(randalign, (int, int));
+E const int * FDECL(god_minions, (const char *));
 E int FDECL(str2role, (char *));
 E const struct Role *FDECL(pm2role, (int));
 E int FDECL(str2race, (char *));

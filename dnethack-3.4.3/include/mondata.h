@@ -22,16 +22,21 @@
 // #define resists_drain(mon)	(((mon)->mintrinsics & MR_DRAIN) != 0)
 // #define resists_sickness(mon)	(((mon)->mintrinsics & MR_SICK) != 0)
 
-#define	resist_attacks(ptr)	((ptr) == &mons[PM_HUNGRY_DEAD])
+#define	resist_attacks(ptr)	((ptr) == &mons[PM_HUNGRY_DEAD] || (ptr) == &mons[PM_STINKING_CLOUD] || (ptr) == &mons[PM_MORTAI])
 
-#define resists_poly(ptr)	((ptr) == &mons[PM_OONA] || is_weeping(ptr))
+#define resists_poly(ptr)	((ptr) == &mons[PM_OONA] || is_weeping(ptr) || is_yochlol(ptr))
 
 #define is_blind(mon)		(!((mon)->mcansee) || (is_drow((mon)->data) && (viz_array[(mon)->my][(mon)->mx]&TEMP_LIT || levl[(mon)->mx][(mon)->my].lit)))
 
 #define is_lminion(mon)		(is_minion((mon)->data) && \
-				 (mon)->data->maligntyp >= A_COALIGNED && \
+				 (mon)->data->maligntyp > A_NEUTRAL && \
 				 ((mon)->data != &mons[PM_ANGEL] || \
 				  EPRI(mon)->shralign > 0))
+
+#define is_cminion(mon)		(is_minion((mon)->data) && \
+				 (mon)->data->maligntyp < A_NEUTRAL && \
+				 ((mon)->data != &mons[PM_ANGEL] || \
+				  EPRI(mon)->shralign < 0))
 
 #define is_flyer(ptr)		(((ptr)->mflags1 & M1_FLY) != 0L)
 #define is_displacer(ptr)	((ptr) == &mons[PM_DISPLACER_BEAST] || (ptr) == &mons[PM_SHIMMERING_DRAGON])
@@ -106,6 +111,7 @@
 #define mindless(ptr)		(((ptr)->mflags1 & M1_MINDLESS) != 0L || on_level(&valley_level, &u.uz))
 #define humanoid(ptr)		(((ptr)->mflags1 & M1_HUMANOID) != 0L)
 #define is_animal(ptr)		(((ptr)->mflags1 & M1_ANIMAL) != 0L)
+#define is_plant(ptr)		(is_vegetation(ptr) || (ptr) == &mons[PM_WOOD_GOLEM] || (ptr) == &mons[PM_GROVE_GUARDIAN] || (ptr) == &mons[PM_WOOD_TROLL])
 #define slithy(ptr)		(((ptr)->mflags1 & M1_SLITHY) != 0L)
 #define is_wooden(ptr)		((ptr) == &mons[PM_WOOD_GOLEM] || (ptr) == &mons[PM_LIVING_LECTURN] || (ptr) == &mons[PM_GROVE_GUARDIAN] || (ptr) == &mons[PM_WOOD_TROLL])
 #define thick_skinned(ptr)	(((ptr)->mflags1 & M1_THICK_HIDE) != 0L)
@@ -135,16 +141,26 @@
 #define is_undead(ptr)		(((ptr)->mflags2 & M2_UNDEAD) != 0L)
 #define is_were(ptr)		(((ptr)->mflags2 & M2_WERE) != 0L)
 #define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
-#define is_heladrin(ptr)		((ptr) == &mons[PM_FIRRE] || \
+#define is_heladrin(ptr)		(\
+							 (ptr) == &mons[PM_NOVIERE] || \
+							 (ptr) == &mons[PM_BRALANI] || \
+							 (ptr) == &mons[PM_FIRRE] || \
 							 (ptr) == &mons[PM_SHIERE] || \
 							 (ptr) == &mons[PM_GHAELE] || \
 							 (ptr) == &mons[PM_TULANI] \
 							)
-#define is_eeladrin(ptr)	((ptr) == &mons[PM_DANCING_FLAME] || \
+#define is_eeladrin(ptr)	(\
+							 (ptr) == &mons[PM_WATER_DOLPHIN] || \
+							 (ptr) == &mons[PM_SINGING_SAND] || \
+							 (ptr) == &mons[PM_DANCING_FLAME] || \
 							 (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 							 (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 							 (ptr) == &mons[PM_BALL_OF_RADIANCE] \
 							)
+#define is_yochlol(ptr)		((ptr) == &mons[PM_YOCHLOL] ||\
+							 (ptr) == &mons[PM_UNEARTHLY_DROW] ||\
+							 (ptr) == &mons[PM_STINKING_CLOUD] ||\
+							 (ptr) == &mons[PM_DEMONIC_BLACK_WIDOW])
 #define is_vampire(ptr)		(((ptr)->mflags2 & M2_VAMPIRE) != 0L)
 #define is_half_dragon(ptr)		attacktype_fordmg(ptr, AT_BREA, AD_HDRG)
 #define is_elf(ptr)			(((ptr)->mflags2 & M2_ELF) != 0L && !is_drow(ptr))
@@ -206,6 +222,7 @@
 #define is_domestic(ptr)	(((ptr)->mflags2 & M2_DOMESTIC) != 0L)
 #define is_demon(ptr)		(((ptr)->mflags2 & M2_DEMON) != 0L)
 #define is_keter(ptr)		((ptr)->mlet == S_KETER)
+#define is_angel(ptr)		((ptr)->mlet == S_ANGEL)
 #define is_auton(ptr)		(	(ptr) == &mons[PM_MONOTON] ||\
 								(ptr) == &mons[PM_DUTON] ||\
 								(ptr) == &mons[PM_TRITON] ||\
@@ -342,6 +359,7 @@
 				  (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 				  (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 				  (ptr) == &mons[PM_HOOLOOVOO] || \
+				  (ptr) == &mons[PM_LIGHTNING_PARAELEMENTAL] || \
 				  (ptr) == &mons[PM_FALLEN_ANGEL] || \
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
