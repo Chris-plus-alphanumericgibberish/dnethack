@@ -1745,7 +1745,7 @@ dosacrifice()
       of your alignment, is strongly discouraged.
      */
 
-	if(Role_if(PM_ANACHRONIST) && otmp->otyp != AMULET_OF_YENDOR){
+	if(Role_if(PM_ANACHRONONAUT) && otmp->otyp != AMULET_OF_YENDOR){
 		You("do not give offerings to the God of the future.");
 		return 0;
 	}
@@ -2288,7 +2288,7 @@ int
 dopray()
 {
     /* Confirm accidental slips of Alt-P */
-	if(Role_if(PM_ANACHRONIST)){
+	if(Role_if(PM_ANACHRONONAUT)){
 		pline("There is but one God in the future.");
 		pline("And to It, you do not pray.");
 		return 0;
