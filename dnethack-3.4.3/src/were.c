@@ -12,7 +12,8 @@ register struct monst *mon;
 {
 	if( !is_were(mon->data) && 
 		!(is_heladrin(mon->data) && mon->mhp < .5*mon->mhpmax && rn2(2)) && 
-		!(is_eeladrin(mon->data) && mon->mhp > .5*mon->mhpmax)
+		!(is_eeladrin(mon->data) && mon->mhp > .5*mon->mhpmax) &&
+		!(is_yochlol(mon->data) && mon->mhp < .5*mon->mhpmax)
 	) return;
 
 	if (is_human(mon->data)) {
@@ -33,8 +34,9 @@ register struct monst *mon;
 			You_hear("a %s howling at the moon.", howler);
 		}
 	    }
-	} else if (!rn2(30) || Protection_from_shape_changers 
+	} else if (!rn2(30) || (is_were(mon->data) && Protection_from_shape_changers) 
 		|| is_heladrin(mon->data) 
+		|| is_yochlol(mon->data) 
 		|| (is_eeladrin(mon->data) && mon->mhp >= mon->mhpmax)
 	) {
 		if(mon->data == &mons[PM_BALL_OF_LIGHT]){
@@ -42,6 +44,7 @@ register struct monst *mon;
 			mon->mfleetim = 0;
 		}
 	    new_were(mon);		/* change back into human form */
+		if(is_yochlol(mon->data)) mon->movement += 12;
 	}
 }
 
@@ -63,6 +66,10 @@ int pm;
 	    case PM_HUMAN_WERERAT:    return(PM_WERERAT);
 		case PM_ANUBITE:		  return(PM_ANUBAN_JACKAL);
 		case PM_ANUBAN_JACKAL:	  return(PM_ANUBITE);
+		case PM_NOVIERE:		  return(PM_WATER_DOLPHIN);
+		case PM_WATER_DOLPHIN:	  return(PM_NOVIERE);
+		case PM_BRALANI:		  return(PM_SINGING_SAND);
+		case PM_SINGING_SAND:	  return(PM_BRALANI);
 		case PM_FIRRE:			  return(PM_DANCING_FLAME);
 		case PM_DANCING_FLAME:	  return(PM_FIRRE);
 		case PM_SHIERE:			  return(PM_BALL_OF_LIGHT);
@@ -71,6 +78,31 @@ int pm;
 		case PM_LUMINOUS_CLOUD:	  return(PM_GHAELE);
 		case PM_TULANI:			  return(PM_BALL_OF_RADIANCE);
 		case PM_BALL_OF_RADIANCE: return(PM_TULANI);
+		
+		case PM_YOCHLOL: 
+			switch(rnd(3)){
+			case 1: return(PM_UNEARTHLY_DROW);
+			case 2: return(PM_STINKING_CLOUD);
+			case 3: return(PM_DEMONIC_BLACK_WIDOW);
+		}
+		case PM_UNEARTHLY_DROW: 
+			switch(rnd(3)){
+			case 1: return(PM_YOCHLOL);
+			case 2: return(PM_STINKING_CLOUD);
+			case 3: return(PM_DEMONIC_BLACK_WIDOW);
+		}
+		case PM_STINKING_CLOUD: 
+			switch(rnd(3)){
+			case 1: return(PM_UNEARTHLY_DROW);
+			case 2: return(PM_YOCHLOL);
+			case 3: return(PM_DEMONIC_BLACK_WIDOW);
+		}
+		case PM_DEMONIC_BLACK_WIDOW: 
+			switch(rnd(3)){
+			case 1: return(PM_UNEARTHLY_DROW);
+			case 2: return(PM_STINKING_CLOUD);
+			case 3: return(PM_YOCHLOL);
+		}
 	    default:			      return(0);
 	}
 }
@@ -91,12 +123,8 @@ struct monst *mon;
 
 	if(canseemon(mon) && !Hallucination) {
 		if(mon->data != &mons[PM_ANUBITE] && mon->data != &mons[PM_ANUBAN_JACKAL] &&
-		   mon->data != &mons[PM_FIRRE] && mon->data != &mons[PM_DANCING_FLAME] &&
-		   mon->data != &mons[PM_SHIERE] && mon->data != &mons[PM_BALL_OF_LIGHT] &&
-		   mon->data != &mons[PM_GHAELE] && mon->data != &mons[PM_LUMINOUS_CLOUD] &&
-		   mon->data != &mons[PM_TULANI] && mon->data != &mons[PM_BALL_OF_RADIANCE]
-		)
-	    pline("%s changes into a %s.", Monnam(mon),
+		  !is_eladrin(mon->data) && !is_yochlol(mon->data)
+		) pline("%s changes into a %s.", Monnam(mon),
 			is_human(&mons[pm]) ? "human" :
 			mons[pm].mname+4);
 		else pline("%s changes into a %s.", Monnam(mon),
