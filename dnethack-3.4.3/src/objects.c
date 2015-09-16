@@ -60,7 +60,7 @@ NEARDATA struct objclass objects[] = {
 	OBJECT( \
 		OBJ(name,app), BITS(kn,mg,1,0,0,1,0,0,bi,0,typ,sub,metal), 0, \
 		WEAPON_CLASS, prob, 0, \
-		wt, cost, sdam, ldam, hitbon, 0, wt, color )
+		wt, cost, sdam, ldam, hitbon, WP_GENERIC, wt, color )
 #define PROJECTILE(name,app,kn,prob,wt,cost,sdam,ldam,hitbon,metal,sub,color) \
 	OBJECT( \
 		OBJ(name,app), \
@@ -71,7 +71,7 @@ NEARDATA struct objclass objects[] = {
 	OBJECT( \
 		OBJ(name,app), BITS(kn,0,1,0,0,1,0,0,bi,0,0,sub,metal), 0, \
 		WEAPON_CLASS, prob, 0, \
-		wt, cost, 2, 2, hitbon, WP_GENERIC, wt, color )
+		wt, cost, 0, 0, hitbon, WP_GENERIC, wt, color )
 #define BULLET(name,app,kn,prob,wt,cost,sdam,ldam,hitbon,ammotyp,typ,metal,sub,color) \
 	OBJECT( \
 		OBJ(name,app), BITS(kn,1,1,0,0,1,0,0,0,0,typ,sub,metal), 0, \
