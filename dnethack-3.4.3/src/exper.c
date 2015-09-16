@@ -206,7 +206,15 @@ void
 more_experienced(exp, rexp)
 	register int exp, rexp;
 {
-	u.uexp += exp;
+	if(u.ulevel < u.ulevelmax){
+		//if you have lost levels to level drain, gain XP at 5x rate.
+		//if you are about to regain the last drained level, gain at least the base xp total
+		if(newuexp(u.ulevelmax - 1) < u.uexp + exp*5){
+			u.uexp += max(exp, newuexp(u.ulevelmax - 1) - u.uexp);
+		} else {
+			u.uexp += exp*5;
+		}
+	} else u.uexp += exp;
 	u.urexp += 4*exp + rexp;
 	if(exp
 #ifdef SCORE_ON_BOTL
