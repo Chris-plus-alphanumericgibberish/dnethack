@@ -396,9 +396,11 @@ moveloop()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			if(u.uhs == WEAK && u.sealsActive&SEAL_AHAZU) unbind(SEAL_AHAZU,TRUE);
 #ifndef GOLDOBJ
-			if(u.sealsActive&SEAL_FAFNIR && u.ugold < u.ulevel*100) unbind(SEAL_FAFNIR,TRUE);
+			// if(u.sealsActive&SEAL_FAFNIR && u.ugold < u.ulevel*100) unbind(SEAL_FAFNIR,TRUE);
+			if(u.sealsActive&SEAL_FAFNIR && u.ugold == 0) unbind(SEAL_FAFNIR,TRUE);
 #else
-			if(u.sealsActive&SEAL_FAFNIR && money_cnt(invent) < u.ulevel*100) unbind(SEAL_FAFNIR,TRUE);
+			// if(u.sealsActive&SEAL_FAFNIR && money_cnt(invent) < u.ulevel*100) unbind(SEAL_FAFNIR,TRUE);
+			if(u.sealsActive&SEAL_FAFNIR && money_cnt(invent) == 0) unbind(SEAL_FAFNIR,TRUE);
 #endif
 			if(u.sealsActive&SEAL_JACK && (Is_astralevel(&u.uz) || Inhell)) unbind(SEAL_JACK,TRUE);
 			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON) 
@@ -513,7 +515,7 @@ moveloop()
 				if(mtmp->data == &mons[PM_CLOCKWORK_SOLDIER] || mtmp->data == &mons[PM_CLOCKWORK_DWARF] || 
 				   mtmp->data == &mons[PM_FABERGE_SPHERE] || mtmp->data == &mons[PM_FIREWORK_CART] ||
 				   mtmp->data == &mons[PM_ID_JUGGERNAUT]
-				) if(rn2(2)) mtmp->mextra[0] = ((int)mtmp->mextra[0] + rn2(3)-1)%8;
+				) if(rn2(2)) mtmp->mvar1 = ((int)mtmp->mvar1 + rn2(3)-1)%8;
 				if((mtmp->data == &mons[PM_JUGGERNAUT] || mtmp->data == &mons[PM_ID_JUGGERNAUT]) && !rn2(3)){
 					int mdx=0, mdy=0, i;
 					if(mtmp->mux - mtmp->mx < 0) mdx = -1;
@@ -521,7 +523,7 @@ moveloop()
 					if(mtmp->muy - mtmp->my < 0) mdy = -1;
 					else if(mtmp->muy - mtmp->my > 0) mdy = +1;
 					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
-					if(mtmp->mextra[0] != i){
+					if(mtmp->mvar1 != i){
 						if(sensemon(mtmp) || ((cansee(mtmp->mx,mtmp->my) || see_with_infrared(mtmp)) && canspotmon(mtmp) && !mtmp->mundetected)){
 							pline("%s turns to a new heading.", Monnam(mtmp));
 						} else if(couldsee(mtmp->mx,mtmp->my)){
@@ -529,7 +531,7 @@ moveloop()
 						} else {
 							You_hear("scraping in the distance.");
 						}
-						mtmp->mextra[0] = i;
+						mtmp->mvar1 = i;
 						mtmp->movement = -12;
 					}
 				}
@@ -780,7 +782,7 @@ moveloop()
 					else if(pobj->cobj){
 						arti_poly_contents(pobj);
 					}
-					u.protean = rnz(100)+d(3,10);
+					u.protean = 100 + d(10,10);
 					update_inventory();
 				}
 			}
