@@ -255,7 +255,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 				break;
 			case AD_DISN:
 				explmask = (olet == WAND_CLASS) ?
-						!!(nonliving(youmonst.data) || is_demon(youmonst.data) || u.sealsActive&SEAL_OSE) :
+						!!(resists_death(&youmonst) || u.sealsActive&SEAL_OSE) :
 						!!Disint_resistance;
 				break;
 			case AD_ELEC:
@@ -298,7 +298,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 				break;
 			case AD_DISN:
 				explmask |= (olet == WAND_CLASS) ?
-					(nonliving(mtmp->data) || is_demon(mtmp->data)) :
+					resists_death(mtmp) :
 					resists_disint(mtmp);
 				break;
 			case AD_ELEC:
