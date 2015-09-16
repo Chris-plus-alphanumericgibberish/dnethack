@@ -1091,6 +1091,9 @@ register int after;	/* this is extra fast monster movement */
 #ifdef PET_SATIATION
 			     && edog->hungrytime < monstermoves + DOG_SATIATED
 #endif /* PET_SATIATION */
+				 && !((mtmp->misc_worn_check & W_ARMH) && 
+					(((which_armor(mtmp, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mtmp, W_ARMH))->otyp) == CRYSTAL_HELM) &&
+					(which_armor(mtmp, W_ARMH))->cursed)
 			     ) {
 			/* Note: our dog likes the food so much that he
 			 * might eat it even when it conceals a cursed object */
