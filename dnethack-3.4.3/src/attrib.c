@@ -277,11 +277,11 @@ boolean parameter; /* So I can't think up of a good name.  So sue me. --KAA */
 		else if (otmp->blessed) bonchance += otmp->quan;
 		else if (parameter) bonchance += otmp->quan;
 	    }
-#ifdef CONVICT
-	if(Role_if(PM_CONVICT)) bonchance -= (u.ulevel-1)/10 + 1; /* a Convict's karmic burden becomes 
-																only more heavy as they level up */
-#endif	/* CONVICT */
-	return sgn((int)bonchance);
+// #ifdef CONVICT
+	// if(Role_if(PM_CONVICT)) bonchance -= (u.ulevel-1)/10 + 1; /* a Convict's karmic burden becomes 
+																// only more heavy as they level up */
+// #endif	/* CONVICT */
+	return (int)bonchance;
 }
 
 boolean
@@ -298,9 +298,13 @@ has_luckitem()
 void
 set_moreluck()
 {
+	int stoneluck = stone_luck(TRUE);
 	if (!has_luckitem()) u.moreluck = 0;
-	else if (stone_luck(TRUE) >= 0) u.moreluck = LUCKADD;
-	else u.moreluck = -LUCKADD;
+	else if (stoneluck >= 0){
+		if(Role_if(PM_CONVICT) && stoneluck < LUCKADD)
+			u.moreluck = stoneluck;
+		else u.moreluck = LUCKADD;
+	} else u.moreluck = -LUCKADD;
 }
 
 #endif /* OVLB */

@@ -307,6 +307,7 @@ nh_timeout()
 	if (u.uluck != baseluck) {
 	    int timeout = 600;
 	    int time_luck = stone_luck(FALSE);
+		int stoneluck = stone_luck(TRUE);
 	/* Cursed luckstones slow bad luck timing out; blessed luckstones
 	 * slow good luck timing out; normal luckstones slow both;
 	 * neither is affected if you don't have a luckstone.
@@ -315,8 +316,8 @@ nh_timeout()
 	    if (has_luckitem() && 
 		    (!time_luck ||
 		     (time_luck > 0 && u.uluck > baseluck) ||
-		     (time_luck < 0 && u.uluck < baseluck))) {
-
+		     (time_luck < 0 && u.uluck < baseluck))
+		) {
 		/* The slowed timeout depends on the distance between your 
 		 * luck (not including luck bonuses) and your base luck.
 		 * 
@@ -336,9 +337,14 @@ nh_timeout()
 		 */ 
 		int base_dist = u.uluck - baseluck;
 		int slow_timeout;
+			if (!Role_if(PM_CONVICT) || 
+				stoneluck < 0 || 
+				base_dist <= stoneluck*3
+			){
 		if(base_dist < 0) base_dist *= -1; /* magnitude only */
 		slow_timeout = 22000 - 2000 * (base_dist);
 		if (slow_timeout > timeout) timeout = slow_timeout;
+	    }
 	    }
 
 	    if (u.uhave.amulet || u.ugangr[Align2gangr(u.ualign.type)]) timeout = timeout / 2;
