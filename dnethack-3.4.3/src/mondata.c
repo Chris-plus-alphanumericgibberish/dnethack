@@ -883,15 +883,18 @@ struct attack *mattk;
     case PM_FLAMING_SPHERE:
     case PM_FIRE_VORTEX:
     case PM_FIRE_ELEMENTAL:
+    case PM_LIGHTNING_PARAELEMENTAL:
     case PM_SALAMANDER:
 	what = "already on fire";
 	break;
     case PM_WATER_ELEMENTAL:
     case PM_FOG_CLOUD:
     case PM_STEAM_VORTEX:
+    case PM_ACID_PARAELEMENTAL:
 	what = "boiling";
 	break;
     case PM_ICE_VORTEX:
+    case PM_ICE_PARAELEMENTAL:
     case PM_GLASS_GOLEM:
 	what = "melting";
 	break;
@@ -899,6 +902,7 @@ struct attack *mattk;
     case PM_CLAY_GOLEM:
     case PM_GOLD_GOLEM:
     case PM_AIR_ELEMENTAL:
+    case PM_POISON_PARAELEMENTAL:
     case PM_EARTH_ELEMENTAL:
     case PM_DUST_VORTEX:
     case PM_ENERGY_VORTEX:
