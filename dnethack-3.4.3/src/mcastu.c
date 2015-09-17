@@ -495,7 +495,32 @@ unsigned int type;
 				return GEYSER;
 			break;
 		}
-
+	   break;
+       case PM_MAHADEVA:
+		switch(rn2(10)){
+			case 0:
+				return MASS_CURE_CLOSE;
+			break;
+			case 1:
+			case 2:
+			case 3:
+				return ARROW_RAIN;
+			break;
+			case 4:
+			case 5:
+			case 6:
+				return ICE_STORM;
+			break;
+			case 7:
+			case 8:
+			case 9:
+				return GEYSER;
+			break;
+		}
+	   break;
+       case PM_MOVANIC_DEVA:
+		return MASS_CURE_FAR;
+	   break;
        case PM_GRAND_MASTER:
        case PM_MASTER_KAEN:
           return (rn2(2) ? WEAKEN_YOU : EARTHQUAKE);
