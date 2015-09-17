@@ -3264,13 +3264,15 @@ register int	mmflags;
 				curhouse = PEN_A_SYMBOL;
 			} else if(ptr == &mons[PM_DOKKALFAR_ETERNAL_MATRIARCH]){
 				curhouse = LOST_HOUSE;
-			} else if(ptr == &mons[PM_ECLAVDRA] || ptr == &mons[PM_AVATAR_OF_LOLTH]){
+			} else if(ptr == &mons[PM_ECLAVDRA] || ptr == &mons[PM_AVATAR_OF_LOLTH] || is_yochlol(ptr)){
 				curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_DROW_MATRON_MOTHER]){
 				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.uhouse - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE)) : LOLTH_SYMBOL;
 				else curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_SEYLL_AUZKOVYN] || ptr == &mons[PM_STJARNA_ALFAR]){
 				curhouse = EILISTRAEE_SYMBOL;
+			} else if(ptr == &mons[PM_PRIESTESS_OF_GHAUNADAUR]){
+				curhouse = GHAUNADAUR_SYMBOL;
 			} else if(ptr == &mons[PM_DARUTH_XAXOX] || ptr == &mons[PM_DROW_ALIENIST]){
 				curhouse = XAXOX;
 			} else if(ptr == &mons[PM_EMBRACED_DROWESS] || (ptr == &mons[PM_DROW_MUMMY] && In_quest(&u.uz) && !flags.initgend)){
@@ -3306,7 +3308,7 @@ register int	mmflags;
 					curhouse = PEN_A_SYMBOL;
 				} else if(Role_if(PM_ANACHRONONAUT)){
 					curhouse = LAST_BASTION_SYMBOL;
-				} else if(Race_if(PM_DROW) && (in_mklev || flags.stag || rn2(3))){
+				} else if((Race_if(PM_DROW)) && (in_mklev || flags.stag || rn2(3))){
 					if(Is_qstart(&u.uz)) curhouse = u.uhouse;
 					else if(Role_if(PM_NOBLEMAN)){
 						if(flags.initgend) curhouse = u.uhouse;
