@@ -220,6 +220,18 @@ struct monst *mon;
 	return FALSE;
 }
 
+boolean
+resists_death(mon)	/* TRUE if monster resists death magic */
+struct monst *mon;
+{
+	struct permonst *ptr = mon->data;
+	struct obj *o;
+	
+	if(mon == u.usteed && u.sealsActive&SEAL_BERITH && u.sealsActive&SEAL_OSE) return TRUE;
+	
+	return nonliving(mon->data) || is_demon(mon->data) || is_angel(mon->data) || is_keter(mon->data);
+}
+
 /* TRUE iff monster is resistant to light-induced blindness */
 boolean
 resists_blnd(mon)
