@@ -7,6 +7,8 @@
 #include "epri.h"
 #include "artifact.h"
 
+extern const int monstr[];
+
 void
 msummon(mon)		/* mon summons a monster */
 struct monst *mon;
@@ -57,7 +59,7 @@ struct monst *mon;
 	    if (!rn2(6)) {
 		switch (atyp) { /* see summon_minion */
 		case A_NEUTRAL:
-		    dtype = PM_AIR_ELEMENTAL + rn2(4);
+		    dtype = PM_AIR_ELEMENTAL + rn2(8);
 		    break;
 		case A_CHAOTIC:
 		case A_NONE:
@@ -78,7 +80,7 @@ struct monst *mon;
 	 * If this daemon is unique and being re-summoned (the only way we
 	 * could get this far with an extinct dtype), try another.
 	 */
-	if (mvitals[dtype].mvflags & G_GONE) {
+	if (mvitals[dtype].mvflags & G_GONE && !In_quest(&u.uz)) {
 	    dtype = ndemon(atyp);
 	    if (dtype == NON_PM) return;
 	}
@@ -94,10 +96,90 @@ struct monst *mon;
 }
 
 struct monst *
-summon_minion(alignment, talk, devils)
+summon_god_minion(gptr, alignment, talk)
+const char *gptr;
+aligntyp alignment;
+boolean talk;
+{
+    const int *minions = god_minions(gptr);
+    int mnum=NON_PM, mlev, num = 0, first, last;
+	struct monst *mon;
+
+	mlev = level_difficulty();
+	
+	for (first = 0; minions[first] != NON_PM; first++)
+	    if (!(mvitals[minions[first]].mvflags & G_GONE && !In_quest(&u.uz)) && monstr[minions[first]] > mlev/2) break;
+	if(minions[first] == NON_PM){ //All minions too weak, or no minions
+		if(first == 0) return (struct monst *) 0;
+		else mnum = minions[first-1];
+	}
+	else for (last = first; minions[last] != NON_PM; last++)
+	    if (!(mvitals[minions[last]].mvflags & G_GONE && !In_quest(&u.uz))) {
+			/* consider it */
+			if(monstr[minions[last]] > mlev+5) break;
+			num += min(1,mons[minions[last]].geno & G_FREQ);
+	    }
+
+	if(!num){ //All minions too strong, or gap between weak and strong minions
+		if(first == 0) return (struct monst *) 0;
+		else mnum = minions[first-1];
+	}
+/*	Assumption:	minions are presented in ascending order of strength. */
+	else{
+		for(num = rnd(num); num > 0; first++) if (!(mvitals[minions[first]].mvflags & G_GONE && !In_quest(&u.uz))) {
+			/* skew towards lower value monsters at lower exp. levels */
+			num -= min(1, mons[minions[first]].geno & G_FREQ);
+			if (num && adj_lev(&mons[minions[first]]) > (u.ulevel*2)) {
+				/* but not when multiple monsters are same level */
+				if (mons[first].mlevel != mons[first+1].mlevel)
+				num--;
+			}
+	    }
+		first--; /* correct an off-by-one error */
+		mnum = minions[first];
+	}
+
+
+    if (mnum == NON_PM) {
+		mon = (struct monst *)0;
+    } else if (mons[mnum].pxlth == 0) {
+		struct permonst *pm = &mons[mnum];
+		mon = makemon(pm, u.ux, u.uy, MM_EMIN);
+		if (mon) {
+			mon->isminion = TRUE;
+			EMIN(mon)->min_align = alignment;
+		}
+    } else if (mnum == PM_ANGEL) {
+		mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
+		if (mon) {
+			mon->isminion = TRUE;
+			EPRI(mon)->shralign = alignment;	/* always A_LAWFUL here */
+		}
+    } else
+		mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
+    if (mon) {
+	if (talk) {
+	    pline_The("voice of %s booms:", align_gname(alignment));
+	    verbalize("Thou shalt pay for thy indiscretion!");
+	    if (!Blind)
+		pline("%s appears before you.", An(Hallucination ? rndmonnam() : mon->data->mname));
+	}
+	mon->mpeaceful = FALSE;
+	/* don't call set_malign(); player was naughty */
+    }
+	
+	if(is_drow(mon->data)){
+		/* fix house setting */
+	}
+	return mon;
+}
+
+struct monst *
+summon_minion(alignment, talk, devils, angels)
 aligntyp alignment;
 boolean talk;
 boolean devils;
+boolean angels;
 {
     register struct monst *mon;
     int mnum;
@@ -108,11 +190,13 @@ boolean devils;
 	    mnum = devils ? ndemon(alignment) : lminion();
 	    break;
 	case A_NEUTRAL:
-	    mnum = PM_AIR_ELEMENTAL + rn2(4);
+	    mnum = angels ? nminion() : (PM_AIR_ELEMENTAL + rn2(8));
 	    break;
 	case A_CHAOTIC:
+	    mnum = angels ? cminion() : ndemon(alignment);
+	    break;
 	case A_NONE:
-	    mnum = ndemon(alignment);
+	    mnum = angels ? PM_FALLEN_ANGEL : ndemon(alignment);
 	    break;
 	default:
 //	    impossible("unaligned player?");
@@ -160,7 +244,6 @@ register struct monst *mtmp;
 
 	if (uwep && (
 			   uwep->oartifact == ART_EXCALIBUR 
-			|| uwep->oartifact == ART_ROD_OF_SEVEN_PARTS
 			|| uwep->oartifact == ART_LANCE_OF_LONGINUS
 		) ) {
 	    pline("%s looks very angry.", Amonnam(mtmp));
@@ -275,7 +358,7 @@ aligntyp atyp;
 
 	for (tryct = 0; tryct < 20; tryct++) {
 	    pm = rn1(PM_DEMOGORGON + 1 - PM_ORCUS, PM_ORCUS);
-	    if (!(mvitals[pm].mvflags & G_GONE) &&
+	    if (!(mvitals[pm].mvflags & G_GONE && !In_quest(&u.uz)) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
@@ -291,7 +374,7 @@ aligntyp atyp;
 	for (tryct = 0; tryct < 20; tryct++) {
 	    do pm = rn1(PM_YEENOGHU + 1 - PM_JUIBLEX, PM_JUIBLEX);
 		while(pm == PM_SHAKTARI);
-	    if (!(mvitals[pm].mvflags & G_GONE) &&
+	    if (!(mvitals[pm].mvflags & G_GONE && !In_quest(&u.uz)) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
@@ -303,7 +386,7 @@ aligntyp atyp;
 int
 llord()
 {
-	if (!(mvitals[PM_ARCHON].mvflags & G_GONE))
+	if (!(mvitals[PM_ARCHON].mvflags & G_GONE && !In_quest(&u.uz)))
 		return(PM_ARCHON);
 
 	return(lminion());	/* approximate */
@@ -322,6 +405,28 @@ lminion()
 	}
 
 	return NON_PM;
+}
+
+int
+nminion()
+{
+	switch(rnd(3)){
+		case 1: return PM_MOVANIC_DEVA;
+		case 2: return PM_MONADIC_DEVA;
+		case 3: return PM_ASTRAL_DEVA;
+	}
+}
+
+int
+cminion()
+{
+	switch(rnd(5)){
+		case 1: return PM_NOVIERE;
+		case 2: return PM_BRALANI;
+		case 3: return PM_FIRRE;
+		case 4: return PM_SHIERE;
+		case 5: return PM_GHAELE;
+	}
 }
 
 int
