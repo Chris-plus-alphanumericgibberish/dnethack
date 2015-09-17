@@ -178,7 +178,7 @@ const char * const monexplain[MAXMCLASSES] = {
     "piercer",			"quadruped",		"rodent",
     "arachnid or centipede",	"trapper, lurker, or metroid", "unicorn or horse",
     "vortex",		"worm", "xan or other mythical/fantastic insect",
-    "light",			"zruty",
+    "light",			"zruty or ammit",
 
     "angelic being",		"bat or bird",		"centaur",
     "dragon",			"elemental",		"fungus or mold",
