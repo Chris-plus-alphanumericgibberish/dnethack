@@ -4336,8 +4336,8 @@ struct obj **optr;
 				mm->data == &mons[PM_FABERGE_SPHERE] || mm->data == &mons[PM_FIREWORK_CART] || 
 				mm->data == &mons[PM_JUGGERNAUT] || mm->data == &mons[PM_ID_JUGGERNAUT])
 			){
-				mm->mextra[0] = -1;
-				while(xdir[(int)(++mm->mextra[0])] != u.dx || ydir[(int)mm->mextra[0]] != u.dy);
+				mm->mvar1 = -1;
+				while(xdir[(int)(++mm->mvar1)] != u.dx || ydir[(int)mm->mvar1] != u.dy);
 			}
 		}
 		useup(obj);

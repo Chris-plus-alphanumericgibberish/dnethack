@@ -226,8 +226,8 @@ mattackm(magr, mdef)
 	if(pa == &mons[PM_CLOCKWORK_SOLDIER] || pa == &mons[PM_CLOCKWORK_DWARF] || 
 	   pa == &mons[PM_FABERGE_SPHERE] || pa == &mons[PM_FIREWORK_CART] || 
 	   pa == &mons[PM_JUGGERNAUT] || pa == &mons[PM_ID_JUGGERNAUT]
-	) if(magr->mx + xdir[(int)magr->mextra[0]] != mdef->mx || 
-		   magr->my + ydir[(int)magr->mextra[0]] != mdef->my 
+	) if(magr->mx + xdir[(int)magr->mvar1] != mdef->mx || 
+		   magr->my + ydir[(int)magr->mvar1] != mdef->my 
 		) return(MM_MISS);
 	
     /* Calculate the armour class differential. */
@@ -468,7 +468,7 @@ meleeattack:
 				
 				if(mlocal){
 					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
-					mlocal->mextra[0] = i;
+					mlocal->mvar1 = i;
 					
 					magr->mspec_used = rnd(6);
 				}

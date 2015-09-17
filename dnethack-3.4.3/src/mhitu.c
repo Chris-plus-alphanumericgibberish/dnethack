@@ -662,11 +662,11 @@ mattacku(mtmp)
 				wildmiss(mtmp, mattk);
 			}
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
-				mtmp->mextra[1] = mtmp->mextra[1]+1;
-				if(!range2 && mtmp->mextra[1]>=2){
+				mtmp->mvar2 = mtmp->mvar2+1;
+				if(!range2 && mtmp->mvar2>=2){
 					struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
 					hitmu(mtmp, &rend);
-					mtmp->mextra[1]=0;
+					mtmp->mvar2=0;
 				}
 			}
 		break;
@@ -685,11 +685,11 @@ mattacku(mtmp)
 				wildmiss(mtmp, mattk);
 			}
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
-				mtmp->mextra[1] = mtmp->mextra[1]+1;
-				if(!range2 && mtmp->mextra[1]>=2){
+				mtmp->mvar2 = mtmp->mvar2+1;
+				if(!range2 && mtmp->mvar2>=2){
 					struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
 					hitmu(mtmp, &rend);
-					mtmp->mextra[1]=0;
+					mtmp->mvar2=0;
 				}
 			}
 		break;
@@ -707,11 +707,11 @@ mattacku(mtmp)
 					wildmiss(mtmp, mattk);
 			}
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
-				mtmp->mextra[1] = mtmp->mextra[1]+1;
-				if(!range2 && mtmp->mextra[1]>=2){
+				mtmp->mvar2 = mtmp->mvar2+1;
+				if(!range2 && mtmp->mvar2>=2){
 					struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
 					hitmu(mtmp, &rend);
-					mtmp->mextra[1]=0;
+					mtmp->mvar2=0;
 				}
 			}
 		break;
@@ -732,13 +732,13 @@ mattacku(mtmp)
 			if (mdat != &mons[PM_MEDUSA] && !is_weeping(mdat))
 				sum[i] = gazemu(mtmp, mattk);
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
-				mtmp->mextra[0] = mtmp->mextra[0]+1;
-				if(!range2 && mtmp->mextra[0]>=2){
+				mtmp->mvar1 = mtmp->mvar1+1;
+				if(!range2 && mtmp->mvar1>=2){
 					struct attack theft = {AT_CLAW, AD_SEDU, 1, 1};
 					You("have met the twin gaze of Demogorgon, Prince of Demons!");
 					You("feel his command within you!");
 					hitmu(mtmp, &theft);
-					mtmp->mextra[0]=0;
+					mtmp->mvar1=0;
 				}
 			}
 		break;
@@ -850,7 +850,7 @@ mattacku(mtmp)
 				
 				if(mlocal){
 					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
-					mlocal->mextra[0] = i;
+					mlocal->mvar1 = i;
 					
 					mtmp->mspec_used = rnd(6);
 				}
@@ -877,17 +877,18 @@ mattacku(mtmp)
 						wildmiss(mtmp, mattk);
 				}
 				if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
-					mtmp->mextra[1] = mtmp->mextra[1]+1;
-					if(!range2 && mtmp->mextra[1]>=2){
+					mtmp->mvar2 = mtmp->mvar2+1;
+					if(!range2 && mtmp->mvar2>=2){
 						struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
 						hitmu(mtmp, &rend);
-						mtmp->mextra[1]=0;
+						mtmp->mvar2=0;
 					}
 				}
 			}
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_WEAP:
+		case AT_DEVA:
 			if(range2) {
 #ifdef REINCARNATION
 				if (!Is_rogue_level(&u.uz))
@@ -1015,8 +1016,8 @@ mattacku(mtmp)
 	    /* sum[i] == 0: unsuccessful attack */
 	}
 	if(mdat == &mons[PM_DEMOGORGON]){ 
-		mtmp->mextra[0] = 0;
-		mtmp->mextra[1] = 0;
+		mtmp->mvar1 = 0;
+		mtmp->mvar2 = 0;
 	}
 	return(0);
 }
@@ -5955,7 +5956,7 @@ register struct monst *mon;
 		boolean helpless = TRUE;
 	}
 
-	if(mon->mextra[0] == 1){
+	if(mon->mvar1 == 1){
 		if (Blind) You_feel("cloth against your %s...",body_part(BODY_SKIN));
 		else{
 			pline("The shroud dances as if in the wind. The %s figure beneath is almost exposed!", fem ? "shapely feminine" : "shapely masculine");
@@ -5963,7 +5964,7 @@ register struct monst *mon;
 		}
 	}
 	else{
-		mon->mextra[0] = 1;
+		mon->mvar1 = 1;
 		if (Blind) You_feel("the brush of cloth...");
 		else{
 			You("see a %s form behind the shroud. It beckons you forwards.", fem ? "lithe, feminine," : "toned, masculine,");
