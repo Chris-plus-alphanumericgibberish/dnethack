@@ -3826,7 +3826,6 @@ register int	mmflags;
 	    mtmp->mavenge = 0;
 	    if (uwep && (
 			uwep->oartifact == ART_EXCALIBUR
-			|| uwep->oartifact == ART_ROD_OF_SEVEN_PARTS
 			|| uwep->oartifact == ART_LANCE_OF_LONGINUS
 		) ) mtmp->mpeaceful = mtmp->mtame = FALSE;
 	}
