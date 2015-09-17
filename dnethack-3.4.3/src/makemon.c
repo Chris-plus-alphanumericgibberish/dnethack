@@ -1170,6 +1170,7 @@ register struct monst *mtmp;
 		break;}
 	    case S_ANGEL:
 		{
+		int spe2;
 /*			if(ptr == &mons[PM_DESTROYER]){
 				struct obj *otmp = mksobj(BROADSWORD, TRUE, FALSE);
 				otmp->blessed = FALSE;
@@ -1228,8 +1229,125 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, SHORT_SWORD);
 				(void)mongets(mtmp, SHORT_SWORD);
 				return;//no random stuff
+			} else if(ptr == &mons[PM_MONADIC_DEVA]){
+				otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				spe2 = rn2(4);
+			    otmp->spe = max(otmp->spe, spe2);
+			    (void) mpickobj(mtmp, otmp);
+			} else if(ptr == &mons[PM_MOVANIC_DEVA]){
+				otmp = mksobj(MORNING_STAR, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				spe2 = rn2(4);
+			    otmp->spe = max(otmp->spe, spe2);
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(SMALL_SHIELD, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 0;
+			    (void) mpickobj(mtmp, otmp);
+				(void)mongets(mtmp, ROBE);
+			} else if(ptr == &mons[PM_ASTRAL_DEVA]){
+				otmp = mksobj(MACE, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(CHAIN_MAIL, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+			} else if(ptr == &mons[PM_MAHADEVA]){
+				otmp = mksobj(SCIMITAR, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+				otmp = mksobj(SCIMITAR, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+				otmp = mksobj(SCIMITAR, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+				otmp = mksobj(SCIMITAR, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+			} else if(ptr == &mons[PM_NOVIERE]){
+				(void)mongets(mtmp, LEATHER_GLOVES);
+				(void)mongets(mtmp, LOW_BOOTS);
+				(void)mongets(mtmp, ELVEN_LEATHER_HELM);
+				(void)mongets(mtmp, ELVEN_SPEAR);
+				(void)mongets(mtmp, ELVEN_SICKLE);
+			} else if(ptr == &mons[PM_BRALANI]){
+				(void)mongets(mtmp, LEATHER_JACKET);
+				(void)mongets(mtmp, LEATHER_CLOAK);
+				(void)mongets(mtmp, HIGH_BOOTS);
+				(void)mongets(mtmp, HELMET);
+				(void)mongets(mtmp, DWARVISH_SPEAR);
+				(void)mongets(mtmp, DWARVISH_SPEAR);
+				(void)mongets(mtmp, DWARVISH_SHORT_SWORD);
+			} else if(ptr == &mons[PM_FIRRE]){
+				(void)mongets(mtmp, LEATHER_JACKET);
+				(void)mongets(mtmp, ELVEN_SHIELD);
+				(void)mongets(mtmp, ELVEN_CLOAK);
+				(void)mongets(mtmp, ELVEN_BOOTS);
+				(void)mongets(mtmp, ELVEN_LEATHER_HELM);
+				(void)mongets(mtmp, ELVEN_SPEAR);
+				(void)mongets(mtmp, ELVEN_BROADSWORD);
+			} else if(ptr == &mons[PM_SHIERE]){
+				(void)mongets(mtmp, CRYSTAL_PLATE_MAIL);
+				(void)mongets(mtmp, CRYSTAL_SHIELD);
+				(void)mongets(mtmp, CRYSTAL_BOOTS);
+				(void)mongets(mtmp, CRYSTAL_SWORD);
+				(void)mongets(mtmp, WAN_STRIKING);
+			} else if(ptr == &mons[PM_GHAELE]){
+				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
+				(void)mongets(mtmp, LARGE_SHIELD);
+				(void)mongets(mtmp, IRON_SHOES);
+				(void)mongets(mtmp, HELMET);
+				(void)mongets(mtmp, TWO_HANDED_SWORD);
+			} else if(ptr == &mons[PM_TULANI]){
+				(void)mongets(mtmp, CRYSTAL_PLATE_MAIL);
+				(void)mongets(mtmp, ELVEN_CLOAK);
+				(void)mongets(mtmp, CRYSTAL_BOOTS);
+				(void)mongets(mtmp, CRYSTAL_HELM);
+			} else if(ptr == &mons[PM_LILLEND]){
+				(void)mongets(mtmp, MASK);
+				(void)mongets(mtmp, MASK);
+				(void)mongets(mtmp, MASK);
+				(void)mongets(mtmp, MASK);
+				(void)mongets(mtmp, MASK);
+				(void)mongets(mtmp, MASK);
+				
+				otmp = mksobj(ELVEN_BOW, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				spe2 = 3;
+			    otmp->spe = max(otmp->spe, spe2);
+			    (void) mpickobj(mtmp, otmp);
+					m_initthrow(mtmp, ELVEN_ARROW, 12+rnd(30));
+				(void)mongets(mtmp, WOODEN_HARP);
+				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				spe2 = 3;
+			    otmp->spe = max(otmp->spe, spe2);
+			    (void) mpickobj(mtmp, otmp);
 			} else {
-				int spe2;
 				int artnum = rn2(8);
 	
 			    /* create minion stuff; can't use mongets */
