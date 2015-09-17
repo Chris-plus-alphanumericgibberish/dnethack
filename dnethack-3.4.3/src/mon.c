@@ -119,10 +119,10 @@ int mndx;
 #if 0	/* DEFERRED */
 	case PM_VAMPIRE_MAGE:
 #endif
-	case PM_DROW_ZOMBIE:	mndx = PM_DROW;  break;
-	case PM_DROW_MUMMY:	mndx = PM_DROW_MATRON;  break;
 	case PM_HUMAN_ZOMBIE:
 	case PM_HUMAN_MUMMY:	mndx = PM_HUMAN;  break;
+	case PM_DROW_ZOMBIE:	mndx = PM_DROW;  break;
+	case PM_DROW_MUMMY:	mndx = PM_DROW_MATRON;  break;
 	case PM_GIANT_ZOMBIE:
 	case PM_GIANT_MUMMY:	mndx = PM_GIANT;  break;
 	case PM_ETTIN_ZOMBIE:
