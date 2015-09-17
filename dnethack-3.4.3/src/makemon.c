@@ -3249,6 +3249,7 @@ register int	mmflags;
 	mtmp->mvanishes  = -1;
 
 	mtmp->mspec_used = 3;
+	mtmp->encouraged = 0;
 	/* Ok, here's the deal: I'm using a global to coordinate the house emblems on the drow's armor. 
 	   It needs to be set up here so that everyone created as part of the group gets the same emblem, 
 	   and then unset after this creature's armor is created. */
