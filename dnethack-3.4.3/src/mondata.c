@@ -122,7 +122,7 @@ boolean
 resists_sleep(mon)
 	struct monst *mon;
 {
-	return (((mon)->mintrinsics & MR_SLEEP) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance));
+	return (((mon)->mintrinsics & MR_SLEEP) != 0 || ((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
 }
 
 boolean

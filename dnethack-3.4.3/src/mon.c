@@ -50,7 +50,7 @@ STATIC_DCL void NDECL(warn_effects);
 #endif /* 0 */
 
 #ifndef OVLB
-STATIC_VAR short cham_to_pm[];
+STATIC_VAR int cham_to_pm[];
 #else
 STATIC_DCL struct obj *FDECL(make_corpse,(struct monst *));
 STATIC_DCL void FDECL(m_detach, (struct monst *, struct permonst *));
@@ -187,17 +187,19 @@ int mndx;
 	case PM_CHAMELEON:	mcham = CHAM_CHAMELEON; break;
 	case PM_DOPPELGANGER:	mcham = CHAM_DOPPELGANGER; break;
 	case PM_SANDESTIN:	mcham = CHAM_SANDESTIN; break;
+	case PM_DREAM_QUASIELEMENTAL:	mcham = CHAM_DREAM; break;
 	default: mcham = CHAM_ORDINARY; break;
 	}
 	return mcham;
 }
 
 /* convert chameleon index to monster index */
-STATIC_VAR short cham_to_pm[] = {
+STATIC_VAR int cham_to_pm[] = {
 		NON_PM,		/* placeholder for CHAM_ORDINARY */
 		PM_CHAMELEON,
 		PM_DOPPELGANGER,
 		PM_SANDESTIN,
+		PM_DREAM_QUASIELEMENTAL,
 };
 
 /* for deciding whether corpse or statue will carry along full monster data */
@@ -3700,6 +3702,9 @@ struct monst *mon;
 		break;
 	    case CHAM_CHAMELEON:
 		if (!rn2(3)) mndx = pick_animal();
+	    case CHAM_DREAM:
+		if(rn2(2)) mndx = rndshape();//try to get an in-depth monster of any kind
+		else mndx = PM_DREAM_QUASIELEMENTAL;
 		break;
 	    case CHAM_ORDINARY:
 	      {
@@ -3808,6 +3813,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	/* Possibly Block  */
 	if(opaque(mdat) && !opaque(mtmp->data)) block_point(mtmp->mx, mtmp->my);
 
+	if(mtmp->cham != CHAM_DREAM){
 	hpn = mtmp->mhp;
 	hpd = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev)*8 : mdat->mlevel;
 	if(!hpd) hpd = 4;
@@ -3822,18 +3828,18 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	mtmp->mhp = (int)(((long)hpn*(long)mhp)/(long)hpd);
 #endif
 	if(mtmp->mhp < 0) mtmp->mhp = hpn;	/* overflow */
-/* Unlikely but not impossible; a 1HD creature with 1HP that changes into a
+	/* Unlikely but not impossible; a 1HD creature with 1HP that changes into a
    0HD creature will require this statement */
 	if (!mtmp->mhp) mtmp->mhp = 1;
 
-/* and the same for maximum hit points */
+	/* and the same for maximum hit points */
 	hpn = mtmp->mhpmax;
 #ifndef LINT
 	mtmp->mhpmax = (int)(((long)hpn*(long)mhp)/(long)hpd);
 #endif
 	if(mtmp->mhpmax < 0) mtmp->mhpmax = hpn;	/* overflow */
 	if (!mtmp->mhpmax) mtmp->mhpmax = 1;
-
+	} //else just take on new form I think....
 	/* take on the new form... */
 	set_mon_data(mtmp, mdat, 0);
 
