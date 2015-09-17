@@ -46,6 +46,7 @@ register struct permonst *ptr;
 	if (ptr->mlet == S_ELEMENTAL)
 	    switch (monsndx(ptr)) {
 		case PM_AIR_ELEMENTAL: return Is_airlevel(&u.uz);
+		case PM_LIGHTNING_PARAELEMENTAL: return Is_airlevel(&u.uz);
 		case PM_FIRE_ELEMENTAL: return Is_firelevel(&u.uz);
 		case PM_EARTH_ELEMENTAL: return Is_earthlevel(&u.uz);
 		case PM_WATER_ELEMENTAL: return Is_waterlevel(&u.uz);
