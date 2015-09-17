@@ -290,18 +290,23 @@ register struct monst *mtmp;
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, CROSSBOW);
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 10);
+				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
 			break;
 			case PM_LEGION_DEVIL_SERGEANT:
 			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, CROSSBOW);
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 20);
+				  (void)mongets(mtmp, rnd_attack_wand(mtmp));
+				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
 			break;
 			case PM_LEGION_DEVIL_CAPTAIN:
 			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, BOW);
 				  m_initthrow(mtmp, ARROW, 30);
+				  (void)mongets(mtmp, rnd_attack_wand(mtmp));
+				  (void)mongets(mtmp, rnd_utility_wand(mtmp));
 				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
 			break;
 			case PM_GLASYA:
