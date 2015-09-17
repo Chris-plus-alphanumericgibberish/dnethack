@@ -583,6 +583,7 @@ register struct monst *mtmp;
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_STRAW_GOLEM:
+		if(!rn2(10)) mksobj_at(SEDGE_HAT, x, y, FALSE, FALSE);
 		obj = mksobj_at(SHEAF_OF_HAY, x, y, FALSE, FALSE);
 		obj->quan = (long)(d(2,4));
 		obj->owt = weight(obj);
