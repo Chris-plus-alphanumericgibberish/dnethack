@@ -423,7 +423,7 @@ register struct monst *mtmp;
 			} else if(is_drow(ptr)){
 				mtmp->mspec_used = d(4,4);
 				if(mm != PM_DROW_MATRON && mm != PM_DROW_MATRON_MOTHER && mm != PM_DROW_NOVICE 
-					&& mm != PM_A_SALOM && mm != PM_SISTER && mm != PM_MOTHER 
+					&& mm != PM_A_SALOM && mm != PM_SISTER && mm != PM_MOTHER && !is_yochlol(mtmp->data)
 					&& mm != PM_ECLAVDRA && mm != PM_SEYLL_AUZKOVYN && mm != PM_STJARNA_ALFAR
 					&& mm != PM_DARUTH_XAXOX && mm != PM_DROW_ALIENIST && mm != PM_HEDROW_MASTER_WIZARD
 				){
@@ -715,6 +715,55 @@ register struct monst *mtmp;
 					otmp->cursed = TRUE;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 5;
+					(void) mpickobj(mtmp, otmp);
+				} else if(is_yochlol(mtmp->data)){
+					/*weapon*/
+					otmp = mksobj(RAPIER, TRUE, FALSE);
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->spe = 2;
+					(void) mpickobj(mtmp, otmp);
+					/*Plate Mail*/
+					otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
+					otmp->ohaluengr = TRUE;
+					otmp->ovar1 = LOLTH_SYMBOL;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->spe = 2;
+					(void) mpickobj(mtmp, otmp);
+					/*Dress*/
+					otmp = mksobj(BLACK_DRESS, TRUE, FALSE);
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->spe = 2;
+					(void) mpickobj(mtmp, otmp);
+					/*Ring*/
+					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
+					otmp->ohaluengr = TRUE;
+					otmp->ovar1 = curhouse;
+					(void) mpickobj(mtmp, otmp);
+					/*Cloak*/
+					otmp = mksobj(CLOAK_OF_MAGIC_RESISTANCE, TRUE, FALSE);
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->spe = 0;
+					(void) mpickobj(mtmp, otmp);
+					/*Helm*/
+					otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->spe = 0;
+					(void) mpickobj(mtmp, otmp);
+					/*boots*/
+					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_HEDROW_MASTER_WIZARD){
 					otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
