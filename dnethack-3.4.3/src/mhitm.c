@@ -1169,11 +1169,13 @@ physical:
 					otmp->oartifact != ART_PEN_OF_THE_VOID
 			)) {
 			    /* then do only 1-2 points of damage */
-			    if (mdef->data->mlet == S_SHADE && objects[otmp->otyp].oc_material != SILVER)
+			    if (mdef->data->mlet == S_SHADE && (objects[otmp->otyp].oc_material != SILVER || arti_silvered(otmp)))
 					tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
 				else tmp = rnd(2);
+				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(pd))
+					tmp += rnd(20);
 			} else tmp += dmgval(otmp, mdef, 0);
 			
 			if(resist_attacks(mdef->data))
