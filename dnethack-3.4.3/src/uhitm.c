@@ -1032,12 +1032,14 @@ int thrown;
 		    /* houchou that isn't thrown */
 		    (!thrown && obj->oartifact == ART_HOUCHOU) ||
 		    /* or throw a missile without the proper bow... */
-		    (is_ammo(obj) && !ammo_and_launcher(obj, uwep))) {
+		    (is_ammo(obj) && !ammo_and_launcher(obj, uwep))
+		) {
 			
 		    /* then do only 1-2 points of damage */
 		    if (mdat->mlet == S_SHADE && !(objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
 				tmp = 0;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
+		    else if(obj->oclass == SPBOOK_CLASS && u.sealsActive&SEAL_PAIMON) tmp = rnd(spiritDsize()) + objects[obj->otyp].oc_level;
 			else tmp = rnd(2);
 			
 		    // if (tmp && obj->oartifact &&
