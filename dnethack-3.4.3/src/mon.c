@@ -1793,7 +1793,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	    return ALLOW_M|ALLOW_TM;
 	
         /* and vice versa */
-	if (mdef->mtame && !magr->mpeaceful && !mdef->meating)
+	if (mdef->mtame && !magr->mpeaceful && !mdef->meating && mdef != u.usteed && !mdef->mflee)
 	    return ALLOW_M|ALLOW_TM;
 #endif /* ATTACK_PETS */
 
