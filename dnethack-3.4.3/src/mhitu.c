@@ -551,8 +551,8 @@ mattacku(mtmp)
 		newsym(mtmp->mx,mtmp->my);
 	}
 
-/*	Special demon handling code */
-	if(!mtmp->cham && is_demon(mdat) && !range2
+/*	Special demon/minion handling code */
+	if(!mtmp->cham && (is_demon(mdat) || is_minion(mdat)) && !range2
 	   && mtmp->data != &mons[PM_BALROG]
 	   && mtmp->data != &mons[PM_SUCCUBUS]
 	   && mtmp->data != &mons[PM_INCUBUS])
