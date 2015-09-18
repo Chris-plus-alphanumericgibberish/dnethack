@@ -3108,7 +3108,8 @@ use_weapon:
 				maybe_polyd(is_vampire(mas), Race_if(PM_VAMPIRE)) &&
 				(is_rider(mon->data) ||
 				 mon->data == &mons[PM_GREEN_SLIME] ||
-				 mon->data == &mons[PM_FLUX_SLIME])){
+				 mon->data == &mons[PM_FLUX_SLIME])
+			){
 			    	break;
 				}
 		case AT_STNG:
