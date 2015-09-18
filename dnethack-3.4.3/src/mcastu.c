@@ -1274,9 +1274,9 @@ summon_alien:
        struct monst *mtmp2;
 	   if(!mtmp) goto psibolt;
 	   if(is_alienist(mtmp->data)) goto summon_alien;
-	   if(!(mtmp->data->maligntyp)) mtmp2 = summon_minion(A_NEUTRAL, FALSE, TRUE);
-	   else if((mtmp->data->maligntyp) > 0) mtmp2 = summon_minion(A_LAWFUL, FALSE, TRUE);
-	   else mtmp2 = summon_minion(A_CHAOTIC, FALSE, TRUE);
+	   if(!(mtmp->data->maligntyp)) mtmp2 = summon_minion(A_NEUTRAL, FALSE, TRUE, FALSE);
+	   else if((mtmp->data->maligntyp) > 0) mtmp2 = summon_minion(A_LAWFUL, FALSE, TRUE, FALSE);
+	   else mtmp2 = summon_minion(A_CHAOTIC, FALSE, TRUE, FALSE);
        if (mtmp2) {
            if (canspotmon(mtmp2))
                pline("%s ascends from below!",
