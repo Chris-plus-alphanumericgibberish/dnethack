@@ -1267,6 +1267,7 @@ int thrown;
 			    setuwep((struct obj *)0);
 			freeinv(obj);
 			potionhit(mon, obj, TRUE);
+			obj = (struct obj *)0;
 			if (mon->mhp <= 0) return FALSE;	/* killed */
 			hittxt = TRUE;
 			/* in case potion effect causes transformation */
