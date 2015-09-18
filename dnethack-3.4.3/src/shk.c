@@ -1741,6 +1741,7 @@ shk_other_services()
 
 	/* Init the shopkeeper */
 	shkp = shop_keeper(*u.ushops);
+	if(!shkp) return; //'keeper is out of his shop
 	
 	seenSeals = countCloseSigns(shkp);
 	if(seenSeals && strcmp(shkname(shkp), "Izchak") == 0) seenSeals = 0;
