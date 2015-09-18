@@ -422,6 +422,13 @@ peffects(otmp)
 
 	switch(otmp->otyp){
 	case POT_RESTORE_ABILITY:
+		/* Restore one lost level if blessed */
+		if (otmp->blessed && u.ulevel < u.ulevelmax) {
+		    ///* when multiple levels have been lost, drinking
+		    //   multiple potions will only get half of them back */
+		    // u.ulevelmax -= 1;
+		    pluslvl(FALSE);
+		}
 	case SPE_RESTORE_ABILITY:
 		unkn++;
 		if(otmp->cursed) {
@@ -853,9 +860,9 @@ as_extra_healing:
 		healup(400, 4+4*bcsign(otmp), !otmp->cursed, TRUE);
 		/* Restore one lost level if blessed */
 		if (otmp->blessed && u.ulevel < u.ulevelmax) {
-		    /* when multiple levels have been lost, drinking
-		       multiple potions will only get half of them back */
-		    u.ulevelmax -= 1;
+		    ///* when multiple levels have been lost, drinking
+		    //   multiple potions will only get half of them back */
+		    // u.ulevelmax -= 1;
 		    pluslvl(FALSE);
 		}
 		(void) make_hallucinated(0L,TRUE,0L);
