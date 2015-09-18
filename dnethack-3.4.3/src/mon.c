@@ -3125,13 +3125,16 @@ cleanup:
 					// u.uevent.qcompleted ? "probably " : "");
 		} else {/* REAL BAD! */
 	    adjalign(-(u.ualign.record+(int)ALIGNLIM/2));
+			u.hod += 30;
 	    pline("That was %sa bad idea...",
 	    		u.uevent.qcompleted ? "probably " : "");
 		}
-	} else if (mdat->msound == MS_NEMESIS)	/* Real good! */
+	} else if (mdat->msound == MS_NEMESIS){	/* Real good! */
 	    adjalign((int)(ALIGNLIM/4));
-	else if (mdat->msound == MS_GUARDIAN && mdat != &mons[PM_THUG]) {	/* Bad *//*nobody cares if you kill thugs*/
+		u.hod = max(u.hod-10,0);
+	} else if (mdat->msound == MS_GUARDIAN && mdat != &mons[PM_THUG]) {	/* Bad *//*nobody cares if you kill thugs*/
 	    adjalign(-(int)(ALIGNLIM/8));											/*what's a little murder amongst rogues?*/
+		u.hod += 10;
 	    if (!Hallucination) pline("That was probably a bad idea...");
 	    else pline("Whoopsie-daisy!");
 	}else if (mtmp->ispriest) {
