@@ -2253,13 +2253,14 @@ boolean ordinary;
 
 		case WAN_DEATH:
 		case SPE_FINGER_OF_DEATH:
+			//Shooting yourself with a death effect while inside a Circle of Acheron doesn't protect you, since the spell originates inside the ward.
 			if(u.sealsActive&SEAL_BUER) unbind(SEAL_BUER,TRUE);
-		    if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
+		    if (nonliving(youmonst.data) || is_demon(youmonst.data) || is_angel(youmonst.data)) {
 			pline((obj->otyp == WAN_DEATH) ?
 			  "The wand shoots an apparently harmless beam at you."
 			  : "You seem no deader than before.");
 			break;
-		    } else if(u.sealsActive&SEAL_OSE){
+		    } else if(u.sealsActive&SEAL_OSE || resists_death(&youmonst)){
 				(obj->otyp == WAN_DEATH) ? 
 					pline("The wand shoots an apparently harmless beam at you."):
 					You("shoot yourself with an apparently harmless beam.");
@@ -3302,8 +3303,7 @@ death_blast:
 			tmp = 0;
 			break;
 		    }
-		    if (nonliving(mon->data) || is_demon(mon->data) ||
-			    resists_magm(mon) || is_keter(mon->data)) {	/* similar to player */
+		    if (resists_death(mon) || resists_magm(mon)) {	/* similar to player */
 			sho_shieldeff = TRUE;
 			break;
 		    }
@@ -3538,7 +3538,7 @@ xchar sx, sy;
 				 }
 				break;
 			}
-	    } else if (nonliving(youmonst.data) || is_demon(youmonst.data) || u.sealsActive&SEAL_OSE) {
+	    } else if (resists_death(&youmonst) || u.sealsActive&SEAL_OSE) {
 		shieldeff(sx, sy);
 		You("seem unaffected.");
 		break;
