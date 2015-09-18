@@ -1195,7 +1195,7 @@ boolean your_fault;
  do_healing:
 		angermon = FALSE;
 		if(mon->mhp < mon->mhpmax) {
-		    mon->mhp = mon->mhpmax;
+		    mon->mhp = min(mon->mhpmax,mon->mhp+400);
 		    if (canseemon(mon))
 			pline("%s looks sound and hale again.", Monnam(mon));
 		}
