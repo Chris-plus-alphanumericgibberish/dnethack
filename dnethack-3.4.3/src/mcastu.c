@@ -1771,7 +1771,7 @@ ray:
                              PM_FREEZING_SPHERE : PM_SHOCKING_SPHERE));
        boolean created = FALSE;
        struct monst *mon;
-       if (!(mvitals[sphere].mvflags & G_GONE) &&
+       if (!(mvitals[sphere].mvflags & G_GONE && !In_quest(&u.uz)) &&
 		(mon = makemon(&mons[sphere],
 			u.ux, u.uy, NO_MINVENT)) != 0)
 				if (canspotmon(mon)) created++;
@@ -2045,9 +2045,9 @@ int spellnum;
            return TRUE;
        /* don't summon spheres when one type is gone */
        if (spellnum == SUMMON_SPHERE &&
-               (mvitals[PM_FLAMING_SPHERE].mvflags & G_GONE) ||
-               (mvitals[PM_FREEZING_SPHERE].mvflags & G_GONE) ||
-               (mvitals[PM_SHOCKING_SPHERE].mvflags & G_GONE))
+               (mvitals[PM_FLAMING_SPHERE].mvflags & G_GONE && !In_quest(&u.uz)) ||
+               (mvitals[PM_FREEZING_SPHERE].mvflags & G_GONE && !In_quest(&u.uz)) ||
+               (mvitals[PM_SHOCKING_SPHERE].mvflags & G_GONE && !In_quest(&u.uz)))
 	    return TRUE;
 	/* haste self when already fast */
 	if (mtmp->permspeed == MFAST && spellnum == HASTE_SELF)
@@ -2708,14 +2708,14 @@ int spellnum;
        struct monst *mpet;
 	   if(!yours && !(mattk && mtmp && mattk->mtame != mtmp->mtame)) goto uspsibolt;
 	   if(yours || mattk->mtame){
-		   if (!(mvitals[sphere].mvflags & G_GONE) &&
+		   if (!(mvitals[sphere].mvflags & G_GONE && !In_quest(&u.uz)) &&
 			(mpet = makemon(&mons[sphere],
 				u.ux, u.uy, MM_EDOG|NO_MINVENT)) != 0){
 					if (canspotmon(mpet)) created++;
 					initedog(mpet);
 			}
 		} else {
-		   if (!(mvitals[sphere].mvflags & G_GONE) &&
+		   if (!(mvitals[sphere].mvflags & G_GONE && !In_quest(&u.uz)) &&
 			(mpet = makemon(&mons[sphere],
 				u.ux, u.uy, NO_MINVENT)) != 0){
 					if (canspotmon(mpet)) created++;

@@ -2172,7 +2172,7 @@ struct monst *mtmp;
 		}
 		if (mtmp->mhpmax <= 0) mtmp->mhpmax = 10;
 		mtmp->mhp = mtmp->mhpmax;
-		if (mvitals[monsndx(mtmp->data)].mvflags & G_GENOD) {
+		if (mvitals[monsndx(mtmp->data)].mvflags & G_GENOD && !In_quest(&u.uz)) {
 			if (cansee(mtmp->mx, mtmp->my))
 			    pline("Unfortunately %s is still genocided...",
 				mon_nam(mtmp));
@@ -3784,7 +3784,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	    while (++tryct <= 100) {
 		mndx = select_newcham_form(mtmp);
 		mdat = &mons[mndx];
-		if ((mvitals[mndx].mvflags & G_GENOD) != 0 ||
+		if ((mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) != 0 ||
 			is_placeholder(mdat)) continue;
 		/* polyok rules out all M2_PNAME and M2_WERE's;
 		   select_newcham_form might deliberately pick a player
@@ -3794,7 +3794,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 		    break;
 	    }
 	    if (tryct > 100) return 0;	/* Should never happen */
-	} else if (mvitals[monsndx(mdat)].mvflags & G_GENOD)
+	} else if (mvitals[monsndx(mdat)].mvflags & G_GENOD && !In_quest(&u.uz))
 	    return(0);	/* passed in mdat is genocided */
 
 	if(is_male(mdat)) {
@@ -4015,9 +4015,9 @@ boolean egg;
 	 */
 	return (boolean)
 		(m_idx >= LOW_PM &&
-		 ((mvitals[m_idx].mvflags & G_GENOD) != 0 ||
+		 ((mvitals[m_idx].mvflags & G_GENOD && !In_quest(&u.uz)) != 0 ||
 		  (egg &&
-		   (mvitals[big_to_little(m_idx)].mvflags & G_GENOD) != 0)));
+		   (mvitals[big_to_little(m_idx)].mvflags & G_GENOD && !In_quest(&u.uz)) != 0)));
 }
 
 /* kill off any eggs of genocided monsters */
@@ -4061,7 +4061,7 @@ kill_genocided_monsters()
 
 	kill_cham[CHAM_ORDINARY] = FALSE;	/* (this is mndx==0) */
 	for (mndx = 1; mndx <= CHAM_MAX_INDX; mndx++)
-	  kill_cham[mndx] = (mvitals[cham_to_pm[mndx]].mvflags & G_GENOD) != 0;
+	  kill_cham[mndx] = (mvitals[cham_to_pm[mndx]].mvflags & G_GENOD && !In_quest(&u.uz)) != 0;
 	/*
 	 * Called during genocide, and again upon level change.  The latter
 	 * catches up with any migrating monsters as they finally arrive at
@@ -4077,7 +4077,7 @@ kill_genocided_monsters()
 	    mtmp2 = mtmp->nmon;
 	    if (DEADMONSTER(mtmp)) continue;
 	    mndx = monsndx(mtmp->data);
-	    if ((mvitals[mndx].mvflags & G_GENOD) || kill_cham[mtmp->cham]) {
+	    if ((mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) || kill_cham[mtmp->cham]) {
 		if (mtmp->cham && !kill_cham[mtmp->cham])
 		    (void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 		else
