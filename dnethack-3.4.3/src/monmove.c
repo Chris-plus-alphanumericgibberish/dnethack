@@ -1457,8 +1457,8 @@ not_special:
 		    (throws_rocks(youmonst.data) ? 20 : ACURRSTR/2+1)
 		);
 
-	    if (appr != 1 || !in_line) {
-			/* Monsters in combat won't pick stuff up, avoiding the
+	    if (appr == 0 || !in_line) {
+			/* Monsters in combat or fleeing won't pick stuff up, avoiding the
 			 * situation where you toss arrows at it and it has nothing
 			 * better to do than pick the arrows up.
 			 */
