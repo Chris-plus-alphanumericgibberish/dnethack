@@ -3121,8 +3121,8 @@ cleanup:
 	if (mtmp->m_id == quest_status.leader_m_id) {
 		if(flags.leader_backstab){ /* They attacked you! */
 			adjalign((int)(ALIGNLIM/4));
-			pline("That was %sa bad idea...",
-					u.uevent.qcompleted ? "probably " : "");
+			// pline("That was %sa bad idea...",
+					// u.uevent.qcompleted ? "probably " : "");
 		} else {/* REAL BAD! */
 	    adjalign(-(u.ualign.record+(int)ALIGNLIM/2));
 	    pline("That was %sa bad idea...",
