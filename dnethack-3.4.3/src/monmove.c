@@ -864,6 +864,7 @@ register struct monst *mtmp;
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
 		(mdat->msound == MS_JUBJUB && (!rn2(10) || (!um_dist(mtmp->mx, mtmp->my, 3) && !rn2(10)))) ||
 		(mdat->msound == MS_DREAD && !rn2(4)) ||
+		(mdat->msound == MS_OONA && !rn2(6)) ||
 		(mdat->msound == MS_SONG && !rn2(6)) ||
 		(mdat == &mons[PM_LAMASHTU] && !rn2(7))
 	) m_respond(mtmp);

@@ -887,7 +887,7 @@ asGuardian:
 				boolean resisted;
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 					if(tmpm != mtmp){
-						if (nonliving(tmpm->data) || is_demon(tmpm->data)) {
+						if (resists_death(tmpm)) {
 							// if (canseemon(tmpm))
 								// pline("%s seems no deader than before.", Monnam(tmpm));
 						} else if (!(resisted = (resists_magm(tmpm) || resist(tmpm, 0, 0, FALSE))) &&
@@ -901,7 +901,7 @@ asGuardian:
 				}
 				if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
 					// You("seem no deader than before.");
-				} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12) && !(u.sealsActive&SEAL_OSE)) {
+				} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12) && !(u.sealsActive&SEAL_OSE || resists_death(&youmonst))) {
 					if (Hallucination) {
 						You("have an out of body experience.");
 					} else {
@@ -1045,6 +1045,217 @@ asGuardian:
 		}
 	}break;
 	case MS_SONG:{
+		struct monst *tmpm;
+		int ix, iy;
+		if((mtmp->data == &mons[PM_INTONER] && rn2(2)) || mtmp->data == &mons[PM_BLACK_FLOWER]){
+			switch(rnd(4)){
+				case 1:
+					pline_msg = "sings the song of broken eyes.";
+				break;
+				case 2:
+					pline_msg = "sings a harmless song of ruin.";
+				break;
+				case 3:{
+					struct obj *ispe = mksobj(SPE_TURN_UNDEAD,TRUE,FALSE);
+					pline_msg = "sings the song of the day of repentance.";
+					//Rapture invisible creatures
+					//Make visable creatures invisable
+					//Resurect creatures:
+					for(ix = 0; ix < COLNO; ix++){
+						for(iy = 0; iy < ROWNO; iy++){
+							bhitpile(ispe, bhito, ix, iy);
+						}
+					}
+				}break;
+				case 4:
+					pline_msg = "sings the song of bloodied prayers.";
+				break;
+			}
+		} else if(!(mtmp->mspec_used) || mtmp->data == &mons[PM_INTONER]){
+			if(mtmp->data != &mons[PM_INTONER]) mtmp->mspec_used = rn1(10,10);
+			switch(rnd(3)){
+				case 1:
+					pline_msg = "sings a song of courage.";
+
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+							if(!mindless(tmpm->data)){
+								if ( mtmp->mpeaceful == tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
+									if (tmpm->encouraged < BASE_DOG_ENCOURAGED_MAX)
+										tmpm->encouraged = min_ints(BASE_DOG_ENCOURAGED_MAX, tmpm->encouraged + rnd(mtmp->m_lev/3+1));
+									if (tmpm->mflee) tmpm->mfleetim = 0;
+									if (canseemon(tmpm))
+										if (Hallucination)
+											pline("%s looks %s!", Monnam(tmpm),
+												  tmpm->encouraged == BASE_DOG_ENCOURAGED_MAX ? "way cool" :
+												  tmpm->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
+										else
+											pline("%s looks %s!", Monnam(tmpm),
+												  tmpm->encouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" :
+												  tmpm->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
+								}
+							}
+						}
+					}
+				break;
+				case 2:
+					pline_msg = "sings a song of good health.";
+
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+							if(!mindless(tmpm->data)){
+								if ( mtmp->mpeaceful == tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
+									tmpm->mcan = 0;
+									tmpm->mspec_used = 0;
+									if(!tmpm->mnotlaugh && tmpm->mlaughing){
+										tmpm->mnotlaugh = 1;
+										tmpm->mlaughing = 0;
+									}
+									if(!tmpm->mcansee && tmpm->mblinded){
+										tmpm->mcansee = 1;
+										tmpm->mblinded = 0;
+									}
+									tmpm->mberserk = 0;
+									if(tmpm->mhp < tmpm->mhpmax) tmpm->mhp = min(tmpm->mhp + tmpm->m_lev,tmpm->mhpmax);
+									if(!tmpm->mcanmove && tmpm->mfrozen){
+										tmpm->mcanmove = 1;
+										tmpm->mfrozen = 0;
+									}
+									tmpm->mstdy = 0;
+									tmpm->mstun = 0;
+									tmpm->mconf = 0;
+									tmpm->msleeping = 0;
+									tmpm->mflee = 0;
+									tmpm->mfleetim = 0;
+								}
+							}
+						}
+					}
+				break;
+				case 3:
+					pline_msg = "sings a song of haste.";
+
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+							if(!mindless(tmpm->data) && tmpm->data->mmove){
+								if ( mtmp->mpeaceful == tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
+									tmpm->movement += 12;
+									tmpm->permspeed = MFAST;
+									tmpm->mspeed = MFAST;
+									pline("%s moves quickly to attack.", Monnam(tmpm));
+								}
+							}
+						}
+					}
+				break;
+			}
+		} else goto humanoid_sound;
+	}break;
+	case MS_OONA:{
+		struct monst *tmpm;
+		int dmg;
+		if(!(mtmp->mspec_used)){
+			mtmp->mspec_used = rn1(3,3);
+			switch(rnd(3)){
+				case 1:
+					switch(u.oonaenergy){
+						case AD_FIRE:
+							pline_msg = "sings the lament of flames.";
+						break;
+						case AD_COLD:
+							pline_msg = "sings the lament of ice.";
+						break;
+						case AD_ELEC:
+							pline_msg = "sings the lament of storms.";
+						break;
+					}
+
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+							if ( mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5 && !resist(tmpm, 0, 0, FALSE)) {
+								dmg = 0;
+								switch(u.oonaenergy){
+									case AD_FIRE:
+										if(resists_fire(tmpm)) dmg = d(mtmp->m_lev/2+10,4);
+										else break;
+										if(!resists_cold(tmpm)) dmg *= 1.5;
+									break;
+									case AD_COLD:
+										if(resists_cold(tmpm)) dmg = d(mtmp->m_lev/2+10,4);
+										else break;
+										if(!resists_fire(tmpm)) dmg *= 1.5;
+									break;
+									case AD_ELEC:
+										if(resists_elec(tmpm)) dmg = d(mtmp->m_lev/2+10,4);
+									break;
+								}
+								if(dmg) tmpm->mhp = max(tmpm->mhp - dmg,1);
+							}
+						}
+					}
+					if(!mtmp->mpeaceful){
+						dmg = 0;
+						switch(u.oonaenergy){
+							case AD_FIRE:
+								if(Fire_resistance) dmg = d(mtmp->m_lev/2+10,4);
+								else break;
+								if(!Cold_resistance) dmg *= 1.5;
+							break;
+							case AD_COLD:
+								if(Cold_resistance) dmg = d(mtmp->m_lev/2+10,4);
+								else break;
+								if(!Fire_resistance) dmg *= 1.5;
+							break;
+							case AD_ELEC:
+								if(Shock_resistance) dmg = d(mtmp->m_lev/2+10,4);
+							break;
+						}
+						if(Half_spell_damage) dmg /= 2;
+						if(dmg) dmg = min(dmg,Upolyd ? (u.mh - 1) : (u.uhp - 1));
+						if(dmg) mdamageu(mtmp,dmg);
+					}
+				break;
+				case 2:
+					pline_msg = "sings a dirge.";
+
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+							if(!mindless(tmpm->data)){
+								if ( mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
+									if (tmpm->encouraged > -1*BASE_DOG_ENCOURAGED_MAX)
+										tmpm->encouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, tmpm->encouraged - rnd(mtmp->m_lev/3+1));
+									if (tmpm->mflee) tmpm->mfleetim = 0;
+									if (canseemon(tmpm))
+										if (Hallucination)
+											pline("%s looks %s!", Monnam(tmpm),
+												  tmpm->encouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "peaced out" :
+												  tmpm->encouraged < (-1*BASE_DOG_ENCOURAGED_MAX/2) ? "mellower" : "mellow");
+										else
+											pline("%s looks %s!", Monnam(tmpm),
+												  tmpm->encouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" :
+												  tmpm->encouraged > -1*(BASE_DOG_ENCOURAGED_MAX/2) ? "depressed" : "a bit sad");
+								}
+							}
+						}
+					}
+				break;
+				case 3:
+					pline_msg = "sings a slow march.";
+
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+							if(!mindless(tmpm->data) && tmpm->data->mmove){
+								if ( mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5 && !resist(tmpm, 0, 0, FALSE)) {
+									tmpm->movement -= 12;
+									tmpm->permspeed = MSLOW;
+									tmpm->mspeed = MSLOW;
+								}
+							}
+						}
+					}
+				break;
+			}
+		} else goto humanoid_sound;
 	}break;
 	case MS_SHRIEK:
 	    pline_msg = "shrieks.";
@@ -1052,9 +1263,10 @@ asGuardian:
 		if(mtmp->data == &mons[PM_LAMASHTU]){
 			struct monst *tmpm;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
-				if(tmpm->mtame) tmpm->mtame -= 10;
-				if(tmpm->mtame <= 0) tmpm->mtame = 0;
-				else tmpm->mflee = 1;
+				if(tmpm->mtame > 10){
+					tmpm->mtame -= 10;
+					tmpm->mflee = 1;
+				} else tmpm->mtame = 0;
 			}
 		}
 	break;
@@ -1109,6 +1321,7 @@ asGuardian:
 	    }
 	    /* else FALLTHRU */
 	case MS_HUMANOID:
+humanoid_sound:
 		if(Role_if(PM_NOBLEMAN) && 
 			(mtmp->data == &mons[PM_KNIGHT] 
 				|| mtmp->data == &mons[PM_MAID]) && 
