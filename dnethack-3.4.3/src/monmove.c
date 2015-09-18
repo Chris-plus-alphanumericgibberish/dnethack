@@ -727,6 +727,7 @@ int *inrange, *nearby, *scared;
 	if(*scared && mtmp->mvanishes > 0) mtmp->mvanishes = mtmp->mvanishes/2 + 1;
 	
 	if(mtmp->data == &mons[PM_BALL_OF_LIGHT]) *scared = TRUE;
+	else if(mtmp->data == &mons[PM_DAUGHTER_OF_BEDLAM] && !rn2(20)) *scared = TRUE;
 	
 	if(*scared) {
 		if (rn2(7))
