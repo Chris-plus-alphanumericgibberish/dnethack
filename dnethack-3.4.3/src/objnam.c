@@ -815,6 +815,8 @@ register struct obj *obj;
 	int ispoisoned = 0;
 	char prefix[PREFIX];
 	char tmpbuf[PREFIX+1];
+    const struct artifact *oart = 0;
+	if(obj && obj->oartifact) oart = &artilist[(obj)->oartifact];
 	/* when we have to add something at the start of prefix instead of the
 	 * end (Strcat is used on the end)
 	 */
