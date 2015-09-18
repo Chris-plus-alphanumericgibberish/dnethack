@@ -1250,6 +1250,13 @@ int thrown;
 						if (tmp == 0) return TRUE; /* NOTE: ditto */
 						hittxt = TRUE;
 					}
+					if(obj->oartifact &&
+						artifact_hit(&youmonst, mon, obj, &tmp, dieroll)){
+						if(mon->mhp <= 0) /* artifact killed monster */
+							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
+						if (tmp == 0) return TRUE; /* NOTE: ditto */
+						hittxt = TRUE;
+					}
 				}
 			}
 		}
