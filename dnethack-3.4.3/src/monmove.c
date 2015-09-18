@@ -54,7 +54,7 @@ register struct monst *mtmp;
 	if(mtmp->mpeaceful && in_town(u.ux+u.dx, u.uy+u.dy) &&
 	   !is_blind(mtmp) && m_canseeu(mtmp) && !rn2(3)) {
 
-#ifdef CONVICT
+//ifdef CONVICT
 		if(Role_if(PM_CONVICT) && !Upolyd && !(ublindf && ublindf->otyp != LENSES)) {
             verbalize("%s yells: Hey!  You are the one from the wanted poster!",
              Amonnam(mtmp));
@@ -62,7 +62,7 @@ register struct monst *mtmp;
             stop_occupation();
             return;
         }
-#endif /* CONVICT */
+//endif /* CONVICT */
 	    if(picking_lock(&x, &y) && IS_DOOR(levl[x][y].typ) &&
 	       (levl[x][y].doormask & D_LOCKED)) {
 
