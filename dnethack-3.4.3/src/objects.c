@@ -422,7 +422,7 @@ HELM("droven helm", "spider shaped helm",
 HELM("plasteel helm", "white skull helm",
 		0, 0,  0,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
 HELM("crystal helm", "fish bowl",
-		0, 0,  0,   0, 1,150, 300, 6, 1, GLASS, CLR_CYAN),
+		0, 0,  0,   0, 1,150, 300, 5, 1, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
 HELM("helmet", "plumed helmet", /* circlet */
 		0, 0,  0,      8, 1, 30,  10, 9, 0, IRON, CLR_RED),
@@ -652,7 +652,7 @@ BOOTS("plasteel boots", "hard white boots",
 BOOTS("high boots", "jackboots",
 		0, 0,  0,	  15, 2, 20, 12,  8, 0, LEATHER, HI_LEATHER),
 BOOTS("crystal boots", "glass boots",
-		0, 0,  0,	   0, 2,150,300,  7, 0, GLASS, CLR_CYAN),
+		0, 0,  0,	   0, 2,150,300,  6, 0, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
 BOOTS("speed boots", "combat boots",
 		0, 1,  FAST,	  12, 2, 20, 50,  9, 0, LEATHER, HI_LEATHER),
