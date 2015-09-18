@@ -654,8 +654,8 @@ struct obj * instr;
 
 	alev += rnd(20)-10; /*Almost the same average, more variability*/
 	
-    if (wizard)
-	    pline("[%s:%i/%i]", mon_nam(mtmp), alev, dlev);
+    // if (wizard)
+	    // pline("[%s:%i/%i]", mon_nam(mtmp), alev, dlev);
 
     if (alev >= dlev && msg != (void *)0)
 	    pline(msg, Monnam(mtmp));
@@ -760,7 +760,7 @@ int distance;
 			if (is_undead(mtmp->data) || is_demon(mtmp->data)) {
 				// small chance of side effect
 				r = r/songs[song_being_played()].turns;
-				if (wizard) pline("[%i%% side effect]", r);
+				// if (wizard) pline("[%i%% side effect]", r);
 			}
 	
 			/* fear song actually can pacify undead */
@@ -973,7 +973,7 @@ int distance;
 			if (canseemon(mtmp))
 				pline("%s seems unable to focus.", Monnam(mtmp));
 			mtmp->mspec_used += min(max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED), 255);
-			if(wizard) pline("mspec cooldown: %d", (int)mtmp->mspec_used);
+			// if(wizard) pline("mspec cooldown: %d", (int)mtmp->mspec_used);
 		}
 		mtmp = mtmp->nmon;
 	}
@@ -1094,8 +1094,8 @@ int distance;
 			mtmp->mfrozen = min( mtmp->mfrozen +
 					     max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)
 					     * (mtmp->mtame ? 2 : 3), 127);
-			if (wizard)
-				pline("[%s:%i turns]", mon_nam(mtmp), mtmp->mfrozen);
+			// if (wizard)
+				// pline("[%s:%i turns]", mon_nam(mtmp), mtmp->mfrozen);
 			if (!mtmp->mcanmove) {
 				if (canseemon(mtmp) && flags.verbose && !rn2(10))
 					pline("%s moves while sleeping.", Monnam(mtmp));
