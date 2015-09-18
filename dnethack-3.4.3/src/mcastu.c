@@ -945,17 +945,21 @@ int spellnum;
 	} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12) && !(u.sealsActive&SEAL_OSE)) {
 	    if (Hallucination) {
 		You("have an out of body experience.");
+	    } else if(Upolyd ? (u.mh >= 100) : (u.uhp >= 100)){
+			Your("%s stops!  When it finally beats again, it is weak and thready", body_part(HEART));
+			if(Upolyd) u.mh -= d(8,8);	//Same as death's touch attack, sans special effects
+			else u.uhp -= d(8,8);		//Not reduced by AC
 	    } else {
 		killer_format = KILLED_BY_AN;
 		killer = "touch of death";
 		dmg = 0; //no additional damage
 		done(DIED);
 	    }
-	} else if(!(u.sealsActive&SEAL_OSE)){
+	} else if(!(u.sealsActive&SEAL_OSE || resists_death(&youmonst))){
 	    if (Antimagic) shieldeff(u.ux, u.uy);
 //	    pline("Lucky for you, it didn't work!");
 		Your("%s flutters!", body_part(HEART));
-		dmg = mtmp ? rnd(mtmp->m_lev) : 10; //you still take damage
+		dmg = 8; //you still take damage
 	} else{
 		dmg = 0;
 		shieldeff(u.ux, u.uy);
@@ -1039,7 +1043,7 @@ int spellnum;
 		   verbalize(rn2(2) ? "I shall make a statue of thee!" :
 							  "I condemn thee to eternity unmoving!");
         if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
-           if(!Stone_resistance && (!rn2(10) || !(have_lizard() || Free_action)) ){
+           if(!Stone_resistance && Free_action && (!rn2(10) || !have_lizard()) ){
 			You_feel("less limber.");
 			Stoned = 5;
 		   }else{
@@ -1173,26 +1177,18 @@ int spellnum;
 	break;
     case ICE_STORM:
 	pline("Chunks of ice pummel you from all sides!");
+	    dmg = d(4, 8);
+		
+		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+		else dmg -= rnd(-u.uac);
+		
+		if (dmg < 1) dmg = 1;
+		
+		if (Half_physical_damage) dmg = (dmg + 1) / 2;
+		
 	if (Cold_resistance) {
 	    shieldeff(u.ux, u.uy);
-	    dmg = d(4, 8);
-		
-		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
-		else dmg -= rnd(-u.uac);
-		
-		if (dmg < 1) dmg = 1;
-		
-		if (Half_physical_damage) dmg = (dmg + 1) / 2;
 	} else{
-	    dmg = d(4, 8);
-		
-		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
-		else dmg -= rnd(-u.uac);
-		
-		if (dmg < 1) dmg = 1;
-		
-		if (Half_physical_damage) dmg = (dmg + 1) / 2;
-		
 	    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
 		destroy_item(POTION_CLASS, AD_COLD);
 	}
@@ -1647,7 +1643,7 @@ drainhp:
 		You_hear("%s laugh menacingly as the world blurs around you...", mtmp ? mon_nam(mtmp) : "Someone");
 		if(Antimagic||Half_spell_damage) dmg = (dmg + 1) / ((Antimagic + Half_spell_damage) * 2);
 		make_confused(HConfusion + dmg*10, FALSE);
-		make_stunned(HStun + dmg*5, FALSE);
+		make_stunned(HStun + dmg, FALSE);
 		make_hallucinated(HHallucination + dmg*15, FALSE, 0L);
 		dmg = 0;
 		stop_occupation();
@@ -1724,13 +1720,11 @@ ray:
     case PARALYZE:
 	if (Antimagic || Free_action) {
 	    shieldeff(u.ux, u.uy);
-	    if (multi >= 0)
-		You("stiffen briefly.");
-	    nomul(-1, "paralyzed by a monster");
+	    if (multi >= 0) You("stiffen briefly.");
+	    if(!Free_action) nomul(-1, "paralyzed by a monster");
 	} else {
-	    if (multi >= 0)
-		You("are frozen in place!");
-	    dmg = rnd(4) + mtmp ? rnd((int)mtmp->m_lev) : rnd(30);
+	    if (multi >= 0) You("are frozen in place!");
+	    dmg = min_ints(rnd(4), mtmp ? rnd((int)mtmp->m_lev) : rnd(30));
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	    nomul(-dmg, "paralyzed by a monster");
 	}
@@ -1738,7 +1732,7 @@ ray:
 	stop_occupation();
 	break;
     case CONFUSE_YOU:
-	if (Antimagic) {
+	if (Antimagic || Free_action) {
 	    shieldeff(u.ux, u.uy);
 	    You_feel("momentarily dizzy.");
 	} else {
@@ -1760,10 +1754,10 @@ ray:
            shieldeff(u.ux, u.uy);
            if (!Stunned)
                You_feel("momentarily disoriented.");
-           make_stunned(1L, FALSE);
+           if(!Free_action) make_stunned(1L, FALSE);
        } else {
            You(Stunned ? "struggle to keep your balance." : "reel...");
-           dmg = d(ACURR(A_DEX) < 12 ? 6 : 4, 4);
+           dmg = d(ACURR(A_DEX) < 12 ? 2 : 1, 4);
            if (Half_spell_damage) dmg = (dmg + 1) / 2;
            make_stunned(HStun + dmg, FALSE);
        }
@@ -2687,7 +2681,7 @@ int spellnum;
 	if (nonliving(mtmp->data) || is_demon(mtmp->data)) {
 	    if (yours || canseemon(mtmp))
 	        pline("%s seems no deader than before.", Monnam(mtmp));
-	} else if (!(resisted = (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE))) ||
+	} else if (!(resisted = (resists_magm(mtmp) || resists_death(mtmp) || resist(mtmp, 0, 0, FALSE))) ||
 	           rn2(mons[u.umonnum].mlevel) > 12) {
             mtmp->mhp = -1;
 	    if (yours) killed(mtmp);
