@@ -1901,6 +1901,13 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(md->mlet==S_ANGEL && (is_demon(ma) /*|| ma == &mons[PM_FALLEN_ANGEL] || ma == &mons[PM_LUCIFER]*/))
 		return ALLOW_M|ALLOW_TM;
 
+	/* monadics vs. undead */
+	if(ma == &mons[PM_MONADIC_DEVA] && (is_undead(md) /*|| md == &mons[PM_FALLEN_ANGEL]*/))
+		return ALLOW_M|ALLOW_TM;
+	/* and vice versa */
+	if(md == &mons[PM_MONADIC_DEVA] && (is_undead(ma) /*|| ma == &mons[PM_FALLEN_ANGEL] || ma == &mons[PM_LUCIFER]*/))
+		return ALLOW_M|ALLOW_TM;
+
 	/* woodchucks vs. The Oracle */
 	if(ma == &mons[PM_WOODCHUCK] && md == &mons[PM_ORACLE])
 		return ALLOW_M|ALLOW_TM;
