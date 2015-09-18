@@ -1361,7 +1361,7 @@ boolean your_fault;
 			    pline("%s looks at you curiously!", 
 					    Monnam(mon));
 			make_happy_shk(mon, FALSE);
-		    } else if (!is_covetous(mon->data) && !rn2(4) &&
+		    } else if (!is_covetous(mon->data) &&
 				    !resist(mon, POTION_CLASS, 0, 0)) {
 			angermon = FALSE;
 			if (canseemon(mon)) {
@@ -1371,9 +1371,9 @@ boolean your_fault;
 						Monnam(mon));
 			    } else
 				pline("%s looks bewildered!", Monnam(mon));
+				}
 			    mon->mpeaceful = TRUE;
 			    mon->mtame = FALSE;	
-			}
 		    }
 		    break;
 		}
