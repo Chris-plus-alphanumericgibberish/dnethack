@@ -354,6 +354,7 @@ mattacku(mtmp)
 {
 	struct	attack	*mattk, alt_attk;
 	int	i, j, tmp, tchtmp, sum[NATTK];
+	int deva;
 	struct	permonst *mdat = mtmp->data;
 	boolean ranged = (distu(mtmp->mx, mtmp->my) > 3);
 		/* Is it near you?  Affects your actions */
@@ -365,7 +366,6 @@ mattacku(mtmp)
 		/* Might be attacking your image around the corner, or
 		 * invisible, or you might be blind....
 		 */
-	
 	if(!ranged) nomul(0, NULL);
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
@@ -921,10 +921,13 @@ mattacku(mtmp)
 						tmp += hittmp;
 						mswings(mtmp, otmp);
 					}
-					if(tmp > (j = dieroll = rnd(20+i)))
+					if(tmp > (j = dieroll = rnd(20+i))){
 						sum[i] = hitmu(mtmp, mattk);
-					else
-						missmu(mtmp, (tmp == j), mattk);
+						if(mattk->aatyp == AT_DEVA && sum[i]){
+							deva = 1;
+							while(tmp > (j = dieroll = rnd(20+i+(deva++)))) hitmu(mtmp, mattk);
+						}
+					} else missmu(mtmp, (tmp == j), mattk);
 					/* KMH -- Don't accumulate to-hit bonuses */
 					if (otmp)
 						tmp -= hittmp;
