@@ -972,6 +972,27 @@ struct monst *mtmp;
 
 #define MUSE_WAN_CANCELLATION 22	/* Lethe */
 
+/* Find a mask.
+ */
+struct permonst *
+find_mask(mtmp)
+struct monst *mtmp;
+{
+	register struct obj *obj;
+	int maskno = 0;
+	for(obj = mtmp->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == MASK) maskno++;
+	}
+	if(!maskno) return mtmp->data;
+	else maskno = rnd(maskno);
+	
+	for(obj = mtmp->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == MASK) maskno--;
+		if(!maskno) return &mons[(int)(obj->corpsenm)];
+	}
+	return mtmp->data; //Should never reach
+}
+
 /* Select an offensive item/action for a monster.  Returns TRUE iff one is
  * found.
  */
