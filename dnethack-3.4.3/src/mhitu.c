@@ -162,6 +162,7 @@ struct attack *mattk;
 	} else {
 	    return (mattk->aatyp == AT_TUCH) ? "contact" :
 		   (mattk->aatyp == AT_GAZE) ? "gaze" :
+		   (mattk->aatyp == AT_ENGL) ? "vapor" :
 		   (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK) ? "bite" : "sting";
 	}
 }
@@ -3127,6 +3128,21 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			u.ustdy = max(tmp,u.ustdy);
 			tmp = 0;
 		}break;
+		case AD_DRST:
+			if (nonliving(youmonst.data) || Breathless){
+				tmp = 0;
+				break;
+			}
+			if (!Blind)
+				make_blinded(1L, FALSE);
+			if (!Poison_resistance) {
+				pline("%s is burning your %s!", Something, makeplural(body_part(LUNG)));
+				You("cough and spit blood!");
+			} else {
+				You("cough!");
+				tmp = 0;
+			}
+		break;
 		default:
 		    tmp = 0;
 		break;
