@@ -827,7 +827,7 @@ int distance;
 
 	while(mtmp) {
 		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
-			mon_affected_by_peace_song(mtmp) &&
+			mon_affected_by_peace_song(mtmp) && mtmp->data->mmove &&
 		    resist_song(mtmp, SNG_SLOW, song_instr) >= 0) {
 			switch (P_SKILL(P_MUSICALIZE)) {
 			case P_UNSKILLED:
