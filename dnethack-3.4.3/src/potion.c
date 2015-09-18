@@ -798,7 +798,7 @@ peffects(otmp)
 			else Your("quickness feels more natural.");
 			HFast |= FROMOUTSIDE;
 			unkn++;
-	    }
+	    } else nothing++;
 		exercise(A_DEX, TRUE);
 	break;
 	case POT_BLINDNESS:
