@@ -482,17 +482,18 @@ struct obj *instr;
 	any.a_int = SNG_IMPROVISE;
 	add_menu(tmpwin, NO_GLYPH, &any, SNG_IMPROVISE_CHAR, 0, ATR_NONE,
 		 "improvise", MENU_UNSELECTED);
-	/* play notes option */
-	any.a_int = SNG_NOTES;
-	add_menu(tmpwin, NO_GLYPH, &any, SNG_NOTES_CHAR, 0, ATR_NONE,
-		 "a sequence of notes", MENU_UNSELECTED);
-	/* play the passtune option */
-	if (u.uevent.uheard_tune == 2) {
-		any.a_int = SNG_PASSTUNE;
-		add_menu(tmpwin, NO_GLYPH, &any, SNG_PASSTUNE_CHAR, 0, ATR_NONE,
-			 "passtune", MENU_UNSELECTED);
+	if(instr->otyp != LEATHER_DRUM && instr->otyp != DRUM_OF_EARTHQUAKE){
+		/* play notes option */
+		any.a_int = SNG_NOTES;
+		add_menu(tmpwin, NO_GLYPH, &any, SNG_NOTES_CHAR, 0, ATR_NONE,
+			 "a sequence of notes", MENU_UNSELECTED);
+		/* play the passtune option */
+		if (u.uevent.uheard_tune == 2) {
+			any.a_int = SNG_PASSTUNE;
+			add_menu(tmpwin, NO_GLYPH, &any, SNG_PASSTUNE_CHAR, 0, ATR_NONE,
+				 "passtune", MENU_UNSELECTED);
+		}
 	}
-
 	for (a = SNG_FIRST; a <= SNG_LAST; a++) {
 		/* For a song to be available in the menu:
 		   - Need a suitable instrument (the Lyre of Orpheus can play any song)
