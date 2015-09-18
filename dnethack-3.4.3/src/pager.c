@@ -149,7 +149,7 @@ lookat(x, y, buf, monbuf)
 #endif
 		    (mtmp->mpeaceful && accurate) ? (mtmp->data==&mons[PM_UVUUDAUM]) ? "meditating " : "peaceful " : "",
 		    name);
-	    if (mtmp->data==&mons[PM_DREAD_SERAPH] && mtmp->mextra[1])
+	    if (mtmp->data==&mons[PM_DREAD_SERAPH] && mtmp->mvar2)
 		Strcat(buf, "praying ");
 		
 	    if (u.ustuck == mtmp)

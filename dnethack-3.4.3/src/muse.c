@@ -373,8 +373,8 @@ struct monst *mtmp;
 		if((mtmp->data != &mons[PM_CLOCKWORK_SOLDIER] && mtmp->data != &mons[PM_CLOCKWORK_DWARF] && 
 		   mtmp->data != &mons[PM_FABERGE_SPHERE] && mtmp->data != &mons[PM_FIREWORK_CART] && 
 		   mtmp->data != &mons[PM_JUGGERNAUT] && mtmp->data != &mons[PM_ID_JUGGERNAUT]) ||
-			(x + xdir[(int)mtmp->mextra[0]] == xx && 
-			   y + ydir[(int)mtmp->mextra[0]] == yy 
+			(x + xdir[(int)mtmp->mvar1] == xx && 
+			   y + ydir[(int)mtmp->mvar1] == yy 
 			)
 		)
 		if ((xx==x && yy==y) || !level.monsters[xx][yy])
@@ -1838,8 +1838,8 @@ struct monst *mtmp;
 			if((mtmp->data != &mons[PM_CLOCKWORK_SOLDIER] && mtmp->data != &mons[PM_CLOCKWORK_DWARF] && 
 			   mtmp->data != &mons[PM_FABERGE_SPHERE] && mtmp->data != &mons[PM_FIREWORK_CART] && 
 			   mtmp->data != &mons[PM_JUGGERNAUT] && mtmp->data != &mons[PM_ID_JUGGERNAUT]) ||
-				(x + xdir[(int)mtmp->mextra[0]] == xx && 
-				   y + ydir[(int)mtmp->mextra[0]] == yy 
+				(x + xdir[(int)mtmp->mvar1] == xx && 
+				   y + ydir[(int)mtmp->mvar1] == yy 
 				)
 			)
 			if (/* (xx==x && yy==y) || */ !level.monsters[xx][yy])

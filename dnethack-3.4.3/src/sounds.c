@@ -851,15 +851,15 @@ asGuardian:
 	case MS_DREAD:{
 		struct monst *tmpm;
 		int ix, iy;
-		if(!mtmp->mextra[0] < moves && (
+		if(mtmp->mvar1 >= moves && (
 			mtmp->mhp < mtmp->mhpmax/4 || mtmp->mcrazed
 		)){
-			mtmp->mextra[0] = moves + rnz(350);
-			mtmp->mextra[1] = moves + 5;
+			mtmp->mvar1 = moves + rnz(350);
+			mtmp->mvar2 = moves + 5;
 		}
-		if(mtmp->mextra[1]){
-			if(mtmp->mextra[1] < moves){
-				mtmp->mextra[1] = 0;
+		if(mtmp->mvar2){
+			if(mtmp->mvar2 < moves){
+				mtmp->mvar2 = 0;
 				mtmp->mhp = mtmp->mhpmax;
 				mtmp->mspec_used = 0;
 				mtmp->mcan = 0;

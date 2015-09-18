@@ -970,8 +970,8 @@ movemon()
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
 		//Weeping angel step 1
 		if(is_weeping(mtmp->data)){
-			if(mtmp->mextra[2] && u.uevent.udemigod){
-				mtmp->mextra[2] = 0; //Quantum Lock status will be reset below.
+			if(mtmp->mvar3 && u.uevent.udemigod){
+				mtmp->mvar3 = 0; //Quantum Lock status will be reset below.
 				m_initgrp(mtmp, 0, 0, 10);
 			}
 		} else if(mtmp->data == &mons[PM_RAZORVINE] && 
@@ -1027,17 +1027,17 @@ movemon()
 
 	//Weeping angel step 3
 	if(is_weeping(mtmp->data)){
-		mtmp->mextra[1] &= 0x1L; //clear higher order bits, first bit is whether it should generate a swarm when you return
+		mtmp->mvar2 &= 0x1L; //clear higher order bits, first bit is whether it should generate a swarm when you return
 		if(canseemon(mtmp)){
-			mtmp->mextra[0] +=  (long)(NORMAL_SPEED*arc/314);
+			mtmp->mvar1 +=  (long)(NORMAL_SPEED*arc/314);
 			if(!arc){
-				mtmp->mextra[1] |= 0x4L; //Quantum Locked
+				mtmp->mvar2 |= 0x4L; //Quantum Locked
 			}
 			else if(arc < 314/2){
-				mtmp->mextra[1] |= 0x2L; //Partial Quantum Lock
+				mtmp->mvar2 |= 0x2L; //Partial Quantum Lock
 			}
 			m_respond(mtmp);
-			if(mtmp->mextra[0] >= NORMAL_SPEED*2) mtmp->mextra[0] -= NORMAL_SPEED*2;
+			if(mtmp->mvar1 >= NORMAL_SPEED*2) mtmp->mvar1 -= NORMAL_SPEED*2;
 			else continue;
 		}
 		//else no quant lock
@@ -1601,8 +1601,8 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		if(mdat == &mons[PM_CLOCKWORK_SOLDIER] || mdat == &mons[PM_CLOCKWORK_DWARF] || 
 		   mdat == &mons[PM_FABERGE_SPHERE] || mdat == &mons[PM_FIREWORK_CART] || 
 		   mdat == &mons[PM_JUGGERNAUT] || mdat == &mons[PM_ID_JUGGERNAUT]
-		) if(x + xdir[(int)mon->mextra[0]] != nx || 
-			   y + ydir[(int)mon->mextra[0]] != ny 
+		) if(x + xdir[(int)mon->mvar1] != nx || 
+			   y + ydir[(int)mon->mvar1] != ny 
 			) continue;
 		if(mdat == &mons[PM_WATCHER_IN_THE_WATER] && 
 			distmin(nx, ny, mon->mux, mon->muy) <= 3 && 
@@ -1979,21 +1979,21 @@ register int x,y;
 	if (distance==2 && (mon->data==&mons[PM_GRID_BUG] || mon->data==&mons[PM_BEBELITH])) return 0;
 	if(mon->data == &mons[PM_CLOCKWORK_SOLDIER] || mon->data == &mons[PM_CLOCKWORK_DWARF] || 
 	   mon->data == &mons[PM_FABERGE_SPHERE]
-	) if(mon->mx + xdir[(int)mon->mextra[0]] != x || 
-		   mon->my + ydir[(int)mon->mextra[0]] != y 
+	) if(mon->mx + xdir[(int)mon->mvar1] != x || 
+		   mon->my + ydir[(int)mon->mvar1] != y 
 		) return 0;
 	if(mon->data == &mons[PM_FIREWORK_CART] || 
 	   mon->data == &mons[PM_JUGGERNAUT] || 
 	   mon->data == &mons[PM_ID_JUGGERNAUT]
 	){
-		if(mon->mx + xdir[(int)mon->mextra[0]] == x && 
-		   mon->my + ydir[(int)mon->mextra[0]] == y 
+		if(mon->mx + xdir[(int)mon->mvar1] == x && 
+		   mon->my + ydir[(int)mon->mvar1] == y 
 		) return ((boolean)(distance < 3));
-		else if(rn2(2) && mon->mx + xdir[((int)mon->mextra[0] + 1)%8] == x && 
-		   mon->my + ydir[((int)mon->mextra[0] + 1)%8] == y 
+		else if(rn2(2) && mon->mx + xdir[((int)mon->mvar1 + 1)%8] == x && 
+		   mon->my + ydir[((int)mon->mvar1 + 1)%8] == y 
 		) return (!rn2(2) && (distance < 3));
-		else if(mon->mx + xdir[((int)mon->mextra[0] - 1)%8] == x && 
-		   mon->my + ydir[((int)mon->mextra[0] - 1)%8] == y 
+		else if(mon->mx + xdir[((int)mon->mvar1 - 1)%8] == x && 
+		   mon->my + ydir[((int)mon->mvar1 - 1)%8] == y 
 		) return (!rn2(2) && (distance < 3));
 		else return 0;
 	}
@@ -2304,7 +2304,7 @@ boolean was_swallowed;			/* digestion */
 		for (mtmp = fmon; mtmp; mtmp = mtmp2){
 			mtmp2 = mtmp->nmon;
 			if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
-				if(mon->mextra[0] == (long)mtmp->m_id){
+				if(mon->mvar1 == (long)mtmp->m_id){
 					mtmp->mhp = 0;
 					mondied(mtmp);
 					break;
@@ -2315,7 +2315,7 @@ boolean was_swallowed;			/* digestion */
 			for (mtmp = migrating_mons; mtmp; mtmp = mtmp2){
 				mtmp2 = mtmp->nmon;
 				if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
-					if(mon->mextra[0] == (long)mtmp->m_id){
+					if(mon->mvar1 == (long)mtmp->m_id){
 						mon_arrive(mtmp, TRUE);
 						mtmp->mhp = 0;
 						mondied(mtmp);

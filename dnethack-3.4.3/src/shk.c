@@ -3671,8 +3671,8 @@ register struct monst *shkp;
 		((shkp->data != &mons[PM_CLOCKWORK_SOLDIER] && shkp->data != &mons[PM_CLOCKWORK_DWARF] && 
 		   shkp->data != &mons[PM_FABERGE_SPHERE] && shkp->data != &mons[PM_FIREWORK_CART] && 
 		   shkp->data != &mons[PM_JUGGERNAUT] && shkp->data != &mons[PM_ID_JUGGERNAUT]) ||
-			(omx + xdir[(int)shkp->mextra[0]] == u.ux && 
-			   omy + ydir[(int)shkp->mextra[0]] == u.uy 
+			(omx + xdir[(int)shkp->mvar1] == u.ux && 
+			   omy + ydir[(int)shkp->mvar1] == u.uy 
 			)
 		)
 	){

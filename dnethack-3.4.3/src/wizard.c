@@ -878,9 +878,9 @@ register struct monst	*mtmp;
 			  random_malediction[rn2(SIZE(random_malediction))],
 			  random_insult[rn2(SIZE(random_insult))]);
 	} else if(mtmp->data == &mons[PM_CHAOS]){
-		if(mtmp->mextra[0]<5){
-			verbalize("%s", random_chaosism[mtmp->mextra[0]+5]);
-			mtmp->mextra[0]++;
+		if(mtmp->mvar1<5){
+			verbalize("%s", random_chaosism[mtmp->mvar1+5]);
+			mtmp->mvar1++;
 		}
 		else verbalize("%s", random_chaosism[rn2(5)]);
 	} else if(mtmp->data == &mons[PM_GARLAND]){
