@@ -289,7 +289,7 @@ struct obj *book2;
 		arti2_primed = TRUE;
 	}
 	if(!arti2_primed && !arti_cursed && uwep && uwep->oartifact == ART_SILVER_KEY){
-	    pline("As you read from the book, you unconciously move the silver key through a complex unlocking gesture.");
+		pline("As you read from the book, you unconsciously move the silver key through a complex unlocking gesture.");
 		if(!uwep->cursed) arti2_primed = TRUE;
 		else arti_cursed = TRUE;
 	}
@@ -457,7 +457,7 @@ learn()
 	}
 	if(RoSbook == STUDY_WARD){
 	 if((book->ovar1)){
-		pline("The spellbook is warded with a %s", wardDecode[decode_wardID(book->ovar1)]);
+		pline("The spellbook is warded with a %s.", wardDecode[decode_wardID(book->ovar1)]);
 		if( !(u.wardsknown & book->ovar1) ){
 			u.wardsknown |= book->ovar1;
 		}
@@ -553,7 +553,7 @@ struct obj *spellbook;
 					spl_book[i].sp_lev = objects[spellbook->ovar1].oc_level;
 					incrnknow(i);
 					pline("The endless pages of the book cover the material of a spellbook of %s in exhaustive detail.",OBJ_NAME(objects[spellbook->ovar1]));
-					pline("Using the instructions on the pages, you easilly learn to cast the spell!");
+					pline("Using the instructions on the pages, you easily learn to cast the spell!");
 					if(!rn2(20)){
 						spellbook->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
 						pline("The endless pages of the book turn themselves. They settle on a section describing %s.",OBJ_NAME(objects[spellbook->ovar1]));
@@ -606,7 +606,13 @@ struct obj *spellbook;
 			delay = 0;
 			return 0;
 		}
-		/* Books are often wiser than their readers (Rus.) */
+		if((spellbook->ovar1) && RoSbook == STUDY_WARD){
+			if( (u.wardsknown & spellbook->ovar1) ){
+				You("are already familar with this ward.");
+				delay = 0;
+				return 0;
+			}
+		}		/* Books are often wiser than their readers (Rus.) */
 		spellbook->in_use = TRUE;
 		if (!spellbook->blessed &&
 			!spellbook->oartifact && 
@@ -850,8 +856,8 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Purifying Blast", "Recall to Eden", "Stargate",
 	"Walk among Thresholds", "Geyser",
 	"Vengeance", "Shape the Wind",
-	"Thorns and Stones", "Barage",
-	"Breath Poison", "Ruinous Strike",
+	"Thorns and Stones", "Barrage",
+	"Breathe Poison", "Ruinous Strike",
 	"Raven's Talons",
 	"Horrid Wilting", "Horrid Rainbow",
 	"Refill Lantern", "Hellfire", 
@@ -1756,7 +1762,7 @@ spiriteffects(power, atme)
 					if (mon->mhp <= 0){
 						xkilled(mon, 1);
 						break;
-					} else You("hit %s", mon_nam(mon));
+					} else You("hit %s.", mon_nam(mon));
 					setmangry(mon);
 				} else You("don't have enough gold on hand.");
 			}
@@ -1792,7 +1798,7 @@ spiriteffects(power, atme)
 							if (mon->mhp <= 0){
 								xkilled(mon, 1);
 								continue;
-							} else You("hit %s", mon_nam(mon));
+							} else You("hit %s.", mon_nam(mon));
 							setmangry(mon);
 						} You("don't have enough gold on hand.");
 					}
@@ -1800,7 +1806,7 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_SOW_DISCORD:
-			You("sow discord amongst your enemies");
+			You("sow discord amongst your enemies.");
 			u.sowdisc = 5+dsize;
 		break;
 		case PWR_GIFT_OF_HEALING:{
@@ -1870,7 +1876,10 @@ spiriteffects(power, atme)
 					shieldeff(mon->mx, mon->my);
 				} else {
 					pline("%s recovers.", Monnam(mon));
-					if(mon->permspeed == MSLOW) mon->permspeed = 0;
+					if(mon->permspeed == MSLOW){
+						mon->permspeed = 0;
+						if(mon->mspeed == MSLOW) mon->mspeed = 0;
+					}
 					mon->mcan = 0;
 					mon->mcrazed = 0; 
 					mon->mcansee = 1;
@@ -1979,7 +1988,7 @@ spiriteffects(power, atme)
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon || mon->data->geno & G_UNIQ) break;
-				You("attempt to recall %s to eden.", mon_nam(mon));
+				You("attempt to recall %s to Eden.", mon_nam(mon));
 				if(Upolyd) perc = (u.mh - mon->mhp)*100/u.mh;
 				else perc = (u.uhp - mon->mhp)*100/u.uhp;
 				
@@ -2054,7 +2063,7 @@ spiriteffects(power, atme)
 			int cancelled;
 		    cc.x = u.ux;
 		    cc.y = u.uy;
-		    pline("To what doorway do you wish to travel?");
+		    pline("To which doorway do you wish to travel?");
 			do cancelled = getpos(&cc, TRUE, "the desired doorway");
 			while( !(IS_DOOR(levl[cc.x][cc.y].typ) && teleok(cc.x, cc.y, FALSE)) && cancelled >= 0);
 			if(cancelled < 0) return 0; /*abort*/
@@ -2087,7 +2096,7 @@ spiriteffects(power, atme)
 						if(Wwalking){
 							pline("A sudden geyser from the abzu erupts under %s's feet!", mon_nam(mon));
 							if(mon->data->mmove >= 14){
-								pline("%s puts the added monmentum to good use!", Monnam(mon));
+								pline("%s puts the added momentum to good use!", Monnam(mon));
 								if(mon->data->mmove >= 25) mon->movement += 12;
 								else if(mon->data->mmove >= 18) mon->movement += 8;
 								else mon->movement += 6;
@@ -2118,7 +2127,7 @@ spiriteffects(power, atme)
 		case PWR_VENGANCE:{
 			struct monst *mon;
 			int i,j;
-			You("lash out in vengeance.");
+			You("lash out in vengeance!");
 			for(i=-1;i<=1;i++){
 			  for(j=-1;j<=1;j++){
 				if((i!=0 || j!=0) && isok(u.ux+i, u.uy+j) && (mon = m_at(u.ux+i, u.uy+j)) && mon->mhurtu){
@@ -2127,7 +2136,7 @@ spiriteffects(power, atme)
 						mon->mhp = 0;
 						xkilled(mon, 1);
 						break;
-					} else You("hit %s",mon_nam(mon));
+					} else You("hit %s.",mon_nam(mon));
 					setmangry(mon);
 				}
 			  }
@@ -2214,7 +2223,7 @@ spiriteffects(power, atme)
 		break;
 		case PWR_BREATH_POISON:{
 	        coord cc;
-			pline("Breath where?");
+			pline("Breathe where?");
 			cc.x = u.ux;
 			cc.y = u.uy;
 			if (getpos(&cc, TRUE, "the desired position") < 0) {
@@ -2313,7 +2322,7 @@ spiriteffects(power, atme)
 				}
 				dmg = d(5,dsize);
 				u.irisAttack = moves;
-				pline("Arcs of iridescent  droplets tear free from %s body!", s_suffix(mon_nam(mon)));
+				pline("Arcs of iridescent droplets tear free from %s body!", s_suffix(mon_nam(mon)));
 				pline("They merge with and are absorbed by your tentacles!");
 				if(mon->data==&mons[PM_WATER_ELEMENTAL] || mon->data==&mons[PM_FOG_CLOUD] || mon->data==&mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES]) dmg *= 2;
 				if (mon->mhp <= dmg){
@@ -2357,7 +2366,7 @@ spiriteffects(power, atme)
 			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact){
 				uwep->age += d(5,dsize) * 10;
 				if(uwep->age > 1500) uwep->age = 1500;
-				You("refill %s",the(xname(uwep)));
+				You("refill %s.",the(xname(uwep)));
 				if(uwep->lamplit){
 					end_burn(uwep, TRUE);
 					begin_burn(uwep, FALSE);
@@ -2374,7 +2383,7 @@ spiriteffects(power, atme)
 					begin_burn(uwep, FALSE);
 				} else return 0;
 			} else{
-				if(uwep && uwep->otyp == BRASS_LANTERN) pline("You need an oil lamp. These moddern lamps just aren't the same!");
+				if(uwep && uwep->otyp == BRASS_LANTERN) pline("You need an oil lamp. These modern lamps just aren't the same!");
 				else You("must wield a burning lamp!");
 				return 0;
 			}
@@ -2421,7 +2430,7 @@ spiriteffects(power, atme)
 						if (mon->mhp <= 0){
 							xkilled(mon, 1);
 							continue;
-						} else You("hit %s", mon_nam(mon));
+						} else You("hit %s.", mon_nam(mon));
 						setmangry(mon);
 					}
 				} else break;
@@ -2746,7 +2755,7 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_GREAT_LEAP:
-			You("plunge through the ceiling.");
+			You("plunge through the ceiling!");
 			morehungry(rnd(625));
 			level_tele();
 		break;
@@ -2948,7 +2957,7 @@ spiriteffects(power, atme)
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
 			You("speak an echo of the Last Word of creation.");
-			if(resists_drli(mon) || !(mon->data->geno & G_GENO) || is_demon(mon->data)){
+			if(resists_drli(mon) || !(mon->data->geno & G_GENO) || resists_death(mon)){
 				int nlev;
 				d_level tolevel;
 				int migrate_typ = MIGR_RANDOM;
@@ -3060,7 +3069,7 @@ spiriteffects(power, atme)
 		    int spirit_id = pick_council_seal();
 			if(spirit_id) councilspirit(spirit_id);
 			else return 0;
-			You("re-contact %s", sealNames[spirit_id-FIRST_SEAL]);
+			You("re-contact %s.", sealNames[spirit_id-FIRST_SEAL]);
 		}break;
 		case PWR_SUMMON_MONSTER:{
 			struct monst *mon;
@@ -3080,7 +3089,7 @@ spiriteffects(power, atme)
 			sx = u.ux;
 			sy = u.uy;
 			if(u.uswallow){
-				You("can't do that in here");
+				You("can't do that in here!");
 				return 0;
 			}
 			if(!(uwep && uwep->otyp == MIRROR && !(uwep->oartifact))){
@@ -3283,7 +3292,7 @@ spiriteffects(power, atme)
 		    int spirit_id = pick_gnosis_seal();
 			if(spirit_id) gnosisspirit(spirit_id);
 			else return 0;
-			You("dream of %s", sealNames[spirit_id-FIRST_SEAL]);
+			You("dream of %s...", sealNames[spirit_id-FIRST_SEAL]);
 		}break;
 		default:
 			pline("BANG! That's not going to kill TOO many people, is it...? (Unknown power %d.)", power);
