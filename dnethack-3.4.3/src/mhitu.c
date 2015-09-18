@@ -320,7 +320,8 @@ struct attack *alt_attk_buf;
     if (indx > 0 && prev_result[indx - 1] > 0 &&
 	    (attk->adtyp == AD_DISE ||
 		attk->adtyp == AD_PEST ||
-		attk->adtyp == AD_FAMN) &&
+		attk->adtyp == AD_FAMN ||
+		mptr == &mons[PM_ASTRAL_DEVA]) &&
 	    attk->adtyp == mptr->mattk[indx - 1].adtyp
 	) {
 		*alt_attk_buf = *attk;
