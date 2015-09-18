@@ -600,6 +600,10 @@ mattacku(mtmp)
 	    }
 	}
 
+	if(mdat == &mons[PM_LILLEND] && rn2(2)){
+		mdat = find_mask(mtmp);
+		if(!Blind && mdat != &mons[PM_LILLEND]) pline("%s uses a %s mask!",Monnam(mtmp),mdat->mname);
+	}
 	if(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
 	    /* monsters won't attack you */
 	    if(mtmp == u.ustuck)
