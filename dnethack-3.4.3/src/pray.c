@@ -6,6 +6,8 @@
 #include "epri.h"
 #include "artifact.h"
 
+extern const int monstr[];
+
 STATIC_PTR int NDECL(prayer_done);
 STATIC_DCL struct obj *NDECL(worst_cursed_item);
 STATIC_DCL int NDECL(in_trouble);
@@ -21,6 +23,9 @@ STATIC_DCL void FDECL(fry_by_god,(ALIGNTYP_P));
 STATIC_DCL void FDECL(consume_offering,(struct obj *));
 STATIC_DCL boolean FDECL(water_prayer,(BOOLEAN_P));
 STATIC_DCL boolean FDECL(blocked_boulder,(int,int));
+static void NDECL(lawful_god_gives_angel);
+static void FDECL(god_gives_pet,(const char *,ALIGNTYP_P));
+static void FDECL(god_gives_benefit,(ALIGNTYP_P));
 
 /* simplify a few tests */
 #define Cursed_obj(obj,typ) ((obj) && (obj)->otyp == (typ) && (obj)->cursed)
@@ -42,15 +47,16 @@ STATIC_DCL boolean FDECL(blocked_boulder,(int,int));
  *	responsible for the theft of the Amulet from Marduk, the Creator.
  *	Moloch is unaligned.
  */
-static const char	*Moloch = "Moloch";
-static const char	*Chaos = "Chaos";
-static const char	*DeepChaos = "Chaos, with Cosmos in chains";
-static const char	*tVoid = "the Void";
-static const char	*Demiurge = "Yaldabaoth";
-static const char	*Sophia = "Pistis Sophia";
-static const char	*Other = "an alien god";
-static const char	*BlackMother = "the Black Mother";
-static const char	*AllInOne = "Yog-Sothoth";
+//definition of externs in you.h
+const char	*Moloch = "Moloch";
+const char	*Chaos = "Chaos";
+const char	*DeepChaos = "Chaos, with Cosmos in chains";
+const char	*tVoid = "the void";
+const char	*Demiurge = "Yaldabaoth";
+const char	*Sophia = "Pistis Sophia";
+const char	*Other = "an alien god";
+const char	*BlackMother = "the Black Mother";
+const char	*AllInOne = "Yog-Sothoth";
 
 static const char *godvoices[] = {
     "booms out",
@@ -542,9 +548,11 @@ aligntyp resp_god;
 	    if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) {
 		/* one more try for high altars */
 		verbalize("Thou cannot escape my wrath, mortal!");
-		(void) summon_minion(resp_god, FALSE, FALSE);
-		(void) summon_minion(resp_god, FALSE, FALSE);
-		(void) summon_minion(resp_god, FALSE, FALSE);
+		(void) summon_god_minion(align_gname_full(resp_god), resp_god, FALSE);
+		(void) summon_god_minion(align_gname_full(resp_god), resp_god, FALSE);
+		(void) summon_god_minion(align_gname_full(resp_god), resp_god, FALSE);
+		(void) summon_god_minion(align_gname_full(resp_god), resp_god, FALSE);
+		(void) summon_god_minion(align_gname_full(resp_god), resp_god, FALSE);
 		verbalize("Destroy %s, my servants!", uhim());
 	    }
 	}
@@ -628,7 +636,7 @@ aligntyp resp_god;
 				  "scorn":"call upon");
 			pline("\"Then die, %s!\"",
 			      youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
-			(void) summon_minion(resp_god, FALSE, FALSE);
+			(void) summon_god_minion(align_gname_full(resp_god), resp_god, FALSE);
 			break;
 
 	    default:	gods_angry(resp_god);
@@ -1334,6 +1342,10 @@ pleased(g_align)
 	    if (p_trouble == 0) pat_on_head = 1;
 	} else {
 	    int action = rn1(Luck + (on_altar() ? 3 + on_shrine() : 2), 1);
+	    /* pleased Lawful gods often send you a helpful angel if you're
+	       getting the crap beat out of you */
+	    if ((u.uhp < 5 || (u.uhp*7 < u.uhpmax)) &&
+		 u.ualign.type == A_LAWFUL && rn2(3)) lawful_god_gives_angel();
 
 	    if (!on_altar()) action = min(action, 3);
 	    if (u.ualign.record < STRIDENT)
@@ -1718,6 +1730,101 @@ register struct obj *otmp;
     exercise(A_WIS, TRUE);
 }
 
+void
+god_gives_pet(gptr, alignment)
+const char *gptr;
+aligntyp alignment;
+{
+/*
+    register struct monst *mtmp2;
+    register struct permonst *pm;
+ */
+    const int *minions = god_minions(gptr);
+    int mnum=NON_PM, mlev, num = 0, first, last;
+	struct monst *mon = (struct monst *)0;
+	
+	mlev = level_difficulty();
+	
+	for (first = 0; minions[first] != NON_PM; first++)
+	    if (!(mvitals[minions[first]].mvflags & G_GONE && !In_quest(&u.uz)) && monstr[minions[first]] > mlev/2) break;
+	if(minions[first] == NON_PM){ //All minions too weak, or no minions
+		if(first == 0) return;
+		else mnum = minions[first-1];
+	}
+	else for (last = first; minions[last] != NON_PM; last++)
+	    if (!(mvitals[minions[last]].mvflags & G_GONE && !In_quest(&u.uz))) {
+			/* consider it */
+			if(monstr[minions[last]] > mlev+5) break;
+			num += min(1,mons[minions[last]].geno & G_FREQ);
+	    }
+
+	if(!num){ //All minions too strong, or gap between weak and strong minions
+		if(first == 0) return;
+		else mnum = minions[first-1];
+	}
+/*	Assumption:	minions are presented in ascending order of strength. */
+	else{
+		for(num = rnd(num); num > 0; first++) if (!(mvitals[minions[first]].mvflags & G_GONE && !In_quest(&u.uz))) {
+			/* skew towards lower value monsters at lower exp. levels */
+			num -= min(1, mons[minions[first]].geno & G_FREQ);
+			if (num && adj_lev(&mons[minions[first]]) > (u.ulevel*2)) {
+				/* but not when multiple monsters are same level */
+				if (mons[first].mlevel != mons[first+1].mlevel)
+				num--;
+			}
+	    }
+		first--; /* correct an off-by-one error */
+		mnum = minions[first];
+	}
+
+
+    if (mnum == NON_PM) {
+		mon = (struct monst *)0;
+    }
+	else mon = make_pet_minion(mnum,alignment);
+	
+    if (mon) {
+	switch ((int)alignment) {
+	   case A_LAWFUL:
+		if (u.uhp > (u.uhpmax / 10)) godvoice(u.ualign.type, "My minion shall serve thee!");
+		else godvoice(u.ualign.type, "My minion shall save thee!");
+	   break;
+	   case A_NEUTRAL:
+	   case A_VOID:
+		pline("%s", Blind ? "You hear the earth rumble..." :
+		 "A cloud of gray smoke gathers around you!");
+	   break;
+	   case A_CHAOTIC:
+	   case A_NONE:
+		pline("%s", Blind ? "You hear an evil chuckle!" :
+		 "A miasma of stinking vapors coalesces around you!");
+	   break;
+	}
+	godvoice(u.ualign.type, "My minion shall serve thee!");
+	return;
+    }
+}
+
+static void
+lawful_god_gives_angel()
+{
+/*
+    register struct monst *mtmp2;
+    register struct permonst *pm;
+*/
+    int mnum;
+    int mon;
+
+    // mnum = lawful_minion(u.ulevel);
+    // mon = make_pet_minion(mnum,A_LAWFUL);
+    // pline("%s", Blind ? "You feel the presence of goodness." :
+	 // "There is a puff of white fog!");
+    // if (u.uhp > (u.uhpmax / 10)) godvoice(u.ualign.type, "My minion shall serve thee!");
+    // else godvoice(u.ualign.type, "My minion shall save thee!");
+	god_gives_pet(align_gname_full(A_LAWFUL),A_LAWFUL);
+}
+
+
 int
 dosacrifice()
 {
@@ -2085,9 +2192,13 @@ dosacrifice()
 					}
 				}
 			}
-		    if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
-		       rnd(u.ualign.record) > (3*ALIGNLIM)/4)
-			(void) summon_minion(altaralign, TRUE, FALSE);
+		    // if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
+		       // rnd(u.ualign.record) > (3*ALIGNLIM)/4)
+			if(!Pantheon_if(PM_ELF)){
+				if(u.ulevel > 20) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+				if(u.ulevel > 10) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+				(void) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+			}
 		    /* anger priest; test handles bones files */
 		    if((pri = findpriest(temple_occupied(u.urooms))) &&
 		       !p_coaligned(pri))
@@ -2097,9 +2208,11 @@ dosacrifice()
 			  u_gname());
 		    change_luck(-1);
 		    exercise(A_WIS, FALSE);
-		    if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
-		       rnd(u.ualign.record) > (7*ALIGNLIM)/8)
-			(void) summon_minion(altaralign, TRUE, FALSE);
+			if(!Pantheon_if(PM_ELF)){
+				if(u.ulevel > 20) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+				if(u.ulevel > 10) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+				(void) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+			}
 		}
 		return(1);
 	    }
@@ -2217,6 +2330,11 @@ dosacrifice()
 			}
 			return(1);
 		}
+	    } else if (!rnl(30 + u.ulevel)) {
+			/* no artifact, but maybe a helpful pet? */
+			/* WAC is now some generic benefit (includes pets) */
+			god_gives_benefit(altaralign);
+		    return(1);
 	    }
 	    change_luck((value * LUCKMAX) / (MAXVALUE * 2));
 	    if ((int)u.uluck < 0) u.uluck = 0;
@@ -2727,6 +2845,48 @@ aligntyp alignment;
     return gnam;
 }
 
+const char *
+align_gname_full(alignment)
+aligntyp alignment;
+{
+    const char *gnam;
+
+    switch (alignment) {
+     case A_NONE:
+		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
+		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
+		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
+		else if(In_neu(&u.uz)){
+			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
+			else gnam = BlackMother;
+		}
+		else gnam = Moloch;
+	 break;
+     case A_LAWFUL:
+		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
+						gnam = urole.lgod; break;
+		} else {
+						gnam = Demiurge; break;
+		}
+     case A_NEUTRAL:	
+		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
+						gnam = urole.ngod; break;
+		} else {
+						gnam = tVoid; break;
+		}
+     case A_CHAOTIC:	
+		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
+						gnam = urole.cgod; break;
+		} else {
+						gnam = Sophia; break;
+		}
+     case A_VOID:		gnam = tVoid; break;
+     default:		impossible("unknown alignment.");
+			gnam = "someone"; break;
+    }
+    return gnam;
+}
+
 /* hallucination handling for priest/minion names: select a random god
    iff character is hallucinating */
 const char *
@@ -2838,4 +2998,74 @@ struct obj *candle;
   return (p_type > 2 ? 1 : p_type - 1);
 }
 
+/* Give away something */
+void
+god_gives_benefit(alignment)
+aligntyp alignment;
+{
+	register struct obj *otmp;
+	const char *what = (const char *)0;
+	
+	if (!rnl(30 + u.ulevel)) god_gives_pet(align_gname_full(alignment),alignment);
+	else {
+		switch (rnl(5)) {
+			case 0: /* randomly charge an object */
+			case 1: /* increase weapon bonus */
+				if(uwep && uwep->spe < 7 && (otmp->oclass == WEAPON_CLASS || is_weptool(otmp))){
+					uwep->spe++;
+				}
+			case 2: /* randomly identify items in the backpack */
+			case 3: /* do magic mapping */
+			case 4: /* give some food */
+			case 5: /* randomly bless items */
+		    /* weapon takes precedence if it interferes
+		       with taking off a ring or shield */
+
+		    if (uwep && !uwep->blessed) /* weapon */
+			    otmp = uwep;
+		    else if (uswapwep && !uswapwep->blessed) /* secondary weapon */
+			    otmp = uswapwep;
+		    /* gloves come next, due to rings */
+		    else if (uarmg && !uarmg->blessed)    /* gloves */
+			    otmp = uarmg;
+		    /* then shield due to two handed weapons and spells */
+		    else if (uarms && !uarms->blessed)    /* shield */
+			    otmp = uarms;
+		    /* then cloak due to body armor */
+		    else if (uarmc && !uarmc->blessed)    /* cloak */
+			    otmp = uarmc;
+		    else if (uarm && !uarm->blessed)      /* armor */
+			    otmp = uarm;
+		    else if (uarmh && !uarmh->blessed)    /* helmet */
+			    otmp = uarmh;
+		    else if (uarmf && !uarmf->blessed)    /* boots */
+			    otmp = uarmf;
+//ifdef TOURIST
+		    else if (uarmu && !uarmu->blessed)    /* shirt */
+			    otmp = uarmu;
+//endif
+		    /* (perhaps amulet should take precedence over rings?) */
+		    else if (uleft && !uleft->blessed)
+			    otmp = uleft;
+		    else if (uright && !uright->blessed)
+			    otmp = uright;
+		    else if (uamul && !uamul->blessed) /* amulet */
+			    otmp = uamul;
+		    else {
+			    for(otmp=invent; otmp; otmp=otmp->nobj)
+				if (!otmp->blessed)
+					break;
+			    return; /* Nothing to do! */
+		    }
+		    bless(otmp);
+		    otmp->bknown = TRUE;
+		    if (!Blind)
+			    Your("%s %s.",
+				 what ? what :
+				 (const char *)aobjnam (otmp, "softly glow"),
+				 hcolor(NH_AMBER));
+			break;
+		}
+	}
+}
 /*pray.c*/

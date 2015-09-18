@@ -646,8 +646,8 @@ const char *DrowMaleLgodKnown = "the Eddergud",
 		   *DrowMaleNgod = "Vhaeraun",
 		   *DrowMaleCgod = "_Lolth"; /* Hedroven */
 
-const char *DrowNobMaleLgod = "Selvetarm", /*Nevermind, using Ver'tas instead*/
-		   *DrowNobMaleNgod = "Keptolo",
+// const char *DrowNobMaleLgod = "Selvetarm", /*Nevermind, using Ver'tas instead*/
+const char *DrowNobMaleNgod = "Keptolo",
 		   *DrowNobMaleCgod = "Ghaunadaur"; /* Hedroven Nobles */
 
 const char *DrowFemaleLgod = "_Eilistraee",
@@ -679,6 +679,8 @@ const char *DnDHumLgod = "Saint Cuthbert",
 		   *DnDHumNgod = "Helm",
 		   *DnDHumCgod = "_Mask"; /* DnD human pantheon */
 
+//defined in pray.c
+extern const char *Moloch, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *AllInOne; /*defined in pray*/
 /* The player's role, created at runtime from initial
  * choices.  This may be munged in role_init().
  */
@@ -901,6 +903,249 @@ randrole(ralign)
 		for(i=0;i<SIZE(roles)-1;i++) if(roles[i].allow & ralign) if(!(--allowed)) return i;
 	}
 	return 0;/* Backup, should never reach */
+}
+
+const int Langels[] = {PM_COUATL,PM_ANGEL,PM_ARCHON,PM_SOLAR,NON_PM};
+const int Ldevils[] = {PM_LEMURE,PM_IMP,PM_HORNED_DEVIL,PM_BARBED_DEVIL,PM_LEGION_DEVIL_GRUNT,PM_LEGION_DEVIL_SOLDIER,
+	PM_ICE_DEVIL,PM_BONE_DEVIL,PM_FALLEN_ANGEL,NON_PM};
+const int Nangels[] = {PM_MOVANIC_DEVA,PM_MONADIC_DEVA,PM_ASTRAL_DEVA,PM_MAHADEVA,NON_PM};
+const int NElemen[] = {PM_AIR_ELEMENTAL,PM_WATER_ELEMENTAL,PM_FIRE_ELEMENTAL,PM_EARTH_ELEMENTAL,NON_PM};
+const int Cangels[] = {PM_BRALANI,PM_FIRRE,PM_SHIERE,PM_GHAELE,PM_TULANI,NON_PM};
+const int Cdemons[] = {PM_MANES,PM_QUASIT,PM_VROCK,PM_HEZROU,PM_NALFESHNEE,PM_MARILITH,PM_BALROG,NON_PM};
+
+const int LArc[] = {PM_COUATL,NON_PM};
+
+const int LIssek[] = {PM_WATER_ELEMENTAL,PM_ANGEL,PM_ARCHON,NON_PM};
+const int NMog[] = {PM_GIANT_SPIDER,PM_ANGEL,PM_MIRKWOOD_SPIDER,PM_MAHADEVA,NON_PM};
+const int CKos[] = {PM_ICE_VORTEX,PM_FIRE_VORTEX,PM_BRALANI,PM_GHAELE,PM_TULANI,NON_PM};
+
+const int LAthena[] = {PM_SOLDIER,PM_SERGEANT,PM_DEMINYMPH,PM_ARCHON,NON_PM};
+const int NHermes[] = {PM_QUICKLING,PM_AIR_ELEMENTAL,PM_LIGHTNING_PARAELEMENTAL,PM_BANDERSNATCH,PM_MORTAI,NON_PM};
+const int CPoseidon[] = {PM_NOVIERE,PM_WATER_DEMON,PM_WATER_ELEMENTAL,PM_ICE_PARAELEMENTAL,PM_LIGHTNING_PARAELEMENTAL,PM_TITAN,NON_PM};
+
+const int LLugh[] = {PM_WARHORSE,PM_ANGEL,PM_KI_RIN,PM_SOLAR,NON_PM};
+const int NBrigit[] = {PM_FIRRE,PM_FIRE_ELEMENTAL,PM_FIRE_VORTEX,PM_SOLAR,NON_PM};
+const int CManannan[] = {PM_NOVIERE,PM_NAIAD,PM_WATER_ELEMENTAL,PM_ICE_PARAELEMENTAL,PM_LIGHTNING_PARAELEMENTAL,PM_STORM_GIANT,NON_PM};
+
+const int LShanLaiChing[] = {PM_OREAD,PM_EARTH_ELEMENTAL,PM_WATER_ELEMENTAL,PM_MAHADEVA,NON_PM};
+const int NSungTzu[] = {PM_NAIAD,PM_WATER_ELEMENTAL,PM_MORTAI,NON_PM};
+const int CHuanTi[] = {PM_SOLDIER,PM_TERRACOTTA_SOLDIER,PM_TULANI,PM_SOLAR,NON_PM};
+
+const int NSea[] = {PM_NOVIERE,PM_WATER_DEMON,PM_WATER_ELEMENTAL,PM_ICE_PARAELEMENTAL,PM_LIGHTNING_PARAELEMENTAL,NON_PM};
+
+const int LApollo[] = {PM_PLAINS_CENTAUR,PM_OREAD,PM_MOUNTAIN_CENTAUR,PM_SOLAR,NON_PM};
+const int NLatona[] = {PM_NAIAD,PM_OREAD,PM_EARTH_ELEMENTAL,PM_WATER_ELEMENTAL,PM_TITAN,NON_PM};
+const int CDiana[] = {PM_PLAINS_CENTAUR,PM_NAIAD,PM_FOREST_CENTAUR,PM_TULANI,NON_PM};
+
+const int COffler[] = {PM_BABY_CROCODILE,PM_CROCODILE,PM_ZRUTY,PM_MARILITH,PM_AMMIT,NON_PM};
+
+const int LApollon[] = {PM_NAIAD,PM_MOVANIC_DEVA,PM_MONADIC_DEVA,PM_SOLAR,NON_PM};
+const int NPan[] = {PM_DRYAD,PM_MONADIC_DEVA,PM_DEMINYMPH,PM_TULANI,NON_PM};
+const int CDionysus[] = {PM_NAIAD,PM_NOVIERE,PM_DEMINYMPH,PM_TULANI,NON_PM};
+
+const int LTyr[] = {PM_ARCADIAN_AVENGER,PM_ANGEL,PM_ARCHON,PM_SOLAR,NON_PM};
+const int NOdin[] = {PM_ARCADIAN_AVENGER,PM_WARRIOR,PM_VALKYRIE,PM_MAHADEVA,NON_PM};
+const int CLoki[] = {PM_HELL_HOUND_PUP,PM_HELL_HOUND,PM_FIRE_GIANT,PM_TITAN,NON_PM};
+
+const int LPtah[] = {PM_CROCODILE,PM_SERPENT_NECKED_LIONESS,PM_PHARAOH,NON_PM};
+const int NThoth[] = {PM_PARROT,PM_GOLDEN_NAGA,PM_ASTRAL_DEVA,PM_PHARAOH,NON_PM};
+const int CAnhur[] = {PM_VROCK,PM_MARILITH,PM_ANUBITE,PM_AMMIT,NON_PM};
+
+const int LOrome[] = {PM_PLAINS_CENTAUR,PM_FOREST_CENTAUR,PM_MOUNTAIN_CENTAUR,PM_HUNTER,PM_TITAN,NON_PM};
+const int NYavanna[] = {PM_GRAY_UNICORN,PM_EARTH_ELEMENTAL,PM_WOOD_TROLL,PM_TITAN,NON_PM};
+
+const int LVarda[] = {PM_WHITE_UNICORN,PM_AIR_ELEMENTAL,PM_ANGEL,PM_SOLAR,NON_PM};
+const int NVaire[] = {PM_GRAY_UNICORN,PM_MOVANIC_DEVA,PM_ASTRAL_DEVA,PM_MAHADEVA,NON_PM};
+
+const int LManwe[] = {PM_WHITE_UNICORN,PM_AIR_ELEMENTAL,PM_ANGEL,PM_GIANT_EAGLE,NON_PM};
+const int NMandos[] = {PM_GRAY_UNICORN,PM_MOVANIC_DEVA,PM_ASTRAL_DEVA,PM_MAHADEVA,NON_PM};
+
+const int LIllsensine[] = {PM_MIND_FLAYER,PM_BRAIN_GOLEM,PM_SEMBLANCE,PM_MASTER_MIND_FLAYER,NON_PM};
+
+const int LBlackWeb[] = {PM_DROW_MUMMY,PM_EDDERKOP,PM_EDDERKOP,PM_EDDERKOP,PM_DROW_ALIENIST,PM_EMBRACED_DROWESS,NON_PM};
+const int NVhaeraun[] = {PM_HEDROW_WARRIOR,PM_PHASE_SPIDER,PM_MIRKWOOD_ELDER,NON_PM};
+const int CLolthMale[] = {PM_GIANT_SPIDER,PM_MIRKWOOD_SPIDER,PM_MIRKWOOD_ELDER,NON_PM};
+
+const int CGhaunadaur[] = {PM_HEDROW_WARRIOR,PM_DRIDER,PM_HEDROW_WIZARD,PM_SHOGGOTH,PM_PRIESTESS_OF_GHAUNADAUR,NON_PM};
+
+const int LEilisstraee[] = {PM_ELF_LORD,PM_DROW_MATRON,PM_HEDROW_BLADEMASTER,PM_ANGEL,NON_PM};
+const int LVerTas[] = {PM_HEDROW_WARRIOR,PM_BEHOLDER,PM_ANGEL,PM_EYE_OF_DOOM,NON_PM};
+const int NKiaransali[] = {PM_DROW_ZOMBIE,PM_DROW_MUMMY,PM_VAMPIRE,PM_MASTER_LICH,NON_PM};
+const int CLolth[] = {PM_SPROW,PM_YOCHLOL,PM_ANGEL,PM_MARILITH,NON_PM};
+
+const int NVoid[] = {NON_PM};
+const int CSophia[] = {PM_ANGEL,PM_ARCHON,NON_PM};
+
+const int LMahal[] = {PM_ROCK_MOLE,PM_DWARF,PM_ANGEL,PM_ARCHON,NON_PM};
+const int NHolashner[] = {PM_ROCK_MOLE,PM_MIND_FLAYER,PM_PURPLE_WORM,NON_PM};
+
+const int NGnome[] = {PM_ARCADIAN_AVENGER,PM_MOVANIC_DEVA,PM_MONADIC_DEVA,PM_ASTRAL_DEVA,PM_MAHADEVA,NON_PM};
+
+const int MChaos[] = {PM_GOBLIN,PM_WATER_ELEMENTAL,PM_FIRE_ELEMENTAL,PM_EARTH_ELEMENTAL,PM_AIR_ELEMENTAL,PM_MIND_FLAYER,PM_VAMPIRE,PM_PURPLE_WORM,NON_PM};
+const int MChaosDeep[] = {PM_LICH,PM_MARILITH,PM_KRAKEN,PM_GREEN_DRAGON,NON_PM};
+const int Onone[] = {NON_PM};
+const int MBlackMother[] = {PM_DEMINYMPH,PM_SHOGGOTH,PM_DARK_YOUNG,NON_PM};
+const int MAllInOne[] = {PM_AOA_DROPLET,PM_HOOLOOVOO,PM_AOA,PM_UVUUDAUM,NON_PM};
+
+const int *
+god_minions(gptr)
+	const char *gptr;
+{
+	int role = -1, galign, i;
+	
+	for(i=0;i<SIZE(roles)-1;i++){
+		if(roles[i].lgod == gptr){
+			role = roles[i].malenum;
+			galign = A_LAWFUL;
+		} else if(roles[i].ngod == gptr){
+			role = roles[i].malenum;
+			galign = A_NEUTRAL;
+		} else if(roles[i].cgod == gptr){
+			role = roles[i].malenum;
+			galign = A_CHAOTIC;
+		}
+		
+	}
+	if(role != -1) switch(role){
+		case PM_ARCHEOLOGIST:
+			if(galign == A_LAWFUL) return LArc;
+			if(galign == A_NEUTRAL) return NElemen;
+			return Cdemons;
+		break;
+		// case PM_ANACHRONONAUT:
+			// //should always be subbed out for something else
+		// break;
+		case PM_BARBARIAN:
+			if(galign == A_LAWFUL) return Langels;
+			if(galign == A_NEUTRAL) return NElemen;
+			return Cdemons;
+		break;
+		// case PM_EXILE:
+			// //should always be subbed out for something else
+		// break;
+		case PM_CAVEMAN:
+			if(galign == A_LAWFUL) return Langels;
+			if(galign == A_NEUTRAL) return NElemen;
+			return Cdemons;
+		break;
+		case PM_CONVICT:
+			if(galign == A_LAWFUL) return Langels;
+			if(galign == A_NEUTRAL) return NElemen;
+			return Cangels;
+		break;
+		case PM_HEALER:
+			if(galign == A_LAWFUL) return LAthena;
+			if(galign == A_NEUTRAL) return NHermes;
+			return CPoseidon;
+		break;
+		case PM_KNIGHT:
+			if(galign == A_LAWFUL) return LLugh;
+			if(galign == A_NEUTRAL) return NBrigit;
+			return CManannan;
+		break;
+		case PM_MONK:
+			//Neutral is water, Law is mountains and seas and Chaos is... the first emperor, lord of the moving heavens...
+			if(galign == A_LAWFUL) return LShanLaiChing;
+			if(galign == A_NEUTRAL) return NSungTzu;
+			return CHuanTi;
+		break;
+		case PM_NOBLEMAN:
+			if(galign == A_LAWFUL) return Langels;
+			if(galign == A_NEUTRAL) return NElemen;
+			return Cdemons;
+		break;
+		// case PM_PRIEST:
+			// //should always be subbed out for something else
+		// break;
+		case PM_PIRATE:
+			if(galign == A_LAWFUL) return Langels;
+			if(galign == A_NEUTRAL) return NSea;
+			return Cdemons;
+		break;
+		case PM_ROGUE:
+			if(galign == A_LAWFUL) return LIssek;
+			if(galign == A_NEUTRAL) return NMog;
+			return CKos;
+		break;
+		case PM_RANGER:
+			if(galign == A_LAWFUL) return LApollo;
+			if(galign == A_NEUTRAL) return NLatona;
+			return CDiana;
+		break;
+		case PM_SAMURAI:
+			if(galign == A_LAWFUL) return Langels;
+			if(galign == A_NEUTRAL) return Nangels;
+			return Cangels;
+		break;
+		case PM_TOURIST:
+			if(galign == A_LAWFUL) return Langels;
+			if(galign == A_NEUTRAL) return Nangels;
+			return COffler;
+		break;
+		case PM_BARD:
+			if(galign == A_LAWFUL) return LApollon;
+			if(galign == A_NEUTRAL) return NPan;
+			return CDionysus;
+		break;
+		case PM_VALKYRIE:
+			if(galign == A_LAWFUL) return LTyr;
+			if(galign == A_NEUTRAL) return NOdin;
+			return CLoki;
+		break;
+		case PM_WIZARD:
+			if(galign == A_LAWFUL) return LPtah;
+			if(galign == A_NEUTRAL) return NThoth;
+			return CAnhur;
+		break;
+	}
+	
+	if(gptr == Moloch) return rn2(2) ? Ldevils:Cdemons;
+	
+	if(gptr == ElfRangerLgod) return LOrome;
+	if(gptr == ElfRangerNgod) return NYavanna;
+	if(gptr == ElfRangerCgod) return Cangels;
+	
+	if(gptr == ElfPriestessLgod) return LVarda;
+	if(gptr == ElfPriestessNgod) return NVaire;
+	if(gptr == ElfPriestessCgod) return Cangels;
+	
+	if(gptr == ElfPriestLgod) return LManwe;
+	if(gptr == ElfPriestNgod) return NMandos;
+	if(gptr == ElfPriestCgod) return Cangels;
+	
+	if(gptr == AnachrononautLgod) return LIllsensine;
+	
+	if(gptr == DrowMaleLgodKnown || gptr == DrowMaleLgodUknwn) return LBlackWeb;
+	if(gptr == DrowMaleNgod) return NVhaeraun;
+	if(gptr == DrowMaleCgod) return CLolthMale;
+	
+	if(gptr == DrowNobMaleNgod) return NVhaeraun;
+	if(gptr == DrowNobMaleCgod) return CGhaunadaur;
+	
+	if(gptr == DrowFemaleLgod) return LEilisstraee;
+	if(gptr == DrowNobFemaleLgod) return LVerTas;
+	if(gptr == DrowFemaleNgod) return NKiaransali;
+	if(gptr == DrowFemaleCgod) return CLolth;
+	
+	if(gptr == BinLgod || gptr == Demiurge) return Langels;
+	if(gptr == BinNgod || gptr == tVoid) return NVoid;
+	if(gptr == BinCgod || gptr == Sophia) return CSophia;
+	
+	if(gptr == DwarfLgod) return LMahal;
+	if(gptr == DwarfNgod) return NHolashner;
+	if(gptr == DwarfCgod) return Cdemons;
+	
+	if(gptr == GnomeLgod) return Ldevils;
+	if(gptr == GnomeNgod) return NGnome;
+	
+	if(gptr == Chaos) return MChaos;
+	if(gptr == DeepChaos) return MChaosDeep;
+	if(gptr == Other) return Onone;
+	if(gptr == BlackMother) return MBlackMother;
+	if(gptr == AllInOne) return MAllInOne;
+	
+	pline("ERROR RECOVERY:Minion list for %s not specified, using default", gptr);
+	return Cdemons;
 }
 
 
