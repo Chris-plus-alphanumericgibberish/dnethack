@@ -91,7 +91,7 @@ static const char *alignmentThings[] = {
 static const char *woePrisoners[] = {
 	"All this, because of a dream?",
 	"Why are they doing this?",
-	"I thought these religions had nothing to do with each other?",
+	"I thought these religions had nothing to do with each other!?",
 	"Shouldn't these gods be enemies?",
 	"To what Power are the Keter sworn?",
 	"They said the world was cracked. They said it was our fault.",
@@ -3725,7 +3725,7 @@ int tx,ty;
 				You("see there a far-distant realm:");
 				pline("planar layers stacked like onion-flesh,");
 				pline("twisting possibly-plants growing like ivy on the walls of the universe;");
-				pline("presided over by grim, meditating monks who's heads are black thorns.");
+				pline("presided over by grim, meditating monks whose heads are black thorns.");
 				pline("The babble gets louder.");
 				pline("You find yourself surrounded by a whirling mass of confused imagery and inane questions:");
 				do{
@@ -3788,7 +3788,7 @@ int tx,ty;
 		if(u.ulevel == 30 && Role_if(PM_EXILE)){
 			int skill;
 			You("hear a tumultuous babble of voices.");
-			pline("So insistent are they that even the un initiated can hear,");
+			pline("So insistent are they that even the uninitiated can hear,");
 			pline("albeit only in the form of whispers.");
 			bindspirit(ep->ward_id);
 		} else pline("You hear whispering all around you.");
