@@ -1376,12 +1376,16 @@ hitmu(mtmp, mattk)
 					otmp->oartifact != ART_PEN_OF_THE_VOID
 				)) {
 			    /* then do only 1-2 points of damage */
-			    if (u.umonnum == PM_SHADE && otmp->otyp != SILVER_ARROW)
-				dmg = 0;
+			    if (u.umonnum == PM_SHADE && otmp && 
+					(objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp))
+				) dmg = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 				dmg = 2*(rnd(12) + rnd(10) + otmp->spe);
 				else
 				dmg = rnd(2);
+				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && 
+					maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))
+				) dmg += rnd(20);
 			} else dmg += dmgval(otmp, &youmonst, 0);
 			
 			if (otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
