@@ -772,6 +772,7 @@ int thrown;
 	char yourbuf[BUFSZ];
 	char unconventional[BUFSZ];	/* substituted for word "attack" in msg */
 	char saved_oname[BUFSZ];
+	int unarmedMult = Race_if(PM_HALF_DRAGON) ? 3 : 1;
 
 	static short jadeRing = 0;
 	if(!jadeRing) jadeRing = find_jade_ring();
