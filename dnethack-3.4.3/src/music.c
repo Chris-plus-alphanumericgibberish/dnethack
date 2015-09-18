@@ -93,19 +93,18 @@ struct songspell {
 #define SNG_PASSTUNE        97
 #ifdef BARD
 /* same order and indices as below */
-#define SNG_SLEEP		1
-#define SNG_CONFUSION	2
-#define SNG_SLOW		3
-#define SNG_FEAR		4
-#define SNG_TAME		5
-#define SNG_COURAGE		6
-#define SNG_FIRST		SNG_SLEEP
-#define SNG_LAST_ENCHANTMENT	SNG_COURAGE	/* last song based on an enchantment spell */
-#define SNG_HASTE		7
-#define SNG_HEAL		8
-#define SNG_CNCL		9
-#define SNG_RLLY	   10
-#define SNG_LAST		SNG_RLLY
+#define SNG_FEAR		1
+#define SNG_SLEEP		2
+#define SNG_HEAL		3
+#define SNG_RLLY	    4
+#define SNG_CONFUSION	5
+#define SNG_HASTE		6
+#define SNG_CNCL		7
+#define SNG_SLOW		8
+#define SNG_TAME		9
+#define SNG_COURAGE	   10
+#define SNG_FIRST		SNG_FEAR
+#define SNG_LAST		SNG_COURAGE
 #define SNG_IMPROVISE_CHAR	'x'
 #define SNG_NOTES_CHAR		'n'
 #define SNG_PASSTUNE_CHAR	'p'
@@ -115,16 +114,16 @@ struct songspell {
 NEARDATA const struct songspell songs[] = {
 	/* sp_id		name	    level turns instr1		instr2 */
 	{ 0,				"None",				0, 1,	0,				0 },
-	{ SPE_SLEEP,		"Lullaby",			1, 4,	WOODEN_HARP,	WOODEN_FLUTE },
-	{ SPE_CONFUSE_MONSTER,	"Cacophony",	2, 5,	LEATHER_DRUM,	TOOLED_HORN },
-	{ SPE_SLOW_MONSTER,	"Lethargy",			2, 5,	WOODEN_FLUTE,	WOODEN_HARP },
 	{ SPE_CAUSE_FEAR,	"Fear",				1, 6,	LEATHER_DRUM,	TOOLED_HORN },
-	{ SPE_CHARM_MONSTER,"Friendship",		3, 6,	WOODEN_FLUTE,	WOODEN_HARP },
-	{ SPE_CAUSE_FEAR,	"Inspire Courage",	3,6,	LEATHER_DRUM,	BUGLE },
+	{ SPE_SLEEP,		"Lullaby",			1, 4,	WOODEN_HARP,	WOODEN_FLUTE },
+	{ SPE_EXTRA_HEALING,"Meditative Healing",1,4,	WOODEN_HARP,	WOODEN_FLUTE },
+	{ SPE_TELEPORT_AWAY,"Rally",			1, 1,	TOOLED_HORN,	BUGLE },
+	{ SPE_CONFUSE_MONSTER,	"Cacophony",	2, 5,	LEATHER_DRUM,	TOOLED_HORN },
 	{ SPE_HASTE_SELF,	"Charge", 			2, 5,	LEATHER_DRUM,	BUGLE },
-	{ SPE_EXTRA_HEALING,"Meditative Healing", 1,4,	WOODEN_HARP,	WOODEN_FLUTE },
-	{ SPE_CANCELLATION,	"Disruption", 		2,5,	BUGLE,			TOOLED_HORN },
-	{ SPE_TELEPORT_AWAY,"Rally",			1, 1,	TOOLED_HORN,	BUGLE }
+	{ SPE_CANCELLATION,	"Disruption", 		2, 5,	BUGLE,			TOOLED_HORN },
+	{ SPE_SLOW_MONSTER,	"Lethargy",			2, 5,	WOODEN_FLUTE,	WOODEN_HARP },
+	{ SPE_CHARM_MONSTER,"Friendship",		3, 6,	WOODEN_FLUTE,	WOODEN_HARP },
+	{ SPE_CAUSE_FEAR,	"Inspire Courage",	3, 6,	LEATHER_DRUM,	BUGLE }
 /*	random ideas that weren't implemented -- based in spells from other schools
 	{ SPE_CURE_BLINDNESS,	"Cause Blindness"
 	{ SPE_CURE_SICKNESS,	"Cause Sickness"
