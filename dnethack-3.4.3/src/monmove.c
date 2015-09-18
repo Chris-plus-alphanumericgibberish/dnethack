@@ -142,6 +142,7 @@ struct monst *mtmp;
 {
 	struct obj *alignedfearobj = aligned_sartprop3_at(SPFX3_FEAR, x, y);
 	int wardAt = ward_at(x,y);
+	struct monst *mat = m_at(x,y);
 	
 
 	return (boolean)(
@@ -150,7 +151,9 @@ struct monst *mtmp;
 				 || (alignedfearobj && !touch_artifact(alignedfearobj,mtmp))
 				 ) && scaryItem(mtmp)
 				)
-			 || (u.umonnum == PM_GHOUL && mtmp->data == &mons[PM_GUG])
+			 || (u.umonnum == PM_GHOUL && x == mtmp->mux && y == mtmp->muy && mtmp->data == &mons[PM_GUG])
+			 || (mat && mat->data == &mons[PM_GHOUL] && mtmp->data == &mons[PM_GUG])
+			 || (mat && mat->data == &mons[PM_MOVANIC_DEVA] && (is_animal(mtmp->data) || is_plant(mtmp->data)))
 			 || (wardAt == HEPTAGRAM && scaryHept(num_wards_at(x,y), mtmp))
 			 || (wardAt == GORGONEION && scaryGorg(num_wards_at(x,y), mtmp))
 			 || (wardAt == CIRCLE_OF_ACHERON && scaryCircle(num_wards_at(x,y), mtmp))
@@ -186,6 +189,7 @@ struct monst *mtmp;
 			mtmp->data->mlet == S_NAGA ||
 			mtmp->data->mlet == S_SNAKE ||
 			mtmp->data->mlet == S_LIZARD ||
+			mtmp->data == &mons[PM_TOVE] ||
 			mtmp->data == &mons[PM_KRAKEN];
 }
 
@@ -213,7 +217,8 @@ struct monst *mtmp;
 			mtmp->data->mlet == S_SNAKE ||
 			mtmp->data->mlet == S_SPIDER ||
 			mtmp->data->mlet == S_EEL ||
-			mtmp->data->mlet == S_LIZARD;
+			mtmp->data->mlet == S_LIZARD ||
+			mtmp->data == &mons[PM_TOVE];
 }
 
 boolean
@@ -383,8 +388,11 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && complete <= d(1,8))
 		) return FALSE;
-	return 	(mtmp->data == &mons[PM_HELL_HOUND] || 
+	return 	(is_minion(mtmp->data) ||
+			mtmp->data == &mons[PM_HELL_HOUND] || 
 			mtmp->data == &mons[PM_HELL_HOUND_PUP] ||
+			mtmp->data == &mons[PM_EYE_OF_DOOM] ||
+			mtmp->data == &mons[PM_SON_OF_TYPHON] ||
 			is_golem(mtmp->data) ||
 			mtmp->data->mlet == S_ANGEL ||
 			mtmp->data->mlet == S_KETER ||
@@ -409,7 +417,8 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && !rn2(9))
 		) return FALSE;
-	return 	(mtmp->data == &mons[PM_HELL_HOUND] || 
+	return 	(is_demon(mtmp->data) || 
+			mtmp->data == &mons[PM_HELL_HOUND] ||
 			mtmp->data == &mons[PM_HELL_HOUND_PUP] ||
 			mtmp->data == &mons[PM_GARGOYLE] || 
 			mtmp->data == &mons[PM_WINGED_GARGOYLE] ||
@@ -418,8 +427,7 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_SALAMANDER] ||
 			mtmp->data->mlet == S_ELEMENTAL ||
 			mtmp->data->mlet == S_KETER ||
-			mtmp->data->mlet == S_IMP ||
-			is_demon(mtmp->data));
+			mtmp->data->mlet == S_IMP);
 }
 
 boolean
@@ -1221,7 +1229,7 @@ toofar:
 	if (inrange && mtmp->data->msound == MS_CUSS && !mtmp->mpeaceful &&
 		couldsee(mtmp->mx, mtmp->my) && ((!mtmp->minvis && !rn2(5)) || 
 										mtmp->data == &mons[PM_SIR_GARLAND] || mtmp->data == &mons[PM_GARLAND] ||
-										(mtmp->data == &mons[PM_CHAOS] && (mtmp->mextra[1] < 5 || !rn2(5)) )|| 
+										(mtmp->data == &mons[PM_CHAOS] && (mtmp->mvar2 < 5 || !rn2(5)) )|| 
 										mtmp->data == &mons[PM_APOLLYON]
 	) )
 	    cuss(mtmp);
