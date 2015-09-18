@@ -3143,7 +3143,7 @@ cleanup:
 		if (p_coaligned(mtmp)) u.ublessed = 0;
 		if (mdat->maligntyp == A_NONE)
 			adjalign((int)(ALIGNLIM / 4));		/* BIG bonus */
-	} else if (mtmp->mtame) {
+	} else if (mtmp->mtame && !Role_if(PM_EXILE)) {
 		adjalign(-15);	/* bad!! */
 		/* your god is mighty displeased... */
 		if (!Hallucination) You_hear("the rumble of distant thunder...");
