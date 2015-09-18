@@ -383,6 +383,8 @@ boolean on, silently;
     unseen = !canseemon(mon);
     if (!which) goto maybe_blocks;
 	
+	if(obj->otyp == ALCHEMY_SMOCK) update_mon_intrinsic(mon, obj, ACID_RES, on, silently);
+	
 	if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
 		for(which = 0; which < 1; which++) update_mon_intrinsic(mon, obj, ORANGE_RES[which], on, silently);
 	} else if(obj->otyp == YELLOW_DRAGON_SCALES || obj->otyp == YELLOW_DRAGON_SCALE_MAIL || obj->otyp == YELLOW_DRAGON_SCALE_SHIELD){
