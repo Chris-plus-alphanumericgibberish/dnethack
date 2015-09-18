@@ -1180,7 +1180,7 @@ int thrown;
 					monwep->owornmask = 0L;
 					update_mon_intrinsics(mon, monwep, FALSE, FALSE);
 				}
-				pline("%s %s is snaged by your %s.",
+				pline("%s %s is snagged by your %s.",
 				      s_suffix(Monnam(mon)), xname(monwep), xname(obj));
 				getdir((char *)0);
 				if(u.dx || u.dy){
