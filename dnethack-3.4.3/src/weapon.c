@@ -667,8 +667,12 @@ int x;
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
 		{
 			if (!obest ||
-				dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0))
-					obest = otmp;
+				// dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0)
+				(is_bludgeon(otmp) ? 
+					(otmp->spe - greatest_erosion(otmp) > obest->spe - greatest_erosion(obest)):
+					(otmp->spe > obest->spe)
+				)
+			) obest = otmp;
 		}
 	}
 	return obest;
@@ -1145,9 +1149,17 @@ mon_wield_item(mon)
 register struct monst *mon;
 {
 	struct obj *obj;
+	struct obj *mw_tmp = MON_WEP(mon);
 
 	/* This case actually should never happen */
 	if (mon->weapon_check == NO_WEAPON_WANTED) return 0;
+	
+	/* Most monsters are able to remember that they wielded a cursed weapon */
+	if (mw_tmp && mw_tmp->cursed && mw_tmp->otyp != CORPSE && mon->m_lev > 1) {
+		mon->weapon_check = NO_WEAPON_WANTED;
+		return 0;
+	}
+	
 	switch(mon->weapon_check) {
 		case NEED_HTH_WEAPON:
 			obj = select_hwep(mon);
@@ -1182,7 +1194,6 @@ register struct monst *mon;
 			return 0;
 	}
 	if (obj && obj != &zeroobj) {
-		struct obj *mw_tmp = MON_WEP(mon);
 		if (mw_tmp && mw_tmp->otyp == obj->otyp) {
 		/* already wielding one similar to it */
 			if (is_lightsaber(obj))
