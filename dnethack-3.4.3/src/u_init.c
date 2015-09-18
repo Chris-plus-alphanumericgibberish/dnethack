@@ -1928,7 +1928,7 @@ u_init()
 		if(Role_if(PM_NOBLEMAN)){
 			if(!flags.female) u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 				u.ualign.type = A_NEUTRAL; /* Males are neutral */
-		} else if(!Role_if(PM_EXILE)){
+		} else if(!Role_if(PM_EXILE) && !Role_if(PM_CONVICT)){
 			ini_inv(DrovenCloak);
 			if(!flags.female) u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 				u.ualign.type = A_NEUTRAL; /* Males are neutral */
@@ -2461,7 +2461,8 @@ register struct trobj *trop;
 				}
 			}
 			obj = mksobj(otyp, TRUE, FALSE);
-			if(obj->otyp == POT_BLOOD) obj->corpsenm = PM_HUMAN;
+			if(obj->otyp == POT_BLOOD) 
+				obj->corpsenm = PM_HUMAN;
 			/* Don't start with +0 or negative rings */
 			if (objects[obj->otyp].oc_charged && obj->spe <= 0)
 				obj->spe = rne(3);
