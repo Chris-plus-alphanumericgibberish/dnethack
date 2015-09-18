@@ -1668,10 +1668,14 @@ struct obj *instr;
 		return 0;
     }
 
-    if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM))
+    if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM)){
 	    You("can't play properly while wearing a shield.");
-    if (is_silent(youmonst.data))
+		return 0;
+	}
+    if (is_silent(youmonst.data)){
 	    pline("While in this form, you can't sing along your songs.");
+		return 0;
+	}
     
     if (!P_RESTRICTED(P_MUSICALIZE)) {
 	song = songs_menu(instr);
