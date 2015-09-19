@@ -156,14 +156,25 @@ CONTAINER:'(',"chest",(16,19)
 	OBJECT:'(',"pick-axe",contained, uncursed, 0
 	OBJECT:'(',"power pack",contained, uncursed, 0
 CONTAINER:'(',"chest",(17,19)
-	OBJECT:'(',"sensor pack",contained, uncursed, 0
-	OBJECT:'(',"sensor pack",contained, uncursed, 0
-	OBJECT:'(',"sensor pack",contained, uncursed, 0
-	OBJECT:'(',"power pack",contained, uncursed, 0
+	OBJECT:'(',"bag of holding",contained, uncursed, 0
+	OBJECT:'(',"oilskin sack",contained, uncursed, 0
+	OBJECT:'(',"oilskin sack",contained, uncursed, 0
+	OBJECT:'(',"sack",contained, uncursed, 0
+	OBJECT:'(',"sack",contained, uncursed, 0
+	OBJECT:'(',"sack",contained, uncursed, 0
+	OBJECT:'(',"sack",contained, uncursed, 0
+	OBJECT:'(',"sack",contained, uncursed, 0
 CONTAINER:'(',"chest",(18,19)
 	OBJECT:'(',"hypospray",contained, uncursed, 0
 	OBJECT:'(',"hypospray",contained, uncursed, 0
 	OBJECT:'(',"hypospray",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
 	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
 	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
 	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
@@ -562,10 +573,17 @@ OBJECT[60%]:'[',"cloak of invisibility",random
 OBJECT[60%]:'[',"cloak of magic resistance",random
 OBJECT[60%]:'[',"cloak of displacement",random
 OBJECT[60%]:'[',"Leo Nemaeus hide",random
+OBJECT[30%]:'(',"sensor pack",random
 
 OBJECT:'(',"power pack",random
 
 OBJECT:'(',"hypospray",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
 OBJECT:'(',"hypospray ampule",random
 OBJECT:'(',"hypospray ampule",random
 OBJECT:'(',"hypospray ampule",random
@@ -638,6 +656,12 @@ OBJECT:')',"frag grenade",random
 OBJECT:')',"frag grenade",random
 OBJECT:')',"frag grenade",random
 OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
 OBJECT:')',"gas grenade",random
 OBJECT:')',"gas grenade",random
 OBJECT:')',"gas grenade",random
@@ -776,6 +800,13 @@ OBJECT:')',"frag grenade",random
 OBJECT:')',"frag grenade",random
 OBJECT:')',"frag grenade",random
 OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"frag grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
+OBJECT:')',"gas grenade",random
 OBJECT:')',"gas grenade",random
 OBJECT:')',"gas grenade",random
 
@@ -798,6 +829,24 @@ OBJECT:'(',"lightsaber",random
 OBJECT:'(',"lightsaber",random
 
 OBJECT:'(',"double lightsaber",random
+
+OBJECT:'(',"sensor pack",random
+
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
 
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -1123,6 +1172,20 @@ OBJECT[10%]:'[',"cloak of invisibility",random
 OBJECT[10%]:'[',"cloak of magic resistance",random
 OBJECT[10%]:'[',"cloak of displacement",random
 OBJECT[10%]:'[',"Leo Nemaeus hide",random
+OBJECT[60%]:'(',"sensor pack",random
+
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+OBJECT:'(',"hypospray ampule",random
+
 OBJECT:'[',"droven cloak",random
 OBJECT:'[',"droven cloak",random
 
