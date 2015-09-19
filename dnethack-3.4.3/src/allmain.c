@@ -23,6 +23,32 @@ STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
 extern const int monstr[];
 
 STATIC_OVL void
+digcrater(mtmp)
+	struct monst *mtmp;
+{
+	int x,y,i,j;
+	struct trap *ttmp;
+	for(i=-5;i<=5;i++){
+		x = mtmp->mx+i;
+		for(j=-5;j<=5;j++){
+			y = mtmp->my+j;
+			if(isok(x,y)&& !(x == u.ux && y == u.uy)){
+				ttmp = t_at(x, y);
+				if(levl[x][y].typ <= SCORR || levl[x][y].typ == CORR || levl[x][y].typ == ROOM){
+					if(dist2(x,y,mtmp->mx,mtmp->my) <= 26){
+						levl[x][y].typ = CORR;
+						if(!does_block(x,y,&levl[x][y])) unblock_point(x,y);	/* vision:  can see through */
+						if(ttmp) delfloortrap(ttmp);
+						if(dist2(x,y,mtmp->mx,mtmp->my) <= 9) levl[x][y].typ = LAVAPOOL;
+						else if(dist2(x,y,mtmp->mx,mtmp->my) <= 26) digactualhole(x, y, mtmp, PIT, TRUE, FALSE);
+					}
+				}
+			}
+		}
+	}
+}
+
+STATIC_OVL void
 digXchasm(mtmp)
 	struct monst *mtmp;
 {
@@ -472,12 +498,14 @@ moveloop()
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
 				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH]) flags.walky_level=1;
 				if(mtmp->data == &mons[PM_ORCUS] || mtmp->data == &mons[PM_NAZGUL]) flags.shade_level=1;
-				if(mtmp->data == &mons[PM_DREAD_SERAPH] && (mtmp->mstrategy & STRAT_WAITMASK) && u.uevent.udemigod){
+				if(mtmp->data == &mons[PM_DREAD_SERAPH] && (mtmp->mstrategy & STRAT_WAITMASK) && (u.uevent.udemigod || (Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)))){
 					mtmp->mstrategy &= ~STRAT_WAITMASK;
 					pline_The("entire %s is shaking around you!",
 						   In_endgame(&u.uz) ? "plane" : "dungeon");
 					do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp);
-					if(rn2(2)){ //Do for x
+					if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
+						digcrater(mtmp);
+					} else if(rn2(2)){ //Do for x
 						digXchasm(mtmp);
 					} else { //Do for y
 						digYchasm(mtmp);

@@ -3697,9 +3697,6 @@ register int	mmflags;
 				mtmp->mhpmax = 4*8*mtmp->m_lev;
 				mtmp->mhp = mtmp->mhpmax;
 			}
-			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
-				mtmp->mstrategy &= ~(STRAT_WAITFORU|STRAT_CLOSE);
-			}
 		break;
 		case S_DEMON:
 //			pline("%d\n",mtmp->mhpmax);
