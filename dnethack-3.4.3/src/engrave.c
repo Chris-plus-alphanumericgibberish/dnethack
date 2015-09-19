@@ -250,6 +250,10 @@ static const char *haluMesg[] = {
 		"Here are blind idiot children playing with a magic that hates them.",
 		"The walled-up abomination seems friendly enough.",
 		"Kill you... Take your face...",
+		"The trees don't even change color anymore.",
+		"What happend to you? It wasn't me!",
+		"I'm sorry you could never forgive me.",
+	"Reach heaven through violence.",/*Kill 6 Billion Demons*/
 	"You are lost. You can never go home.", /* Gollum's Song */
 	"But now, we dance this grim fandango, and will for years until we rest.", /* Grim Fandango */
 	"Bad Wolf", /* Dr. Who */
@@ -2879,10 +2883,7 @@ doward()
 		break;
 
 	    case WEAPON_CLASS:
-		if (is_lightsaber(otmp)) {
-			if (otmp->lamplit) type = BURN;
-			else Your("%s is deactivated!", aobjnam(otmp,"are"));
-		} else if (otmp->oartifact == ART_PEN_OF_THE_VOID &&
+		if (otmp->oartifact == ART_PEN_OF_THE_VOID &&
 				mvitals[PM_ACERERAK].died > 0 && otmp->ovar1 & SEAL_ANDREALPHUS
 		) {
 			type = BURN;
@@ -2895,7 +2896,10 @@ doward()
 		break;
 
 	    case TOOL_CLASS:
-		if(otmp == ublindf) {
+		if (is_lightsaber(otmp)) {
+			if (otmp->lamplit) type = BURN;
+			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if(otmp == ublindf) {
 		    pline(
 		"That is a bit difficult to draw with, don't you think?");
 		    return(0);
@@ -4015,10 +4019,7 @@ doseal()
 		break;
 
 	    case WEAPON_CLASS:
-		if (is_lightsaber(otmp)) {
-			if (otmp->lamplit) type = BURN;
-			else Your("%s is deactivated!", aobjnam(otmp,"are"));
-		} else if (otmp->oartifact == ART_PEN_OF_THE_VOID &&
+		if (otmp->oartifact == ART_PEN_OF_THE_VOID &&
 				mvitals[PM_ACERERAK].died > 0 && otmp->ovar1 & SEAL_ANDREALPHUS
 		) {
 			type = BURN;
@@ -4031,7 +4032,10 @@ doseal()
 		break;
 
 	    case TOOL_CLASS:
-		if(otmp == ublindf) {
+		if (is_lightsaber(otmp)) {
+			if (otmp->lamplit) type = BURN;
+			else Your("%s is deactivated!", aobjnam(otmp,"are"));
+		} else if(otmp == ublindf) {
 		    pline(
 		"That is a bit difficult to draw with, don't you think?");
 		    return(0);
