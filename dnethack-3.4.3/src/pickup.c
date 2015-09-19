@@ -2169,7 +2169,7 @@ pick_gemstone()
 	Sprintf(buf, "Gems");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for(otmp = invent; otmp; otmp = otmp->nobj){
-		if(otmp->oclass == GEM_CLASS){
+		if(otmp->oclass == GEM_CLASS && otmp->otyp < LUCKSTONE){
 			Sprintf(buf, doname(otmp));
 			any.a_char = otmp->invlet;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
