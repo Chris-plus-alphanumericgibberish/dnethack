@@ -758,6 +758,11 @@ int curse_bless;
 		    p_glow1(obj);
 		}
 		break;
+	    case SENSOR_PACK:
+			if(is_blessed) obj->spe = 25;
+			else if(is_cursed) obj->spe = 0;
+			else obj->spe = rn1(12,12);
+		break;
 	    case CRYSTAL_BALL:
 		if (is_cursed) stripspe(obj);
 		else if (is_blessed) {
