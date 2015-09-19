@@ -1230,6 +1230,13 @@ domove()
 					"crawl");
 				fill_pit(u.ux, u.uy);
 				vision_full_recalc = 1;	/* vision limits change */
+		    } else if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+				trap = t_at(u.ux,u.uy);
+				u.utrap = 0;
+				pline("The energy blade burns handholds in the side of the pit!");
+				if(is_lightsaber(uwep)) uwep->age -= 200;
+				fill_pit(u.ux, u.uy);
+				vision_full_recalc = 1;	/* vision limits change */
 		    } else if (flags.verbose) {
 #ifdef STEED
 			if (u.usteed)
@@ -1276,10 +1283,16 @@ domove()
 			if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20){
 				You("phase through the web.");
 				u.utrap=0;
-		    } else if(uwep && (uwep->oartifact == ART_STING || uwep->oartifact == ART_LIECLEAVER)){
+		    } else if(uwep && 
+				(uwep->oartifact == ART_STING || uwep->oartifact == ART_LIECLEAVER || 
+					(is_lightsaber(uwep) && uwep->lamplit)
+				)
+			){
 				trap = t_at(u.ux,u.uy);
 				u.utrap = 0;
-				pline("%s cuts through the web!", uwep->oartifact == ART_LIECLEAVER ? "Liecleaver" : "Sting");
+				pline("%s through the web!", is_lightsaber(uwep) ? "The energy blade burns" : 
+									uwep->oartifact == ART_LIECLEAVER ? "Liecleaver cuts" : "Sting cuts");
+				if(is_lightsaber(uwep)) uwep->age -= 100;
 				if(trap->ttyp == WEB){
 					deltrap(trap);
 					newsym(u.ux,u.uy);
@@ -1339,6 +1352,20 @@ domove()
 			if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20){
 				You("phase through the bear trap.");
 				u.utrap = 0;
+		    } else if(uwep && 
+				(uwep->oartifact == ART_STING || uwep->oartifact == ART_LIECLEAVER || 
+					(is_lightsaber(uwep) && uwep->lamplit)
+				)
+			){
+				trap = t_at(u.ux,u.uy);
+				u.utrap = 0;
+				pline("The energy blade burns through the bear trap!");
+				if(is_lightsaber(uwep)) uwep->age -= 100;
+				if(trap->ttyp == BEARTRAP){
+					deltrap(trap);
+					newsym(u.ux,u.uy);
+				}
+				usedmove = FALSE;
 			} else {
 		    if(flags.verbose) {
 			predicament = "caught in a bear trap";
