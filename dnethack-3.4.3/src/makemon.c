@@ -459,8 +459,6 @@ register struct monst *mtmp;
 						} else {
 							(void)mongets(mtmp, DROVEN_GREATSWORD);
 						}
-						(void)mongets(mtmp, POT_SLEEPING);
-						(void)mongets(mtmp, POT_SLEEPING);
 					break;
 					}
 					switch(rn2(5)){
