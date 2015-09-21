@@ -132,12 +132,12 @@ struct obj *wep;
 	if (!wep) {
 	    /* No weapon */
 	    if (uwep) {
-		You("are empty %s.", body_part(HANDED));
-		setuwep((struct obj *) 0);
+			You("are empty %s.", body_part(HANDED));
+			setuwep((struct obj *) 0);
 		if(!stealthy && Stealth) pline("Now you can move stealthily.");
-		res++;
+			res++;
 	    } else
-		You("are already empty %s.", body_part(HANDED));
+			You("are already empty %s.", body_part(HANDED));
 	} else if (!uarmg && !Stone_resistance && wep->otyp == CORPSE
 				&& touch_petrifies(&mons[wep->corpsenm])) {
 	    /* Prevent wielding cockatrice when not wearing gloves --KAA */
@@ -492,7 +492,7 @@ can_twoweapon()
 {
 	struct obj *otmp;
 
-#define NOT_WEAPON(obj) (!is_weptool(obj) && obj->oclass != WEAPON_CLASS)
+#define NOT_WEAPON(obj) (obj && !is_weptool(obj) && obj->oclass != WEAPON_CLASS)
 	if (!could_twoweap(youmonst.data) && 
 		!(!Upolyd && Role_if(PM_ANACHRONONAUT)) && 
 		!(u.specialSealsActive&SEAL_MISKA) && 
@@ -507,27 +507,28 @@ can_twoweapon()
 		    pline("%s aren't able to use two weapons at once.",
 			  makeplural((flags.female && urole.name.f) ?
 				     urole.name.f : urole.name.m));
-	} else if (!uwep || !uswapwep)
-		Your("%s%s%s empty.", uwep ? "left " : uswapwep ? "right " : "",
+	} else if ((!uwep || !uswapwep) && !u.umartial)
+		Your("%s%s%s empty.", uwep ? "off " : uswapwep ? "main " : "",
 			body_part(HAND), (!uwep && !uswapwep) ? "s are" : " is");
 	else if (NOT_WEAPON(uwep) || NOT_WEAPON(uswapwep)) {
 		otmp = NOT_WEAPON(uwep) ? uwep : uswapwep;
 		pline("%s %s.", Yname2(otmp),
 		    is_plural(otmp) ? "aren't weapons" : "isn't a weapon");
-	} else if (bimanual(uwep) || bimanual(uswapwep) || 
-		(is_launcher(uwep) && !is_firearm(uwep)) || 
-		(is_launcher(uswapwep) && !is_firearm(uswapwep))
+	} else if ((uwep && bimanual(uwep) && !(u.umartial && !uswapwep)) || 
+		(uswapwep && bimanual(uswapwep) && !(u.umartial && !uwep)) || 
+		(uwep && is_launcher(uwep) && !is_firearm(uwep)) || 
+		(uswapwep && is_launcher(uswapwep) && !is_firearm(uswapwep))
 	) {
 		otmp = bimanual(uwep) ? uwep : uswapwep;
 		pline("%s isn't one-handed.", Yname2(otmp));
 	} else if (uarms)
 		You_cant("use two weapons while wearing a shield.");
-	else if (uswapwep->otyp == ARM_BLASTER && uarmg && is_metal(uarmg))
+	else if (uswapwep && uswapwep->otyp == ARM_BLASTER && uarmg && is_metal(uarmg))
 		You("cannot fit the bracer over such bulky, rigid gloves.");
-	else if (uswapwep->oartifact && !is_twoweapable_artifact(uswapwep))
+	else if (uswapwep && uswapwep->oartifact && !is_twoweapable_artifact(uswapwep))
 		pline("%s %s being held second to another weapon!",
 			Yname2(uswapwep), otense(uswapwep, "resist"));
-	else if (!uarmg && !Stone_resistance && (uswapwep->otyp == CORPSE &&
+	else if (!uarmg && !Stone_resistance && (uswapwep && uswapwep->otyp == CORPSE &&
 		    touch_petrifies(&mons[uswapwep->corpsenm]))) {
 		char kbuf[BUFSZ];
 
@@ -535,7 +536,7 @@ can_twoweapon()
 		    mons[uswapwep->corpsenm].mname, body_part(HAND));
 		Sprintf(kbuf, "%s corpse", an(mons[uswapwep->corpsenm].mname));
 		instapetrify(kbuf);
-	} else if (Glib || uswapwep->cursed) {
+	} else if (uswapwep && (Glib || uswapwep->cursed)) {
 		if (!Glib)
 			uswapwep->bknown = TRUE;
 		drop_uswapwep();

@@ -2675,12 +2675,15 @@ doprgold()
 int
 doprwep()
 {
-    if (!uwep) {
-	You("are empty %s.", body_part(HANDED));
-    } else {
-	prinv((char *)0, uwep, 0L);
-	if (u.twoweap) prinv((char *)0, uswapwep, 0L);
-    }
+	if (u.twoweap){
+		if (!uwep) Your("main %s is empty.", body_part(HAND));
+		else prinv((char *)0, uwep, 0L);
+		if (!uswapwep) Your("other %s is %sempty.", body_part(HAND), !uwep ? "also " : "");
+		else prinv((char *)0, uswapwep, 0L);
+	} else {
+		if (!uwep) You("are empty %s.", body_part(HANDED));
+		else prinv((char *)0, uwep, 0L);
+	}
     return 0;
 }
 

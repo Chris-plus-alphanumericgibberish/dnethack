@@ -1832,6 +1832,9 @@ struct obj *weapon;
 	    case P_BASIC:	bonus = -8; break;
 	    case P_SKILLED:	bonus = -5; break;
 	    case P_EXPERT:	bonus = -2; break;
+		//For use with martial-arts
+	    case P_MASTER:	bonus =  0; break;
+	    case P_GRAND_MASTER:	bonus = +2; break;
 	}
     } else if (type == P_BARE_HANDED_COMBAT) {
 	/*
@@ -1890,7 +1893,7 @@ struct obj *weapon;
 			case P_SKILLED:	 	 maxweight = 30; break;	 /* shortswords and spears (inc silver), mace, club, lightsaber, grappling hook */
 			case P_EXPERT:		 maxweight = 40; break;	 /* sabers and long swords, axe weighs 60, war hammer 50, pickaxe 80, beamsword */
 		}
-		if (uswapwep->owt > maxweight && uswapwep->oartifact != ART_BLADE_DANCER_S_DAGGER) {
+		if (uswapwep && uswapwep->owt > maxweight && uswapwep->oartifact != ART_BLADE_DANCER_S_DAGGER) {
 			if(twowepwarn) pline("Your %s seem%s very unwieldy.",xname(uswapwep),uswapwep->quan == 1 ? "s" : "");
 			twowepwarn = FALSE;
 			bonus += -20;
@@ -1932,28 +1935,56 @@ struct obj *weapon;
     type = (u.twoweap && (weapon == uwep || weapon == uswapwep)) ?
 	    P_TWO_WEAPON_COMBAT : wep_type;
     if (type == P_NONE) {
-	bonus = 0;
+		bonus = 0;
     } else if (type <= P_LAST_WEAPON) {
-	switch (P_SKILL(type)) {
-	    default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type));
-		     /* fall through */
-	    case P_ISRESTRICTED:	bonus = -5; break;
-	    case P_UNSKILLED:	bonus = -2; break;
-	    case P_BASIC:	bonus =  0; break;
-	    case P_SKILLED:	bonus =  2; break;
-	    case P_EXPERT:	bonus =  5; break;
-	}
-    } else if (type == P_TWO_WEAPON_COMBAT) {
-	skill = P_SKILL(P_TWO_WEAPON_COMBAT);
-	if (P_SKILL(wep_type) < skill) skill = P_SKILL(wep_type);
-	switch (skill) {
-	    default:
-	    case P_ISRESTRICTED:
-	    case P_UNSKILLED:	bonus = -5; break;
-	    case P_BASIC:	bonus = -3; break;
-	    case P_SKILLED:	bonus = -1; break;
-	    case P_EXPERT:	bonus =  0; break;
-	}
+		switch (P_SKILL(type)) {
+			default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type));
+				 /* fall through */
+			case P_ISRESTRICTED:	bonus = -5; break;
+			case P_UNSKILLED:	bonus = -2; break;
+			case P_BASIC:	bonus =  0; break;
+			case P_SKILLED:	bonus =  2; break;
+			case P_EXPERT:	bonus =  5; break;
+		}
+	} else if (type == P_TWO_WEAPON_COMBAT) {
+		skill = P_SKILL(P_TWO_WEAPON_COMBAT);
+		if (P_SKILL(wep_type) < skill) skill = P_SKILL(wep_type);
+		if(wep_type == P_BARE_HANDED_COMBAT){
+			if(martial_bonus()){
+				skill = P_SKILL(type);
+				switch(skill){
+					default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type)); /* fall through */
+					case P_ISRESTRICTED:	bonus = -5; break;
+					case P_UNSKILLED:   	bonus = -3; break;
+					case P_BASIC:			bonus = -1; break;
+					case P_SKILLED:			bonus = +1; break;
+					case P_EXPERT:			bonus = +3; break;
+					case P_MASTER:			bonus = +5; break;
+					case P_GRAND_MASTER:	bonus = +7; break;
+				}
+			} else {
+				skill = P_SKILL(type);
+				switch(skill){
+					default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type)); /* fall through */
+					case P_ISRESTRICTED:	bonus = -6; break;
+					case P_UNSKILLED:   	bonus = -4; break;
+					case P_BASIC:			bonus = -2; break;
+					case P_SKILLED:			bonus =  0; break;
+					case P_EXPERT:			bonus = +1; break;
+					case P_MASTER:			bonus = +2; break;
+					case P_GRAND_MASTER:	bonus = +3; break;
+				}
+			}
+		} else {
+			switch (skill) {
+				default:
+				case P_ISRESTRICTED:
+				case P_UNSKILLED:	bonus = -5; break;
+				case P_BASIC:	bonus = -3; break;
+				case P_SKILLED:	bonus = -1; break;
+				case P_EXPERT:	bonus =  0; break;
+			}
+		}
     } else if (type == P_BARE_HANDED_COMBAT) {
 	// /*
 	 // *	       b.h.  m.a.
@@ -2011,7 +2042,7 @@ struct obj *weapon;
 			case P_SKILLED:	 	 maxweight = 30; break;	 /* shortswords and spears (inc silver), mace, club, lightsaber, grappling hook */
 			case P_EXPERT:		 maxweight = 40; break;	 /* sabers and long swords, axe weighs 60, war hammer 50, pickaxe 80, beamsword */
 		}
-		if (uswapwep->owt > maxweight) {
+		if (uswapwep && uswapwep->owt > maxweight) {
 			bonus += max(-20, -5 * (uswapwep->owt-maxweight)/maxweight);
 		}
 	}

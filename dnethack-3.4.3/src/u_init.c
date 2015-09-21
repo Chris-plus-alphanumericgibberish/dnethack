@@ -774,6 +774,7 @@ static const struct def_skill Skill_Mon[] = {
     { P_CLERIC_SPELL, P_SKILLED },  { P_ESCAPE_SPELL, P_BASIC },
     { P_MATTER_SPELL, P_BASIC },
     { P_MARTIAL_ARTS, P_GRAND_MASTER },
+    { P_TWO_WEAPON_COMBAT, P_GRAND_MASTER },
 #ifdef BARD
     { P_MUSICALIZE, P_BASIC },
 #endif
@@ -1695,6 +1696,7 @@ u_init()
 		else skill_init(Skill_K);
 		break;
 	case PM_MONK:
+		u.umartial = TRUE;
 		switch (rn2(90) / 30) {
 		case 0: Monk[M_BOOK].trotyp = SPE_HEALING; break;
 		case 1: Monk[M_BOOK].trotyp = SPE_PROTECTION; break;
@@ -1799,6 +1801,7 @@ u_init()
 		skill_init(Skill_R);
 		break;
 	case PM_SAMURAI:
+		u.umartial = TRUE;
 		Samurai[S_ARROWS].trquan = rn1(20, 26);
 		if(flags.female){
 			Samurai[S_WEAPON].trotyp = GLAIVE;
@@ -1873,6 +1876,10 @@ u_init()
 		else ini_inv(ExtraBook);
 	    if (!Role_if(PM_HEALER) && (!Role_if(PM_MONK) || Monk[M_BOOK].trotyp != SPE_HEALING)) ini_inv(HealingBook);
 		else ini_inv(ExtraBook);
+		if(Role_if(PM_ANACHRONONAUT)){
+			u.umartial = TRUE;
+			skill_add(Skill_Elf_Ana);
+		}
     break;
 
 	case PM_ELF:

@@ -89,7 +89,7 @@
 #define P_NUM_SKILLS		(P_LAST_H_TO_H+1)
 
 /* These roles qualify for a martial arts bonus */
-#define martial_bonus()	(Role_if(PM_SAMURAI) || Role_if(PM_MONK) || (u.umartial))
+#define martial_bonus()	(u.umartial)
 
 
 /*
