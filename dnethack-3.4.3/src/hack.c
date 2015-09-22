@@ -1361,7 +1361,7 @@ domove()
 				u.utrap = 0;
 				pline("The energy blade burns through the bear trap!");
 				if(is_lightsaber(uwep)) uwep->age -= 100;
-				if(trap->ttyp == BEARTRAP){
+				if(trap->ttyp == BEAR_TRAP){
 					deltrap(trap);
 					newsym(u.ux,u.uy);
 				}
