@@ -1114,7 +1114,7 @@ cast_protection()
 {
 	int loglev = 0;
 	int l = u.ulevel;
-	int natac = u.uac - u.uspellprot;
+	int natac = u.uac + u.uspellprot;
 	int gain;
 
 	/* loglev=log2(u.ulevel)+1 (1..5) */
