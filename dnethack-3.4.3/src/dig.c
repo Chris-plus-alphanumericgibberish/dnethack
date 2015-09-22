@@ -248,25 +248,25 @@ dig()
 	    ((digging.down ? (dpx != u.ux || dpy != u.uy)
 			   : (distu(dpx,dpy) > 2)))
 	) return(0);
-
+	
 	if (digging.down) {
-	    if(!dig_check(BY_YOU, TRUE, u.ux, u.uy)) return(0);
+		if(!dig_check(BY_YOU, TRUE, u.ux, u.uy)) return(0);
 	} else { /* !digging.down */
-	    if (IS_TREES(lev->typ) && !may_dig(dpx,dpy) &&
+		if (IS_TREES(lev->typ) && !may_dig(dpx,dpy) &&
 			dig_typ(uwep, dpx, dpy) == DIGTYP_TREE
 		) {
-		pline("This tree seems to be petrified.");
-		return(0);
-	    }
+			pline("This tree seems to be petrified.");
+			return(0);
+		}
 	    /* ALI - Artifact doors from Slash'em */
-	    if (IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
+		if (IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
 	    		dig_typ(uwep, dpx, dpy) == DIGTYP_ROCK ||
 			(IS_DOOR(lev->typ) && artifact_door(dpx, dpy))
 		) {
-		pline("This %s is too hard to %s.",
-			IS_DOOR(lev->typ) ? "door" : "wall", verb);
-		return(0);
-	    }
+			pline("This %s is too hard to %s.",
+				IS_DOOR(lev->typ) ? "door" : "wall", verb);
+			return(0);
+		}
 	}
 	if(Fumbling &&
 		/* Can't exactly miss holding a lightsaber to the wall */
@@ -500,7 +500,7 @@ cleanup:
 			"", "rock", "statue", "boulder", "door", "tree", "bars", "chains"
 		};
 		int dig_target = dig_typ(uwep, dpx, dpy);
-
+		
 		if(uwep && is_lightsaber(uwep)) uwep->age -= 100;
 		
 		if (IS_WALL(lev->typ) || dig_target == DIGTYP_DOOR) {
@@ -1594,8 +1594,8 @@ struct obj *obj;
 
 			if (trap && trap->ttyp == WEB) {
 			    if (!trap->tseen) {
-				seetrap(trap);
-				There("is a spider web there!");
+					seetrap(trap);
+					There("is a spider web there!");
 			    }
 				if(digtyp == 1){
 					Your("%s through in the web.",
@@ -1603,12 +1603,12 @@ struct obj *obj;
 					deltrap(trap);
 					newsym(rx, ry);
 				} else {
-			    Your("%s entangled in the web.",
-				aobjnam(obj, "become"));
-			    /* you ought to be able to let go; tough luck */
-			    /* (maybe `move_into_trap()' would be better) */
-			    nomul(-d(2,2), "entangled in a web");
-			    nomovemsg = "You pull free.";
+					Your("%s entangled in the web.",
+					aobjnam(obj, "become"));
+					/* you ought to be able to let go; tough luck */
+					/* (maybe `move_into_trap()' would be better) */
+					nomul(-d(2,2), "entangled in a web");
+					nomovemsg = "You pull free.";
 				}
 			} else if (lev->typ == IRONBARS) {
 			    pline("Clang!");
