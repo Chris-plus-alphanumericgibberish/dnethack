@@ -1464,8 +1464,29 @@ register struct monst *mtmp;
 			}
  			if (!rn2(3))
 			    (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
+		}else if(mm == PM_GNOLL) {
+			switch(rnd(4)){
+			case 1:
+			(void)mongets(mtmp, FLAIL);
+			break;
+			case 2:
+			(void)mongets(mtmp, BOW);
+			(void)mongets(mtmp, ARROW);
+			break;
+			case 3:
+			(void)mongets(mtmp, BATTLE_AXE);
+			break;
+			case 4:
+			(void)mongets(mtmp, SPEAR);
+			(void)mongets(mtmp, SPEAR);
+			(void)mongets(mtmp, SPEAR);
+			break;
+			}
+			(void)mongets(mtmp, LEATHER_ARMOR);
+			if(!rn2(2))(void)mongets(mtmp, LEATHER_GLOVES);
+			if(!rn2(4))(void)mongets(mtmp, LEATHER_CLOAK);
 		}else if(mm == PM_CHANGED) {
-			(void)mongets(mtmp, STILETTO);			
+			(void)mongets(mtmp, STILETTO);
 		}else if(mm == PM_DEEP_ONE || mm == PM_DEEPER_ONE) {
 		 if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
 		    switch (rn2(3)) {
