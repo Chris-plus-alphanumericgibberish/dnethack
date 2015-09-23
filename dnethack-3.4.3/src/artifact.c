@@ -797,13 +797,13 @@ long wp_mask;
 	if (spfx & SPFX_WARN) {
 	    if (spec_m2(otmp)) {
 	    	if (on) {
-			EWarn_of_mon |= wp_mask;
-			flags.warntype |= spec_m2(otmp);
+				EWarn_of_mon |= wp_mask;
+				flags.warntype |= spec_m2(otmp);
 	    	} else {
-			EWarn_of_mon &= ~wp_mask;
-	    		flags.warntype &= ~spec_m2(otmp);
-		}
-		see_monsters();
+				EWarn_of_mon &= ~wp_mask;
+					flags.warntype &= ~spec_m2(otmp);
+			}
+			see_monsters();
 	    } else if (spec_s(otmp)) {
 	    	if (on) {
 				EWarn_of_mon |= wp_mask;
@@ -814,8 +814,8 @@ long wp_mask;
 			}
 			see_monsters();
 	    } else {
-		if (on) EWarning |= wp_mask;
-	    	else EWarning &= ~wp_mask;
+			if (on) EWarning |= wp_mask;
+				else EWarning &= ~wp_mask;
 	    }
 	}
 	if (spfx & SPFX_EREGEN) {
@@ -1135,7 +1135,7 @@ struct monst *mon;
 	}
 	
 	if(Role_if(PM_PRIEST)) return weap->attk.damn; //priests always get the maximum to-hit bonus.
-
+	
 	if (weap && weap->attk.damn && spec_applies(weap, mon))
 	    return rnd((int)weap->attk.damn);
 	return 0;

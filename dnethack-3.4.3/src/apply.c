@@ -1631,8 +1631,8 @@ int magic; /* 0=Physical, otherwise skill level */
 			You("flail around a little.");
 			return 1;
 		} else {
-		You("don't have enough traction to jump.");
-		return 0;
+			You("don't have enough traction to jump.");
+			return 0;
 		}
 	} else if (!magic && near_capacity() > UNENCUMBERED) {
 		You("are carrying too much to jump!");
@@ -2471,7 +2471,7 @@ struct obj *sensor;
 			case WAN_SECRET_DOOR_DETECTION:
 				findit();
 			break;
-	}
+		}
 	}
 	sensor->spe--;
 }
@@ -4773,7 +4773,7 @@ doapply()
 	case TALLOW_CANDLE:
 	case GNOMISH_POINTY_HAT:
 		use_candle(&obj);
-		break;
+	break;
 	case BULLET_FABBER:{
 		static const char all_count[] = { ALLOW_COUNT, GEM_CLASS, 0 };
 		struct obj *otmp = getobj(all_count, "feed to the fabber");
