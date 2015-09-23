@@ -190,6 +190,16 @@ CONTAINER:'(',"chest",(18,19)
 	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
 	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
 	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
 CONTAINER:'(',"chest",(19,19)
 	OBJECT:'(',"bullet fabber",contained, uncursed, 0
 	OBJECT:'(',"bullet fabber",contained, uncursed, 0
@@ -257,60 +267,92 @@ CONTAINER:'(',"chest",(01,06)
 	OBJECT:'%',"K-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
 CONTAINER:'(',"chest",(01,07)
 	OBJECT:'%',"C-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
 CONTAINER:'(',"chest",(01,08)
 	OBJECT:'%',"C-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
 CONTAINER:'(',"chest",(01,09)
 	OBJECT:'%',"K-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[90%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
+	OBJECT[45%]:'%',"protein pill",contained
 CONTAINER:'(',"tinning kit",(01,09)
 
 CONTAINER:'(',"chest",(01,11)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
-	OBJECT:'+',random,contained
+	OBJECT[80%]:'+',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
+	OBJECT[80%]:'?',random,contained
+	OBJECT[80%]:'?',random,contained
 CONTAINER:'(',"chest",(01,12)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
-	OBJECT:'+',random,contained
+	OBJECT[80%]:'+',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
+	OBJECT[80%]:'?',random,contained
+	OBJECT[80%]:'?',random,contained
 CONTAINER:'(',"chest",(01,13)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
-	OBJECT:'+',random,contained
+	OBJECT[80%]:'+',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
+	OBJECT[80%]:'?',random,contained
+	OBJECT[80%]:'?',random,contained
 CONTAINER:'(',"chest",(01,14)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
-	OBJECT:'+',random,contained
+	OBJECT[80%]:'+',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
 	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
-	OBJECT:'?',random,contained
+	OBJECT[80%]:'?',random,contained
+	OBJECT[80%]:'?',random,contained
 
 GEOMETRY:center,center
 #0         1         2         3         4         5         6         7     
