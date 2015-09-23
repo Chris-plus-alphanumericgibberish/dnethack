@@ -300,52 +300,45 @@ Amulet on that altar to fulfill your destiny.
 #	Anachrononaut
 #
 %Cc Ana 00001
-You are suddenly in familiar surroundings.  The buildings in the distance
-seem to be those of your old alma mater, but something is wrong.  It feels
-as if there has been a riot recently, or %H has
-been under siege.
-
-All of the windows are boarded up, and there are objects scattered around
-the entrance.
-
-Strange forbidding shapes seem to be moving in the distance.
+Suddenly, you find yourself back in the warrens surrounding the Last Bastion.
 %E
 %Cp Ana 00002
-Once again, you are back at %H.
+Once again, you return to the Last Bastion.
 %E
 %Cp Ana 00003
-You are back at %H.
+You are back at the Last Bastion.
+
 You have an odd feeling this may be the last time you ever come here.
 %E
 %Cp Ana 00005
-"Did you see Lash LaRue in 'Song of Old Wyoming' the other night?"
+"The sepulchers have opened!  The Seraphs are rising to the surface!"
 %E
 %Cp Ana 00006
-"Hey man, got any potions of hallucination for sale?"
+"They know our location.  This position will be overrun shortly."
 %E
 %Cp Ana 00007
-"Did you see the artifact %l brought back from the last dig?"
+"We're out of time."
 %E
 %Cp Ana 00008
-"So what species do *you* think we evolved from?"
+"Ever since the rapture of slime, the puppets of the Black Web have been appearing in great numbers."
 %E
 %Cp Ana 00009
-"So you're %ls prize pupil!  I don't know what he sees in you."
+"You must speak with Sara before the Last Bastion falls!"
 %E
 %Cp Ana 00010
-"Did you see Lash LaRue in 'Song of Old Wyoming' the other night?"
+"Have you seen the flowers at the end of time?"
 %E
 %Cp Ana 00011
-"Hey man, got any potions of hallucination for sale?"
+"We're being overrun!"
 %E
 %Cp Ana 00012
-"I guess you are guaranteed to make full professor now."
+"We're out of time."
 %E
 %Cp Ana 00013
-"So, what was worse, %n or your entrance exams?"
+"All the world has begun to move with the semblance of life."
 %E
 %Cp Ana 00014
-"%oC is impressive, but nothing like the bones I dug up!"
+"You retrieved the Annulus?  Why?  It won't save us now."
 %E
 %Cc Ana 00015
 "Finally you have returned, %p.  You were always
