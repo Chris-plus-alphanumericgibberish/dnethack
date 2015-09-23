@@ -2526,22 +2526,34 @@ boolean was_swallowed;			/* digestion */
 //				if(mdat1==&mons[PM_QUINON]) quincount++;
 				if(mdat1==&mons[PM_QUATON] && quin){
 					set_mon_data(mtmp, &mons[PM_QUINON], 0);
+					mtmp->m_lev += 1;
+					mtmp->mhp += 4;
+					mtmp->mhpmax += 4;
 					newsym(mtmp->mx, mtmp->my);
 					quin--;
 //					quincount++;
 				}
 				else if(mdat1==&mons[PM_TRITON] && qua){
 					set_mon_data(mtmp, &mons[PM_QUATON], 0);
+					mtmp->m_lev += 1;
+					mtmp->mhp += 4;
+					mtmp->mhpmax += 4;
 					newsym(mtmp->mx, mtmp->my);
 					qua--;
 				}
 				else if(mdat1==&mons[PM_DUTON] && tre){
 					set_mon_data(mtmp, &mons[PM_TRITON], 0);
+					mtmp->m_lev += 1;
+					mtmp->mhp += 4;
+					mtmp->mhpmax += 4;
 					newsym(mtmp->mx, mtmp->my);
 					tre--;
 				}
 				else if(mdat1==&mons[PM_MONOTON] && duo){
 					set_mon_data(mtmp, &mons[PM_DUTON], 0);
+					mtmp->m_lev += 1;
+					mtmp->mhp += 4;
+					mtmp->mhpmax += 4;
 					newsym(mtmp->mx, mtmp->my);
 					duo--;
 //					makemon(&mons[PM_MONOTON], mon->mx, mon->my,MM_ADJACENTOK|MM_ANGRY);
@@ -2638,6 +2650,11 @@ boolean was_swallowed;			/* digestion */
 					mdat1 = mtmp->data;
 					if(mdat1==child[i]){
 						set_mon_data(mtmp, growto[i], 0);
+						//Assumes Auton
+						mtmp->m_lev += 1;
+						mtmp->mhp += 4;
+						mtmp->mhpmax += 4;
+						
 						newsym(mtmp->mx, mtmp->my);
 						found=TRUE;
 						if(child[i] == &mons[PM_MONOTON]){
