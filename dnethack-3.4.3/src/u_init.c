@@ -74,7 +74,7 @@ static struct trobj Anachrononaut_Vam[] = {
 	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, 0 },
 	{ CLOAK_OF_DISPLACEMENT, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
-	{ POWER_PACK, 0, TOOL_CLASS, 5, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS,  5, 0 },
 	{ BULLET, 0, TOOL_CLASS, 200, 0 },
 	{ SILVER_BULLET, 0, TOOL_CLASS, 50, 0 },
 	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
@@ -108,7 +108,7 @@ static struct trobj Anachrononaut_Elf[] = {
 	{ HYPOSPRAY, 0, FOOD_CLASS, 1, 0 },
 	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 15, 0 },
 	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 10, 0 },
-	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS, 5, 0 },
+	{ HYPOSPRAY_AMPULE, 0, TOOL_CLASS,  5, 0 },
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ TIN_OPENER, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -601,6 +601,7 @@ static const struct def_skill Skill_Ana[] = {
     { P_SHORT_SWORD, P_EXPERT },{ P_LANCE,  P_EXPERT },
     { P_SABER, P_EXPERT },		{ P_LONG_SWORD,  P_SKILLED },
     { P_CLUB, P_SKILLED },		{ P_QUARTERSTAFF, P_SKILLED },
+	{ P_BROAD_SWORD, P_BASIC },
 //#ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
 //#endif
@@ -1552,7 +1553,7 @@ u_init()
 		knows_object(SACK);
 		knows_object(TOUCHSTONE);
 		skill_init(Skill_A);
-		break;
+	break;
 	case PM_ANACHRONONAUT:
 		if(Race_if(PM_DROW)) ini_inv(Anachrononaut_Dro);
 		else if(Race_if(PM_ELF)) ini_inv(Anachrononaut_Elf);

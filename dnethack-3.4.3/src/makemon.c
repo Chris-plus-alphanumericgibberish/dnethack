@@ -1002,7 +1002,7 @@ register struct monst *mtmp;
 				otmp->ovar1 = 50 + d(5,10);
 				otmp->recharged = rn1(3,3);
 				(void) mpickobj(mtmp, otmp);
-
+				
 				otmp = mksobj(HAND_BLASTER, TRUE, FALSE);
 				otmp->spe = 0;
 				otmp->ovar1 = 50 + d(5,10);
@@ -1443,11 +1443,11 @@ register struct monst *mtmp;
 			}
 			/* note: you can't use a mattock with a shield */
 			if(!Is_minetown_level(&u.uz)){
-			if (!rn2(3)) (void)mongets(mtmp, DWARVISH_MATTOCK);
-			else {
-				(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
-				(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
-			}
+				if (!rn2(3)) (void)mongets(mtmp, DWARVISH_MATTOCK);
+				else {
+					(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
+					(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
+				}
 			}
 			if (In_mines(&u.uz) && !Is_minetown_level(&u.uz)) {
 			/* MRKR: Dwarves in dark mines have their lamps on. */
@@ -1560,7 +1560,7 @@ register struct monst *mtmp;
 					otmp = mksobj(SHOTGUN, TRUE, FALSE);
 					otmp->oeroded = 3;
 					(void) mpickobj(mtmp, otmp);
-
+					
 					(void)mongets(mtmp, SHOTGUN_SHELL);
 					(void)mongets(mtmp, SHOTGUN_SHELL);
 					
@@ -1810,10 +1810,10 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, CROSSBOW);
 				m_initthrow(mtmp, CROSSBOW_BOLT, 12);
 			} else {
-			if(!rn2(3)) {
+				if(!rn2(3)) {
 					(void)mongets(mtmp, CROSSBOW);
 					m_initthrow(mtmp, CROSSBOW_BOLT, 12);
-			}
+				}
 			}
 //endif
 			break;
@@ -3735,13 +3735,13 @@ register int	mmflags;
 				mtmp->mhpmax = 15*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
-			else if(mndx == PM_DEMOGORGON){ 
+			else if(mndx == PM_DEMOGORGON){
 				mtmp->mhpmax = 2*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 				pline("Demogorgon, Prince of Demons, is near!");
 				com_pager(200);
 			}
-			else if(mndx == PM_LAMASHTU){ 
+			else if(mndx == PM_LAMASHTU){
 				mtmp->mhpmax = 2*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 				pline("Lamashtu, the Demon Queen, is near!");
@@ -3751,7 +3751,7 @@ register int	mmflags;
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
-			else if(mndx == PM_PALE_NIGHT){ 
+			else if(mndx == PM_PALE_NIGHT){
 				mtmp->mvar1 = 0;
 			}
 			if(mndx == PM_ANCIENT_OF_DEATH){
