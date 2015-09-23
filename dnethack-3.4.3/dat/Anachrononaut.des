@@ -384,7 +384,7 @@ ENDMAP
 #0         1         2         3         4         5         6         7     
 
 # Portal arrival point
-BRANCH:(20,00,75,18),(0,0,0,0)
+BRANCH:(20,00,75,18),(20,06,75,14)
 MAZEWALK:(22,09),north
 MAZEWALK:(22,11),south
 # Stairs
