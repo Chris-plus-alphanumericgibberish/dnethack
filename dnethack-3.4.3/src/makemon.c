@@ -2129,15 +2129,21 @@ register struct	monst	*mtmp;
 				(void) mongets(mtmp, TIN_WHISTLE);
 		} else if (ptr == &mons[PM_SHOPKEEPER]) {
 		    (void) mongets(mtmp,SKELETON_KEY);
-		    switch (rn2(6)) {
-		    /* MAJOR fall through ... */
-		    case 0: (void) mongets(mtmp, WAN_MAGIC_MISSILE);
-		    case 1: (void) mongets(mtmp, POT_EXTRA_HEALING);
-		    case 2: (void) mongets(mtmp, POT_HEALING);
-				break;
-		    case 3: (void) mongets(mtmp, WAN_STRIKING);
-		    case 4: (void) mongets(mtmp, POT_HEALING);
-		    case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
+			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
+				(void) mongets(mtmp, SHOTGUN);
+				(void) mongets(mtmp, SHOTGUN_SHELL);
+				(void) mongets(mtmp, SHOTGUN_SHELL);
+				(void) mongets(mtmp, POT_EXTRA_HEALING);
+				(void) mongets(mtmp, POT_HEALING);
+			} else switch (rn2(6)) {
+				/* MAJOR fall through ... */
+				case 0: (void) mongets(mtmp, WAN_MAGIC_MISSILE);
+				case 1: (void) mongets(mtmp, POT_EXTRA_HEALING);
+				case 2: (void) mongets(mtmp, POT_HEALING);
+					break;
+				case 3: (void) mongets(mtmp, WAN_STRIKING);
+				case 4: (void) mongets(mtmp, POT_HEALING);
+				case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
 		    }
 		} else if (ptr->msound == MS_PRIEST ||
 			quest_mon_represents_role(ptr,PM_PRIEST)) {
