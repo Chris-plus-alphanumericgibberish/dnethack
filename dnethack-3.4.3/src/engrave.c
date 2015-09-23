@@ -254,6 +254,7 @@ static const char *haluMesg[] = {
 		"What happend to you? It wasn't me!",
 		"I'm sorry you could never forgive me.",
 	"Reach heaven through violence.",/*Kill 6 Billion Demons*/
+		"'Kindly ignore my first three answers.'",
 	"You are lost. You can never go home.", /* Gollum's Song */
 	"But now, we dance this grim fandango, and will for years until we rest.", /* Grim Fandango */
 	"Bad Wolf", /* Dr. Who */
