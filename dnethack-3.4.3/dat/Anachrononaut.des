@@ -452,14 +452,12 @@ MONSTER:'@',"trooper",(47,11)
 MONSTER:'@',"trooper",(47,09)
 
 
-MONSTER:'@',"hedrow warrior",(06,01),peaceful
+MONSTER:'@',"drow matron",(06,01),peaceful
+MONSTER:'@',"Elvenking",(06,02),peaceful
 MONSTER:'C',"drider",(08,01),peaceful
 MONSTER:'@',"drow",(10,01),peaceful
 MONSTER:'@',"drow",(12,01),peaceful
 MONSTER:'@',"hedrow warrior",(14,01),peaceful
-
-MONSTER:'@',"hedrow warrior",(06,01)
-MONSTER:'@',"hedrow warrior",(06,01)
 
 MONSTER:'@',"human",(06,19),peaceful
 MONSTER:'@',"elf",(08,19),peaceful
