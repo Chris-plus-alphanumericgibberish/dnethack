@@ -1046,20 +1046,74 @@ asGuardian:
 	}break;
 	case MS_SONG:{
 		struct monst *tmpm;
-		int ix, iy;
-		if((mtmp->data == &mons[PM_INTONER] && rn2(2)) || mtmp->data == &mons[PM_BLACK_FLOWER]){
+		struct trap *ttmp;
+		int ix, iy, i;
+		if((mtmp->data == &mons[PM_INTONER] && !rn2(5)) || mtmp->data == &mons[PM_BLACK_FLOWER]){
 			switch(rnd(4)){
 				case 1:
 					pline_msg = "sings the song of broken eyes.";
+					
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+							if(tmpm->mcansee && !tmpm->mblinded){
+								tmpm->mcansee = 0;
+								tmpm->mblinded = rnd(20);
+							}
+						}
+					}
+					
+					if(!Blind){
+						Your("vision fills with grasping roots!");
+						
+						make_blinded(Blinded+(long)rnd(20),FALSE);
+						if (!Blind) Your(vision_clears);
+					}
 				break;
 				case 2:
 					pline_msg = "sings a harmless song of ruin.";
+					ix = rn2(COLNO);
+					iy = rn2(ROWNO);
+					for(i = rnd(5); i > 0; i--){
+						if(isok(ix,iy) && !(ix == u.ux && iy == u.uy)){
+							ttmp = t_at(ix, iy);
+							if(levl[ix][iy].typ <= SCORR || levl[ix][iy].typ == CORR || levl[ix][iy].typ == ROOM){
+								levl[ix][iy].typ = CORR;
+								if(!does_block(ix,iy,&levl[ix][iy])) unblock_point(ix,iy);	/* vision:  can see through */
+								if(ttmp) delfloortrap(ttmp);
+								levl[ix][iy].typ = CORR;
+							}
+						}
+					}
+					vision_full_recalc = 1;
+					doredraw();
 				break;
 				case 3:{
 					struct obj *ispe = mksobj(SPE_TURN_UNDEAD,TRUE,FALSE);
 					pline_msg = "sings the song of the day of repentance.";
 					//Rapture invisible creatures
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm) && mtmp->mrevived){
+							if(mtmp->minvis && tmpm->perminvis && !(tmpm->mvanishes)){
+								tmpm->mvanishes = 5;
+							}
+						}
+					}
+					if(vision_full_recalc) doredraw();
 					//Make visable creatures invisable
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm) && mtmp->mrevived){
+							if(!opaque(mtmp->data)){
+								mtmp->perminvis = TRUE;
+								mtmp->minvis = TRUE;
+								newsym(mtmp->mx, mtmp->my);
+							} else {
+								mtmp->perminvis = TRUE;
+								mtmp->minvis = TRUE;
+								vision_full_recalc = 1;
+							}
+						}
+					}
+					if(vision_full_recalc) doredraw();
 					//Resurect creatures:
 					for(ix = 0; ix < COLNO; ix++){
 						for(iy = 0; iy < ROWNO; iy++){
@@ -1069,6 +1123,14 @@ asGuardian:
 				}break;
 				case 4:
 					pline_msg = "sings the song of bloodied prayers.";
+					
+					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+						if(tmpm != mtmp && !DEADMONSTER(tmpm) && tmpm->mpeaceful == tmpm->mpeaceful){
+							if(tmpm->mhp < tmpm->mhpmax){
+								for(i = (tmpm->mhpmax - tmpm->mhp); i > 0; i--) grow_up(tmpm, 0);
+							}
+						}
+					}
 				break;
 			}
 		} else if(!(mtmp->mspec_used) || mtmp->data == &mons[PM_INTONER]){
