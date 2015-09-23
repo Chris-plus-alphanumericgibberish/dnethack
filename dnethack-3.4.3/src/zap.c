@@ -3304,7 +3304,7 @@ death_blast:
 			break;
 		    }
 		    if (resists_death(mon) || resists_magm(mon)) {	/* similar to player */
-			sho_shieldeff = TRUE;
+				sho_shieldeff = TRUE;
 			break;
 		    }
 		    type = -1; /* so they don't get saving throws */
@@ -3793,17 +3793,17 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					int tmp = zhitm(mon, type, nd, flat, &otmp);
 
 					if ( is_rider(mon->data) && (abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING))) {
-					if (canseemon(mon)) {
-						hit(fltxt, mon, ".");
-						pline("%s disintegrates.", Monnam(mon));
-						pline("%s body reintegrates before your %s!",
-						  s_suffix(Monnam(mon)),
-						  (eyecount(youmonst.data) == 1) ?
-							body_part(EYE) : makeplural(body_part(EYE)));
-						pline("%s resurrects!", Monnam(mon));
-					}
-					mon->mhp = mon->mhpmax;
-					break; /* Out of while loop */
+						if (canseemon(mon)) {
+							hit(fltxt, mon, ".");
+							pline("%s disintegrates.", Monnam(mon));
+							pline("%s body reintegrates before your %s!",
+							  s_suffix(Monnam(mon)),
+							  (eyecount(youmonst.data) == 1) ?
+								body_part(EYE) : makeplural(body_part(EYE)));
+							pline("%s resurrects!", Monnam(mon));
+						}
+						mon->mhp = mon->mhpmax;
+						break; /* Out of while loop */
 					}
 					if((mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_ASMODEUS]) && 
 						(abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING))

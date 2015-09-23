@@ -774,7 +774,7 @@ level_tele()
 		else if (In_neu(&u.uz))
 			newlev =  newlev + dungeons[neutral_dnum].depth_start - 1;
 		else if (In_cha(&u.uz))
-		newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
+			newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
 	} else { /* involuntary level tele */
  random_levtport:
 	    newlev = random_teleport_level();

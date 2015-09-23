@@ -901,9 +901,9 @@ register struct obj *obj;
 
 	/* worst case, at least it'll be peaceful. */
 	if(!obj || !is_instrument(obj)){
-	mtmp->mpeaceful = 1;
-	mtmp->mtraitor  = 0;	/* No longer a traitor */
-	set_malign(mtmp);
+		mtmp->mpeaceful = 1;
+		mtmp->mtraitor  = 0;	/* No longer a traitor */
+		set_malign(mtmp);
 	}
 	if(flags.moonphase == FULL_MOON && night() && rn2(6) && obj && !is_instrument(obj)
 						&& mtmp->data->mlet == S_DOG)

@@ -3366,12 +3366,12 @@ boolean atme;
 				uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM)
 		) {
 			if(spellknow(spell) <= 200) { /* 1% */
-			You("strain to recall the spell.");
-		} else if (spellknow(spell) <= 1000 && 
-			!(spellid(spell) == SPE_LIGHTNING_BOLT || !uarmh || uarmh->oartifact != ART_STORMHELM)
-		) { /* 5% */
-			Your("knowledge of this spell is growing faint.");
-		}
+				You("strain to recall the spell.");
+			} else if (spellknow(spell) <= 1000 && 
+				!(spellid(spell) == SPE_LIGHTNING_BOLT || !uarmh || uarmh->oartifact != ART_STORMHELM)
+			) { /* 5% */
+				Your("knowledge of this spell is growing faint.");
+			}
 		}
 		energy = (spellev(spell) * 5);    /* 5 <= energy <= 35 */
 
@@ -3922,7 +3922,7 @@ int spell;
 	int chance, splcaster, special, statused;
 	int difficulty;
 	int skill;
-
+	
 	if(
 		((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 
 			uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM)
@@ -3952,7 +3952,7 @@ int spell;
 
 	if (uarm && (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE) )
 	    splcaster += (uarmc && uarmc->otyp == ROBE) ?
-		uarmc->oartifact ? 0 : urole.spelarmr/2 : urole.spelarmr;
+			uarmc->oartifact ? 0 : urole.spelarmr/2 : urole.spelarmr;
 	else if (uarmc && uarmc->otyp == ROBE)
 		splcaster -= uarmc->oartifact ? 2*urole.spelarmr : urole.spelarmr;
 	

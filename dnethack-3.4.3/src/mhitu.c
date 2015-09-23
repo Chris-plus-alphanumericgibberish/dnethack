@@ -601,7 +601,7 @@ mattacku(mtmp)
 		}
 	    }
 	}
-
+	
 	if(mdat == &mons[PM_LILLEND] && rn2(2)){
 		mdat = find_mask(mtmp);
 		if(!Blind && mdat != &mons[PM_LILLEND]) pline("%s uses a %s mask!",Monnam(mtmp),mdat->mname);
@@ -636,7 +636,7 @@ mattacku(mtmp)
 	    sum[i] = 0;
 	    mattk = getmattk(mdat, i, sum, &alt_attk);
 	    if (u.uswallow && (mattk->aatyp != AT_ENGL && mattk->aatyp != AT_ILUR))
-		continue;
+			continue;
 		
 		/*Plasteel helms cover the face and prevent bite attacks*/
 		if((mtmp->misc_worn_check & W_ARMH) && 
@@ -1367,7 +1367,7 @@ hitmu(mtmp, mattk)
 				/* houchou not thrown */
 				(otmp->oartifact == ART_HOUCHOU) ||
 				/* WAC -- or using a pole at short range... */
-				(is_pole(otmp) &&
+				(is_pole(otmp) && 
 					otmp->otyp != AKLYS && 
 					otmp->otyp != FORCE_PIKE && 
 					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 

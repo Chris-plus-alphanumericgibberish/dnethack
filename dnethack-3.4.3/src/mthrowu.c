@@ -427,12 +427,12 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 				  Tobjnam(singleobj, "slip"));
 		}
 	    if(canseemon(mon) && flags.verbose) {
-		if(is_ammo(singleobj))
-		    pline("%s misfires!", Monnam(mon));
-		else
-		    pline("%s as %s throws it!",
-			  Tobjnam(singleobj, "slip"), mon_nam(mon));
-	    }
+			if(is_ammo(singleobj))
+				pline("%s misfires!", Monnam(mon));
+			else
+				pline("%s as %s throws it!",
+				  Tobjnam(singleobj, "slip"), mon_nam(mon));
+		}
 	    dx = rn2(3)-1;
 	    dy = rn2(3)-1;
 	    /* check validity of new direction */
@@ -451,7 +451,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 	    || closed_door(bhitpos.x+dx, bhitpos.y+dy)
 	    || (levl[bhitpos.x + dx][bhitpos.y + dy].typ == IRONBARS &&
 			((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, 0, 0)))
-		) {
+	) {
 		struct rm *room = &levl[bhitpos.x+dx][bhitpos.y+dy];
 		boolean shopdoor=FALSE, shopwall=FALSE;
 		if((closed_door(bhitpos.x+dx,bhitpos.y+dy) || room->typ == SDOOR) && 
@@ -549,7 +549,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 				dx *= -1;
 				dy *= -1;
 		    } else if (ohitmon(mon, mtmp, singleobj, range, verbose))
-			break;
+				break;
 		} else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
 		    if (multi) nomul(0, NULL);
 
@@ -671,7 +671,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			/* Thrown objects "sink" */
 			|| IS_SINK(levl[bhitpos.x][bhitpos.y].typ)
 #endif
-								) {
+		) {
 			struct rm *room = &levl[bhitpos.x+dx][bhitpos.y+dy];
 			boolean shopdoor=FALSE, shopwall=FALSE;
 			if(isok(bhitpos.x+dx,bhitpos.y+dy) && (closed_door(bhitpos.x+dx,bhitpos.y+dy) || room->typ == SDOOR) && 
@@ -899,7 +899,7 @@ struct monst *mtmp;
 		    otmp->otyp == ORCISH_ARROW &&
 		    mwep && mwep->otyp == ORCISH_BOW))
 		multishot++;
-
+		
 	    if (multishot < 1) multishot = 1;
 	    else multishot = rnd(multishot);
 //#ifdef FIREARMS

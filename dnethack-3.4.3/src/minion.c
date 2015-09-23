@@ -205,22 +205,22 @@ boolean angels;
 	    break;
     }
     if (mnum == NON_PM) {
-	mon = 0;
+		mon = 0;
     } else if (mons[mnum].pxlth == 0) {
-	struct permonst *pm = &mons[mnum];
-	mon = makemon(pm, u.ux, u.uy, MM_EMIN);
-	if (mon) {
-	    mon->isminion = TRUE;
-	    EMIN(mon)->min_align = alignment;
-	}
+		struct permonst *pm = &mons[mnum];
+		mon = makemon(pm, u.ux, u.uy, MM_EMIN);
+		if (mon) {
+			mon->isminion = TRUE;
+			EMIN(mon)->min_align = alignment;
+		}
     } else if (mnum == PM_ANGEL) {
-	mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
-	if (mon) {
-	    mon->isminion = TRUE;
-	    EPRI(mon)->shralign = alignment;	/* always A_LAWFUL here */
-	}
+		mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
+		if (mon) {
+			mon->isminion = TRUE;
+			EPRI(mon)->shralign = alignment;	/* always A_LAWFUL here */
+		}
     } else
-	mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
+		mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
     if (mon) {
 	if (talk) {
 	    pline_The("voice of %s booms:", align_gname(alignment));

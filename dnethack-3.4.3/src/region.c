@@ -868,7 +868,7 @@ int radius, ttl;
     }
     ff->ttl = ttl;
     if (!in_mklev && !flags.mon_moving)
-	set_heros_fault(ff);		/* assume player has created it */
+		set_heros_fault(ff);		/* assume player has created it */
 	else clear_heros_fault(ff);
  /* ff->can_enter_f = enter_force_field; */
  /* ff->can_leave_f = enter_force_field; */

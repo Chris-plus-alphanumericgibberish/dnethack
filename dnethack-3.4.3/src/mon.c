@@ -1875,7 +1875,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		else if(truce2 && !(f1 <= LAST_HOUSE && f1 >= FIRST_HOUSE))
 			return ALLOW_M|ALLOW_TM;
 	}
-	
+
 	/* drow vs. edderkops */
 	if(is_drow(ma) && magr->mfaction != XAXOX && magr->mfaction != EDDER_SYMBOL && md == &mons[PM_EDDERKOP]){
 		return ALLOW_M|ALLOW_TM;
@@ -3129,10 +3129,10 @@ cleanup:
 			// pline("That was %sa bad idea...",
 					// u.uevent.qcompleted ? "probably " : "");
 		} else {/* REAL BAD! */
-	    adjalign(-(u.ualign.record+(int)ALIGNLIM/2));
+			adjalign(-(u.ualign.record+(int)ALIGNLIM/2));
 			u.hod += 30;
-	    pline("That was %sa bad idea...",
-	    		u.uevent.qcompleted ? "probably " : "");
+			pline("That was %sa bad idea...",
+					u.uevent.qcompleted ? "probably " : "");
 		}
 	} else if (mdat->msound == MS_NEMESIS){	/* Real good! */
 	    adjalign((int)(ALIGNLIM/4));
@@ -3830,33 +3830,33 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	if(!opaque(mdat) && opaque(mtmp->data)) unblock_point(mtmp->mx, mtmp->my);
 	/* Possibly Block  */
 	if(opaque(mdat) && !opaque(mtmp->data)) block_point(mtmp->mx, mtmp->my);
-
+	
 	if(mtmp->cham != CHAM_DREAM){
-	hpn = mtmp->mhp;
-	hpd = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev)*8 : mdat->mlevel;
-	if(!hpd) hpd = 4;
+		hpn = mtmp->mhp;
+		hpd = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev)*8 : mdat->mlevel;
+		if(!hpd) hpd = 4;
 
-	mtmp->m_lev = adj_lev(mdat);		/* new monster level */
+		mtmp->m_lev = adj_lev(mdat);		/* new monster level */
 
-	mhp = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev)*8 : mdat->mlevel;
-	if(!mhp) mhp = 4;
+		mhp = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev)*8 : mdat->mlevel;
+		if(!mhp) mhp = 4;
 
-	/* new hp: same fraction of max as before */
+		/* new hp: same fraction of max as before */
 #ifndef LINT
-	mtmp->mhp = (int)(((long)hpn*(long)mhp)/(long)hpd);
+		mtmp->mhp = (int)(((long)hpn*(long)mhp)/(long)hpd);
 #endif
-	if(mtmp->mhp < 0) mtmp->mhp = hpn;	/* overflow */
+		if(mtmp->mhp < 0) mtmp->mhp = hpn;	/* overflow */
 	/* Unlikely but not impossible; a 1HD creature with 1HP that changes into a
-   0HD creature will require this statement */
-	if (!mtmp->mhp) mtmp->mhp = 1;
+	   0HD creature will require this statement */
+		if (!mtmp->mhp) mtmp->mhp = 1;
 
 	/* and the same for maximum hit points */
-	hpn = mtmp->mhpmax;
+		hpn = mtmp->mhpmax;
 #ifndef LINT
-	mtmp->mhpmax = (int)(((long)hpn*(long)mhp)/(long)hpd);
+		mtmp->mhpmax = (int)(((long)hpn*(long)mhp)/(long)hpd);
 #endif
-	if(mtmp->mhpmax < 0) mtmp->mhpmax = hpn;	/* overflow */
-	if (!mtmp->mhpmax) mtmp->mhpmax = 1;
+		if(mtmp->mhpmax < 0) mtmp->mhpmax = hpn;	/* overflow */
+		if (!mtmp->mhpmax) mtmp->mhpmax = 1;
 	} //else just take on new form I think....
 	/* take on the new form... */
 	set_mon_data(mtmp, mdat, 0);

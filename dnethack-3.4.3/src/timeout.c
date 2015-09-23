@@ -318,43 +318,43 @@ nh_timeout()
 		     (time_luck > 0 && u.uluck > baseluck) ||
 		     (time_luck < 0 && u.uluck < baseluck))
 		) {
-		/* The slowed timeout depends on the distance between your 
-		 * luck (not including luck bonuses) and your base luck.
-		 * 
-		 * distance	timeout
-		 * --------------------
-		 *  1		20000
-		 *  2		18000
-		 *  3		16000
-		 *  4		14000
-		 *  5		12000
-		 *  6		10000
-		 *  7		 8000
-		 *  8		 6000
-		 *  9		 4000
-		 *  10		 2000
-		 *  11		(600)
-		 */ 
-		int base_dist = u.uluck - baseluck;
-		int slow_timeout;
+			/* The slowed timeout depends on the distance between your 
+			 * luck (not including luck bonuses) and your base luck.
+			 * 
+			 * distance	timeout
+			 * --------------------
+			 *  1		20000
+			 *  2		18000
+			 *  3		16000
+			 *  4		14000
+			 *  5		12000
+			 *  6		10000
+			 *  7		 8000
+			 *  8		 6000
+			 *  9		 4000
+			 *  10		 2000
+			 *  11		(600)
+			 */ 
+			int base_dist = u.uluck - baseluck;
+			int slow_timeout;
 			if (!Role_if(PM_CONVICT) || 
 				stoneluck < 0 || 
 				base_dist <= stoneluck*3
 			){
-		if(base_dist < 0) base_dist *= -1; /* magnitude only */
-		slow_timeout = 22000 - 2000 * (base_dist);
-		if (slow_timeout > timeout) timeout = slow_timeout;
-	    }
+				if(base_dist < 0) base_dist *= -1; /* magnitude only */
+				slow_timeout = 22000 - 2000 * (base_dist);
+				if (slow_timeout > timeout) timeout = slow_timeout;
+			}
 	    }
 
 	    if (u.uhave.amulet || u.ugangr[Align2gangr(u.ualign.type)]) timeout = timeout / 2;
 
 	    if (moves >= u.luckturn + timeout) {
-		if(u.uluck > baseluck)
-		u.uluck--;
-		else if(u.uluck < baseluck)
-		u.uluck++;
-		u.luckturn = moves;
+			if(u.uluck > baseluck)
+			u.uluck--;
+			else if(u.uluck < baseluck)
+			u.uluck++;
+			u.luckturn = moves;
 	    }
 	}
 #ifdef CONVICT
@@ -1509,7 +1509,7 @@ long timeout;
 				lightsaber_deactivate(obj, FALSE);
 			}
 			if (obj && obj->age && obj->lamplit) /* might be deactivated */
-			    begin_burn(obj, TRUE);
+				begin_burn(obj, TRUE);
 		break;
 //#ifdef FIREARMS
 	    case STICK_OF_DYNAMITE:

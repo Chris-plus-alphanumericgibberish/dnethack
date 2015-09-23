@@ -645,13 +645,13 @@ const char * haluWard[] =  {
 	
 	/* books */
 	"a set of holy horns",	"a Summoning Dark mine-sign",	"a Long Dark mine-sign",
-	"a Following Dark mine-sign",	"a Closing Dark mine-sign",	"an Opening Dark mine-sign",
-	"a Breathing Dark mine-sign",	"a Speaking Dark mine-sign",	"a Catching Dark mine-sign",
-	"a Secret Dark mine-sign",	"a Calling Dark mine-sign",	"a Waiting Dark mine-sign",
-	"a florid crest dominated by a double-headed bat",
-	"a Guarding Dark mine-sign",	"the mark of the Caller of Eight", /* Discworld */
+		"a Following Dark mine-sign",	"a Closing Dark mine-sign",	"an Opening Dark mine-sign",
+		"a Breathing Dark mine-sign",	"a Speaking Dark mine-sign",	"a Catching Dark mine-sign",
+		"a Secret Dark mine-sign",	"a Calling Dark mine-sign",	"a Waiting Dark mine-sign",
+		"a florid crest dominated by a double-headed bat",
+		"a Guarding Dark mine-sign",	"the mark of the Caller of Eight", /* Discworld */
 	"a lidless eye", /* Lord of the Rings */
-	"a white tree", /* Gondor, Lord of the Rings */
+		"a white tree", /* Gondor, Lord of the Rings */
 	"a triangle enclosing a circle and bisected by a line", /* Harry Potter */
 	"a set of three trefoils, the lower most inverted", /* describes the three of clubs. Too Many Magicians*/
 	"a Trump of Doom",	"a Sign of Chaos",	"a Pattern of Amber",	"a Ghostwheel",
@@ -2464,7 +2464,7 @@ doengrave()
 					otmp->age = 0;
 				} else otmp->age += (multi-1)*100; //NOTE: multi is negative
 			}
-		if (multi)
+			if (multi)
 				nomovemsg = is_ice(u.ux,u.uy) ?
 				"You finish melting your message into the ice.":
 				"You finish burning your message into the floor.";
@@ -3223,7 +3223,7 @@ doward()
 					otmp->age = 0;
 				} else otmp->age += (multi-1)*100; //NOTE: multi is negative
 			}
-		if (multi)
+			if (multi)
 				nomovemsg = is_ice(u.ux,u.uy) ?
 				"You finish melting your drawing into the ice.":
 				"You finish burning your drawing into the floor.";
@@ -4305,7 +4305,7 @@ doseal()
 					otmp->age = 0;
 				} else otmp->age += (multi-1)*100; //NOTE: multi is negative
 			}
-		if (multi)
+			if (multi)
 				nomovemsg = is_ice(u.ux,u.uy) ?
 				"You finish melting your drawing into the ice.":
 				"You finish burning your drawing into the floor.";
@@ -4906,8 +4906,8 @@ static const char *epitaphs[] = {
 	"Of course, you realize, this means war.",
 	
 	"FIQ:  One step from divinity.",
-	"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
-	"FIQ, killed by a clockwork bug.",
+		"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
+		"FIQ, killed by a clockwork bug.",
 	
 	"Khor:  \"Wait, did that axe just fall off the edge of the world?\"",
 		"Khor:  Balancing dNethack, one sleeping potion to the face at a time.",

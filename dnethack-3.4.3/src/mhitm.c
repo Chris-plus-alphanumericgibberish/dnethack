@@ -240,7 +240,7 @@ mattackm(magr, mdef)
     }
 	
 	if(magr->mtame && !mdef->mtame) tmp += beastmastery();
-
+	
 	tmp += magr->encouraged;
 	if (wizard && magr->encouraged)
 		pline("[%s +%d]", Monnam(magr), magr->encouraged);

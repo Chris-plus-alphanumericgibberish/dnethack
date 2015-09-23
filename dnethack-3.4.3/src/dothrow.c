@@ -320,7 +320,7 @@ int shots, shotlimit;
 		shots,	/* (might be 1 if player gave shotlimit) */
 		(shots == 1) ? "ray" : "rays");
 	}
-
+	
 	
 	
 	while(shots){
@@ -580,7 +580,7 @@ dofire()
 
 		return throw_obj(uwep, shotlimit, THROW_UWEP);
 	}
-
+	
 	if(uwep && is_blaster(uwep)){
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
@@ -1207,11 +1207,11 @@ int thrown;
 //			ammo_and_launcher(obj, launcher) && is_poisonable(obj))
 //		obj->opoisoned = 1;
 
-       obj->was_thrown = 1;
+    obj->was_thrown = 1;
 	if ((obj->cursed || obj->greased || (ammo_and_launcher(obj, launcher) && launcher->otyp == FLINTLOCK)) && (u.dx || u.dy) && !rn2(7)) {
 	    boolean slipok = TRUE;
 	    if (ammo_and_launcher(obj, launcher))
-		pline("%s!", Tobjnam(obj, "misfire"));
+			pline("%s!", Tobjnam(obj, "misfire"));
 	    else {
 		/* only slip if it's greased or meant to be thrown */
 		if (obj->greased || throwing_weapon(obj))
@@ -1258,16 +1258,16 @@ int thrown;
 				 obj->oartifact == ART_SICKLE_MOON
 			  ) && !impaired
 		) {
-		pline("%s the %s and returns to your hand!",
-		      Tobjnam(obj, "hit"), ceiling(u.ux,u.uy));
-		obj = addinv(obj);
-		(void) encumber_msg();
+			pline("%s the %s and returns to your hand!",
+				  Tobjnam(obj, "hit"), ceiling(u.ux,u.uy));
+			obj = addinv(obj);
+			(void) encumber_msg();
 			if(obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON || obj->oartifact == ART_ANNULUS){
-			setuqwep(obj);
-		} else{
-			setuwep(obj);
-			u.twoweap = twoweap;
-		}
+				setuqwep(obj);
+			} else{
+				setuwep(obj);
+				u.twoweap = twoweap;
+			}
 		}
 //#ifdef FIREARMS
 	    /* [ALI]
@@ -1349,7 +1349,7 @@ int thrown;
 				) range = 1000;
 				else range++;
 			} else if (obj->oclass != GEM_CLASS)
-			range /= 2;
+				range /= 2;
 		}
 
 		if (Is_airlevel(&u.uz) || Levitation) {

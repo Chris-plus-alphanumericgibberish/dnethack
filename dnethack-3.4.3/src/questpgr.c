@@ -524,10 +524,10 @@ qt_montype()
 				return (&mons[qpm]);
 			return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
 		  } else {
-		    qpm = urole.enemy1num;
+			qpm = urole.enemy1num;
 			if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD && !In_quest(&u.uz)))
-		    	return (&mons[qpm]);
-		    return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
+				return (&mons[qpm]);
+			return (mkclass(urole.enemy1sym, G_NOHELL|G_HELL));
 		  }
 		}
 		if(Role_if(PM_EXILE)){

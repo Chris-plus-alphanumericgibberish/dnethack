@@ -589,10 +589,10 @@ boolean artif;
 					break;
 		case CAN_OF_GREASE:	otmp->spe = rnd(25);
 					blessorcurse(otmp, 10);
-					break;
+		break;
 		case CRYSTAL_BALL:	otmp->spe = rnd(5);
 					blessorcurse(otmp, 2);
-					break;
+		break;
 		case POWER_PACK:
 			otmp->quan = rnd(5) + 5;
 			otmp->owt = weight(otmp);

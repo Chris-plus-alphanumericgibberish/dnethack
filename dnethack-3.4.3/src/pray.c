@@ -1851,7 +1851,7 @@ dosacrifice()
       toughness.  Human and pet sacrifice, as well as sacrificing unicorns
       of your alignment, is strongly discouraged.
      */
-
+	
 	if(Role_if(PM_ANACHRONONAUT) && otmp->otyp != AMULET_OF_YENDOR){
 		You("do not give offerings to the God of the future.");
 		return 0;
@@ -2111,7 +2111,7 @@ dosacrifice()
 				pline("A pulse of darkness radiates from your sacrifice!");
 				angrygods(altaralign);
 				return 1;
-			} 
+			}
 			consume_offering(otmp);
 		    pline("%s accepts your allegiance.", a_gname());
 

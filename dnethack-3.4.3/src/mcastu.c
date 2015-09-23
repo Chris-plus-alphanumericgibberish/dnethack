@@ -749,20 +749,20 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			u.ugangr[Align2gangr(A_CHAOTIC)]++;
 			angrygods(A_CHAOTIC);
 		}
-           do {
-               spellnum = choose_magic_special(mtmp, mattk->adtyp);
-				if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
-		/* not trying to attack?  don't allow directed spells */
-		if (!thinks_it_foundyou) {
+        do {
+			spellnum = choose_magic_special(mtmp, mattk->adtyp);
+			if(!spellnum) return 0; //The monster's spellcasting code aborted the cast.
+			/* not trying to attack?  don't allow directed spells */
+			if (!thinks_it_foundyou) {
 				if (!is_undirected_spell(spellnum) ||
-                       spell_would_be_useless(mtmp, spellnum)
-			) {
-//				if (foundyou)
-//					impossible("spellcasting monster found you and doesn't know it?");
-				return 0;
-		    }
-		    break;
-		}
+						   spell_would_be_useless(mtmp, spellnum)
+				) {
+//					if (foundyou)
+//						impossible("spellcasting monster found you and doesn't know it?");
+					return 0;
+				}
+				break;
+			}
 	    } while(--cnt > 0 &&
                    spell_would_be_useless(mtmp, spellnum));
 	    if (cnt == 0) return 0;
@@ -944,16 +944,16 @@ int spellnum;
 		dmg = 0; //you don't take damage
 	} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12) && !(u.sealsActive&SEAL_OSE)) {
 	    if (Hallucination) {
-		You("have an out of body experience.");
+			You("have an out of body experience.");
 	    } else if(Upolyd ? (u.mh >= 100) : (u.uhp >= 100)){
 			Your("%s stops!  When it finally beats again, it is weak and thready", body_part(HEART));
 			if(Upolyd) u.mh -= d(8,8);	//Same as death's touch attack, sans special effects
 			else u.uhp -= d(8,8);		//Not reduced by AC
-	    } else {
-		killer_format = KILLED_BY_AN;
-		killer = "touch of death";
-		dmg = 0; //no additional damage
-		done(DIED);
+		} else {
+			killer_format = KILLED_BY_AN;
+			killer = "touch of death";
+			dmg = 0; //no additional damage
+			done(DIED);
 	    }
 	} else if(!(u.sealsActive&SEAL_OSE || resists_death(&youmonst))){
 	    if (Antimagic) shieldeff(u.ux, u.uy);
@@ -1000,10 +1000,10 @@ int spellnum;
        for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
            if(!DEADMONSTER(mtmp2) && (mtmp2 != mtmp))
            monflee(mtmp2, 0, FALSE, FALSE);
-	}
-    vomit();
-    dmg = rnd(Half_physical_damage ? 5 : 10);
-	stop_occupation();
+		}
+		vomit();
+		dmg = rnd(Half_physical_damage ? 5 : 10);
+		stop_occupation();
 	break;
 	}
     case STRANGLE:
@@ -1186,13 +1186,13 @@ int spellnum;
 		
 		if (Half_physical_damage) dmg = (dmg + 1) / 2;
 		
-	if (Cold_resistance) {
-	    shieldeff(u.ux, u.uy);
-	} else{
-	    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
-		destroy_item(POTION_CLASS, AD_COLD);
-	}
-	stop_occupation();
+		if (Cold_resistance) {
+		    shieldeff(u.ux, u.uy);
+		} else{
+		    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
+			destroy_item(POTION_CLASS, AD_COLD);
+		}
+		stop_occupation();
 	break;
     case LIGHTNING:
     if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
@@ -1964,7 +1964,7 @@ int spellnum;
      * We really want something like "if the monster could see mux, muy".
      */
     boolean mcouldseeu = couldsee(mtmp->mx, mtmp->my);
-
+	
 	/*Don't cast at warded spaces*/
 	if(onscary(mtmp->mux, mtmp->muy, mtmp) && !is_undirected_spell(spellnum))
 		return TRUE;
@@ -1979,7 +1979,7 @@ int spellnum;
 			if(sengr_at("Lolth", mtmp->mux, mtmp->muy) && (mtmp->m_lev < u.ulevel || u.ualign.record-- > 0)) return TRUE;
 		}
 	}
-       /* only the wiz makes a clone */
+    /* only the wiz makes a clone */
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == CLONE_WIZ) return TRUE;
 	/* aggravate monsters won't be cast by peaceful monsters */
 	if (mtmp->mpeaceful && (spellnum == AGGRAVATION))

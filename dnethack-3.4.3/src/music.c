@@ -422,7 +422,7 @@ int know_spell;
 
 	if (!know_spell)
 		return 0;
-
+	
 	if(instr->otyp == LEATHER_DRUM || instr->otyp == DRUM_OF_EARTHQUAKE)
 		chance = ( ACURR(A_STR) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
 		- (songs[song_id].level * (instr->blessed ? 15 : 20));
@@ -1640,13 +1640,13 @@ struct obj *instr;
 	else if(instr_otyp == FROST_HORN) instr_otyp = TOOLED_HORN;
 		
     if (Underwater) {
-	You_cant("play music underwater!");
-	return(0);
+		You_cant("play music underwater!");
+		return(0);
     }
 #ifdef BARD
     if (nohands(youmonst.data)) {
-	You("have no hands!");
-	return 0;
+		You("have no hands!");
+		return 0;
     }
     /*
     if (uarms) {
@@ -1655,8 +1655,8 @@ struct obj *instr;
     }
     */
     if (welded(uwep)) {
-	You("need free hands to play music!");
-	return(0);
+		You("need free hands to play music!");
+		return(0);
     }
     /* also cursed gauntlets should mean your song will go bad */
 
@@ -1678,9 +1678,9 @@ struct obj *instr;
 	}
     
     if (!P_RESTRICTED(P_MUSICALIZE)) {
-	song = songs_menu(instr);
-	if (song == SNG_NONE)
-	    return 0;
+		song = songs_menu(instr);
+		if (song == SNG_NONE)
+			return 0;
     } else {
 #endif
     if (instr->otyp != LEATHER_DRUM && instr->otyp != DRUM_OF_EARTHQUAKE) {

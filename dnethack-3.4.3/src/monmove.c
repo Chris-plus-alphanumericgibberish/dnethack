@@ -144,7 +144,7 @@ struct monst *mtmp;
 	int wardAt = ward_at(x,y);
 	struct monst *mat = m_at(x,y);
 	
-
+	
 	return (boolean)(
 				((
 					sobj_at(SCR_SCARE_MONSTER, x, y)
@@ -1621,7 +1621,7 @@ not_special:
 			for(i = 0; i < cnt; i++)
 				if(!(info[i] & NOTONL)) avoid=TRUE;
 	    }
-
+		
 		if(appr == 0 && !mtmp->mpeaceful && Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
 			struct monst *m2 = (struct monst *)0;
 			for(m2=fmon; m2; m2 = m2->nmon){

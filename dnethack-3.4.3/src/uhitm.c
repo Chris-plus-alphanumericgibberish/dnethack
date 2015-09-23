@@ -308,7 +308,7 @@ boolean phasing;
 	int tmp2;
 	double bab = BASE_ATTACK_BONUS;
 	int luckbon = 0;
-	
+		
 	if(Luck) luckbon = sgn(Luck)*rnd(abs(Luck));
 	
 	if(phasing){
@@ -3111,7 +3111,7 @@ use_weapon:
 				 mon->data == &mons[PM_FLUX_SLIME])
 			){
 			    	break;
-				}
+			}
 		case AT_STNG:
 		case AT_TUCH:
 		case AT_BUTT:

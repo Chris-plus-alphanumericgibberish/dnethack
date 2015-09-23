@@ -685,7 +685,7 @@ doforce()		/* try to force a chest with your weapon */
 		    is_lightsaber(uwep) ||
 		    is_axe(uwep)))
 	    	return use_pick_axe2(uwep);
-
+		
 	    if(!IS_DOOR(door->typ)) {
 		if (is_drawbridge_wall(x,y) >= 0)
 		    pline("The drawbridge is too solid to force open.");

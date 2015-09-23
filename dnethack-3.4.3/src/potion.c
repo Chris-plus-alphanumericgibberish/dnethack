@@ -782,7 +782,7 @@ peffects(otmp)
 			    break;
 		    }
 		}
-		break;
+	break;
 	case POT_SPEED:
 		if(Wounded_legs && !otmp->cursed
 #ifdef STEED
@@ -1363,17 +1363,17 @@ boolean your_fault;
 			make_happy_shk(mon, FALSE);
 		    } else if (!is_covetous(mon->data) &&
 				    !resist(mon, POTION_CLASS, 0, 0)) {
-			angermon = FALSE;
-			if (canseemon(mon)) {
-			    if (mon->msleeping) {
-				wakeup(mon);
-				pline("%s wakes up looking bewildered!", 
-						Monnam(mon));
-			    } else
-				pline("%s looks bewildered!", Monnam(mon));
+				angermon = FALSE;
+				if (canseemon(mon)) {
+					if (mon->msleeping) {
+					wakeup(mon);
+					pline("%s wakes up looking bewildered!", 
+							Monnam(mon));
+					} else
+						pline("%s looks bewildered!", Monnam(mon));
 				}
-			    mon->mpeaceful = TRUE;
-			    mon->mtame = FALSE;	
+				mon->mpeaceful = TRUE;
+				mon->mtame = FALSE;	
 		    }
 		    break;
 		}
