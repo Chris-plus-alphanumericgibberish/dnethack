@@ -1177,22 +1177,22 @@ int spellnum;
 	break;
     case ICE_STORM:
 	pline("Chunks of ice pummel you from all sides!");
-	    dmg = d(4, 8);
+	dmg = d(4, 8);
+	
+	if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+	else dmg -= rnd(-u.uac);
+	
+	if (dmg < 1) dmg = 1;
+	
+	if (Half_physical_damage) dmg = (dmg + 1) / 2;
 		
-		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
-		else dmg -= rnd(-u.uac);
-		
-		if (dmg < 1) dmg = 1;
-		
-		if (Half_physical_damage) dmg = (dmg + 1) / 2;
-		
-		if (Cold_resistance) {
-		    shieldeff(u.ux, u.uy);
-		} else{
-		    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
-			destroy_item(POTION_CLASS, AD_COLD);
-		}
-		stop_occupation();
+	if (Cold_resistance) {
+	    shieldeff(u.ux, u.uy);
+	} else{
+	    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
+		destroy_item(POTION_CLASS, AD_COLD);
+	}
+	stop_occupation();
 	break;
     case LIGHTNING:
     if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
