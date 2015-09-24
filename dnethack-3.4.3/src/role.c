@@ -2441,6 +2441,11 @@ role_init()
 	    mons[urole.neminum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
 	    mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
 	}
+	
+	//Drow noble nemesis is regular monster for anachrononauts
+	if(Role_if(PM_ANACHRONONAUT)){
+		mons[PM_ELDER_BRAIN].msound = MS_SILENT;
+	}
 
 	/* Fix up infravision */
 	if (mons[urace.malenum].mflags3 & M3_INFRAVISION) {

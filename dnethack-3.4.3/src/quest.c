@@ -456,14 +456,38 @@ prisoner_speaks(mtmp)
 	return;
 }
 
+static const char *elderBrain[] = {
+	"YOU ARE ALL LOST.",
+	"ALL TIME IS ONE IN US.",
+	"SUBMIT.",
+	"ABANDON YOUR SELF.",
+	"GIVE IN TO US.",
+	"REST.",
+	"SLEEP FOREVER.",
+	"GIVE UP.",
+	"WHY DO YOU STRUGGLE?",
+	"DO NOT BE AFRAID.",
+	"WE RULE ALL.",
+	"YOU PROLONG YOUR SUFFERING.",
+	"TO WHAT END DO YOU STRIVE?",
+	"PENUMBRA HANGS OVER ALL.",
+	"PENUMBRA'S ARC IS CLOSED."
+};
+
 void
 quest_chat(mtmp)
 	register struct monst *mtmp;
 {
     if (mtmp->m_id == Qstat(leader_m_id)) {
-	chat_with_leader();
-	return;
+		chat_with_leader();
+		return;
     }
+	
+	if(Role_if(PM_ANACHRONONAUT) && mtmp->data == &mons[PM_ELDER_BRAIN]){
+		pline("%s",elderBrain[rn2(SIZE(elderBrain))]);
+		return;
+	}
+	
 	if(
 		(Role_if(PM_NOBLEMAN) && 
 		(mtmp->data == &mons[PM_KNIGHT] 
