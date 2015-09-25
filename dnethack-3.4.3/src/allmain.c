@@ -579,6 +579,10 @@ moveloop()
 				}
 				else (void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 			}
+			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !Is_qstart(&u.uz) && !rn2(50)){
+				struct monst* mtmp = makemon(&mons[PM_SEMBLANCE], 0, 0, MM_ADJACENTSTRICT);
+				if(mtmp && canseemon(mtmp)) pline("The base matter of the world stirs at the beckoning of inexplicable urges, dancing with a semblance of life.");
+			}
 
 		    /* reset summon monster block. */
 			if(u.summonMonster) u.summonMonster = FALSE;
