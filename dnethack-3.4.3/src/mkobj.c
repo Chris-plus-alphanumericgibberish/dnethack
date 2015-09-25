@@ -400,9 +400,9 @@ boolean artif;
 #ifdef INVISIBLE_OBJECTS
 	otmp->oinvis = !rn2(1250);
 #endif
+	otmp->quan = is_multigen(otmp) ? (long) rn1(6,6) : 1L;
 	if (init) switch (let) {
 	case WEAPON_CLASS:
-		otmp->quan = is_multigen(otmp) ? (long) rn1(6,6) : 1L;
 		if(!rn2(11)) {
 			otmp->spe = rne(3);
 			otmp->blessed = rn2(2);

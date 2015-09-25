@@ -282,9 +282,10 @@ struct obj {
 #define is_lightsaber(otmp) ((otmp)->otyp == LIGHTSABER || \
 							 (otmp)->otyp == BEAMSWORD || \
 							 (otmp)->otyp == DOUBLE_LIGHTSABER)
-#define is_multigen(otmp)	(otmp->oclass == WEAPON_CLASS && \
+#define is_multigen(otmp)	((otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
-			 objects[otmp->otyp].oc_skill <= -P_BOW)
+			 objects[otmp->otyp].oc_skill <= -P_BOW) || \
+			 otmp->otyp == HYPOSPRAY_AMPULE)
 // define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 // objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
 			 // objects[otmp->otyp].oc_skill <= -P_BOW)
