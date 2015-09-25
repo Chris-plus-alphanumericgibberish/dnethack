@@ -172,7 +172,7 @@ typedef struct branch {
 #define Is_sokoend_level(x)     (on_level(x, &sokoend_level))
 #endif
 
-#define In_sokoban(x)		((x)->dnum == sokoban_dnum)
+#define In_sokoban(x)	((x)->dnum == sokoban_dnum)
 #define In_tower(x)		((x)->dnum == tower_dnum)
 #define In_sea(x)		((x)->dnum == sea_dnum)
 #define Is_sunsea(x)	(In_sea(x) && dungeon_topology.sea_variant == SUNLESS_SEA_LEVEL)

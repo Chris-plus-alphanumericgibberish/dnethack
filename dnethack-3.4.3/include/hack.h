@@ -118,7 +118,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define INVIS_BEAM	4
 
 #define MATCH_WARN_OF_MON(mon)	( (Warn_of_mon && flags.warntype && \
-					(flags.warntype & (mon)->data->mflags2)) || \
+						(flags.warntype & (mon)->data->mflags2)) || \
 					(Warn_of_mon && flags.montype && \
 						(flags.montype & (long long int)((long long int)1 << (int)((mon)->data->mlet)))) || \
 					(u.sealsActive&SEAL_PAIMON && is_magical((mon)->data)) || \
