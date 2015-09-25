@@ -658,7 +658,7 @@ int how;
 		u.gevurah += 4;//cheated death.
 
 		(void) adjattrib(A_CON, -1, TRUE);
-		if(u.uhpmax <= 0) u.uhpmax = 10;	/* arbitrary */
+		if(u.uhpmax <= 9) u.uhpmax = 10;	/* arbitrary */
 		savelife(how);
 		if (how == GENOCIDED)
 			pline("Unfortunately you are still genocided...");

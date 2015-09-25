@@ -2170,7 +2170,7 @@ struct monst *mtmp;
 		if (mtmp->mtame && !mtmp->isminion) {
 			wary_dog(mtmp, FALSE);
 		}
-		if (mtmp->mhpmax <= 0) mtmp->mhpmax = 10;
+		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
 		mtmp->mhp = mtmp->mhpmax;
 		if (mvitals[monsndx(mtmp->data)].mvflags & G_GENOD && !In_quest(&u.uz)) {
 			if (cansee(mtmp->mx, mtmp->my))
@@ -2178,6 +2178,23 @@ struct monst *mtmp;
 				mon_nam(mtmp));
 		} else
 			return;
+	} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !(mtmp->mpeaceful) && !rn2(20)){
+		if (cansee(mtmp->mx, mtmp->my)) {
+			pline("But wait...");
+			if (attacktype(mtmp->data, AT_EXPL)
+			    || attacktype(mtmp->data, AT_BOOM))
+				pline("%s reconstitutes!", Monnam(mtmp));
+			else
+				pline("%s flickers, then reappears looking much better!", Monnam(mtmp));
+		}
+		mtmp->mcanmove = 1;
+		mtmp->mfrozen = 0;
+		if (mtmp->mtame && !mtmp->isminion) {
+			wary_dog(mtmp, FALSE);
+		}
+		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
+		mtmp->mhp = mtmp->mhpmax;
+		return;
 	}
 	mtmp->mhp = 0;
 }
