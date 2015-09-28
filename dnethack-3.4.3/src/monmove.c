@@ -806,7 +806,7 @@ register struct monst *mtmp;
 
 		if (!(mon_has_amulet(mtmp) || In_endgame(&u.uz))) {
 			nlev = random_teleport_level();
-			pline("going to %d",nlev);
+			// pline("going to %d",nlev);
 			if (nlev != depth(&u.uz)) {
 				get_level(&flev, nlev);
 				migrate_to_level(mtmp, ledger_no(&flev), MIGR_RANDOM,
