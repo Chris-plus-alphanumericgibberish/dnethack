@@ -313,7 +313,36 @@ int indx, prev_result[];
 struct attack *alt_attk_buf;
 {
     struct attack *attk = &mptr->mattk[indx];
-
+	static int subout = 0;
+	if(indx==0){
+		if(
+			(mptr == &mons[PM_LICH__THE_FIEND_OF_EARTH] && rn2(4)) ||
+			(mptr == &mons[PM_KARY__THE_FIEND_OF_FIRE] && rn2(100)<37) ||
+			(mptr == &mons[PM_KRAKEN__THE_FIEND_OF_WATER] && rn2(100)<52) ||
+			(mptr == &mons[PM_TIAMAT__THE_FIEND_OF_WIND] && !rn2(4)) ||
+			(mptr == &mons[PM_CHAOS] && !rn2(3))
+		){
+			subout = 1;
+			*alt_attk_buf = *attk;
+			attk = alt_attk_buf;
+			attk->aatyp = AT_MAGC;
+			attk->adtyp = AD_SPEL;
+			attk->damn = 0;
+			attk->damd = 0;
+			return attk;
+		} else subout = 0;
+	}
+	
+	if(subout){
+		*alt_attk_buf = *attk;
+		attk = alt_attk_buf;
+		attk->aatyp = 0;
+		attk->adtyp = 0;
+		attk->damn = 0;
+		attk->damd = 0;
+		return attk;
+	}
+	
     /* prevent a monster with two consecutive disease or hunger attacks
        from hitting with both of them on the same turn; if the first has
        already hit, switch to a stun attack for the second */
@@ -968,6 +997,11 @@ mattacku(mtmp)
 			else if( mdat == &mons[PM_EMBRACED_DROWESS]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_ELDER_BRAIN]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_LUGRIBOSSK]) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_LICH__THE_FIEND_OF_EARTH]) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_KARY__THE_FIEND_OF_FIRE]) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_KRAKEN__THE_FIEND_OF_WATER]) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_TIAMAT__THE_FIEND_OF_WIND]) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_CHAOS]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_MAANZECORIAN]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_AVATAR_OF_LOLTH]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_HOOLOOVOO] && rn2(2) ) break;
