@@ -600,7 +600,7 @@ turn_stag()
 			urole.enemy1sym = S_IMP;
 			urole.enemy2sym = S_DEMON;
 		} else{
-			urole.lgod = "the Eddergud";
+			urole.lgod = getDrowMaleLgodKnown();
 			
 			urole.homebase = "Tower Xaxox";
 			urole.intermed = "Menzoberranzan";
