@@ -1239,23 +1239,39 @@ boolean at_stairs, falling, portal;
 		    (near_capacity() > UNENCUMBERED || (Punished &&
 		    ((uwep != uball) || ((P_SKILL(P_FLAIL) < P_BASIC))
             || !Role_if(PM_CONVICT)))
-		     || Fumbling)) {
+		     || Fumbling)
 #else
-		    (near_capacity() > UNENCUMBERED || Punished || Fumbling)) {
+		    (near_capacity() > UNENCUMBERED || Punished || Fumbling)
 #endif /* CONVICT */
+		) {
 		    You("fall down the %s.", at_ladder ? "ladder" : "stairs");
 		    if (Punished) {
 			drag_down();
-			if (carried(uball)) {
-			    if (uwep == uball)
-				setuwep((struct obj *)0);
-			    if (uswapwep == uball)
-				setuswapwep((struct obj *)0);
-			    if (uquiver == uball)
-				setuqwep((struct obj *)0);
-			    freeinv(uball);
-			}
+				if (carried(uball)) {
+					if (uwep == uball)
+					setuwep((struct obj *)0);
+					if (uswapwep == uball)
+					setuswapwep((struct obj *)0);
+					if (uquiver == uball)
+					setuqwep((struct obj *)0);
+					freeinv(uball);
+				}
 		    }
+			if(((uwep && is_lightsaber(uwep) && uwep->lamplit)) ||
+				(uswapwep && is_lightsaber(uswapwep) && uswapwep->lamplit && u.twoweap)
+			){
+				boolean mainsaber = (uwep && is_lightsaber(uwep) && uwep->lamplit);
+				boolean secsaber = (uswapwep && is_lightsaber(uswapwep) && uswapwep->lamplit && u.twoweap);
+				if(rnl(20) < ACURR(A_DEX)){
+					You("hurriedly deactivate your energy sword%s.", (mainsaber && secsaber) ? "s" : "");
+				} else {
+					You("come into contact with your energy sword%s.", (mainsaber && secsaber) ? "s" : "");
+					if(mainsaber) losehp(dmgval(uwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
+					if(secsaber) losehp(dmgval(uswapwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
+				}
+				if(mainsaber) lightsaber_deactivate(uwep, TRUE);
+				if(secsaber) lightsaber_deactivate(uswapwep, TRUE);
+			}
 #ifdef STEED
 		    /* falling off steed has its own losehp() call */
 		    if (u.usteed)
