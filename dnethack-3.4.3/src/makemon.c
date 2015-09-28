@@ -3364,6 +3364,9 @@ register int	mmflags;
 		case S_MIMIC:
 			set_mimic_sym(mtmp);
 			break;
+		case S_QUADRUPED:
+			if(mtmp->data == &mons[PM_DARK_YOUNG]) set_mimic_sym(mtmp);
+			break;
 		case S_SPIDER:
 		case S_SNAKE:
 			if(in_mklev)
@@ -4909,6 +4912,7 @@ register struct monst *mtmp;
 	int mx, my;
 
 	if (!mtmp) return;
+	
 	mx = mtmp->mx; my = mtmp->my;
 	typ = levl[mx][my].typ;
 					/* only valid for INSIDE of room */
@@ -4921,7 +4925,10 @@ register struct monst *mtmp;
 #endif
 	else	rt = 0;	/* roomno < 0 case for GCC_WARN */
 
-	if (OBJ_AT(mx, my)) {
+	if (mtmp->data == &mons[PM_DARK_YOUNG]) {
+		ap_type = M_AP_FURNITURE;
+		appear = S_deadtree;
+	} else if (OBJ_AT(mx, my)) {
 		ap_type = M_AP_OBJECT;
 		appear = level.objects[mx][my]->otyp;
 	} else if (IS_DOOR(typ) || IS_WALL(typ) ||
