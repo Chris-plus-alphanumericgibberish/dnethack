@@ -424,10 +424,22 @@ dig()
 					bars->cursed = bars->blessed = FALSE;
 				}
 			} else {
+				struct obj *otmp;
+				if(!is_lightsaber(uwep)){
+					if(!rn2(20)){
+						otmp = mksobj_at(BOULDER, dpx, dpy, FALSE, FALSE);
+						otmp->owt = weight(otmp);
+					} else {
+						otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
+						otmp->quan = 20L+rnd(20);
+						otmp->owt = weight(otmp);
+					}
+				}
 			    digtxt = "You succeed in cutting away some rock.";
 			    lev->typ = CORR;
 			}
 		} else if(IS_WALL(lev->typ)) {
+			struct obj *otmp;
 			if(IS_WALL(lev->typ) && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
 			if(shopedge) {
 			    add_damage(dpx, dpy, 10L * ACURRSTR);
@@ -441,6 +453,11 @@ dig()
 			} else {
 			    lev->typ = DOOR;
 			    lev->doormask = D_NODOOR;
+			}
+			if(!is_lightsaber(uwep)){
+				otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
+				otmp->quan = 20L+rnd(20);
+				otmp->owt = weight(otmp);
 			}
 			digtxt = "You make an opening in the wall.";
 		} else if(lev->typ == SDOOR) {
@@ -1762,7 +1779,7 @@ mdig_tunnel(mtmp)
 register struct monst *mtmp;
 {
 	register struct rm *here;
-	int pile = rnd(12);
+	struct obj *otmp;
 
 	here = &levl[mtmp->mx][mtmp->my];
 	if (here->typ == SDOOR)
@@ -1812,15 +1829,25 @@ register struct monst *mtmp;
 		here->typ = DOOR;
 		here->doormask = D_NODOOR;
 	    }
+		otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
+		otmp->quan = 20L+rnd(20);
+		otmp->owt = weight(otmp);
 	} else if (IS_TREE(here->typ)) {
+		int numsticks;
 	    here->typ = ROOM;
-//	    if (pile && pile < 5)
-//		(void) rnd_treefruit_at(mtmp->mx, mtmp->my);
+		for(numsticks = d(2,4)-1; numsticks > 0; numsticks--){
+			otmp = mksobj_at(rn2(2) ? QUARTERSTAFF : CLUB, mtmp->mx, mtmp->my, FALSE, FALSE);
+			otmp->spe = 0;
+			otmp->cursed = otmp->blessed = FALSE;
+		}
 	} else {
 	    here->typ = CORR;
-	    if (pile && pile < 5)
-		(void) mksobj_at((pile == 1) ? BOULDER : ROCK,
-			     mtmp->mx, mtmp->my, TRUE, FALSE);
+	    if (!rn2(20)) mksobj_at(BOULDER, mtmp->mx, mtmp->my, TRUE, FALSE);
+		else {
+			otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
+			otmp->quan = 20L+rnd(20);
+			otmp->owt = weight(otmp);
+		}
 	}
 	newsym(mtmp->mx, mtmp->my);
 	if (!sobj_at(BOULDER, mtmp->mx, mtmp->my))
@@ -1907,77 +1934,77 @@ register int zx, zy, digdepth;
 	    delay_output();	/* wait a little bit */
 		if(closed_door(zx, zy) && !(levl[zx][zy].doormask&D_LOCKED) && u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX, TRUE);
 	    if (closed_door(zx, zy) || room->typ == SDOOR) {
-		/* ALI - Artifact doors from slash'em*/
-		if (artifact_door(zx, zy)) {
-		    if (cansee(zx, zy))
-			pline_The("door glows then fades.");
-		    break;
-		}
-		if (*in_rooms(zx,zy,SHOPBASE)) {
-		    add_damage(zx, zy, 400L);
-		    shopdoor = TRUE;
-		}
-		if (room->typ == SDOOR)
-		    room->typ = DOOR;
-		else if (cansee(zx, zy))
-		    pline_The("door is razed!");
-		watch_dig((struct monst *)0, zx, zy, TRUE);
-		room->doormask = D_NODOOR;
-		unblock_point(zx,zy); /* vision */
-		digdepth -= 2;
-		if (maze_dig) break;
-	    } else if (maze_dig) {
-		if (IS_WALL(room->typ)) {
-		    if (!(room->wall_info & W_NONDIGGABLE)) {
-			if (*in_rooms(zx,zy,SHOPBASE)) {
-			    add_damage(zx, zy, 200L);
-			    shopwall = TRUE;
+			/* ALI - Artifact doors from slash'em*/
+			if (artifact_door(zx, zy)) {
+				if (cansee(zx, zy))
+				pline_The("door glows then fades.");
+				break;
 			}
-			room->typ = ROOM;
+			if (*in_rooms(zx,zy,SHOPBASE)) {
+				add_damage(zx, zy, 400L);
+				shopdoor = TRUE;
+			}
+			if (room->typ == SDOOR)
+				room->typ = DOOR;
+			else if (cansee(zx, zy))
+				pline_The("door is razed!");
+			watch_dig((struct monst *)0, zx, zy, TRUE);
+			room->doormask = D_NODOOR;
 			unblock_point(zx,zy); /* vision */
-		    } else if (!Blind)
-			pline_The("wall glows then fades.");
-		    break;
-		} else if (IS_TREE(room->typ)) { /* check trees before stone */
-		    if (!(room->wall_info & W_NONDIGGABLE)) {
+			digdepth -= 2;
+			if (maze_dig) break;
+	    } else if (maze_dig) {
+			if (IS_WALL(room->typ)) {
+				if (!(room->wall_info & W_NONDIGGABLE)) {
+				if (*in_rooms(zx,zy,SHOPBASE)) {
+					add_damage(zx, zy, 200L);
+					shopwall = TRUE;
+				}
 				room->typ = ROOM;
 				unblock_point(zx,zy); /* vision */
-		    } else if (!Blind)
-				pline_The("tree shudders but is unharmed.");
-		    break;
-		} else if (room->typ == STONE || room->typ == SCORR) {
-		    if (!(room->wall_info & W_NONDIGGABLE)) {
-				room->typ = CORR;
-				unblock_point(zx,zy); /* vision */
-		    } else if (!Blind)
-				pline_The("rock glows then fades.");
-		    break;
-		}
+				} else if (!Blind)
+				pline_The("wall glows then fades.");
+				break;
+			} else if (IS_TREE(room->typ)) { /* check trees before stone */
+				if (!(room->wall_info & W_NONDIGGABLE)) {
+					room->typ = ROOM;
+					unblock_point(zx,zy); /* vision */
+				} else if (!Blind)
+					pline_The("tree shudders but is unharmed.");
+				break;
+			} else if (room->typ == STONE || room->typ == SCORR) {
+				if (!(room->wall_info & W_NONDIGGABLE)) {
+					room->typ = CORR;
+					unblock_point(zx,zy); /* vision */
+				} else if (!Blind)
+					pline_The("rock glows then fades.");
+				break;
+			}
 	    } else if (IS_ROCK(room->typ)) {
-		if (!may_dig(zx,zy)) break;
-		if (IS_WALL(room->typ) || room->typ == SDOOR) {
-			if(IS_WALL(room->typ) && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
-		    if (*in_rooms(zx,zy,SHOPBASE)) {
-			add_damage(zx, zy, 200L);
-			shopwall = TRUE;
-		    }
-		    watch_dig((struct monst *)0, zx, zy, TRUE);
-		    if (level.flags.is_cavernous_lev && !in_town(zx, zy)) {
-			room->typ = CORR;
-		    } else {
-			room->typ = DOOR;
-			room->doormask = D_NODOOR;
-		    }
-		    digdepth -= 2;
-		} else if (IS_TREE(room->typ)) {
-		    room->typ = ROOM;
-		    digdepth -= 2;
-			if(!flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
-		} else {	/* IS_ROCK but not IS_WALL or SDOOR */
-		    room->typ = CORR;
-		    digdepth--;
-		}
-		unblock_point(zx,zy); /* vision */
+			if (!may_dig(zx,zy)) break;
+			if (IS_WALL(room->typ) || room->typ == SDOOR) {
+				if(IS_WALL(room->typ) && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
+				if (*in_rooms(zx,zy,SHOPBASE)) {
+				add_damage(zx, zy, 200L);
+				shopwall = TRUE;
+				}
+				watch_dig((struct monst *)0, zx, zy, TRUE);
+				if (level.flags.is_cavernous_lev && !in_town(zx, zy)) {
+				room->typ = CORR;
+				} else {
+				room->typ = DOOR;
+				room->doormask = D_NODOOR;
+				}
+				digdepth -= 2;
+			} else if (IS_TREE(room->typ)) {
+				room->typ = ROOM;
+				digdepth -= 2;
+				if(!flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+			} else {	/* IS_ROCK but not IS_WALL or SDOOR */
+				room->typ = CORR;
+				digdepth--;
+			}
+			unblock_point(zx,zy); /* vision */
 	    }
 	    zx += u.dx;
 	    zy += u.dy;
