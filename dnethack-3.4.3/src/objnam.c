@@ -226,7 +226,7 @@ char *
 lightsaber_colorText(otmp)
 struct obj *otmp;
 {
-	if(otmp->oartifact == ART_ANNULUS) return Hallucination ? hcolor(0) : "silver";
+	if(otmp->oartifact == ART_ANNULUS) return Hallucination ? hcolor(0) : "cerulean";
 	return Hallucination ? hcolor(0) : LightsaberColor[((int)otmp->cobj->otyp) - MAGICITE_CRYSTAL].colorText;
 }
 

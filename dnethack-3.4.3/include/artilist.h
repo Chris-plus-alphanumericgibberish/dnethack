@@ -773,7 +773,7 @@ A("Itlachiayaque", SHIELD_OF_REFLECTION,/*From archeologist patch*/
 
 A("The Annulus", SILVER_CHAKRAM,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), (SPFX_HSPDAM), 0,
-     PHYS(1,1), NO_DFNS, CARY(AD_MAGM),
+     PHYS(5,1), NO_DFNS, CARY(AD_MAGM), /*Actually Phys(5,0) if not a lightsaber*/
 	 ANNUL, A_CHAOTIC, PM_ANACHRONONAUT, NON_PM, 3000L, 
 	0,0,0),
 

@@ -1182,7 +1182,7 @@ physical:
 				tmp = 0;
             /* WAC Weres get seared */
             if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
-				!(is_lightsaber(otmp) && otmp->lamplit && otmp->oartifact != ART_ANNULUS)
+				!(is_lightsaber(otmp) && otmp->lamplit)
 			) {
             	if (vis) pline("The silver sears %s!", mon_nam(mdef));
             }

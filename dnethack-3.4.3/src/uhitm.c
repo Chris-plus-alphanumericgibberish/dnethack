@@ -1203,7 +1203,7 @@ int thrown;
 			}
 		    if ((objects[obj->otyp].oc_material == SILVER || arti_silvered(obj)  || 
 					(thrown && obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) )
-			   && hates_silver(mdat) && !(is_lightsaber(obj) && obj->lamplit && obj->oartifact != ART_ANNULUS)) {
+			   && hates_silver(mdat) && !(is_lightsaber(obj) && obj->lamplit)) {
 				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
 				else silvermsg = TRUE;
 				silverobj = TRUE;

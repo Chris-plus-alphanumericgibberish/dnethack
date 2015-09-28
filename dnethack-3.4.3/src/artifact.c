@@ -1151,6 +1151,9 @@ struct monst *mon;
 int tmp;
 {
 	register const struct artifact *weap = get_artifact(otmp);
+	int damd = (int)weap->attk.damd;
+	
+	if(otmp->oartifact == ART_ANNULUS && !is_lightsaber(otmp)) damd = 0;
 	
 	if (otmp->oartifact == ART_BLACK_ARROW){
 		if(mon->data == &mons[PM_SMAUG]) return mon->mhpmax+100;
@@ -1181,8 +1184,8 @@ int tmp;
 			if(Hallucination) multiplier++;
 			if(Fumbling) multiplier++;
 			if(Wounded_legs) multiplier++;
-			return weap->attk.damd ? d(multiplier, (int)weap->attk.damd) : max(multiplier*tmp,multiplier);
-		} else return weap->attk.damd ? rnd((int)weap->attk.damd) : max(tmp,1);
+			return damd ? d(multiplier, damd) : max(multiplier*tmp,multiplier);
+		} else return damd ? d(is_lightsaber(otmp) ? 3 : 1, damd) : max(tmp,1);
 	}
 	return 0;
 }
@@ -4509,36 +4512,57 @@ arti_invoke(obj)
 						otmp->altmode = ZT_LIGHTNING;
 						otmp->ovar1 = 100;
 						zap_raygun(otmp,1,0);
+						obfree(otmp,(struct obj *)0);
 					}break;
 					case COMMAND_ANNUL:{
-						struct monst *mtmp = fmon, *ntmp;
-						
-						You("raise the Annulus into the %s, and it releases a rapidly-expanding ring of energy.", Underwater ? "water" : "air");
-						for(mtmp; mtmp; mtmp = ntmp){
-							ntmp = mtmp->nmon;
-							if(telepathic(mtmp->data) && couldsee(mtmp->mx,mtmp->my)){
-								killed(mtmp);
-							} else if(is_magical(mtmp->data) && couldsee(mtmp->mx,mtmp->my) 
-								&& !resist(mtmp, WEAPON_CLASS, 0, NOTELL)
-							){
-								killed(mtmp);
-							} else if(!rn2(5)){
-								mtmp->mhp -= d(5,15);
-								if (mtmp->mhp <= 0) xkilled(mtmp, 1);
-								else {
-									setmangry(mtmp);
-									mtmp->mstun = 1;
-									mtmp->mconf = 1;
+						if(Is_astralevel(&u.uz) && IS_ALTAR(levl[u.ux][u.uy].typ) && a_align(u.ux, u.uy) == A_LAWFUL){
+							struct engr *engrHere = engr_at(u.ux,u.uy);
+							pline("A column of cerulean light blasts through the center of the Annulus, striking the High Altar with intolerable force.");
+							pline("The whole plane shakes, and the Altar and Annulus both explode into a rapidly-fading ring of cerulean light.");
+							flags.questprogress = 2;
+							urole.lgod = getAnachrononautLgodEnd();
+							levl[u.ux][u.uy].typ = CORR;
+							newsym(u.ux, u.uy);
+							useupall(obj);
+							if(!engrHere){
+								make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
+								engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
+							}
+							engrHere->halu_ward = TRUE;
+							engrHere->ward_id = CERULEAN_SIGN;
+							engrHere->ward_type = BURN;
+							engrHere->complete_wards = 1;
+							return 1;
+						} else {
+							struct monst *mtmp = fmon, *ntmp;
+							
+							You("raise the Annulus into the %s, and it releases a rapidly-expanding ring of cerulean energy.", Underwater ? "water" : "air");
+							for(mtmp; mtmp; mtmp = ntmp){
+								ntmp = mtmp->nmon;
+								if(telepathic(mtmp->data) && couldsee(mtmp->mx,mtmp->my)){
+									killed(mtmp);
+								} else if(is_magical(mtmp->data) && couldsee(mtmp->mx,mtmp->my) 
+									&& !resist(mtmp, WEAPON_CLASS, 0, NOTELL)
+								){
+									killed(mtmp);
+								} else if(!rn2(5)){
+									mtmp->mhp -= d(5,15);
+									if (mtmp->mhp <= 0) xkilled(mtmp, 1);
+									else {
+										setmangry(mtmp);
+										mtmp->mstun = 1;
+										mtmp->mconf = 1;
+									}
 								}
 							}
-						}
-						if(HTelepat & INTRINSIC){
-							Your("inner eye is blinded by the flash!");
-							HTelepat &= ~INTRINSIC;
-							if (Blind && !Blind_telepat)
-								see_monsters(); /* Can't sense monsters any more. */
-							make_stunned(HStun + d(5,15), FALSE);
-							make_confused(HConfusion + d(5,15), FALSE);
+							if(HTelepat & INTRINSIC){
+								Your("inner eye is blinded by the flash!");
+								HTelepat &= ~INTRINSIC;
+								if (Blind && !Blind_telepat)
+									see_monsters(); /* Can't sense monsters any more. */
+								make_stunned(HStun + d(5,15), FALSE);
+								make_confused(HConfusion + d(5,15), FALSE);
+							}
 						}
 					}break;
 					case COMMAND_CHARGE: {
