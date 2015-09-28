@@ -211,7 +211,8 @@ int thrown;
 		/* else it is auto == no change */
 	    }
 
-	    if ((long)multishot > obj->quan) multishot = (int)obj->quan;
+	    if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
+		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS) multishot = (int)obj->quan;
 //#endif
 
 	if (multishot < 1) multishot = 1;
