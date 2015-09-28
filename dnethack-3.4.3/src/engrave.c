@@ -2136,6 +2136,50 @@ doengrave()
 			type = ENGRAVE;
 		    else
 			Your("%s too dull for engraving.", aobjnam(otmp,"are"));
+		} else if(otmp->otyp == RAYGUN){
+			if(otmp->altmode == ZT_LIGHTNING && otmp->ovar1 >= 15){
+				otmp->ovar1 -= 15;
+				if (dighole(FALSE)){
+					Your("raygun disintegrated the floor!");
+					if(!Blind && !resists_blnd(&youmonst)) {
+						You("are blinded by the flash!");
+						make_blinded((long)rnd(50),FALSE);
+						if (!Blind) Your(vision_clears);
+					}
+					return 1;
+				} else {
+					ptext = TRUE;
+					type  = BURN;
+					if(!Blind){
+						Strcpy(post_engr_text,
+							"A brilliant beam shoots from the raygun.");
+						doblind = TRUE;
+					}
+				}
+			} else if(otmp->altmode == ZT_DEATH && otmp->ovar1 >= 10){
+				otmp->ovar1 -= 10;
+				ptext = TRUE;
+				if (!Blind) {
+				   Sprintf(post_engr_text,
+					   "The bugs on the %s stop moving!",
+					   surface(u.ux, u.uy));
+				}
+			} else if(otmp->altmode == ZT_FIRE && otmp->ovar1 >= 2){
+				otmp->ovar1 -= 2;
+				ptext = TRUE;
+				type  = BURN;
+				Strcpy(post_engr_text,
+					Blind ? "You feel the raygun heat up." :
+						"A heat ray shoots from the raygun.");
+			} else if(otmp->ovar1 >= 1){
+				otmp->ovar1 -= 1;
+				ptext = TRUE;
+				if (!Blind) {
+				   Sprintf(post_engr_text,
+					   "The bugs on the %s stop moving!",
+					   surface(u.ux, u.uy));
+				}
+			}
 		}
 		break;
 
@@ -2893,6 +2937,50 @@ doward()
 			type = ENGRAVE;
 		    else
 			Your("%s too dull for drawing.", aobjnam(otmp,"are"));
+		} else if(otmp->otyp == RAYGUN){
+			if(otmp->altmode == ZT_LIGHTNING && otmp->ovar1 >= 15){
+				otmp->ovar1 -= 15;
+				if (dighole(FALSE)){
+					Your("raygun disintegrated the floor!");
+					if(!Blind && !resists_blnd(&youmonst)) {
+						You("are blinded by the flash!");
+						make_blinded((long)rnd(50),FALSE);
+						if (!Blind) Your(vision_clears);
+					}
+					return 1;
+				} else {
+					ptext = TRUE;
+					type  = BURN;
+					if(!Blind){
+						Strcpy(post_engr_text,
+							"A brilliant beam shoots from the raygun.");
+						doblind = TRUE;
+					}
+				}
+			} else if(otmp->altmode == ZT_DEATH && otmp->ovar1 >= 10){
+				otmp->ovar1 -= 10;
+				ptext = TRUE;
+				if (!Blind) {
+				   Sprintf(post_engr_text,
+					   "The bugs on the %s stop moving!",
+					   surface(u.ux, u.uy));
+				}
+			} else if(otmp->altmode == ZT_FIRE && otmp->ovar1 >= 2){
+				otmp->ovar1 -= 2;
+				ptext = TRUE;
+				type  = BURN;
+				Strcpy(post_engr_text,
+					Blind ? "You feel the raygun heat up." :
+						"A heat ray shoots from the raygun.");
+			} else if(otmp->ovar1 >= 1){
+				otmp->ovar1 -= 1;
+				ptext = TRUE;
+				if (!Blind) {
+				   Sprintf(post_engr_text,
+					   "The bugs on the %s stop moving!",
+					   surface(u.ux, u.uy));
+				}
+			}
 		}
 		break;
 
@@ -4029,6 +4117,50 @@ doseal()
 			type = ENGRAVE;
 		    else
 			Your("%s too dull for drawing.", aobjnam(otmp,"are"));
+		} else if(otmp->otyp == RAYGUN){
+			if(otmp->altmode == ZT_LIGHTNING && otmp->ovar1 >= 15){
+				otmp->ovar1 -= 15;
+				if (dighole(FALSE)){
+					Your("raygun disintegrated the floor!");
+					if(!Blind && !resists_blnd(&youmonst)) {
+						You("are blinded by the flash!");
+						make_blinded((long)rnd(50),FALSE);
+						if (!Blind) Your(vision_clears);
+					}
+					return 1;
+				} else {
+					ptext = TRUE;
+					type  = BURN;
+					if(!Blind){
+						Strcpy(post_engr_text,
+							"A brilliant beam shoots from the raygun.");
+						doblind = TRUE;
+					}
+				}
+			} else if(otmp->altmode == ZT_DEATH && otmp->ovar1 >= 10){
+				otmp->ovar1 -= 10;
+				ptext = TRUE;
+				if (!Blind) {
+				   Sprintf(post_engr_text,
+					   "The bugs on the %s stop moving!",
+					   surface(u.ux, u.uy));
+				}
+			} else if(otmp->altmode == ZT_FIRE && otmp->ovar1 >= 2){
+				otmp->ovar1 -= 2;
+				ptext = TRUE;
+				type  = BURN;
+				Strcpy(post_engr_text,
+					Blind ? "You feel the raygun heat up." :
+						"A heat ray shoots from the raygun.");
+			} else if(otmp->ovar1 >= 1){
+				otmp->ovar1 -= 1;
+				ptext = TRUE;
+				if (!Blind) {
+				   Sprintf(post_engr_text,
+					   "The bugs on the %s stop moving!",
+					   surface(u.ux, u.uy));
+				}
+			}
 		}
 		break;
 
