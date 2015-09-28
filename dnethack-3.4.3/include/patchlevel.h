@@ -6,13 +6,15 @@
 #define VERSION_MAJOR	3
 /* Started at 3.4.3, for the nethack version. Incremented straight 
    to 3.6 with the advent of the Noble role, counting the initial
-   release as 3.5.
+   release as 3.5 (with Pirate already in, I think?).
    
    Incremented to 3.7 with the advent of the Binder role.
    Incremented to 3.8 with the introduction of Clockwork upgrades and the finished Drow quests.
    Incremented to 3.9 with the introduction of.... many things, including dread seraphs, half dragons, and another demon level.
+   Incremented to 3.10 was the Bard version, though most development was handled late in 3.9.
+   Incremented to 3.11 with the introduction Anachrononauts.
 */
-#define VERSION_MINOR	10
+#define VERSION_MINOR	11
 /*
  * PATCHLEVEL is updated for each release.
  *
