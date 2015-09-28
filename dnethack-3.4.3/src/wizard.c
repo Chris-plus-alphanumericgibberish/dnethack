@@ -475,31 +475,32 @@ nasty(mcast)
 	bypos.y = u.uy;
 	for(i = rnd(tmp); i > 0; --i)
 	    for(j=0; j<20; j++) {
-		int makeindex;
+			int makeindex;
 
-		/* Don't create more spellcasters of the monsters' level or
-		 * higher--avoids chain summoners filling up the level.
-		 */
-		do {
-		    makeindex = pick_nasty();
-		} while(mcast && attacktype(&mons[makeindex], AT_MAGC) &&
-			monstr[makeindex] >= monstr[mcast->mnum]);
-		/* do this after picking the monster to place */
-		if (mcast &&
-		    !enexto(&bypos, mcast->mux, mcast->muy, &mons[makeindex]))
-		    continue;
-		if ((mtmp = makemon(&mons[makeindex],
-				    bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
-		    mtmp->msleeping = mtmp->mpeaceful = mtmp->mtame = 0;
-		    set_malign(mtmp);
-		} else /* GENOD? */
-		    mtmp = makemon((struct permonst *)0,
-					bypos.x, bypos.y, NO_MM_FLAGS);
-		if(mtmp && (mtmp->data->maligntyp == 0 ||
-		            sgn(mtmp->data->maligntyp) == sgn(castalign)) ) {
-		    count++;
-		    break;
-		}
+			/* Don't create more spellcasters of the monsters' level or
+			 * higher--avoids chain summoners filling up the level.
+			 */
+			do {
+				makeindex = pick_nasty();
+			} while(mcast && attacktype(&mons[makeindex], AT_MAGC) &&
+				monstr[makeindex] >= monstr[mcast->mnum]);
+			/* do this after picking the monster to place */
+			if (mcast &&
+				!enexto(&bypos, mcast->mux, mcast->muy, &mons[makeindex]))
+				continue;
+			if(mvitals[makeindex].mvflags & G_GENOD)
+				continue;
+			if(castalign == 0 || mons[makeindex].maligntyp == 0 || sgn(mons[makeindex].maligntyp) == sgn(castalign)){
+				if ((mtmp = makemon(&mons[makeindex],
+							bypos.x, bypos.y, NO_MM_FLAGS)) != 0);
+				else /* makemon failed for some reason */
+					mtmp = makemon((struct permonst *)0,
+							bypos.x, bypos.y, NO_MM_FLAGS);
+				mtmp->msleeping = mtmp->mpeaceful = mtmp->mtame = 0;
+				set_malign(mtmp);
+				count++;
+				break;
+			}
 	    }
     }
     return count;

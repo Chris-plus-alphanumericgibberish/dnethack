@@ -2853,9 +2853,17 @@ int spellnum;
 			else msummon(mattk);
 		} else {
 			register int i, j;
-				int makeindex, tmp = (u.ulevel > 3) ? u.ulevel / 3 : 1;
+				int makeindex, tmp = 1;
 			coord bypos;
-
+			
+			if(yours){
+				tmp = (u.ulevel > 3) ? u.ulevel / 3 : 1;
+				// if(!Upolyd) tmp = (u.ulevel > 3) ? u.ulevel / 3 : 1;
+				// else
+			} else {
+				tmp = (mattk->m_lev > 3) ? mattk->m_lev / 3 : 1;
+			}
+			
 			if (mtmp)
 				bypos.x = mtmp->mx, bypos.y = mtmp->my;
 			else if (yours)
@@ -2863,48 +2871,50 @@ int spellnum;
 				else
 				bypos.x = mattk->mx, bypos.y = mattk->my;
 
-			for (i = rnd(tmp); i > 0; --i)
+			for (i = rnd(tmp); i > 0; --i){
 				for(j=0; j<20; j++) {
 
-	            do {
-	                makeindex = pick_nasty();
-	            } while (attacktype(&mons[makeindex], AT_MAGC) &&
-	                     monstr[makeindex] >= monstr[u.umonnum]);
-                    if (yours &&
-		        !enexto(&bypos, u.ux, u.uy, &mons[makeindex]))
-		        continue;
-                    if (!yours &&
-		        !enexto(&bypos, mattk->mx, mattk->my, &mons[makeindex]))
-		        continue;
-		    if ((mpet = makemon(&mons[makeindex], 
-                          bypos.x, bypos.y, 
-			  (yours || mattk->mtame) ? MM_EDOG :
-											NO_MM_FLAGS)) != 0
-				) {
-                        mpet->msleeping = 0;
-					if (yours || mattk->mtame) initedog(mpet);
-					else if (mattk->mpeaceful) mpet->mpeaceful = 1;
-			else mpet->mpeaceful = mpet->mtame = 0;
-					mpet->mvanishes = yours ? (u.ulevel+rnd(u.ulevel)) : mtmp ? (mtmp->m_lev+rnd(mtmp->m_lev)) : d(2,20);
-                        set_malign(mpet);
-                    } else /* GENOD? */
-                        mpet = makemon((struct permonst *)0,
-                                            bypos.x, bypos.y, NO_MM_FLAGS);
-                    if(mpet && (u.ualign.type == 0 ||
-		        mpet->data->maligntyp == 0 || 
-						sgn(mpet->data->maligntyp) == sgn(u.ualign.type)) 
+					do {
+						makeindex = pick_nasty();
+					} while (attacktype(&mons[makeindex], AT_MAGC) &&
+							 monstr[makeindex] >= monstr[u.umonnum]);
+						if (yours &&
+					!enexto(&bypos, u.ux, u.uy, &mons[makeindex]))
+					continue;
+						if (!yours &&
+					!enexto(&bypos, mattk->mx, mattk->my, &mons[makeindex]))
+					continue;
+					if(mpet && (u.ualign.type == 0 ||
+						mons[makeindex].maligntyp == 0 || 
+						sgn(mons[makeindex].maligntyp) == sgn(u.ualign.type)) 
 					) {
-                        count++;
-                        break;
-                    }
-                }
+						if ((mpet = makemon(&mons[makeindex], 
+									  bypos.x, bypos.y, 
+						  (yours || mattk->mtame) ? MM_EDOG :
+													NO_MM_FLAGS)) != 0
+						);
+						else /* GENOD? */
+							mpet = makemon((struct permonst *)0,
+														bypos.x, bypos.y, (yours || mattk->mtame) ? MM_EDOG :
+													NO_MM_FLAGS);
+						mpet->msleeping = 0;
+						if (yours || mattk->mtame) initedog(mpet);
+						else if (mattk->mpeaceful) mpet->mpeaceful = 1;
+						else mpet->mpeaceful = mpet->mtame = 0;
+						mpet->mvanishes = yours ? (u.ulevel+rnd(u.ulevel)) : mtmp ? (mtmp->m_lev+rnd(mtmp->m_lev)) : d(2,20);
+						set_malign(mpet);
+						count++;
+						break;
+					}
+				}
+			}
 
-	    const char *mappear =
-		    (count == 1) ? "A monster appears" : "Monsters appear";
+			const char *mappear =
+				(count == 1) ? "A monster appears" : "Monsters appear";
 
-	    if (yours || canseemon(mtmp))
-	        pline("%s from nowhere!", mappear);
-	}
+			if (yours || canseemon(mtmp))
+				pline("%s from nowhere!", mappear);
+		}
 
 	dmg = 0;
 	break;
