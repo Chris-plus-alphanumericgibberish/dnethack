@@ -67,18 +67,19 @@ extern void demonpet();
 #define FILTH                  NIGHTMARE+1
 #define CLONE_WIZ              FILTH+1
 #define STRANGLE               CLONE_WIZ+1
-//Not yet implemented
-#define MON_FIRE               STRANGLE+1
-#define MON_FIRA               MON_FIRE+1
+#define MON_FIRA               STRANGLE+1
 #define MON_FIRAGA             MON_FIRA+1
-#define MON_BLIZZARD           MON_FIRAGA+1
-#define MON_BLIZZARA           MON_BLIZZARD+1
+#define MON_BLIZZARA           MON_FIRAGA+1
 #define MON_BLIZZAGA           MON_BLIZZARA+1
-#define MON_THUNDER            MON_BLIZZAGA+1
-#define MON_THUNDARA           MON_THUNDER+1
+#define MON_THUNDARA           MON_BLIZZAGA+1
 #define MON_THUNDAGA           MON_THUNDARA+1
 #define MON_FLARE              MON_THUNDAGA+1
 #define MON_WARP               MON_FLARE+1
+#define MON_POISON_GAS         MON_WARP+1
+//Not yet implemented
+// #define MON_FIRE               STRANGLE+1
+// #define MON_BLIZZARD           MON_FIRAGA+1
+// #define MON_THUNDER            MON_BLIZZAGA+1
 
 extern void you_aggravate(struct monst *);
 
@@ -87,6 +88,7 @@ STATIC_DCL int FDECL(choose_magic_spell, (int,int,boolean));
 STATIC_DCL int FDECL(choose_clerical_spell, (int,int,boolean));
 STATIC_DCL void FDECL(cast_spell,(struct monst *, int,int));
 STATIC_DCL boolean FDECL(is_undirected_spell,(int));
+STATIC_DCL boolean FDECL(is_aoe_spell,(int));
 STATIC_DCL boolean FDECL(spell_would_be_useless,(struct monst *,int));
 STATIC_DCL boolean FDECL(mspell_would_be_useless,(struct monst *,struct monst *,int));
 STATIC_DCL boolean FDECL(uspell_would_be_useless,(struct monst *,int));
@@ -473,28 +475,6 @@ unsigned int type;
            if(!rn2(3)) return NIGHTMARE;
 		   else if(rn2(2)) return MASS_CURE_CLOSE;
 		   else return SLEEP;
-
-	case PM_CHAOS:
-		switch(rn2(10)){
-			case 0:
-				return CURE_SELF;
-			break;
-			case 1:
-			case 2:
-			case 3:
-				return LIGHTNING;
-			break;
-			case 4:
-			case 5:
-			case 6:
-				return FIRE_PILLAR;
-			break;
-			case 7:
-			case 8:
-			case 9:
-				return GEYSER;
-			break;
-		}
 	   break;
        case PM_MAHADEVA:
 		switch(rn2(10)){
@@ -565,6 +545,74 @@ unsigned int type;
 	switch(monsndx(mtmp->data)) {
 	case PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK:
 		return SUMMON_DEVIL; 
+	case PM_LICH__THE_FIEND_OF_EARTH:
+		if(mtmp->mvar1 > 3) mtmp->mvar1 = 0;
+		switch(mtmp->mvar1++){
+			case 0: return MON_FLARE;
+			case 1: return PARALYZE;
+			case 2: return MON_WARP;
+			case 3: return DEATH_TOUCH;
+		}
+	break;
+	case PM_KARY__THE_FIEND_OF_FIRE:
+		if(mtmp->mvar1 > 7) mtmp->mvar1 = 0;
+		switch(mtmp->mvar1++){
+			case 0: return MON_FIRAGA;
+			case 1: return BLIND_YOU;
+			case 2: return MON_FIRAGA;
+			case 3: return BLIND_YOU;
+			case 4: return MON_FIRAGA;
+			case 5: return STUN_YOU;
+			case 6: return MON_FIRAGA;
+			case 7: return STUN_YOU;
+		}
+	break;
+	case PM_KRAKEN__THE_FIEND_OF_WATER:
+		if(rn2(100)<71) return MON_THUNDARA;
+		else return BLIND_YOU;
+	break;
+	case PM_TIAMAT__THE_FIEND_OF_WIND:
+		if(rn2(3)){
+			if(mtmp->mvar1 > 3) mtmp->mvar1 = 0;
+			switch(mtmp->mvar1++){
+				case 0: return PLAGUE;
+				case 1: return MON_BLIZZARA;
+				case 2: return MON_THUNDARA;
+				case 3: return MON_FIRA;
+			}
+		} else {
+			if(mtmp->mvar2 > 3) mtmp->mvar1 = 0;
+			switch(mtmp->mvar2++){
+				case 0: return LIGHTNING;
+				case 1: return MON_POISON_GAS;
+				case 2: return ICE_STORM;
+				case 3: return FIRE_PILLAR;
+			}
+		}
+	break;
+	case PM_CHAOS:
+		if(rn2(2)){
+			if(mtmp->mvar1 > 7) mtmp->mvar1 = 0;
+			switch(mtmp->mvar1++){
+				case 0: return MON_BLIZZAGA;
+				case 1: return WEAKEN_STATS;
+				case 2: return MON_THUNDAGA;
+				case 3: return CURE_SELF;
+				case 4: return HASTE_SELF;
+				case 5: return MON_FIRAGA;
+				case 6: return ICE_STORM;
+				case 7: return MON_FLARE;
+			}
+		} else {
+			if(mtmp->mvar2 > 3) mtmp->mvar1 = 0;
+			switch(mtmp->mvar2++){
+				case 0: return FIRE_PILLAR;
+				case 1: return GEYSER;
+				case 2: return MON_POISON_GAS;
+				case 3: return EARTHQUAKE;
+			}
+		}
+	break;
 	case PM_SHOGGOTH:
 		if(!rn2(20)) return SUMMON_MONS; 
 		else return 0;
@@ -784,7 +832,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	   wrong place?  If so, give a message, and return.  Do this *after*
 	   penalizing mspec_used. */
 	if (!foundyou && thinks_it_foundyou &&
-		!is_undirected_spell(spellnum)) {
+		!is_undirected_spell(spellnum) &&
+		!is_aoe_spell(spellnum)) {
 	    pline("%s casts a spell at %s!",
 		canseemon(mtmp) ? Monnam(mtmp) : "Something",
 		levl[mtmp->mux][mtmp->muy].typ == WATER
@@ -1221,6 +1270,52 @@ int spellnum;
 	   stop_occupation();
        break;
     }
+	case MON_FIRA:
+		explode(mtmp->mux, mtmp->muy, 1, dmg, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_FIRAGA:
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_BLIZZARA:
+		explode(mtmp->mux, mtmp->muy, 2, dmg, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_BLIZZAGA:
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_THUNDARA:
+		explode(mtmp->mux, mtmp->muy, 5, dmg, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_THUNDAGA:
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_FLARE:
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_MUDDY); //explode(x, y, type, dam, olet, expltype)
+		big_explode(mtmp->mux, mtmp->muy, 8, dmg, MON_EXPLODE, EXPL_FROSTY,3); //big_explode(x, y, type, dam, olet, expltype, radius)
+		dmg = 0;
+	break;
+	case MON_WARP:
+		pline("Space warps into deadly blades!");
+	break;
+	case MON_POISON_GAS:
+		flags.cth_attk=TRUE;//state machine stuff.
+		create_gas_cloud(mtmp->mux, mtmp->muy, rnd(3), rnd(3)+1);
+		flags.cth_attk=FALSE;
+		dmg = 0;
+	break;
     case SUMMON_ANGEL: /* cleric only */
     {
        struct monst *mtmp2;
@@ -1942,6 +2037,27 @@ int spellnum;
 	case HASTE_SELF:
 	case CURE_SELF:
 	case INSECTS:
+	    return TRUE;
+	default:
+	    break;
+	}
+    return FALSE;
+}
+
+STATIC_DCL
+boolean
+is_aoe_spell(spellnum)
+int spellnum;
+{
+	switch (spellnum) {
+	case MON_FIRA:
+	case MON_FIRAGA:
+	case MON_BLIZZARA:
+	case MON_BLIZZAGA:
+	case MON_THUNDARA:
+	case MON_THUNDAGA:
+	case MON_FLARE:
+	case MON_POISON_GAS:
 	    return TRUE;
 	default:
 	    break;

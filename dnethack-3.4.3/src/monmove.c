@@ -283,6 +283,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST]) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU]) ||
+			(mtmp->data == &mons[PM_CHAOS] && rn2(2)) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
 			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && rn2(9))
@@ -384,6 +385,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST]) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU]) ||
+			(mtmp->data == &mons[PM_CHAOS] && rn2(2)) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
 			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && complete <= d(1,8))
@@ -413,6 +415,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST]) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU]) ||
+			(mtmp->data == &mons[PM_CHAOS] && rn2(2)) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
 			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && !rn2(9))
@@ -459,6 +462,7 @@ struct monst *mtmp;
 			(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 			(mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 			(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
+			(mtmp->data != &mons[PM_CHAOS] || rn2(2)) &&
 			(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
 			(mtmp->data != &mons[PM_LAMASHTU] || !rn2(3)) &&
 			(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
@@ -478,6 +482,7 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST] && complete <= d(2,4)+2) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU] && complete <= d(2,4)+2) ||
+			(mtmp->data == &mons[PM_CHAOS] && rn2(2)) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && rn2(3)) ||
 			(mtmp->data == &mons[PM_LAMASHTU] && rn2(3)) ||
 			(mtmp->data == &mons[PM_ASMODEUS] && complete <= d(1,10))
@@ -519,6 +524,7 @@ struct monst *mtmp;
 	return (boolean) (mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
+					(mtmp->data != &mons[PM_CHAOS] || rn2(2)) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || rn2(3)) &&
 					(mtmp->data != &mons[PM_LAMASHTU] || rn2(3)) &&
 					(mtmp->data != &mons[PM_ASMODEUS]);
@@ -537,6 +543,7 @@ struct monst *mtmp;
 	return (boolean) (mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
+					(mtmp->data != &mons[PM_CHAOS] || rn2(2)) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
 					(mtmp->data != &mons[PM_LAMASHTU]) &&
 					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));
@@ -557,6 +564,7 @@ struct monst *mtmp;
 	return (boolean) (mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 					(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
 					(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
+					(mtmp->data != &mons[PM_CHAOS] || rn2(2)) &&
 					(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
 					(mtmp->data != &mons[PM_LAMASHTU]) &&
 					(mtmp->data != &mons[PM_ASMODEUS] || !rn2(9));

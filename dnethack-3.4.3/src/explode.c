@@ -151,6 +151,26 @@ int expltype;
 }
 
 void
+big_explode(x, y, type, dam, olet, expltype, radius)
+int x, y;
+int type; /* the same as in zap.c */
+int dam;
+char olet;
+int expltype;
+int radius;
+{
+    int i, j;
+    ExplodeRegion *area;
+    area = create_explode_region();
+    for(i = 0; i < radius*2+1; i++)
+	for(j = 0; j < radius*2+1; j++)
+	    if (isok(i+x-1,j+y-1) && ZAP_POS((&levl[i+x-1][j+y-1])->typ))
+		add_location_to_explode_region(area, i+x-1, j+y-1);
+    do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
+    free_explode_region(area);
+}
+
+void
 do_explode(x, y, area, type, dam, olet, expltype, dest, yours)
 int x, y;
 ExplodeRegion *area;
@@ -285,7 +305,9 @@ boolean yours; /* is it your fault (for killing monsters) */
 		if (mtmp) {
 		    if (mtmp->mhp < 1) explmask = 2;
 		    else switch(adtyp) {
-			case AD_PHYS:                        
+			case AD_PHYS:
+				if(mtmp->data == &mons[PM_LICH__THE_FIEND_OF_EARTH] || mtmp->data == &mons[PM_CHAOS])
+					explmask |= TRUE;
 				break;
 			case AD_MAGM:
 				explmask |= resists_magm(mtmp);

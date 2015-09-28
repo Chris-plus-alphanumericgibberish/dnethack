@@ -238,6 +238,44 @@ register struct monst *mtmp;
 	}
 	
 	switch(mndx) {
+	    case PM_LICH__THE_FIEND_OF_EARTH:
+			if(mvitals[PM_GARLAND].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+			}
+		break;
+	    case PM_KARY__THE_FIEND_OF_FIRE:
+			if(mvitals[PM_GARLAND].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+			}
+		break;
+	    case PM_KRAKEN__THE_FIEND_OF_WATER:
+			if(mvitals[PM_GARLAND].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+			}
+		break;
+	    case PM_TIAMAT__THE_FIEND_OF_WIND:
+			if(mvitals[PM_GARLAND].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+			}
+		break;
+	    case PM_CHAOS:
+			otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+			otmp = oname(otmp, artiname(ART_BLACK_CRYSTAL));		
+			curse(otmp);
+			otmp->oerodeproof = TRUE;
+		break;
 	    case PM_GRAY_DRAGON:
 	    case PM_SILVER_DRAGON:
 	    case PM_MERCURIAL_DRAGON:
@@ -2516,7 +2554,37 @@ boolean was_swallowed;			/* digestion */
 	    	return (FALSE);
 		}
 		else if(mdat->mattk[i].adtyp == AD_KAOS){
+			int x = mon->mx, y = mon->my;
+			struct obj *otmp;
 			makemon(&mons[PM_CHAOS], mon->mx, mon->my, MM_ADJACENTOK);
+			if(mvitals[PM_TIAMAT__THE_FIEND_OF_WIND].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+				// rloco(otmp);
+			}
+			if(mvitals[PM_KRAKEN__THE_FIEND_OF_WATER].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+				// rloco(otmp);
+			}
+			if(mvitals[PM_KARY__THE_FIEND_OF_FIRE].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+				// rloco(otmp);
+			}
+			if(mvitals[PM_LICH__THE_FIEND_OF_EARTH].died){
+				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
+				curse(otmp);
+				otmp->oerodeproof = TRUE;
+				// rloco(otmp);
+			}
 			return (FALSE);
 		}
   		else if(	( (mdat->mattk[i].aatyp == AT_NONE && mdat==&mons[PM_GREAT_CTHULHU])
