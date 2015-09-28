@@ -1809,6 +1809,13 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	
 	// if(magr->mpeaceful && mdef->mpeaceful && (magr->mtame || mdef->mtame)) return 0L;
 	
+	/* In the anachrononaut quest, all peaceful monsters are at threat from all hostile monsters.
+		The leader IS in serious danger */
+	if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
+		if(magr->mpeaceful != mdef->mpeaceful) return ALLOW_M|ALLOW_TM;
+		else return 0L;
+	}
+	
 	if(magr->mberserk) return ALLOW_M|ALLOW_TM;
 	
 	if(touch_petrifies(md) && !resists_ston(magr)) return 0L;
@@ -1842,11 +1849,6 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		md == &mons[PM_GUG])
 			return ALLOW_M|ALLOW_TM;
 
-	/* In the anachrononaut quest, all peaceful monsters are at threat from all hostile monsters.
-		The leader IS in serious danger */
-	if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
-		if(magr->mpeaceful != mdef->mpeaceful) return ALLOW_M|ALLOW_TM;
-	}
 	/* Since the quest guardians are under siege, it makes sense to have 
        them fight hostiles.  (But we don't want the quest leader to be in danger.) */
 	if( (ma->msound==MS_GUARDIAN 
