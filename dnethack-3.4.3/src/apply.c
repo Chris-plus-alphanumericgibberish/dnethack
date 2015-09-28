@@ -1404,7 +1404,7 @@ struct obj *obj;
 		return;
 	}
 	/* magic lamps with an spe == 0 (wished for) cannot be lit */
-	if ((!Is_candle(obj) && obj->age == 0 && !(is_lightsaber(obj) && obj->oartifact ))
+	if ((!Is_candle(obj) && obj->age == 0 && !(is_lightsaber(obj) && obj->oartifact == ART_ATMA_WEAPON ))
 			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)
 		) {
 		if (obj->otyp == BRASS_LANTERN || 
