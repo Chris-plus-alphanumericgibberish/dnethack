@@ -804,7 +804,7 @@ die:
 	    u.urexp += 50L * (long)(deepest - 1);
 	    if (deepest > 20)
 		u.urexp += 1000L * (long)((deepest > 30) ? 10 : deepest - 20);
-	    if (how == ASCENDED) u.urexp *= 2L;
+	    if (how == ASCENDED && (!Role_if(PM_ANACHRONONAUT) || flags.questprogress==2)) u.urexp *= 2L;
 	}
 
 	if (bones_ok) {
@@ -862,6 +862,16 @@ die:
 	    else if (carrying(FAKE_AMULET_OF_YENDOR))
 		Strcat(kilbuf, " (with a fake Amulet)");
 		/* don't bother counting to see whether it should be plural */
+	}
+	
+	if(Role_if(PM_ANACHRONONAUT) && Is_astralevel(&u.uz)){
+	    if (flags.questprogress!=2){
+			if(how == ASCENDED) Strcat(kilbuf, ", but the future refused to change");
+			else Strcat(kilbuf, ", and the future remained unchanged");
+		} else {
+			if(how == ASCENDED) Strcat(kilbuf, ", having saved the future");
+			else Strcat(kilbuf, ", after completing the mission");
+		}
 	}
 
 	if (!done_stopprint) {

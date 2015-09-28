@@ -303,6 +303,9 @@ chat_with_leader()
 		if(Role_if(PM_EXILE)){
 			bindspirit(DAHLVER_NAR);
 			u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + 5000;
+		} else if(Role_if(PM_ANACHRONONAUT)){
+			flags.questprogress = 1;
+			urole.lgod = getAnachrononautLgod();
 		} else if(Role_if(PM_CONVICT)){
 			struct obj *obj;
 			obj = mksobj(HEAVY_IRON_BALL, TRUE, FALSE);

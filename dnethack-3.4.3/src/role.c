@@ -2448,9 +2448,12 @@ role_init()
 	    mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
 	}
 	
-	//Drow noble nemesis is regular monster for anachrononauts
 	if(Role_if(PM_ANACHRONONAUT)){
+		//Drow noble nemesis is regular monster for anachrononauts
 		mons[PM_ELDER_BRAIN].msound = MS_SILENT;
+		mons[PM_ELDER_BRAIN].geno &= ~G_UNIQ;
+		if(flags.questprogress==2) urole.lgod = AnachrononautLgodEnd;
+		else if(flags.questprogress==1) urole.lgod = AnachrononautLgod;
 	}
 
 	/* Fix up infravision */

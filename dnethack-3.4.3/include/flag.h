@@ -120,7 +120,8 @@ struct flag {
 #endif
 
 	int	 questvar;	/* quest variant */
-	boolean	 stag;	/* turned stag during the quest */
+#define	questprogress	questvar
+	boolean	 stag;	/* turned stag during the quest, re-used to track if the Anachrononaut has completed their extra task */
 	boolean leader_backstab;		/* your leader is attacking you */
 	boolean made_bell;		/* the bell of opening has been created */
 

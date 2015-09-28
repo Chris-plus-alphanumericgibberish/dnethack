@@ -1852,7 +1852,7 @@ dosacrifice()
       of your alignment, is strongly discouraged.
      */
 	
-	if(Role_if(PM_ANACHRONONAUT) && otmp->otyp != AMULET_OF_YENDOR){
+	if(Role_if(PM_ANACHRONONAUT) && otmp->otyp != AMULET_OF_YENDOR && flags.questprogress!=2){
 		You("do not give offerings to the God of the future.");
 		return 0;
 	}
@@ -2406,7 +2406,7 @@ int
 dopray()
 {
     /* Confirm accidental slips of Alt-P */
-	if(Role_if(PM_ANACHRONONAUT)){
+	if(Role_if(PM_ANACHRONONAUT) && flags.questprogress!=2){
 		pline("There is but one God in the future.");
 		pline("And to It, you do not pray.");
 		return 0;
@@ -2820,22 +2820,28 @@ aligntyp alignment;
 		else gnam = Moloch;
 	 break;
      case A_LAWFUL:
-		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
-						gnam = urole.lgod; break;
-		} else {
+		if(Role_if(PM_EXILE) && Is_astralevel(&u.uz)){
 						gnam = Demiurge; break;
+		} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !quest_status.got_quest){
+			gnam = ""; break;
+		} else {
+						gnam = urole.lgod; break;
 		}
      case A_NEUTRAL:	
-		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
-						gnam = urole.ngod; break;
-		} else {
+		if(Role_if(PM_EXILE) && Is_astralevel(&u.uz)){
 						gnam = tVoid; break;
-		}
-     case A_CHAOTIC:	
-		if(!Role_if(PM_EXILE) || !Is_astralevel(&u.uz)){ 
-						gnam = urole.cgod; break;
+		} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
+			gnam = ""; break;
 		} else {
+						gnam = urole.ngod; break;
+		}
+     case A_CHAOTIC:
+		if(Role_if(PM_EXILE) && Is_astralevel(&u.uz)){
 						gnam = Sophia; break;
+		} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
+			gnam = ""; break;
+		} else {
+						gnam = urole.cgod; break;
 		}
      case A_VOID:		gnam = tVoid; break;
      default:		impossible("unknown alignment.");
