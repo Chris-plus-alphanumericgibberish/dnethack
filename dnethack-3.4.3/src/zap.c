@@ -1147,7 +1147,7 @@ int ochance, achance;	/* percent chance for ordinary objects, artifacts */
 	} else {
 		int chance = rn2(100);
 
-		return((boolean)(chance < (obj->oartifact ? achance : ochance)));
+		return((boolean)(chance < ((obj->oartifact || is_lightsaber(obj)) ? achance : ochance)));
 	}
 }
 
