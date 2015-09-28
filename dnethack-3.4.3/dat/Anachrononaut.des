@@ -156,11 +156,18 @@ CONTAINER:'(',"chest",(16,19)
 	OBJECT:'(',"pick-axe",contained, uncursed, 0
 	OBJECT:'(',"power pack",contained, uncursed, 0
 CONTAINER:'(',"chest",(17,19)
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
 	OBJECT:'(',"bag of holding",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
 	OBJECT:'(',"oilskin sack",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
 	OBJECT:'(',"oilskin sack",contained, uncursed, 0
-	OBJECT:'(',"sack",contained, uncursed, 0
-	OBJECT:'(',"sack",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
+	OBJECT[50%]:'(',"sack",contained, uncursed, 0
 	OBJECT:'(',"sack",contained, uncursed, 0
 	OBJECT:'(',"sack",contained, uncursed, 0
 	OBJECT:'(',"sack",contained, uncursed, 0
