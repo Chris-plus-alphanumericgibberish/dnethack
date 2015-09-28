@@ -1109,6 +1109,7 @@ register struct monst *mtmp;
 				break;
 				case PM_NURSE:
 					(void) mongets(mtmp, SCALPEL);
+					(void) mongets(mtmp, HEALER_UNIFORM);
 				return;
 				break;
 				case PM_MAID: //ninja maids
@@ -1486,7 +1487,8 @@ register struct monst *mtmp;
 			if(!rn2(2))(void)mongets(mtmp, LEATHER_GLOVES);
 			if(!rn2(4))(void)mongets(mtmp, LEATHER_CLOAK);
 		}else if(mm == PM_CHANGED) {
-			(void)mongets(mtmp, STILETTO);
+			if(!rn2(10)) (void)mongets(mtmp, HAND_BLASTER);
+			else (void)mongets(mtmp, STILETTO);
 		}else if(mm == PM_DEEP_ONE || mm == PM_DEEPER_ONE) {
 		 if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
 		    switch (rn2(3)) {
