@@ -4774,7 +4774,9 @@ doapply()
 	case GNOMISH_POINTY_HAT:
 		use_candle(&obj);
 	break;
-	case BULLET_FABBER:{
+	case BULLET_FABBER:
+	if(!Role_if(PM_ANACHRONONAUT)) pline("It seems inert.");
+	else {
 		static const char all_count[] = { ALLOW_COUNT, GEM_CLASS, 0 };
 		struct obj *otmp = getobj(all_count, "feed to the fabber");
 		if (!otmp) break;
@@ -4792,7 +4794,8 @@ doapply()
 				poly_obj(otmp,ROCKET);
 			break;
 		}
-	}break;
+	}
+	break;
 	case POWER_PACK:{
 		static const char all_count[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
 		struct obj *otmp = getobj(all_count, "charge");

@@ -126,6 +126,22 @@ boolean restore;
 				*ONAME(otmp) = '\0';
 				otmp->owt = weight(otmp);
 			}
+			//Vibroblades and force pikes: Ok for bones inclusion
+			//Basic Firearms: Ok for bones inclusion
+			//Blasters: Max out the recharge counter and halve remaining shots
+			//Raygun: Max out the recharge counter and halve remaining shots
+			//Plasteel Armor: Ok for bones inclusion
+			//Sensors and Hyposprays: Ok for bones inclusion
+			if(otmp->otyp == HAND_BLASTER || otmp->otyp == ARM_BLASTER || otmp->otyp == RAYGUN){
+			    otmp->ovar1 /= 2;
+			    otmp->recharged = 4;
+				curse(otmp);
+			//Actually, make it so these can barely be recharged/don't work, but let them be saved
+			// } else if(otmp->otyp == RAYGUN || otmp->otyp == BULLET_FABBER){
+			    // otmp->otyp = SUBETHAIC_MECHANISM;
+			    // otmp->spe = 0;
+				// otmp->owt = weight(otmp);
+			}
 		}
 	}
 }

@@ -733,9 +733,16 @@ int curse_bless;
 			else obj->ovar1 = 80L + rn2(20);
 		break;
 	    case RAYGUN:
-			if(is_blessed) obj->ovar1 = 160L;
-			else if(is_cursed) obj->ovar1 = 10L;
-			else obj->ovar1 = (8 + rn2(8))*10L;
+			if(Role_if(PM_ANACHRONONAUT)){
+				if(is_blessed) obj->ovar1 = 160L;
+				else if(is_cursed) obj->ovar1 = 10L;
+				else obj->ovar1 = (8 + rn2(8))*10L;
+			} else {
+				//The Raygun's power cell is damaged:
+				if(is_blessed) obj->ovar1 = 15L;
+				else if(is_cursed) obj->ovar1 = 2L;
+				else obj->ovar1 = 2+rnd(5)*2;
+			}
 		break;
 //#endif
 	    case LIGHTSABER:
