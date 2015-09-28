@@ -127,6 +127,18 @@ register char *array;
 	return('\0');
 }
 
+aligntyp
+temple_alignment(roomno)
+int roomno;
+{
+	char *ptr;
+	coord *shrine_spot;
+	struct rm *lev;
+
+	shrine_spot = shrine_pos(roomno);
+	lev = &levl[shrine_spot->x][shrine_spot->y];
+	return ((aligntyp)Amask2align(lev->altarmask & AM_MASK));
+}
 #endif /* OVL0 */
 #ifdef OVLB
 

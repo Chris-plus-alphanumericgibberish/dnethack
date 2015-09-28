@@ -1820,6 +1820,8 @@ E int FDECL(candle_on_altar, (struct obj *));
 
 /* ### priest.c ### */
 
+E coord * FDECL(shrine_pos, (int));
+E aligntyp FDECL(temple_alignment, (int));
 E int FDECL(move_special, (struct monst *,BOOLEAN_P,SCHAR_P,BOOLEAN_P,BOOLEAN_P,
 			   XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P));
 E char FDECL(temple_occupied, (char *));

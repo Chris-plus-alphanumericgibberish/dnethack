@@ -25,7 +25,6 @@ STATIC_DCL void FDECL(mklibrary, (struct mkroom *));
 STATIC_DCL void NDECL(mkisland);
 STATIC_DCL void NDECL(mkriver);
 STATIC_DCL void FDECL(liquify, (xchar, xchar, boolean));
-STATIC_DCL coord * FDECL(shrine_pos, (int));
 STATIC_DCL struct permonst * NDECL(morguemon);
 STATIC_DCL struct permonst * NDECL(antholemon);
 STATIC_DCL struct permonst * NDECL(squadmon);
@@ -799,7 +798,7 @@ register boolean edge; /* Allows room walls to intrude slightly into river. */
 	levl[x][y].lit = 1;
 }
 
-STATIC_OVL coord *
+coord *
 shrine_pos(roomno)
 int roomno;
 {
