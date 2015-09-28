@@ -966,8 +966,13 @@ plus:
 
 		if (is_lightsaber(obj)) {
 		    if (obj->lamplit){
-				if(obj->age > 1000) Strcat(bp, " (lit)");
-				else Strcat(bp, " (flickering)");
+				if(obj->altmode){
+					if(obj->age > 1000) Strcat(bp, " (two blades lit)");
+					else Strcat(bp, " (two blades flickering)");
+				} else {
+					if(obj->age > 1000) Strcat(bp, " (lit)");
+					else Strcat(bp, " (flickering)");
+				}
 				if(obj->cobj || obj->oartifact == ART_ANNULUS){
 					Strcat(prefix, lightsaber_colorText(obj));
 					Strcat(prefix, " ");
