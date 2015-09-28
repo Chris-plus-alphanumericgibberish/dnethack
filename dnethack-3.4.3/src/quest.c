@@ -133,6 +133,11 @@ boolean talk;
 #endif
 	if(Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN))){
 		purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod))  ?  1 : 0;
+	} else if(Role_if(PM_ANACHRONONAUT)){
+		purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod) &&
+			  u.ualign.type == u.ualignbase[A_CURRENT] &&
+			  u.ualignbase[A_CURRENT] != A_LAWFUL) ?  1 :
+			 (u.ualignbase[A_CURRENT] == A_LAWFUL) ? -1 : 0;
 	} else {
 		purity = (u.ualign.record >= (MIN_QUEST_ALIGN-racemod) &&
 			  u.ualign.type == original_alignment &&
