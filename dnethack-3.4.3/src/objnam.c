@@ -3131,7 +3131,20 @@ typfnd:
 
 	if((typ == SPE_LIGHTNING_BOLT ||
 		typ == SPE_POISON_SPRAY ||
-		typ == SPE_ACID_BLAST
+		typ == SPE_ACID_BLAST ||
+		typ == VIBROBLADE ||
+		typ == FORCE_PIKE ||
+		(typ >= PISTOL && typ <= RAYGUN) || 
+		(typ >= SHOTGUN_SHELL && typ <= LASER_BEAM) ||
+		typ == PLASTEEL_HELM ||
+		typ == PLASTEEL_ARMOR ||
+		typ == JUMPSUIT ||
+		typ == BODYGLOVE ||
+		typ == PLASTEEL_GAUNTLETS ||
+		typ == PLASTEEL_BOOTS ||
+		(typ >= SENSOR_PACK && typ <= HYPOSPRAY_AMPULE) ||
+		typ == BULLET_FABBER ||
+		typ == PROTEIN_PILL
 		)
 #ifdef WIZARD
 				&& !wizard
