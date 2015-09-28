@@ -404,6 +404,8 @@
 				 (ptr) == &mons[PM_MASTER_MIND_FLAYER]|| \
 				 (ptr) == &mons[PM_ALHOON]|| \
 				 (ptr) == &mons[PM_ELDER_BRAIN]|| \
+				 (ptr) == &mons[PM_LUGRIBOSSK]|| \
+				 (ptr) == &mons[PM_MAANZECORIAN]|| \
 				 (ptr) == &mons[PM_GREAT_CTHULHU])
 
 #define nonliving(ptr)		(on_level(&valley_level, &u.uz) || is_keter(ptr) || is_golem(ptr) || \

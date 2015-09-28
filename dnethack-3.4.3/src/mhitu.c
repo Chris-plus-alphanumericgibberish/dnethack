@@ -967,6 +967,8 @@ mattacku(mtmp)
 			else if( mdat == &mons[PM_ALHOON] && rn2(2) ) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_EMBRACED_DROWESS]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_ELDER_BRAIN]) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_LUGRIBOSSK]) mtmp->mspec_used = 0;
+			else if( mdat == &mons[PM_MAANZECORIAN]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_AVATAR_OF_LOLTH]) mtmp->mspec_used = 0;
 			else if( mdat == &mons[PM_HOOLOOVOO] && rn2(2) ) break;
 //			else if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;

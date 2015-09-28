@@ -358,6 +358,8 @@ struct monst *mtmp;
 			(mtmp->data == &mons[PM_DAGON] && complete == 6) ||
 			(mtmp->data == &mons[PM_DEMOGORGON] && complete == 6 && !rn2(3)) ||
 			(mtmp->data == &mons[PM_GREAT_CTHULHU] && complete == 6) ||
+			(mtmp->data == &mons[PM_LUGRIBOSSK] && complete == 6) ||
+			(mtmp->data == &mons[PM_MAANZECORIAN] && complete == 6) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST] && complete == 6) ||
 			(mtmp->data == &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD] && complete == 6);
 }
@@ -441,6 +443,7 @@ struct monst *mtmp;
 	if(complete <= 0) return FALSE;
 	else if(mtmp->isshk || mtmp->iswiz || 
 			is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
+			mtmp->data == &mons[PM_MAANZECORIAN] ||
 			is_rider(mtmp->data)) return FALSE;
 	return mtmp->data == &mons[PM_CERBERUS] || is_undead(mtmp->data);
 }
@@ -462,6 +465,8 @@ struct monst *mtmp;
 			(mtmp->data != &mons[PM_CHOKHMAH_SEPHIRAH]) &&
 			(mtmp->data != &mons[PM_ELDER_PRIEST]) &&
 			(mtmp->data != &mons[PM_GREAT_CTHULHU]) &&
+			(mtmp->data != &mons[PM_LUGRIBOSSK]) &&
+			(mtmp->data != &mons[PM_MAANZECORIAN]) &&
 			(mtmp->data != &mons[PM_CHAOS] || rn2(2)) &&
 			(mtmp->data != &mons[PM_DEMOGORGON] || !rn2(3)) &&
 			(mtmp->data != &mons[PM_LAMASHTU] || !rn2(3)) &&
@@ -1041,7 +1046,7 @@ register struct monst *mtmp;
 				pline("It locks on to your %s!",
 					m_sen ? "telepathy" :
 					Blind_telepat ? "latent telepathy" : "mind");
-				dmg = (mdat == &mons[PM_GREAT_CTHULHU]) ? d(5,15) : (mdat == &mons[PM_ELDER_BRAIN]) ? d(3,15) : rnd(15);
+				dmg = (mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_LUGRIBOSSK] || mdat == &mons[PM_MAANZECORIAN]) ? d(5,15) : (mdat == &mons[PM_ELDER_BRAIN]) ? d(3,15) : rnd(15);
 				if (Half_spell_damage) dmg = (dmg+1) / 2;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
 				if(mdat == &mons[PM_ELDER_BRAIN]) u.ustdy = max(u.ustdy,dmg/3);

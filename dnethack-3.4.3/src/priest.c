@@ -404,79 +404,105 @@ register int roomno;
 
 	if(!temple_occupied(u.urooms0)) {
 	    if(tended) {
-		shrined = has_shrine(priest);
-		sanctum = ( (priest->data == &mons[PM_HIGH_PRIEST] || priest->data == &mons[PM_ELDER_PRIEST]) &&
-			   (Is_sanctum(&u.uz) || In_endgame(&u.uz)));
-		can_speak = (priest->mcanmove && priest->mnotlaugh && !priest->msleeping &&
-			     flags.soundok);
-		if (can_speak) {
-		    unsigned save_priest = priest->ispriest;
-		    /* don't reveal the altar's owner upon temple entry in
-		       the endgame; for the Sanctum, the next message names
-		       Moloch so suppress the "of Moloch" for him here too */
-		    if (sanctum && !Hallucination) priest->ispriest = 0;
-		    pline("%s intones:",
-			canseemon(priest) ? Monnam(priest) : "A nearby voice");
-		    priest->ispriest = save_priest;
-		}
-		msg2 = 0;
-		if(sanctum && Is_sanctum(&u.uz)) {
-		    if(priest->mpeaceful) {
-			msg1 = "Infidel, you have entered Moloch's Sanctum!";
-			msg2 = "Be gone!";
-			priest->mpeaceful = 0;
-			set_malign(priest);
-		    } else
-			msg1 = "You desecrate this place by your presence!";
-		} else if(In_quest(&u.uz) && Role_if(PM_EXILE) && u.uz.dlevel == nemesis_level.dlevel) {
-		    if(priest->mpeaceful) {
-			msg1 = "Your existence is blasphemy!";
-			msg2 = "No more shall you challenge the Most High!";
-			priest->mpeaceful = 0;
-			set_malign(priest);
-		    } else
-			msg1 = "You desecrate this place by your presence!";
+			shrined = has_shrine(priest);
+			sanctum = ( (priest->data == &mons[PM_HIGH_PRIEST] || priest->data == &mons[PM_ELDER_PRIEST]) &&
+				   (Is_sanctum(&u.uz) || In_endgame(&u.uz)));
+			can_speak = (priest->mcanmove && priest->mnotlaugh && !priest->msleeping &&
+					 flags.soundok);
+			if (can_speak) {
+				unsigned save_priest = priest->ispriest;
+				/* don't reveal the altar's owner upon temple entry in
+				   the endgame; for the Sanctum, the next message names
+				   Moloch so suppress the "of Moloch" for him here too */
+				if (sanctum && !Hallucination) priest->ispriest = 0;
+				pline("%s intones:",
+				canseemon(priest) ? Monnam(priest) : "A nearby voice");
+				priest->ispriest = save_priest;
+			}
+			msg2 = 0;
+			if(sanctum && Is_sanctum(&u.uz)) {
+				if(priest->mpeaceful) {
+				msg1 = "Infidel, you have entered Moloch's Sanctum!";
+				msg2 = "Be gone!";
+				priest->mpeaceful = 0;
+				set_malign(priest);
+				} else
+				msg1 = "You desecrate this place by your presence!";
+			} else if(In_quest(&u.uz) && Role_if(PM_EXILE) && u.uz.dlevel == nemesis_level.dlevel) {
+				if(priest->mpeaceful) {
+				msg1 = "Your existence is blasphemy!";
+				msg2 = "No more shall you challenge the Most High!";
+				priest->mpeaceful = 0;
+				set_malign(priest);
+				} else
+				msg1 = "You desecrate this place by your presence!";
+			} else if(Is_astralevel(&u.uz) && Role_if(PM_ANACHRONONAUT) && EPRI(priest)->shralign == A_LAWFUL) {
+				if(priest->mpeaceful) {
+					priest->mpeaceful = 0;
+					set_malign(priest);
+				}
+				msg1 = "I SEE YOU!";
+				set_mon_data(priest, &mons[PM_LUGRIBOSSK], 0);
+				//Assumes High Priest is 25, Lugribossk is 27 (archon)
+				priest->m_lev += 2;
+				priest->mhp += 4*2;
+				priest->mhpmax += 4*2;
+				newsym(priest->mx, priest->my);
+			} else {
+				Sprintf(buf, "Pilgrim, you enter a %s place!",
+					!shrined ? "desecrated" : "sacred");
+				msg1 = buf;
+			}
+			if (can_speak) {
+				verbalize(msg1);
+				if (msg2) verbalize(msg2);
+			}
+			if(!sanctum) {
+				/* !tended -> !shrined */
+				if (!shrined || !p_coaligned(priest) ||
+					u.ualign.record <= ALGN_SINNED)
+				You("have a%s forbidding feeling...",
+					(!shrined) ? "" : " strange");
+				else You("experience a strange sense of peace.");
+			}
 		} else {
-		    Sprintf(buf, "Pilgrim, you enter a %s place!",
-			    !shrined ? "desecrated" : "sacred");
-		    msg1 = buf;
-		}
-		if (can_speak) {
-		    verbalize(msg1);
-		    if (msg2) verbalize(msg2);
-		}
-		if(!sanctum) {
-		    /* !tended -> !shrined */
-		    if (!shrined || !p_coaligned(priest) ||
-			    u.ualign.record <= ALGN_SINNED)
-			You("have a%s forbidding feeling...",
-				(!shrined) ? "" : " strange");
-		    else You("experience a strange sense of peace.");
-		}
-	    } else {
-		switch(rn2(3)) {
-		  case 0: You("have an eerie feeling..."); break;
-		  case 1: You_feel("like you are being watched."); break;
-		  default: pline("A shiver runs down your %s.",
-			body_part(SPINE)); break;
-		}
-		if(!rn2(5)) {
-		    struct monst *mtmp;
+			switch(rn2(3)) {
+			  case 0: You("have an eerie feeling..."); break;
+			  case 1: You_feel("like you are being watched."); break;
+			  default: pline("A shiver runs down your %s.",
+				body_part(SPINE)); break;
+			}
+			if(Is_astralevel(&u.uz) && Role_if(PM_ANACHRONONAUT) && temple_alignment(roomno) == A_LAWFUL) {
+				struct monst *mtmp;
 
-		    if(!(mtmp = makemon(&mons[PM_GHOST],u.ux,u.uy,NO_MM_FLAGS)))
-			return;
-		    if (!Blind || sensemon(mtmp))
-			pline("An enormous ghost appears next to you!");
-		    else You("sense a presence close by!");
-		    mtmp->mpeaceful = 0;
-		    set_malign(mtmp);
-		    if(flags.verbose)
-			You("are frightened to death, and unable to move.");
-		    nomul(-3, "being frightened to death");
-		    nomovemsg = "You regain your composure.";
-	       }
-	   }
-       }
+				if(mvitals[PM_MAANZECORIAN].born > 0 || !(mtmp = makemon(&mons[PM_MAANZECORIAN],u.ux,u.uy,MM_ADJACENTOK)))
+					return;
+				if (!Blind || sensemon(mtmp))
+				pline("An enormous ghostly mind flayer appears next to you!");
+				else You("sense a presence close by!");
+				mtmp->mpeaceful = 0;
+				set_malign(mtmp);
+				if(flags.verbose)
+				You("are frightened to death, and unable to move.");
+				nomul(-4, "being frightened to death");
+				nomovemsg = "You regain your composure.";
+			} else if(!rn2(5)) {
+				struct monst *mtmp;
+
+				if(!(mtmp = makemon(&mons[PM_GHOST],u.ux,u.uy,NO_MM_FLAGS)))
+				return;
+				if (!Blind || sensemon(mtmp))
+				pline("An enormous ghost appears next to you!");
+				else You("sense a presence close by!");
+				mtmp->mpeaceful = 0;
+				set_malign(mtmp);
+				if(flags.verbose)
+				You("are frightened to death, and unable to move.");
+				nomul(-3, "being frightened to death");
+				nomovemsg = "You regain your composure.";
+			}
+		}
+    }
 }
 
 void
