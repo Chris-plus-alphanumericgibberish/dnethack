@@ -625,7 +625,11 @@ const char *ElfPriestLgod = "Manwe Sulimo",
 		   *ElfPriestNgod = "Mandos",
 		   *ElfPriestCgod = "Lorien"; /* Elven */
 
-const char *AnachrononautLgod = "Illsensine";
+const char *AnachrononautLgod = "Ilsensine",
+		   *AnachrononautLgodEnd = "Ilsensine the Banished One";
+
+const char *getAnachrononautLgod(){return AnachrononautLgod;}
+const char *getAnachrononautLgodEnd(){return AnachrononautLgodEnd;}
 
 int DrowPriestessFavoredSpell = SPE_CREATE_FAMILIAR;
 int DrowPriestessFavoredBonus = -20;
@@ -645,6 +649,8 @@ const char *DrowMaleLgodKnown = "the Eddergud",
 		   *DrowMaleLgodUknwn = "the black web",
 		   *DrowMaleNgod = "Vhaeraun",
 		   *DrowMaleCgod = "_Lolth"; /* Hedroven */
+const char *getDrowMaleLgodKnown(){return DrowMaleLgodKnown;}
+
 
 // const char *DrowNobMaleLgod = "Selvetarm", /*Nevermind, using Ver'tas instead*/
 const char *DrowNobMaleNgod = "Keptolo",
@@ -960,7 +966,7 @@ const int NVaire[] = {PM_GRAY_UNICORN,PM_MOVANIC_DEVA,PM_ASTRAL_DEVA,PM_MAHADEVA
 const int LManwe[] = {PM_WHITE_UNICORN,PM_AIR_ELEMENTAL,PM_ANGEL,PM_GIANT_EAGLE,NON_PM};
 const int NMandos[] = {PM_GRAY_UNICORN,PM_MOVANIC_DEVA,PM_ASTRAL_DEVA,PM_MAHADEVA,NON_PM};
 
-const int LIllsensine[] = {PM_MIND_FLAYER,PM_BRAIN_GOLEM,PM_SEMBLANCE,PM_MASTER_MIND_FLAYER,NON_PM};
+const int LIlsensine[] = {PM_MIND_FLAYER,PM_BRAIN_GOLEM,PM_SEMBLANCE,PM_MASTER_MIND_FLAYER,NON_PM};
 
 const int LBlackWeb[] = {PM_DROW_MUMMY,PM_EDDERKOP,PM_EDDERKOP,PM_EDDERKOP,PM_DROW_ALIENIST,PM_EMBRACED_DROWESS,NON_PM};
 const int NVhaeraun[] = {PM_HEDROW_WARRIOR,PM_PHASE_SPIDER,PM_MIRKWOOD_ELDER,NON_PM};
@@ -1113,7 +1119,7 @@ god_minions(gptr)
 	if(gptr == ElfPriestNgod) return NMandos;
 	if(gptr == ElfPriestCgod) return Cangels;
 	
-	if(gptr == AnachrononautLgod) return LIllsensine;
+	if(gptr == AnachrononautLgod || gptr == AnachrononautLgodEnd) return LIlsensine;
 	
 	if(gptr == DrowMaleLgodKnown || gptr == DrowMaleLgodUknwn) return LBlackWeb;
 	if(gptr == DrowMaleNgod) return NVhaeraun;

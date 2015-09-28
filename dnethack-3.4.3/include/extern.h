@@ -1795,6 +1795,9 @@ E const char *NDECL(bottlename);
 
 /* ### pray.c ### */
 
+E const char * NDECL(getDrowMaleLgodKnown);
+E const char * NDECL(getAnachrononautLgod);
+E const char * NDECL(getAnachrononautLgodEnd);
 #ifdef USE_TRAMPOLI
 E int NDECL(prayer_done);
 #endif
