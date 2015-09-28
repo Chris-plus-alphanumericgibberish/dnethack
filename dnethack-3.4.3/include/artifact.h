@@ -295,4 +295,19 @@ struct artifact {
 				)\
 )
 
+#define is_monk_safe_artifact(m) (\
+				(m) == ART_TIE_DYE_SHIRT_OF_SHAMBHALA ||\
+				(m) == ART_WHISPERFEET ||\
+				(m) == ART_WATER_FLOWERS ||\
+				(m) == ART_HAMMERFEET ||\
+				(m) == ART_SHIELD_OF_THE_RESOLUTE_HEA ||\
+				(m) == ART_GAUNTLETS_OF_SPELL_POWER ||\
+				(m) == ART_PREMIUM_HEART ||\
+				(m) == ART_STORMHELM ||\
+				(m) == ART_HELPING_HAND ||\
+				(m) == ART_GARNET_ROD ||\
+				(m) == ART_ARKENSTONE ||\
+				(m) == ART_MARAUDER_S_MAP\
+			)
+
 #endif /* ARTIFACT_H */
