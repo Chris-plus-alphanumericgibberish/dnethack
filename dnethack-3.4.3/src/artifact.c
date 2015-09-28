@@ -1151,7 +1151,8 @@ int tmp;
 	register const struct artifact *weap = get_artifact(otmp);
 	
 	if (otmp->oartifact == ART_BLACK_ARROW){
-		return mon->mhpmax+100;
+		if(mon->data == &mons[PM_SMAUG]) return mon->mhpmax+100;
+		else return tmp*3+108;
 	}
 	
 	if (!weap || (weap->attk.adtyp == AD_PHYS && /* check for `NO_ATTK' */
