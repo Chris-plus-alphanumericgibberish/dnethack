@@ -800,11 +800,11 @@ struct mkroom	*croom;
 	    get_room_loc(&x, &y, croom);
 	else {
 	    if (!pm || !is_swimmer(pm))
-		get_location(&x, &y, DRY);
+			get_location(&x, &y, DRY);
 	    else if (pm->mlet == S_EEL)
-		get_location(&x, &y, WET);
+			get_location(&x, &y, WET);
 	    else
-		get_location(&x, &y, DRY|WET);
+			get_location(&x, &y, DRY|WET);
 	}
 	/* try to find a close place if someone else is already there */
 	if (MON_AT(x,y) && enexto(&cc, x, y, pm))

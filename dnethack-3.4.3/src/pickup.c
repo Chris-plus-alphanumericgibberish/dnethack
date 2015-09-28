@@ -1591,7 +1591,7 @@ lootcont:
 			if (c == 'n') continue;
 			timepassed |= use_lightsaber(cobj, 0);
 			if(timepassed) underfoot = TRUE;
-	    }
+		}
 	}
 	if (any) c = 'y';
     } else if (Confusion) {
