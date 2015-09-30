@@ -928,8 +928,7 @@ register struct monst *mtmp;
 	    do_clear_area(mtmp->mx,mtmp->my, 5, set_lit, (genericptr_t)0);
 		doredraw();
 	    if(mtmp->data == &mons[PM_HEDROW_WARRIOR]) mtmp->mspec_used += d(4,4);
-		else mtmp->mspec_used += 10 - mtmp->m_lev;
-	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
+		else mtmp->mspec_used += max(10 - mtmp->m_lev,2);
 	}
 
 	/* Demonic Blackmail! */
