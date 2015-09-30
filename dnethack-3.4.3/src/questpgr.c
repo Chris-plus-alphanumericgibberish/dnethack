@@ -478,7 +478,7 @@ qt_montype()
 				if(rn2(4)) return mkclass(S_VAMPIRE, G_NOHELL|G_HELL);
 				else if(rn2(4)) return mkclass(S_WRAITH, G_NOHELL|G_HELL);
 				else if(rn2(4)) return mkclass(S_LICH, G_NOHELL|G_HELL);
-				else if(rn2(4)) return &mons[PM_DARKNESS_GIVEN_HUNGER];
+				else if(Is_qstart(&u.uz) || rn2(4)) return &mons[PM_DARKNESS_GIVEN_HUNGER];
 				else return &mons[PM_DREAD_SERAPH];
 			break;
 			case 5:
