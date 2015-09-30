@@ -4948,7 +4948,7 @@ doapply()
 			You("set %s to stun.", yname(obj));
 		} else {
 			obj->altmode = ZT_FIRE;
-			You("set %s to wound.", yname(obj));
+			You("set %s to heat.", yname(obj));
 		}
 	break;
 	case ARM_BLASTER:
