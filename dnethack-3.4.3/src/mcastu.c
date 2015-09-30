@@ -758,8 +758,8 @@ unsigned int type;
 		}
 	}
     if (type == AD_CLRC)
-        return choose_clerical_spell(rn2(mtmp->m_lev),mtmp->mnum,!(mtmp->mpeaceful));
-    return choose_magic_spell(rn2(mtmp->m_lev),mtmp->mnum,!(mtmp->mpeaceful));
+        return choose_clerical_spell(rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
+    return choose_magic_spell(rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
 }
 
 /* return values:
