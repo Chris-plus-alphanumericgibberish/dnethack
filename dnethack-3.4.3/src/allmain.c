@@ -564,7 +564,20 @@ moveloop()
 					}
 				}
 			} /* movement rations */
-
+			
+			static boolean LBbreach = FALSE;
+			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
+				for (mtmp = fmon; mtmp; mtmp = nxtmon) if(!mtmp->mpeaceful && mtmp->mx <= 20) break;
+				if(mtmp && !(LBbreach && moves%10)) {
+					verbalize("**ALERT: hostile entities detected within Last Bastion**");
+					LBbreach = TRUE;
+				} else if(!mtmp) LBbreach = FALSE;
+				if(!(moves%10)){
+					for (mtmp = fmon; mtmp; mtmp = nxtmon) if(!mtmp->mpeaceful && mtmp->mx <= 50 && mtmp->mx > 20) break;
+					if(mtmp) verbalize("*PERIMETER ALERT: hostile entities closing on Last Bastion*");
+				}
+			}
+			
 		    if(!rn2(u.uevent.udemigod ? 25 :
 				(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)) ? 35 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)
