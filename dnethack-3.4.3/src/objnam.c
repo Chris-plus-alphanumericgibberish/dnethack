@@ -963,8 +963,21 @@ plus:
 #  endif
 		}
 //#endif	/* FIREARMS */
-
-		if (is_lightsaber(obj)) {
+		if(obj->otyp == RAYGUN){
+			if(obj->altmode == ZT_SLEEP) Strcat(bp, " (stun)");
+			else if(obj->altmode == ZT_FIRE) Strcat(bp, " (heat)");
+			else if(obj->altmode == ZT_DEATH) Strcat(bp, " (kill)");
+			else if(obj->altmode == ZT_LIGHTNING) Strcat(bp, " (disintegrate)");
+		} else if(obj->otyp == ARM_BLASTER ||
+				  obj->otyp == ASSAULT_RIFLE ||
+				  obj->otyp == BFG ||
+				  obj->otyp == AUTO_SHOTGUN ||
+				  obj->otyp == SUBMACHINE_GUN
+		){
+			if (obj->altmode == WP_MODE_AUTO) Strcat(bp, " (auto)");
+			else if (obj->altmode == WP_MODE_BURST) Strcat(bp, " (burst)");
+			else if (obj->altmode == WP_MODE_SINGLE) Strcat(bp, " (single)");
+		} else if (is_lightsaber(obj)) {
 		    if (obj->lamplit){
 				if(obj->altmode){
 					if(obj->age > 1000) Strcat(bp, " (two blades lit)");
