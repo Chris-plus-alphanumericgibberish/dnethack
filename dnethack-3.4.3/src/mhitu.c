@@ -954,7 +954,7 @@ mattacku(mtmp)
 						sum[i] = hitmu(mtmp, mattk);
 						if(mattk->aatyp == AT_DEVA && sum[i]){
 							deva = 1;
-							while(tmp > (j = dieroll = rnd(20+i+(deva++)))) hitmu(mtmp, mattk);
+							while(tmp > (j = dieroll = rnd(20+i+(deva++)*5))) hitmu(mtmp, mattk);
 						}
 					} else missmu(mtmp, (tmp == j), mattk);
 					/* KMH -- Don't accumulate to-hit bonuses */
