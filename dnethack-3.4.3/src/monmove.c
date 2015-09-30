@@ -921,7 +921,7 @@ register struct monst *mtmp;
 			return 1;
 	}
 	
-	if(is_drow(mtmp->data) && (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
+	if(is_drow(mtmp->data) && (!mtmp->mpeaceful || Race_if(PM_DROW)) && (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
 	){
 		if(cansee(mtmp->mx,mtmp->my)) pline("%s invokes the darkness.",Monnam(mtmp));
