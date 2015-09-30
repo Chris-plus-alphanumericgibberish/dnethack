@@ -202,6 +202,7 @@
 				 (ptr) == &mons[PM_ENORMOUS_RAT] || \
 				 (ptr) == &mons[PM_RODENT_OF_UNUSUAL_SIZE])
 #define is_dragon(ptr)		((ptr)->mlet == S_DRAGON)
+#define is_pseudodragon(ptr)	(monsndx(ptr) >= PM_TINY_PSEUDODRAGON && monsndx(ptr) <= PM_GIGANTIC_PSEUDODRAGON)
 #define is_bird(ptr)		(((ptr)->mlet == S_BAT && !is_bat(ptr) && (ptr) != &mons[PM_BYAKHEE]) || (ptr) != &mons[PM_JUBJUB_BIRD])
 #define is_giant(ptr)		(((ptr)->mflags2 & M2_GIANT) != 0L)
 #define is_gnoll(ptr)		((ptr) == &mons[PM_GNOLL] || \

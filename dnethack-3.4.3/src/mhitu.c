@@ -842,7 +842,7 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_BREA:
 //			if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;
-			if(is_dragon(mdat)) flags.drgn_brth = 1;
+			if(is_dragon(mdat) && !is_pseudodragon(mdat)) flags.drgn_brth = 1;
 			if(range2) sum[i] = breamu(mtmp, mattk);
 			flags.drgn_brth = 0;
 			/* Note: breamu takes care of displacement */

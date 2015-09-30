@@ -411,7 +411,7 @@ meleeattack:
 
 #ifdef TAME_RANGED_ATTACKS
 	    case AT_BREA:
-			if(is_dragon(magr->data)) flags.drgn_brth = 1;
+			if(is_dragon(magr->data) && !is_pseudodragon(magr->data)) flags.drgn_brth = 1;
 	        breamm(magr, mdef, mattk);
 			flags.drgn_brth = 0;
 		if (tmphp > mdef->mhp){
