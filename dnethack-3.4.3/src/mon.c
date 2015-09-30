@@ -2584,7 +2584,7 @@ boolean was_swallowed;			/* digestion */
 			}
 			if(mvitals[PM_KARY__THE_FIEND_OF_FIRE].died){
 				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
+				otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));
 				curse(otmp);
 				otmp->oerodeproof = TRUE;
 				// rloco(otmp);
