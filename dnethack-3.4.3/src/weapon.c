@@ -310,15 +310,17 @@ int spec;
 			tmp += rnd(objects[otyp].oc_wldam)+4;
 		break;
 		case VIBROBLADE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wldam)+4; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wldam)+objects[otyp].oc_wldam/2;
 		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wldam)+8; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wldam)+objects[otyp].oc_wldam;
 		break;
 		case LASER_BEAM:
+			tmp += d(2, objects[otyp].oc_wldam)+10;
+		break;
 		case BLASTER_BOLT:
 		case HEAVY_BLASTER_BOLT:
-			tmp += d(2, objects[otyp].oc_wldam)+10;
+			tmp += d(2, objects[otyp].oc_wldam)+objects[otyp].oc_wldam;
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
@@ -416,15 +418,17 @@ int spec;
 			tmp += rnd(objects[otyp].oc_wsdam)+4;
 		break;
 		case VIBROBLADE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wsdam)+3; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wsdam)+objects[otyp].oc_wsdam/2;
 		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wsdam)+6; 
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wsdam)+objects[otyp].oc_wsdam;
 		break;
 		case LASER_BEAM:
+			tmp += d(2, objects[otyp].oc_wsdam)+10;
+		break;
 		case BLASTER_BOLT:
 		case HEAVY_BLASTER_BOLT:
-			tmp += d(2, objects[otyp].oc_wsdam)+10;
+			tmp += d(2, objects[otyp].oc_wsdam)+objects[otyp].oc_wsdam;
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
