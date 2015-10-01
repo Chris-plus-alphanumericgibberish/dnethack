@@ -278,7 +278,7 @@ int sx, sy;
 	struct permonst *ptr;
 	struct obj *curobj = 0;
 
-	if (rn2(100) < depth(&u.uz) &&
+	if (rn2(100) < depth(&u.uz) && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)) &&
 		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC,Inhell ? G_HELL : G_NOHELL)) &&
 		(mtmp = makemon(ptr,sx,sy,NO_MM_FLAGS)) != 0) {
 	    /* note: makemon will set the mimic symbol to a shop item */
