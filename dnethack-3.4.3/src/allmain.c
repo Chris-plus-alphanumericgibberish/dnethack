@@ -566,16 +566,26 @@ moveloop()
 			} /* movement rations */
 			
 			static boolean LBbreach = FALSE;
-			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
-				for (mtmp = fmon; mtmp; mtmp = nxtmon) if(!mtmp->mpeaceful && mtmp->mx <= 20) break;
-				if(mtmp && !(LBbreach && moves%10)) {
-					verbalize("**ALERT: hostile entities detected within Last Bastion**");
+			static boolean LBproxim = FALSE;
+			static boolean LBperim = FALSE;
+			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz) && !(quest_status.leader_is_dead)){
+				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) if(!mtmp->mpeaceful && mtmp->mx <= 23) break;
+				if(mtmp && !(LBbreach && moves%5)) {
+					verbalize("**EMERGENCY ALERT: hostile entities detected within Last Bastion**");
 					LBbreach = TRUE;
 				} else if(!mtmp) LBbreach = FALSE;
-				if(!(moves%10)){
-					for (mtmp = fmon; mtmp; mtmp = nxtmon) if(!mtmp->mpeaceful && mtmp->mx <= 50 && mtmp->mx > 20) break;
+				
+				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) if(!mtmp->mpeaceful && mtmp->mx <= 26 && mtmp->mx > 23) break;
+				if(mtmp && !LBbreach && !(LBproxim && moves%10)) {
+					verbalize("*PROXIMITY ALERT: hostile entities detected outside Last Bastion*");
+					LBproxim = TRUE;
+				} else if(!mtmp) LBproxim = FALSE;
+				
+				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) if(!mtmp->mpeaceful && mtmp->mx <= 55 && mtmp->mx > 26) break;
+				if(mtmp && !LBperim) {
 					if(mtmp) verbalize("*PERIMETER ALERT: hostile entities closing on Last Bastion*");
-				}
+					LBperim = TRUE;
+				} else if(!mtmp) LBperim = FALSE;
 			}
 			
 		    if(!rn2(u.uevent.udemigod ? 25 :
