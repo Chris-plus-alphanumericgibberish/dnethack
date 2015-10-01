@@ -148,10 +148,10 @@ int x,y;
 			obj = (struct obj *)0;
 		}
 	} else if (obj->otyp == BLASTER_BOLT) {
-		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,6)+4,
+		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,6),
 		    0, EXPL_FIERY);
 	} else if (obj->otyp == HEAVY_BLASTER_BOLT) {
-		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,10)+10,
+		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,10),
 		    0, EXPL_FIERY);
 	} else if (objects[obj->otyp].oc_dir & EXPLOSION) {
 	    	if (cansee(bhitpos.x,bhitpos.y)) 
