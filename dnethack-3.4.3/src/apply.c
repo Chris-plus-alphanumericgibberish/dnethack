@@ -2778,30 +2778,10 @@ struct obj *hypo;
 						  TRUE, 0L);
 			break;
 			case POT_HEALING:
-				forget((!amp->blessed? ALL_SPELLS : 0) | ALL_MAP);
-				if (Hallucination)
-					pline("Hakuna matata!");
-				else
-					You_feel("your memories dissolve.");
-
-				/* Blessed amnesia makes you forget lycanthropy, sickness */
-				if (amp->blessed) {
-					if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF)) {
-					You("forget your affinity to %s!",
-							makeplural(mons[u.ulycn].mname));
-					if (youmonst.data == &mons[u.ulycn])
-						you_unwere(FALSE);
-					u.ulycn = NON_PM;	/* cure lycanthropy */
-					}
-					make_sick(0L, (char *) 0, TRUE, SICK_ALL);
-
-					/* You feel refreshed */
-					if(Race_if(PM_INCANTIFIER)) u.uen += 50 + rnd(50);
-					else u.uhunger += 50 + rnd(50);
-					
-					newuhs(FALSE);
-				} else
-					exercise(A_WIS, FALSE);
+				You_feel("better.");
+				healup(d(6 + 2 * bcsign(amp), 4),
+					   !amp->cursed ? 1 : 0, !!amp->blessed, !amp->cursed);
+				exercise(A_CON, TRUE);
 			break;
 			case POT_EXTRA_HEALING:
 				You_feel("much better.");
@@ -2855,8 +2835,6 @@ struct obj *hypo;
 				if (!Unchanging) polyself(FALSE);
 			break;
 			case POT_AMNESIA:
-				pline(Hallucination? "This tastes like champagne!" :
-					"This liquid bubbles and fizzes as you drink it.");
 				forget((!amp->blessed? ALL_SPELLS : 0) | ALL_MAP);
 				if (Hallucination)
 					pline("Hakuna matata!");
