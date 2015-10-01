@@ -993,7 +993,7 @@ register struct monst *mtmp;
 			else if (mm == PM_TROOPER){
 				otmp = mksobj(ARM_BLASTER, TRUE, FALSE);
 				otmp->spe = 0;
-				otmp->ovar1 = 50 + d(5,10);
+				otmp->ovar1 = d(5,10);
 				otmp->recharged = 4;
 				(void) mpickobj(mtmp, otmp);
 				
