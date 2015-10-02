@@ -78,6 +78,7 @@ static struct trobj Anachrononaut_Vam[] = {
 	{ BULLET, 0, TOOL_CLASS, 200, 0 },
 	{ SILVER_BULLET, 0, TOOL_CLASS, 50, 0 },
 	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
+	{ FOOD_RATION, 0, TOOL_CLASS, 5, 0 },
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ 0, 0, 0, 0, 0 }
 };
