@@ -579,7 +579,7 @@ vision_recalc(control)
     }
 #endif
     else {
-	int has_night_vision = u.nv_range || (Race_if(PM_DROW) && LightBlind);	/* hero has night vision */
+	int has_night_vision = u.nv_range || (Race_if(PM_DROW) && LightBlind && !Role_if(PM_ANACHRONONAUT));	/* hero has night vision */
 
 	if (Underwater && !Is_waterlevel(&u.uz)) {
 	    /*
@@ -739,7 +739,7 @@ vision_recalc(control)
 		    newsym(col,row);
 	    }
 
-	    else if ((!(Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && (next_row[col] & COULD_SEE)
+	    else if ((!(Race_if(PM_DROW) && !(Role_if(PM_ANACHRONONAUT) && LightBlind) && !Is_waterlevel(&u.uz)) && (next_row[col] & COULD_SEE)
 				&& (lev->lit || (next_row[col] & TEMP_LIT) || u.sealsActive&SEAL_AMON)) ||
 				 ( Race_if(PM_DROW)  && !Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)
 				&& (!(ulev->lit|| (next_array[u.uy][u.ux] & TEMP_LIT)) || u.sealsActive&SEAL_AMON)
@@ -760,7 +760,8 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if ((!(Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) &&  (flev->lit || next_array[row+dy][col+dx] & TEMP_LIT))
+		    if ((!(Race_if(PM_DROW) && !(Role_if(PM_ANACHRONONAUT) && LightBlind) && !Is_waterlevel(&u.uz)) && 
+					(flev->lit || next_array[row+dy][col+dx] & TEMP_LIT))
 			   ||(Race_if(PM_DROW) && !Is_waterlevel(&u.uz) && !((mat = m_at(col,row)) && emits_light(mat->data)))
 			   || u.sealsActive&SEAL_AMON
 			){
