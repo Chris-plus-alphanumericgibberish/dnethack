@@ -831,6 +831,11 @@ black light
 	X-rays. ... Some of the UV wavelengths are colloquially called black
 	light, as it is invisible to the human eye.
 		[ Wikipedia, the free encyclopedia ]
+blaster
+arm blaster
+hand blaster
+	Not as showy or impractical as a lightsaber; a powerful weapon, for
+	an uncivilized age.
 blindfold
 	The blindfolding was performed by binding a piece of the
 	yellowish linen whereof those of the Amahagger who condescended
@@ -4539,6 +4544,10 @@ light
 	Strange creatures formed from energy rather than matter,
 	lights are given to self-destructive behavior when battling
 	foes.
+*lightsaber
+	"Not as clumsy or random as a blaster; an elegant weapon,
+	for a more civilized age."
+		[ Star Wars ]
 crone lilith
 	It seems as if Euryale has always dwelt in the Hells. 
 	Beelzebub named his present city (Malegard) after her in 
@@ -6929,6 +6938,7 @@ the drowned
 	...But Time washes away all things, 
 		and that shining city has long since drowned 
 		beneath the uncaring ocean.
+~lightsaber
 *saber
 *sabre
 	Flashed all their sabres bare,
