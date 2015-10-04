@@ -781,7 +781,7 @@ A("The Heart of Ahriman",	RUBY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), (SPFX_REFLECT|SPFX_HSPDAM), 0,
 	/* this stone does double damage if used as a projectile weapon */
 	PHYS(10,0),	NO_DFNS,	CARY(AD_MAGM),
-	LEVITATION,	A_NEUTRAL, PM_BARBARIAN, NON_PM, 2500L, 
+	ARTI_REMOVE_CURSE,	A_NEUTRAL, PM_BARBARIAN, NON_PM, 2500L, 
 	0,0,0),
 
 #ifdef BARD

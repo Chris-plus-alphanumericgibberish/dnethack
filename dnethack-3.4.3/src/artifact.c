@@ -3353,6 +3353,69 @@ arti_invoke(obj)
 			}
 		}
     break;
+	case ARTI_REMOVE_CURSE:
+	    {	register struct obj *otmp;
+		if(Confusion != 0)
+		    if (Hallucination)
+			You_feel("the power of the Force against you!");
+		    else
+			You_feel("like you need some help.");
+		else
+		    if (Hallucination)
+			You_feel("in touch with the Universal Oneness.");
+		    else
+			You_feel("like someone is helping you.");
+		if (obj->cursed) {
+			pline("The curse is lifted.");
+			obj->cursed = FALSE;
+		} else {
+			if((Confusion == 0) && u.sealsActive&SEAL_MARIONETTE){
+				unbind(SEAL_MARIONETTE,TRUE);
+			} 
+			if(Confusion == 0) u.wimage = 0;
+		    for (otmp = invent; otmp; otmp = otmp->nobj) {
+			long wornmask;
+#ifdef GOLDotmp
+			/* gold isn't subject to cursing and blessing */
+			if (otmp->oclass == COIN_CLASS) continue;
+#endif
+			wornmask = (otmp->owornmask & ~(W_BALL|W_ART|W_ARTI));
+			if (wornmask && !obj->blessed) {
+			    /* handle a couple of special cases; we don't
+			       allow auxiliary weapon slots to be used to
+			       artificially increase number of worn items */
+			    if (otmp == uswapwep) {
+				if (!u.twoweap) wornmask = 0L;
+			    } else if (otmp == uquiver) {
+				if (otmp->oclass == WEAPON_CLASS) {
+				    /* mergeable weapon test covers ammo,
+				       missiles, spears, daggers & knives */
+				    if (!objects[otmp->otyp].oc_merge) 
+					wornmask = 0L;
+				} else if (otmp->oclass == GEM_CLASS) {
+				    /* possibly ought to check whether
+				       alternate weapon is a sling... */
+				    if (!uslinging()) wornmask = 0L;
+				} else {
+				    /* weptools don't merge and aren't
+				       reasonable quivered weapons */
+				    wornmask = 0L;
+				}
+			    }
+			}
+			if (obj->blessed || wornmask ||
+			     otmp->otyp == LOADSTONE ||
+			     (otmp->otyp == LEASH && otmp->leashmon)) {
+			    if(Confusion != 0) blessorcurse(otmp, 2);
+			    else uncurse(otmp);
+			}
+		    }
+		}
+		if(Punished && Confusion == 0) unpunish();
+		update_inventory();
+		break;
+	    }
+    break;
 	case CANNONADE:
 		You_hear("a voice shouting\"By your order, Sah!\"");
 		if (getdir((char *)0) && (u.dx || u.dy)){
