@@ -910,30 +910,31 @@ register int after;	/* this is extra fast monster movement */
 	if (passes_walls(mtmp->data)) allowflags |= (ALLOW_ROCK | ALLOW_WALL);
 	if (passes_bars(mtmp->data)  && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz)) ) allowflags |= ALLOW_BARS;
 	if (throws_rocks(mtmp->data)) allowflags |= ALLOW_ROCK;
-
-	if (Conflict && !resist(mtmp, RING_CLASS, 0, 0)) {
+	
+	/*I'm making minions just RESIST conflict automatically, instead of becoming a swarm of hostile angels*/
+	if (Conflict && has_edog && !resist(mtmp, RING_CLASS, 0, 0)) {
 	    allowflags |= ALLOW_U;
-	    if (!has_edog) {
-		coord mm;
-		/* Guardian angel refuses to be conflicted; rather,
-		 * it disappears, angrily, and sends in some nasties
-		 */
-		if (canspotmon(mtmp)) {
-		    pline("%s rebukes you, saying:", Monnam(mtmp));
-		    verbalize("Since you desire conflict, have some more!");
-		}
-		mongone(mtmp);
-		i = rnd(4);
-		while(i--) {
-		    mm.x = u.ux;
-		    mm.y = u.uy;
-		    if(enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL]))
-			(void) mk_roamer(&mons[PM_ANGEL], u.ualign.type,
-					 mm.x, mm.y, FALSE);
-		}
-		return(2);
+	    // if (!has_edog) {
+		// coord mm;
+		// /* Guardian angel refuses to be conflicted; rather,
+		 // * it disappears, angrily, and sends in some nasties
+		 // */
+		// if (canspotmon(mtmp)) {
+		    // pline("%s rebukes you, saying:", Monnam(mtmp));
+		    // verbalize("Since you desire conflict, have some more!");
+		// }
+		// mongone(mtmp);
+		// i = rnd(4);
+		// while(i--) {
+		    // mm.x = u.ux;
+		    // mm.y = u.uy;
+		    // if(enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL]))
+			// (void) mk_roamer(&mons[PM_ANGEL], u.ualign.type,
+					 // mm.x, mm.y, FALSE);
+		// }
+		// return(2);
 
-	    }
+	    // }
 	}
 	if (!Conflict && !mtmp->mconf &&
 	    mtmp == u.ustuck && !sticks(youmonst.data)) {
