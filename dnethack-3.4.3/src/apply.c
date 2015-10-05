@@ -5067,11 +5067,16 @@ doapply()
 		}
 		
 		You("switch %s to %s mode.", yname(obj), 
-			((obj->altmode == WP_MODE_SINGLE) ? "single shot" : 
+			((obj->altmode == WP_MODE_SINGLE) ? "semi-automatic" : 
 			 ((obj->altmode == WP_MODE_BURST) ? "burst" :
 			  "full automatic")));
 		break;	
 	case BFG:
+		if (obj->altmode == WP_MODE_AUTO) obj-> altmode = WP_MODE_BURST;
+		else obj->altmode = WP_MODE_AUTO;
+		You("switch %s to %s mode.", yname(obj), 
+			(obj->altmode ? "burst" : "full automatic"));
+		break;
 	case AUTO_SHOTGUN:
 	case SUBMACHINE_GUN:
 		if (obj->altmode == WP_MODE_AUTO) obj-> altmode = WP_MODE_SINGLE;
