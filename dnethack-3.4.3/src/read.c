@@ -518,7 +518,7 @@ struct obj *obj;
 	if (is_lightsaber(obj))
 	    return TRUE;
 //#ifdef FIREARMS
-	if (is_blaster(obj))
+	if (is_blaster(obj) && (obj->recharged < 4 || (obj->otyp != HAND_BLASTER && obj->otyp != ARM_BLASTER)))
 	    return TRUE;
 	if ((obj->otyp == FORCE_PIKE || obj->otyp == VIBROBLADE))
 	    return TRUE;
