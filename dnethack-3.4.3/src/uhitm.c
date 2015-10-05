@@ -1089,7 +1089,9 @@ int thrown;
 						((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh || 
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
-								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) && 
+								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy)) ||
+								((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
+						) && 
 						((Role_if(PM_ROGUE) && !Upolyd) ||
 							(Role_if(PM_ANACHRONONAUT) && Race_if(PM_DROW) && !Upolyd) ||
 							u.sealsActive&SEAL_ANDROMALIUS ||
@@ -1097,7 +1099,9 @@ int thrown;
 							(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
 							(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON))
 			)) {
-				if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+				if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
+					You("snipe the flat-footed %s!", l_monnam(mon));
+				else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
 					(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 					&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
 				) You("strike %s from behind!", mon_nam(mon));
