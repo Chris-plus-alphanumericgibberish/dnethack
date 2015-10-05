@@ -1091,6 +1091,7 @@ int thrown;
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) && 
 						((Role_if(PM_ROGUE) && !Upolyd) ||
+							(Role_if(PM_ANACHRONONAUT) && Race_if(PM_DROW) && !Upolyd) ||
 							u.sealsActive&SEAL_ANDROMALIUS ||
 							(uwep && uwep->oartifact == ART_SPINESEEKER) ||
 							(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
