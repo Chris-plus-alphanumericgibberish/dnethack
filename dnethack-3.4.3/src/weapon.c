@@ -494,7 +494,7 @@ int spec;
 	if (objects[otyp].oc_material <= LEATHER && (thick_skinned(ptr) || (mon == &youmonst && u.sealsActive&SEAL_ECHIDNA)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
-	if (ptr->mlet == S_SHADE && objects[otyp].oc_material != SILVER)
+	if (ptr->mlet == S_SHADE && (objects[otyp].oc_material != SILVER || arti_silvered(otmp) || arti_shining(otmp)))
 		tmp = 0;
 
 	/* "very heavy iron ball"; weight increase is in increments of 160 */
