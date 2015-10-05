@@ -1451,7 +1451,7 @@ NEARDATA struct permonst mons[] = {
 	M3_INFRAVISIBLE, CLR_WHITE),
 */
     MON("Nightmare", S_UNICORN,//18
-	LVL(12, 22, 0, 110, -20), (G_UNIQ|G_NOCORPSE|0), //needs quote
+	LVL(12, 22, 0, 110, -20), (G_UNIQ|G_NOCORPSE|G_NOGEN), //needs quote
 	A(ATTK(AT_BUTT, AD_CHRN, 1,12), ATTK(AT_KICK, AD_FIRE, 1, 6),
 	  ATTK(AT_KICK, AD_FIRE, 1, 6), ATTK(AT_KICK, AD_FIRE, 1, 6), 
 	  ATTK(AT_KICK, AD_FIRE, 1, 6), NO_ATTK),
