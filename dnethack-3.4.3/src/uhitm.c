@@ -1085,7 +1085,7 @@ int thrown;
 			valid_weapon_attack = (tmp > 1 || (obj && obj->otyp == SPOON && Role_if(PM_CONVICT)));
 			if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
-			} else if (!(noncorporeal(mdat) || amorphous(mdat) || stationary(mdat)) && (
+			} else if (!(noncorporeal(mdat) || amorphous(mdat) || (stationary(mdat) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT))) && (
 						((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh || 
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
