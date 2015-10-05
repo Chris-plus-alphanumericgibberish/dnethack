@@ -4755,22 +4755,147 @@ doapply()
 	case BULLET_FABBER:
 	if(!Role_if(PM_ANACHRONONAUT)) pline("It seems inert.");
 	else {
-		static const char all_count[] = { ALLOW_COUNT, GEM_CLASS, 0 };
+		static const char all_count[] = { ALLOW_COUNT, WEAPON_CLASS, GEM_CLASS, 0 };
 		struct obj *otmp = getobj(all_count, "feed to the fabber");
 		if (!otmp) break;
 		switch(otmp->otyp){
 			case ROCK:
-				poly_obj(otmp,BULLET);
+				obj_extract_self(otmp);
+				otmp = poly_obj(otmp,BULLET);
+				otmp = hold_another_object(otmp, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(otmp, "slip")),
+							   (const char *)0);
 			break;
 			case SILVER_SLINGSTONE:
-				poly_obj(otmp,SILVER_BULLET);
+				obj_extract_self(otmp);
+				otmp = poly_obj(otmp,SILVER_BULLET);
+				otmp->quan *= 2;
+				otmp->owt = weight(otmp);
+				otmp = hold_another_object(otmp, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(otmp, "slip")),
+							   (const char *)0);
 			break;
 			case FLINT:
-				poly_obj(otmp,SHOTGUN_SHELL);
+				obj_extract_self(otmp);
+				otmp = poly_obj(otmp,SHOTGUN_SHELL);
+				otmp = hold_another_object(otmp, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(otmp, "slip")),
+							   (const char *)0);
 			break;
 			case LOADSTONE:
-				poly_obj(otmp,ROCKET);
+				obj_extract_self(otmp);
+				otmp = poly_obj(otmp,ROCKET);
+				otmp = hold_another_object(otmp, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(otmp, "slip")),
+							   (const char *)0);
 			break;
+			case BULLET:
+				obj_extract_self(otmp);
+				otmp = poly_obj(otmp,SHOTGUN_SHELL);
+				otmp = hold_another_object(otmp, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(otmp, "slip")),
+							   (const char *)0);
+			break;
+			case SHOTGUN_SHELL:
+				obj_extract_self(otmp);
+				otmp = poly_obj(otmp,BULLET);
+				otmp = hold_another_object(otmp, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(otmp, "slip")),
+							   (const char *)0);
+			break;
+			case SILVER_BULLET:{
+				struct obj *rocket;
+				rocket = mksobj(ROCKET, FALSE, FALSE);
+				rocket->blessed = otmp->blessed;
+				rocket->cursed = otmp->cursed;
+				rocket->quan = (otmp->quan)/10;
+				rocket->spe = otmp->spe;
+				rocket->dknown = TRUE;
+				rocket->known = otmp->known;
+				rocket->bknown = otmp->bknown;
+				rocket->rknown = otmp->rknown;
+				rocket->sknown = otmp->sknown;
+				if((otmp->quan = (otmp->quan)%10) == 0) useup(otmp);
+				else otmp->owt = weight(otmp);
+				rocket->owt = weight(rocket);
+				rocket = hold_another_object(rocket, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(rocket, "slip")),
+							   (const char *)0);
+			}break;
+			case ROCKET:{
+				struct obj *bullets;
+				bullets = mksobj(SILVER_BULLET, FALSE, FALSE);
+				bullets->blessed = otmp->blessed;
+				bullets->cursed = otmp->cursed;
+				bullets->quan = (otmp->quan)*10;
+				bullets->spe = otmp->spe;
+				bullets->dknown = TRUE;
+				bullets->known = otmp->known;
+				bullets->bknown = otmp->bknown;
+				bullets->rknown = otmp->rknown;
+				bullets->sknown = otmp->sknown;
+				useupall(otmp);
+				bullets->owt = weight(bullets);
+				bullets = hold_another_object(bullets, u.uswallow ?
+						   "Oops!  %s out of your reach!" :
+						(Is_airlevel(&u.uz) ||
+						 Is_waterlevel(&u.uz) ||
+						 levl[u.ux][u.uy].typ < IRONBARS ||
+						 levl[u.ux][u.uy].typ >= ICE) ?
+							   "Oops!  %s away from you!" :
+							   "Oops!  %s to the floor!",
+							   The(aobjnam(bullets, "slip")),
+							   (const char *)0);
+			}break;
 		}
 	}
 	break;

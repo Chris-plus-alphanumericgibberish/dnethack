@@ -1024,7 +1024,8 @@ register const char *let,*word;
 		|| (!strcmp(word, "tin") &&
 		    (otyp != CORPSE || !tinnable(otmp)))
 		|| (!strcmp(word, "feed to the fabber") &&
-		    (otyp != ROCK && otyp != SILVER_SLINGSTONE && otyp != FLINT && otyp != LOADSTONE))
+		    (otyp != ROCK && otyp != SILVER_SLINGSTONE && otyp != FLINT && otyp != LOADSTONE
+			&& otyp != BULLET && otyp != SHOTGUN_SHELL && otyp != SILVER_BULLET && otyp != ROCKET))
 		|| (!strcmp(word, "rub") &&
 		    ((otmp->oclass == TOOL_CLASS &&
 		      otyp != OIL_LAMP && otyp != MAGIC_LAMP &&
