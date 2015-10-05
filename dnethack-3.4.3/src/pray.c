@@ -104,15 +104,19 @@ static int p_type; /* (-1)-3: (-1)=really naughty, 3=really good */
 
 #define TROUBLE_PUNISHED	       (-1)
 #define TROUBLE_FUMBLING	       (-2)
-#define TROUBLE_CURSED_ITEMS	       (-3)
+#define TROUBLE_CURSED_ITEMS	   (-3)
 #define TROUBLE_SADDLE		       (-4)
-#define TROUBLE_BLIND		       (-5)
-#define TROUBLE_POISONED	       (-6)
-#define TROUBLE_WOUNDED_LEGS	       (-7)
-#define TROUBLE_HUNGRY		       (-8)
-#define TROUBLE_STUNNED		       (-9)
-#define TROUBLE_CONFUSED	      (-10)
-#define TROUBLE_HALLUCINATION	      (-11)
+#define TROUBLE_CARRY_CURSED	   (-5)
+#define TROUBLE_TOHIT_CURSED	   (-6)
+#define TROUBLE_AC_CURSED		   (-7)
+#define TROUBLE_DAMAGE_CURSED	   (-8)
+#define TROUBLE_BLIND		       (-9)
+#define TROUBLE_POISONED	      (-10)
+#define TROUBLE_WOUNDED_LEGS	  (-11)
+#define TROUBLE_HUNGRY		      (-12)
+#define TROUBLE_STUNNED		      (-13)
+#define TROUBLE_CONFUSED	      (-14)
+#define TROUBLE_HALLUCINATION	  (-15)
 
 /* We could force rehumanize of polyselfed people, but we can't tell
    unintentional shape changes from the other kind. Oh well.
@@ -203,6 +207,10 @@ in_trouble()
 	}
 #endif
 
+	if (u.ucarinc < 0) return(TROUBLE_CARRY_CURSED);
+	if (u.uhitinc < 0) return(TROUBLE_TOHIT_CURSED);
+	if (u.uacinc < 0) return(TROUBLE_AC_CURSED);
+	if (u.udaminc < 0) return(TROUBLE_DAMAGE_CURSED);
 	if (Blinded > 1 && haseyes(youmonst.data)) return(TROUBLE_BLIND);
 	for(i=0; i<A_MAX; i++)
 	    if(ABASE(i) < AMAX(i)) return(TROUBLE_POISONED);
@@ -434,6 +442,23 @@ decurse:
 		    }
 		    (void) encumber_msg();
 		    break;
+	    case TROUBLE_CARRY_CURSED:
+			Your("pack feels lighter.");
+		    u.ucarinc = 0;
+			inv_weight();
+	    break;
+	    case TROUBLE_TOHIT_CURSED:
+			Your("curse is lifted.");
+		    u.uhitinc = 0;
+	    break;
+	    case TROUBLE_AC_CURSED:
+			Your("curse is lifted.");
+		    u.uacinc = 0;
+	    break;
+	    case TROUBLE_DAMAGE_CURSED:
+			Your("curse is lifted.");
+		    u.udaminc = 0;
+	    break;
 	    case TROUBLE_BLIND:
 		{
 		    int num_eyes = eyecount(youmonst.data);

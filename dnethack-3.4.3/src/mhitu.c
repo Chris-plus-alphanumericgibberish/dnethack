@@ -5350,7 +5350,7 @@ register struct monst *mon;
 			case 3:
 				Your("pack feels heavier.");
 				(void) adjattrib(A_STR, -2, TRUE);
-				u.ucarinc -= 250;
+				u.ucarinc -= 100;
 			break;
 			case 4: {
 				int tmp;
