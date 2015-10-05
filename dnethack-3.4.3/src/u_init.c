@@ -83,7 +83,7 @@ static struct trobj Anachrononaut_Vam[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Anachrononaut_Dro[] = {
-	{ SNIPER_RIFLE, 0, WEAPON_CLASS, 1, 0 },
+	{ SNIPER_RIFLE, 4, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
 	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
 	{ PLASTEEL_ARMOR, 0, ARMOR_CLASS, 1, 0 },
