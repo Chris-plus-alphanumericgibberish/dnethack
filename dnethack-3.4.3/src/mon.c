@@ -903,7 +903,7 @@ struct monst *mon;
 	}
     }
 #endif
-	if(u.sealsActive&SEAL_CHUPOCLOPS && dist2(mon->mx, mon->my, u.ux, u.uy) <= u.ulevel){
+	if(u.sealsActive&SEAL_CHUPOCLOPS && distmin(mon->mx, mon->my, u.ux, u.uy) <= u.ulevel/5+1){
 		mmove = max(mmove-(u.ulevel/10+1),1);
 	}
     return mmove;
