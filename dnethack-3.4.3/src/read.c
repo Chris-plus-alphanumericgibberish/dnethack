@@ -715,7 +715,6 @@ int curse_bless;
 		    }
 		}
 //#ifdef FIREARMS
-	    case CUTTING_LASER:
 	    case HAND_BLASTER:
 	    case ARM_BLASTER:
 			if(obj->recharged > 4){
@@ -726,6 +725,7 @@ int curse_bless;
 				else obj->ovar1 = 80L + rn2(20);
 			}
 		break;
+	    case CUTTING_LASER:
 	    case VIBROBLADE:
 	    case FORCE_PIKE:
 			if(is_blessed) obj->ovar1 = 100L;
