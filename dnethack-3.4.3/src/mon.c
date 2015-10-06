@@ -245,6 +245,7 @@ register struct monst *mtmp;
 				curse(otmp);
 				otmp->oerodeproof = TRUE;
 			}
+		goto default_1;
 		break;
 	    case PM_KARY__THE_FIEND_OF_FIRE:
 			if(mvitals[PM_GARLAND].died){
@@ -253,6 +254,7 @@ register struct monst *mtmp;
 				curse(otmp);
 				otmp->oerodeproof = TRUE;
 			}
+		goto default_1;
 		break;
 	    case PM_KRAKEN__THE_FIEND_OF_WATER:
 			if(mvitals[PM_GARLAND].died){
@@ -261,6 +263,7 @@ register struct monst *mtmp;
 				curse(otmp);
 				otmp->oerodeproof = TRUE;
 			}
+		goto default_1;
 		break;
 	    case PM_TIAMAT__THE_FIEND_OF_WIND:
 			if(mvitals[PM_GARLAND].died){
@@ -269,12 +272,14 @@ register struct monst *mtmp;
 				curse(otmp);
 				otmp->oerodeproof = TRUE;
 			}
+		goto default_1;
 		break;
 	    case PM_CHAOS:
 			otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
 			otmp = oname(otmp, artiname(ART_BLACK_CRYSTAL));		
 			curse(otmp);
 			otmp->oerodeproof = TRUE;
+		goto default_1;
 		break;
 	    case PM_GRAY_DRAGON:
 	    case PM_SILVER_DRAGON:
@@ -2350,7 +2355,7 @@ boolean was_swallowed;			/* digestion */
 		u.uevent.ukilled_illurien = 1;
 		u.ill_cnt = rn1(1000, 250);
 	}
-	if (mdat == &mons[PM_VLAD_THE_IMPALER] || mdat->mlet == S_LICH) {
+	if (mdat == &mons[PM_VLAD_THE_IMPALER] || (mdat->mlet == S_LICH && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH])) {
 	    if (cansee(mon->mx, mon->my) && !was_swallowed)
 			pline("%s body crumbles into dust.", s_suffix(Monnam(mon)));
 	    return FALSE;
