@@ -846,6 +846,13 @@ register struct obj *obj;
 	case RIN_WARNING:
 		see_monsters();
 		break;
+	case RIN_ALACRITY:
+		if (!oldprop && !(HFast & TIMEOUT)) {
+			makeknown(obj->otyp);
+			You_feel("yourself speed up%s.",
+				(oldprop || HFast) ? " a bit more" : "");
+		}
+	break;
 	case RIN_FIRE_RESISTANCE:
 		if(!oldprop && !HFire_resistance) pline("The ring feels cool!");
 	break;
@@ -939,6 +946,13 @@ boolean gone;
     else setworn((struct obj *)0, obj->owornmask);
 
     switch(obj->otyp) {
+	case RIN_ALACRITY:
+		if (!Very_fast && !cancelled_don) {
+			makeknown(obj->otyp);
+			You_feel("yourself slow down%s.",
+				Fast ? " a bit" : "");
+		}
+	break;
 	case RIN_TELEPORTATION:
 	case RIN_REGENERATION:
 	case RIN_SEARCHING:
