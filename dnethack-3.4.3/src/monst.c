@@ -6202,7 +6202,7 @@ is a red right hand
  * alignment quest nemeses
  */
     MON("Lich, the Fiend of Earth", S_LICH,//14
-	LVL(11, 12, 0, 30, -9), (G_NOCORPSE|G_UNIQ),
+	LVL(11, 6, 0, 30, -9), (G_NOCORPSE|G_UNIQ),
 	A(ATTK(AT_TUCH, AD_COLD, 1,10), ATTK(AT_TUCH, AD_PLYS, 1, 10),//Attack routine sometimes replaced by ATTK(AT_MAGC, AD_SPEL, 0, 0)
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(1200, 100, 0, MS_MUMBLE, MZ_GIGANTIC),//75% Flare -> paralize -> warp -> death touch
@@ -6219,7 +6219,7 @@ is a red right hand
 	M2_DEMON|M2_STALK|M2_HOSTILE|M2_NASTY|M2_FEMALE|M2_COLLECT|M2_PNAME,
 	M3_WAITFORU|M3_INFRAVISIBLE|M3_INFRAVISION|M3_TRAITOR, CLR_RED),
     MON("Kraken, the Fiend of Water", S_EEL,//22
-	LVL(20, 12, 6, 70, -10), (G_NOCORPSE|G_UNIQ),
+	LVL(20, 9, 6, 70, -10), (G_NOCORPSE|G_UNIQ),
 	A(ATTK(AT_TENT, AD_PHYS, 2, 4), ATTK(AT_CLAW, AD_PHYS, 2, 4),//Attack routine sometimes replaced by ATTK(AT_MAGC, AD_SPEL, 0, 0)
 	  ATTK(AT_HUGS, AD_WRAP, 2, 6), ATTK(AT_BITE, AD_PHYS, 5, 4),
 	  ATTK(AT_SPIT, AD_BLND, 0, 0), NO_ATTK),
@@ -6227,7 +6227,7 @@ is a red right hand
 	M1_SWIM|M1_AMPHIBIOUS|M1_ANIMAL|M1_NOHANDS|M1_CARNIVORE,
 	M2_NOPOLY|M2_HOSTILE|M2_STRONG|M2_MALE|M2_PNAME, M3_WAITFORU|M3_INFRAVISIBLE, CLR_GREEN),
     MON("Tiamat, the Fiend of Wind", S_DRAGON,//17
-	LVL(13, 12, -6, 90, -10), (G_NOCORPSE|G_UNIQ),
+	LVL(13, 9, -6, 90, -10), (G_NOCORPSE|G_UNIQ),
 	A(ATTK(AT_BITE, AD_PHYS, 3, 8), ATTK(AT_BITE, AD_PHYS, 3, 8),//Attack routine sometimes replaced by ATTK(AT_MAGC, AD_SPEL, 0, 0)
 	  ATTK(AT_BITE, AD_PHYS, 3, 8), ATTK(AT_BITE, AD_PHYS, 3, 8),
 	  NO_ATTK, NO_ATTK),
