@@ -280,20 +280,20 @@ register struct monst *mtmp;
 		    int w1 = 0, w2 = 0;
 			switch (mm){
 			case PM_LEGION_DEVIL_GRUNT:
-			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
+			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, CROSSBOW);
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 5);
 			break;
 			case PM_LEGION_DEVIL_SOLDIER:
-			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
+			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, CROSSBOW);
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 10);
 				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
 			break;
 			case PM_LEGION_DEVIL_SERGEANT:
-			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
+			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, CROSSBOW);
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 20);
@@ -301,7 +301,7 @@ register struct monst *mtmp;
 				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
 			break;
 			case PM_LEGION_DEVIL_CAPTAIN:
-			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
+			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, BOW);
 				  m_initthrow(mtmp, ARROW, 30);
@@ -379,7 +379,7 @@ register struct monst *mtmp;
 				case PM_WATCHMAN:
 				case PM_SOLDIER:
 				  if (!rn2(3)) {
-					  w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
+					  w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
 					  w2 = rn2(2) ? DAGGER : KNIFE;
 				  } else if(!rn2(2)){
 					  w1 = CROSSBOW;
