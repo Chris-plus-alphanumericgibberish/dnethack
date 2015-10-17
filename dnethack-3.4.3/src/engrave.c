@@ -267,6 +267,12 @@ static const char *haluMesg[] = {
 	"fire, walk with me.", /*Twin Peaks*/
 	"redefine happiness", /* Blue Oyster Cult */
 	"no more sadness, no more anger, no more envy...", /*Halo*/
+		"Silence fills the empty grave, now that I have gone.",
+		"But my mind is not at rest, for questions linger on.",
+	"We are born of the blood.",/*Bloodborne*/
+		"Made men by the blood.",
+		"Undone by the blood.",
+		"Fear the old blood.",
 	"Even false things are true",	"FIVE TONS OF FLAX!",	"Fnord", /*Discordianism*/
 	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
 		"This thing all things devours.",
@@ -320,6 +326,7 @@ static const char *haluMesg[] = {
 		"Hello.", "You are no longer lost.", "Here is the map for your journey up.", /* SCP-2084 - Anabasis */
 		"A war, whoever was left alive, was Clean.", /* Red Sea Object */
 		"Let the depths rise up and sweep over the shores, rendering the works of man to dust.", /* SCP-1014 - Jonah Crusoe */
+		"in my head theres a sick silk nail", /* SCP 1291 */
 	"I prepared Explosive Runes this morning.", /*Order of the Stick*/
 		"In any battle, there's always a level of force against which no tactics can succeed.",
 	"1002: He is Not that Which He Says He Is.", /*Good Omens*/
