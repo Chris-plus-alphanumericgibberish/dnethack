@@ -3437,16 +3437,12 @@ xchar sx, sy;
 	    } else {
 			if(!flat) dam = d(nd,6);
 			else dam = flat;
-			if (!rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
-			if (!rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
-			if (!rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
-			burnarmor(&youmonst);
-	    }
-		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
-			destroy_item(POTION_CLASS, AD_FIRE);
-			destroy_item(SCROLL_CLASS, AD_FIRE);
-			destroy_item(SPBOOK_CLASS, AD_FIRE);
-			burnarmor(&youmonst);
+			if(!Reflecting){
+				if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
+				if (flags.drgn_brth || !rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
+				if (flags.drgn_brth || !rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
+				burnarmor(&youmonst);
+			} else dam = dam/2+1;
 		}
 	    burn_away_slime();
     break;
@@ -3458,11 +3454,10 @@ xchar sx, sy;
 	    } else {
 			if(!flat) dam = d(nd,6);
 			else dam = flat;
-			if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
-	    }
-		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
-			destroy_item(POTION_CLASS, AD_COLD);
-			destroy_item(POTION_CLASS, AD_COLD);
+			if(!Reflecting){
+				if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
+				if (flags.drgn_brth) destroy_item(POTION_CLASS, AD_COLD);
+			} else dam = dam/2+1;
 		}
     break;
 	case ZT_SLEEP:{
@@ -3562,12 +3557,10 @@ xchar sx, sy;
 		if(!flat) dam = d(nd,6);
 		else dam = flat;
 		exercise(A_CON, FALSE);
-	    if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
-	    if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
-	    }
-		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
-			destroy_item(WAND_CLASS, AD_ELEC);
-			destroy_item(RING_CLASS, AD_ELEC);
+			if(!Reflecting){
+				if (flags.drgn_brth || !rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
+				if (flags.drgn_brth || !rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
+			} else dam = dam/2+1;
 		}
 	    break;
 	case ZT_POISON_GAS:
@@ -3595,18 +3588,13 @@ xchar sx, sy;
 			if(!flat) dam = d(nd,6);
 			else dam = flat;
 			exercise(A_STR, FALSE);
-			if(!flags.drgn_brth){
+			if(!Reflecting){
 				/* using two weapons at once makes both of them more vulnerable */
-				if (!rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, TRUE, TRUE);
-				if (u.twoweap && !rn2(3)) erode_obj(uswapwep, TRUE, TRUE);
-				if (!rn2(6)) erode_armor(&youmonst, TRUE);
-			}
+				if (flags.drgn_brth || !rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, TRUE, TRUE);
+				if (u.twoweap && (flags.drgn_brth || !rn2(3))) erode_obj(uswapwep, TRUE, TRUE);
+				if (flags.drgn_brth || !rn2(6)) erode_armor(&youmonst, TRUE);
+			} else dam = dam/2+1;
 	    }
-		if(flags.drgn_brth && !(uarms && Is_dragon_shield(uarms))){
-			erode_obj(uwep, TRUE, TRUE);
-			if (u.twoweap) erode_obj(uswapwep, TRUE, TRUE);
-			erode_armor(&youmonst, TRUE);
-		}
 	break;
 	}
 
@@ -3641,7 +3629,7 @@ boolean u_caused;
 			obj->otyp == SHEAF_OF_HAY) {
 		if (obj->otyp == SCR_FIRE || obj->otyp == SPE_FIREBALL  || 
 			obj->otyp == SCR_GOLD_SCROLL_OF_LAW || 
-			obj_resists(obj, 2, 100))
+			obj_resists(obj, 0, 100))
 		    continue;
 		scrquan = obj->quan;	/* number present */
 		delquan = 0;		/* number to destroy */
@@ -3903,14 +3891,13 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				goto buzzmonst;
 			} else
 #endif
-			if (zap_hit((int) u.uac, 0) || (((flags.drgn_brth && abs(type) != ZT_BREATH(ZT_DEATH))
-				|| abs(type) == ZT_BREATH(ZT_SLEEP)) && !(uarms && Is_dragon_shield(uarms)))
+			if (zap_hit((int) u.uac, 0) || ((flags.drgn_brth && abs(type) != ZT_BREATH(ZT_DEATH))
+				|| abs(type) == ZT_BREATH(ZT_SLEEP))
 			) {
 				range -= 2;
 				pline("%s hits you!", The(fltxt));
 				if (Reflecting && (
 					(!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || 
-					(uarms && uarms->otyp == SILVER_DRAGON_SCALE_SHIELD) ||
 					(uwep && uwep->oartifact == ART_DRAGONLANCE))
 				) {
 					if (!Blind) {
