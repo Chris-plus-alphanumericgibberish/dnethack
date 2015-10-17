@@ -530,7 +530,7 @@ unsigned int type;
        case PM_LICH:
            if (!rn2(3)) return CURSE_ITEMS;
        /* fallthrough */
-       case PM_NALFESHNEE:
+       // case PM_NALFESHNEE:
            if (rn2(2)) return (rn2(2) ? DESTRY_ARMR : DESTRY_WEPN);
        /* fallthrough */
        case PM_BARROW_WIGHT:
@@ -668,6 +668,25 @@ unsigned int type;
 				return SUMMON_SPHERE;
 			break;
 		}
+	case PM_NALFESHNEE:
+		switch(rn2(5)){
+			case 0:
+				return OPEN_WOUNDS;
+			break;
+			case 1:
+				return CURSE_ITEMS;
+			break;
+			case 2:
+				return LIGHTNING;
+			break;
+			case 3:
+				return FIRE_PILLAR;
+			break;
+			case 4:
+				return PUNISH;
+			break;
+		}
+	break;
 	case PM_PALE_NIGHT:
 		switch(rn2(5)){
 			case 0:
@@ -686,6 +705,7 @@ unsigned int type;
 				return DEATH_TOUCH;
 			break;
 		}
+	break;
 	case PM_ASMODEUS:
 		switch(rn2(9)){
 			case 0:
@@ -716,6 +736,7 @@ unsigned int type;
 				return DEATH_TOUCH;
 			break;
 		}
+	break;
 	case PM_MINOTAUR_PRIESTESS:
 		switch (d(1,5)+8) {
 			case 13:
@@ -735,6 +756,7 @@ unsigned int type;
 			return OPEN_WOUNDS;
 			break;
 		}
+	break;
 	case PM_GNOLL_MATRIARCH:
 		switch (d(1,10)-4) {
 			case 6:
