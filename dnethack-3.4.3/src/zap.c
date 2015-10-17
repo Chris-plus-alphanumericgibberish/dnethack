@@ -1662,7 +1662,7 @@ struct obj *obj, *otmp;
 		if (obj->otyp == WAN_POLYMORPH ||
 			obj->otyp == SPE_POLYMORPH ||
 			obj->otyp == POT_POLYMORPH ||
-			obj_resists(obj, 5, 95)) {
+			obj_resists(obj, 0, 95)) {
 		    res = 0;
 		    break;
 		}
