@@ -272,7 +272,7 @@ aligntyp alignment;	/* target alignment, or A_NONE */
 				continue;	/* skip enemies' equipment */
 			} else if(by_align && Role_if(PM_PIRATE)) 
 				continue; /* pirates are not gifted artifacts */
-			else if(by_align && Role_if(PM_MONK) && is_monk_safe_artifact(m) && (!(u.uconduct.weaphit) || !rn2(20)))
+			else if(by_align && Role_if(PM_MONK) && !is_monk_safe_artifact(m) && (!(u.uconduct.weaphit) || rn2(20)))
 				continue; /* monks are very restricted */
 			else
 				eligible[n++] = m;
