@@ -34,7 +34,6 @@ struct monst *mon;
 	    ptr = &mons[PM_WIZARD_OF_YENDOR];
 	    atyp = (ptr->maligntyp==A_NONE) ? A_NONE : sgn(ptr->maligntyp);
 	}
-	
 	if(ptr == &mons[PM_SHAKTARI]) {
 	    dtype = PM_MARILITH;
 		cnt = d(1,6);
@@ -48,7 +47,7 @@ struct monst *mon;
 	    cnt = (!rn2(4) && is_ndemon(&mons[dtype])) ? 2 : 1;
 	} else if (is_ndemon(ptr)) {
 	    dtype = (!rn2(20) && Inhell) ? dlord(atyp) :
-				 (!rn2(6)) ? ndemon(atyp) : monsndx(ptr);
+				 ((mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? ndemon(atyp) : monsndx(ptr);
 	    cnt = 1;
 	} else if (is_lminion(mon)) {
 	    dtype = (is_lord(ptr) && !rn2(20)) ? llord() :
