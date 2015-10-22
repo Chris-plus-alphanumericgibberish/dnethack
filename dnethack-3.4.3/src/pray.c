@@ -1825,7 +1825,6 @@ aligntyp alignment;
 		 "A miasma of stinking vapors coalesces around you!");
 	   break;
 	}
-	godvoice(u.ualign.type, "My minion shall serve thee!");
 	return;
     }
 }
