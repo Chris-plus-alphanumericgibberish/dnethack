@@ -2761,6 +2761,7 @@ spiriteffects(power, atme)
 					else {
 						setmangry(mon);
 						mon->msleeping = 1;
+						slept_monst(mon);
 					}
 				}
 				else mon->msleeping = 0;
@@ -2941,6 +2942,7 @@ spiriteffects(power, atme)
 				break;
 			}
 			if (resists_drli(mon) || resist(mon, '\0', 0, NOTELL)){
+				pline("%s is unaffected by the touch of the void.", Monnam(mon));
 				shieldeff(mon->mx, mon->my);
 				break;
 			} else {
