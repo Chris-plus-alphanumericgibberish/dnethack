@@ -4480,7 +4480,7 @@ int	spc;
  *			mons[] array.
  */
 	for (first = LOW_PM; first < SPECIAL_PM; first++)
-	    if (mons[first].mlet == class) break;
+	    if (mons[first].mlet == class && !(mons[first].geno & mask)) break;
 	if (first == SPECIAL_PM) return (struct permonst *) 0;
 
 	for (last = first;
