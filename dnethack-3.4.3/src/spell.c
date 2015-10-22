@@ -3015,6 +3015,7 @@ spiriteffects(power, atme)
 				break;
 			}
 			if(resists_poison(mon)){
+				pline("%s is immune to the poison.", Monnam(mon));
 				shieldeff(mon->mx, mon->my);
 			} else if(rn2(10)){
 				mon->mhp = 0;
@@ -3070,6 +3071,7 @@ spiriteffects(power, atme)
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
 			if(resists_drli(mon) || nonliving(mon->data) || mon->m_lev > u.ulevel){
+				pline("You can't swallow the soul of %s.", mon_nam(mon));
 				shieldeff(mon->mx, mon->my);
 			} else {
 				You("suck out %s's soul.", mon_nam(mon));
