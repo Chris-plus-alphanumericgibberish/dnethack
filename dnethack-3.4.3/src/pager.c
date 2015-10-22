@@ -752,10 +752,12 @@ static const char * const bogusobjects[] = {
 	   "spellbook named Sefer Raziel HaMalakh", 				/*"Book of Raziel the Angel”, given to Adam */
 	   "spellbook named The Testament of Solomon",
 	   "spellbook named The Book of Enoch",
+	   "spellbook named The Book of Inverted Darkness",
 	   "spellbook named The Uruk Tablets",
 	   "spellbook named The Book of the Law",
 	   "spellbook named the Book of Shadows",
 	   "spellbook named the Book of Mirrors",
+	   "book called the Gospel of the Thricefold Exile",
        "dead sea scroll",
 	   "mayan codex",
 	   "simple textbook on the zoologically dubious",			/* Homestuck */
