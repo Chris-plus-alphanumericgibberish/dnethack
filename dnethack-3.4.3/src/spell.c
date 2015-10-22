@@ -1969,6 +1969,12 @@ spiriteffects(power, atme)
 				if(rn2(u.ulevel) > mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
 					if (mon->isshk) make_happy_shk(mon, FALSE);
 					else (void) tamedog(mon, (struct obj *) 0);
+				} else {
+					if(resists_sleep(mon) || resist(mon, '\0', 0, TELL)) shieldeff(mon->mx, mon->my);
+					else {
+						mon->msleeping = 1;
+						slept_monst(mon);
+					}
 				}
 			} else break;
 		}break;
