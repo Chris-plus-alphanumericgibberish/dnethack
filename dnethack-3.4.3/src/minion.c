@@ -51,7 +51,14 @@ struct monst *mon;
 	    cnt = 1;
 	} else if (is_lminion(mon)) {
 	    dtype = (is_lord(ptr) && !rn2(20)) ? llord() :
-		     (is_lord(ptr) || !rn2(6)) ? lminion() : monsndx(ptr);
+		     (is_lord(ptr) || (mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? lminion() : monsndx(ptr);
+	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
+	} else if (is_nminion(mon)) {
+	    dtype = (is_lord(ptr) && !rn2(20)) ? nlord() :
+		     (is_lord(ptr) || (mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? nminion() : monsndx(ptr);
+	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
+	} else if (is_cminion(mon)) {
+	    dtype = (is_lord(ptr) && !rn2(20)) ? clord() : cminion();
 	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
 	} else if (ptr == &mons[PM_ANGEL]) {
 	    /* non-lawful angels can also summon */
