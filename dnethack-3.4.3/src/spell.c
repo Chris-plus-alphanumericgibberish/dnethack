@@ -2593,12 +2593,18 @@ spiriteffects(power, atme)
 			if(!getdir((char *)0)  || !(u.dx || u.dy)) return 0;
 			if(mon = m_at(u.ux+u.dx, u.uy+u.dy)){
 				Your("forked tongue speaks with silvery grace.");
-				if(!always_hostile(mon->data) &&
+				if((!always_hostile(mon->data) &&
 				!(mon->data->geno & G_UNIQ) &&
-				!mon->mtraitor){
-					if (mon->isshk) make_happy_shk(mon, FALSE);
-					mon->mpeaceful = 1;
+				!mon->mtraitor) || !resist(mon, '\0', 0, NOTELL)
+				){
+					if (mon->isshk){
+						make_happy_shk(mon, FALSE);
+						mon->mpeaceful = 1;
+					} else {
+						(void) tamedog(mon, (struct obj *)0);
+					}
 				} else {
+					shieldeff(mon->mx, mon->my);
 					pline("%s doesn't waver, though.", Monnam(mon));
 				}
 			} else{
