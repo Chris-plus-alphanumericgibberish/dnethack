@@ -3036,8 +3036,9 @@ aligntyp alignment;
 	register struct obj *otmp;
 	const char *what = (const char *)0;
 	
-	if (!rnl(30 + u.ulevel)) god_gives_pet(align_gname_full(alignment),alignment);
-	else {
+	// if (!rnl(30 + u.ulevel)) god_gives_pet(align_gname_full(alignment),alignment);
+	// else {
+	{ //For now, remove gods giving pets, since I think it crashes the game.
 		switch (rnl(5)) {
 			case 0: /* randomly charge an object */
 			case 1: /* increase weapon bonus */
