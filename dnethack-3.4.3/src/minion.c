@@ -406,6 +406,16 @@ lminion()
 	return NON_PM;
 }
 
+/* create neutral (good) lord */
+int
+nlord()
+{
+	if (!(mvitals[PM_MAHADEVA].mvflags & G_GONE && !In_quest(&u.uz)))
+		return(PM_MAHADEVA);
+
+	return(nminion());	/* approximate */
+}
+
 int
 nminion()
 {
@@ -414,6 +424,16 @@ nminion()
 		case 2: return PM_MONADIC_DEVA;
 		case 3: return PM_ASTRAL_DEVA;
 	}
+}
+
+/* create chaotic (good) lord */
+int
+clord()
+{
+	if (!(mvitals[PM_TULANI].mvflags & G_GONE && !In_quest(&u.uz)))
+		return(PM_TULANI);
+
+	return(cminion());	/* approximate */
 }
 
 int

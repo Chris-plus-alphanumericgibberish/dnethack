@@ -1115,6 +1115,8 @@ E long FDECL(bribe, (struct monst *));
 E int FDECL(dprince, (ALIGNTYP_P));
 E int FDECL(dlord, (ALIGNTYP_P));
 E int NDECL(llord);
+E int NDECL(nlord);
+E int NDECL(clord);
 E int FDECL(ndemon, (ALIGNTYP_P));
 E int NDECL(lminion);
 E int NDECL(nminion);

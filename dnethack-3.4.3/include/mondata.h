@@ -33,6 +33,11 @@
 				 ((mon)->data != &mons[PM_ANGEL] || \
 				  EPRI(mon)->shralign > 0))
 
+#define is_nminion(mon)		(is_minion((mon)->data) && \
+				 (mon)->data->maligntyp == A_NEUTRAL && \
+				 ((mon)->data != &mons[PM_ANGEL] || \
+				  EPRI(mon)->shralign == 0))
+
 #define is_cminion(mon)		(is_minion((mon)->data) && \
 				 (mon)->data->maligntyp < A_NEUTRAL && \
 				 ((mon)->data != &mons[PM_ANGEL] || \
