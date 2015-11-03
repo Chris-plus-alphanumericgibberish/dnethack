@@ -68,7 +68,8 @@ boolean restore;
 			&& otmp->otyp != STATUE)
 			&& (!otmp->oartifact ||
 			   (restore && (exist_artifact(otmp->otyp, ONAME(otmp))
-					|| is_quest_artifact(otmp))))) {
+					|| (is_quest_artifact(otmp) && !In_quest(&u.uz)))))
+		) {
 			otmp->oartifact = 0;
 			otmp->onamelth = 0;
 			*ONAME(otmp) = '\0';
