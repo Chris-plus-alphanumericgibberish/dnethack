@@ -69,6 +69,8 @@ pet_type()
 	    return (PM_KITTEN);
 	else if (preferred_pet == 'd')
 	    return (PM_LITTLE_DOG);
+	else if (urole.petnum != NON_PM)
+	    return (urole.petnum);
 	else
 	    return (rn2(2) ? PM_KITTEN : PM_LITTLE_DOG);
 }
