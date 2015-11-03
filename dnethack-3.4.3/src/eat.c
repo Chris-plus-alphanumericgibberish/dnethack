@@ -3715,8 +3715,12 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 		else u.uhunger -= 9;
 	}
 	if(uclockwork){
-		if(u.ucspeed == SLOW_CLOCKSPEED && !(moves%(10+u.slowclock))) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
-		else{
+		if(u.ucspeed == SLOW_CLOCKSPEED){
+			if(!(moves%(10+u.slowclock))){
+				if(Race_if(PM_INCANTIFIER)) u.uen--;
+				else u.uhunger--;
+			}
+		} else {
 			if(u.slowclock < 10){
 				if(moves%10 >= u.slowclock) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 			} else if(!(moves%u.slowclock)) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
