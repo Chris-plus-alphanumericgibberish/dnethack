@@ -1003,6 +1003,10 @@ plus:
 				" (being worn)");
 		if(obj->lamplit)
 			Strcat(bp, " (lit)");
+		if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
+			if(Is_dragon_mail(obj)) Sprintf(eos(bp), " (mail)");
+			if(Is_dragon_scales(obj)) Sprintf(eos(bp), " (scales)");
+		}
 		goto plus;
 	case TOOL_CLASS:
 		/* weptools already get this done when we go to the +n code */
