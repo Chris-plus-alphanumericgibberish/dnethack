@@ -1710,7 +1710,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		you_are("protected from shape changers");
 	if (Polymorph) you_are("polymorphing");
 	if (Polymorph_control) you_have("polymorph control");
-	if (u.ulycn >= LOW_PM) {
+	if (u.ulycn >= LOW_PM && !uclockwork) {
 		Strcpy(buf, an(mons[u.ulycn].mname));
 		you_are(buf);
 	}

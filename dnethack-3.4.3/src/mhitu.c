@@ -2061,7 +2061,9 @@ dopois:
 		hitmsg(mtmp, mattk);
 		if (uncancelled && !rn2(4) && u.ulycn == NON_PM &&
 			!Protection_from_shape_changers &&
-			!spec_ability2(uwep, SPFX2_NOWERE)) {
+			!spec_ability2(uwep, SPFX2_NOWERE) &&
+			!uclockwork
+		) {
 		    You_feel("feverish.");
 		    exercise(A_CON, FALSE);
 		    u.ulycn = monsndx(mdat);
