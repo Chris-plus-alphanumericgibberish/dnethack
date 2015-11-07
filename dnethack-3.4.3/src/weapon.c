@@ -1488,6 +1488,7 @@ boolean speedy;
 #endif
 	    (P_ADVANCE(skill) >=
 		(unsigned) practice_needed_to_advance(OLD_P_SKILL(skill))
+		&& practice_needed_to_advance(OLD_P_SKILL(skill))
 	    && u.skills_advanced < P_SKILL_LIMIT
 	    && u.weapon_slots >= slots_required(skill)));
 }
@@ -1501,6 +1502,7 @@ int skill;
 	    && P_SKILL(skill) < P_MAX_SKILL(skill) && (
 	    (P_ADVANCE(skill) >=
 		(unsigned) practice_needed_to_advance(OLD_P_SKILL(skill))
+		&& practice_needed_to_advance(OLD_P_SKILL(skill))
 	    && u.skills_advanced < P_SKILL_LIMIT));
 }
 
