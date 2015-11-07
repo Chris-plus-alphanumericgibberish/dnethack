@@ -2333,6 +2333,8 @@ role_init()
 			urole.ldrnum = PM_THORIN_II_OAKENSHIELD;
 			urole.guardnum = PM_DWARF_WARRIOR;
 			urole.neminum = PM_BOLG;
+			
+			urole.petnum = NON_PM;
 		} else {
 			urole.filecode = "Dnb";
 			
@@ -2343,6 +2345,8 @@ role_init()
 			urole.ldrnum = PM_DAIN_II_IRONFOOT;
 			urole.guardnum = PM_DWARF_WARRIOR;
 			urole.neminum = PM_DURIN_S_BANE;
+			
+			urole.petnum = NON_PM;
 		}
 		urole.rank[0] = DwarfRanks[0];
 		urole.rank[1] = DwarfRanks[1];
