@@ -82,7 +82,7 @@ boolean restore;
 			otmp->dknown = otmp->bknown = 0;
 			otmp->rknown = 0;
 			otmp->sknown = 0;
-			otmp->ostolen = 0;
+			// otmp->ostolen = 0;
 			otmp->invlet = 0;
 			otmp->no_charge = 0;
 			otmp->was_thrown = 0;

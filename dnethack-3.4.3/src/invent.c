@@ -2575,8 +2575,8 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	if (obj->oclass == COIN_CLASS) return TRUE;
 #endif
 	if (obj->unpaid != otmp->unpaid ||
-		obj->sknown != otmp->sknown ||
 		obj->ostolen != otmp->ostolen ||
+		(obj->ostolen && obj->sknown != otmp->sknown) ||
 		(obj->ovar1 != otmp->ovar1 && obj->otyp != CORPSE) ||
 	    obj->spe != otmp->spe || obj->dknown != otmp->dknown ||
 	    (obj->bknown != otmp->bknown && !Role_if(PM_PRIEST)) ||
@@ -2594,6 +2594,8 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	    obj->bypass != otmp->bypass)
 	    return(FALSE);
 
+	if(obj->sknown || otmp->sknown) obj->sknown = otmp->sknown = 1;
+	
 	if ((obj->oclass==WEAPON_CLASS || obj->oclass==ARMOR_CLASS) &&
 	    (obj->oerodeproof!=otmp->oerodeproof || obj->rknown!=otmp->rknown))
 	    return FALSE;
