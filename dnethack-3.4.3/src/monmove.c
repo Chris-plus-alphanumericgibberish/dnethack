@@ -1023,6 +1023,7 @@ register struct monst *mtmp;
 				digactualhole(mtmp->mx, mtmp->my, mtmp, HOLE, FALSE, TRUE);
 		}
 	} else if (has_mind_blast(mdat) && !rn2(20)) {
+		boolean reducedFlayerMessages = (((Role_if(PM_NOBLEMAN) && Race_if(PM_DROW) && flags.initgend) || Role_if(PM_ANACHRONONAUT)) && In_quest(&u.uz));
 		struct monst *m2, *nmon = (struct monst *)0;
 		
 		if (canseemon(mtmp))
@@ -1031,10 +1032,10 @@ register struct monst *mtmp;
 			// You("sense a faint wave of psychic energy.");
 			// goto toofar;
 		// }
-		pline("A wave of psychic energy pours over you!");
+		if(!reducedFlayerMessages) pline("A wave of psychic energy pours over you!");
 		if (mtmp->mpeaceful &&
 		    (!Conflict || resist(mtmp, RING_CLASS, 0, 0)))
-			pline("It feels quite soothing.");
+			if(!reducedFlayerMessages) pline("It feels quite soothing.");
 		else {
 			register boolean m_sen = sensemon(mtmp);
 			
