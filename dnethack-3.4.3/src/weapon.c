@@ -2047,6 +2047,8 @@ struct obj *weapon;
 			case P_BASIC:		 maxweight = 20; break;	 /* daggers, crysknife, sickle, aklys, flail, bullwhip, unicorn horn */
 			case P_SKILLED:	 	 maxweight = 30; break;	 /* shortswords and spears (inc silver), mace, club, lightsaber, grappling hook */
 			case P_EXPERT:		 maxweight = 40; break;	 /* sabers and long swords, axe weighs 60, war hammer 50, pickaxe 80, beamsword */
+			case P_MASTER:		 maxweight = 50; break;	 /* war hammer */
+			case P_GRAND_MASTER: maxweight = 60; break;	 /* axe */
 		}
 		if (uswapwep && uswapwep->owt > maxweight) {
 			bonus += max(-20, -5 * (uswapwep->owt-maxweight)/maxweight);
