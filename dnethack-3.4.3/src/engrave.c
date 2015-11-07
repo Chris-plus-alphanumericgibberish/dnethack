@@ -344,6 +344,7 @@ static const char *haluMesg[] = {
 		"We're certainly dwarves",
 		"There is no doubt being human is incredibly difficult and cannot be mastered in one lifetime.",
 	"NOT A Secret Base", /*Gunnerkrigg Court*/
+	"We have the option to definitely die, but I've decided against it.", /*Schlock Mercenary*/
 	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
 	"I SAW THE EYE. Over the horizon, like a rising sun!", /* Dresden Codak */
 		"That's Science, isn't it? The perpetual horizon. But we found a way, haha, we found a way around that!",
@@ -352,6 +353,7 @@ static const char *haluMesg[] = {
 		"The world turns, and dawn comes. And under the light of the sun I shall slay giants.",
 	"Don't trust the skull.", /* Cynarfpncr: Gbezrag (mild spoiler) */
 	"death is the greatest illusion", /*Blade of Innocence*/
+	"Our sandwiches come with attempted assassination plots. New sales gimmick!", /*Shemeska's Planescape Storyhour*/
 	"The quality of your lives depends on what you make of them!", /* The Life and Times of Scrooge McDuck */
 	"We do not threaten or warn or advise. We tell the truth.", /* The Mansion of E */
 		"What you stole is even more dangerous and precious than you know.",
