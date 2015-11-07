@@ -3573,7 +3573,7 @@ uchar aatyp;
 	switch(ptr->mattk[i].adtyp) {
 		
 	  case AD_BARB:
-		if(ptr == &mons[PM_RAZORVINE]) You("are hit by the sprining vines!");
+		if(ptr == &mons[PM_RAZORVINE]) You("are hit by the springing vines!");
 		else You("are hit by %s barbs!", s_suffix(mon_nam(mon)));
 		if (tmp && u.uac < 0) {
 			if(u.sealsActive&SEAL_BALAM) tmp -= min_ints(rnd(-u.uac),rnd(-u.uac));

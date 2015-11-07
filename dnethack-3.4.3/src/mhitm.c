@@ -2093,7 +2093,7 @@ int mdead;
 			Strcpy(buf, Monnam(magr));
 			if(canseemon(magr)){
 				if(mdef->data == &mons[PM_RAZORVINE]) 
-					pline("%s is hit by the sprining vines!", buf);
+					pline("%s is hit by the springing vines!", buf);
 				else pline("%s is hit by %s barbs!",
 					  buf, s_suffix(mon_nam(mdef)));
 			}
