@@ -1940,6 +1940,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	    if (realizes_damage)
 			pline_The("ice-cold %s %s %s%c", otmp->oartifact == ART_LASH_OF_THE_COLD_WASTE ? "whip" : 
 											 otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO ? "staff" : 
+											 otmp->oartifact == ART_WRATHFUL_WIND ? "club" : 
 											 "blade",
 				!spec_dbon_applies ? "hits" : "freezes",
 				hittee, !spec_dbon_applies ? '.' : '!');
