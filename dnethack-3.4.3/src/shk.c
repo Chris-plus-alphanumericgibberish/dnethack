@@ -2034,6 +2034,7 @@ boolean itemize;
 	pay(ltmp, shkp);
 	obj->shopOwned = FALSE;
 	obj->ostolen = FALSE;
+	obj->sknown = TRUE;
 	shk_names_obj(shkp, obj, consumed ?
 			"paid for %s at a cost of %ld gold piece%s.%s" :
 			"bought %s for %ld gold piece%s.%s", ltmp, "");
@@ -3039,8 +3040,9 @@ xchar x, y;
 	saleitem = saleable(shkp, obj);
 	if(obj->ostolen){
 		verbalize("That item is stolen.");
-		obj->sknown = TRUE;
 	}
+	obj->sknown = TRUE;
+	
 	if(!isgold && !obj->unpaid && saleitem)
 	    ltmp = set_cost(obj, shkp);
 
