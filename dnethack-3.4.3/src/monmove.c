@@ -1034,9 +1034,9 @@ register struct monst *mtmp;
 		// }
 		if(!reducedFlayerMessages) pline("A wave of psychic energy pours over you!");
 		if (mtmp->mpeaceful &&
-		    (!Conflict || resist(mtmp, RING_CLASS, 0, 0)))
+		    (!Conflict || resist(mtmp, RING_CLASS, 0, 0))){
 			if(!reducedFlayerMessages) pline("It feels quite soothing.");
-		else {
+		} else {
 			register boolean m_sen = sensemon(mtmp);
 			
 			if(mdat == &mons[PM_ELDER_BRAIN]) quest_chat(mtmp);
