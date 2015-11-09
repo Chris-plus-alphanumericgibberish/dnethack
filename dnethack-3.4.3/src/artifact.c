@@ -1448,45 +1448,47 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	}
 	if(pen->ovar1&SEAL_OTIAX){
 	    *dmgptr += d(1,dnum);
-		if(youattack && dieroll == 1){
-			struct obj *otmp2, **minvent_ptr;
-			long unwornmask;
+		if(youattack){
+			if(dieroll == 1){
+				struct obj *otmp2, **minvent_ptr;
+				long unwornmask;
 
-			/* Don't steal worn items, and downweight wielded items */
-			if((otmp2 = mdef->minvent) != 0) {
-				while(otmp2 && 
-					  otmp2->owornmask&W_ARMOR && 
-					  !( (otmp2->owornmask&W_WEP) && !rn2(10))
-				) otmp2 = otmp2->nobj;
-			}
-			/* Still has handling for worn items, incase that changes */
-			if(otmp2 != 0){
-				int dx,dy;
-				/* take the object away from the monster */
-				if(otmp2->quan > 1L){
-					otmp2 = splitobj(otmp2, 1L);
-					obj_extract_self(otmp2); //wornmask is cleared by splitobj
-				} else{
-					obj_extract_self(otmp2);
-					if ((unwornmask = otmp2->owornmask) != 0L) {
-						mdef->misc_worn_check &= ~unwornmask;
-						if (otmp2->owornmask & W_WEP) {
-							setmnotwielded(mdef,otmp2);
-							MON_NOWEP(mdef);
-						}
-						otmp2->owornmask = 0L;
-						update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);
-					}
+				/* Don't steal worn items, and downweight wielded items */
+				if((otmp2 = mdef->minvent) != 0) {
+					while(otmp2 && 
+						  otmp2->owornmask&W_ARMOR && 
+						  !( (otmp2->owornmask&W_WEP) && !rn2(10))
+					) otmp2 = otmp2->nobj;
 				}
-				Your("blade's mist tendril frees %s.",doname(otmp2));
-				mdrop_obj(mdef,otmp2,FALSE);
-				/* more take-away handling, after theft message */
-				if (unwornmask & W_WEP) {		/* stole wielded weapon */
-					possibly_unwield(mdef, FALSE);
-				} else if (unwornmask & W_ARMG) {	/* stole worn gloves */
-					mselftouch(mdef, (const char *)0, TRUE);
-					if (mdef->mhp <= 0)	/* it's now a statue */
-						return 1; /* monster is dead */
+				/* Still has handling for worn items, incase that changes */
+				if(otmp2 != 0){
+					int dx,dy;
+					/* take the object away from the monster */
+					if(otmp2->quan > 1L){
+						otmp2 = splitobj(otmp2, 1L);
+						obj_extract_self(otmp2); //wornmask is cleared by splitobj
+					} else{
+						obj_extract_self(otmp2);
+						if ((unwornmask = otmp2->owornmask) != 0L) {
+							mdef->misc_worn_check &= ~unwornmask;
+							if (otmp2->owornmask & W_WEP) {
+								setmnotwielded(mdef,otmp2);
+								MON_NOWEP(mdef);
+							}
+							otmp2->owornmask = 0L;
+							update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);
+						}
+					}
+					Your("blade's mist tendril frees %s.",doname(otmp2));
+					mdrop_obj(mdef,otmp2,FALSE);
+					/* more take-away handling, after theft message */
+					if (unwornmask & W_WEP) {		/* stole wielded weapon */
+						possibly_unwield(mdef, FALSE);
+					} else if (unwornmask & W_ARMG) {	/* stole worn gloves */
+						mselftouch(mdef, (const char *)0, TRUE);
+						if (mdef->mhp <= 0)	/* it's now a statue */
+							return 1; /* monster is dead */
+					}
 				}
 			}
 		} else if(youdefend){
