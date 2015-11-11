@@ -403,6 +403,7 @@ Helmet_off()
 	case HELMET:
 	case DROVEN_HELM:
 	case FLACK_HELMET:
+	case SKULLCAP:
 	case PLASTEEL_HELM:
 	case CRYSTAL_HELM:
 	case SEDGE_HAT:
