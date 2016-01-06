@@ -1038,11 +1038,11 @@ aligntyp alignment;
     mtmp2->mtame = 10;
     /* this section names the creature "of ______" */
     if (mons[mnum].pxlth == 0) {
-	mtmp2->isminion = TRUE;
-	EMIN(mtmp2)->min_align = alignment;
+		mtmp2->isminion = TRUE;
+		EMIN(mtmp2)->min_align = alignment;
     } else if (mnum == PM_ANGEL) {
-	 mtmp2->isminion = TRUE;
-	 EPRI(mtmp2)->shralign = alignment;
+		 mtmp2->isminion = TRUE;
+		 EPRI(mtmp2)->shralign = alignment;
     }
     return mtmp2;
 }
