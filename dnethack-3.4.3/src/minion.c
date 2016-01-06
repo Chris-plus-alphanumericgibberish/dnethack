@@ -461,7 +461,7 @@ aligntyp atyp;
 {
 	int	tryct;
 	struct	permonst *ptr;
-
+	
 	for (tryct = 0; tryct < 20; tryct++) {
 	    ptr = mkclass(S_DEMON, G_NOHELL|G_HELL);
 	    if (ptr && is_ndemon(ptr) &&

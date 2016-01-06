@@ -3433,9 +3433,9 @@ xchar sx, sy;
     break;
 	case ZT_FIRE:
 	    if (Fire_resistance) {
-		shieldeff(sx, sy);
-		You("don't feel hot!");
-		ugolemeffects(AD_FIRE, flat ? flat : d(nd, 6));
+			shieldeff(sx, sy);
+			You("don't feel hot!");
+			ugolemeffects(AD_FIRE, flat ? flat : d(nd, 6));
 	    } else {
 			if(!flat) dam = d(nd,6);
 			else dam = flat;
@@ -3445,7 +3445,7 @@ xchar sx, sy;
 				if (flags.drgn_brth || !rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
 				burnarmor(&youmonst);
 			} else dam = dam/2+1;
-		}
+	    }
 	    burn_away_slime();
     break;
 	case ZT_COLD:
@@ -3460,7 +3460,7 @@ xchar sx, sy;
 				if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
 				if (flags.drgn_brth) destroy_item(POTION_CLASS, AD_COLD);
 			} else dam = dam/2+1;
-		}
+	    }
     break;
 	case ZT_SLEEP:{
 		int time = flat ? flat : d(nd,25);
@@ -3556,14 +3556,14 @@ xchar sx, sy;
 		You("aren't affected.");
 		ugolemeffects(AD_ELEC, flat ? flat : d(nd, 6));
 	    } else {
-		if(!flat) dam = d(nd,6);
-		else dam = flat;
-		exercise(A_CON, FALSE);
+			if(!flat) dam = d(nd,6);
+			else dam = flat;
+			exercise(A_CON, FALSE);
 			if(!Reflecting){
 				if (flags.drgn_brth || !rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 				if (flags.drgn_brth || !rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 			} else dam = dam/2+1;
-		}
+	    }
 	    break;
 	case ZT_POISON_GAS:
 		if(abs(type) == ZT_SPELL(ZT_POISON_GAS)){
@@ -3916,9 +3916,9 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				pline("%s whizzes by you!", The(fltxt));
 			}
 			if (abstype == ZT_LIGHTNING && !resists_blnd(&youmonst)) {
-			You(are_blinded_by_the_flash);
-			make_blinded((long)d(nd,50),FALSE);
-			if (!Blind) Your(vision_clears);
+				You(are_blinded_by_the_flash);
+				make_blinded((long)d(nd,50),FALSE);
+				if (!Blind) Your(vision_clears);
 			}
 			stop_occupation();
 		    nomul(0, NULL);
