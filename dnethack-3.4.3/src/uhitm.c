@@ -3837,13 +3837,13 @@ dobpois:
 			// }
 		  // }
 		  
-		  for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-			mndx = monsndx(mtmp->data);
-			if(mndx <= PM_QUINON && mndx >= PM_MONOTON && mtmp->mpeaceful){
-				pline("%s gets angry...", Amonnam(mtmp));
-				mtmp->mpeaceful = 0;
+			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+				mndx = monsndx(mtmp->data);
+				if(mndx <= PM_QUINON && mndx >= PM_MONOTON && mtmp->mpeaceful){
+					pline("%s gets angry...", Amonnam(mtmp));
+					mtmp->mpeaceful = 0;
+				}
 			}
-		   }
 		} break;
 	  	  case AD_UNKNWN:
 			  if(uwep && uwep->oartifact && uwep->oartifact != ART_SILVER_KEY && uwep->oartifact != ART_ANNULUS
