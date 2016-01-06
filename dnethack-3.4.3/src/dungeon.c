@@ -667,7 +667,7 @@ struct level_map {
 	
 //	{ "asmodeus",	&asmodeus_level },
 //	{ "baalz",	&baalzebub_level },
-	{ "hell",	&hell2_level },
+	{ "hell",	&hell1_level },
 	{ "hell2",	&hell2_level },
 	{ "hell3",	&hell3_level },
 	{ "fakewiz1",	&portal_level },
