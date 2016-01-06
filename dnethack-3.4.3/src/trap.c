@@ -1964,7 +1964,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    case PM_STRAW_GOLEM:   alt = mtmp->mhpmax / 2; break;
 			    case PM_WOOD_GOLEM:    alt = mtmp->mhpmax / 4; break;
 			    case PM_GROVE_GUARDIAN:    alt = mtmp->mhpmax / 4; break;
-			    case PM_LIVING_LECTURN:    alt = mtmp->mhpmax / 4; break;
+			    case PM_LIVING_LECTERN:    alt = mtmp->mhpmax / 4; break;
 			    case PM_LEATHER_GOLEM: alt = mtmp->mhpmax / 8; break;
 			    default: alt = 0; break;
 			    }
@@ -2533,7 +2533,7 @@ struct obj *box;	/* null for floor trap */
 	    case PM_STRAW_GOLEM:   alt = u.mhmax / 2; break;
 	    case PM_WOOD_GOLEM:    alt = u.mhmax / 4; break;
 	    case PM_GROVE_GUARDIAN:    alt = u.mhmax / 4; break;
-	    case PM_LIVING_LECTURN:alt = u.mhmax / 4; break;
+	    case PM_LIVING_LECTERN:alt = u.mhmax / 4; break;
 	    case PM_LEATHER_GOLEM: alt = u.mhmax / 8; break;
 	    default: alt = 0; break;
 	    }

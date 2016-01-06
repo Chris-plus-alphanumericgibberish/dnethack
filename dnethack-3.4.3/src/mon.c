@@ -593,7 +593,7 @@ register struct monst *mtmp;
 			}
 			mtmp->mnamelth = 0;
 		break;
-	    case PM_LIVING_LECTURN:
+	    case PM_LIVING_LECTERN:
 			num = d(2,3);
 			while(num--) {
 				obj = mksobj_at(CLUB, x, y, TRUE, FALSE);

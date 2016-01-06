@@ -580,8 +580,8 @@ OBJECT[50%]:'?',"blank paper",(37,10)
 OBJECT[50%]:'+',"blank paper",(37,10)
 OBJECT[50%]:'?',"blank paper",(41,11)
 OBJECT[50%]:'+',"blank paper",(41,11)
-MONSTER:'\'',"living lecturn",(41,10)
-MONSTER[25%]:'\'',"living lecturn",(38,10)
+MONSTER:'\'',"living lectern",(41,10)
+MONSTER[25%]:'\'',"living lectern",(38,10)
 #
 # A few random flapping things
 MONSTER:'B',"vampire bat",random
@@ -699,8 +699,8 @@ OBJECT[50%]:'?',"blank paper",(37,10)
 OBJECT[50%]:'+',"blank paper",(37,10)
 OBJECT[50%]:'?',"blank paper",(41,11)
 OBJECT[50%]:'+',"blank paper",(41,11)
-MONSTER:'\'',"living lecturn",(41,10)
-MONSTER[25%]:'\'',"living lecturn",(38,10)
+MONSTER:'\'',"living lectern",(41,10)
+MONSTER[25%]:'\'',"living lectern",(38,10)
 # And some (empty) decorations
 CONTAINER:'`',"statue",(33,10)
 CONTAINER:'`',"statue",(35,09)

@@ -118,7 +118,7 @@
 #define is_animal(ptr)		(((ptr)->mflags1 & M1_ANIMAL) != 0L)
 #define is_plant(ptr)		(is_vegetation(ptr) || (ptr) == &mons[PM_WOOD_GOLEM] || (ptr) == &mons[PM_GROVE_GUARDIAN] || (ptr) == &mons[PM_WOOD_TROLL])
 #define slithy(ptr)		(((ptr)->mflags1 & M1_SLITHY) != 0L)
-#define is_wooden(ptr)		((ptr) == &mons[PM_WOOD_GOLEM] || (ptr) == &mons[PM_LIVING_LECTURN] || (ptr) == &mons[PM_GROVE_GUARDIAN] || (ptr) == &mons[PM_WOOD_TROLL])
+#define is_wooden(ptr)		((ptr) == &mons[PM_WOOD_GOLEM] || (ptr) == &mons[PM_LIVING_LECTERN] || (ptr) == &mons[PM_GROVE_GUARDIAN] || (ptr) == &mons[PM_WOOD_TROLL])
 #define thick_skinned(ptr)	(((ptr)->mflags1 & M1_THICK_HIDE) != 0L)
 #define lays_eggs(ptr)		(((ptr)->mflags1 & M1_OVIPAROUS) != 0L)
 #define regenerates(ptr)	(((ptr)->mflags1 & M1_REGEN) != 0L)

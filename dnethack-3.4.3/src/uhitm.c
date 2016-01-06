@@ -2392,7 +2392,7 @@ register struct attack *mattk;
 	    case AD_DCAY:
 		if (pd == &mons[PM_WOOD_GOLEM] ||
 			pd == &mons[PM_GROVE_GUARDIAN] ||
-			pd == &mons[PM_LIVING_LECTURN] ||
+			pd == &mons[PM_LIVING_LECTERN] ||
 		    pd == &mons[PM_LEATHER_GOLEM]) {
 			pline("%s falls to pieces!", Monnam(mdef));
 			xkilled(mdef,0);
