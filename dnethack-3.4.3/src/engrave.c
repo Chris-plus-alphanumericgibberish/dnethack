@@ -71,7 +71,7 @@ static const char *random_mesg[] = {
 	"ChrisANG followed Khor", /* Fourth ascender */
 	"FIQ followed ChrisANG", /* Fifth ascender */
 	"Tariru followed FIQ", /* Sixth ascender */
-	"VOR followed Tariru", /* Seventh ascender */
+	"VoiceOfReason followed Tariru", /* Seventh ascender */
 	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */
@@ -225,9 +225,11 @@ static const char *haluMesg[] = {
 		/*Pyro627, regarding an experiment in creating undead bacon in Dwarf Fortress. An "accident" with an axe led to a zombified army, 
 			which the poster didn't even comment on.*/
 		"Today, in 'poor word choice': 'Urist, go make a new table with our mason.'", /*Swonnrr, regarding a fell mood.*/
+		"The horses outnumber us. I have seen settlements with a thousand horses to a man. I have seen them in the deepest caverns. They are everywhere. Save us.", /*Quote from: Fniff regarding a bug causing ubiquitous horses*/
 	"All the world's cracked but me and thee; and I'm not too sure about thee.",
 	"Some walls are made of fear, but some are made from wall material.", /*Clash of Clans metro advert */
 	"No gods, no masters.", /*Anarchist slogan*/
+	"For the world's more full of weeping than you can understand.", /*The Stolen Child*/
 	"No matter where you go, there you are.",
 	"You noticed them, and they noticed that you noticed them.", /*The Mothman Prophecies*/
 	"Well, how did I get here?", /*Once In A Lifetime*/
@@ -254,7 +256,7 @@ static const char *haluMesg[] = {
 		"What happend to you? It wasn't me!",
 		"I'm sorry you could never forgive me.",
 	"Reach heaven through violence.",/*Kill 6 Billion Demons*/
-		"'Kindly ignore my first three answers.'",
+		"Kindly ignore my first three answers.",
 	"You are lost. You can never go home.", /* Gollum's Song */
 	"But now, we dance this grim fandango, and will for years until we rest.", /* Grim Fandango */
 	"Bad Wolf", /* Dr. Who */
@@ -269,6 +271,8 @@ static const char *haluMesg[] = {
 	"no more sadness, no more anger, no more envy...", /*Halo*/
 		"Silence fills the empty grave, now that I have gone.",
 		"But my mind is not at rest, for questions linger on.",
+	"Everyone you know will tell you small lies, except the ones you love, who will tell you large ones.", /*Borderlands 2*/
+		"I am eternal / Death will never capture me / My skills exceed his.",
 	"We are born of the blood.",/*Bloodborne*/
 		"Made men by the blood.",
 		"Undone by the blood.",
@@ -354,6 +358,9 @@ static const char *haluMesg[] = {
 	"Don't trust the skull.", /* Cynarfpncr: Gbezrag (mild spoiler) */
 	"death is the greatest illusion", /*Blade of Innocence*/
 	"Our sandwiches come with attempted assassination plots. New sales gimmick!", /*Shemeska's Planescape Storyhour*/
+		"I've stood at that edge! I've looked over into that void! I'm just looking at it from the bottom now!",
+		"Free! Apple pie with every meal! We don't care if you don't like apple - Take It!",
+		"For there is a hole in the sky",
 	"The quality of your lives depends on what you make of them!", /* The Life and Times of Scrooge McDuck */
 	"We do not threaten or warn or advise. We tell the truth.", /* The Mansion of E */
 		"What you stole is even more dangerous and precious than you know.",
