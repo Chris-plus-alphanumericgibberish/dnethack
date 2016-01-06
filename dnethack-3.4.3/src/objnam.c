@@ -2180,6 +2180,7 @@ struct alt_spellings {
 	{ "grapple", GRAPPLING_HOOK },
 //#ifdef FIREARMS
 	{ "handgun", PISTOL },
+	{ "hand-gun", PISTOL },
 	{ "hand gun", PISTOL },
 	{ "revolver", PISTOL },
 	{ "bazooka", ROCKET_LAUNCHER },
@@ -2313,6 +2314,7 @@ boolean from_user;
 	char oclass;
 	char *un, *dn, *actualn;
 	const char *name=0;
+	boolean isartifact = FALSE;
 
 	cnt = spe = spesgn = typ = very = rechrg =
 		blessed = uncursed = iscursed = stolen = 
@@ -2976,8 +2978,9 @@ srch:
 	    /* Perhaps it's an artifact specified by name, not type */
 	    name = artifact_name(actualn, &objtyp);
 	    if(name) {
-		typ = objtyp;
-		goto typfnd;
+			isartifact = TRUE;
+			typ = objtyp;
+			goto typfnd;
 	    }
 	}
 #ifdef WIZARD
@@ -3152,19 +3155,26 @@ typfnd:
 	if((typ == SPE_LIGHTNING_BOLT ||
 		typ == SPE_POISON_SPRAY ||
 		typ == SPE_ACID_BLAST ||
-		typ == VIBROBLADE ||
-		typ == FORCE_PIKE ||
-		(typ >= PISTOL && typ <= RAYGUN) || 
-		(typ >= SHOTGUN_SHELL && typ <= LASER_BEAM) ||
-		typ == PLASTEEL_HELM ||
-		typ == PLASTEEL_ARMOR ||
-		typ == JUMPSUIT ||
-		typ == BODYGLOVE ||
-		typ == PLASTEEL_GAUNTLETS ||
-		typ == PLASTEEL_BOOTS ||
-		(typ >= SENSOR_PACK && typ <= HYPOSPRAY_AMPULE) ||
-		typ == BULLET_FABBER ||
-		typ == PROTEIN_PILL
+		(typ >= HANDGUN && typ <= LARGE_GUN) ||
+		((
+			typ == LIGHTSABER ||
+			typ == BEAMSWORD ||
+			typ == DOUBLE_LIGHTSABER ||
+			typ == VIBROBLADE ||
+			typ == FORCE_PIKE ||
+			(typ >= PISTOL && typ <= RAYGUN) || 
+			(typ >= SHOTGUN_SHELL && typ <= LASER_BEAM) ||
+			typ == FLACK_HELMET ||
+			typ == PLASTEEL_HELM ||
+			typ == PLASTEEL_ARMOR ||
+			typ == JUMPSUIT ||
+			typ == BODYGLOVE ||
+			typ == PLASTEEL_GAUNTLETS ||
+			typ == PLASTEEL_BOOTS ||
+			(typ >= SENSOR_PACK && typ <= HYPOSPRAY_AMPULE) ||
+			typ == BULLET_FABBER ||
+			typ == PROTEIN_PILL
+		) && !Role_if(PM_TOURIST) && !isartifact)
 		)
 #ifdef WIZARD
 				&& !wizard
@@ -3458,7 +3468,10 @@ typfnd:
 
 		/* an artifact name might need capitalization fixing */
 		aname = artifact_name(name, &objtyp);
-		if (aname && objtyp == otmp->otyp) name = aname;
+		if (aname && objtyp == otmp->otyp){
+			isartifact = TRUE;
+			name = aname;
+		}
 
 		otmp = oname(otmp, name);
 		if (otmp->oartifact) {
