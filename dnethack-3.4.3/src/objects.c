@@ -412,11 +412,15 @@ HELM("cornuthaum", "conical hat",
 		0, 1,  CLAIRVOYANT,
 					3, 1,  4,  80,10, 2, CLOTH, CLR_BLUE),
 HELM("dunce cap", "conical hat",
-		0, 1,  0,	3, 1,  4,   1,10, 0, CLOTH, CLR_BLUE),
-HELM("skullcap", "metal disk",
-		0, 0,  0,	2, 0, 15,   30, 9, 0, IRON, HI_METAL),
+		0, 1,  0,	3, 1,  4,   1, 10, 0, CLOTH, CLR_BLUE),
+HELM("war hat", "wide metal helm", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	2, 0, 100,  30, 8, 2, IRON, HI_METAL),
 HELM("flack helmet", "green bowel",
 		0, 0,  0,	0, 0, 10,   50, 8, 1, PLASTIC, CLR_GREEN),
+HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	0, 1, 30,   5, 9, 0, WOOD, HI_WOOD),
+HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	0, 1,  3,   5, 8, 0, MITHRIL, HI_METAL),
 HELM("droven helm", "spider shaped helm",
 		0, 0,  0,	0, 1, 50,   5, 7, 0, MINERAL, CLR_BLACK),
 HELM("plasteel helm", "white skull helm",

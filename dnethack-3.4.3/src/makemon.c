@@ -358,7 +358,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, ELVEN_MITHRIL_COAT);
 				(void)mongets(mtmp, ORCISH_SHIELD);
 				(void)mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
-				(void)mongets(mtmp, ELVEN_LEATHER_HELM);
+				(void)mongets(mtmp, DROVEN_HELM);
 				(void)mongets(mtmp, ELVEN_BOOTS);
 				(void)mongets(mtmp, ELVEN_DAGGER);
 				(void)mongets(mtmp, ORCISH_DAGGER);
@@ -617,7 +617,7 @@ register struct monst *mtmp;
 					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					/*Helm*/
-					otmp = mksobj(ELVEN_LEATHER_HELM, TRUE, FALSE);
+					otmp = mksobj(HIGH_ELVEN_HELM, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
@@ -905,7 +905,7 @@ register struct monst *mtmp;
 				if (rn2(2))
 				(void) mongets(mtmp,
 					   rn2(2) ? ELVEN_MITHRIL_COAT : ELVEN_CLOAK);
-				if (rn2(2)) (void)mongets(mtmp, ELVEN_LEATHER_HELM);
+				if (rn2(2)) (void)mongets(mtmp, (mm == PM_ELVENKING || mm == PM_ELF_LORD) ? HIGH_ELVEN_HELM : ELVEN_HELM);
 				else if (!rn2(4)) (void)mongets(mtmp, ELVEN_BOOTS);
 				if (rn2(2)) (void)mongets(mtmp, ELVEN_DAGGER);
 #ifdef BARD
@@ -1069,7 +1069,7 @@ register struct monst *mtmp;
 					(void) mongets(mtmp, ELVEN_SHORT_SWORD);
 					(void) mongets(mtmp, ELVEN_SHORT_SWORD);
 					(void) mongets(mtmp, ELVEN_MITHRIL_COAT);
-					(void) mongets(mtmp, ELVEN_LEATHER_HELM);
+					(void) mongets(mtmp, ELVEN_HELM);
 					(void) mongets(mtmp, ELVEN_CLOAK);
 					(void) mongets(mtmp, HIGH_BOOTS);
 					(void) mongets(mtmp, ELVEN_BOW);
@@ -1288,7 +1288,7 @@ register struct monst *mtmp;
 			} else if(ptr == &mons[PM_NOVIERE]){
 				(void)mongets(mtmp, LEATHER_GLOVES);
 				(void)mongets(mtmp, LOW_BOOTS);
-				(void)mongets(mtmp, ELVEN_LEATHER_HELM);
+				(void)mongets(mtmp, ELVEN_HELM);
 				(void)mongets(mtmp, ELVEN_SPEAR);
 				(void)mongets(mtmp, ELVEN_SICKLE);
 			} else if(ptr == &mons[PM_BRALANI]){
@@ -1304,7 +1304,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, ELVEN_SHIELD);
 				(void)mongets(mtmp, ELVEN_CLOAK);
 				(void)mongets(mtmp, ELVEN_BOOTS);
-				(void)mongets(mtmp, ELVEN_LEATHER_HELM);
+				(void)mongets(mtmp, ELVEN_HELM);
 				(void)mongets(mtmp, ELVEN_SPEAR);
 				(void)mongets(mtmp, ELVEN_BROADSWORD);
 			} else if(ptr == &mons[PM_SHIERE]){
@@ -2102,7 +2102,9 @@ register struct	monst	*mtmp;
 		    if (mac < 10 && rn2(3))
 			mac += 1 + mongets(mtmp, HELMET);
 		    else if (mac < 10 && rn2(2))
-			mac += 1 + mongets(mtmp, SKULLCAP);
+			mac += 1 + mongets(mtmp, LEATHER_HELM);
+		    else if (mac < 10 && !rn2(10))
+			mac += 2 + mongets(mtmp, WAR_HAT);
 		    if (mac < 10 && rn2(3))
 			mac += 1 + mongets(mtmp, SMALL_SHIELD);
 		    else if (mac < 10 && rn2(2))

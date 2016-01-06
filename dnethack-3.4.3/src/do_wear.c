@@ -330,11 +330,13 @@ Helmet_on()
 	case HELMET:
 	case DROVEN_HELM:
 	case FLACK_HELMET:
-	case SKULLCAP:
 	case PLASTEEL_HELM:
 	case CRYSTAL_HELM:
 	case SEDGE_HAT:
-	case ELVEN_LEATHER_HELM:
+	case WAR_HAT:
+	case ELVEN_HELM:
+	case LEATHER_HELM:
+	case HIGH_ELVEN_HELM:
 	case DWARVISH_IRON_HELM:
 	case GNOMISH_POINTY_HAT:
 	case ORCISH_HELM:
@@ -403,11 +405,13 @@ Helmet_off()
 	case HELMET:
 	case DROVEN_HELM:
 	case FLACK_HELMET:
-	case SKULLCAP:
 	case PLASTEEL_HELM:
 	case CRYSTAL_HELM:
 	case SEDGE_HAT:
-	case ELVEN_LEATHER_HELM:
+	case WAR_HAT:
+	case ELVEN_HELM:
+	case LEATHER_HELM:
+	case HIGH_ELVEN_HELM:
 	case DWARVISH_IRON_HELM:
 	case GNOMISH_POINTY_HAT:
 	case ORCISH_HELM:

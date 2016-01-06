@@ -1175,6 +1175,10 @@ int spellnum;
 		if(uarmh && uarmh->otyp == SEDGE_HAT){
 			pline("It runs off the brim of your wide straw hat.");
 			dmg = 0;
+		} else if(uarmh && uarmh->otyp == WAR_HAT) {
+			pline("It runs off the brim of your wide helm.");
+			erode_obj(uarmh, TRUE, FALSE);
+			dmg = 0;
 		} else {
 			dmg = d(8, 6);
 			if (Acid_resistance) {

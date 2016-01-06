@@ -1655,7 +1655,7 @@ OBJECT:'[',"leather jacket",contained,blessed,+3
 OBJECT:'[',"elven shield",contained,blessed,+3
 OBJECT:'[',"elven cloak",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+3
-OBJECT:'[',"elven leather helm",contained,blessed,+3
+OBJECT:'[',"elven helm",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:')',"elven broadsword",contained,blessed,+3
 OBJECT:random,random,contained
@@ -1682,7 +1682,7 @@ OBJECT:'[',"leather jacket",contained,blessed,+3
 OBJECT:'[',"elven shield",contained,blessed,+3
 OBJECT:'[',"elven cloak",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+3
-OBJECT:'[',"elven leather helm",contained,blessed,+3
+OBJECT:'[',"elven helm",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:')',"elven broadsword",contained,blessed,+3
 OBJECT:random,random,contained

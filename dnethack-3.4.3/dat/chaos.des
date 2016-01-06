@@ -300,7 +300,7 @@ REGION:(00,00,16,20),  lit,"ordinary",unfilled
 REGION:(54,00,73,20),  lit,"ordinary",unfilled
 
 CONTAINER: '(', "chest"  , (16,19)
-OBJECT:'[',"elven leather helm", contained, uncursed, 0
+OBJECT:'[',"leather helm", contained, uncursed, 0
 
 CONTAINER: '(', "chest"  , (16,01)
 OBJECT:'!',"healing", contained, uncursed, 0

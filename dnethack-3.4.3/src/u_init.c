@@ -494,7 +494,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ELF,	SHORT_SWORD,		ELVEN_SHORT_SWORD     },
     { PM_ELF,	BOW,			ELVEN_BOW	      },
     { PM_ELF,	ARROW,			ELVEN_ARROW	      },
-    { PM_ELF,	HELMET,			ELVEN_LEATHER_HELM    },
+    { PM_ELF,	HELMET,			ELVEN_HELM    },
 	{ PM_ELF,	SMALL_SHIELD,		ELVEN_SHIELD	      },
     { PM_ELF,	CLOAK_OF_DISPLACEMENT,	ELVEN_CLOAK	      },
     { PM_ELF,	CRAM_RATION,		LEMBAS_WAFER	      },
@@ -1916,7 +1916,7 @@ u_init()
 	    knows_object(ELVEN_MACE);
 	    knows_object(ELVEN_LANCE);
 	    knows_object(ELVEN_MITHRIL_COAT);
-	    knows_object(ELVEN_LEATHER_HELM);
+	    knows_object(ELVEN_HELM);
 	    knows_object(ELVEN_SHIELD);
 	    knows_object(ELVEN_BOOTS);
 	    knows_object(ELVEN_CLOAK);
