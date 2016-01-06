@@ -4134,6 +4134,7 @@ rndmonst()
 
 	if(u.hod && !rn2(10) && rn2(40+u.hod) > 50){
 		u.hod-=10;
+		if(u.hod<0) u.hod = 0;
 		if(!tooweak(PM_HOD_SEPHIRAH, minmlev)){
 			return &mons[PM_HOD_SEPHIRAH];
 		}
@@ -4147,6 +4148,7 @@ rndmonst()
 		}
 		else{
 			u.gevurah -= 4;
+			if(u.gevurah<0) u.gevurah = 0;
 			u.keter++;
 			return &mons[PM_CHOKHMAH_SEPHIRAH];
 		}
