@@ -268,7 +268,7 @@ register int x, y, typ;
 
 		statue = mkcorpstat(STATUE, (struct monst *)0,
 					&mons[rndmonnum()], x, y, FALSE);
-		mtmp = makemon(&mons[statue->corpsenm], 0, 0, NO_MM_FLAGS);
+		mtmp = makemon(&mons[statue->corpsenm], x, y, MM_ADJACENTOK);
 		if (!mtmp) break; /* should never happen */
 		while(mtmp->minvent) {
 		    otmp = mtmp->minvent;
