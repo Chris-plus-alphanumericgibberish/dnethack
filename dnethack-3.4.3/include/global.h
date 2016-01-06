@@ -321,9 +321,9 @@ struct version_info {
 #define MAX_SUBROOMS	24	/* max # of subrooms in a given room */
 #define DOORMAX		120	/* max number of doors per level */
 
-#define BUFSZ		512	/* for getlin buffers */
-#define QBUFSZ		256	/* for building question text */
-#define TBUFSZ		600	/* toplines[] buffer max msg: 3 81char names */
+#define BUFSZ		1024	/* for getlin buffers */
+#define QBUFSZ		 512	/* for building question text */
+#define TBUFSZ		1024	/* toplines[] buffer max msg: 3 81char names */
 				/* plus longest prefix plus a few extra words */
 				/* tmptext keeps overflowing.  Maybe this is too small? Doubling the size (300-600). -CM */
 
