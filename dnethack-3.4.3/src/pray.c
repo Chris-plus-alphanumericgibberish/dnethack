@@ -2816,6 +2816,8 @@ const char * const hallu_gods[] = {
 	"Tariru the samurai",
 	"Tariru the archeologist",
 	"Tariru the droven noble",
+	"VoiceOfReason the knight",
+	"VoiceOfReason the dwarven noble",
 	
 	"Dudley",
 	"the RNG"
