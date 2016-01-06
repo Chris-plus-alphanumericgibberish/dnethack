@@ -2820,16 +2820,28 @@ boolean was_swallowed;			/* digestion */
 				lvlgain = rn2(2);
 			} else if((mdat==&mons[PM_DEEPEST_ONE])){
 				lvlgain = 1;
+			} else { //arcadian avenger
+				lvlgain = 1;
 			}
-
-			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-				mdat1 = mtmp->data;
-				if( mdat1==&mons[PM_DEEP_ONE] || 
-					mdat1==&mons[PM_DEEPER_ONE] || 
-					mdat1==&mons[PM_DEEPEST_ONE] ){
+			if(mdat==&mons[PM_DEEP_ONE] || mdat==&mons[PM_DEEPER_ONE] || mdat==&mons[PM_DEEPEST_ONE]){
+				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+					mdat1 = mtmp->data;
+					if( mdat1==&mons[PM_DEEP_ONE] || 
+						mdat1==&mons[PM_DEEPER_ONE] || 
+						mdat1==&mons[PM_DEEPEST_ONE] ){
+							if(mtmp->mhp > 0){ 
+								for(lvls = lvlgain; lvls > 0; lvls--) grow_up(mtmp, 0);
+							}
+					}
+				}
+			} else { //arcadian avenger
+				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+					mdat1 = mtmp->data;
+					if( mdat1==mdat ){
 						if(mtmp->mhp > 0){ 
 							for(lvls = lvlgain; lvls > 0; lvls--) grow_up(mtmp, 0);
 						}
+					}
 				}
 			}
 		}//end of AD_SOUL
