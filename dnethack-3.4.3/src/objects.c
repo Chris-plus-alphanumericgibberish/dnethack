@@ -400,7 +400,7 @@ BOW("droven crossbow", "spider-legged crossbow",	0, 0, 0, 50, 120, 4, SILVER, P_
 /* helmets */
 HELM("sedge hat", "wide conical hat",
 		0, 0,  0,	3, 1,  3,   8, 9, 0, VEGGY, CLR_YELLOW),
-HELM("elven leather helm", "leather hat",
+HELM("leather helm", "leather hat",
 		0, 0,  0,	5, 1,  3,   8, 9, 0, LEATHER, HI_LEATHER),
 HELM("orcish helm", "iron skull cap",
 		0, 0,  0,	5, 1, 30,  10, 9, 0, IRON, CLR_BLACK),
