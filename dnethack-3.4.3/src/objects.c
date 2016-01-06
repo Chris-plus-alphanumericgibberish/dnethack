@@ -500,6 +500,10 @@ ARMOR("black dress", (char *)0,
 	1, 0, 1, 0,	0, 5, 50,  500, 10, 2, ARM_SHIRT, CLOTH, CLR_BLACK),
 ARMOR("consort's suit", "loud foppish suit",
 	0, 0, 1, 0,	0, 5, 10, 	1000,  9, 1, ARM_SUIT, CLOTH, CLR_BRIGHT_MAGENTA),
+ARMOR("gentleman's suit", "expensive clothes", /*Needs encyc entry*/
+	0, 0, 1, 0,	0, 5, 10, 1000,  10, 1, ARM_SUIT, CLOTH, CLR_BLACK),
+ARMOR("gentlewoman's dress", "expensive dress", /*Needs encyc entry*/
+	0, 0, 1, 0,	0, 6,150, 1000,   9, 3, ARM_SUIT, BONE, CLR_RED), /*Specifically, whale bone*/
 ARMOR("crystal plate mail", (char *)0,
 	1, 0, 1, 0,	10, 5, 250, 2000,  -6, 2, ARM_SUIT, GLASS, CLR_CYAN), /*Best armor, AC wise*/
 #ifdef TOURIST

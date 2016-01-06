@@ -602,7 +602,7 @@ Shirt_on()
 	else if(uarmu->otyp == VICTORIAN_UNDERWEAR){
 		pline("The %s shapes your figure, but it isn't very practical to fight in.",
 				OBJ_NAME(objects[uarmu->otyp]));
-		ABON(A_CHA) += 2;
+		ABON(A_CHA) += 2*(1 + uarmu->spe);
 		flags.botl = 1;
 	}
 	else if(uarmu->otyp == BLACK_DRESS) {
@@ -633,7 +633,7 @@ Shirt_off()
 		flags.botl = 1;
 	}
 	else if(uarmu->otyp == VICTORIAN_UNDERWEAR){
-		ABON(A_CHA) -= 2;
+		ABON(A_CHA) -= 2*(1 + uarmu->spe);
 		flags.botl = 1;
 	}
 	else if(uarmu->otyp == BLACK_DRESS) {
@@ -670,6 +670,13 @@ Armor_on()
 		ABON(A_CHA) += 2;
 		flags.botl = 1;
 	}
+	else if(uarm->otyp == GENTLEWOMAN_S_DRESS || uarm->otyp == GENTLEMAN_S_SUIT){
+		You("%s very elegant in your %s.", Blind ||
+				(Invis && !See_invisible) ? "feel" : "look",
+				OBJ_NAME(objects[uarm->otyp]));
+		ABON(A_CHA) += 2*(1 + uarm->spe);
+		flags.botl = 1;
+	}
 	if(arti_lighten(uarm)) inv_weight();
     return 0;
 }
@@ -690,6 +697,10 @@ Armor_off()
 	}
 	else if(uarm->otyp == ELVEN_TOGA && !cancelled_don){
 		ABON(A_CHA) -= 2;
+		flags.botl = 1;
+	}
+	else if((uarm->otyp == GENTLEWOMAN_S_DRESS || uarm->otyp == GENTLEMAN_S_SUIT) && !cancelled_don){
+		ABON(A_CHA) -= 2*(1+uarm->spe);
 		flags.botl = 1;
 	}
     setworn((struct obj *)0, W_ARM);
@@ -2760,9 +2771,16 @@ register schar delta;
 		flags.botl = 1;
 	}
 	if((uarm && uarm == otmp) || (uarmu && uarmu == otmp) &&
-		(otmp->otyp == NOBLE_S_DRESS || otmp->otyp == BLACK_DRESS || otmp->otyp == CONSORT_S_SUIT)
+		(otmp->otyp == NOBLE_S_DRESS || otmp->otyp == BLACK_DRESS || otmp->otyp == CONSORT_S_SUIT
+		 || otmp->otyp == VICTORIAN_UNDERWEAR || otmp->otyp == GENTLEMAN_S_SUIT || otmp->otyp == GENTLEMAN_S_SUIT)
 	){
-		if (delta) ABON(A_CHA) += (delta);
+		if (delta){
+			if(otmp->otyp == GENTLEWOMAN_S_DRESS || 
+				otmp->otyp == GENTLEMAN_S_SUIT || 
+				otmp->otyp == VICTORIAN_UNDERWEAR
+			) ABON(A_CHA) += 2*(delta);
+			else ABON(A_CHA) += (delta);
+		}
 		flags.botl = 1;
 	}
 }
