@@ -1704,6 +1704,8 @@ struct obj *obj, *otmp;
 			fracture_rock(obj);
 		else if (obj->otyp == STATUE)
 			(void) break_statue(obj);
+		else if (obj->otyp == HUGE_STONE_CRATE)
+			(void) break_crate(obj);
 		else {
 			if (!flags.mon_moving)
 			    (void)hero_breaks(obj, obj->ox, obj->oy, FALSE);
@@ -4356,6 +4358,24 @@ register struct obj *obj;
 	if (Role_if(PM_ARCHEOLOGIST) && !flags.mon_moving && (obj->spe & STATUE_HISTORIC)) {
 	    You_feel("guilty about damaging such a historic statue.");
 	    adjalign(-1);
+	}
+	obj->spe = 0;
+	fracture_rock(obj);
+	return TRUE;
+}
+
+/* handle crate hit by striking/force bolt/pick-axe */
+boolean
+break_crate(obj)
+register struct obj *obj;
+{
+	/* [obj is assumed to be on floor, so no get_obj_location() needed] */
+	struct obj *item;
+
+	/* drop any objects contained inside the crate */
+	while ((item = obj->cobj) != 0) {
+	    obj_extract_self(item);
+	    place_object(item, obj->ox, obj->oy);
 	}
 	obj->spe = 0;
 	fracture_rock(obj);

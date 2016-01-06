@@ -189,8 +189,18 @@ const char *verb;
 			}
 		}
 		deltrap(t);
+		bury_objs(x, y); //Crate handling: Bury everything here (inc boulder item) then free the boulder after
+		if(obj->otyp == HUGE_STONE_CRATE){
+			struct obj *item;
+			if(Blind) pline("Click!");
+			else pline("The crate pops open as it lands.");
+			/* drop any objects contained inside the crate */
+			while ((item = obj->cobj) != 0) {
+				obj_extract_self(item);
+				place_object(item, x, y);
+			}
+		}
 		obfree(obj, (struct obj *)0);
-		bury_objs(x, y);
 		newsym(x,y);
 		return TRUE;
 	} else if (is_lava(x, y)) {

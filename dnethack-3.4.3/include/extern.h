@@ -2673,6 +2673,7 @@ E void FDECL(melt_ice, (XCHAR_P,XCHAR_P));
 E int FDECL(zap_over_floor, (XCHAR_P,XCHAR_P,int,boolean *));
 E void FDECL(fracture_rock, (struct obj *));
 E boolean FDECL(break_statue, (struct obj *));
+E boolean FDECL(break_crate, (struct obj *));
 E void FDECL(destroy_item, (int,int));
 E int FDECL(destroy_mitem, (struct monst *,int,int));
 E int FDECL(resist, (struct monst *,CHAR_P,int,int));

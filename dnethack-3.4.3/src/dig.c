@@ -23,10 +23,11 @@ STATIC_DCL int NDECL(dig);
 #define DIGTYP_ROCK       1
 #define DIGTYP_STATUE     2
 #define DIGTYP_BOULDER    3
-#define DIGTYP_DOOR       4
-#define DIGTYP_TREE       5
-#define DIGTYP_BARS       6
-#define DIGTYP_BRIDGE     7
+#define DIGTYP_CRATE      4
+#define DIGTYP_DOOR       5
+#define DIGTYP_TREE       6
+#define DIGTYP_BARS       7
+#define DIGTYP_BRIDGE     8
 
 
 STATIC_OVL boolean
@@ -143,6 +144,7 @@ xchar x, y;
 
 	return ((ispick||is_saber) && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
 		(ispick||is_saber) && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
+		(ispick||is_saber) && sobj_at(HUGE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
 		(closed_door(x, y) ||
 			levl[x][y].typ == SDOOR) ? DIGTYP_DOOR :
 		IS_TREES(levl[x][y].typ) ?
@@ -353,6 +355,8 @@ dig()
 		register boolean shopedge = *in_rooms(dpx, dpy, SHOPBASE);
 
 		if ((obj = sobj_at(STATUE, dpx, dpy)) != 0) {
+			struct obj *bobj;
+			
 			if (break_statue(obj))
 				digtxt = "The statue shatters.";
 			else
@@ -360,6 +364,11 @@ dig()
 				 * printed a message and updated the screen
 				 */
 				digtxt = (char *)0;
+			if ((bobj = boulder_at(dpx, dpy)) != 0) {
+			    /* another boulder here, restack it to the top */
+			    obj_extract_self(bobj);
+			    place_object(bobj, dpx, dpy);
+			}
 		} else if ((obj = sobj_at(BOULDER, dpx, dpy)) != 0) {
 			struct obj *bobj;
 
@@ -370,6 +379,16 @@ dig()
 			    place_object(bobj, dpx, dpy);
 			}
 			digtxt = "The boulder falls apart.";
+		} else if ((obj = sobj_at(HUGE_STONE_CRATE, dpx, dpy)) != 0) {
+			struct obj *bobj;
+
+			break_crate(obj);
+			if ((bobj = boulder_at(dpx, dpy)) != 0) {
+			    /* another boulder here, restack it to the top */
+			    obj_extract_self(bobj);
+			    place_object(bobj, dpx, dpy);
+			}
+			digtxt = "The crate falls open.";
 		} else if (lev->typ == DRAWBRIDGE_DOWN) {
 		    destroy_drawbridge(dpx, dpy);
 			spoteffects(FALSE);
@@ -513,8 +532,8 @@ cleanup:
 		digging.level.dlevel = -1;
 		return(0);
 	} else {		/* not enough effort has been spent yet */
-		static const char *const d_target[8] = {
-			"", "rock", "statue", "boulder", "door", "tree", "bars", "chains"
+		static const char *const d_target[9] = {
+			"", "rock", "statue", "boulder", "crate", "door", "tree", "bars", "chains"
 		};
 		int dig_target = dig_typ(uwep, dpx, dpy);
 		
@@ -1646,11 +1665,12 @@ struct obj *obj;
 			    You("swing your %s through thin air.",
 				aobjnam(obj, (char *)0));
 		} else {
-			static const char * const d_action[8][2] = {
+			static const char * const d_action[9][2] = {
 			    {"swinging","slicing the air"},
 			    {"digging","cutting through the wall"},
 			    {"chipping the statue","cutting the statue"},
 			    {"hitting the boulder","cutting through the boulder"},
+			    {"chipping the crate","cutting through the crate"},
 			    {"chopping at the door","burning through the door"},
 			    {"cutting the tree","razing the tree"},
 			    {"chopping at the bars","cutting through the bars"},

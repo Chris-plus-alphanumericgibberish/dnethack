@@ -495,7 +495,7 @@ struct obj {
 							 objects[otmp->otyp].oc_material == IRON)
 
 /* misc */
-#define is_boulder(otmp)		((otmp)->otyp == BOULDER || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
+#define is_boulder(otmp)		((otmp)->otyp == BOULDER || (otmp)->otyp == HUGE_STONE_CRATE || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
 
 /* helpers, simple enough to be macros */
 #define is_plural(o)	((o)->quan > 1 || \
