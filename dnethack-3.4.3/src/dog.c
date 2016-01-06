@@ -594,8 +594,11 @@ boolean pets_only;	/* true for ascension or final escape */
 	    if (DEADMONSTER(mtmp)) continue;
 	    if (pets_only && !mtmp->mtame) continue;
 	    if (((monnear(mtmp, u.ux, u.uy) && levl_follower(mtmp)) || 
-			(mtmp->mtame && all_pets) ||
-			 
+			(mtmp->mtame && (all_pets ||
+							// (u.sealsActive&SEAL_MALPHAS && mtmp->data == &mons[PM_CROW]) || //Allow distant crows to get left behind.
+							(P_SKILL(P_BEAST_MASTERY) > 1 && distmin(mtmp->mx, mtmp->my, u.ux, u.uy) <= P_SKILL(P_BEAST_MASTERY))
+							)
+			) ||
 #ifdef STEED
 			(mtmp == u.usteed) ||
 #endif
