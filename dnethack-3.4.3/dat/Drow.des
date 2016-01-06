@@ -344,9 +344,13 @@ MONSTER:'@',"stjarna-alfar",(37,11), hostile
 # traps
 # One pit at each cardinal point.
 TRAP:"pit",(37,05)
+TRAP:"pit",(37,06)
 TRAP:"pit",(46,10)
+TRAP:"pit",(45,10)
 TRAP:"pit",(37,15)
+TRAP:"pit",(37,14)
 TRAP:"pit",(28,10)
+TRAP:"pit",(29,10)
 TRAP:random,random
 TRAP:random,random
 
