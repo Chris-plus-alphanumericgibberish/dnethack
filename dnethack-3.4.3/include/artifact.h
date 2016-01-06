@@ -281,6 +281,8 @@ struct artifact {
 #define THEFT_TYPE		(LAST_PROP+42)
 #define ANNUL			(LAST_PROP+43)
 #define ARTI_REMOVE_CURSE	(LAST_PROP+44)
+#define SUMMON_UNDEAD   (LAST_PROP+45)
+#define DEATH_GAZE      (LAST_PROP+46)
 
 #define is_nameable_artifact(a) (\
 			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\

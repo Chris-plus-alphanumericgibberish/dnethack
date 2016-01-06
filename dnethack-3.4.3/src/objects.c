@@ -927,6 +927,10 @@ OBJECT(OBJ("meat ring", (char *)0),
     BITS(1,0,0,0,0,0,0,0,0,0,0,0,FLESH),
     0, FOOD_CLASS, 0, 1, 5, 1, 0, 0, 0, 0, 5, CLR_BROWN),
 
+/* Body parts.... eeeww */
+FOOD("eyeball",              0, 1,  0, 0, FLESH,  10, CLR_WHITE),/*Needs tile*/
+FOOD("severed hand",         0, 1,  0, 0, FLESH,  40, CLR_BROWN),/*Needs tile*/
+
 /* fruits & veggies */
 FOOD("kelp frond",           0, 1,  1, 0, VEGGY,  30, CLR_GREEN),
 FOOD("eucalyptus leaf",      3, 1,  1, 0, VEGGY,  30, CLR_GREEN),

@@ -1014,6 +1014,8 @@ register const char *let,*word;
 			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strcmp(word, "sacrifice") &&
 		    (otyp != CORPSE &&
+		     otyp != SEVERED_HAND &&                    
+		     otyp != EYEBALL &&	/* KMH -- fixed */
 		     otyp != AMULET_OF_YENDOR && otyp != FAKE_AMULET_OF_YENDOR))
 		|| (!strcmp(word, "write with") &&
 		    ((otmp->oclass == TOOL_CLASS &&
@@ -2593,7 +2595,7 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	    obj->oeroded2 != otmp->oeroded2 ||
 	    obj->bypass != otmp->bypass)
 	    return(FALSE);
-
+	
 	if(obj->sknown || otmp->sknown) obj->sknown = otmp->sknown = 1;
 	
 	if ((obj->oclass==WEAPON_CLASS || obj->oclass==ARMOR_CLASS) &&

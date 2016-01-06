@@ -2482,6 +2482,27 @@ register struct obj *otmp;
 	    case CARROT:
 		make_blinded((long)u.ucreamed,TRUE);
 		break;
+	    case EYEBALL:
+	    /* body parts -- now checks for artifact and name*/
+		if (!otmp->oartifact) break;
+		You("feel a burning inside!");
+		u.uhp -= rn1(50,150);
+		if (u.uhp <= 0) {
+		  killer_format = KILLED_BY;
+		  killer = food_xname(otmp, TRUE);
+		  done(CHOKING);
+		}
+		break;
+	    case SEVERED_HAND:
+		if (!otmp->oartifact) break;
+		You("feel the hand scrabbling around inside of you!");
+		u.uhp -= rn1(50,150);
+		if (u.uhp <= 0) {
+		  killer_format = KILLED_BY;
+		  killer = food_xname(otmp, TRUE);
+		  done(CHOKING);
+		}
+		break;
 	    case FORTUNE_COOKIE:
 	   	if (yn("Read the fortune?") == 'y') {
 			outrumor(bcsign(otmp), BY_COOKIE);
@@ -2639,6 +2660,7 @@ struct obj *otmp;
 	 
 	if (!u.uconduct.unvegan && !Race_if(PM_INCANTIFIER) &&
 	    ((material == LEATHER || material == BONE ||
+	      material == EYEBALL || material == SEVERED_HAND ||
 	      material == DRAGON_HIDE || material == WAX) ||
 	     (cadaver && !vegan(&mons[mnum])))) {
 		Sprintf(buf, "%s foul and unfamiliar to you. %s",
@@ -2648,6 +2670,7 @@ struct obj *otmp;
 	}
 	if (!u.uconduct.unvegetarian && !Race_if(PM_INCANTIFIER) &&
 	    ((material == LEATHER || material == BONE ||
+	      material == EYEBALL || material == SEVERED_HAND ||
 	      material == DRAGON_HIDE) ||
 	     (cadaver && !vegetarian(&mons[mnum])))) {
 		Sprintf(buf, "%s unfamiliar to you. %s",
@@ -3366,6 +3389,10 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 			return 1;
 		}
 	}
+	if (otmp->otyp == EYEBALL || otmp->otyp == SEVERED_HAND) {
+	    Strcpy(qbuf,"Are you sure you want to eat that?");
+	    if ((c = yn_function(qbuf, ynqchars, 'n')) != 'y') return 0;
+	}
 	/* KMH -- Slow digestion is... indigestible */
 	if (otmp->otyp == RIN_SLOW_DIGESTION) {
 		pline("This ring is indigestible!");
@@ -3396,6 +3423,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 	    material = objects[otmp->otyp].oc_material;
 	    if (material == LEATHER ||
+		material == EYEBALL || material == SEVERED_HAND ||
 		material == BONE || material == DRAGON_HIDE) {
 		u.uconduct.unvegan++;
 		violated_vegetarian();

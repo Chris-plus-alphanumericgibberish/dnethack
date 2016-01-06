@@ -1158,6 +1158,18 @@ A("The Kusanagi no Tsurugi",	LONG_SWORD,
  /*//None of these count, since they are boss treasure//*/
 /*/////////////////////////////////////////////////////*/
 
+A("The Eye of Vecna", EYEBALL,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_HSPDAM), 0, 0,
+	NO_ATTK,        NO_DFNS,        NO_CARY,
+	DEATH_GAZE,     A_CHAOTIC, NON_PM, NON_PM, 500L,
+	0,0,0),
+
+A("The Hand of Vecna",       SEVERED_HAND,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_HPHDAM), 0, 0,
+	NO_ATTK,        DRLI(0,0),      CARY(AD_COLD),
+	SUMMON_UNDEAD,  A_CHAOTIC, NON_PM, NON_PM, 700L,
+	0,0,0),
+
 A("Genocide", TWO_HANDED_SWORD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK), 0, 0,
 	FIRE(10,20),	NO_DFNS,	NO_CARY,

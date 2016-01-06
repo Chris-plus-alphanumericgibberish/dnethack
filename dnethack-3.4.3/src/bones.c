@@ -127,6 +127,14 @@ boolean restore;
 				*ONAME(otmp) = '\0';
 				otmp->owt = weight(otmp);
 			}
+			if (otmp->oartifact == ART_HAND_OF_VECNA ||
+				otmp->oartifact == ART_EYE_OF_VECNA
+			) { /*Convert the Vecna artifacts to an ordinary whatever*/
+				otmp->oartifact = 0;
+				otmp->onamelth = 0;
+				*ONAME(otmp) = '\0';
+				otmp->owt = weight(otmp);
+			}
 			//Vibroblades and force pikes: Ok for bones inclusion
 			//Basic Firearms: Ok for bones inclusion
 			//Blasters: Max out the recharge counter and halve remaining shots

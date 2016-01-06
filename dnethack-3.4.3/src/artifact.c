@@ -4669,6 +4669,66 @@ arti_invoke(obj)
 			}
 			else pline("You strike the single-bladed athame, but nothing happens.");
 		break;
+		case DEATH_GAZE:{
+			struct monst *mtmp2;
+			if (u.uluck < -9) { /* uh oh... */
+				pline("The Eye turns on you!");
+				u.uhp = 0;
+				killer_format = KILLED_BY;
+				killer = "the Eye of Vecna";
+				done(DIED);
+			}
+			pline("The Eye looks around with its icy gaze!");
+			for (mtmp = fmon; mtmp; mtmp = mtmp2) {
+				mtmp2 = mtmp->nmon;
+				/* The eye is never blind ... */
+				if (couldsee(mtmp->mx, mtmp->my) && !is_undead(mtmp->data)) {
+					pline("%s screams in agony!",Monnam(mtmp));
+					mtmp->mhp /= 4;
+					if (mtmp->mhp < 1) mtmp->mhp = 1;
+				}
+			}
+			/* Tsk,tsk.. */
+			adjalign(-3);
+			u.uluck -= 3;
+	    }break;
+		case SUMMON_UNDEAD:{
+			int summon_loop;
+			struct monst *mtmp2;
+			if (u.uluck < -9) { /* uh oh... */
+			u.uhp -= (rn2(20)+5);
+			pline("The Hand claws you with its icy nails!");
+			if (u.uhp <= 0) {
+			  killer_format = KILLED_BY;
+			  killer="the Hand of Vecna";
+			  done(DIED);
+			}
+			}
+			summon_loop = rn2(4) + 4;
+			pline("Creatures from the grave surround you!");
+			do {
+			  switch (rn2(6)+1) {
+			case 1: mtmp = makemon(mkclass(S_VAMPIRE,0), u.ux, u.uy, NO_MM_FLAGS);
+			   break;
+			case 2:
+			case 3: mtmp = makemon(mkclass(S_ZOMBIE,0), u.ux, u.uy, NO_MM_FLAGS);
+			   break;
+			case 4: mtmp = makemon(mkclass(S_MUMMY,0), u.ux, u.uy, NO_MM_FLAGS);
+			   break;
+			case 5: mtmp = makemon(mkclass(S_GHOST,0), u.ux, u.uy, NO_MM_FLAGS);
+			   break;
+				   default: mtmp = makemon(mkclass(S_WRAITH,0), u.ux, u.uy, NO_MM_FLAGS);
+			   break;
+			  }
+			  if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
+				mtmp = mtmp2;
+			  mtmp->mtame = 30;
+			  summon_loop--;
+			} while (summon_loop);
+			/* Tsk,tsk.. */
+			adjalign(-3);
+			u.uluck -= 3;
+	    }break;
 		case RAISE_UNDEAD:
 			if(getdir((char *)0)){
 				struct obj *ocur,*onxt;
