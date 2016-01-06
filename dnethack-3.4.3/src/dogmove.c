@@ -323,6 +323,10 @@ boolean devour;
 	    nutrit = (nutrit + 4) / 5;
 	}
 	edog->hungrytime += nutrit;
+	if(u.sealsActive&SEAL_MALPHAS && mtmp->data == &mons[PM_CROW] && obj->otyp == CORPSE){
+		more_experienced(ptrexperience(&mons[obj->corpsenm]),0);
+		newexplevel();
+	}
 	mtmp->mconf = 0;
 	if (edog->mhpmax_penalty) {
 	    /* no longer starving */
