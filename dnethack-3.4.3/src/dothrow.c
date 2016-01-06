@@ -1211,9 +1211,10 @@ int thrown;
     obj->was_thrown = 1;
 	if ((obj->cursed || obj->greased || (ammo_and_launcher(obj, launcher) && launcher->otyp == FLINTLOCK)) && (u.dx || u.dy) && !rn2(7)) {
 	    boolean slipok = TRUE;
-	    if (ammo_and_launcher(obj, launcher))
-			pline("%s!", Tobjnam(obj, "misfire"));
-	    else {
+	    if (ammo_and_launcher(obj, launcher)){
+			if(is_firearm(launcher)) pline("%s!", Tobjnam(launcher, "misfire"));
+			else pline("%s!", Tobjnam(obj, "misfire"));
+	    } else {
 		/* only slip if it's greased or meant to be thrown */
 		if (obj->greased || throwing_weapon(obj))
 		    /* BUG: this message is grammatically incorrect if obj has
