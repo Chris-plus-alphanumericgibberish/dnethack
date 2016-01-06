@@ -4402,7 +4402,7 @@ register int osym, dmgtyp;
 	register int dindx;
 	const char *mult;
 
-	if(osym == RING_CLASS && dmgtyp == AD_ELEC) return;
+	if(osym == RING_CLASS && dmgtyp == AD_ELEC) return; /*Rings aren't destroyed by electrical damage anymore*/
 	
 	for(obj = invent; obj; obj = obj2) {
 	    obj2 = obj->nobj;
