@@ -2475,6 +2475,23 @@ role_init()
 	    if (urole.femalenum != NON_PM)
 	    	mons[urole.femalenum].mflags3 |= M3_INFRAVISION;
 	}
+	
+	/* Fix up the unknown firearms descriptions */
+	if(Role_if(PM_PIRATE) || Role_if(PM_ANACHRONONAUT)){
+		COPY_OBJ_DESCR(objects[FLINTLOCK], objects[HANDGUN]);
+		COPY_OBJ_DESCR(objects[PISTOL], objects[HANDGUN]);
+		
+		COPY_OBJ_DESCR(objects[RIFLE], objects[LONG_GUN]);
+		COPY_OBJ_DESCR(objects[ASSAULT_RIFLE], objects[LONG_GUN]);
+		COPY_OBJ_DESCR(objects[SNIPER_RIFLE], objects[LONG_GUN]);
+		COPY_OBJ_DESCR(objects[SHOTGUN], objects[LONG_GUN]);
+		COPY_OBJ_DESCR(objects[AUTO_SHOTGUN], objects[LONG_GUN]);
+		
+		COPY_OBJ_DESCR(objects[SUBMACHINE_GUN], objects[GUN]);
+		
+		COPY_OBJ_DESCR(objects[HEAVY_MACHINE_GUN], objects[LARGE_GUN]);
+		COPY_OBJ_DESCR(objects[GRENADE_LAUNCHER], objects[LARGE_GUN]);
+	}
 
 	/* Artifacts are fixed in hack_artifacts() */
 
