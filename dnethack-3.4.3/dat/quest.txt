@@ -408,7 +408,7 @@ it.  The other gods of the heavens became aware of the Enemy and
 fought against it, but they too were consumed one by one, until only
 the gods of the earth remained.
 
-"The moral races of the earth were trapped between the new God
+"The mortal races of the earth were trapped between the new God
 of the heavens and the old gods of earth.  But they were not
 unprepared.
 
@@ -420,7 +420,7 @@ could be ejected from the universe.
 "The greatest hero of the age wielded this Annulus in battle
 with the servants of Ilsensine, on the day of our birth when the
 heavens fell to earth.  The Annulus was lost at Ground Zero in 
-the defeat at that Battle of Heavenfall and the subsequent 
+the defeat at the Battle of Heavenfall and the subsequent 
 Night of Falling Stars.
 
 "It is too late now to employ the Annulus against Ilsensine, for all
@@ -430,8 +430,8 @@ overran the heavens, and employ it against her then.  This is the
 great mission for which you have spent your whole life training.
 
 "However, the Annulus remains lost at Ground Zero.  All the 
-remaining armies of the resistance have been unable to penetrate
-deep enough into enemy teritory to reach that place, and now there
+armies of the Resistance have been unable to penetrate deep 
+enough into enemy teritory to reach that place, and now there
 are no armies left.  We have no choice but to send you, the Last
 Hero of this or any age to come, alone in the hopes that you can
 succeed where they failed.  Should you do so, you must return to
@@ -5095,7 +5095,7 @@ efforts.
 "Take %o with you, on your quest for
 the Amulet.
 
-"Thank you, F- Farewell"
+"Goodbye, F- Farewell"
 %E
 %Cc Nhd 00082
 "You must go, now!
