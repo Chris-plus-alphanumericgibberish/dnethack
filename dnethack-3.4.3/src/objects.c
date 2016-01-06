@@ -168,8 +168,8 @@ WEAPON("crysknife", (char *)0,
 
 WEAPON("sickle", (char *)0, /* Vs plants: +6 to hit and double damage */
 	1, 1, 0, 22, 20,  4,  4,  1, -2, S,   P_HARVEST, IRON, HI_METAL),
-WEAPON("elven sickle", (char *)0, /* Vs plants: +6 to hit and double damage */
-	1, 1, 0,  0, 20,  4,  6,  3,  0, S,   P_HARVEST, WOOD, HI_WOOD),
+WEAPON("elven sickle", "runed sickle", /* Vs plants: +6 to hit and double damage *//*Needs tile*/
+	0, 1, 0,  0, 20,  4,  6,  3,  0, S,   P_HARVEST, WOOD, HI_WOOD),
 
 WEAPON("axe", (char *)0,
 	1, 0, 0, 20, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
@@ -193,7 +193,9 @@ WEAPON("orcish short sword", "crude short sword",
 WEAPON("dwarvish short sword", "broad short sword",
 	0, 0, 0,  2, 30, 10,  8,  7, 0, P,   P_SHORT_SWORD, IRON, HI_METAL),
 WEAPON("scimitar", "curved sword",
-	0, 0, 0, 15, 40, 15,  8,  8, 0, S,   P_SCIMITAR, IRON, HI_METAL),
+	0, 0, 0, 14, 40, 15,  8,  8, 0, S,   P_SCIMITAR, IRON, HI_METAL),
+WEAPON("high-elven warsword", "runed curved sword",
+	0, 0, 0,  1,  4, 15, 10, 10, 2, S,   P_SCIMITAR, MITHRIL, HI_METAL),
 WEAPON("rapier", (char *)0,
 	1, 0, 0,  6, 40, 20,  6,  4, 2, P,   P_SABER, METAL, HI_METAL),
 WEAPON("silver saber", (char *)0,
@@ -241,8 +243,8 @@ WEAPON("lance", (char *)0,
 	1, 0, 0,  4,180, 10,  6,  8, 0, P,   P_LANCE, IRON, HI_METAL),
 WEAPON("force pike", "long gray spear",
 	0, 0, 0,  0,180, 10,  6,  8, 2, P,   P_LANCE, PLASTIC, CLR_GRAY),
-WEAPON("elven lance", (char *)0,
-	1, 0, 0,  0,140, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
+WEAPON("elven lance", "runed lance", /*Needs encyc entry*//*Needs tile*/
+	0, 0, 0,  0,140, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
 WEAPON("droven lance", "obsidian lance",
 	0, 0, 1,  0,200, 10, 10, 10, 2, P,   P_LANCE, GLASS, CLR_BLACK),
 /* axe-type */
@@ -281,8 +283,8 @@ WEAPON("scythe", (char *)0, /* 2d4 damage. Vs plants: +6 to hit and double damag
 WEAPON("mace", (char *)0,
 	1, 0, 0, 40, 30,  5,  6,  6, 0, B,   P_MACE, IRON, HI_METAL),
 						/* +1 small */
-WEAPON("elven mace", (char *)0,
-	1, 0, 0,  0, 30,  5,  7,  7, 2, B,   P_MACE, WOOD, HI_WOOD),
+WEAPON("elven mace", "runed mace", /*Needs encyc entry*/
+	0, 0, 0,  0, 30,  5,  7,  7, 2, B,   P_MACE, WOOD, HI_WOOD),
 						/* +1 small */
 WEAPON("morning star", (char *)0,
 	1, 0, 0, 12,120, 10,  4,  6, 0, B,   P_MORNING_STAR, IRON, HI_METAL),
@@ -665,7 +667,7 @@ BOOTS("water walking boots", "jungle boots",
 BOOTS("jumping boots", "hiking boots",
 		0, 1,  JUMPING,   12, 2, 20, 50,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("elven boots", "mud boots",
-		0, 1,  STEALTH,   12, 2, 15,  8,  9, 0, LEATHER, HI_LEATHER),
+		0, 1,  STEALTH,   12, 2, 15,  8,  9, 0, WOOD, CLR_BROWN),
 BOOTS("kicking boots", "buckled boots",
 		0, 1,  0,         12, 2, 15,  8,  9, 0, IRON, CLR_BROWN),
 BOOTS("fumble boots", "riding boots",

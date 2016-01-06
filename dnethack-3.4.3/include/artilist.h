@@ -1031,7 +1031,7 @@ A("The Moonbow of Sehanine", ELVEN_BOW,
 	CREATE_AMMO, A_CHAOTIC, PM_RANGER, PM_ELF, 4000L, 
 	SPFX2_SILVERED,0,0), /*silver is the moon's metal... but bows don't enter this code...*/
 
-A("The Spellsword of Corellon", ELVEN_BROADSWORD,
+A("The Spellsword of Corellon", HIGH_ELVEN_WARSWORD, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	PHYS(1,10),	NO_DFNS,	NO_CARY,
 	0, A_CHAOTIC, NON_PM, PM_ELF, 4000L, 
