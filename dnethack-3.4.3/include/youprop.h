@@ -124,7 +124,7 @@
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK)
 		/* ...means blind because of a cover */
 #define NoLightBlind	((Blinded || Blindfolded || !haseyes(youmonst.data)) && \
-		 !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp != CRYSTAL_PLATE_MAIL)) && \
+		 !(u.sealsActive&SEAL_DANTALION && !((uarm && uarm->otyp != CRYSTAL_PLATE_MAIL) || uarmu)) && \
 		 !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) && !forcesight)
 // #define Blind	((Blinded || Blindfolded || !haseyes(youmonst.data) || LightBlind) && \
 		 // !(u.sealsActive&SEAL_DANTALION && !(uarm && uarm->otyp != CRYSTAL_PLATE_MAIL)) && \
