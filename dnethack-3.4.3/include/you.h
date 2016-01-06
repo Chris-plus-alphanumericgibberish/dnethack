@@ -538,6 +538,7 @@ struct you {
 #define SEAL_DANTALION				0x0000200L
 #define SEAL_ECHIDNA				0x0000400L
 #define SEAL_EDEN					0x0000800L
+	long	edenshield;
 #define SEAL_ENKI					0x0001000L
 #define SEAL_EURYNOME				0x0002000L
 	int		eurycounts;

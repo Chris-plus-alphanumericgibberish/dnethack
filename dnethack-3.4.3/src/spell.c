@@ -1393,7 +1393,7 @@ purifying_blast()
 		buzz(SPE_FIREBALL - SPE_MAGIC_MISSILE + 10, 0,
 			u.ux, u.uy, u.dx, u.dy,25,d(10,dsize));
 	}
-	u.uacinc-=7;  //Note: was added when purifying blast began to charge.
+	// u.uacinc-=7;  //Note: was added when purifying blast began to charge.
 }
 
 int
@@ -1981,7 +1981,8 @@ spiriteffects(power, atme)
 		case PWR_PURIFYING_BLAST:{
 			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
-				u.uacinc+=7; //Note: purifying_blast subtracts 7 from uacinc to compensate.
+				// u.uacinc+=7; //Note: purifying_blast subtracts 7 from uacinc to compensate.
+				u.edenshield = moves+5;
 				nomul(-5, "charging up a purifying blast");
 				nomovemsg = "You finish charging.";
 				afternmv = purifying_blast;

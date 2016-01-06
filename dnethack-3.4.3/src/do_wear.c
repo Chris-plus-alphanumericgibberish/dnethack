@@ -1833,6 +1833,7 @@ int base_uac()
 	if (HProtection & INTRINSIC) uac -= u.ublessed;
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
+	if(u.edenshield > moves) uac -= 7;
 	if(Race_if(PM_ORC)){
 		uac -= (u.ulevel+1)/3;
 	}
@@ -1926,6 +1927,7 @@ find_ac()
 	if (HProtection & INTRINSIC) uac -= u.ublessed;
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
+	if(u.edenshield > moves) uac -= 7;
 	if(Race_if(PM_ORC)){
 		uac -= (u.ulevel+1)/3;
 		uac -= (u.ulevel+2)/3;
