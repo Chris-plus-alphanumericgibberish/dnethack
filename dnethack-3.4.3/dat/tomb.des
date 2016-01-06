@@ -96,7 +96,7 @@ OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
-MONSTER: 'L', "lich", (47,9)
+MONSTER: 'L', random, (47,9)
 MONSTER: '.',random,random
 MONSTER: '.',random,random
 MONSTER: '.',random,random
