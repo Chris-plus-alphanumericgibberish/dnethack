@@ -3729,7 +3729,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if(Race_if(PM_INCANTIFIER)) hungermod *= 10;
 	
 	if ((carnivorous(youmonst.data) 
-		|| herbivorous(youmonst.data) 
+		|| herbivorous(youmonst.data)
 		|| maybe_polyd(is_vampire(youmonst.data), 
 						Race_if(PM_VAMPIRE)))
 		&& !(moves % hungermod)
