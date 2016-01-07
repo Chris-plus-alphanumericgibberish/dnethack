@@ -97,6 +97,7 @@ OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 MONSTER: 'L', random, (47,9)
+OBJECT:'(',"magic chest",(47,10)
 MONSTER: '.',random,random
 MONSTER: '.',random,random
 MONSTER: '.',random,random

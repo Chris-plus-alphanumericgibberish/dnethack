@@ -526,8 +526,8 @@ DOOR:closed,(17,13)
 DOOR:closed,(17,15)
 REGION:(18,10,22,16),lit,"zoo",filled,true
 OBJECT:'(',"bag of holding",place[0]
-MONSTER:'m',"giant mimic", place[0], m_object "boulder"
-ENGRAVING:place[0],burn,"Elbereth"
+MONSTER:'m',"giant mimic", place[0], m_object "huge stone crate"
+OBJECT:'(',"magic chest",place[1]
 
 
 MAZE:"soko1-2",' '
@@ -621,5 +621,5 @@ DOOR:closed,(17,12)
 DOOR:closed,(17,14)
 REGION:(18,09,22,15),lit,"zoo",filled,true
 OBJECT:'"',"amulet of reflection",place[0]
-MONSTER:'m',"giant mimic", place[0], m_object "boulder"
-ENGRAVING:place[0],burn,"Elbereth"
+MONSTER:'m',"giant mimic", place[0], m_object "huge stone crate"
+OBJECT:'(',"magic chest",place[1]

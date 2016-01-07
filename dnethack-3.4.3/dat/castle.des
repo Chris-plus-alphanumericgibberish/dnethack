@@ -138,7 +138,8 @@ CONTAINER:'(',"chest",place[0]
 OBJECT:'/',"wishing",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
-ENGRAVING:place[0],burn,"Elbereth"
+# A magic chest in another tower
+OBJECT:'(',"magic chest",place[1]
 # The treasure of the lord
 OBJECT:'(',"chest",(37,08)
 # Traps
@@ -383,7 +384,8 @@ CONTAINER:'(',"chest",place[0]
 OBJECT:'/',"wishing",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
-ENGRAVING:place[0],burn,"Elbereth"
+# A magic chest in another tower
+OBJECT:'(',"magic chest",place[1]
 # The treasure of the lord
 OBJECT:'(',"chest",(37,09)
 # Traps
@@ -601,7 +603,8 @@ CONTAINER:'(',"chest",place[0]
 OBJECT:'/',"wishing",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
-ENGRAVING:place[0],burn,"Elbereth"
+# A magic chest in another tower
+OBJECT:'(',"magic chest",place[1]
 # Storecave number 1
 OBJECT:object[0],random,(27,00)
 OBJECT:object[0],random,(28,00)
@@ -914,7 +917,8 @@ CONTAINER:'(',"chest",place[0]
 OBJECT:'/',"wishing",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
-ENGRAVING:place[0],burn,"Elbereth"
+# A magic chest in another tower
+OBJECT:'(',"magic chest",place[1]
 # The treasure of the lord
 OBJECT:'(',"chest",(45,12)
 # Traps
@@ -1157,7 +1161,8 @@ CONTAINER:'(',"chest",place[0]
 OBJECT:'/',"wishing",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
-ENGRAVING:place[0],burn,"Elbereth"
+# A magic chest in another tower
+OBJECT:'(',"magic chest",place[1]
 # The treasure of the lord
 OBJECT:'(',"chest",(37,08)
 # Traps
@@ -1401,8 +1406,9 @@ OBJECT:object[3],random,(62,11)
 CONTAINER:'(',"chest",place[0]
 OBJECT:'/',"wishing",contained
 # Prevent monsters from eating it.(@'s never eat objects)
-ENGRAVING:place[0],burn,"Elbereth"
 OBJECT:'?',"scare monster",place[0]
+# A magic chest in another tower
+OBJECT:'(',"magic chest",place[1]
 # The treasure of the lord
 OBJECT:'(',"chest",(44,08)
 # Traps

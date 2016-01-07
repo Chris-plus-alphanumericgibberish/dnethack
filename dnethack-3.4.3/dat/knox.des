@@ -35,6 +35,7 @@ BRANCH:(08,16,08,16),(0,0,0,0)
 #   Throne room, with Croesus on the throne
 REGION:(37,08,46,11),lit,"throne"
 MONSTER:'@',"Croesus",(43,10),hostile
+OBJECT:'(',"magic chest",(43,10)
 #   The Vault
 #   Using unfilled morgue for
 #   identification in mkmaze.c

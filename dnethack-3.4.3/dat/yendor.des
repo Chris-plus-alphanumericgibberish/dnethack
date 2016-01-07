@@ -51,6 +51,7 @@ MONSTER:'d',"hell hound",(15,05)
 MONSTER:'V',"vampire lord",(17,05)
 # The local treasure
 OBJECT:'+',"Book of the Dead",(16,05)
+OBJECT:'(',"magic chest",(16,05)
 # Kinda mean to place these here, since the player may be blindsided by an upgraded wizard,
 # 	but them's the breaks!
 OBJECT[10%]:'+',"secrets",(16,05),"Necronomicon",0
