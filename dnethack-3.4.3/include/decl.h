@@ -397,6 +397,7 @@ E const char def_monsyms[MAXMCLASSES];	/* default class symbols */
 E uchar monsyms[MAXMCLASSES];		/* current class symbols */
 
 #include "obj.h"
+E NEARDATA struct obj *magic_chest_objs[10];
 E NEARDATA struct obj *invent,
 	*uarm, *uarmc, *uarmh, *uarms, *uarmg, *uarmf,
 #ifdef TOURIST

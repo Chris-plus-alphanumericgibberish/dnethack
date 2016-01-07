@@ -43,6 +43,12 @@ STATIC_DCL boolean FDECL(mon_beside, (int, int));
     (((flags) & BY_NEXTHERE) ? (curr)->nexthere : (curr)->nobj)
 
 /*
+ * Used by container code to check if they're dealing with the special magic
+ * chest container.
+ */
+#define cobj_is_magic_chest(cobj) ((cobj)->otyp == MAGIC_CHEST)
+
+/*
  *  How much the weight of the given container will change when the given
  *  object is removed from it.  This calculation must match the one used
  *  by weight() in mkobj.c.
@@ -989,7 +995,7 @@ long count;
 boolean telekinesis;
 int *wt_before, *wt_after;
 {
-    boolean adjust_wt = container && carried(container),
+    boolean adjust_wt = container && carried(container) && !cobj_is_magic_chest(container),
 	    is_gold = obj->oclass == COIN_CLASS;
     int wt, iw, ow, oow;
     long qq, savequan;
@@ -1268,10 +1274,10 @@ boolean telekinesis;	/* not picking it up directly by hand */
 #endif
 		obj->dknown = 1;
 
-	if(obj->shopOwned && !(obj->unpaid)){ /* shop stock is outside shop */
-		if(obj->sknown && !(obj->ostolen) ) obj->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
-		obj->ostolen = TRUE; /* object was apparently stolen by someone (not necessarily the player) */
-	}
+	// if(obj->shopOwned && !(obj->unpaid)){ /* shop stock is outside shop */
+		// if(obj->sknown && !(obj->ostolen) ) obj->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
+		// obj->ostolen = TRUE; /* object was apparently stolen by someone (not necessarily the player) */
+	// }
 	if (obj == uchain) {    /* do not pick up attached chain */
 	    return 0;
 	} else if (obj->oartifact && !touch_artifact(obj,&youmonst)) {
@@ -1796,7 +1802,7 @@ STATIC_PTR int
 in_container(obj)
 register struct obj *obj;
 {
-	boolean floor_container = !carried(current_container);
+	boolean floor_container = !cobj_is_magic_chest(current_container) && !carried(current_container);
 	boolean was_unpaid = FALSE;
 	char buf[BUFSZ];
 
@@ -1863,6 +1869,28 @@ register struct obj *obj;
 		    return -1;
 		}
 	    }
+
+	    // /*
+	     // * Revive corpses timed to revive immediately when trying to put
+	     // * them into a magic chest.
+	     // *
+	     // * Timers attached to objects on the magic_chest_objs chain are
+	     // * considered global and therefore follow the hero from level to
+	     // * level.  If the timeout happens to be REVIVE_MON (e.g. a troll
+	     // * corpse), the revival code has no sensible place to put the
+	     // * revived monster and the corpse simply vanishes.  To prevent
+	     // * magic chests being exploited to get rid of reviving corpses,
+	     // * such corpses are revived immediately upon trying to insert them
+	     // * into a magic chest.
+	     // */
+	    // if (report_timer(level, REVIVE_MON, obj)) {
+		// if (revive_corpse(obj, REVIVE_MONSTER)) {
+		    // /* Stop any multi-looting. */
+		    // nomul(-1, "startled by a reviving monster");
+		    // nomovemsg = "";
+		    // return -1;
+		// }
+	    // }
 	}
 
 	/* boxes, boulders, and big statues can't fit into any container */
@@ -1934,12 +1962,18 @@ register struct obj *obj;
 	if (current_container) {
 	    Strcpy(buf, the(xname(current_container)));
 	    You("put %s into %s.", doname(obj), buf);
+		if(cobj_is_magic_chest(current_container))
+			pline("The lock labled '%d' is open.", (int)current_container->ovar1);
 
 	    /* gold in container always needs to be added to credit */
 	    if (floor_container && obj->oclass == COIN_CLASS)
 		sellobj(obj, current_container->ox, current_container->oy);
-	    (void) add_to_container(current_container, obj);
-	    current_container->owt = weight(current_container);
+		if(cobj_is_magic_chest(current_container)){
+			add_to_magic_chest(obj,((int)(current_container->ovar1))%10);
+		} else {
+			(void) add_to_container(current_container, obj);
+			current_container->owt = weight(current_container);
+		}
 	}
 	/* gold needs this, and freeinv() many lines above may cause
 	 * the encumbrance to disappear from the status, so just always
@@ -1974,10 +2008,6 @@ register struct obj *obj;
 		obj->owt = weight(obj);
 	}
 
-	if(obj->shopOwned && !(obj->unpaid)){ /* shop stock is outside shop */
-		if(obj->sknown && !(obj->ostolen) ) obj->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
-		obj->ostolen = TRUE; /* object was apparently stolen by someone (not necessarily the player) */
-	}
 	if(obj->oartifact && !touch_artifact(obj,&youmonst)) return 0;
 	// if(obj->oartifact && obj->oartifact == ART_PEN_OF_THE_VOID && !Role_if(PM_EXILE)) u.sealsKnown |= obj->ovar1;
 	/*Handle the pen of the void here*/
@@ -2021,7 +2051,8 @@ register struct obj *obj;
 
 	/* Remove the object from the list. */
 	obj_extract_self(obj);
-	current_container->owt = weight(current_container);
+	if (!cobj_is_magic_chest(current_container))
+	    current_container->owt = weight(current_container);
 
 	if (Icebox && !age_is_relative(obj)) {
 		obj->age = monstermoves - obj->age; /* actual age */
@@ -2030,11 +2061,17 @@ register struct obj *obj;
 	}
 	/* simulated point of time */
 
-	if(!obj->unpaid && !carried(current_container) &&
-	     costly_spot(current_container->ox, current_container->oy)) {
+	if(!obj->unpaid && !cobj_is_magic_chest(current_container) && 
+		!carried(current_container) && 
+		costly_spot(current_container->ox, current_container->oy)
+	) {
 		obj->ox = current_container->ox;
 		obj->oy = current_container->oy;
 		addtobill(obj, FALSE, FALSE, FALSE);
+	}
+	if(obj->shopOwned && !(obj->unpaid)){ /* shop stock is outside shop */
+		if(obj->sknown && !(obj->ostolen) ) obj->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
+		obj->ostolen = TRUE; /* object was apparently stolen by someone (not necessarily the player) */
 	}
 	if (is_pick(obj) && !obj->unpaid && *u.ushops && shop_keeper(*u.ushops))
 		verbalize("You sneaky cad! Get out of here with that pick!");
@@ -2262,7 +2299,11 @@ register int held;
 	}
 	/* Count the number of contained objects. Sometimes toss objects if */
 	/* a cursed magic bag.						    */
-	for (curr = obj->cobj; curr; curr = otmp) {
+	if (cobj_is_magic_chest(obj))
+	    curr = magic_chest_objs[((int)obj->ovar1)%10];/*guard against polymorph related whoopies*/
+	else
+	    curr = obj->cobj;
+	for (; curr; curr = otmp) {
 	    otmp = curr->nobj;
 	    if (Is_mbag(obj) && obj->cursed && !rn2(13)) {
 		obj_extract_self(curr);
@@ -2275,7 +2316,8 @@ register int held;
 
 	if (loss)	/* magic bag lost some shop goods */
 	    You("owe %ld %s for lost merchandise.", loss, currency(loss));
-	obj->owt = weight(obj);	/* in case any items were lost */
+	if (!cobj_is_magic_chest(obj))
+		obj->owt = weight(obj);	/* in case any items were lost */
 
 	if (!cnt)
 	    Sprintf(emptymsg, "%s is %sempty.", Yname2(obj),
@@ -2466,8 +2508,15 @@ boolean put_in;
 	Sprintf(buf,"%s what type of objects?", put_in ? putin : takeout);
 	mflags = put_in ? ALL_TYPES | BUC_ALLBKNOWN | BUC_UNKNOWN :
 		          ALL_TYPES | CHOOSE_ALL | BUC_ALLBKNOWN | BUC_UNKNOWN;
-	n = query_category(buf, put_in ? invent : container->cobj,
-			   mflags, &pick_list, PICK_ANY);
+	if (put_in) {
+	    otmp = invent;
+	} else {
+	    if (cobj_is_magic_chest(container))
+		otmp = magic_chest_objs[((int)(container->ovar1))%10];
+	    else
+		otmp = container->cobj;
+	}
+	n = query_category(buf, otmp, mflags, &pick_list, PICK_ANY);
 	if (!n) return 0;
 	for (i = 0; i < n; i++) {
 	    if (pick_list[i].item.a_int == 'A')
@@ -2481,7 +2530,11 @@ boolean put_in;
     }
 
     if (loot_everything) {
-	for (otmp = container->cobj; otmp; otmp = otmp2) {
+	if (cobj_is_magic_chest(container))
+	    otmp = magic_chest_objs[((int)(container->ovar1))%10];
+	else
+	    otmp = container->cobj;
+	for (; otmp; otmp = otmp2) {
 	    otmp2 = otmp->nobj;
 	    res = out_container(otmp);
 	    if (res < 0) break;
@@ -2490,7 +2543,17 @@ boolean put_in;
 	mflags = INVORDER_SORT;
 	if (put_in && flags.invlet_constant) mflags |= USE_INVLET;
 	Sprintf(buf,"%s what?", put_in ? putin : takeout);
-	n = query_objlist(buf, put_in ? invent : container->cobj,
+	
+	if (put_in) {
+	    otmp = invent;
+	} else {
+	    if (cobj_is_magic_chest(container))
+		otmp = magic_chest_objs[((int)(container->ovar1))%10];
+	    else
+		otmp = container->cobj;
+	}
+
+	n = query_objlist(buf, otmp,
 			  mflags, &pick_list, PICK_ANY,
 			  all_categories ? allow_all : allow_category);
 	if (n) {

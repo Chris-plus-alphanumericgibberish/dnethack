@@ -369,6 +369,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	boolean remember_discover = discover;
 	struct obj *otmp;
 	int uid;
+	int i;
 
 	mread(fd, (genericptr_t) &uid, sizeof uid);
 	if (uid != getuid()) {		/* strange ... */
@@ -432,6 +433,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	restore_timers(fd, RANGE_GLOBAL, FALSE, 0L);
 	restore_light_sources(fd);
 	invent = restobjchn(fd, FALSE, FALSE);
+	for(i=0;i<10;i++) magic_chest_objs[i] = restobjchn(fd, FALSE, FALSE);
 	migrating_objs = restobjchn(fd, FALSE, FALSE);
 	migrating_mons = restmonchn(fd, FALSE);
 	mread(fd, (genericptr_t) mvitals, sizeof(mvitals));

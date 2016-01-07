@@ -38,6 +38,7 @@ STATIC_VAR NEARDATA struct xlock_s {
 	int picktyp, chance, usedtime;
 	/* ALI - Artifact doors from slash'em*/
 	int key;			/* Key being used (doors only) */
+	long mgclcknm;
 } xlock;
 
 #ifdef OVLB
@@ -82,7 +83,7 @@ lock_action()
 	/* if the target is currently unlocked, we're trying to lock it now */
 	if (xlock.door && !(xlock.door->doormask & D_LOCKED))
 		return actions[0]+2;	/* "locking the door" */
-	else if (xlock.box && !xlock.box->olocked)
+	else if (xlock.box && !xlock.box->olocked && xlock.box->otyp != MAGIC_CHEST)
 		return xlock.box->otyp == CHEST ? actions[1]+2 : actions[2]+2;
 	/* otherwise we're trying to unlock it */
 	else if (xlock.picktyp == LOCK_PICK)
@@ -146,7 +147,10 @@ picklock()	/* try to open/close a lock */
 			if(u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX,TRUE);
 		}
 	} else {
-	    xlock.box->olocked = !xlock.box->olocked;
+	    if(xlock.box->otyp == MAGIC_CHEST){
+			xlock.box->olocked = 0;
+			xlock.box->ovar1 = xlock.mgclcknm;
+		} else xlock.box->olocked = !xlock.box->olocked;
 	    if(xlock.box->otrapped)	
 		(void) chest_trap(xlock.box, FINGER, FALSE);
 	}
@@ -394,7 +398,7 @@ pick_lock(pick) /* pick a lock with a given object */
 		    }
 		    it = 0;
 		    if (otmp->obroken) verb = "fix";
-		    else if (!otmp->olocked) verb = "lock", it = 1;
+		    else if (!otmp->olocked && otmp->otyp != MAGIC_CHEST) verb = "lock", it = 1;
 		    else if (picktyp != LOCK_PICK) verb = "unlock", it = 1;
 		    else verb = "pick";
 		    Sprintf(qbuf, "There is %s here, %s %s?",
@@ -407,14 +411,24 @@ pick_lock(pick) /* pick a lock with a given object */
 		    if(c == 'n') continue;
 
 		    if (otmp->obroken) {
-			You_cant("fix its broken lock with %s.", doname(pick));
-			return 0;
-		    }
+				You_cant("fix its broken lock with %s.", doname(pick));
+				return 0;
+		    } else if(otmp->otyp == MAGIC_CHEST){
+				char locknumber = 0;
+				pline("What lock will you open (0-9)?");
+				do locknumber = readchar();
+				while(!(locknumber >= '0' && locknumber <= '9'));
+				if(otmp->ovar1 == (long)(locknumber-'0') && !otmp->olocked){
+					pline("That lock is already open.");
+					return 0;
+				}
+				xlock.mgclcknm = (long)(locknumber-'0');
+			}
 #ifdef TOURIST
-		    else if (picktyp == CREDIT_CARD && !otmp->olocked) {
-			/* credit cards are only good for unlocking */
-			You_cant("do that with %s.", doname(pick));
-			return 0;
+		    else if (picktyp == CREDIT_CARD && !otmp->olocked && otmp->otyp != MAGIC_CHEST) {
+				/* credit cards are only good for unlocking */
+				You_cant("do that with %s.", doname(pick));
+				return 0;
 		    }
 #endif
 		    switch(picktyp) {

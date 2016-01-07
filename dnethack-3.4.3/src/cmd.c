@@ -135,6 +135,7 @@ STATIC_PTR int NDECL(wiz_migrate_mons);
 #endif
 STATIC_DCL void FDECL(count_obj, (struct obj *, long *, long *, BOOLEAN_P, BOOLEAN_P));
 STATIC_DCL void FDECL(obj_chain, (winid, const char *, struct obj *, long *, long *));
+STATIC_DCL void FDECL(magic_chest_obj_chain, (winid, const char *, long *, long *));
 STATIC_DCL void FDECL(mon_invent_chain, (winid, const char *, struct monst *, long *, long *));
 STATIC_DCL void FDECL(mon_chain, (winid, const char *, struct monst *, long *, long *));
 STATIC_DCL void FDECL(contained, (winid, const char *, long *, long *));
@@ -3164,6 +3165,25 @@ obj_chain(win, src, chain, total_count, total_size)
 }
 
 STATIC_OVL void
+magic_chest_obj_chain(win, src, total_count, total_size)
+	winid win;
+	const char *src;
+	long *total_count;
+	long *total_size;
+{
+	char buf[BUFSZ];
+	long count = 0, size = 0;
+	int i;
+
+	for(i=0;i<10;i++)
+		count_obj(magic_chest_objs[i], &count, &size, TRUE, FALSE);
+	*total_count += count;
+	*total_size += size;
+	Sprintf(buf, template, src, count, size);
+	putstr(win, 0, buf);
+}
+
+STATIC_OVL void
 mon_invent_chain(win, src, chain, total_count, total_size)
 	winid win;
 	const char *src;
@@ -3193,11 +3213,14 @@ contained(win, src, total_count, total_size)
 	char buf[BUFSZ];
 	long count = 0, size = 0;
 	struct monst *mon;
+	int i;
 
 	count_obj(invent, &count, &size, FALSE, TRUE);
 	count_obj(fobj, &count, &size, FALSE, TRUE);
 	count_obj(level.buriedobjlist, &count, &size, FALSE, TRUE);
 	count_obj(migrating_objs, &count, &size, FALSE, TRUE);
+	for (i = 0; i<10; i++)
+	    count_obj(magic_chest_objs[i], &count, &size, FALSE, TRUE);
 	/* DEADMONSTER check not required in this loop since they have no inventory */
 	for (mon = fmon; mon; mon = mon->nmon)
 	    count_obj(mon->minvent, &count, &size, FALSE, TRUE);
@@ -3257,6 +3280,8 @@ wiz_show_stats()
 				&total_obj_count, &total_obj_size);
 	obj_chain(win, "migrating obj", migrating_objs,
 				&total_obj_count, &total_obj_size);
+	magic_chest_obj_chain(win, "magic chest obj",
+				&total_obj_count,&total_obj_size);
 	mon_invent_chain(win, "minvent", fmon,
 				&total_obj_count,&total_obj_size);
 	mon_invent_chain(win, "migrating minvent", migrating_mons,

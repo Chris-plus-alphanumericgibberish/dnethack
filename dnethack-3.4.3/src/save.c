@@ -275,7 +275,7 @@ STATIC_OVL void
 savegamestate(fd, mode)
 register int fd, mode;
 {
-	int uid;
+	int uid,i;
 #if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
 	time_t realtime;
 #endif
@@ -299,6 +299,7 @@ register int fd, mode;
 	save_light_sources(fd, mode, RANGE_GLOBAL);
 
 	saveobjchn(fd, invent, mode);
+	for(i=0;i<10;i++) saveobjchn(fd, magic_chest_objs[i], mode);
 	saveobjchn(fd, migrating_objs, mode);
 	savemonchn(fd, migrating_mons, mode);
 	if (release_data(mode)) {
@@ -1018,6 +1019,7 @@ freedynamicdata()
 	free_timers(RANGE_GLOBAL);
 	free_light_sources(RANGE_GLOBAL);
 	freeobjchn(invent);
+	for(i=0;i<10;i++) freeobjchn(magic_chest_objs[i]);
 	freeobjchn(migrating_objs);
 	freemonchn(migrating_mons);
 	freemonchn(mydogs);		/* ascension or dungeon escape */

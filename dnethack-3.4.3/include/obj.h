@@ -65,7 +65,8 @@ struct obj {
 #define OBJ_MIGRATING	5		/* object sent off to another level */
 #define OBJ_BURIED	6		/* object buried */
 #define OBJ_ONBILL	7		/* object on shk bill */
-#define NOBJ_STATES	8
+#define OBJ_MAGIC_CHEST	8		/* object in shared magic chest */
+#define NOBJ_STATES	9
 	xchar timed;		/* # of fuses (timers) attached to this obj */
 
 	Bitfield(cursed,1);
@@ -315,7 +316,7 @@ struct obj {
 			objects[otmp->otyp].oc_dir | PIERCE) //Pierce == 1
 #define is_slashing(otmp)	(otmp->oclass != SPBOOK_CLASS && \
 			otmp->oclass != WAND_CLASS && \
-			objects[otmp->otyp].oc_dir | SLASH) //Pierce == 2
+			objects[otmp->otyp].oc_dir | SLASH) //Slash == 2
 //#ifdef FIREARMS
 #define is_blaster(otmp) \
 			((otmp)->oclass == WEAPON_CLASS && \
@@ -399,7 +400,7 @@ struct obj {
 #define Has_contents(o) (/* (Is_container(o) || (o)->otyp == STATUE) && */ \
 			 (o)->cobj != (struct obj *)0)
 #define Is_container(o) ((o)->otyp >= LARGE_BOX && (o)->otyp <= BAG_OF_TRICKS/*DISTRESSED_PRINCESS*/)
-#define Is_box(otmp)	(otmp->otyp == LARGE_BOX || otmp->otyp == CHEST)
+#define Is_box(otmp)	(otmp->otyp == LARGE_BOX || otmp->otyp == CHEST || otmp->otyp == MAGIC_CHEST)
 #define Is_mbag(otmp)	(otmp->otyp == BAG_OF_HOLDING || \
 			 otmp->otyp == BAG_OF_TRICKS)
 

@@ -148,6 +148,9 @@ NEARDATA struct flag flags = DUMMY;
 NEARDATA struct instance_flags iflags = DUMMY;
 NEARDATA struct you u = DUMMY;
 
+/* objects that have been stored in a magic chest */
+NEARDATA struct obj *magic_chest_objs[10] = {0};
+
 NEARDATA struct obj *invent = (struct obj *)0,
 	*uwep = (struct obj *)0, *uarm = (struct obj *)0,
 	*uswapwep = (struct obj *)0,

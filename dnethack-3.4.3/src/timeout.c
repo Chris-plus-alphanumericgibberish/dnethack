@@ -2254,6 +2254,7 @@ obj_is_local(obj)
 {
     switch (obj->where) {
 	case OBJ_INVENT:
+	case OBJ_MAGIC_CHEST:
 	case OBJ_MIGRATING:	return FALSE;
 	case OBJ_FLOOR:
 	case OBJ_BURIED:	return TRUE;
