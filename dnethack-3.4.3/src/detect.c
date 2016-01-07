@@ -1608,7 +1608,7 @@ sokoban_detect()
 	    	else levl[x][y].waslit = TRUE;
 	    	map_background(x, y, 1);
 	    	for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
-	    	    if (obj->otyp == BOULDER)
+	    	    if (obj->otyp == HUGE_STONE_CRATE)
 	    	    	map_object(obj, 1);
 	    }
 

@@ -140,6 +140,7 @@ mkbox_cnts(box)
 struct obj *box;
 {
 	register int n;
+	register int min = 0;
 	register struct obj *otmp;
 
 	box->cobj = (struct obj *) 0;
@@ -148,6 +149,7 @@ struct obj *box;
 	case ICE_BOX:		n = 20; break;
 	case CHEST:		n = 5; break;
 	case LARGE_BOX:		n = 3; break;
+	case HUGE_STONE_CRATE: min=1;
 	case SACK:
 	case OILSKIN_SACK:
 				/* initial inventory: sack starts out empty */
@@ -157,17 +159,19 @@ struct obj *box;
 	default:		n = 0; break;
 	}
 
-	for (n = rn2(n+1); n > 0; n--) {
+	for (n = max_ints(rn2(n+1),min); n > 0; n--) {
 	    if (box->otyp == ICE_BOX) {
-		if (!(otmp = mksobj(CORPSE, TRUE, TRUE))) continue;
-		/* Note: setting age to 0 is correct.  Age has a different
-		 * from usual meaning for objects stored in ice boxes. -KAA
-		 */
-		otmp->age = 0L;
-		if (otmp->timed) {
-		    (void) stop_timer(ROT_CORPSE, (genericptr_t)otmp);
-		    (void) stop_timer(REVIVE_MON, (genericptr_t)otmp);
-		}
+			if (!(otmp = mksobj(CORPSE, TRUE, TRUE))) continue;
+			/* Note: setting age to 0 is correct.  Age has a different
+			 * from usual meaning for objects stored in ice boxes. -KAA
+			 */
+			otmp->age = 0L;
+			if (otmp->timed) {
+				(void) stop_timer(ROT_CORPSE, (genericptr_t)otmp);
+				(void) stop_timer(REVIVE_MON, (genericptr_t)otmp);
+			}
+	    } else if(box->otyp == HUGE_STONE_CRATE){
+			if (!(otmp = mkobj(FOOD_CLASS, TRUE))) continue;
 	    } else {
 		register int tprob;
 		const struct icp *iprobs = boxiprobs;
@@ -579,6 +583,7 @@ boolean artif;
 		case ICE_BOX:
 		case SACK:
 		case OILSKIN_SACK:
+		case HUGE_STONE_CRATE:
 		case BAG_OF_HOLDING:	mkbox_cnts(otmp);
 					break;
 		case MAGIC_CHEST:
