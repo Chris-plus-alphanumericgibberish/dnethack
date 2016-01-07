@@ -133,6 +133,9 @@ ENDMAP
 REGION:(00,00,75,19),unlit,"ordinary"
 # Doors
 
+# Magic Chest
+OBJECT:'(',"magic chest",random
+
 # Stairs
 STAIR:(01,01),up
 STAIR:(45,01),down

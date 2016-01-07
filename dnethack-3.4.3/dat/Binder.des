@@ -348,6 +348,8 @@ OBJECT:')',random,(07,17),blessed,5
 OBJECT:')',random,(07,16),blessed,5
 OBJECT:')',random,(07,15),blessed,5
 
+# Magic Chest
+OBJECT:'(',"magic chest",(17,16)
 # Monsters.
 #MONSTER:'K',"binah sephirah",(17,16), asleep
 #MONSTER:'K',"daat sephirah",(17,14), asleep

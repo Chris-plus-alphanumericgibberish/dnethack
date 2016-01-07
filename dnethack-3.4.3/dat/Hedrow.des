@@ -249,6 +249,9 @@ STAIR: (74,17), up
 STAIR: (23,03), down
 # Doors
 
+# Magic Chest
+OBJECT:'(',"magic chest",random
+
 # Objects
 OBJECT: random,random,random
 OBJECT: random,random,random

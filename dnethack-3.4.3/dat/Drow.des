@@ -158,6 +158,9 @@ REGION:(00,00,75,19),unlit,"ordinary"
 STAIR:(01,13),up
 STAIR:(73,02),down
 
+# Magic Chest
+OBJECT:'(',"magic chest",random
+
 OBJECT: random,random,random
 OBJECT: random,random,random
 OBJECT: random,random,random

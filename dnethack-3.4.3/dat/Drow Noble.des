@@ -203,6 +203,9 @@ ENDMAP
 STAIR: (36,14), up
 STAIR: (00,00,73,19),(34,12,39,16), down
 
+# Magic Chest
+OBJECT:'(',"magic chest",(37,6)
+
 MONSTER:'U',"umber hulk",random
 MONSTER:'U',"umber hulk",random
 MONSTER:'U',"umber hulk",random

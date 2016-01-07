@@ -218,6 +218,8 @@ RANDOM_PLACES:(49,07),(47,15),(57,06),(61,11)
 REGION:(00,00,75,19),lit,"ordinary"
 # Altar to Apollo
 ALTAR:(37,10),law,altar
+# Magic Chest
+OBJECT:'(',"magic chest",(37,10)
 # Stairs
 STAIR:(19,10),up
 # Non diggable walls

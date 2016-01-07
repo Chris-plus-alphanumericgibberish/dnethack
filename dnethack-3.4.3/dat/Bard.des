@@ -127,6 +127,8 @@ REGION:(00,00,75,20),lit,"ordinary"
 # Stairs
 STAIR:(74,08),up
 STAIR:(24,10),down
+# Magic Chest
+OBJECT:'(',"magic chest",(24,9)
 # Non diggable walls
 NON_DIGGABLE:(00,00,75,19)
 # Objects

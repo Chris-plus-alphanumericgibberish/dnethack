@@ -321,6 +321,8 @@ STAIR:(38,10),up
 NON_DIGGABLE:(00,00,75,19)
 # The altar of Huhetotl.  Unattended.
 ALTAR:place[0],chaos,altar
+# Magic chest in another alcove
+OBJECT:'(',"magic chest",place[1]
 # Objects
 OBJECT:'[',"shield of reflection",place[0],uncursed,1,"Itlachiayaque"
 OBJECT:random,random,random

@@ -165,6 +165,9 @@ ENDMAP
 REGION:(00,00,75,19),lit,"ordinary"
 NON_DIGGABLE:(00,00,75,19)
 #
+# Magic Chest
+OBJECT:'(',"magic chest",random
+
 REGION:(01,01,04,05),unlit,"morgue"
 REGION:(15,03,20,05),lit,"shop"
 REGION:(62,03,71,04),lit,"shop"

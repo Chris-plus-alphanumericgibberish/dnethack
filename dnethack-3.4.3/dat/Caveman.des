@@ -128,6 +128,8 @@ DOOR:locked,(28,11)
 # Stairs
 STAIR:(04,03),up
 STAIR:(73,10),down
+# Magic Chest
+OBJECT:'(',"magic chest",(73,09)
 # Non diggable walls
 NON_DIGGABLE:(00,00,75,19)
 # Objects

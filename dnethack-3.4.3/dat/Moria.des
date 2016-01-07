@@ -413,6 +413,9 @@ OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
 OBJECT:'[',"iron shoes",contained
 
+# Magic Chest
+OBJECT:'(',"magic chest",(34,19)
+
 #Chamber of Mazarbul
 ENGRAVING:(69,15),engrave,"BALIN SON OF FUNDIN LORD OF MORIA"
 OBJECT:')',"battle-axe",(69,15)

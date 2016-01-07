@@ -44,6 +44,8 @@ STAIR:place[0],down
 MONSTER:'m',"giant mimic", place[1], m_feature "staircase down"
 MONSTER:'m',"large mimic", place[2], m_feature "staircase down"
 MONSTER:'m',"small mimic", place[3], m_feature "staircase down"
+# Magic Chest
+OBJECT:'(',"magic chest",random
 # Portal arrival point
 BRANCH:(19,09,19,09),(0,0,0,0)
 # Doors (secret)

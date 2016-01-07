@@ -394,6 +394,9 @@ MONSTER: '@', "A'salom", (69,16), hostile
 CONTAINER:'(',"chest",(69,17)
 OBJECT:'[',"droven cloak",contained,blessed,0,"The Cloak of the Consort"
 
+# Magic Chest
+OBJECT:'(',"magic chest",(64,16)
+
 
 MAZE: "Nhd-fila", ' '
 FLAGS: hardfloor,shortsighted

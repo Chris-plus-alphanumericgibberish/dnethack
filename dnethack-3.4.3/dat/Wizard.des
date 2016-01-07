@@ -145,6 +145,8 @@ DOOR:locked,(55,08)
 DOOR:locked,(55,12)
 DOOR:locked,(47,08)
 DOOR:locked,(47,12)
+# Magic Chest
+OBJECT:'(',"magic chest",(44,10)
 # Stairs
 STAIR:(03,17),up
 STAIR:(48,10),down

@@ -139,6 +139,8 @@ STAIR:(20,06),down
 NON_DIGGABLE:(11,02,21,07)
 # Altar in the temple.
 ALTAR:(13,05), chaos, shrine
+# Magic Chest
+OBJECT:'(',"magic chest",(13,04)
 # Objects
 OBJECT:random,random,random
 OBJECT:random,random,random

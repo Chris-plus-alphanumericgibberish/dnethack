@@ -133,6 +133,8 @@ REGION:(31,00,39,13),unlit,"morgue"
 REGION:(11,03,29,10),lit,"temple",filled,true
 # The altar inside the temple
 ALTAR:(20,07),noalign,shrine
+# Magic Chest
+OBJECT:'(',"magic chest",(20,07)
 MONSTER:'@',"aligned priest",(20,07),noalign,hostile
 # Doors
 DOOR:locked,(10,06)
