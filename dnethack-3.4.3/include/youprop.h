@@ -81,7 +81,12 @@
 #define EAntimagic		u.uprops[ANTIMAGIC].extrinsic
 #define Antimagic		(EAntimagic || HAntimagic ||\
 						(u.sealsActive&SEAL_MOTHER) ||\
+						Nullmagic ||\
 				 (Upolyd && resists_magm(&youmonst)))
+
+#define HNullmagic		u.uprops[NULLMAGIC].intrinsic
+#define ENullmagic		u.uprops[NULLMAGIC].extrinsic
+#define Nullmagic		(ENullmagic || HNullmagic)
 
 #define HStone_resistance	u.uprops[STONE_RES].intrinsic
 #define EStone_resistance	u.uprops[STONE_RES].extrinsic

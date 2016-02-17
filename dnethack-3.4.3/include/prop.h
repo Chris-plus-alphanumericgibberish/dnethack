@@ -75,7 +75,8 @@
 #define DETECT_MONSTERS		66
 #define SPELLBOOST		67
 #define CARCAP		68
-#define LAST_PROP		(CARCAP)
+#define NULLMAGIC		69
+#define LAST_PROP		(NULLMAGIC)
 
 /*** Where the properties come from ***/
 /* Definitions were moved here from obj.h and you.h */
