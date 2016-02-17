@@ -13,8 +13,9 @@
    Incremented to 3.9 with the introduction of.... many things, including dread seraphs, half dragons, and another demon level.
    Incremented to 3.10 was the Bard version, though most development was handled late in 3.9.
    Incremented to 3.11 with the introduction Anachrononauts.
+   Incremented to 3.12 with the introduction Magic chests, scrolls of antimagic, resistance, and consecration, YARevison to chaos quest, beter resistance-from-diet, and lightsaber forms.
 */
-#define VERSION_MINOR	11
+#define VERSION_MINOR	12
 /*
  * PATCHLEVEL is updated for each release.
  *
