@@ -2754,7 +2754,9 @@ const char * const hallu_gods[] = {
 	"Gades", "Amon", "_Erim", "Daos", /* Lufia series */
         "_Beatrice", /* Umineko no Naku Koro ni */
 	"Spongebob Squarepants", /* should be obvious, right? :) */
-
+	"Chiyo-chichi", /* Azumanga Daioh */
+	"The Wondrous Mambo god", /* Xenogears */
+	
 	//Internet
 	"SCP-343",
 	"the Slender Man",

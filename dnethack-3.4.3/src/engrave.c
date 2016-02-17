@@ -268,6 +268,7 @@ static const char *haluMesg[] = {
 	"Life is truth, and never a dream...", /* Persona 4 */
 	"fire, walk with me.", /*Twin Peaks*/
 	"redefine happiness", /* Blue Oyster Cult */
+	"Evolve. Transform. Transcend", /*Heart of the Swarm*/
 	"no more sadness, no more anger, no more envy...", /*Halo*/
 		"Silence fills the empty grave, now that I have gone.",
 		"But my mind is not at rest, for questions linger on.",
@@ -361,6 +362,7 @@ static const char *haluMesg[] = {
 		"I've stood at that edge! I've looked over into that void! I'm just looking at it from the bottom now!",
 		"Free! Apple pie with every meal! We don't care if you don't like apple - Take It!",
 		"For there is a hole in the sky",
+		"and too long have I gazed",
 	"The quality of your lives depends on what you make of them!", /* The Life and Times of Scrooge McDuck */
 	"We do not threaten or warn or advise. We tell the truth.", /* The Mansion of E */
 		"What you stole is even more dangerous and precious than you know.",
@@ -575,7 +577,7 @@ const char * wardNames[][2] = {
 /* There is %s drawn here */
 const char * haluWard[] =  {
 	"", /* 0 index */
-	"a series of disconected lines", /* nondescript*/
+	"a series of disconnected lines", /* nondescript*/
 
 	/*DnD*/
 	"a cerulean weeping-willow", /* it's magic. Unlike the others, this one works. Keep in sync with engrave.h!*/
@@ -5068,6 +5070,8 @@ static const char *epitaphs[] = {
 		"I feel my body rising towards the bright light...wait, now it's falling, What the HELL!",
 		"Reader if cash thou art in want of any, dig four feet deep and find a penny",
 		"A lesson learned. Too bad I'm dead.",
+	
+	"I never got a single answer to any of my biggest questions, and now I will never know.", /*Unicorn Jelly*/
 	
 	"I beat you in the human race.", /*Fable*/
 	
