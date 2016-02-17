@@ -664,6 +664,9 @@ nh_timeout()
 		case DETECT_MONSTERS:
 			see_monsters();
 			break;
+		case NULLMAGIC:
+			pline("The shimmering film around your body pops!");
+		break;
 		}
 		}
 	}
