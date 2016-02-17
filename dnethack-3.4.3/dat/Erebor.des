@@ -105,6 +105,7 @@ DOOR:closed,(65,05)
 MONSTER:'h',"Thorin II Oakenshield",(48,10)
 CONTAINER:'(',"sack",(48,10)
 OBJECT:'(',"skeleton key",contained, uncursed, 0, "The Key of Erebor"
+OBJECT:'?',"resistance",contained
 
 # guards for the audience chamber
 MONSTER:'h',"dwarf warrior",(45,10)

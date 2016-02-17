@@ -80,6 +80,9 @@ ALTAR:(03,02),chaos,altar
 MONSTER:'@',"Eclavdra",(03,01)
 # The treasure of Eclavdra
 OBJECT:'(',"chest",(03,01)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # guards for the audience chamber
 MONSTER:'@',"drow matron-mother",(01,02)
 MONSTER:'@',"drow matron-mother",(01,03)

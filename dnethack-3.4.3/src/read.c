@@ -1915,6 +1915,171 @@ struct obj	*sobj;
 						8+4*bcsign(sobj));
 		break;
 	}
+	case SCR_ANTIMAGIC:{
+		if(confused && sobj->cursed){
+			//Confused
+			pline("Shimmering sparks shoot into your body!");
+			if(u.uen + 400 > u.uenmax){
+				u.uenmax += 4;
+				u.uen = u.uenmax;
+			} else u.uen += 400;
+	break;
+		}
+		if(sobj->cursed){
+			//Cursed: Attacks YOUR magic
+			pline("Shimmering sparks shoot from your body!");
+			u.uen = max(0,u.uen-400);
+	break;
+		}
+		if(confused){
+			//Confused: Remove magic shield
+			if(HNullmagic && ( HNullmagic & ~TIMEOUT) == 0L)
+				pline("The shimmering film around you pops!");
+			else pline("Nothing happens.");
+			HNullmagic &= ~TIMEOUT;
+	break;
+		}
+		if(!Nullmagic) pline("A shimmering film surrounds you!");
+		else pline("The shimmering film grows brighter!");
+		if( (HNullmagic & TIMEOUT) + 400L < TIMEOUT) {
+			long timer = (HNullmagic & TIMEOUT) + 400L;
+			HNullmagic &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HNullmagic |= timer; //set new timer
+		}
+		else{
+			HNullmagic |= TIMEOUT; //set timer to max value
+		}
+	}break;
+	case SCR_RESISTANCE:{
+		if(confused){
+			int damlevel = max(3, u.ulevel), sx = u.ux, sy = u.uy;
+			cval = bcsign(sobj);
+			sx = u.ux+rnd(3)-2; 
+			sy = u.uy+rnd(3)-2;
+			if (!isok(sx,sy) ||
+				IS_STWALL(levl[sx][sy].typ) || u.uswallow) {
+				/* Spell is reflected back to center */
+				sx = u.ux; 
+				sy = u.uy;
+			}
+			explode(sx, sy, 11, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
+							SCROLL_CLASS, EXPL_FIERY);
+			sx = u.ux+rnd(3)-2; 
+			sy = u.uy+rnd(3)-2;
+			if (!isok(sx,sy) ||
+				IS_STWALL(levl[sx][sy].typ) || u.uswallow) {
+				/* Spell is reflected back to center */
+				sx = u.ux; 
+				sy = u.uy;
+			}
+			explode(sx, sy, 12, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
+							SCROLL_CLASS, EXPL_FROSTY);
+			sx = u.ux+rnd(3)-2; 
+			sy = u.uy+rnd(3)-2;
+			if (!isok(sx,sy) ||
+				IS_STWALL(levl[sx][sy].typ) || u.uswallow) {
+				/* Spell is reflected back to center */
+				sx = u.ux; 
+				sy = u.uy;
+			}
+			explode(sx, sy, 15, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
+							SCROLL_CLASS, EXPL_MAGICAL);
+			sx = u.ux+rnd(3)-2; 
+			sy = u.uy+rnd(3)-2;
+			if (!isok(sx,sy) ||
+				IS_STWALL(levl[sx][sy].typ) || u.uswallow) {
+				/* Spell is reflected back to center */
+				sx = u.ux; 
+				sy = u.uy;
+			}
+			explode(sx, sy, 17, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
+							SCROLL_CLASS, EXPL_NOXIOUS);
+	break;
+		}
+		long rturns = sobj->blessed ? 500L : sobj->cursed ? 5L : 250L;
+		if( !(HFire_resistance) ) {
+			You(Hallucination ? "be chillin'." :
+			    "feel a momentary chill.");
+		}
+		if( (HFire_resistance & TIMEOUT) + rturns < TIMEOUT) {
+			long timer = (HFire_resistance & TIMEOUT) + rturns;
+			HFire_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HFire_resistance |= timer; //set new timer
+		}
+		else{
+			HFire_resistance |= TIMEOUT; //set timer to max value
+		}
+		
+		if( !(HSleep_resistance) ) {
+			You_feel("wide awake.");
+		}
+		if( (HSleep_resistance & TIMEOUT) + rturns < TIMEOUT) {
+			long timer = (HSleep_resistance & TIMEOUT) + rturns;
+			HSleep_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HSleep_resistance |= timer; //set new timer
+		}
+		else{
+			HSleep_resistance |= TIMEOUT; //set timer to max value
+		}
+		
+		if( !(HCold_resistance) ) {
+			You_feel("full of hot air.");
+		}
+		if( (HCold_resistance & TIMEOUT) + rturns < TIMEOUT) {
+			long timer = (HCold_resistance & TIMEOUT) + rturns;
+			HCold_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HCold_resistance |= timer; //set new timer
+		}
+		else{
+			HCold_resistance |= TIMEOUT; //set timer to max value
+		}
+		
+		if( !(HShock_resistance) ) {
+			if (Hallucination)
+				rn2(2) ? You_feel("grounded in reality.") : Your("health currently feels amplified!");
+			else
+				You_feel("well grounded.");
+		}
+		if( (HShock_resistance & TIMEOUT) + rturns < TIMEOUT) {
+			long timer = (HShock_resistance & TIMEOUT) + rturns;
+			HShock_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HShock_resistance |= timer; //set new timer
+		}
+		else{
+			HShock_resistance |= TIMEOUT; //set timer to max value
+		}
+		
+		if( !(HAcid_resistance) ) {
+			if (Hallucination)
+				rn2(2) ? You_feel("like you've really gotten back to basics!") : You_feel("insoluble.");
+			else
+				Your("skin feels leathery.");
+		}
+		if( (HAcid_resistance & TIMEOUT) + rturns < TIMEOUT) {
+			// long timer = max((HAcid_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = (HAcid_resistance & TIMEOUT) + rturns;
+			HAcid_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HAcid_resistance |= timer; //set new timer
+		}
+		else{
+			HAcid_resistance |= TIMEOUT; //set timer to max value
+		}
+	}break;
+	case SCR_CONSECRATION:{
+		aligntyp whichgod;
+		if(sobj->cursed || In_hell(&u.uz)){
+			whichgod = A_NONE;
+		} else if(confused){
+			whichgod = (aligntyp)(rn2(3) - 1);
+		} else whichgod = u.ualign.type;
+		
+		if(levl[u.ux][u.uy].typ == CORR || levl[u.ux][u.uy].typ == ROOM){
+			levl[u.ux][u.uy].typ = ALTAR;
+			levl[u.ux][u.uy].altarmask = Align2amask( whichgod );
+			pline("%s altar appears in front of you!", An(align_str(whichgod)));
+			newsym(u.ux, u.uy);
+		} else angrygods(whichgod);
+	}break;
 	case SCR_GOLD_SCROLL_OF_LAW: {
 		register struct monst *mtmp;
 		aligntyp mal, ual = u.ualign.type;

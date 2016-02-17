@@ -199,6 +199,9 @@ OBJECT:'?',"scare monster",(52,14), cursed, 0
 MONSTER:'@',"Mayor Cummerbund",(51,10)
 # The treasure of the Dread Pirate
 OBJECT:'(',"chest",(52,10)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # Guards for the audience chamber
 MONSTER:'@',"pirate brother",(22,05)
 MONSTER:'@',"pirate brother",(27,05)

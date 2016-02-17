@@ -48,6 +48,9 @@ MONSTER:'@',"Galadriel",(37,10)
 MONSTER:'@',"Celeborn",(37,11)
 # The treasure of Celeborn/Galadriel
 OBJECT:'(',"chest",(37,10)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # elf guards for the audience chamber
 MONSTER:'@',"High-elf",(38,09)
 MONSTER:'@',"High-elf",(38,10)

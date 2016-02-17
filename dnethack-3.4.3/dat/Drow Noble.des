@@ -80,6 +80,16 @@ MONSTER:'@',"sister",(39,07)
 MONSTER:'@',"sister",(38,09)
 MONSTER:'@',"sister",(39,12)
 
+#Your oldest sister's stash
+OBJECT:'(',"chest",(39,0)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'%',"food ration",contained
+OBJECT:'%',"food ration",contained
+OBJECT:'%',"food ration",contained
+OBJECT:'%',"food ration",contained
+
 MONSTER:'@',"hedrow warrior",random
 MONSTER:'@',"hedrow warrior",random
 MONSTER:'@',"hedrow warrior",random

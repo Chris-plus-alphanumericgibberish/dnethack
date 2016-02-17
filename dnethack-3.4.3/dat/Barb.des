@@ -61,6 +61,9 @@ DOOR:open,(28,05)
 MONSTER:'@',"Pelias",(10,07)
 # The treasure of Pelias
 OBJECT:'(',"chest",(09,05)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # chieftain guards for the audience chamber
 MONSTER:'@',"chieftain",(10,05)
 MONSTER:'@',"chieftain",(10,09)

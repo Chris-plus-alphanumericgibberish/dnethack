@@ -67,6 +67,9 @@ MONSTER:'@',"King Arthur",(09,07)
 MONSTER:'D',"Ixoth",(26,01),hostile
 # The treasure of King Arthur
 OBJECT:'(',"chest",(09,07)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # knight guards for the watchrooms
 MONSTER:'@',"knight",(04,02),peaceful
 MONSTER:'@',"knight",(04,13),peaceful

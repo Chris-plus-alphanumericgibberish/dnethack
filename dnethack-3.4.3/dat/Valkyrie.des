@@ -48,6 +48,9 @@ DOOR:locked,(43,10)
 MONSTER:'@',"Norn",(35,10)
 # The treasure of the Norn
 OBJECT:'(',"chest",(36,10)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # valkyrie guards for the audience chamber
 MONSTER:'@',"warrior",(27,08)
 MONSTER:'@',"warrior",(27,09)

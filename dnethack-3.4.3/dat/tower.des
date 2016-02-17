@@ -46,6 +46,11 @@ DOOR:locked,(10,07)
 DOOR:closed,(03,06)
 # treasures
 OBJECT:'(',"magic chest",(07,05)
+OBJECT:'(',"chest",(01,05)
+OBJECT:'?',"antimagic",contained
+OBJECT:'?',"antimagic",contained
+OBJECT:'?',"antimagic",contained
+OBJECT:'?',"antimagic",contained
 # +4 containers are secretly coffins.
 OBJECT:'(',"large box",(03,09), cursed, +4
 OBJECT:'(',"large box",(07,09), cursed, +4

@@ -47,6 +47,9 @@ DOOR:locked,(33,10)
 # Class leader
 MONSTER:'@',"Pindar",(13,10)
 OBJECT:'(',"chest",(13,10)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # Other treasures
 OBJECT[33%]:'(',"chest",(14,04)
 OBJECT[33%]:'(',"chest",(14,15)

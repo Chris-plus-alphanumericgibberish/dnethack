@@ -49,6 +49,10 @@ register struct obj *otmp;
 	case SCR_CHARGING:
 		return(16);
 /*		break; */
+	case SCR_RESISTANCE:
+	case SCR_ANTIMAGIC:
+		return(18);
+/*		break; */
 	case SCR_SCARE_MONSTER:
 	case SCR_STINKING_CLOUD:
 	case SCR_TAMING:
@@ -254,7 +258,7 @@ found_ward:
 		You_cant("write that!");
 		pline("It's obscene!");
 		return 1;
-	} else if (i == SPE_BOOK_OF_THE_DEAD) {
+	} else if (i == SPE_BOOK_OF_THE_DEAD || i == SCR_CONSECRATION) {
 		pline("No mere dungeon adventurer could write that.");
 		return 1;
 	} else if (by_descr && paper->oclass == SPBOOK_CLASS &&

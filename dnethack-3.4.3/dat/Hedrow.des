@@ -150,6 +150,9 @@ MONSTER:'@',"Gromph",(49,09)
 MONSTER:'@',"Dantrag",(48,08)
 # The treasure of Eclavdra
 OBJECT:'(',"chest",(12,10)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # guards for the audience chamber
 MONSTER:'@',"drow matron-mother",(10,09)
 MONSTER:'@',"drow matron-mother",(10,11)

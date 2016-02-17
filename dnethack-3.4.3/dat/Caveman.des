@@ -55,6 +55,7 @@ ALTAR:(36,02),coaligned,shrine
 MONSTER:'@',"Shaman Karnov",(35,02)
 # The treasure of Shaman Karnov
 OBJECT:'(',"chest",(34,02)
+# no scrolls, cavemen cannot write
 # neanderthal guards for the audience chamber
 MONSTER:'@',"neanderthal",(20,03)
 MONSTER:'@',"neanderthal",(20,02)

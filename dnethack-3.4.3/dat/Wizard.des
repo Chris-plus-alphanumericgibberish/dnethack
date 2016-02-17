@@ -55,6 +55,9 @@ DOOR:locked,(20,10)
 MONSTER:'@',"Neferet the Green",(23,05)
 # The treasure of the quest leader
 OBJECT:'(',"chest",(24,05)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # apprentice guards for the audience chamber
 MONSTER:'@',"apprentice",(30,07)
 MONSTER:'@',"apprentice",(24,06)

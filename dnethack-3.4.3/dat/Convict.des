@@ -40,6 +40,7 @@ BRANCH:(71,03,71,03),(0,0,0,0)
 ALTAR:(70,16),chaos,shrine
 # Robert the Lifer
 MONSTER:'@',"Robert the Lifer",(74,18)
+OBJECT:'?',"resistance",(74,18)
 # fellow prisoners
 MONSTER:'@',"inmate",random
 MONSTER:'@',"inmate",random

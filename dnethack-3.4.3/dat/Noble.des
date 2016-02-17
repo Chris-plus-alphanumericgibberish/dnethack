@@ -59,6 +59,9 @@ DOOR:closed,(17,05)
 MONSTER:'@',"old Gypsy woman",(12,05)
 # Your treasure chest
 OBJECT:'(',"chest",(22,05)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
 # Magic Chest
 OBJECT:'(',"magic chest",(21,02)
 

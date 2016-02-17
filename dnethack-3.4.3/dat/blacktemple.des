@@ -82,6 +82,7 @@ GOLD: random, (53,4)
 OBJECT: random, random, contained
 OBJECT: random, random, contained
 OBJECT: random, random, contained
+OBJECT: '?', "consecration", contained
 #OBJECT:'(',"wax candle",(54,4)
 CONTAINER:'(',"chest",(54,4)
 GOLD: random, (54,4)
