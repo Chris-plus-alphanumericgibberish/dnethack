@@ -886,7 +886,7 @@ touch_artifact(obj,mon)
     struct monst *mon;
 {
     register const struct artifact *oart = get_artifact(obj);
-    boolean badclass, badalign, self_willed, yours;
+    boolean badclass, badalign, self_willed, yours, forceEvade = FALSE;
 
     if(!oart) return 1;
 
@@ -991,7 +991,26 @@ touch_artifact(obj,mon)
 		}
 	}
 	if(mon->data == &mons[PM_DAEMON]) badclass = badalign = FALSE;
-
+	
+	if(obj->oartifact >= ART_BLACK_CRYSTAL && obj->oartifact <= ART_AIR_CRYSTAL){
+		if(obj->oartifact == ART_BLACK_CRYSTAL){
+			if(yours) badclass = badalign = forceEvade = !(mvitals[PM_CHAOS].died);
+			else badclass = badalign = forceEvade = TRUE;
+		} else if(obj->oartifact == ART_EARTH_CRYSTAL){
+			if(yours) badclass = badalign = forceEvade = !mvitals[PM_LICH__THE_FIEND_OF_EARTH].died;
+			else badclass = badalign = forceEvade = !!(mvitals[PM_LICH__THE_FIEND_OF_EARTH].died);
+		} else if(obj->oartifact == ART_FIRE_CRYSTAL){
+			if(yours) badclass = badalign = forceEvade = !mvitals[PM_KARY__THE_FIEND_OF_FIRE].died;
+			else badclass = badalign = forceEvade = !!(mvitals[PM_KARY__THE_FIEND_OF_FIRE].died);
+		} else if(obj->oartifact == ART_WATER_CRYSTAL){
+			if(yours) badclass = badalign = forceEvade = !mvitals[PM_KRAKEN__THE_FIEND_OF_WATER].died;
+			else badclass = badalign = forceEvade = !!(mvitals[PM_KRAKEN__THE_FIEND_OF_WATER].died);
+		} else if(obj->oartifact == ART_AIR_CRYSTAL){
+			if(yours) badclass = badalign = forceEvade = !mvitals[PM_TIAMAT__THE_FIEND_OF_WIND].died;
+			else badclass = badalign = forceEvade = !!(mvitals[PM_TIAMAT__THE_FIEND_OF_WIND].died);
+		}
+	}
+	
 	if (((badclass || badalign) && self_willed) ||
        (badalign && (!yours || !rn2(4)))
 	   )  {
@@ -1007,7 +1026,7 @@ touch_artifact(obj,mon)
     }
 
     /* can pick it up unless you're totally non-synch'd with the artifact */
-    if (badclass && badalign && self_willed) {
+    if ((badclass && badalign && self_willed) || forceEvade) {
 		if (yours) pline("%s your grasp!", Tobjnam(obj, "evade"));
 		return 0;
     } //Clarent sticks itself into it's surroundings if dropped

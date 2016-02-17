@@ -2763,11 +2763,11 @@ register struct	monst	*mtmp;
 				{
 				struct	monst *mlocal;
 				/* create special stuff; can't use mongets */
-				otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_BLACK_CRYSTAL));		
-				bless(otmp);
-				otmp->oerodeproof = TRUE;
-				(void) mpickobj(mtmp, otmp);
+				// otmp = mksobj(CRYSTAL_BALL, TRUE, FALSE);
+				// otmp = oname(otmp, artiname(ART_BLACK_CRYSTAL));
+				// bless(otmp);
+				// otmp->oerodeproof = TRUE;
+				// (void) mpickobj(mtmp, otmp);
 
 				otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_THIRD_KEY_OF_CHAOS));

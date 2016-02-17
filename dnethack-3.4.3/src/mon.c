@@ -239,46 +239,46 @@ register struct monst *mtmp;
 	
 	switch(mndx) {
 	    case PM_LICH__THE_FIEND_OF_EARTH:
-			if(mvitals[PM_GARLAND].died){
-				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
-				curse(otmp);
-				otmp->oerodeproof = TRUE;
-			}
+			// if(mvitals[PM_GARLAND].died){
+				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				// otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
+				// curse(otmp);
+				// otmp->oerodeproof = TRUE;
+			// }
 		goto default_1;
 		break;
 	    case PM_KARY__THE_FIEND_OF_FIRE:
-			if(mvitals[PM_GARLAND].died){
-				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
-				curse(otmp);
-				otmp->oerodeproof = TRUE;
-			}
+			// if(mvitals[PM_GARLAND].died){
+				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				// otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));		
+				// curse(otmp);
+				// otmp->oerodeproof = TRUE;
+			// }
 		goto default_1;
 		break;
 	    case PM_KRAKEN__THE_FIEND_OF_WATER:
-			if(mvitals[PM_GARLAND].died){
-				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
-				curse(otmp);
-				otmp->oerodeproof = TRUE;
-			}
+			// if(mvitals[PM_GARLAND].died){
+				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				// otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
+				// curse(otmp);
+				// otmp->oerodeproof = TRUE;
+			// }
 		goto default_1;
 		break;
 	    case PM_TIAMAT__THE_FIEND_OF_WIND:
-			if(mvitals[PM_GARLAND].died){
-				otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
-				curse(otmp);
-				otmp->oerodeproof = TRUE;
-			}
+			// if(mvitals[PM_GARLAND].died){
+				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+				// otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
+				// curse(otmp);
+				// otmp->oerodeproof = TRUE;
+			// }
 		goto default_1;
 		break;
 	    case PM_CHAOS:
-			otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-			otmp = oname(otmp, artiname(ART_BLACK_CRYSTAL));		
-			curse(otmp);
-			otmp->oerodeproof = TRUE;
+			// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
+			// otmp = oname(otmp, artiname(ART_BLACK_CRYSTAL));		
+			// curse(otmp);
+			// otmp->oerodeproof = TRUE;
 		goto default_1;
 		break;
 	    case PM_GRAY_DRAGON:
