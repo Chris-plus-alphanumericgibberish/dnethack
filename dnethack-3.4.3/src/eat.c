@@ -998,10 +998,10 @@ boolean drained;
 	if (chance && ptr->mlevel <= rn2(chance))
 		return;		/* failed die roll */
 
-	if(ptr->mlevel < 5) multiplier = 2;
-	else if (ptr->mlevel < 10) multiplier = 4;
-	else if (ptr->mlevel < 15) multiplier = 6;
-	else multiplier = 10;
+	if(ptr->mlevel < 5) multiplier = 5;
+	else if (ptr->mlevel < 10) multiplier = 10;
+	else if (ptr->mlevel < 15) multiplier = 15;
+	else multiplier = 20;
 	if(ptr->geno & G_UNIQ) multiplier = 20;
 	if(ptr->geno & G_UNIQ && ptr->mlevel > 14) permanent = 1;
 	switch (type) {
@@ -1014,7 +1014,8 @@ boolean drained;
 			    "feel a momentary chill.");
 		}
 		if( (HFire_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
+			// long timer = max((HFire_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = (HFire_resistance & TIMEOUT) + (long)(nutval*multiplier);
 			HFire_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HFire_resistance |= timer; //set new timer
 		}
@@ -1033,7 +1034,8 @@ boolean drained;
 			You_feel("wide awake.");
 		}
 		if( (HSleep_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HSleep_resistance & TIMEOUT), (long)(nutval*multiplier));
+			// long timer = max((HSleep_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = (HSleep_resistance & TIMEOUT) + (long)(nutval*multiplier);
 			HSleep_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HSleep_resistance |= timer; //set new timer
 		}
@@ -1052,7 +1054,8 @@ boolean drained;
 			You_feel("full of hot air.");
 		}
 		if( (HCold_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HCold_resistance & TIMEOUT), (long)(nutval*multiplier));
+			// long timer = max((HCold_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = (HCold_resistance & TIMEOUT) + (long)(nutval*multiplier);
 			HCold_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HCold_resistance |= timer; //set new timer
 		}
@@ -1085,7 +1088,8 @@ boolean drained;
 				You_feel("well grounded.");
 		}
 		if( (HShock_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HShock_resistance & TIMEOUT), (long)(nutval*multiplier));
+			// long timer = max((HShock_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = (HShock_resistance & TIMEOUT) + (long)(nutval*multiplier);
 			HShock_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HShock_resistance |= timer; //set new timer
 		}
@@ -1107,7 +1111,8 @@ boolean drained;
 				Your("skin feels leathery.");
 		}
 		if( (HAcid_resistance & TIMEOUT) + (long)(nutval*multiplier) < TIMEOUT) {
-			long timer = max((HAcid_resistance & TIMEOUT), (long)(nutval*multiplier));
+			// long timer = max((HAcid_resistance & TIMEOUT), (long)(nutval*multiplier));
+			long timer = (HAcid_resistance & TIMEOUT) + (long)(nutval*multiplier);
 			HAcid_resistance &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HAcid_resistance |= timer; //set new timer
 		}
