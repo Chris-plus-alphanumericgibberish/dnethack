@@ -2041,18 +2041,16 @@ const char *oldstr;
 			    !BSTRCMP(bp, p-6, "scales"))
 				return bp;
 
-		} else if (!BSTRCMP(bp, p-5, "boots") ||
-			   !BSTRCMP(bp, p-9, "gauntlets") ||
-			   !BSTRCMP(bp, p-9, "Gauntlets") ||
-			   !BSTRCMP(bp, p-6, "tricks") ||
-			   !BSTRCMP(bp, p-13, "versus curses") ||
-			   !BSTRCMP(bp, p-9, "paralysis") ||
-			   !BSTRCMP(bp, p-5, "glass") ||
+		} else if (!BSTRCMPI(bp, p-5, "boots") ||
+			   !BSTRCMPI(bp, p-9, "gauntlets") ||
+			   !BSTRCMPI(bp, p-6, "tricks") ||
+			   !BSTRCMPI(bp, p-13, "versus curses") ||
+			   !BSTRCMPI(bp, p-9, "paralysis") ||
+			   !BSTRCMPI(bp, p-5, "glass") ||
 			   !BSTRCMP(bp, p-4, "ness") ||
-			   !BSTRCMP(bp, p-14, "shape changers") ||
-			   !BSTRCMP(bp, p-15, "detect monsters") ||
-			   !BSTRCMP(bp, p-5, "chaos") ||
-			   !BSTRCMP(bp, p-5, "Chaos") ||
+			   !BSTRCMPI(bp, p-14, "shape changers") ||
+			   !BSTRCMPI(bp, p-15, "detect monsters") ||
+			   !BSTRCMPI(bp, p-5, "Chaos") ||
 			   !BSTRCMPI(bp, p-11, "Aesculapius") || /* staff */
 			   !BSTRCMPI(bp, p-7, "Orpheus") || /* lyre */
 			   !BSTRCMPI(bp, p-7, "Annulus") || /* Ring */
@@ -2063,15 +2061,15 @@ const char *oldstr;
 			   !BSTRCMPI(bp, p-11, "Seven Parts") || /* spear */
 			   !BSTRCMPI(bp, p-10, "Lost Names") || /* book */
 			   !BSTRCMPI(bp, p-10, "Infinite Spells") || /* book */
-			   !BSTRCMP(bp, p-10, "eucalyptus") ||
+			   !BSTRCMPI(bp, p-10, "eucalyptus") ||
 #ifdef WIZARD
-			   !BSTRCMP(bp, p-9, "iron bars") ||
+			   !BSTRCMPI(bp, p-9, "iron bars") ||
 #endif
-			   !BSTRCMP(bp, p-5, "aklys") ||
-			   !BSTRCMP(bp, p-5, "dress") ||
-			   !BSTRCMP(bp, p-16, "descent of stars") ||
-			   !BSTRCMP(bp, p-13, "dragon scales") ||
-			   !BSTRCMP(bp, p-6, "fungus"))
+			   !BSTRCMPI(bp, p-5, "aklys") ||
+			   !BSTRCMPI(bp, p-5, "dress") ||
+			   !BSTRCMPI(bp, p-16, "descent of stars") ||
+			   !BSTRCMPI(bp, p-13, "dragon scales") ||
+			   !BSTRCMPI(bp, p-6, "fungus"))
 				return bp;
 	mins:
 		p[-1] = '\0';
