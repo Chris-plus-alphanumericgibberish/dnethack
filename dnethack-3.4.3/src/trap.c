@@ -2852,7 +2852,7 @@ register boolean force, here, forcelethe;
 			/* Spell books get blanked... */
 			if (obj->otyp == SPE_BOOK_OF_THE_DEAD)
 				pline("Steam rises from %s.", the(xname(obj)));
-			else if (obj->oartifact == ART_NECRONOMICON) /*do nothing*/;
+			else if (obj->oartifact) /*do nothing*/;
 			else obj->otyp = SPE_BLANK_PAPER;
 			break;
 		    case POTION_CLASS:
