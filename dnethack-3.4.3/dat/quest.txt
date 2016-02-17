@@ -420,10 +420,10 @@ could be ejected from the universe.
 "The greatest hero of the age wielded this Annulus in battle
 with the servants of Ilsensine, on the day of our birth when the
 heavens fell to earth.  The Annulus was lost at Ground Zero in 
-the defeat at the Battle of Heavenfall and the subsequent 
-Night of Falling Stars.
+the defeat at the Battle of Heavenfall and the Night of Falling
+Stars.
 
-"It is too late now to employ the Annulus against Ilsensine, for all
+"It is too late to employ the Annulus against Ilsensine, for all
 the base matter of the world now stirs with her thoughts.  The only
 hope is to take the Annulus back into the past, to before Ilsensine
 overran the heavens, and employ it against her then.  This is the
@@ -571,7 +571,6 @@ there, you must use the Annulus to Annul the High
 Altar of Ilsensine and eject her from this
 universe."
 %E
-# Assumes Itlachiayaque (smooth shield)
 %Cc Ana 00082
 "The Annulus is the pinnacle of mortal technology, created
 by turning the power of the Bell of Opening upon itself,
@@ -590,7 +589,7 @@ with the servants of Ilsensine awaits you."
 %E
 %Cc Ana 00091
 "You've done it!  But there is still nothing you can do for us
-here.  Go back to the past, and bear the Amulet of Yendor up
+now.  Go back to the past, and bear the Amulet of Yendor up
 to the Astral Plane.  Once there, you must use the Annulus
 to Annul the High Altar of Ilsensine and eject her from
 this universe before she can consume the heavens and the
@@ -4674,7 +4673,7 @@ we maintain a pure devotion to things %a!
 and what you must do:
 
 "A short time ago, the life-cavern colony went suddenly silent.
-The my greatest rival, sensing an opportunity for further glory,
+My greatest rival, sensing an opportunity for further glory,
 sent her most talented daughter to the colony, the girl recently
 taken by Lolth as her Chosen priestess.  Her mission was to 
 learn the cause of the silence and to bring justice to those 
@@ -4683,7 +4682,7 @@ responsible.
 "The girl failed, for that was the last anyone has heard of her.
 I have been grooming you as her rival to the title of Chosen.
 It is too late for you to best her in life, but you can still
-can still prove your superiority.
+prove your superiority.
 
 "Go, travel to the life-cavern colony, learn the cause of the 
 silence and bring justice to those responsible.  Recover
@@ -4787,7 +4786,7 @@ WE RULED AND SHALL RULE ALL.
 %Cc Ndr 00070
 You fill with pride as you pick up %o.
 
-You shall succeed where you're rival has failed, and claim the
+You shall succeed where your rival has failed, and claim the
 Amulet of Yendor besides.
 %E
 %Cc Ndr 00080
@@ -7720,4 +7719,57 @@ destiny in the depths of %Z,
 or die in the attempt.
 
 Go bravely with %d!
+%E
+#
+#	Legacy text for Anachrononauts
+#
+%Cc - 00218
+Once, there was a story:
+
+    After the Creation, the cruel god Moloch rebelled
+    against the authority of Marduk the Creator.
+    Moloch stole from Marduk the most powerful of all
+    the artifacts of the gods, the Amulet of Yendor,
+    and he hid it in the dark cavities of Gehennom, the
+    Under World, where he now lurks, and bides his time.
+
+The various gods and heroes of the world struggled 
+mightily to recover the amulet, for the god who reclaimed
+the amulet would be granted ascendance over the other 
+gods of the world.  Eventually, one such hero recovered
+the amulet and bore it up the the Astral Plane in the
+name of their god.  The hero was rewarded by their 
+ascendent deity with demi-godhood and immortality.
+%E
+%Cc - 00219
+That time is long past.  The ascendance and immortality
+of the gods proved a lie, for heaven now lies in ruins,
+trampled into the bloody soil of earth by the cursed
+mind flayers.
+
+You, a newly trained %r, have been trained
+from birth as the instrument of hope in a dying world.
+One day soon, when your sister, the Last Oracle Sara,
+deems you ready and the Army of the Bastion has 
+completed its secret preparations, you shall-
+
+*ALERT: Picket line reports contact.  Hostile entities
+vectoring on Last Bastion.  Picket line engaging targets*
+
+<<%p, report to ritual grounds at once.  We must complete
+the ritual before the courtyard in overrun>>
+
+%E
+%Cc - 00220
+**EMERGENCY ALERT:  Picket line overrun.  Telemetry
+suggests 100%% losses.  Hostile entitites vectoring
+on Last Bastion.**
+
+<<Once the ritual is complete, proceed to the Dungeons
+of Doom.  I will contact you at that time-place with
+further instructions>>
+
+%E
+%Cc - 00221
+<<Good luck, %s.>>
 %E
