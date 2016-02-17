@@ -3160,6 +3160,7 @@ typfnd:
 	if((typ == SPE_LIGHTNING_BOLT ||
 		typ == SPE_POISON_SPRAY ||
 		typ == SPE_ACID_BLAST ||
+		typ == SCR_CONSECRATION ||
 		(typ >= HANDGUN && typ <= LARGE_GUN) ||
 		((
 			typ == LIGHTSABER ||
