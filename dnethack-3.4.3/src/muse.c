@@ -1007,7 +1007,7 @@ struct monst *mtmp;
 
 	struct monst *target = mfind_target(mtmp);
 	
-	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
 	if (target)
 	{

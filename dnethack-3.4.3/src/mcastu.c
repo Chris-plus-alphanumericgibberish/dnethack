@@ -799,7 +799,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	int ret;
 	int spellnum = 0;
 
-	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	/* Three cases:
 	 * -- monster is attacking you.  Search for a useful spell.
 	 * -- monster thinks it's attacking you.  Search for a useful spell,
@@ -2248,7 +2248,7 @@ castmm(mtmp, mdef, mattk)
 	int ret;
 	int spellnum = 0;
 
-	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;

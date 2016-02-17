@@ -455,7 +455,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 	    || IS_ROCK(levl[bhitpos.x+dx][bhitpos.y+dy].typ)
 	    || closed_door(bhitpos.x+dx, bhitpos.y+dy)
 	    || (levl[bhitpos.x + dx][bhitpos.y + dy].typ == IRONBARS &&
-			((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, 0, 0)))
+			(Is_illregrd(&u.uz) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, 0, 0)))
 	) {
 		struct rm *room = &levl[bhitpos.x+dx][bhitpos.y+dy];
 		boolean shopdoor=FALSE, shopwall=FALSE;
@@ -678,7 +678,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			|| closed_door(bhitpos.x+dx, bhitpos.y+dy)
 			/* missile might hit iron bars */
 			|| (levl[bhitpos.x+dx][bhitpos.y+dy].typ == IRONBARS &&
-				((u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, !rn2(5), 0)))
+				(Is_illregrd(&u.uz) || hits_bars(&singleobj, bhitpos.x, bhitpos.y, !rn2(5), 0)))
 #ifdef SINKS
 			/* Thrown objects "sink" */
 			|| IS_SINK(levl[bhitpos.x][bhitpos.y].typ)
@@ -819,7 +819,7 @@ struct monst *mtmp;
 	int multishot;
 	const char *onm;
 
-	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return;
 	
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (mtmp->weapon_check == NEED_WEAPON || !MON_WEP(mtmp)) {
@@ -1500,7 +1500,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	register struct attack  *mattk;
 {
 
-	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp ;
@@ -1550,7 +1550,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp ;
 	if(typ == AD_HDRG) typ = flags.HDbreath;
 
-	if(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
 	if (distmin(mtmp->mx, mtmp->my, mdef->mx, mdef->my) < 3)
 	    return 0;  /* not at close range */

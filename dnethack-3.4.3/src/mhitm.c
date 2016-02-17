@@ -347,6 +347,7 @@ mattackm(magr, mdef)
 		}
 		else goto meleeattack;
 		case AT_BEAM:
+		if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 		if(!mlined_up(magr, mdef, FALSE) || dist2(magr->mx,magr->my,mdef->mx,mdef->my) > BOLT_LIM*BOLT_LIM){
 #ifdef TAME_RANGED_ATTACKS
                     break; /* might have more ranged attacks */
@@ -433,6 +434,7 @@ meleeattack:
 		break;
 
 	    case AT_ARRW:{
+			if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 			if((mattk->adtyp != AD_SHDW || dist2(magr->mx,magr->my,mdef->mx,mdef->my)>2) && mlined_up(magr, mdef, FALSE)){
 				int n;
 				if (canseemon(magr)) pline("%s shoots.", Monnam(magr));
@@ -520,6 +522,7 @@ meleeattack:
             case AT_MAGC:
             case AT_MMGC:{
 				int temp=0;
+				if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 				if( pa == &mons[PM_ASMODEUS] ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_DEMOGORGON] && rn2(3) ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_LAMASHTU] && rn2(3) ) magr->mspec_used = 0;
@@ -606,7 +609,7 @@ struct monst *mdef;
     int multishot, mhp;
 	const char *onm;
 
-	if(magr->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (magr->weapon_check == NEED_WEAPON || !MON_WEP(magr)) {
@@ -848,7 +851,7 @@ gazemm(magr, mdef, mattk)
 {
 	char buf[BUFSZ];
 
-	if(magr->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)) return 0;
+	if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	if(vis) {
 		/* the gaze attack of weeping (arch)angels isn't active like others */
 		if (is_weeping(magr->data)) {

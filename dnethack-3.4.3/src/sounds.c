@@ -1048,6 +1048,7 @@ asGuardian:
 		struct monst *tmpm;
 		struct trap *ttmp;
 		int ix, iy, i;
+		if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 		if((mtmp->data == &mons[PM_INTONER] && !rn2(5)) || mtmp->data == &mons[PM_BLACK_FLOWER]){
 			switch(rnd(4)){
 				case 1:

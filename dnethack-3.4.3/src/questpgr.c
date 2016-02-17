@@ -897,7 +897,7 @@ law_montype()
 			}
 		}
 	}
-	else if(on_level(&illregrd_level,&u.uz)){
+	else if(Is_illregrd(&u.uz)){
 		int chance = d(1,31);
 		if(chance == 1){
 			return &mons[PM_QUINON];

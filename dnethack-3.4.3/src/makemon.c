@@ -3174,6 +3174,7 @@ register int	mmflags;
 		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 50);
 		mndx = monsndx(ptr);
 	}
+	if(allow_minvent) allow_minvent = !(mons[mndx].maligntyp < 0 && Is_illregrd(&u.uz));
 	(void) propagate(mndx, countbirth, FALSE);
 	xlth = ptr->pxlth;
 	if (mmflags & MM_EDOG) xlth += sizeof(struct edog);

@@ -870,6 +870,7 @@ register struct monst *mtmp;
 
 	/* some monsters teleport */
 	if (can_teleport(mdat) && (mtmp->mflee || !rn2(5)) && !rn2(40) && !mtmp->iswiz &&
+	    !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) &&
 	    !level.flags.noteleport) {
 		(void) rloc(mtmp, FALSE);
 		return(0);
@@ -907,8 +908,8 @@ register struct monst *mtmp;
 	/* may teleport, so do it before inrange is set */
 	if(is_covetous(mdat) && (mdat!=&mons[PM_DEMOGORGON] || !rn2(3)) 
 		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
-		&& !(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz)))
-		(void) tactics(mtmp);
+		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+	) (void) tactics(mtmp);
 
 	/* check distance and scariness of attacks */
 	distfleeck(mtmp,&inrange,&nearby,&scared);
@@ -923,6 +924,7 @@ register struct monst *mtmp;
 	
 	if(is_drow(mtmp->data) && (!mtmp->mpeaceful || Race_if(PM_DROW)) && (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
+		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 	){
 		if(cansee(mtmp->mx,mtmp->my)) pline("%s invokes the darkness.",Monnam(mtmp));
 	    do_clear_area(mtmp->mx,mtmp->my, 5, set_lit, (genericptr_t)0);
@@ -1406,7 +1408,8 @@ register int after;
 
 	/* teleport if that lies in our nature */
 	if(mteleport(ptr) && !rn2(5) && !mtmp->mcan &&
-	   !tele_restrict(mtmp) && !(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz))) {
+	   !tele_restrict(mtmp) && !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+	) {
 	    if(mtmp->mhp < 7 || mtmp->mpeaceful || rn2(2))
 		(void) rloc(mtmp, FALSE);
 	    else
@@ -1604,7 +1607,7 @@ not_special:
 		|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH] 
 		|| ptr == &mons[PM_WATCHER_IN_THE_WATER]) flag |= NOTONL;
 	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
-	if (passes_bars(ptr) && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz)) ) flag |= ALLOW_BARS;
+	if (passes_bars(ptr) && !Is_illregrd(&u.uz) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
 	if (is_human(ptr) || ptr == &mons[PM_MINOTAUR]) flag |= ALLOW_SSM;
 	if (is_undead(ptr) && ptr->mlet != S_GHOST && ptr->mlet != S_SHADE) flag |= NOGARLIC;
@@ -1765,7 +1768,7 @@ not_special:
 	    if (mtmp->wormno) worm_move(mtmp);
 	} else {
 	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp) && 
-			!(mtmp->data->maligntyp < 0 && u.uz.dnum == law_dnum && on_level(&illregrd_level,&u.uz))
+			!(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 		) {
 			(void) rloc(mtmp, FALSE);
 			return(1);
@@ -1856,7 +1859,7 @@ postmov:
 			if (*in_rooms(mtmp->mx, mtmp->my, SHOPBASE))
 			    add_damage(mtmp->mx, mtmp->my, 0L);
 		    }
-		} else if (levl[mtmp->mx][mtmp->my].typ == IRONBARS && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz))) {
+		} else if (levl[mtmp->mx][mtmp->my].typ == IRONBARS && !Is_illregrd(&u.uz)) {
 		    if ( (dmgtype(ptr,AD_RUST) && ptr != &mons[PM_NAIAD]) || dmgtype(ptr,AD_CORR)) {
 				if (canseemon(mtmp)) {
 					pline("%s eats through the iron bars.", 
