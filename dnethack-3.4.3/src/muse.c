@@ -1345,7 +1345,7 @@ struct obj *obj;			/* 2nd arg to fhitm/fhito */
 		    if(hitanything)	range--;
 		}
 		typ = levl[bhitpos.x][bhitpos.y].typ;
-		if (typ == IRONBARS && obj->otyp==WAN_STRIKING && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz))){
+		if (typ == IRONBARS && obj->otyp==WAN_STRIKING && !Is_illregrd(&u.uz)){
 			char numbars;
 			struct obj *obj;
 			You_hear("a sharp crack!");

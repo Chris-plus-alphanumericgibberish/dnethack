@@ -2949,7 +2949,7 @@ boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may b
 
 	    typ = levl[bhitpos.x][bhitpos.y].typ;
 	    if (typ == IRONBARS){
-		 if((obj->otyp==SPE_FORCE_BOLT || obj->otyp==WAN_STRIKING) && (u.uz.dnum != law_dnum || !on_level(&illregrd_level,&u.uz))){
+		 if((obj->otyp==SPE_FORCE_BOLT || obj->otyp==WAN_STRIKING) && !Is_illregrd(&u.uz)){
 			char numbars;
 			struct obj *obj;
 			You_hear("a sharp crack!");
