@@ -2065,7 +2065,15 @@ struct obj	*sobj;
 			HAcid_resistance |= TIMEOUT; //set timer to max value
 		}
 	}break;
-	case SCR_CONSECRATION:{
+	case SCR_CONSECRATION:
+	if(In_endgame(&u.uz)){
+		if(Is_astralevel(&u.uz)) pline("This place is already pretty consecrated.");
+		else pline("It would seem base matter alone cannot be consecrated.");
+	break;
+	} else if(Is_sanctum(&u.uz)){
+		pline("This place is much too unholy for the scroll to work.");
+	break;
+	} else {
 		aligntyp whichgod;
 		if(sobj->cursed || In_hell(&u.uz)){
 			whichgod = A_NONE;
@@ -2079,7 +2087,8 @@ struct obj	*sobj;
 			pline("%s altar appears in front of you!", An(align_str(whichgod)));
 			newsym(u.ux, u.uy);
 		} else angrygods(whichgod);
-	}break;
+	}
+	break;
 	case SCR_GOLD_SCROLL_OF_LAW: {
 		register struct monst *mtmp;
 		aligntyp mal, ual = u.ualign.type;
