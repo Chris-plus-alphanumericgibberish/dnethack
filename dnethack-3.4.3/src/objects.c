@@ -427,7 +427,7 @@ HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1, 30,   5, 9, 0, WOOD, HI_WOOD),
 HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1,  3,   5, 8, 0, MITHRIL, HI_METAL),
-HELM("droven helm", "spider shaped helm",
+HELM("droven helm", "spider-shaped helm",
 		0, 0,  0,	0, 1, 50,   5, 7, 0, MINERAL, CLR_BLACK),
 HELM("plasteel helm", "white skull helm",
 		0, 0,  0,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
