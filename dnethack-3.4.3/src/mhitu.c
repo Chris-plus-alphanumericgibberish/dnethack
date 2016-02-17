@@ -704,7 +704,7 @@ mattacku(mtmp)
 				mtmp->mvar2 = mtmp->mvar2+1;
 				if(!range2 && mtmp->mvar2>=2){
 					struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
-					hitmu(mtmp, &rend);
+					sum[i] = hitmu(mtmp, &rend);
 					mtmp->mvar2=0;
 				}
 			}
@@ -727,7 +727,7 @@ mattacku(mtmp)
 				mtmp->mvar2 = mtmp->mvar2+1;
 				if(!range2 && mtmp->mvar2>=2){
 					struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
-					hitmu(mtmp, &rend);
+					sum[i] = hitmu(mtmp, &rend);
 					mtmp->mvar2=0;
 				}
 			}
@@ -749,7 +749,7 @@ mattacku(mtmp)
 				mtmp->mvar2 = mtmp->mvar2+1;
 				if(!range2 && mtmp->mvar2>=2){
 					struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
-					hitmu(mtmp, &rend);
+					sum[i] = hitmu(mtmp, &rend);
 					mtmp->mvar2=0;
 				}
 			}
@@ -776,7 +776,7 @@ mattacku(mtmp)
 					struct attack theft = {AT_CLAW, AD_SEDU, 1, 1};
 					You("have met the twin gaze of Demogorgon, Prince of Demons!");
 					You("feel his command within you!");
-					hitmu(mtmp, &theft);
+					sum[i] = hitmu(mtmp, &theft);
 					mtmp->mvar1=0;
 				}
 			}
@@ -921,7 +921,7 @@ mattacku(mtmp)
 					mtmp->mvar2 = mtmp->mvar2+1;
 					if(!range2 && mtmp->mvar2>=2){
 						struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
-						hitmu(mtmp, &rend);
+						sum[i] = hitmu(mtmp, &rend);
 						mtmp->mvar2=0;
 					}
 				}
