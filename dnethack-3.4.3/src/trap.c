@@ -594,12 +594,33 @@ unsigned trflags;
 {
 	register int ttype = trap->ttyp;
 	register struct obj *otmp;
+	boolean shienuse = FALSE;
 	boolean already_seen = trap->tseen;
 	boolean webmsgok = (!(trflags & NOWEBMSG));
 	boolean forcebungle = (trflags & FORCEBUNGLE);
 
 	nomul(0, NULL);
 
+	if(
+		uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SHIEN || u.fightingForm == FFORM_SORESU)
+	){
+		switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
+			case P_BASIC:
+				if(rn2(100) < 33){
+					shienuse = TRUE;
+				}
+			break;
+			case P_SKILLED:
+				if(rn2(100) < 66){
+					shienuse = TRUE;
+				}
+			break;
+			case P_EXPERT:
+				shienuse = TRUE;
+			break;
+		}
+	}
+	
 	/* KMH -- You can't escape the Sokoban level traps */
 	if (In_sokoban(&u.uz) &&
 			(ttype == PIT || ttype == SPIKED_PIT || ttype == HOLE ||
@@ -660,7 +681,7 @@ unsigned trflags;
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
-		if (thitu(8, dmgval(otmp, &youmonst, 0), otmp, "arrow")) {
+		if (thitu(8, dmgval(otmp, &youmonst, 0), otmp, "arrow", shienuse) || shienuse) {
 		    obfree(otmp, (struct obj *)0);
 		} else {
 		    place_object(otmp, u.ux, u.uy);
@@ -690,8 +711,8 @@ unsigned trflags;
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
-		if (thitu(7, dmgval(otmp, &youmonst, 0), otmp, "little dart")) {
-		    if (otmp->opoisoned)
+		if (thitu(7, dmgval(otmp, &youmonst, 0), otmp, "little dart", shienuse) || shienuse) {
+		    if (otmp->opoisoned && !shienuse)
 			poisoned("dart", A_CON, "little dart", -10, rn2(10) ? OPOISON_BASIC :
 														!rn2(4) ? OPOISON_SLEEP :
 														!rn2(3) ? OPOISON_BLIND :
@@ -1457,7 +1478,7 @@ int style;
 			if (multi) nomul(0, NULL);
 			if (thitu(9 + singleobj->spe,
 				  dmgval(singleobj, &youmonst, 0),
-				  singleobj, (char *)0))
+				  singleobj, (char *)0, FALSE))
 			    stop_occupation();
 		}
 		if (style == ROLL) {

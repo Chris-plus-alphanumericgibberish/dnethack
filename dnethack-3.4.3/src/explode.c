@@ -727,7 +727,7 @@ struct obj *obj;			/* only scatter this obj        */
 				    if (bigmonst(youmonst.data)) hitvalu++;
 				    hitu = thitu(hitvalu,
 						 dmgval(stmp->obj, &youmonst, 0),
-						 stmp->obj, (char *)0);
+						 stmp->obj, (char *)0, FALSE);
 				    if (hitu) {
 					stmp->range -= 3;
 					stop_occupation();

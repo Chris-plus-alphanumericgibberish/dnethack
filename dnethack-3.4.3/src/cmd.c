@@ -835,6 +835,143 @@ use_reach_attack()
 	return (1);
 }
 
+int
+dofightingform()
+{
+	winid tmpwin;
+	int i, n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	long seal_flag = 0x1L;
+	menu_item *selected;
+	anything any;
+	
+	if(!(uwep && is_lightsaber(uwep))){
+		pline("You don't know any special fighting styles for use in this situation.");
+		return 0;
+	}
+	
+	if(P_SKILL(weapon_type(uwep)) < P_BASIC){
+		pline("You must have at least some basic skill in the use of your weapon before you can employ special fighting styles.");
+		return 0;
+	}
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf,	"Known Forms");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
+		if(u.fightingForm == FFORM_SHII_CHO) {
+			Sprintf(buf,	"Shii-Cho (active)");
+		} else {
+			Sprintf(buf,	"Shii-Cho");
+		}
+		any.a_int = FFORM_SHII_CHO;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(P_SKILL(FFORM_MAKASHI) >= P_BASIC){
+		if(u.fightingForm == FFORM_MAKASHI) {
+			Sprintf(buf,	"Makashi (active)");
+		} else {
+			Sprintf(buf,	"Makashi");
+		}
+		any.a_int = FFORM_MAKASHI;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(P_SKILL(FFORM_SORESU) >= P_BASIC){
+		if(u.fightingForm == FFORM_SORESU) {
+			Sprintf(buf,	"Soresu (active)");
+		} else {
+			Sprintf(buf,	"Soresu");
+		}
+		any.a_int = FFORM_SORESU;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(P_SKILL(FFORM_ATARU) >= P_BASIC){
+		if(u.fightingForm == FFORM_ATARU) {
+			Sprintf(buf,	"Ataru (active)");
+		} else {
+			Sprintf(buf,	"Ataru");
+		}
+		any.a_int = FFORM_ATARU;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(P_SKILL(FFORM_SHIEN) >= P_BASIC){
+		if(u.fightingForm == FFORM_SHIEN) {
+			Sprintf(buf,	"Shien (active)");
+		} else {
+			Sprintf(buf,	"Shien");
+		}
+		any.a_int = FFORM_SHIEN;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(P_SKILL(FFORM_DJEM_SO) >= P_BASIC){
+		if(u.fightingForm == FFORM_DJEM_SO) {
+			Sprintf(buf,	"Djem So (active)");
+		} else {
+			Sprintf(buf,	"Djem So");
+		}
+		any.a_int = FFORM_DJEM_SO;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(P_SKILL(FFORM_NIMAN) >= P_BASIC){
+		if(u.fightingForm == FFORM_NIMAN) {
+			Sprintf(buf,	"Niman (active)");
+		} else {
+			Sprintf(buf,	"Niman");
+		}
+		any.a_int = FFORM_NIMAN;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(P_SKILL(FFORM_JUYO) >= P_BASIC){
+		if(u.fightingForm == FFORM_JUYO) {
+			Sprintf(buf,	"Juyo (active)");
+		} else {
+			Sprintf(buf,	"Juyo");
+		}
+		any.a_int = FFORM_JUYO;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	end_menu(tmpwin,	"Choose fighting style:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	
+	if(n == 0 || u.fightingForm == selected[0].item.a_int){
+		return 0;
+	} else {
+		u.fightingForm = selected[0].item.a_int;
+		return 1;
+	}
+}
+
 STATIC_PTR int
 enter_explore_mode(VOID_ARGS)
 {
@@ -3025,6 +3162,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"rub", "rub a lamp or a stone", dorub, FALSE},
 	{"sit", "sit down", dosit, FALSE},
 	{"swim", "swim under water", dodeepswim, FALSE},
+	{"style", "switch fighting style", dofightingform, TRUE},
 	{"turn", "turn undead", doturn, TRUE},
 	{"twoweapon", "toggle two-weapon combat", dotwoweapon, FALSE},
 	{"untrap", "untrap something", dountrap, FALSE},

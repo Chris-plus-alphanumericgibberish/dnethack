@@ -379,6 +379,7 @@ boolean allow_drag;
 	}
 	/* must set u.ux, u.uy after drag_ball(), which may need to know
 	   the old position if allow_drag is true... */
+	u.lastmoved = monstermoves;
 	u.ux = nux;
 	u.uy = nuy;
 	fill_pit(u.ux0, u.uy0);

@@ -3177,7 +3177,7 @@ int dx, dy;
 			if(Fumbling || (!obj->oartifact && rn2(18) >= ACURR(A_DEX))) {
 				/* we hit ourselves */
 				(void) thitu(10, rnd(10), (struct obj *)0,
-					"boomerang");
+					"boomerang", FALSE);
 				break;
 			} else {	/* we catch it */
 				tmp_at(DISP_END, 0);
@@ -3706,10 +3706,30 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     struct monst *mon;
     coord save_bhitpos;
     boolean shopdamage = FALSE, redrawneeded=FALSE;
+	boolean shienuse = FALSE;
     const char *fltxt;
     struct obj *otmp;
     int spell_type;
 
+	if(
+		uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN
+	){
+		switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
+			case P_BASIC:
+				if(rn2(100) < 33){
+					shienuse = TRUE;
+				}
+			break;
+			case P_SKILLED:
+				if(rn2(100) < 66){
+					shienuse = TRUE;
+				}
+			break;
+			case P_EXPERT:
+				shienuse = TRUE;
+			break;
+		}
+	}
     /* if its a Hero Spell then get its SPE_TYPE */
     spell_type = is_hero_spell(type) ? SPE_MAGIC_MISSILE + abstype : 0;
 
@@ -3899,15 +3919,23 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				range -= 2;
 				pline("%s hits you!", The(fltxt));
 				if (Reflecting && (
-					(!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || 
-					(uwep && uwep->oartifact == ART_DRAGONLANCE))
-				) {
+						(!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || 
+						(uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) ||
+						(uarm && (uarm->otyp == SILVER_DRAGON_SCALE_MAIL || uarm->otyp == SILVER_DRAGON_SCALES || uarm->otyp == SILVER_DRAGON_SCALE_SHIELD)) ||
+						(uwep && uwep->oartifact == ART_DRAGONLANCE)
+				)) {
 					if (!Blind) {
 						(void) ureflects("But %s reflects from your %s!", "it");
 					} else
 					pline("For some reason you are not affected.");
-					dx = -dx;
-					dy = -dy;
+					if(uwep && is_lightsaber(uwep) && uwep->lamplit && shienuse && getdir((char *)0) && (u.dx || u.dy)){
+						dx = u.dx;
+						dy = u.dy;
+						tmp_at(DISP_CHANGE, zapdir_to_glyph(dx,dy,abstype));
+					} else {
+						dx = -dx;
+						dy = -dy;
+					}
 					shieldeff(sx, sy);
 				} else {
 					zhitu(type, nd, flat, fltxt, sx, sy);

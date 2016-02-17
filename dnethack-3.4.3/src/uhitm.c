@@ -279,10 +279,28 @@ find_to_hit_rolls(mtmp,ptmp,pweptmp,ptchtmp)
 	weptmp = find_roll_to_hit(mtmp, (uwep && arti_shining(uwep)) || u.sealsActive&SEAL_CHUPOCLOPS);
 	tchtmp = find_roll_to_hit(mtmp, TRUE);
 	
+	if(mtmp->ustdym){
+		tmp += mtmp->ustdym;
+		weptmp += mtmp->ustdym;
+		tchtmp += mtmp->ustdym;
+	}
+	
 	
 	if (uwep) {
 		weptmp += hitval(uwep, mtmp);
 		weptmp += weapon_hit_bonus(uwep);
+		if(is_lightsaber(uwep) && uwep->lamplit){
+			if(u.fightingForm == FFORM_SHII_CHO && MON_WEP(mtmp) && is_lightsaber(MON_WEP(mtmp)) && MON_WEP(mtmp)->lamplit){
+				weptmp -= 5;
+				// switch(min(P_SKILL(FFORM_SHII_CHO), P_SKILL(weapon_type(uwep)))){
+					// case P_ISRESTRICTED:weptmp -= 5; break;
+					// case P_UNSKILLED:   weptmp -= 5; break;
+					// case P_BASIC:       weptmp -= 5; break;
+					// case P_SKILLED:     weptmp -= 2; break;
+					// case P_EXPERT:      weptmp -= 1; break;
+				// }
+			}
+		}
 	}
 	
 	if(!uarm){
@@ -1085,7 +1103,8 @@ int thrown;
 			valid_weapon_attack = (tmp > 1 || (obj && obj->otyp == SPOON && Role_if(PM_CONVICT)));
 			if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
-			} else if (!(noncorporeal(mdat) || amorphous(mdat) || (stationary(mdat) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT))) && (
+			} else {
+				if (!(noncorporeal(mdat) || amorphous(mdat) || (stationary(mdat) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT))) && (
 						((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh || 
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
@@ -1098,62 +1117,144 @@ int thrown;
 							(uwep && uwep->oartifact == ART_SPINESEEKER) ||
 							(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
 							(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON))
-			)) {
-				if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
-					You("snipe the flat-footed %s!", l_monnam(mon));
-				else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
-					(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
-					&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
-				) You("strike %s from behind!", mon_nam(mon));
-				else if(is_blind(mon)) You("strike the blinded %s!", l_monnam(mon));
-				else if(mon->mtrapped) You("strike the trapped %s!", l_monnam(mon));
-				else You("strike the helpless %s!", l_monnam(mon));
-				if(uwep && uwep->oartifact == ART_SPINESEEKER && !Upolyd) tmp += rnd(u.ulevel + (
-					mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
-					(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
-					&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) ? u.ulevel : 0);
-				if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) 
-					tmp += rnd(u.ulevel + ((mvitals[PM_ACERERAK].died > 0 ? u.ulevel/2 : 0)));
-				if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
-				if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
-				if(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON) tmp += rnd(u.ulevel);
-				hittxt = TRUE;
-			} else if ( (( (dieroll <= 2 || (Role_if(PM_BARBARIAN) && dieroll <= 4)) && 
-						  obj == uwep &&
-						  obj->oclass == WEAPON_CLASS &&
-						  (bimanual(obj) ||
-						    (Role_if(PM_SAMURAI) && obj->otyp == KATANA && !uarms) ||
-							(obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_BERITH)) &&
-						  ((wtype = uwep_skill_type()) != P_NONE &&
-						  P_SKILL(wtype) >= P_SKILLED)
-						 ) || arti_shattering(obj)
-						) &&
-						((monwep = MON_WEP(mon)) != 0 &&
-							!is_flimsy(monwep) &&
-							!obj_resists(monwep, 0, 100))) {
-				/*
-				 * 5% chance of shattering defender's weapon when
-				 * using a two-handed weapon; less if uwep is rusted.
-				 * [dieroll == 2 is most successful non-beheading or
-				 * -bisecting hit, in case of special artifact damage;
-				 * the percentage chance is (2/20)*(50/100).]
-				 * Barbarians get a 10% chance.
-				 */
-				setmnotwielded(mon,monwep);
-				MON_NOWEP(mon);
-				mon->weapon_check = NEED_WEAPON;
-				if(is_lightsaber(obj)) Your("energy blade slices %s %s in two!",
-				      s_suffix(mon_nam(mon)), xname(monwep));
-				else pline("%s %s %s from the force of your blow!",
-				      s_suffix(Monnam(mon)), xname(monwep),
-				      otense(monwep, "shatter"));
-				m_useup(mon, monwep);
-				/* If someone just shattered MY weapon, I'd flee! */
-				if (rn2(4)) {
-				    monflee(mon, d(2,3), TRUE, TRUE);
+				)) {
+					if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
+						You("snipe the flat-footed %s!", l_monnam(mon));
+					else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+						(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
+						&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
+					) You("strike %s from behind!", mon_nam(mon));
+					else if(is_blind(mon)) You("strike the blinded %s!", l_monnam(mon));
+					else if(mon->mtrapped) You("strike the trapped %s!", l_monnam(mon));
+					else You("strike the helpless %s!", l_monnam(mon));
+					if(uwep && uwep->oartifact == ART_SPINESEEKER && !Upolyd) tmp += rnd(u.ulevel + (
+						mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+						(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
+						&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) ? u.ulevel : 0);
+					if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) 
+						tmp += rnd(u.ulevel + ((mvitals[PM_ACERERAK].died > 0 ? u.ulevel/2 : 0)));
+					if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
+					if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
+					if(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON) tmp += rnd(u.ulevel);
+					hittxt = TRUE;
 				}
-				hittxt = TRUE;
-		    }
+				if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+					if (
+						(mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh ||
+							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) || stationary(mdat) ||
+								((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) == 1)
+					) {
+						if(P_SKILL(weapon_type(uwep)) >= P_BASIC){
+							if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
+								if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_JUYO)
+								) use_skill(FFORM_JUYO,1);
+							}
+						}
+						if(u.fightingForm == FFORM_JUYO){
+							if(stationary(mdat)) You("rain blows on the immobile %s!", mon_nam(mon));
+							else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
+								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
+							) You("rain blows on %s from behind!", mon_nam(mon));
+							else if(is_blind(mon)) You("rain blows on the blinded %s!", l_monnam(mon));
+							else if(mon->mtrapped) You("rain blows on the trapped %s!", l_monnam(mon));
+							else You("rain blows on the helpless %s!", l_monnam(mon));
+							
+							tmp += rnd(u.ulevel);
+							
+							switch(min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))){
+								case P_BASIC:
+									youmonst.movement += NORMAL_SPEED/4;
+								break;
+								case P_SKILLED:
+									youmonst.movement += NORMAL_SPEED/3;
+								break;
+								case P_EXPERT:
+									youmonst.movement += NORMAL_SPEED/2;
+								break;
+							}
+							
+							if(rnd(20) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))){
+								if (canspotmon(mon))
+									pline("%s %s from your powerful strikes!", Monnam(mon),
+									  makeplural(stagger(mon->data, "stagger")));
+								/* avoid migrating a dead monster */
+								if (mon->mhp > tmp) {
+									mhurtle(mon, u.dx, u.dy, 1);
+									mon->mstun = TRUE;
+									mdat = mon->data; /* in case of a polymorph trap */
+									if (DEADMONSTER(mon)) already_killed = TRUE;
+								}
+							}
+							hittxt = TRUE;
+						} else if(rnd(100) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))){
+							if (canspotmon(mon))
+								pline("%s %s from your powerful strike!", Monnam(mon),
+								  makeplural(stagger(mon->data, "stagger")));
+							/* avoid migrating a dead monster */
+							if (mon->mhp > tmp) {
+								mhurtle(mon, u.dx, u.dy, 1);
+								mon->mstun = TRUE;
+								mdat = mon->data; /* in case of a polymorph trap */
+								if (DEADMONSTER(mon)) already_killed = TRUE;
+							}
+							hittxt = TRUE;
+						}
+					}
+					if(u.fightingForm == FFORM_DJEM_SO){
+						if(rnd(mon->mattackedu ? 20 : 100) < min(P_SKILL(FFORM_DJEM_SO), P_SKILL(weapon_type(uwep)))){
+							if (canspotmon(mon))
+								pline("%s %s from your powerful strike!", Monnam(mon),
+								  makeplural(stagger(mon->data, "stagger")));
+							/* avoid migrating a dead monster */
+							if (mon->mhp > tmp) {
+								mhurtle(mon, u.dx, u.dy, 1);
+								mon->mstun = TRUE;
+								mdat = mon->data; /* in case of a polymorph trap */
+								if (DEADMONSTER(mon)) already_killed = TRUE;
+							}
+							hittxt = TRUE;
+						}
+					}
+				}
+				if ( (( (dieroll <= 2 || (Role_if(PM_BARBARIAN) && dieroll <= 4)) && 
+							  obj == uwep &&
+							  obj->oclass == WEAPON_CLASS &&
+							  (bimanual(obj) ||
+								(Role_if(PM_SAMURAI) && obj->otyp == KATANA && !uarms) ||
+								(obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_BERITH)) &&
+							  ((wtype = uwep_skill_type()) != P_NONE &&
+							  P_SKILL(wtype) >= P_SKILLED)
+							 ) || arti_shattering(obj)
+							) &&
+							((monwep = MON_WEP(mon)) != 0 &&
+								!is_flimsy(monwep) &&
+								!obj_resists(monwep, 0, 100))
+				) {
+					/*
+					 * 5% chance of shattering defender's weapon when
+					 * using a two-handed weapon; less if uwep is rusted.
+					 * [dieroll == 2 is most successful non-beheading or
+					 * -bisecting hit, in case of special artifact damage;
+					 * the percentage chance is (2/20)*(50/100).]
+					 * Barbarians get a 10% chance.
+					 */
+					setmnotwielded(mon,monwep);
+					MON_NOWEP(mon);
+					mon->weapon_check = NEED_WEAPON;
+					if(is_lightsaber(obj)) Your("energy blade slices %s %s in two!",
+						  s_suffix(mon_nam(mon)), xname(monwep));
+					else pline("%s %s %s from the force of your blow!",
+						  s_suffix(Monnam(mon)), xname(monwep),
+						  otense(monwep, "shatter"));
+					m_useup(mon, monwep);
+					/* If someone just shattered MY weapon, I'd flee! */
+					if (rn2(4)) {
+						monflee(mon, d(2,3), TRUE, TRUE);
+					}
+					hittxt = TRUE;
+				}
+			}
 			if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
 				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
 			}
@@ -1564,6 +1665,23 @@ defaultvalue:
 	    /* [this assumes that `!thrown' implies wielded...] */
 	    wtype = thrown ? weapon_type(wep) : uwep_skill_type();
 	    use_skill(wtype, 1);
+		if(!thrown && uwep && is_lightsaber(uwep) && uwep->lamplit && P_SKILL(wtype) >= P_BASIC){
+			use_skill(FFORM_SHII_CHO,1);
+			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
+				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_MAKASHI) &&
+					!uarms && !u.twoweap && wtype == P_SABER
+				) use_skill(FFORM_MAKASHI,1);
+				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_ATARU) &&
+					u.lastmoved + 1 >= monstermoves
+				) use_skill(FFORM_ATARU,1);
+				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_DJEM_SO) &&
+					mon->mattackedu
+				) use_skill(FFORM_DJEM_SO,1);
+				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_NIMAN) &&
+					u.lastcast >= monstermoves
+				) use_skill(FFORM_NIMAN,1);
+			}
+		}
 	}
 	if (ispoisoned || (obj && (arti_poisoned(obj) || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM))) {
 	    if Role_if(PM_SAMURAI) {
@@ -1722,6 +1840,7 @@ defaultvalue:
 				/* avoid migrating a dead monster */
 				if (mon->mhp > tmp) {
 					mhurtle(mon, u.dx, u.dy, 1);
+					mon->mstun = TRUE;
 					mdat = mon->data; /* in case of a polymorph trap */
 					if (DEADMONSTER(mon)) already_killed = TRUE;
 				}
@@ -2553,7 +2672,7 @@ register struct attack *mattk;
 
 		    mon_adjust_speed(mdef, -1, (struct obj *)0);
 		    if (mdef->mspeed != oldspeed && canseemon(mdef))
-			pline("%s slows down.", Monnam(mdef));
+				pline("%s slows down.", Monnam(mdef));
 		}
 		break;
 	    case AD_CONF:
@@ -2736,7 +2855,9 @@ register struct attack *mattk;
 		tmp += mdef->mstdy;
 		mdef->mstdy -= 1;
 	}
-		
+	if(mdef->ustdym){
+		tmp += rnd(mdef->ustdym);
+	}
 	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (mdef->mtame && !cansee(mdef->mx,mdef->my)) {

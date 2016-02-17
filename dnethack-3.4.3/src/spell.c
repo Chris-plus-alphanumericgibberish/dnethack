@@ -1340,10 +1340,18 @@ tt_findadjacent(cc, mon)
 coord *cc;
 struct monst *mon;
 {
-	int x, y;
+	int x, y, spot;
 	for(x = mon->mx-1; x <= mon->mx+1; x++){
 		for(y = mon->my-1; y <= mon->my+1; y++){
 			if(teleok(x,y,TRUE)){
+				spot++;
+			}
+		}
+	}
+	spot = rn2(spot);
+	for(x = mon->mx-1; x <= mon->mx+1; x++){
+		for(y = mon->my-1; y <= mon->my+1; y++){
+			if(teleok(x,y,TRUE) && spot--==0){
 				cc->x = x;
 				cc->y = y;
 				return TRUE;
@@ -3648,6 +3656,7 @@ boolean atme;
 
 	/* gain skill for successful cast */
 	use_skill(skill, spellev(spell));
+	u.lastcast = monstermoves + spellev(spell);
 
 	obfree(pseudo, (struct obj *)0);	/* now, get rid of it */
 	return(1);
@@ -3939,6 +3948,8 @@ int spell;
 	int chance, splcaster, special, statused;
 	int difficulty;
 	int skill;
+	
+	if(Nullmagic) return 0;
 	
 	if(
 		((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 

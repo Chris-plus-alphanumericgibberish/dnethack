@@ -303,7 +303,9 @@ nh_timeout()
 	int sleeptime, i, m_idx, baseluck = (flags.moonphase == FULL_MOON) ? 1 : 0;
 	
 	if (flags.friday13) baseluck -= 1;
-		
+	
+	if(u.lastcast) u.lastcast--;
+	
 	if (u.uluck != baseluck) {
 	    int timeout = 600;
 	    int time_luck = stone_luck(FALSE);

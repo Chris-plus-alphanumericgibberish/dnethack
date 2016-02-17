@@ -314,6 +314,19 @@ struct you {
 #define DEFAULT_HMAX	2000
 	unsigned uhs;		/* hunger state - see eat.c */
 
+	int fightingForm;
+// #define FFORM_SHII_CHO	1
+// #define FFORM_MAKASHI	2
+// #define FFORM_SORESU	3
+// #define FFORM_ATARU		4
+// #define FFORM_DJEM_SO	5
+// #define FFORM_SHIEN		6
+// #define FFORM_NIMAN		7
+// #define FFORM_JUYO		8
+	// long laststruck;
+	long lastmoved;
+	long lastcast;
+	
 	boolean ukinghill; /* records if you are carying the pirate treasure (and are therefor king of the hill) */
 	int protean; /* counter for the auto-polypiling power of the pirate treasure*/
 	int uhouse; /* drow house info */

@@ -650,6 +650,7 @@ mattacku(mtmp)
 	    return (0);
 	}
 
+	mtmp->mattackedu = 1; //It is going to try attacking you now, even if it fails for some reason, it tried.
 	/* Unlike defensive stuff, don't let them use item _and_ attack. */
 	if(find_offensive(mtmp)) {
 		int foo = use_offensive(mtmp);
@@ -676,6 +677,8 @@ mattacku(mtmp)
 				(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
 			)
 		) continue;
+		
+		if(!mattk->aatyp && !mattk->adtyp && !mattk->damn && !mattk->damd) continue;
 		
 	    switch(mattk->aatyp) {
 		case AT_CLAW:	/* "hand to hand" attacks */
@@ -951,18 +954,31 @@ mattacku(mtmp)
 					if(otmp) {
 						hittmp = hitval(otmp, &youmonst);
 						tmp += hittmp;
+						tchtmp += hittmp;
 						mswings(mtmp, otmp);
 					}
-					if(tmp > (j = dieroll = rnd(20+i))){
-						sum[i] = hitmu(mtmp, mattk);
-						if(mattk->aatyp == AT_DEVA && sum[i]){
-							deva = 1;
-							while(tmp > (j = dieroll = rnd(20+i+(deva++)*5))) hitmu(mtmp, mattk);
-						}
-					} else missmu(mtmp, (tmp == j), mattk);
+					if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))){
+						if(tchtmp > (j = dieroll = rnd(20+i))){
+							sum[i] = hitmu(mtmp, mattk);
+							if(mattk->aatyp == AT_DEVA && sum[i]){
+								deva = 1;
+								while(tchtmp > (j = dieroll = rnd(20+i+(deva++)*5))) sum[i] = hitmu(mtmp, mattk);
+							}
+						} else missmu(mtmp, (tchtmp == j), mattk);
+					} else {
+						if(tmp > (j = dieroll = rnd(20+i))){
+							sum[i] = hitmu(mtmp, mattk);
+							if(mattk->aatyp == AT_DEVA && sum[i]){
+								deva = 1;
+								while(tmp > (j = dieroll = rnd(20+i+(deva++)*5))) sum[i] = hitmu(mtmp, mattk);
+							}
+						} else missmu(mtmp, (tmp == j), mattk);
+					}
 					/* KMH -- Don't accumulate to-hit bonuses */
-					if (otmp)
+					if (otmp){
 						tmp -= hittmp;
+						tchtmp -= hittmp;
+					}
 			    } else
 					wildmiss(mtmp, mattk);
 			}
@@ -1062,6 +1078,73 @@ mattacku(mtmp)
 	    }
 	    if(sum[i] == 2) return 1;		/* attacker dead */
 	    if(sum[i] == 3) break;  /* attacker teleported, no more attacks */
+		
+		if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+			if(u.fightingForm == FFORM_SHIEN && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1){
+				switch(min(P_SKILL(FFORM_SHIEN), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						if(rn2(100) < 5){
+							You("counterattack!");
+							flags.forcefight = TRUE;
+							attack(mtmp);
+							flags.forcefight = FALSE;
+							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
+						}
+					break;
+					case P_SKILLED:
+						if(rn2(100) < 10){
+							You("counterattack!");
+							flags.forcefight = TRUE;
+							attack(mtmp);
+							flags.forcefight = FALSE;
+							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
+						}
+					break;
+					case P_EXPERT:
+						if(rn2(100) < 20){
+							You("counterattack!");
+							flags.forcefight = TRUE;
+							attack(mtmp);
+							flags.forcefight = FALSE;
+							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
+						}
+					break;
+				}
+			} else if(u.fightingForm == FFORM_SORESU && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1){
+				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						if(rn2(100) < 25){
+							You("counterattack!");
+							flags.forcefight = TRUE;
+							attack(mtmp);
+							flags.forcefight = FALSE;
+							use_skill(FFORM_SORESU,1);
+							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
+						}
+					break;
+					case P_SKILLED:
+						if(rn2(100) < 50){
+							You("counterattack!");
+							flags.forcefight = TRUE;
+							attack(mtmp);
+							flags.forcefight = FALSE;
+							use_skill(FFORM_SORESU,1);
+							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
+						}
+					break;
+					case P_EXPERT:
+						if(rn2(100) < 75){
+							You("counterattack!");
+							flags.forcefight = TRUE;
+							attack(mtmp);
+							flags.forcefight = FALSE;
+							use_skill(FFORM_SORESU,1);
+							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
+						}
+					break;
+				}
+			}
+		}
 	    /* sum[i] == 0: unsuccessful attack */
 	}
 	if(mdat == &mons[PM_DEMOGORGON]){ 
@@ -1272,6 +1355,7 @@ hitmu(mtmp, mattk)
 	register int uncancelled, ptmp, armuncancel;
 	struct obj *optr;
 	int dmg, armpro, permdmg;
+	boolean phasearmor = FALSE;
 	char	 buf[BUFSZ];
 	struct permonst *olduasmon = youmonst.data;
 	int res;
@@ -1334,7 +1418,43 @@ hitmu(mtmp, mattk)
 			    if (!Stoned)
 				goto do_stone;
 			}
-			dmg += dmgval(uwep, &youmonst, 0);
+			/* WAC -- Real weapon?
+			 * Could be stuck with a cursed bow/polearm it wielded
+			 */
+			if (/* if you strike with a bow... */
+				is_launcher(uwep) ||
+				/* or strike with a missile in your hand... */
+			    ((is_missile(uwep) || is_ammo(uwep)) &&
+					!(uwep->otyp == SILVER_CHAKRAM)
+				) ||
+				/* lightsaber that isn't lit ;) */
+				(is_lightsaber(uwep) && !uwep->lamplit) ||
+				/* houchou not thrown */
+				(uwep->oartifact == ART_HOUCHOU) ||
+				/* WAC -- or using a pole at short range... */
+				(is_pole(uwep) && 
+					uwep->otyp != AKLYS && 
+					uwep->otyp != FORCE_PIKE && 
+					uwep->oartifact != ART_WEBWEAVER_S_CROOK && 
+					uwep->oartifact != ART_HEARTCLEAVER && 
+					uwep->oartifact != ART_SOL_VALTIVA && 
+					uwep->oartifact != ART_PEN_OF_THE_VOID
+				)) {
+			    /* then do only 1-2 points of damage */
+			    if (u.umonnum == PM_SHADE && uwep && 
+					(objects[uwep->otyp].oc_material == SILVER || arti_silvered(uwep))
+				) dmg = 0;
+				else if(uwep->oartifact == ART_LIECLEAVER)
+				dmg = 2*(rnd(12) + rnd(10) + uwep->spe);
+				else
+				dmg = rnd(2);
+				if(uwep && (objects[uwep->otyp].oc_material == SILVER || arti_silvered(uwep)) && 
+					maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))
+				) dmg += rnd(20);
+			} else {
+				dmg += dmgval(uwep, &youmonst, 0);
+				if(uwep && ((is_lightsaber(uwep) && uwep->lamplit) || arti_shining(uwep))) phasearmor = TRUE;
+			}
 			
 			if (uwep->opoisoned){
 				Sprintf(buf, "%s %s",
@@ -1426,7 +1546,10 @@ hitmu(mtmp, mattk)
 				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && 
 					maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))
 				) dmg += rnd(20);
-			} else dmg += dmgval(otmp, &youmonst, 0);
+			} else {
+				dmg += dmgval(otmp, &youmonst, 0);
+				if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))) phasearmor = TRUE;
+			}
 			
 			if (otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
 				!(u.sealsActive&SEAL_EDEN) &&
@@ -1910,7 +2033,7 @@ dopois:
 		break;
 	    case AD_DRLI:
 			hitmsg(mtmp, mattk);
-			if (uncancelled  && !rn2(3) && !Drain_resistance) {
+			if ((uncancelled || mdat == &mons[PM_DEEP_DRAGON]) && !rn2(3) && !Drain_resistance) {
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 				if(mdat == &mons[PM_METROID] || mdat == &mons[PM_ALPHA_METROID] || mdat == &mons[PM_GAMMA_METROID] 
 					|| mdat == &mons[PM_ZETA_METROID] || mdat == &mons[PM_OMEGA_METROID] 
@@ -2842,9 +2965,16 @@ dopois:
 /*	Negative armor class reduces damage done instead of fully protecting
  *	against hits.  The bladed shadows of the black web pierce your armor.
  */
-	if (dmg && u.uac < 0 && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR) {
-		dmg += AC_VALUE(u.uac);
-		if (dmg < 1) dmg = 1;
+	if (dmg){
+		if(u.uac < 0) {
+			if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
+				dmg += AC_VALUE(u.uac);
+				if (dmg < 1) dmg = 1;
+			} else if(base_uac() < 0){
+				dmg += AC_VALUE(base_uac());
+				if (dmg < 1) dmg = 1;
+			}
+		}
 	}
 
 	if(dmg) {
@@ -2894,6 +3024,7 @@ dopois:
 	    res = passiveum(olduasmon, mtmp, mattk);
 	else
 	    res = 1;
+
 	stop_occupation();
 	return res;
 }
@@ -7139,17 +7270,59 @@ register struct attack *mattk;
 		}
 		if(u.sealsActive&SEAL_EURYNOME && !rn2(5)){
 			You("counterattack!");
+			flags.forcefight = TRUE;
 			attack(mtmp);
+			flags.forcefight = FALSE;
 			if(DEADMONSTER(mtmp)) return 2;
 		}
 	}
-
+	if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+		if(P_SKILL(weapon_type(uwep)) >= P_BASIC){
+			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
+				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_SORESU)
+				) use_skill(FFORM_SORESU,1);
+			}
+		}
+		if(u.fightingForm == FFORM_DJEM_SO){
+			switch(min(P_SKILL(FFORM_DJEM_SO), P_SKILL(weapon_type(uwep)))){
+				case P_BASIC:
+					if(rn2(100) < 5){
+						You("counterattack!");
+						flags.forcefight = TRUE;
+						attack(mtmp);
+						flags.forcefight = FALSE;
+						if(DEADMONSTER(mtmp)) return 2;
+					}
+				break;
+				case P_SKILLED:
+					if(rn2(100) < 10){
+						You("counterattack!");
+						flags.forcefight = TRUE;
+						attack(mtmp);
+						flags.forcefight = FALSE;
+						if(DEADMONSTER(mtmp)) return 2;
+					}
+				break;
+				case P_EXPERT:
+					if(rn2(100) < 20){
+						You("counterattack!");
+						flags.forcefight = TRUE;
+						attack(mtmp);
+						flags.forcefight = FALSE;
+						if(DEADMONSTER(mtmp)) return 2;
+					}
+				break;
+			}
+		}
+	}
 	if( uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && 
 		uwep->ovar1&SEAL_EURYNOME && 
 		!rn2((quest_status.killed_nemesis && Role_if(PM_EXILE)) ? 10 : 20)
 	){
 		You("counterattack!");
+		flags.forcefight = TRUE;
 		attack(mtmp);
+		flags.forcefight = FALSE;
 		if(DEADMONSTER(mtmp)) return 2;
 	}
 	

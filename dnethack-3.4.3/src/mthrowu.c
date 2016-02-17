@@ -40,10 +40,11 @@ int bypassDR=0;
 
 /* hero is hit by something other than a monster */
 int
-thitu(tlev, dam, obj, name)
+thitu(tlev, dam, obj, name, burn)
 int tlev, dam;
 struct obj *obj;
 const char *name;	/* if null, then format `obj' */
+boolean burn;
 {
 	const char *onm, *knm;
 	boolean is_acid;
@@ -67,11 +68,29 @@ const char *name;	/* if null, then format `obj' */
 			    (obj && obj->quan > 1L) ? name : an(name);
 	is_acid = (obj && obj->otyp == ACID_VENOM);
 
+	if(uwep && is_lightsaber(uwep) && uwep->lamplit && P_SKILL(weapon_type(uwep)) >= P_BASIC){
+		if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
+			if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_SHIEN)
+			) use_skill(FFORM_SHIEN,1);
+		}
+	}
+	
+	if(burn){
+		You("burn %s out of the %s!", onm, (Underwater || Is_waterlevel(&u.uz)) ? "water" : "air");
+		return 0;
+	}
+	
 	if((bypassDR && (AC_VALUE(base_uac()) + tlev <= rnd(20))) || (!bypassDR && (AC_VALUE(u.uac) + tlev <= rnd(20)))) {
 		if(Blind || !flags.verbose) pline("It misses.");
 		else You("are almost hit by %s.", onm);
 		return(0);
 	} else {
+		
+		if(bypassDR && base_uac() < 0) dam -= AC_VALUE(base_uac());
+		else if(!bypassDR && u.uac < 0) dam -= AC_VALUE(u.uac);
+		
+		if(dam < 1) dam = 1;
+		
 		if(Blind || !flags.verbose) You("are hit!");
 		else You("are hit by %s%s", onm, exclam(dam));
 		
@@ -594,7 +613,39 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			    /* fall through */
 			case CREAM_PIE:
 			case BLINDING_VENOM:
-			    hitu = thitu(4+mon->m_lev, 0, singleobj, (char *)0);
+				if(
+				  !(singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT || singleobj->oartifact) && 
+					uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SHIEN || u.fightingForm == FFORM_SORESU)
+				){
+					switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
+						case P_BASIC:
+							if(rn2(100) < 33){
+								thitu(4, 0, singleobj, (char *)0,TRUE);
+								obfree(singleobj, (struct obj*) 0);
+								delay_output();
+								tmp_at(DISP_END, 0);
+								return;
+							}
+						break;
+						case P_SKILLED:
+							if(rn2(100) < 66){
+								thitu(4, 0, singleobj, (char *)0,TRUE);
+								obfree(singleobj, (struct obj*) 0);
+								delay_output();
+								tmp_at(DISP_END, 0);
+								return;
+							}
+						break;
+						case P_EXPERT:
+							thitu(4, 0, singleobj, (char *)0,TRUE);
+							obfree(singleobj, (struct obj*) 0);
+							delay_output();
+							tmp_at(DISP_END, 0);
+							return;
+						break;
+					}
+				}
+			    hitu = thitu(4+mon->m_lev, 0, singleobj, (char *)0, FALSE);
 			    if(hitu>0) break;
 			default:
 			    dam = dmgval(singleobj, &youmonst, 0);
@@ -619,11 +670,69 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 //					artifact_hit(mon, &youmonst, singleobj, &dam, d(1,20));
 //				}//maybe this is ok.  It will give messages for hits that will ultimatly miss.
 					//This is definitly a temporary setup.
-			    hitu = thitu(hitv, dam, singleobj, (char *)0);
+				if(
+				  !(singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT || singleobj->oartifact) && 
+					uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SHIEN || u.fightingForm == FFORM_SORESU)
+				){
+					switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
+						case P_BASIC:
+							if(rn2(100) < 33){
+								thitu(4, 0, singleobj, (char *)0,TRUE);
+								obfree(singleobj, (struct obj*) 0);
+								delay_output();
+								tmp_at(DISP_END, 0);
+								return;
+							}
+						break;
+						case P_SKILLED:
+							if(rn2(100) < 66){
+								thitu(4, 0, singleobj, (char *)0,TRUE);
+								obfree(singleobj, (struct obj*) 0);
+								delay_output();
+								tmp_at(DISP_END, 0);
+								return;
+							}
+						break;
+						case P_EXPERT:
+							thitu(4, 0, singleobj, (char *)0,TRUE);
+							obfree(singleobj, (struct obj*) 0);
+							delay_output();
+							tmp_at(DISP_END, 0);
+							return;
+						break;
+					}
+				}
+			    hitu = thitu(hitv, dam, singleobj, (char *)0, FALSE);
 			}//close switch statement
 			if(hitu < 0){
-				dx *= -1;
-				dy *= -1;
+				boolean shienuse = FALSE;
+				if(
+					uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN
+				){
+					switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
+						case P_BASIC:
+							if(rn2(100) < 33){
+								shienuse = TRUE;
+							}
+						break;
+						case P_SKILLED:
+							if(rn2(100) < 66){
+								shienuse = TRUE;
+							}
+						break;
+						case P_EXPERT:
+							shienuse = TRUE;
+						break;
+					}
+				}
+
+				if(uwep && is_lightsaber(uwep) && uwep->lamplit && shienuse && getdir((char *)0) && (u.dx || u.dy)){
+					dx = u.dx;
+					dy = u.dy;
+				} else {
+					dx *= -1;
+					dy *= -1;
+				}
 			}
 		    if (hitu>0 && singleobj->opoisoned &&
 				is_poisonable(singleobj)
@@ -633,8 +742,8 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 				Strcpy(onmbuf, xname(singleobj));
 				Strcpy(knmbuf, killer_xname(singleobj));
 				poisoned(onmbuf, A_STR, knmbuf, -10, singleobj->opoisoned);
-		    }
-		    if(hitu>0 &&
+			}
+			if(hitu>0 &&
 		       can_blnd((struct monst*)0, &youmonst,
 				(uchar)(singleobj->otyp == BLINDING_VENOM ?
 					AT_SPIT : AT_WEAP), singleobj)
@@ -860,7 +969,7 @@ struct monst *mtmp;
 	    hitv += 4 + mtmp->m_lev + otmp->spe;
 	    if (dam < 1) dam = 1;
 
-	    (void) thitu(hitv, dam, otmp, (char *)0);
+	    (void) thitu(hitv, dam, otmp, (char *)0,FALSE);
 	    stop_occupation();
 	    return;
 	}

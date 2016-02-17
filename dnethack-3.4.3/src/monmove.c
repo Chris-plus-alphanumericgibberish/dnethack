@@ -781,7 +781,9 @@ register struct monst *mtmp;
 /*	Pre-movement adjustments	*/
 
 	mdat = mtmp->data;
-		
+	
+	mtmp->mattackedu = 0; /*Clear out attacked bit*/
+	
 	if(mdat == &mons[PM_GNOLL_MATRIARCH]){
 		if(!rn2(20)){
 			makemon(&mons[PM_GNOLL], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);

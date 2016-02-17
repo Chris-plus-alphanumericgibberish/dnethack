@@ -63,6 +63,7 @@ struct monst {
 	unsigned int mintrinsics;	/* low 10 correspond to mresists */
 	int mspec_used;		/* monster's special ability attack timeout */
 	int mstdy;		/* to record extra damage to be delt due to having been studied */
+	int ustdym;		/* to record extra damage to be delt by you due to having been studied by you*/
 
 	Bitfield(mferal,1);	/* was once tame */
 	
@@ -126,6 +127,7 @@ struct monst {
 	Bitfield(mclone,1);		/* is a clone of another monster (don't make death drop) */
 	Bitfield(uhurtm,1);		/* injured by you */
 	Bitfield(mhurtu,1);		/* has injured you */
+	Bitfield(mattackedu,1);	/* attacked you on it's last turn */
 	Bitfield(housealert,1);	/* won't accept house-based pacification */
 #define BASE_DOG_ENCOURAGED_MAX		7
 	int encouraged;	/* affected by Encourage song */

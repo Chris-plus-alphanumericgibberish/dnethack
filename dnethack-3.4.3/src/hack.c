@@ -963,6 +963,7 @@ domove()
 		if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20){
 			You("pass right through %s!", mon_nam(u.ustuck));
 			expels(u.ustuck, u.ustuck->data, 0);
+			u.lastmoved = monstermoves;
 			return;
 		} else {
 			u.dx = u.dy = 0;
@@ -1173,7 +1174,16 @@ domove()
 		if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) displacer = TRUE;
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
-		else if(attack(mtmp)) return;
+		else if(attack(mtmp)){
+			if(uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_ATARU){
+				coord cc;
+				if(!u.utrap && tt_findadjacent(&cc, mtmp) && (cc.x != u.ux || cc.y != u.uy)){
+					You("somersault to a new location!");
+					teleds(cc.x, cc.y, FALSE);
+				}
+			}
+			return;
+		}
 	    }
 	}
 
@@ -1390,7 +1400,7 @@ domove()
 		    if((u.dx || u.dy) || !rn2(5)) u.utrap--; //was dx && dy, I think this was a typo
 			}
 		}
-		if(!(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) && usedmove)return;
+		if(!(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) && usedmove) return;
 	}
 
 	if (!test_move(u.ux, u.uy, x-u.ux, y-u.uy, DO_MOVE)) {
@@ -1450,6 +1460,7 @@ domove()
 
  	/* now move the hero */
 	mtmp = m_at(x, y);
+	u.lastmoved = monstermoves;
 	u.ux += u.dx;
 	u.uy += u.dy;
 #ifdef STEED

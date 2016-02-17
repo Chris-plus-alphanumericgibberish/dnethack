@@ -408,6 +408,7 @@
 #define EReflecting		u.uprops[REFLECTING].extrinsic
 #define Reflecting		(EReflecting || \
 						 (u.sealsActive&SEAL_EDEN) || \
+						 (uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) || \
 				 (youmonst.data == &mons[PM_SILVER_DRAGON]))
 
 #define Free_action		(u.uprops[FREE_ACTION].extrinsic || u.sealsActive&SEAL_EURYNOME) /* [Tom] */

@@ -1824,19 +1824,64 @@ int base_uac()
 	int uac = mons[u.umonnum].ac;
 
 	if(uwep){
-		if((uwep->otyp == RAPIER || (uwep->otyp == LIGHTSABER && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0)) 
-			&& arti_shining(uwep)) 
-										uac -= max(
-											min(
-											(ACURR(A_DEX)-13)/4,
-											P_SKILL(weapon_type(uwep))-1
-											)
-										,0);
+		if((uwep->otyp == RAPIER && arti_shining(uwep)) || 
+			(uwep->otyp == LIGHTSABER && uwep->lamplit && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0)
+				) uac -= max(
+					min(
+					(ACURR(A_DEX)-13)/4,
+					P_SKILL(weapon_type(uwep))-1
+					)
+				,0);
 		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max(uwep->spe,0);
 		if(uwep->oartifact == ART_TENSA_ZANGETSU){
 			uac -= max( (uwep->spe+1)/2,0);
 			if(!uarmc || !uarm) uac -= max( uwep->spe,0);
 			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
+		}
+		if(is_lightsaber(uwep) && uwep->lamplit){
+			if(u.fightingForm == FFORM_SORESU){
+				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						uac -=   (ACURR(A_DEX)+ACURR(A_INT))/5;
+					break;
+					case P_SKILLED:
+						uac -= 2*(ACURR(A_DEX)+ACURR(A_INT))/5;
+					break;
+					case P_EXPERT:
+						uac -= 3*(ACURR(A_DEX)+ACURR(A_INT))/5;
+					break;
+				}
+			} else if(u.fightingForm == FFORM_ATARU){
+				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						uac -= 6;
+					break;
+					case P_SKILLED:
+						uac -= 4;
+					break;
+					case P_EXPERT:
+						uac -= 2;
+					break;
+				}
+			} else if(u.fightingForm == FFORM_MAKASHI){
+				int sx, sy, mcount = 0;
+				for(sx = u.ux-1; sx<=u.ux+1; sx++){
+					for(sy = u.uy-1; sy<=u.uy+1; sy++){
+						if(isok(sx,sy) && m_at(sx,sy)) mcount++;
+					}
+				}
+				switch(min(P_SKILL(FFORM_MAKASHI), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						if(mcount) uac += (mcount-1) * 10;
+					break;
+					case P_SKILLED:
+						if(mcount) uac += (mcount-1) * 5;
+					break;
+					case P_EXPERT:
+						if(mcount) uac += (mcount-1) * 2;
+					break;
+				}
+			}
 		}
 	}
 	if(uleft && uleft->otyp == RIN_PROTECTION) uac -= uleft->spe;
@@ -1918,19 +1963,64 @@ find_ac()
 	
 	if(uwep){
 		if(uwep->otyp == RAPIER || 
-			(uwep->otyp == LIGHTSABER && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0)
-										) uac -= max(
-											min(
-											(ACURR(A_DEX)-13)/4,
-											P_SKILL(weapon_type(uwep))-1
-											)
-										,0);
+			(uwep->otyp == LIGHTSABER && uwep->lamplit && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0)
+				) uac -= max(
+					min(
+					(ACURR(A_DEX)-13)/4,
+					P_SKILL(weapon_type(uwep))-1
+					)
+				,0);
 		if(uwep->oartifact == ART_TOBIUME || uwep->oartifact == ART_MASAMUNE ||
 			uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max(uwep->spe,0);
 		if(uwep->oartifact == ART_TENSA_ZANGETSU){
 			uac -= max( (uwep->spe+1)/2,0);
 			if(!uarmc || !uarm) uac -= max( uwep->spe,0);
 			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
+		}
+		if(is_lightsaber(uwep) && uwep->lamplit){
+			if(u.fightingForm == FFORM_SORESU){
+				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						uac -=   (ACURR(A_DEX)+ACURR(A_INT))/5;
+					break;
+					case P_SKILLED:
+						uac -= 2*(ACURR(A_DEX)+ACURR(A_INT))/5;
+					break;
+					case P_EXPERT:
+						uac -= 3*(ACURR(A_DEX)+ACURR(A_INT))/5;
+					break;
+				}
+			} else if(u.fightingForm == FFORM_ATARU){
+				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						uac -= 6;
+					break;
+					case P_SKILLED:
+						uac -= 4;
+					break;
+					case P_EXPERT:
+						uac -= 2;
+					break;
+				}
+			} else if(u.fightingForm == FFORM_MAKASHI){
+				int sx, sy, mcount = 0;
+				for(sx = u.ux-1; sx<=u.ux+1; sx++){
+					for(sy = u.uy-1; sy<=u.uy+1; sy++){
+						if(isok(sx,sy) && m_at(sx,sy)) mcount++;
+					}
+				}
+				switch(min(P_SKILL(FFORM_MAKASHI), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						if(mcount) uac += (mcount-1) * 10;
+					break;
+					case P_SKILLED:
+						if(mcount) uac += (mcount-1) * 5;
+					break;
+					case P_EXPERT:
+						if(mcount) uac += (mcount-1) * 2;
+					break;
+				}
+			}
 		}
 	}
 	if(uleft && uleft->otyp == RIN_PROTECTION) uac -= uleft->spe;
