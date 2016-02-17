@@ -227,8 +227,8 @@ struct obj *obj;	/* quest artifact; possibly null if carrying Amulet */
 	    qt_pager((!Qstat(got_thanks) ? QT_OFFEREDIT : is_primary_quest_artifact(obj) ? QT_OFFEREDIT2 : QT_OFFERART2) + (flags.stag ? QT_TURNEDSTAG : 0));
 	    /* should have obtained bell during quest;
 	       if not, suggest returning for it now */
-	    if ((otmp = carrying(BELL_OF_OPENING)) == 0)
-		com_pager(5);
+	    if ((otmp = carrying(BELL_OF_OPENING)) == 0 && !Role_if(PM_ANACHRONONAUT))
+			com_pager(5);
 	}
 	Qstat(got_thanks) = TRUE;
 
