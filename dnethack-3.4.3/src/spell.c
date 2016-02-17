@@ -265,7 +265,7 @@ struct obj *book2;
 	    return;
 	}
 
-	if(!(u.uhave.bell || (uwep && uwep->oartifact == ART_SILVER_KEY) || Role_if(PM_EXILE)) || !u.uhave.menorah) {
+	if(!(u.uhave.bell || (uwep && uwep->oartifact == ART_SILVER_KEY) || (u.voidChime && (u.sealsActive&SEAL_OTIAX || Role_if(PM_ANACHRONONAUT)))) || !u.uhave.menorah) {
 	    pline("A chill runs down your %s.", body_part(SPINE));
 	    if(!u.uhave.bell) You_hear("a faint chime...");
 	    if(!u.uhave.menorah) pline("Vlad's doppelganger is amused.");
