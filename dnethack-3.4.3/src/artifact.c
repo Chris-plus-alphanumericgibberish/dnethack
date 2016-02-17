@@ -6170,6 +6170,8 @@ read_lost(VOID_ARGS)
 		pline("Using the rituals in the book, you attempt to form a bond with %s",sealNames[lostname-FIRST_SEAL]);
 		if(u.sealCounts < numSlots){
 			bindspirit(lostname);
+			u.sealsKnown |= (1L << lostname);
+			You("feel %s within your soul.",sealNames[lostname-FIRST_SEAL]);
 		} else You("can't feel the spirit.");
 	}
 	else if(lostname == QUEST_SPIRITS){
@@ -6182,6 +6184,7 @@ read_lost(VOID_ARGS)
 			putativeSeal = 1L << i;
 			if(artiptr->ovar1 & putativeSeal) losexp("getting lost in a book",TRUE,TRUE,TRUE);
 			else{
+				u.sealsKnown |= putativeSeal;
 				artiptr->ovar1 |= putativeSeal;
 				You("learn the name \"%s\" while studying the book.",sealNames[i]);
 				artiptr->spestudied++;
