@@ -1394,6 +1394,11 @@ newgame()
 			// com_pager(211);
 		} else if(Race_if(PM_ELF) && (Role_if(PM_PRIEST) || Role_if(PM_RANGER) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD))){
 			com_pager(211);
+		} else if(Role_if(PM_ANACHRONONAUT)){
+			com_pager(218);
+			com_pager(219);
+			com_pager(220);
+			com_pager(221);
 		} else if(Race_if(PM_WORM_THAT_WALKS)){
 			if(Role_if(PM_CONVICT)){
 				com_pager(214);
