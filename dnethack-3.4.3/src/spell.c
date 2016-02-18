@@ -1340,18 +1340,18 @@ tt_findadjacent(cc, mon)
 coord *cc;
 struct monst *mon;
 {
-	int x, y, spot;
+	int x, y, spot=0;
 	for(x = mon->mx-1; x <= mon->mx+1; x++){
 		for(y = mon->my-1; y <= mon->my+1; y++){
-			if(teleok(x,y,TRUE)){
+			if(teleok(x,y,FALSE) && !m_at(x,y)){
 				spot++;
 			}
 		}
 	}
-	spot = rn2(spot);
+	if(spot>1) spot = rnd(spot);
 	for(x = mon->mx-1; x <= mon->mx+1; x++){
 		for(y = mon->my-1; y <= mon->my+1; y++){
-			if(teleok(x,y,TRUE) && spot--==0){
+			if(teleok(x,y,FALSE) && !m_at(x,y) && !(--spot)){
 				cc->x = x;
 				cc->y = y;
 				return TRUE;
@@ -1927,8 +1927,13 @@ spiriteffects(power, atme)
 				cc.x = u.ux;
 				cc.y = u.uy;
 				pline("To what creature do you wish to travel?");
-				do cancelled = getpos(&cc, TRUE, "the desired creature");
-				while( !((mon = m_at(cc.x,cc.y)) && tp_sensemon(mon) && tt_findadjacent(&cc, mon)) && cancelled >= 0);
+				cancelled = getpos(&cc, TRUE, "the desired creature");
+				while( !((mon = m_at(cc.x,cc.y)) && tp_sensemon(mon) && tt_findadjacent(&cc, mon)) && cancelled >= 0){
+					if(!mon || !(sensemon(mon) || (mon_visible(mon) && cansee(mon->mx,mon->my)) )) You("don't sense anything there.");
+					else if (!tp_sensemon(mon)) You("can't sense that monster's mind!");
+					else if (!tt_findadjacent(&cc, mon)) pline("Something blocks your way!");
+					cancelled = getpos(&cc, TRUE, "the desired creature");
+				}
 				if(cancelled < 0) return 0; /*abort*/
 //			    if (u.usteed){
 //				}
