@@ -2208,7 +2208,7 @@ struct obj *weapon;
 	}
 #endif
 	//Do to-hit bonuses for lightsaber forms here.  May do other fighting styles at some point.
-	if(is_lightsaber(weapon) && weapon->lamplit && uwep == weapon){
+	if(weapon && is_lightsaber(weapon) && weapon->lamplit && uwep == weapon){
 		if(u.fightingForm < FFORM_SHII_CHO || u.fightingForm > FFORM_JUYO) u.fightingForm = FFORM_SHII_CHO;
 		if(P_SKILL(u.fightingForm) < P_BASIC) u.fightingForm = FFORM_SHII_CHO;
 		if(u.fightingForm == FFORM_MAKASHI){
