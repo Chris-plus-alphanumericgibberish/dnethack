@@ -623,6 +623,7 @@ moveloop()
 					else if(!(moves%(u.slowclock - 2))) morehungry(1);
 				}
 				if(u.phasengn){
+					//Phasing mount as well
 					morehungry(10);
 				}
 			}
@@ -631,7 +632,6 @@ moveloop()
 		    {
 			moveamt = youmonst.data->mmove;
 			if(Race_if(PM_HALF_DRAGON)) moveamt = (moveamt*2)/3;
-			if(!moveamt) moveamt = 1;
 			
 			if(u.sealsActive&SEAL_EURYNOME && IS_POOL(levl[u.ux][u.uy].typ)){
 				if (Very_fast) {	/* speed boots or potion */
@@ -735,16 +735,11 @@ moveloop()
 					case P_EXPERT:      moveamt = max(moveamt-3,1); break;
 				}
 			}
+			if(youmonst.data->mmove){
+				if(moveamt < 1) moveamt = 1;
+			} else {
+				if(moveamt < 0) moveamt = 0;
 			}
-			
-			if(u.petattacked){
-				u.petattacked = FALSE;
-				use_skill(P_BEAST_MASTERY, 1);
-			}
-			if(u.pethped){
-				u.pethped = FALSE;
-				more_experienced(u.ulevel,0);
-				newexplevel();
 			}
 			
 			if(uclockwork && u.phasengn){
@@ -776,6 +771,16 @@ moveloop()
 		     /* once-per-turn things go here */
 		    /********************************/
 
+			if(u.petattacked){
+				u.petattacked = FALSE;
+				use_skill(P_BEAST_MASTERY, 1);
+			}
+			if(u.pethped){
+				u.pethped = FALSE;
+				more_experienced(u.ulevel,0);
+				newexplevel();
+			}
+			
 		    if (flags.bypasses) clear_bypasses();
 		    if(Glib) glibr();
 		    nh_timeout();
