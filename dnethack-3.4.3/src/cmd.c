@@ -964,7 +964,7 @@ dofightingform()
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
 	
-	if(n == 0 || u.fightingForm == selected[0].item.a_int){
+	if(n <= 0 || u.fightingForm == selected[0].item.a_int){
 		return 0;
 	} else {
 		u.fightingForm = selected[0].item.a_int;
