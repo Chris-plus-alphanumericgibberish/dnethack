@@ -1067,7 +1067,15 @@ register struct monst *mtmp;
 			    (rn2(2) || m2->mblinded)) || !rn2(10)) {
 				if (cansee(m2->mx, m2->my))
 				    pline("It locks on to %s.", mon_nam(m2));
-				m2->mhp -= rnd(15);
+				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_LUGRIBOSSK] || mdat == &mons[PM_MAANZECORIAN]) m2->mhp -= d(5,15);
+				else if(mdat == &mons[PM_ELDER_BRAIN]){
+					int mfdmg = d(3,15);
+					m2->mhp -= mfdmg;
+					m2->mstdy = max(mfdmg, m2->mstdy);
+				} else {
+					m2->mhp -= rnd(15);
+					if(mdat == &mons[PM_SEMBLANCE]) m2->mconf=TRUE;
+				}
 				if (m2->mhp <= 0)
 				    monkilled(m2, "", AD_DRIN);
 				else
