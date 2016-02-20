@@ -1252,12 +1252,11 @@ struct attack *mattk;
 	else if (mattk->adtyp == AD_DRDX) obj = uarmg;
 	else if (mattk->adtyp == AD_LEGS) obj = uarmf;
 
-	/* mud boots block wrap attacks 80% of the time */
-    static int mboots = 0;
-    if (!mboots) mboots = find_mboots();
+	/* mud boots block wrap attacks */
+    static int mboots1 = 0;
+    if (!mboots1) mboots1 = find_mboots();
     if(mattk->adtyp == AD_WRAP && 
-		rn2(5) && 
-		uarmf && uarmf->otyp == mboots
+		uarmf && uarmf->otyp == mboots1
 	){
 		pline("%s slips off of your slippery mud boots!", Monnam(mtmp));
 		return TRUE; 
