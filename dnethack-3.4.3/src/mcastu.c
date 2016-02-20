@@ -1208,9 +1208,11 @@ int spellnum;
 	dmg = 0;
 	stop_occupation();
 	break;
-    case GEYSER:
-	dmg = 0;
+    case GEYSER:{
+	static int mboots3 = 0;
+	if (!mboots3) mboots3 = find_mboots();
 	/* this is physical damage, not magical damage */
+	dmg = 0;
 	if(Wwalking){
 		pline("A sudden geyser erupts under your feet!");
 		if(ACURR(A_DEX) >= 14){
@@ -1228,11 +1230,13 @@ int spellnum;
 	} else {
 		pline("A sudden geyser slams into you from nowhere!");
 		dmg = d(8, 6);
-		water_damage(invent, FALSE, FALSE, FALSE);
+		if(uarmf && uarmf->otyp == mboots3 )
+			pline("Good thing you're wearing mud boots!");
+		else water_damage(invent, FALSE, FALSE, FALSE);
 		if (Half_physical_damage) dmg = (dmg + 1) / 2;
 	}
 	stop_occupation();
-	break;
+	}break;
     case FIRE_PILLAR:
 	pline("A pillar of fire strikes all around you!");
 	if (Fire_resistance) {
@@ -3104,6 +3108,8 @@ uspsibolt:
 		}
 		dmg = 0;
 		boots = which_armor(mtmp, W_ARMF);
+		static int mboots2 = 0;
+		if (!mboots2) mboots2 = find_mboots();
 		if(boots && boots->otyp == WATER_WALKING_BOOTS){
 			if (yours || canseemon(mtmp)){
 				pline("A sudden geyser erupts under %s's feet!", mon_nam(mtmp));
@@ -3122,7 +3128,7 @@ uspsibolt:
 				pline("A sudden geyser slams into %s from nowhere!", mon_nam(mtmp));
 			/* this is physical damage, not magical damage */
 			dmg = d(8, 6);
-			water_damage(mtmp->minvent, FALSE, FALSE, FALSE);
+			if(boots && boots->otyp != mboots2) water_damage(mtmp->minvent, FALSE, FALSE, FALSE);
 		}
 	}break;
     case FIRE_PILLAR:
