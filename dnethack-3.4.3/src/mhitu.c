@@ -1113,7 +1113,7 @@ mattacku(mtmp)
 			} else if(u.fightingForm == FFORM_SORESU && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
-						if(rn2(100) < 25){
+						if(rn2(100) < 5){
 							You("counterattack!");
 							flags.forcefight = TRUE;
 							attack(mtmp);
@@ -1123,7 +1123,7 @@ mattacku(mtmp)
 						}
 					break;
 					case P_SKILLED:
-						if(rn2(100) < 50){
+						if(rn2(100) < 10){
 							You("counterattack!");
 							flags.forcefight = TRUE;
 							attack(mtmp);
@@ -1133,7 +1133,7 @@ mattacku(mtmp)
 						}
 					break;
 					case P_EXPERT:
-						if(rn2(100) < 75){
+						if(rn2(100) < 20){
 							You("counterattack!");
 							flags.forcefight = TRUE;
 							attack(mtmp);
