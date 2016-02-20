@@ -1187,19 +1187,19 @@ int thrown;
 								}
 							}
 							hittxt = TRUE;
-						} else if(rnd(100) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))){
-							if (canspotmon(mon))
-								pline("%s %s from your powerful strike!", Monnam(mon),
-								  makeplural(stagger(mon->data, "stagger")));
-							/* avoid migrating a dead monster */
-							if (mon->mhp > tmp) {
-								mhurtle(mon, u.dx, u.dy, 1);
-								mon->mstun = TRUE;
-								mdat = mon->data; /* in case of a polymorph trap */
-								if (DEADMONSTER(mon)) already_killed = TRUE;
-							}
-							hittxt = TRUE;
 						}
+					} else if(u.fightingForm == FFORM_JUYO && rnd(50) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))){
+						if (canspotmon(mon))
+							pline("%s %s from your powerful strike!", Monnam(mon),
+							  makeplural(stagger(mon->data, "stagger")));
+						/* avoid migrating a dead monster */
+						if (mon->mhp > tmp) {
+							mhurtle(mon, u.dx, u.dy, 1);
+							mon->mstun = TRUE;
+							mdat = mon->data; /* in case of a polymorph trap */
+							if (DEADMONSTER(mon)) already_killed = TRUE;
+						}
+						hittxt = TRUE;
 					}
 					if(u.fightingForm == FFORM_DJEM_SO){
 						if(rnd(mon->mattackedu ? 20 : 100) < min(P_SKILL(FFORM_DJEM_SO), P_SKILL(weapon_type(uwep)))){
