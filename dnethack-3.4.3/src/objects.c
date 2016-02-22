@@ -854,10 +854,10 @@ TOOL("stethoscope", (char *)0,  1, 0, 0, 0,  25,  4,  75, IRON, HI_METAL),
 TOOL("tinning kit", (char *)0,  1, 0, 0, 1,  15,100,  30, IRON, HI_METAL),
 TOOL("bullet fabber", "white box with a yellow fiddly bit",
 								0, 0, 1, 0,   0,100,  30, PLASTIC, CLR_WHITE),
-TOOL("upgrade kit", (char *)0,  1, 0, 0, 0,   0,100,  30, COPPER, HI_COPPER),
+TOOL("upgrade kit", (char *)0,  1, 0, 0, 0,  40,100,  30, COPPER, HI_COPPER),
 TOOL("power pack", "small white cube",
 								0, 0, 1, 0,   0,  1,  300, PLASTIC, CLR_WHITE),
-TOOL("tin opener", (char *)0,   1, 0, 0, 0,  35,  4,  30, IRON, HI_METAL),
+TOOL("tin opener", (char *)0,   1, 0, 0, 0,  25,  4,  30, IRON, HI_METAL),
 TOOL("can of grease", (char *)0,1, 0, 0, 1,  15, 15,  20, IRON, HI_METAL),
 TOOL("figurine", (char *)0,     1, 0, 1, 0,  25, 50,  80, MINERAL, HI_MINERAL),
 TOOL("magic marker", (char *)0, 1, 0, 1, 1,  15,  2,  50, PLASTIC, CLR_RED),
@@ -867,7 +867,7 @@ TOOL("beartrap", (char *)0,     1, 0, 0, 0,   0,200,  60, IRON, HI_METAL),
 /* instruments */
 /* some code in invent.c and obj.h requires wooden flute .. drum of earthquake to be
    consecutive, with the wooden flute first and drum of earthquake last */
-TOOL("tin whistle", "whistle",  0, 0, 0, 0,  90,  3,  10, METAL, HI_METAL),
+TOOL("tin whistle", "whistle",  0, 0, 0, 0,  60,  3,  10, METAL, HI_METAL),
 TOOL("magic whistle", "whistle",0, 0, 1, 0,  30,  3,  10, METAL, HI_METAL),
 /* "If tin whistles are made out of tin, what do they make foghorns out of?" */
 TOOL("wooden flute", "flute",   0, 0, 0, 0,   4,  5,  12, WOOD, HI_WOOD),
