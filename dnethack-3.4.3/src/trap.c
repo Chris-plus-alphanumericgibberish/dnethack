@@ -2791,7 +2791,7 @@ register boolean force, here, forcelethe;
 //	int is_lethe = level.flags.lethe || forcelethe;
 	int is_lethe = 0;
 	if((uarmc
-		&& uarmc->otyp == OILSKIN_CLOAK
+		&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
 		&& (!uarmc->cursed || rn2(3))
 	   ) || (
 		ublindf
@@ -2799,8 +2799,14 @@ register boolean force, here, forcelethe;
 		&& (!ublindf->cursed || rn2(3))
 	   ) || u.sealsActive&SEAL_ENKI
 	) {
+		if(uarmc && uarmc->otyp != OILSKIN_CLOAK && uarmc->greased){
+			if (force || !rn2(uarmc->blessed ? 4 : 2)){
+				uarmc->greased = 0;
+				pline("The layer of grease on your %s dissolves.", xname(uarmc));
+			}
+		}
 			return 0;
-	}	/* Scrolls, spellbooks, potions, weapons and
+	}	/* else: Scrolls, spellbooks, potions, weapons and
 	   pieces of armor may get affected by the water */
 	for (; obj; obj = otmp) {
 		otmp = here ? obj->nexthere : obj->nobj;
