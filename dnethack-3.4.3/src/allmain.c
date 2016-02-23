@@ -429,11 +429,15 @@ moveloop()
 			if(u.sealsActive&SEAL_FAFNIR && money_cnt(invent) == 0) unbind(SEAL_FAFNIR,TRUE);
 #endif
 			if(u.sealsActive&SEAL_JACK && (Is_astralevel(&u.uz) || Inhell)) unbind(SEAL_JACK,TRUE);
-			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON) 
+			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON || Race_if(PM_DROW))
 				&&!(viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)
 			){
+				if(!u.nv_range){
 				if(++u.orthocounts>5) unbind(SEAL_ORTHOS,TRUE);
-				else if(Hallucination){
+				} else {
+					if(++u.orthocounts>5*u.nv_range) unbind(SEAL_ORTHOS,TRUE);
+				}
+				if(u.sealsActive&SEAL_ORTHOS && Hallucination){ /*Didn't just unbind it*/
 					if(u.orthocounts == 1) pline("It is now pitch black. You are likely to be eaten by a grue.");
 					else pline("You are likely to be eaten by a grue.");
 				} else You_feel("increasingly panicked about being in the dark!");
@@ -710,7 +714,14 @@ moveloop()
 			
 			if(!(moves%10)){
 				if(u.eurycounts) u.eurycounts--;
-				if(u.orthocounts) u.orthocounts--;
+				if(u.orthocounts){
+					if(u.nv_range){
+						u.orthocounts -= u.nv_range;
+						if(u.orthocounts < 0) u.orthocounts = 0;
+					} else {
+						u.orthocounts--;
+					}
+				}
 				if(u.wimage){
 					exercise(A_INT, TRUE);
 					exercise(A_WIS, FALSE);
