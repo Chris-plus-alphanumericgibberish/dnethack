@@ -592,7 +592,8 @@ moveloop()
 				} else if(!mtmp) LBperim = FALSE;
 			}
 			
-		    if(!rn2(u.uevent.udemigod ? 25 :
+		    if(!(Is_illregrd(&u.uz) && u.ualign.type == A_LAWFUL && !u.uevent.uaxus_foe) && /*Turn off random generation on axus's level if lawful*/
+				!rn2(u.uevent.udemigod ? 25 :
 				(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)) ? 35 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)
 			){
