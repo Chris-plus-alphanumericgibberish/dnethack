@@ -4620,11 +4620,13 @@ arti_invoke(obj)
 							return 1;
 						} else {
 							struct monst *mtmp = fmon, *ntmp;
+							boolean maanze = FALSE;
 							
 							You("raise the Annulus into the %s, and it releases a rapidly-expanding ring of cerulean energy.", Underwater ? "water" : "air");
 							for(mtmp; mtmp; mtmp = ntmp){
 								ntmp = mtmp->nmon;
 								if(telepathic(mtmp->data) && couldsee(mtmp->mx,mtmp->my)){
+									if(mtmp->data == &mons[PM_LUGRIBOSSK]) maanze = TRUE;
 									killed(mtmp);
 								} else if(is_magical(mtmp->data) && couldsee(mtmp->mx,mtmp->my) 
 									&& !resist(mtmp, WEAPON_CLASS, 0, NOTELL)
@@ -4647,6 +4649,23 @@ arti_invoke(obj)
 									see_monsters(); /* Can't sense monsters any more. */
 								make_stunned(HStun + d(5,15), FALSE);
 								make_confused(HConfusion + d(5,15), FALSE);
+							}
+							if(maanze && mvitals[PM_MAANZECORIAN].born == 0 && (mtmp = makemon(&mons[PM_MAANZECORIAN],u.ux,u.uy,MM_ADJACENTOK))){
+								if (!Blind || sensemon(mtmp))
+									pline("An enormous ghostly mind flayer appears next to you!");
+								else You("sense a presence close by!");
+								mtmp->mpeaceful = 0;
+								set_malign(mtmp);
+								//Assumes Maanzecorian is 27 (archon)
+								mtmp->m_lev = 27;
+								mtmp->mhpmax = 8*26 + rn2(8);
+								mtmp->mhp = mtmp->mhpmax;
+								do_clear_area(mtmp->mx,mtmp->my, 4, set_lit, (genericptr_t)0);
+								do_clear_area(u.ux,u.uy, 4, set_lit, (genericptr_t)0);
+								doredraw();
+								if(flags.verbose) You("are frightened to death, and unable to move.");
+								nomul(-4, "being frightened to death");
+								nomovemsg = "You regain your composure.";
 							}
 						}
 					}break;
