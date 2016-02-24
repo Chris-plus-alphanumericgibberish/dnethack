@@ -1553,8 +1553,7 @@ u_init()
 #endif
 
 	/*
-	 *  For now, everyone starts out with a night vision range of 1 and
-	 *  their xray range disabled.
+	 *  For now, everyone starts out with their xray range disabled.
 	 */
 	u.nv_range   =  urace.nv_range;
 	u.xray_range = -1;
