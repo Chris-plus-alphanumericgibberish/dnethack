@@ -924,7 +924,9 @@ register struct monst *mtmp;
 			return 1;
 	}
 	
-	if(is_drow(mtmp->data) && (!mtmp->mpeaceful || Race_if(PM_DROW)) && (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
+	if((is_drow(mtmp->data) || mtmp->data == &mons[PM_LUGRIBOSSK] || mtmp->data == &mons[PM_MAANZECORIAN])
+		&& (!mtmp->mpeaceful || (Race_if(PM_DROW) && !Role_if(PM_ANACHRONONAUT))) 
+		&& (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 	){

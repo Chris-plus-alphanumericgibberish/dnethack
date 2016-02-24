@@ -444,9 +444,12 @@ register int roomno;
 				msg1 = "I SEE YOU!";
 				set_mon_data(priest, &mons[PM_LUGRIBOSSK], 0);
 				//Assumes High Priest is 25, Lugribossk is 27 (archon)
-				priest->m_lev += 2;
-				priest->mhp += 4*2;
-				priest->mhpmax += 4*2;
+				priest->m_lev = 27;
+				priest->mhp = 8*26 + rn2(8);
+				priest->mhpmax = priest->mhp;
+				do_clear_area(priest->mx,priest->my, 4, set_lit, (genericptr_t)0);
+				do_clear_area(u.ux,u.uy, 4, set_lit, (genericptr_t)0);
+				doredraw();
 				newsym(priest->mx, priest->my);
 			} else {
 				Sprintf(buf, "Pilgrim, you enter a %s place!",
@@ -482,8 +485,14 @@ register int roomno;
 				else You("sense a presence close by!");
 				mtmp->mpeaceful = 0;
 				set_malign(mtmp);
-				if(flags.verbose)
-				You("are frightened to death, and unable to move.");
+				//Assumes Maanzecorian is 27 (archon)
+				mtmp->m_lev = 27;
+				mtmp->mhpmax = 8*26 + rn2(8);
+				mtmp->mhp = mtmp->mhpmax;
+				do_clear_area(mtmp->mx,mtmp->my, 4, set_lit, (genericptr_t)0);
+				do_clear_area(u.ux,u.uy, 4, set_lit, (genericptr_t)0);
+				doredraw();
+				if(flags.verbose) You("are frightened to death, and unable to move.");
 				nomul(-4, "being frightened to death");
 				nomovemsg = "You regain your composure.";
 			} else if(!rn2(5)) {
