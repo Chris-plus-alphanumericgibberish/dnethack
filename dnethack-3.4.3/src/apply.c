@@ -4920,7 +4920,7 @@ doapply()
 	case LIGHTSABER:
   	case BEAMSWORD:
 	case DOUBLE_LIGHTSABER:
-		if (uwep != obj && !wield_tool(obj, (const char *)0)) break;
+		if (uwep != obj && !(u.twoweap && uswapwep == obj) && !wield_tool(obj, (const char *)0)) break;
 		/* Fall through - activate via use_lamp */
 		    
 /* MRKR: dwarvish helms are mining helmets. 
