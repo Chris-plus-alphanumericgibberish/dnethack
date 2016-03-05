@@ -6194,24 +6194,18 @@ read_lost(VOID_ARGS)
 		} else You("can't feel the spirit.");
 	}
 	else if(lostname == QUEST_SPIRITS){
-		int chance = 0;
+		long putativeSeal;
 		if(!(artiptr->ovar1)) artiptr->spestudied = 0; /* Sanity enforcement. Something wierd is going on with the artifact creation code.*/
 
-		if(!(artiptr->ovar1 & SEAL_SPECIAL)){
-			long putativeSeal;
-			i = rn2(31);
-			putativeSeal = 1L << i;
-			if(artiptr->ovar1 & putativeSeal) losexp("getting lost in a book",TRUE,TRUE,TRUE);
-			else{
-				u.sealsKnown |= putativeSeal;
-				artiptr->ovar1 |= putativeSeal;
-				You("learn the name \"%s\" while studying the book.",sealNames[i]);
-				artiptr->spestudied++;
-			}
-		} else losexp("getting lost in a book",TRUE,TRUE,TRUE);
-		
-		if(artiptr->spestudied > 5 && !rn2(500)) artiptr->ovar1 |= SEAL_SPECIAL;
-		
+		i = rn2(31);
+		putativeSeal = 1L << i;
+		if(artiptr->ovar1 & putativeSeal) losexp("getting lost in a book",TRUE,TRUE,TRUE);
+		else{
+			u.sealsKnown |= putativeSeal;
+			artiptr->ovar1 |= putativeSeal;
+			You("learn the name \"%s\" while studying the book.",sealNames[i]);
+			artiptr->spestudied++;
+		}
 	}
 	else{
 		pline("Unrecognized Lost Names effect.");
