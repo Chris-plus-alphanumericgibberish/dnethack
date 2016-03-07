@@ -53,10 +53,10 @@ static struct trobj Anachrononaut_Hu[] = {
 };
 static struct trobj Anachrononaut_Inc[] = {
 	{ LIGHTSABER,  3, WEAPON_CLASS, 1, 0 },
-	{ ELVEN_TOGA, 3, ARMOR_CLASS, 1, 0 },
+	{ ELVEN_TOGA, 1, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
 	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, 0 },
-	{ ROBE, 4, ARMOR_CLASS, 1, 0 },
+	{ ROBE, 1, ARMOR_CLASS, 1, 0 },
 	{ SEDGE_HAT, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS, 5, 0 },
@@ -65,8 +65,8 @@ static struct trobj Anachrononaut_Inc[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Anachrononaut_Vam[] = {
-	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
-	{ SUBMACHINE_GUN, 0, WEAPON_CLASS, 1, 0 },
+	{ SUBMACHINE_GUN, 4, WEAPON_CLASS, 1, 0 },
+	{ SUBMACHINE_GUN, 4, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
 	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
 	{ STUDDED_LEATHER_ARMOR, 0, ARMOR_CLASS, 1, 0 },
