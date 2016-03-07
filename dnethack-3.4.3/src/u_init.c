@@ -102,7 +102,7 @@ static struct trobj Anachrononaut_Dro[] = {
 static struct trobj Anachrononaut_Elf[] = {
 	{ RAYGUN,  0, WEAPON_CLASS, 1, 0 },
 	{ SENSOR_PACK,  25, WEAPON_CLASS, 1, 0 },
-	{ JUMPSUIT, 0, ARMOR_CLASS, 1, 0 },
+	{ JUMPSUIT, 5, ARMOR_CLASS, 1, 0 },
 	{ JUMPING_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS, 10, 0 },
 	{ LEMBAS_WAFER, 0, FOOD_CLASS, 3, 0 },
