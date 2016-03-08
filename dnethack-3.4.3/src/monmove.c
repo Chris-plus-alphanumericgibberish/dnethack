@@ -1650,15 +1650,21 @@ not_special:
 				if(!(info[i] & NOTONL)) avoid=TRUE;
 	    }
 		
-		if(appr == 0 && !mtmp->mpeaceful && Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
+		if(appr == 0){
 			struct monst *m2 = (struct monst *)0;
+			int distminbest = SQSRCHRADIUS;
 			for(m2=fmon; m2; m2 = m2->nmon){
-				if(m2->m_id == quest_status.leader_m_id){
+				if(m2->m_id == quest_status.leader_m_id && Role_if(PM_ANACHRONONAUT) && !mtmp->mpeaceful && In_quest(&u.uz)){
 					/*make a beeline for the leader*/
+					distminbest = min(distminbest,distmin(mtmp->mx,mtmp->my,m2->mx,m2->my));
 					gx = m2->mx;
 					gy = m2->my;
 					appr = 1;
-					break;
+				} else if(distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) < distminbest && mm_aggression(mtmp,m2)){
+					distminbest = distmin(mtmp->mx,mtmp->my,m2->mx,m2->my);
+					gx = m2->mx;
+					gy = m2->my;
+					appr = 1;
 				}
 			}
 		}
