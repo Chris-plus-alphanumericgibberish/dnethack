@@ -1043,7 +1043,7 @@ register struct monst *mtmp;
 		    (!Conflict || resist(mtmp, RING_CLASS, 0, 0))){
 			if(!reducedFlayerMessages) pline("It feels quite soothing.");
 		} else {
-			register boolean m_sen = sensemon(mtmp);
+			register boolean m_sen = tp_sensemon(mtmp);
 			
 			if(mdat == &mons[PM_ELDER_BRAIN]) quest_chat(mtmp);
 			
