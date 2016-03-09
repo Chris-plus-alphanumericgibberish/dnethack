@@ -568,8 +568,8 @@ struct you {
 #define SEAL_ORTHOS					0x0800000L
 	int		orthocounts;
 #define SEAL_OSE					0x1000000L
-	char	osepro[5];
-	char	osegen[9];
+	char	osepro[128]; /*Lots of extra space*/
+	char	osegen[128];
 #define SEAL_OTIAX					0x2000000L
 	long	otiaxAttack;
 #define SEAL_PAIMON					0x4000000L

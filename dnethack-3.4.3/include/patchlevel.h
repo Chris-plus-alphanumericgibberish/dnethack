@@ -28,8 +28,9 @@
  * 3.9.2: added poison spray and acid blast spells.
  * 3.9.3: added bard, hungry dead, dokkalfar matriarch.
  * 3.10.0: belated increment of minor version, Bugfixed bard, bards gain exp by watching their pets level up.
+ * 3.10.1: Expand size of ose buffers, to 'fix' buffer overflow.
  */
-#define PATCHLEVEL	0
+#define PATCHLEVEL	1
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
