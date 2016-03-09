@@ -2987,19 +2987,23 @@ int spellnum;
 	    if (otmp &&
 	        !oresist_disintegration(otmp))
 	    {
-	       if (yours || canseemon(mtmp)) pline("%s %s %s!",
-		      s_suffix(Monnam(mtmp)),
-		      xname(otmp),
-		      is_cloak(otmp)  ? "crumbles and turns to dust" :
-		      is_shirt(otmp)  ? "crumbles into tiny threads" :
-		      is_helmet(otmp) ? "turns to dust and is blown away" :
-		      is_gloves(otmp) ? "vanish" :
-		      is_boots(otmp)  ? "disintegrate" :
-		      is_shield(otmp) ? "crumbles away" :
-		                        "turns to dust"
-		      );
-		obj_extract_self(otmp);
-		obfree(otmp, (struct obj *)0);
+			long unwornmask = otmp->owornmask;
+			if (yours || canseemon(mtmp)) pline("%s %s %s!",
+				s_suffix(Monnam(mtmp)),
+				xname(otmp),
+				is_cloak(otmp)  ? "crumbles and turns to dust" :
+				is_shirt(otmp)  ? "crumbles into tiny threads" :
+				is_helmet(otmp) ? "turns to dust and is blown away" :
+				is_gloves(otmp) ? "vanish" :
+				is_boots(otmp)  ? "disintegrate" :
+				is_shield(otmp) ? "crumbles away" :
+								"turns to dust"
+				);
+			obj_extract_self(otmp);
+			mtmp->misc_worn_check &= ~unwornmask;
+			otmp->owornmask = 0L;
+			update_mon_intrinsics(mtmp, otmp, FALSE, FALSE);
+			obfree(otmp, (struct obj *)0);
  	    }
 	    else if (yours || canseemon(mtmp))
 	        pline("%s looks itchy.", Monnam(mtmp)); 
