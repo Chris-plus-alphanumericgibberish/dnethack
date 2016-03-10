@@ -81,7 +81,7 @@ MONSTER:'@',"sister",(38,09)
 MONSTER:'@',"sister",(39,12)
 
 #Your oldest sister's stash
-OBJECT:'(',"chest",(39,0)
+CONTAINER:'(',"chest",(39,0)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

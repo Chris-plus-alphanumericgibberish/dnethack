@@ -104,10 +104,10 @@ OBJECT:')',"droven crossbow",random
 
 # lone survivor
 MONSTER:'@',"drow novice",(39,00)
-OBJECT:'?',"resistance",contained
-OBJECT:'?',"resistance",contained
-OBJECT:'?',"resistance",contained
-OBJECT:'%',"food ration",contained
+OBJECT:'?',"resistance",(39,00)
+OBJECT:'?',"resistance",(39,00)
+OBJECT:'?',"resistance",(39,00)
+OBJECT:'%',"food ration",(39,00)
 
 MAZE: "Nhd-loca",' '
 FLAGS: hardfloor,shortsighted

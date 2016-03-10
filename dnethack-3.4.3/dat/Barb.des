@@ -60,7 +60,7 @@ DOOR:open,(28,05)
 # Elder
 MONSTER:'@',"Pelias",(10,07)
 # The treasure of Pelias
-OBJECT:'(',"chest",(09,05)
+CONTAINER:'(',"chest",(09,05)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

@@ -100,7 +100,7 @@ DOOR: closed, (68,18)
 # Master of Thieves
 MONSTER:'@',"Master of Thieves",(36,11)
 # The treasure of Master of Thieves
-OBJECT:'(',"chest",(36,11)
+CONTAINER:'(',"chest",(36,11)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

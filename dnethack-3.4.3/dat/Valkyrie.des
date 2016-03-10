@@ -47,7 +47,7 @@ DOOR:locked,(43,10)
 # Norn
 MONSTER:'@',"Norn",(35,10)
 # The treasure of the Norn
-OBJECT:'(',"chest",(36,10)
+CONTAINER:'(',"chest",(36,10)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

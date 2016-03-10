@@ -54,7 +54,7 @@ DOOR:locked,(20,10)
 # Neferet the Green, the quest leader
 MONSTER:'@',"Neferet the Green",(23,05)
 # The treasure of the quest leader
-OBJECT:'(',"chest",(24,05)
+CONTAINER:'(',"chest",(24,05)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

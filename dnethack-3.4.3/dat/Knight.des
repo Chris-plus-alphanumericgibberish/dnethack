@@ -66,7 +66,7 @@ MONSTER:'@',"King Arthur",(09,07)
 # Ixoth
 MONSTER:'D',"Ixoth",(26,01),hostile
 # The treasure of King Arthur
-OBJECT:'(',"chest",(09,07)
+CONTAINER:'(',"chest",(09,07)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

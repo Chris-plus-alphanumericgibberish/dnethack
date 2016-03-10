@@ -46,7 +46,7 @@ BRANCH:levregion(66,03,75,12),(1,1,40,19)
 # Orion
 MONSTER:'@',"Orion",(20,10)
 # The treasure of Orion
-OBJECT:'(',"chest",(20,10)
+CONTAINER:'(',"chest",(20,10)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

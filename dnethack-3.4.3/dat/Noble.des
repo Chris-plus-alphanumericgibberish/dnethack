@@ -58,7 +58,7 @@ DOOR:closed,(17,05)
 # Fortuneteller
 MONSTER:'@',"old Gypsy woman",(12,05)
 # Your treasure chest
-OBJECT:'(',"chest",(22,05)
+CONTAINER:'(',"chest",(22,05)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

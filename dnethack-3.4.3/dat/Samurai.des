@@ -54,7 +54,7 @@ DOOR:closed,(50,06)
 # Lord Sato
 MONSTER:'@',"Lord Sato",(20,04)
 # The treasure of Lord Sato
-OBJECT:'(',"chest",(20,04)
+CONTAINER:'(',"chest",(20,04)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

@@ -96,7 +96,7 @@ MONSTER: 'h',random,random
 # Twoflower
 MONSTER:'@',"Twoflower",(64,03)
 # The treasure of Twoflower
-OBJECT:'(',"chest",(64,03)
+CONTAINER:'(',"chest",(64,03)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained

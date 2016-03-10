@@ -47,7 +47,7 @@ ALTAR:(37,10),chaos,altar
 MONSTER:'@',"Galadriel",(37,10)
 MONSTER:'@',"Celeborn",(37,11)
 # The treasure of Celeborn/Galadriel
-OBJECT:'(',"chest",(37,10)
+CONTAINER:'(',"chest",(37,10)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
