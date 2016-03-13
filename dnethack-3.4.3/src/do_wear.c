@@ -1839,7 +1839,7 @@ int base_uac()
 			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
 		}
 		if(is_lightsaber(uwep) && uwep->lamplit){
-			if(u.fightingForm == FFORM_SORESU){
+			if(u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
 						uac -=   (ACURR(A_DEX)+ACURR(A_INT))/5;
@@ -1851,7 +1851,7 @@ int base_uac()
 						uac -= 3*(ACURR(A_DEX)+ACURR(A_INT))/5;
 					break;
 				}
-			} else if(u.fightingForm == FFORM_ATARU){
+			} else if(u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
 						uac -= 6;
@@ -1863,7 +1863,7 @@ int base_uac()
 						uac -= 2;
 					break;
 				}
-			} else if(u.fightingForm == FFORM_MAKASHI){
+			} else if(u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				int sx, sy, mcount = 0;
 				for(sx = u.ux-1; sx<=u.ux+1; sx++){
 					for(sy = u.uy-1; sy<=u.uy+1; sy++){
@@ -1915,16 +1915,14 @@ int base_uac()
 	}
 	
 	if(dexbonus > 0 && uarm){
-		if(uarm->otyp == BRONZE_PLATE_MAIL || uarm->otyp == DROVEN_CHAIN_MAIL || uarm->otyp == CHAIN_MAIL || uarm->otyp == SCALE_MAIL || 
-			uarm->otyp == STUDDED_LEATHER_ARMOR || uarm->otyp == LEATHER_ARMOR || uarm->otyp == BANDED_MAIL || uarm->otyp == NOBLE_S_DRESS)
+		if(is_medium_armor(uarm))
 				dexbonus = max(
 						(int)(dexbonus/2), 
 						(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
 							(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
 						)
 					);
-		else if(uarm->otyp != DWARVISH_MITHRIL_COAT && uarm->otyp != ELVEN_MITHRIL_COAT &&
-			uarm->otyp != LEATHER_JACKET && uarm->otyp != ELVEN_TOGA && uarm->otyp != BLACK_DRESS)
+		else if(!is_light_armor(uarm))
 				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
 	}
 	uac -= dexbonus;
@@ -1955,8 +1953,8 @@ find_ac()
 	
     static int cbootsd = 0;
     if (!cbootsd) cbootsd = find_cboots();
-    if (uarmf && uarmf->otyp == cbootsd) uac -= 1; /*max( (int)(uarmf->spe/2+1),(int)(uarmf->spe/-2+1));/* adds half again the enchantment, 
-																									and mitigates penalties from negative enchantment */
+    if (uarmf && uarmf->otyp == cbootsd) uac -= 1; /*max( (int)(uarmf->spe/2+1),(int)(uarmf->spe/-2+1));*/ /* adds half again the enchantment, and mitigates penalties from negative enchantment */
+																										  /* and mitigates penalties from negative enchantment */
     static int pgloves = 0;
     if (!pgloves) pgloves = find_pgloves();
     if (uarmf && uarmf->otyp == pgloves) uac -= 1;
@@ -1978,7 +1976,7 @@ find_ac()
 			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
 		}
 		if(is_lightsaber(uwep) && uwep->lamplit){
-			if(u.fightingForm == FFORM_SORESU){
+			if(u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
 						uac -=   (ACURR(A_DEX)+ACURR(A_INT))/5;
@@ -1990,7 +1988,7 @@ find_ac()
 						uac -= 3*(ACURR(A_DEX)+ACURR(A_INT))/5;
 					break;
 				}
-			} else if(u.fightingForm == FFORM_ATARU){
+			} else if(u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
 						uac -= 6;
@@ -2002,7 +2000,7 @@ find_ac()
 						uac -= 2;
 					break;
 				}
-			} else if(u.fightingForm == FFORM_MAKASHI){
+			} else if(u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				int sx, sy, mcount = 0;
 				for(sx = u.ux-1; sx<=u.ux+1; sx++){
 					for(sy = u.uy-1; sy<=u.uy+1; sy++){
@@ -2060,16 +2058,14 @@ find_ac()
 	}
 	
 	if(dexbonus > 0 && uarm){
-		if(uarm->otyp == BRONZE_PLATE_MAIL || uarm->otyp == CHAIN_MAIL || uarm->otyp == SCALE_MAIL || 
-			uarm->otyp == STUDDED_LEATHER_ARMOR || uarm->otyp == LEATHER_ARMOR || uarm->otyp == BANDED_MAIL)
+		if(is_medium_armor(uarm))
 				dexbonus = max(
 						(int)(dexbonus/2), 
 						(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
 							(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
 						)
 					);
-		else if(uarm->otyp != DWARVISH_MITHRIL_COAT && uarm->otyp != ELVEN_MITHRIL_COAT &&
-			uarm->otyp != LEATHER_JACKET)
+		else if(!is_light_armor(uarm))
 				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
 	}
 	uac -= dexbonus;
@@ -2860,9 +2856,9 @@ register schar delta;
 		if (delta) ABON(A_CHA) += (delta);
 		flags.botl = 1;
 	}
-	if((uarm && uarm == otmp) || (uarmu && uarmu == otmp) &&
+	if(((uarm && uarm == otmp) || (uarmu && uarmu == otmp)) &&
 		(otmp->otyp == NOBLE_S_DRESS || otmp->otyp == BLACK_DRESS || otmp->otyp == CONSORT_S_SUIT
-		 || otmp->otyp == VICTORIAN_UNDERWEAR || otmp->otyp == GENTLEMAN_S_SUIT || otmp->otyp == GENTLEMAN_S_SUIT)
+		 || otmp->otyp == VICTORIAN_UNDERWEAR || otmp->otyp == GENTLEMAN_S_SUIT)
 	){
 		if (delta){
 			if(otmp->otyp == GENTLEWOMAN_S_DRESS || 
