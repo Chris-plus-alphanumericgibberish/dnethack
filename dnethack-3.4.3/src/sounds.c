@@ -4600,13 +4600,13 @@ int p_skill;
 	}
 	
 	if(p_skill == FFORM_SHIEN){
-		if(OLD_P_SKILL(FFORM_DJEM_SO) == P_SKILLED) curskill++;
-		if(OLD_P_SKILL(FFORM_DJEM_SO) == P_EXPERT) curskill++;
+		if(OLD_P_SKILL(FFORM_DJEM_SO) >= P_SKILLED) curskill++;
+		if(OLD_P_SKILL(FFORM_DJEM_SO) >= P_EXPERT) curskill++;
 	}
 	
 	if(p_skill == FFORM_DJEM_SO){
-		if(OLD_P_SKILL(FFORM_SHIEN) == P_SKILLED) curskill++;
-		if(OLD_P_SKILL(FFORM_SHIEN) == P_EXPERT) curskill++;
+		if(OLD_P_SKILL(FFORM_SHIEN) >= P_SKILLED) curskill++;
+		if(OLD_P_SKILL(FFORM_SHIEN) >= P_EXPERT) curskill++;
 	}
 	
 	if(u.sealsActive&SEAL_NABERIUS && (curskill<P_BASIC || maxskill<P_BASIC)){
