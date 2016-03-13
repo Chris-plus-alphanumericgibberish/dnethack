@@ -273,10 +273,11 @@ struct obj {
 #define is_grenade(otmp)	(is_ammo(otmp) && \
 			 	 objects[(otmp)->otyp].w_ammotyp == WP_GRENADE)
 #define ammo_and_launcher(otmp,ltmp) \
-			 (is_ammo(otmp) && (ltmp) && \
-			  (objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
-			  (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill || \
-			   (ltmp->oartifact == ART_PEN_OF_THE_VOID && (ltmp->ovar1 & SEAL_EVE))))
+			 (is_ammo(otmp) && (ltmp) && (\
+			  ((objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
+			   (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill)) ||\
+			 (ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE) ||\
+			 ltmp->otyp == BFG))
 #define is_missile(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 objects[otmp->otyp].oc_skill >= -P_BOOMERANG && \

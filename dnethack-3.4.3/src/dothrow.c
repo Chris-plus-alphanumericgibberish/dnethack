@@ -198,18 +198,18 @@ int thrown;
 	     * (currently oc_rof conflicts with wsdam)
 	     */
     if (launcher && ammo_and_launcher(obj,launcher)) {
-		if (objects[(launcher->otyp)].oc_rof) 
-		    multishot += (objects[(launcher->otyp)].oc_rof - 1);
 		if(launcher->otyp == BFG){
-			if(objects[(obj)->otyp].w_ammotyp == WP_BULLET) multishot += 2*(objects[(launcher->otyp)].oc_rof);
-			if(objects[(obj)->otyp].w_ammotyp == WP_SHELL) multishot += 1.5*(objects[(launcher->otyp)].oc_rof);
-			if(objects[(obj)->otyp].w_ammotyp == WP_GRENADE) multishot += .5*(objects[(launcher->otyp)].oc_rof);
-		}
+			if(objects[(obj)->otyp].w_ammotyp == WP_BULLET) multishot += 3*(objects[(launcher->otyp)].oc_rof);
+			if(objects[(obj)->otyp].w_ammotyp == WP_SHELL) multishot += 2.5*(objects[(launcher->otyp)].oc_rof);
+			if(objects[(obj)->otyp].w_ammotyp == WP_GRENADE) multishot += 1.5*(objects[(launcher->otyp)].oc_rof);
+			else multishot += (objects[(launcher->otyp)].oc_rof);
+		} else if (objects[(launcher->otyp)].oc_rof)
+		    multishot += (objects[(launcher->otyp)].oc_rof - 1);
 		if (launcher->altmode == WP_MODE_SINGLE)
 		  /* weapons switchable b/w full/semi auto */
 		    multishot = 1;
 		else if (launcher->altmode == WP_MODE_BURST)
-		    multishot = ((multishot > 3) ? (multishot / 3) : 1);
+		    multishot = ((multishot > 5) ? (multishot / 3) : 1);
 		/* else it is auto == no change */
 	    }
 
