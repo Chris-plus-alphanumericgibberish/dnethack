@@ -1687,7 +1687,7 @@ defaultvalue:
 					mon->mattackedu
 				) use_skill(FFORM_DJEM_SO,1);
 				if((u.fightingForm == FFORM_SHII_CHO || 
-					 (u.fightingForm == FFORM_NIMAN && (!uarm || is_light_armor(uarm)))
+					 (u.fightingForm == FFORM_NIMAN && (!uarm || !is_metallic(uarm)))
 					) &&
 					u.lastcast >= monstermoves
 				) use_skill(FFORM_NIMAN,1);
