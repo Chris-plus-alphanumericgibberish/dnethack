@@ -102,11 +102,12 @@ register struct obj *obj;
 	/* protect invocation tools but not Rider corpses (handled elsewhere)*/
      /* if (obj->oclass != FOOD_CLASS && obj_resists(obj, 0, 0)) */
 	 /* Repeating this check in the name of futureproofing */
-	if (objects[obj->otyp].oc_unique || (objects[obj->otyp].oc_merge && 
+	if (objects[obj->otyp].oc_unique || obj->oartifact || 
+										(objects[obj->otyp].oc_merge && 
 										 obj->otyp != CORPSE && 
 										 obj->otyp != TIN && 
-										 obj->oclass != SCROLL_CLASS))
-		return FALSE;
+										 obj->oclass != SCROLL_CLASS)
+	) return FALSE;
 	
 	if(obj->spe > 0){
 		if(obj->oclass == WEAPON_CLASS) return TRUE;
@@ -1215,7 +1216,9 @@ BOOLEAN_P tin, nobadeffects, drained;
 		/* MRKR: "eye of newt" may give small magical energy boost */
 		if(!drained || !rn2(5)){
 			int old_uen = u.uen;
-			u.uen += d(2,10);
+			int amnt = d(2,10);
+			u.uen += amnt;
+			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
 			if (u.uen > u.uenmax){
 				u.uenmax++;
 				u.uen = u.uenmax;
@@ -1229,7 +1232,9 @@ BOOLEAN_P tin, nobadeffects, drained;
 	    case PM_AOA_DROPLET: //Aoas are drops of pure magic
 		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
 		    int old_uen = u.uen;
-		    u.uen += d(4,10);
+			int amnt = d(4,10);
+			u.uen += amnt;
+			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
 		    if (u.uen > u.uenmax) {
 				u.uenmax+=4;
 				u.uen = u.uenmax;
@@ -1243,9 +1248,11 @@ BOOLEAN_P tin, nobadeffects, drained;
 	    case PM_AOA: //Aoas are drops of pure magic
 		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
 		    int old_uen = u.uen;
-			int bonus = d(6,10);
+			int amnt = d(6,10);
+			u.uen += amnt;
+			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
 			u.uen = u.uen + 10 > (u.uenmax - 40) ? u.uen + 10 : (u.uenmax - 40);
-		    u.uen += bonus;
+		    u.uen += amnt;
 		    if (u.uen > u.uenmax) {
 				u.uenmax+=10;
 				u.uen = u.uenmax;
@@ -2819,6 +2826,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
+					healup(50,FALSE,FALSE,FALSE);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}
@@ -2835,6 +2843,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if (carried(otmp)) useup(otmp);
 				else useupf(otmp, 1L);
 				lesshungry(50);
+				healup(50,FALSE,FALSE,FALSE);
 			break;
 			case AMULET_CLASS:
 				if(otmp->oartifact || objects[otmp->otyp].oc_unique) break; //redundant check
@@ -2848,6 +2857,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if (carried(otmp)) useup(otmp);
 				else useupf(otmp, 1L);
 				lesshungry(50);
+				healup(50,FALSE,FALSE,FALSE);
 			break;
 			case ARMOR_CLASS:
 				u.uconduct.food++;
@@ -2856,6 +2866,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
+					healup(50,FALSE,FALSE,FALSE);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}
@@ -2867,6 +2878,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
+					healup(50,FALSE,FALSE,FALSE);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}
@@ -2880,6 +2892,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    otmp->spe = 0;
 	    	    otmp->ovar1 = 0;
 				lesshungry(50);
+				healup(50,FALSE,FALSE,FALSE);
 			break;
 			case SPBOOK_CLASS:
 				if(otmp->oartifact) break; //redundant check
@@ -2889,6 +2902,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				costly_cancel(otmp);
 	    	    if(otmp->spestudied > MAX_SPELL_STUDY) otmp->otyp = SPE_BLANK_PAPER;
 				lesshungry(50);
+				healup(50,FALSE,FALSE,FALSE);
 			break;
 			case WAND_CLASS:
 				u.uconduct.food++;
@@ -2897,6 +2911,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(10);
+					healup(10,FALSE,FALSE,FALSE);
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}

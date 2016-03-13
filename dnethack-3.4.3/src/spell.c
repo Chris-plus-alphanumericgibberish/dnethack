@@ -3439,7 +3439,7 @@ boolean atme;
 			You("don't have enough energy to cast that spell (need %d).", energy);
 			return(0);
 		} else {
-			if (spellid(spell) != SPE_DETECT_FOOD) {
+			if (spellid(spell) != SPE_DETECT_FOOD && !(Race_if(PM_INCANTIFIER)) ) {
 				int hungr = energy * 2;
 
 				/* If hero is a wizard, their current intelligence
@@ -3456,8 +3456,8 @@ boolean atme;
 				 * understand quite well how to cast spells.
 				 */
 				intell = acurr(A_INT);
-				if (!Role_if(PM_WIZARD) && !(Race_if(PM_INCANTIFIER) && u.sealsActive&SEAL_PAIMON)){
-					if(Race_if(PM_INCANTIFIER) || u.sealsActive&SEAL_PAIMON) intell -= 6;
+				if (!Role_if(PM_WIZARD) && !(u.sealsActive&SEAL_PAIMON) ){
+					if(u.sealsActive&SEAL_PAIMON) intell -= 6;
 					else intell -= 10;
 				}
 				if(intell < 15);
