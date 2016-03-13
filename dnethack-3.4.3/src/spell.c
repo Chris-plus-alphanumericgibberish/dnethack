@@ -2846,7 +2846,11 @@ spiriteffects(power, atme)
 			} else return 0;
 		}break;
 		case PWR_READ_SPELL:{
-			if(uwep && uwep->oclass == SPBOOK_CLASS && !uwep->oartifact && uwep->otyp != SPE_BLANK_PAPER && uwep->otyp != SPE_SECRETS){
+			if(uwep && uwep->oclass == SPBOOK_CLASS && !uwep->oartifact && 
+				uwep->otyp != SPE_BLANK_PAPER && 
+				uwep->otyp != SPE_SECRETS && 
+				uwep->otyp != SPE_BOOK_OF_THE_DEAD
+			){
 				You("read from the spellbook in your hands.");
 				// uwep->spestudied++;
 				// costly_cancel(uwep);
