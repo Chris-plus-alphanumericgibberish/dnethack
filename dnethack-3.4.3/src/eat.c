@@ -4184,6 +4184,7 @@ boolean incr;
 	              flags.soundok=0;
 				  nomul(-2, "immobilized by slipping gears.");
 	              nomovemsg = "Your clockwork catches again.";
+				  afternmv = unfaint;
 	            } else {
 					You("faint from lack of food.");
 					flags.soundok = 0;
