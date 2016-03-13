@@ -1664,7 +1664,15 @@ not_special:
 					distminbest = distmin(mtmp->mx,mtmp->my,m2->mx,m2->my);
 					gx = m2->mx;
 					gy = m2->my;
-					appr = 1;
+					if(MON_WEP(mtmp) && 
+						(is_launcher(MON_WEP(mtmp)) || is_firearm(MON_WEP(mtmp)) )
+					){
+						if(distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) >= BOLT_LIM) appr = 1;
+						else if(distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) < 4) appr = -1;
+						else appr = 0;
+					} else {
+						appr = 1;
+					}
 				}
 			}
 		}
