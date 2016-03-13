@@ -70,7 +70,8 @@ boolean burn;
 
 	if(uwep && is_lightsaber(uwep) && uwep->lamplit && P_SKILL(weapon_type(uwep)) >= P_BASIC){
 		if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
-			if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_SHIEN)
+			if(u.fightingForm == FFORM_SHII_CHO || 
+				(u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm)))
 			) use_skill(FFORM_SHIEN,1);
 		}
 	}
@@ -615,7 +616,10 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			case BLINDING_VENOM:
 				if(
 				  !(singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT || singleobj->oartifact) && 
-					uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SHIEN || u.fightingForm == FFORM_SORESU)
+					uwep && is_lightsaber(uwep) && uwep->lamplit && 
+						((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
+						 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
+						)
 				){
 					switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
 						case P_BASIC:
@@ -672,7 +676,10 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 					//This is definitly a temporary setup.
 				if(
 				  !(singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT || singleobj->oartifact) && 
-					uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SHIEN || u.fightingForm == FFORM_SORESU)
+					uwep && is_lightsaber(uwep) && uwep->lamplit && 
+						((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
+						 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
+						)
 				){
 					switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
 						case P_BASIC:
@@ -707,7 +714,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			if(hitu < 0){
 				boolean shienuse = FALSE;
 				if(
-					uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN
+					uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))
 				){
 					switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
 						case P_BASIC:
