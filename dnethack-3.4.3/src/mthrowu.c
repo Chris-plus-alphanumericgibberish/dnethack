@@ -1004,6 +1004,9 @@ struct monst *mtmp;
 	    if (is_prince(mtmp->data)) multishot += 2;
 	    else if (is_lord(mtmp->data)) multishot++;
 
+		/*Increase skill related rof for heavy machine gun*/
+		if(mwep->otyp == HEAVY_MACHINE_GUN) multishot *= 2;
+		
 	    switch (monsndx(mtmp->data)) {
 	    case PM_RANGER:
 		    multishot++;

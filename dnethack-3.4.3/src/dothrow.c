@@ -139,6 +139,9 @@ int thrown;
 	    case P_SKILLED:	multishot++; break;
 	    case P_EXPERT:	multishot += 2; break;
 	    }
+		/*Increase skill related rof for heavy machine gun*/
+		if(launcher->otyp == HEAVY_MACHINE_GUN) multishot *= 2;
+		
 	    /* ...or is using the legendary Longbow... */
 		if(ammo_and_launcher(obj, launcher)
 			&& (launcher->oartifact == ART_LONGBOW_OF_DIANA || uwep->oartifact == ART_BELTHRONDING)
