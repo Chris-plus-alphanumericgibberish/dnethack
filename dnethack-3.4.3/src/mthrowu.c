@@ -1039,10 +1039,16 @@ struct monst *mtmp;
 		if (((is_blaster(otmp) && otmp == mwep) || ammo_and_launcher(otmp, mwep))
 			&& objects[(mwep->otyp)].oc_rof && mwep->otyp != RAYGUN && mwep->altmode != WP_MODE_SINGLE
 		) {
-			if (mwep->otyp != RAYGUN && mwep->altmode == WP_MODE_BURST)
-				multishot += objects[(mwep->otyp)].oc_rof / 3;
-			/* else it is full auto */
-			else multishot += (objects[(mwep->otyp)].oc_rof - 1);
+			if(mwep->otyp == BFG){
+				if(objects[(otmp)->otyp].w_ammotyp == WP_BULLET) multishot += 2*(objects[(mwep->otyp)].oc_rof);
+				else if(objects[(otmp)->otyp].w_ammotyp == WP_SHELL) multishot += 1.5*(objects[(mwep->otyp)].oc_rof);
+				else if(objects[(otmp)->otyp].w_ammotyp == WP_GRENADE) multishot += 1*(objects[(mwep->otyp)].oc_rof);
+				else if(objects[(otmp)->otyp].w_ammotyp == WP_ROCKET) multishot += .5*(objects[(mwep->otyp)].oc_rof);
+				else multishot += (objects[(mwep->otyp)].oc_rof);
+			} else if (objects[(mwep->otyp)].oc_rof)
+				multishot += (objects[(mwep->otyp)].oc_rof - 1);
+			if (mwep->altmode == WP_MODE_BURST)
+				multishot = ((multishot > 5) ? (multishot / 3) : 1);
 		}
 		/* single shot, don't add anything */
 //#endif
