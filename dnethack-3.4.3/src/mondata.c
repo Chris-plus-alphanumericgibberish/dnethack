@@ -339,9 +339,8 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 	    o = (mdef == &youmonst) ? invent : mdef->minvent;
 	    for ( ; o; o = o->nobj)
 		if ((o->owornmask & W_ARMH) &&
-			o->otyp == vhelmsa || o->otyp == CRYSTAL_HELM
-		)
-			return FALSE;
+			(o->otyp == vhelmsa || o->otyp == CRYSTAL_HELM)
+		) return FALSE;
 	}
 	return TRUE;
 }
