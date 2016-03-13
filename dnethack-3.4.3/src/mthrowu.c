@@ -1619,8 +1619,11 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
 	/* if new breath types are added, change AD_ACID to max type */
-	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp ;
-	if(typ == AD_HDRG) typ = flags.HDbreath;
+	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
+	if(typ == AD_HDRG){
+		typ = flags.HDbreath;
+		if(typ == AD_SLEE) mult = 4;
+	}
 
 	if(lined_up(mtmp)) {
 
@@ -1641,7 +1644,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 			pline("%s breathes %s!", Monnam(mtmp),
 			      breathwep[typ-1]);
 		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/2),
-			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? d((int)mattk->damn + (mtmp->m_lev/2), (int)mattk->damd) : 0);
+			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/2), (int)mattk->damd)*mult) : 0);
 		    nomul(0, NULL);
 		    /* breath runs out sometimes. Also, give monster some
 		     * cunning; don't breath if the player fell asleep.
@@ -1663,8 +1666,11 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	register struct attack  *mattk;
 {
 	/* if new breath types are added, change AD_ACID to max type */
-	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp ;
-	if(typ == AD_HDRG) typ = flags.HDbreath;
+	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
+	if(typ == AD_HDRG){
+		typ = flags.HDbreath;
+		if(typ == AD_SLEE) mult = 4;
+	}
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
@@ -1693,7 +1699,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 		    nomul(0, NULL);
 	            }
 		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/2),
-			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? d((int)mattk->damn + (mtmp->m_lev/2), (int)mattk->damd) : 0);
+			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/2), (int)mattk->damd)*mult) : 0);
 		    /* breath runs out sometimes. Also, give monster some
 		     * cunning; don't breath if the player fell asleep.
 		     */

@@ -862,11 +862,14 @@ dobreathe(mdat)
 	if (!mattk)
 	    impossible("bad breath attack?");	/* mouthwash needed... */
 	else{
-		int type = mattk->adtyp;
-		if(type == AD_HDRG) type = flags.HDbreath;
+		int type = mattk->adtyp, multiplier = 1;
+		if(type == AD_HDRG){
+			type = flags.HDbreath;
+			if(type == AD_SLEE) multiplier = 4;
+		}
 		if(is_dragon(mdat)) flags.drgn_brth = 1;
 	    buzz((int) (20 + type-1), (int)mattk->damn + (u.ulevel/2),
-			u.ux, u.uy, u.dx, u.dy,0, mattk->damd ? d((int)mattk->damn + (u.ulevel/2), (int)mattk->damd) : 0);
+			u.ux, u.uy, u.dx, u.dy,0, mattk->damd ? (d((int)mattk->damn + (u.ulevel/2), (int)mattk->damd)*multiplier) : 0);
 		flags.drgn_brth = 0;
 	}
 	return(1);
