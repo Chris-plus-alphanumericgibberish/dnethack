@@ -2596,6 +2596,7 @@ register struct	monst	*mtmp;
 			oep->ward_type = BURN;
 			oep->complete_wards = 1;
 			rloc_engr(oep);
+			oep = engr_at(mtmp->mx,mtmp->my);
 		 }
 		} else if(ptr == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] && !(u.uevent.ukilled_illurien)){
 			otmp = mksobj(SPE_SECRETS, TRUE, FALSE);
