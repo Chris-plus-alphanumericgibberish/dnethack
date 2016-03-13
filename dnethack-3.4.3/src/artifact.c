@@ -1469,7 +1469,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	    *dmgptr += d(1,dnum);
 		if(youattack){
 			if(dieroll == 1){
-				struct obj *otmp2, **minvent_ptr;
+				struct obj *otmp2;
 				long unwornmask;
 
 				/* Don't steal worn items, and downweight wielded items */
@@ -1481,7 +1481,6 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 				}
 				/* Still has handling for worn items, incase that changes */
 				if(otmp2 != 0){
-					int dx,dy;
 					/* take the object away from the monster */
 					if(otmp2->quan > 1L){
 						otmp2 = splitobj(otmp2, 1L);
@@ -2063,7 +2062,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
            if(rnd_tmp<2) rnd_tmp = 2;
            if(youdefend) {
                    make_blinded(Blinded+rnd_tmp, FALSE);
-                   if (!Blind) Your(vision_clears);
+                   if (!Blind) Your1(vision_clears);
            } else {
                if ((rnd_tmp += mdef->mblinded) > 127) rnd_tmp = 127;
                mdef->mblinded = rnd_tmp;
@@ -2142,7 +2141,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	if(arti_steal(otmp)){
 	 if(youattack){
 	  if(mdef->minvent && (Role_if(PM_PIRATE) || !rn2(10) ) ){
-		struct obj *otmp2, **minvent_ptr;
+		struct obj *otmp2;
 		long unwornmask;
 
 		/* Don't steal worn items, and downweight wielded items */
@@ -2512,18 +2511,18 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	} else if(arti_threeHead(otmp) && youdefend){
 		int extrahits = 2;
-		int monAC, extrahit=1, tmp;
-		tmp = AC_VALUE(u.uac) + 10;		/* tmp ~= 0 - 20 */
-		tmp += magr->m_lev;
-		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) tmp += u.chokhmah;
-		if(multi < 0) tmp += 4;
+		int monAC, extrahit=1;
+		monAC = AC_VALUE(u.uac) + 10;		/* monAC ~= 0 - 20 */
+		monAC += magr->m_lev;
+		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) monAC += u.chokhmah;
+		if(multi < 0) monAC += 4;
 		if((Invis && !perceives(magr->data)) || is_blind(magr))
-			tmp -= 2;
-		if(magr->mtrapped) tmp -= 2;
-		if(tmp <= 0) tmp = 1;
+			monAC -= 2;
+		if(magr->mtrapped) monAC -= 2;
+		if(monAC <= 0) monAC = 1;
 
 		while(extrahits--){
-			if(u.uswallow || tmp > rnd(20)){
+			if(u.uswallow || monAC > rnd(20)){
 				*dmgptr += dmgval(otmp, mdef, 0);
 				extrahit++;
 			}
@@ -2769,7 +2768,7 @@ arti_invoke(obj)
 	if(obj->otyp == CRYSTAL_BALL)
 	    use_crystal_ball(obj);
 	else
-	    pline(nothing_happens);
+	    pline1(nothing_happens);
 	return 1;
     }
 
@@ -2982,7 +2981,7 @@ arti_invoke(obj)
 			rloco(obj);
 			pline("%s teleports without you.",xname(obj));
 		}else{
-			pline("%s shakes for an instant.");
+			pline("%s shakes for an instant.",xname(obj));
 		}
 	break;
 #ifdef CONVICT
@@ -3265,7 +3264,6 @@ arti_invoke(obj)
 			else {
 				int energy, damage, n;
 				int role_skill;
-				boolean confused = (Confusion != 0);
 				struct obj *pseudo;
 				coord cc;
 
@@ -3344,7 +3342,7 @@ arti_invoke(obj)
               You("may summon a stinking cloud.");
                pline("Where do you want to center the cloud?");
                if (getpos(&cc, TRUE, "the desired position") < 0) {
-                   pline(Never_mind);
+                   pline1(Never_mind);
                    obj->age = 0;
                    return 0;
                }
@@ -3442,9 +3440,7 @@ arti_invoke(obj)
 		You_hear("a voice shouting\"By your order, Sah!\"");
 		if (getdir((char *)0) && (u.dx || u.dy)){
 		    struct obj *otmp;
-			int i, x, y;
-			x =  u.ux;
-			y = u.uy;
+			int i;
 			for(i = 12; i > 0; i--){
 				int xadj=0;
 				int yadj=0;
@@ -3532,7 +3528,6 @@ arti_invoke(obj)
 	break;
 	case QUAKE:{
 				register struct monst *mtmp, *mtmp2;
-				int gonecnt = 0;
 				pline("For a moment, you feel a crushing weight settle over you.");
 				for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 					mtmp2 = mtmp->nmon;
@@ -3542,8 +3537,8 @@ arti_invoke(obj)
 					}
 				}
 				pline_The("entire dungeon is quaking around you!");
-				do_earthquake(u.ulevel / 4 + 1);
-				do_earthquake(u.ulevel / 3 + 1);
+				do_earthquake(u.ulevel / 4 + 1, obj->cursed, (struct monst *)0);
+				do_earthquake(u.ulevel / 3 + 1, obj->cursed, (struct monst *)0);
 				awaken_monsters(ROWNO * COLNO);
 			   }
 	break;
@@ -3551,13 +3546,13 @@ arti_invoke(obj)
 		int starfall = rnd(u.ulevel/10+1), x, y, n;
 		coord cc;
 		verbalize("Even Stars Fall");
-		for (starfall; starfall > 0; starfall--){
+		for (; starfall > 0; starfall--){
 			x = rn2(COLNO-2)+1;
 			y = rn2(ROWNO-2)+1;
 			cc.x=x;cc.y=y;
 			n=rnd(4)+1;
 			explode(x, y,
-				8, //1 = AD_PHYS, explode uses nonstandard damage type flags...
+				8, //8 = AD_PHYS, explode uses nonstandard damage type flags...
 				d(5,6), 0,
 				EXPL_MUDDY);
 			while(n--) {
@@ -3591,7 +3586,6 @@ arti_invoke(obj)
 			cc.x=u.dx;cc.y=u.dy;
 			n=3;
 			while(n--) {
-				int type = d(1,3);
 				explode(u.dx, u.dy,
 					4, //4 = AD_DISN, explode uses nonstandard damage type flags...
 					u.ulevel + 10 + spell_damage_bonus(), 0,
@@ -3964,7 +3958,7 @@ arti_invoke(obj)
 				} else pline("Your weapon rattles faintly.");
 			}
 			else {
-				You_feel("foolish.", the(xname(obj)));
+				You_feel("foolish.");
 				exercise(A_WIS, FALSE);
 				if( (d(1,20)-10) > 0 ){
 					obj->spe--;//lose charge for false invoke
@@ -4169,7 +4163,6 @@ arti_invoke(obj)
 				set_occupation(read_necro, "studying", 0);
 			}
 			else if(yn(obj->ovar1 ? "Study the parts you don't yet understand?" : "Study the text?") == 'y'){
-				int chance = 0;
 				u.uconduct.literate++;
 				You("struggle to understand the mad scrawlings of Abdul Alhazred and the horrid, rushed annotations of those who came after him.");
 				necro_effect = SELECT_STUDY;
@@ -4217,7 +4210,6 @@ arti_invoke(obj)
 				set_occupation(read_lost, "studying", 0);
 			}
 			else if(yn("Risk your name amongst the Lost?") == 'y'){
-				int chance = 0;
 				u.uconduct.literate++;
 				You("open your mind to the cold winds of the Void.");
 				lostname = QUEST_SPIRITS;
@@ -4383,7 +4375,6 @@ arti_invoke(obj)
 							pline("The %s glows and then fades.", obj->oartifact == ART_SCEPTRE_OF_LOLTH ? "Sceptre" : "Rod");
 						} else {
 							int dmg = d(2,8);
-							int rcvr;
 							if (resists_drli(mtmp)){
 								shieldeff(mtmp->mx, mtmp->my);
 					break;
@@ -4410,7 +4401,6 @@ arti_invoke(obj)
 							You("swing wildly.");
 						} else {
 							int dmg = d(5,6);
-							int rcvr;
 							if (resists_poison(mtmp)){
 								shieldeff(mtmp->mx, mtmp->my);
 					break;
@@ -4495,8 +4485,7 @@ arti_invoke(obj)
 					break;
 					/*These effects are limited by timeout*/
 					case COMMAND_BELL:{
-						boolean wakem = FALSE,
-							invoking = invocation_pos(u.ux, u.uy) && !On_stairs(u.ux, u.uy);
+						boolean invoking = invocation_pos(u.ux, u.uy) && !On_stairs(u.ux, u.uy);
 						You("ring %s.", the(xname(obj)));
 						
 						if (Underwater) {
@@ -4518,7 +4507,7 @@ arti_invoke(obj)
 							mm.y = u.uy;
 							pline("Graves open around you...");
 							mkundead(&mm, FALSE, NO_MINVENT);
-							wakem = TRUE;
+							wake_nearby();
 
 						} else  if (invoking) {
 							pline("%s an unsettling shrill sound...",
@@ -4527,7 +4516,7 @@ arti_invoke(obj)
 							amii_speaker( obj, "aefeaefeaefeaefeaefe", AMII_LOUDER_VOLUME );
 #endif
 							u.voidChime = 5;
-							wakem = TRUE;
+							wake_nearby();
 						} else if (obj->blessed) {
 							int res = 0;
 
@@ -4623,7 +4612,7 @@ arti_invoke(obj)
 							boolean maanze = FALSE;
 							
 							You("raise the Annulus into the %s, and it releases a rapidly-expanding ring of cerulean energy.", Underwater ? "water" : "air");
-							for(mtmp; mtmp; mtmp = ntmp){
+							for(; mtmp; mtmp = ntmp){
 								ntmp = mtmp->nmon;
 								if(telepathic(mtmp->data) && couldsee(mtmp->mx,mtmp->my)){
 									if(mtmp->data == &mons[PM_LUGRIBOSSK]) maanze = TRUE;
@@ -6146,11 +6135,7 @@ read_necro(VOID_ARGS)
 STATIC_PTR int
 read_lost(VOID_ARGS)
 {
-	struct permonst *pm;
-	struct monst *mtmp = 0;
 	int i, numSlots;
-	short booktype;
-	char splname[BUFSZ];
 
 	if (Confusion) {		/* became confused while learning */
 //	    (void) confused_book(book);
