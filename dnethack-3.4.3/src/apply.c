@@ -1563,12 +1563,12 @@ dorub()
 		update_inventory();
 	    } else if (rn2(2) && !Blind)
 		You("see a puff of smoke.");
-	    else pline(nothing_happens);
+	    else pline1(nothing_happens);
 	} else if (obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_IRON_HELM) {
 	    /* message from Adventure */
 	    pline("Rubbing the electric lamp is not particularly rewarding.");
 	    pline("Anyway, nothing exciting happens.");
-	} else pline(nothing_happens);
+	} else pline1(nothing_happens);
 	return 1;
 }
 
@@ -1702,7 +1702,7 @@ int magic; /* 0=Physical, otherwise skill level */
 				if(bootdamage > uarmf->spe){
 					claws_destroy_arm(uarmf);
 				}else{
-					for(bootdamage; bootdamage >= 0; bootdamage--) drain_item(uarmf);
+					for(; bootdamage >= 0; bootdamage--) drain_item(uarmf);
 					Your("boots are damaged!");
 				}
 			}
@@ -1941,7 +1941,7 @@ struct obj *obj;
 	// }
 
 	if (trouble_count == 0) {
-	    pline(nothing_happens);
+	    pline1(nothing_happens);
 	    return;
 	} else if (trouble_count > 1) {		/* shuffle */
 	    int i, j, k;
@@ -2430,7 +2430,7 @@ struct obj *sensor;
 					You("scan the %s thoroughly.  It seems it is %s.", ceiling(u.ux,u.uy), an(ceiling(u.ux,u.uy)));
 				} else if(u.dz > 0) {
 					pobj = level.objects[u.ux][u.uy];
-					for(pobj; pobj; pobj = pobj->nexthere){
+					for(; pobj; pobj = pobj->nexthere){
 						/* target object has now been "seen (up close)" */
 						pobj->dknown = 1;
 						if (Is_container(pobj) || pobj->otyp == STATUE) {
@@ -2451,7 +2451,7 @@ struct obj *sensor;
 					struct monst *mat = m_at(u.ux+u.dx,u.uy+u.dy);
 					if(mat) probe_monster(mat);
 					pobj = level.objects[u.ux+u.dx][u.uy+u.dy];
-					for(pobj; pobj; pobj = pobj->nexthere){
+					for(; pobj; pobj = pobj->nexthere){
 						/* target object has now been "seen (up close)" */
 						pobj->dknown = 1;
 						if (Is_container(pobj) || pobj->otyp == STATUE) {
@@ -3011,8 +3011,7 @@ use_droven_cloak(optr)
 struct obj **optr;
 {
 	struct obj *otmp = *optr;
-	int ttyp, tmp, rx, ry;
-	boolean gone = FALSE;
+	int rx, ry;
 	const char *what = (char *)0;
 	struct trap *ttmp;
 	struct monst *mtmp;
@@ -3075,7 +3074,6 @@ struct obj **optr;
 			else if(mtmp) mintrap(mtmp);
 		} else pline("The cloak cannot spin a web there!");
 		if(++otmp->ovar1 > 3){
-			gone = TRUE;
 			useup(otmp);
 			*optr = 0;
 			pline("The thoroughly tattered cloak falls to pieces");
@@ -3092,10 +3090,7 @@ STATIC_OVL int
 use_darkweavers_cloak(otmp)
 struct obj *otmp;
 {
-	int ttyp, tmp, rx, ry;
-	boolean gone = FALSE;
 	const char *what = (char *)0;
-	struct monst *mtmp;
 
 	if (nohands(youmonst.data))
 	    what = "without hands";
@@ -4093,7 +4088,7 @@ pick_carvee()
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for(otmp = invent; otmp; otmp = otmp->nobj){
 		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && otmp->oartifact != ART_BOW_OF_SKADI){
-			Sprintf(buf, doname(otmp));
+			Sprintf1(buf, doname(otmp));
 			any.a_char = otmp->invlet;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
 				otmp->invlet, 0, ATR_NONE, buf,
@@ -4232,7 +4227,7 @@ struct obj **optr;
 				return 0;
 		}
 		x = u.ux + u.dx; y = u.uy + u.dy;
-		if(mm = m_at(x,y)){
+		if((mm = m_at(x,y))){
 			if(is_clockwork(mm->data)){
 				if(obj->otyp == CLOCKWORK_COMPONENT){
 					if(	mm->data != &mons[PM_GOLDEN_HEART] && 
