@@ -814,7 +814,7 @@ gcrownu()
 		strcpy(crown_msg, "I proclame thee...  Nasu no ");
 		strcat(crown_msg, plname);
 		strcat(crown_msg, "!");
-		verbalize(crown_msg);
+		verbalize1(crown_msg);
 	} else {
 		u.uevent.uhand_of_elbereth = 1;
 		verbalize("I dub thee...  The Arm of the Law!");
@@ -1571,6 +1571,17 @@ pleased(g_align)
 			break;
 		}
 	}
+	
+	/*Scare hostile monsters on level*/
+	{
+		struct monst *tmpm;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(!tmpm->mpeaceful){
+				monflee(tmpm, 77, TRUE, TRUE);
+			}
+		}
+	}
+	
 	u.ublesscnt = rnz(350);
 	kick_on_butt = u.uevent.udemigod ? 1 : 0;
 #ifdef ELBERETH
