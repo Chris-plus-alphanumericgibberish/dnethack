@@ -3712,7 +3712,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     int spell_type;
 
 	if(
-		uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN
+		uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))
 	){
 		switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
 			case P_BASIC:
@@ -3920,8 +3920,13 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				pline("%s hits you!", The(fltxt));
 				if (Reflecting && (
 						(!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || 
-						(uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) ||
-						(uarm && (uarm->otyp == SILVER_DRAGON_SCALE_MAIL || uarm->otyp == SILVER_DRAGON_SCALES || uarm->otyp == SILVER_DRAGON_SCALE_SHIELD)) ||
+						(uwep && is_lightsaber(uwep) && uwep->lamplit && 
+							((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
+							 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
+							)
+						) ||
+						(uarm && (uarm->otyp == SILVER_DRAGON_SCALE_MAIL || uarm->otyp == SILVER_DRAGON_SCALES || uarm->otyp == JUMPSUIT)) ||
+						(uarms && (uarms->otyp == SILVER_DRAGON_SCALE_SHIELD)) ||
 						(uwep && uwep->oartifact == ART_DRAGONLANCE)
 				)) {
 					if (!Blind) {

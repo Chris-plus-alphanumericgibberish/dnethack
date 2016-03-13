@@ -1146,11 +1146,12 @@ int thrown;
 					) {
 						if(P_SKILL(weapon_type(uwep)) >= P_BASIC){
 							if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
-								if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_JUYO)
+								if(u.fightingForm == FFORM_SHII_CHO || 
+								 (u.fightingForm == FFORM_JUYO && (!uarm || is_light_armor(uarm)))
 								) use_skill(FFORM_JUYO,1);
 							}
 						}
-						if(u.fightingForm == FFORM_JUYO){
+						if(u.fightingForm == FFORM_JUYO && (!uarm || is_light_armor(uarm))){
 							if(stationary(mdat)) You("rain blows on the immobile %s!", mon_nam(mon));
 							else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
@@ -1188,7 +1189,9 @@ int thrown;
 							}
 							hittxt = TRUE;
 						}
-					} else if(u.fightingForm == FFORM_JUYO && rnd(50) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))){
+					} else if(u.fightingForm == FFORM_JUYO && (!uarm || is_light_armor(uarm)) && 
+						rnd(50) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))
+					){
 						if (canspotmon(mon))
 							pline("%s %s from your powerful strike!", Monnam(mon),
 							  makeplural(stagger(mon->data, "stagger")));
@@ -1201,7 +1204,7 @@ int thrown;
 						}
 						hittxt = TRUE;
 					}
-					if(u.fightingForm == FFORM_DJEM_SO){
+					if(u.fightingForm == FFORM_DJEM_SO && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 						if(rnd(mon->mattackedu ? 20 : 100) < min(P_SKILL(FFORM_DJEM_SO), P_SKILL(weapon_type(uwep)))){
 							if (canspotmon(mon))
 								pline("%s %s from your powerful strike!", Monnam(mon),
@@ -1668,16 +1671,24 @@ defaultvalue:
 		if(!thrown && uwep && is_lightsaber(uwep) && uwep->lamplit && P_SKILL(wtype) >= P_BASIC){
 			use_skill(FFORM_SHII_CHO,1);
 			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
-				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_MAKASHI) &&
+				if((u.fightingForm == FFORM_SHII_CHO || 
+					 (u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
+					) &&
 					!uarms && !u.twoweap && wtype == P_SABER
 				) use_skill(FFORM_MAKASHI,1);
-				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_ATARU) &&
+				if((u.fightingForm == FFORM_SHII_CHO || 
+					 (u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm)))
+					) &&
 					u.lastmoved + 1 >= monstermoves
 				) use_skill(FFORM_ATARU,1);
-				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_DJEM_SO) &&
+				if((u.fightingForm == FFORM_SHII_CHO || 
+					 (u.fightingForm == FFORM_DJEM_SO && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
+					) &&
 					mon->mattackedu
 				) use_skill(FFORM_DJEM_SO,1);
-				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_NIMAN) &&
+				if((u.fightingForm == FFORM_SHII_CHO || 
+					 (u.fightingForm == FFORM_NIMAN && (!uarm || is_light_armor(uarm)))
+					) &&
 					u.lastcast >= monstermoves
 				) use_skill(FFORM_NIMAN,1);
 			}
