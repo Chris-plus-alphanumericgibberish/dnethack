@@ -2233,13 +2233,14 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_BARAGE:
 			You("get ready to fire a barrage.");
-			barage = TRUE; //state variable
-			if(uquiver) throw_obj(uquiver, 0, 1);
-			else{
+			if(uquiver){
+				barage = TRUE; //state variable
+				throw_obj(uquiver, 0, 1);
+				barage = FALSE;
+			} else {
 				You("have nothing quivered.");
 				return;
 			}
-			barage = FALSE;
 		break;
 		case PWR_BREATH_POISON:{
 	        coord cc;
@@ -2247,7 +2248,7 @@ spiriteffects(power, atme)
 			cc.x = u.ux;
 			cc.y = u.uy;
 			if (getpos(&cc, TRUE, "the desired position") < 0) {
-				pline(Never_mind);
+				pline1(Never_mind);
 				return 0;
 			}
 			if (!cansee(cc.x, cc.y) || distu(cc.x, cc.y) >= 32) {
