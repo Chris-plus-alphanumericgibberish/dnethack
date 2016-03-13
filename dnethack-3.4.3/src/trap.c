@@ -602,7 +602,10 @@ unsigned trflags;
 	nomul(0, NULL);
 
 	if(
-		uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SHIEN || u.fightingForm == FFORM_SORESU)
+		uwep && is_lightsaber(uwep) && uwep->lamplit && 
+			((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
+			 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
+			)
 	){
 		switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
 			case P_BASIC:
