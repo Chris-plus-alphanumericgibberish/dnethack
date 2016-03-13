@@ -308,6 +308,12 @@ find_to_hit_rolls(mtmp,ptmp,pweptmp,ptchtmp)
 		tmp += weapon_hit_bonus(0); /*Add to hit bonus for martial arts, if you aren't wearing body armor.*/
 	}
 	
+	if(!uwep && Race_if(PM_HALF_DRAGON)){
+		/*Claws get large bonus to hit thanks to instinct*/
+		weptmp += 5;
+		tmp += 5;
+	}
+	
     static int fgloves = 0;
     if (!fgloves) fgloves = find_fgloves();
     if (uarmf && uarmf->otyp == fgloves && uwep && !bimanual(uwep) && !uarms) weptmp+=3;
