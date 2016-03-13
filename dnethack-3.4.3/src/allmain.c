@@ -921,10 +921,25 @@ moveloop()
 			}
 		    }
 			if(u.sealsActive&SEAL_BUER){
+				int dsize = spiritDsize(), regenrate = dsize/3, remainderrate = dsize%3;
 				if(Upolyd && u.mh < u.mhmax){
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) u.mh++;
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance){
+						if(regenrate) u.mh+=regenrate;
+						if(remainderrate && moves%3 < remainderrate) u.mh+=1;
+					} else {
+						if(regenrate && !(moves%4)) u.mh+=regenrate;
+						if(remainderrate && moves%12 < remainderrate) u.mh+=1;
+					}
+					if(u.mh > u.mhmax) u.mh = u.mhmax;
 				} else if(u.uhp < u.uhpmax){
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) u.uhp++;
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance){
+						if(regenrate) u.uhp+=regenrate;
+						if(remainderrate && moves%3 < remainderrate) u.uhp+=1;
+					} else {
+						if(regenrate && !(moves%4)) u.uhp+=regenrate;
+						if(remainderrate && moves%12 < remainderrate) u.uhp+=1;
+					}
+					if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 				}
 			}
 
