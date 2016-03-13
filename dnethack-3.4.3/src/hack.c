@@ -1175,7 +1175,7 @@ domove()
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
 		else if(attack(mtmp)){
-			if(uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_ATARU){
+			if(uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				coord cc;
 				if(!u.utrap && tt_findadjacent(&cc, mtmp) && (cc.x != u.ux || cc.y != u.uy)){
 					You("somersault to a new location!");
