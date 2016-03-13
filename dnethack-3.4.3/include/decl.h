@@ -496,6 +496,16 @@ E NEARDATA char **viz_array;		/* could see/in sight row pointers */
 /* Window system stuff */
 E NEARDATA winid WIN_MESSAGE, WIN_STATUS;
 E NEARDATA winid WIN_MAP, WIN_INVEN;
+
+/* pline (et al) for a single string argument (suppress compiler warning) */
+#define pline1(cstr) pline("%s", cstr)
+#define Your1(cstr) Your("%s", cstr)
+#define You1(cstr) You("%s", cstr)
+#define verbalize1(cstr) verbalize("%s", cstr)
+#define You_hear1(cstr) You_hear("%s", cstr)
+#define Sprintf1(buf, cstr) Sprintf(buf, "%s", cstr)
+#define panic1(cstr) panic("%s", cstr)
+
 E char toplines[];
 #ifndef TCAP_H
 E struct tc_gbl_data {	/* also declared in tcap.h */
