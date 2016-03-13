@@ -1010,8 +1010,8 @@ god_minions(gptr)
 			role = roles[i].malenum;
 			galign = A_CHAOTIC;
 		}
-		
 	}
+		
 	if(role != -1) switch(role){
 		case PM_ARCHEOLOGIST:
 			if(galign == A_LAWFUL) return LArc;
