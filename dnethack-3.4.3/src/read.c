@@ -908,7 +908,7 @@ forget_objects(percent)
 	for (i = 0; i < count; i++)
 	    forget_single_object(indices[i]);
 	
-	if(rn2(100 < percent)) u.uevent.uread_necronomicon = 0; /* potentially forget having read necronomicon */
+	if(rn2(100) < percent) u.uevent.uread_necronomicon = 0; /* potentially forget having read necronomicon */
 }
 
 
