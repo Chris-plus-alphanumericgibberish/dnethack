@@ -2385,8 +2385,9 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_REFILL_LANTERN:
 			if(uwep && (uwep->otyp == OIL_LAMP || is_lightsaber(uwep)) && !uwep->oartifact){
-				uwep->age += d(5,dsize) * 10;
-				if(uwep->age > 1500) uwep->age = 1500;
+				int multiplier = is_lightsaber(uwep) ? 100 : 1;
+				uwep->age += d(5,dsize) * 10 * multiplier;
+				if(uwep->age > 1500*multiplier) uwep->age = 1500*multiplier;
 				You("refill %s.",the(xname(uwep)));
 				if(uwep->lamplit){
 					end_burn(uwep, TRUE);
