@@ -181,11 +181,13 @@ static const char *haluMesg[] = {
 	"I see you...",
 		"...do you see me?",
 		"That was a mistake.",
-	"Everything dies.",
-	"What is lost might not be found.",
-	"What was drowned and washed away need never return.",
+	"What was drowned, and washed away, need never return.",
+		"Eternity is a lie.",
+		"Everything dies.",
+		"What is lost might not be found.",
+		"And even if it all came back, it would never be the same.",
 	
-	"Game Balance: Closing barn doors since day two.",
+	"Department of Game Balance: Closing barn doors since day two.",
 	
 	"Listen at us, won't you?", /* All Our Friends Are Dead */
 		"Share with us your head",
@@ -278,6 +280,7 @@ static const char *haluMesg[] = {
 		"Made men by the blood.",
 		"Undone by the blood.",
 		"Fear the old blood.",
+		"The Great Ones are sympathetic in spirit, and often answer when called upon.",
 	"Even false things are true",	"FIVE TONS OF FLAX!",	"Fnord", /*Discordianism*/
 	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
 		"This thing all things devours.",
@@ -384,6 +387,9 @@ static const char *haluMesg[] = {
 		"Another world awaits. ...And you're going!",
 		"You have seven days.",
 	"But the future refused to change.", /*Chrono Trigger*/
+	"WHEN ALL ELSE FAILS USE FIRE",
+	"Don't you see? All of you... YOUR GODS DESTROYED YOU",
+		"The wind... It is blowing...",
 	"I wonder... If you do the right thing... Does it really make... everybody... happy?",/*Majora's Mask*/
 		"Your friends... What kind of... people are they? I wonder... Do these people... think of you... as a friend?",
 		"What makes you happy? I wonder...what makes you happy...does it make...others happy, too?",
