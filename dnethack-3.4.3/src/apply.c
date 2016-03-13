@@ -2474,6 +2474,7 @@ struct obj *sensor;
 		}
 	}
 	sensor->spe--;
+	return 1;
 }
 
 STATIC_OVL int
@@ -3103,7 +3104,7 @@ struct obj *otmp;
 	    what = "underwater";
 	if (what) {
 	    You_cant("release darkness %s!",what);
-	    return;
+	    return 0;
 	}
 	
 	if(!levl[u.ux][u.uy].lit) {
