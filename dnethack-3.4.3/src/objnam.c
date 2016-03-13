@@ -238,7 +238,7 @@ nextobuf()
 	return bufs[bufidx];
 }
 
-char *
+const char *
 lightsaber_colorText(otmp)
 struct obj *otmp;
 {

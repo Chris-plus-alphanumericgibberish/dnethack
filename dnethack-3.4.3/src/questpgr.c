@@ -393,7 +393,7 @@ struct qtmsg *qt_msg;
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
 	    (void) dlb_fgets(in_line, 80, msg_file);
 	    convert_line();
-	    pline(out_line);
+	    pline1(out_line);
 	}
 
 }
@@ -728,56 +728,61 @@ neutral_montype()
 		int num = 0;
 		if(rn2(20)) return (struct permonst *)0; /*GREATLY reduce monster generation*/
 		if(chance < 2){
-				num = d(2,3);
-				for(num; num >= 0; num--) !(mvitals[PM_HUNTING_HORROR].mvflags & G_GENOD) ? 
-										makemon(&mons[PM_HUNTING_HORROR], xupstair, yupstair, MM_ADJACENTOK):
-										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			for (num = d(2,3); num >= 0; num--) {
+				if (!(mvitals[PM_HUNTING_HORROR].mvflags & G_GENOD))
+					makemon(&mons[PM_HUNTING_HORROR], xupstair, yupstair, MM_ADJACENTOK);
+				else
+					makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
+			}
+			return (struct permonst *)0;
 		}
 		else if(chance < 6){
-				num = d(2,4);
-				for(num; num >= 0; num--) !(mvitals[PM_BYAKHEE].mvflags & G_GENOD) ?
-										makemon(&mons[PM_BYAKHEE], xupstair, yupstair, MM_ADJACENTOK):
-										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			for (num = d(2,4); num >= 0; num--) {
+				if (!(mvitals[PM_BYAKHEE].mvflags & G_GENOD))
+					makemon(&mons[PM_BYAKHEE], xupstair, yupstair, MM_ADJACENTOK);
+				else
+					makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
+			}
+			return (struct permonst *)0;
 		}
 		else if(chance < 8){
-				!(mvitals[PM_SHOGGOTH].mvflags & G_GENOD) ? 
-						makemon(&mons[PM_SHOGGOTH], xupstair, yupstair, MM_ADJACENTOK):
-						makemon(mkclass(S_BLOB, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			if (!(mvitals[PM_SHOGGOTH].mvflags & G_GENOD))
+				makemon(&mons[PM_SHOGGOTH], xupstair, yupstair, MM_ADJACENTOK);
+			else
+				makemon(mkclass(S_BLOB, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
+			return (struct permonst *)0;
 		}
 		else if(chance < 10){ /*Deep ones can't be genocided*/
-				makemon(&mons[PM_DEEPEST_ONE], xupstair, yupstair, MM_ADJACENTOK);
-				num = rnd(4);
-				for(num; num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], xupstair, yupstair, MM_ADJACENTOK);
-				num = rn1(2,1);
-				for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			makemon(&mons[PM_DEEPEST_ONE], xupstair, yupstair, MM_ADJACENTOK);
+			for (num = rnd(4); num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], xupstair, yupstair, MM_ADJACENTOK);
+			for (num = rn1(2,1); num >= 0; num--) makemon(&mons[PM_DEEP_ONE], xupstair, yupstair, MM_ADJACENTOK);
+			return (struct permonst *)0;
 		}
 		else if(chance < 30){
-				num = rnd(3);
-				for(num; num >= 0; num--) !(mvitals[PM_MASTER_MIND_FLAYER].mvflags & G_GENOD) ?
-										makemon(&mons[PM_MASTER_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK):
-										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			for (num = rnd(3); num >= 0; num--) {
+				if (!(mvitals[PM_MASTER_MIND_FLAYER].mvflags & G_GENOD))
+					makemon(&mons[PM_MASTER_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK);
+				else
+					makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
+			}
+			return (struct permonst *)0;
 		}
 		else if(chance < 50){
-				num = rn1(2,2);
-				for(num; num >= 0; num--) !(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD) ?
-										makemon(&mons[PM_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK):
-										makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			for (num = rn1(2,2); num >= 0; num--) {
+				if (!(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD))
+					makemon(&mons[PM_MIND_FLAYER], xupstair, yupstair, MM_ADJACENTOK);
+				else
+					makemon(mkclass(S_UMBER, G_NOHELL|G_HELL), xupstair, yupstair, MM_ADJACENTOK);
+			}
+			return (struct permonst *)0;
 		}
 		else if(chance < 70){/*Deep ones can't be genocided*/
-				num = rnd(6);
-				for(num; num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			for (num = rnd(6); num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], xupstair, yupstair, MM_ADJACENTOK);
+			return (struct permonst *)0;
 		}
 		else{/*Deep ones can't be genocided*/
-				num = rn1(4,3);
-				for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], xupstair, yupstair, MM_ADJACENTOK);
-				return (struct permonst *)0;
+			for (num = rn1(4,3); num >= 0; num--) makemon(&mons[PM_DEEP_ONE], xupstair, yupstair, MM_ADJACENTOK);
+			return (struct permonst *)0;
 		}
 	}
 	return (struct permonst *)0;

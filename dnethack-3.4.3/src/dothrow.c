@@ -7,6 +7,8 @@
 #include "hack.h"
 #include "edog.h"
 
+STATIC_DCL int FDECL(fire_blaster, (struct obj *, int));
+STATIC_DCL int FDECL(blast_self, (struct obj *));
 STATIC_DCL void NDECL(autoquiver);
 STATIC_DCL int FDECL(gem_accept, (struct monst *, struct obj *));
 STATIC_DCL void FDECL(tmiss, (struct obj *, struct monst *));
@@ -97,8 +99,8 @@ int thrown;
 		The(xname(obj)));
 		return(0);
 	}
-	if ((obj->oartifact == ART_MJOLLNIR || 
-			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) && ACURR(A_STR) < STR19(25)
+	if (((obj->oartifact == ART_MJOLLNIR ||
+			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) && ACURR(A_STR) < STR19(25))
 	   || (is_boulder(obj) && !throws_rocks(youmonst.data) && !(u.sealsActive&SEAL_YMIR))) {
 		pline("It's too heavy.");
 		return(1);
@@ -257,7 +259,7 @@ int thrown;
 }
 
 
-STATIC_OVL char *Ronnie_ray_gun[] = {
+STATIC_OVL const char * const Ronnie_ray_gun[] = {
 	"When you can't make them see the light, make them feel the heat.",
 	"Every man must be free to become whatever God intends he should become.",
 	"There you go again.",
@@ -325,7 +327,7 @@ int shots, shotlimit;
 	
 	
 	while(shots){
-		if(Hallucination) pline(Ronnie_ray_gun[rn2(SIZE(Ronnie_ray_gun))]);
+		if(Hallucination) pline1(Ronnie_ray_gun[rn2(SIZE(Ronnie_ray_gun))]);
 		raygun->ovar1 -= cost;
 		buzz(raygun->altmode+40, 6, u.ux, u.uy, u.dx, u.dy, objects[(raygun->otyp)].oc_range,0);
 		shots--;
@@ -334,10 +336,11 @@ int shots, shotlimit;
 	if(clicky){
 		You("push the firing stud, but nothing happens.");
 	}
+	return 1;
 }
 
 /* Fire the selected object, asking for direction */
-int
+STATIC_OVL int
 fire_blaster(blaster, shotlimit)
 struct obj *blaster;
 int shotlimit;
@@ -434,9 +437,11 @@ int shotlimit;
 	return 1;
 }
 
-int
-blast_self()
+STATIC_OVL int
+blast_self(otmp)
+	struct obj *otmp;
 {
+	pline("TODO: blast_self()");
 	return 0;
 }
 
@@ -1097,7 +1102,7 @@ boolean hitsroof;
 			pline("It blinds you!");
 		    u.ucreamed += blindinc;
 		    make_blinded(Blinded + (long)blindinc, FALSE);
-		    if (!Blind) Your(vision_clears);
+		    if (!Blind) Your1(vision_clears);
 		}
 		break;
 	default:

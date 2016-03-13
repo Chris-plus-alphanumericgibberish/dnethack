@@ -873,8 +873,7 @@ dobreathe(mdat)
 }
 
 int
-doelementalbreath(mdat)
-	struct permonst *mdat;
+doelementalbreath()
 {
 	struct monst *mon = 0;
 	int type;

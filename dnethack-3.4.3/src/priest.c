@@ -457,8 +457,8 @@ register int roomno;
 				msg1 = buf;
 			}
 			if (can_speak) {
-				verbalize(msg1);
-				if (msg2) verbalize(msg2);
+				verbalize1(msg1);
+				if (msg2) verbalize1(msg2);
 			}
 			if(!sanctum) {
 				/* !tended -> !shrined */
@@ -587,7 +587,7 @@ register struct monst *priest;
 	/* priests don't chat unless peaceful and in their own temple */
 	if(!histemple_at(priest,priest->mx,priest->my) ||
 		 !priest->mpeaceful || !priest->mcanmove || priest->msleeping) {
-	    static const char *cranky_msg[3] = {
+	    static const char * const cranky_msg[3] = {
 		"Thou wouldst have words, eh?  I'll give thee a word or two!",
 		"Talk?  Here is what I have to say!",
 		"Pilgrim, I would speak no longer with thee."
@@ -600,7 +600,7 @@ register struct monst *priest;
 		priest->mcanmove = 1;
 	    }
 	    priest->mpeaceful = 0;
-	    verbalize(cranky_msg[rn2(3)]);
+	    verbalize1(cranky_msg[rn2(3)]);
 	    return;
 	}
 
@@ -664,12 +664,12 @@ register struct monst *priest;
 		Strcpy(class_list, tools);
 		key = getobj(class_list, "wind with");
 		if (!key){
-			pline(Never_mind);
+			pline1(Never_mind);
 			return;
 		}
 		turns = ask_turns(priest, u.ulevel*10+100, 0);
 		if(!turns){
-			pline(Never_mind);
+			pline1(Never_mind);
 			return;
 		}
 		start_clockwinding(key, priest, turns);

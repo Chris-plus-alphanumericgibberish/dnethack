@@ -4,6 +4,7 @@
 
 #include "hack.h"
 
+STATIC_DCL void FDECL(update_mon_intrinsic, (struct monst *,struct obj *,int,BOOLEAN_P,BOOLEAN_P));
 STATIC_DCL void FDECL(m_lose_armor, (struct monst *,struct obj *));
 STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P));
 STATIC_DCL int NDECL(def_beastmastery);
@@ -279,6 +280,7 @@ struct obj *obj;	/* item to make known if effect can be seen */
     }
 }
 
+STATIC_OVL void
 update_mon_intrinsic(mon, obj, which, on, silently)
 struct monst *mon;
 struct obj *obj;
@@ -379,6 +381,7 @@ boolean on, silently;
 {
     int unseen;
     int which = (int) objects[obj->otyp].oc_oprop;
+    long all_worn = ~0L; /* clang lint */
 	
     unseen = !canseemon(mon);
     if (!which) goto maybe_blocks;
@@ -407,7 +410,7 @@ boolean on, silently;
     /* obj->owornmask has been cleared by this point, so we can't use it.
        However, since monsters don't wield armor, we don't have to guard
        against that and can get away with a blanket worn-mask value. */
-    switch (w_blocks(obj,~0L)) {
+    switch (w_blocks(obj,all_worn)) {
      case INVIS:
 	mon->invis_blkd = on ? 1 : 0;
 	mon->minvis = on ? 0 : mon->perminvis;

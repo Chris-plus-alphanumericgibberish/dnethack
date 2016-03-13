@@ -684,7 +684,7 @@ xchar x, y;
 				if(bootdamage > uarmf->spe){
 					claws_destroy_arm(uarmf);
 				}else{
-					for(bootdamage; bootdamage >= 0; bootdamage--) drain_item(uarmf);
+					for(; bootdamage >= 0; bootdamage--) drain_item(uarmf);
 					Your("boots are damaged!");
 				}
 			}

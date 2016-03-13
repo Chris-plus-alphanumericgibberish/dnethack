@@ -264,6 +264,7 @@ NEARDATA struct permonst mons[] = {
 	MR_POISON|MR_FIRE, MR_POISON|MR_FIRE,
 	M1_ANIMAL|M1_NOHANDS|M1_OMNIVORE|M1_OVIPAROUS, M2_HOSTILE|M2_NASTY,
 	M3_INFRAVISIBLE, CLR_RED),
+*/
 /*
  * dogs & other canines
  */
@@ -1618,12 +1619,12 @@ NEARDATA struct permonst mons[] = {
 	M1_OVIPAROUS|M1_FLY|M1_ANIMAL|M1_NOHANDS|M1_POIS, M2_HOSTILE, M3_INFRAVISIBLE,
 	CLR_RED),
 /*
-‘Long we live and long we weave
+Long we live and long we weave
 Till we have filled this space.
 Then, as before, we will leave
 To hunt another place.
 Our task ends when the weak are gone.
-then fill new spaces with our spawn!’
+then fill new spaces with our spawn!
 -Planescape Monstrous Compendium
 */
     MON("bebelith", S_XAN, //14

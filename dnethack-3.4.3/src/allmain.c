@@ -1694,7 +1694,7 @@ printMons(){
 			resFlags(convbuf, mons[i].mconveys);
 			Sprintf(pbuf,"{{monster\n");
 			Sprintf(eos(pbuf)," |name=%s\n", mons[i].mname);
-			Sprintf(eos(pbuf)," |symbol={{%s|%c}}\n", colorstr, def_monsyms[mons[i].mlet]);
+			Sprintf(eos(pbuf)," |symbol={{%s|%c}}\n", colorstr, def_monsyms[(int)mons[i].mlet]);
 			Sprintf(eos(pbuf)," |tile=\n");
 			Sprintf(eos(pbuf)," |difficulty=%d\n", monstr[i]);
 			Sprintf(eos(pbuf)," |level=%d\n", mons[i].mlevel);
@@ -1704,7 +1704,7 @@ printMons(){
 			Sprintf(eos(pbuf)," |MR=%d\n", mons[i].mr);
 			Sprintf(eos(pbuf)," |align=%d\n", mons[i].maligntyp);
 			Sprintf(eos(pbuf)," |frequency=%d\n", (int)(mons[i].geno & G_FREQ));
-			Sprintf(eos(pbuf)," |genocidable=%s\n", (mons[i].geno & G_GENO != 0) ? "Yes":"No");
+			Sprintf(eos(pbuf)," |genocidable=%s\n", ((mons[i].geno & G_GENO) != 0) ? "Yes":"No");
 			Sprintf(eos(pbuf)," |attacks=%s\n", attkbuf);
 			Sprintf(eos(pbuf)," |weight=%d\n", (int) mons[i].cwt);
 			Sprintf(eos(pbuf)," |nutr=%d\n", (int) mons[i].cnutrit);
@@ -1786,7 +1786,7 @@ printMons(){
 				Sprintf(eos(pbuf)," |infravision=%s\n", infravision(ptr) ? "1":"");
 				Sprintf(eos(pbuf)," |infravisible=%s\n", infravisible(ptr) ? "1":"");
 				Sprintf(eos(pbuf)," |nohell=%s\n", (mons[i].geno & G_NOHELL) ? "1":"");
-				Sprintf(eos(pbuf)," |hell=%s\n", (mons[i].geno & G_HELL != 0) ? "1":"");
+				Sprintf(eos(pbuf)," |hell=%s\n", ((mons[i].geno & G_HELL) != 0) ? "1":"");
 				Sprintf(eos(pbuf)," |moria=\n");
 				Sprintf(eos(pbuf)," |sgroup=%s\n", (mons[i].geno & G_SGROUP) ? "1":"");
 				Sprintf(eos(pbuf)," |lgroup=%s\n", (mons[i].geno & G_LGROUP) ? "1":"");
@@ -1842,7 +1842,7 @@ resFlags(buf, rflags)
 		"[[level drain]]",
 		"[[disease]]"
 	};
-	Sprintf(buf,"");
+	// Sprintf(buf,""); //What was this for?
 	for(i = 0; i<10; i++){
 		if(rflags & (1 << i)){
 			if(!b){

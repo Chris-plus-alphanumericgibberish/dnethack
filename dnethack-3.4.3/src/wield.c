@@ -104,17 +104,18 @@ register struct obj *obj;
 	if (obj) {
 		unweapon = (obj->oclass == WEAPON_CLASS) ?
 				(is_launcher(obj) || is_ammo(obj) ||
-				is_missile(obj) || (is_pole(obj))
+				 is_missile(obj) ||
+				 (is_pole(obj)
 #ifdef STEED
-				&& !u.usteed
+				  && !u.usteed
 #endif
-				&& obj->otyp != AKLYS
-				&& obj->otyp != FORCE_PIKE
-				&& obj->oartifact != ART_WEBWEAVER_S_CROOK
-				&& obj->oartifact != ART_HEARTCLEAVER
-				&& obj->oartifact != ART_SOL_VALTIVA
-				&& obj->oartifact != ART_PEN_OF_THE_VOID)
-					: !is_weptool(obj);
+				  && obj->otyp != AKLYS
+				  && obj->otyp != FORCE_PIKE
+				  && obj->oartifact != ART_WEBWEAVER_S_CROOK
+				  && obj->oartifact != ART_HEARTCLEAVER
+				  && obj->oartifact != ART_SOL_VALTIVA
+				  && obj->oartifact != ART_PEN_OF_THE_VOID)) :
+				!is_weptool(obj);
 	} else
 		unweapon = TRUE;	/* for "bare hands" message */
 	update_inventory();

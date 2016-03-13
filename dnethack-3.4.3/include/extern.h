@@ -494,6 +494,7 @@ E void FDECL(impact_drop, (struct obj *,XCHAR_P,XCHAR_P,XCHAR_P));
 /* ### dothrow.c ### */
 
 E int FDECL(throw_obj, (struct obj *,int, int));
+E int FDECL(zap_raygun, (struct obj *,int,int));
 E int NDECL(dothrow);
 E int NDECL(dofire);
 E void FDECL(hitfloor, (struct obj *));
@@ -612,6 +613,7 @@ E void NDECL(vomit);
 E int FDECL(eaten_stat, (int,struct obj *));
 E void FDECL(food_disappears, (struct obj *));
 E void FDECL(food_substitution, (struct obj *,struct obj *));
+E boolean FDECL(bite_monster, (struct monst *));
 E void NDECL(fix_petrification);
 E void FDECL(consume_oeaten, (struct obj *,int));
 E boolean FDECL(maybe_finished_meal, (BOOLEAN_P));
@@ -667,10 +669,11 @@ E void FDECL(del_engr_at, (int,int));
 E void FDECL(del_ward_at, (int,int));
 E void FDECL(del_engr_ward_at, (int,int));
 E int NDECL(freehand);
+E int NDECL(doengward);
 E int NDECL(doengrave);
 E int NDECL(doward);
 E int NDECL(doseal);
-E int NDECL(doengward);
+E int NDECL(pick_seal);
 E void FDECL(save_engravings, (int,int));
 E void FDECL(rest_engravings, (int));
 E void FDECL(del_engr, (struct engr *));
@@ -1223,6 +1226,7 @@ E void NDECL(obj_sanity_check);
 
 /* ### mkroom.c ### */
 
+E void NDECL(mksepulcher);
 E struct mkroom * FDECL(pick_room,(BOOLEAN_P));
 E void FDECL(mkroom, (int));
 E void FDECL(fill_zoo, (struct mkroom *));
@@ -1265,6 +1269,7 @@ E void FDECL(relmon, (struct monst *));
 E struct obj *FDECL(mlifesaver, (struct monst *));
 E boolean FDECL(corpse_chance,(struct monst *,struct monst *,BOOLEAN_P));
 E void FDECL(mondead, (struct monst *));
+E void FDECL(spore_dies, (struct monst *));
 E void FDECL(mondied, (struct monst *));
 E void FDECL(monvanished, (struct monst *));
 E void FDECL(mongone, (struct monst *));
@@ -1497,6 +1502,7 @@ E boolean FDECL(munstone, (struct monst *,BOOLEAN_P));
 /* ### music.c ### */
 
 E void NDECL(awaken_soldiers);
+E void FDECL(do_earthquake, (int,BOOLEAN_P,struct monst *));
 E int FDECL(do_play_instrument, (struct obj *));
 #ifdef BARD
 E int FDECL(pet_can_sing, (struct monst *,BOOLEAN_P));
@@ -1546,6 +1552,7 @@ E int NDECL(find_opera_cloak);
 E int NDECL(find_signet_ring);
 E int NDECL(find_engagement_ring);
 E int NDECL(find_gold_ring);
+E int NDECL(find_silver_ring);
 E int NDECL(find_opal_ring);
 E int NDECL(find_clay_ring);
 E int NDECL(find_coral_ring);
@@ -1562,6 +1569,10 @@ E int NDECL(find_emerald_ring);
 E int NDECL(find_droven_ring);
 E boolean FDECL(isEngrRing, (short));
 E boolean FDECL(isSignetRing, (short));
+E int NDECL(find_ogloves);
+E int NDECL(find_tgloves);
+E int NDECL(find_pgloves);
+E int NDECL(find_fgloves);
 E void NDECL(oinit);
 E void FDECL(savenames, (int,int));
 E void FDECL(restnames, (int));
@@ -1575,7 +1586,7 @@ E void NDECL(objects_init);
 
 /* ### objnam.c ### */
 
-E char *FDECL(lightsaber_colorText, (struct obj *));
+E const char *FDECL(lightsaber_colorText, (struct obj *));
 E char *FDECL(lightsaber_hiltText, (struct obj *));
 E int NDECL(random_saber_hilt);
 E char *FDECL(obj_typename, (int));
@@ -1749,7 +1760,7 @@ E const char *FDECL(align_str, (ALIGNTYP_P));
 E void FDECL(mstatusline, (struct monst *));
 E void NDECL(ustatusline);
 E void NDECL(self_invis_message);
-E char *FDECL(piratesay, (const char *));
+E const char *FDECL(piratesay, (const char *));
 
 /* ### polyself.c ### */
 
@@ -1760,6 +1771,7 @@ E void FDECL(polyself, (BOOLEAN_P));
 E int FDECL(polymon, (int));
 E void NDECL(rehumanize);
 E int FDECL(dobreathe, (struct permonst *));
+E int NDECL(doelementalbreath);
 E int NDECL(dospit);
 E int NDECL(doremove);
 E int NDECL(dospinweb);
@@ -1768,6 +1780,7 @@ E int NDECL(dogaze);
 E int NDECL(dohide);
 E int NDECL(domindblast);
 E int NDECL(dodarken);
+E int NDECL(doclockspeed);
 E void FDECL(skinback, (BOOLEAN_P));
 E const char *FDECL(mbodypart, (struct monst *,int));
 E const char *FDECL(body_part, (int));
@@ -2121,6 +2134,8 @@ E void FDECL(yelp, (struct monst *));
 E void FDECL(whimper, (struct monst *));
 E void FDECL(beg, (struct monst *));
 E int NDECL(dotalk);
+E void FDECL(councilspirit, (int));
+E void FDECL(gnosisspirit, (int));
 E int FDECL(P_MAX_SKILL, (int));
 E int FDECL(P_SKILL, (int));
 E int FDECL(P_RESTRICTED, (int));
@@ -2244,6 +2259,7 @@ E void NDECL(burn_away_slime);
 E void FDECL(unbind, (long, boolean));
 E void NDECL(nh_timeout);
 E void FDECL(fall_asleep, (int, BOOLEAN_P));
+E void FDECL(attach_bomb_blow_timeout, (struct obj *,int,BOOLEAN_P));
 E void FDECL(attach_egg_hatch_timeout, (struct obj *));
 E void FDECL(attach_fig_transform_timeout, (struct obj *));
 E void FDECL(kill_egg, (struct obj *));

@@ -1280,6 +1280,7 @@ long hnum;
 		case EDDER_SYMBOL:
 			return u.uevent.knoweddergud ? "Edderkirke" : "black-webbed";
 	}
+	return "";
 }
 
 static const char * const bogusmons[] = {

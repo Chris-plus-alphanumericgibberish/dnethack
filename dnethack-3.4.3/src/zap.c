@@ -2032,7 +2032,7 @@ dozap()
 	check_unpaid(obj);
 
 	/* zappable addition done by GAN 11/03/86 */
-	if(!zappable(obj)) pline(nothing_happens);
+	if(!zappable(obj)) pline1(nothing_happens);
 	else if(obj->cursed && !rn2(100)) {
 		backfire(obj);	/* the wand blows up in your face! */
 		exercise(A_STR, FALSE);
@@ -2110,7 +2110,7 @@ boolean ordinary;
 		    if (!resists_blnd(&youmonst)) {
 			    You(are_blinded_by_the_flash);
 			    make_blinded((long)rnd(100),FALSE);
-			    if (!Blind) Your(vision_clears);
+			    if (!Blind) Your1(vision_clears);
 		    }
 		    break;
 
@@ -2323,7 +2323,7 @@ boolean ordinary;
 			You(are_blinded_by_the_flash);
 			make_blinded((long)damage, FALSE);
 			makeknown(obj->otyp);
-			if (!Blind) Your(vision_clears);
+			if (!Blind) Your1(vision_clears);
 		    }
 		    damage = 0;	/* reset */
 		    break;
@@ -2629,7 +2629,7 @@ struct obj *obj;	/* wand or spell */
 	case SPE_STONE_TO_FLESH:
 	    if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
 		     Underwater || (Is_qstart(&u.uz) && u.dz < 0)) {
-		pline(nothing_happens);
+		pline1(nothing_happens);
 	    } else if (u.dz < 0) {	/* we should do more... */
 		pline("Blood drips on your %s.", body_part(FACE));
 	    } else if (u.dz > 0 && !OBJ_AT(u.ux, u.uy)) {
@@ -2640,7 +2640,7 @@ struct obj *obj;	/* wand or spell */
 		e = engr_at(u.ux, u.uy);
 		if (!(e && e->engr_type == ENGRAVE)) {
 		    if (is_pool(u.ux, u.uy) || is_ice(u.ux, u.uy))
-			pline(nothing_happens);
+			pline1(nothing_happens);
 		    else
 			pline("Blood %ss %s your %s.",
 			      is_lava(u.ux, u.uy) ? "boil" : "pool",
@@ -3480,8 +3480,7 @@ xchar sx, sy;
 				break;
 			} else if (uarms) {
 				/* destroy shield; other possessions are safe */
-				 i = d(1,4);
-				 for(i; i>0; i--){
+				 for(i=d(1,4); i>0; i--){
 					if(uarms->spe > -1*objects[(uarms)->otyp].a_ac){
 						damage_item(uarms);
 						if(i==1) Your("%s damaged by the beam.", aobjnam(uarms, "seem"));
@@ -3494,8 +3493,7 @@ xchar sx, sy;
 				break;
 			} else if (uarmc) {
 				/* destroy cloak */
-				 i = d(1,4);
-				 for(i; i>0; i--){
+				 for(i=d(1,4); i>0; i--){
 					if(uarmc->spe > -1*objects[(uarmc)->otyp].a_ac){
 						damage_item(uarmc);
 						if(i==1) Your("%s damaged by the beam.", aobjnam(uarmc, "seem"));
@@ -3508,8 +3506,7 @@ xchar sx, sy;
 				break;
 			} else if (uarm) {
 				/* destroy suit */
-				 i = d(1,4);
-				 for(i; i>0; i--){
+				 for(i=d(1,4); i>0; i--){
 					if(uarm->spe > -1*objects[(uarm)->otyp].a_ac){
 						damage_item(uarm);
 						if(i==1) Your("%s damaged by the beam.", aobjnam(uarm, "seem"));
@@ -3522,8 +3519,7 @@ xchar sx, sy;
 				break;
 			} else if(uarmu && objects[uarmu->otyp].a_can > 0){
 				/* destroy underwear */
-				 i = d(1,4);
-				 for(i; i>0; i--){
+				 for(i=d(1,4); i>0; i--){
 					if(uarmu->spe > -1*objects[(uarmu)->otyp].a_ac){
 						damage_item(uarmu);
 						if(i==1) Your("%s damaged by the beam.", aobjnam(uarmu, "seem"));
@@ -3879,8 +3875,8 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 							hit(fltxt, mon, exclam(tmp));
 						} else {
 							/* some armor was damaged or destroyed; no damage done */
-							 int i = d(1,4);
-							 for(i; i>0; i--){
+							 int i;
+							 for(i=d(1,4); i>0; i--){
 								if(otmp->spe > -1*objects[(otmp)->otyp].a_ac){
 									damage_item(otmp);
 									if (i==1 && canseemon(mon))
@@ -3951,7 +3947,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			if (abstype == ZT_LIGHTNING && !resists_blnd(&youmonst)) {
 				You(are_blinded_by_the_flash);
 				make_blinded((long)d(nd,50),FALSE);
-				if (!Blind) Your(vision_clears);
+				if (!Blind) Your1(vision_clears);
 			}
 			stop_occupation();
 		    nomul(0, NULL);
@@ -4163,7 +4159,7 @@ boolean *shopdamage;
 		    if (ttmp) ttmp->tseen = 1;
 		    if (cansee(x,y)) msgtxt = "The water evaporates.";
 		}
-		Norep(msgtxt);
+		Norep("%s", msgtxt);
 		if (lev->typ == ROOM) newsym(x,y);
 	    } else if(IS_FOUNTAIN(lev->typ)) {
 		    if (cansee(x,y))
@@ -4307,12 +4303,12 @@ boolean *shopdamage;
 		    lev->doormask = new_doormask;
 		    unblock_point(x, y);	/* vision */
 		    if (cansee(x, y)) {
-			pline(see_txt);
+			pline1(see_txt);
 			newsym(x, y);
 		    } else if (sense_txt) {
-			You(sense_txt);
+			You1(sense_txt);
 		    } else if (hear_txt) {
-			if (flags.soundok) You_hear(hear_txt);
+			if (flags.soundok) You_hear1(hear_txt);
 		    }
 		    if (picking_at(x, y)) {
 			stop_occupation();
@@ -4739,7 +4735,7 @@ retry:
 	if (!otmp) {
 	    pline("Nothing fitting that description exists in the game.");
 	    if (++tries < 5) goto retry;
-	    pline(thats_enough_tries);
+	    pline1(thats_enough_tries);
 	    otmp = readobjnam((char *)0, (struct obj *)0, TRUE);
 	    if (!otmp) return;	/* for safety; should never happen */
 	} else if (otmp == &nothing) {

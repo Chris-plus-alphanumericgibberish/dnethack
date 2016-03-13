@@ -1488,8 +1488,8 @@ register int x,y;
 			sensed = 1;
 	    }
 	    if (sensed) {
-	    	char *et;
-	    	unsigned maxelen = BUFSZ - sizeof("You feel the words: \"\". ");
+			const char *et;
+			unsigned maxelen = BUFSZ - sizeof("You feel the words: \"\". ");
 			if(!Hallucination /*|| rn2(20)*/ ){
 				if (strlen(ep->engr_txt) > maxelen) {
 					(void) strncpy(buf,  ep->engr_txt, (int)maxelen);
@@ -1745,18 +1745,17 @@ static NEARDATA const char styluses[] =
 	{ ALL_CLASSES, ALLOW_NONE, TOOL_CLASS, WEAPON_CLASS, WAND_CLASS,
 	  GEM_CLASS, RING_CLASS, 0 };
 
-	  
 int
 doengward()
 {
-    char c = 'n';
+	char c = 'n';
 	if(u.wardsknown){
 		c = yn_function("Do you want to scribe a warding sign?",
 						ynqchars, 'q');
 	}
-	if(c == 'y') doward();
-	else if(c=='n') doengrave();
-	else return 0;
+	if(c == 'y') return doward();
+	else if(c=='n') return doengrave();
+	return 0;
 }
 
 /* Mohs' Hardness Scale:
@@ -2168,7 +2167,7 @@ doengrave()
 					if(!Blind && !resists_blnd(&youmonst)) {
 						You("are blinded by the flash!");
 						make_blinded((long)rnd(50),FALSE);
-						if (!Blind) Your(vision_clears);
+						if (!Blind) Your1(vision_clears);
 					}
 					return 1;
 				} else {
@@ -2352,7 +2351,7 @@ doengrave()
 		c = yn_function("Do you want to add to the current engraving?",
 				ynqchars, 'y');
 		if (c == 'q') {
-		    pline(Never_mind);
+		    pline1(Never_mind);
 		    return(0);
 		}
 	    }
@@ -2449,7 +2448,7 @@ doengrave()
 			  Tobjnam(otmp,	"glow"), otense(otmp,	"fade"));
 		return(1);
 	    } else {
-			pline(Never_mind);
+			pline1(Never_mind);
 			return(0);
 	    }
 	}
@@ -2578,12 +2577,12 @@ doengrave()
 	if(sengr_at("Elbereth", u.ux, u.uy)){
 		u.uconduct.elbereth++;
 	}
-	if (post_engr_text[0]) pline(post_engr_text);
+	if (post_engr_text[0]) pline1(post_engr_text);
 
 	if (doblind && !resists_blnd(&youmonst)) {
 	    You("are blinded by the flash!");
 	    make_blinded((long)rnd(50),FALSE);
-	    if (!Blind) Your(vision_clears);
+	    if (!Blind) Your1(vision_clears);
 	}
 
 	return(1);
@@ -2969,7 +2968,7 @@ doward()
 					if(!Blind && !resists_blnd(&youmonst)) {
 						You("are blinded by the flash!");
 						make_blinded((long)rnd(50),FALSE);
-						if (!Blind) Your(vision_clears);
+						if (!Blind) Your1(vision_clears);
 					}
 					return 1;
 				} else {
@@ -3153,7 +3152,7 @@ doward()
 			c = yn_function("Do you want to reinforce the existing ward?",
 					ynqchars, 'y');
 			if (c == 'q') {
-				pline(Never_mind);
+				pline1(Never_mind);
 				return(0);
 			}
 	    }
@@ -3275,7 +3274,7 @@ doward()
 				  Tobjnam(otmp,	"glow"), otense(otmp,	"fade"));
 			return(1);
 	    } else {
-			pline(Never_mind);
+			pline1(Never_mind);
 			return(0);
 	    }
 	}
@@ -3425,12 +3424,12 @@ doward()
 		}
 	}
 
-	if (post_engr_text[0]) pline(post_engr_text);
+	if (post_engr_text[0]) pline1(post_engr_text);
 
 	if (doblind && !resists_blnd(&youmonst)) {
 	    You("are blinded by the flash!");
 	    make_blinded((long)rnd(50),FALSE);
-	    if (!Blind) Your(vision_clears);
+	    if (!Blind) Your1(vision_clears);
 	}
 
 	return(1);
@@ -4149,7 +4148,7 @@ doseal()
 					if(!Blind && !resists_blnd(&youmonst)) {
 						You("are blinded by the flash!");
 						make_blinded((long)rnd(50),FALSE);
-						if (!Blind) Your(vision_clears);
+						if (!Blind) Your1(vision_clears);
 					}
 					return 1;
 				} else {
@@ -4403,7 +4402,7 @@ doseal()
 				  Tobjnam(otmp,	"glow"), otense(otmp,	"fade"));
 			return(1);
 	    } else {
-			pline(Never_mind);
+			pline1(Never_mind);
 			return(0);
 	    }
 	}
@@ -4554,12 +4553,12 @@ doseal()
 		}
 	}
 
-	if (post_engr_text[0]) pline(post_engr_text);
+	if (post_engr_text[0]) pline1(post_engr_text);
 
 	if (doblind && !resists_blnd(&youmonst)) {
 	    You("are blinded by the flash!");
 	    make_blinded((long)rnd(50),FALSE);
-	    if (!Blind) Your(vision_clears);
+	    if (!Blind) Your1(vision_clears);
 	}
 
 	return(1);
@@ -4587,7 +4586,7 @@ pick_seal()
 		seal_flag = 0x1L << i;
 		if(u.sealsKnown&seal_flag){
 			if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-				Sprintf(buf,	"%s (active; timeout:%d)", 
+				Sprintf(buf,	"%s (active; timeout:%ld)",
 					sealNames[i], 
 					u.sealTimeout[i] - moves
 				);
@@ -4596,7 +4595,7 @@ pick_seal()
 					sealNames[i] 
 				);
 			} else if(u.sealTimeout[i] > moves){
-				Sprintf(buf,	"%s (timeout:%d)", 
+				Sprintf(buf,	"%s (timeout:%ld)",
 					sealNames[i], 
 					u.sealTimeout[i] - moves
 				);
@@ -4615,7 +4614,7 @@ pick_seal()
 	}
 	if(Role_if(PM_EXILE) && quest_status.got_quest){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[DAHLVER_NAR-FIRST_SEAL], 
 				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] - moves
 			);
@@ -4624,7 +4623,7 @@ pick_seal()
 				sealNames[DAHLVER_NAR-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[DAHLVER_NAR-FIRST_SEAL], 
 				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] - moves
 			);
@@ -4642,7 +4641,7 @@ pick_seal()
 	}
 	if(Role_if(PM_EXILE) && quest_status.killed_nemesis){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[ACERERAK-FIRST_SEAL], 
 				u.sealTimeout[ACERERAK-FIRST_SEAL] - moves
 			);
@@ -4651,7 +4650,7 @@ pick_seal()
 				sealNames[ACERERAK-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[ACERERAK-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[ACERERAK-FIRST_SEAL], 
 				u.sealTimeout[ACERERAK-FIRST_SEAL] - moves
 			);
@@ -4669,7 +4668,7 @@ pick_seal()
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_COSMOS){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[COSMOS-FIRST_SEAL], 
 				u.sealTimeout[COSMOS-FIRST_SEAL] - moves
 			);
@@ -4678,7 +4677,7 @@ pick_seal()
 				sealNames[COSMOS-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[COSMOS-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[COSMOS-FIRST_SEAL], 
 				u.sealTimeout[COSMOS-FIRST_SEAL] - moves
 			);
@@ -4696,7 +4695,7 @@ pick_seal()
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_MISKA){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[MISKA-FIRST_SEAL], 
 				u.sealTimeout[MISKA-FIRST_SEAL] - moves
 			);
@@ -4705,7 +4704,7 @@ pick_seal()
 				sealNames[MISKA-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[MISKA-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[MISKA-FIRST_SEAL], 
 				u.sealTimeout[MISKA-FIRST_SEAL] - moves
 			);
@@ -4723,7 +4722,7 @@ pick_seal()
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIARTH){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[NUDZIARTH-FIRST_SEAL], 
 				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
 			);
@@ -4732,7 +4731,7 @@ pick_seal()
 				sealNames[NUDZIARTH-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[NUDZIARTH-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[NUDZIARTH-FIRST_SEAL], 
 				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
 			);
@@ -4750,7 +4749,7 @@ pick_seal()
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_ALIGNMENT_THING){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[ALIGNMENT_THING-FIRST_SEAL], 
 				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] - moves
 			);
@@ -4759,7 +4758,7 @@ pick_seal()
 				sealNames[ALIGNMENT_THING-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[ALIGNMENT_THING-FIRST_SEAL], 
 				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] - moves
 			);
@@ -4777,7 +4776,7 @@ pick_seal()
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_UNKNOWN_GOD){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[UNKNOWN_GOD-FIRST_SEAL], 
 				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] - moves
 			);
@@ -4786,7 +4785,7 @@ pick_seal()
 				sealNames[UNKNOWN_GOD-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[UNKNOWN_GOD-FIRST_SEAL], 
 				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] - moves
 			);
@@ -4804,7 +4803,7 @@ pick_seal()
 	}
 	if(u.specialSealsKnown&SEAL_BLACK_WEB){
 		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
-			Sprintf(buf,	"%s (active; timeout:%d)", 
+			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[BLACK_WEB-FIRST_SEAL], 
 				u.sealTimeout[BLACK_WEB-FIRST_SEAL] - moves
 			);
@@ -4813,7 +4812,7 @@ pick_seal()
 				sealNames[BLACK_WEB-FIRST_SEAL] 
 			);
 		} else if(u.sealTimeout[BLACK_WEB-FIRST_SEAL] > moves){
-			Sprintf(buf,	"%s (timeout:%d)", 
+			Sprintf(buf,	"%s (timeout:%ld)",
 				sealNames[BLACK_WEB-FIRST_SEAL], 
 				u.sealTimeout[BLACK_WEB-FIRST_SEAL] - moves
 			);

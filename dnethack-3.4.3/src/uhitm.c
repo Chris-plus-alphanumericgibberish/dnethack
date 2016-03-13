@@ -577,7 +577,7 @@ register struct monst *mtmp;
 			tendrils = rnd(5);
 			tmp2 = spiritDsize();
 			tendrils = min(tendrils,tmp2);
-			for(tendrils;tendrils>0;tendrils--) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_OTIAX];
+			for(;tendrils>0;tendrils--) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_OTIAX];
 		}
 		if(u.sealsActive&SEAL_SIMURGH) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_SIMURGH];
 		if(nspiritattacks) keepattacking = hmonwith(mtmp, tmp, weptmp, tchtmp,curspiritattacks,nspiritattacks);
@@ -585,9 +585,9 @@ register struct monst *mtmp;
 	mtmp->mstrategy &= ~STRAT_WAITMASK;
 	
 	if(keepattacking && u.sealsActive&SEAL_SHIRO){
-		int i = rnd(8),dx,dy;
+		int i,dx,dy;
 		struct obj *otmp;
-		for(i;i>0;i--){
+		for(i=rnd(8);i>0;i--){
 			dx = rn2(3)-1;
 			dy = rn2(3)-1;
 			otmp = mksobj(ROCK, TRUE, FALSE);
@@ -1127,10 +1127,10 @@ int thrown;
 					else if(is_blind(mon)) You("strike the blinded %s!", l_monnam(mon));
 					else if(mon->mtrapped) You("strike the trapped %s!", l_monnam(mon));
 					else You("strike the helpless %s!", l_monnam(mon));
-					if(uwep && uwep->oartifact == ART_SPINESEEKER && !Upolyd) tmp += rnd(u.ulevel + (
-						mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
-						(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
-						&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) ? u.ulevel : 0);
+					if(uwep && uwep->oartifact == ART_SPINESEEKER && !Upolyd) tmp += rnd(u.ulevel +
+						((mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+						  (sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux)
+						  && sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) ? u.ulevel : 0));
 					if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) 
 						tmp += rnd(u.ulevel + ((mvitals[PM_ACERERAK].died > 0 ? u.ulevel/2 : 0)));
 					if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
@@ -1656,7 +1656,7 @@ defaultvalue:
 				if(Race_if(PM_GNOME)) i++;
 				if(dambonus > 0) dambonus *= 3;
 				tmp += dambonus;
-				for(i;i>0;i--){
+				for(;i>0;i--){
 					// pline("%d",i);
 					tmp += dmgval(obj, mon, 0);
 					if(wep->oartifact == ART_LIECLEAVER) tmp += rnd(10);
@@ -1731,7 +1731,7 @@ defaultvalue:
 			else if((obj->oartifact == ART_MOONBEAM || !rn2(5)) && 
 				sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
 		}
-		if(obj && obj->opoisoned & OPOISON_BLIND || obj->oartifact == ART_WEBWEAVER_S_CROOK){
+		if(obj && (obj->opoisoned & OPOISON_BLIND || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
 			if (resists_poison(mon))
 				needpoismsg = TRUE;
 			else if (rn2(10))
@@ -2604,9 +2604,10 @@ register struct attack *mattk;
 		exercise(A_INT, TRUE);
 		break;
 	    case AD_STCK:
-		if (!negated && !sticks(mdef->data))
+		if (!negated && !sticks(mdef->data)) {
 			if(mdef->data == &mons[PM_TOVE]) pline("It is too slithy to get stuck!");
 			else u.ustuck = mdef; /* it's now stuck to you */
+		}
 		break;
 	    case AD_WRAP:
 		if (!sticks(mdef->data)) {
@@ -2839,8 +2840,8 @@ register struct attack *mattk;
 			}
 		break;
 		case AD_FRWK:{
-			int x,y,i = rn2(3)+2;
-			for(i; i > 0; i--){
+			int x,y,i;
+			for(i = rn2(3)+2; i > 0; i--){
 				x = rn2(3)-1;
 				y = rn2(3)-1;
 				explode(u.ux+x, u.uy+y, 8, tmp, -1, rn2(7));		//-1 is unspecified source. 8 is physical

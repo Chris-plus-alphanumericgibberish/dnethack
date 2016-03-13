@@ -176,7 +176,6 @@ full:
 }
 
 /*
-/*
  * "entity path to"
  *
  * Attempt to find nc good places for the given monster type with the shortest
@@ -644,7 +643,7 @@ dotele()
 		else tele();
 		(void) next_to_u();
 	} else {
-		You(shudder_for_moment);
+		You1(shudder_for_moment);
 		return(0);
 	}
 	if (!trap) morehungry(100);
@@ -755,7 +754,7 @@ level_tele()
 	     * we let negative values requests fall into the "heaven" loop.
 	     */
 	    if (Is_knox(&u.uz) && newlev > 0) {
-			You(shudder_for_moment);
+			You1(shudder_for_moment);
 			return;
 	    }
 	    /* if in Quest, the player sees "Home 1", etc., on the status
@@ -781,13 +780,13 @@ level_tele()
 	    newlev = random_teleport_level();
 	    if (newlev == depth(&u.uz)) {
 			tele();
-			You(shudder_for_moment);
+			You1(shudder_for_moment);
 			return;
 	    }
 	}
 
 	if (!next_to_u()) {
-		You(shudder_for_moment);
+		You1(shudder_for_moment);
 		return;
 	}
 #ifdef WIZARD
@@ -880,7 +879,7 @@ level_tele()
 	     * the last level of Gehennom is forbidden.
 	     */
 #ifdef WIZARD
-		if (!(wizard))
+	    if (!(wizard)) {
 #endif
 	    if (Inhell && !u.uevent.gehennom_entered && /*seal off gehennom untill you formally enter it by descending the valley of the dead staircase.*/
 			newlev >= (dungeons[u.uz.dnum].depth_start)){
@@ -894,6 +893,9 @@ level_tele()
 					dunlevs_in_dungeon(&u.uz) - 3;
 		pline("Sorry...");
 	    }
+#ifdef WIZARD
+	    }
+#endif
 	    /* no teleporting out of quest dungeon */
 	    if (In_quest(&u.uz) && newlev < depth(&qstart_level))
 		newlev = depth(&qstart_level);
@@ -919,7 +921,7 @@ register struct trap *ttmp;
 	struct d_level target_level;
 
 	if (!next_to_u()) {
-		You(shudder_for_moment);
+		You1(shudder_for_moment);
 		return;
 	}
 
@@ -953,7 +955,7 @@ struct trap *trap;
 			shieldeff(u.ux, u.uy);
 		You_feel("a wrenching sensation.");
 	} else if (!next_to_u()) {
-		You(shudder_for_moment);
+		You1(shudder_for_moment);
 	} else if (trap->once) {
 		deltrap(trap);
 		newsym(u.ux,u.uy);	/* get rid of trap symbol */

@@ -661,8 +661,8 @@ domonability(VOID_ARGS)
 	switch (selected[0].item.a_int) {
 	case MATTK_BREATH: return dobreathe(youmonst.data);
 	case MATTK_DSCALE:{
-		int res;
-		if(res = dobreathe(Dragon_shield_to_pm(uarms))){
+		int res = dobreathe(Dragon_shield_to_pm(uarms));
+		if(res){
 			uarm->age = monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
 			uarms->age= monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
 		}
@@ -820,7 +820,6 @@ use_reach_attack()
 
 	/* Attack the monster there */
 	if ((mtmp = m_at(cc.x, cc.y)) != (struct monst *)0) {
-	    int oldhp = mtmp->mhp;
 		int tmp, tmpw, tmpt;
 
 	    bhitpos = cc;
@@ -839,10 +838,9 @@ int
 dofightingform()
 {
 	winid tmpwin;
-	int i, n, how;
+	int n, how;
 	char buf[BUFSZ];
 	char incntlet = 'a';
-	long seal_flag = 0x1L;
 	menu_item *selected;
 	anything any;
 	
@@ -876,9 +874,17 @@ dofightingform()
 	}
 	if(P_SKILL(FFORM_MAKASHI) >= P_BASIC){
 		if(u.fightingForm == FFORM_MAKASHI) {
-			Sprintf(buf,	"Makashi (active)");
+			if(uarm && !(is_light_armor(uarm) || is_medium_armor(uarm))){
+				Sprintf(buf,	"Makashi (active; blocked by armor)");
+			} else {
+				Sprintf(buf,	"Makashi (active)");
+			}
 		} else {
+			if(uarm && !(is_light_armor(uarm) || is_medium_armor(uarm))){
+				Sprintf(buf,	"Makashi (blocked by armor)");
+			} else {
 			Sprintf(buf,	"Makashi");
+		}
 		}
 		any.a_int = FFORM_MAKASHI;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
@@ -888,9 +894,17 @@ dofightingform()
 	}
 	if(P_SKILL(FFORM_SORESU) >= P_BASIC){
 		if(u.fightingForm == FFORM_SORESU) {
-			Sprintf(buf,	"Soresu (active)");
+			if(uarm && !(is_light_armor(uarm) || is_medium_armor(uarm))){
+				Sprintf(buf,	"Soresu (active; blocked by armor)");
+			} else {
+				Sprintf(buf,	"Soresu (active)");
+			}
 		} else {
-			Sprintf(buf,	"Soresu");
+			if(uarm && !(is_light_armor(uarm) || is_medium_armor(uarm))){
+				Sprintf(buf,	"Soresu (blocked by armor)");
+			} else {
+					Sprintf(buf,	"Soresu (active)");
+			}
 		}
 		any.a_int = FFORM_SORESU;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
@@ -1130,7 +1144,7 @@ wiz_level_change(VOID_ARGS)
     else ret = sscanf(buf, "%d", &newlevel);
 
     if (ret != 1) {
-	pline(Never_mind);
+	pline1(Never_mind);
 	return 0;
     }
     if (newlevel == u.ulevel) {
@@ -1414,7 +1428,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		
 	    if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
 	    else if(Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE)) you_are("the Pirate King");
-	    else if(Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT) && u.uevent.uhand_of_elbereth == 1) you_are("the King of the Angles");
+	    else if((Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)) && u.uevent.uhand_of_elbereth == 1) you_are("the King of the Angles");
 	    else if((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) you_are("the Daughter of Skadi");
 	    else if(Race_if(PM_DWARF) && (urole.ldrnum == PM_THORIN_II_OAKENSHIELD || urole.ldrnum == PM_DAIN_II_IRONFOOT)){
 			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD) you_are("King under the Mountain");
@@ -1646,7 +1660,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIARTH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
 			you_are("able to bind with an aligned spirit");
 		}
-		if(!u.spirit[OUTER_SPIRIT] && u.ulevel == 30){
+		if(!u.spirit[OUTER_SPIRIT] && u.ulevel == 30 && Role_if(PM_EXILE)){
 			you_are("able to bind with the Numina");
 		}
 		if(u.sealCounts < numSlots){
@@ -1863,6 +1877,15 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (Unchanging) you_can("not change from your current form");
 	if (Fast) you_are(Very_fast ? "very fast" : "fast");
 	if (Reflecting) you_have("reflection");
+	if (Reflecting && (
+			(uwep && is_lightsaber(uwep) && uwep->lamplit && 
+				((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
+				 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
+				)
+			) ||
+			(uarm && (uarm->otyp == SILVER_DRAGON_SCALE_MAIL || uarm->otyp == SILVER_DRAGON_SCALES || uarm->otyp == SILVER_DRAGON_SCALE_SHIELD)) ||
+			(uwep && uwep->oartifact == ART_DRAGONLANCE)
+	)) you_have("dragon-breath reflection");
 	if (Free_action) you_have("free action");
 	if (Fixed_abil) you_have("fixed abilities");
 	if (Lifesaved)
@@ -1956,7 +1979,6 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 void
 resistances_enlightenment()
 {
-	int ltmp;
 	char buf[BUFSZ];
 
 	en_win = create_nhwindow(NHW_MENU);
@@ -1986,7 +2008,7 @@ resistances_enlightenment()
 	if (u.uinwater){
 		if(ublindf && ublindf->otyp == R_LYEHIAN_FACEPLATE && !ublindf->cursed)
 			putstr(en_win, 0, "Your faceplate wraps you in a waterproof field.");
-		else if(uarmc && uarmc->otyp == OILSKIN_CLOAK && !uarmc->cursed)
+		else if(uarmc && (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased) && !uarmc->cursed)
 			putstr(en_win, 0, "Your waterproof cloak protects your gear.");
 		else if(u.sealsActive&SEAL_ENKI)
 			putstr(en_win, 0, "YOU'RE soaked, but the water doesn't wet your gear.");
@@ -2177,8 +2199,6 @@ resistances_enlightenment()
 void
 signs_enlightenment()
 {
-	int ltmp;
-	char buf[BUFSZ];
 	boolean message = FALSE;
 
 	en_win = create_nhwindow(NHW_MENU);
@@ -2379,7 +2399,7 @@ signs_enlightenment()
 		if(!uarmg)
 			putstr(en_win, 0, "You have iron claws.");
 		else
-			putstr(en_win, 0, "Your iron claws seem to be part of you gloves.");
+			putstr(en_win, 0, "Your iron claws seem to be part of your gloves.");
 		putstr(en_win, 0, "There are prismatic feathers around your head.");
 		message = TRUE;
 	}
@@ -2442,7 +2462,7 @@ signs_enlightenment()
 		message = TRUE;
 	}
 	if(u.specialSealsActive&SEAL_MISKA){
-		putstr(en_win, 0, "You have 4 arms, and a wolf head growing from both hips.");
+		putstr(en_win, 0, "You have 4 arms, and a wolf head grows from each hip.");
 		message = TRUE;
 	}
 	// if(u.specialSealsActive&SEAL_NUDZIARTH){
@@ -2471,8 +2491,6 @@ signs_enlightenment()
 void
 signs_mirror()
 {
-	int ltmp;
-	char buf[BUFSZ];
 	boolean message = FALSE;
 
 	en_win = create_nhwindow(NHW_MENU);
@@ -2576,7 +2594,7 @@ signs_mirror()
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_EDEN && !NoBInvis){
-		putstr(en_win, 0, "You see a garden through the dome of cerulean crystal enbedded in your head!");
+		putstr(en_win, 0, "You see a garden through the dome of cerulean crystal embedded in your head!");
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_ENKI && !Invis){
@@ -2728,7 +2746,7 @@ signs_mirror()
 		}
 	}
 	if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !(ublindf && ublindf->otyp != LENSES)){
-		putstr(en_win, 0, "You gave gemstones for eyes!");
+		putstr(en_win, 0, "You have gemstones for eyes!");
 		message = TRUE;
 	}
 	if(u.specialSealsActive&SEAL_COUNCIL && !NoBInvis){
@@ -2755,7 +2773,7 @@ signs_mirror()
 		message = TRUE;
 	}
 	if(u.specialSealsActive&SEAL_ALIGNMENT_THING && !NoBInvis){
-		putstr(en_win, 0, "You see a small black halo just behind your head. Their is an eye in the center, staring at you!");
+		putstr(en_win, 0, "You see a small black halo just behind your head. There is an eye in the center, staring at you!");
 		message = TRUE;
 	}
 	
@@ -2986,14 +3004,14 @@ int final;
 	if (u.uconduct.shopID == 0) {
 	    you_have_never("paid a shopkeeper to identify an item");
 	} else {
-	    Sprintf(buf, "paid to have %d item%s identified",
+	    Sprintf(buf, "paid to have %ld item%s identified",
 		    u.uconduct.shopID, plur(u.uconduct.shopID));
 	    you_have_X(buf);
 	}
 	if (u.uconduct.IDs == 0) {
 	    you_have_never("magically identified an item");
 	} else {
-	    Sprintf(buf, "magically identified %d item%s",
+	    Sprintf(buf, "magically identified %ld item%s",
 		    u.uconduct.IDs, plur(u.uconduct.shopID));
 	    you_have_X(buf);
 	}

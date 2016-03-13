@@ -3462,7 +3462,7 @@ register int	x, y;
 register int	mmflags;
 {
 	register struct monst *mtmp;
-	int mndx, mcham, ct, mitem, xlth;
+	int mndx, mcham, ct, mitem, xlth, num;
 	boolean anymon = (!ptr);
 	boolean byyou = (x == u.ux && y == u.uy);
 	boolean allow_minvent = ((mmflags & NO_MINVENT) == 0);
@@ -3609,9 +3609,9 @@ register int	mmflags;
 	set_mon_data(mtmp, ptr, 0);
 	
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && (ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])){
-		struct obj *otmp;
+		struct obj *otmp = mksobj(SADDLE, TRUE, FALSE);
 		initedog(mtmp);
-		if (otmp = mksobj(SADDLE, TRUE, FALSE)) {
+		if (otmp) {
 			if (mpickobj(mtmp, otmp)) panic("merged saddle?");
 			mtmp->misc_worn_check |= W_SADDLE;
 			otmp->dknown = otmp->bknown = otmp->rknown = 1;
@@ -3810,19 +3810,15 @@ register int	mmflags;
 			if (mndx == PM_QUINON){
 				mtmp->movement = d(1,6);
 				if(anymon){
-					int num = 0;
 					makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
-					num = rnd(6);
-					for(num; num >= 0; num--) makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					for(num = rnd(6); num >= 0; num--) makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 					m_initlgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
 				}
 				makemon(&mons[PM_QUATON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			} else if (mndx == PM_QUATON){
 				mtmp->movement = d(1,7);
 				if(anymon){
-					int num = 0;
-					num = rn1(6,5);
-					for(num; num >= 0; num--) makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					for(num = rn1(6,5); num >= 0; num--) makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 				}
 				makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			} else if (mndx == PM_TRITON){
@@ -3847,19 +3843,12 @@ register int	mmflags;
 		case S_IMP:
 			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_LEGION_DEVIL_SERGEANT){
-				int num = 0;
-				num = 10;
-				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_GRUNT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				num = 3;
-				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = 10; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_GRUNT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = 3; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			} else if (anymon && mndx == PM_LEGION_DEVIL_CAPTAIN){
-				int num = 0;
-				num = 20;
-				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_GRUNT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				num = 8;
-				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				num = 2;
-				for(num; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SERGEANT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = 20; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_GRUNT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = 8; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = 2; num > 0; num--) makemon(&mons[PM_LEGION_DEVIL_SERGEANT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 			}
 		break;
@@ -3879,11 +3868,8 @@ register int	mmflags;
 	    case S_GIANT:
 			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_DEEPEST_ONE){
-				int num = 0;
-				num = rn1(3,3);
-				for(num; num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				num = rn1(10,10);
-				for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rn1(3,3); num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rn1(10,10); num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 			}
 		break;
@@ -3898,11 +3884,8 @@ register int	mmflags;
 					m_initlgrp(makemon(&mons[PM_DROW_MUMMY], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
 					m_initlgrp(makemon(&mons[PM_DROW_ZOMBIE], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
 				} else if (mndx == PM_ELVENKING){
-					int num = 0;
-					num = rnd(2);
-					for(num; num >= 0; num--) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-					num = rn1(6,3);
-					for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					for(num = rnd(2); num >= 0; num--) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					for(num = rn1(6,3); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				}
 			}
 			}
@@ -3911,9 +3894,7 @@ register int	mmflags;
 			if(!(mmflags & MM_EDOG)){
 			if(anymon){
 				if (mndx == PM_DEEPER_ONE){
-					int num = 0;
-					num = rn1(10,3);
-					for(num; num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					for(num = rn1(10,3); num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				}
 			}
 			}
@@ -3921,13 +3902,9 @@ register int	mmflags;
 		case S_FUNGUS:
 			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_MIGO_QUEEN){
-				int num = 0;
-				num = rn2(2)+1;
-				for(num; num >= 0; num--) makemon(&mons[PM_MIGO_PHILOSOPHER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				num = rn2(3)+3;
-				for(num; num >= 0; num--) makemon(&mons[PM_MIGO_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				num = rn2(5)+5;
-				for(num; num >= 0; num--) makemon(&mons[PM_MIGO_WORKER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rn2(2)+1; num >= 0; num--) makemon(&mons[PM_MIGO_PHILOSOPHER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rn2(3)+3; num >= 0; num--) makemon(&mons[PM_MIGO_SOLDIER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rn2(5)+5; num >= 0; num--) makemon(&mons[PM_MIGO_WORKER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 
 			}
 			}
@@ -4013,11 +3990,10 @@ register int	mmflags;
 		break;
 		case S_TRAPPER:
 			if(!(mmflags & MM_EDOG)){
-				int num=6;
 				if(mndx==PM_METROID_QUEEN) 
-					if(anymon) for(num; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-					// if(anymon) for(num; num >= 0; num--) makemon(&mons[PM_BABY_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-					// else for(num; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					if(anymon) for(num = 6; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					// if(anymon) for(num = 6; num >= 0; num--) makemon(&mons[PM_BABY_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					// else for(num = 6; num >= 0; num--) makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 		break;
 //		case S_VAMPIRE:
@@ -4080,14 +4056,10 @@ register int	mmflags;
 			}
 			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_ORC_CAPTAIN){
-				int num = 0;
-				num = rn1(10,3);
-				for(num; num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rn1(10,3); num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 			if (anymon && mndx == PM_ORC_SHAMAN){
-				int num = 0;
-				num = rnd(3);
-				for(num; num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rnd(3); num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 			}
 		break;
@@ -4118,13 +4090,10 @@ register int	mmflags;
 			if(mndx == PM_GROVE_GUARDIAN){
 				if(!(mmflags & MM_EDOG)){
 					if (anymon){
-						int num = 0;
 						if(!rn2(10)) makemon(&mons[PM_ELVENKING], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 						if(rn2(4)) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-						num = rn2(5);
-						for(num; num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-						num = d(2,4);
-						for(num; num >= 0; num--) makemon(&mons[PM_WOODLAND_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						for(num = rn2(5); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						for(num = d(2,4); num >= 0; num--) makemon(&mons[PM_WOODLAND_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 					}
 				}
 			}
@@ -5074,10 +5043,10 @@ struct monst *mtmp, *victim;
 		if(newtype == PM_METROID_QUEEN && mtmp->mtame){
 			struct monst *baby;
 			int tnum = d(1,6);
-			int i = 0;
+			int i;
 			mtmp->mtame = 0;
 			mtmp->mpeaceful = 1;
-			for(i; i < 6; i++){
+			for(i = 0; i < 6; i++){
 				baby = makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				if(tnum-->0) tamedog(baby,(struct obj *) 0);
 			}
@@ -5447,7 +5416,7 @@ struct obj *bag;
     if (!bag || bag->otyp != BAG_OF_TRICKS) {
 	impossible("bad bag o' tricks");
     } else if (bag->spe < 1) {
-	pline(nothing_happens);
+	pline1(nothing_happens);
     } else {
 	boolean gotone = FALSE;
 	int cnt = 1;

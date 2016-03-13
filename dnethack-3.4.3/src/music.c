@@ -154,7 +154,7 @@ static NEARDATA char msgbuf[BUFSZ];
  * We cannot check song_played directly because if the song was interrupted,
  * we have no means to reset song_played.
  */
-int inline
+STATIC_DCL int
 song_being_played()
 {
     if (occupation != play_song)
@@ -162,14 +162,13 @@ song_being_played()
     return song_played;
 }
 
-STATIC_PTR int
+STATIC_DCL void
 reset_song()
 {
     song_played = SNG_NONE;
     song_delay = 0;
     song_penalty = 0;
 /*	song_lastturn = 0L;*/
-    return;
 }
 
 /* music being played is at its last turn? */
@@ -251,7 +250,7 @@ boolean domsg;
 				You_hear("a horrible voice chanting your song!");
 			else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
 					 || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
-				You_hear("someone mourning while you play!", Monnam(mtmp));
+				You_hear("someone mourning while you play!");
 			else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
 				You_hear("something caw and croak while you play!");
 			else if (mtmp->data == &mons[PM_PARROT])
@@ -347,7 +346,7 @@ boolean domsg;
 				You_hear("a horrible voice chanting in opposition to your song!");
 			else if (mtmp->data->mlet == S_MUMMY || mtmp->data->mlet == S_GHOST
 					 || mtmp->data->mlet == S_WRAITH || mtmp->data->mlet == S_SHADE)
-				You_hear("someone wailing in opposition to your song!", Monnam(mtmp));
+				You_hear("someone wailing in opposition to your song!");
 			else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
 				You_hear("something caws and croaks in opposition to your song!");
 			else if (mtmp->data == &mons[PM_PARROT])
@@ -915,7 +914,7 @@ int distance;
 		    resist_song(mtmp, SNG_COURAGE, song_instr) >= 0) {
 			if (mtmp->encouraged < BASE_DOG_ENCOURAGED_MAX)
 				mtmp->encouraged = min(BASE_DOG_ENCOURAGED_MAX, mtmp->encouraged+(P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1));
-			if (mtmp->mflee)
+			if (mtmp->mflee) {
 				switch (P_SKILL(P_MUSICALIZE)) {
 				case P_UNSKILLED:
 				case P_BASIC:
@@ -928,15 +927,18 @@ int distance;
 					mtmp->mfleetim = 0;
 					break;
 				}
-			if (canseemon(mtmp))
-				if (Hallucination)
+			}
+			if (canseemon(mtmp)) {
+				if (Hallucination) {
 					pline("%s looks %s!", Monnam(mtmp),
 					      mtmp->encouraged == BASE_DOG_ENCOURAGED_MAX ? "way cool" :
 					      mtmp->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
-				else
+				} else {
 					pline("%s looks %s!", Monnam(mtmp),
 					      mtmp->encouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" :
 					      mtmp->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
+				}
+			}
 		}
 		mtmp = mtmp->nmon;
 	}

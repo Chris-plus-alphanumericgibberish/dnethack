@@ -1134,14 +1134,14 @@ know_random_obj()
 
                obj_descr[(objects[obj].oc_name_idx)].oc_name != 0 &&
 
-              (objects[obj].oc_class == ARMOR_CLASS &&
+              ((objects[obj].oc_class == ARMOR_CLASS &&
 
                /* Dragon scales and mails are considered magical,
                   but as they don't have different descriptions,
                   they don't appear in the discovery list,
                   so as not to rob the player of an opportunity... */
 
-                !(obj > HELM_OF_TELEPATHY && obj < PLATE_MAIL) ||
+                !(obj > HELM_OF_TELEPATHY && obj < PLATE_MAIL)) ||
 
                objects[obj].oc_class == RING_CLASS ||
                objects[obj].oc_class == POTION_CLASS ||
@@ -1462,18 +1462,18 @@ u_init()
 		
 	if(rn2(20)){
 			if(urace.individual.m){
-				if(flags.female) Sprintf(u.osegen,urace.individual.m);
-				else Sprintf(u.osegen,urace.individual.f);
+				if(flags.female) Sprintf1(u.osegen,urace.individual.m);
+				else Sprintf1(u.osegen,urace.individual.f);
 			} else {
-				Sprintf(u.osegen,urace.noun);
+				Sprintf1(u.osegen,urace.noun);
 			}
 		} else {
 			int rndI = randrace(flags.initrole);
 			if(races[rndI].individual.m){
-				if(flags.female) Sprintf(u.osegen,races[rndI].individual.m);
-				else Sprintf(u.osegen,races[rndI].individual.f);
+				if(flags.female) Sprintf1(u.osegen,races[rndI].individual.m);
+				else Sprintf1(u.osegen,races[rndI].individual.f);
 			} else {
-				Sprintf(u.osegen,races[rndI].noun);
+				Sprintf1(u.osegen,races[rndI].noun);
 			}
 		}
 	} else if(rn2(20)){
@@ -1482,18 +1482,18 @@ u_init()
 		
 		if(rn2(20)){
 			if(urace.individual.m){
-				if(flags.female) Sprintf(u.osegen,urace.individual.f);
-				else Sprintf(u.osegen,urace.individual.m);
+				if(flags.female) Sprintf1(u.osegen,urace.individual.f);
+				else Sprintf1(u.osegen,urace.individual.m);
 			} else {
-				Sprintf(u.osegen,urace.noun);
+				Sprintf1(u.osegen,urace.noun);
 			}
 		} else {
 			int rndI = randrace(flags.initrole);
 			if(races[rndI].individual.m){
-				if(flags.female) Sprintf(u.osegen,races[rndI].individual.f);
-				else Sprintf(u.osegen,races[rndI].individual.m);
+				if(flags.female) Sprintf1(u.osegen,races[rndI].individual.f);
+				else Sprintf1(u.osegen,races[rndI].individual.m);
 			} else {
-				Sprintf(u.osegen,races[rndI].noun);
+				Sprintf1(u.osegen,races[rndI].noun);
 			}
 		}
 	} else{
@@ -1503,7 +1503,7 @@ u_init()
 			if(i%2) Strcat(u.osepro, oseConsonants[rn2(SIZE(oseConsonants))]);
 			else Strcat(u.osepro, oseVowels[rn2(SIZE(oseVowels))]);
 		}
-		i, lets = rnd(5);
+		lets = rnd(5);
 		Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
 		for(i=0; i<lets;i++){
 			if(i%2) Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
@@ -2163,7 +2163,7 @@ u_init()
 //		pline("shambling horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
 	}
 	shamattacks = shamattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
-	for(i; i < shamattacks; i++){
+	for(; i < shamattacks; i++){
 		attkptr = &shambler->mattk[i];
 		/* restrict it to certain types of attacks */
 		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
@@ -2213,7 +2213,7 @@ u_init()
 //		pline("stumbling horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
 	}
 	stumattacks = stumattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
-	for(i; i < stumattacks; i++){
+	for(; i < stumattacks; i++){
 		attkptr = &stumbler->mattk[i];
 		/* restrict it to certain types of attacks */
 		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
@@ -2262,7 +2262,7 @@ u_init()
 //		pline("wandering horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
 	}
 	wandattacks = wandattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
-	for(i; i < wandattacks; i++){
+	for(; i < wandattacks; i++){
 		attkptr = &wanderer->mattk[i];
 		/* restrict it to certain types of attacks */
 		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
@@ -2595,15 +2595,17 @@ register struct trobj *trop;
 			}
 			/* Don't have 2 of the same ring or spellbook */
 			if (obj->oclass == RING_CLASS ||
-			    obj->oclass == SPBOOK_CLASS)
+			    obj->oclass == SPBOOK_CLASS) {
 				if(nocreate4 == STRANGE_OBJECT) nocreate4 = otyp;
 				else if(nocreate5 == STRANGE_OBJECT) nocreate5 = otyp;
 				else if(nocreate6 == STRANGE_OBJECT) nocreate6 = otyp;
 				else if(nocreate7 == STRANGE_OBJECT) nocreate7 = otyp;
+			}
 			/* or ampule */
-			if (obj->otyp == HYPOSPRAY_AMPULE)
+			if (obj->otyp == HYPOSPRAY_AMPULE) {
 				if(nocreateam1 == STRANGE_OBJECT) nocreateam1 = (short)obj->ovar1;
 				else if(nocreateam2 == STRANGE_OBJECT) nocreateam2 = (short)obj->ovar1;
+			}
 		}
 
 #ifdef GOLDOBJ

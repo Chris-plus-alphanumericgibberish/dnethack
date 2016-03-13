@@ -34,7 +34,7 @@ stoned_dialogue()
 	register long i = (Stoned & TIMEOUT);
 
 	if (i > 0L && i <= SIZE(stoned_texts)) {
-		pline(stoned_texts[SIZE(stoned_texts) - i]);
+		pline1(stoned_texts[SIZE(stoned_texts) - i]);
 		nomul(0, NULL); /* fix for C343-74 */
 	}
 	if (i == 5L)
@@ -129,7 +129,7 @@ choke_dialogue()
 		if (index(str, '%'))
 		    pline(str, hcolor(NH_BLUE));
 		else
-		    pline(str);
+		    pline1(str);
 	    }
 	}
 	exercise(A_STR, FALSE);
@@ -159,7 +159,7 @@ slime_dialogue()
 		} else
 		    pline(str, an(Hallucination ? rndmonnam() : "green slime"));
 	    } else
-		pline(str);
+		pline1(str);
 	}
 	if (i == 3L) {	/* limbs becoming oozy */
 	    HFast = 0L;	/* lose intrinsic speed */
@@ -713,8 +713,8 @@ boolean yours;
 	if (bomb->cursed && !rn2(2)) return; /* doesn't arm if not armed */
 
 	/* Now if you play with other people's property... */
-	if (yours && (!carried(bomb) && costly_spot(bomb->ox, bomb->oy) &&
-		!bomb->no_charge || bomb->unpaid)) {
+	if (yours && ((!carried(bomb) && costly_spot(bomb->ox, bomb->oy) &&
+		!bomb->no_charge) || bomb->unpaid)) {
 	    verbalize("You play with it, you pay for it!");
 	    bill_dummy_object(bomb);
 	}

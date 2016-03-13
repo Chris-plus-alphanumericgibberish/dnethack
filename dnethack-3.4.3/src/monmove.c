@@ -515,7 +515,7 @@ struct monst *mtmp;
 			mtmp->mcrazed = 1;
 			return !rn2(10);
 	}
-	
+	return FALSE;
 }
 boolean
 scaryItem(mtmp)

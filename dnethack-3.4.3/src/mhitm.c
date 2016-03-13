@@ -1895,8 +1895,8 @@ physical:
 	     /* if (cancelled) break; */
 		break;
 		case AD_FRWK:{
-			int x,y,i = rn2(3)+2;
-			for(i; i > 0; i--){
+			int x, y, i;
+			for (i = rn2(3)+2; i > 0; i--) {
 				x = rn2(3)-1;
 				y = rn2(3)-1;
 				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(7));		//-1 is unspecified source. 8 is physical
@@ -1943,7 +1943,7 @@ physical:
 		 * after monkilled() to provide better message ordering */
 		if (mdef->cham != CHAM_ORDINARY && !resists_poly(magr->data)) {
 		    (void) newcham(magr, (struct permonst *)0, FALSE, TRUE);
-		} else if (mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME] && !resists_poly(magr->data)) {
+		} else if ((mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME]) && !resists_poly(magr->data)) {
 		    (void) newcham(magr, &mons[PM_GREEN_SLIME], FALSE, TRUE);
 		} else if (mdef->data == &mons[PM_WRAITH]) {
 		    (void) grow_up(magr, (struct monst *)0);
@@ -2123,9 +2123,12 @@ int mdead;
 		pline("A hail of magic missiles narrowly misses %s!",mon_nam(magr));
 		}
 	    } else {
-		if(canseemon(magr))
-			pline(magr->data == &mons[PM_WOODCHUCK] ? "ZOT!" : 
-			"%s is hit by magic missiles appearing from thin air!",Monnam(magr));
+		if (canseemon(magr)) {
+		    if (magr->data == &mons[PM_WOODCHUCK])
+			pline("ZOT!");
+		    else
+			pline("%s is hit by magic missiles appearing from thin air!", Monnam(magr));
+		}
 		goto assess_dmg;
 	    }
 	    break;

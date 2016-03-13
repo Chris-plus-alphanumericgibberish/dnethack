@@ -431,6 +431,8 @@ nminion()
 		case 2: return PM_MONADIC_DEVA;
 		case 3: return PM_ASTRAL_DEVA;
 	}
+
+	return NON_PM;
 }
 
 /* create chaotic (good) lord */
@@ -453,6 +455,8 @@ cminion()
 		case 4: return PM_SHIERE;
 		case 5: return PM_GHAELE;
 	}
+
+	return NON_PM;
 }
 
 int

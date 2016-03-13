@@ -606,7 +606,7 @@ static const char * const bogusobjects[] = {
        "potion of antacid",
        "traffic cone",
        "chainsaw",
-/*	   "pair of high-heeled stilettos",    /* the *other* stiletto */
+//	   "pair of high-heeled stilettos",    /* the *other* stiletto */
 	   "high-heeled stiletto",
 	   "comic book",
 	   "lipstick",
@@ -719,7 +719,7 @@ static const char * const bogusobjects[] = {
 		   "spellbook named the Book of Keeping",
 		   "Black Scroll of Ahm",
 	   "Elder Scroll", /*the Elder Scrolls*/
-       "spellbook named The Ta’ge Fragments", /* Cthulhutech */
+       "spellbook named The Ta'ge Fragments", /* Cthulhutech */
        "spellbook named Tome of Eternal Darkness", /* Eternal Darkness */
        "history book called A Chronicle of the Daevas", /* SCP Foundation */
        "spellbook named The Book of Sand",                     /* Jorge Luis Borges */
@@ -751,7 +751,7 @@ static const char * const bogusobjects[] = {
 	   "spellbook named The Six and Seventh Books of Moses",	/* 18th- or 19th-century magical text allegedly written by Moses */
 	   "spellbook named The Book of Coming Forth by Day", "spellbook named The Book of emerging forth into the Light",
 	   "spellbook named Sepher Ha-Razim",						/* Book given to Noah by the angel Raziel */
-	   "spellbook named Sefer Raziel HaMalakh", 				/*"Book of Raziel the Angel”, given to Adam */
+	   "spellbook named Sefer Raziel HaMalakh", 				/* Book of Raziel the Angel, given to Adam */
 	   "spellbook named The Testament of Solomon",
 	   "spellbook named The Book of Enoch",
 	   "spellbook named The Book of Inverted Darkness",

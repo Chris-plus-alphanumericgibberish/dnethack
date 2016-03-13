@@ -170,7 +170,7 @@ dosounds()
 		"the splashing of a naiad.",
 		"a soda fountain!",
 	};
-	You_hear(fountain_msg[rn2(3)+hallu]);
+	You_hear1(fountain_msg[rn2(3)+hallu]);
     }
 #ifdef SINK
     if (level.flags.nsinks && !rn2(300)) {
@@ -198,7 +198,7 @@ dosounds()
 		/* finding one is enough, at least for now */
 		int which = rn2(3)+hallu;
 
-		if (which != 2) You_hear(throne_msg[which]);
+		if (which != 2) You_hear1(throne_msg[which]);
 		else		pline(throne_msg[2], uhis());
 		return;
 	    }
@@ -230,7 +230,7 @@ dosounds()
 		"smell marsh gas!",	/* so it's a smell...*/
 		"hear Donald Duck!",
 	};
-	You(swamp_msg[rn2(2)+hallu]);
+	You1(swamp_msg[rn2(2)+hallu]);
 	return;
     }
     if (level.flags.has_vault && !rn2(200)) {
@@ -338,7 +338,7 @@ dosounds()
 		mon_in_room(mtmp, BARRACKS) &&
 		/* sleeping implies not-yet-disturbed (usually) */
 		(mtmp->msleeping || ++count > 5)) {
-		You_hear(barracks_msg[rn2(3)+hallu]);
+		You_hear1(barracks_msg[rn2(3)+hallu]);
 		return;
 	    }
 	}
@@ -350,7 +350,7 @@ dosounds()
 			"hear burly voices singing shanties.",
 			"here someone ask about warez.",
 		};
-		You(island_msg[rn2(2)+2*hallu]);
+		You1(island_msg[rn2(2)+2*hallu]);
 		return;
 	}
     if (level.flags.has_zoo && !rn2(200)) {
@@ -363,7 +363,7 @@ dosounds()
 	    if (DEADMONSTER(mtmp)) continue;
 	    if ((mtmp->msleeping || is_animal(mtmp->data)) &&
 		    mon_in_room(mtmp, ZOO)) {
-		You_hear(zoo_msg[rn2(2)+hallu]);
+		You_hear1(zoo_msg[rn2(2)+hallu]);
 		return;
 	    }
 	}
@@ -381,7 +381,7 @@ dosounds()
 		    "the chime of a cash register.",
 		    "Neiman and Marcus arguing!",
 	    };
-	    You_hear(shop_msg[rn2(2)+hallu]);
+	    You_hear1(shop_msg[rn2(2)+hallu]);
 	}
 	return;
     }
@@ -399,7 +399,7 @@ dosounds()
 		    "someone say \"No more woodchucks!\"",
 		    "a loud ZOT!"		/* both rec.humor.oracle */
 	    };
-	    You_hear(ora_msg[rn2(3)+hallu*2]);
+	    You_hear1(ora_msg[rn2(3)+hallu*2]);
 	}
 	return;
     }
@@ -620,12 +620,12 @@ asGuardian:
 			Strcpy(class_list, tools);
 			key = getobj(class_list, "wind with");
 			if (!key){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			start_clockwinding(key, mtmp, turns);
@@ -658,13 +658,13 @@ asGuardian:
 			Strcpy(class_list, tools);
 			key = getobj(class_list, "wind with");
 			if (!key){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20 + 100, u.ulevel/10+1);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			start_clockwinding(key, mtmp, turns);
@@ -737,13 +737,13 @@ asGuardian:
 			Strcpy(class_list, tools);
 			key = getobj(class_list, "wind with");
 			if (!key){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*10 + 100, u.ulevel/5+1);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			start_clockwinding(key, mtmp, turns);
@@ -1070,7 +1070,7 @@ asGuardian:
 						Your("vision fills with grasping roots!");
 						
 						make_blinded(Blinded+(long)rnd(20),FALSE);
-						if (!Blind) Your(vision_clears);
+						if (!Blind) Your1(vision_clears);
 					}
 				break;
 				case 2:
@@ -1534,13 +1534,13 @@ humanoid_sound:
 			Strcpy(class_list, tools);
 			key = getobj(class_list, "wind with");
 			if (!key){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*10 + 100, u.ulevel/10+1);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			start_clockwinding(key, mtmp, turns);
@@ -1553,7 +1553,7 @@ humanoid_sound:
 			if(!mtmp->mtame) howmany = ask_cp(mtmp,100);
 			else howmany = ask_cp(mtmp,50);
 			if(!howmany){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			// start_clockwinding(key, mtmp, turns);
@@ -1572,7 +1572,7 @@ humanoid_sound:
 			if(!mtmp->mtame) howmany = ask_cp(mtmp,1000);
 			else howmany = ask_cp(mtmp,500);
 			if(!howmany){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			// start_clockwinding(key, mtmp, turns);
@@ -1630,13 +1630,13 @@ humanoid_sound:
 			Strcpy(class_list, tools);
 			key = getobj(class_list, "wind with");
 			if (!key){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*11 +111, u.ulevel/10+1);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			start_clockwinding(key, mtmp, turns);
@@ -1702,13 +1702,13 @@ humanoid_sound:
 				Strcpy(class_list, tools);
 				key = getobj(class_list, "wind with");
 				if (!key){
-					pline(Never_mind);
+					pline1(Never_mind);
 					break;
 				}
 				if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20, u.ulevel/5+1);
 				else turns = ask_turns(mtmp, 0, 0);
 				if(!turns){
-					pline(Never_mind);
+					pline1(Never_mind);
 					break;
 				}
 				start_clockwinding(key, mtmp, turns);
@@ -1733,13 +1733,13 @@ humanoid_sound:
 			Strcpy(class_list, tools);
 			key = getobj(class_list, "wind with");
 			if (!key){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			if(!mtmp->mtame) turns = ask_turns(mtmp, 0, u.ulevel/15+1);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			start_clockwinding(key, mtmp, turns);
@@ -1785,13 +1785,13 @@ humanoid_sound:
 			Strcpy(class_list, tools);
 			key = getobj(class_list, "wind with");
 			if (!key){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			if(!mtmp->mtame) turns = ask_turns(mtmp, u.ulevel*20+200, 0);
 			else turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
-				pline(Never_mind);
+				pline1(Never_mind);
 				break;
 			}
 			start_clockwinding(key, mtmp, turns);
@@ -1809,7 +1809,7 @@ humanoid_sound:
     }
 
     if (pline_msg) pline("%s %s", Monnam(mtmp), pline_msg);
-    else if (verbl_msg) verbalize(verbl_msg);
+    else if (verbl_msg) verbalize1(verbl_msg);
     return(1);
 }
 
@@ -1868,7 +1868,7 @@ dochat()
 #endif
 	if (u.dz) {
 		struct engr *ep = get_head_engr();
-		for(ep;ep;ep=ep->nxt_engr) 
+		for(;ep;ep=ep->nxt_engr)
 			if(ep->engr_x==u.ux && ep->engr_y==u.uy)
 				break;//else continue
 		if(!ep || ep->halu_ward || ep->ward_id < FIRST_SEAL) pline("They won't hear you %s there.", u.dz < 0 ? "up" : "down");
@@ -1905,8 +1905,9 @@ dochat()
 		}
 		return 1;
 	}
-	
-	if(bindresult = dobinding(tx,ty)) return bindresult;
+
+	bindresult = dobinding(tx,ty);
+	if(bindresult) return bindresult;
 	
 	if(!mtmp && (u.specialSealsActive&SEAL_ACERERAK) &&
 		(otmp = level.objects[tx][ty]) && 
@@ -2050,7 +2051,7 @@ int tx,ty;
 	struct engr *ep = get_head_engr();
 	int numSlots, i;
 	int bindingPeriod = 5000;
-	for(ep;ep;ep=ep->nxt_engr) 
+	for(;ep;ep=ep->nxt_engr)
 		if(ep->engr_x==tx && ep->engr_y==ty)
 			break;//else continue
 	if(!(ep)) return 0; //no engraving found
@@ -2230,9 +2231,9 @@ int tx,ty;
 						else if(otmp->otyp == MIRROR){ o1 = otmp; t1 = 8;}
 						else if(otmp->otyp == EGG){ o1 = otmp; t1 = 9;}
 						else if(otmp->oclass == POTION_CLASS){ o1 = otmp; t1 = 10;}
-						else if(otmp->oclass == CORPSE && otmp->corpsenm==PM_CAVE_SPIDER){ o1 = otmp; t1 = 11;}
-						else if(otmp->oclass == CORPSE && your_race(&mons[otmp->corpsenm])){ o1 = otmp; t1 = 12;}
-						else if(otmp->oclass == CORPSE && is_andromaliable(&mons[otmp->corpsenm]) ){ o1 = otmp; t1 = 13;}
+						else if(otmp->otyp == CORPSE && otmp->corpsenm==PM_CAVE_SPIDER){ o1 = otmp; t1 = 11;}
+						else if(otmp->otyp == CORPSE && your_race(&mons[otmp->corpsenm])){ o1 = otmp; t1 = 12;}
+						else if(otmp->otyp == CORPSE && is_andromaliable(&mons[otmp->corpsenm]) ){ o1 = otmp; t1 = 13;}
 						else if(otmp->oclass == SPBOOK_CLASS){ o1 = otmp; t1 = 14;}
 						else if(otmp->otyp == BELL){ o1 = otmp; t1 = 15;}
 						else if(otmp->otyp == LOCK_PICK){ o1 = otmp; t1 = 16;}
@@ -2249,9 +2250,9 @@ int tx,ty;
 						else if(otmp->otyp == MIRROR && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 8;}
 						else if(otmp->otyp == EGG && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 9;}
 						else if(otmp->oclass == POTION_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 10;}
-						else if(otmp->oclass == CORPSE && otmp->corpsenm==PM_CAVE_SPIDER && t1 != 11){ o2 = otmp; t2 = 11;}
-						else if(otmp->oclass == CORPSE && your_race(&mons[otmp->corpsenm]) && t1 != 12 && otmp != o1){ o2 = otmp; t2 = 12;}
-						else if(otmp->oclass == CORPSE && is_andromaliable(&mons[otmp->corpsenm]) && t1 != 13 && otmp != o1){ o2 = otmp; t2 = 13;}
+						else if(otmp->otyp == CORPSE && otmp->corpsenm==PM_CAVE_SPIDER && t1 != 11){ o2 = otmp; t2 = 11;}
+						else if(otmp->otyp == CORPSE && your_race(&mons[otmp->corpsenm]) && t1 != 12 && otmp != o1){ o2 = otmp; t2 = 12;}
+						else if(otmp->otyp == CORPSE && is_andromaliable(&mons[otmp->corpsenm]) && t1 != 13 && otmp != o1){ o2 = otmp; t2 = 13;}
 						else if(otmp->oclass == SPBOOK_CLASS && otmp->oclass != o1->oclass){ o2 = otmp; t2 = 14;}
 						else if(otmp->otyp == BELL && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 15;}
 						else if(otmp->otyp == LOCK_PICK && otmp->otyp != o1->otyp){ o2 = otmp; t2 = 16;}
@@ -2703,7 +2704,7 @@ int tx,ty;
 				// pline("The %s within the seal begins to twitch and shake.");
 				// Your("consciousness expands, and you sense great currents of despair and mortality that wrap the world like silken threads.");
 				// pline("The %s falls still, and you know you're in the presence of the Spider.");
-				pline("The great sweep of lives and civilizations seems represented in microcosm by the scene within the seal’s boundaries.");
+				pline("The great sweep of lives and civilizations seems represented in microcosm by the scene within the seal's boundaries.");
 				You("sense the twin threads of mortality and despair,");
 				pline("that wrap this world and its inhabitants like silken bindings, and, suddenly,");
 				pline("you know you are in the presence of the Spider.");
@@ -4569,6 +4570,7 @@ int pmon;
 	}
 }
 
+int
 P_MAX_SKILL(p_skill)
 int p_skill;
 {

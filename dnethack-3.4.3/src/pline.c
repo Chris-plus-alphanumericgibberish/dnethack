@@ -556,7 +556,7 @@ const char *st, *orig, *repl;
 }
 
 /*Ben Collver's fixes*/
-char *
+const char *
 piratesay(orig)
 const char *orig;
 {

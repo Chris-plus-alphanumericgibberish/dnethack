@@ -1111,10 +1111,10 @@ movemon()
 		if(mtmp->mtame){
 			struct monst *baby;
 			int tnum = d(1,6);
-			int i = 0;
+			int i;
 			mtmp->mtame = 0;
 			mtmp->mpeaceful = 1;
-			for(i; i < 6; i++){
+			for(i = 0; i < 6; i++){
 				baby = makemon(&mons[PM_METROID], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				if(tnum-- > 0) tamedog(baby,(struct obj *) 0);
 				else baby->mpeaceful = 1;
@@ -1641,7 +1641,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 	    /* ALI -- Artifact doors (no passage unless open/openable) from Slash'em*/
 	    if (IS_DOOR(ntyp))
 			if (artifact_door(nx, ny) ?
-				levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)
+				(levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR))
 				  || levl[nx][ny].doormask & D_LOCKED :
 				!amorphous(mdat) &&
 			   ((levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) ||
@@ -2520,8 +2520,8 @@ boolean was_swallowed;			/* digestion */
 				explode(mon->mx, mon->my, 5, tmp, MON_EXPLODE, EXPL_MAGICAL);
 			}
 			else if(mdat->mattk[i].adtyp == AD_FRWK){
-				int x,y,i = rn2(3)+2;
-				for(i; i > 0; i--){
+				int x, y, i;
+				for(i = rn2(3)+2; i > 0; i--){
 					x = rn2(7)-3;
 					y = rn2(7)-3;
 					explode(mon->mx+x, mon->my+y, 8, tmp, -1, rn2(7));		//-1 is unspecified source. 8 is physical
@@ -3906,7 +3906,7 @@ struct monst *mon;
 				You("cannot polymorph %s into that.", mon_nam(mon));
 			else break;
 		} while(++tries < 5);
-		if (tries==5) pline(thats_enough_tries);
+		if (tries==5) pline1(thats_enough_tries);
 	}
 #endif /*WIZARD*/
 	if (mndx == NON_PM) mndx = rndshape();//first try to get an in-depth monster

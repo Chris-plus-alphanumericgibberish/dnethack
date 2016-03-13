@@ -2071,7 +2071,7 @@ dosacrifice()
 					carries you off on their shoulders */
 					adjalign(-99);
 					pline("%s accepts your gift, and gains complete control over creation.", a_gname());
-					pline("In the next instant, she destroys it.", a_gname());
+					pline("In the next instant, she destroys it.");
 					pline("You are functionally dead, your soul shorn from its earthly husk...");
 					pline("...as well as everything that made you YOU.");
 					killer_format = KILLED_BY;
@@ -2116,7 +2116,7 @@ dosacrifice()
     } /* fake Amulet */
 
     if (value == 0) {
-	pline(nothing_happens);
+	pline1(nothing_happens);
 	return (1);
     }
 

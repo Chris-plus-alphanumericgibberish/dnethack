@@ -261,8 +261,8 @@ dig()
 			return(0);
 		}
 	    /* ALI - Artifact doors from Slash'em */
-		if (IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
-	    		dig_typ(uwep, dpx, dpy) == DIGTYP_ROCK ||
+		if ((IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
+			    dig_typ(uwep, dpx, dpy) == DIGTYP_ROCK) ||
 			(IS_DOOR(lev->typ) && artifact_door(dpx, dpy))
 		) {
 			pline("This %s is too hard to %s.",
@@ -501,7 +501,7 @@ dig()
 		    feel_location(dpx, dpy);
 		else
 		    newsym(dpx, dpy);
-		if(digtxt && !digging.quiet) pline(digtxt); /* after newsym */
+		if(digtxt && !digging.quiet) pline1(digtxt); /* after newsym */
 		if(dmgtxt)
 		    pay_for_damage(dmgtxt, FALSE);
 
