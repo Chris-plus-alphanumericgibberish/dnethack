@@ -199,9 +199,10 @@ int thrown;
 	     */
     if (launcher && ammo_and_launcher(obj,launcher)) {
 		if(launcher->otyp == BFG){
-			if(objects[(obj)->otyp].w_ammotyp == WP_BULLET) multishot += 3*(objects[(launcher->otyp)].oc_rof);
-			if(objects[(obj)->otyp].w_ammotyp == WP_SHELL) multishot += 2.5*(objects[(launcher->otyp)].oc_rof);
-			if(objects[(obj)->otyp].w_ammotyp == WP_GRENADE) multishot += 1.5*(objects[(launcher->otyp)].oc_rof);
+			if(objects[(obj)->otyp].w_ammotyp == WP_BULLET) multishot += 2*(objects[(launcher->otyp)].oc_rof);
+			else if(objects[(obj)->otyp].w_ammotyp == WP_SHELL) multishot += 1.5*(objects[(launcher->otyp)].oc_rof);
+			else if(objects[(obj)->otyp].w_ammotyp == WP_GRENADE) multishot += 1*(objects[(launcher->otyp)].oc_rof);
+			else if(objects[(obj)->otyp].w_ammotyp == WP_ROCKET) multishot += .5*(objects[(launcher->otyp)].oc_rof);
 			else multishot += (objects[(launcher->otyp)].oc_rof);
 		} else if (objects[(launcher->otyp)].oc_rof)
 		    multishot += (objects[(launcher->otyp)].oc_rof - 1);
