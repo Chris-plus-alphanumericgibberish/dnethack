@@ -103,7 +103,7 @@ struct Role {
 	      enemy2num;
 	char  enemy1sym,	/* quest enemies by class (S_) */
 	      enemy2sym;
-	short questarti;	/* index (ART_) of quest artifact (questpgr.c) */
+	int questarti;	/* index (ART_) of quest artifact (questpgr.c) */
 
 	/*** Bitmasks ***/
 	short allow;		/* bit mask of allowed variations */
