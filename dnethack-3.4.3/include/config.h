@@ -5,7 +5,6 @@
 #ifndef CONFIG_H /* make sure the compiler does not see the typedefs twice */
 #define CONFIG_H
 
-
 /*
  * Section 1:	Operating and window systems selection.
  *		Select the version of the OS you are using.
