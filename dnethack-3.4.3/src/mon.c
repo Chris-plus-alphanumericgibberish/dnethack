@@ -1880,6 +1880,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Race_if(PM_DROW) && is_drow(ma) && magr->mfaction == u.uhouse)
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(md)))
+		&& !(Role_if(PM_EXILE))
 		&& magr->mpeaceful==TRUE 
 		&& mdef->mpeaceful==FALSE
 	) return ALLOW_M|ALLOW_TM;
@@ -1890,6 +1891,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Race_if(PM_DROW) && is_drow(md) && mdef->mfaction == u.uhouse)
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(ma)))
+		&& !(Role_if(PM_EXILE))
 		&& mdef->mpeaceful==TRUE 
 		&& magr->mpeaceful==FALSE 
 		&& rn2(2)
