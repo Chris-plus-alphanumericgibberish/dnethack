@@ -385,6 +385,7 @@ mattacku(mtmp)
 	int	i, j, tmp, tchtmp, sum[NATTK];
 	int deva;
 	struct	permonst *mdat = mtmp->data;
+	struct obj *oarmor;
 	boolean ranged = (distu(mtmp->mx, mtmp->my) > 3);
 		/* Is it near you?  Affects your actions */
 	boolean range2 = !monnear(mtmp, mtmp->mux, mtmp->muy);
@@ -670,13 +671,16 @@ mattacku(mtmp)
 			continue;
 		
 		/*Plasteel helms cover the face and prevent bite attacks*/
-		if((mtmp->misc_worn_check & W_ARMH) && 
-			(((which_armor(mtmp, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mtmp, W_ARMH))->otyp) == CRYSTAL_HELM) && 
-			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || 
-				(mattk->aatyp == AT_ENGL && !u.uswallow) ||
-				(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
-			)
-		) continue;
+		if(mtmp->misc_worn_check & W_ARMH){
+			oarmor = which_armor(mtmp, W_ARMH);
+			if(oarmor && 
+				(oarmor->otyp == PLASTEEL_HELM || oarmor->otyp == CRYSTAL_HELM) && 
+				(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || 
+					(mattk->aatyp == AT_ENGL && !u.uswallow) ||
+					(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
+				)
+			) continue;
+		}
 		
 		if(!mattk->aatyp && !mattk->adtyp && !mattk->damn && !mattk->damd) continue;
 		
@@ -1080,7 +1084,7 @@ mattacku(mtmp)
 	    if(sum[i] == 3) break;  /* attacker teleported, no more attacks */
 		
 		if(uwep && is_lightsaber(uwep) && uwep->lamplit){
-			if(u.fightingForm == FFORM_SHIEN && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1){
+			if(u.fightingForm == FFORM_SHIEN && multi >= 0 && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1 && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SHIEN), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
 						if(rn2(100) < 5){
@@ -1110,7 +1114,9 @@ mattacku(mtmp)
 						}
 					break;
 				}
-			} else if(u.fightingForm == FFORM_SORESU && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1){
+			} else if(u.fightingForm == FFORM_SORESU && multi >= 0 && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1 
+				&& (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))
+			){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
 						if(rn2(100) < 5){
@@ -7267,7 +7273,7 @@ register struct attack *mattk;
 				tmp += rnd(20);
 			}
 		}
-		if(u.sealsActive&SEAL_EURYNOME && !rn2(5)){
+		if(u.sealsActive&SEAL_EURYNOME && multi >= 0 && !rn2(5)){
 			You("counterattack!");
 			flags.forcefight = TRUE;
 			attack(mtmp);
@@ -7278,11 +7284,12 @@ register struct attack *mattk;
 	if(uwep && is_lightsaber(uwep) && uwep->lamplit){
 		if(P_SKILL(weapon_type(uwep)) >= P_BASIC){
 			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
-				if((u.fightingForm == FFORM_SHII_CHO || u.fightingForm == FFORM_SORESU)
+				if(u.fightingForm == FFORM_SHII_CHO || 
+					(u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 				) use_skill(FFORM_SORESU,1);
 			}
 		}
-		if(u.fightingForm == FFORM_DJEM_SO){
+		if(u.fightingForm == FFORM_DJEM_SO && multi >= 0 && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 			switch(min(P_SKILL(FFORM_DJEM_SO), P_SKILL(weapon_type(uwep)))){
 				case P_BASIC:
 					if(rn2(100) < 5){
@@ -7315,7 +7322,7 @@ register struct attack *mattk;
 		}
 	}
 	if( uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && 
-		uwep->ovar1&SEAL_EURYNOME && 
+		uwep->ovar1&SEAL_EURYNOME && multi >= 0 && 
 		!rn2((quest_status.killed_nemesis && Role_if(PM_EXILE)) ? 10 : 20)
 	){
 		You("counterattack!");
