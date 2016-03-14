@@ -5337,7 +5337,7 @@ is a red right hand
 	M2_HOSTILE|M2_NEUTER|M2_NOPOLY, M3_STATIONARY, CLR_YELLOW),
 	
     MON("devil's snare", S_PLANT,//16
-	LVL(14, 16, 3, 0, -2), (G_GENO|2),
+	LVL(14, 10, 3, 0, -2), (G_GENO|2),
 	A(ATTK(AT_CLAW, AD_WRAP, 4, 6), NO_ATTK,
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(40, 100, 0, MS_SILENT, MZ_LARGE), MR_COLD, 0,
@@ -5345,7 +5345,7 @@ is a red right hand
 	M2_HOSTILE|M2_NEUTER|M2_NOPOLY, M3_STATIONARY, CLR_BLUE),
 	
     MON("black flower", S_PLANT,//16
-	LVL(45, 16, -5, 50, -20), (G_NOGEN),
+	LVL(45, 6, -5, 50, -20), (G_NOGEN),
 	A(NO_ATTK, NO_ATTK,
 	  NO_ATTK, NO_ATTK, 
 	  NO_ATTK, NO_ATTK),
