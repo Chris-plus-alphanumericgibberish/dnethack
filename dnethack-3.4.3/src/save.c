@@ -299,7 +299,12 @@ register int fd, mode;
 	save_light_sources(fd, mode, RANGE_GLOBAL);
 
 	saveobjchn(fd, invent, mode);
-	for(i=0;i<10;i++) saveobjchn(fd, magic_chest_objs[i], mode);
+	for(i=0;i<10;i++){
+		saveobjchn(fd, magic_chest_objs[i], mode);
+		if(release_data(mode)){ /*then saveobjchn freed all these objects*/
+			magic_chest_objs[i] = (struct obj *) 0;
+		}
+	}
 	saveobjchn(fd, migrating_objs, mode);
 	savemonchn(fd, migrating_mons, mode);
 	if (release_data(mode)) {
