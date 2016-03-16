@@ -210,46 +210,75 @@ boolean yours; /* is it your fault (for killing monsters) */
 			default:  break;
 		}
 
-	// if (olet == MON_EXPLODE) {
-	    // str = killer;
-	    // killer = 0;		/* set again later as needed */
+	if (olet == MON_EXPLODE && killer) {
+	    str = killer;
+	    killer = 0;		/* set again later as needed */
 	    // adtyp = AD_PHYS;
-	// }
-	// else switch (abs(type) % 10) {
-	switch (abs(type) % 10) {
-		case 0: str = "magical blast";
-			adtyp = AD_MAGM;
-			break;
-		case 1: str =   olet == BURNING_OIL ?	"burning oil" :
+	}
+	else switch (abs(type) % 10) {
+		case 0:
+			str = "magical blast";
+		break;
+		case 1:
+			str =   olet == BURNING_OIL ?	"burning oil" :
 				olet == SCROLL_CLASS ?	"tower of flame" :
 							"fireball";
-			adtyp = AD_FIRE;
-			break;
-		case 2: str = "ball of cold";
-			adtyp = AD_COLD;
-			break;
+		break;
+		case 2:
+			str = "ball of cold";
+		break;
 /* Assume that wands are death, others are disintegration */
-		case 4: str =  (olet == WAND_CLASS) ? "death field" :
+		case 4:
+			str =  (olet == WAND_CLASS) ? "death field" :
 							"disintegration field";
-			adtyp = AD_DISN;
-			break;
-		case 5: str = "ball of lightning";
-			adtyp = AD_ELEC;
-			break;
-		case 6: str = "poison gas cloud";
-			adtyp = AD_DRST;
-			break;
-		case 7: str = "splash of acid";
-			adtyp = AD_ACID;
-			break;
+		break;
+		case 5:
+			str = "ball of lightning";
+		break;
+		case 6:
+			str = "poison gas cloud";
+		break;
+		case 7:
+			str = "splash of acid";
+		break;
 		case 8:
 			if(olet == TOOL_CLASS) str = "flying shards of mirror";
 			else if(olet == WEAPON_CLASS) str = "flying shards of obsidian";
 			// else if(olet == ARMOR_CLASS) str = "flying shards of crystal";
 			else str = "blast";
+		break;
+		case 9:
+			str = "cloud of spores";
+		break;
+		default: impossible("explosion base type %d?", type); return;
+	}
+	switch (abs(type) % 10) {
+		case 0:
+			adtyp = AD_MAGM;
+			break;
+		case 1:
+			adtyp = AD_FIRE;
+			break;
+		case 2:
+			adtyp = AD_COLD;
+			break;
+/* Assume that wands are death, others are disintegration */
+		case 4:
+			adtyp = AD_DISN;
+			break;
+		case 5:
+			adtyp = AD_ELEC;
+			break;
+		case 6:
+			adtyp = AD_DRST;
+			break;
+		case 7:
+			adtyp = AD_ACID;
+			break;
+		case 8:
 			adtyp = AD_PHYS;
 			break;
-		case 9: str = "cloud of spores";
+		case 9:
 			adtyp = AD_DISE;
 			break;
 		default: impossible("explosion base type %d?", type); return;
