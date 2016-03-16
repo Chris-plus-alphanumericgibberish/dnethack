@@ -1219,6 +1219,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 			int amnt = d(2,10);
 			u.uen += amnt;
 			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
+			flags.botl = 1;
 			if (u.uen > u.uenmax){
 				u.uenmax++;
 				u.uen = u.uenmax;
@@ -1235,6 +1236,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 			int amnt = d(4,10);
 			u.uen += amnt;
 			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
+			flags.botl = 1;
 		    if (u.uen > u.uenmax) {
 				u.uenmax+=4;
 				u.uen = u.uenmax;
@@ -1251,6 +1253,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 			int amnt = d(6,10);
 			u.uen += amnt;
 			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
+			flags.botl = 1;
 			u.uen = u.uen + 10 > (u.uenmax - 40) ? u.uen + 10 : (u.uenmax - 40);
 		    u.uen += amnt;
 		    if (u.uen > u.uenmax) {
@@ -2827,6 +2830,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
 					healup(50,FALSE,FALSE,FALSE);
+					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}
@@ -2844,6 +2848,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				else useupf(otmp, 1L);
 				lesshungry(50);
 				healup(50,FALSE,FALSE,FALSE);
+				flags.botl = 1;
 			break;
 			case AMULET_CLASS:
 				if(otmp->oartifact || objects[otmp->otyp].oc_unique) break; //redundant check
@@ -2858,6 +2863,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				else useupf(otmp, 1L);
 				lesshungry(50);
 				healup(50,FALSE,FALSE,FALSE);
+				flags.botl = 1;
 			break;
 			case ARMOR_CLASS:
 				u.uconduct.food++;
@@ -2867,6 +2873,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
 					healup(50,FALSE,FALSE,FALSE);
+					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}
@@ -2879,6 +2886,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(50);
 					healup(50,FALSE,FALSE,FALSE);
+					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}
@@ -2893,6 +2901,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    otmp->ovar1 = 0;
 				lesshungry(50);
 				healup(50,FALSE,FALSE,FALSE);
+				flags.botl = 1;
 			break;
 			case SPBOOK_CLASS:
 				if(otmp->oartifact) break; //redundant check
@@ -2903,6 +2912,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    if(otmp->spestudied > MAX_SPELL_STUDY) otmp->otyp = SPE_BLANK_PAPER;
 				lesshungry(50);
 				healup(50,FALSE,FALSE,FALSE);
+				flags.botl = 1;
 			break;
 			case WAND_CLASS:
 				u.uconduct.food++;
@@ -2912,6 +2922,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
 					lesshungry(10);
 					healup(10,FALSE,FALSE,FALSE);
+					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
 				}
