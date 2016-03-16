@@ -144,7 +144,7 @@ int expltype;
     area = create_explode_region();
     for(i = 0; i < 3; i++)
 	for(j = 0; j < 3; j++)
-	    if (isok(i+x-1,j+y-1) && ZAP_POS((&levl[i+x-1][j+y-1])->typ))
+	    if (isok(i+x-1,j+y-1))
 		add_location_to_explode_region(area, i+x-1, j+y-1);
     do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
     free_explode_region(area);
