@@ -1749,8 +1749,11 @@ int skill;
      *	basic -> skilled	2
      *	skilled -> expert	3
      */
-    if (skill != P_BARE_HANDED_COMBAT && skill != P_MARTIAL_ARTS  && skill != FFORM_NIMAN)
-	return tmp;
+    if (skill != P_BARE_HANDED_COMBAT && 
+		(skill != P_TWO_WEAPON_COMBAT || !Role_if(PM_MONK))  && 
+		skill != P_MARTIAL_ARTS  && 
+		skill != FFORM_NIMAN
+	) return tmp;
 
     /* Fewer slots used up for unarmed or martial.
      *	unskilled -> basic	1
