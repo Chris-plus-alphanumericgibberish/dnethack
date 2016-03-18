@@ -115,7 +115,7 @@ struct obj *otmp;
 {
 	boolean wake = TRUE;	/* Most 'zaps' should wake monster */
 	boolean reveal_invis = FALSE;
-	boolean dbldam = Role_if(PM_KNIGHT) && u.uhave.questart;
+	boolean dbldam = !flags.mon_moving && ((Role_if(PM_KNIGHT) && u.uhave.questart) || Spellboost);
 	int dmg, otyp = otmp->otyp;
 	const char *zap_type_text = "spell";
 	struct obj *obj;
@@ -136,6 +136,8 @@ struct obj *otmp;
 			break;	/* skip makeknown */
 		} else if (u.uswallow || otyp == WAN_STRIKING || rnd(20) < 10 + find_mac(mtmp)) {
 			dmg = d(2,12);
+			if (!flags.mon_moving && otyp == SPE_FORCE_BOLT && (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM))
+				dmg += d((u.ulevel+1)/2, 12);
 			if(dbldam) dmg *= 2;
 			if (otyp == SPE_FORCE_BOLT)
 			    dmg += spell_damage_bonus();
