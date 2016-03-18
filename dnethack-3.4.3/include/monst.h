@@ -59,7 +59,8 @@ struct monst {
 #define M_AP_OBJECT	2	/* an object */
 #define M_AP_MONSTER	3	/* a monster */
 
-	schar mtame;		/* level of tameness, implies peaceful */
+	int mtame;		/* level of tameness, implies peaceful */
+	int mpeacetime;		/* level of peacefulness, implies peaceful, ignored if tame */
 	unsigned int mintrinsics;	/* low 10 correspond to mresists */
 	int mspec_used;		/* monster's special ability attack timeout */
 	int mstdy;		/* to record extra damage to be delt due to having been studied */
@@ -129,6 +130,7 @@ struct monst {
 	Bitfield(mhurtu,1);		/* has injured you */
 	Bitfield(mattackedu,1);	/* attacked you on it's last turn */
 	Bitfield(housealert,1);	/* won't accept house-based pacification */
+	Bitfield(mspiritual,1);	/* Created by spirit power, doesn't count towards pet limit */
 #define BASE_DOG_ENCOURAGED_MAX		7
 	int encouraged;	/* affected by Encourage song */
 #define helpless(mon) (mon->msleeping || !(mon->mcanmove) || !(mon->mnotlaugh))	
