@@ -602,9 +602,9 @@ aligntyp resp_god;
 {
 	register int	maxanger;
 
-	if(Role_if(PM_EXILE) && resp_god == u.ualign.type) return;
+	if(resp_god == A_VOID) return;
 	
-	if(Inhell && !(Race_if(PM_DROW) && resp_god == A_CHAOTIC)) resp_god = A_NONE;
+	if(Inhell && !(Race_if(PM_DROW) && (resp_god != A_LAWFUL || !flags.initgend))) resp_god = A_NONE;
 	
 	u.ublessed = 0;
 	
@@ -1655,7 +1655,7 @@ void
 gods_upset(g_align)
 	aligntyp g_align;
 {
-	if(Role_if(PM_EXILE)) return;
+	if(g_align == A_VOID) return;
 	if(g_align == u.ualign.type) u.ugangr[Align2gangr(u.ualign.type)]++;
 	else if(u.ugangr[Align2gangr(u.ualign.type)]){
 		u.ugangr[Align2gangr(u.ualign.type)]--;
@@ -1918,7 +1918,7 @@ dosacrifice()
 			value = eaten_stat(value, otmp);
 		}
 
-		if (your_race(ptr) && !Role_if(PM_EXILE)) {
+		if (your_race(ptr) && u.ualign.type != A_VOID) {
 			if (is_demon(youmonst.data)) {
 			You("find the idea very satisfying.");
 			exercise(A_WIS, TRUE);
@@ -2104,7 +2104,7 @@ dosacrifice()
 	    } else {
 		/* don't you dare try to fool the gods */
 		change_luck(-3);
-		if(!Role_if(PM_EXILE)){
+		if(u.ualign.type != A_VOID){
 			adjalign(-1);
 			u.ugangr[Align2gangr(u.ualign.type)] += 3;
 			value = -3;
@@ -2142,9 +2142,9 @@ dosacrifice()
 	if (u.ualign.type != altaralign) {
 	    /* Is this a conversion ? */
 	    /* An unaligned altar in Gehennom will always elicit rejection. */
-	    if ((ugod_is_angry() && !Role_if(PM_EXILE)) || (altaralign == A_NONE && Inhell)) {
+	    if ((ugod_is_angry() && u.ualign.type != A_VOID) || (altaralign == A_NONE && Inhell)) {
 		if(u.ualignbase[A_CURRENT] == u.ualignbase[A_ORIGINAL] &&
-		   altaralign != A_NONE && altaralign != A_VOID) {
+		   altaralign != A_NONE && altaralign != A_VOID && !Role_if(PM_EXILE)) {
 		    You("have a strong feeling that %s is angry...", u_gname());
 			if(otmp->otyp == CORPSE && is_rider(&mons[otmp->corpsenm])){
 				pline("A pulse of darkness radiates from your sacrifice!");
@@ -2171,6 +2171,22 @@ dosacrifice()
 		    u.lastprayresult = PRAY_CONV;
 		    adjalign((int)(u.ualignbase[A_ORIGINAL] * (ALIGNLIM / 2)));
 		} else {
+			if(altaralign == A_VOID){
+				consume_offering(otmp);
+				if (!Inhell){
+					godvoice(u.ualign.type, "Suffer, infidel!");
+					u.ugangr[Align2gangr(u.ualign.type)] += 3;
+					adjalign(-5);
+					u.lastprayed = moves;
+					u.lastprayresult = PRAY_ANGER;
+					u.reconciled = REC_NONE;
+					change_luck(-5);
+					(void) adjattrib(A_WIS, -2, TRUE);
+					angrygods(u.ualign.type);
+				} else {
+					pline("Silence greets your offering.");
+				}
+			} else {
 		    u.ugangr[Align2gangr(u.ualign.type)] += 3;
 		    adjalign(-5);
 		    u.lastprayed = moves;
@@ -2182,6 +2198,7 @@ dosacrifice()
 		    (void) adjattrib(A_WIS, -2, TRUE);
 		    if (!Inhell) angrygods(u.ualign.type);
 		}
+		}
 		return(1);
 	    } else {
 		if(otmp->otyp == CORPSE && is_rider(&mons[otmp->corpsenm])){
@@ -2190,6 +2207,11 @@ dosacrifice()
 			return 1;
 		}
 		consume_offering(otmp);
+		if(Role_if(PM_EXILE) && u.ualign.type != A_VOID && altaralign != A_VOID){
+			You("sense a conference between %s and %s.",
+				u_gname(), a_gname());
+			pline("But nothing else occurs.");
+		} else {
 		You("sense a conflict between %s and %s.",
 			u_gname(), a_gname());
 		if (rn2(8 + u.ulevel) > 5) {
@@ -2252,6 +2274,7 @@ dosacrifice()
 				if(u.ulevel > 10) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
 				(void) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
 			}
+		}
 		}
 		return(1);
 	    }
