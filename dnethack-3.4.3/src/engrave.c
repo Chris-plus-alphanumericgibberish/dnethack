@@ -72,6 +72,7 @@ static const char *random_mesg[] = {
 	"FIQ followed ChrisANG", /* Fifth ascender */
 	"Tariru followed FIQ", /* Sixth ascender */
 	"VoiceOfReason followed Tariru", /* Seventh ascender */
+	"HBane followed VoiceOfReason", /* Seventh ascender */
 	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */
@@ -5060,6 +5061,8 @@ static const char *epitaphs[] = {
 	
 	"Of course, you realize, this means war.",
 	
+	"In death ground, fight.",
+	
 	"FIQ:  One step from divinity.",
 		"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
 		"FIQ, killed by a clockwork bug.",
@@ -5068,6 +5071,7 @@ static const char *epitaphs[] = {
 		"Khor:  Balancing dNethack, one sleeping potion to the face at a time.",
 	
 	"Package contains: One posthumous worm feeder",
+	"Was that the hill I wanted to die on?",
 	
 	"Used no net, knew no fear, made mis-step, wound up here.", /*Balder's Gate gravestones*/
 		"Here lies the body of Rob.  If not, please notify the undertakers at once.",
