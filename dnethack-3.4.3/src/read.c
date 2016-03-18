@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "edog.h"
 
 /* KMH -- Copied from pray.c; this really belongs in a header file */
 #define DEVOUT 14
@@ -1450,13 +1451,45 @@ struct obj	*sobj;
 		if (u.uswallow) {
 		    maybe_tame(u.ustuck, sobj);
 		} else {
-		    int i, j, bd = confused ? 5 : 1;
 		    struct monst *mtmp;
-
+			if(confused){
+				int i, j, bd = 5;
 		    for (i = -bd; i <= bd; i++) for(j = -bd; j <= bd; j++) {
 			if (!isok(u.ux + i, u.uy + j)) continue;
-			if ((mtmp = m_at(u.ux + i, u.uy + j)) != 0)
+					mtmp = m_at(u.ux + i, u.uy + j);
+					if(mtmp){
+						if(!mtmp->mtame){
+							boolean waspeaceful = mtmp->mpeaceful;
+							maybe_tame(mtmp, sobj);
+							mtmp = m_at(u.ux + i, u.uy + j); /* Old monster was freed if it was tamed */
+							if(mtmp && mtmp->mtame){
+								EDOG(mtmp)->friend = TRUE;
+								mtmp->mtame += ACURR(A_CHA)*10;
+								EDOG(mtmp)->waspeaceful = waspeaceful;
+								if(!waspeaceful) mtmp->mpeacetime += ACURR(A_CHA);
+							}
+						} else if(EDOG(mtmp)->friend){
+							mtmp->mtame += ACURR(A_CHA)*10;
+							if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
+						} else if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
+					}
+				}
+			} else {
+				getdir((char *)0);
+				while(!(u.dx || u.dy)){
+					u.dx = rn2(3)-1;
+					u.dy = rn2(3)-1;
+				}
+				if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
+				mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+				if(mtmp){
+					if(!mtmp->mtame){
 			    maybe_tame(mtmp, sobj);
+					} else if(EDOG(mtmp)->friend){
+						mtmp->mtame += ACURR(A_CHA)*10;
+						if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
+					} else if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
+				}
 		    }
 		}
 		break;
