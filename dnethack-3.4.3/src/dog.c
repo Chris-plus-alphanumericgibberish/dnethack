@@ -23,7 +23,7 @@ register struct monst *mtmp;
 	mtmp->meating = 0;
 	EDOG(mtmp)->droptime = 0;
 	EDOG(mtmp)->dropdist = 10000;
-	EDOG(mtmp)->apport = 10;
+	EDOG(mtmp)->apport = ACURR(A_CHA);
 	EDOG(mtmp)->whistletime = 0;
 	EDOG(mtmp)->hungrytime = 1000 + monstermoves;
 	EDOG(mtmp)->ogoal.x = -1;	/* force error if used before set */
@@ -678,7 +678,8 @@ boolean pets_only;	/* true for ascension or final escape */
 			// mondied(mtmp);
 	    } else if (mtmp->iswiz || 
 			mtmp->data == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] || 
-			mtmp->data == &mons[PM_HUNGRY_DEAD]
+			mtmp->data == &mons[PM_HUNGRY_DEAD] ||
+			mtmp->mtame
 		) {
 			/* we want to be able to find him when his next resurrection
 			   chance comes up, but have him resume his present location
@@ -894,11 +895,11 @@ rock:
 
 struct monst *
 tamedog(mtmp, obj)
-register struct monst *mtmp;
-register struct obj *obj;
+struct monst *mtmp;
+struct obj *obj;
 {
-	register struct monst *mtmp2;
-
+	struct monst *mtmp2, *curmon, *weakdog = (struct monst *) 0;
+	int numdogs = 0;
 	/* The Wiz, Medusa and the quest nemeses aren't even made peaceful. */
 	if (mtmp->iswiz || mtmp->data == &mons[PM_MEDUSA]
 				|| (&mons[urole.neminum] == mtmp->data))
@@ -974,7 +975,7 @@ register struct obj *obj;
 		return (struct monst *)0;
 	}
 
-	if (mtmp->mtame || !mtmp->mcanmove ||
+	if (mtmp->mtame || (!mtmp->mcanmove && !mtmp->moccupation) ||
 	    /* monsters with conflicting structures cannot be tamed */
 	    mtmp->isshk || mtmp->isgd || mtmp->ispriest || mtmp->isminion ||
 	    is_covetous(mtmp->data) || is_human(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
@@ -984,13 +985,21 @@ register struct obj *obj;
 	if (mtmp->m_id == quest_status.leader_m_id)
 	    return((struct monst *)0);
 
-	/* make a new monster which has the pet extension */
-	if(obj && is_instrument(obj)){
-		/*Make it peaceful now*/
-		mtmp->mpeaceful = 1;
-		mtmp->mtraitor  = 0;	/* No longer a traitor */
-		set_malign(mtmp);
+	/* before officially taming the target, check how many pets there are and untame one if there are too many */
+	for(curmon = fmon; curmon; curmon = curmon->nmon){
+		if(curmon->mtame && !(EDOG(curmon)->friend) && !curmon->mspiritual && curmon->mvanishes < 0){
+			numdogs++;
+			if(!weakdog) weakdog = curmon;
+			if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
+			else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+			else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+			else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+		}
 	}
+	
+	if(weakdog && numdogs > (ACURR(A_CHA)/3) ) EDOG(weakdog)->friend = 1;
+	
+	/* make a new monster which has the pet extension */
 	mtmp2 = newmonst(sizeof(struct edog) + mtmp->mnamelth);
 	*mtmp2 = *mtmp;
 	mtmp2->mxlth = sizeof(struct edog);
