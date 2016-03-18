@@ -1455,7 +1455,7 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_FIRE_BREATH:
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			buzz((int) (20 + AD_FIRE-1), 0,
 				u.ux, u.uy, u.dx, u.dy,0,d(5,dsize));
 		break;
