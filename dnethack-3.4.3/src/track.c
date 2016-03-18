@@ -39,26 +39,18 @@ coord *
 gettrack(x, y)
 register int x, y;
 {
-    register int cnt, ndist;
-    register coord *tc;
+    int cnt, ndist;
+    coord *tc;
     cnt = utcnt;
     for(tc = &utrack[utpnt]; cnt--; ){
 	if(tc == utrack) tc = &utrack[UTSZ-1];
+	
+	
 	else tc--;
 	ndist = distmin(x,y,tc->x,tc->y);
 
-	/* if far away, skip track entries til we're closer */
-	if(ndist > 2) {
-	    ndist -= 2; /* be careful due to extra decrement at top of loop */
-	    cnt -= ndist;
-	    if(cnt <= 0)
-		return (coord *) 0; /* too far away, no matches possible */
-	    if(tc < &utrack[ndist])
-		tc += (UTSZ-ndist);
-	    else
-		tc -= ndist;
-	} else if(ndist <= 1)
-	    return(ndist ? tc : 0);
+		if(ndist <= 1)
+		    return ndist ? tc : 0 ;
     }
     return (coord *)0;
 }
