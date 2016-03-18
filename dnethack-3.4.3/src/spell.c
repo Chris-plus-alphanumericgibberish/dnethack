@@ -2419,10 +2419,24 @@ spiriteffects(power, atme)
 			You("call down backup!");
 			mon = makemon(&mons[PM_CROW], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 			if(mon){
+				struct monst *curmon, *weakdog = (struct monst *)0;
+				int numdogs = 0;
 				initedog(mon);
 				mon->m_lev += (u.ulevel - mon->m_lev)/3;
 				mon->mhpmax = (mon->m_lev * 8) - 4;
 				mon->mhp =  mon->mhpmax;
+				for(curmon = fmon; curmon; curmon = curmon->nmon){
+					if(curmon->mspiritual && curmon->mvanishes < 0){
+						numdogs++;
+						if(!weakdog) weakdog = curmon;
+						if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
+						else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+						else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+						else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+					}
+				}
+				if(weakdog && numdogs > (ACURR(A_CHA)/3) ) mon->mvanishes = 5;
+				mon->mspiritual = TRUE;
 			}
 		}break;
 		case PWR_ROOT_SHOUT:{
