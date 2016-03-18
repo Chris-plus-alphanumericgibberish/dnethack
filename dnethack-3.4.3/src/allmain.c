@@ -5,6 +5,7 @@
 /* various code that was replicated in *main.c */
 
 #include "hack.h"
+#include "edog.h"
 
 #ifndef NO_SIGNAL
 #include <signal.h>
@@ -498,6 +499,11 @@ moveloop()
 						continue;
 					}
 				}
+				/* Possibly become hostile */
+				if(mtmp->mpeacetime && !mtmp->mtame){
+					mtmp->mpeacetime--;
+					if(!mtmp->mpeacetime) mtmp->mpeaceful = FALSE;
+				}
 				if(mtmp->data == &mons[PM_ZUGGTMOY]) flags.spore_level=1;
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
 				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH]) flags.walky_level=1;
@@ -783,6 +789,43 @@ moveloop()
 		     /* once-per-turn things go here */
 		    /********************************/
 
+			/* If the player has too many pets, untame them untill that is no longer the case */
+			{
+				struct monst *curmon, *weakdog;
+				int numdogs;
+				do {
+					numdogs = 0;
+					weakdog = (struct monst *)0;
+					for(curmon = fmon; curmon; curmon = curmon->nmon){
+						if(curmon->mtame && !(EDOG(curmon)->friend) && !curmon->mspiritual && curmon->mvanishes < 0){
+							numdogs++;
+							if(!weakdog) weakdog = curmon;
+							if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
+							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+						}
+					}
+					if(weakdog && numdogs > (ACURR(A_CHA)/3) ) EDOG(weakdog)->friend = 1;
+				} while(weakdog && numdogs > (ACURR(A_CHA)/3));
+				
+				do {
+					weakdog = (struct monst *)0;
+					numdogs = 0;
+					for(curmon = fmon; curmon; curmon = curmon->nmon){
+						if(curmon->mspiritual && curmon->mvanishes < 0){
+							numdogs++;
+							if(!weakdog) weakdog = curmon;
+							if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
+							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+						}
+					}
+					if(weakdog && numdogs > (ACURR(A_CHA)/3) ) weakdog->mvanishes = 5;
+				} while(weakdog && numdogs > (ACURR(A_CHA)/3));
+			}
+			
 			if(u.petattacked){
 				u.petattacked = FALSE;
 				use_skill(P_BEAST_MASTERY, 1);
