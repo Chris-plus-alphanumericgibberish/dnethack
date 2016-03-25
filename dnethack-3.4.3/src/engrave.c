@@ -72,7 +72,8 @@ static const char *random_mesg[] = {
 	"FIQ followed ChrisANG", /* Fifth ascender */
 	"Tariru followed FIQ", /* Sixth ascender */
 	"VoiceOfReason followed Tariru", /* Seventh ascender */
-	"HBane followed VoiceOfReason", /* Seventh ascender */
+	"Catullus followed VoiceOfReason", /* Eighth ascender */
+	"HBane followed Catullus", /* Ninth ascender */
 	
 	/* contributed by members of NetHackWiki */
 	"Write down the coordinates, he said.", /* the Submachine series */
@@ -5165,6 +5166,7 @@ static const char *epitaphs[] = {
        	"Algernon",
        	"All else failed...",
        	"All hail RNG",
+       	"All I see are the bright lights of a billion places I'll never go",
        	"All right, we'll call it a draw!",
        	"All's well that end well",
        	"Alone at last!",
