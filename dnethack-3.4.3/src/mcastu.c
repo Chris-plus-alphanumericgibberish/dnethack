@@ -1924,7 +1924,7 @@ ray:
        struct monst *mon;
        if (!(mvitals[sphere].mvflags & G_GONE && !In_quest(&u.uz)) &&
 		(mon = makemon(&mons[sphere],
-			u.ux, u.uy, NO_MINVENT)) != 0)
+			u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT)) != 0)
 				if (canspotmon(mon)) created++;
        if (created)
            pline("%s is created!",
@@ -2882,14 +2882,14 @@ int spellnum;
 	   if(yours || mattk->mtame){
 		   if (!(mvitals[sphere].mvflags & G_GONE && !In_quest(&u.uz)) &&
 			(mpet = makemon(&mons[sphere],
-				u.ux, u.uy, MM_EDOG|NO_MINVENT)) != 0){
+				mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_EDOG|NO_MINVENT)) != 0){
 					if (canspotmon(mpet)) created++;
 					initedog(mpet);
 			}
 		} else {
 		   if (!(mvitals[sphere].mvflags & G_GONE && !In_quest(&u.uz)) &&
 			(mpet = makemon(&mons[sphere],
-				u.ux, u.uy, NO_MINVENT)) != 0){
+				mtmp->mx, mtmp->my, MM_ADJACENTOK|NO_MINVENT)) != 0){
 					if (canspotmon(mpet)) created++;
 			}
 		}
