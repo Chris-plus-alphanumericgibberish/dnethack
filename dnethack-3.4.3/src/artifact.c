@@ -1204,6 +1204,8 @@ int tmp;
 			if(Fumbling) multiplier++;
 			if(Wounded_legs) multiplier++;
 			return damd ? d(multiplier, damd) : max(multiplier*tmp,multiplier);
+		} else if(otmp && otmp->oartifact == ART_LIMITED_MOON){
+			return 2*(damd ? d(is_lightsaber(otmp) ? 3 : 1, damd) : max(tmp,1));
 		} else return damd ? d(is_lightsaber(otmp) ? 3 : 1, damd) : max(tmp,1);
 	}
 	return 0;
