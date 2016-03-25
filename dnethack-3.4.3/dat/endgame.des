@@ -234,83 +234,85 @@ GEOMETRY:center,center
 # This map has no visible outer boundary, and
 # is mostly open area, with lava lakes and bunches of fire traps.
 MAP
-............................................................................
-....LLLLLLLL............L.......................LLL.........................
-...LL...................L......................LLLL................LL.......
-...L.............LLLL...LL....LL...............LLLLL.............LLL........
-.LLLL..............LL....L.....LLL..............LLLL..............LLLL......
-..........LLLL...LLLL...LLL....LLL......L........LLLL....LL........LLL......
-........LLLLLLL...LL.....L......L......LL.........LL......LL........LL...L..
-........LL..LLL..LL......LL......LLLL..L.........LL......LLL............LL..
-....L..LL....LLLLL.................LLLLLLL.......L......LL............LLLLLL
-....L..L.....LL.LLLL.......L............L........LLLLL.LL......LL.........LL
-....LL........L...LL......LL.............LLL.....L...LLL.......LLL.........L
-.....LLLLLL........L.......LLL.............L....LL...L.LLL......LLLLLLL.....
-..........LLLL............LL.L.............L....L...LL.........LLL..LLL.....
+    ........................................................................
+  ..LLLLLLLL.. .. ......L................   ....LLL..  .................. ..
+ ..LL......  . .........L.................  ...LLLL... ...  .......LL..    .
+ ..L....    .....LLLL...LL....LL....   ........LLLLL.....    ....LLL...   ..
+.LLLL..  ...... ...LL....L.. ..LLL.    .........LLLL......  ......LLLL......
+..........LLLL...LLLL...LLL. ..LLL..  ..L........LLLL....LL........LLL......
+. ......LLLLLLL...LL.....L..  ..L......LL....  ...LL.. ...LL........LL...L..
+.. .....LL..LLL..LL... ..LL..  ..LLLL..L....   ..LL..  ..LLL............LL..
+.  .L..LL....LLLLL....  ...........LLLLLLL.......L......LL............LLLLLL
+. ..L..L.. ..LL.LLLL..  ...L............L....  ..LLLLL.LL... ..LL.........LL
+.. .LL........L...LL.. ...LL.....  ......LLL.....L...LLL.... ..LLL.....  ..L
+.....LLLLLL..... ..L.......LLL...  ... ....L....LL...L.LLL. ....LLLLLLL. ...
+.. .......LLLL... ..... ..LL.L.... ...  ...L....L...LL.........LLL..LLL.....
 ...........................LLLLL...........LL...L...L........LLLL..LLLLLL...
-.....LLLL.............LL....LL.......LLL...LL.......L..LLL....LLLLLLL.......
-.......LLL.........LLLLLLLLLLL......LLLLL...L...........LL...LL...LL........
-.........LL.......LL.........LL.......LLL....L..LLL....LL.........LL........
-..........LLLLLLLLL...........LL....LLL.......LLLLL.....LL........LL........
-.................L.............LLLLLL............LL...LLLL.........LL.......
-.................................LL....................LL...................
+.....LLLL...     .....LL....LL.......LLL. .LL.......L..LLL....LLLLLLL.......
+  .....LLL.........LLLLLLLLLLL......LLLLL...L...........LL...LL...LL..... ..
+   ......LL.......LL.........LL.......LLL....L..LLL....LL.... ....LL........
+     .....LLLLLLLLL... .  ....LL....LLL..... .LLLLL.....LL..  ....LL .......
+     ............L...        ..LLLLLL. ...   ....LL...LLLL.........LL.......
+     . .............         ....LL... ..     .........LL...................
 ENDMAP
 TELEPORT_REGION:(69,16,69,16),(0,0,0,0)
 PORTAL:(0,0,75,19),(65,13,75,19),"water"
 
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
-TRAP:"fire",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
+MONSTER:'{',"burning fern",random
 #  An assortment of fire-appropriate nasties
 MONSTER:'D',"red dragon",random
-MONSTER:'&',"balrog",random
+MONSTER:'D',"red dragon",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'v',"fire vortex",random
-MONSTER:'d',"hell hound",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
+MONSTER:'{',"razorvine",random
 #
 MONSTER:'H',"fire giant",random
-MONSTER:'&',"barbed devil",random
-MONSTER:'d',"hell hound",random
+MONSTER:'{',"sunflower",random
+MONSTER:'c',"pyrolisk",random
 MONSTER:''',"stone golem",random
-MONSTER:'&',"pit fiend",random
+MONSTER:'A',"Firre",random
 MONSTER:'E',"fire elemental",random,hostile
 #
 MONSTER:'E',"fire elemental",random,hostile
@@ -320,13 +322,13 @@ MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'s',"scorpion",random
 MONSTER:'H',"fire giant",random
 #
-MONSTER:'d',"hell hound",random
+MONSTER:'A',"Firre",random
 MONSTER:'v',"dust vortex",random
 MONSTER:'v',"fire vortex",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
-MONSTER:'d',"hell hound",random
+MONSTER:'A',"Firre",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:''',"stone golem",random
 MONSTER:'S',"pit viper",random
@@ -339,7 +341,7 @@ MONSTER:'H',"fire giant",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'v',"fire vortex",random
 MONSTER:'v',"fire vortex",random
-MONSTER:'&',"pit fiend",random
+MONSTER:'A',"monadic deva",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'S',"pit viper",random
 #
@@ -352,18 +354,18 @@ MONSTER:':',"salamander",random,hostile
 MONSTER:':',"salamander",random,hostile
 #
 MONSTER:'H',"fire giant",random
-MONSTER:'&',"barbed devil",random
+MONSTER:'A',"lillend",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'v',"fire vortex",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'d',"hell hound",random
 MONSTER:'H',"fire giant",random
-MONSTER:'&',"pit fiend",random
+MONSTER:'A',"Tulani",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 #
-MONSTER:'&',"barbed devil",random
+MONSTER:'A',"Firre",random
 MONSTER:':',"salamander",random,hostile
 MONSTER:'v',"steam vortex",random
 MONSTER:':',"salamander",random,hostile

@@ -990,6 +990,8 @@ explmm(magr, mdef, mattk)
 	else{
 		mondead(magr);
 		if(magr->data==&mons[PM_SWAMP_FERN_SPORE]) explode(magr->mx, magr->my, 9, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_MAGICAL);
+		else if(magr->data==&mons[PM_BURNING_FERN_SPORE])
+			explode(magr->mx, magr->my, 8, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_YELLOW);
 		else explode(magr->mx, magr->my, 7, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_NOXIOUS);
 		if (magr->mhp > 0) return result;
 		else return result | MM_AGR_DIED;

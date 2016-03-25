@@ -2482,6 +2482,9 @@ boolean was_swallowed;			/* digestion */
 			else if(mdat==&mons[PM_SWAMP_FERN_SPORE]){
 	    	  explode(mon->mx, mon->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 			}
+			else if(mdat==&mons[PM_BURNING_FERN_SPORE]){
+	    	  explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+			}
 			else if(mdat->mattk[i].adtyp == AD_PHYS){
 				if(mdat == &mons[PM_FABERGE_SPHERE]) explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, rn2(7));
 				else explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_MUDDY);
@@ -2894,6 +2897,11 @@ struct monst *mon;
 			if (rn2(3)) return;
 	    } else if (mon->data == &mons[PM_SWAMP_FERN_SPORE]) {
 			if (!is_ice(mm.x, mm.y) && !is_lava(mm.x, mm.y) && !is_pool(mm.x, mm.y))
+				sporetype = 2;
+			else return;
+			if (rn2(3)) return;
+	    } else if (mon->data == &mons[PM_BURNING_FERN_SPORE]) {
+			if (!is_ice(mm.x, mm.y) && !is_pool(mm.x, mm.y))
 				sporetype = 3;
 			else return;
 			if (rn2(3)) return;
@@ -2905,9 +2913,13 @@ struct monst *mon;
 		    if (!rn2(6)) makemon(&mons[PM_DUNGEON_FERN], mm.x, mm.y, NO_MM_FLAGS);
 		    else makemon(&mons[PM_DUNGEON_FERN_SPROUT], mm.x, mm.y, NO_MM_FLAGS);
 	    break;
-		case 3:
+		case 2:
 		    if (!rn2(6)) makemon(&mons[PM_SWAMP_FERN], mm.x, mm.y, NO_MM_FLAGS);
 		    else makemon(&mons[PM_SWAMP_FERN_SPROUT], mm.x, mm.y, NO_MM_FLAGS);
+	    break;
+		case 3:
+		    if (!rn2(6)) makemon(&mons[PM_BURNING_FERN], mm.x, mm.y, NO_MM_FLAGS);
+		    else makemon(&mons[PM_BURNING_FERN_SPROUT], mm.x, mm.y, NO_MM_FLAGS);
 	    break;
 		default:
 		    pline("BUG: Unknown spore type: (%d)", sporetype);

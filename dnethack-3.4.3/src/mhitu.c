@@ -3382,7 +3382,10 @@ boolean ufound;
 	switch (mattk->adtyp) {
 		case AD_FNEX:
 			mondead(mtmp);
-			if(mtmp->data==&mons[PM_SWAMP_FERN_SPORE]) explode(mtmp->mx, mtmp->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL);
+			if(mtmp->data==&mons[PM_SWAMP_FERN_SPORE]) 
+				explode(mtmp->mx, mtmp->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL);
+			else if(mtmp->data==&mons[PM_BURNING_FERN_SPORE])
+				explode(mtmp->mx, mtmp->my, 8, tmp, MON_EXPLODE, EXPL_YELLOW);
 			else explode(mtmp->mx, mtmp->my, 7, tmp, MON_EXPLODE, EXPL_NOXIOUS);
 			return 2;
 		break;
@@ -4033,11 +4036,17 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    mm.x = mtmp->mx; mm.y = mtmp->my;
 		    enexto(&mm, mm.x, mm.y, &mons[PM_DUNGEON_FERN_SPORE]);
 			if (mtmp->data == &mons[PM_DUNGEON_FERN] ||
-				mtmp->data == &mons[PM_DUNGEON_FERN_SPROUT]) {
+				mtmp->data == &mons[PM_DUNGEON_FERN_SPROUT]
+			) {
 			makemon(&mons[PM_DUNGEON_FERN_SPORE], mm.x, mm.y, NO_MM_FLAGS);
 		    } else if (mtmp->data == &mons[PM_SWAMP_FERN] ||
-				mtmp->data == &mons[PM_SWAMP_FERN_SPROUT]) {
+				mtmp->data == &mons[PM_SWAMP_FERN_SPROUT]
+			) {
 			makemon(&mons[PM_SWAMP_FERN_SPORE], mm.x, mm.y, NO_MM_FLAGS);
+		    } else if (mtmp->data == &mons[PM_BURNING_FERN] ||
+				mtmp->data == &mons[PM_BURNING_FERN_SPROUT]
+			) {
+				makemon(&mons[PM_BURNING_FERN_SPORE], mm.x, mm.y, NO_MM_FLAGS);
 		    } else { /* currently these should not be generated */
 			makemon(&mons[PM_DUNGEON_FERN_SPORE], mm.x, mm.y, NO_MM_FLAGS);
 		    }

@@ -335,8 +335,11 @@ boolean yours; /* is it your fault (for killing monsters) */
 		    if (mtmp->mhp < 1) explmask = 2;
 		    else switch(adtyp) {
 			case AD_PHYS:
-				if(mtmp->data == &mons[PM_LICH__THE_FIEND_OF_EARTH] || mtmp->data == &mons[PM_CHAOS])
-					explmask |= TRUE;
+				if(mtmp->data == &mons[PM_LICH__THE_FIEND_OF_EARTH] || 
+				   mtmp->data == &mons[PM_BURNING_FERN_SPROUT] ||
+				   mtmp->data == &mons[PM_BURNING_FERN] ||
+				   mtmp->data == &mons[PM_CHAOS]
+				) explmask |= TRUE;
 				break;
 			case AD_MAGM:
 				explmask |= resists_magm(mtmp);

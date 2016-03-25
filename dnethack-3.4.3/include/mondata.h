@@ -461,14 +461,17 @@
 /* Keep track of ferns, fern sprouts, fern spores, and other plants */
 
 #define is_fern_sprout(ptr)	((ptr) == &mons[PM_DUNGEON_FERN_SPROUT] || \
-				 (ptr) == &mons[PM_SWAMP_FERN_SPROUT])
+				 (ptr) == &mons[PM_SWAMP_FERN_SPROUT] || \
+				 (ptr) == &mons[PM_BURNING_FERN_SPROUT])
 
 #define is_fern_spore(ptr)	((ptr) == &mons[PM_DUNGEON_FERN_SPORE] || \
-				 (ptr) == &mons[PM_SWAMP_FERN_SPORE])
+				 (ptr) == &mons[PM_SWAMP_FERN_SPORE] || \
+				 (ptr) == &mons[PM_BURNING_FERN_SPORE])
 
 #define is_fern(ptr)		(is_fern_sprout(ptr) || \
 				 (ptr) == &mons[PM_DUNGEON_FERN] || \
-				 (ptr) == &mons[PM_SWAMP_FERN])
+				 (ptr) == &mons[PM_SWAMP_FERN] || \
+				 (ptr) == &mons[PM_BURNING_FERN])
 
 #define is_vegetation(ptr)	((ptr)->mlet == S_PLANT || is_fern(ptr))
 
