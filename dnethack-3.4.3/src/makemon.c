@@ -3611,6 +3611,7 @@ register int	mmflags;
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && (ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])){
 		struct obj *otmp = mksobj(SADDLE, TRUE, FALSE);
 		initedog(mtmp);
+		EDOG(mtmp)->loyal = TRUE;
 		if (otmp) {
 			if (mpickobj(mtmp, otmp)) panic("merged saddle?");
 			mtmp->misc_worn_check |= W_SADDLE;

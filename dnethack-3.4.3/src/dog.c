@@ -36,6 +36,7 @@ register struct monst *mtmp;
 	EDOG(mtmp)->friend = 0;
 	EDOG(mtmp)->waspeaceful = 0;
 //endif
+	EDOG(mtmp)->loyal = 0;
 }
 
 STATIC_OVL int
@@ -237,6 +238,7 @@ makedog()
 		mtmp = christen_monst(mtmp, petname);
 
 	initedog(mtmp);
+	EDOG(mtmp)->loyal = TRUE;
 	return(mtmp);
 }
 
