@@ -17,6 +17,13 @@ int explcolors[] = {
 	CLR_MAGENTA,	/* magical */
 	CLR_ORANGE,	/* fiery   */
 	CLR_WHITE,	/* frosty  */
+	CLR_GRAY,	/* gray  */
+	CLR_BRIGHT_GREEN,	/* lime  */
+	CLR_YELLOW,	/* yellow  */
+	CLR_BRIGHT_BLUE,	/* bright blue */
+	CLR_BRIGHT_MAGENTA,	/* magenta */
+	CLR_RED,	/* red */
+	CLR_BRIGHT_CYAN,	/* cyan */
 };
 
 #if !defined(TTY_GRAPHICS)
