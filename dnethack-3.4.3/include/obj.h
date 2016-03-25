@@ -349,7 +349,8 @@ struct obj {
 			(otmp)->otyp == LEATHER_JACKET || (otmp)->otyp == ELVEN_TOGA || (otmp)->otyp == BLACK_DRESS)
 #define is_medium_armor(otmp)	((otmp)->otyp == BRONZE_PLATE_MAIL || (otmp)->otyp == DROVEN_CHAIN_MAIL || \
 			(otmp)->otyp == CHAIN_MAIL || (otmp)->otyp == SCALE_MAIL || (otmp)->otyp == STUDDED_LEATHER_ARMOR || \
-			(otmp)->otyp == LEATHER_ARMOR || (otmp)->otyp == BANDED_MAIL || (otmp)->otyp == NOBLE_S_DRESS)
+			(otmp)->otyp == LEATHER_ARMOR || (otmp)->otyp == BANDED_MAIL || (otmp)->otyp == NOBLE_S_DRESS || \
+			(otmp)->otyp == PLASTEEL_ARMOR)
 #define is_elven_armor(otmp)	((otmp)->otyp == ELVEN_HELM\
 				|| (otmp)->otyp == HIGH_ELVEN_HELM\
 				|| (otmp)->otyp == ELVEN_MITHRIL_COAT\
