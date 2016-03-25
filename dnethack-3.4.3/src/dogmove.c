@@ -639,6 +639,8 @@ int after, udist, whappr;
 	    gtyp = APPORT;
 	    gx = u.ux;
 	    gy = u.uy;
+	} else if(distu(mtmp->mx,mtmp->my) > 5 || (!in_masters_sight && distu(mtmp->mx,mtmp->my) > 2) ){
+	    gtyp = UNDEF;
 	} else {
 #define DDIST(x,y) (dist2(x,y,omx,omy))
 #define SQSRCHRADIUS 5
@@ -712,6 +714,27 @@ int after, udist, whappr;
 		}
 		if(appr == 0 && Race_if(PM_DROW) && is_spider(mtmp->data)){
 			appr = 1;
+		}
+		
+		if(appr >= 0){
+			struct monst *m2 = (struct monst *)0;
+			int distminbest = SQSRCHRADIUS;
+			for(m2=fmon; m2; m2 = m2->nmon){
+				if(!m2->mtame && !m2->mpeaceful && distu(m2->mx,m2->my) <= SQSRCHRADIUS && distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) < distminbest){
+					distminbest = distmin(mtmp->mx,mtmp->my,m2->mx,m2->my);
+					gx = m2->mx;
+					gy = m2->my;
+					if(MON_WEP(mtmp) && 
+						(is_launcher(MON_WEP(mtmp)) || is_firearm(MON_WEP(mtmp)) )
+					){
+						if(distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) >= BOLT_LIM) appr = 1;
+						else if(distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) < 4) appr = -1;
+						else appr = 0;
+					} else {
+						appr = 1;
+					}
+				}
+			}
 		}
 		/* if you have dog food it'll follow you more closely */
 		if (appr == 0) {
