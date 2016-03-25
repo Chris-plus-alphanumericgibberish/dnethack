@@ -59,10 +59,10 @@ MONSTER:'T',"rock troll",(53,12)
 MONSTER:'H',"stone giant",(54,12)
 #
 MONSTER:'S',"pit viper",(70,05)
-MONSTER:'&',"barbed devil",(69,06)
+MONSTER:'A',"monadic deva",(69,06)
 MONSTER:'H',"stone giant",(69,08)
 MONSTER:''',"stone golem",(71,08)
-MONSTER:'&',"pit fiend",(70,09)
+MONSTER:'A',"Mahadeva",(70,09)
 MONSTER:'E',"earth elemental",(70,08),hostile
 #
 MONSTER:'E',"earth elemental",(60,03),hostile
@@ -91,7 +91,7 @@ MONSTER:''',"stone golem",(01,02)
 MONSTER:'E',"earth elemental",(02,02),hostile
 MONSTER:'T',"rock troll",(04,03)
 MONSTER:'T',"rock troll",(03,03)
-MONSTER:'&',"pit fiend",(03,04)
+MONSTER:'A',"monadic deva",(03,04)
 MONSTER:'E',"earth elemental",(04,05),hostile
 MONSTER:'S',"pit viper",(05,06)
 #
@@ -104,18 +104,18 @@ MONSTER:'E',"earth elemental",(22,06),hostile
 MONSTER:'E',"earth elemental",(23,06),hostile
 #
 MONSTER:'S',"pit viper",(14,08)
-MONSTER:'&',"barbed devil",(14,09)
+MONSTER:'A',"monadic deva",(14,09)
 MONSTER:'E',"earth elemental",(13,10),hostile
 MONSTER:'T',"rock troll",(12,11)
 MONSTER:'E',"earth elemental",(14,12),hostile
 MONSTER:'E',"earth elemental",(15,13),hostile
 MONSTER:'H',"stone giant",(17,13)
 MONSTER:''',"stone golem",(18,13)
-MONSTER:'&',"pit fiend",(18,12)
+MONSTER:'A',"Bralani",(18,12)
 MONSTER:'E',"earth elemental",(18,11),hostile
 MONSTER:'E',"earth elemental",(18,10),hostile
 #
-MONSTER:'&',"barbed devil",(02,16)
+MONSTER:'A',"Bralani",(02,16)
 MONSTER:'E',"earth elemental",(03,16),hostile
 MONSTER:'T',"rock troll",(02,17)
 MONSTER:'E',"earth elemental",(04,17),hostile
@@ -187,6 +187,10 @@ MONSTER:'y',"yellow light",random,hostile
 MONSTER:'y',"yellow light",random,hostile
 
 MONSTER:'A',"couatl",random
+MONSTER:'A',"couatl",random
+MONSTER:'A',"couatl",random
+
+MONSTER:'A',"Giant Eagle",random
 
 MONSTER:'D',random,random
 MONSTER:'D',random,random
@@ -473,6 +477,14 @@ MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
+
+MONSTER:'A',"Noviere",random
+MONSTER:'A',"Noviere",random
+MONSTER:'A',"Noviere",random
+MONSTER:'A',"Noviere",random
+MONSTER:'A',"Noviere",random
+MONSTER:'A',"Noviere",random
+MONSTER:'A',"Noviere",random
 
 
 MAZE:"astral",' '
