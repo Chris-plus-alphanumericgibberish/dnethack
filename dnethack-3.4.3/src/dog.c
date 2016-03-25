@@ -937,7 +937,7 @@ struct obj *obj;
 	}
 
 	/* feeding it treats makes it tamer */
-	if (mtmp->mtame && obj && !is_instrument(obj)) {
+	if (mtmp->mtame && obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS) {
 	    int tasty;
 
 	    if (mtmp->mcanmove && !mtmp->mconf && !mtmp->meating &&
@@ -982,7 +982,7 @@ struct obj *obj;
 	    mtmp->isshk || mtmp->isgd || mtmp->ispriest || mtmp->isminion ||
 	    is_covetous(mtmp->data) || is_human(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
 	    (is_demon(mtmp->data) && !is_demon(youmonst.data)) ||
-	    (obj && !is_instrument(obj) && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
+	    (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
 
 	if (mtmp->m_id == quest_status.leader_m_id)
 	    return((struct monst *)0);

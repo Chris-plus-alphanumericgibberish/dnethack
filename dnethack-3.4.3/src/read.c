@@ -1055,7 +1055,7 @@ struct obj *sobj;
 	    if (mtmp->isshk)
 		make_happy_shk(mtmp, FALSE);
 	    else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
-		(void) tamedog(mtmp, (struct obj *) 0);
+		(void) tamedog(mtmp, sobj);
 	}
 }
 
