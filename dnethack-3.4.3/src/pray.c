@@ -1467,7 +1467,7 @@ pleased(g_align)
 			/* if any levels have been lost (and not yet regained),
 			   treat this effect like blessed full healing */
 			if (u.ulevel < u.ulevelmax) {
-			u.ulevelmax -= 1;	/* see potion.c */
+			// u.ulevelmax -= 1;	/* see potion.c */
 			pluslvl(FALSE);
 			} else {
 			u.uhpmax += 5;
