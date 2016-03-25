@@ -210,13 +210,7 @@ boolean sanctum;   /* is it the seat of the high priest? */
 
 	if(MON_AT(sx+1, sy))
 		(void) rloc(m_at(sx+1, sy), FALSE); /* insurance */
-	if(Amask2align(levl[sx][sy].altarmask) == A_NONE && on_level(&sanctum_level, &u.uz)) //make moloch's high priest
-		priest = makemon(&mons[PM_ELDER_PRIEST], sx + 1, sy, NO_MM_FLAGS);
-	else if(Role_if(PM_EXILE)){
-		if(!sanctum) priest = makemon(&mons[PM_ALIGNED_PRIEST], sx + 1, sy, NO_MM_FLAGS);
-		else priest = (struct monst *) 0;
-	} else priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
-			 sx + 1, sy, NO_MM_FLAGS);
+	priest = god_priest(align_gname_full(Amask2align(levl[sx][sy].altarmask)), sx, sy, sanctum);
 	if (priest) {
 		EPRI(priest)->shroom = (sroom - rooms) + ROOMOFFSET;
 		EPRI(priest)->shralign = Amask2align(levl[sx][sy].altarmask);
@@ -317,12 +311,12 @@ char *pname;		/* caller-supplied output buffer */
 		/* use epri */
 		if (mon->mtame && mon->data == &mons[PM_ANGEL])
 			Strcat(pname, "guardian ");
-		if (mon->data != &mons[PM_ALIGNED_PRIEST] &&
-				mon->data != &mons[PM_HIGH_PRIEST] &&
-				mon->data != &mons[PM_ELDER_PRIEST]) {
-			Strcat(pname, what);
-			Strcat(pname, " ");
-		}
+		// if (mon->data != &mons[PM_ALIGNED_PRIEST] &&
+				// mon->data != &mons[PM_HIGH_PRIEST] &&
+				// mon->data != &mons[PM_ELDER_PRIEST]) {
+			// Strcat(pname, what);
+			// Strcat(pname, " ");
+		// }
 		if (mon->data != &mons[PM_ANGEL]) {
 			if (!mon->ispriest && EPRI(mon)->renegade)
 				Strcat(pname, "renegade ");

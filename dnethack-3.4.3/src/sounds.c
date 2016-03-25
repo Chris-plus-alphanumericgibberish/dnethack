@@ -599,10 +599,15 @@ register struct monst *mtmp;
 	if (!canspotmon(mtmp) && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) < 2 && ptr->msound != MS_SONG && ptr->msound != MS_OONA)
 	map_invisible(mtmp->mx, mtmp->my);
 	
+	if(mtmp->ispriest){
+		priest_talk(mtmp);
+		return 1;
+	}
+	
 	switch (ptr->msound) {
 	case MS_ORACLE:
 	    return doconsult(mtmp);
-	case MS_PRIEST:
+	case MS_PRIEST: /*Most (all?) things with this will have ispriest set*/
 	    priest_talk(mtmp);
 	    break;
 	case MS_NEMESIS:

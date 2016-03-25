@@ -1154,6 +1154,124 @@ god_minions(gptr)
 	return Cdemons;
 }
 
+struct monst *
+god_priest(gptr, sx, sy, sanctum)
+	int sx, sy;
+	const char *gptr;
+	boolean sanctum;   /* is it the seat of the high priest? */
+{
+	struct monst *priest;
+	
+	if(on_level(&sanctum_level, &u.uz)) //make moloch's high priest, assume gptr == Moloch is potentially misleading and not necessary
+		priest = makemon(&mons[PM_ELDER_PRIEST], sx + 1, sy, NO_MM_FLAGS);
+	else if(Role_if(PM_EXILE) && sanctum) priest = (struct monst *) 0;
+	else {
+		int role = -1, galign, i;
+		
+		for(i=0;i<SIZE(roles)-1;i++){
+			if(roles[i].lgod == gptr){
+				role = roles[i].malenum;
+				galign = A_LAWFUL;
+			} else if(roles[i].ngod == gptr){
+				role = roles[i].malenum;
+				galign = A_NEUTRAL;
+			} else if(roles[i].cgod == gptr){
+				role = roles[i].malenum;
+				galign = A_CHAOTIC;
+			}
+		}
+		
+		priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
+			sx + 1, sy, NO_MM_FLAGS);
+		if(role != -1){
+			return priest;
+		}
+		
+		if(gptr == ElfRangerLgod) 
+		if(gptr == ElfRangerNgod) 
+		if(gptr == ElfRangerCgod) 
+		
+		if(gptr == ElfPriestessLgod){
+			priest->female = TRUE;
+			return priest;
+		}
+		if(gptr == ElfPriestessNgod){
+			priest->female = TRUE;
+			return priest;
+		}
+		if(gptr == ElfPriestessCgod){
+			priest->female = TRUE;
+			return priest;
+		}
+		
+		
+		if(gptr == ElfPriestLgod){
+			priest->female = FALSE;
+			return priest;
+		}
+		if(gptr == ElfPriestNgod){
+			priest->female = FALSE;
+			return priest;
+		}
+		if(gptr == ElfPriestCgod){
+			priest->female = FALSE;
+			return priest;
+		}
+		
+		if(gptr == DrowMaleLgodKnown || gptr == DrowMaleLgodUknwn){
+			priest->female = FALSE;
+			if(!sanctum) newcham(priest,&mons[PM_DROW_ALIENIST],FALSE,FALSE);
+			return priest;
+		}
+		if(gptr == DrowMaleNgod){
+			priest->female = FALSE;
+			if(!sanctum) newcham(priest,&mons[PM_HEDROW_BLADEMASTER],FALSE,FALSE);
+			return priest;
+		}
+		if(gptr == DrowMaleCgod){
+			priest->female = FALSE;
+			if(!sanctum) newcham(priest,&mons[PM_DROW_MATRON],FALSE,FALSE);
+			return priest;
+		}
+		
+		if(gptr == DrowNobMaleNgod){
+			priest->female = FALSE;
+			if(!sanctum) newcham(priest,&mons[PM_HEDROW_WIZARD],FALSE,FALSE);
+			return priest;
+		}
+		if(gptr == DrowNobMaleCgod){
+			if(!sanctum){
+				if(priest->female) newcham(priest,&mons[PM_PRIESTESS_OF_GHAUNADAUR],FALSE,FALSE);
+				else newcham(priest,&mons[PM_PRIEST_OF_GHAUNADAUR],FALSE,FALSE);
+			}
+			return priest;
+		}
+		if(gptr == DrowFemaleLgod){
+			priest->female = TRUE;
+			if(!sanctum) newcham(priest,&mons[PM_STJARNA_ALFAR],FALSE,FALSE);
+			return priest;
+		}
+		if(gptr == DrowNobFemaleLgod){
+			priest->female = TRUE;
+			if(!sanctum) newcham(priest,&mons[PM_DROW_MATRON],FALSE,FALSE);
+			//ver'tas
+			return priest;
+		}
+		if(gptr == DrowFemaleNgod){
+			priest->female = TRUE;
+			if(!sanctum) newcham(priest,&mons[PM_DROW_MATRON],FALSE,FALSE);
+			//NKiaransali
+			return priest;
+		}
+		if(gptr == DrowFemaleCgod){
+			priest->female = TRUE;
+			if(!sanctum) newcham(priest,&mons[PM_DROW_MATRON],FALSE,FALSE);
+			//Lolth
+			return priest;
+		}
+	}
+	return priest;
+}
 
 int
 str2role(str)
