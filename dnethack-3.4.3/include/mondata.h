@@ -244,6 +244,8 @@
 							  || (ptr) == &mons[PM_GREMLIN]\
 							  || (ptr) == &mons[PM_DUNGEON_FERN_SPORE]\
 							  || (ptr) == &mons[PM_DUNGEON_FERN_SPROUT]\
+							  || (ptr) == &mons[PM_BURNING_FERN_SPORE]\
+							  || (ptr) == &mons[PM_BURNING_FERN_SPROUT]\
 							  || (ptr) == &mons[PM_SWAMP_FERN_SPORE]\
 							  || (ptr) == &mons[PM_SWAMP_FERN_SPROUT]\
 							  || (ptr) == &mons[PM_RAZORVINE]\
