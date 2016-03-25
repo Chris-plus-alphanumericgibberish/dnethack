@@ -48,6 +48,7 @@
 #define is_floater(ptr)		((ptr) && (ptr)->mlet == S_EYE && !(is_auton(ptr) || ptr == &mons[PM_MONOTON]))
 #define is_clinger(ptr)		(((ptr)->mflags1 & M1_CLING) != 0L)
 #define is_swimmer(ptr)		(((ptr)->mflags1 & M1_SWIM) != 0L)
+#define is_suicidal(ptr)	((ptr)->mlet == S_EYE && !is_auton(ptr) && ptr != &mons[PM_FLOATING_EYE] && ptr != &mons[PM_BEHOLDER])
 #define breathless(ptr)		(((ptr)->mflags1 & M1_BREATHLESS) != 0L)
 #define amphibious(ptr)		(((ptr)->mflags1 & (M1_AMPHIBIOUS | M1_BREATHLESS)) != 0L)
 #define passes_walls(ptr)	(((ptr)->mflags1 & M1_WALLWALK) != 0L)
