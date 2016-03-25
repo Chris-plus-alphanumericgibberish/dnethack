@@ -242,6 +242,7 @@ boolean sanctum;   /* is it the seat of the high priest? */
 	}
 	if(In_quest(&u.uz) && u.uz.dlevel == nemesis_level.dlevel && Role_if(PM_EXILE)){
 		int qpm = NON_PM;
+		const int *minions;
 		if(Amask2align(levl[sx][sy].altarmask) == A_LAWFUL){
 			makemon(&mons[roles[flags.panLgod].guardnum], sx, sy, MM_ADJACENTOK);
 			makemon(&mons[roles[flags.panLgod].guardnum], sx, sy, MM_ADJACENTOK);
@@ -255,6 +256,10 @@ boolean sanctum;   /* is it the seat of the high priest? */
 				roles[flags.panLgod].malenum : 
 				roles[flags.panLgod].femalenum;
 			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+			minions = god_minions(align_gname_full(A_LAWFUL));
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
 		} else if(Amask2align(levl[sx][sy].altarmask) == A_CHAOTIC){
 			makemon(&mons[roles[flags.panCgod].guardnum], sx, sy, MM_ADJACENTOK);
 			makemon(&mons[roles[flags.panCgod].guardnum], sx, sy, MM_ADJACENTOK);
@@ -268,6 +273,10 @@ boolean sanctum;   /* is it the seat of the high priest? */
 				roles[flags.panCgod].malenum : 
 				roles[flags.panCgod].femalenum;
 			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+			minions = god_minions(align_gname_full(A_CHAOTIC));
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
 		} else if(Amask2align(levl[sx][sy].altarmask) == A_NEUTRAL){
 			makemon(&mons[roles[flags.panNgod].guardnum], sx, sy, MM_ADJACENTOK);
 			makemon(&mons[roles[flags.panNgod].guardnum], sx, sy, MM_ADJACENTOK);
@@ -281,6 +290,10 @@ boolean sanctum;   /* is it the seat of the high priest? */
 				roles[flags.panNgod].malenum : 
 				roles[flags.panNgod].femalenum;
 			makemon(&mons[qpm], sx, sy, MM_ADJACENTOK);
+			minions = god_minions(align_gname_full(A_NEUTRAL));
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
+			makemon(&mons[minions[0]], sx, sy, MM_ADJACENTOK);
 		}
 	}
 }
