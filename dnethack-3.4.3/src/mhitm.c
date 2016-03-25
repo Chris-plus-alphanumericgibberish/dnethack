@@ -1901,7 +1901,7 @@ physical:
 			for (i = rn2(3)+2; i > 0; i--) {
 				x = rn2(3)-1;
 				y = rn2(3)-1;
-				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(7));		//-1 is unspecified source. 8 is physical
+				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(EXPL_MAX));		//-1 is unspecified source. 8 is physical
 			}
 			tmp=0;
 		} break;
