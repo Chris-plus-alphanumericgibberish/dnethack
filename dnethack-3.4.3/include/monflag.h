@@ -50,6 +50,7 @@
 #define MS_DREAD	41	/* song of the dread seraphim */
 #define MS_OONA		42	/* song of Oona */
 #define MS_SONG		43	/* other singers */
+#define MS_FLOWER	44	/* black flower's songs */
 
 
 #define MR_FIRE		0x001	/* 1 resists fire */
