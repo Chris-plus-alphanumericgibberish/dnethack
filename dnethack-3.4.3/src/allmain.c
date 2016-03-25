@@ -797,7 +797,9 @@ moveloop()
 					numdogs = 0;
 					weakdog = (struct monst *)0;
 					for(curmon = fmon; curmon; curmon = curmon->nmon){
-						if(curmon->mtame && !(EDOG(curmon)->friend) && !curmon->mspiritual && curmon->mvanishes < 0){
+						if(curmon->mtame && !(EDOG(curmon)->friend) && !(EDOG(curmon)->loyal) && 
+							!is_suicidal(curmon->data) && !curmon->mspiritual && curmon->mvanishes < 0
+						){
 							numdogs++;
 							if(!weakdog) weakdog = curmon;
 							if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;

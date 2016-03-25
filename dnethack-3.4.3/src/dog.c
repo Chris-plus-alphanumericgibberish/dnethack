@@ -508,7 +508,7 @@ long nmv;		/* number of moves */
 	else mtmp->mspec_used -= imv;
 
 	/* reduce tameness for every 150 moves you are separated */
-	if (mtmp->mtame && !(
+	if (mtmp->mtame && !(EDOG(mtmp)->loyal) && !(
 		In_quest(&u.uz) && 
 		((Is_qstart(&u.uz) && !flags.stag) || 
 		 (Is_nemesis(&u.uz) && flags.stag)) &&
@@ -988,18 +988,22 @@ struct obj *obj;
 	    return((struct monst *)0);
 
 	/* before officially taming the target, check how many pets there are and untame one if there are too many */
-	for(curmon = fmon; curmon; curmon = curmon->nmon){
-		if(curmon->mtame && !(EDOG(curmon)->friend) && !curmon->mspiritual && curmon->mvanishes < 0){
-			numdogs++;
-			if(!weakdog) weakdog = curmon;
-			if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
-			else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-			else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-			else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+	if(!(obj && obj->oclass == SCROLL_CLASS && Confusion)){
+		for(curmon = fmon; curmon; curmon = curmon->nmon){
+			if(curmon->mtame && !(EDOG(curmon)->friend) && !(EDOG(curmon)->loyal) && !is_suicidal(curmon->data)
+				&& !curmon->mspiritual && curmon->mvanishes < 0
+			){
+				numdogs++;
+				if(!weakdog) weakdog = curmon;
+				if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
+				else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+				else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+				else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
+			}
 		}
+		
+		if(weakdog && numdogs > (ACURR(A_CHA)/3) ) EDOG(weakdog)->friend = 1;
 	}
-	
-	if(weakdog && numdogs > (ACURR(A_CHA)/3) ) EDOG(weakdog)->friend = 1;
 	
 	/* make a new monster which has the pet extension */
 	mtmp2 = newmonst(sizeof(struct edog) + mtmp->mnamelth);
