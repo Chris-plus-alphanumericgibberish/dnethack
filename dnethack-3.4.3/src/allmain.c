@@ -315,6 +315,7 @@ moveloop()
     objects_init();
 
 #ifdef WIZARD
+	// Called twice in dNAO?
     if (wizard) add_debug_extended_commands();
 #endif
 
