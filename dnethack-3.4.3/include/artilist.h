@@ -498,13 +498,13 @@ A("The Book of Lost Names", SPE_SECRETS,
 	(SPFX_NOGEN|SPFX_RESTR), 0,0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	SPIRITNAMES,	A_NONE, NON_PM, NON_PM, 5000L, 
-	0,0,0),
+	0,SPFX3_NOCNT,0),
 
 A("The Book of Infinite Spells", SPE_SECRETS,
 	(SPFX_NOGEN|SPFX_RESTR), 0,0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	INFINITESPELLS,	A_NONE, NON_PM, NON_PM, 5000L, 
-	0,0,0),
+	0,SPFX3_NOCNT,0),
 
 
 /*//////////Artifact Armors//////////*/
@@ -742,7 +742,7 @@ A("The Necronomicon", SPE_SECRETS, /*from the works of HP Lovecraft*/
 	(SPFX_NOGEN|SPFX_RESTR), 0,0,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	NECRONOMICON,	A_NONE, NON_PM, NON_PM, 5000L, 
-	0,0,0),
+	0,SPFX3_NOCNT,0),
 
 A("The Hand-Mirror of Cthylla", MIRROR, /*from the works of HP Lovecraft*/
 	(SPFX_NOGEN|SPFX_RESTR), (SPFX_SEARCH|SPFX_TCTRL),0,
