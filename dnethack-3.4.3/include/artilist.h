@@ -677,7 +677,7 @@ A("Nighthorn",	UNICORN_HORN, /*from SLASH'EM, although modified from its origina
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_INTEL|SPFX_LUCK), 0,0, //needs quote
 	FIRE(12,24),	FIRE(0,0),	NO_CARY,
 	LEVITATION,	A_CHAOTIC, NON_PM, NON_PM, 5000L, 
-	SPFX2_FIRE2,SPFX3_FEAR,0), /*Fire explosion and acts as a scroll of scare monster against non-chaotic monsters.*/
+	SPFX2_FIRE2,SPFX3_FEAR|SPFX3_NOCNT,0), /*Fire explosion and acts as a scroll of scare monster against non-chaotic monsters.*/
 
 
 /*/Artifact Keys.  Must be grouped together.  Some code in lock.c, artifact.h, and invent.c depends on the order./*/
