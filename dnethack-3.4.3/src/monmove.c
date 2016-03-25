@@ -256,8 +256,10 @@ struct monst *mtmp;
 	if(mtmp->isshk || mtmp->iswiz || 
 			is_rider(mtmp->data)) return FALSE;
 	return 	mtmp->data->mlet == S_LEPRECHAUN ||
-			mtmp->data->mlet == S_NYMPH;
+			mtmp->data->mlet == S_NYMPH ||
+			is_thief(mtmp->data);
 }
+
 boolean
 scaryQueen(complete, mtmp)
 int complete;

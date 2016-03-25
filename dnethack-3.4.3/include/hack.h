@@ -130,7 +130,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 						(mon)->mhp < (mon)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mon)->mx, (mon)->my)) || \
 					(u.specialSealsActive&SEAL_ACERERAK && is_undead((mon)->data)) || \
 					(uwep && uwep->oclass == WEAPON_CLASS && objects[(uwep)->otyp].oc_material == WOOD && \
-					(uwep->ovar1 & WARD_THJOFASTAFUR) && ((mon)->data->mlet == S_LEPRECHAUN || (mon)->data->mlet == S_NYMPH)) \
+					(uwep->ovar1 & WARD_THJOFASTAFUR) && ((mon)->data->mlet == S_LEPRECHAUN || (mon)->data->mlet == S_NYMPH || is_thief((mon)->data))) \
 				)
 
 #include "trap.h"
