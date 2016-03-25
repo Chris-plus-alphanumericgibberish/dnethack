@@ -1107,7 +1107,7 @@ boolean was_dead;
 	}
     } else {
 	/* chance it goes wild anyway - Pet Semetary */
-	if (!rn2(mtmp->mtame)) {
+	if (!(edog && edog->loyal) && !rn2(mtmp->mtame)) {
 	    mtmp->mpeaceful = mtmp->mtame = 0;
 	}
     }
