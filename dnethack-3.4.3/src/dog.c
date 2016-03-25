@@ -1120,18 +1120,18 @@ boolean was_dead;
 
     /* if its still a pet, start a clean pet-slate now */
     if (edog && mtmp->mtame) {
-	edog->revivals++;
-	edog->killed_by_u = 0;
-	edog->abuse = 0;
-	edog->ogoal.x = edog->ogoal.y = -1;
-	if (was_dead || edog->hungrytime < monstermoves + 500L)
-	    edog->hungrytime = monstermoves + 500L;
-	if (was_dead) {
-	    edog->droptime = 0L;
-	    edog->dropdist = 10000;
-	    edog->whistletime = 0L;
-	    edog->apport = 5;
-	} /* else lifesaved, so retain current values */
+		edog->revivals++;
+		edog->killed_by_u = 0;
+		edog->abuse = 0;
+		edog->ogoal.x = edog->ogoal.y = -1;
+		if (was_dead || edog->hungrytime < monstermoves + 500L)
+		    edog->hungrytime = monstermoves + 500L;
+		if (was_dead) {
+		    edog->droptime = 0L;
+		    edog->dropdist = 10000;
+		    edog->whistletime = 0L;
+		    edog->apport = ACURR(A_CHA);
+		} /* else lifesaved, so retain current values */
     }
 }
 
