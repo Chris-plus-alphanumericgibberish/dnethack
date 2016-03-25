@@ -1888,7 +1888,7 @@ register int zx, zy, digdepth;
 	struct rm *room;
 	struct monst *mtmp;
 	struct obj *otmp;
-	boolean shopdoor, shopwall, maze_dig;
+	boolean shopdoor, shopwall, maze_dig, cavesafe = FALSE;
 	/*
 	 * Original effect (approximately):
 	 * from CORR: dig until we pierce a wall
@@ -2023,6 +2023,15 @@ register int zx, zy, digdepth;
 			} else {	/* IS_ROCK but not IS_WALL or SDOOR */
 				room->typ = CORR;
 				digdepth--;
+				if(Is_earthlevel(&u.uz) && !cavesafe) {
+					if(!rn2(3)) {
+						mkcavearea(FALSE);
+						digdepth=0;
+					} else if(rn2(2)) {
+						mkcavearea(TRUE);
+						digdepth=0;
+					} else cavesafe = TRUE;
+				}
 			}
 			unblock_point(zx,zy); /* vision */
 	    }
