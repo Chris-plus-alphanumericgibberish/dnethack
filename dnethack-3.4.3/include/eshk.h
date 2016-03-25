@@ -39,10 +39,10 @@ struct eshk {
 	char shknam[PL_NSIZ];
 #ifdef OTHER_SERVICES
 	long services;          /* Services offered */
-#define SHK_ID_BASIC    01L
-#define SHK_ID_PREMIUM  02L
-#define SHK_UNCURSE     010L
-#define SHK_APPRAISE    0100L
+#define SHK_ID_BASIC    00001L
+#define SHK_ID_PREMIUM  00002L
+#define SHK_UNCURSE     00010L
+#define SHK_APPRAISE    00100L
 #define SHK_SPECIAL_A   01000L
 #define SHK_SPECIAL_B   02000L
 #define SHK_SPECIAL_C   04000L
