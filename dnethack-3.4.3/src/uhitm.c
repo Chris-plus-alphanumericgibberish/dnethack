@@ -856,7 +856,7 @@ int thrown;
 				hittxt = TRUE;
 			}
 		}
-	    if (!uarmg || uarmg->oartifact != ART_CLAWS_OF_THE_REVENANCER) {
+	    if (!uarmg || uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER) {
 			/* So do silver rings.  Note: rings are worn under gloves, so you
 			 * don't get both bonuses.
 			 */
