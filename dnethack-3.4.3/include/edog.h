@@ -31,6 +31,7 @@ struct edog {
 	Bitfield(friend, 1);		/* tamed by song - will lose tameness */
 	Bitfield(waspeaceful, 1);      	/* was peaceful before tame song */
 //endif
+	Bitfield(loyal, 1);      	/* is particularly loyal (starting pet, quest home pet) */
 };
 #define EDOG(mon)	((struct edog *)&(mon)->mextra[0])
 
