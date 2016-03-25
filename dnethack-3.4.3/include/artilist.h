@@ -286,7 +286,7 @@ A("Magicbane",			ATHAME,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN), 0, 0,//needs quote
 	STUN(3,4),	DFNS(AD_MAGM),	NO_CARY,	
 	0, A_NEUTRAL, PM_WIZARD, NON_PM, 3500L, 
-	0,0,0),
+	SPFX2_SILVERED,0,0),
 
 
 /*//////////Double Damage Artifacts//////////*/
