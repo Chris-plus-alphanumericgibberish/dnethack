@@ -2374,7 +2374,8 @@ dosacrifice()
 				otmp = mksobj(SILVER_SPEAR, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_BLADE_SINGER_S_SPEAR));		
 			 }
-				unrestrict_weapon_skill(weapon_type(otmp));
+				unrestrict_weapon_skill(P_SPEAR);
+				unrestrict_weapon_skill(P_DAGGER);
 				unrestrict_weapon_skill(P_TWO_WEAPON_COMBAT);
 				if (otmp->spe < 0) otmp->spe = 0;
 				if (otmp->cursed) uncurse(otmp);
