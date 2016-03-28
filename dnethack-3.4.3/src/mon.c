@@ -2389,7 +2389,7 @@ boolean was_swallowed;			/* digestion */
 		if(mdat == &mons[PM_TROOPER] || mdat == &mons[PM_HEDROW_WARRIOR]){
 			verbalize("**ALERT: trooper %d vital signs terminated**", (int)(mon->m_id));
 			if(!cansee(mon->mx,mon->my)) map_invisible(mon->mx, mon->my);
-		} else {
+		} else if(mdat != &mons[PM_PHANTASM]){
 			verbalize("**ALERT: citizen %d vital signs terminated**", (int)(mon->m_id));
 			if(!cansee(mon->mx,mon->my)) map_invisible(mon->mx, mon->my);
 		}
