@@ -1991,10 +1991,10 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		return ALLOW_M|ALLOW_TM;
 
 	/* dungeon fern spores hate everything */
-	if(is_fern_spore(ma) && !is_fern_spore(md) && !is_vegetation(md))
+	if(is_fern_spore(ma) && !is_vegetation(md))
 		return ALLOW_M|ALLOW_TM;
 	/* and everything hates them */
-	if(is_fern_spore(md) && !is_fern_spore(ma) && !is_vegetation(ma))
+	if(is_fern_spore(md) && !is_vegetation(ma))
 		return ALLOW_M|ALLOW_TM;
 	/* everything attacks razorvine */
 	// if(md == &mons[PM_RAZORVINE] && !is_vegetation(ma))
