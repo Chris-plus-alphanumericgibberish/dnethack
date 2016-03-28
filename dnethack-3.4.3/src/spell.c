@@ -1572,7 +1572,7 @@ spiriteffects(power, atme)
 			}
 		}break;
 		case PWR_ASTAROTH_S_SHARDS:
-		if (getdir((char *)0) && (u.dx || u.dy)){
+		if (getdir((char *)0) || !(u.dx || u.dy)){
 		    struct obj *otmp;
 			int i, x, y;
 			x =  u.ux;
@@ -1823,7 +1823,7 @@ spiriteffects(power, atme)
 		case PWR_GIFT_OF_HEALING:{
 			struct monst *mon;
 			int dmg;
-			if (!getdir((char *)0)  && !(u.dz)) return(0);
+			if (!getdir((char *)0) || (u.dz)) return(0);
 			if(!(u.dx || u.dy)){
 				You("heal yourself.");
 				healup(d(5,dsize), 0, FALSE, FALSE);
@@ -1843,7 +1843,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			struct obj *pseudo;
 			int dmg;
-			if (!getdir((char *)0)  && !(u.dz)) return(0);
+			if (!getdir((char *)0) || (u.dz)) return(0);
 			if(!(u.dx || u.dy)){
 				int idx, recover, val_limit, aprobs = 0, fixpoint, curpoint;
 				
@@ -1854,6 +1854,8 @@ spiriteffects(power, atme)
 				if (Vomiting) make_vomiting(0L, TRUE);
 				if (HConfusion) make_confused(0L, TRUE);
 				if (HStun) make_stunned(0L, TRUE);
+				if (Wounded_legs) HWounded_legs = 1L;
+
 
 				/* collect attribute troubles */
 				for (idx = 0; idx < A_MAX; idx++) {
@@ -1906,7 +1908,7 @@ spiriteffects(power, atme)
 			} else break;
 		}break;
 		case PWR_THROW_WEBBING:
-			if (getdir((char *)0) && (u.dx || u.dy)){
+			if (getdir((char *)0) || !(u.dx || u.dy)){
 				struct obj *otmp;
 				You("throw a ball of webbing.");
 				otmp = mksobj(BALL_OF_WEBBING, TRUE, FALSE);
@@ -1966,7 +1968,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_ECHIDNA_S_VENOM:{
 			struct obj *otmp;
-			if (!getdir((char *)0)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			otmp = mksobj(ACID_VENOM, TRUE, FALSE);
 			otmp->spe = 1; /* to indicate it's yours */
 			otmp->ovar1 = d(5,dsize); /* save the damge this should do */
@@ -1995,7 +1997,7 @@ spiriteffects(power, atme)
 			} else break;
 		}break;
 		case PWR_PURIFYING_BLAST:{
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				// u.uacinc+=7; //Note: purifying_blast subtracts 7 from uacinc to compensate.
 				u.edenshield = moves+5;
@@ -2446,7 +2448,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			You("scream!");
 			if(u.uswallow){
 				zap_dig(-1,-1,1); /*try to blast free of engulfing monster*/
@@ -2655,7 +2657,7 @@ spiriteffects(power, atme)
 			struct monst *mon;
 			sx = u.ux;
 			sy = u.uy;
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
 				if(is_whirly(mon->data)){
 					pline("%s blows apart in the wind.",Monnam(u.ustuck));
@@ -2888,7 +2890,7 @@ spiriteffects(power, atme)
 			book_detect(u.ulevel>13);
 		break;
 		case PWR_UNITE_THE_EARTH_AND_SKY:
-			if (!getdir((char *)0) && (u.dx || u.dy)) return(0);
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(isok(u.ux+u.dx, u.uy+u.dy)){
 				struct trap *t = t_at(u.ux+u.dx, u.uy+u.dy);
 				struct monst *mon = m_at(u.ux+u.dx, u.uy+u.dy);
