@@ -496,10 +496,10 @@ struct obj *instr;
 	for (a = SNG_FIRST; a <= SNG_LAST; a++) {
 		/* For a song to be available in the menu:
 		   - Need a suitable instrument (the Lyre of Orpheus can play any song)
-		   - Must know the related spell (Bards already know any enchantment based song)
+		   - Must know the related spell (Bards already know all songs)
 		*/
 		// know_spell = (Role_if(PM_BARD) && a <= SNG_LAST_ENCHANTMENT);
-		know_spell = (Role_if(PM_BARD));
+		know_spell = (Role_if(PM_BARD) || (u.sealsActive&SEAL_ORTHOS));
 		if (!know_spell)
 			for (b = 0; b < MAXSPELL; b++)
 				if (spl_book[b].sp_id == songs[a].sp_id)
