@@ -267,20 +267,8 @@
 #define cantweararm(ptr)	(breakarm(ptr) || sliparm(ptr))
 #define throws_rocks(ptr)	(((ptr)->mflags2 & M2_ROCKTHROW) != 0L)
 #define type_is_pname(ptr)	(((ptr)->mflags2 & M2_PNAME) != 0L)
-#define is_thief(ptr)		( (ptr)->mattk[0].adtyp == AD_SGLD || (ptr)->mattk[0].adtyp == AD_SITM || (ptr)->mattk[0].adtyp == AD_SEDU \
-							||(ptr)->mattk[1].adtyp == AD_SGLD || (ptr)->mattk[1].adtyp == AD_SITM || (ptr)->mattk[0].adtyp == AD_SEDU \
-							||(ptr)->mattk[2].adtyp == AD_SGLD || (ptr)->mattk[2].adtyp == AD_SITM || (ptr)->mattk[0].adtyp == AD_SEDU \
-							||(ptr)->mattk[3].adtyp == AD_SGLD || (ptr)->mattk[3].adtyp == AD_SITM || (ptr)->mattk[0].adtyp == AD_SEDU \
-							||(ptr)->mattk[4].adtyp == AD_SGLD || (ptr)->mattk[4].adtyp == AD_SITM || (ptr)->mattk[0].adtyp == AD_SEDU \
-							||(ptr)->mattk[5].adtyp == AD_SGLD || (ptr)->mattk[5].adtyp == AD_SITM || (ptr)->mattk[0].adtyp == AD_SEDU \
-							)
-#define is_magical(ptr)		( (ptr)->mattk[0].aatyp == AT_MMGC || (ptr)->mattk[0].aatyp == AT_MAGC \
-							||(ptr)->mattk[1].aatyp == AT_MMGC || (ptr)->mattk[1].aatyp == AT_MAGC \
-							||(ptr)->mattk[2].aatyp == AT_MMGC || (ptr)->mattk[2].aatyp == AT_MAGC \
-							||(ptr)->mattk[3].aatyp == AT_MMGC || (ptr)->mattk[3].aatyp == AT_MAGC \
-							||(ptr)->mattk[4].aatyp == AT_MMGC || (ptr)->mattk[4].aatyp == AT_MAGC \
-							||(ptr)->mattk[5].aatyp == AT_MMGC || (ptr)->mattk[5].aatyp == AT_MAGC \
-							)
+#define is_thief(ptr)		( dmgtype(ptr, AD_SGLD)  || dmgtype(ptr, AD_SITM) || dmgtype(ptr, AD_SEDU) )
+#define is_magical(ptr)		( attacktype(ptr, AT_MMGC) || attacktype(ptr, AT_MAGC) )
 #define is_lord(ptr)		(((ptr)->mflags2 & M2_LORD) != 0L)
 #define is_prince(ptr)		(((ptr)->mflags2 & M2_PRINCE) != 0L)
 #define is_ndemon(ptr)		(is_demon(ptr) && \
