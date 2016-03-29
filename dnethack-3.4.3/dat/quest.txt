@@ -6112,6 +6112,253 @@ When you reach the temple, sacrifice the Amulet to %d.
 "Thus will you fulfill your destiny."
 %E
 #
+#	Gnome Ranger
+#
+%Cc Gnr 00001
+You arrive back at %H, but something seems
+wrong here.  The happy songs of your gnome kin are absent,
+and you hear angry words in a strange, unknown language.
+%E
+%Cp Gnr 00002
+Once again, you arrive back at %H.
+%E
+%Cp Gnr 00003
+For some reason, you think that this may be the last time you will
+enter %H.
+%E
+%Cp Gnr 00005
+"We have not been able to get food since the cave-in!"
+%E
+%Cp Gnr 00006
+"Since %n sent his minions, we have been constantly fighting."
+%E
+%Cp Gnr 00007
+"I have heard your quest has been successful so far.  Is this so?"
+%E
+%Cp Gnr 00008
+"So, tell me, %p, how have you fared?"
+%E
+%Cp Gnr 00009
+"Ruggo grows old.  We know not who will guide us after he ascends."
+%E
+%Cp Gnr 00010
+"We have not been able to get food since the cave-in!"
+%E
+%Cp Gnr 00011
+"Since %n sent his minions, we have been constantly fighting."
+%E
+%Cp Gnr 00012
+"I have heard your quest has been successful so far.  Is this so?"
+%E
+%Cp Gnr 00013
+"So, tell me, %p, how have you fared?"
+%E
+%Cp Gnr 00014
+"Have you truly rescued %o!?"
+%E
+%Cc Gnr 00015
+"You have returned from your vision quest, %p.
+ Thank %d.
+
+"We are in dire need of your help, my %S.
+
+"But first, I must see if you are yet capable of the quest I would
+ask you to undertake."
+%E
+%Cp Gnr 00016
+"Again, you return to us, %p.  Let me see if you are ready now."
+%E
+%Cp Gnr 00017
+"Ah, %p.  Are you finally ready?"
+%E
+%Cc Gnr 00018
+"%p!  You have sealed our fate.  You seem unable to reform yourself,
+so I must select another to take your place.
+
+"Begone from %H!  You have betrayed us by choosing
+the path of the %C over the true path of the %L.
+
+"You no longer live in our eyes."
+%E
+%Cc Gnr 00019
+"Alas, %p, you are as yet too inexperienced to embark upon such
+a difficult quest as that I propose to give you.
+
+"%rA could not possibly survive the rigors demanded to find
+%i, never mind to confront %n himself.
+
+"Adventure some more, and you will learn the skills you will require.
+%d decrees it."
+%E
+%Cc Gnr 00020
+"%p!  You have deviated from my teachings.  You no longer follow
+the path of the %a as you should.  I banish you from these
+caves, to go forth and purify yourself.  Then, you might be able
+to accomplish this quest."
+%E
+%Cc Gnr 00021
+"You are indeed ready now, %p.  I shall tell you a tale of
+great suffering among our people:
+
+"Shortly after you left on your quest, the caves were invaded by
+the creatures sent against us by %n.
+
+"He sits, haughty and arrogant, in the very bowels of the earth. He sends
+legions of orcs, ogres, and his dark elven kin against us. Many of us
+have died, and the minions of %n managed to steal
+%o. They took it to %i and there, none
+of our %gP have been able to go.
+
+"You must find %i, and within it wrest
+%o from %n.  He guards it jealously.  But with it,
+we can make our caves safe once more.
+
+"Please, %p, recover %o for us, and return it here."
+%E
+%Cp Gnr 00025
+"%n is a great and evil sorcerer."
+%E
+%Cp Gnr 00026
+"When you encounter %n, call upon %d for assistance."
+%E
+%Cp Gnr 00027
+"There will be nowhere to hide inside %n's inner sanctum."
+%E
+%Cp Gnr 00028
+"Your best chance with %n will be to keep moving."
+%E
+%Cp Gnr 00029
+"Do not be distracted by the great treasures in %n's lair.
+Concentrate on %o."
+%E
+%Cp Gnr 00030
+"%oC is the only object that %n truly fears."
+%E
+%Cp Gnr 00031
+"%n is fast, and uses sleeping poison on his blades!"
+%E
+%Cp Gnr 00032
+"I would send a party of %gP with you, but we will need all
+of our strength to defend ourselves."
+%E
+%Cp Gnr 00033
+"Remember, be %a at all times.  This is your strength."
+%E
+%Cp Gnr 00034
+"If only we had an amulet of reflection, this would not have happened."
+%E
+%Cc Gnr 00035
+You %x the footprints of many ogres and orcs.  The tunnels ahead
+of you are larger than most of those in any cave complex you have
+ever been in before.
+
+Your nose detects the smell of carrion from within, and bones litter
+the sides of the tunnels.
+%E
+%Cc Gnr 00036
+Once again, you approach %i.
+%E
+%Cc Gnr 00040
+You find yourself in a dark room with neatly polished walls.
+
+Bones litter the floor, and there are objects scattered everywhere.
+The air is close with the fumes of evil magic.
+%E
+%Cp Gnr 00041
+Once again, you find yourself in the lair of %n.
+%E
+%Cc Gnr 00050
+"So, gnome, you seek to invade the lair of %n. Prepare to be flayed alive!"
+%E
+%Cp Gnr 00051
+"So, again you face me, %c. Now I shall kill you."
+%E
+%Cp Gnr 00052
+"You are getting annoying, %c.  Prepare to die."
+%E
+%Cp Gnr 00053
+"I'll have %o from you, %c.  You shall die."
+%E
+%Cp Gnr 00060
+"You are weak, %c.  No challenge for the Dark Hope!"
+%E
+%Cp Gnr 00061
+"I grow hungry, gnome.  Shall I have gnome fingers for dinner?"
+%E
+%Cp Gnr 00062
+"Die, %c!"
+%E
+%Cp Gnr 00063
+"With %o, I am invincible!  You cannot succeed."
+%E
+%Cp Gnr 00064
+"Your mentor, %l, has failed.  You are nothing to fear."
+%E
+%Cp Gnr 00065
+"You shall die here, %c.  %rA cannot hope to defeat me."
+%E
+%Cp Gnr 00066
+"You, a mere %r challenge the might of %n?  Hah!"
+%E
+%Cp Gnr 00067
+"You cannot hope to defeat me."
+%E
+%Cp Gnr 00068
+"I shall rip you to shreds with my bare teeth!"
+%E
+%Cp Gnr 00069
+"%d has deserted you, %c.  This is my domain."
+%E
+%Cc Gnr 00070
+As you pick up %o it seems heavy at first,
+but as you hold it, strength flows into your arms.
+
+You suddenly feel full of power, as if nothing could possibly stand
+in your path.
+%E
+%Cc Gnr 00080
+%nC collapses to the ground, cursing you and %l, then says:
+
+    You have defeated me, %r!  But I curse you one final time, with my
+    dying breath!  You shall die before you leave my castle!
+%E
+%Cc Gnr 00081
+%l glimpses %o in your possession.
+He smiles and says:
+
+    You have done it!  We are saved.  But I fear that
+    %o will always be a target for %C
+    forces who will want it for their own.
+
+    To prevent further trouble, I would like you, %p,
+    to take %o away with you.  It will help you
+    as you quest for the Amulet of Yendor.
+%E
+# assumes The Longbow of Diana
+%Cc Gnr 00082
+%l flexs %o reverently.
+
+"With this wondrous bow, one need never run out of arrows.
+You are its keeper now, and the time has come to resume your
+search for the Amulet.  %Z await your return
+through the magic portal that brought you here."
+%E
+%Cp Gnr 00090
+"%p!  Welcome back.
+How goes your quest to recover the Amulet for %d?"
+%E
+%Cc Gnr 00091
+"You have been successful, I see, %p.
+
+"Now that the Amulet of Yendor is yours, here is what you must do:
+
+"Journey upwards to the open air.  The Amulet you carry will then
+take you into the Astral Planes, where the Great Temple of %d
+casts its influence throughout our world.
+
+"Sacrifice the Amulet on the altar.  Thus shall %d become supreme!"
+%E
+#
 #	Rogue (with apologies to all Norsk speakers -dean)
 #
 %Cc Rog 00001

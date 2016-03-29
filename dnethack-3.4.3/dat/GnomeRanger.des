@@ -1,0 +1,349 @@
+#	SCCS Id: @(#)Wizard.des	3.1	92/07/11
+#	Copyright (c) 1992 by David Cohrs
+# NetHack may be freely redistributed.  See license for details.
+#
+#	The "start" level for the quest.
+#
+# [Tom] -- the gnome quest
+#
+# this one looks familiar... :)
+# level.
+#
+MAZE: "Gnr-strt",'.'
+FLAGS: noteleport,hardfloor
+INIT_MAP:'.','.',true,true,lit,false
+GEOMETRY:left,center
+###########1#########2#########3#########4#########5#########6#########7#####
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1                   #                      #                  #              
+2                  ##                    #####          #######              
+3                  #                         #          #     #              
+4    ###############  ###           ######   #      #####     ########       
+5    #             ####             #        #      #       #                
+6    #          ####      #####################    ##  -----S-----      ###  
+7  #########    #  ########         #         #     #  |....\....|      #    
+8         #     #              ######       ###     #  |.........|   ####    
+9        ##     #              #           ## #######  |.........|  ##  #    
+0        #      ####   #       ########    #  #     #  -----+-----      #    
+1               #      #########      #    #  #             #           #    
+2          #######          #  #  #####       ###############       #####    
+3          #  #       ########    #        #    #       #           #   #    
+4             #       #        ######     #########    ##############        
+5                     #     ####  #       #       #           #              
+6                           #                                 #              
+ENDMAP
+# STAIR:(35,06),up
+BRANCH:(35,06,35,06),(0,0,0,0)
+STAIR:(61,01),down
+DOOR: closed, (59,10)
+# throne room
+MONSTER: 'G', "Ruggo the Gnome High King", (59,7)
+MONSTER: 'A', "damaged arcadian avenger", (59,5)
+
+MONSTER: 'G', "gnome comrade", (55,7)
+MONSTER: 'G', "gnome comrade", (56,7)
+MONSTER: 'G', "gnome comrade", (57,7)
+MONSTER: 'G', "gnome comrade", (58,7)
+
+MONSTER: 'G', "gnome comrade", (60,7)
+MONSTER: 'G', "gnome comrade", (61,7)
+MONSTER: 'G', "gnome comrade", (62,7)
+MONSTER: 'G', "gnome comrade", (63,7)
+
+MONSTER: 'G', "gnome", (55,8)
+MONSTER: 'G', "gnome", (56,8)
+MONSTER: 'G', "gnome", (57,8)
+MONSTER: 'G', "gnome", (58,8)
+
+MONSTER: 'G', "gnome", (60,8)
+MONSTER: 'G', "gnome", (61,8)
+MONSTER: 'G', "gnome", (62,8)
+MONSTER: 'G', "gnome", (63,8)
+# the evil hordes
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "large kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+MONSTER: 'k', "kobold", random, hostile
+
+#
+#	The "locate" level for the quest.
+#
+#	Here you have to infiltrate the Cave of the Wumpus to go
+#	further towards your assigned quest.
+#
+
+MAZE: "Gnr-loca",' '
+FLAGS: hardfloor
+GEOMETRY:center,center
+###########1#########2#########3#########4#########5#########6#########7#####
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1    .............                     ...........                           
+2   ...............                   .............                          
+3    .............                  ...............        ..........        
+4     ...........                    .............      ...............      
+5        ...                                    ...   ..................     
+6         ...                ..........          ... ..................      
+7          ...              ............          BBB...................     
+8           ...              ..........          ......................      
+9            .....                 ..      .....B........................    
+0  ....       ...............      .    ........B..........................  
+1 ......     .. .............S..............         ..................      
+2  ....     ..                ...........             ...............        
+3     ..  ...                                    ....................        
+4      ....                                      BB...................       
+5         ..                 ..                 ..  ...............          
+6          ..   .......     ....  .....  ....  ..     .......   S            
+7           ............     ....... ..  .......       .....    ...  ....    
+8               .......       .....   ......                      .......    
+9                                                                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+###########1#########2#########3#########4#########5#########6#########7#####
+# Dungeon Description
+REGION:(00,00,75,19),unlit,"ordinary"
+REGION:(52,06,73,15),unlit,"ordinary",unfilled,true
+# Doors
+DOOR:locked,(28,11)
+# Stairs
+STAIR:(04,03),up
+STAIR:(73,10),down
+# Objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+# Random traps
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+# Random monsters.
+MONSTER:'k', "kobold",(02,10),hostile
+MONSTER:'k', "kobold",(03,11),hostile
+MONSTER:'k', "kobold",(04,12),hostile
+MONSTER:'k', "kobold",(02,11),hostile
+MONSTER:'k', "kobold",(16,16),hostile
+MONSTER:'k', "kobold",(17,17),hostile
+MONSTER:'k', "kobold",(18,18),hostile
+MONSTER:'k', "kobold",(19,16),hostile
+MONSTER:'k', "kobold",(30,06),hostile
+MONSTER:'k', "kobold",(31,07),hostile
+MONSTER:'k', "kobold",(32,08),hostile
+MONSTER:'k', "kobold",(33,06),hostile
+MONSTER:'k', "kobold",(34,07),hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', random,random,hostile
+MONSTER:'k', random,random,hostile
+MONSTER:'k', "large kobold",(03,12),hostile
+MONSTER:'k', "large kobold",(20,17),hostile
+MONSTER:'k', "large kobold",(35,08),hostile
+MONSTER:'k', random,random,hostile
+MONSTER:'k', random,random,hostile
+MONSTER:'k', random,random,hostile
+MONSTER:'k', random,random,hostile
+MONSTER:'k', random,random,hostile
+WALLIFY
+
+#
+#	The "goal" level for the quest.
+#
+#	Here you meet Scorpius, your nemesis monster.  You have to
+#	defeat Scorpius in combat to gain the artifact you have
+#	been assigned to retrieve.
+#
+
+MAZE: "Gnr-goal", ' '
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1                                                                            
+2                                                                            
+3                   -------------                 -------------              
+4                   |...........|                 |...........|              
+5            -------|...........-------------------...........|              
+6            |......S...........|.................|...........|              
+7            |......|...........|.................|...........|              
+8            |......|...........|.................|...........|              
+9            --S----|...........S.................S...........|              
+0            |......|...........|.................|...........|              
+1            |......|...........|.................|...........|              
+2            |......|...........|.................|...........|              
+3            -------|...........-------------------...........|              
+4                   |...........|                 |...........|              
+5                   -------------                 -------------              
+6                                                                            
+7                                                                            
+8                                                                            
+9                                                                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
+# Dungeon Description
+REGION:(13,10,18,12),unlit,"temple"
+# Stairs
+STAIR:(55,05),up
+# The altar of Kurtulmak.  This is not a shrine.
+ALTAR:(16,11),lawful,altar
+# Objects
+OBJECT:'(',"pick-axe",(16,11),blessed,0,"The Rogue Gear-Spirits"
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+# Random traps
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+# Random monsters.
+MONSTER:'k',"Great High Shaman of Kurtulmak",(16,11)
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "kobold",random,hostile
+MONSTER:'k', "large kobold",random,hostile
+MONSTER:'k', "large kobold",random,hostile
+MONSTER:'k', "large kobold",random,hostile
+MONSTER:'k', "large kobold",random,hostile
+MONSTER:'k', "large kobold",random,hostile
+MONSTER:'k', "large kobold",random,hostile
+MONSTER:'k', "large shaman",random,hostile
+MONSTER:'k', "large shaman",random,hostile
+MONSTER:'k', "large shaman",random,hostile
+
+#
+#	The "fill" levels for the quest.
+#
+#	These levels are used to fill out any levels not occupied by specific
+#	levels as defined above. "fila" is the upper filler, between the
+#	start and locate levels, and "filb" the lower between the locate
+#	and goal levels.
+#
+
+MAZE: "Gnr-fila" , ' '
+INIT_MAP: '.' , ' ' , true , true , random , true
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+#
+OBJECT: '*', random, random
+OBJECT: '*', random, random
+OBJECT: '*', random, random
+OBJECT: '(', random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+#
+MONSTER: 'G', random, random
+MONSTER: 'G', random, random
+MONSTER: 'G', random, random
+MONSTER: 'G', random, random
+MONSTER: 'G', "gnome", random
+MONSTER: 'G', "gnome", random
+MONSTER: 'G', "gnome", random
+MONSTER: 'G', "gnome lord", random
+MONSTER: 'k', "large kobold", random
+MONSTER: 'k', "large kobold", random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+#
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+
+MAZE: "Gnr-filb" , ' '
+INIT_MAP: '.' , ' ' , true , true , random , true
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+#
+OBJECT: '*', random, random
+OBJECT: '*', random, random
+OBJECT: '*', random, random
+OBJECT: '(', random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+#
+MONSTER: 'k', "kobold", random
+MONSTER: 'k', "kobold", random
+MONSTER: 'k', "kobold", random
+MONSTER: 'k', "kobold", random
+MONSTER: 'k', "kobold", random
+MONSTER: 'k', "kobold", random
+MONSTER: 'k', "kobold", random
+MONSTER: 'k', "kobold lord", random
+MONSTER: 'k', "kobold shaman", random
+MONSTER: 'k', "kobold shaman", random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+#
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
+TRAP: random, random
