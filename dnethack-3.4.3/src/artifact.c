@@ -2963,8 +2963,7 @@ arti_invoke(obj)
 		otmp->quan += rnd(10);
 	    } else if (obj->cursed) {
 		if (otmp->spe > 0) otmp->spe = 0;
-	    } else
-		otmp->quan += rnd(5);
+	    } else otmp->quan += rnd(5);
 	    otmp->owt = weight(otmp);
 	    otmp = hold_another_object(otmp, "Suddenly %s out.",
 				       aobjnam(otmp, "fall"), (const char *)0);
