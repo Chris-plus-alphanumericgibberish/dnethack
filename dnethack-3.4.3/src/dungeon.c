@@ -1370,6 +1370,13 @@ d_level *lev;
 	return((boolean)(lev->dnum == quest_dnum));
 }
 
+boolean
+In_mines_quest(lev)	/* are you in the quest dungeon? */
+d_level *lev;
+{
+	return((boolean)(lev->dnum == mines_dnum || (Role_if(PM_RANGER) && Race_if(PM_GNOME) && lev->dnum == quest_dnum)));
+}
+
 #endif /* OVL0 */
 #ifdef OVL1
 
@@ -1408,7 +1415,7 @@ boolean
 In_cave(lev)
 d_level *lev;
 {
-	if(In_mines(&u.uz) || (Inhell && !on_level(&valley_level, &u.uz))) return TRUE;
+	if(In_mines_quest(&u.uz) || (Inhell && !on_level(&valley_level, &u.uz))) return TRUE;
 	if(In_quest(lev)){
 		if(Role_if(PM_BARBARIAN)
 		|| Role_if(PM_PIRATE) || Role_if(PM_PRIEST) || Role_if(PM_SAMURAI)

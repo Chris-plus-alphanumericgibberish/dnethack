@@ -350,14 +350,14 @@ unsigned *ospecial;
 					color = CLR_YELLOW;
 				else if (In_W_tower(x, y, &u.uz))
 					color = CLR_MAGENTA;
-				else if (In_mines(&u.uz) /*&& !Is_minetown_level(&u.uz)*/)
+				else if (In_mines_quest(&u.uz) && !Is_nemesis(&u.uz))
 					color = CLR_BROWN;
 				else if (Is_astralevel(&u.uz))
 					color = CLR_WHITE;
 			} else if (offset == S_drkroom || offset == S_litroom) {
 				if (*in_rooms(x,y,BEEHIVE))
 					color = CLR_YELLOW;
-				else if(In_mines(&u.uz)){
+				else if(In_mines_quest(&u.uz) && !Is_nemesis(&u.uz)){
 					color = CLR_BROWN;
 				}
 			} else if (offset == S_altar) {

@@ -932,7 +932,7 @@ mineralize()
 #endif
 		level.flags.arboreal ||
 		((sp = Is_special(&u.uz)) != 0 && !Is_oracle_level(&u.uz)
-					&& (!In_mines(&u.uz) || sp->flags.town)
+					&& (!In_mines_quest(&u.uz) || sp->flags.town)
 	    )) return;
 
 	/* basic level-related probabilities */
@@ -941,7 +941,7 @@ mineralize()
 	silverprob = gemprob * 2;
 
 	/* mines have ***MORE*** goodies - otherwise why mine? */
-	if (In_mines(&u.uz)) {
+	if (In_mines_quest(&u.uz)) {
 	    goldprob *= 2;
 	    gemprob *= 3;
 	    silverprob *= 4;

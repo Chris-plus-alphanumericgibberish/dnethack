@@ -554,6 +554,7 @@ E boolean FDECL(In_quest, (d_level *));
 E boolean FDECL(In_outdoors, (d_level *));
 E boolean FDECL(In_cave, (d_level *));
 E boolean FDECL(In_mines, (d_level *));
+E boolean FDECL(In_mines_quest, (d_level *));
 E boolean FDECL(In_neu, (d_level *));
 E boolean FDECL(In_cha, (d_level *));
 E boolean FDECL(In_law, (d_level *));

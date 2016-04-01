@@ -1822,7 +1822,7 @@ register struct monst *mtmp;
 				(void) mongets(mtmp, AKLYS);
 			break;
 		}
-		if (In_mines(&u.uz)) {//note, gnomish wizards never have pointy hats.
+		if (In_mines_quest(&u.uz)) {//note, gnomish wizards never have pointy hats.
 			/* cm: Gnomes in dark mines have candles lit. */
 			    otmp = mksobj(GNOMISH_POINTY_HAT, TRUE, FALSE);
 			    (void) mpickobj(mtmp, otmp);
@@ -1869,7 +1869,7 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
 				}
 			}
-			if (In_mines(&u.uz) && !Is_minetown_level(&u.uz)) {
+			if (In_mines_quest(&u.uz) && !Is_minetown_level(&u.uz)) {
 			/* MRKR: Dwarves in dark mines have their lamps on. */
 			    otmp = mksobj(DWARVISH_IRON_HELM, TRUE, FALSE);
 			    (void) mpickobj(mtmp, otmp);
