@@ -4469,13 +4469,23 @@ rndmonst()
 	else if (In_law(&u.uz)){
 	    return law_montype();
 	}
-	else if (u.uz.dnum == mines_dnum){
+	else if (In_mines(&u.uz)){
 		int roll = d(1,10);
+		if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && rn2(2)){
+			switch(roll){
+				case 1:	case 2: case 3: case 4: return mkclass(S_KOBOLD, G_NOHELL); break;
+				case 5:	case 6: return rn2(6) ? &mons[PM_GNOME_ZOMBIE] : &mons[PM_DWARF_ZOMBIE]; break;
+				case 7: return &mons[PM_IMP]; break;
+				default: break; //proceed with normal generation
+			}
+		} else {
 		switch(roll){
 			case 1:	case 2: case 3: case 4: return mkclass(S_GNOME, G_NOHELL); break;
 			case 5:	case 6: return &mons[PM_DWARF]; break;
+				case 7: return rn2(6) ? &mons[PM_GNOME_ZOMBIE] : &mons[PM_DWARF_ZOMBIE]; break;
 			default: break; //proceed with normal generation
 		}
+	}
 	}
 	else if(Is_juiblex_level(&u.uz)){
 		if(rn2(2)) return rn2(2) ? mkclass(S_BLOB, G_NOHELL|G_HELL) : mkclass(S_PUDDING, G_NOHELL|G_HELL);
