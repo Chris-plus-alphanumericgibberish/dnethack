@@ -186,7 +186,7 @@ adjattrib(ndx, incr, msgflg)
 	    }
 	} else {
 	    if (ABASE(ndx) <= ATTRMIN(ndx)) {
-		if(ndx == A_WIS && u.wimage){
+		if(ndx == A_WIS && u.wimage >= 10){
 			int temparise = u.ugrave_arise;
 			pline("The image of the weeping angel is taking over your body!");
 			u.ugrave_arise = PM_WEEPING_ANGEL;
@@ -524,7 +524,7 @@ exerchk()
 			break;
 		    case A_WIS: You((mod_val >0) ?
 				    "must have been very observant." :
-				    u.wimage ? "are being consumed by the image of the weeping angel!" : "haven't been paying attention.");
+				    u.wimage >= 10 ? "are being consumed by the image of the weeping angel!" : "haven't been paying attention.");
 				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    }

@@ -1776,7 +1776,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 #endif
 	if (Sleeping) enl_msg("You ", "fall", "fell", " asleep");
 	if (Hunger) enl_msg("You hunger", "", "ed", " rapidly");
-	if(u.wimage){
+	if(u.wimage >= 10){
 		if(ACURR(A_WIS) < 6){
 			Sprintf(buf, " filled with the image of a weeping angel");
 			enl_msg("Your mind ", "is","was",buf);
@@ -2073,7 +2073,7 @@ resistances_enlightenment()
 		putstr(en_win, 0, buf);
 	}
 	
-	if(u.wimage){
+	if(u.wimage >= 10){
 		if(ACURR(A_WIS) < 6) Sprintf(buf, "Your mind is filled with the image of a weeping angel");
 		else if(ACURR(A_WIS) < 9) Sprintf(buf, "The image of a weeping angel is ever on your mind");
 		else if(ACURR(A_WIS) < 12) Sprintf(buf, "You can't seem to shake the image of a weeping angel from your mind");

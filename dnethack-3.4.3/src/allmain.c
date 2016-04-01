@@ -731,8 +731,10 @@ moveloop()
 					}
 				}
 				if(u.wimage){
-					exercise(A_INT, TRUE);
-					exercise(A_WIS, FALSE);
+					if(u.wimage >= 10){
+						exercise(A_INT, TRUE);
+						exercise(A_WIS, FALSE);
+					} else if(!(moves%10)) u.wimage--;
 				}
 			}
 			
