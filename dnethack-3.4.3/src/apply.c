@@ -4961,6 +4961,42 @@ doapply()
 	case FIGURINE:
 		use_figurine(&obj);
 	break;
+	case EFFIGY:{
+	    struct obj *curo;
+		if (Hallucination) You_feel("the tall leather doll take up your burdens!");
+		else You_feel("like someone is helping you.");
+
+		if(u.sealsActive&SEAL_MARIONETTE){
+			unbind(SEAL_MARIONETTE,TRUE);
+		}
+		
+		for (curo = invent; curo; curo = curo->nobj) {
+#ifdef GOLDOBJ
+			/* gold isn't subject to cursing and blessing */
+			if (curo->oclass == COIN_CLASS) continue;
+#endif
+			if (curo->cursed) uncurse(curo);
+		}
+		if(Punished) unpunish();
+		
+		if(u.wimage >= 0){
+			u.wimage = 0;
+			makemon(&mons[PM_WEEPING_ANGEL], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+			if(Blind) pline("The effigy grows and turns to stone!");
+			else pline("The effigy becomes a weeping angel!");
+		} else {
+			u.wimage = 0; //Sub-critial images are removed anyway.
+			if(Blind) pline("The effigy bursts into flames!");
+			else pline("The effigy burns with sickly flames!");
+		}
+		if(obj->quan>1)
+			useup(obj);
+		else{
+			useup(obj);
+			obj = 0;
+		}
+		update_inventory();
+	} break;
 	case UNICORN_HORN:
 		use_unicorn_horn(obj);
 	break;
