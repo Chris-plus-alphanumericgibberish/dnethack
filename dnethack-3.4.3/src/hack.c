@@ -692,7 +692,7 @@ int mode;
 		You("cannot pass that way.");
 	    return FALSE;
 	}
-	if (bigmonst(youmonst.data) && !(u.sealsActive&SEAL_ANDREALPHUS)) {
+	if (bigmonst(youmonst.data) && !(u.sealsActive&SEAL_ANDREALPHUS) && !amorphous(youmonst.data)) {
 	    if (mode == DO_MOVE)
 		Your("body is too large to fit through.");
 	    return FALSE;
