@@ -5335,6 +5335,7 @@ static const char *epitaphs[] = {
        	"I disbelieved in reincarnation in my last life, too.",
        	"I hacked myself to death",
        	"I have all the time in the world",
+		"I just wanted you to know that it was nice to talk to someone while it lasted.", /*SCP SCP-1470*/
        	"I knew I'd find a use for this gravestone!",
        	"I know my mind. And it's around here someplace.",
        	"I lied!  I'll never be alright!",
