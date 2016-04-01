@@ -6127,7 +6127,7 @@ For some reason, you think that this may be the last time you will
 enter %H.
 %E
 %Cp Gnr 00005
-"We have not been able to get food since the cave-in!"
+"We have not been able to get food since the cave-ins!"
 %E
 %Cp Gnr 00006
 "Since %n sent his minions, we have been constantly fighting."
@@ -6142,13 +6142,13 @@ enter %H.
 "Ruggo grows old.  We know not who will guide us after he ascends."
 %E
 %Cp Gnr 00010
-"We have not been able to get food since the cave-in!"
+"We have finally been able make some progress clearing the cave-ins!"
 %E
 %Cp Gnr 00011
 "Since %n sent his minions, we have been constantly fighting."
 %E
 %Cp Gnr 00012
-"I have heard your quest has been successful so far.  Is this so?"
+"I have heard your quest has been very successful so far!"
 %E
 %Cp Gnr 00013
 "So, tell me, %p, how have you fared?"
@@ -6157,98 +6157,93 @@ enter %H.
 "Have you truly rescued %o!?"
 %E
 %Cc Gnr 00015
-"You have returned from your vision quest, %p.
- Thank %d.
+"You hAve returned from your Vision QuesT.
+bY %d's wiLl this is sO.
 
-"We are in dire need of your help, my %S.
+"We are in Dire Need of your hElp, younG Gnome.
 
-"But first, I must see if you are yet capable of the quest I would
-ask you to undertake."
+"But first, i mUst see if you are yet caPabbble of the quest I would
+ask you to undertAke."
 %E
 %Cp Gnr 00016
-"Again, you return to us, %p.  Let me see if you are ready now."
+"Again, you retUrn to us, %p.  Let mE see if you are reaDy."
 %E
 %Cp Gnr 00017
-"Ah, %p.  Are you finally ready?"
+"Ah, %p.  Are yoU finally reAdy?"
 %E
 %Cc Gnr 00018
-"%p!  You have sealed our fate.  You seem unable to reform yourself,
-so I must select another to take your place.
+"%p!  YOU seem unabLe to rEform YOUrself,
+I mUst select anOther to tAke your plAce.
 
-"Begone from %H!  You have betrayed us by choosing
-the path of the %C over the true path of the %L.
-
-"You no longer live in our eyes."
+"Begone froM %H!"
 %E
 %Cc Gnr 00019
-"Alas, %p, you are as yet too inexperienced to embark upon such
-a difficult quest as that I propose to give you.
-
-"%rA could not possibly survive the rigors demanded to find
-%i, never mind to confront %n himself.
-
-"Adventure some more, and you will learn the skills you will require.
-%d decrees it."
+"Alas, %p, you Are As yet too ineXperienced to Embark upOn such
+a difficult queEst as that I propose to you.  yOu must become
+mOre pOwerful than Even Ruggo."
 %E
 %Cc Gnr 00020
-"%p!  You have deviated from my teachings.  You no longer follow
-the path of the %a as you should.  I banish you from these
-caves, to go forth and purify yourself.  Then, you might be able
-to accomplish this quest."
+"%p!  You have dEviated from thE teachings of %d.  Go fOrth,
+and purify yourself."
 %E
 %Cc Gnr 00021
-"You are indeed ready now, %p.  I shall tell you a tale of
-great suffering among our people:
+"You are inDeed reaDy now, %p.  I Shall Tell you the Tale of
+ouR wOe:
 
-"Shortly after you left on your quest, the caves were invaded by
-the creatures sent against us by %n.
+"I am An AnGel of thE PeaceAble kiNgdoms of ArCaDia.  My aPointed
+Task was to Guard and Guide a Pair of Gear-Spirits riSen aBove
+the ClockwoRk PerfecTion.  But I faLtered in My task and my Wards
+were stOlen AwAy by deVils in the serVice of KurtulmaK, God of
+the KoBolds.
 
-"He sits, haughty and arrogant, in the very bowels of the earth. He sends
-legions of orcs, ogres, and his dark elven kin against us. Many of us
-have died, and the minions of %n managed to steal
-%o. They took it to %i and there, none
-of our %gP have been able to go.
+"My CharGes were Gifted to thE %n,
+and shortly aFter you leFt on your Quest, the cAves of your Home 
+were invadeD by the kobolDs.  The %n 
+usEd %o to coLapse many of your peoPle's Mines.
 
-"You must find %i, and within it wrest
-%o from %n.  He guards it jealously.  But with it,
-we can make our caves safe once more.
+"The %n sitS, hAughty and arRogant, in the verY bowEls 
+of the Earth. He sends leGions of his KoBold Kin aGainst your
+comRades, and theiR blades and the faMine have claimed Many.
 
-"Please, %p, recover %o for us, and return it here."
+"You mUst find %i, and withIn it wrest
+%o from %n.  
+He guaRds thEm jeaLousLy.  But with Them, yoU can make youR 
+caveS Safe onCe more.
 %E
 %Cp Gnr 00025
-"%n is a great and evil sorcerer."
+"%n is a greAt and eVil suMonEr."
 %E
 %Cp Gnr 00026
-"When you encounter %n, call upon %d for assistance."
+"When you enCounter %n, Call uPon %d for assisTance."
 %E
 %Cp Gnr 00027
 "There will be nowhere to hide inside %n's inner sanctum."
 %E
 %Cp Gnr 00028
-"Your best chance with %n will be to keep moving."
+"yOur best chance with %n wIll be to Kill hIm swifTly."
 %E
 %Cp Gnr 00029
-"Do not be distracted by the great treasures in %n's lair.
-Concentrate on %o."
+"Do Not be distraCteD by the grEat treAsures in %n's lair.
+ConCentraTe on %o."
 %E
 %Cp Gnr 00030
-"%oC is the only object that %n truly fears."
+"%nC will sUmMon devils to fIght for hIm."
 %E
 %Cp Gnr 00031
-"%n is fast, and uses sleeping poison on his blades!"
+"%n is slOw, and will die QuickLy if You can Hit Him."
 %E
 %Cp Gnr 00032
-"I would send a party of %gP with you, but we will need all
-of our strength to defend ourselves."
+"I Would send a parTy of %gP with yoU,
+but tHey must deFend their Homes."
 %E
 %Cp Gnr 00033
-"Remember, be %a at all times.  This is your strength."
+"RememBer, be %a At All Times.this is your strength."
 %E
 %Cp Gnr 00034
-"If only we had an amulet of reflection, this would not have happened."
+"If only I had bEen more vigiLant, this would Not have happeneD."
 %E
 %Cc Gnr 00035
-You %x the footprints of many ogres and orcs.  The tunnels ahead
+You %x the footprints of many kobolds.  The tunnels ahead
 of you are larger than most of those in any cave complex you have
 ever been in before.
 
@@ -6268,95 +6263,94 @@ The air is close with the fumes of evil magic.
 Once again, you find yourself in the lair of %n.
 %E
 %Cc Gnr 00050
-"So, gnome, you seek to invade the lair of %n. Prepare to be flayed alive!"
+"Gnome, you come my home!? You flayed!"
 %E
 %Cp Gnr 00051
-"So, again you face me, %c. Now I shall kill you."
+"You come again, %c!? Killed, you!!"
 %E
 %Cp Gnr 00052
-"You are getting annoying, %c.  Prepare to die."
+"You annoying.  Die."
 %E
 %Cp Gnr 00053
-"I'll have %o from you, %c.  You shall die."
+"Give back, you!?  Give back, die!"
 %E
 %Cp Gnr 00060
-"You are weak, %c.  No challenge for the Dark Hope!"
+"Weak, you.  No challenge, you!"
 %E
 %Cp Gnr 00061
-"I grow hungry, gnome.  Shall I have gnome fingers for dinner?"
+"I hungry!  Gnome fingers, dinner!!"
 %E
 %Cp Gnr 00062
-"Die, %c!"
+"Die, gnome!"
 %E
 %Cp Gnr 00063
-"With %o, I am invincible!  You cannot succeed."
+"Invincible, I!  Fail, you!"
 %E
 %Cp Gnr 00064
-"Your mentor, %l, has failed.  You are nothing to fear."
+"Failed, angel.  Fail, you!"
 %E
 %Cp Gnr 00065
-"You shall die here, %c.  %rA cannot hope to defeat me."
+"You die here!"
 %E
 %Cp Gnr 00066
-"You, a mere %r challenge the might of %n?  Hah!"
+"Hah! Hah! Laugh, I!"
 %E
 %Cp Gnr 00067
-"You cannot hope to defeat me."
+"No hope, you."
 %E
 %Cp Gnr 00068
-"I shall rip you to shreds with my bare teeth!"
+"Bite! Rip! Tear! You shreds!"
 %E
 %Cp Gnr 00069
-"%d has deserted you, %c.  This is my domain."
+"No god, you. This MY god home!"
 %E
 %Cc Gnr 00070
-As you pick up %o it seems heavy at first,
-but as you hold it, strength flows into your arms.
-
-You suddenly feel full of power, as if nothing could possibly stand
-in your path.
+The twin crossbow makes small clicking and rattling noises.
+They seem to be talking to each other, and their conversation,
+though indecipherable, sounds distinctly relieved.
 %E
 %Cc Gnr 00080
-%nC collapses to the ground, cursing you and %l, then says:
-
-    You have defeated me, %r!  But I curse you one final time, with my
-    dying breath!  You shall die before you leave my castle!
+%nC collapses to the ground, 
+cursing you and %o incoherently,
+and dies in a pool of blood.
 %E
 %Cc Gnr 00081
-%l glimpses %o in your possession.
-He smiles and says:
+%l senses %o in your possession.
 
-    You have done it!  We are saved.  But I fear that
-    %o will always be a target for %C
-    forces who will want it for their own.
+    You have Done it.  We are savEd.  But I fEar that
+    %o will alWays be a TarGet for %C.
 
-    To prevent further trouble, I would like you, %p,
-    to take %o away with you.  It will help you
-    as you quest for the Amulet of Yendor.
+    To preVent further trouBle, I would lIke you, %p,
+    To Take %o aWay with You.  TheY will help You
+    as you Quest for the AmuLet of Yendor.
 %E
-# assumes The Longbow of Diana
+# assumes The Twin Gear-spirits
 %Cc Gnr 00082
-%l flexs %o reverently.
+%l clicks and rattles to %o lovingly.
 
-"With this wondrous bow, one need never run out of arrows.
-You are its keeper now, and the time has come to resume your
-search for the Amulet.  %Z await your return
-through the magic portal that brought you here."
+"The Gear-spirIts can make Endless supplies of simPle bolTs,
+so there is neVer aNy need for you to rEload, unlesS you
+wish to fiRe special bolts.  In addiTion, the spirits
+can disAssemble manY tYpes of trap if asked."
+
+"You are their menTor now, and the Time has come to reSume
+your search for the AmuLet.  %Z awAit your
+reTurn."
 %E
 %Cp Gnr 00090
-"%p!  Welcome back.
-How goes your quest to recover the Amulet for %d?"
+"WelCome back.
+How goEs your Quest to Recover the Amulet for %d?"
 %E
 %Cc Gnr 00091
-"You have been successful, I see, %p.
+"You have been sucCessful, I sEe, %p.
 
-"Now that the Amulet of Yendor is yours, here is what you must do:
+"Now that the Amulet of YenDor is yours, here is wHat you must do:
 
-"Journey upwards to the open air.  The Amulet you carry will then
-take you into the Astral Planes, where the Great Temple of %d
-casts its influence throughout our world.
+"Journey UpWards to the open air.  The Amulet you carRy will then
+take you into the AsTral Planes, where the Great Temple of 
+%d casts itS influence throughOut your world.
 
-"Sacrifice the Amulet on the altar.  Thus shall %d become supreme!"
+"SacriFice the AmuLet on the alTar.  Thus shall %d become supReme!"
 %E
 #
 #	Rogue (with apologies to all Norsk speakers -dean)
