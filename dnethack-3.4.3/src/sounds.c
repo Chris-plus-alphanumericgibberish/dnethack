@@ -1504,6 +1504,13 @@ humanoid_sound:
 			mtmp->data == &mons[PM_PEASANT] && 
 			mtmp->mpeaceful
 		) goto asGuardian; /* Jump up to a different case in this switch statment */
+		else if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && (mtmp->data == &mons[PM_GNOME] || mtmp->data == &mons[PM_GNOME_LORD] || mtmp->data == &mons[PM_GNOME_KING]
+			|| mtmp->data == &mons[PM_TINKER_GNOME] || mtmp->data == &mons[PM_GNOMISH_WIZARD]) && mtmp->mpeaceful
+		) goto asGuardian; /* Jump up to a different case in this switch statment */
+		else if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && mtmp->data == &mons[PM_RUGGO_THE_GNOME_HIGH_KING]){
+			verbl_msg = "Ah, comrade!  It is good you are here.  I've hidden the angel behind my throne.";
+			break;
+		}
 
 	    if (!mtmp->mpeaceful) {
 		if (In_endgame(&u.uz) && is_mplayer(ptr)) {
@@ -1614,6 +1621,11 @@ humanoid_sound:
 		    break;
 #endif
 		default:
+			if(Role_if(PM_RANGER) && Race_if(PM_GNOME) &&
+				mtmp->data == &mons[PM_ARCADIAN_AVENGER] && 
+				mtmp->m_id == quest_status.leader_m_id
+			) goto asGuardian; /* Jump up to a different case in this switch statment */
+			
 			if((Role_if(PM_NOBLEMAN) || Role_if(PM_KNIGHT)) && In_quest(&u.uz)){
 				if(Race_if(PM_DWARF)) pline_msg = "talks about fishing.";
 				else pline_msg = "talks about farming.";
