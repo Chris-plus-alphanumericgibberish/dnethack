@@ -1878,6 +1878,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Role_if(PM_NOBLEMAN) && (ma == &mons[PM_KNIGHT] || ma == &mons[PM_MAID] || ma == &mons[PM_PEASANT]) && magr->mpeaceful && In_quest(&u.uz))
 		  || (Role_if(PM_KNIGHT) && ma == &mons[PM_KNIGHT] && magr->mpeaceful && In_quest(&u.uz))
 		  || (Race_if(PM_DROW) && is_drow(ma) && magr->mfaction == u.uhouse)
+		  || (Race_if(PM_GNOME) && (is_gnome(ma) && !is_undead(ma)) && magr->mpeaceful)
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(md)))
 		&& !(Role_if(PM_EXILE))
@@ -1889,6 +1890,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Role_if(PM_NOBLEMAN) && (md == &mons[PM_KNIGHT] || md == &mons[PM_MAID] || md == &mons[PM_PEASANT]) && mdef->mpeaceful && In_quest(&u.uz))
 		  || (Role_if(PM_KNIGHT) && md == &mons[PM_KNIGHT] && mdef->mpeaceful && In_quest(&u.uz))
 		  || (Race_if(PM_DROW) && is_drow(md) && mdef->mfaction == u.uhouse)
+		  || (Race_if(PM_GNOME) && (is_gnome(md) && !is_undead(md)) && mdef->mpeaceful)
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(ma)))
 		&& !(Role_if(PM_EXILE))
@@ -3645,7 +3647,8 @@ register struct monst *mtmp;
 
 	/* attacking your own quest leader will anger his or her guardians */
 	if (!flags.mon_moving &&	/* should always be the case here */
-		mtmp->data == &mons[quest_info(MS_LEADER)]) {
+		mtmp->m_id == quest_status.leader_m_id) {
+		// mtmp->data == &mons[quest_info(MS_LEADER)]) {
 	    struct monst *mon;
 	    struct permonst *q_guardian = &mons[quest_info(MS_GUARDIAN)];
 	    int got_mad = 0;
