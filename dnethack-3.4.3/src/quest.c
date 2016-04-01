@@ -504,13 +504,12 @@ quest_chat(mtmp)
 	if(
 		(Role_if(PM_NOBLEMAN) && 
 		(mtmp->data == &mons[PM_KNIGHT] 
-			|| mtmp->data == &mons[PM_MAID]) && 
-		mtmp->mpeaceful) ||
-		(Race_if(PM_DROW) && 
-		is_drow(mtmp->data)) ||
-		(Role_if(PM_EXILE) && 
-		mtmp->data == &mons[PM_PEASANT] && 
-		mtmp->mpeaceful)
+				|| mtmp->data == &mons[PM_MAID]) && mtmp->mpeaceful)
+	  || (Race_if(PM_DROW) && is_drow(mtmp->data))
+	  || (Role_if(PM_EXILE) && 
+			mtmp->data == &mons[PM_PEASANT] && mtmp->mpeaceful)
+	  || (Race_if(PM_GNOME) && Role_if(PM_RANGER) && (mtmp->data == &mons[PM_GNOME] || mtmp->data == &mons[PM_GNOME_LORD] || mtmp->data == &mons[PM_GNOME_KING]
+			|| mtmp->data == &mons[PM_TINKER_GNOME] || mtmp->data == &mons[PM_GNOMISH_WIZARD]) && mtmp->mpeaceful)
 	){
 		chat_with_guardian();
 	} else {
