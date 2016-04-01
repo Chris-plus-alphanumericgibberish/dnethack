@@ -37,6 +37,8 @@ boolean barage=FALSE;
 #define THROW_UWEP 	1
 #define THROW_USWAPWEP 	2
 
+boolean break_thrown = FALSE; /*state variable, if TRUE thrown object always breaks.*/
+
 /* Throw the selected object, asking for direction */
 int
 throw_obj(obj, shotlimit, thrown)
@@ -187,7 +189,10 @@ int thrown;
 	
 	if(!barage) multishot = rnd(multishot);
 	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barage
-	if(ammo_and_launcher(obj, launcher) && launcher->oartifact == ART_WRATHFUL_SPIDER) multishot += rn2(8);
+	if(ammo_and_launcher(obj, launcher) && launcher->oartifact){
+		if(launcher->oartifact == ART_WRATHFUL_SPIDER) multishot += rn2(8);
+		else if(launcher->oartifact == ART_ROGUE_GEAR_SPIRITS) multishot = 2;
+	}
 	
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
 		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS
@@ -242,7 +247,9 @@ int thrown;
 	m_shot.o = obj->otyp;
 	m_shot.n = multishot;
 	for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
-		if(!obj || obj->where != OBJ_INVENT) break; //Weapon lost
+		if(!obj || 
+			(obj->where != OBJ_INVENT && !(launcher && launcher->oartifact == ART_ROGUE_GEAR_SPIRITS))
+		) break; //Weapon lost
 	    twoweap = u.twoweap;
 	    /* split this object off from its slot if necessary */
 	    if (obj->quan > 1L) {
@@ -252,7 +259,7 @@ int thrown;
 		if (otmp->owornmask)
 		    remove_worn_item(otmp, FALSE);
 	    }
-	    freeinv(otmp);
+	    if(obj->where == OBJ_INVENT) freeinv(otmp);
 	    throwit(otmp, wep_mask, twoweap, thrown);
 	}
 	m_shot.n = m_shot.i = 0;
@@ -426,7 +433,7 @@ int shotlimit;
 
 	m_shot.o = blaster->otyp == CUTTING_LASER ? LASER_BEAM : blaster->otyp == ARM_BLASTER ? HEAVY_BLASTER_BOLT : BLASTER_BOLT;
 	m_shot.n = multishot;
-	otmp = mksobj(m_shot.o, TRUE, FALSE);
+	otmp = mksobj(m_shot.o, FALSE, FALSE);
 	otmp->blessed = blaster->blessed;
 	otmp->cursed = blaster->cursed;
 	otmp->spe = blaster->spe;
@@ -591,6 +598,23 @@ dofire()
 		return throw_obj(uwep, shotlimit, THROW_UWEP);
 	}
 	
+	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep)))  && uwep->oartifact == ART_ROGUE_GEAR_SPIRITS){
+		struct obj *bolt = mksobj(CROSSBOW_BOLT, FALSE, FALSE);
+		int result;
+		bolt->spe = min(0,uwep->spe);
+		bolt->blessed = uwep->blessed;
+		bolt->cursed = uwep->cursed;
+		/*See below for shotlimit*/
+		shotlimit = (multi || save_cm) ? multi + 1 : 0;
+		multi = 0;		/* reset; it's been used up */
+		
+		if(shotlimit > 0) bolt->quan = min(2,shotlimit); /* Make exactly enough, so that they are destroyed by throwing. */
+		break_thrown = TRUE; /* state variable, always destroy thrown */
+		result = throw_obj(bolt, shotlimit, THROW_UWEP);
+		break_thrown = FALSE; /* state variable, always destroy thrown */
+		return result;
+	}
+	
 	if(uwep && is_blaster(uwep)){
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
@@ -672,6 +696,12 @@ void
 hitfloor(obj)
 register struct obj *obj;
 {
+	if(break_thrown){
+	    check_shop_obj(obj, u.ux,u.uy, TRUE);
+	    obfree(obj, (struct obj *)0);
+	    return;
+	}
+	
 	if (IS_SOFT(levl[u.ux][u.uy].typ) || u.uinwater) {
 		dropy(obj);
 		return;
@@ -1435,6 +1465,11 @@ int thrown;
 	    obfree(obj, (struct obj *)0);
 	    return;
 	}
+	if(break_thrown){
+	    check_shop_obj(obj, bhitpos.x,bhitpos.y, TRUE);
+	    obfree(obj, (struct obj *)0);
+	    return;
+	}
 //#endif
 
 	if (u.uswallow) {
@@ -2018,7 +2053,7 @@ int thrown;
 				broken = 0;
 			} else if((launcher && ammo_and_launcher(obj, launcher) && 
 				(launcher->oartifact==ART_HELLFIRE || launcher->oartifact==ART_BOW_OF_SKADI))
-				|| obj->oartifact == ART_HOUCHOU
+				|| obj->oartifact == ART_HOUCHOU || break_thrown
 			){
 				broken = 1;
 			} else {
