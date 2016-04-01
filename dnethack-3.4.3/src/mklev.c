@@ -1434,8 +1434,14 @@ struct mkroom *croom;
 	 * has an up or down stair specified in its description file.
 	 */
 	if ((dunlev(&u.uz) == 1 && up) ||
-			(dunlev(&u.uz) == dunlevs_in_dungeon(&u.uz) && !up))
+			(dunlev(&u.uz) == dunlevs_in_dungeon(&u.uz) && !up)
+	){
+		if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && Is_qstart(&u.uz)){
+			levl[x][y].typ = STAIRS;
+			levl[x][y].ladder = up ? LA_UP : LA_DOWN;
+		}
 	    return;
+	}
 
 	if(up) {
 		xupstair = x;

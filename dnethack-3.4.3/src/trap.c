@@ -381,6 +381,9 @@ boolean td;	/* td == TRUE : trap door or hole */
 	if(*u.ushops) shopdig(1);
 	if (Is_stronghold(&u.uz)) {
 	    find_hell(&dtmp);
+	} else if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && In_mines(&u.uz) && !(u.uevent.qexpelled)){
+		dtmp.dnum = qstart_level.dnum;
+		dtmp.dlevel = 1;
 	} else {
 	    dtmp.dnum = u.uz.dnum;
 	    dtmp.dlevel = newlevel;
@@ -952,7 +955,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    You("%s into %s pit!", verbbuf, a_your[trap->madeby_u]);
 		}
 		/* wumpus reference */
-		if (Role_if(PM_RANGER) && !Race_if(PM_DROW) && !trap->madeby_u && !trap->once &&
+		if (Role_if(PM_RANGER) && !Race_if(PM_DROW) && !Race_if(PM_ELF) && !Race_if(PM_GNOME) && !trap->madeby_u && !trap->once &&
 			In_quest(&u.uz) && Is_qlocate(&u.uz)) {
 		    pline("Fortunately it has a bottom after all...");
 		    trap->once = 1;

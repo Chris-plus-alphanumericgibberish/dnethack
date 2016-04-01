@@ -868,6 +868,7 @@ doup()
 	     && (!xupladder || u.ux != xupladder || u.uy != yupladder)
 	     && (!sstairs.sx || u.ux != sstairs.sx || u.uy != sstairs.sy
 			|| !sstairs.up)
+		 && !(Role_if(PM_RANGER) && Race_if(PM_GNOME) && Is_qstart(&u.uz) && levl[u.ux][u.uy].ladder == LA_UP)
 	  ) {
 		if(uwep && uwep->oartifact == ART_ROD_OF_SEVEN_PARTS && u.RoSPflights > 0){
 			struct obj *pseudo;
@@ -882,7 +883,9 @@ doup()
 			u.RoSPflights--;
 		}
 		else{
-			if(levl[u.ux][u.uy].typ == STAIRS) pline("These stairs don't go up!");
+			if(levl[u.ux][u.uy].typ == STAIRS){
+				pline("These stairs don't go up!");
+			}
 			else You_cant("go up here.");
 		}
 		return(0);
@@ -915,6 +918,27 @@ doup()
 	if(!next_to_u()) {
 		You("are held back by your pet!");
 		return(0);
+	}
+	if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && Is_qstart(&u.uz) && levl[u.ux][u.uy].ladder == LA_UP){
+		if(!u.uevent.qcompleted){
+			pline("This staircase is partially collapsed.  It will be a tight squeeze.");
+			if (bigmonst(youmonst.data) && !(u.sealsActive&SEAL_ANDREALPHUS) && !amorphous(youmonst.data)) {
+				Your("body is too large to fit through.");
+				return 1;
+			}
+			if (!invent || (inv_weight() + weight_cap() > 600) 
+				|| (u.sealsActive&SEAL_ANDREALPHUS)
+				|| (uarmc && (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)) 
+				|| (uarm && uarm->greased) 
+				|| (uarmu && uarmu->greased) 
+			) {
+				You("find you can't fit you gear past the rubble in this staircase.");
+				return 1;
+			}
+			You("manage it, though.");
+		}
+		goto_level(&minetown_level,FALSE,FALSE,FALSE);
+		return 1;
 	}
 	at_ladder = (boolean) (levl[u.ux][u.uy].typ == LADDER);
 	prev_level(TRUE);

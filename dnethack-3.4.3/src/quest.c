@@ -162,10 +162,15 @@ boolean seal;
     struct trap *t;
     int portal_flag;
 
-    br = dungeon_branch("The Quest");
-    dest = (br->end1.dnum == u.uz.dnum) ? &br->end2 : &br->end1;
-    portal_flag = u.uevent.qexpelled ? 0 :	/* returned via artifact? */
-		  !seal ? 1 : -1;
+	if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && !seal){ //If sealing dump out quest portal and seal it.
+		dest = &minetown_level;
+		portal_flag = 0;
+	} else {
+	    br = dungeon_branch("The Quest");
+	    dest = (br->end1.dnum == u.uz.dnum) ? &br->end2 : &br->end1;
+	    portal_flag = u.uevent.qexpelled ? 0 :	/* returned via artifact? */
+			  !seal ? 1 : -1;
+	}
     schedule_goto(dest, FALSE, FALSE, portal_flag, (char *)0, (char *)0);
     if (seal) {	/* remove the portal to the quest - sealing it off */
 	int reexpelled = u.uevent.qexpelled;

@@ -11,7 +11,31 @@
 #
 MAZE: "Gnr-strt",'.'
 FLAGS: noteleport,hardfloor
-INIT_MAP:'.','.',true,true,lit,false
+#GEOMETRY:left,center
+###########1#########2#########3#########4#########5#########6#########7#####
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#MAP
+#0                                                                            
+#1                   #                      #                  #              
+#2                   #                    # # #          #     #              
+#3                                                                            
+#4    #                # #           #    #          #   #     #      #       
+#5                     #                                                      
+#6    #          #         #                   #    ##  -----------      # #  
+#7  # #    ##       #      #                            |         |           
+#8                              #    #       # #        |         |   #  #    
+#9        ##                                ## #     #  |         |  ##       
+#0        #         #           #      #             #  -----------           
+#1                      #                   #                                 
+#2          #  #  #             #  #   #       # #       #   #       #   #    
+#3          #          #      #             #                            #    
+#4             #                #  # #     ##      #    #      #     #        
+#5                     #     #  #  #       #       #                          
+#6                           #                                 #              
+#ENDMAP
+#BRANCH:(00,00,75,16),(0,0,0,0)
+#Portal placement happens after everything is generated, this doesn't work :(
+
 GEOMETRY:left,center
 ###########1#########2#########3#########4#########5#########6#########7#####
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -33,10 +57,14 @@ MAP
 4             #       #        ######     #########    ##############        
 5                     #     ####  #       #       #           #              
 6                           #                                 #              
+7                                                                            
+8                                                                            
+9                                                                            
 ENDMAP
-# STAIR:(35,06),up
-BRANCH:(35,06,35,06),(0,0,0,0)
-STAIR:(61,01),down
+RANDOM_PLACES:(61,01),(73,06),(61,16),(41,15),(42,01),(27,16),(22,10),(19,01),(10,13),(08,10)
+STAIR:(35,06),up
+BRANCH:(00,00,75,16),(44,04,64,12)
+STAIR:place[0],down
 DOOR: closed, (59,10)
 # throne room
 MONSTER: 'G', "Ruggo the Gnome High King", (59,7)
@@ -221,9 +249,9 @@ REGION:(13,10,18,12),unlit,"temple"
 # Stairs
 STAIR:(55,05),up
 # The altar of Kurtulmak.  This is not a shrine.
-ALTAR:(16,11),lawful,altar
+ALTAR:(16,11),law,altar
 # Objects
-OBJECT:'(',"pick-axe",(16,11),blessed,0,"The Rogue Gear-Spirits"
+OBJECT:')',"crossbow",(16,11),blessed,+2,"The Rogue Gear-spirits"
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -263,9 +291,9 @@ MONSTER:'k', "large kobold",random,hostile
 MONSTER:'k', "large kobold",random,hostile
 MONSTER:'k', "large kobold",random,hostile
 MONSTER:'k', "large kobold",random,hostile
-MONSTER:'k', "large shaman",random,hostile
-MONSTER:'k', "large shaman",random,hostile
-MONSTER:'k', "large shaman",random,hostile
+MONSTER:'k', "kobold shaman",random,hostile
+MONSTER:'k', "kobold shaman",random,hostile
+MONSTER:'k', "kobold shaman",random,hostile
 
 #
 #	The "fill" levels for the quest.
