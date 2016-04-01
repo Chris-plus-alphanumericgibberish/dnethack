@@ -6013,7 +6013,7 @@ Off in the distance, you hear a sound like the clattering of many
 hooves on rock.
 %E
 %Cp Ran 00041
-Once again, you enter the distorted castle of %n.
+Once again, you enter the ruined temple of %n.
 %E
 %Cc Ran 00050
 "So, %c.  %lC has sent you to recover %o.
@@ -6072,7 +6072,7 @@ on your speed.
 %nC collapses to the ground, cursing you and %l, then says:
 
     You have defeated me, %r!  But I curse you one final time, with my
-    dying breath!  You shall die before you leave my castle!
+    dying breath!  You shall die before you leave my temple!
 %E
 %Cc Ran 00081
 "%pC!  You have succeeded!  I feared it was not possible!
