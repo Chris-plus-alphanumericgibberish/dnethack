@@ -2267,7 +2267,17 @@ register struct monst *mtmp;
 		}
 		break;
 	    case S_KOBOLD:
+		if(ptr == &mons[PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK]){
+			(void)mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
+			(void)mongets(mtmp, SHORT_SWORD);
+			(void)mongets(mtmp, SMALL_SHIELD);
+			m_initthrow(mtmp, CROSSBOW_BOLT, 36);
+			m_initthrow(mtmp, DART, 36);
+		} else {
 		if (!rn2(4)) m_initthrow(mtmp, DART, 12);
+			else if(!rn2(3)) (void)mongets(mtmp, SHORT_SWORD);
+			else if(!rn2(2)) (void)mongets(mtmp, CLUB);
+		}
 		break;
 	    case S_CENTAUR:
 		if(ptr == &mons[PM_DRIDER]){
