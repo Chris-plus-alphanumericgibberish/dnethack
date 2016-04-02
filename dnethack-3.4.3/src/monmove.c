@@ -1181,7 +1181,8 @@ toofar:
 	   (mdat->mlet == S_LEPRECHAUN && !ygold && (lepgold || rn2(2))) ||
 #endif
 	   (is_wanderer(mdat) && !rn2(4)) || (Conflict && !mtmp->iswiz) ||
-	   (is_blind(mtmp) && !rn2(4)) || (mtmp->mpeaceful && mdat != &mons[PM_NURSE])) {
+	   (is_blind(mtmp) && !rn2(4)) || (mtmp->mpeaceful && mdat != &mons[PM_NURSE])
+	) {
 		/* Possibly cast an undirected spell if not attacking you */
 		/* note that most of the time castmu() will pick a directed
 		   spell and do nothing, so the monster moves normally */

@@ -812,7 +812,7 @@ asGuardian:
 	case MS_HISS:
 	    if (!mtmp->mpeaceful)
 		pline_msg = "hisses!";
-	    else return 0;	/* no sound */
+		    else return 0;	/* no sound */
 	    break;
 	case MS_BUZZ:
 	    pline_msg = mtmp->mpeaceful ? "drones." : "buzzes angrily.";
@@ -1822,7 +1822,7 @@ humanoid_sound:
 	    if (ptr == &mons[PM_DEATH] && !rn2(10))
 		pline_msg = "is busy reading a copy of Sandman #8.";
 	    else verbl_msg = "Who do you think you are, War?";
-	    break;
+    break;
     }
 
     if (pline_msg) pline("%s %s", Monnam(mtmp), pline_msg);

@@ -664,7 +664,7 @@ struct attack *uattk;
 	if (override_confirmation) {
 	    /* this may need to be generalized if weapons other than
 	       Stormbringer acquire similar anti-social behavior... */
-	    if (flags.verbose) Your("bloodthirsty blade attacks!");
+	    if (flags.verbose) Your("bloodthirsty weapon attacks!");
 	}
 
 	if(!*mhit) {
