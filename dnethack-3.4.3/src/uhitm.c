@@ -1063,6 +1063,7 @@ int thrown;
 		    if (mdat->mlet == S_SHADE && !(objects[obj->otyp].oc_material == SILVER || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
 				tmp = 0;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
+		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 3 : 6) + obj->spe);
 		    else if(obj->oclass == SPBOOK_CLASS && u.sealsActive&SEAL_PAIMON) tmp = rnd(spiritDsize()) + objects[obj->otyp].oc_level;
 			else tmp = rnd(2);
 			
@@ -1658,7 +1659,7 @@ defaultvalue:
 			  ) && !(noncorporeal(mdat) || amorphous(mdat) || stationary(mdat))
 			){
 				int dambonus = weapon_dam_bonus(wep);
-				int i=max(P_SKILL(objects[wep->otyp].oc_skill)-2,0);
+				int i=max(P_SKILL(objects[wep->otyp].oc_skill)-2,0); //Expert = 2
 				if(Race_if(PM_GNOME)) i++;
 				if(dambonus > 0) dambonus *= 3;
 				tmp += dambonus;

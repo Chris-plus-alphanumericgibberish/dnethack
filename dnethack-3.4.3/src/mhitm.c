@@ -1178,6 +1178,8 @@ physical:
 					tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
+				else if(otmp->oartifact == ART_ROGUE_GEAR_SPIRITS)
+					tmp = 2*(rnd(bigmonst(mdef->data) ? 3 : 6) + otmp->spe);
 				else tmp = rnd(2);
 				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(pd))
 					tmp += rnd(20);
