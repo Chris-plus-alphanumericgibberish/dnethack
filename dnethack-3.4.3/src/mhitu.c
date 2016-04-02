@@ -3924,7 +3924,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_BLNK:
-		if (!mtmp->mcan && !u.wimage && canseemon(mtmp) &&
+		if (!mtmp->mcan && canseemon(mtmp) &&
 			couldsee(mtmp->mx, mtmp->my) &&
 			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)
 		) {
@@ -3935,15 +3935,18 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	    		exercise(A_INT, TRUE);
 	    		exercise(A_WIS, FALSE);
 		    } else {
-			if (flags.verbose)
+				static long lastverbed = 0L;
+				if (flags.verbose && lastverbed+10 < moves)
 			    /* Since this message means the player is unaffected, limit
 			       its occurence to preserve flavor but avoid message spam */
-			    if (!rn2(10)) pline("%s is covering its face.", Monnam(mtmp));
+					pline("%s is covering its face.", Monnam(mtmp));
+				lastverbed = moves;
 			dmg = 0;
 		    }
-		    if (dmg && !rn2(100)){
+		    if (dmg){
 				int temparise = u.ugrave_arise;
-				u.wimage = TRUE;
+				u.wimage += dmg;
+				if(u.wimage>10) u.wimage = 10;
 				u.ugrave_arise = PM_WEEPING_ANGEL;
 				mdamageu(mtmp, dmg);
 				/*If the player surived the gaze attack, restore the value of arise*/
