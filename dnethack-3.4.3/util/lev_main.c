@@ -260,8 +260,8 @@ char **argv;
 	*/
 	monst_init();
 	objects_init();
+	/* these do something... */
 	decl_init();
-	/* this one does something... */
 	init_obj_classes();
 
 	init_yyout(stdout);
