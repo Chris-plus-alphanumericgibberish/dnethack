@@ -1317,6 +1317,9 @@ struct permonst *ptr;
 /*	For higher ac values */
 	n += (ptr->ac < 4);
 	n += (ptr->ac < 0);
+	n += (ptr->ac < -5);
+	n += (ptr->ac < -10);
+	n += (ptr->ac < -20);
 
 /*	For very fast monsters */
 	n += (ptr->mmove >= 18);
@@ -1326,7 +1329,8 @@ struct permonst *ptr;
 
 	    tmp2 = ptr->mattk[i].aatyp;
 	    n += (tmp2 > 0);
-	    n += (tmp2 == AT_MAGC || tmp2 == AT_MMGC);
+	    n += (tmp2 == AT_MAGC || tmp2 == AT_MMGC || 
+			tmp2 == AT_TUCH || tmp2 == AT_SHDW || tmp2 == AT_TNKR);
 	    n += (tmp2 == AT_WEAP && (ptr->mflags2 & M2_STRONG));
 	}
 
@@ -1335,7 +1339,8 @@ struct permonst *ptr;
 
 	    tmp2 = ptr->mattk[i].adtyp;
 	    if ((tmp2 == AD_DRLI) || (tmp2 == AD_STON) || (tmp2 == AD_DRST)
-		|| (tmp2 == AD_DRDX) || (tmp2 == AD_DRCO) || (tmp2 == AD_WERE))
+		|| (tmp2 == AD_DRDX) || (tmp2 == AD_DRCO) || (tmp2 == AD_WERE)
+		|| (tmp2 == AD_SHDW)|| (tmp2 == AD_STAR))
 			n += 2;
 	    else if (strcmp(ptr->mname, "grid bug")) n += (tmp2 != AD_PHYS);
 	    n += ((int) (ptr->mattk[i].damd * ptr->mattk[i].damn) > 23);
@@ -1344,6 +1349,9 @@ struct permonst *ptr;
 /*	Leprechauns are special cases.  They have many hit dice so they
 	can hit and are hard to kill, but they don't really do much damage. */
 	if (!strcmp(ptr->mname, "leprechaun")) n -= 2;
+
+/*	Hooloovoo spawn many dangerous enemies. */
+	if (!strcmp(ptr->mname, "hooloovoo")) n += 10;
 
 /*	Finally, adjust the monster level  0 <= n <= 24 (approx.) */
 	if(n == 0) tmp--;
