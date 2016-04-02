@@ -285,6 +285,7 @@ int spec;
 			tmp++;
 		case IRON_CHAIN:
 		case CROSSBOW_BOLT:
+		case DROVEN_BOLT:
 		case MORNING_STAR:
 		case PARTISAN:
 		case RUNESWORD:
@@ -528,12 +529,16 @@ int spec;
 	    switch (otyp) {
 		case IRON_CHAIN:
 		case CROSSBOW_BOLT:
+		case DROVEN_BOLT:
 		case MACE:
 		case ELVEN_MACE:
 		case WAR_HAMMER:
 		case FLAIL:
 		case SPETUM:
-		case TRIDENT:		tmp++; if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4)+2; break;
+		case TRIDENT:
+			tmp++; 
+			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4)+2;
+		break;
 
 		case BULLWHIP:
 			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += 10;
@@ -993,8 +998,8 @@ static NEARDATA const int rwep[] =
 // #ifdef FIREARMS
 	FRAG_GRENADE, GAS_GRENADE, ROCKET, SILVER_BULLET, BULLET, SHOTGUN_SHELL,
 // #endif
+	DROVEN_BOLT/*1d9+1/1d6+1*/, 
 	DWARVISH_SPEAR/*1d9/1d9*/, 
-	DROVEN_BOLT/*1d9/1d6*/, 
 	SHURIKEN/*1d8/1d6*/, 
 	DROVEN_DAGGER/*1d8/1d6*/, 
 	YA,/*1d7/1d7*/ 
@@ -1009,8 +1014,8 @@ static NEARDATA const int rwep[] =
 	TOUCHSTONE/*1d3/1d3*/, 
 	SPEAR/*1d6/1d8*/, 
 	ORCISH_SPEAR/*1d5/1d10*/,
+	CROSSBOW_BOLT/*1d4+1/1d6+1*/, 
 	ORCISH_ARROW/*1d5/1d8*/, 
-	CROSSBOW_BOLT/*1d4/1d6*/, 
 	SILVER_DAGGER/*1d4/1d3*/, 
 	ELVEN_DAGGER/*1d5/1d3*/, 
 	DAGGER/*1d4/1d3*/,
