@@ -221,7 +221,7 @@ const char *verb;
 		    map_background(x, y, 0);
 		    newsym(x, y);
 		}
-		return water_damage(obj, FALSE, FALSE, FALSE);
+		return water_damage(obj, FALSE, FALSE, FALSE, (struct monst *) 0);
 	} else if (u.ux == x && u.uy == y &&
 		(!u.utrap || u.utraptype != TT_PIT) &&
 		(t = t_at(x,y)) != 0 && t->tseen &&

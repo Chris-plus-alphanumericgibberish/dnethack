@@ -2115,7 +2115,7 @@ spiriteffects(power, atme)
 						} else {
 							pline("A sudden geyser from the abzu washes over %s!", mon_nam(mon));
 							dmg = d(rnd(5), dsize);
-							water_damage(mon->minvent, FALSE, FALSE, FALSE);
+							water_damage(mon->minvent, FALSE, FALSE, FALSE, mon);
 						}
 					} else {
 						if(Wwalking){
@@ -2135,7 +2135,7 @@ spiriteffects(power, atme)
 						} else {
 							pline("A sudden geyser from the abzu slams into %s!", mon_nam(mon));
 							dmg = d(8, dsize);
-							water_damage(mon->minvent, FALSE, FALSE, FALSE);
+							water_damage(mon->minvent, FALSE, FALSE, FALSE, mon);
 						}
 					}
 					if(flaming(mon->data) || mon->data == &mons[PM_EARTH_ELEMENTAL]) dmg *= 2;

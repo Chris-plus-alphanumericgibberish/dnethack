@@ -635,7 +635,7 @@ dowizgush() /* Gushing forth along LOS from (u.ux, u.uy) and random other spots 
 	yprime = u.uy;
 	do_clear_area(u.ux, u.uy, 9, wizgush, (genericptr_t)&madepool);
 	pline("Water sprays all over you.");
-	water_damage(invent, FALSE, FALSE, FALSE);
+	water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
 	for(cx = 0; cx < COLNO; cx++){
 		for(cy = 0; cy < ROWNO; cy++){
 			if(!rn2(100)){
@@ -669,7 +669,7 @@ genericptr_t poolcnt;
 	levl[cx][cy].typ = POOL;
 	/* No kelp! */
 	del_engr_ward_at(cx, cy);
-	water_damage(level.objects[cx][cy], FALSE, TRUE, FALSE);
+	water_damage(level.objects[cx][cy], FALSE, TRUE, FALSE, (struct monst *) 0);
 
 	if ((mtmp = m_at(cx, cy)) != 0){
 		(void) minliquid(mtmp);

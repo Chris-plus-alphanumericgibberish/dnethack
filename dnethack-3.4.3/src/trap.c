@@ -2784,9 +2784,10 @@ xchar x, y;
 
 /* returns TRUE if obj is destroyed */
 boolean
-water_damage(obj, force, here, forcelethe)
-register struct obj *obj;
-register boolean force, here, forcelethe;
+water_damage(obj, force, here, forcelethe, owner)
+struct obj *obj;
+boolean force, here, forcelethe;
+struct monst *owner;
 {
 	/* Dips in the Lethe are a very poor idea Lethe patch*/
 //	int luckpenalty = level.flags.lethe? 7 : 0;
@@ -2796,6 +2797,7 @@ register boolean force, here, forcelethe;
 	boolean obj_destroyed = FALSE;
 //	int is_lethe = level.flags.lethe || forcelethe;
 	int is_lethe = 0;
+	if(owner == &youmonst){
 	if((uarmc
 		&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
 		&& (!uarmc->cursed || rn2(3))
@@ -2812,7 +2814,29 @@ register boolean force, here, forcelethe;
 			}
 		}
 			return 0;
-	}	/* else: Scrolls, spellbooks, potions, weapons and
+		}
+	} else if(owner){ //Monster
+		struct obj *cloak = which_armor(owner, W_ARMC);
+		// struct obj *blindfold = which_armor(owner, W_ARMC);
+		if((cloak
+			&& (cloak->otyp == OILSKIN_CLOAK || cloak->greased)
+			&& (!cloak->cursed || rn2(3))
+		   // ) || (
+			// ublindf
+			// && ublindf->otyp == R_LYEHIAN_FACEPLATE
+			// && (!ublindf->cursed || rn2(3))
+		   )
+		) {
+			if(cloak && cloak->otyp != OILSKIN_CLOAK && cloak->greased){
+				if (force || !rn2(cloak->blessed ? 4 : 2)){
+					cloak->greased = 0;
+					if(canseemon(owner)) pline("The layer of grease on %s's %s dissolves.", mon_nam(owner), xname(cloak));
+				}
+			}
+			return 0;
+		}
+	}
+	/* else: Scrolls, spellbooks, potions, weapons and
 	   pieces of armor may get affected by the water */
 	for (; obj; obj = otmp) {
 		otmp = here ? obj->nexthere : obj->nobj;
@@ -2828,7 +2852,7 @@ register boolean force, here, forcelethe;
 			}
 		} else if(Is_container(obj) && !Is_box(obj) &&
 			(obj->otyp != OILSKIN_SACK || (obj->cursed && !rn2(3)))) {
-			water_damage(obj->cobj, force, FALSE, FALSE);
+			water_damage(obj->cobj, force, FALSE, FALSE, (struct monst *) 0);
 		} else if (!force && (Luck - luckpenalty + 5) > rn2(20)) {
 			/*  chance per item of sustaining damage:
 			 *	max luck (full moon):	 5%
@@ -3080,7 +3104,7 @@ drown()
 	    // forget(25);
 	// }
 
-	water_damage(invent, FALSE, FALSE, FALSE);
+	water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
 
 	if (u.umonnum == PM_GREMLIN && rn2(3))
 	    (void)split_mon(&youmonst, (struct monst *)0);

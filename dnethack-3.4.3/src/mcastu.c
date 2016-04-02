@@ -1215,7 +1215,7 @@ int spellnum;
 			erode_obj(uwep, TRUE, FALSE);
 			erode_obj(uswapwep, TRUE, FALSE);
 			erode_armor(&youmonst, TRUE);
-			water_damage(invent, FALSE, FALSE, FALSE);
+			water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
 			if (!resists_blnd(&youmonst) && rn2(2)) {
 				pline_The("acid gets into your %s!", eyecount(youmonst.data) == 1 ?
 						body_part(EYE) : makeplural(body_part(EYE)));
@@ -1256,7 +1256,7 @@ int spellnum;
 		dmg = d(8, 6);
 		if(uarmf && uarmf->otyp == mboots3 )
 			pline("Good thing you're wearing mud boots!");
-		else water_damage(invent, FALSE, FALSE, FALSE);
+		else water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
 		if (Half_physical_damage) dmg = (dmg + 1) / 2;
 	}
 	stop_occupation();
@@ -3158,7 +3158,7 @@ uspsibolt:
 				pline("A sudden geyser slams into %s from nowhere!", mon_nam(mtmp));
 			/* this is physical damage, not magical damage */
 			dmg = d(8, 6);
-			if(boots && boots->otyp != mboots2) water_damage(mtmp->minvent, FALSE, FALSE, FALSE);
+			if(boots && boots->otyp != mboots2) water_damage(mtmp->minvent, FALSE, FALSE, FALSE, mtmp);
 		}
 	}break;
     case FIRE_PILLAR:

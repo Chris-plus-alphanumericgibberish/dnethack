@@ -125,7 +125,7 @@ genericptr_t poolcnt;
 	levl[x][y].typ = POOL;
 	/* No kelp! */
 	del_engr_ward_at(x, y);
-	water_damage(level.objects[x][y], FALSE, TRUE, FALSE);
+	water_damage(level.objects[x][y], FALSE, TRUE, FALSE, (struct monst *) 0);
 
 	if ((mtmp = m_at(x, y)) != 0)
 		(void) minliquid(mtmp);

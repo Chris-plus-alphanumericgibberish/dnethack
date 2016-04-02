@@ -2168,7 +2168,7 @@ dopois:
 					!Is_medusa_level(&u.uz) &&
 					!Is_waterlevel(&u.uz);
 					
-					water_damage(invent, FALSE, FALSE, FALSE);
+					water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
 					
 					pline("%s drowns you...", Monnam(mtmp));
 					killer_format = KILLED_BY_AN;
@@ -2681,7 +2681,7 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 		case AD_WET:
 		hitmsg(mtmp, mattk);
-		water_damage(invent, FALSE, FALSE, FALSE);
+		water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 		case AD_SHRD:{
@@ -3229,7 +3229,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				(void) adjattrib(A_INT, -1, FALSE);
 				forget_levels(25);	/* lose memory of 25% of levels*/
 				forget_objects(25);	/* lose memory of 25% of objects*/
-				water_damage(invent, FALSE, FALSE, TRUE);
+				water_damage(invent, FALSE, FALSE, TRUE, &youmonst);
 
 				exercise(A_WIS, FALSE);
 			}
