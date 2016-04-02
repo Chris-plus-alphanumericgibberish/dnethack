@@ -1080,6 +1080,18 @@ int spellnum;
            Your("%s %s!", makeplural(body_part(HAND)),
                (old ? "are filthier than ever" : "get slimy"));
        }
+	   if(uwep && !rn2(20)){
+			uwep->greased = TRUE;
+			Glib += rn1(20, 9);
+			if(is_poisonable(uwep)) uwep->opoisoned = OPOISON_FILTH;
+			Your("%s is coated in gunk!", xname(uwep));
+	   }
+	   if(uswapwep && u.twoweap && !rn2(20)){
+			uswapwep->greased = TRUE;
+			Glib += rn1(20, 9);
+			if(is_poisonable(uswapwep)) uswapwep->opoisoned = OPOISON_FILTH;
+			Your("%s is coated in gunk!", xname(uswapwep));
+	   }
        if(haseyes(youmonst.data) && !Blindfolded && mtmp && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
            old = u.ucreamed;
            u.ucreamed += rn1(20, 9);
