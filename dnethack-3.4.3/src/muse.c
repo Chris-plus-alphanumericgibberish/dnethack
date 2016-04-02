@@ -1695,7 +1695,7 @@ struct monst *mtmp;
 	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
-	if (difficulty > 7 && !rn2(35)) return WAN_DEATH;
+	if (difficulty > 7 && !rn2(35)) return rnd(20) > 10 ? WAN_DRAINING : WAN_DEATH;
 	switch (rnd(8)) {
 		case 1: return WAN_STRIKING;
 		case 2: case 3:
