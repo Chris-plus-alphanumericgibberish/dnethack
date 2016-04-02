@@ -2316,7 +2316,7 @@ castmm(mtmp, mdef, mattk)
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
 	}
 
-	if(rn2(ml*10) < (mtmp->mconf ? 100 : 20)) {	/* fumbled attack */
+	if(rn2(ml*20) < (mtmp->mconf ? 100 : 20)) {	/* fumbled attack */
 	    if (canseemon(mtmp) && flags.soundok)
 		pline_The("air crackles around %s.", mon_nam(mtmp));
 	    return(0);
@@ -2704,7 +2704,7 @@ castum(mtmp, mattk)
 	    u.uen -= ml;
 	}
 
-	if(rn2(ml*10) < (Confusion ? 100 : 20)) {	/* fumbled attack */
+	if(rn2(ml*20) < (Confusion ? 100 : 20)) {	/* fumbled attack */
 	    pline_The("air crackles around you.");
 	    return(0);
 	}
