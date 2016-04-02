@@ -117,6 +117,7 @@ STATIC_OVL char *SaberHilts[] = {
 	"A blazing claw is set the pommel of this %s.",
 	"A red eclipse symbol is set the pommel of this %s.",
 	"There is a ring of bronze sea-creatures above the grip of this %s.",
+	"The pommel of this %s is carved from a japor snippet.",
 	"Four lines of silver Qualith stand out from this basalt hilt.",
 	"This %s is decorated with subtle swirls.",
 	"This %s is decorated with non-euclidean curves and angles.", /*Given that a lightsaber handle is a curved surface....*/
