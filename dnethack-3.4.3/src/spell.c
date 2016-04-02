@@ -3223,7 +3223,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_FLOWING_FORMS:{
 			struct monst *mon;
-			if(!getdir((char *)0))
+			if(!getdir((char *)0) || u.dz)
 				return 0;
 			else if((!u.dx && !u.dy)) {
 				You_feel("a little %s.", Hallucination ? "normal" : "strange");
