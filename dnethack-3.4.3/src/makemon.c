@@ -962,7 +962,7 @@ register struct monst *mtmp;
 					else if (!rn2(4)) (void)mongets(mtmp, ELVEN_BOOTS);
 					if (rn2(2)) (void)mongets(mtmp, ELVEN_DAGGER);
 #ifdef BARD
-				    if (mm == PM_ELVENKING || mm == PM_ELF_LORD ? !rn2(10) : !rn2(50))
+					if (mm == PM_ELVENKING || mm == PM_ELF_LORD ? TRUE : !rn2(10))
 						(void)mongets(mtmp, (rn2(2) ? WOODEN_FLUTE : WOODEN_HARP));
 #endif
 					switch (rn2(3)) {
