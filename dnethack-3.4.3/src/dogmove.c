@@ -307,7 +307,8 @@ boolean devour;
 	boolean vampiric = is_vampire(mtmp->data);
 
 #ifdef PET_SATIATION
-	boolean can_choke = (edog->hungrytime >= monstermoves + DOG_SATIATED && !vampiric);
+	// boolean can_choke = (edog->hungrytime >= monstermoves + DOG_SATIATED && !vampiric);
+	boolean can_choke = FALSE;
 #else
         /* disabled if pets can choke;
 	   if they're really hungry you should feed them big food! */
