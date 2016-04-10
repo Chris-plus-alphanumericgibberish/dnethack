@@ -565,7 +565,15 @@ const char *name;
 	}
 	
 	if (lth) artifact_exists(obj, name, TRUE);
+	
 	if (obj->oartifact) {
+		
+		/*artifacts are unique*/
+		obj->quan = 1L;
+		obj->owt = weight(obj);
+		
+		if(obj->oartifact == ART_WAR_MASK_OF_DURIN) obj->corpsenm = PM_DWARF;
+		
 	    /* can't dual-wield with artifact as secondary weapon */
 	    if (obj == uswapwep) untwoweapon();
 	    /* activate warning if you've just named your weapon "Sting" */

@@ -1040,7 +1040,6 @@ gcrownu()
 			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
 				obj = mksobj(DIAMOND, FALSE, FALSE);
 				obj = oname(obj, artiname(ART_ARKENSTONE));
-				obj->quan = 1;
 				at_your_feet("A shining diamond");
 				discover_artifact(ART_DURIN_S_AXE);
 			} else if(urole.ldrnum == PM_DAIN_II_IRONFOOT){

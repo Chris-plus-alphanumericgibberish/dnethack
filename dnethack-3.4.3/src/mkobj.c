@@ -1334,8 +1334,6 @@ register struct obj *obj;
 		wt =  (int)(wt * 1.5); //225
 	} else if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
 		wt =  50; /* Same as a crystal ball (ie, the Orb of Weight) */
-	} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
-		obj->corpsenm = PM_DWARF;
 	}
 
 
