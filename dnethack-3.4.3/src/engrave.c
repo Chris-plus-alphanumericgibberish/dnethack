@@ -208,6 +208,7 @@ static const char *haluMesg[] = {
 		"B3C4US3!!! R3D 1S TH3 B3ST 4ND T4ST3S TH3 B3ST!!! <3",
 		"OK TH3N WH4T?",
 		"WH3R3 1S 1T?",
+	"Im Sure That Possibly All Made Sense Good Speech",
 	
 	"And there shall be laughter and magic and blood, and we shall dance our dance until the end of time...", /*Incursion, Halls of the Goblin King*/
 		"May you find beauty in endings.",
