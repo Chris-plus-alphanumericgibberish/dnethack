@@ -28,8 +28,6 @@ static int dieroll;
 /* Used to flag attacks caused by Stormbringer's maliciousness. */
 static boolean override_confirmation = FALSE;
 
-#define PROJECTILE(obj)	((obj) && is_ammo(obj))
-
 /* modified from hurtarmor() in mhitu.c */
 /* This is not static because it is also used for monsters rusting monsters */
 void
@@ -1056,7 +1054,7 @@ int thrown;
 		    /* houchou that isn't thrown */
 		    (!thrown && obj->oartifact == ART_HOUCHOU) ||
 		    /* or throw a missile without the proper bow... */
-		    (is_ammo(obj) && !ammo_and_launcher(obj, uwep))
+		    (is_ammo(obj) && (!ammo_and_launcher(obj, uwep) || obj->oclass == GEM_CLASS))
 		) {
 			
 		    /* then do only 1-2 points of damage */
@@ -1641,7 +1639,7 @@ defaultvalue:
 			/* If you throw using a propellor, you don't get a strength
 			 * bonus but you do get an increase-damage bonus.
 			 */
-			if(!thrown || !obj || !uwep || !ammo_and_launcher(obj, uwep))
+			if(!thrown || !obj || !uwep || !ammo_and_launcher(obj, uwep) || objects[uwep->otyp].oc_skill == P_SLING)
 				tmp += dbon(uwep);
 		}
 	}
@@ -1649,8 +1647,7 @@ defaultvalue:
 	if (valid_weapon_attack) {
 	    struct obj *wep;
 
-	    /* to be valid a projectile must have had the correct projector */
-	    wep = PROJECTILE(obj) ? uwep : obj;
+	    wep = (obj && ammo_and_launcher(obj, uwep)) ? uwep : obj;
 	    if((thrown && objects[wep->otyp].oc_skill != P_LANCE && objects[wep->otyp].oc_skill != P_POLEARMS)
 			|| (wep && wep->oartifact == ART_TENTACLE_ROD)
 		){

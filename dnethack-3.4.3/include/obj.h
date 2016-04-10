@@ -279,9 +279,11 @@ struct obj {
 			 (ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE) ||\
 			 ltmp->otyp == BFG))
 #define is_missile(otmp)	((otmp->oclass == WEAPON_CLASS || \
-			 otmp->oclass == TOOL_CLASS) && \
-			 objects[otmp->otyp].oc_skill >= -P_BOOMERANG && \
-			 objects[otmp->otyp].oc_skill <= -P_DART)
+			 otmp->oclass == TOOL_CLASS || otmp->oclass == GEM_CLASS) && \
+			 ((objects[otmp->otyp].oc_skill >= -P_BOOMERANG && \
+				 objects[otmp->otyp].oc_skill <= -P_DART) ||\
+				 objects[otmp->otyp].oc_skill == -P_SLING)\
+			 )
 #define is_weptool(o)	((o)->oclass == TOOL_CLASS && \
 			 objects[(o)->otyp].oc_skill != P_NONE)
 #define is_instrument(o)	((o)->otyp >= WOODEN_FLUTE && \

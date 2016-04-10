@@ -150,6 +150,9 @@ int thrown;
 		) multishot++;
 	    /* ...or is using a special weapon for their role... */
 	    switch (Role_switch) {
+	    case PM_CAVEMAN:
+		if (skill == -P_SLING) multishot++;
+		break;
 	    case PM_RANGER:
 		multishot++;
 		if(ammo_and_launcher(obj, launcher) && launcher->oartifact == ART_LONGBOW_OF_DIANA) multishot++;//double bonus for Rangers
@@ -1771,7 +1774,7 @@ int thrown;
 
 	/* Differences from melee weapons:
 	 *
-	 * Dex still gives a bonus, but strength does not.
+	 * Dex still gives a bonus, but strength does not unless the items was thrown or shot from a sling.
 	 * Polymorphed players lacking attacks may still throw.
 	 * There's a base -1 to hit.
 	 * No bonuses for fleeing or stunned targets (they don't dodge
@@ -1792,10 +1795,14 @@ int thrown;
 			maybe_polyd(youmonst.data->mlevel, u.ulevel);
 	else tmp = -1 + Luck + find_mac(mon) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*BASE_ATTACK_BONUS;
-	if (ACURR(A_DEX) < 4) tmp -= 3;
-	else if (ACURR(A_DEX) < 6) tmp -= 2;
-	else if (ACURR(A_DEX) < 8) tmp -= 1;
-	else if (ACURR(A_DEX) >= 14) tmp += (ACURR(A_DEX) - 14);
+	
+	if(!launcher || objects[launcher->otyp].oc_skill == P_SLING) tmp += abon();
+	else {
+		if (ACURR(A_DEX) < 4) tmp -= 3;
+		else if (ACURR(A_DEX) < 6) tmp -= 2;
+		else if (ACURR(A_DEX) < 8) tmp -= 1;
+		else if (ACURR(A_DEX) >= 14) tmp += (ACURR(A_DEX) - 14);
+	}
 
 	/* Modify to-hit depending on distance; but keep it sane.
 	 * Polearms get a distance penalty even when wielded; it's
