@@ -603,7 +603,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 			done((adtyp == AD_FIRE) ? BURNING : DIED);
 		    }
 		}
-		exercise(A_STR, FALSE);
+		if(uhurt == 2) exercise(A_STR, FALSE);
 	}
 
 	if (shopdamage) {
