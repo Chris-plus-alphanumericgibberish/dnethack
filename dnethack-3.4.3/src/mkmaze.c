@@ -1083,7 +1083,7 @@ movebubbles()
 			}
 
 			levl[x][y] = water_pos;
-			block_point(x,y);
+			// block_point(x,y);
 		    }
 	}
 
@@ -1405,7 +1405,7 @@ register boolean ini;
 		if (b->bm[j + 2] & (1 << i)) {
 		    levl[x][y].typ = ROOM;// was AIR
 		    levl[x][y].lit = 1;
-		    unblock_point(x,y);
+		    // unblock_point(x,y);
 		}
 
 	/* replace contents of bubble */
