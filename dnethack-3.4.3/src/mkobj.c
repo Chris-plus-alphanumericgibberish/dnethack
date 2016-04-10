@@ -449,7 +449,7 @@ boolean artif;
 				break;
 			}
 		}
-		if (artif && !rn2(20))
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 //#ifdef FIREARMS
 		if (otmp->otyp == STICK_OF_DYNAMITE) {
