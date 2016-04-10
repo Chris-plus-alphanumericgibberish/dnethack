@@ -502,8 +502,8 @@ dothrow()
 	 * [ALI] Bug fix: Temporary paralysis (eg., from hurtle) cancels
 	 * any count for the throw command.
 	 */
-	if (multi >= 0)
-	    multi = oldmulti;
+	// if (multi >= 0)
+	    // multi = oldmulti;
     save_cm = oldsave_cm;
     return (result);
 }
