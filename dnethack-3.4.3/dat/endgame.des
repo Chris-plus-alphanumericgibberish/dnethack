@@ -262,46 +262,46 @@ ENDMAP
 TELEPORT_REGION:(69,16,69,16),(0,0,0,0)
 PORTAL:(0,0,75,19),(65,13,75,19),"water"
 
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
-MONSTER:'{',"burning fern",random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
+MONSTER:'{',random,random
 #  An assortment of fire-appropriate nasties
 MONSTER:'D',"red dragon",random
 MONSTER:'D',"red dragon",random
