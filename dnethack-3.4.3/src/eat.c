@@ -1514,9 +1514,12 @@ void
 violated_vegetarian()
 {
     u.uconduct.unvegetarian++;
+	
     if (Role_if(PM_MONK)) {
-	You_feel("guilty.");
-	adjalign(-1);
+		You_feel("guilty.");
+		adjalign(-1);
+		u.ualign.sins++;
+		if(u.uconduct.unvegetarian%2) u.hod++;
     }
     return;
 }
