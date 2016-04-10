@@ -4813,7 +4813,7 @@ is a red right hand
 	  ATTK(AT_SPIT, AD_DRST, 4, 2), NO_ATTK)
 #endif
     MON("Shaktari", S_DEMON,//
-	LVL(63, 12, -4, 80, -18), (G_HELL|G_NOCORPSE|G_NOGEN), /* -44 if armed */
+	LVL(63, 12, -4, 80, -18), (G_HELL|G_NOCORPSE|G_NOGEN|G_UNIQ), /* -44 if armed */
 	A(ATTK(AT_WEAP, AD_PHYS, 2, 4), ATTK(AT_WEAP, AD_PHYS, 2, 4),
 	  ATTK(AT_WEAP, AD_PHYS, 2, 4), ATTK(AT_WEAP, AD_PHYS, 2, 4),
 	  ATTK(AT_WEAP, AD_PHYS, 2, 4), ATTK(AT_WEAP, AD_PHYS, 2, 4)),
