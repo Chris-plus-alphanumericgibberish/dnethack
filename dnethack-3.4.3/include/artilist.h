@@ -247,9 +247,9 @@ A("the Pen of the Void",	ATHAME,
 	0,SPFX3_NOCNT,0),
 
 #ifdef CONVICT
-A("Luck Blade",			SHORT_SWORD, //needs quote
-	(SPFX_RESTR|SPFX_INTEL), 0,0,
-	PHYS(1, 4),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
+A("Luck Blade",			SHORT_SWORD, /*Needs encyc entry*/
+	(SPFX_RESTR|SPFX_INTEL|SPFX_LUCK), 0,0,
+	PHYS(7, 7),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
 	0,0,0 ),
 #endif /* CONVICT */
 
