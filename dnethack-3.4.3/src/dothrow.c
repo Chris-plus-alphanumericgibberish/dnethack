@@ -1849,7 +1849,11 @@ int thrown;
 		pline("%s catches and drops %s.", Monnam(mon), the(xname(obj)));
 		return 0;
 	    } else {
-		pline("%s catches %s.", Monnam(mon), the(xname(obj)));
+			if(obj->oartifact){ //All gem artifacts need to force a "the" here.
+				pline("%s catches the %s.", Monnam(mon), xname(obj));
+			} else {
+				pline("%s catches %s.", Monnam(mon), the(xname(obj)));
+			}
 		return gem_accept(mon, obj);
 	    }
 	}
@@ -2191,11 +2195,17 @@ register struct obj *obj;
 	static NEARDATA const char maybeluck[] = " hesitatingly";
 	static NEARDATA const char noluck[] = " graciously";
 	static NEARDATA const char addluck[] = " gratefully";
+	static NEARDATA const char isartifact[] = " drops it in shock!";
 
 	Strcpy(buf,Monnam(mon));
 	mon->mpeaceful = 1;
 	mon->mavenge = 0;
 
+	if(obj->oartifact){
+		Strcat(buf,isartifact);
+		goto nopick;
+	}
+	
 	/* object properly identified */
 	if(obj->dknown && objects[obj->otyp].oc_name_known) {
 		if(is_gem) {
