@@ -4665,8 +4665,8 @@ shk_identify(slang, shkp)
 
 	/* Here we go */
 	/* KMH -- fixed */
-	if (ESHK(shkp)->services & (SHK_ID_BASIC|SHK_ID_PREMIUM) ==
-			SHK_ID_BASIC|SHK_ID_PREMIUM) {
+	if ((ESHK(shkp)->services & (SHK_ID_BASIC|SHK_ID_PREMIUM)) ==
+			(SHK_ID_BASIC|SHK_ID_PREMIUM)) {
 		ident_type = yn_function("[B]asic service or [P]remier",
 		     ident_chars, '\0');
 		if (ident_type == '\0') return;
