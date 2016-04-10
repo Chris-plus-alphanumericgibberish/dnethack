@@ -5241,7 +5241,7 @@ shk_armor_works(slang, shkp)
 		verbalize("Nobody will ever hit on you again.");
  
 		/* Higher enchantment levels cost more. */
-		charge = (obj->spe+1) * (obj->spe+1) * 500;
+		charge = (obj->spe+1) * (obj->spe+1) * 100;
 						
 		if (obj->spe < 0) charge = 100;                
 
