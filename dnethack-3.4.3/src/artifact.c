@@ -2218,7 +2218,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	  }
 	 }
-	 else if(youdefend){
+	 else if(youdefend && !(u.sealsActive|SEAL_ANDROMALIUS)){
 		char buf[BUFSZ];
 		buf[0] = '\0';
 		steal(magr, buf, TRUE);
