@@ -189,8 +189,10 @@ struct monst *mon;
 
 	/* Blessed weapons used against undead or demons */
 	if (Is_weapon && otmp->blessed &&
-	   (is_demon(ptr) || is_undead(ptr))) tmp += 2;
-
+	   (is_demon(ptr) || is_undead(ptr))){
+		if(otmp->oartifact == ART_EXCALIBUR) tmp += 7; //Quite holy
+		else tmp += 2;
+	}
 	if (is_spear(otmp) &&
 	   index(kebabable, ptr->mlet)) tmp += (ptr == &mons[PM_SMAUG]) ? 20 : 2;
 
@@ -811,8 +813,10 @@ int spec;
 		otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS) {
 	    int bonus = 0;
 
-	    if (otmp->blessed && (is_undead(ptr) || is_demon(ptr)))
-		bonus += rnd(4);
+	    if (otmp->blessed && (is_undead(ptr) || is_demon(ptr))){
+			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
+			else bonus += rnd(4);
+		}
 	    if (is_axe(otmp) && is_wooden(ptr))
 		bonus += rnd(4);
 	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) 
