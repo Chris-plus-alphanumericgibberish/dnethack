@@ -821,13 +821,12 @@ int spec;
 		bonus += rnd(4);
 	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) 
 			&& (hates_silver(ptr) || (youdefend && maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))))
-			&& !(is_lightsaber(otmp) && otmp->lamplit && otmp->oartifact != ART_ANNULUS)
+			&& !(is_lightsaber(otmp) && otmp->lamplit)
 			&& (!youdefend || !(u.sealsActive&SEAL_EDEN))
 		){
 			if(otyp == SILVER_KHAKKHARA) bonus += d(rnd(3),20);
 			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
 			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
-			else if(otmp->altmode && otmp->oartifact == ART_ANNULUS && is_lightsaber(otmp)) bonus += d(2,20);
 			else bonus += rnd(20);
 		}
 		
