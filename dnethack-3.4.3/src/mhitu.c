@@ -3590,7 +3590,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	    case AD_PLYS:
 		if(mtmp->data == &mons[PM_DEMOGORGON]){
 		  if(!Blind && !is_blind(mtmp) && canseemon(mtmp)){
-			if((!Free_action || !rn2(2)) && (!Sleep_resistance || rn2(4))){
+			if((!Free_action || rn2(2)) && (!Sleep_resistance || rn2(4))){
 				You("meet the gaze of Aameul, left head of Demogorgon!");
 				You("are mesmerized!");
 				nomovemsg = 0;	/* default: "you can move again" */
