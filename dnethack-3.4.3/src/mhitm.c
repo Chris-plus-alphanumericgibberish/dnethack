@@ -2063,7 +2063,7 @@ register struct obj *otemp;
 	if (!flags.verbose || Blind || !mon_visible(magr)) return;
 	Strcpy(buf, mon_nam(mdef));
 	pline("%s %s %s %s at %s.", Monnam(magr),
-	      (objects[otemp->otyp].oc_dir & PIERCE) ? "thrusts" : "swings",
+	      (objects[otemp->otyp].oc_dir & PIERCE && weapon_type(otemp) != P_PICK_AXE) ? "thrusts" : "swings",
 	      mhis(magr), singular(otemp, xname), buf);
 }
 

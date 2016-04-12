@@ -136,7 +136,7 @@ register struct obj *otemp;
 	if (!flags.verbose || Blind || !mon_visible(mtmp))
 		return;
 	pline("%s %s %s %s.", Monnam(mtmp),
-	      (objects[otemp->otyp].oc_dir & PIERCE) ? "thrusts" : "swings",
+	      (objects[otemp->otyp].oc_dir & PIERCE && weapon_type(otemp) != P_PICK_AXE) ? "thrusts" : "swings",
 	      mhis(mtmp), singular(otemp, xname));
 }
 
