@@ -1735,7 +1735,7 @@ boolean pick;
 		}
 	}
 stillinwater:;
-	if (!Levitation && !u.ustuck && !Flying) {
+	if (((!Levitation && !Flying) || Is_waterlevel(&u.uz)) && !u.ustuck) {
 	    /* limit recursive calls through teleds() */
 	    if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
 #ifdef STEED

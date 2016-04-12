@@ -1403,7 +1403,7 @@ register boolean ini;
 	for (i = 0, x = b->x; i < (int) b->bm[0]; i++, x++)
 	    for (j = 0, y = b->y; j < (int) b->bm[1]; j++, y++)
 		if (b->bm[j + 2] & (1 << i)) {
-		    levl[x][y].typ = ROOM;// was AIR
+		    levl[x][y].typ = AIR;
 		    levl[x][y].lit = 1;
 		    // unblock_point(x,y);
 		}
