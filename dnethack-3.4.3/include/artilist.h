@@ -47,7 +47,7 @@ A("",				STRANGE_OBJECT,
 A("Excalibur",			LONG_SWORD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
 	PHYS(20,10),	DRLI(0,0),	NO_CARY,	//Excalibur is a very accurate weapon, a property that almost doesn't matter except for vs high level demons
-	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
+	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, //Excalibur does extra blessed damage to demons and undead, +3d7 instead of 1d4
 	0,0,0),
 /* Clarent patch (Greyknight): Note that Clarent's SPFX2_DIG gives it another +2 to hit against thick-skinned
 	monsters, as well as against wall-passers. Another special effect of Clarent
