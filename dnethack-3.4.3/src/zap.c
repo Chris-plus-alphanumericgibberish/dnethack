@@ -3934,6 +3934,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					if(uwep && is_lightsaber(uwep) && uwep->lamplit && shienuse && getdir((char *)0) && (u.dx || u.dy)){
 						dx = u.dx;
 						dy = u.dy;
+						use_skill(FFORM_SHIEN,1);
 						tmp_at(DISP_CHANGE, zapdir_to_glyph(dx,dy,abstype));
 					} else {
 						dx = -dx;

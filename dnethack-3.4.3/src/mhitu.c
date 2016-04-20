@@ -1093,6 +1093,7 @@ mattacku(mtmp)
 					case P_BASIC:
 						if(rn2(100) < 5){
 							You("counterattack!");
+							use_skill(FFORM_SHIEN,1);
 							flags.forcefight = TRUE;
 							attack(mtmp);
 							flags.forcefight = FALSE;
@@ -1102,6 +1103,7 @@ mattacku(mtmp)
 					case P_SKILLED:
 						if(rn2(100) < 10){
 							You("counterattack!");
+							use_skill(FFORM_SHIEN,1);
 							flags.forcefight = TRUE;
 							attack(mtmp);
 							flags.forcefight = FALSE;
@@ -1111,6 +1113,7 @@ mattacku(mtmp)
 					case P_EXPERT:
 						if(rn2(100) < 20){
 							You("counterattack!");
+							use_skill(FFORM_SHIEN,1);
 							flags.forcefight = TRUE;
 							attack(mtmp);
 							flags.forcefight = FALSE;
@@ -7308,6 +7311,7 @@ register struct attack *mattk;
 				case P_BASIC:
 					if(rn2(100) < 5){
 						You("counterattack!");
+						use_skill(FFORM_DJEM_SO,1);
 						flags.forcefight = TRUE;
 						attack(mtmp);
 						flags.forcefight = FALSE;
@@ -7317,6 +7321,7 @@ register struct attack *mattk;
 				case P_SKILLED:
 					if(rn2(100) < 10){
 						You("counterattack!");
+						use_skill(FFORM_DJEM_SO,1);
 						flags.forcefight = TRUE;
 						attack(mtmp);
 						flags.forcefight = FALSE;
@@ -7326,6 +7331,7 @@ register struct attack *mattk;
 				case P_EXPERT:
 					if(rn2(100) < 20){
 						You("counterattack!");
+						use_skill(FFORM_DJEM_SO,1);
 						flags.forcefight = TRUE;
 						attack(mtmp);
 						flags.forcefight = FALSE;
