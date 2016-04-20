@@ -106,7 +106,7 @@ use_saddle(otmp)
 	    exercise(A_WIS, FALSE);
 	    return 1;
 	}
-	if (mtmp->isminion || mtmp->isshk || mtmp->ispriest ||
+	if (mtmp->isshk || mtmp->ispriest ||
 			mtmp->isgd || mtmp->iswiz) {
 	    pline("I think %s would mind.", mon_nam(mtmp));
 	    return 1;
@@ -285,7 +285,7 @@ mount_steed(mtmp, force)
 	    Sprintf(kbuf, "attempting to ride %s", an(mtmp->data->mname));
 	    instapetrify(kbuf);
 	}
-	if (!mtmp->mtame || mtmp->isminion) {
+	if (!mtmp->mtame) {
 	    pline("I think %s would mind.", mon_nam(mtmp));
 	    return (FALSE);
 	}
@@ -298,7 +298,7 @@ mount_steed(mtmp, force)
 	    return (FALSE);
 	}
 
-	if (!force && !Role_if(PM_KNIGHT) && !(--mtmp->mtame)) {
+	if (!force && !Role_if(PM_KNIGHT) && !mtmp->isminion && !(--mtmp->mtame)) {
 	    /* no longer tame */
 	    newsym(mtmp->mx, mtmp->my);
 	    pline("%s resists%s!", Monnam(mtmp),
