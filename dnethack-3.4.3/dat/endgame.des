@@ -238,30 +238,71 @@ GEOMETRY:center,center
 # This map has no visible outer boundary, and
 # is mostly open area, with lava lakes and bunches of fire traps.
 MAP
-    ........................................................................
-  ..LLLLLLLL.. .. ......L................   ....LLL..  .................. ..
- ..LL......  . .........L.................  ...LLLL... ...  .......LL..    .
- ..L....    .....LLLL...LL....LL....   ........LLLLL.....    ....LLL...   ..
-.LLLL..  ...... ...LL....L.. ..LLL.    .........LLLL......  ......LLLL......
-..........LLLL...LLLL...LLL. ..LLL..  ..L........LLLL....LL........LLL......
-. ......LLLLLLL...LL.....L..  ..L......LL....  ...LL.. ...LL........LL...L..
-.. .....LL..LLL..LL... ..LL..  ..LLLL..L....   ..LL..  ..LLL............LL..
-.  .L..LL....LLLLL....  ...........LLLLLLL.......L......LL............LLLLLL
-. ..L..L.. ..LL.LLLL..  ...L............L....  ..LLLLL.LL... ..LL.........LL
-.. .LL........L...LL.. ...LL.....  ......LLL.....L...LLL.... ..LLL.....  ..L
-.....LLLLLL..... ..L.......LLL...  ... ....L....LL...L.LLL. ....LLLLLLL. ...
-.. .......LLLL... ..... ..LL.L.... ...  ...L....L...LL.........LLL..LLL.....
-...........................LLLLL...........LL...L...L........LLLL..LLLLLL...
-.....LLLL...     .....LL....LL.......LLL. .LL.......L..LLL....LLLLLLL.......
-  .....LLL.........LLLLLLLLLLL......LLLLL...L...........LL...LL...LL..... ..
-   ......LL.......LL.........LL.......LLL....L..LLL....LL.... ....LL........
-     .....LLLLLLLLL... .  ....LL....LLL..... .LLLLL.....LL..  ....LL .......
-     ............L...        ..LLLLLL. ...   ....LL...LLLL.........LL.......
-     . .............         ....LL... ..     .........LL...................
+0    ........................................................................
+1  ..LLLLLLLL.. .. ......L................   ....LLL..  .................. ..
+2 ..LL......  . .........L.................  ...LLLL... ...  .......LL..    .
+3 ..L....    .....LLLL...LL....LL....   ........LLLLL.....    ....LLL...   ..
+4.LLLL..  ...... ...LL....L.. ..LLL.    .........LLLL......  ......LLLL......
+5..........LLLL...LLLL...LLL. ..LLL..  ..L........LLLL....LL........LLL......
+6. ......LLLLLLL...LL.....L..  ..L......LL....  ...LL.. ...LL........LL...L..
+7.. .....LL..LLL..LL... ..LL..  ..LLLL..L....   ..LL..  ..LLL............LL..
+8.  .L..LL....LLLLL....  ...........LLLLLLL.......L......LL............LLLLLL
+9. ..L..L.. ..LL.LLLL..  ...L............L....  ..LLLLL.LL... ..LL.........LL
+0.. .LL........L...LL.. ...LL.....  ......LLL.....L...LLL.... ..LLL.....  ..L
+1.....LLLLLL..... ..L.......LLL...  ... ....L....LL...L.LLL. ....LLLLLLL. ...
+2.. .......LLLL... ..... ..LL.L.... ...  ...L....L...LL.........LLL..LLL.....
+3...........................LLLLL...........LL...L...L........LLLL..LLLLLL...
+4.....LLLL...     .....LL....LL.......LLL. .LL.......L..LLL....LLLLLLL.......
+5  .....LLL.........LLLLLLLLLLL......LLLLL...L...........LL...LL...LL..... ..
+6   ......LL.......LL.........LL.......LLL....L..LLL....LL.... ....LL........
+7     .....LLLLLLLLL... .  ....LL....LLL..... .LLLLL.....LL..  ....LL .......
+8     ............L...        ..LLLLLL. ...   ....LL...LLLL.........LL.......
+9     . .............         ....LL... ..     .........LL...................
 ENDMAP
 TELEPORT_REGION:(69,16,69,16),(0,0,0,0)
 PORTAL:(0,0,75,19),(65,13,75,19),"water"
+REGION:(00,00,75,19),lit,"ordinary"
 
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
 MONSTER:'{',random,random
 MONSTER:'{',random,random
 MONSTER:'{',random,random

@@ -1780,7 +1780,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 				    (mdat->msize > MZ_SMALL &&
 				     !amorphous(mdat) && !is_flyer(mdat)))
 				&& (ttmp->ttyp != FIRE_TRAP ||
-				    !resists_fire(mon))
+				    !resists_fire(mon) || distmin(mon->mx, mon->my, mon->mux, mon->muy) > 2) /*Cuts down on plane of fire message spam*/
 				&& (ttmp->ttyp != SQKY_BOARD || !is_flyer(mdat))
 				&& (ttmp->ttyp != WEB || (!amorphous(mdat) &&
 				    !webmaker(mdat) && !(

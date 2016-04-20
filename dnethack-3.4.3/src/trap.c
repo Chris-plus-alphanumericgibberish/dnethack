@@ -3914,8 +3914,6 @@ boolean force;
 				return disarm_shooting_trap(ttmp, ARROW);
 			case RUST_TRAP:
 				return disarm_rust_trap(ttmp);
-			case FIRE_TRAP:
-				return disarm_fire_trap(ttmp);
 			case PIT:
 			case SPIKED_PIT:
 				if (!u.dx && !u.dy) {
@@ -3932,6 +3930,9 @@ boolean force;
 			case MAGIC_TRAP:
 			case POLY_TRAP:
 				return disarm_magic_trap(ttmp);
+			case FIRE_TRAP:
+				if(!Is_firelevel(&u.uz)) return disarm_fire_trap(ttmp);
+				// else fall through
 			default:
 				You("cannot disable %s trap.", (u.dx || u.dy) ? "that" : "this");
 				return 0;
