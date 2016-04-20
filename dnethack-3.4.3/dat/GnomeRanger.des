@@ -9,7 +9,7 @@
 # this one looks familiar... :)
 # level.
 #
-MAZE: "Gnr-strt",'.'
+MAZE: "Gnr-strt",' '
 FLAGS: noteleport,hardfloor
 #GEOMETRY:left,center
 ###########1#########2#########3#########4#########5#########6#########7#####
