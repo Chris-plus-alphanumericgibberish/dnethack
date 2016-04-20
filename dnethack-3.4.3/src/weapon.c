@@ -2543,10 +2543,10 @@ struct obj *weapon;
 						bonus += 2 + ((ACURR(A_DEX)+3)/3 - 4);
 					break;
 					case P_SKILLED:
-						bonus += 5 + 2*((ACURR(A_DEX)+3)/3 - 4);
+						bonus += (2*(ACURR(A_DEX)+3))/3 - 3;
 					break;
 					case P_EXPERT:
-						bonus += 10 + 3*((ACURR(A_DEX)+3)/3 - 4);
+						bonus += 1 + ACURR(A_DEX);
 					break;
 				}
 			break;
