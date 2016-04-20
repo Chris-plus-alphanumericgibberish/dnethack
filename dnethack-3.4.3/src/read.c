@@ -125,7 +125,7 @@ doread()
 			}
 			else{
 				int j;
-				if(!quest_status.killed_nemesis && Role_if(PM_EXILE)) pline("It seems this athame once had dual blades, but one blade has been snapped off at the hilt.");
+				if(!(quest_status.killed_nemesis && Role_if(PM_EXILE))) pline("It seems this athame once had dual blades, but one blade has been snapped off at the hilt.");
 				else pline("The dual-bladed athame vibrates faintly.");
 				if(u.spiritTineA) for(j=0;j<32;j++){
 					if((u.spiritTineA >> j) == 1){
