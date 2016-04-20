@@ -3564,6 +3564,7 @@ struct trap *ttmp;
 	deltrap(ttmp);
 	newsym(trapx, trapy);
 	lesshungry(50);
+	healup(50,FALSE,FALSE,FALSE);
 	return 1;
 }
 

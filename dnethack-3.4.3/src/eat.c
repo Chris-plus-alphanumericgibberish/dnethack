@@ -3546,8 +3546,11 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					make_sick(0L, (char *) 0, TRUE, SICK_ALL);
 
 					/* You feel refreshed */
-					if(Race_if(PM_INCANTIFIER)) u.uen += 50 + rnd(50);
-					else u.uhunger += 50 + rnd(50);
+					if(Race_if(PM_INCANTIFIER)){
+						int engain = 50 + rnd(50);
+						u.uen += engain;
+						healup(engain,FALSE,FALSE,FALSE)
+					} else u.uhunger += 50 + rnd(50);
 					newuhs(FALSE);
 				} else
 					exercise(A_WIS, FALSE);
