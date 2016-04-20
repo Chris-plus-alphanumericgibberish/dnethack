@@ -89,6 +89,8 @@ NEARDATA struct colorTextClr LightsaberColor[] = {
 STATIC_OVL char *SaberHilts[] = {
 	"This %s has a curved hilt, making it particularly suited for use in duels.",
 	"This %s has a classic grip and exposed emitter disk.",
+	"This %s has a raised emitter with a lotus-bud shroud.",
+	"This %s has a delicate-looking basket hilt.",
 	"This %s projects a single quillon blade.",
 	"This %s projects a pair of quillon blades.",
 	"This %s has a smooth, flowing design.",
@@ -108,6 +110,8 @@ STATIC_OVL char *SaberHilts[] = {
 	"This %s has a rough, worn-looking leather grip.",
 	"This %s has a grip of tarnished silver ivy.",
 	"This %s has a forest camouflage covering.",
+	"This %s has a smooth diskguard.",
+	"This %s has a ornate golden diskguard.",
 	"The focusing chamber of this %s can be seen through a viewport.",
 	"A thin red ribbon hangs from the pommel of this %s.",
 	"This %s has a crude hilt fashoned from crystalized metal.",
