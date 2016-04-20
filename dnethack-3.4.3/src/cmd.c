@@ -1022,7 +1022,7 @@ dofightingform()
 		return 0;
 	} else {
 		u.fightingForm = selected[0].item.a_int;
-		return 1;
+		return 0;
 	}
 }
 
