@@ -806,7 +806,7 @@ A("The Sceptre of Might",	MACE,
 	// SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
 A("The Iron Ball of Levitation", HEAVY_IRON_BALL,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK|SPFX_DALIGN|SPFX_LUCK|SPFX_INTEL), (SPFX_WARN), 0,
-	PHYS(5,0),	NO_DFNS,	CARY(AD_DRLI),
+	PHYS(5,10),	NO_DFNS,	CARY(AD_DRLI),
 	LEVITATION,	A_CHAOTIC, PM_CONVICT, NON_PM, 5000L,
 	SPFX2_STLTH,0,0), /*Note: it had caried stealth before*/
 A("The Iron Spoon of Liberation", SPOON,
