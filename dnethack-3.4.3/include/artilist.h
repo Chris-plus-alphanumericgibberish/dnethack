@@ -959,7 +959,7 @@ A("The War-mask of Durin",	MASK, /*Moria dwarf noble */
 
 A("Durin's Axe",			AXE, /*Moria dwarf noble crowning */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
-	PHYS(5,10),	DRLI(0,0),	NO_CARY,	
+	PHYS(10,10),	DRLI(0,0),	NO_CARY,	
 	0, A_LAWFUL, PM_NOBLEMAN, PM_DWARF, 4000L, 
 	SPFX2_DIG|SPFX2_SILVERED,0,0),
 
