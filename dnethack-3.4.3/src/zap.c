@@ -2600,7 +2600,7 @@ struct obj *obj;	/* wand or spell */
 		disclose = TRUE;
 	    } else if (striking && u.dz < 0 && rn2(3) &&
 			!Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) &&
-			!Underwater && !Is_qstart(&u.uz)) {
+			!Underwater && !In_outdoors(&u.uz)) {
 		/* similar to zap_dig() */
 		pline("A rock is dislodged from the %s and falls on your %s.",
 		      ceiling(x, y), body_part(HEAD));
