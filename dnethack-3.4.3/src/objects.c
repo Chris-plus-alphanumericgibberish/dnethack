@@ -1165,12 +1165,12 @@ WAND((char *)0,        "jeweled",   0, 150, 1, 0,         IRON,     HI_MINERAL),
 #define GEM(name,desc,prob,wt,gval,nutr,mohs,glass,color) OBJECT( \
 	    OBJ(name,desc), \
 	    BITS(0,1,0,0,0,0,0,0,0,HARDGEM(mohs),0,-P_SLING,glass), 0, \
-	    GEM_CLASS, prob, 0, 1, gval, 3, 3, 0, 0, nutr, color )
-#define ROCK(name,desc,kn,prob,wt,gval,sdam,ldam,mgc,nutr,mohs,glass,color) OBJECT( \
+	    GEM_CLASS, prob, 0, 1, gval, 3, 3, 0, WP_GENERIC, nutr, color )
+#define ROCK(name,desc,kn,prob,wt,gval,sdam,ldam,hitbon,mgc,nutr,mohs,glass,color) OBJECT( \
 	    OBJ(name,desc), \
 	    BITS(kn,1,0,0,mgc,0,0,0,0,HARDGEM(mohs),0,-P_SLING,glass), 0, \
-	    GEM_CLASS, prob, 0, wt, gval, sdam, ldam, 0, 0, nutr, color )
-GEM("magicite crystal","brilliant blue",1, 1, 5000, 15, 11, GEMSTONE, CLR_BRIGHT_BLUE),
+	    GEM_CLASS, prob, 0, wt, gval, sdam, ldam, hitbon, WP_GENERIC, nutr, color )
+GEM("magicite crystal","brilliant blue",1, 1, 9999, 15, 11, GEMSTONE, CLR_BRIGHT_BLUE),
 GEM("dilithium crystal", "white",      2,  1, 4500, 15,  5, GEMSTONE, CLR_WHITE),
 GEM("diamond", "white",                3,  1, 4000, 15, 10, GEMSTONE, CLR_WHITE),
 GEM("star sapphire", "blue",           2,  1, 3750, 15,  9, GEMSTONE, CLR_BLUE),
@@ -1213,13 +1213,14 @@ GEM("worthless piece of violet glass", "violet", 77, 1, 0, 6, 5, GLASS, CLR_MAGE
  * "gray stones" in the o_ranges[] array in objnam.c
  * that is currently everything between luckstones and flint (inclusive).
  */
-ROCK("luckstone", "gray",	0, 10,  10, 60, 3, 3, 1, 10, 7, MINERAL, CLR_GRAY),
-ROCK("loadstone", "gray",	0, 10, 500,  1, 30, 30, 1, 10, 6, MINERAL, CLR_GRAY),
-ROCK("touchstone", "gray",	0,  8,  10, 45, 3, 3, 1, 10, 6, MINERAL, CLR_GRAY),
-ROCK("flint", "gray",		0, 10,  10,  1, 6, 6, 0, 10, 7, MINERAL, CLR_GRAY),
-ROCK("small piece of unrefined mithril", "silvery metal", 0, 0, 1, 10000, 3, 3, 0, 0, 5, MITHRIL, HI_SILVER),
-ROCK("silver slingstone", "silver", 0, 0, 1, 10, 6, 6, 0, 0, 5, SILVER, HI_SILVER),
-ROCK("rock", (char *)0,		1,100,  10,  0, 3, 3, 0, 10, 7, MINERAL, CLR_GRAY),
+ROCK("luckstone", "gray",	0, 10,  10, 60, 3, 3, 20, 1, 10, 7, MINERAL, CLR_GRAY),
+ROCK("loadstone", "gray",	0, 10, 500,  1,30,30, -5, 1, 10, 6, MINERAL, CLR_GRAY),
+ROCK("touchstone", "gray",	0,  8,  10, 45, 3, 3,  0, 1, 10, 6, MINERAL, CLR_GRAY),
+ROCK("flint", "gray",		0, 10,  10,  1, 6, 6,  2, 0, 10, 7, MINERAL, CLR_GRAY),
+ROCK("small piece of unrefined mithril", "silvery metal",
+							0,  0,   1, 10000,3,3, 0, 0, 0, 5, MITHRIL, HI_SILVER),
+ROCK("silver slingstone", "silver", 0, 0, 1, 10, 6, 6, 2, 0, 0, 5, SILVER, HI_SILVER),
+ROCK("rock", (char *)0,		1,100,  10,  0, 3, 3, 0, 0, 10, 7, MINERAL, CLR_GRAY),
 #undef GEM
 #undef ROCK
 
