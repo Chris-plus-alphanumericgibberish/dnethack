@@ -1126,16 +1126,6 @@ mattacku(mtmp)
 			){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
-						if(rn2(100) < 5){
-							You("counterattack!");
-							flags.forcefight = TRUE;
-							attack(mtmp);
-							flags.forcefight = FALSE;
-							use_skill(FFORM_SORESU,1);
-							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
-						}
-					break;
-					case P_SKILLED:
 						if(rn2(100) < 10){
 							You("counterattack!");
 							flags.forcefight = TRUE;
@@ -1145,8 +1135,18 @@ mattacku(mtmp)
 							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
 						}
 					break;
+					case P_SKILLED:
+						if(rn2(100) < 15){
+							You("counterattack!");
+							flags.forcefight = TRUE;
+							attack(mtmp);
+							flags.forcefight = FALSE;
+							use_skill(FFORM_SORESU,1);
+							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
+						}
+					break;
 					case P_EXPERT:
-						if(rn2(100) < 20){
+						if(rn2(100) < 25){
 							You("counterattack!");
 							flags.forcefight = TRUE;
 							attack(mtmp);
