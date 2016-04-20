@@ -2383,11 +2383,14 @@ int tx,ty;
 						break;
 						case 17:
 							rat = makemon(&mons[PM_SEWER_RAT], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-							initedog(rat);
-							rat->mtame = 10;
-							rat->mpeaceful = 1;
-							pline("A startled-looking rat lands in your %s, then leaps to the floor.",makeplural(body_part(HAND)));
-							rat = 0;
+							if(rat){
+								initedog(rat);
+								if(rat->mtame) EDOG(rat)->loyal = TRUE;
+								rat->mtame = 10;
+								rat->mpeaceful = 1;
+								pline("A startled-looking rat lands in your %s, then leaps to the floor.",makeplural(body_part(HAND)));
+								rat = 0;
+							}
 						break;
 					}
 					pline("When your attention returns to the seal, the hands have gone.");
