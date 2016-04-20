@@ -1145,6 +1145,10 @@ int distance;
 		    distu(mtmp->mx, mtmp->my) < distance) {
 		was_peaceful = mtmp->mpeaceful;
 		mtmp->mpeaceful = 1;
+		if(&mons[urole.neminum] == mtmp->data){
+			mtmp->mpeacetime = max(mtmp->mpeacetime, ACURR(A_DEX));
+			if(mtmp->mpeacetime < 1) mtmp->mpeacetime = 1;
+		}
 		mtmp->mavenge = 0;
 		could_see_mon = canseemon(mtmp);
 		mtmp->mundetected = 0;
@@ -1178,6 +1182,10 @@ int distance;
 		    distu(mtmp->mx, mtmp->my) < distance) {
 		mtmp->msleeping = 0;
 		mtmp->mpeaceful = 1;
+		if(&mons[urole.neminum] == mtmp->data){
+			mtmp->mpeacetime = max(mtmp->mpeacetime, ACURR(A_DEX));
+			if(mtmp->mpeacetime < 1) mtmp->mpeacetime = 1;
+		}
 		mtmp->mavenge = 0;
 		if (canseemon(mtmp))
 		    pline(
@@ -1330,7 +1338,6 @@ int distance;
 		}
 	    }
 	}
-
 }
 
 /* Generate earthquake :-) of desired force.
