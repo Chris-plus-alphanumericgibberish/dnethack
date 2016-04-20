@@ -324,7 +324,7 @@ struct attack *alt_attk_buf;
 			(mptr == &mons[PM_KARY__THE_FIEND_OF_FIRE] && rn2(100)<37) ||
 			(mptr == &mons[PM_KRAKEN__THE_FIEND_OF_WATER] && rn2(100)<52) ||
 			(mptr == &mons[PM_TIAMAT__THE_FIEND_OF_WIND] && !rn2(4)) ||
-			(mptr == &mons[PM_CHAOS] && !rn2(3))
+			(mptr == &mons[PM_CHAOS] && rn2(3))
 		){
 			subout = 1;
 			*alt_attk_buf = *attk;
