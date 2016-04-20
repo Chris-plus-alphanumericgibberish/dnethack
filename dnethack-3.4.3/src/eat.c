@@ -3549,7 +3549,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					if(Race_if(PM_INCANTIFIER)){
 						int engain = 50 + rnd(50);
 						u.uen += engain;
-						healup(engain,FALSE,FALSE,FALSE)
+						healup(engain,FALSE,FALSE,FALSE);
 					} else u.uhunger += 50 + rnd(50);
 					newuhs(FALSE);
 				} else
