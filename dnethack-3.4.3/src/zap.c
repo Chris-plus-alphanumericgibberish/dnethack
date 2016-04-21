@@ -730,8 +730,10 @@ register struct obj *obj;
 				m_useup(obj->ocarry, obj);
 				break;
 			    case OBJ_CONTAINED:
-				obj_extract_self(obj);
-				obfree(obj, (struct obj *) 0);
+					if (obj->quan > 1L)
+						obj = splitobj(obj, 1L);
+					obj_extract_self(obj);
+					obfree(obj, (struct obj *) 0);
 				break;
 			    default:
 				panic("revive");
