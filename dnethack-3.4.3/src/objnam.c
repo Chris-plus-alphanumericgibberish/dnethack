@@ -735,7 +735,11 @@ register struct obj *obj;
 	if (obj->onamelth && obj->dknown) {
 		Strcat(buf, " named ");
 nameit:
-		Strcat(buf, ONAME(obj));
+		if(!strcmp(ONAME(obj),"Fluorite Octahedron")){
+			if(obj->quan == 8) Strcat(buf, "The Fluorite Octet");
+			else if(obj->quan > 1) Strcat(buf, "Fluorite Octahedra");
+			else Strcat(buf, "Fluorite Octahedron");
+		} else Strcat(buf, ONAME(obj));
 	}
 
 	if (!strncmpi(buf, "the ", 4)) buf += 4;
@@ -874,7 +878,7 @@ register struct obj *obj;
 		ispoisoned = OPOISON_BASIC;
 	}
 	
-	if(obj->quan != 1L)
+	if(obj->quan != 1L && !(obj->quan == 8 && obj->oartifact == ART_FLUORITE_OCTAHEDRON))
 		Sprintf(prefix, "%ld ", obj->quan);
 	else if (obj_is_pname(obj) || the_unique_obj(obj)) {
 		if (!strncmpi(bp, "the ", 4))
@@ -1890,6 +1894,11 @@ const char *oldstr;
 		goto bottom;
 	}
 
+	if (len >= 5 && (!strcmp(spot-3, "dron"))) {
+		Strcpy(spot-3, "dra");
+		goto bottom;
+	}
+	
 	/* note: -eau/-eaux (gateau, bordeau...) */
 	/* note: ox/oxen, VAX/VAXen, goose/geese */
 

@@ -325,7 +325,16 @@ short *otyp;
 	    return a->name;
 	}
     }
-
+	aname = "Fluorite Octet";
+	if(!strcmpi(name, aname)) {
+		*otyp = artilist[ART_FLUORITE_OCTAHEDRON].otyp;
+		return artilist[ART_FLUORITE_OCTAHEDRON].name;
+	}
+	aname = "Fluorite Octahedra";
+	if(!strcmpi(name, aname)) {
+		*otyp = artilist[ART_FLUORITE_OCTAHEDRON].otyp;
+		return artilist[ART_FLUORITE_OCTAHEDRON].name;
+	}
     return (char *)0;
 }
 

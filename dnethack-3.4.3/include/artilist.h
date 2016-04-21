@@ -493,6 +493,12 @@ A("Yoichi no yumi", YUMI, //needs quote
 	CREATE_AMMO, A_LAWFUL, NON_PM, NON_PM, 4000L, 
 	0,0,0),
 
+A("Fluorite Octahedron", BLUE_FLUORITE, /*Needs encyc entry*/
+	(SPFX_RESTR), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0, A_NONE, NON_PM, NON_PM, 4000L, 
+	0,0,0),
+
 /*//////////Artifact Books///////////*/
 A("The Book of Lost Names", SPE_SECRETS,
 	(SPFX_NOGEN|SPFX_RESTR), 0,0,

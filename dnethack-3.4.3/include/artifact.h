@@ -310,6 +310,7 @@ struct artifact {
 				(m) == ART_HELPING_HAND ||\
 				(m) == ART_GARNET_ROD ||\
 				(m) == ART_ARKENSTONE ||\
+				(m) == ART_FLUORITE_OCTAHEDRON ||\
 				(m) == ART_MARAUDER_S_MAP\
 			)
 

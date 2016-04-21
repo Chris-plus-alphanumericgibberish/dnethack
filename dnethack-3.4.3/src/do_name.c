@@ -568,8 +568,9 @@ const char *name;
 	
 	if (obj->oartifact) {
 		
-		/*artifacts are unique*/
-		obj->quan = 1L;
+		/*artifacts are unique, except the fluorite octet which is a set of 8*/
+		if(obj->oartifact == ART_FLUORITE_OCTAHEDRON) obj->quan = 8L;
+		else obj->quan = 1L;
 		obj->owt = weight(obj);
 		
 		if(obj->oartifact == ART_WAR_MASK_OF_DURIN) obj->corpsenm = PM_DWARF;

@@ -230,19 +230,30 @@ int thrown;
 //#endif
 
 	if (multishot < 1) multishot = 1;
+	if(obj->oartifact == ART_FLUORITE_OCTAHEDRON && !ammo_and_launcher(obj,launcher)) multishot = 1;
 
 	m_shot.s = ammo_and_launcher(obj,launcher) ? TRUE : FALSE;
 	/* give a message if shooting more than one, or if player
 	   attempted to specify a count */
-	if (multishot > 1 || shotlimit > 0) {
+	if(obj->oartifact == ART_FLUORITE_OCTAHEDRON){
+		if(!ammo_and_launcher(obj,launcher)){
+			if(shotlimit && shotlimit < obj->quan) You("throw %d Fluorite %s.", shotlimit, shotlimit > 1 ? "Octahedra" : "Octahedron");
+			else if(obj->quan == 8) You("throw the Fluorite Octet.", obj->quan);
+			else You("throw %d Fluorite %s.", obj->quan, obj->quan > 1 ? "Octahedra" : "Octahedron");
+		} else if (multishot > 1 || shotlimit > 0) {
+			if(obj->quan > 1) You("shoot %d Fluorite %s.",
+			multishot,	/* (might be 1 if player gave shotlimit) */
+			(multishot == 1) ? "Octahedron" : "Octahedra");
+		}
+	} else if (multishot > 1 || shotlimit > 0) {
 	    /* "You shoot N arrows." or "You throw N daggers." */
 		if(obj->quan > 1) You("%s %d %s.",
 		m_shot.s ? "shoot" : "throw",
 		multishot,	/* (might be 1 if player gave shotlimit) */
-		(multishot == 1) ? singular(obj, xname) : obj->quan == 1 ? the(xname(obj)) : xname(obj));
-		else if(multishot>1) You("%s %s %d times.",
+		(multishot == 1) ? singular(obj, xname) : xname(obj));
+		else if(multishot>1 || shotlimit > 0) You("%s %s %d times.",
 		m_shot.s ? "shoot" : "throw",
-		(multishot == 1) ? singular(obj, xname) : obj->quan == 1 ? the(xname(obj)) : xname(obj),
+		the(xname(obj)),
 		multishot);	/* (might be 1 if player gave shotlimit) */
 	}
 
@@ -255,7 +266,15 @@ int thrown;
 		) break; //Weapon lost
 	    twoweap = u.twoweap;
 	    /* split this object off from its slot if necessary */
-	    if (obj->quan > 1L) {
+		if(obj->oartifact == ART_FLUORITE_OCTAHEDRON && !ammo_and_launcher(obj,launcher)){
+			if(!shotlimit || obj->quan <= shotlimit){
+				otmp = obj;
+				if (otmp->owornmask)
+					remove_worn_item(otmp, FALSE);
+			} else {
+				otmp = splitobj(obj, shotlimit > 0 ? ((long)shotlimit) : 1L);
+			}
+	    } else if (obj->quan > 1L) {
 		otmp = splitobj(obj, 1L);
 	    } else {
 		otmp = obj;
@@ -1796,8 +1815,9 @@ int thrown;
 	else tmp = -1 + Luck + find_mac(mon) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*BASE_ATTACK_BONUS;
 	
-	if(!launcher || objects[launcher->otyp].oc_skill == P_SLING) tmp += abon();
-	else {
+	if(!launcher || objects[launcher->otyp].oc_skill == P_SLING){
+		tmp += abon();
+	} else {
 		if (ACURR(A_DEX) < 4) tmp -= 3;
 		else if (ACURR(A_DEX) < 6) tmp -= 2;
 		else if (ACURR(A_DEX) < 8) tmp -= 1;
@@ -2005,7 +2025,8 @@ int thrown;
 		// miss(xname(obj), mon);
 	}
 	else if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
-		obj->oclass == GEM_CLASS) {
+		obj->oclass == GEM_CLASS
+	) {
 	    if (is_ammo(obj)) {
 		if (!ammo_and_launcher(obj, launcher)) {
 		    tmp -= 4;
