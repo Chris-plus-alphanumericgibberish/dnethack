@@ -1054,7 +1054,7 @@ int thrown;
 		    /* houchou that isn't thrown */
 		    (!thrown && obj->oartifact == ART_HOUCHOU) ||
 		    /* or throw a missile without the proper bow... */
-		    (is_ammo(obj) && (!ammo_and_launcher(obj, uwep) || obj->oclass == GEM_CLASS))
+		    (is_ammo(obj) && !(ammo_and_launcher(obj, uwep) || obj->oclass == GEM_CLASS))
 		) {
 			
 		    /* then do only 1-2 points of damage */
