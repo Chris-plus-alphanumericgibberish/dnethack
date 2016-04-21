@@ -913,12 +913,13 @@ struct obj *obj;
 		mtmp->mtraitor  = 0;	/* No longer a traitor */
 		set_malign(mtmp);
 	}
-	if(flags.moonphase == FULL_MOON && night() && rn2(6) && obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS
-						&& mtmp->data->mlet == S_DOG)
-		return((struct monst *)0);
+	if(flags.moonphase == FULL_MOON && night() && rn2(6) && obj && !is_instrument(obj)
+		&& obj->oclass != SPBOOK_CLASS && obj->oclass != SCROLL_CLASS
+		&& mtmp->data->mlet == S_DOG
+	) return((struct monst *)0);
 
 #ifdef CONVICT
-    if (Role_if(PM_CONVICT) && (is_domestic(mtmp->data) && obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS)) {
+    if (Role_if(PM_CONVICT) && (is_domestic(mtmp->data) && obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && obj->oclass != SPBOOK_CLASS)) {
         /* Domestic animals are wary of the Convict */
         pline("%s still looks wary of you.", Monnam(mtmp));
         return((struct monst *)0);
@@ -937,7 +938,7 @@ struct obj *obj;
 	}
 
 	/* feeding it treats makes it tamer */
-	if (mtmp->mtame && obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS) {
+	if (mtmp->mtame && obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && obj->oclass != SPBOOK_CLASS) {
 	    int tasty;
 
 	    if (mtmp->mcanmove && !mtmp->mconf && !mtmp->meating &&
@@ -982,13 +983,13 @@ struct obj *obj;
 	    mtmp->isshk || mtmp->isgd || mtmp->ispriest || mtmp->isminion ||
 	    is_covetous(mtmp->data) || is_human(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
 	    (is_demon(mtmp->data) && !is_demon(youmonst.data)) ||
-	    (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
+	    (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && obj->oclass != SPBOOK_CLASS && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
 
 	if (mtmp->m_id == quest_status.leader_m_id)
 	    return((struct monst *)0);
 
 	/* before officially taming the target, check how many pets there are and untame one if there are too many */
-	if(!(obj && obj->oclass == SCROLL_CLASS && Confusion)){
+	if(!(obj && obj->oclass == SCROLL_CLASS && obj->oclass == SPBOOK_CLASS && Confusion)){
 		for(curmon = fmon; curmon; curmon = curmon->nmon){
 			if(curmon->mtame && !(EDOG(curmon)->friend) && !(EDOG(curmon)->loyal) && !is_suicidal(curmon->data)
 				&& !curmon->mspiritual && curmon->mvanishes < 0
@@ -1014,7 +1015,7 @@ struct obj *obj;
 	replmon(mtmp, mtmp2);
 	/* `mtmp' is now obsolete */
 
-	if (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS) {		/* thrown food */
+	if (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && obj->oclass != SPBOOK_CLASS) {		/* thrown food */
 	    /* defer eating until the edog extension has been set up */
 	    place_object(obj, mtmp2->mx, mtmp2->my);	/* put on floor */
 	    /* devour the food (might grow into larger, genocided monster) */
