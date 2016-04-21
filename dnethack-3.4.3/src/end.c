@@ -280,6 +280,7 @@ panic VA_DECL(const char *, str)
 	VA_START(str);
 	VA_INIT(str, char *);
 
+	NH_abort(); /*actually just die here*/
 	if (program_state.panicking++)
 	    NH_abort();	/* avoid loops - this should never happen*/
 
