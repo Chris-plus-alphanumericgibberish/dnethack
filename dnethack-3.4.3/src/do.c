@@ -1829,10 +1829,14 @@ long timeout;
 	 * becomes possible for molds to grow in containers we should
 	 * check for iceboxes here as well.
 	 */
-	if ((body->where == OBJ_FLOOR || body->where==OBJ_BURIED) &&
-	  (is_pool(body->ox, body->oy) || is_lava(body->ox, body->oy) ||
-	  is_ice(body->ox, body->oy)))
-	pmtype = -1;
+	if ((
+			(body->where == OBJ_FLOOR || body->where==OBJ_BURIED) &&
+			(is_pool(body->ox, body->oy) || is_lava(body->ox, body->oy) ||
+				is_ice(body->ox, body->oy))
+		) || (
+			(body->where == OBJ_CONTAINED && body->ocontainer->otyp == ICE_BOX)
+		)
+	) pmtype = -1;
 
 	if (pmtype != -1) {
 	/* We don't want special case revivals */
