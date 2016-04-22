@@ -1482,7 +1482,7 @@ int style;
 			}
 		} else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
 			if (multi) nomul(0, NULL);
-			if (thitu(9 + singleobj->spe,
+			if (!u.uinvulnerable && thitu(9 + singleobj->spe,
 				  dmgval(singleobj, &youmonst, 0),
 				  singleobj, (char *)0, FALSE))
 			    stop_occupation();
