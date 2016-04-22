@@ -1030,7 +1030,7 @@ register struct monst *mtmp;
 			else
 				digactualhole(mtmp->mx, mtmp->my, mtmp, HOLE, FALSE, TRUE);
 		}
-	} else if (has_mind_blast(mdat) && !rn2(20)) {
+	} else if (has_mind_blast(mdat) && !u.uinvulnerable && !rn2(mdat == &mons[PM_ELDER_BRAIN] ? 10 : 20)) {
 		boolean reducedFlayerMessages = (((Role_if(PM_NOBLEMAN) && Race_if(PM_DROW) && flags.initgend) || Role_if(PM_ANACHRONONAUT)) && In_quest(&u.uz));
 		struct monst *m2, *nmon = (struct monst *)0;
 		
