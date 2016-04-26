@@ -4979,7 +4979,7 @@ doapply()
 		}
 		if(Punished) unpunish();
 		
-		if(u.wimage >= 0){
+		if(u.wimage >= 10){
 			u.wimage = 0;
 			makemon(&mons[PM_WEEPING_ANGEL], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
 			if(Blind) pline("The effigy grows and turns to stone!");
