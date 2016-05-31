@@ -987,6 +987,7 @@ E int NDECL(doforce);
 E boolean FDECL(boxlock, (struct obj *,struct obj *));
 E boolean FDECL(doorlock, (struct obj *,int,int));
 E int NDECL(doopen);
+E int FDECL(doopen_indir, (int,int));
 E int NDECL(doclose);
 E int FDECL(artifact_door, (int,int));
 

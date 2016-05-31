@@ -196,6 +196,7 @@ struct instance_flags {
 	uchar	bouldersym;	/* symbol for boulder display */
 	boolean travel1;	/* first travel step */
 	coord	travelcc;	/* coordinates for travel_cache */
+	boolean  door_opened;	/* set to true if door was opened during test_move */
 #ifdef WIZARD
 	boolean  sanity_check;	/* run sanity checks */
 	boolean  mon_polycontrol;	/* debug: control monster polymorphs */
@@ -237,6 +238,7 @@ struct instance_flags {
 	boolean lan_mail;	/* mail is initialized */
 	boolean lan_mail_fetched; /* mail is awaiting display */
 #endif
+	boolean  autoopen;	/* open doors by walking into them */
 	boolean  quiver_fired;
        boolean  pickup_thrown;
     boolean role_obj_names;
