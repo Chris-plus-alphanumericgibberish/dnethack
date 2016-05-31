@@ -2446,7 +2446,7 @@ const char *fmt, *str;
 	if (EReflecting & W_ARMS) {
 	    if (fmt && str) {
 	    	pline(fmt, str, "shield");
-	    	makeknown(SHIELD_OF_REFLECTION);
+	    	if(uarms && uarms->otyp == SHIELD_OF_REFLECTION) makeknown(SHIELD_OF_REFLECTION);
 	    }
 	    return TRUE;
 	} else if (EReflecting & W_WEP) {
@@ -2454,15 +2454,48 @@ const char *fmt, *str;
 	    if (fmt && str)
 	    	pline(fmt, str, "weapon");
 	    return TRUE;
+	} else if (uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) {
+	    /* Due to wielded lightsaber */
+	    if (fmt && str)
+	    	pline(fmt, str, "lightsaber");
+	    return TRUE;
+	} else if (EReflecting & W_ARMC) {
+	    if (fmt && str) {
+	    	pline(fmt, str, "cloak");
+	    }
+	    return TRUE;
 	} else if (EReflecting & W_AMUL) {
 	    if (fmt && str) {
 	    	pline(fmt, str, "medallion");
-	    	makeknown(AMULET_OF_REFLECTION);
+	    	if(uamul && uamul->otyp == AMULET_OF_REFLECTION) makeknown(AMULET_OF_REFLECTION);
+	    }
+	    return TRUE;
+	} else if (EReflecting & W_ARMG) {
+	    if (fmt && str) {
+	    	pline(fmt, str, "gauntlets");
+	    }
+	    return TRUE;
+	} else if (EReflecting & (W_RINGL|W_RINGR)) {
+	    if (fmt && str) {
+	    	pline(fmt, str, "ring");
+	    }
+	    return TRUE;
+	} else if (EReflecting & W_ARMH) {
+	    if (fmt && str) {
+	    	pline(fmt, str, "helm");
 	    }
 	    return TRUE;
 	} else if (EReflecting & W_ARM) {
 	    if (fmt && str)
 	    	pline(fmt, str, "armor");
+	    return TRUE;
+	} else if (EReflecting & W_ARMU) {
+	    if (fmt && str)
+	    	pline(fmt, str, "underclothes");
+	    return TRUE;
+	} else if (EReflecting & W_ARMF) {
+	    if (fmt && str)
+	    	pline(fmt, str, "boots");
 	    return TRUE;
 	} else if (youmonst.data == &mons[PM_SILVER_DRAGON]) {
 	    if (fmt && str)
@@ -2471,6 +2504,11 @@ const char *fmt, *str;
 	} else if (u.sealsActive&SEAL_EDEN) {
 	    if (fmt && str)
 	    	pline(fmt, str, "skin");
+	    return TRUE;
+	} else if (EReflecting) {
+	    /* Catchall */
+	    if (fmt && str)
+	    	pline(fmt, str, "artifact");
 	    return TRUE;
 	}
 	return FALSE;
