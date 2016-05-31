@@ -1407,7 +1407,7 @@ domove()
 	}
 
 	if (!test_move(u.ux, u.uy, x-u.ux, y-u.uy, DO_MOVE)) {
-		if (!context.door_opened) {
+		if (!iflags.door_opened) {
 		    flags.move = 0;
 		    nomul(0, NULL);
 		}
