@@ -1592,12 +1592,12 @@ lootcont:
 		timepassed |= use_container(cobj, 0);
 		if (multi < 0) return 1;		/* chest trap */
 	    } else if(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS){
-			Sprintf(qbuf, "There is %s here, open it?",an(xname(cobj)));
-			c = ynq(qbuf);
-			if (c == 'q') return (timepassed);
-			if (c == 'n') continue;
-			timepassed |= use_lightsaber(cobj, 0);
-			if(timepassed) underfoot = TRUE;
+		Sprintf(qbuf, "There is %s here, open it?",an(xname(cobj)));
+		c = ynq(qbuf);
+		if (c == 'q') return (timepassed);
+		if (c == 'n') continue;
+		timepassed |= use_lightsaber(cobj);
+		if(timepassed) underfoot = TRUE;
 		}
 	}
 	if (any) c = 'y';
