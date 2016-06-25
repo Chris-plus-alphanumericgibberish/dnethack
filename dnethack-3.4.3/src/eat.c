@@ -30,7 +30,7 @@ STATIC_DCL struct obj *FDECL(touchfood, (struct obj *));
 STATIC_DCL void NDECL(do_reset_eat);
 STATIC_DCL void FDECL(done_eating, (BOOLEAN_P));
 STATIC_DCL int FDECL(intrinsic_possible, (int,struct permonst *));
-STATIC_DCL void FDECL(givit, (int,struct permonst *, unsigned short, boolean));
+STATIC_DCL void FDECL(givit, (int,struct permonst *,SHORT_P,BOOLEAN_P));
 STATIC_DCL void FDECL(start_tin, (struct obj *));
 STATIC_DCL int FDECL(eatcorpse, (struct obj *));
 STATIC_DCL void FDECL(start_eating, (struct obj *));
