@@ -30,7 +30,8 @@
  * 3.10.0: belated increment of minor version, Bugfixed bard, bards gain exp by watching their pets level up.
  * 3.12.1: Expand size of ose buffers, to 'fix' buffer overflow.
  * 3.12.2: Expand size of mnum and quest artifact listing to int instead of short int.
- * 3.12.3: Partial reform of charm monster and monster summoning.
+ * 3.12.3: Partial reform of charm monster and monster summoning, Gnome ranger quest.
+ * 3.13.beta: "The Great Reflagging".
  */
 #define PATCHLEVEL	3
 /*
