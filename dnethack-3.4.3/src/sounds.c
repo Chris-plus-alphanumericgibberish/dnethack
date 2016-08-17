@@ -2075,6 +2075,15 @@ int tx,ty;
 	} else {
 		numSlots=1;
 	}
+
+    boolean hasSealofSpirits = FALSE;
+    {
+      struct obj *otmp;
+      for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+        if(otmp->oartifact && otmp->oartifact == ART_SEAL_OF_THE_SPIRITS)
+          hasSealofSpirits = TRUE;
+      }
+    }
 	
 	if(m_at(tx,ty) && (ep->ward_id != ANDROMALIUS || m_at(tx,ty)->data != &mons[PM_SEWER_RAT])) return 0;
 	
