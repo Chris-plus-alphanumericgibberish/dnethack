@@ -106,8 +106,8 @@ struct Role {
 	int questarti;	/* index (ART_) of quest artifact (questpgr.c) */
 
 	/*** Bitmasks ***/
+	long marace;		/* allowable races */
 	short allow;		/* bit mask of allowed variations */
-#define ROLE_RACEMASK	0x0ff8		/* allowable races */
 #define ROLE_GENDMASK	0xf000		/* allowable genders */
 #define ROLE_MALE	0x1000
 #define ROLE_FEMALE	0x2000
@@ -196,7 +196,7 @@ struct Race {
 
 	/*** Bitmasks ***/
 	short allow;		/* bit mask of allowed variations */
-	short selfmask,		/* your own race's bit mask */
+	long selfmask,		/* your own race's bit mask */
 	      lovemask,		/* bit mask of always peaceful */
 	      hatemask;		/* bit mask of always hostile */
 
@@ -243,6 +243,7 @@ extern const struct Monrace mraces[];	/* Table of default monster races */
 extern struct Race urace;
 #define Race_if(X)	(urace.malenum == (X))
 #define Race_switch	(urace.malenum)
+#define youracedata	(maybe_polyd(youmonst.data, &mons[urace.malenum]))
 
 /*** Unified structure specifying gender information ***/
 struct Gender {
