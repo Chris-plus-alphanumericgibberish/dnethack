@@ -1694,8 +1694,8 @@ CONTAINER:'`',"statue",(1,3),uncursed,"Tulani",1
 OBJECT:'[',"elven toga",contained,blessed,+5
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+5
-OBJECT:'[',"crystal helm",contained,blessed,+3
-OBJECT:'[',"leather gloves",contained,blessed,+5
+OBJECT:'[',"high-elven helm",contained,blessed,+5
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
@@ -1706,8 +1706,8 @@ CONTAINER:'`',"statue",(1,5),uncursed,"Tulani",1
 OBJECT:'[',"elven toga",contained,blessed,+5
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+5
-OBJECT:'[',"crystal helm",contained,blessed,+3
-OBJECT:'[',"leather gloves",contained,blessed,+5
+OBJECT:'[',"high-elven helm",contained,blessed,+5
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
