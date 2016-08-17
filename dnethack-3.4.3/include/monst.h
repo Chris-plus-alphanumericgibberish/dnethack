@@ -81,7 +81,7 @@ struct monst {
 #define CHAM_DREAM			4	/* anything */
 #define CHAM_MAX_INDX		CHAM_DREAM
 	Bitfield(mundetected,1);	/* not seen in present hiding place */
-				/* implies one of M1_CONCEAL or M1_HIDE,
+				/* implies one of MT_CONCEAL or MT_HIDE,
 				 * but not mimic (that is, snake, spider,
 				 * trapper, piercer, eel)
 				 */
@@ -131,10 +131,13 @@ struct monst {
 	Bitfield(mattackedu,1);	/* attacked you on it's last turn */
 	Bitfield(housealert,1);	/* won't accept house-based pacification */
 	Bitfield(mspiritual,1);	/* Created by spirit power, doesn't count towards pet limit */
-#define BASE_DOG_ENCOURAGED_MAX		7
+	Bitfield(artnum,2);		/* Created from an artifact. */
+#define ART_PYGMALION	1
+#define ART_GALATEA		2
 	int encouraged;	/* affected by Encourage song */
-#define helpless(mon) (mon->msleeping || !(mon->mcanmove) || !(mon->mnotlaugh))	
+#define BASE_DOG_ENCOURAGED_MAX		7
 	
+#define helpless(mon) (mon->msleeping || !(mon->mcanmove) || !(mon->mnotlaugh))	
 	long mstrategy;		/* for monsters with mflag3: current strategy */
 #define STRAT_ARRIVE	0x40000000L	/* just arrived on current level */
 #define STRAT_WAITFORU	0x20000000L

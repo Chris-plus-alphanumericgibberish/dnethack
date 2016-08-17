@@ -98,7 +98,12 @@ struct flag {
 	unsigned run;		/* 0: h (etc), 1: H (etc), 2: fh (etc) */
 				/* 3: FH, 4: ff+, 5: ff-, 6: FF+, 7: FF- */
 				/* 8: travel */
-	unsigned long warntype; /* warn_of_mon monster type M2 */
+	unsigned long warntypem; /* warn_of_mon monster type MM */
+	unsigned long warntypet; /* warn_of_mon monster type MT */
+	unsigned long warntypeb; /* warn_of_mon monster type MB */
+	unsigned long warntypeg; /* warn_of_mon monster type MG */
+	unsigned long warntypea; /* warn_of_mon monster type MA */
+	unsigned long warntypev; /* warn_of_mon monster type MV */
 	unsigned long long montype; /* warn_of_mon monster type bitshifted S_ */
 	int	 warnlevel;
 	int	 djinni_count, ghost_count;	/* potion effect tuning */

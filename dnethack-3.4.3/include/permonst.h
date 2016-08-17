@@ -57,9 +57,12 @@ struct permonst {
 #define combatNoise(dat) (dat->msound ? dat->msize*2+1 : dat->msize+1)
 	unsigned int	mresists;		/* resistances */
 	unsigned int	mconveys;		/* conveyed by eating */
-	unsigned long	mflags1,		/* boolean bitflags */
-			mflags2;		/* more boolean bitflags */
-	unsigned long	mflags3;		/* yet more boolean bitflags *///increased from short to long
+	unsigned long	mflagsm,		/* Monster Motility boolean bitflags */
+					mflagst,		/* Monster Thoughts and behavior boolean bitflags */
+					mflagsb,		/* Monster Body plan boolean bitflags */
+					mflagsg,		/* Monster Game mechanics and bookkeeping boolean bitflags */
+					mflagsa,		/* Monster rAce boolean bitflags */
+					mflagsv;		/* Monster Vision boolean bitflags */
 # ifdef TEXTCOLOR
 	uchar		mcolor;			/* color to use */
 # endif

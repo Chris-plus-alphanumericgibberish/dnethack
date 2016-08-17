@@ -76,109 +76,150 @@
 #define MR2_STRENGTH	0x2000	/* gauntlets of power */
 #define MR2_FUMBLING	0x4000	/* clumsy */
 
+//MM_ Monster Motility
+#define MM_FLY			0x00000001L	/* can fly or float */
+#define MM_SWIM			0x00000002L	/* can traverse water */
+#define MM_AMORPHOUS	0x00000004L	/* can flow under doors */
+#define MM_WALLWALK		0x00000008L	/* can phase thru rock */
+#define MM_CLING		0x00000010L	/* can cling to ceiling */
+#define MM_TUNNEL		0x00000020L	/* can tunnel thru rock */
+#define MM_NEEDPICK		0x00000040L	/* needs pick to tunnel */
+#define MM_AMPHIBIOUS	0x00000080L	/* can survive underwater */
+#define MM_BREATHLESS	0x00000100L	/* doesn't need to breathe */
+#define MM_TPORT		0x00000200L	/* can teleport */
+#define MM_TPORT_CNTRL	0x00000400L	/* controls where it teleports to */
+#define MM_TENGTPORT	0x00000800L	/* Monster teleports as Tengu */
+#define MM_STATIONARY	0x00001000L	/* does not move. */
+#define MM_FLOAT		0x00002000L	/* Monster floats instead of truely flying (modifier) */
 
-#define M1_FLY			0x00000001L	/* can fly or float */
-#define M1_SWIM			0x00000002L	/* can traverse water */
-#define M1_AMORPHOUS	0x00000004L	/* can flow under doors */
-#define M1_WALLWALK		0x00000008L	/* can phase thru rock */
-#define M1_CLING		0x00000010L	/* can cling to ceiling */
-#define M1_TUNNEL		0x00000020L	/* can tunnel thru rock */
-#define M1_NEEDPICK		0x00000040L	/* needs pick to tunnel */
-#define M1_CONCEAL		0x00000080L	/* hides under objects */
-#define M1_HIDE			0x00000100L	/* mimics, blends in with ceiling */
-#define M1_AMPHIBIOUS	0x00000200L	/* can survive underwater */
-#define M1_BREATHLESS	0x00000400L	/* doesn't need to breathe */
-#define M1_NOTAKE		0x00000800L	/* cannot pick up objects */
-#define M1_NOEYES		0x00001000L	/* no eyes to gaze into or blind */
-#define M1_NOHANDS		0x00002000L	/* no hands to handle things */
-#define M1_NOLIMBS		0x00006000L	/* no arms/legs to kick/wear on */
-#define M1_NOHEAD		0x00008000L	/* no head to behead */
-#define M1_MINDLESS		0x00010000L	/* has no mind--golem, zombie, mold */
-#define M1_HUMANOID		0x00020000L	/* has humanoid head/arms/torso */
-#define M1_ANIMAL		0x00040000L	/* has animal body */
-#define M1_SLITHY		0x00080000L	/* has serpent body */
-#define M1_UNSOLID		0x00100000L	/* has no solid or liquid body */
-#define M1_THICK_HIDE	0x00200000L	/* has thick hide or scales */
-#define M1_OVIPAROUS	0x00400000L	/* can lay eggs */
-#define M1_REGEN		0x00800000L	/* regenerates hit points */
-#define M1_SEE_INVIS	0x01000000L	/* can see invisible creatures */
-#define M1_TPORT		0x02000000L	/* can teleport */
-#define M1_TPORT_CNTRL	0x04000000L	/* controls where it teleports to */
-#define M1_ACID			0x08000000L	/* acidic to eat */
-#define M1_POIS			0x10000000L	/* poisonous to eat */
-#define M1_CARNIVORE	0x20000000L	/* eats corpses */
-#define M1_HERBIVORE	0x40000000L	/* eats fruits */
-#define M1_OMNIVORE		0x60000000L	/* eats both */
-#ifdef NHSTDC
-#define M1_METALLIVORE	0x80000000UL	/* eats metal */
-#else
-#define M1_METALLIVORE	0x80000000L	/* eats metal */
-#endif
+//Monster Thoughts and behavior
+#define MT_CONCEAL		0x00000001L	/* hides under objects */
+#define MT_HIDE			0x00000002L	/* mimics, blends in with ceiling */
+#define MT_MINDLESS		0x00000004L	/* has no mind--golem, zombie, mold */
+#define MT_ANIMAL		0x00000008L	/* has animal mind */
+#define MT_CARNIVORE	0x00000010L	/* eats corpses */
+#define MT_HERBIVORE	0x00000020L	/* eats fruits */
+#define MT_HOSTILE		0x00000040L	/* always starts hostile */
+#define MT_PEACEFUL		0x00000080L	/* always starts peaceful */
+#define MT_DOMESTIC		0x00000100L	/* can be tamed by feeding */
+#define MT_WANDER		0x00000200L	/* wanders randomly */
+#define MT_STALK		0x00000400L	/* follows you to other levels */
+#define MT_ROCKTHROW	0x00000800L	/* throws boulders */
+#define MT_GREEDY		0x00001000L	/* likes gold */
+#define MT_JEWELS		0x00002000L	/* likes gems */
+#define MT_COLLECT		0x00004000L	/* picks up weapons and food */
+#define MT_MAGIC		0x00008000L	/* picks up magic items */
+#define MT_WANTSAMUL	0x00010000L	/* would like to steal the amulet */
+#define MT_WANTSBELL	0x00020000L	/* wants the bell */
+#define MT_WANTSBOOK	0x00040000L	/* wants the book */
+#define MT_WANTSCAND	0x00080000L	/* wants the candelabrum */
+#define MT_WANTSARTI	0x00100000L	/* wants the quest artifact */
+#define MT_WAITFORU		0x00200000L	/* waits to see you or get attacked */
+#define MT_CLOSE		0x00400000L	/* lets you close unless attacked */
+#define MT_TRAITOR		0x00800000L	/* slash'em tag. */
+#define MT_NOTAKE		0x01000000L	/* doesn't pick up items. */
+#define MT_METALLIVORE	0x02000000L	/* eats metal. */
 
-#define M2_NOPOLY	0x00000001L	/* players mayn't poly into one */
-#define M2_UNDEAD	0x00000002L	/* is walking dead */
-#define M2_WERE		0x00000004L	/* is a lycanthrope */
-/*ROLE_RACEMASK starts*/
-#define M2_HUMAN	0x00000008L	/* is a human */
-#define M2_ELF		0x00000010L	/* is an elf */
-#define M2_DWARF	0x00000020L	/* is a dwarf */
-#define M2_GNOME	0x00000040L	/* is a gnome */
-#define M2_ORC		0x00000080L	/* is an orc */
-#define M2_VAMPIRE	0x00000100L	/* is a vampire */
-#define M2_CLOCK	0x00000200L	/* is a clockwork automaton */
-#define M2_DEMON	0x00000400L	/* is a demon */
-#define M2_MINION	0x00000800L	/* is a minion of a deity */
-#define M2_LORD		0x00001000L	/* is a lord to its kind */
-#define M2_PRINCE	0x00002000L	/* is an overlord to its kind */
-#define M2_GIANT	0x00004000L	/* is a giant */
-#define M2_MERC		0x00008000L	/* is a guard or soldier */
-/*ROLE_RACEMASK ends*/
-/*ROLE_GENDMASK starts*/
-#define M2_MALE		0x00010000L	/* always male */
-#define M2_FEMALE	0x00020000L	/* always female */
-#define M2_NEUTER	0x00040000L	/* neither male nor female */
-#define M2_PNAME	0x00080000L	/* monster name is a proper name */
-/*ROLE_GENDMASK ends*/
-#define M2_HOSTILE	0x00100000L	/* always starts hostile */
-#define M2_PEACEFUL	0x00200000L	/* always starts peaceful */
-#define M2_DOMESTIC	0x00400000L	/* can be tamed by feeding */
-#define M2_WANDER	0x00800000L	/* wanders randomly */
-#define M2_STALK	0x01000000L	/* follows you to other levels */
-#define M2_NASTY	0x02000000L	/* extra-nasty monster (more xp) */
-#define M2_STRONG	0x04000000L	/* strong (or big) monster */
-#define M2_ROCKTHROW	0x08000000L	/* throws boulders */
-#define M2_GREEDY	0x10000000L	/* likes gold */
-#define M2_JEWELS	0x20000000L	/* likes gems */
-#define M2_COLLECT	0x40000000L	/* picks up weapons and food */
-#ifdef NHSTDC
-#define M2_MAGIC	0x80000000UL	/* picks up magic items */
-#else
-#define M2_MAGIC	0x80000000L	/* picks up magic items */
-#endif
-#define M2_MAID		M2_MAGIC|M2_COLLECT|M2_JEWELS|M2_GREEDY	/* tiddies up the dungeon */
+#define MT_MAGIVORE		0x04000000L	/* eats magic */
 
-#define M3_WANTSAMUL	0x00000001L		/* would like to steal the amulet */
-#define M3_WANTSBELL	0x00000002L		/* wants the bell */
-#define M3_WANTSBOOK	0x00000004L		/* wants the book */
-#define M3_WANTSCAND	0x00000008L		/* wants the candelabrum */
-#define M3_WANTSARTI	0x00000010L		/* wants the quest artifact */
-#define M3_WANTSALL		0x0000001fL		/* wants any major artifact */
-#define M3_WAITFORU		0x00000040L		/* waits to see you or get attacked */
-#define M3_CLOSE		0x00000080L		/* lets you close unless attacked */
+#define MT_OMNIVORE		(MT_CARNIVORE|MT_HERBIVORE)	/* eats both */
+#define MT_MAID		(MT_MAGIC|MT_COLLECT|MT_JEWELS|MT_GREEDY)	/* tiddies up the dungeon */
+#define MT_WANTSALL		(MT_WANTSAMUL|MT_WANTSBELL|MT_WANTSBOOK|MT_WANTSCAND|MT_WANTSARTI)	/* wants any major artifact */
+#define MT_COVETOUS		MT_WANTSALL		/* wants something */
+#define MT_WAITMASK		(MT_WAITFORU|MT_CLOSE)	/* waiting... */
 
-#define M3_COVETOUS		0x0000001fL		/* wants something */
-#define M3_WAITMASK		0x000000c0L		/* waiting... */
 
-/* Infravision is currently implemented for players only */
-#define M3_INFRAVISION	0x00000100L		/* has infravision */
-#define M3_INFRAVISIBLE	0x00000200L		/* visible by infravision */
-#define M3_DARKSIGHT	0x00000400L		/* sees in the dark, blinded by light */
-#define M3_TRAITOR		0x00000800L		/* slash'em tag. */
-#define M3_OPAQUE		0x00001000L		/* Monster blocks line of sight */
-#define M3_TENGTPORT	0x00002000L		/* Monster teleports as Tengu */
-#define M3_CHILL		0x00004000L		/* cold to eat */
-#define M3_TOSTY		0x00008000L		/* hot to eat */
-#define M3_STATIONARY	0x00010000L		/* does not move. */
+//Monster Body plan
+#define MB_NOEYES		0x00000001L	/* no eyes to gaze into or blind */
+#define MB_NOHANDS		0x00000002L	/* no hands to handle things */
+#define MB_NOLIMBS		0x00000004L	/* no arms/legs to kick/wear on */
+#define MB_NOHEAD		0x00000008L	/* no head to behead */
+#define MB_HUMANOID		0x00000010L	/* has humanoid head/arms/torso */
+#define MB_ANIMAL		0x00000020L	/* has animal body */
+#define MB_SLITHY		0x00000040L	/* has serpent body */
+#define MB_UNSOLID		0x00000080L	/* has no solid or liquid body */
+#define MB_THICK_HIDE	0x00000100L	/* has thick hide or scales */
+#define MB_OVIPAROUS	0x00000200L	/* can lay eggs */
+#define MB_ACID			0x00000400L	/* acidic to eat */
+#define MB_POIS			0x00000800L	/* poisonous to eat */
+#define MB_CHILL		0x00001000L		/* cold to eat */
+#define MB_TOSTY		0x00002000L		/* hot to eat */
+#define MB_MALE			0x00004000L	/* always male */
+#define MB_FEMALE		0x00008000L	/* always female */
+#define MB_NEUTER		0x00010000L	/* neither male nor female */
+#define MB_STRONG		0x00020000L	/* strong (or big) monster */
+#define MB_WINGS		0x00040000L	/* has wings */
+#define MB_LONGHEAD		0x00080000L	/* has 'long' (animal) head */
+#define MB_LONGNECK		0x00100000L	/* has 'long' (snakelike) head and neck */
+
+#define MB_SNAKELEG	(MB_HUMANOID|MB_SLITHY)
+#define MB_CENTAUR	(MB_HUMANOID|MB_ANIMAL)
+
+#define MB_BODYTYPEMASK	(MB_HUMANOID|MB_ANIMAL|MB_SLITHY)
+#define MB_HEADMODIMASK	(MB_LONGHEAD|MB_LONGNECK)
+
+
+
+//Monster Vision types and other sensorium details
+#define MV_NORMAL		0x00000001L		/* can't see more than 1 square in the dark */
+#define MV_INFRAVISION	0x00000002L		/* has infravision (does not show squares) */
+#define MV_DARKSIGHT	0x00000004L		/* sees in the dark, blinded by light */
+#define MV_LOWLIGHT		0x00000008L		/* sees farther in the dark, defaults to 2 with the possibility of special casing */
+#define MV_CATSIGHT		0x00000010L		/* sees in the dark, sees in the light, not both at once */
+#define MV_ECHOLOCATE	0x00800020L		/* sees via sound, in both light and dark, blinded and stunned by loud noises */
+#define MV_BLOODSENSE	0x00000040L		/* detect monsters by seeing their blood (does not show squares) */
+#define MV_LIFESENSE	0x00000080L		/* detect monsters by sensing their life-force (does not show squares) */
+#define MV_EXTRAMISSION	0x00000100L		/* see perfectly in light and dark */
+//define MV_BLINDSIGHT	0x00000000L		/* see without eyes OBSOLETE*/
+#define MV_TELEPATHIC	0x00000200L		/* Monster is telepathic, detects any non-mindless creatures on the level (does not show squares) */
+#define MV_RLYEHIAN		0x00000400L		/* Cannot see into or through water squares. Blind in water */
+#define MV_SEE_INVIS	0x00000800L		/* can see invisible creatures (modifier) */
+#define MV_DETECTION	0x00001000L		/* detect monsters in line-of-sight (does not show squares) */
+#define MV_OMNI			0x00002000L		/* non-square-sight does not require line-of-sight */
+
+//Monster Game mechanics and bookkeeping
+#define MG_REGEN		0x00000001L	/* regenerates hit points */
+#define MG_NOPOLY		0x00000002L	/* players mayn't poly into one */
+#define MG_MERC			0x00000004L	/* is a guard or soldier */
+#define MG_PNAME		0x00000008L	/* monster name is a proper name */
+#define MG_LORD			0x00000010L	/* is a lord to its kind */
+#define MG_PRINCE		0x00000020L	/* is an overlord to its kind */
+#define MG_NASTY		0x00000040L	/* extra-nasty monster (more xp) */
+#define MG_INFRAVISIBLE	0x00000080L	/* visible by infravision */
+#define MG_OPAQUE		0x00000100L	/* Monster blocks line of sight */
+#define MG_DISPLACEMENT	0x00000200L	/* Monster has displacement */
+#define MG_HATESSILVER	0x00000400L	/* Monster hates silver */
+#define MG_HATESIRON	0x00000800L	/* Monster hates iron/steel */
+#define MG_HATESUNHOLY	0x00001000L	/* Monster hates cursed objects */
+
+//Monster rAce
+#define MA_UNDEAD		0x00000001L	/* is walking dead */
+#define MA_WERE			0x00000002L	/* is a lycanthrope */
+#define MA_HUMAN		0x00000004L	/* is a human */
+#define MA_ELF			0x00000008L	/* is an elf */
+#define MA_DROW			0x00000010L	/* is a drow */
+#define MA_DWARF		0x00000020L	/* is a dwarf */
+#define MA_GNOME		0x00000040L	/* is a gnome */
+#define MA_ORC			0x00000080L	/* is an orc */
+#define MA_VAMPIRE		0x00000100L	/* is a vampire */
+#define MA_CLOCK		0x00000200L	/* is a clockwork automaton */
+#define MA_UNLIVING		0x00000400L	/* isn't alive */
+#define MA_PLANT		0x00000800L	/* is a plant (or a fungus.  Which is SORTA a plant) */
+#define MA_GIANT		0x00001000L	/* is a giant */
+#define MA_INSECTOID	0x00002000L	/* is an insectoid creature */
+#define MA_ARACHNID		0x00004000L	/* is an insectoid creature */
+#define MA_AVIAN		0x00008000L	/* is a bird-like-creature */
+#define MA_REPTILIAN	0x00010000L	/* is a reptilian creature */
+#define MA_ANIMAL		0x00020000L	/* is a more-or-less mundane animal (or a hybrid of an animal and something else) */
+#define MA_AQUATIC		0x00040000L	/* is a water-dwelling creature */
+#define MA_DEMIHUMAN	0x00080000L	/* is a humanoid with animal traits */
+#define MA_FEY			0x00100000L	/* is a member of the fair folk */
+#define MA_ELEMENTAL	0x00200000L	/* is an elemental being */
+#define MA_DRAGON		0x00400000L	/* is a dragon */
+#define MA_DEMON		0x00800000L	/* is a demon */
+#define MA_MINION		0x01000000L	/* is a minion of a deity */
+#define MA_PRIMORDIAL	0x02000000L	/* is an ancient race */
+#define MA_ET			0x04000000L	/* is an alien race */
 
 #define MZ_TINY		0		/* < 2' */
 #define MZ_SMALL	1		/* 2-4' */
@@ -187,18 +228,6 @@
 #define MZ_LARGE	3		/* 7-12' */
 #define MZ_HUGE		4		/* 12-25' */
 #define MZ_GIGANTIC	7		/* off the scale */
-
-
-/* Monster races -- must stay within ROLE_RACEMASK */
-/* Eventually this may become its own field */
-#define MH_HUMAN	M2_HUMAN
-#define MH_ELF		M2_ELF
-#define MH_DWARF	M2_DWARF
-#define MH_GNOME	M2_GNOME
-#define MH_ORC		M2_ORC
-#define MH_VAMPIRE	M2_VAMPIRE
-#define MH_CLOCK	M2_CLOCK
-
 
 /* for mons[].geno (constant during game) */
 #define G_UNIQ		0x1000		/* generated only once */

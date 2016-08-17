@@ -23,26 +23,37 @@ int flag;
 		mon->mintrinsics |= (ptr->mresists & 0x03FF);
     else
 		mon->mintrinsics = (ptr->mresists & 0x03FF);
-	if(is_half_dragon(ptr)){
-		switch(flags.HDbreath){
-			case AD_FIRE:
-				mon->mintrinsics |= MR_FIRE;
-			break;
-			case AD_COLD:
-				mon->mintrinsics |= MR_COLD;
-			break;
-			case AD_ELEC:
-				mon->mintrinsics |= MR_ELEC;
-			break;
-			case AD_ACID:
-				mon->mintrinsics |= MR_ACID;
-			break;
-			case AD_SLEE:
-				mon->mintrinsics |= MR_SLEEP;
-			break;
-			case AD_DRST:
-				mon->mintrinsics |= MR_POISON;
-			break;
+	if(is_half_dragon(ptr) && (mon->mvar1 == 0 || flag != 1)){
+		/*
+			Store half dragon breath type in mvar1
+		*/
+		if(is_half_dragon(ptr)){
+			switch(rnd(6)){
+				case 1:
+					mon->mvar1 = AD_COLD;
+					mon->mintrinsics |= AD_COLD;
+				break;
+				case 2:
+					mon->mvar1 = AD_FIRE;
+					mon->mintrinsics |= AD_FIRE;
+				break;
+				case 3:
+					mon->mvar1 = AD_SLEE;
+					mon->mintrinsics |= AD_SLEE;
+				break;
+				case 4:
+					mon->mvar1 = AD_ELEC;
+					mon->mintrinsics |= AD_ELEC;
+				break;
+				case 5:
+					mon->mvar1 = AD_DRST;
+					mon->mintrinsics |= AD_DRST;
+				break;
+				case 6:
+					mon->mvar1 = AD_ACID;
+					mon->mintrinsics |= AD_ACID;
+				break;
+			}
 		}
 	}
     return;
@@ -205,7 +216,7 @@ struct monst *mon;
 	
 	/* as of 3.2.0:  gray dragons, Angels, Oracle, Yeenoghu */
 	if (dmgtype(ptr, AD_MAGM) || ptr == &mons[PM_BABY_GRAY_DRAGON] ||
-		dmgtype(ptr, AD_RBRE))	/* Chromatic Dragon */
+		(dmgtype(ptr, AD_RBRE) && ptr != &mons[PM_SHIMMERING_DRAGON]))	/* Chromatic Dragon */
 	    return TRUE;
 	/* check for magic resistance granted by wielded weapon */
 	o = (mon == &youmonst) ? uwep : MON_WEP(mon);
@@ -371,25 +382,6 @@ struct permonst *ptr;
 	return FALSE;
 }
 
-boolean
-hates_silver(ptr)
-register struct permonst *ptr;
-/* returns TRUE if monster is especially affected by silver weapons */
-{
-	return((boolean)(is_were(ptr) || ptr->mlet==S_VAMPIRE || is_demon(ptr) ||
-		ptr->mlet == S_SHADE ||
-		(ptr->mlet==S_IMP && ptr != &mons[PM_TENGU])));
-}
-
-boolean
-hates_iron(ptr)
-register struct permonst *ptr;
-/* returns TRUE if monster is especially affected by iron weapons */
-{
-	return((boolean)(is_elf(ptr) || ptr->mlet==S_NYMPH || ptr->mlet==S_LEPRECHAUN || 
-		(ptr->mlet==S_GIANT && throws_rocks(ptr))));
-}
-
 /* true iff the type of monster pass through iron bars */
 boolean
 passes_bars(mptr)
@@ -419,23 +411,6 @@ can_track(ptr)		/* returns TRUE if monster can track well */
 #endif /* OVL1 */
 #ifdef OVLB
 
-boolean
-sliparm(ptr)	/* creature will slide out of armor */
-	register struct permonst *ptr;
-{
-	return((boolean)(is_whirly(ptr) || ptr->msize <= MZ_SMALL ||
-			 noncorporeal(ptr)));
-}
-
-boolean
-breakarm(ptr)	/* creature will break out of armor */
-	register struct permonst *ptr;
-{
-	return ((bigmonst(ptr) || (ptr->msize > MZ_SMALL && !humanoid(ptr)) ||
-		/* special cases of humanoids that cannot wear body armor */
-		ptr == &mons[PM_WINGED_GARGOYLE])
-	      && !sliparm(ptr));
-}
 #endif /* OVLB */
 #ifdef OVL1
 
@@ -700,7 +675,7 @@ struct monst *mtmp;
 
 	/* stalking types follow, but won't when fleeing unless you hold
 	   the Amulet */
-	return (boolean)((mtmp->data->mflags2 & M2_STALK) &&
+	return (boolean)((mtmp->data->mflagst & MT_STALK) &&
 				(!mtmp->mflee || mtmp->data == &mons[PM_BANDERSNATCH] || u.uhave.amulet));
 }
 
