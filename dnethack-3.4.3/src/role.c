@@ -987,6 +987,7 @@ const int LMahal[] = {PM_ROCK_MOLE,PM_DWARF,PM_ANGEL,PM_ARCHON,NON_PM};
 const int NHolashner[] = {PM_ROCK_MOLE,PM_MIND_FLAYER,PM_PURPLE_WORM,NON_PM};
 
 const int NGnome[] = {PM_ARCADIAN_AVENGER,PM_MOVANIC_DEVA,PM_MONADIC_DEVA,PM_ASTRAL_DEVA,PM_MAHADEVA,NON_PM};
+const int CGnome[] = {PM_ROCK_MOLE,PM_LONG_WORM,PM_EARTH_ELEMENTAL,PM_PURPLE_WORM,NON_PM};
 
 const int MChaos[] = {PM_GOBLIN,PM_WATER_ELEMENTAL,PM_FIRE_ELEMENTAL,PM_EARTH_ELEMENTAL,PM_AIR_ELEMENTAL,PM_MIND_FLAYER,PM_VAMPIRE,PM_PURPLE_WORM,NON_PM};
 const int MChaosDeep[] = {PM_LICH,PM_MARILITH,PM_KRAKEN,PM_GREEN_DRAGON,NON_PM};
@@ -1012,7 +1013,7 @@ god_minions(gptr)
 			galign = A_CHAOTIC;
 		}
 	}
-		
+	
 	if(role != -1) switch(role){
 		case PM_ARCHEOLOGIST:
 			if(galign == A_LAWFUL) return LArc;
@@ -1144,6 +1145,7 @@ god_minions(gptr)
 	
 	if(gptr == GnomeLgod) return Ldevils;
 	if(gptr == GnomeNgod) return NGnome;
+	if(gptr == GnomeCgod) return CGnome;
 	
 	if(gptr == Chaos) return MChaos;
 	if(gptr == DeepChaos) return MChaosDeep;
@@ -2211,21 +2213,18 @@ role_init()
 		urole.ngod = roles[flags.panNgod].ngod;
 		urole.cgod = roles[flags.panCgod].cgod;
 		if(roles[flags.panLgod].guardnum){
-			mons[roles[flags.panLgod].guardnum].mflags2 &= ~M2_PEACEFUL;
-			mons[roles[flags.panLgod].guardnum].mflags2 |= M2_HOSTILE;
-			mons[roles[flags.panLgod].guardnum].mflags3 &= ~M3_CLOSE;
+			mons[roles[flags.panLgod].guardnum].mflagst &= ~(MT_CLOSE|MT_PEACEFUL);
+			mons[roles[flags.panLgod].guardnum].mflagst |= MT_HOSTILE;
 			mons[roles[flags.panLgod].guardnum].msound = MS_CUSS;
 		}
 		if(roles[flags.panNgod].guardnum){
-			mons[roles[flags.panNgod].guardnum].mflags2 &= ~M2_PEACEFUL;
-			mons[roles[flags.panNgod].guardnum].mflags2 |= M2_HOSTILE;
-			mons[roles[flags.panNgod].guardnum].mflags3 &= ~M3_CLOSE;
+			mons[roles[flags.panNgod].guardnum].mflagst &= ~(MT_CLOSE|MT_PEACEFUL);
+			mons[roles[flags.panNgod].guardnum].mflagst |= MT_HOSTILE;
 			mons[roles[flags.panNgod].guardnum].msound = MS_CUSS;
 		}
 		if(roles[flags.panCgod].guardnum){
-			mons[roles[flags.panCgod].guardnum].mflags2 &= ~M2_PEACEFUL;
-			mons[roles[flags.panCgod].guardnum].mflags2 |= M2_HOSTILE;
-			mons[roles[flags.panCgod].guardnum].mflags3 &= ~M3_CLOSE;
+			mons[roles[flags.panCgod].guardnum].mflagst &= ~(MT_CLOSE|MT_PEACEFUL);
+			mons[roles[flags.panCgod].guardnum].mflagst |= MT_HOSTILE;
 			mons[roles[flags.panCgod].guardnum].msound = MS_CUSS;
 		}
 	} else if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_NOBLEMAN))){
@@ -2532,28 +2531,27 @@ role_init()
 	}
 	if(flags.leader_backstab){
 		mons[urole.ldrnum].msound = MS_CUSS;
-		mons[urole.ldrnum].mflags2 &= ~(M2_PEACEFUL);
-		mons[urole.ldrnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-		mons[urole.ldrnum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+		mons[urole.ldrnum].mflagst &= ~(MT_PEACEFUL);
+		mons[urole.ldrnum].mflagst |= (MT_WANTSARTI|MT_WAITFORU|MT_STALK|MT_HOSTILE);
+		mons[urole.ldrnum].mflagsg |= MG_NASTY;
 		
 		mons[urole.guardnum].msound = MS_CUSS;
-		mons[urole.guardnum].mflags2 &= ~(M2_PEACEFUL);
-		mons[urole.guardnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-		mons[urole.guardnum].mflags3 |= M3_WAITFORU;
+		mons[urole.guardnum].mflagst &= ~(MT_PEACEFUL);
+		mons[urole.guardnum].mflagst |= (MT_WAITFORU|MT_STALK|MT_HOSTILE);
+		mons[urole.guardnum].mflagsg |= MG_NASTY;
 	} else {
 		/* Fix up the quest leader */
 		if (urole.ldrnum != NON_PM) {
 			mons[urole.ldrnum].msound = MS_LEADER;
-			mons[urole.ldrnum].mflags2 |= (M2_PEACEFUL);
-			mons[urole.ldrnum].mflags3 |= M3_CLOSE;
-			mons[urole.ldrnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+			mons[urole.ldrnum].mflagst |= (MT_PEACEFUL|MT_CLOSE);
+			mons[urole.ldrnum].mflagst &= ~(MT_WAITFORU|MT_COVETOUS);
 		}
 
 		/* Fix up the quest guardians */
 		if (urole.guardnum != NON_PM) {
-			mons[urole.guardnum].mflags2 |= (M2_PEACEFUL);
+			mons[urole.guardnum].mflagst |= (MT_PEACEFUL);
+			mons[urole.guardnum].mflagst &= ~(MT_WAITFORU|MT_COVETOUS);
 			mons[urole.guardnum].msound = MS_GUARDIAN;
-			mons[urole.guardnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
 		}
 		if(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD))){
 			mons[PM_HEDROW_MASTER_WIZARD].msound = MS_GUARDIAN;
@@ -2566,9 +2564,9 @@ role_init()
 		!(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && flags.initgend)
 	) {
 	    mons[urole.neminum].msound = MS_NEMESIS;
-	    mons[urole.neminum].mflags2 &= ~(M2_PEACEFUL);
-	    mons[urole.neminum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-	    mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+	    mons[urole.neminum].mflagst &= ~(MT_PEACEFUL);
+	    mons[urole.neminum].mflagst |= (MT_WANTSARTI|MT_WAITFORU|MT_STALK|MT_HOSTILE);
+	    mons[urole.neminum].mflagsg |= MG_NASTY;
 	}
 	
 	if(Role_if(PM_ANACHRONONAUT)){
@@ -2580,7 +2578,7 @@ role_init()
 	}
 
 	/* Fix up infravision */
-	if (mons[urace.malenum].mflags3 & M3_INFRAVISION) {
+	if (mons[urace.malenum].mflagsv & MV_INFRAVISION) {
 	    /* although an infravision intrinsic is possible, infravision
 	     * is purely a property of the physical race.  This means that we
 	     * must put the infravision flag in the player's current race
@@ -2590,9 +2588,9 @@ role_init()
 	     * but since infravision has no effect for NPCs anyway we can
 	     * ignore this.
 	     */
-	    mons[urole.malenum].mflags3 |= M3_INFRAVISION;
+	    mons[urole.malenum].mflagsv |= MV_INFRAVISION;
 	    if (urole.femalenum != NON_PM)
-	    	mons[urole.femalenum].mflags3 |= M3_INFRAVISION;
+	    	mons[urole.femalenum].mflagsv |= MV_INFRAVISION;
 	}
 	
 	/* Fix up the unknown firearms descriptions */
@@ -2608,8 +2606,8 @@ role_init()
 		
 		COPY_OBJ_DESCR(objects[SUBMACHINE_GUN], objects[GUN]);
 		
-		COPY_OBJ_DESCR(objects[HEAVY_MACHINE_GUN], objects[LARGE_GUN]);
-		COPY_OBJ_DESCR(objects[GRENADE_LAUNCHER], objects[LARGE_GUN]);
+		COPY_OBJ_DESCR(objects[HEAVY_MACHINE_GUN], objects[HEAVY_GUN]);
+		COPY_OBJ_DESCR(objects[GRENADE_LAUNCHER], objects[HEAVY_GUN]);
 	}
 
 	/* Artifacts are fixed in hack_artifacts() */
