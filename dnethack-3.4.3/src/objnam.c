@@ -200,10 +200,9 @@ STATIC_OVL struct Jitem Pirate_items[] = {
 	{ POT_BOOZE, "rum" },
 	{ CRAM_RATION, "sea biscuit" },
 	{ SCIMITAR, "cutlass" },
-	{ SMALL_SHIELD, "buckler" },
 	{ SACK, "ditty bag" },
 	{ OILSKIN_SACK, "oilskin ditty bag" },
-	{ LARGE_BOX, "foot locker" },
+	{ BOX, "foot locker" },
 	{ CLUB, "belaying pin" },
 	{0, "" }
 };
@@ -445,16 +444,23 @@ register struct obj *obj;
 	if (u.sealsActive&SEAL_ANDROMALIUS) obj->sknown = TRUE;
 	if (obj_is_pname(obj))
 	    goto nameit;
+	if(obj->objsize != MZ_MEDIUM){
+		if(obj->objsize == MZ_TINY) Strcat(buf, "tiny ");
+		else if(obj->objsize == MZ_SMALL) Strcat(buf, "small ");
+		else if(obj->objsize == MZ_LARGE) Strcat(buf, "large ");
+		else if(obj->objsize == MZ_HUGE) Strcat(buf, "huge ");
+		else if(obj->objsize == MZ_GIGANTIC) Strcat(buf, "gigantic ");
+	}
 	switch (obj->oclass) {
 	    case AMULET_CLASS:
 		if (!obj->dknown)
-			Strcpy(buf, "amulet");
+			Strcat(buf, "amulet");
 		else if (typ == AMULET_OF_YENDOR ||
 			 typ == FAKE_AMULET_OF_YENDOR)
 			/* each must be identified individually */
-			Strcpy(buf, obj->known ? actualn : dn);
+			Strcat(buf, obj->known ? actualn : dn);
 		else if (nn)
-			Strcpy(buf, actualn);
+			Strcat(buf, actualn);
 		else if (un)
 			Sprintf(buf,"amulet called %s", un);
 		else
@@ -462,42 +468,37 @@ register struct obj *obj;
 		break;
 	    case WEAPON_CLASS:
 		if (is_poisonable(obj) && obj->opoisoned){
-			if(obj->opoisoned & OPOISON_BASIC) Strcpy(buf, "poisoned ");
-			if(obj->opoisoned & OPOISON_FILTH) Strcpy(buf, "filth-crusted ");
-			if(obj->opoisoned & OPOISON_SLEEP) Strcpy(buf, "drug-coated ");
-			if(obj->opoisoned & OPOISON_BLIND) Strcpy(buf, "stained ");
-			if(obj->opoisoned & OPOISON_PARAL) Strcpy(buf, "envenomed ");
-			if(obj->opoisoned & OPOISON_AMNES) Strcpy(buf, "lethe-rusted ");
+			if(obj->opoisoned & OPOISON_BASIC) Strcat(buf, "poisoned ");
+			if(obj->opoisoned & OPOISON_FILTH) Strcat(buf, "filth-crusted ");
+			if(obj->opoisoned & OPOISON_SLEEP) Strcat(buf, "drug-coated ");
+			if(obj->opoisoned & OPOISON_BLIND) Strcat(buf, "stained ");
+			if(obj->opoisoned & OPOISON_PARAL) Strcat(buf, "envenomed ");
+			if(obj->opoisoned & OPOISON_AMNES) Strcat(buf, "lethe-rusted ");
 		}
+		if(objects[(obj)->otyp].oc_material == WOOD && obj->ovar1) Strcat(buf, "carved ");
 		if(obj->otyp == MOON_AXE && nn){
 			switch(obj->ovar1){
 				case ECLIPSE_MOON:
-					if(obj->opoisoned) Strcat(buf, "eclipse ");
-					else Strcpy(buf, "eclipse ");
+					Strcat(buf, "eclipse ");
 				break;
 				case CRESCENT_MOON:
-					if(obj->opoisoned) Strcat(buf, "crescent ");
-					else Strcpy(buf, "crescent ");
+					Strcat(buf, "crescent ");
 				break;
 				case HALF_MOON:
-					if(obj->opoisoned) Strcat(buf, "half ");
-					else Strcpy(buf, "half ");
+					Strcat(buf, "half ");
 				break;
 				case GIBBOUS_MOON:
-					if(obj->opoisoned) Strcat(buf, "gibbous ");
-					else Strcpy(buf, "gibbous ");
+					Strcat(buf, "gibbous ");
 				break;
 				case FULL_MOON:
-					if(obj->opoisoned) Strcat(buf, "full ");
-					else Strcpy(buf, "full ");
+					Strcat(buf, "full ");
 				break;
 			}
 		}
-		if(objects[(obj)->otyp].oc_material == WOOD && obj->ovar1) Strcpy(buf, "carved ");
 	    case VENOM_CLASS:
 	    case TOOL_CLASS:
 		if (typ == LENSES)
-			Strcpy(buf, "pair of ");
+			Strcat(buf, "pair of ");
 		if(typ == HYPOSPRAY_AMPULE){
 			int ptyp = (int)(obj->ovar1);
 			struct objclass *pcl = &objects[ptyp];
@@ -548,6 +549,17 @@ register struct obj *obj;
 		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
 		break;
 	    case ARMOR_CLASS:
+		if((obj->bodytypeflag&MB_BODYTYPEMASK) != MB_HUMANOID){
+			if((obj->bodytypeflag&MB_BODYTYPEMASK) == MB_ANIMAL) Strcat(buf, "barded ");
+			else if((obj->bodytypeflag&MB_BODYTYPEMASK) == MB_SLITHY) is_shirt(obj) ? Strcat(buf, "tubular ") : Strcat(buf, "segmented ");
+			else if((obj->bodytypeflag&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_ANIMAL)) Strcat(buf, "centaur ");
+			else if((obj->bodytypeflag&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY)) Strcat(buf, "snakeleg ");
+			else if((obj->bodytypeflag&MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY)) Strcat(buf, "snakeback ");
+		}
+		if((obj->bodytypeflag&MB_HEADMODIMASK) != 0){
+			if((obj->bodytypeflag&MB_HEADMODIMASK) == MB_LONGHEAD) Strcat(buf, "barded ");
+			else if((obj->bodytypeflag&MB_HEADMODIMASK) == MB_LONGNECK) Strcat(buf, "snakeneck ");
+		}
 		/* depends on order of the dragon scales objects */
 		if (typ >= GRAY_DRAGON_SCALES && typ <= YELLOW_DRAGON_SCALES) {
 			Sprintf(buf, "set of %s", actualn);
@@ -557,15 +569,15 @@ register struct obj *obj;
 			Sprintf(buf, "set of %s", actualn);
 			break;
 		}
-		if(is_boots(obj) || is_gloves(obj)) Strcpy(buf,"pair of ");
+		if(is_boots(obj) || is_gloves(obj)) Strcat(buf,"pair of ");
 
 		if(obj->otyp >= ELVEN_SHIELD && obj->otyp <= ORCISH_SHIELD
 				&& !obj->dknown) {
-			Strcpy(buf, "shield");
+			Strcat(buf, "shield");
 			break;
 		}
 		if(obj->otyp == SHIELD_OF_REFLECTION && !obj->dknown) {
-			Strcpy(buf, "smooth shield");
+			Strcat(buf, "smooth shield");
 			break;
 		}
 
@@ -576,13 +588,13 @@ register struct obj *obj;
 			else if(is_gloves(obj))
 				Strcat(buf,"gloves");
 			else if(is_cloak(obj))
-				Strcpy(buf,"cloak");
+				Strcat(buf,"cloak");
 			else if(is_helmet(obj))
-				Strcpy(buf,"helmet");
+				Strcat(buf,"helmet");
 			else if(is_shield(obj))
-				Strcpy(buf,"shield");
+				Strcat(buf,"shield");
 			else
-				Strcpy(buf,"armor");
+				Strcat(buf,"armor");
 			Strcat(buf, " called ");
 			Strcat(buf, un);
 		} else	Strcat(buf, dn);
@@ -593,7 +605,7 @@ register struct obj *obj;
 
 			for(f=ffruit; f; f = f->nextf) {
 				if(f->fid == obj->spe) {
-					Strcpy(buf, f->fname);
+					Strcat(buf, f->fname);
 					break;
 				}
 			}
@@ -601,7 +613,7 @@ register struct obj *obj;
 			break;
 		}
 
-		Strcpy(buf, actualn);
+		Strcat(buf, actualn);
 		if (typ == TIN && obj->known) {
 		    if(obj->spe > 0)
 			Strcat(buf, " of spinach");
@@ -615,7 +627,7 @@ register struct obj *obj;
 		break;
 	    case COIN_CLASS:
 	    case CHAIN_CLASS:
-		Strcpy(buf, actualn);
+		Strcat(buf, actualn);
 		break;
 	    case ROCK_CLASS:
 		if (typ == STATUE)
@@ -627,7 +639,7 @@ register struct obj *obj;
 			    (index(vowels,*(mons[obj->corpsenm].mname)) ?
 								"an " : "a "),
 			mons[obj->corpsenm].mname);
-		else Strcpy(buf, actualn);
+		else Strcat(buf, actualn);
 		break;
 	    case BALL_CLASS:
 		Sprintf(buf, "%sheavy iron ball",
@@ -635,7 +647,7 @@ register struct obj *obj;
 		break;
 	    case POTION_CLASS:
 		if (obj->dknown && obj->odiluted)
-			Strcpy(buf, "diluted ");
+			Strcat(buf, "diluted ");
 		if( typ == POT_BLOOD && (obj->known || maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) ) {
 			Strcat(buf, "potion");
 			Sprintf(eos(buf), " of %s blood", mons[obj->corpsenm].mname);
@@ -660,7 +672,7 @@ register struct obj *obj;
 		}
 		break;
 	case SCROLL_CLASS:
-		Strcpy(buf, "scroll");
+		Strcat(buf, "scroll");
 		if(!obj->dknown) break;
 		if(nn) {
 			Strcat(buf, " of ");
@@ -679,7 +691,7 @@ register struct obj *obj;
 		break;
 	case WAND_CLASS:
 		if(!obj->dknown)
-			Strcpy(buf, "wand");
+			Strcat(buf, "wand");
 		else if(nn)
 			Sprintf(buf, "wand of %s", actualn);
 		else if(un)
@@ -689,10 +701,10 @@ register struct obj *obj;
 		break;
 	case SPBOOK_CLASS:
 		if (!obj->dknown) {
-			Strcpy(buf, "spellbook");
+			Strcat(buf, "spellbook");
 		} else if (nn) {
 			if (typ != SPE_BOOK_OF_THE_DEAD)
-			    Strcpy(buf, "spellbook of ");
+			    Strcat(buf, "spellbook of ");
 			Strcat(buf, actualn);
 		} else if (un) {
 			Sprintf(buf, "spellbook called %s", un);
@@ -701,7 +713,7 @@ register struct obj *obj;
 		break;
 	case RING_CLASS:
 		if(!obj->dknown)
-			Strcpy(buf, "ring");
+			Strcat(buf, "ring");
 		else if(nn)
 			Sprintf(buf, "ring of %s", actualn);
 		else if(un)
@@ -717,12 +729,12 @@ register struct obj *obj;
 				 ocl->oc_material == SILVER
 				) ? "stone" : "gem";
 		if (!obj->dknown) {
-		    Strcpy(buf, rock);
+		    Strcat(buf, rock);
 		} else if (!nn) {
 		    if (un) Sprintf(buf,"%s called %s", rock, un);
 		    else Sprintf(buf, "%s %s", dn, rock);
 		} else {
-		    Strcpy(buf, actualn);
+		    Strcat(buf, actualn);
 		    if (GemStone(typ)) Strcat(buf, " stone");
 		}
 		break;
@@ -975,6 +987,10 @@ plus:
 		){
 			Sprintf(eos(bp), " (%s)", OBJ_NAME(objects[obj->otyp]));
 		}
+        if(obj->oartifact == ART_SCALPEL_OF_LIFE_AND_DEATH){
+            if(COMMAND_LIFE == obj->ovar1) Sprintf(eos(bp), " (life)");
+            if(COMMAND_DEATH  == obj->ovar1) Sprintf(eos(bp), " (death)");
+        }
 //#ifdef FIREARMS
 	if(obj->otyp == STICK_OF_DYNAMITE) {
 	    if (obj->lamplit) Strcat(bp, " (lit)");
@@ -1032,6 +1048,32 @@ plus:
 			if(Is_dragon_mail(obj)) Sprintf(eos(bp), " (mail)");
 			if(Is_dragon_scales(obj)) Sprintf(eos(bp), " (scales)");
 		}
+        if(obj->oartifact == ART_PRISMATIC_DRAGON_PLATE){
+          if(GRAY_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (gray)");
+          if(SILVER_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (silver)");
+          if(MERCURIAL_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (mercurial)");
+          if(SHIMMERING_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (shimmering)");
+          if(DEEP_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (deep)");
+          if(RED_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (red)");
+          if(WHITE_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (white)");
+          if(ORANGE_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (orange)");
+          if(BLACK_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (black)");
+          if(BLUE_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (blue)");
+          if(GREEN_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (green)");
+          if(YELLOW_DRAGON_SCALE_MAIL == obj->otyp)
+            Sprintf(eos(bp), " (yellow)");
+        }
 		goto plus;
 	case TOOL_CLASS:
 		/* weptools already get this done when we go to the +n code */
@@ -1184,7 +1226,7 @@ ring:
 		} else {
 			const char *hand_s = body_part(HAND);
 
-			if (bimanual(obj)) hand_s = makeplural(hand_s);
+			if (bimanual(obj,youracedata)) hand_s = makeplural(hand_s);
 			Sprintf(eos(bp), " (weapon in %s)", hand_s);
 		}
 	}
@@ -1944,7 +1986,7 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 	{ "lamp",	TOOL_CLASS,   OIL_LAMP,	      MAGIC_LAMP },
 	{ "candle",	TOOL_CLASS,   TALLOW_CANDLE,  WAX_CANDLE },
 	{ "horn",	TOOL_CLASS,   TOOLED_HORN,    HORN_OF_PLENTY },
-	{ "shield",	ARMOR_CLASS,  SMALL_SHIELD,   SHIELD_OF_REFLECTION },
+	{ "shield",	ARMOR_CLASS,  BUCKLER,   SHIELD_OF_REFLECTION },
 	{ "helm",	ARMOR_CLASS,  LEATHER_HELM, HELM_OF_TELEPATHY },
 	{ "gloves",	ARMOR_CLASS,  LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY },
 	{ "gauntlets",	ARMOR_CLASS,  LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY },
@@ -1959,7 +2001,7 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 	{ "dragon scale shield",
 			ARMOR_CLASS,  GRAY_DRAGON_SCALE_SHIELD, YELLOW_DRAGON_SCALE_SHIELD },
 	{ "scale shield",
-			ARMOR_CLASS,  LARGE_SHIELD, LARGE_SHIELD },
+			ARMOR_CLASS,  KITE_SHIELD, KITE_SHIELD },
 	{ "dragon scale mail",
 			ARMOR_CLASS,  GRAY_DRAGON_SCALE_MAIL, YELLOW_DRAGON_SCALE_MAIL },
 	{ "sword",	WEAPON_CLASS, SHORT_SWORD,    KATANA },
@@ -2216,10 +2258,9 @@ struct alt_spellings {
 	{ "rum", POT_BOOZE },
 	{ "sea biscuit", CRAM_RATION },
 	{ "cutlass", SCIMITAR },
-	{ "buckler", SMALL_SHIELD },
 	{ "buccaneer's ditty bag", OILSKIN_SACK },
 	{ "ditty bag", SACK },
-	{ "foot locker", LARGE_BOX },
+	{ "foot locker", BOX },
 	{ "belaying pin", CLUB },
 	{ "ono", BATTLE_AXE },
 	{ "ninja-to", BROADSWORD },
@@ -2336,12 +2377,15 @@ boolean from_user;
 		toustefna = FALSE,
 		dreprun = FALSE,
 		veioistafur = FALSE,
-		thjofastafur = FALSE;
+		thjofastafur = FALSE,
+		sizewished = FALSE;
+	int objsize = youracedata->msize;
+	long bodytype = 0L;
 	char oclass;
 	char *un, *dn, *actualn;
 	const char *name=0;
 	boolean isartifact = FALSE;
-
+	
 	cnt = spe = spesgn = typ = very = rechrg =
 		blessed = uncursed = iscursed = stolen = 
 		isdrained = halfdrained =
@@ -2436,6 +2480,44 @@ boolean from_user;
 			/*This modifier does nothing, really, but people should be allowed to write it.*/;
 		} else if(!strncmpi(bp, "carved ", l=7)){
 			/*This modifier does nothing, really, but people should be allowed to write it.*/;
+		} else if(!sizewished && !strncmpi(bp, "tiny ", l=5)){
+			objsize = MZ_TINY;
+			sizewished = TRUE;
+		} else if(!sizewished && !strncmpi(bp, "small ", l=6)){
+			objsize = MZ_SMALL;
+			sizewished = TRUE;
+		} else if(!sizewished && !strncmpi(bp, "medium ", l=7)){
+			objsize = MZ_MEDIUM;
+			sizewished = TRUE;
+		} else if(!sizewished && !strncmpi(bp, "large ", l=6)){
+			objsize = MZ_LARGE;
+			sizewished = TRUE;
+		} else if(!sizewished && !strncmpi(bp, "huge ", l=5)){
+			objsize = MZ_HUGE;
+			sizewished = TRUE;
+		} else if(!sizewished && !strncmpi(bp, "gigantic ", l=9)){
+			objsize = MZ_GIGANTIC;
+			sizewished = TRUE;
+		} else if(!strncmpi(bp, "humanoid ", l=9)){
+			bodytype = MB_HUMANOID;
+		} else if(!strncmpi(bp, "human ", l=6)){
+			bodytype = MB_HUMANOID;
+		} else if(!strncmpi(bp, "barded ", l=7)){
+			bodytype = MB_ANIMAL|MB_LONGHEAD;
+		} else if(!strncmpi(bp, "barding ", l=6)){
+			bodytype = MB_ANIMAL|MB_LONGHEAD;
+		} else if(!strncmpi(bp, "segmented ", l=10)){
+			bodytype = MB_SLITHY;
+		} else if(!strncmpi(bp, "tubular ", l=8)){
+			bodytype = MB_SLITHY;
+		} else if(!strncmpi(bp, "centaur ", l=8)){
+			bodytype = (MB_HUMANOID|MB_ANIMAL);
+		} else if(!strncmpi(bp, "snakeleg ", l=9)){
+			bodytype = (MB_HUMANOID|MB_SLITHY);
+		} else if(!strncmpi(bp, "snakeback ", l=10)){
+			bodytype = (MB_ANIMAL|MB_SLITHY);
+		} else if(!strncmpi(bp, "snakeneck ", l=10)){
+			bodytype = MB_LONGNECK;
 		} else if (!strncmpi(bp, "blessed ", l=8) ||
 			   !strncmpi(bp, "holy ", l=5)) {
 			blessed = 1;
@@ -3182,7 +3264,7 @@ typfnd:
 		typ == SPE_POISON_SPRAY ||
 		typ == SPE_ACID_BLAST ||
 		typ == SCR_CONSECRATION ||
-		(typ >= HANDGUN && typ <= LARGE_GUN) ||
+		(typ >= HANDGUN && typ <= HEAVY_GUN) ||
 		((
 			typ == LIGHTSABER ||
 			typ == BEAMSWORD ||
@@ -3270,7 +3352,7 @@ typfnd:
 			break;
 		case SLIME_MOLD: otmp->spe = ftype;
 			/* Fall through */
-		case SKELETON_KEY: case UNIVERSAL_KEY: case CHEST: case LARGE_BOX:
+		case SKELETON_KEY: case UNIVERSAL_KEY: case CHEST: case BOX:
 		case HEAVY_IRON_BALL: case IRON_CHAIN: case STATUE:
 			/* otmp->cobj already done in mksobj() */
 				break;
@@ -3356,7 +3438,7 @@ typfnd:
 			    otmp->otyp = GRAY_DRAGON_SCALE_MAIL +
 						    mntmp - PM_GRAY_DRAGON;
 			break;
-		case LARGE_SHIELD:
+		case KITE_SHIELD:
 			/* Dragon shield - depends on the order of objects */
 			/*		 & dragons.			 */
 			if (mntmp >= PM_GRAY_DRAGON &&
@@ -3370,6 +3452,31 @@ typfnd:
 	if(stolen){
 		otmp->ostolen = 1;
 		otmp->sknown = 1;
+	}
+	
+	if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS){
+		otmp->objsize = objsize;
+	}
+	
+	if(otmp->oclass == ARMOR_CLASS && !Is_dragon_scales(otmp)){
+		if(bodytype == 0L){
+			if(is_suit(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
+			else if(is_helmet(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
+			else if(is_shirt(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
+		} else {
+			if(is_suit(otmp)){
+				if((bodytype&MB_BODYTYPEMASK) != 0L) otmp->bodytypeflag = (bodytype&MB_BODYTYPEMASK);
+				else otmp->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
+			} else if(is_helmet(otmp)){
+				if((bodytype&MB_HEADMODIMASK) != 0L) otmp->bodytypeflag = (bodytype&MB_HEADMODIMASK);
+				else if((bodytype&MB_HUMANOID) != 0L) otmp->bodytypeflag = 0L; //Humanoid heads have no special modifier
+				else otmp->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
+			} else if(is_shirt(otmp)){
+				if((bodytype&MB_BODYTYPEMASK) != 0L) otmp->bodytypeflag = (bodytype&MB_HUMANOID) ? MB_HUMANOID : (bodytype&MB_BODYTYPEMASK);
+				else otmp->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
+			}
+		}
+		
 	}
 	
 	if(otmp->oclass == RING_CLASS && isEngrRing((otmp)->otyp) && (wizard || (otmp->ovar1 && !(otmp->ohaluengr)))){

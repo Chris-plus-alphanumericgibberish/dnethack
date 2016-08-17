@@ -100,15 +100,15 @@ PROJECTILE("orcish arrow", "crude arrow",
 		0, 18, 1, 2, 5, 8, -1, IRON, -P_BOW, CLR_BLACK),
 PROJECTILE("silver arrow", (char *)0,
 		1, 12, 1, 5, 6, 6, 0, SILVER, -P_BOW, HI_SILVER),
-PROJECTILE("golden arrow", (char *)0,
+PROJECTILE("golden arrow", (char *)0, /*Needs encyc entry*//*Needs tile*/
 		1,  9, 2,10,13,13, 0, GOLD, -P_BOW, HI_GOLD),
-PROJECTILE("ancient arrow", (char *)0,
+PROJECTILE("ancient arrow", (char *)0, /*Needs encyc entry*//*Needs tile*/
 		1,  0, 1,10,10,10, 0, METAL, -P_BOW, CLR_BLACK),
 PROJECTILE("ya", "bamboo arrow",
 		0, 15, 1, 4, 7, 7, 1, METAL, -P_BOW, HI_METAL),
 PROJECTILE("crossbow bolt", (char *)0,
 		1, 55, 1, 2, 4, 6, 0, IRON, -P_CROSSBOW, HI_METAL),
-PROJECTILE("droven bolt", "obsidian bolt",
+PROJECTILE("droven bolt", "obsidian bolt", /*Needs encyc entry*/
 		0,  0, 1, 2, 9, 6, 2, GLASS, -P_CROSSBOW, CLR_BLACK),
 
 WEAPON("dart", (char *)0,
@@ -117,9 +117,9 @@ WEAPON("shuriken", "throwing star",
 	0, 1, 0, 33,  1,  5,  8,  6, 2, P,   -P_SHURIKEN, IRON, HI_METAL),
 WEAPON("boomerang", (char *)0,
 	1, 1, 0, 13,  5, 20,  9,  9, 0, 0,   -P_BOOMERANG, WOOD, HI_WOOD),
-WEAPON("silver chakram", "silver circular blade",
+WEAPON("silver chakram", "silver circular blade", /*Needs encyc entry*//*Needs tile*/
 	1, 1, 0,  6,  5, 20,  9,  9, 0, 0,   -P_BOOMERANG, SILVER, HI_SILVER),
-WEAPON("spike", (char *)0,
+WEAPON("spike", (char *)0, /*Needs encyc entry*/
 	1, 1, 0,  0,  1,  2,  3,  2, 0, P,   -P_DART, BONE, CLR_WHITE),
 
 /* spears */
@@ -127,7 +127,7 @@ WEAPON("spear", (char *)0,
 	1, 1, 0, 48, 25,  3,  6,  8, 0, P,   P_SPEAR, IRON, HI_METAL),
 WEAPON("elven spear", "runed spear",
 	0, 1, 0, 10, 25,  3,  7,  7, 2, P,   P_SPEAR, WOOD, HI_WOOD),
-WEAPON("droven spear", "long obsidian spear",
+WEAPON("droven spear", "long obsidian spear", /*Needs encyc entry*/
 	0, 1, 1,  0, 25,  3, 12, 12, 2, P,   P_SPEAR, GLASS, CLR_BLACK),
 WEAPON("orcish spear", "crude spear",
 	0, 1, 0, 13, 25,  3,  5,  10, -1, P,   P_SPEAR, IRON, CLR_BLACK),
@@ -138,7 +138,7 @@ WEAPON("silver spear", (char *)0,
 WEAPON("javelin", "throwing spear",
 	0, 1, 0, 10, 20,  3,  6,  6, 0, P,   P_JAVELIN, IRON, HI_METAL),
 
-WEAPON("trident", (char *)0,
+WEAPON("trident", (char *)0, /*Needs encyc entry*/
 	1, 0, 0,  8, 25,  5,  6,  4, 0, P,   P_TRIDENT, IRON, HI_METAL),
 						/* +1 small, +2d4 large */
 
@@ -147,7 +147,7 @@ WEAPON("dagger", (char *)0,
 	1, 1, 0, 22, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
 WEAPON("elven dagger", "runed dagger",
 	0, 1, 0,  7, 10,  4,  5,  3, 4, P,   P_DAGGER, WOOD, HI_WOOD),
-WEAPON("droven dagger", "obsidian dagger",
+WEAPON("droven dagger", "obsidian dagger", /*Needs encyc entry*/
 	0, 1, 0,  0, 10,  12,  8,  6, 4, P,   P_DAGGER, GLASS, CLR_BLACK),
 WEAPON("orcish dagger", "crude dagger",
 	0, 1, 0,  9, 10,  5,  3,  5, 1, P,   P_DAGGER, IRON, CLR_BLACK),
@@ -175,17 +175,17 @@ WEAPON("axe", (char *)0,
 	1, 0, 0, 20, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
 WEAPON("battle-axe", "double-headed axe",/* "double-bitted" ? */
 	0, 0, 1, 16,120, 40,  8,  6, 0, S,   P_AXE, IRON, HI_METAL), /*+1d4/+2d4*/
-WEAPON("moon axe", "large silver axe",
+WEAPON("moon axe", "silver two-handed axe", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, 12,160, 40,  6,  6, 0, S,   P_AXE, SILVER, HI_SILVER),
 
 /* swords */
 WEAPON("short sword", (char *)0,
 	1, 0, 0,  8, 30, 10,  6,  8, 0, P,   P_SHORT_SWORD, IRON, HI_METAL),
-WEAPON("vibroblade", "gray short sword",
+WEAPON("vibroblade", "gray short sword", /*Needs encyc entry*//*Needs tile*/
 	1, 0, 0,  0, 30, 10,  6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, CLR_GRAY),
 WEAPON("elven short sword", "runed short sword",
 	0, 0, 0,  2, 30, 10,  7,  7, 2, P,   P_SHORT_SWORD, WOOD, HI_WOOD),
-WEAPON("droven short sword", "obsidian short sword",
+WEAPON("droven short sword", "obsidian short sword", /*Needs encyc entry*/
 	0, 0, 0,  0, 30, 10,  9,  9, 2, P,   P_SHORT_SWORD, GLASS, CLR_BLACK),
 
 WEAPON("orcish short sword", "crude short sword",
@@ -208,12 +208,12 @@ WEAPON("elven broadsword", "runed broadsword",
 						/* +d4 small, +2 large */
 WEAPON("long sword", (char *)0,
 	1, 0, 0, 46, 40, 15,  8, 12, 0, S,   P_LONG_SWORD, IRON, HI_METAL),
-WEAPON("crystal sword", (char *)0,
+WEAPON("crystal sword", (char *)0, /*Needs encyc entry*//*Needs tile*/
 	1, 0, 0, 2, 120,300,  8, 12, 0, S,   P_LONG_SWORD, GLASS, CLR_CYAN),
 WEAPON("two-handed sword", (char *)0,
 	1, 0, 1, 22,150, 50, 12,  6, 0, S,   P_TWO_HANDED_SWORD, IRON, HI_METAL),
 						/* +2d6 large */
-WEAPON("droven greatsword", "large obsidian sword",
+WEAPON("droven greatsword", "obsidian two-handed sword", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1,  0,150, 50,  18, 30, 2, S,   P_TWO_HANDED_SWORD, GLASS, CLR_BLACK),
 WEAPON("katana", "samurai sword",
 	0, 0, 0,  4, 40, 80, 10, 12, 1, S,   P_LONG_SWORD, IRON, HI_METAL),
@@ -241,11 +241,11 @@ WEAPON("glaive", "single-edged polearm",
 	0, 0, 1,  8, 75,  6,  6, 10, 0, S,   P_POLEARMS, IRON, HI_METAL),
 WEAPON("lance", (char *)0,
 	1, 0, 0,  4,180, 10,  6,  8, 0, P,   P_LANCE, IRON, HI_METAL),
-WEAPON("force pike", "long gray spear",
+WEAPON("force pike", "long gray spear",/*Needs tile*/
 	0, 0, 0,  0,180, 10,  6,  8, 2, P,   P_LANCE, PLASTIC, CLR_GRAY),
 WEAPON("elven lance", "runed lance", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0,  0,140, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
-WEAPON("droven lance", "obsidian lance",
+WEAPON("droven lance", "obsidian lance", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1,  0,200, 10, 10, 10, 2, P,   P_LANCE, GLASS, CLR_BLACK),
 /* axe-type */
 WEAPON("halberd", "angled poleaxe",
@@ -296,7 +296,7 @@ WEAPON("club", (char *)0,
 	1, 0, 0, 11, 30,  3,  6,  3, 0, B,   P_CLUB, WOOD, HI_WOOD),
 WEAPON("quarterstaff", "staff",
 	0, 0, 1, 10, 40,  5,  6,  6, 0, B,   P_QUARTERSTAFF, WOOD, HI_WOOD),
-WEAPON("silver khakkhara", "silver monk's staff",
+WEAPON("silver khakkhara", "silver monk's staff", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1,  2, 120,  5,  6,  4, 0, B|P,   P_QUARTERSTAFF, SILVER, HI_SILVER),
 WEAPON("iron bar", (char *)0,
 	1, 1, 1, 0, 400,  10,  8,  6, -10, B,   P_QUARTERSTAFF, IRON, HI_METAL),
@@ -312,52 +312,53 @@ WEAPON("bullwhip", (char *)0,
 
 /* Firearms */
 //ifdef FIREARMS
-GUN("flintlock", "small broken crossbow",			0,  0, 0,  10,   50,  8, -2,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL),
+ /*Needs encyc entry*/
+GUN("flintlock", "broken hand-crossbow",			0,  0, 0,  10,   50,  8, -2,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
 
-GUN("pistol", "small broken crossbow",	   	   		0,  0, 0,  12,  100, 15,  1,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL),
-GUN("submachine gun", "strange broken crossbow",   	0,  0, 0,  25,  250, 10,  3, -1, WP_BULLET, IRON, P_FIREARM, HI_METAL),
-GUN("heavy machine gun", "strange broken crossbow",	0,  1, 0, 100, 2000, 20,  8, -4, WP_BULLET, IRON, P_FIREARM, HI_METAL),
-GUN("rifle", "broken crossbow",		   	   			0,  1, 0,  30,  150, 22, -1,  1, WP_BULLET, IRON, P_FIREARM, HI_METAL),
-GUN("assault rifle", "broken crossbow",	   			0,  0, 0,  40, 1000, 20,  5, -2, WP_BULLET, IRON, P_FIREARM, HI_METAL),
-GUN("sniper rifle", "broken crossbow",	   			0,  1, 0,  50, 4000, 25, -3,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL),
-GUN("shotgun", "broken crossbow",	   	   			0,  0, 0,  35,  200,  3, -1,  3,  WP_SHELL, IRON, P_FIREARM, HI_METAL),
-GUN("auto shotgun", "strange broken crossbow",	   	0,  1, 0,  60, 1500,  3,  2,  0,  WP_SHELL, IRON, P_FIREARM, HI_METAL),
-GUN("rocket launcher", "metal tube",  				0,  1, 0, 100, 3500, 20, -5, -4, WP_ROCKET, IRON, P_FIREARM, HI_METAL),
-GUN("grenade launcher", "strange broken crossbow", 	0,  0, 0,  55, 1500,  6, -3, -3,WP_GRENADE, IRON, P_FIREARM, HI_METAL),
+GUN("pistol", "broken hand-crossbow",	   	   		0,  0, 0,  12,  100, 15,  1,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("submachine gun", "strange broken crossbow",   	0,  0, 0,  25,  250, 10,  3, -1, WP_BULLET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("heavy machine gun", "strange broken crossbow",	0,  1, 0, 100, 2000, 20,  8, -4, WP_BULLET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("rifle", "broken crossbow",		   	   			0,  1, 0,  30,  150, 22, -1,  1, WP_BULLET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("assault rifle", "broken crossbow",	   			0,  0, 0,  40, 1000, 20,  5, -2, WP_BULLET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("sniper rifle", "broken crossbow",	   			0,  1, 0,  50, 4000, 25, -3,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("shotgun", "broken crossbow",	   	   			0,  0, 0,  35,  200,  3, -1,  3,  WP_SHELL, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("auto shotgun", "strange broken crossbow",	   	0,  1, 0,  60, 1500,  3,  2,  0,  WP_SHELL, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("rocket launcher", "metal tube",  				0,  1, 0, 100, 3500, 20, -5, -4, WP_ROCKET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
+GUN("grenade launcher", "strange broken crossbow", 	0,  0, 0,  55, 1500,  6, -3, -3,WP_GRENADE, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
 
 GUN("BFG", "silver ovoid device", 			   		0,  1, 0, 100, 3000,100,  3,  0,WP_ROCKET|WP_GRENADE|WP_BULLET|WP_SHELL|WP_ROCKET,
-																								SILVER, P_FIREARM, HI_SILVER),
+																								SILVER, P_FIREARM, HI_SILVER), /*Needs tile*/
 GUN("handgun", "unfamiliar handgun",			0,  0, 0,  12,  100, 15,  1,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
 GUN("gun", "unfamiliar gun",					0,  0, 0,  25,  250, 10,  3, -1, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
 GUN("long gun", "unfamiliar long gun",			0,  1, 0,  30,  150, 22, -1,  1, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
-GUN("large gun", "unfamiliar large gun",		0,  1, 0, 100, 2000, 20,  8, -4, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
+GUN("heavy gun", "unfamiliar heavy gun",		0,  1, 0, 100, 2000, 20,  8, -4, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
+ /*Needs encyc entry*/
+GUN("hand blaster", "hard black handmirror",		0,  0, 0,  12, 1000, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BLACK), /*Needs tile*/
+GUN("arm blaster",  "hard white bracer", 	   		0,  0, 0,  45, 4500, 15,  6,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_WHITE), /*Needs tile*/
+GUN("cutting laser","hard tan lozenge",    			0,  0, 0,  10, 1000,  3,  -1,  3,WP_BLASTER, PLASTIC, P_FIREARM, CLR_YELLOW), /*Needs tile*/
 
-GUN("hand blaster", "hard black handmirror",		0,  0, 0,  12, 1000, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BLACK),
-GUN("arm blaster",  "hard white bracer", 	   		0,  0, 0,  45, 4500, 15,  6,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_WHITE),
-GUN("cutting laser","hard tan lozenge",    			0,  0, 0,  10, 1000,  3,  -1,  3,WP_BLASTER, PLASTIC, P_FIREARM, CLR_YELLOW),
-
-GUN("raygun", "hard handle ending in glassy disks",	0,  0, 0,  45, 3000, 15,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BRIGHT_CYAN),
+GUN("raygun", "hard handle ending in glassy disks",	0,  0, 0,  45, 3000, 15,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BRIGHT_CYAN), /*Needs tile*/
 BULLET("bullet", "pellet",
-	0,  0,   1,   5, 8, 6, 0, WP_BULLET,   P,   METAL, -P_FIREARM, HI_METAL),
+	0,  0,   1,   5, 8, 6, 0, WP_BULLET,   P,   METAL, -P_FIREARM, HI_METAL),/*Needs tile*/
 BULLET("silver bullet", "silver pellet",
-	0,  0,   1,  15, 8, 6, 0, WP_BULLET,   P, SILVER, -P_FIREARM, HI_SILVER),
+	0,  0,   1,  15, 8, 6, 0, WP_BULLET,   P, SILVER, -P_FIREARM, HI_SILVER),/*Needs tile*/
 BULLET("shotgun shell", "red tube",
-	0,  0,   1,  10,12, 6, 0,  WP_SHELL,   P,   METAL, -P_FIREARM, CLR_RED),
+	0,  0,   1,  10,12, 6, 0,  WP_SHELL,   P,   METAL, -P_FIREARM, CLR_RED),/*Needs tile*/
 BULLET("rocket", "firework",
-	0,  0,  20, 450,12,20, 0, WP_ROCKET, P|E, SILVER, -P_FIREARM, CLR_BLUE),
+	0,  0,  20, 450,12,20, 0, WP_ROCKET, P|E, SILVER, -P_FIREARM, CLR_BLUE),/*Needs tile*/
 BULLET("frag grenade", "green spheriod",
-	0,  0,   5, 350, 2, 2, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_GREEN),
+	0,  0,   5, 350, 2, 2, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_GREEN),/*Needs tile*/
 BULLET("gas grenade", "lime spheriod",
-	0,  0,   2, 350, 2, 2, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_BRIGHT_GREEN),
+	0,  0,   2, 350, 2, 2, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_BRIGHT_GREEN),/*Needs tile*/
 BULLET("stick of dynamite", "red stick",
-	0,  0,  10, 150, 0, 0, 0,  WP_GENERIC,   B,   PLASTIC, P_NONE, CLR_RED),
+	0,  0,  10, 150, 0, 0, 0,  WP_GENERIC,   B,   PLASTIC, P_NONE, CLR_RED),/*Needs tile*/
 
 BULLET("blaster bolt", "ruby bolt",
-		0,  0, 1, 0, 6, 8, 0, WP_BLASTER,   E,   METAL, -P_FIREARM, CLR_RED),
+		0,  0, 1, 0, 6, 8, 0, WP_BLASTER,   E,   METAL, -P_FIREARM, CLR_RED),/*Needs tile*/
 BULLET("heavy blaster bolt", "scarlet bolt",
-		0,  0, 1, 0,10,12, 0, WP_BLASTER,   E,   METAL, -P_FIREARM, CLR_ORANGE),
+		0,  0, 1, 0,10,12, 0, WP_BLASTER,   E,   METAL, -P_FIREARM, CLR_ORANGE),/*Needs tile*/
 BULLET("laser beam", "green bolt",
-		0,  0, 1, 0, 1, 1, 0, WP_BLASTER,   S,   METAL, -P_FIREARM, CLR_BRIGHT_GREEN),
+		0,  0, 1, 0, 1, 1, 0, WP_BLASTER,   S,   METAL, -P_FIREARM, CLR_BRIGHT_GREEN),/*Needs tile*/
 //endif
 
 /* bows */
@@ -367,7 +368,7 @@ BOW("orcish bow", "crude bow",	0, 0, 12, 30, 60, -2, WOOD, P_BOW, CLR_BLACK),
 BOW("yumi", "long bow",			0,  0, 0, 30, 60, 0, WOOD, P_BOW, HI_WOOD),
 BOW("sling", (char *)0,			1, 0, 40,  3, 20, -1, LEATHER, P_SLING, HI_LEATHER),
 BOW("crossbow", (char *)0,		1, 0, 45, 50, 40, 1, WOOD, P_CROSSBOW, HI_WOOD),
-BOW("droven crossbow", "spider-legged crossbow",	0, 0, 0, 50, 120, 4, SILVER, P_CROSSBOW, CLR_BLACK),
+BOW("droven crossbow", "spider-legged crossbow",	0, 0, 0, 50, 120, 4, SILVER, P_CROSSBOW, CLR_BLACK), /*Needs encyc entry*/
 
 #undef P
 #undef S
@@ -402,7 +403,7 @@ BOW("droven crossbow", "spider-legged crossbow",	0, 0, 0, 50, 120, 4, SILVER, P_
 	ARMOR(name,desc,kn,mgc,0,power,prob,delay,wt,cost,ac,can,ARM_BOOTS,metal,c)
 
 /* helmets */
-HELM("sedge hat", "wide conical hat",
+HELM("sedge hat", "wide conical hat", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	3, 1,  3,   8, 9, 0, VEGGY, CLR_YELLOW),
 HELM("leather helm", "leather hat",
 		0, 0,  0,	5, 1,  3,   8, 9, 0, LEATHER, HI_LEATHER),
@@ -421,17 +422,17 @@ HELM("dunce cap", "conical hat",
 		0, 1,  0,	3, 1,  4,   1, 10, 0, CLOTH, CLR_BLUE),
 HELM("war hat", "wide metal helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	2, 0, 100,  30, 8, 2, IRON, HI_METAL),
-HELM("flack helmet", "green bowel",
+HELM("flack helmet", "green bowel", /*Needs encyc entry*/
 		0, 0,  0,	0, 0, 10,   50, 8, 1, PLASTIC, CLR_GREEN),
 HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1, 30,   5, 9, 0, WOOD, HI_WOOD),
 HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1,  3,   5, 8, 0, MITHRIL, HI_METAL),
-HELM("droven helm", "spider-shaped helm",
+HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1, 50,   5, 7, 0, MINERAL, CLR_BLACK),
-HELM("plasteel helm", "white skull helm",
+HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
-HELM("crystal helm", "fish bowl",
+HELM("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 1,150, 300, 5, 1, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
 HELM("helmet", "plumed helmet", /* circlet */
@@ -442,7 +443,7 @@ HELM("helm of opposite alignment", "crested helmet", /* tiara of treachery */
 		0, 1,  0,	6, 1, 50,  50, 9, 0, IRON, HI_METAL),
 HELM("helm of telepathy", "visored helmet", /*tiara of telepathy*/
 		0, 1,  TELEPAT, 2, 1, 50,  50, 9, 0, IRON, HI_METAL),
-HELM("helm of drain resistance", "gold circlet", /*diadem of drain resistance*/
+HELM("helm of drain resistance", "gold circlet", /*diadem of drain resistance*//*Needs tile*/
 		0, 1,  DRAIN_RES, 2, 1, 50,  50, 9, 0, GOLD, HI_GOLD),
 
 /* suits of armor */
@@ -460,7 +461,7 @@ HELM("helm of drain resistance", "gold circlet", /*diadem of drain resistance*/
    needed to create them */
 DRGN_ARMR("gray dragon scale mail",   1, ANTIMAGIC,  1200, 1, CLR_GRAY),
 DRGN_ARMR("silver dragon scale mail", 1, REFLECTING, 1200, 1, DRAGON_SILVER),
-DRGN_ARMR("mercurial dragon scale mail", 1, FAST, 1200, 1, CLR_GRAY),
+DRGN_ARMR("mercurial dragon scale mail", 1, FAST, 1200, 1, CLR_GRAY),/*Needs tile*/
 DRGN_ARMR("shimmering dragon scale mail", 1, DISPLACED, 1200, 1, CLR_CYAN),
 DRGN_ARMR("deep dragon scale mail",   1, DRAIN_RES,  1200, 1, CLR_MAGENTA),
 DRGN_ARMR("red dragon scale mail",    1, FIRE_RES,    900, 1, CLR_RED),
@@ -476,7 +477,7 @@ DRGN_ARMR("yellow dragon scale mail", 1, ACID_RES,    900, 1, CLR_YELLOW),
    magical properties but are produced "naturally" */
 DRGN_ARMR("gray dragon scales",   0, ANTIMAGIC,  700, 7, CLR_GRAY),
 DRGN_ARMR("silver dragon scales", 0, REFLECTING, 700, 7, DRAGON_SILVER),
-DRGN_ARMR("mercurial dragon scales", 0, FAST,  700, 7, CLR_GRAY),
+DRGN_ARMR("mercurial dragon scales", 0, FAST,  700, 7, CLR_GRAY),/*Needs tile*/
 DRGN_ARMR("shimmering dragon scales", 0, DISPLACED,  700, 7, CLR_CYAN),
 DRGN_ARMR("deep dragon scales",   0, DRAIN_RES,  500, 7, CLR_MAGENTA),
 DRGN_ARMR("red dragon scales",    0, FIRE_RES,   500, 7, CLR_RED),
@@ -488,32 +489,34 @@ DRGN_ARMR("green dragon scales",  0, POISON_RES, 500, 7, CLR_GREEN),
 DRGN_ARMR("yellow dragon scales", 0, ACID_RES,   500, 7, CLR_YELLOW),
 #undef DRGN_ARMR
 
-ARMOR("plate mail", (char *)0,
+ARMOR("plate mail", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	44, 5, 225, 600,  0, 3, ARM_SUIT, IRON, HI_METAL),
-ARMOR("droven plate mail", "crested black plate",
+ARMOR("high-elven plate", "runed plate mail", /*Needs encyc entry*/
+	0, 0, 1, 0,	0, 5, 60, 	1200,  0, 3, ARM_SUIT, MITHRIL, HI_METAL),
+ARMOR("droven plate mail", "crested black plate", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 5, 50, 	2000,  0, 1, ARM_SUIT, MINERAL, CLR_BLACK),
-ARMOR("elven toga", (char *)0,
+ARMOR("elven toga", (char *)0, /*Needs encyc entry*//*Needs tile*/
 	1, 0, 0, 0,	 0, 5,	 5,  100, 9, 2, ARM_SUIT, CLOTH, CLR_GREEN),
-ARMOR("noble's dress", "armored black dress",
+ARMOR("noble's dress", "armored black dress", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 5,100, 2000,  2, 3, ARM_SUIT, MINERAL, CLR_BLACK),
-ARMOR("black dress", (char *)0,
+ARMOR("black dress", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	0, 5, 50,  500, 10, 2, ARM_SHIRT, CLOTH, CLR_BLACK),
-ARMOR("consort's suit", "loud foppish suit",
+ARMOR("consort's suit", "loud foppish suit", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, 0,	0, 5, 10, 	1000,  9, 1, ARM_SUIT, CLOTH, CLR_BRIGHT_MAGENTA),
 ARMOR("gentleman's suit", "expensive clothes", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 5, 10, 1000,  10, 1, ARM_SUIT, CLOTH, CLR_BLACK),
 ARMOR("gentlewoman's dress", "expensive dress", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 6,150, 1000,   9, 3, ARM_SUIT, BONE, CLR_RED), /*Specifically, whale bone*/
-ARMOR("crystal plate mail", (char *)0,
+ARMOR("crystal plate mail", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	10, 5, 250, 2000,  -6, 2, ARM_SUIT, GLASS, CLR_CYAN), /*Best armor, AC wise*/
 #ifdef TOURIST
-ARMOR("bronze plate mail", (char *)0,
+ARMOR("bronze plate mail", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	20, 5, 225, 400,  3, 3, ARM_SUIT, COPPER, HI_COPPER),
 #else
 ARMOR("bronze plate mail", (char *)0,
 	1, 0, 1, 0,	35, 5, 225, 400,  3, 3, ARM_SUIT, COPPER, HI_COPPER),
 #endif
-ARMOR("plasteel armor", "hard white armor",
+ARMOR("plasteel armor", "hard white armor", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, 0,	 0, 5, 100,  500, 4, 3, ARM_SUIT, PLASTIC, CLR_WHITE),
 // ARMOR("force armor", "gemstone-adorned clothing",
 	// 0, 0, 1, 0,	 0, 5,  50, 1000, 9, 3, ARM_SUIT, GEMSTONE, CLR_BRIGHT_GREEN),
@@ -527,7 +530,7 @@ ARMOR("elven mithril-coat", (char *)0,
 	1, 0, 0, 0,	15, 1, 20, 240,  5, 3, ARM_SUIT, MITHRIL, HI_METAL),
 ARMOR("chain mail", (char *)0,
 	1, 0, 0, 0,	72, 5, 150,  75,  5, 1, ARM_SUIT, IRON, HI_METAL),
-ARMOR("droven chain mail", "crested black mail",
+ARMOR("droven chain mail", "crested black mail", /*Needs encyc entry*/
 	0, 0, 0, 0,	0, 5, 50,  1000,  5, 2, ARM_SUIT, MINERAL, HI_METAL),
 ARMOR("orcish chain mail", "crude chain mail",
 	0, 0, 0, 0,	20, 5, 150,  75,  6, 1, ARM_SUIT, IRON, CLR_BLACK),
@@ -543,9 +546,9 @@ ARMOR("leather armor", (char *)0,
 	1, 0, 0, 0,	82, 3, 75,   5,  8, 0, ARM_SUIT, LEATHER, HI_LEATHER),
 ARMOR("leather jacket", (char *)0,
 	1, 0, 0, 0,	12, 0,	30,  10,  9, 2, ARM_SUIT, LEATHER, CLR_BLACK),
-ARMOR("straitjacket", "long-sleeved jacket",
+ARMOR("straitjacket", "long-sleeved jacket", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0, 0,	0, 0,	30,  10,  9, 2, ARM_SUIT, CLOTH, CLR_WHITE),
-ARMOR("healer uniform","clean white clothes",
+ARMOR("healer uniform","clean white clothes", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0, SICK_RES,	0, 0,	30,  10,  9, 0, ARM_SUIT, CLOTH, CLR_WHITE),
 #ifdef TOURIST
 /* shirts */
@@ -554,22 +557,22 @@ ARMOR("healer uniform","clean white clothes",
 */
 ARMOR("Hawaiian shirt", "flowery shirt",
 	0, 0, 0, 0,	 10, 0,	 5,   3, 10, 0, ARM_SHIRT, CLOTH, CLR_MAGENTA),
-ARMOR("T-shirt", (char *)0,
+ARMOR("T-shirt", (char *)0, /*Needs encyc entry*/
 	1, 0, 0, 0,	 5, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_WHITE),
 # ifdef CONVICT
-ARMOR("striped shirt", (char *)0,
+ARMOR("striped shirt", (char *)0, /*Needs encyc entry*/
 	1, 0, 0, 0,	 0, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_GRAY),
 # endif /* CONVICT */
 #endif
 /*Ruffled shirts are little different from other shirts*/
-ARMOR("ruffled shirt", (char *)0,
+ARMOR("ruffled shirt", (char *)0, /*Needs encyc entry*/
 	1, 0, 0, 0,	 0, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_WHITE),
 /* victorian underwear, on the other hand, inflicts a penalty to AC but grants MC 3 */
 ARMOR("victorian underwear", "white dress",
 	0, 0, 1, 		  0,	 0, 5,	 5,   10, 10, 3, ARM_SHIRT, CLOTH, CLR_WHITE),
-ARMOR("jumpsuit", "silver clothes",
+ARMOR("jumpsuit", "silver clothes",/*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, REFLECTING,	 0, 5,	 5, 1000, 10, 3, ARM_SUIT, PLASTIC, HI_SILVER),
-ARMOR("bodyglove", "tight black clothes",
+ARMOR("bodyglove", "tight black clothes", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, SICK_RES,	 0, 5,	 5, 1000, 10, 3, ARM_SHIRT, PLASTIC, CLR_BLACK),
 /* cloaks */
 /*  'cope' is not a spelling mistake... leave it be */
@@ -577,7 +580,7 @@ CLOAK("mummy wrapping", (char *)0,
 		1, 0,	0,	    0, 0,  3,  2, 10, 1, CLOTH, CLR_GRAY),
 CLOAK("elven cloak", "faded pall",
 		0, 1,	STEALTH,    7, 0, 10, 60,  9, 3, CLOTH, CLR_BLACK),
-CLOAK("droven cloak", "cobwebbed cloak",
+CLOAK("droven cloak", "cobwebbed cloak", /*Needs encyc entry*/
 		0, 1,	0,      1, 0, 10, 60,  10, 3, CLOTH, CLR_GRAY),
 CLOAK("orcish cloak", "coarse mantelet",
 		0, 0,	0,	    8, 0, 10, 40, 10, 2, CLOTH, CLR_BLACK),
@@ -604,7 +607,7 @@ CLOAK("cloak of displacement", "piece of cloth",
 		0, 1,	DISPLACED, 10, 0, 10, 50,  9, 2, CLOTH, CLR_BRIGHT_MAGENTA),
 
 /* shields */
-SHIELD("small shield", (char *)0,
+SHIELD("buckler", (char *)0,
 		1, 0, 0, 0,	     6, 0, 30,	3,  9, 0, WOOD, HI_WOOD),
 SHIELD("elven shield", "blue and green shield",
 		0, 0, 0, 0,	     2, 0, 40,	7,  8, 2, WOOD, CLR_GREEN),
@@ -612,11 +615,11 @@ SHIELD("Uruk-hai shield", "white-handed shield",
 		0, 0, 0, 0,	     2, 0, 50,	7,  8, 1, IRON, HI_METAL),
 SHIELD("orcish shield", "red-eyed shield",
 		0, 0, 0, 0,	     2, 0, 50,	7,  9, 0, IRON, CLR_RED),
-SHIELD("large shield", (char *)0,
+SHIELD("kite shield", (char *)0,
 		1, 0, 1, 0,	     7, 0,100, 10,  8, 1, IRON, HI_METAL),
-SHIELD("dwarvish roundshield", "large round shield",
+SHIELD("dwarvish roundshield", "round shield",
 		0, 0, 0, 0,	     4, 0, 80, 10,  7, 1, IRON, HI_METAL),
-SHIELD("crystal shield", "glass shield",
+SHIELD("crystal shield", "glass shield", /*Needs encyc entry*//*Needs tile*/
 		0, 0, 0, 0,	     0, 0,300,150,  4, 1, GLASS, CLR_CYAN),
 SHIELD("shield of reflection", "polished silver shield",
 		0, 1, 0, REFLECTING, 3, 0, 50, 50,  8, 0, SILVER, HI_SILVER),
@@ -628,7 +631,7 @@ SHIELD("shield of reflection", "polished silver shield",
    needed to create them */
 DRGN_SHIELD("gray dragon scale shield", 1, ANTIMAGIC,  1200, 7, CLR_GRAY),
 DRGN_SHIELD("silver dragon scale shield", 1, REFLECTING, 1200, 7, DRAGON_SILVER),
-DRGN_SHIELD("mercurial dragon scale shield", 1, FAST, 1200, 7, CLR_GRAY),
+DRGN_SHIELD("mercurial dragon scale shield", 1, FAST, 1200, 7, CLR_GRAY),/*Needs tile*/
 DRGN_SHIELD("shimmering dragon scale shield", 1, DISPLACED, 1200, 7, CLR_CYAN),
 DRGN_SHIELD("deep dragon scale shield", 1, DRAIN_RES, 1200, 7, CLR_MAGENTA),
 DRGN_SHIELD("red dragon scale shield", 1, FIRE_RES,    900, 7, CLR_RED),
@@ -643,7 +646,11 @@ DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, CLR_YELLOW),
 /* these have their color but not material shuffled, so the IRON must stay
  * CLR_BROWN (== HI_LEATHER)
  */
-GLOVES("plasteel gauntlets", "hard white gauntlets",
+GLOVES("crystal gauntlets", "glass gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   0, 2, 50, 400, 7, 0, GLASS, CLR_CYAN),
+GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   0, 2,  5, 400, 8, 0, MITHRIL, HI_METAL),
+GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 15, 50,  8, 0, PLASTIC, CLR_WHITE),
 GLOVES("leather gloves", "old gloves",
 		0, 0,  0,	  12, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
@@ -651,7 +658,7 @@ GLOVES("gauntlets of fumbling", "padded gloves",
 		0, 1,  FUMBLING,   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of power", "riding gloves",
 		0, 1,  0,	   7, 1, 30, 50,  9, 0, IRON, CLR_BROWN),
-GLOVES("orihalcyon gauntlets", "fighting gloves",
+GLOVES("orihalcyon gauntlets", "fighting gloves",/*Needs tile*/
 		0, 1,  ANTIMAGIC,  7, 1, 10, 50,  9, 0, METAL, CLR_BROWN),
 GLOVES("gauntlets of dexterity", "fencing gloves",
 		0, 1,  0,	   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
@@ -661,11 +668,11 @@ BOOTS("low boots", "walking shoes",
 		0, 0,  0,	  25, 2, 10,  8,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("iron shoes", "hard shoes",
 		0, 0,  0,	   7, 2, 50, 16,  8, 0, IRON, HI_METAL),
-BOOTS("plasteel boots", "hard white boots",
+BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 25, 32,  8, 1, PLASTIC, CLR_WHITE),
 BOOTS("high boots", "jackboots",
 		0, 0,  0,	  15, 2, 20, 12,  8, 0, LEATHER, HI_LEATHER),
-BOOTS("crystal boots", "glass boots",
+BOOTS("crystal boots", "glass boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2,150,300,  6, 0, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
 BOOTS("speed boots", "combat boots",
@@ -731,7 +738,7 @@ RING("polymorph control", POLYMORPH_CONTROL, "emerald",
 RING("invisibility", INVIS, "wire", 150, 1, 0, 5, IRON, HI_METAL),
 RING("see invisible", SEE_INVIS, "engagement",
 					    150, 1, 0, 5, IRON, HI_METAL),
-RING("alacrity", FAST, "shiny", 100, 1, 0, 5, METAL, CLR_BRIGHT_CYAN),
+RING("alacrity", FAST, "shiny", 100, 1, 0, 5, METAL, CLR_BRIGHT_CYAN),/*Needs tile*/
 RING("protection from shape changers", PROT_FROM_SHAPE_CHANGERS, "black signet",
 					    100, 1, 0, 5, MITHRIL, CLR_BLACK),
 #undef RING
@@ -748,7 +755,7 @@ AMULET("amulet of strangulation", "oval",       STRANGLED,  120),
 AMULET("amulet of restful sleep", "triangular", SLEEPING,   120),
 AMULET("amulet versus poison",    "pyramidal",  POISON_RES, 140),
 AMULET("amulet of change",        "square",     0,          125),
-AMULET("amulet versus curses",    "convex",     0,           60),
+AMULET("amulet versus curses",    "convex",     0,           60),/*Needs tile*/
 						/* POLYMORPH */
 AMULET("amulet of unchanging",    "concave",    UNCHANGING,	 45),
 AMULET("amulet of reflection",    "hexagonal",  REFLECTING,  70),
@@ -784,11 +791,11 @@ OBJECT(OBJ("Amulet of Yendor",	/* note: description == name */
 		0, TOOL_CLASS, prob, 0, \
 		wt, cost, sdam, ldam, hitbon, WP_GENERIC, wt, clr )
 /* containers */
-CONTAINER("large box", (char *)0,       1, 0, 0,  30,350,   8, WOOD, HI_WOOD),
-CONTAINER("huge stone crate", (char *)0,1, 0, 0,   0,6000,  8, MINERAL,HI_MINERAL),/*Needs tile*/
+CONTAINER("box", (char *)0,       1, 0, 0,  30,350,   8, WOOD, HI_WOOD),
+CONTAINER("massive stone crate", (char *)0,1, 0, 0,   0,6000,  8, MINERAL,HI_MINERAL),/*Needs tile*/
 CONTAINER("chest", (char *)0,           1, 0, 0,  30,600,  16, WOOD, HI_WOOD),
-CONTAINER("magic chest", "huge chest with 10 keyholes",
-										0, 0, 0,  15,1001,7000, METAL, CLR_BRIGHT_MAGENTA),/*Needs tile*/
+CONTAINER("magic chest", "big chest with 10 keyholes",
+										0, 1, 0,  15,1001,7000, METAL, CLR_BRIGHT_MAGENTA),/*Needs tile*/
 CONTAINER("ice box", (char *)0,         1, 0, 0,   5,250,  42, PLASTIC, CLR_WHITE),
 CONTAINER("sack", "bag",                0, 0, 0,  20, 15,   2, CLOTH, HI_CLOTH),
 CONTAINER("oilskin sack", "bag",        0, 0, 0,  20, 15, 100, CLOTH, HI_CLOTH),
@@ -832,16 +839,16 @@ TOOL("mirror", "looking glass", 0, 0, 0, 0,  60, 13,  10, GLASS, HI_SILVER),
 #endif
 TOOL("crystal ball", "glass orb",
 								0, 0, 1, 1,  15, 50, 200, GLASS, HI_GLASS),
-TOOL("sensor pack", "small rigid box",
+TOOL("sensor pack", "rigid box", /*Needs encyc entry*//*Needs tile*/
 								0, 0, 1, 1,   0, 15,2000, PLASTIC,CLR_WHITE),
-TOOL("hypospray", "hammer-shaped device",
+TOOL("hypospray", "hammer-shaped device", /*Needs encyc entry*//*Needs tile*/
 								0, 0, 1, 0,   0, 15, 500, PLASTIC,CLR_GRAY),
-TOOL("hypospray ampule", "small hard grey bottle",
+TOOL("hypospray ampule", "little hard grey bottle", /*Needs encyc entry*//*Needs tile*/
 								0, 1, 1, 0,   0,  1,  50, PLASTIC,CLR_GRAY),
 TOOL("mask", (char *)0,			1, 0, 0, 0,  10, 10,  80, LEATHER, CLR_WHITE),
-TOOLMASK("R'lyehian faceplate", "ebon pane", POISON_RES,
+TOOLMASK("R'lyehian faceplate", "ebon pane", POISON_RES,/*Needs tile*/
 								0, 0, 1, 0,   0, 15, 200, GLASS, CLR_BLACK),
-TOOL("lenses", (char *)0,		1, 0, 0, 0,   5,  3,  80, GLASS, HI_GLASS),
+TOOL("lenses", (char *)0,		1, 0, 0, 0,   5,  3,  80, GLASS, HI_GLASS), /*Needs encyc entry*/
 TOOL("blindfold", (char *)0,    1, 0, 0, 0,  45,  2,  20, CLOTH, CLR_GRAY),
 TOOL("towel", (char *)0,        1, 0, 0, 0,  45,  2,  50, CLOTH, CLR_MAGENTA),
 #ifdef STEED
@@ -852,15 +859,15 @@ TOOL("leash", (char *)0,        1, 0, 0, 0,  70, 12,  20, LEATHER, HI_LEATHER),
 #endif
 TOOL("stethoscope", (char *)0,  1, 0, 0, 0,  25,  4,  75, IRON, HI_METAL),
 TOOL("tinning kit", (char *)0,  1, 0, 0, 1,  15,100,  30, IRON, HI_METAL),
-TOOL("bullet fabber", "white box with a yellow fiddly bit",
+TOOL("bullet fabber", "white box with a yellow fiddly bit",/*Needs tile*/
 								0, 0, 1, 0,   0,100,  30, PLASTIC, CLR_WHITE),
-TOOL("upgrade kit", (char *)0,  1, 0, 0, 0,  40,100,  30, COPPER, HI_COPPER),
-TOOL("power pack", "small white cube",
+TOOL("upgrade kit", (char *)0,  1, 0, 0, 0,  40,100,  30, COPPER, HI_COPPER),/*Needs encyc entry*//*Needs tile*/
+TOOL("power pack", "little white cube", /*Needs encyc entry*//*Needs tile*/
 								0, 1, 1, 0,   0,  1,  300, PLASTIC, CLR_WHITE),
 TOOL("tin opener", (char *)0,   1, 0, 0, 0,  20,  4,  30, IRON, HI_METAL),
 TOOL("can of grease", (char *)0,1, 0, 0, 1,  15, 15,  20, IRON, HI_METAL),
 TOOL("figurine", (char *)0,     1, 0, 1, 0,  20, 50,  80, MINERAL, HI_MINERAL),
-TOOL("effigy",   (char *)0,     1, 1, 0, 0,  20,  5,  80, LEATHER, HI_LEATHER),
+TOOL("effigy",   (char *)0,     1, 1, 1, 0,  20,  5,  80, LEATHER, HI_LEATHER),
 TOOL("magic marker", (char *)0, 1, 0, 1, 1,  15,  2,  50, PLASTIC, CLR_RED),
 /* traps */
 TOOL("land mine",(char *)0,     1, 0, 0, 0,   0,300, 180, IRON, CLR_RED),
@@ -890,18 +897,18 @@ WEPTOOL("pick-axe", (char *)0,
 /* 
  * Lightsabers get 3x dice when lit 
  */
-WEPTOOL("lightsaber", "silver sword hilt",
+WEPTOOL("lightsaber", "silver sword hilt", /*Needs (better) encyc entry*/
 	0, 1, 1, 0,  0, 12, 500, 8,  8, -3, SLASH, P_SABER, SILVER, HI_SILVER),
-WEPTOOL("beamsword",  "gold sword hilt",
+WEPTOOL("beamsword",  "gold sword hilt", /*Needs encyc entry*/
 	0, 1, 1, 0,  0, 20, 500, 10,10, -3, SLASH, P_BROAD_SWORD, GOLD, HI_GOLD),
-WEPTOOL("double lightsaber",  "platinum grip",
+WEPTOOL("double lightsaber",  "platinum grip", /*Needs encyc entry*//*Needs tile*/
 	0, 1, 1, 1,  0, 24,1000, 10,10, -6, SLASH, P_QUARTERSTAFF, PLATINUM, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
 	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
 /* 3.4.1: unicorn horn left classified as "magic" */
 WEPTOOL("unicorn horn", (char *)0,
 	1, 1, 0, 0,  0,  20, 100, 12, 12, 0, PIERCE, P_UNICORN_HORN, BONE, CLR_WHITE),
-WEPTOOL("spoon", (char *)0,
+WEPTOOL("spoon", (char *)0, /*Needs encyc entry*//*Needs tile*/
 	1, 0, 0, 0,  0,  1,    1,  1,  1, 0, PIERCE,  P_KNIFE, IRON, HI_METAL),
 
 /* two special unique artifact "tools" */
@@ -935,7 +942,7 @@ FOOD("corpse",               0, 1,  0, 0, FLESH,   0, CLR_BROWN),
 FOOD("egg",                 85, 1,  1, 1, FLESH,  80, CLR_WHITE),
 FOOD("meatball",             0, 1,  1, 0, FLESH,   5, CLR_BROWN),
 FOOD("meat stick",           0, 1,  1, 0, FLESH,   5, CLR_BROWN),
-FOOD("huge chunk of meat",   0,20,400, 0, FLESH,2000, CLR_BROWN),
+FOOD("massive chunk of meat",   0,20,400, 0, FLESH,2000, CLR_BROWN),
 /* special case because it's not mergable */
 OBJECT(OBJ("meat ring", (char *)0),
     BITS(1,0,0,0,0,0,0,0,0,0,0,0,FLESH),
@@ -969,7 +976,7 @@ FOOD("pancake",             25, 2,  2, 0, VEGGY, 200, CLR_YELLOW),
 FOOD("lembas wafer",        20, 2,  5, 0, VEGGY, 800, CLR_WHITE),
 FOOD("cram ration",         20, 3, 15, 0, VEGGY, 600, HI_ORGANIC),
 FOOD("food ration",        380, 5, 20, 0, VEGGY, 800, HI_ORGANIC),
-FOOD("protein pill",         0, 1,  1, 0, VEGGY, 800, HI_ORGANIC),
+FOOD("protein pill",         0, 1,  1, 0, VEGGY, 800, HI_ORGANIC), /*Needs encyc entry*//*Needs tile*/
 FOOD("K-ration",             0, 1, 10, 0, VEGGY, 400, HI_ORGANIC),
 FOOD("C-ration",             0, 1, 10, 0, VEGGY, 300, HI_ORGANIC),
 FOOD("tin",                 75, 0, 10, 1, METAL,   0, HI_METAL),
@@ -1067,8 +1074,8 @@ SPELL("cone of cold",    "dog eared",   P_ATTACK_SPELL, 10,  7, 4, 1, RAY,      
 SPELL("sleep",           "mottled",     P_ENCHANTMENT_SPELL, 50,  1, 1, 1, RAY,  HI_PAPER),
 SPELL("finger of death", "stained",     P_ATTACK_SPELL,  5, 10, 7, 1, RAY,       HI_PAPER),
 SPELL("lightning bolt",  "storm-hued",  P_ATTACK_SPELL,  0,  8, 5, 1, RAY,       CLR_BLUE),
-SPELL("poison spray",  "snakeskin",  	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_GREEN),
-SPELL("acid blast",  "acid green",  	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_BRIGHT_GREEN),
+SPELL("poison spray",  "snakeskin",  	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_GREEN),/*Needs tile*/
+SPELL("acid blast",  "acid green",  	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_BRIGHT_GREEN),/*Needs tile*/
 SPELL("light",           "cloth",       P_DIVINATION_SPELL, 45,  1, 1, 1, NODIR,     HI_CLOTH),
 SPELL("detect monsters", "leather",     P_DIVINATION_SPELL, 43,  1, 1, 1, NODIR,     HI_LEATHER),
 SPELL("healing",         "white",       P_HEALING_SPELL, 40,  2, 1, 1, IMMEDIATE, CLR_WHITE),
@@ -1122,8 +1129,8 @@ OBJECT(OBJ("secrets", "ragged leather"), BITS(0,0,1,0,1,0,1,1,0,0,0,P_NONE,PAPER
 #define WAND(name,typ,prob,cost,mgc,dir,metal,color) OBJECT( \
 		OBJ(name,typ), BITS(0,0,1,0,mgc,1,0,0,0,0,dir,P_NONE,metal), 0, \
 		WAND_CLASS, prob, 0, 7, cost, 0, 0, 0, 0, 30, color )
-WAND("light",          "glass",    90, 100, 1, NODIR,     GLASS,    CLR_WHITE),
-WAND("darkness",       "obsidian", 10, 100, 1, NODIR,     GLASS,    CLR_BLACK),
+WAND("light",          "glass",    90, 100, 1, NODIR,     GLASS,    CLR_WHITE),/*Needs tile?*/
+WAND("darkness",       "obsidian", 10, 100, 1, NODIR,     GLASS,    CLR_BLACK),/*Needs tile*/
 WAND("wishing",        "pine",      5, 500, 1, NODIR,     WOOD,     HI_WOOD),
 WAND("secret door detection", "balsa",
 				   50, 150, 1, NODIR,	  WOOD,     HI_WOOD),
@@ -1170,10 +1177,10 @@ WAND((char *)0,        "jeweled",   0, 150, 1, 0,         IRON,     HI_MINERAL),
 	    OBJ(name,desc), \
 	    BITS(kn,1,0,0,mgc,0,0,0,0,HARDGEM(mohs),0,-P_SLING,glass), 0, \
 	    GEM_CLASS, prob, 0, wt, gval, sdam, ldam, hitbon, WP_GENERIC, nutr, color )
-GEM("magicite crystal","brilliant blue",1, 1, 9999, 15, 11, GEMSTONE, CLR_BRIGHT_BLUE),
+GEM("magicite crystal","brilliant blue",1, 1, 9999, 15, 11, GEMSTONE, CLR_BRIGHT_BLUE),/*Needs tile*/
 GEM("dilithium crystal", "white",      2,  1, 4500, 15,  5, GEMSTONE, CLR_WHITE),
 GEM("diamond", "white",                3,  1, 4000, 15, 10, GEMSTONE, CLR_WHITE),
-GEM("star sapphire", "blue",           2,  1, 3750, 15,  9, GEMSTONE, CLR_BLUE),
+GEM("star sapphire", "blue",           2,  1, 3750, 15,  9, GEMSTONE, CLR_BLUE),/*Needs tile*/
 GEM("ruby", "red",                     4,  1, 3500, 15,  9, GEMSTONE, CLR_RED),
 GEM("jacinth", "orange",               3,  1, 3250, 15,  9, GEMSTONE, CLR_ORANGE),
 GEM("sapphire", "blue",                4,  1, 3000, 15,  9, GEMSTONE, CLR_BLUE),
@@ -1191,10 +1198,10 @@ GEM("chrysoberyl", "yellow",           8,  1,  700, 15,  5, GEMSTONE, CLR_YELLOW
 GEM("garnet", "red",                  12,  1,  700, 15,  7, GEMSTONE, CLR_RED),
 GEM("amethyst", "violet",             14,  1,  600, 15,  7, GEMSTONE, CLR_MAGENTA),
 GEM("jasper", "red",                  15,  1,  500, 15,  7, GEMSTONE, CLR_RED),
-GEM("violet fluorite", "violet",       4,  1,  400, 15,  4, GEMSTONE, CLR_MAGENTA),
-GEM("blue fluorite", "blue",           4,  1,  400, 15,  4, GEMSTONE, CLR_BLUE),
-GEM("white fluorite", "white",         4,  1,  400, 15,  4, GEMSTONE, CLR_WHITE),
-GEM("green fluorite", "green",         4,  1,  400, 15,  4, GEMSTONE, CLR_GREEN),
+GEM("violet fluorite", "violet",       4,  1,  400, 15,  4, GEMSTONE, CLR_MAGENTA),/*Needs tile*/
+GEM("blue fluorite", "blue",           4,  1,  400, 15,  4, GEMSTONE, CLR_BLUE),/*Needs tile*/
+GEM("white fluorite", "white",         4,  1,  400, 15,  4, GEMSTONE, CLR_WHITE),/*Needs tile*/
+GEM("green fluorite", "green",         4,  1,  400, 15,  4, GEMSTONE, CLR_GREEN),/*Needs tile*/
 GEM("obsidian", "black",               9,  1,  200, 15,  6, GEMSTONE, CLR_BLACK),
 GEM("agate", "orange",                12,  1,  200, 15,  6, GEMSTONE, CLR_ORANGE),
 GEM("jade", "green",                  10,  1,  300, 15,  6, GEMSTONE, CLR_GREEN),
@@ -1217,9 +1224,9 @@ ROCK("luckstone", "gray",	0, 10,  10, 60, 3, 3, 20, 1, 10, 7, MINERAL, CLR_GRAY)
 ROCK("loadstone", "gray",	0, 10, 500,  1,30,30, -5, 1, 10, 6, MINERAL, CLR_GRAY),
 ROCK("touchstone", "gray",	0,  8,  10, 45, 3, 3,  0, 1, 10, 6, MINERAL, CLR_GRAY),
 ROCK("flint", "gray",		0, 10,  10,  1, 6, 6,  2, 0, 10, 7, MINERAL, CLR_GRAY),
-ROCK("small piece of unrefined mithril", "silvery metal",
-							0,  0,   1, 10000,3,3, 0, 0, 0, 5, MITHRIL, HI_SILVER),
-ROCK("silver slingstone", "silver", 0, 0, 1, 10, 6, 6, 2, 0, 0, 5, SILVER, HI_SILVER),
+ROCK("chunk of unrefined mithril", "silvery metal", 
+							0,  0,   1, 10000,3,3, 0, 0, 0, 5, MITHRIL, HI_SILVER),/*Needs tile*/
+ROCK("silver slingstone", "silver", 0, 0, 1, 10, 6, 6, 2, 0, 0, 5, SILVER, HI_SILVER),/*Needs tile*/
 ROCK("rock", (char *)0,		1,100,  10,  0, 3, 3, 0, 0, 10, 7, MINERAL, CLR_GRAY),
 #undef GEM
 #undef ROCK
@@ -1251,15 +1258,15 @@ OBJECT(OBJ("heavy iron ball", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,
 						/* +d4 when "very heavy" */
 OBJECT(OBJ("iron chain", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
 		CHAIN_CLASS, 1000, 0,  120,  0,  4,  4, 0, 0,  200, HI_METAL),
-OBJECT(OBJ("sheaf of hay", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,0,P_NONE,VEGGY), 0,
+OBJECT(OBJ("sheaf of hay", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,0,P_NONE,VEGGY), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS, 	0, 2, 	20,  0,  0,  0, 0, 0,  100, CLR_YELLOW),
-OBJECT(OBJ("clockwork component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,COPPER), 0,
+OBJECT(OBJ("clockwork component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,COPPER), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   20, HI_COPPER),
-OBJECT(OBJ("subethaic component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,GLASS), 0,
+OBJECT(OBJ("subethaic component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,GLASS), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   20, HI_GLASS),
-OBJECT(OBJ("scrap", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
+OBJECT(OBJ("scrap", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   20, CLR_BROWN),
-OBJECT(OBJ("hellfire component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,METAL), 0,
+OBJECT(OBJ("hellfire component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,METAL), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   20, CLR_ORANGE),
 						/* +1 both l & s */
 
@@ -1269,7 +1276,7 @@ OBJECT(OBJ("blinding venom", "splash of venom"),
 OBJECT(OBJ("acid venom", "splash of venom"),
 		BITS(0,1,0,0,0,0,0,1,0,0,0,P_NONE,LIQUID), 0,
 		VENOM_CLASS,  500, 0,	 1,  0,  6,  6, 0, 0,	 0, CLR_BRIGHT_GREEN),
-OBJECT(OBJ("ball of webbing", (char *)0),
+OBJECT(OBJ("ball of webbing", (char *)0),/*Needs tile*/
 		BITS(1,1,0,0,0,0,0,1,0,0,0,P_NONE,LIQUID), 0,
 		VENOM_CLASS,  0, 0,	 1,  0,  6,  6, 0, 0,	 0, CLR_WHITE),
 //OBJECT(OBJ("shoggoth venom", "splash of venom"),

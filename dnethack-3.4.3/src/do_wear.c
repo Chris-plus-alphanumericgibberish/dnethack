@@ -463,6 +463,8 @@ Gloves_on()
 
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
+	case HIGH_ELVEN_GAUNTLETS:
+	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:
 	case ORIHALCYON_GAUNTLETS:
 		break;
@@ -492,6 +494,8 @@ Gloves_off()
 
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
+	case HIGH_ELVEN_GAUNTLETS:
+	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:
 	case ORIHALCYON_GAUNTLETS:
 	    break;
@@ -546,12 +550,12 @@ Shield_on()
 {
 /*
     switch (uarms->otyp) {
-	case SMALL_SHIELD:
+	case BUCKLER:
 	case ELVEN_SHIELD:
 	case URUK_HAI_SHIELD:
 	case ORCISH_SHIELD:
 	case DWARVISH_ROUNDSHIELD:
-	case LARGE_SHIELD:
+	case KITE_SHIELD:
 	case SHIELD_OF_REFLECTION:
 		break;
 	default: impossible(unknown_type, c_shield, uarms->otyp);
@@ -566,12 +570,12 @@ Shield_off()
     takeoff_mask &= ~W_ARMS;
 /*
     switch (uarms->otyp) {
-	case SMALL_SHIELD:
+	case BUCKLER:
 	case ELVEN_SHIELD:
 	case URUK_HAI_SHIELD:
 	case ORCISH_SHIELD:
 	case DWARVISH_ROUNDSHIELD:
-	case LARGE_SHIELD:
+	case KITE_SHIELD:
 	case SHIELD_OF_REFLECTION:
 		break;
 	default: impossible(unknown_type, c_shield, uarms->otyp);
@@ -1465,93 +1469,107 @@ long *mask;
 boolean noisy;
 {
     int err = 0;
-    const char *which;
 
-    which = is_cloak(otmp) ? c_cloak :
-#ifdef TOURIST
-	    is_shirt(otmp) ? c_shirt :
-#endif
-	    is_suit(otmp) ? c_suit : 0;
-    if (which && cantweararm(youmonst.data) &&
-	    /* same exception for cloaks as used in m_dowear() */
-	    (which != c_cloak || youmonst.data->msize != MZ_SMALL) &&
-	    (racial_exception(&youmonst, otmp) < 1)) {
-	if (noisy) pline_The("%s will not fit on your body.", which);
-	return 0;
-    } else if (otmp->owornmask & W_ARMOR) {
-	if (noisy) already_wearing(c_that_);
-	return 0;
+	if (otmp->owornmask & W_ARMOR) {
+		if (noisy) already_wearing(c_that_);
+		return 0;
     }
 
-    if (welded(uwep) && bimanual(uwep) &&
+    if (welded(uwep) && bimanual(uwep,youracedata) &&
 	    (is_suit(otmp)
-#ifdef TOURIST
 			|| is_shirt(otmp)
-#endif
-	    )) {
-	if (noisy)
-	    You("cannot do that while holding your %s.",
-		is_sword(uwep) ? c_sword : c_weapon);
-	return 0;
+	)) {
+		if (noisy)
+			You("cannot do that while holding your %s.",
+			is_sword(uwep) ? c_sword : c_weapon);
+		return 0;
     }
+	
+	if(is_whirly(youracedata) || noncorporeal(youracedata)){
+		Your("body can't support clothing.");
+	}
 
     if (is_helmet(otmp)) {
-	if (uarmh) {
-	    if (noisy) already_wearing(an(c_helmet));
-	    err++;
-	} else if (Upolyd && has_horns(youmonst.data) && !is_flimsy(otmp)) {
-	    /* (flimsy exception matches polyself handling) */
-	    if (noisy)
-		pline_The("%s won't fit over your horn%s.",
-			  c_helmet, plur(num_horns(youmonst.data)));
-	    err++;
-	} else
-	    *mask = W_ARMH;
+		if (uarmh) {
+			if (noisy) already_wearing(an(c_helmet));
+			err++;
+		} else if (!is_flimsy(otmp)) {
+			/* (flimsy exception matches polyself handling), you can even just set a hat on top of your body (no head requried)*/
+			if(!has_head(youracedata)){
+				if (noisy)
+				You("don't have a head.");
+				err++;
+			} else if(youracedata->msize != otmp->objsize){
+				if (noisy)
+				pline_The("%s is the wrong size for you.", c_helmet);
+				err++;
+			} else if(!helm_match(youracedata,otmp)){
+				if (noisy)
+				pline_The("%s is the wrong shape for your head.", c_helmet);
+				err++;
+			} else if(has_horns(youracedata)){
+				if (noisy)
+				pline_The("%s won't fit over your horn%s.",
+					  c_helmet, plur(num_horns(youracedata)));
+				err++;
+			} else
+				*mask = W_ARMH;
+		} else
+			*mask = W_ARMH;
     } else if (is_shield(otmp)) {
-	if (uarms) {
-	    if (noisy) already_wearing(an(c_shield));
-	    err++;
-	} else if (uwep && bimanual(uwep)) {
-	    if (noisy) 
-		You("cannot wear a shield while wielding a two-handed %s.",
-		    is_sword(uwep) ? c_sword :
-		    (uwep->otyp == BATTLE_AXE) ? c_axe : c_weapon);
-	    err++;
-	} else if (u.twoweap) {
-	    if (noisy)
-		You("cannot wear a shield while wielding two weapons.");
-	    err++;
-	} else
-	    *mask = W_ARMS;
+		if (uarms) {
+			if (noisy) already_wearing(an(c_shield));
+			err++;
+		} else if (uwep && bimanual(uwep,youracedata)) {
+			if (noisy) 
+			You("cannot wear a shield while wielding a two-handed %s.",
+				is_sword(uwep) ? c_sword :
+				(uwep->otyp == BATTLE_AXE) ? c_axe : c_weapon);
+			err++;
+		} else if (u.twoweap) {
+			if (noisy)
+			You("cannot wear a shield while wielding two weapons.");
+			err++;
+		} else
+			*mask = W_ARMS;
     } else if (is_boots(otmp)) {
-	if (uarmf) {
-	    if (noisy) already_wearing(c_boots);
-	    err++;
-	} else if (Upolyd && slithy(youmonst.data)) {
-	    if (noisy) You("have no feet...");	/* not body_part(FOOT) */
-	    err++;
-	} else if (Upolyd && youmonst.data->mlet == S_CENTAUR) {
-	    /* break_armor() pushes boots off for centaurs,
-	       so don't let dowear() put them back on... */
-	    if (noisy) pline("You have too many hooves to wear %s.",
-			     c_boots);	/* makeplural(body_part(FOOT)) yields
-					   "rear hooves" which sounds odd */
-	    err++;
-	} else if (u.utrap && (u.utraptype == TT_BEARTRAP ||
-				u.utraptype == TT_INFLOOR)) {
-	    if (u.utraptype == TT_BEARTRAP) {
-		if (noisy) Your("%s is trapped!", body_part(FOOT));
-	    } else {
-		if (noisy) Your("%s are stuck in the %s!",
-				makeplural(body_part(FOOT)),
-				surface(u.ux, u.uy));
-	    }
-	    err++;
-	} else
-	    *mask = W_ARMF;
+		if (uarmf) {
+			if (noisy) already_wearing(c_boots);
+			err++;
+		} else if (slithy(youracedata)) {
+			if (noisy) You("have no feet...");	/* not body_part(FOOT) */
+			err++;
+		} else if (!humanoid(youracedata)) {
+			if (noisy) pline("You have too many legs to wear %s.",  c_boots);
+			err++;
+		} else if(youracedata->msize != otmp->objsize){
+			if (noisy)
+			pline_The("%s are the wrong size for you.", c_boots);
+			err++;
+		} else if (u.utrap && (u.utraptype == TT_BEARTRAP ||
+					u.utraptype == TT_INFLOOR)) {
+			if (u.utraptype == TT_BEARTRAP) {
+			if (noisy) Your("%s is trapped!", body_part(FOOT));
+			} else {
+			if (noisy) Your("%s are stuck in the %s!",
+					makeplural(body_part(FOOT)),
+					surface(u.ux, u.uy));
+			}
+			err++;
+		} else
+			*mask = W_ARMF;
     } else if (is_gloves(otmp)) {
 		if (uarmg) {
 			if (noisy) already_wearing(c_gloves);
+			err++;
+		} else if(nohands(youracedata)){
+			/*Included for completeness, but having no hands actually prevents you from equiping anything*/
+			if (noisy)
+			You("don't have hands.");
+			err++;
+		} else if(youracedata->msize != otmp->objsize){
+			if (noisy)
+			pline_The("%s are the wrong size for you.", c_gloves);
 			err++;
 		} else if (welded(uwep)) {
 			if (noisy) You("cannot wear gloves over your %s.",
@@ -1575,29 +1593,53 @@ boolean noisy;
 						   (uarm && !uarmc) ? c_armor : cloak_simple_name(uarmc));
 			}
 			err++;
+		} else if(youracedata->msize != otmp->objsize){
+			if (noisy)
+			pline_The("%s is the wrong size for you.", c_shirt);
+			err++;
+		} else if(!shirt_match(youracedata,otmp)){
+			if (noisy)
+			pline_The("%s is the wrong shape for your body.", c_shirt);
+			err++;
 		} else
 			*mask = W_ARMU;
 	} else if (is_cloak(otmp)) {
-	if (uarmc) {
-	    if (noisy) already_wearing(an(cloak_simple_name(uarmc)));
-	    err++;
-	} else
-	    *mask = W_ARMC;
+		if (uarmc) {
+			if (noisy) already_wearing(an(cloak_simple_name(uarmc)));
+			err++;
+		} else if(abs(otmp->objsize - youracedata->msize) > 1){
+			if (noisy)
+			pline_The("%s is the wrong size for you.", cloak_simple_name(uarmc));
+			err++;
+		} else if(!shirt_match(youracedata,otmp)){
+			if (noisy)
+			pline_The("%s is the wrong shape for your body.", cloak_simple_name(uarmc));
+			err++;
+		} else
+			*mask = W_ARMC;
     } else if (is_suit(otmp)) {
-	if (uarmc) {
-	    if (noisy) You("cannot wear armor over a %s.", cloak_simple_name(uarmc));
-	    err++;
-	} else if (uarm) {
-	    if (noisy) already_wearing("some armor");
-	    err++;
-	} else
-	    *mask = W_ARM;
+		if (uarmc) {
+			if (noisy) You("cannot wear armor over a %s.", cloak_simple_name(uarmc));
+			err++;
+		} else if (uarm) {
+			if (noisy) already_wearing("some armor");
+			err++;
+		} else if(!Is_dragon_scales(otmp) && (youracedata->msize != otmp->objsize) && !(is_elven_armor(otmp) && abs(otmp->objsize - youracedata->msize) <= 1)){
+			if (noisy)
+			pline_The("%s is the wrong size for you.", c_armor);
+			err++;
+		} else if(!Is_dragon_scales(otmp) && !arm_match(youracedata,otmp)){
+			if (noisy)
+			pline_The("%s is the wrong shape for your body.", c_armor);
+			err++;
+		} else
+			*mask = W_ARM;
     } else {
-	/* getobj can't do this after setting its allow_all flag; that
-	   happens if you have armor for slots that are covered up or
-	   extra armor for slots that are filled */
-	if (noisy) silly_thing("wear", otmp);
-	err++;
+		/* getobj can't do this after setting its allow_all flag; that
+		   happens if you have armor for slots that are covered up or
+		   extra armor for slots that are filled */
+		if (noisy) silly_thing("wear", otmp);
+		err++;
     }
 /* Unnecessary since now only weapons and special items like pick-axes get
  * welded to your hand, not armor
@@ -1618,9 +1660,8 @@ dowear()
 	int delay;
 	long mask = 0;
 
-	/* cantweararm checks for suits of armor */
-	/* verysmall or nohands checks for shields, gloves, etc... */
-	if ((verysmall(youmonst.data) || nohands(youmonst.data))) {
+	/* nohands checks for shields, gloves, etc... */
+	if (nohands(youracedata)) {
 		pline("Don't even bother.");
 		return(0);
 	}
@@ -1746,7 +1787,7 @@ doputon()
 		    You("cannot remove your gloves to put on the ring.");
 			return(0);
 		}
-		if (welded(uwep) && bimanual(uwep)) {
+		if (welded(uwep) && bimanual(uwep,youracedata)) {
 			/* welded will set bknown */
 	    You("cannot free your weapon hands to put on the ring.");
 			return(0);
@@ -1947,7 +1988,10 @@ find_ac()
 	}
 	if(uarmh) uac -= ARM_BONUS(uarmh);
 	if(uarmf) uac -= ARM_BONUS(uarmf);
-	if(uarms) uac -= ARM_BONUS(uarms);
+	if(uarms){
+		uac -= ARM_BONUS(uarms);
+		uac -= (uarms->objsize - youracedata->msize);
+	}
 	if(uarmg) uac -= ARM_BONUS(uarmg);
 	if(uarmu) uac -= ARM_BONUS(uarmu);
 	
@@ -2088,7 +2132,7 @@ glibr()
 	const char *otherwep = 0;
 
 	leftfall = (uleft && !uleft->cursed &&
-		    (!uwep || !welded(uwep) || !bimanual(uwep)));
+		    (!uwep || !welded(uwep) || !bimanual(uwep,youracedata)));
 	rightfall = (uright && !uright->cursed && (!welded(uwep)));
 	if (!uarmg && (leftfall || rightfall) && !nolimbs(youmonst.data)) {
 		/* changed so cursed rings don't fall off, GAN 10/30/86 */
@@ -2198,7 +2242,7 @@ int otyp;
 	if (nolimbs(youmonst.data) &&
 		uamul && uamul->otyp == AMULET_OF_UNCHANGING && uamul->cursed)
 	    return uamul;
-	if (welded(uwep) && (ring == uright || bimanual(uwep))) return uwep;
+	if (welded(uwep) && (ring == uright || bimanual(uwep,youracedata))) return uwep;
 	if (uarmg && uarmg->cursed) return uarmg;
 	if (ring->cursed) return ring;
     }
@@ -2233,7 +2277,7 @@ register struct obj *otmp;
 		return 0;
 	    }
 	    why = 0;	/* the item which prevents ring removal */
-	    if (welded(uwep) && (otmp == uright || bimanual(uwep))) {
+	    if (welded(uwep) && (otmp == uright || bimanual(uwep,youracedata))) {
 		Sprintf(buf, "free a weapon %s", body_part(HAND));
 		why = uwep;
 	    } else if (uarmg && uarmg->cursed) {
@@ -2286,7 +2330,7 @@ register struct obj *otmp;
 		Sprintf(buf, "remove your %s", c_suit);
 		why = uarm;
 #endif
-	    } else if (welded(uwep) && bimanual(uwep)) {
+	    } else if (welded(uwep) && bimanual(uwep,youracedata)) {
 		Sprintf(buf, "release your %s",
 			is_sword(uwep) ? c_sword :
 			(uwep->otyp == BATTLE_AXE) ? c_axe : c_weapon);

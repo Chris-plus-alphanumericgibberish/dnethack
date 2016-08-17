@@ -117,8 +117,11 @@ struct obj {
 	/* 0 free bits */
 	Bitfield(fromsink,1);
 	Bitfield(yours,1);	/* obj is yours (eg. thrown by you) */
-	/* 30 free bits in this field, I think -CM */
+	Bitfield(masters,1);	/* obj is given by a monster's master, it will not drop it */
+	Bitfield(objsize,3);	/* 0-7 */
+	/* 26 free bits in this field, I think -CM */
 	
+	long bodytypeflag;	/* MB tag(s) this item goes with. */
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
 					/* Class of mask */
 #define leashmon	corpsenm	/* gets m_id of attached pet */
@@ -160,6 +163,7 @@ struct obj {
 			/* 	Records theft type for stealing artifacts (reaver (scimitar) and averice (shortsword) */
 			/* 	Records remaining ammo for blasters and force pikes */
 			/* 	Records the hilt-type for lightsabers */
+			/* 	Records the ema of damage taken for gloves of the berserker */
 			
 #define ECLIPSE_MOON	0
 #define CRESCENT_MOON	1
@@ -243,10 +247,10 @@ struct obj {
 #define is_axe(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 objects[otmp->otyp].oc_skill == P_AXE)
-#define is_pick(otmp)	((otmp->oclass == WEAPON_CLASS || \
+#define is_pick(otmp)	(((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
-			 (objects[otmp->otyp].oc_skill == P_PICK_AXE || \
-			  arti_digs(otmp)))
+			 (objects[otmp->otyp].oc_skill == P_PICK_AXE)) || \
+			  arti_digs(otmp))
 #define is_sword(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= P_SHORT_SWORD && \
 			 objects[otmp->otyp].oc_skill <= P_SABER)
@@ -256,6 +260,7 @@ struct obj {
 			  objects[otmp->otyp].oc_skill == P_LANCE || \
 			  otmp->otyp==AKLYS || \
 			  otmp->oartifact==ART_SOL_VALTIVA || \
+			  otmp->oartifact==ART_SHADOWLOCK || \
 			  (otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE ) \
 			 ))
 #define is_spear(otmp)	(otmp->oclass == WEAPON_CLASS && \
@@ -274,7 +279,8 @@ struct obj {
 			 	 objects[(otmp)->otyp].w_ammotyp == WP_GRENADE)
 #define ammo_and_launcher(otmp,ltmp) \
 			 (is_ammo(otmp) && (ltmp) && (\
-			  ((objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
+			  ((otmp->objsize == (ltmp)->objsize || objects[(ltmp)->otyp].oc_skill == P_SLING) &&\
+			   (objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
 			   (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill)) ||\
 			 (ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE) ||\
 			 ltmp->otyp == BFG))
@@ -288,9 +294,13 @@ struct obj {
 			 objects[(o)->otyp].oc_skill != P_NONE)
 #define is_instrument(o)	((o)->otyp >= WOODEN_FLUTE && \
 			 (o)->otyp <= DRUM_OF_EARTHQUAKE)
-#define bimanual(otmp)	((otmp->oclass == WEAPON_CLASS || \
+#define bimanual(otmp,ptr)	(otmp && (otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
-			 objects[otmp->otyp].oc_bimanual)
+			 ptr != &mons[PM_ARCHON] && \
+			 (objects[otmp->otyp].oc_bimanual ? \
+				((ptr)->msize - otmp->objsize > 2):\
+				((ptr)->msize - otmp->objsize < -1))\
+			)
 #define is_lightsaber(otmp) ((otmp)->otyp == LIGHTSABER || \
 							 (otmp)->otyp == BEAMSWORD || \
 							 (otmp)->otyp == DOUBLE_LIGHTSABER)
@@ -352,9 +362,11 @@ struct obj {
 #define is_medium_armor(otmp)	((otmp)->otyp == BRONZE_PLATE_MAIL || (otmp)->otyp == DROVEN_CHAIN_MAIL || \
 			(otmp)->otyp == CHAIN_MAIL || (otmp)->otyp == SCALE_MAIL || (otmp)->otyp == STUDDED_LEATHER_ARMOR || \
 			(otmp)->otyp == LEATHER_ARMOR || (otmp)->otyp == BANDED_MAIL || (otmp)->otyp == NOBLE_S_DRESS || \
-			(otmp)->otyp == PLASTEEL_ARMOR)
+			(otmp)->otyp == PLASTEEL_ARMOR || (otmp)->otyp == HIGH_ELVEN_PLATE)
 #define is_elven_armor(otmp)	((otmp)->otyp == ELVEN_HELM\
 				|| (otmp)->otyp == HIGH_ELVEN_HELM\
+				|| (otmp)->otyp == HIGH_ELVEN_GAUNTLETS\
+				|| (otmp)->otyp == HIGH_ELVEN_PLATE\
 				|| (otmp)->otyp == ELVEN_MITHRIL_COAT\
 				|| (otmp)->otyp == ELVEN_CLOAK\
 				|| (otmp)->otyp == ELVEN_SHIELD\
@@ -408,8 +420,8 @@ struct obj {
 #define mcarried(o)	((o)->where == OBJ_MINVENT)
 #define Has_contents(o) (/* (Is_container(o) || (o)->otyp == STATUE) && */ \
 			 (o)->cobj != (struct obj *)0)
-#define Is_container(o) ((o)->otyp >= LARGE_BOX && (o)->otyp <= BAG_OF_TRICKS/*DISTRESSED_PRINCESS*/)
-#define Is_box(otmp)	(otmp->otyp == LARGE_BOX || otmp->otyp == CHEST || otmp->otyp == MAGIC_CHEST)
+#define Is_container(o) ((o)->otyp >= BOX && (o)->otyp <= BAG_OF_TRICKS/*DISTRESSED_PRINCESS*/)
+#define Is_box(otmp)	(otmp->otyp == BOX || otmp->otyp == CHEST || otmp->otyp == MAGIC_CHEST)
 #define Is_mbag(otmp)	(otmp->otyp == BAG_OF_HOLDING || \
 			 otmp->otyp == BAG_OF_TRICKS)
 
@@ -513,7 +525,7 @@ struct obj {
 							 objects[otmp->otyp].oc_material == IRON)
 
 /* misc */
-#define is_boulder(otmp)		((otmp)->otyp == BOULDER || (otmp)->otyp == HUGE_STONE_CRATE || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
+#define is_boulder(otmp)		((otmp)->otyp == BOULDER || (otmp)->otyp == MASSIVE_STONE_CRATE || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
 
 /* helpers, simple enough to be macros */
 #define is_plural(o)	((o)->quan > 1 || \

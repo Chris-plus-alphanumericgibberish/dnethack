@@ -33,14 +33,23 @@ init_uasmon()
 	/* Fix up the flags */
 	/* Default flags assume human,  so replace with your race's flags */
 
-	upermonst.mflags1 &= ~(mons[PM_HUMAN].mflags1);
-	upermonst.mflags1 |= (mons[urace.malenum].mflags1);
+	upermonst.mflagsm &= ~(mons[PM_HUMAN].mflagsm);
+	upermonst.mflagsm |= (mons[urace.malenum].mflagsm);
 
-	upermonst.mflags2 &= ~(mons[PM_HUMAN].mflags2);
-	upermonst.mflags2 |= (mons[urace.malenum].mflags2);
+	upermonst.mflagst &= ~(mons[PM_HUMAN].mflagst);
+	upermonst.mflagst |= (mons[urace.malenum].mflagst);
 
-	upermonst.mflags3 &= ~(mons[PM_HUMAN].mflags3);
-	upermonst.mflags3 |= (mons[urace.malenum].mflags3);
+	upermonst.mflagsb &= ~(mons[PM_HUMAN].mflagsb);
+	upermonst.mflagsb |= (mons[urace.malenum].mflagsb);
+	
+	upermonst.mflagsg &= ~(mons[PM_HUMAN].mflagsg);
+	upermonst.mflagsg |= (mons[urace.malenum].mflagsg);
+
+	upermonst.mflagsa &= ~(mons[PM_HUMAN].mflagsa);
+	upermonst.mflagsa |= (mons[urace.malenum].mflagsa);
+
+	upermonst.mflagsv &= ~(mons[PM_HUMAN].mflagsv);
+	upermonst.mflagsv |= (mons[urace.malenum].mflagsv);
 	
 	/* Fix up the attacks */
 	/* crude workaround, needs better general solution */
@@ -673,105 +682,101 @@ break_armor()
 {
     register struct obj *otmp;
 
-    if (breakarm(youmonst.data)) {
 	if ((otmp = uarm) != 0) {
-		if (donning(otmp)) cancel_don();
-		You("break out of your armor!");
-		exercise(A_STR, FALSE);
-		(void) Armor_gone();
-		useup(otmp);
+		if((otmp->objsize != youracedata->msize && !(is_elven_armor(otmp) && abs(otmp->objsize - youracedata->msize) <= 1))
+				|| !arm_match(youracedata,otmp) || is_whirly(youracedata) || noncorporeal(youracedata)
+		){
+			if (donning(otmp)) cancel_don();
+			if(otmp->oartifact || otmp->objsize > youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)){
+				Your("armor falls around you!");
+				(void) Armor_gone();
+				dropx(otmp);
+			} else {
+				You("break out of your armor!");
+				exercise(A_STR, FALSE);
+				(void) Armor_gone();
+				useup(otmp);
+			}
+		}
 	}
 	if ((otmp = uarmc) != 0) {
-	    if(otmp->oartifact) {
-		Your("%s falls off!", cloak_simple_name(otmp));
-		(void) Cloak_off();
-		dropx(otmp);
-	    } else {
-		Your("%s tears apart!", cloak_simple_name(otmp));
-		(void) Cloak_off();
-		useup(otmp);
-	    }
+		if(abs(otmp->objsize - youracedata->msize) > 1
+				|| !shirt_match(youracedata,otmp) || is_whirly(youracedata) || noncorporeal(youracedata)
+		){
+			if (donning(otmp)) cancel_don();
+			if(otmp->oartifact || otmp->objsize > youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)) {
+				Your("%s falls off!", cloak_simple_name(otmp));
+				(void) Cloak_off();
+				dropx(otmp);
+			} else {
+				Your("%s tears apart!", cloak_simple_name(otmp));
+				(void) Cloak_off();
+				useup(otmp);
+			}
+		}
 	}
-#ifdef TOURIST
 	if (uarmu) {
-		Your("shirt rips to shreds!");
-		useup(uarmu);
-	}
-#endif
-    } else if (sliparm(youmonst.data)) {
-	if (((otmp = uarm) != 0) && (racial_exception(&youmonst, otmp) < 1)) {
-		if (donning(otmp)) cancel_don();
-		Your("armor falls around you!");
-		(void) Armor_gone();
-		dropx(otmp);
-	}
-	if ((otmp = uarmc) != 0) {
-		if (is_whirly(youmonst.data))
-			Your("%s falls, unsupported!", cloak_simple_name(otmp));
-		else You("shrink out of your %s!", cloak_simple_name(otmp));
-		(void) Cloak_off();
-		dropx(otmp);
-	}
-#ifdef TOURIST
-	if ((otmp = uarmu) != 0) {
-		if (is_whirly(youmonst.data))
-			You("seep right through your shirt!");
-		else You("become much too small for your shirt!");
-		setworn((struct obj *)0, otmp->owornmask & W_ARMU);
-		dropx(otmp);
-	}
-#endif
+		if(otmp->objsize != youracedata->msize
+				|| !shirt_match(youracedata,otmp) || is_whirly(youracedata) || noncorporeal(youracedata)
+		){
+			if (donning(otmp)) cancel_don();
+			if(otmp->oartifact || otmp->objsize > youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)) {
+				Your("shirt falls off!");
+				(void) Shirt_off();
+		// setworn((struct obj *)0, otmp->owornmask & W_ARMU);
+				dropx(otmp);
+			} else {
+				Your("shirt rips to shreds!");
+				(void) Shirt_off();
+				useup(uarmu);
+			}
+		}
     }
-    if (has_horns(youmonst.data)) {
-	if ((otmp = uarmh) != 0) {
-	    if (is_flimsy(otmp) && !donning(otmp)) {
-		char hornbuf[BUFSZ], yourbuf[BUFSZ];
-
-		/* Future possiblities: This could damage/destroy helmet */
-		Sprintf(hornbuf, "horn%s", plur(num_horns(youmonst.data)));
-		Your("%s %s through %s %s.", hornbuf, vtense(hornbuf, "pierce"),
-		     shk_your(yourbuf, otmp), xname(otmp));
-	    } else {
-		if (donning(otmp)) cancel_don();
-		Your("helmet falls to the %s!", surface(u.ux, u.uy));
-		(void) Helmet_off();
-		dropx(otmp);
-	    }
-	}
+	if ((otmp = uarmh) != 0){
+		if((!is_flimsy(otmp) && (otmp->objsize != youracedata->msize || has_horns(youracedata) || !has_head(youracedata) || !helm_match(youracedata,otmp)))
+			|| is_whirly(youracedata) || noncorporeal(youracedata)
+		) {
+			if (donning(otmp)) cancel_don();
+			Your("helmet falls to the %s!", surface(u.ux, u.uy));
+			(void) Helmet_off();
+			dropx(otmp);
+	    } else if (is_flimsy(otmp) && !donning(otmp) && has_horns(youracedata)) {
+			char hornbuf[BUFSZ], yourbuf[BUFSZ];
+			/* Future possiblities: This could damage/destroy helmet */
+			Sprintf(hornbuf, "horn%s", plur(num_horns(youmonst.data)));
+			Your("%s %s through %s %s.", hornbuf, vtense(hornbuf, "pierce"),
+				 shk_your(yourbuf, otmp), xname(otmp));
+		}
     }
-    if (nohands(youmonst.data) || verysmall(youmonst.data)) {
 	if ((otmp = uarmg) != 0) {
-	    if (donning(otmp)) cancel_don();
-	    /* Drop weapon along with gloves */
-	    You("drop your gloves%s!", uwep ? " and weapon" : "");
-	    drop_weapon(0);
-	    (void) Gloves_off();
-	    dropx(otmp);
+		if(nohands(youracedata) || otmp->objsize != youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)){
+			if (donning(otmp)) cancel_don();
+			/* Drop weapon along with gloves */
+			You("drop your gloves%s!", uwep ? " and weapon" : "");
+			drop_weapon(0);
+			(void) Gloves_off();
+			dropx(otmp);
+		}
 	}
 	if ((otmp = uarms) != 0) {
-	    You("can no longer hold your shield!");
-	    (void) Shield_off();
-	    dropx(otmp);
+		if(nohands(youracedata) || bimanual(uwep,youracedata) || is_whirly(youracedata) || noncorporeal(youracedata)){
+			if (donning(otmp)) cancel_don();
+			You("can no longer hold your shield!");
+			(void) Shield_off();
+			dropx(otmp);
+		}
 	}
-	if ((otmp = uarmh) != 0) {
-	    if (donning(otmp)) cancel_don();
-	    Your("helmet falls to the %s!", surface(u.ux, u.uy));
-	    (void) Helmet_off();
-	    dropx(otmp);
-	}
-    }
-    if (nohands(youmonst.data) || verysmall(youmonst.data) ||
-		slithy(youmonst.data) || youmonst.data->mlet == S_CENTAUR) {
 	if ((otmp = uarmf) != 0) {
-	    if (donning(otmp)) cancel_don();
-	    if (is_whirly(youmonst.data))
-		Your("boots fall away!");
-	    else Your("boots %s off your feet!",
-			verysmall(youmonst.data) ? "slide" : "are pushed");
-	    (void) Boots_off();
-	    dropx(otmp);
+		if(slithy(youracedata) || !humanoid(youracedata) || youracedata->msize != otmp->objsize || is_whirly(youracedata) || noncorporeal(youracedata)){
+			if (donning(otmp)) cancel_don();
+			if (is_whirly(youracedata))
+				Your("boots fall away!");
+			else Your("boots %s off your feet!",
+				youracedata->msize < otmp->objsize ? "slide" : "are pushed");
+			(void) Boots_off();
+			dropx(otmp);
+		}
 	}
-    }
 }
 
 STATIC_OVL void

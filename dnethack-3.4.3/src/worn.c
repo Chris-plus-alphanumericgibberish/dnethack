@@ -497,8 +497,10 @@ struct monst *mon;
 		if(armac < 0) armac *= -1;
 	}
 	else for (obj = mon->minvent; obj; obj = obj->nobj) {
-	    if (obj->owornmask & mwflags)
-		armac += ARM_BONUS(obj);
+	    if (obj->owornmask & mwflags){
+			armac += ARM_BONUS(obj);
+			if(is_shield(obj)) armac += max(0, obj->objsize - mon->data->msize);
+		}
 	}
 	if(armac > 11) armac = rnd(armac-10) + 10; /* high armor ac values act like player ac values */
 
@@ -579,35 +581,28 @@ boolean creation;
 	/* Note the restrictions here are the same as in dowear in do_wear.c
 	 * except for the additional restriction on intelligence.  (Players
 	 * are always intelligent, even if polymorphed).
+	 *
+	 * Give animals and mindless creatures a chance to wear their initial
+	 * equipment.
 	 */
-	if (verysmall(mon->data) || nohands(mon->data) || is_animal(mon->data))
-		return;
-	/* give mummies a chance to wear their wrappings
-	 * and let skeletons wear their initial armor */
-	if (mindless(mon->data) && (!creation ||
-	    (mon->data->mlet != S_MUMMY && mon->data != &mons[PM_SKELETON])))
+	if ((is_animal(mon->data) || mindless(mon->data)) && !creation)
 		return;
 
 	m_dowear_type(mon, W_AMUL, creation, FALSE);
 #ifdef TOURIST
 	/* can't put on shirt if already wearing suit */
-	if (!cantweararm(mon->data) || (mon->misc_worn_check & W_ARM))
+	if ((mon->misc_worn_check & W_ARM))
 	    m_dowear_type(mon, W_ARMU, creation, FALSE);
 #endif
 	/* treating small as a special case allows
 	   hobbits, gnomes, and kobolds to wear cloaks */
-	if (!cantweararm(mon->data) || mon->data->msize == MZ_SMALL)
-	    m_dowear_type(mon, W_ARMC, creation, FALSE);
+	m_dowear_type(mon, W_ARMC, creation, FALSE);
 	m_dowear_type(mon, W_ARMH, creation, FALSE);
-	if (!MON_WEP(mon) || !bimanual(MON_WEP(mon)))
+	if (!MON_WEP(mon) || !bimanual(MON_WEP(mon),mon->data))
 	    m_dowear_type(mon, W_ARMS, creation, FALSE);
 	m_dowear_type(mon, W_ARMG, creation, FALSE);
-	if (!slithy(mon->data) && mon->data->mlet != S_CENTAUR)
-	    m_dowear_type(mon, W_ARMF, creation, FALSE);
-	if (!cantweararm(mon->data))
-	    m_dowear_type(mon, W_ARM, creation, FALSE);
-	else
-	    m_dowear_type(mon, W_ARM, creation, RACE_EXCEPTION);
+	m_dowear_type(mon, W_ARMF, creation, FALSE);
+	m_dowear_type(mon, W_ARM, creation, FALSE);
 }
 
 STATIC_OVL void
@@ -623,6 +618,8 @@ boolean racialexception;
 	char nambuf[BUFSZ];
 
 	if (mon->mfrozen) return; /* probably putting previous item on */
+	
+	if(is_whirly(mon->data) || noncorporeal(mon->data)) return;
 
 	/* Get a copy of monster's name before altering its visibility */
 	Strcpy(nambuf, See_invisible ? Monnam(mon) : mon_nam(mon));
@@ -636,36 +633,36 @@ boolean racialexception;
 	    switch(flag) {
 		case W_AMUL:
 		    if (obj->oclass != AMULET_CLASS ||
+				!can_wear_amulet(mon->data) || 
 			    (obj->otyp != AMULET_OF_LIFE_SAVING &&
 				obj->otyp != AMULET_OF_REFLECTION))
 			continue;
 		    best = obj;
 		    goto outer_break; /* no such thing as better amulets */
-#ifdef TOURIST
 		case W_ARMU:
-		    if (!is_shirt(obj)) continue;
+		    if (!is_shirt(obj) || obj->objsize != mon->data->msize || !shirt_match(mon->data,obj)) continue;
 		    break;
-#endif
 		case W_ARMC:
-		    if (!is_cloak(obj)) continue;
+		    if (!is_cloak(obj) || (abs(obj->objsize - mon->data->msize) > 1) || !shirt_match(mon->data,obj)) continue;
 		    break;
 		case W_ARMH:
-		    if (!is_helmet(obj)) continue;
+		    if (!is_helmet(obj) || ((!helm_match(mon->data,obj) || !has_head(mon->data) || obj->objsize != mon->data->msize) && !is_flimsy(obj))) continue;
 		    /* (flimsy exception matches polyself handling) */
 		    if (has_horns(mon->data) && !is_flimsy(obj)) continue;
 		    break;
 		case W_ARMS:
-		    if (!is_shield(obj)) continue;
+		    if (cantwield(mon->data) || !is_shield(obj)) continue;
 		    break;
 		case W_ARMG:
-		    if (!is_gloves(obj)) continue;
+		    if (!is_gloves(obj) || obj->objsize != mon->data->msize || !can_wear_gloves(mon->data)) continue;
 		    break;
 		case W_ARMF:
-		    if (!is_boots(obj)) continue;
+		    if (!is_boots(obj) || obj->objsize != mon->data->msize || !can_wear_boots(mon->data)) continue;
 		    break;
 		case W_ARM:
-		    if (!is_suit(obj)) continue;
-		    if (racialexception && (racial_exception(mon, obj) < 1)) continue;
+		    if (!is_suit(obj) || (!Is_dragon_scales(obj) && (!arm_match(mon->data, obj) || (obj->objsize != mon->data->msize &&
+				!(is_elven_armor(obj) && abs(obj->objsize - mon->data->msize) <= 1))))
+			) continue;
 		    break;
 	    }
 	    if (obj->owornmask) continue;
@@ -821,127 +818,116 @@ boolean polyspot;
 	const char *pronoun = mhim(mon),
 			*ppronoun = mhis(mon);
 
-	if (breakarm(mdat)) {
-	    if ((otmp = which_armor(mon, W_ARM)) != 0) {
+	if ((otmp = which_armor(mon, W_ARM)) != 0) {
 		if ((Is_dragon_scales(otmp) &&
 			mdat == Dragon_scales_to_pm(otmp)) ||
-		    (Is_dragon_mail(otmp) && mdat == Dragon_mail_to_pm(otmp)))
-		    ;	/* no message here;
+			(Is_dragon_mail(otmp) && mdat == Dragon_mail_to_pm(otmp)))
+			m_useup(mon, otmp);	/* no message here;
 			   "the dragon merges with his scaly armor" is odd
 			   and the monster's previous form is already gone */
-		else if (vis)
-		    pline("%s breaks out of %s armor!", Monnam(mon), ppronoun);
-		else
-		    You_hear("a cracking sound.");
-		m_useup(mon, otmp);
-	    }
-	    if ((otmp = which_armor(mon, W_ARMC)) != 0) {
-		if (otmp->oartifact) {
-		    if (vis)
-			pline("%s %s falls off!", s_suffix(Monnam(mon)),
-				cloak_simple_name(otmp));
-		    if (polyspot) bypass_obj(otmp);
-		    m_lose_armor(mon, otmp);
-		} else {
-		    if (vis)
-			pline("%s %s tears apart!", s_suffix(Monnam(mon)),
-				cloak_simple_name(otmp));
-		    else
-			You_hear("a ripping sound.");
-		    m_useup(mon, otmp);
+		else if((otmp->objsize != mon->data->msize && !(is_elven_armor(otmp) && abs(otmp->objsize - mon->data->msize) <= 1))
+				|| !arm_match(mon->data,otmp) || is_whirly(mon->data) || noncorporeal(mon->data)
+		){
+			if (otmp->oartifact || otmp->objsize > mon->data->msize || is_whirly(mon->data) || noncorporeal(mon->data)) {
+				if (vis)
+					pline("%s armor falls around %s!",
+						s_suffix(Monnam(mon)), pronoun);
+				else
+					You_hear("a thud.");
+				if (polyspot) bypass_obj(otmp);
+				m_lose_armor(mon, otmp);
+			} else if (vis){
+				pline("%s breaks out of %s armor!", Monnam(mon), ppronoun);
+				m_useup(mon, otmp);
+			} else {
+				You_hear("a cracking sound.");
+				m_useup(mon, otmp);
+			}
 		}
-	    }
-#ifdef TOURIST
-	    if ((otmp = which_armor(mon, W_ARMU)) != 0) {
-		if (vis)
-		    pline("%s shirt rips to shreds!", s_suffix(Monnam(mon)));
-		else
-		    You_hear("a ripping sound.");
-		m_useup(mon, otmp);
-	    }
-#endif
-	} else if (sliparm(mdat)) {
-	    if ((otmp = which_armor(mon, W_ARM)) != 0) {
-		if (vis)
-		    pline("%s armor falls around %s!",
-				 s_suffix(Monnam(mon)), pronoun);
-		else
-		    You_hear("a thud.");
-		if (polyspot) bypass_obj(otmp);
-		m_lose_armor(mon, otmp);
-	    }
-	    if ((otmp = which_armor(mon, W_ARMC)) != 0) {
-		if (vis) {
-		    if (is_whirly(mon->data))
-			pline("%s %s falls, unsupported!",
-				     s_suffix(Monnam(mon)), cloak_simple_name(otmp));
-		    else
-			pline("%s shrinks out of %s %s!", Monnam(mon),
-						ppronoun, cloak_simple_name(otmp));
-		}
-		if (polyspot) bypass_obj(otmp);
-		m_lose_armor(mon, otmp);
-	    }
-#ifdef TOURIST
-	    if ((otmp = which_armor(mon, W_ARMU)) != 0) {
-		if (vis) {
-		    if (sliparm(mon->data))
-			pline("%s seeps right through %s shirt!",
-					Monnam(mon), ppronoun);
-		    else
-			pline("%s becomes much too small for %s shirt!",
-					Monnam(mon), ppronoun);
-		}
-		if (polyspot) bypass_obj(otmp);
-		m_lose_armor(mon, otmp);
-	    }
-#endif
 	}
-	if (handless_or_tiny) {
-	    /* [caller needs to handle weapon checks] */
-	    if ((otmp = which_armor(mon, W_ARMG)) != 0) {
-		if (vis)
-		    pline("%s drops %s gloves%s!", Monnam(mon), ppronoun,
-					MON_WEP(mon) ? " and weapon" : "");
-		if (polyspot) bypass_obj(otmp);
-		m_lose_armor(mon, otmp);
-	    }
-	    if ((otmp = which_armor(mon, W_ARMS)) != 0) {
-		if (vis)
-		    pline("%s can no longer hold %s shield!", Monnam(mon),
-								ppronoun);
-		else
-		    You_hear("a clank.");
-		if (polyspot) bypass_obj(otmp);
-		m_lose_armor(mon, otmp);
-	    }
-	}
-	if (handless_or_tiny || has_horns(mdat)) {
-	    if ((otmp = which_armor(mon, W_ARMH)) != 0 &&
-		    /* flimsy test for horns matches polyself handling */
-		    (handless_or_tiny || !is_flimsy(otmp))) {
-		if (vis)
-		    pline("%s helmet falls to the %s!",
-			  s_suffix(Monnam(mon)), surface(mon->mx, mon->my));
-		else
-		    You_hear("a clank.");
-		if (polyspot) bypass_obj(otmp);
-		m_lose_armor(mon, otmp);
-	    }
-	}
-	if (handless_or_tiny || slithy(mdat) || mdat->mlet == S_CENTAUR) {
-	    if ((otmp = which_armor(mon, W_ARMF)) != 0) {
-		if (vis) {
-		    if (is_whirly(mon->data))
-			pline("%s boots fall away!",
-				       s_suffix(Monnam(mon)));
-		    else pline("%s boots %s off %s feet!",
-			s_suffix(Monnam(mon)),
-			verysmall(mdat) ? "slide" : "are pushed", ppronoun);
+	if ((otmp = which_armor(mon, W_ARMC)) != 0) {
+		if(abs(otmp->objsize - mon->data->msize) > 1 || !shirt_match(mon->data,otmp) || is_whirly(mon->data) || noncorporeal(mon->data)){
+			if (otmp->oartifact || otmp->objsize > mon->data->msize || is_whirly(mon->data) || noncorporeal(mon->data)) {
+				if (vis)
+				pline("%s %s falls off!", s_suffix(Monnam(mon)),
+					cloak_simple_name(otmp));
+				if (polyspot) bypass_obj(otmp);
+				m_lose_armor(mon, otmp);
+			} else {
+				if (vis)
+				pline("%s %s tears apart!", s_suffix(Monnam(mon)),
+					cloak_simple_name(otmp));
+				else
+				You_hear("a ripping sound.");
+				m_useup(mon, otmp);
+			}
 		}
-		if (polyspot) bypass_obj(otmp);
-		m_lose_armor(mon, otmp);
-	    }
+	}
+	if ((otmp = which_armor(mon, W_ARMU)) != 0) {
+		if(otmp->objsize != mon->data->msize || !shirt_match(mon->data,otmp) || is_whirly(mon->data) || noncorporeal(mon->data)){
+			if (otmp->oartifact || otmp->objsize > mon->data->msize || is_whirly(mon->data) || noncorporeal(mon->data)) {
+				if (vis)
+				pline("%s %s falls off!", s_suffix(Monnam(mon)),
+					cloak_simple_name(otmp));
+				if (polyspot) bypass_obj(otmp);
+				m_lose_armor(mon, otmp);
+			} else {
+				if (vis)
+					pline("%s shirt rips to shreds!", s_suffix(Monnam(mon)));
+				else
+					You_hear("a ripping sound.");
+				m_useup(mon, otmp);
+			}
+		}
+	}
+	if ((otmp = which_armor(mon, W_ARMG)) != 0) {
+		if(nohands(mon->data) || otmp->objsize != mon->data->msize || is_whirly(mon->data) || noncorporeal(mon->data)){
+			if (vis)
+				pline("%s drops %s gloves!", Monnam(mon), ppronoun);
+			if (polyspot) bypass_obj(otmp);
+			m_lose_armor(mon, otmp);
+		}
+	}
+	if ((otmp = which_armor(mon, W_ARMS)) != 0) {
+		if(nohands(mon->data) || bimanual(MON_WEP(mon),mon->data) || is_whirly(mon->data) || noncorporeal(mon->data)){
+			if (vis)
+				pline("%s can no longer hold %s shield!", Monnam(mon),
+									ppronoun);
+			else
+				You_hear("a clank.");
+			if (polyspot) bypass_obj(otmp);
+			m_lose_armor(mon, otmp);
+		}
+	}
+	if ((otmp = which_armor(mon, W_ARMH)) != 0 &&
+		/* flimsy test for horns matches polyself handling */
+		(!is_flimsy(otmp) || is_whirly(mon->data) || noncorporeal(mon->data))
+	) {
+		if(!has_head(mon->data) || mon->data->msize != otmp->objsize || !helm_match(mon->data,otmp) || has_horns(mon->data)
+			 || is_whirly(mon->data) || noncorporeal(mon->data)
+		){
+			if (vis)
+				pline("%s helmet falls to the %s!",
+				  s_suffix(Monnam(mon)), surface(mon->mx, mon->my));
+			else
+				You_hear("a clank.");
+			if (polyspot) bypass_obj(otmp);
+			m_lose_armor(mon, otmp);
+		}
+	}
+	if ((otmp = which_armor(mon, W_ARMF)) != 0) {
+		if(slithy(mon->data) || !humanoid(mon->data) || mon->data->msize != otmp->objsize || is_whirly(mon->data) || noncorporeal(mon->data)){
+			if (vis) {
+				if (is_whirly(mon->data) || noncorporeal(mon->data))
+					pline("%s %s falls, unsupported!",
+							 s_suffix(Monnam(mon)), cloak_simple_name(otmp));
+				else pline("%s boots %s off %s feet!",
+				s_suffix(Monnam(mon)),
+				mon->data->msize < otmp->objsize ? "slide" : "are pushed", ppronoun);
+			}
+			if (polyspot) bypass_obj(otmp);
+			m_lose_armor(mon, otmp);
+		}
 	}
 #ifdef STEED
 	if (!can_saddle(mon)) {
@@ -983,31 +969,6 @@ struct obj *obj;
 	if (obj->otyp == SPEED_BOOTS && mon->permspeed != MFAST)
 	    return 20;
     }
-    return 0;
-}
-
-/*
- * Exceptions to things based on race. Correctly checks polymorphed player race.
- * Returns:
- *	 0 No exception, normal rules apply.
- * 	 1 If the race/object combination is acceptable.
- *	-1 If the race/object combination is unacceptable.
- */
-int
-racial_exception(mon, obj)
-struct monst *mon;
-struct obj *obj;
-{
-    const struct permonst *ptr = raceptr(mon);
-
-    /* Acceptable Exceptions: */
-    /* Allow hobbits to wear elven armor - LoTR */
-    if (ptr == &mons[PM_HOBBIT] && is_elven_armor(obj))
-	return 1;
-    /* Unacceptable Exceptions: */
-    /* Checks for object that certain races should never use go here */
-    /*	return -1; */
-
     return 0;
 }
 
