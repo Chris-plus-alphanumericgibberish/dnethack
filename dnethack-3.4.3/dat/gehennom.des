@@ -3041,22 +3041,7 @@ MONSTER:'&',"balrog",place[3], asleep
 
 
 CONTAINER:   '`', "statue" ,place[4], cursed, "Shaktari", 1
-OBJECT:'/', random, contained, blessed, 1
-OBJECT:'/', random, contained, blessed, 1
-OBJECT:'/', random, contained, blessed, 1
-OBJECT:'!', "full healing", contained, blessed, 0
-OBJECT:'!', "full healing", contained, blessed, 0
-OBJECT:'!', "full healing", contained, blessed, 0
-OBJECT:'!', "full healing", contained, blessed, 0
 OBJECT:')', "flail", contained, cursed, 3, "Sting of the Poison Queen"
-OBJECT:')', "runesword", contained, blessed, 3
-OBJECT:')', "runesword", contained, blessed, 3
-OBJECT:')', "halberd", contained, blessed, 3
-OBJECT:')', "bullwhip", contained, blessed, 3
-OBJECT:'[', "shield of reflection", contained, blessed, 3
-OBJECT:'[', "helmet", contained, blessed, 3
-OBJECT:'[', "crystal plate mail", contained, blessed, 3
-OBJECT:'[', "cloak of magic resistance", contained, blessed, 3
 TRAP:"statue", place[4]
 MONSTER:'S',"python", place[4]
 MONSTER:'S',"cobra", place[4]
