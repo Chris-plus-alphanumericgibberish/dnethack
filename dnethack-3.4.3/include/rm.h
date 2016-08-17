@@ -566,7 +566,7 @@ extern dlevel_t level;	/* structure describing the current level */
 				 level.monsters[(m)->mx][(m)->my]=(m))
 #endif
 #define place_worm_seg(m,x,y)	level.monsters[x][y] = m
-#define m_at(x,y)		(MON_AT(x,y) ? level.monsters[x][y] : \
+#define m_at(x,y)		((isok(x,y) && MON_AT(x,y)) ? level.monsters[x][y] : \
 						(struct monst *)0)
 #define m_buried_at(x,y)	(MON_BURIED_AT(x,y) ? level.monsters[x][y] : \
 						       (struct monst *)0)
