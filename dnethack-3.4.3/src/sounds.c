@@ -34,13 +34,21 @@ static const char *buerTitles[] = {
 	"interent teacher",
 	"fallen of heaven",
 	"risen of hell",
+	"from beyond the fixed stars",
 	"the first healer",
 	"philosopher of nature",
 	"of the philosophy of healing",
+	"penitent assassin",
 	"philosopher of healing",
 	"philosopher of natural morality",
 	"the lost",
 	"the ignored",
+	"of the east",
+	"of the west",
+	"of the north",
+	"of the south",
+	"daughter of the Moon",
+	"son of the Moon",
 	"paragon of morality"
 };
 //I am Buer, X,
@@ -49,6 +57,9 @@ static const char *buerSetOne[] = {
 	"doomed by the gods",
 	"seduced by a demon and made",
 	"taken by a fey spirit and left",
+	"come from a far place",
+	"descended",
+	"ascended",
 	"destined",
 	"determined"
 };
@@ -58,7 +69,9 @@ static const char *buerSetTwo[] = {
 	"walk through the ages",
 	"search the five corners of the world",
 	"bear witness 'til all is redemed at last",
+	"live forever on this winding road",
 	"never be released by death",
+	"never find home",
 	"search for redemption, but never to find it",
 	"seek virtue forevermore"
 };
@@ -76,8 +89,11 @@ static const char *echidnaTitles[] = {
 
 static const char *alignmentThings[] = {
 	"Can a paladin kill baby orcs?",
+	"Must a paladin never stab a man in the back?",
+	"Must laws be upheld with no reason or logic?",
 	"Saying you love someone is always good?",
 	"Can a king be lawful?",
+	"Can God be lawful?",
 	"Is it chaotic to refuse to kill an innocent man?",
 	"Chaotic means stabbing a man, then giving him icecream!",
 	"Neutral means stabbing a man, then giving him icecream!",
@@ -85,7 +101,8 @@ static const char *alignmentThings[] = {
 	"Being nailed to things is good?",
 	"Storms are chaotic?",
 	"Armies are lawful?",
-	"Must all rules be followed?"
+	"Must all rules be followed?",
+	"Everything not forbidden is compulsory?"
 };
 
 static const char *woePrisoners[] = {
@@ -3477,7 +3494,7 @@ int tx,ty;
 					pline("A sleeping %s floats gently up out of the dark seas below the seal.",u.osegen);
 					pline("You supose %s could be called comely,",u.osepro);
 					pline("though to be honest %s is about average among %s you have known.",u.osepro,makeplural(u.osegen));
-					if(!rn2(20)) pline("The figure's eyes open, and you have a long negotiation before achieving a good pact.");
+					if(!rn2(20)) pline("The %s's eyes open, and you have a long negotiation before achieving a good pact.", u.osegen);
 					else pline("You know that this is Ose, despite never having met.");
 					pline("The seabed rises.");
 					bindspirit(ep->ward_id);
@@ -3505,6 +3522,33 @@ int tx,ty;
 				}
 				else{
 					if(!Blind) pline("The silt in the seal swirls a bit. Otherwise, nothing happens.");
+					// u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod/10;
+				}
+			} else if(In_depths(&u.uz)){ 
+				if(u.sealCounts < numSlots){
+					pline("There is a %s meditating in the center of the seal.",u.osegen);
+					pline("You supose %s could be called comely,",u.osepro);
+					pline("though to be honest %s is about average among %s you have known.",u.osepro,makeplural(u.osegen));
+					if(!rn2(20)) pline("The %s's eyes open, and you have a long negotiation before achieving a good pact.", u.osegen);
+					else pline("You know that this is Ose, despite never having met.");
+					bindspirit(ep->ward_id);
+					u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod;
+				}
+				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis && Role_if(PM_EXILE)))){
+					if(!Blind) pline("The dust swirls below your weapon, forming into thousands of reaching arms.");
+					uwep->ovar1 |= SEAL_OSE;
+					if(!u.spiritTineA){ 
+						u.spiritTineA = SEAL_OSE;
+						u.spiritTineTA= moves + bindingPeriod;
+					}
+					else{
+						u.spiritTineB = SEAL_OSE;
+						u.spiritTineTB= moves + bindingPeriod;
+					}
+					u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod;
+				}
+				else {
+					if(!Blind) pline("The dust in the seal swirls a bit. Otherwise, nothing happens.");
 					// u.sealTimeout[OSE-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{

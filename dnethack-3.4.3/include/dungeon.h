@@ -129,6 +129,7 @@ typedef struct branch {
 #define Is_tiamat_level(x)	(on_level(x, &chaosvth_level))
 #define Is_chaos_level(x)	(on_level(x, &chaose_level))
 
+#define In_depths(x)		((x)->dnum == rlyeh_dnum)
 #define Is_rlyeh(x)			(on_level(x, &rlyeh_level))
 
 #define Is_valley(x)		(on_level(x, &valley_level))
