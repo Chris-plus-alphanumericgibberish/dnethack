@@ -151,6 +151,25 @@ int expltype;
 }
 
 void
+explode2(x, y, type, dam, olet, expltype)
+int x, y;
+int type; /* the same as in zap.c */
+int dam;
+char olet;
+int expltype;
+{
+    int i, j;
+    ExplodeRegion *area;
+    area = create_explode_region();
+    for(i = 0; i < 5; i++)
+	for(j = 0; j < 5; j++)
+	    if (isok(i+x-2,j+y-2) && (ZAP_POS((&levl[i+x-2][j+y-2])->typ) || (i<4 && i>0 && j<4 && j>0)))
+		add_location_to_explode_region(area, i+x-2, j+y-2);
+    do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
+    free_explode_region(area);
+}
+
+void
 big_explode(x, y, type, dam, olet, expltype, radius)
 int x, y;
 int type; /* the same as in zap.c */
@@ -255,32 +274,32 @@ boolean yours; /* is it your fault (for killing monsters) */
 	switch (abs(type) % 10) {
 		case 0:
 			adtyp = AD_MAGM;
-			break;
+		break;
 		case 1:
 			adtyp = AD_FIRE;
-			break;
+		break;
 		case 2:
 			adtyp = AD_COLD;
-			break;
+		break;
 /* Assume that wands are death, others are disintegration */
 		case 4:
 			adtyp = AD_DISN;
-			break;
+		break;
 		case 5:
 			adtyp = AD_ELEC;
-			break;
+		break;
 		case 6:
 			adtyp = AD_DRST;
-			break;
+		break;
 		case 7:
 			adtyp = AD_ACID;
-			break;
+		break;
 		case 8:
 			adtyp = AD_PHYS;
-			break;
+		break;
 		case 9:
 			adtyp = AD_DISE;
-			break;
+		break;
 		default: impossible("explosion base type %d?", type); return;
 	}
 
@@ -573,7 +592,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 		    if (Upolyd)
 		    	u.mh  -= damu;
 		    else
-			u.uhp -= damu;
+				u.uhp -= damu;
 		    flags.botl = 1;
 		}
 
@@ -932,7 +951,7 @@ boolean isyou;
 		if (resists_fire(mon)) {
 		    shielded = TRUE;
 		} else {
-		    for (obj = mon->minvent; obj; obj = obj2) {
+		    for(obj = mon->minvent; obj; obj = obj2) {
 			obj2 = obj->nobj;
 			GRENADE_TRIGGER(obj);
 			for(i = 0; i < delquan; i++)
@@ -944,7 +963,7 @@ boolean isyou;
 		if (Fire_resistance) {
 		    shielded = TRUE;
 		} else {
-		    for (obj = invent; obj; obj = obj2) {
+		    for(obj = invent; obj; obj = obj2) {
 			obj2 = obj->nobj;
 			GRENADE_TRIGGER(obj);
 			for(i = 0; i < delquan; i++)

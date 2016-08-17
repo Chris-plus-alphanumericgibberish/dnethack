@@ -705,6 +705,7 @@ E long FDECL(rndexp, (BOOLEAN_P));
 /* ### explode.c ### */
 
 E void FDECL(explode, (int,int,int,int,CHAR_P,int));
+E void FDECL(explode2, (int,int,int,int,CHAR_P,int));
 E void FDECL(big_explode, (int,int,int,int,CHAR_P,int,int));
 E long FDECL(scatter, (int, int, int, unsigned int, struct obj *));
 E void FDECL(splatter_burning_oil, (int, int));
