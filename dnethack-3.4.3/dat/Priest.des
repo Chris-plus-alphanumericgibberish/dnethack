@@ -103,7 +103,7 @@ MONSTER: 'Z',"human zombie",(01,17)
 #
 #	The "locate" level for the quest.
 #
-#	Here you have to locate the Temple of Nalzok to go
+#	Here you have to locate the Temple of Legion to go
 #	further towards your assigned quest.
 #
 
@@ -180,8 +180,8 @@ TRAP:random,random
 #
 #	The "goal" level for the quest.
 #
-#	Here you meet Nalzok your nemesis monster.  You have to
-#	defeat Nalzok in combat to gain the artifact you have
+#	Here you meet Legion your nemesis monster.  You have to
+#	defeat Legion in combat to gain the artifact you have
 #	been assigned to retrieve.
 #
 
@@ -230,7 +230,7 @@ TRAP:"fire",random
 TRAP:random,random
 TRAP:random,random
 # Random monsters.
-MONSTER:'&',"Nalzok",place[0]
+MONSTER:'&',"Legion",place[0]
 MONSTER:'Z',"human zombie",random
 MONSTER:'Z',"human zombie",random
 MONSTER:'Z',"human zombie",random
