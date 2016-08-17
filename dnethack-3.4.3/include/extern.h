@@ -1338,12 +1338,8 @@ E boolean FDECL(resists_death, (struct monst *));
 E boolean FDECL(resists_blnd, (struct monst *));
 E boolean FDECL(can_blnd, (struct monst *,struct monst *,UCHAR_P,struct obj *));
 E boolean FDECL(ranged_attk, (struct permonst *));
-E boolean FDECL(hates_silver, (struct permonst *));
-E boolean FDECL(hates_iron, (struct permonst *));
 E boolean FDECL(passes_bars, (struct permonst *));
 E boolean FDECL(can_track, (struct permonst *));
-E boolean FDECL(breakarm, (struct permonst *));
-E boolean FDECL(sliparm, (struct permonst *));
 E boolean FDECL(sticks, (struct permonst *));
 E int FDECL(num_horns, (struct permonst *));
 /* E boolean FDECL(canseemon, (struct monst *)); */
@@ -1355,7 +1351,7 @@ E int FDECL(name_to_mon, (const char *));
 E int FDECL(gender, (struct monst *));
 E int FDECL(pronoun_gender, (struct monst *));
 E boolean FDECL(levl_follower, (struct monst *));
-E int FDECL(little_to_big, (int));
+E int FDECL(little_to_big, (int,boolean));
 E int FDECL(big_to_little, (int));
 E const char *FDECL(locomotion, (const struct permonst *,const char *));
 E const char *FDECL(stagger, (const struct permonst *,const char *));
@@ -2210,7 +2206,7 @@ E long NDECL(somegold);
 #endif
 E void FDECL(stealgold, (struct monst *));
 E void FDECL(remove_worn_item, (struct obj *,BOOLEAN_P));
-E int FDECL(steal, (struct monst *, char *,boolean));
+E int FDECL(steal, (struct monst *, char *,boolean,boolean));
 E int FDECL(mpickobj, (struct monst *,struct obj *));
 E void FDECL(stealamulet, (struct monst *));
 E void FDECL(stealquestart, (struct monst *));
@@ -2660,7 +2656,6 @@ E void FDECL(mon_break_armor, (struct monst *,BOOLEAN_P));
 E int FDECL(extra_pref, (struct monst *, struct obj *));
 E void FDECL(bypass_obj, (struct obj *));
 E void NDECL(clear_bypasses);
-E int FDECL(racial_exception, (struct monst *, struct obj *));
 E void FDECL(light_damage, (genericptr_t, long));
 
 /* ### write.c ### */
