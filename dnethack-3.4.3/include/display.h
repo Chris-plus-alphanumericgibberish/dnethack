@@ -79,6 +79,26 @@
  */
 #define see_with_infrared(mon) (!Blind && Infravision && infravisible(mon->data) && couldsee(mon->mx, mon->my))
 
+/*
+ * see_with_bloodsense()
+ *
+ * This function is true if the player can see a monster using bloodsense.
+ * The caller must check for invisibility (invisible monsters are also
+ * invisible to bloodsense), because this is usually called from within
+ * canseemon() or canspotmon() which already check that.
+ */
+#define see_with_bloodsense(mon) (Race_if(PM_VAMPIRE) && has_blood((mon)->data) && couldsee((mon)->mx, (mon)->my))
+
+/*
+ * see_with_lifesense()
+ *
+ * This function is true if the player can see a monster using lifesense.
+ * The caller must check for invisibility (invisible monsters are also
+ * invisible to lifesense), because this is usually called from within
+ * canseemon() or canspotmon() which already check that.
+ */
+#define see_with_lifesense(mon) (Upolyd && is_metroid(youmonst.data) && !nonliving((mon)->data) && couldsee((mon)->mx, (mon)->my))
+
 
 /*
  * canseemon()
@@ -88,7 +108,7 @@
  * location instead of assuming it.  (And also considers worms.)
  */
 #define canseemon(mon) ((mon->wormno ? worm_known(mon) : \
-	    (cansee(mon->mx, mon->my) || see_with_infrared(mon))) \
+	    (cansee(mon->mx, mon->my) || see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon))) \
 	&& mon_visible(mon))
 
 
