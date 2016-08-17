@@ -690,7 +690,9 @@ static const short grownups[][2] = {
 	{PM_PONY, PM_HORSE}, {PM_HORSE, PM_WARHORSE},
 	{PM_KOBOLD, PM_LARGE_KOBOLD}, {PM_LARGE_KOBOLD, PM_KOBOLD_LORD},
 	{PM_GNOME, PM_GNOME_LORD}, {PM_GNOME_LORD, PM_GNOME_KING},
+	{PM_GNOME, PM_GNOME_LADY}, {PM_GNOME_LADY, PM_GNOME_QUEEN},
 	{PM_DWARF, PM_DWARF_LORD}, {PM_DWARF_LORD, PM_DWARF_KING},
+	{PM_DWARF, PM_DWARF_CLERIC}, {PM_DWARF_CLERIC, PM_DWARF_KING},
 	{PM_MIND_FLAYER, PM_MASTER_MIND_FLAYER},
 	{PM_DEEP_ONE, PM_DEEPER_ONE}, {PM_DEEPER_ONE, PM_DEEPEST_ONE},
 	{PM_ORC, PM_ORC_CAPTAIN}, {PM_HILL_ORC, PM_ORC_CAPTAIN},
@@ -705,6 +707,9 @@ static const short grownups[][2] = {
 	{PM_ELF, PM_ELF_LORD}, {PM_WOODLAND_ELF, PM_ELF_LORD},
 	{PM_GREEN_ELF, PM_ELF_LORD}, {PM_GREY_ELF, PM_ELF_LORD},
 	{PM_ELF_LORD, PM_ELVENKING},
+	{PM_ELF, PM_ELF_LADY}, {PM_WOODLAND_ELF, PM_ELF_LADY},
+	{PM_GREEN_ELF, PM_ELF_LADY}, {PM_GREY_ELF, PM_ELF_LADY},
+	{PM_ELF_LADY, PM_ELVENQUEEN},
 	{PM_LICH, PM_DEMILICH}, {PM_DEMILICH, PM_MASTER_LICH},
 	{PM_MASTER_LICH, PM_ARCH_LICH},
 	{PM_BABY_METROID, PM_METROID},{PM_METROID, PM_ALPHA_METROID}, {PM_ALPHA_METROID, PM_GAMMA_METROID},
@@ -738,9 +743,12 @@ static const short grownups[][2] = {
 	{PM_WATCHMAN, PM_WATCH_CAPTAIN},
 	{PM_ALIGNED_PRIEST, PM_HIGH_PRIEST},
 	{PM_STUDENT, PM_ARCHEOLOGIST},
+	{PM_RHYMER, PM_BARD},
+	{PM_HEDROW_WIZARD, PM_HEDROW_MASTER_WIZARD},
 	{PM_ATTENDANT, PM_HEALER},
 	{PM_PAGE, PM_KNIGHT},
 	{PM_ACOLYTE, PM_PRIEST},
+	{PM_ACOLYTE, PM_PRIESTESS},
 	{PM_APPRENTICE, PM_WIZARD},
 	{PM_DUNGEON_FERN_SPROUT, PM_DUNGEON_FERN},
 	{PM_SWAMP_FERN_SPROUT, PM_SWAMP_FERN},
@@ -750,14 +758,19 @@ static const short grownups[][2] = {
 };
 
 int
-little_to_big(montype)
+little_to_big(montype, female)
 int montype;
+boolean female;
 {
 #ifndef AIXPS2_BUG
 	register int i;
 
 	for (i = 0; grownups[i][0] >= LOW_PM; i++)
-		if(montype == grownups[i][0]) return grownups[i][1];
+		if(montype == grownups[i][0] && (
+			!((mons[grownups[i][1]].mflagsb)&(MB_FEMALE|MB_MALE)) ||
+			(female && ((mons[grownups[i][1]].mflagsb)&(MB_FEMALE))) ||
+			(!female && ((mons[grownups[i][1]].mflagsb)&(MB_MALE)))
+		)) return grownups[i][1];
 	return montype;
 #else
 /* AIX PS/2 C-compiler 1.1.1 optimizer does not like the above for loop,
@@ -770,7 +783,11 @@ int montype;
 
 	monvalue = montype;
 	for (i = 0; grownups[i][0] >= LOW_PM; i++)
-		if(montype == grownups[i][0]) monvalue = grownups[i][1];
+		if(montype == grownups[i][0] && (
+			!((mons[grownups[i][1]].mflagsb)&(MB_FEMALE|MB_MALE)) ||
+			(female && ((mons[grownups[i][1]].mflagsb)&(MB_FEMALE))) ||
+			(!female && ((mons[grownups[i][1]].mflagsb)&(MB_MALE)))
+		)) monvalue = grownups[i][1];
 
 	return monvalue;
 #endif
