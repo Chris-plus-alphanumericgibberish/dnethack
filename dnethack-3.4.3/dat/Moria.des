@@ -496,21 +496,21 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7     
 
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
 
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
 
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
 
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
 
 GEOMETRY: center, center
 #0         1         2         3         4         5         6         7     
@@ -717,9 +717,9 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7     
 
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
-OBJECT[10%]:'*',"small piece of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
+OBJECT[10%]:'*',"chunk of unrefined mithril",random
 
 GEOMETRY: center, center
 #0         1         2         3         4         5         6         7     

@@ -52,12 +52,12 @@ OBJECT:'?',"antimagic",contained
 OBJECT:'?',"antimagic",contained
 OBJECT:'?',"antimagic",contained
 # +4 containers are secretly coffins.
-OBJECT:'(',"large box",(03,09), cursed, +4
-OBJECT:'(',"large box",(07,09), cursed, +4
-OBJECT:'(',"large box",(11,09), cursed, +4
-OBJECT:'(',"large box",(03,01), cursed, +4
-OBJECT:'(',"large box",(07,01), cursed, +4
-OBJECT:'(',"large box",(11,01), cursed, +4
+OBJECT:'(',"box",(03,09), cursed, +4
+OBJECT:'(',"box",(07,09), cursed, +4
+OBJECT:'(',"box",(11,09), cursed, +4
+OBJECT:'(',"box",(03,01), cursed, +4
+OBJECT:'(',"box",(07,01), cursed, +4
+OBJECT:'(',"box",(11,01), cursed, +4
 # We have to protect the tower against outside attacks
 NON_DIGGABLE:(00,00,14,10)
 

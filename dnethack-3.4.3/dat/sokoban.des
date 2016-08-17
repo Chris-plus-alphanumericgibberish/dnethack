@@ -58,18 +58,18 @@ NON_DIGGABLE:(00,00,13,12)
 NON_PASSWALL:(00,00,13,12)
 
 # Crates
-OBJECT:'(',"huge stone crate",(02,02)
-OBJECT:'(',"huge stone crate",(02,03)
+OBJECT:'(',"massive stone crate",(02,02)
+OBJECT:'(',"massive stone crate",(02,03)
 #
-OBJECT:'(',"huge stone crate",(10,02)
-OBJECT:'(',"huge stone crate",(09,03)
-OBJECT:'(',"huge stone crate",(10,04)
+OBJECT:'(',"massive stone crate",(10,02)
+OBJECT:'(',"massive stone crate",(09,03)
+OBJECT:'(',"massive stone crate",(10,04)
 #
-OBJECT:'(',"huge stone crate",(08,07)
-OBJECT:'(',"huge stone crate",(09,08)
-OBJECT:'(',"huge stone crate",(09,09)
-OBJECT:'(',"huge stone crate",(08,10)
-OBJECT:'(',"huge stone crate",(10,10)
+OBJECT:'(',"massive stone crate",(08,07)
+OBJECT:'(',"massive stone crate",(09,08)
+OBJECT:'(',"massive stone crate",(09,09)
+OBJECT:'(',"massive stone crate",(08,10)
+OBJECT:'(',"massive stone crate",(10,10)
 
 # Traps
 TRAP:"pit",(03,06)
@@ -119,20 +119,20 @@ NON_DIGGABLE:(00,00,14,10)
 NON_PASSWALL:(00,00,14,10)
 
 # Crates
-OBJECT:'(',"huge stone crate",(05,02)
-OBJECT:'(',"huge stone crate",(06,02)
-OBJECT:'(',"huge stone crate",(06,03)
-OBJECT:'(',"huge stone crate",(07,03)
+OBJECT:'(',"massive stone crate",(05,02)
+OBJECT:'(',"massive stone crate",(06,02)
+OBJECT:'(',"massive stone crate",(06,03)
+OBJECT:'(',"massive stone crate",(07,03)
 #
-OBJECT:'(',"huge stone crate",(09,05)
-OBJECT:'(',"huge stone crate",(10,03)
-OBJECT:'(',"huge stone crate",(11,02)
-OBJECT:'(',"huge stone crate",(12,03)
+OBJECT:'(',"massive stone crate",(09,05)
+OBJECT:'(',"massive stone crate",(10,03)
+OBJECT:'(',"massive stone crate",(11,02)
+OBJECT:'(',"massive stone crate",(12,03)
 #
-OBJECT:'(',"huge stone crate",(07,08)
-OBJECT:'(',"huge stone crate",(08,08)
-OBJECT:'(',"huge stone crate",(09,08)
-OBJECT:'(',"huge stone crate",(10,08)
+OBJECT:'(',"massive stone crate",(07,08)
+OBJECT:'(',"massive stone crate",(08,08)
+OBJECT:'(',"massive stone crate",(09,08)
+OBJECT:'(',"massive stone crate",(10,08)
 
 # Traps
 TRAP:"pit",(01,02)
@@ -186,29 +186,29 @@ NON_DIGGABLE:(00,00,28,11)
 NON_PASSWALL:(00,00,28,11)
 
 # Crates
-OBJECT:'(',"huge stone crate",(03,02)
-OBJECT:'(',"huge stone crate",(04,02)
+OBJECT:'(',"massive stone crate",(03,02)
+OBJECT:'(',"massive stone crate",(04,02)
 #
-OBJECT:'(',"huge stone crate",(06,02)
-OBJECT:'(',"huge stone crate",(06,03)
-OBJECT:'(',"huge stone crate",(07,02)
+OBJECT:'(',"massive stone crate",(06,02)
+OBJECT:'(',"massive stone crate",(06,03)
+OBJECT:'(',"massive stone crate",(07,02)
 #
-OBJECT:'(',"huge stone crate",(03,06)
-OBJECT:'(',"huge stone crate",(02,07)
-OBJECT:'(',"huge stone crate",(03,07)
-OBJECT:'(',"huge stone crate",(03,08)
-OBJECT:'(',"huge stone crate",(02,09)
-OBJECT:'(',"huge stone crate",(03,09)
-OBJECT:'(',"huge stone crate",(04,09)
+OBJECT:'(',"massive stone crate",(03,06)
+OBJECT:'(',"massive stone crate",(02,07)
+OBJECT:'(',"massive stone crate",(03,07)
+OBJECT:'(',"massive stone crate",(03,08)
+OBJECT:'(',"massive stone crate",(02,09)
+OBJECT:'(',"massive stone crate",(03,09)
+OBJECT:'(',"massive stone crate",(04,09)
 #
-OBJECT:'(',"huge stone crate",(06,07)
-OBJECT:'(',"huge stone crate",(06,09)
-OBJECT:'(',"huge stone crate",(08,07)
-OBJECT:'(',"huge stone crate",(08,10)
-OBJECT:'(',"huge stone crate",(09,08)
-OBJECT:'(',"huge stone crate",(09,09)
-OBJECT:'(',"huge stone crate",(10,07)
-OBJECT:'(',"huge stone crate",(10,10)
+OBJECT:'(',"massive stone crate",(06,07)
+OBJECT:'(',"massive stone crate",(06,09)
+OBJECT:'(',"massive stone crate",(08,07)
+OBJECT:'(',"massive stone crate",(08,10)
+OBJECT:'(',"massive stone crate",(09,08)
+OBJECT:'(',"massive stone crate",(09,09)
+OBJECT:'(',"massive stone crate",(10,07)
+OBJECT:'(',"massive stone crate",(10,10)
 
 # Traps
 TRAP:"hole",(12,10)
@@ -264,22 +264,22 @@ NON_DIGGABLE:(00,00,25,13)
 NON_PASSWALL:(00,00,25,13)
 
 # Crates
-OBJECT:'(',"huge stone crate",(02,03)
-OBJECT:'(',"huge stone crate",(08,03)
-OBJECT:'(',"huge stone crate",(09,04)
-OBJECT:'(',"huge stone crate",(02,05)
-OBJECT:'(',"huge stone crate",(04,05)
-OBJECT:'(',"huge stone crate",(09,05)
-OBJECT:'(',"huge stone crate",(02,06)
-OBJECT:'(',"huge stone crate",(05,06)
-OBJECT:'(',"huge stone crate",(06,07)
-OBJECT:'(',"huge stone crate",(03,08)
-OBJECT:'(',"huge stone crate",(07,08)
-OBJECT:'(',"huge stone crate",(05,09)
-OBJECT:'(',"huge stone crate",(10,09)
-OBJECT:'(',"huge stone crate",(07,10)
-OBJECT:'(',"huge stone crate",(10,10)
-OBJECT:'(',"huge stone crate",(03,11)
+OBJECT:'(',"massive stone crate",(02,03)
+OBJECT:'(',"massive stone crate",(08,03)
+OBJECT:'(',"massive stone crate",(09,04)
+OBJECT:'(',"massive stone crate",(02,05)
+OBJECT:'(',"massive stone crate",(04,05)
+OBJECT:'(',"massive stone crate",(09,05)
+OBJECT:'(',"massive stone crate",(02,06)
+OBJECT:'(',"massive stone crate",(05,06)
+OBJECT:'(',"massive stone crate",(06,07)
+OBJECT:'(',"massive stone crate",(03,08)
+OBJECT:'(',"massive stone crate",(07,08)
+OBJECT:'(',"massive stone crate",(05,09)
+OBJECT:'(',"massive stone crate",(10,09)
+OBJECT:'(',"massive stone crate",(07,10)
+OBJECT:'(',"massive stone crate",(10,10)
+OBJECT:'(',"massive stone crate",(03,11)
 
 # Traps
 TRAP:"hole",(12,10)
@@ -331,23 +331,23 @@ NON_DIGGABLE:(00,00,19,11)
 NON_PASSWALL:(00,00,19,11)
 
 # Crates
-OBJECT:'(',"huge stone crate",(02,02)
-OBJECT:'(',"huge stone crate",(03,02)
+OBJECT:'(',"massive stone crate",(02,02)
+OBJECT:'(',"massive stone crate",(03,02)
 #
-OBJECT:'(',"huge stone crate",(05,03)
-OBJECT:'(',"huge stone crate",(07,03)
-OBJECT:'(',"huge stone crate",(07,02)
-OBJECT:'(',"huge stone crate",(08,02)
+OBJECT:'(',"massive stone crate",(05,03)
+OBJECT:'(',"massive stone crate",(07,03)
+OBJECT:'(',"massive stone crate",(07,02)
+OBJECT:'(',"massive stone crate",(08,02)
 #
-OBJECT:'(',"huge stone crate",(10,03)
-OBJECT:'(',"huge stone crate",(11,03)
+OBJECT:'(',"massive stone crate",(10,03)
+OBJECT:'(',"massive stone crate",(11,03)
 #
-OBJECT:'(',"huge stone crate",(02,07)
-OBJECT:'(',"huge stone crate",(02,08)
-OBJECT:'(',"huge stone crate",(03,09)
+OBJECT:'(',"massive stone crate",(02,07)
+OBJECT:'(',"massive stone crate",(02,08)
+OBJECT:'(',"massive stone crate",(03,09)
 #
-OBJECT:'(',"huge stone crate",(05,07)
-OBJECT:'(',"huge stone crate",(06,06)
+OBJECT:'(',"massive stone crate",(05,07)
+OBJECT:'(',"massive stone crate",(06,06)
 
 # Traps
 TRAP:"hole",(08,09)
@@ -397,22 +397,22 @@ NON_DIGGABLE:(00,00,19,12)
 NON_PASSWALL:(00,00,19,12)
 
 # Crates
-OBJECT:'(',"huge stone crate",(04,02)
-OBJECT:'(',"huge stone crate",(04,03)
-OBJECT:'(',"huge stone crate",(05,03)
-OBJECT:'(',"huge stone crate",(07,03)
-OBJECT:'(',"huge stone crate",(08,03)
-OBJECT:'(',"huge stone crate",(02,04)
-OBJECT:'(',"huge stone crate",(03,04)
-OBJECT:'(',"huge stone crate",(05,05)
-OBJECT:'(',"huge stone crate",(06,06)
-OBJECT:'(',"huge stone crate",(09,06)
-OBJECT:'(',"huge stone crate",(03,07)
-OBJECT:'(',"huge stone crate",(04,07)
-OBJECT:'(',"huge stone crate",(07,07)
-OBJECT:'(',"huge stone crate",(06,09)
-OBJECT:'(',"huge stone crate",(05,10)
-OBJECT:'(',"huge stone crate",(05,11)
+OBJECT:'(',"massive stone crate",(04,02)
+OBJECT:'(',"massive stone crate",(04,03)
+OBJECT:'(',"massive stone crate",(05,03)
+OBJECT:'(',"massive stone crate",(07,03)
+OBJECT:'(',"massive stone crate",(08,03)
+OBJECT:'(',"massive stone crate",(02,04)
+OBJECT:'(',"massive stone crate",(03,04)
+OBJECT:'(',"massive stone crate",(05,05)
+OBJECT:'(',"massive stone crate",(06,06)
+OBJECT:'(',"massive stone crate",(09,06)
+OBJECT:'(',"massive stone crate",(03,07)
+OBJECT:'(',"massive stone crate",(04,07)
+OBJECT:'(',"massive stone crate",(07,07)
+OBJECT:'(',"massive stone crate",(06,09)
+OBJECT:'(',"massive stone crate",(05,10)
+OBJECT:'(',"massive stone crate",(05,11)
 
 # Traps
 TRAP:"hole",(07,11)
@@ -468,27 +468,27 @@ NON_DIGGABLE:(00,00,25,17)
 NON_PASSWALL:(00,00,25,17)
 
 # Crates
-OBJECT:'(',"huge stone crate",(03,05)
-OBJECT:'(',"huge stone crate",(05,05)
-OBJECT:'(',"huge stone crate",(07,05)
-OBJECT:'(',"huge stone crate",(09,05)
-OBJECT:'(',"huge stone crate",(11,05)
+OBJECT:'(',"massive stone crate",(03,05)
+OBJECT:'(',"massive stone crate",(05,05)
+OBJECT:'(',"massive stone crate",(07,05)
+OBJECT:'(',"massive stone crate",(09,05)
+OBJECT:'(',"massive stone crate",(11,05)
 #
-OBJECT:'(',"huge stone crate",(04,07)
-OBJECT:'(',"huge stone crate",(04,08)
-OBJECT:'(',"huge stone crate",(06,07)
-OBJECT:'(',"huge stone crate",(09,07)
-OBJECT:'(',"huge stone crate",(11,07)
+OBJECT:'(',"massive stone crate",(04,07)
+OBJECT:'(',"massive stone crate",(04,08)
+OBJECT:'(',"massive stone crate",(06,07)
+OBJECT:'(',"massive stone crate",(09,07)
+OBJECT:'(',"massive stone crate",(11,07)
 #
-OBJECT:'(',"huge stone crate",(03,12)
-OBJECT:'(',"huge stone crate",(04,10)
-OBJECT:'(',"huge stone crate",(05,12)
-OBJECT:'(',"huge stone crate",(06,10)
-OBJECT:'(',"huge stone crate",(07,11)
-OBJECT:'(',"huge stone crate",(08,10)
-OBJECT:'(',"huge stone crate",(09,12)
+OBJECT:'(',"massive stone crate",(03,12)
+OBJECT:'(',"massive stone crate",(04,10)
+OBJECT:'(',"massive stone crate",(05,12)
+OBJECT:'(',"massive stone crate",(06,10)
+OBJECT:'(',"massive stone crate",(07,11)
+OBJECT:'(',"massive stone crate",(08,10)
+OBJECT:'(',"massive stone crate",(09,12)
 #
-OBJECT:'(',"huge stone crate",(03,14)
+OBJECT:'(',"massive stone crate",(03,14)
 
 # Traps
 TRAP:"hole",(08,01)
@@ -508,8 +508,8 @@ TRAP:"hole",(21,01)
 TRAP:"hole",(22,01)
 TRAP:"hole",(23,01)
 
-MONSTER:'m',"giant mimic", random, m_object "huge stone crate"
-MONSTER:'m',"giant mimic", random, m_object "huge stone crate"
+MONSTER:'m',"giant mimic", random, m_object "massive stone crate"
+MONSTER:'m',"giant mimic", random, m_object "massive stone crate"
 
 # Random objects
 # OBJECT:'%',random,random
@@ -526,7 +526,7 @@ DOOR:closed,(17,13)
 DOOR:closed,(17,15)
 REGION:(18,10,22,16),lit,"zoo",filled,true
 OBJECT:'(',"bag of holding",place[0]
-MONSTER:'m',"giant mimic", place[0], m_object "huge stone crate"
+MONSTER:'m',"giant mimic", place[0], m_object "massive stone crate"
 OBJECT:'(',"magic chest",place[1]
 
 
@@ -560,28 +560,28 @@ NON_DIGGABLE:(00,00,25,16)
 NON_PASSWALL:(00,00,25,16)
 
 # Crates
-OBJECT:'(',"huge stone crate",(04,04)
-OBJECT:'(',"huge stone crate",(02,06)
-OBJECT:'(',"huge stone crate",(03,06)
-OBJECT:'(',"huge stone crate",(04,07)
-OBJECT:'(',"huge stone crate",(05,07)
-OBJECT:'(',"huge stone crate",(02,08)
-OBJECT:'(',"huge stone crate",(05,08)
-OBJECT:'(',"huge stone crate",(03,09)
-OBJECT:'(',"huge stone crate",(04,09)
-OBJECT:'(',"huge stone crate",(03,10)
-OBJECT:'(',"huge stone crate",(05,10)
-OBJECT:'(',"huge stone crate",(06,12)
+OBJECT:'(',"massive stone crate",(04,04)
+OBJECT:'(',"massive stone crate",(02,06)
+OBJECT:'(',"massive stone crate",(03,06)
+OBJECT:'(',"massive stone crate",(04,07)
+OBJECT:'(',"massive stone crate",(05,07)
+OBJECT:'(',"massive stone crate",(02,08)
+OBJECT:'(',"massive stone crate",(05,08)
+OBJECT:'(',"massive stone crate",(03,09)
+OBJECT:'(',"massive stone crate",(04,09)
+OBJECT:'(',"massive stone crate",(03,10)
+OBJECT:'(',"massive stone crate",(05,10)
+OBJECT:'(',"massive stone crate",(06,12)
 #
-OBJECT:'(',"huge stone crate",(07,14)
+OBJECT:'(',"massive stone crate",(07,14)
 #
-OBJECT:'(',"huge stone crate",(11,05)
-OBJECT:'(',"huge stone crate",(12,06)
-OBJECT:'(',"huge stone crate",(10,07)
-OBJECT:'(',"huge stone crate",(11,07)
-OBJECT:'(',"huge stone crate",(10,08)
-OBJECT:'(',"huge stone crate",(12,09)
-OBJECT:'(',"huge stone crate",(11,10)
+OBJECT:'(',"massive stone crate",(11,05)
+OBJECT:'(',"massive stone crate",(12,06)
+OBJECT:'(',"massive stone crate",(10,07)
+OBJECT:'(',"massive stone crate",(11,07)
+OBJECT:'(',"massive stone crate",(10,08)
+OBJECT:'(',"massive stone crate",(12,09)
+OBJECT:'(',"massive stone crate",(11,10)
 
 # Traps
 TRAP:"hole",(05,01)
@@ -603,8 +603,8 @@ TRAP:"hole",(20,01)
 TRAP:"hole",(21,01)
 TRAP:"hole",(22,01)
 
-MONSTER:'m',"giant mimic", random, m_object "huge stone crate"
-MONSTER:'m',"giant mimic", random, m_object "huge stone crate"
+MONSTER:'m',"giant mimic", random, m_object "massive stone crate"
+MONSTER:'m',"giant mimic", random, m_object "massive stone crate"
 
 # Random objects
 # OBJECT:'%',random,random
@@ -621,5 +621,5 @@ DOOR:closed,(17,12)
 DOOR:closed,(17,14)
 REGION:(18,09,22,15),lit,"zoo",filled,true
 OBJECT:'"',"amulet of reflection",place[0]
-MONSTER:'m',"giant mimic", place[0], m_object "huge stone crate"
+MONSTER:'m',"giant mimic", place[0], m_object "massive stone crate"
 OBJECT:'(',"magic chest",place[1]

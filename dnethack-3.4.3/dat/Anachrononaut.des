@@ -270,7 +270,7 @@ MAP
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7     
-CONTAINER:'(',"large box",(02,07)
+CONTAINER:'(',"box",(02,07)
 	OBJECT:'%',"K-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
@@ -281,7 +281,7 @@ CONTAINER:'(',"large box",(02,07)
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
-CONTAINER:'(',"large box",(01,07)
+CONTAINER:'(',"box",(01,07)
 	OBJECT:'%',"C-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
@@ -292,7 +292,7 @@ CONTAINER:'(',"large box",(01,07)
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
-CONTAINER:'(',"large box",(02,08)
+CONTAINER:'(',"box",(02,08)
 	OBJECT:'%',"K-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
@@ -303,7 +303,7 @@ CONTAINER:'(',"large box",(02,08)
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
-CONTAINER:'(',"large box",(01,08)
+CONTAINER:'(',"box",(01,08)
 	OBJECT:'%',"C-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
@@ -314,7 +314,7 @@ CONTAINER:'(',"large box",(01,08)
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
-CONTAINER:'(',"large box",(02,09)
+CONTAINER:'(',"box",(02,09)
 	OBJECT:'%',"K-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
@@ -325,7 +325,7 @@ CONTAINER:'(',"large box",(02,09)
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
 	OBJECT[45%]:'%',"protein pill",contained
-CONTAINER:'(',"large box",(01,09)
+CONTAINER:'(',"box",(01,09)
 	OBJECT:'%',"K-ration",contained
 	OBJECT:'%',"protein pill",contained
 	OBJECT:'%',"protein pill",contained
@@ -338,7 +338,7 @@ CONTAINER:'(',"large box",(01,09)
 	OBJECT[45%]:'%',"protein pill",contained
 CONTAINER:'(',"tinning kit",(01,09)
 
-CONTAINER:'(',"large box",(01,11)
+CONTAINER:'(',"box",(01,11)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
 	OBJECT[80%]:'+',random,contained
@@ -348,7 +348,7 @@ CONTAINER:'(',"large box",(01,11)
 	OBJECT:'?',random,contained
 	OBJECT[80%]:'?',random,contained
 	OBJECT[80%]:'?',random,contained
-CONTAINER:'(',"large box",(02,11)
+CONTAINER:'(',"box",(02,11)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
 	OBJECT[80%]:'+',random,contained
@@ -358,7 +358,7 @@ CONTAINER:'(',"large box",(02,11)
 	OBJECT:'?',random,contained
 	OBJECT[80%]:'?',random,contained
 	OBJECT[80%]:'?',random,contained
-CONTAINER:'(',"large box",(01,12)
+CONTAINER:'(',"box",(01,12)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
 	OBJECT[80%]:'+',random,contained
@@ -368,7 +368,7 @@ CONTAINER:'(',"large box",(01,12)
 	OBJECT:'?',random,contained
 	OBJECT[80%]:'?',random,contained
 	OBJECT[80%]:'?',random,contained
-CONTAINER:'(',"large box",(02,12)
+CONTAINER:'(',"box",(02,12)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
 	OBJECT[80%]:'+',random,contained
@@ -378,7 +378,7 @@ CONTAINER:'(',"large box",(02,12)
 	OBJECT:'?',random,contained
 	OBJECT[80%]:'?',random,contained
 	OBJECT[80%]:'?',random,contained
-CONTAINER:'(',"large box",(01,13)
+CONTAINER:'(',"box",(01,13)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
 	OBJECT[80%]:'+',random,contained
@@ -388,7 +388,7 @@ CONTAINER:'(',"large box",(01,13)
 	OBJECT:'?',random,contained
 	OBJECT[80%]:'?',random,contained
 	OBJECT[80%]:'?',random,contained
-CONTAINER:'(',"large box",(02,13)
+CONTAINER:'(',"box",(02,13)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
 	OBJECT[80%]:'+',random,contained
