@@ -457,19 +457,22 @@ nh_timeout()
 			}
 		}
 	}
-	
-	if(u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){
+	if((u.usubwater || is_3dwater(u.ux,u.uy)) && u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){
 		u.divetimer--;
-		if(u.divetimer==0){
-			You("can't hold your breath any longer");
-			u.usubwater = 0;
-			if(!Swimming) drown();
-			vision_full_recalc = 1;
-			vision_recalc(2);	/* unsee old position */
-			doredraw();
-		}
+		if(u.divetimer==3) You("are running short on air.");
+		if(u.divetimer==1) You("are running out of air!");
+	} else if (!u.usubwater && u.divetimer < (ACURR(A_CON))/3 && !u.ustuck){ /* limited duration dive, 2 turns to 6 turns naturally, 8 turns with magic */ 
+		u.divetimer++;
 	}
 
+	if(u.divetimer<=0){
+		You("can't hold your breath any longer.");
+		if((!Swimming && !Amphibious && is_pool(u.ux,u.uy)) || is_3dwater(u.ux,u.uy)) drown();
+		u.usubwater = 0;
+		vision_full_recalc = 1;
+		vision_recalc(2);	/* unsee old position */
+		doredraw();
+	}
 #ifdef STEED
 	if (u.ugallop) {
 	    if (--u.ugallop == 0L && u.usteed)
@@ -478,7 +481,7 @@ nh_timeout()
 #endif
 
 	for(upp = u.uprops; upp < u.uprops+SIZE(u.uprops); upp++){
-		if(Upolyd && youmonst.data == &mons[PM_SHOGGOTH] && upp - u.uprops == BLINDED
+		if(Upolyd && (youmonst.data == &mons[PM_SHOGGOTH] || youmonst.data == &mons[PM_PRIEST_OF_GHAUNADAUR]) && upp - u.uprops == BLINDED
 			&&  upp->intrinsic & TIMEOUT
 		){
 			upp->intrinsic &= ~TIMEOUT;

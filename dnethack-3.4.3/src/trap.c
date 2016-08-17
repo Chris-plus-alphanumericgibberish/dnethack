@@ -3081,12 +3081,13 @@ drown()
 	
 	/* happily wading in the same contiguous pool */
 	if (u.uinwater && is_pool(u.ux-u.dx,u.uy-u.dy) &&
-	    (Swimming || (Amphibious && u.usubwater))) {
+		!(!is_3dwater(u.ux-u.dx,u.uy-u.dy) && is_3dwater(u.ux,u.uy)) &&
+	    ((Swimming && (u.divetimer>0 || !u.usubwater)) || (Amphibious && u.usubwater))) {
 		/* water effects on objects every now and then */
 		if (!rn2(5)) inpool_ok = TRUE;
 		else return(FALSE);
 	}
-
+	
 	if (!u.uinwater) {
 	    You("%s into the %swater%c",
 		Is_waterlevel(&u.uz) ? "plunge" : "fall",
@@ -3123,13 +3124,15 @@ drown()
 		unleash_all();
 	}
 	
-	if (Amphibious || Swimming) {
+	if (Amphibious || (Swimming && !(u.divetimer == 0 && u.usubwater))) {
 		u.uinwater = 1;
 		if(uclockwork) u.uboiler = MAX_BOILER;
-		if (Swimming && ACURR(A_CON) > 11 && yn("Dive underwater?")=='y') {
-			u.divetimer = (ACURR(A_CON)-10)/2 + 1;
-		} else u.divetimer = 0;
-		if (Amphibious && (u.divetimer || !Swimming)){
+		if (Swimming && !is_3dwater(u.ux-u.dx,u.uy-u.dy) && u.divetimer > 0 && !Is_waterlevel(&u.uz) && yn("Dive underwater?")=='y') {
+			u.usubwater = 1;
+		} else if(is_3dwater(u.ux-u.dx,u.uy-u.dy)){
+			u.usubwater = 1;
+		}
+		if (Amphibious && (u.usubwater || (!Swimming || is_3dwater(u.ux-u.dx,u.uy-u.dy)))){
 			if (flags.verbose)
 				if(!Swimming) pline("But you aren't drowning.");
 			if (!Is_waterlevel(&u.uz)) {
@@ -3137,7 +3140,6 @@ drown()
 					Your("keel hits the bottom.");
 				else
 					You("touch bottom.");
-				u.usubwater = 1;
 				under_water(1);
 			}
 		} else { //canswim and are swiming
@@ -3151,6 +3153,7 @@ drown()
 		vision_full_recalc = 1;
 		return(FALSE);
 	}
+	You("are drowning!");
 	if ((Teleportation || can_teleport(youmonst.data)) &&
 		    !u.usleep && (Teleport_control || rn2(3) < Luck+2)) {
 		You("attempt a teleport spell.");	/* utcsri!carroll */
@@ -3198,11 +3201,13 @@ drown()
 		boolean succ = Is_waterlevel(&u.uz) ? TRUE :
 				emergency_disrobe(&lost);
 
-		You("try to crawl out of the water.");
+		if(Is_waterlevel(&u.uz)) You("try to flounder into a bubble.");
+		else You("try to crawl out of the water.");
 		if (lost)
 			You("dump some of your gear to lose weight...");
 		if (succ) {
 			pline("Pheew!  That was close.");
+			u.usubwater = 0;
 			teleds(x,y,TRUE);
 			return(TRUE);
 		}
@@ -3216,9 +3221,14 @@ drown()
 	 */
 	if (Upolyd && !Unchanging && Race_if(PM_VAMPIRE)) {
 		rehumanize();
-		u.uinwater = 0;
-		u.usubwater = 0;
-		You("fly up out of the water!");
+		if(!is_3dwater(u.ux, u.uy)){
+			u.uinwater = 0;
+			u.usubwater = 0;
+			vision_recalc(2);	/* unsee old position */
+			vision_full_recalc = 1;
+			doredraw();
+			You("fly up out of the water!");
+		}
 		return (TRUE);
 	}
 	killer_format = KILLED_BY_AN;
@@ -3233,6 +3243,9 @@ drown()
 	if (u.uinwater) {
 	    u.uinwater = 0;
 	    u.usubwater = 0;
+		vision_recalc(2);	/* unsee old position */
+		vision_full_recalc = 1;
+		doredraw();
 	    You("find yourself back %s.", Is_waterlevel(&u.uz) ?
 		"in an air bubble" : "on land");
 	}
@@ -3244,22 +3257,30 @@ dodeepswim()
 {
 	if(u.uinwater && Swimming){
 		if(u.usubwater){
-			You("swim up to the surface.");
-			u.usubwater = 0;
-			u.divetimer = 0;
-			vision_recalc(2);	/* unsee old position */
-			vision_full_recalc = 1;
-			doredraw();
-			return 1;
-		} else { 
-			if(ACURR(A_CON) > 11){
-				You("dive below the surface.");
-				u.usubwater = 1;
-				u.divetimer = (ACURR(A_CON)-10)/2 + 1; /* limited duration dive */
-				under_water(1);
+			if(is_3dwater(u.ux, u.uy)){
+				pline("There is no surface!");
+				return 0;
+			} else {
+				You("swim up to the surface.");
+				u.usubwater = 0;
 				vision_recalc(2);	/* unsee old position */
 				vision_full_recalc = 1;
+				doredraw();
 				return 1;
+			}
+		} else {
+			if(ACURR(A_CON) > 5){
+				if(Is_waterlevel(&u.uz)){
+					You("are already under water!");
+					return 0;
+				} else {
+					You("dive below the surface.");
+					u.usubwater = 1;
+					under_water(1);
+					vision_recalc(2);	/* unsee old position */
+					vision_full_recalc = 1;
+					return 1;
+				}
 			} else You("can't hold your breath for very long.");
 			return 0;
 		}

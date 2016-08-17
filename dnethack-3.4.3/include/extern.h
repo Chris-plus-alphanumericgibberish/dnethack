@@ -219,6 +219,7 @@ E int NDECL(dotravel);
 /* ### dbridge.c ### */
 
 E boolean FDECL(is_pool, (int,int));
+E boolean FDECL(is_3dwater, (int,int));
 E boolean FDECL(is_lava, (int,int));
 E boolean FDECL(is_ice, (int,int));
 E int FDECL(is_drawbridge_wall, (int,int));

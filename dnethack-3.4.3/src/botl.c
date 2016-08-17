@@ -284,13 +284,13 @@ bot2()
 	if(hp < 0) hp = 0;
 	(void) describe_level(newbot2);
 	Sprintf(nb = eos(newbot2),
-		"%c:%-2ld HP:%d(%d) Pw:%d(%d) AC:%-2d", oc_syms[COIN_CLASS],
+		"%c:%-2ld HP:%d(%d) Pw:%d(%d) Br:%d AC:%-2d", oc_syms[COIN_CLASS],
 #ifndef GOLDOBJ
 		u.ugold,
 #else
 		money_cnt(invent),
 #endif
-		hp, hpmax, u.uen, u.uenmax, u.uac);
+		hp, hpmax, u.uen, u.uenmax, u.divetimer, u.uac);
 
 	if (Upolyd)
 		Sprintf(nb = eos(nb), " HD:%d", mons[u.umonnum].mlevel);

@@ -152,10 +152,10 @@ unsigned *ospecial;
 						color = CLR_BROWN;
 					}
 				} else if(Is_waterlevel(&u.uz)){
-					if(offset >= S_vwall && offset <= S_trwall){
+					if(offset < S_arrow_trap){
 						color = CLR_BRIGHT_BLUE;
 					}
-					if(offset >= S_drkroom && offset <= S_dnladder){
+					if(offset == S_water){
 						color = CLR_BLUE;
 					}
 				} else if(Is_firelevel(&u.uz)){

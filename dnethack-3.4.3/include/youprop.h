@@ -315,18 +315,22 @@
 #ifdef STEED
 # define Swimming	(((HSwimming || ESwimming || \
 				 is_swimmer(youmonst.data) || \
+				 Is_waterlevel(&u.uz) || \
 				 u.sealsActive&SEAL_ENKI) && !Punished && inv_weight() < 0) || \
 				 (u.usteed && is_swimmer(u.usteed->data)))
 # define NoburdSwimming	((HSwimming || ESwimming || \
 				 is_swimmer(youmonst.data) || \
+				 Is_waterlevel(&u.uz) || \
 				 u.sealsActive&SEAL_ENKI) && !Punished) || \
 				 (u.usteed && is_swimmer(u.usteed->data)))
 #else
 # define Swimming	((HSwimming || ESwimming || \
 				 is_swimmer(youmonst.data) || \
+				 Is_waterlevel(&u.uz) || \
 				 u.sealsActive&SEAL_ENKI) && !Punished && inv_weight() < 0)
 # define NoburdSwimming	((HSwimming || ESwimming || \
 				 is_swimmer(youmonst.data) || \
+				 Is_waterlevel(&u.uz) || \
 				 u.sealsActive&SEAL_ENKI) && !Punished)
 #endif
 	/* Get wet, don't go under water unless if amphibious */
@@ -335,7 +339,7 @@
 #define EMagical_breathing	u.uprops[MAGICAL_BREATHING].extrinsic
 #define Amphibious		(HMagical_breathing || EMagical_breathing || \
 				 u.sealsActive&SEAL_ASTAROTH || \
-				 u.divetimer || \
+				 (u.divetimer > 0 && u.usubwater) || \
 				 amphibious(youmonst.data))
 	/* Get wet, may go under surface */
 
@@ -344,7 +348,7 @@
 				 breathless(youmonst.data))
 
 //define Underwater		(u.uinwater)
-#define Underwater		(u.usubwater)
+#define Underwater		(u.usubwater || is_3dwater(u.ux,u.uy))
 /* Note that Underwater and u.uinwater are both used in code.
    The latter form is for later implementation of other in-water
    states, like swimming, wading, etc. */

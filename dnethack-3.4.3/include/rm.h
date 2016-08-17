@@ -91,6 +91,7 @@ enum {
 #define ZAP_POS(typ)	((typ) >= POOL)
 #define SPACE_POS(typ)	((typ) > DOOR)
 #define IS_POOL(typ)	((typ) >= POOL && (typ) <= DRAWBRIDGE_UP)
+#define IS_3DWATER(typ)	((typ) == WATER)
 #define IS_THRONE(typ)	((typ) == THRONE)
 #define IS_FOUNTAIN(typ) ((typ) == FOUNTAIN)
 #define IS_SINK(typ)	((typ) == SINK)

@@ -48,6 +48,20 @@ int x,y;
 }
 
 boolean
+is_3dwater(x, y)
+int x, y;
+{
+    schar ltyp;
+
+    if (!isok(x, y))
+        return FALSE;
+    ltyp = levl[x][y].typ;
+    if (ltyp == WATER)
+        return TRUE;
+    return FALSE;
+}
+
+boolean
 is_lava(x,y)
 int x,y;
 {
@@ -360,6 +374,9 @@ int x, y;
 {
 	if (noncorporeal(etmp->edata))
 		return(TRUE);
+	if(is_3dwater(x, y))
+        return (boolean) ((is_u(etmp) && Amphibious)
+                          || is_swimmer(etmp->edata));
 	if (is_pool(x, y))
 		return (boolean)((is_u(etmp) &&
 				(Wwalking || Amphibious || Swimming ||

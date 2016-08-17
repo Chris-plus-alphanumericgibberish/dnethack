@@ -57,7 +57,11 @@ unsigned gpflags;
 		return FALSE;
 
 	    mdat = mtmp->data;
-	    if (is_pool(x,y) && !ignorewater) {
+	    if (is_3dwater(x,y) && !ignorewater) {
+			if (mtmp == &youmonst)
+				return !!(Amphibious);
+			else return (is_swimmer(mdat));
+	    } else if (is_pool(x,y) && !ignorewater) {
 		if (mtmp == &youmonst)
 			return !!(HLevitation || Flying || Wwalking ||
 					Swimming || Amphibious);
@@ -406,6 +410,12 @@ boolean allow_drag;
 	vision_full_recalc = 1;
 	nomul(0, NULL);
 	vision_recalc(0);	/* vision before effects */
+	if(u.usubwater && !is_3dwater(u.ux, u.uy)){
+		u.usubwater = 0;
+		vision_recalc(2);	/* unsee old position */
+		vision_full_recalc = 1;
+		doredraw();
+	}
 	spoteffects(TRUE);
 	invocation_message();
 }

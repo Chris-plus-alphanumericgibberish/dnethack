@@ -359,6 +359,21 @@ moveloop()
 			 /*once-per-monster-moving things go here*/
 			/****************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////
+	/*If anything a monster did caused us to get moved out of water, surface*/
+	if(u.usubwater && !is_pool(u.ux, u.uy)){
+		u.usubwater = 0;
+		vision_full_recalc = 1;
+		vision_recalc(2);	/* unsee old position */
+		doredraw();
+	} else if(Is_waterlevel(&u.uz) && u.usubwater && !is_3dwater(u.ux, u.uy)){
+		You("pop out into an airbubble!");
+		u.usubwater = 0;
+	} else if(Is_waterlevel(&u.uz) && !u.usubwater && is_3dwater(u.ux, u.uy)){
+		Your("%s goes under water!", body_part(HEAD));
+		if(!Breathless) You("can't breath.");
+		u.usubwater = 1;
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////
 			if (!oldBlind ^ !Blind) {  /* one or the other but not both */
 				see_monsters();
 				flags.botl = 1;
@@ -923,89 +938,98 @@ moveloop()
 		     * that encumbrance and movement rate be recalculated.
 		     */
 		    if (u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
-			/* for the moment at least, you're in tiptop shape */
-			wtcap = UNENCUMBERED;
-		    } else if (Upolyd && youmonst.data->mlet == S_EEL && !is_pool(u.ux,u.uy) && !Is_waterlevel(&u.uz)) {
-			if (u.mh > 1) {
-			    u.mh--;
-			    flags.botl = 1;
-			} else if (u.mh < 1)
-			    rehumanize();
-		    } else if (Upolyd && u.mh < u.mhmax) {
-			if (u.mh < 1)
-			    rehumanize();
-			else if (Regeneration ||
-				    (wtcap < MOD_ENCUMBER && !(moves%20))) {
-				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
+				/* for the moment at least, you're in tiptop shape */
+				wtcap = UNENCUMBERED;
+		    } else {
+				if (youracedata->mlet == S_EEL && !is_pool(u.ux,u.uy) && !Is_waterlevel(&u.uz)) {
+				if (u.mh > 1) {
+					u.mh--;
 					flags.botl = 1;
-					u.mh++;
-				}
-			}
-		    } else if (u.uhp < u.uhpmax &&
-			 (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
-			if (u.ulevel > 9 && !(moves % 3) && 
-				!(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz))) {
-			    int heal, Con = (int) ACURR(A_CON);
-				if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
-					if (Con < 12) {
-					heal = 1;
-					} else {
-					heal = rnd(Con-10);
-					if (heal > u.ulevel-9) heal = u.ulevel-9;
+				} else if (u.mh < 1)
+					rehumanize();
+				} else if (Upolyd && u.mh < u.mhmax) {
+				if (u.mh < 1)
+					rehumanize();
+				else if (Regeneration ||
+						(wtcap < MOD_ENCUMBER && !(moves%20))) {
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
+						flags.botl = 1;
+						u.mh++;
 					}
-					flags.botl = 1;
-					u.uhp += heal;
-					if(u.uhp > u.uhpmax)
-					u.uhp = u.uhpmax;
 				}
-			} else if (Regeneration ||
-			     (u.ulevel <= 9 && 
-				 !(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz)) &&
-			      !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
-			    if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)){
-					flags.botl = 1;
-					u.uhp++;
-				}
-			}
-		    }
-			if(u.sealsActive&SEAL_BUER){
-				int dsize = spiritDsize(), regenrate = dsize/3, remainderrate = dsize%3;
-				if(Upolyd && u.mh < u.mhmax){
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance){
-						if(regenrate) u.mh+=regenrate;
-						if(remainderrate && moves%3 < remainderrate) u.mh+=1;
-					} else {
-						if(regenrate && !(moves%4)) u.mh+=regenrate;
-						if(remainderrate && moves%12 < remainderrate) u.mh+=1;
+				} else if (u.uhp < u.uhpmax &&
+				 (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
+				if (u.ulevel > 9 && !(moves % 3) && 
+					!(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz))) {
+					int heal, Con = (int) ACURR(A_CON);
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
+						if (Con < 12) {
+						heal = 1;
+						} else {
+						heal = rnd(Con-10);
+						if (heal > u.ulevel-9) heal = u.ulevel-9;
+						}
+						flags.botl = 1;
+						u.uhp += heal;
+						if(u.uhp > u.uhpmax)
+						u.uhp = u.uhpmax;
 					}
-					if(u.mh > u.mhmax) u.mh = u.mhmax;
-				} else if(u.uhp < u.uhpmax){
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance){
-						if(regenrate) u.uhp+=regenrate;
-						if(remainderrate && moves%3 < remainderrate) u.uhp+=1;
-					} else {
-						if(regenrate && !(moves%4)) u.uhp+=regenrate;
-						if(remainderrate && moves%12 < remainderrate) u.uhp+=1;
+				} else if (Regeneration ||
+					 (u.ulevel <= 9 && 
+					 !(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz)) &&
+					  !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
+					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)){
+						flags.botl = 1;
+						u.uhp++;
 					}
-					if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 				}
-			}
-
-			if(u.sealsActive&SEAL_YMIR && (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)){
-				if((u.ulevel > 9 && !(moves % 3)) || 
-					(u.ulevel <= 9 && !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))
+				}
+				if((uleft  && uleft->oartifact  == ART_RING_OF_HYGIENE_S_DISCIPLE)||
+				   (uright && uright->oartifact == ART_RING_OF_HYGIENE_S_DISCIPLE)
 				){
-					int val_limit, idx;
-					for (idx = 0; idx < A_MAX; idx++) {
-						val_limit = AMAX(idx);
-						/* don't recover strength lost from hunger */
-						if (idx == A_STR && u.uhs >= WEAK) val_limit--;
-						
-						if (val_limit > ABASE(idx)) ABASE(idx)++;
+					if(u.uhp < u.uhpmax) u.uhp++;
+					if(u.uhp < u.uhpmax / 2) u.uhp++;
+					if(u.uhp < u.uhpmax / 3) u.uhp++;
+					if(u.uhp < u.uhpmax / 4) u.uhp++;
+				}
+				if(u.sealsActive&SEAL_BUER){
+					int dsize = spiritDsize(), regenrate = dsize/3, remainderrate = dsize%3;
+					if(Upolyd && u.mh < u.mhmax){
+						if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance){
+							if(regenrate) u.mh+=regenrate;
+							if(remainderrate && moves%3 < remainderrate) u.mh+=1;
+						} else {
+							if(regenrate && !(moves%4)) u.mh+=regenrate;
+							if(remainderrate && moves%12 < remainderrate) u.mh+=1;
+						}
+						if(u.mh > u.mhmax) u.mh = u.mhmax;
+					} else if(u.uhp < u.uhpmax){
+						if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance){
+							if(regenrate) u.uhp+=regenrate;
+							if(remainderrate && moves%3 < remainderrate) u.uhp+=1;
+						} else {
+							if(regenrate && !(moves%4)) u.uhp+=regenrate;
+							if(remainderrate && moves%12 < remainderrate) u.uhp+=1;
+						}
+						if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+					}
+				}
+
+				if(u.sealsActive&SEAL_YMIR && (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)){
+					if((u.ulevel > 9 && !(moves % 3)) || 
+						(u.ulevel <= 9 && !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))
+					){
+						int val_limit, idx;
+						for (idx = 0; idx < A_MAX; idx++) {
+							val_limit = AMAX(idx);
+							/* don't recover strength lost from hunger */
+							if (idx == A_STR && u.uhs >= WEAK) val_limit--;
+							
+							if (val_limit > ABASE(idx)) ABASE(idx)++;
+						}
 					}
 				}
 			}
-			
 		    /* moving around while encumbered is hard work */
 		    if (wtcap > MOD_ENCUMBER && u.umoved) {
 			if(!(wtcap < EXT_ENCUMBER ? moves%30 : moves%10)) {
@@ -1234,6 +1258,20 @@ moveloop()
 				if(u.uen > u.uenmax) u.uen = u.uenmax;
 				oldWisBon = ACURR(A_WIS)/4;
 			}
+////////////////////////////////////////////////////////////////////////////////////////////////
+	/*If anything we did caused us to get moved out of water, surface*/
+	if(u.usubwater && !is_pool(u.ux, u.uy)){
+		u.usubwater = 0;
+		vision_full_recalc = 1;
+		vision_recalc(2);	/* unsee old position */
+		doredraw();
+	} else if(Is_waterlevel(&u.uz) && u.usubwater && !is_3dwater(u.ux, u.uy)){
+		You("pop out into an airbubble!");
+		u.usubwater = 0;
+	} else if(Is_waterlevel(&u.uz) && !u.usubwater && is_3dwater(u.ux, u.uy)){
+		Your("%s goes under water!", body_part(HEAD));
+		u.usubwater = 1;
+	}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	

@@ -1721,7 +1721,7 @@ boolean pick;
 				You("are on solid %s again.",
 				    is_ice(u.ux, u.uy) ? "ice" : "land");
 		}
-		else if (Is_waterlevel(&u.uz))
+		else if (is_3dwater(u.ux, u.uy))
 			goto stillinwater;
 		else if (Levitation)
 			You("pop out of the water like a cork!");
@@ -1731,7 +1731,7 @@ boolean pick;
 			You("slowly rise above the surface.");
 		else
 			goto stillinwater;
-		was_underwater = Underwater && !Is_waterlevel(&u.uz);
+		was_underwater = Underwater;
 		u.uinwater = 0;		/* leave the water */
 		u.usubwater = 0;		/* leave the water */
 		if (was_underwater) {	/* restore vision */
@@ -1740,7 +1740,7 @@ boolean pick;
 		}
 	}
 stillinwater:;
-	if (((!Levitation && !Flying) || Is_waterlevel(&u.uz)) && !u.ustuck) {
+	if (((!Levitation && !Flying) || is_3dwater(u.ux, u.uy)) && !u.ustuck) {
 	    /* limit recursive calls through teleds() */
 	    if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
 #ifdef STEED
@@ -2139,7 +2139,7 @@ dopickup()
 		return loot_mon(u.ustuck, &tmpcount, (boolean *)0);
 	    }
 	}
-	if(is_pool(u.ux, u.uy)) {
+	if(is_pool(u.ux, u.uy) && !is_3dwater(u.ux, u.uy)) {
 	    if (Wwalking || is_floater(youmonst.data) || is_clinger(youmonst.data)
 			|| (Flying && !Breathless)) {
 		You("cannot dive into the water to pick things up.");
