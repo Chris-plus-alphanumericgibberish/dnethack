@@ -229,14 +229,14 @@ boolean unchain_ball;	/* whether to unpunish or just unwield */
  * Avoid stealing the object stealoid
  */
 int
-steal(mtmp, objnambuf, artifact)
+steal(mtmp, objnambuf, artifact, monkey_business)
 struct monst *mtmp;
 char *objnambuf;
 boolean artifact;
+boolean monkey_business; /* true iff an animal is doing the thievery */
 {
 	struct obj *otmp;
 	int tmp, could_petrify, named = 0, armordelay;
-	boolean monkey_business; /* true iff an animal is doing the thievery */
 
 	if (objnambuf) *objnambuf = '\0';
 	/* the following is true if successful on first of two attacks. */
@@ -259,7 +259,7 @@ nothing_to_steal:
 	    return(1);	/* let her flee */
 	}
 
-	monkey_business = is_animal(mtmp->data);
+	// monkey_business = is_animal(mtmp->data);
 	if (monkey_business) {
 	    ;	/* skip ring special cases */
 	} else if (Adornment & LEFT_RING) {
@@ -381,15 +381,15 @@ gotobj:
 				  curssv ? "let him take" :
 				  slowly ? "start removing" : "hand over",
 				  equipname(otmp));
-			else if(flags.female)
+			else if(is_neuter(mtmp->data) || flags.female == mtmp->female)
 			    pline("%s charms you.  You gladly %s your %s.",
-				  !seen ? "She" : Monnam(mtmp),
+				  !seen ? SheHeIt(mtmp) : Monnam(mtmp),
 				  curssv ? "let her take" :
 				  slowly ? "start removing" : "hand over",
 				  equipname(otmp));
 			else
 			    pline("%s seduces you and %s off your %s.",
-				  !seen ? "She" : Adjmonnam(mtmp, "beautiful"),
+				  !seen ? SheHeIt(mtmp) : Adjmonnam(mtmp, "beautiful"),
 				  curssv ? "helps you to take" :
 				  slowly ? "you start taking" : "you take",
 				  equipname(otmp));

@@ -387,6 +387,7 @@ struct obj {
 #define is_twoweapable_artifact(otmp) ((otmp)->oartifact == ART_STING\
 				|| (otmp)->oartifact == ART_ORCRIST\
 				|| (otmp)->oartifact == ART_GRIMTOOTH\
+				|| (otmp)->oartifact == ART_CLAIDEAMH\
 				|| (otmp)->oartifact == ART_DRAGONLANCE\
 				|| (otmp)->oartifact == ART_DEMONBANE\
 				|| (otmp)->oartifact == ART_WEREBANE\

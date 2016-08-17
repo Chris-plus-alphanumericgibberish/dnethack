@@ -1109,41 +1109,55 @@ int thrown;
 			if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
 			} else {
-				if (!(noncorporeal(mdat) || amorphous(mdat) || (stationary(mdat) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT))) && (
+				if (!(noncorporeal(mdat) || amorphous(mdat) || (stationary(mdat) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT)) || u.uswallow) && (
 						((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh || 
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy)) ||
-								((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
+								((mon->mux != u.ux || mon->muy != u.uy) && 
+									((obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data) && !is_unalive(mon->data))
+										|| distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
+								)
 						) && 
 						((Role_if(PM_ROGUE) && !Upolyd) ||
 							(Role_if(PM_ANACHRONONAUT) && Race_if(PM_DROW) && !Upolyd) ||
 							u.sealsActive&SEAL_ANDROMALIUS ||
-							(uwep && uwep->oartifact == ART_SPINESEEKER) ||
-							(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
-							(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON))
+							(obj == uwep && uwep->oartifact == ART_SPINESEEKER) ||
+							(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data) && !is_unalive(mon->data)) ||
+							(obj == uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
+							(Role_if(PM_CONVICT) && !Upolyd && obj == uwep && uwep->otyp == SPOON))
 				)) {
+					if(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data) && !is_unalive(mon->data)){
+						pline("The power of lifehunt seeks the neck of %s!",the(mon_nam(mon)));
+						mon->mstdy += u.ulevel;
+						u.ustdy = u.ulevel/2+1;
+					}
 					if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
 						You("snipe the flat-footed %s!", l_monnam(mon));
-					else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
+					else if((mon->mux != u.ux || mon->muy != u.uy) && 
+						(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data))
+					){
+						You("strike the flat-footed %s!", l_monnam(mon));
+					} else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
 						(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 						&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
 					) You("strike %s from behind!", mon_nam(mon));
 					else if(is_blind(mon)) You("strike the blinded %s!", l_monnam(mon));
 					else if(mon->mtrapped) You("strike the trapped %s!", l_monnam(mon));
 					else You("strike the helpless %s!", l_monnam(mon));
-					if(uwep && uwep->oartifact == ART_SPINESEEKER && !Upolyd) tmp += rnd(u.ulevel +
+					
+					if(obj == uwep && uwep->oartifact == ART_SPINESEEKER && !Upolyd) tmp += rnd(u.ulevel +
 						((mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
 						  (sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux)
 						  && sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))) ? u.ulevel : 0));
-					if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) 
+					if(obj == uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) 
 						tmp += rnd(u.ulevel + ((mvitals[PM_ACERERAK].died > 0 ? u.ulevel/2 : 0)));
-					if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
-					if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel + ((uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
-					if(Role_if(PM_CONVICT) && !Upolyd && uwep && uwep->otyp == SPOON) tmp += rnd(u.ulevel);
+					if(Role_if(PM_ROGUE) &&!Upolyd) tmp += rnd(u.ulevel + ((obj == uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
+					if(u.sealsActive&SEAL_ANDROMALIUS) tmp += rnd(u.ulevel + ((obj == uwep && uwep->oartifact == ART_SILVER_STARLIGHT ? u.ulevel/2 : 0)));
+					if(Role_if(PM_CONVICT) && !Upolyd && obj == uwep && uwep->otyp == SPOON) tmp += rnd(u.ulevel);
 					hittxt = TRUE;
 				}
-				if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+				if(obj == uwep && is_lightsaber(uwep) && uwep->lamplit){
 					if (
 						(mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh ||
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) || stationary(mdat) ||
@@ -1366,6 +1380,13 @@ int thrown;
 					}
 					if(obj->oartifact &&
 						artifact_hit(&youmonst, mon, obj, &tmp, dieroll)){
+						if(mon->mhp <= 0) /* artifact killed monster */
+							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
+						if (tmp == 0) return TRUE; /* NOTE: ditto */
+						hittxt = TRUE;
+					}
+					if(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER &&
+						artifact_hit(&youmonst, mon, uarmh, &tmp, dieroll)){
 						if(mon->mhp <= 0) /* artifact killed monster */
 							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
 						if (tmp == 0) return TRUE; /* NOTE: ditto */
