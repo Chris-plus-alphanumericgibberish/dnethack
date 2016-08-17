@@ -590,6 +590,7 @@ clear_level_structures()
 	level.flags.has_court = 0;
 	level.flags.has_morgue = level.flags.graveyard = 0;
 	level.flags.has_beehive = 0;
+	level.flags.has_armory = 0;
 	level.flags.has_barracks = 0;
 	level.flags.has_temple = 0;
 	level.flags.has_swamp = 0;
@@ -788,7 +789,10 @@ makelevel()
 	   !(mvitals[PM_KILLER_BEE].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(BEEHIVE);
 	else if (u_depth > 11 && !rn2(8)) mkroom(MORGUE);
 	else if (u_depth > 12 && !rn2(10)) mkroom(ANTHOLE);
-	else if (u_depth > 14 && !rn2(6) &&
+	else if (u_depth <= 14 && u_depth > 1 && !rn2(6) &&
+	   !(mvitals[PM_RUST_MONSTER].mvflags & G_GONE && !In_quest(&u.uz))){
+		mkroom(ARMORY);
+	} else if (u_depth > 14 && !rn2(6) &&
 	   !(mvitals[PM_SOLDIER].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(BARRACKS);
 	else if (u_depth > 16 && !rn2(10) &&
 	   !(mvitals[PM_COCKATRICE].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(COCKNEST);
@@ -801,14 +805,19 @@ makelevel()
 		/* Rivers on vault levels are buggy, so we forbid that.
 		Islands + rivers are potentially too blocking,
 			so no that either. 
-		dNethack adjustment: as Vlad's has garunteed water 
+		dNethack adjustment: as Vlad's has water 
 			walking boots, I'm allowing Islands+rivers. */
 	if (u_depth > 3 && !rn2(4) &&
 		!level.flags.has_vault) mkroom(RIVER);
 	
 		/* Part four: very late modifications */
-	if (u_depth > 12 && !rn2(8)){
+	if (u_depth > 12 && !rn2(8) &&
+		!level.flags.has_vault){
 		mksepulcher();
+	}
+	if (!rn2(8) &&
+		!level.flags.has_vault){
+		mkmivault();
 	}
 	
 	} /*end u_depth*/

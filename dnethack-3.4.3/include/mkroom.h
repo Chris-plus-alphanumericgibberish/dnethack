@@ -59,40 +59,42 @@ extern NEARDATA struct door doors[DOORMAX];
 #define VAULT		 4	/* contains piles of gold */
 #define BEEHIVE		 5	/* contains killer bees and royal jelly */
 #define MORGUE		 6	/* contains corpses, undead and ghosts */
-#define BARRACKS	 7	/* contains soldiers and their gear */
-#define ZOO			 8	/* floor covered with treasure and monsters */
-#define DELPHI		 9	/* contains Oracle and peripherals */
-#define TEMPLE		10	/* contains a shrine */
-#define LEPREHALL	11	/* leprechaun hall (Tom Proudfoot) */
-#define COCKNEST	12	/* cockatrice nest (Tom Proudfoot) */
-#define ANTHOLE		13	/* ants (Tom Proudfoot) */
-#define GARDEN		14	/* nymphs, trees and fountains */
-#define LIBRARY		15	/* nymphs, trees and fountains */
-#define ISLAND 		16 /* ringed by water, contains items */
-#define RIVER 		17 /* "room" is really a river running through the level*/
-#define POOLROOM	18	/*  */
-#define SHOPBASE	19	/* everything above this is a shop */
-#define ARMORSHOP	20	/* specific shop defines for level compiler */
-#define SCROLLSHOP	21
-#define POTIONSHOP	22
-#define WEAPONSHOP 	23
-#define FOODSHOP  	24
-#define RINGSHOP	25
-#define WANDSHOP	26
-#define TOOLSHOP	27
-#define BOOKSHOP	28
-#define UNIQUESHOP	29	/* shops here & above not randomly gen'd. */
-#define CANDLESHOP	29
-#define MAXRTYPE	29	/* maximum valid room type */
+#define ARMORY		 7	/* ruined armory */
+#define BARRACKS	 8	/* contains soldiers and their gear */
+#define ZOO			 9	/* floor covered with treasure and monsters */
+#define DELPHI		10	/* contains Oracle and peripherals */
+#define TEMPLE		11	/* contains a shrine */
+#define LEPREHALL	12	/* leprechaun hall (Tom Proudfoot) */
+#define COCKNEST	13	/* cockatrice nest (Tom Proudfoot) */
+#define ANTHOLE		14	/* ants (Tom Proudfoot) */
+#define GARDEN		15	/* nymphs, trees and fountains */
+#define LIBRARY		16	/* nymphs, trees and fountains */
+#define ISLAND 		17 /* ringed by water, contains items */
+#define RIVER 		18 /* "room" is really a river running through the level*/
+#define POOLROOM	19	/*  */
+#define SHOPBASE	20	/* everything above this is a shop */
+#define ARMORSHOP	21	/* specific shop defines for level compiler */
+#define SCROLLSHOP	22
+#define POTIONSHOP	23
+#define WEAPONSHOP 	24
+#define FOODSHOP  	25
+#define RINGSHOP	26
+#define WANDSHOP	27
+#define TOOLSHOP	28
+#define BOOKSHOP	29
+#define UNIQUESHOP	30	/* shops here & above not randomly gen'd. */
+#define CANDLESHOP	30
+#define MAXRTYPE	30	/* maximum valid room type */
 #ifdef BARD
-#define MUSICSHOP	29
+#define MUSICSHOP	30
 #undef UNIQUESHOP
 #undef CANDLESHOP
 #undef MAXRTYPE
-#define UNIQUESHOP	30
-#define CANDLESHOP	30
-#define MAXRTYPE	30
+#define UNIQUESHOP	31
+#define CANDLESHOP	31
+#define MAXRTYPE	31
 #endif
+/* NOTE: rtype is a char, so if go above 124 or so need to fix that*/
 
 /* Special type for search_special() */
 #define ANY_TYPE	(-1)

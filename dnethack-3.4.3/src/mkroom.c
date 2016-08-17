@@ -22,6 +22,7 @@ STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
 STATIC_DCL void FDECL(mkgarden, (struct mkroom *));
 STATIC_DCL void FDECL(mklibrary, (struct mkroom *));
+STATIC_DCL void FDECL(mkarmory, (struct mkroom *));
 STATIC_DCL void NDECL(mkisland);
 STATIC_DCL void NDECL(mkriver);
 STATIC_DCL void FDECL(liquify, (xchar, xchar, boolean));
@@ -93,6 +94,77 @@ mksepulcher()
 }
 
 void
+mkmivault()
+{
+	int x,y,tries=0;
+	int i,j;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-6)+1;
+		y = rn2(ROWNO-6)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<6;i++) for(j=0;j<6;j++) if(!isok(x+i,y+j) || levl[x+i][y+j].typ != STONE) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<6;i++) for(j=0;j<6;j++) levl[x+i][y+j].typ = MOAT;
+			
+			for(i=2;i<4;i++) for(j=2;j<4;j++) levl[x+i][y+j].typ = ROOM;
+			levl[x+4][y+4].typ = BRCORNER;
+			levl[x+1][y+4].typ = BLCORNER;
+			for(i=2;i<4;i++) levl[x+i][y+4].typ = HWALL;
+			for(i=2;i<4;i++) levl[x+i][y+1].typ = HWALL;
+			for(i=2;i<4;i++) levl[x+4][y+i].typ = VWALL;
+			for(i=2;i<4;i++) levl[x+1][y+i].typ = VWALL;
+			levl[x+4][y+1].typ = TRCORNER;
+			levl[x+1][y+1].typ = TLCORNER;
+			
+			
+			otmp = mksobj_at(CHEST, x+2, y+2, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			otmp = mksobj_at(CHEST, x+2, y+3, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			otmp = mksobj_at(CHEST, x+3, y+2, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			otmp = mksobj_at(CHEST, x+3, y+3, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			
+			mon = makemon(mivaultmon(), x+rnd(2)+1, y+rnd(2)+1, 0);
+			mon->mstrategy |= STRAT_WAITFORU;
+		}
+	}
+}
+
+void
+mkmivaultitem(container)
+    struct obj *container;
+{
+	struct obj *otmp;
+	int try_limit = 100;
+	otmp = (struct obj *)0;
+	if(!rn2(4)){
+		do {
+		if (otmp) delobj(otmp);
+		otmp = mkobj(ARMOR_CLASS, FALSE);
+		} while (--try_limit > 0 &&
+		  !(objects[otmp->otyp].oc_magic || otmp->oartifact));
+		add_to_container(container, otmp);
+	} else {
+		do {
+			if(otmp && !Is_container(otmp)) delobj(otmp);
+			otmp = mkobj(RANDOM_CLASS, TRUE);
+			if(Is_container(otmp)){
+				place_object(otmp, container->ox, container->oy);
+			}
+		} while (--try_limit > 0 &&
+		  !(objects[otmp->otyp].oc_magic || otmp->oartifact));
+		if(!Is_container(otmp)) add_to_container(container, otmp);
+	}
+}
+
+void
 mkroom(roomtype)
 /* make and stock a room of a given type */
 int	roomtype;
@@ -104,6 +176,7 @@ int	roomtype;
 	case ZOO:	mkzoo(ZOO); break;
 	case BEEHIVE:	mkzoo(BEEHIVE); break;
 	case MORGUE:	mkzoo(MORGUE); break;
+	case ARMORY:	mkzoo(ARMORY); break;
 	case BARRACKS:	mkzoo(BARRACKS); break;
 	case SWAMP:	mkswamp(); break;
 	case GARDEN:	mkgarden((struct mkroom *)0); break;
@@ -315,6 +388,10 @@ struct mkroom *sroom;
 		case LIBRARY:
 			mklibrary(sroom);
 			/* mklibrary() sets flags and we don't want other fillings */
+		return;
+		case ARMORY:
+			mkarmory(sroom);
+			/* mkarmory() sets flags and we don't want other fillings */
 		return;
 	    case COURT:
 		if(level.flags.is_maze_lev) {
@@ -646,6 +723,91 @@ struct mkroom *croom; /* NULL == choose random room */
 			if(levl[pos.x][pos.y].typ >= STONE && levl[pos.x][pos.y].typ <= DBWALL){
 				if(rn2(6)) mksobj_at(SPE_BLANK_PAPER, pos.x, pos.y, TRUE, FALSE);
 				else mkobj_at(SPBOOK_CLASS, pos.x, pos.y, FALSE);
+			}
+		}
+	}
+	}
+}
+
+STATIC_OVL void
+mkarmory(croom)
+struct mkroom *croom; /* NULL == choose random room */
+{
+    register int tryct = 0;
+	register struct obj *otmp;
+    boolean maderoom = FALSE;
+    coord pos;
+    register int i, tried;
+
+    while ((tryct++ < 25) && !maderoom) {
+	register struct mkroom *sroom = croom ? croom : &rooms[rn2(nroom)];
+	
+	if (sroom->hx < 0 || (!croom && (sroom->rtype != OROOM)))
+	    	continue;
+
+	sroom->rtype = ARMORY;
+	maderoom = TRUE;
+	level.flags.has_armory = 1;
+	
+	tried = 0;
+	i = rnd(2);
+	while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
+	    struct permonst *pmon;
+	    if (!MON_AT(pos.x, pos.y)) {
+			struct monst *mtmp = makemon(&mons[PM_RUST_MONSTER], pos.x,pos.y, NO_MM_FLAGS);
+			if (mtmp) mtmp->msleeping = 1;
+			i--;
+	    }
+	}
+	tried = 0;
+	i = rn2(3);
+	while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
+	    struct permonst *pmon;
+	    if (!MON_AT(pos.x, pos.y)) {
+			struct monst *mtmp = makemon(&mons[PM_BROWN_PUDDING], pos.x,pos.y, NO_MM_FLAGS);
+			if (mtmp) mtmp->mstrategy |= STRAT_WAITFORU;
+			i--;
+	    }
+	}
+	for(pos.x=sroom->lx; pos.x <= sroom->hx; pos.x++){
+		for(pos.y=sroom->ly; pos.y <= sroom->hy; pos.y++){
+			if(!rn2(6)){
+				otmp = mkobj_at(WEAPON_CLASS, pos.x, pos.y, FALSE);
+				if(rn2(3)){
+					otmp->oeroded = rn2(4);
+				} else {
+					otmp->oeroded2 = rn2(4);
+				}
+				if(rn2(2)){
+					otmp->spe = rn2(3)+rn2(3);
+				}
+			}
+			if(!rn2(6)){
+				otmp = mkobj_at(ARMOR_CLASS, pos.x, pos.y, FALSE);
+				if(rn2(3)){
+					otmp->oeroded = rn2(4);
+				} else {
+					otmp->oeroded2 = rn2(4);
+				}
+				if(rn2(2)){
+					otmp->spe = rn2(3)+rn2(2);
+				}
+			}
+			if(!rn2(3)){
+				otmp = mkobj_at(WEAPON_CLASS, pos.x, pos.y, FALSE);
+				if(rn2(3)){
+					otmp->oeroded = rn2(4);
+				} else {
+					otmp->oeroded2 = rn2(4);
+				}
+			}
+			if(!rn2(3)){
+				otmp = mkobj_at(ARMOR_CLASS, pos.x, pos.y, FALSE);
+				if(rn2(3)){
+					otmp->oeroded = rn2(4);
+				} else {
+					otmp->oeroded2 = rn2(4);
+				}
 			}
 		}
 	}
@@ -1120,6 +1282,79 @@ courtmon()
 	else if (i > 30)	return(&mons[PM_HOBGOBLIN]);
 	else if (i > 15)	return(mkclass(S_GNOME, Inhell ? G_HELL : G_NOHELL));
 	else			return(mkclass(S_KOBOLD, Inhell ? G_HELL : G_NOHELL));
+}
+
+struct permonst *
+mivaultmon()
+{
+	switch(rn2(22)){
+		case 0:
+			return(&mons[PM_SHOGGOTH]);
+		break;
+		case 1:
+			return(&mons[PM_PRIEST_OF_GHAUNADAUR]);
+		break;
+		case 2:
+			return(&mons[PM_EYE_OF_DOOM]);
+		break;
+		case 3:
+			return(&mons[PM_SON_OF_TYPHON]);
+		break;
+		case 4:
+			return(&mons[PM_NIGHTGAUNT]);
+		break;
+		case 5:
+			return(&mons[PM_DARK_YOUNG]);
+		break;
+		case 6:
+			return(&mons[PM_MIRKWOOD_ELDER]);
+		break;
+		case 7:
+			return(&mons[PM_PURPLE_WORM]);
+		break;
+		case 8:
+			return(&mons[PM_HUNTING_HORROR]);
+		break;
+		case 9:
+			return(&mons[PM_BEBELITH]);
+		break;
+		case 10:
+			return(&mons[PM_AMMIT]);
+		break;
+		case 11:
+			return(&mons[PM_GIGANTIC_PSEUDODRAGON]);
+		break;
+		case 12:
+			return(&mons[PM_JUGGERNAUT]);
+		break;
+		case 13:
+			return(&mons[PM_ID_JUGGERNAUT]);
+		break;
+		case 14:
+			return(&mons[PM_SCRAP_TITAN]);
+		break;
+		case 15:
+			return(&mons[PM_HELLFIRE_COLOSSUS]);
+		break;
+		case 16:
+			return(&mons[PM_TITAN]);
+		break;
+		case 17:
+			return(&mons[PM_JABBERWOCK]);
+		break;
+		case 18:
+			return(&mons[PM_GUARDIAN_NAGA]);
+		break;
+		case 19:
+			return(&mons[PM_GROVE_GUARDIAN]);
+		break;
+		case 20:
+			return(&mons[PM_IRON_GOLEM]);
+		break;
+		case 21:
+			return(&mons[PM_BALROG]);
+		break;
+	}
 }
 
 #define NSTYPES (PM_CAPTAIN - PM_SOLDIER + 1)

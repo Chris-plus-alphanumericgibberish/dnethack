@@ -485,6 +485,7 @@ struct levelflags {
 	Bitfield(has_garden, 1);
 	Bitfield(has_library, 1);
 	Bitfield(has_beehive, 1);
+	Bitfield(has_armory, 1);
 	Bitfield(has_barracks, 1);
 	Bitfield(has_temple, 1);
 
