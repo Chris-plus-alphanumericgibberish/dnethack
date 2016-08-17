@@ -614,14 +614,14 @@ register struct monst *mtmp;
 	 * which case we want to check its pre-teleport position
 	 */
 	if (!canspotmon(mtmp) && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) < 2 && ptr->msound != MS_SONG && ptr->msound != MS_OONA)
-	map_invisible(mtmp->mx, mtmp->my);
+		map_invisible(mtmp->mx, mtmp->my);
 	
 	if(mtmp->ispriest){
 		priest_talk(mtmp);
 		return 1;
 	}
 	
-	if (mtmp->mtame && uclockwork && !nohands(ptr) && !is_animal(ptr) && yn("(Ask for help winding your clockwork?)") == 'y'){
+	if (mtmp->mtame && !flags.mon_moving && uclockwork && !nohands(ptr) && !is_animal(ptr) && yn("(Ask for help winding your clockwork?)") == 'y'){
 		struct obj *key;
 		int turns = 0;
 		
@@ -724,7 +724,7 @@ asGuardian:
 				verbl_msg = verbuf;
 	    		} else
 		    		verbl_msg = "I only drink... potions.";
-    	        } else {
+    	} else {
 			int vampindex;
 	    		static const char * const vampmsg[] = {
 			       /* These first two (0 and 1) are specially handled below */
@@ -753,19 +753,19 @@ asGuardian:
 		    	    } else
 			    	verbl_msg = vampmsg[vampindex];
 			}
-	        }
 	    }
-	    break;
+	}
+	break;
 	case MS_WERE:
 		if (flags.moonphase == FULL_MOON && (night() ^ !rn2(13))) {
-		pline("%s throws back %s head and lets out a blood curdling %s!",
-		      Monnam(mtmp), mhis(mtmp),
-		      ptr == &mons[PM_HUMAN_WERERAT] ? "shriek" : "howl");
-		wake_nearto_noisy(mtmp->mx, mtmp->my, 11*11);
-	    } else
-		pline_msg =
-		     "whispers inaudibly.  All you can make out is \"moon\".";
-	    break;
+			pline("%s throws back %s head and lets out a blood curdling %s!",
+				  Monnam(mtmp), mhis(mtmp),
+				  ptr == &mons[PM_HUMAN_WERERAT] ? "shriek" : "howl");
+			wake_nearto_noisy(mtmp->mx, mtmp->my, 11*11);
+		} else
+			pline_msg =
+				 "whispers inaudibly.  All you can make out is \"moon\".";
+	break;
 	case MS_BARK:
 	    if (flags.moonphase == FULL_MOON && night()) {
 		pline_msg = "howls.";
@@ -815,7 +815,7 @@ asGuardian:
 	case MS_HISS:
 	    if (!mtmp->mpeaceful)
 		pline_msg = "hisses!";
-		    else return 0;	/* no sound */
+	    else return 0;	/* no sound */
 	    break;
 	case MS_BUZZ:
 	    pline_msg = mtmp->mpeaceful ? "drones." : "buzzes angrily.";
@@ -1367,7 +1367,7 @@ asGuardian:
 					
 					pline_msg = "sings a dirge.";
 					mtmp->mspec_used = rn1(3,3);
-
+					
 					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if(!mindless(tmpm->data)){
@@ -1716,7 +1716,7 @@ humanoid_sound:
 #endif /* CONVICT */
 	    if (mtmp->mpeaceful) {
 			if(!mtmp->mtame) (void) demon_talk(mtmp);
-		break;
+			break;
 	    }
 	    /* fall through */
 	case MS_CUSS:
@@ -1907,7 +1907,7 @@ dochat()
 		}
 		return 1;
 	}
-
+	
 	bindresult = dobinding(tx,ty);
 	if(bindresult) return bindresult;
 	

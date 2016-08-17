@@ -195,7 +195,7 @@ int humidity;
 			*y = ystart + yy;
 			if (is_ok_location(*x,*y,humidity)) goto found_it;
 		    }
-		panic("get_location:  can't find a place!");
+			panic("get_location:  can't find a place!");
 	    }
 	}
 found_it:;

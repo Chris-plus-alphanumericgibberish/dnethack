@@ -102,7 +102,7 @@ char *wardDecode[26] = {
  *  spelspec, spelsbon:
  *	Arc map masters (SPE_MAGIC_MAPPING)
  *	Bar fugue/berserker (SPE_HASTE_SELF)
- *      Brd to put to sleep (SPE_SLEEP)
+ *  Brd to put to sleep (SPE_SLEEP)
  *	Cav born to dig (SPE_DIG)
  *	Hea to heal (SPE_CURE_SICKNESS)
  *	Kni to turn back evil (SPE_TURN_UNDEAD)
@@ -1317,8 +1317,8 @@ masterDoorBox(x,y)
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
 	if (Is_box(otmp)) {
 		if (!can_reach_floor()) {
-		You_cant("reach %s from up here.", the(xname(otmp)));
-		return FALSE;
+			You_cant("reach %s from up here.", the(xname(otmp)));
+			return FALSE;
 		}
 		
 		if (otmp->obroken || !otmp->olocked) continue;
@@ -1449,7 +1449,7 @@ spiriteffects(power, atme)
 				} else {
 					Your("shadow flows under %s, but nothing happens.",mon_nam(mon));
 				}
-			} else{
+			} else {
 				pline("There is no target there.");
 				break;
 			}
