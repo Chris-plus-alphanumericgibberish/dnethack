@@ -488,7 +488,7 @@ use_stethoscope(obj)
 	boolean interference = (u.uswallow && is_whirly(u.ustuck->data) &&
 				!rn2(Role_if(PM_HEALER) ? 10 : 3));
 
-	if (nohands(youmonst.data)) {	/* should also check for no ears and/or deaf */
+	if (nohands(youracedata)) {	/* should also check for no ears and/or deaf */
 		You("have no hands!");	/* not `body_part(HAND)' */
 		return 0;
 	} else if (!freehand()) {
@@ -907,7 +907,7 @@ struct obj *obj;
 						  "Yikes!  You've frozen yourself!");
 					nomul(-rnd((MAXULEV+6) - u.ulevel), "frozen by your own reflection");
 				} else You("stiffen momentarily under your gaze.");
-		    } else if (youmonst.data->mlet == S_VAMPIRE)
+		    } else if (youracedata->mlet == S_VAMPIRE)
 				You("don't have a reflection.");
 		    else if (u.umonnum == PM_UMBER_HULK && ward_at(u.ux, u.uy) != HAMSA) {
 				pline("Huh?  That doesn't look like you!");
@@ -1585,7 +1585,7 @@ int magic; /* 0=Physical, otherwise skill level */
 {
 	coord cc;
 
-	if (!magic && (nolimbs(youmonst.data) || slithy(youmonst.data))) {
+	if (!magic && (nolimbs(youracedata) || slithy(youracedata))) {
 		/* normally (nolimbs || slithy) implies !Jumping,
 		   but that isn't necessarily the case for knights */
 		You_cant("jump; you have no legs!");
@@ -1796,7 +1796,7 @@ register struct obj *obj;
 		&& !Stone_resistance && !uarmg) {
 	    char kbuf[BUFSZ];
 
-	    if (poly_when_stoned(youmonst.data))
+	    if (poly_when_stoned(youracedata))
 		You("tin %s without wearing gloves.",
 			an(mons[corpse->corpsenm].mname));
 	    else {
@@ -2229,7 +2229,7 @@ struct obj *obj;
 			You("cover %s with a thick layer of grease.",
 			    yname(otmp));
 			otmp->greased = 1;
-			if (obj->cursed && !nohands(youmonst.data)) {
+			if (obj->cursed && !nohands(youracedata)) {
 			    incr_itimeout(&Glib, rnd(15));
 			    pline("Some of the grease gets all over your %s.",
 				makeplural(body_part(HAND)));
@@ -2879,7 +2879,7 @@ struct obj *otmp;
 	char buf[BUFSZ];
 	const char *occutext = "setting the trap";
 
-	if (nohands(youmonst.data))
+	if (nohands(youracedata))
 	    what = "without hands";
 	else if (Stunned)
 	    what = "while stunned";
@@ -3023,7 +3023,7 @@ struct obj **optr;
     mtmp = m_at(rx, ry);
 	ttmp = t_at(rx, ry);
 
-	if (nohands(youmonst.data))
+	if (nohands(youracedata))
 	    what = "without hands";
 	else if (Stunned)
 	    what = "while stunned";
@@ -3091,7 +3091,7 @@ struct obj *otmp;
 {
 	const char *what = (char *)0;
 
-	if (nohands(youmonst.data))
+	if (nohands(youracedata))
 	    what = "without hands";
 	else if (Stunned)
 	    what = "while stunned";
@@ -3320,7 +3320,7 @@ struct obj *obj;
 		    if (otmp->otyp == CORPSE &&
 			    touch_petrifies(&mons[otmp->corpsenm]) &&
 			    !uarmg && !Stone_resistance &&
-			    !(poly_when_stoned(youmonst.data) &&
+			    !(poly_when_stoned(youracedata) &&
 				polymon(PM_STONE_GOLEM))) {
 			char kbuf[BUFSZ];
 
@@ -3629,7 +3629,7 @@ do_break_wand(obj)
 
     is_fragile = (!strcmp(OBJ_DESCR(objects[obj->otyp]), "balsa"));
 
-    if (nohands(youmonst.data)) {
+    if (nohands(youracedata)) {
 	You_cant("break %s without hands!", the_wand);
 	return 0;
     } else if (obj->oartifact || ACURR(A_STR) < (is_fragile ? 5 : 10)) {
@@ -3905,7 +3905,7 @@ struct obj *obj;
     dealloc_obj(obj);
 #endif
 
-    if (nohands(youmonst.data)) {
+    if (nohands(youracedata)) {
 	pline("And how would you flip the coin without hands?");
 	return 0;
     } else if (!freehand()) {
