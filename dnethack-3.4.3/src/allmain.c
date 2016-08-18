@@ -1159,7 +1159,9 @@ moveloop()
 	      /******************************************/
 	     /* once-per-hero-took-time things go here */
 	    /******************************************/
-		u.ustdy /= 2;
+		if(u.ustdy > 0) u.ustdy -= 1;
+		
+
 		
 		if(u.utrap && u.utraptype == TT_LAVA) {
 			if(!is_lava(u.ux,u.uy))
