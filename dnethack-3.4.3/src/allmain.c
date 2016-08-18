@@ -547,14 +547,14 @@ moveloop()
 				if(!mtmp->mnotlaugh){
 					if(!is_silent(mtmp->data)){
 						wake_nearto_noisy(mtmp->mx, mtmp->my, combatNoise(mtmp->data));
-						if(sensemon(mtmp) || ((cansee(mtmp->mx,mtmp->my) || see_with_infrared(mtmp)) && canspotmon(mtmp) && !mtmp->mundetected)){
+						if(sensemon(mtmp) || (canseemon(mtmp) && !mtmp->mundetected)){
 							pline("%s is laughing hysterically.", Monnam(mtmp));
 						} else if(couldsee(mtmp->mx,mtmp->my)){
 							You_hear("hysterical laughter.");
 						} else {
 							You_hear("laughter in the distance.");
 						}
-					} else if(sensemon(mtmp) || ((cansee(mtmp->mx,mtmp->my) || see_with_infrared(mtmp)) && canspotmon(mtmp) && !mtmp->mundetected))
+					} else if(sensemon(mtmp) || (canseemon(mtmp) && !mtmp->mundetected))
 						pline("%s is trembling hysterically.", Monnam(mtmp));
 				}
 //ifdef BARD
@@ -580,7 +580,7 @@ moveloop()
 					else if(mtmp->muy - mtmp->my > 0) mdy = +1;
 					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
 					if(mtmp->mvar1 != i){
-						if(sensemon(mtmp) || ((cansee(mtmp->mx,mtmp->my) || see_with_infrared(mtmp)) && canspotmon(mtmp) && !mtmp->mundetected)){
+						if(sensemon(mtmp) || (canseemon(mtmp) && !mtmp->mundetected)){
 							pline("%s turns to a new heading.", Monnam(mtmp));
 						} else if(couldsee(mtmp->mx,mtmp->my)){
 							You_hear("a loud scraping noise.");
