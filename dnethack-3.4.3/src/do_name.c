@@ -1066,14 +1066,14 @@ const char *
 sheheit(mtmp)
 register struct monst *mtmp;
 {
-	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "it" : mtmp->female ? "she" : "he";
+	return (is_neuter(mtmp->data)) ? "it" : mtmp->female ? "she" : "he";
 }
 
 const char *
 SheHeIt(mtmp)
 register struct monst *mtmp;
 {
-	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "It" : mtmp->female ? "She" : "He";
+	return (is_neuter(mtmp->data)) ? "It" : mtmp->female ? "She" : "He";
 }
 
 const char *
