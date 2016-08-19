@@ -249,7 +249,7 @@ void
 init_uhunger()
 {
 	if(Race_if(PM_INCANTIFIER)){
-		u.uenmax += 900;
+		u.uenmax += 18000;
 		u.uen = u.uenmax*.45;
 	} else {
 		u.uhungermax = DEFAULT_HMAX;
@@ -1217,8 +1217,8 @@ BOOLEAN_P tin, nobadeffects, drained;
 		if(!drained || !rn2(5)){
 			int old_uen = u.uen;
 			int amnt = d(2,10);
-			u.uen += amnt;
-			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
+			if(Race_if(PM_INCANTIFIER)) u.uen += amnt*10;
+			else u.uen += amnt;
 			flags.botl = 1;
 			if (u.uen > u.uenmax){
 				u.uenmax++;
@@ -1234,8 +1234,8 @@ BOOLEAN_P tin, nobadeffects, drained;
 		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
 		    int old_uen = u.uen;
 			int amnt = d(4,10);
-			u.uen += amnt;
-			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
+			if(Race_if(PM_INCANTIFIER)) u.uen += amnt*10;
+			else u.uen += amnt;
 			flags.botl = 1;
 		    if (u.uen > u.uenmax) {
 				u.uenmax+=4;
@@ -1251,8 +1251,8 @@ BOOLEAN_P tin, nobadeffects, drained;
 		if(!drained || !rn2(5)) if (rn2(3) || 3 * u.uen <= 2 * u.uenmax) {
 		    int old_uen = u.uen;
 			int amnt = d(6,10);
-			u.uen += amnt;
-			if(Race_if(PM_INCANTIFIER)) healup(amnt,FALSE,FALSE,FALSE);
+			if(Race_if(PM_INCANTIFIER)) u.uen += amnt*10;
+			else u.uen += amnt;
 			flags.botl = 1;
 			u.uen = u.uen + 10 > (u.uenmax - 40) ? u.uen + 10 : (u.uenmax - 40);
 		    u.uen += amnt;
@@ -2831,8 +2831,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(50);
-					healup(50,FALSE,FALSE,FALSE);
+					lesshungry(500);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2849,8 +2848,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 				if (carried(otmp)) useup(otmp);
 				else useupf(otmp, 1L);
-				lesshungry(50);
-				healup(50,FALSE,FALSE,FALSE);
+				lesshungry(500);
 				flags.botl = 1;
 			break;
 			case AMULET_CLASS:
@@ -2864,8 +2862,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 				if (carried(otmp)) useup(otmp);
 				else useupf(otmp, 1L);
-				lesshungry(50);
-				healup(50,FALSE,FALSE,FALSE);
+				lesshungry(500);
 				flags.botl = 1;
 			break;
 			case ARMOR_CLASS:
@@ -2874,8 +2871,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(50);
-					healup(50,FALSE,FALSE,FALSE);
+					lesshungry(500);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2887,8 +2883,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(50);
-					healup(50,FALSE,FALSE,FALSE);
+					lesshungry(500);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2902,8 +2897,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    otmp->otyp = SCR_BLANK_PAPER;
 	    	    otmp->spe = 0;
 	    	    otmp->ovar1 = 0;
-				lesshungry(50);
-				healup(50,FALSE,FALSE,FALSE);
+				lesshungry(500);
 				flags.botl = 1;
 			break;
 			case SPBOOK_CLASS:
@@ -2913,8 +2907,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				otmp->spestudied++;
 				costly_cancel(otmp);
 	    	    if(otmp->spestudied > MAX_SPELL_STUDY) otmp->otyp = SPE_BLANK_PAPER;
-				lesshungry(50);
-				healup(50,FALSE,FALSE,FALSE);
+				lesshungry(500);
 				flags.botl = 1;
 			break;
 			case WAND_CLASS:
@@ -2923,8 +2916,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(10);
-					healup(10,FALSE,FALSE,FALSE);
+					lesshungry(100);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -3549,7 +3541,6 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					if(Race_if(PM_INCANTIFIER)){
 						int engain = 50 + rnd(50);
 						u.uen += engain;
-						healup(engain,FALSE,FALSE,FALSE);
 					} else u.uhunger += 50 + rnd(50);
 					newuhs(FALSE);
 				} else
@@ -3766,10 +3757,10 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	}
 	if(maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)))
 		hungermod *= (maybe_polyd(youmonst.data->mlevel, u.ulevel)/10 + 1);
-	if(Race_if(PM_INCANTIFIER)) hungermod *= 10;
 	
 	if ((carnivorous(youmonst.data) 
 		|| herbivorous(youmonst.data)
+		|| magivorous(youmonst.data)
 		|| maybe_polyd(is_vampire(youmonst.data), 
 						Race_if(PM_VAMPIRE)))
 		&& !(moves % hungermod)

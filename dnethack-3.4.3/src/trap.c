@@ -3584,8 +3584,7 @@ struct trap *ttmp;
 	u.uconduct.food++;
 	deltrap(ttmp);
 	newsym(trapx, trapy);
-	lesshungry(50);
-	healup(50,FALSE,FALSE,FALSE);
+	lesshungry(500);
 	return 1;
 }
 
