@@ -2479,6 +2479,7 @@ boolean in_view;
 		case CRYSTAL_SWORD:
 		case CRYSTAL_SHIELD:
 		case CRYSTAL_BOOTS:
+		case CRYSTAL_GAUNTLETS:
 		case DROVEN_BOLT:
 		case DROVEN_DAGGER:
 		case DROVEN_SHORT_SWORD:
