@@ -1605,8 +1605,8 @@ int thrown;
 				if(obj->otyp == MIRROR){
 					if(u.spiritPColdowns[PWR_MIRROR_SHATTER] < monstermoves && !u.uswallow && uwep && uwep->otyp == MIRROR && !(uwep->oartifact)){
 						useup(uwep);
-						explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
-						explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+						explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
+						explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
 						
 						while(sx != u.ux && sy != u.uy){
 							sx -= u.dx;
@@ -1642,7 +1642,7 @@ int thrown;
 							}
 						}
 						u.spiritPColdowns[PWR_MIRROR_SHATTER] = monstermoves + 25;
-					} else explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), TOOL_CLASS, EXPL_DARK);
+					} else explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), TOOL_CLASS, HI_SILVER);
 				} else if(obj->oclass == WEAPON_CLASS && obj->otyp != CRYSTAL_SWORD) explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), WEAPON_CLASS, EXPL_DARK);
 			}
 		    tmp_at(DISP_FLASH, obj_to_glyph(obj));
