@@ -198,7 +198,7 @@ int thrown;
 	}
 	
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
-		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS
+		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS && obj->oartifact != ART_DART_OF_THE_ASSASSIN
 	) multishot = (int)obj->quan;
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 	
@@ -226,10 +226,11 @@ int thrown;
 	    }
 
 	    if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
-		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS) multishot = (int)obj->quan;
+		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS && obj->oartifact != ART_DART_OF_THE_ASSASSIN)
+          multishot = (int)obj->quan;
 //#endif
 
-	if (multishot < 1) multishot = 1;
+	if(multishot < 1) multishot = 1;
 	if(obj->oartifact == ART_FLUORITE_OCTAHEDRON && !ammo_and_launcher(obj,launcher)) multishot = 1;
 
 	m_shot.s = ammo_and_launcher(obj,launcher) ? TRUE : FALSE;
@@ -275,11 +276,11 @@ int thrown;
 				otmp = splitobj(obj, shotlimit > 0 ? ((long)shotlimit) : 1L);
 			}
 	    } else if (obj->quan > 1L) {
-		otmp = splitobj(obj, 1L);
+			otmp = splitobj(obj, 1L);
 	    } else {
-		otmp = obj;
-		if (otmp->owornmask)
-		    remove_worn_item(otmp, FALSE);
+			otmp = obj;
+			if (otmp->owornmask)
+				remove_worn_item(otmp, FALSE);
 	    }
 	    if(obj->where == OBJ_INVENT) freeinv(otmp);
 	    throwit(otmp, wep_mask, twoweap, thrown);
@@ -515,7 +516,7 @@ dothrow()
 	/* kludge to work around parse()'s pre-decrement of 'multi' */
 	shotlimit = (multi || save_cm) ? multi + 1 : 0;
 
-        result = throw_obj(obj, shotlimit, THROW_UWEP);
+	result = throw_obj(obj, shotlimit, THROW_UWEP);
         
 	/*
 	 * [ALI] Bug fix: Temporary paralysis (eg., from hurtle) cancels
@@ -1874,7 +1875,7 @@ int thrown;
 			} else {
 				pline("%s catches %s.", Monnam(mon), the(xname(obj)));
 			}
-		return gem_accept(mon, obj);
+			return gem_accept(mon, obj);
 	    }
 	}
 
@@ -2221,7 +2222,7 @@ register struct obj *obj;
 	Strcpy(buf,Monnam(mon));
 	mon->mpeaceful = 1;
 	mon->mavenge = 0;
-
+	
 	if(obj->oartifact){
 		Strcat(buf,isartifact);
 		goto nopick;
