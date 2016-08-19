@@ -239,6 +239,8 @@ makedog()
 
 	initedog(mtmp);
 	EDOG(mtmp)->loyal = TRUE;
+	if(is_half_dragon(mtmp->data))
+		mtmp->mvar1 = flags.HDbreath;
 	return(mtmp);
 }
 
