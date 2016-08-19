@@ -373,7 +373,7 @@ Helmet_on()
 		    else
 			pline("%s %s for a moment.",
 			      Tobjnam(uarmh, "glow"), hcolor(NH_BLACK));
-		    curse(uarmh);
+		    if(!(uarmh->oartifact)) curse(uarmh);
 		}
 		flags.botl = 1;		/* reveal new alignment or INT & WIS */
 		if (Hallucination) {
@@ -2879,6 +2879,16 @@ register schar delta;
 	static int gcircletsa = 0;
 	if(!gcircletsa) gcircletsa = find_gcirclet();
 	
+	if (uarmg && uarmg == otmp && otmp->oartifact == ART_GAUNTLETS_OF_THE_BERSERKER) {
+		if (delta) {
+			ABON(A_DEX) += (delta);
+			ABON(A_STR) += (delta);
+			ABON(A_CON) += (delta);
+			ABON(A_INT) -= (delta);
+			ABON(A_WIS) -= (delta);
+		}
+		flags.botl = 1;
+	}
 	if (uarmg && uarmg == otmp && otmp->otyp == GAUNTLETS_OF_DEXTERITY) {
 		if (delta) {
 			makeknown(uarmg->otyp);
