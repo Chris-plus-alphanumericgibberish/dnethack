@@ -3391,7 +3391,7 @@ use_pole (obj)
 	    pline("%s", not_enough_room);
 	    return (0);
 	}
-	if (obj != uwep) {
+	if (obj != uwep && obj != uarmg) {
 	    if (!wield_tool(obj, "swing")) return 0;
 	    else res = 1;
 	}
