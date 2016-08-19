@@ -628,6 +628,7 @@ dofire()
 		bolt->spe = min(0,uwep->spe);
 		bolt->blessed = uwep->blessed;
 		bolt->cursed = uwep->cursed;
+		bolt->objsize = MZ_SMALL;
 		/*See below for shotlimit*/
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
@@ -1863,6 +1864,12 @@ int thrown;
 	if(obj->otyp == BALL_OF_WEBBING) tmp -= 2000; //nasty hack :c
 	
 	tmp += omon_adj(mon, obj, TRUE);
+	if(obj->objsize - youracedata->msize > 0){
+		if(ammo_and_launcher(obj, launcher)){
+			tmp += -4*(obj->objsize - youracedata->msize);
+		}
+	}
+	
 	if (is_orc(mon->data) && maybe_polyd(is_elf(youmonst.data),
 			Race_if(PM_ELF)))
 	    tmp++;
