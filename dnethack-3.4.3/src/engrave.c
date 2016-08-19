@@ -1492,7 +1492,7 @@ register int x,y;
 	    }
 	    if (sensed) {
 			const char *et;
-			unsigned maxelen = BUFSZ - sizeof("You feel the words: \"\". ");
+	    	unsigned maxelen = BUFSZ - sizeof("You feel the words: \"\". ");
 			if(!Hallucination /*|| rn2(20)*/ ){
 				if (strlen(ep->engr_txt) > maxelen) {
 					(void) strncpy(buf,  ep->engr_txt, (int)maxelen);
@@ -1736,7 +1736,7 @@ int
 freehand()
 {
 	return(!uwep || !welded(uwep) ||
-	   (!bimanual(uwep) && (!uarms || !uarms->cursed)));
+	   (!bimanual(uwep,youracedata) && (!uarms || !uarms->cursed)));
 /*	if ((uwep && bimanual(uwep)) ||
 	    (uwep && uarms))
 		return(0);
@@ -1751,7 +1751,7 @@ static NEARDATA const char styluses[] =
 int
 doengward()
 {
-	char c = 'n';
+    char c = 'n';
 	if(u.wardsknown){
 		c = yn_function("Do you want to scribe a warding sign?",
 						ynqchars, 'q');

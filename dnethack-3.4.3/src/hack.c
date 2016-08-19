@@ -191,7 +191,7 @@ moverock()
 			  surface(rx, ry));
 		    deltrap(ttmp);
 			bury_objs(rx, ry); //Crate handling: Bury everything here (inc boulder item) then free the boulder after
-			if(otmp->otyp == HUGE_STONE_CRATE){
+			if(otmp->otyp == MASSIVE_STONE_CRATE){
 				struct obj *item;
 				if(Blind) pline("Click!");
 				else pline("The crate pops open as it lands.");

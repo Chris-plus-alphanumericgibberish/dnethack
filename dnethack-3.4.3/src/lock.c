@@ -776,7 +776,7 @@ int x, y;
 	    You_cant("reach over the edge of the pit.");
 	    return 0;
 	}
-
+	
 	if(x > 0 && y > 0){
 		cc.x = x;
 		cc.y = y;

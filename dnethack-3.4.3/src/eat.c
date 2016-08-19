@@ -2187,7 +2187,7 @@ struct obj *otmp;
 		break;
 	    case MEATBALL:
 	    case MEAT_STICK:
-	    case HUGE_CHUNK_OF_MEAT:
+	    case MASSIVE_CHUNK_OF_MEAT:
 	    case MEAT_RING:
 		goto give_feedback;
 	     /* break; */
@@ -2814,13 +2814,13 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		if (carried(otmp)) {
 			freeinv(otmp);
 			if (inv_cnt() >= 52) {
-			sellobj_state(SELL_DONTSELL);
-			dropy(otmp);
-			sellobj_state(SELL_NORMAL);
+				sellobj_state(SELL_DONTSELL);
+				dropy(otmp);
+				sellobj_state(SELL_NORMAL);
 			} else {
-			otmp->oxlth++;		/* hack to prevent merge */
-			otmp = addinv(otmp);
-			otmp->oxlth--;
+				otmp->oxlth++;		/* hack to prevent merge */
+				otmp = addinv(otmp);
+				otmp->oxlth--;
 			}
 		}
 		}

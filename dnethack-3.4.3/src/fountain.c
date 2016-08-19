@@ -377,7 +377,7 @@ register struct obj *obj;
 		} else {
 			/* The lady of the lake acts! - Eric Backus */
 			/* Be *REAL* nice */
-	  pline("From the murky depths, a hand reaches up to bless the sword.");
+			pline("From the murky depths, a hand reaches up to bless the sword.");
 			pline("As the hand retreats, the fountain disappears!");
 			obj = oname(obj, artiname(ART_EXCALIBUR));
 			discover_artifact(ART_EXCALIBUR);
