@@ -877,6 +877,64 @@ int mclass;			/* monster class, 0 for all */
     return 0;
 }
 
+int
+pet_detect_and_heal(otmp)
+register struct obj *otmp;	/* detecting object (if any) */
+{
+    register struct monst *mtmp;
+    int mcnt = 0;
+
+
+    /* Note: This used to just check fmon for a non-zero value
+     * but in versions since 3.3.0 fmon can test TRUE due to the
+     * presence of dmons, so we have to find at least one
+     * with positive hit-points to know for sure.
+     */
+    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+    	if (!DEADMONSTER(mtmp) && mtmp->mtame) {
+		mcnt++;
+		break;
+	}
+
+    if (!mcnt) {
+	boolean savebeginner = flags.beginner;	/* prevent non-delivery of */
+	flags.beginner = FALSE;			/* 	message            */
+	if (otmp)
+	    strange_feeling((struct obj *)0, Hallucination ?
+			    "You suddenly recall the hamster you had as a child." :
+			    "You feel lonely.");
+	flags.beginner = savebeginner;
+	return 1;
+    } else {
+	cls();
+	display_self();
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	    if (DEADMONSTER(mtmp)) continue;
+	    if (mtmp->mtame && mtmp->mx > 0) {
+		show_glyph(mtmp->mx,mtmp->my,mon_to_glyph(mtmp));
+		/* don't be stingy - display entire worm */
+		if (mtmp->data == &mons[PM_LONG_WORM]) detect_wsegs(mtmp,0);
+		/* heal */
+		if(canseemon(mtmp) && mtmp->mtame < 20) mtmp->mhp += d(4, 8);
+		if (mtmp->mhp > mtmp->mhpmax)
+		    mtmp->mhp = mtmp->mhpmax;
+	    }
+	}
+	You(Hallucination ?
+	    "are at one with your comrades." :
+	    "sense the presence of your retinue.");
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	    if (!DEADMONSTER(mtmp) && (mtmp->mtame && mtmp->mx > 0) && canseemon(mtmp))
+		pline("%s is in awe of %s!", upstart(y_monnam(mtmp)), yname(otmp));
+	}
+	display_nhwindow(WIN_MAP, TRUE);
+	docrt();
+	if (Underwater) under_water(2);
+	if (u.uburied) under_ground(2);
+    }
+    return 0;
+}
+
 /*
  * Used by: LEADERSHIP artifacts (Clarent (from Greyknight's patch))
  *
