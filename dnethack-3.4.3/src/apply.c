@@ -2557,7 +2557,9 @@ struct obj *hypo;
 			You("don't find a patient there.");
 			return 1;
 		}
-		switch(amp->ovar1){
+		if(!has_blood(mtarg->data)){
+			pline("It would seem that the patient has no circulatory system....");
+		} else switch(amp->ovar1){
 			case POT_HEALING:
 				if (mtarg->data == &mons[PM_PESTILENCE]){
 					mtarg->mhp -= d(6 + 2 * bcsign(amp), 4);
@@ -2584,15 +2586,15 @@ struct obj *hypo;
 			break;
 			case POT_FULL_HEALING:
 				if (mtarg->data == &mons[PM_PESTILENCE]){
-				if((mtarg->mhpmax > 3) && !resist(mtarg, POTION_CLASS, 0, NOTELL))
-					mtarg->mhpmax /= 2;
-				if((mtarg->mhp > 2) && !resist(mtarg, POTION_CLASS, 0, NOTELL))
-					mtarg->mhp /= 2;
-				if (mtarg->mhp > mtarg->mhpmax) mtarg->mhp = mtarg->mhpmax;
-				if(mtarg->mhp <= 0) xkilled(mtarg,1);
-				if (canseemon(mtarg))
-					pline("%s looks rather ill.", Monnam(mtarg));
-					break;
+					if((mtarg->mhpmax > 3) && !resist(mtarg, POTION_CLASS, 0, NOTELL))
+						mtarg->mhpmax /= 2;
+					if((mtarg->mhp > 2) && !resist(mtarg, POTION_CLASS, 0, NOTELL))
+						mtarg->mhp /= 2;
+					if (mtarg->mhp > mtarg->mhpmax) mtarg->mhp = mtarg->mhpmax;
+					if(mtarg->mhp <= 0) xkilled(mtarg,1);
+					if (canseemon(mtarg))
+						pline("%s looks rather ill.", Monnam(mtarg));
+						break;
 				}
 			case POT_GAIN_ABILITY:
 			case POT_RESTORE_ABILITY:
@@ -2630,12 +2632,12 @@ struct obj *hypo;
 				if(!amp->cursed){
 					if (canseemon(mtarg))
 						pline("%s looks lackluster.", Monnam(mtarg));
-					mtarg->mspec_used = 0;
-					mtarg->mcan = 0;
+					mtarg->mcan = 1;
 				} else {
 					if (canseemon(mtarg))
 						pline("%s looks full of energy.", Monnam(mtarg));
-					mtarg->mcan = 1;
+					mtarg->mspec_used = 0;
+					mtarg->mcan = 0;
 				}
 			break;
 			case POT_SLEEPING:
