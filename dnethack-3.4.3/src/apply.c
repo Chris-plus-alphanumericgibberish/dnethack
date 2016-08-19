@@ -3269,7 +3269,7 @@ struct obj *obj;
 	    Strcpy(onambuf, cxname(otmp));
 	    if (gotit) {
 		mon_hand = mbodypart(mtmp, HAND);
-		if (bimanual(otmp)) mon_hand = makeplural(mon_hand);
+		if (bimanual(otmp,mtmp->data)) mon_hand = makeplural(mon_hand);
 	    } else
 		mon_hand = 0;	/* lint suppression */
 
