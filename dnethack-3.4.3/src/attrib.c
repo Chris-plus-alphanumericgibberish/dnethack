@@ -906,7 +906,8 @@ int x;
 	} else if (x == A_CON) {
 		if (
 			(uwep && uwep->oartifact == ART_OGRESMASHER) ||
-			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER)
+			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER) ||
+			(uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)
 		) return(25);
 		if(Race_if(PM_ORC)){
 			tmp += u.ulevel/3;
