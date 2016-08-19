@@ -379,7 +379,7 @@ choke(food)	/* To a full belly all food is bad. (It.) */
 
 	exercise(A_CON, FALSE);
 
-	if ((Breathless && !Race_if(PM_INCANTIFIER)) || (!Strangled && !rn2(20))) {
+	if ((Breathless || (!Strangled && !rn2(20))) && !Race_if(PM_INCANTIFIER)) {
 		/* choking by eating AoS doesn't involve stuffing yourself */
 		if (food && food->otyp == AMULET_OF_STRANGULATION) {
 			You("choke, but recover your composure.");
@@ -3845,7 +3845,7 @@ register int num;
 #endif
 	if(Race_if(PM_INCANTIFIER)) u.uen += num;
 	else u.uhunger += num;
-	if(((Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax) ||
+	if(((Race_if(PM_INCANTIFIER) && u.uen > u.uenmax) ||
 		 (!Race_if(PM_INCANTIFIER)&& u.uhunger >= u.uhungermax) )
 		) {
 	    if (!iseating || victual.canchoke) {
