@@ -297,7 +297,7 @@ unmap_object(x, y)
 
     if (!level.flags.hero_memory) return;
 
-    if ((trap = t_at(x,y)) != 0 && trap->tseen && !covers_traps(x,y))
+    if ((trap = t_at(x,y)) != 0 && trap->tseen && (trap->ttyp == MAGIC_PORTAL || !covers_traps(x,y)))
 	map_trap(trap, 0);
     else if (levl[x][y].seenv) {
 	struct rm *lev = &levl[x][y];
@@ -328,7 +328,7 @@ unmap_object(x, y)
 									\
     if ((obj = vobj_at(x,y)) && !covers_objects(x,y))			\
 	map_object(obj,show);						\
-    else if ((trap = t_at(x,y)) && trap->tseen && !covers_traps(x,y))	\
+    else if ((trap = t_at(x,y)) && trap->tseen && (trap->ttyp == MAGIC_PORTAL || !covers_traps(x,y)))	\
 	map_trap(trap,show);						\
     else								\
 	map_background(x,y,show);					\
@@ -505,7 +505,7 @@ feel_location(x, y)
     if (glyph_is_invisible(levl[x][y].glyph) && m_at(x,y)) return;
 
     /* The hero can't feel non pool locations while under water. */
-    if (Underwater && !Is_waterlevel(&u.uz) && ! is_pool(x,y))
+    if (Underwater && !Is_waterlevel(&u.uz) && !is_pool(x,y))
 	return;
 
     /* Set the seen vector as if the hero had seen it.  It doesn't matter */
@@ -722,7 +722,7 @@ newsym(x,y)
 	}
 	else if ((mon = m_at(x,y))
 		&& ((see_it = (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)
-		    		|| (see_with_infrared(mon) && mon_visible(mon))))
+		    		|| ((see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon)) && mon_visible(mon))))
 		    || Detect_monsters)
 		&& !is_worm_tail(mon)) {
 	    /* Monsters are printed every time. */
