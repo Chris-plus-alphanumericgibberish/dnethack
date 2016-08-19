@@ -144,7 +144,7 @@ xchar x, y;
 
 	return ((ispick||is_saber) && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
 		(ispick||is_saber) && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
-		(ispick||is_saber) && sobj_at(HUGE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
+		(ispick||is_saber) && sobj_at(MASSIVE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
 		(closed_door(x, y) ||
 			levl[x][y].typ == SDOOR) ? DIGTYP_DOOR :
 		IS_TREES(levl[x][y].typ) ?
@@ -379,7 +379,7 @@ dig()
 			    place_object(bobj, dpx, dpy);
 			}
 			digtxt = "The boulder falls apart.";
-		} else if ((obj = sobj_at(HUGE_STONE_CRATE, dpx, dpy)) != 0) {
+		} else if ((obj = sobj_at(MASSIVE_STONE_CRATE, dpx, dpy)) != 0) {
 			struct obj *bobj;
 
 			break_crate(obj);

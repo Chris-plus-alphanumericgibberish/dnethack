@@ -1088,7 +1088,7 @@ see_monsters()
  * Block/unblock light depending on what a mimic is mimicing and if it's
  * invisible or not.  Should be called only when the state of See_invisible
  * changes.
- * Also contains a backup check for M3_OPAQUE monsters, since that wasn't
+ * Also contains a backup check for MG_OPAQUE monsters, since that wasn't
  * always working -CM
  */
 void

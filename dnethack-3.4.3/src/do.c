@@ -190,7 +190,7 @@ const char *verb;
 		}
 		deltrap(t);
 		bury_objs(x, y); //Crate handling: Bury everything here (inc boulder item) then free the boulder after
-		if(obj->otyp == HUGE_STONE_CRATE){
+		if(obj->otyp == MASSIVE_STONE_CRATE){
 			struct obj *item;
 			if(Blind) pline("Click!");
 			else pline("The crate pops open as it lands.");

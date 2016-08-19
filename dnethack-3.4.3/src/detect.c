@@ -1051,7 +1051,7 @@ register struct obj *sobj;
 	else found = TRUE;
     }
     for (obj = fobj; obj; obj = obj->nobj) {
-	if ((obj->otyp==LARGE_BOX || obj->otyp==CHEST) && obj->otrapped) {
+	if ((obj->otyp==BOX || obj->otyp==CHEST) && obj->otrapped) {
 	    if (obj->ox != u.ux || obj->oy != u.uy)
 		goto outtrapmap;
 	    else found = TRUE;
@@ -1084,7 +1084,7 @@ outtrapmap:
 	sense_trap(ttmp, 0, 0, sobj && sobj->cursed);
 
     for (obj = fobj; obj; obj = obj->nobj)
-	if ((obj->otyp==LARGE_BOX || obj->otyp==CHEST) && obj->otrapped)
+	if ((obj->otyp==BOX || obj->otyp==CHEST) && obj->otrapped)
 	sense_trap((struct trap *)0, obj->ox, obj->oy, sobj && sobj->cursed);
 
     for (door = 0; door < doorindex; door++) {
@@ -1666,7 +1666,7 @@ sokoban_detect()
 	    	else levl[x][y].waslit = TRUE;
 	    	map_background(x, y, 1);
 	    	for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
-	    	    if (obj->otyp == HUGE_STONE_CRATE)
+	    	    if (obj->otyp == MASSIVE_STONE_CRATE)
 	    	    	map_object(obj, 1);
 	    }
 
