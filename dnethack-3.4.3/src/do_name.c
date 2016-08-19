@@ -370,7 +370,7 @@ do_mname()
 	    mtmp = m_at(cx, cy);
 
 	if (!mtmp || (!sensemon(mtmp) &&
-			(!(cansee(cx,cy) || see_with_infrared(mtmp)) || mtmp->mundetected
+			(!(cansee(cx,cy) || see_with_infrared(mtmp) || see_with_bloodsense(mtmp) || see_with_lifesense(mtmp)) || mtmp->mundetected
 			|| mtmp->m_ap_type == M_AP_FURNITURE
 			|| mtmp->m_ap_type == M_AP_OBJECT
 			|| (mtmp->minvis && !See_invisible)))) {
@@ -528,6 +528,14 @@ const char *name;
 	if (obj->oartifact || (lth && exist_artifact(obj->otyp, name)))
 		return obj;
 	
+    if(!strcmp((&artilist[ART_SCALPEL_OF_LIFE_AND_DEATH])->name,name) &&
+       obj && obj->otyp == SCALPEL){
+      obj->ovar1 = COMMAND_DEATH;
+    }
+    if(((!strcmp((&artilist[ART_FIGURINE_OF_GALATEA])->name,name)) || (!strcmp((&artilist[ART_FIGURINE_OF_PYGMALION])->name,name))) &&
+       obj && obj->otyp == FIGURINE){
+      // obj->corpsenm = u.umonster*S*D*D*D*S*;
+    }
 	if(!strcmp((&artilist[ART_MANTLE_OF_HEAVEN])->name,name) &&
 	   obj && obj->otyp == LEATHER_CLOAK){
 		if(!Race_if(PM_VAMPIRE)) obj = poly_obj(obj,find_cope());
@@ -575,6 +583,23 @@ const char *name;
 		
 		if(obj->oartifact == ART_WAR_MASK_OF_DURIN) obj->corpsenm = PM_DWARF;
 		
+		if(obj->oartifact == ART_LIFEHUNT_SCYTHE) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) obj->objsize = MZ_SMALL;
+		else if(obj->oartifact == ART_FIELD_MARSHAL_S_BATON) obj->objsize = MZ_SMALL;
+		else if(obj->oartifact == ART_GENOCIDE) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_WRATHFUL_WIND) obj->objsize = MZ_HUGE;
+		// else if(obj->oartifact == ART_HEARTCLEAVER) obj->objsize = MZ_HUGE; //Actually, if it is MZ_MEDIUM Baphomet can wield it one-handed
+		else if(obj->oartifact == ART_THREE_HEADED_FLAIL) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_AVARICE) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_STING_OF_THE_POISON_QUEEN) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_WAND_OF_ORCUS) obj->objsize = MZ_HUGE;
+		else if(obj->oartifact == ART_UNBLEMISHED_SOUL) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_DIADEM_OF_AMNESIA) obj->objsize = MZ_HUGE;
+		else if(obj->oartifact == ART_WRATH_OF_HEAVEN) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_COLD_SOUL) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) obj->objsize = MZ_LARGE;
+		else obj->objsize = MZ_MEDIUM;
 	    /* can't dual-wield with artifact as secondary weapon */
 	    if (obj == uswapwep) untwoweapon();
 	    /* activate warning if you've just named your weapon "Sting" */
