@@ -920,7 +920,7 @@ int x;
 			tmp += u.ulevel/3;
 		}
 	} else if (x == A_CHA) {
-		if (tmp < 18 && youmonst.data && (youmonst.data->mlet == S_NYMPH ||
+		if (tmp < 18 && youracedata && (youracedata->mlet == S_NYMPH ||
 		    u.umonnum==PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
 		    return 18;
 	} else if (x == A_INT || x == A_WIS) {
