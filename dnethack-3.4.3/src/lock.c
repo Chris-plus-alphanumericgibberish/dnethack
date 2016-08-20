@@ -1115,6 +1115,7 @@ int x, y;
 		msg = "The door unlocks!";
 		door->doormask = D_CLOSED | (door->doormask & D_TRAPPED);
 	    } else res = FALSE;
+	break;
 	case WAN_STRIKING:
 	case SPE_FORCE_BOLT:
 	    if (!key && door->doormask & (D_LOCKED | D_CLOSED)) {
