@@ -2534,7 +2534,7 @@ boolean was_swallowed;			/* digestion */
 				tmp=0;
 			} else if(mdat->mattk[i].adtyp == AD_SPNL){
 				explode(mon->mx, mon->my, 2, tmp, MON_EXPLODE, EXPL_WET);
-				makemon(&mons[PM_LEVIATHAN], mon->mx, mon->my, MM_ADJACENTOK);
+				makemon(rn2(2) ? &mons[PM_LEVIATHAN] : &mons[PM_LEVISTUS], mon->mx, mon->my, MM_ADJACENTOK);
 			} else if(mdat == &mons[PM_ANCIENT_OF_DEATH]){
 				if(!(u.sealsActive&SEAL_OSE)) explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_DARK);
 			} else if(mdat->mattk[i].adtyp == AD_WTCH){
