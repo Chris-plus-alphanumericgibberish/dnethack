@@ -547,6 +547,11 @@ unsigned int type;
        case PM_BARROW_WIGHT:
            return (!rn2(3) ? DARKNESS : (rn2(2) ? MAKE_WEB : SLEEP));
 
+       case PM_PRIEST_OF_GHAUNADAUR:
+           if (rn2(2)) return FIRE_PILLAR;
+		   else if(rn2(2)) return MON_FIRAGA;
+		break; /*Go on to regular spell list*/
+
        case PM_GNOMISH_WIZARD:
            if (rn2(2)) return SUMMON_SPHERE;
        }
@@ -554,6 +559,88 @@ unsigned int type;
 	
 	//100% favored spells
 	switch(monsndx(mtmp->data)) {
+	case PM_DWARF_CLERIC:
+	case PM_DWARF_QUEEN:
+		switch (rnd(4)) {
+			case 4:
+			return CURE_SELF;
+			break;
+			case 3:
+			return MASS_CURE_CLOSE;
+			break;
+			case 2:
+			return MASS_CURE_FAR;
+			break;
+			case 1:
+			return AGGRAVATION;
+			break;
+		}
+	break;
+	case PM_ELF_LADY:
+	case PM_ELVENQUEEN:
+		switch (rnd(6)) {
+			case 6:
+			return CURE_SELF;
+			break;
+			case 5:
+			return MASS_CURE_FAR;
+			break;
+			case 4:
+			return SLEEP;
+			break;
+			case 3:
+			return BLIND_YOU;
+			break;
+			case 2:
+			return CONFUSE_YOU;
+			break;
+			case 1:
+			return DISAPPEAR;
+			break;
+		}
+	break;
+	case PM_MINOTAUR_PRIESTESS:
+		switch (d(1,5)+8) {
+			case 13:
+			return GEYSER;
+			break;
+			case 12:
+			return FIRE_PILLAR;
+			break;
+			case 11:
+			return LIGHTNING;
+			break;
+			case 10:
+			case 9:
+			return CURSE_ITEMS;
+			break;
+			default:
+			return OPEN_WOUNDS;
+			break;
+		}
+	break;
+	case PM_GNOLL_MATRIARCH:
+		switch (d(1,10)-4) {
+			case 6:
+				return BLIND_YOU;
+			break;
+			case 5:
+			case 4:
+				return PARALYZE;
+			break;
+			case 3:
+			case 2:
+				return CONFUSE_YOU;
+			break;
+			case 1:
+				return MASS_CURE_FAR;
+			break;
+			case 0:
+			default:
+				return OPEN_WOUNDS;
+			break;
+		}
+	break;
 	case PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK:
 		return SUMMON_DEVIL; 
 	case PM_LICH__THE_FIEND_OF_EARTH:
@@ -748,47 +835,6 @@ unsigned int type;
 			break;
 		}
 	break;
-	case PM_MINOTAUR_PRIESTESS:
-		switch (d(1,5)+8) {
-			case 13:
-			return GEYSER;
-			break;
-			case 12:
-			return FIRE_PILLAR;
-			break;
-			case 11:
-			return LIGHTNING;
-			break;
-			case 10:
-			case 9:
-			return CURSE_ITEMS;
-			break;
-			default:
-			return OPEN_WOUNDS;
-			break;
-		}
-	break;
-	case PM_GNOLL_MATRIARCH:
-		switch (d(1,10)-4) {
-			case 6:
-				return BLIND_YOU;
-			break;
-			case 5:
-			case 4:
-				return PARALYZE;
-			break;
-			case 3:
-			case 2:
-				return CONFUSE_YOU;
-			break;
-			case 1:
-				return MASS_CURE_FAR;
-			break;
-			case 0:
-			default:
-				return OPEN_WOUNDS;
-			break;
-		}
 	}
     if (type == AD_CLRC)
         return choose_clerical_spell(rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
@@ -826,9 +872,11 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;
 		
-		if(Race_if(PM_DROW) && mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !Role_if(PM_EXILE) && !mtmp->mpeaceful){
+		// if(Race_if(PM_DROW) && mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !Role_if(PM_EXILE) && !mtmp->mpeaceful){
+		if(mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !mtmp->mpeaceful && strcmp(urole.cgod,"_Lolth")){
 			u.ugangr[Align2gangr(A_CHAOTIC)]++;
 			angrygods(A_CHAOTIC);
+			return 1;
 		}
         do {
 			spellnum = choose_magic_special(mtmp, mattk->adtyp);
@@ -1062,12 +1110,11 @@ int spellnum;
 	if (mtmp && mtmp->iswiz && flags.no_of_wizards == 1) {
 	    pline("Double Trouble...");
 	    clonewiz();
-	    dmg = 0;
 	} else {
 	    if(mtmp) impossible("bad wizard cloning?");
-		dmg = 0;
 	}
 		//else end with no message.
+	dmg = 0;
 	break;
     case FILTH:
     {
@@ -1337,43 +1384,53 @@ int spellnum;
        break;
     }
 	case MON_FIRA:
+		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux, mtmp->muy, 1, dmg, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
 	break;
 	case MON_FIRAGA:
+		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
 	break;
 	case MON_BLIZZARA:
+		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux, mtmp->muy, 2, dmg, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
 	break;
 	case MON_BLIZZAGA:
+		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
 	break;
 	case MON_THUNDARA:
+		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux, mtmp->muy, 5, dmg, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
 	break;
 	case MON_THUNDAGA:
+		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
 	break;
 	case MON_FLARE:
+		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_MUDDY); //explode(x, y, type, dam, olet, expltype)
-		big_explode(mtmp->mux, mtmp->muy, 8, dmg, MON_EXPLODE, EXPL_FROSTY,3); //big_explode(x, y, type, dam, olet, expltype, radius)
+		explode2(mtmp->mux, mtmp->muy, 8, dmg, MON_EXPLODE, EXPL_FROSTY);
 		dmg = 0;
 	break;
 	case MON_WARP:
+		if(Half_spell_damage) dmg /= 2;
+		if(Half_physical_damage) dmg /= 2;
+		if(dmg > 100) dmg = 100;
 		pline("Space warps into deadly blades!");
 	break;
 	case MON_POISON_GAS:
@@ -1573,7 +1630,8 @@ summon_alien:
      {
        struct obj *otmp;
        int weap, i, tdmg;
-       if (!rn2(3)) weap = ARROW;
+       dmg = 0;
+       if (rn2(3)) weap = ARROW;
        else if (!rn2(3)) weap = DAGGER;
        else if (!rn2(3)) weap = SPEAR;
        else if (!rn2(3)) weap = KNIFE;
@@ -1588,7 +1646,6 @@ summon_alien:
        otmp->owt = weight(otmp);
        You("are hit from all directions by a %s of %s!",
                rn2(2) ? "shower" : "hail", xname(otmp));
-       dmg = 0;
        for (i = 0; i < otmp->quan; i++) {
 			tdmg = dmgval(otmp, &youmonst, 0);
 			if (tdmg && u.uac < 0) {
@@ -1611,6 +1668,7 @@ summon_alien:
      case DROP_BOULDER:
      {
         struct obj *otmp;
+		dmg = 0;
         boolean iron = (!rn2(4) ||
 #ifdef REINCARNATION
             Is_rogue_level(&u.uz) || 
@@ -1646,7 +1704,7 @@ summon_alien:
      {
         struct obj *otmp = uwep;
         const char *hands;
-       hands = bimanual(otmp) ? makeplural(body_part(HAND)) : body_part(HAND);
+       hands = bimanual(otmp,youracedata) ? makeplural(body_part(HAND)) : body_part(HAND);
         if (otmp->oclass == WEAPON_CLASS && !Antimagic && !otmp->oartifact && rn2(4)) {
                /* Quest nemesis maledictions */
 			   if(otmp->spe > -7){
@@ -1835,9 +1893,9 @@ drainhp:
            mon_set_minvis(mtmp);
           if (malediction && !canspotmon(mtmp))
                You("hear %s fiendish laughter all around you.", s_suffix(mon_nam(mtmp)));
-           dmg = 0;
        } else
            impossible("no reason for monster to cast disappear spell?");
+	   dmg = 0;
        break;
      case DRAIN_ENERGY: /* stronger than antimagic field */
         if(Antimagic && !Race_if(PM_INCANTIFIER)) {
@@ -1963,8 +2021,8 @@ ray:
 	    /* note: player healing does 6d4; this used to do 1d8; then it did 3d6 */
 	    if ((mtmp->mhp += min(d(mtmp->m_lev/3+1,8), 10)) > mtmp->mhpmax)
 			mtmp->mhp = mtmp->mhpmax;
-	    dmg = 0;
 	}
+	dmg = 0;
 	break;
 	case MASS_CURE_CLOSE:{
 		int x, y, n;
@@ -1991,7 +2049,7 @@ ray:
 					pline("%s looks better.", Monnam(mtmp));
 			}
 		}
-
+	    dmg = 0;
 	}break;
 	case MASS_CURE_FAR:{
 		int x, y, n;
@@ -2018,7 +2076,7 @@ ray:
 					pline("%s looks better.", Monnam(mtmp));
 			}
 		}
-
+	    dmg = 0;
 	}break;
 	case RECOVER:
 		if(!mtmp) goto openwounds;
@@ -2035,6 +2093,7 @@ ray:
 		mtmp->mconf = 0;
 	    if (canseemon(mtmp))
 			pline("%s looks recovered.", Monnam(mtmp));
+	    dmg = 0;
 	break;
     case OPEN_WOUNDS:
 	openwounds:
