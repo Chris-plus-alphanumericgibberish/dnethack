@@ -5090,6 +5090,8 @@ static const char *epitaphs[] = {
 	
 	"Omnes una manet nox", /*One night awaits us all*/
 	
+	"I suddenly have a LOT of regrets.", /*Water Phoenix King is very quoteable...*/
+	
        	"Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
        	"Applaud, my friends, the comedy is finished.",
        	"At last... a nice long sleep.",
