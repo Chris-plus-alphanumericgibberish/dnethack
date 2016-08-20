@@ -2096,8 +2096,8 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 			  !uniq ? "This " : !type_is_pname(&mons[mnum]) ? "The " : "",
 			  food_xname(otmp, FALSE),
 			  (vegan(&mons[mnum]) ?
-			   (!carnivorous(youmonst.data) && herbivorous(youmonst.data)) :
-			   (carnivorous(youmonst.data) && !herbivorous(youmonst.data)))
+			   (!(carnivorous(youmonst.data) || (uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) && herbivorous(youmonst.data)) :
+			   ((carnivorous(youmonst.data) || (uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) && !herbivorous(youmonst.data)))
 			  ? "is delicious" : "tastes terrible");
 		}
 	}
