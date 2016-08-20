@@ -3957,7 +3957,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 		mdat = &mons[mndx];
 		if ((mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) != 0 ||
 			is_placeholder(mdat)) continue;
-		/* polyok rules out all M2_PNAME and M2_WERE's;
+		/* polyok rules out all MG_PNAME and MA_WERE's;
 		   select_newcham_form might deliberately pick a player
 		   character type, so we can't arbitrarily rule out all
 		   human forms any more */
@@ -4145,7 +4145,7 @@ int mnum;
        such into ordinary eggs rather than forbidding them outright */
     if (mnum == PM_SCORPIUS) mnum = PM_SCORPION;
 
-    mnum = little_to_big(mnum);
+    mnum = little_to_big(mnum, (boolean)rn2(2));
     /*
      * Queen bees lay killer bee eggs (usually), but killer bees don't
      * grow into queen bees.  Ditto for [winged-]gargoyles.

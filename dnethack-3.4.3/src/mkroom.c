@@ -406,7 +406,7 @@ struct mkroom *sroom;
 			tx = mm.x; ty = mm.y;
 		} while (occupied((xchar)tx, (xchar)ty) && --i > 0);
 	    throne_placed:
-		/* TODO: try to ensure the enthroned monster is an M2_PRINCE */
+		/* TODO: try to ensure the enthroned monster is an MG_PRINCE */
 		break;
 	    case BEEHIVE:
 		tx = sroom->lx + (sroom->hx - sroom->lx + 1)/2;
@@ -483,7 +483,7 @@ struct mkroom *sroom;
 			if(!rn2(5))
 			    (void) mk_tt_object(CORPSE, sx, sy);
 			if(!rn2(10))	/* lots of treasure buried with dead */
-			    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
+			    (void) mksobj_at((rn2(3)) ? BOX : CHEST,
 					     sx, sy, TRUE, FALSE);
 			if (!rn2(5))
 			    make_grave(sx, sy, (char *)0);
@@ -496,7 +496,7 @@ struct mkroom *sroom;
 			break;
 		    case BARRACKS:
 			if(!rn2(20))	/* the payroll and some loot */
-			    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
+			    (void) mksobj_at((rn2(3)) ? BOX : CHEST,
 					     sx, sy, TRUE, FALSE);
 			break;
 		    case COCKNEST:
