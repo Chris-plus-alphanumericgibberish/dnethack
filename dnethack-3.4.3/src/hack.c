@@ -1204,7 +1204,11 @@ domove()
 		    expl ? "explode at" : "attack",
 		    !Underwater ? "thin air" :
 		    is_pool(x,y) ? "empty water" : buf);
-		unmap_object(x, y); /* known empty -- remove 'I' if present */
+		// unmap_object(x, y); /* known empty -- remove 'I' if present */
+		if (glyph_is_invisible(levl[x][y].glyph)) {
+			unmap_object(x, y);
+			newsym(x, y);
+		}
 		newsym(x, y);
 		nomul(0, NULL);
 		if (expl) {
