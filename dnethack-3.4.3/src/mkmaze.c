@@ -459,27 +459,39 @@ fixup_special()
 		    (void)maketrap(x, y, rn2(3) ? LANDMINE : SPIKED_PIT);
 	    }
     } else if(urole.neminum == PM_BOLG && In_quest(&u.uz) && Is_qlocate(&u.uz)) {
+	int rmn, piled, disty, distx;
 	/* using an unfilled morgue for rm id */
 	croom = search_special(MORGUE);
+	disty = croom->hy - croom->ly;
+	distx = croom->hx - croom->lx;
+	rmn = (croom - rooms) + ROOMOFFSET;
 	/* avoid inappropriate morgue-related messages */
 	level.flags.graveyard = level.flags.has_morgue = 0;
 	croom->rtype = OROOM;	/* perhaps it should be set to VAULT? */
 	/* stock the main vault */
 	for(x = croom->lx; x <= croom->hx; x++)
 	    for(y = croom->ly; y <= croom->hy; y++) {
-		if(rn2(2)) mkobj_at(WEAPON_CLASS, x, y, FALSE);
-		if(rn2(2)) mkobj_at(ARMOR_CLASS, x, y, FALSE);
-		if(rn2(6)) mkobj_at(RING_CLASS, x, y, FALSE);
-		if(!rn2(3))mkobj_at(TOOL_CLASS, x, y, FALSE);
-		if(rn2(6)) mkobj_at(SCROLL_CLASS, x, y, FALSE);
-		if(!rn2(4))mkobj_at(GEM_CLASS, x, y, FALSE);
-		if(!rn2(3))mkobj_at(GEM_CLASS, x, y, FALSE);
-		if(!rn2(2))mkobj_at(GEM_CLASS, x, y, FALSE);
-		if(!rn2(4))mksobj_at(SILVER_SLINGSTONE, x, y, TRUE, FALSE);
-		if(rn2(3)) mkobj_at(GEM_CLASS, x, y, FALSE);
-		if(rn2(4)) mkobj_at(GEM_CLASS, x, y, FALSE);
-		(void) mkgold((long) rn1(1000, 100), x, y);
-    }
+		    if (!levl[x][y].edge &&
+			    (int) levl[x][y].roomno == rmn){
+				piled = 1;
+				if(y < croom->ly+disty*1/3 && x > croom->lx+distx*1/5 && x < croom->lx+distx*4/5) piled++;
+				if(y < croom->ly+disty*2/3 && x > croom->lx+distx*2/5 && x < croom->lx+distx*3/5) piled++;
+				for(piled; piled > 0; piled--){
+					if(rn2(2)) mkobj_at(WEAPON_CLASS, x, y, FALSE);
+					if(rn2(2)) mkobj_at(ARMOR_CLASS, x, y, FALSE);
+					if(rn2(6)) mkobj_at(RING_CLASS, x, y, FALSE);
+					if(!rn2(3))mkobj_at(TOOL_CLASS, x, y, FALSE);
+					if(rn2(6)) mkobj_at(SCROLL_CLASS, x, y, FALSE);
+					if(!rn2(4))mkobj_at(GEM_CLASS, x, y, FALSE);
+					if(!rn2(3))mkobj_at(GEM_CLASS, x, y, FALSE);
+					if(!rn2(2))mkobj_at(GEM_CLASS, x, y, FALSE);
+					if(!rn2(4))mksobj_at(SILVER_SLINGSTONE, x, y, TRUE, FALSE);
+					if(rn2(3)) mkobj_at(GEM_CLASS, x, y, FALSE);
+					if(rn2(4)) mkobj_at(GEM_CLASS, x, y, FALSE);
+				}
+				(void) mkgold((long) rn1(1000, 100), x, y);
+			}
+		}
 	} else if (Role_if(PM_PRIEST) && In_quest(&u.uz)) {
 	/* less chance for undead corpses (lured from lower morgues) */
 	level.flags.graveyard = 1;
