@@ -6298,7 +6298,7 @@ register struct monst *mon;
 		break;
 		case 1:
 			verbalize("Tell me, whom shall I kill?");
-			do_genocide(0);
+			do_genocide(1);
 		break;
 		case 2:{
 			int i;
