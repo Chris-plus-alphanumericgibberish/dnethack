@@ -1318,19 +1318,19 @@ register struct obj *obj;
 	else if(obj->oartifact == ART_SCEPTRE_OF_LOLTH) wt = 3*objects[MACE].oc_weight;
 	else if(obj->oartifact == ART_ROD_OF_THE_ELVISH_LORDS) wt = objects[ELVEN_MACE].oc_weight;
 	else if(obj->oartifact == ART_EARTH_CRYSTAL){
-		wt = 80;
+		wt = 160;
 	}
 	else if(obj->oartifact == ART_WATER_CRYSTAL){
-		wt = 20;
+		wt = 40;
 	}
 	else if(obj->oartifact == ART_FIRE_CRYSTAL){
-		wt = 10;
+		wt = 20;
 	}
 	else if(obj->oartifact == ART_AIR_CRYSTAL){
-		wt = 10;
+		wt = 20;
 	}
 	else if(obj->oartifact == ART_BLACK_CRYSTAL){
-		wt = 30; //150 total
+		wt = 60; //300 total
 	}
 	else if(obj->oartifact == ART_DRAGON_PLATE || obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 		wt =  (int)(wt * 1.5); //225
