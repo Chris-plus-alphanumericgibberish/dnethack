@@ -68,8 +68,8 @@ mksepulcher()
 		y = rn2(ROWNO-7)+3;
 		tries++;
 		okspot = TRUE;
-		for(i=-1;i<2;i++) for(j=-1;j<2;j++) if(levl[x+i][y+j].typ != STONE) okspot = FALSE;
-		for(i=-2;i<3;i++) for(j=-2;j<3;j++) if(levl[x+i][y+j].typ >= CORR) okspot = FALSE;
+		for(i=-1;i<2;i++) for(j=-1;j<2;j++) if(!isok(x+i,y+j) || levl[x+i][y+j].typ != STONE) okspot = FALSE;
+		for(i=-2;i<3;i++) for(j=-2;j<3;j++) if(!isok(x+i,y+j) || levl[x+i][y+j].typ >= CORR) okspot = FALSE;
 		if(okspot){
 			good = TRUE;
 			for(i=-1;i<2;i++) for(j=-1;j<2;j++) levl[x+i][y+j].typ = STONE;
