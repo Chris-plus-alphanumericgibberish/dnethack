@@ -961,7 +961,7 @@ mcalcdistress()
 	    (void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 	were_change(mtmp);
 	
-	if(!mtmp->mcansee && mtmp->data == &mons[PM_SHOGGOTH]){
+	if(!mtmp->mcansee && (mtmp->data == &mons[PM_SHOGGOTH] || mtmp->data == &mons[PM_PRIEST_OF_GHAUNADAUR])){
 		if(canspotmon(mtmp)) pline("%s forms new eyes!",Monnam(mtmp));
 		mtmp->mblinded = 1;
 	}
