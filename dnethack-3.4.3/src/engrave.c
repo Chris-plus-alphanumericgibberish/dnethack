@@ -1189,7 +1189,7 @@ can_reach_floor()
 			!(u.usteed && P_SKILL(P_RIDING) < P_BASIC) &&
 #endif
 			 (!Levitation ||
-			  Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)));
+			  Is_airlevel(&u.uz)));
 }
 #endif /* OVLB */
 #ifdef OVL0
