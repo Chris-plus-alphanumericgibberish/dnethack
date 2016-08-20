@@ -1084,7 +1084,7 @@ movemon()
 	if (mtmp->movement >= NORMAL_SPEED)
 	    somebody_can_move = TRUE;
 	
-	mtmp->mstdy /= 2; //monster is moving, reduce studied level
+	if(mtmp->mstdy > 0) mtmp->mstdy -= 1; //monster is moving, reduce studied level
 
 	//Weeping angel step 3
 	if(is_weeping(mtmp->data)){
