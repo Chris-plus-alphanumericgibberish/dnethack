@@ -148,8 +148,8 @@ struct obj *box;
 	switch (box->otyp) {
 	case ICE_BOX:		n = 20; break;
 	case CHEST:		n = 5; break;
-	case LARGE_BOX:		n = 3; break;
-	case HUGE_STONE_CRATE: min=1;
+	case BOX:		n = 3; break;
+	case MASSIVE_STONE_CRATE: min=1;
 	case SACK:
 	case OILSKIN_SACK:
 				/* initial inventory: sack starts out empty */
@@ -170,7 +170,7 @@ struct obj *box;
 				(void) stop_timer(ROT_CORPSE, (genericptr_t)otmp);
 				(void) stop_timer(REVIVE_MON, (genericptr_t)otmp);
 			}
-	    } else if(box->otyp == HUGE_STONE_CRATE){
+	    } else if(box->otyp == MASSIVE_STONE_CRATE){
 			if (!(otmp = mkobj(FOOD_CLASS, TRUE))) continue;
 	    } else {
 		register int tprob;
@@ -385,6 +385,8 @@ boolean artif;
 	otmp->where = OBJ_FREE;
 	otmp->dknown = index(dknowns, let) ? 0 : 1;
 	otmp->corpsenm = 0; /* BUGFIX: Where does this get set? shouldn't it be given a default during initialization? */
+	otmp->objsize = MZ_MEDIUM;
+	otmp->bodytypeflag = MB_HUMANOID;
 	otmp->ovar1 = 0;
 	otmp->gifted = A_NONE;
 	otmp->lifted = 0;
@@ -572,7 +574,7 @@ boolean artif;
 					otmp->ovar1 = random_saber_hilt();
 					break;
 		case CHEST:
-		case LARGE_BOX:
+		case BOX:
 			if(Is_stronghold(&u.uz) && in_mklev){
 				otmp->olocked = 1;
 				otmp->otrapped = 0;
@@ -583,7 +585,7 @@ boolean artif;
 		case ICE_BOX:
 		case SACK:
 		case OILSKIN_SACK:
-		case HUGE_STONE_CRATE:
+		case MASSIVE_STONE_CRATE:
 		case BAG_OF_HOLDING:	mkbox_cnts(otmp);
 					break;
 		case MAGIC_CHEST:
@@ -1227,7 +1229,7 @@ register struct obj *otmp;
 	otmp->blessed = 0;
 	otmp->cursed = 1;
 	/* welded two-handed weapon interferes with some armor removal */
-	if (otmp == uwep && bimanual(uwep)) reset_remarm();
+	if (otmp == uwep && bimanual(uwep,youracedata)) reset_remarm();
 	/* rules at top of wield.c state that twoweapon cannot be done
 	   with cursed alternate weapon */
 	if (otmp == uswapwep && u.twoweap)
@@ -1335,14 +1337,26 @@ register struct obj *obj;
 	} else if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
 		wt =  50; /* Same as a crystal ball (ie, the Orb of Weight) */
 	}
-
-
+	
+	if(obj->objsize != MZ_MEDIUM){
+		int difsize = obj->objsize - MZ_MEDIUM;
+		if(difsize > 0){
+			difsize++;
+			if(obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS) wt = wt*difsize;
+			else wt = wt*difsize*difsize;
+		} else {
+			difsize = abs(difsize)+1;
+			if(obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS) wt = wt/(difsize) + 1;
+			else wt = wt/(difsize*difsize) + 1;
+		}
+	}
+	
 	if(obj->otyp == MOON_AXE){
 		if(obj->ovar1) wt =  wt/4*obj->ovar1;
 		else wt = wt/4;
 	}
 
-	if (obj->otyp == LARGE_BOX && obj->spe){ /* Schroedinger's Cat */
+	if (obj->otyp == BOX && obj->spe){ /* Schroedinger's Cat */
 		if(obj->spe == 1){
 			wt += mons[PM_HOUSECAT].cwt;
 		}else if(obj->spe == 4){
