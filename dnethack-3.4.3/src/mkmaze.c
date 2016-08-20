@@ -229,6 +229,7 @@ bad_location(x, y, lx, ly, hx, hy)
     return((boolean)(occupied(x, y) ||
 	   within_bounded_area(x,y, lx,ly, hx,hy) ||
 	   !((levl[x][y].typ == CORR && level.flags.is_maze_lev) ||
+		   (Is_waterlevel(&u.uz) && levl[x][y].typ == MOAT) ||
 	       levl[x][y].typ == ROOM || levl[x][y].typ == AIR)));
 }
 
@@ -1403,7 +1404,7 @@ register boolean ini;
 	for (i = 0, x = b->x; i < (int) b->bm[0]; i++, x++)
 	    for (j = 0, y = b->y; j < (int) b->bm[1]; j++, y++)
 		if (b->bm[j + 2] & (1 << i)) {
-		    levl[x][y].typ = AIR;
+		    levl[x][y].typ = MOAT;//was ROOM;// was AIR
 		    levl[x][y].lit = 1;
 		    // unblock_point(x,y);
 		}

@@ -1325,7 +1325,7 @@ register xchar x, y;
 	return((boolean)(t_at(x, y)
 		|| IS_FURNITURE(levl[x][y].typ)
 		|| is_lava(x,y)
-		|| is_pool(x,y)
+		|| (is_pool(x,y) && (!Is_waterlevel(&u.uz) || is_3dwater(x,y)))
 		|| invocation_pos(x,y)
 		));
 }
