@@ -183,8 +183,8 @@ int radius;
     area = create_explode_region();
     for(i = 0; i < radius*2+1; i++)
 	for(j = 0; j < radius*2+1; j++)
-	    if (isok(i+x-1,j+y-1) && ZAP_POS((&levl[i+x-1][j+y-1])->typ))
-		add_location_to_explode_region(area, i+x-1, j+y-1);
+	    if (isok(i+x-radius,j+y-radius) && ZAP_POS((&levl[i+x-radius][j+y-radius])->typ))
+		add_location_to_explode_region(area, i+x-radius, j+y-radius);
     do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
     free_explode_region(area);
 }
