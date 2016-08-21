@@ -100,10 +100,25 @@ boolean burn;
 			return -1;
 		}
 
-		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
-				&& maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
-			dam += rnd(20);
+		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj)) &&
+				!(is_lightsaber(obj) && obj->lamplit) &&
+				!(u.sealsActive&SEAL_EDEN)
+				&& hates_silver(youracedata)) {
+			// dam += rnd(20);
 			pline_The("silver sears your flesh!");
+			exercise(A_CON, FALSE);
+		}
+		if (obj && (objects[obj->otyp].oc_material == IRON) &&
+				!(is_lightsaber(obj) && obj->lamplit)
+				&& hates_iron(youracedata)) {
+			// dam += rnd(20);
+			pline_The("cold-iron sears your flesh!");
+			exercise(A_CON, FALSE);
+		}
+		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
+				&& hates_unholy(youracedata)) {
+			// dam += rnd(20);
+			pline_The("curse sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
 		if (is_acid && Acid_resistance)
@@ -349,10 +364,27 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 			}
 	    }
 	    if ( (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
-		    hates_silver(mtmp->data)) {
-		if (vis) pline_The("silver sears %s flesh!",
-				s_suffix(mon_nam(mtmp)));
-		else if (verbose) pline("Its flesh is seared!");
+			!(is_lightsaber(otmp) && otmp->lamplit) &&
+		    hates_silver(mtmp->data)
+		) {
+			if (vis) pline_The("silver sears %s flesh!",
+					s_suffix(mon_nam(mtmp)));
+			else if (verbose) pline("Its flesh is seared!");
+	    }
+	    if ( (objects[otmp->otyp].oc_material == IRON) &&
+			!(is_lightsaber(otmp) && otmp->lamplit) &&
+		    hates_iron(mtmp->data)
+		) {
+			if (vis) pline_The("cold-iron sears %s flesh!",
+					s_suffix(mon_nam(mtmp)));
+			else if (verbose) pline("Its flesh is seared!");
+	    }
+	    if ( (otmp->cursed) &&
+		    hates_unholy(mtmp->data)
+		) {
+			if (vis) pline_The("curse sears %s flesh!",
+					s_suffix(mon_nam(mtmp)));
+			else if (verbose) pline("Its flesh is seared!");
 	    }
 	    if (otmp->otyp == ACID_VENOM && cansee(mtmp->mx,mtmp->my)) {
 		if (resists_acid(mtmp)) {
