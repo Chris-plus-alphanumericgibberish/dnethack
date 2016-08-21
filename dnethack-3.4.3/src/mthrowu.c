@@ -1662,7 +1662,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
 	if(typ == AD_HDRG){
-		typ = flags.HDbreath;
+		typ = mtmp->mvar1;
 		if(typ == AD_SLEE) mult = 4;
 	}
 
@@ -1709,7 +1709,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
 	if(typ == AD_HDRG){
-		typ = flags.HDbreath;
+		typ = mtmp->mvar1;
 		if(typ == AD_SLEE) mult = 4;
 	}
 
