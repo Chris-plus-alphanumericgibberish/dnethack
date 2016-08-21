@@ -1230,10 +1230,10 @@ int distance;
 {
 	struct monst *mtmp=0, *mtmp2;
 	xchar waspeaceful;
-
+	
 	if(SNG_FIRST_TURN){
-	if (u.uswallow) {
-		if (resist_song(u.ustuck, SNG_TAME, song_instr) >= 0) {
+		if (u.uswallow) {
+			if (resist_song(u.ustuck, SNG_TAME, song_instr) >= 0) {
 				u.ustuck->moccupation = 1;
 				u.ustuck->mcanmove = 0;
 			}
@@ -1274,39 +1274,39 @@ int distance;
 			if (u.ustuck->moccupation
 				&& resist_song(u.ustuck, SNG_TAME, song_instr) >= 0
 			) {
-			mtmp = tamedog(u.ustuck, (struct obj *) 0);
-			if(mtmp){
+				mtmp = tamedog(u.ustuck, (struct obj *) 0);
+				if(mtmp){
 					waspeaceful = mtmp->mpeaceful;
-				mtmp->mtame = min(max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2, 255);
+					mtmp->mtame = min(max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2, 255);
 					EDOG(mtmp)->waspeaceful = waspeaceful;
 					if(!waspeaceful || mtmp->mpeacetime){ /*Should it become untame, remain tame peaceful for a short period of time*/
 						mtmp->mpeacetime = max(mtmp->mpeacetime, (P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*10);
 						if(mtmp->mpeacetime < 5) mtmp->mpeacetime = 5;
 					}
+				}
 			}
-		}
-	} else {
+		} else {
 			mtmp = m_at(u.ux+u.dx, u.uy+u.dy);
 			if (mtmp && !DEADMONSTER(mtmp) && mtmp->moccupation
 				&& distu(mtmp->mx, mtmp->my) <= distance
 				&& resist_song(mtmp, SNG_TAME, song_instr) >= 0
 			) {
 				if(mtmp->mx == u.ux+u.dx && mtmp->my == u.uy+u.dy && mtmp->moccupation){
-				mtmp->mflee = 0;
-				/* no other effect if monster was already tame by other means */
-				if (mtmp->mtame && !mtmp->isminion && !(EDOG(mtmp)->friend)){
-					if(mtmp->mtame < P_SKILL(P_MUSICALIZE)*P_SKILL(P_MUSICALIZE)) mtmp->mtame++;
+					mtmp->mflee = 0;
+					/* no other effect if monster was already tame by other means */
+					if (mtmp->mtame && !mtmp->isminion && !(EDOG(mtmp)->friend)){
+						if(mtmp->mtame < P_SKILL(P_MUSICALIZE)*P_SKILL(P_MUSICALIZE)) mtmp->mtame++;
 						return;
-				}
-				waspeaceful = mtmp->mpeaceful;
+					}
+					waspeaceful = mtmp->mpeaceful;
 					if (!(mtmp->mtame)) {
-					mtmp = tamedog(mtmp, song_instr);
-					if (mtmp){
-						if (canseemon(mtmp) && flags.verbose && !mtmp->msleeping)
-							pline("%s seems to like your song.", Monnam(mtmp));
-					mtmp->mtame = min(mtmp->mtame
-							   + max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2,
-							   255);
+						mtmp = tamedog(mtmp, song_instr);
+						if (mtmp){
+							if (canseemon(mtmp) && flags.verbose && !mtmp->msleeping)
+								pline("%s seems to like your song.", Monnam(mtmp));
+							mtmp->mtame = min(mtmp->mtame
+									   + max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2,
+									   255);
 							EDOG(mtmp)->waspeaceful = TRUE;
 							if(!waspeaceful || mtmp->mpeacetime){ /*Should it become untame, remain tame peaceful for a short period of time*/
 								mtmp->mpeacetime = max(mtmp->mpeacetime, (P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*10);
@@ -1332,13 +1332,13 @@ int distance;
 		(void) tamedog(u.ustuck, (struct obj *) 0);
 	} else {
 	    for (mtmp = fmon; mtmp; mtmp = mtmp2) {
-		mtmp2 = mtmp->nmon;
-		if (DEADMONSTER(mtmp)) continue;
+			mtmp2 = mtmp->nmon;
+			if (DEADMONSTER(mtmp)) continue;
 
-		if (distu(mtmp->mx, mtmp->my) <= distance) {
-		    if (!resist(mtmp, TOOL_CLASS, 0, NOTELL))
-			(void) tamedog(mtmp, (struct obj *) 0);
-		}
+			if (distu(mtmp->mx, mtmp->my) <= distance) {
+				if (!resist(mtmp, TOOL_CLASS, 0, NOTELL))
+				(void) tamedog(mtmp, (struct obj *) 0);
+			}
 	    }
 	}
 }
