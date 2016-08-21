@@ -431,10 +431,13 @@ int know_spell;
 	if (instr->oartifact || instr_otyp == songs[song_id].instr2)
 		chance = (chance*3)/2;
 
-	/* not easy to play 'peaceful' music when badly injured */
-	if (u.uhp < u.uhpmax * 0.3 && 
-		(song_id == SNG_SLEEP || song_id == SNG_TAME || song_id == SNG_HASTE || song_id == SNG_HEAL)
-	) chance /= 2;
+	// /* not easy to play 'peaceful' music when badly injured */
+	// if (u.uhp < u.uhpmax * 0.3 && 
+		// (song_id == SNG_SLEEP || song_id == SNG_TAME || song_id == SNG_HASTE || song_id == SNG_HEAL)
+	// ) chance /= 2;
+
+	/* actually, when the pressure's on give a bonus to songs.  Otherwise you have a glass-cannon type effect */
+	if (u.uhp < u.uhpmax * 0.3) chance *= 2;
 
 	/* it's also difficult to play some instruments while wearing a shield. */
 	if (uarms && (instr_otyp == WOODEN_HARP || instr_otyp == LEATHER_DRUM)) 
