@@ -869,6 +869,12 @@ register struct monst *mtmp;
 		}
 	}
 	
+	if(mtmp->data == &mons[PM_QUIVERING_BLOB] && !mtmp->mflee){
+		if(!rn2(20)){
+			monflee(mtmp, 0, TRUE, TRUE);
+		}
+	}
+	
 	/* stunned monsters get un-stunned with larger probability */
 	if (mtmp->mstun && !rn2(10)) mtmp->mstun = 0;
 
