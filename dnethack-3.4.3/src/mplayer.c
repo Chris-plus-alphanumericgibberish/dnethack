@@ -141,11 +141,11 @@ register boolean special;
 			rwammo = STRANGE_OBJECT;
 			armor = rnd_class(GRAY_DRAGON_SCALE_MAIL, YELLOW_DRAGON_SCALE_MAIL);
 			cloak = !rn2(8) ? STRANGE_OBJECT :
-	    		rnd_class(OILSKIN_CLOAK, CLOAK_OF_DISPLACEMENT);
+					rnd_class(OILSKIN_CLOAK, CLOAK_OF_DISPLACEMENT);
 			helm = !rn2(8) ? STRANGE_OBJECT :
 					rnd_class(HELMET, HELM_OF_TELEPATHY);
 			shield = !rn2(2) ? rnd_class(GRAY_DRAGON_SCALE_SHIELD, YELLOW_DRAGON_SCALE_SHIELD) 
-							   : (!rn2(8) ? STRANGE_OBJECT : rnd_class(ELVEN_SHIELD, SHIELD_OF_REFLECTION));
+							 : (!rn2(8) ? STRANGE_OBJECT : rnd_class(ELVEN_SHIELD, SHIELD_OF_REFLECTION));
 		} else {
 			static int weptyp[] = {
 				STILETTO, AXE, SHORT_SWORD, SCIMITAR, BROADSWORD,
@@ -166,7 +166,7 @@ register boolean special;
 			armor = armtyp[rn2(SIZE(armtyp))];
 			cloak = rn2(8) ? STRANGE_OBJECT : LEATHER_CLOAK;
 			helm = !rn2(4) ? STRANGE_OBJECT : hlmtyp[rn2(SIZE(hlmtyp))];
-			shield = !rn2(4) ? STRANGE_OBJECT : rnd_class(SMALL_SHIELD, CRYSTAL_SHIELD);
+			shield = !rn2(4) ? STRANGE_OBJECT : rnd_class(BUCKLER, CRYSTAL_SHIELD);
 		}
 
 	    mtmp->m_lev = (special ? rn1(16,15) : rnd(16));
@@ -217,7 +217,7 @@ register boolean special;
 		    else weapon = CLUB;
 			if(!special) armor = STRANGE_OBJECT;
 			if(special){
-		    if (helm == HELM_OF_BRILLIANCE) helm = STRANGE_OBJECT;
+				if (helm == HELM_OF_BRILLIANCE) helm = STRANGE_OBJECT;
 			} else helm = LEATHER_HELM;
 		break;
 		case PM_CLOCKWORK_AUTOMATON:
@@ -283,7 +283,7 @@ register boolean special;
 		case PM_PIRATE:
 			weapon = SCIMITAR;
 			armor = LEATHER_JACKET;
-			shield = SMALL_SHIELD;
+			shield = BUCKLER;
 			rweapon = FLINTLOCK;
 			rwammo = BULLET;
 	    break;
@@ -340,16 +340,16 @@ register boolean special;
 	    }
 
 	    if (weapon != STRANGE_OBJECT) {
-		otmp = mksobj(weapon, TRUE, FALSE);
-		otmp->spe = (special ? rn1(5,4) : rn2(4));
-		if (!rn2(3)) otmp->oerodeproof = 1;
-		else if (!rn2(2)) otmp->greased = 1;
-		if (special && rn2(2))
-		    otmp = mk_artifact(otmp, A_NONE);
-		/* mplayers knew better than to overenchant Magicbane */
-		if (otmp->oartifact == ART_MAGICBANE)
-		    otmp->spe = rnd(4);
-		(void) mpickobj(mtmp, otmp);
+			otmp = mksobj(weapon, TRUE, FALSE);
+			otmp->spe = (special ? rn1(5,4) : rn2(4));
+			if (!rn2(3)) otmp->oerodeproof = 1;
+			else if (!rn2(2)) otmp->greased = 1;
+			if (special && rn2(2))
+				otmp = mk_artifact(otmp, A_NONE);
+			/* mplayers knew better than to overenchant Magicbane */
+			if (otmp->oartifact == ART_MAGICBANE)
+				otmp->spe = rnd(4);
+			(void) mpickobj(mtmp, otmp);
 	    }
 
 	    if (rweapon != STRANGE_OBJECT) {
@@ -371,32 +371,32 @@ register boolean special;
 	    }
 
 	    if(special) {
-		if (!rn2(10))
-		    (void) mongets(mtmp, rn2(3) ? LUCKSTONE : LOADSTONE);
-		mk_mplayer_armor(mtmp, armor);
-		mk_mplayer_armor(mtmp, cloak);
-		mk_mplayer_armor(mtmp, helm);
-		mk_mplayer_armor(mtmp, shield);
-		if (rn2(8))
-		    mk_mplayer_armor(mtmp, rnd_class(LEATHER_GLOVES,
-					       GAUNTLETS_OF_DEXTERITY));
-		if (rn2(8))
+			if (!rn2(10))
+				(void) mongets(mtmp, rn2(3) ? LUCKSTONE : LOADSTONE);
+			mk_mplayer_armor(mtmp, armor);
+			mk_mplayer_armor(mtmp, cloak);
+			mk_mplayer_armor(mtmp, helm);
+			mk_mplayer_armor(mtmp, shield);
+			if (rn2(8))
+				mk_mplayer_armor(mtmp, rnd_class(LEATHER_GLOVES,
+							   GAUNTLETS_OF_DEXTERITY));
+			if (rn2(8))
 				mk_mplayer_armor(mtmp, rnd_class(CRYSTAL_BOOTS, FLYING_BOOTS));
-		m_dowear(mtmp, TRUE);
+			m_dowear(mtmp, TRUE);
 
-		quan = rn2(3) ? rn2(3) : rn2(16);
-		while(quan--)
-		    (void)mongets(mtmp, rnd_class(DILITHIUM_CRYSTAL, JADE));
-		/* To get the gold "right" would mean a player can double his */
-		/* gold supply by killing one mplayer.  Not good. */
+			quan = rn2(3) ? rn2(3) : rn2(16);
+			while(quan--)
+				(void)mongets(mtmp, rnd_class(DILITHIUM_CRYSTAL, JADE));
+			/* To get the gold "right" would mean a player can double his */
+			/* gold supply by killing one mplayer.  Not good. */
 #ifndef GOLDOBJ
-		mtmp->mgold = rn2(1000);
+			mtmp->mgold = rn2(1000);
 #else
-		mkmonmoney(mtmp, rn2(1000));
+			mkmonmoney(mtmp, rn2(1000));
 #endif
-		quan = rn2(10);
-		while(quan--)
-		    (void) mpickobj(mtmp, mkobj(RANDOM_CLASS, FALSE));
+			quan = rn2(10);
+			while(quan--)
+				(void) mpickobj(mtmp, mkobj(RANDOM_CLASS, FALSE));
 	    } else {
 			(void) mongets(mtmp, armor);
 			(void) mongets(mtmp, cloak);
@@ -406,16 +406,16 @@ register boolean special;
 			if (rn2(3)) mongets(mtmp, LEATHER_GLOVES);
 			if (rn2(3)) mongets(mtmp, !rn2(2) ? LOW_BOOTS : HIGH_BOOTS);
 			m_dowear(mtmp, TRUE);
-	    }
+		}
 	    quan = rnd(3);
 	    while(quan--)
-		(void)mongets(mtmp, rnd_offensive_item(mtmp));
+			(void)mongets(mtmp, rnd_offensive_item(mtmp));
 	    quan = rnd(3);
 	    while(quan--)
-		(void)mongets(mtmp, rnd_defensive_item(mtmp));
+			(void)mongets(mtmp, rnd_defensive_item(mtmp));
 	    quan = rnd(3);
 	    while(quan--)
-		(void)mongets(mtmp, rnd_misc_item(mtmp));
+			(void)mongets(mtmp, rnd_misc_item(mtmp));
 	}
 
 	return(mtmp);
