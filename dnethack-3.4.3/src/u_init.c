@@ -2604,7 +2604,7 @@ register struct trobj *trop;
 			/* or ampule */
 			if (obj->otyp == HYPOSPRAY_AMPULE) {
 				if(nocreateam1 == STRANGE_OBJECT) nocreateam1 = (short)obj->ovar1;
-				else if(nocreateam2 == STRANGE_OBJECT) nocreateam2 = (short)obj->ovar1;
+					else if(nocreateam2 == STRANGE_OBJECT) nocreateam2 = (short)obj->ovar1;
 			}
 		}
 

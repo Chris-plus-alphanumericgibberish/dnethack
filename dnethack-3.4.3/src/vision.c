@@ -225,9 +225,9 @@ vision_reset()
 		    i = dig_left;
 		    if(dig_left) dig_left--; /* point at first blocked point */
 		    for(; i<x; i++) {
-			left_ptrs [y][i] = dig_left;
-			right_ptrs[y][i] = x;
-			viz_clear[y][i] = 1;
+				left_ptrs [y][i] = dig_left;
+				right_ptrs[y][i] = x;
+				viz_clear[y][i] = 1;
 		    }
 		}
 		dig_left = x;

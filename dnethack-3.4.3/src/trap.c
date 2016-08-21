@@ -2798,21 +2798,21 @@ struct monst *owner;
 //	int is_lethe = level.flags.lethe || forcelethe;
 	int is_lethe = 0;
 	if(owner == &youmonst){
-	if((uarmc
-		&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
-		&& (!uarmc->cursed || rn2(3))
-	   ) || (
-		ublindf
-		&& ublindf->otyp == R_LYEHIAN_FACEPLATE
-		&& (!ublindf->cursed || rn2(3))
-	   ) || u.sealsActive&SEAL_ENKI
-	) {
-		if(uarmc && uarmc->otyp != OILSKIN_CLOAK && uarmc->greased){
-			if (force || !rn2(uarmc->blessed ? 4 : 2)){
-				uarmc->greased = 0;
-				pline("The layer of grease on your %s dissolves.", xname(uarmc));
+		if((uarmc
+			&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
+			&& (!uarmc->cursed || rn2(3))
+		   ) || (
+			ublindf
+			&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+			&& (!ublindf->cursed || rn2(3))
+		   ) || u.sealsActive&SEAL_ENKI
+		) {
+			if(uarmc && uarmc->otyp != OILSKIN_CLOAK && uarmc->greased){
+				if (force || !rn2(uarmc->blessed ? 4 : 2)){
+					uarmc->greased = 0;
+					pline("The layer of grease on your %s dissolves.", xname(uarmc));
+				}
 			}
-		}
 			return 0;
 		}
 	} else if(owner){ //Monster

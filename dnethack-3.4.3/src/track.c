@@ -43,12 +43,12 @@ register int x, y;
     coord *tc;
     cnt = utcnt;
     for(tc = &utrack[utpnt]; cnt--; ){
-	if(tc == utrack) tc = &utrack[UTSZ-1];
+		if(tc == utrack) tc = &utrack[UTSZ-1];
 	
 	
-	else tc--;
-	ndist = distmin(x,y,tc->x,tc->y);
-
+		else tc--;
+		ndist = distmin(x,y,tc->x,tc->y);
+	
 		if(ndist <= 1)
 		    return ndist ? tc : 0 ;
     }

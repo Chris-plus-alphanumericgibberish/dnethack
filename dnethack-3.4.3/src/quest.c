@@ -161,29 +161,29 @@ boolean seal;
     d_level *dest;
     struct trap *t;
     int portal_flag;
-
+	
 	if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && !seal){ //If sealing dump out quest portal and seal it.
 		dest = &minetown_level;
 		portal_flag = 0;
 	} else {
-	    br = dungeon_branch("The Quest");
-	    dest = (br->end1.dnum == u.uz.dnum) ? &br->end2 : &br->end1;
-	    portal_flag = u.uevent.qexpelled ? 0 :	/* returned via artifact? */
+		br = dungeon_branch("The Quest");
+		dest = (br->end1.dnum == u.uz.dnum) ? &br->end2 : &br->end1;
+		portal_flag = u.uevent.qexpelled ? 0 :	/* returned via artifact? */
 			  !seal ? 1 : -1;
 	}
     schedule_goto(dest, FALSE, FALSE, portal_flag, (char *)0, (char *)0);
     if (seal) {	/* remove the portal to the quest - sealing it off */
-	int reexpelled = u.uevent.qexpelled;
-	u.uevent.qexpelled = 1;
-	remdun_mapseen(quest_dnum);
-	/* Delete the near portal now; the far (main dungeon side)
-	   portal will be deleted as part of arrival on that level.
-	   If monster movement is in progress, any who haven't moved
-	   yet will now miss out on a chance to wander through it... */
-	for (t = ftrap; t; t = t->ntrap)
-	    if (t->ttyp == MAGIC_PORTAL) break;
-	if (t) deltrap(t);	/* (display might be briefly out of sync) */
-	else if (!reexpelled) impossible("quest portal already gone?");
+		int reexpelled = u.uevent.qexpelled;
+		u.uevent.qexpelled = 1;
+		remdun_mapseen(quest_dnum);
+		/* Delete the near portal now; the far (main dungeon side)
+		   portal will be deleted as part of arrival on that level.
+		   If monster movement is in progress, any who haven't moved
+		   yet will now miss out on a chance to wander through it... */
+		for (t = ftrap; t; t = t->ntrap)
+			if (t->ttyp == MAGIC_PORTAL) break;
+		if (t) deltrap(t);	/* (display might be briefly out of sync) */
+		else if (!reexpelled) impossible("quest portal already gone?");
     }
 }
 

@@ -419,12 +419,12 @@ aggravate()
 
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
 	    if (!DEADMONSTER(mtmp)) {
-		mtmp->msleeping = 0;
-		if(!mtmp->mcanmove && !rn2(5)) {
-			mtmp->mfrozen = 0;
-      if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee))
-			mtmp->mcanmove = 1;
-		}
+			mtmp->msleeping = 0;
+			if(!mtmp->mcanmove && !rn2(5)) {
+				mtmp->mfrozen = 0;
+				if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee))
+					mtmp->mcanmove = 1;
+			}
 	    }
 }
 

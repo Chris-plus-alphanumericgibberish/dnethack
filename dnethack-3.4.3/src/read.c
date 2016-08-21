@@ -1454,8 +1454,8 @@ struct obj	*sobj;
 		    struct monst *mtmp;
 			if(confused){
 				int i, j, bd = 5;
-		    for (i = -bd; i <= bd; i++) for(j = -bd; j <= bd; j++) {
-			if (!isok(u.ux + i, u.uy + j)) continue;
+				for (i = -bd; i <= bd; i++) for(j = -bd; j <= bd; j++) {
+					if (!isok(u.ux + i, u.uy + j)) continue;
 					mtmp = m_at(u.ux + i, u.uy + j);
 					if(mtmp){
 						if(!mtmp->mtame){
@@ -1484,13 +1484,13 @@ struct obj	*sobj;
 				mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
 				if(mtmp){
 					if(!mtmp->mtame){
-			    maybe_tame(mtmp, sobj);
+						maybe_tame(mtmp, sobj);
 					} else if(EDOG(mtmp)->friend){
 						mtmp->mtame += ACURR(A_CHA)*10;
 						if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
 					} else if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
 				}
-		    }
+			}
 		}
 		break;
 	case SCR_GENOCIDE:

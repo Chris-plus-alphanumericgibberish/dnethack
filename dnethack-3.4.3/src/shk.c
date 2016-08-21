@@ -4988,14 +4988,14 @@ struct monst *shkp;
 	start_menu(tmpwin);
 	if (ESHK(shkp)->services & (SHK_SPECIAL_A | SHK_SPECIAL_B)) {
 		if (ESHK(shkp)->services & SHK_SPECIAL_A) {
-		    any.a_int = 1;
-		    add_menu(tmpwin, NO_GLYPH, &any , 'w', 0, ATR_NONE,
-			    "Ward against damage", MENU_UNSELECTED);
+			any.a_int = 1;
+			add_menu(tmpwin, NO_GLYPH, &any , 'w', 0, ATR_NONE,
+				"Ward against damage", MENU_UNSELECTED);
 		}
 		if (ESHK(shkp)->services & SHK_SPECIAL_B) {
-		    any.a_int = 2;
-		    add_menu(tmpwin, NO_GLYPH, &any , 'e', 0, ATR_NONE,
-			    "Enchant", MENU_UNSELECTED);
+			any.a_int = 2;
+			add_menu(tmpwin, NO_GLYPH, &any , 'e', 0, ATR_NONE,
+				"Enchant", MENU_UNSELECTED);
 		}
 	}
 	/* Can object be poisoned? */
@@ -5037,90 +5037,90 @@ struct monst *shkp;
 
     switch(service) {
 		case 0:
-	    break;
-	
+		break;
+
 		case 1:
-		    verbalize("This'll leave your %s untouchable!", xname(obj));
-		    
-		    /* Costs more the more eroded it is (oeroded 0-3 * 2) */
-		    charge = 500 * (obj->oeroded + obj->oeroded2 + 1);
-		    if (obj->oeroded + obj->oeroded2 > 2)
+			verbalize("This'll leave your %s untouchable!", xname(obj));
+			
+			/* Costs more the more eroded it is (oeroded 0-3 * 2) */
+			charge = 500 * (obj->oeroded + obj->oeroded2 + 1);
+			if (obj->oeroded + obj->oeroded2 > 2)
 			verbalize("This thing's in pretty sad condition, %s", slang);
-	
-		    /* Another warning if object is naturally rustproof */
-		    if (obj->oerodeproof || !is_damageable(obj))
+
+			/* Another warning if object is naturally rustproof */
+			if (obj->oerodeproof || !is_damageable(obj))
 			pline("%s gives you a suspciously happy smile...",
 				mon_nam(shkp));
-	
-		    /* Artifacts cost more to deal with */
-		    if (obj->oartifact) charge = charge * 3 / 2;
-	
-		    /* Smooth out the charge a bit */
-		    shk_smooth_charge(&charge, 200, 1500);
-	
-		    if (shk_offer_price(slang, charge, shkp) == FALSE) return;
-	
-		    /* Have some fun, but for this $$$ it better work. */
-		    if (Confusion)
+
+			/* Artifacts cost more to deal with */
+			if (obj->oartifact) charge = charge * 3 / 2;
+
+			/* Smooth out the charge a bit */
+			shk_smooth_charge(&charge, 200, 1500);
+
+			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+
+			/* Have some fun, but for this $$$ it better work. */
+			if (Confusion)
 			You("fall over in appreciation");
-		    else if (Hallucination)
+			else if (Hallucination)
 			Your(" - tin roof, un-rusted!");
-	
-		    obj->oeroded = obj->oeroded2 = 0;
-		    obj->rknown = TRUE;
-		    obj->oerodeproof = TRUE;
-	    break;
+
+			obj->oeroded = obj->oeroded2 = 0;
+			obj->rknown = TRUE;
+			obj->oerodeproof = TRUE;
+		break;
 		case 2:
-		    verbalize("Guaranteed not to harm your weapon, or your money back!");
-	
+			verbalize("Guaranteed not to harm your weapon, or your money back!");
+
 			charge = (obj->spe+1) * (obj->spe+1) * 62;
-	
-		    if (obj->spe < 0) charge = 100;
-	
-		    /* Artifacts cost more to deal with */
-		    if (obj->oartifact) charge *= 2;
-	
-		    /* Smooth out the charge a bit (lower bound only) */
-		    shk_smooth_charge(&charge, 50, NOBOUND);
-	
-		    if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+			
+			if (obj->spe < 0) charge = 100;
+
+			/* Artifacts cost more to deal with */
+			if (obj->oartifact) charge *= 2;
+
+			/* Smooth out the charge a bit (lower bound only) */
+			shk_smooth_charge(&charge, 50, NOBOUND);
+
+			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 			
 			if(obj->oclass == TOOL_CLASS && !is_weptool(obj)){
 				verbalize("All done!");
 				// Steals your money
 				break;
 			}
-		    if (obj->spe+1 > 5) { 
+			if (obj->spe+1 > 5) {
 				verbalize("I tried, but I can't enchant this any higher!");
 				// Steals your money
-			break;
-		    }
-		    /* Have some fun! */
-		    if (Confusion)
+				break;
+			}
+			/* Have some fun! */
+			if (Confusion)
 			Your("%s unexpectedly!", aobjnam(obj, "vibrate"));
-		    else if (Hallucination)
+			else if (Hallucination)
 			Your("%s to evaporate into thin air!", aobjnam(obj, "seem"));
-		    /* ...No actual vibrating and no evaporating */
-	
-		    if (obj->otyp == WORM_TOOTH) {
+			/* ...No actual vibrating and no evaporating */
+
+			if (obj->otyp == WORM_TOOTH) {
 			obj->otyp = CRYSKNIFE;
 			Your("weapon seems sharper now.");
 			obj->cursed = 0;
 			break;
-		    }
-	
-		    obj->spe++;
-	    break;
+			}
+
+			obj->spe++;
+		break;
 		case 3:
-		    verbalize("Just imagine what poisoned %s can do!", xname(obj));
-	
+			verbalize("Just imagine what poisoned %s can do!", xname(obj));
+
 			charge = 90;
 			charge+= 10 * obj->quan;
-	
-		    if (shk_offer_price(slang, charge, shkp) == FALSE) return;
-	
-		    obj->opoisoned = OPOISON_BASIC;
-	    break;
+
+			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+
+			obj->opoisoned = OPOISON_BASIC;
+		break;
 		case 4:
 			verbalize("Just imagine what drugged %s can do!", xname(obj));
 
@@ -5163,9 +5163,9 @@ struct monst *shkp;
 		break;
 
 		default:
-		    impossible("Unknown Weapon Enhancement");
-	    break;
-    }
+			impossible("Unknown Weapon Enhancement");
+		break;
+	}
 }
 
 

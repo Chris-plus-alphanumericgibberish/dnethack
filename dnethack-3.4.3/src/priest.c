@@ -488,7 +488,7 @@ register int roomno;
 				if(mvitals[PM_MAANZECORIAN].born > 0 || !(mtmp = makemon(&mons[PM_MAANZECORIAN],u.ux,u.uy,MM_ADJACENTOK)))
 					return;
 				if (!Blind || sensemon(mtmp))
-				pline("An enormous ghostly mind flayer appears next to you!");
+					pline("An enormous ghostly mind flayer appears next to you!");
 				else You("sense a presence close by!");
 				mtmp->mpeaceful = 0;
 				set_malign(mtmp);
