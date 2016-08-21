@@ -186,6 +186,12 @@ lookat(x, y, buf, monbuf)
 		/* infravision */
 		if ((!mtmp->minvis || See_invisible) && see_with_infrared(mtmp))
 		    ways_seen++;
+		/* bloodsense */
+		if ((!mtmp->minvis || See_invisible) && see_with_bloodsense(mtmp))
+		    ways_seen++;
+		/* lifesense */
+		if ((!mtmp->minvis || See_invisible) && see_with_lifesense(mtmp))
+		    ways_seen++;
 		/* telepathy */
 		if (tp_sensemon(mtmp))
 		    ways_seen++;
@@ -213,6 +219,16 @@ lookat(x, y, buf, monbuf)
 			Strcat(monbuf, "infravision");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
 		    }
+		    if ((!mtmp->minvis || See_invisible) &&
+			    see_with_bloodsense(mtmp)) {
+			Strcat(monbuf, "bloodsense");
+			if (ways_seen-- > 1) Strcat(monbuf, ", ");
+		    }
+		    if ((!mtmp->minvis || See_invisible) &&
+			    see_with_lifesense(mtmp)) {
+			Strcat(monbuf, "lifesense");
+			if (ways_seen-- > 1) Strcat(monbuf, ", ");
+		    }
 		    if (tp_sensemon(mtmp)) {
 			Strcat(monbuf, "telepathy");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
@@ -229,15 +245,59 @@ lookat(x, y, buf, monbuf)
 		    }
 		    if (MATCH_WARN_OF_MON(mtmp)) {
 		    	char wbuf[BUFSZ];
-			if (Hallucination)
+			if (Hallucination){
 				Strcat(monbuf, "paranoid delusion");
-			else {
-				Sprintf(wbuf, "warned of %s",
-					makeplural(mtmp->data->mname));
-		    		Strcat(monbuf, wbuf);
-		    	}
-		    	if (ways_seen-- > 1) Strcat(monbuf, ", ");
+				if (ways_seen-- > 1) Strcat(monbuf, ", ");
+			} else {
+				//going to need more detail about how it is seen....
+				ways_seen = 0;
+				if(u.sealsActive&SEAL_PAIMON && is_magical((mtmp)->data)) ways_seen++;
+				if(u.sealsActive&SEAL_ANDROMALIUS && is_thief((mtmp)->data)) ways_seen++;
+				if(u.sealsActive&SEAL_TENEBROUS && !nonliving((mtmp)->data)) ways_seen++;
+				if(u.specialSealsActive&SEAL_ACERERAK && is_undead((mtmp)->data)) ways_seen++;
+				if(uwep && ((uwep->ovar1 & WARD_THJOFASTAFUR) && 
+					((mtmp)->data->mlet == S_LEPRECHAUN || (mtmp)->data->mlet == S_NYMPH || is_thief((mtmp)->data)))) ways_seen++;
+				if(Upolyd && youmonst.data == &mons[PM_SHARK] && has_blood((mtmp)->data) &&
+						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mtmp)->mx, (mtmp)->my)) ways_seen++;
+				if(MATCH_WARN_OF_MON_STRICT(mtmp)){
+					Sprintf(wbuf, "warned of %s",
+						makeplural(mtmp->data->mname));
+					Strcat(monbuf, wbuf);
+				} else {
+					if(u.sealsActive&SEAL_PAIMON && is_magical((mtmp)->data)){
+					Sprintf(wbuf, "warned of magic users");
+					Strcat(monbuf, wbuf);
+					if (ways_seen-- > 1) Strcat(monbuf, ", ");
+					}
+					if(u.sealsActive&SEAL_ANDROMALIUS && is_thief((mtmp)->data)){
+					Sprintf(wbuf, "warned of item thieves");
+					Strcat(monbuf, wbuf);
+					if (ways_seen-- > 1) Strcat(monbuf, ", ");
+					}
+					if(uwep && (uwep->ovar1 & WARD_THJOFASTAFUR) && ((mtmp)->data->mlet == S_LEPRECHAUN || (mtmp)->data->mlet == S_NYMPH || is_thief((mtmp)->data))){
+					Sprintf(wbuf, "warned of leprechauns, nymphs, and item thieves");
+					Strcat(monbuf, wbuf);
+					if (ways_seen-- > 1) Strcat(monbuf, ", ");
+					}
+					if(u.specialSealsActive&SEAL_ACERERAK && is_undead((mtmp)->data)){
+					Sprintf(wbuf, "warned of the undead");
+					Strcat(monbuf, wbuf);
+					if (ways_seen-- > 1) Strcat(monbuf, ", ");
+					}
+					if(u.sealsActive&SEAL_TENEBROUS && !nonliving((mtmp)->data)){
+					Sprintf(wbuf, "warned of living beings");
+					Strcat(monbuf, wbuf);
+					if (ways_seen-- > 1) Strcat(monbuf, ", ");
+					}
+					if(Upolyd && youmonst.data == &mons[PM_SHARK] && has_blood((mtmp)->data) &&
+						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mtmp)->mx, (mtmp)->my)){
+					Sprintf(wbuf, "smell blood in the water");
+					Strcat(monbuf, wbuf);
+					if (ways_seen-- > 1) Strcat(monbuf, ", ");
+					}
+				}
 		    }
+			}
 		}
 	    }
 	}
