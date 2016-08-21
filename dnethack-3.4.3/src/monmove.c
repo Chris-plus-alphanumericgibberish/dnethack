@@ -931,6 +931,7 @@ register struct monst *mtmp;
 		&& (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+		&& !(mindless(mtmp->data))
 	){
 		if(cansee(mtmp->mx,mtmp->my)) pline("%s invokes the darkness.",Monnam(mtmp));
 	    do_clear_area(mtmp->mx,mtmp->my, 5, set_lit, (genericptr_t)0);
