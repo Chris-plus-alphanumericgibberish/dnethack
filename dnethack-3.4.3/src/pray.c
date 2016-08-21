@@ -1311,16 +1311,16 @@ gcrownu()
 
     /* enhance weapon regardless of alignment or artifact status */
     if (ok_wep(obj)) {
-	bless(obj);
-	obj->oeroded = obj->oeroded2 = 0;
-	obj->oerodeproof = TRUE;
-	obj->bknown = obj->rknown = TRUE;
-	if (obj->spe < 1) obj->spe = 1;
-	/* acquire skill in this weapon */
-	unrestrict_weapon_skill(weapon_type(obj));
+		bless(obj);
+		obj->oeroded = obj->oeroded2 = 0;
+		obj->oerodeproof = TRUE;
+		obj->bknown = obj->rknown = TRUE;
+		if (obj->spe < 1) obj->spe = 1;
+		/* acquire skill in this weapon */
+		unrestrict_weapon_skill(weapon_type(obj));
     } else if (class_gift == STRANGE_OBJECT) {
-	/* opportunity knocked, but there was nobody home... */
-	You_feel("unworthy.");
+		/* opportunity knocked, but there was nobody home... */
+		You_feel("unworthy.");
     }
     update_inventory();
     return;
@@ -2186,17 +2186,17 @@ dosacrifice()
 					pline("Silence greets your offering.");
 				}
 			} else {
-		    u.ugangr[Align2gangr(u.ualign.type)] += 3;
-		    adjalign(-5);
-		    u.lastprayed = moves;
-		    u.lastprayresult = PRAY_ANGER;
-			u.reconciled = REC_NONE;
-		    pline("%s rejects your sacrifice!", a_gname());
-		    godvoice(altaralign, "Suffer, infidel!");
-		    change_luck(-5);
-		    (void) adjattrib(A_WIS, -2, TRUE);
-		    if (!Inhell) angrygods(u.ualign.type);
-		}
+				u.ugangr[Align2gangr(u.ualign.type)] += 3;
+				adjalign(-5);
+				u.lastprayed = moves;
+				u.lastprayresult = PRAY_ANGER;
+				u.reconciled = REC_NONE;
+				pline("%s rejects your sacrifice!", a_gname());
+				godvoice(altaralign, "Suffer, infidel!");
+				change_luck(-5);
+				(void) adjattrib(A_WIS, -2, TRUE);
+				if (!Inhell) angrygods(u.ualign.type);
+			}
 		}
 		return(1);
 	    } else {
@@ -2211,69 +2211,69 @@ dosacrifice()
 				u_gname(), a_gname());
 			pline("But nothing else occurs.");
 		} else {
-		You("sense a conflict between %s and %s.",
-			u_gname(), a_gname());
-		if (rn2(8 + u.ulevel) > 5) {
-		    struct monst *pri;
-		    You_feel("the power of %s increase.", u_gname());
-		    exercise(A_WIS, TRUE);
-		    change_luck(1);
-		    /* Yes, this is supposed to be &=, not |= */
-		    levl[u.ux][u.uy].altarmask &= AM_SHRINE;
-		    /* the following accommodates stupid compilers */
-		    levl[u.ux][u.uy].altarmask =
-			levl[u.ux][u.uy].altarmask | (Align2amask(u.ualign.type));
-		    if (!Blind)
-			pline_The("altar glows %s.",
-			      hcolor(
-			      u.ualign.type == A_LAWFUL ? NH_WHITE :
-			      u.ualign.type ? NH_BLACK : (const char *)"gray"));
-			if(Role_if(PM_EXILE) && In_quest(&u.uz) && u.uz.dlevel == nemesis_level.dlevel){
-				int door = 0, ix, iy;
-				if(altaralign == A_CHAOTIC) door = 1;
-				else if(altaralign == A_NEUTRAL) door = 2;
-				else if(altaralign == A_LAWFUL) door = 3;
-				else if(!u.uevent.qcompleted && altaralign == A_NONE){
-					pline("The muted tension that filled the wind fades away.");
-					pline("You here again the thousand-tounged whisperers,");
-					pline("though you cannot make out the name they repeat.");
-					makemon(&mons[PM_ACERERAK],u.ux,u.uy,MM_ADJACENTOK);
-					pline("Someone now stands beside you!");
-				}
-				if(door){
-					for(ix = 1; ix < COLNO; ix++){
-						for(iy = 0; iy < ROWNO; iy++){
-							if(IS_DOOR(levl[ix][iy].typ) && artifact_door(ix,iy) == door){
-								You_hear("a door open.");
-								levl[ix][iy].typ = ROOM;
-								unblock_point(ix,iy);
+			You("sense a conflict between %s and %s.",
+				u_gname(), a_gname());
+			if (rn2(8 + u.ulevel) > 5) {
+				struct monst *pri;
+				You_feel("the power of %s increase.", u_gname());
+				exercise(A_WIS, TRUE);
+				change_luck(1);
+				/* Yes, this is supposed to be &=, not |= */
+				levl[u.ux][u.uy].altarmask &= AM_SHRINE;
+				/* the following accommodates stupid compilers */
+				levl[u.ux][u.uy].altarmask =
+				levl[u.ux][u.uy].altarmask | (Align2amask(u.ualign.type));
+				if (!Blind)
+				pline_The("altar glows %s.",
+					  hcolor(
+					  u.ualign.type == A_LAWFUL ? NH_WHITE :
+					  u.ualign.type ? NH_BLACK : (const char *)"gray"));
+				if(Role_if(PM_EXILE) && In_quest(&u.uz) && u.uz.dlevel == nemesis_level.dlevel){
+					int door = 0, ix, iy;
+					if(altaralign == A_CHAOTIC) door = 1;
+					else if(altaralign == A_NEUTRAL) door = 2;
+					else if(altaralign == A_LAWFUL) door = 3;
+					else if(!u.uevent.qcompleted && altaralign == A_NONE){
+						pline("The muted tension that filled the wind fades away.");
+						pline("You here again the thousand-tounged whisperers,");
+						pline("though you cannot make out the name they repeat.");
+						makemon(&mons[PM_ACERERAK],u.ux,u.uy,MM_ADJACENTOK);
+						pline("Someone now stands beside you!");
+					}
+					if(door){
+						for(ix = 1; ix < COLNO; ix++){
+							for(iy = 0; iy < ROWNO; iy++){
+								if(IS_DOOR(levl[ix][iy].typ) && artifact_door(ix,iy) == door){
+									You_hear("a door open.");
+									levl[ix][iy].typ = ROOM;
+									unblock_point(ix,iy);
+								}
 							}
 						}
 					}
 				}
+				// if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
+				   // rnd(u.ualign.record) > (3*ALIGNLIM)/4)
+				if(!Pantheon_if(PM_ELF)){
+					if(u.ulevel > 20) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+					if(u.ulevel > 10) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+					(void) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+				}
+				/* anger priest; test handles bones files */
+				if((pri = findpriest(temple_occupied(u.urooms))) &&
+				   !p_coaligned(pri))
+				angry_priest();
+			} else {
+				pline("Unluckily, you feel the power of %s decrease.",
+				  u_gname());
+				change_luck(-1);
+				exercise(A_WIS, FALSE);
+				if(!Pantheon_if(PM_ELF)){
+					if(u.ulevel > 20) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+					if(u.ulevel > 10) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+					(void) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
+				}
 			}
-		    // if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
-		       // rnd(u.ualign.record) > (3*ALIGNLIM)/4)
-			if(!Pantheon_if(PM_ELF)){
-				if(u.ulevel > 20) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
-				if(u.ulevel > 10) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
-				(void) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
-			}
-		    /* anger priest; test handles bones files */
-		    if((pri = findpriest(temple_occupied(u.urooms))) &&
-		       !p_coaligned(pri))
-			angry_priest();
-		} else {
-		    pline("Unluckily, you feel the power of %s decrease.",
-			  u_gname());
-		    change_luck(-1);
-		    exercise(A_WIS, FALSE);
-			if(!Pantheon_if(PM_ELF)){
-				if(u.ulevel > 20) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
-				if(u.ulevel > 10) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
-				(void) summon_god_minion(align_gname_full(altaralign),altaralign, TRUE);
-			}
-		}
 		}
 		return(1);
 	    }
