@@ -239,7 +239,7 @@ worst_cursed_item()
     }
     /* weapon takes precedence if it is interfering
        with taking off a ring or putting on a shield */
-    if (welded(uwep) && (uright || bimanual(uwep))) {	/* weapon */
+    if (welded(uwep) && (uright || bimanual(uwep,youracedata))) {	/* weapon */
 	otmp = uwep;
     /* gloves come next, due to rings */
     } else if (uarmg && uarmg->cursed) {		/* gloves */
