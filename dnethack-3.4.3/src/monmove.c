@@ -693,10 +693,10 @@ boolean fleemsg;
 	    if (!fleetime)
 		mtmp->mfleetim = 0;
 	    else if (!mtmp->mflee || mtmp->mfleetim) {
-		fleetime += mtmp->mfleetim;
-		/* ensure monster flees long enough to visibly stop fighting */
-		if (fleetime == 1) fleetime++;
-			mtmp->mfleetim = min(fleetime, 127);
+			fleetime += mtmp->mfleetim;
+			/* ensure monster flees long enough to visibly stop fighting */
+			if (fleetime == 1) fleetime++;
+				mtmp->mfleetim = min(fleetime, 127);
 	    }
 		if( !mtmp->mflee && mtmp->data == &mons[PM_GIANT_TURTLE]){
 		 mtmp->mcanmove=0;
@@ -1483,7 +1483,7 @@ not_special:
 #ifdef REINCARNATION
 				    && (!Is_rogue_level(&u.uz))
 #endif
-							    ) {
+	) {
 	    boolean in_line = lined_up(mtmp) &&
 		(distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <=
 		    (throws_rocks(youmonst.data) ? 20 : ACURRSTR/2+1)
@@ -1681,29 +1681,29 @@ not_special:
 		}
 		
 	    for(i=0; i < cnt; i++) {
-		if (avoid && (info[i] & NOTONL)) continue;
-		nx = poss[i].x;
-		ny = poss[i].y;
+			if (avoid && (info[i] & NOTONL)) continue;
+			nx = poss[i].x;
+			ny = poss[i].y;
 
-		if (appr != 0) {
-		    mtrk = &mtmp->mtrack[0];
-		    for(j=0; j < jcnt; mtrk++, j++)
-			if(nx == mtrk->x && ny == mtrk->y)
-			    if(rn2(4*(cnt-j)))
-				goto nxti;
-		}
+			if (appr != 0) {
+				mtrk = &mtmp->mtrack[0];
+				for(j=0; j < jcnt; mtrk++, j++)
+				if(nx == mtrk->x && ny == mtrk->y)
+					if(rn2(4*(cnt-j)))
+					goto nxti;
+			}
 
-		nearer = ((ndist = dist2(nx,ny,gx,gy)) < nidist);
+			nearer = ((ndist = dist2(nx,ny,gx,gy)) < nidist);
 
-		if((appr == 1 && nearer) || (appr == -1 && !nearer) ||
-		   (!appr && !rn2(++chcnt)) || !mmoved) {
-		    nix = nx;
-		    niy = ny;
-		    nidist = ndist;
-		    chi = i;
-		    mmoved = 1;
-		}
-	    nxti:	;
+			if((appr == 1 && nearer) || (appr == -1 && !nearer) ||
+			   (!appr && !rn2(++chcnt)) || !mmoved) {
+				nix = nx;
+				niy = ny;
+				nidist = ndist;
+				chi = i;
+				mmoved = 1;
+			}
+			nxti:	;
 	    }
 	}
 
