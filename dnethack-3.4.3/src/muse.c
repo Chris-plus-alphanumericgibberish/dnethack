@@ -2169,8 +2169,18 @@ museamnesia:
 			pline_The("whip slips free.");  /* not `The_whip' */
 			return 1;
 		    } else if (where_to == 3 && hates_silver(mtmp->data) &&
-			    objects[obj->otyp].oc_material == SILVER) {
+			    (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))) {
 			/* this monster won't want to catch a silver
+			   weapon; drop it at hero's feet instead */
+			where_to = 2;
+		    } else if (where_to == 3 && hates_iron(mtmp->data) &&
+			    objects[obj->otyp].oc_material == IRON) {
+			/* this monster won't want to catch an iron
+			   weapon; drop it at hero's feet instead */
+			where_to = 2;
+		    } else if (where_to == 3 && hates_unholy(mtmp->data) &&
+			    obj->cursed) {
+			/* this monster won't want to catch a cursed
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;
 		    }
