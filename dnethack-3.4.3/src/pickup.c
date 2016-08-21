@@ -1964,7 +1964,7 @@ register struct obj *obj;
 	    Strcpy(buf, the(xname(current_container)));
 	    You("put %s into %s.", doname(obj), buf);
 		if(cobj_is_magic_chest(current_container))
-			pline("The lock labled '%d' is open.", (int)current_container->ovar1);
+			pline("The lock labeled '%d' is open.", (int)current_container->ovar1);
 
 	    /* gold in container always needs to be added to credit */
 	    if (floor_container && obj->oclass == COIN_CLASS)
