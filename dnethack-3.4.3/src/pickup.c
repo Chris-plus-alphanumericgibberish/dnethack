@@ -1596,7 +1596,7 @@ lootcont:
 			c = ynq(qbuf);
 			if (c == 'q') return (timepassed);
 			if (c == 'n') continue;
-			timepassed |= use_lightsaber(cobj, 0);
+			timepassed |= use_lightsaber(cobj);
 			if(timepassed) underfoot = TRUE;
 		}
 	}
