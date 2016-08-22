@@ -207,14 +207,14 @@ struct obj *obj;	/* quest artifact; possibly null if carrying Amulet */
 			struct monst *tm;
 			flags.leader_backstab = TRUE;
 			mons[urole.ldrnum].msound = MS_CUSS;
-			mons[urole.ldrnum].mflags2 &= ~(M2_PEACEFUL);
-			mons[urole.ldrnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-			mons[urole.ldrnum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+			mons[urole.ldrnum].mflagst &= ~(MT_PEACEFUL);
+			mons[urole.ldrnum].mflagst |= (MT_WANTSARTI|MT_WAITFORU|MT_STALK|MT_HOSTILE);
+			mons[urole.ldrnum].mflagsg |= MG_NASTY;
 			
 			mons[urole.guardnum].msound = MS_CUSS;
-			mons[urole.guardnum].mflags2 &= ~(M2_PEACEFUL);
-			mons[urole.guardnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-			mons[urole.guardnum].mflags3 |= M3_WAITFORU;
+			mons[urole.guardnum].mflagst &= ~(MT_PEACEFUL);
+			mons[urole.guardnum].mflagst |= (MT_WAITFORU|MT_STALK|MT_HOSTILE);
+			mons[urole.guardnum].mflagsg |= MG_NASTY;
 			for(tm = fmon; tm; tm = tm->nmon){
 				if(tm->mfaction != EILISTRAEE_SYMBOL && 
 					tm->mfaction != XAXOX && tm->mfaction != EDDER_SYMBOL && 
@@ -503,7 +503,7 @@ quest_chat(mtmp)
 	
 	if(
 		(Role_if(PM_NOBLEMAN) && 
-		(mtmp->data == &mons[PM_KNIGHT] 
+			(mtmp->data == &mons[PM_KNIGHT] 
 				|| mtmp->data == &mons[PM_MAID]) && mtmp->mpeaceful)
 	  || (Race_if(PM_DROW) && is_drow(mtmp->data))
 	  || (Role_if(PM_EXILE) && 
@@ -575,19 +575,19 @@ turn_stag()
 	}
 	/*Eliminate old monster tags*/
 	    mons[urole.ldrnum].msound = MS_CUSS;
-	    mons[urole.ldrnum].mflags2 &= ~(M2_PEACEFUL);
-	    mons[urole.ldrnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-	    mons[urole.ldrnum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+	    mons[urole.ldrnum].mflagst &= ~(MT_PEACEFUL);
+	    mons[urole.ldrnum].mflagst |= (MT_STALK|MT_HOSTILE|MT_WANTSARTI|MT_WAITFORU);
+	    mons[urole.ldrnum].mflagsg |= MG_NASTY;
 		
 	    mons[urole.guardnum].msound = MS_CUSS;
-	    mons[urole.guardnum].mflags2 &= ~(M2_PEACEFUL);
-	    mons[urole.guardnum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-	    mons[urole.guardnum].mflags3 |= M3_WAITFORU;
+	    mons[urole.guardnum].mflagst &= ~(MT_PEACEFUL);
+	    mons[urole.guardnum].mflagst |= MT_WAITFORU|MT_STALK|MT_HOSTILE;
+	    mons[urole.guardnum].mflagsg |= (MG_NASTY);
 		
 	    mons[urole.neminum].msound = MS_DJINNI;
-	    mons[urole.neminum].mflags2 |= M2_PEACEFUL;
-	    mons[urole.neminum].mflags2 &= ~(M2_NASTY|M2_STALK|M2_HOSTILE);
-	    mons[urole.neminum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+	    mons[urole.neminum].mflagst |= MT_PEACEFUL;
+	    mons[urole.neminum].mflagst &= ~(MT_STALK|MT_HOSTILE|MT_WAITFORU|MT_COVETOUS);
+	    mons[urole.neminum].mflagsg &= ~(MG_NASTY);
 	/*Fix up role*/
 		if(flags.initgend){
 			/*true = female*/
@@ -635,18 +635,17 @@ turn_stag()
 	/*Fix monster flags*/
 	{
 	    mons[urole.ldrnum].msound = MS_LEADER;
-	    mons[urole.ldrnum].mflags2 |= (M2_PEACEFUL);
-	    mons[urole.ldrnum].mflags3 |= M3_CLOSE;
-	    mons[urole.ldrnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+	    mons[urole.ldrnum].mflagst |= (MT_PEACEFUL|MT_CLOSE);
+	    mons[urole.ldrnum].mflagst &= ~(MT_WAITFORU|MT_COVETOUS);
 		
-	    mons[urole.guardnum].mflags2 |= (M2_PEACEFUL);
 	    mons[urole.guardnum].msound = MS_GUARDIAN;
-	    mons[urole.guardnum].mflags3 &= ~(M3_COVETOUS|M3_WAITFORU);
+	    mons[urole.guardnum].mflagst |= (MT_PEACEFUL);
+	    mons[urole.guardnum].mflagst &= ~(MT_WAITFORU|MT_COVETOUS);
 		
 	    mons[urole.neminum].msound = MS_NEMESIS;
-	    mons[urole.neminum].mflags2 &= ~(M2_PEACEFUL);
-	    mons[urole.neminum].mflags2 |= (M2_NASTY|M2_STALK|M2_HOSTILE);
-	    mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
+	    mons[urole.neminum].mflagst &= ~(MT_PEACEFUL);
+	    mons[urole.neminum].mflagst |= (MT_WANTSARTI|MT_WAITFORU|MT_STALK|MT_HOSTILE);
+	    mons[urole.neminum].mflagsg |= MG_NASTY;
 	}
 	/*Correct Qstat settings*/
 	{
@@ -673,7 +672,7 @@ turn_stag()
 		Qstat(touched_artifact) = 0;
 		Qstat(offered_artifact) = 0;
 		Qstat(got_thanks) = 0;
-		u.uhave.questart = 0; /*Maybe will flip if you got Tent rod fist somehow*/
+		u.uhave.questart = 0; /*Maybe will flip if you got Tent rod first somehow*/
 		u.uevent.qcompleted = 0;	/* you didn't do it! */
 	}
 	/*Correct peacefulness settings*/
