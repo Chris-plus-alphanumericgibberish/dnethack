@@ -328,7 +328,7 @@ find_to_hit_rolls(mtmp,ptmp,pweptmp,ptchtmp)
 	
     static int fgloves = 0;
     if (!fgloves) fgloves = find_fgloves();
-    if (uarmf && uarmf->otyp == fgloves && uwep && !bimanual(uwep) && !uarms) weptmp+=3;
+    if (uarmf && uarmf->otyp == fgloves && uwep && !bimanual(uwep,youracedata) && !uarms) weptmp+=3;
 	
 	*ptmp = tmp;
 	*pweptmp = weptmp;
