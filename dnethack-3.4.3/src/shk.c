@@ -625,7 +625,7 @@ struct monst *shkp;
 	if (!Role_if(PM_ROGUE)) {     /* stealing is unlawful */
 	    adjalign(-sgn(u.ualign.type));
 	    You("feel like an evil rogue.");
-		if(u.ualign.type < 0){
+		if(u.ualign.type >= 0){
 			u.ualign.sins++;
 			u.hod++; /* It is deliberate that non-rogues increment hod twice*/
 		}
