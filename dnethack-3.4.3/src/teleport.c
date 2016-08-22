@@ -776,22 +776,35 @@ level_tele()
 	     * we let negative values requests fall into the "heaven" loop.
 	     */
 		if(In_quest(&u.uz) || In_tower(&u.uz) || In_law(&u.uz) || In_neu(&u.uz) || In_cha(&u.uz)){
+			boolean rangeRestricted = TRUE;
 			int urlev = dungeons[u.uz.dnum].depth_start + u.uz.dlevel - 1;
 			if (In_quest(&u.uz) && newlev > 0){
 				newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
+				if(u.uhave.questart) rangeRestricted = FALSE;
 			} else if (In_tower(&u.uz)) {
-			if(newlev > 4) newlev = 4;
-			newlev = dungeons[u.uz.dnum].depth_start + 4 - newlev;
+				if(newlev > 4) newlev = 4;
+				newlev = dungeons[u.uz.dnum].depth_start + 4 - newlev;
+				if(mvitals[PM_VLAD_THE_IMPALER].died > 0) rangeRestricted = FALSE;
 			} else if (In_law(&u.uz)) {
-			newlev =  dungeons[u.uz.dnum].depth_start + (path1_level.dlevel - newlev);
+				newlev = dungeons[u.uz.dnum].depth_start + (path1_level.dlevel - newlev);
+				if(mvitals[PM_ARSENAL].died > 0) rangeRestricted = FALSE;
 			} else if (In_neu(&u.uz)) {
-			newlev =  newlev + dungeons[neutral_dnum].depth_start - 1;
+				struct obj *pobj;
+				newlev =  newlev + dungeons[neutral_dnum].depth_start - 1;
+				for(pobj = invent; pobj; pobj=pobj->nobj){
+					if(pobj->oartifact == ART_SILVER_KEY){
+						rangeRestricted = FALSE;
+						break;
+					}
+				}
 			} else if (In_cha(&u.uz)){
-			newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
+				newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
+				if(mvitals[PM_CHAOS].died > 0) rangeRestricted = FALSE;
 			}
 #ifdef WIZARD
-			if (!wizard) {
+			if (wizard) rangeRestricted = FALSE;
 #endif
+			if (rangeRestricted) {
 				if(urlev <= 0){ /*Level 0 is skipped*/
 					if(newlev < urlev) newlev = urlev-2;
 					else if(newlev > urlev){
@@ -802,9 +815,7 @@ level_tele()
 					if(newlev < urlev) newlev = urlev-1;
 					else if(newlev > urlev) newlev = urlev+1;
 				}
-#ifdef WIZARD
 			}
-#endif
 		}
 	} else { /* involuntary level tele */
  random_levtport:
@@ -836,7 +847,7 @@ level_tele()
 #endif
 
 	killer = 0;		/* still alive, so far... */
-
+		
 	if (newlev < 0 && dungeons[u.uz.dnum].depth_start-1 > newlev && !force_dest) {
 		if (*u.ushops0) {
 		    /* take unpaid inventory items off of shop bills */
