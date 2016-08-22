@@ -255,14 +255,19 @@ struct monst *mtmp;
 	}
 /*	attacking peaceful creatures is bad for the samurai's giri */
 	if (Role_if(PM_SAMURAI) && mtmp->mpeaceful){
-		You("dishonorably attack the innocent!");
-		u.ualign.sins++;
-		u.ualign.sins++;
-		u.hod++;
-		adjalign(-1);
-		if(u.ualign.record > -10) {
-			adjalign(-4);
-		}
+        if(!(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_NINJA)){
+          You("dishonorably attack the innocent!");
+          u.ualign.sins++;
+          u.ualign.sins++;
+          u.hod++;
+          adjalign(-1);
+          if(u.ualign.record > -10) {
+              adjalign(-4);
+          }
+        } else {
+          You("dishonorably attack the innocent!");
+          adjalign(1);
+        }
 	}
 	
 }
@@ -796,6 +801,7 @@ int thrown;
 	char unconventional[BUFSZ];	/* substituted for word "attack" in msg */
 	char saved_oname[BUFSZ];
 	int unarmedMult = Race_if(PM_HALF_DRAGON) ? 3 : 1;
+	if(uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN) unarmedMult += 2;
 
 	static short jadeRing = 0;
 	if(!jadeRing) jadeRing = find_jade_ring();
@@ -826,7 +832,7 @@ int thrown;
 	    else {
 			tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,max_ints(2*unarmedMult,rnd(5)*2),0) : rnd(2*unarmedMult);
 		}
-		if(uarmg && uarmg->oartifact == ART_PREMIUM_HEART) tmp += uarmg->spe;
+		if(uarmg && (uarmg->oartifact == ART_PREMIUM_HEART || uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) tmp += uarmg->spe;
 		if(u.specialSealsActive&SEAL_DAHLVER_NAR) tmp += d(2,6)+min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 		if(uarmg && uarmg->otyp == tgloves) tmp += 1;
 	    valid_weapon_attack = (tmp > 1);
@@ -1723,10 +1729,15 @@ defaultvalue:
 	}
 	if (ispoisoned || (obj && (arti_poisoned(obj) || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM))) {
 	    if Role_if(PM_SAMURAI) {
+          if(!(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_NINJA)){
 			You("dishonorably use a poisoned weapon!");
 			adjalign(-sgn(u.ualign.type)*5); //stiffer penalty
 			u.ualign.sins++;
 			u.hod++;
+          } else {
+			You("dishonorably use a poisoned weapon!");
+			adjalign(5);
+          }
 	    } else if ((u.ualign.type == A_LAWFUL) && !Race_if(PM_ORC) &&
 				!((Race_if(PM_DROW) && !flags.initgend && 
 					(Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) ) ||
