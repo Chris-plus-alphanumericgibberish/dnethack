@@ -2491,7 +2491,7 @@ u_init()
 						 : (u.oonaenergy == AD_COLD) ? CLR_CYAN 
 						 : (u.oonaenergy == AD_ELEC) ? HI_ZAP 
 						 : CLR_WHITE;
-	mons[PM_OONA].mattk[0].adtyp = u.oonaenergy;
+	mons[PM_OONA].mattk[2].adtyp = u.oonaenergy;
 	return;
 }
 
