@@ -1074,9 +1074,20 @@ struct obj *sobj;
 	    setmangry(mtmp);
 	} else {
 	    if (mtmp->isshk)
-		make_happy_shk(mtmp, FALSE);
-	    else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
-		(void) tamedog(mtmp, sobj);
+			make_happy_shk(mtmp, FALSE);
+	    else if (sobj->otyp == SPE_CHARM_MONSTER){
+			int skill = spell_skilltype(sobj->otyp);
+			int role_skill = P_SKILL(skill)-1; //P_basic would be 2
+			if(Spellboost) role_skill++;
+			if(role_skill < 1) role_skill = 1;
+			
+			for(role_skill; role_skill; role_skill--)
+				if(!resist(mtmp, sobj->oclass, 0, NOTELL)){
+					(void) tamedog(mtmp, sobj);
+					return;
+				}
+	    } else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
+			(void) tamedog(mtmp, sobj);
 	}
 }
 
