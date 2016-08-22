@@ -283,6 +283,11 @@ find_to_hit_rolls(mtmp,ptmp,pweptmp,ptchtmp)
 	weptmp = find_roll_to_hit(mtmp, (uwep && arti_shining(uwep)) || u.sealsActive&SEAL_CHUPOCLOPS);
 	tchtmp = find_roll_to_hit(mtmp, TRUE);
 	
+	if(mtmp->mstdy){
+		tmp += mtmp->mstdy;
+		weptmp += mtmp->mstdy;
+		tchtmp += mtmp->mstdy;
+	}
 	if(mtmp->ustdym){
 		tmp += mtmp->ustdym;
 		weptmp += mtmp->ustdym;
