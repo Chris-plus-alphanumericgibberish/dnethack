@@ -1549,7 +1549,6 @@ register int aflag;
 		if(u.sealsActive&SEAL_OTIAX) fund += spiritDsize();
 	    if (ublindf && ublindf->otyp == LENSES && !Blind)
 		    fund += 2; /* JDS: lenses help searching */
-	    if (fund > 5) fund = 5;
 	    for(x = u.ux-1; x < u.ux+2; x++)
 	      for(y = u.uy-1; y < u.uy+2; y++) {
 		if(!isok(x,y)) continue;
@@ -1557,7 +1556,7 @@ register int aflag;
 		    // if (Blind && !aflag) feel_location(x,y);
 		    if (!cansee(x,y) && !aflag) feel_location(x,y);
 		    if(levl[x][y].typ == SDOOR) {
-			if(rnl(7-fund)) continue;
+			if(rnl(100) >= 14+fund) continue;
 			cvt_sdoor_to_door(&levl[x][y]);	/* .typ = DOOR */
 			exercise(A_WIS, TRUE);
 			nomul(0, NULL);
@@ -1566,7 +1565,7 @@ register int aflag;
 			else
 			    newsym(x,y);
 		    } else if(levl[x][y].typ == SCORR) {
-			if(rnl(7-fund)) continue;
+			if(rnl(100) >= 14+fund) continue;
 			levl[x][y].typ = CORR;
 			unblock_point(x,y);	/* vision */
 			exercise(A_WIS, TRUE);
@@ -1623,7 +1622,7 @@ register int aflag;
 			    newsym(x,y);
 			}
 
-			if ((trap = t_at(x,y)) && !trap->tseen && !rnl(8)) {
+			if ((trap = t_at(x,y)) && !trap->tseen && rnl(100) < 22) {
 			    nomul(0, NULL);
 
 			    if (trap->ttyp == STATUE_TRAP) {

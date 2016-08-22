@@ -697,14 +697,14 @@ level_tele()
 		}
 		getlin(qbuf, buf);
 		if (!strcmp(buf,"\033")) {	/* cancelled */
-			if (Confusion && rnl(5)) {
+			if (Confusion && rnl(100) >= 20) {
 			pline("Oops...");
 			goto random_levtport;
 			}
 			return;
 		} else if (!strcmp(buf,"*")) {
 			goto random_levtport;
-		} else if (Confusion && rnl(5)) {
+		} else if (Confusion && rnl(100) >= 20) {
 			pline("Oops...");
 			goto random_levtport;
 		}

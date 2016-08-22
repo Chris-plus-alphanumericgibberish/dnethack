@@ -165,7 +165,7 @@ struct monst *victim;
 	} else if (erosion < MAX_ERODE) {
 	    if (grprot && otmp->greased) {
 		grease_protect(otmp,ostr,victim);
-	    } else if (otmp->oerodeproof || (otmp->blessed && !rnl(4))) {
+	    } else if (otmp->oerodeproof || (otmp->blessed && rnl(100) < 25)) {
 		if (flags.verbose) {
 		    if (victim == &youmonst)
 			pline("Somehow, your %s %s not affected.",
@@ -1779,7 +1779,7 @@ register struct monst *mtmp;
 	    /* Monster is aggravated by being trapped by you.
 	       Recognizing who made the trap isn't completely
 	       unreasonable; everybody has their own style. */
-	    if (trap->madeby_u && rnl(5)) setmangry(mtmp);
+	    if (trap->madeby_u && rnl(100) >= 20) setmangry(mtmp);
 
 	    in_sight = canseemon(mtmp);
 	    see_it = cansee(mtmp->mx, mtmp->my);
@@ -2767,7 +2767,7 @@ xchar x, y;
 	    delobj(obj);
 	    retval++;
 	} else if (is_flammable(obj) && obj->oeroded < MAX_ERODE &&
-		   !(obj->oerodeproof || (obj->blessed && !rnl(4)))) {
+		   !(obj->oerodeproof || (obj->blessed && rnl(100) < 25))) {
 	    if (in_sight) {
 		pline("%s %s%s.", Yname2(obj), otense(obj, "burn"),
 		      obj->oeroded+1 == MAX_ERODE ? " completely" :
@@ -2980,7 +2980,7 @@ struct monst *owner;
 		    default:
 			if (is_rustprone(obj) && obj->oeroded < MAX_ERODE &&
 					!(obj->oerodeproof || 
-					 (obj->blessed && !rnl(4))))
+					 (obj->blessed && rnl(100) < 25)))
 				obj->oeroded++;
 			/* The Lethe may unfooproof the item... */
 			if (is_lethe
@@ -3450,7 +3450,7 @@ boolean force_failure;
 
 	/* Will our hero succeed? */
 	if (force_failure || untrap_prob(ttmp)) {
-		if (rnl(5)) {
+		if (rnl(100) >= 20) {
 		    pline("Whoops...");
 		    if (mtmp) {		/* must be a trap that holds monsters */
 			if (ttype == BEAR_TRAP) {
@@ -3494,7 +3494,7 @@ struct trap *ttmp;
 struct monst *mtmp;
 {
 	if (!ttmp->madeby_u) {
-	    if (rnl(10) < 8 && !mtmp->mpeaceful &&
+	    if (rnl(100) < 80 && !mtmp->mpeaceful &&
 		    !mtmp->msleeping && !mtmp->mfrozen &&
 		    !mindless(mtmp->data) &&
 		    mtmp->data->mlet != S_HUMAN) {
@@ -3504,9 +3504,9 @@ struct monst *mtmp;
 	    }
 	    /* Helping someone out of a trap is a nice thing to do,
 	     * A lawful may be rewarded, but not too often.  */
-	    if (!rn2(3) && !rnl(8) && u.ualign.type == A_LAWFUL) {
-		adjalign(1);
-		You_feel("that you did the right thing.");
+	    if (!rn2(3) && rnl(100) < 16 && u.ualign.type == A_LAWFUL) {
+			adjalign(1);
+			You_feel("that you did the right thing.");
 	    }
 	}
 }
@@ -3734,7 +3734,7 @@ boolean stuff;
 		  stuff ? "carrying too much" : "too heavy");
 	    if (!ttmp->madeby_u && !mtmp->mpeaceful && mtmp->mcanmove &&
 		    !mindless(mtmp->data) &&
-		    mtmp->data->mlet != S_HUMAN && rnl(10) < 3) {
+		    mtmp->data->mlet != S_HUMAN && rnl(100) < 30) {
 		mtmp->mpeaceful = 1;
 		set_malign(mtmp);		/* reset alignment */
 		pline("%s thinks it was nice of you to try.", Monnam(mtmp));

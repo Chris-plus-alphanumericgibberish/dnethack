@@ -943,7 +943,7 @@ boolean polyspot;
 	noride:
 	    You("can no longer ride %s.", mon_nam(mon));
 	    if (touch_petrifies(u.usteed->data) &&
-			!Stone_resistance && rnl(3)) {
+			!Stone_resistance && rnl(100) >= 33) {
 		char buf[BUFSZ];
 
 		You("touch %s.", mon_nam(u.usteed));

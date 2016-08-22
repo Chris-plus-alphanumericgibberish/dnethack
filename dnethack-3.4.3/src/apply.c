@@ -2935,8 +2935,8 @@ struct obj *otmp;
 	if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
 	    boolean chance;
 
-	    if (Fumbling || otmp->cursed) chance = (rnl(10) > 3);
-	    else  chance = (rnl(10) > 5);
+	    if (Fumbling || otmp->cursed) chance = (rnl(100) > 30);
+	    else  chance = (rnl(100) > 50);
 	    You("aren't very skilled at reaching from %s.",
 		mon_nam(u.usteed));
 	    Sprintf(buf, "Continue your attempt to set %s?",
@@ -2998,7 +2998,7 @@ set_trap()
 	    if (!trapinfo.force_bungle)
 		You("finish arming %s.",
 			the(defsyms[trap_to_defsym(what_trap(ttyp))].explanation));
-	    if (((otmp->cursed || Fumbling) && (rnl(10) > 5)) || trapinfo.force_bungle)
+	    if (((otmp->cursed || Fumbling) && (rnl(100) > 50)) || trapinfo.force_bungle)
 		dotrap(ttmp,
 			(unsigned)(trapinfo.force_bungle ? FORCEBUNGLE : 0));
 	} else {
@@ -3188,7 +3188,7 @@ struct obj *obj;
 	    if (otmp && proficient) {
 		You("wrap your bullwhip around %s on the %s.",
 		    an(singular(otmp, xname)), surface(u.ux, u.uy));
-		if (rnl(6) || pickup_object(otmp, 1L, TRUE) < 1)
+		if (rnl(100) >= 16 || pickup_object(otmp, 1L, TRUE) < 1)
 		    pline("%s", msg_slipsfree);
 		return 1;
 	    }

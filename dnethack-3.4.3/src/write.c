@@ -317,7 +317,7 @@ found_ward:
 		new_obj->otyp == SPE_POISON_SPRAY || new_obj->otyp == SPE_ACID_BLAST ||
 	  (!(objects[new_obj->otyp].oc_name_known) &&
 	   !(objects[new_obj->otyp].oc_uname) &&
-	   (rnl(Role_if(PM_WIZARD) ? 3 : 15)))) {
+	   (rnl(100) >= (Role_if(PM_WIZARD) ? 33 : 7)))) {
 		if(new_obj->otyp != SPE_SECRETS) You("%s to write that!", by_descr ? "fail" : "don't know how");
 		/* scrolls disappear, spellbooks don't */
 		if (paper->oclass == SPBOOK_CLASS) {

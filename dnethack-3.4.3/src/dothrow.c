@@ -2107,7 +2107,7 @@ int thrown;
 					broken = rn2(chance);
 				else
 					broken = !rn2(4);
-				if (obj->blessed && !rnl(4))
+				if (obj->blessed && rnl(100) < 25)
 					broken = 0;
 			}
 		    if (broken) {
