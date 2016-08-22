@@ -132,6 +132,14 @@ long mask;
 			if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 					    mask != W_WEP) {
 			    p = objects[obj->otyp].oc_oprop;
+				if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
+					for(p = 0; p < 1; p++) u.uprops[ORANGE_RES[p]].extrinsic = u.uprops[ORANGE_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->otyp == YELLOW_DRAGON_SCALES || obj->otyp == YELLOW_DRAGON_SCALE_MAIL || obj->otyp == YELLOW_DRAGON_SCALE_SHIELD){
+					for(p = 0; p < 1; p++) u.uprops[YELLOW_RES[p]].extrinsic = u.uprops[YELLOW_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->otyp == GREEN_DRAGON_SCALES || obj->otyp == GREEN_DRAGON_SCALE_MAIL || obj->otyp == GREEN_DRAGON_SCALE_SHIELD){
+					for(p = 0; p < 1; p++) u.uprops[GREEN_RES[p]].extrinsic = u.uprops[GREEN_RES[p]].extrinsic | wp->w_mask;
+				}
+				
 				if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 					for(p = 0; p < 5; p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic | wp->w_mask;
 				} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
