@@ -2470,6 +2470,14 @@ register struct attack *mattk;
 		    tmp = 0;
 		    break;
 		}
+		if (resists_fire(mdef)) {
+		    if (!Blind)
+			pline_The("fire doesn't heat %s!", mon_nam(mdef));
+		    golemeffects(mdef, AD_FIRE, tmp);
+		    shieldeff(mdef->mx, mdef->my);
+		    tmp = 0;
+		    break;
+		}
 		if (!Blind)
 		    pline("%s is %s!", Monnam(mdef),
 			  on_fire(mdef->data, mattk));
@@ -2482,7 +2490,7 @@ register struct attack *mattk;
 		    tmp = 0;
 		    break;
 		    /* Don't return yet; keep hp<1 and tmp=0 for pet msg */
-		}else if (pd == &mons[PM_MIGO_WORKER]) {
+		} else if (pd == &mons[PM_MIGO_WORKER]) {
 		    if (!Blind)
 			pline("%s's brain melts!", Monnam(mdef));
 		    xkilled(mdef,2);
@@ -2492,13 +2500,39 @@ register struct attack *mattk;
 		}
 		tmp += destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
 		tmp += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+		/* only potions damage resistant players in destroy_item */
+		tmp += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_EFIR:
 		if (resists_fire(mdef)) {
-		    if (!Blind)
-			pline_The("fire doesn't heat %s!", mon_nam(mdef));
-		    golemeffects(mdef, AD_FIRE, tmp);
+		    golemeffects(mdef, AD_EFIR, tmp);
 		    shieldeff(mdef->mx, mdef->my);
-		    tmp = 0;
+		    tmp /= 2;
+		    break;
 		}
+		if (!Blind)
+		    pline("%s is %s!", Monnam(mdef),
+			  on_fire(mdef->data, mattk));
+		if (pd == &mons[PM_STRAW_GOLEM] ||
+		    pd == &mons[PM_PAPER_GOLEM] ||
+		    pd == &mons[PM_SPELL_GOLEM]) {
+		    if (!Blind)
+			pline("%s burns completely!", Monnam(mdef));
+		    xkilled(mdef,2);
+		    tmp = 0;
+		    break;
+		    /* Don't return yet; keep hp<1 and tmp=0 for pet msg */
+		} else if (pd == &mons[PM_MIGO_WORKER]) {
+		    if (!Blind)
+			pline("%s's brain melts!", Monnam(mdef));
+		    xkilled(mdef,2);
+		    tmp = 0;
+		    break;
+		    /* Don't return yet; keep hp<1 and tmp=0 for pet msg */
+		}
+		tmp += destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+		tmp += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
 		/* only potions damage resistant players in destroy_item */
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		break;
@@ -2508,41 +2542,84 @@ register struct attack *mattk;
 		    tmp = 0;
 		    break;
 		}
-		if (!Blind) pline("%s is covered in frost!", Monnam(mdef));
 		if (resists_cold(mdef)) {
 		    shieldeff(mdef->mx, mdef->my);
 		    if (!Blind)
 			pline_The("frost doesn't chill %s!", mon_nam(mdef));
 		    golemeffects(mdef, AD_COLD, tmp);
 		    tmp = 0;
+			break;
 		}
+		if (!Blind) pline("%s is covered in frost!", Monnam(mdef));
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_COLD);
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_ECLD:
+		if (resists_cold(mdef)) {
+		    shieldeff(mdef->mx, mdef->my);
+		    golemeffects(mdef, AD_COLD, tmp);
+		    tmp /= 2;
+			break;
+		}
+		if (!Blind) pline("%s is covered in frost!", Monnam(mdef));
+		tmp += destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_ELEC:
 		if (negated) {
 		    tmp = 0;
 		    break;
 		}
-		if (!Blind) pline("%s is zapped!", Monnam(mdef));
-		tmp += destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
 		if (resists_elec(mdef)) {
 		    if (!Blind)
 			pline_The("zap doesn't shock %s!", mon_nam(mdef));
 		    golemeffects(mdef, AD_ELEC, tmp);
 		    shieldeff(mdef->mx, mdef->my);
 		    tmp = 0;
+			break;
 		}
+		if (!Blind) pline("%s is zapped!", Monnam(mdef));
+		tmp += destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
 		/* only rings damage resistant players in destroy_item */
 		tmp += destroy_mitem(mdef, RING_CLASS, AD_ELEC);
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_EELC:
+		if (resists_elec(mdef)) {
+		    if (!Blind)
+			pline_The("zap doesn't shock %s!", mon_nam(mdef));
+		    golemeffects(mdef, AD_EELC, tmp);
+		    shieldeff(mdef->mx, mdef->my);
+		    tmp /= 2;
+			break;
+		}
+		if (!Blind) pline("%s is zapped!", Monnam(mdef));
+		tmp += destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+
+		/* only rings damage resistant players in destroy_item */
+		tmp += destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_ACID:
 		if (resists_acid(mdef)) tmp = 0;
+		else {
+			if (!rn2(10)) erode_armor(mdef, TRUE);
+		}
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_EACD:
+		if (resists_acid(mdef)) tmp /= 2;
+		else {
+			erode_armor(mdef, TRUE);
+		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_STON:
 		if (!munstone(mdef, TRUE))
 		    minstapetrify(mdef, TRUE);
 		tmp = 0;
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////
 #ifdef SEDUCE
 	    case AD_SSEX:
 #endif
@@ -2551,6 +2628,7 @@ register struct attack *mattk;
 		steal_it(mdef, mattk);
 		tmp = 0;
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SGLD:
 #ifndef GOLDOBJ
 		if (mdef->mgold) {
@@ -2712,6 +2790,18 @@ register struct attack *mattk;
 			} else tmp += rn1(10,6);
 		    }
 		}
+		break;
+	    case AD_EDRC:
+		    Your("%s was poisoned!", mpoisons_subj(&youmonst, mattk));
+		    if (resists_poison(mdef))
+			pline_The("poison doesn't seem to affect %s.",
+				mon_nam(mdef));
+		    else {
+			if (!rn2(10)) {
+			    Your("poison was deadly...");
+			    tmp = mdef->mhp;
+			} else tmp += rn1(10,6);
+		    }
 		break;
 	    case AD_DRIN:
 		if (notonhead || !has_head(mdef->data)) {
@@ -2922,7 +3012,7 @@ register struct attack *mattk;
 		case AD_SIMURGH:
 			if(hates_iron(mdef->data)){
 				Your("claws of cold iron sear %s.",mon_nam(mdef));
-				tmp+=rnd(20);
+				tmp+=rnd(mdef->m_lev*2);
 			}
 			pline("Radiant feathers slice through %s.",mon_nam(mdef));
 			switch(rn2(15)){
@@ -3092,6 +3182,29 @@ common:
 				mon_nam(mdef));
 		}
 		break;
+	    case AD_ECLD:
+		resistance = resists_cold(mdef);
+		goto ecommon;
+	    case AD_EFIR:
+		resistance = resists_fire(mdef);
+		goto ecommon;
+	    case AD_EELC:
+		resistance = resists_elec(mdef);
+ecommon:
+		if (resistance) {
+		    shieldeff(mdef->mx, mdef->my);
+		    if (is_golem(mdef->data))
+				golemeffects(mdef, (int)mattk->adtyp, tmp);
+			tmp /= 2;
+		}
+		pline("%s gets blasted!", Monnam(mdef));
+		mdef->mhp -= tmp;
+		if(tmp>0) mdef->uhurtm = TRUE;
+		if (mdef->mhp <= 0) {
+		 killed(mdef);
+		 return(2);
+		}
+		break;
 	    default:
 		break;
 	}
@@ -3236,6 +3349,16 @@ register struct attack *mattk;
 			if (resists_acid(mdef)) {
 			    pline("It seems harmless to %s.", mon_nam(mdef));
 			    dam = 0;
+			} else {
+				erode_armor(mdef, TRUE);
+			}
+			break;
+		    case AD_EACD:
+			pline("%s is covered with your goo!", Monnam(mdef));
+			if (resists_acid(mdef)) {
+			    dam /= 2;
+			} else {
+				erode_armor(mdef, TRUE);
 			}
 			break;
 		    case AD_BLND:
@@ -3253,31 +3376,72 @@ register struct attack *mattk;
 			if (rn2(2)) {
 			    pline_The("air around %s crackles with electricity.", mon_nam(mdef));
 			    if (resists_elec(mdef)) {
-				pline("%s seems unhurt.", Monnam(mdef));
-				dam = 0;
+					pline("%s seems unhurt.", Monnam(mdef));
+					dam = 0;
+			    } else {
+					dam += destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+					dam += destroy_mitem(mdef, RING_CLASS, AD_ELEC);
 			    }
 			    golemeffects(mdef,(int)mattk->adtyp,dam);
 			} else dam = 0;
 			break;
+		    case AD_EELC:
+			    pline_The("air around %s crackles with electricity.", mon_nam(mdef));
+			    if (resists_elec(mdef)) {
+					dam /= 2;
+			    } else {
+					dam += destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+					dam += destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+				}
+			    golemeffects(mdef,(int)mattk->adtyp,dam);
+			break;
 		    case AD_COLD:
 			if (rn2(2)) {
 			    if (resists_cold(mdef)) {
-				pline("%s seems mildly chilly.", Monnam(mdef));
-				dam = 0;
-			    } else
-				pline("%s is freezing to death!",Monnam(mdef));
-			    golemeffects(mdef,(int)mattk->adtyp,dam);
+					pline("%s seems mildly chilly.", Monnam(mdef));
+					dam = 0;
+			    } else {
+					pline("%s is freezing to death!",Monnam(mdef));
+					dam += destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+				}
+				golemeffects(mdef,(int)mattk->adtyp,dam);
 			} else dam = 0;
+			break;
+		    case AD_ECLD:
+			    if (resists_cold(mdef)) {
+					pline("%s seems mildly chilly.", Monnam(mdef));
+					dam /= 2;
+			    } else {
+					pline("%s is freezing to death!",Monnam(mdef));
+					dam += destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+				}
+				golemeffects(mdef,(int)mattk->adtyp,dam);
 			break;
 		    case AD_FIRE:
 			if (rn2(2)) {
 			    if (resists_fire(mdef)) {
-				pline("%s seems mildly hot.", Monnam(mdef));
-				dam = 0;
-			    } else
-				pline("%s is burning to a crisp!",Monnam(mdef));
+					pline("%s seems mildly hot.", Monnam(mdef));
+					dam = 0;
+			    } else {
+					pline("%s is burning to a crisp!",Monnam(mdef));
+					dam += destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+					dam += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+					dam += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+				}
 			    golemeffects(mdef,(int)mattk->adtyp,dam);
 			} else dam = 0;
+			break;
+		    case AD_EFIR:
+			    if (resists_fire(mdef)) {
+					pline("%s seems mildly hot.", Monnam(mdef));
+					dam /= 2;
+			    } else {
+					pline("%s is burning to a crisp!",Monnam(mdef));
+					dam += destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+					dam += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+					dam += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+				}
+			    golemeffects(mdef,(int)mattk->adtyp,dam);
 			break;
 		}
 		end_engulf();
