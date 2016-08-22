@@ -1749,7 +1749,12 @@ right_side(row, cb_row, cb_col, fb_row, fb_col, left, right_mark, limits)
 	    loc_right = right_mark;
 
 	if(vis_func) {
-	    for (i = left; i <= loc_right; i++) (*vis_func)(i, row, varg);
+		void FDECL((*hold_func), (int,int,genericptr_t));
+		hold_func = vis_func;
+	    for (i = left; i <= loc_right; i++){
+			(*vis_func)(i, row, varg);
+			vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+		}
 	} else {
 	    for (i = left; i <= loc_right; i++) set_cs(rowp,i);
 	    set_min(left);	set_max(loc_right);
@@ -1802,10 +1807,15 @@ right_side(row, cb_row, cb_col, fb_row, fb_col, left, right_mark, limits)
 	    if (loc_right > right_mark) loc_right = right_mark;
 
 	    if(vis_func) {
-		for (i = left; i <= loc_right; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = left; i <= loc_right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
-		for (i = left; i <= loc_right; i++) set_cs(rowp,i);
-		set_min(left);	set_max(loc_right);
+			for (i = left; i <= loc_right; i++) set_cs(rowp,i);
+			set_min(left);	set_max(loc_right);
 	    }
 
 	    if (loc_right == right_mark) return;	/* hit the end */
@@ -1837,10 +1847,14 @@ right_side(row, cb_row, cb_col, fb_row, fb_col, left, right_mark, limits)
 	if (left >= loc_right) {
 	    if (loc_right == lim_max) {		/* boundary */
 		if (left == lim_max) {
-		    if(vis_func) (*vis_func)(lim_max, row, varg);
-		    else {
-			set_cs(rowp,lim_max);	/* last pos */
-			set_max(lim_max);
+			if(vis_func){
+				void FDECL((*hold_func), (int,int,genericptr_t));
+				hold_func = vis_func;
+				(*vis_func)(lim_max, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+		    } else {
+				set_cs(rowp,lim_max);	/* last pos */
+				set_max(lim_max);
 		    }
 		}
 		return;					/* done */
@@ -1869,10 +1883,15 @@ right_side(row, cb_row, cb_col, fb_row, fb_col, left, right_mark, limits)
 	if ((loc_right < right_shadow) ||
 				(fb_row >= 0 && loc_right == right_shadow)) {
 	    if(vis_func) {
-		for (i = left; i <= loc_right; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = left; i <= loc_right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
-		for (i = left; i <= loc_right; i++) set_cs(rowp,i);
-		set_min(left);	set_max(loc_right);
+			for (i = left; i <= loc_right; i++) set_cs(rowp,i);
+			set_min(left);	set_max(loc_right);
 	    }
 
 	    if (deeper) {
@@ -1904,7 +1923,12 @@ right_side(row, cb_row, cb_col, fb_row, fb_col, left, right_mark, limits)
 	 */
 	else {
 	    if(vis_func) {
-		for (i=left; i <= right_shadow; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i=left; i <= right_shadow; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
 		for (i = left; i <= right_shadow; i++) set_cs(rowp,i);
 		set_min(left);	set_max(right_shadow);
@@ -1989,7 +2013,12 @@ left_side(row, cb_row, cb_col, fb_row, fb_col, left_mark, right, limits)
 	    loc_left = left_mark;
 
 	if(vis_func) {
-	    for (i = loc_left; i <= right; i++) (*vis_func)(i, row, varg);
+		void FDECL((*hold_func), (int,int,genericptr_t));
+		hold_func = vis_func;
+	    for (i = loc_left; i <= right; i++){
+			(*vis_func)(i, row, varg);
+			vis_func = hold_func;  //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+		}
 	} else {
 	    for (i = loc_left; i <= right; i++) set_cs(rowp,i);
 	    set_min(loc_left);	set_max(right);
@@ -2020,10 +2049,15 @@ left_side(row, cb_row, cb_col, fb_row, fb_col, left_mark, right, limits)
 	    if (loc_left < left_mark) loc_left = left_mark;
 
 	    if(vis_func) {
-		for (i = loc_left; i <= right; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = loc_left; i <= right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
-		for (i = loc_left; i <= right; i++) set_cs(rowp,i);
-		set_min(loc_left);	set_max(right);
+			for (i = loc_left; i <= right; i++) set_cs(rowp,i);
+			set_min(loc_left);	set_max(right);
 	    }
 
 	    if (loc_left == left_mark) return;	/* hit end */
@@ -2045,10 +2079,14 @@ left_side(row, cb_row, cb_col, fb_row, fb_col, left_mark, right, limits)
 	    /*  Make a boundary condition work. */
 	    if (loc_left == lim_min) {	/* at boundary */
 		if (right == lim_min) {
-		    if(vis_func) (*vis_func)(lim_min, row, varg);
-		    else {
-			set_cs(rowp,lim_min);	/* caught the last pos */
-			set_min(lim_min);
+		    if(vis_func){
+				void FDECL((*hold_func), (int,int,genericptr_t));
+				hold_func = vis_func;
+				(*vis_func)(lim_min, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+		    } else {
+				set_cs(rowp,lim_min);	/* caught the last pos */
+				set_min(lim_min);
 		    }
 		}
 		return;			/* and break out the loop */
@@ -2062,10 +2100,15 @@ left_side(row, cb_row, cb_col, fb_row, fb_col, left_mark, right, limits)
 	if ((loc_left > left_shadow) ||
 				    (fb_row >= 0 && loc_left == left_shadow)) {
 	    if(vis_func) {
-		for (i = loc_left; i <= right; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = loc_left; i <= right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
-		for (i = loc_left; i <= right; i++) set_cs(rowp,i);
-		set_min(loc_left);	set_max(right);
+			for (i = loc_left; i <= right; i++) set_cs(rowp,i);
+			set_min(loc_left);	set_max(right);
 	    }
 
 	    if (deeper) {
@@ -2083,7 +2126,12 @@ left_side(row, cb_row, cb_col, fb_row, fb_col, left_mark, right, limits)
 	/*  The opening extends beyond the left mark. */
 	else {
 	    if(vis_func) {
-		for (i=left_shadow; i <= right; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i=left_shadow; i <= right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
 		for (i = left_shadow; i <= right; i++) set_cs(rowp,i);
 		set_min(left_shadow);	set_max(right);
@@ -2282,7 +2330,12 @@ right_side(row, left, right_mark, limits)
 						    right_mark+1 : right_mark;
 	    }
 	    if(vis_func) {
-		for (i = left; i <= right_edge; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = left; i <= right_edge; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
 		for (i = left; i <= right_edge; i++) set_cs(rowp,i);
 		set_min(left);      set_max(right_edge);
@@ -2316,8 +2369,12 @@ rside1:					/* used if q?_path() is a macro */
 	     */
 	    if (left > lim_max) return;	/* check (1) */
 	    if (left == lim_max) {	/* check (2) */
-		if(vis_func) (*vis_func)(lim_max, row, varg);
-		else {
+		if(vis_func){
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			(*vis_func)(lim_max, row, varg);
+			vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+		} else {
 		    set_cs(rowp,lim_max);
 		    set_max(lim_max);
 		}
@@ -2379,11 +2436,16 @@ rside2:					/* used if q?_path() is a macro */
 
 	    if(right > lim_max) right = lim_max;
 	    /* set the bits */
-	    if(vis_func)
-		for (i = left; i <= right; i++) (*vis_func)(i, row, varg);
-	    else {
-		for (i = left; i <= right; i++) set_cs(rowp,i);
-		set_min(left);      set_max(right);
+	    if(vis_func){
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = left; i <= right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
+	    } else {
+			for (i = left; i <= right; i++) set_cs(rowp,i);
+			set_min(left);      set_max(right);
 	    }
 
 	    /* recursive call for next finger of light */
@@ -2439,7 +2501,12 @@ left_side(row, left_mark, right, limits)
 						    left_mark-1 : left_mark;
 	    }
 	    if(vis_func) {
-		for (i = left_edge; i <= right; i++) (*vis_func)(i, row, varg);
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = left_edge; i <= right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+			}
 	    } else {
 		for (i = left_edge; i <= right; i++) set_cs(rowp,i);
 		set_min(left_edge); set_max(right);
@@ -2463,8 +2530,12 @@ lside1:					/* used if q?_path() is a macro */
 	    /* Check for boundary conditions. */
 	    if (right < lim_min) return;
 	    if (right == lim_min) {
-		if(vis_func) (*vis_func)(lim_min, row, varg);
-		else {
+		if(vis_func){
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			(*vis_func)(lim_min, row, varg);
+			vis_func = hold_func; //vis_func sometimes become null/is changed by the function passed in, probably thanks to multiple passes through this code
+		} else {
 		    set_cs(rowp,lim_min);
 		    set_min(lim_min);
 		}
@@ -2500,11 +2571,16 @@ lside2:					/* used if q?_path() is a macro */
 		left = start_col-1;
 
 	    if(left < lim_min) left = lim_min;
-	    if(vis_func)
-		for (i = left; i <= right; i++) (*vis_func)(i, row, varg);
-	    else {
-		for (i = left; i <= right; i++) set_cs(rowp,i);
-		set_min(left);      set_max(right);
+	    if(vis_func){
+			void FDECL((*hold_func), (int,int,genericptr_t));
+			hold_func = vis_func;
+			for (i = left; i <= right; i++){
+				(*vis_func)(i, row, varg);
+				vis_func = hold_func; //vis_func sometimes become NULL here, probably changed by the function passed in, probably thanks to multiple passes through this code?
+			} 
+		} else {
+			for (i = left; i <= right; i++) set_cs(rowp,i);
+			set_min(left);      set_max(right);
 	    }
 
 	    /* Recurse */
