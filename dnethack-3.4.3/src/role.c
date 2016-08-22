@@ -736,7 +736,7 @@ const struct Race races[] = {
 	{ STR18(100), 18, 18, 18, 18, 18 },
 	/* Init   Lower  Higher */
 	{  2, 0,  0, 2,  0, 2 },	/* Hit points */
-	{  0, 0,  10, 0, 10, 0 },		/* Energy */
+	{  0, 0,  100, 0, 100, 0 },		/* Energy */
 	NORMALNIGHTVIS
 },
 {	"elf", "elven", "elvenkind", "Elf",
