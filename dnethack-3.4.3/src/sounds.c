@@ -4642,7 +4642,8 @@ int p_skill;
 	if(p_skill == P_BARE_HANDED_COMBAT){
 		if((u.sealsActive&SEAL_EURYNOME) && (u.sealsActive&SEAL_BUER)) maxskill = max(P_GRAND_MASTER,maxskill);
 		else if((u.sealsActive&SEAL_EURYNOME) || (u.sealsActive&SEAL_BUER)) maxskill = max(P_EXPERT,maxskill);
-	} else if(u.specialSealsActive&SEAL_NUMINA || spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
+	} else if(spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
+	else if(u.specialSealsActive&SEAL_NUMINA) maxskill = max(P_SKILLED,maxskill);
 	return maxskill;
 }
 
