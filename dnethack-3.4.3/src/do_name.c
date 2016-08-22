@@ -829,7 +829,10 @@ boolean called;
 		return buf;
 	    Strcat(buf, " the ");
 	    if (do_invis) Strcat(buf, "invisible ");
-		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
+		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]){
+			Strcat(buf, "frumious ");
+			name_at_start = FALSE;
+		}
 		if ((u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)) || (Role_if(PM_HEALER) && (!nonliving(mtmp->data) || has_blood(mtmp->data))) ){
 			if(mtmp->mhp == mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "uninjured ") : Strcat(buf, "undamaged ");
 			else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
@@ -837,12 +840,16 @@ boolean called;
 			else if(mtmp->mhp >= .25*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "bloodied ") : Strcat(buf, "damaged ");
 			else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 			else if(mtmp->mhp > 0) (has_blood(mtmp->data)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
+			name_at_start = FALSE;
 		}
 		if(is_drow(mdat)){
 			struct obj *otmp;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
-					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+					&& otmp->owornmask & mtmp->misc_worn_check){
+						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						name_at_start = FALSE;
+					}
 			}
 		}
 	    Strcat(buf, mdat->mname);
@@ -882,7 +889,10 @@ boolean called;
 			Sprintf(eos(buf), "%s broken shadow", s_suffix(name));
 			name_at_start = TRUE;
 	    } else if (called) {
-			if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Sprintf(eos(buf), "frumious ");
+			if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]){
+				Sprintf(eos(buf), "frumious ");
+				name_at_start = FALSE;
+			}
 			if ((u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)) || (Role_if(PM_HEALER) && (!nonliving(mtmp->data) || has_blood(mtmp->data))) ){
 				if(mtmp->mhp == mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "uninjured ") : Strcat(buf, "undamaged ");
 				else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
@@ -890,12 +900,16 @@ boolean called;
 				else if(mtmp->mhp >= .25*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "bloodied ") : Strcat(buf, "damaged ");
 				else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 				else if(mtmp->mhp > 0) (has_blood(mtmp->data)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
+				name_at_start = FALSE;
 			}
 			if(is_drow(mdat)){
 				struct obj *otmp;
 				for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 					if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
-						&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						&& otmp->owornmask & mtmp->misc_worn_check){
+							Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+							name_at_start = FALSE;
+						}
 				}
 			}
 			Sprintf(eos(buf), "%s called %s", mdat->mname, name);
@@ -924,7 +938,11 @@ boolean called;
 	    Strcat(buf, lcase(pbuf));
 	    name_at_start = FALSE;
 	} else {
-		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
+	    name_at_start = (boolean)type_is_pname(mdat);
+		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]){
+			Strcat(buf, "frumious ");
+			name_at_start = FALSE;
+		}
 		if ((u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)) || (Role_if(PM_HEALER) && (!nonliving(mtmp->data) || has_blood(mtmp->data))) ){
 			if(mtmp->mhp == mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "uninjured ") : Strcat(buf, "undamaged ");
 			else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
@@ -932,16 +950,19 @@ boolean called;
 			else if(mtmp->mhp >= .25*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "bloodied ") : Strcat(buf, "damaged ");
 			else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 			else if(mtmp->mhp > 0) (has_blood(mtmp->data)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
+			name_at_start = FALSE;
 		}
 		if(is_drow(mdat)){
 			struct obj *otmp;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
-					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+					&& otmp->owornmask & mtmp->misc_worn_check){
+						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						name_at_start = FALSE;
+					}
 			}
 		}
 	    Strcat(buf, mdat->mname);
-	    name_at_start = (boolean)type_is_pname(mdat);
 	}
 
 	if (name_at_start && (article == ARTICLE_YOUR || !has_adjectives)) {
