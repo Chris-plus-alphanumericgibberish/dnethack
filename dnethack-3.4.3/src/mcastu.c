@@ -1629,8 +1629,24 @@ summon_alien:
      case ARROW_RAIN: /* actually other things as well */
      {
        struct obj *otmp;
-       int weap, i, tdmg;
+       int weap, i, tdmg = 0;
+	   int shienChance = 0, shienCount = 0;
        dmg = 0;
+		if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+			if(u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))){
+				switch(min(P_SKILL(FFORM_SHIEN), P_SKILL(weapon_type(uwep)))){
+					case P_BASIC:
+						shienChance = 33;
+					break;
+					case P_SKILLED:
+						shienChance = 66;
+					break;
+					case P_EXPERT:
+						shienChance = 100;
+					break;
+				}
+			}
+		}
        if (rn2(3)) weap = ARROW;
        else if (!rn2(3)) weap = DAGGER;
        else if (!rn2(3)) weap = SPEAR;
@@ -1642,14 +1658,19 @@ summon_alien:
            if (weap == TRIDENT) weap = JAVELIN;
        }
        otmp = mksobj(weap, TRUE, FALSE);
-       otmp->quan = (long) rn1(7,mtmp ? mtmp->m_lev/2 : rnd(15) );
+       otmp->quan = (long) rn1(mtmp ? (mtmp->m_lev/2 + 1) : (rn2(12) + 1), 4);
+	   otmp->quan = min(otmp->quan, 16L);
        otmp->owt = weight(otmp);
+       otmp->spe = 0;
        You("are hit from all directions by a %s of %s!",
                rn2(2) ? "shower" : "hail", xname(otmp));
        for (i = 0; i < otmp->quan; i++) {
-			tdmg = dmgval(otmp, &youmonst, 0);
+			if(shienChance <= rnd(100)){
+				shienCount++;
+				tdmg = 0;
+			} else tdmg = dmgval(otmp, &youmonst, 0);
 			if (tdmg && u.uac < 0) {
-				if(u.sealsActive&SEAL_BALAM) tdmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+				if(u.sealsActive&SEAL_BALAM) tdmg -= max_ints(rnd(-u.uac),rnd(-u.uac));
 				else tdmg -= rnd(-u.uac);
 				
 				if (tdmg < 1) tdmg = 1;
@@ -1658,11 +1679,17 @@ summon_alien:
 			if (Half_physical_damage) tdmg = (tdmg + 1) / 2;
 			dmg += tdmg;
        }
-        if (!flooreffects(otmp, u.ux, u.uy, "fall")) {
-            place_object(otmp, u.ux, u.uy);
-            stackobj(otmp);
-            newsym(u.ux, u.uy);
-        }
+		if(shienCount < otmp->quan){
+			otmp->quan -= shienCount;
+			otmp->owt = weight(otmp);
+	        if (!flooreffects(otmp, u.ux, u.uy, "fall")) {
+	            place_object(otmp, u.ux, u.uy);
+	            stackobj(otmp);
+	            newsym(u.ux, u.uy);
+	        }
+		} else {
+			delobj(otmp)
+		}
 	   stop_occupation();
      } break;
      case DROP_BOULDER:
