@@ -782,9 +782,8 @@ int thrown;
 {
 	int tmp;
 	struct permonst *mdat = mon->data;
-	int barehand_silver_rings = 0;
+	int barehand_silver_rings = 0, barehand_iron_rings = 0, barehand_unholy_rings = 0, barehand_jade_rings = 0;
 	int eden_silver = 0;
-	int barehand_jade_rings = 0;
 	/* The basic reason we need all these booleans is that we don't want
 	 * a "hit" message when a monster dies, so we have to know how much
 	 * damage it did _before_ outputting a hit message, but any messages
@@ -796,7 +795,8 @@ int thrown;
 	int ispoisoned = 0;
 	boolean needpoismsg = FALSE, needfilthmsg = FALSE, needdrugmsg = FALSE, needsamnesiamsg = FALSE, poiskilled = FALSE, 
 			filthkilled = FALSE, druggedmon = FALSE, poisblindmon = FALSE, amnesiamon = FALSE;
-	boolean silvermsg = FALSE, sunmsg = FALSE, silverobj = FALSE,lightmsg = FALSE;
+	boolean silvermsg = FALSE,  ironmsg = FALSE,  unholymsg = FALSE, sunmsg = FALSE,
+	silverobj = FALSE, ironobj = FALSE, unholyobj = FALSE, lightmsg = FALSE;
 	boolean valid_weapon_attack = FALSE;
 	boolean unarmed = !uwep && !uarm && !uarms;
 #ifdef STEED
@@ -861,6 +861,16 @@ int thrown;
 					tmp += rnd(20);
 					silvermsg = TRUE;
 			}
+			if ((objects[uarmg->otyp].oc_material == IRON) &&
+				hates_iron(mdat)){
+					tmp += rnd(mon->m_lev*2);
+					ironmsg = TRUE;
+			}
+			if ((uarmg->cursed) &&
+				hates_unholy(mdat)){
+					tmp += rnd(20);
+					unholymsg = TRUE;
+			}
 			if(uarmg->oartifact && 
 			   artifact_hit(&youmonst, mon, uarmg, &tmp, rnd(20)) ){
 				if(mon->mhp <= 0) /* artifact killed monster */
@@ -896,6 +906,36 @@ int thrown;
 			if ((barehand_silver_rings || eden_silver) && hates_silver(mdat)) {
 			    tmp += d(barehand_silver_rings+eden_silver,20);
 			    silvermsg = TRUE;
+			}
+			
+			/* Do iron rings.  Note: rings are worn under gloves, so you
+			 * don't get both bonuses.
+			 */
+			if (uleft 
+				&& (objects[uleft->otyp].oc_material == IRON)
+			) barehand_iron_rings++;
+			if (uright 
+				&& (objects[uright->otyp].oc_material == IRON)
+			) barehand_iron_rings++;
+			
+			if ((barehand_iron_rings) && hates_iron(mdat)) {
+			    tmp += d(barehand_iron_rings,mon->m_lev*2);
+			    ironmsg = TRUE;
+			}
+			
+			/* Do cursed rings.  Note: rings are worn under gloves, so you
+			 * don't get both bonuses.
+			 */
+			if (uleft 
+				&& (uleft->cursed)
+			) barehand_unholy_rings++;
+			if (uright 
+				&& (uright->cursed)
+			) barehand_unholy_rings++;
+			
+			if ((barehand_unholy_rings) && hates_unholy(mdat)) {
+			    tmp += d(barehand_unholy_rings,20);
+			    ironmsg = TRUE;
 			}
 			
 			if (uleft 
@@ -2008,6 +2048,65 @@ defaultvalue:
 		if (!noncorporeal(mdat))
 		    whom = strcat(s_suffix(whom), " flesh");
 		pline(fmt, eden_silver ? "silver skin and " : "", whom);
+	}
+	if (ironmsg) {
+		const char *fmt;
+		char *whom = mon_nam(mon);
+		char ironobjbuf[BUFSZ];
+
+		if (canspotmon(mon)) {
+		    if (barehand_iron_rings == 1)
+			fmt = "Your %scold-iron ring sears %s!";
+		    else if (barehand_iron_rings == 2)
+			fmt = "Your %scold-iron rings sear %s!";
+		    else if (ironobj && saved_oname[0]) {
+		    	Sprintf(ironobjbuf, "Your %%s%s%s %s %%s!",
+		    		strstri(saved_oname, "iron") ?
+					"" : "cold-iron ",
+				saved_oname, vtense(saved_oname, "sear"));
+		    	fmt = ironobjbuf;
+		    }
+			else fmt = "The %siron sears %s!";
+		} else {
+		    *whom = highc(*whom);	/* "it" -> "It" */
+		    fmt = "%s is seared!";
+			if (!noncorporeal(mdat))
+				whom = strcat(s_suffix(whom), " flesh");
+			pline(fmt, whom);
+		}
+		/* note: s_suffix returns a modifiable buffer */
+		if (!noncorporeal(mdat))
+		    whom = strcat(s_suffix(whom), " flesh");
+		pline(fmt,"", whom);
+	}
+	if (unholymsg) {
+		const char *fmt;
+		char *whom = mon_nam(mon);
+		char unholyobjbuf[BUFSZ];
+
+		if (canspotmon(mon)) {
+		    if (barehand_unholy_rings == 1)
+			fmt = "Your %sunholy ring sears %s!";
+		    else if (barehand_unholy_rings == 2)
+			fmt = "Your %sunholy rings sear %s!";
+		    else if (unholyobj && saved_oname[0]) {
+		    	Sprintf(unholyobjbuf, "Your %%s%s%s %s %%s!",
+		    		strstri(saved_oname, "cursed") ?
+					"" : "unholy ",
+				saved_oname, vtense(saved_oname, "sear"));
+		    	fmt = unholyobjbuf;
+		    } else fmt = "The %scurse sears %s!";
+		} else {
+		    *whom = highc(*whom);	/* "it" -> "It" */
+		    fmt = "%s is seared!";
+			if (!noncorporeal(mdat))
+				whom = strcat(s_suffix(whom), " flesh");
+			pline(fmt, whom);
+		}
+		/* note: s_suffix returns a modifiable buffer */
+		if (!noncorporeal(mdat))
+		    whom = strcat(s_suffix(whom), " flesh");
+		pline(fmt, "", whom);
 	}
 
 	if (sunmsg) {
