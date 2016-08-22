@@ -4064,7 +4064,7 @@ struct permonst _mons2[] = {
 	SIZ(WT_HUMAN, 400, 0, MS_HUMANOID, MZ_HUMAN), 0, 0,
 	0 /*MM*/, MT_OMNIVORE|MT_COLLECT /*MT*/,
 	MB_HUMANOID|MB_STRONG /*MB*/, MG_NOPOLY|MG_INFRAVISIBLE /*MG*/,
-	MA_HUMAN /*MA*/,  MV_NORMAL /*MV*/, HI_DOMESTIC),
+	MA_HUMAN /*MA*/,  MV_NORMAL /*MV*/, CLR_BROWN),
 #ifdef CONVICT
     MON("miner", S_HUMAN,//4 /*Needs encyc entry*/
 	LVL(2, 6, 10, 10, 4), (G_GENO|G_NOGEN),
