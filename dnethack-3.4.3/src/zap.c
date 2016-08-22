@@ -1712,7 +1712,7 @@ struct obj *obj, *otmp;
 			fracture_rock(obj);
 		else if (obj->otyp == STATUE)
 			(void) break_statue(obj);
-		else if (obj->otyp == HUGE_STONE_CRATE)
+		else if (obj->otyp == MASSIVE_STONE_CRATE)
 			(void) break_crate(obj);
 		else {
 			if (!flags.mon_moving)
