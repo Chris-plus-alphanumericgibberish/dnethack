@@ -456,6 +456,7 @@ struct monst *mon;
 	
 	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
 	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + AC_VALUE(base+8);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
@@ -485,6 +486,7 @@ struct monst *mon;
 	
 	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
 	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + AC_VALUE(base+8);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
