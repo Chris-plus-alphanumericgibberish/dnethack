@@ -1298,7 +1298,7 @@ int thrown;
 				if ( (( (dieroll <= 2 || (Role_if(PM_BARBARIAN) && dieroll <= 4)) && 
 							  obj == uwep &&
 							  obj->oclass == WEAPON_CLASS &&
-							  (bimanual(obj) ||
+							  (bimanual(obj,youracedata) ||
 								(Role_if(PM_SAMURAI) && obj->otyp == KATANA && !uarms) ||
 								(obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_BERITH)) &&
 							  ((wtype = uwep_skill_type()) != P_NONE &&
