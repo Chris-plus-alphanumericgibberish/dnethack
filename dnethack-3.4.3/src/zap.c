@@ -139,8 +139,10 @@ struct obj *otmp;
 			if (!flags.mon_moving && otyp == SPE_FORCE_BOLT && (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM))
 				dmg += d((u.ulevel+1)/2, 12);
 			if(dbldam) dmg *= 2;
+			if(u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
 			if (otyp == SPE_FORCE_BOLT)
 			    dmg += spell_damage_bonus();
+			
 			hit(zap_type_text, mtmp, exclam(dmg));
 			(void) resist(mtmp, otmp->oclass, dmg, TELL);
 		} else miss(zap_type_text, mtmp);
@@ -174,6 +176,7 @@ struct obj *otmp;
 			wake = TRUE;
 			dmg = rnd(8);
 			if(dbldam) dmg *= 2;
+			if(u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
 			if (otyp == SPE_TURN_UNDEAD)
 				dmg += spell_damage_bonus();
 			flags.bypasses = TRUE;	/* for make_corpse() */
@@ -333,6 +336,7 @@ struct obj *otmp;
 		reveal_invis = TRUE;
 		dmg = rnd(8);
 		if(dbldam) dmg *= 2;
+		if(u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
 		if (otyp == SPE_DRAIN_LIFE)
 			dmg += spell_damage_bonus();
 		if (resists_drli(mtmp)){
@@ -3751,6 +3755,11 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     }
     if(type < 0) newsym(u.ux,u.uy);
     if(!range) range = rn1(7,7);
+	if(u.sealsActive&SEAL_NABERIUS){
+		range *= 2;
+		flat *= 1.5;
+		nd *= 1.5;
+	}
     if(dx == 0 && dy == 0) range = 1;
     save_bhitpos = bhitpos;
 
@@ -4074,10 +4083,17 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 	////////////////////////////////////////////////////////////////////////////////////////
 	if(redrawneeded) doredraw();
     tmp_at(DISP_END,0);
-    if (type == ZT_SPELL(ZT_FIRE))
-		explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_FIERY);
-    else if (type == ZT_SPELL(ZT_ACID))
-		explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_NOXIOUS);
+	if(u.sealsActive&SEAL_NABERIUS){
+		if (type == ZT_SPELL(ZT_FIRE))
+			explode2(sx, sy, type, flat ? flat : d(18,6), 0, EXPL_FIERY);
+		else if (type == ZT_SPELL(ZT_ACID))
+			explode2(sx, sy, type, flat ? flat : d(18,6), 0, EXPL_NOXIOUS);
+	} else {
+		if (type == ZT_SPELL(ZT_FIRE))
+			explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_FIERY);
+		else if (type == ZT_SPELL(ZT_ACID))
+			explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_NOXIOUS);
+	}
     if (shopdamage)
 	pay_for_damage(abstype == ZT_FIRE ?  "burn away" :
 		       abstype == ZT_COLD ?  "shatter" :
