@@ -699,7 +699,7 @@ struct attack *uattk;
 		malive = hmon(mon, uswapwep, 0);
 	    if (malive) {
 		/* monster still alive */
-		if(!rn2(25) && mon->mhp < mon->mhpmax/2
+		if(((!rn2(25) && mon->mhp < mon->mhpmax/2) || mon->data == &mons[PM_QUIVERING_BLOB])
 			    && !(u.uswallow && mon == u.ustuck)) {
 		    /* maybe should regurgitate if swallowed? */
 		    if(!rn2(3)) {
