@@ -250,7 +250,6 @@ char	*argv[];
 	}
 #endif
 	do_makedefs(&argv[1][1]);
-	printf("hi\n");
 	exit(EXIT_SUCCESS);
 	/*NOTREACHED*/
 	return 0;
