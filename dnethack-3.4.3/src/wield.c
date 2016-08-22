@@ -149,7 +149,7 @@ struct obj *wep;
 		mons[wep->corpsenm].mname, makeplural(body_part(HAND)));
 	    Sprintf(kbuf, "%s corpse", an(mons[wep->corpsenm].mname));
 	    instapetrify(kbuf);
-	} else if (uarms && bimanual(wep))
+	} else if (uarms && bimanual(wep,youracedata))
 	    You("cannot wield a two-handed %s while wearing a shield.",
 		is_sword(wep) ? "sword" :
 		    wep->otyp == BATTLE_AXE ? "axe" : "weapon");
@@ -167,7 +167,7 @@ struct obj *wep;
 		else tmp = "";
 		pline("%s%s %s to your %s!", tmp, aobjnam(wep, "weld"),
 			(wep->quan == 1L) ? "itself" : "themselves", /* a3 */
-			bimanual(wep) ?
+			bimanual(wep,youracedata) ?
 				(const char *)makeplural(body_part(HAND))
 				: body_part(HAND));
 		wep->bknown = TRUE;
@@ -451,7 +451,7 @@ const char *verb;	/* "rub",&c */
 	if (flags.verbose) {
 	    const char *hand = body_part(HAND);
 
-	    if (bimanual(uwep)) hand = makeplural(hand);
+	    if (bimanual(uwep,youracedata)) hand = makeplural(hand);
 	    if (strstri(what, "pair of ") != 0) more_than_1 = FALSE;
 	    pline(
 	     "Since your weapon is welded to your %s, you cannot %s %s %s.",
@@ -466,7 +466,7 @@ const char *verb;	/* "rub",&c */
 	return FALSE;
     }
     /* check shield */
-    if (uarms && bimanual(obj)) {
+    if (uarms && bimanual(obj,youracedata)) {
 	You("cannot %s a two-handed %s while wearing a shield.",
 	    verb, (obj->oclass == WEAPON_CLASS) ? "weapon" : "tool");
 	return FALSE;
@@ -516,12 +516,12 @@ can_twoweapon()
 		otmp = NOT_WEAPON(uwep) ? uwep : uswapwep;
 		pline("%s %s.", Yname2(otmp),
 		    is_plural(otmp) ? "aren't weapons" : "isn't a weapon");
-	} else if ((uwep && bimanual(uwep) && !(u.umartial && !uswapwep)) || 
-		(uswapwep && bimanual(uswapwep) && !(u.umartial && !uwep)) || 
+	} else if ((uwep && bimanual(uwep,youracedata) && !(u.umartial && !uswapwep)) || 
+		(uswapwep && bimanual(uswapwep,youracedata) && !(u.umartial && !uwep)) || 
 		(uwep && is_launcher(uwep) && !is_firearm(uwep)) || 
 		(uswapwep && is_launcher(uswapwep) && !is_firearm(uswapwep))
 	) {
-		otmp = bimanual(uwep) ? uwep : uswapwep;
+		otmp = bimanual(uwep,youracedata) ? uwep : uswapwep;
 		pline("%s isn't one-handed.", Yname2(otmp));
 	} else if (uarms)
 		You_cant("use two weapons while wearing a shield.");
@@ -848,7 +848,7 @@ register struct obj *obj;
 	savewornmask = obj->owornmask;
 	Your("%s %s welded to your %s!",
 		xname(obj), otense(obj, "are"),
-		bimanual(obj) ? (const char *)makeplural(body_part(HAND))
+		bimanual(obj,youracedata) ? (const char *)makeplural(body_part(HAND))
 				: body_part(HAND));
 	obj->owornmask = savewornmask;
 }

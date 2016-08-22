@@ -15,12 +15,12 @@ extern const int monstr[];
 
 #ifdef OVLB
 
-STATIC_DCL short FDECL(which_arti, (int));
+STATIC_DCL short FDECL(which_arti, (long int));
 STATIC_DCL boolean FDECL(mon_has_arti, (struct monst *,SHORT_P));
 STATIC_DCL struct monst *FDECL(other_mon_has_arti, (struct monst *,SHORT_P));
 STATIC_DCL struct obj *FDECL(on_ground, (SHORT_P));
-STATIC_DCL boolean FDECL(you_have, (int));
-STATIC_DCL long FDECL(target_on, (int,struct monst *));
+STATIC_DCL boolean FDECL(you_have, (long int));
+STATIC_DCL long FDECL(target_on, (long int,struct monst *));
 STATIC_DCL long FDECL(strategy, (struct monst *));
 STATIC_DCL void FDECL(wizgush, (int, int, genericptr_t));
 STATIC_DCL void NDECL(dowizgush);
@@ -136,17 +136,17 @@ register struct monst *mtmp;
  */
 #define STRAT(w, x, y, typ) (w | ((long)(x)<<16) | ((long)(y)<<8) | (long)typ)
 
-#define M_Wants(mask)	(mtmp->data->mflags3 & (mask))
+#define M_Wants(mask)	(mtmp->data->mflagst & (mask))
 
 STATIC_OVL short
 which_arti(mask)
-	register int mask;
+	register long int mask;
 {
 	switch(mask) {
-	    case M3_WANTSAMUL:	return(AMULET_OF_YENDOR);
-	    case M3_WANTSBELL:	return(BELL_OF_OPENING);
-	    case M3_WANTSCAND:	return(CANDELABRUM_OF_INVOCATION);
-	    case M3_WANTSBOOK:	return(SPE_BOOK_OF_THE_DEAD);
+	    case MT_WANTSAMUL:	return(AMULET_OF_YENDOR);
+	    case MT_WANTSBELL:	return(BELL_OF_OPENING);
+	    case MT_WANTSCAND:	return(CANDELABRUM_OF_INVOCATION);
+	    case MT_WANTSBOOK:	return(SPE_BOOK_OF_THE_DEAD);
 	    default:		break;	/* 0 signifies quest artifact */
 	}
 	return(0);
@@ -207,14 +207,14 @@ on_ground(otyp)
 
 STATIC_OVL boolean
 you_have(mask)
-	register int mask;
+	register long int mask;
 {
 	switch(mask) {
-	    case M3_WANTSAMUL:	return(boolean)(u.uhave.amulet);
-	    case M3_WANTSBELL:	return(boolean)(u.uhave.bell);
-	    case M3_WANTSCAND:	return(boolean)(u.uhave.menorah);
-	    case M3_WANTSBOOK:	return(boolean)(u.uhave.book);
-	    case M3_WANTSARTI:	return(boolean)(u.uhave.questart);
+	    case MT_WANTSAMUL:	return(boolean)(u.uhave.amulet);
+	    case MT_WANTSBELL:	return(boolean)(u.uhave.bell);
+	    case MT_WANTSCAND:	return(boolean)(u.uhave.menorah);
+	    case MT_WANTSBOOK:	return(boolean)(u.uhave.book);
+	    case MT_WANTSARTI:	return(boolean)(u.uhave.questart);
 	    default:		break;
 	}
 	return(0);
@@ -222,7 +222,7 @@ you_have(mask)
 
 STATIC_OVL long
 target_on(mask, mtmp)
-	register int mask;
+	register long int mask;
 	register struct monst *mtmp;
 {
 	register short	otyp;
@@ -275,28 +275,28 @@ strategy(mtmp)
 	}
 
 	if(flags.made_amulet)
-	    if((strat = target_on(M3_WANTSAMUL, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSAMUL, mtmp)) != STRAT_NONE)
 		return(strat);
 
 	if(u.uevent.invoked) {		/* priorities change once gate opened */
 
-	    if((strat = target_on(M3_WANTSARTI, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSARTI, mtmp)) != STRAT_NONE)
 		return(strat);
-	    if((strat = target_on(M3_WANTSBOOK, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSBOOK, mtmp)) != STRAT_NONE)
 		return(strat);
-	    if((strat = target_on(M3_WANTSBELL, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSBELL, mtmp)) != STRAT_NONE)
 		return(strat);
-	    if((strat = target_on(M3_WANTSCAND, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSCAND, mtmp)) != STRAT_NONE)
 		return(strat);
 	} else {
 
-	    if((strat = target_on(M3_WANTSBOOK, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSBOOK, mtmp)) != STRAT_NONE)
 		return(strat);
-	    if((strat = target_on(M3_WANTSBELL, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSBELL, mtmp)) != STRAT_NONE)
 		return(strat);
-	    if((strat = target_on(M3_WANTSCAND, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSCAND, mtmp)) != STRAT_NONE)
 		return(strat);
-	    if((strat = target_on(M3_WANTSARTI, mtmp)) != STRAT_NONE)
+	    if((strat = target_on(MT_WANTSARTI, mtmp)) != STRAT_NONE)
 		return(strat);
 	}
 	return(dstrat);
