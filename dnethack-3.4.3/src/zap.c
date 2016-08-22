@@ -659,44 +659,44 @@ register struct obj *obj;
 		    if (obj->oxlth && (obj->oattached == OATTACHED_MONST)) {
 			    coord xy;
 			    xy.x = x; xy.y = y;
-		    	    mtmp = montraits(obj, &xy);
-		    	    if (mtmp && mtmp->mtame && !mtmp->isminion)
-				wary_dog(mtmp, TRUE);
+				mtmp = montraits(obj, &xy);
+				if (mtmp && mtmp->mtame && !mtmp->isminion)
+					wary_dog(mtmp, TRUE);
 		    } else
  		            mtmp = makemon(&mons[montype], x, y,
 				       NO_MINVENT|MM_NOWAIT|MM_NOCOUNTBIRTH);
 		    if (mtmp) {
-			if (obj->oxlth && (obj->oattached == OATTACHED_M_ID)) {
-			    unsigned m_id;
-			    struct monst *ghost;
-			    (void) memcpy((genericptr_t)&m_id,
-				    (genericptr_t)obj->oextra, sizeof(m_id));
-			    ghost = find_mid(m_id, FM_FMON);
-		    	    if (ghost && ghost->data == &mons[PM_GHOST]) {
-		    		    int x2, y2;
-		    		    x2 = ghost->mx; y2 = ghost->my;
-		    		    if (ghost->mtame)
-		    		    	savetame = ghost->mtame;
-		    		    if (canseemon(ghost))
-		    		  	pline("%s is suddenly drawn into its former body!",
-						Monnam(ghost));
-				    mondead(ghost);
-				    recorporealization = TRUE;
-				    newsym(x2, y2);
-			    }
-			    /* don't mess with obj->oxlth here */
-			    obj->oattached = OATTACHED_NOTHING;
+				if (obj->oxlth && (obj->oattached == OATTACHED_M_ID)) {
+					unsigned m_id;
+					struct monst *ghost;
+					(void) memcpy((genericptr_t)&m_id,
+						(genericptr_t)obj->oextra, sizeof(m_id));
+					ghost = find_mid(m_id, FM_FMON);
+						if (ghost && ghost->data == &mons[PM_GHOST]) {
+							int x2, y2;
+							x2 = ghost->mx; y2 = ghost->my;
+							if (ghost->mtame)
+								savetame = ghost->mtame;
+							if (canseemon(ghost))
+							pline("%s is suddenly drawn into its former body!",
+							Monnam(ghost));
+						mondead(ghost);
+						recorporealization = TRUE;
+						newsym(x2, y2);
+					}
+					/* don't mess with obj->oxlth here */
+					obj->oattached = OATTACHED_NOTHING;
+				}
+				/* Monster retains its name */
+				if (obj->onamelth)
+					mtmp = christen_monst(mtmp, ONAME(obj));
+				/* flag the quest leader as alive. */
+				if (mtmp->data == &mons[urole.ldrnum] || mtmp->m_id ==
+					quest_status.leader_m_id) {
+					quest_status.leader_m_id = mtmp->m_id;
+					quest_status.leader_is_dead = FALSE;
+				}
 			}
-			/* Monster retains its name */
-			if (obj->onamelth)
-			    mtmp = christen_monst(mtmp, ONAME(obj));
-			/* flag the quest leader as alive. */
-			if (mtmp->data == &mons[urole.ldrnum] || mtmp->m_id ==
-			    quest_status.leader_m_id) {
-			    quest_status.leader_m_id = mtmp->m_id;
-			    quest_status.leader_is_dead = FALSE;
-		    }
-		}
 		}
 		if (mtmp) {
 			if (obj->oeaten)
@@ -722,16 +722,16 @@ register struct obj *obj;
 				useup(obj);
 				break;
 			    case OBJ_FLOOR:
-				/* in case MON_AT+enexto for invisible mon */
-				x = obj->ox,  y = obj->oy;
-				/* not useupf(), which charges */
-				if (obj->quan > 1L)
-				    obj = splitobj(obj, 1L);
-				delobj(obj);
-				newsym(x, y);
+					/* in case MON_AT+enexto for invisible mon */
+					x = obj->ox,  y = obj->oy;
+					/* not useupf(), which charges */
+					if (obj->quan > 1L)
+						obj = splitobj(obj, 1L);
+					delobj(obj);
+					newsym(x, y);
 				break;
 			    case OBJ_MINVENT:
-				m_useup(obj->ocarry, obj);
+					m_useup(obj->ocarry, obj);
 				break;
 			    case OBJ_CONTAINED:
 					if (obj->quan > 1L)
