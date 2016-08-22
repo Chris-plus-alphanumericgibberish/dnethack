@@ -1102,6 +1102,7 @@ int thrown;
 				obj->oartifact != ART_WEBWEAVER_S_CROOK && 
 				obj->oartifact != ART_HEARTCLEAVER && 
 				obj->oartifact != ART_SOL_VALTIVA && 
+				obj->oartifact != ART_SHADOWLOCK && 
 				obj->oartifact != ART_PEN_OF_THE_VOID
 			) ||
 		    /* lightsaber that isn't lit ;) */
