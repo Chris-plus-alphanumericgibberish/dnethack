@@ -25,7 +25,6 @@ STATIC_DCL void FDECL(use_whistle, (struct obj *));
 STATIC_DCL void FDECL(use_magic_whistle, (struct obj *));
 STATIC_DCL void FDECL(use_leash, (struct obj *));
 STATIC_DCL int FDECL(use_mirror, (struct obj *));
-STATIC_DCL void FDECL(use_bell, (struct obj **));
 STATIC_DCL void FDECL(use_candelabrum, (struct obj *));
 STATIC_DCL void FDECL(use_candle, (struct obj **));
 STATIC_DCL void FDECL(use_lamp, (struct obj *));
@@ -1045,20 +1044,24 @@ struct obj *obj;
 	return 1;
 }
 
-STATIC_OVL void
-use_bell(optr)
+void
+use_bell(optr, spiritseal)
 struct obj **optr;
+boolean spiritseal;
 {
 	register struct obj *obj = *optr;
 	struct monst *mtmp;
 	boolean wakem = FALSE, learno = FALSE,
-		ordinary = (obj->otyp != BELL_OF_OPENING || !obj->spe),
+		ordinary = (obj->otyp != BELL_OF_OPENING || (!obj->spe && !spiritseal)),
 		invoking = (obj->otyp == BELL_OF_OPENING &&
-			 invocation_pos(u.ux, u.uy) && !On_stairs(u.ux, u.uy));
+			(spiritseal ?
+			 (invocation_pos(obj->ox, obj->oy) && !On_stairs(obj->ox, obj->oy)) :
+			 (invocation_pos(u.ux, u.uy) && !On_stairs(u.ux, u.uy))
+			));
 
-	You("ring %s.", the(xname(obj)));
+	if(!spiritseal) You("ring %s.", the(xname(obj)));
 	
-	if(Role_if(PM_EXILE) && obj->otyp == BELL_OF_OPENING){
+	if(Role_if(PM_EXILE) && obj->otyp == BELL_OF_OPENING && !spiritseal){
 		pline("It makes a rather sad clonk.");
 		return;
 	}
@@ -4738,7 +4741,7 @@ doapply()
 	break;
 	case BELL:
 	case BELL_OF_OPENING:
-		use_bell(&obj);
+		use_bell(&obj, FALSE);
 		break;
 	case CANDELABRUM_OF_INVOCATION:
 		use_candelabrum(obj);

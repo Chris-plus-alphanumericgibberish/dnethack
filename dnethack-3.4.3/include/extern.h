@@ -47,6 +47,7 @@ E boolean FDECL(snuff_candle, (struct obj *));
 E boolean FDECL(snuff_lit, (struct obj *));
 E boolean FDECL(catch_lit, (struct obj *));
 E void FDECL(use_unicorn_horn, (struct obj *));
+E void FDECL(use_bell, (struct obj **, boolean));
 E boolean FDECL(tinnable, (struct obj *));
 E void NDECL(reset_trapset);
 E void FDECL(fig_transform, (genericptr_t, long));

@@ -2561,9 +2561,22 @@ int tx,ty;
 					pline("The Pen of the Void drips black oil, as if in sympathy.");
 				}
 				// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
-			} else{
-				pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
-				// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+			} else {
+				o = (struct obj *) 0;
+				for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+					if(otmp->otyp == BELL_OF_OPENING && (otmp->spe == 0 || Role_if(PM_EXILE))){
+						o = otmp;
+				break;
+					}
+				}
+				if(o){
+					pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal and rings the bell.");
+					use_bell(&o,TRUE);
+					u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+				} else {
+					pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
+					// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+				}
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
