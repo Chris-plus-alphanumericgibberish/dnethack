@@ -884,7 +884,7 @@ unsigned trflags;
 				    body_part(ARM));
 			if (rust_dmg(uarms, "shield", 1, TRUE, &youmonst))
 			    break;
-			if (u.twoweap || (uwep && bimanual(uwep)))
+			if (u.twoweap || (uwep && bimanual(uwep,youracedata)))
 			    erode_obj(u.twoweap ? uswapwep : uwep, FALSE, TRUE);
 glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			/* Not "metal gauntlets" since it gets called
@@ -1908,7 +1908,7 @@ register struct monst *mtmp;
 			    if (rust_dmg(target, "shield", 1, TRUE, mtmp))
 				break;
 			    target = MON_WEP(mtmp);
-			    if (target && bimanual(target))
+			    if (target && bimanual(target,mtmp->data))
 				erode_obj(target, FALSE, TRUE);
 glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    (void) rust_dmg(target, "gauntlets", 1, TRUE, mtmp);
@@ -2716,7 +2716,7 @@ xchar x, y;
 	    case CHEST:
 		chance = 40;
 		break;
-	    case LARGE_BOX:
+	    case BOX:
 		chance = 30;
 		break;
 	    default:
@@ -3320,7 +3320,7 @@ dountrap()	/* disarm a trap */
 	    pline("You'll have to let go of %s first.", mon_nam(u.ustuck));
 	    return 0;
 	}
-	if (u.ustuck || (welded(uwep) && bimanual(uwep))) {
+	if (u.ustuck || (welded(uwep) && bimanual(uwep,youracedata))) {
 	    Your("%s seem to be too busy for that.",
 		 makeplural(body_part(HAND)));
 	    return 0;
