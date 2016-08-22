@@ -1330,7 +1330,7 @@ struct permonst *ptr;
 	    n += (tmp2 > 0);
 	    n += (tmp2 == AT_MAGC || tmp2 == AT_MMGC || 
 			tmp2 == AT_TUCH || tmp2 == AT_SHDW || tmp2 == AT_TNKR);
-	    n += (tmp2 == AT_WEAP && (ptr->mflags2 & M2_STRONG));
+	    n += (tmp2 == AT_WEAP && (ptr->mflagsb & MB_STRONG));
 	}
 
 /*	For each "special" damage type */
@@ -1348,7 +1348,7 @@ struct permonst *ptr;
 /*	Leprechauns are special cases.  They have many hit dice so they
 	can hit and are hard to kill, but they don't really do much damage. */
 	if (!strcmp(ptr->mname, "leprechaun")) n -= 2;
-
+	
 /*	Hooloovoo spawn many dangerous enemies. */
 	if (!strcmp(ptr->mname, "hooloovoo")) n += 10;
 
