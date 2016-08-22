@@ -256,41 +256,47 @@ struct obj *otmp;
 struct monst *mon;
 int spec;
 {
-	int tmp = 0, otyp = otmp->otyp;
+	int tmp = 0, otyp = otmp->otyp, dmod, ldie, sdie;
 	struct permonst *ptr;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp)), youdefend = mon == &youmonst;
-
+	
 	if (!mon) ptr = &mons[NUMMONS];
-	else ptr = mon->data;
+	else ptr = youdefend ? youracedata : mon->data;
 
 	if (otyp == CREAM_PIE) return 0;
+	
 	if (otmp->oartifact == ART_HOUCHOU)
 	        return 9999;
-
+	
+	dmod = otmp->objsize - MZ_MEDIUM;
+	ldie = max(2, objects[otyp].oc_wldam + dmod);
+	sdie = max(2, objects[otyp].oc_wsdam + dmod);
+	
 	if (bigmonst(ptr)) {
-		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,objects[otyp].oc_wldam,1);
+		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,ldie,1);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
-															rnl(objects[otyp].oc_wldam)+1 : 
-															objects[otyp].oc_wldam - rnl(objects[otyp].oc_wldam);
+															rnl(ldie)+1 : 
+															ldie - rnl(ldie);
 		else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp = youdefend ? 
 															unlucky_exploding_d(otmp->quan,8,0) : 
 															lucky_exploding_d(otmp->quan,8,0);
-	    else if (otyp == MOON_AXE && otmp->ovar1) tmp = d(2,objects[otyp].oc_wldam + 2*(otmp->ovar1-1));
-	    else if (objects[otyp].oc_wldam) tmp = rnd(objects[otyp].oc_wldam);
+	    else if (otyp == MOON_AXE && otmp->ovar1) tmp = d(2,ldie + 2*(otmp->ovar1-1));
+	    else if (ldie) tmp = rnd(ldie);
 		
 		if(spec & SPEC_MARIONETTE){
-			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,objects[otyp].oc_wldam+2,1);
+			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,ldie+2,1);
 			else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
-																rnl(objects[otyp].oc_wldam+2)+1 : 
-																objects[otyp].oc_wldam+2 - rnl(objects[otyp].oc_wldam+2);
+																rnl(ldie+2)+1 : 
+																ldie+2 - rnl(ldie+2);
 			else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp = youdefend ? 
 																unlucky_exploding_d(otmp->quan,10,0) : 
 																lucky_exploding_d(otmp->quan,10,0);
-			else if (objects[otyp].oc_wldam) tmp += rnd(objects[otyp].oc_wldam+2);
+			else if (ldie) tmp += rnd(ldie+2);
 		}
 	    switch (otyp) {
 		case ELVEN_BROADSWORD:
-			tmp++;
+			tmp += max(0,2+dmod);
+		break;
 		case IRON_CHAIN:
 		case CROSSBOW_BOLT:
 		case DROVEN_BOLT:
@@ -298,60 +304,60 @@ int spec;
 		case PARTISAN:
 		case RUNESWORD:
 		case BROADSWORD:	
-			tmp++; 
+			tmp += max(0,1+dmod);
 			break;
 
 		case FLAIL:
 		case RANSEUR:
 		case SCYTHE:
-		case VOULGE:		tmp += rnd(4); break;
+		case VOULGE:		tmp += rnd(4+dmod); break;
 
 		case HALBERD:
-		case SPETUM:		tmp += rnd(6); break;
+		case SPETUM:		tmp += rnd(6+dmod); break;
 		case ACID_VENOM:
 			if(otmp->ovar1) tmp = otmp->ovar1;
 			else tmp += rnd(6);
 		break;
 		
-		case CRYSTAL_SWORD:	tmp += d(1,12); break;
+		case CRYSTAL_SWORD:	tmp += d(1,12+dmod); break;
 		
 		case AXE:
-			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(2,4);
+			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(2,4+dmod);
 		break;
 		case BATTLE_AXE:
 		case BARDICHE:
-		case TRIDENT:		tmp += d(2,4); break;
+		case TRIDENT:		tmp += d(2,4+dmod); break;
 
 		case TSURUGI:
 		case DWARVISH_MATTOCK:
-		case TWO_HANDED_SWORD:	tmp += d(2,6); break;
+		case TWO_HANDED_SWORD:	tmp += d(2,6+dmod); break;
 		case SCIMITAR:
-			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
+			if(otmp->oartifact == ART_REAVER) tmp += d(1,8+dmod); break;
 		case LONG_SWORD:	
-			if(otmp->oartifact == ART_TOBIUME) tmp -= 3; 
+			if(otmp->oartifact == ART_TOBIUME) tmp -= (3-dmod); 
 		break;
 		case BULLET:
 		case SILVER_BULLET:
 		case SHOTGUN_SHELL:
 		case ROCKET:
-			tmp += rnd(objects[otyp].oc_wldam)+4;
+			tmp += rnd(ldie)+4;
 		break;
 		case VIBROBLADE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wldam)+objects[otyp].oc_wldam/2;
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie/2;
 		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wldam)+objects[otyp].oc_wldam;
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, ldie)+ldie;
 		break;
 		case LASER_BEAM:
-			tmp += d(2, objects[otyp].oc_wldam)+10;
+			tmp += d(2, ldie)+10;
 		break;
 		case BLASTER_BOLT:
 		case HEAVY_BLASTER_BOLT:
-			tmp += d(2, objects[otyp].oc_wldam)+objects[otyp].oc_wldam;
+			tmp += d(2, ldie)+ldie;
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
-			tmp += d(2, objects[otyp].oc_wldam);
+			tmp += d(2, ldie);
 			otmp->age -= 100;
 			if(otmp->oartifact == ART_ATMA_WEAPON &&
 				otmp == uwep &&
@@ -364,7 +370,7 @@ int spec;
 						((float)u.uhp)/u.uhpmax;
 			}
 			if(otmp->altmode){ //Probably just the Annulus
-				tmp += d(3, 3);
+				tmp += d(3, 3+dmod);
 				otmp->age -= 100;
 			}
 			if(otmp == uwep || (u.twoweap && otmp == uswapwep) ){
@@ -383,21 +389,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, objects[otyp].oc_wldam);
+							tmp += d(1, ldie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(1, 3);
+								tmp += d(1, 3+dmod);
 							}
 						break;
 						case P_SKILLED:
-							tmp += d(2, objects[otyp].oc_wldam);
+							tmp += d(2, ldie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(2, 3);
+								tmp += d(2, 3+dmod);
 							}
 						break;
 						case P_EXPERT:
-							tmp += d(3, objects[otyp].oc_wldam);
+							tmp += d(3, ldie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(3, 3);
+								tmp += d(3, 3+dmod);
 							}
 						break;
 					}
@@ -436,10 +442,10 @@ int spec;
 			}
 		break;
 		case DOUBLE_LIGHTSABER: 
-			tmp += d(2, objects[otyp].oc_wldam);
+			tmp += d(2, ldie);
 			otmp->age -= 100;
 			if (otmp->altmode){
-				tmp += d(3, objects[otyp].oc_wldam);
+				tmp += d(3, ldie);
 				otmp->age -= 100;
 			}
 			if(otmp == uwep){
@@ -458,21 +464,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, objects[otyp].oc_wldam);
+							tmp += d(1, ldie);
 							if(otmp->altmode){
-								tmp += d(1, objects[otyp].oc_wldam);
+								tmp += d(1, ldie);
 							}
 						break;
 						case P_SKILLED:
-							tmp += d(2, objects[otyp].oc_wldam);
+							tmp += d(2, ldie);
 							if(otmp->altmode){
-								tmp += d(2, objects[otyp].oc_wldam);
+								tmp += d(2, ldie);
 							}
 						break;
 						case P_EXPERT:
-							tmp += d(3, objects[otyp].oc_wldam);
+							tmp += d(3, ldie);
 							if(otmp->altmode){
-								tmp += d(3, objects[otyp].oc_wldam);
+								tmp += d(3, ldie);
 							}
 						break;
 					}
@@ -511,34 +517,34 @@ int spec;
 			}
 		break;
 		case WAR_HAMMER:
-			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4); break;
+			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4+dmod); break;
 		case BULLWHIP:
-			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += d(1,10);
-			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(2,2,0);
+			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += d(1,10+dmod);
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(2,max(2,2+dmod),0);
 		break;
 		case RAPIER:
-			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(2,4); break;
+			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(2,4+dmod); break;
 	    }
 	} else {
-		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,objects[otyp].oc_wsdam,1);
+		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,sdie,1);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
-															rnl(objects[otyp].oc_wsdam)+1 : 
-															objects[otyp].oc_wsdam - rnl(objects[otyp].oc_wsdam);
+															rnl(sdie)+1 : 
+															sdie - rnl(sdie);
 		else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp = youdefend ? 
 															unlucky_exploding_d(otmp->quan,8,0) : 
 															lucky_exploding_d(otmp->quan,8,0);
-	    else if (otyp == MOON_AXE) tmp = d(2,otmp->ovar1 ? objects[otyp].oc_wsdam + 2*(otmp->ovar1-1) : 12);
-	    else if (objects[otyp].oc_wsdam) tmp = rnd(objects[otyp].oc_wsdam);
+	    else if (otyp == MOON_AXE) tmp = d(2,otmp->ovar1 ? sdie + 2*(otmp->ovar1-1) : 12);
+	    else if (sdie) tmp = rnd(sdie);
 		
 		if(spec & SPEC_MARIONETTE){
-			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,objects[otyp].oc_wsdam+2,1);
+			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,sdie+2,1);
 			else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
-																rnl(objects[otyp].oc_wsdam+2)+1 : 
-																objects[otyp].oc_wsdam+2 - rnl(objects[otyp].oc_wsdam+2);
+																rnl(sdie+2)+1 : 
+																sdie+2 - rnl(sdie+2);
 			else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp = youdefend ? 
 																unlucky_exploding_d(otmp->quan,10,0) : 
 																lucky_exploding_d(otmp->quan,10,0);
-			else if (objects[otyp].oc_wsdam) tmp += rnd(objects[otyp].oc_wsdam+2);
+			else if (sdie) tmp += rnd(sdie+2);
 		}
 	    switch (otyp) {
 		case IRON_CHAIN:
@@ -551,22 +557,22 @@ int spec;
 		case SPETUM:
 		case TRIDENT:
 			tmp++; 
-			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4)+2;
+			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4+dmod)+2;
 		break;
 
 		case BULLWHIP:
-			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += 10;
-			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(4,4,0);
+			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += 10+dmod;
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(4,4+dmod,0);
 		break;
 
 		case LONG_SWORD:	
-			if(otmp->oartifact == ART_TOBIUME) tmp -= 2;
+			if(otmp->oartifact == ART_TOBIUME) tmp -= 2-dmod;
 		break;
 		
-		case CRYSTAL_SWORD:	tmp += d(1,8); break;
+		case CRYSTAL_SWORD:	tmp += d(1,8+dmod); break;
 		
 		case AXE:
-			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(1,4);
+			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(1,4+dmod);
 		break;
 		
 		case BATTLE_AXE:
@@ -581,30 +587,30 @@ int spec;
 		case RUNESWORD:
 		case SCYTHE:
 		case VOULGE:		
-			tmp += rnd(4);
+			tmp += rnd(4+dmod);
 		break;
 		case BULLET:
 		case SILVER_BULLET:
 		case SHOTGUN_SHELL:
 		case ROCKET:
-			tmp += rnd(objects[otyp].oc_wsdam)+4;
+			tmp += rnd(sdie)+4;
 		break;
 		case VIBROBLADE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, objects[otyp].oc_wsdam)+objects[otyp].oc_wsdam/2;
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
 		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, objects[otyp].oc_wsdam)+objects[otyp].oc_wsdam;
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, sdie)+sdie;
 		break;
 		case LASER_BEAM:
-			tmp += d(2, objects[otyp].oc_wsdam)+10;
+			tmp += d(2, sdie)+10;
 		break;
 		case BLASTER_BOLT:
 		case HEAVY_BLASTER_BOLT:
-			tmp += d(2, objects[otyp].oc_wsdam)+objects[otyp].oc_wsdam;
+			tmp += d(2, sdie)+sdie;
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
-			tmp += d(2, objects[otyp].oc_wsdam);
+			tmp += d(2, sdie);
 			otmp->age -= 100;
 			if(otmp->oartifact == ART_ATMA_WEAPON &&
 				otmp == uwep &&
@@ -617,7 +623,7 @@ int spec;
 						((float)u.uhp)/u.uhpmax;
 			}
 			if(otmp->altmode){ //Probably just the Annulus
-				tmp += d(3, 3);
+				tmp += d(3, 3+dmod);
 				otmp->age -= 100;
 			}
 			if(otmp == uwep || (u.twoweap && otmp == uswapwep) ){
@@ -636,21 +642,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, objects[otyp].oc_wsdam);
+							tmp += d(1, sdie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(1, 3);
+								tmp += d(1, 3+dmod);
 							}
 						break;
 						case P_SKILLED:
-							tmp += d(2, objects[otyp].oc_wsdam);
+							tmp += d(2, sdie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(2, 3);
+								tmp += d(2, 3+dmod);
 							}
 						break;
 						case P_EXPERT:
-							tmp += d(3, objects[otyp].oc_wsdam);
+							tmp += d(3, sdie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(3, 3);
+								tmp += d(3, 3+dmod);
 							}
 						break;
 					}
@@ -689,10 +695,10 @@ int spec;
 			}
 		break;
 		case DOUBLE_LIGHTSABER: 
-			tmp += d(2, objects[otyp].oc_wsdam);
+			tmp += d(2, sdie);
 			otmp->age -= 100;
 			if (otmp->altmode){
-				tmp += d(3, objects[otyp].oc_wsdam);
+				tmp += d(3, sdie);
 				otmp->age -= 100;
 			}
 			if(otmp == uwep){
@@ -711,21 +717,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, objects[otyp].oc_wsdam);
+							tmp += d(1, sdie);
 							if(otmp->altmode){
-								tmp += d(1, objects[otyp].oc_wsdam);
+								tmp += d(1, sdie);
 							}
 						break;
 						case P_SKILLED:
-							tmp += d(2, objects[otyp].oc_wsdam);
+							tmp += d(2, sdie);
 							if(otmp->altmode){
-								tmp += d(2, objects[otyp].oc_wsdam);
+								tmp += d(2, sdie);
 							}
 						break;
 						case P_EXPERT:
-							tmp += d(3, objects[otyp].oc_wsdam);
+							tmp += d(3, sdie);
 							if(otmp->altmode){
-								tmp += d(3, objects[otyp].oc_wsdam);
+								tmp += d(3, sdie);
 							}
 						break;
 					}
@@ -768,9 +774,9 @@ int spec;
 			else tmp += rnd(6);
 		break;
 		case SCIMITAR:
-			if(otmp->oartifact == ART_REAVER) tmp += d(1,8); break;
+			if(otmp->oartifact == ART_REAVER) tmp += d(1,8+dmod); break;
 		case RAPIER:
-			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(1,6)+d(1,4); break;
+			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(1,6+dmod)+d(1,4+dmod); break;
 	    }
 	}
 	
@@ -798,11 +804,16 @@ int spec;
 		if (tmp < 0) tmp = 0;
 	}
 
-	if (objects[otyp].oc_material <= LEATHER && (thick_skinned(ptr) || (mon == &youmonst && u.sealsActive&SEAL_ECHIDNA)))
+	if (objects[otyp].oc_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
-	if (ptr->mlet == S_SHADE && (objects[otyp].oc_material != SILVER || arti_silvered(otmp) || arti_shining(otmp)))
-		tmp = 0;
+	if (ptr->mlet == S_SHADE && (
+		(is_lightsaber(otmp) && otmp->lamplit) || 
+		(hates_silver(ptr) && (objects[otyp].oc_material != SILVER || arti_silvered(otmp))) || 
+		(hates_iron(ptr) && objects[otyp].oc_material != IRON) || 
+		(hates_unholy(ptr) && otmp->cursed) || 
+		arti_shining(otmp)
+	)) tmp = 0;
 
 	/* "very heavy iron ball"; weight increase is in increments of 160 */
 	if (otyp == HEAVY_IRON_BALL && tmp > 0) {
@@ -830,9 +841,9 @@ int spec;
 			else bonus += rnd(4);
 		}
 	    if (is_axe(otmp) && is_wooden(ptr))
-		bonus += rnd(4);
+			bonus += rnd(4);
 	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) 
-			&& (hates_silver(ptr) || (youdefend && maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))))
+			&& hates_silver(ptr)
 			&& !(is_lightsaber(otmp) && otmp->lamplit)
 			&& (!youdefend || !(u.sealsActive&SEAL_EDEN))
 		){
@@ -840,6 +851,17 @@ int spec;
 			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
 			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
 			else bonus += rnd(20);
+		}
+	    if (objects[otyp].oc_material == IRON 
+			&& hates_iron(ptr)
+			&& !(is_lightsaber(otmp) && otmp->lamplit)
+		){
+			bonus += rnd(mon->m_lev*2);
+		}
+	    if (otmp->cursed
+			&& hates_unholy(ptr)
+		){
+			bonus += rnd(20);
 		}
 		
 		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && 
@@ -1073,25 +1095,29 @@ struct obj *otmp;
     if (wep)
     {
         if (wep == otmp) return TRUE;
-
+		
         if (wep->oartifact) return FALSE;
 
         if (throws_rocks(mtmp->data) &&  is_boulder(wep)) return FALSE;
         if (throws_rocks(mtmp->data) && is_boulder(otmp)) return TRUE;
+		
+		if(wep->otyp == otmp->otyp) return dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(wep, 0 /*zeromonst*/, 0);
     }
     
     if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
-	    || !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON]) &&
-        (objects[pwep[i]].oc_material != SILVER
- 	    || !hates_silver(mtmp->data)))
-    {
+	    || !bimanual(otmp,mtmp->data))
+		&& (objects[otmp->otyp].oc_material != SILVER
+		|| !hates_silver(mtmp->data))
+		&& (objects[otmp->otyp].oc_material != IRON
+		|| !hates_iron(mtmp->data))
+		&& (otmp->cursed
+		|| !hates_unholy(mtmp->data))
+	){
         for (i = 0; i < SIZE(pwep); i++)
         {
             if ( wep &&
-	         wep->otyp == pwep[i] &&
-               !(otmp->otyp == pwep[i] &&
-	         dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(wep, 0 /*zeromonst*/, 0)))
-	        return FALSE;
+	         wep->otyp == pwep[i])
+					return FALSE;
             if (otmp->otyp == pwep[i]) return TRUE;
         }
     }
@@ -1146,9 +1172,12 @@ register struct monst *mtmp;
 		 * All monsters can wield the remaining weapons.
 		 */
 		if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
-			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON]) &&
-		    (objects[pwep[i]].oc_material != SILVER
-			|| !hates_silver(mtmp->data))) {
+			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON])
+		    && (objects[pwep[i]].oc_material != SILVER
+			|| !hates_silver(mtmp->data))
+		    && (objects[pwep[i]].oc_material != IRON
+			|| !hates_iron(mtmp->data))
+		) {
 		    if ((otmp = oselect(mtmp, pwep[i])) != 0) {
 			propellor = otmp; /* force the monster to wield it */
 			return otmp;
@@ -1374,8 +1403,8 @@ register struct monst *mtmp;
 		if (otmp->oclass == WEAPON_CLASS
 			&& otmp->oartifact && touch_artifact(otmp,mtmp)
 			&& ((strong && !wearing_shield)
-			    || !objects[otmp->otyp].oc_bimanual || mtmp->data == &mons[PM_ARCHON]))
-		    return otmp;
+			    || !bimanual(otmp,mtmp->data))
+			) return otmp;
 	}
 
 	if(is_giant(mtmp->data))	/* giants just love to use clubs */
@@ -1388,10 +1417,12 @@ register struct monst *mtmp;
 	    if (hwep[i] == CORPSE && !(mtmp->misc_worn_check & W_ARMG))
 		continue;
 	    if (((strong && !wearing_shield)
-			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON]) &&
-		    (objects[hwep[i]].oc_material != SILVER
-			|| !hates_silver(mtmp->data)))
-		Oselect(hwep[i]);
+			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON])
+		    && (objects[hwep[i]].oc_material != SILVER
+			|| !hates_silver(mtmp->data))
+		    && (objects[hwep[i]].oc_material != IRON
+			|| !hates_iron(mtmp->data))
+		) Oselect(hwep[i]);
 	}
 
 	/* failure */
@@ -1523,7 +1554,7 @@ register struct monst *mon;
 			char welded_buf[BUFSZ];
 			const char *mon_hand = mbodypart(mon, HAND);
 
-			if (bimanual(mw_tmp)) mon_hand = makeplural(mon_hand);
+			if (bimanual(mw_tmp,mon->data)) mon_hand = makeplural(mon_hand);
 			Sprintf(welded_buf, "%s welded to %s %s",
 				otense(mw_tmp, "are"),
 				mhis(mon), mon_hand);
@@ -1665,7 +1696,7 @@ struct obj *otmp;
 	else if (str < STR19(25)) bonus = 7;
 	else /*  str ==25*/bonus = 8;
 	
-	if(otmp && (objects[otmp->otyp].oc_bimanual ||
+	if(otmp && (bimanual(otmp,youracedata) ||
 		(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
 	)) bonus *= 2;
 	
@@ -2098,6 +2129,9 @@ struct obj *obj;
 		if(P_SKILL(P_LONG_SWORD) > P_SKILL(P_SHORT_SWORD))
 			type = P_LONG_SWORD;
 		else type = P_SHORT_SWORD;
+	}
+	if(obj && obj->oartifact && obj->oartifact == ART_TORCH_OF_ORIGINS){
+		type = P_CLUB;
 	}
 	else type = objects[obj->otyp].oc_skill;
 	return ((type < 0) ? -type : type);
