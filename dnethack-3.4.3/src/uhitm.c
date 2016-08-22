@@ -1846,8 +1846,18 @@ defaultvalue:
 			else if(!rn2(10)) amnesiamon = TRUE;
 		}
 	    if (obj && !rn2(20) && obj->opoisoned) {
-			obj->opoisoned = FALSE;
-			pline("The coating on your %s has worn off.", xname(obj));
+			if(obj->quan > 1){
+				struct obj *unpoisd = splitobj(obj, 1L);
+				unpoisd->opoisoned = FALSE;
+				pline("The coating on your %s has worn off.", xname(unpoisd));
+				obj_extract_self(unpoisd);	/* free from inv */
+				/* shouldn't merge */
+				unpoisd = hold_another_object(unpoisd, "You drop %s!",
+							  doname(unpoisd), (const char *)0);
+			} else {
+				obj->opoisoned = FALSE;
+				pline("The coating on your %s has worn off.", xname(obj));
+			}
 	    }
 	}
 	if(uclockwork && u.utemp >= BURNING_HOT && obj && is_metallic(obj) && !resists_fire(mon)){
