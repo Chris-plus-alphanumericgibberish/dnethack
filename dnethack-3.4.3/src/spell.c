@@ -3249,7 +3249,7 @@ spiriteffects(power, atme)
 				mdat = &mons[mndx];
 				if ((mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) != 0 ||
 					is_placeholder(mdat)) continue;
-				/* polyok rules out all M2_PNAME and M2_WERE's;
+				/* polyok rules out all MG_PNAME and MA_WERE's;
 				   select_newcham_form might deliberately pick a player
 				   character type, so we can't arbitrarily rule out all
 				   human forms any more */
