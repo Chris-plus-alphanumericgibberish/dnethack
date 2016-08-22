@@ -40,23 +40,29 @@ register struct obj *otmp;
     register struct obj *best = (struct obj *)0;
 
     if (otmp->oclass != ARMOR_CLASS) return FALSE;
-
-    if (cantweararm(mtmp->data) &&
-        !(is_cloak(otmp) && mtmp->data->msize == MZ_SMALL))
-	return FALSE;
     
-    if (is_shirt(otmp) && (mtmp->misc_worn_check & W_ARM))
+    if (is_suit(otmp) && (!Is_dragon_scales(otmp) && (!arm_match(mtmp->data, otmp) || (otmp->objsize != mtmp->data->msize &&
+				!(is_elven_armor(otmp) && abs(otmp->objsize - mtmp->data->msize) <= 1))))
+	) return FALSE;
+    
+    if (is_shirt(otmp) && (otmp->objsize != mtmp->data->msize || !shirt_match(mtmp->data,otmp) || (mtmp->misc_worn_check & W_ARM)))
+        return FALSE;
+    
+    if (is_cloak(otmp) && ((abs(otmp->objsize - mtmp->data->msize) > 1) || !shirt_match(mtmp->data,otmp)))
+        return FALSE;
+    
+    if (is_helmet(otmp) && (!has_head(mtmp->data) || otmp->objsize != mtmp->data->msize || !helm_match(mtmp->data,otmp)) && !is_flimsy(obj))
         return FALSE;
     
     if (is_shield(otmp) &&
-        (mtmp == &youmonst) ? (uwep && bimanual(uwep)) 
-	                    : (MON_WEP(mtmp) && bimanual(MON_WEP(mtmp))))
+        (mtmp == &youmonst) ? (uwep && bimanual(uwep,youracedata)) 
+	                    : (MON_WEP(mtmp) && bimanual(MON_WEP(mtmp),mtmp->data)))
 	return FALSE;
     
-    if (is_gloves(otmp) && nohands(mtmp->data)) return FALSE;
+    if (is_gloves(otmp) && (otmp->objsize != mtmp->data->msize || !can_wear_gloves(mtmp->data))) return FALSE;
     
     if (is_boots(otmp) &&
-        (slithy(mtmp->data) || mtmp->data->mlet == S_CENTAUR))
+        (otmp->objsize != mtmp->data->msize || !can_wear_boots(mtmp->data)))
 	return FALSE;
     
     if (is_helmet(otmp) &&
@@ -159,7 +165,7 @@ boolean check_if_better;
 	{
 	    /* Check if you've got one.
 	       If you DO, don't hoard it. */
-            register struct obj *otmp2;
+        register struct obj *otmp2;
 	    for(otmp2 = mtmp->minvent; otmp2; otmp2 = otmp2->nobj)
 	        if (otmp2 != otmp && (otmp->otyp == otmp2->otyp ||
 	            (otmp->otyp == FOOD_CLASS && otmp2->otyp == FOOD_CLASS))
@@ -696,7 +702,7 @@ int after, udist, whappr;
 	    }
 	}
 
-	/* follow player if appropriate */
+	/* follow player if appropriate, or move to attack nearby enemies */
 	if (gtyp == UNDEF ||
 	    (gtyp != DOGFOOD && gtyp != APPORT && monstermoves < edog->hungrytime)) {
 		gx = u.ux;
