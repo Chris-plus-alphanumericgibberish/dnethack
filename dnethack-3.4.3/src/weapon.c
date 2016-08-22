@@ -2666,6 +2666,11 @@ const struct def_skill *class_skill;
 	    if (OLD_P_SKILL(skill) == P_ISRESTRICTED)	/* skill pre-set */
 			OLD_P_SKILL(skill) = P_UNSKILLED;
 	}
+
+	/* High potential fighters already know how to use their hands. */
+	if (OLD_P_MAX_SKILL(P_BARE_HANDED_COMBAT) > P_EXPERT)
+	    OLD_P_SKILL(P_BARE_HANDED_COMBAT) = P_BASIC;
+	
 	/*
 	 * Make sure we haven't missed setting the max on a skill
 	 * & set advance
