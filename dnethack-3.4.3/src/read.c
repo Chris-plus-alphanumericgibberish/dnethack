@@ -202,6 +202,27 @@ doread()
 			pline(silly_thing_to, "read");
 			return(0);
 		}
+    } else if(scroll->oartifact && scroll->oartifact == ART_ENCYCLOPEDIA_GALACTICA){
+      const char *line;
+      char buf[BUFSZ];
+
+      line = getrumor(bcsign(scroll), buf, TRUE);
+      if (!*line)
+        line = "NetHack rumors file closed for renovation.";
+
+      pline("%s:", Tobjnam(scroll, "display"));
+      verbalize("%s", line);
+      return 1;
+    } else if(scroll->oartifact && scroll->oartifact == ART_LOG_OF_THE_CURATOR){
+      int oindx = 1 + rn2(NUM_OBJECTS - 1);
+      if(objects[oindx].oc_name_known){
+        makeknown(oindx);
+        You("study the pages of %s, you learn to recognize %s!", xname(scroll),
+            obj_typename(oindx));
+      } else {
+        You("study the pages of %s, but you already can recognize that.", xname(scroll));
+      }
+      return 1;
 	} else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
 		if(! (u.wardsknown & scroll->ovar1) ){
@@ -604,7 +625,7 @@ int curse_bless;
 
 	    /* destruction depends on current state, not adjustment */
 	    if (obj->spe > (6-rnl(7)) || obj->spe <= -5) {
-			if(obj->oartifact != ART_ANNULUS){
+			if(!obj->oartifact){
 				Your("%s %s momentarily, then %s!",
 					 xname(obj), otense(obj,"pulsate"), otense(obj,"explode"));
 				if (is_on) Ring_gone(obj);
