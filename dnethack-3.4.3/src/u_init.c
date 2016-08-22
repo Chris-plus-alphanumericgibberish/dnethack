@@ -1421,7 +1421,7 @@ u_init()
 	
 	u.ukinghill = 0;
 	u.protean = 0;
-	u.divetimer = 0;
+	u.divetimer = (ACURR(A_CON))/3;
 	
 	u.uhouse = 0;
 	
