@@ -426,7 +426,31 @@ dosounds()
 		    "someone say \"No more woodchucks!\"",
 		    "a loud ZOT!"		/* both rec.humor.oracle */
 	    };
-	    You_hear1(ora_msg[rn2(3)+hallu*2]);
+		int messagen;
+		messagen = rn2(3)+hallu*2;
+	    You_hear1(ora_msg[messagen]);
+		if(messagen == 3){
+			makemon(&mons[PM_WOODCHUCK], 0, 0,MM_ADJACENTOK|NO_MINVENT);
+		} else if(messagen == 4){
+			struct monst *tmpm;
+			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+				if(tmpm->data == &mons[PM_WOODCHUCK]){
+					if (resists_death(tmpm)) {
+						// if (canseemon(tmpm))
+							// pline("%s seems no deader than before.", Monnam(tmpm));
+					} else if (!(resists_magm(tmpm) || resist(tmpm, 0, 0, FALSE))) {
+							tmpm->mhp = -1;
+						monkilled(tmpm, "", AD_SPEL);
+			break;
+					}
+				}
+			}
+			if(!tmpm){ /*pointer is stale, but still nonzero*/
+				if(youmonst.data == &mons[PM_WOODCHUCK]){
+					You("have an out of body experience."); //You are hallucinating if you got this message
+				}
+			}
+		}
 	}
 	return;
     }
