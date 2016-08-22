@@ -904,7 +904,7 @@ pick_council_seal()
 	
 	for(i = 0; i < (QUEST_SPIRITS-FIRST_SEAL); i++){
 		seal_flag = 0x1L << i;
-		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && (u.sealsUsed&seal_flag || u.specialSealsActive&SEAL_NUMINA) && u.sealTimeout[i] < moves ){
+		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && (u.sealsUsed&seal_flag) && u.sealTimeout[i] < moves ){
 			Sprintf(buf,	"%s%s", sealNames[i], sealTitles[i]);
 			any.a_int = i+FIRST_SEAL;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
