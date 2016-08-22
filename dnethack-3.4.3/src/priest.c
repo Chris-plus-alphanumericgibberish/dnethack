@@ -324,12 +324,10 @@ char *pname;		/* caller-supplied output buffer */
 		/* use epri */
 		if (mon->mtame && mon->data == &mons[PM_ANGEL])
 			Strcat(pname, "guardian ");
-		// if (mon->data != &mons[PM_ALIGNED_PRIEST] &&
-				// mon->data != &mons[PM_HIGH_PRIEST] &&
-				// mon->data != &mons[PM_ELDER_PRIEST]) {
-			// Strcat(pname, what);
-			// Strcat(pname, " ");
-		// }
+		if (mon->data == &mons[PM_ANGEL]) {
+			Strcat(pname, what);
+			Strcat(pname, " ");
+		}
 		if (mon->data != &mons[PM_ANGEL]) {
 			if (!mon->ispriest && EPRI(mon)->renegade)
 				Strcat(pname, "renegade ");
