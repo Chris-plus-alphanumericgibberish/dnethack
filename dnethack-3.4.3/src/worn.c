@@ -75,7 +75,10 @@ long mask;
 				obj->ovar1 |= u.spirit[i];
 			}
 		}
-	}
+	} else if(obj && obj->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER){
+      if(P_UNSKILLED == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_BASIC;
+      if(P_BASIC     == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_SKILLED;
+    }
 	
 	if ((mask & (W_ARM|I_SPECIAL)) == (W_ARM|I_SPECIAL)) {
 	    /* restoring saved game; no properties are conferred via skin */
@@ -162,6 +165,10 @@ register struct obj *obj;
 
 	if (!obj) return;
 	if (obj == uwep || obj == uswapwep) u.twoweap = 0;
+	if (obj->oartifact && obj->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER){
+      if(P_BASIC   == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_UNSKILLED;
+      if(P_SKILLED == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_BASIC;
+    }
 	for(wp = worn; wp->w_mask; wp++)
 	    if(obj == *(wp->w_obj)) {
 		*(wp->w_obj) = 0;
@@ -183,6 +190,10 @@ register struct obj *obj;
 		} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 			for(p = 0; p < 5; p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
 		} else u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
+		if(obj->oartifact == ART_GAUNTLETS_OF_THE_BERSERKER){
+//        adj_abon(uarmg, -uarmg->ovar1);
+          uarmg->ovar1 = 0;
+        }
 		obj->owornmask &= ~wp->w_mask;
 		if (obj->oartifact)
 		    set_artifact_intrinsic(obj, 0, wp->w_mask);
