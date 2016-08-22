@@ -165,6 +165,7 @@ struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 
 	if (mtmp->mundetected && !canseemon(mtmp) &&
 		!glyph_is_warning(glyph_at(u.ux+u.dx,u.uy+u.dy)) &&
+		!MATCH_WARN_OF_MON(mtmp) &&
 		(hides_under(mtmp->data) || mtmp->data->mlet == S_EEL)) {
 	    mtmp->mundetected = mtmp->msleeping = 0;
 	    newsym(mtmp->mx, mtmp->my);
