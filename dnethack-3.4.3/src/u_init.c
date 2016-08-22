@@ -2560,6 +2560,12 @@ register struct trobj *trop;
 			obj = mksobj(otyp, TRUE, FALSE);
 			if(obj->otyp == POT_BLOOD) 
 				obj->corpsenm = PM_HUMAN;
+			if(obj->oclass == WEAPON_CLASS || obj->oclass == ARMOR_CLASS) obj->objsize = youracedata->msize;
+			if(obj->oclass == ARMOR_CLASS){
+				if(is_suit(obj)) obj->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
+				else if(is_helmet(obj)) obj->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
+				else if(is_shirt(obj)) obj->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
+			}
 			/* Don't start with +0 or negative rings */
 			if (objects[obj->otyp].oc_charged && obj->spe <= 0)
 				obj->spe = rne(3);
