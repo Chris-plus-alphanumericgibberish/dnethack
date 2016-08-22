@@ -107,13 +107,14 @@ register struct obj *obj;
 				 is_missile(obj) ||
 				 (is_pole(obj)
 #ifdef STEED
-				  && !u.usteed
+				&& !u.usteed
 #endif
-				  && obj->otyp != AKLYS
-				  && obj->otyp != FORCE_PIKE
-				  && obj->oartifact != ART_WEBWEAVER_S_CROOK
-				  && obj->oartifact != ART_HEARTCLEAVER
-				  && obj->oartifact != ART_SOL_VALTIVA
+				&& obj->otyp != AKLYS
+				&& obj->otyp != FORCE_PIKE
+				&& obj->oartifact != ART_WEBWEAVER_S_CROOK
+				&& obj->oartifact != ART_HEARTCLEAVER
+				&& obj->oartifact != ART_SOL_VALTIVA
+				&& obj->oartifact != ART_SHADOWLOCK
 				  && obj->oartifact != ART_PEN_OF_THE_VOID)) :
 				!is_weptool(obj);
 	} else
