@@ -298,6 +298,9 @@ find_to_hit_rolls(mtmp,ptmp,pweptmp,ptchtmp)
 	if (uwep) {
 		weptmp += hitval(uwep, mtmp);
 		weptmp += weapon_hit_bonus(uwep);
+		if(uwep->objsize - youracedata->msize > 0){
+			weptmp += -4*(uwep->objsize - youracedata->msize);
+		}
 		if(is_lightsaber(uwep) && uwep->lamplit){
 			if(u.fightingForm == FFORM_SHII_CHO && MON_WEP(mtmp) && is_lightsaber(MON_WEP(mtmp)) && MON_WEP(mtmp)->lamplit){
 				weptmp -= 5;
