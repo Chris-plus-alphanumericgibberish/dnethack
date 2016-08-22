@@ -3189,8 +3189,8 @@ spiriteffects(power, atme)
 			//else
 			useup(uwep);
 			if(u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH,TRUE);
-			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
-			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
+			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
 			
 			while(sx != u.ux && sy != u.uy){
 				sx -= u.dx;
