@@ -2830,7 +2830,7 @@ int skill;
 	case P_UNSKILLED:   hit_bon = -4; break;
 	case P_BASIC:       hit_bon =  0; break;
 	case P_SKILLED:     hit_bon =  2; break;
-	case P_EXPERT:      hit_bon =  3; break;
+	case P_EXPERT:      hit_bon =  5; break;
     }
 
     if (dex < 4)
@@ -4707,7 +4707,12 @@ int damage, tell;
 	    case SCROLL_CLASS:	alev =  9;	 break;
 	    case POTION_CLASS:	alev =  6;	 break;
 	    case RING_CLASS:	alev =  5;	 break;
-	    default:		alev = u.ulevel; break;	/* spell */
+	    default:/* spell */
+			alev = u.ulevel;
+			alev += (ACURR(A_CHA)-11);
+			if(Luck > 0) alev += rnd(Luck);
+			else if(Luck < 0) alev -= rnd(-1*Luck);
+		break;
 	}
 	/* defense level */
 	dlev = (int)mtmp->m_lev;
