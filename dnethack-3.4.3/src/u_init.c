@@ -2197,8 +2197,13 @@ u_init()
 				attkptr->adtyp = AD_PHYS;
 			break;
 		}
-		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
-		attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
+		if(attkptr->adtyp == AD_VBLD){
+			attkptr->damn = d(1,3);	
+			attkptr->damd = rn2(3)+1;
+		} else {
+			attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
+			attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
+		}
 	}
 
 	/* attacks...? */
@@ -2350,60 +2355,116 @@ u_init()
 	 * a number of complete trainwreck monsters at first, but
 	 * every so often something will dial up nasty stuff
 	 */
-	shambler->mflags1 = 0;
+	shambler->mflagsm = 0;
+	shambler->mflagst = 0;
+	shambler->mflagsb = 0;
+	shambler->mflagsg = 0;
+	shambler->mflagsa = 0;
+	shambler->mflagsv = 0;
+	
+	stumbler->mflagsm = 0;
+	stumbler->mflagst = 0;
+	stumbler->mflagsb = 0;
+	stumbler->mflagsg = 0;
+	stumbler->mflagsa = 0;
+	stumbler->mflagsv = 0;
+	
+	wanderer->mflagsm = 0;
+	wanderer->mflagst = 0;
+	wanderer->mflagsb = 0;
+	wanderer->mflagsg = 0;
+	wanderer->mflagsa = 0;
+	wanderer->mflagsv = 0;
 	for (i = 0; i < rnd(17); i++) {
-		shambler->mflags1 |= (1 << rn2(33));		/* trainwreck this way :D */
+		shambler->mflagsm |= (1 << rn2(33));		/* trainwreck this way :D */
 	}
 	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflags1 |= (1 << rn2(33));
+		stumbler->mflagsm |= (1 << rn2(33));
 	}
 	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflags1 |= (1 << rn2(33));
-	}
-	shambler->mflags1 &= ~M1_UNSOLID;			/* no ghosts */
-	shambler->mflags1 &= ~M1_WALLWALK;			/* no wall-walkers */
-	stumbler->mflags1 &= ~M1_UNSOLID;			/* no ghosts */
-	stumbler->mflags1 &= ~M1_WALLWALK;			/* no wall-walkers */
-	wanderer->mflags1 &= ~M1_UNSOLID;			/* no ghosts */
-	wanderer->mflags1 &= ~M1_WALLWALK;			/* no wall-walkers */
-
-	shambler->mflags2 = M2_NOPOLY | M2_HOSTILE;		/* Don't let the player be one of these yet. */
-	stumbler->mflags2 = M2_NOPOLY | M2_HOSTILE;		/* Don't let the player be one of these yet. */
-	wanderer->mflags2 = M2_NOPOLY | M2_HOSTILE;		/* Don't let the player be one of these yet. */
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflags2 |= (1 << rn2(31));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflags2 |= (1 << rn2(31));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflags2 |= (1 << rn2(31));
-	}
-	shambler->mflags2 &= ~M2_MERC;				/* no guards */
-	shambler->mflags2 &= ~M2_PEACEFUL;			/* no peacefuls */
-	shambler->mflags2 &= ~M2_WERE;				/* no lycanthropes */
-	shambler->mflags2 &= ~M2_PNAME;				/* not a proper name */
-
-	stumbler->mflags2 &= ~M2_MERC;				/* no guards */
-	stumbler->mflags2 &= ~M2_PEACEFUL;			/* no peacefuls */
-	stumbler->mflags2 &= ~M2_WERE;				/* no lycanthropes */
-	stumbler->mflags2 &= ~M2_PNAME;				/* not a proper name */
-
-	wanderer->mflags2 &= ~M2_MERC;				/* no guards */
-	wanderer->mflags2 &= ~M2_PEACEFUL;			/* no peacefuls */
-	wanderer->mflags2 &= ~M2_WERE;				/* no lycanthropes */
-	wanderer->mflags2 &= ~M2_PNAME;				/* not a proper name */
-
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflags2 |= (0x100 << rn2(7));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflags2 |= (0x100 << rn2(7));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflags2 |= (0x100 << rn2(7));
+		wanderer->mflagsm |= (1 << rn2(33));
 	}
 	
+	for (i = 0; i < rnd(17); i++) {
+		shambler->mflagst |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		stumbler->mflagst |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		wanderer->mflagst |= (1 << rn2(33));
+	}
+	
+	for (i = 0; i < rnd(17); i++) {
+		shambler->mflagsb |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		stumbler->mflagsb |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		wanderer->mflagsb |= (1 << rn2(33));
+	}
+	
+	for (i = 0; i < rnd(17); i++) {
+		shambler->mflagsg |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		stumbler->mflagsg |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		wanderer->mflagsg |= (1 << rn2(33));
+	}
+	
+	for (i = 0; i < rnd(17); i++) {
+		shambler->mflagsa |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		stumbler->mflagsa |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		wanderer->mflagsa |= (1 << rn2(33));
+	}
+	
+	for (i = 0; i < rnd(17); i++) {
+		shambler->mflagsv |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		stumbler->mflagsv |= (1 << rn2(33));
+	}
+	for (i = 0; i < rnd(17); i++) {
+		wanderer->mflagsv |= (1 << rn2(33));
+	}
+	
+	// shambler->mflagsb &= ~MB_UNSOLID;			/* no ghosts */
+	// shambler->mflagsm &= ~MM_WALLWALK;			/* no wall-walkers */
+	// stumbler->mflagsb &= ~MB_UNSOLID;			/* no ghosts */
+	// stumbler->mflagsm &= ~MM_WALLWALK;			/* no wall-walkers */
+	// wanderer->mflagsb &= ~MB_UNSOLID;			/* no ghosts */
+	// wanderer->mflagsm &= ~MM_WALLWALK;			/* no wall-walkers */
+
+	shambler->mflagsg = MG_NOPOLY;		/* Don't let the player be one of these yet. */
+	stumbler->mflagsg = MG_NOPOLY;		/* Don't let the player be one of these yet. */
+	wanderer->mflagsg = MG_NOPOLY;		/* Don't let the player be one of these yet. */
+	
+	shambler->mflagst = MT_HOSTILE;
+	stumbler->mflagst = MT_HOSTILE;
+	wanderer->mflagst = MT_HOSTILE;
+
+	shambler->mflagsg &= ~MG_MERC;				/* no guards */
+	shambler->mflagst &= ~MT_PEACEFUL;			/* no peacefuls */
+	shambler->mflagsa &= ~MA_WERE;				/* no lycanthropes */
+	shambler->mflagsg &= ~MG_PNAME;				/* not a proper name */
+
+	stumbler->mflagsg &= ~MG_MERC;				/* no guards */
+	stumbler->mflagst &= ~MT_PEACEFUL;			/* no peacefuls */
+	stumbler->mflagsa &= ~MA_WERE;				/* no lycanthropes */
+	stumbler->mflagsg &= ~MG_PNAME;				/* not a proper name */
+
+	wanderer->mflagsg &= ~MG_MERC;				/* no guards */
+	wanderer->mflagst &= ~MT_PEACEFUL;			/* no peacefuls */
+	wanderer->mflagsa &= ~MA_WERE;				/* no lycanthropes */
+	wanderer->mflagsg &= ~MG_PNAME;				/* not a proper name */
+
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
 	switch(rnd(6)){
 		case 1:
