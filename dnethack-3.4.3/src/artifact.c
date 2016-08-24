@@ -2007,7 +2007,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		// if(u.uen >= 10) u.uen -= 10;
 	}
 	
-	if (otmp->oartifact == ART_ICONOCLAST && mdef->data->mlet == S_ANGEL ) *dmgptr += 9;
+	if (otmp->oartifact == ART_ICONOCLAST && is_angel(mdef->data) ) *dmgptr += 9;
 
 	if(Role_if(PM_PRIEST)) *dmgptr += d(1,u.ulevel); //priests do extra damage when attacking with artifacts
 
