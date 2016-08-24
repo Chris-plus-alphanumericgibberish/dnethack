@@ -446,8 +446,6 @@
 				   (ptr)->mlet != S_GOLEM && \
 				   (ptr)->mlet != S_KETER && \
 				   (ptr)->mlet != S_MIMIC && \
-				   (ptr)->mlet != S_DEMON && \
-				   (ptr)->mlet != S_ANGEL && \
 				   !is_clockwork(ptr) && \
 				   (!is_undead(ptr) || is_vampire(ptr)))
 
