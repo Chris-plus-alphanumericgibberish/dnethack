@@ -36,44 +36,46 @@
 #define S_XAN		24
 #define S_LIGHT		25
 #define S_ZRUTY		26
-#define S_ANGEL		27
-#define S_BAT		28
-#define S_CENTAUR	29
-#define S_DRAGON	30
-#define S_ELEMENTAL	31
-#define S_FUNGUS	32
-#define S_GNOME		33
-#define S_GIANT		34
-#define S_JABBERWOCK	36
-#define S_KETER		37
-#define S_LICH		38
-#define S_MUMMY		39
-#define S_NAGA		40
-#define S_OGRE		41
-#define S_PUDDING	42
-#define S_QUANTMECH	43
-#define S_RUSTMONST	44
-#define S_SNAKE		45
-#define S_TROLL		46
-#define S_UMBER		47
-#define S_VAMPIRE	48
-#define S_WRAITH	49
-#define S_XORN		50
-#define S_YETI		51
-#define S_ZOMBIE	52
-#define S_HUMAN		53
-#define S_GHOST		54
-#define S_SHADE		55
-#define S_GOLEM		56
-#define S_DEMON		57
-#define S_EEL		58
-#define S_LIZARD	59
-#define S_PLANT		60
+#define S_LAW_ANGEL		27
+#define S_NEU_ANGEL		28
+#define S_CHA_ANGEL		29
+#define S_BAT		30
+#define S_CENTAUR	31
+#define S_DRAGON	32
+#define S_ELEMENTAL	33
+#define S_FUNGUS	34
+#define S_GNOME		35
+#define S_GIANT		36
+#define S_JABBERWOCK	38
+#define S_KETER		39
+#define S_LICH		40
+#define S_MUMMY		41
+#define S_NAGA		42
+#define S_OGRE		43
+#define S_PUDDING	44
+#define S_QUANTMECH	45
+#define S_RUSTMONST	46
+#define S_SNAKE		47
+#define S_TROLL		48
+#define S_UMBER		49
+#define S_VAMPIRE	50
+#define S_WRAITH	51
+#define S_XORN		52
+#define S_YETI		53
+#define S_ZOMBIE	54
+#define S_HUMAN		55
+#define S_GHOST		56
+#define S_SHADE		57
+#define S_GOLEM		58
+#define S_DEMON		59
+#define S_EEL		60
+#define S_LIZARD	61
+#define S_PLANT		62
 
-#define S_WORM_TAIL	61
-#define S_MIMIC_DEF	62
+#define S_WORM_TAIL	63
+#define S_MIMIC_DEF	64
 
-#define MAXMCLASSES 63	/* number of monster classes */
+#define MAXMCLASSES 65	/* number of monster classes */
 
 #if 0	/* moved to decl.h so that makedefs.c won't see them */
 extern const char def_monsyms[MAXMCLASSES];	/* default class symbols */
@@ -110,7 +112,11 @@ extern uchar monsyms[MAXMCLASSES];		/* current class symbols */
 #define DEF_XAN		'x'
 #define DEF_LIGHT	'y'
 #define DEF_ZRUTY	'z'
-#define DEF_ANGEL	'A'
+#define DEF_LAW_ANGEL	'7'
+//0x8F
+#define DEF_NEU_ANGEL	'0'
+//0x8E
+#define DEF_CHA_ANGEL	'A'
 #define DEF_BAT		'B'
 #define DEF_CENTAUR	'C'
 #define DEF_DRAGON	'D'

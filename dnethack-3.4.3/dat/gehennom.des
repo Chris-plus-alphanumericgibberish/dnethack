@@ -3079,10 +3079,10 @@ MONSTER:'y',"black light", place[8], asleep
 MONSTER:'y',"black light", place[8], asleep
 
 
-MONSTER:'A',"Aleax", place[9], hostile, "mad aleax"
-MONSTER:'A',"Aleax", place[9], hostile, "mad aleax"
-MONSTER:'A',"Archon", place[9], hostile, "mad archon", asleep
-MONSTER:'A',"Aleax", place[9], hostile, "mad aleax"
+MONSTER:'7',"Aleax", place[9], hostile
+MONSTER:'7',"Aleax", place[9], hostile
+MONSTER:'7',"Throne Archon", place[9], hostile, asleep
+MONSTER:'7',"Aleax", place[9], hostile
 
 
 #Some random objects

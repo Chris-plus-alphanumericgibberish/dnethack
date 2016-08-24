@@ -238,7 +238,7 @@
 #define is_domestic(ptr)	(((ptr)->mflagst & MT_DOMESTIC) != 0L)
 #define is_demon(ptr)		(((ptr)->mflagsa & MA_DEMON) != 0L)
 #define is_keter(ptr)		((ptr)->mlet == S_KETER)
-#define is_angel(ptr)		((ptr)->mlet == S_ANGEL)
+#define is_angel(ptr)		((((ptr)->mflagsa & MA_MINION) != 0L) && ((ptr)->mlet == S_LAW_ANGEL || (ptr)->mlet == S_NEU_ANGEL || (ptr)->mlet == S_CHA_ANGEL))
 #define is_auton(ptr)		(	(ptr) == &mons[PM_MONOTON] ||\
 								(ptr) == &mons[PM_DUTON] ||\
 								(ptr) == &mons[PM_TRITON] ||\
@@ -360,7 +360,7 @@
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
 				  (ptr) == &mons[PM_DANCING_FLAME] ||\
 				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
-				 ((ptr) == &mons[PM_SOLAR]|| \
+				 ((ptr) == &mons[PM_LIGHT_ARCHON]|| \
 				  (ptr) == &mons[PM_LUCIFER]) ? 7 : 0)
 /*	[note: the light ranges above were reduced to 1 for performance...] */
 #define likes_lava(ptr)		(ptr == &mons[PM_FIRE_ELEMENTAL] || \

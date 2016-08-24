@@ -305,8 +305,8 @@ struct monst *mtmp;
 			(mtmp->data->mlet == S_TRAPPER && complete >= 4  && /*This one means "is a metroid", which are being counted as energions for this*/
 				mtmp->data != &mons[PM_TRAPPER] &&
 				mtmp->data != &mons[PM_LURKER_ABOVE]) ||
-			(mtmp->data->mlet == S_ANGEL && complete == 7) ||
-			(mtmp->data->mlet == S_KETER && complete == 7) ||
+			(is_angel(mtmp->data) && complete == 7) ||
+			(is_keter(mtmp->data) && complete == 7) ||
 			(is_demon(mtmp->data) && complete == 7) ||
 			(is_auton(mtmp->data) && complete == 7) ||
 			(mtmp->data->mlet == S_IMP && complete == 7)
@@ -400,8 +400,8 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_EYE_OF_DOOM] ||
 			mtmp->data == &mons[PM_SON_OF_TYPHON] ||
 			is_golem(mtmp->data) ||
-			mtmp->data->mlet == S_ANGEL ||
-			mtmp->data->mlet == S_KETER ||
+			is_angel(mtmp->data) ||
+			is_keter(mtmp->data) ||
 			mtmp->data->mlet == S_QUANTMECH ||
 			mtmp->data->mlet == S_IMP ||
 			is_demon(mtmp->data));

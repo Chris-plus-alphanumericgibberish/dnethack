@@ -1172,7 +1172,7 @@ register struct monst *mtmp;
 		 * All monsters can wield the remaining weapons.
 		 */
 		if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
-			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON])
+			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_THRONE_ARCHON])
 		    && (objects[pwep[i]].oc_material != SILVER
 			|| !hates_silver(mtmp->data))
 		    && (objects[pwep[i]].oc_material != IRON
@@ -1417,7 +1417,7 @@ register struct monst *mtmp;
 	    if (hwep[i] == CORPSE && !(mtmp->misc_worn_check & W_ARMG))
 		continue;
 	    if (((strong && !wearing_shield)
-			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON])
+			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_THRONE_ARCHON])
 		    && (objects[hwep[i]].oc_material != SILVER
 			|| !hates_silver(mtmp->data))
 		    && (objects[hwep[i]].oc_material != IRON

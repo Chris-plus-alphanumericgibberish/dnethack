@@ -648,12 +648,16 @@ DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, CLR_YELLOW),
  */
 GLOVES("crystal gauntlets", "glass gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 50, 400, 7, 0, GLASS, CLR_CYAN),
+GLOVES("iron gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   4, 2, 25, 400, 8, 0, IRON, HI_METAL),
+GLOVES("bronze gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   0, 1, 25, 400, 8, 0, COPPER, HI_COPPER),
 GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2,  5, 400, 8, 0, MITHRIL, HI_METAL),
 GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 15, 50,  8, 0, PLASTIC, CLR_WHITE),
 GLOVES("leather gloves", "old gloves",
-		0, 0,  0,	  12, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
+		0, 0,  0,	   8, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of fumbling", "padded gloves",
 		0, 1,  FUMBLING,   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of power", "riding gloves",
@@ -668,6 +672,8 @@ BOOTS("low boots", "walking shoes",
 		0, 0,  0,	  25, 2, 10,  8,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("iron shoes", "hard shoes",
 		0, 0,  0,	   7, 2, 50, 16,  8, 0, IRON, HI_METAL),
+BOOTS("bronze boots", "hard boots",
+		0, 0,  0,	   0, 1, 75, 16,  7, 1, COPPER, HI_COPPER),
 BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 25, 32,  8, 1, PLASTIC, CLR_WHITE),
 BOOTS("high boots", "jackboots",

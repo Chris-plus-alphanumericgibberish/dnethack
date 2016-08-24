@@ -521,7 +521,7 @@ unsigned int type;
 
        case PM_TITAN:
            return (rn2(2) ? DROP_BOULDER : LIGHTNING);
-       case PM_ARCHON:
+       case PM_THRONE_ARCHON:
            return (rn2(2) ? SUMMON_ANGEL : LIGHTNING);
        case PM_KI_RIN:
            return FIRE_PILLAR;

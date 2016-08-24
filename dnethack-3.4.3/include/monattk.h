@@ -123,7 +123,7 @@
 #define AD_JAILER	77	/* Sets Lucifer to apear and drops third key of law when killed */
 #define AD_AXUS		78 /* Multi-element counterattack, angers 'tons */
 #define AD_UNKNWN	79	/* Priest of an unknown God */
-#define AD_SOLR		80	/* Solar's silver arrow attack */
+#define AD_SOLR		80	/* Light Archon's silver arrow attack */
 #define AD_CHKH		81 /* Chokhmah Sephirah's escalating damage attack */
 #define AD_HODS		82 /* Hod Sephirah's mirror attack */
 #define AD_CHRN		83 /* Nightmare's horn attack */

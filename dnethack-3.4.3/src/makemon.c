@@ -1588,7 +1588,9 @@ register struct monst *mtmp;
 			break;}
 			}
 		break;}
-	    case S_ANGEL:
+	    case S_LAW_ANGEL:
+	    case S_NEU_ANGEL:
+	    case S_CHA_ANGEL:
 		{
 		int spe2;
 /*			if(ptr == &mons[PM_DESTROYER]){
@@ -1649,6 +1651,178 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, SHORT_SWORD);
 				(void)mongets(mtmp, SHORT_SWORD);
 				return;//no random stuff
+			} else if(ptr == &mons[PM_JUSTICE_ARCHON]){
+				otmp = mksobj(GENTLEWOMAN_S_DRESS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(HELMET, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(IRON_GAUNTLETS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(KITE_SHIELD, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+			} else if(ptr == &mons[PM_SWORD_ARCHON]){
+					//Nothing
+			} else if(ptr == &mons[PM_SHIELD_ARCHON]){
+				otmp = mksobj(SCALE_MAIL, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(HELMET, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(IRON_GAUNTLETS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(IRON_SHOES, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(LANCE, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(WAR_HAMMER, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(KITE_SHIELD, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+				otmp->spe = 3;
+			    (void) mpickobj(mtmp, otmp);
+				
+			} else if(ptr == &mons[PM_TRUMPET_ARCHON]){
+				otmp = mksobj(LEATHER_CLOAK, FALSE, FALSE);
+			    bless(otmp);
+				otmp->spe = 3;
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(LEATHER_GLOVES, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
+			    bless(otmp);
+				otmp->spe = 3;
+			    otmp->oerodeproof = TRUE;
+			    (void) mpickobj(mtmp, otmp);
+				
+			} else if(ptr == &mons[PM_THRONE_ARCHON]){
+				int artnum = rn2(8);
+	
+			    /* create minion stuff; can't use mongets */
+			    otmp = mksobj(angelwepsbase[artnum], FALSE, FALSE);
+	
+			    /* make it special */
+				otmp = oname(otmp, artiname(angelweps[artnum]));
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+	
+			    otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
+			    otmp->cursed = FALSE;
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 0;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(find_gcirclet(), FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(BRONZE_GAUNTLETS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(BRONZE_BOOTS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+			} else if(ptr == &mons[PM_LIGHT_ARCHON]){
+				int artnum = rn2(8);
+	
+			    /* create minion stuff; can't use mongets */
+			    otmp = mksobj(angelwepsbase[artnum], FALSE, FALSE);
+	
+			    /* make it special */
+				otmp = oname(otmp, artiname(angelweps[artnum]));
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+	
+			    otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
+			    otmp->cursed = FALSE;
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 0;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(CRYSTAL_HELM, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(CRYSTAL_GAUNTLETS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
 			} else if(ptr == &mons[PM_MONADIC_DEVA]){
 				otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
 			    bless(otmp);
@@ -1742,7 +1916,7 @@ register struct monst *mtmp;
 			} else if(ptr == &mons[PM_GHAELE]){
 				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
 				(void)mongets(mtmp, KITE_SHIELD);
-				(void)mongets(mtmp, IRON_SHOES);
+				(void)mongets(mtmp, BRONZE_BOOTS);
 				(void)mongets(mtmp, HELMET);
 				(void)mongets(mtmp, TWO_HANDED_SWORD);
 			} else if(ptr == &mons[PM_TULANI]){
@@ -2196,8 +2370,8 @@ register struct monst *mtmp;
 		} else if(mm == PM_GITHYANKI_PIRATE){
 			(void)mongets(mtmp, TWO_HANDED_SWORD);
 			(void)mongets(mtmp, BRONZE_PLATE_MAIL);
-			(void)mongets(mtmp, LEATHER_GLOVES);
-			(void)mongets(mtmp, HIGH_BOOTS);
+			(void)mongets(mtmp, BRONZE_GAUNTLETS);
+			(void)mongets(mtmp, BRONZE_BOOTS);
 		}
 		break;
 	    case S_KETER:
@@ -2848,7 +3022,7 @@ register struct	monst	*mtmp;
 				mongets(mtmp, LONG_SWORD);
 				mongets(mtmp, BRONZE_PLATE_MAIL);
 				mongets(mtmp, HELMET);
-				mongets(mtmp, LEATHER_GLOVES);
+				mongets(mtmp, BRONZE_GAUNTLETS);
 			} else if(ptr == &mons[PM_GUARDIAN_NAGA] || ptr == &mons[PM_GUARDIAN_NAGA_HATCHLING]){
 				chance = rnd(10);
 				if(chance >= 7){
@@ -2977,6 +3151,35 @@ register struct	monst	*mtmp;
 #else
 		mkmonmoney(mtmp, (long) d(level_difficulty(), 30));
 #endif
+		break;
+		case S_LAW_ANGEL:
+		case S_NEU_ANGEL:
+		case S_CHA_ANGEL:
+			if(ptr == &mons[PM_WARDEN_ARCHON]){
+				otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(HELMET, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(IRON_GAUNTLETS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(IRON_SHOES, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
+			}
 		break;
 	    case S_DEMON:
 	    	/* moved here from m_initweap() because these don't
@@ -3956,7 +4159,9 @@ register int	mmflags;
 			}
 			}
 		break;
-		case S_ANGEL:
+		case S_LAW_ANGEL:
+		case S_NEU_ANGEL:
+		case S_CHA_ANGEL:
 			if(is_weeping(mtmp->data)){
 				mtmp->mvar1 = 0;
 				mtmp->mvar2 = 0;
@@ -4817,6 +5022,7 @@ rndmonst()
 		if (elemlevel && wrong_elem_type(ptr)) continue;
 		if (uncommon(mndx)) continue;
 		if (Inhell && (ptr->geno & G_NOHELL)) continue;
+		if (!In_endgame(&u.uz) && ((ptr->geno & (G_PLANES|G_HELL|G_NOHELL)) == G_PLANES)) continue;
 		ct = (int)(ptr->geno & G_FREQ) + align_shift(ptr);
 		if (ct < 0 || ct > 127)
 		    panic("rndmonst: bad count [#%d: %d]", mndx, ct);
@@ -4974,7 +5180,7 @@ char	class;
 int	spc;
 {
 	register int	first, last, num = 0;
-	int maxmlev, mask = (G_NOHELL | G_HELL | G_NOGEN | G_UNIQ) & ~spc;
+	int maxmlev, mask = (G_PLANES | G_NOHELL | G_HELL | G_NOGEN | G_UNIQ) & ~spc;
 
 	maxmlev = level_difficulty() >> 1;
 	if(class < 1 || class >= MAXMCLASSES) {

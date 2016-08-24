@@ -296,7 +296,7 @@ struct obj {
 			 (o)->otyp <= DRUM_OF_EARTHQUAKE)
 #define bimanual(otmp,ptr)	(otmp && (otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
-			 ptr != &mons[PM_ARCHON] && \
+			 ptr != &mons[PM_THRONE_ARCHON] && \
 			 (objects[otmp->otyp].oc_bimanual ? \
 				((ptr)->msize - otmp->objsize > 2):\
 				((ptr)->msize - otmp->objsize < -1))\
