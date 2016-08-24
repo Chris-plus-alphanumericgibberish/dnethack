@@ -1648,7 +1648,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (6,7)
 CONTAINER:'`',"statue",(4,7),uncursed,"Ghaele",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"large shield",contained,blessed,+3
+OBJECT:'[',"kite shield",contained,blessed,+3
 OBJECT:'[',"iron shoes",contained,blessed,+3
 OBJECT:'[',"helmet",contained,blessed,+3
 OBJECT:')',"two-handed sword",contained,blessed,+3
@@ -1675,7 +1675,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (6,1)
 CONTAINER:'`',"statue",(4,1),uncursed,"Ghaele",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"large shield",contained,blessed,+3
+OBJECT:'[',"kite shield",contained,blessed,+3
 OBJECT:'[',"iron shoes",contained,blessed,+3
 OBJECT:'[',"helmet",contained,blessed,+3
 OBJECT:')',"two-handed sword",contained,blessed,+3
