@@ -230,7 +230,7 @@ TRAP:"fire",random
 TRAP:random,random
 TRAP:random,random
 # Random monsters.
-MONSTER:'&',"Legion",place[0]
+MONSTER:'Z',"Legion",place[0]
 MONSTER:'Z',"human zombie",random
 MONSTER:'Z',"human zombie",random
 MONSTER:'Z',"human zombie",random
