@@ -638,20 +638,6 @@ A("The Grandmaster's Robe",	ROBE, /*double robe effect*/
 	0, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,0,(WSFX_PLUSSEV)),
 
-A("The Platinum Dragon Plate",	SILVER_DRAGON_SCALE_MAIL,/*heavier than normal, and causes spell penalties*/
-	(SPFX_RESTR|SPFX_INTEL),0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
-	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
-	0, A_LAWFUL, NON_PM, NON_PM, 9000L, 
-	0,0,0),
-
-A("The Chromatic Dragon Scales",	BLACK_DRAGON_SCALES,
-	(SPFX_RESTR|SPFX_INTEL),0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
-	NO_ATTK,	NO_DFNS,	NO_CARY,
-	0, A_CHAOTIC, NON_PM, NON_PM, 9000L, 
-	0,0,0),
-
 A("Beastmaster's Duster", LEATHER_JACKET, /*Needs encyc entry*/
 	(SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
@@ -1368,6 +1354,20 @@ A("The Kusanagi no Tsurugi",	LONG_SWORD, /*Needs encyc entry*/
   /*/////////////Special Monster Artifacts//////////////*/
  /*//Few of these count, since they are boss treasure//*/
 /*////////////////////////////////////////////////////*/
+
+A("The Platinum Dragon Plate",	SILVER_DRAGON_SCALE_MAIL,/*heavier than normal, and causes spell penalties*/
+	(SPFX_NOGEN|SPFX_RESTR),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
+	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
+	0, A_NONE, NON_PM, NON_PM, 9000L, 
+	0,0,0),
+
+A("The Chromatic Dragon Scales",	BLACK_DRAGON_SCALES,
+	(SPFX_NOGEN|SPFX_RESTR),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0, A_NONE, NON_PM, NON_PM, 9000L, 
+	0,0,0),
 
 A("The Eye of Vecna", EYEBALL,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_HSPDAM),0,

@@ -2577,6 +2577,11 @@ role_init()
 		else if(flags.questprogress==1) urole.lgod = AnachrononautLgod;
 	}
 
+	if(!Role_if(PM_CAVEMAN)){
+		//Caveman nemesis is regular unique for others
+		mons[PM_CHROMATIC_DRAGON].msound = MS_ROAR;
+	}
+
 	/* Fix up infravision */
 	if (mons[urace.malenum].mflagsv & MV_INFRAVISION) {
 	    /* although an infravision intrinsic is possible, infravision
