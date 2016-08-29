@@ -2336,7 +2336,7 @@ dosacrifice()
 		}
 	    }
 	} else {
-	    int nartifacts = nartifact_exist();
+	    int nartifacts = (int)(u.uconduct.wisharti + u.ugifts);
 		//pline("looking into an artifact gift.  %d currently exist. %d gifts have been given, on level %d, and your luck %d.", nartifacts, (int)u.ugifts, u.ulevel, (int)u.uluck);
 	    /* you were already in pretty good standing */
 	    /* The player can gain an artifact */
