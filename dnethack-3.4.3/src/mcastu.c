@@ -977,6 +977,14 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	ret = 1;
 
 	switch (mattk->adtyp) {
+		case AD_OONA:
+			switch(u.oonaenergy){
+				case AD_ELEC: goto elec_spell;
+				case AD_FIRE: goto fire_spell;
+				case AD_COLD: goto cold_spell;
+				default: pline("Bad Oona spell type?");
+			}
+		break;
 		case AD_RBRE:
 			switch(rnd(3)){
 				case 1: goto elec_spell;
@@ -2444,6 +2452,14 @@ castmm(mtmp, mdef, mattk)
 	ret = 1;
 
 	switch (mattk->adtyp) {
+		case AD_OONA:
+			switch(u.oonaenergy){
+				case AD_ELEC: goto elec_mm;
+				case AD_FIRE: goto fire_mm;
+				case AD_COLD: goto cold_mm;
+				default: pline("Bad Oona spell type?");
+			}
+		break;
 		case AD_RBRE:
 			switch(rnd(3)){
 				case 1: goto elec_mm;
@@ -2646,6 +2662,8 @@ buzzmu(mtmp, mattk, ml)		/* monster uses spell (ranged) */
 				type = AD_FIRE;
 			break;
 		}
+	} else if(type == AD_OONA){
+		type = u.oonaenergy;
 	}
 
 	
@@ -2697,6 +2715,8 @@ buzzmm(magr, mdef, mattk, ml)		/* monster uses spell (ranged) */
 				type = AD_FIRE;
 			break;
 		}
+	} else if(type == AD_OONA){
+		type = u.oonaenergy;
 	}
 
 	
@@ -2828,6 +2848,14 @@ castum(mtmp, mattk)
 	ret = 1;
 
 	switch (mattk->adtyp) {
+		case AD_OONA:
+			switch(u.oonaenergy){
+				case AD_ELEC: goto elec_um;
+				case AD_FIRE: goto fire_um;
+				case AD_COLD: goto cold_um;
+				default: pline("Bad Oona spell type?");
+			}
+		break;
 		case AD_RBRE:
 			switch(rnd(3)){
 				case 1: goto elec_um;

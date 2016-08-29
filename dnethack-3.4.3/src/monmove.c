@@ -1143,6 +1143,10 @@ toofar:
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         == AD_RBRE))
 	      ) ||
+	     (attacktype(mtmp->data, AT_MAGC) &&
+	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
+	         == AD_OONA))
+	      ) ||
 	     (attacktype(mtmp->data, AT_LNCK) &&
 	      (((attacktype_fordmg(mtmp->data, AT_LNCK, AD_ANY))->adtyp
 	         <= AD_SPC2))
