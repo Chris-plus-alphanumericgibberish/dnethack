@@ -1573,10 +1573,10 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	}
 	if (pen->ovar1&SEAL_IRIS) {
 	    if (vis){ 
-			and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
+			if(pen->ovar1&SEAL_ENKI) and ? Strcat(buf, " yet thirsty") : Sprintf(buf, "thirsty");
+			else and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
 			and = TRUE;
 		}
-		/*water damage?*/
 	}
 	if (pen->ovar1&SEAL_ECHIDNA) {
 	    if (vis){ 
