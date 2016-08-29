@@ -920,7 +920,9 @@ register struct monst *mtmp;
 		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 	) (void) tactics(mtmp);
-
+	
+	if(mdat == &mons[PM_GREAT_CTHULHU] && !rn2(20)) (void) tactics(mtmp);
+	
 	/* check distance and scariness of attacks */
 	distfleeck(mtmp,&inrange,&nearby,&scared);
 
@@ -1066,6 +1068,7 @@ register struct monst *mtmp;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
 				if(mdat == &mons[PM_ELDER_BRAIN]) u.ustdy = max(u.ustdy,dmg/3);
 				if(mdat == &mons[PM_SEMBLANCE]) make_hallucinated(HHallucination + dmg, FALSE, 0L);
+				if(mdat == &mons[PM_GREAT_CTHULHU]) make_stunned(HStun + dmg*10, TRUE);
 			}
 		}
 		for(m2=fmon; m2; m2 = nmon) {
@@ -1078,6 +1081,7 @@ register struct monst *mtmp;
 			    (rn2(2) || m2->mblinded)) || !rn2(10)) {
 				if (cansee(m2->mx, m2->my))
 				    pline("It locks on to %s.", mon_nam(m2));
+				if(mdat == &mons[PM_GREAT_CTHULHU]) m2->mconf=TRUE;
 				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_LUGRIBOSSK] || mdat == &mons[PM_MAANZECORIAN]) m2->mhp -= d(5,15);
 				else if(mdat == &mons[PM_ELDER_BRAIN]){
 					int mfdmg = d(3,15);
