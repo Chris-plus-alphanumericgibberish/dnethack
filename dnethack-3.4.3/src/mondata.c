@@ -216,7 +216,7 @@ struct monst *mon;
 	
 	/* as of 3.2.0:  gray dragons, Angels, Oracle, Yeenoghu */
 	if (dmgtype(ptr, AD_MAGM) || ptr == &mons[PM_BABY_GRAY_DRAGON] ||
-		(dmgtype(ptr, AD_RBRE) && ptr != &mons[PM_SHIMMERING_DRAGON]))	/* Chromatic Dragon */
+		(dmgtype(ptr, AD_RBRE) && ptr != &mons[PM_SHIMMERING_DRAGON]))	/* Chromatic Dragon, Platinum Dragon, mortai, flux slime, tulani */
 	    return TRUE;
 	/* check for magic resistance granted by wielded weapon */
 	o = (mon == &youmonst) ? uwep : MON_WEP(mon);
