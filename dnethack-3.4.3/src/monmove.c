@@ -743,6 +743,7 @@ int *inrange, *nearby, *scared;
 	
 	if(mtmp->data == &mons[PM_BALL_OF_LIGHT]) *scared = TRUE;
 	else if(mtmp->data == &mons[PM_DAUGHTER_OF_BEDLAM] && !rn2(20)) *scared = TRUE;
+	else if(*nearby && !mtmp->mflee && mm_fleetflee(mtmp->data) && mtmp->data->mmove > youracedata->mmove) *scared = TRUE;
 	
 	if(*scared) {
 		if (rn2(7))
@@ -1633,9 +1634,7 @@ not_special:
 	else flag |= ALLOW_U;
 	if (is_minion(ptr) || is_rider(ptr)) flag |= ALLOW_SANCT;
 	/* unicorn may not be able to avoid hero on a noteleport level */
-	if ((is_unicorn(ptr) && !level.flags.noteleport) 
-		|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH] 
-		|| ptr == &mons[PM_WATCHER_IN_THE_WATER]) flag |= NOTONL;
+	if (mm_notonline(ptr) && ((can_teleport(ptr) || is_unicorn(ptr)) && !level.flags.noteleport)) flag |= NOTONL;
 	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
 	if (passes_bars(ptr) && !Is_illregrd(&u.uz) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
@@ -1660,12 +1659,16 @@ not_special:
 	    /* allow monsters be shortsighted on some levels for balance */
 	    if((!mtmp->mpeaceful || mtmp->data == &mons[PM_NURSE]) && level.flags.shortsighted &&
 	       nidist > (couldsee(nix,niy) ? 144 : 36) && appr == 1) appr = 0;
-	    if ((is_unicorn(ptr) && level.flags.noteleport) 
-			|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH] 
-			|| ptr == &mons[PM_WATCHER_IN_THE_WATER]){
+	    if (mm_notonline(ptr)){
+			int curappr = appr;
+			if(appr == 1){
+				appr = -1; //If approaching, default to running away instead
+			}
 			/* on noteleport levels, perhaps we cannot avoid hero */
-			for(i = 0; i < cnt; i++)
+			for(i = 0; i < cnt; i++){
 				if(!(info[i] & NOTONL)) avoid=TRUE;
+				else appr = curappr; //If was approaching and swithced to running away, reinstates approaching
+			}
 	    }
 		
 		if(appr == 0){

@@ -91,6 +91,8 @@
 #define MM_TENGTPORT	0x00000800L	/* Monster teleports as Tengu */
 #define MM_STATIONARY	0x00001000L	/* does not move. */
 #define MM_FLOAT		0x00002000L	/* Monster floats instead of truely flying (modifier) */
+#define MM_NOTONL		0x00004000L	/* Tries to avoid being on same line as player */
+#define MM_FLEETFLEE	0x00008000L	/* Flees if adjacent if it thinks it can outrun you */
 
 //Monster Thoughts and behavior
 #define MT_CONCEAL		0x00000001L	/* hides under objects */
