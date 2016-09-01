@@ -2032,13 +2032,13 @@ find_ac()
 			} else if(u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
-						uac -= 6;
+						uac += 20;
 					break;
 					case P_SKILLED:
-						uac -= 4;
+						uac += 10;
 					break;
 					case P_EXPERT:
-						uac -= 2;
+						uac += 5;
 					break;
 				}
 			} else if(u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
