@@ -301,7 +301,7 @@ A("the Pen of the Void",	ATHAME,
 
 #ifdef CONVICT
 A("Luck Blade",			SHORT_SWORD, /*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_INTEL|SPFX_LUCK), 0,
+	(SPFX_RESTR|SPFX_LUCK), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7, 7),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
 	0,0,0 ),
