@@ -719,6 +719,8 @@ int gr_set_flag;
         iflags.cursesgraphics = FALSE;
 #endif
 	    assign_graphics(ibm_graphics, SIZE(ibm_graphics), MAXPCHARS, 0);
+		monsyms[S_LAW_ANGEL] = 0x8F;
+		monsyms[S_NEU_ANGEL] = 0x8E;
 #ifdef PC9800
 	    if (ibmgraphics_mode_callback) (*ibmgraphics_mode_callback)();
 #endif
