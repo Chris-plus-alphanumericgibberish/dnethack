@@ -299,10 +299,10 @@ const struct Role roles[] = {
 	{"Patriarch",   "Matriarch"},
 	{"High Priest", "High Priestess"} },
 	0, 0, 0,	/* chosen randomly from among the other roles */
-	"Pri", "the Great Temple", "the Temple of Legion",
+	"Pri", "the Great Temple", "the Temple of the Legion",
 	PM_PRIEST, PM_PRIESTESS, NON_PM,
-	PM_ARCH_PRIEST, PM_ACOLYTE, PM_LEGION,//Legion
-	PM_HUMAN_ZOMBIE, PM_WRAITH, S_ZOMBIE, S_WRAITH,//Zombies, wraiths, elementals, zombies.  Place oozes.
+	PM_ARCH_PRIEST, PM_ACOLYTE, PM_LEGION,
+	PM_HUMAN_ZOMBIE, PM_LEGIONNAIRE, S_ZOMBIE, S_PUDDING,
 	ART_MITRE_OF_HOLINESS,
 	MA_HUMAN|MA_ELF|MA_CLOCK|MA_DRAGON, ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
