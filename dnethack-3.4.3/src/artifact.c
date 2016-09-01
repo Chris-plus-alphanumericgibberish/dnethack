@@ -1777,7 +1777,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			else pline_The("unholy blade drains your life!");
 			losexp("life drainage",TRUE,FALSE,FALSE);
 		}
-		else if(!resists_drli(mdef)){
+		else if(!youdefend && !resists_drli(mdef)){
 			if (vis) {
 				pline_The("unholy blade draws the life from %s!",
 				      mon_nam(mdef));
