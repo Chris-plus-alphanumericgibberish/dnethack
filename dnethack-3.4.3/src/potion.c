@@ -976,7 +976,7 @@ as_extra_healing:
 		break;
 	case POT_BLOOD:
 		unkn++;
-		if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+		if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) || carnivorous(youracedata)) {
 			pline("It smells like %s%s.", 
 					!type_is_pname(&mons[otmp->corpsenm]) ||
 					!(mons[otmp->corpsenm].geno & G_UNIQ) ||
