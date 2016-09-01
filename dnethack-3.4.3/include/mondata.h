@@ -328,16 +328,8 @@
 #define mteleport(ptr)	(((ptr)->mflagsm & MM_TENGTPORT))
 #define is_mplayer(ptr)		(((ptr) >= &mons[PM_ARCHEOLOGIST]) && \
 				 ((ptr) <= &mons[PM_WIZARD]))
-#define is_rider(ptr)		((ptr) == &mons[PM_DEATH] || \
-				 (ptr) == &mons[PM_FAMINE] || \
-				 (ptr) == &mons[PM_PESTILENCE] || \
-				 (ptr) == &mons[PM_LUCIFER] || \
-				 (ptr) == &mons[PM_GREAT_CTHULHU] || \
-				 (ptr) == &mons[PM_AXUS] || \
-				 (ptr) == &mons[PM_NAZGUL] || \
-				 (ptr) == &mons[PM_STRANGE_CORPSE] || \
-				 (ptr) == &mons[PM_ELDER_PRIEST] || \
-				 (ptr) == &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD])
+#define is_deadly(ptr)		((ptr)->mflagsg & MG_DEADLY)
+#define is_rider(ptr)		((ptr)->mflagsg & MG_RIDER)
 #define is_placeholder(ptr)	((ptr) == &mons[PM_ORC] || \
 				 (ptr) == &mons[PM_GIANT] || \
 				 (ptr) == &mons[PM_ELF] || \

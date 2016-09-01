@@ -717,12 +717,18 @@ BOOLEAN_P bld, nobadeffects;
 			if (Stoned) fix_petrification();
 			make_sick(0L, (char *) 0, TRUE, SICK_ALL);
 		break;
-		/*Note: these three imply corpse*/
-	    case PM_GREAT_CTHULHU:
-	    case PM_DEATH:
-	    case PM_PESTILENCE:
-	    case PM_FAMINE:
-		{ char buf[BUFSZ];
+	    case PM_GREEN_SLIME:
+	    case PM_FLUX_SLIME:
+		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youracedata) &&
+			youmonst.data != &mons[PM_GREEN_SLIME]) {
+		    You("don't feel very well.");
+		    Slimed = 10L;
+		    flags.botl = 1;
+		}
+		/* Fall through */
+	    default:
+		if(is_deadly(&mons[pm])){
+			char buf[BUFSZ];
 			if(!nobadeffects){
 				pline("Eating that is instantly fatal.");
 				Sprintf(buf, "unwisely ate the body of %s",
@@ -731,6 +737,8 @@ BOOLEAN_P bld, nobadeffects;
 				killer_format = NO_KILLER_PREFIX;
 				done(DIED);
 			}
+		}
+		if(is_rider(&mons[pm])){
 		    /* It so happens that since we know these monsters */
 		    /* cannot appear in tins, victual.piece will always */
 		    /* be what we want, which is not generally true. */
@@ -738,27 +746,6 @@ BOOLEAN_P bld, nobadeffects;
 			victual.piece = (struct obj *)0;
 		    return;
 		}
-		case PM_AXUS:
-		case PM_NAZGUL:
-		case PM_ELDER_PRIEST:
-		case PM_PRIEST_OF_AN_UNKNOWN_GOD:
-		    /* It so happens that since we know these monsters */
-		    /* cannot appear in tins, victual.piece will always */
-		    /* be what we want, which is not generally true. */
-		    if (revive_corpse(victual.piece, REVIVE_MONSTER))
-			victual.piece = (struct obj *)0;
-		    return;
-		break;
-	    case PM_GREEN_SLIME:
-	    case PM_FLUX_SLIME:
-		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youmonst.data) &&
-			youmonst.data != &mons[PM_GREEN_SLIME]) {
-		    You("don't feel very well.");
-		    Slimed = 10L;
-		    flags.botl = 1;
-		}
-		/* Fall through */
-	    default:
 		if (acidic(&mons[pm]) && Stoned)
 		    fix_petrification();
 		break;

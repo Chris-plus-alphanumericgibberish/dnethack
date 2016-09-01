@@ -193,6 +193,8 @@
 #define MG_HATESSILVER	0x00000400L	/* Monster hates silver */
 #define MG_HATESIRON	0x00000800L	/* Monster hates iron/steel */
 #define MG_HATESUNHOLY	0x00001000L	/* Monster hates cursed objects */
+#define MG_RIDER		0x00002000L	/* Monster has perfect resurection */
+#define MG_DEADLY		0x00004000L	/* Monster's corpse is deadly to taste */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */
