@@ -1925,6 +1925,10 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, CRYSTAL_BOOTS);
 				(void)mongets(mtmp, CRYSTAL_GAUNTLETS);
 				(void)mongets(mtmp, CRYSTAL_HELM);
+			} else if(ptr == &mons[PM_GWYNHARWYF]){
+				(void)mongets(mtmp, LEATHER_CLOAK);
+				(void)mongets(mtmp, HIGH_BOOTS);
+				(void)mongets(mtmp, SCIMITAR);
 			} else if(ptr == &mons[PM_OONA]){
 				//Nothing
 			} else if(ptr == &mons[PM_LILLEND]){

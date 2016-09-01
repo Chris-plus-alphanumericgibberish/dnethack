@@ -78,6 +78,8 @@ int pm;
 		case PM_LUMINOUS_CLOUD:	  return(PM_GHAELE);
 		case PM_TULANI:			  return(PM_BALL_OF_RADIANCE);
 		case PM_BALL_OF_RADIANCE: return(PM_TULANI);
+		case PM_GWYNHARWYF:		  return(PM_FURIOUS_WHIRLWIND);
+		case PM_FURIOUS_WHIRLWIND: return(PM_GWYNHARWYF);
 		
 		case PM_YOCHLOL: 
 			switch(rnd(3)){

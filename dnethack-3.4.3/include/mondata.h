@@ -163,7 +163,8 @@
 							 (ptr) == &mons[PM_FIRRE] || \
 							 (ptr) == &mons[PM_SHIERE] || \
 							 (ptr) == &mons[PM_GHAELE] || \
-							 (ptr) == &mons[PM_TULANI] \
+							 (ptr) == &mons[PM_TULANI] || \
+							 (ptr) == &mons[PM_GWYNHARWYF] \
 							)
 #define is_eeladrin(ptr)	(\
 							 (ptr) == &mons[PM_WATER_DOLPHIN] || \
@@ -171,7 +172,8 @@
 							 (ptr) == &mons[PM_DANCING_FLAME] || \
 							 (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 							 (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
-							 (ptr) == &mons[PM_BALL_OF_RADIANCE] \
+							 (ptr) == &mons[PM_BALL_OF_RADIANCE] || \
+							 (ptr) == &mons[PM_FURIOUS_WHIRLWIND] \
 							)
 #define is_yochlol(ptr)		((ptr) == &mons[PM_YOCHLOL] ||\
 							 (ptr) == &mons[PM_UNEARTHLY_DROW] ||\
