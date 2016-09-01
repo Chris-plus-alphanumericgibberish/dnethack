@@ -505,6 +505,7 @@ struct monst *mon;
 	}
 	
 	if(mon->mtame) base -= rnd(def_beastmastery());
+	if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
@@ -556,6 +557,7 @@ struct monst *mon;
 	}
 	
 	if(mon->mtame) base -= def_beastmastery();
+	if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);

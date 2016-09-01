@@ -254,6 +254,10 @@ mattackm(magr, mdef)
 	if(magr->mtame && !mdef->mtame){
 		tmp += beastmastery();
 		tchtmp += beastmastery();
+		if(u.specialSealsActive&SEAL_COSMOS){
+			tmp += spiritDsize();
+			tchtmp += spiritDsize();
+		}
 	}
 	
 	tmp += magr->encouraged;
@@ -1989,7 +1993,10 @@ physical:
 		mdef->mstdy -= 1;
 	}
 	
-	if(tmp && magr->mtame && !mdef->mtame) tmp += beastmastery();
+	if(tmp && magr->mtame && !mdef->mtame){
+		tmp += beastmastery();
+		if(u.specialSealsActive&SEAL_COSMOS) tmp += spiritDsize();
+	}
 	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (m_at(mdef->mx, mdef->my) == magr) {  /* see gulpmm() */
