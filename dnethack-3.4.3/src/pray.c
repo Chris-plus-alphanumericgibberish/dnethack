@@ -2552,7 +2552,7 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
 	}
 	return(1);
     }
-    if (Inhell && u.ualign.type != A_VOID && !(Race_if(PM_DROW) && alignment == A_CHAOTIC)) {
+    if (Inhell && u.ualign.type != A_VOID && !(alignment == A_CHAOTIC && strcmp(urole.cgod,"Lolth"))) {
 	pline("Since you are in Gehennom, %s won't help you.",
 	      align_gname(alignment));
 	/* haltingly aligned is least likely to anger */

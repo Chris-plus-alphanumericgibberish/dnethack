@@ -873,7 +873,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	    int cnt = 40;
 		
 		// if(Race_if(PM_DROW) && mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !Role_if(PM_EXILE) && !mtmp->mpeaceful){
-		if(mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !mtmp->mpeaceful && strcmp(urole.cgod,"_Lolth")){
+		if(mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !mtmp->mpeaceful && strcmp(urole.cgod,"Lolth")){
 			u.ugangr[Align2gangr(A_CHAOTIC)]++;
 			angrygods(A_CHAOTIC);
 			return 1;
