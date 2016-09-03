@@ -298,7 +298,7 @@ struct obj {
 			 otmp->oclass == TOOL_CLASS) && \
 			 ptr != &mons[PM_THRONE_ARCHON] && \
 			 (objects[otmp->otyp].oc_bimanual ? \
-				((ptr)->msize - otmp->objsize > 2):\
+				((ptr)->msize - otmp->objsize <  2):\
 				((ptr)->msize - otmp->objsize < -1))\
 			)
 #define is_lightsaber(otmp) ((otmp)->otyp == LIGHTSABER || \
