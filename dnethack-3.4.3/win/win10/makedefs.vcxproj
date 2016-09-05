@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <ProjectGuid>{F511D78B-BF75-44C1-9A7D-EC75DA112060}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\..\util\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\..\util\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalIncludeDirectories>.;..\include;..\sys\winnt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_CONSOLE;WIN32CON;DLB;MSWIN_GRAPHICS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\makedefs.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>echo chdir ..\util
+chdir ..\util
+chdir
+ echo makedefs.exe -v
+makedefs.exe -v
+ echo makedefs.exe -o
+makedefs.exe  -o
+ echo makedefs.exe -p
+makedefs.exe -p
+ echo makedefs.exe -m
+makedefs.exe -m
+ echo makedefs.exe -z
+makedefs.exe -z
+ echo chdir ..\dat
+chdir ..\dat
+chdir
+ echo Generating NetHack database
+echo ..\util\makedefs.exe -d
+..\util\makedefs.exe -d
+ echo Generating rumors
+echo ..\util\makedefs.exe -r
+..\util\makedefs.exe -r
+ echo Generating quests
+echo ..\util\makedefs.exe -q
+..\util\makedefs.exe -q
+ echo Generating oracles
+echo ..\util\makedefs.exe -h
+..\util\makedefs.exe -h
+ echo Generating dungeon.pdf
+echo ..\util\makedefs.exe -e
+..\util\makedefs.exe -e
+ echo chdir ..\build
+chdir ..\build
+ copy ..\win\share\tilemap.c ..\win\share\tiletxt.c</Command>
+      <Message>Running makedefs</Message>
+    </PostBuildEvent>
+    <Midl>
+      <TypeLibraryName>.\..\util\makedefs.tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\..\util\makedefs.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>.\..\util\makedefs.exe</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>.;..\include;..\sys\winnt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_CONSOLE;WIN32CON;DLB;MSWIN_GRAPHICS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\makedefs.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>echo chdir ..\util
+chdir ..\util
+chdir
+ echo makedefs.exe -v
+makedefs.exe -v
+ echo makedefs.exe -o
+makedefs.exe  -o
+ echo makedefs.exe -p
+makedefs.exe -p
+ echo makedefs.exe -m
+makedefs.exe -m
+ echo makedefs.exe -z
+makedefs.exe -z
+ echo chdir ..\dat
+chdir ..\dat
+chdir
+ echo Generating NetHack database
+echo ..\util\makedefs.exe -d
+..\util\makedefs.exe -d
+ echo Generating rumors
+echo ..\util\makedefs.exe -r
+..\util\makedefs.exe -r
+ echo Generating quests
+echo ..\util\makedefs.exe -q
+..\util\makedefs.exe -q
+ echo Generating oracles
+echo ..\util\makedefs.exe -h
+..\util\makedefs.exe -h
+ echo Generating dungeon.pdf
+echo ..\util\makedefs.exe -e
+..\util\makedefs.exe -e
+ echo chdir ..\build
+chdir ..\build
+ copy ..\win\share\tilemap.c ..\win\share\tiletxt.c</Command>
+      <Message>Running makedefs</Message>
+    </PostBuildEvent>
+    <Midl>
+      <TypeLibraryName>.\..\util\makedefs.tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\..\util\makedefs.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>.\..\util\makedefs.exe</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\monst.c" />
+    <ClCompile Include="..\src\objects.c" />
+    <ClCompile Include="..\util\makedefs.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\config.h" />
+    <ClInclude Include="..\include\config1.h" />
+    <ClInclude Include="..\include\coord.h" />
+    <ClInclude Include="..\include\global.h" />
+    <ClInclude Include="..\include\monattk.h" />
+    <ClInclude Include="..\include\monflag.h" />
+    <ClInclude Include="..\include\monsym.h" />
+    <ClInclude Include="..\include\nhlan.h" />
+    <ClInclude Include="..\include\ntconf.h" />
+    <ClInclude Include="..\include\objclass.h" />
+    <ClInclude Include="..\include\patchlevel.h" />
+    <ClInclude Include="..\include\qtext.h" />
+    <ClInclude Include="..\include\tradstdc.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

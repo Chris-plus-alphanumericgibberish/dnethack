@@ -1,0 +1,709 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <ProjectGuid>{61726259-EEA5-404F-AC77-9A006D7C2FC5}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <StringPooling>true</StringPooling>
+      <AdditionalIncludeDirectories>..\win\win32;..\include;..\sys\winnt;..\sys\share;..\win\share;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;DLB;MSWIN_GRAPHICS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\NetHackW.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader />
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <AdditionalOptions> /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>copy $(OutDir)NetHackW.exe ..\binary
+ copy ..\dat\nhdat ..\binary
+ copy ..\dat\license ..\binary
+ if exist tiles.bmp copy tiles.bmp ..\binary
+ if exist ..\doc\Guidebook.txt copy ..\doc\Guidebook.txt ..\binary\Guidebook.txt
+ if exist ..\doc\nethack.txt copy ..\doc\nethack.txt ..\binary\NetHack.txt
+ copy ..\sys\winnt\defaults.nh ..\binary\defaults.nh</Command>
+      <Message>Install exe</Message>
+    </PostBuildEvent>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\NetHackW.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\NetHackW.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>.\Release\NetHackW.exe</OutputFile>
+      <AdditionalDependencies>comctl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions> /MAPINFO:EXPORTS  /MAPINFO:LINES </AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\win\win32;..\include;..\sys\winnt;..\sys\share;..\win\share;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;DLB;MSWIN_GRAPHICS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\NetHackW.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader />
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>if NOT exist ..\binary\*.* mkdir ..\binary
+ copy $(OutDir)NetHackW.exe ..\binary
+ copy ..\dat\nhdat ..\binary
+ copy ..\dat\license ..\binary
+ if exist tiles.bmp copy tiles.bmp ..\binary
+ if exist ..\doc\Guidebook.txt copy ..\doc\Guidebook.txt ..\binary\Guidebook.txt
+ if exist ..\doc\nethack.txt copy ..\doc\nethack.txt ..\binary\NetHack.txt
+ copy ..\sys\winnt\defaults.nh ..\binary\defaults.nh</Command>
+      <Message>Install exe</Message>
+    </PostBuildEvent>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\NetHackW.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\NetHackW.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>.\Debug\NetHackW.exe</OutputFile>
+      <AdditionalDependencies>comctl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\allmain.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\alloc.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\apply.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\artifact.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\attrib.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\ball.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\bones.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\botl.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\cmd.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dbridge.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\decl.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\detect.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dig.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\display.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dlb.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\do.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dog.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dogmove.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dokick.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dothrow.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\do_name.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\do_wear.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\drawing.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\dungeon.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\eat.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\end.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\engrave.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\exper.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\explode.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\extralev.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\files.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\fountain.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\hack.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\hacklib.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\invent.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\light.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\lock.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mail.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\makemon.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mapglyph.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mcastu.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mhitm.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mhitu.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\minion.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mklev.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mkmap.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mkmaze.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mkobj.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mkroom.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mon.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mondata.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\monmove.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\monst.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\monstr.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mplayer.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\mthrowu.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\muse.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\music.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\objects.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\objnam.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\options.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\o_init.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\pager.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\pickup.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\pline.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\polyself.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\potion.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\pray.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\priest.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\quest.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\questpgr.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\read.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\rect.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\region.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\restore.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\rip.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\rnd.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\role.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\rumors.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\save.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\shk.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\shknam.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\sit.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\sounds.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\spell.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\sp_lev.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\steal.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\steed.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\teleport.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\tile.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\timeout.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\topten.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\track.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\trap.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\uhitm.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\u_init.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\vault.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\version.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\vision.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\weapon.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\were.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\wield.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\windows.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\wizard.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\worm.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\worn.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\write.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\src\zap.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\sys\share\pcmain.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\sys\share\pcsys.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\sys\share\pcunix.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\sys\share\random.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\sys\winnt\ntsound.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\sys\winnt\winnt.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\tty\getline.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\tty\wintty.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhaskyn.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhdlg.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhfont.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhinput.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhmain.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhmap.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhmenu.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhmsgwnd.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhrip.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhsplash.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhstatus.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mhtext.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\mswproc.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\win\win32\winhack.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> /Gs /Oi-   /Gs /Oi- </AdditionalOptions>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\align.h" />
+    <ClInclude Include="..\include\amiconf.h" />
+    <ClInclude Include="..\include\artifact.h" />
+    <ClInclude Include="..\include\artilist.h" />
+    <ClInclude Include="..\include\attrib.h" />
+    <ClInclude Include="..\include\beconf.h" />
+    <ClInclude Include="..\include\bitmfile.h" />
+    <ClInclude Include="..\include\color.h" />
+    <ClInclude Include="..\include\config.h" />
+    <ClInclude Include="..\include\config1.h" />
+    <ClInclude Include="..\include\coord.h" />
+    <ClInclude Include="..\include\decl.h" />
+    <ClInclude Include="..\include\def_os2.h" />
+    <ClInclude Include="..\include\dgn_file.h" />
+    <ClInclude Include="..\include\display.h" />
+    <ClInclude Include="..\include\dlb.h" />
+    <ClInclude Include="..\include\dungeon.h" />
+    <ClInclude Include="..\include\edog.h" />
+    <ClInclude Include="..\include\emin.h" />
+    <ClInclude Include="..\include\engrave.h" />
+    <ClInclude Include="..\include\epri.h" />
+    <ClInclude Include="..\include\eshk.h" />
+    <ClInclude Include="..\include\extern.h" />
+    <ClInclude Include="..\include\flag.h" />
+    <ClInclude Include="..\include\func_tab.h" />
+    <ClInclude Include="..\include\gem_rsc.h" />
+    <ClInclude Include="..\include\global.h" />
+    <ClInclude Include="..\include\hack.h" />
+    <ClInclude Include="..\include\lev.h" />
+    <ClInclude Include="..\include\load_img.h" />
+    <ClInclude Include="..\include\macconf.h" />
+    <ClInclude Include="..\include\macpopup.h" />
+    <ClInclude Include="..\include\mactty.h" />
+    <ClInclude Include="..\include\macwin.h" />
+    <ClInclude Include="..\include\mail.h" />
+    <ClInclude Include="..\include\mfndpos.h" />
+    <ClInclude Include="..\include\micro.h" />
+    <ClInclude Include="..\include\mkroom.h" />
+    <ClInclude Include="..\include\monattk.h" />
+    <ClInclude Include="..\include\mondata.h" />
+    <ClInclude Include="..\include\monflag.h" />
+    <ClInclude Include="..\include\monst.h" />
+    <ClInclude Include="..\include\monsym.h" />
+    <ClInclude Include="..\include\mttypriv.h" />
+    <ClInclude Include="..\include\nhlan.h" />
+    <ClInclude Include="..\include\ntconf.h" />
+    <ClInclude Include="..\include\obj.h" />
+    <ClInclude Include="..\include\objclass.h" />
+    <ClInclude Include="..\include\os2conf.h" />
+    <ClInclude Include="..\include\patchlevel.h" />
+    <ClInclude Include="..\include\pcconf.h" />
+    <ClInclude Include="..\include\permonst.h" />
+    <ClInclude Include="..\include\prop.h" />
+    <ClInclude Include="..\include\qtext.h" />
+    <ClInclude Include="..\include\qt_clust.h" />
+    <ClInclude Include="..\include\qt_kde0.h" />
+    <ClInclude Include="..\include\qt_win.h" />
+    <ClInclude Include="..\include\qt_xpms.h" />
+    <ClInclude Include="..\include\quest.h" />
+    <ClInclude Include="..\include\rect.h" />
+    <ClInclude Include="..\include\region.h" />
+    <ClInclude Include="..\include\rm.h" />
+    <ClInclude Include="..\include\skills.h" />
+    <ClInclude Include="..\include\spell.h" />
+    <ClInclude Include="..\include\sp_lev.h" />
+    <ClInclude Include="..\include\system.h" />
+    <ClInclude Include="..\include\tcap.h" />
+    <ClInclude Include="..\include\tile2x11.h" />
+    <ClInclude Include="..\include\timeout.h" />
+    <ClInclude Include="..\include\tosconf.h" />
+    <ClInclude Include="..\include\tradstdc.h" />
+    <ClInclude Include="..\include\trampoli.h" />
+    <ClInclude Include="..\include\trap.h" />
+    <ClInclude Include="..\include\unixconf.h" />
+    <ClInclude Include="..\include\vault.h" />
+    <ClInclude Include="..\include\vision.h" />
+    <ClInclude Include="..\include\vmsconf.h" />
+    <ClInclude Include="..\include\winami.h" />
+    <ClInclude Include="..\include\wingem.h" />
+    <ClInclude Include="..\include\winGnome.h" />
+    <ClInclude Include="..\include\winprocs.h" />
+    <ClInclude Include="..\include\wintty.h" />
+    <ClInclude Include="..\include\wintype.h" />
+    <ClInclude Include="..\include\winX.h" />
+    <ClInclude Include="..\include\xwindow.h" />
+    <ClInclude Include="..\include\xwindowp.h" />
+    <ClInclude Include="..\include\you.h" />
+    <ClInclude Include="..\include\youprop.h" />
+    <ClInclude Include="..\win\win32\mhaskyn.h" />
+    <ClInclude Include="..\win\win32\mhdlg.h" />
+    <ClInclude Include="..\win\win32\mhfont.h" />
+    <ClInclude Include="..\win\win32\mhinput.h" />
+    <ClInclude Include="..\win\win32\mhmain.h" />
+    <ClInclude Include="..\win\win32\mhmap.h" />
+    <ClInclude Include="..\win\win32\mhmenu.h" />
+    <ClInclude Include="..\win\win32\mhmsg.h" />
+    <ClInclude Include="..\win\win32\mhmsgwnd.h" />
+    <ClInclude Include="..\win\win32\mhrip.h" />
+    <ClInclude Include="..\win\win32\mhsplash.h" />
+    <ClInclude Include="..\win\win32\mhstatus.h" />
+    <ClInclude Include="..\win\win32\mhtext.h" />
+    <ClInclude Include="..\win\win32\resource.h" />
+    <ClInclude Include="..\win\win32\winMS.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\win\win32\bitmap1.bmp" />
+    <Image Include="..\win\win32\bitmap2.bmp" />
+    <Image Include="..\win\win32\mnsel.bmp" />
+    <Image Include="..\win\win32\mnunsel.bmp" />
+    <Image Include="..\win\win32\NETHACK.ICO" />
+    <Image Include="..\win\win32\small.ico" />
+    <Image Include="..\win\win32\tiles.bmp" />
+    <Image Include="..\win\win32\winhack.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\win\win32\winhack.rc">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">\src\dnethack\dnethack-3.4.3\win\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">\src\dnethack\dnethack-3.4.3\win\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\win\win32\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="dgncomp.vcxproj">
+      <Project>{8d3304ca-0f8f-47fa-a398-7f7c677af7f1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="dlb_main.vcxproj">
+      <Project>{be01c7ed-5d08-431b-917b-eff087a01646}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="levcomp.vcxproj">
+      <Project>{c430b8ff-5a78-4f0a-9397-04cfba9f5e1f}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="makedefs.vcxproj">
+      <Project>{f511d78b-bf75-44c1-9a7d-ec75da112060}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="tilemap.vcxproj">
+      <Project>{74b13466-9a90-4acd-8a30-9e653ffcee29}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="tiles.vcxproj">
+      <Project>{5f1479c1-44ed-4de2-90f0-dd4a497d932a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="uudecode.vcxproj">
+      <Project>{3b2fb1a9-90c7-4f22-8847-7f43326697a1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
