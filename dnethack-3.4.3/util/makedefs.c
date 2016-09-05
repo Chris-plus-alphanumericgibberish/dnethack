@@ -1331,7 +1331,7 @@ struct permonst *ptr;
 	    n += (tmp2 > 0);
 	    n += (tmp2 == AT_MAGC || tmp2 == AT_MMGC || 
 			tmp2 == AT_TUCH || tmp2 == AT_SHDW || tmp2 == AT_TNKR);
-	    n += (tmp2 == AT_WEAP && (ptr->mflags2 & M2_STRONG));
+	    n += (tmp2 == AT_WEAP && (ptr->mflagsb & MB_STRONG));
 	}
 
 /*	For each "special" damage type */
