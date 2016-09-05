@@ -38,6 +38,23 @@ dnethack-3.4.3/src/vis_tab.c
 dnethack-3.4.3/win/share/tiletxt.c
 dnethack-3.4.3/util/makedefs.exe
 
+# Files created via running / building levstuff, levcomp, dgnstuff, dgncomp
+dnethack-3.4.3/dat/*.lev
+dnethack-3.4.3/include/lev_comp.h
+dnethack-3.4.3/util/lev_lex.c
+dnethack-3.4.3/util/lev_yacc.c
+dnethack-3.4.3/include/dgn_comp.h
+dnethack-3.4.3/util/dgn_lex.c
+dnethack-3.4.3/util/dgn_yacc.c
+dnethack-3.4.3/dat/dungeon
+
 # Files created via running / building bld_main
 dnethack-3.4.3/dat/dlb.lst
 dnethack-3.4.3/dat/porthelp
+dnethack-3.4.3/dat/nhdat
+
+#File created from tiles somthing
+dnethack-3.4.3/src/tile.c
+dnethack-3.4.3/src/tiles.bmp
+dnethack-3.4.3/win/win32/*.bmp
+dnethack-3.4.3/win/win32/*.ico
