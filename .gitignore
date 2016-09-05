@@ -1,0 +1,42 @@
+# Added by IDE's and Editors
+**/.vs/
+**/.vscode/
+
+# These files/folders are created via dnethack-3.4.3\sys\winnt\nhsetup.bat
+dnethack-3.4.3/binary/
+dnethack-3.4.3/build/
+dnethack-3.4.3/src/Makefile
+dnethack-3.4.3/src/Makefile-orig
+dnethack-3.4.3/src/Makefile.bcc
+dnethack-3.4.3/src/Makefile.bcc-orig
+dnethack-3.4.3/src/Makefile.gcc
+dnethack-3.4.3/src/Makefile.gcc-orig
+dnethack-3.4.3/nethack.dsw
+
+# Files created from upgrading to VS 2015
+# these files should be moved to dnethack-3.4.3\sys\win10
+dnethack-3.4.3/UpgradeLog.htm
+dnethack-3.4.3/nethack.sln
+dnethack-3.4.3/solution.props
+dnethack-3.4.3/nethack.VC.opendb
+dnethack-3.4.3/nethack.sdf
+
+
+# Files created via running / building makedefs 
+dnethack-3.4.3/dat/data
+dnethack-3.4.3/dat/rumors
+dnethack-3.4.3/dat/oracles
+dnethack-3.4.3/dat/dungeon.pdf
+dnethack-3.4.3/dat/guioptions
+dnethack-3.4.3/include/date.h
+dnethack-3.4.3/include/onames.h
+dnethack-3.4.3/include/pm.h
+dnethack-3.4.3/include/vis_tab.h
+dnethack-3.4.3/src/monstr.c
+dnethack-3.4.3/src/vis_tab.c
+dnethack-3.4.3/win/share/tiletxt.c
+dnethack-3.4.3/util/makedefs.exe
+
+# Files created via running / building bld_main
+dnethack-3.4.3/dat/dlb.lst
+dnethack-3.4.3/dat/porthelp
