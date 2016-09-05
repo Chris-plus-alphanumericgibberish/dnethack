@@ -3747,7 +3747,8 @@ int tmp, weptmp, tchtmp;
 struct attack *attacklist;
 int nattk;
 {
-	int	i, sum[nattk], hittmp = 0;
+	int	i, hittmp = 0;
+	int *sum = (int *)malloc(sizeof(int) * nattk);
 	int	nsum = 0;
 	int	dhit = 0;
 	struct attack *mattk;
@@ -3973,9 +3974,11 @@ wisp_shdw_dhit2:
 	u.mh = -1;	/* dead in the current form */
 	rehumanize();
 	}
-	    if (sum[i] == 2)
-	return((boolean)passive(mon, 1, 0, mattk->aatyp));
-						/* defender dead */
+	if (sum[i] == 2) {
+		free(sum);
+		return((boolean)passive(mon, 1, 0, mattk->aatyp));
+		/* defender dead */
+	}
 	else {
 		(void) passive(mon, sum[i], 1, mattk->aatyp);
 		nsum |= sum[i];
@@ -3985,6 +3988,7 @@ wisp_shdw_dhit2:
 	if (multi < 0)
 		break; /* If paralyzed while attacking, i.e. floating eye */
 	}
+	free(sum);
 	return((boolean)(nsum != 0));
 }
 

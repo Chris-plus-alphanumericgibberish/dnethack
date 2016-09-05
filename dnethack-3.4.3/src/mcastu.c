@@ -1688,7 +1688,7 @@ summon_alien:
 	            newsym(u.ux, u.uy);
 	        }
 		} else {
-			delobj(otmp)
+			delobj(otmp);
 		}
 	   stop_occupation();
      } break;
