@@ -63,7 +63,7 @@ if NOT exist ..\..\binary\*.* mkdir ..\..\binary
 if NOT exist ..\..\binary\license copy ..\..\dat\license ..\..\binary\license >nul
 if NOT exist ..\..\build\*.* echo Creating ..\..\build directory
 if NOT exist ..\..\build\*.* mkdir ..\..\build
-for %%G in (..\..\win\win10\*.vcxproj ..\..\win\win10\*.vcxproj.filters ..\..\*.mak) Do mklink /H ..\..\build\%%~nxG %%G >nul
+for %%G in (..\..\win\win10\*.vcxproj ..\..\win\win10\*.vcxproj.filters ..\..\win\win10\*.mak) Do mklink /H ..\..\build\%%~nxG %%G >nul
 @REM for %%G in (..\..\win\win10\*.vcxproj.filters) Do mklink /H ..\..\build\%%~nxG %%G >nul
 @REM  copy ..\..\win\win32\dgncomp.dsp   ..\..\build >nul
 @REM copy ..\..\win\win32\dgnstuff.dsp  ..\..\build >nul
