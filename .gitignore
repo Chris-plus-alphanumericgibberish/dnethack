@@ -13,8 +13,8 @@ dnethack-3.4.3/src/Makefile.gcc
 dnethack-3.4.3/src/Makefile.gcc-orig
 dnethack-3.4.3/nethack.dsw
 
+
 # Files created from upgrading to VS 2015
-# these files should be moved to dnethack-3.4.3\sys\win10
 dnethack-3.4.3/UpgradeLog.htm
 dnethack-3.4.3/nethack.sln
 dnethack-3.4.3/solution.props
