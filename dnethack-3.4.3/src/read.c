@@ -202,6 +202,27 @@ doread()
 			pline(silly_thing_to, "read");
 			return(0);
 		}
+    } else if(scroll->oartifact && scroll->oartifact == ART_ENCYCLOPEDIA_GALACTICA){
+      const char *line;
+      char buf[BUFSZ];
+
+      line = getrumor(bcsign(scroll), buf, TRUE);
+      if (!*line)
+        line = "NetHack rumors file closed for renovation.";
+
+      pline("%s:", Tobjnam(scroll, "display"));
+      verbalize("%s", line);
+      return 1;
+    } else if(scroll->oartifact && scroll->oartifact == ART_LOG_OF_THE_CURATOR){
+      int oindx = 1 + rn2(NUM_OBJECTS - 1);
+      if(objects[oindx].oc_name_known){
+        makeknown(oindx);
+        You("study the pages of %s, you learn to recognize %s!", xname(scroll),
+            obj_typename(oindx));
+      } else {
+        You("study the pages of %s, but you already can recognize that.", xname(scroll));
+      }
+      return 1;
 	} else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
 		if(! (u.wardsknown & scroll->ovar1) ){
@@ -604,7 +625,7 @@ int curse_bless;
 
 	    /* destruction depends on current state, not adjustment */
 	    if (obj->spe > (6-rnl(7)) || obj->spe <= -5) {
-			if(obj->oartifact != ART_ANNULUS){
+			if(!obj->oartifact){
 				Your("%s %s momentarily, then %s!",
 					 xname(obj), otense(obj,"pulsate"), otense(obj,"explode"));
 				if (is_on) Ring_gone(obj);
@@ -1053,9 +1074,20 @@ struct obj *sobj;
 	    setmangry(mtmp);
 	} else {
 	    if (mtmp->isshk)
-		make_happy_shk(mtmp, FALSE);
-	    else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
-		(void) tamedog(mtmp, sobj);
+			make_happy_shk(mtmp, FALSE);
+	    else if (sobj->otyp == SPE_CHARM_MONSTER){
+			int skill = spell_skilltype(sobj->otyp);
+			int role_skill = P_SKILL(skill)-1; //P_basic would be 2
+			if(Spellboost) role_skill++;
+			if(role_skill < 1) role_skill = 1;
+			
+			for(role_skill; role_skill; role_skill--)
+				if(!resist(mtmp, sobj->oclass, 0, NOTELL)){
+					(void) tamedog(mtmp, sobj);
+					return;
+				}
+	    } else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
+			(void) tamedog(mtmp, sobj);
 	}
 }
 
@@ -1113,6 +1145,7 @@ struct obj	*sobj;
 				/* assumes same order */
 				otmp->otyp = GRAY_DRAGON_SCALE_SHIELD +
 					otmp->otyp - GRAY_DRAGON_SCALES;
+				otmp->objsize = youracedata->msize;
 				otmp->cursed = 0;
 				if (sobj->blessed) {
 					otmp->spe++;
@@ -1153,6 +1186,7 @@ struct obj	*sobj;
 			otmp->otyp == CRYSTAL_HELM ||
 			otmp->otyp == CRYSTAL_PLATE_MAIL ||
 			otmp->otyp == CRYSTAL_SHIELD ||
+			otmp->otyp == CRYSTAL_GAUNTLETS ||
 			otmp->otyp == CRYSTAL_BOOTS ||
 			otmp->otyp == PLATE_MAIL || /*plate mails have finer manufacturing and can be more highly enchanted*/
 			otmp->otyp == BRONZE_PLATE_MAIL ||
@@ -1201,6 +1235,8 @@ struct obj	*sobj;
 			/* assumes same order */
 			otmp->otyp = GRAY_DRAGON_SCALE_MAIL +
 						otmp->otyp - GRAY_DRAGON_SCALES;
+			otmp->objsize = youracedata->msize;
+			otmp->bodytypeflag = youracedata->mflagsb&MB_BODYTYPEMASK;
 			otmp->cursed = 0;
 			if (sobj->blessed) {
 				otmp->spe++;
@@ -1454,8 +1490,8 @@ struct obj	*sobj;
 		    struct monst *mtmp;
 			if(confused){
 				int i, j, bd = 5;
-		    for (i = -bd; i <= bd; i++) for(j = -bd; j <= bd; j++) {
-			if (!isok(u.ux + i, u.uy + j)) continue;
+				for (i = -bd; i <= bd; i++) for(j = -bd; j <= bd; j++) {
+					if (!isok(u.ux + i, u.uy + j)) continue;
 					mtmp = m_at(u.ux + i, u.uy + j);
 					if(mtmp){
 						if(!mtmp->mtame){
@@ -1484,13 +1520,13 @@ struct obj	*sobj;
 				mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
 				if(mtmp){
 					if(!mtmp->mtame){
-			    maybe_tame(mtmp, sobj);
+						maybe_tame(mtmp, sobj);
 					} else if(EDOG(mtmp)->friend){
 						mtmp->mtame += ACURR(A_CHA)*10;
 						if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
 					} else if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
 				}
-		    }
+			}
 		}
 		break;
 	case SCR_GENOCIDE:

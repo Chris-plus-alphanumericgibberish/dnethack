@@ -322,12 +322,12 @@ struct toptenentry *tt;
 	for(i=0;i<9;i++){
 		if((achieve.get_keys >> i) & 1) keys++;
 	}
-	  if(achieve.killed_lucifer)     dnethachievements |= 1L << 0;
-	  if(achieve.killed_asmodeus)    dnethachievements |= 1L << 1;
-	  if(achieve.killed_demogorgon)  dnethachievements |= 1L << 2;
-	  if(keys >= 1)					 dnethachievements |= 1L << 3;
-	  if(keys >= 3)					 dnethachievements |= 1L << 4;
-	  if(keys == 9)  				 dnethachievements |= 1L << 5;
+	  if(achieve.killed_lucifer)     dnethachievements |= 1L << 0;//1
+	  if(achieve.killed_asmodeus)    dnethachievements |= 1L << 1;//2
+	  if(achieve.killed_demogorgon)  dnethachievements |= 1L << 2;//4
+	  if(keys >= 1)					 dnethachievements |= 1L << 3;//8
+	  if(keys >= 3)					 dnethachievements |= 1L << 4;//10
+	  if(keys == 9)  				 dnethachievements |= 1L << 5;//20
   (void)fprintf(rfile, SEP "dnetachieve=0x%lx", dnethachievements);
   }
 #endif

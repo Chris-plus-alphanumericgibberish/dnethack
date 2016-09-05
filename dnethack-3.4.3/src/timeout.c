@@ -481,7 +481,7 @@ nh_timeout()
 #endif
 
 	for(upp = u.uprops; upp < u.uprops+SIZE(u.uprops); upp++){
-		if(Upolyd && (youmonst.data == &mons[PM_SHOGGOTH] || youmonst.data == &mons[PM_PRIEST_OF_GHAUNADAUR]) && upp - u.uprops == BLINDED
+		if((youracedata == &mons[PM_SHOGGOTH] || youracedata == &mons[PM_PRIEST_OF_GHAUNADAUR]) && upp - u.uprops == BLINDED
 			&&  upp->intrinsic & TIMEOUT
 		){
 			upp->intrinsic &= ~TIMEOUT;
@@ -1044,7 +1044,7 @@ learn_egg_type(mnum)
 int mnum;
 {
 	/* baby monsters hatch from grown-up eggs */
-	mnum = little_to_big(mnum);
+	mnum = little_to_big(mnum, rn2(2));
 	mvitals[mnum].mvflags |= MV_KNOWS_EGG;
 	/* we might have just learned about other eggs being carried */
 	update_inventory();

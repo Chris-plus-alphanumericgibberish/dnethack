@@ -1796,12 +1796,30 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (See_invisible) enl_msg(You_, "see", "saw", " invisible");
 	if (Blind_telepat) you_are("telepathic");
 	if (Warning) you_are("warned");
-	if (Warn_of_mon && (flags.warntype||flags.montype)) {
-		Sprintf(buf, "aware of the presence of %s",
-			(flags.warntype & M2_ORC) ? "orcs" :
-			(flags.warntype & M2_DEMON) ? "demons" :
-			something); 
-		you_are(buf);
+	if (Warn_of_mon && (flags.warntypem||flags.warntypet||flags.warntypeb||flags.warntypeg||flags.warntypea||flags.warntypev||flags.montype)) {
+		if(flags.warntypea & MA_ANIMAL) you_are("aware of the presence of animals");
+		if(flags.warntypea & MA_ARACHNID) you_are("aware of the presence of arachnids");
+		if(flags.warntypea & MA_AVIAN) you_are("aware of the presence of birds");
+		if(flags.warntypea & MA_DEMIHUMAN) you_are("aware of the presence of demihumans");
+		if(flags.warntypea & MA_DEMON) you_are("aware of the presence of demons");
+		if(flags.warntypea & MA_MINION) you_are("aware of the presence of divine beings");
+		if(flags.warntypea & MA_DRAGON) you_are("aware of the presence of dragons");
+		if(flags.warntypea & MA_DWARF) you_are("aware of the presence of dwarves");
+		if(flags.warntypea & MA_ELEMENTAL) you_are("aware of the presence of elemental beings");
+		if(flags.warntypea & MA_ELF) you_are("aware of the presence of elves");
+		if(flags.warntypea & MA_FEY) you_are("aware of the presence of fair folk");
+		if(flags.warntypea & MA_GIANT) you_are("aware of the presence of giants");
+		if(flags.warntypea & MA_HUMAN) you_are("aware of the presence of humans");
+		if(flags.warntypea & MA_INSECTOID) you_are("aware of the presence of insectoids");
+		if(flags.warntypet & MT_MAGIC) you_are("aware of the presence of magic seekers");
+		if(flags.warntypeg & MG_LORD) you_are("aware of the presence of nobles");
+		if(flags.warntypea & MA_PRIMORDIAL) you_are("aware of the presence of old ones");
+		if(flags.warntypea & MA_ORC) you_are("aware of the presence of orcs");
+		if(flags.warntypea & MA_PLANT) you_are("aware of the presence of plants");
+		if(flags.warntypea & MA_REPTILIAN) you_are("aware of the presence of reptiles");
+		if(flags.warntypeg & MG_PRINCE) you_are("aware of the presence of rulers");
+		if(flags.warntypea & MV_TELEPATHIC) you_are("aware of the presence of telepaths");
+		if(flags.warntypea & MA_WERE) you_are("aware of the presence of werecreatures");
 	}
 	if (Undead_warning) you_are("warned of undead");
 	if (Searching) you_have("automatic searching");
@@ -2431,7 +2449,7 @@ signs_enlightenment()
 			message = TRUE;
 		}
 	}
-	if(u.sealsActive&SEAL_PAIMON && !Invis){ 
+	if(u.sealsActive&SEAL_PAIMON && !Invis){
 		putstr(en_win, 0, "There is a crown floating over your head.");
 		message = TRUE;
 	}

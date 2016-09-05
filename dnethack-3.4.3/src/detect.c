@@ -877,6 +877,64 @@ int mclass;			/* monster class, 0 for all */
     return 0;
 }
 
+int
+pet_detect_and_heal(otmp)
+register struct obj *otmp;	/* detecting object (if any) */
+{
+    register struct monst *mtmp;
+    int mcnt = 0;
+
+
+    /* Note: This used to just check fmon for a non-zero value
+     * but in versions since 3.3.0 fmon can test TRUE due to the
+     * presence of dmons, so we have to find at least one
+     * with positive hit-points to know for sure.
+     */
+    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+    	if (!DEADMONSTER(mtmp) && mtmp->mtame) {
+		mcnt++;
+		break;
+	}
+
+    if (!mcnt) {
+	boolean savebeginner = flags.beginner;	/* prevent non-delivery of */
+	flags.beginner = FALSE;			/* 	message            */
+	if (otmp)
+	    strange_feeling((struct obj *)0, Hallucination ?
+			    "You suddenly recall the hamster you had as a child." :
+			    "You feel lonely.");
+	flags.beginner = savebeginner;
+	return 1;
+    } else {
+	cls();
+	display_self();
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	    if (DEADMONSTER(mtmp)) continue;
+	    if (mtmp->mtame && mtmp->mx > 0) {
+		show_glyph(mtmp->mx,mtmp->my,mon_to_glyph(mtmp));
+		/* don't be stingy - display entire worm */
+		if (mtmp->data == &mons[PM_LONG_WORM]) detect_wsegs(mtmp,0);
+		/* heal */
+		if(canseemon(mtmp) && mtmp->mtame < 20) mtmp->mhp += d(4, 8);
+		if (mtmp->mhp > mtmp->mhpmax)
+		    mtmp->mhp = mtmp->mhpmax;
+	    }
+	}
+	You(Hallucination ?
+	    "are at one with your comrades." :
+	    "sense the presence of your retinue.");
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	    if (!DEADMONSTER(mtmp) && (mtmp->mtame && mtmp->mx > 0) && canseemon(mtmp))
+		pline("%s is in awe of %s!", upstart(y_monnam(mtmp)), yname(otmp));
+	}
+	display_nhwindow(WIN_MAP, TRUE);
+	docrt();
+	if (Underwater) under_water(2);
+	if (u.uburied) under_ground(2);
+    }
+    return 0;
+}
+
 /*
  * Used by: LEADERSHIP artifacts (Clarent (from Greyknight's patch))
  *
@@ -993,7 +1051,7 @@ register struct obj *sobj;
 	else found = TRUE;
     }
     for (obj = fobj; obj; obj = obj->nobj) {
-	if ((obj->otyp==LARGE_BOX || obj->otyp==CHEST) && obj->otrapped) {
+	if ((obj->otyp==BOX || obj->otyp==CHEST) && obj->otrapped) {
 	    if (obj->ox != u.ux || obj->oy != u.uy)
 		goto outtrapmap;
 	    else found = TRUE;
@@ -1026,7 +1084,7 @@ outtrapmap:
 	sense_trap(ttmp, 0, 0, sobj && sobj->cursed);
 
     for (obj = fobj; obj; obj = obj->nobj)
-	if ((obj->otyp==LARGE_BOX || obj->otyp==CHEST) && obj->otrapped)
+	if ((obj->otyp==BOX || obj->otyp==CHEST) && obj->otrapped)
 	sense_trap((struct trap *)0, obj->ox, obj->oy, sobj && sobj->cursed);
 
     for (door = 0; door < doorindex; door++) {
@@ -1491,7 +1549,6 @@ register int aflag;
 		if(u.sealsActive&SEAL_OTIAX) fund += spiritDsize();
 	    if (ublindf && ublindf->otyp == LENSES && !Blind)
 		    fund += 2; /* JDS: lenses help searching */
-	    if (fund > 5) fund = 5;
 	    for(x = u.ux-1; x < u.ux+2; x++)
 	      for(y = u.uy-1; y < u.uy+2; y++) {
 		if(!isok(x,y)) continue;
@@ -1499,7 +1556,7 @@ register int aflag;
 		    // if (Blind && !aflag) feel_location(x,y);
 		    if (!cansee(x,y) && !aflag) feel_location(x,y);
 		    if(levl[x][y].typ == SDOOR) {
-			if(rnl(7-fund)) continue;
+			if(rnl(100) >= 14+fund) continue;
 			cvt_sdoor_to_door(&levl[x][y]);	/* .typ = DOOR */
 			exercise(A_WIS, TRUE);
 			nomul(0, NULL);
@@ -1508,7 +1565,7 @@ register int aflag;
 			else
 			    newsym(x,y);
 		    } else if(levl[x][y].typ == SCORR) {
-			if(rnl(7-fund)) continue;
+			if(rnl(100) >= 14+fund) continue;
 			levl[x][y].typ = CORR;
 			unblock_point(x,y);	/* vision */
 			exercise(A_WIS, TRUE);
@@ -1565,7 +1622,7 @@ register int aflag;
 			    newsym(x,y);
 			}
 
-			if ((trap = t_at(x,y)) && !trap->tseen && !rnl(8)) {
+			if ((trap = t_at(x,y)) && !trap->tseen && rnl(100) < 22) {
 			    nomul(0, NULL);
 
 			    if (trap->ttyp == STATUE_TRAP) {
@@ -1608,7 +1665,7 @@ sokoban_detect()
 	    	else levl[x][y].waslit = TRUE;
 	    	map_background(x, y, 1);
 	    	for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
-	    	    if (obj->otyp == HUGE_STONE_CRATE)
+	    	    if (obj->otyp == MASSIVE_STONE_CRATE)
 	    	    	map_object(obj, 1);
 	    }
 

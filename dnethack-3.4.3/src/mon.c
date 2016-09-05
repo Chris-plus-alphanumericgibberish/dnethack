@@ -961,7 +961,7 @@ mcalcdistress()
 	    (void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 	were_change(mtmp);
 	
-	if(!mtmp->mcansee && mtmp->data == &mons[PM_SHOGGOTH]){
+	if(!mtmp->mcansee && (mtmp->data == &mons[PM_SHOGGOTH] || mtmp->data == &mons[PM_PRIEST_OF_GHAUNADAUR])){
 		if(canspotmon(mtmp)) pline("%s forms new eyes!",Monnam(mtmp));
 		mtmp->mblinded = 1;
 	}
@@ -1084,7 +1084,7 @@ movemon()
 	if (mtmp->movement >= NORMAL_SPEED)
 	    somebody_can_move = TRUE;
 	
-	mtmp->mstdy /= 2; //monster is moving, reduce studied level
+	if(mtmp->mstdy > 0) mtmp->mstdy -= 1; //monster is moving, reduce studied level
 
 	//Weeping angel step 3
 	if(is_weeping(mtmp->data)){
@@ -2534,7 +2534,7 @@ boolean was_swallowed;			/* digestion */
 				tmp=0;
 			} else if(mdat->mattk[i].adtyp == AD_SPNL){
 				explode(mon->mx, mon->my, 2, tmp, MON_EXPLODE, EXPL_WET);
-				makemon(&mons[PM_LEVIATHAN], mon->mx, mon->my, MM_ADJACENTOK);
+				makemon(rn2(2) ? &mons[PM_LEVIATHAN] : &mons[PM_LEVISTUS], mon->mx, mon->my, MM_ADJACENTOK);
 			} else if(mdat == &mons[PM_ANCIENT_OF_DEATH]){
 				if(!(u.sealsActive&SEAL_OSE)) explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_DARK);
 			} else if(mdat->mattk[i].adtyp == AD_WTCH){
@@ -3957,7 +3957,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 		mdat = &mons[mndx];
 		if ((mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) != 0 ||
 			is_placeholder(mdat)) continue;
-		/* polyok rules out all M2_PNAME and M2_WERE's;
+		/* polyok rules out all MG_PNAME and MA_WERE's;
 		   select_newcham_form might deliberately pick a player
 		   character type, so we can't arbitrarily rule out all
 		   human forms any more */
@@ -4145,7 +4145,7 @@ int mnum;
        such into ordinary eggs rather than forbidding them outright */
     if (mnum == PM_SCORPIUS) mnum = PM_SCORPION;
 
-    mnum = little_to_big(mnum);
+    mnum = little_to_big(mnum, (boolean)rn2(2));
     /*
      * Queen bees lay killer bee eggs (usually), but killer bees don't
      * grow into queen bees.  Ditto for [winged-]gargoyles.

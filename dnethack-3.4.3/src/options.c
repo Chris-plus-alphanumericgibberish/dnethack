@@ -542,7 +542,12 @@ initoptions()
 	iflags.bouldersym = 0;
 	iflags.travelcc.x = iflags.travelcc.y = -1;
 	flags.warnlevel = 1;
-	flags.warntype = 0L;
+	flags.warntypem = 0L;
+	flags.warntypet = 0L;
+	flags.warntypeb = 0L;
+	flags.warntypeg = 0L;
+	flags.warntypea = 0L;
+	flags.warntypev = 0L;
 	flags.montype = (long long int)0;
 
      /* assert( sizeof flags.inv_order == sizeof def_inv_order ); */

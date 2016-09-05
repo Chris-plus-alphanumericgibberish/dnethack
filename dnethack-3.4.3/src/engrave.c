@@ -1189,7 +1189,7 @@ can_reach_floor()
 			!(u.usteed && P_SKILL(P_RIDING) < P_BASIC) &&
 #endif
 			 (!Levitation ||
-			  Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)));
+			  Is_airlevel(&u.uz)));
 }
 #endif /* OVLB */
 #ifdef OVL0
@@ -1492,7 +1492,7 @@ register int x,y;
 	    }
 	    if (sensed) {
 			const char *et;
-			unsigned maxelen = BUFSZ - sizeof("You feel the words: \"\". ");
+	    	unsigned maxelen = BUFSZ - sizeof("You feel the words: \"\". ");
 			if(!Hallucination /*|| rn2(20)*/ ){
 				if (strlen(ep->engr_txt) > maxelen) {
 					(void) strncpy(buf,  ep->engr_txt, (int)maxelen);
@@ -1736,7 +1736,7 @@ int
 freehand()
 {
 	return(!uwep || !welded(uwep) ||
-	   (!bimanual(uwep) && (!uarms || !uarms->cursed)));
+	   (!bimanual(uwep,youracedata) && (!uarms || !uarms->cursed)));
 /*	if ((uwep && bimanual(uwep)) ||
 	    (uwep && uarms))
 		return(0);
@@ -1751,7 +1751,7 @@ static NEARDATA const char styluses[] =
 int
 doengward()
 {
-	char c = 'n';
+    char c = 'n';
 	if(u.wardsknown){
 		c = yn_function("Do you want to scribe a warding sign?",
 						ynqchars, 'q');
@@ -4616,12 +4616,12 @@ pick_seal()
 		}
 	}
 	if(Role_if(PM_EXILE) && quest_status.got_quest){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_DAHLVER_NAR) && u.sealTimeout[DAHLVER_NAR] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[DAHLVER_NAR-FIRST_SEAL], 
 				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_DAHLVER_NAR) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[DAHLVER_NAR-FIRST_SEAL] 
 			);
@@ -4643,12 +4643,12 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && quest_status.killed_nemesis){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_ACERERAK) && u.sealTimeout[ACERERAK] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[ACERERAK-FIRST_SEAL], 
 				u.sealTimeout[ACERERAK-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_ACERERAK) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[ACERERAK-FIRST_SEAL] 
 			);
@@ -4670,12 +4670,12 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_COSMOS){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_COSMOS) && u.sealTimeout[COSMOS] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[COSMOS-FIRST_SEAL], 
 				u.sealTimeout[COSMOS-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_COSMOS) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[COSMOS-FIRST_SEAL] 
 			);
@@ -4697,12 +4697,12 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_MISKA){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_MISKA) && u.sealTimeout[MISKA] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[MISKA-FIRST_SEAL], 
 				u.sealTimeout[MISKA-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_MISKA) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[MISKA-FIRST_SEAL] 
 			);
@@ -4724,12 +4724,12 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIARTH){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_NUDZIARTH) && u.sealTimeout[NUDZIARTH] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[NUDZIARTH-FIRST_SEAL], 
 				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_NUDZIARTH) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[NUDZIARTH-FIRST_SEAL] 
 			);
@@ -4751,12 +4751,12 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_ALIGNMENT_THING){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_ALIGNMENT_THING) && u.sealTimeout[ALIGNMENT_THING] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[ALIGNMENT_THING-FIRST_SEAL], 
 				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_ALIGNMENT_THING) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[ALIGNMENT_THING-FIRST_SEAL] 
 			);
@@ -4778,12 +4778,12 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_UNKNOWN_GOD){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_UNKNOWN_GOD) && u.sealTimeout[UNKNOWN_GOD] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[UNKNOWN_GOD-FIRST_SEAL], 
 				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_UNKNOWN_GOD) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[UNKNOWN_GOD-FIRST_SEAL] 
 			);
@@ -4805,12 +4805,12 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.specialSealsKnown&SEAL_BLACK_WEB){
-		if((u.sealsActive&seal_flag) && u.sealTimeout[i] > moves){
+		if((u.specialSealsActive&SEAL_BLACK_WEB) && u.sealTimeout[BLACK_WEB] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[BLACK_WEB-FIRST_SEAL], 
 				u.sealTimeout[BLACK_WEB-FIRST_SEAL] - moves
 			);
-		} else if(u.sealsActive&seal_flag) {
+		} else if(u.specialSealsActive&SEAL_BLACK_WEB) {
 			Sprintf(buf,	"%s (active)", 
 				sealNames[BLACK_WEB-FIRST_SEAL] 
 			);
@@ -4832,7 +4832,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.ulevel == 30){
-		if((u.sealsActive&seal_flag)){
+		if((u.specialSealsActive&SEAL_NUMINA)){
 			Sprintf(buf,	"%s (active)", 
 				sealNames[NUMINA-FIRST_SEAL]
 			);
@@ -5089,6 +5089,8 @@ static const char *epitaphs[] = {
 	"Nobody expects the Spanish Inquisition!", /*Monty Python*/
 	
 	"Omnes una manet nox", /*One night awaits us all*/
+	
+	"I suddenly have a LOT of regrets.", /*Water Phoenix King is very quoteable...*/
 	
        	"Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
        	"Applaud, my friends, the comedy is finished.",

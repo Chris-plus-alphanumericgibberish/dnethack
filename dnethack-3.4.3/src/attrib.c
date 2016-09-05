@@ -906,7 +906,8 @@ int x;
 	} else if (x == A_CON) {
 		if (
 			(uwep && uwep->oartifact == ART_OGRESMASHER) ||
-			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER)
+			(uswapwep && uswapwep->oartifact == ART_OGRESMASHER) ||
+			(uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)
 		) return(25);
 		if(Race_if(PM_ORC)){
 			tmp += u.ulevel/3;
@@ -919,7 +920,7 @@ int x;
 			tmp += u.ulevel/3;
 		}
 	} else if (x == A_CHA) {
-		if (tmp < 18 && youmonst.data && (youmonst.data->mlet == S_NYMPH ||
+		if (tmp < 18 && youracedata && (youracedata->mlet == S_NYMPH ||
 		    u.umonnum==PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
 		    return 18;
 	} else if (x == A_INT || x == A_WIS) {

@@ -37,6 +37,8 @@ register boolean clumsy;
 	int blessed_foot_damage = 0;
 	boolean trapkilled = FALSE;
 	boolean silvermsg = FALSE, silverobj = FALSE;
+	boolean ironmsg = FALSE, ironobj = FALSE;
+	boolean unholymsg = FALSE, unholyobj = FALSE;
 
 	if (uarmf && uarmf->otyp == KICKING_BOOTS)
 	    dmg += 5;
@@ -63,7 +65,17 @@ register boolean clumsy;
 			dmg += rnd(20);
 			silvermsg = TRUE; silverobj = TRUE;
 	}
-	if (mon->data->mlet == S_SHADE && !blessed_foot_damage && !silverobj) {
+	if (uarmf && (objects[uarmf->otyp].oc_material == IRON)
+		&& hates_iron(mdat)) {
+			dmg += rnd(mon->m_lev*2);
+			ironmsg = TRUE; ironobj = TRUE;
+	}
+	if (uarmf && uarmf->cursed
+		&& hates_unholy(mdat)) {
+			dmg += rnd(20);
+			unholymsg = TRUE; unholyobj = TRUE;
+	}
+	if (mon->data->mlet == S_SHADE && !blessed_foot_damage && !silverobj && !ironobj && !unholyobj) {
 	    pline_The("%s.", kick_passes_thru);
 	    /* doesn't exercise skill or abuse alignment or frighten pet,
 	       and shades have no passive counterattack */
@@ -109,10 +121,39 @@ register boolean clumsy;
 	if (silvermsg) {
 		const char *fmt;
 		char *whom = mon_nam(mon);
-		char silverobjbuf[BUFSZ];
 
 		if (canspotmon(mon)) {
 			fmt = "Your silver shoes sear %s!";
+		} else {
+		    *whom = highc(*whom);	/* "it" -> "It" */
+		    fmt = "%s is seared!";
+		}
+		/* note: s_suffix returns a modifiable buffer */
+		if (!noncorporeal(mdat))
+		    whom = strcat(s_suffix(whom), " flesh");
+		pline(fmt, whom);
+	}
+	if (ironmsg) {
+		const char *fmt;
+		char *whom = mon_nam(mon);
+
+		if (canspotmon(mon)) {
+			fmt = "Your cold-iron shoes sear %s!";
+		} else {
+		    *whom = highc(*whom);	/* "it" -> "It" */
+		    fmt = "%s is seared!";
+		}
+		/* note: s_suffix returns a modifiable buffer */
+		if (!noncorporeal(mdat))
+		    whom = strcat(s_suffix(whom), " flesh");
+		pline(fmt, whom);
+	}
+	if (unholymsg) {
+		const char *fmt;
+		char *whom = mon_nam(mon);
+
+		if (canspotmon(mon)) {
+			fmt = "Your cursed shoes sear %s!";
 		} else {
 		    *whom = highc(*whom);	/* "it" -> "It" */
 		    fmt = "%s is seared!";

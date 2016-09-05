@@ -198,7 +198,7 @@ int thrown;
 	}
 	
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
-		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS
+		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS && obj->oartifact != ART_DART_OF_THE_ASSASSIN
 	) multishot = (int)obj->quan;
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 	
@@ -226,10 +226,11 @@ int thrown;
 	    }
 
 	    if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
-		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS) multishot = (int)obj->quan;
+		&& obj->oartifact != ART_SICKLE_MOON && obj->oartifact != ART_ANNULUS && obj->oartifact != ART_DART_OF_THE_ASSASSIN)
+          multishot = (int)obj->quan;
 //#endif
 
-	if (multishot < 1) multishot = 1;
+	if(multishot < 1) multishot = 1;
 	if(obj->oartifact == ART_FLUORITE_OCTAHEDRON && !ammo_and_launcher(obj,launcher)) multishot = 1;
 
 	m_shot.s = ammo_and_launcher(obj,launcher) ? TRUE : FALSE;
@@ -275,11 +276,11 @@ int thrown;
 				otmp = splitobj(obj, shotlimit > 0 ? ((long)shotlimit) : 1L);
 			}
 	    } else if (obj->quan > 1L) {
-		otmp = splitobj(obj, 1L);
+			otmp = splitobj(obj, 1L);
 	    } else {
-		otmp = obj;
-		if (otmp->owornmask)
-		    remove_worn_item(otmp, FALSE);
+			otmp = obj;
+			if (otmp->owornmask)
+				remove_worn_item(otmp, FALSE);
 	    }
 	    if(obj->where == OBJ_INVENT) freeinv(otmp);
 	    throwit(otmp, wep_mask, twoweap, thrown);
@@ -515,7 +516,7 @@ dothrow()
 	/* kludge to work around parse()'s pre-decrement of 'multi' */
 	shotlimit = (multi || save_cm) ? multi + 1 : 0;
 
-        result = throw_obj(obj, shotlimit, THROW_UWEP);
+	result = throw_obj(obj, shotlimit, THROW_UWEP);
         
 	/*
 	 * [ALI] Bug fix: Temporary paralysis (eg., from hurtle) cancels
@@ -607,6 +608,7 @@ dofire()
 	
 	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && uwep->oartifact && 
 		(
+        (uwep->oartifact == ART_KHAKKHARA_OF_THE_MONKEY) ||
 		(uwep->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE) && ACURR(A_STR) == STR19(25)) ||
 		(uwep->oartifact == ART_ANNULUS && (uwep->otyp == SILVER_CHAKRAM || uwep->otyp == LIGHTSABER)) ||
 		(uwep->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && Race_if(PM_DWARF) && ACURR(A_STR) == STR19(25))
@@ -626,6 +628,7 @@ dofire()
 		bolt->spe = min(0,uwep->spe);
 		bolt->blessed = uwep->blessed;
 		bolt->cursed = uwep->cursed;
+		bolt->objsize = MZ_SMALL;
 		/*See below for shotlimit*/
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
@@ -1317,7 +1320,9 @@ int thrown;
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
 				 Race_if(PM_DWARF)) ||
 				 obj->oartifact == ART_WINDRIDER ||
+				 obj->oartifact == ART_DART_OF_THE_ASSASSIN ||
 				 obj->oartifact == ART_ANNULUS ||
+				 obj->oartifact == ART_KHAKKHARA_OF_THE_MONKEY ||
 				 obj->oartifact == ART_SICKLE_MOON
 			  ) && !impaired
 		) {
@@ -1506,6 +1511,8 @@ int thrown;
 				 Race_if(PM_DWARF)) ||
 				 obj->oartifact == ART_SICKLE_MOON ||
 				 obj->oartifact == ART_ANNULUS ||
+				 obj->oartifact == ART_KHAKKHARA_OF_THE_MONKEY ||
+				 obj->oartifact == ART_DART_OF_THE_ASSASSIN ||
 				 obj->oartifact == ART_WINDRIDER
 			  )
 		) {
@@ -1598,8 +1605,8 @@ int thrown;
 				if(obj->otyp == MIRROR){
 					if(u.spiritPColdowns[PWR_MIRROR_SHATTER] < monstermoves && !u.uswallow && uwep && uwep->otyp == MIRROR && !(uwep->oartifact)){
 						useup(uwep);
-						explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
-						explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+						explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
+						explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
 						
 						while(sx != u.ux && sy != u.uy){
 							sx -= u.dx;
@@ -1635,7 +1642,7 @@ int thrown;
 							}
 						}
 						u.spiritPColdowns[PWR_MIRROR_SHATTER] = monstermoves + 25;
-					} else explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), TOOL_CLASS, EXPL_DARK);
+					} else explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), TOOL_CLASS, HI_SILVER);
 				} else if(obj->oclass == WEAPON_CLASS && obj->otyp != CRYSTAL_SWORD) explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), WEAPON_CLASS, EXPL_DARK);
 			}
 		    tmp_at(DISP_FLASH, obj_to_glyph(obj));
@@ -1857,6 +1864,12 @@ int thrown;
 	if(obj->otyp == BALL_OF_WEBBING) tmp -= 2000; //nasty hack :c
 	
 	tmp += omon_adj(mon, obj, TRUE);
+	if(obj->objsize - youracedata->msize > 0){
+		if(ammo_and_launcher(obj, launcher)){
+			tmp += -4*(obj->objsize - youracedata->msize);
+		}
+	}
+	
 	if (is_orc(mon->data) && maybe_polyd(is_elf(youmonst.data),
 			Race_if(PM_ELF)))
 	    tmp++;
@@ -1874,7 +1887,7 @@ int thrown;
 			} else {
 				pline("%s catches %s.", Monnam(mon), the(xname(obj)));
 			}
-		return gem_accept(mon, obj);
+			return gem_accept(mon, obj);
 	    }
 	}
 
@@ -2094,7 +2107,7 @@ int thrown;
 					broken = rn2(chance);
 				else
 					broken = !rn2(4);
-				if (obj->blessed && !rnl(4))
+				if (obj->blessed && rnl(100) < 25)
 					broken = 0;
 			}
 		    if (broken) {
@@ -2221,7 +2234,7 @@ register struct obj *obj;
 	Strcpy(buf,Monnam(mon));
 	mon->mpeaceful = 1;
 	mon->mavenge = 0;
-
+	
 	if(obj->oartifact){
 		Strcat(buf,isartifact);
 		goto nopick;
@@ -2466,6 +2479,7 @@ boolean in_view;
 		case CRYSTAL_SWORD:
 		case CRYSTAL_SHIELD:
 		case CRYSTAL_BOOTS:
+		case CRYSTAL_GAUNTLETS:
 		case DROVEN_BOLT:
 		case DROVEN_DAGGER:
 		case DROVEN_SHORT_SWORD:

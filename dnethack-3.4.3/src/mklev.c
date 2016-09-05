@@ -878,7 +878,7 @@ skip0:
 		 *  when few rooms; chance for 3 or more is neglible.
 		 */
 		if(!rn2(nroom * 5 / 2))
-		    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
+		    (void) mksobj_at((rn2(3)) ? BOX : CHEST,
 				     somex(croom), somey(croom), TRUE, FALSE);
 
 		/* maybe make some graffiti */
@@ -1325,7 +1325,7 @@ register xchar x, y;
 	return((boolean)(t_at(x, y)
 		|| IS_FURNITURE(levl[x][y].typ)
 		|| is_lava(x,y)
-		|| is_pool(x,y)
+		|| (is_pool(x,y) && (!Is_waterlevel(&u.uz) || is_3dwater(x,y)))
 		|| invocation_pos(x,y)
 		));
 }

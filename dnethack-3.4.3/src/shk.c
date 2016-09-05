@@ -625,7 +625,7 @@ struct monst *shkp;
 	if (!Role_if(PM_ROGUE)) {     /* stealing is unlawful */
 	    adjalign(-sgn(u.ualign.type));
 	    You("feel like an evil rogue.");
-		if(u.ualign.type < 0){
+		if(u.ualign.type >= 0){
 			u.ualign.sins++;
 			u.hod++; /* It is deliberate that non-rogues increment hod twice*/
 		}
@@ -4653,136 +4653,138 @@ shk_identify(slang, shkp)
 	boolean guesswork;              /* Will shkp be guessing?       */
 	boolean ripoff=FALSE;           /* Shkp ripping you off?        */
 	char ident_type;
-
-	/* Pick object */
-	if ( !(obj = getobj(identify_types, "have identified"))) return;
-
-	/* Will shk be guessing? */
-        if ((guesswork = !shk_obj_match(obj, shkp)))
-	{
-		verbalize("I don't handle that sort of item, but I could try...");
-	}
-
-	/* Here we go */
-	/* KMH -- fixed */
-	if ((ESHK(shkp)->services & (SHK_ID_BASIC|SHK_ID_PREMIUM)) ==
-			(SHK_ID_BASIC|SHK_ID_PREMIUM)) {
-		ident_type = yn_function("[B]asic service or [P]remier",
-		     ident_chars, '\0');
-		if (ident_type == '\0') return;
-	} else if (ESHK(shkp)->services & SHK_ID_BASIC) {
-		verbalize("I only offer basic identification.");
-		ident_type = 'b';
-	} else if (ESHK(shkp)->services & SHK_ID_PREMIUM) {
-		verbalize("I only make complete identifications.");
-		ident_type = 'p';
-	}
-
-	/*
-	** Shopkeeper is ripping you off if:
-	** Basic service and object already known.
-	** Premier service, object known, + know blessed/cursed and
-	**      rustproof, etc.
-	*/
-	if (obj->dknown && objects[obj->otyp].oc_name_known)
-	{
-		if (ident_type=='b') ripoff=TRUE;
-		if (ident_type=='p' && obj->bknown && obj->rknown && obj->known) ripoff=TRUE;
-	}
-
-	/* Compute the charge */
 	
-	if (ripoff)
-	{
-		if (no_cheat) {
-			verbalize("That item's already identified!");
-			return;
+	while(TRUE){
+		/* Pick object */
+		if ( !(obj = getobj(identify_types, "have identified"))) return;
+	
+		/* Will shk be guessing? */
+	        if ((guesswork = !shk_obj_match(obj, shkp)))
+		{
+			verbalize("I don't handle that sort of item, but I could try...");
 		}
-		/* Object already identified: Try and cheat the customer. */
-		pline("%s chuckles greedily...", mon_nam(shkp));
-		mult = 1;
 	
-	/* basic */        
-	} else if (ident_type=='b') mult = 1;
-
-	/* premier */
-	else mult = 2;
+		/* Here we go */
+		/* KMH -- fixed */
+		if ((ESHK(shkp)->services & (SHK_ID_BASIC|SHK_ID_PREMIUM)) ==
+				(SHK_ID_BASIC|SHK_ID_PREMIUM)) {
+			ident_type = yn_function("[B]asic service or [P]remier",
+			     ident_chars, '\0');
+			if (ident_type == '\0') return;
+		} else if (ESHK(shkp)->services & SHK_ID_BASIC) {
+			verbalize("I only offer basic identification.");
+			ident_type = 'b';
+		} else if (ESHK(shkp)->services & SHK_ID_PREMIUM) {
+			verbalize("I only make complete identifications.");
+			ident_type = 'p';
+		}
 	
-	switch (obj->oclass) {        
-		case AMULET_CLASS:      charge = 375 * mult;
-					break;
-		case WEAPON_CLASS:      charge = 75 * mult;
-					break;
-		case ARMOR_CLASS:       charge = 100 * mult;
-					break;
-		case FOOD_CLASS:        charge = 25 * mult;   
-					break;
-		case SCROLL_CLASS:      charge = 150 * mult;   
-					break;
-		case SPBOOK_CLASS:      charge = 250 * mult;   
-					break;
-		case POTION_CLASS:      charge = 150 * mult;   
-					break;
-		case RING_CLASS:        charge = 300 * mult;   
-					break;
-		case WAND_CLASS:        charge = 200 * mult;   
-					break;
-		case TOOL_CLASS:        charge = 50 * mult;   
-					break;
-		case GEM_CLASS:         charge = 500 * mult;
-					break;
-		default:                charge = 75 * mult;
-					break;
-	}
-		
-	/* Artifacts cost more to deal with */
-	/* KMH -- Avoid floating-point */
-	if (obj->oartifact) charge = charge * 3 / 2;
-	
-	/* Smooth out the charge a bit (lower bound only) */
-	shk_smooth_charge(&charge, 25, 750);
-	
-	/* Go ahead? */
-	if (shk_offer_price(slang, charge, shkp) == FALSE) return;
-
-	/* Shopkeeper deviousness */
-	if (ident_type == 'b') {
-	    if (Hallucination) {
-		pline("You hear %s tell you it's a pot of flowers.",
-			mon_nam(shkp));
-		return;
-	    } else if (Confusion) {
-			pline("%s tells you but you forget.", mon_nam(shkp));
-		return;
-	    }
-	}
-
-	/* Is shopkeeper guessing? */
-	if (guesswork)
-	{
 		/*
-		** Identify successful if rn2() < #.  
+		** Shopkeeper is ripping you off if:
+		** Basic service and object already known.
+		** Premier service, object known, + know blessed/cursed and
+		**      rustproof, etc.
 		*/
-		if (!rn2(ident_type == 'b' ? 4 : 2)) {
-			verbalize("Success!");
-			/* Rest of msg will come from identify(); */
-		} else {
-			verbalize("Sorry.  I guess it's not your lucky day.");
-			return;
+		if (obj->dknown && objects[obj->otyp].oc_name_known)
+		{
+			if (ident_type=='b') ripoff=TRUE;
+			if (ident_type=='p' && obj->bknown && obj->rknown && obj->known) ripoff=TRUE;
 		}
-	}
-
-	/* Premier service */
-	if (ident_type == 'p') {
-		identify(obj);
-	} else { 
-		/* Basic */
-		makeknown(obj->otyp);
-		obj->dknown = 1;
-    		prinv((char *)0, obj, 0L); /* Print result */
-		u.uconduct.IDs++;
-	}
-	u.uconduct.shopID++;
+	
+		/* Compute the charge */
+		
+		if (ripoff)
+		{
+			if (no_cheat) {
+				verbalize("That item's already identified!");
+				return;
+			}
+			/* Object already identified: Try and cheat the customer. */
+			pline("%s chuckles greedily...", mon_nam(shkp));
+			mult = 1;
+		
+		/* basic */        
+		} else if (ident_type=='b') mult = 1;
+	
+		/* premier */
+		else mult = 2;
+		
+		switch (obj->oclass) {        
+			case AMULET_CLASS:      charge = 375 * mult;
+						break;
+			case WEAPON_CLASS:      charge = 75 * mult;
+						break;
+			case ARMOR_CLASS:       charge = 100 * mult;
+						break;
+			case FOOD_CLASS:        charge = 25 * mult;   
+						break;
+			case SCROLL_CLASS:      charge = 150 * mult;   
+						break;
+			case SPBOOK_CLASS:      charge = 250 * mult;   
+						break;
+			case POTION_CLASS:      charge = 150 * mult;   
+						break;
+			case RING_CLASS:        charge = 300 * mult;   
+						break;
+			case WAND_CLASS:        charge = 200 * mult;   
+						break;
+			case TOOL_CLASS:        charge = 50 * mult;   
+						break;
+			case GEM_CLASS:         charge = 500 * mult;
+						break;
+			default:                charge = 75 * mult;
+						break;
+		}
+			
+		/* Artifacts cost more to deal with */
+		/* KMH -- Avoid floating-point */
+		if (obj->oartifact) charge = charge * 3 / 2;
+		
+		/* Smooth out the charge a bit (lower bound only) */
+		shk_smooth_charge(&charge, 25, 750);
+		
+		/* Go ahead? */
+		if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+	
+		/* Shopkeeper deviousness */
+		if (ident_type == 'b') {
+		    if (Hallucination) {
+			pline("You hear %s tell you it's a pot of flowers.",
+				mon_nam(shkp));
+			return;
+		    } else if (Confusion) {
+				pline("%s tells you but you forget.", mon_nam(shkp));
+			return;
+		    }
+		}
+	
+		/* Is shopkeeper guessing? */
+		if (guesswork)
+		{
+			/*
+			** Identify successful if rn2() < #.  
+			*/
+			if (!rn2(ident_type == 'b' ? 4 : 2)) {
+				verbalize("Success!");
+				/* Rest of msg will come from identify(); */
+			} else {
+				verbalize("Sorry.  I guess it's not your lucky day.");
+				return;
+			}
+		}
+	
+		/* Premier service */
+		if (ident_type == 'p') {
+			identify(obj);
+		} else { 
+			/* Basic */
+			makeknown(obj->otyp);
+			obj->dknown = 1;
+	    		prinv((char *)0, obj, 0L); /* Print result */
+			u.uconduct.IDs++;
+		}
+		u.uconduct.shopID++;
+	} //loop for multiple ids
 }
 
 
@@ -4988,14 +4990,14 @@ struct monst *shkp;
 	start_menu(tmpwin);
 	if (ESHK(shkp)->services & (SHK_SPECIAL_A | SHK_SPECIAL_B)) {
 		if (ESHK(shkp)->services & SHK_SPECIAL_A) {
-		    any.a_int = 1;
-		    add_menu(tmpwin, NO_GLYPH, &any , 'w', 0, ATR_NONE,
-			    "Ward against damage", MENU_UNSELECTED);
+			any.a_int = 1;
+			add_menu(tmpwin, NO_GLYPH, &any , 'w', 0, ATR_NONE,
+				"Ward against damage", MENU_UNSELECTED);
 		}
 		if (ESHK(shkp)->services & SHK_SPECIAL_B) {
-		    any.a_int = 2;
-		    add_menu(tmpwin, NO_GLYPH, &any , 'e', 0, ATR_NONE,
-			    "Enchant", MENU_UNSELECTED);
+			any.a_int = 2;
+			add_menu(tmpwin, NO_GLYPH, &any , 'e', 0, ATR_NONE,
+				"Enchant", MENU_UNSELECTED);
 		}
 	}
 	/* Can object be poisoned? */
@@ -5037,90 +5039,90 @@ struct monst *shkp;
 
     switch(service) {
 		case 0:
-	    break;
-	
+		break;
+
 		case 1:
-		    verbalize("This'll leave your %s untouchable!", xname(obj));
-		    
-		    /* Costs more the more eroded it is (oeroded 0-3 * 2) */
-		    charge = 500 * (obj->oeroded + obj->oeroded2 + 1);
-		    if (obj->oeroded + obj->oeroded2 > 2)
+			verbalize("This'll leave your %s untouchable!", xname(obj));
+			
+			/* Costs more the more eroded it is (oeroded 0-3 * 2) */
+			charge = 500 * (obj->oeroded + obj->oeroded2 + 1);
+			if (obj->oeroded + obj->oeroded2 > 2)
 			verbalize("This thing's in pretty sad condition, %s", slang);
-	
-		    /* Another warning if object is naturally rustproof */
-		    if (obj->oerodeproof || !is_damageable(obj))
+
+			/* Another warning if object is naturally rustproof */
+			if (obj->oerodeproof || !is_damageable(obj))
 			pline("%s gives you a suspciously happy smile...",
 				mon_nam(shkp));
-	
-		    /* Artifacts cost more to deal with */
-		    if (obj->oartifact) charge = charge * 3 / 2;
-	
-		    /* Smooth out the charge a bit */
-		    shk_smooth_charge(&charge, 200, 1500);
-	
-		    if (shk_offer_price(slang, charge, shkp) == FALSE) return;
-	
-		    /* Have some fun, but for this $$$ it better work. */
-		    if (Confusion)
+
+			/* Artifacts cost more to deal with */
+			if (obj->oartifact) charge = charge * 3 / 2;
+
+			/* Smooth out the charge a bit */
+			shk_smooth_charge(&charge, 200, 1500);
+
+			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+
+			/* Have some fun, but for this $$$ it better work. */
+			if (Confusion)
 			You("fall over in appreciation");
-		    else if (Hallucination)
+			else if (Hallucination)
 			Your(" - tin roof, un-rusted!");
-	
-		    obj->oeroded = obj->oeroded2 = 0;
-		    obj->rknown = TRUE;
-		    obj->oerodeproof = TRUE;
-	    break;
+
+			obj->oeroded = obj->oeroded2 = 0;
+			obj->rknown = TRUE;
+			obj->oerodeproof = TRUE;
+		break;
 		case 2:
-		    verbalize("Guaranteed not to harm your weapon, or your money back!");
-	
+			verbalize("Guaranteed not to harm your weapon, or your money back!");
+
 			charge = (obj->spe+1) * (obj->spe+1) * 62;
-	
-		    if (obj->spe < 0) charge = 100;
-	
-		    /* Artifacts cost more to deal with */
-		    if (obj->oartifact) charge *= 2;
-	
-		    /* Smooth out the charge a bit (lower bound only) */
-		    shk_smooth_charge(&charge, 50, NOBOUND);
-	
-		    if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+			
+			if (obj->spe < 0) charge = 100;
+
+			/* Artifacts cost more to deal with */
+			if (obj->oartifact) charge *= 2;
+
+			/* Smooth out the charge a bit (lower bound only) */
+			shk_smooth_charge(&charge, 50, NOBOUND);
+
+			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 			
 			if(obj->oclass == TOOL_CLASS && !is_weptool(obj)){
 				verbalize("All done!");
 				// Steals your money
 				break;
 			}
-		    if (obj->spe+1 > 5) { 
+			if (obj->spe+1 > 5) {
 				verbalize("I tried, but I can't enchant this any higher!");
 				// Steals your money
-			break;
-		    }
-		    /* Have some fun! */
-		    if (Confusion)
+				break;
+			}
+			/* Have some fun! */
+			if (Confusion)
 			Your("%s unexpectedly!", aobjnam(obj, "vibrate"));
-		    else if (Hallucination)
+			else if (Hallucination)
 			Your("%s to evaporate into thin air!", aobjnam(obj, "seem"));
-		    /* ...No actual vibrating and no evaporating */
-	
-		    if (obj->otyp == WORM_TOOTH) {
+			/* ...No actual vibrating and no evaporating */
+
+			if (obj->otyp == WORM_TOOTH) {
 			obj->otyp = CRYSKNIFE;
 			Your("weapon seems sharper now.");
 			obj->cursed = 0;
 			break;
-		    }
-	
-		    obj->spe++;
-	    break;
+			}
+
+			obj->spe++;
+		break;
 		case 3:
-		    verbalize("Just imagine what poisoned %s can do!", xname(obj));
-	
+			verbalize("Just imagine what poisoned %s can do!", xname(obj));
+
 			charge = 90;
 			charge+= 10 * obj->quan;
-	
-		    if (shk_offer_price(slang, charge, shkp) == FALSE) return;
-	
-		    obj->opoisoned = OPOISON_BASIC;
-	    break;
+
+			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+
+			obj->opoisoned = OPOISON_BASIC;
+		break;
 		case 4:
 			verbalize("Just imagine what drugged %s can do!", xname(obj));
 
@@ -5163,9 +5165,9 @@ struct monst *shkp;
 		break;
 
 		default:
-		    impossible("Unknown Weapon Enhancement");
-	    break;
-    }
+			impossible("Unknown Weapon Enhancement");
+		break;
+	}
 }
 
 

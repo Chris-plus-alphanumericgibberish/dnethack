@@ -75,7 +75,10 @@ long mask;
 				obj->ovar1 |= u.spirit[i];
 			}
 		}
-	}
+	} else if(obj && obj->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER){
+      if(P_UNSKILLED == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_BASIC;
+      if(P_BASIC     == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_SKILLED;
+    }
 	
 	if ((mask & (W_ARM|I_SPECIAL)) == (W_ARM|I_SPECIAL)) {
 	    /* restoring saved game; no properties are conferred via skin */
@@ -129,6 +132,14 @@ long mask;
 			if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 					    mask != W_WEP) {
 			    p = objects[obj->otyp].oc_oprop;
+				if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
+					for(p = 0; p < 1; p++) u.uprops[ORANGE_RES[p]].extrinsic = u.uprops[ORANGE_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->otyp == YELLOW_DRAGON_SCALES || obj->otyp == YELLOW_DRAGON_SCALE_MAIL || obj->otyp == YELLOW_DRAGON_SCALE_SHIELD){
+					for(p = 0; p < 1; p++) u.uprops[YELLOW_RES[p]].extrinsic = u.uprops[YELLOW_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->otyp == GREEN_DRAGON_SCALES || obj->otyp == GREEN_DRAGON_SCALE_MAIL || obj->otyp == GREEN_DRAGON_SCALE_SHIELD){
+					for(p = 0; p < 1; p++) u.uprops[GREEN_RES[p]].extrinsic = u.uprops[GREEN_RES[p]].extrinsic | wp->w_mask;
+				}
+				
 				if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 					for(p = 0; p < 5; p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic | wp->w_mask;
 				} else if(obj->oartifact == ART_WAR_MASK_OF_DURIN){
@@ -162,6 +173,10 @@ register struct obj *obj;
 
 	if (!obj) return;
 	if (obj == uwep || obj == uswapwep) u.twoweap = 0;
+	if (obj->oartifact && obj->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER){
+      if(P_BASIC   == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_UNSKILLED;
+      if(P_SKILLED == OLD_P_SKILL(P_ATTACK_SPELL)) OLD_P_SKILL(P_ATTACK_SPELL) = P_BASIC;
+    }
 	for(wp = worn; wp->w_mask; wp++)
 	    if(obj == *(wp->w_obj)) {
 		*(wp->w_obj) = 0;
@@ -183,6 +198,10 @@ register struct obj *obj;
 		} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 			for(p = 0; p < 5; p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
 		} else u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
+		if(obj->oartifact == ART_GAUNTLETS_OF_THE_BERSERKER){
+//        adj_abon(uarmg, -uarmg->ovar1);
+          uarmg->ovar1 = 0;
+        }
 		obj->owornmask &= ~wp->w_mask;
 		if (obj->oartifact)
 		    set_artifact_intrinsic(obj, 0, wp->w_mask);
@@ -437,6 +456,7 @@ struct monst *mon;
 	
 	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
 	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + AC_VALUE(base+8);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
@@ -466,6 +486,7 @@ struct monst *mon;
 	
 	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
 	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + AC_VALUE(base+8);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
@@ -943,7 +964,7 @@ boolean polyspot;
 	noride:
 	    You("can no longer ride %s.", mon_nam(mon));
 	    if (touch_petrifies(u.usteed->data) &&
-			!Stone_resistance && rnl(3)) {
+			!Stone_resistance && rnl(100) >= 33) {
 		char buf[BUFSZ];
 
 		You("touch %s.", mon_nam(u.usteed));

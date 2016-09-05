@@ -165,7 +165,7 @@ struct monst *victim;
 	} else if (erosion < MAX_ERODE) {
 	    if (grprot && otmp->greased) {
 		grease_protect(otmp,ostr,victim);
-	    } else if (otmp->oerodeproof || (otmp->blessed && !rnl(4))) {
+	    } else if (otmp->oerodeproof || (otmp->blessed && rnl(100) < 25)) {
 		if (flags.verbose) {
 		    if (victim == &youmonst)
 			pline("Somehow, your %s %s not affected.",
@@ -884,7 +884,7 @@ unsigned trflags;
 				    body_part(ARM));
 			if (rust_dmg(uarms, "shield", 1, TRUE, &youmonst))
 			    break;
-			if (u.twoweap || (uwep && bimanual(uwep)))
+			if (u.twoweap || (uwep && bimanual(uwep,youracedata)))
 			    erode_obj(u.twoweap ? uswapwep : uwep, FALSE, TRUE);
 glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			/* Not "metal gauntlets" since it gets called
@@ -1779,7 +1779,7 @@ register struct monst *mtmp;
 	    /* Monster is aggravated by being trapped by you.
 	       Recognizing who made the trap isn't completely
 	       unreasonable; everybody has their own style. */
-	    if (trap->madeby_u && rnl(5)) setmangry(mtmp);
+	    if (trap->madeby_u && rnl(100) >= 20) setmangry(mtmp);
 
 	    in_sight = canseemon(mtmp);
 	    see_it = cansee(mtmp->mx, mtmp->my);
@@ -1908,7 +1908,7 @@ register struct monst *mtmp;
 			    if (rust_dmg(target, "shield", 1, TRUE, mtmp))
 				break;
 			    target = MON_WEP(mtmp);
-			    if (target && bimanual(target))
+			    if (target && bimanual(target,mtmp->data))
 				erode_obj(target, FALSE, TRUE);
 glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    (void) rust_dmg(target, "gauntlets", 1, TRUE, mtmp);
@@ -2716,7 +2716,7 @@ xchar x, y;
 	    case CHEST:
 		chance = 40;
 		break;
-	    case LARGE_BOX:
+	    case BOX:
 		chance = 30;
 		break;
 	    default:
@@ -2767,7 +2767,7 @@ xchar x, y;
 	    delobj(obj);
 	    retval++;
 	} else if (is_flammable(obj) && obj->oeroded < MAX_ERODE &&
-		   !(obj->oerodeproof || (obj->blessed && !rnl(4)))) {
+		   !(obj->oerodeproof || (obj->blessed && rnl(100) < 25))) {
 	    if (in_sight) {
 		pline("%s %s%s.", Yname2(obj), otense(obj, "burn"),
 		      obj->oeroded+1 == MAX_ERODE ? " completely" :
@@ -2798,21 +2798,21 @@ struct monst *owner;
 //	int is_lethe = level.flags.lethe || forcelethe;
 	int is_lethe = 0;
 	if(owner == &youmonst){
-	if((uarmc
-		&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
-		&& (!uarmc->cursed || rn2(3))
-	   ) || (
-		ublindf
-		&& ublindf->otyp == R_LYEHIAN_FACEPLATE
-		&& (!ublindf->cursed || rn2(3))
-	   ) || u.sealsActive&SEAL_ENKI
-	) {
-		if(uarmc && uarmc->otyp != OILSKIN_CLOAK && uarmc->greased){
-			if (force || !rn2(uarmc->blessed ? 4 : 2)){
-				uarmc->greased = 0;
-				pline("The layer of grease on your %s dissolves.", xname(uarmc));
+		if((uarmc
+			&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
+			&& (!uarmc->cursed || rn2(3))
+		   ) || (
+			ublindf
+			&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+			&& (!ublindf->cursed || rn2(3))
+		   ) || u.sealsActive&SEAL_ENKI
+		) {
+			if(uarmc && uarmc->otyp != OILSKIN_CLOAK && uarmc->greased){
+				if (force || !rn2(uarmc->blessed ? 4 : 2)){
+					uarmc->greased = 0;
+					pline("The layer of grease on your %s dissolves.", xname(uarmc));
+				}
 			}
-		}
 			return 0;
 		}
 	} else if(owner){ //Monster
@@ -2980,7 +2980,7 @@ struct monst *owner;
 		    default:
 			if (is_rustprone(obj) && obj->oeroded < MAX_ERODE &&
 					!(obj->oerodeproof || 
-					 (obj->blessed && !rnl(4))))
+					 (obj->blessed && rnl(100) < 25)))
 				obj->oeroded++;
 			/* The Lethe may unfooproof the item... */
 			if (is_lethe
@@ -3320,7 +3320,7 @@ dountrap()	/* disarm a trap */
 	    pline("You'll have to let go of %s first.", mon_nam(u.ustuck));
 	    return 0;
 	}
-	if (u.ustuck || (welded(uwep) && bimanual(uwep))) {
+	if (u.ustuck || (welded(uwep) && bimanual(uwep,youracedata))) {
 	    Your("%s seem to be too busy for that.",
 		 makeplural(body_part(HAND)));
 	    return 0;
@@ -3450,7 +3450,7 @@ boolean force_failure;
 
 	/* Will our hero succeed? */
 	if (force_failure || untrap_prob(ttmp)) {
-		if (rnl(5)) {
+		if (rnl(100) >= 20) {
 		    pline("Whoops...");
 		    if (mtmp) {		/* must be a trap that holds monsters */
 			if (ttype == BEAR_TRAP) {
@@ -3494,7 +3494,7 @@ struct trap *ttmp;
 struct monst *mtmp;
 {
 	if (!ttmp->madeby_u) {
-	    if (rnl(10) < 8 && !mtmp->mpeaceful &&
+	    if (rnl(100) < 80 && !mtmp->mpeaceful &&
 		    !mtmp->msleeping && !mtmp->mfrozen &&
 		    !mindless(mtmp->data) &&
 		    mtmp->data->mlet != S_HUMAN) {
@@ -3504,9 +3504,9 @@ struct monst *mtmp;
 	    }
 	    /* Helping someone out of a trap is a nice thing to do,
 	     * A lawful may be rewarded, but not too often.  */
-	    if (!rn2(3) && !rnl(8) && u.ualign.type == A_LAWFUL) {
-		adjalign(1);
-		You_feel("that you did the right thing.");
+	    if (!rn2(3) && rnl(100) < 16 && u.ualign.type == A_LAWFUL) {
+			adjalign(1);
+			You_feel("that you did the right thing.");
 	    }
 	}
 }
@@ -3584,8 +3584,7 @@ struct trap *ttmp;
 	u.uconduct.food++;
 	deltrap(ttmp);
 	newsym(trapx, trapy);
-	lesshungry(50);
-	healup(50,FALSE,FALSE,FALSE);
+	lesshungry(500);
 	return 1;
 }
 
@@ -3735,7 +3734,7 @@ boolean stuff;
 		  stuff ? "carrying too much" : "too heavy");
 	    if (!ttmp->madeby_u && !mtmp->mpeaceful && mtmp->mcanmove &&
 		    !mindless(mtmp->data) &&
-		    mtmp->data->mlet != S_HUMAN && rnl(10) < 3) {
+		    mtmp->data->mlet != S_HUMAN && rnl(100) < 30) {
 		mtmp->mpeaceful = 1;
 		set_malign(mtmp);		/* reset alignment */
 		pline("%s thinks it was nice of you to try.", Monnam(mtmp));

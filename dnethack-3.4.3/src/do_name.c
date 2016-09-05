@@ -370,7 +370,7 @@ do_mname()
 	    mtmp = m_at(cx, cy);
 
 	if (!mtmp || (!sensemon(mtmp) &&
-			(!(cansee(cx,cy) || see_with_infrared(mtmp)) || mtmp->mundetected
+			(!(cansee(cx,cy) || see_with_infrared(mtmp) || see_with_bloodsense(mtmp) || see_with_lifesense(mtmp)) || mtmp->mundetected
 			|| mtmp->m_ap_type == M_AP_FURNITURE
 			|| mtmp->m_ap_type == M_AP_OBJECT
 			|| (mtmp->minvis && !See_invisible)))) {
@@ -528,6 +528,14 @@ const char *name;
 	if (obj->oartifact || (lth && exist_artifact(obj->otyp, name)))
 		return obj;
 	
+    if(!strcmp((&artilist[ART_SCALPEL_OF_LIFE_AND_DEATH])->name,name) &&
+       obj && obj->otyp == SCALPEL){
+      obj->ovar1 = COMMAND_DEATH;
+    }
+    if(((!strcmp((&artilist[ART_FIGURINE_OF_GALATEA])->name,name)) || (!strcmp((&artilist[ART_FIGURINE_OF_PYGMALION])->name,name))) &&
+       obj && obj->otyp == FIGURINE){
+      // obj->corpsenm = u.umonster*S*D*D*D*S*;
+    }
 	if(!strcmp((&artilist[ART_MANTLE_OF_HEAVEN])->name,name) &&
 	   obj && obj->otyp == LEATHER_CLOAK){
 		if(!Race_if(PM_VAMPIRE)) obj = poly_obj(obj,find_cope());
@@ -575,6 +583,23 @@ const char *name;
 		
 		if(obj->oartifact == ART_WAR_MASK_OF_DURIN) obj->corpsenm = PM_DWARF;
 		
+		if(obj->oartifact == ART_LIFEHUNT_SCYTHE) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) obj->objsize = MZ_SMALL;
+		else if(obj->oartifact == ART_FIELD_MARSHAL_S_BATON) obj->objsize = MZ_SMALL;
+		else if(obj->oartifact == ART_GENOCIDE) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_WRATHFUL_WIND) obj->objsize = MZ_HUGE;
+		// else if(obj->oartifact == ART_HEARTCLEAVER) obj->objsize = MZ_HUGE; //Actually, if it is MZ_MEDIUM Baphomet can wield it one-handed
+		else if(obj->oartifact == ART_THREE_HEADED_FLAIL) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_AVARICE) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_STING_OF_THE_POISON_QUEEN) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_WAND_OF_ORCUS) obj->objsize = MZ_HUGE;
+		else if(obj->oartifact == ART_UNBLEMISHED_SOUL) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_DIADEM_OF_AMNESIA) obj->objsize = MZ_HUGE;
+		else if(obj->oartifact == ART_WRATH_OF_HEAVEN) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_COLD_SOUL) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) obj->objsize = MZ_LARGE;
+		else obj->objsize = MZ_MEDIUM;
 	    /* can't dual-wield with artifact as secondary weapon */
 	    if (obj == uswapwep) untwoweapon();
 	    /* activate warning if you've just named your weapon "Sting" */
@@ -804,7 +829,10 @@ boolean called;
 		return buf;
 	    Strcat(buf, " the ");
 	    if (do_invis) Strcat(buf, "invisible ");
-		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
+		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]){
+			Strcat(buf, "frumious ");
+			name_at_start = FALSE;
+		}
 		if ((u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)) || (Role_if(PM_HEALER) && (!nonliving(mtmp->data) || has_blood(mtmp->data))) ){
 			if(mtmp->mhp == mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "uninjured ") : Strcat(buf, "undamaged ");
 			else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
@@ -812,12 +840,16 @@ boolean called;
 			else if(mtmp->mhp >= .25*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "bloodied ") : Strcat(buf, "damaged ");
 			else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 			else if(mtmp->mhp > 0) (has_blood(mtmp->data)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
+			name_at_start = FALSE;
 		}
 		if(is_drow(mdat)){
 			struct obj *otmp;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
-					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+					&& otmp->owornmask & mtmp->misc_worn_check){
+						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						name_at_start = FALSE;
+					}
 			}
 		}
 	    Strcat(buf, mdat->mname);
@@ -857,7 +889,10 @@ boolean called;
 			Sprintf(eos(buf), "%s broken shadow", s_suffix(name));
 			name_at_start = TRUE;
 	    } else if (called) {
-			if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Sprintf(eos(buf), "frumious ");
+			if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]){
+				Sprintf(eos(buf), "frumious ");
+				name_at_start = FALSE;
+			}
 			if ((u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)) || (Role_if(PM_HEALER) && (!nonliving(mtmp->data) || has_blood(mtmp->data))) ){
 				if(mtmp->mhp == mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "uninjured ") : Strcat(buf, "undamaged ");
 				else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
@@ -865,12 +900,16 @@ boolean called;
 				else if(mtmp->mhp >= .25*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "bloodied ") : Strcat(buf, "damaged ");
 				else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 				else if(mtmp->mhp > 0) (has_blood(mtmp->data)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
+				name_at_start = FALSE;
 			}
 			if(is_drow(mdat)){
 				struct obj *otmp;
 				for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 					if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
-						&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						&& otmp->owornmask & mtmp->misc_worn_check){
+							Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+							name_at_start = FALSE;
+						}
 				}
 			}
 			Sprintf(eos(buf), "%s called %s", mdat->mname, name);
@@ -899,7 +938,11 @@ boolean called;
 	    Strcat(buf, lcase(pbuf));
 	    name_at_start = FALSE;
 	} else {
-		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]) Strcat(buf, "frumious ");
+	    name_at_start = (boolean)type_is_pname(mdat);
+		if (mtmp->mflee && mtmp->data == &mons[PM_BANDERSNATCH]){
+			Strcat(buf, "frumious ");
+			name_at_start = FALSE;
+		}
 		if ((u.sealsActive&SEAL_MOTHER && !is_undead(mtmp->data)) || (Role_if(PM_HEALER) && (!nonliving(mtmp->data) || has_blood(mtmp->data))) ){
 			if(mtmp->mhp == mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "uninjured ") : Strcat(buf, "undamaged ");
 			else if(mtmp->mhp >= .9*mtmp->mhpmax) Strcat(buf, "scuffed ");
@@ -907,16 +950,19 @@ boolean called;
 			else if(mtmp->mhp >= .25*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "bloodied ") : Strcat(buf, "damaged ");
 			else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood(mtmp->data)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 			else if(mtmp->mhp > 0) (has_blood(mtmp->data)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
+			name_at_start = FALSE;
 		}
 		if(is_drow(mdat)){
 			struct obj *otmp;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
-					&& otmp->owornmask & mtmp->misc_worn_check) Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+					&& otmp->owornmask & mtmp->misc_worn_check){
+						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						name_at_start = FALSE;
+					}
 			}
 		}
 	    Strcat(buf, mdat->mname);
-	    name_at_start = (boolean)type_is_pname(mdat);
 	}
 
 	if (name_at_start && (article == ARTICLE_YOUR || !has_adjectives)) {
@@ -1041,14 +1087,14 @@ const char *
 sheheit(mtmp)
 register struct monst *mtmp;
 {
-	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "it" : mtmp->female ? "she" : "he";
+	return (is_neuter(mtmp->data)) ? "it" : mtmp->female ? "she" : "he";
 }
 
 const char *
 SheHeIt(mtmp)
 register struct monst *mtmp;
 {
-	return (!canspotmon(mtmp) || is_neuter(mtmp->data)) ? "It" : mtmp->female ? "She" : "He";
+	return (is_neuter(mtmp->data)) ? "It" : mtmp->female ? "She" : "He";
 }
 
 const char *

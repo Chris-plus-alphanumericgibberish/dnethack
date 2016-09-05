@@ -1946,7 +1946,7 @@ recbranch_mapseen(source, dest)
 
 	/* branch not found, so not a real branch. */
 	if (!br) return;
-
+  
 	if ((mptr = find_mapseen(source))) {
 		if (mptr->br && br != mptr->br)
 			impossible("Two branches on the same level?");
@@ -2303,26 +2303,27 @@ dooverview()
 	/* lazy intialization */
 	(void) recalc_mapseen();
 
-	win = create_nhwindow(NHW_MENU);
+	if(mapseenchn){
+		win = create_nhwindow(NHW_MENU);
+		for (mptr = mapseenchn; mptr; mptr = mptr->next) {
+			/* only print out info for a level or a dungeon if interest */
+			if (interest_mapseen(mptr)) {
+				printdun = (first || lastdun != mptr->lev.dnum);
+				/* if (!first) putstr(win, 0, ""); */
+				print_mapseen(win, mptr, printdun);
 
-	for (mptr = mapseenchn; mptr; mptr = mptr->next) {
-
-		/* only print out info for a level or a dungeon if interest */
-		if (interest_mapseen(mptr)) {
-			printdun = (first || lastdun != mptr->lev.dnum);
-			/* if (!first) putstr(win, 0, ""); */
-			print_mapseen(win, mptr, printdun);
-
-			if (printdun) {
-				first = FALSE;
-				lastdun = mptr->lev.dnum;
+				if (printdun) {
+					first = FALSE;
+					lastdun = mptr->lev.dnum;
+				}
 			}
 		}
+
+		display_nhwindow(win, TRUE);
+		destroy_nhwindow(win);
+	} else {
+		You("have found nothing of note.");
 	}
-
-	display_nhwindow(win, TRUE);
-	destroy_nhwindow(win);
-
 	return 0;
 }
 

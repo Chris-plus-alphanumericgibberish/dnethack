@@ -139,8 +139,10 @@ struct obj *otmp;
 			if (!flags.mon_moving && otyp == SPE_FORCE_BOLT && (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM))
 				dmg += d((u.ulevel+1)/2, 12);
 			if(dbldam) dmg *= 2;
+			if(u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
 			if (otyp == SPE_FORCE_BOLT)
 			    dmg += spell_damage_bonus();
+			
 			hit(zap_type_text, mtmp, exclam(dmg));
 			(void) resist(mtmp, otmp->oclass, dmg, TELL);
 		} else miss(zap_type_text, mtmp);
@@ -174,6 +176,7 @@ struct obj *otmp;
 			wake = TRUE;
 			dmg = rnd(8);
 			if(dbldam) dmg *= 2;
+			if(u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
 			if (otyp == SPE_TURN_UNDEAD)
 				dmg += spell_damage_bonus();
 			flags.bypasses = TRUE;	/* for make_corpse() */
@@ -333,6 +336,7 @@ struct obj *otmp;
 		reveal_invis = TRUE;
 		dmg = rnd(8);
 		if(dbldam) dmg *= 2;
+		if(u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
 		if (otyp == SPE_DRAIN_LIFE)
 			dmg += spell_damage_bonus();
 		if (resists_drli(mtmp)){
@@ -655,44 +659,44 @@ register struct obj *obj;
 		    if (obj->oxlth && (obj->oattached == OATTACHED_MONST)) {
 			    coord xy;
 			    xy.x = x; xy.y = y;
-		    	    mtmp = montraits(obj, &xy);
-		    	    if (mtmp && mtmp->mtame && !mtmp->isminion)
-				wary_dog(mtmp, TRUE);
+				mtmp = montraits(obj, &xy);
+				if (mtmp && mtmp->mtame && !mtmp->isminion)
+					wary_dog(mtmp, TRUE);
 		    } else
  		            mtmp = makemon(&mons[montype], x, y,
 				       NO_MINVENT|MM_NOWAIT|MM_NOCOUNTBIRTH);
 		    if (mtmp) {
-			if (obj->oxlth && (obj->oattached == OATTACHED_M_ID)) {
-			    unsigned m_id;
-			    struct monst *ghost;
-			    (void) memcpy((genericptr_t)&m_id,
-				    (genericptr_t)obj->oextra, sizeof(m_id));
-			    ghost = find_mid(m_id, FM_FMON);
-		    	    if (ghost && ghost->data == &mons[PM_GHOST]) {
-		    		    int x2, y2;
-		    		    x2 = ghost->mx; y2 = ghost->my;
-		    		    if (ghost->mtame)
-		    		    	savetame = ghost->mtame;
-		    		    if (canseemon(ghost))
-		    		  	pline("%s is suddenly drawn into its former body!",
-						Monnam(ghost));
-				    mondead(ghost);
-				    recorporealization = TRUE;
-				    newsym(x2, y2);
-			    }
-			    /* don't mess with obj->oxlth here */
-			    obj->oattached = OATTACHED_NOTHING;
+				if (obj->oxlth && (obj->oattached == OATTACHED_M_ID)) {
+					unsigned m_id;
+					struct monst *ghost;
+					(void) memcpy((genericptr_t)&m_id,
+						(genericptr_t)obj->oextra, sizeof(m_id));
+					ghost = find_mid(m_id, FM_FMON);
+						if (ghost && ghost->data == &mons[PM_GHOST]) {
+							int x2, y2;
+							x2 = ghost->mx; y2 = ghost->my;
+							if (ghost->mtame)
+								savetame = ghost->mtame;
+							if (canseemon(ghost))
+							pline("%s is suddenly drawn into its former body!",
+							Monnam(ghost));
+						mondead(ghost);
+						recorporealization = TRUE;
+						newsym(x2, y2);
+					}
+					/* don't mess with obj->oxlth here */
+					obj->oattached = OATTACHED_NOTHING;
+				}
+				/* Monster retains its name */
+				if (obj->onamelth)
+					mtmp = christen_monst(mtmp, ONAME(obj));
+				/* flag the quest leader as alive. */
+				if (mtmp->data == &mons[urole.ldrnum] || mtmp->m_id ==
+					quest_status.leader_m_id) {
+					quest_status.leader_m_id = mtmp->m_id;
+					quest_status.leader_is_dead = FALSE;
+				}
 			}
-			/* Monster retains its name */
-			if (obj->onamelth)
-			    mtmp = christen_monst(mtmp, ONAME(obj));
-			/* flag the quest leader as alive. */
-			if (mtmp->data == &mons[urole.ldrnum] || mtmp->m_id ==
-			    quest_status.leader_m_id) {
-			    quest_status.leader_m_id = mtmp->m_id;
-			    quest_status.leader_is_dead = FALSE;
-		    }
-		}
 		}
 		if (mtmp) {
 			if (obj->oeaten)
@@ -718,16 +722,16 @@ register struct obj *obj;
 				useup(obj);
 				break;
 			    case OBJ_FLOOR:
-				/* in case MON_AT+enexto for invisible mon */
-				x = obj->ox,  y = obj->oy;
-				/* not useupf(), which charges */
-				if (obj->quan > 1L)
-				    obj = splitobj(obj, 1L);
-				delobj(obj);
-				newsym(x, y);
+					/* in case MON_AT+enexto for invisible mon */
+					x = obj->ox,  y = obj->oy;
+					/* not useupf(), which charges */
+					if (obj->quan > 1L)
+						obj = splitobj(obj, 1L);
+					delobj(obj);
+					newsym(x, y);
 				break;
 			    case OBJ_MINVENT:
-				m_useup(obj->ocarry, obj);
+					m_useup(obj->ocarry, obj);
 				break;
 			    case OBJ_CONTAINED:
 					if (obj->quan > 1L)
@@ -1708,7 +1712,7 @@ struct obj *obj, *otmp;
 			fracture_rock(obj);
 		else if (obj->otyp == STATUE)
 			(void) break_statue(obj);
-		else if (obj->otyp == HUGE_STONE_CRATE)
+		else if (obj->otyp == MASSIVE_STONE_CRATE)
 			(void) break_crate(obj);
 		else {
 			if (!flags.mon_moving)
@@ -1780,7 +1784,7 @@ struct obj *obj, *otmp;
 		switch (objects[obj->otyp].oc_class) {
 		    case ROCK_CLASS:	/* boulders and statues */
 			if (obj->otyp == BOULDER) {
-			    obj = poly_obj(obj, HUGE_CHUNK_OF_MEAT);
+			    obj = poly_obj(obj, MASSIVE_CHUNK_OF_MEAT);
 			    goto smell;
 			} else if (obj->otyp == STATUE) {
 			    xchar oox, ooy;
@@ -2037,7 +2041,7 @@ dozap()
 
 	/* zappable addition done by GAN 11/03/86 */
 	if(!zappable(obj)) pline1(nothing_happens);
-	else if(obj->cursed && !rn2(100)) {
+	else if(obj->cursed && !obj->oartifact && !rn2(100)) {
 		backfire(obj);	/* the wand blows up in your face! */
 		exercise(A_STR, FALSE);
 		return(1);
@@ -2307,7 +2311,8 @@ boolean ordinary;
 		    break;
 		case SPE_HEALING:
 		case SPE_EXTRA_HEALING:
-		    healup(d(6, obj->otyp == SPE_EXTRA_HEALING ? 8 : 4),
+		    healup(d((uarm && uarm->oartifact == ART_GAUNTLETS_OF_THE_HEALING_H) ?
+                  12 : 6, obj->otyp == SPE_EXTRA_HEALING ? 8 : 4),
 			   0, FALSE, (obj->otyp == SPE_EXTRA_HEALING));
 		    You_feel("%sbetter.",
 			obj->otyp == SPE_EXTRA_HEALING ? "much " : "");
@@ -2826,7 +2831,7 @@ int skill;
 	case P_UNSKILLED:   hit_bon = -4; break;
 	case P_BASIC:       hit_bon =  0; break;
 	case P_SKILLED:     hit_bon =  2; break;
-	case P_EXPERT:      hit_bon =  3; break;
+	case P_EXPERT:      hit_bon =  5; break;
     }
 
     if (dex < 4)
@@ -3751,6 +3756,11 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     }
     if(type < 0) newsym(u.ux,u.uy);
     if(!range) range = rn1(7,7);
+	if(u.sealsActive&SEAL_NABERIUS){
+		range *= 2;
+		flat *= 1.5;
+		nd *= 1.5;
+	}
     if(dx == 0 && dy == 0) range = 1;
     save_bhitpos = bhitpos;
 
@@ -4074,10 +4084,17 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 	////////////////////////////////////////////////////////////////////////////////////////
 	if(redrawneeded) doredraw();
     tmp_at(DISP_END,0);
-    if (type == ZT_SPELL(ZT_FIRE))
-		explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_FIERY);
-    else if (type == ZT_SPELL(ZT_ACID))
-		explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_NOXIOUS);
+	if(u.sealsActive&SEAL_NABERIUS){
+		if (type == ZT_SPELL(ZT_FIRE))
+			explode2(sx, sy, type, flat ? flat : d(18,6), 0, EXPL_FIERY);
+		else if (type == ZT_SPELL(ZT_ACID))
+			explode2(sx, sy, type, flat ? flat : d(18,6), 0, EXPL_NOXIOUS);
+	} else {
+		if (type == ZT_SPELL(ZT_FIRE))
+			explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_FIERY);
+		else if (type == ZT_SPELL(ZT_ACID))
+			explode(sx, sy, type, flat ? flat : d(12,6), 0, EXPL_NOXIOUS);
+	}
     if (shopdamage)
 	pay_for_damage(abstype == ZT_FIRE ?  "burn away" :
 		       abstype == ZT_COLD ?  "shatter" :
@@ -4691,7 +4708,12 @@ int damage, tell;
 	    case SCROLL_CLASS:	alev =  9;	 break;
 	    case POTION_CLASS:	alev =  6;	 break;
 	    case RING_CLASS:	alev =  5;	 break;
-	    default:		alev = u.ulevel; break;	/* spell */
+	    default:/* spell */
+			alev = u.ulevel;
+			alev += (ACURR(A_CHA)-11);
+			if(Luck > 0) alev += rnd(Luck);
+			else if(Luck < 0) alev -= rnd(-1*Luck);
+		break;
 	}
 	/* defense level */
 	dlev = (int)mtmp->m_lev;

@@ -144,7 +144,7 @@ xchar x, y;
 
 	return ((ispick||is_saber) && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
 		(ispick||is_saber) && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
-		(ispick||is_saber) && sobj_at(HUGE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
+		(ispick||is_saber) && sobj_at(MASSIVE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
 		(closed_door(x, y) ||
 			levl[x][y].typ == SDOOR) ? DIGTYP_DOOR :
 		IS_TREES(levl[x][y].typ) ?
@@ -230,22 +230,21 @@ dig_check(madeby, verbose, x, y)
 STATIC_OVL int
 dig()
 {
-	register struct rm *lev;
 	register xchar dpx = digging.pos.x, dpy = digging.pos.y;
-	register boolean ispick = uwep && is_pick(uwep);
+	register struct rm *lev = &levl[dpx][dpy];
+	register boolean ispick = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) || (uarmg && is_pick(uarmg));
 	const char *verb =
 	    (!uwep || is_pick(uwep)) ? "dig into" :
 		    is_lightsaber(uwep) ? "cut through" :
 		    "chop through";
 	int bonus;
-
-	lev = &levl[dpx][dpy];
+	struct obj *digitem = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) ? uwep : 
+		(uwep && is_axe(uwep) && IS_TREES(lev->typ)) ? uwep :
+		(uarmg && is_pick(uarmg)) ? uarmg : uwep;
 	/* perhaps a nymph stole your pick-axe while you were busy digging */
 	/* or perhaps you teleported away */
 	/* WAC allow lightsabers */
-	if (u.uswallow || !uwep || (!ispick &&
-		(!is_lightsaber(uwep) || !uwep->lamplit) &&
-		!is_axe(uwep)) ||
+	if (u.uswallow || !(ispick || (digitem && is_axe(digitem))) ||
 	    !on_level(&digging.level, &u.uz) ||
 	    ((digging.down ? (dpx != u.ux || dpy != u.uy)
 			   : (distu(dpx,dpy) > 2)))
@@ -255,14 +254,14 @@ dig()
 		if(!dig_check(BY_YOU, TRUE, u.ux, u.uy)) return(0);
 	} else { /* !digging.down */
 		if (IS_TREES(lev->typ) && !may_dig(dpx,dpy) &&
-			dig_typ(uwep, dpx, dpy) == DIGTYP_TREE
+			dig_typ(digitem, dpx, dpy) == DIGTYP_TREE
 		) {
 			pline("This tree seems to be petrified.");
 			return(0);
 		}
 	    /* ALI - Artifact doors from Slash'em */
 		if ((IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
-			    dig_typ(uwep, dpx, dpy) == DIGTYP_ROCK) ||
+	    		dig_typ(digitem, dpx, dpy) == DIGTYP_ROCK) ||
 			(IS_DOOR(lev->typ) && artifact_door(dpx, dpy))
 		) {
 			pline("This %s is too hard to %s.",
@@ -272,27 +271,27 @@ dig()
 	}
 	if(Fumbling &&
 		/* Can't exactly miss holding a lightsaber to the wall */
-		!is_lightsaber(uwep) &&
+		!is_lightsaber(digitem) &&
 		!rn2(3)) {
 	    switch(rn2(3)) {
 	    case 0:
-		if(!welded(uwep)) {
-		    You("fumble and drop your %s.", xname(uwep));
-		    dropx(uwep);
+		if(!welded(digitem) && !(digitem->owornmask)) {
+		    You("fumble and drop your %s.", xname(digitem));
+		    dropx(digitem);
 		} else {
 			static int jboots3 = 0;
 			if (!jboots3) jboots3 = find_jboots();
 #ifdef STEED
 		    if (u.usteed)
 			Your("%s %s and %s %s!",
-			     xname(uwep),
-			     otense(uwep, "bounce"), otense(uwep, "hit"),
+			     xname(digitem),
+			     otense(digitem, "bounce"), otense(digitem, "hit"),
 			     mon_nam(u.usteed));
 		    else
 #endif
 			pline("Ouch!  Your %s %s and %s you!",
-			      xname(uwep),
-			      otense(uwep, "bounce"), otense(uwep, "hit"));
+			      xname(digitem),
+			      otense(digitem, "bounce"), otense(digitem, "hit"));
 #ifdef STEED
 		    if (u.usteed) set_wounded_legs(RIGHT_SIDE, 5 + rnd(5));
 			else
@@ -302,7 +301,7 @@ dig()
 		break;
 	    case 1:
 		pline("Bang!  You hit with the broad side of %s!",
-		      the(xname(uwep)));
+		      the(xname(digitem)));
 		break;
 	    default: Your("swing misses its mark.");
 		break;
@@ -311,12 +310,14 @@ dig()
 	}
 
 	bonus = 10 + rn2(5) + abon() +
-			   uwep->spe - greatest_erosion(uwep) + u.udaminc;
+			   digitem->spe - greatest_erosion(digitem) + u.udaminc;
 	if (Race_if(PM_DWARF))
 	    bonus *= 2;
+	if (digitem->oartifact == ART_GREAT_CLAWS_OF_URDLEN)
+	    bonus *= 4;
 	if (lev->typ == DEADTREE)
 	    bonus *= 2;
-	if (is_lightsaber(uwep) && !IS_TREES(lev->typ))
+	if (is_lightsaber(digitem) && !IS_TREES(lev->typ))
 	    bonus -= 11; /* Melting a hole takes longer */
 
 	digging.effort += bonus;
@@ -331,7 +332,7 @@ dig()
 		}
 
 		if (digging.effort <= 50 ||
-		    is_lightsaber(uwep) ||
+		    is_lightsaber(digitem) ||
 		    ((ttmp = t_at(dpx,dpy)) != 0 &&
 			(ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT ||
 			 ttmp->ttyp == TRAPDOOR || ttmp->ttyp == HOLE)))
@@ -379,7 +380,7 @@ dig()
 			    place_object(bobj, dpx, dpy);
 			}
 			digtxt = "The boulder falls apart.";
-		} else if ((obj = sobj_at(HUGE_STONE_CRATE, dpx, dpy)) != 0) {
+		} else if ((obj = sobj_at(MASSIVE_STONE_CRATE, dpx, dpy)) != 0) {
 			struct obj *bobj;
 
 			break_crate(obj);
@@ -401,11 +402,11 @@ dig()
 		} else if (lev->typ == STONE || lev->typ == SCORR ||
 				IS_TREES(lev->typ) || lev->typ == IRONBARS) {
 			if(Is_earthlevel(&u.uz)) {
-			    if(uwep->blessed && !rn2(3)) {
+			    if(digitem->blessed && !rn2(3)) {
 				mkcavearea(FALSE);
 				goto cleanup;
-			    } else if((uwep->cursed && !rn2(4)) ||
-					  (!uwep->blessed && !rn2(6))) {
+			    } else if((digitem->cursed && !rn2(4)) ||
+					  (!digitem->blessed && !rn2(6))) {
 				mkcavearea(TRUE);
 				goto cleanup;
 			    }
@@ -444,7 +445,7 @@ dig()
 				}
 			} else {
 				struct obj *otmp;
-				if(!is_lightsaber(uwep)){
+				if(!is_lightsaber(digitem)){
 					if(!rn2(20)){
 						otmp = mksobj_at(BOULDER, dpx, dpy, FALSE, FALSE);
 						otmp->owt = weight(otmp);
@@ -473,7 +474,7 @@ dig()
 			    lev->typ = DOOR;
 			    lev->doormask = D_NODOOR;
 			}
-			if(!is_lightsaber(uwep)){
+			if(!is_lightsaber(digitem)){
 				otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
 				otmp->quan = 20L+rnd(20);
 				otmp->owt = weight(otmp);
@@ -535,9 +536,9 @@ cleanup:
 		static const char *const d_target[9] = {
 			"", "rock", "statue", "boulder", "crate", "door", "tree", "bars", "chains"
 		};
-		int dig_target = dig_typ(uwep, dpx, dpy);
+		int dig_target = dig_typ(digitem, dpx, dpy);
 		
-		if(uwep && is_lightsaber(uwep)) uwep->age -= 100;
+		if(digitem && is_lightsaber(digitem)) digitem->age -= 100;
 		
 		if (IS_WALL(lev->typ) || dig_target == DIGTYP_DOOR) {
 		    if(*in_rooms(dpx, dpy, SHOPBASE)) {
@@ -548,7 +549,7 @@ cleanup:
 		} else if (!IS_ROCK(lev->typ) && dig_target == DIGTYP_ROCK)
 		    return(0); /* statue or boulder got taken */
 		if(!did_dig_msg) {
-		    if (is_lightsaber(uwep)) You("burn steadily through %s.",
+		    if (is_lightsaber(digitem)) You("burn steadily through %s.",
 			d_target[dig_target]);
 		    else
 		    You("hit the %s with all your might.",
@@ -1459,10 +1460,15 @@ int x, y;
 		u.hod++;
 	    You_feel("like a despicable grave-robber!");
 	} else if (Role_if(PM_SAMURAI)) {
-	    adjalign(-sgn(u.ualign.type)*10);//stiffer penalty
-		u.ualign.sins++;
-		u.hod++;
-	    You("disturb the honorable dead!");
+        if(!(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_NINJA)){
+		    adjalign(-sgn(u.ualign.type)*10);//stiffer penalty
+			u.ualign.sins++;
+			u.hod++;
+		    You("disturb the honorable dead!");
+        } else {
+			adjalign(10);
+			You("disturb the honorable dead!");
+        }
 	} else if ((u.ualign.type == A_LAWFUL) && (u.ualign.record > -10)) {
 	    adjalign(-sgn(u.ualign.type)*2);
 	    You("have violated the sanctity of this grave!");
@@ -1521,7 +1527,7 @@ struct obj *obj;
 	if(iflags.num_pad) sdp = ndir; else sdp = sdir;	/* DICE workaround */
 
 	/* Check tool */
-	if (obj != uwep) {
+	if (obj != uwep && obj != uarmg) {
 	    if (!wield_tool(obj, "swing")) return 0;
 	    else res = 1;
 	}

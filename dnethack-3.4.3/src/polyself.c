@@ -578,7 +578,7 @@ int	mntmp;
 #ifdef STEED
 	if (u.usteed) {
 	    if (touch_petrifies(u.usteed->data) &&
-	    		!Stone_resistance && rnl(3)) {
+	    		!Stone_resistance && rnl(100) >= 33) {
 	    	char buf[BUFSZ];
 
 	    	pline("No longer petrifying-resistant, you touch %s.",

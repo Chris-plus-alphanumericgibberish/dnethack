@@ -426,7 +426,31 @@ dosounds()
 		    "someone say \"No more woodchucks!\"",
 		    "a loud ZOT!"		/* both rec.humor.oracle */
 	    };
-	    You_hear1(ora_msg[rn2(3)+hallu*2]);
+		int messagen;
+		messagen = rn2(3)+hallu*2;
+	    You_hear1(ora_msg[messagen]);
+		if(messagen == 3){
+			makemon(&mons[PM_WOODCHUCK], 0, 0,MM_ADJACENTOK|NO_MINVENT);
+		} else if(messagen == 4){
+			struct monst *tmpm;
+			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+				if(tmpm->data == &mons[PM_WOODCHUCK]){
+					if (resists_death(tmpm)) {
+						// if (canseemon(tmpm))
+							// pline("%s seems no deader than before.", Monnam(tmpm));
+					} else if (!(resists_magm(tmpm) || resist(tmpm, 0, 0, FALSE))) {
+							tmpm->mhp = -1;
+						monkilled(tmpm, "", AD_SPEL);
+			break;
+					}
+				}
+			}
+			if(!tmpm){ /*pointer is stale, but still nonzero*/
+				if(youmonst.data == &mons[PM_WOODCHUCK]){
+					You("have an out of body experience."); //You are hallucinating if you got this message
+				}
+			}
+		}
 	}
 	return;
     }
@@ -1998,10 +2022,10 @@ dochat()
      !mtmp->mtame) {
         You("attempt to soothe the %s with chittering sounds.",
          l_monnam(mtmp));
-        if (rnl(10) < 2) {
+        if (rnl(100) < 20) {
             (void) tamedog(mtmp, (struct obj *) 0);
         } else {
-            if (rnl(10) > 8) {
+            if (rnl(100) >= 90) {
                 pline("%s unfortunately ignores your overtures.",
                  Monnam(mtmp));
                 return 0;
@@ -2561,9 +2585,22 @@ int tx,ty;
 					pline("The Pen of the Void drips black oil, as if in sympathy.");
 				}
 				// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
-			} else{
-				pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
-				// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+			} else {
+				o = (struct obj *) 0;
+				for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere){
+					if(otmp->otyp == BELL_OF_OPENING && (otmp->spe == 0 || Role_if(PM_EXILE))){
+						o = otmp;
+				break;
+					}
+				}
+				if(o){
+					pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal and rings the bell.");
+					use_bell(&o,TRUE);
+					u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+				} else {
+					pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
+					// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+				}
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
@@ -4629,7 +4666,8 @@ int p_skill;
 	if(p_skill == P_BARE_HANDED_COMBAT){
 		if((u.sealsActive&SEAL_EURYNOME) && (u.sealsActive&SEAL_BUER)) maxskill = max(P_GRAND_MASTER,maxskill);
 		else if((u.sealsActive&SEAL_EURYNOME) || (u.sealsActive&SEAL_BUER)) maxskill = max(P_EXPERT,maxskill);
-	} else if(u.specialSealsActive&SEAL_NUMINA || spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
+	} else if(spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
+	else if(u.specialSealsActive&SEAL_NUMINA) maxskill = max(P_SKILLED,maxskill);
 	return maxskill;
 }
 

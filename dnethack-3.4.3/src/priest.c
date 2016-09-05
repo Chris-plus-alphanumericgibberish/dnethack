@@ -324,12 +324,10 @@ char *pname;		/* caller-supplied output buffer */
 		/* use epri */
 		if (mon->mtame && mon->data == &mons[PM_ANGEL])
 			Strcat(pname, "guardian ");
-		// if (mon->data != &mons[PM_ALIGNED_PRIEST] &&
-				// mon->data != &mons[PM_HIGH_PRIEST] &&
-				// mon->data != &mons[PM_ELDER_PRIEST]) {
-			// Strcat(pname, what);
-			// Strcat(pname, " ");
-		// }
+		if (mon->data == &mons[PM_ANGEL]) {
+			Strcat(pname, what);
+			Strcat(pname, " ");
+		}
 		if (mon->data != &mons[PM_ANGEL]) {
 			if (!mon->ispriest && EPRI(mon)->renegade)
 				Strcat(pname, "renegade ");
@@ -488,7 +486,7 @@ register int roomno;
 				if(mvitals[PM_MAANZECORIAN].born > 0 || !(mtmp = makemon(&mons[PM_MAANZECORIAN],u.ux,u.uy,MM_ADJACENTOK)))
 					return;
 				if (!Blind || sensemon(mtmp))
-				pline("An enormous ghostly mind flayer appears next to you!");
+					pline("An enormous ghostly mind flayer appears next to you!");
 				else You("sense a presence close by!");
 				mtmp->mpeaceful = 0;
 				set_malign(mtmp);

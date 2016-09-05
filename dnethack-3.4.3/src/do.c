@@ -190,7 +190,7 @@ const char *verb;
 		}
 		deltrap(t);
 		bury_objs(x, y); //Crate handling: Bury everything here (inc boulder item) then free the boulder after
-		if(obj->otyp == HUGE_STONE_CRATE){
+		if(obj->otyp == MASSIVE_STONE_CRATE){
 			struct obj *item;
 			if(Blind) pline("Click!");
 			else pline("The crate pops open as it lands.");
@@ -815,6 +815,8 @@ dodown()
 			if (flags.autodig && !flags.nopick &&
 				uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) {
 				return use_pick_axe2(uwep);
+			} else if(uarmg && is_pick(uarmg)){
+				return use_pick_axe2(uarmg);
 			} else {
 				if(levl[u.ux][u.uy].typ == STAIRS) pline("These stairs don't go down!");
 				else You_cant("go down here.");
@@ -869,7 +871,7 @@ doup()
 	     && (!sstairs.sx || u.ux != sstairs.sx || u.uy != sstairs.sy
 			|| !sstairs.up)
 		 && !(Role_if(PM_RANGER) && Race_if(PM_GNOME) && Is_qstart(&u.uz) && levl[u.ux][u.uy].ladder == LA_UP)
-	  ) {
+	) {
 		if(uwep && uwep->oartifact == ART_ROD_OF_SEVEN_PARTS && u.RoSPflights > 0){
 			struct obj *pseudo;
 			pseudo = mksobj(SPE_LEVITATION, FALSE, FALSE);
@@ -1034,7 +1036,7 @@ boolean at_stairs, falling, portal;
 		newlevel->dlevel = dunlevs_in_dungeon(newlevel);
 	if (newdungeon && In_endgame(newlevel)) { /* 1st Endgame Level !!! */
 		if (u.uhave.amulet)
-			assign_level(newlevel, &earth_level);
+		    assign_level(newlevel, &earth_level);
 		else return;
 	}
 	new_ledger = ledger_no(newlevel);
@@ -1652,10 +1654,10 @@ int different;
 
     if (where == OBJ_CONTAINED) {
     	struct monst *mtmp2 = (struct monst *)0;
-	container = corpse->ocontainer;
+		container = corpse->ocontainer;
     	mtmp2 = get_container_location(container, &container_where, (int *)0);
-	/* container_where is the outermost container's location even if nested */
-	if (container_where == OBJ_MINVENT && mtmp2) mcarry = mtmp2;
+		/* container_where is the outermost container's location even if nested */
+		if (container_where == OBJ_MINVENT && mtmp2) mcarry = mtmp2;
     }
     mtmp = revive(corpse);      /* corpse is gone if successful && quan == 1 */
 
@@ -1839,38 +1841,38 @@ long timeout;
 	) pmtype = -1;
 
 	if (pmtype != -1) {
-	/* We don't want special case revivals */
-	if (cant_create(&pmtype, TRUE) || (body->oxlth &&
-				(body->oattached == OATTACHED_MONST)))
-		pmtype = -1; /* cantcreate might have changed it so change it back */
+		/* We don't want special case revivals */
+		if (cant_create(&pmtype, TRUE) || (body->oxlth &&
+					(body->oattached == OATTACHED_MONST)))
+			pmtype = -1; /* cantcreate might have changed it so change it back */
 		else {
-			body->corpsenm = pmtype;
+				body->corpsenm = pmtype;
 
-		/* oeaten isn't used for hp calc here, and zeroing it 
-		 * prevents eaten_stat() from worrying when you've eaten more
-		 * from the corpse than the newly grown mold's nutrition
-		 * value.
-		 */
-		body->oeaten = 0;
+			/* oeaten isn't used for hp calc here, and zeroing it 
+			 * prevents eaten_stat() from worrying when you've eaten more
+			 * from the corpse than the newly grown mold's nutrition
+			 * value.
+			 */
+			body->oeaten = 0;
 
-		/* [ALI] If we allow revive_corpse() to get rid of revived
-		 * corpses from hero's inventory then we run into problems
-		 * with unpaid corpses.
-		 */
-		if (body->where == OBJ_INVENT)
-			body->quan++;
-		oldquan = body->quan;
+			/* [ALI] If we allow revive_corpse() to get rid of revived
+			 * corpses from hero's inventory then we run into problems
+			 * with unpaid corpses.
+			 */
+			if (body->where == OBJ_INVENT)
+				body->quan++;
+			oldquan = body->quan;
 			if (revive_corpse(body, GROW_MOLD)) {
-			if (oldquan != 1) {		/* Corpse still valid */
-			body->corpsenm = oldtyp;
-			if (body->where == OBJ_INVENT) {
-				useup(body);
-				oldquan--;
+				if (oldquan != 1) {		/* Corpse still valid */
+					body->corpsenm = oldtyp;
+					if (body->where == OBJ_INVENT) {
+						useup(body);
+						oldquan--;
+					}
+				}
+				if (oldquan == 1)
+				body = (struct obj *)0;	/* Corpse gone */
 			}
-			}
-			if (oldquan == 1)
-			body = (struct obj *)0;	/* Corpse gone */
-		}
 		}
 	}
 

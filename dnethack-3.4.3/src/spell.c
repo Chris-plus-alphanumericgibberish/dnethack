@@ -904,7 +904,7 @@ pick_council_seal()
 	
 	for(i = 0; i < (QUEST_SPIRITS-FIRST_SEAL); i++){
 		seal_flag = 0x1L << i;
-		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && (u.sealsUsed&seal_flag || u.specialSealsActive&SEAL_NUMINA) && u.sealTimeout[i] < moves ){
+		if(u.sealsKnown&seal_flag && !(u.sealsActive&seal_flag) && (u.sealsUsed&seal_flag) && u.sealTimeout[i] < moves ){
 			Sprintf(buf,	"%s%s", sealNames[i], sealTitles[i]);
 			any.a_int = i+FIRST_SEAL;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
@@ -1366,15 +1366,17 @@ struct monst *mon;
 int
 spiritDsize()
 {
-	if(u.ulevel <= 2) return 1;
-	else if(u.ulevel <= 5) return 2;
-	else if(u.ulevel <= 9) return 3;
-	else if(u.ulevel <= 13) return 4;
-	else if(u.ulevel <= 17) return 5;
-	else if(u.ulevel <= 21) return 6;
-	else if(u.ulevel <= 25) return 7;
-	else if(u.ulevel <= 29) return 8;
-	else return 9;
+    int bonus = 1;
+    if(ublindf && ublindf->oartifact == ART_SOUL_LENS) bonus = 2;
+	if(u.ulevel <= 2) return 1 * bonus;
+	else if(u.ulevel <= 5) return 2 * bonus;
+	else if(u.ulevel <= 9) return 3 * bonus;
+	else if(u.ulevel <= 13) return 4 * bonus;
+	else if(u.ulevel <= 17) return 5 * bonus;
+	else if(u.ulevel <= 21) return 6 * bonus;
+	else if(u.ulevel <= 25) return 7 * bonus;
+	else if(u.ulevel <= 29) return 8 * bonus;
+	else return 9 * bonus;
 }
 STATIC_PTR int
 purifying_blast()
@@ -1547,7 +1549,8 @@ spiriteffects(power, atme)
 			sy = u.uy;
 			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
-				explode(u.ux,u.uy,5/*Electrical*/, d(range,dsize), WAND_CLASS, EXPL_MAGICAL);
+				if(u.sealsActive&SEAL_NABERIUS) explode2(u.ux,u.uy,5/*Electrical*/, d(range,dsize)*1.5, WAND_CLASS, EXPL_MAGICAL);
+				else explode(u.ux,u.uy,5/*Electrical*/, d(range,dsize), WAND_CLASS, EXPL_MAGICAL);
 			} else {
 				while(--range >= 0){
 					lsx = sx; sx += u.dx;
@@ -1556,12 +1559,14 @@ spiriteffects(power, atme)
 						mon = m_at(sx, sy);
 						if(mon){
 							dmg = d(range+1,dsize); //Damage decreases with range
-							explode(sx, sy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
+							if(u.sealsActive&SEAL_NABERIUS) explode2(sx, sy, 5/*Electrical*/, dmg*1.5, WAND_CLASS, EXPL_MAGICAL);
+							else explode(sx, sy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
 							break;//break loop
 						}
 					} else {
 						dmg = d(range+1,dsize); //Damage decreases with range
-						explode(lsx, lsy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
+						if(u.sealsActive&SEAL_NABERIUS) explode2(lsx, lsy, 5/*Electrical*/, dmg*1.5, WAND_CLASS, EXPL_MAGICAL);
+						else explode(lsx, lsy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
 						break;//break loop
 					}
 				}
@@ -2406,6 +2411,7 @@ spiriteffects(power, atme)
 				if (throwspell()) {
 					if(uwep->age < 500) uwep->age = 0;
 					else uwep->age -= 500;
+					if(u.sealsActive&SEAL_NABERIUS) explode2(u.dx,u.dy,1/*Fire*/, d(rnd(5),dsize)*1.5, WAND_CLASS, EXPL_FIERY);
 					explode(u.dx,u.dy,1/*Fire*/, d(rnd(5),dsize), WAND_CLASS, EXPL_FIERY);
 					end_burn(uwep, TRUE);
 					begin_burn(uwep, FALSE);
@@ -3183,8 +3189,8 @@ spiriteffects(power, atme)
 			//else
 			useup(uwep);
 			if(u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH,TRUE);
-			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
-			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, EXPL_DARK);
+			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
+			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
 			
 			while(sx != u.ux && sy != u.uy){
 				sx -= u.dx;
@@ -3243,7 +3249,7 @@ spiriteffects(power, atme)
 				mdat = &mons[mndx];
 				if ((mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz)) != 0 ||
 					is_placeholder(mdat)) continue;
-				/* polyok rules out all M2_PNAME and M2_WERE's;
+				/* polyok rules out all MG_PNAME and MA_WERE's;
 				   select_newcham_form might deliberately pick a player
 				   character type, so we can't arbitrarily rule out all
 				   human forms any more */
@@ -3543,6 +3549,7 @@ boolean atme;
 	        if (throwspell()) {
 			    cc.x=u.dx;cc.y=u.dy;
 			    n=rnd(8)+1;
+				if(u.sealsActive&SEAL_NABERIUS) n *= 1.5;
 			    while(n--) {
 					if(!u.dx && !u.dy && !u.dz) {
 					    if ((damage = zapyourself(pseudo, TRUE)) != 0) {
@@ -3551,7 +3558,17 @@ boolean atme;
 							losehp(damage, buf, NO_KILLER_PREFIX);
 					    }
 					} else {
-					    explode(u.dx, u.dy,
+						if(u.sealsActive&SEAL_NABERIUS) explode2(u.dx, u.dy,
+						    pseudo->otyp - SPE_MAGIC_MISSILE + 10,
+						    u.ulevel/2 + 1 + spell_damage_bonus(), 0,
+							(pseudo->otyp == SPE_CONE_OF_COLD) ?
+								EXPL_FROSTY : 
+							(pseudo->otyp == SPE_LIGHTNING_BOLT) ? 
+								EXPL_MAGICAL : 
+							(pseudo->otyp == SPE_ACID_BLAST) ? 
+								EXPL_NOXIOUS : 
+								EXPL_FIERY);
+					    else explode(u.dx, u.dy,
 						    pseudo->otyp - SPE_MAGIC_MISSILE + 10,
 						    u.ulevel/2 + 1 + spell_damage_bonus(), 0,
 							(pseudo->otyp == SPE_CONE_OF_COLD) ?
@@ -4094,7 +4111,7 @@ int spell;
 	 * to cast a spell.  The penalty is not quite so bad for the
 	 * player's role-specific spell.
 	 */
-	if (uarms && weight(uarms) > (int) objects[SMALL_SHIELD].oc_weight) {
+	if (uarms && (is_metallic(uarms) || weight(uarms) > (int) objects[BUCKLER].oc_weight)) {
 		if (spellid(spell) == urole.spelspec) {
 			chance /= 2;
 		} else {

@@ -291,13 +291,13 @@ mount_steed(mtmp, force)
 	}
 	if (mtmp->mtrapped) {
 	    struct trap *t = t_at(mtmp->mx, mtmp->my);
-
+		
 	    You_cant("mount %s while %s's trapped in %s.",
 		     mon_nam(mtmp), mhe(mtmp),
 		     an(defsyms[trap_to_defsym(t->ttyp)].explanation));
 	    return (FALSE);
 	}
-
+	
 	if (!force && !Role_if(PM_KNIGHT) && !mtmp->isminion && !(--mtmp->mtame)) {
 	    /* no longer tame */
 	    newsym(mtmp->mx, mtmp->my);

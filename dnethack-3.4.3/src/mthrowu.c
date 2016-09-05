@@ -100,10 +100,25 @@ boolean burn;
 			return -1;
 		}
 
-		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
-				&& maybe_polyd(hates_silver(youmonst.data), Race_if(PM_VAMPIRE))) {
-			dam += rnd(20);
+		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj)) &&
+				!(is_lightsaber(obj) && obj->lamplit) &&
+				!(u.sealsActive&SEAL_EDEN)
+				&& hates_silver(youracedata)) {
+			// dam += rnd(20);
 			pline_The("silver sears your flesh!");
+			exercise(A_CON, FALSE);
+		}
+		if (obj && (objects[obj->otyp].oc_material == IRON) &&
+				!(is_lightsaber(obj) && obj->lamplit)
+				&& hates_iron(youracedata)) {
+			// dam += rnd(20);
+			pline_The("cold-iron sears your flesh!");
+			exercise(A_CON, FALSE);
+		}
+		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
+				&& hates_unholy(youracedata)) {
+			// dam += rnd(20);
+			pline_The("curse sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
 		if (is_acid && Acid_resistance)
@@ -349,10 +364,27 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 			}
 	    }
 	    if ( (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
-		    hates_silver(mtmp->data)) {
-		if (vis) pline_The("silver sears %s flesh!",
-				s_suffix(mon_nam(mtmp)));
-		else if (verbose) pline("Its flesh is seared!");
+			!(is_lightsaber(otmp) && otmp->lamplit) &&
+		    hates_silver(mtmp->data)
+		) {
+			if (vis) pline_The("silver sears %s flesh!",
+					s_suffix(mon_nam(mtmp)));
+			else if (verbose) pline("Its flesh is seared!");
+	    }
+	    if ( (objects[otmp->otyp].oc_material == IRON) &&
+			!(is_lightsaber(otmp) && otmp->lamplit) &&
+		    hates_iron(mtmp->data)
+		) {
+			if (vis) pline_The("cold-iron sears %s flesh!",
+					s_suffix(mon_nam(mtmp)));
+			else if (verbose) pline("Its flesh is seared!");
+	    }
+	    if ( (otmp->cursed) &&
+		    hates_unholy(mtmp->data)
+		) {
+			if (vis) pline_The("curse sears %s flesh!",
+					s_suffix(mon_nam(mtmp)));
+			else if (verbose) pline("Its flesh is seared!");
 	    }
 	    if (otmp->otyp == ACID_VENOM && cansee(mtmp->mx,mtmp->my)) {
 		if (resists_acid(mtmp)) {
@@ -1630,7 +1662,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
 	if(typ == AD_HDRG){
-		typ = flags.HDbreath;
+		typ = mtmp->mvar1;
 		if(typ == AD_SLEE) mult = 4;
 	}
 
@@ -1677,7 +1709,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
 	if(typ == AD_HDRG){
-		typ = flags.HDbreath;
+		typ = mtmp->mvar1;
 		if(typ == AD_SLEE) mult = 4;
 	}
 
@@ -1877,7 +1909,7 @@ int whodidit;	/* 1==hero, 0=other, -1==just check whether it'll pass thru */
 			mons[otmp->corpsenm].msize > MZ_TINY) hits = TRUE;
 		else
 		    hits = (obj_type == MEAT_STICK ||
-			    obj_type == HUGE_CHUNK_OF_MEAT);
+			    obj_type == MASSIVE_CHUNK_OF_MEAT);
 		break;
 	case SPBOOK_CLASS:
 	case WAND_CLASS:

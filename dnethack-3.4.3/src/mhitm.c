@@ -208,6 +208,7 @@ mattackm(magr, mdef)
 {
     int		    i,		/* loop counter */
 		    tmp,	/* amour class difference */
+		    tchtmp,	/* touch amour class difference */
 		    strike = 0,	/* hit this attack (default to 0) */
 		    attk,	/* attack attempted this time */
 		    struck = 0,	/* hit at least once */
@@ -232,16 +233,31 @@ mattackm(magr, mdef)
 	
     /* Calculate the armour class differential. */
     tmp = find_mac(mdef) + magr->m_lev;
-	if(magr->data == &mons[PM_UVUUDAUM]) tmp += 20;
+	tmp += mdef->mstdy;
+    tchtmp = base_mac(mdef) + magr->m_lev;
+	tchtmp += mdef->mstdy;
+	if(magr->data == &mons[PM_UVUUDAUM]){
+		tmp += 20;
+		tchtmp += 20;
+	}
     if (mdef->mconf || !mdef->mcanmove || mdef->msleeping) {
-		if(mdef->data != &mons[PM_GIANT_TURTLE] || !mdef->mflee)
+		if(mdef->data != &mons[PM_GIANT_TURTLE] || !mdef->mflee){
 			tmp += 4;
+			tchtmp += 4;
+		}
 		mdef->msleeping = 0;
     }
+	if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee){
+		tchtmp += 20;
+	}
 	
-	if(magr->mtame && !mdef->mtame) tmp += beastmastery();
+	if(magr->mtame && !mdef->mtame){
+		tmp += beastmastery();
+		tchtmp += beastmastery();
+	}
 	
 	tmp += magr->encouraged;
+	tchtmp += magr->encouraged;
 	if (wizard && magr->encouraged)
 		pline("[%s +%d]", Monnam(magr), magr->encouraged);
 	
@@ -258,8 +274,10 @@ mattackm(magr, mdef)
     }
 
     /* Elves hate orcs. */
-    if (is_elf(pa) && is_orc(pd)) tmp++;
-
+    if (is_elf(pa) && is_orc(pd)){
+		tmp++;
+		tchtmp++;
+	}
 
     /* Set up the visibility of action */
     vis = (cansee(magr->mx,magr->my) && cansee(mdef->mx,mdef->my) && (canspotmon(magr) || canspotmon(mdef)));
@@ -286,6 +304,7 @@ mattackm(magr, mdef)
 	) continue;
 	
 	switch (mattk->aatyp) {
+	    case AT_DEVA:
 	    case AT_WEAP:		/* weapon attacks */
 #ifdef TAME_RANGED_ATTACKS
 		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2)
@@ -327,6 +346,11 @@ mattackm(magr, mdef)
 		if (otmp) {
 		    if (vis) mswingsm(magr, mdef, otmp);
 		    tmp += hitval(otmp, mdef);
+		    tchtmp += hitval(otmp, mdef);
+			if(otmp->objsize - magr->data->msize > 0){
+				tmp += -4*(otmp->objsize - magr->data->msize);
+				tchtmp += -2*(otmp->objsize - magr->data->msize);
+			}
 		}
 		/* fall through */
 	    case AT_CLAW:
@@ -334,6 +358,7 @@ mattackm(magr, mdef)
 	    case AT_BITE:
 	    case AT_STNG:
 	    case AT_TUCH:
+	    case AT_SHDW:
 	    case AT_BUTT:
 	    case AT_TENT:
 		/* Nymph that teleported away on first attack? */
@@ -371,17 +396,27 @@ meleeattack:
 		 * players, or under conflict or confusion. 
 		 */
 		if (!magr->mconf && !Conflict && otmp &&
-		    mattk->aatyp != AT_WEAP && mattk->aatyp != AT_BEAM && 
+		    mattk->aatyp != AT_WEAP && mattk->aatyp != AT_DEVA && mattk->aatyp != AT_BEAM && 
 			touch_petrifies(mdef->data)
 		) {
 		    strike = 0;
 		    break;
 		}
 		dieroll = rnd(20 + i);
-		strike = (tmp > dieroll);
+		if(mattk->aatyp == AT_TUCH || mattk->aatyp == AT_SHDW){
+			strike = (tchtmp > dieroll);
+		} else {
+			strike = (tmp > dieroll);
+		}
 		/* KMH -- don't accumulate to-hit bonuses */
-		if (otmp)
+		if (otmp){
 		    tmp -= hitval(otmp, mdef);
+		    tchtmp -= hitval(otmp, mdef);
+			if(otmp->objsize - magr->data->msize > 0){
+				tmp += 4*(otmp->objsize - magr->data->msize);
+				tchtmp += 2*(otmp->objsize - magr->data->msize);
+			}
+		}
 		if (strike) {
 		    res[i] = hitmm(magr, mdef, mattk);
 			if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
@@ -526,6 +561,7 @@ meleeattack:
 				if( pa == &mons[PM_ASMODEUS] ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_DEMOGORGON] && rn2(3) ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_LAMASHTU] && rn2(3) ) magr->mspec_used = 0;
+				else if( pa == &mons[PM_OBOX_OB]) magr->mspec_used = 0;
 				else if( pa == &mons[PM_ELDER_PRIEST] && rn2(2) ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_ALHOON] && rn2(2) ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_EMBRACED_DROWESS]) magr->mspec_used = 0;
@@ -1146,7 +1182,7 @@ mdamagem(magr, mdef, mattk)
 physical:
 		if (mattk->aatyp == AT_KICK && thick_skinned(pd)) {
 		    tmp = 0;
-		} else if(mattk->aatyp == AT_WEAP) {
+		} else if(mattk->aatyp == AT_WEAP || mattk->aatyp == AT_DEVA) {
 		    if(otmp) {
 			if (otmp->otyp == CORPSE &&
 				touch_petrifies(&mons[otmp->corpsenm]))
@@ -1171,17 +1207,32 @@ physical:
 					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
 					otmp->oartifact != ART_HEARTCLEAVER && 
 					otmp->oartifact != ART_SOL_VALTIVA && 
+					otmp->oartifact != ART_SHADOWLOCK && 
 					otmp->oartifact != ART_PEN_OF_THE_VOID
 			)) {
 			    /* then do only 1-2 points of damage */
-			    if (mdef->data->mlet == S_SHADE && (objects[otmp->otyp].oc_material != SILVER || arti_silvered(otmp)))
-					tmp = 0;
+			    if (mdef->data->mlet == S_SHADE && !(
+					((objects[otmp->otyp].oc_material != SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
+						!(is_lightsaber(otmp) && otmp->lamplit)) ||
+					(objects[otmp->otyp].oc_material != IRON && hates_iron(pd) &&
+						!(is_lightsaber(otmp) && otmp->lamplit)) ||
+					(otmp->cursed && hates_unholy(pd))
+				)) tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
 				else if(otmp->oartifact == ART_ROGUE_GEAR_SPIRITS)
-					tmp = 2*(rnd(bigmonst(mdef->data) ? 3 : 6) + otmp->spe);
+					tmp = 2*(rnd(bigmonst(mdef->data) ? 2 : 5) + otmp->spe);
 				else tmp = rnd(2);
-				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(pd))
+				
+				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
+					!(is_lightsaber(otmp) && otmp->lamplit)
+				)
+					tmp += rnd(20);
+				if(otmp && (objects[otmp->otyp].oc_material == IRON) && hates_iron(pd) &&
+					!(is_lightsaber(otmp) && otmp->lamplit)
+				)
+					tmp += rnd(mdef->m_lev*2);
+				if(otmp && (otmp->cursed) && hates_unholy(pd))
 					tmp += rnd(20);
 			} else tmp += dmgval(otmp, mdef, 0);
 			
@@ -1192,6 +1243,14 @@ physical:
 				!(is_lightsaber(otmp) && otmp->lamplit)
 			) {
             	if (vis) pline("The silver sears %s!", mon_nam(mdef));
+            }
+            if(otmp && (objects[otmp->otyp].oc_material == IRON) && hates_iron(pd) &&
+				!(is_lightsaber(otmp) && otmp->lamplit)
+			) {
+            	if (vis) pline("The cold-iron sears %s!", mon_nam(mdef));
+            }
+            if(otmp && (otmp->cursed) && hates_unholy(pd)) {
+            	if (vis) pline("The curse sears %s!", mon_nam(mdef));
             }
 			if (otmp->oartifact) {
 			    (void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
@@ -2314,6 +2373,7 @@ int aatyp;
     case AT_LRCH:
     case AT_TUCH:
     case AT_WEAP:
+    case AT_DEVA:
 	w_mask = W_ARMG;	/* caller needs to check for weapon */
 	break;
     case AT_KICK:

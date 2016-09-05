@@ -191,7 +191,7 @@ moverock()
 			  surface(rx, ry));
 		    deltrap(ttmp);
 			bury_objs(rx, ry); //Crate handling: Bury everything here (inc boulder item) then free the boulder after
-			if(otmp->otyp == HUGE_STONE_CRATE){
+			if(otmp->otyp == MASSIVE_STONE_CRATE){
 				struct obj *item;
 				if(Blind) pline("Click!");
 				else pline("The crate pops open as it lands.");
@@ -610,10 +610,13 @@ int mode;
 	    /* Eat the rock. */
 	    if (mode == DO_MOVE && still_chewing(x,y)) return FALSE;
 	} else if (flags.autodig && !flags.run && !flags.nopick &&
-		   uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) {
+		   ((uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) ||
+			(uarmg && is_pick(uarmg)))) {
 	/* MRKR: Automatic digging when wielding the appropriate tool */
-	    if (mode == DO_MOVE)
-		(void) use_pick_axe2(uwep);
+	    if (mode == DO_MOVE){
+			if(uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) (void) use_pick_axe2(uwep);
+			else if(uarmg && is_pick(uarmg)) (void) use_pick_axe2(uarmg);
+		}
 	    return FALSE;
 	} else {
 	    if (mode == DO_MOVE) {
@@ -701,9 +704,9 @@ int mode;
 	    return FALSE;
 	}
 	if (invent && (inv_weight() + weight_cap() > 600) && !(u.sealsActive&SEAL_ANDREALPHUS)
-		&& !(uarmc && (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)) 
-		&& !(uarm && uarm->greased) 
-		&& !(uarmu && uarmu->greased) 
+		&& !(uarmc && (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased))
+		&& !(uarm && uarm->greased)
+		&& !(uarmu && uarmu->greased)
 	) {
 	    if (mode == DO_MOVE)
 #ifdef CONVICT
@@ -1201,7 +1204,11 @@ domove()
 		    expl ? "explode at" : "attack",
 		    !Underwater ? "thin air" :
 		    is_pool(x,y) ? "empty water" : buf);
-		unmap_object(x, y); /* known empty -- remove 'I' if present */
+		// unmap_object(x, y); /* known empty -- remove 'I' if present */
+		if (glyph_is_invisible(levl[x][y].glyph)) {
+			unmap_object(x, y);
+			newsym(x, y);
+		}
 		newsym(x, y);
 		nomul(0, NULL);
 		if (expl) {
@@ -2064,6 +2071,9 @@ register boolean newlev;
 			You("enter an abandoned barracks.");
 			rt = 0;
 	    break;
+		case ARMORY:
+			You("enter a dilapidated armory.");
+	    break;
 		case DELPHI:
 		    if(monstinroom(&mons[PM_ORACLE], roomno))
 			verbalize("%s, %s, welcome to Delphi!",
@@ -2092,6 +2102,9 @@ register boolean newlev;
 					break;
 					case ZOO:
 					level.flags.has_zoo = 0;
+					break;
+					case ARMORY:
+					level.flags.has_armory = 0;
 					break;
 					case BARRACKS:
 					level.flags.has_barracks = 0;

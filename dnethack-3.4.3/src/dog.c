@@ -239,6 +239,8 @@ makedog()
 
 	initedog(mtmp);
 	EDOG(mtmp)->loyal = TRUE;
+	if(is_half_dragon(mtmp->data))
+		mtmp->mvar1 = flags.HDbreath;
 	return(mtmp);
 }
 
@@ -873,6 +875,12 @@ rock:
 		return TABU;
 	    if (hates_silver(mon->data) &&
 		objects[obj->otyp].oc_material == SILVER)
+		return(TABU);
+	    if (hates_iron(mon->data) &&
+		objects[obj->otyp].oc_material == IRON)
+		return(TABU);
+	    if (hates_unholy(mon->data) &&
+		obj->cursed)
 		return(TABU);
 	    if (herbi && (obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT))
 		return CADAVER;

@@ -776,7 +776,7 @@ int x, y;
 	    You_cant("reach over the edge of the pit.");
 	    return 0;
 	}
-
+	
 	if(x > 0 && y > 0){
 		cc.x = x;
 		cc.y = y;
@@ -1115,6 +1115,7 @@ int x, y;
 		msg = "The door unlocks!";
 		door->doormask = D_CLOSED | (door->doormask & D_TRAPPED);
 	    } else res = FALSE;
+	break;
 	case WAN_STRIKING:
 	case SPE_FORCE_BOLT:
 	    if (!key && door->doormask & (D_LOCKED | D_CLOSED)) {
