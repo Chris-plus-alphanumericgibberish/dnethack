@@ -1214,12 +1214,12 @@ toofar:
 				){
 					if(castmu(mtmp, a, TRUE, TRUE)){
 						tmp = 3;
-						if(mdat != &mons[PM_DEMOGORGON]) break;
+						// if(mdat != &mons[PM_DEMOGORGON]) break;
 					}
 			    } else {
 					if(castmu(mtmp, a, FALSE, FALSE)){
 						tmp = 3;
-						if(mdat != &mons[PM_DEMOGORGON]) break;
+						// if(mdat != &mons[PM_DEMOGORGON]) break;
 					}
 				}
 			}
