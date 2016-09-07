@@ -2771,6 +2771,12 @@ register struct attack *mattk;
 			}
 			tmp += dtypbon(RAPIER);
 		break;
+	    case AD_BLUD:
+			if(has_blood(pd)) {
+            	tmp += mdef->m_lev;
+            	pline("The blade of rotted blood tears through the veins of %s!", mon_nam(mdef));
+            }
+		break;
 	    case AD_SHDW:
 			if(u.specialSealsActive&SEAL_BLACK_WEB) tmp = d(rnd(8),spiritDsize()+1);
 			// else tmp = d(rnd(8),rnd(5)+1);
@@ -4416,7 +4422,7 @@ dobpois:
 			    mon->mhp += tmp / 2;
 			    if (mon->mhpmax < mon->mhp) mon->mhpmax = mon->mhp;
 			/* at a certain point, the monster will reproduce! */
-			    if(mon->mhpmax > ((int) (mon->m_lev+1) * 8))
+			    if(mon->mhpmax > ((int) (mon->m_lev+1) * 8) && !is_eladrin(mon->data))
 				(void)split_mon(mon, &youmonst);
 			}
 		break;

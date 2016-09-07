@@ -158,6 +158,9 @@ struct attack *mattk;
 	else if(mattk->adtyp == AD_STAR){
 		return "starlight rapier";
 	} 
+	else if(mattk->adtyp == AD_BLUD){
+		return "blade of rotted blood";
+	} 
 	else if(mattk->aatyp == AT_HODS){
 	    struct obj *mwep = uwep;
 	    /* "Foo's attack was poisoned." is pretty lame, but at least
@@ -1659,6 +1662,14 @@ hitmu(mtmp, mattk)
 				!(u.sealsActive&SEAL_EDEN)) {
             	dmg += rnd(20);
             	pline("The rapier of silver light sears your flesh!");
+            }
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_BLUD:
+			if(has_blood(youracedata)) {
+            	dmg += u.ulevel;
+            	pline("The blade of rotted blood tears through your veins!");
+				phasearmor = TRUE;
             }
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4298,6 +4309,26 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					if(cansee(mtmp->mx, mtmp->my)) You("see scalding steam swirl out from around %s.",mon_nam(mtmp));
 					for(i=0;i<n;i++) makemon(&mons[PM_STEAM_VORTEX], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
 				}
+				else if(mtmp->data == &mons[PM_ANCIENT_TEMPEST]){
+					switch(rnd(4)){
+						case 1:
+							if(cansee(mtmp->mx, mtmp->my)) You("see a whisp of cloud swirl out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_AIR_ELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+						case 2:
+							if(cansee(mtmp->mx, mtmp->my)) You("see rain coalesce and stride out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_WATER_ELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+						case 3:
+							if(cansee(mtmp->mx, mtmp->my)) You("see lightning coalesce and strike out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_LIGHTNING_PARAELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+						case 4:
+							if(cansee(mtmp->mx, mtmp->my)) You("see hail coalesce and stride out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_ICE_PARAELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+					}
+				}
 				else{
 					if(cansee(mtmp->mx, mtmp->my)) You("see fog billow out from around %s.",mon_nam(mtmp));
 					makemon(&mons[PM_FOG_CLOUD], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
@@ -4357,18 +4388,28 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			//Watcher in the Water's tentacle spawn and retreat behavior
 			int ltnt = 0, stnt = 0;
 			struct monst *tmon;
-			if (distu(mtmp->mx, mtmp->my) <= 8 && !(mtmp->mflee)){
+			if (distu(mtmp->mx, mtmp->my) <= 3 && !(mtmp->mflee)){
 				mtmp->mflee = 1;
 				mtmp->mfleetim = 2;
 			}
 			for(tmon = fmon; tmon; tmon=tmon->nmon){
-				if(tmon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES]) stnt++;
-				else if(tmon->data == &mons[PM_LONG_SINUOUS_TENTACLE]) ltnt++;
+				if(mtmp->data == &mons[PM_WATCHER_IN_THE_WATER]){
+					if(tmon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES]) stnt++;
+					else if(tmon->data == &mons[PM_LONG_SINUOUS_TENTACLE]) ltnt++;
+				} else if(mtmp->data == &mons[PM_KETO]){
+					if(tmon->data == &mons[PM_WIDE_CLUBBED_TENTACLE]) ltnt++;
+				}
 			}
-			if(stnt<6){
-				makemon(&mons[PM_SWARM_OF_SNAKING_TENTACLES], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
-			} else if(ltnt<2){
-				makemon(&mons[PM_LONG_SINUOUS_TENTACLE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+			if(mtmp->data == &mons[PM_WATCHER_IN_THE_WATER]){
+				if(stnt<6){
+					makemon(&mons[PM_SWARM_OF_SNAKING_TENTACLES], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				} else if(ltnt<2){
+					makemon(&mons[PM_LONG_SINUOUS_TENTACLE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				}
+			} else if(mtmp->data == &mons[PM_KETO]){
+				if(ltnt<2){
+					makemon(&mons[PM_WIDE_CLUBBED_TENTACLE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				}
 			}
 		}break;
 /*		case AD_VTGT:  // vorlon missile targeting vision
@@ -7551,7 +7592,7 @@ register struct attack *mattk;
 		pline("%s is suddenly very cold!", Monnam(mtmp));
 		u.mh += tmp / 2;
 		if (u.mhmax < u.mh) u.mhmax = u.mh;
-		if (u.mhmax > ((youmonst.data->mlevel+1) * 8))
+		if (u.mhmax > ((youmonst.data->mlevel+1) * 8) && !is_eladrin(youmonst.data))
 		    (void)split_mon(&youmonst, mtmp);
 		break;
 		case AD_ECLD:

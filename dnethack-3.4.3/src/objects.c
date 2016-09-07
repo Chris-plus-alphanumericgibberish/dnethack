@@ -424,8 +424,10 @@ HELM("war hat", "wide metal helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	2, 0, 100,  30, 8, 2, IRON, HI_METAL),
 HELM("flack helmet", "green bowel", /*Needs encyc entry*/
 		0, 0,  0,	0, 0, 10,   50, 8, 1, PLASTIC, CLR_GREEN),
+HELM("bronze helm", "helmet",
+		0, 0,  0,   0, 1, 30,  12, 9, 0, COPPER, HI_COPPER),
 HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	0, 1, 30,   5, 9, 0, WOOD, HI_WOOD),
+		0, 0,  0,	0, 1, 25,   5, 9, 0, WOOD, HI_WOOD),
 HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1,  3,   5, 8, 0, MITHRIL, HI_METAL),
 HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
@@ -433,7 +435,7 @@ HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
 HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
 HELM("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,   0, 1,150, 300, 5, 1, GLASS, CLR_CYAN),
+		0, 0,  0,   0, 2,150, 300, 5, 1, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
 HELM("helmet", "plumed helmet", /* circlet */
 		0, 0,  0,      8, 1, 30,  10, 9, 0, IRON, CLR_RED),
@@ -616,7 +618,9 @@ SHIELD("Uruk-hai shield", "white-handed shield",
 SHIELD("orcish shield", "red-eyed shield",
 		0, 0, 0, 0,	     2, 0, 50,	7,  9, 0, IRON, CLR_RED),
 SHIELD("kite shield", (char *)0,
-		1, 0, 1, 0,	     7, 0,100, 10,  8, 1, IRON, HI_METAL),
+		1, 0, 1, 0,	     6, 0,100, 10,  8, 1, IRON, HI_METAL),
+SHIELD("bronze roundshield", "round shield",
+		0, 0, 1, 0,	     1, 0,120,  7,  8, 1, COPPER, HI_COPPER),
 SHIELD("dwarvish roundshield", "round shield",
 		0, 0, 0, 0,	     4, 0, 80, 10,  7, 1, IRON, HI_METAL),
 SHIELD("crystal shield", "glass shield", /*Needs encyc entry*//*Needs tile*/

@@ -645,8 +645,8 @@ A("Beastmaster's Duster", LEATHER_JACKET, /*Needs encyc entry*/
 	PETMASTER, A_LAWFUL, NON_PM, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
-A("Mirrorbright",	SHIELD_OF_REFLECTION,/*adapted from Slash'em*/
-	(SPFX_RESTR|SPFX_HALRES),0,
+A("Mirrorbright",	BRONZE_ROUNDSHIELD,/*adapted from Slash'em*/
+	(SPFX_RESTR|SPFX_HALRES|SPFX_REFLECT),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message

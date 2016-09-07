@@ -66,6 +66,8 @@ int pm;
 	    case PM_HUMAN_WERERAT:    return(PM_WERERAT);
 		case PM_ANUBITE:		  return(PM_ANUBAN_JACKAL);
 		case PM_ANUBAN_JACKAL:	  return(PM_ANUBITE);
+		case PM_COURE:			  return(PM_MOTE_OF_LIGHT);
+		case PM_MOTE_OF_LIGHT:	  return(PM_COURE);
 		case PM_NOVIERE:		  return(PM_WATER_DOLPHIN);
 		case PM_WATER_DOLPHIN:	  return(PM_NOVIERE);
 		case PM_BRALANI:		  return(PM_SINGING_SAND);
@@ -79,7 +81,13 @@ int pm;
 		case PM_TULANI:			  return(PM_BALL_OF_RADIANCE);
 		case PM_BALL_OF_RADIANCE: return(PM_TULANI);
 		case PM_GWYNHARWYF:		  return(PM_FURIOUS_WHIRLWIND);
-		case PM_FURIOUS_WHIRLWIND: return(PM_GWYNHARWYF);
+		case PM_FURIOUS_WHIRLWIND:return(PM_GWYNHARWYF);
+		case PM_ASCODEL:		  return(PM_BLOODY_SUNSET);
+		case PM_BLOODY_SUNSET:	  return(PM_ASCODEL);
+		case PM_QUEEN_MAB:		  return(PM_COTERIE_OF_MOTES);
+		case PM_COTERIE_OF_MOTES: return(PM_QUEEN_MAB);
+		case PM_KETO:			  return(PM_ANCIENT_TEMPEST);
+		case PM_ANCIENT_TEMPEST:  return(PM_KETO);
 		
 		case PM_YOCHLOL: 
 			switch(rnd(3)){
@@ -158,6 +166,41 @@ struct monst *mon;
 			if (otmp->owornmask)
 				update_mon_intrinsics(mon, otmp, FALSE, FALSE);
 			otmp->owornmask = 0L;
+		}
+		if(mon->data == &mons[PM_ANCIENT_TEMPEST]){
+			struct monst *ltnt;
+			for(ltnt = fmon; ltnt; ltnt = ltnt->nmon) if(ltnt->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
+				switch(rnd(4)){
+					case 1:
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						set_mon_data(ltnt, &mons[PM_WATER_ELEMENTAL], 0);
+						newsym(ltnt->mx,ltnt->my);
+						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),
+								 LS_MONSTER, (genericptr_t)ltnt);
+					break;
+					case 2:
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						set_mon_data(ltnt, &mons[PM_AIR_ELEMENTAL], 0);
+						newsym(ltnt->mx,ltnt->my);
+						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),
+								 LS_MONSTER, (genericptr_t)ltnt);
+					break;
+					case 3:
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						set_mon_data(ltnt, &mons[PM_LIGHTNING_PARAELEMENTAL], 0);
+						newsym(ltnt->mx,ltnt->my);
+						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),
+								 LS_MONSTER, (genericptr_t)ltnt);
+					break;
+					case 4:
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						set_mon_data(ltnt, &mons[PM_ICE_PARAELEMENTAL], 0);
+						newsym(ltnt->mx,ltnt->my);
+						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),
+								 LS_MONSTER, (genericptr_t)ltnt);
+					break;
+				}
+			}
 		}
 	} else if(is_heladrin(mon->data)){
 		m_dowear(mon, TRUE);

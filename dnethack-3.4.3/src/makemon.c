@@ -1885,14 +1885,37 @@ register struct monst *mtmp;
 			    otmp->spe = 7;
 				otmp->objsize = MZ_LARGE;
 			    (void) mpickobj(mtmp, otmp);
+			} else if(ptr == &mons[PM_COURE]){
+				(void)mongets(mtmp, LEATHER_GLOVES);
+				(void)mongets(mtmp, LEATHER_JACKET);
+				(void)mongets(mtmp, LOW_BOOTS);
+				(void)mongets(mtmp, BOW);
+				m_initthrow(mtmp, ARROW, d(4,4));
+				switch(rnd(4)){
+					case 1:
+					(void)mongets(mtmp, RAPIER);
+					break;
+					case 2:
+					(void)mongets(mtmp, SCIMITAR);
+					(void)mongets(mtmp, KITE_SHIELD);
+					break;
+					case 3:
+					(void)mongets(mtmp, SHORT_SWORD);
+					(void)mongets(mtmp, BUCKLER);
+					break;
+					case 4:
+					(void)mongets(mtmp, MOON_AXE);
+					break;
+				}
 			} else if(ptr == &mons[PM_NOVIERE]){
 				(void)mongets(mtmp, LEATHER_GLOVES);
-				(void)mongets(mtmp, LOW_BOOTS);
-				(void)mongets(mtmp, ELVEN_HELM);
-				(void)mongets(mtmp, ELVEN_SPEAR);
-				(void)mongets(mtmp, ELVEN_SICKLE);
-			} else if(ptr == &mons[PM_BRALANI]){
 				(void)mongets(mtmp, LEATHER_JACKET);
+				(void)mongets(mtmp, LOW_BOOTS);
+				(void)mongets(mtmp, LEATHER_HELM);
+				(void)mongets(mtmp, ELVEN_SPEAR);
+				(void)mongets(mtmp, rn2(2) ? ELVEN_SICKLE : RAPIER);
+			} else if(ptr == &mons[PM_BRALANI]){
+				(void)mongets(mtmp, CHAIN_MAIL);
 				(void)mongets(mtmp, LEATHER_CLOAK);
 				(void)mongets(mtmp, HIGH_BOOTS);
 				(void)mongets(mtmp, HELMET);
@@ -1900,7 +1923,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, DWARVISH_SPEAR);
 				(void)mongets(mtmp, DWARVISH_SHORT_SWORD);
 			} else if(ptr == &mons[PM_FIRRE]){
-				(void)mongets(mtmp, LEATHER_JACKET);
+				(void)mongets(mtmp, ELVEN_MITHRIL_COAT);
 				(void)mongets(mtmp, ELVEN_SHIELD);
 				(void)mongets(mtmp, ELVEN_CLOAK);
 				(void)mongets(mtmp, ELVEN_BOOTS);
@@ -1915,9 +1938,9 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, WAN_STRIKING);
 			} else if(ptr == &mons[PM_GHAELE]){
 				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
-				(void)mongets(mtmp, KITE_SHIELD);
+				(void)mongets(mtmp, BRONZE_ROUNDSHIELD);
 				(void)mongets(mtmp, BRONZE_BOOTS);
-				(void)mongets(mtmp, HELMET);
+				(void)mongets(mtmp, BRONZE_HELM);
 				(void)mongets(mtmp, TWO_HANDED_SWORD);
 			} else if(ptr == &mons[PM_TULANI]){
 				(void)mongets(mtmp, CRYSTAL_PLATE_MAIL);
@@ -2079,7 +2102,7 @@ register struct monst *mtmp;
 			break;
 			case 2:
 			(void)mongets(mtmp, BOW);
-			(void)mongets(mtmp, ARROW);
+			m_initthrow(mtmp, ARROW, d(8,4));
 			break;
 			case 3:
 			(void)mongets(mtmp, BATTLE_AXE);
@@ -4178,6 +4201,9 @@ register int	mmflags;
 				}
 			} else if(mtmp->data == &mons[PM_ARCADIAN_AVENGER]){
 				if(anymon) m_initsgrp(makemon(&mons[PM_ARCADIAN_AVENGER], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+			} else if(mndx == PM_KETO){ 
+				mtmp->mhpmax = 3*mtmp->mhpmax;
+				mtmp->mhp = mtmp->mhpmax;
 			}
 		break;
 	    case S_GIANT:
@@ -5307,6 +5333,7 @@ struct monst *mtmp, *victim;
 	    else if (is_home_elemental(ptr) || 
 			ptr == &mons[PM_DARKNESS_GIVEN_HUNGER] ||
 			ptr == &mons[PM_WATCHER_IN_THE_WATER] ||
+			ptr == &mons[PM_KETO] ||
 			ptr == &mons[PM_DURIN_S_BANE] ||
 			ptr == &mons[PM_CHROMATIC_DRAGON] ||
 			ptr == &mons[PM_BOLG] ||

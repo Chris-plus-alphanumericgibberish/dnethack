@@ -159,22 +159,30 @@
 #define is_were(ptr)		(((ptr)->mflagsa & MA_WERE) != 0L)
 #define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
 #define is_heladrin(ptr)		(\
+							 (ptr) == &mons[PM_COURE] || \
 							 (ptr) == &mons[PM_NOVIERE] || \
 							 (ptr) == &mons[PM_BRALANI] || \
 							 (ptr) == &mons[PM_FIRRE] || \
 							 (ptr) == &mons[PM_SHIERE] || \
 							 (ptr) == &mons[PM_GHAELE] || \
 							 (ptr) == &mons[PM_TULANI] || \
-							 (ptr) == &mons[PM_GWYNHARWYF] \
+							 (ptr) == &mons[PM_GWYNHARWYF] ||\
+							 (ptr) == &mons[PM_ASCODEL] ||\
+							 (ptr) == &mons[PM_QUEEN_MAB] ||\
+							 (ptr) == &mons[PM_KETO] \
 							)
 #define is_eeladrin(ptr)	(\
+							 (ptr) == &mons[PM_MOTE_OF_LIGHT] || \
 							 (ptr) == &mons[PM_WATER_DOLPHIN] || \
 							 (ptr) == &mons[PM_SINGING_SAND] || \
 							 (ptr) == &mons[PM_DANCING_FLAME] || \
 							 (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 							 (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 							 (ptr) == &mons[PM_BALL_OF_RADIANCE] || \
-							 (ptr) == &mons[PM_FURIOUS_WHIRLWIND] \
+							 (ptr) == &mons[PM_FURIOUS_WHIRLWIND] ||\
+							 (ptr) == &mons[PM_BLOODY_SUNSET] ||\
+							 (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
+							 (ptr) == &mons[PM_ANCIENT_TEMPEST] \
 							)
 #define is_yochlol(ptr)		((ptr) == &mons[PM_YOCHLOL] ||\
 							 (ptr) == &mons[PM_UNEARTHLY_DROW] ||\
@@ -348,6 +356,7 @@
 #define emits_light(ptr)	(((ptr)->mlet == S_LIGHT || \
 				  (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				  (ptr) == &mons[PM_SHOCKING_SPHERE] || \
+				  (ptr) == &mons[PM_MOTE_OF_LIGHT] || \
 				  (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 				  (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 				  (ptr) == &mons[PM_HOOLOOVOO] || \
@@ -356,6 +365,7 @@
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
 				  (ptr) == &mons[PM_DANCING_FLAME] ||\
+				  (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
 				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
 				 ((ptr) == &mons[PM_LIGHT_ARCHON]|| \
 				  (ptr) == &mons[PM_LUCIFER]) ? 7 : 0)

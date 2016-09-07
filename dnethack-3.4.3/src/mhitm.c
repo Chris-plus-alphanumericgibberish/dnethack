@@ -849,7 +849,7 @@ hitmm(magr, mdef, mattk)
 			case AT_TUCH:
 				if (is_weeping(magr->data)) {
 					Sprintf(buf,"%s is touching", magr_name);
-				} else if(mattk->adtyp == AD_SHDW || mattk->adtyp == AD_STAR){
+				} else if(mattk->adtyp == AD_SHDW || mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD){
 					if(magr->mcan) goto defaultmmhit;
 					else Sprintf(buf,"%s slashes", magr_name);
 				} else {
@@ -1823,6 +1823,12 @@ physical:
             	if (vis) pline("The rapier of silver light sears %s!", mon_nam(mdef));
             }
 		break;
+	    case AD_BLUD:
+			if(has_blood(pd)) {
+            	tmp += mdef->m_lev;
+            	if (vis) pline("The blade of rotted blood tears through the veins of %s!", mon_nam(mdef));
+            }
+		break;
 	    case AD_SHDW:
 			// tmp = d(rnd(8),rnd(5)+1);
 	    case AD_DRST:
@@ -2305,7 +2311,7 @@ int mdead;
 		    pline("%s is suddenly very cold!", Monnam(magr));
 		mdef->mhp += tmp / 2;
 		if (mdef->mhpmax < mdef->mhp) mdef->mhpmax = mdef->mhp;
-		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8))
+		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8) && !is_eladrin(mdef->data))
 		    (void)split_mon(mdef, magr);
 		break;
 	    case AD_STUN:

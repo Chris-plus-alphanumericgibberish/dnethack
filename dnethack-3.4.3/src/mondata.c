@@ -211,6 +211,8 @@ struct monst *mon;
 	if(mon->data == &mons[PM_WATCHER_IN_THE_WATER] ||
 		mon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || 
 		mon->data == &mons[PM_LONG_SINUOUS_TENTACLE] ||
+		mon->data == &mons[PM_KETO] ||
+		mon->data == &mons[PM_WIDE_CLUBBED_TENTACLE] ||
 		mon->data == &mons[PM_DARUTH_XAXOX]
 	) return TRUE;
 	
