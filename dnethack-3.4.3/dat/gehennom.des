@@ -943,6 +943,190 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 
+MAZE: "hell-a",random
+FLAGS: noteleport,hardfloor,nommap,shortsighted
+GEOMETRY:left,center
+
+#0         1         2   	3	    4		  5		6	    7
+#0 1234567890123456789012345678901234567890123456789012345678901234567890123456
+MAP
+0..LFFF|
+1..LF..|
+2..LF..|
+3..LFFF|
+4..L..S.
+5..LFFF|
+6..LF..|
+7..LF..|
+8..LFFF|
+9..L...+
+0..LFFF|
+1..LF..|
+2..LF..|
+3..LFFF|
+4..L..S.
+5..LFFF|
+6..LF..|
+7..LF..|
+8..LFFF|
+ENDMAP
+
+TELEPORT_REGION:(00,00,01,18),(0,0,0,0),down
+
+DOOR:locked,(06,09)
+MAZEWALK:(06,04),east
+MAZEWALK:(06,09),east
+MAZEWALK:(06,14),east
+STAIR:(0,18),up
+#TOWER Monsters
+MONSTER:'i',"legion devil grunt",(04,01)
+MONSTER:'i',"legion devil grunt",(05,02)
+MONSTER:'i',"legion devil grunt",(04,06)
+MONSTER:'i',"legion devil grunt",(05,07)
+MONSTER:'i',"legion devil grunt",(05,11)
+MONSTER:'i',"legion devil grunt",(04,12)
+MONSTER:'i',"legion devil grunt",(05,16)
+MONSTER:'i',"legion devil grunt",(04,17)
+MONSTER:'i',"legion devil soldier",(05,09)
+#
+MONSTER:'i',"legion devil grunt",random
+MONSTER:'i',"legion devil grunt",random
+MONSTER:'i',"legion devil grunt",random
+MONSTER:'i',"legion devil grunt",random
+MONSTER:'i',"legion devil grunt",random
+MONSTER:'i',"legion devil grunt",random
+MONSTER:'i',"legion devil grunt",random
+MONSTER:'i',"legion devil grunt",random
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:right,center
+
+#0         1         2   	   3	     4		   5		 6	       7
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+MAP
+0|FFL.......  .                                        
+1S.FL........H                                         
+2|FFL.........                                         
+3.|.L..........                                        
+4.|.L..........                                        
+5|FFL...... ...                                        
+6S.FL..........                                        
+7|FFL..........                                        
+8.|.L..........                                        
+9.|.L.........H                                        
+0.|.L........HH                                        
+1|FFL.........H                                        
+2S.FL..........                                        
+3|FFL..........                                        
+4.|.L..........                                        
+5.|.L..........                                        
+6|FFL..........                                        
+7S.FL.. .......                                        
+8|FFL........                                          
+                                                       
+ENDMAP
+
+OBJECT:'`',"boulder",(9,1)
+OBJECT:'`',"boulder",(7,3)
+OBJECT:'`',"boulder",(9,3)
+OBJECT:'`',"boulder",(6,3)
+OBJECT:'`',"boulder",(13,4)
+OBJECT:'`',"boulder",(7,4)
+OBJECT:'`',"boulder",(10,6)
+OBJECT:'`',"boulder",(5,6)
+OBJECT:'`',"boulder",(12,8)
+OBJECT:'`',"boulder",(6,8)
+OBJECT:'`',"boulder",(9,9)
+OBJECT:'`',"boulder",(12,10)
+OBJECT:'`',"boulder",(7,10)
+OBJECT:'`',"boulder",(10,11)
+OBJECT:'`',"boulder",(6,12)
+OBJECT:'`',"boulder",(12,13)
+OBJECT:'`',"boulder",(4,13)
+OBJECT:'`',"boulder",(9,14)
+OBJECT:'`',"boulder",(6,14)
+OBJECT:'`',"boulder",(11,15)
+OBJECT:'`',"boulder",(8,16)
+OBJECT:'`',"boulder",(11,17)
+OBJECT:'`',"boulder",(5,17)
+OBJECT:'`',"boulder",(8,18)
+
+MONSTER:'i',"legion devil soldier",(01,01)
+MONSTER:'i',"legion devil soldier",(01,06)
+MONSTER:'i',"legion devil soldier",(01,12)
+MONSTER:'i',"legion devil soldier",(01,17)
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+MONSTER:'i',"legion devil soldier",random
+
+GEOMETRY:right,center
+#0         1         2   	   3	     4		   5		 6	       7
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+MAP
+0|FFL.......  .                                        
+1S.FL........H          .....................          
+2|FFL.........         .......................         
+3.|.L..........       .........................        
+4.|.L..........      ...........................       
+5|FFL...... ...     .............................      
+6S.FL..........    ...............................     
+7|FFL..........   .................................    
+8.|.L..........  ...................................   
+9.|.L.........H .....................................  
+0.|.L........HH....................................... 
+1|FFL.........H .....................................  
+2S.FL..........  ...................................   
+3|FFL..........   .................................    
+4.|.L..........    ...............................     
+5.|.L..........     .............................      
+6|FFL..........      ...........................       
+7S.FL.. .......       .........................        
+8|FFL........          .......................         
+                                                       
+ENDMAP
+MONSTER:'D',"Chromatic Dragon",(46,10),asleep
+MONSTER:'F',"shrieker",(43,13)
+MONSTER:'F',"shrieker",(44,8)
+MONSTER:'F',"shrieker",(22,11)
+
+STAIR:(11,10),down
+
+TELEPORT_REGION:(04,00,13,18),(0,0,0,0),down
+
+MAZEWALK:(00,01), west
+MAZEWALK:(00,06), west
+MAZEWALK:(00,12), west
+MAZEWALK:(00,17), west
+
+#Some random objects
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
 #          1         2         3         4         5         6         7
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
 #0|------|--------|----------|-|-------------------------------|--------------

@@ -704,6 +704,10 @@ struct level_map {
 	{ "arcadia3",	&arcadia3_level },
 	{ "arcward",	&arcward_level },
 	{ "arcfort",	&arcfort_level },
+	{ "atower1",	&tower1_level },
+	{ "atower2",	&tower2_level },
+	{ "atower3",	&tower3_level },
+	{ "towrtop",	&towertop_level },
 	/*Neutral Levels*/
 	{ "gatetwn",&gatetown_level },
 	{ "spire",	&spire_level },

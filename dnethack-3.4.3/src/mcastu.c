@@ -480,6 +480,9 @@ unsigned int type;
        case PM_CHROMATIC_DRAGON:
            return (rn2(2) ? DESTRY_WEPN : EARTHQUAKE);
 
+       case PM_PLATINUM_DRAGON:
+           return (rn2(2) ? LIGHTNING : FIRE_PILLAR);
+			
        case PM_IXOTH:
 			return FIRE_PILLAR;
        case PM_NIMUNE:

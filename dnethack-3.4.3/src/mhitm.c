@@ -561,6 +561,7 @@ meleeattack:
             case AT_MAGC:
             case AT_MMGC:{
 				int temp=0;
+				int range;
 				if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 				if( pa == &mons[PM_ASMODEUS] ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_DEMOGORGON] && rn2(3) ) magr->mspec_used = 0;
@@ -576,7 +577,14 @@ meleeattack:
 					magr->mspec_used = 0;
 				}
 				
-				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > BOLT_LIM*BOLT_LIM) break;
+				if(is_orc(magr->data) || 
+					magr->data == &mons[PM_HEDROW_WARRIOR] || 
+					magr->data == &mons[PM_MINOTAUR_PRIESTESS]
+				) range = (BOLT_LIM*BOLT_LIM)/2;
+				else if(magr->data == &mons[PM_CHROMATIC_DRAGON] || magr->data == &mons[PM_PLATINUM_DRAGON]) range = 2;
+				else range = (BOLT_LIM*BOLT_LIM);
+				
+				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > range) break;
 				
 				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
 					res[i] = buzzmm(magr, mdef, mattk, magr->m_lev);

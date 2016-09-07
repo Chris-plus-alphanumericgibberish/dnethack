@@ -223,7 +223,7 @@ REGION:(00,00,02,02),  lit,"ordinary"
 
 ##The Dungeon of Ill-Regard
 MAZE: "illregrd",' '
-FLAGS: shortsighted
+FLAGS: shortsighted, noteleport
 
 GEOMETRY: center, center
 #0          1         2   	  3	      4	    5		  6	      7
@@ -975,6 +975,7 @@ ENDMAP
 STAIR: (02,02,30,19),(0,0,0,0),down
 PORTAL:(75,11,75,11),(00,00,00,00),"arcadia2"
 NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 REGION:(00,00,75,20),  lit,"ordinary"
 
 MAZEWALK:(04,10),east
@@ -1050,9 +1051,10 @@ MAP
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0          1         2   	  3	      4	    5		  6	      7
-PORTAL:(01,11,01,11),(00,00,00,00),"arcadia1"
+PORTAL:(00,11,00,11),(00,00,00,00),"arcadia1"
 PORTAL:(75,11,75,11),(00,00,00,00),"arcadia3"
 NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 REGION:(00,00,75,20),  lit,"ordinary"
 
 MAZEWALK:(04,10),east
@@ -1088,7 +1090,7 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 
 MAZE: "arcadia3",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: shortsighted,hardfloor,noteleport
 
 GEOMETRY: center, center
 #0          1        2   	   3	     4		   5		 6	       7
@@ -1105,7 +1107,7 @@ MAP
 8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T}--    --  
 9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T }}--- +-   
 0...................................................................}|       
-1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ..}|       
+1.. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ..}|       
 2...................................................................}|       
 3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T }}--- +-   
 4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T}--    --  
@@ -1177,7 +1179,7 @@ MAP
 8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T}--....--..
 9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T }}---F+-...
 0...................................................................}|.......
-1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ..}|.......
+1.. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ..}|.......
 2...................................................................}|.......
 3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T }}---F+-...
 4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T}--....--..
@@ -1190,9 +1192,10 @@ MAP
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0          1         2   	  3	      4	    5		  6	      7
-PORTAL:(01,11,01,11),(00,00,00,00),"arcadia2"
+PORTAL:(00,11,00,11),(00,00,00,00),"arcadia2"
 PORTAL:(75,11,75,11),(00,00,00,00),"arcward"
 NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 REGION:(00,00,75,20),  lit,"ordinary"
 
 DOOR:closed,(70,03)
@@ -1228,7 +1231,7 @@ MONSTER:'@',"soldier",(69,20)
 
 ##Arcadian Fortress
 MAZE: "arcward",' '
-FLAGS: hardfloor
+FLAGS: hardfloor,noteleport
 GEOMETRY: center, center
 #0          1         2   	  3	      4	    5		  6	      7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -1261,6 +1264,7 @@ PORTAL:(01,10,01,10),(00,00,00,00),"arcadia3"
 STAIR: (74,06), up
 LADDER: (39,16), up
 NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 REGION:(00,00,75,20),  lit,"ordinary"
 
 DOOR:closed,(15,03)
@@ -1376,6 +1380,7 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 
 MAZE: "arcfort",' '
+FLAGS: noteleport
 GEOMETRY: center, center
 #0          1         2   	  3	      4	    5		  6	      7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -1446,6 +1451,7 @@ STAIR: (42,06), down
 STAIR: (07,15), up
 LADDER: (07,17), down
 NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 REGION:(21,00,75,12),  lit,"ordinary"
 
 DOOR:closed,(33,05)
@@ -1514,23 +1520,39 @@ MONSTER:'a',"soldier ant",(73,11),asleep
 MONSTER:'a',"soldier ant",(74,11),asleep
 
 MAZE: "atower1",' '
+FLAGS: noteleport
 GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-0 ------- 
-1 |#####| 
-2--#####--
-3|###|###|
-4|##-----|
-5|###|###|
-6--#####--
-7 |#####| 
-8 ------- 
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |#####|                                                                   |
+4--#####--                                                                  |
+5|###|###|                                                                  |
+6|##-----|                                                                  |
+7|###|###|                                                                  |
+8--#####--                                                                  |
+9 |#####|                                                                   |
+0----------------------------------------------------------------------------
+ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0          1         2   	  3	      4	    5		  6	      7
-ENDMAP
-STAIR: (07,03), up
-STAIR: (07,05), down
-NON_DIGGABLE:(00,00,08,08)
+STAIR: (07,15), up
+STAIR: (07,17), down
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 
 MONSTER:'a',"soldier ant",random
 MONSTER:'a',"soldier ant",random
@@ -1542,21 +1564,36 @@ MONSTER:'@',"soldier",random
 MONSTER:'@',"soldier",random
 
 MAZE: "atower2",' '
+FLAGS: noteleport
 GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-0 ------- 
-1 |#####| 
-2--#####--
-3|###|###|
-4|##-----|
-5|###|###|
-6--#####--
-7 |#####| 
-8 ------- 
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |#####|                                                                   |
+4--#####--                                                                  |
+5|###|###|                                                                  |
+6|##-----|                                                                  |
+7|###|###|                                                                  |
+8--#####--                                                                  |
+9 |#####|                                                                   |
+0----------------------------------------------------------------------------
 ENDMAP
-STAIR: (07,03), up
-STAIR: (07,05), down
-NON_DIGGABLE:(00,00,08,08)
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+
 MONSTER:'a',"soldier ant",random
 MONSTER:'a',"soldier ant",random
 MONSTER:'a',"soldier ant",random
@@ -1566,22 +1603,74 @@ MONSTER:'@',"soldier",random
 MONSTER:'@',"soldier",random
 MONSTER:'@',"soldier",random
 
-MAZE: "atower3",' '
 GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-0 ------- 
-1 |#####| 
-2--#####--
-3|###|###|
-4|##-----|
-5|###|###|
-6--#####--
-7 |#####| 
-8 ------- 
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |#####|                                                                   |
+4--#####--                                                                  |
+5|###|###|                                                                  |
+6|##-----|-|                                                                |
+7|###|###S#|                                                                |
+8--#####---|                                                                |
+9 |#####|                                                                   |
+0----------------------------------------------------------------------------
 ENDMAP
-STAIR: (07,03), up
-STAIR: (07,05), down
-NON_DIGGABLE:(00,00,08,08)
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+STAIR: (07,15), up
+STAIR: (07,17), down
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
+
+MAZE: "atower3",' '
+FLAGS: noteleport
+GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |#####|                                                                   |
+4--#####--                                                                  |
+5|###|###|                                                                  |
+6|##-----|                                                                  |
+7|###|###|                                                                  |
+8--#####--                                                                  |
+9 |#####|                                                                   |
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+STAIR: (07,15), up
+STAIR: (07,17), down
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
+
 MONSTER:'a',"soldier ant",random
 MONSTER:'a',"soldier ant",random
 MONSTER:'a',"soldier ant",random
@@ -1594,50 +1683,66 @@ MONSTER:'@',"lieutenant",random
 
 
 MAZE: "towrtop",' '
+FLAGS: noteleport
 GEOMETRY: center, center
-#012345678
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-0 ------- 
-1 |.|.|.| 
-2--.....--
-3|..-|...|
-4|-..|-..|
-5|..-|...|
-6--.....--
-7 |.|.|.| 
-8 ------- 
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |.|.|.|                                                                   |
+4--.....--                                                                  |
+5|..-|...|                                                                  |
+6|-..--..|                                                                  |
+7|..-|...|                                                                  |
+8--.....--                                                                  |
+9 |.|.|.|                                                                   |
+0----------------------------------------------------------------------------
 ENDMAP
-#012345678
-TELEPORT_REGION:(06,04,07,04),(0,0,0,0),down
-TELEPORT_REGION:(06,04,07,04),(0,0,0,0),up
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+TELEPORT_REGION:(06,16,07,16),(0,0,0,0),down
+TELEPORT_REGION:(06,16,07,16),(0,0,0,0),up
 
-STAIR: (07,04), down
-NON_DIGGABLE:(00,00,08,08)
+STAIR: (07,16), down
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
 
-MONSTER:'A',"Oona",(02,04)
-CONTAINER:'`',"statue",(3,4),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of Aaqa"
+MONSTER:'A',"Oona",(02,16)
+CONTAINER:'`',"statue",(03,16),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of Aaqa"
 OBJECT:')',"silver spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 
-CONTAINER:'`',"statue",(7,3),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+6
 OBJECT:'[',"crystal shield",contained,blessed,+3
 OBJECT:'[',"crystal boots",contained,blessed,+3
 OBJECT:')',"crystal sword",contained,blessed,+3
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (7,3)
-CONTAINER:'`',"statue",(7,5),uncursed,"Shiere",1
+TRAP:"statue", (7,15)
+CONTAINER:'`',"statue",(7,17),uncursed,"Shiere",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+6
 OBJECT:'[',"crystal shield",contained,blessed,+3
 OBJECT:'[',"crystal boots",contained,blessed,+3
 OBJECT:')',"crystal sword",contained,blessed,+3
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (7,5)
+TRAP:"statue", (7,17)
 
-CONTAINER:'`',"statue",(6,7),uncursed,"Firre",1
-OBJECT:'[',"leather jacket",contained,blessed,+3
+CONTAINER:'`',"statue",(6,19),uncursed,"Firre",1
+OBJECT:'[',"elven mithril-coat",contained,blessed,+3
 OBJECT:'[',"elven shield",contained,blessed,+3
 OBJECT:'[',"elven cloak",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+3
@@ -1645,26 +1750,26 @@ OBJECT:'[',"elven helm",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:')',"elven broadsword",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (6,7)
-CONTAINER:'`',"statue",(4,7),uncursed,"Ghaele",1
+TRAP:"statue", (6,19)
+CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"kite shield",contained,blessed,+3
-OBJECT:'[',"iron shoes",contained,blessed,+3
-OBJECT:'[',"helmet",contained,blessed,+3
+OBJECT:'[',"bronze roundshield",contained,blessed,+3
+OBJECT:'[',"bronze boots",contained,blessed,+3
+OBJECT:'[',"bronze helm",contained,blessed,+3
 OBJECT:')',"two-handed sword",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (4,7)
-CONTAINER:'`',"statue",(2,7),uncursed,"Shiere",1
+TRAP:"statue", (4,19)
+CONTAINER:'`',"statue",(2,19),uncursed,"Shiere",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+6
 OBJECT:'[',"crystal shield",contained,blessed,+3
 OBJECT:'[',"crystal boots",contained,blessed,+3
 OBJECT:')',"crystal sword",contained,blessed,+3
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (2,7)
+TRAP:"statue", (2,19)
 
-CONTAINER:'`',"statue",(6,1),uncursed,"Firre",1
-OBJECT:'[',"leather jacket",contained,blessed,+3
+CONTAINER:'`',"statue",(6,13),uncursed,"Firre",1
+OBJECT:'[',"elven mithril-coat",contained,blessed,+3
 OBJECT:'[',"elven shield",contained,blessed,+3
 OBJECT:'[',"elven cloak",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+3
@@ -1672,25 +1777,25 @@ OBJECT:'[',"elven helm",contained,blessed,+3
 OBJECT:')',"elven spear",contained,blessed,+3
 OBJECT:')',"elven broadsword",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (6,1)
-CONTAINER:'`',"statue",(4,1),uncursed,"Ghaele",1
+TRAP:"statue", (6,13)
+CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"kite shield",contained,blessed,+3
-OBJECT:'[',"iron shoes",contained,blessed,+3
-OBJECT:'[',"helmet",contained,blessed,+3
+OBJECT:'[',"bronze roundshield",contained,blessed,+3
+OBJECT:'[',"bronze boots",contained,blessed,+3
+OBJECT:'[',"bronze helm",contained,blessed,+3
 OBJECT:')',"two-handed sword",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (4,1)
-CONTAINER:'`',"statue",(2,1),uncursed,"Shiere",1
+TRAP:"statue", (4,13)
+CONTAINER:'`',"statue",(2,13),uncursed,"Shiere",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+6
 OBJECT:'[',"crystal shield",contained,blessed,+3
 OBJECT:'[',"crystal boots",contained,blessed,+3
 OBJECT:')',"crystal sword",contained,blessed,+3
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
-TRAP:"statue", (2,1)
+TRAP:"statue", (2,13)
 
-CONTAINER:'`',"statue",(1,3),uncursed,"Tulani",1
+CONTAINER:'`',"statue",(1,15),uncursed,"Tulani",1
 OBJECT:'[',"elven toga",contained,blessed,+5
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+5
@@ -1701,8 +1806,8 @@ OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
 OBJECT:random,random,contained
 OBJECT:random,random,contained
-TRAP:"statue", (1,3)
-CONTAINER:'`',"statue",(1,5),uncursed,"Tulani",1
+TRAP:"statue", (1,15)
+CONTAINER:'`',"statue",(1,17),uncursed,"Tulani",1
 OBJECT:'[',"elven toga",contained,blessed,+5
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
 OBJECT:'[',"elven boots",contained,blessed,+5
@@ -1713,4 +1818,542 @@ OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
 OBJECT:random,random,contained
 OBJECT:random,random,contained
-TRAP:"statue", (1,5)
+TRAP:"statue", (1,17)
+
+MAZE: "btower2",' '
+FLAGS: noteleport
+GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |#####|                                                                   |
+4--#####--                                                                  |
+5|###|###|                                                                  |
+6|##-----|                                                                  |
+7|###|###|                                                                  |
+8--#####--                                                                  |
+9 |#####|                                                                   |
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+MONSTER:'a',"soldier ant",random
+MONSTER:'a',"soldier ant",random
+MONSTER:'a',"soldier ant",random
+MONSTER:'a',"soldier ant",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                           |
+1                     -------------                                         |
+2                    ----.......----                                        |
+3                   ||....-----....||                                       |
+4                ---|...---...---...|---                                    |
+5               ||....---...|...---....||                                   |
+6               |..----...-----...----..|                                   |
+7               |.--....---...---....--.|                                   |
+8               |.|..----...-...----..|.|                                   |
+9               |.|.--....-----....--.|.|                                   |
+0               |.|.--....-...--...--.|.|                                   |
+1               |.|..---....---..---..|.|                                   |
+2 -------       |.--...------...--...--.|                                   |
+3 |     |       |..---........---..---..|                                   |
+4--     --      ||...----------...--...||                                   |
+5|   |   |       ---............---..---                                    |
+6|  -----|-----------------------...--                                      |
+7|   |                   .........---                                       |
+8--    -----------------------------                                        |
+9 |    |                                                                    |
+0 ------                                                                    |
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"knight",random
+
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"sergeant",random
+MONSTER:'@',"knight",random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                           |
+1                     -------------                                         |
+2                    ----.......----                                        |
+3                   ||....-----....||                                       |
+4                ---|...---...---...|---                                    |
+5               ||....---...|...---....||                                   |
+6               |..----...-----...----..|                                   |
+7               |.--....---...---....--.|                                   |
+8               |.|..----...-...----..|.|                                   |
+9               |.|.--....-----....--.|.|                                   |
+0               |.|.--....-...--...--.|.|                                   |
+1               |.|..---....---..---..|.|                                   |
+2 -------       |.--...------...--...--.|                                   |
+3 |#####|       |..---........---..---..|                                   |
+4--#####--      ||...----------...--...||                                   |
+5|###|###|       ---............---..---                                    |
+6|##-----|-----------------------...--                                      |
+7|###|###S##############+.........---                                       |
+8--####-----------------------------                                        |
+9 |####|                                                                    |
+0 ------                                                                    |
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+STAIR: (07,15), up
+STAIR: (07,17), down
+LADDER: (27,10), up
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
+TELEPORT_REGION:(00,12,08,20),(14,00,50,20)
+# entire tower in a region, constrains monster migration?
+REGION:(14,00,50,20),unlit,"ordinary",unfilled
+
+MAZE: "btower3",' '
+FLAGS: noteleport
+GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |#####|                                                                   |
+4--#####--                                                                  |
+5|###|###|                                                                  |
+6|##-----|                                                                  |
+7|###|###|                                                                  |
+8--#####--                                                                  |
+9 |#####|                                                                   |
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+MONSTER:'a',"soldier ant",random
+MONSTER:'a',"soldier ant",random
+MONSTER:'a',"soldier ant",random
+MONSTER:'a',"soldier ant",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"sergeant",random
+MONSTER:'@',"lieutenant",random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                           |
+1                     -------------                                         |
+2                    ----.......----                                        |
+3                   ||....-----....||                                       |
+4                ---|...---...---...|---                                    |
+5               ||....---...|...---....||                                   |
+6               |..----...-----...----..|                                   |
+7               |.--....---...---....--.|                                   |
+8               |.|..----...-...----..|.|                                   |
+9               |.|.--  F.-----.F  --.|.|                                   |
+0               |.|.--  F.-...-.F  --.|.|                                   |
+1               |.|..---F...---.F---..|.|                                   |
+2 -------       |.--...------...--...--.|                                   |
+3 |     |       |..---........---..---..|                                   |
+4--     --      ||...----------...--...||                                   |
+5|   |   |       ---............---..---                                    |
+6|  -----|         --------------...--                                      |
+7|   |   |            |...........---                                       |
+8--    ---            --------------                                        |
+9 |    |                                                                    |
+0 ------                                                                    |
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+
+MONSTER:'@',"knight",random
+MONSTER:'@',"knight",random
+MONSTER:'@',"knight",random
+MONSTER:'@',"knight",random
+MONSTER:'@',"knight",random
+
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                           |
+1                     -------------                                         |
+2                    ----       ----                                        |
+3                   ||    -----    ||                                       |
+4                ---|   ---   ---   |---                                    |
+5               ||    ---   |   ---    ||                                   |
+6               |  ----   -----   ----  |                                   |
+7               | --    ---   ---    -- |                                   |
+8               | |  ----   -   ----  | |                                   |
+9               | | --..F ----- F..-- | |                                   |
+0               | | --..F -   - F..-- | |                                   |
+1               | |  ---F   --- F---  | |                                   |
+2 -------       | --   ------   --   -- |                                   |
+3 |     |       |  ---        ---  ---  |                                   |
+4--     --      ||   ----------   --   ||                                   |
+5|   |   |       ---            ---  ---                                    |
+6|  -----|         --------------   --                                      |
+7|   |   |            |           ---                                       |
+8--    ---            --------------                                        |
+9 |    |                                                                    |
+0 ------                                                                    |
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+MONSTER:'D',"silver dragon",random
+MONSTER:'D',"gray dragon",random
+MONSTER:'D',"orange dragon",random
+
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                           |
+1                     -------------                                         |
+2                    ----.......----                                        |
+3                   ||....-----....||                                       |
+4                ---|...---...---...|---                                    |
+5               ||....---...|...---....||                                   |
+6               |..----...-----...----..|                                   |
+7               |.--....---...---....--.|                                   |
+8               |.|..----...-...----..|.|                                   |
+9               |.|.--..F.-----.F..--.|.|                                   |
+0               |.|.--..F.-...-.F..--.|.|                                   |
+1               |.|..---F...---.F---..|.|                                   |
+2 -------       |.--...------...--...--.|                                   |
+3 |#####|       |..---........---..---..|                                   |
+4--#####--      ||...----------...--...||                                   |
+5|###|###|       ---............---..---                                    |
+6|##-----|         --------------...--                                      |
+7|###|###|            |...........---                                       |
+8--####---            --------------                                        |
+9 |####|                                                                    |
+0 ------                                                                    |
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+STAIR: (07,15), up
+STAIR: (07,17), down
+LADDER: (27,10), down
+LADDER: (22,17), up
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
+TELEPORT_REGION:(00,12,08,20),(14,00,50,20)
+# entire tower in a region, constrains monster migration?
+REGION:(14,00,50,20),unlit,"ordinary",unfilled
+
+MAZE: "towrtob",' '
+FLAGS: noteleport
+GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
+1|                                                                          |
+2|                                                                          |
+3|                                                                          |
+4|                                                                          |
+5|                                                                          |
+6|                                                                          |
+7|                                                                          |
+8|                                                                          |
+9|                                                                          |
+0|                                                                          |
+1|                                                                          |
+2 -------                                                                   |
+3 |.|.|.|                                                                   |
+4--.....--                                                                  |
+5|..-|...|                                                                  |
+6|-..--..|                                                                  |
+7|..-|...|                                                                  |
+8--.....--                                                                  |
+9 |.|.|.|                                                                   |
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+MONSTER:'A',"Oona",(02,16)
+CONTAINER:'`',"statue",(03,16),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of Aaqa"
+OBJECT:')',"silver spear",contained,blessed,-7,"The Rod of Seven Parts"
+
+
+CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1
+OBJECT:'[',"crystal plate mail",contained,blessed,+6
+OBJECT:'[',"crystal shield",contained,blessed,+3
+OBJECT:'[',"crystal boots",contained,blessed,+3
+OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'/',"striking",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (7,15)
+CONTAINER:'`',"statue",(7,17),uncursed,"Shiere",1
+OBJECT:'[',"crystal plate mail",contained,blessed,+6
+OBJECT:'[',"crystal shield",contained,blessed,+3
+OBJECT:'[',"crystal boots",contained,blessed,+3
+OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'/',"striking",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (7,17)
+
+CONTAINER:'`',"statue",(6,19),uncursed,"Firre",1
+OBJECT:'[',"elven mithril-coat",contained,blessed,+3
+OBJECT:'[',"elven shield",contained,blessed,+3
+OBJECT:'[',"elven cloak",contained,blessed,+3
+OBJECT:'[',"elven boots",contained,blessed,+3
+OBJECT:'[',"elven helm",contained,blessed,+3
+OBJECT:')',"elven spear",contained,blessed,+3
+OBJECT:')',"elven broadsword",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (6,19)
+CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele",1
+OBJECT:'[',"bronze plate mail",contained,blessed,+3
+OBJECT:'[',"bronze roundshield",contained,blessed,+3
+OBJECT:'[',"bronze boots",contained,blessed,+3
+OBJECT:'[',"bronze helm",contained,blessed,+3
+OBJECT:')',"two-handed sword",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (4,19)
+CONTAINER:'`',"statue",(2,19),uncursed,"Shiere",1
+OBJECT:'[',"crystal plate mail",contained,blessed,+6
+OBJECT:'[',"crystal shield",contained,blessed,+3
+OBJECT:'[',"crystal boots",contained,blessed,+3
+OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'/',"striking",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (2,19)
+
+CONTAINER:'`',"statue",(6,13),uncursed,"Firre",1
+OBJECT:'[',"elven mithril-coat",contained,blessed,+3
+OBJECT:'[',"elven shield",contained,blessed,+3
+OBJECT:'[',"elven cloak",contained,blessed,+3
+OBJECT:'[',"elven boots",contained,blessed,+3
+OBJECT:'[',"elven helm",contained,blessed,+3
+OBJECT:')',"elven spear",contained,blessed,+3
+OBJECT:')',"elven broadsword",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (6,13)
+CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele",1
+OBJECT:'[',"bronze plate mail",contained,blessed,+3
+OBJECT:'[',"bronze roundshield",contained,blessed,+3
+OBJECT:'[',"bronze boots",contained,blessed,+3
+OBJECT:'[',"bronze helm",contained,blessed,+3
+OBJECT:')',"two-handed sword",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (4,13)
+CONTAINER:'`',"statue",(2,13),uncursed,"Shiere",1
+OBJECT:'[',"crystal plate mail",contained,blessed,+6
+OBJECT:'[',"crystal shield",contained,blessed,+3
+OBJECT:'[',"crystal boots",contained,blessed,+3
+OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'/',"striking",contained,blessed,+3
+OBJECT:random,random,contained
+TRAP:"statue", (2,13)
+
+CONTAINER:'`',"statue",(1,15),uncursed,"Tulani",1
+OBJECT:'[',"elven toga",contained,blessed,+5
+OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
+OBJECT:'[',"elven boots",contained,blessed,+5
+OBJECT:'[',"high-elven helm",contained,blessed,+5
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
+OBJECT:'!',"full healing",contained,blessed,+0
+OBJECT:'!',"full healing",contained,blessed,+0
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+TRAP:"statue", (1,15)
+CONTAINER:'`',"statue",(1,17),uncursed,"Tulani",1
+OBJECT:'[',"elven toga",contained,blessed,+5
+OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
+OBJECT:'[',"elven boots",contained,blessed,+5
+OBJECT:'[',"high-elven helm",contained,blessed,+5
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
+OBJECT:'!',"full healing",contained,blessed,+0
+OBJECT:'!',"full healing",contained,blessed,+0
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+TRAP:"statue", (1,17)
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                           |
+1                     -------------                                         |
+2                    ----.......----                                        |
+3                   ||....-----....||                                       |
+4                ---|...---   ---...|---                                    |
+5               ||....---   |   ---....||                                   |
+6               |..----     ---   ----..|                                   |
+7               |.--          ---    --.|                                   |
+8               |.|             ----  |.|                                   |
+9               |.|                -- |.|                                   |
+0               |.|                -- |.|                                   |
+1               |.|              ---  |.|                                   |
+2 -------       |.--            --   --.|                                   |
+3 | | | |       |..---        ---  ---..|                                   |
+4--     --      ||...----------...--...||                                   |
+5|  -|   |       ---............---..---                                    |
+6|-  --  |         --------------...--                                      |
+7|  -|   |            |...........---                                       |
+8--     --            --------------                                        |
+9 |     |                                                                   |
+0 -------                                                                   |
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+MONSTER:'D',"silver dragon",random
+MONSTER:'D',"gray dragon",random
+MONSTER:'D',"orange dragon",random
+
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+MONSTER:'D',"half-dragon",random
+
+MONSTER:'@',"knight",random
+MONSTER:'@',"knight",random
+MONSTER:'@',"knight",random
+
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+MONSTER:'@',"soldier",random
+
+GEOMETRY: center, center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                           |
+1                     -------------                                         |
+2                    ----.......----                                        |
+3                   ||....-----....||                                       |
+4                ---|...---...---...|---                                    |
+5               ||....---...|...---....||                                   |
+6               |..----.....---...----..|                                   |
+7               |.--..........---....--.|                                   |
+8               |.|.............----..|.|                                   |
+9               |.|................--.|.|                                   |
+0               |.|.........\......--.|.|                                   |
+1               |.|..............---..|.|                                   |
+2 -------       |.--............--...--.|                                   |
+3 |.|.|.|       |..---........---..---..|                                   |
+4--.....--      ||...----------...--...||                                   |
+5|..-|...|       ---............---..---                                    |
+6|-..--..|         --------------...--                                      |
+7|..-|...|            |...........---                                       |
+8--.....--            --------------                                        |
+9 |.|.|.|                                                                   |
+0 -------                                                                   |
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+TELEPORT_REGION:(06,16,07,16),(0,0,0,0),down
+TELEPORT_REGION:(06,16,07,16),(0,0,0,0),up
+
+STAIR: (07,16), down
+LADDER: (22,17), down
+NON_DIGGABLE:(00,00,75,20)
+NON_PASSWALL:(00,00,75,20)
+TELEPORT_REGION:(00,12,08,20),(14,00,50,20)
+# entire tower in a region, constrains monster migration?
+REGION:(14,00,50,20),unlit,"ordinary",unfilled
+
+MONSTER:'D',"Platinum Dragon",(27,10)
+
+MONSTER:'D',"silver dragon",(28,11)
+MONSTER:'D',"gray dragon",(28,12)
+MONSTER:'D',"orange dragon",(28,13)
+
+MONSTER:'D',"silver dragon",(28,09)
+MONSTER:'D',"gray dragon",(28,08)
+MONSTER:'D',"orange dragon",(28,07)
+
+MONSTER:'@',"sergeant",(25,08)
+MONSTER:'@',"lieutenant",(25,09)
+MONSTER:'@',"captain",(25,10)
+MONSTER:'@',"lieutenant",(25,11)
+MONSTER:'@',"sergeant",(25,12)
+
+MONSTER:'D',"half-dragon",(24,08)
+MONSTER:'@',"knight",(24,09)
+MONSTER:'D',"half-dragon",(24,10)
+MONSTER:'@',"knight",(24,11)
+MONSTER:'D',"half-dragon",(24,12)
+
+MONSTER:'@',"knight",(24,08)
+MONSTER:'D',"half-dragon",(24,09)
+MONSTER:'@',"knight",(24,10)
+MONSTER:'D',"half-dragon",(24,11)
+MONSTER:'@',"knight",(24,12)
+
+MONSTER:'D',"half-dragon",(22,08)
+MONSTER:'@',"knight",(22,09)
+MONSTER:'D',"half-dragon",(22,10)
+MONSTER:'@',"knight",(22,11)
+MONSTER:'D',"half-dragon",(22,12)
+
+MONSTER:'@',"knight",(21,08)
+MONSTER:'D',"half-dragon",(21,09)
+MONSTER:'@',"knight",(21,10)
+MONSTER:'D',"half-dragon",(21,11)
+MONSTER:'@',"knight",(21,12)
+

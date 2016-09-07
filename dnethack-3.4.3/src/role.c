@@ -2580,6 +2580,7 @@ role_init()
 	if(!Role_if(PM_CAVEMAN)){
 		//Caveman nemesis is regular unique for others
 		mons[PM_CHROMATIC_DRAGON].msound = MS_ROAR;
+		mons[PM_CHROMATIC_DRAGON].mflagst &= ~MT_WANTSARTI;
 	}
 
 	/* Fix up infravision */

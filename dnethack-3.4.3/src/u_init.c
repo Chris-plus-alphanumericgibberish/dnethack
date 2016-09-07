@@ -2467,6 +2467,7 @@ u_init()
 	wanderer->mflagsg &= ~MG_PNAME;				/* not a proper name */
 
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
+	dungeon_topology.alt_tower = !rn2(8);
 	switch(rnd(6)){
 		case 1:
 			flags.HDbreath = AD_COLD;

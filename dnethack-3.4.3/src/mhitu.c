@@ -1068,6 +1068,7 @@ mattacku(mtmp)
 					mtmp->data == &mons[PM_HEDROW_WARRIOR] || 
 					mtmp->data == &mons[PM_MINOTAUR_PRIESTESS]
 				) range = (BOLT_LIM*BOLT_LIM)/2;
+				else if(mtmp->data == &mons[PM_CHROMATIC_DRAGON] || mtmp->data == &mons[PM_PLATINUM_DRAGON]) range = 2;
 				else range = (BOLT_LIM*BOLT_LIM);
 			    if (foundyou){
 					if(couldsee(mtmp->mx, mtmp->my) && dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= range)
