@@ -364,7 +364,7 @@ aligntyp atyp;
 
 	for (tryct = 0; tryct < 20; tryct++) {
 	    pm = rn1(PM_DEMOGORGON + 1 - PM_ORCUS, PM_ORCUS);
-	    if (!(mvitals[pm].mvflags & G_GONE && !In_quest(&u.uz)) &&
+	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
@@ -380,7 +380,7 @@ aligntyp atyp;
 	for (tryct = 0; tryct < 20; tryct++) {
 	    do pm = rn1(PM_YEENOGHU + 1 - PM_JUIBLEX, PM_JUIBLEX);
 		while(pm == PM_SHAKTARI);
-	    if (!(mvitals[pm].mvflags & G_GONE && !In_quest(&u.uz)) &&
+	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
