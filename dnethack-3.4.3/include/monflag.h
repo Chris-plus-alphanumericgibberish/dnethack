@@ -124,6 +124,8 @@
 
 #define MT_MAGIVORE		0x04000000L	/* eats magic */
 
+#define MT_BOLD			0x08000000L	/* recovers from fear quickly */
+
 #define MT_OMNIVORE		(MT_CARNIVORE|MT_HERBIVORE)	/* eats both */
 #define MT_MAID		(MT_MAGIC|MT_COLLECT|MT_JEWELS|MT_GREEDY)	/* tiddies up the dungeon */
 #define MT_WANTSALL		(MT_WANTSAMUL|MT_WANTSBELL|MT_WANTSBOOK|MT_WANTSCAND|MT_WANTSARTI)	/* wants any major artifact */

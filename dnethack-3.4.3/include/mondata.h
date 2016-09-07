@@ -43,8 +43,9 @@
 				 ((mon)->data != &mons[PM_ANGEL] || \
 				  EPRI(mon)->shralign < 0))
 
-#define mm_notonline(ptr)	(((ptr)->mflagsm & MM_NOTONL) != 0L)
-#define mm_fleetflee(ptr)	(((ptr)->mflagsm & MM_FLEETFLEE) != 0L)
+#define notonline(ptr)		(((ptr)->mflagsm & MM_NOTONL) != 0L)
+#define fleetflee(ptr)		(((ptr)->mflagsm & MM_FLEETFLEE) != 0L)
+#define bold(ptr)			(((ptr)->mflagst & MT_BOLD) != 0L)
 #define is_flyer(ptr)		(((ptr)->mflagsm & MM_FLY) != 0L)
 #define is_displacer(ptr)	(((ptr)->mflagsg & MG_DISPLACEMENT) != 0L)
 #define is_floater(ptr)		(((ptr)->mflagsm & MM_FLOAT) != 0L)
