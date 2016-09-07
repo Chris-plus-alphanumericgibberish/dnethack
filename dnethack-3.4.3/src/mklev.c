@@ -51,6 +51,7 @@ STATIC_DCL void FDECL(mk_knox_portal, (XCHAR_P,XCHAR_P));
 #define do_vault()	(vault_x != -1)
 static xchar		vault_x, vault_y;
 boolean goldseen;
+boolean wantanmivault, wantasepulcher;
 static boolean made_branch;	/* used only during level creation */
 
 /* Args must be (const genericptr) so that qsort will always be happy. */
@@ -230,8 +231,10 @@ makerooms()
 
 	/* make rooms until satisfied */
 	/* rnd_rect() will returns 0 if no more rects are available... */
+	wantanmivault = !rn2(8);
+	wantasepulcher = (depth(&u.uz) > 12 && !rn2(8));
 	while(nroom < MAXNROFROOMS && rnd_rect()) {
-		if(nroom >= (MAXNROFROOMS/6) && rn2(2) && !tried_vault) {
+		if(nroom >= (MAXNROFROOMS/6) && rn2(2) && !tried_vault && !wantanmivault && !wantasepulcher) {
 			tried_vault = TRUE;
 			if (create_vault()) {
 				vault_x = rooms[nroom].lx;
@@ -811,11 +814,11 @@ makelevel()
 		!level.flags.has_vault) mkroom(RIVER);
 	
 		/* Part four: very late modifications */
-	if (u_depth > 12 && !rn2(8) &&
+	if (wantasepulcher &&
 		!level.flags.has_vault){
 		mksepulcher();
 	}
-	if (!rn2(8) &&
+	if (wantanmivault &&
 		!level.flags.has_vault){
 		mkmivault();
 	}
