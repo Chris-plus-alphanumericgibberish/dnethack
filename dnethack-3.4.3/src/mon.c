@@ -3595,7 +3595,8 @@ register struct monst *mtmp;
     } else if(!(mtmp->mspec_used) &&
 		(
 		mtmp->data->msound == MS_JUBJUB || mtmp->data->msound == MS_DREAD || 
-		mtmp->data->msound == MS_SONG || mtmp->data->msound == MS_OONA
+		mtmp->data->msound == MS_SONG || mtmp->data->msound == MS_OONA ||
+		mtmp->data->msound == MS_TRUMPET
 		)
 	) {
 		domonnoise(mtmp);
