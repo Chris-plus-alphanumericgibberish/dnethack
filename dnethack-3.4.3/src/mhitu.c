@@ -1060,7 +1060,7 @@ mattacku(mtmp)
 //			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_SPEL && rn2(2) ) return 0;
 //			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_FIRE && rn2(2) ) return 0;
 			if( mdat == &mons[PM_GRAZ_ZT]) temp = mtmp->mspec_used;
-			if( mdat == &mons[PM_QUINON] ) {
+			if( mdat == &mons[PM_QUINON] || mdat == &mons[PM_FAERINAAL]) {
 				temp = mtmp->mspec_used;
 				mtmp->mspec_used = 0;
 			}
@@ -1088,7 +1088,7 @@ mattacku(mtmp)
 				}
 			}
 			if( mdat == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
-			if( mdat == &mons[PM_QUINON] ) {
+			if( mdat == &mons[PM_QUINON] || mdat == &mons[PM_FAERINAAL]) {
 				mtmp->mspec_used = temp;
 			}
 			if( mdat == &mons[PM_GRAZ_ZT] && temp == 0) mtmp->mspec_used = 4;

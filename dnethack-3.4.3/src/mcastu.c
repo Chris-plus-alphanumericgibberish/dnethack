@@ -702,6 +702,12 @@ unsigned int type;
 			break;
 		}
 	break;
+	case PM_FAERINAAL:{
+		int spelln;
+		do spelln = rnd(MON_LASTSPELL);
+		while(spelln == CLONE_WIZ);
+		return spelln;
+	} break;
 	case PM_PALE_NIGHT:
 		switch(rn2(5)){
 			case 0:
@@ -908,6 +914,16 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 				case 2: goto fire_spell;
 				case 3: goto cold_spell;
 			}
+		break;
+		case AD_SLEE:
+		pline("You're enveloped in a puff of gas.");
+		if(Sleep_resistance) {
+			shieldeff(u.ux, u.uy);
+			You("don't feel sleepy!");
+		} else {
+			fall_asleep(-dmg, TRUE);
+		}
+		dmg = 0;
 		break;
 	    case AD_ELEC:
 elec_spell:

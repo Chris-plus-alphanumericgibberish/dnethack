@@ -168,6 +168,7 @@
 							 (ptr) == &mons[PM_TULANI] || \
 							 (ptr) == &mons[PM_GWYNHARWYF] ||\
 							 (ptr) == &mons[PM_ASCODEL] ||\
+							 (ptr) == &mons[PM_FAERINAAL] ||\
 							 (ptr) == &mons[PM_QUEEN_MAB] ||\
 							 (ptr) == &mons[PM_KETO] \
 							)
@@ -181,6 +182,7 @@
 							 (ptr) == &mons[PM_BALL_OF_RADIANCE] || \
 							 (ptr) == &mons[PM_FURIOUS_WHIRLWIND] ||\
 							 (ptr) == &mons[PM_BLOODY_SUNSET] ||\
+							 (ptr) == &mons[PM_BALL_OF_GOSSAMER_SUNLIGHT] ||\
 							 (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
 							 (ptr) == &mons[PM_ANCIENT_TEMPEST] \
 							)
@@ -358,6 +360,8 @@
 				  (ptr) == &mons[PM_SHOCKING_SPHERE] || \
 				  (ptr) == &mons[PM_MOTE_OF_LIGHT] || \
 				  (ptr) == &mons[PM_BALL_OF_LIGHT] || \
+				  (ptr) == &mons[PM_BLOODY_SUNSET] || \
+				  (ptr) == &mons[PM_BALL_OF_GOSSAMER_SUNLIGHT] || \
 				  (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 				  (ptr) == &mons[PM_HOOLOOVOO] || \
 				  (ptr) == &mons[PM_LIGHTNING_PARAELEMENTAL] || \
