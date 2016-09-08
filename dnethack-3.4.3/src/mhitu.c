@@ -85,7 +85,9 @@ register struct attack *mattk;
 			pline("%s butts!", Monnam(mtmp));
 			break;
 		case AT_TUCH:
-			if(mtmp->data == &mons[PM_EDDERKOP]) pline("%s slashes you with bladed shadows!", Monnam(mtmp));
+			if(mattk->adtyp == AD_SHDW) pline("%s slashes you with bladed shadows!", Monnam(mtmp));
+			else if(mattk->adtyp == AD_STAR) pline("%s slashes you with a starlight rapier!", Monnam(mtmp));
+			else if(mattk->adtyp == AD_BLUD) pline("%s slashes you with a blade of blood!", Monnam(mtmp));
 			else pline("%s touches you!", Monnam(mtmp));
 			break;
 		case AT_TENT:
@@ -701,6 +703,7 @@ mattacku(mtmp)
 		case AT_TENT:
 		case AT_WHIP:
 			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict ||
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youmonst.data))) {
 			    if (foundyou) {
 				if(tmp > (j = rnd(20+i))) {
@@ -723,7 +726,8 @@ mattacku(mtmp)
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_TUCH:
-			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict ||
+			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict || 
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youmonst.data))) {
 			    if (foundyou) {
 				if(tchtmp > (j = rnd(20+i))) {
@@ -920,6 +924,7 @@ mattacku(mtmp)
 		case AT_LRCH:{
 			if(dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8 && couldsee(mtmp->mx, mtmp->my)){
 				if(mtmp->mconf || Conflict ||
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youmonst.data)){
 					if (foundyou){
 						if(tmp > (j = rnd(20+i))) {
@@ -1662,8 +1667,8 @@ hitmu(mtmp, mattk)
 			if(hates_silver(youracedata) &&
 				!(u.sealsActive&SEAL_EDEN)) {
             	dmg += rnd(20);
-            	pline("The rapier of silver light sears your flesh!");
-            }
+            	pline("The rapier of silver starlight sears your flesh!");
+            } else hitmsg(mtmp, mattk);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_BLUD:
@@ -1671,7 +1676,7 @@ hitmu(mtmp, mattk)
             	dmg += u.ulevel;
             	pline("The blade of rotted blood tears through your veins!");
 				phasearmor = TRUE;
-            }
+            } else hitmsg(mtmp, mattk);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SHDW:
@@ -7485,9 +7490,11 @@ register struct attack *mattk;
 		long protector = attk_protection((int)mattk->aatyp),
 		     wornitems = mtmp->misc_worn_check;
 
+		if(mattk->adtyp == AD_STAR || mattk->adtyp == AD_SHDW || mattk->adtyp == AD_BLUD) break;
+
 		/* wielded weapon gives same protection as gloves here */
 		if (MON_WEP(mtmp) != 0) wornitems |= W_ARMG;
-
+		
 		if (!resists_ston(mtmp) && 
 			(protector == 0L || (protector != ~0L &&
 			    (wornitems & protector) != protector))

@@ -28,7 +28,7 @@ STATIC_DCL int FDECL(mdamagem, (struct monst *,struct monst *,struct attack *));
 STATIC_DCL void FDECL(mswingsm, (struct monst *, struct monst *, struct obj *));
 STATIC_DCL void FDECL(noises,(struct monst *,struct attack *));
 STATIC_DCL void FDECL(missmm,(struct monst *,struct monst *,struct attack *));
-STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, BOOLEAN_P, int));
+STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, BOOLEAN_P, int, struct attack *));
 STATIC_DCL int NDECL(beastmastery);
 
 /* Needed for the special case of monsters wielding vorpal blades (rare).
@@ -401,6 +401,7 @@ meleeattack:
 		 */
 		if (!magr->mconf && !Conflict && otmp &&
 		    mattk->aatyp != AT_WEAP && mattk->aatyp != AT_DEVA && mattk->aatyp != AT_BEAM && 
+			mattk->adtyp != AD_STAR && mattk->adtyp != AD_BLUD && mattk->adtyp != AD_SHDW && 
 			touch_petrifies(mdef->data)
 		) {
 		    strike = 0;
@@ -611,7 +612,7 @@ meleeattack:
 
 	if (attk && !(res[i] & MM_AGR_DIED) &&
 	    dist2(magr->mx, magr->my, mdef->mx, mdef->my) < 3)
-	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED);
+	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED, mattk);
 
 	if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 	if (res[i] & MM_DEF_DIED) return res[i];
@@ -1077,7 +1078,9 @@ mdamagem(magr, mdef, mattk)
 	tmp += magr->encouraged;
 //endif
 
-	if (touch_petrifies(pd) && !resists_ston(magr)) {
+	if (touch_petrifies(pd) && !resists_ston(magr) &&
+		mattk->adtyp != AD_STAR && mattk->adtyp != AD_BLUD && mattk->adtyp != AD_SHDW
+	) {
 	    long protector = attk_protection((int)mattk->aatyp),
 		 wornitems = magr->misc_worn_check;
 
@@ -2152,10 +2155,11 @@ register struct obj *otemp;
  * handled above.  Returns same values as mattackm.
  */
 STATIC_OVL int
-passivemm(magr,mdef,mhit,mdead)
+passivemm(magr,mdef,mhit,mdead,mattk)
 register struct monst *magr, *mdef;
 boolean mhit;
 int mdead;
+struct attack *mattk;
 {
 	register struct permonst *mddat = mdef->data;
 	register struct permonst *madat = magr->data;
