@@ -182,6 +182,8 @@ mkmivault()
 			
 			mon = makemon(mivaultmon(), x+rnd(2)+1, y+rnd(2)+1, 0);
 			mon->mstrategy |= STRAT_WAITFORU;
+			mon->mpeaceful = FALSE;
+			set_malign(mon);
 		}
 	}
 }
