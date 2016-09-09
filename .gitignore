@@ -17,7 +17,7 @@ dnethack-3.4.3/nethack.dsw
 # Files created from upgrading to VS 2015
 dnethack-3.4.3/UpgradeLog.htm
 dnethack-3.4.3/nethack.sln
-dnethack-3.4.3/solution.props
+dnethack-3.4.3/nethack.props
 dnethack-3.4.3/nethack.VC.opendb
 dnethack-3.4.3/nethack.sdf
 

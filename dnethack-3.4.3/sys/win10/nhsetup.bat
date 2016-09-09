@@ -23,6 +23,7 @@ echo.
 echo Hard Linking Visual C project files to ..\..\build directory
 echo Hard Linking ..\..\win\win10\nethack.sln to ..\..\nethack.sln
 mklink /H ..\..\nethack.sln ..\..\win\win10\nethack.sln >nul
+mklink /H ..\..\nethack.props ..\..\win\win10\nethack.props >nul
 if NOT exist ..\..\binary\*.* echo Creating ..\..\binary directory
 if NOT exist ..\..\binary\*.* mkdir ..\..\binary
 if NOT exist ..\..\binary\license copy ..\..\dat\license ..\..\binary\license >nul

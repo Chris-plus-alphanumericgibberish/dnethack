@@ -721,12 +721,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\win\win32\bitmap1.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\win\win32\bitmap2.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\win\win32\mnsel.bmp">
       <Filter>Resource Files</Filter>
     </Image>
@@ -743,6 +737,18 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\win\win32\winhack.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\win\win32\petmark.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\win\win32\mnselcnt.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\win\win32\rip.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\win\win32\splash.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
