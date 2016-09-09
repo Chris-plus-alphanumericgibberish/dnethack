@@ -604,6 +604,17 @@ const char *name;
 	    if (obj == uswapwep) untwoweapon();
 	    /* activate warning if you've just named your weapon "Sting" */
 	    if (obj == uwep) set_artifact_intrinsic(obj, TRUE, W_WEP);
+		if (carried(obj)) {
+			/*
+			 * We may need to do extra adjustments for the hero if we're
+			 * messing with the hero's inventory.  The following calls are
+			 * equivalent to calling freeinv on obj and addinv on obj,
+			 * while doing an in-place swap of the actual objects.
+			 */
+			freeinv_core(obj);
+			addinv_core1(obj);
+			addinv_core2(obj);
+		}
 	}
 	if (carried(obj)) update_inventory();
 	return obj;
