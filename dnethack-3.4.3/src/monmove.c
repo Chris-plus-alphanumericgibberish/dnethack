@@ -613,6 +613,33 @@ boolean digest_meal;
 		}
 		return;
 	}
+	/* Clouds on Lolth's level deal damage */
+	if(Is_lolth_level(&u.uz) && levl[mon->mx][mon->my].typ == CLOUD){
+		if (!(nonliving(mon->data) || breathless(mon->data))){
+			if (haseyes(mon->data) && mon->mcansee){
+				mon->mblinded = 1;
+				mon->mcansee = 0;
+			}
+			if (!resists_poison(mon)) {
+				pline("%s coughs!", Monnam(mon));
+				mon->mhp -= (d(3,8) + ((Amphibious && !flaming(youracedata)) ? 0 : rnd(6)));
+			} else if (!(amphibious(mon->data) && !flaming(youracedata))){
+				/* NB: Amphibious includes Breathless */
+				if (!(amphibious(mon->data) && !flaming(youracedata))) mon->mhp -= rnd(6);
+			}
+			if(mon->mhp <= 0){
+				monkilled(mon, "gas cloud", AD_DRST);
+				if(mon->mhp <= 0) return;	/* not lifesaved */
+			}
+		} else {
+			/* NB: Amphibious includes Breathless */
+			mon->mhp -= rnd(6);
+			if(mon->mhp <= 0){
+				monkilled(mon, "suffocating cloud", AD_DRST);
+				if(mon->mhp <= 0) return;	/* not lifesaved */
+			}
+		}
+	}
 	if(mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
 	if(!nonliving(mon->data)){
 		if (mon->mhp < mon->mhpmax){

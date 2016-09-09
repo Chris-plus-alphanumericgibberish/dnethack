@@ -4627,7 +4627,7 @@ arti_invoke(obj)
 								goto_level(&newlevel, FALSE, FALSE, FALSE);
 							}
 						} else{
-							if (!Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) && !Underwater) {
+							if (!Weightless && !Is_waterlevel(&u.uz) && !Underwater) {
 								pline("The %s begins to extend quickly upwards.", obj->oartifact == ART_SCEPTRE_OF_LOLTH ? "Sceptre" : "Rod");
 								pline("However, a mysterious force slams it back into the %s below.", surface(u.ux, u.uy));
 								watch_dig((struct monst *)0, u.ux, u.uy, TRUE);
@@ -5942,7 +5942,7 @@ struct obj *obj;
 			if((obj->otyp == MACE || obj->otyp == ELVEN_MACE || obj->otyp == SILVER_KHAKKHARA) && (
 			   u.uswallow || 
 			   (!u.uhave.amulet && Can_rise_up(u.ux, u.uy, &u.uz)) || 
-			   (u.uhave.amulet && !Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) && !Underwater) 
+			   (u.uhave.amulet && !Weightless && !Is_waterlevel(&u.uz) && !Underwater) 
 			  )){
 				Sprintf(buf, "Become a ladder");
 				any.a_int = COMMAND_LADDER;	/* must be non-zero */

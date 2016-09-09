@@ -1189,7 +1189,7 @@ can_reach_floor()
 			!(u.usteed && P_SKILL(P_RIDING) < P_BASIC) &&
 #endif
 			 (!Levitation ||
-			  Is_airlevel(&u.uz)));
+			  Weightless));
 }
 #endif /* OVLB */
 #ifdef OVL0
@@ -1203,7 +1203,7 @@ register int x, y;
 	if ((x == u.ux) && (y == u.uy) && u.uswallow &&
 		is_animal(u.ustuck->data))
 	    return "maw";
-	else if (IS_AIR(lev->typ) && Is_airlevel(&u.uz))
+	else if (IS_AIR(lev->typ) && Weightless)
 	    return "air";
 	else if (is_pool(x,y))
 	    return (Underwater && !Is_waterlevel(&u.uz)) ? "bottom" : "water";
@@ -1848,7 +1848,7 @@ doengrave()
 		You_cant("draw on the water!");
 		return(0);
 	}
-	if(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)/* in bubble */) {
+	if(Weightless || Is_waterlevel(&u.uz)/* in bubble */) {
 		You_cant("write in thin air!");
 		return(0);
 	}
@@ -2657,7 +2657,7 @@ doward()
 		You_cant("draw on the water!");
 		return(0);
 	}
-	if(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)/* in bubble */ /*|| is_sky(u.ux, u.uy)*/) {
+	if(Weightless || Is_waterlevel(&u.uz)/* in bubble */ /*|| is_sky(u.ux, u.uy)*/) {
 		You_cant("draw in thin air!");
 		return(0);
 	}
@@ -3837,7 +3837,7 @@ doseal()
 		You_cant("draw on the water!");
 		return(0);
 	}
-	if(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)/* in bubble */) {
+	if(Weightless || Is_waterlevel(&u.uz)/* in bubble */) {
 		You_cant("draw in thin air!");
 		return(0);
 	}

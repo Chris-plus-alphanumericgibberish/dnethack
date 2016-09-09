@@ -1761,6 +1761,10 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			if(flag & NOTONL) continue;
 			info[cnt] |= NOTONL;
 		}
+		if (levl[nx][ny].typ == CLOUD && Is_lolth_level(&u.uz) && !(nonliving(mon->data) || breathless(mon->data) || resists_poison(mon))) {
+			if(!(flag & ALLOW_TRAPS)) continue;
+			info[cnt] |= ALLOW_TRAPS;
+		}
 		if (nx != x && ny != y && bad_rock(mdat, x, ny)
 			    && bad_rock(mdat, nx, y)
 			    && ((bigmonst(mdat) && !amorphous(mdat)) || (curr_mon_load(mon) > 600)))
@@ -1797,7 +1801,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 				    !resists_fire(mon) || distmin(mon->mx, mon->my, mon->mux, mon->muy) > 2) /*Cuts down on plane of fire message spam*/
 				&& (ttmp->ttyp != SQKY_BOARD || !is_flyer(mdat))
 				&& (ttmp->ttyp != WEB || (!amorphous(mdat) &&
-				    !webmaker(mdat) && !(
+				    !(webmaker(mdat) || (Is_lolth_level(&u.uz) && !mon->mpeaceful)) && !(
 						 mdat->mlet == S_GIANT ||
 						(mdat->mlet == S_DRAGON &&
 						extra_nasty(mdat)) || /* excl. babies */

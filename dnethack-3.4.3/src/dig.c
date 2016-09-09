@@ -201,7 +201,7 @@ dig_check(madeby, verbose, x, y)
 				Is_astralevel(&u.uz) || Is_sanctum(&u.uz))) {
 	    if(verbose) pline_The("altar is too hard to break apart.");
 	    return(FALSE);
-	} else if (Is_airlevel(&u.uz)) {
+	} else if (Weightless) {
 	    if(verbose) You("cannot %s thin air.", verb);
 	    return(FALSE);
 	} else if (Is_waterlevel(&u.uz)) {
@@ -1637,8 +1637,10 @@ struct obj *obj;
 				if(digtyp == 1){
 					Your("%s through in the web.",
 					aobjnam(obj, "burn"));
-					deltrap(trap);
-					newsym(rx, ry);
+					if(!Is_lolth_level(&u.uz)){
+						deltrap(trap);
+						newsym(rx, ry);
+					}
 				} else {
 					Your("%s entangled in the web.",
 					aobjnam(obj, "become"));
@@ -1706,7 +1708,7 @@ struct obj *obj;
 			}
 			set_occupation(dig, verbing, 0);
 		}
-	} else if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
+	} else if (Weightless || Is_waterlevel(&u.uz)) {
 		/* it must be air -- water checked above */
 		You("swing your %s through thin air.", aobjnam(obj, (char *)0));
 	} else if (!can_reach_floor()) {
@@ -1917,7 +1919,7 @@ register int zx, zy, digdepth;
 	} /* swallowed */
 
 	if (u.dz) {
-	    if (!Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) && !Underwater) {
+	    if (!Weightless && !Is_waterlevel(&u.uz) && !Underwater) {
 		if (u.dz < 0 || On_stairs(u.ux, u.uy)) {
 		    if (On_stairs(u.ux, u.uy))
 			pline_The("beam bounces off the %s and hits the %s.",

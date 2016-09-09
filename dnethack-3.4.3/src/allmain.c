@@ -50,6 +50,23 @@ digcrater(mtmp)
 }
 
 STATIC_OVL void
+digcloudcrater(mtmp)
+	struct monst *mtmp;
+{
+	int x,y,i,j;
+	struct trap *ttmp;
+	for(i=-2;i<=2;i++){
+		x = mtmp->mx+i;
+		for(j=-2;j<=2;j++){
+			y = mtmp->my+j;
+			if(isok(x,y) && dist2(x,y,mtmp->mx,mtmp->my) < 8){
+				levl[x][y].typ = CLOUD;
+			}
+		}
+	}
+}
+
+STATIC_OVL void
 digXchasm(mtmp)
 	struct monst *mtmp;
 {
@@ -533,6 +550,8 @@ moveloop()
 					do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp);
 					if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
 						digcrater(mtmp);
+					} else if(Is_lolth_level(&u.uz)){
+						digcloudcrater(mtmp);
 					} else if(rn2(2)){ //Do for x
 						digXchasm(mtmp);
 					} else { //Do for y
@@ -808,7 +827,36 @@ moveloop()
 		      /********************************/
 		     /* once-per-turn things go here */
 		    /********************************/
-
+			/* Clouds on Lolth's level deal damage */
+			if(Is_lolth_level(&u.uz) && levl[u.ux][u.uy].typ == CLOUD){
+				if (!(nonliving(youmonst.data) || Breathless)){
+					if (!Blind)
+						make_blinded((long)rnd(4), FALSE);
+					if (!Poison_resistance) {
+						pline("%s is burning your %s!", Something, makeplural(body_part(LUNG)));
+						You("cough and spit blood!");
+						losehp(d(3,8) + ((Amphibious && !flaming(youracedata)) ? 0 : rnd(6)), "stinking cloud", KILLED_BY_AN);
+					} else if (!(Amphibious && !flaming(youracedata))){
+						You("are laden with moisture and %s",
+							flaming(youracedata) ? "are smoldering out!" :
+							Breathless ? "find it mildly uncomfortable." :
+							amphibious(youracedata) ? "feel comforted." :
+							"can barely breathe!");
+						/* NB: Amphibious includes Breathless */
+						if (!(Amphibious && !flaming(youracedata))) losehp(rnd(6), "suffocating in a cloud", KILLED_BY);
+					} else {
+						You("cough!");
+					}
+				} else {
+					You("are laden with moisture and %s",
+						flaming(youracedata) ? "are smoldering out!" :
+						Breathless ? "find it mildly uncomfortable." :
+						amphibious(youracedata) ? "feel comforted." :
+						"can barely breathe!");
+					/* NB: Amphibious includes Breathless */
+					if (!(Amphibious && !flaming(youracedata))) losehp(rnd(6), "suffocating in a cloud", KILLED_BY);
+				}
+			}
 			/* If the player has too many pets, untame them untill that is no longer the case */
 			{
 				struct monst *curmon, *weakdog;

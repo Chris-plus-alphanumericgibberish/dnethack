@@ -20,6 +20,14 @@ STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
+STATIC_DCL void NDECL(mklolthsepulcher);
+STATIC_DCL void NDECL(mkmivaultlolth);
+STATIC_DCL void NDECL(mkvaultlolth);
+STATIC_DCL void NDECL(mklolthgnoll);
+STATIC_DCL void NDECL(mklolthgarden);
+STATIC_DCL void NDECL(mklolthtroll);
+STATIC_DCL void NDECL(mklolthdown);
+STATIC_DCL void NDECL(mklolthup);
 STATIC_DCL void FDECL(mkgarden, (struct mkroom *));
 STATIC_DCL void FDECL(mklibrary, (struct mkroom *));
 STATIC_DCL void FDECL(mkarmory, (struct mkroom *));
@@ -82,6 +90,42 @@ mksepulcher()
 			levl[x+2][y-2].typ = TRCORNER;
 			levl[x-2][y-2].typ = TLCORNER;
 			levl[x][y].typ = ROOM;
+			for(i=-2;i<3;i++) {
+				for(j=-2;j<3;j++) {
+					levl[x+i][y+j].lit = 0;
+					levl[x+i][y+j].wall_info |= W_NONDIGGABLE;
+				}
+			}
+			makemon(&mons[PM_DREAD_SERAPH], x, y, 0);
+		}
+	}
+}
+
+STATIC_OVL
+void
+mklolthsepulcher()
+{
+	int x,y,tries=0;
+	int i,j;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-7)+3;
+		y = rn2(ROWNO-7)+3;
+		tries++;
+		okspot = TRUE;
+		for(i=-2;i<3;i++) for(j=-2;j<3;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=-1;i<2;i++) for(j=-1;j<2;j++) levl[x+i][y+j].typ = STONE;
+			levl[x+2][y+2].typ = BRCORNER;
+			levl[x-2][y+2].typ = BLCORNER;
+			for(i=-1;i<2;i++) levl[x+i][y+2].typ = HWALL;
+			for(i=-1;i<2;i++) levl[x+i][y-2].typ = HWALL;
+			for(i=-1;i<2;i++) levl[x+2][y+i].typ = VWALL;
+			for(i=-1;i<2;i++) levl[x-2][y+i].typ = VWALL;
+			levl[x+2][y-2].typ = TRCORNER;
+			levl[x-2][y-2].typ = TLCORNER;
+			levl[x][y].typ = CORR;
 			for(i=-2;i<3;i++) {
 				for(j=-2;j<3;j++) {
 					levl[x+i][y+j].lit = 0;
@@ -167,6 +211,933 @@ mkmivaultitem(container)
 		  !(objects[otmp->otyp].oc_magic || otmp->oartifact));
 		if(!Is_container(otmp)) add_to_container(container, otmp);
 	}
+}
+
+STATIC_OVL
+void
+mkmivaultlolth()
+{
+	int x,y,tries=0;
+	int i,j;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-4)+1;
+		y = rn2(ROWNO-4)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<4;i++) for(j=0;j<4;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<4;i++) for(j=0;j<4;j++) levl[x+i][y+j].typ = CORR;
+			for(i=0;i<4;i++){
+				levl[x][y+i].edge = 1;
+				levl[x+i][y].edge = 1;
+				levl[x+3][y+i].edge = 1;
+				levl[x+i][y+3].edge = 1;
+			}
+			levl[x+3][y+3].typ = BRCORNER;
+			levl[x][y+3].typ = BLCORNER;
+			for(i=1;i<3;i++) levl[x+i][y+3].typ = HWALL;
+			for(i=1;i<3;i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<3;i++) levl[x+3][y+i].typ = VWALL;
+			for(i=1;i<3;i++) levl[x][y+i].typ = VWALL;
+			levl[x+3][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			
+			otmp = mksobj_at(CHEST, x+1, y+1, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			otmp = mksobj_at(CHEST, x+1, y+2, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			otmp = mksobj_at(CHEST, x+2, y+1, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			otmp = mksobj_at(CHEST, x+2, y+2, TRUE, FALSE);
+			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
+			
+			mon = makemon(mivaultmon(), x+rnd(2), y+rnd(2), 0);
+			mon->mstrategy |= STRAT_WAITFORU;
+			mon->mpeaceful = FALSE;
+			set_malign(mon);
+		}
+	}
+}
+
+STATIC_OVL
+void
+mkvaultlolth()
+{
+	int x,y,tries=0;
+	int i,j;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-4)+1;
+		y = rn2(ROWNO-4)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<4;i++) for(j=0;j<4;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<4;i++) for(j=0;j<4;j++) levl[x+i][y+j].typ = CORR;
+			for(i=0;i<4;i++){
+				levl[x][y+i].edge = 1;
+				levl[x+i][y].edge = 1;
+				levl[x+3][y+i].edge = 1;
+				levl[x+i][y+3].edge = 1;
+			}
+			levl[x+3][y+3].typ = BRCORNER;
+			levl[x][y+3].typ = BLCORNER;
+			for(i=1;i<3;i++) levl[x+i][y+3].typ = HWALL;
+			for(i=1;i<3;i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<3;i++) levl[x+3][y+i].typ = VWALL;
+			for(i=1;i<3;i++) levl[x][y+i].typ = VWALL;
+			levl[x+3][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			mkgold((long) rn1((10+rnd(10)) * level_difficulty(),10), x+1, y+1);
+			mkgold((long) rn1((10+rnd(10)) * level_difficulty(),10), x+2, y+1);
+			mkgold((long) rn1((10+rnd(10)) * level_difficulty(),10), x+1, y+2);
+			mkgold((long) rn1((10+rnd(10)) * level_difficulty(),10), x+2, y+2);
+			
+			switch(rn2(3)){
+				case 0:
+					makemon(&mons[PM_SKELETON], x+rnd(2), y+rnd(2), 0);
+				break;
+				case 1:
+					makemon(&mons[PM_DROW_MUMMY], x+rnd(2), y+rnd(2), 0);
+				break;
+				case 2:
+					makemon(&mons[PM_DROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
+					if(rn2(4)) makemon(&mons[PM_DROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
+					if(!rn2(3)) makemon(&mons[PM_DROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
+				break;
+			}
+		}
+	}
+}
+
+STATIC_OVL
+void
+mklolthgnoll()
+{
+	int x,y,tries=0;
+	int i,j, rmnumb = nroom+ROOMOFFSET, trycount, madedoor;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-10)+1;
+		y = rn2(ROWNO-10)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<10;i++) for(j=0;j<10;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<10;i++) for(j=0;j<10;j++){
+				levl[x+i][y+j].typ = CORR;
+				levl[x+i][y+j].roomno = rmnumb;
+			}
+			for(i=0;i<10;i++){
+				levl[x][y+i].edge = 1;
+				levl[x+i][y].edge = 1;
+				levl[x+9][y+i].edge = 1;
+				levl[x+i][y+9].edge = 1;
+			}
+			levl[x+9][y+9].typ = BRCORNER;
+			levl[x][y+9].typ = BLCORNER;
+			for(i=1;i<9;i++) levl[x+i][y+9].typ = HWALL;
+			for(i=1;i<9;i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<9;i++) levl[x+9][y+i].typ = VWALL;
+			for(i=1;i<9;i++) levl[x][y+i].typ = VWALL;
+			levl[x+9][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			rooms[nroom].lx = x + 1;
+			rooms[nroom].hx = x + 8;
+			rooms[nroom].ly = y + 1;
+			rooms[nroom].hy = y + 8;
+			rooms[nroom].rtype = BARRACKS;
+			rooms[nroom].doorct = 0;
+			rooms[nroom].fdoor = 0;
+			rooms[nroom].nsubrooms = 0;
+			rooms[nroom].irregular = FALSE;
+			nroom++;
+			
+			for(i = 2; i < 8; i++) for(j = 2; j < 8; j++){
+				if(rn2(10)){
+					mon = makemon(&mons[PM_GNOLL], x+i, y+j, 0);
+					if(mon) mon->msleeping = 1;
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(8);
+				if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+					madedoor++;
+					levl[x+i][y].typ = DOOR;
+					levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= 8 && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(8);
+				if(isok(x+i,y+10) && levl[x+i][y+10].typ == ROOM){
+					madedoor++;
+					levl[x+i][y+9].typ = DOOR;
+					levl[x+i][y+9].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= 8 && madedoor < 2; i++){
+					if(isok(x+i,y+10) && levl[x+i][y+10].typ == ROOM){
+						madedoor++;
+						levl[x+i][y+9].typ = DOOR;
+						levl[x+i][y+9].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(8);
+				if(isok(x-1,y+i) && levl[x-1][y+i].typ == ROOM){
+					madedoor++;
+					levl[x][y+i].typ = DOOR;
+					levl[x][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= 8 && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(8);
+				if(isok(x+10,y+i) && levl[x+10][y+i].typ == ROOM){
+					madedoor++;
+					levl[x+9][y+i].typ = DOOR;
+					levl[x+9][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= 8 && madedoor < 2; i++){
+					if(isok(x+10,y+i) && levl[x+10][y+i].typ == ROOM){
+						madedoor++;
+						levl[x+9][y+i].typ = DOOR;
+						levl[x+9][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+STATIC_OVL
+void
+mklolthgarden()
+{
+	int x,y,tries=0, width= rn1(4,5), height=rn1(4,5);
+	int i,j, rmnumb = nroom+ROOMOFFSET, trycount, madedoor;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-width)+1;
+		y = rn2(ROWNO-height)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<width;i++) for(j=0;j<height;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<width;i++) for(j=0;j<height;j++){
+				levl[x+i][y+j].typ = CORR;
+			}
+			levl[x+(width-1)][y+(height-1)].typ = BRCORNER;
+			levl[x][y+(height-1)].typ = BLCORNER;
+			for(i=1;i<(width-1);i++) levl[x+i][y+(height-1)].typ = HWALL;
+			for(i=1;i<(width-1);i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<(height-1);i++) levl[x+(width-1)][y+i].typ = VWALL;
+			for(i=1;i<(height-1);i++) levl[x][y+i].typ = VWALL;
+			levl[x+(width-1)][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			rooms[nroom].lx = x + 1;
+			rooms[nroom].hx = x + width - 2;
+			rooms[nroom].ly = y + 1;
+			rooms[nroom].hy = y + height - 2;
+			rooms[nroom].rtype = GARDEN;
+			rooms[nroom].doorct = 0;
+			rooms[nroom].fdoor = 0;
+			rooms[nroom].nsubrooms = 0;
+			rooms[nroom].irregular = FALSE;
+			mkgarden(&rooms[nroom]);
+			nroom++;
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+					madedoor++;
+					levl[x+i][y].typ = DOOR;
+					levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+					madedoor++;
+					levl[x+i][y+height-1].typ = DOOR;
+					levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+						madedoor++;
+						levl[x+i][y+height-1].typ = DOOR;
+						levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x-1,y+i) && levl[x-1][y+i].typ == ROOM){
+					madedoor++;
+					levl[x][y+i].typ = DOOR;
+					levl[x][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+					madedoor++;
+					levl[x+width-1][y+i].typ = DOOR;
+					levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+						madedoor++;
+						levl[x+width-1][y+i].typ = DOOR;
+						levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+STATIC_OVL
+void
+mklolthtroll()
+{
+	int x,y,tries=0, width= 6, height=6;
+	int i,j, rmnumb = nroom+ROOMOFFSET, trycount, madedoor;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-width)+1;
+		y = rn2(ROWNO-height)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<width;i++) for(j=0;j<height;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<width;i++) for(j=0;j<height;j++){
+				levl[x+i][y+j].typ = CORR;
+			}
+			levl[x+(width-1)][y+(height-1)].typ = BRCORNER;
+			levl[x][y+(height-1)].typ = BLCORNER;
+			for(i=1;i<(width-1);i++) levl[x+i][y+(height-1)].typ = HWALL;
+			for(i=1;i<(width-1);i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<(height-1);i++) levl[x+(width-1)][y+i].typ = VWALL;
+			for(i=1;i<(height-1);i++) levl[x][y+i].typ = VWALL;
+			levl[x+(width-1)][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			for(i = 0; i < 10; i++) makemon(mkclass(S_TROLL, G_HELL|G_NOHELL), x+3, y+3, MM_ADJACENTOK);
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+					madedoor++;
+					levl[x+i][y].typ = DOOR;
+					levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+					madedoor++;
+					levl[x+i][y+height-1].typ = DOOR;
+					levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+						madedoor++;
+						levl[x+i][y+height-1].typ = DOOR;
+						levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x-1,y+i) && levl[x-1][y+i].typ == ROOM){
+					madedoor++;
+					levl[x][y+i].typ = DOOR;
+					levl[x][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+					madedoor++;
+					levl[x+width-1][y+i].typ = DOOR;
+					levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+						madedoor++;
+						levl[x+width-1][y+i].typ = DOOR;
+						levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+STATIC_OVL
+void
+mklolthtreasure()
+{
+	int x,y,tries=0, width= 5, height=5;
+	int i,j, rmnumb = nroom+ROOMOFFSET, trycount, madedoor;
+	struct obj *otmp, *container;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good && tries < 50){
+		x = rn2(COLNO-width)+1;
+		y = rn2(ROWNO-height)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<width;i++) for(j=0;j<height;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<width;i++) for(j=0;j<height;j++){
+				levl[x+i][y+j].typ = CORR;
+			}
+			levl[x+(width-1)][y+(height-1)].typ = BRCORNER;
+			levl[x][y+(height-1)].typ = BLCORNER;
+			for(i=1;i<(width-1);i++) levl[x+i][y+(height-1)].typ = HWALL;
+			for(i=1;i<(width-1);i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<(height-1);i++) levl[x+(width-1)][y+i].typ = VWALL;
+			for(i=1;i<(height-1);i++) levl[x][y+i].typ = VWALL;
+			levl[x+(width-1)][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			makemon(&mons[PM_HEDROW_WIZARD], x+2, y+2, MM_ADJACENTOK);
+			makemon(&mons[PM_DROW_MATRON], x+2, y+2, MM_ADJACENTOK);
+			makemon(&mons[PM_DROW_MATRON], x+2, y+2, MM_ADJACENTOK);
+			makemon(&mons[PM_DROW_MATRON], x+2, y+2, MM_ADJACENTOK);
+			makemon(&mons[PM_DROW_MATRON], x+2, y+2, MM_ADJACENTOK);
+			
+			container = mksobj_at(CHEST, x+2, y+2, TRUE, FALSE);
+			otmp = mksobj(POT_FULL_HEALING, TRUE, FALSE);
+			(void) add_to_container(container, otmp);
+			otmp = mksobj(POT_FULL_HEALING, TRUE, FALSE);
+			(void) add_to_container(container, otmp);
+			for(i = d(2,8); i > 0; i--){
+				otmp = mksobj(rn2(LAST_GEM-DILITHIUM_CRYSTAL)+DILITHIUM_CRYSTAL, TRUE, FALSE);
+				(void) add_to_container(container, otmp);
+			}
+			for(i = d(2,4); i > 0; i--){
+				otmp = mkgold((long)rn1(depth(&u.uz) * 20 + 100, 175), x+2, y+2);
+				remove_object(otmp);
+				(void) add_to_container(container, otmp);
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+					madedoor++;
+					levl[x+i][y].typ = DOOR;
+					levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+					madedoor++;
+					levl[x+i][y+height-1].typ = DOOR;
+					levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+						madedoor++;
+						levl[x+i][y+height-1].typ = DOOR;
+						levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x-1,y+i) && levl[x-1][y+i].typ == ROOM){
+					madedoor++;
+					levl[x][y+i].typ = DOOR;
+					levl[x][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+					madedoor++;
+					levl[x+width-1][y+i].typ = DOOR;
+					levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+						madedoor++;
+						levl[x+width-1][y+i].typ = DOOR;
+						levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+STATIC_OVL
+void
+mklolthup()
+{
+	int x,y,tries=0,madedoor,trycount;
+	int i,j, width=5, height=5;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good){
+		x = rn2(COLNO-width)+1;
+		y = rn2(ROWNO-height)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<width;i++) for(j=0;j<height;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<width;i++) for(j=0;j<height;j++){
+				levl[x+i][y+j].typ = CORR;
+			}
+			levl[x+(width-1)][y+(height-1)].typ = BRCORNER;
+			levl[x][y+(height-1)].typ = BLCORNER;
+			for(i=1;i<(width-1);i++) levl[x+i][y+(height-1)].typ = HWALL;
+			for(i=1;i<(width-1);i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<(height-1);i++) levl[x+(width-1)][y+i].typ = VWALL;
+			for(i=1;i<(height-1);i++) levl[x][y+i].typ = VWALL;
+			levl[x+(width-1)][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			xupstair = x+2;
+			yupstair = y+2;
+			
+			levl[x+2][y+2].typ = STAIRS;
+			levl[x+2][y+2].ladder = LA_UP;
+			
+			makemon(&mons[PM_VROCK], x+1, y+1, NO_MM_FLAGS);
+			makemon(&mons[PM_VROCK], x+1, y+3, NO_MM_FLAGS);
+			makemon(&mons[PM_VROCK], x+3, y+3, NO_MM_FLAGS);
+			makemon(&mons[PM_VROCK], x+3, y+1, NO_MM_FLAGS);
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+					madedoor++;
+					levl[x+i][y].typ = DOOR;
+					levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+					madedoor++;
+					levl[x+i][y+height-1].typ = DOOR;
+					levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+						madedoor++;
+						levl[x+i][y+height-1].typ = DOOR;
+						levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x-1,y+i) && levl[x-1][y+i].typ == ROOM){
+					madedoor++;
+					levl[x][y+i].typ = DOOR;
+					levl[x][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+					madedoor++;
+					levl[x+width-1][y+i].typ = DOOR;
+					levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+						madedoor++;
+						levl[x+width-1][y+i].typ = DOOR;
+						levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+		}
+	}
+}
+
+STATIC_OVL
+void
+mklolthdown()
+{
+	int x,y,tries=0, madedoor, trycount;
+	int i,j, width=5, height=5;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE,okspot;
+	while(!good){
+		x = rn2(COLNO-width)+1;
+		y = rn2(ROWNO-height)+1;
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<width;i++) for(j=0;j<height;j++) if(!isok(x+i,y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == CLOUD)) okspot = FALSE;
+		if(okspot){
+			good = TRUE;
+			for(i=0;i<width;i++) for(j=0;j<height;j++){
+				levl[x+i][y+j].typ = CORR;
+			}
+			levl[x+(width-1)][y+(height-1)].typ = BRCORNER;
+			levl[x][y+(height-1)].typ = BLCORNER;
+			for(i=1;i<(width-1);i++) levl[x+i][y+(height-1)].typ = HWALL;
+			for(i=1;i<(width-1);i++) levl[x+i][y].typ = HWALL;
+			for(i=1;i<(height-1);i++) levl[x+(width-1)][y+i].typ = VWALL;
+			for(i=1;i<(height-1);i++) levl[x][y+i].typ = VWALL;
+			levl[x+(width-1)][y].typ = TRCORNER;
+			levl[x][y].typ = TLCORNER;
+			
+			xdnstair = x+2;
+			ydnstair = y+2;
+
+			levl[x+2][y+2].typ = STAIRS;
+			levl[x+2][y+2].ladder = LA_DOWN;
+			
+			makemon(&mons[PM_MARILITH], x+2, y+2, NO_MM_FLAGS);
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+					madedoor++;
+					levl[x+i][y].typ = DOOR;
+					levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(width-2);
+				if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+					madedoor++;
+					levl[x+i][y+height-1].typ = DOOR;
+					levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (width-2) && madedoor < 2; i++){
+					if(isok(x+i,y+height) && levl[x+i][y+height].typ == ROOM){
+						madedoor++;
+						levl[x+i][y+height-1].typ = DOOR;
+						levl[x+i][y+height-1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x-1,y+i) && levl[x-1][y+i].typ == ROOM){
+					madedoor++;
+					levl[x][y+i].typ = DOOR;
+					levl[x][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+i,y-1) && levl[x+i][y-1].typ == ROOM){
+						madedoor++;
+						levl[x+i][y].typ = DOOR;
+						levl[x+i][y].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+			
+			madedoor = 0;
+			trycount = 0;
+			while(madedoor < 2 && trycount<50){
+				i = rnd(height-2);
+				if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+					madedoor++;
+					levl[x+width-1][y+i].typ = DOOR;
+					levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				trycount++;
+			}
+			if(madedoor == 0){
+				for(i = 1; i <= (height-2) && madedoor < 2; i++){
+					if(isok(x+width,y+i) && levl[x+width][y+i].typ == ROOM){
+						madedoor++;
+						levl[x+width-1][y+i].typ = DOOR;
+						levl[x+width-1][y+i].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+					}
+				}
+			}
+		}
+	}
+}
+
+void
+place_lolth_vaults()
+{
+	int num, i;
+	//"portal room" upstairs with 4 vrocks
+	mklolthup();
+	//"portal room" downstairs with 1 marilith
+	mklolthdown();
+	//trollguards: 6x6 room (4x4 + walls) with 10 trolls.  Gold and gems
+	if(!rn2(3))
+		mklolthtroll();
+	//Gnoll barracks
+	else if(rn2(2))
+		mklolthgnoll();
+	else {
+		mklolthtroll();
+		mklolthgnoll();
+	}
+	//(leveled?) werewolf cage?
+	//Garden
+	if(rn2(3)){
+		mklolthgarden();
+	}
+	if(!rn2(3)){
+		mklolthgarden();
+	}
+	//4 drow clerics and 1 drow wizard Trapped chest, 4 full healing potions, gold and gems
+	mklolthtreasure();
+	//Co-alligned temple.  Priest transforms and becomes hostile if adjacent.
+	//prison
+	//sepulcher
+	if(!rn2(4)){
+		mklolthsepulcher();
+	}
+	//mivault
+	num = rnd(3);
+	for(i = 0; i < num; i++) mkmivaultlolth();
+	//Vault
+	num = rnd(6);
+	for(i = 0; i < num; i++) mkvaultlolth();
 }
 
 void
@@ -666,7 +1637,7 @@ struct mkroom *croom; /* NULL == choose random room */
 	tried = 0;
 	i = rn1(3,3);
 	while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
-	    if (levl[pos.x][pos.y].typ == ROOM && !MON_AT(pos.x,pos.y) &&
+	    if ((levl[pos.x][pos.y].typ == ROOM || levl[pos.x][pos.y].typ == CORR) && !MON_AT(pos.x,pos.y) &&
 		!nexttodoor(pos.x,pos.y)) {
 		if (rn2(3))
 		  levl[pos.x][pos.y].typ = TREE;

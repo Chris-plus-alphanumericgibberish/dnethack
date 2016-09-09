@@ -808,7 +808,7 @@ dokick()
 		 */
 		if (isok(xx,yy) && !IS_ROCK(levl[xx][yy].typ) &&
 			!IS_DOOR(levl[xx][yy].typ) &&
-			(!Is_airlevel(&u.uz) || !OBJ_AT(xx,yy))) {
+			(!Weightless || !OBJ_AT(xx,yy))) {
 		    You("have nothing to brace yourself against.");
 		    return(0);
 		}
@@ -841,7 +841,7 @@ dokick()
 		    !glyph_is_invisible(levl[x][y].glyph) &&
 		    !(u.uswallow && mtmp == u.ustuck))
 			map_invisible(x, y);
-		if((Is_airlevel(&u.uz) || Levitation) && flags.move) {
+		if((Weightless || Levitation) && flags.move) {
 		    int range;
 
 		    range = ((int)youmonst.data->cwt + (weight_cap() + inv_weight()));
@@ -865,10 +865,10 @@ dokick()
 
 	kickobj = (struct obj *)0;
 	if (OBJ_AT(x, y) &&
-	    (!Levitation || Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)
+	    (!Levitation || Weightless || Is_waterlevel(&u.uz)
 	     || boulder_at(x,y))) {
 		if(kick_object(x, y)) {
-		    if(Is_airlevel(&u.uz))
+		    if(Weightless)
 			hurtle(-u.dx, -u.dy, 1, TRUE); /* assume it's light */
 		    return(1);
 		}
@@ -1351,7 +1351,7 @@ ouch:
 		    if( !(uarmf && uarmf->otyp == jboots2) && !rn2(3)) set_wounded_legs(RIGHT_SIDE, 5 + rnd(5));
 		    losehp(rnd(ACURR(A_CON) > 15 ? 3 : 5), kickstr(buf),
 			KILLED_BY);
-		    if(Is_airlevel(&u.uz) || Levitation)
+		    if(Weightless || Levitation)
 			hurtle(-u.dx, -u.dy, rn1(2,4), TRUE); /* assume it's heavy */
 		    return(1);
 		}
@@ -1371,7 +1371,7 @@ dumb:
 			exercise(A_STR, FALSE);
 			set_wounded_legs(RIGHT_SIDE, 5 + rnd(5));
 		}
-		if ((Is_airlevel(&u.uz) || Levitation) && rn2(2)) {
+		if ((Weightless || Levitation) && rn2(2)) {
 		    hurtle(-u.dx, -u.dy, 1, TRUE);
 		    return 1;		/* you moved, so use up a turn */
 		}

@@ -631,6 +631,15 @@ register const char *s;
 				}
 			}
 		}
+		if(Is_lolth_level(&u.uz)){
+			int x, y;
+			place_lolth_vaults();
+			for(x = 0; x<COLNO; x++){
+				for(y = 0; y<ROWNO; y++){
+					if(levl[x][y].typ == ROOM) maketrap(x,y,WEB);
+				}
+			}
+		}
 		return;	/* no mazification right now */
 	    }
 	    impossible("Couldn't load \"%s\" - making a maze.", protofile);

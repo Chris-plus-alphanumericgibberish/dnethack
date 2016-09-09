@@ -660,8 +660,10 @@ xchar x, y;
 		break;
 	    case TT_WEB:
 		pline(pullmsg, "web");
-		pline_The("web is destroyed!");
-		deltrap(t_at(u.ux,u.uy));
+		if(!Is_lolth_level(&u.uz)){
+			pline_The("web is destroyed!");
+			deltrap(t_at(u.ux,u.uy));
+		}
 		break;
 	    case TT_LAVA:
 		pline(pullmsg, "lava");

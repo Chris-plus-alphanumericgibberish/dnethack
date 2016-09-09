@@ -655,7 +655,7 @@ peffects(otmp)
 		if (Free_action)
 		    You("stiffen momentarily.");
 		else {
-		    if (Levitation || Is_airlevel(&u.uz)||Is_waterlevel(&u.uz))
+		    if (Levitation || Weightless||Is_waterlevel(&u.uz))
 			You("are motionlessly suspended.");
 #ifdef STEED
 		    else if (u.usteed)

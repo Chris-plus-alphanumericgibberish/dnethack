@@ -512,7 +512,7 @@ feel_location(x, y)
     /* if the hero is levitating or not.				  */
     set_seenv(lev, u.ux, u.uy, x, y);
 
-    if (Levitation && !Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz)) {
+    if (Levitation && !Weightless && !Is_waterlevel(&u.uz)) {
 	/*
 	 * Levitation Rules.  It is assumed that the hero can feel the state
 	 * of the walls around herself and can tell if she is in a corridor,

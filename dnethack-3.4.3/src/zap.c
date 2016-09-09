@@ -2606,7 +2606,7 @@ struct obj *obj;	/* wand or spell */
 		    destroy_drawbridge(xx, yy);
 		disclose = TRUE;
 	    } else if (striking && u.dz < 0 && rn2(3) &&
-			!Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) &&
+			!Weightless && !Is_waterlevel(&u.uz) &&
 			!Underwater && !In_outdoors(&u.uz)) {
 		/* similar to zap_dig() */
 		pline("A rock is dislodged from the %s and falls on your %s.",
@@ -2636,7 +2636,7 @@ struct obj *obj;	/* wand or spell */
 	    }
 	    break;
 	case SPE_STONE_TO_FLESH:
-	    if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
+	    if (Weightless || Is_waterlevel(&u.uz) ||
 		     Underwater || (Is_qstart(&u.uz) && u.dz < 0)) {
 		pline1(nothing_happens);
 	    } else if (u.dz < 0) {	/* we should do more... */
@@ -4160,7 +4160,7 @@ boolean *shopdamage;
 	if(abstype == ZT_FIRE) {
 	    struct trap *t = t_at(x, y);
 
-	    if (t && t->ttyp == WEB) {
+	    if (t && t->ttyp == WEB && !Is_lolth_level(&u.uz)) {
 		/* a burning web is too flimsy to notice if you can't see it */
 		if (cansee(x,y)) Norep("A web bursts into flames!");
 		(void) delfloortrap(t);
@@ -4778,14 +4778,14 @@ retry:
 	    /* The(aobjnam()) is safe since otmp is unidentified -dlc */
 	    (void) hold_another_object(otmp, u.uswallow ?
 				       "Oops!  %s out of your reach!" :
-				       (Is_airlevel(&u.uz) ||
+				       (Weightless ||
 					Is_waterlevel(&u.uz) ||
 					levl[u.ux][u.uy].typ < IRONBARS ||
 					levl[u.ux][u.uy].typ >= ICE) ?
 				       "Oops!  %s away from you!" :
 				       "Oops!  %s to the floor!",
 				       The(aobjnam(otmp,
-					     Is_airlevel(&u.uz) || u.uinwater ?
+					     Weightless || u.uinwater ?
 						   "slip" : "drop")),
 				       (const char *)0);
 	    u.ublesscnt += rn1(100,50);  /* the gods take notice */

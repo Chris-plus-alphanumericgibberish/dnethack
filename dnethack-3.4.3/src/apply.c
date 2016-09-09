@@ -1629,7 +1629,7 @@ int magic; /* 0=Physical, otherwise skill level */
 		}
 
 		return 0;
-	} else if (Levitation || Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
+	} else if (Levitation || Weightless || Is_waterlevel(&u.uz)) {
 		if (magic) {
 			You("flail around a little.");
 			return 1;
@@ -1719,8 +1719,13 @@ int magic; /* 0=Physical, otherwise skill level */
 		    You("leap from the pit!");
 		    break;
 		case TT_WEB:
-		    You("tear the web apart as you pull yourself free!");
-		    deltrap(t_at(u.ux,u.uy));
+			if(Is_lolth_level(&u.uz)){
+				You("cannot free yourself from the web!");
+				return 0;
+			} else {
+				You("tear the web apart as you pull yourself free!");
+				deltrap(t_at(u.ux,u.uy));
+			}
 		    break;
 		case TT_LAVA:
 		    You("pull yourself above the lava!");
@@ -2171,7 +2176,7 @@ struct obj **optr;
 	if (!figurine_location_checks(obj, &cc, FALSE)) return;
 	You("%s and it transforms.",
 	    (u.dx||u.dy) ? "set the figurine beside you" :
-	    (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
+	    (Weightless || Is_waterlevel(&u.uz) ||
 	     is_pool(cc.x, cc.y)) ?
 		"release the figurine" :
 	    (u.dz < 0 ?
@@ -2747,7 +2752,7 @@ struct obj *hypo;
 				if (Free_action)
 					You("stiffen momentarily.");
 				else {
-					if (Levitation || Is_airlevel(&u.uz)||Is_waterlevel(&u.uz))
+					if (Levitation || Weightless || Is_waterlevel(&u.uz))
 					You("are motionlessly suspended.");
 #ifdef STEED
 					else if (u.usteed)
@@ -3059,8 +3064,10 @@ struct obj **optr;
 	if(ttmp) {
 		if(otmp->ovar1) otmp->ovar1--;
 		pline("The cloak sweeps up a web!");
-		deltrap(ttmp);
-		newsym(rx, ry);
+		if(!Is_lolth_level(&u.uz)){ //results in unlimited recharging in lolths domain, no big deal
+			deltrap(ttmp);
+			newsym(rx, ry);
+		}
 		if(rx==u.ux && ry==u.uy) u.utrap = 0;
 		else if(mtmp) mtmp->mtrapped = 0;
 	}
@@ -3361,7 +3368,7 @@ struct obj *obj;
 	    }
 	}
 
-    } else if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
+    } else if (Weightless || Is_waterlevel(&u.uz)) {
 	    /* it must be air -- water checked above */
 	    You("snap your whip through thin air.");
 
@@ -4294,7 +4301,7 @@ struct obj **optr;
 		if (!clockwork_location_checks(obj, &cc, FALSE)) return 0;
 		You("build a clockwork and %s.",
 			(u.dx||u.dy) ? "set it beside you" :
-			(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
+			(Weightless || Is_waterlevel(&u.uz) ||
 			 is_pool(cc.x, cc.y)) ?
 			"release it" :
 			(u.dz < 0 ?
@@ -4763,7 +4770,7 @@ doapply()
 				otmp = poly_obj(otmp,BULLET);
 				otmp = hold_another_object(otmp, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -4779,7 +4786,7 @@ doapply()
 				otmp->owt = weight(otmp);
 				otmp = hold_another_object(otmp, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -4793,7 +4800,7 @@ doapply()
 				otmp = poly_obj(otmp,SHOTGUN_SHELL);
 				otmp = hold_another_object(otmp, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -4807,7 +4814,7 @@ doapply()
 				otmp = poly_obj(otmp,ROCKET);
 				otmp = hold_another_object(otmp, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -4821,7 +4828,7 @@ doapply()
 				otmp = poly_obj(otmp,SHOTGUN_SHELL);
 				otmp = hold_another_object(otmp, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -4835,7 +4842,7 @@ doapply()
 				otmp = poly_obj(otmp,BULLET);
 				otmp = hold_another_object(otmp, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -4861,7 +4868,7 @@ doapply()
 				rocket->owt = weight(rocket);
 				rocket = hold_another_object(rocket, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -4886,7 +4893,7 @@ doapply()
 				bullets->owt = weight(bullets);
 				bullets = hold_another_object(bullets, u.uswallow ?
 						   "Oops!  %s out of your reach!" :
-						(Is_airlevel(&u.uz) ||
+						(Weightless ||
 						 Is_waterlevel(&u.uz) ||
 						 levl[u.ux][u.uy].typ < IRONBARS ||
 						 levl[u.ux][u.uy].typ >= ICE) ?
@@ -5041,7 +5048,7 @@ doapply()
 		    otmp->owt = weight(otmp);
 		    otmp = hold_another_object(otmp, u.uswallow ?
 				       "Oops!  %s out of your reach!" :
-					(Is_airlevel(&u.uz) ||
+					(Weightless ||
 					 Is_waterlevel(&u.uz) ||
 					 levl[u.ux][u.uy].typ < IRONBARS ||
 					 levl[u.ux][u.uy].typ >= ICE) ?

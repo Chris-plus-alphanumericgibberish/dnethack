@@ -97,6 +97,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define ORCUS_LEVEL		1
 #define MALCANTHET_LEVEL	2
 #define GRAZ_ZT_LEVEL	3
+#define LOLTH_LEVEL		4
 	d_level	d_brine_level;
 	int		brine_variant;
 #define DEMOGORGON_LEVEL	1

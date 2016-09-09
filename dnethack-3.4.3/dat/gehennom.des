@@ -4561,7 +4561,50 @@ DOOR:locked,(47,11)
 DOOR:locked,(49,09)
 DOOR:open,(65,10)
 
+MAZE: "abys2-4",' '
+#MAZE: "lolth",' '
+FLAGS: noteleport,hardfloor,nommap,shortsighted
+GEOMETRY: center,center
 
+#0         1         2   	   3	     4		   5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1          .......................................................           
+2         .CCCCC.CCCCC.CCCCC.C.CCCCCCCCCCCCCCC.C.CCCCC.CCCCC.CCCCC.          
+3        .CCCCC.CCCCC.CCCCC.CCC.CCCCCCCCCCCCC.CCC.CCCCC.CCCCC.CCCCC.         
+4       .CCCCC.CCCCC.CCCCC.CCCCC.............CCCCC.CCCCC.CCCCC.CCCCC.        
+5      .CCCCC.CCCCC.CCCCC.CCCCC.C.CCCCCCCCC.C.CCCCC.CCCCC.CCCCC.CCCCC.       
+6     .CCCCC.CCCCC.CCCCC.CCCCC.CCC.CCCCCCC.CCC.CCCCC.CCCCC.CCCCC.CCCCC.      
+7    .CCCCC.CCCCC.CCCCC.CCCCC.CCCCCHHHHHHHCCCCC.CCCCC.CCCCC.CCCCC.CCCCC.     
+8   .CCCCC.CCCCC.CCCCC.CCCCC.CCCCCHC.CCC.CHCCCCC.CCCCC.CCCCC.CCCCC.CCCCC.    
+9  .CCCCC.CCCCC.CCCCC.CCCCC.CCCCCHCCC.C.CCCHCCCCC.CCCCC.CCCCC.CCCCC.CCCCC.   
+0 ..............................H.....\.....H..............................  
+1  .CCCCC.CCCCC.CCCCC.CCCCC.CCCCCHCCC.C.CCCHCCCCC.CCCCC.CCCCC.CCCCC.CCCCC.   
+2   .CCCCC.CCCCC.CCCCC.CCCCC.CCCCCHC.CCC.CHCCCCC.CCCCC.CCCCC.CCCCC.CCCCC.    
+3    .CCCCC.CCCCC.CCCCC.CCCCC.CCCCCHHHHHHHCCCCC.CCCCC.CCCCC.CCCCC.CCCCC.     
+4     .CCCCC.CCCCC.CCCCC.CCCCC.CCC.CCCCCCC.CCC.CCCCC.CCCCC.CCCCC.CCCCC.      
+5      .CCCCC.CCCCC.CCCCC.CCCCC.C.CCCCCCCCC.C.CCCCC.CCCCC.CCCCC.CCCCC.       
+6       .CCCCC.CCCCC.CCCCC.CCCCC.............CCCCC.CCCCC.CCCCC.CCCCC.        
+7        .CCCCC.CCCCC.CCCCC.CCC.CCCCCCCCCCCCC.CCC.CCCCC.CCCCC.CCCCC.         
+8         .CCCCC.CCCCC.CCCCC.C.CCCCCCCCCCCCCCC.C.CCCCC.CCCCC.CCCCC.          
+9          .......................................................           
+0                                                                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4		   5		 6	       7
+
+
+MONSTER:'&',"Avatar of Lolth",(37,10)
+MONSTER:'@',"unearthly drow",(38,10)
+MONSTER:'s',"demonic black widow",(38,11)
+MONSTER:'&',"yochlol",(38,09)
+MONSTER:'v',"stinking cloud",(40,10)
+
+MONSTER:'@',"unearthly drow",(36,10)
+MONSTER:'&',"yochlol",(36,11)
+MONSTER:'s',"demonic black widow",(36,09)
+MONSTER:'v',"stinking cloud",(34,10)
 
 MAZE: "stair1",random
 FLAGS: hardfloor,shortsighted

@@ -1032,8 +1032,10 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			    You("%s %s spider web!",
 				(u.umonnum == PM_FIRE_ELEMENTAL) ? "burn" : "dissolve",
 				a_your[trap->madeby_u]);
-			deltrap(trap);
-			newsym(u.ux,u.uy);
+			if(!Is_lolth_level(&u.uz)){
+				deltrap(trap);
+				newsym(u.ux,u.uy);
+			}
 			break;
 		    }
 		    if (webmsgok) You("flow through %s spider web.",
@@ -1106,8 +1108,10 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			u.utrap = 0;
 			if (webmsgok)
 			    You("tear through %s web!", a_your[trap->madeby_u]);
-			deltrap(trap);
-			newsym(u.ux,u.uy);	/* get rid of trap symbol */
+			if(!Is_lolth_level(&u.uz)){
+				deltrap(trap);
+				newsym(u.ux,u.uy);	/* get rid of trap symbol */
+			}
 		    }
 		}
 		break;
@@ -2083,7 +2087,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 
 		case WEB:
 			/* Monster in a web. */
-			if (webmaker(mptr)) break;
+			if (webmaker(mptr) || (Is_lolth_level(&u.uz) && !mtmp->mpeaceful)) break;
 			if (amorphous(mptr) || is_whirly(mptr) || unsolid(mptr)){
 			    if(acidic(mptr) ||
 			       mptr == &mons[PM_GELATINOUS_CUBE] ||
@@ -2094,8 +2098,10 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 					  (mptr == &mons[PM_FIRE_ELEMENTAL]) ?
 					    "burns" : "dissolves",
 					  a_your[trap->madeby_u]);
-				deltrap(trap);
-				newsym(mtmp->mx, mtmp->my);
+				if(!Is_lolth_level(&u.uz)){
+					deltrap(trap);
+					newsym(mtmp->mx, mtmp->my);
+				}
 				break;
 			    }
 			    if (in_sight) {
@@ -2113,7 +2119,10 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 					pline("%s slices through %s spider web.",
 						  Monnam(mtmp),
 						  a_your[trap->madeby_u]);
-					deltrap(trap);
+					if(!Is_lolth_level(&u.uz)){
+						deltrap(trap);
+						newsym(mtmp->mx, mtmp->my);
+					}
 					break;
 				}
 			}
@@ -2158,6 +2167,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    case PM_BALROG:
 			    case PM_KRAKEN:
 			    case PM_MASTODON:
+			    case PM_DREAD_SERAPH:
 				tear_web = TRUE;
 				break;
 			}
@@ -2165,8 +2175,10 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    if (in_sight)
 				pline("%s tears through %s spider web!",
 				      Monnam(mtmp), a_your[trap->madeby_u]);
-			    deltrap(trap);
-			    newsym(mtmp->mx, mtmp->my);
+				if(!Is_lolth_level(&u.uz)){
+					deltrap(trap);
+					newsym(mtmp->mx, mtmp->my);
+				}
 			}
 			break;
 
@@ -2369,7 +2381,7 @@ float_up()
 			mon_nam(u.ustuck));
 	else if (Hallucination)
 		pline("Up, up, and awaaaay!  You're walking on air!");
-	else if(Is_airlevel(&u.uz))
+	else if(Weightless)
 		You("gain control over your movements.");
 	else
 		You("start to float in the air!");
@@ -2461,7 +2473,7 @@ long hmask, emask;     /* might cancel timeout */
 	}
 	if (!trap) {
 	    trap = t_at(u.ux,u.uy);
-	    if(Is_airlevel(&u.uz))
+	    if(Weightless)
 		You("begin to tumble in place.");
 	    else if (Is_waterlevel(&u.uz) && !no_msg)
 		You_feel("heavier.");
@@ -2520,7 +2532,7 @@ long hmask, emask;     /* might cancel timeout */
 				dotrap(trap, 0);
 	}
 
-	if (!Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) && !u.uswallow &&
+	if (!Weightless && !Is_waterlevel(&u.uz) && !u.uswallow &&
 		/* falling through trap door calls goto_level,
 		   and goto_level does its own pickup() call */
 		on_level(&u.uz, &current_dungeon_level))
@@ -3534,7 +3546,7 @@ struct trap *ttmp;
 		if (ttmp->ttyp == BEAR_TRAP) {
 			You("disarm %s bear trap.", the_your[ttmp->madeby_u]);
 			cnv_trap_obj(BEARTRAP, 1, ttmp);
-		} else /* if (ttmp->ttyp == WEB) */ {
+		} else if(!Is_lolth_level(&u.uz)) /* if (ttmp->ttyp == WEB) */ {
 			You("succeed in removing %s web.", the_your[ttmp->madeby_u]);
 			deltrap(ttmp);
 		}

@@ -1881,7 +1881,7 @@ struct obj *obj;
 		const char *what, *where;
 		if (!Blind)
 		    what = "goes",  where = "dark";
-		else if (Levitation || Is_airlevel(&u.uz) ||
+		else if (Levitation || Weightless ||
 			 Is_waterlevel(&u.uz))
 		    what = "you lose control of",  where = "yourself";
 		else
@@ -3492,7 +3492,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				if (Free_action)
 					You("stiffen momentarily.");
 				else {
-					if (Levitation || Is_airlevel(&u.uz)||Is_waterlevel(&u.uz))
+					if (Levitation || Weightless||Is_waterlevel(&u.uz))
 					You("are motionlessly suspended.");
 #ifdef STEED
 					else if (u.usteed)

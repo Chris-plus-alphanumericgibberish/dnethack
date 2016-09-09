@@ -4052,6 +4052,8 @@ register int	mmflags;
 			){
 				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = u.uhouse;
 				else curhouse = LOLTH_SYMBOL;
+			} else if(Is_lolth_level(&u.uz)){
+				curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_MINDLESS_THRALL] || ptr == &mons[PM_A_GONE] || ptr == &mons[PM_PEASANT]){
 				curhouse = PEN_A_SYMBOL;
 			} else if(ptr == &mons[PM_DOKKALFAR_ETERNAL_MATRIARCH]){

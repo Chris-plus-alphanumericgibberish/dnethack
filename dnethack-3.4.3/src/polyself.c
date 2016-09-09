@@ -958,7 +958,7 @@ dospinweb()
 {
 	register struct trap *ttmp = t_at(u.ux,u.uy);
 
-	if (Levitation || Is_airlevel(&u.uz)
+	if (Levitation || Weightless
 	    || Underwater || Is_waterlevel(&u.uz)) {
 		You("must be on the ground to spin a web.");
 		return(0);

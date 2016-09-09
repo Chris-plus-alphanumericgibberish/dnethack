@@ -1299,7 +1299,7 @@ int thrown;
 	    (Upolyd ? (u.mh < 5 && u.mh != u.mhmax)
 	     : (u.uhp < 10 && u.uhp != u.uhpmax)) &&
 	    obj->owt > (unsigned)((Upolyd ? u.mh : u.uhp) * 2) &&
-	    !Is_airlevel(&u.uz)) {
+	    !Weightless) {
 	    You("have so little stamina, %s drops from your grasp.",
 		the(xname(obj)));
 	    exercise(A_CON, FALSE);
@@ -1349,7 +1349,7 @@ int thrown;
 	    else if (is_grenade(obj))
 			arm_bomb(obj, TRUE);
 	    else if (is_bullet(obj) && ammo_and_launcher(obj, launcher)) {
-			if (!Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz) && !Underwater
+			if (!Weightless && !Is_waterlevel(&u.uz) && !Underwater
 				&& (objects[obj->otyp].oc_dir & EXPLOSION)) {
 				pline("%s hit%s the %s and explodes in a ball of fire!",
 					Doname2(obj), (obj->quan == 1L) ? "s" : "",
@@ -1362,7 +1362,7 @@ int thrown;
 			return;
 	    }
 //#endif
-		if (u.dz < 0 && !Is_airlevel(&u.uz) &&
+		if (u.dz < 0 && !Weightless &&
 		    !Underwater && !Is_waterlevel(&u.uz)) {
 		(void) toss_up(obj, rn2(5));
 	    } else {
@@ -1372,7 +1372,7 @@ int thrown;
 	    return;
 
 	} else if(is_boomerang(obj) && !Underwater) {
-		if(Is_airlevel(&u.uz) || Levitation)
+		if(Weightless || Levitation)
 		    hurtle(-u.dx, -u.dy, 1, TRUE);
 		mon = boomhit(obj, u.dx, u.dy);
 		if(mon == &youmonst) {		/* the thing was caught */
@@ -1420,7 +1420,7 @@ int thrown;
 				range /= 2;
 		}
 
-		if (Is_airlevel(&u.uz) || Levitation) {
+		if (Weightless || Levitation) {
 		    /* action, reaction... */
 		    urange -= range;
 		    if(urange < 1) urange = 1;
@@ -1444,7 +1444,7 @@ int thrown;
 			   obj, &obj_destroyed);
 
 		/* have to do this after bhit() so u.ux & u.uy are correct */
-		if(Is_airlevel(&u.uz) || Levitation)
+		if(Weightless || Levitation)
 		    hurtle(-u.dx, -u.dy, urange, TRUE);
 
 		if (obj_destroyed) return; /* fixes C343-100 */
@@ -2555,7 +2555,7 @@ struct obj *obj;
 	}
 
 	if(u.dz) {
-		if (u.dz < 0 && !Is_airlevel(&u.uz) &&
+		if (u.dz < 0 && !Weightless &&
 					!Underwater && !Is_waterlevel(&u.uz)) {
 	pline_The("gold hits the %s, then falls back on top of your %s.",
 		    ceiling(u.ux,u.uy), body_part(HEAD));

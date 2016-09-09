@@ -90,7 +90,7 @@ RNDLEVEL:		"hell2" "A" @ (-6, 0) 4
 LEVALIGN:		lawful
 RNDLEVEL:		"hell" "B" @ (-9, 0) 4
 LEVALIGN:		lawful
-RNDLEVEL:		"abys2" "C" @ (-12,9) 3
+RNDLEVEL:		"abys2" "C" @ (-12,9) 4
 LEVALIGN:		chaotic
 RNDLEVEL:		"abyss" "D" @ (-12,9) 6
 LEVALIGN:		chaotic

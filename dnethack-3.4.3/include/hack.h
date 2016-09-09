@@ -143,6 +143,8 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 						(flags.montype & (unsigned long long int)((unsigned long long int)1 << (int)((mon)->data->mlet)))) \
 				)
 
+#define Weightless	(Is_airlevel(&u.uz) || (Is_lolth_level(&u.uz) && levl[u.ux][u.uy].typ == CLOUD))
+
 #include "trap.h"
 #include "flag.h"
 #include "rm.h"
