@@ -707,6 +707,9 @@ long wp_mask;
 	register const struct artifact *oart = get_artifact(otmp);
 	uchar dtyp;
 	long spfx, spfx2, spfx3;
+	long exist_warntypem = 0, exist_warntypet = 0, exist_warntypeb = 0, exist_warntypeg = 0, exist_warntypea = 0, exist_warntypev = 0;
+	long long exist_montype = 0;
+	boolean exist_nonspecwarn;
 	int p = 0, r;
 
 	if (!oart) return;
@@ -773,7 +776,21 @@ long wp_mask;
 	    for(obj = invent; obj; obj = obj->nobj)
 		if(obj != otmp && obj->oartifact) {
 		    register const struct artifact *art = get_artifact(obj);
-		    spfx &= ~art->cspfx;
+		    spfx &= ~(art->cspfx&(~SPFX_WARN)); //SPFX_WARN is ALWAYS going to need special handling :(
+			spfx3 &= ~(art->cspfx3);
+			if(spfx&SPFX_WARN){
+				if(art->cspfx&SPFX_WARN){
+					exist_warntypem |= spec_mm(obj);
+					exist_warntypet |= spec_mt(obj);
+					exist_warntypeb |= spec_mb(obj);
+					exist_warntypeg |= spec_mg(obj);
+					exist_warntypea |= spec_ma(obj);
+					exist_warntypev |= spec_mv(obj);
+					exist_montype |= (long long int)((long long int)1 << (int)(spec_s(obj)));
+					if(!(spec_mm(obj) || spec_mt(obj) || spec_mb(obj) || spec_mg(obj) || spec_ma(obj) || spec_mv(obj) || spec_s(obj)))
+						exist_nonspecwarn |= TRUE;
+				}
+			}
 		}
 	}
 
@@ -818,8 +835,8 @@ long wp_mask;
 				EWarn_of_mon |= wp_mask;
 				flags.warntypem |= spec_mm(otmp);
 	    	} else {
-				EWarn_of_mon &= ~wp_mask;
-					flags.warntypem &= ~spec_mm(otmp);
+				// EWarn_of_mon &= ~wp_mask;
+				flags.warntypem &= ~(spec_mm(otmp)&(~exist_warntypem));
 			}
 			see_monsters();
 			specific = TRUE;
@@ -829,8 +846,8 @@ long wp_mask;
 				EWarn_of_mon |= wp_mask;
 				flags.warntypet |= spec_mt(otmp);
 	    	} else {
-				EWarn_of_mon &= ~wp_mask;
-					flags.warntypet &= ~spec_mt(otmp);
+				// EWarn_of_mon &= ~wp_mask;
+				flags.warntypet &= ~(spec_mt(otmp)&(~exist_warntypet));
 			}
 			see_monsters();
 			specific = TRUE;
@@ -840,8 +857,8 @@ long wp_mask;
 				EWarn_of_mon |= wp_mask;
 				flags.warntypeb |= spec_mb(otmp);
 	    	} else {
-				EWarn_of_mon &= ~wp_mask;
-					flags.warntypeb &= ~spec_mb(otmp);
+				// EWarn_of_mon &= ~wp_mask;
+				flags.warntypeb &= ~(spec_mb(otmp)&(~exist_warntypeb));
 			}
 			see_monsters();
 			specific = TRUE;
@@ -851,8 +868,8 @@ long wp_mask;
 				EWarn_of_mon |= wp_mask;
 				flags.warntypeg |= spec_mg(otmp);
 	    	} else {
-				EWarn_of_mon &= ~wp_mask;
-					flags.warntypeg &= ~spec_mg(otmp);
+				// EWarn_of_mon &= ~wp_mask;
+				flags.warntypeg &= ~(spec_mg(otmp)&(~exist_warntypeg));
 			}
 			see_monsters();
 			specific = TRUE;
@@ -862,8 +879,8 @@ long wp_mask;
 				EWarn_of_mon |= wp_mask;
 				flags.warntypea |= spec_ma(otmp);
 	    	} else {
-				EWarn_of_mon &= ~wp_mask;
-					flags.warntypea &= ~spec_ma(otmp);
+				// EWarn_of_mon &= ~wp_mask;
+				flags.warntypea &= ~(spec_ma(otmp)&(~exist_warntypea));
 			}
 			see_monsters();
 			specific = TRUE;
@@ -873,8 +890,8 @@ long wp_mask;
 				EWarn_of_mon |= wp_mask;
 				flags.warntypev |= spec_mv(otmp);
 	    	} else {
-				EWarn_of_mon &= ~wp_mask;
-					flags.warntypev &= ~spec_mv(otmp);
+				// EWarn_of_mon &= ~wp_mask;
+				flags.warntypev &= ~(spec_mv(otmp)&(~exist_warntypeb));
 			}
 			see_monsters();
 			specific = TRUE;
@@ -884,15 +901,16 @@ long wp_mask;
 				EWarn_of_mon |= wp_mask;
 				flags.montype |= (long long int)((long long int)1 << (int)(spec_s(otmp))); //spec_s(otmp);
 	    	} else {
-				EWarn_of_mon &= ~wp_mask;
-					flags.montype &= ~(long long int)((long long int)1 << (int)(spec_s(otmp)));
+				// EWarn_of_mon &= ~wp_mask;
+				flags.montype &= ~((long long int)((long long int)1 << (int)(spec_s(otmp)))&(~exist_montype));
 			}
 			see_monsters();
 			specific = TRUE;
-	    } 
+	    }
+		if(!(flags.warntypem || flags.warntypet || flags.warntypeb || flags.warntypeg || flags.warntypea || flags.warntypev || flags.montype)) EWarn_of_mon &= ~wp_mask;
 		if(!specific){
 			if (on) EWarning |= wp_mask;
-				else EWarning &= ~wp_mask;
+			else if(!exist_nonspecwarn) EWarning &= ~wp_mask;
 	    }
 	}
 	if (spfx & SPFX_EREGEN) {
