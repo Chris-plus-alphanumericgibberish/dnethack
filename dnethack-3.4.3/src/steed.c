@@ -9,7 +9,7 @@
 
 /* Monsters that might be ridden */
 static NEARDATA const char steeds[] = {
-	S_QUADRUPED, S_UNICORN, S_ANGEL, S_CENTAUR, S_DRAGON, S_JABBERWOCK, '\0'
+	S_QUADRUPED, S_UNICORN, S_LAW_ANGEL, S_NEU_ANGEL, S_CHA_ANGEL, S_CENTAUR, S_DRAGON, S_JABBERWOCK, '\0'
 };
 
 static NEARDATA const char drow_steeds[] = {

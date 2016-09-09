@@ -575,6 +575,19 @@ register const char *s;
 	} else if(In_sea(&u.uz)){
 		dungeon_topology.sea_variant = levvar;
 	}
+	
+	if(dungeon_topology.alt_tower){
+		if(Is_arcadiatower2(&u.uz)){
+			Strcpy(protofile, "btower2");
+		} else if(Is_arcadiatower3(&u.uz)){
+			Strcpy(protofile, "btower3");
+		} else if(Is_arcadiadonjon(&u.uz)){
+			Strcpy(protofile, "towrtob");
+		}
+	} 
+	if(Is_hell1(&u.uz) && !Role_if(PM_CAVEMAN) && dungeon_topology.hell1_variant == BAEL_LEVEL && rn2(2)){
+			Strcpy(protofile, "hell-a");
+	}
 #ifdef WIZARD
 	/* SPLEVTYPE format is "level-choice,level-choice"... */
 	if (wizard && *protofile && sp && sp->rndlevs) {

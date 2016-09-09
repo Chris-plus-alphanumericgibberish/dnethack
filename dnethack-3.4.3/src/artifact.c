@@ -1573,10 +1573,10 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	}
 	if (pen->ovar1&SEAL_IRIS) {
 	    if (vis){ 
-			and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
+			if(pen->ovar1&SEAL_ENKI) and ? Strcat(buf, " yet thirsty") : Sprintf(buf, "thirsty");
+			else and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
 			and = TRUE;
 		}
-		/*water damage?*/
 	}
 	if (pen->ovar1&SEAL_ECHIDNA) {
 	    if (vis){ 
@@ -1777,7 +1777,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			else pline_The("unholy blade drains your life!");
 			losexp("life drainage",TRUE,FALSE,FALSE);
 		}
-		else if(!resists_drli(mdef)){
+		else if(!youdefend && !resists_drli(mdef)){
 			if (vis) {
 				pline_The("unholy blade draws the life from %s!",
 				      mon_nam(mdef));
@@ -2007,9 +2007,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		// if(u.uen >= 10) u.uen -= 10;
 	}
 	
-	if (otmp->oartifact == ART_ICONOCLAST && mdef->data->mlet == S_ANGEL ) *dmgptr += 9;
+	if (otmp->oartifact == ART_ICONOCLAST && is_angel(mdef->data) ) *dmgptr += 9;
 
-	if(Role_if(PM_PRIEST)) *dmgptr += d(1,u.ulevel); //priests do extra damage when attacking with artifacts
+	if(youattack && Role_if(PM_PRIEST)) *dmgptr += d(1,u.ulevel); //priests do extra damage when attacking with artifacts
 
 	if (youattack && youdefend) {
 	    impossible("attacking yourself with weapon?");

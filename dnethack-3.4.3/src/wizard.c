@@ -378,6 +378,8 @@ tactics(mtmp)
 					teleds(cc.x, cc.y, FALSE);
 					return(0);
 				}
+			} else if(mtmp->data == &mons[PM_GREAT_CTHULHU]){
+				pline("%s steps through strange angles.",Monnam(mtmp));
 			}
 			mnexto(mtmp);
 		    return(0);

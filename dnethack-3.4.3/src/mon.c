@@ -306,6 +306,10 @@ register struct monst *mtmp;
 		    obj = mksobj_at(BLACK_DRAGON_SCALES, x, y, FALSE, FALSE);
 			obj = oname(obj, artiname(ART_CHROMATIC_DRAGON_SCALES));
 		goto default_1;
+	    case PM_PLATINUM_DRAGON:
+		    obj = mksobj_at(SILVER_DRAGON_SCALE_MAIL, x, y, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_DRAGON_PLATE));
+		goto default_1;
 	    case PM_MANTICORE:
 		if (mtmp->mrevived ? !rn2(6) : TRUE) {
 			obj = mksobj_at(SPIKE, x, y, TRUE, FALSE);
@@ -953,9 +957,15 @@ mcalcdistress()
 	/* regenerate hit points */
 	mon_regen(mtmp, FALSE);
 	
-	if(mtmp->data == &mons[PM_BALL_OF_LIGHT]) mtmp->mflee = 1;
-	else if(mtmp->data == &mons[PM_SHIERE]) mtmp->mflee = 0;
-
+	if(bold(mtmp->data) && mtmp->mflee){
+		if(mtmp->mfleetim > 4) mtmp->mfleetim /= 4;
+		else {
+			mtmp->mfleetim = 0;
+			mtmp->mflee = 0;
+		}
+	}
+	
+	
 	/* possibly polymorph shapechangers and lycanthropes */
 	if (mtmp->cham && !rn2(6))
 	    (void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
@@ -1588,6 +1598,10 @@ mfndpos(mon, poss, info, flag)
 		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_WATCHER_IN_THE_WATER]) break;
 	} else witw = 0;
 	
+	if(mdat == &mons[PM_WIDE_CLUBBED_TENTACLE]){
+		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_KETO]) break;
+	} else witw = 0;
+	
 	x = mon->mx;
 	y = mon->my;
 	nowtyp = levl[x][y].typ;
@@ -1665,7 +1679,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		) if(x + xdir[(int)mon->mvar1] != nx || 
 			   y + ydir[(int)mon->mvar1] != ny 
 			) continue;
-		if(mdat == &mons[PM_WATCHER_IN_THE_WATER] && 
+		if((mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO]) && 
 			distmin(nx, ny, mon->mux, mon->muy) <= 3 && 
 			dist2(nx, ny, mon->mux, mon->muy) <= dist2(mon->mx, mon->my, mon->mux, mon->muy)) continue;
 		if(witw && dist2(nx, ny, witw->mx, witw->my) > 32 && 
@@ -1967,10 +1981,10 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		return ALLOW_M|ALLOW_TM;
 
 	/* angels vs. demons */
-	if(ma->mlet==S_ANGEL && (is_demon(md) /*|| md == &mons[PM_FALLEN_ANGEL]*/))
+	if(is_angel(ma) && (is_demon(md) /*|| md == &mons[PM_FALLEN_ANGEL]*/))
 		return ALLOW_M|ALLOW_TM;
 	/* and vice versa */
-	if(md->mlet==S_ANGEL && (is_demon(ma) /*|| ma == &mons[PM_FALLEN_ANGEL] || ma == &mons[PM_LUCIFER]*/))
+	if(is_angel(md) && (is_demon(ma) /*|| ma == &mons[PM_FALLEN_ANGEL] || ma == &mons[PM_LUCIFER]*/))
 		return ALLOW_M|ALLOW_TM;
 
 	/* monadics vs. undead */
@@ -2541,7 +2555,7 @@ boolean was_swallowed;			/* digestion */
 				struct monst *mtmp, *mtmp2;
 				for (mtmp = fmon; mtmp; mtmp = mtmp2){
 					mtmp2 = mtmp->nmon;
-					if(mtmp->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || mtmp->data == &mons[PM_LONG_SINUOUS_TENTACLE]){
+					if(mtmp->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || mtmp->data == &mons[PM_LONG_SINUOUS_TENTACLE] || mtmp->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
 						if (DEADMONSTER(mtmp)) continue;
 						mtmp->mhp = -10;
 						monkilled(mtmp,"",AD_DRLI);
@@ -3239,7 +3253,7 @@ xkilled(mtmp, dest)
 					&& !(mtmp->mvanishes)
 					&& !(mtmp->mclone)
 					&& !(is_auton(mtmp->data))
-							) {
+		) {
 			int typ;
 
 			otmp = mkobj_at(RANDOM_CLASS, x, y, TRUE);
@@ -3252,7 +3266,8 @@ xkilled(mtmp, dest)
 				objects[typ].oc_big /*oc_bimanual/oc_bulky*/ ||
 				is_spear(otmp) || (is_pole(otmp) && otmp->otyp != AKLYS) ||
 				typ == MORNING_STAR)
-				&& !is_divider(mdat)) {
+				&& !is_divider(mdat)
+			) {
 			    delobj(otmp);
 			} else redisp = TRUE;
 		}
@@ -3580,7 +3595,8 @@ register struct monst *mtmp;
     } else if(!(mtmp->mspec_used) &&
 		(
 		mtmp->data->msound == MS_JUBJUB || mtmp->data->msound == MS_DREAD || 
-		mtmp->data->msound == MS_SONG || mtmp->data->msound == MS_OONA
+		mtmp->data->msound == MS_SONG || mtmp->data->msound == MS_OONA ||
+		mtmp->data->msound == MS_TRUMPET
 		)
 	) {
 		domonnoise(mtmp);

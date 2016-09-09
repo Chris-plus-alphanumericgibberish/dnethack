@@ -85,7 +85,9 @@ register struct attack *mattk;
 			pline("%s butts!", Monnam(mtmp));
 			break;
 		case AT_TUCH:
-			if(mtmp->data == &mons[PM_EDDERKOP]) pline("%s slashes you with bladed shadows!", Monnam(mtmp));
+			if(mattk->adtyp == AD_SHDW) pline("%s slashes you with bladed shadows!", Monnam(mtmp));
+			else if(mattk->adtyp == AD_STAR) pline("%s slashes you with a starlight rapier!", Monnam(mtmp));
+			else if(mattk->adtyp == AD_BLUD) pline("%s slashes you with a blade of blood!", Monnam(mtmp));
 			else pline("%s touches you!", Monnam(mtmp));
 			break;
 		case AT_TENT:
@@ -157,6 +159,9 @@ struct attack *mattk;
 	} 
 	else if(mattk->adtyp == AD_STAR){
 		return "starlight rapier";
+	} 
+	else if(mattk->adtyp == AD_BLUD){
+		return "blade of rotted blood";
 	} 
 	else if(mattk->aatyp == AT_HODS){
 	    struct obj *mwep = uwep;
@@ -587,6 +592,7 @@ mattacku(mtmp)
 
 /*	Special demon/minion handling code */
 	if(!mtmp->cham && (is_demon(mdat) || is_minion(mdat)) && !range2
+	   && mtmp->data != &mons[PM_OONA]
 	   && mtmp->data != &mons[PM_BALROG]
 	   && mtmp->data != &mons[PM_DURIN_S_BANE]
 	   && mtmp->data != &mons[PM_SUCCUBUS]
@@ -697,6 +703,7 @@ mattacku(mtmp)
 		case AT_TENT:
 		case AT_WHIP:
 			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict ||
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youmonst.data))) {
 			    if (foundyou) {
 				if(tmp > (j = rnd(20+i))) {
@@ -719,7 +726,8 @@ mattacku(mtmp)
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_TUCH:
-			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict ||
+			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict || 
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youmonst.data))) {
 			    if (foundyou) {
 				if(tchtmp > (j = rnd(20+i))) {
@@ -916,6 +924,7 @@ mattacku(mtmp)
 		case AT_LRCH:{
 			if(dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8 && couldsee(mtmp->mx, mtmp->my)){
 				if(mtmp->mconf || Conflict ||
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youmonst.data)){
 					if (foundyou){
 						if(tmp > (j = rnd(20+i))) {
@@ -1051,7 +1060,7 @@ mattacku(mtmp)
 //			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_SPEL && rn2(2) ) return 0;
 //			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_FIRE && rn2(2) ) return 0;
 			if( mdat == &mons[PM_GRAZ_ZT]) temp = mtmp->mspec_used;
-			if( mdat == &mons[PM_QUINON] ) {
+			if( mdat == &mons[PM_QUINON] || mdat == &mons[PM_FAERINAAL]) {
 				temp = mtmp->mspec_used;
 				mtmp->mspec_used = 0;
 			}
@@ -1064,6 +1073,7 @@ mattacku(mtmp)
 					mtmp->data == &mons[PM_HEDROW_WARRIOR] || 
 					mtmp->data == &mons[PM_MINOTAUR_PRIESTESS]
 				) range = (BOLT_LIM*BOLT_LIM)/2;
+				else if(mtmp->data == &mons[PM_CHROMATIC_DRAGON] || mtmp->data == &mons[PM_PLATINUM_DRAGON]) range = 2;
 				else range = (BOLT_LIM*BOLT_LIM);
 			    if (foundyou){
 					if(couldsee(mtmp->mx, mtmp->my) && dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= range)
@@ -1078,7 +1088,7 @@ mattacku(mtmp)
 				}
 			}
 			if( mdat == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
-			if( mdat == &mons[PM_QUINON] ) {
+			if( mdat == &mons[PM_QUINON] || mdat == &mons[PM_FAERINAAL]) {
 				mtmp->mspec_used = temp;
 			}
 			if( mdat == &mons[PM_GRAZ_ZT] && temp == 0) mtmp->mspec_used = 4;
@@ -1657,8 +1667,16 @@ hitmu(mtmp, mattk)
 			if(hates_silver(youracedata) &&
 				!(u.sealsActive&SEAL_EDEN)) {
             	dmg += rnd(20);
-            	pline("The rapier of silver light sears your flesh!");
-            }
+            	pline("The rapier of silver starlight sears your flesh!");
+            } else hitmsg(mtmp, mattk);
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_BLUD:
+			if(has_blood(youracedata)) {
+            	dmg += u.ulevel;
+            	pline("The blade of rotted blood tears through your veins!");
+				phasearmor = TRUE;
+            } else hitmsg(mtmp, mattk);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SHDW:
@@ -4297,6 +4315,26 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					if(cansee(mtmp->mx, mtmp->my)) You("see scalding steam swirl out from around %s.",mon_nam(mtmp));
 					for(i=0;i<n;i++) makemon(&mons[PM_STEAM_VORTEX], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
 				}
+				else if(mtmp->data == &mons[PM_ANCIENT_TEMPEST]){
+					switch(rnd(4)){
+						case 1:
+							if(cansee(mtmp->mx, mtmp->my)) You("see a whisp of cloud swirl out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_AIR_ELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+						case 2:
+							if(cansee(mtmp->mx, mtmp->my)) You("see rain coalesce and stride out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_WATER_ELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+						case 3:
+							if(cansee(mtmp->mx, mtmp->my)) You("see lightning coalesce and strike out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_LIGHTNING_PARAELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+						case 4:
+							if(cansee(mtmp->mx, mtmp->my)) You("see hail coalesce and stride out from %s.",mon_nam(mtmp));
+							makemon(&mons[PM_ICE_PARAELEMENTAL], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+						break;
+					}
+				}
 				else{
 					if(cansee(mtmp->mx, mtmp->my)) You("see fog billow out from around %s.",mon_nam(mtmp));
 					makemon(&mons[PM_FOG_CLOUD], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT);
@@ -4356,18 +4394,28 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			//Watcher in the Water's tentacle spawn and retreat behavior
 			int ltnt = 0, stnt = 0;
 			struct monst *tmon;
-			if (distu(mtmp->mx, mtmp->my) <= 8 && !(mtmp->mflee)){
+			if (distu(mtmp->mx, mtmp->my) <= 3 && !(mtmp->mflee)){
 				mtmp->mflee = 1;
 				mtmp->mfleetim = 2;
 			}
 			for(tmon = fmon; tmon; tmon=tmon->nmon){
-				if(tmon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES]) stnt++;
-				else if(tmon->data == &mons[PM_LONG_SINUOUS_TENTACLE]) ltnt++;
+				if(mtmp->data == &mons[PM_WATCHER_IN_THE_WATER]){
+					if(tmon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES]) stnt++;
+					else if(tmon->data == &mons[PM_LONG_SINUOUS_TENTACLE]) ltnt++;
+				} else if(mtmp->data == &mons[PM_KETO]){
+					if(tmon->data == &mons[PM_WIDE_CLUBBED_TENTACLE]) ltnt++;
+				}
 			}
-			if(stnt<6){
-				makemon(&mons[PM_SWARM_OF_SNAKING_TENTACLES], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
-			} else if(ltnt<2){
-				makemon(&mons[PM_LONG_SINUOUS_TENTACLE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+			if(mtmp->data == &mons[PM_WATCHER_IN_THE_WATER]){
+				if(stnt<6){
+					makemon(&mons[PM_SWARM_OF_SNAKING_TENTACLES], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				} else if(ltnt<2){
+					makemon(&mons[PM_LONG_SINUOUS_TENTACLE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				}
+			} else if(mtmp->data == &mons[PM_KETO]){
+				if(ltnt<2){
+					makemon(&mons[PM_WIDE_CLUBBED_TENTACLE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+				}
 			}
 		}break;
 /*		case AD_VTGT:  // vorlon missile targeting vision
@@ -7442,9 +7490,11 @@ register struct attack *mattk;
 		long protector = attk_protection((int)mattk->aatyp),
 		     wornitems = mtmp->misc_worn_check;
 
+		if(mattk->adtyp == AD_STAR || mattk->adtyp == AD_SHDW || mattk->adtyp == AD_BLUD) break;
+
 		/* wielded weapon gives same protection as gloves here */
 		if (MON_WEP(mtmp) != 0) wornitems |= W_ARMG;
-
+		
 		if (!resists_ston(mtmp) && 
 			(protector == 0L || (protector != ~0L &&
 			    (wornitems & protector) != protector))
@@ -7550,7 +7600,7 @@ register struct attack *mattk;
 		pline("%s is suddenly very cold!", Monnam(mtmp));
 		u.mh += tmp / 2;
 		if (u.mhmax < u.mh) u.mhmax = u.mh;
-		if (u.mhmax > ((youmonst.data->mlevel+1) * 8))
+		if (u.mhmax > ((youmonst.data->mlevel+1) * 8) && !is_eladrin(youmonst.data))
 		    (void)split_mon(&youmonst, mtmp);
 		break;
 		case AD_ECLD:

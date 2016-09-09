@@ -2336,7 +2336,7 @@ dosacrifice()
 		}
 	    }
 	} else {
-	    int nartifacts = nartifact_exist();
+	    int nartifacts = (int)(u.uconduct.wisharti + u.ugifts);
 		//pline("looking into an artifact gift.  %d currently exist. %d gifts have been given, on level %d, and your luck %d.", nartifacts, (int)u.ugifts, u.ulevel, (int)u.uluck);
 	    /* you were already in pretty good standing */
 	    /* The player can gain an artifact */
@@ -2552,7 +2552,7 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
 	}
 	return(1);
     }
-    if (Inhell && u.ualign.type != A_VOID && !(Race_if(PM_DROW) && alignment == A_CHAOTIC)) {
+    if (Inhell && u.ualign.type != A_VOID && !(alignment == A_CHAOTIC && strcmp(urole.cgod,"Lolth"))) {
 	pline("Since you are in Gehennom, %s won't help you.",
 	      align_gname(alignment));
 	/* haltingly aligned is least likely to anger */

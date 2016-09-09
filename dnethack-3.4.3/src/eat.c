@@ -211,8 +211,8 @@ register struct obj *obj;
 	if(uclockwork) return uclockwork_edible(obj);
 	if(Role_if(PM_ANACHRONONAUT) && !(Upolyd || Race_if(PM_VAMPIRE))) return ((obj->otyp >= SLIME_MOLD && obj->otyp <= TIN)); /*Processed foods only*/
 	
-	if (metallivorous(youmonst.data) && is_metallic(obj) &&
-	    (youmonst.data != &mons[PM_RUST_MONSTER] || is_rustprone(obj)))
+	if (metallivorous(youracedata) && is_metallic(obj) &&
+	    (youracedata != &mons[PM_RUST_MONSTER] || is_rustprone(obj)))
 		return TRUE;
 	if (u.umonnum == PM_GELATINOUS_CUBE && is_organic(obj) &&
 		/* [g.cubes can eat containers and retain all contents
@@ -221,9 +221,9 @@ register struct obj *obj;
 		return TRUE;
 
 	/* a sheaf of straw is VEGGY, but only edible for herbivorous animals */
-	if ((obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT) && herbivorous(youmonst.data))
-		return !carnivorous(youmonst.data);
-	if (herbivorous(youmonst.data) && is_veggy(obj))
+	if ((obj->otyp == ROPE_OF_ENTANGLING || obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT) && herbivorous(youracedata))
+		return !carnivorous(youracedata);
+	if (herbivorous(youracedata) && is_veggy(obj))
 		return TRUE;
 		
 	/* Ghouls only eat corpses */
@@ -675,7 +675,7 @@ BOOLEAN_P bld, nobadeffects;
 	if(!nobadeffects) maybe_cannibal(pm,TRUE);
 	if (!nobadeffects && (touch_petrifies(&mons[pm]) || pm == PM_MEDUSA)) {
 	    if (!Stone_resistance &&
-		!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+		!(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))) {
 		Sprintf(killer_buf, "tasting %s %s", mons[pm].mname, bld ? "blood" : "meat");
 		killer_format = KILLED_BY;
 		killer = killer_buf;
@@ -717,12 +717,18 @@ BOOLEAN_P bld, nobadeffects;
 			if (Stoned) fix_petrification();
 			make_sick(0L, (char *) 0, TRUE, SICK_ALL);
 		break;
-		/*Note: these three imply corpse*/
-	    case PM_GREAT_CTHULHU:
-	    case PM_DEATH:
-	    case PM_PESTILENCE:
-	    case PM_FAMINE:
-		{ char buf[BUFSZ];
+	    case PM_GREEN_SLIME:
+	    case PM_FLUX_SLIME:
+		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youracedata) &&
+			youmonst.data != &mons[PM_GREEN_SLIME]) {
+		    You("don't feel very well.");
+		    Slimed = 10L;
+		    flags.botl = 1;
+		}
+		/* Fall through */
+	    default:
+		if(is_deadly(&mons[pm])){
+			char buf[BUFSZ];
 			if(!nobadeffects){
 				pline("Eating that is instantly fatal.");
 				Sprintf(buf, "unwisely ate the body of %s",
@@ -731,6 +737,8 @@ BOOLEAN_P bld, nobadeffects;
 				killer_format = NO_KILLER_PREFIX;
 				done(DIED);
 			}
+		}
+		if(is_rider(&mons[pm])){
 		    /* It so happens that since we know these monsters */
 		    /* cannot appear in tins, victual.piece will always */
 		    /* be what we want, which is not generally true. */
@@ -738,27 +746,6 @@ BOOLEAN_P bld, nobadeffects;
 			victual.piece = (struct obj *)0;
 		    return;
 		}
-		case PM_AXUS:
-		case PM_NAZGUL:
-		case PM_ELDER_PRIEST:
-		case PM_PRIEST_OF_AN_UNKNOWN_GOD:
-		    /* It so happens that since we know these monsters */
-		    /* cannot appear in tins, victual.piece will always */
-		    /* be what we want, which is not generally true. */
-		    if (revive_corpse(victual.piece, REVIVE_MONSTER))
-			victual.piece = (struct obj *)0;
-		    return;
-		break;
-	    case PM_GREEN_SLIME:
-	    case PM_FLUX_SLIME:
-		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youmonst.data) &&
-			youmonst.data != &mons[PM_GREEN_SLIME]) {
-		    You("don't feel very well.");
-		    Slimed = 10L;
-		    flags.botl = 1;
-		}
-		/* Fall through */
-	    default:
 		if (acidic(&mons[pm]) && Stoned)
 		    fix_petrification();
 		break;
@@ -791,9 +778,9 @@ struct monst *mon;
 
 	case PM_GREEN_SLIME:
 	case PM_FLUX_SLIME:
-	    if (!Unchanging && youmonst.data != &mons[PM_FIRE_VORTEX] &&
-			    youmonst.data != &mons[PM_FIRE_ELEMENTAL] &&
-			    youmonst.data != &mons[PM_GREEN_SLIME]) {
+	    if (!Unchanging && youracedata != &mons[PM_FIRE_VORTEX] &&
+			    youracedata != &mons[PM_FIRE_ELEMENTAL] &&
+			    youracedata != &mons[PM_GREEN_SLIME]) {
 		You("don't feel very well.");
 		Slimed = 10L;
 	    }
@@ -947,7 +934,7 @@ STATIC_OVL void
 givit(type, ptr, nutval, drained)
 int type;
 register struct permonst *ptr;
-short nutval;
+unsigned short nutval;
 boolean drained;
 {
 	int chance = 0; //starts at 0. Changing it indicates a non-energy resistence
@@ -1354,7 +1341,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 		/* fall into next case */
 	    case PM_SMALL_MIMIC:
 		tmp += 20;
-		if (!nobadeffects && youmonst.data->mlet != S_MIMIC && !Unchanging) {
+		if (!nobadeffects && youracedata->mlet != S_MIMIC && !Unchanging) {
 		    char buf[BUFSZ];
 		    You_cant("resist the temptation to mimic %s.",
 			Hallucination ? "an orange" : "a pile of gold");
@@ -1366,7 +1353,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 		    Sprintf(buf, Hallucination ?
 			"You suddenly dread being peeled and mimic %s again!" :
 			"You now prefer mimicking %s again.",
-			an(Upolyd ? youmonst.data->mname : urace.noun));
+			an(Upolyd ? youracedata->mname : urace.noun));
 		    eatmbuf = strcpy((char *) alloc(strlen(buf) + 1), buf);
 		    nomovemsg = eatmbuf;
 		    afternmv = eatmdone;
@@ -1490,7 +1477,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 		 for (i = 1; i <= LAST_PROP; i++) {
 			if (intrinsic_possible(i, ptr)) {
 				count++;
-					if(u.sealsActive&SEAL_AHAZU) givit(i, ptr, (tin && ptr->cnutrit > 45) ? 45 : ptr->cnutrit*0.9, drained);
+					if(u.sealsActive&SEAL_AHAZU) givit(i, ptr, (tin && ptr->cnutrit > 50) ? 45 : ptr->cnutrit*0.9, drained);
 					else givit(i, ptr, (tin && ptr->cnutrit > 50) ? 50 : ptr->cnutrit, drained);
 			}
 		 }
@@ -1808,13 +1795,13 @@ start_tin(otmp)		/* called when starting to open a tin */
 {
 	register int tmp;
 
-	if (metallivorous(youmonst.data)) {
+	if (metallivorous(youracedata)) {
 		You("bite right into the metal tin...");
 		tmp = 1;
 	} else if (Upolyd && u.umonnum == PM_TOVE) {
 		You("gyre, gimbling right into the metal tin.");
 		tmp = 1;
-	} else if (nolimbs(youmonst.data)) {
+	} else if (nolimbs(youracedata)) {
 		You("cannot handle the tin properly to open it.");
 		return;
 	} else if (otmp->blessed) {
@@ -1931,7 +1918,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	boolean uniq = !!(mons[mnum].geno & G_UNIQ);
 	int retcode = 0;
 	boolean stoneable = (touch_petrifies(&mons[mnum]) && !Stone_resistance &&
-				!poly_when_stoned(youmonst.data));
+				!poly_when_stoned(youracedata));
 
 	/* KMH, conduct */
 	if (!vegan(&mons[mnum])) u.uconduct.unvegan++;
@@ -2021,7 +2008,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		else useupf(otmp, 1L);
 		return(2);
 	    }
-	} else if (youmonst.data == &mons[PM_GHOUL]) {
+	} else if (youracedata == &mons[PM_GHOUL]) {
 		pline ("This corpse is too fresh!");
 		return 3;
 	} else if (acidic(&mons[mnum]) && !Acid_resistance) {
@@ -2096,8 +2083,8 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 			  !uniq ? "This " : !type_is_pname(&mons[mnum]) ? "The " : "",
 			  food_xname(otmp, FALSE),
 			  (vegan(&mons[mnum]) ?
-			   (!(carnivorous(youmonst.data) || (uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) && herbivorous(youmonst.data)) :
-			   ((carnivorous(youmonst.data) || (uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) && !herbivorous(youmonst.data)))
+			   (!(carnivorous(youracedata) || (uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) && herbivorous(youracedata)) :
+			   ((carnivorous(youracedata) || (uarmg && uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) && !herbivorous(youracedata)))
 			  ? "is delicious" : "tastes terrible");
 		}
 	}
@@ -2158,7 +2145,7 @@ struct obj *otmp;
 						body_part(STOMACH));
 		break;
 	    case TRIPE_RATION:
-		if ((carnivorous(youmonst.data) && !humanoid(youmonst.data)) ||
+		if ((carnivorous(youracedata) && !humanoid(youracedata)) ||
 			(u.ulycn != NON_PM && carnivorous(&mons[u.ulycn]) &&
 			 !humanoid(&mons[u.ulycn])))
 		    /* Symptom of lycanthropy is starting to like your
@@ -2192,7 +2179,7 @@ struct obj *otmp;
 		goto give_feedback;
 	     /* break; */
 	    case CLOVE_OF_GARLIC:
-		if (is_undead(youmonst.data)) {
+		if (is_undead(youracedata)) {
 			make_vomiting((long)rn1(victual.reqtime, 5), FALSE);
 			break;
 		}
@@ -2282,7 +2269,7 @@ struct obj *otmp;
 		    set_mimic_blocking();
 		    see_monsters();
 		    if (Invis && !oldprop && !ESee_invisible &&
-				!perceives(youmonst.data) && !Blind) {
+				!perceives(youracedata) && !Blind) {
 			newsym(u.ux,u.uy);
 			pline("Suddenly you can see yourself.");
 			makeknown(typ);
@@ -2497,7 +2484,7 @@ register struct obj *otmp;
 	}
 	switch(otmp->otyp) {
 	    case SPRIG_OF_WOLFSBANE:
-		if (u.ulycn >= LOW_PM || is_were(youmonst.data))
+		if (u.ulycn >= LOW_PM || is_were(youracedata))
 		    you_unwere(TRUE);
 		break;
 	    case CARROT:
@@ -2557,7 +2544,7 @@ register struct obj *otmp;
 	    case EGG:
 		if (touch_petrifies(&mons[otmp->corpsenm])) {
 		    if (!Stone_resistance &&
-			!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+			!(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))) {
 			if (!Stoned) Stoned = 5;
 			killer_format = KILLED_BY_AN;
 			Sprintf(killer_buf, "%s egg", mons[otmp->corpsenm].mname);
@@ -2605,11 +2592,11 @@ struct obj *otmp;
 		/* These checks must match those in eatcorpse() */
 		stoneorslime = (touch_petrifies(&mons[mnum]) &&
 				!Stone_resistance &&
-				!poly_when_stoned(youmonst.data));
+				!poly_when_stoned(youracedata));
 
 		if (mnum == PM_GREEN_SLIME || mnum == PM_FLUX_SLIME)
-		    stoneorslime = (!Unchanging && !flaming(youmonst.data) &&
-			youmonst.data != &mons[PM_GREEN_SLIME]);
+		    stoneorslime = (!Unchanging && !flaming(youracedata) &&
+			youracedata != &mons[PM_GREEN_SLIME]);
 
 		if (cadaver && mnum != PM_LIZARD && mnum != PM_SMALL_CAVE_LIZARD && mnum != PM_CAVE_LIZARD 
 		&& mnum != PM_LARGE_CAVE_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER ) {
@@ -3531,7 +3518,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF)) {
 					You("forget your affinity to %s!",
 							makeplural(mons[u.ulycn].mname));
-					if (youmonst.data == &mons[u.ulycn])
+					if (youracedata == &mons[u.ulycn])
 						you_unwere(FALSE);
 					u.ulycn = NON_PM;	/* cure lycanthropy */
 					}
@@ -3758,17 +3745,18 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if(maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)))
 		hungermod *= (maybe_polyd(youmonst.data->mlevel, u.ulevel)/10 + 1);
 	
-	if ((carnivorous(youmonst.data) 
-		|| herbivorous(youmonst.data)
-		|| magivorous(youmonst.data)
-		|| maybe_polyd(is_vampire(youmonst.data), 
+	if ((carnivorous(youracedata) 
+		|| herbivorous(youracedata)
+		|| magivorous(youracedata)
+		|| Race_if(PM_INCANTIFIER)
+		|| maybe_polyd(is_vampire(youracedata), 
 						Race_if(PM_VAMPIRE)))
 		&& !(moves % hungermod)
 		&& !( (Slow_digestion && !Race_if(PM_INCANTIFIER)) ||
 				(uclockwork) ))
 			(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);		/* ordinary food consumption */
 	if(uwep && (
-		uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youmonst.data)))
+		uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youracedata)))
 	){
 		if(Race_if(PM_INCANTIFIER)) u.uen -= 9;
 		else u.uhunger -= 9;
@@ -4354,11 +4342,11 @@ floorfood(verb,corpsecheck)	/* get food from floor or pack */
 		(feeding && u.usteed) || /* can't eat off floor while riding */
 #endif
 		((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) &&
-		    (Wwalking || is_clinger(youmonst.data) ||
+		    (Wwalking || is_clinger(youracedata) ||
 			(Flying && !Breathless))))
 	    goto skipfloor;
 
-	if (feeding && (metallivorous(youmonst.data) || (uclockwork && u.clockworkUpgrades&SCRAP_MAW))) {
+	if (feeding && (metallivorous(youracedata) || (uclockwork && u.clockworkUpgrades&SCRAP_MAW))) {
 	    struct obj *gold;
 	    struct trap *ttmp = t_at(u.ux, u.uy);
 
@@ -4378,7 +4366,7 @@ floorfood(verb,corpsecheck)	/* get food from floor or pack */
 		}
 	    }
 
-	    if (youmonst.data != &mons[PM_RUST_MONSTER] &&
+	    if (youracedata != &mons[PM_RUST_MONSTER] &&
 			!(uclockwork && u.clockworkUpgrades&SCRAP_MAW) &&
 		(gold = g_at(u.ux, u.uy)) != 0) {
 		if (gold->quan == 1L)

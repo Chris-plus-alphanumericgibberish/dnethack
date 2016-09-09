@@ -364,7 +364,7 @@ aligntyp atyp;
 
 	for (tryct = 0; tryct < 20; tryct++) {
 	    pm = rn1(PM_DEMOGORGON + 1 - PM_ORCUS, PM_ORCUS);
-	    if (!(mvitals[pm].mvflags & G_GONE && !In_quest(&u.uz)) &&
+	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
@@ -380,7 +380,7 @@ aligntyp atyp;
 	for (tryct = 0; tryct < 20; tryct++) {
 	    do pm = rn1(PM_YEENOGHU + 1 - PM_JUIBLEX, PM_JUIBLEX);
 		while(pm == PM_SHAKTARI);
-	    if (!(mvitals[pm].mvflags & G_GONE && !In_quest(&u.uz)) &&
+	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
@@ -392,9 +392,17 @@ aligntyp atyp;
 int
 llord()
 {
-	if (!(mvitals[PM_ARCHON].mvflags & G_GONE && !In_quest(&u.uz)))
-		return(PM_ARCHON);
-
+	switch(rnd(2)){
+	case 1:
+		if (!(mvitals[PM_THRONE_ARCHON].mvflags & G_GONE && !In_quest(&u.uz)))
+			return(PM_THRONE_ARCHON);
+	break;
+	case 2:
+		if (!(mvitals[PM_LIGHT_ARCHON].mvflags & G_GONE && !In_quest(&u.uz)))
+			return(PM_LIGHT_ARCHON);
+	break;
+	}
+	
 	return(lminion());	/* approximate */
 }
 
@@ -405,9 +413,9 @@ lminion()
 	struct	permonst *ptr;
 
 	for (tryct = 0; tryct < 20; tryct++) {
-	    ptr = mkclass(S_ANGEL,G_NOHELL|G_HELL);
-	    if (ptr && !is_lord(ptr))
-		return(monsndx(ptr));
+	    ptr = mkclass(S_LAW_ANGEL,G_NOHELL|G_HELL|G_PLANES);
+	    if (ptr && !is_lord(ptr) && is_angel(ptr))
+			return(monsndx(ptr));
 	}
 
 	return NON_PM;
@@ -426,10 +434,13 @@ nlord()
 int
 nminion()
 {
-	switch(rnd(3)){
-		case 1: return PM_MOVANIC_DEVA;
-		case 2: return PM_MONADIC_DEVA;
-		case 3: return PM_ASTRAL_DEVA;
+	int	tryct;
+	struct	permonst *ptr;
+
+	for (tryct = 0; tryct < 20; tryct++) {
+	    ptr = mkclass(S_NEU_ANGEL,G_NOHELL|G_HELL|G_PLANES);
+	    if (ptr && !is_lord(ptr) && is_angel(ptr))
+			return(monsndx(ptr));
 	}
 
 	return NON_PM;
@@ -448,12 +459,13 @@ clord()
 int
 cminion()
 {
-	switch(rnd(5)){
-		case 1: return PM_NOVIERE;
-		case 2: return PM_BRALANI;
-		case 3: return PM_FIRRE;
-		case 4: return PM_SHIERE;
-		case 5: return PM_GHAELE;
+	int	tryct;
+	struct	permonst *ptr;
+
+	for (tryct = 0; tryct < 20; tryct++) {
+	    ptr = mkclass(S_CHA_ANGEL,G_NOHELL|G_HELL|G_PLANES);
+	    if (ptr && !is_lord(ptr) && is_angel(ptr))
+			return(monsndx(ptr));
 	}
 
 	return NON_PM;

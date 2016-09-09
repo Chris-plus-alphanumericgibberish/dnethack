@@ -68,7 +68,7 @@ STAIR:place[0],down
 DOOR: closed, (59,10)
 # throne room
 MONSTER: 'G', "Ruggo the Gnome High King", (59,7)
-MONSTER: 'A', "damaged arcadian avenger", (59,5)
+MONSTER: '7', "damaged arcadian avenger", (59,5)
 
 MONSTER: 'G', "gnome comrade", (55,7)
 MONSTER: 'G', "gnome comrade", (56,7)

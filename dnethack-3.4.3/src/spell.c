@@ -2665,13 +2665,14 @@ spiriteffects(power, atme)
 			sy = u.uy;
 			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
+				mon = u.ustuck;
 				if(is_whirly(mon->data)){
-					pline("%s blows apart in the wind.",Monnam(u.ustuck));
-					expels(u.ustuck, u.ustuck->data, TRUE);
+					pline("%s blows apart in the wind.",Monnam(mon));
+					expels(mon, u.ustuck->data, TRUE);
 					mon->mhp = 0;
 					xkilled(mon, 1);
 					break;
-				} else expels(u.ustuck, u.ustuck->data, TRUE);
+				} else expels(mon, mon->data, TRUE);
 			} else {
 				pline("a whistling wind springs up.");
 				for(i=range; i > 0; i--){

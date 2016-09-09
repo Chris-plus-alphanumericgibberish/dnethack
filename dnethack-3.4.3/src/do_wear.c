@@ -1895,13 +1895,13 @@ int base_uac()
 			} else if(u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
-						uac -= 6;
+						uac += 20;
 					break;
 					case P_SKILLED:
-						uac -= 4;
+						uac += 10;
 					break;
 					case P_EXPERT:
-						uac -= 2;
+						uac += 5;
 					break;
 				}
 			} else if(u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
@@ -1934,10 +1934,7 @@ int base_uac()
 	if(Race_if(PM_ORC)){
 		uac -= (u.ulevel+1)/3;
 	}
-	if(u.sealsActive&SEAL_ECHIDNA) uac -= (ACURR(A_CON)-10)/2;
-	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
-	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
-	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= uwep->spe;
+	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
 	uac -= u.uspellprot;
 	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
 	if(Role_if(PM_MONK) && !uarm){
@@ -2035,13 +2032,13 @@ find_ac()
 			} else if(u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
-						uac -= 6;
+						uac += 20;
 					break;
 					case P_SKILLED:
-						uac -= 4;
+						uac += 10;
 					break;
 					case P_EXPERT:
-						uac -= 2;
+						uac += 5;
 					break;
 				}
 			} else if(u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
@@ -2075,10 +2072,11 @@ find_ac()
 		uac -= (u.ulevel+1)/3;
 		uac -= (u.ulevel+2)/3;
 	} else if(Race_if(PM_HALF_DRAGON)) uac -= (u.ulevel)/3;
+	if(u.specialSealsActive&SEAL_COSMOS) uac -= spiritDsize();
 	if(u.sealsActive&SEAL_ECHIDNA) uac -= (ACURR(A_CON)-10)/2;
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
-	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= uwep->spe;
+	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
 	uac -= u.uspellprot;
 	if(uclockwork) uac -= (u.clockworkUpgrades&ARMOR_PLATING) ? 10 : 3; /*armor bonus for automata*/
 	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */

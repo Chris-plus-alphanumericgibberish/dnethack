@@ -43,6 +43,9 @@
 				 ((mon)->data != &mons[PM_ANGEL] || \
 				  EPRI(mon)->shralign < 0))
 
+#define notonline(ptr)		(((ptr)->mflagsm & MM_NOTONL) != 0L)
+#define fleetflee(ptr)		(((ptr)->mflagsm & MM_FLEETFLEE) != 0L)
+#define bold(ptr)			(((ptr)->mflagst & MT_BOLD) != 0L)
 #define is_flyer(ptr)		(((ptr)->mflagsm & MM_FLY) != 0L)
 #define is_displacer(ptr)	(((ptr)->mflagsg & MG_DISPLACEMENT) != 0L)
 #define is_floater(ptr)		(((ptr)->mflagsm & MM_FLOAT) != 0L)
@@ -156,20 +159,32 @@
 #define is_were(ptr)		(((ptr)->mflagsa & MA_WERE) != 0L)
 #define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
 #define is_heladrin(ptr)		(\
+							 (ptr) == &mons[PM_COURE] || \
 							 (ptr) == &mons[PM_NOVIERE] || \
 							 (ptr) == &mons[PM_BRALANI] || \
 							 (ptr) == &mons[PM_FIRRE] || \
 							 (ptr) == &mons[PM_SHIERE] || \
 							 (ptr) == &mons[PM_GHAELE] || \
-							 (ptr) == &mons[PM_TULANI] \
+							 (ptr) == &mons[PM_TULANI] || \
+							 (ptr) == &mons[PM_GWYNHARWYF] ||\
+							 (ptr) == &mons[PM_ASCODEL] ||\
+							 (ptr) == &mons[PM_FAERINAAL] ||\
+							 (ptr) == &mons[PM_QUEEN_MAB] ||\
+							 (ptr) == &mons[PM_KETO] \
 							)
 #define is_eeladrin(ptr)	(\
+							 (ptr) == &mons[PM_MOTE_OF_LIGHT] || \
 							 (ptr) == &mons[PM_WATER_DOLPHIN] || \
 							 (ptr) == &mons[PM_SINGING_SAND] || \
 							 (ptr) == &mons[PM_DANCING_FLAME] || \
 							 (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 							 (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
-							 (ptr) == &mons[PM_BALL_OF_RADIANCE] \
+							 (ptr) == &mons[PM_BALL_OF_RADIANCE] || \
+							 (ptr) == &mons[PM_FURIOUS_WHIRLWIND] ||\
+							 (ptr) == &mons[PM_BLOODY_SUNSET] ||\
+							 (ptr) == &mons[PM_BALL_OF_GOSSAMER_SUNLIGHT] ||\
+							 (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
+							 (ptr) == &mons[PM_ANCIENT_TEMPEST] \
 							)
 #define is_yochlol(ptr)		((ptr) == &mons[PM_YOCHLOL] ||\
 							 (ptr) == &mons[PM_UNEARTHLY_DROW] ||\
@@ -238,7 +253,7 @@
 #define is_domestic(ptr)	(((ptr)->mflagst & MT_DOMESTIC) != 0L)
 #define is_demon(ptr)		(((ptr)->mflagsa & MA_DEMON) != 0L)
 #define is_keter(ptr)		((ptr)->mlet == S_KETER)
-#define is_angel(ptr)		((ptr)->mlet == S_ANGEL)
+#define is_angel(ptr)		((((ptr)->mflagsa & MA_MINION) != 0L) && ((ptr)->mlet == S_LAW_ANGEL || (ptr)->mlet == S_NEU_ANGEL || (ptr)->mlet == S_CHA_ANGEL))
 #define is_auton(ptr)		(	(ptr) == &mons[PM_MONOTON] ||\
 								(ptr) == &mons[PM_DUTON] ||\
 								(ptr) == &mons[PM_TRITON] ||\
@@ -326,16 +341,8 @@
 #define mteleport(ptr)	(((ptr)->mflagsm & MM_TENGTPORT))
 #define is_mplayer(ptr)		(((ptr) >= &mons[PM_ARCHEOLOGIST]) && \
 				 ((ptr) <= &mons[PM_WIZARD]))
-#define is_rider(ptr)		((ptr) == &mons[PM_DEATH] || \
-				 (ptr) == &mons[PM_FAMINE] || \
-				 (ptr) == &mons[PM_PESTILENCE] || \
-				 (ptr) == &mons[PM_LUCIFER] || \
-				 (ptr) == &mons[PM_GREAT_CTHULHU] || \
-				 (ptr) == &mons[PM_AXUS] || \
-				 (ptr) == &mons[PM_NAZGUL] || \
-				 (ptr) == &mons[PM_STRANGE_CORPSE] || \
-				 (ptr) == &mons[PM_ELDER_PRIEST] || \
-				 (ptr) == &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD])
+#define is_deadly(ptr)		((ptr)->mflagsg & MG_DEADLY)
+#define is_rider(ptr)		((ptr)->mflagsg & MG_RIDER)
 #define is_placeholder(ptr)	((ptr) == &mons[PM_ORC] || \
 				 (ptr) == &mons[PM_GIANT] || \
 				 (ptr) == &mons[PM_ELF] || \
@@ -351,7 +358,10 @@
 #define emits_light(ptr)	(((ptr)->mlet == S_LIGHT || \
 				  (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				  (ptr) == &mons[PM_SHOCKING_SPHERE] || \
+				  (ptr) == &mons[PM_MOTE_OF_LIGHT] || \
 				  (ptr) == &mons[PM_BALL_OF_LIGHT] || \
+				  (ptr) == &mons[PM_BLOODY_SUNSET] || \
+				  (ptr) == &mons[PM_BALL_OF_GOSSAMER_SUNLIGHT] || \
 				  (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 				  (ptr) == &mons[PM_HOOLOOVOO] || \
 				  (ptr) == &mons[PM_LIGHTNING_PARAELEMENTAL] || \
@@ -359,8 +369,9 @@
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
 				  (ptr) == &mons[PM_DANCING_FLAME] ||\
+				  (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
 				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
-				 ((ptr) == &mons[PM_SOLAR]|| \
+				 ((ptr) == &mons[PM_LIGHT_ARCHON]|| \
 				  (ptr) == &mons[PM_LUCIFER]) ? 7 : 0)
 /*	[note: the light ranges above were reduced to 1 for performance...] */
 #define likes_lava(ptr)		(ptr == &mons[PM_FIRE_ELEMENTAL] || \
@@ -446,8 +457,6 @@
 				   (ptr)->mlet != S_GOLEM && \
 				   (ptr)->mlet != S_KETER && \
 				   (ptr)->mlet != S_MIMIC && \
-				   (ptr)->mlet != S_DEMON && \
-				   (ptr)->mlet != S_ANGEL && \
 				   !is_clockwork(ptr) && \
 				   (!is_undead(ptr) || is_vampire(ptr)))
 

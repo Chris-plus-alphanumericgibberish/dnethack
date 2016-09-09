@@ -126,7 +126,9 @@ const char def_monsyms[MAXMCLASSES] = {
 	DEF_XAN,
 	DEF_LIGHT,
 	DEF_ZRUTY,
-	DEF_ANGEL,
+	DEF_LAW_ANGEL,
+	DEF_NEU_ANGEL,
+	DEF_CHA_ANGEL,
 	DEF_BAT,
 	DEF_CENTAUR,
 	DEF_DRAGON,		/* 30 */
@@ -180,7 +182,8 @@ const char * const monexplain[MAXMCLASSES] = {
     "vortex",		"worm", "xan or other mythical/fantastic insect",
     "light",			"zruty or ammit",
 
-    "angelic being",		"bat or bird",		"centaur",
+    "lawful angelic being",	"neutral angelic being",	"chaotic angelic being",
+	"bat or bird",		"centaur",
     "dragon",			"elemental",		"fungus or mold",
     "gnome or gizmo",	"giant humanoid",	0,
     "jabberwockian",	"Keter Sephiroth",		"lich",
@@ -716,6 +719,8 @@ int gr_set_flag;
         iflags.cursesgraphics = FALSE;
 #endif
 	    assign_graphics(ibm_graphics, SIZE(ibm_graphics), MAXPCHARS, 0);
+		monsyms[S_LAW_ANGEL] = 0x8F;
+		monsyms[S_NEU_ANGEL] = 0x8E;
 #ifdef PC9800
 	    if (ibmgraphics_mode_callback) (*ibmgraphics_mode_callback)();
 #endif

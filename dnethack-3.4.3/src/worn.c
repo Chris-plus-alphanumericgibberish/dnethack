@@ -46,7 +46,7 @@ const struct worn {
 #define w_blocks(o,m) \
 		((o->otyp == MUMMY_WRAPPING && ((m) & W_ARMC)) ? INVIS : \
 		 (o->otyp == CORNUTHAUM && ((m) & W_ARMH) && \
-			!Role_if(PM_WIZARD)) ? CLAIRVOYANT : 0)
+			!(Role_if(PM_WIZARD) || Race_if(PM_INCANTIFIER))) ? CLAIRVOYANT : 0)
 		/* note: monsters don't have clairvoyance, so your role
 		   has no significant effect on their use of w_blocks() */
 
@@ -505,6 +505,7 @@ struct monst *mon;
 	}
 	
 	if(mon->mtame) base -= rnd(def_beastmastery());
+	if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
@@ -556,6 +557,7 @@ struct monst *mon;
 	}
 	
 	if(mon->mtame) base -= def_beastmastery();
+	if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);

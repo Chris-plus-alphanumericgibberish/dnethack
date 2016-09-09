@@ -110,7 +110,12 @@ mkmivault()
 		if(okspot){
 			good = TRUE;
 			for(i=0;i<6;i++) for(j=0;j<6;j++) levl[x+i][y+j].typ = MOAT;
-			
+			for(i=0;i<6;i++){
+				levl[x][y+i].edge = 1;
+				levl[x+i][y].edge = 1;
+				levl[x+5][y+i].edge = 1;
+				levl[x+i][y+5].edge = 1;
+			}
 			for(i=2;i<4;i++) for(j=2;j<4;j++) levl[x+i][y+j].typ = ROOM;
 			levl[x+4][y+4].typ = BRCORNER;
 			levl[x+1][y+4].typ = BLCORNER;

@@ -123,7 +123,7 @@
 #define AD_JAILER	77	/* Sets Lucifer to apear and drops third key of law when killed */
 #define AD_AXUS		78 /* Multi-element counterattack, angers 'tons */
 #define AD_UNKNWN	79	/* Priest of an unknown God */
-#define AD_SOLR		80	/* Solar's silver arrow attack */
+#define AD_SOLR		80	/* Light Archon's silver arrow attack */
 #define AD_CHKH		81 /* Chokhmah Sephirah's escalating damage attack */
 #define AD_HODS		82 /* Hod Sephirah's mirror attack */
 #define AD_CHRN		83 /* Nightmare's horn attack */
@@ -157,35 +157,37 @@
 #define AD_EDRC		111	/* Elemental poison (con) */
 #define AD_ECLD		112	/* Elemental cold */
 #define AD_EACD		113	/* Elemental acid */
+#define AD_CNFT		114	/* War's conflict-inducing touch */
+#define AD_BLUD		115	/* Sword of Blood inflicts heavy damage on creatures with blood */
 
-//#define AD_AHAZU	114 /*  */
+//#define AD_AHAZU	116 /*  */
 //Amon is a headbutt (AT_BUTT/AD_PHYS)
 //Chupoclops is a poisonous bite (AT_BITE/AD_DRST)
-#define AD_DUNSTAN	115
-#define AD_IRIS		116
-#define AD_NABERIUS	117
-#define AD_OTIAX	118
-#define AD_SIMURGH	119
+#define AD_DUNSTAN	117
+#define AD_IRIS		118
+#define AD_NABERIUS	119
+#define AD_OTIAX	120
+#define AD_SIMURGH	121
 
 
-//#define AD_VMSL		120 //Vorlon missile: elect, disintegration, blast.  Triple damage.
-#define AD_CMSL		121 //Cold missile
-#define AD_FMSL		122 //Fire missile
-#define AD_EMSL		123 //Electric missile
-#define AD_SMSL		124 //Shrapnel missile: physical
+//#define AD_VMSL		122 //Vorlon missile: elect, disintegration, blast.  Triple damage.
+#define AD_CMSL		123 //Cold missile
+#define AD_FMSL		124 //Fire missile
+#define AD_EMSL		125 //Electric missile
+#define AD_SMSL		126 //Shrapnel missile: physical
 
-//#define AD_VTGT		125 //Vorlon targeting GAZE
-#define AD_WMTG		126 //War machine targeting GAZE
+//#define AD_VTGT		127 //Vorlon targeting GAZE
+#define AD_WMTG		128 //War machine targeting GAZE
 
-#define AD_CLRC		127	/* random clerical spell */
-#define AD_SPEL		128	/* random magic spell */
-#define AD_RBRE		129	/* random breath weapon */
-#define AD_RGAZ		130	/* random gaze attack */
-#define AD_RETR		131 /* elemental gaze attack */
+#define AD_CLRC		129	/* random clerical spell */
+#define AD_SPEL		130	/* random magic spell */
+#define AD_RBRE		131	/* random breath weapon */
+#define AD_RGAZ		132	/* random gaze attack */
+#define AD_RETR		133 /* elemental gaze attack */
 
-#define AD_SAMU		132	/* hits, may steal Amulet (Wizard) */
-#define AD_CURS		133	/* random curse (ex. gremlin) */
-#define AD_SQUE		134	/* hits, may steal Quest Art or Amulet (Nemeses) */
+#define AD_SAMU		134	/* hits, may steal Amulet (Wizard) */
+#define AD_CURS		135	/* random curse (ex. gremlin) */
+#define AD_SQUE		136	/* hits, may steal Quest Art or Amulet (Nemeses) */
 
 
 /*

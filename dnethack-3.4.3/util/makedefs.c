@@ -250,7 +250,6 @@ char	*argv[];
 	}
 #endif
 	do_makedefs(&argv[1][1]);
-	printf("hi\n");
 	exit(EXIT_SUCCESS);
 	/*NOTREACHED*/
 	return 0;
@@ -1331,7 +1330,7 @@ struct permonst *ptr;
 	    n += (tmp2 > 0);
 	    n += (tmp2 == AT_MAGC || tmp2 == AT_MMGC || 
 			tmp2 == AT_TUCH || tmp2 == AT_SHDW || tmp2 == AT_TNKR);
-	    n += (tmp2 == AT_WEAP && (ptr->mflags2 & M2_STRONG));
+	    n += (tmp2 == AT_WEAP && (ptr->mflagsb & MB_STRONG));
 	}
 
 /*	For each "special" damage type */
@@ -1340,7 +1339,7 @@ struct permonst *ptr;
 	    tmp2 = ptr->mattk[i].adtyp;
 	    if ((tmp2 == AD_DRLI) || (tmp2 == AD_STON) || (tmp2 == AD_DRST)
 		|| (tmp2 == AD_DRDX) || (tmp2 == AD_DRCO) || (tmp2 == AD_WERE)
-		|| (tmp2 == AD_SHDW)|| (tmp2 == AD_STAR))
+		|| (tmp2 == AD_SHDW) || (tmp2 == AD_STAR) || (tmp2 == AD_BLUD))
 			n += 2;
 	    else if (strcmp(ptr->mname, "grid bug")) n += (tmp2 != AD_PHYS);
 	    n += ((int) (ptr->mattk[i].damd * ptr->mattk[i].damn) > 23);
@@ -1349,7 +1348,7 @@ struct permonst *ptr;
 /*	Leprechauns are special cases.  They have many hit dice so they
 	can hit and are hard to kill, but they don't really do much damage. */
 	if (!strcmp(ptr->mname, "leprechaun")) n -= 2;
-
+	
 /*	Hooloovoo spawn many dangerous enemies. */
 	if (!strcmp(ptr->mname, "hooloovoo")) n += 10;
 

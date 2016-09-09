@@ -147,6 +147,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 		d_arcadia1, d_arcadia2, d_arcadia3, d_arcward, d_arcfort,
 		d_tower1, d_tower2, d_tower3, d_tower4, d_tower5,
 		d_tower6, d_tower7, d_tower8, d_tower9, d_towertop;
+	int alt_tower;
 	/*Fort Knox*/
     d_level	d_knox_level;
 	d_level d_minetown_level;
@@ -242,12 +243,12 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define tower1_level	(dungeon_topology.d_tower1)
 #define tower2_level	(dungeon_topology.d_tower2)
 #define tower3_level	(dungeon_topology.d_tower3)
-#define tower4_level	(dungeon_topology.d_tower4)
-#define tower5_level	(dungeon_topology.d_tower5)
-#define tower6_level	(dungeon_topology.d_tower6)
-#define tower7_level	(dungeon_topology.d_tower7)
-#define tower8_level	(dungeon_topology.d_tower8)
-#define tower9_level	(dungeon_topology.d_tower9)
+//define tower4_level	(dungeon_topology.d_tower4)
+//define tower5_level	(dungeon_topology.d_tower5)
+//define tower6_level	(dungeon_topology.d_tower6)
+//define tower7_level	(dungeon_topology.d_tower7)
+//define tower8_level	(dungeon_topology.d_tower8)
+//define tower9_level	(dungeon_topology.d_tower9)
 #define towertop_level	(dungeon_topology.d_towertop)
 	/*Fort Knox*/
 #define knox_level		(dungeon_topology.d_knox_level)

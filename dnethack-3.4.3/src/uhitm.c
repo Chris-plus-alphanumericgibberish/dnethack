@@ -741,7 +741,7 @@ struct attack *uattk;
 
 	if(tmp > dieroll) exercise(A_DEX, TRUE);
 	malive = known_hitum(mon, &mhit, uattk);
-	(void) passive(mon, mhit, malive, AT_WEAP);
+	(void) passive(mon, mhit, malive, uattk->aatyp, uattk->adtyp);
 	
 	if(u.sealsActive&SEAL_MARIONETTE && uwep){
 		struct monst *m2 = m_at(mon->mx+u.dx,mon->my+u.dy);
@@ -749,7 +749,7 @@ struct attack *uattk;
 		int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 
 		if(tmp > dieroll) exercise(A_DEX, TRUE);
-		(void) passive(m2, mhit, known_hitum(m2, &mhit, uattk), AT_WEAP);
+		(void) passive(m2, mhit, known_hitum(m2, &mhit, uattk), uattk->aatyp, uattk->adtyp);
 		
 	}
 	return(malive);
@@ -2771,6 +2771,12 @@ register struct attack *mattk;
 			}
 			tmp += dtypbon(RAPIER);
 		break;
+	    case AD_BLUD:
+			if(has_blood(pd)) {
+            	tmp += mdef->m_lev;
+            	pline("The blade of rotted blood tears through the veins of %s!", mon_nam(mdef));
+            }
+		break;
 	    case AD_SHDW:
 			if(u.specialSealsActive&SEAL_BLACK_WEB) tmp = d(rnd(8),spiritDsize()+1);
 			// else tmp = d(rnd(8),rnd(5)+1);
@@ -3543,7 +3549,7 @@ use_weapon:
 				if(!m2 || DEADMONSTER(m2) || m2==mon) break;
 				dhit = (weptmp > (dieroll = rnd(20)) || u.uswallow);
 				/* Enemy dead, before any special abilities used */
-				(void) passive(m2, dhit, known_hitum(m2, &dhit, mattk), AT_WEAP);
+				(void) passive(m2, dhit, known_hitum(m2, &dhit, mattk), mattk->aatyp, mattk->adtyp);
 				/* might be a worm that gets cut in half */
 			}
 		break;
@@ -3577,6 +3583,7 @@ use_weapon:
 		case AT_WHIP:
 			if (i==0 && uwep && (mas->mlet==S_LICH)) goto use_weapon;
 			if ((uwep || (u.twoweap && uswapwep) || uarmg) &&
+				mattk->adtyp != AD_STAR && mattk->adtyp != AD_BLUD && mattk->adtyp != AD_SHDW && 
 				(touch_petrifies(mon->data) ||
 				 mon->data == &mons[PM_MEDUSA])){
 			    	break;
@@ -3620,15 +3627,17 @@ wisp_shdw_dhit:
 				    You("sting %s.", mon_nam(mon));
 			    else if (mattk->aatyp == AT_BUTT)
 				    You("butt %s.", mon_nam(mon));
-			    else if (mattk->aatyp == AT_TUCH)
-				    You("touch %s.", mon_nam(mon));
-				else if (mattk->aatyp == AT_TENT)
+			    else if (mattk->aatyp == AT_TUCH){
+					if(mattk->adtyp == AD_SHDW) You("slash %s with bladed shadows.", mon_nam(mon));
+					else if(mattk->adtyp == AD_STAR)  You("slash %s with a starlight rapier.", mon_nam(mon));
+					else if(mattk->adtyp == AD_BLUD) You("slash %s with a blade of blood.", mon_nam(mon));
+				    else You("touch %s.", mon_nam(mon));
+				} else if (mattk->aatyp == AT_TENT)
 				    Your("tentacles suck %s.", mon_nam(mon));
 			    else if (mattk->aatyp == AT_WHIP)
 				    Your("barbed whips lash %s.", mon_nam(mon));
 				else if(mattk->adtyp == AT_SHDW) {
-					if(mas == &mons[PM_EDDERKOP]) You("slash %s with bladed shadows.", mon_nam(mon));
-					else Your("bladed shadow srikes %s.", mon_nam(mon));
+					Your("bladed shadow srikes %s.", mon_nam(mon));
 				} else if(mattk->adtyp == AT_SHDW) {
 					You("slash %s with a starlight rapier.", mon_nam(mon));
 				} else if(mattk->aatyp == AT_WISP) 
@@ -3726,10 +3735,10 @@ wisp_shdw_dhit:
 		rehumanize();
 	    }
 	    if (sum[i] == 2)
-		return((boolean)passive(mon, 1, 0, mattk->aatyp));
+		return((boolean)passive(mon, 1, 0, mattk->aatyp, mattk->adtyp));
 							/* defender dead */
 	    else {
-		(void) passive(mon, sum[i], 1, mattk->aatyp);
+		(void) passive(mon, sum[i], 1, mattk->aatyp, mattk->adtyp);
 		nsum |= sum[i];
 	    }
 	    if (Upolyd != Old_Upolyd)
@@ -3824,7 +3833,8 @@ use_weapon:
 	case AT_BUTT:
 	case AT_TENT:
 	case AT_WHIP:
-		if ((uwep || (u.twoweap && uswapwep) || uarmg)&&
+		if ((uwep || (u.twoweap && uswapwep) || uarmg) &&
+			mattk->adtyp != AD_STAR && mattk->adtyp != AD_BLUD && mattk->adtyp != AD_SHDW && 
 			(touch_petrifies(mon->data) ||
 			 mon->data == &mons[PM_MEDUSA])){
 				break;
@@ -3974,10 +3984,10 @@ wisp_shdw_dhit2:
 	rehumanize();
 	}
 	    if (sum[i] == 2)
-	return((boolean)passive(mon, 1, 0, mattk->aatyp));
+	return((boolean)passive(mon, 1, 0, mattk->aatyp, mattk->adtyp));
 						/* defender dead */
 	else {
-		(void) passive(mon, sum[i], 1, mattk->aatyp);
+		(void) passive(mon, sum[i], 1, mattk->aatyp, mattk->adtyp);
 		nsum |= sum[i];
 	}
 	if (Upolyd != Old_Upolyd)
@@ -3991,16 +4001,24 @@ wisp_shdw_dhit2:
 /*	Special (passive) attacks on you by monsters done here.		*/
 
 int
-passive(mon, mhit, malive, aatyp)
+passive(mon, mhit, malive, aatyp, adtyp)
 register struct monst *mon;
 register boolean mhit;
 register int malive;
-uchar aatyp;
+uchar aatyp, adtyp;
 {
 	register struct permonst *ptr = mon->data;
 	register int i, tmp, ptmp;
 	struct obj *optr;
 	char	 buf[BUFSZ];
+	
+	/* Otiax's mist tendrils don't bring you into contact. */
+	if(aatyp == AT_WISP) return (malive | mhit);
+	
+	if(u.sealsActive&SEAL_IRIS && mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.") && !Blind && canseemon(mon)){
+		if(u.sealsActive&SEAL_IRIS) unbind(SEAL_IRIS,TRUE);
+	}
+	
 	if (mhit && aatyp == AT_BITE && maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
 	    if (bite_monster(mon))
 		return 2;			/* lifesaved */
@@ -4016,10 +4034,6 @@ uchar aatyp;
 	    tmp = d((int)mon->m_lev+1, (int)ptr->mattk[i].damd);
 	else
 	    tmp = 0;
-	
-	if(u.sealsActive&SEAL_IRIS && mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.") && !Blind && canseemon(mon)){
-		if(u.sealsActive&SEAL_IRIS) unbind(SEAL_IRIS,TRUE);
-	}
 	
 /*	These affect you even if they just died */
 
@@ -4060,13 +4074,14 @@ uchar aatyp;
 	    if (mhit) {		/* successful attack */
 		long protector = attk_protection((int)aatyp);
 
-		/* hero using monsters' AT_MAGC attack is hitting hand to
-		   hand rather than casting a spell */
-		if (aatyp == AT_MAGC) protector = W_ARMG;
+		/* hero using monsters' AT_MAGC attack isn't touching the monster */
+		if (aatyp == AT_MAGC) break;
 		
 		/* Otiax's mist tendrils don't cause skin contact. */
-		if (aatyp == AT_WISP || aatyp == AT_SHDW) protector = W_ARMG;
+		if (aatyp == AT_WISP || aatyp == AT_SHDW) break;
 
+		if(adtyp == AD_SHDW || adtyp == AD_STAR || adtyp == AD_BLUD) break;
+		
 		if (protector == 0L ||		/* no protection */
 			(protector == W_ARMG && !uarmg && !uwep) ||
 			(protector == W_ARMF && !uarmf) ||
@@ -4416,7 +4431,7 @@ dobpois:
 			    mon->mhp += tmp / 2;
 			    if (mon->mhpmax < mon->mhp) mon->mhpmax = mon->mhp;
 			/* at a certain point, the monster will reproduce! */
-			    if(mon->mhpmax > ((int) (mon->m_lev+1) * 8))
+			    if(mon->mhpmax > ((int) (mon->m_lev+1) * 8) && !is_eladrin(mon->data))
 				(void)split_mon(mon, &youmonst);
 			}
 		break;

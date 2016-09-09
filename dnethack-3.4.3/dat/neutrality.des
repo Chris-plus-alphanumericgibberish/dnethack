@@ -215,7 +215,7 @@ REGION:(24,12,28,13),  lit,"shop"
 REGION:(47,12,51,13),  unlit,"beehive"
 
 MAZE: "out1",' '
-FLAGS: shortsighted
+FLAGS: shortsighted,hardfloor
 INIT_MAP: 'T' , '.' , false, false, lit , false
 
 NOMAP
@@ -233,7 +233,7 @@ MONSTER:'C', random, random
 MONSTER:'C', random, random
 
 MAZE: "out2",' '
-FLAGS: shortsighted
+FLAGS: shortsighted,hardfloor
 INIT_MAP: '.' , 'T' , true, true , lit , false
 
 NOMAP
@@ -254,7 +254,7 @@ MONSTER:'C', random, random
 MONSTER:'C', random, random
 
 MAZE: "out3",' '
-FLAGS: shortsighted
+FLAGS: shortsighted,hardfloor
 INIT_MAP: '.' , 'T' , false, true , unlit , false
 
 NOMAP
@@ -278,7 +278,7 @@ MONSTER:'C', random, random
 MONSTER:'C', random, random
 
 MAZE: "out4",' '
-FLAGS: nommap, shortsighted
+FLAGS: nommap,hardfloor, shortsighted
 INIT_MAP: '.' , 'T' , false, true , unlit , false
 
 NOMAP

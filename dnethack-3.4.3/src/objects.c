@@ -424,8 +424,10 @@ HELM("war hat", "wide metal helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	2, 0, 100,  30, 8, 2, IRON, HI_METAL),
 HELM("flack helmet", "green bowel", /*Needs encyc entry*/
 		0, 0,  0,	0, 0, 10,   50, 8, 1, PLASTIC, CLR_GREEN),
+HELM("bronze helm", "helmet",
+		0, 0,  0,   0, 1, 30,  12, 9, 0, COPPER, HI_COPPER),
 HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	0, 1, 30,   5, 9, 0, WOOD, HI_WOOD),
+		0, 0,  0,	0, 1, 25,   5, 9, 0, WOOD, HI_WOOD),
 HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1,  3,   5, 8, 0, MITHRIL, HI_METAL),
 HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
@@ -433,7 +435,7 @@ HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
 HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
 HELM("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,   0, 1,150, 300, 5, 1, GLASS, CLR_CYAN),
+		0, 0,  0,   0, 2,150, 300, 5, 1, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
 HELM("helmet", "plumed helmet", /* circlet */
 		0, 0,  0,      8, 1, 30,  10, 9, 0, IRON, CLR_RED),
@@ -616,7 +618,9 @@ SHIELD("Uruk-hai shield", "white-handed shield",
 SHIELD("orcish shield", "red-eyed shield",
 		0, 0, 0, 0,	     2, 0, 50,	7,  9, 0, IRON, CLR_RED),
 SHIELD("kite shield", (char *)0,
-		1, 0, 1, 0,	     7, 0,100, 10,  8, 1, IRON, HI_METAL),
+		1, 0, 1, 0,	     6, 0,100, 10,  8, 1, IRON, HI_METAL),
+SHIELD("bronze roundshield", "round shield",
+		0, 0, 1, 0,	     1, 0,120,  7,  8, 1, COPPER, HI_COPPER),
 SHIELD("dwarvish roundshield", "round shield",
 		0, 0, 0, 0,	     4, 0, 80, 10,  7, 1, IRON, HI_METAL),
 SHIELD("crystal shield", "glass shield", /*Needs encyc entry*//*Needs tile*/
@@ -648,12 +652,16 @@ DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, CLR_YELLOW),
  */
 GLOVES("crystal gauntlets", "glass gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 50, 400, 7, 0, GLASS, CLR_CYAN),
+GLOVES("iron gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   4, 2, 25, 400, 8, 0, IRON, HI_METAL),
+GLOVES("bronze gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   0, 1, 25, 400, 8, 0, COPPER, HI_COPPER),
 GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2,  5, 400, 8, 0, MITHRIL, HI_METAL),
 GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 15, 50,  8, 0, PLASTIC, CLR_WHITE),
 GLOVES("leather gloves", "old gloves",
-		0, 0,  0,	  12, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
+		0, 0,  0,	   8, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of fumbling", "padded gloves",
 		0, 1,  FUMBLING,   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of power", "riding gloves",
@@ -668,6 +676,8 @@ BOOTS("low boots", "walking shoes",
 		0, 0,  0,	  25, 2, 10,  8,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("iron shoes", "hard shoes",
 		0, 0,  0,	   7, 2, 50, 16,  8, 0, IRON, HI_METAL),
+BOOTS("bronze boots", "hard boots",
+		0, 0,  0,	   0, 1, 75, 16,  7, 1, COPPER, HI_COPPER),
 BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 25, 32,  8, 1, PLASTIC, CLR_WHITE),
 BOOTS("high boots", "jackboots",
@@ -1269,6 +1279,13 @@ OBJECT(OBJ("scrap", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0, 
 OBJECT(OBJ("hellfire component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,METAL), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   20, CLR_ORANGE),
 						/* +1 both l & s */
+
+OBJECT(OBJ("rope of entangling", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,VEGGY), 0,
+		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  200, CLR_BROWN),
+OBJECT(OBJ("iron bands", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
+		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  200, HI_METAL),
+OBJECT(OBJ("razor wire", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,SLASH,P_NONE,IRON), 0,
+		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  200, HI_METAL),
 
 OBJECT(OBJ("blinding venom", "splash of venom"),
 		BITS(0,1,0,0,0,0,0,1,0,0,0,P_NONE,LIQUID), 0,

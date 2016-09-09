@@ -305,8 +305,8 @@ struct monst *mtmp;
 			(mtmp->data->mlet == S_TRAPPER && complete >= 4  && /*This one means "is a metroid", which are being counted as energions for this*/
 				mtmp->data != &mons[PM_TRAPPER] &&
 				mtmp->data != &mons[PM_LURKER_ABOVE]) ||
-			(mtmp->data->mlet == S_ANGEL && complete == 7) ||
-			(mtmp->data->mlet == S_KETER && complete == 7) ||
+			(is_angel(mtmp->data) && complete == 7) ||
+			(is_keter(mtmp->data) && complete == 7) ||
 			(is_demon(mtmp->data) && complete == 7) ||
 			(is_auton(mtmp->data) && complete == 7) ||
 			(mtmp->data->mlet == S_IMP && complete == 7)
@@ -400,8 +400,8 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_EYE_OF_DOOM] ||
 			mtmp->data == &mons[PM_SON_OF_TYPHON] ||
 			is_golem(mtmp->data) ||
-			mtmp->data->mlet == S_ANGEL ||
-			mtmp->data->mlet == S_KETER ||
+			is_angel(mtmp->data) ||
+			is_keter(mtmp->data) ||
 			mtmp->data->mlet == S_QUANTMECH ||
 			mtmp->data->mlet == S_IMP ||
 			is_demon(mtmp->data));
@@ -741,8 +741,8 @@ int *inrange, *nearby, *scared;
 	
 	if(*scared && mtmp->mvanishes > 0) mtmp->mvanishes = mtmp->mvanishes/2 + 1;
 	
-	if(mtmp->data == &mons[PM_BALL_OF_LIGHT]) *scared = TRUE;
-	else if(mtmp->data == &mons[PM_DAUGHTER_OF_BEDLAM] && !rn2(20)) *scared = TRUE;
+	if(mtmp->data == &mons[PM_DAUGHTER_OF_BEDLAM] && !rn2(20)) *scared = TRUE;
+	else if(*nearby && !mtmp->mflee && fleetflee(mtmp->data) && (mtmp->data->mmove > youracedata->mmove || noattacks(mtmp->data))) *scared = TRUE;
 	
 	if(*scared) {
 		if (rn2(7))
@@ -886,7 +886,8 @@ register struct monst *mtmp;
 		return(0);
 	}
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
-		(mdat->msound == MS_JUBJUB && (!rn2(10) || (!um_dist(mtmp->mx, mtmp->my, 3) && !rn2(10)))) ||
+		(mdat->msound == MS_JUBJUB && !rn2(10) && (!um_dist(mtmp->mx, mtmp->my, 3) || !rn2(10))) ||
+		(mdat->msound == MS_TRUMPET && !rn2(10) && !um_dist(mtmp->mx, mtmp->my, 3)) ||
 		(mdat->msound == MS_DREAD && !rn2(4)) ||
 		(mdat->msound == MS_OONA && !rn2(6)) ||
 		(mdat->msound == MS_SONG && !rn2(6)) ||
@@ -920,7 +921,9 @@ register struct monst *mtmp;
 		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 	) (void) tactics(mtmp);
-
+	
+	if(mdat == &mons[PM_GREAT_CTHULHU] && !rn2(20)) (void) tactics(mtmp);
+	
 	/* check distance and scariness of attacks */
 	distfleeck(mtmp,&inrange,&nearby,&scared);
 
@@ -1066,6 +1069,7 @@ register struct monst *mtmp;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
 				if(mdat == &mons[PM_ELDER_BRAIN]) u.ustdy = max(u.ustdy,dmg/3);
 				if(mdat == &mons[PM_SEMBLANCE]) make_hallucinated(HHallucination + dmg, FALSE, 0L);
+				if(mdat == &mons[PM_GREAT_CTHULHU]) make_stunned(HStun + dmg*10, TRUE);
 			}
 		}
 		for(m2=fmon; m2; m2 = nmon) {
@@ -1078,6 +1082,7 @@ register struct monst *mtmp;
 			    (rn2(2) || m2->mblinded)) || !rn2(10)) {
 				if (cansee(m2->mx, m2->my))
 				    pline("It locks on to %s.", mon_nam(m2));
+				if(mdat == &mons[PM_GREAT_CTHULHU]) m2->mconf=TRUE;
 				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_LUGRIBOSSK] || mdat == &mons[PM_MAANZECORIAN]) m2->mhp -= d(5,15);
 				else if(mdat == &mons[PM_ELDER_BRAIN]){
 					int mfdmg = d(3,15);
@@ -1143,6 +1148,10 @@ toofar:
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         == AD_RBRE))
 	      ) ||
+	     (attacktype(mtmp->data, AT_MAGC) &&
+	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
+	         == AD_OONA))
+	      ) ||
 	     (attacktype(mtmp->data, AT_LNCK) &&
 	      (((attacktype_fordmg(mtmp->data, AT_LNCK, AD_ANY))->adtyp
 	         <= AD_SPC2))
@@ -1206,12 +1215,12 @@ toofar:
 				){
 					if(castmu(mtmp, a, TRUE, TRUE)){
 						tmp = 3;
-						if(mdat != &mons[PM_DEMOGORGON]) break;
+						// if(mdat != &mons[PM_DEMOGORGON]) break;
 					}
 			    } else {
 					if(castmu(mtmp, a, FALSE, FALSE)){
 						tmp = 3;
-						if(mdat != &mons[PM_DEMOGORGON]) break;
+						// if(mdat != &mons[PM_DEMOGORGON]) break;
 					}
 				}
 			}
@@ -1625,9 +1634,7 @@ not_special:
 	else flag |= ALLOW_U;
 	if (is_minion(ptr) || is_rider(ptr)) flag |= ALLOW_SANCT;
 	/* unicorn may not be able to avoid hero on a noteleport level */
-	if ((is_unicorn(ptr) && !level.flags.noteleport) 
-		|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH] 
-		|| ptr == &mons[PM_WATCHER_IN_THE_WATER]) flag |= NOTONL;
+	if (notonline(ptr) && ((can_teleport(ptr) || is_unicorn(ptr)) && !level.flags.noteleport)) flag |= NOTONL;
 	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
 	if (passes_bars(ptr) && !Is_illregrd(&u.uz) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
@@ -1652,12 +1659,16 @@ not_special:
 	    /* allow monsters be shortsighted on some levels for balance */
 	    if((!mtmp->mpeaceful || mtmp->data == &mons[PM_NURSE]) && level.flags.shortsighted &&
 	       nidist > (couldsee(nix,niy) ? 144 : 36) && appr == 1) appr = 0;
-	    if ((is_unicorn(ptr) && level.flags.noteleport) 
-			|| ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_BANDERSNATCH] 
-			|| ptr == &mons[PM_WATCHER_IN_THE_WATER]){
+	    if (notonline(ptr)){
+			int curappr = appr;
+			if(appr == 1){
+				appr = -1; //If approaching, default to running away instead
+			}
 			/* on noteleport levels, perhaps we cannot avoid hero */
-			for(i = 0; i < cnt; i++)
+			for(i = 0; i < cnt; i++){
 				if(!(info[i] & NOTONL)) avoid=TRUE;
+				else appr = curappr; //If was approaching and swithced to running away, reinstates approaching
+			}
 	    }
 		
 		if(appr == 0){

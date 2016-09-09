@@ -602,7 +602,7 @@ struct obj * instr;
 			if (showmsg) msg = "%s seems to briefly swing with your music.";
 		}
 		// angels like the sound of harps
-		if ((mtmp->data->mlet == S_ANGEL) && (mtmp->malign >= A_COALIGNED)
+		if ((mtmp->data == &mons[PM_ANGEL]) && (mtmp->malign >= A_COALIGNED)
 		    && (instr_otyp == WOODEN_HARP))
 			dlev -= dlev0/5;
 		// snakes (and nagas) also like music from flutes

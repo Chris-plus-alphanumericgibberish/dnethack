@@ -301,7 +301,7 @@ A("the Pen of the Void",	ATHAME,
 
 #ifdef CONVICT
 A("Luck Blade",			SHORT_SWORD, /*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_INTEL|SPFX_LUCK), 0,
+	(SPFX_RESTR|SPFX_LUCK), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7, 7),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, PM_CONVICT, NON_PM, 3000L,
 	0,0,0 ),
@@ -638,20 +638,6 @@ A("The Grandmaster's Robe",	ROBE, /*double robe effect*/
 	0, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,0,(WSFX_PLUSSEV)),
 
-A("The Platinum Dragon Plate",	SILVER_DRAGON_SCALE_MAIL,/*heavier than normal, and causes spell penalties*/
-	(SPFX_RESTR|SPFX_INTEL),0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
-	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
-	0, A_LAWFUL, NON_PM, NON_PM, 9000L, 
-	0,0,0),
-
-A("The Chromatic Dragon Scales",	BLACK_DRAGON_SCALES,
-	(SPFX_RESTR|SPFX_INTEL),0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
-	NO_ATTK,	NO_DFNS,	NO_CARY,
-	0, A_CHAOTIC, NON_PM, NON_PM, 9000L, 
-	0,0,0),
-
 A("Beastmaster's Duster", LEATHER_JACKET, /*Needs encyc entry*/
 	(SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
@@ -659,8 +645,8 @@ A("Beastmaster's Duster", LEATHER_JACKET, /*Needs encyc entry*/
 	PETMASTER, A_LAWFUL, NON_PM, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
-A("Mirrorbright",	SHIELD_OF_REFLECTION,/*adapted from Slash'em*/
-	(SPFX_RESTR|SPFX_HALRES),0,
+A("Mirrorbright",	BRONZE_ROUNDSHIELD,/*adapted from Slash'em*/
+	(SPFX_RESTR|SPFX_HALRES|SPFX_REFLECT),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message
@@ -1368,6 +1354,20 @@ A("The Kusanagi no Tsurugi",	LONG_SWORD, /*Needs encyc entry*/
   /*/////////////Special Monster Artifacts//////////////*/
  /*//Few of these count, since they are boss treasure//*/
 /*////////////////////////////////////////////////////*/
+
+A("The Platinum Dragon Plate",	SILVER_DRAGON_SCALE_MAIL,/*heavier than normal, and causes spell penalties*/
+	(SPFX_NOGEN|SPFX_RESTR),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
+	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
+	0, A_NONE, NON_PM, NON_PM, 9000L, 
+	0,0,0),
+
+A("The Chromatic Dragon Scales",	BLACK_DRAGON_SCALES,
+	(SPFX_NOGEN|SPFX_RESTR),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0, A_NONE, NON_PM, NON_PM, 9000L, 
+	0,0,0),
 
 A("The Eye of Vecna", EYEBALL,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_HSPDAM),0,

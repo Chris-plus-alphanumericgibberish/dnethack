@@ -28,7 +28,7 @@ STATIC_DCL int FDECL(mdamagem, (struct monst *,struct monst *,struct attack *));
 STATIC_DCL void FDECL(mswingsm, (struct monst *, struct monst *, struct obj *));
 STATIC_DCL void FDECL(noises,(struct monst *,struct attack *));
 STATIC_DCL void FDECL(missmm,(struct monst *,struct monst *,struct attack *));
-STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, BOOLEAN_P, int));
+STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, BOOLEAN_P, int, struct attack *));
 STATIC_DCL int NDECL(beastmastery);
 
 /* Needed for the special case of monsters wielding vorpal blades (rare).
@@ -254,6 +254,10 @@ mattackm(magr, mdef)
 	if(magr->mtame && !mdef->mtame){
 		tmp += beastmastery();
 		tchtmp += beastmastery();
+		if(u.specialSealsActive&SEAL_COSMOS){
+			tmp += spiritDsize();
+			tchtmp += spiritDsize();
+		}
 	}
 	
 	tmp += magr->encouraged;
@@ -397,6 +401,7 @@ meleeattack:
 		 */
 		if (!magr->mconf && !Conflict && otmp &&
 		    mattk->aatyp != AT_WEAP && mattk->aatyp != AT_DEVA && mattk->aatyp != AT_BEAM && 
+			mattk->adtyp != AD_STAR && mattk->adtyp != AD_BLUD && mattk->adtyp != AD_SHDW && 
 			touch_petrifies(mdef->data)
 		) {
 		    strike = 0;
@@ -557,6 +562,7 @@ meleeattack:
             case AT_MAGC:
             case AT_MMGC:{
 				int temp=0;
+				int range;
 				if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 				if( pa == &mons[PM_ASMODEUS] ) magr->mspec_used = 0;
 				else if( pa == &mons[PM_DEMOGORGON] && rn2(3) ) magr->mspec_used = 0;
@@ -572,7 +578,14 @@ meleeattack:
 					magr->mspec_used = 0;
 				}
 				
-				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > BOLT_LIM*BOLT_LIM) break;
+				if(is_orc(magr->data) || 
+					magr->data == &mons[PM_HEDROW_WARRIOR] || 
+					magr->data == &mons[PM_MINOTAUR_PRIESTESS]
+				) range = (BOLT_LIM*BOLT_LIM)/2;
+				else if(magr->data == &mons[PM_CHROMATIC_DRAGON] || magr->data == &mons[PM_PLATINUM_DRAGON]) range = 2;
+				else range = (BOLT_LIM*BOLT_LIM);
+				
+				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > range) break;
 				
 				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
 					res[i] = buzzmm(magr, mdef, mattk, magr->m_lev);
@@ -599,7 +612,7 @@ meleeattack:
 
 	if (attk && !(res[i] & MM_AGR_DIED) &&
 	    dist2(magr->mx, magr->my, mdef->mx, mdef->my) < 3)
-	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED);
+	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED, mattk);
 
 	if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 	if (res[i] & MM_DEF_DIED) return res[i];
@@ -845,7 +858,7 @@ hitmm(magr, mdef, mattk)
 			case AT_TUCH:
 				if (is_weeping(magr->data)) {
 					Sprintf(buf,"%s is touching", magr_name);
-				} else if(mattk->adtyp == AD_SHDW || mattk->adtyp == AD_STAR){
+				} else if(mattk->adtyp == AD_SHDW || mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD){
 					if(magr->mcan) goto defaultmmhit;
 					else Sprintf(buf,"%s slashes", magr_name);
 				} else {
@@ -1065,7 +1078,9 @@ mdamagem(magr, mdef, mattk)
 	tmp += magr->encouraged;
 //endif
 
-	if (touch_petrifies(pd) && !resists_ston(magr)) {
+	if (touch_petrifies(pd) && !resists_ston(magr) &&
+		mattk->adtyp != AD_STAR && mattk->adtyp != AD_BLUD && mattk->adtyp != AD_SHDW
+	) {
 	    long protector = attk_protection((int)mattk->aatyp),
 		 wornitems = magr->misc_worn_check;
 
@@ -1819,6 +1834,12 @@ physical:
             	if (vis) pline("The rapier of silver light sears %s!", mon_nam(mdef));
             }
 		break;
+	    case AD_BLUD:
+			if(has_blood(pd)) {
+            	tmp += mdef->m_lev;
+            	if (vis) pline("The blade of rotted blood tears through the veins of %s!", mon_nam(mdef));
+            }
+		break;
 	    case AD_SHDW:
 			// tmp = d(rnd(8),rnd(5)+1);
 	    case AD_DRST:
@@ -1989,7 +2010,10 @@ physical:
 		mdef->mstdy -= 1;
 	}
 	
-	if(tmp && magr->mtame && !mdef->mtame) tmp += beastmastery();
+	if(tmp && magr->mtame && !mdef->mtame){
+		tmp += beastmastery();
+		if(u.specialSealsActive&SEAL_COSMOS) tmp += spiritDsize();
+	}
 	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (m_at(mdef->mx, mdef->my) == magr) {  /* see gulpmm() */
@@ -2131,10 +2155,11 @@ register struct obj *otemp;
  * handled above.  Returns same values as mattackm.
  */
 STATIC_OVL int
-passivemm(magr,mdef,mhit,mdead)
+passivemm(magr,mdef,mhit,mdead,mattk)
 register struct monst *magr, *mdef;
 boolean mhit;
 int mdead;
+struct attack *mattk;
 {
 	register struct permonst *mddat = mdef->data;
 	register struct permonst *madat = magr->data;
@@ -2298,7 +2323,7 @@ int mdead;
 		    pline("%s is suddenly very cold!", Monnam(magr));
 		mdef->mhp += tmp / 2;
 		if (mdef->mhpmax < mdef->mhp) mdef->mhpmax = mdef->mhp;
-		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8))
+		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8) && !is_eladrin(mdef->data))
 		    (void)split_mon(mdef, magr);
 		break;
 	    case AD_STUN:

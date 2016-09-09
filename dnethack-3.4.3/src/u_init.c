@@ -1186,6 +1186,7 @@ int randMeleeDamageTypes[] =
 						{AD_PHYS, 
 						 AD_SHDW, 
 						 AD_STAR, 
+						 AD_BLUD, 
 						 AD_FIRE, 
 						 AD_COLD,
 						 AD_SLEE,
@@ -2466,6 +2467,7 @@ u_init()
 	wanderer->mflagsg &= ~MG_PNAME;				/* not a proper name */
 
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
+	dungeon_topology.alt_tower = !rn2(8);
 	switch(rnd(6)){
 		case 1:
 			flags.HDbreath = AD_COLD;
@@ -2491,7 +2493,6 @@ u_init()
 						 : (u.oonaenergy == AD_COLD) ? CLR_CYAN 
 						 : (u.oonaenergy == AD_ELEC) ? HI_ZAP 
 						 : CLR_WHITE;
-	mons[PM_OONA].mattk[2].adtyp = u.oonaenergy;
 	return;
 }
 

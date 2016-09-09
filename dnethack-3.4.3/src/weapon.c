@@ -389,21 +389,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, ldie);
+							tmp += d(2, ldie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(1, 3+dmod);
+								tmp += d(2, 3);
 							}
 						break;
 						case P_SKILLED:
-							tmp += d(2, ldie);
+							tmp += d(4, ldie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(2, 3+dmod);
+								tmp += d(4, 3);
 							}
 						break;
 						case P_EXPERT:
-							tmp += d(3, ldie);
+							tmp += d(6, ldie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(3, 3+dmod);
+								tmp += d(6, 3);
 							}
 						break;
 					}
@@ -464,21 +464,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, ldie);
-							if(otmp->altmode){
-								tmp += d(1, ldie);
-							}
-						break;
-						case P_SKILLED:
 							tmp += d(2, ldie);
 							if(otmp->altmode){
 								tmp += d(2, ldie);
 							}
 						break;
-						case P_EXPERT:
-							tmp += d(3, ldie);
+						case P_SKILLED:
+							tmp += d(4, ldie);
 							if(otmp->altmode){
-								tmp += d(3, ldie);
+								tmp += d(4, ldie);
+							}
+						break;
+						case P_EXPERT:
+							tmp += d(6, ldie);
+							if(otmp->altmode){
+								tmp += d(6, ldie);
 							}
 						break;
 					}
@@ -642,21 +642,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, sdie);
+							tmp += d(2, sdie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(1, 3+dmod);
+								tmp += d(2, 3);
 							}
 						break;
 						case P_SKILLED:
-							tmp += d(2, sdie);
+							tmp += d(4, sdie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(2, 3+dmod);
+								tmp += d(4, 3);
 							}
 						break;
 						case P_EXPERT:
-							tmp += d(3, sdie);
+							tmp += d(6, sdie);
 							if(otmp->altmode){ //Probably just the Annulus
-								tmp += d(3, 3+dmod);
+								tmp += d(6, 3);
 							}
 						break;
 					}
@@ -717,21 +717,21 @@ int spec;
 				} else if(u.fightingForm == FFORM_ATARU && u.lastmoved + 1 >= monstermoves && (!uarm || is_light_armor(uarm))){
 					switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(otmp)))){
 						case P_BASIC:
-							tmp += d(1, sdie);
-							if(otmp->altmode){
-								tmp += d(1, sdie);
-							}
-						break;
-						case P_SKILLED:
 							tmp += d(2, sdie);
 							if(otmp->altmode){
 								tmp += d(2, sdie);
 							}
 						break;
-						case P_EXPERT:
-							tmp += d(3, sdie);
+						case P_SKILLED:
+							tmp += d(4, sdie);
 							if(otmp->altmode){
-								tmp += d(3, sdie);
+								tmp += d(4, sdie);
+							}
+						break;
+						case P_EXPERT:
+							tmp += d(6, sdie);
+							if(otmp->altmode){
+								tmp += d(6, sdie);
 							}
 						break;
 					}
@@ -1172,7 +1172,7 @@ register struct monst *mtmp;
 		 * All monsters can wield the remaining weapons.
 		 */
 		if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
-			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON])
+			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_THRONE_ARCHON])
 		    && (objects[pwep[i]].oc_material != SILVER
 			|| !hates_silver(mtmp->data))
 		    && (objects[pwep[i]].oc_material != IRON
@@ -1417,7 +1417,7 @@ register struct monst *mtmp;
 	    if (hwep[i] == CORPSE && !(mtmp->misc_worn_check & W_ARMG))
 		continue;
 	    if (((strong && !wearing_shield)
-			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_ARCHON])
+			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_THRONE_ARCHON])
 		    && (objects[hwep[i]].oc_material != SILVER
 			|| !hates_silver(mtmp->data))
 		    && (objects[hwep[i]].oc_material != IRON

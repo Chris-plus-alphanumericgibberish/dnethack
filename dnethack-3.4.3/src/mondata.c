@@ -211,12 +211,14 @@ struct monst *mon;
 	if(mon->data == &mons[PM_WATCHER_IN_THE_WATER] ||
 		mon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || 
 		mon->data == &mons[PM_LONG_SINUOUS_TENTACLE] ||
+		mon->data == &mons[PM_KETO] ||
+		mon->data == &mons[PM_WIDE_CLUBBED_TENTACLE] ||
 		mon->data == &mons[PM_DARUTH_XAXOX]
 	) return TRUE;
 	
 	/* as of 3.2.0:  gray dragons, Angels, Oracle, Yeenoghu */
 	if (dmgtype(ptr, AD_MAGM) || ptr == &mons[PM_BABY_GRAY_DRAGON] ||
-		(dmgtype(ptr, AD_RBRE) && ptr != &mons[PM_SHIMMERING_DRAGON]))	/* Chromatic Dragon */
+		(dmgtype(ptr, AD_RBRE) && ptr != &mons[PM_SHIMMERING_DRAGON]))	/* Chromatic Dragon, Platinum Dragon, mortai, flux slime, tulani */
 	    return TRUE;
 	/* check for magic resistance granted by wielded weapon */
 	o = (mon == &youmonst) ? uwep : MON_WEP(mon);
