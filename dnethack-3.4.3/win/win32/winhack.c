@@ -97,7 +97,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	_nethack_app.hMainWnd = NULL;
 	_nethack_app.hPopupWnd = NULL;
 	_nethack_app.bmpTiles = LoadBitmap(hInstance, MAKEINTRESOURCE(IDB_TILES));
-	if( _nethack_app.bmpTiles==NULL ) panic("cannot load tiles bitmap");
+	if( _nethack_app.bmpTiles==NULL ) panic("cannot load tiles bitmap"); // note this fails if tiles.bmp is 0 bytes
 	_nethack_app.bmpPetMark = LoadBitmap(hInstance, MAKEINTRESOURCE(IDB_PETMARK));
 	if( _nethack_app.bmpPetMark==NULL ) panic("cannot load pet mark bitmap");
 	_nethack_app.bmpRip = LoadBitmap(hInstance, MAKEINTRESOURCE(IDB_RIP));
