@@ -1940,6 +1940,7 @@ LADDER: (27,10), up
 NON_DIGGABLE:(00,00,75,20)
 NON_PASSWALL:(00,00,75,20)
 TELEPORT_REGION:(00,12,08,20),(14,00,50,20)
+DOOR:locked,(23,17)
 # entire tower in a region, constrains monster migration?
 REGION:(14,00,50,20),unlit,"ordinary",unfilled
 
@@ -2317,43 +2318,43 @@ TELEPORT_REGION:(00,12,08,20),(14,00,50,20)
 # entire tower in a region, constrains monster migration?
 REGION:(14,00,50,20),unlit,"ordinary",unfilled
 
-MONSTER:'D',"Platinum Dragon",(27,10)
+MONSTER:'D',"Platinum Dragon",(27,10), asleep
 
-MONSTER:'D',"silver dragon",(28,11)
-MONSTER:'D',"gray dragon",(28,12)
-MONSTER:'D',"orange dragon",(28,13)
+MONSTER:'D',"silver dragon",(28,11), asleep
+MONSTER:'D',"gray dragon",(28,12), asleep
+MONSTER:'D',"orange dragon",(28,13), asleep
 
-MONSTER:'D',"silver dragon",(28,09)
-MONSTER:'D',"gray dragon",(28,08)
-MONSTER:'D',"orange dragon",(28,07)
+MONSTER:'D',"silver dragon",(28,09), asleep
+MONSTER:'D',"gray dragon",(28,08), asleep
+MONSTER:'D',"orange dragon",(28,07), asleep
 
-MONSTER:'@',"sergeant",(25,08)
-MONSTER:'@',"lieutenant",(25,09)
-MONSTER:'@',"captain",(25,10)
-MONSTER:'@',"lieutenant",(25,11)
-MONSTER:'@',"sergeant",(25,12)
+MONSTER:'@',"sergeant",(25,08), asleep
+MONSTER:'@',"lieutenant",(25,09), asleep
+MONSTER:'@',"captain",(25,10), asleep
+MONSTER:'@',"lieutenant",(25,11), asleep
+MONSTER:'@',"sergeant",(25,12), asleep
 
-MONSTER:'D',"half-dragon",(24,08)
-MONSTER:'@',"knight",(24,09)
-MONSTER:'D',"half-dragon",(24,10)
-MONSTER:'@',"knight",(24,11)
-MONSTER:'D',"half-dragon",(24,12)
+MONSTER:'D',"half-dragon",(24,08), asleep
+MONSTER:'@',"knight",(24,09), asleep
+MONSTER:'D',"half-dragon",(24,10), asleep
+MONSTER:'@',"knight",(24,11), asleep
+MONSTER:'D',"half-dragon",(24,12), asleep
 
-MONSTER:'@',"knight",(24,08)
-MONSTER:'D',"half-dragon",(24,09)
-MONSTER:'@',"knight",(24,10)
-MONSTER:'D',"half-dragon",(24,11)
-MONSTER:'@',"knight",(24,12)
+MONSTER:'@',"knight",(23,08), asleep
+MONSTER:'D',"half-dragon",(23,09), asleep
+MONSTER:'@',"knight",(23,10), asleep
+MONSTER:'D',"half-dragon",(23,11), asleep
+MONSTER:'@',"knight",(23,12), asleep
 
-MONSTER:'D',"half-dragon",(22,08)
-MONSTER:'@',"knight",(22,09)
-MONSTER:'D',"half-dragon",(22,10)
-MONSTER:'@',"knight",(22,11)
-MONSTER:'D',"half-dragon",(22,12)
+MONSTER:'D',"half-dragon",(22,08), asleep
+MONSTER:'@',"knight",(22,09), asleep
+MONSTER:'D',"half-dragon",(22,10), asleep
+MONSTER:'@',"knight",(22,11), asleep
+MONSTER:'D',"half-dragon",(22,12), asleep
 
-MONSTER:'@',"knight",(21,08)
-MONSTER:'D',"half-dragon",(21,09)
-MONSTER:'@',"knight",(21,10)
-MONSTER:'D',"half-dragon",(21,11)
-MONSTER:'@',"knight",(21,12)
+MONSTER:'@',"knight",(21,08), asleep
+MONSTER:'D',"half-dragon",(21,09), asleep
+MONSTER:'@',"knight",(21,10), asleep
+MONSTER:'D',"half-dragon",(21,11), asleep
+MONSTER:'@',"knight",(21,12), asleep
 
