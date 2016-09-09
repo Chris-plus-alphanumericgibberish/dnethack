@@ -661,7 +661,7 @@ NEARDATA struct permonst mons[] = {
 	SIZ(500, 200, 0, MS_HUMANOID, MZ_SMALL), 0, 0,
 	0 /*MM*/, MT_COLLECT|MT_OMNIVORE /*MT*/,
 	MB_HUMANOID /*MB*/, MG_INFRAVISIBLE /*MG*/,
-	MA_HUMAN /*MA*/,  MV_NORMAL /*MV*/, CLR_GREEN),
+	0 /*MA*/,  MV_NORMAL /*MV*/, CLR_GREEN),
     MON("dwarf", S_HUMANOID,//4
 	LVL(2, 6, 10, 10, 4), (G_GENO|3),
 	A(ATTK(AT_WEAP, AD_PHYS, 1, 8),
