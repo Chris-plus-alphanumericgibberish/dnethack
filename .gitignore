@@ -13,11 +13,11 @@ dnethack-3.4.3/src/Makefile.gcc
 dnethack-3.4.3/src/Makefile.gcc-orig
 dnethack-3.4.3/nethack.dsw
 
+
 # Files created from upgrading to VS 2015
-# these files should be moved to dnethack-3.4.3\sys\win10
 dnethack-3.4.3/UpgradeLog.htm
 dnethack-3.4.3/nethack.sln
-dnethack-3.4.3/solution.props
+dnethack-3.4.3/nethack.props
 dnethack-3.4.3/nethack.VC.opendb
 dnethack-3.4.3/nethack.sdf
 
@@ -28,6 +28,7 @@ dnethack-3.4.3/dat/rumors
 dnethack-3.4.3/dat/oracles
 dnethack-3.4.3/dat/dungeon.pdf
 dnethack-3.4.3/dat/guioptions
+dnethack-3.4.3/dat/quest.dat
 dnethack-3.4.3/include/date.h
 dnethack-3.4.3/include/onames.h
 dnethack-3.4.3/include/pm.h
@@ -37,6 +38,23 @@ dnethack-3.4.3/src/vis_tab.c
 dnethack-3.4.3/win/share/tiletxt.c
 dnethack-3.4.3/util/makedefs.exe
 
+# Files created via running / building levstuff, levcomp, dgnstuff, dgncomp
+dnethack-3.4.3/dat/*.lev
+dnethack-3.4.3/include/lev_comp.h
+dnethack-3.4.3/util/lev_lex.c
+dnethack-3.4.3/util/lev_yacc.c
+dnethack-3.4.3/include/dgn_comp.h
+dnethack-3.4.3/util/dgn_lex.c
+dnethack-3.4.3/util/dgn_yacc.c
+dnethack-3.4.3/dat/dungeon
+
 # Files created via running / building bld_main
 dnethack-3.4.3/dat/dlb.lst
 dnethack-3.4.3/dat/porthelp
+dnethack-3.4.3/dat/nhdat
+
+#File created from tiles somthing
+dnethack-3.4.3/src/tile.c
+dnethack-3.4.3/src/tiles.bmp
+dnethack-3.4.3/win/win32/*.bmp
+dnethack-3.4.3/win/win32/*.ico
