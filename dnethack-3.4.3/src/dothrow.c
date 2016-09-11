@@ -8,7 +8,6 @@
 #include "edog.h"
 
 STATIC_DCL int FDECL(fire_blaster, (struct obj *, int));
-STATIC_DCL int FDECL(blast_self, (struct obj *));
 STATIC_DCL void NDECL(autoquiver);
 STATIC_DCL int FDECL(gem_accept, (struct monst *, struct obj *));
 STATIC_DCL void FDECL(tmiss, (struct obj *, struct monst *));
@@ -352,13 +351,74 @@ int shots, shotlimit;
 		clicky = TRUE;
 	}
 	
+	if(!u.dx && !u.dy){
+		shotlimit = 1;
+		if(u.dz > 0){
+			raygun->ovar1 -= cost;
+			if(raygun->altmode == ZT_LIGHTNING){
+				if (dighole(FALSE)){
+					Your("raygun disintegrated the floor!");
+					if(!Blind && !resists_blnd(&youmonst)) {
+						You("are blinded by the flash!");
+						make_blinded((long)rnd(50),FALSE);
+						if (!Blind) Your1(vision_clears);
+					}
+					return 1;
+				} else {
+					struct engr *oep;
+					if(!Blind){
+						pline("A brilliant beam shoots from the raygun and burns into the %s!",surface(u.ux, u.uy));
+						make_blinded((long)rnd(50),FALSE);
+					}
+					oep = engr_at(u.ux,u.uy);
+					if(!oep){
+						make_engr_at(u.ux, u.uy,	"", moves, DUST);
+						oep = engr_at(u.ux,u.uy);
+					}
+					oep->ward_id = (!Hallucination || rn2(100)) ? 1 : randHaluWard();
+					oep->halu_ward = TRUE;
+					oep->ward_type = BURN;
+					oep->complete_wards = 1;
+				}
+			} else if(raygun->altmode == ZT_DEATH){
+				if (!Blind) {
+				   pline("The bugs on the %s stop moving!", surface(u.ux, u.uy));
+				}
+			} else if(raygun->altmode == ZT_FIRE){
+					struct engr *oep;
+					if(!Blind){
+						pline("A heat ray shoots from the raygun and melts into the %s!",surface(u.ux, u.uy));
+					} else {
+						pline("You feel the raygun heat up.");
+					}
+					oep = engr_at(u.ux,u.uy);
+					if(!oep){
+						make_engr_at(u.ux, u.uy,	"", moves, DUST);
+						oep = engr_at(u.ux,u.uy);
+					}
+					oep->ward_id = (!Hallucination || rn2(100)) ? 1 : randHaluWard();
+					oep->halu_ward = TRUE;
+					oep->ward_type = BURN;
+					oep->complete_wards = 1;
+			} else {
+				if (!Blind) {
+				   pline("The bugs on the %s stop moving!", surface(u.ux, u.uy));
+				}
+			}
+			return 1;
+		} else {
+			if(Hallucination) pline1(Ronnie_ray_gun[rn2(SIZE(Ronnie_ray_gun))]);
+			raygun->ovar1 -= cost;
+			buzz(raygun->altmode+40, 6, u.ux, u.uy, u.dx, u.dy, 1,0);
+			return 1;
+		}
+	}
+	
 	if ((shots > 1 || shotlimit > 0) && !Hallucination) {
 		You("shoot %d %s.",
 		shots,	/* (might be 1 if player gave shotlimit) */
 		(shots == 1) ? "ray" : "rays");
 	}
-	
-	
 	
 	while(shots){
 		if(Hallucination) pline1(Ronnie_ray_gun[rn2(SIZE(Ronnie_ray_gun))]);
@@ -381,6 +441,7 @@ int shotlimit;
 {
 	struct obj *otmp;
 	int multishot = 1;
+	int range;
 	schar skill;
 	long wep_mask;
 	boolean twoweap;
@@ -400,10 +461,6 @@ int shotlimit;
 	
 	check_unpaid(blaster);
 	if(blaster->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
-	
-	if(!u.dx && !u.dy && !u.dz) {
-		return(blast_self(blaster));
-	}
 	
 	u_wipe_engr(1);
 	
@@ -461,22 +518,18 @@ int shotlimit;
 	otmp->cursed = blaster->cursed;
 	otmp->spe = blaster->spe;
 	otmp->quan = m_shot.n;
+	
+	if(!u.dx && !u.dy) range = 1;
+	else range = objects[(blaster->otyp)].oc_range;
+	
 	for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
-		m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy, objects[(blaster->otyp)].oc_range, otmp,TRUE);
+		m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy, range, otmp,TRUE);
 	}
 	m_shot.n = m_shot.i = 0;
 	m_shot.o = STRANGE_OBJECT;
 	m_shot.s = FALSE;
 
 	return 1;
-}
-
-STATIC_OVL int
-blast_self(otmp)
-	struct obj *otmp;
-{
-	pline("TODO: blast_self()");
-	return 0;
 }
 
 //endif
