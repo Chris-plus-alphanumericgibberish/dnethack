@@ -747,6 +747,8 @@ mklolthtreasure()
 			makemon(&mons[PM_DROW_MATRON], x+2, y+2, MM_ADJACENTOK);
 			
 			container = mksobj_at(CHEST, x+2, y+2, TRUE, FALSE);
+			container->olocked = 1;
+			container->otrapped = 1;
 			otmp = mksobj(POT_FULL_HEALING, TRUE, FALSE);
 			(void) add_to_container(container, otmp);
 			otmp = mksobj(POT_FULL_HEALING, TRUE, FALSE);
