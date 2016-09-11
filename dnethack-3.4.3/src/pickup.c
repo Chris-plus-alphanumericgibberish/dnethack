@@ -38,6 +38,7 @@ STATIC_DCL int FDECL(container_at, (int, int, BOOLEAN_P));
 STATIC_DCL boolean FDECL(able_to_loot, (int, int));
 STATIC_DCL boolean FDECL(mon_beside, (int, int));
 STATIC_DCL int FDECL(use_lightsaber, (struct obj *));
+STATIC_DCL char NDECL(pick_gemstone);
 STATIC_DCL struct obj * FDECL(pick_creatures_armor, (struct monst *, int *));
 STATIC_DCL struct obj * FDECL(pick_armor_for_creature, (struct monst *));
 
@@ -2271,6 +2272,7 @@ boolean past;
 }
 
 #undef Icebox
+STATIC_OVL
 char
 pick_gemstone()
 {
