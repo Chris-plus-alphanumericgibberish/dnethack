@@ -38,6 +38,8 @@ STATIC_DCL int FDECL(container_at, (int, int, BOOLEAN_P));
 STATIC_DCL boolean FDECL(able_to_loot, (int, int));
 STATIC_DCL boolean FDECL(mon_beside, (int, int));
 STATIC_DCL int FDECL(use_lightsaber, (struct obj *));
+STATIC_DCL struct obj * FDECL(pick_creatures_armor, (struct monst *, int *));
+STATIC_DCL struct obj * FDECL(pick_armor_for_creature, (struct monst *));
 
 /* define for query_objlist() and autopickup() */
 #define FOLLOW(curr, flags) \
@@ -1725,18 +1727,15 @@ boolean *prev_loot;
     /* 3.3.1 introduced the ability to remove saddle from a steed             */
     /* 	*passed_info is set to TRUE if a loot query was given.               */
     /*	*prev_loot is set to TRUE if something was actually acquired in here. */
-    if (mtmp && mtmp != u.usteed && (otmp = which_armor(mtmp, W_SADDLE))) {
+	if(mtmp && mtmp != u.usteed && mtmp->mtame){
+	if(otmp = pick_creatures_armor(mtmp, passed_info)){
 	long unwornmask;
-	if (passed_info) *passed_info = 1;
-	Sprintf(qbuf, "Do you want to remove the saddle from %s?",
-		x_monnam(mtmp, ARTICLE_THE, (char *)0, SUPPRESS_SADDLE, FALSE));
-	if ((c = yn_function(qbuf, ynqchars, 'n')) == 'y') {
 		if (nolimbs(youmonst.data)) {
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
 		    return (0);
 		}
 		if (otmp->cursed) {
-		    You("can't. The saddle seems to be stuck to %s.",
+		    You("can't. It seems to be stuck to %s.",
 			x_monnam(mtmp, ARTICLE_THE, (char *)0,
 				SUPPRESS_SADDLE, FALSE));
 			    
@@ -1751,9 +1750,11 @@ boolean *prev_loot;
 		}
 		otmp = hold_another_object(otmp, "You drop %s!", doname(otmp),
 					(const char *)0);
-		timepassed = rnd(3);
+		timepassed = rnd(3) +  objects[otmp->otyp].oc_delay;
+		mtmp->mcanmove = FALSE;
+		mtmp->mfrozen = timepassed;
 		if (prev_loot) *prev_loot = TRUE;
-	} else if (c == 'q') {
+	} else {
 		return (0);
 	}
     }
@@ -1762,6 +1763,86 @@ boolean *prev_loot;
     if (u.uswallow) {
 	int count = passed_info ? *passed_info : 0;
 	timepassed = pickup(count);
+    }
+    return timepassed;
+}
+
+/* dopetequip() returns amount of time passed.
+ */
+int
+dopetequip()
+{
+    int c = -1;
+    int timepassed = 0;
+	long flag;
+	boolean unseen;
+    coord cc;
+    struct obj *otmp;
+    char qbuf[QBUFSZ];
+	struct monst *mtmp;
+	char nambuf[BUFSZ];
+	
+	if (!get_adjacent_loc("Equip a pet in what direction?", "Invalid location",
+		u.ux, u.uy, &cc)) return 0;
+	
+	mtmp = m_at(cc.x, cc.y);
+	
+	if(mtmp && 
+#ifdef STEED
+		mtmp != u.usteed && 
+#endif	/* STEED */
+		mtmp->mtame
+	){
+	unseen = !canseemon(mtmp);
+
+	/* Get a copy of monster's name before altering its visibility */
+	Strcpy(nambuf, See_invisible ? Monnam(mtmp) : mon_nam(mtmp));
+	
+	if(otmp = pick_armor_for_creature(mtmp)){
+		if (nolimbs(youmonst.data)) {
+		    You_cant("do that without limbs."); /* not body_part(HAND) */
+		    return (0);
+		}
+		if(otmp->oclass == AMULET_CLASS){
+			flag = W_AMUL;
+		} else if(is_shirt(otmp)){
+			flag = W_ARMU;
+		} else if(is_cloak(otmp)){
+			flag = W_ARMC;
+		} else if(is_helmet(otmp)){
+			flag = W_ARMH;
+		} else if(is_shield(otmp)){
+			flag = W_ARMS;
+		} else if(is_gloves(otmp)){
+			flag = W_ARMG;
+		} else if(is_boots(otmp)){
+			flag = W_ARMF;
+		} else if(is_suit(otmp)){
+			flag = W_ARM;
+		} else {
+			pline("Error: Unknown monster armor type!?");
+			return 0;
+		}
+		freeinv(otmp);
+		otmp->masters = TRUE;
+		mpickobj(mtmp, otmp);
+		mtmp->misc_worn_check |= flag;
+		otmp->owornmask |= flag;
+		update_mon_intrinsics(mtmp, otmp, TRUE, FALSE);
+		/* if couldn't see it but now can, or vice versa, */
+		if (unseen ^ !canseemon(mtmp)) {
+			if (mtmp->minvis && !See_invisible) {
+				pline("Suddenly you cannot see %s.", nambuf);
+				makeknown(otmp->otyp);
+			} /* else if (!mon->minvis) pline("%s suddenly appears!", Amonnam(mon)); */
+		}
+		timepassed = rnd(3) +  objects[otmp->otyp].oc_delay;
+		if(unseen) timepassed += d(3,4);
+		mtmp->mcanmove = FALSE;
+		mtmp->mfrozen = timepassed;
+	} else {
+		return (0);
+	}
     }
     return timepassed;
 }
@@ -2223,6 +2304,115 @@ pick_gemstone()
 	else You("don't have any gems.");
 	destroy_nhwindow(tmpwin);
 	return ( n > 0 ) ? selected[0].item.a_char : 0;
+}
+
+STATIC_OVL
+struct obj *
+pick_creatures_armor(mon, passed_info)
+struct monst *mon;
+int *passed_info;
+{
+	winid tmpwin;
+	int n=0, how,count=0;
+	char buf[BUFSZ];
+	struct obj *otmp;
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf, "Equipment");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
+		// if(otmp->owornmask){
+			Sprintf1(buf, doname(otmp));
+			any.a_obj = otmp;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				otmp->invlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			count++;
+		// }
+	}
+	end_menu(tmpwin, "What do you want to remove:");
+
+	how = PICK_ONE;
+	if(count){
+		if (passed_info) *passed_info = 1;
+		n = select_menu(tmpwin, how, &selected);
+	} else pline("Nothing to remove!");
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_obj : 0;
+}
+
+#define addArmorMenuOption	Sprintf1(buf, doname(otmp));\
+							any.a_obj = otmp;\
+							add_menu(tmpwin, NO_GLYPH, &any,\
+							otmp->invlet, 0, ATR_NONE, buf,\
+							MENU_UNSELECTED);\
+							count++;
+
+
+STATIC_OVL
+struct obj *
+pick_armor_for_creature(mon)
+struct monst *mon;
+{
+	winid tmpwin;
+	int n=0, how,count=0;
+	char buf[BUFSZ];
+	struct obj *otmp;
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf, "Equipment");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(!(is_whirly(mon->data) || noncorporeal(mon->data))) for(otmp = invent; otmp; otmp = otmp->nobj){
+		if(!otmp->owornmask){
+			if(otmp->oclass == AMULET_CLASS && !(mon->misc_worn_check&W_AMUL) &&
+				can_wear_amulet(mon->data) && 
+			    (otmp->otyp == AMULET_OF_LIFE_SAVING |
+				 otmp->otyp == AMULET_OF_REFLECTION)
+			){
+				addArmorMenuOption
+			} else if(is_shirt(otmp) && !(mon->misc_worn_check&W_ARMU) && otmp->objsize == mon->data->msize && shirt_match(mon->data,otmp)){
+				addArmorMenuOption
+			} else if(is_cloak(otmp) && !(mon->misc_worn_check&W_ARMC) && (abs(otmp->objsize - mon->data->msize) <= 1) && shirt_match(mon->data,otmp)){
+				addArmorMenuOption
+			} else if(is_helmet(otmp) && !(mon->misc_worn_check&W_ARMH) && 
+				((helm_match(mon->data,otmp) && has_head(mon->data) && otmp->objsize == mon->data->msize && !has_horns(mon->data))
+				|| is_flimsy(otmp))
+			){
+				addArmorMenuOption
+			} else if(is_shield(otmp) && !(mon->misc_worn_check&W_ARMS) && !cantwield(mon->data)){
+				addArmorMenuOption
+			} else if(is_gloves(otmp) && !(mon->misc_worn_check&W_ARMG) && otmp->objsize == mon->data->msize && can_wear_gloves(mon->data)){
+				addArmorMenuOption
+			} else if(is_boots(otmp) && !(mon->misc_worn_check&W_ARMG) && otmp->objsize == mon->data->msize && can_wear_boots(mon->data)){
+				addArmorMenuOption
+			} else if(is_suit(otmp) && !(mon->misc_worn_check&W_ARM) && (Is_dragon_scales(otmp) || 
+					(arm_match(mon->data, otmp) && (otmp->objsize == mon->data->msize ||
+					(is_elven_armor(otmp) && abs(otmp->objsize - mon->data->msize) <= 1)
+					))
+				)
+			){
+				addArmorMenuOption
+			}
+		}
+	}
+	end_menu(tmpwin, "What do you want to equip:");
+
+	how = PICK_ONE;
+	if(count){
+		n = select_menu(tmpwin, how, &selected);
+	} else pline("Nothing to equip!");
+	destroy_nhwindow(tmpwin);
+	return ( n > 0 ) ? selected[0].item.a_obj : 0;
 }
 
 STATIC_OVL int
