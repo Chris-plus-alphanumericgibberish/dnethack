@@ -1824,8 +1824,8 @@ dopetequip()
 			pline("Error: Unknown monster armor type!?");
 			return 0;
 		}
+		if(otmp->unpaid)  addtobill(otmp, FALSE, FALSE, FALSE);
 		freeinv(otmp);
-		otmp->masters = TRUE;
 		mpickobj(mtmp, otmp);
 		mtmp->misc_worn_check |= flag;
 		otmp->owornmask |= flag;
