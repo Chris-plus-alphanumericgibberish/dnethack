@@ -2049,8 +2049,8 @@ register struct obj *obj;
 			pline("The lock labeled '%d' is open.", (int)current_container->ovar1);
 
 	    /* gold in container always needs to be added to credit */
-	    if (floor_container && obj->oclass == COIN_CLASS)
-		sellobj(obj, current_container->ox, current_container->oy);
+	    if (floor_container && obj->oclass == COIN_CLASS && !cobj_is_magic_chest(current_container))
+			sellobj(obj, current_container->ox, current_container->oy);
 		if(cobj_is_magic_chest(current_container)){
 			add_to_magic_chest(obj,((int)(current_container->ovar1))%10);
 		} else {
