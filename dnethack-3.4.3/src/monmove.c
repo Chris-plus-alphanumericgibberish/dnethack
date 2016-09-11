@@ -818,6 +818,32 @@ register struct monst *mtmp;
 			makemon(&mons[PM_GNOLL], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
 		}
 	}
+	if(mdat == &mons[PM_LEGION]){
+		int n = rnd(4);
+		for(n; n>0; n--) switch(rnd(7)){
+		case 1:
+			makemon(&mons[PM_LEGIONNAIRE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		break;
+		case 2:
+			makemon(&mons[PM_GNOME_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		break;
+		case 3:
+			makemon(&mons[PM_ORC_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		break;
+		case 4:
+			makemon(&mons[PM_DWARF_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		break;
+		case 5:
+			makemon(&mons[PM_ELF_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		break;
+		case 6:
+			makemon(&mons[PM_HUMAN_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		break;
+		case 7:
+			makemon(&mons[PM_HALF_DRAGON_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		break;
+		}
+	}
 	if (mtmp->mstrategy & STRAT_ARRIVE) {
 	    int res = m_arrival(mtmp);
 	    if (res >= 0) return res;

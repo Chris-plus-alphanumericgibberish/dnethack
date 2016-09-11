@@ -3123,6 +3123,7 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AD_STDY:{
 			if(is_orc(mtmp->data)) pline("%s curses and urges %s followers on.", Monnam(mtmp), mhis(mtmp));
+			else if(mtmp->data == &mons[PM_LEGION] || mtmp->data == &mons[PM_LEGIONNAIRE]); //no message
 			else pline("%s studies you carefully.", Monnam(mtmp));
 			u.ustdy = max(dmg,u.ustdy);
 			dmg = 0;
@@ -4471,8 +4472,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				!is_blind(mtmp)
 			) {
 				int dmg = d((int)mattk->damn, (int)mattk->damd);
-				if(mtmp->data == &mons[PM_ORC_CAPTAIN] || mtmp->data == &mons[PM_BOLG]) 
-					pline("%s curses and urges %s followers on.", Monnam(mtmp), mhis(mtmp));
+				if(is_orc(mtmp->data)) pline("%s curses and urges %s followers on.", Monnam(mtmp), mhis(mtmp));
+				else if(mtmp->data == &mons[PM_LEGION] || mtmp->data == &mons[PM_LEGIONNAIRE]); //no message
 				else pline("%s studies you with a level stare.", Monnam(mtmp));
 				u.ustdy = max(dmg,u.ustdy);
 				dmg = 0;
