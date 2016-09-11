@@ -415,7 +415,6 @@ unsigned int *stuckid, *steedid;	/* STEED */
 						 : (u.oonaenergy == AD_COLD) ? CLR_CYAN 
 						 : (u.oonaenergy == AD_ELEC) ? HI_ZAP 
 						 : CLR_WHITE;
-	mons[PM_OONA].mattk[0].adtyp = u.oonaenergy;
 	
 	if(u.uhp <= 0 && (!Upolyd || u.mh <= 0)) {
 	    u.ux = u.uy = 0;	/* affects pline() [hence You()] */
