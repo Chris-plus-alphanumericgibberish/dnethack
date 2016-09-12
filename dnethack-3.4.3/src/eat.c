@@ -208,6 +208,7 @@ register struct obj *obj;
 	   allow fake amulets to be eaten either [which is already the case] */
 
 	if(Race_if(PM_INCANTIFIER)) return incantifier_edible(obj);
+	if(magivorous(youracedata)) return incantifier_edible(obj);
 	if(uclockwork) return uclockwork_edible(obj);
 	if(Role_if(PM_ANACHRONONAUT) && !(Upolyd || Race_if(PM_VAMPIRE))) return ((obj->otyp >= SLIME_MOLD && obj->otyp <= TIN)); /*Processed foods only*/
 	
@@ -379,7 +380,7 @@ choke(food)	/* To a full belly all food is bad. (It.) */
 
 	exercise(A_CON, FALSE);
 
-	if ((Breathless || (!Strangled && !rn2(20))) && !Race_if(PM_INCANTIFIER)) {
+	if ((Breathless || (!Strangled && !rn2(20))) && !Race_if(PM_INCANTIFIER) && !magivorous(youracedata)) {
 		/* choking by eating AoS doesn't involve stuffing yourself */
 		if (food && food->otyp == AMULET_OF_STRANGULATION) {
 			You("choke, but recover your composure.");
@@ -400,7 +401,12 @@ choke(food)	/* To a full belly all food is bad. (It.) */
 		u.uhp = u.uhpmax/2;
 		pline("You reform!");
 		morehungry(u.uenmax/2);	/* lifesaved */
-	 } else{
+	 } else if(magivorous(youracedata)){
+		You("absorb too much energy and then vomit up a rainbow!");
+		morehungry(1000);	/* you just got *very* sick! */
+		nomovemsg = 0;
+		vomit();
+	 } else {
 		killer_format = KILLED_BY_AN;
 		/*
 		 * Note all "killer"s below read "Choked on %s" on the
@@ -1649,7 +1655,7 @@ opentin()		/* called during each move whilst opening a tin */
 				costly_tin((const char*)0);
 				goto use_me;
 			}
-        } else if(Race_if(PM_INCANTIFIER) && 
+        } else if((Race_if(PM_INCANTIFIER) || magivorous(youracedata)) && 
 			((tin.tin->corpsenm != PM_NEWT && 
 			tin.tin->corpsenm != PM_AOA_DROPLET && 
 			tin.tin->corpsenm != PM_AOA) ||
@@ -1757,7 +1763,7 @@ opentin()		/* called during each move whilst opening a tin */
 				costly_tin((const char*)0);
 				goto use_me;
 			}
-        } else if(Race_if(PM_INCANTIFIER) ){
+        } else if(Race_if(PM_INCANTIFIER) || magivorous(youracedata) ){
 				pline("Sadly, you would not derive any nutrition from eating it.");
 				You("reluctantly discard the spinach");
 				costly_tin((const char*)0);
@@ -2666,7 +2672,7 @@ struct obj *otmp;
 	 * Breaks conduct, but otherwise safe.
 	 */
 	 
-	if (!u.uconduct.unvegan && !Race_if(PM_INCANTIFIER) &&
+	if (!u.uconduct.unvegan && !(Race_if(PM_INCANTIFIER) || magivorous(youracedata)) &&
 	    ((material == LEATHER || material == BONE ||
 	      material == EYEBALL || material == SEVERED_HAND ||
 	      material == DRAGON_HIDE || material == WAX) ||
@@ -2676,7 +2682,7 @@ struct obj *otmp;
 		if (yn_function(buf,ynchars,'n')=='n') return 1;
 		else return 2;
 	}
-	if (!u.uconduct.unvegetarian && !Race_if(PM_INCANTIFIER) &&
+	if (!u.uconduct.unvegetarian && !(Race_if(PM_INCANTIFIER) || magivorous(youracedata)) &&
 	    ((material == LEATHER || material == BONE ||
 	      material == EYEBALL || material == SEVERED_HAND ||
 	      material == DRAGON_HIDE) ||
@@ -2787,10 +2793,10 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		stackobj(otmp);
 		return 1;
 	}
-	if(Race_if(PM_INCANTIFIER)){
+	if(Race_if(PM_INCANTIFIER) || magivorous(youracedata)){
 		int curspe;
 		if(objects[otmp->otyp].oc_unique) return 1;//redundant check against unique
-		if(Race_if(PM_INCANTIFIER) && u.uen >= u.uenmax * 3/4 && yn("You feel overcharged. Continue eating?") != 'y'){
+		if((Race_if(PM_INCANTIFIER) || magivorous(youracedata)) && u.uen >= u.uenmax * 3/4 && yn("You feel overcharged. Continue eating?") != 'y'){
 			return 0;
 		}
 		if (otmp->quan > 1L) {
