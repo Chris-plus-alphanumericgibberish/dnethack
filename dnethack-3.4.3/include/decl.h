@@ -408,6 +408,7 @@ E NEARDATA struct obj *invent,
 	*uskin, *uamul, *uleft, *uright, *ublindf,
 	*uwep, *uswapwep, *uquiver;
 
+E NEARDATA struct obj *urope;		/* defined only when entangled */
 E NEARDATA struct obj *uchain;		/* defined only when punished */
 E NEARDATA struct obj *uball;
 E NEARDATA struct obj *migrating_objs;

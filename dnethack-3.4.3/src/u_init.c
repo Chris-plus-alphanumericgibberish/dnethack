@@ -1387,7 +1387,7 @@ u_init()
 	uarmu = 0;
 # endif
 	uarm = uarmc = uarmh = uarms = uarmg = uarmf = 0;
-	uwep = uball = uchain = uleft = uright = 0;
+	uwep = uball = uchain = uleft = uright = urope = 0;
 	uswapwep = uquiver = 0;
 	u.twoweap = 0;
 	u.ublessed = 0;				/* not worthy yet */
