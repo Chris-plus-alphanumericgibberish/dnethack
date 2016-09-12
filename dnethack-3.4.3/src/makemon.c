@@ -2615,24 +2615,91 @@ register struct monst *mtmp;
 				
 				return; //bypass general weapons
 			break;
+		    case PM_HORNED_DEVIL:
+				(void)mongets(mtmp, rn2(4) ? TRIDENT : BULLWHIP);
+			break;
+		    case PM_ERINYS:{
+				chance = rnd(10);
+				if(chance >= 9){
+					mongets(mtmp, HELMET);
+					mongets(mtmp, PLATE_MAIL);
+					mongets(mtmp, KITE_SHIELD);
+					mongets(mtmp, LEATHER_GLOVES);
+					mongets(mtmp, HIGH_BOOTS);
+					mongets(mtmp, LONG_SWORD);
+					// mongets(mtmp, IRON_BANDS);
+				} else if(chance >= 6){
+					mongets(mtmp, HELMET);
+					mongets(mtmp, CHAIN_MAIL);
+					mongets(mtmp, LEATHER_GLOVES);
+					mongets(mtmp, HIGH_BOOTS);
+					mongets(mtmp, TWO_HANDED_SWORD);
+					// mongets(mtmp, ROPE_OF_ENTANGLING);
+				} else if(chance >= 3){
+					mongets(mtmp, LEATHER_HELM);
+					mongets(mtmp, LEATHER_ARMOR);
+					mongets(mtmp, LEATHER_GLOVES);
+					mongets(mtmp, HIGH_BOOTS);
+					mongets(mtmp, RAPIER);
+					mongets(mtmp, BOW);
+					m_initthrow(mtmp, ARROW, 20);
+					// mongets(mtmp, ROPE_OF_ENTANGLING);
+				} else {
+					mongets(mtmp, find_gcirclet());
+					mongets(mtmp, GENTLEWOMAN_S_DRESS);
+					mongets(mtmp, CRYSTAL_BOOTS);
+					mongets(mtmp, CRYSTAL_GAUNTLETS);
+					mongets(mtmp, STILETTO);
+					mongets(mtmp, RAZOR_WIRE);
+				}
+			}break;
+		    case PM_BONE_DEVIL:
+				(void)mongets(mtmp, rn2(4) ? TRIDENT : WAR_HAMMER);
+			break;
+			case PM_ICE_DEVIL:
+				  if(!rn2(4)) (void)mongets(mtmp, TRIDENT);
+				  else (void)mongets(mtmp, GLAIVE);
+			break;
+		    case PM_KARY__THE_FIEND_OF_FIRE:{
+				mongets(mtmp, LEATHER_ARMOR);
+				mongets(mtmp, SCIMITAR);
+			}break;
+		    case PM_MARILITH:{
+				chance = rnd(10);
+				if(chance >= 9) mongets(mtmp, PLATE_MAIL);
+				else if(chance >= 6) mongets(mtmp, CHAIN_MAIL);
+				else if(chance >= 3) mongets(mtmp, STUDDED_LEATHER_ARMOR);
+				else mongets(mtmp, LEATHER_ARMOR);
+				mongets(mtmp, SCIMITAR);
+			}break;
+		    case PM_PIT_FIEND:
+				otmp = mksobj(TRIDENT, FALSE, FALSE);
+				otmp->spe = rnd(9);
+				(void) mpickobj(mtmp, otmp);
+			break;
+		    case PM_FALLEN_ANGEL:
+				mongets(mtmp, LONG_SWORD);
+			break;
+		    case PM_ANCIENT_OF_ICE:
+				otmp = mksobj(MACE, FALSE, FALSE);
+				otmp->spe = rnd(8);
+				(void) mpickobj(mtmp, otmp);
+			break;
+		    case PM_ANCIENT_OF_DEATH:
+				otmp = mksobj(SCYTHE, FALSE, FALSE);
+				otmp->spe = 8;
+				(void) mpickobj(mtmp, otmp);
+				return; //bypass general weapons
+			break;
 		    case PM_BALROG:
 				(void)mongets(mtmp, BULLWHIP);
 				(void)mongets(mtmp, BROADSWORD);
 				return; //bypass general weapons
 			break;
-		    case PM_MARILITH:{
-				chance = rnd(10);
-				if(chance == 9) mongets(mtmp, PLATE_MAIL);
-				else if(chance >= 6) mongets(mtmp, CHAIN_MAIL);
-				else if(chance >= 3) mongets(mtmp, STUDDED_LEATHER_ARMOR);
-				else mongets(mtmp, LEATHER_ARMOR);
-			}break;
-		    case PM_HORNED_DEVIL:
-				(void)mongets(mtmp, rn2(4) ? TRIDENT : BULLWHIP);
-			break;
-		    case PM_ANCIENT_OF_DEATH:
-				(void)mongets(mtmp, SCYTHE);
-				return; //bypass general weapons
+		    case PM_NESSIAN_PIT_FIEND:
+				otmp = mksobj(TRIDENT, FALSE, FALSE);
+				otmp->spe = 9;
+				(void) mpickobj(mtmp, otmp);
 			break;
 		}
 		/* prevent djinnis and mail daemons from leaving objects when
@@ -3217,11 +3284,14 @@ register struct	monst	*mtmp;
 	    	/* moved here from m_initweap() because these don't
 		   have AT_WEAP so m_initweap() is not called for them */
 			switch(monsndx(ptr)){
-			case PM_ICE_DEVIL:
-				  if(!rn2(4)) (void)mongets(mtmp, TRIDENT);
-				  else (void)mongets(mtmp, SPEAR);
-			break;
 ///////////////////////////////
+			case PM_ALDINACH:
+				otmp = mksobj(MASK, FALSE, FALSE);
+				otmp->blessed = FALSE;
+				otmp->cursed = FALSE;
+				otmp->corpsenm = PM_ALDINACH;
+				(void) mpickobj(mtmp,otmp);
+			break;
 			case PM_KOSTCHTCHIE:
 				otmp = mksobj(CLUB, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_WRATHFUL_WIND));
