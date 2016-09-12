@@ -356,33 +356,84 @@ struct monst *mtmp;
 	return(offer);
 }
 
+int demonPrinces[] = {
+	PM_DEMOGORGON,
+	PM_LAMASHTU,
+	PM_OBOX_OB,
+	PM_DAGON,
+	PM_PALE_NIGHT,
+	PM_ORCUS,
+	PM_GRAZ_ZT,
+	PM_MALCANTHET
+};
+
 int
 dprince(atyp)
 aligntyp atyp;
 {
 	int tryct, pm;
 
-	for (tryct = 0; tryct < 20; tryct++) {
-	    pm = rn1(PM_DEMOGORGON + 1 - PM_ORCUS, PM_ORCUS);
-	    if (!(mvitals[pm].mvflags & G_GONE) &&
-		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
-		return(pm);
+	if(atyp == A_NONE) atyp = !rn2(3) ? A_LAWFUL : A_CHAOTIC;
+
+	if(atyp == A_LAWFUL){
+		if(!(mvitals[PM_ASMODEUS].mvflags & G_GONE)) return PM_ASMODEUS;
+		else return dlord(atyp);
+	} else if(atyp == A_CHAOTIC) {
+		for (tryct = 0; tryct < 20; tryct++) {
+			pm = demonPrinces[rn2(SIZE(demonPrinces))];
+			if (!(mvitals[pm].mvflags & G_GONE))
+				return(pm);
+		}
 	}
 	return(dlord(atyp));	/* approximate */
 }
+
+int demonLords[] = {
+	PM_YEENOGHU,
+	PM_BAPHOMET,
+	PM_KOSTCHTCHIE,
+	PM_ZUGGTMOY,
+	PM_JUIBLEX,
+	PM_ALDINACH
+};
+
+int lordsOfTheNine[] = {
+	PM_MEPHISTOPHELES,
+	PM_BAALZEBUB,
+	PM_CRONE_LILITH,
+	PM_CREATURE_IN_THE_ICE,
+	PM_BELIAL,
+	PM_MAMMON,
+	PM_DISPATER,
+	PM_BAEL
+};
 
 int
 dlord(atyp)
 aligntyp atyp;
 {
 	int tryct, pm;
+	
+	if(atyp == A_NONE) atyp = rn2(2) ? A_LAWFUL : A_CHAOTIC;
 
-	for (tryct = 0; tryct < 20; tryct++) {
-	    do pm = rn1(PM_YEENOGHU + 1 - PM_JUIBLEX, PM_JUIBLEX);
-		while(pm == PM_SHAKTARI);
-	    if (!(mvitals[pm].mvflags & G_GONE) &&
-		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
-		return(pm);
+	if(atyp == A_LAWFUL){
+		for (tryct = 0; tryct < 20; tryct++) {
+			pm = lordsOfTheNine[rn2(SIZE(lordsOfTheNine))];
+			if(pm == PM_CRONE_LILITH) pm = !rn2(3) ? PM_CRONE_LILITH : !rn2(2) ? PM_MOTHER_LILITH : PM_DAUGHTER_LILITH;
+			if (!(mvitals[pm].mvflags & G_GONE)){
+				if(pm == PM_CREATURE_IN_THE_ICE){
+					mvitals[pm].mvflags |= G_GONE;
+					pm = rn2(2) ? PM_LEVISTUS : PM_LEVIATHAN;
+				}
+				return(pm);
+			}
+		}
+	} else if(atyp == A_CHAOTIC) {
+		for (tryct = 0; tryct < 20; tryct++) {
+			pm = demonLords[rn2(SIZE(demonLords))];
+			if (!(mvitals[pm].mvflags & G_GONE))
+				return(pm);
+		}
 	}
 	
 	return(ndemon(atyp));	/* approximate */
