@@ -5688,7 +5688,7 @@ you have purified yourself."
 "Yes, %p.  You are truly ready now.  Attend to me and I shall
 tell you of what has transpired:
 
-"At one of the Great Festivals a short time ago, %n and a legion
+"At one of the Great Festivals a short time ago, a Legion
 of undead invaded %H.  Many %gP were killed, including
 the one carrying %o.
 
@@ -5697,7 +5697,8 @@ Without it, we could not mount a counter-attack.  Now, there are
 barely enough %gP left to keep the undead at bay.
 
 "We need you to find %i, then, from there, travel
-to %ns lair.  If you can manage to defeat %n and return
+to %ns lair deep bellow the lowest crypts.  
+If you can manage to defeat %n and return
 %o here, we can then drive off the legions of
 undead that befoul the land.
 
@@ -5755,74 +5756,74 @@ Ahead, there is a small clearing amidst the bubbling pits of lava...
 Again, you have invaded %ns domain.
 %E
 %Cc Pri 00050
-"Ah, so %lC has sent another %g to retrieve
+"ah, so %l has sent another %g to retrieve
 %o.
 
-"No, I see you are no %g.  Perhaps I shall have some fun today
-after all.  Prepare to die, %r!  You shall never regain
+"no, We see you are no %g.  perhaps We shall have some fun today
+after all.  prepare to die, %r!  you shall never regain
 %o."
 %E
 %Cp Pri 00051
-"So, %r.  Again you challenge me."
+"so, %r.  again you challenge Us."
 %E
 %Cp Pri 00052
-"Die now, %r.  %d has no power here to aid you."
+"die now, %r.  %d has no power here to aid you."
 %E
 %Cp Pri 00053
-"You shall die, %r, and I will have %o back."
+"you shall die, %r, and we will have %o back."
 %E
 %Cp Pri 00060
-"Submit to my will, %c, and I shall spare you."
+"submit to Our will, %c, and We shall spare you."
 %E
 %Cp Pri 00061
-"Your puny powers are no match for me, %c."
+"your puny powers are no match for Us."
 %E
 %Cp Pri 00062
-"I shall have you turned into a zombie for my pleasure!"
+"We shall have you turned into a zombie for Our pleasure!"
 %E
 %Cp Pri 00063
-"Despair now, %r.  %d cannot help you."
+"despair now, %r.  %d cannot help you."
 %E
 %Cp Pri 00064
-"I shall feast upon your soul for many days, %c."
+"We shall feast upon your soul for many days, %c."
 %E
 %Cp Pri 00065
-"Your death will be slow and painful.  That I promise!"
+"your death will be slow and painful.  That We promise!"
 %E
 %Cp Pri 00066
-"You cannot defeat %n, you fool.  I shall kill you now."
+"you cannot defeat %n, you fool.  We shall kill you now."
 %E
 %Cp Pri 00067
-"Your precious %lt will be my next victim."
+"your precious %lt will be Our next victim."
 %E
 %Cp Pri 00068
-"I feel your powers failing you, %r.  You shall die now."
+"We feel your powers failing you, %r.  you shall die now."
 %E
 %Cp Pri 00069
-"With %o, nothing can stand in my way."
+"with %o, nothing can stand in Our way."
 %E
 %Cc Pri 00070
 As you pick up %o, you feel the essence of
 %d fill your soul.  You know now why %n stole it from
 %H, for with it, %ca of %d could
-easily defeat his plans.
+easily defeat their plans.
 
 You sense a message from %d.  Though not verbal, you
 get the impression that you must return to %lC as soon
 as possible.
 %E
 %Cc Pri 00080
-You feel a wrenching shift in the ether as %ns body dissolves
+You feel a wrenching shift in the ether as %n dissolves
 into a cloud of noxious gas.
 
 Suddenly, a voice booms out:
 
     Thou hast defeated the least of my minions, %r.
     Know now that Moloch is aware of thy presence.
-    As for thee, %n, I shall deal with thy failure
-    at my leisure.
+    As for 'Thee', o Legion of the damned, 
+    I shall deal with thy failure at my leisure.
 
-You then hear the voice of %n, screaming in terror...
+You then hear the voices of %n, screaming in terror...
 %E
 %Cc Pri 00081
 "You have returned, %p.  And with %o, I see.

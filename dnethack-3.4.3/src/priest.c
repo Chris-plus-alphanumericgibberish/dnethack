@@ -445,6 +445,7 @@ register int roomno;
 				if(priest->mpeaceful) {
 				msg1 = 0;
 				msg2 = 0;
+				msg1 = "You are not welcome here!";
 				if(canseemon(priest)) pline("As you approach, the priest suddenly putrefies and melts into a foul-smelling liquid mass!");
 				set_mon_data(priest, &mons[PM_DARKNESS_GIVEN_HUNGER], 0);
 				priest->mpeaceful = 0;
