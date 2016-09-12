@@ -32,6 +32,7 @@
  * 3.12.2: Expand size of mnum and quest artifact listing to int instead of short int.
  * 3.12.3: Partial reform of charm monster and monster summoning, Gnome ranger quest.
  * 3.13.beta: "The Great Reflagging".
+ * 3.13.0: "The Great Reflagging", Monster equipment, Angel symbol split, PoWater revision, Demonweb, Naberius buff, Incant energy gain/loss/cap increase.
  */
 #define PATCHLEVEL	3
 /*
