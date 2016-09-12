@@ -390,9 +390,11 @@ struct artifact {
 							(exist_artifact(SKELETON_KEY,artilist[ART_THIRD_KEY_OF_CHAOS].name) \
 							||  u.ualign.type == A_CHAOTIC ) \
 				)\
+			)
+#define is_mastery_artifact_nameable(a) (\
             /* Mastery artifacts */\
             /* Archeologist */\
-            || ((a) == &artilist[ART_TRUSTY_ADVENTURER_S_WHIP] && (Role_if(PM_ARCHEOLOGIST) || Pantheon_if(PM_ARCHEOLOGIST)) && u.ulevel >= MASTERY_ARTIFACT_LEVEL &&\
+			((a) == &artilist[ART_TRUSTY_ADVENTURER_S_WHIP] && (Role_if(PM_ARCHEOLOGIST) || Pantheon_if(PM_ARCHEOLOGIST)) && u.ulevel >= MASTERY_ARTIFACT_LEVEL &&\
                 !has_named_mastery_artifact())\
             || ((a) == &artilist[ART_LOG_OF_THE_CURATOR] && (Role_if(PM_ARCHEOLOGIST) || Pantheon_if(PM_ARCHEOLOGIST)) && u.ulevel >= MASTERY_ARTIFACT_LEVEL &&\
                 !has_named_mastery_artifact())\
