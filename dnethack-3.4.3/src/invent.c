@@ -2585,6 +2585,7 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	    obj->cursed != otmp->cursed || obj->blessed != otmp->blessed ||
 	    obj->no_charge != otmp->no_charge ||
 	    obj->obroken != otmp->obroken ||
+	    obj->objsize != otmp->objsize ||
 	    obj->otrapped != otmp->otrapped ||
 	    obj->lamplit != otmp->lamplit ||
 #ifdef INVISIBLE_OBJECTS
