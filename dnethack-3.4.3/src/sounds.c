@@ -880,7 +880,7 @@ asGuardian:
 			pline("%s screams high and shrill.", Monnam(mtmp));
 			mtmp->mspec_used = 10;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
-				if(tmpm != mtmp){
+				if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 					if(tmpm->mtame && tmpm->mtame<20) tmpm->mtame++;
 					if(d(1,tmpm->mhp) < mtmp->mhpmax){
 						tmpm->mflee = 1;
@@ -899,7 +899,7 @@ asGuardian:
 			pline("%s blows %s trumpet.", Monnam(mtmp), hisherits(mtmp));
 			mtmp->mspec_used = 10;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
-				if(tmpm != mtmp){
+				if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 					if(tmpm->mpeaceful != mtmp->mpeaceful){
 						tmpm->mconf = 1;
 					}
@@ -949,7 +949,7 @@ asGuardian:
 				// pline("death\n");
 				boolean resisted;
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
-					if(tmpm != mtmp){
+					if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 						if (resists_death(tmpm)) {
 							// if (canseemon(tmpm))
 								// pline("%s seems no deader than before.", Monnam(tmpm));
@@ -991,7 +991,7 @@ asGuardian:
 				case 3:
 				// pline("nightmare\n");
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
-					if(tmpm != mtmp){
+					if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 						if(!mindless(tmpm->data)){
 							tmpm->mstun = 1;
 							tmpm->mconf = 1;
