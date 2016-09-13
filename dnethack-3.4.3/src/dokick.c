@@ -1257,6 +1257,7 @@ dokick()
 				struct obj *staff;
 				pline("The dead tree falls down.");
 				maploc->typ = ROOM;
+				maploc->looted = 0; /* don't leave loose ends.. */
 				for(numsticks = d(1,4); numsticks > 0; numsticks--){
 					staff = mksobj_at(rn2(2) ? QUARTERSTAFF : CLUB, x, y, FALSE, FALSE);
 					staff->spe = 0;
