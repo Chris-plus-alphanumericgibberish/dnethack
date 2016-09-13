@@ -4015,7 +4015,10 @@ uchar aatyp, adtyp;
 	/* Otiax's mist tendrils don't bring you into contact. */
 	if(aatyp == AT_WISP) return (malive | mhit);
 	
-	if(u.sealsActive&SEAL_IRIS && mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.") && !Blind && canseemon(mon)){
+	if(u.sealsActive&SEAL_IRIS && !Blind && canseemon(mon) && !Invisible
+		&& maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))
+		&& mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.")
+	){
 		if(u.sealsActive&SEAL_IRIS) unbind(SEAL_IRIS,TRUE);
 	}
 	
