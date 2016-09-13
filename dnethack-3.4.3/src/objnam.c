@@ -2094,13 +2094,13 @@ const char *oldstr;
 			if (!BSTRCMP(bp, p-6, "gloves") ||
 			    !BSTRCMP(bp, p-6, "lenses") ||
 			    !BSTRCMP(bp, p-5, "shoes") ||
+				!BSTRCMPI(bp, p-13, "versus curses") ||
 			    !BSTRCMP(bp, p-6, "scales"))
 				return bp;
 
 		} else if (!BSTRCMPI(bp, p-5, "boots") ||
 			   !BSTRCMPI(bp, p-9, "gauntlets") ||
 			   !BSTRCMPI(bp, p-6, "tricks") ||
-			   !BSTRCMPI(bp, p-13, "versus curses") ||
 			   !BSTRCMPI(bp, p-9, "paralysis") ||
 			   !BSTRCMPI(bp, p-5, "glass") ||
 			   !BSTRCMP(bp, p-4, "ness") ||
