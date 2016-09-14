@@ -239,8 +239,34 @@ makedog()
 
 	initedog(mtmp);
 	EDOG(mtmp)->loyal = TRUE;
-	if(is_half_dragon(mtmp->data))
-		mtmp->mvar1 = flags.HDbreath;
+	if(is_half_dragon(mtmp->data) && flags.HDbreath){
+		switch(flags.HDbreath){
+			case AD_COLD:
+				mtmp->mvar1 = AD_COLD;
+				mtmp->mintrinsics == MR_COLD;
+			break;
+			case AD_FIRE:
+				mtmp->mvar1 = AD_FIRE;
+				mtmp->mintrinsics == MR_FIRE;
+			break;
+			case AD_SLEE:
+				mtmp->mvar1 = AD_SLEE;
+				mtmp->mintrinsics == MR_SLEEP;
+			break;
+			case AD_ELEC:
+				mtmp->mvar1 = AD_ELEC;
+				mtmp->mintrinsics == MR_ELEC;
+			break;
+			case AD_DRST:
+				mtmp->mvar1 = AD_DRST;
+				mtmp->mintrinsics == MR_POISON;
+			break;
+			case AD_ACID:
+				mtmp->mvar1 = AD_ACID;
+				mtmp->mintrinsics == MR_ACID;
+			break;
+		}
+	}
 	return(mtmp);
 }
 

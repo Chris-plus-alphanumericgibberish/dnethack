@@ -31,27 +31,27 @@ int flag;
 			switch(rnd(6)){
 				case 1:
 					mon->mvar1 = AD_COLD;
-					mon->mintrinsics |= AD_COLD;
+					mon->mintrinsics |= MR_COLD;
 				break;
 				case 2:
 					mon->mvar1 = AD_FIRE;
-					mon->mintrinsics |= AD_FIRE;
+					mon->mintrinsics |= MR_FIRE;
 				break;
 				case 3:
 					mon->mvar1 = AD_SLEE;
-					mon->mintrinsics |= AD_SLEE;
+					mon->mintrinsics |= MR_SLEEP;
 				break;
 				case 4:
 					mon->mvar1 = AD_ELEC;
-					mon->mintrinsics |= AD_ELEC;
+					mon->mintrinsics |= MR_ELEC;
 				break;
 				case 5:
 					mon->mvar1 = AD_DRST;
-					mon->mintrinsics |= AD_DRST;
+					mon->mintrinsics |= MR_POISON;
 				break;
 				case 6:
 					mon->mvar1 = AD_ACID;
-					mon->mintrinsics |= AD_ACID;
+					mon->mintrinsics |= MR_ACID;
 				break;
 			}
 		}
