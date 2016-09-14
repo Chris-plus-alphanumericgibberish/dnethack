@@ -215,6 +215,7 @@ mattackm(magr, mdef)
 		    res[NATTK];	/* results of all attacks */
     struct attack   *mattk, alt_attk;
     struct permonst *pa, *pd;
+	struct obj *oarmor;
 	
     if (!magr || !mdef) return(MM_MISS);		/* mike@genat */
     if (!magr->mcanmove || magr->msleeping) return(MM_MISS);
@@ -236,6 +237,21 @@ mattackm(magr, mdef)
 	tmp += mdef->mstdy;
     tchtmp = base_mac(mdef) + magr->m_lev;
 	tchtmp += mdef->mstdy;
+	oarmor = which_armor(magr, W_ARMG);
+	if(oarmor){
+		if(oarmor->otyp == GAUNTLETS_OF_POWER){
+			if(oarmor->oartifact == ART_PREMIUM_HEART){
+				tmp += 14;
+				tchtmp += 14;
+			} else {
+				tmp += 3;
+				tchtmp += 3;
+			}
+		} else if(oarmor->otyp == GAUNTLETS_OF_DEXTERITY){
+			tmp += oarmor->spe;
+			tchtmp += oarmor->spe;
+		}
+	}
 	if(magr->data == &mons[PM_UVUUDAUM]){
 		tmp += 20;
 		tchtmp += 20;
@@ -1194,7 +1210,9 @@ mdamagem(magr, mdef, mattk)
 	    case AD_MALK:
 	    case AD_UVUU:
 	    case AD_TELE:
-physical:
+physical:{
+		struct obj *oarm;
+		oarm = which_armor(magr, W_ARMG);
 		if (mattk->aatyp == AT_KICK && thick_skinned(pd)) {
 		    tmp = 0;
 		} else if(mattk->aatyp == AT_WEAP || mattk->aatyp == AT_DEVA) {
@@ -1267,7 +1285,11 @@ physical:
             if(otmp && (otmp->cursed) && hates_unholy(pd)) {
             	if (vis) pline("The curse sears %s!", mon_nam(mdef));
             }
-			if (otmp->oartifact) {
+			if(oarm && tmp && oarm->otyp == GAUNTLETS_OF_POWER){
+				tmp += 8;
+				if(otmp && bimanual(otmp,magr->data)) tmp += 4;
+			}
+			if (otmp && otmp->oartifact) {
 			    (void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
 			    if (mdef->mhp <= 0)
 				return (MM_DEF_DIED |
@@ -1283,6 +1305,8 @@ physical:
 		       won't swallow the corpse; but if the target survives,
 		       the subsequent engulf attack should accomplish that */
 		    if (tmp >= mdef->mhp) tmp = mdef->mhp - 1;
+		} else {
+			if(oarm && tmp && oarm->otyp == GAUNTLETS_OF_POWER) tmp += 8;
 		}
 		if(pa == &mons[PM_BABY_METROID]){
 				magr->mhpmax += 1;
@@ -1291,7 +1315,7 @@ physical:
 					EDOG(magr)->hungrytime += pd->cnutrit/10;  //400/10 = human nut/10
 				}
 		}
-		break;
+		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_FIRE:
 		if (cancelled) {

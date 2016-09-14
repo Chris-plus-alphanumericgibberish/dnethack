@@ -556,6 +556,21 @@ mattacku(mtmp)
 	tchtmp += mtmp->m_lev;
 	tmp += u.ustdy;
 	tchtmp += u.ustdy;
+	oarmor = which_armor(mtmp, W_ARMG);
+	if(oarmor){
+		if(oarmor->otyp == GAUNTLETS_OF_POWER){
+			if(oarmor->oartifact == ART_PREMIUM_HEART){
+				tmp += 14;
+				tchtmp += 14;
+			} else {
+				tmp += 3;
+				tchtmp += 3;
+			}
+		} else if(oarmor->otyp == GAUNTLETS_OF_DEXTERITY){
+			tmp += oarmor->spe;
+			tchtmp += oarmor->spe;
+		}
+	}
 //ifdef BARD
 	tmp += mtmp->encouraged;
 	if (wizard && mtmp->encouraged)
@@ -1533,7 +1548,9 @@ hitmu(mtmp, mattk)
 			hitmsg(mtmp, mattk);
 		 }
 		break;
-	    case AD_PHYS:
+	    case AD_PHYS:{
+		struct obj *oarm;
+		oarm = which_armor(mtmp, W_ARMG);
 		if (mattk->aatyp == AT_HUGS && !sticks(youmonst.data)) {
 		    if(!u.ustuck && rn2(2)) {
 			if (u_slip_free(mtmp, mattk)) {
@@ -1551,6 +1568,7 @@ hitmu(mtmp, mattk)
 			      (mtmp->data == &mons[PM_ROPE_GOLEM])
 			      ? "choked" : "crushed");
 		    }
+			if(oarm && dmg && oarm->otyp == GAUNTLETS_OF_POWER) dmg += 16;
 		} else {			  /* hand to hand weapon */
 		    if(mattk->aatyp == AT_WEAP && otmp) {
 			if (otmp->otyp == CORPSE &&
@@ -1609,6 +1627,11 @@ hitmu(mtmp, mattk)
 				if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))) phasearmor = TRUE;
 			}
 			
+			if(oarm && dmg && oarm->otyp == GAUNTLETS_OF_POWER){
+				dmg += 8;
+				if(otmp && bimanual(otmp,mtmp->data)) dmg += 4;
+			}
+			
 			if (otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
 				!(u.sealsActive&SEAL_EDEN) &&
 				hates_silver(youracedata) &&
@@ -1658,10 +1681,13 @@ hitmu(mtmp, mattk)
 			}
 			urustm(mtmp, otmp);
 		    } else if (mattk->aatyp != AT_TUCH || dmg != 0 ||
-				mtmp != u.ustuck)
-			hitmsg(mtmp, mattk);
+				mtmp != u.ustuck
+			){
+				if(oarm && dmg && oarm->otyp == GAUNTLETS_OF_POWER) dmg += 8;
+				hitmsg(mtmp, mattk);
+			}
 		}
-		break;
+		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_STAR:
 			if(hates_silver(youracedata) &&
