@@ -989,11 +989,11 @@ gcrownu()
 			if(u.ualign.type == A_CHAOTIC){
 				//unrestrict_weapon_skill();
 			} else if(u.ualign.type == A_NEUTRAL){
-				unrestrict_weapon_skill(P_BARE_HANDED_COMBAT);
+				expert_weapon_skill(P_BARE_HANDED_COMBAT);
 				u.umartial = TRUE;
 			} else if(u.ualign.type == A_LAWFUL){
-				if(Role_if(PM_NOBLEMAN)) unrestrict_weapon_skill(P_CROSSBOW);
-				else unrestrict_weapon_skill(P_HARVEST);
+				if(Role_if(PM_NOBLEMAN)) expert_weapon_skill(P_CROSSBOW);
+				else expert_weapon_skill(P_HARVEST);
 			}
 		} else { /*male*/
 			if (class_gift != STRANGE_OBJECT) {
@@ -1015,13 +1015,6 @@ gcrownu()
 						discover_artifact(ART_LIECLEAVER);
 					}
 				}
-				if(u.ualign.type == A_CHAOTIC){
-					unrestrict_weapon_skill(P_MORNING_STAR);
-				} else if(u.ualign.type == A_NEUTRAL){
-					unrestrict_weapon_skill(P_SHORT_SWORD);
-				} else if(u.ualign.type == A_LAWFUL){
-					unrestrict_weapon_skill(P_CROSSBOW);
-				}
 			} else if (!already_exists) {
 				obj = mksobj(DROVEN_SHORT_SWORD, FALSE, FALSE);
 				obj = oname(obj, artiname(ART_LOLTH_S_FANG));
@@ -1031,7 +1024,17 @@ gcrownu()
 				dropy(obj);
 				u.ugifts++;
 			}
-			unrestrict_weapon_skill(P_SHORT_SWORD);
+			if(Role_if(PM_NOBLEMAN)){
+				if(u.ualign.type == A_CHAOTIC){
+					expert_weapon_skill(P_MORNING_STAR);
+				} else if(u.ualign.type == A_NEUTRAL){
+					expert_weapon_skill(P_SHORT_SWORD);
+				} else if(u.ualign.type == A_LAWFUL){
+					expert_weapon_skill(P_CROSSBOW);
+				}
+			} else {
+				expert_weapon_skill(P_SHORT_SWORD);
+			}
 		}
 	} else if (Race_if(PM_DWARF) && (urole.ldrnum == PM_THORIN_II_OAKENSHIELD || urole.ldrnum == PM_DAIN_II_IRONFOOT)) {
 		if (class_gift != STRANGE_OBJECT) {
@@ -1047,7 +1050,7 @@ gcrownu()
 				obj = oname(obj, artiname(ART_DURIN_S_AXE));
 				obj->spe = 1;
 				at_your_feet("A silver axe");
-				unrestrict_weapon_skill(P_AXE);
+				expert_weapon_skill(P_AXE);
 				discover_artifact(ART_DURIN_S_AXE);
 			}
 			dropy(obj);
@@ -1080,11 +1083,11 @@ gcrownu()
 			discover_artifact(ART_ARCOR_KERYM);
 		
 		if(u.ualign.type == A_CHAOTIC){
-			unrestrict_weapon_skill(P_BROAD_SWORD);
+			expert_weapon_skill(P_BROAD_SWORD);
 		} else if(u.ualign.type == A_NEUTRAL){
-			unrestrict_weapon_skill(P_BROAD_SWORD);
+			expert_weapon_skill(P_BROAD_SWORD);
 		} else if(u.ualign.type == A_LAWFUL){
-			unrestrict_weapon_skill(P_LONG_SWORD);
+			expert_weapon_skill(P_LONG_SWORD);
 		}
 	} else if( Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE) ){
 		if (class_gift != STRANGE_OBJECT) {
@@ -1102,7 +1105,7 @@ gcrownu()
 		}
 		/* acquire Reaver's skill regardless of weapon or gift, 
 			although pirates are already good at using scimitars */
-		unrestrict_weapon_skill(P_SCIMITAR);
+		expert_weapon_skill(P_SCIMITAR);
 		if (obj && obj->oartifact == ART_REAVER)
 			discover_artifact(ART_REAVER);
 	} else if ((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) {
@@ -1116,9 +1119,7 @@ gcrownu()
 			dropy(obj);
 			u.ugifts++;
 		}
-		/* acquire Reaver's skill regardless of weapon or gift, 
-			although pirates are already good at using scimitars */
-		unrestrict_weapon_skill(P_BOW);
+		expert_weapon_skill(P_BOW);
 		if (obj && obj->oartifact == ART_BOW_OF_SKADI)
 			discover_artifact(ART_BOW_OF_SKADI);
 	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
@@ -1135,7 +1136,7 @@ gcrownu()
 				at_your_feet("Silver arrows");
 				dropy(obj);
 				discover_artifact(ART_MOONBEAM);
-				unrestrict_weapon_skill(P_BOW);
+				expert_weapon_skill(P_BOW);
 			} else if(u.ualign.type == A_NEUTRAL){
 				obj = mksobj(CLOAK_OF_INVISIBILITY, FALSE, FALSE);
 				obj = oname(obj, artiname(ART_VEIL_OF_LATONA));
@@ -1151,10 +1152,22 @@ gcrownu()
 				at_your_feet("Golden arrows");
 				dropy(obj);
 				discover_artifact(ART_SUNBEAM);
-				unrestrict_weapon_skill(P_BOW);
+				expert_weapon_skill(P_BOW);
 			}
 			u.ugifts++;
 		}
+	} else if (Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)) {
+		if(!already_exists){
+			obj = mksobj(LONG_SWORD, FALSE, FALSE);
+			obj = oname(obj, artiname(ART_CLARENT));
+			obj->spe = 1;
+			at_your_feet("A sword");
+			discover_artifact(ART_CLARENT);
+			dropy(obj);
+			u.ugifts++;
+		}
+		expert_weapon_skill(P_LONG_SWORD);
+		expert_weapon_skill(P_BEAST_MASTERY);
 	} else if (Pantheon_if(PM_MONK) || Role_if(PM_MONK)) {
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */
@@ -1170,10 +1183,20 @@ gcrownu()
 			dropy(obj);
 			u.ugifts++;
 		}
-		if (obj && obj->oartifact == ART_GRANDMASTER_S_ROBE)
+		if (obj && obj->oartifact == ART_GRANDMASTER_S_ROBE){
 			discover_artifact(ART_GRANDMASTER_S_ROBE);
-		else if(obj && obj->oartifact == ART_ROBE_OF_THE_ARCHMAGI)
+		} else if(obj && obj->oartifact == ART_ROBE_OF_THE_ARCHMAGI)
 			discover_artifact(ART_ROBE_OF_THE_ARCHMAGI);
+		
+		if(u.ualign.type != A_CHAOTIC){
+			expert_weapon_skill(P_BARE_HANDED_COMBAT);
+			u.umartial = TRUE;
+		} else {
+			expert_weapon_skill(P_ATTACK_SPELL);
+			expert_weapon_skill(P_ENCHANTMENT_SPELL);
+			expert_weapon_skill(P_ESCAPE_SPELL);
+			expert_weapon_skill(P_MATTER_SPELL);
+		}
 	} else if (Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)) {
 		if(!already_exists){
 			if (class_gift != STRANGE_OBJECT) {
@@ -1225,6 +1248,7 @@ gcrownu()
 					Helmet_on();
 				}
 			}
+			expert_weapon_skill(P_BEAST_MASTERY);
 			u.ugifts++;
 		}
 		if (obj && obj->oartifact == ART_CROWN_OF_THE_SAINT_KING)
@@ -1242,7 +1266,7 @@ gcrownu()
 			dropy(obj);
 			u.ugifts++;
 		}
-		unrestrict_weapon_skill(P_BOW);
+		expert_weapon_skill(P_BOW);
 		if (obj && obj->oartifact == ART_YOICHI_NO_YUMI)
 			discover_artifact(ART_YOICHI_NO_YUMI);
     } else {
@@ -1256,7 +1280,7 @@ gcrownu()
 				if (obj && obj->oartifact == ART_EXCALIBUR) u.ugifts++;
 			}
 			/* acquire Excalibur's skill regardless of weapon or gift */
-			unrestrict_weapon_skill(P_LONG_SWORD);
+			expert_weapon_skill(P_LONG_SWORD);
 			if (obj && obj->oartifact == ART_EXCALIBUR)
 				discover_artifact(ART_EXCALIBUR);
 			break;
@@ -1275,7 +1299,7 @@ gcrownu()
 				u.ugifts++;
 			}
 			/* acquire Vorpal Blade's skill regardless of weapon or gift */
-			unrestrict_weapon_skill(P_LONG_SWORD);
+			expert_weapon_skill(P_LONG_SWORD);
 			if (obj && obj->oartifact == ART_VORPAL_BLADE)
 				discover_artifact(ART_VORPAL_BLADE);
 			break;
@@ -1298,7 +1322,7 @@ gcrownu()
 				u.ugifts++;
 			}
 			/* acquire Stormbringer's skill regardless of weapon or gift */
-			unrestrict_weapon_skill(P_BROAD_SWORD);
+			expert_weapon_skill(P_BROAD_SWORD);
 			if (obj && obj->oartifact == ART_STORMBRINGER)
 				discover_artifact(ART_STORMBRINGER);
 			break;

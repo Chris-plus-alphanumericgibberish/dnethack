@@ -2048,6 +2048,21 @@ int skill;
     }
 }
 
+/*
+ * Change from restricted to unrestricted, allowing P_EXPERT as max.  This
+ * function may be called with with P_NONE.  Used in pray.c.
+ */
+void
+expert_weapon_skill(skill)
+int skill;
+{
+    if (skill < P_NUM_SKILLS && OLD_P_MAX_SKILL(skill) < P_EXPERT) {
+		if(OLD_P_SKILL(skill) == P_ISRESTRICTED) OLD_P_SKILL(skill) = P_UNSKILLED;
+		OLD_P_MAX_SKILL(skill) = P_EXPERT;
+		P_ADVANCE(skill) = practice_needed_to_advance(OLD_P_SKILL(skill)-1);
+    }
+}
+
 #endif /* OVL1 */
 #ifdef OVLB
 
