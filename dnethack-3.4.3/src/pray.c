@@ -1943,9 +1943,15 @@ dosacrifice()
 
 		if (your_race(ptr) && u.ualign.type != A_VOID) {
 			if (is_demon(youmonst.data)) {
-			You("find the idea very satisfying.");
-			exercise(A_WIS, TRUE);
+				You("find the idea very satisfying.");
+				exercise(A_WIS, TRUE);
 			} else if (u.ualign.type != A_CHAOTIC) {
+				if(u.ualign.record >= rnd(u.ulevel) || (u.ualign.record == ALIGNLIM && u.ualign.sins <= u.ulevel)){
+					char buf[BUFSZ];
+					Sprintf(buf, "You feel a deep sense of kinship to %s!  Sacrifice %s anyway?",
+						the(xname(otmp)), (otmp->quan == 1L) ? "it" : "one");
+					if (yn_function(buf,ynchars,'n')=='n') return 0;
+				}
 				pline("You'll regret this infamous offense!");
 				exercise(A_WIS, FALSE);
 			}

@@ -976,6 +976,14 @@ as_extra_healing:
 		break;
 	case POT_BLOOD:
 		unkn++;
+		if(your_race(&mons[otmp->corpsenm]) && !(Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || Race_if(PM_VAMPIRE)) 
+			&& (u.ualign.record >= rnd(u.ulevel) || (u.ualign.record == ALIGNLIM && u.ualign.sins <= u.ulevel))
+		){
+			char buf[BUFSZ];
+			Sprintf(buf, "You feel a deep sense of kinship to %s!  Drink %s anyway?",
+				the(xname(otmp)), (otmp->quan == 1L) ? "it" : "one");
+			if (yn_function(buf,ynchars,'n')=='n') return 0;
+		}
 		if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) || carnivorous(youracedata)) {
 			pline("It smells like %s%s.", 
 					!type_is_pname(&mons[otmp->corpsenm]) ||
