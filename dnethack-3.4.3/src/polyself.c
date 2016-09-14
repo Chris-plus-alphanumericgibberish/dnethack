@@ -1444,7 +1444,9 @@ int part;
 	    if (mptr->mlet == S_DOG || mptr->mlet == S_FELINE ||
 		    mptr->mlet == S_YETI)
 		return part == HAND ? "paw" : "pawed";
-		if(maybe_polyd(youmonst.data == &mons[PM_HALF_DRAGON], Race_if(PM_HALF_DRAGON)))
+		if(mon == &youmonst && maybe_polyd(youmonst.data == &mons[PM_HALF_DRAGON], Race_if(PM_HALF_DRAGON)))
+			return part == HAND ? "claw" : "clawed";
+		if(mon->data == &mons[PM_HALF_DRAGON])
 			return part == HAND ? "claw" : "clawed";
 	    if (humanoid(mptr) && attacktype(mptr, AT_CLAW) &&
 		    !index(not_claws, mptr->mlet) &&
