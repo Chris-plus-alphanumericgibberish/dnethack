@@ -897,7 +897,7 @@ asGuardian:
 		if(!(mtmp->mspec_used || mtmp->mcan) && otmp){
 			if(canspotmon(mtmp)) pline("%s raises %s %s to %s lips and it becomes a trumpet.", Monnam(mtmp), hisherits(mtmp), xname(otmp), hisherits(mtmp));
 			pline("%s blows %s trumpet.", Monnam(mtmp), hisherits(mtmp));
-			mtmp->mspec_used = 10;
+			mtmp->mspec_used = 7;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 				if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 					if(tmpm->mpeaceful != mtmp->mpeaceful){
