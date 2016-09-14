@@ -938,11 +938,27 @@ register struct monst *mtmp;
 		(void) rloc(mtmp, FALSE);
 		return(0);
 	}
+	
+	if(mdat == &mons[PM_OONA] && !mtmp->mspec_used){
+		nearby = FALSE;
+		struct monst *tmpm;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+				if ( mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 4 && resists_oona(tmpm)) {
+					nearby=TRUE;
+				}
+			}
+		}
+		if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && Oona_resistance){
+			nearby=TRUE;
+		}
+	}
+	
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
 		(mdat->msound == MS_JUBJUB && !rn2(10) && (!um_dist(mtmp->mx, mtmp->my, 3) || !rn2(10))) ||
 		(mdat->msound == MS_TRUMPET && !rn2(10) && !um_dist(mtmp->mx, mtmp->my, 3)) ||
 		(mdat->msound == MS_DREAD && !rn2(4)) ||
-		(mdat->msound == MS_OONA && !rn2(6)) ||
+		(mdat->msound == MS_OONA && (nearby || !rn2(6))) ||
 		(mdat->msound == MS_SONG && !rn2(6)) ||
 		(mdat == &mons[PM_LAMASHTU] && !rn2(7))
 	) m_respond(mtmp);

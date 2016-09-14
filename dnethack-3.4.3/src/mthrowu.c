@@ -1175,7 +1175,7 @@ struct monst *mtmp;
 			attacktype(mtmp->data, AT_LNCK)
 		)
 	){
-	    return mtmp2;
+	    if(!(mtmp->data == &mons[PM_OONA] && resists_oona(mtmp2))) return mtmp2;
 	}
 	
 #if 0
@@ -1191,7 +1191,7 @@ struct monst *mtmp;
 			attacktype(mtmp->data, AT_LRCH) ||
 			attacktype(mtmp->data, AT_LNCK) )
 		) {
-        	return &youmonst;  /* kludge - attack the player first
+        	if(!(mtmp->data == &mons[PM_OONA] && Oona_resistance)) return &youmonst;  /* kludge - attack the player first
 				      if possible */
 		}
 
@@ -1211,7 +1211,7 @@ struct monst *mtmp;
 		origdir = -1;
 
     	if (!mtmp->mpeaceful && !conflicted && lined_up(mtmp)) {
-        	return &youmonst;  /* kludge - attack the player first
+        	if(!(mtmp->data == &mons[PM_OONA] && Oona_resistance)) return &youmonst;  /* kludge - attack the player first
 				      if possible */
 		}
     }
@@ -1246,11 +1246,13 @@ struct monst *mtmp;
 	    {
 	        /* i > 0 ensures this is not a close range attack */
 	        if (mtmp->mtame && !mat->mtame &&
-		    acceptable_pet_target(mtmp, mat, TRUE) && i > 0) {
-				if ((!oldmret) ||
+				acceptable_pet_target(mtmp, mat, TRUE) && i > 0
+			) {
+				if (((!oldmret) ||
 					(monstr[monsndx(mat->data)] >
-				 monstr[monsndx(oldmret->data)]))
-					mret = mat;
+					monstr[monsndx(oldmret->data)])
+					) && !(mtmp->data == &mons[PM_OONA] && resists_oona(mat))
+				) mret = mat;
 			}
 			else if ((mm_aggression(mtmp, mat) & ALLOW_M)
 				|| conflicted)
@@ -1267,9 +1269,11 @@ struct monst *mtmp;
 				if ((conflicted ||
 					(!(mtmp->mtame && mat->mtame) || !rn2(5))) &&
 				i > 0) {
-					if ((!oldmret) ||
+					if (((!oldmret) ||
 						(monstr[monsndx(mat->data)] >
-					 monstr[monsndx(oldmret->data)]))
+						monstr[monsndx(oldmret->data)])
+						) && !(mtmp->data == &mons[PM_OONA] && resists_oona(mat))
+					)
 						mret = mat;
 				}
 			}

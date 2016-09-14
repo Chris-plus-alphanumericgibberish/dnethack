@@ -6643,7 +6643,7 @@ is a red right hand
     MON("Oona", S_CHA_ANGEL,// /*Needs tile*/
 	LVL(20, 9, -13, 77, 20), (G_NOCORPSE|G_NOGEN|G_UNIQ), //
 	A(ATTK(AT_WEAP, AD_PHYS, 4, 8), ATTK(AT_WEAP, AD_PHYS, 4, 8),
-	  ATTK(AT_MAGC, AD_OONA, 10,8), ATTK(AT_NONE, AD_OONA, 20, 8), /* The AD_ type of attack 3 is replaced with oona's energy type */
+	  ATTK(AT_MAGC, AD_OONA, 10,8), ATTK(AT_NONE, AD_OONA, 20, 8),
 	  NO_ATTK, NO_ATTK),
 	SIZ(WT_ELF, 350, 0, MS_OONA, MZ_HUMAN), MR_STONE|MR_DISINT|MR_FIRE|MR_ELEC|MR_COLD|MR_DRAIN|MR_SLEEP, MR_SLEEP,
 	MM_BREATHLESS|MM_AMPHIBIOUS /*MM*/, MT_OMNIVORE /*MT*/,

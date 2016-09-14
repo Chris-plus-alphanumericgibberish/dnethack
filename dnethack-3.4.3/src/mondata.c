@@ -116,6 +116,18 @@ poly_when_stoned(ptr)
 }
 
 boolean
+resists_oona(mon)
+	struct monst *mon;
+{
+	switch(u.oonaenergy){
+		case AD_ELEC: return resists_elec(mon);
+		case AD_FIRE: return resists_fire(mon);
+		case AD_COLD: return resists_cold(mon);
+		default: return FALSE;
+	}
+}
+
+boolean
 resists_fire(mon)
 	struct monst *mon;
 {

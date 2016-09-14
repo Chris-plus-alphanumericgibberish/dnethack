@@ -1327,6 +1327,7 @@ E boolean FDECL(attacktype, (struct permonst *,int));
 E int FDECL(attackindex, (struct permonst *,int,int));
 E boolean FDECL(poly_when_stoned, (struct permonst *));
 E boolean FDECL(resists_drli, (struct monst *));
+E boolean FDECL(resists_oona, (struct monst *));
 E boolean FDECL(resists_fire, (struct monst *));
 E boolean FDECL(resists_cold, (struct monst *));
 E boolean FDECL(resists_sleep, (struct monst *));
