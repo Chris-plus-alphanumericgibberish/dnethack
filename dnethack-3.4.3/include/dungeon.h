@@ -145,7 +145,14 @@ typedef struct branch {
 
 #define Is_hell1(x)			(on_level(x, &hell1_level))
 #define Is_bael_level(x)	(on_level(x, &hell1_level) && dungeon_topology.hell1_variant == BAEL_LEVEL)
+#define Is_dis_level(x)		(on_level(x, &hell1_level) && dungeon_topology.hell1_variant == DISPATER_LEVEL)
+#define Is_mammon_level(x)	(on_level(x, &hell1_level) && dungeon_topology.hell1_variant == MAMMON_LEVEL)
+#define Is_belial_level(x)	(on_level(x, &hell1_level) && dungeon_topology.hell1_variant == BELIAL_LEVEL)
 #define Is_hell2(x)			(on_level(x, &hell2_level))
+#define Is_leviathan_level(x)	(on_level(x, &hell2_level) && dungeon_topology.hell1_variant == LEVIATHAN_LEVEL)
+#define Is_lilith_level(x)		(on_level(x, &hell2_level) && dungeon_topology.hell1_variant == LILITH_LEVEL)
+#define Is_baalzebub_level(x)	(on_level(x, &hell2_level) && dungeon_topology.hell1_variant == BAALZEBUB_LEVEL)
+#define Is_mephisto_level(x)	(on_level(x, &hell2_level) && dungeon_topology.hell1_variant == MEPHISTOPHELES_LEVEL)
 #define Is_hell3(x)			(on_level(x, &hell3_level))
 #define Is_asmo_level(x)	(on_level(x, &hell3_level))
 
