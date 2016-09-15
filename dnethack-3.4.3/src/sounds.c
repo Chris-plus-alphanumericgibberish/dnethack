@@ -4635,6 +4635,8 @@ gnosisspirit(seal_id)
 	int bindingPeriod = 5, i, seal_index = (seal_id-FIRST_SEAL);
 	long new_seal = (0x1L<<seal_index);
 	
+	if(u.spirit[GPREM_SPIRIT] != 0L) unbind(u.spirit[GPREM_SPIRIT], FALSE);
+	
 	if(new_seal&int_spirits) u.intSpirits++;
 	else if(new_seal&wis_spirits) u.wisSpirits++;
 	
