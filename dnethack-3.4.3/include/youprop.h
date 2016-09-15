@@ -107,6 +107,10 @@
 					) \
 				 ) || u.sealsActive&SEAL_IRIS)
 
+#define HStrangled		u.uprops[STRANGLED].intrinsic
+#define EStrangled		u.uprops[STRANGLED].extrinsic
+#define Strangled		(HStrangled || EStrangled)
+
 /* Intrinsics only */
 #define Invulnerable		u.uprops[INVULNERABLE].intrinsic    /* [Tom] */
 
@@ -145,7 +149,6 @@
 
 #define Sick			u.uprops[SICK].intrinsic
 #define Stoned			u.uprops[STONED].intrinsic
-#define Strangled		u.uprops[STRANGLED].intrinsic
 #define Vomiting		u.uprops[VOMITING].intrinsic
 #define Glib			u.uprops[GLIB].intrinsic
 #define Slimed			u.uprops[SLIMED].intrinsic	/* [Tom] */

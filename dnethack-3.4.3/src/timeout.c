@@ -118,11 +118,11 @@ static NEARDATA const char * const choke_texts2[] = {
 STATIC_OVL void
 choke_dialogue()
 {
-	register long i = (Strangled & TIMEOUT);
+	register long i = u.divetimer;
 
 	if(i > 0 && i <= SIZE(choke_texts)) {
-	    if (Breathless || !rn2(50))
-		pline(choke_texts2[SIZE(choke_texts2) - i], body_part(NECK));
+	    if (!rn2(10))
+			pline(choke_texts2[SIZE(choke_texts2) - i], body_part(NECK));
 	    else {
 		const char *str = choke_texts[SIZE(choke_texts)-i];
 
@@ -202,12 +202,13 @@ boolean forced;
 		if(flags.run) nomul(0, NULL);
 		stop_occupation();
 	}
-	if(u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
 	if(forced && gnosis){
 		You("are shaken to your core!");
 		return;
 	}
+	
+	if(forced && u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
 	
 	if(spir == SEAL_ORTHOS && Hallucination) pline("Orthos has been eaten by a grue!");
 	
@@ -457,12 +458,21 @@ nh_timeout()
 			}
 		}
 	}
-	if((u.usubwater || is_3dwater(u.ux,u.uy)) && u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){
+	if(Strangled){
+		if(Breathless);//Do nothing
+		else if(u.divetimer > 1) u.divetimer--;
+		else {
+			killer_format = KILLED_BY;
+			killer = (u.uburied) ? "suffocation" : "strangulation";
+			done(DIED);
+		}
+	} else if((u.usubwater || is_3dwater(u.ux,u.uy)) && u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){
 		u.divetimer--;
 		if(u.divetimer==3) You("are running short on air.");
 		if(u.divetimer==1) You("are running out of air!");
-	} else if (!u.usubwater && u.divetimer < (ACURR(A_CON))/3 && !u.ustuck){ /* limited duration dive, 2 turns to 6 turns naturally, 8 turns with magic */ 
-		u.divetimer++;
+	} else if (!u.usubwater && !u.ustuck){ /* limited duration dive, 2 turns to 6 turns naturally, 8 turns with magic */ 
+		if(u.divetimer < (ACURR(A_CON))/3) u.divetimer++;
+		else if(u.divetimer > (ACURR(A_CON))/3) u.divetimer--;
 	}
 
 	if(u.divetimer<=0){
@@ -638,10 +648,8 @@ nh_timeout()
 			(void) float_down(I_SPECIAL|TIMEOUT, 0L);
 			break;
 		case STRANGLED:
-			killer_format = KILLED_BY;
-			killer = (u.uburied) ? "suffocation" : "strangulation";
-			done(DIED);
-			break;
+			if(!Breathless && !Strangled) Your("throat opens up!");
+		break;
 		case FUMBLING:
 			/* call this only when a move took place.  */
 			/* otherwise handle fumbling msgs locally. */

@@ -771,7 +771,6 @@ Amulet_on()
 	case AMULET_OF_STRANGULATION:
 		makeknown(AMULET_OF_STRANGULATION);
 		pline("It constricts your throat!");
-		Strangled = 6;
 		break;
 	case AMULET_OF_RESTFUL_SLEEP:
 		HSleeping = rnd(100);
@@ -816,7 +815,6 @@ Amulet_off()
 	case AMULET_OF_STRANGULATION:
 		if (Strangled) {
 			You("can breathe more easily!");
-			Strangled = 0;
 		}
 		break;
 	case AMULET_OF_RESTFUL_SLEEP:

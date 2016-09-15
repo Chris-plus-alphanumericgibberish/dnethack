@@ -2260,7 +2260,7 @@ struct obj *otmp;
 	    if (u.uhp <= 0) return; /* died from sink fall */
 	}
 	otmp->known = otmp->dknown = 1; /* by taste */
-	if (otmp->otyp == AMULET_OF_DRAIN_RESISTANCE || !rn2(otmp->oclass == RING_CLASS ? 3 : 5)) {
+	if (otmp->otyp == AMULET_OF_STRANGULATION || otmp->otyp == AMULET_OF_DRAIN_RESISTANCE || !rn2(otmp->oclass == RING_CLASS ? 3 : 5)) {
 	  switch (otmp->otyp) {
 	    default:
 	        if (!objects[typ].oc_oprop) break; /* should never happen */
@@ -2362,13 +2362,17 @@ struct obj *otmp;
 		}
 		break;
 	    case AMULET_OF_STRANGULATION: /* bad idea! */
-		/* no message--this gives no permanent effect */
-		if(!Race_if(PM_INCANTIFIER)) choke(otmp);
+		if(!Race_if(PM_INCANTIFIER)){
+			Your("throat swells shut!");
+			HStrangled = 6; //If you can survive without air for six turns, you live.
+		}
 		break;
 	    case AMULET_OF_RESTFUL_SLEEP: /* another bad idea! */
-		if (!(HSleeping & FROMOUTSIDE))
-		    accessory_has_effect(otmp);
-		HSleeping = FROMOUTSIDE | rnd(100);
+		if(!Race_if(PM_INCANTIFIER)){
+			if (!(HSleeping & FROMOUTSIDE))
+				accessory_has_effect(otmp);
+			HSleeping = FROMOUTSIDE | rnd(100);
+		}
 		break;
 	    case AMULET_OF_DRAIN_RESISTANCE:
 #ifdef DEBUG

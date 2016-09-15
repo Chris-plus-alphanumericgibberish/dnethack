@@ -310,11 +310,14 @@ register int trouble;
 		    break;
 	    case TROUBLE_STRANGLED:
 		    if (uamul && uamul->otyp == AMULET_OF_STRANGULATION) {
-			Your("amulet vanishes!");
-			useup(uamul);
+				Your("amulet vanishes!");
+				useup(uamul);
 		    }
-		    You("can breathe again.");
-		    Strangled = 0;
+			if(HStrangled){
+				HStrangled = 0;
+				Your("throat opens up!");
+			}
+			if(!Strangled) You("can breathe again.");
 		    flags.botl = 1;
 		    break;
 	    case TROUBLE_LAVA:
