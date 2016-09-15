@@ -446,11 +446,15 @@ dig()
 			} else {
 				struct obj *otmp;
 				if(!is_lightsaber(digitem)){
-					if(!rn2(20)){
+					if(!Is_belial_level(&u.uz) && !rn2(20)){
 						otmp = mksobj_at(BOULDER, dpx, dpy, FALSE, FALSE);
 						otmp->owt = weight(otmp);
 					} else {
-						otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
+						if(Is_belial_level(&u.uz)){
+							otmp = mksobj_at(DROVEN_DAGGER, dpx, dpy, FALSE, FALSE);
+						} else {
+							otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
+						}
 						otmp->quan = 20L+rnd(20);
 						otmp->owt = weight(otmp);
 					}
@@ -475,7 +479,11 @@ dig()
 			    lev->doormask = D_NODOOR;
 			}
 			if(!is_lightsaber(digitem)){
-				otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
+				if(Is_belial_level(&u.uz)){
+					otmp = mksobj_at(DROVEN_DAGGER, dpx, dpy, FALSE, FALSE);
+				} else {
+					otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
+				}
 				otmp->quan = 20L+rnd(20);
 				otmp->owt = weight(otmp);
 			}
@@ -1852,7 +1860,11 @@ register struct monst *mtmp;
 		here->typ = DOOR;
 		here->doormask = D_NODOOR;
 	    }
-		otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
+		if(Is_belial_level(&u.uz)){
+			otmp = mksobj_at(DROVEN_DAGGER, mtmp->mx, mtmp->my, FALSE, FALSE);
+		} else {
+			otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
+		}
 		otmp->quan = 20L+rnd(20);
 		otmp->owt = weight(otmp);
 	} else if (IS_TREE(here->typ)) {
@@ -1865,9 +1877,13 @@ register struct monst *mtmp;
 		}
 	} else {
 	    here->typ = CORR;
-	    if (!rn2(20)) mksobj_at(BOULDER, mtmp->mx, mtmp->my, TRUE, FALSE);
+	    if (!Is_belial_level(&u.uz) && !rn2(20)) mksobj_at(BOULDER, mtmp->mx, mtmp->my, TRUE, FALSE);
 		else {
-			otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
+			if(Is_belial_level(&u.uz)){
+				otmp = mksobj_at(DROVEN_DAGGER, mtmp->mx, mtmp->my, FALSE, FALSE);
+			} else {
+				otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
+			}
 			otmp->quan = 20L+rnd(20);
 			otmp->owt = weight(otmp);
 		}
