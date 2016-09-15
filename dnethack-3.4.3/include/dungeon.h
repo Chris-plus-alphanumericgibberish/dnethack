@@ -259,7 +259,12 @@ struct linfo {
 					  (x) == AM_NONE ? MSA_UNALI : \
 					  (x) == AM_VOID ? MSA_VOID : \
 					  MSA_MULTI)
-#define Msa2amask(x) ((x) == 3 ? 4 : (x))
+#define Msa2amask(x) ((x) == MSA_LAWFUL ? AM_LAWFUL : \
+					  (x) == MSA_NEUTRAL ? AM_NEUTRAL : \
+					  (x) == MSA_CHAOTIC ? AM_CHAOTIC : \
+					  (x) == MSA_UNALI ? AM_NONE : \
+					  (x) == MSA_VOID ? AM_VOID : \
+					  MSA_MULTI)
 #define MSA_MULTI	0  /* multiple alignments */
 #define MSA_LAWFUL  1
 #define MSA_NEUTRAL 2
