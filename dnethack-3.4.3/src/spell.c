@@ -3022,21 +3022,24 @@ spiriteffects(power, atme)
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
 			You("speak an echo of the Last Word of creation.");
-			if(resists_drli(mon) || !(mon->data->geno & G_GENO) || resists_death(mon)){
+			if(mon->data == &mons[PM_DREAD_SERAPH]){
+				pline("Its voice harmonizes with your own!");
+				unbind(SEAL_TENEBROUS, TRUE);
+			} else if(resists_drli(mon) || !(mon->data->geno & G_GENO) || resists_death(mon)){
 				int nlev;
 				d_level tolevel;
 				int migrate_typ = MIGR_RANDOM;
 				if(mon->data->geno & G_UNIQ || mon_has_amulet(mon)){
 					if (mon_has_amulet(mon) || In_endgame(&u.uz)) {
 						if (canspotmon(mon))
-						pline("%s seems very disoriented for a moment.",
+						pline("%s flickers for a moment.",
 							Monnam(mon));
 						return 0;
 					}
 					nlev = random_teleport_level();
 					if (nlev == depth(&u.uz)) {
 						if (canspotmon(mon))
-						pline("%s shudders for a moment.", Monnam(mon));
+						pline("%s flickers for a moment.", Monnam(mon));
 						return 0;
 					}
 					get_level(&tolevel, nlev);
