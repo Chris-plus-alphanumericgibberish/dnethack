@@ -475,7 +475,7 @@ NEARDATA struct permonst mons[] = {
     MON("beholder", S_EYE, //10
 	LVL(6, 3, 4, 50, -10), (G_GENO|G_HELL|1),
 	A(ATTK(AT_GAZE, AD_RGAZ, 4, 6), ATTK(AT_GAZE, AD_RGAZ, 4,6),
-	  ATTK(AT_NONE, AD_PLYS, 1, 10), 
+	  ATTK(AT_NONE, AD_PLYS, 3, 5), 
 	  AT_NONE, AT_NONE, AT_NONE),
 	SIZ(1000, 1000, 0, MS_SILENT, MZ_MEDIUM), MR_COLD|MR_FIRE|MR_ELEC, 0,//beholder meat has a special effect.
  	MM_FLY|MM_FLOAT|MM_BREATHLESS /*MM*/, MT_HOSTILE /*MT*/,
@@ -490,7 +490,7 @@ NEARDATA struct permonst mons[] = {
 	MA_MINION|MA_FEY /*MA*/,  MV_INFRAVISION|MV_NORMAL /*MV*/, CLR_CYAN),
     MON("eye of doom", S_EYE, //3 /*Needs tile*/
 	LVL(15, 12, -9,100, 0), (G_GENO|G_HELL|1),
-	A(ATTK(AT_GAZE, AD_STDY, 5, 8), ATTK(AT_NONE, AD_PLYS, 1,7),
+	A(ATTK(AT_GAZE, AD_STDY, 5, 8), ATTK(AT_NONE, AD_PLYS, 3,7),
 	  ATTK(AT_MAGC, AD_SPEL, 0, 0), NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(10, 10, 0, MS_SILENT, MZ_SMALL), 0, 0,
 	MM_FLY|MM_FLOAT|MM_AMPHIBIOUS /*MM*/, MT_HOSTILE|MT_NOTAKE /*MT*/,
