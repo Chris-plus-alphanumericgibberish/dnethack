@@ -260,7 +260,7 @@ register struct monst *mtmp;
 	}
 
 	/* Slight advantage given. */
-	if (is_dprince(mtmp->data) && mtmp->minvis) {
+	if ((is_dprince(mtmp->data) || is_dlord(mtmp->data)) && mtmp->minvis) {
 	    mtmp->minvis = mtmp->perminvis = 0;
 	    if (!Blind) pline("%s appears before you.", Amonnam(mtmp));
 	    newsym(mtmp->mx,mtmp->my);
