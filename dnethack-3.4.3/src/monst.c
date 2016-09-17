@@ -163,7 +163,7 @@ NEARDATA struct permonst mons[] = {
 	MM_AMORPHOUS|MM_BREATHLESS|MM_STATIONARY /*MM*/, MT_HOSTILE|MT_WANDER /*MT*/,
 	MB_NOLIMBS|MB_NOHEAD|MB_POIS|MB_NEUTER /*MB*/, 0 /*MG*/,
 	0 /*MA*/,  MV_NORMAL /*MV*/, CLR_YELLOW),
-    MON("quivering blob", S_BLOB,//6 /*Needs encyc entry*/
+    MON("quivering blob", S_BLOB,//6
 	LVL(5, 1, 8, 0, 0), (G_GENO|2),
 	A(ATTK(AT_TUCH, AD_PHYS, 1, 8),
 	  ATTK(AT_NONE, AD_PHYS, 1, 8),
@@ -367,7 +367,7 @@ NEARDATA struct permonst mons[] = {
 	MB_ANIMAL|MB_LONGHEAD|MB_NOHANDS|MB_STRONG|MB_TOSTY /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_ANIMAL|MA_DEMON /*MA*/,  MV_NORMAL /*MV*/, CLR_RED),
 //ifdef CHARON
-    MON("Cerberus", S_DOG,//15 //encyclopedia exists
+    MON("Cerberus", S_DOG,//15
 	LVL(13, 10, 2, 20, 7), (G_HELL|G_UNIQ|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 3, 6), ATTK(AT_BITE, AD_PHYS, 3, 6),
 	  ATTK(AT_BITE, AD_PHYS, 3, 6), NO_ATTK, NO_ATTK, NO_ATTK),
@@ -488,7 +488,7 @@ NEARDATA struct permonst mons[] = {
 	MM_FLY|MM_FLOAT|MM_BREATHLESS|MM_NOTONL|MM_FLEETFLEE /*MM*/, MT_STALK|MT_HOSTILE /*MT*/,
 	MB_STRONG|MB_UNSOLID|MB_NOEYES|MB_NOLIMBS|MB_NOHEAD /*MB*/, MG_INFRAVISIBLE|MG_NASTY|MG_REGEN|MG_HATESUNHOLY|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY /*MA*/,  MV_INFRAVISION|MV_NORMAL /*MV*/, CLR_CYAN),
-    MON("eye of doom", S_EYE, //3 /*Needs encyc entry*//*Needs tile*/
+    MON("eye of doom", S_EYE, //3 /*Needs tile*/
 	LVL(15, 12, -9,100, 0), (G_GENO|G_HELL|1),
 	A(ATTK(AT_GAZE, AD_STDY, 5, 8), ATTK(AT_NONE, AD_PLYS, 1,7),
 	  ATTK(AT_MAGC, AD_SPEL, 0, 0), NO_ATTK, NO_ATTK, NO_ATTK),
@@ -969,7 +969,7 @@ NEARDATA struct permonst mons[] = {
 	0 /*MM*/, MT_OMNIVORE|MT_HOSTILE|MT_MAGIC /*MT*/,
 	MB_HUMANOID|MB_POIS|MB_OVIPAROUS /*MB*/, MG_LORD /*MG*/,
 	MA_REPTILIAN /*MA*/,  MV_INFRAVISION|MV_NORMAL /*MV*/, HI_ZAP),
-    MON("winged kobold", S_KOBOLD,//4 /*Needs encyc entry*/
+    MON("winged kobold", S_KOBOLD,//4 /*Needs tile*/
 	LVL(5, 8, 0, 10, -4), (G_GENO|1),
 	A(ATTK(AT_WEAP, AD_PHYS, 2, 4),
 	  ATTK(AT_BREA, AD_HDRG, 2, 6), 
@@ -2082,7 +2082,7 @@ then fill new spaces with our spawn!
 	MA_MINION|MA_FEY /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS /*MV*/, CLR_BRIGHT_MAGENTA),
 	
 	/*Eladrin Lords and Ladies*/
-    MON("Gwynharwyf", S_CHA_ANGEL,// /*Needs tile*/
+    MON("Gwynharwyf", S_CHA_ANGEL,// /*Needs encyc entry*//*Needs tile*/
 	LVL(63, 24, -7, 30, -20), (G_PLANES|G_NOCORPSE|G_NOGEN|G_UNIQ),
 	A(ATTK(AT_WEAP, AD_PHYS, 4, 4), ATTK(AT_WEAP, AD_PHYS, 4, 4), 
 	  ATTK(AT_WEAP, AD_PHYS, 4, 4), ATTK(AT_WEAP, AD_PHYS, 4, 4), 
@@ -2092,7 +2092,7 @@ then fill new spaces with our spawn!
 	MM_FLY /*MM*/, MT_COLLECT|MT_OMNIVORE|MT_STALK|MT_WAITFORU|MT_BOLD /*MT*/,
 	MB_HUMANOID|MB_STRONG|MB_FEMALE /*MB*/, MG_PNAME|MG_INFRAVISIBLE|MG_NASTY|MG_LORD|MG_HATESUNHOLY|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS /*MV*/, HI_LORD),
-    MON("furious whirlwind", S_ELEMENTAL,//
+    MON("furious whirlwind", S_ELEMENTAL,// /*Needs encyc entry*/
 	LVL(63, 42, -7, 30, -20), (G_PLANES|G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_WEAP, AD_PHYS, 4, 4), ATTK(AT_WEAP, AD_PHYS, 4, 4),
 	  ATTK(AT_WEAP, AD_PHYS, 4, 4), ATTK(AT_WEAP, AD_PHYS, 4, 4), 
@@ -2102,7 +2102,7 @@ then fill new spaces with our spawn!
 	MM_FLY|MM_FLOAT /*MM*/, MT_COLLECT|MT_OMNIVORE|MT_STALK|MT_BOLD /*MT*/,
 	MB_NOEYES|MB_NOLIMBS|MB_NOHEAD|MB_UNSOLID|MB_STRONG|MB_FEMALE /*MB*/, MG_NASTY|MG_LORD|MG_HATESUNHOLY|MG_REGEN|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS /*MV*/, HI_LORD),
-    MON("Ascodel", S_CHA_ANGEL,// /*Needs tile*/
+    MON("Ascodel", S_CHA_ANGEL,// /*Needs encyc entry*//*Needs tile*/
 	LVL(66, 18, -4, 30, -1), (G_PLANES|G_NOCORPSE|G_NOGEN|G_UNIQ),
 	A(ATTK(AT_TUCH, AD_BLUD, 4, 4), ATTK(AT_TUCH, AD_BLUD, 4, 4),
 	  ATTK(AT_BITE, AD_VAMP, 1, 12),
@@ -2113,7 +2113,7 @@ then fill new spaces with our spawn!
 	MM_FLY /*MM*/, MT_COLLECT|MT_OMNIVORE|MT_STALK|MT_WAITFORU|MT_BOLD /*MT*/,
 	MB_HUMANOID|MB_STRONG|MB_MALE /*MB*/, MG_PNAME|MG_INFRAVISIBLE|MG_NASTY|MG_LORD|MG_HATESUNHOLY|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY|MA_VAMPIRE|MA_UNDEAD /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS|MV_BLOODSENSE /*MV*/, HI_LORD),
-    MON("bloody sunset", S_EYE,// /*Needs tile*/
+    MON("bloody sunset", S_EYE,// /*Needs encyc entry*//*Needs tile*/
 	LVL(66, 18, -4, 30, -1), (G_PLANES|G_NOCORPSE|G_NOGEN|G_UNIQ),
 	A(ATTK(AT_TUCH, AD_EFIR, 3, 12), ATTK(AT_TUCH, AD_EFIR, 3, 12),
 	  ATTK(AT_TUCH, AD_VAMP, 3, 12), ATTK(AT_TUCH, AD_VAMP, 3, 12),
@@ -2123,7 +2123,7 @@ then fill new spaces with our spawn!
 	MM_FLY|MM_FLOAT /*MM*/, MT_COLLECT|MT_OMNIVORE|MT_STALK /*MT*/,
 	MB_NOEYES|MB_NOLIMBS|MB_NOHEAD|MB_UNSOLID|MB_STRONG|MB_MALE /*MB*/, MG_NASTY|MG_LORD|MG_HATESUNHOLY|MG_REGEN|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY|MA_VAMPIRE|MA_UNDEAD /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS|MV_BLOODSENSE /*MV*/, HI_LORD),
-    MON("Faerinaal", S_CHA_ANGEL,//12 /*Needs tile*/
+    MON("Faerinaal", S_CHA_ANGEL,//12 /*Needs encyc entry*//*Needs tile*/
 	LVL(69, 16, -12, 45, -15), (G_PLANES|G_NOCORPSE|G_NOGEN|G_UNIQ),
 	A(ATTK(AT_TUCH, AD_STAR, 4, 8), ATTK(AT_TUCH, AD_STAR, 4, 8),
 	  ATTK(AT_GAZE, AD_STUN, 2,10), ATTK(AT_MAGC, AD_SPEL, 0, 6),
@@ -2133,7 +2133,7 @@ then fill new spaces with our spawn!
 	MM_FLY /*MM*/, MT_COLLECT|MT_OMNIVORE|MT_STALK /*MT*/,
 	MB_HUMANOID|MB_STRONG|MB_MALE /*MB*/, MG_PNAME|MG_NASTY|MG_LORD|MG_INFRAVISIBLE|MG_HATESUNHOLY|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS /*MV*/, HI_LORD),
-    MON("ball of gossamer sunlight", S_EYE, //10 /*Needs tile*/
+    MON("ball of gossamer sunlight", S_EYE, //10 /*Needs encyc entry*//*Needs tile*/
 	LVL(69, 20, -22, 45, -8), (G_PLANES|G_NOCORPSE|G_NOGEN|G_UNIQ),
 	A(ATTK(AT_TUCH, AD_WEBS, 3, 12), ATTK(AT_TUCH, AD_WEBS, 3, 12),
 		ATTK(AT_MAGC, AD_SLEE, 3, 12), ATTK(AT_NONE, AD_FIRE, 0, 10),
@@ -2142,7 +2142,7 @@ then fill new spaces with our spawn!
 	MM_FLY|MM_BREATHLESS /*MM*/, MT_STALK|MT_HOSTILE /*MT*/,
 	MB_UNSOLID|MB_NOEYES|MB_NOLIMBS|MB_NOHEAD|MB_STRONG|MB_MALE /*MB*/, MG_NASTY|MG_LORD|MG_INFRAVISIBLE|MG_REGEN|MG_HATESUNHOLY|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY /*MA*/,  MV_INFRAVISION|MV_NORMAL /*MV*/, CLR_BRIGHT_MAGENTA),
-    MON("Queen Mab", S_CHA_ANGEL,//?? /*Needs tile*/
+    MON("Queen Mab", S_CHA_ANGEL,//?? /*Needs encyc entry*//*Needs tile*/
 	LVL(81, 36, -7, 100, -20), (G_PLANES|G_NOCORPSE|G_NOGEN|G_UNIQ),
 	A(ATTK(AT_WEAP, AD_PHYS, 1, 1), ATTK(AT_TUCH, AD_STAR, 4, 8),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -2150,7 +2150,7 @@ then fill new spaces with our spawn!
 	MM_FLY /*MM*/, MT_STALK|MT_OMNIVORE|MT_WAITFORU|MT_COLLECT /*MT*/,
 	MB_HUMANOID|MB_WINGS|MB_FEMALE /*MB*/, MG_PNAME|MG_NASTY|MG_PRINCE|MG_INFRAVISIBLE|MG_HATESUNHOLY|MG_NOPOLY /*MG*/,
 	MA_MINION|MA_FEY /*MA*/,  MV_SEE_INVIS|MV_CATSIGHT /*MV*/, HI_LORD),
-    MON("coterie of motes", S_LIGHT, //10 /*Needs tile*/
+    MON("coterie of motes", S_LIGHT, //10 /*Needs encyc entry*//*Needs tile*/
 	LVL(81, 36, -15, 100, -20), (G_PLANES|G_NOCORPSE|G_NOGEN|G_UNIQ),
 	A(ATTK(AT_TUCH, AD_STAR, 4, 8), ATTK(AT_TUCH, AD_STAR, 4, 8), 
 		ATTK(AT_GAZE, AD_STUN, 4,10), 
@@ -2293,7 +2293,7 @@ then fill new spaces with our spawn!
 	0 /*MM*/, MT_OMNIVORE /*MT*/,
 	MB_HUMANOID|MB_FEMALE|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE|MG_HATESIRON /*MG*/,
 	MA_ARACHNID|MA_DROW|MA_ELF /*MA*/,  MV_DARKSIGHT|MV_NORMAL /*MV*/, CLR_BLACK),
-    MON("drider", S_CENTAUR, /*Needs encyc entry*/
+    MON("drider", S_CENTAUR,
 	LVL(16, 15, 2, 10, -18), (G_GENO|1),
 	A(ATTK(AT_WEAP, AD_PHYS, 1,10), ATTK(AT_WEAP, AD_PHYS, 1,10),
 	  ATTK(AT_BITE, AD_DRST, 1, 1), ATTK(AT_KICK, AD_WEBS, 1, 1), 
@@ -2606,7 +2606,7 @@ then fill new spaces with our spawn!
 	MM_FLY /*MM*/, MT_WANDER|MT_ANIMAL|MT_STALK|MT_HOSTILE /*MT*/,
 	MB_NOEYES|MB_STRONG /*MB*/, 0 /*MG*/,
 	MA_ELEMENTAL /*MA*/,  MV_SEE_INVIS|MV_NORMAL /*MV*/, CLR_WHITE),
-    MON("dream quasielemental", S_ELEMENTAL,//9 /*Needs encyc entry*//*Needs tile*/
+    MON("dream quasielemental", S_ELEMENTAL,//9 /*Needs tile*/
 	LVL(8, 12, 3, 0, 0), (G_NOCORPSE|1),
 	A(ATTK(AT_CLAW, AD_SLEE, 4, 4),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
