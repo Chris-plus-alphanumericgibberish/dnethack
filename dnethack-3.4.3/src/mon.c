@@ -4164,7 +4164,11 @@ int mnum;
        be possible to wish for eggs of that unique monster; turn
        such into ordinary eggs rather than forbidding them outright */
     if (mnum == PM_SCORPIUS) mnum = PM_SCORPION;
-
+	else if(mnum == PM_ANCIENT_NAGA) mnum = rn2(PM_GUARDIAN_NAGA_HATCHLING - PM_RED_NAGA_HATCHLING + 1) + PM_RED_NAGA_HATCHLING;
+	else if(mnum == PM_SERPENT_MAN_OF_YOTH) mnum = rn2(PM_COBRA - PM_GARTER_SNAKE + 1) + PM_GARTER_SNAKE;
+	else if(mnum == PM_HUNTING_HORROR) mnum = PM_BABY_LONG_WORM;
+	else if(mnum == PM_SMAUG) mnum = PM_BABY_RED_DRAGON;
+	
     mnum = little_to_big(mnum, (boolean)rn2(2));
     /*
      * Queen bees lay killer bee eggs (usually), but killer bees don't
