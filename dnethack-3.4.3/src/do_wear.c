@@ -94,6 +94,7 @@ Boots_on()
     switch(uarmf->otyp) {
 	case LOW_BOOTS:
 	case IRON_SHOES:
+	case BRONZE_BOOTS:
 	case HIGH_BOOTS:
 	case PLASTEEL_BOOTS:
 	case CRYSTAL_BOOTS:
@@ -179,6 +180,7 @@ Boots_off()
 		break;
 	case LOW_BOOTS:
 	case IRON_SHOES:
+	case BRONZE_BOOTS:
 	case HIGH_BOOTS:
 	case PLASTEEL_BOOTS:
 	case CRYSTAL_BOOTS:
@@ -335,6 +337,7 @@ Helmet_on()
 	case SEDGE_HAT:
 	case WAR_HAT:
 	case ELVEN_HELM:
+	case BRONZE_HELM:
 	case LEATHER_HELM:
 	case HIGH_ELVEN_HELM:
 	case DWARVISH_IRON_HELM:
@@ -410,6 +413,7 @@ Helmet_off()
 	case SEDGE_HAT:
 	case WAR_HAT:
 	case ELVEN_HELM:
+	case BRONZE_HELM:
 	case LEATHER_HELM:
 	case HIGH_ELVEN_HELM:
 	case DWARVISH_IRON_HELM:
@@ -464,6 +468,8 @@ Gloves_on()
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
+	case IRON_GAUNTLETS:
+	case BRONZE_GAUNTLETS:
 	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:
 	case ORIHALCYON_GAUNTLETS:
@@ -495,6 +501,8 @@ Gloves_off()
     switch(uarmg->otyp) {
 	case LEATHER_GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
+	case IRON_GAUNTLETS:
+	case BRONZE_GAUNTLETS:
 	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:
 	case ORIHALCYON_GAUNTLETS:
