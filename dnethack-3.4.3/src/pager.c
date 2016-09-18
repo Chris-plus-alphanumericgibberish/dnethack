@@ -13,7 +13,7 @@
 
 STATIC_DCL boolean FDECL(is_swallow_sym, (int));
 STATIC_DCL int FDECL(append_str, (char *, const char *));
-STATIC_DCL struct permonst * FDECL(lookat, (int, int, char *, char *));
+STATIC_DCL struct permonst * FDECL(lookat, (int, int, char *, char *, char *));
 STATIC_DCL void FDECL(checkfile,
 		      (char *,struct permonst *,BOOLEAN_P,BOOLEAN_P));
 STATIC_DCL int FDECL(do_look, (BOOLEAN_P));
@@ -58,15 +58,15 @@ append_str(buf, new_str)
  * If not hallucinating and the glyph is a monster, also monster data.
  */
 STATIC_OVL struct permonst *
-lookat(x, y, buf, monbuf)
+lookat(x, y, buf, monbuf, shapebuff)
     int x, y;
-    char *buf, *monbuf;
+    char *buf, *monbuf, *shapebuff;
 {
     register struct monst *mtmp = (struct monst *) 0;
     struct permonst *pm = (struct permonst *) 0;
     int glyph;
 
-    buf[0] = monbuf[0] = 0;
+    buf[0] = monbuf[0] = shapebuff[0] = 0;
     glyph = glyph_at(x,y);
     if (u.ux == x && u.uy == y && senseself()) {
 	char race[QBUFSZ];
@@ -203,7 +203,7 @@ lookat(x, y, buf, monbuf)
 		    ways_seen++;
 		if (MATCH_WARN_OF_MON(mtmp))
 		    ways_seen++;
-
+		
 		if (ways_seen > 1 || !normal) {
 		    if (normal) {
 			Strcat(monbuf, "normal vision");
@@ -300,6 +300,24 @@ lookat(x, y, buf, monbuf)
 			}
 		}
 	    }
+		if(mtmp->data->msize == MZ_TINY) Sprintf(shapebuff, "tiny");
+		else if(mtmp->data->msize == MZ_SMALL) Sprintf(shapebuff, "small");
+		else if(mtmp->data->msize == MZ_HUMAN) Sprintf(shapebuff, "human-sized");
+		else if(mtmp->data->msize == MZ_LARGE) Sprintf(shapebuff, "large");
+		else if(mtmp->data->msize == MZ_HUGE) Sprintf(shapebuff, "huge");
+		else if(mtmp->data->msize == MZ_GIGANTIC) Sprintf(shapebuff, "gigantic");
+		else Sprintf(shapebuff, "odd-sized ");
+		
+		if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGHEAD) Strcat(shapebuff, ", snouted");
+		else if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGNECK) Strcat(shapebuff, ", long-necked");
+		
+		if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_ANIMAL) Strcat(shapebuff, " animal");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_SLITHY) Strcat(shapebuff, " serpentine");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_HUMANOID) Strcat(shapebuff, " humanoid");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_ANIMAL)) Strcat(shapebuff, " centauroid");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY)) Strcat(shapebuff, " snake-legged");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY)) Strcat(shapebuff, " snake-backed");
+		else Strcat(shapebuff, " thing");
 	}
     }
     else if (glyph_is_object(glyph)) {
@@ -1195,20 +1213,30 @@ do_look(quick)
 	    } else if (found > 1 || need_to_look) {
 
 		char monbuf[BUFSZ];
+		char shapebuf[BUFSZ];
 		char temp_buf[BUFSZ];
 
-		pm = lookat(cc.x, cc.y, look_buf, monbuf);
+		pm = lookat(cc.x, cc.y, look_buf, monbuf, shapebuf);
 		firstmatch = look_buf;
 		if (*firstmatch) {
-		    Sprintf(temp_buf, " (%s)", firstmatch);
-		    (void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
-		    found = 1;	/* we have something to look up */
+			if(shapebuf[0]){
+				Sprintf(temp_buf, " (%s", firstmatch);
+				(void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
+				Sprintf(temp_buf, ", a %s)", shapebuf);
+				(void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
+				found = 1;	/* we have something to look up */
+			}
+			else {
+				Sprintf(temp_buf, " (%s)", firstmatch);
+				(void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
+				found = 1;	/* we have something to look up */
+			}
 		}
 		if (monbuf[0]) {
 		    Sprintf(temp_buf, " [seen: %s]", monbuf);
 		    (void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		}
-	    }
+		}
 	}
 
 	/* Finally, print out our explanation. */
