@@ -1006,6 +1006,7 @@ int distance;
 				mtmp->mspec_used = 0;
 				mtmp->mcrazed = 0;
 				if(!mtmp->isminion && EDOG(mtmp)->apport < 10) EDOG(mtmp)->apport++;
+				if(mon->permspeed == 0) mon_adjust_speed(mtmp, 1, (struct obj *) 0);
 			case P_SKILLED:
 				if(!mtmp->mnotlaugh && mtmp->mlaughing){
 					mtmp->mnotlaugh = 1;
@@ -1029,6 +1030,7 @@ int distance;
 				mtmp->msleeping = 0;
 				mtmp->mflee = 0;
 				mtmp->mfleetim = 0;
+				if(mon->permspeed == MSLOW) mon_adjust_speed(mtmp, 1, (struct obj *) 0);
 			}
 			mnexto(mtmp);
 			if (mintrap(mtmp) == 2) change_luck(-1);
