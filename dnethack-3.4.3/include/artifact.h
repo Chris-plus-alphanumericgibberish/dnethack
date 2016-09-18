@@ -193,22 +193,24 @@
 #define COMMAND_E_SPEAR			14
 #define COMMAND_E_LANCE			15
 
-#define COMMAND_LADDER			16
-#define COMMAND_CLAIRVOYANCE	17
-#define COMMAND_FEAR			18
-#define COMMAND_LIFE			19
-#define COMMAND_KNEEL			20
+#define COMMAND_SCIMITAR		16
+#define COMMAND_WHIP			17
 
-#define COMMAND_SCIMITAR		21
-#define COMMAND_WHIP			22
-#define COMMAND_STRIKE			23
+#define COMMAND_SABER			18
+#define COMMAND_RING			19
+#define COMMAND_ARM				20
+#define COMMAND_RAY				21
+#define COMMAND_BFG				22
+#define COMMAND_ANNULUS			23
 
-#define COMMAND_SABER			24
-#define COMMAND_RING			25
-#define COMMAND_ARM				26
-#define COMMAND_RAY				27
-#define COMMAND_BFG				28
-#define COMMAND_ANNULUS			29
+#define COMMAND_LADDER			24
+#define COMMAND_CLAIRVOYANCE	25
+#define COMMAND_FEAR			26
+#define COMMAND_LIFE			27
+#define COMMAND_KNEEL			28
+
+#define COMMAND_STRIKE			29
+
 #define COMMAND_BELL			30
 #define COMMAND_BULLETS			31
 #define COMMAND_ROCKETS			32
