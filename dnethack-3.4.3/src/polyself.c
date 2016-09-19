@@ -617,7 +617,7 @@ int	mntmp;
 		pline(use_thec,monsterc,"spin a web");
 	    if (u.umonnum == PM_GREMLIN)
 		pline(use_thec,monsterc,"multiply in a fountain");
-	    if (is_unicorn(youmonst.data))
+	    if (is_unicorn(youmonst.data) || youmonst.data == &mons[PM_KI_RIN])
 		pline(use_thec,monsterc,"use your horn");
 	    if (is_mind_flayer(youmonst.data))
 		pline(use_thec,monsterc,"emit a mental blast");

@@ -273,15 +273,15 @@ struct monst *mtmp;
 	 * silly trying to use the same cursed horn round after round
 	 */
 	if (mtmp->mconf || mtmp->mstun || !mtmp->mcansee) {
-	    if (!is_unicorn(mtmp->data) && !nohands(mtmp->data)) {
-		for(obj = mtmp->minvent; obj; obj = obj->nobj)
-		    if (obj->otyp == UNICORN_HORN && !obj->cursed)
-			break;
+	    if (!(is_unicorn(mtmp->data) || mtmp->data == &mons[PM_KI_RIN]) && !nohands(mtmp->data)) {
+			for(obj = mtmp->minvent; obj; obj = obj->nobj)
+				if (obj->otyp == UNICORN_HORN && !obj->cursed)
+				break;
 	    }
-	    if (obj || is_unicorn(mtmp->data)) {
-		m.defensive = obj;
-		m.has_defense = MUSE_UNICORN_HORN;
-		return TRUE;
+	    if (obj || is_unicorn(mtmp->data) || mtmp->data == &mons[PM_KI_RIN]) {
+			m.defensive = obj;
+			m.has_defense = MUSE_UNICORN_HORN;
+			return TRUE;
 	    }
 	}
 
