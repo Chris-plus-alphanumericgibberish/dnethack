@@ -3143,8 +3143,10 @@ drown()
 			u.usubwater = 1;
 		} else if(is_3dwater(u.ux-u.dx,u.uy-u.dy)){
 			u.usubwater = 1;
+		} else if(Amphibious && !Swimming){
+			u.usubwater = 1;
 		}
-		if (Amphibious && (u.usubwater || (!Swimming || is_3dwater(u.ux-u.dx,u.uy-u.dy)))){
+		if (Amphibious &&  u.usubwater){
 			if (flags.verbose)
 				if(!Swimming) pline("But you aren't drowning.");
 			if (!Is_waterlevel(&u.uz)) {
