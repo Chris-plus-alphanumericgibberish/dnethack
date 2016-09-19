@@ -3022,9 +3022,12 @@ spiriteffects(power, atme)
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
 			You("speak an echo of the Last Word of creation.");
-			if(mon->data == &mons[PM_DREAD_SERAPH]){
+			if(mon->data == &mons[PM_DREAD_SERAPH] || mon->data == &mons[PM_BLACK_FLOWER]){
 				pline("Its voice harmonizes with your own!");
 				unbind(SEAL_TENEBROUS, TRUE);
+			} else if(mon->data == &mons[PM_INTONER]){
+				pline("%s screams!", SheHeIt(mon));
+				newcham(mon, &mons[PM_BLACK_FLOWER], FALSE, FALSE);
 			} else if(resists_drli(mon) || !(mon->data->geno & G_GENO) || resists_death(mon)){
 				int nlev;
 				d_level tolevel;
@@ -3039,7 +3042,7 @@ spiriteffects(power, atme)
 					nlev = random_teleport_level();
 					if (nlev == depth(&u.uz)) {
 						if (canspotmon(mon))
-						pline("%s flickers for a moment.", Monnam(mon));
+							pline("%s flickers for a moment.", Monnam(mon));
 						return 0;
 					}
 					get_level(&tolevel, nlev);
