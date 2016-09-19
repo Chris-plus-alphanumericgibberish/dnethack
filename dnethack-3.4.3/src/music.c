@@ -674,7 +674,9 @@ play_song()
 	register struct monst *mtmp;
 	int distance;
 
-	distance = (P_SKILL(P_MUSICALIZE) - P_UNSKILLED + 1) * 9 + (u.ulevel/2);
+	distance = ((P_SKILL(P_MUSICALIZE)) + (u.ulevel/10) + 1);
+	if(P_SKILL(P_MUSICALIZE) > P_BASIC) distance += P_SKILL(P_MUSICALIZE) - P_BASIC;
+	distance = distance*distance + 1;
 
 	///* songs only have effect after the 1st turn */
 	//if (song_delay <= songs[song_played].level+2) 
