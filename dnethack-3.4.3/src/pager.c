@@ -300,23 +300,23 @@ lookat(x, y, buf, monbuf, shapebuff)
 			}
 		}
 	    }
-		if(mtmp->data->msize == MZ_TINY) Sprintf(shapebuff, "tiny");
-		else if(mtmp->data->msize == MZ_SMALL) Sprintf(shapebuff, "small");
-		else if(mtmp->data->msize == MZ_HUMAN) Sprintf(shapebuff, "human-sized");
-		else if(mtmp->data->msize == MZ_LARGE) Sprintf(shapebuff, "large");
-		else if(mtmp->data->msize == MZ_HUGE) Sprintf(shapebuff, "huge");
-		else if(mtmp->data->msize == MZ_GIGANTIC) Sprintf(shapebuff, "gigantic");
-		else Sprintf(shapebuff, "odd-sized ");
+		if(mtmp->data->msize == MZ_TINY) Sprintf(shapebuff, "a tiny");
+		else if(mtmp->data->msize == MZ_SMALL) Sprintf(shapebuff, "a small");
+		else if(mtmp->data->msize == MZ_HUMAN) Sprintf(shapebuff, "a human-sized");
+		else if(mtmp->data->msize == MZ_LARGE) Sprintf(shapebuff, "a large");
+		else if(mtmp->data->msize == MZ_HUGE) Sprintf(shapebuff, "a huge");
+		else if(mtmp->data->msize == MZ_GIGANTIC) Sprintf(shapebuff, "a gigantic");
+		else Sprintf(shapebuff, "an odd-sized");
 		
 		if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGHEAD) Strcat(shapebuff, ", snouted");
 		else if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGNECK) Strcat(shapebuff, ", long-necked");
 		
 		if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_ANIMAL) Strcat(shapebuff, " animal");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_SLITHY) Strcat(shapebuff, " serpentine");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_SLITHY) Strcat(shapebuff, " ophidian");
 		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_HUMANOID) Strcat(shapebuff, " humanoid");
 		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_ANIMAL)) Strcat(shapebuff, " centauroid");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY)) Strcat(shapebuff, " snake-legged");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY)) Strcat(shapebuff, " snake-backed");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY)) Strcat(shapebuff, " snake-legged humanoid");
+		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY)) Strcat(shapebuff, " snake-backed animal");
 		else Strcat(shapebuff, " thing");
 	}
     }
@@ -1222,7 +1222,7 @@ do_look(quick)
 			if(shapebuf[0]){
 				Sprintf(temp_buf, " (%s", firstmatch);
 				(void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
-				Sprintf(temp_buf, ", a %s)", shapebuf);
+				Sprintf(temp_buf, ", %s)", shapebuf);
 				(void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 				found = 1;	/* we have something to look up */
 			}
