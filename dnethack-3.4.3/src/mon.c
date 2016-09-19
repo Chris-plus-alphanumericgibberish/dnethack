@@ -3711,9 +3711,7 @@ wake_nearby()
 
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 	    if (!DEADMONSTER(mtmp) && distu(mtmp->mx,mtmp->my) < u.ulevel*20) {
-		mtmp->msleeping = 0;
-		if (mtmp->mtame && !mtmp->isminion)
-		    EDOG(mtmp)->whistletime = moves;
+			mtmp->msleeping = 0;
 	    }
 	}
 }

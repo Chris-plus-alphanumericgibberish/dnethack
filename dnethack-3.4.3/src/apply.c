@@ -588,8 +588,16 @@ STATIC_OVL void
 use_whistle(obj)
 struct obj *obj;
 {
+	register struct monst *mtmp;
+
 	You(whistle_str, obj->cursed ? "shrill" : "high");
 	wake_nearby();
+	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	    if (!DEADMONSTER(mtmp)) {
+			if (mtmp->mtame && !mtmp->isminion)
+				EDOG(mtmp)->whistletime = moves;
+	    }
+	}
 }
 
 STATIC_OVL void
