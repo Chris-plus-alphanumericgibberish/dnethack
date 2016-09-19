@@ -701,7 +701,7 @@ break_armor()
 	}
 	if ((otmp = uarmc) != 0) {
 		if(abs(otmp->objsize - youracedata->msize) > 1
-				|| !shirt_match(youracedata,otmp) || is_whirly(youracedata) || noncorporeal(youracedata)
+				|| is_whirly(youracedata) || noncorporeal(youracedata)
 		){
 			if (donning(otmp)) cancel_don();
 			if(otmp->oartifact || otmp->objsize > youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)) {

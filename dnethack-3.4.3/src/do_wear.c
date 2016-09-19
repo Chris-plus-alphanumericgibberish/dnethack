@@ -1617,10 +1617,6 @@ boolean noisy;
 			if (noisy)
 			pline_The("%s is the wrong size for you.", cloak_simple_name(uarmc));
 			err++;
-		} else if(!shirt_match(youracedata,otmp)){
-			if (noisy)
-			pline_The("%s is the wrong shape for your body.", cloak_simple_name(uarmc));
-			err++;
 		} else
 			*mask = W_ARMC;
     } else if (is_suit(otmp)) {

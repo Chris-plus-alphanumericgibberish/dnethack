@@ -2384,7 +2384,7 @@ struct monst *mon;
 				addArmorMenuOption
 			} else if(is_shirt(otmp) && !(mon->misc_worn_check&W_ARMU) && otmp->objsize == mon->data->msize && shirt_match(mon->data,otmp)){
 				addArmorMenuOption
-			} else if(is_cloak(otmp) && !(mon->misc_worn_check&W_ARMC) && (abs(otmp->objsize - mon->data->msize) <= 1) && shirt_match(mon->data,otmp)){
+			} else if(is_cloak(otmp) && !(mon->misc_worn_check&W_ARMC) && (abs(otmp->objsize - mon->data->msize) <= 1)){
 				addArmorMenuOption
 			} else if(is_helmet(otmp) && !(mon->misc_worn_check&W_ARMH) && 
 				((helm_match(mon->data,otmp) && has_head(mon->data) && otmp->objsize == mon->data->msize && !has_horns(mon->data))

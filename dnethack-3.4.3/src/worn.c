@@ -666,7 +666,7 @@ boolean racialexception;
 		    if (!is_shirt(obj) || obj->objsize != mon->data->msize || !shirt_match(mon->data,obj)) continue;
 		    break;
 		case W_ARMC:
-		    if (!is_cloak(obj) || (abs(obj->objsize - mon->data->msize) > 1) || !shirt_match(mon->data,obj)) continue;
+		    if (!is_cloak(obj) || (abs(obj->objsize - mon->data->msize) > 1)) continue;
 		    break;
 		case W_ARMH:
 		    if (!is_helmet(obj) || ((!helm_match(mon->data,obj) || !has_head(mon->data) || obj->objsize != mon->data->msize) && !is_flimsy(obj))) continue;
@@ -869,7 +869,7 @@ boolean polyspot;
 		}
 	}
 	if ((otmp = which_armor(mon, W_ARMC)) != 0) {
-		if(abs(otmp->objsize - mon->data->msize) > 1 || !shirt_match(mon->data,otmp) || is_whirly(mon->data) || noncorporeal(mon->data)){
+		if(abs(otmp->objsize - mon->data->msize) > 1 || is_whirly(mon->data) || noncorporeal(mon->data)){
 			if (otmp->oartifact || otmp->objsize > mon->data->msize || is_whirly(mon->data) || noncorporeal(mon->data)) {
 				if (vis)
 				pline("%s %s falls off!", s_suffix(Monnam(mon)),

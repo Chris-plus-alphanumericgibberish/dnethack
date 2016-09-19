@@ -48,7 +48,7 @@ register struct obj *otmp;
     if (is_shirt(otmp) && (otmp->objsize != mtmp->data->msize || !shirt_match(mtmp->data,otmp) || (mtmp->misc_worn_check & W_ARM)))
         return FALSE;
     
-    if (is_cloak(otmp) && ((abs(otmp->objsize - mtmp->data->msize) > 1) || !shirt_match(mtmp->data,otmp)))
+    if (is_cloak(otmp) && ((abs(otmp->objsize - mtmp->data->msize) > 1)))
         return FALSE;
     
     if (is_helmet(otmp) && (!has_head(mtmp->data) || otmp->objsize != mtmp->data->msize || !helm_match(mtmp->data,otmp)) && !is_flimsy(otmp))
