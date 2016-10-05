@@ -1191,8 +1191,10 @@ int thrown;
 					if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
 						You("snipe the flat-footed %s!", l_monnam(mon));
 					else if((mon->mux != u.ux || mon->muy != u.uy) && 
-						(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data))
+						(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE&& !is_unalive(mon->data) && has_head(mon->data)) &&
+						((Role_if(PM_ROGUE) &&!Upolyd) || (u.sealsActive&SEAL_ANDROMALIUS))
 					){
+						//Lifehunt scythe triggers sneak attack, but you have to actually HAVE sneak attack
 						You("strike the flat-footed %s!", l_monnam(mon));
 					} else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
 						(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
