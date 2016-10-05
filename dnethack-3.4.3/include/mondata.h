@@ -101,6 +101,9 @@
 						 ((ptr) == &mons[PM_SHAMBLING_HORROR] && u.shambin == 2) || \
 						 ((ptr) == &mons[PM_STUMBLING_HORROR] && u.stumbin == 2) || \
 						 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 2) || \
+						 ((ptr) == &mons[PM_HUNGRY_DEAD]) || \
+						 ((ptr) == &mons[PM_SKELETON]) || \
+						 ((ptr) == &mons[PM_SKELETAL_PIRATE]) || \
 						 (ptr)->mlet == S_WRAITH || \
 						 (ptr)->mlet == S_GHOST || \
 						 (ptr)->mlet == S_SHADE || \
