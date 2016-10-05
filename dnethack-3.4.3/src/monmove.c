@@ -319,12 +319,7 @@ int complete;
 struct monst *mtmp;
 {
 	if(complete <= 0) return FALSE;
-	else if(mtmp->isshk || mtmp->iswiz || 
-			(is_rider(mtmp->data) && 
-				mtmp->data != &mons[PM_GREAT_CTHULHU] &&
-				mtmp->data != &mons[PM_ELDER_PRIEST] &&
-				mtmp->data != &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD] )
-			) return FALSE;
+	else if(mtmp->isshk || mtmp->iswiz) return FALSE;
 	return 	mtmp->data->mlet == S_BLOB ||
 			mtmp->data->mlet == S_JELLY ||
 			mtmp->data->mlet == S_MIMIC ||
@@ -414,7 +409,6 @@ struct monst *mtmp;
 {
 	if(complete <= 0) return FALSE;
 	else if(mtmp->isshk || mtmp->iswiz || 
-			is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
 			is_rider(mtmp->data) ||
 			(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]) ||
 			(mtmp->data == &mons[PM_ELDER_PRIEST]) ||
@@ -433,7 +427,6 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_SANDESTIN] ||
 			mtmp->data == &mons[PM_SALAMANDER] ||
 			mtmp->data->mlet == S_ELEMENTAL ||
-			mtmp->data->mlet == S_KETER ||
 			mtmp->data->mlet == S_IMP);
 }
 
