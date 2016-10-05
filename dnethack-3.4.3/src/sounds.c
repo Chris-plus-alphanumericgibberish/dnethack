@@ -2124,7 +2124,7 @@ int tx,ty;
 	if(Role_if(PM_EXILE)){
 		if(u.ulevel <= 2) numSlots=1;
 		else if(u.ulevel <= 9) numSlots=2;
-		else if(u.ulevel <= 18) numSlots=3;
+		else if(u.ulevel <= 17) numSlots=3;
 		else if(u.ulevel <= 25) numSlots=4;
 		else numSlots=5;
 	} else {
