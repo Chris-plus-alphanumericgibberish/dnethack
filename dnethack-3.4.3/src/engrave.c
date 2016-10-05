@@ -284,6 +284,12 @@ static const char *haluMesg[] = {
 		"Undone by the blood.",
 		"Fear the old blood.",
 		"The Great Ones are sympathetic in spirit, and often answer when called upon.",
+	"We do not breathe. We do not eat. We do not sleep. We do not stop. ", /* Sigma */
+		"We have outlasted our gods. We know true freedom.",
+		"We do not suffer the enslavement of your passions, or your religions, or your creeds and your self conflict.",
+		"We are the Vederiction of our fallen deities, their visage perfected.",
+		"We have marched upon the cosmos long before your ancestors left their home.",
+		"And we will endure long after your dying civilization perishes on the chain of worlds.",
 	"Even false things are true",	"FIVE TONS OF FLAX!",	"Fnord", /*Discordianism*/
 	"Ash nazg durbatuluk, ash nazg gimbatul, ash nazg thrakatuluk, agh burzum-ishi krimpatul", /*the Lord of the Rings*/
 		"This thing all things devours.",
