@@ -4500,15 +4500,11 @@ arti_invoke(obj)
 				u.specialSealsKnown = 0;
 				u.uconduct.literate++;
 				lostname = pick_seal();
-				if(!lostname){
-					u.sealsKnown = yourseals;
-					u.specialSealsKnown = yourspecial;
-					break;
-				}
-				delay = -25;
-				artiptr = obj;
 				u.sealsKnown = yourseals;
 				u.specialSealsKnown = yourspecial;
+				if(!lostname) break;
+				delay = -25;
+				artiptr = obj;
 				set_occupation(read_lost, "studying", 0);
 			}
 			else if(yn("Risk your name amongst the Lost?") == 'y'){
