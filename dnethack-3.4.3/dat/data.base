@@ -1025,6 +1025,27 @@ bow
 	"It would not be amiss," said Hordle John, "if under his
 	girdle he had four farthings'-worth of wine."
 		[ The White Company, by Sir Arthur Conan Doyle ]
+brain golem
+	A creation of the ancient race of mind flayers, brain 
+	golems may be the most horrible of all their kind. 
+	They exist purely for the desire of illithids and are 
+	unswayed from their goals.
+	
+	A brain golem appears as a huge, burly humanoid with 
+	an oversized brain for a head. In fact, the whole body 
+	is made up of brain tissue, but is covered with a thin 
+	film of slimy skin.
+	
+	In a book by a sage called Hapworth is a tale told by 
+	two rescued human prisoners of the illithids, who 
+	apparently saw a brain golem created. Although the 
+	magic used was unknown to the humans, the brain golem's
+	body seemed to be a combination of different racial 
+	brains. As for the head, this was taken from a part of 
+	the elder brain of the mind flayers. The skin was a 
+	membrane oozed from that same being.
+		[ Dungeons and Dragons 2nd Edition 
+			Complete Monstrous Manual ]
 brigit
 	Brigit (Brigid, Bride, Banfile), which means the Exalted One,
 	was the Celtic (continental European and Irish) fertility
@@ -4559,6 +4580,15 @@ hod seph*
 	"The one time a man inevitably tells the truth 
 	 is when he makes a vow in his own heart." 
 		[ Adapted from Code Geass ]
+daat seph*
+	A six-arm humanoid torso, made from an amalgamation of
+	metal and stone, surmounts a whirling orrery of rings
+	of pure metals and carved stone.  In the gaps between
+	segments of its admixed skin can be seen interlocking
+	gears of like composition to the rings of its orrery.
+	
+	"The inevitablity of separation and the turning of
+	 the Great Wheel shall not be transcended"
 yesod seph*
 	A humanoid sculpture of black metal and mechanical
 	muscles, clad in golden armor and a crimson cloak.
@@ -5004,6 +5034,17 @@ lichen
 	moss was in abundant life, some feathering, and some
 	gobleted, and some with fringe of red to it.
 		[ Lorna Doone, by R.D. Blackmore ]
+lifehunt scythe
+	There once was an abomination who had no place in this
+	world, the bastard child of the last unliving dragon
+	and the goddess of sin.  This scythe is born from
+	the soul of that stark white crossbreed, who long
+	ago was drawn into a cold and lonely painted world.
+	
+	Even the gods feared her lifehunt ability, though
+	in the hands of a mortal its power will turn
+	upon its wielder.
+		[ Adapted from Dark Souls, by FromSoftware ]
 # takes "light" when specifying "y"
 ~* of light
 ~black light
@@ -5991,6 +6032,24 @@ morning star
 	but with the head attached by a short chain.
 		[ Dictionary of Medieval Knighthood and Chivalry, 
 		  by Bradford Broughton ]
+mortai
+	Mortai are a mystery of the Beastlands, enigmatic creatures
+	of immense intelligence and power.  Also known as the 
+	"faces in the clouds", mortai are creatures of the air. 
+	They appear as great clouds spanning the horizon, covering 
+	miles from side to side and towering thousands of feet in 
+	the air. In fact, a basher who doesn'tknow what he's looking
+	for'll walk right under a mortai wihout even realizing that 
+	the creature is just drifting along a half mile or so over 
+	his head. Most of the time, mortai are happy to remain 
+	unnoticed, and can imitate a natural cloud perfectly. But 
+	when they want a basher to know they're present, the mortai
+	begin to pulsate with a golden glow, crackling with immense
+	power like a lightning storm. When a mortai reveals itself
+	this way, great faces of wisdom and beauty begin to appear
+	on the surface of its clouds.
+		[ Adapted from Dungeons and Dragons 2nd Edition 
+			Complete Monstrous Manual ]
 mumak*
 	... the Mumak of Harad was indeed a beast of vast bulk, and
 	the like of him does not walk now in Middle-Earth; his kin
@@ -7155,6 +7214,29 @@ python
 	and claimed the oracle for himself. ... The old name of 
 	Delphi, Pytho, refers to the serpent.
 		[ Encyclopedia Mythica, ed. M.F. Lindemans ]
+serpent people
+serpent man
+serpent man of Yoth
+	They resemble upright serpents, with arms and legs, 
+	ophidian heads and tails, and commonly wear robes of 
+	the highest quality.
+	
+	This ancient race first reach prominence in the 
+	Permian Age, long before the first dinosaurs.  
+	That primordial civilization built cities of black 
+	basalt, fought deadly wars, and mastered profound 
+	chemical and hypergeometrical techniques.  The 
+	species dwindled in the Triassic.  In the Pliocene,
+	Serpent People increased and once again built cities,
+	thriving into the early Pleistocene.  Now they are 
+	again a relict species, here and in the Dreamlands.
+	
+	Their first civilization learned the secret of 
+	immortality, later enabling isolated scholars to 
+	contribute profoundly in epochs when civilization 
+	was prostrate.
+		[ S. Petersen's Field Guide to 
+			Creatures of the Dreamlands ]
 *speed*
 	"Attack on ground where your enemy believes you will not, from an unexpected 
 	direction at an unexpected time. Defend where your enemy believes you are not, 
@@ -8690,6 +8772,11 @@ tove
 	All mimsy were the borogoves,
 	And the mome raths outgrabe.
 		[ Jabberwocky, by Lewis Carroll ]
+		
+	Something like badgers - 
+	they're something like lizards - 
+	and they are something like corkscrews.
+		[ Through the Looking Glass, by Lewis Carroll ]
 towel
 	The Hitchhiker's Guide to the Galaxy has a few things to say
 	on the subject of towels.
