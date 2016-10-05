@@ -707,6 +707,7 @@ register char *enterstring;
 			coord mm;
 			verbalize("Foul heretic! Iconoclast against the Great Contract! The Crown's servants shall make you pay!");
 			make_angry_shk(shkp,shkp->mx,shkp->my);
+			set_malign(shkp);
 			mm.x = u.ux;
 			mm.y = u.uy;
 			makemon(&mons[PM_DAAT_SEPHIRAH], mm.x, mm.y, MM_ADJACENTOK);
