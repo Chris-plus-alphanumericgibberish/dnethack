@@ -217,7 +217,7 @@ A("Gaia's Fate",			SICKLE,
 	0 /*MV*/,
 	PHYS(10,20),	NO_DFNS,	NO_CARY,				/* plus, reflection */
 	0, A_NONE, NON_PM, NON_PM, 5000L, 
-	SPFX2_SILVERED,0,0),
+	0,0,0),
 
 A("Demonbane",			SILVER_SABER,
 	(SPFX_RESTR|SPFX_CON_OR), SPFX_WARN, /* blocks summoning and is a silver saber. */
