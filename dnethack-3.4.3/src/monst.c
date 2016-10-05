@@ -2699,7 +2699,7 @@ then fill new spaces with our spawn!
 	MM_AMPHIBIOUS|MM_SWIM /*MM*/, MT_MINDLESS|MT_TRAITOR /*MT*/,
 	MB_NOEYES|MB_NOLIMBS|MB_NOHEAD|MB_STRONG|MB_NEUTER /*MB*/, 0 /*MG*/,
 	MA_PRIMORDIAL|MA_ELEMENTAL|MA_AQUATIC /*MA*/,  MV_EXTRAMISSION|MV_NORMAL /*MV*/, CLR_GRAY),
-    MON("mortai", S_ELEMENTAL,//10 /*Needs encyc entry*//*Needs tile*/
+    MON("mortai", S_ELEMENTAL,//10 /*Needs tile*/
 	LVL(20, 24, -10, 125, 0), (G_NOCORPSE|G_NOHELL|G_NOGEN),
 	A(ATTK(AT_MAGC, AD_RBRE, 10, 10),
 	  ATTK(AT_CLAW, AD_WET, 5, 10), ATTK(AT_ENGL, AD_PHYS, 5, 10),
@@ -3101,7 +3101,7 @@ struct permonst _mons2[] = {
 /*
  * Monsters from the Jabberwocky poem
  */
-    MON("tove", S_JABBERWOCK,// /*Needs (better) encyc entry*/
+    MON("tove", S_JABBERWOCK,//
 	LVL(10, 10, 4, 50, 0), (G_GENO|G_NOHELL|1), /* Frequency should increase while hallucinating and while demigod */
 	A(ATTK(AT_BITE, AD_PHYS, 1,10), NO_ATTK,
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -3153,7 +3153,7 @@ struct permonst _mons2[] = {
 	MM_FLY|MM_BREATHLESS /*MM*/, MT_STALK|MT_HOSTILE|MT_MINDLESS /*MT*/,
 	MB_STRONG|MB_NEUTER|MB_HUMANOID|MB_THICK_HIDE /*MB*/, MG_NOPOLY|MG_NASTY /*MG*/,
 	MA_CLOCK|MA_MINION /*MA*/,  MV_EXTRAMISSION /*MV*/, CLR_RED),
-    MON("daat sephirah", S_KETER,// /*Needs encyc entry*//*Needs tile*/
+    MON("daat sephirah", S_KETER,// /*Needs tile*/
 	LVL(11, 12, -1, 11, 11), (G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_TUCH, AD_FIRE, 2, 6), ATTK(AT_TUCH, AD_COLD, 2, 6),
 	  ATTK(AT_TUCH, AD_ELEC, 2, 6), ATTK(AT_TUCH, AD_ACID, 2, 6),
@@ -3188,7 +3188,7 @@ struct permonst _mons2[] = {
 	MM_BREATHLESS /*MM*/, MT_STALK|MT_HOSTILE|MT_MINDLESS /*MT*/,
 	MB_HUMANOID|MB_THICK_HIDE|MB_STRONG|MB_NEUTER /*MB*/, MG_NOPOLY|MG_NASTY /*MG*/,
 	MA_CLOCK /*MA*/,  MV_EXTRAMISSION /*MV*/, HI_LORD),
-    MON("binah sephirah", S_KETER,//30 /*Needs encyc entry*//*Needs tile*/
+    MON("binah sephirah", S_KETER,//30 /*Needs tile*/
 	LVL(29, 12, -19, 29, 29), (G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_TUCH, AD_PHYS, 8, 8), ATTK(AT_TUCH, AD_PHYS, 8, 8), 
 	  ATTK(AT_BREA, AD_DISN, 8, 8),
@@ -3650,7 +3650,7 @@ struct permonst _mons2[] = {
 	MM_SWIM /*MM*/, MT_HOSTILE|MT_CARNIVORE|MT_CONCEAL|MT_ANIMAL|MT_NOTAKE /*MT*/,
 	MB_OVIPAROUS|MB_SLITHY|MB_LONGHEAD|MB_POIS|MB_NOLIMBS /*MB*/, 0 /*MG*/,
 	MA_REPTILIAN /*MA*/,  MV_NORMAL /*MV*/, CLR_BLUE),
-    MON("serpent man of Yoth", S_SNAKE,// /*Needs encyc entry*//*Needs tile*/
+    MON("serpent man of Yoth", S_SNAKE,// /*Needs tile*/
 	LVL(11, 6, 0, 30, 0), (G_GENO|1),
 	A(ATTK(AT_BITE, AD_DRST, 2, 4), ATTK(AT_MAGC, AD_SPEL, 0, 0),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -4157,7 +4157,7 @@ struct permonst _mons2[] = {
 	MM_BREATHLESS /*MM*/, MT_MINDLESS|MT_HOSTILE /*MT*/,
 	MB_HUMANOID|MB_STRONG /*MB*/, 0 /*MG*/,
 	MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, CLR_RED),
-    MON("brain golem", S_GOLEM,// /*Needs encyc entry*//*Needs tile*/
+    MON("brain golem", S_GOLEM,// /*Needs tile*/
 	LVL(9, 12, 5, 90, 0), (G_NOGEN),
 	A(ATTK(AT_CLAW, AD_PHYS, 2, 8), ATTK(AT_CLAW, AD_PHYS, 2, 8),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
