@@ -147,8 +147,8 @@
 #define MB_OVIPAROUS	0x00000200L	/* can lay eggs */
 #define MB_ACID			0x00000400L	/* acidic to eat */
 #define MB_POIS			0x00000800L	/* poisonous to eat */
-#define MB_CHILL		0x00001000L		/* cold to eat */
-#define MB_TOSTY		0x00002000L		/* hot to eat */
+#define MB_CHILL		0x00001000L	/* cold to eat */
+#define MB_TOSTY		0x00002000L	/* hot to eat */
 #define MB_MALE			0x00004000L	/* always male */
 #define MB_FEMALE		0x00008000L	/* always female */
 #define MB_NEUTER		0x00010000L	/* neither male nor female */
@@ -214,7 +214,7 @@
 #define MA_PLANT		0x00000800L	/* is a plant (or a fungus.  Which is SORTA a plant) */
 #define MA_GIANT		0x00001000L	/* is a giant */
 #define MA_INSECTOID	0x00002000L	/* is an insectoid creature */
-#define MA_ARACHNID		0x00004000L	/* is an insectoid creature */
+#define MA_ARACHNID		0x00004000L	/* is an arachind creature */
 #define MA_AVIAN		0x00008000L	/* is a bird-like-creature */
 #define MA_REPTILIAN	0x00010000L	/* is a reptilian creature */
 #define MA_ANIMAL		0x00020000L	/* is a more-or-less mundane animal (or a hybrid of an animal and something else) */
