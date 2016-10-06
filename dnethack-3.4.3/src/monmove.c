@@ -1543,7 +1543,7 @@ not_special:
 				      // (levl[gx][gy].lit ||
 				       // !levl[omx][omy].lit) &&
 				      // (dist2(omx, omy, gx, gy) <= 36));
-		if(distmin(omx,omy,gx,gy) <= 1) should_see = TRUE;
+		if(distmin(omx,omy,gx,gy) <= 1 && !rn2(8)) should_see = TRUE;
 		if((darksight(mtmp->data) || (catsight(mtmp->data) && catsightdark)) && !is_blind(mtmp)){
 			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
 				if(levl[gx][gy].lit){
