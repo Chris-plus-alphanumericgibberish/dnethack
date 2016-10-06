@@ -207,7 +207,33 @@ wildmiss(mtmp, mattk)		/* monster attacked your displaced image */
 	compat = (mattk->adtyp == AD_SEDU || mattk->adtyp == AD_SSEX || mattk->adtyp == AD_LSEX) &&
 		 could_seduce(mtmp, &youmonst, (struct attack *)0);
 
-	if (is_blind(mtmp) || (Invis && !perceives(mtmp->data))) {
+	if (Displaced) {
+	    if (compat)
+		pline("%s smiles %s at your %sdisplaced image...",
+			Monnam(mtmp),
+			compat == 2 ? "engagingly" : "seductively",
+			Invis ? "invisible " : "");
+	    else
+		pline("%s strikes at your %sdisplaced image and misses you!",
+			/* Note: if you're both invisible and displaced,
+			 * only monsters which see invisible will attack your
+			 * displaced image, since the displaced image is also
+			 * invisible.
+			 */
+			Monnam(mtmp),
+			Invis ? "invisible " : "");
+
+	} else if (Underwater) {
+	    /* monsters may miss especially on water level where
+	       bubbles shake the player here and there */
+	    if (compat)
+		pline("%s reaches towards your distorted image.",Monnam(mtmp));
+	    else
+		pline("%s is fooled by water reflections and misses!",Monnam(mtmp));
+
+	} else if(mtmp->mcrazed){
+		pline("%s flails around randomly.",Monnam(mtmp));
+	} else {
 	    const char *swings =
 		mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK ? "snaps" :
 		mattk->aatyp == AT_KICK ? "kicks" :
@@ -232,36 +258,7 @@ wildmiss(mtmp, mattk)		/* monster attacked your displaced image */
 		    break;
 		}
 
-	} else if (Displaced) {
-	    if (compat)
-		pline("%s smiles %s at your %sdisplaced image...",
-			Monnam(mtmp),
-			compat == 2 ? "engagingly" : "seductively",
-			Invis ? "invisible " : "");
-	    else
-		pline("%s strikes at your %sdisplaced image and misses you!",
-			/* Note: if you're both invisible and displaced,
-			 * only monsters which see invisible will attack your
-			 * displaced image, since the displaced image is also
-			 * invisible.
-			 */
-			Monnam(mtmp),
-			Invis ? "invisible " : "");
-
-	} else if (Underwater) {
-	    /* monsters may miss especially on water level where
-	       bubbles shake the player here and there */
-	    if (compat)
-		pline("%s reaches towards your distorted image.",Monnam(mtmp));
-	    else
-		pline("%s is fooled by water reflections and misses!",Monnam(mtmp));
-
-	} 
-	else if(mtmp->mcrazed){
-		pline("%s flails around randomly.",Monnam(mtmp));
 	}
-	else impossible("%s attacks you without knowing your location?",
-		Monnam(mtmp));
 }
 
 void
