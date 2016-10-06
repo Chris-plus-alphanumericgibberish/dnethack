@@ -3157,6 +3157,7 @@ spiriteffects(power, atme)
 			int dmg;
 			boolean done = FALSE;
 			struct obj *obj;
+			struct obj *umirror;
 			xchar lsx, lsy, sx, sy;
 			struct monst *mon;
 			sx = u.ux;
@@ -3165,8 +3166,10 @@ spiriteffects(power, atme)
 				You("can't do that in here!");
 				return 0;
 			}
-			if(!(uwep && uwep->otyp == MIRROR && !(uwep->oartifact))){
-				You("must be wielding a breakable mirror to use this power!");
+			for(umirror = invent; umirror; umirror = umirror->nobj)
+				if(umirror->otyp == MIRROR && !(umirror->oartifact)) break;
+			if(!(umirror)){
+				You("must have a breakable mirror in inventory to use this power!");
 				return 0;
 			}
 			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
@@ -3196,7 +3199,7 @@ spiriteffects(power, atme)
 			}
 			if(!done) return 0;
 			//else
-			useup(uwep);
+			useup(umirror);
 			if(u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH,TRUE);
 			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
 			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
