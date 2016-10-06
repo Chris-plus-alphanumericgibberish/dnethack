@@ -29,6 +29,7 @@ STATIC_DCL void FDECL(use_candelabrum, (struct obj *));
 STATIC_DCL void FDECL(use_candle, (struct obj **));
 STATIC_DCL void FDECL(use_lamp, (struct obj *));
 STATIC_DCL void FDECL(light_cocktail, (struct obj *));
+STATIC_DCL void FDECL(light_torch, (struct obj *));
 STATIC_DCL void FDECL(use_tinning_kit, (struct obj *));
 STATIC_DCL void FDECL(use_figurine, (struct obj **));
 STATIC_DCL void FDECL(use_grease, (struct obj *));
@@ -1529,6 +1530,58 @@ light_cocktail(obj)
 //#ifdef FIREARMS
 	if (obj->otyp == STICK_OF_DYNAMITE) obj->yours=TRUE;
 //#endif
+
+	if (obj->quan > 1L) {
+	    obj = splitobj(obj, 1L);
+	    begin_burn(obj, FALSE);	/* burn before free to get position */
+	    obj_extract_self(obj);	/* free from inv */
+
+	    /* shouldn't merge */
+	    obj = hold_another_object(obj, "You drop %s!",
+				      doname(obj), (const char *)0);
+	} else
+	    begin_burn(obj, FALSE);
+}
+
+STATIC_OVL void
+light_torch(obj)
+	struct obj *obj;	/* obj is a shadowlander's torch */
+{
+	char buf[BUFSZ];
+	const char *objnam = "torch";
+
+	if (u.uswallow) {
+	    You(no_elbow_room);
+	    return;
+	}
+
+	if(Underwater) {
+		You("can't light this underwater!");
+		return;
+	}
+
+	if (obj->lamplit) {
+	    You("snuff the lit %s.", objnam);
+	    end_burn(obj, TRUE);
+	    /*
+	     * Free & add to re-merge potion.  This will average the
+	     * age of the potions.  Not exactly the best solution,
+	     * but its easy.
+	     */
+	    freeinv(obj);
+	    (void) addinv(obj);
+	    return;
+	} else if (Underwater) {
+	    There("is not enough oxygen to sustain a fire.");
+	    return;
+	}
+
+	You("light %s %s.%s", shk_your(buf, obj), objnam,
+	    Blind ? "" : "  It gives off dark shadows.");
+	if (obj->unpaid && costly_spot(u.ux, u.uy)) {
+		verbalize("You burn it, you bought it!");
+	    bill_dummy_object(obj);
+	}
 
 	if (obj->quan > 1L) {
 	    obj = splitobj(obj, 1L);
@@ -4951,6 +5004,9 @@ doapply()
 	case POT_OIL:
 		light_cocktail(obj);
 		obj = 0; //May have been dealocated, just get rid of it
+	break;
+	case SHADOWLANDER_S_TORCH:
+		light_torch(obj);
 	break;
 #ifdef TOURIST
 	case EXPENSIVE_CAMERA:

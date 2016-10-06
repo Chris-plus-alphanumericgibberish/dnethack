@@ -547,6 +547,39 @@ peffects(otmp)
 			}
 		}
 	break;
+	case POT_STARLIGHT:
+		if(uclockwork){
+			if(u.clockworkUpgrades&(OIL_STOVE|WOOD_STOVE|HELLFIRE_FURNACE)){
+				You("pour the water into your boiler.");
+				if(u.uboiler < MAX_BOILER) u.uboiler = min(MAX_BOILER, u.uboiler+400);
+				else pline("The boiler overflows and water spills over your mechanisms");
+			} else {
+				pline("The water runs across your mechanisms.");
+			}
+		} else {
+			if(hates_silver(youracedata)) {
+				pline("This burns like acid!");
+				exercise(A_CON, FALSE);
+				if (u.ulycn >= LOW_PM) {
+					Your("affinity to %s disappears!",
+					 makeplural(mons[u.ulycn].mname));
+					if (youmonst.data == &mons[u.ulycn])
+					you_unwere(FALSE);
+					u.ulycn = NON_PM;	/* cure lycanthropy */
+				}
+				losehp(d(3,20), "potion of silver starlight", KILLED_BY_AN);
+			} else {
+				You_feel("full of awe.");
+				make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+				exercise(A_WIS, TRUE);
+				exercise(A_CON, TRUE);
+				if (u.ulycn >= LOW_PM)
+					you_unwere(TRUE);	/* "Purified" */
+				/* make_confused(0L,TRUE); */
+				if(u.sealsActive&SEAL_MARIONETTE) unbind(SEAL_MARIONETTE,TRUE);
+			}
+		}
+	break;
 	case POT_BOOZE:
 		unkn++;
 		pline("Ooph!  This tastes like %s%s!",
@@ -1314,6 +1347,38 @@ boolean your_fault;
 		    }
 		}
 		break;
+	case POT_STARLIGHT:
+		if (hates_silver(mon->data)) {
+			pline("%s %s in pain!", Monnam(mon),
+			      is_silent(mon->data) ? "writhes" : "shrieks");
+			mon->mhp -= d(3,20);
+			//Slashem
+			if (mon->mhp < 1) {
+			    if (your_fault)
+				killed(mon);
+			    else
+				monkilled(mon, "", AD_ACID);
+			}
+			else if (is_were(mon->data) && !is_human(mon->data))
+			    new_were(mon);	/* revert to human */
+		} else if(mon->data == &mons[PM_GREMLIN]) {
+		    angermon = FALSE;
+		    (void)split_mon(mon, (struct monst *)0);
+		} else if(mon->data == &mons[PM_FLAMING_SPHERE] ||
+			mon->data == &mons[PM_IRON_GOLEM]) {
+		    if (canseemon(mon))
+			pline("%s %s.", Monnam(mon),
+				mon->data == &mons[PM_IRON_GOLEM] ?
+				"rusts" : "flickers");
+		    mon->mhp -= d(1,6);
+		    if (mon->mhp < 1) {
+			if (your_fault)
+			    killed(mon);
+			else
+			    monkilled(mon, "", AD_ACID);
+		    }
+		}
+		break;
 	case POT_AMNESIA:
 		switch (monsndx(mon->data)) {
 		case PM_GREMLIN:
@@ -1613,6 +1678,16 @@ register struct obj *obj;
 			you_unwere(FALSE);
 		    else if (obj->cursed && !Upolyd)
 			you_were();
+		}
+		break;
+	case POT_STARLIGHT:
+		if(u.umonnum == PM_GREMLIN) {
+		    (void)split_mon(&youmonst, (struct monst *)0);
+		} else if (u.ulycn >= LOW_PM) {
+		    /* vapor from [un]holy water will trigger
+		       transformation but won't cure lycanthropy */
+		    if (youmonst.data == &mons[u.ulycn])
+				you_unwere(FALSE);
 		}
 		break;
 	case POT_AMNESIA:

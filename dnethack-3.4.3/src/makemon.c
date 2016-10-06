@@ -925,6 +925,11 @@ register struct monst *mtmp;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
+					/*phial*/
+					otmp = mksobj(POT_STARLIGHT, TRUE, FALSE);
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_CELEBORN){
 					/*Plate Mail*/
 					otmp = mksobj(HIGH_ELVEN_WARSWORD, TRUE, FALSE);
@@ -967,9 +972,12 @@ register struct monst *mtmp;
 					else if (!rn2(4)) (void)mongets(mtmp, ELVEN_BOOTS);
 					if (rn2(2)) (void)mongets(mtmp, ELVEN_DAGGER);
 #ifdef BARD
-					if (mm == PM_ELVENKING || mm == PM_ELF_LORD ? TRUE : !rn2(10))
+					if ((mm == PM_ELVENKING || mm == PM_ELF_LORD || mm == PM_ELVENQUEEN || mm == PM_ELF_LADY) ? TRUE : !rn2(10))
 						(void)mongets(mtmp, (rn2(2) ? WOODEN_FLUTE : WOODEN_HARP));
 #endif
+					if (rnd(100) < mtmp->m_lev)
+						(void)mongets(mtmp, POT_STARLIGHT);
+						
 					switch (rn2(3)) {
 					case 0:
 						if (!rn2(4)) (void)mongets(mtmp, ELVEN_SHIELD);

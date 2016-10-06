@@ -1230,7 +1230,7 @@ long timeout;
 			end_burn(obj, FALSE);
 			if (menorah) {
 			    obj->spe = 0;	/* no more candles */
-			} else if (Is_candle(obj) || obj->otyp == POT_OIL) {
+			} else if (Is_candle(obj) || obj->otyp == POT_OIL || obj->otyp == SHADOWLANDER_S_TORCH) {
 			    /* get rid of candles and burning oil potions */
 			    obj_extract_self(obj);
 			    obfree(obj, (struct obj *)0);
@@ -1487,6 +1487,69 @@ long timeout;
 			    obj = (struct obj *) 0;
 			}
 			break;
+		}
+		
+		if (obj && obj->age)
+		    begin_burn(obj, TRUE);
+
+		break;
+
+		case SHADOWLANDER_S_TORCH:
+		switch (obj->age) {
+		    case 150:
+			if (canseeit)
+			    switch (obj->where) {
+				case OBJ_INVENT:
+				case OBJ_MINVENT:
+				    pline("%s torch is getting short.", whose);
+				    break;
+				case OBJ_FLOOR:
+				    You("see a torch getting short.");
+				    break;
+			    }
+			break;
+
+		    case 50:
+			if (canseeit)
+			    switch (obj->where) {
+				case OBJ_MINVENT:
+				case OBJ_INVENT:
+				    pline("%s torch's shadowy flame flickers low!", whose);
+				    break;
+				case OBJ_FLOOR:
+				    You("see a torch's shadowy flame flicker low!");
+				    break;
+			    }
+			break;
+
+		    case 0:
+			/* we know even if blind and in our inventory */
+			if (canseeit || obj->where == OBJ_INVENT) {
+				switch (obj->where) {
+				    case OBJ_INVENT:
+				    case OBJ_MINVENT:
+					pline("%s %s is consumed!",
+					    whose,
+					    xname(obj));
+					break;
+				    case OBJ_FLOOR:
+					You("see %s consumed!", an(xname(obj)));
+					need_newsym = TRUE;
+					break;
+				}
+
+				/* post message */
+				pline(Hallucination ? 
+						"It shrieks!" :
+					Blind ? "" :
+					    "Its shadowy flame dies.");
+			}
+			end_burn(obj, FALSE);
+
+			obj_extract_self(obj);
+			obfree(obj, (struct obj *)0);
+			obj = (struct obj *) 0;
+			break;
 
 		    default:
 			/*
@@ -1608,15 +1671,16 @@ begin_burn(obj, already_lit)
 	struct obj *obj;
 	boolean already_lit;
 {
-	int radius, nvmult = u.nv_range;
+	int radius;
 	long turns = 0;
 	boolean do_timer = TRUE;
 	
-	if(nvmult < 1) nvmult = 1;
-	radius = 3*nvmult;
+	radius = 3;
 
 	if (obj->age == 0 && 
 		obj->otyp != MAGIC_LAMP && 
+		obj->otyp != POT_STARLIGHT && 
+		obj->otyp != CHUNK_OF_FOSSILE_DARK && 
 		!artifact_light(obj) && 
 		!arti_light(obj) && 
 		obj->oartifact != ART_ATMA_WEAPON
@@ -1626,6 +1690,16 @@ begin_burn(obj, already_lit)
 	    case MAGIC_LAMP:
 		obj->lamplit = 1;
 		do_timer = FALSE;
+		break;
+	    case POT_STARLIGHT:
+		obj->lamplit = 1;
+		do_timer = FALSE;
+		radius = 2;
+		break;
+	    case CHUNK_OF_FOSSILE_DARK:
+		obj->lamplit = 1;
+		do_timer = FALSE;
+		radius = 2;
 		break;
 	    case DOUBLE_LIGHTSABER:
 	    case LIGHTSABER:
@@ -1641,17 +1715,17 @@ begin_burn(obj, already_lit)
 				} else if(!Drain_resistance) obj->age++;
 			}
 			turns = 1;
-    	    radius = 1*nvmult;
+    	    radius = 1;
 		break;
 
 	    case POT_OIL:
 		turns = obj->age;
-		radius = 1*nvmult;	/* very dim light */
+		radius = 1;	/* very dim light */
 		break;
 
 		case GNOMISH_POINTY_HAT:
 			turns = obj->age;
-			radius = 2*nvmult;
+			radius = 2;
 			if (obj->age > 75L)
 				turns = obj->age - 75L;
 			else if (obj->age > 15L)
@@ -1684,7 +1758,18 @@ begin_burn(obj, already_lit)
 		    turns = obj->age - 15L;
 		else
 		    turns = obj->age;
-		radius = candle_light_range(obj)*nvmult;
+		radius = candle_light_range(obj);
+		break;
+
+	    case SHADOWLANDER_S_TORCH:
+		/* magic times are 150, 50, and 0 */
+		if (obj->age > 150L)
+		    turns = obj->age - 150L;
+		else if (obj->age > 50L)
+		    turns = obj->age - 50L;
+		else
+		    turns = obj->age;
+		radius = 4;
 		break;
 
 	    default:
@@ -1692,7 +1777,7 @@ begin_burn(obj, already_lit)
         if (artifact_light(obj) || arti_light(obj)) {
 		    obj->lamplit = 1;
 		    do_timer = FALSE;
-			radius = (obj->blessed ? 3 : (obj->cursed ? 1 : 2))*nvmult;
+			radius = (obj->blessed ? 3 : (obj->cursed ? 1 : 2));
 		} else {
 		    impossible("begin burn: unexpected %s", xname(obj));
 		    turns = obj->age;

@@ -836,9 +836,11 @@ TOOL("lock pick", (char *)0,    1, 0, 0, 0,  75,  4,  20, IRON, HI_METAL),
 /* light sources */
 TOOL("tallow candle", "candle", 0, 1, 0, 0,  20,  2,  10, WAX, CLR_WHITE),
 TOOL("wax candle", "candle",    0, 1, 0, 0,   5,  2,  20, WAX, CLR_WHITE),
-TOOL("brass lantern", (char *)0,1, 0, 0, 0,  30, 30,  12, COPPER, CLR_YELLOW),
-TOOL("oil lamp", "lamp",        0, 0, 0, 0,  45, 20,  10, COPPER, CLR_YELLOW),
+TOOL("brass lantern", (char *)0,1, 0, 0, 0,  25, 30,  12, COPPER, CLR_YELLOW),
+TOOL("oil lamp", "lamp",        0, 0, 0, 0,  40, 20,  10, COPPER, CLR_YELLOW),
 TOOL("magic lamp", "lamp",      0, 0, 1, 0,  15, 20,  50, COPPER, CLR_YELLOW),
+TOOL("shadowlander's torch", "black-wood torch",
+								0, 0, 1, 0,  10, 20,  50, WOOD, CLR_BLACK),
 /* other tools */
 #ifdef TOURIST
 TOOL("expensive camera", (char *)0,
@@ -1021,9 +1023,10 @@ POTION("sickness", "fizzy",             0, 0,          40,  50, CLR_CYAN),
 POTION("fruit juice", "dark",           0, 0,          42,  50, CLR_BLACK),
 POTION("acid", "white",                 0, 0,          10, 250, CLR_WHITE),
 POTION("oil", "murky",                  0, 0,          30, 250, CLR_BROWN),
-POTION("amnesia", "sparkling",          1, 0,          8, 100, CLR_CYAN),
-POTION("water", "clear",                0, 0,          84, 100, CLR_CYAN),
-POTION("blood", "blood-red",            0, 0,           18, 50, CLR_RED),
+POTION("amnesia", "sparkling",          1, 0,          8,  100, CLR_CYAN),
+POTION("starlight", "dimly-shining",    1, 0,          4,  250, CLR_BRIGHT_CYAN),
+POTION("water", "clear",                0, 0,          80, 100, CLR_CYAN),
+POTION("blood", "blood-red",            0, 0,          18, 50,  CLR_RED),
 #undef POTION
 
 /* scrolls ... */
@@ -1235,7 +1238,9 @@ ROCK("loadstone", "gray",	0, 10, 500,  1,30,30, -5, 1, 10, 6, MINERAL, CLR_GRAY)
 ROCK("touchstone", "gray",	0,  8,  10, 45, 3, 3,  0, 1, 10, 6, MINERAL, CLR_GRAY),
 ROCK("flint", "gray",		0, 10,  10,  1, 6, 6,  2, 0, 10, 7, MINERAL, CLR_GRAY),
 ROCK("chunk of unrefined mithril", "silvery metal", 
-							0,  0,   1, 10000,3,3, 0, 0, 0, 5, MITHRIL, HI_SILVER),/*Needs tile*/
+							0,  0,   1, 10000,3,3, 0, 0, 0, 10, MITHRIL, HI_SILVER),/*Needs tile*/
+ROCK("chunk of fossile dark", "black",
+							0,  0, 25, 	500,10,10,-5, 1, 0, 1, MINERAL, CLR_BLACK),/*Needs tile*/
 ROCK("silver slingstone", "silver", 0, 0, 1, 10, 6, 6, 2, 0, 0, 5, SILVER, HI_SILVER),/*Needs tile*/
 ROCK("rock", (char *)0,		1,100,  10,  0, 3, 3, 0, 0, 10, 7, MINERAL, CLR_GRAY),
 #undef GEM

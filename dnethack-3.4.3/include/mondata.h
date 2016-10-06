@@ -401,7 +401,10 @@
 				  (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
 				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
 				 ((ptr) == &mons[PM_LIGHT_ARCHON]|| \
-				  (ptr) == &mons[PM_LUCIFER]) ? 7 : 0)
+				  (ptr) == &mons[PM_LUCIFER]) ? 7 : \
+				 ((ptr) == &mons[PM_EDDERKOP]) ? 8 : \
+				 0)
+#define Is_darklight_monster(ptr)	((ptr) == &mons[PM_EDDERKOP])
 /*	[note: the light ranges above were reduced to 1 for performance...] */
 #define likes_lava(ptr)		(ptr == &mons[PM_FIRE_ELEMENTAL] || \
 				 ptr == &mons[PM_SALAMANDER])

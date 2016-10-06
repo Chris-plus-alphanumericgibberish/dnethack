@@ -538,6 +538,11 @@ boolean artif;
 		else if (otmp->otyp == ROCK) otmp->quan = (long) rn1(6,6);
 		else if (otmp->otyp != LUCKSTONE && !rn2(6)) otmp->quan = 2L;
 		else otmp->quan = 1L;
+		if (otmp->otyp == CHUNK_OF_FOSSILE_DARK){
+			place_object(otmp, u.ux, u.uy);  /* make it viable light source */
+			begin_burn(otmp, FALSE);
+			obj_extract_self(otmp);	 /* now release it for caller's use */
+		}
 		break;
 	case TOOL_CLASS:
 	    switch(otmp->otyp) {
@@ -552,6 +557,12 @@ boolean artif;
 					break;
 		case BRASS_LANTERN:
 		case OIL_LAMP:		otmp->spe = 1;
+					otmp->age = (long) rn1(500,1000);
+					otmp->lamplit = 0;
+					blessorcurse(otmp, 5);
+					break;
+		case SHADOWLANDER_S_TORCH:
+					otmp->spe = 1;
 					otmp->age = (long) rn1(500,1000);
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 5);
@@ -753,6 +764,11 @@ boolean artif;
 		}
 		if (otmp->otyp == POT_OIL)
 		    otmp->age = MAX_OIL_IN_FLASK;	/* amount of oil */
+		if (otmp->otyp == POT_STARLIGHT){
+			place_object(otmp, u.ux, u.uy);  /* make it viable light source */
+			begin_burn(otmp, FALSE);
+			obj_extract_self(otmp);	 /* now release it for caller's use */
+		}
 		/* fall through */
 	case SCROLL_CLASS:
 #ifdef MAIL

@@ -152,6 +152,7 @@ static struct trobj Binder[] = {
 };
 //initialization of an extern in you.h
 boolean forcesight = FALSE;
+boolean forceblind = FALSE;
 //definition of an extern in you.h
 long sealKey[34] = {SEAL_AHAZU, SEAL_AMON, SEAL_ANDREALPHUS, SEAL_ANDROMALIUS, SEAL_ASTAROTH, SEAL_BALAM, 
 				 SEAL_BERITH, SEAL_BUER, SEAL_CHUPOCLOPS, SEAL_DANTALION, SEAL_SHIRO, SEAL_ECHIDNA, SEAL_EDEN,
@@ -248,6 +249,7 @@ static struct trobj DNoble[] = {
 	{ ARROW, 0, WEAPON_CLASS, 30, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 10, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
+	{ CHUNK_OF_FOSSILE_DARK, 0, GEM_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj DwarfNoble[] = {
@@ -403,6 +405,17 @@ static struct trobj DarkWand[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 
+static struct trobj Phial[] = {
+	{ POT_STARLIGHT, UNDEF_SPE, POTION_CLASS, 1, 1 },
+	{ SACK, UNDEF_SPE, TOOL_CLASS, 1, 1 },
+	{ 0, 0, 0, 0, 0 }
+};
+
+static struct trobj BlackTorches[] = {
+	{ SHADOWLANDER_S_TORCH, 0, TOOL_CLASS, 3, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+
 static struct trobj ExtraBook[] = {
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },
 	{ 0, 0, 0, 0, 0 }
@@ -500,7 +513,8 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ELF,	CLOAK_OF_DISPLACEMENT,	ELVEN_CLOAK	      },
     { PM_ELF,	LEATHER_CLOAK,			ELVEN_CLOAK	      },
     { PM_ELF,	CRAM_RATION,			LEMBAS_WAFER	      },
-    { PM_ELF,	GENTLEWOMAN_S_DRESS,		ELVEN_TOGA  },
+    { PM_ELF,	FOOD_RATION,			LEMBAS_WAFER	      },
+    { PM_ELF,	GENTLEWOMAN_S_DRESS,	ELVEN_TOGA  },
     { PM_ELF,	GENTLEMAN_S_SUIT,		ELVEN_TOGA  },
     { PM_ELF,	VICTORIAN_UNDERWEAR,	ELVEN_SHIELD  },
     { PM_ELF,	RUFFLED_SHIRT,			ELVEN_SHIELD  },
@@ -860,6 +874,7 @@ static const struct def_skill Skill_DNob[] = {
     { P_TRIDENT, P_BASIC },		{ P_LANCE, P_SKILLED },
 	{ P_QUARTERSTAFF, P_EXPERT },
     { P_BOW, P_BASIC },			{ P_CROSSBOW, P_SKILLED },
+	{ P_SLING, P_BASIC },
     { P_ATTACK_SPELL, P_SKILLED },	{ P_CLERIC_SPELL, P_SKILLED },
     { P_ESCAPE_SPELL, P_SKILLED },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
 #ifdef STEED
@@ -1749,6 +1764,11 @@ u_init()
 			ini_inv(DNoble);
 			ini_inv(DarkWand);
 		} else ini_inv(Noble);
+		if(Race_if(PM_ELF)){
+			ini_inv(Phial);
+		} else if(Race_if(PM_DROW) && !flags.female){
+			ini_inv(BlackTorches);
+		}
 		// knows_class(ARMOR_CLASS);
 		if(Race_if(PM_DROW) && flags.female) skill_init(Skill_DNob);
 		else if(Race_if(PM_DWARF)) skill_init(Skill_DwaNob);
@@ -1776,6 +1796,7 @@ u_init()
 			otmp->spe = otmp->cursed = otmp->blessed = 0;
 			otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 			addinv(otmp);
+			ini_inv(BlackTorches);
 		}
 		knows_object(SACK);
 		knows_object(OILSKIN_SACK);
@@ -1817,6 +1838,9 @@ u_init()
 		Ranger[RAN_ZERO_ARROWS].trquan = rn1(10, 30);
 		ini_inv(Ranger);
 		skill_init(Skill_Ran);
+		if(Race_if(PM_DROW)){
+			ini_inv(BlackTorches);
+		}
 		break;
 	case PM_ROGUE:
 		Rogue[R_DAGGERS].trquan = rn1(10, 6);
