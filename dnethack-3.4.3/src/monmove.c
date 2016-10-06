@@ -2335,6 +2335,12 @@ register struct monst *mtmp;
 		notseen = FALSE;
 	}
 	if(couldsee(mtmp->mx,mtmp->my) &&
+		distu(mtmp->mx,mtmp->my) <= 100 &&
+		(!Stealth || (mtmp->data == &mons[PM_ETTIN] && rn2(10))) &&
+		(Aggravate_monster || (!rn2(7)))
+	) {
+		notseen = FALSE;
+	}
 	if(notseen && goodsmeller(mtmp->data) && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 6){
 	/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
 		if(clear_path(u.ux, u.uy, mtmp->mx, mtmp->my)){
