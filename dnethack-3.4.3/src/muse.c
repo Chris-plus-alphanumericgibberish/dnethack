@@ -2248,6 +2248,19 @@ void
 you_aggravate(mtmp)
 struct monst *mtmp;
 {
+	register struct monst *tmpm;
+
+	for(tmpm = fmon; tmpm; tmpm = tmpm->nmon)
+	    if (!DEADMONSTER(tmpm) && mtmp != tmpm) {
+			tmpm->msleeping = 0;
+			if(!tmpm->mcanmove && !rn2(5)) {
+				tmpm->mfrozen = 0;
+				if(tmpm->data != &mons[PM_GIANT_TURTLE] || !(tmpm->mflee))
+					tmpm->mcanmove = 1;
+			}
+			tmpm->mux = mtmp->mx;
+			tmpm->muy = mtmp->my;
+	    }
 	pline("For some reason, %s presence is known to you.",
 		s_suffix(noit_mon_nam(mtmp)));
 	cls();

@@ -427,6 +427,8 @@ aggravate()
 				if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee))
 					mtmp->mcanmove = 1;
 			}
+			mtmp->mux = u.ux;
+			mtmp->muy = u.uy;
 	    }
 }
 
