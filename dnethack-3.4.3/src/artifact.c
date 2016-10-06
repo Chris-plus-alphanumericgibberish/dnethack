@@ -1831,15 +1831,19 @@ char *type;			/* blade, staff, etc */
     boolean youattack = (magr == &youmonst),
 	    youdefend = (mdef == &youmonst),
 	    resisted = FALSE, do_stun, do_confuse, result;
-    int attack_indx, scare_dieroll = MB_MAX_DIEROLL / 2;
-
+    int attack_indx, scare_dieroll = MB_MAX_DIEROLL / 2,
+		dsize=4, dnum=1;
+	
     result = FALSE;		/* no message given yet */
+	
     /* the most severe effects are less likely at higher enchantment */
     if (mb->spe >= 3)
 	scare_dieroll /= (1 << (mb->spe / 3));
     /* if target successfully resisted the artifact damage bonus,
-       reduce overall likelihood of the assorted special effects */
-    if (!spec_dbon_applies) dieroll += 1;
+       INCREASE overall likelihood of the assorted special effects 
+	   this is Magic BANE, after all, it is stronger the less 
+	   magical it is */
+    if (!spec_dbon_applies) dieroll -= 2;
 
     /* might stun even when attempting a more severe effect, but
        in that case it will only happen if the other effect fails;
@@ -1847,6 +1851,32 @@ char *type;			/* blade, staff, etc */
        just probe even when it hasn't been enchanted */
     do_stun = (max(mb->spe,0) < rn2(spec_dbon_applies ? 11 : 7));
 
+	if(mb->oartifact == ART_MAGICBANE){
+		if (!spec_dbon_applies){
+			//Equal to a fireball, makes +2 MB good vs magic resistant creatures (avg damage same for +0,+1,+2), +7 MB least bad vs magic sensitives
+			dnum = 5;
+			dsize = 6;
+		}
+	} else if(mb->oartifact == ART_MIRROR_BRAND){
+		//average longsword damage, mirror brand is best vs magic sensitives, has a flatter distribution vs magic resistants +2 is better than +7, but by a very small margin
+		dnum = 2;
+		dsize = 10;
+	} else if(mb->oartifact == ART_STAFF_OF_WILD_MAGIC){
+		//The wild magic staff, on the other hand, does nothing if the target resists its effects, and is not degraded by enchantment;
+		//Because of the low die size, its straight weapon damage is never more than so-so, though.
+		if (!spec_dbon_applies) return FALSE;
+		dnum = 1;
+		dsize = 6;
+		scare_dieroll = MB_MAX_DIEROLL / 2;
+		dieroll += 2;
+		do_stun = rn2(2);
+	} else if(mb->oartifact == ART_FORCE_PIKE_OF_THE_RED_GUAR){
+		//Strongest vs magic sensitives and +7, also good vs magic resistants at +2
+		dnum = 3;
+		dsize = 10;
+	}
+	
+	
     /* the special effects also boost physical damage; increments are
        generally cumulative, but since the stun effect is based on a
        different criterium its damage might not be included; the base
@@ -1855,18 +1885,18 @@ char *type;			/* blade, staff, etc */
        [note that a successful save against AD_STUN doesn't actually
        prevent the target from ending up stunned] */
     attack_indx = MB_INDEX_PROBE;
-    *dmgptr += rnd(4);			/* (2..3)d4 */
+    *dmgptr += d(dnum,dsize);			/* (2..3)d4 */
     if (do_stun) {
 	attack_indx = MB_INDEX_STUN;
-	*dmgptr += rnd(4);		/* (3..4)d4 */
+	*dmgptr += d(dnum,dsize);		/* (3..4)d4 */
     }
     if (dieroll <= scare_dieroll) {
 	attack_indx = MB_INDEX_SCARE;
-	*dmgptr += rnd(4);		/* (3..5)d4 */
+	*dmgptr += d(dnum,dsize);		/* (3..5)d4 */
     }
     if (dieroll <= (scare_dieroll / 2)) {
 	attack_indx = MB_INDEX_CANCEL;
-	*dmgptr += rnd(4);		/* (4..6)d4 */
+	*dmgptr += d(dnum,dsize);		/* (4..6)d4 */
     }
 
     /* give the hit message prior to inflicting the effects */
