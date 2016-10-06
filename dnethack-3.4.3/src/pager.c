@@ -192,6 +192,9 @@ lookat(x, y, buf, monbuf, shapebuff)
 		/* lifesense */
 		if ((!mtmp->minvis || See_invisible) && see_with_lifesense(mtmp))
 		    ways_seen++;
+		/* smell */
+		if (sense_by_scent(mtmp))
+		    ways_seen++;
 		/* telepathy */
 		if (tp_sensemon(mtmp))
 		    ways_seen++;
@@ -227,6 +230,10 @@ lookat(x, y, buf, monbuf, shapebuff)
 		    if ((!mtmp->minvis || See_invisible) &&
 			    see_with_lifesense(mtmp)) {
 			Strcat(monbuf, "lifesense");
+			if (ways_seen-- > 1) Strcat(monbuf, ", ");
+			}
+		    if (sense_by_scent(mtmp)) {
+			Strcat(monbuf, "scent");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
 		    }
 		    if (tp_sensemon(mtmp)) {

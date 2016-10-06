@@ -313,6 +313,7 @@ E void FDECL(unmap_object, (int,int));
 E void FDECL(map_location, (int,int,int));
 E void FDECL(feel_location, (XCHAR_P,XCHAR_P));
 E void FDECL(newsym, (int,int));
+E boolean FDECL(sense_by_scent, (struct monst *));
 E void FDECL(shieldeff, (XCHAR_P,XCHAR_P));
 E void FDECL(tmp_at, (int,int));
 E void FDECL(swallowed, (int));

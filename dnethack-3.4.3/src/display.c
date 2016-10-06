@@ -121,6 +121,7 @@
 STATIC_DCL void FDECL(display_monster,(XCHAR_P,XCHAR_P,struct monst *,int,XCHAR_P));
 STATIC_DCL int FDECL(swallow_to_glyph, (int, int));
 STATIC_DCL void FDECL(display_warning,(struct monst *));
+STATIC_DCL int FDECL(you_scent_callback,(genericptr_t, int, int));
 
 STATIC_DCL int FDECL(check_pos, (int, int, int));
 #ifdef WA_VERBOSE
@@ -723,7 +724,8 @@ newsym(x,y)
 	else if ((mon = m_at(x,y))
 		&& ((see_it = (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)
 		    		|| ((see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon)) && mon_visible(mon))))
-		    || Detect_monsters)
+		    || Detect_monsters
+			|| sense_by_scent(mon))
 		&& !is_worm_tail(mon)) {
 	    /* Monsters are printed every time. */
 	    /* This also gets rid of any invisibility glyph */
@@ -771,6 +773,41 @@ show_mem:
 }
 
 #undef is_worm_tail
+
+STATIC_DCL int
+you_scent_callback(data, x, y)
+genericptr_t data;
+int x, y;
+{
+    int is_accessible = ZAP_POS(levl[x][y].typ);
+    struct seekspot *smelltarget = (struct seekspot *)data;
+    if (smelltarget->x == x && smelltarget->y == y) smelltarget->found = TRUE;
+	
+	if(!(smelltarget->found)) return !is_accessible;
+	else return 1; /* Once a path to target is found, quickly end the xpath function */
+}
+
+boolean
+sense_by_scent(mon)
+	struct monst *mon;
+{
+	/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
+	if(goodsmeller(youracedata) && distmin(u.ux, u.uy, mon->mx, mon->my) <= 6){
+		/*don't running a complicated path function if there is a straight line to it*/
+		if(clear_path(u.ux, u.uy, mon->mx, mon->my)){
+			return TRUE;
+		} else {
+			struct seekspot smelltarget;
+			smelltarget.x = mon->mx;
+			smelltarget.y = mon->my;
+			smelltarget.found = FALSE;
+			
+			xpathto(6, u.ux, u.uy, you_scent_callback, (genericptr_t)&smelltarget);
+			return smelltarget.found;
+		}
+	}
+	return FALSE;
+}
 
 /*
  * shieldeff()

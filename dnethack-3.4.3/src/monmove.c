@@ -12,6 +12,7 @@ extern boolean notonhead;
 #ifdef OVL0
 
 STATIC_DCL int FDECL(disturb,(struct monst *));
+STATIC_DCL int FDECL(scent_you_callback,(genericptr_t, int, int));
 STATIC_DCL void FDECL(distfleeck,(struct monst *,int *,int *,int *));
 STATIC_DCL int FDECL(m_arrival, (struct monst *));
 STATIC_DCL void FDECL(watch_on_duty,(struct monst *));
@@ -1371,6 +1372,19 @@ register struct monst *mtmp;
 	return(FALSE);
 }
 
+STATIC_DCL int
+scent_you_callback(data, x, y)
+genericptr_t data;
+int x, y;
+{
+    int is_accessible = ZAP_POS(levl[x][y].typ);
+    boolean *shouldsmell = (boolean *)data;
+    if (u.ux == x && u.uy == y) *shouldsmell = TRUE;
+	
+	if(!(*shouldsmell)) return !is_accessible;
+	else return 1; /* Once a path to you is found, quickly end the xpath function */
+}
+
 /* Return values:
  * 0: did not move, but can still attack and do other stuff.
  * 1: moved, possibly can attack.
@@ -1615,6 +1629,19 @@ not_special:
 		}
 		if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
 			should_see = TRUE;
+		}
+		if(!should_see && goodsmeller(mtmp->data) && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 6){
+		/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
+			if(clear_path(u.ux, u.uy, mtmp->mx, mtmp->my)){
+			/*don't running a complicated path function if there is a straight line to you*/
+				should_see = TRUE;
+			} else {
+				boolean shouldsmell = FALSE;
+				xpathto(6, mtmp->mx, mtmp->my, scent_you_callback, (genericptr_t)&shouldsmell);
+				if(shouldsmell){
+					should_see = TRUE;
+				}
+			}
 		}
 		
 		if ((youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == STRANGE_OBJECT) || u.uundetected ||
@@ -2295,6 +2322,19 @@ register struct monst *mtmp;
 	}
 	if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
 		notseen = FALSE;
+	}
+	if(notseen && goodsmeller(mtmp->data) && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 6){
+	/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
+		if(clear_path(u.ux, u.uy, mtmp->mx, mtmp->my)){
+		/*don't running a complicated path function if there is a straight line to you*/
+			notseen = FALSE;
+		} else {
+			boolean shouldsmell = FALSE;
+			xpathto(6, mtmp->mx, mtmp->my, scent_you_callback, (genericptr_t)&shouldsmell);
+			if(shouldsmell){
+				notseen = FALSE;
+			}
+		}
 	}
 	
 	/* add cases as required.  eg. Displacement ... */

@@ -9,4 +9,9 @@ typedef struct nhcoord {
 	xchar x,y;
 } coord;
 
+struct seekspot {
+	xchar x,y;
+	boolean found;
+};
+
 #endif /* COORD_H */

@@ -70,8 +70,8 @@
 #define is_hider(ptr)		(((ptr)->mflagst & MT_HIDE) != 0L)
 /*#define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L) when did this get duplicated???*/
 #define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L)
-#define goodsmeller(ptr)	(((ptr)->mflagsv & MV_SCENT) == 0L)
-#define is_tracker(ptr)		(((ptr)->mflagsg & MG_TRACKER) == 0L)
+#define goodsmeller(ptr)	(((ptr)->mflagsv & MV_SCENT) != 0L)
+#define is_tracker(ptr)		(((ptr)->mflagsg & MG_TRACKER) != 0L)
 #define eyecount(ptr)		(!haseyes(ptr) ? 0 : \
 				 ((ptr) == &mons[PM_CYCLOPS] || \
 				  (ptr) == &mons[PM_MONOTON] || \
