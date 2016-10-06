@@ -5606,7 +5606,7 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_OTIAX && !Invis && !(moves > u.otiaxAttack+5)) count++;
 		if(u.sealsActive&SEAL_PAIMON && !Invis && !uarmh) count++;
 		if(u.sealsActive&SEAL_SIMURGH && !Invis && !(((uarmg || uarmc) && uarmh))) count++;
-		if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
 		if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || 
 												 (moves>20000 && !(uarmc && uarmg && uarmf)) || (moves>50000 && !(uarmc && uarmg && uarmf && uarm && uarmh)) || 
 												 (moves>100000 && !(uarmc && uarmg && uarmf && uarm && uarmh && ublindf && (ublindf->otyp==MASK || ublindf->otyp == R_LYEHIAN_FACEPLATE)))
@@ -5631,8 +5631,8 @@ struct monst *mon;
 	if(couldsee(mon->mx, mon->my) && !is_blind(mon)){
 		if(u.sealsActive&SEAL_AHAZU && !(ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE))) count++;
 		// if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
-		if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
-		if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
+		if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
 		// if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES)) count++;
 		if(u.sealsActive&SEAL_BALAM && !Invis && (uarmc || uarm) && !(uarmg && uarmf)) count++;
 		// if(u.sealsActive&SEAL_BERITH && !Invis && (u.usteed || !(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))) count++;
@@ -5643,7 +5643,7 @@ struct monst *mon;
 		// if(u.sealsActive&SEAL_ECHIDNA && !Invis && !(uarmf && (uarmc || uarm))) count++;
 		if(u.sealsActive&SEAL_EDEN && !NoBInvis && !verysmall(youmonst.data) && !bigmonst(youmonst.data) && !uarmh) count++;
 		// if(u.sealsActive&SEAL_ENKI && !Invis && !(uarm || uarmc)) count++;
-		if(u.sealsActive&SEAL_EURYNOME && !Invis && levl[u.ux][u.uy].lit == 0 && viz_array[u.uy][u.ux]&TEMP_LIT) count++;
+		if(u.sealsActive&SEAL_EURYNOME && !Invis && levl[u.ux][u.uy].lit == 0 && viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)) count++;
 		// if(u.sealsActive&SEAL_EVE && !NoBInvis && !(uarmf && (uarm || uarmc))) count++;
 		if(u.sealsActive&SEAL_FAFNIR && !NoBInvis && !(uright || uarmg)) count++;
 		if(u.sealsActive&SEAL_HUGINN_MUNINN && !NoBInvis && !uarmh) count++;
@@ -5658,13 +5658,13 @@ struct monst *mon;
 		// if(u.sealsActive&SEAL_OTIAX && !Invis && !(moves > u.otiaxAttack+5)) count++;
 		// if(u.sealsActive&SEAL_PAIMON && !Invis && !uarmh) count++;
 		if(u.sealsActive&SEAL_SIMURGH && !Invis && uarmc && uarmh && !uarmg) count++;
-		// if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		// if(u.sealsActive&SEAL_TENEBROUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
 		// if(u.sealsActive&SEAL_YMIR && !Invis && ((moves>5000 && !(uarm || uarmc)) || (moves>10000 && !(uarmc)) || (moves>20000 && !(uarmc && uarmg)))) count++;
 		// if(u.specialSealsActive&SEAL_DAHLVER_NAR && !NoBInvis && dahlverNarVis()) count++;
 		// if(u.specialSealsActive&SEAL_ACERERAK && !NoBInvis && !ublindf) count++;
 		if(u.specialSealsActive&SEAL_COUNCIL && !Blind) count++;
 		if(u.specialSealsActive&SEAL_ALIGNMENT_THING) count++;
-		if(u.sealsActive&SEAL_BLACK_WEB && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))) count++;
+		if(u.sealsActive&SEAL_BLACK_WEB && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
 	} if(u.specialSealsActive&SEAL_NUMINA) count++;
 //	if(u.specialSealsActive&SEAL_UNKNOWN_GOD) count++;
 	return count;

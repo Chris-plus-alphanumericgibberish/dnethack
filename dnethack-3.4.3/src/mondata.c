@@ -419,7 +419,7 @@ can_track(ptr)		/* returns TRUE if monster can track well */
 		|| uwep->oartifact == ART_SLAVE_TO_ARMOK
 		) ) return TRUE;
 	else
-		return((boolean)haseyes(ptr));
+		return((boolean)is_tracker(ptr));
 }
 
 #endif /* OVL1 */

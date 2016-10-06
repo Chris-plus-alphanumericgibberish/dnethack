@@ -130,8 +130,12 @@
 #define HConfusion		u.uprops[CONFUSION].intrinsic
 #define Confusion		(HConfusion && !(u.specialSealsActive&SEAL_NUMINA))
 
-#define LightBlind		((Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && !(u.sealsActive&SEAL_AMON) && (viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)\
-						&& !(ublindf && (ublindf->otyp == LENSES || ublindf->otyp == MASK)) && !Is_waterlevel(&u.uz))
+#define LightBlind		(((darksight(youracedata) && !Is_waterlevel(&u.uz)) && !(u.sealsActive&SEAL_AMON) &&\
+							((viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))\
+							|| (levl[u.ux][u.uy].lit &&\
+								!(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)) &&\
+								!(viz_array[u.uy][u.ux]&TEMP_DRK2)\
+						&& !(ublindf && (ublindf->otyp == LENSES || ublindf->otyp == MASK)) && !Is_waterlevel(&u.uz)))))
 #define Blinded			u.uprops[BLINDED].intrinsic
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK)
 		/* ...means blind because of a cover */

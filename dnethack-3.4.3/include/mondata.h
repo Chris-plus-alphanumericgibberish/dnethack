@@ -26,7 +26,14 @@
 
 #define resists_poly(ptr)	((ptr) == &mons[PM_OONA] || is_weeping(ptr) || is_yochlol(ptr))
 
-#define is_blind(mon)		(!((mon)->mcansee) || (is_drow((mon)->data) && (viz_array[(mon)->my][(mon)->mx]&TEMP_LIT || levl[(mon)->mx][(mon)->my].lit)))
+#define is_blind(mon)		(!((mon)->mcansee) || (darksight((mon)->data) && (viz_array[(mon)->my][(mon)->mx]&TEMP_LIT1 || levl[(mon)->mx][(mon)->my].lit)))
+#define is_deaf(mon)		(!((mon)->mcanhear))
+
+#define is_molochan(ptr)	((ptr)->maligntyp == A_NONE)
+#define is_voidalign(ptr)	((ptr)->maligntyp == A_VOID)
+#define is_lawful(ptr)		((ptr)->maligntyp > A_NEUTRAL && !is_molochan(ptr) && !is_voidalign(ptr))
+#define is_neutral(ptr)		((ptr)->maligntyp == A_NEUTRAL)
+#define is_chaotic(ptr)		((ptr)->maligntyp < A_NEUTRAL && !is_molochan(ptr) && !is_voidalign(ptr))
 
 #define is_lminion(mon)		(is_minion((mon)->data) && \
 				 (mon)->data->maligntyp > A_NEUTRAL && \
@@ -63,6 +70,8 @@
 #define is_hider(ptr)		(((ptr)->mflagst & MT_HIDE) != 0L)
 /*#define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L) when did this get duplicated???*/
 #define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L)
+#define goodsmeller(ptr)	(((ptr)->mflagsv & MV_SCENT) == 0L)
+#define is_tracker(ptr)		(((ptr)->mflagsg & MG_TRACKER) == 0L)
 #define eyecount(ptr)		(!haseyes(ptr) ? 0 : \
 				 ((ptr) == &mons[PM_CYCLOPS] || \
 				  (ptr) == &mons[PM_MONOTON] || \
@@ -337,9 +346,25 @@
 #define wants_qart(ptr)	((ptr->mflagst & MT_WANTSARTI))
 #define wants_amul(ptr)	((ptr->mflagst & MT_COVETOUS))
 #define is_covetous(ptr)	((ptr->mflagst & MT_COVETOUS))
+
+#define normalvision(ptr)	((ptr->mflagsv & MV_NORMAL))
+#define darksight(ptr)		((ptr->mflagsv & MV_DARKSIGHT))
+#define catsight(ptr)		((ptr->mflagsv & MV_CATSIGHT))
+#define lowlightsight2(ptr)	((ptr->mflagsv & MV_LOWLIGHT2))
+#define lowlightsight3(ptr)	((ptr->mflagsv & MV_LOWLIGHT3))
+#define echolocation(ptr)	((ptr->mflagsv & MV_ECHOLOCATE))
+#define extramission(ptr)	((ptr->mflagsv & MV_EXTRAMISSION))
+#define rlyehiansight(ptr)	((ptr->mflagsv & MV_RLYEHIAN))
+
 #define infravision(ptr)	((ptr->mflagsv & MV_INFRAVISION))
 #define infravisible(ptr)	((ptr->mflagsg & MG_INFRAVISIBLE))
-#define darksight(ptr)	((ptr->mflagsv & MV_DARKSIGHT))
+#define bloodsense(ptr)		((ptr->mflagsv & MV_BLOODSENSE))
+#define lifesense(ptr)		((ptr->mflagsv & MV_LIFESENSE))
+#define earthsense(ptr)		((ptr->mflagsv & MV_EARTHSENSE))
+#define senseall(ptr)		((ptr->mflagsv & MV_DETECTION))
+
+#define ominsense(ptr)		((ptr->mflagsv & MV_OMNI))
+
 #define can_betray(ptr)		((ptr->mflagst & MT_TRAITOR))
 #define opaque(ptr)	(((ptr)->mflagsg & MG_OPAQUE))
 #define mteleport(ptr)	(((ptr)->mflagsm & MM_TENGTPORT))

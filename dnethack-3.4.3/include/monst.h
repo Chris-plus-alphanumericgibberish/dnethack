@@ -103,6 +103,9 @@ struct monst {
 	Bitfield(mcansee,1);	/* cansee 1, temp.blinded 0, blind 0 */
 	Bitfield(mblinded,7);	/* cansee 0, temp.blinded n, blind 0 */
 
+	Bitfield(mcanhear,1);	/* cansee 1, temp.blinded 0, blind 0 */
+	Bitfield(mdeafened,7);	/* cansee 0, temp.blinded n, blind 0 */
+
 	Bitfield(mcanmove,1);	/* paralysis, similar to mblinded */
 	Bitfield(mfrozen,7);
 	

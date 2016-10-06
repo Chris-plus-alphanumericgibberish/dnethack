@@ -24,7 +24,7 @@
  *
  * The major working function is do_light_sources(). It is called
  * when the vision system is recreating its "could see" array.  Here
- * we add a flag (TEMP_LIT) to the array for all locations that are lit
+ * we add a flag (TEMP_LIT#) to the array for all locations that are lit
  * via a light source.  The bad part of this is that we have to
  * re-calculate the LOS of each light source every time the vision
  * system runs.  Even if the light sources and any topology (vision blocking
@@ -170,44 +170,217 @@ do_light_sources(cs_rows)
         }
 
 	if (ls->flags & LSF_SHOW) {
-	    /*
-	     * Walk the points in the circle and see if they are
-	     * visible from the center.  If so, mark'em.
-	     *
-	     * Kevin's tests indicated that doing this brute-force
-	     * method is faster for radius <= 3 (or so).
-	     */
-	    limits = circle_ptr(ls->range);
-	    if ((max_y = (ls->y + ls->range)) >= ROWNO) max_y = ROWNO-1;
-	    if ((y = (ls->y - ls->range)) < 0) y = 0;
-	    for (; y <= max_y; y++) {
-		row = cs_rows[y];
-		offset = limits[abs(y - ls->y)];
-		if ((min_x = (ls->x - offset)) < 0) min_x = 0;
-		if ((max_x = (ls->x + offset)) >= COLNO) max_x = COLNO-1;
+		if((ls->type == LS_OBJECT && Is_darklight_source(((struct obj *)(ls->id)))) ||
+			(ls->type == LS_MONSTER && Is_darklight_monster(((struct monst *)(ls->id))->data))
+		){
+			int range = ls->range;
+			/*
+			 * Walk the points in the circle and see if they are
+			 * visible from the center.  If so, mark'em.
+			 *
+			 * Kevin's tests indicated that doing this brute-force
+			 * method is faster for radius <= 3 (or so).
+			 */
+			limits = circle_ptr(range);
+			if ((max_y = (ls->y + range)) >= ROWNO) max_y = ROWNO-1;
+			if ((y = (ls->y - range)) < 0) y = 0;
+			for (; y <= max_y; y++) {
+			row = cs_rows[y];
+			offset = limits[abs(y - ls->y)];
+			if ((min_x = (ls->x - offset)) < 0) min_x = 0;
+			if ((max_x = (ls->x + offset)) >= COLNO) max_x = COLNO-1;
 
-		if (ls->x == u.ux && ls->y == u.uy) {
-		    /*
-		     * If the light source is located at the hero, then
-		     * we can use the COULD_SEE bits already calcualted
-		     * by the vision system.  More importantly than
-		     * this optimization, is that it allows the vision
-		     * system to correct problems with clear_path().
-		     * The function clear_path() is a simple LOS
-		     * path checker that doesn't go out of its way
-		     * make things look "correct".  The vision system
-		     * does this.
-		     */
-		    for (x = min_x; x <= max_x; x++)
-			if (row[x] & COULD_SEE)
-			    row[x] |= TEMP_LIT;
+			if (ls->x == u.ux && ls->y == u.uy) {
+				/*
+				 * If the light source is located at the hero, then
+				 * we can use the COULD_SEE bits already calcualted
+				 * by the vision system.  More importantly than
+				 * this optimization, is that it allows the vision
+				 * system to correct problems with clear_path().
+				 * The function clear_path() is a simple LOS
+				 * path checker that doesn't go out of its way
+				 * make things look "correct".  The vision system
+				 * does this.
+				 */
+				for (x = min_x; x <= max_x; x++)
+				if (row[x] & COULD_SEE)
+					row[x] |= TEMP_DRK1;
+			} else {
+				for (x = min_x; x <= max_x; x++)
+				if ((ls->x == x && ls->y == y)
+					|| clear_path((int)ls->x, (int) ls->y, x, y))
+					row[x] |= TEMP_DRK1;
+			}
+			}
+			range = ls->range*2/3;
+			limits = circle_ptr(range);
+			if ((max_y = (ls->y + range)) >= ROWNO) max_y = ROWNO-1;
+			if ((y = (ls->y - range)) < 0) y = 0;
+			for (; y <= max_y; y++) {
+			row = cs_rows[y];
+			offset = limits[abs(y - ls->y)];
+			if ((min_x = (ls->x - offset)) < 0) min_x = 0;
+			if ((max_x = (ls->x + offset)) >= COLNO) max_x = COLNO-1;
+
+			if (ls->x == u.ux && ls->y == u.uy) {
+				/*
+				 * If the light source is located at the hero, then
+				 * we can use the COULD_SEE bits already calcualted
+				 * by the vision system.  More importantly than
+				 * this optimization, is that it allows the vision
+				 * system to correct problems with clear_path().
+				 * The function clear_path() is a simple LOS
+				 * path checker that doesn't go out of its way
+				 * make things look "correct".  The vision system
+				 * does this.
+				 */
+				for (x = min_x; x <= max_x; x++)
+				if (row[x] & COULD_SEE)
+					row[x] |= TEMP_DRK2;
+			} else {
+				for (x = min_x; x <= max_x; x++)
+				if ((ls->x == x && ls->y == y)
+					|| clear_path((int)ls->x, (int) ls->y, x, y))
+					row[x] |= TEMP_DRK2;
+			}
+			}
+			range = ls->range*1/3;
+			limits = circle_ptr(range);
+			if ((max_y = (ls->y + range)) >= ROWNO) max_y = ROWNO-1;
+			if ((y = (ls->y - range)) < 0) y = 0;
+			for (; y <= max_y; y++) {
+			row = cs_rows[y];
+			offset = limits[abs(y - ls->y)];
+			if ((min_x = (ls->x - offset)) < 0) min_x = 0;
+			if ((max_x = (ls->x + offset)) >= COLNO) max_x = COLNO-1;
+
+			if (ls->x == u.ux && ls->y == u.uy) {
+				/*
+				 * If the light source is located at the hero, then
+				 * we can use the COULD_SEE bits already calcualted
+				 * by the vision system.  More importantly than
+				 * this optimization, is that it allows the vision
+				 * system to correct problems with clear_path().
+				 * The function clear_path() is a simple LOS
+				 * path checker that doesn't go out of its way
+				 * make things look "correct".  The vision system
+				 * does this.
+				 */
+				for (x = min_x; x <= max_x; x++)
+				if (row[x] & COULD_SEE)
+					row[x] |= TEMP_DRK3;
+			} else {
+				for (x = min_x; x <= max_x; x++)
+				if ((ls->x == x && ls->y == y)
+					|| clear_path((int)ls->x, (int) ls->y, x, y))
+					row[x] |= TEMP_DRK3;
+			}
+			}
 		} else {
-		    for (x = min_x; x <= max_x; x++)
-			if ((ls->x == x && ls->y == y)
-				|| clear_path((int)ls->x, (int) ls->y, x, y))
-			    row[x] |= TEMP_LIT;
+			int range = ls->range;
+			/*
+			 * Walk the points in the circle and see if they are
+			 * visible from the center.  If so, mark'em.
+			 *
+			 * Kevin's tests indicated that doing this brute-force
+			 * method is faster for radius <= 3 (or so).
+			 */
+			limits = circle_ptr(range);
+			if ((max_y = (ls->y + range)) >= ROWNO) max_y = ROWNO-1;
+			if ((y = (ls->y - range)) < 0) y = 0;
+			for (; y <= max_y; y++) {
+			row = cs_rows[y];
+			offset = limits[abs(y - ls->y)];
+			if ((min_x = (ls->x - offset)) < 0) min_x = 0;
+			if ((max_x = (ls->x + offset)) >= COLNO) max_x = COLNO-1;
+
+			if (ls->x == u.ux && ls->y == u.uy) {
+				/*
+				 * If the light source is located at the hero, then
+				 * we can use the COULD_SEE bits already calcualted
+				 * by the vision system.  More importantly than
+				 * this optimization, is that it allows the vision
+				 * system to correct problems with clear_path().
+				 * The function clear_path() is a simple LOS
+				 * path checker that doesn't go out of its way
+				 * make things look "correct".  The vision system
+				 * does this.
+				 */
+				for (x = min_x; x <= max_x; x++)
+				if (row[x] & COULD_SEE)
+					row[x] |= TEMP_LIT1;
+			} else {
+				for (x = min_x; x <= max_x; x++)
+				if ((ls->x == x && ls->y == y)
+					|| clear_path((int)ls->x, (int) ls->y, x, y))
+					row[x] |= TEMP_LIT1;
+			}
+			}
+			range = ls->range*2;
+			limits = circle_ptr(range);
+			if ((max_y = (ls->y + range)) >= ROWNO) max_y = ROWNO-1;
+			if ((y = (ls->y - range)) < 0) y = 0;
+			for (; y <= max_y; y++) {
+			row = cs_rows[y];
+			offset = limits[abs(y - ls->y)];
+			if ((min_x = (ls->x - offset)) < 0) min_x = 0;
+			if ((max_x = (ls->x + offset)) >= COLNO) max_x = COLNO-1;
+
+			if (ls->x == u.ux && ls->y == u.uy) {
+				/*
+				 * If the light source is located at the hero, then
+				 * we can use the COULD_SEE bits already calcualted
+				 * by the vision system.  More importantly than
+				 * this optimization, is that it allows the vision
+				 * system to correct problems with clear_path().
+				 * The function clear_path() is a simple LOS
+				 * path checker that doesn't go out of its way
+				 * make things look "correct".  The vision system
+				 * does this.
+				 */
+				for (x = min_x; x <= max_x; x++)
+				if (row[x] & COULD_SEE)
+					row[x] |= TEMP_LIT2;
+			} else {
+				for (x = min_x; x <= max_x; x++)
+				if ((ls->x == x && ls->y == y)
+					|| clear_path((int)ls->x, (int) ls->y, x, y))
+					row[x] |= TEMP_LIT2;
+			}
+			}
+			range = ls->range*3;
+			limits = circle_ptr(range);
+			if ((max_y = (ls->y + range)) >= ROWNO) max_y = ROWNO-1;
+			if ((y = (ls->y - range)) < 0) y = 0;
+			for (; y <= max_y; y++) {
+			row = cs_rows[y];
+			offset = limits[abs(y - ls->y)];
+			if ((min_x = (ls->x - offset)) < 0) min_x = 0;
+			if ((max_x = (ls->x + offset)) >= COLNO) max_x = COLNO-1;
+
+			if (ls->x == u.ux && ls->y == u.uy) {
+				/*
+				 * If the light source is located at the hero, then
+				 * we can use the COULD_SEE bits already calcualted
+				 * by the vision system.  More importantly than
+				 * this optimization, is that it allows the vision
+				 * system to correct problems with clear_path().
+				 * The function clear_path() is a simple LOS
+				 * path checker that doesn't go out of its way
+				 * make things look "correct".  The vision system
+				 * does this.
+				 */
+				for (x = min_x; x <= max_x; x++)
+				if (row[x] & COULD_SEE)
+					row[x] |= TEMP_LIT3;
+			} else {
+				for (x = min_x; x <= max_x; x++)
+				if ((ls->x == x && ls->y == y)
+					|| clear_path((int)ls->x, (int) ls->y, x, y))
+					row[x] |= TEMP_LIT3;
+			}
+			}
 		}
-	    }
 	}
     }
 }

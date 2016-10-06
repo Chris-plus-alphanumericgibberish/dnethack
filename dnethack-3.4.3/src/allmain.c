@@ -465,13 +465,18 @@ moveloop()
 			if(u.sealsActive&SEAL_FAFNIR && money_cnt(invent) == 0) unbind(SEAL_FAFNIR,TRUE);
 #endif
 			if(u.sealsActive&SEAL_JACK && (Is_astralevel(&u.uz) || Inhell)) unbind(SEAL_JACK,TRUE);
-			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON || Race_if(PM_DROW))
-				&&!(viz_array[u.uy][u.ux]&TEMP_LIT || levl[u.ux][u.uy].lit)
+			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON || darksight(youracedata))
+				&&!(
+					(viz_array[u.uy][u.ux]&TEMP_LIT3 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)) || 
+					(levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT3)))
+				   )
 			){
-				if(!u.nv_range){
-					if(++u.orthocounts>5) unbind(SEAL_ORTHOS,TRUE);
+				if(lowlightsight3(youracedata)){
+					if(++u.orthocounts>(5*3)) unbind(SEAL_ORTHOS,TRUE);
+				} else if(lowlightsight2(youracedata)){
+					if(++u.orthocounts>(5*2)) unbind(SEAL_ORTHOS,TRUE);
 				} else {
-					if(++u.orthocounts>5*u.nv_range) unbind(SEAL_ORTHOS,TRUE);
+					if(++u.orthocounts>5) unbind(SEAL_ORTHOS,TRUE);
 				}
 				if(u.sealsActive&SEAL_ORTHOS && Hallucination){ /*Didn't just unbind it*/
 					if(u.orthocounts == 1) pline("It is now pitch black. You are likely to be eaten by a grue.");

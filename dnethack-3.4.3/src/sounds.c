@@ -3773,7 +3773,11 @@ int tx,ty;
 	case TENEBROUS:{
 		if(u.sealTimeout[TENEBROUS-FIRST_SEAL] < moves){
 			//Spirit requires that his seal be drawn in darkness.
-			if( !(levl[tx][ty].lit) && !(viz_array[ty][tx]&TEMP_LIT) && !(levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_LIT)) ){
+			if( !(levl[tx][ty].lit) &&
+					!(viz_array[ty][tx]&TEMP_LIT1 && !(viz_array[ty][tx]&TEMP_DRK3)) && 
+				!(levl[u.ux][u.uy].lit) && 
+					!(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))
+			){
 				if(!Blind) pline("Within the seal, darkness takes on its own meaning,");
 				if(!Blind) pline("beyond mere absense of light.");
 				if(u.sealCounts < numSlots){
@@ -4027,7 +4031,13 @@ int tx,ty;
 	case BLACK_WEB:{
 		if(u.sealTimeout[BLACK_WEB-FIRST_SEAL] < moves){
 			struct trap *t = t_at(tx,ty);
-			if(t && t->ttyp == WEB && ((levl[tx][ty].lit) || viz_array[ty][tx]&TEMP_LIT || (levl[u.ux][u.uy].lit) || viz_array[u.uy][u.ux]&TEMP_LIT)){
+			if(t && t->ttyp == WEB && (
+				(levl[tx][ty].lit && !(viz_array[ty][tx]&TEMP_DRK3 && !viz_array[ty][tx]&TEMP_LIT1)) || 
+				(viz_array[ty][tx]&TEMP_LIT1 && !(viz_array[ty][tx]&TEMP_DRK3)) || 
+				(levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_DRK3 && !viz_array[u.uy][u.ux]&TEMP_LIT1)) || 
+				(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))
+				)
+			){
 				pline("The Black Web reaches out from the gate hidden below the white one.");
 				pline("Your eyes fill with darkness,");
 				pline("your mind with lies,");

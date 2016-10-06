@@ -724,6 +724,7 @@ struct you {
 
 extern long sealKey[34]; /*Defined in u_init.c*/
 extern boolean forcesight; /*Defined in u_init.c*/
+extern boolean forceblind; /*Defined in u_init.c*/
 extern char *wardDecode[26]; /*Defined in spell.c*/
 extern int wardMax[18]; /*Defined in engrave.c*/
 extern char *sealNames[]; /*Defined in engrave.c*/

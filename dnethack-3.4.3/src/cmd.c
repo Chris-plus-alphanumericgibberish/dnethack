@@ -2275,14 +2275,12 @@ signs_enlightenment()
 //		} else putstr(en_win, 0, "Your ram's horns have fused with your helm, taking on a metalic hue.");
 		message = TRUE;
 	}
-	if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))){
+	if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))){
 		putstr(en_win, 0, "Up close, it is plain your shadow aspires to depth as well as width and height.");
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis){
-//		if((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT)))
 			putstr(en_win, 0, "Your features have taken on the rigidity of a cheap disguise.");
-		// else putstr(en_win, 0, "Your rigid features can't be seen in the dark.");
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_ASTAROTH && !Invis){
@@ -2373,7 +2371,7 @@ signs_enlightenment()
 		if(levl[u.ux][u.uy].lit != 0){
 			putstr(en_win, 0, "Your shadow is that of a dancing nymph.");
 			message = TRUE;
-		} else if(viz_array[u.uy][u.ux]&TEMP_LIT){
+		} else if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !viz_array[u.uy][u.ux]&TEMP_DRK3){
 			putstr(en_win, 0, "It's a bit hard to see, but your shadow is a dancing nymph.");
 			message = TRUE;
 		}
@@ -2462,7 +2460,7 @@ signs_enlightenment()
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_TENEBROUS && !Invis){
-		if(!(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT))){
+		if(!(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !viz_array[u.uy][u.ux]&TEMP_DRK3))){
 			putstr(en_win, 0, "Your shadow is deep black and pools unnaturally close to you.");
 			message = TRUE;
 		}
@@ -2573,7 +2571,7 @@ signs_mirror()
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis){
-		if((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT)))
+		if((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !viz_array[u.uy][u.ux]&TEMP_DRK3)))
 			putstr(en_win, 0, "Your features have taken on the rigidity of a cheap disguise.");
 		else putstr(en_win, 0, "Your rigid features can't be seen in the dark.");
 		message = TRUE;

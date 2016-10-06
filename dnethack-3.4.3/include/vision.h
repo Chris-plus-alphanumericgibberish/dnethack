@@ -12,10 +12,17 @@ extern char *viz_rmin;			/* min could see indices */
 extern char *viz_rmax;			/* max could see indices */
 #endif
 /*Note: these are stored in char arrays*/
-#define COULD_SEE 0x1		/* location could be seen, if it were lit */
-#define IN_SIGHT  0x2		/* location can be seen */
-#define TEMP_LIT  0x4		/* location is temporarily lit */
-#define OVER_LIT  0x8		/* too bright */
+#define COULD_SEE  0x01		/* location could be seen, if it were lit */
+#define IN_SIGHT   0x02		/* location can be seen */
+#define TEMP_LIT1  0x04		/* location is temporarily lit (regular) */
+#define TEMP_LIT2  0x08		/* location is temporarily lit (lowlight 2) */
+#define TEMP_LIT3  0x10		/* location is temporarily lit (lowlight 3) */
+#define TEMP_DRK1  0x20		/* location is temporarily dark (regular) */
+#define TEMP_DRK2  0x40		/* location is temporarily dark (lowlight 2) */
+#define TEMP_DRK3  0x80		/* location is temporarily dark (lowlight 3) */
+
+#define TEMP_LIT  TEMP_LIT1	/* location is temporarily lit */
+#define TEMP_DRK  TEMP_DRK1	/* location is temporarily lit */
 
 /*
  * Light source sources

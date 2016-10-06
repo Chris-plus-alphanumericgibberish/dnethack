@@ -579,7 +579,14 @@ vision_recalc(control)
     }
 #endif
     else {
-	int has_night_vision = u.nv_range || (Race_if(PM_DROW) && LightBlind && !Role_if(PM_ANACHRONONAUT));	/* hero has night vision */
+	// int has_night_vision = u.nv_range || (Race_if(PM_DROW) && LightBlind && !Role_if(PM_ANACHRONONAUT));	/* hero has night vision */
+	int nv_range;
+	if(lowlightsight3(youracedata)) nv_range = 3;
+	else if(lowlightsight2(youracedata)) nv_range = 2;
+	else if(darksight(youracedata) && LightBlind) nv_range = 1;
+	else if(normalvision(youracedata)) nv_range = 1;
+	else nv_range = 0;
+		
 
 	if (Underwater && !Is_waterlevel(&u.uz)) {
 	    /*
@@ -587,7 +594,7 @@ vision_recalc(control)
 	     * they are also underwater.  This overrides night vision but
 	     * does not override x-ray vision.
 	     */
-	    has_night_vision = 0;
+	    nv_range = 0;
 
 	    for (row = u.uy-1; row <= u.uy+1; row++)
 		for (col = u.ux-1; col <= u.ux+1; col++) {
@@ -657,17 +664,10 @@ vision_recalc(control)
 		}
 	}
 	
-	if (has_night_vision && u.xray_range <= u.nv_range) {
-	    if (!u.nv_range && !(Race_if(PM_DROW) && LightBlind)) {	/* range is 0 */
-			next_array[u.uy][u.ux] |= IN_SIGHT;
-			levl[u.ux][u.uy].seenv = SVALL;
-			next_rmin[u.uy] = min(u.ux, next_rmin[u.uy]);
-			next_rmax[u.uy] = max(u.ux, next_rmax[u.uy]);
-	    } else {
-		int nvrange =  u.nv_range > 0 ? u.nv_range : 1;
-		ranges = u.nv_range > 0 ? circle_ptr(u.nv_range) : circle_ptr(1);
+	if (nv_range && u.xray_range <= nv_range) {
+		ranges = circle_ptr(nv_range);
 
-		for (row = u.uy-nvrange; row <= u.uy+nvrange; row++) {
+		for (row = u.uy-nv_range; row <= u.uy+nv_range; row++) {
 		    if (row < 0) continue;	if (row >= ROWNO) break;
 		    dy = v_abs(u.uy-row);	next_row = next_array[row];
 
@@ -680,7 +680,6 @@ vision_recalc(control)
 		    next_rmin[row] = min(start, next_rmin[row]);
 		    next_rmax[row] = max(stop, next_rmax[row]);
 		}
-	    }
 	}
 	if(u.sealsActive&SEAL_ORTHOS) u.xray_range=oldxray;
     }
@@ -738,19 +737,47 @@ vision_recalc(control)
 		if ( !(old_row[col] & IN_SIGHT) || oldseenv != lev->seenv)
 		    newsym(col,row);
 	    }
-
-	    else if ((!(Race_if(PM_DROW) && !(Role_if(PM_ANACHRONONAUT) && LightBlind) && !Is_waterlevel(&u.uz)) && (next_row[col] & COULD_SEE)
-				&& (lev->lit || (next_row[col] & TEMP_LIT) || u.sealsActive&SEAL_AMON)) ||
-				 ( Race_if(PM_DROW)  && !Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)
-				&& (!(ulev->lit|| (next_array[u.uy][u.ux] & TEMP_LIT)) || u.sealsActive&SEAL_AMON)
-				&& (!(lev->lit || (next_row[col] & TEMP_LIT)) || 
-					((lev->typ < CORR || lev->typ==STAIRS) && !((mat = m_at(col,row)) && emits_light(mat->data))) || 
-					u.sealsActive&SEAL_AMON))
+	    else if (
+			((u.sealsActive&SEAL_AMON) && (next_row[col] & COULD_SEE)) ||
+			(Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)) ||
+			(normalvision(youracedata) && (next_row[col] & COULD_SEE) && (
+				(lev->lit &&
+					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT1)) &&
+					!(next_row[col]&TEMP_DRK2) 
+				) || 
+				((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK1))
+			)) ||
+			(lowlightsight2(youracedata) && (next_row[col] & COULD_SEE) && (
+				(lev->lit &&
+					!(next_row[col]&TEMP_DRK2 && !(next_row[col]&TEMP_LIT2)) &&
+					!(next_row[col]&TEMP_DRK3 && !(next_row[col]&TEMP_LIT1)) 
+				) || 
+				(((next_row[col]&TEMP_LIT2) && !(next_row[col]&TEMP_DRK2)) || ((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK3)))
+			)) ||
+			(lowlightsight3(youracedata) && (next_row[col] & COULD_SEE) && (
+				(lev->lit &&
+					!(next_row[col]&TEMP_DRK3 && !(next_row[col]&TEMP_LIT3))
+				) || 
+				(
+					((next_row[col]&TEMP_LIT3) && !(next_row[col]&TEMP_DRK1)) || 
+					((next_row[col]&TEMP_LIT2) && !(next_row[col]&TEMP_DRK2)) || 
+					((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK3))
+				)
+			)) ||
+			(darksight(youracedata) && !LightBlind && (next_row[col] & COULD_SEE) && 
+			 ((lev->typ < CORR || lev->typ==STAIRS) || !(
+				(lev->lit &&
+					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT1)) &&
+					!(next_row[col]&TEMP_DRK2) 
+				) || 
+				((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK1))
+			))) ||
+			(extramission(youracedata) && (next_row[col] & COULD_SEE))
 		) {
 		/*
 		 * We see this position because it is lit.
 		 */
-		if ((/*IS_DOOR(lev->typ) || lev->typ == SDOOR || */ /*allow doors to be seen due to light through the cracks -ChrisANG*/
+		if ((/*IS_DOOR(lev->typ) || */ lev->typ == SDOOR || /*allow doors to be seen due to light through the cracks -ChrisANG*/
 		     IS_WALL(lev->typ)) && !viz_clear[row][col]) {
 		    /*
 		     * Make sure doors, walls, boulders or mimics don't show up
@@ -760,10 +787,12 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if ((!(Race_if(PM_DROW) && !(Role_if(PM_ANACHRONONAUT) && LightBlind) && !Is_waterlevel(&u.uz)) && 
-					(flev->lit || next_array[row+dy][col+dx] & TEMP_LIT))
-			   ||(Race_if(PM_DROW) && !Is_waterlevel(&u.uz) && !((mat = m_at(col,row)) && emits_light(mat->data)))
+		    if ((!(darksight(youracedata) && !LightBlind && !Is_waterlevel(&u.uz)) && 
+					(flev->lit || 
+					next_array[row+dy][col+dx]&TEMP_LIT1))
+			   ||(darksight(youracedata) && !Is_waterlevel(&u.uz))
 			   || u.sealsActive&SEAL_AMON
+			   || extramission(youracedata)
 			){
 				next_row[col] |= IN_SIGHT;	/* we see it */
 
@@ -810,11 +839,11 @@ vision_recalc(control)
 	     */
 	    else {
 not_in_sight:
-		if ((old_row[col] & IN_SIGHT)
-			|| ((next_row[col] & COULD_SEE)
-				^ (old_row[col] & COULD_SEE))
-			|| (Race_if(PM_DROW) && !Is_waterlevel(&u.uz))
-		) newsym(col,row);
+			if ((old_row[col] & IN_SIGHT)
+				|| (next_row[col] & IN_SIGHT)
+				|| ((next_row[col] & COULD_SEE)
+					^ (old_row[col] & COULD_SEE))
+			) newsym(col,row);
 	    }
 
 	} /* end for col . . */

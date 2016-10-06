@@ -998,8 +998,8 @@ register struct monst *mtmp;
 	}
 	
 	if((is_drow(mtmp->data) || mtmp->data == &mons[PM_LUGRIBOSSK] || mtmp->data == &mons[PM_MAANZECORIAN])
-		&& (!mtmp->mpeaceful || (Race_if(PM_DROW) && !Role_if(PM_ANACHRONONAUT))) 
-		&& (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT)
+		&& (!mtmp->mpeaceful || darksight(youracedata))
+		&& (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 		&& !(mindless(mtmp->data))
@@ -1517,20 +1517,107 @@ not_special:
 	gx = mtmp->mux;
 	gy = mtmp->muy;
 	appr = (mtmp->mflee && mtmp->data != &mons[PM_BANDERSNATCH]) ? -1 : 1;
-	if (mtmp->mconf || (u.uswallow && mtmp == u.ustuck))
+	if (mtmp->mconf || (u.uswallow && mtmp == u.ustuck) || (gx == 0 && gy == 0))
 		appr = 0;
 	else {
 #ifdef GOLDOBJ
 		struct obj *lepgold, *ygold;
 #endif
-		boolean should_see = (couldsee(omx, omy) &&
-				      (levl[gx][gy].lit ||
-				       !levl[omx][omy].lit) &&
-				      (dist2(omx, omy, gx, gy) <= 36));
-
-		if (is_blind(mtmp) ||
-		    (should_see && Invis && !perceives(ptr) && rn2(11)) ||
-		    (youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == STRANGE_OBJECT) || u.uundetected ||
+		boolean should_see = FALSE;
+		// should_see = (couldsee(omx, omy) &&
+				      // (levl[gx][gy].lit ||
+				       // !levl[omx][omy].lit) &&
+				      // (dist2(omx, omy, gx, gy) <= 36));
+		if(distmin(omx,omy,gx,gy) <= 1) should_see = TRUE;
+		if(darksight(mtmp->data) && !is_blind(mtmp)){
+			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				if(levl[gx][gy].lit){
+					if(viz_array[gy][gx]&TEMP_DRK1 && !(viz_array[gy][gx]&TEMP_LIT1))
+						should_see = TRUE;
+				} else {
+					if(!(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK1)))
+						should_see = TRUE;
+				}
+			}
+		}
+		if(lowlightsight3(mtmp->data) && !is_blind(mtmp)){
+			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				if(levl[gx][gy].lit){
+					if(!(viz_array[gy][gx]&TEMP_DRK3 && !(viz_array[gy][gx]&TEMP_LIT3)))
+						should_see = TRUE;
+				} else {
+					if(viz_array[gy][gx]&TEMP_LIT3 && !(viz_array[gy][gx]&TEMP_DRK1))
+						should_see = TRUE;
+					else if(viz_array[gy][gx]&TEMP_LIT2 && !(viz_array[gy][gx]&TEMP_DRK2))
+						should_see = TRUE;
+					else if(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK3))
+						should_see = TRUE;
+				}
+			}
+		}
+		if(lowlightsight2(mtmp->data) && !is_blind(mtmp)){
+			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				if(levl[gx][gy].lit){
+					if(!(viz_array[gy][gx]&TEMP_DRK2 && !(viz_array[gy][gx]&TEMP_LIT2)) &&
+						!(viz_array[gy][gx]&TEMP_DRK3 && !(viz_array[gy][gx]&TEMP_LIT1)))
+						should_see = TRUE;
+				} else {
+					if(viz_array[gy][gx]&TEMP_LIT2 && !(viz_array[gy][gx]&TEMP_DRK1))
+						should_see = TRUE;
+					else if(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK2))
+						should_see = TRUE;
+				}
+			}
+		}
+		if(normalvision(mtmp->data) && !is_blind(mtmp)){
+			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				if(levl[gx][gy].lit){
+					if(!(viz_array[gy][gx]&TEMP_DRK1 && !(viz_array[gy][gx]&TEMP_LIT1)) &&
+						!(viz_array[gy][gx]&TEMP_DRK2)
+					)
+						should_see = TRUE;
+				} else {
+					if(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK1))
+						should_see = TRUE;
+				}
+			}
+		}
+		if(echolocation(mtmp->data) && !is_deaf(mtmp)){
+			if(couldsee(omx, omy)){
+				should_see = TRUE;
+			}
+		}
+		if(extramission(mtmp->data)){
+			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				should_see = TRUE;
+			}
+		}
+		
+		if(infravision(mtmp->data) && infravisible(youracedata) && !is_blind(mtmp)){
+			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				should_see = TRUE;
+			}
+		}
+		if(bloodsense(mtmp->data) && has_blood(youracedata)){
+			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				should_see = TRUE;
+			}
+		}
+		if(lifesense(mtmp->data) && !nonliving(youracedata)){
+			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				should_see = TRUE;
+			}
+		}
+		if(senseall(mtmp->data)){
+			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+				should_see = TRUE;
+			}
+		}
+		if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
+			should_see = TRUE;
+		}
+		
+		if ((youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == STRANGE_OBJECT) || u.uundetected ||
 		    (youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == GOLD_PIECE && !likes_gold(ptr)) ||
 		    (mtmp->mpeaceful && !mtmp->isshk) ||  /* allow shks to follow */
 		    ((monsndx(ptr) == PM_STALKER || is_bat(ptr) || monsndx(ptr) == PM_HUNTING_HORROR ||
@@ -1546,7 +1633,7 @@ not_special:
 #endif
 			appr = -1;
 
-		if (!should_see && can_track(ptr)) {
+		if (!should_see && can_track(ptr) && (goodsmeller(ptr) || (mtmp)->mcansee)) {
 			register coord *cp;
 
 			cp = gettrack(omx,omy);
@@ -2101,7 +2188,7 @@ void
 set_apparxy(mtmp)
 register struct monst *mtmp;
 {
-	boolean notseen, gotu;
+	boolean notseen, gotu = FALSE;
 	register int disp, mx = mtmp->mux, my = mtmp->muy;
 #ifdef GOLDOBJ
 	long umoney = money_cnt(invent);
@@ -2118,19 +2205,113 @@ register struct monst *mtmp;
 	   if you haven't moved away.  Assuming they aren't crazy. */
 	if (mx == u.ux && my == u.uy && (!mtmp->mcrazed || rn2(4))) goto found_you;
 
-	notseen = (is_blind(mtmp) || (Invis && !perceives(mtmp->data)));
+	// notseen = (is_blind(mtmp) || (Invis && !perceives(mtmp->data)));
+	notseen = TRUE;
+	
+	if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) <= 1 && !rn2(8)) notseen = FALSE;
+	if(darksight(mtmp->data) && !is_blind(mtmp)){
+		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			if(levl[u.ux][u.uy].lit){
+				if(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
+					notseen = FALSE;
+			} else {
+				if(!(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))
+					notseen = FALSE;
+			}
+		}
+	}
+	if(lowlightsight3(mtmp->data) && !is_blind(mtmp)){
+		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			if(levl[u.ux][u.uy].lit){
+				if(!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT3)))
+					notseen = FALSE;
+			} else {
+				if(viz_array[u.uy][u.ux]&TEMP_LIT3 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
+					notseen = FALSE;
+				else if(viz_array[u.uy][u.ux]&TEMP_LIT2 && !(viz_array[u.uy][u.ux]&TEMP_DRK2))
+					notseen = FALSE;
+				else if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))
+					notseen = FALSE;
+			}
+		}
+	}
+	if(lowlightsight2(mtmp->data) && !is_blind(mtmp)){
+		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			if(levl[u.ux][u.uy].lit){
+				if(!(viz_array[u.uy][u.ux]&TEMP_DRK2 && !(viz_array[u.uy][u.ux]&TEMP_LIT2)) &&
+					!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
+				)
+					notseen = FALSE;
+			} else {
+				if(viz_array[u.uy][u.ux]&TEMP_LIT2 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
+					notseen = FALSE;
+				else if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK2))
+					notseen = FALSE;
+			}
+		}
+	}
+	if(normalvision(mtmp->data) && !is_blind(mtmp)){
+		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			if(levl[u.ux][u.uy].lit){
+				if(!(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)) &&
+					!(viz_array[u.uy][u.ux]&TEMP_DRK2)
+				)
+					notseen = FALSE;
+			} else {
+				if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
+					notseen = FALSE;
+			}
+		}
+	}
+	if(echolocation(mtmp->data) && !is_deaf(mtmp)){
+		if(couldsee(mtmp->mx, mtmp->my)){
+			notseen = FALSE;
+		}
+	}
+	if(extramission(mtmp->data)){
+		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			notseen = FALSE;
+		}
+	}
+	if(infravision(mtmp->data) && infravisible(youracedata) && !is_blind(mtmp)){
+		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			notseen = FALSE;
+		}
+	}
+	if(bloodsense(mtmp->data) && has_blood(youracedata)){
+		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			notseen = FALSE;
+		}
+	}
+	if(lifesense(mtmp->data) && !nonliving(youracedata)){
+		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			notseen = FALSE;
+		}
+	}
+	if(senseall(mtmp->data)){
+		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
+			notseen = FALSE;
+		}
+	}
+	if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
+		notseen = FALSE;
+	}
+	
 	/* add cases as required.  eg. Displacement ... */
-	if (notseen || Underwater) {
-	    /* Xorns can smell valuable metal like gold, treat as seen */
-	    if ((mtmp->data == &mons[PM_XORN]) &&
-#ifndef GOLDOBJ
-			u.ugold
-#else
-			umoney
-#endif
-			&& !Underwater)
-		disp = 0;
-	    else
+	if(notseen){
+		if((distmin(mtmp->mx,mtmp->my,mx,my) <= 1 && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) > 1) || !rn2(100)){
+			/*well, now it has NO clue where you are...*/
+			mtmp->mux = 0;
+			mtmp->muy = 0;
+		}
+		if(is_wanderer(mtmp->data) && !rn2(20)){
+			/*x goes from 1 to colno-1, y goes from 0 to rowno-1*/
+			mtmp->mux = rnd(COLNO-1);
+			mtmp->muy = rn2(ROWNO);
+		}
+		/* Otherwise, don't change the current */
+		return;
+	} else if ( Underwater) {
 		disp = 1;
 	} else if (Displaced || mtmp->mcrazed) {
 	    disp = couldsee(mx, my) ? 2 : 1;
@@ -2139,7 +2320,7 @@ register struct monst *mtmp;
 
 	/* without something like the following, invis. and displ.
 	   are too powerful */
-	gotu = notseen ? !rn2(3) : Displaced ? !rn2(4) : FALSE;
+	gotu = Displaced ? !rn2(4) : FALSE;
 
 #if 0		/* this never worked as intended & isn't needed anyway */
 	/* If invis but not displaced, staying around gets you 'discovered' */
