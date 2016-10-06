@@ -675,9 +675,6 @@ disturb(mtmp)
 		(!Stealth || (mtmp->data == &mons[PM_ETTIN] && rn2(10))) &&
 		(!(mtmp->data->mlet == S_NYMPH
 			|| mtmp->data == &mons[PM_JABBERWOCK]
-//#if 0	/* DEFERRED */
-			// || mtmp->data == &mons[PM_VORPAL_JABBERWOCK]
-//#endif
 			|| mtmp->data->mlet == S_LEPRECHAUN) || !rn2(50)) &&
 		(Aggravate_monster
 			|| (mtmp->data->mlet == S_DOG ||
