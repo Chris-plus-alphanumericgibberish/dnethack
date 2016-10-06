@@ -50,9 +50,14 @@ struct monst *mon;
 				 ((mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? ndemon(atyp) : monsndx(ptr);
 	    cnt = 1;
 	} else if (is_lminion(mon)) {
-	    dtype = (is_lord(ptr) && !rn2(20)) ? llord() :
-		     (is_lord(ptr) || (mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? lminion() : monsndx(ptr);
-	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
+		if(is_keter(mon->data)){
+			dtype = PM_MALKUTH_SEPHIRAH;
+			cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
+		} else {
+			dtype = (is_lord(ptr) && !rn2(20)) ? llord() :
+				 (is_lord(ptr) || (mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? lminion() : monsndx(ptr);
+			cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
+		}
 	} else if (is_nminion(mon)) {
 	    dtype = (is_lord(ptr) && !rn2(20)) ? nlord() :
 		     (is_lord(ptr) || (mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? nminion() : monsndx(ptr);
