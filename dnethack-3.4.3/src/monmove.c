@@ -1556,7 +1556,8 @@ not_special:
 		}
 		if(lowlightsight3(mtmp->data) && !is_blind(mtmp)){
 			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				if(levl[gx][gy].lit){
+				if(dist2(omx,omy,gx,gy) <= 3*3) should_see = TRUE;
+				else if(levl[gx][gy].lit){
 					if(!(viz_array[gy][gx]&TEMP_DRK3 && !(viz_array[gy][gx]&TEMP_LIT3)))
 						should_see = TRUE;
 				} else {
@@ -1571,7 +1572,8 @@ not_special:
 		}
 		if(lowlightsight2(mtmp->data) && !is_blind(mtmp)){
 			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				if(levl[gx][gy].lit){
+				if(dist2(omx,omy,gx,gy) <= 2*2) should_see = TRUE;
+				else if(levl[gx][gy].lit){
 					if(!(viz_array[gy][gx]&TEMP_DRK2 && !(viz_array[gy][gx]&TEMP_LIT2)) &&
 						!(viz_array[gy][gx]&TEMP_DRK3 && !(viz_array[gy][gx]&TEMP_LIT1)))
 						should_see = TRUE;
@@ -1585,7 +1587,8 @@ not_special:
 		}
 		if(normalvision(mtmp->data) && !is_blind(mtmp)){
 			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				if(levl[gx][gy].lit){
+				if(distmin(omx,omy,gx,gy) <= 1) should_see = TRUE;
+				else if(levl[gx][gy].lit){
 					if(!(viz_array[gy][gx]&TEMP_DRK1 && !(viz_array[gy][gx]&TEMP_LIT1)) &&
 						!(viz_array[gy][gx]&TEMP_DRK2)
 					)
@@ -2249,7 +2252,8 @@ register struct monst *mtmp;
 	}
 	if(lowlightsight3(mtmp->data) && !is_blind(mtmp)){
 		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			if(levl[u.ux][u.uy].lit){
+			if(dist2(mtmp->mx,mtmp->my,u.ux,u.uy) <= 3*3) notseen = FALSE;
+			else if(levl[u.ux][u.uy].lit){
 				if(!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT3)))
 					notseen = FALSE;
 			} else {
@@ -2264,7 +2268,8 @@ register struct monst *mtmp;
 	}
 	if(lowlightsight2(mtmp->data) && !is_blind(mtmp)){
 		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			if(levl[u.ux][u.uy].lit){
+			if(dist2(mtmp->mx,mtmp->my,u.ux,u.uy) <= 2*2) notseen = FALSE;
+			else if(levl[u.ux][u.uy].lit){
 				if(!(viz_array[u.uy][u.ux]&TEMP_DRK2 && !(viz_array[u.uy][u.ux]&TEMP_LIT2)) &&
 					!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
 				)
@@ -2279,7 +2284,8 @@ register struct monst *mtmp;
 	}
 	if(normalvision(mtmp->data) && !is_blind(mtmp)){
 		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			if(levl[u.ux][u.uy].lit){
+			if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) <= 1) notseen = FALSE;
+			else if(levl[u.ux][u.uy].lit){
 				if(!(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)) &&
 					!(viz_array[u.uy][u.ux]&TEMP_DRK2)
 				)
