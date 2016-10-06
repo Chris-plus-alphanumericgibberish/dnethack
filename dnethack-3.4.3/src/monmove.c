@@ -1731,6 +1731,9 @@ not_special:
 		   to grab them; this might hamper sling wielders, but it cuts
 		   down on move overhead by filtering out most common item */
 		if (otmp->otyp == ROCK) continue;
+		/* skip objects not in line-of-sight */
+		if (!((mtmp->mx == otmp->ox && mtmp->my == otmp->oy)
+			|| clear_path(mtmp->mx, mtmp->my, otmp->ox, otmp->oy))) continue;
 		xx = otmp->ox;
 		yy = otmp->oy;
 		/* Nymphs take everything.  Most other creatures should not
