@@ -447,7 +447,6 @@
 				)
 
 #define nonliving(ptr)		(is_unalive(ptr) || is_undead(ptr) || \
-				 (ptr)->mlet == S_VORTEX || \
 				 (ptr) == &mons[PM_MANES] \
 				)
 
