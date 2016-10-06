@@ -417,6 +417,7 @@ can_track(ptr)		/* returns TRUE if monster can track well */
 	if (uwep && (
 		uwep->oartifact == ART_EXCALIBUR
 		|| uwep->oartifact == ART_SLAVE_TO_ARMOK
+		|| (uwep->oartifact == ART_ROD_OF_SEVEN_PARTS && is_demon(ptr) && is_chaotic(ptr))
 		) ) return TRUE;
 	else
 		return((boolean)is_tracker(ptr));
