@@ -169,18 +169,21 @@
 #define MV_NORMAL		0x00000001L		/* can't see more than 1 square in the dark */
 #define MV_INFRAVISION	0x00000002L		/* has infravision (does not show squares) */
 #define MV_DARKSIGHT	0x00000004L		/* sees in the dark, blinded by light */
-#define MV_LOWLIGHT		0x00000008L		/* sees farther in the dark, defaults to 2 with the possibility of special casing */
-#define MV_CATSIGHT		0x00000010L		/* sees in the dark, sees in the light, not both at once */
-#define MV_ECHOLOCATE	0x00800020L		/* sees via sound, in both light and dark, blinded and stunned by loud noises */
-#define MV_BLOODSENSE	0x00000040L		/* detect monsters by seeing their blood (does not show squares) */
-#define MV_LIFESENSE	0x00000080L		/* detect monsters by sensing their life-force (does not show squares) */
-#define MV_EXTRAMISSION	0x00000100L		/* see perfectly in light and dark */
+#define MV_LOWLIGHT2	0x00000008L		/* sees farther in the dark (2 squares) */
+#define MV_LOWLIGHT3	0x00000010L		/* sees farther in the dark (3 squares) */
+#define MV_CATSIGHT		0x00000020L		/* sees in the dark, sees in the light, not both at once */
+#define MV_ECHOLOCATE	0x00800040L		/* sees via sound, in both light and dark, blinded and stunned by loud noises */
+#define MV_BLOODSENSE	0x00000080L		/* detect monsters by seeing their blood (does not show squares, does not require eyes) */
+#define MV_LIFESENSE	0x00000100L		/* detect monsters by sensing their life-force (does not show squares, does not require eyes) */
+#define MV_EXTRAMISSION	0x00000200L		/* see perfectly in light and dark */
 //define MV_BLINDSIGHT	0x00000000L		/* see without eyes OBSOLETE*/
-#define MV_TELEPATHIC	0x00000200L		/* Monster is telepathic, detects any non-mindless creatures on the level (does not show squares) */
-#define MV_RLYEHIAN		0x00000400L		/* Cannot see into or through water squares. Blind in water */
-#define MV_SEE_INVIS	0x00000800L		/* can see invisible creatures (modifier) */
-#define MV_DETECTION	0x00001000L		/* detect monsters in line-of-sight (does not show squares) */
-#define MV_OMNI			0x00002000L		/* non-square-sight does not require line-of-sight */
+#define MV_TELEPATHIC	0x00000400L		/* Monster is telepathic, detects any non-mindless creatures on the level (does not show squares) */
+#define MV_RLYEHIAN		0x00000800L		/* Cannot see into or through water squares. Blind in water */
+#define MV_SEE_INVIS	0x00001000L		/* can see invisible creatures (modifier) */
+#define MV_DETECTION	0x00002000L		/* detect monsters in line-of-sight (does not show squares) */
+#define MV_OMNI			0x00004000L		/* non-square-sight does not require line-of-sight */
+#define MV_SCENT		0x00008000L		/* has a sensitive nose or other chemoreception (6 square detection range) */
+#define MV_EARTHSENSE	0x00010000L		/* detect monsters by hearing their steps through the ground (blocked by stealth, flying, defness) */
 
 //Monster Game mechanics and bookkeeping
 #define MG_REGEN		0x00000001L	/* regenerates hit points */
@@ -198,6 +201,7 @@
 #define MG_HATESUNHOLY	0x00001000L	/* Monster hates cursed objects */
 #define MG_RIDER		0x00002000L	/* Monster has perfect resurection */
 #define MG_DEADLY		0x00004000L	/* Monster's corpse is deadly to taste */
+#define MG_TRACKER		0x00008000L	/* Monster can track players by sight or scent (guideline: predators with mv_scent or 'woodsy' inteligent beings) */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */
