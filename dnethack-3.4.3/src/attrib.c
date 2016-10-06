@@ -601,6 +601,14 @@ init_attr(np)
 				AMAX(A_INT) = min(18, AMAX(i));
 			}
 		}
+	} else if(Race_if(PM_ELF)) {
+		if(ABASE(A_DEX) < ABASE(A_STR)){
+			int d = ABASE(A_DEX);
+			ABASE(A_DEX) = ABASE(A_STR);
+			ABASE(A_STR) = d;
+			AMAX(A_DEX) = ABASE(A_DEX);
+			AMAX(A_STR) = ABASE(A_STR);
+		}
 	}
 }
 
