@@ -512,6 +512,7 @@ vision_recalc(control)
     int oldseenv;				/* previous seenv value */
     int oldxray;				/* previous xray range value */
 	struct monst *mon, *nmon, *mat;
+	boolean catsightdark = !(levl[u.ux][u.uy].lit || (viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)));
 	
 	
     vision_full_recalc = 0;			/* reset flag */
@@ -740,7 +741,7 @@ vision_recalc(control)
 	    else if (
 			((u.sealsActive&SEAL_AMON) && (next_row[col] & COULD_SEE)) ||
 			(Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)) ||
-			(normalvision(youracedata) && (next_row[col] & COULD_SEE) && (
+			((normalvision(youracedata) || (catsight(youracedata) && !catsightdark)) && (next_row[col] & COULD_SEE) && (
 				(lev->lit &&
 					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT1)) &&
 					!(next_row[col]&TEMP_DRK2) 
@@ -764,7 +765,7 @@ vision_recalc(control)
 					((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK3))
 				)
 			)) ||
-			(darksight(youracedata) && !LightBlind && (next_row[col] & COULD_SEE) && 
+			((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !LightBlind && (next_row[col] & COULD_SEE) && 
 			 ((lev->typ < CORR || lev->typ==STAIRS) || !(
 				(lev->lit &&
 					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT1)) &&
@@ -787,10 +788,10 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if ((!(darksight(youracedata) && !LightBlind && !Is_waterlevel(&u.uz)) && 
+		    if ((!((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !LightBlind && !Is_waterlevel(&u.uz)) && 
 					(flev->lit || 
 					next_array[row+dy][col+dx]&TEMP_LIT1))
-			   ||(darksight(youracedata) && !Is_waterlevel(&u.uz))
+			   ||((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !Is_waterlevel(&u.uz))
 			   || u.sealsActive&SEAL_AMON
 			   || extramission(youracedata)
 			){

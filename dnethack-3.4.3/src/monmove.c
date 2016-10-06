@@ -1538,12 +1538,13 @@ not_special:
 		struct obj *lepgold, *ygold;
 #endif
 		boolean should_see = FALSE;
+		boolean catsightdark = !(levl[mtmp->mx][mtmp->my].lit || (viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1 && !(viz_array[mtmp->my][mtmp->mx]&TEMP_DRK1)));
 		// should_see = (couldsee(omx, omy) &&
 				      // (levl[gx][gy].lit ||
 				       // !levl[omx][omy].lit) &&
 				      // (dist2(omx, omy, gx, gy) <= 36));
 		if(distmin(omx,omy,gx,gy) <= 1) should_see = TRUE;
-		if(darksight(mtmp->data) && !is_blind(mtmp)){
+		if((darksight(mtmp->data) || (catsight(mtmp->data) && catsightdark)) && !is_blind(mtmp)){
 			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
 				if(levl[gx][gy].lit){
 					if(viz_array[gy][gx]&TEMP_DRK1 && !(viz_array[gy][gx]&TEMP_LIT1))
@@ -1585,7 +1586,7 @@ not_special:
 				}
 			}
 		}
-		if(normalvision(mtmp->data) && !is_blind(mtmp)){
+		if((normalvision(mtmp->data) || (catsight(mtmp->data) && !catsightdark)) && !is_blind(mtmp)){
 			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
 				if(distmin(omx,omy,gx,gy) <= 1) should_see = TRUE;
 				else if(levl[gx][gy].lit){
@@ -2239,7 +2240,7 @@ register struct monst *mtmp;
 	notseen = TRUE;
 	
 	if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) <= 1 && !rn2(8)) notseen = FALSE;
-	if(darksight(mtmp->data) && !is_blind(mtmp)){
+	if((darksight(mtmp->data) || (catsight(mtmp->data) && catsightdark)) && !is_blind(mtmp)){
 		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
 			if(levl[u.ux][u.uy].lit){
 				if(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
@@ -2282,7 +2283,7 @@ register struct monst *mtmp;
 			}
 		}
 	}
-	if(normalvision(mtmp->data) && !is_blind(mtmp)){
+	if((normalvision(mtmp->data) || (catsight(mtmp->data) && !catsightdark)) && !is_blind(mtmp)){
 		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
 			if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) <= 1) notseen = FALSE;
 			else if(levl[u.ux][u.uy].lit){
