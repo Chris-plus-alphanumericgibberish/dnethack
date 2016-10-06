@@ -1411,7 +1411,7 @@ register int after;
 			pline("ERROR RECOVERY: Negative meating timer (%d) set to 0", mtmp->meating);
 			mtmp->meating = 0;
 		}
-		if(mtmp->meating > 100){
+		if(mtmp->meating > 1000){
 			pline("ERROR RECOVERY: Overlong meating timer (%d) truncated to 100 turns", mtmp->meating);
 			mtmp->meating = 0;
 		}
