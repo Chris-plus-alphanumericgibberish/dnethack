@@ -77,7 +77,7 @@
 				  (ptr) == &mons[PM_MONOTON] || \
 				  (ptr) == &mons[PM_FLOATING_EYE]) ? 1 : 2)
 #define sensitive_ears(ptr)		(((ptr)->mflagsv & MV_ECHOLOCATE) != 0L)
-#define nohands(ptr)		(((ptr)->mflagsb & MB_NOHANDS) != 0L)
+#define nohands(ptr)		(((ptr)->mflagsb & (MB_NOHANDS|MB_NOLIMBS)) != 0L)
 #define nolimbs(ptr)		(((ptr)->mflagsb & MB_NOLIMBS) == MB_NOLIMBS)
 #define notake(ptr)		(((ptr)->mflagst & MT_NOTAKE) != 0L)
 #define has_head(ptr)		(((ptr)->mflagsb & MB_NOHEAD) == 0L)
