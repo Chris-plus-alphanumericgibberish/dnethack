@@ -452,6 +452,8 @@
 
 #define is_unalive(ptr)		(on_level(&valley_level, &u.uz) || ((ptr->mflagsa & MA_UNLIVING)) )
 
+#define is_elemental(ptr)		( (ptr->mflagsa & MA_ELEMENTAL) )
+
 #define likes_swamp(ptr)	((ptr)->mlet == S_PUDDING || \
 				 (ptr)->mlet == S_FUNGUS || \
 				 (ptr) == &mons[PM_OCHRE_JELLY])
