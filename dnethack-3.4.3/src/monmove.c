@@ -1631,6 +1631,9 @@ not_special:
 		if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
 			should_see = TRUE;
 		}
+		if(telepathic(mtmp->data) && !mindless(youracedata)){
+			should_see = TRUE;
+		}
 		if(!should_see && goodsmeller(mtmp->data) && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 6){
 		/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
 			if(clear_path(u.ux, u.uy, mtmp->mx, mtmp->my)){
@@ -2327,6 +2330,10 @@ register struct monst *mtmp;
 	if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
 		notseen = FALSE;
 	}
+	if(telepathic(mtmp->data) && !mindless(youracedata)){
+		notseen = FALSE;
+	}
+	if(couldsee(mtmp->mx,mtmp->my) &&
 	if(notseen && goodsmeller(mtmp->data) && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 6){
 	/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
 		if(clear_path(u.ux, u.uy, mtmp->mx, mtmp->my)){
