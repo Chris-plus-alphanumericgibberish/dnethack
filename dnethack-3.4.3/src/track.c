@@ -5,7 +5,7 @@
 
 #include "hack.h"
 
-#define UTSZ	50
+#define UTSZ	200
 
 STATIC_VAR NEARDATA int utcnt, utpnt;
 STATIC_VAR NEARDATA coord utrack[UTSZ];
