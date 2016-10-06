@@ -2221,6 +2221,7 @@ register struct monst *mtmp;
 {
 	boolean notseen, gotu = FALSE;
 	register int disp, mx = mtmp->mux, my = mtmp->muy;
+	boolean catsightdark = !(levl[mtmp->mx][mtmp->my].lit || (viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1 && !(viz_array[mtmp->my][mtmp->mx]&TEMP_DRK1)));
 #ifdef GOLDOBJ
 	long umoney = money_cnt(invent);
 #endif
