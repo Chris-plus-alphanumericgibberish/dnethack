@@ -792,7 +792,7 @@ makelevel()
 	   !(mvitals[PM_KILLER_BEE].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(BEEHIVE);
 	else if (u_depth > 11 && !rn2(8)) mkroom(MORGUE);
 	else if (u_depth > 12 && !rn2(10)) mkroom(ANTHOLE);
-	else if (u_depth <= 14 && u_depth > 1 && !rn2(6) &&
+	else if (u_depth <= 14 && u_depth > 1 && !rn2(12) &&
 	   !(mvitals[PM_RUST_MONSTER].mvflags & G_GONE && !In_quest(&u.uz))){
 		mkroom(ARMORY);
 	} else if (u_depth > 14 && !rn2(6) &&
