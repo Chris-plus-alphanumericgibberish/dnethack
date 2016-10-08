@@ -997,11 +997,23 @@ struct monst *mtmp;
 	    if (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) > POLE_LIM ||
 		    !couldsee(mtmp->mx, mtmp->my))
 		return;	/* Out of range, or intervening wall */
-
+		
+		if(mtmp->mux != u.ux || mtmp->muy != u.uy){
+			if(canseemon(mtmp)){
+				onm = xname(otmp);
+				pline("%s %s %s wildly.", Monnam(mtmp), otmp->otyp == AKLYS ? "throws" : "thrusts",
+					  obj_is_pname(otmp) ? the(onm) : an(onm));
+			}
+			//figures out you aren't where it thought you were.
+			mtmp->mux = 0;
+			mtmp->muy = 0;
+			return;
+		}
+		
 	    if (canseemon(mtmp)) {
-		onm = xname(otmp);
-		pline("%s %s %s.", Monnam(mtmp), otmp->otyp == AKLYS ? "throws" : "thrusts",
-		      obj_is_pname(otmp) ? the(onm) : an(onm));
+			onm = xname(otmp);
+			pline("%s %s %s.", Monnam(mtmp), otmp->otyp == AKLYS ? "throws" : "thrusts",
+				  obj_is_pname(otmp) ? the(onm) : an(onm));
 	    }
 
 	    dam = dmgval(otmp, &youmonst, 0);
@@ -1325,6 +1337,9 @@ register struct attack *mattk;
 {
 	register struct obj *otmp;
 
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return;
+	if(mtmp->mux == 0 && mtmp->muy == 0) return 0;
+
 	if(mtmp->mcan) {
 		if(mtmp->data==&mons[PM_ZETA_METROID]) //|| mtmp->data==&mons[PM_CRAZY_CHEMIST]) 
 			mtmp->mcan=FALSE;
@@ -1366,6 +1381,11 @@ register struct attack *mattk;
 			m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
 			distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy), otmp,
 			TRUE);
+			if(mtmp->mux != u.ux || mtmp->muy != u.uy){
+				//figures out you aren't where it thought you were.
+				mtmp->mux = 0;
+				mtmp->muy = 0;
+			}
 		    nomul(0, NULL);
 		    return 0;
 		}
@@ -1446,7 +1466,11 @@ register struct attack *mattk;
 {
 	register struct obj *qvr = NULL;
 	int ammo_type, autodestroy = 1;
+	
 
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return;
+	if(mtmp->mux == 0 && mtmp->muy == 0) return 0;
+	
 	if(lined_up(mtmp)) {
 		int yadj, xadj, rngmod;
 		yadj = xadj = 0;
@@ -1555,7 +1579,12 @@ ironball:
 					m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
 						BOLT_LIM + rngmod, qvr,TRUE);
 				}
-			    /*nomul(0);*/ //Copy paste error?
+				if(mtmp->mux != u.ux || mtmp->muy != u.uy){
+					//figures out you aren't where it thought you were
+					mtmp->mux = 0;
+					mtmp->muy = 0;
+				}
+			    nomul(0, NULL);
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		}
 		bypassDR = 0;
@@ -1660,7 +1689,7 @@ register struct attack *mattk;
 					m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
 						BOLT_LIM + rngmod, qvr,TRUE);
 				}
-			    /*nomul(0);*/ //Copy paste error?
+			    nomul(0, NULL);
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		}
 		bypassDR = 0;
@@ -1677,6 +1706,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 {
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
+	if(mtmp->mux == 0 && mtmp->muy == 0) return 0;
 	
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
@@ -1705,6 +1735,11 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 			      breathwep[typ-1]);
 		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/2),
 			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/2), (int)mattk->damd)*mult) : 0);
+			if(mtmp->mux != u.ux || mtmp->muy != u.uy){
+				//figures out you aren't where it thought you were
+				mtmp->mux = 0;
+				mtmp->muy = 0;
+			}
 		    nomul(0, NULL);
 		    /* breath runs out sometimes. Also, give monster some
 		     * cunning; don't breath if the player fell asleep.
