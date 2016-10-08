@@ -2624,6 +2624,7 @@ int tx,ty;
 					pline("A hand of worn and broken clockwork on a rusted metal arm reaches into the seal and rings the bell.");
 					use_bell(&o,TRUE);
 					u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
+					pline("*Sometimes, what was broken cannot be restored.*");
 				} else {
 					pline("You think of all the loyal items used up and thrown away each day, and shed a tear.");
 					// u.sealTimeout[ASTAROTH-FIRST_SEAL] = moves + bindingPeriod/10;
