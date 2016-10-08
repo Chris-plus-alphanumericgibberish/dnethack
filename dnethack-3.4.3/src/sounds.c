@@ -1553,6 +1553,12 @@ humanoid_sound:
 			mtmp->data == &mons[PM_KNIGHT] && 
 			mtmp->mpeaceful
 		) goto asGuardian; /* Jump up to a different case in this switch statment */
+		else if(Role_if(PM_ANACHRONONAUT) && 
+			(mtmp->data == &mons[PM_MYRKALFAR_WARRIOR] 
+				|| mtmp->data == &mons[PM_MYRKALFAR_MATRON] 
+				|| mtmp->data == &mons[PM_ALIDER]) && 
+			mtmp->mpeaceful
+		) goto asGuardian; /* Jump up to a different case in this switch statment */
 		else if(Race_if(PM_DROW) && 
 			is_drow(mtmp->data) && 
 			mtmp->mfaction == u.uhouse &&
@@ -4588,9 +4594,11 @@ bindspirit(seal_id)
 				u.specialSealsActive |= SEAL_SPECIAL|SEAL_BLACK_WEB;
 				u.specialSealsUsed |= SEAL_BLACK_WEB;
 				set_spirit_powers(SEAL_SPECIAL|SEAL_BLACK_WEB);
-				u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_BLACK_WEB;
-				u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
-				u.sealTimeout[BLACK_WEB-FIRST_SEAL] = moves + bindingPeriod;
+				if(!Role_if(PM_ANACHRONONAUT)){
+					u.spirit[QUEST_SPIRIT] = SEAL_SPECIAL|SEAL_BLACK_WEB;
+					u.spiritT[QUEST_SPIRIT] = moves + bindingPeriod;
+					u.sealTimeout[BLACK_WEB-FIRST_SEAL] = moves + bindingPeriod;
+				}
 			} else You("can't feel the spirit.");
 		break;
 		case NUMINA:{

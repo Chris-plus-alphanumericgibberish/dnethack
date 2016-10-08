@@ -40,7 +40,7 @@ can_saddle(mtmp)
 
 	return ((index(steeds, ptr->mlet) ||
 				(Race_if(PM_ORC) && index(orc_steeds, ptr->mlet)) ||
-				(Race_if(PM_DROW) && index(drow_steeds, ptr->mlet))) && 
+				((Race_if(PM_DROW) || Race_if(PM_MYRKALFR)) && index(drow_steeds, ptr->mlet))) && 
 			(ptr->msize >= MZ_MEDIUM) &&
 			(!humanoid(ptr) || ptr->mlet == S_CENTAUR
 				|| ptr == &mons[PM_SALAMANDER] 

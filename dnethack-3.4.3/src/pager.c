@@ -1077,7 +1077,7 @@ do_look(quick)
 	if ((from_screen ?
 		(sym == monsyms[S_HUMAN] && cc.x == u.ux && cc.y == u.uy) :
 		(sym == def_monsyms[S_HUMAN] && !iflags.showrace)) &&
-	    !(Race_if(PM_HUMAN) || Race_if(PM_ELF) || Race_if(PM_DROW)) && !Upolyd)
+	    !(Race_if(PM_HUMAN) || Race_if(PM_ELF) || Race_if(PM_DROW) || Race_if(PM_MYRKALFR)) && !Upolyd)
 	    found += append_str(out_str, "you");	/* tack on "or you" */
 
 	/*

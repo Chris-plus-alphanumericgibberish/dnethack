@@ -266,7 +266,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	    return 1;
 	} else {
 	    damage = dmgval(otmp, mtmp, 0);
-		if(mon == &youmonst && damage > 1 && objects[otmp->otyp].oc_skill != P_NONE) use_skill(objects[otmp->otyp].oc_skill,1);
+		if(mon == &youmonst && damage > 1){
+			if(otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1) use_skill((int)otmp->ovar1,1);
+			else if(objects[otmp->otyp].oc_skill != P_NONE) use_skill(objects[otmp->otyp].oc_skill,1);
+		}
 	    if (otmp->otyp == ACID_VENOM && resists_acid(mtmp)) damage = 0;
 	    if (ismimic) seemimic(mtmp);
 	    mtmp->msleeping = 0;
@@ -966,8 +969,10 @@ struct monst *mtmp;
 	schar skill;
 	int multishot;
 	const char *onm;
+	boolean mass_pistol = FALSE;
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return;
+	if(mtmp->mux == 0 && mtmp->muy == 0) return;
 	
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (mtmp->weapon_check == NEED_WEAPON || !MON_WEP(mtmp)) {
@@ -1091,7 +1096,11 @@ struct monst *mtmp;
 	}
 	
 	if(is_blaster(otmp) && otmp == mwep){
-		otmp = mksobj(otmp->otyp == ARM_BLASTER ? HEAVY_BLASTER_BOLT : BLASTER_BOLT, TRUE, FALSE);
+		if(otmp->otyp == MASS_SHADOW_PISTOL) mass_pistol = TRUE;
+		otmp = mksobj(otmp->otyp == CUTTING_LASER ? LASER_BEAM : 
+				otmp->otyp == ARM_BLASTER ? HEAVY_BLASTER_BOLT : 
+				otmp->otyp == MASS_SHADOW_PISTOL ? otmp->cobj->otyp : 
+				BLASTER_BOLT, TRUE, FALSE);
 		otmp->blessed = mwep->blessed;
 		otmp->cursed = mwep->cursed;
 		otmp->spe = mwep->spe;
@@ -1127,6 +1136,7 @@ struct monst *mtmp;
 
 	m_shot.n = multishot;
 	
+	if(mass_pistol) set_destroy_thrown(TRUE); /* state variable, always destroy thrown */
 	for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++)
 	    if(m_shot.s && objects[(mwep->otyp)].oc_range) m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
 		    objects[(mwep->otyp)].oc_range, otmp,
@@ -1134,10 +1144,15 @@ struct monst *mtmp;
 		else m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
 		    distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy), otmp,
 		    TRUE);
+	if(mass_pistol) set_destroy_thrown(FALSE); /* state variable, always destroy thrown */
 	m_shot.n = m_shot.i = 0;
 	m_shot.o = STRANGE_OBJECT;
 	m_shot.s = FALSE;
-
+	if(mtmp->mux != u.ux || mtmp->muy != u.uy){
+		//figures out you aren't where it thought you were
+		mtmp->mux = 0;
+		mtmp->muy = 0;
+	}
 	nomul(0, NULL);
 }
 

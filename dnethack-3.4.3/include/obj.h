@@ -279,11 +279,14 @@ struct obj {
 			 	 objects[(otmp)->otyp].w_ammotyp == WP_GRENADE)
 #define ammo_and_launcher(otmp,ltmp) \
 			 (is_ammo(otmp) && (ltmp) && (\
-			  ((otmp->objsize == (ltmp)->objsize || objects[(ltmp)->otyp].oc_skill == P_SLING) &&\
-			   (objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
-			   (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill)) ||\
-			 (ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE) ||\
-			 ltmp->otyp == BFG))
+			  (\
+			   (ltmp->otyp == BFG) ||\
+			   (ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE) ||\
+			   (ltmp->otyp == MASS_SHADOW_PISTOL && ((otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK) || (otmp->otyp >= BULLET && otmp->otyp <= SILVER_BULLET))) ||\
+			   (otmp->objsize == (ltmp)->objsize || objects[(ltmp)->otyp].oc_skill == P_SLING) &&\
+			    (objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
+			    (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill))\
+			   ))
 #define is_missile(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS || otmp->oclass == GEM_CLASS) && \
 			 ((objects[otmp->otyp].oc_skill >= -P_BOOMERANG && \

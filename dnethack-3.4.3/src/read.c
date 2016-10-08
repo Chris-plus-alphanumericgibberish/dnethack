@@ -750,6 +750,11 @@ int curse_bless;
 				else obj->ovar1 = 80L + rn2(20);
 			}
 		break;
+	    case MASS_SHADOW_PISTOL:
+			if(is_blessed) obj->ovar1 = 1000L;
+			else if(is_cursed) obj->ovar1 = 100L;
+			else obj->ovar1 = 800L + rn2(200);
+		break;
 	    case CUTTING_LASER:
 	    case VIBROBLADE:
 	    case FORCE_PIKE:

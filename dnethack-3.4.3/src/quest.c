@@ -505,6 +505,9 @@ quest_chat(mtmp)
 		(Role_if(PM_NOBLEMAN) && 
 			(mtmp->data == &mons[PM_KNIGHT] 
 				|| mtmp->data == &mons[PM_MAID]) && mtmp->mpeaceful)
+	  || (Role_if(PM_ANACHRONONAUT) && 
+			(mtmp->data == &mons[PM_MYRKALFAR_WARRIOR] || mtmp->data == &mons[PM_ALIDER] 
+				|| mtmp->data == &mons[PM_MYRKALFAR_MATRON]) && mtmp->mpeaceful)
 	  || (Race_if(PM_DROW) && is_drow(mtmp->data))
 	  || (Role_if(PM_EXILE) && 
 			mtmp->data == &mons[PM_PEASANT] && mtmp->mpeaceful)
@@ -596,7 +599,7 @@ turn_stag()
 			urole.questarti = ART_TENTACLE_ROD;
 			
 			urole.ldrnum = PM_SEYLL_AUZKOVYN;
-			urole.guardnum = PM_STJARNA_ALFAR;
+			urole.guardnum = PM_STJARNA_ALFR;
 			urole.neminum = PM_ECLAVDRA;
 			
 			urole.enemy1num = PM_HEDROW_WARRIOR;

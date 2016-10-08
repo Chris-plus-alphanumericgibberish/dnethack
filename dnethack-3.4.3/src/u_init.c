@@ -82,6 +82,18 @@ static struct trobj Anachrononaut_Vam[] = {
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj Anachrononaut_ShDro[] = {
+	{ MASS_SHADOW_PISTOL, 4, WEAPON_CLASS, 1, 0 },
+	{ BODYGLOVE, 1, ARMOR_CLASS, 1, 0 },
+	{ DROVEN_CLOAK, 1, ARMOR_CLASS, 1, 0 },
+	{ GAUNTLETS_OF_DEXTERITY, 1, ARMOR_CLASS, 1, 0 },
+	{ ELVEN_BOOTS, 1, ARMOR_CLASS, 1, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS,  5, 0 },
+	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
+	{ SPE_FORCE_BOLT, 0, SPBOOK_CLASS, 1, 0 },
+	{ SPE_SLOW_MONSTER, 0, SPBOOK_CLASS, 1, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 static struct trobj Anachrononaut_Dro[] = {
 	{ SNIPER_RIFLE, 4, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
@@ -1591,13 +1603,18 @@ u_init()
 		skill_init(Skill_A);
 	break;
 	case PM_ANACHRONONAUT:
-		if(Race_if(PM_DROW)) ini_inv(Anachrononaut_Dro);
-		else if(Race_if(PM_ELF)) ini_inv(Anachrononaut_Elf);
+		if(Race_if(PM_MYRKALFR) && !flags.female){
+			ini_inv(Anachrononaut_Dro);
+		} else if(Race_if(PM_MYRKALFR) && flags.female){
+			ini_inv(Anachrononaut_ShDro);
+			bindspirit(BLACK_WEB);
+		} else if(Race_if(PM_ELF)) ini_inv(Anachrononaut_Elf);
 		else if(Race_if(PM_INCANTIFIER)) ini_inv(Anachrononaut_Inc);
 		else if(Race_if(PM_VAMPIRE)) ini_inv(Anachrononaut_Vam);
 		else ini_inv(Anachrononaut_Hu);
 		knows_object(FLINTLOCK);
 		knows_object(PISTOL);
+		knows_object(MASS_SHADOW_PISTOL);
 		knows_object(SUBMACHINE_GUN);
 		knows_object(HEAVY_MACHINE_GUN);
 		knows_object(RIFLE);
@@ -1972,6 +1989,7 @@ u_init()
 	    knows_object(ELVEN_CLOAK);
 	break;
 
+	case PM_MYRKALFR:
 	case PM_DROW:{
 		struct obj* pobj;
 		
@@ -2615,7 +2633,7 @@ register struct trobj *trop;
 		 * one will immediately read it and use the iron ball as a
 		 * weapon.)
 		 */
-			if(Race_if(PM_DROW) && trop->trclass == RING_CLASS) obj = mksobj(find_signet_ring(),TRUE,FALSE);
+			if((Race_if(PM_DROW) || Race_if(PM_MYRKALFR)) && trop->trclass == RING_CLASS) obj = mksobj(find_signet_ring(),TRUE,FALSE);
 			else obj = mkobj(trop->trclass, FALSE);
 			otyp = obj->otyp;
 			while (otyp == WAN_WISHING

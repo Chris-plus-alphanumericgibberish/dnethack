@@ -424,7 +424,15 @@ boolean artif;
 			otmp->ovar1 = (8 + rnd(8))*10L;
 			otmp->altmode = ZT_SLEEP;
 		}
-		else if(is_blaster(otmp)){ //Rayguns are also blasters, so this has to go under that case
+		else if(otmp->otyp == MASS_SHADOW_PISTOL){
+			struct obj *stone = mksobj(ROCK, TRUE, FALSE);
+			otmp->ovar1 = 800L + rnd(200);
+			stone->quan = 1;
+			stone->owt = weight(stone);
+			add_to_container(otmp, stone);
+			container_weight(otmp);
+		}
+		else if(is_blaster(otmp)){ //Rayguns and mass-shadow pistols are also blasters, so this has to go under that case
 			otmp->ovar1 = 80L + rnd(20);
 			if(otmp->otyp == ARM_BLASTER) otmp->altmode = WP_MODE_SINGLE;
 			if(otmp->otyp == RAYGUN) otmp->altmode = ZT_FIRE;

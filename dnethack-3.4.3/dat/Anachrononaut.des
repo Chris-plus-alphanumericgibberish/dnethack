@@ -338,6 +338,7 @@ CONTAINER:'(',"box",(01,09)
 	OBJECT[45%]:'%',"protein pill",contained
 CONTAINER:'(',"tinning kit",(01,09)
 
+OBJECT:'+',"lightning bolt",(01,11)
 CONTAINER:'(',"box",(01,11)
 	OBJECT:'+',random,contained
 	OBJECT:'+',random,contained
@@ -476,10 +477,10 @@ MONSTER:'@',"mad seer",(10,12), peaceful
 MONSTER:'@',"mad seer",(08,12), peaceful
 
 MONSTER:'@',"trooper",(16,06)
-MONSTER:'@',"trooper",(17,06)
+MONSTER:'@',"myrkalfar warrior",(17,06)
 MONSTER:'@',"trooper",(18,06)
 MONSTER:'@',"trooper",(16,07)
-MONSTER:'@',"trooper",(17,07)
+MONSTER:'@',"myrkalfar warrior",(17,07)
 MONSTER:'@',"trooper",(16,08)
 MONSTER:'@',"trooper",(16,09)
 
@@ -493,21 +494,21 @@ MONSTER:'@',"trooper",(16,13)
 
 
 MONSTER:'@',"trooper",(46,10)
-MONSTER:'@',"trooper",(47,10)
+MONSTER:'@',"myrkalfar warrior",(47,10)
 MONSTER:'@',"trooper",(48,10)
 
 MONSTER:'@',"trooper",(47,11)
 MONSTER:'@',"trooper",(47,09)
 
 
-MONSTER:'@',"drow matron",(06,01),peaceful
+MONSTER:'@',"myrkalfar matron",(06,01),peaceful
 MONSTER:'@',"Elvenking",(07,01),peaceful
-MONSTER:'C',"drider",(10,01),peaceful
+MONSTER:'C',"alider",(10,01),peaceful
 MONSTER:'@',"trooper",(12,01),peaceful
-MONSTER:'@',"hedrow warrior",(14,01),peaceful
+MONSTER:'@',"myrkalfar warrior",(14,01),peaceful
 
 MONSTER:'@',"human",(06,19),peaceful
-MONSTER:'@',"drow",(08,19),peaceful
+MONSTER:'@',"myrkalfr",(08,19),peaceful
 MONSTER:'@',"elf",(10,19),peaceful
 MONSTER:'@',"human",(12,19),peaceful
 MONSTER:'@',"incantifier",(14,19),peaceful
@@ -756,6 +757,8 @@ OBJECT:')',"gas grenade",random
 OBJECT:')',"gas grenade",random
 
 OBJECT:')',"raygun",random
+
+OBJECT:')',"mass-shadow pistol",random
 
 OBJECT:')',"submachine gun",random
 OBJECT:')',"submachine gun",random

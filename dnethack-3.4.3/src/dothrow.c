@@ -415,7 +415,7 @@ int shots, shotlimit;
 	}
 	
 	if ((shots > 1 || shotlimit > 0) && !Hallucination) {
-		You("shoot %d %s.",
+		You("fire %d %s.",
 		shots,	/* (might be 1 if player gave shotlimit) */
 		(shots == 1) ? "ray" : "rays");
 	}
@@ -506,12 +506,21 @@ int shotlimit;
 	m_shot.s = TRUE;
 	
 	if (multishot > 1 || shotlimit > 0) {
-		You("shoot %d %s.",
-		multishot,	/* (might be 1 if player gave shotlimit) */
-		(multishot == 1) ? "bolt" : "bolts");
+		if(blaster->otyp == MASS_SHADOW_PISTOL){
+			You("fire %d %s.",
+			multishot,	/* (might be 1 if player gave shotlimit) */
+			(multishot == 1) ? "shot" : "shots");
+		} else {
+			You("fire %d %s.",
+			multishot,	/* (might be 1 if player gave shotlimit) */
+			(multishot == 1) ? "bolt" : "bolts");
+		}
 	}
 
-	m_shot.o = blaster->otyp == CUTTING_LASER ? LASER_BEAM : blaster->otyp == ARM_BLASTER ? HEAVY_BLASTER_BOLT : BLASTER_BOLT;
+	m_shot.o =	blaster->otyp == CUTTING_LASER ? LASER_BEAM : 
+				blaster->otyp == ARM_BLASTER ? HEAVY_BLASTER_BOLT : 
+				blaster->otyp == MASS_SHADOW_PISTOL ? blaster->cobj->otyp : 
+				BLASTER_BOLT;
 	m_shot.n = multishot;
 	otmp = mksobj(m_shot.o, FALSE, FALSE);
 	otmp->blessed = blaster->blessed;
@@ -522,8 +531,23 @@ int shotlimit;
 	if(!u.dx && !u.dy) range = 1;
 	else range = objects[(blaster->otyp)].oc_range;
 	
-	for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
-		m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy, range, otmp,TRUE);
+	if(blaster->otyp == MASS_SHADOW_PISTOL){
+		struct obj *tobj;
+		otmp->ovar1 = -P_FIREARM;
+		break_thrown = TRUE; /* state variable, always destroy thrown */
+		for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
+			if (otmp->quan > 1L) {
+				tobj = splitobj(otmp, 1L);
+			} else {
+				tobj = otmp;
+			}
+			throwit(tobj, 0L, u.twoweap, blaster == uwep ? 1 : blaster == uswapwep ? 2 : 0);
+		}
+		break_thrown = FALSE; /* state variable, always destroy thrown */
+	} else {
+		for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
+			m_throw(&youmonst, u.ux, u.uy, u.dx, u.dy, range, otmp,TRUE);
+		}
 	}
 	m_shot.n = m_shot.i = 0;
 	m_shot.o = STRANGE_OBJECT;
@@ -711,6 +735,14 @@ dofire()
 		result = fire_blaster(uwep, shotlimit);
 		
 		return result;
+	} else if(u.twoweap && uswapwep && is_blaster(uswapwep) && !(uquiver && ammo_and_launcher(uquiver, uwep))){
+		shotlimit = (multi || save_cm) ? multi + 1 : 0;
+		multi = 0;		/* reset; it's been used up */
+		if (!can_twoweapon()) untwoweapon();
+		else {
+			result = fire_blaster(uswapwep, shotlimit);
+			return(result);
+		}
 	}
 	
 	if(check_capacity((char *)0)) return(0);
@@ -758,6 +790,12 @@ dofire()
 			else if ((result == 1) && uquiver)
 			    result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP);
 			if (result > 1) result--;
+			return(result);
+		} else if(ammo_and_launcher(uquiver,uwep)){
+			result = throw_obj(uquiver, shotlimit, THROW_UWEP);
+			return(result);
+		} else if(ammo_and_launcher(uquiver, uswapwep)){
+			result = throw_obj(uquiver, shotlimit, THROW_USWAPWEP);
 			return(result);
 		}
 	}

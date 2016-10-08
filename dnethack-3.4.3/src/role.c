@@ -864,6 +864,20 @@ struct Race urace =
 	NO_NIGHTVISION
 };
 
+struct Race myrkalfr = 
+{	"myrkalfr", "myrkalfar", "myrkalfrkind", "Dro",
+	{"myrkalfr", "myrkalfr"},
+	PM_MYRKALFR, NON_PM, PM_DROW_MUMMY, PM_DROW_ZOMBIE,
+	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
+	MA_ELF, 0, MA_ELF|MA_ORC|MA_DROW,
+	/*  Str    Int Wis Dex Con Cha */
+	{    3,     3,  3,  3,  3,  3 },
+	{   18,    20, 20, 18, 16, 18 },
+	/* Init   Lower  Higher */
+	{  1, 0,  0, 1,  1, 0 },	/* Hit points */
+	{  2, 0,  3, 0,  3, 0 },	/* Energy */
+	NO_NIGHTVISION
+};
 
 /* Table of all genders */
 const struct Gender genders[] = {
@@ -1251,7 +1265,7 @@ god_priest(gptr, sx, sy, sanctum)
 		}
 		if(gptr == DrowFemaleLgod){
 			priest->female = TRUE;
-			if(!sanctum) newcham(priest,&mons[PM_STJARNA_ALFAR],FALSE,FALSE);
+			if(!sanctum) newcham(priest,&mons[PM_STJARNA_ALFR],FALSE,FALSE);
 			return priest;
 		}
 		if(gptr == DrowNobFemaleLgod){
@@ -2185,6 +2199,9 @@ role_init()
 	/* Initialize urole and urace */
 	urole = roles[flags.initrole];
 	urace = races[flags.initrace];
+	if(Role_if(PM_ANACHRONONAUT) && Race_if(PM_DROW)){
+		urace = myrkalfr;
+	}
 
 	/* Fix up the god names */
 	if (flags.pantheon == -1) {		/* new game */
@@ -2293,7 +2310,7 @@ role_init()
 					urole.questarti = ART_TENTACLE_ROD;
 					
 					urole.ldrnum = PM_SEYLL_AUZKOVYN;
-					urole.guardnum = PM_STJARNA_ALFAR;
+					urole.guardnum = PM_STJARNA_ALFR;
 					urole.neminum = PM_ECLAVDRA;
 					
 					urole.enemy1num = PM_HEDROW_WARRIOR;

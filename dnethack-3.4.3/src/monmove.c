@@ -535,7 +535,8 @@ boolean
 scaryLol(mtmp)
 struct monst *mtmp;
 {
-  if(Race_if(PM_DROW) && !flags.stag){
+  if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)) return FALSE;
+  if((Race_if(PM_DROW)) && !flags.stag){
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || is_blind(mtmp) ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 
 	    (is_rider(mtmp->data))
@@ -555,6 +556,7 @@ boolean
 scaryElb(mtmp)
 struct monst *mtmp;
 {
+  if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)) return FALSE;
   if(Race_if(PM_ELF)){
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || is_blind(mtmp) ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN || 

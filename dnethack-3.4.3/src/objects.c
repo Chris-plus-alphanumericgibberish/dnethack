@@ -335,7 +335,8 @@ GUN("heavy gun", "unfamiliar heavy gun",		0,  1, 0, 100, 2000, 20,  8, -4, WP_BU
  /*Needs encyc entry*/
 GUN("hand blaster", "hard black handmirror",		0,  0, 0,  12, 1000, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BLACK), /*Needs tile*/
 GUN("arm blaster",  "hard white bracer", 	   		0,  0, 0,  45, 4500, 15,  6,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_WHITE), /*Needs tile*/
-GUN("cutting laser","hard tan lozenge",    			0,  0, 0,  10, 1000,  3,  -1,  3,WP_BLASTER, PLASTIC, P_FIREARM, CLR_YELLOW), /*Needs tile*/
+GUN("mass-shadow pistol",  "rectangular device",	0,  0, 0,  25, 4500, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_GRAY), /*Needs tile*/
+GUN("cutting laser","hard tan lozenge",    			0,  0, 0,  10, 1000,  3, -1,  3,WP_BLASTER, PLASTIC, P_FIREARM, CLR_YELLOW), /*Needs tile*/
 
 GUN("raygun", "hard handle ending in glassy disks",	0,  0, 0,  45, 3000, 15,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BRIGHT_CYAN), /*Needs tile*/
 BULLET("bullet", "pellet",
@@ -1238,9 +1239,9 @@ ROCK("loadstone", "gray",	0, 10, 500,  1,30,30, -5, 1, 10, 6, MINERAL, CLR_GRAY)
 ROCK("touchstone", "gray",	0,  8,  10, 45, 3, 3,  0, 1, 10, 6, MINERAL, CLR_GRAY),
 ROCK("flint", "gray",		0, 10,  10,  1, 6, 6,  2, 0, 10, 7, MINERAL, CLR_GRAY),
 ROCK("chunk of unrefined mithril", "silvery metal", 
-							0,  0,   1, 10000,3,3, 0, 0, 0, 10, MITHRIL, HI_SILVER),/*Needs tile*/
+							0,  0,   1, 10000,3,3, 3, 0, 0, 10, MITHRIL, HI_SILVER),/*Needs tile*/
 ROCK("chunk of fossile dark", "black",
-							0,  0, 25, 	500,10,10,-5, 1, 0, 1, MINERAL, CLR_BLACK),/*Needs tile*/
+							0,  0, 25, 	500, 8, 8, 4, 1, 0, 1, MINERAL, CLR_BLACK),/*Needs tile*/
 ROCK("silver slingstone", "silver", 0, 0, 1, 10, 6, 6, 2, 0, 0, 5, SILVER, HI_SILVER),/*Needs tile*/
 ROCK("rock", (char *)0,		1,100,  10,  0, 3, 3, 0, 0, 10, 7, MINERAL, CLR_GRAY),
 #undef GEM

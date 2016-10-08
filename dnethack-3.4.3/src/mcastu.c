@@ -2182,7 +2182,7 @@ int spellnum;
 	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
 		return TRUE;
 	
-	if(is_drow(mtmp->data)){
+	if(is_drow(mtmp->data) && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))){
 		if(!Race_if(PM_DROW)){
 			if(sengr_at("Elbereth", mtmp->mux, mtmp->muy)) return TRUE;
 		} else {

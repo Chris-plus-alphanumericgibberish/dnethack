@@ -429,7 +429,7 @@ register struct monst *mtmp;
 				mtmp->mspec_used = d(4,4);
 				if(mm != PM_DROW_MATRON && mm != PM_DROW_MATRON_MOTHER && mm != PM_DROW_NOVICE 
 					&& mm != PM_A_SALOM && mm != PM_SISTER && mm != PM_MOTHER && !is_yochlol(mtmp->data)
-					&& mm != PM_ECLAVDRA && mm != PM_SEYLL_AUZKOVYN && mm != PM_STJARNA_ALFAR
+					&& mm != PM_ECLAVDRA && mm != PM_SEYLL_AUZKOVYN && mm != PM_STJARNA_ALFR
 					&& mm != PM_DARUTH_XAXOX && mm != PM_DROW_ALIENIST && mm != PM_HEDROW_MASTER_WIZARD
 				){
 					otmp = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
@@ -853,7 +853,7 @@ register struct monst *mtmp;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
-				} else if(mm == PM_STJARNA_ALFAR){
+				} else if(mm == PM_STJARNA_ALFR){
 					otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
 					otmp->ohaluengr = TRUE;
 					otmp->ovar1 = EILISTRAEE_SYMBOL;
@@ -964,6 +964,87 @@ register struct monst *mtmp;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
+				} else if(mm == PM_MYRKALFAR_WARRIOR){
+					otmp = mksobj(SNIPER_RIFLE, TRUE, FALSE);
+					otmp->spe = 4;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(BULLET, FALSE, FALSE);
+					otmp->spe = 0;
+					otmp->quan += 60;
+					otmp->owt = weight(otmp);
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(SILVER_BULLET, FALSE, FALSE);
+					otmp->spe = 3;
+					otmp->quan += 30;
+					otmp->owt = weight(otmp);
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(VIBROBLADE, TRUE, FALSE);
+					otmp->spe = 0;
+					otmp->ovar1 = 50 + d(5,10);
+					otmp->recharged = rn1(3,3);
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
+					otmp->ohaluengr = TRUE;
+					otmp->ovar1 = LAST_BASTION_SYMBOL;
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, DROVEN_CLOAK);
+					(void)mongets(mtmp, FLACK_HELMET);
+					(void)mongets(mtmp, PLASTEEL_ARMOR);
+					(void)mongets(mtmp, BODYGLOVE);
+					(void)mongets(mtmp, ORIHALCYON_GAUNTLETS);
+					(void)mongets(mtmp, ELVEN_BOOTS);
+				} else if(mm == PM_MYRKALFAR_MATRON){
+					otmp = mksobj(ARM_BLASTER, TRUE, FALSE);
+					otmp->spe = 4;
+					otmp->ovar1 = 50 + d(5,10);
+					otmp->recharged = 4;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(VIBROBLADE, TRUE, FALSE);
+					otmp->spe = 4;
+					otmp->ovar1 = 50 + d(5,10);
+					otmp->recharged = rn1(3,3);
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
+					otmp->ohaluengr = TRUE;
+					otmp->ovar1 = LAST_BASTION_SYMBOL;
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
+					(void)mongets(mtmp, BODYGLOVE);
+					otmp = mksobj(GAUNTLETS_OF_DEXTERITY, TRUE, FALSE);
+					otmp->spe = 4;
+					(void) mpickobj(mtmp, otmp);
+					(void)mongets(mtmp, ELVEN_BOOTS);
+				} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && mm == PM_ELVENKING){ /* Give the elvenking in the quest a special setup */
+					otmp = mksobj(LIGHTSABER, TRUE, FALSE);
+					otmp->spe = 3;
+					otmp->ovar1 = !rn2(3) ? 2L : rn2(2) ? 21L : 22L;
+					otmp->cobj->otyp = !rn2(3) ? EMERALD : rn2(2) ? GREEN_FLUORITE : JADE;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(HAND_BLASTER, TRUE, FALSE);
+					otmp->spe = 3;
+					otmp->ovar1 = 50 + d(5,10);
+					otmp->recharged = rnd(4);
+					(void) mpickobj(mtmp, otmp);
+					
+					(void)mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
+					(void)mongets(mtmp, ELVEN_MITHRIL_COAT);
+					(void)mongets(mtmp, HIGH_ELVEN_HELM);
+					(void)mongets(mtmp, BODYGLOVE);
+					otmp = mksobj(GAUNTLETS_OF_DEXTERITY, TRUE, FALSE);
+					otmp->spe = 3;
+					(void) mpickobj(mtmp, otmp);
+					(void)mongets(mtmp, ELVEN_BOOTS);
 				} else {
 					if (rn2(2))
 					(void) mongets(mtmp,
@@ -2537,6 +2618,29 @@ register struct monst *mtmp;
 			else if(chance >= 6) mongets(mtmp, CLOAK_OF_PROTECTION);
 			else if(chance == 5) mongets(mtmp, CONSORT_S_SUIT);
 			(void)mongets(mtmp, CRYSTAL_SWORD);
+		} else if(ptr == &mons[PM_ALIDER]){
+			otmp = mksobj(FORCE_PIKE, TRUE, FALSE);
+			otmp->spe = 8;
+			otmp->ovar1 = 50 + d(5,10);
+			otmp->recharged = rn1(3,3);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(HAND_BLASTER, TRUE, FALSE);
+			otmp->spe = 8;
+			otmp->ovar1 = 50 + d(5,10);
+			otmp->recharged = rn2(3);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(find_signet_ring(), TRUE, FALSE);
+			otmp->ohaluengr = TRUE;
+			otmp->ovar1 = LAST_BASTION_SYMBOL;
+			(void) mpickobj(mtmp, otmp);
+			
+			(void)mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
+			(void)mongets(mtmp, PLASTEEL_HELM);
+			(void)mongets(mtmp, PLASTEEL_ARMOR);
+			(void)mongets(mtmp, BODYGLOVE);
+			(void)mongets(mtmp, GAUNTLETS_OF_POWER);
 		}
 		if (rn2(2)) {
 		    if(ptr == &mons[PM_FOREST_CENTAUR] || ptr == &mons[PM_PLAINS_CENTAUR]) {
@@ -4144,7 +4248,7 @@ register int	mmflags;
 			} else if(ptr == &mons[PM_DROW_MATRON_MOTHER]){
 				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.uhouse - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE)) : LOLTH_SYMBOL;
 				else curhouse = LOLTH_SYMBOL;
-			} else if(ptr == &mons[PM_SEYLL_AUZKOVYN] || ptr == &mons[PM_STJARNA_ALFAR]){
+			} else if(ptr == &mons[PM_SEYLL_AUZKOVYN] || ptr == &mons[PM_STJARNA_ALFR]){
 				curhouse = EILISTRAEE_SYMBOL;
 			} else if(ptr == &mons[PM_PRIESTESS_OF_GHAUNADAUR]){
 				curhouse = GHAUNADAUR_SYMBOL;

@@ -5160,6 +5160,9 @@ doapply()
 			You("set %s to heat.", yname(obj));
 		}
 	break;
+	case MASS_SHADOW_PISTOL:
+		res = use_massblaster(obj);
+	break;
 	case ARM_BLASTER:
 	case ASSAULT_RIFLE:
 		/* Switch between WP_MODE_SINGLE, WP_MODE_BURST and WP_MODE_AUTO */

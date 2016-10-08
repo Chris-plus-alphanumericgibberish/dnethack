@@ -338,14 +338,14 @@ OBJECT:'(',"chest",(37,10)
 # Monsters.
 MONSTER:'@',"Seyll Auzkovyn", (37,10)
 # elf guards for the audience chamber
-MONSTER:'@',"stjarna-alfar",(38,09), hostile
-MONSTER:'@',"stjarna-alfar",(38,10), hostile
-MONSTER:'@',"stjarna-alfar",(38,11), hostile
-MONSTER:'@',"stjarna-alfar",(36,09), hostile
-MONSTER:'@',"stjarna-alfar",(36,10), hostile
-MONSTER:'@',"stjarna-alfar",(36,11), hostile
-MONSTER:'@',"stjarna-alfar",(37,09), hostile
-MONSTER:'@',"stjarna-alfar",(37,11), hostile
+MONSTER:'@',"stjarna-alfr",(38,09), hostile
+MONSTER:'@',"stjarna-alfr",(38,10), hostile
+MONSTER:'@',"stjarna-alfr",(38,11), hostile
+MONSTER:'@',"stjarna-alfr",(36,09), hostile
+MONSTER:'@',"stjarna-alfr",(36,10), hostile
+MONSTER:'@',"stjarna-alfr",(36,11), hostile
+MONSTER:'@',"stjarna-alfr",(37,09), hostile
+MONSTER:'@',"stjarna-alfr",(37,11), hostile
 
 # traps
 # One pit at each cardinal point.

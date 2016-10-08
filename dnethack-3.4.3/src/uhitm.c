@@ -1176,7 +1176,7 @@ int thrown;
 								)
 						) && 
 						((Role_if(PM_ROGUE) && !Upolyd) ||
-							(Role_if(PM_ANACHRONONAUT) && Race_if(PM_DROW) && !Upolyd) ||
+							(Role_if(PM_ANACHRONONAUT) && Race_if(PM_MYRKALFR) && !Upolyd) ||
 							u.sealsActive&SEAL_ANDROMALIUS ||
 							(obj == uwep && uwep->oartifact == ART_SPINESEEKER) ||
 							(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data) && !is_unalive(mon->data)) ||

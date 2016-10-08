@@ -172,7 +172,7 @@ struct monst *mon;
 	struct permonst *ptr = mon->data;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
 
-	if (Is_weapon){
+	if (Is_weapon || (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM)){
 		if(Race_if(PM_ORC) && otmp == uwep){
 			tmp += max((u.ulevel+2)/3, otmp->spe);
 		} else {
@@ -784,7 +784,7 @@ int spec;
 		tmp += pendamage(otmp, mon);
 	}
 	
-	if (Is_weapon) {
+	if (Is_weapon || (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM)) {
 		if(is_lightsaber(otmp)){
 			if(otmp == uwep && Race_if(PM_ORC)){
 				tmp += 3*max((u.ulevel+1)/3,otmp->spe);
@@ -2145,8 +2145,11 @@ struct obj *obj;
 			type = P_LONG_SWORD;
 		else type = P_SHORT_SWORD;
 	}
-	if(obj && obj->oartifact && obj->oartifact == ART_TORCH_OF_ORIGINS){
+	else if(obj && obj->oartifact && obj->oartifact == ART_TORCH_OF_ORIGINS){
 		type = P_CLUB;
+	}
+	else if(obj && obj->otyp >= LUCKSTONE && obj->otyp <= ROCK && obj->ovar1){
+		type = (int)obj->ovar1;
 	}
 	else type = objects[obj->otyp].oc_skill;
 	return ((type < 0) ? -type : type);

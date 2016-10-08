@@ -87,45 +87,45 @@ NEARDATA struct colorTextClr LightsaberColor[] = {
 };
 
 STATIC_OVL char *SaberHilts[] = {
-	"This %s has a curved hilt, making it particularly suited for use in duels.",
-	"This %s has a classic grip and exposed emitter disk.",
-	"This %s has a raised emitter with a lotus-bud shroud.",
-	"This %s has a delicate-looking basket hilt.",
-	"This %s projects a single quillon blade.",
-	"This %s projects a pair of quillon blades.",
-	"This %s has a smooth, flowing design.",
-	"This %s has a smooth hilt with a recessed emitter disk.",
-	"Six little claws grip the emitter disk of this %s.",
-	"This %s's grip is composed of a hard, woody substance.",
-	"This %s's grip is a set of verticle black ridges.",
-	"This %s is fasioned to appear much like a branch of coral.",
-	"This %s is a single long spiral.",
-	"This %s's emitter disk is set into the jaws of a white tiger.",
-	"This %s's emitter disk is held by the coils of a green dragon.",
-	"A red bird holds this %s's emitter disk in its beak, its wings form a saber guard.",
-	"This %s has a black tortoise shell grip, and its blade emerges from the beak of a black turtle head.",
-	"This %s has an electrum grip and pommel.",
-	"This %s has a black grip and silver details.",
-	"This %s has a long, fabric-wrapped grip and jade buttons.",
-	"This %s has a rough, worn-looking leather grip.",
-	"This %s has a grip of tarnished silver ivy.",
-	"This %s has a forest camouflage covering.",
-	"This %s has a smooth diskguard.",
-	"This %s has a ornate golden diskguard.",
-	"The focusing chamber of this %s can be seen through a viewport.",
-	"A thin red ribbon hangs from the pommel of this %s.",
-	"This %s has a crude hilt fashoned from crystalized metal.",
-	"There is a winged blade of light carved into the pommel of this %s.",
-	"The Galactic Roundel is carved into this %s's pommel.",
-	"A crimson starbird is set the pommel of this %s.",
-	"A blazing claw is set the pommel of this %s.",
-	"A red eclipse symbol is set the pommel of this %s.",
-	"There is a ring of bronze sea-creatures above the grip of this %s.",
-	"The pommel of this %s is carved from a japor snippet.",
-	"Four lines of silver Qualith stand out from this basalt hilt.",
-	"This %s is decorated with subtle swirls.",
-	"This %s is decorated with non-euclidean curves and angles.", /*Given that a lightsaber handle is a curved surface....*/
-	"This %s is quite intricate in its design, covered in delicate runes and inlaid with black markings.",
+/*00*/"This %s has a curved hilt, making it particularly suited for use in duels.",
+/*01*/"This %s has a classic grip and exposed emitter disk.",
+/*02*/"This %s has a raised emitter with a lotus-bud shroud.",
+/*03*/"This %s has a delicate-looking basket hilt.",
+/*04*/"This %s projects a single quillon blade.",
+/*05*/"This %s projects a pair of quillon blades.",
+/*06*/"This %s has a smooth, flowing design.",
+/*07*/"This %s has a smooth hilt with a recessed emitter disk.",
+/*08*/"Six little claws grip the emitter disk of this %s.",
+/*09*/"This %s's grip is composed of a hard, woody substance.",
+/*10*/"This %s's grip is a set of verticle black ridges.",
+/*11*/"This %s is fasioned to appear much like a branch of coral.",
+/*12*/"This %s is a single long spiral.",
+/*13*/"This %s's emitter disk is set into the jaws of a white tiger.",
+/*14*/"This %s's emitter disk is held by the coils of a green dragon.",
+/*15*/"A red bird holds this %s's emitter disk in its beak, its wings form a saber guard.",
+/*16*/"This %s has a black tortoise shell grip, and its blade emerges from the beak of a black turtle head.",
+/*17*/"This %s has an electrum grip and pommel.",
+/*18*/"This %s has a black grip and silver details.",
+/*19*/"This %s has a long, fabric-wrapped grip and jade buttons.",
+/*20*/"This %s has a rough, worn-looking leather grip.",
+/*21*/"This %s has a grip of tarnished silver ivy.",
+/*22*/"This %s has a forest camouflage covering.",
+/*23*/"This %s has a smooth diskguard.",
+/*24*/"This %s has a ornate golden diskguard.",
+/*25*/"The focusing chamber of this %s can be seen through a viewport.",
+/*26*/"A thin red ribbon hangs from the pommel of this %s.",
+/*27*/"This %s has a crude hilt fashoned from crystalized metal.",
+/*28*/"There is a winged blade of light carved into the pommel of this %s.",
+/*29*/"The Galactic Roundel is carved into this %s's pommel.",
+/*30*/"A crimson starbird is set the pommel of this %s.",
+/*31*/"A blazing claw is set the pommel of this %s.",
+/*32*/"A red eclipse symbol is set the pommel of this %s.",
+/*33*/"There is a ring of bronze sea-creatures above the grip of this %s.",
+/*34*/"The pommel of this %s is carved from a japor snippet.",
+/*35*/"Four lines of silver Qualith stand out from this basalt hilt.",
+/*36*/"This %s is decorated with subtle swirls.",
+/*37*/"This %s is decorated with non-euclidean curves and angles.", /*Given that a lightsaber handle is a curved surface....*/
+/*38*/"This %s is quite intricate in its design, covered in delicate runes and inlaid with black markings.",
 };
 
 STATIC_OVL struct Jitem ObscureJapanese_items[] = {
@@ -1810,6 +1810,7 @@ const char *oldstr;
 	if ((len == 2 && !strcmp(str, "ya")) ||
 	    (len >= 2 && !strcmp(spot-1, "ai")) || /* samurai, Uruk-hai */
 	    (len >= 3 && !strcmp(spot-2, " ya")) ||
+	    (len >= 4 && !strcmp(spot-3, "drow")) ||
 	    (len >= 4 &&
 	     (!strcmp(spot-3, "fish") || !strcmp(spot-3, "tuna") ||
 	      !strcmp(spot-3, "deer") || !strcmp(spot-3, "yaki"))) ||
@@ -1829,6 +1830,18 @@ const char *oldstr;
 			(len<6 || strcmp(spot-5, "shaman")) &&
 			(len<5 || strcmp(spot-4, "human"))) {
 		*(spot-1) = 'e';
+		goto bottom;
+	}
+
+	/* Keter (plural of sephirah is sephiroth) */
+	if (len >= 8 && !strcmp(spot-7, "sephirah")) {
+		Strcpy(spot-1, "oth");
+		goto bottom;
+	}
+
+	/* Elves (plural of alfr is alfar) */
+	if (len >= 4 && !strcmp(spot-3, "alfr")) {
+		Strcpy(spot-3, "alfar");
 		goto bottom;
 	}
 
