@@ -2342,7 +2342,7 @@ do_it:
 	 *  blind, then we have to pick up and replace the ball and chain so
 	 *  that we don't remember them if they are out of sight.
 	 */
-	if (Punished && (Race_if(PM_DROW) ? on : !on) && !Blind)
+	if (Punished && (darksight(youracedata) ? on : !on) && !Blind)
 	    move_bc(1, 0, uball->ox, uball->oy, uchain->ox, uchain->oy);
 
 #ifdef REINCARNATION
@@ -2375,7 +2375,7 @@ do_it:
 	    vision_recalc(2);
 
 	    /* replace ball&chain */
-	    if (Punished && (Race_if(PM_DROW) ? on : !on))
+	    if (Punished && (darksight(youracedata) ? on : !on))
 			move_bc(0, 0, uball->ox, uball->oy, uchain->ox, uchain->oy);
 	}
 

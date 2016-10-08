@@ -1836,7 +1836,7 @@ end_burn(obj, timer_attached)
 		update_inventory();
 	} else if (!stop_timer(BURN_OBJECT, (genericptr_t) obj))
 	    impossible("end_burn: obj %s not timed!", xname(obj));
-	if(Race_if(PM_DROW)) doredraw();
+	if(darksight(youracedata) || catsight(youracedata)) doredraw();
 }
 
 #endif /* OVL1 */

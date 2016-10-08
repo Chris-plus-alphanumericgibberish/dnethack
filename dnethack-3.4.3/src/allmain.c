@@ -469,7 +469,7 @@ moveloop()
 			if(u.sealsActive&SEAL_FAFNIR && money_cnt(invent) == 0) unbind(SEAL_FAFNIR,TRUE);
 #endif
 			if(u.sealsActive&SEAL_JACK && (Is_astralevel(&u.uz) || Inhell)) unbind(SEAL_JACK,TRUE);
-			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON || darksight(youracedata))
+			if(u.sealsActive&SEAL_ORTHOS && !(u.sealsActive&SEAL_AMON || darksight(youracedata) || catsight(youracedata) || extramission(youracedata))
 				&&!(
 					(viz_array[u.uy][u.ux]&TEMP_LIT3 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)) || 
 					(levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT3)))
@@ -1624,7 +1624,7 @@ newgame()
 
 #endif /* RECORD_REALTIME || REALTIME_ON_BOTL */
 
-	if(Race_if(PM_DROW)) litroom(FALSE,NULL);
+	if(darksight(youracedata)) litroom(FALSE,NULL);
 	/* Success! */
 	welcome(TRUE);
 	return;
@@ -1666,7 +1666,7 @@ boolean new_game;	/* false => restoring an old game */
 		pline("#chat to a fresh seal to contact the spirit beyond.");
 		pline("Press Ctrl^F or type #power to fire active spirit powers!");
 	}
-	if(Race_if(PM_DROW)){
+	if(darksight(youracedata)){
 		pline("Beware, droven armor evaporates in light!");
 		pline("Use #monster to create a patch of darkness.");
 	}

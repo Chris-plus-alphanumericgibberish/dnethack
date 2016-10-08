@@ -1658,7 +1658,7 @@ sokoban_detect()
 	for (x = 1; x < COLNO; x++)
 		for (y = 0; y < ROWNO; y++) {
 			levl[x][y].seenv = SVALL;
-			if(Race_if(PM_DROW)){
+			if(darksight(youracedata)){
 				set_lit(x,y,0);
 				levl[x][y].waslit = FALSE;
 			}

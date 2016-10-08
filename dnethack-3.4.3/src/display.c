@@ -670,7 +670,7 @@ newsym(x,y)
 	 * Perhaps ALL areas should revert to their "unlit" look when
 	 * out of sight.
 	 */
-	lev->waslit = Race_if(PM_DROW) ? 0 : (lev->lit!=0);	/* remember lit condition */
+	lev->waslit = (darksight(youracedata) || catsight(youracedata)) ? 0 : (lev->lit!=0);	/* remember lit condition */
 
 	if (reg != NULL && ACCESSIBLE(lev->typ)) {
 	    show_region(reg,x,y);
