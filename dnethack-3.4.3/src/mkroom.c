@@ -1751,7 +1751,7 @@ struct mkroom *croom; /* NULL == choose random room */
 	}
 	for(pos.x=sroom->lx; pos.x <= sroom->hx; pos.x++){
 		for(pos.y=sroom->ly; pos.y <= sroom->hy; pos.y++){
-			if(!rn2(6)){
+			if(!rn2(7)){
 				otmp = mkobj_at(WEAPON_CLASS, pos.x, pos.y, FALSE);
 				if(rn2(3)){
 					otmp->oeroded = rn2(4);
@@ -1762,7 +1762,7 @@ struct mkroom *croom; /* NULL == choose random room */
 					otmp->spe = rn2(3)+rn2(3);
 				}
 			}
-			if(!rn2(6)){
+			if(!rn2(7)){
 				otmp = mkobj_at(ARMOR_CLASS, pos.x, pos.y, FALSE);
 				if(rn2(3)){
 					otmp->oeroded = rn2(4);
@@ -1773,7 +1773,7 @@ struct mkroom *croom; /* NULL == choose random room */
 					otmp->spe = rn2(3)+rn2(2);
 				}
 			}
-			if(!rn2(3)){
+			if(!rn2(4)){
 				otmp = mkobj_at(WEAPON_CLASS, pos.x, pos.y, FALSE);
 				if(rn2(3)){
 					otmp->oeroded = rn2(4);
@@ -1781,7 +1781,7 @@ struct mkroom *croom; /* NULL == choose random room */
 					otmp->oeroded2 = rn2(4);
 				}
 			}
-			if(!rn2(3)){
+			if(!rn2(4)){
 				otmp = mkobj_at(ARMOR_CLASS, pos.x, pos.y, FALSE);
 				if(rn2(3)){
 					otmp->oeroded = rn2(4);
