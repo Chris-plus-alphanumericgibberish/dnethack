@@ -2600,21 +2600,21 @@ role_init()
 		mons[PM_CHROMATIC_DRAGON].mflagst &= ~MT_WANTSARTI;
 	}
 
-	/* Fix up infravision */
-	if (mons[urace.malenum].mflagsv & MV_INFRAVISION) {
-	    /* although an infravision intrinsic is possible, infravision
-	     * is purely a property of the physical race.  This means that we
-	     * must put the infravision flag in the player's current race
-	     * (either that or have separate permonst entries for
-	     * elven/non-elven members of each class).  The side effect is that
-	     * all NPCs of that class will have (probably bogus) infravision,
-	     * but since infravision has no effect for NPCs anyway we can
-	     * ignore this.
-	     */
-	    mons[urole.malenum].mflagsv |= MV_INFRAVISION;
-	    if (urole.femalenum != NON_PM)
-	    	mons[urole.femalenum].mflagsv |= MV_INFRAVISION;
-	}
+	// /* Fix up infravision */
+	// if (mons[urace.malenum].mflagsv & MV_INFRAVISION) {
+	    // /* although an infravision intrinsic is possible, infravision
+	     // * is purely a property of the physical race.  This means that we
+	     // * must put the infravision flag in the player's current race
+	     // * (either that or have separate permonst entries for
+	     // * elven/non-elven members of each class).  The side effect is that
+	     // * all NPCs of that class will have (probably bogus) infravision,
+	     // * but since infravision has no effect for NPCs anyway we can
+	     // * ignore this.
+	     // */
+	    // mons[urole.malenum].mflagsv |= MV_INFRAVISION;
+	    // if (urole.femalenum != NON_PM)
+	    	// mons[urole.femalenum].mflagsv |= MV_INFRAVISION;
+	// }
 	
 	/* Fix up the unknown firearms descriptions */
 	if(Role_if(PM_PIRATE) || Role_if(PM_ANACHRONONAUT)){
