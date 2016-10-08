@@ -152,3 +152,4 @@ MONSTER: 'Z',random,(21,5),hostile,asleep
 MONSTER: 'Z',random,(22,5),hostile,asleep
 MONSTER: 'Z',random,(23,5),hostile,asleep
 ENGRAVING:(06,04),burn,"Those Not of Moloch, Begone!"
+

@@ -109,7 +109,7 @@ DESCRIPTION:	mazelike
 BRANCH:		"Vlad's Tower" @ (1, 0) up
 RNDLEVEL:	"minetn" "T" @ (4, 1) 7
 LEVELDESC:	town
-RNDLEVEL:	"minend" "E" @ (-1, 0) 3
+RNDLEVEL:	"minend" "E" @ (-1, 0) 4
 ENTRY:          2
 
 # Law Quest
