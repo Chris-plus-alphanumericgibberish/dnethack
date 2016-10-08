@@ -1064,7 +1064,7 @@ boolean spiritseal;
 		ordinary = (obj->otyp != BELL_OF_OPENING || (!obj->spe && !spiritseal)),
 		invoking = (obj->otyp == BELL_OF_OPENING &&
 			(spiritseal ?
-			 (invocation_pos(obj->ox, obj->oy) && !On_stairs(obj->ox, obj->oy)) :
+			 ((invocation_pos(obj->ox, obj->oy) && !On_stairs(obj->ox, obj->oy)) || (invocation_pos(u.ux, u.uy) && !On_stairs(u.ux, u.uy))) :
 			 (invocation_pos(u.ux, u.uy) && !On_stairs(u.ux, u.uy))
 			));
 
