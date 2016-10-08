@@ -1055,13 +1055,17 @@ int distance;
 	register int distm;
 
 	while(mtmp) {
-	    if (!DEADMONSTER(mtmp)) {
+	    if (!DEADMONSTER(mtmp) && !is_deaf(mtmp)) {
 		distm = distu(mtmp->mx, mtmp->my);
 		if (distm < distance) {
 		    mtmp->msleeping = 0;
 			if(mtmp->data != &mons[PM_GIANT_TURTLE] || !(mtmp->mflee)){
 			    mtmp->mcanmove = 1;
 			    mtmp->mfrozen = 0;
+				if(mtmp->mux == 0 && mtmp->muy == 0){
+					mtmp->mux = u.ux;
+					mtmp->muy = u.uy;
+				}
 			}
 		    /* May scare or deafen some monsters */
 			if(sensitive_ears(mtmp->data)){
@@ -1070,7 +1074,8 @@ int distance;
 				){
 					mtmp->mstun = 1;
 					mtmp->mconf = 1;
-					mtmp->uhurtm = 1;
+					mtmp->mcanhear = 0;
+					mtmp->mdeafened = distance/3 - distm;
 				}
 			} else {
 				if (distm < distance/3 &&

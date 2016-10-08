@@ -681,6 +681,7 @@ disturb(mtmp)
 		(Aggravate_monster
 			|| (mtmp->data->mlet == S_DOG ||
 				mtmp->data->mlet == S_HUMAN)
+			|| (sensitive_ears(mtmp->data) && !is_deaf(mtmp))
 			|| (!rn2(7) && mtmp->m_ap_type != M_AP_FURNITURE &&
 				mtmp->m_ap_type != M_AP_OBJECT) )) {
 		mtmp->msleeping = 0;
@@ -2342,7 +2343,7 @@ register struct monst *mtmp;
 	if(couldsee(mtmp->mx,mtmp->my) &&
 		distu(mtmp->mx,mtmp->my) <= 100 &&
 		(!Stealth || (mtmp->data == &mons[PM_ETTIN] && rn2(10))) &&
-		(Aggravate_monster || (!rn2(7)))
+		(Aggravate_monster || (sensitive_ears(mtmp->data) && !is_deaf(mtmp)) || (!rn2(7)))
 	) {
 		notseen = FALSE;
 	}

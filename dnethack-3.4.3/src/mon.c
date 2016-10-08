@@ -979,6 +979,8 @@ mcalcdistress()
 	/* gradually time out temporary problems */
 	if (mtmp->mblinded && !--mtmp->mblinded)
 	    mtmp->mcansee = 1;
+	if (mtmp->mdeafened && !--mtmp->mdeafened)
+	    mtmp->mcanhear = 1;
 	if (mtmp->mlaughing && !--mtmp->mlaughing)
 	    mtmp->mnotlaugh = 1;
 	if (mtmp->mfrozen && !--mtmp->mfrozen)
@@ -3727,9 +3729,15 @@ register int x, y, distance;
 	register struct monst *mtmp;
 
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-	    if (!DEADMONSTER(mtmp) && mtmp->msleeping && (distance == 0 ||
-				 dist2(mtmp->mx, mtmp->my, x, y) < distance))
-		mtmp->msleeping = 0;
+	    if (!DEADMONSTER(mtmp) && mtmp->msleeping && !is_deaf(mtmp) && (distance == 0 ||
+				 dist2(mtmp->mx, mtmp->my, x, y) < distance)
+		){
+			mtmp->msleeping = 0;
+			if(mtmp->mux == 0 && mtmp->muy == 0){
+				mtmp->mux = x;
+				mtmp->muy = y;
+			}
+		}
 	}
 }
 
@@ -3742,11 +3750,12 @@ register int x, y, distance;
 	wake_nearto(x,y,distance);
 	distance /= 3;
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-	    if (!DEADMONSTER(mtmp) && sensitive_ears(mtmp->data) &&
+	    if (!DEADMONSTER(mtmp) && sensitive_ears(mtmp->data) && !is_deaf(mtmp) &&
 				 dist2(mtmp->mx, mtmp->my, x, y) < distance){
 			mtmp->mstun = 1;
 			mtmp->mconf = 1;
-			mtmp->uhurtm = 1;
+			mtmp->mcanhear = 0;
+			mtmp->mdeafened = distance - dist2(mtmp->mx, mtmp->my, x, y);
 		}
 	}
 }
