@@ -1987,7 +1987,7 @@ dosacrifice()
 				change_luck(altaralign == A_NONE ? -2 : 2);
 				demonless_msg = "blood coagulates";
 			}
-			if ((pm = dlord(altaralign)) != NON_PM &&
+			if ((pm = dlord((struct permonst *) 0, altaralign)) != NON_PM &&
 				(dmon = makemon(&mons[pm], u.ux, u.uy, NO_MM_FLAGS))) {
 				You("have summoned %s!", a_monnam(dmon));
 				if (sgn(u.ualign.type) == sgn(dmon->data->maligntyp))

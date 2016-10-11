@@ -38,15 +38,15 @@ struct monst *mon;
 	    dtype = PM_MARILITH;
 		cnt = d(1,6);
 	} else if (is_dprince(ptr) || (ptr == &mons[PM_WIZARD_OF_YENDOR])) {
-	    dtype = (!rn2(20)) ? dprince(atyp) :
-				 (!rn2(4)) ? dlord(atyp) : ndemon(atyp);
+	    dtype = (!rn2(20)) ? dprince(ptr, atyp) :
+				 (!rn2(4)) ? dlord(ptr, atyp) : ndemon(atyp);
 	    cnt = (!rn2(4) && is_ndemon(&mons[dtype])) ? 2 : 1;
 	} else if (is_dlord(ptr)) {
-	    dtype = (!rn2(50)) ? dprince(atyp) :
-				 (!rn2(20)) ? dlord(atyp) : ndemon(atyp);
+	    dtype = (!rn2(50)) ? dprince(ptr, atyp) :
+				 (!rn2(20)) ? dlord(ptr, atyp) : ndemon(atyp);
 	    cnt = (!rn2(4) && is_ndemon(&mons[dtype])) ? 2 : 1;
 	} else if (is_ndemon(ptr)) {
-	    dtype = (!rn2(20) && Inhell) ? dlord(atyp) :
+	    dtype = (!rn2(20) && Inhell) ? dlord(ptr, atyp) :
 				 ((mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? ndemon(atyp) : monsndx(ptr);
 	    cnt = 1;
 	} else if (is_lminion(mon)) {
@@ -373,24 +373,42 @@ int demonPrinces[] = {
 };
 
 int
-dprince(atyp)
+dprince(ptr, atyp)
+struct permonst *ptr;
 aligntyp atyp;
 {
 	int tryct, pm;
+	
+	/*Specific aliances go here*/
+	if(ptr == &mons[PM_BAPHOMET] && !(mvitals[PM_PALE_NIGHT].mvflags & G_GONE))
+		return PM_PALE_NIGHT;
+	if(ptr == &mons[PM_PALE_NIGHT] && !(mvitals[PM_ASCODEL].mvflags & G_GONE) && !rn2(4))
+		return PM_ASCODEL;
+	if(ptr == &mons[PM_PALE_NIGHT] && !(mvitals[PM_GRAZ_ZT].mvflags & G_GONE))
+		return PM_GRAZ_ZT;
+	if(ptr == &mons[PM_DEMOGORGON] && !(mvitals[PM_DAGON].mvflags & G_GONE))
+		return PM_DAGON;
 
 	if(atyp == A_NONE) atyp = !rn2(3) ? A_LAWFUL : A_CHAOTIC;
-
+	
 	if(atyp == A_LAWFUL){
 		if(!(mvitals[PM_ASMODEUS].mvflags & G_GONE)) return PM_ASMODEUS;
-		else return dlord(atyp);
+		else return dlord(ptr, atyp);
 	} else if(atyp == A_CHAOTIC) {
 		for (tryct = 0; tryct < 20; tryct++) {
 			pm = demonPrinces[rn2(SIZE(demonPrinces))];
-			if (!(mvitals[pm].mvflags & G_GONE))
+			if (!(mvitals[pm].mvflags & G_GONE
+				|| (ptr == &mons[PM_GRAZ_ZT] && pm == PM_MALCANTHET)
+				|| (ptr == &mons[PM_MALCANTHET] && pm == PM_GRAZ_ZT)
+				|| (ptr == &mons[PM_OBOX_OB] && pm == PM_DEMOGORGON)
+				|| (ptr == &mons[PM_DEMOGORGON] && pm == PM_OBOX_OB)
+				|| (ptr == &mons[PM_LAMASHTU] && pm == PM_DEMOGORGON)
+				|| (ptr == &mons[PM_DEMOGORGON] && pm == PM_LAMASHTU)
+			))
 				return(pm);
 		}
 	}
-	return(dlord(atyp));	/* approximate */
+	return(dlord(ptr, atyp));	/* approximate */
 }
 
 int demonLords[] = {
@@ -399,6 +417,7 @@ int demonLords[] = {
 	PM_KOSTCHTCHIE,
 	PM_ZUGGTMOY,
 	PM_JUIBLEX,
+	PM_ALRUNES,
 	PM_ALDINACH
 };
 
@@ -414,18 +433,41 @@ int lordsOfTheNine[] = {
 };
 
 int
-dlord(atyp)
+dlord(ptr, atyp)
+struct permonst *ptr;
 aligntyp atyp;
 {
 	int tryct, pm;
 	
+	/*Specific aliances go here*/
+	if(ptr == &mons[PM_MEPHISTOPHELES] && !(mvitals[PM_BAALPHEGOR].mvflags & G_GONE))
+		return PM_BAALPHEGOR;
+	if(ptr == &mons[PM_CRONE_LILITH] && !(mvitals[PM_MOTHER_LILITH].mvflags & G_GONE))
+		return PM_MOTHER_LILITH;
+	if(ptr == &mons[PM_CRONE_LILITH] && !(mvitals[PM_DAUGHTER_LILITH].mvflags & G_GONE))
+		return PM_DAUGHTER_LILITH;
+	if(ptr == &mons[PM_MOTHER_LILITH] && !(mvitals[PM_DAUGHTER_LILITH].mvflags & G_GONE))
+		return PM_DAUGHTER_LILITH;
+	if(ptr == &mons[PM_BELIAL] && !(mvitals[PM_FIERNA].mvflags & G_GONE))
+		return PM_FIERNA;
+	if(ptr == &mons[PM_MAMMON] && !(mvitals[PM_GLASYA].mvflags & G_GONE) && !rn2(20))
+		return PM_GLASYA;
+	
+	if(ptr == &mons[PM_PALE_NIGHT] && !(mvitals[PM_BAPHOMET].mvflags & G_GONE))
+		return PM_BAPHOMET;
+	if(ptr == &mons[PM_OBOX_OB] && !(mvitals[PM_ALDINACH].mvflags & G_GONE))
+		return PM_ALDINACH;
+
 	if(atyp == A_NONE) atyp = rn2(2) ? A_LAWFUL : A_CHAOTIC;
 
 	if(atyp == A_LAWFUL){
 		for (tryct = 0; tryct < 20; tryct++) {
 			pm = lordsOfTheNine[rn2(SIZE(lordsOfTheNine))];
 			if(pm == PM_CRONE_LILITH) pm = !rn2(3) ? PM_CRONE_LILITH : !rn2(2) ? PM_MOTHER_LILITH : PM_DAUGHTER_LILITH;
-			if (!(mvitals[pm].mvflags & G_GONE)){
+			if (!(mvitals[pm].mvflags & G_GONE
+				|| (ptr == &mons[PM_MEPHISTOPHELES] && pm == PM_BAALZEBUB)
+				|| (ptr == &mons[PM_BAALZEBUB] && pm == PM_MEPHISTOPHELES)
+			)){
 				if(pm == PM_CREATURE_IN_THE_ICE){
 					mvitals[pm].mvflags |= G_GONE;
 					pm = rn2(2) ? PM_LEVISTUS : PM_LEVIATHAN;
@@ -436,7 +478,12 @@ aligntyp atyp;
 	} else if(atyp == A_CHAOTIC) {
 		for (tryct = 0; tryct < 20; tryct++) {
 			pm = demonLords[rn2(SIZE(demonLords))];
-			if (!(mvitals[pm].mvflags & G_GONE))
+			if (!(mvitals[pm].mvflags & G_GONE
+				|| (ptr == &mons[PM_BAPHOMET] && pm == PM_YEENOGHU)
+				|| (ptr == &mons[PM_YEENOGHU] && pm == PM_BAPHOMET)
+				|| (ptr == &mons[PM_ZUGGTMOY] && pm == PM_JUIBLEX)
+				|| (ptr == &mons[PM_JUIBLEX] && pm == PM_ZUGGTMOY)
+			))
 				return(pm);
 		}
 	}
