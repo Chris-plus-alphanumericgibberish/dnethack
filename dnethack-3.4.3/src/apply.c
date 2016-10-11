@@ -3086,7 +3086,7 @@ struct obj **optr;
 	struct trap *ttmp;
 	struct monst *mtmp;
 
-    if (!getdir((char *)0) || !(u.dx || u.dy)) return 0;
+    if (!getdir((char *)0) || u.dz < 0) return 0;
 
     if (Stunned || (Confusion && !rn2(5))) confdir();
     rx = u.ux + u.dx;
