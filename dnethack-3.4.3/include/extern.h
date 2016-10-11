@@ -1076,6 +1076,8 @@ E void FDECL(mkmonmoney, (struct monst *, long));
 #endif
 E void FDECL(bagotricks, (struct obj *));
 E boolean FDECL(propagate, (int, BOOLEAN_P,BOOLEAN_P));
+E boolean FDECL(mon_can_see_you, (struct monst *));
+E boolean FDECL(mon_can_see_mon, (struct monst *, struct monst *));
 
 /* ### mapglyph.c ### */
 

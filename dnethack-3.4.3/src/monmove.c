@@ -12,7 +12,6 @@ extern boolean notonhead;
 #ifdef OVL0
 
 STATIC_DCL int FDECL(disturb,(struct monst *));
-STATIC_DCL int FDECL(scent_you_callback,(genericptr_t, int, int));
 STATIC_DCL void FDECL(distfleeck,(struct monst *,int *,int *,int *));
 STATIC_DCL int FDECL(m_arrival, (struct monst *));
 STATIC_DCL void FDECL(watch_on_duty,(struct monst *));
@@ -1372,19 +1371,6 @@ register struct monst *mtmp;
 	return(FALSE);
 }
 
-STATIC_DCL int
-scent_you_callback(data, x, y)
-genericptr_t data;
-int x, y;
-{
-    int is_accessible = ZAP_POS(levl[x][y].typ);
-    boolean *shouldsmell = (boolean *)data;
-    if (u.ux == x && u.uy == y) *shouldsmell = TRUE;
-	
-	if(!(*shouldsmell)) return !is_accessible;
-	else return 1; /* Once a path to you is found, quickly end the xpath function */
-}
-
 /* Return values:
  * 0: did not move, but can still attack and do other stuff.
  * 1: moved, possibly can attack.
@@ -1537,119 +1523,7 @@ not_special:
 #ifdef GOLDOBJ
 		struct obj *lepgold, *ygold;
 #endif
-		boolean should_see = FALSE;
-		boolean catsightdark = !(levl[mtmp->mx][mtmp->my].lit || (viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1 && !(viz_array[mtmp->my][mtmp->mx]&TEMP_DRK1)));
-		// should_see = (couldsee(omx, omy) &&
-				      // (levl[gx][gy].lit ||
-				       // !levl[omx][omy].lit) &&
-				      // (dist2(omx, omy, gx, gy) <= 36));
-		if(distmin(omx,omy,gx,gy) <= 1 && !rn2(8)) should_see = TRUE;
-		if((darksight(mtmp->data) || (catsight(mtmp->data) && catsightdark)) && !is_blind(mtmp)){
-			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				if(levl[gx][gy].lit){
-					if(viz_array[gy][gx]&TEMP_DRK1 && !(viz_array[gy][gx]&TEMP_LIT1))
-						should_see = TRUE;
-				} else {
-					if(!(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK1)))
-						should_see = TRUE;
-				}
-			}
-		}
-		if(lowlightsight3(mtmp->data) && !is_blind(mtmp)){
-			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				if(dist2(omx,omy,gx,gy) <= 3*3) should_see = TRUE;
-				else if(levl[gx][gy].lit){
-					if(!(viz_array[gy][gx]&TEMP_DRK3 && !(viz_array[gy][gx]&TEMP_LIT3)))
-						should_see = TRUE;
-				} else {
-					if(viz_array[gy][gx]&TEMP_LIT3 && !(viz_array[gy][gx]&TEMP_DRK1))
-						should_see = TRUE;
-					else if(viz_array[gy][gx]&TEMP_LIT2 && !(viz_array[gy][gx]&TEMP_DRK2))
-						should_see = TRUE;
-					else if(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK3))
-						should_see = TRUE;
-				}
-			}
-		}
-		if(lowlightsight2(mtmp->data) && !is_blind(mtmp)){
-			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				if(dist2(omx,omy,gx,gy) <= 2*2) should_see = TRUE;
-				else if(levl[gx][gy].lit){
-					if(!(viz_array[gy][gx]&TEMP_DRK2 && !(viz_array[gy][gx]&TEMP_LIT2)) &&
-						!(viz_array[gy][gx]&TEMP_DRK3 && !(viz_array[gy][gx]&TEMP_LIT1)))
-						should_see = TRUE;
-				} else {
-					if(viz_array[gy][gx]&TEMP_LIT2 && !(viz_array[gy][gx]&TEMP_DRK1))
-						should_see = TRUE;
-					else if(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK2))
-						should_see = TRUE;
-				}
-			}
-		}
-		if((normalvision(mtmp->data) || (catsight(mtmp->data) && !catsightdark)) && !is_blind(mtmp)){
-			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				if(distmin(omx,omy,gx,gy) <= 1) should_see = TRUE;
-				else if(levl[gx][gy].lit){
-					if(!(viz_array[gy][gx]&TEMP_DRK1 && !(viz_array[gy][gx]&TEMP_LIT1)) &&
-						!(viz_array[gy][gx]&TEMP_DRK2)
-					)
-						should_see = TRUE;
-				} else {
-					if(viz_array[gy][gx]&TEMP_LIT1 && !(viz_array[gy][gx]&TEMP_DRK1))
-						should_see = TRUE;
-				}
-			}
-		}
-		if(echolocation(mtmp->data) && !is_deaf(mtmp)){
-			if(couldsee(omx, omy)){
-				should_see = TRUE;
-			}
-		}
-		if(extramission(mtmp->data)){
-			if(couldsee(omx, omy) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				should_see = TRUE;
-			}
-		}
-		
-		if(infravision(mtmp->data) && infravisible(youracedata) && !is_blind(mtmp)){
-			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				should_see = TRUE;
-			}
-		}
-		if(bloodsense(mtmp->data) && has_blood(youracedata)){
-			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				should_see = TRUE;
-			}
-		}
-		if(lifesense(mtmp->data) && !nonliving(youracedata)){
-			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				should_see = TRUE;
-			}
-		}
-		if(senseall(mtmp->data)){
-			if((couldsee(omx, omy) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-				should_see = TRUE;
-			}
-		}
-		if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
-			should_see = TRUE;
-		}
-		if(telepathic(mtmp->data) && !mindless(youracedata)){
-			should_see = TRUE;
-		}
-		if(!should_see && goodsmeller(mtmp->data) && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 6){
-		/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
-			if(clear_path(u.ux, u.uy, mtmp->mx, mtmp->my)){
-			/*don't running a complicated path function if there is a straight line to you*/
-				should_see = TRUE;
-			} else {
-				boolean shouldsmell = FALSE;
-				xpathto(6, mtmp->mx, mtmp->my, scent_you_callback, (genericptr_t)&shouldsmell);
-				if(shouldsmell){
-					should_see = TRUE;
-				}
-			}
-		}
+		boolean should_see = mon_can_see_you(mtmp);
 		
 		if ((youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == STRANGE_OBJECT) || u.uundetected ||
 		    (youmonst.m_ap_type == M_AP_OBJECT && youmonst.mappearance == GOLD_PIECE && !likes_gold(ptr)) ||
@@ -2227,7 +2101,6 @@ register struct monst *mtmp;
 {
 	boolean notseen, gotu = FALSE;
 	register int disp, mx = mtmp->mux, my = mtmp->muy;
-	boolean catsightdark = !(levl[mtmp->mx][mtmp->my].lit || (viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1 && !(viz_array[mtmp->my][mtmp->mx]&TEMP_DRK1)));
 #ifdef GOLDOBJ
 	long umoney = money_cnt(invent);
 #endif
@@ -2243,122 +2116,14 @@ register struct monst *mtmp;
 	   if you haven't moved away.  Assuming they aren't crazy. */
 	if (mx == u.ux && my == u.uy && (!mtmp->mcrazed || rn2(4))) goto found_you;
 
-	// notseen = (is_blind(mtmp) || (Invis && !perceives(mtmp->data)));
-	notseen = TRUE;
-	
-	if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) <= 1 && !rn2(8)) notseen = FALSE;
-	if((darksight(mtmp->data) || (catsight(mtmp->data) && catsightdark)) && !is_blind(mtmp)){
-		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			if(levl[u.ux][u.uy].lit){
-				if(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
-					notseen = FALSE;
-			} else {
-				if(!(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))
-					notseen = FALSE;
-			}
-		}
-	}
-	if(lowlightsight3(mtmp->data) && !is_blind(mtmp)){
-		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			if(dist2(mtmp->mx,mtmp->my,u.ux,u.uy) <= 3*3) notseen = FALSE;
-			else if(levl[u.ux][u.uy].lit){
-				if(!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT3)))
-					notseen = FALSE;
-			} else {
-				if(viz_array[u.uy][u.ux]&TEMP_LIT3 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
-					notseen = FALSE;
-				else if(viz_array[u.uy][u.ux]&TEMP_LIT2 && !(viz_array[u.uy][u.ux]&TEMP_DRK2))
-					notseen = FALSE;
-				else if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))
-					notseen = FALSE;
-			}
-		}
-	}
-	if(lowlightsight2(mtmp->data) && !is_blind(mtmp)){
-		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			if(dist2(mtmp->mx,mtmp->my,u.ux,u.uy) <= 2*2) notseen = FALSE;
-			else if(levl[u.ux][u.uy].lit){
-				if(!(viz_array[u.uy][u.ux]&TEMP_DRK2 && !(viz_array[u.uy][u.ux]&TEMP_LIT2)) &&
-					!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
-				)
-					notseen = FALSE;
-			} else {
-				if(viz_array[u.uy][u.ux]&TEMP_LIT2 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
-					notseen = FALSE;
-				else if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK2))
-					notseen = FALSE;
-			}
-		}
-	}
-	if((normalvision(mtmp->data) || (catsight(mtmp->data) && !catsightdark)) && !is_blind(mtmp)){
-		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) <= 1) notseen = FALSE;
-			else if(levl[u.ux][u.uy].lit){
-				if(!(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)) &&
-					!(viz_array[u.uy][u.ux]&TEMP_DRK2)
-				)
-					notseen = FALSE;
-			} else {
-				if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
-					notseen = FALSE;
-			}
-		}
-	}
-	if(echolocation(mtmp->data) && !is_deaf(mtmp)){
-		if(couldsee(mtmp->mx, mtmp->my)){
-			notseen = FALSE;
-		}
-	}
-	if(extramission(mtmp->data)){
-		if(couldsee(mtmp->mx, mtmp->my) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			notseen = FALSE;
-		}
-	}
-	if(infravision(mtmp->data) && infravisible(youracedata) && !is_blind(mtmp)){
-		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			notseen = FALSE;
-		}
-	}
-	if(bloodsense(mtmp->data) && has_blood(youracedata)){
-		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			notseen = FALSE;
-		}
-	}
-	if(lifesense(mtmp->data) && !nonliving(youracedata)){
-		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			notseen = FALSE;
-		}
-	}
-	if(senseall(mtmp->data)){
-		if((couldsee(mtmp->mx, mtmp->my) || ominsense(mtmp->data)) && !(Invis && !perceives(mtmp->data) && !can_track(mtmp->data) && rn2(11))){
-			notseen = FALSE;
-		}
-	}
-	if(earthsense(mtmp->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
-		notseen = FALSE;
-	}
-	if(telepathic(mtmp->data) && !mindless(youracedata)){
-		notseen = FALSE;
-	}
+	notseen = !mon_can_see_you(mtmp);
+	/* Can also learn your position via hearing you */
 	if(couldsee(mtmp->mx,mtmp->my) &&
 		distu(mtmp->mx,mtmp->my) <= 100 &&
 		(!Stealth || (mtmp->data == &mons[PM_ETTIN] && rn2(10))) &&
 		(Aggravate_monster || (sensitive_ears(mtmp->data) && !is_deaf(mtmp)) || (!rn2(7)))
 	) {
 		notseen = FALSE;
-	}
-	if(notseen && goodsmeller(mtmp->data) && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 6){
-	/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
-		if(clear_path(u.ux, u.uy, mtmp->mx, mtmp->my)){
-		/*don't running a complicated path function if there is a straight line to you*/
-			notseen = FALSE;
-		} else {
-			boolean shouldsmell = FALSE;
-			xpathto(6, mtmp->mx, mtmp->my, scent_you_callback, (genericptr_t)&shouldsmell);
-			if(shouldsmell){
-				notseen = FALSE;
-			}
-		}
 	}
 	
 	/* add cases as required.  eg. Displacement ... */

@@ -567,7 +567,20 @@ moveloop()
 						digYchasm(mtmp);
 					}
 				}
-				mtmp->movement += mcalcmove(mtmp);
+				
+				if(mtmp->data == &mons[PM_DREADBLOSSOM_SWARM]){
+					if(canseemon(mtmp) || u.ustuck == mtmp) mtmp->movement += mcalcmove(mtmp);
+					else {
+						struct monst *tmpm;
+						for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+							if(!(is_fey(tmpm->data) || is_plant(tmpm->data)) && mon_can_see_mon(tmpm,mtmp)){
+								mtmp->movement += mcalcmove(mtmp);
+								break;
+							}
+						}
+					}
+				} else mtmp->movement += mcalcmove(mtmp);
+				
 				if(mtmp->moccupation && !occupation){
 					mtmp->moccupation = 0;
 					mtmp->mcanmove = 1;

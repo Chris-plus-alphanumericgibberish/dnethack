@@ -263,6 +263,7 @@
 #define is_golem(ptr)		((ptr)->mlet == S_GOLEM)
 #define is_clockwork(ptr)	(((ptr)->mflagsa & MA_CLOCK) != 0L)
 #define is_domestic(ptr)	(((ptr)->mflagst & MT_DOMESTIC) != 0L)
+#define is_fey(ptr)			(((ptr)->mflagsa & MA_FEY) != 0L)
 #define is_demon(ptr)		(((ptr)->mflagsa & MA_DEMON) != 0L)
 #define is_keter(ptr)		((ptr)->mlet == S_KETER)
 #define is_angel(ptr)		((((ptr)->mflagsa & MA_MINION) != 0L) && ((ptr)->mlet == S_LAW_ANGEL || (ptr)->mlet == S_NEU_ANGEL || (ptr)->mlet == S_CHA_ANGEL))

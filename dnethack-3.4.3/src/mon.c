@@ -16,6 +16,9 @@
 
 
 STATIC_DCL boolean FDECL(restrap,(struct monst *));
+STATIC_DCL int FDECL(scent_callback,(genericptr_t, int, int));
+int scentgoalx, scentgoaly;
+
 #ifdef OVL2
 STATIC_DCL int NDECL(pick_animal);
 STATIC_DCL int FDECL(select_newcham_form, (struct monst *));
@@ -1117,8 +1120,6 @@ movemon()
 		
 	}
 	
-	if(mtmp->data == &mons[PM_DREADBLOSSOM_SWARM] && !canseemon(mtmp) && u.ustuck != mtmp) continue; /* Dreadblossoms only attack those who can see them */
-
 	if(mtmp->data == &mons[PM_METROID_QUEEN]){
 		if(mtmp->mtame){
 			struct monst *baby;
@@ -1531,6 +1532,294 @@ register struct monst *mtmp;
 	return (int) maxload;
 }
 
+boolean
+mon_can_see_mon(looker, lookie)
+	struct monst *looker;
+	struct monst *lookie;
+{
+	boolean catsightdark = !(levl[looker->mx][looker->my].lit || (viz_array[looker->my][looker->mx]&TEMP_LIT1 && !(viz_array[looker->my][looker->mx]&TEMP_DRK1))) ||
+							(!levl[looker->mx][looker->my].lit && !(viz_array[looker->my][looker->mx]&TEMP_DRK1 && !(viz_array[looker->my][looker->mx]&TEMP_LIT1)));
+	
+	if(looker->data == &mons[PM_DREADBLOSSOM_SWARM]){
+		if(lookie->data == &mons[PM_DREADBLOSSOM_SWARM]) return FALSE;
+		else return mon_can_see_mon(lookie, looker);
+	}
+	if(looker->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || looker->data == &mons[PM_LONG_SINUOUS_TENTACLE]){
+		struct monst *witw;
+		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_WATCHER_IN_THE_WATER]) break;
+		if(mon_can_see_mon(witw, lookie)) return TRUE;
+		//may still be able to feel target adjacent
+	}
+	
+	if(looker->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
+		struct monst *keto;
+		for(keto = fmon; keto; keto = keto->nmon) if(keto->data == &mons[PM_KETO]) break;
+		if(mon_can_see_mon(keto, lookie)) return TRUE;
+		//may still be able to feel target adjacent
+	}
+	
+	
+	if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1 && !rn2(8)) return TRUE;
+	if((darksight(looker->data) || (catsight(looker->data) && catsightdark)) && !is_blind(looker)){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(levl[lookie->mx][lookie->my].lit){
+				if(viz_array[lookie->my][lookie->mx]&TEMP_DRK1 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT1))
+					return TRUE;
+			} else {
+				if(!(viz_array[lookie->my][lookie->mx]&TEMP_LIT1 && !(viz_array[lookie->my][lookie->mx]&TEMP_DRK1)))
+					return TRUE;
+			}
+		}
+	}
+	if(lowlightsight3(looker->data) && !is_blind(looker)){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(dist2(looker->mx,looker->my,lookie->mx,lookie->my) <= 3*3) return TRUE;
+			else if(levl[lookie->mx][lookie->my].lit){
+				if(!(viz_array[lookie->my][lookie->mx]&TEMP_DRK3 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT3)))
+					return TRUE;
+			} else {
+				if(viz_array[lookie->my][lookie->mx]&TEMP_LIT3 && !(viz_array[lookie->my][lookie->mx]&TEMP_DRK1))
+					return TRUE;
+				else if(viz_array[lookie->my][lookie->mx]&TEMP_LIT2 && !(viz_array[lookie->my][lookie->mx]&TEMP_DRK2))
+					return TRUE;
+				else if(viz_array[lookie->my][lookie->mx]&TEMP_LIT1 && !(viz_array[lookie->my][lookie->mx]&TEMP_DRK3))
+					return TRUE;
+			}
+		}
+	}
+	if(lowlightsight2(looker->data) && !is_blind(looker)){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(dist2(looker->mx,looker->my,lookie->mx,lookie->my) <= 2*2) return TRUE;
+			else if(levl[lookie->mx][lookie->my].lit){
+				if(!(viz_array[lookie->my][lookie->mx]&TEMP_DRK2 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT2)) &&
+					!(viz_array[lookie->my][lookie->mx]&TEMP_DRK3 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT1))
+				)
+					return TRUE;
+			} else {
+				if(viz_array[lookie->my][lookie->mx]&TEMP_LIT2 && !(viz_array[lookie->my][lookie->mx]&TEMP_DRK1))
+					return TRUE;
+				else if(viz_array[lookie->my][lookie->mx]&TEMP_LIT1 && !(viz_array[lookie->my][lookie->mx]&TEMP_DRK2))
+					return TRUE;
+			}
+		}
+	}
+	if((normalvision(looker->data) || (catsight(looker->data) && !catsightdark)) && !is_blind(looker)){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1) return TRUE;
+			else if(levl[lookie->mx][lookie->my].lit){
+				if(!(viz_array[lookie->my][lookie->mx]&TEMP_DRK1 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT1)) &&
+					!(viz_array[lookie->my][lookie->mx]&TEMP_DRK2)
+				)
+					return TRUE;
+			} else {
+				if(viz_array[lookie->my][lookie->mx]&TEMP_LIT1 && !(viz_array[lookie->my][lookie->mx]&TEMP_DRK1))
+					return TRUE;
+			}
+		}
+	}
+	if(echolocation(looker->data) && !is_deaf(looker) && !unsolid(lookie->data)){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my)){
+			return TRUE;
+		}
+	}
+	if(extramission(looker->data)){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(infravision(looker->data) && infravisible(youracedata) && !is_blind(looker)){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(bloodsense(looker->data) && has_blood(youracedata)){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(lifesense(looker->data) && !nonliving(youracedata)){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(senseall(looker->data)){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(earthsense(looker->data) && !(is_flyer(lookie->data) || is_floater(lookie->data) || unsolid(lookie->data))){
+		return TRUE;
+	}
+	if(telepathic(looker->data) && !mindless(youracedata)){
+		return TRUE;
+	}
+	if(goodsmeller(looker->data) && distmin(lookie->mx, lookie->my, looker->mx, looker->my) <= 6){
+	/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
+		if(clear_path(lookie->mx, lookie->my, looker->mx, looker->my)){
+		/*don't running a complicated path function if there is a straight line to you*/
+			return TRUE;
+		} else {
+			boolean shouldsmell = FALSE;
+			scentgoalx = lookie->mx;
+			scentgoaly = lookie->my;
+			xpathto(6, looker->mx, looker->my, scent_callback, (genericptr_t)&shouldsmell);
+			if(shouldsmell){
+				return TRUE;
+			}
+		}
+	}
+}
+
+boolean
+mon_can_see_you(looker)
+	struct monst *looker;
+{
+	boolean catsightdark = !(levl[looker->mx][looker->my].lit || (viz_array[looker->my][looker->mx]&TEMP_LIT1 && !(viz_array[looker->my][looker->mx]&TEMP_DRK1)));
+	
+	if(distmin(looker->mx,looker->my,u.ux,u.uy) <= 1 && !rn2(8)) return TRUE;
+	
+	if(looker->data == &mons[PM_DREADBLOSSOM_SWARM]){
+		if(youracedata == &mons[PM_DREADBLOSSOM_SWARM]) return FALSE;
+		else return canseemon(looker);
+	}
+	
+	if(looker->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || looker->data == &mons[PM_LONG_SINUOUS_TENTACLE]){
+		struct monst *witw;
+		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_WATCHER_IN_THE_WATER]) break;
+		if(mon_can_see_you(witw)) return TRUE;
+		//may still be able to feel target adjacent
+	}
+	
+	if(looker->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
+		struct monst *keto;
+		for(keto = fmon; keto; keto = keto->nmon) if(keto->data == &mons[PM_KETO]) break;
+		if(mon_can_see_you(keto)) return TRUE;
+		//may still be able to feel target adjacent
+	}
+	
+	if((darksight(looker->data) || (catsight(looker->data) && catsightdark)) && !is_blind(looker)){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(levl[u.ux][u.uy].lit){
+				if(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
+					return TRUE;
+			} else {
+				if(!(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))
+					return TRUE;
+			}
+		}
+	}
+	if(lowlightsight3(looker->data) && !is_blind(looker)){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(dist2(looker->mx,looker->my,u.ux,u.uy) <= 3*3) return TRUE;
+			else if(levl[u.ux][u.uy].lit){
+				if(!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT3)))
+					return TRUE;
+			} else {
+				if(viz_array[u.uy][u.ux]&TEMP_LIT3 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
+					return TRUE;
+				else if(viz_array[u.uy][u.ux]&TEMP_LIT2 && !(viz_array[u.uy][u.ux]&TEMP_DRK2))
+					return TRUE;
+				else if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))
+					return TRUE;
+			}
+		}
+	}
+	if(lowlightsight2(looker->data) && !is_blind(looker)){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(dist2(looker->mx,looker->my,u.ux,u.uy) <= 2*2) return TRUE;
+			else if(levl[u.ux][u.uy].lit){
+				if(!(viz_array[u.uy][u.ux]&TEMP_DRK2 && !(viz_array[u.uy][u.ux]&TEMP_LIT2)) &&
+					!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
+				)
+					return TRUE;
+			} else {
+				if(viz_array[u.uy][u.ux]&TEMP_LIT2 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
+					return TRUE;
+				else if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK2))
+					return TRUE;
+			}
+		}
+	}
+	if((normalvision(looker->data) || (catsight(looker->data) && !catsightdark)) && !is_blind(looker)){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			if(distmin(looker->mx,looker->my,u.ux,u.uy) <= 1) return TRUE;
+			else if(levl[u.ux][u.uy].lit){
+				if(!(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)) &&
+					!(viz_array[u.uy][u.ux]&TEMP_DRK2)
+				)
+					return TRUE;
+			} else {
+				if(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1))
+					return TRUE;
+			}
+		}
+	}
+	if(echolocation(looker->data) && !is_deaf(looker) && !unsolid(youracedata)){
+		if(couldsee(looker->mx, looker->my)){
+			return TRUE;
+		}
+	}
+	if(extramission(looker->data)){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(infravision(looker->data) && infravisible(youracedata) && !is_blind(looker)){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(bloodsense(looker->data) && has_blood(youracedata)){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(lifesense(looker->data) && !nonliving(youracedata)){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(senseall(looker->data)){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+			return TRUE;
+		}
+	}
+	if(earthsense(looker->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
+		return TRUE;
+	}
+	if(telepathic(looker->data) && !mindless(youracedata)){
+		return TRUE;
+	}
+	if(goodsmeller(looker->data) && distmin(u.ux, u.uy, looker->mx, looker->my) <= 6){
+	/*sanity check: don't bother trying to path to it if it is farther than a path can possibly exist*/
+		if(clear_path(u.ux, u.uy, looker->mx, looker->my)){
+		/*don't running a complicated path function if there is a straight line to you*/
+			return TRUE;
+		} else {
+			boolean shouldsmell = FALSE;
+			scentgoalx = u.ux;
+			scentgoaly = u.uy;
+			xpathto(6, looker->mx, looker->my, scent_callback, (genericptr_t)&shouldsmell);
+			if(shouldsmell){
+				return TRUE;
+			}
+		}
+	}
+}
+
+STATIC_DCL int
+scent_callback(data, x, y)
+genericptr_t data;
+int x, y;
+{
+    int is_accessible = ZAP_POS(levl[x][y].typ);
+    boolean *shouldsmell = (boolean *)data;
+    if (scentgoalx == x && scentgoaly == y) *shouldsmell = TRUE;
+	
+	if(!(*shouldsmell)) return !is_accessible;
+	else return 1; /* Once a path to you is found, quickly end the xpath function */
+}
+
 /* for restricting monsters' object-pickup */
 boolean
 can_carry(mtmp,otmp)
@@ -1837,9 +2126,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 
 /* Monster against monster special attacks; for the specified monster
    combinations, this allows one monster to attack another adjacent one
-   in the absence of Conflict.  There is no provision for targetting
-   other monsters; just hand to hand fighting when they happen to be
-   next to each other. Incorporates changes from grudge mod */
+   in the absence of Conflict. Incorporates changes from grudge mod */
 long
 mm_aggression(magr, mdef)
 struct monst *magr,	/* monster that is currently deciding where to move */
@@ -1851,6 +2138,12 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	md = mdef->data;
 	
 	// if(magr->mpeaceful && mdef->mpeaceful && (magr->mtame || mdef->mtame)) return 0L;
+	
+	if(!mon_can_see_mon(magr, mdef)) return 0L;
+	
+	if(ma == &mons[PM_DREADBLOSSOM_SWARM]){
+		if(!(is_fey(md) || is_plant(md))) return ALLOW_M|ALLOW_TM;
+	}
 	
 	/* In the anachrononaut quest, all peaceful monsters are at threat from all hostile monsters.
 		The leader IS in serious danger */
