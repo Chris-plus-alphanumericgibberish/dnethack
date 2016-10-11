@@ -206,6 +206,7 @@ struct monst *mon;
 		}
 	} else if(is_heladrin(mon->data)){
 		m_dowear(mon, TRUE);
+		init_mon_wield_item(mon);
 	} else mon_break_armor(mon, FALSE);
 	possibly_unwield(mon, FALSE);
 }

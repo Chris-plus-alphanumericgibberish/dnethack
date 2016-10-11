@@ -1609,6 +1609,44 @@ register struct monst *mon;
 	return 0;
 }
 
+void
+init_mon_wield_item(mon)
+register struct monst *mon;
+{
+	struct obj *obj = 0;
+	struct obj *mw_tmp = MON_WEP(mon);
+	
+	if(!attacktype(mon->data, AT_WEAP)) return;
+
+	if(needspick(mon->data)){
+		obj = m_carrying(mon, PICK_AXE);
+		/* KMH -- allow other picks */
+		if (!obj && !which_armor(mon, W_ARMS))
+			obj = m_carrying(mon, DWARVISH_MATTOCK);
+	}
+	if(!obj){
+		(void)select_rwep(mon);
+		if(propellor != &zeroobj) obj = propellor;
+	}
+	if(!obj){
+		obj = select_hwep(mon);
+	}
+	if (obj && obj != &zeroobj) {
+		mon->mw = obj;		/* wield obj */
+		setmnotwielded(mon, mw_tmp);
+		mon->weapon_check = NEED_WEAPON;
+		if (artifact_light(obj) && !obj->lamplit) {
+		    begin_burn(obj, FALSE);
+		}
+		obj->owornmask = W_WEP;
+		if (is_lightsaber(obj))
+		    mon_ignite_lightsaber(obj, mon);
+		return;
+	}
+	mon->weapon_check = NEED_WEAPON;
+	return;
+}
+
 static void
 mon_ignite_lightsaber(obj, mon)
 struct obj * obj;

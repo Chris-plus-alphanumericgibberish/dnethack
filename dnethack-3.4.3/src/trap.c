@@ -490,6 +490,7 @@ int *fail_reason;
 	    (void) add_to_minv(mon, item);
 	}
 	m_dowear(mon, TRUE);
+	init_mon_wield_item(mon);
 	delobj(statue);
 
 	/* mimic statue becomes seen mimic; other hiders won't be hidden */

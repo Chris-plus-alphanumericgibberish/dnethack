@@ -383,6 +383,7 @@ register boolean special;
 			if (rn2(8))
 				mk_mplayer_armor(mtmp, rnd_class(CRYSTAL_BOOTS, FLYING_BOOTS));
 			m_dowear(mtmp, TRUE);
+			init_mon_wield_item(mtmp);
 
 			quan = rn2(3) ? rn2(3) : rn2(16);
 			while(quan--)
@@ -406,6 +407,7 @@ register boolean special;
 			if (rn2(3)) mongets(mtmp, LEATHER_GLOVES);
 			if (rn2(3)) mongets(mtmp, !rn2(2) ? LOW_BOOTS : HIGH_BOOTS);
 			m_dowear(mtmp, TRUE);
+			init_mon_wield_item(mtmp);
 		}
 	    quan = rnd(3);
 	    while(quan--)

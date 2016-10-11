@@ -4731,6 +4731,7 @@ doapply()
 		    (void) add_to_minv(mon, item);
 		}
 		m_dowear(mon, TRUE);
+		init_mon_wield_item(mon);
 		obj_extract_self(obj);
 		dealloc_obj(obj);
 							 }

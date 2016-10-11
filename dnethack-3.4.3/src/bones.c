@@ -379,6 +379,7 @@ struct obj *corpse;
 		display_nhwindow(WIN_MESSAGE, FALSE);
 		drop_upon_death(mtmp, (struct obj *)0);
 		m_dowear(mtmp, TRUE);
+		init_mon_wield_item(mtmp);
 	}
 	if (mtmp) {
 		mtmp->m_lev = (u.ulevel ? u.ulevel : 1);
