@@ -1049,8 +1049,8 @@ register struct monst *mtmp;
 					if (rn2(2))
 					(void) mongets(mtmp,
 						   rn2(2) ? ELVEN_MITHRIL_COAT : ELVEN_CLOAK);
-					if (rn2(2)) (void)mongets(mtmp, (mm == PM_ELVENKING || mm == PM_ELF_LORD) ? HIGH_ELVEN_HELM : ELVEN_HELM);
-					else if (!rn2(4)) (void)mongets(mtmp, ELVEN_BOOTS);
+					if (rn2(2)) (void)mongets(mtmp, (mm == PM_ELVENKING || mm == PM_ELF_LORD || mm == PM_ELVENQUEEN || mm == PM_ELF_LADY) ? HIGH_ELVEN_HELM : ELVEN_HELM);
+					if (!rn2(4)) (void)mongets(mtmp, ELVEN_BOOTS);
 					if (rn2(2)) (void)mongets(mtmp, ELVEN_DAGGER);
 #ifdef BARD
 					if ((mm == PM_ELVENKING || mm == PM_ELF_LORD || mm == PM_ELVENQUEEN || mm == PM_ELF_LADY) ? TRUE : !rn2(10))
@@ -4425,8 +4425,8 @@ register int	mmflags;
 					m_initlgrp(makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
 					m_initlgrp(makemon(&mons[PM_DROW_MUMMY], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
 					m_initlgrp(makemon(&mons[PM_DROW_ZOMBIE], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-				} else if (mndx == PM_ELVENKING){
-					for(num = rnd(2); num >= 0; num--) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				} else if (mndx == PM_ELVENKING || mndx == PM_ELVENQUEEN){
+					for(num = rnd(2); num >= 0; num--) makemon(&mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 					for(num = rn1(6,3); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 				}
 			}
@@ -4635,8 +4635,8 @@ register int	mmflags;
 			if(mndx == PM_GROVE_GUARDIAN){
 				if(!(mmflags & MM_EDOG)){
 					if (anymon){
-						if(!rn2(10)) makemon(&mons[PM_ELVENKING], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-						if(rn2(4)) makemon(&mons[PM_ELF_LORD], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(!rn2(10)) makemon(&mons[rn2(2) ? PM_ELVENKING : PM_ELVENQUEEN], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(rn2(4)) makemon(&mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 						for(num = rn2(5); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 						for(num = d(2,4); num >= 0; num--) makemon(&mons[PM_WOODLAND_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 					}
