@@ -1853,13 +1853,13 @@ not_special:
 		notonhead = mtmp2 && (nix != mtmp2->mx || niy != mtmp2->my);
 		/* note: mstatus returns 0 if mtmp2 is nonexistent */
 		mstatus = mattackm(mtmp, mtmp2);
-
+		
 		if (mstatus & MM_AGR_DIED)		/* aggressor died */
 		    return 2;
 
 		if ((mstatus & MM_HIT) && !(mstatus & MM_DEF_DIED)  &&
 		    rn2(4) && mtmp2->movement >= NORMAL_SPEED /*don't counter allied nurses*/
-			&& (mtmp->data != &mons[PM_NURSE] || mtmp->mpeaceful != mtmp2->mpeaceful)) { 
+			&& (mtmp->data != &mons[PM_NURSE] || mtmp->mpeaceful != mtmp2->mpeaceful)) {
 			mtmp2->movement -= NORMAL_SPEED;
 		    notonhead = 0;
 		    mstatus = mattackm(mtmp2, mtmp);	/* return attack */
