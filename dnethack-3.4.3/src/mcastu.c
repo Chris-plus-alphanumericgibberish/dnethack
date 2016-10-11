@@ -1068,16 +1068,16 @@ int spellnum;
                (old ? "are filthier than ever" : "get slimy"));
        }
 	   if(uwep && !rn2(20)){
+			Your("%s is coated in gunk!", xname(uwep));
 			uwep->greased = TRUE;
 			Glib += rn1(20, 9);
 			if(is_poisonable(uwep)) uwep->opoisoned = OPOISON_FILTH;
-			Your("%s is coated in gunk!", xname(uwep));
 	   }
 	   if(uswapwep && u.twoweap && !rn2(20)){
+			Your("%s is coated in gunk!", xname(uswapwep));
 			uswapwep->greased = TRUE;
 			Glib += rn1(20, 9);
 			if(is_poisonable(uswapwep)) uswapwep->opoisoned = OPOISON_FILTH;
-			Your("%s is coated in gunk!", xname(uswapwep));
 	   }
        if(haseyes(youmonst.data) && !Blindfolded && mtmp && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
            old = u.ucreamed;
@@ -1093,6 +1093,8 @@ int spellnum;
            monflee(mtmp2, 0, FALSE, FALSE);
 		}
 		vomit();
+	   if(!Sick) make_sick((long)rn1(ACURR(A_CON), 20), /* Don't make the PC more sick */
+					(char *)0, TRUE, SICK_NONVOMITABLE);
 		dmg = rnd(Half_physical_damage ? 5 : 10);
 		stop_occupation();
 	break;
@@ -1134,7 +1136,7 @@ int spellnum;
 		   verbalize(rn2(2) ? "I shall make a statue of thee!" :
 							  "I condemn thee to eternity unmoving!");
         if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
-           if(!Stone_resistance && Free_action && (!rn2(10) || !have_lizard()) ){
+           if(!Stone_resistance && !Free_action && (!rn2(10) || !have_lizard()) ){
 			You_feel("less limber.");
 			Stoned = 5;
 		   }else{
@@ -1148,8 +1150,8 @@ int spellnum;
        HInvis &= ~INTRINSIC;
        You_feel("paranoid.");
        dmg = 0;
-       break;
-	 stop_occupation();
+	   stop_occupation();
+     break;
      case PLAGUE:
        if (!Sick_resistance) {
           You("are afflicted with disease!");
@@ -1157,8 +1159,8 @@ int spellnum;
                         (char *)0, TRUE, SICK_NONVOMITABLE);
        } else You_feel("slightly infectious.");
        dmg = 0;
-       break;
-	 stop_occupation();
+	   stop_occupation();
+    break;
     case PUNISH:
 		if(u.ualign.record <= 1 || !rn2(min(u.ualign.record,20))){
 			if (!Punished) {
@@ -1326,6 +1328,7 @@ int spellnum;
 		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux, mtmp->muy, 1, dmg, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
+		stop_occupation();
 	break;
 	case MON_FIRAGA:
 		if(dmg > 60) dmg = 60;
@@ -1333,11 +1336,13 @@ int spellnum;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
+		stop_occupation();
 	break;
 	case MON_BLIZZARA:
 		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux, mtmp->muy, 2, dmg, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
+		stop_occupation();
 	break;
 	case MON_BLIZZAGA:
 		if(dmg > 60) dmg = 60;
@@ -1345,11 +1350,13 @@ int spellnum;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
+		stop_occupation();
 	break;
 	case MON_THUNDARA:
 		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux, mtmp->muy, 5, dmg, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
+		stop_occupation();
 	break;
 	case MON_THUNDAGA:
 		if(dmg > 60) dmg = 60;
@@ -1357,6 +1364,7 @@ int spellnum;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
 		dmg = 0;
+		stop_occupation();
 	break;
 	case MON_FLARE:
 		if(dmg > 60) dmg = 60;
@@ -1365,18 +1373,21 @@ int spellnum;
 		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_MUDDY); //explode(x, y, type, dam, olet, expltype)
 		explode2(mtmp->mux, mtmp->muy, 8, dmg, MON_EXPLODE, EXPL_FROSTY);
 		dmg = 0;
+		stop_occupation();
 	break;
 	case MON_WARP:
 		if(Half_spell_damage) dmg /= 2;
 		if(Half_physical_damage) dmg /= 2;
 		if(dmg > 100) dmg = 100;
 		pline("Space warps into deadly blades!");
+		stop_occupation();
 	break;
 	case MON_POISON_GAS:
 		flags.cth_attk=TRUE;//state machine stuff.
 		create_gas_cloud(mtmp->mux, mtmp->muy, rnd(3), rnd(3)+1);
 		flags.cth_attk=FALSE;
 		dmg = 0;
+		stop_occupation();
 	break;
     case SUMMON_ANGEL: /* cleric only */
     {
@@ -1396,6 +1407,7 @@ int spellnum;
                        an(Hallucination ? rndmonnam() : "hostile angel"));
        }
        dmg = 0;
+	   stop_occupation();
        break;
     }
     case SUMMON_ALIEN: /* special only */
@@ -1426,6 +1438,7 @@ summon_alien:
                        an(Hallucination ? rndmonnam() : "alien"));
        }
        dmg = 0;
+	   stop_occupation();
        break;
     }
     case SUMMON_DEVIL: /* cleric only */
@@ -1445,6 +1458,7 @@ summon_alien:
                        an(Hallucination ? rndmonnam() : "hostile fiend"));
        }
        dmg = 0;
+	   stop_occupation();
        break;
     }
     case SUMMON_MONS:
@@ -1470,6 +1484,7 @@ summon_alien:
 		pline("%s from nowhere!", mappear);
 	}
 	dmg = 0;
+    stop_occupation();
 	break;
     }
     case INSECTS:
@@ -1543,6 +1558,7 @@ summon_alien:
 	else
 	    pline("%s summons %s!", Monnam(mtmp), let == S_SPIDER ? "arachnids" : "insects");
 	dmg = 0;
+    stop_occupation();
 	break;
       }
      case RAISE_DEAD:
@@ -1554,6 +1570,7 @@ summon_alien:
        mm.y = mtmp ? mtmp->my : u.uy;
        mkundead(&mm, TRUE, NO_MINVENT);
        dmg = 0;
+	   stop_occupation();
        break;
      }
     case CONE_OF_COLD: /* simulates basic cone of cold */
@@ -1762,6 +1779,7 @@ summon_alien:
 			dmg = 0;
 			stop_occupation();
 		}
+	    stop_occupation();
         break;
     case WEAKEN_YOU:		/* drain strength */
 	if (Fixed_abil) {
@@ -2928,6 +2946,106 @@ int spellnum;
 	}
 	dmg = 0;
 	break;
+    case CLONE_WIZ:
+		goto uspsibolt; //probably never happens, but...
+	break;
+    case FILTH:
+    {
+       struct monst *mtmp2;
+	   struct obj *otmp;
+       long old;
+	   if(!mtmp) break;
+       pline("A cascade of filth pours onto %s!", mon_nam(mtmp));
+       if (otmp = MON_WEP(mtmp)) {
+			if(!rn2(20)){
+				if(canseemon(mtmp)) pline("%s %s is coated in gunk!", s_suffix(Monnam(mtmp)), xname(otmp));
+				if(is_poisonable(otmp)){
+					otmp->opoisoned = OPOISON_FILTH;
+				}
+				otmp->greased = TRUE;
+			}
+			if (!otmp->cursed) {
+				obj_extract_self(otmp);
+				possibly_unwield(mtmp, FALSE);
+				setmnotwielded(mtmp,otmp);
+				obj_no_longer_held(otmp);
+				place_object(otmp, mtmp->mx, mtmp->my);
+				stackobj(otmp);
+			}
+       }
+       if(haseyes(mtmp->data) && mattk && mattk->data != &mons[PM_DEMOGORGON] && rn2(3)) {
+			mtmp->mcansee = 0;
+			mtmp->mblinded = max(mtmp->mblinded, rn1(20, 9));
+       }
+       if (!resists_sickness(mtmp)) {
+		  if(!rn2(10)){
+			if (yours) killed(mtmp);
+			else monkilled(mtmp, "", AD_SPEL);
+			dmg = 0;
+		  } else {
+			dmg = rnd(10);
+		  }
+       } else dmg = 0;
+	break;
+	}
+    case STRANGLE:
+		goto uspsibolt; //monsters don't have breath stat
+	break;
+     case TURN_TO_STONE:
+		if(!mtmp) break;
+        if (!(poly_when_stoned(mtmp->data) && newcham(mtmp, &mons[PM_STONE_GOLEM], FALSE, TRUE))) {
+           if(!resists_ston(mtmp) && !rn2(10) ){
+			if (!munstone(mtmp, yours))
+				minstapetrify(mtmp, yours);
+		   }
+        }
+		dmg = 0;
+	 stop_occupation();
+     break;
+     case MAKE_VISIBLE:
+		if(!mtmp) break;
+		if(mtmp->minvis){
+			mtmp->perminvis = 0;
+			struct obj* otmp;
+			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
+				if (otmp->owornmask && objects[otmp->otyp].oc_oprop == INVIS)
+					break;
+			if(!otmp) mtmp->minvis = 0;
+			newsym(mtmp->mx, mtmp->my);
+		}
+       dmg = 0;
+     break;
+     case PLAGUE:
+	   if(!mtmp) break;
+       if (!resists_sickness(mtmp)) {
+          pline("%s is afflicted with disease!", Monnam(mtmp));
+		  if(!rn2(10)){
+			if (yours) killed(mtmp);
+			else monkilled(mtmp, "", AD_SPEL);
+			dmg = 0;
+		  } else {
+			dmg = rnd(12);
+		  }
+       } else dmg = 0;
+    break;
+    case PUNISH:
+		goto uspsibolt; //Punishment not implemented for monsters
+	break;
+    case EARTHQUAKE:
+		pline_The("entire %s is shaking around you!",
+               In_endgame(&u.uz) ? "plane" : "dungeon");
+		if (mtmp) {
+			if(yours) do_earthquake(mtmp->mx, mtmp->my, min(((int)u.ulevel - 1) / 3 + 1,24), min(((int)u.ulevel - 1) / 6 + 1, 8), FALSE, mattk);
+			else do_earthquake(mtmp->mx, mtmp->my, min(((int)mattk->m_lev - 1) / 3 + 1,24), min(((int)mattk->m_lev - 1) / 6 + 1, 8), FALSE, mattk);
+		} else {
+			if(yours) do_earthquake(u.ux, u.uy, min(((int)u.ulevel - 1) / 3 + 1,24), min(((int)u.ulevel - 1) / 6 + 1, 8), FALSE, mattk);
+			else do_earthquake(mattk->mx, mattk->my, min(((int)mattk->m_lev - 1) / 3 + 1,24), min(((int)mattk->m_lev - 1) / 6 + 1, 8), FALSE, mattk);
+		}
+		aggravate(); /* wake up without scaring */
+		dmg = 0;
+		stop_occupation();
+		doredraw();
+	break;
     case SUMMON_SPHERE:
     {
        /* For a change, let's not assume the spheres are together. : ) */
@@ -2981,7 +3099,7 @@ int spellnum;
 				bypos.x = mtmp->mx, bypos.y = mtmp->my;
 			else if (yours)
 				bypos.x = u.ux, bypos.y = u.uy;
-				else
+			else
 				bypos.x = mattk->mx, bypos.y = mattk->my;
 
 			for (i = rnd(tmp); i > 0; --i){
@@ -3114,8 +3232,8 @@ int spellnum;
 	    mtmp->mhpmax -= dmg;
 	    if ((mtmp->mhp -= dmg) <= 0) {
 	        if (yours) killed(mtmp);
-		else monkilled(mtmp, "", AD_SPEL);
-            }
+			else monkilled(mtmp, "", AD_SPEL);
+		}
 	}
 	dmg = 0;
 	break;
