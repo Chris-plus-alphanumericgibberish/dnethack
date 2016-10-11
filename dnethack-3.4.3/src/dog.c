@@ -339,7 +339,7 @@ boolean with_you;
 	mtmp->mstrategy |= STRAT_ARRIVE;
 
 	/* make sure mnexto(rloc_to(set_apparxy())) doesn't use stale data */
-	mtmp->mux = u.ux,  mtmp->muy = u.uy;
+	mtmp->mux = 0,  mtmp->muy = 0;
 	xyloc	= mtmp->mtrack[0].x;
 	xyflags = mtmp->mtrack[0].y;
 	xlocale = mtmp->mtrack[1].x;
