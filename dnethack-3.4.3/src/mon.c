@@ -1175,6 +1175,15 @@ movemon()
 			set_malign(mtmp);
 		}
 	}
+	if(mtmp->data == &mons[PM_DREAD_SERAPH] && 
+		mtmp->mhp == mtmp->mhpmax && 
+		!(mtmp->mstrategy&STRAT_WAITMASK) && 
+		!(u.uevent.udemigod || (Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)))
+			
+	){
+		//go back to sleep
+		mtmp->mstrategy |= STRAT_WAITMASK;
+	}
 	
 	if (vision_full_recalc) vision_recalc(0);	/* vision! */
 
