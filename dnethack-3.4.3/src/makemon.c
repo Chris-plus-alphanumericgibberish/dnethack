@@ -2033,7 +2033,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, BRONZE_ROUNDSHIELD);
 				(void)mongets(mtmp, BRONZE_BOOTS);
 				(void)mongets(mtmp, BRONZE_HELM);
-				(void)mongets(mtmp, TWO_HANDED_SWORD);
+				(void)mongets(mtmp, LONG_SWORD);
 			} else if(ptr == &mons[PM_TULANI]){
 				(void)mongets(mtmp, CRYSTAL_PLATE_MAIL);
 				(void)mongets(mtmp, ELVEN_CLOAK);
