@@ -699,6 +699,7 @@ int fleetime;
 boolean first;
 boolean fleemsg;
 {
+	int j;
 	if (u.ustuck == mtmp) {
 	    if (u.uswallow)
 		expels(mtmp, mtmp->data, TRUE);
@@ -706,6 +707,11 @@ boolean fleemsg;
 		unstuck(mtmp);	/* monster lets go when fleeing */
 		You("get released!");
 	    }
+	}
+	/*Clear track so they can actually move away in narrow spaces*/
+	for (j = 0; j < MTSZ; j++){
+		mtmp->mtrack[j].x = 0;
+		mtmp->mtrack[j].y = 0;
 	}
 
 	if (!first || !mtmp->mflee) {
