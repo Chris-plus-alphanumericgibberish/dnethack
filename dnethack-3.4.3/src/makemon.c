@@ -2704,7 +2704,7 @@ register struct monst *mtmp;
 		break;
 	    case S_DEMON:
 
-		if(mm>PM_NESSIAN_PIT_FIEND) return; //Lords handled above, no random cursed stuff!
+		if(mm>PM_SHAYATEEN) return; //Lords handled above, no random cursed stuff!
 		switch (mm) {
 			case PM_DAMNED_PIRATE:
 				otmp = mksobj(SCIMITAR, FALSE, FALSE);
