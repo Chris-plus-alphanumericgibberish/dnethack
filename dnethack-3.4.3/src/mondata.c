@@ -225,6 +225,8 @@ struct monst *mon;
 		mon->data == &mons[PM_LONG_SINUOUS_TENTACLE] ||
 		mon->data == &mons[PM_KETO] ||
 		mon->data == &mons[PM_WIDE_CLUBBED_TENTACLE] ||
+		mon->data == &mons[PM_TULANI_QUEEN] ||
+		mon->data == &mons[PM_ETERNAL_LIGHT] ||
 		mon->data == &mons[PM_DARUTH_XAXOX]
 	) return TRUE;
 	

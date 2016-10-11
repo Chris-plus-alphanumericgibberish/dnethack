@@ -2436,6 +2436,7 @@ dopois:
 				return 1;
 			}
 			if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
+			if (((MON_WEP(mtmp)) && mdat == &mons[PM_ALRUNES]) && !rn2(20)) return 1;
 			if (dmgtype(youmonst.data, AD_SEDU)
 #ifdef SEDUCE
 				|| dmgtype(youmonst.data, AD_SSEX) || dmgtype(youmonst.data, AD_LSEX)
@@ -3147,6 +3148,7 @@ dopois:
 		case AD_STDY:{
 			if(is_orc(mtmp->data)) pline("%s curses and urges %s followers on.", Monnam(mtmp), mhis(mtmp));
 			else if(mtmp->data == &mons[PM_LEGION] || mtmp->data == &mons[PM_LEGIONNAIRE]); //no message
+			else if(mtmp->data == &mons[PM_HATEFUL_WHISPERS]) pline("%s whispers vicious secrets about you.", Monnam(mtmp));
 			else pline("%s studies you carefully.", Monnam(mtmp));
 			u.ustdy = max(dmg,u.ustdy);
 			dmg = 0;
@@ -3845,6 +3847,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					return 1;
 				}
 				if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
+				if (((MON_WEP(mtmp)) && mdat == &mons[PM_ALRUNES]) && !rn2(20)) return 1;
 				if (is_animal(mtmp->data)) {
 					hitmsg(mtmp, mattk);
 						if (mtmp->mcan) break;
@@ -4665,11 +4668,11 @@ struct attack *mattk;
 		return 0;
 
 	if(pagr->mlet == S_NYMPH || pagr == &mons[PM_INCUBUS] || pagr == &mons[PM_SUCCUBUS]
-			|| pagr == &mons[PM_CARMILLA] || pagr == &mons[PM_VLAD_THE_IMPALER]){
+			|| pagr == &mons[PM_CARMILLA] || pagr == &mons[PM_VLAD_THE_IMPALER] || pagr == &mons[PM_LEVISTUS]){
 		if(genagr == 1 - gendef)
 			return 1;
 		else
-			return (pagr->mlet == S_NYMPH) ? 2 : 0;
+			return (pagr->mlet == S_NYMPH || pagr == &mons[PM_LEVISTUS]) ? 2 : 0;
 	}
 	else if(pagr == &mons[PM_MOTHER_LILITH] || pagr == &mons[PM_BELIAL]
 		 /*|| pagr == &mons[PM_SHAMI_AMOURAE]*/){
@@ -4677,6 +4680,7 @@ struct attack *mattk;
 		else return 0;
 	}
 	else if(pagr == &mons[PM_FIERNA]) return 2;
+	else if(pagr == &mons[PM_ALRUNES]) return (genagr == gendef) ? 1 : 2;
 	else if(pagr == &mons[PM_MALCANTHET] || pagr == &mons[PM_GRAZ_ZT]
 		 || pagr == &mons[PM_PALE_NIGHT] || pagr == &mons[PM_AVATAR_OF_LOLTH]) 
 			return 1;

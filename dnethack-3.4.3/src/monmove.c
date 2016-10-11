@@ -1238,7 +1238,7 @@ toofar:
 		                           : mattackm(mtmp, mtmp2);
 	        if (res & MM_AGR_DIED) return 1; /* Oops. */
 
-			if(!(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_ARCADIAN_AVENGER])) 
+			if(!(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO] || mdat == &mons[PM_ARCADIAN_AVENGER])) 
 				return 0; /* that was our move for the round */
 	    }
 	}
@@ -1310,7 +1310,7 @@ toofar:
 			if (mtmp->msleeping || !(mtmp->mcanmove && mtmp->mnotlaugh)) return(0);
 			if(!nearby &&
 			  (ranged_attk(mdat) || find_offensive(mtmp))){
-				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_ARCADIAN_AVENGER]){
+				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO] || mdat == &mons[PM_ARCADIAN_AVENGER]){
 					break;
 			    } else return(0);
 			    // return(0);

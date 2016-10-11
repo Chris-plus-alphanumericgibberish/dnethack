@@ -237,6 +237,9 @@ boolean monkey_business; /* true iff an animal is doing the thievery */
 {
 	struct obj *otmp;
 	int tmp, could_petrify, named = 0, armordelay;
+	boolean charms = (is_neuter(mtmp->data) || flags.female == mtmp->female);
+	if(mtmp->data == &mons[PM_ALRUNES]) charms = !charms;
+	else if(mtmp->data == &mons[PM_FIERNA]) charms = TRUE;
 
 	if (objnambuf) *objnambuf = '\0';
 	/* the following is true if successful on first of two attacks. */
@@ -381,7 +384,7 @@ gotobj:
 				  curssv ? "let him take" :
 				  slowly ? "start removing" : "hand over",
 				  equipname(otmp));
-			else if(is_neuter(mtmp->data) || flags.female == mtmp->female)
+			else if(charms)
 			    pline("%s charms you.  You gladly %s your %s.",
 				  !seen ? SheHeIt(mtmp) : Monnam(mtmp),
 				  curssv ? "let her take" :

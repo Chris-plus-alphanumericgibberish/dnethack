@@ -178,10 +178,12 @@
 							 (ptr) == &mons[PM_SHIERE] || \
 							 (ptr) == &mons[PM_GHAELE] || \
 							 (ptr) == &mons[PM_TULANI] || \
+							 (ptr) == &mons[PM_ALRUNES] ||\
 							 (ptr) == &mons[PM_GWYNHARWYF] ||\
 							 (ptr) == &mons[PM_ASCODEL] ||\
 							 (ptr) == &mons[PM_FAERINAAL] ||\
 							 (ptr) == &mons[PM_QUEEN_MAB] ||\
+							 (ptr) == &mons[PM_TULANI_QUEEN] ||\
 							 (ptr) == &mons[PM_KETO] \
 							)
 #define is_eeladrin(ptr)	(\
@@ -192,10 +194,12 @@
 							 (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 							 (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 							 (ptr) == &mons[PM_BALL_OF_RADIANCE] || \
+							 (ptr) == &mons[PM_HATEFUL_WHISPERS] ||\
 							 (ptr) == &mons[PM_FURIOUS_WHIRLWIND] ||\
 							 (ptr) == &mons[PM_BLOODY_SUNSET] ||\
 							 (ptr) == &mons[PM_BALL_OF_GOSSAMER_SUNLIGHT] ||\
 							 (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
+							 (ptr) == &mons[PM_ETERNAL_LIGHT] ||\
 							 (ptr) == &mons[PM_ANCIENT_TEMPEST] \
 							)
 #define is_yochlol(ptr)		((ptr) == &mons[PM_YOCHLOL] ||\

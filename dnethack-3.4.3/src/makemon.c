@@ -3441,6 +3441,20 @@ register struct	monst	*mtmp;
 				// (void) mongets(mtmp, POT_FULL_HEALING);
 				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
+			case PM_ALRUNES:
+				if(rn2(2)){
+					(void) mongets(mtmp, HELMET);
+					(void) mongets(mtmp, PLATE_MAIL);
+					(void) mongets(mtmp, GAUNTLETS_OF_POWER);
+					(void) mongets(mtmp, HIGH_BOOTS);
+					(void) mongets(mtmp, LONG_SWORD);
+					(void) mongets(mtmp, KITE_SHIELD);
+				} else {
+					(void) mongets(mtmp, CRYSTAL_BOOTS);
+					(void) mongets(mtmp, CRYSTAL_GAUNTLETS);
+					(void) mongets(mtmp, CRYSTAL_PLATE_MAIL);
+				}
+			break;
 ///////////////////////////////
 			case PM_ORCUS:
 				otmp = mksobj(WAN_DEATH, TRUE, FALSE);
