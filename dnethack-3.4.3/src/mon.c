@@ -1100,6 +1100,7 @@ movemon()
 	    somebody_can_move = TRUE;
 	
 	if(mtmp->mstdy > 0) mtmp->mstdy -= 1; //monster is moving, reduce studied level
+	else if(mtmp->mstdy < 0) mtmp->mstdy += 1; //monster is moving, reduce protection level
 
 	//Weeping angel step 3
 	if(is_weeping(mtmp->data)){

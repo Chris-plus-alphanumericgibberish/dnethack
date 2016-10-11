@@ -2031,7 +2031,8 @@ physical:{
 	
 	if(mdef->mstdy){
 		tmp += mdef->mstdy;
-		mdef->mstdy -= 1;
+		if(mdef->mstdy > 0) mdef->mstdy -= 1;
+		else mdef->mstdy += 1;
 	}
 	
 	if(tmp && magr->mtame && !mdef->mtame){

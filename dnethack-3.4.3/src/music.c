@@ -1025,7 +1025,7 @@ int distance;
 					mtmp->mcanmove = 1;
 					mtmp->mfrozen = 0;
 				}
-				mtmp->mstdy = 0;
+				if(mtmp->mstdy > 0) mtmp->mstdy = 0;
 				mtmp->mstun = 0;
 				mtmp->mconf = 0;
 			case P_UNSKILLED:

@@ -1248,7 +1248,7 @@ asGuardian:
 							if(!mindless(tmpm->data)){
 								if ( mtmp->mpeaceful == tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
 									if(tmpm->mcan || tmpm->mspec_used || (!tmpm->mnotlaugh && tmpm->mlaughing) || (!tmpm->mcansee && tmpm->mblinded) ||
-										tmpm->mberserk || (tmpm->mhp < tmpm->mhpmax) || (!tmpm->mcanmove && tmpm->mfrozen) || tmpm->mstdy || tmpm->mstun ||
+										tmpm->mberserk || (tmpm->mhp < tmpm->mhpmax) || (!tmpm->mcanmove && tmpm->mfrozen) || tmpm->mstdy > 0 || tmpm->mstun ||
 										tmpm->mconf || tmpm->msleeping || tmpm->mflee || tmpm->mfleetim
 									) inrange = TRUE;
 								}
@@ -1282,7 +1282,7 @@ asGuardian:
 										tmpm->mcanmove = 1;
 										tmpm->mfrozen = 0;
 									}
-									tmpm->mstdy = 0;
+									if(tmpm->mstdy > 0) tmpm->mstdy = 0;
 									tmpm->mstun = 0;
 									tmpm->mconf = 0;
 									tmpm->msleeping = 0;
