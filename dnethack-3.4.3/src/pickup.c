@@ -1603,7 +1603,7 @@ lootcont:
 			if (c == 'n') continue;
 			timepassed |= use_lightsaber(cobj);
 			if(timepassed) underfoot = TRUE;
-		} else if(cobj->otyp == MASS_SHADOW_PISTOL){
+	    } else if(cobj->otyp == MASS_SHADOW_PISTOL){
 			Sprintf(qbuf, "There is %s here, open it?",an(xname(cobj)));
 			c = ynq(qbuf);
 			if (c == 'q') return (timepassed);
