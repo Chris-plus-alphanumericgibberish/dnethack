@@ -77,7 +77,7 @@
  * invisible to infravision), because this is usually called from within
  * canseemon() or canspotmon() which already check that.
  */
-#define see_with_infrared(mon) (!Blind && Infravision && infravisible(mon->data) && couldsee(mon->mx, mon->my))
+#define see_with_infrared(mon) (!Blind && Infravision && infravisible(mon->data) && (couldsee(mon->mx, mon->my) || ominsense((mon)->data)))
 
 /*
  * see_with_bloodsense()
@@ -87,7 +87,7 @@
  * invisible to bloodsense), because this is usually called from within
  * canseemon() or canspotmon() which already check that.
  */
-#define see_with_bloodsense(mon) (Race_if(PM_VAMPIRE) && has_blood((mon)->data) && couldsee((mon)->mx, (mon)->my))
+#define see_with_bloodsense(mon) (bloodsense(youracedata) && has_blood((mon)->data) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
 
 /*
  * see_with_lifesense()
@@ -97,7 +97,25 @@
  * invisible to lifesense), because this is usually called from within
  * canseemon() or canspotmon() which already check that.
  */
-#define see_with_lifesense(mon) (Upolyd && is_metroid(youmonst.data) && !nonliving((mon)->data) && couldsee((mon)->mx, (mon)->my))
+#define see_with_lifesense(mon) (lifesense(youracedata) && !nonliving((mon)->data) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
+
+/*
+ * see_with_senseall()
+ *
+ * This function is true if the player can see a monster using senseall.
+ * The caller must check for invisibility (invisible monsters are also
+ * invisible to senseall), because this is usually called from within
+ * canseemon() or canspotmon() which already check that.
+ */
+#define see_with_senseall(mon) (senseall(youracedata) && !nonliving((mon)->data) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
+
+/*
+ * see_with_earthsense()
+ *
+ * This function is true if the player can see a monster using earthsense.
+ * The caller must NOT check for invisibility.
+ */
+#define see_with_earthsense(mon) (earthsense(youracedata) && !(is_flyer((mon)->data) || is_floater((mon)->data) || unsolid((mon)->data)))
 
 
 /*
@@ -107,9 +125,9 @@
  * routines.  Like mon_visible(), but it checks to see if the hero sees the
  * location instead of assuming it.  (And also considers worms.)
  */
-#define canseemon(mon) ((mon->wormno ? worm_known(mon) : \
-	    (cansee(mon->mx, mon->my) || see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon))) \
-	&& mon_visible(mon))
+#define canseemon(mon) (((mon->wormno ? worm_known(mon) : \
+	    (cansee(mon->mx, mon->my) || see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon) || see_with_senseall(mon))) \
+	&& mon_visible(mon)) || see_with_earthsense(mon))
 
 
 /*

@@ -723,7 +723,8 @@ newsym(x,y)
 	}
 	else if ((mon = m_at(x,y))
 		&& ((see_it = (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)
-		    		|| ((see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon)) && mon_visible(mon))))
+		    		|| ((see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon) || see_with_senseall(mon))
+				&& mon_visible(mon)) || see_with_earthsense(mon)))
 		    || Detect_monsters
 			|| sense_by_scent(mon))
 		&& !is_worm_tail(mon)) {

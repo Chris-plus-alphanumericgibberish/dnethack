@@ -192,6 +192,12 @@ lookat(x, y, buf, monbuf, shapebuff)
 		/* lifesense */
 		if ((!mtmp->minvis || See_invisible) && see_with_lifesense(mtmp))
 		    ways_seen++;
+		/* senseall */
+		if ((!mtmp->minvis || See_invisible) && see_with_senseall(mtmp))
+		    ways_seen++;
+		/* earthsense */
+		if (see_with_earthsense(mtmp))
+		    ways_seen++;
 		/* smell */
 		if (sense_by_scent(mtmp))
 		    ways_seen++;
@@ -230,6 +236,15 @@ lookat(x, y, buf, monbuf, shapebuff)
 		    if ((!mtmp->minvis || See_invisible) &&
 			    see_with_lifesense(mtmp)) {
 			Strcat(monbuf, "lifesense");
+			if (ways_seen-- > 1) Strcat(monbuf, ", ");
+			}
+		    if ((!mtmp->minvis || See_invisible) &&
+			    see_with_senseall(mtmp)) {
+			Strcat(monbuf, "omnisense");
+			if (ways_seen-- > 1) Strcat(monbuf, ", ");
+			}
+		    if (see_with_earthsense(mtmp)) {
+			Strcat(monbuf, "earthsense");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
 			}
 		    if (sense_by_scent(mtmp)) {
