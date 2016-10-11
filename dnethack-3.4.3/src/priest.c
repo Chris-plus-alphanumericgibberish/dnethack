@@ -890,7 +890,7 @@ angry_priest()
 	struct rm *lev;
 
 	if ((priest = findpriest(temple_occupied(u.urooms))) != 0) {
-	    wakeup(priest);
+	    wakeup(priest, TRUE);
 	    /*
 	     * If the altar has been destroyed or converted, let the
 	     * priest run loose.

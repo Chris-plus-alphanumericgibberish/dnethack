@@ -1360,8 +1360,8 @@ int distance;
  */
 
 void
-do_earthquake(force, cursed, mon)
-int force;
+do_earthquake(cntrx, cntry, range, force, cursed, mon)
+int cntrx, cntry, range, force;
 boolean cursed;
 struct monst *mon;
 {
@@ -1370,18 +1370,19 @@ struct monst *mon;
 	struct obj *otmp;
 	struct trap *chasm;
 	int start_x, start_y, end_x, end_y;
+	boolean yours = (mon == &youmonst);
 
-	start_x = u.ux - (force * 2);
-	start_y = u.uy - (force * 2);
-	end_x = u.ux + (force * 2);
-	end_y = u.uy + (force * 2);
+	start_x = cntrx - (range);
+	start_y = cntry - (range);
+	end_x = cntrx + (range);
+	end_y = cntry + (range);
 	if (start_x < 1) start_x = 1;
 	if (start_y < 1) start_y = 1;
 	if (end_x >= COLNO) end_x = COLNO - 1;
 	if (end_y >= ROWNO) end_y = ROWNO - 1;
 	for (x=start_x; x<=end_x; x++) for (y=start_y; y<=end_y; y++) {
 	    if ((mtmp = m_at(x,y)) != 0) {
-               if (!mon) wakeup(mtmp); /* peaceful monster will become hostile */
+               wakeup(mtmp, yours); /* peaceful monster will become hostile */
 		if (mtmp->mundetected && is_hider(mtmp->data)) {
 		    mtmp->mundetected = 0;
 		    if (cansee(x,y))
@@ -1395,7 +1396,7 @@ struct monst *mon;
 		    newsym(x,y);
 		}
 	    }
-           if ((!rn2(14 - force) || (cursed && x == u.ux && y == u.uy)) && m_at(x,y) != mon)
+           if (((rn2(10) < force) || (cursed && x == u.ux && y == u.uy)) && !(mon && m_at(x,y) == mon))
            switch (levl[x][y].typ) {
 		  case FOUNTAIN : /* Make the fountain disappear */
 			if (cansee(x,y))
@@ -1665,7 +1666,7 @@ struct obj *instr;
 
 		You("produce a heavy, thunderous rolling!");
 		pline_The("entire dungeon is shaking around you!");
-               do_earthquake((u.ulevel - 1) / 3 + 1, instr->cursed, (struct monst *)0);
+               do_earthquake(u.ux, u.uy, (u.ulevel)*2 / 3 + 1, (u.ulevel) / 5 + 1, instr->cursed, &youmonst);
 		/* shake up monsters in a much larger radius... */
 		awaken_monsters(ROWNO * COLNO);
 		makeknown(DRUM_OF_EARTHQUAKE);

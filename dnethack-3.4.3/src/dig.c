@@ -2383,7 +2383,7 @@ struct monst *mtmp;
 	}
 
 	mtmp->mburied = TRUE;
-	wakeup(mtmp);			/* at least give it a chance :-) */
+	wakeup(mtmp, TRUE);			/* at least give it a chance :-) */
 	newsym(mtmp->mx, mtmp->my);
 }
 

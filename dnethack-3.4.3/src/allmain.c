@@ -556,7 +556,7 @@ moveloop()
 					mtmp->mstrategy &= ~STRAT_WAITMASK;
 					pline_The("entire %s is shaking around you!",
 						   In_endgame(&u.uz) ? "plane" : "dungeon");
-					do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp);
+					do_earthquake(mtmp->mx, mtmp->my, min(((int)mtmp->m_lev - 1) / 3 + 1,24), 3, TRUE, mtmp);
 					if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
 						digcrater(mtmp);
 					} else if(Is_lolth_level(&u.uz)){

@@ -1183,10 +1183,9 @@ int spellnum;
             else verbalize("Open thy maw, mighty earth!");
 		}
 		if (mtmp) {
-			do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp);
+			do_earthquake(u.ux, u.uy, min(((int)mtmp->m_lev - 1) / 3 + 1,24), min(((int)mtmp->m_lev - 1) / 6 + 1, 8), TRUE, mtmp);
 		} else {
-			pline("cast_spell: [FIXME] true \"not my fault\" flag needed.");
-			do_earthquake(rnd(5), TRUE, (struct monst *)1); //Fixme: true "not my fault" flag needed.
+			do_earthquake(u.ux, u.uy, d(2,12), rnd(8), TRUE, (struct monst *) 0);
 		}
 		aggravate(); /* wake up without scaring */
 		dmg = 0;

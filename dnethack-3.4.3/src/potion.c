@@ -1446,7 +1446,7 @@ boolean your_fault;
 				angermon = FALSE;
 				if (canseemon(mon)) {
 					if (mon->msleeping) {
-					wakeup(mon);
+					wakeup(mon, FALSE);
 					pline("%s wakes up looking bewildered!", 
 							Monnam(mon));
 					} else
@@ -1535,11 +1535,8 @@ boolean your_fault;
 		break;
 */
 	}
-	if (angermon)
-	    wakeup(mon);
-	else
-	    mon->msleeping = 0;
-    }
+	wakeup(mon, angermon);
+	}
 
 	/* Note: potionbreathe() does its own docall() */
 	if ((distance==0 || ((distance < 3) && rn2(5))) &&

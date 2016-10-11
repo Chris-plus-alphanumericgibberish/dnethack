@@ -1304,7 +1304,7 @@ E void FDECL(poisontell, (int));
 E void FDECL(poisoned, (const char *,int,const char *,int,int));
 E void FDECL(m_respond, (struct monst *));
 E void FDECL(setmangry, (struct monst *));
-E void FDECL(wakeup, (struct monst *));
+E void FDECL(wakeup, (struct monst *, boolean));
 E void NDECL(wake_nearby);
 E void FDECL(wake_nearto, (int,int,int));
 E void FDECL(wake_nearto_noisy, (int,int,int));
@@ -1518,7 +1518,7 @@ E boolean FDECL(munstone, (struct monst *,BOOLEAN_P));
 /* ### music.c ### */
 
 E void NDECL(awaken_soldiers);
-E void FDECL(do_earthquake, (int,BOOLEAN_P,struct monst *));
+E void FDECL(do_earthquake, (int, int, int, int,BOOLEAN_P,struct monst *));
 E int FDECL(do_play_instrument, (struct obj *));
 #ifdef BARD
 E int FDECL(pet_can_sing, (struct monst *,BOOLEAN_P));

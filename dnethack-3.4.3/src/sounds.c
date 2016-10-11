@@ -1008,7 +1008,7 @@ asGuardian:
 				break;
 				case 4:
 				// pline("earthquake\n");
-				do_earthquake(min(((int)mtmp->m_lev - 1) / 6 + 1,12), TRUE, mtmp);
+				do_earthquake(mtmp->mx, mtmp->my, min(((int)mtmp->m_lev - 1) / 3 + 1,24), min(((int)mtmp->m_lev - 1) / 6 + 1,8), TRUE, mtmp);
 				aggravate(); /* wake up without scaring */
 				stop_occupation();
 				doredraw();
@@ -4029,7 +4029,7 @@ int tx,ty;
 				You("don't know what that was about, but it seems your contract was accepted.");
 				make_confused(5, FALSE);
 				make_stunned(5, FALSE);
-				do_earthquake(5,0,0);
+				do_earthquake(u.ux, u.uy, 10, 2, FALSE, (struct monst *)0);
 				bindspirit(ep->ward_id);
 				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] = moves + bindingPeriod;
 			}

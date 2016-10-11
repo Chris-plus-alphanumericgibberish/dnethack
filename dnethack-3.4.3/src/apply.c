@@ -3322,7 +3322,7 @@ struct obj *obj;
 	    } else {
 		pline("%s", msg_slipsfree);
 	    }
-	    if (mtmp) wakeup(mtmp);
+	    if (mtmp) wakeup(mtmp, TRUE);
 	} else pline("%s", msg_snap);
 
     } else if (mtmp) {
@@ -3417,7 +3417,7 @@ struct obj *obj;
 	    } else {
 		pline("%s", msg_slipsfree);
 	    }
-	    wakeup(mtmp);
+	    wakeup(mtmp, TRUE);
 	} else {
 	    if (mtmp->m_ap_type &&
 		!Protection_from_shape_changers && !sensemon(mtmp))

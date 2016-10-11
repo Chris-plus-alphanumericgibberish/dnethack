@@ -316,7 +316,7 @@ register struct obj *gold;
 
 	if(!likes_gold(mtmp->data) && !mtmp->isshk && !mtmp->ispriest
 			&& !is_mercenary(mtmp->data)) {
-		wakeup(mtmp);
+		wakeup(mtmp, TRUE);
 	} else if (!mtmp->mcanmove) {
 		/* too light to do real damage */
 		if (canseemon(mtmp)) {

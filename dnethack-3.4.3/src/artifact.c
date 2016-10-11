@@ -27,7 +27,6 @@ const static int AHRIMAN_PROPS[] = {AD_FIRE, AD_DRLI, AD_DRST};
 STATIC_DCL void NDECL(cast_protection);
 STATIC_DCL int NDECL(throweffect);
 STATIC_DCL void FDECL(awaken_monsters,(int));
-STATIC_DCL void FDECL(do_earthquake_at,(int, int, int));
 
 int FDECL(donecromenu, (const char *,struct obj *));
 int FDECL(dopetmenu, (const char *,struct obj *));
@@ -3380,9 +3379,9 @@ arti_invoke(obj)
 				int gonecnt = 0;
 				You("touch the tip of the Silence Glaive to the ground.");
 				// pline("The walls of the dungeon quake!");
-				do_earthquake_at(12,u.ux, u.uy);
-				do_earthquake_at(6,u.ux, u.uy);
-				do_earthquake_at(3,u.ux, u.uy);
+				do_earthquake(u.ux, u.uy, 24, 3, FALSE, (struct monst *) 0);
+				do_earthquake(u.ux, u.uy, 12, 3, FALSE, (struct monst *) 0);
+				do_earthquake(u.ux, u.uy,  6, 3, FALSE, (struct monst *) 0);
 				You("call out to the souls and spirits inhabiting this land.");
 				for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 					mtmp2 = mtmp->nmon;
@@ -3875,8 +3874,8 @@ arti_invoke(obj)
 					}
 				}
 				pline_The("entire dungeon is quaking around you!");
-				do_earthquake(u.ulevel / 4 + 1, obj->cursed, (struct monst *)0);
-				do_earthquake(u.ulevel / 3 + 1, obj->cursed, (struct monst *)0);
+				do_earthquake(u.ux, u.uy, u.ulevel / 2 + 1, 3, obj->cursed, (struct monst *)0);
+				do_earthquake(u.ux, u.uy, u.ulevel*2 / 3 + 1, 2, obj->cursed, (struct monst *)0);
 				awaken_monsters(ROWNO * COLNO);
 			   }
 	break;
@@ -3906,8 +3905,8 @@ arti_invoke(obj)
 					y = cc.y;
 				}
 			}
-				do_earthquake_at(10, cc.x, cc.y);
-				do_earthquake_at(6, cc.x, cc.y);
+			do_earthquake(cc.x, cc.y, 6, 3, FALSE, &youmonst);
+			do_earthquake(cc.x, cc.y, 3, 5, FALSE, &youmonst);
 		}
 		awaken_monsters(ROWNO * COLNO);
 	} break;
@@ -7295,154 +7294,6 @@ int distance;
 		}
 	    }
 	    mtmp = mtmp->nmon;
-	}
-}
-/* Generate earthquake :-) of desired force.
- * That is:  create random chasms (pits).
- */
-
-STATIC_OVL void
-do_earthquake_at(force,sx,sy)
-int force,sx,sy;
-{
-	register int x,y;
-	struct monst *mtmp;
-	struct obj *otmp;
-	struct trap *chasm;
-	int start_x, start_y, end_x, end_y;
-
-	start_x = sx - (force * 2);
-	start_y = sy - (force * 2);
-	end_x = sx + (force * 2);
-	end_y = sy + (force * 2);
-	if (start_x < 1) start_x = 1;
-	if (start_y < 1) start_y = 1;
-	if (end_x >= COLNO) end_x = COLNO - 1;
-	if (end_y >= ROWNO) end_y = ROWNO - 1;
-	for (x=start_x; x<=end_x; x++) for (y=start_y; y<=end_y; y++) {
-	    if ((mtmp = m_at(x,y)) != 0) {
-		wakeup(mtmp);	/* peaceful monster will become hostile */
-		if (mtmp->mundetected && is_hider(mtmp->data)) {
-		    mtmp->mundetected = 0;
-		    if (cansee(x,y))
-			pline("%s is shaken loose from the ceiling!",
-							    Amonnam(mtmp));
-		    else
-			You_hear("a thumping sound.");
-		    if (x==sx && y==sy)
-			You("easily dodge the falling %s.",
-							    mon_nam(mtmp));
-		    newsym(x,y);
-		}
-	    }
-	    if (!rn2(14 - force)) switch (levl[x][y].typ) {
-		  case FOUNTAIN : /* Make the fountain disappear */
-			if (cansee(x,y))
-				pline_The("fountain falls into a chasm.");
-			goto do_pit;
-#ifdef SINKS
-		  case SINK :
-			if (cansee(x,y))
-				pline_The("kitchen sink falls into a chasm.");
-			goto do_pit;
-#endif
-		  case ALTAR :
-			if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) break;
-
-			if (cansee(x,y))
-				pline_The("altar falls into a chasm.");
-			goto do_pit;
-		  case GRAVE :
-			if (cansee(x,y))
-				pline_The("headstone topples into a chasm.");
-			goto do_pit;
-		  case TREE:
-			if (cansee(x,y))
-				pline_The("tree topples into a chasm.");
-			if(!flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
-			goto do_pit;
-		  case DEADTREE:
-			if (cansee(x,y))
-				pline_The("dead tree topples into a chasm.");
-			goto do_pit;
-		  case THRONE :
-			if (cansee(x,y))
-				pline_The("throne falls into a chasm.");
-			if(u.sealsActive&SEAL_DANTALION) unbind(SEAL_DANTALION,TRUE);
-			/* Falls into next case */
-		  case ROOM :
-		  case CORR : /* Try to make a pit */
-do_pit:		    chasm = maketrap(x,y,PIT);
-		    if (!chasm) break;	/* no pit if portal at that location */
-		    chasm->tseen = 1;
-
-		    levl[x][y].doormask = 0;
-
-		    mtmp = m_at(x,y);
-
-		    if ((otmp = boulder_at(x, y)) != 0) {
-			if (cansee(x, y))
-			   pline("KADOOM! The %s falls into a chasm%s!", xname(boulder_at(x,y)),
-			      ((x == sx) && (y == sy)) ? " below you" : "");
-			if (mtmp)
-				mtmp->mtrapped = 0;
-			obj_extract_self(otmp);
-			(void) flooreffects(otmp, x, y, "");
-			break;
-		    }
-
-		    /* We have to check whether monsters or player
-		       falls in a chasm... */
-
-		    if (mtmp) {
-			if(!is_flyer(mtmp->data) && !is_clinger(mtmp->data)) {
-			    mtmp->mtrapped = 1;
-			    if(cansee(x,y))
-				pline("%s falls into a chasm!", Monnam(mtmp));
-			    else if (flags.soundok && humanoid(mtmp->data))
-				You_hear("a scream!");
-			    mselftouch(mtmp, "Falling, ", TRUE);
-			    if (mtmp->mhp > 0)
-				if ((mtmp->mhp -= rnd(6)) <= 0) {
-				    if(!cansee(x,y))
-					pline("It is destroyed!");
-				    else {
-					You("destroy %s!", mtmp->mtame ?
-					    x_monnam(mtmp, ARTICLE_THE, "poor",
-				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE):
-					    mon_nam(mtmp));
-				    }
-				    xkilled(mtmp,0);
-				}
-			}
-		    } else if (x == sx && y == sy) {
-			    if (Levitation || Flying ||
-						is_clinger(youracedata)) {
-				    pline("A chasm opens up under you!");
-				    You("don't fall in!");
-			    } else {
-				    You("fall into a chasm!");
-				    u.utrap = rn1(6,2);
-				    u.utraptype = TT_PIT;
-				    losehp(rnd(6),"fell into a chasm",
-					NO_KILLER_PREFIX);
-				    selftouch("Falling, you");
-			    }
-		    } else newsym(x,y);
-		    break;
-		  case DOOR : /* Make the door collapse */
-		    /* ALI - artifact doors from Slash'em*/
-		    if (artifact_door(x, y))  break;
-		    if (levl[x][y].doormask == D_NODOOR) goto do_pit;
-		    if (cansee(x,y))
-			pline_The("door collapses.");
-		    if (*in_rooms(x, y, SHOPBASE))
-			add_damage(x, y, 0L);
-		    levl[x][y].doormask = D_NODOOR;
-		    unblock_point(x,y);
-		    newsym(x,y);
-		    break;
-	    }
 	}
 }
 

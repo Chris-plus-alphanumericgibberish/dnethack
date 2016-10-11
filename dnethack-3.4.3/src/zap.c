@@ -362,7 +362,7 @@ struct obj *otmp;
 	}
 	if(wake) {
 	    if(mtmp->mhp > 0) {
-		wakeup(mtmp);
+		wakeup(mtmp, TRUE);
 		m_respond(mtmp);
 		if(mtmp->isshk && !*u.ushops) hot_pursuit(mtmp);
 	    } else if(mtmp->m_ap_type)
@@ -4346,8 +4346,7 @@ boolean *shopdamage;
 			!Blind ? "see a puff" : "smell a whiff");
 		}
 	if ((mon = m_at(x,y)) != 0) {
-		/* Cannot use wakeup() which also angers the monster */
-		mon->msleeping = 0;
+		wakeup(mon, FALSE);
 		if(mon->m_ap_type) seemimic(mon);
 		if(type >= 0 && !flags.mon_moving) {
 		    setmangry(mon);
