@@ -480,7 +480,7 @@ unsigned int type;
 	case PM_DWARF_QUEEN:
 		switch (rnd(4)) {
 			case 4:
-			return CURE_SELF;
+			return MON_PROTECTION;
 			break;
 			case 3:
 			return MASS_CURE_CLOSE;
@@ -755,6 +755,128 @@ unsigned int type;
 			break;
 			case 8:
 				return DEATH_TOUCH;
+			break;
+		}
+	break;
+	case PM_ALRUNES:
+		switch(rn2(6)){
+			case 0:
+				return MON_PROTECTION;
+			break;
+			case 1:
+				return MASS_CURE_CLOSE;
+			break;
+			case 2:
+				return MASS_CURE_FAR;
+			break;
+			case 3:
+				return AGGRAVATION;
+			break;
+			case 4:
+				return VULNERABILITY;
+			break;
+			case 5:
+				return MON_POISON_GAS;
+			break;
+		}
+	break;
+	case PM_DOMIEL:
+		switch(rn2(7)){
+			case 0:
+				return MON_PROTECTION;
+			break;
+			case 1:
+				return HASTE_SELF;
+			break;
+			case 2:
+				return MASS_CURE_CLOSE;
+			break;
+			case 3:
+				return MASS_CURE_FAR;
+			break;
+			case 4:
+				return AGGRAVATION;
+			break;
+			case 5:
+				return FIRE_PILLAR;
+			break;
+			case 6:
+				return STUN_YOU;
+			break;
+		}
+	break;
+	case PM_ERATHAOL:
+		switch(rn2(7)){
+			case 0:
+				return MON_PROTECTION;
+			break;
+			case 1:
+				return VULNERABILITY;
+			break;
+			case 2:
+				return EVIL_EYE;
+			break;
+			case 3:
+				return BLIND_YOU;
+			break;
+			case 4:
+				return AGGRAVATION;
+			break;
+			case 5:
+				return CONFUSE_YOU;
+			break;
+			case 6:
+				return HASTE_SELF;
+			break;
+		}
+	break;
+	case PM_SEALTIEL:
+		switch(rn2(7)){
+			case 0:
+				return MON_PROTECTION;
+			break;
+			case 1:
+				return HASTE_SELF;
+			break;
+			case 2:
+				return MASS_CURE_CLOSE;
+			break;
+			case 3:
+				return MASS_CURE_FAR;
+			break;
+			case 4:
+				return ICE_STORM;
+			break;
+			case 5:
+				return DROP_BOULDER;
+			break;
+			case 6:
+				return TURN_TO_STONE;
+			break;
+		}
+	break;
+	case PM_ZAPHKIEL:
+		switch(rn2(7)){
+			case 0:
+				return MON_PROTECTION;
+			break;
+			case 1:
+				return SUMMON_ANGEL;
+			break;
+			case 2:
+				return MASS_CURE_CLOSE;
+			break;
+			case 3:
+				return MASS_CURE_FAR;
+			break;
+			case 4:
+				return AGGRAVATION;
+			break;
+			case 5:
+				return RECOVER;
+			break;
+			case 6:
+				return MASS_HASTE;
 			break;
 		}
 	break;
@@ -1763,6 +1885,38 @@ summon_alien:
     stop_occupation();
 	dmg = 0;
     break;
+    case VULNERABILITY:{
+		int x, y, n, prot;
+		struct monst *cmon;
+		if(!mtmp){
+			x = (int) u.ux;
+			y = (int) u.uy;
+			n = 8;
+		} else {
+			x = (int) mtmp->mux;
+			y = (int) mtmp->muy;
+			n = mtmp->m_lev/3+4;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( cmon != mtmp &&
+				cmon->mhp<cmon->mhpmax && 
+				!DEADMONSTER(cmon) &&
+				((mtmp && cmon->mpeaceful != mtmp->mpeaceful) ||
+				 (!mtmp && !cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
+			){
+				prot = rnd(n);
+				if(resists_magm(cmon)) cmon->mstdy = min(prot, cmon->mstdy + (prot/2+1));
+				else cmon->mstdy = min(prot, cmon->mstdy+prot);
+			}
+		}
+		if(Antimagic) u.ustdy = min(prot, u.ustdy + (prot/2+1));
+		else u.ustdy = min(prot, u.ustdy+prot);
+		You_feel("vulnerable!");
+	    dmg = 0;
+	}
+	stop_occupation();
+    break;
     case DRAIN_LIFE:  /* simulates player spell "drain life" */
 		if(!mtmp || distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2){
 			if (Drain_resistance) {
@@ -2008,24 +2162,47 @@ ray:
 	}
 	dmg = 0;
 	break;
+	case MASS_HASTE:{
+		int x, y, n;
+		struct monst *cmon;
+		if(!mtmp){
+			x = (int) u.ux;
+			y = (int) u.uy;
+			n = 8;
+		} else {
+			x = (int) mtmp->mx;
+			y = (int) mtmp->my;
+			n = mtmp->m_lev/3+1;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( !DEADMONSTER(cmon) &&
+				((mtmp && cmon->mpeaceful == mtmp->mpeaceful) ||
+				 (!mtmp && !cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
+			){
+				mon_adjust_speed(cmon, 1, (struct obj *)0);
+			}
+		}
+	    dmg = 0;
+	}break;
 	case MASS_CURE_CLOSE:{
 		int x, y, n;
 		struct monst *cmon;
 		if(!mtmp){
-			x = u.ux;
-			y = u.uy;
+			x = (int) u.ux;
+			y = (int) u.uy;
 			n = 8;
 		} else {
-			x = mtmp->mx;
-			x = mtmp->my;
+			x = (int) mtmp->mx;
+			y = (int) mtmp->my;
 			n = mtmp->m_lev/3+1;
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
-			if( cmon != mtmp &&
-				cmon->mhp<cmon->mhpmax && 
+			if( cmon->mhp < cmon->mhpmax && 
+				!DEADMONSTER(cmon) &&
 				((mtmp && cmon->mpeaceful == mtmp->mpeaceful) ||
 				 (!mtmp && !cmon->mpeaceful)) &&
-				dist2(x,y,cmon->mx,cmon->my) <= 4
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
 			){
 				if((cmon->mhp += d(n,8)) > cmon->mhpmax)
 					cmon->mhp = cmon->mhpmax;
@@ -2039,25 +2216,63 @@ ray:
 		int x, y, n;
 		struct monst *cmon;
 		if(!mtmp){
-			x = u.ux;
-			y = u.uy;
+			x = (int) u.ux;
+			y = (int) u.uy;
 			n = 8;
 		} else {
-			x = mtmp->mux;
-			x = mtmp->muy;
+			if(mtmp->mux == 0 && mtmp->muy == 0){
+				x = (int) mtmp->mx;
+				y = (int) mtmp->my;
+			} else {
+				x = (int) mtmp->mux;
+				y = (int) mtmp->muy;
+			}
 			n = mtmp->m_lev/3+1;
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon != mtmp &&
 				cmon->mhp<cmon->mhpmax && 
+				!DEADMONSTER(cmon) &&
 				((mtmp && cmon->mpeaceful == mtmp->mpeaceful) ||
 				 (!mtmp && !cmon->mpeaceful)) &&
-				dist2(x,y,cmon->mx,cmon->my) <= 4
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
 			){
 				if((cmon->mhp += d(n,8)) > cmon->mhpmax)
 					cmon->mhp = cmon->mhpmax;
 				if (canseemon(cmon))
 					pline("%s looks better.", Monnam(mtmp));
+			}
+		}
+	    dmg = 0;
+	}break;
+	case MON_PROTECTION:{
+		int x, y, n, prot;
+		struct monst *cmon;
+		if(!mtmp){
+			x = (int) u.ux;
+			y = (int) u.uy;
+			n = 8;
+		} else {
+			if(mtmp->mux == 0 && mtmp->muy == 0){
+				x = (int) mtmp->mx;
+				y = (int) mtmp->my;
+			} else {
+				x = (int) mtmp->mux;
+				y = (int) mtmp->muy;
+			}
+			n = mtmp->m_lev/3+4;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( cmon != mtmp &&
+				!DEADMONSTER(cmon) &&
+				((mtmp && cmon->mpeaceful == mtmp->mpeaceful) ||
+				 (!mtmp && !cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
+			){
+				prot = -1*rnd(n);
+				cmon->mstdy = max(prot, cmon->mstdy+prot);
+				if (canseemon(cmon))
+					pline("A shimmering shield surrounds %s!", mon_nam(cmon));
 			}
 		}
 	    dmg = 0;
@@ -2148,6 +2363,10 @@ int spellnum;
 	case HASTE_SELF:
 	case CURE_SELF:
 	case INSECTS:
+	case MASS_HASTE:
+	case MASS_CURE_CLOSE:
+	case MASS_CURE_FAR:
+	case MON_PROTECTION:
 	    return TRUE;
 	default:
 	    break;
@@ -2169,6 +2388,9 @@ int spellnum;
 	case MON_THUNDAGA:
 	case MON_FLARE:
 	case MON_POISON_GAS:
+	case MASS_CURE_FAR:
+	case MON_PROTECTION:
+	case VULNERABILITY:
 	    return TRUE;
 	default:
 	    break;
