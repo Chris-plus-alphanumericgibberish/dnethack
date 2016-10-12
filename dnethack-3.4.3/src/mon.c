@@ -1557,14 +1557,22 @@ mon_can_see_mon(looker, lookie)
 	if(looker->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || looker->data == &mons[PM_LONG_SINUOUS_TENTACLE]){
 		struct monst *witw;
 		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_WATCHER_IN_THE_WATER]) break;
-		if(mon_can_see_mon(witw, lookie)) return TRUE;
+		if(witw){
+			looker->mux = witw->mux;
+			looker->muy = witw->muy;
+			if(mon_can_see_mon(witw, lookie)) return TRUE;
+		}
 		//may still be able to feel target adjacent
 	}
 	
 	if(looker->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
 		struct monst *keto;
 		for(keto = fmon; keto; keto = keto->nmon) if(keto->data == &mons[PM_KETO]) break;
-		if(mon_can_see_mon(keto, lookie)) return TRUE;
+		if(keto){
+			looker->mux = keto->mux;
+			looker->muy = keto->muy;
+			if(mon_can_see_mon(keto, lookie)) return TRUE;
+		}
 		//may still be able to feel target adjacent
 	}
 	
