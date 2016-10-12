@@ -4421,7 +4421,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			//Watcher in the Water's tentacle spawn and retreat behavior
 			int ltnt = 0, stnt = 0;
 			struct monst *tmon;
-			if (distu(mtmp->mx, mtmp->my) <= 3 && !(mtmp->mflee)){
+			if (distmin(u.ux, u.uy, mtmp->mx, mtmp->my) <= 2 && !(mtmp->mflee)){
 				mtmp->mflee = 1;
 				mtmp->mfleetim = 2;
 			}

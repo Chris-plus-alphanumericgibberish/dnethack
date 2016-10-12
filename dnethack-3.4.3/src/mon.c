@@ -1905,11 +1905,11 @@ mfndpos(mon, poss, info, flag)
 	
 	if(mdat == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || mdat == &mons[PM_LONG_SINUOUS_TENTACLE]){
 		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_WATCHER_IN_THE_WATER]) break;
-	} else witw = 0;
+	}
 	
 	if(mdat == &mons[PM_WIDE_CLUBBED_TENTACLE]){
 		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_KETO]) break;
-	} else witw = 0;
+	}
 	
 	x = mon->mx;
 	y = mon->my;
@@ -1991,6 +1991,8 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		if((mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO]) && 
 			distmin(nx, ny, mon->mux, mon->muy) <= 3 && 
 			dist2(nx, ny, mon->mux, mon->muy) <= dist2(mon->mx, mon->my, mon->mux, mon->muy)) continue;
+		if((mdat == &mons[PM_WATCHER_IN_THE_WATER]) && 
+			onlineu(nx, ny) && (lined_up(mon) || !rn2(4))) continue;
 		if(witw && dist2(nx, ny, witw->mx, witw->my) > 32 && 
 			dist2(nx, ny, witw->mx, witw->my) >= dist2(mon->mx, mon->my, witw->mx, witw->my)) continue;
 		if(mdat == &mons[PM_HOOLOOVOO] && 
