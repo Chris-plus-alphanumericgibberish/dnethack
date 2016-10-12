@@ -1563,6 +1563,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(u.spirit[GPREM_SPIRIT]) numBound++;
 		if(u.spirit[ALIGN_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
+		if(Role_if(PM_ANACHRONONAUT) && u.specialSealsActive|SEAL_BLACK_WEB) numBound++;
 		Sprintf(prebuf, "Your soul ");
 		Sprintf(buf, " bound to ");
 		for(i=0;i<QUEST_SPIRIT;i++){
