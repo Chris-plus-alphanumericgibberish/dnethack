@@ -880,7 +880,7 @@ char * sealNames[] =  {
 	"Nudziarth", /* 36 */
 	"the Alignment Thing", /* 37 */
 	"the Unknown God", /* 38 */
-	"Eddergud", /* 38 */
+	"the Eddergud", /* 38 */
 	"Numina" /* 39 */
 };
 
