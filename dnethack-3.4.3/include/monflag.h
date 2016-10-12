@@ -341,7 +341,12 @@
 #define MON_FLARE              MON_THUNDAGA+1
 #define MON_WARP               MON_FLARE+1
 #define MON_POISON_GAS         MON_WARP+1
-#define MON_LASTSPELL          MON_POISON_GAS
+#define MON_PROTECTION         MON_POISON_GAS+1
+//60
+#define VULNERABILITY          MON_PROTECTION+1
+#define MASS_HASTE             VULNERABILITY+1
+
+#define MON_LASTSPELL          MASS_HASTE
 //Not yet implemented
 // #define MON_FIRE               STRANGLE+1
 // #define MON_BLIZZARD           MON_FIRAGA+1
