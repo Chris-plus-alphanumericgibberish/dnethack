@@ -1441,23 +1441,9 @@ domove()
 			You("slip out of the iron chain.");
 			unpunish();
 		} else {
-			/*Temp blind self if about to become blinded*/
-			if((Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && !LightBlind && !(u.sealsActive&SEAL_AMON) && (viz_array[u.uy+u.dy][u.ux+u.dx]&TEMP_LIT || levl[u.ux+u.dx][u.uy+u.dy].lit)){
-				// Blinded |= 0x1L;
-				viz_array[u.uy][u.ux] |= TEMP_LIT;
-				set_bc(FALSE);
-			} else if((Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && LightBlind && !(viz_array[u.uy+u.dy][u.ux+u.dx]&TEMP_LIT || levl[u.ux+u.dx][u.uy+u.dy].lit)){
-				forcesight = TRUE;
-			}
 			if (!drag_ball(x,y, &bc_control, &ballx, &bally, &chainx, &chainy,
 				&cause_delay, TRUE))
 			return;
-			/*Unblind self if about to become blinded*/
-			if(forcesight);
-			else if((Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && !LightBlind && !(u.sealsActive&SEAL_AMON) && (viz_array[u.uy+u.dy][u.ux+u.dx]&TEMP_LIT || levl[u.ux+u.dx][u.uy+u.dy].lit)){
-				// Blinded &= ~(0x1L);
-				viz_array[u.uy][u.ux] &= ~TEMP_LIT;
-			}
 		}
 	}
 	
@@ -1632,14 +1618,7 @@ domove()
 	}
 
 	if (Punished){				/* put back ball and chain */
-	if((Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && !LightBlind && !(u.sealsActive&SEAL_AMON) && (viz_array[u.uy-u.dy][u.ux-u.dx]&TEMP_LIT || levl[u.ux-u.dx][u.uy-u.dy].lit)){
-		Blinded |= 0x1L;
-	}
 	    move_bc(0,bc_control,ballx,bally,chainx,chainy);
-	if((Race_if(PM_DROW) && !Is_waterlevel(&u.uz)) && !LightBlind && !(u.sealsActive&SEAL_AMON) && (viz_array[u.uy-u.dy][u.ux-u.dx]&TEMP_LIT || levl[u.ux-u.dx][u.uy-u.dy].lit)){
-		Blinded &= ~(0x1L);
-	}
-	if(forcesight)  forcesight = FALSE;
 	}
 
 	spoteffects(TRUE);
