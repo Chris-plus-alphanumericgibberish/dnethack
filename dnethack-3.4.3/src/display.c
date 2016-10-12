@@ -625,6 +625,73 @@ feel_location(x, y)
 		is_worm_tail(mon));
 }
 
+void
+echo_location(x, y)
+    xchar x, y;
+{
+    struct rm *lev = &(levl[x][y]);
+    struct obj *boulder;
+    register struct monst *mon;
+	
+    /* The hero can't feel non pool locations while under water. */
+    if (Underwater && !Is_waterlevel(&u.uz) && !is_pool(x,y))
+	return;
+
+	if (glyph_is_invisible(levl[x][y].glyph) && !(m_at(x,y))) {
+		unmap_object(x,y);
+		newsym(x,y);
+	}
+	
+    /* Set the seen vector as if the hero had seen it.  It doesn't matter */
+    /* if the hero is levitating or not.				  */
+    set_seenv(lev, u.ux, u.uy, x, y);
+	
+	if(!cansee(x,y)){
+		_map_location(x, y, 1);
+
+		if (Punished) {
+			/*
+			 * A ball or chain is only felt if it is first on the object
+			 * location list.  Otherwise, we need to clear the felt bit ---
+			 * something has been dropped on the ball/chain.  If the bit is
+			 * not cleared, then when the ball/chain is moved it will drop
+			 * the wrong glyph.
+			 */
+			if (uchain && uchain->ox == x && uchain->oy == y) {
+			if (level.objects[x][y] == uchain)
+				u.bc_felt |= BC_CHAIN;
+			else
+				u.bc_felt &= ~BC_CHAIN;	/* do not feel the chain */
+			}
+			if (uball && !carried(uball) && uball->ox == x && uball->oy == y) {
+			if (level.objects[x][y] == uball)
+				u.bc_felt |= BC_BALL;
+			else
+				u.bc_felt &= ~BC_BALL;	/* do not feel the ball */
+			}
+		}
+
+		/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
+		if (lev->typ == ROOM &&
+				lev->glyph == cmap_to_glyph(S_litroom) && !lev->waslit)
+			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_stone));
+		else if (lev->typ == CORR &&
+				lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
+			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
+	}
+	// return;
+	if((mon = m_at(x, y))) {
+    /* draw monster on top if we can sense it */
+		if ((x != u.ux || y != u.uy) && (sensemon(mon) || sensemon(mon) || mon->m_ap_type))
+			display_monster(x, y, mon,
+				(tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)) ? PHYSICALLY_SEEN : DETECTED,
+				is_worm_tail(mon));
+		else if (!(canspotmon(mon) || sensemon(mon) || mon->m_ap_type)) {
+			map_invisible(x, y);
+		}
+	}
+}
+
 /*
  * newsym()
  *
