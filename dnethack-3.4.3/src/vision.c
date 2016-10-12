@@ -512,7 +512,7 @@ vision_recalc(control)
     int oldseenv;				/* previous seenv value */
     int oldxray;				/* previous xray range value */
 	struct monst *mon, *nmon, *mat;
-	boolean catsightdark = !(levl[u.ux][u.uy].lit || (viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)));
+	boolean catsightdark;
 	
 	
     vision_full_recalc = 0;			/* reset flag */
@@ -559,6 +559,7 @@ vision_recalc(control)
 	
 	temp_array = viz_array;	/* set viz_array so newsym() will work */
 	viz_array = next_array;
+	catsightdark = !(levl[u.ux][u.uy].lit || (viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)));
 
 	for (row = 0; row < ROWNO; row++) {
 	    old_row = temp_array[row];
@@ -694,6 +695,7 @@ vision_recalc(control)
      */
     temp_array = viz_array;
     viz_array = next_array;
+	catsightdark = !(levl[u.ux][u.uy].lit || (viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)));
 
 	
     /*

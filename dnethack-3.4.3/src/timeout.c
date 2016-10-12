@@ -1836,7 +1836,9 @@ end_burn(obj, timer_attached)
 		update_inventory();
 	} else if (!stop_timer(BURN_OBJECT, (genericptr_t) obj))
 	    impossible("end_burn: obj %s not timed!", xname(obj));
-	if(darksight(youracedata) || catsight(youracedata)) doredraw();
+	// if(darksight(youracedata) || catsight(youracedata)) doredraw();
+	// So many different vision systems, just do a redraw
+	doredraw();
 }
 
 #endif /* OVL1 */
