@@ -1986,8 +1986,6 @@ extract_nobj(obj, head_ptr)
 	}
     }
     if (!curr){
-		struct obj *crash;
-		crash->spe++;
 		panic("extract_nobj: object lost");
 	}
     obj->where = OBJ_FREE;
