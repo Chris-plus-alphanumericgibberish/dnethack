@@ -715,7 +715,7 @@ break_armor()
 			}
 		}
 	}
-	if (uarmu) {
+	if ((otmp = uarmu) != 0) {
 		if(otmp->objsize != youracedata->msize
 				|| !shirt_match(youracedata,otmp) || is_whirly(youracedata) || noncorporeal(youracedata)
 		){
