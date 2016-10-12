@@ -689,7 +689,7 @@ newsym(x,y)
 	    worm_tail = is_worm_tail(mon);
 	    see_it = mon && (worm_tail
 		? (!mon->minvis || See_invisible)
-		: (mon_visible(mon)) || tp_sensemon(mon) || MATCH_WARN_OF_MON(mon));
+		: (mon_visible(mon)) || tp_sensemon(mon) || MATCH_WARN_OF_MON(mon) || sense_by_scent(mon));
 	    if (mon && (see_it || (!worm_tail && Detect_monsters))) {
 		if (mon->mtrapped) {
 		    struct trap *trap = t_at(x, y);

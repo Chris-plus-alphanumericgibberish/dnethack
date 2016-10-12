@@ -1292,7 +1292,7 @@ moveloop()
 			see_objects();
 			see_traps();
 			if (u.uswallow) swallowed(0);
-		} else if (Unblind_telepat) {
+		} else if (Unblind_telepat || goodsmeller(youracedata)) {
 			see_monsters();
 	    } else if (Warning || Warn_of_mon)
 	     	see_monsters();
@@ -1315,7 +1315,7 @@ moveloop()
 			see_objects();
 			see_traps();
 			if (u.uswallow) swallowed(0);
-		} else if (Unblind_telepat) {
+		} else if (Unblind_telepat || goodsmeller(youracedata)) {
 			see_monsters();
 	    } else if (Warning || Warn_of_mon)
 	     	see_monsters();

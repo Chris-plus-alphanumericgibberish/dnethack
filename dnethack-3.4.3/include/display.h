@@ -33,7 +33,7 @@
 	(distu(mon->mx, mon->my) <= (BOLT_LIM * BOLT_LIM))))		      \
 )
 
-#define sensemon(mon) (tp_sensemon(mon) || Detect_monsters || MATCH_WARN_OF_MON(mon))
+#define sensemon(mon) (tp_sensemon(mon) || Detect_monsters || MATCH_WARN_OF_MON(mon) || sense_by_scent(mon))
 
 /*
  * mon_warning() is used to warn of any dangerous monsters in your

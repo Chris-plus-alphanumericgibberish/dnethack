@@ -370,7 +370,7 @@ do_mname()
 	    mtmp = m_at(cx, cy);
 
 	if (!mtmp || (!sensemon(mtmp) &&
-			(!(cansee(cx,cy) || see_with_infrared(mtmp) || see_with_bloodsense(mtmp) || see_with_lifesense(mtmp) || see_with_senseall(mtmp) || see_with_earthsense(mtmp) || sense_by_scent(mtmp))
+			(!(cansee(cx,cy) || see_with_infrared(mtmp) || see_with_bloodsense(mtmp) || see_with_lifesense(mtmp) || see_with_senseall(mtmp) || see_with_earthsense(mtmp))
 			|| mtmp->mundetected
 			|| mtmp->m_ap_type == M_AP_FURNITURE
 			|| mtmp->m_ap_type == M_AP_OBJECT
