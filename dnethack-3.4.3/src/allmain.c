@@ -1118,14 +1118,23 @@ moveloop()
 		    }
 
 		    if ((u.uen < u.uenmax) && 
-			((wtcap < MOD_ENCUMBER && !Race_if(PM_INCANTIFIER) &&
-			  (!(moves%(((MAXULEV+2) - u.ulevel) *
-				    (Role_if(PM_WIZARD) ? 3 : 4) / 6))))
-			 || Energy_regeneration)) {
+			(wtcap < MOD_ENCUMBER && !Race_if(PM_INCANTIFIER) &&
+			  (!(moves%(((MAXULEV+5) - u.ulevel) *
+				    (Role_if(PM_WIZARD) ? 3 : 4) / 6))))) {
 				u.uen += rn1((int)(ACURR(A_WIS) + ACURR(A_INT)) / 10 + 1,1);
 				if (u.uen > u.uenmax)  u.uen = u.uenmax;
 				flags.botl = 1;
 		    }
+			if(Energy_regeneration && u.uen < u.uenmax){
+				u.uen++;
+				/*Note: at +1 per turn this never goes over max*/
+				flags.botl = 1;
+			}
+			if(u.specialSealsActive&SEAL_UNKNOWN_GOD && u.uen < u.uenmax){
+				u.uen+=min_ints(rnd(spiritDsize()),5);
+				if (u.uen > u.uenmax)  u.uen = u.uenmax;
+				flags.botl = 1;
+			}
 			if(u.uen < u.uenmax && (Role_if(PM_WIZARD) || Race_if(PM_INCANTIFIER)) && uarmh && uarmh->otyp == CORNUTHAUM && uarmh->spe > 0){
 				u.uen += rnd(uarmh->spe);
 				if (u.uen > u.uenmax)  u.uen = u.uenmax;
