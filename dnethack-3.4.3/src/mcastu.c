@@ -1951,6 +1951,7 @@ summon_alien:
 				else cmon->mstdy = min(prot, cmon->mstdy+prot);
 			}
 		}
+		prot = rnd(n);
 		if(Antimagic) u.ustdy = min(prot, u.ustdy + (prot/2+1));
 		else u.ustdy = min(prot, u.ustdy+prot);
 		You_feel("vulnerable!");
