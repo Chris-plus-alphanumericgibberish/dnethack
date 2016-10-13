@@ -33,7 +33,7 @@
  * 3.12.3: Partial reform of charm monster and monster summoning, Gnome ranger quest.
  * 3.13.beta: "The Great Reflagging".
  * 3.13.0: "The Great Reflagging", Monster equipment, Angel symbol split, PoWater revision, Demonweb, Naberius buff, Incant energy gain/loss/cap increase.
- * 3.13.1: implement monster sensoria. Purpose for STUN artifacts. Change guidelines for nopoly rules
+ * 3.13.1: implement monster sensoria. Purpose for STUN artifacts. Change guidelines for nopoly rules. Implement a few more angel lords, Alrunes.  Female Drow Anachrononauts, myrkalfar. Dark lights.
  */
 #define PATCHLEVEL	1
 /*
