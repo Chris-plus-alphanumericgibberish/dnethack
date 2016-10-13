@@ -3683,7 +3683,7 @@ int type;	/* either hero cast spell type or 0 */
     if (!chance) return rnd(10) < ac+spell_bonus;
 
     /* very high armor protection does not achieve invulnerability */
-    ac = AC_VALUE(ac);
+    ac = AC_VALUE(ac+u.uspellprot)-u.uspellprot;
 
     return (3 - chance) < ac+spell_bonus;
 }

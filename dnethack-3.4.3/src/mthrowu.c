@@ -81,14 +81,14 @@ boolean burn;
 		return 0;
 	}
 	
-	if((bypassDR && (AC_VALUE(base_uac()) + tlev <= rnd(20))) || (!bypassDR && (AC_VALUE(u.uac) + tlev <= rnd(20)))) {
+	if((bypassDR && (AC_VALUE(base_uac()+u.uspellprot) - u.uspellprot + tlev <= rnd(20))) || (!bypassDR && (AC_VALUE(u.uac+u.uspellprot)-u.uspellprot + tlev <= rnd(20)))) {
 		if(Blind || !flags.verbose) pline("It misses.");
 		else You("are almost hit by %s.", onm);
 		return(0);
 	} else {
 		
-		if(bypassDR && base_uac() < 0) dam -= AC_VALUE(base_uac());
-		else if(!bypassDR && u.uac < 0) dam -= AC_VALUE(u.uac);
+		if(bypassDR && base_uac() < 0) dam -= AC_VALUE(base_uac()+u.uspellprot)-u.uspellprot;
+		else if(!bypassDR && u.uac < 0) dam -= AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
 		
 		if(dam < 1) dam = 1;
 		
@@ -688,7 +688,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			    if(hitu>0) break;
 			default:
 			    dam = dmgval(singleobj, &youmonst, 0);
-				if(!bypassDR && u.uac<0) dam += AC_VALUE(u.uac);
+				if(!bypassDR && u.uac<0) dam += AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
 			    hitv = 3 - distmin(u.ux,u.uy, mon->mx,mon->my);
 			    if (hitv < -4) hitv = (hitv+4)/2-4;
 			    if (hitv < -8) hitv = (hitv+8)*2/3-8;

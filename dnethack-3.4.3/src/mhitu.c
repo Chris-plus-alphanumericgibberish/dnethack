@@ -547,8 +547,8 @@ mattacku(mtmp)
 	}
 
 /*	Work out the armor class differential	*/
-	tmp = AC_VALUE(u.uac) + 10;		/* tmp ~= 0 - 20 */
-	tchtmp = AC_VALUE(base_uac()) + 10;
+	tmp = AC_VALUE(u.uac+u.uspellprot) + 10 - u.uspellprot;		/* tmp ~= 0 - 20 */
+	tchtmp = AC_VALUE(base_uac()+u.uspellprot) + 10 - u.uspellprot;
 	tmp += mtmp->m_lev;
 	tchtmp += mtmp->m_lev;
 	tmp += u.ustdy;
@@ -1497,14 +1497,14 @@ hitmu(mtmp, mattk)
 				artifact_hit(mtmp, &youmonst, uwep, &dmg,dieroll)))
 			     hitmsg(mtmp, mattk);
 			if (!dmg) break;
-			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac)) &&
+			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac+u.uspellprot)-u.uspellprot) &&
 				   objects[uwep->otyp].oc_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
 			     * take the damage _before_ being cloned.
 			     */
-			    if (u.uac < 0) dmg += AC_VALUE(u.uac);
+			    if (u.uac < 0) dmg += AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
 			    if (dmg < 1) dmg = 1;
 			    if (dmg > 1) exercise(A_STR, FALSE);
 			    u.mh -= dmg;
@@ -1631,14 +1631,14 @@ hitmu(mtmp, mattk)
 				artifact_hit(mtmp, &youmonst, otmp, &dmg,dieroll)))
 			     hitmsg(mtmp, mattk);
 			if (!dmg) break;
-			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac)) &&
+			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac+u.uspellprot)-u.uspellprot) &&
 				   objects[otmp->otyp].oc_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
 			     * take the damage _before_ being cloned.
 			     */
-			    if (u.uac < 0) dmg += AC_VALUE(u.uac);
+			    if (u.uac < 0) dmg += AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
 			    if (dmg < 1) dmg = 1;
 			    if (dmg > 1) exercise(A_STR, FALSE);
 			    u.mh -= dmg;
@@ -3162,10 +3162,10 @@ dopois:
 	if (dmg){
 		if(u.uac < 0) {
 			if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
-				dmg += AC_VALUE(u.uac);
+				dmg += AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
 				if (dmg < 1) dmg = 1;
 			} else if(base_uac() < 0){
-				dmg += AC_VALUE(base_uac());
+				dmg += AC_VALUE(base_uac()+u.uspellprot)-u.uspellprot;
 				if (dmg < 1) dmg = 1;
 			}
 		}

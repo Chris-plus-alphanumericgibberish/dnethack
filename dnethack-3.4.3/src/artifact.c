@@ -2803,7 +2803,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	} else if(arti_threeHead(otmp) && youdefend){
 		int extrahits = 2;
 		int monAC, extrahit=1;
-		monAC = AC_VALUE(u.uac) + 10;		/* monAC ~= 0 - 20 */
+		monAC = AC_VALUE(u.uac+u.uspellprot) + 10 - u.uspellprot;		/* monAC ~= 0 - 20 */
 		monAC += magr->m_lev;
 		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) monAC += u.chokhmah;
 		if(multi < 0) monAC += 4;
@@ -2912,7 +2912,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	} else if(arti_tentRod(otmp) && youdefend){
 		int extrahits = rn2(7);
 		int extrahit = 1, tmp;
-		tmp = AC_VALUE(u.uac) + 10;		/* tmp ~= 0 - 20 */
+		tmp = AC_VALUE(u.uac+u.uspellprot) + 10 - u.uspellprot;		/* tmp ~= 0 - 20 */
 		tmp += magr->m_lev;
 		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) tmp += u.chokhmah;
 		if(multi < 0) tmp += 4;
