@@ -593,7 +593,7 @@ meleeattack:
 				
 				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > range) break;
 				
-				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
+				if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC && mattk->adtyp != AD_STAR)
 					res[i] = buzzmm(magr, mdef, mattk, magr->m_lev);
 				else {
 					res[i] = castmm(magr, mdef, mattk);

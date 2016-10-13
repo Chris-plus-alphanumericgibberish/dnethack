@@ -1129,6 +1129,19 @@ cold_spell:
 		} //else dmg = d((int)mtmp->m_lev/2 + 1,6);
 		stop_occupation();
 		break;
+	    case AD_STAR:
+		You("are hit by a shower of silver stars!");
+		dmg /= 2;
+		drain_en(dmg);
+		if(hates_silver(youracedata)) dmg += d(dmn,20);
+		if(Half_physical_damage) dmg /= 2;
+		if(u.uac < 0){
+			if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+			else dmg -= rnd(-u.uac);
+		}
+		if(dmg < 1) dmg = 1;
+		stop_occupation();
+		break;
         default:
 	    {
         cast_spell(mtmp, dmg, spellnum);
@@ -2718,6 +2731,14 @@ cold_mm:
 			dmg = 0;
 		} //else dmg = d((int)mtmp->m_lev/2 + 1,6);
 		break;
+	    case AD_STAR:
+		if (canspotmon(mdef))
+		pline("%s is hit by a shower of silver stars!", Monnam(mdef));
+		dmg /= 2;
+		mdef->mspec_used += dmg;
+		if(hates_silver(mdef->data)) dmg += d(dmn,20);
+		if(resists_magm(mdef)) dmg /= 2;
+		break;
 	    default:
 		{
 	    /*aggravation is a special case;*/
@@ -3112,6 +3133,13 @@ cold_um:
 			pline_The("missiles bounce off!");
 			dmg = 0;
 		}// else dmg = d((int)ml/2 + 1,6);
+		break;
+	    case AD_STAR:
+		pline("%s is hit by a shower of silver stars!", Monnam(mtmp));
+		dmg /= 2;
+		mtmp->mspec_used += dmg;
+		if(hates_silver(mtmp->data)) dmg += d(dmn,20);
+		if(resists_magm(mtmp)) dmg /= 2;
 		break;
 	    default:
 	    {
