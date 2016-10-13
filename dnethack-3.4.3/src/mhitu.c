@@ -796,8 +796,9 @@ mattacku(mtmp)
 			 * Weeping angels gaze during movemon().
 			 * Don't gaze more than once per round.
 			 */
-			if (mdat != &mons[PM_MEDUSA] && !is_weeping(mdat))
-				sum[i] = gazemu(mtmp, mattk);
+			if (mdat == &mons[PM_MEDUSA] || is_weeping(mdat) || u.ux != mtmp->mux || u.uy != mtmp->muy)
+				break;
+			sum[i] = gazemu(mtmp, mattk);
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
 				mtmp->mvar1 = mtmp->mvar1+1;
 				if(!range2 && mtmp->mvar1>=2){
