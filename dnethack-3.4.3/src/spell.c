@@ -2252,7 +2252,7 @@ spiriteffects(power, atme)
 				barage = FALSE;
 			} else {
 				You("have nothing quivered.");
-				return;
+				return 0;
 			}
 		break;
 		case PWR_BREATH_POISON:{
