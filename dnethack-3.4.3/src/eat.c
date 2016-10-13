@@ -2755,10 +2755,10 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		if (yn_function(buf,ynchars,'n')=='n') return 0;
 	}
 	
-	if (u.uedibility || u.sealsActive&SEAL_BUER) {
+	if (u.uedibility || u.sealsActive&SEAL_BUER || goodsmeller(youracedata)) {
 		int res = edibility_prompts(otmp);
 		if (res) {
-			if(!(u.sealsActive&SEAL_BUER)){
+			if(!(u.sealsActive&SEAL_BUER || goodsmeller(youracedata))){
 				Your("%s stops tingling and your sense of smell returns to normal.",
 					body_part(NOSE));
 				u.uedibility = 0;
