@@ -922,6 +922,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	int	dmg, ml = mtmp->m_lev;
 	int ret;
 	int spellnum = 0;
+	int dmd, dmn;
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	/* Three cases:
@@ -1014,7 +1015,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
  */
 	if (!foundyou) {
 		if(is_aoe_spell(spellnum)){
-			int dmd = 6, dmn = ml/2;
+			dmd = 6;
+			dmn = ml/2;
 			if (mattk->damd) dmd = (int)(mattk->damd);
 			
 			if (mattk->damn) dmn+= (int)(mattk->damn);
@@ -1032,10 +1034,14 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	    }
 	} else {
 		int dmd = 6, dmn = ml/2;
+		
+		if (dmn > 15) dmn = 15;
+		
 		if (mattk->damd) dmd = (int)(mattk->damd);
 		
 		if (mattk->damn) dmn+= (int)(mattk->damn);
-		else dmn += 1;
+		
+		if(dmn < 1) dmn = 1;
 		
 	    dmg = d(dmn, dmd);
 	}
@@ -2576,6 +2582,7 @@ castmm(mtmp, mdef, mattk)
 	int	dmg, ml = mtmp->m_lev;
 	int ret;
 	int spellnum = 0;
+	int dmd, dmn;
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
@@ -2633,11 +2640,16 @@ castmm(mtmp, mdef, mattk)
 	}
 
 	{
-		int dmd = 6, dmn = ml/2;
+		dmd = 6;
+		dmn = ml/2;
+		
+		if(dmn > 15) dmn = 15;
+		
 		if (mattk->damd) dmd = (int)(mattk->damd);
 		
 		if (mattk->damn) dmn+= (int)(mattk->damn);
-		else dmn += 1;
+
+		if(dmn < 1) dmn = 1;
 		
 	    dmg = d(dmn, dmd);
 	}
@@ -2950,6 +2962,7 @@ castum(mtmp, mattk)
 	int ret;
 	int spellnum = 0;
 	boolean directed = FALSE;
+	int dmd, dmn;
 
 	/* Three cases:
 	 * -- monster is attacking you.  Search for a useful spell.
@@ -3029,11 +3042,16 @@ castum(mtmp, mattk)
  *	of the monster casting the spell.
  */
 	{
-		int dmd = 6, dmn = ml/2;
+		dmd = 6;
+		dmn = ml/2;
+		
+		if(dmn > 15) dmn = 15;
+		
 		if (mattk->damd) dmd = (int)(mattk->damd);
 		
 		if (mattk->damn) dmn+= (int)(mattk->damn);
-		else dmn += 1;
+		
+		if(dmn < 1) dmn = 1;
 		
 	    dmg = d(dmn, dmd);
 	}
