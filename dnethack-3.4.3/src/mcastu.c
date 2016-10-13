@@ -776,7 +776,29 @@ unsigned int type;
 				return VULNERABILITY;
 			break;
 			case 5:
-				return MON_POISON_GAS;
+				return EVIL_EYE;
+			break;
+		}
+	break;
+	case PM_HATEFUL_WHISPERS:
+		switch(rn2(6)){
+			case 0:
+				return SUMMON_MONS;
+			break;
+			case 1:
+				return CURE_SELF;
+			break;
+			case 2:
+				return SUMMON_DEVIL;
+			break;
+			case 3:
+				return AGGRAVATION;
+			break;
+			case 4:
+				return VULNERABILITY;
+			break;
+			case 5:
+				return EVIL_EYE;
 			break;
 		}
 	break;
