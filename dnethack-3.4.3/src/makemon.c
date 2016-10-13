@@ -2762,7 +2762,7 @@ register struct monst *mtmp;
 					mongets(mtmp, CRYSTAL_BOOTS);
 					mongets(mtmp, CRYSTAL_GAUNTLETS);
 					mongets(mtmp, STILETTO);
-					mongets(mtmp, RAZOR_WIRE);
+					// mongets(mtmp, RAZOR_WIRE);
 				}
 			}break;
 		    case PM_BONE_DEVIL:
