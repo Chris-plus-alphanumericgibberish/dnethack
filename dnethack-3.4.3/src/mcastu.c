@@ -943,12 +943,12 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || mtmp->mspec_used || !ml || u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
+	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns(mtmp->data)) || !ml || u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
 	    cursetxt(mtmp, is_undirected_spell(spellnum));
 	    return(0);
 	}
 
-	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && !nospellcooldowns(mtmp->data)) {
 	    if(mtmp->data == &mons[PM_HEDROW_WARRIOR]) mtmp->mspec_used = d(4,4);
 		else mtmp->mspec_used = 10 - mtmp->m_lev;
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
@@ -2570,7 +2570,7 @@ castmm(mtmp, mdef, mattk)
 	}
 
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || mtmp->mspec_used || !ml) {
+	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns(mtmp->data)) || !ml) {
 	    if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my))
 	    {
                 char buf[BUFSZ];
@@ -2588,7 +2588,7 @@ castmm(mtmp, mdef, mattk)
 	    return(0);
 	}
 
-	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && !nospellcooldowns(mtmp->data)) {
 	    mtmp->mspec_used = 10 - mtmp->m_lev;
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
 	}

@@ -202,6 +202,7 @@
 #define MG_RIDER		0x00002000L	/* Monster has perfect resurection */
 #define MG_DEADLY		0x00004000L	/* Monster's corpse is deadly to taste */
 #define MG_TRACKER		0x00008000L	/* Monster can track players by sight or scent (guideline: predators with mv_scent or 'woodsy' inteligent beings) */
+#define MG_NOSPELLCOOLDOWN	0x00010000L	/* Monster can cast spells without depending on or increasing mspec_used */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */

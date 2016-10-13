@@ -581,20 +581,9 @@ meleeattack:
 				int temp=0;
 				int range;
 				if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
-				if( pa == &mons[PM_ASMODEUS] ) magr->mspec_used = 0;
-				else if( pa == &mons[PM_DEMOGORGON] && rn2(3) ) magr->mspec_used = 0;
-				else if( pa == &mons[PM_LAMASHTU] && rn2(3) ) magr->mspec_used = 0;
-				else if( pa == &mons[PM_OBOX_OB]) magr->mspec_used = 0;
-				else if( pa == &mons[PM_ELDER_PRIEST] && rn2(2) ) magr->mspec_used = 0;
-				else if( pa == &mons[PM_ALHOON] && rn2(2) ) magr->mspec_used = 0;
-				else if( pa == &mons[PM_EMBRACED_DROWESS]) magr->mspec_used = 0;
-				else if( pa == &mons[PM_HOOLOOVOO] && rn2(2) ) break;
-				if( pa == &mons[PM_GRAZ_ZT]) temp = magr->mspec_used;
-				if( pa == &mons[PM_QUINON] ) {
-					temp = magr->mspec_used;
-					magr->mspec_used = 0;
-				}
 				
+				if( magr->data == &mons[PM_DEMOGORGON] && distmin(magr->mx, magr->my, mdef->mx, mdef->my) > 1 && !magr->mflee && rn2(6)) 
+					break; //cast spells more rarely if he's in melee range
 				if(is_orc(magr->data) || 
 					magr->data == &mons[PM_HEDROW_WARRIOR] || 
 					magr->data == &mons[PM_MINOTAUR_PRIESTESS]
@@ -612,10 +601,6 @@ meleeattack:
 				if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 				if (res[i] & MM_DEF_DIED)
 				if( pa == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
-				if( pa == &mons[PM_QUINON] ) {
-					magr->mspec_used = temp;
-				}
-				if( pa == &mons[PM_GRAZ_ZT] && temp == 0) magr->mspec_used = 4;
 				return (MM_DEF_DIED |
 					(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
 			}break;

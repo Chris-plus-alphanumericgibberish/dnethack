@@ -1050,32 +1050,8 @@ mattacku(mtmp)
 		case AT_MMGC:{
 			int temp=0;
 			if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
-			if( mdat == &mons[PM_ASMODEUS] ) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_DEMOGORGON] && rn2(3) ) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_LAMASHTU] && rn2(3) ) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_OBOX_OB]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_ELDER_PRIEST] && rn2(2) ) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_ALHOON] && rn2(2) ) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_EMBRACED_DROWESS]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_ELDER_BRAIN]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_LUGRIBOSSK]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_LICH__THE_FIEND_OF_EARTH]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_KARY__THE_FIEND_OF_FIRE]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_KRAKEN__THE_FIEND_OF_WATER]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_TIAMAT__THE_FIEND_OF_WIND]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_CHAOS]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_MAANZECORIAN]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_AVATAR_OF_LOLTH]) mtmp->mspec_used = 0;
-			else if( mdat == &mons[PM_HOOLOOVOO] && rn2(2) ) break;
-//			else if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;
+			if(nospellcooldowns(mdat)) mtmp->mspec_used = 0;
 			
-//			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_SPEL && rn2(2) ) return 0;
-//			if( mdat == &mons[PM_ASMODEUS] && mattk->adtyp == AD_FIRE && rn2(2) ) return 0;
-			if( mdat == &mons[PM_GRAZ_ZT]) temp = mtmp->mspec_used;
-			if( mdat == &mons[PM_QUINON] || mdat == &mons[PM_FAERINAAL]) {
-				temp = mtmp->mspec_used;
-				mtmp->mspec_used = 0;
-			}
 			if( mdat == &mons[PM_DEMOGORGON] && !range2 && !mtmp->mflee && rn2(6)) break; //cast spells more rarely if he's in melee range
 			if (range2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC)
 			    sum[i] = buzzmu(mtmp, mattk, mtmp->m_lev);
@@ -1100,11 +1076,6 @@ mattacku(mtmp)
 				}
 			}
 			if( mdat == &mons[PM_ASMODEUS] && !rn2(3) ) return 3;
-			if( mdat == &mons[PM_QUINON] || mdat == &mons[PM_FAERINAAL]) {
-				mtmp->mspec_used = temp;
-			}
-			if( mdat == &mons[PM_GRAZ_ZT] && temp == 0) mtmp->mspec_used = 4;
-//			if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;
 			break;
 			}
 
