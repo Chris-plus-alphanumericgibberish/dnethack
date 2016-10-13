@@ -1337,7 +1337,7 @@ register struct attack *mattk;
 {
 	register struct obj *otmp;
 
-	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	if(mtmp->mux == 0 && mtmp->muy == 0) return 0;
 
 	if(mtmp->mcan) {
@@ -1468,7 +1468,7 @@ register struct attack *mattk;
 	int ammo_type, autodestroy = 1;
 	
 
-	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return;
+	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	if(mtmp->mux == 0 && mtmp->muy == 0) return 0;
 	
 	if(lined_up(mtmp)) {
