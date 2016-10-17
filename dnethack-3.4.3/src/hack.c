@@ -598,7 +598,7 @@ int mode;
 	if (Blind && mode == DO_MOVE) feel_location(x,y);
 	if (Passes_walls && may_passwall(x,y)) {
 	    ;	/* do nothing */
-	} else if (tmpr->typ == IRONBARS && !Is_illregrd(&u.uz)) {
+	} else if (tmpr->typ == IRONBARS && !Is_illregrd(&u.uz) && mode == DO_MOVE) {
 	    if ((dmgtype(youmonst.data, AD_RUST) ||
 			dmgtype(youmonst.data, AD_CORR))) {
 			You("eat through the bars.");
