@@ -5259,6 +5259,11 @@ rndmonst()
 		if(!rn2(20)) return mkclass(S_LICH, G_NOHELL|G_HELL);
 		//else default
 	}
+	else if(Is_lolth_level(&u.uz)){
+		int roll = d(1,10);
+		if(roll == 10) return &mons[PM_DROW_MATRON];
+		if(roll > 4) return mkclass(S_SPIDER, G_NOHELL|G_HELL);
+	}
 	else if(Is_demogorgon_level(&u.uz)){
 		if(rn2(3)) return mkclass(S_DEMON, G_NOHELL|G_HELL) ;
 		//else default
