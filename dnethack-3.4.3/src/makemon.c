@@ -3053,13 +3053,158 @@ register struct	monst	*mtmp;
 //			case 
 //			}
 //		break;
+		case S_ANT:
+			if(In_law(&u.uz)){
+				//Civilized ants
+				if(mtmp->data == &mons[PM_SOLDIER_ANT]){
+					chance = rnd(10);
+					if(chance == 10) mongets(mtmp, PLATE_MAIL);
+					else if(chance >= 8) mongets(mtmp, CHAIN_MAIL);
+					else if(chance >= 5) mongets(mtmp, SCALE_MAIL);
+					if(chance >= 5) mongets(mtmp, HELMET);
+				} else if(mtmp->data == &mons[PM_KILLER_BEE]){
+					if(!rn2(4)){
+						mongets(mtmp, LEATHER_ARMOR);
+					}
+				} else if(mtmp->data == &mons[PM_KILLER_BEE]){
+					chance = rnd(10);
+					if(chance == 10) mongets(mtmp, PLATE_MAIL);
+					else if(chance >= 8) mongets(mtmp, SCALE_MAIL);
+					else if(chance >= 5) mongets(mtmp, GENTLEWOMAN_S_DRESS);
+					if(chance >= 8) mongets(mtmp, HELMET);
+				}
+			}
+		break;
+		case S_DOG:
+			//Escaped war-dog
+			if(mtmp->data == &mons[PM_LARGE_DOG]){
+				chance = rnd(100);
+				if(chance == 100) mongets(mtmp, PLATE_MAIL);
+				else if(chance >= 96) mongets(mtmp, SCALE_MAIL);
+				else if(chance >= 90) mongets(mtmp, LEATHER_ARMOR);
+				if(chance >= 96) mongets(mtmp, HELMET);
+			//Escaped orcish mount
+			} else if(mtmp->data == &mons[PM_WARG]){
+				chance = rnd(10);
+				if(chance == 10) mongets(mtmp, ORCISH_CHAIN_MAIL);
+				else if(chance >= 8) mongets(mtmp, ORCISH_RING_MAIL);
+				else if(chance >= 5) mongets(mtmp, LEATHER_ARMOR);
+				if(chance >= 5) mongets(mtmp, ORCISH_HELM);
+				if(!rn2(20)){
+					otmp = mksobj(SADDLE, TRUE, FALSE);
+					if (otmp) {
+						if (mpickobj(mtmp, otmp)) break;//panic("merged saddle?");
+						mtmp->misc_worn_check |= W_SADDLE;
+						otmp->owornmask = W_SADDLE;
+						otmp->leashmon = mtmp->m_id;
+						update_mon_intrinsics(mtmp, otmp, TRUE, TRUE);
+					}
+				}
+			}
+		case S_QUADRUPED:
+			//Escaped war-elephant
+			if(mtmp->data == &mons[PM_MUMAK]){
+				chance = rnd(100);
+				if(chance == 100) mongets(mtmp, BRONZE_PLATE_MAIL);
+				else if(chance >= 96) mongets(mtmp, ORCISH_CHAIN_MAIL);
+				else if(chance >= 90) mongets(mtmp, ORCISH_RING_MAIL);
+				if(chance == 100) mongets(mtmp, BRONZE_HELM);
+				else if(chance >= 90) mongets(mtmp, ORCISH_HELM);
+				if(chance >= 95){
+					otmp = mksobj(SADDLE, TRUE, FALSE);
+					if (otmp) {
+						if (mpickobj(mtmp, otmp)) break;//panic("merged saddle?");
+						mtmp->misc_worn_check |= W_SADDLE;
+						otmp->owornmask = W_SADDLE;
+						otmp->leashmon = mtmp->m_id;
+						update_mon_intrinsics(mtmp, otmp, TRUE, TRUE);
+					}
+				}
+			}
+		break;
+		case S_RODENT:
+			//6) There is obviously no "underground kingdom beneath London, inhabited by huge, intelligent rodents."
+			if(mtmp->data == &mons[PM_ENORMOUS_RAT]){
+				chance = rnd(100);
+				if(chance == 100){
+					if(mtmp->female) mongets(mtmp, GENTLEWOMAN_S_DRESS);
+					else mongets(mtmp, GENTLEMAN_S_SUIT);
+					mongets(mtmp, FEDORA);
+				}
+				else if(chance >= 90) mongets(mtmp, LEATHER_JACKET);
+			}
+		break;
+		case S_SPIDER:
+			//Escaped drow pet
+			if(mtmp->data == &mons[PM_GIANT_SPIDER]){
+				chance = rnd(100);
+				if(chance == 100) mongets(mtmp, DROVEN_PLATE_MAIL);
+				else if(chance >= 96) mongets(mtmp, DROVEN_CHAIN_MAIL);
+				else if(chance >= 90) mongets(mtmp, LEATHER_ARMOR);
+				if(chance >= 96) mongets(mtmp, DROVEN_HELM);
+				else if(chance >= 90) mongets(mtmp, LEATHER_HELM);
+				if(chance >= 96) mongets(mtmp, DROVEN_CLOAK);
+				if(!rn2(20)){
+					otmp = mksobj(SADDLE, TRUE, FALSE);
+					if (otmp) {
+						if (mpickobj(mtmp, otmp)) break;//panic("merged saddle?");
+						mtmp->misc_worn_check |= W_SADDLE;
+						otmp->owornmask = W_SADDLE;
+						otmp->leashmon = mtmp->m_id;
+						update_mon_intrinsics(mtmp, otmp, TRUE, TRUE);
+					}
+				}
+			}
+		break;
 		case S_UNICORN:
+			//Escaped warhorse
 			if(mtmp->data == &mons[PM_WARHORSE]){
 				chance = rnd(10);
 				if(chance == 10) mongets(mtmp, PLATE_MAIL);
 				else if(chance >= 8) mongets(mtmp, CHAIN_MAIL);
 				else if(chance >= 5) mongets(mtmp, SCALE_MAIL);
 				if(chance >= 5) mongets(mtmp, HELMET);
+				if(!rn2(4)){
+					otmp = mksobj(SADDLE, TRUE, FALSE);
+					if (otmp) {
+						if (mpickobj(mtmp, otmp)) break;//panic("merged saddle?");
+						mtmp->misc_worn_check |= W_SADDLE;
+						otmp->owornmask = W_SADDLE;
+						otmp->leashmon = mtmp->m_id;
+						update_mon_intrinsics(mtmp, otmp, TRUE, TRUE);
+					}
+				}
+			}
+		break;
+		case S_LIZARD:
+			//Escaped drow pet
+			if(mtmp->data == &mons[PM_CAVE_LIZARD]){
+				chance = rnd(100);
+				if(chance == 100) mongets(mtmp, DROVEN_PLATE_MAIL);
+				else if(chance >= 96) mongets(mtmp, DROVEN_CHAIN_MAIL);
+				else if(chance >= 80) mongets(mtmp, LEATHER_ARMOR);
+				if(chance >= 96) mongets(mtmp, DROVEN_HELM);
+				else if(chance >= 80) mongets(mtmp, LEATHER_HELM);
+				if(chance >= 96) mongets(mtmp, DROVEN_CLOAK);
+				if(!rn2(20)){
+					otmp = mksobj(SADDLE, TRUE, FALSE);
+					if (otmp) {
+						if (mpickobj(mtmp, otmp)) break;//panic("merged saddle?");
+						mtmp->misc_worn_check |= W_SADDLE;
+						otmp->owornmask = W_SADDLE;
+						otmp->leashmon = mtmp->m_id;
+						update_mon_intrinsics(mtmp, otmp, TRUE, TRUE);
+					}
+				}
+			//Escaped drow mount
+			} else if(mtmp->data == &mons[PM_LARGE_CAVE_LIZARD]){
+				chance = rnd(100);
+				if(chance == 98) mongets(mtmp, DROVEN_PLATE_MAIL);
+				else if(chance >= 90) mongets(mtmp, DROVEN_CHAIN_MAIL);
+				else if(chance >= 70) mongets(mtmp, LEATHER_ARMOR);
+				if(chance >= 90) mongets(mtmp, DROVEN_HELM);
+				else if(chance >= 70) mongets(mtmp, LEATHER_HELM);
+				if(chance >= 90) mongets(mtmp, DROVEN_CLOAK);
 				if(!rn2(4)){
 					otmp = mksobj(SADDLE, TRUE, FALSE);
 					if (otmp) {
