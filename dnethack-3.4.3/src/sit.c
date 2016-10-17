@@ -194,7 +194,7 @@ dosit()
 					verbalize("Thy audience hath been summoned, %s!",
 						  flags.female ? "Dame" : "Sire");
 					while(cnt--){
-						mtmp = makemon(courtmon(), u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+						mtmp = makemon(courtmon(monsndx(youracedata)), u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 						initedog(mtmp);
 					}
 					levl[u.ux][u.uy].looted |= NOBLE_PETS;
@@ -261,7 +261,7 @@ dosit()
 				verbalize("Thy audience hath been summoned, %s!",
 					  flags.female ? "Dame" : "Sire");
 				while(cnt--)
-					(void) makemon(courtmon(), u.ux, u.uy, MM_ADJACENTOK);
+					(void) makemon(courtmon(0), u.ux, u.uy, MM_ADJACENTOK);
 				break;
 				}
 				case 8:

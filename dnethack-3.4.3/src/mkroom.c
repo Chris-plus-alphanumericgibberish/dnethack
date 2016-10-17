@@ -15,6 +15,8 @@
 
 #include "hack.h"
 
+extern const int monstr[];
+
 #ifdef OVLB
 STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
@@ -1353,7 +1355,15 @@ struct mkroom *sroom;
 	register int sx,sy,i;
 	int sh, tx, ty, goldlim, type = sroom->rtype;
 	int rmno = (sroom - rooms) + ROOMOFFSET;
+	int ctype = 0, tries = 0;
 	coord mm;
+	int zlevel, minmlev, maxmlev;
+	
+	zlevel = level_difficulty();
+	/* determine the level of the weakest monster to make. */
+	minmlev = zlevel / 3;
+	/* determine the level of the strongest monster to make. */
+	maxmlev = (zlevel + u.ulevel) / 2;
 
 #ifdef GCC_WARN
 	tx = ty = goldlim = 0;
@@ -1385,8 +1395,48 @@ struct mkroom *sroom;
 			(void) somexy(sroom, &mm);
 			tx = mm.x; ty = mm.y;
 		} while (occupied((xchar)tx, (xchar)ty) && --i > 0);
+		
+		levl[tx][ty].typ = THRONE;
+		if(rn2(4)){
+			/* recalculae minlev to be stricter about weak throne monsters */
+			minmlev = zlevel * 2  / 3;
+			/* allow mildly out-of-depth lords */
+			maxmlev += 5;
+			
+			static const int kingnums[] = {
+				PM_DWARF_KING,
+				PM_DWARF_QUEEN,
+				PM_KOBOLD_LORD,
+				PM_ORC_CAPTAIN,
+				PM_ORC_OF_THE_AGES_OF_STARS,
+				PM_GNOME_KING,
+				PM_GNOME_QUEEN,
+				PM_TITAN,
+				PM_DEEPEST_ONE,
+				PM_OGRE_KING,
+				PM_VAMPIRE_LORD,
+				PM_ELVENKING,
+				PM_ELVENQUEEN,
+				PM_DROW_MATRON,
+				PM_EMBRACED_DROWESS
+			};
+			
+			do ctype = kingnums[rn2(SIZE(kingnums))];
+			while(tooweak(ctype, minmlev) || toostrong(ctype,maxmlev) || tries++ > 40);
+			if(tries <= 40){
+				mon = makemon(&mons[ctype], tx, ty, NO_MM_FLAGS|MM_NOCOUNTBIRTH);
+				if(mon) {
+					mon->msleeping = 1;
+					if (type==COURT && mon->mpeaceful) {
+						mon->mpeaceful = 0;
+						set_malign(mon);
+					}
+				}
+			}
+			else ctype = 0;
+		} else ctype = 0;
+		
 	    throne_placed:
-		/* TODO: try to ensure the enthroned monster is an MG_PRINCE */
 		break;
 	    case BEEHIVE:
 		tx = sroom->lx + (sroom->hx - sroom->lx + 1)/2;
@@ -1420,12 +1470,12 @@ struct mkroom *sroom;
 			    (sy == sroom->ly && doors[sh].y == sy-1) ||
 			    (sy == sroom->hy && doors[sh].y == sy+1))))
 		    continue;
-		/* don't place monster on explicitly placed throne */
+		/* don't place monster on throne */
 		if(type == COURT && IS_THRONE(levl[sx][sy].typ))
 		    continue;
 		if(!(Role_if(PM_NOBLEMAN) && In_quest(&u.uz) )){
 		mon = makemon(
-		    (type == COURT) ? courtmon() :
+		    (type == COURT) ? courtmon(ctype) :
 		    (type == BARRACKS) ? squadmon() :
 		    (type == MORGUE) ? morguemon() :
 		    (type == BEEHIVE) ?
@@ -1435,7 +1485,7 @@ struct mkroom *sroom;
 		    (type == COCKNEST) ? &mons[PM_COCKATRICE] :
 		    (type == ANTHOLE) ? antholemon() :
 		    (struct permonst *) 0,
-		   sx, sy, NO_MM_FLAGS|MM_NOCOUNTBIRTH);//did add MM_NOCOUNTBIRTH.
+		   sx, sy, NO_MM_FLAGS|MM_NOCOUNTBIRTH);
 		if(mon) {
 			mon->msleeping = 1;
 			if (type==COURT && mon->mpeaceful) {
@@ -1500,13 +1550,16 @@ struct mkroom *sroom;
 	switch (type) {
 	      case COURT:
 		{
-		  struct obj *chest;
-		  levl[tx][ty].typ = THRONE;
+		  struct obj *chest, *gold;
 		  (void) somexy(sroom, &mm);
-		  (void) mkgold((long) rn1(50 * level_difficulty(),10), mm.x, mm.y);
+		  gold = mksobj(GOLD_PIECE, TRUE, FALSE);
+		  gold->quan = (long) rn1(50 * level_difficulty(), 10);
+		  gold->owt = weight(gold);
 		  /* the royal coffers */
 		  chest = mksobj_at(CHEST, mm.x, mm.y, TRUE, FALSE);
 		  chest->spe = 2; /* so it can be found later */
+		  add_to_container(chest, gold);
+		  chest->owt = weight(chest);
 		  level.flags.has_court = 1;
 		  break;
 		}
@@ -2250,18 +2303,320 @@ schar type;
 #ifdef OVLB
 
 struct permonst *
-courtmon()
+courtmon(kingnum)
+	int kingnum;
 {
-	int     i = rn2(60) + rn2(3*level_difficulty());
-	if (i > 100)		return(mkclass(S_DRAGON, Inhell ? G_HELL : G_NOHELL));
-	else if (i > 95)	return(mkclass(S_GIANT, Inhell ? G_HELL : G_NOHELL));
-	else if (i > 85)	return(mkclass(S_TROLL, Inhell ? G_HELL : G_NOHELL));
-	else if (i > 75)	return(mkclass(S_CENTAUR, Inhell ? G_HELL : G_NOHELL));
-	else if (i > 60)	return(mkclass(S_ORC, Inhell ? G_HELL : G_NOHELL));
-	else if (i > 45)	return(&mons[PM_BUGBEAR]);
-	else if (i > 30)	return(&mons[PM_HOBGOBLIN]);
-	else if (i > 15)	return(mkclass(S_GNOME, Inhell ? G_HELL : G_NOHELL));
-	else			return(mkclass(S_KOBOLD, Inhell ? G_HELL : G_NOHELL));
+	int i;
+	switch(kingnum){
+		case PM_DWARF:
+		case PM_DWARF_KING:
+		case PM_DWARF_QUEEN:
+			i = rnd(100);
+			if(i>95)
+				return &mons[PM_DWARF_LORD];
+			else if(i>90)
+				return &mons[PM_DWARF_CLERIC];
+			else if(i>50)
+				return &mons[PM_DWARF];
+			else if(i>20)
+				return &mons[PM_GNOME];
+			else if(i>17)
+				return &mons[PM_GNOME_LORD];
+			else if(i>14)
+				return &mons[PM_GNOME_LADY];
+			else if(i>10)
+				return &mons[PM_GNOMISH_WIZARD];
+			else if(i> 5)
+				return &mons[PM_HOBBIT];
+			else if(i> 0)
+				return &mons[PM_LEPRECHAUN];
+		break;
+		
+		case PM_KOBOLD:
+		case PM_KOBOLD_LORD:
+			i = rnd(100);
+			if(i>95)
+				return &mons[PM_KOBOLD_SHAMAN];
+			else if(i>60)
+				return &mons[PM_LARGE_KOBOLD];
+			else if(i>10)
+				return &mons[PM_KOBOLD];
+			else if(i> 2)
+				return &mons[PM_LEMURE];
+			else if(i> 0)
+				return &mons[PM_IMP];
+		break;
+		
+		case PM_ORC:
+		case PM_ORC_CAPTAIN:
+			i = rnd(100);
+			if(i>95)
+				return &mons[PM_ORC_SHAMAN];
+			else if(i>80)
+				return &mons[PM_MORDOR_ORC];
+			else if(i>60)
+				return &mons[PM_HILL_ORC];
+			else if(i>40)
+				return &mons[PM_HOBGOBLIN];
+			else if(i>10)
+				return &mons[PM_GOBLIN];
+			else if(i> 2)
+				return &mons[PM_MANES];
+			else if(i> 0)
+				return &mons[PM_QUASIT];
+		break;
+		
+		case PM_ORC_OF_THE_AGES_OF_STARS:
+			i = rnd(100);
+			if(i>98)
+				return &mons[PM_DEEP_DRAGON];
+			else if(i>96)
+				return &mons[PM_RED_DRAGON];
+			else if(i>94)
+				return &mons[PM_WHITE_DRAGON];
+			else if(i>92)
+				return &mons[PM_BLACK_DRAGON];
+			else if(i>90)
+				return &mons[PM_BLUE_DRAGON];
+			else if(i>60)
+				return &mons[PM_ANGBAND_ORC];
+			else if(i>40)
+				return &mons[PM_HEDROW_BLADEMASTER];
+			else if(i>36)
+				return &mons[PM_SUCCUBUS];
+			else if(i>32)
+				return &mons[PM_INCUBUS];
+			else if(i>20)
+				return &mons[PM_OLOG_HAI];
+			else if(i>10)
+				return &mons[PM_SIEGE_OGRE];
+			else if(i> 0)
+				return &mons[PM_HELL_HOUND];
+		break;
+		
+		case PM_GNOME:
+		case PM_GNOME_KING:
+		case PM_GNOME_QUEEN:
+			i = rnd(100);
+			if(i>95)
+				return &mons[PM_GNOME_LORD];
+			else if(i>90)
+				return &mons[PM_GNOME_LADY];
+			else if(i>50)
+				return &mons[PM_GNOME];
+			else if(i>45)
+				return &mons[PM_GNOMISH_WIZARD];
+			else if(i>40)
+				return &mons[PM_TINKER_GNOME];
+			else if(i>20)
+				return &mons[PM_DWARF];
+			else if(i>17)
+				return &mons[PM_DWARF_LORD];
+			else if(i>14)
+				return &mons[PM_DWARF_CLERIC];
+			else if(i>10)
+				return &mons[PM_HOBBIT];
+			else if(i> 5)
+				return &mons[PM_LEPRECHAUN];
+			else if(i> 0)
+				return &mons[PM_HOMUNCULUS];
+		break;
+		
+		case PM_GIANT:
+		case PM_TITAN:
+			i = rnd(100);
+			if(i>90)
+				return &mons[PM_STORM_GIANT];
+			else if(i>75)
+				return &mons[PM_FIRE_GIANT];
+			else if(i>60)
+				return &mons[PM_FROST_GIANT];
+			else if(i>35)
+				return &mons[PM_HILL_GIANT];
+			else if(i>20)
+				return &mons[PM_STONE_GIANT];
+			else if(i>17)
+				return &mons[PM_GIANT];
+			else if(i>15)
+				return &mons[PM_SON_OF_TYPHON];
+			else if(i>11)
+				return &mons[PM_DRYAD];
+			else if(i> 7)
+				return &mons[PM_NAIAD];
+			else if(i> 3)
+				return &mons[PM_OREAD];
+			else if(i> 0)
+				return &mons[PM_DEMINYMPH];
+		break;
+		
+		case PM_DEEP_ONE:
+		case PM_DEEPEST_ONE:
+			i = rnd(100);
+			if(i>80)
+				return &mons[PM_DEEPER_ONE];
+			else if(i>30)
+				return &mons[PM_DEEP_ONE];
+			else if(i>25)
+				return &mons[PM_MIND_FLAYER];
+			else if(i>20)
+				return &mons[PM_DARK_YOUNG];
+			else if(i>15)
+				return &mons[PM_UMBER_HULK];
+			else if(i>11)
+				return &mons[PM_STUMBLING_HORROR];
+			else if(i> 7)
+				return &mons[PM_WANDERING_HORROR];
+			else if(i> 3)
+				return &mons[PM_SHAMBLING_HORROR];
+			else if(i> 0)
+				return &mons[PM_HUMAN];
+		break;
+		
+		case PM_OGRE:
+		case PM_OGRE_KING:
+			i = rnd(100);
+			if(i>95)
+				return &mons[PM_OGRE_MAGE];
+			else if(i>85)
+				return &mons[PM_OGRE_LORD];
+			else if(i>50)
+				return &mons[PM_OGRE];
+			else if(i>40)
+				return &mons[PM_ORC_CAPTAIN];
+			else if(i>20)
+				return &mons[PM_MORDOR_ORC];
+			else if(i>15)
+				return &mons[PM_TENGU];
+			else if(i> 5)
+				return &mons[PM_TROLL];
+			else if(i> 0)
+				return(mkclass(S_GIANT, Inhell ? G_HELL : G_NOHELL));
+		break;
+		
+		case PM_VAMPIRE:
+		case PM_VAMPIRE_LORD:
+			i = rnd(100);
+			if(i>90)
+				return &mons[PM_VAMPIRE];
+			else if(i>70)
+				return(mkclass(S_ZOMBIE, Inhell ? G_HELL : G_NOHELL));
+			else if(i>65)
+				return(mkclass(S_MUMMY, Inhell ? G_HELL : G_NOHELL));
+			else if(i>60)
+				return &mons[PM_FLESH_GOLEM];
+			else if(i>55)
+				return &mons[PM_WEREWOLF];
+			else if(i>50)
+				return &mons[PM_FLOATING_EYE];
+			else if(i>45)
+				return &mons[PM_GARGOYLE];
+			else if(i>40)
+				return &mons[PM_WINGED_GARGOYLE];
+			else if(i>35)
+				return &mons[PM_QUASIT];
+			else if(i>30)
+				return &mons[PM_BLACK_PUDDING];
+			else if(i>25)
+				return &mons[PM_WRAITH];
+			else if(i>20)
+				return &mons[PM_PHANTASM];
+			else if(i>15)
+				return &mons[PM_GHOST];
+			else if(i>10)
+				return &mons[PM_MAID];
+			else if(i> 5)
+				return &mons[PM_WEEPING_WILLOW];
+			else if(i> 0)
+				return &mons[PM_SWAMP_NYMPH];
+		break;
+		
+		case PM_ELF:
+		case PM_ELVENKING:
+		case PM_ELVENQUEEN:
+			if(i>95)
+				return &mons[PM_ELF_LORD];
+			else if(i>90)
+				return &mons[PM_ELF_LADY];
+			else if(i>75)
+				return &mons[PM_GREY_ELF];
+			else if(i>60)
+				return &mons[PM_GREEN_ELF];
+			else if(i>50)
+				return &mons[PM_WOODLAND_ELF];
+			else if(i>40)
+				return &mons[PM_QUICKLING];
+			else if(i>32)
+				return &mons[PM_DRYAD];
+			else if(i>30)
+				return &mons[PM_NAIAD];
+			else if(i>20)
+				return &mons[PM_COURE];
+			else if(i>18)
+				return &mons[PM_NOVIERE];
+			else if(i>16)
+				return &mons[PM_BRALANI];
+			else if(i>13)
+				return &mons[PM_FIRRE];
+			else if(i>10)
+				return &mons[PM_SHIERE];
+			else if(i> 5)
+				return &mons[PM_DOPPELGANGER];
+			else if(i> 0)
+				return &mons[PM_WOOD_TROLL];
+		break;
+		
+		case PM_DROW:
+		case PM_DROW_MATRON:
+			if(i>90)
+				return &mons[PM_UNEARTHLY_DROW];
+			if(i>80)
+				return &mons[PM_HEDROW_WIZARD];
+			if(i>50)
+				return &mons[PM_HEDROW_WARRIOR];
+			if(i>40)
+				return &mons[PM_DROW];
+			if(i>30)
+				return &mons[PM_SPROW];
+			if(i>25)
+				return &mons[PM_SWAMP_NYMPH];
+			if(i>15)
+				return &mons[PM_GIANT_SPIDER];
+			if(i>10)
+				return &mons[PM_CAVE_LIZARD];
+			if(i> 5)
+				return &mons[PM_LARGE_CAVE_LIZARD];
+			if(i> 0)
+				return &mons[PM_QUASIT];
+		break;
+		
+		case PM_EMBRACED_DROWESS:
+			if(i>95)
+				return &mons[PM_DROW_ALIENIST];
+			else if(i>90)
+				return &mons[PM_HEDROW_BLADEMASTER];
+			else if(i>70)
+				return &mons[PM_EDDERKOP];
+			else if(i>60)
+				return &mons[PM_HEDROW_WIZARD];
+			else if(i>30)
+				return &mons[PM_HEDROW_WARRIOR];
+			else if(i> 0)
+				return &mons[PM_DROW_MUMMY];
+		break;
+		
+		default:
+			i = rn2(60) + rn2(3*level_difficulty());
+			if (i > 100)		return(mkclass(S_DRAGON, Inhell ? G_HELL : G_NOHELL));
+			else if (i > 95)	return(mkclass(S_GIANT, Inhell ? G_HELL : G_NOHELL));
+			else if (i > 85)	return(mkclass(S_TROLL, Inhell ? G_HELL : G_NOHELL));
+			else if (i > 75)	return(mkclass(S_CENTAUR, Inhell ? G_HELL : G_NOHELL));
+			else if (i > 60)	return(mkclass(S_ORC, Inhell ? G_HELL : G_NOHELL));
+			else if (i > 45)	return(&mons[PM_BUGBEAR]);
+			else if (i > 30)	return(&mons[PM_HOBGOBLIN]);
+			else if (i > 15)	return(mkclass(S_GNOME, Inhell ? G_HELL : G_NOHELL));
+			else			return(mkclass(S_KOBOLD, Inhell ? G_HELL : G_NOHELL));
+		break;
+	}
 }
 
 struct permonst *

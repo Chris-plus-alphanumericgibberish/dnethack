@@ -1644,7 +1644,7 @@ gotit:
 		    (void) add_to_container(coffers, goldob);
 		    coffers->owt = weight(coffers);
 		} else {
-		    struct monst *mon = makemon(courtmon(),
+		    struct monst *mon = makemon(courtmon(0),
 					    u.ux, u.uy, NO_MM_FLAGS);
 		    if (mon) {
 #ifndef GOLDOBJ

@@ -36,8 +36,6 @@ int curhouse = 0;
 
 #define m_initsgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 3)
 #define m_initlgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 10)
-#define toostrong(monindx, lev) (monstr[monindx] > lev)
-#define tooweak(monindx, lev)	(monstr[monindx] < lev)
 
 #ifdef OVLB
 boolean
