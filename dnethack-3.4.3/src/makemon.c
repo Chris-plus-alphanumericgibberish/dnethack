@@ -23,6 +23,7 @@ struct monst zeromonst;
 STATIC_DCL boolean FDECL(uncommon, (int));
 STATIC_DCL int FDECL(align_shift, (struct permonst *));
 #endif /* OVL0 */
+STATIC_DCL struct permonst * NDECL(roguemonst);
 STATIC_DCL boolean FDECL(wrong_elem_type, (struct permonst *));
 STATIC_DCL void FDECL(m_initthrow,(struct monst *,int,int));
 STATIC_DCL void FDECL(m_initweap,(struct monst *));
@@ -5105,6 +5106,54 @@ static NEARDATA struct {
 								   small amount of memory seems outdated */
 } rndmonst_state = { -1, {0} };
 
+static int roguemons[] = {
+	/*A*/
+	PM_BAT,
+	PM_PLAINS_CENTAUR,
+	PM_RED_DRAGON,
+	PM_STALKER,
+	PM_LICHEN,
+	PM_GNOME,
+	/*H*/
+	/*I(stalker, above)*/
+	PM_JABBERWOCK,
+	/*K*/
+	/*L*/
+	/*M*/
+	/*N*/
+	PM_OGRE,
+	/*P*/
+	/*Q*/
+	PM_RUST_MONSTER,
+	PM_PIT_VIPER,
+	PM_TROLL,
+	PM_UMBER_HULK,
+	PM_VAMPIRE,
+	PM_WRAITH,
+	PM_XORN,
+	PM_YETI,
+	PM_HUMAN_ZOMBIE
+};
+
+STATIC_OVL
+struct permonst *
+roguemonst()
+{
+	int mn, tries=0;
+	int zlevel, minmlev, maxmlev;
+	
+	zlevel = level_difficulty();
+	/* determine the level of the weakest monster to make. */
+	if(u.uevent.udemigod) minmlev = zlevel / 3;
+	else minmlev = zlevel / 6;
+	/* determine the level of the strongest monster to make. */
+	maxmlev = (zlevel + u.ulevel) / 2;
+	
+	do mn = roguemons[rn2(SIZE(roguemons))];
+	while(tooweak(mn, minmlev) || toostrong(mn,maxmlev) || tries++ > 40);
+	return &mons[mn];
+}
+
 /* select a random monster type */
 struct permonst *
 rndmonst()
@@ -5355,13 +5404,12 @@ rndmonst()
 			}
 		}
 	}
+	if(Is_rogue_level(&u.uz))
+		return roguemonst();
 
 	if (rndmonst_state.choice_count < 0) {	/* need to recalculate */
 	    int zlevel, minmlev, maxmlev;
 	    boolean elemlevel;
-#ifdef REINCARNATION
-	    boolean upper;
-#endif
 
 	    rndmonst_state.choice_count = 0;
 	    /* look for first common monster */
@@ -5381,9 +5429,6 @@ rndmonst()
 	    minmlev = zlevel / 6;
 	    /* determine the level of the strongest monster to make. */
 	    maxmlev = (zlevel + u.ulevel) / 2;
-#ifdef REINCARNATION
-	    upper = Is_rogue_level(&u.uz);
-#endif
 	    elemlevel = In_endgame(&u.uz) && !Is_astralevel(&u.uz);
 
 /*
@@ -5395,9 +5440,6 @@ rndmonst()
 		rndmonst_state.mchoices[mndx] = 0;
 		if (tooweak(mndx, minmlev) || toostrong(mndx, maxmlev))
 		    continue;
-#ifdef REINCARNATION
-		if (upper && !isupper(def_monsyms[(int)(ptr->mlet)])) continue;
-#endif
 		if (elemlevel && wrong_elem_type(ptr)) continue;
 		if (uncommon(mndx)) continue;
 		if (Inhell && (ptr->geno & G_NOHELL)) continue;
