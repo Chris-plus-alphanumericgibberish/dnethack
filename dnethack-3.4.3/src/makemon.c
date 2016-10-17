@@ -5949,16 +5949,17 @@ register struct permonst *ptr;
 	
 	if(ual == A_VOID) return FALSE;
 	
-	if ((mndx <= PM_QUINON && mndx >= PM_MONOTON) && sgn(mal) == sgn(ual)){
-		if(!(u.uevent.uaxus_foe)){
+	if (((mndx <= PM_QUINON && mndx >= PM_MONOTON) || mndx == PM_AXUS) && sgn(mal) == sgn(ual)){
+		if(!(u.uevent.uaxus_foe) && u.ualign.record >= 10){
 			return TRUE;
 		} else return FALSE;
 	}
-	if (mndx==PM_APOLLYON && sgn(mal) == sgn(ual)) return TRUE;
+	if (mndx==PM_APOLLYON && u.ualign.record >= 0 && sgn(mal) == sgn(ual)) return TRUE;
+	if (mndx==PM_OONA && u.ualign.record >= 20 && u.ualign.sins < 10 && sgn(mal) == sgn(ual)) return TRUE;
 	if (always_hostile(ptr) && 
 		(u.uz.dnum != law_dnum || !is_social_insect(ptr)
 		|| (!on_level(&arcadia1_level,&u.uz) && !on_level(&arcadia2_level,&u.uz) && !on_level(&arcadia3_level,&u.uz) && !on_level(&arcward_level,&u.uz))
-		) && (!is_vampire(ptr) || maybe_polyd(!is_vampire(youmonst.data), !Race_if(PM_VAMPIRE)))
+		) && (!is_vampire(ptr) || !is_vampire(youracedata))
 		) return FALSE;
 
 	if(Role_if(PM_VALKYRIE) && (mndx==PM_CROW || mndx==PM_RAVEN)) return TRUE;
