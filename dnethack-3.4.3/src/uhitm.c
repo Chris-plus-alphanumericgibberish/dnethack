@@ -4016,7 +4016,7 @@ uchar aatyp, adtyp;
 	char	 buf[BUFSZ];
 	
 	/* Otiax's mist tendrils don't bring you into contact. */
-	if(aatyp == AT_WISP) return (malive | mhit);
+	if(aatyp == AT_WISP || aatyp == AT_SHDW) return (malive | mhit);
 	
 	if(u.sealsActive&SEAL_IRIS && !Blind && canseemon(mon) && !Invisible
 		&& maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))
