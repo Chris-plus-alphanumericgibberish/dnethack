@@ -2712,7 +2712,8 @@ boolean was_swallowed;			/* digestion */
 		u.uevent.ukilled_illurien = 1;
 		u.ill_cnt = rn1(1000, 250);
 	}
-	if (mdat == &mons[PM_VLAD_THE_IMPALER] || (mdat->mlet == S_LICH && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH])) {
+	if ((mdat->mlet == S_VAMPIRE && mdat->geno & G_UNIQ) || 
+		(mdat->mlet == S_LICH && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH])) {
 	    if (cansee(mon->mx, mon->my) && !was_swallowed)
 			pline("%s body crumbles into dust.", s_suffix(Monnam(mon)));
 	    if(mdat != &mons[PM_VECNA] && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH]) return FALSE; /*Vecna leaves his hand or eye*/
