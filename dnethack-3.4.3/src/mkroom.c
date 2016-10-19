@@ -82,7 +82,9 @@ mksepulcher()
 		for(i=-2;i<3;i++) for(j=-2;j<3;j++) if(!isok(x+i,y+j) || levl[x+i][y+j].typ >= CORR) okspot = FALSE;
 		if(okspot){
 			good = TRUE;
+			//Blank the inner area, to be safe
 			for(i=-1;i<2;i++) for(j=-1;j<2;j++) levl[x+i][y+j].typ = STONE;
+			//Make outer area walled
 			levl[x+2][y+2].typ = BRCORNER;
 			levl[x-2][y+2].typ = BLCORNER;
 			for(i=-1;i<2;i++) levl[x+i][y+2].typ = HWALL;
@@ -91,7 +93,17 @@ mksepulcher()
 			for(i=-1;i<2;i++) levl[x-2][y+i].typ = VWALL;
 			levl[x+2][y-2].typ = TRCORNER;
 			levl[x-2][y-2].typ = TLCORNER;
-			levl[x][y].typ = ROOM;
+			//Make the inner area walled also
+			levl[x+1][y+1].typ = BRCORNER;
+			levl[x-1][y+1].typ = BLCORNER;
+			levl[x+0][y+1].typ = HWALL;
+			levl[x+0][y-1].typ = HWALL;
+			levl[x+1][y+0].typ = VWALL;
+			levl[x-1][y+0].typ = VWALL;
+			levl[x+1][y-1].typ = TRCORNER;
+			levl[x-1][y-1].typ = TLCORNER;
+			//Make the center spot empty
+			levl[x][y].typ = CORR;
 			for(i=-2;i<3;i++) {
 				for(j=-2;j<3;j++) {
 					levl[x+i][y+j].lit = 0;
@@ -127,6 +139,16 @@ mklolthsepulcher()
 			for(i=-1;i<2;i++) levl[x-2][y+i].typ = VWALL;
 			levl[x+2][y-2].typ = TRCORNER;
 			levl[x-2][y-2].typ = TLCORNER;
+			
+			levl[x+1][y+1].typ = BRCORNER;
+			levl[x-1][y+1].typ = BLCORNER;
+			levl[x+0][y+1].typ = HWALL;
+			levl[x+0][y-1].typ = HWALL;
+			levl[x+1][y+0].typ = VWALL;
+			levl[x-1][y+0].typ = VWALL;
+			levl[x+1][y-1].typ = TRCORNER;
+			levl[x-1][y-1].typ = TLCORNER;
+			
 			levl[x][y].typ = CORR;
 			for(i=-2;i<3;i++) {
 				for(j=-2;j<3;j++) {
