@@ -5003,6 +5003,13 @@ register int	mmflags;
 	return(mtmp);
 }
 
+void
+set_curhouse(house)
+	int house;
+{
+	curhouse = house;
+}
+
 int
 mbirth_limit(mndx)
 int mndx;

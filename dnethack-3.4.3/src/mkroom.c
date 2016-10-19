@@ -1431,6 +1431,9 @@ struct mkroom *sroom;
 						mon->mpeaceful = 0;
 						set_malign(mon);
 					}
+					if(ctype == PM_DROW_MATRON || ctype == PM_EMBRACED_DROWESS){
+						set_curhouse(mon->mfaction);
+					}
 				}
 			}
 			else ctype = 0;
@@ -1457,6 +1460,17 @@ struct mkroom *sroom;
 	}
 	for(sx = sroom->lx; sx <= sroom->hx; sx++)
 	    for(sy = sroom->ly; sy <= sroom->hy; sy++) {
+		if(type == COURT){
+			if(ctype == PM_KOBOLD_LORD || ctype == PM_VAMPIRE_LORD || ctype == PM_DROW_MATRON ||
+				ctype == PM_EMBRACED_DROWESS || ctype == PM_DEEPEST_ONE || ctype == PM_ORC_OF_THE_AGES_OF_STARS
+			){
+				levl[tx][ty].lit = 0;
+				sroom->rlit = 0;
+			} else if(ctype != 0){
+				levl[tx][ty].lit = 1;
+				sroom->rlit = 1;
+			}
+		}
 		if(sroom->irregular) {
 		    if ((int) levl[sx][sy].roomno != rmno ||
 			  levl[sx][sy].edge ||
@@ -1579,6 +1593,7 @@ struct mkroom *sroom;
 		  level.flags.has_beehive = 1;
 		  break;
 	}
+	set_curhouse(0);
 }
 
 /* make a swarm of undead around mm */
@@ -2533,6 +2548,7 @@ courtmon(kingnum)
 		case PM_ELF:
 		case PM_ELVENKING:
 		case PM_ELVENQUEEN:
+			i = rnd(100);
 			if(i>95)
 				return &mons[PM_ELF_LORD];
 			else if(i>90)
@@ -2567,6 +2583,7 @@ courtmon(kingnum)
 		
 		case PM_DROW:
 		case PM_DROW_MATRON:
+			i = rnd(100);
 			if(i>90)
 				return &mons[PM_UNEARTHLY_DROW];
 			if(i>80)
@@ -2590,6 +2607,7 @@ courtmon(kingnum)
 		break;
 		
 		case PM_EMBRACED_DROWESS:
+			i = rnd(100);
 			if(i>95)
 				return &mons[PM_DROW_ALIENIST];
 			else if(i>90)
