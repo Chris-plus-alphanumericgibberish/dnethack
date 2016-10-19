@@ -389,6 +389,7 @@ E char *FDECL(mon_nam, (struct monst *));
 E const char *FDECL(sheheit, (struct monst *));
 E const char *FDECL(SheHeIt, (struct monst *));
 E char *FDECL(noit_mon_nam, (struct monst *));
+E char *FDECL(noit_nohalu_mon_nam, (struct monst *));
 E char *FDECL(Monnam, (struct monst *));
 E char *FDECL(noit_Monnam, (struct monst *));
 E char *FDECL(m_monnam, (struct monst *));

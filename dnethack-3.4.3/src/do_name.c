@@ -1151,6 +1151,19 @@ register struct monst *mtmp;
 		    SUPPRESS_IT, FALSE));
 }
 
+/* print the name as if mon_nam() was called, but assume that the player
+ * can always see the monster and is not hallucinating--used for 
+ * printing monster name to livelog in dNAO
+ */
+char *
+noit_nohalu_mon_nam(mtmp)
+register struct monst *mtmp;
+{
+	return(x_monnam(mtmp, ARTICLE_THE, (char *)0,
+		mtmp->mnamelth ? (SUPPRESS_SADDLE|SUPPRESS_IT|SUPPRESS_HALLUCINATION) :
+		    SUPPRESS_IT|SUPPRESS_HALLUCINATION, FALSE));
+}
+
 char *
 Monnam(mtmp)
 register struct monst *mtmp;
