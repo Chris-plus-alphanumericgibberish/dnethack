@@ -52,7 +52,7 @@ register struct permonst *ptr;
 		case PM_ACID_PARAELEMENTAL: return Is_earthlevel(&u.uz);
 		case PM_WATER_ELEMENTAL: return Is_waterlevel(&u.uz);
 		case PM_ICE_PARAELEMENTAL: return Is_waterlevel(&u.uz);
-	    }
+		}
 	return FALSE;
 }
 
