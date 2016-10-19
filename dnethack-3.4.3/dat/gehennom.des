@@ -3224,9 +3224,9 @@ MONSTER:'&',"balrog",place[3], asleep
 MONSTER:'&',"balrog",place[3], asleep
 
 
+TRAP:"statue", place[4]
 CONTAINER:   '`', "statue" ,place[4], cursed, "Shaktari", 1
 OBJECT:')', "flail", contained, cursed, 3, "Sting of the Poison Queen"
-TRAP:"statue", place[4]
 MONSTER:'S',"python", place[4]
 MONSTER:'S',"cobra", place[4]
 MONSTER:'S',"python", place[4]
