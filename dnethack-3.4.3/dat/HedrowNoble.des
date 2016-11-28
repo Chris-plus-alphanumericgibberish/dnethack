@@ -336,6 +336,55 @@ GEOMETRY:center,center
 #0         1         2         3         4         5         6         7     
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
+0                                         |                                  
+1                                         |        --------------------------
+2                                         |.       |.......|....|...|...|...|
+3                                         |..      |.......|....|...|...|...|
+4                                         |...     |.......|....|...|...|...|
+5                                         |....    |...|-+-|-+----+-|-+---+-|
+6                                         |.....   |...|...|        |.......|
+7                                         |......  |...|...|        |-------|
+8                                         |....... |...|...|        |...|...|
+9                                         |........+...|---|        |...|...|
+0                                         |....... |-F+|...|        |...|...|
+1                                         |......  |...|...|        |-+---+-|
+2                                         |.....   |...|...|        |.......|
+3                                         |....    |...|...|        |-----+-|
+4                                         |...     |-------|+-----+-|   |...|
+5                                         |..      |.......+.|......|   |...|
+6                                         |.       |-+-----|.|..\...|   |...|
+7                                         |        |...|...+.|......|   |...|
+8                                         |        |...|...|-----------------
+9                                         |        |---|---|                 
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+MONSTER: '@', "hedrow warrior", random, hostile
+
+MONSTER: '@', "hedrow blademaster", random, hostile
+MONSTER: '@', "hedrow wizard", random, hostile
+MONSTER: '@', "hedrow wizard", random, hostile
+MONSTER: '@', "hedrow wizard", random, hostile
+MONSTER: '@', "hedrow wizard", random, hostile
+MONSTER: '@', "hedrow wizard", random, hostile
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
 0          ...........             .......|                                  
 1      .................         .........|        --------------------------
 2   .... .............        ............|.       |.......|....|...|...|...|
@@ -379,7 +428,7 @@ DOOR:closed,(67,06)
 DOOR:closed,(67,12)
 DOOR:closed,(69,05)
 DOOR:closed,(69,11)
-DOOR:closed,(69,13)
+DOOR:locked,(69,13)
 DOOR:closed,(73,05)
 DOOR:closed,(73,11)
 DOOR:closed,(73,13)
