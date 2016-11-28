@@ -149,7 +149,7 @@ STATIC_OVL struct Jitem ObscureJapanese_items[] = {
 	{ HELMET, "kabuto" },
 	{ KNIFE, "shito" },
 	{ LANCE, "uma-yari" },
-	{ LEATHER_GLOVES, "yugake" },
+	{ GLOVES, "yugake" },
 	{ LOCK_PICK, "osaku" },
 	{ LONG_SWORD, "chokuto" },
 	{ PLATE_MAIL, "o-yoroi" },
@@ -159,8 +159,6 @@ STATIC_OVL struct Jitem ObscureJapanese_items[] = {
 	{ SHURIKEN, "hira-shuriken" },
 	{ SPEAR, "yari" },
 	{ SPLINT_MAIL, "dou-maru" },
-	{ SILVER_DAGGER, "jade-hilted kunai" },
-	{ SILVER_SPEAR, "jade-set yari" },
 	{ TRIDENT, "magari yari" },
 	{ TWO_HANDED_SWORD, "no-dachi" },
 	{ WAR_HAMMER, "dai tsuchi" },
@@ -184,14 +182,13 @@ STATIC_OVL struct Jitem Japanese_items[] = {
 	{ GLAIVE, "naginata" },
 	{ HELMET, "kabuto" },
 	{ KNIFE, "shito" },
-	{ LEATHER_GLOVES, "yugake" },
+	{ GLOVES, "yugake" },
 	{ LOCK_PICK, "osaku" },
 	{ POT_BOOZE, "sake" },
 	{ QUARTERSTAFF, "bo staff" },
 	{ SHORT_SWORD, "wakizashi" },
 	{ SHURIKEN, "hira-shuriken" },
 	{ SPLINT_MAIL, "dou-maru" },
-	{ SILVER_DAGGER, "silver kunai" },
 	{ WOODEN_HARP, "koto" },
 	{0, "" }
 };
@@ -451,6 +448,80 @@ register struct obj *obj;
 		else if(obj->objsize == MZ_HUGE) Strcat(buf, "huge ");
 		else if(obj->objsize == MZ_GIGANTIC) Strcat(buf, "gigantic ");
 	}
+	if(obj->obj_material != objects[obj->otyp].oc_material && !(obj->oartifact && obj->known) && !(is_lightsaber(obj) && obj->lamplit)){
+		switch(obj->obj_material){
+			case LIQUID: /*Wut?*/
+				Strcat(buf, "liquid ");
+			break;
+			case WAX:
+				Strcat(buf, "wax ");
+			break;
+			case VEGGY:
+				Strcat(buf, "straw ");
+			break;
+			case FLESH:
+				Strcat(buf, "flesh ");
+			break;
+			case PAPER:
+				Strcat(buf, "paper ");
+			break;
+			case CLOTH:
+				Strcat(buf, "cloth ");
+			break;
+			case LEATHER:
+				Strcat(buf, "leather ");
+			break;
+			case WOOD:
+				Strcat(buf, "wooden ");
+			break;
+			case BONE:
+				Strcat(buf, "bone ");
+			break;
+			case DRAGON_HIDE:
+				Strcat(buf, "dragon-scale ");
+			break;
+			case IRON:
+				if(obj->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) Strcat(buf, "steel ");
+				else Strcat(buf, "iron ");
+			break;
+			case METAL:
+				Strcat(buf, "metalic ");
+			break;
+			case COPPER:
+				Strcat(buf, "bronze ");
+			break;
+			case SILVER:
+				Strcat(buf, "silver ");
+			break;
+			case GOLD:
+				Strcat(buf, "golden ");
+			break;
+			case PLATINUM:
+				Strcat(buf, "platinum ");
+			break;
+			case MITHRIL:
+				Strcat(buf, "mithril ");
+			break;
+			case PLASTIC:
+				Strcat(buf, "plastic ");
+			break;
+			case GLASS:
+				Strcat(buf, "glass ");
+			break;
+			case GEMSTONE:
+				Strcat(buf, "gem ");
+			break;
+			case MINERAL:
+				Strcat(buf, "stone ");
+			break;
+			case OBSIDIAN_MT:
+				Strcat(buf, "obsidian ");
+			break;
+			case SHADOWSTUFF:
+				Strcat(buf, "black ");
+			break;
+		}
+	}
 	switch (obj->oclass) {
 	    case AMULET_CLASS:
 		if (!obj->dknown)
@@ -475,7 +546,7 @@ register struct obj *obj;
 			if(obj->opoisoned & OPOISON_PARAL) Strcat(buf, "envenomed ");
 			if(obj->opoisoned & OPOISON_AMNES) Strcat(buf, "lethe-rusted ");
 		}
-		if(objects[(obj)->otyp].oc_material == WOOD && obj->ovar1) Strcat(buf, "carved ");
+		if((obj)->obj_material == WOOD && obj->otyp != MOON_AXE && obj->ovar1) Strcat(buf, "carved ");
 		if(obj->otyp == MOON_AXE && nn){
 			switch(obj->ovar1){
 				case ECLIPSE_MOON:
@@ -2001,8 +2072,7 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 	{ "horn",	TOOL_CLASS,   TOOLED_HORN,    HORN_OF_PLENTY },
 	{ "shield",	ARMOR_CLASS,  BUCKLER,   SHIELD_OF_REFLECTION },
 	{ "helm",	ARMOR_CLASS,  LEATHER_HELM, HELM_OF_TELEPATHY },
-	{ "gloves",	ARMOR_CLASS,  LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY },
-	{ "gauntlets",	ARMOR_CLASS,  LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY },
+	{ "gauntlets",	ARMOR_CLASS,  GLOVES, GAUNTLETS_OF_DEXTERITY },
 	{ "boots",	ARMOR_CLASS,  LOW_BOOTS,      FLYING_BOOTS },
 	{ "shoes",	ARMOR_CLASS,  LOW_BOOTS,      IRON_SHOES },
 	{ "cloak",	ARMOR_CLASS,  MUMMY_WRAPPING, CLOAK_OF_DISPLACEMENT },
@@ -2233,8 +2303,8 @@ struct alt_spellings {
 } spellings[] = {
 	{ "pickax", PICK_AXE },
 	{ "whip", BULLWHIP },
-	{ "saber", SILVER_SABER },
-	{ "silver sabre", SILVER_SABER },
+	{ "saber", SABER },
+	{ "sabre", SABER },
 	{ "smooth shield", SHIELD_OF_REFLECTION },
 	{ "grey dragon scale shield", GRAY_DRAGON_SCALE_SHIELD },
 	{ "grey dragon scale mail", GRAY_DRAGON_SCALE_MAIL },
@@ -2295,7 +2365,7 @@ struct alt_spellings {
 	{ "sugegasa", SEDGE_HAT },
 	{ "jingasa", WAR_HAT },
 	{ "uma-yari", LANCE },
-	{ "yugake", LEATHER_GLOVES },
+	{ "yugake", GLOVES },
 	{ "osaku", LOCK_PICK },
 	{ "chokuto", LONG_SWORD },
 	{ "o-yoroi", PLATE_MAIL },
@@ -2305,8 +2375,6 @@ struct alt_spellings {
 	{ "hira-shuriken", SHURIKEN },
 	{ "yari", SPEAR },
 	{ "dou-maru", SPLINT_MAIL },
-	{ "jade-hilted kunai", SILVER_DAGGER },
-	{ "jade-set yari", SILVER_SPEAR },
 	{ "magari yari", TRIDENT },
 	{ "no-dachi", TWO_HANDED_SWORD },
 	{ "dai tsuchi", WAR_HAMMER },
@@ -2350,7 +2418,7 @@ boolean from_user;
 	register struct obj *otmp;
 	int cnt, spe, spesgn, typ, very, rechrg;
 	int blessed, uncursed, iscursed, ispoisoned, isgreased, isdrained, stolen;
-	int moonphase = -1;
+	int moonphase = -1, mat = 0;
 	int eroded, eroded2, eroded3, erodeproof;
 #ifdef INVISIBLE_OBJECTS
 	int isinvisible;
@@ -2611,6 +2679,45 @@ boolean from_user;
 			moonphase = GIBBOUS_MOON;
 		} else if (!strncmpi(bp, "full ", l=5) && strncmpi(bp, "full healing", 12)) {
 			moonphase = FULL_MOON;
+		} else if (!strncmpi(bp, "iron ", l=5) && strncmpi(bp, "iron skull cap", 14)
+			&& strncmpi(bp, "iron gauntlets", 14) && strncmpi(bp, "iron shoes", 10)
+			&& strncmpi(bp, "iron ring", 9) && strncmpi(bp, "iron hook", 9) && strncmpi(bp, "iron wand", 9)
+			&& strncmpi(bp, "iron wand", 9) && strncmpi(bp, "iron bands", 10)
+			&& strncmpi(bp, "Iron Ball of Levitation", 23) && strncmpi(bp, "Iron Spoon of Liberation", 24)
+		) {
+			mat = IRON;
+		} else if (!strncmpi(bp, "bronze ", l=7)
+			&& strncmpi(bp, "bronze helm", 11) && strncmpi(bp, "bronze plate mail", 17)
+			&& strncmpi(bp, "bronze roundshield", 18) && strncmpi(bp, "bronze gauntlets", 16)
+			&& strncmpi(bp, "bronze boots", 12) && strncmpi(bp, "bronze ring", 11)
+			&& strncmpi(bp, "bronze spellbook", 16)
+		) {
+			mat = COPPER;
+		} else if (!strncmpi(bp, "silver ", l=7)
+			&& strncmpi(bp, "silver arrow", 12) && strncmpi(bp, "silver bullet", 13)
+			&& strncmpi(bp, "silver pellet", 13) && strncmpi(bp, "silver dragon", 13)
+			&& strncmpi(bp, "silver clothes", 14) && strncmpi(bp, "silver ring", 11)
+			&& strncmpi(bp, "silver bell", 11) && strncmpi(bp, "silver spellbook", 16)
+			&& strncmpi(bp, "silver wand", 11) && strncmpi(bp, "silver slingstone", 17)
+			&& strncmpi(bp, "silver stone", 12) && strncmpi(bp, "Silver Key", 10)
+			&& strncmpi(bp, "Silver Starlight", 16)
+		) {
+			mat = SILVER;
+		} else if ((!strncmpi(bp, "golden ", l=7) || !strncmpi(bp, "gold ", l=5))
+			&& strncmpi(bp, "golden arrow", 12) && strncmpi(bp, "gold ring", 9)
+			&& strncmpi(bp, "golden slingstone", 17) && strncmpi(bp, "gold detection", 14)
+			&& strncmpi(bp, "golden scroll", 13) && strncmpi(bp, "Gold Scroll of Law", 18)
+			&& strncmpi(bp, "gold wand", 9) && strncmpi(bp, "gold piece", 10)
+			&& strncmpi(bp, "gold coin", 9) && strncmpi(bp, "Golden Sword of Y'ha-Talla", 26)
+		) {
+			mat = GOLD;
+		} else if (!strncmpi(bp, "platinum ", l=9)
+			&& strncmpi(bp, "platinum wand", 13) && strncmpi(bp, "Platinum Yendorian", 18)
+			&& strncmpi(bp, "Platinum Dragon", 15)
+		) {
+			mat = PLATINUM;
+		} else if (!strncmpi(bp, "mithril ", l=8)) {
+			mat = MITHRIL;
 		} else break;
 		bp += l;
 	}
@@ -3447,9 +3554,12 @@ typfnd:
 			/* Dragon mail - depends on the order of objects */
 			/*		 & dragons.			 */
 			if (mntmp >= PM_GRAY_DRAGON &&
-						mntmp <= PM_YELLOW_DRAGON)
+				mntmp <= PM_YELLOW_DRAGON
+			){
 			    otmp->otyp = GRAY_DRAGON_SCALE_MAIL +
 						    mntmp - PM_GRAY_DRAGON;
+				otmp->obj_material = objects[otmp->otyp].oc_material;
+			}
 			break;
 		case KITE_SHIELD:
 			/* Dragon shield - depends on the order of objects */
@@ -3650,6 +3760,11 @@ typfnd:
 	    pline("For a moment, you feel %s in your %s, but it disappears!",
 		  something,
 		  makeplural(body_part(HAND)));
+	}
+	
+	/* set material */
+	if(otmp->oclass == WEAPON_CLASS && !is_ammo(otmp) && mat && !otmp->oartifact){
+		otmp->obj_material = mat;
 	}
 	
 	if (halfeaten && otmp->oclass == FOOD_CLASS) {

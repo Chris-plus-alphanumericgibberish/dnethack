@@ -52,8 +52,9 @@ OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
-OBJECT[50%]:')',"silver dagger", random
-OBJECT[10%]:')',"silver saber", random
+OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'"',random,random
+OBJECT[30%]:')',"saber", random
 OBJECT:'=',random,random
 OBJECT:'=',random,random
 # the missing magic lamp!
@@ -228,10 +229,10 @@ OBJECT:'*',random,contained
 OBJECT:'*',random,contained
 OBJECT:'*',random,contained
 OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'"',random,random
 OBJECT:'=',random,contained
 OBJECT:'=',random,contained
-OBJECT[50%]:')',"silver dagger", contained
-OBJECT[10%]:')',"silver saber", contained
+OBJECT[30%]:')',"saber", contained
 OBJECT:'(',"magic lamp",contained
 OBJECT:'(',"oil lamp",contained
 
@@ -395,11 +396,11 @@ OBJECT:')',random,random
 OBJECT:')',random,random
 OBJECT:')',random,random
 OBJECT:')',random,random
+OBJECT:'"',"amulet of magical breathing",random
 OBJECT:'"',random,random
 OBJECT:'=',random,random
 OBJECT:'=',random,random
-OBJECT[50%]:')',"silver dagger", random
-OBJECT[10%]:')',"silver saber", random
+OBJECT[30%]:')',"saber", random
 OBJECT:'(',"magic lamp",random
 
 MONSTER: 'h',"deep one",random,hostile
@@ -510,10 +511,10 @@ OBJECT:'*',random,contained
 OBJECT:'*',random,contained
 OBJECT:'*',random,contained
 OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'"',random,contained
 OBJECT:'=',random,contained
 OBJECT:'=',random,contained
-OBJECT[50%]:')',"silver dagger", contained
-OBJECT[10%]:')',"silver saber", contained
+OBJECT[30%]:')',"saber", contained
 OBJECT:'(',"magic lamp",contained
 OBJECT:'(',"oil lamp",contained
 

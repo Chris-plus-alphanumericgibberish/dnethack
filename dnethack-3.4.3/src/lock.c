@@ -178,7 +178,7 @@ forcelock()	/* try to force a locked chest */
 	
 	if(xlock.picktyp == 1) {	/* blade */
 
-	    if((objects[uwep->otyp].oc_material == GLASS || (rn2(1000-(int)uwep->spe) > (992-greatest_erosion(uwep)*10) &&
+	    if((uwep->obj_material == GLASS || (rn2(1000-(int)uwep->spe) > (992-greatest_erosion(uwep)*10) &&
 	       !uwep->cursed)) && !uwep->oartifact) {
 		/* for a +0 weapon, probability that it survives an unsuccessful
 		 * attempt to force the lock is (.992)^50 = .67
@@ -1186,7 +1186,7 @@ struct obj *otmp;
 	Blinded = 1;
 	thing = singular(otmp, xname);
 	Blinded = save_Blinded;
-	switch (objects[otmp->otyp].oc_material) {
+	switch (otmp->obj_material) {
 	case PAPER:	disposition = "is torn to shreds";
 		break;
 	case WAX:	disposition = "is crushed";

@@ -54,7 +54,7 @@ struct objclass {
 #define DRAGON_HIDE	10	/* not leather! */
 #define IRON		11	/* Fe - includes steel */
 #define METAL		12	/* Sn, &c. */
-#define COPPER		13	/* Cu - includes brass */
+#define COPPER		13	/* Cu - includes brass and bronze*/
 #define SILVER		14	/* Ag */
 #define GOLD		15	/* Au */
 #define PLATINUM	16	/* Pt */
@@ -63,18 +63,20 @@ struct objclass {
 #define GLASS		19
 #define GEMSTONE	20
 #define MINERAL		21
+#define OBSIDIAN_MT	22
+#define SHADOWSTUFF	23
 
-#define is_organic(otmp)	(objects[(otmp)->otyp].oc_material <= WOOD)
-#define is_metallic(otmp)	(objects[(otmp)->otyp].oc_material >= IRON && \
-				 objects[(otmp)->otyp].oc_material <= MITHRIL)
-#define is_hard(otmp)	(objects[(otmp)->otyp].oc_material >= WOOD)
+#define is_organic(otmp)	((otmp)->obj_material <= WOOD)
+#define is_metallic(otmp)	((otmp)->obj_material >= IRON && \
+				 (otmp)->obj_material <= MITHRIL)
+#define is_hard(otmp)	((otmp)->obj_material >= WOOD)
 
 /* primary damage: fire/rust/--- */
 /* is_flammable(otmp), is_rottable(otmp) in mkobj.c */
-#define is_rustprone(otmp)	(objects[otmp->otyp].oc_material == IRON)
+#define is_rustprone(otmp)	((otmp)->obj_material == IRON)
 
 /* secondary damage: rot/acid/acid */
-#define is_corrodeable(otmp)	(objects[otmp->otyp].oc_material == COPPER || objects[otmp->otyp].oc_material == IRON)
+#define is_corrodeable(otmp)	((otmp)->obj_material == COPPER || (otmp)->obj_material == IRON)
 
 #define is_evaporable(otmp)	(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == DROVEN_HELM || otmp->otyp == NOBLE_S_DRESS)
 

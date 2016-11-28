@@ -100,7 +100,7 @@ boolean burn;
 			return -1;
 		}
 
-		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj)) &&
+		if (obj && (obj->obj_material == SILVER || arti_silvered(obj)) &&
 				!(is_lightsaber(obj) && obj->lamplit) &&
 				!(u.sealsActive&SEAL_EDEN)
 				&& hates_silver(youracedata)) {
@@ -108,14 +108,14 @@ boolean burn;
 			pline_The("silver sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
-		if (obj && (objects[obj->otyp].oc_material == IRON) &&
+		if (obj && (obj->obj_material == IRON) &&
 				!(is_lightsaber(obj) && obj->lamplit)
 				&& hates_iron(youracedata)) {
 			// dam += rnd(20);
 			pline_The("cold-iron sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
-		if (obj && (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))
+		if (obj && (obj->obj_material == SILVER || arti_silvered(obj))
 				&& hates_unholy(youracedata)) {
 			// dam += rnd(20);
 			pline_The("curse sears your flesh!");
@@ -366,7 +366,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_AMNES;
 			}
 	    }
-	    if ( (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
+	    if ( (otmp->obj_material == SILVER || arti_silvered(otmp)) &&
 			!(is_lightsaber(otmp) && otmp->lamplit) &&
 		    hates_silver(mtmp->data)
 		) {
@@ -374,7 +374,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 					s_suffix(mon_nam(mtmp)));
 			else if (verbose) pline("Its flesh is seared!");
 	    }
-	    if ( (objects[otmp->otyp].oc_material == IRON) &&
+	    if ( (otmp->obj_material == IRON) &&
 			!(is_lightsaber(otmp) && otmp->lamplit) &&
 		    hates_iron(mtmp->data)
 		) {
@@ -583,7 +583,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			if(cansee(bhitpos.x+dx,bhitpos.y+dy)) pline("The %s cuts through the bars!", xname(singleobj));
 			levl[bhitpos.x][bhitpos.y].typ = CORR;
 			for(numbars = d(2,4)-1; numbars > 0; numbars--){
-				otmp = mksobj_at(IRON_BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
+				otmp = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
 				otmp->spe = 0;
 				otmp->cursed = obj->blessed = FALSE;
 			}
@@ -906,7 +906,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 				if(cansee(bhitpos.x+dx,bhitpos.y+dy)) pline("The %s cuts through the bars!", xname(singleobj));
 				levl[bhitpos.x][bhitpos.y].typ = CORR;
 				for(numbars = d(2,4)-1; numbars > 0; numbars--){
-					otmp = mksobj_at(IRON_BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
+					otmp = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
 					otmp->spe = 0;
 					otmp->cursed = obj->blessed = FALSE;
 				}
@@ -2023,8 +2023,8 @@ int whodidit;	/* 1==hero, 0=other, -1==just check whether it'll pass thru */
 	else if (obj_type == BOULDER || obj_type == STATUE || obj_type == HEAVY_IRON_BALL)
 	    pline("Whang!");
 	else if (otmp->oclass == COIN_CLASS ||
-		objects[obj_type].oc_material == GOLD ||
-		objects[obj_type].oc_material == SILVER)
+		otmp->obj_material == GOLD ||
+		otmp->obj_material == SILVER)
 	    pline("Clink!");
 	else
 	    pline("Clonk!");

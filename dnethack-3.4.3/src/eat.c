@@ -160,7 +160,7 @@ struct obj *obj;
 	}
 	
 	if(etype == HELLFIRE_FURNACE && !(obj->oartifact)){
-		if(objects[obj->otyp].oc_material >= WAX && objects[obj->otyp].oc_material <= BONE 
+		if(obj->obj_material >= WAX && obj->obj_material <= BONE 
 #ifdef MAIL
 			&& obj->otyp != SCR_MAIL
 #endif
@@ -1822,7 +1822,6 @@ start_tin(otmp)		/* called when starting to open a tin */
 			tmp = 1;
 			break;
 		case DAGGER:
-		case SILVER_DAGGER:
 		case ELVEN_DAGGER:
 		case ORCISH_DAGGER:
 		case ATHAME:
@@ -2472,10 +2471,10 @@ register struct obj *otmp;
 {
 	if (otmp->oclass == FOOD_CLASS) return "food";
 	if (otmp->oclass == GEM_CLASS &&
-	    objects[otmp->otyp].oc_material == GLASS &&
+	    otmp->obj_material == GLASS &&
 	    otmp->dknown)
 		makeknown(otmp->otyp);
-	return foodwords[objects[otmp->otyp].oc_material];
+	return foodwords[otmp->obj_material];
 }
 
 STATIC_OVL void
@@ -2589,7 +2588,7 @@ struct obj *otmp;
 	     it_or_they[QBUFSZ], eat_it_anyway[QBUFSZ];
 	boolean cadaver = (otmp->otyp == CORPSE),
 		stoneorslime = FALSE;
-	int material = objects[otmp->otyp].oc_material,
+	int material = otmp->obj_material,
 	    mnum = otmp->corpsenm;
 	long rotted = 0L;
 
@@ -3456,7 +3455,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    victual.nmod = basenutrit;
 	    victual.eating = TRUE; /* needed for lesshungry() */
 
-	    material = objects[otmp->otyp].oc_material;
+	    material = otmp->obj_material;
 	    if (material == LEATHER ||
 		material == EYEBALL || material == SEVERED_HAND ||
 		material == BONE || material == DRAGON_HIDE) {
@@ -3641,7 +3640,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	} else {
 	    /* No checks for WAX, LEATHER, BONE, DRAGON_HIDE.  These are
 	     * all handled in the != FOOD_CLASS case, above */
-	    switch (objects[otmp->otyp].oc_material) {
+	    switch (otmp->obj_material) {
 	    case FLESH:
 		u.uconduct.unvegan++;
 		if (otmp->otyp != EGG) {

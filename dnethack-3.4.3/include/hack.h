@@ -124,7 +124,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 					(Upolyd && youmonst.data == &mons[PM_SHARK] && has_blood((mon)->data) && \
 						(mon)->mhp < (mon)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mon)->mx, (mon)->my)) || \
 					(u.specialSealsActive&SEAL_ACERERAK && is_undead((mon)->data)) || \
-					(uwep && uwep->oclass == WEAPON_CLASS && objects[(uwep)->otyp].oc_material == WOOD && \
+					(uwep && uwep->oclass == WEAPON_CLASS && (uwep)->obj_material == WOOD && uwep->otyp != MOON_AXE &&\
 					 (uwep->ovar1 & WARD_THJOFASTAFUR) && ((mon)->data->mlet == S_LEPRECHAUN || (mon)->data->mlet == S_NYMPH || is_thief((mon)->data))) \
 				)
 #define MATCH_WARN_OF_MON_STRICT(mon)	( (Warn_of_mon && flags.warntypem && \

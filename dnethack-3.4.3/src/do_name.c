@@ -600,7 +600,33 @@ const char *name;
 		else if(obj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY) obj->objsize = MZ_LARGE;
 		else if(obj->oartifact == ART_COLD_SOUL) obj->objsize = MZ_LARGE;
 		else if(obj->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) obj->objsize = MZ_LARGE;
+		else if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default size
 		else obj->objsize = MZ_MEDIUM;
+		
+		if(obj->oartifact == ART_TROLLSBANE) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_VAMPIRE_KILLER) obj->obj_material = METAL;
+		else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) obj->obj_material = GOLD;
+		else if(obj->oartifact == ART_MIRROR_BRAND) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_SUNSWORD) obj->obj_material = GOLD;
+		else if(obj->oartifact == ART_SODE_NO_SHIRAYUKI) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_TOBIUME) obj->obj_material = METAL;
+		else if(obj->oartifact == ART_LANCE_OF_LONGINUS) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_BLADE_SINGER_S_SPEAR) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_BLADE_DANCER_S_DAGGER) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_QUICKSILVER) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_SKY_RENDER) obj->obj_material = METAL;
+		else if(obj->oartifact == ART_ROD_OF_SEVEN_PARTS) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_SILVER_STARLIGHT) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_RUINOUS_DESCENT_OF_STARS) obj->obj_material = METAL;
+		else if(obj->oartifact == ART_SICKLE_MOON) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_FIRE_OF_HEAVEN) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_THUNDER_S_VOICE) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_WRATH_OF_HEAVEN) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) obj->obj_material = METAL;
+		else if(obj->oartifact == ART_SCOURGE_OF_LOLTH) obj->obj_material = SILVER;
+		else if(obj->oartifact >= ART_SWORD_OF_ERATHAOL && obj->oartifact <= ART_HAMMER_OF_BARQUIEL) obj->obj_material = SILVER;
+		
 	    /* can't dual-wield with artifact as secondary weapon */
 	    if (obj == uswapwep) untwoweapon();
 	    /* activate warning if you've just named your weapon "Sting" */

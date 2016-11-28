@@ -2661,7 +2661,7 @@ dodip()
 	if (potion->otyp == POT_OIL) {
 	    boolean wisx = FALSE;
 	    if (potion->lamplit) {	/* burning */
-		int omat = objects[obj->otyp].oc_material;
+		int omat = obj->obj_material;
 		/* the code here should be merged with fire_damage */
 		if (catch_lit(obj)) {
 		    /* catch_lit does all the work if true */

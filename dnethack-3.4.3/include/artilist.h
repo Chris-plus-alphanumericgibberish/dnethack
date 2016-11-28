@@ -219,14 +219,14 @@ A("Gaia's Fate",			SICKLE,
 	0, A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
-A("Demonbane",			SILVER_SABER,
+A("Demonbane",			SABER,
 	(SPFX_RESTR|SPFX_CON_OR), SPFX_WARN, /* blocks summoning and is a silver saber. */
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_DEMON /*MA*/, 0 /*MV*/,
 	PHYS(10,20),	NO_DFNS,	NO_CARY,			/* Plus, demons are nasty. */
 	0, A_LAWFUL, NON_PM, NON_PM, 2500L, 
 	SPFX2_NOCALL,0,0),
 
-A("Werebane",			SILVER_SABER, /*Needs encyc entry*/
+A("Werebane",			SABER, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_CON_OR), SPFX_WARN, /* protects against lycathropy and is silver */
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_WERE|MA_DEMIHUMAN /*MA*/, 0 /*MV*/,
 	PHYS(10,20),	NO_DFNS,	NO_CARY,			/*works against many demihumans, including */
@@ -273,7 +273,7 @@ A("Trollsbane",			MORNING_STAR, //code early in attack petrifies trolls
 	S_TROLL /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, MG_REGEN /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(10,20),	NO_DFNS,	NO_CARY, /*Needs encyc entry*/
 	0, A_NONE, NON_PM, NON_PM, 2000L, 
-	SPFX2_SILVERED|SPFX2_BRIGHT,0,0),//Silvered
+	SPFX2_BRIGHT,0,0),//Also silver
 
 /*//////////First Gifts//////////*/
 //first gifts can be twoweaponed by their associated classes, look in obj.h
@@ -350,7 +350,7 @@ A("Magicbane",			ATHAME, /*Needs encyc entry*/
 
 /*//////////Double Damage Artifacts//////////*/
 
-A("Grayswandir",		SILVER_SABER,
+A("Grayswandir",		SABER,
 	(SPFX_RESTR|SPFX_HALRES|SPFX_WARN),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(1, 0),	NO_DFNS,	NO_CARY,	
@@ -371,7 +371,7 @@ A("Fire Brand",			LONG_SWORD,
 	0, A_NONE, NON_PM, NON_PM, 3000L, 
 	0,0,0),
 
-A("Gilded Sword of Y'ha-Talla",			SCIMITAR,
+A("Golden Sword of Y'ha-Talla",			SCIMITAR,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	DRST(5,0),	DRST(0,0),	NO_CARY,
@@ -383,7 +383,7 @@ A("Mirror Brand",	LONG_SWORD,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	STUN(1,0),	NO_DFNS,	NO_CARY,
 	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
-	SPFX2_SILVERED,0,0),
+	0,0,0),
 
 A("Sunsword",			LONG_SWORD,	
 	(SPFX_RESTR|SPFX_CON_OR|SPFX_SEARCH), 0,
@@ -448,7 +448,7 @@ A("Sode no Shirayuki",		KATANA,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	COLD(1,0),	COLD(0,0),	NO_CARY,  /*Sort of intermediate between a double damage and a utility weapon,*/
 	ICE_SHIKAI, A_LAWFUL, NON_PM, NON_PM, 8000L,/*Sode no Shirayuki gains x2 ice damage after using the third dance.*/
-	SPFX2_SILVERED,0,0), /*however, it only keeps it for a few rounds, and the other dances are attack magic. */
+	0,0,0), /*however, it only keeps it for a few rounds, and the other dances are attack magic. */
 
 A("Tobiume",		LONG_SWORD,
 	(SPFX_RESTR|SPFX_ATTK),0,
@@ -458,7 +458,7 @@ A("Tobiume",		LONG_SWORD,
 	SPFX2_DISARM|SPFX2_FIRE2|SPFX2_RAM2,0,0),/*Ram and Fire blast only trigger if enemy is low hp*/
 
 //A("Lancea Longini",			SILVER_SPEAR,
-A("The Lance of Longinus",			SILVER_SPEAR,
+A("The Lance of Longinus",			SPEAR,
 	(SPFX_RESTR|SPFX_HSPDAM|SPFX_HPHDAM|SPFX_DEFN|SPFX_REFLECT),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	NO_ATTK,	DFNS(AD_MAGM),	DRLI(0,0),
@@ -514,14 +514,14 @@ A("Helping Hand",			GRAPPLING_HOOK, /*Needs encyc entry*/
 	UNTRAP, A_LAWFUL, NON_PM, NON_PM, 2000L, 
 	SPFX2_STLTH,SPFX3_ENGRV,0),
 
-A("The Blade Singer's Spear",		SILVER_SPEAR, /*Needs encyc entry*/
+A("The Blade Singer's Spear",		SPEAR, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_DEFN),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(6,6),	NO_DFNS,	NO_CARY,
 	DANCE_DAGGER, A_NONE, NON_PM, NON_PM, 1500L, 
 	SPFX2_DANCER,0,0),
 
-A("The Blade Dancer's Dagger",		SILVER_DAGGER, /*Needs encyc entry*/
+A("The Blade Dancer's Dagger",		DAGGER, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_DEFN),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(4,4),	NO_DFNS,	NO_CARY,
@@ -568,7 +568,7 @@ A("Quicksilver",	FLAIL, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(4,8),	NO_DFNS,	NO_CARY,
 	FAST, A_NONE, NON_PM, NON_PM, 1200L,
-	SPFX2_SILVERED,0,0),
+	0,0,0),
 
 A("Sky Render",		KATANA, /*Needs encyc entry*/
 	SPFX_RESTR, SPFX_DISPL,
@@ -728,7 +728,7 @@ A("Hellrider's Saddle",			SADDLE,
 
 /*//////////Law Quest Artifacts//////////*/
 
-A("The Rod of Seven Parts",	SILVER_SPEAR, /*From D&D*/
+A("The Rod of Seven Parts",	SPEAR, /*From D&D*/
 	(SPFX_CON_OR|SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DALIGN|SPFX_DEFN), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,20),	DRLI(0,0),	NO_CARY,
@@ -910,7 +910,7 @@ A("Itlachiayaque", SHIELD_OF_REFLECTION,/*From archeologist patch*/
 	 SMOKE_CLOUD, A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
 	0,0,0),
 
-A("The Annulus", SILVER_CHAKRAM, /*Needs encyc entry*/
+A("The Annulus", CHAKRAM, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), (SPFX_HSPDAM),
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
      PHYS(5,1), NO_DFNS, CARY(AD_MAGM), /*Actually Phys(5,0) if not a lightsaber*/
@@ -966,7 +966,7 @@ A("Silver Starlight",		RAPIER, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(4,4),	NO_DFNS,	NO_CARY,
 	CREATE_AMMO, A_NONE, NON_PM, PM_DROW, 5000L, /*Creates throwing stars. Makes throwing stars count as silver if wielded */
-	SPFX2_SILVERED|SPFX2_SHINING,0,0),			/*Also can be (a)pplied as a magic flute.								  */
+	SPFX2_SHINING,0,0),			/*Also can be (a)pplied as a magic flute.								  */
 
 A("Wrathful Spider",		DROVEN_CROSSBOW, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
@@ -982,7 +982,7 @@ A("The Tentacle Rod",		FLAIL, /*Needs encyc entry*/
 	0, A_NONE, NON_PM, PM_DROW, 5000L,
 	SPFX2_TENTROD,0,0),
 
-A("The Crescent Blade",		SILVER_SABER, /*Needs encyc entry*/
+A("The Crescent Blade",		SABER, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_BEHEAD), SPFX_REFLECT,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	FIRE(4,0),	NO_DFNS,	NO_CARY,
@@ -1029,7 +1029,7 @@ A("The Claws of the Revenancer",		GAUNTLETS_OF_DEXTERITY, /* Drow crowning gift,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	DRLI(1,1),	DRLI(0,0),	NO_CARY,
 	RAISE_UNDEAD, A_NEUTRAL, NON_PM, PM_DROW, 8000L, 
-	SPFX2_SILVERED,0,0),
+	0,0,0),
 
 A("Liecleaver",		DROVEN_CROSSBOW, /* Drow noble crowning gift, lawful */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),SPFX_HALRES,
@@ -1051,7 +1051,7 @@ A("Sickle Moon",	SICKLE, /*returns to your hand.*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	PHYS(1,0),	NO_DFNS,	NO_CARY,//needs quote
 	0,	A_NONE, NON_PM, NON_PM, 4000L, 
-	SPFX2_SILVERED,0,0),
+	0,0,0),
 
 /** Indwelling of the Black Web entity, lawful hedrow crowning gift */
 
@@ -1155,12 +1155,12 @@ A("The Armor of Erebor",	PLATE_MAIL, /*Lonely Mountain dwarf noble */
 
 /*Arkenstone*/ /*Lonely Mountain dwarf noble crown*/
 
-A("The Sceptre of Lolth", SILVER_KHAKKHARA, /* Drow noble first gift (hedrow get lordly might) */
+A("The Sceptre of Lolth", KHAKKHARA, /* Drow noble first gift (hedrow get lordly might) */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	PHYS(1,0),	NO_DFNS,	NO_CARY,
 	LORDLY,	A_CHAOTIC, PM_NOBLEMAN, PM_DROW, 4000L, 
-	SPFX2_SILVERED,SPFX3_ENGRV,0), 
+	0,SPFX3_ENGRV,0), 
 
 A("The Web of the Chosen",	DROVEN_CLOAK, /* Drow noble quest */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HSPDAM|SPFX_REFLECT),0,
@@ -1409,7 +1409,7 @@ A("Fire of Heaven", TRIDENT, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	FIRE(1,0),	NO_DFNS,	NO_CARY,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
-	SPFX2_SILVERED|SPFX2_FIRE2|SPFX2_ELEC,SPFX3_NOCNT,0),
+	SPFX2_FIRE2|SPFX2_ELEC,SPFX3_NOCNT,0),
 
 A("The Diadem of Amnesia", DUNCE_CAP, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
@@ -1425,7 +1425,7 @@ A("Shadowlock", RAPIER, /*Needs encyc entry*/
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L,
 	SPFX2_SHINING,SPFX3_NOCNT,0),
 
-A("Thunder's Voice", SILVER_DAGGER, /*Needs encyc entry*/
+A("Thunder's Voice", DAGGER, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	ELEC(6,6),	NO_DFNS,	NO_CARY,
@@ -1458,7 +1458,7 @@ A("Wrath of Heaven", LONG_SWORD, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	ELEC(1,0),	NO_DFNS,	NO_CARY,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
-	SPFX2_SILVERED|SPFX2_FIRE|SPFX2_ELEC2,SPFX3_NOCNT,0),
+	SPFX2_FIRE|SPFX2_ELEC2,SPFX3_NOCNT,0),
 
 A("The All-seeing Eye of the Fly", HELM_OF_TELEPATHY, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
@@ -1474,7 +1474,7 @@ A("Cold Soul", RANSEUR, /*Needs encyc entry*/
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_ELEC|SPFX2_COLD|SPFX2_FIRE,SPFX3_NOCNT,0),
 
-A("The Sceptre of the Frozen Floor of Hell", IRON_BAR, /*Needs encyc entry*/
+A("The Sceptre of the Frozen Floor of Hell", QUARTERSTAFF, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	COLD(1,0),	NO_DFNS,	NO_CARY,
@@ -1488,7 +1488,7 @@ A("Caress", BULLWHIP, /*Needs encyc entry*/
 	0, A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	0,SPFX3_NOCNT,0),
 
-A("The Iconoclast", SILVER_SABER,  /*Weapon of Lixer, Prince of Hell, from Dicefreaks the Gates of Hell*/
+A("The Iconoclast", SABER,  /*Weapon of Lixer, Prince of Hell, from Dicefreaks the Gates of Hell*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_CON_OR), 0, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, (MA_HUMAN|MA_ELF|MA_DWARF|MA_GNOME) /*MA*/, 0 /*MV*/,
 	PHYS(9,99),	DFNS(AD_MAGM),	NO_CARY, /*also does +9 damage to S_ANGELs*/
@@ -1528,7 +1528,7 @@ A("The Scourge of Lolth", BULLWHIP, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(1,0),	NO_DFNS,	NO_CARY,
 	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
-	SPFX2_SILVERED,SPFX3_NOCNT,0),
+	0,SPFX3_NOCNT,0),
 
 A("Doomscreamer", TWO_HANDED_SWORD,  /*Weapon of Graz'zt, from Gord the Rogue*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_DEFN),0,
@@ -1549,9 +1549,9 @@ A("The Sword of Erathaol",			LONG_SWORD,	 /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,10),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7777L, 	/**/
-	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
+	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
-A("The Saber of Sabaoth",			SILVER_SABER, /*Needs encyc entry*/
+A("The Saber of Sabaoth",			SABER, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,10),	DFNS(AD_BLND),	NO_CARY,	/**/
@@ -1563,34 +1563,34 @@ A("The Sword of Onoel",			TWO_HANDED_SWORD, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,10),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7777L, 	/**/
-	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
+	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
 A("The Glaive of Shamsiel",			GLAIVE,	 /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,10),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7777L, 	/**/
-	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
+	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
 A("The Lance of Uriel",			LANCE, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,10),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7777L, 	/**/
-	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
+	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
 A("The Hammer of Barquiel",			LUCERN_HAMMER, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_SEARCH),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,10),	DFNS(AD_BLND),	NO_CARY,	/**/
 	0, A_LAWFUL, NON_PM, NON_PM, 7777L, 	/**/
-	SPFX2_SILVERED|SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
+	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
 /* mastery artifacts */
 
 /* Archeologist */
 A("The Trusty Adventurer's Whip",	BULLWHIP,
-	(SPFX_RESTR),0,
+	(SPFX_NOGEN|SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(20,4),	NO_DFNS,	NO_CARY, //Always activates special whip effects
 	0, A_NONE, PM_ARCHEOLOGIST, NON_PM, 0L,
@@ -1624,7 +1624,7 @@ A("The Force Pike of the Red Guard", FORCE_PIKE,
 /* Barbarian */
 /* TODO increase STR, DEX, CON by damage taken average */
 /* TODO gaining CON increases hp with max hp */
-A("The Gauntlets of the Berserker", LEATHER_GLOVES,
+A("The Gauntlets of the Berserker", IRON_GAUNTLETS,
 	(SPFX_NOGEN|SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
@@ -1735,7 +1735,7 @@ A("The Booze of the Drunken Master",	POT_BOOZE,
 	0,0,0),
 
 /* TODO 2x damage against undead/demons */
-A("The Wrappings of the Sacred Fist",	LEATHER_GLOVES,
+A("The Wrappings of the Sacred Fist",	GLOVES,
 	(SPFX_NOGEN|SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
@@ -1744,12 +1744,12 @@ A("The Wrappings of the Sacred Fist",	LEATHER_GLOVES,
 
 /* TODO jumping while wielded */
 /* TODO staggering blows while wielded */
-A("The Khakkhara of the Monkey",	SILVER_KHAKKHARA,
+A("The Khakkhara of the Monkey",	KHAKKHARA,
 	(SPFX_NOGEN|SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	0,	A_NONE, PM_MONK, NON_PM, 0L,
-	SPFX2_SILVERED,0,0),
+	0,0,0),
 
 /* Nobleman/Noblewoman */
 /* TODO */

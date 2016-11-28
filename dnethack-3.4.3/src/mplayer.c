@@ -133,7 +133,7 @@ register boolean special;
 		if(special){
 			static int sweptyp[] = {
 				CRYSKNIFE, MOON_AXE, BATTLE_AXE, HIGH_ELVEN_WARSWORD,
-				SILVER_SABER, CRYSTAL_SWORD, TWO_HANDED_SWORD,
+				SABER, CRYSTAL_SWORD, TWO_HANDED_SWORD,
 				KATANA, DWARVISH_MATTOCK, RUNESWORD
 			};
 			weapon = rn2(2) ? LONG_SWORD : sweptyp[rn2(SIZE(sweptyp))];
@@ -378,7 +378,7 @@ register boolean special;
 			mk_mplayer_armor(mtmp, helm);
 			mk_mplayer_armor(mtmp, shield);
 			if (rn2(8))
-				mk_mplayer_armor(mtmp, rnd_class(LEATHER_GLOVES,
+				mk_mplayer_armor(mtmp, rnd_class(GLOVES,
 							   GAUNTLETS_OF_DEXTERITY));
 			if (rn2(8))
 				mk_mplayer_armor(mtmp, rnd_class(CRYSTAL_BOOTS, FLYING_BOOTS));
@@ -404,7 +404,7 @@ register boolean special;
 			(void) mongets(mtmp, helm);
 			(void) mongets(mtmp, shield);
 			(void) mongets(mtmp, shield);
-			if (rn2(3)) mongets(mtmp, LEATHER_GLOVES);
+			if (rn2(3)) mongets(mtmp, GLOVES);
 			if (rn2(3)) mongets(mtmp, !rn2(2) ? LOW_BOOTS : HIGH_BOOTS);
 			m_dowear(mtmp, TRUE);
 			init_mon_wield_item(mtmp);

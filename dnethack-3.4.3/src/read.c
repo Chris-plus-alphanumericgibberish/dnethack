@@ -223,7 +223,7 @@ doread()
         You("study the pages of %s, but you already can recognize that.", xname(scroll));
       }
       return 1;
-	} else if(scroll->oclass == WEAPON_CLASS && objects[(scroll)->otyp].oc_material == WOOD && scroll->ovar1 != 0){
+	} else if(scroll->oclass == WEAPON_CLASS && (scroll)->obj_material == WOOD && scroll->otyp != MOON_AXE && scroll->ovar1 != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
 		if(! (u.wardsknown & scroll->ovar1) ){
 			You("have learned a new warding stave!");

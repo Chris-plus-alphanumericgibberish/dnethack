@@ -136,7 +136,7 @@ struct obj *otmp;
 			break;	/* skip makeknown */
 		} else if (u.uswallow || otyp == WAN_STRIKING || rnd(20) < 10 + find_mac(mtmp)) {
 			dmg = d(2,12);
-			if (!flags.mon_moving && otyp == SPE_FORCE_BOLT && (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM))
+			if (!flags.mon_moving && otyp == SPE_FORCE_BOLT && (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM))
 				dmg += d((u.ulevel+1)/2, 12);
 			if(dbldam) dmg *= 2;
 			if(u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
@@ -1202,7 +1202,7 @@ polyuse(objhdr, mat, minwt)
 	if (otmp->otyp == SCR_MAIL) continue;
 #endif
 
-	if (((int) objects[otmp->otyp].oc_material == mat) ==
+	if (((int) otmp->obj_material == mat) ==
 		(rn2(minwt + 1) != 0)) {
 	    /* appropriately add damage to bill */
 	    if (costly_spot(otmp->ox, otmp->oy)) {
@@ -1323,7 +1323,7 @@ struct obj *obj;
 	    /* some may metamorphosize */
 	    for (i = obj->quan; i; i--)
 		if (! rn2(Luck + 45)) {
-		    poly_zapped = objects[obj->otyp].oc_material;
+		    poly_zapped = obj->obj_material;
 		    break;
 		}
 	}
@@ -1514,8 +1514,8 @@ poly_obj(obj, id)
 
 	case GEM_CLASS:
 	    if (otmp->quan > (long) rnd(4) &&
-		    objects[obj->otyp].oc_material == MINERAL &&
-		    objects[otmp->otyp].oc_material != MINERAL) {
+		    obj->obj_material == MINERAL &&
+		    otmp->obj_material != MINERAL) {
 		otmp->otyp = ROCK;	/* transmutation backfired */
 		otmp->quan /= 2L;	/* some material has been lost */
 	    }
@@ -1773,8 +1773,8 @@ struct obj *obj, *otmp;
 		break;
 	case SPE_STONE_TO_FLESH:
 		refresh_x = obj->ox; refresh_y = obj->oy;
-		if ((objects[obj->otyp].oc_material != MINERAL &&
-			objects[obj->otyp].oc_material != GEMSTONE) ||
+		if ((obj->obj_material != MINERAL &&
+			 obj->obj_material != GEMSTONE) ||
 			obj->oartifact
 		) {
 		    res = 0;
@@ -2964,7 +2964,7 @@ boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may b
 			You_hear("a sharp crack!");
 		    levl[bhitpos.x][bhitpos.y].typ = CORR;
 			for(numbars = d(2,4)-1; numbars > 0; numbars--){
-				obj = mksobj_at(IRON_BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
+				obj = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
 			    obj->spe = 0;
 			    obj->cursed = obj->blessed = FALSE;
 			}

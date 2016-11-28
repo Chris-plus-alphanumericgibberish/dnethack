@@ -1444,7 +1444,7 @@ hitmu(mtmp, mattk)
 				is_launcher(uwep) ||
 				/* or strike with a missile in your hand... */
 			    ((is_missile(uwep) || is_ammo(uwep)) &&
-					!(uwep->otyp == SILVER_CHAKRAM)
+					!(uwep->otyp == CHAKRAM)
 				) ||
 				/* lightsaber that isn't lit ;) */
 				(is_lightsaber(uwep) && !uwep->lamplit) ||
@@ -1462,7 +1462,7 @@ hitmu(mtmp, mattk)
 				)) {
 			    /* then do only 1-2 points of damage */
 			    if (u.umonnum == PM_SHADE && uwep && 
-					(objects[uwep->otyp].oc_material == SILVER || arti_silvered(uwep))
+					(uwep->obj_material == SILVER || arti_silvered(uwep))
 				) dmg = 0;
 				else if(uwep->oartifact == ART_LIECLEAVER)
 				dmg = 2*(rnd(12) + rnd(10) + uwep->spe);
@@ -1470,12 +1470,12 @@ hitmu(mtmp, mattk)
 				dmg = 2*(rnd(bigmonst(youmonst.data) ? 2 : 5) + otmp->spe);
 				else
 				dmg = rnd(2);
-				if(uwep && (objects[uwep->otyp].oc_material == SILVER || arti_silvered(uwep)) && 
+				if(uwep && (uwep->obj_material == SILVER || arti_silvered(uwep)) && 
 					!(u.sealsActive&SEAL_EDEN) &&
 					hates_silver(youracedata) &&
 					!(is_lightsaber(uwep) && uwep->lamplit)
 				) dmg += rnd(20);
-				if(uwep && (objects[uwep->otyp].oc_material == IRON) && 
+				if(uwep && (uwep->obj_material == IRON) && 
 					hates_iron(youracedata) &&
 					!(is_lightsaber(uwep) && uwep->lamplit)
 				) dmg += rnd(u.ulevel*2);
@@ -1499,7 +1499,7 @@ hitmu(mtmp, mattk)
 			     hitmsg(mtmp, mattk);
 			if (!dmg) break;
 			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac+u.uspellprot)-u.uspellprot) &&
-				   objects[uwep->otyp].oc_material == IRON &&
+				   uwep->obj_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
@@ -1554,7 +1554,7 @@ hitmu(mtmp, mattk)
 				is_launcher(otmp) ||
 				/* or strike with a missile in your hand... */
 			    ((is_missile(otmp) || is_ammo(otmp)) &&
-					!(otmp->otyp == SILVER_CHAKRAM)
+					!(otmp->otyp == CHAKRAM)
 				) ||
 				/* lightsaber that isn't lit ;) */
 				(is_lightsaber(otmp) && !otmp->lamplit) ||
@@ -1571,7 +1571,7 @@ hitmu(mtmp, mattk)
 				)) {
 			    /* then do only 1-2 points of damage */
 			    if (u.umonnum == PM_SHADE && otmp && 
-					(objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp))
+					(otmp->obj_material == SILVER || arti_silvered(otmp))
 				) dmg = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 				dmg = 2*(rnd(12) + rnd(10) + otmp->spe);
@@ -1579,12 +1579,12 @@ hitmu(mtmp, mattk)
 				dmg = 2*(rnd(bigmonst(youracedata) ? 2 : 5) + otmp->spe);
 				else
 				dmg = rnd(2);
-				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && 
+				if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && 
 					!(u.sealsActive&SEAL_EDEN) &&
 					hates_silver(youracedata) &&
 					!(is_lightsaber(otmp) && otmp->lamplit)
 				) dmg += rnd(20);
-				if(otmp && (objects[otmp->otyp].oc_material == IRON) && 
+				if(otmp && (otmp->obj_material == IRON) && 
 					hates_iron(youracedata) &&
 					!(is_lightsaber(otmp) && otmp->lamplit)
 				) dmg += rnd(u.ulevel*2);
@@ -1601,7 +1601,7 @@ hitmu(mtmp, mattk)
 				if(otmp && bimanual(otmp,mtmp->data)) dmg += 4;
 			}
 			
-			if (otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) &&
+			if (otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) &&
 				!(u.sealsActive&SEAL_EDEN) &&
 				hates_silver(youracedata) &&
 				!(is_lightsaber(otmp) && otmp->lamplit)
@@ -1609,7 +1609,7 @@ hitmu(mtmp, mattk)
 			    pline("The silver sears your flesh!");
 			}
 			
-			if (otmp && (objects[otmp->otyp].oc_material == IRON) &&
+			if (otmp && (otmp->obj_material == IRON) &&
 				hates_iron(youracedata) &&
 				!(is_lightsaber(otmp) && otmp->lamplit)
 			) {
@@ -1633,7 +1633,7 @@ hitmu(mtmp, mattk)
 			     hitmsg(mtmp, mattk);
 			if (!dmg) break;
 			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac+u.uspellprot)-u.uspellprot) &&
-				   objects[otmp->otyp].oc_material == IRON &&
+				   otmp->obj_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
@@ -6201,7 +6201,7 @@ register struct monst *mon;
 					freeinv(optr);
 					(void) mpickobj(mon,optr);
 				}
-				else if(uwep && !(uwep->otyp != IRON_BAR)){
+				else if(uwep && !(uwep->otyp != BAR)){
 					verbalize("You're going to hurt yourself with that.");
 					optr = uwep;
 					setuwep((struct obj *)0);
@@ -6211,7 +6211,7 @@ register struct monst *mon;
 				if(!uwep){
 					buf[0] = '\0';
 					steal(mon, buf, FALSE, FALSE);
-					optr = mksobj(IRON_BAR, TRUE, FALSE);		
+					optr = mksobj(BAR, TRUE, FALSE);		
 					curse(optr);
 					optr->spe = -6;
 					verbalize("This will keep you out of trouble.");

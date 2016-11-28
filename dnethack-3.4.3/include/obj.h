@@ -33,7 +33,7 @@ struct obj {
 	unsigned o_id;
 	xchar ox,oy;
 	int otyp;		/* object class number */
-	unsigned owt;
+	unsigned owt;	/* object weight */
 	long quan;		/* number of items */
 
 	schar spe;		/* quality of weapon, armor or ring (+ or -)
@@ -119,7 +119,29 @@ struct obj {
 	Bitfield(yours,1);	/* obj is yours (eg. thrown by you) */
 	Bitfield(masters,1);	/* obj is given by a monster's master, it will not drop it */
 	Bitfield(objsize,3);	/* 0-7 */
-	/* 26 free bits in this field, I think -CM */
+	Bitfield(obj_material,5);
+//define LIQUID		1	/* currently only for venom */
+//define WAX			2
+//define VEGGY		3	/* foodstuffs */
+//define FLESH		4	/*   ditto    */
+//define PAPER		5
+//define CLOTH		6
+//define LEATHER		7
+//define WOOD		8
+//define BONE		9
+//define DRAGON_HIDE	10	/* not leather! */
+//define IRON		11	/* Fe - includes steel */
+//define METAL		12	/* Sn, &c. */
+//define COPPER		13	/* Cu - includes brass and bronze*/
+//define SILVER		14	/* Ag */
+//define GOLD		15	/* Au */
+//define PLATINUM	16	/* Pt */
+//define MITHRIL		17
+//define PLASTIC		18
+//define GLASS		19
+//define GEMSTONE	20
+//define MINERAL		21
+	/* 21 free bits in this field, I think -CM */
 	
 	long bodytypeflag;	/* MB tag(s) this item goes with. */
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
@@ -511,7 +533,7 @@ struct obj {
 
 /* spirit related */
 #define is_berithable(otmp)	(otmp->otyp == SADDLE\
-				|| otmp->otyp == SILVER_SABER\
+				|| otmp->otyp == SABER\
 				|| otmp->otyp == LONG_SWORD\
 				|| otmp->otyp == BOW\
 				|| otmp->otyp == LANCE\
@@ -520,15 +542,15 @@ struct obj {
 #define is_chupodible(otmp) (your_race(&mons[otmp->corpsenm]))
 
 /* material */
-#define is_flimsy(otmp)		(objects[(otmp)->otyp].oc_material <= LEATHER)
-#define is_wood(otmp)		(objects[(otmp)->otyp].oc_material == WOOD)
-#define is_veggy(otmp)		(objects[otmp->otyp].oc_material == VEGGY)
-#define is_flesh(otmp)		(objects[otmp->otyp].oc_material == FLESH)
-#define is_paper(otmp)		(objects[otmp->otyp].oc_material == PAPER)
-#define is_metal(otmp)		(objects[otmp->otyp].oc_material == METAL || \
-							 objects[otmp->otyp].oc_material == COPPER || \
-							 objects[otmp->otyp].oc_material == SILVER || \
-							 objects[otmp->otyp].oc_material == IRON)
+#define is_flimsy(otmp)		((otmp)->obj_material <= LEATHER)
+#define is_wood(otmp)		((otmp)->obj_material == WOOD)
+#define is_veggy(otmp)		((otmp)->obj_material == VEGGY)
+#define is_flesh(otmp)		((otmp)->obj_material == FLESH)
+#define is_paper(otmp)		((otmp)->obj_material == PAPER)
+#define is_metal(otmp)		((otmp)->obj_material == METAL || \
+							 (otmp)->obj_material == COPPER || \
+							 (otmp)->obj_material == SILVER || \
+							 (otmp)->obj_material == IRON)
 
 /* misc */
 #define is_boulder(otmp)		((otmp)->otyp == BOULDER || (otmp)->otyp == MASSIVE_STONE_CRATE || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))

@@ -466,7 +466,7 @@ Gloves_on()
 	u.uprops[objects[uarmg->otyp].oc_oprop].extrinsic & ~WORN_GLOVES;
 
     switch(uarmg->otyp) {
-	case LEATHER_GLOVES:
+	case GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
 	case IRON_GAUNTLETS:
 	case BRONZE_GAUNTLETS:
@@ -499,7 +499,7 @@ Gloves_off()
     takeoff_mask &= ~W_ARMG;
 
     switch(uarmg->otyp) {
-	case LEATHER_GLOVES:
+	case GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
 	case IRON_GAUNTLETS:
 	case BRONZE_GAUNTLETS:

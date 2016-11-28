@@ -1721,7 +1721,7 @@ NON_PASSWALL:(00,00,75,20)
 
 MONSTER:'A',"Oona",(02,16)
 CONTAINER:'`',"statue",(03,16),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of Aaqa"
-OBJECT:')',"silver spear",contained,blessed,-7,"The Rod of Seven Parts"
+OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 
 CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1
@@ -2128,7 +2128,7 @@ ENDMAP
 #0          1         2   	  3	      4	    5		  6	      7
 MONSTER:'A',"Oona",(02,16)
 CONTAINER:'`',"statue",(03,16),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of Aaqa"
-OBJECT:')',"silver spear",contained,blessed,-7,"The Rod of Seven Parts"
+OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 
 CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1

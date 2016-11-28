@@ -1640,7 +1640,7 @@ not_special:
 		       (uses_items && searches_for_item(mtmp, otmp)) ||
 		       (likerock && is_boulder(otmp)) ||
 		       (likegems && otmp->oclass == GEM_CLASS &&
-			objects[otmp->otyp].oc_material != MINERAL) ||
+			otmp->obj_material != MINERAL) ||
 		       (conceals && !cansee(otmp->ox,otmp->oy)) ||
 		       (ptr == &mons[PM_GELATINOUS_CUBE] &&
 			!index(indigestion, otmp->oclass) &&
@@ -1651,7 +1651,7 @@ not_special:
 				 (throws_rocks(ptr) ||
 				  !boulder_at(xx,yy)) &&
 				 (!is_unicorn(ptr) ||
-				  objects[otmp->otyp].oc_material == GEMSTONE) &&
+				  otmp->obj_material == GEMSTONE) &&
 				   /* Don't get stuck circling an Elbereth */
 				  !(onscary(xx, yy, mtmp))) {
 					minr = distmin(omx,omy,xx,yy);

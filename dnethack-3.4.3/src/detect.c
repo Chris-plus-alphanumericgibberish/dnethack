@@ -49,11 +49,11 @@ unsigned material;
 	register struct obj* otmp;
 	struct obj *temp;
 
-	if (objects[obj->otyp].oc_material == material) return obj;
+	if (obj->obj_material == material) return obj;
 
 	if (Has_contents(obj)) {
 	for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
-		if (objects[otmp->otyp].oc_material == material) return otmp;
+		if (obj->obj_material == material) return otmp;
 		else if (Has_contents(otmp) && (temp = o_material(otmp, material)))
 		return temp;
 	}

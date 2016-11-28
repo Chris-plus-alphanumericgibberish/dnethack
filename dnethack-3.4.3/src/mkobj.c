@@ -398,6 +398,17 @@ boolean artif;
 	otmp->opoisoned = 0;
 	otmp->fromsink = 0;
 	otmp->mp = (struct mask_properties *) 0;
+	
+	if(otyp == SABER) otmp->obj_material = SILVER;
+	else if(otyp == KHAKKHARA) otmp->obj_material = SILVER;
+	else if(otyp == CHAKRAM) otmp->obj_material = SILVER;
+	else if(otyp == GLOVES) otmp->obj_material = LEATHER;
+	else if(otyp == BAR) otmp->obj_material = IRON;
+	else if(otyp == find_gcirclet()) otmp->obj_material = GOLD;
+	else if(otyp == SPEAR){if(!rn2(25)) otmp->obj_material = SILVER;}
+	else if(otyp == DAGGER){if(!rn2(12)) otmp->obj_material = SILVER;}
+	else otmp->obj_material = objects[otyp].oc_material;
+	
 	if ((otmp->otyp >= ELVEN_SHIELD && otmp->otyp <= ORCISH_SHIELD) ||
 			otmp->otyp == SHIELD_OF_REFLECTION)
 		otmp->dknown = 0;
@@ -470,7 +481,7 @@ boolean artif;
 		if (is_poisonable(otmp) && ((is_ammo(otmp) && !rn2(100)) || !rn2(1000) )){
 			if(!rn2(100)) otmp->opoisoned = OPOISON_FILTH; /* Once a game or once every few games */
 			else otmp->opoisoned = OPOISON_BASIC;
-		} else if(objects[(otmp)->otyp].oc_material == WOOD 
+		} else if((otmp)->obj_material == WOOD 
 			&& otmp->oartifact != ART_BOW_OF_SKADI
 			&& !rn2(100)
 		){
@@ -1378,6 +1389,41 @@ register struct obj *obj;
 		}
 	}
 	
+	if(obj->obj_material != objects[obj->otyp].oc_material){
+#define Fe		8
+#define Ag		10
+#define Au		19
+#define Pt		21
+#define Mi		2
+		if(objects[obj->otyp].oc_material == SILVER){
+			if(obj->obj_material == GOLD) wt *= (Au/Ag);
+			else if(obj->obj_material == PLATINUM) wt *= (Pt/Ag);
+			else if(obj->obj_material == MITHRIL) wt = wt/(Ag/Mi) + 1;
+			else /*treat it as if it's steel*/ wt = wt/(Ag/Fe) + 1;
+		} else if(objects[obj->otyp].oc_material == GOLD){
+			if(obj->obj_material == SILVER) wt = wt/(Au/Ag) + 1;
+			else if(obj->obj_material == PLATINUM) wt *= (Pt/Au);
+			else if(obj->obj_material == MITHRIL) wt = wt/(Au/Mi) + 1;
+			else /*treat it as if it's steel*/ wt = wt/(Au/Fe) + 1;
+		} else if(objects[obj->otyp].oc_material == PLATINUM){
+			if(obj->obj_material == SILVER) wt = wt/(Pt/Ag) + 1;
+			else if(obj->obj_material == GOLD) wt = wt/(Pt/Au) + 1;
+			else if(obj->obj_material == MITHRIL) wt = wt/(Pt/Mi) + 1;
+			else /*treat it as if it's steel*/ wt = wt/(Pt/Fe) + 1;
+		} else if(objects[obj->otyp].oc_material == MITHRIL){
+			if(obj->obj_material == SILVER) wt *= (Ag/Mi);
+			else if(obj->obj_material == GOLD) wt *= (Au/Mi);
+			else if(obj->obj_material == PLATINUM) wt *= (Pt/Mi);
+			else /*treat it as if it's steel*/ wt *= (Fe/Mi);
+		} else { /*treat it as if it's steel*/
+			if(obj->obj_material == SILVER) wt *= (Ag/Fe);
+			else if(obj->obj_material == GOLD) wt *= (Au/Fe);
+			else if(obj->obj_material == PLATINUM) wt *= (Pt/Fe);
+			else if(obj->obj_material == MITHRIL) wt = wt/(Fe/Mi) + 1;
+			/*treat it as if it's still steel, leave it alone*/
+		}
+	}
+	
 	if(obj->otyp == MOON_AXE){
 		if(obj->ovar1) wt =  wt/4*obj->ovar1;
 		else wt = wt/4;
@@ -1716,8 +1762,8 @@ register struct obj *otmp;
 {
 	int otyp = otmp->otyp;
 
-	return((boolean)(objects[otyp].oc_material <= WOOD &&
-			objects[otyp].oc_material != LIQUID));
+	return((boolean)(otmp->obj_material <= WOOD &&
+			otmp->obj_material != LIQUID));
 }
 
 #endif /* OVLB */

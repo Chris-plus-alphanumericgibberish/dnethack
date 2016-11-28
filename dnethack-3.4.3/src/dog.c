@@ -900,10 +900,10 @@ rock:
 			obj->otyp == RIN_SLOW_DIGESTION)
 		return TABU;
 	    if (hates_silver(mon->data) &&
-		objects[obj->otyp].oc_material == SILVER)
+		obj->obj_material == SILVER)
 		return(TABU);
 	    if (hates_iron(mon->data) &&
-		objects[obj->otyp].oc_material == IRON)
+		obj->obj_material == IRON)
 		return(TABU);
 	    if (hates_unholy(mon->data) &&
 		obj->cursed)

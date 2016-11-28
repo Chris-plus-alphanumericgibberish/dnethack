@@ -339,7 +339,7 @@ struct artifact {
             exist_artifact(BULLWHIP, artilist[ART_TRUSTY_ADVENTURER_S_WHIP].name) ||\
             exist_artifact(SPE_BLANK_PAPER, artilist[ART_LOG_OF_THE_CURATOR].name) ||\
             exist_artifact(FORCE_PIKE, artilist[ART_FORCE_PIKE_OF_THE_RED_GUAR].name) ||\
-            exist_artifact(LEATHER_GLOVES, artilist[ART_GAUNTLETS_OF_THE_BERSERKER].name) ||\
+            exist_artifact(IRON_GAUNTLETS, artilist[ART_GAUNTLETS_OF_THE_BERSERKER].name) ||\
             exist_artifact(SCR_REMOVE_CURSE, artilist[ART_DECLARATION_OF_THE_APOSTAT].name) ||\
             exist_artifact(LENSES, artilist[ART_SOUL_LENS].name) ||\
             exist_artifact(SCR_BLANK_PAPER, artilist[ART_SEAL_OF_THE_SPIRITS].name) ||\
@@ -353,8 +353,8 @@ struct artifact {
             exist_artifact(ROBE, artilist[ART_COPE_OF_THE_ELDRITCH_KNIGH].name) ||\
             exist_artifact(KITE_SHIELD, artilist[ART_SHIELD_OF_THE_PALADIN].name) ||\
             exist_artifact(POT_BOOZE, artilist[ART_BOOZE_OF_THE_DRUNKEN_MASTE].name) ||\
-            exist_artifact(LEATHER_GLOVES, artilist[ART_WRAPPINGS_OF_THE_SACRED_FI].name) ||\
-            exist_artifact(SILVER_KHAKKHARA, artilist[ART_KHAKKHARA_OF_THE_MONKEY].name) ||\
+            exist_artifact(GLOVES, artilist[ART_WRAPPINGS_OF_THE_SACRED_FI].name) ||\
+            exist_artifact(KHAKKHARA, artilist[ART_KHAKKHARA_OF_THE_MONKEY].name) ||\
             exist_artifact(RIN_TELEPORTATION, artilist[ART_MARK_OF_THE_RIGHTFUL_SCION].name) ||\
             exist_artifact(ORIHALCYON_GAUNTLETS, artilist[ART_GAUNTLETS_OF_THE_DIVINE_DI].name) ||\
             exist_artifact(MACE, artilist[ART_MACE_OF_THE_EVANGELIST].name) ||\

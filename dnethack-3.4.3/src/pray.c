@@ -2399,11 +2399,11 @@ dosacrifice()
 		    unrestrict_weapon_skill(weapon_type(otmp));
 		    discover_artifact(otmp->oartifact);
 			if(otmp->oartifact == ART_BLADE_SINGER_S_SPEAR || otmp->oartifact == ART_BLADE_DANCER_S_DAGGER){
-			 if(otmp->oartifact == ART_BLADE_SINGER_S_SPEAR && !exist_artifact(SILVER_DAGGER, "Blade Dancer's Dagger") ){
-				otmp = mksobj(SILVER_DAGGER, TRUE, FALSE);
+			 if(otmp->oartifact == ART_BLADE_SINGER_S_SPEAR && !exist_artifact(DAGGER, "Blade Dancer's Dagger") ){
+				otmp = mksobj(DAGGER, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_BLADE_DANCER_S_DAGGER));		
-			 } else if(otmp->oartifact == ART_BLADE_DANCER_S_DAGGER && !exist_artifact(SILVER_SPEAR, "Blade Singer's Spear") ){
-				otmp = mksobj(SILVER_SPEAR, TRUE, FALSE);
+			 } else if(otmp->oartifact == ART_BLADE_DANCER_S_DAGGER && !exist_artifact(SPEAR, "Blade Singer's Spear") ){
+				otmp = mksobj(SPEAR, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_BLADE_SINGER_S_SPEAR));		
 			 }
 				unrestrict_weapon_skill(P_SPEAR);

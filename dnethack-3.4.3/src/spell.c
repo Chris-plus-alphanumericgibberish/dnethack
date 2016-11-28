@@ -415,9 +415,10 @@ learn()
 				break;
 				case 5:{
 					struct obj *otmp;
-					otmp = mksobj(rnd(4) ? ELVEN_DAGGER : SILVER_DAGGER, TRUE, FALSE);
+					otmp = mksobj(rnd(4) ? ELVEN_DAGGER : DAGGER, TRUE, FALSE);
 					otmp->spe = d(1,4)+1;
 					otmp->quan += d(2,3);
+					if(otmp->otyp == DAGGER) otmp->obj_material = SILVER;
 					pline("...it's been hollowed out.  There is a set of throwing daggers inside.");
 					useup(book);
 					otmp = hold_another_object(otmp, "The %s out.",
@@ -1006,7 +1007,7 @@ docast()
 			}
 		}
 	}
-	if(uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM){
+	if(uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM){
 		int i;
 		for (i = 0; i < MAXSPELL; i++) {
 			if (spellid(i) == SPE_MAGIC_MISSILE) {
@@ -3441,7 +3442,7 @@ boolean atme;
 		} else if (
 			!(spellid(spell) == SPE_LIGHTNING_BOLT && uarmh && uarmh->oartifact == ART_STORMHELM) &&
 			!((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 
-				uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM)
+				uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM)
 		) {
 			if(spellknow(spell) <= 200) { /* 1% */
 				You("strain to recall the spell.");
@@ -4017,7 +4018,7 @@ int spell;
 	
 	if(
 		((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 
-			uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == SILVER_CHAKRAM)
+			uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM)
 	) return 100;
 	
 	/* Calculate intrinsic ability (splcaster) */
@@ -4049,10 +4050,10 @@ int spell;
 		splcaster -= uarmc->oartifact ? 2*urole.spelarmr : urole.spelarmr;
 	
 	// if((spell_skilltype(spellid(spell)) == P_CLERIC_SPELL || Role_if(PM_PRIEST) || Role_if(PM_MONK)) 
-		// && uwep && uwep->otyp == SILVER_KHAKKHARA
+		// && uwep && uwep->otyp == KHAKKHARA
 	// ) splcaster -= urole.spelarmr;
 	
-	if(uwep && (uwep->otyp == SILVER_KHAKKHARA || uwep->oartifact == ART_TENTACLE_ROD || uwep->oartifact == ART_ARYFAERN_KERYM)) splcaster -= urole.spelarmr;
+	if(uwep && (uwep->otyp == KHAKKHARA || uwep->oartifact == ART_TENTACLE_ROD || uwep->oartifact == ART_ARYFAERN_KERYM)) splcaster -= urole.spelarmr;
 	
 	if(u.sealsActive&SEAL_PAIMON) splcaster -= urole.spelarmr;
 	

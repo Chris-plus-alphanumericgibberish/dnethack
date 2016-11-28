@@ -443,7 +443,7 @@ meleeattack:
 		    res[i] = hitmm(magr, mdef, mattk);
 			if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 		    if((mdef->data == &mons[PM_BLACK_PUDDING] || mdef->data == &mons[PM_BROWN_PUDDING])
-		       && otmp && objects[otmp->otyp].oc_material == IRON
+		       && otmp && otmp->obj_material == IRON
 		       && mdef->mhp > 1 && !mdef->mcan)
 		    {
 			if (clone_mon(mdef, 0, 0)) {
@@ -1213,7 +1213,7 @@ physical:{
 			    is_launcher(otmp) ||
 			    /* or strike with a missile in your hand... */
 			    ((is_missile(otmp) || is_ammo(otmp)) &&
-					!(otmp->otyp == SILVER_CHAKRAM)
+					!(otmp->otyp == CHAKRAM)
 				) ||
 				/* houchou not thrown */
 				(otmp->oartifact == ART_HOUCHOU) ||
@@ -1231,9 +1231,9 @@ physical:{
 			)) {
 			    /* then do only 1-2 points of damage */
 			    if (mdef->data->mlet == S_SHADE && !(
-					((objects[otmp->otyp].oc_material != SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
+					((otmp->obj_material != SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
 						!(is_lightsaber(otmp) && otmp->lamplit)) ||
-					(objects[otmp->otyp].oc_material != IRON && hates_iron(pd) &&
+					(otmp->obj_material != IRON && hates_iron(pd) &&
 						!(is_lightsaber(otmp) && otmp->lamplit)) ||
 					(otmp->cursed && hates_unholy(pd))
 				)) tmp = 0;
@@ -1243,27 +1243,30 @@ physical:{
 					tmp = 2*(rnd(bigmonst(mdef->data) ? 2 : 5) + otmp->spe);
 				else tmp = rnd(2);
 				
-				if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
+				if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
 					!(is_lightsaber(otmp) && otmp->lamplit)
 				)
 					tmp += rnd(20);
-				if(otmp && (objects[otmp->otyp].oc_material == IRON) && hates_iron(pd) &&
+				if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
 					!(is_lightsaber(otmp) && otmp->lamplit)
 				)
 					tmp += rnd(mdef->m_lev*2);
 				if(otmp && (otmp->cursed) && hates_unholy(pd))
 					tmp += rnd(20);
-			} else tmp += dmgval(otmp, mdef, 0);
+			} else {
+				tmp += dmgval(otmp, mdef, 0);
+				if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))) phasearmor = TRUE;
+			}
 			
 			if(resist_attacks(mdef->data))
 				tmp = 0;
             /* WAC Weres get seared */
-            if(otmp && (objects[otmp->otyp].oc_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
+            if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
 				!(is_lightsaber(otmp) && otmp->lamplit)
 			) {
             	if (vis) pline("The silver sears %s!", mon_nam(mdef));
             }
-            if(otmp && (objects[otmp->otyp].oc_material == IRON) && hates_iron(pd) &&
+            if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
 				!(is_lightsaber(otmp) && otmp->lamplit)
 			) {
             	if (vis) pline("The cold-iron sears %s!", mon_nam(mdef));

@@ -226,7 +226,7 @@ shuffle_all()
 	shuffle(HELMET, HELM_OF_DRAIN_RESISTANCE, TRUE);
 	
 	/* shuffle the gloves */
-	shuffle(LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY, FALSE);
+	shuffle(GLOVES, GAUNTLETS_OF_DEXTERITY, FALSE);
 
 	/* shuffle the cloaks */
 	shuffle(CLOAK_OF_PROTECTION, CLOAK_OF_DISPLACEMENT, FALSE);
@@ -235,7 +235,7 @@ shuffle_all()
 	shuffle(SPEED_BOOTS, FLYING_BOOTS, FALSE);
 }
 
-/* find the object index for gold circlet */
+/* find the object index for circlet */
 int
 find_gcirclet()
 {
@@ -244,10 +244,10 @@ find_gcirclet()
 
     for (i = HELMET; i <= HELM_OF_DRAIN_RESISTANCE; i++)
 		if ((s = OBJ_DESCR(objects[i])) != 0 && (
-			!strcmp(s, "gold circlet")
+			!strcmp(s, "band")
 		)) return i;
 
-    impossible("gold circlet not found?");
+    impossible("band not found?");
     return -1;	/* not 0, or caller would try again each move */
 }
 
@@ -692,7 +692,7 @@ find_ogloves()
     register int i;
     register const char *s;
 
-    for (i = LEATHER_GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
+    for (i = GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "old gloves"))
 	    return i;
 
@@ -707,7 +707,7 @@ find_tgloves()
     register int i;
     register const char *s;
 
-    for (i = LEATHER_GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
+    for (i = GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "fighting gloves"))
 	    return i;
 
@@ -722,7 +722,7 @@ find_pgloves()
     register int i;
     register const char *s;
 
-    for (i = LEATHER_GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
+    for (i = GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "padded gloves"))
 	    return i;
 
@@ -737,7 +737,7 @@ find_fgloves()
     register int i;
     register const char *s;
 
-    for (i = LEATHER_GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
+    for (i = GLOVES; i <= GAUNTLETS_OF_DEXTERITY; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "fencing gloves"))
 	    return i;
 

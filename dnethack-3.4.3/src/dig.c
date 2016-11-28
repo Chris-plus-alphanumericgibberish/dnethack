@@ -439,7 +439,7 @@ dig()
 			    digtxt = "You cut through the bars.";
 			    lev->typ = ROOM;
 				for(numbars = d(2,4)-1; numbars > 0; numbars--){
-					bars = mksobj_at(IRON_BAR, dpx, dpy, FALSE, FALSE);
+					bars = mksobj_at(BAR, dpx, dpy, FALSE, FALSE);
 					bars->spe = 0;
 					bars->cursed = bars->blessed = FALSE;
 				}

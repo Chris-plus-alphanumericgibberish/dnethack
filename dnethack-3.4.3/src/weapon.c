@@ -206,8 +206,8 @@ struct monst *mon;
 	}
 
 	/* weapons with the veioistafur stave are highly effective against sea monsters */
-	if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && 
-		(otmp->ovar1 & WARD_VEIOISTAFUR) && mon->data->mlet == S_EEL) tmp += 4;
+	if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE
+		&& (otmp->ovar1 & WARD_VEIOISTAFUR) && mon->data->mlet == S_EEL) tmp += 4;
 	
 	/* Picks used against xorns and earth elementals */
 	if (is_pick(otmp) &&
@@ -520,6 +520,7 @@ int spec;
 			if(otmp->oartifact == ART_MJOLLNIR) tmp += d(2,4+dmod); break;
 		case BULLWHIP:
 			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += d(1,10+dmod);
+			else if(otmp->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) tmp = d(1,2) + rnd(4);
 			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(2,max(2,2+dmod),0);
 		break;
 		case RAPIER:
@@ -562,6 +563,7 @@ int spec;
 
 		case BULLWHIP:
 			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += 10+dmod;
+			else if(otmp->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) tmp = d(1,2) + rnd(4);
 			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(4,4+dmod,0);
 		break;
 
@@ -800,17 +802,18 @@ int spec;
 				tmp += 3*max((u.ulevel+1)/3,otmp->spe);
 			} else tmp += 3*otmp->spe;
 		}
+		
 		/* negative enchantment mustn't produce negative damage */
 		if (tmp < 0) tmp = 0;
 	}
 
-	if (objects[otyp].oc_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)))
+	if (otmp->obj_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
 	if (ptr->mlet == S_SHADE && (
 		(is_lightsaber(otmp) && otmp->lamplit) || 
-		(hates_silver(ptr) && (objects[otyp].oc_material != SILVER || arti_silvered(otmp))) || 
-		(hates_iron(ptr) && objects[otyp].oc_material != IRON) || 
+		(hates_silver(ptr) && (otmp->obj_material != SILVER || arti_silvered(otmp))) || 
+		(hates_iron(ptr) && otmp->obj_material != IRON) || 
 		(hates_unholy(ptr) && otmp->cursed) || 
 		arti_shining(otmp)
 	)) tmp = 0;
@@ -842,31 +845,33 @@ int spec;
 		}
 	    if (is_axe(otmp) && is_wooden(ptr))
 			bonus += rnd(4);
-	    if ((objects[otyp].oc_material == SILVER || arti_silvered(otmp)) 
+	    if ((otmp->obj_material == SILVER || arti_silvered(otmp))
 			&& hates_silver(ptr)
 			&& !(is_lightsaber(otmp) && otmp->lamplit)
 			&& (!youdefend || !(u.sealsActive&SEAL_EDEN))
 		){
-			if(otyp == SILVER_KHAKKHARA) bonus += d(rnd(3),20);
+			if(otyp == KHAKKHARA) bonus += d(rnd(3),20);
 			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
 			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
 			else bonus += rnd(20);
 		}
-	    if (objects[otyp].oc_material == IRON 
+	    if (otmp->obj_material == IRON 
 			&& hates_iron(ptr)
 			&& !(is_lightsaber(otmp) && otmp->lamplit)
 		){
-			bonus += rnd(mon->m_lev*2);
+			if(otyp == KHAKKHARA) bonus += d(rnd(3),mon->m_lev*2);
+			else bonus += rnd(mon->m_lev*2);
 		}
 	    if (otmp->cursed
 			&& hates_unholy(ptr)
 		){
-			bonus += rnd(20);
+			if(otyp == KHAKKHARA) bonus += d(rnd(3),20);
+			else bonus += rnd(20);
 		}
 		
-		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && 
-			(otmp->ovar1 & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);
-			
+		if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE
+			&& (otmp->ovar1 & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);
+		
 
 	    /* if the weapon is going to get a double damage bonus, adjust
 	       this bonus so that effectively it's added after the doubling */
@@ -1044,16 +1049,14 @@ static NEARDATA const int rwep[] =
 	ELVEN_SPEAR/*1d7/1d7*/, 
 	JAVELIN/*1d6/1d6*/, 
 	SILVER_ARROW/*1d6/1d6*/, 
-	SILVER_SPEAR/*1d6/1d8*/, 
+	SPEAR/*1d6/1d8*/, 
 	ARROW/*1d6/1d6*/,
 	FLINT/*1d6/1d6*/, 
 	LUCKSTONE/*1d3/1d3*/, /*Because they think it's flint*/
 	TOUCHSTONE/*1d3/1d3*/, 
-	SPEAR/*1d6/1d8*/, 
 	ORCISH_SPEAR/*1d5/1d10*/,
 	CROSSBOW_BOLT/*1d4+1/1d6+1*/, 
 	ORCISH_ARROW/*1d5/1d8*/, 
-	SILVER_DAGGER/*1d4/1d3*/, 
 	ELVEN_DAGGER/*1d5/1d3*/, 
 	DAGGER/*1d4/1d3*/,
 	ORCISH_DAGGER/*1d3/1d5*/, 
@@ -1106,9 +1109,9 @@ struct obj *otmp;
     
     if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
 	    || !bimanual(otmp,mtmp->data))
-		&& (objects[otmp->otyp].oc_material != SILVER
+		&& (otmp->obj_material != SILVER
 		|| !hates_silver(mtmp->data))
-		&& (objects[otmp->otyp].oc_material != IRON
+		&& (otmp->obj_material != IRON
 		|| !hates_iron(mtmp->data))
 		&& (otmp->cursed
 		|| !hates_unholy(mtmp->data))
@@ -1316,7 +1319,7 @@ static const NEARDATA short hwep[] = {
 	  SCYTHE/*2d4*/, 
 	  BROADSWORD/*2d4/1d6+1*/, 
 	  MORNING_STAR/*2d4/1d6+1*/, 
-	  SILVER_SABER/*1d8/1d8*/,
+	  SABER/*1d8/1d8*/,
 	  TRIDENT/*1d6+1/3d4*/, 
 	  LONG_SWORD/*1d8/1d12*/,
 	  FLAIL/*1d6+1/2d4*/, 
@@ -1327,13 +1330,12 @@ static const NEARDATA short hwep[] = {
 	  ELVEN_SHORT_SWORD/*1d7/1d7*/, 
 	  ELVEN_MACE/*1d7/1d7*/, 
 	  ELVEN_SPEAR/*1d7/1d7*/, 
-	  SILVER_SPEAR/*1d6/1d8*/,
+	  SPEAR/*1d6/1d8*/,
 	  SHORT_SWORD/*1d6/1d8*/,
-	  SPEAR/*1d6/1d8*/, 
 	  AXE/*1d6/1d4*/, 
 	  ORCISH_SHORT_SWORD/*1d5/1d10*/, 
 	  ORCISH_SPEAR/*1d5/1d10*/, 
-	  SILVER_KHAKKHARA/*1d6/1d4*/,
+	  KHAKKHARA/*1d6/1d4*/,
 	  BULLWHIP/*1d2/1d1*/, 
 	  QUARTERSTAFF/*1d6/1d6*/,
 	  JAVELIN/*1d6/1d6*/, 
@@ -1344,7 +1346,6 @@ static const NEARDATA short hwep[] = {
 	  ELVEN_SICKLE/*1d6/1d3*/,
 	  STILETTO/*1d6/1d2*/, 
 	  ELVEN_DAGGER/*1d5/1d3*/, 
-	  SILVER_DAGGER/*1d4/1d3*/, 
 	  ATHAME/*1d4/1d4*/, 
 	  DAGGER/*1d4/1d3*/, 
 	  SICKLE/*1d4/1d1*/, 

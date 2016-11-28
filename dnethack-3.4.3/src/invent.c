@@ -680,7 +680,7 @@ register int x, y;
 	register struct obj *otmp;
 
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
-		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_TOUSTEFNA))
+		if(otmp->oclass == WEAPON_CLASS && (otmp)->obj_material == WOOD && otmp->otyp != MOON_AXE && (otmp->ovar1 & WARD_TOUSTEFNA))
 		    return(otmp);
 	return((struct obj *)0);
 }
@@ -692,7 +692,7 @@ register int x, y;
 	register struct obj *otmp;
 
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
-		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_DREPRUN))
+		if(otmp->oclass == WEAPON_CLASS && (otmp)->obj_material == WOOD && otmp->otyp != MOON_AXE && (otmp->ovar1 & WARD_DREPRUN))
 		    return(otmp);
 	return((struct obj *)0);
 }
@@ -704,7 +704,7 @@ register int x, y;
 	register struct obj *otmp;
 
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
-		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_VEIOISTAFUR))
+		if(otmp->oclass == WEAPON_CLASS && (otmp)->obj_material == WOOD && otmp->otyp != MOON_AXE && (otmp->ovar1 & WARD_VEIOISTAFUR))
 		    return(otmp);
 	return((struct obj *)0);
 }
@@ -716,7 +716,7 @@ register int x, y;
 	register struct obj *otmp;
 
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
-		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && (otmp->ovar1 & WARD_THJOFASTAFUR))
+		if(otmp->oclass == WEAPON_CLASS && (otmp)->obj_material == WOOD && otmp->otyp != MOON_AXE && (otmp->ovar1 & WARD_THJOFASTAFUR))
 		    return(otmp);
 	return((struct obj *)0);
 }
@@ -1139,7 +1139,7 @@ register const char *let,*word;
 			allowall = TRUE;//for whatever reason, must allow all in order to get message other than "silly"
 		}
 		//Make exceptions for wooden weapons that have been engraved
-		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && otmp->ovar1 && !strcmp(word, "read")){
+		if(otmp->oclass == WEAPON_CLASS && (otmp)->obj_material == WOOD && otmp->otyp != MOON_AXE && otmp->ovar1 && !strcmp(word, "read")){
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;
 		}
@@ -2594,6 +2594,7 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	    obj->greased != otmp->greased ||
 	    obj->oeroded != otmp->oeroded ||
 	    obj->oeroded2 != otmp->oeroded2 ||
+	    obj->obj_material != otmp->obj_material ||
 	    obj->bypass != otmp->bypass)
 	    return(FALSE);
 	

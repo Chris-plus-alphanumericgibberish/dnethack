@@ -2412,7 +2412,7 @@ struct obj *tstone;
 	    return;
 	} else {
 	    /* either a ring or the touchstone was not effective */
-	    if (objects[obj->otyp].oc_material == GLASS) {
+	    if (obj->obj_material == GLASS) {
 		do_scratch = TRUE;
 		break;
 	    }
@@ -2421,7 +2421,7 @@ struct obj *tstone;
 	break;		/* gem or ring */
 
     default:
-	switch (objects[obj->otyp].oc_material) {
+	switch (obj->obj_material) {
 	case CLOTH:
 	    pline("%s a little more polished now.", Tobjnam(tstone, "look"));
 	    return;
@@ -4159,7 +4159,7 @@ pick_carvee()
 	Sprintf(buf, "Carvable items");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for(otmp = invent; otmp; otmp = otmp->nobj){
-		if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD && otmp->oartifact != ART_BOW_OF_SKADI){
+		if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE && otmp->oartifact != ART_BOW_OF_SKADI){
 			Sprintf1(buf, doname(otmp));
 			any.a_char = otmp->invlet;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,

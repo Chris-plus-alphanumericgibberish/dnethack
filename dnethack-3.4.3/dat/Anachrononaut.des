@@ -994,7 +994,7 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 
 #The annulus should be at the top of any piles
-OBJECT:')',"silver chakram",random,blessed,0,"The Annulus"
+OBJECT:')',"chakram",random,blessed,0,"The Annulus"
 
 GEOMETRY:center,center
 #0         1         2         3         4         5         6         7     

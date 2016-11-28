@@ -534,7 +534,7 @@ register struct monst *mtmp;
 				obj->oeroded = 3;
 				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
-				obj = mksobj_at(IRON_BAR, x, y, TRUE, FALSE);
+				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
 				obj = mksobj_at(SCRAP, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
@@ -560,7 +560,7 @@ register struct monst *mtmp;
 			while (num--){
 				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
 				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
-				obj = mksobj_at(IRON_BAR, x, y, TRUE, FALSE);
+				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
 			}
 			mtmp->mnamelth = 0;
 			if(!rn2(20)){
@@ -574,7 +574,7 @@ register struct monst *mtmp;
 			while (num--){
 				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
 				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
-				obj = mksobj_at(IRON_BAR, x, y, TRUE, FALSE);
+				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
 			}
 			mtmp->mnamelth = 0;
 		break;
@@ -1434,7 +1434,7 @@ mpickgold(mtmp)
     int mat_idx;
 
     if ((gold = g_at(mtmp->mx, mtmp->my)) != 0) {
-	mat_idx = objects[gold->otyp].oc_material;
+	mat_idx = gold->obj_material;
 #ifndef GOLDOBJ
 	mtmp->mgold += gold->quan;
 	delobj(gold);
@@ -1854,8 +1854,10 @@ struct obj *otmp;
 	    return FALSE;
 	if (otyp == CORPSE && is_rider(&mons[otmp->corpsenm]))
 	    return FALSE;
-	if (objects[otyp].oc_material == SILVER && hates_silver(mdat) &&
+	if (otmp->obj_material == SILVER && hates_silver(mdat) &&
 		(otyp != BELL_OF_OPENING || !is_covetous(mdat)))
+	    return FALSE;
+	if (otmp->obj_material == IRON && hates_iron(mdat))
 	    return FALSE;
 
 #ifdef STEED

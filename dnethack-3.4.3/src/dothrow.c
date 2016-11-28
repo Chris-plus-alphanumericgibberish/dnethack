@@ -112,7 +112,7 @@ int thrown;
 	}
 	
 	if(obj->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
-	if((obj->oclass == POTION_CLASS || objects[obj->otyp].oc_material == GLASS) && u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH, TRUE);
+	if((obj->oclass == POTION_CLASS || obj->obj_material == GLASS) && u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH, TRUE);
 	if((obj->otyp == EGG) && u.sealsActive&SEAL_ECHIDNA) unbind(SEAL_ECHIDNA, TRUE);
 	
 	u_wipe_engr(2);
@@ -678,7 +678,7 @@ dofire()
 {
 	int result, shotlimit;
 
-	if (notake(youmonst.data)) {
+	if (notake(youracedata)) {
 	    You("are physically incapable of doing that.");
 	    return 0;
 	}
@@ -687,7 +687,7 @@ dofire()
 		(
         (uwep->oartifact == ART_KHAKKHARA_OF_THE_MONKEY) ||
 		(uwep->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE) && ACURR(A_STR) == STR19(25)) ||
-		(uwep->oartifact == ART_ANNULUS && (uwep->otyp == SILVER_CHAKRAM || uwep->otyp == LIGHTSABER)) ||
+		(uwep->oartifact == ART_ANNULUS && (uwep->otyp == CHAKRAM || uwep->otyp == LIGHTSABER)) ||
 		(uwep->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && Race_if(PM_DWARF) && ACURR(A_STR) == STR19(25))
 		// (uwep->oartifact == ART_SICKLE_MOON)
 		)
@@ -1273,7 +1273,7 @@ boolean hitsroof;
 	    if (dmg < 1) dmg = 1;
 	    else if (dmg > 6) dmg = 6;
 	    if (youmonst.data->mlet == S_SHADE &&
-		    objects[obj->otyp].oc_material != SILVER)
+		    obj->obj_material != SILVER)
 		dmg = 0;
 	}
 	if(resist_attacks(youmonst.data))
@@ -1692,7 +1692,7 @@ int thrown;
 			struct monst *msmon;
 			sx = bhitpos.x;
 			sy = bhitpos.y;
-			if(objects[obj->otyp].oc_material == GLASS && u.specialSealsActive&SEAL_NUDZIARTH){
+			if(obj->obj_material == GLASS && u.specialSealsActive&SEAL_NUDZIARTH){
 				if(obj->otyp == MIRROR){
 					if(u.spiritPColdowns[PWR_MIRROR_SHATTER] < monstermoves && !u.uswallow && uwep && uwep->otyp == MIRROR && !(uwep->oartifact)){
 						useup(uwep);
@@ -1941,7 +1941,7 @@ int thrown;
 	    case GAUNTLETS_OF_FUMBLING:
 		tmp -= 3;
 		break;
-	    case LEATHER_GLOVES:
+	    case GLOVES:
 	    case GAUNTLETS_OF_DEXTERITY:
 		break;
 	    default:
@@ -2039,7 +2039,7 @@ int thrown;
 						yn("Do you wish to take the Crescent Blade, instead of this?") == 'y'
 					){
 						obfree(obj, (struct obj *)0);
-						obj = mksobj(SILVER_SABER, TRUE, FALSE);
+						obj = mksobj(SABER, TRUE, FALSE);
 						obj = oname(obj, artiname(ART_CRESCENT_BLADE));
 						obj->oerodeproof = TRUE;
 						obj->blessed = TRUE;
@@ -2313,7 +2313,7 @@ register struct obj *obj;
 {
 	char buf[BUFSZ];
 	boolean is_buddy = sgn(mon->data->maligntyp) == sgn(u.ualign.type);
-	boolean is_gem = objects[obj->otyp].oc_material == GEMSTONE;
+	boolean is_gem = obj->obj_material == GEMSTONE;
 	int ret = 0;
 	static NEARDATA const char nogood[] = " is not interested in your junk.";
 	static NEARDATA const char acceptgift[] = " accepts your gift.";
@@ -2533,7 +2533,7 @@ breaktest(obj)
 struct obj *obj;
 {
 	if (obj_resists(obj, 0, 100)) return 0;
-	if (objects[obj->otyp].oc_material == GLASS &&
+	if (obj->obj_material == GLASS &&
 		obj->oclass != GEM_CLASS)
 	    return 1;
 	switch (obj->oclass == POTION_CLASS ? POT_WATER : obj->otyp) {
@@ -2562,29 +2562,7 @@ boolean in_view;
 
 	to_pieces = "";
 	switch (obj->oclass == POTION_CLASS ? POT_WATER : obj->otyp) {
-		default: /* glass or crystal wand */
-		    if (obj->oclass != WAND_CLASS)
-			impossible("breaking odd object?");
-		case CRYSTAL_HELM:
-		case CRYSTAL_PLATE_MAIL:
-		case CRYSTAL_SWORD:
-		case CRYSTAL_SHIELD:
-		case CRYSTAL_BOOTS:
-		case CRYSTAL_GAUNTLETS:
-		case DROVEN_BOLT:
-		case DROVEN_DAGGER:
-		case DROVEN_SHORT_SWORD:
-		case DROVEN_LANCE:
-		case DROVEN_GREATSWORD:
-		case DROVEN_SPEAR:
-		case LENSES:
-		case R_LYEHIAN_FACEPLATE:
-		case MIRROR:
-		case CRYSTAL_BALL:
-		case SUBETHAIC_COMPONENT:
-#ifdef TOURIST
-		case EXPENSIVE_CAMERA:
-#endif
+		default: /* misc glass item, including glass or crystal wand */
 			to_pieces = " into a thousand pieces";
 			/*FALLTHRU*/
 		case POT_WATER:		/* really, all potions */

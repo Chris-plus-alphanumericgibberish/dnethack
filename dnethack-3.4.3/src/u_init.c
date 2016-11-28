@@ -55,7 +55,7 @@ static struct trobj Anachrononaut_Inc[] = {
 	{ LIGHTSABER,  3, WEAPON_CLASS, 1, 0 },
 	{ ELVEN_TOGA, 1, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
-	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, 0 },
+	{ GLOVES, 0, ARMOR_CLASS, 1, 0 },
 	{ ROBE, 1, ARMOR_CLASS, 1, 0 },
 	{ SEDGE_HAT, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
@@ -71,7 +71,7 @@ static struct trobj Anachrononaut_Vam[] = {
 	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
 	{ STUDDED_LEATHER_ARMOR, 0, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
-	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, 0 },
+	{ GLOVES, 0, ARMOR_CLASS, 1, 0 },
 	{ CLOAK_OF_DISPLACEMENT, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS,  5, 0 },
@@ -192,8 +192,8 @@ static struct trobj Convict[] = {
 static struct trobj Healer[] = {
 	{ SCALPEL, 0, WEAPON_CLASS, 1, 1 },
 	{ QUARTERSTAFF, 0, WEAPON_CLASS, 1, 1 },
-	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
-/*	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, UNDEF_BLESS }, */
+	{ GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+/*	{ GLOVES, 0, ARMOR_CLASS, 1, UNDEF_BLESS }, */
 /*	{ HEALER_UNIFORM, 0, ARMOR_CLASS, 1, 1 },*/
 	{ STETHOSCOPE, 0, TOOL_CLASS, 1, 0 },
 	{ POT_HEALING, 0, POTION_CLASS, 4, UNDEF_BLESS },
@@ -213,14 +213,14 @@ static struct trobj Knight[] = {
 	{ RING_MAIL, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HELMET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ BUCKLER, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_GLOVES, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ GLOVES, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 10, 0 },
 	{ CARROT, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Monk[] = {
 #define M_BOOK		2
-	{ LEATHER_GLOVES, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ GLOVES, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ ROBE, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },
 	{ UNDEF_TYP, UNDEF_SPE, SCROLL_CLASS, 1, UNDEF_BLESS },
@@ -248,10 +248,10 @@ static struct trobj Noble[] = {
 };
 static struct trobj DNoble[] = {
 	{ BULLWHIP, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
-	{ SILVER_DAGGER, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
+	{ DAGGER, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ NOBLE_S_DRESS, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ DROVEN_HELM, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ BOW, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
@@ -267,7 +267,7 @@ static struct trobj DNoble[] = {
 static struct trobj DwarfNoble[] = {
 	{ BATTLE_AXE, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ CHAIN_MAIL, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 	{ TRIPE_RATION, 0, FOOD_CLASS, 3, 0 },
@@ -1908,7 +1908,7 @@ u_init()
 		break;
 	case PM_WIZARD:
 		if(flags.female && Race_if(PM_DROW)){
-			Wizard[W_WEAPON].trotyp = SILVER_KHAKKHARA;
+			Wizard[W_WEAPON].trotyp = KHAKKHARA;
 			ini_inv(MRGloves);
 		}
 		ini_inv(Wizard);
@@ -2727,7 +2727,7 @@ register struct trobj *trop;
 			if(Role_if(PM_EXILE)){
 				obj->dknown = obj->rknown = obj->sknown = 1;
 				if(obj->oclass == WEAPON_CLASS && !Race_if(PM_DWARF)){
-					if(objects[otyp].oc_material != WOOD) obj->oeroded = 1;
+					if(obj->obj_material != WOOD) obj->oeroded = 1;
 					else obj->oeroded2 = 1;
 				} else if(obj->oclass == FOOD_CLASS){
 					obj->ostolen = TRUE;
@@ -2735,7 +2735,7 @@ register struct trobj *trop;
 			}else{
 				obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
 				if (objects[otyp].oc_uses_known) obj->known = 1;
-				if(Role_if(PM_PIRATE) && objects[otyp].oc_material == IRON) obj->oerodeproof = 1;
+				if(Role_if(PM_PIRATE) && obj->obj_material == IRON) obj->oerodeproof = 1;
 			}
 			obj->cursed = 0;
 			if(obj->otyp == DROVEN_PLATE_MAIL  ||
@@ -2746,7 +2746,7 @@ register struct trobj *trop;
 			if (obj->opoisoned && u.ualign.type != A_CHAOTIC)
 			    obj->opoisoned = 0;
 			if (obj->ovar1){
-				if(obj->oclass == WEAPON_CLASS && objects[(obj)->otyp].oc_material == WOOD) u.wardsknown |= obj->ovar1;
+				if(obj->oclass == WEAPON_CLASS && (obj)->obj_material == WOOD) u.wardsknown |= obj->ovar1;
 				else if(obj->oclass == RING_CLASS && isEngrRing((obj)->otyp) && !(obj->ohaluengr)) u.wardsknown |= get_wardID(obj->ovar1);
 			}
 			if (obj->oclass == WEAPON_CLASS ||

@@ -112,7 +112,7 @@ dosit()
 
 	    obj = level.objects[u.ux][u.uy];
 	    You("sit on %s.", the(xname(obj)));
-	    if (!(Is_box(obj) || objects[obj->otyp].oc_material == CLOTH))
+	    if (!(Is_box(obj) || obj->obj_material == CLOTH))
 		pline("It's not very comfortable...");
 
 	} else if(Underwater || Is_waterlevel(&u.uz)) {

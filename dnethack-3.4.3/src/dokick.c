@@ -60,12 +60,12 @@ register boolean clumsy;
 		uarmf->blessed)
 	    blessed_foot_damage = 1;
 
-	if (uarmf && (objects[uarmf->otyp].oc_material == SILVER || arti_silvered(uarmf) )
+	if (uarmf && (uarmf->obj_material == SILVER || arti_silvered(uarmf) )
 		&& hates_silver(mdat)) {
 			dmg += rnd(20);
 			silvermsg = TRUE; silverobj = TRUE;
 	}
-	if (uarmf && (objects[uarmf->otyp].oc_material == IRON)
+	if (uarmf && (uarmf->obj_material == IRON)
 		&& hates_iron(mdat)) {
 			dmg += rnd(mon->m_lev*2);
 			ironmsg = TRUE; ironobj = TRUE;
@@ -439,7 +439,7 @@ struct obj *obj;
 	    const char *result = (char *)0;
 
 	    otmp2 = otmp->nobj;
-	    if (objects[otmp->otyp].oc_material == GLASS &&
+	    if (otmp->obj_material == GLASS &&
 		otmp->oclass != GEM_CLASS && !obj_resists(otmp, 33, 100)) {
 		result = "shatter";
 	    } else if (otmp->otyp == EGG && !rn2(3)) {
@@ -1693,7 +1693,7 @@ boolean shop_floor_obj;
 	if (breaktest(otmp)) {
 	    const char *result;
 
-	    if (objects[otmp->otyp].oc_material == GLASS
+	    if (otmp->obj_material == GLASS
 #ifdef TOURIST
 		|| otmp->otyp == EXPENSIVE_CAMERA
 #endif

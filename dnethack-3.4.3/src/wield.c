@@ -194,7 +194,7 @@ struct obj *wep;
 			pline("%s to %s%s!", Tobjnam(wep, "begin"),
 				(wep->blessed ? "shine very" : "glow"), (wep->cursed ? "" : " brilliantly"));
 		}
-		if(stealthy && wep->otyp == SILVER_KHAKKHARA) (wep->oartifact == ART_ANNULUS) ? 
+		if(stealthy && wep->otyp == KHAKKHARA) (wep->oartifact == ART_ANNULUS) ? 
 			pline("The hollow silver rod chimes at the slightest touch.") : 
 			pline("The silver rings chime together.");
 		else if(!stealthy && Stealth) pline("Now you can move stealthily.");
@@ -202,7 +202,7 @@ struct obj *wep;
 #if 0
 	    /* we'll get back to this someday, but it's not balanced yet */
 	    if (Race_if(PM_ELF) && !wep->oartifact &&
-			    objects[wep->otyp].oc_material == IRON) {
+			    wep->obj_material == IRON) {
 		/* Elves are averse to wielding cold iron */
 		You("have an uneasy feeling about wielding cold iron.");
 		change_luck(-1);

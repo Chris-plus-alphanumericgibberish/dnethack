@@ -3480,7 +3480,7 @@ arti_invoke(obj)
 						You_hear("a sharp crack!");
 					    levl[bhitpos.x][bhitpos.y].typ = CORR;
 						for(numbars = d(2,4)-1; numbars > 0; numbars--){
-							obj = mksobj_at(IRON_BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
+							obj = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
 						    obj->spe = 0;
 						    obj->cursed = obj->blessed = FALSE;
 						}
@@ -3938,8 +3938,8 @@ arti_invoke(obj)
 		}
 	break;
 	case SING_SPEAR:
-		if(!exist_artifact(SILVER_SPEAR, "Blade Singer's Spear") ){
-			otmp = mksobj(SILVER_SPEAR, TRUE, FALSE);
+		if(!exist_artifact(SPEAR, "Blade Singer's Spear") ){
+			otmp = mksobj(SPEAR, TRUE, FALSE);
 			otmp = oname(otmp, artiname(ART_BLADE_SINGER_S_SPEAR));		
 			if (otmp->spe < 0) otmp->spe = 0;
 			if (otmp->cursed) uncurse(otmp);
@@ -3949,8 +3949,8 @@ arti_invoke(obj)
 		}
 	break;
 	case DANCE_DAGGER:
-		if(!exist_artifact(SILVER_DAGGER, "Blade Dancer's Dagger") ){
-			otmp = mksobj(SILVER_DAGGER, TRUE, FALSE);
+		if(!exist_artifact(DAGGER, "Blade Dancer's Dagger") ){
+			otmp = mksobj(DAGGER, TRUE, FALSE);
 			otmp = oname(otmp, artiname(ART_BLADE_DANCER_S_DAGGER));		
 			if (otmp->spe < 0) otmp->spe = 0;
 			if (otmp->cursed) uncurse(otmp);
@@ -4600,7 +4600,7 @@ arti_invoke(obj)
 						uwep->ovar1 = ECLIPSE_MOON;
 					break;
 					case COMMAND_KHAKKHARA:
-						uwep->otyp = SILVER_KHAKKHARA;
+						uwep->otyp = KHAKKHARA;
 					break;
 					case COMMAND_DROVEN_SPEAR:
 						uwep->otyp = DROVEN_SPEAR;
@@ -4796,7 +4796,7 @@ arti_invoke(obj)
 						if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
 						uwep->oclass = WEAPON_CLASS;
 						uwep->altmode = FALSE;
-						uwep->otyp = SILVER_KHAKKHARA;
+						uwep->otyp = KHAKKHARA;
 					break;
 					case COMMAND_BFG:
 						if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
@@ -4808,7 +4808,7 @@ arti_invoke(obj)
 						if(uwep->lamplit) lightsaber_deactivate(uwep,TRUE);
 						uwep->oclass = WEAPON_CLASS;
 						uwep->altmode = FALSE;
-						uwep->otyp = SILVER_CHAKRAM;
+						uwep->otyp = CHAKRAM;
 					break;
 					/*These effects are limited by timeout*/
 					case COMMAND_BELL:{
@@ -5853,7 +5853,7 @@ struct obj *obj;
 				MENU_UNSELECTED);
 		}
 		
-		if(obj->otyp != SILVER_KHAKKHARA){
+		if(obj->otyp != KHAKKHARA){
 			Sprintf(buf, "Become a khakkhara");
 			any.a_int = COMMAND_KHAKKHARA;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
@@ -5916,7 +5916,7 @@ struct obj *obj;
 				'l', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		}
-	} else if(obj->oartifact == ART_GILDED_SWORD_OF_Y_HA_TALLA){
+	} else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA){
 		if(obj->otyp != SCIMITAR){
 			Sprintf(buf, "Become a sword");
 			any.a_int = COMMAND_SCIMITAR;	/* must be non-zero */
@@ -5975,14 +5975,14 @@ struct obj *obj;
 	}
 	
 	if(obj->age < monstermoves){
-		if(obj->oartifact == ART_GILDED_SWORD_OF_Y_HA_TALLA){
+		if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA){
 			Sprintf(buf, "Strike");
 			any.a_int = COMMAND_STRIKE;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
 				'S', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		} else {
-			if((obj->otyp == MACE || obj->otyp == ELVEN_MACE || obj->otyp == SILVER_KHAKKHARA) && (
+			if((obj->otyp == MACE || obj->otyp == ELVEN_MACE || obj->otyp == KHAKKHARA) && (
 			   u.uswallow || 
 			   (!u.uhave.amulet && Can_rise_up(u.ux, u.uy, &u.uz)) || 
 			   (u.uhave.amulet && !Weightless && !Is_waterlevel(&u.uz) && !Underwater) 
@@ -6006,7 +6006,7 @@ struct obj *obj;
 				'F', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 			
-			if((obj->otyp == SPEAR || obj->otyp == DROVEN_SPEAR || obj->otyp == SILVER_KHAKKHARA || obj->otyp == ELVEN_SPEAR)){
+			if((obj->otyp == SPEAR || obj->otyp == DROVEN_SPEAR || obj->otyp == KHAKKHARA || obj->otyp == ELVEN_SPEAR)){
 				Sprintf(buf, "Give me your life");
 				any.a_int = COMMAND_LIFE;	/* must be non-zero */
 				add_menu(tmpwin, NO_GLYPH, &any,
@@ -6046,7 +6046,7 @@ struct obj *obj;
 
 	Sprintf(buf, "Function list:");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
-	if(obj->otyp != SILVER_KHAKKHARA && !uarms && !u.twoweap){
+	if(obj->otyp != KHAKKHARA && !uarms && !u.twoweap){
 		Sprintf(buf, "Become a khakkhara");
 		any.a_int = COMMAND_KHAKKHARA;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
@@ -6074,7 +6074,7 @@ struct obj *obj;
 			'g', 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 	}
-	if(obj->otyp != SILVER_CHAKRAM){
+	if(obj->otyp != CHAKRAM){
 		Sprintf(buf, "Become a chakram");
 		any.a_int = COMMAND_ANNULUS;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
@@ -6083,7 +6083,7 @@ struct obj *obj;
 	}
 
 	if(obj->ovar1 < monstermoves){
-		if((obj->otyp == SILVER_KHAKKHARA)){
+		if((obj->otyp == KHAKKHARA)){
 			Sprintf(buf, "Ring Out");
 			any.a_int = COMMAND_BELL;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
@@ -6108,7 +6108,7 @@ struct obj *obj;
 				'F', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		}
-		if((obj->otyp == SILVER_CHAKRAM)){
+		if((obj->otyp == CHAKRAM)){
 			Sprintf(buf, "Annul");
 			any.a_int = COMMAND_ANNUL;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,

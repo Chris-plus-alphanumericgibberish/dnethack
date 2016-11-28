@@ -116,15 +116,15 @@ WEAPON("dart", (char *)0,
 WEAPON("shuriken", "throwing star",
 	0, 1, 0, 33,  1,  5,  8,  6, 2, P,   -P_SHURIKEN, IRON, HI_METAL),
 WEAPON("boomerang", (char *)0,
-	1, 1, 0, 13,  5, 20,  9,  9, 0, 0,   -P_BOOMERANG, WOOD, HI_WOOD),
-WEAPON("silver chakram", "silver circular blade", /*Needs encyc entry*//*Needs tile*/
-	1, 1, 0,  6,  5, 20,  9,  9, 0, 0,   -P_BOOMERANG, SILVER, HI_SILVER),
+	1, 1, 0, 13,  5, 20,  9,  9, 0, B,   -P_BOOMERANG, WOOD, HI_WOOD),
+WEAPON("chakram", "circular blade", /*Needs encyc entry*//*Needs tile*/
+	1, 1, 0,  6,  5, 20,  9,  9, 0, S,   -P_BOOMERANG, WOOD, HI_SILVER),
 WEAPON("spike", (char *)0, /*Needs encyc entry*/
 	1, 1, 0,  0,  1,  2,  3,  2, 0, P,   -P_DART, BONE, CLR_WHITE),
 
 /* spears */
 WEAPON("spear", (char *)0,
-	1, 1, 0, 48, 25,  3,  6,  8, 0, P,   P_SPEAR, IRON, HI_METAL),
+	1, 1, 0, 50, 25,  3,  6,  8, 0, P,   P_SPEAR, IRON, HI_METAL),
 WEAPON("elven spear", "runed spear",
 	0, 1, 0, 10, 25,  3,  7,  7, 2, P,   P_SPEAR, WOOD, HI_WOOD),
 WEAPON("droven spear", "long obsidian spear", /*Needs encyc entry*/
@@ -133,8 +133,6 @@ WEAPON("orcish spear", "crude spear",
 	0, 1, 0, 13, 25,  3,  5,  10, -1, P,   P_SPEAR, IRON, CLR_BLACK),
 WEAPON("dwarvish spear", "stout spear",
 	0, 1, 0, 12, 30,  3,  9,  9, 0, P,   P_SPEAR, IRON, HI_METAL),
-WEAPON("silver spear", (char *)0,
-	1, 1, 0,  2, 30, 40,  6,  8, 0, P,   P_SPEAR, SILVER, HI_SILVER),
 WEAPON("javelin", "throwing spear",
 	0, 1, 0, 10, 20,  3,  6,  6, 0, P,   P_JAVELIN, IRON, HI_METAL),
 
@@ -144,15 +142,13 @@ WEAPON("trident", (char *)0, /*Needs encyc entry*/
 
 /* blades */
 WEAPON("dagger", (char *)0,
-	1, 1, 0, 22, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
+	1, 1, 0, 24, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
 WEAPON("elven dagger", "runed dagger",
 	0, 1, 0,  7, 10,  4,  5,  3, 4, P,   P_DAGGER, WOOD, HI_WOOD),
 WEAPON("droven dagger", "obsidian dagger", /*Needs encyc entry*/
 	0, 1, 0,  0, 10,  12,  8,  6, 4, P,   P_DAGGER, GLASS, CLR_BLACK),
 WEAPON("orcish dagger", "crude dagger",
 	0, 1, 0,  9, 10,  5,  3,  5, 1, P,   P_DAGGER, IRON, CLR_BLACK),
-WEAPON("silver dagger", (char *)0,
-	1, 1, 0,  2, 12, 40,  4,  3, 2, P,   P_DAGGER, SILVER, HI_SILVER),
 WEAPON("athame", (char *)0,
 	1, 1, 0,  0, 10,  4,  4,  4, 2, S,   P_DAGGER, IRON, HI_METAL),
 WEAPON("scalpel", (char *)0,
@@ -162,7 +158,7 @@ WEAPON("knife", (char *)0,
 WEAPON("stiletto", (char *)0,
 	1, 1, 0,  4,  5,  4,  6,  2, 1, P|S, P_KNIFE, IRON, HI_METAL),
 WEAPON("worm tooth", (char *)0,
-	1, 0, 0,  0, 20,  2,  2,  2, 0, 0,   P_KNIFE, 0, CLR_WHITE),
+	1, 0, 0,  0, 20,  2,  2,  2, 0, P,   P_KNIFE, 0, CLR_WHITE),
 WEAPON("crysknife", (char *)0,
 	1, 0, 0,  0, 20,100, 10, 10, 3, P,   P_KNIFE, MINERAL, CLR_WHITE),
 
@@ -173,9 +169,9 @@ WEAPON("elven sickle", "runed sickle", /* Vs plants: +6 to hit and double damage
 
 WEAPON("axe", (char *)0,
 	1, 0, 0, 20, 60,  8,  6,  4, 0, S,   P_AXE, IRON, HI_METAL),
-WEAPON("battle-axe", "double-headed axe",/* "double-bitted" ? */
+WEAPON("battle-axe", "double-bitted axe",/* was "double-headed" ? */
 	0, 0, 1, 16,120, 40,  8,  6, 0, S,   P_AXE, IRON, HI_METAL), /*+1d4/+2d4*/
-WEAPON("moon axe", "silver two-handed axe", /*Needs encyc entry*//*Needs tile*/
+WEAPON("moon axe", "two-handed axe", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, 12,160, 40,  6,  6, 0, S,   P_AXE, SILVER, HI_SILVER),
 
 /* swords */
@@ -195,11 +191,11 @@ WEAPON("dwarvish short sword", "broad short sword",
 WEAPON("scimitar", "curved sword",
 	0, 0, 0, 14, 40, 15,  8,  8, 0, S,   P_SCIMITAR, IRON, HI_METAL),
 WEAPON("high-elven warsword", "runed curved sword",
-	0, 0, 0,  1,  4, 15, 10, 10, 2, S,   P_SCIMITAR, MITHRIL, HI_METAL),
+	0, 0, 0,  1, 10, 15, 10, 10, 2, S,   P_SCIMITAR, MITHRIL, HI_METAL),
 WEAPON("rapier", (char *)0,
-	1, 0, 0,  6, 40, 20,  6,  4, 2, P,   P_SABER, METAL, HI_METAL),
-WEAPON("silver saber", (char *)0,
-	1, 0, 0,  6, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
+	1, 0, 0,  6, 34, 20,  6,  4, 2, P,   P_SABER, METAL, HI_METAL),
+WEAPON("saber", (char *)0,
+	1, 0, 0,  6, 34, 75,  8,  8, 0, S,   P_SABER, METAL, HI_SILVER),
 WEAPON("broadsword", (char *)0,
 	1, 0, 0,  8, 70, 10,  4,  6, 0, S,   P_BROAD_SWORD, IRON, HI_METAL),
 						/* +d4 small, +1 large */
@@ -296,10 +292,10 @@ WEAPON("club", (char *)0,
 	1, 0, 0, 11, 30,  3,  6,  3, 0, B,   P_CLUB, WOOD, HI_WOOD),
 WEAPON("quarterstaff", "staff",
 	0, 0, 1, 10, 40,  5,  6,  6, 0, B,   P_QUARTERSTAFF, WOOD, HI_WOOD),
-WEAPON("silver khakkhara", "silver monk's staff", /*Needs encyc entry*//*Needs tile*/
-	0, 0, 1,  2, 120,  5,  6,  4, 0, B|P,   P_QUARTERSTAFF, SILVER, HI_SILVER),
-WEAPON("iron bar", (char *)0,
-	1, 1, 1, 0, 400,  10,  8,  6, -10, B,   P_QUARTERSTAFF, IRON, HI_METAL),
+WEAPON("khakkhara", "monk's staff", /*Needs encyc entry*//*Needs tile*/
+	0, 0, 1,  2, 120,  5,  6,  4, 0, B|P,   P_QUARTERSTAFF, METAL, HI_SILVER),
+WEAPON("bar", (char *)0,
+	1, 1, 1, 0, 400,  10,  8,  6, -10, B,   P_QUARTERSTAFF, METAL, HI_METAL),
 /* two-piece */
 WEAPON("aklys", "thonged club",
 	0, 0, 0,  8, 15,  4,  6,  3, 0, B,   P_CLUB, IRON, HI_METAL),
@@ -326,7 +322,7 @@ GUN("auto shotgun", "strange broken crossbow",	   	0,  1, 0,  60, 1500,  3,  2, 
 GUN("rocket launcher", "metal tube",  				0,  1, 0, 100, 3500, 20, -5, -4, WP_ROCKET, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
 GUN("grenade launcher", "strange broken crossbow", 	0,  0, 0,  55, 1500,  6, -3, -3,WP_GRENADE, IRON, P_FIREARM, HI_METAL), /*Needs tile*/
 
-GUN("BFG", "silver ovoid device", 			   		0,  1, 0, 100, 3000,100,  3,  0,WP_ROCKET|WP_GRENADE|WP_BULLET|WP_SHELL|WP_ROCKET,
+GUN("BFG", "ovoid device", 			   		0,  1, 0, 100, 3000,100,  3,  0,WP_ROCKET|WP_GRENADE|WP_BULLET|WP_SHELL|WP_ROCKET,
 																								SILVER, P_FIREARM, HI_SILVER), /*Needs tile*/
 GUN("handgun", "unfamiliar handgun",			0,  0, 0,  12,  100, 15,  1,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
 GUN("gun", "unfamiliar gun",					0,  0, 0,  25,  250, 10,  3, -1, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
@@ -446,8 +442,8 @@ HELM("helm of opposite alignment", "crested helmet", /* tiara of treachery */
 		0, 1,  0,	6, 1, 50,  50, 9, 0, IRON, HI_METAL),
 HELM("helm of telepathy", "visored helmet", /*tiara of telepathy*/
 		0, 1,  TELEPAT, 2, 1, 50,  50, 9, 0, IRON, HI_METAL),
-HELM("helm of drain resistance", "gold circlet", /*diadem of drain resistance*//*Needs tile*/
-		0, 1,  DRAIN_RES, 2, 1, 50,  50, 9, 0, GOLD, HI_GOLD),
+HELM("helm of drain resistance", "band", /*diadem of drain resistance*//*Needs tile*/
+		0, 1,  DRAIN_RES, 2, 1, 50,  50, 9, 0, METAL, HI_GOLD),
 
 /* suits of armor */
 /*
@@ -661,8 +657,8 @@ GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs t
 		0, 0,  0,	   0, 2,  5, 400, 8, 0, MITHRIL, HI_METAL),
 GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 15, 50,  8, 0, PLASTIC, CLR_WHITE),
-GLOVES("leather gloves", "old gloves",
-		0, 0,  0,	   8, 1, 10,  8,  9, 0, LEATHER, HI_LEATHER),
+GLOVES("gloves", "old gloves",
+		0, 0,  0,	   8, 1, 10,  8,  9, 0, CLOTH, HI_LEATHER),
 GLOVES("gauntlets of fumbling", "padded gloves",
 		0, 1,  FUMBLING,   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
 GLOVES("gauntlets of power", "riding gloves",
@@ -910,12 +906,12 @@ WEPTOOL("pick-axe", (char *)0,
 /* 
  * Lightsabers get 3x dice when lit 
  */
-WEPTOOL("lightsaber", "silver sword hilt", /*Needs (better) encyc entry*/
+WEPTOOL("lightsaber", "sword hilt", /*Needs (better) encyc entry*/
 	0, 1, 1, 0,  0, 12, 500, 8,  8, -3, SLASH, P_SABER, SILVER, HI_SILVER),
-WEPTOOL("beamsword",  "gold sword hilt", /*Needs encyc entry*/
+WEPTOOL("beamsword",  "broadsword hilt", /*Needs encyc entry*/
 	0, 1, 1, 0,  0, 20, 500, 10,10, -3, SLASH, P_BROAD_SWORD, GOLD, HI_GOLD),
-WEPTOOL("double lightsaber",  "platinum grip", /*Needs encyc entry*//*Needs tile*/
-	0, 1, 1, 1,  0, 24,1000, 10,10, -6, SLASH, P_QUARTERSTAFF, PLATINUM, HI_METAL),
+WEPTOOL("double lightsaber",  "long grip", /*Needs encyc entry*//*Needs tile*/
+	0, 1, 1, 1,  0, 24,1000, 10,10, -6, SLASH, P_QUARTERSTAFF, SILVER, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
 	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
 /* 3.4.1: unicorn horn left classified as "magic" */

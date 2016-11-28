@@ -1351,7 +1351,7 @@ struct obj *obj;			/* 2nd arg to fhitm/fhito */
 			You_hear("a sharp crack!");
 		    levl[bhitpos.x][bhitpos.y].typ = CORR;
 			for(numbars = d(2,4)-1; numbars > 0; numbars--){
-				obj = mksobj_at(IRON_BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
+				obj = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
 			    obj->spe = 0;
 			    obj->cursed = obj->blessed = FALSE;
 			}
@@ -2169,12 +2169,12 @@ museamnesia:
 			pline_The("whip slips free.");  /* not `The_whip' */
 			return 1;
 		    } else if (where_to == 3 && hates_silver(mtmp->data) &&
-			    (objects[obj->otyp].oc_material == SILVER || arti_silvered(obj))) {
+			    (obj->obj_material == SILVER || arti_silvered(obj))) {
 			/* this monster won't want to catch a silver
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;
 		    } else if (where_to == 3 && hates_iron(mtmp->data) &&
-			    objects[obj->otyp].oc_material == IRON) {
+			    obj->obj_material == IRON) {
 			/* this monster won't want to catch an iron
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;

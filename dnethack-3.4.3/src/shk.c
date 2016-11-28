@@ -2331,7 +2331,7 @@ register struct monst *shkp;	/* if angry, impose a surcharge */
 	   especially when gem prices are concerned */
 	if (!obj->dknown || !objects[obj->otyp].oc_name_known) {
 		if (obj->oclass == GEM_CLASS &&
-			objects[obj->otyp].oc_material == GLASS) {
+			obj->obj_material == GLASS) {
 		    int i;
 		    /* get a value that's 'random' from game to game, but the
 		       same within the same game */
@@ -2515,8 +2515,8 @@ register struct monst *shkp;
 	if (!obj->dknown || !objects[obj->otyp].oc_name_known) {
 		if (obj->oclass == GEM_CLASS) {
 			/* different shop keepers give different prices */
-			if (objects[obj->otyp].oc_material == GEMSTONE ||
-			    objects[obj->otyp].oc_material == GLASS) {
+			if (obj->obj_material == GEMSTONE ||
+			    obj->obj_material == GLASS) {
 				tmp = (obj->otyp % (6 - shkp->m_id % 3));
 				tmp = (tmp + 3) * obj->quan;
 			}
@@ -3336,7 +3336,43 @@ register struct obj *obj;
 boolean shk_buying;
 {
 	register long tmp = (long) objects[obj->otyp].oc_cost;
-
+	
+	if(obj->obj_material != objects[obj->otyp].oc_material && obj->oclass == WEAPON_CLASS){ /*At least for now, only adjust value for weapons*/
+#define FeV		1
+#define AgV		10
+#define AuV		100
+#define PtV		100
+#define MiV		100
+		if(objects[obj->otyp].oc_material == SILVER){
+			if(obj->obj_material == GOLD) tmp *= (AuV/AgV);
+			else if(obj->obj_material == PLATINUM) tmp *= (PtV/AgV);
+			else if(obj->obj_material == MITHRIL) tmp *= (MiV/AgV);
+			else /*treat it as if it's steel*/ tmp *= (FeV/AgV);
+		} else if(objects[obj->otyp].oc_material == GOLD){
+			if(obj->obj_material == SILVER) tmp = tmp *= (AgV/AuV);
+			else if(obj->obj_material == PLATINUM) tmp *= (PtV/AuV);
+			else if(obj->obj_material == MITHRIL) tmp *= (MiV/AuV);
+			else /*treat it as if it's steel*/ tmp *= (FeV/AuV);
+		} else if(objects[obj->otyp].oc_material == PLATINUM){
+			if(obj->obj_material == SILVER) tmp *= (AgV/PtV);
+			else if(obj->obj_material == GOLD) tmp *= (AuV/PtV);
+			else if(obj->obj_material == MITHRIL) tmp *= (MiV/PtV);
+			else /*treat it as if it's steel*/ tmp *= (FeV/PtV);
+		} else if(objects[obj->otyp].oc_material == MITHRIL){
+			if(obj->obj_material == SILVER) tmp *= (AgV/MiV);
+			else if(obj->obj_material == GOLD) tmp *= (AuV/MiV);
+			else if(obj->obj_material == PLATINUM) tmp *= (PtV/MiV);
+			else /*treat it as if it's steel*/ tmp *= (FeV/MiV);
+		} else { /*treat it as if it's steel*/
+			if(obj->obj_material == SILVER) tmp *= (AgV/FeV);
+			else if(obj->obj_material == GOLD) tmp *= (AuV/FeV);
+			else if(obj->obj_material == PLATINUM) tmp *= (PtV/FeV);
+			else if(obj->obj_material == MITHRIL) tmp *= (MiV/FeV);
+			/*treat it as if it's still steel, leave it alone*/
+		}
+		if(tmp < 1) tmp = 1;
+	}
+	
 	if (obj->oartifact) {
 	    tmp = arti_cost(obj);
 	    if (shk_buying) tmp /= 4;
