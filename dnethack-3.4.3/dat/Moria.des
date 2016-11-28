@@ -419,7 +419,7 @@ OBJECT:'[',"plate mail",contained
 OBJECT:'[',"iron shoes",contained
 
 # Magic Chest
-OBJECT:'(',"magic chest",(34,19)
+OBJECT:'(',"magic chest",(35,16)
 
 #Chamber of Mazarbul
 ENGRAVING:(69,15),engrave,"BALIN SON OF FUNDIN LORD OF MORIA"
@@ -465,7 +465,7 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 # Watcher
-MONSTER:';',"Watcher in the Water",(10,15),hostile
+MONSTER:';',"Watcher in the Water",(10,19),hostile
 
 MAZE: "Dnb-goal", ' '
 FLAGS:noteleport,hardfloor
