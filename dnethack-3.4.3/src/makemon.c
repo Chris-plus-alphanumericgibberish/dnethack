@@ -4543,10 +4543,30 @@ register int	mmflags;
 	fmon = mtmp;
 	mtmp->m_id = flags.ident++;
 	if (!mtmp->m_id) mtmp->m_id = flags.ident++;	/* ident overflowed */
-	mtmp->mcansee = mtmp->mcanmove = mtmp->mnotlaugh = TRUE;
+	mtmp->mcansee = mtmp->mcanhear = mtmp->mcanmove = mtmp->mnotlaugh = TRUE;
 	mtmp->mblinded = mtmp->mfrozen = mtmp->mlaughing = 0;
 	mtmp->mvar1 = mtmp->mvar2 = mtmp->mvar3 = 0;
 	set_mon_data(mtmp, ptr, 0);
+	
+	mtmp->mstr = d(3,6);
+	if(strongmonst(mtmp->data)) mtmp->mstr += 10;
+	mtmp->mdex = d(3,6);
+	if(is_elf(mtmp->data) && mtmp->mstr > mtmp->mdex){
+		short swap = mtmp->mstr;
+		mtmp->mstr = mtmp->mdex;
+		mtmp->mdex = swap;
+	}
+	mtmp->mcon = d(3,6);
+	if(is_animal(mtmp->data)) mtmp->mint = 3;
+	else if(mindless(mtmp->data)) mtmp->mint = 0;
+	else if(is_magical(mtmp->data)) mtmp->mint = 13+rnd(5);
+	else mtmp->mint = d(3,6);
+	mtmp->mwis = d(3,6);
+	mtmp->mcha = d(3,6);
+	if(mtmp->data->mlet == S_NYMPH){
+		if(mtmp->data == &mons[PM_DEMINYMPH]) mtmp->mcha = (mtmp->mcha + 25)/2;
+		else mtmp->mcha = 25;
+	}
 	
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && (ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])){
 		struct obj *otmp = mksobj(SADDLE, TRUE, FALSE);
