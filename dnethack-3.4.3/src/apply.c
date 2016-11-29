@@ -1034,7 +1034,7 @@ struct obj *obj;
 			pline ("%s stares at its reflection with a stony expression.", Monnam(mtmp));
 			mtmp->mcanmove = 0;
 			mtmp->mfrozen = 1;
-	} else if (!is_unicorn(mtmp->data) && !humanoid(mtmp->data) &&
+	} else if (!is_unicorn(mtmp->data) && is_animal(mtmp->data) &&
 			(!mtmp->minvis || perceives(mtmp->data)) && rn2(5)) {
 		if (vis)
 		    pline("%s is frightened by its reflection.", Monnam(mtmp));
