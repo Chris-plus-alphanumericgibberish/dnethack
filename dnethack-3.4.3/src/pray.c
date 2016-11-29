@@ -2183,8 +2183,8 @@ dosacrifice()
 		return 1;
 	    } else {
 		/* don't you dare try to fool the gods */
-		change_luck(-3);
 		if(u.ualign.type != A_VOID){
+			change_luck(-3);
 			adjalign(-1);
 			u.ugangr[Align2gangr(u.ualign.type)] += 3;
 			value = -3;
