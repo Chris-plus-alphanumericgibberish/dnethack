@@ -183,7 +183,7 @@ static const char *haluMesg[] = {
 	"I see you...",
 		"...do you see me?",
 		"That was a mistake.",
-	"What was drowned, and washed away, need never return.",
+	"What was drowned, and washed away, might never rise again.",
 		"Eternity is a lie.",
 		"Everything dies.",
 		"What is lost might not be found.",
@@ -284,6 +284,9 @@ static const char *haluMesg[] = {
 		"Undone by the blood.",
 		"Fear the old blood.",
 		"The Great Ones are sympathetic in spirit, and often answer when called upon.",
+		"O Flora, of the moon, of the dream.",
+		"O Little ones, o fleeting will of the ancients.",
+		"Let the hunter be safe.  Let this dream foretell a pleasant awakening...",
 	"We do not breathe. We do not eat. We do not sleep. We do not stop. ", /* Sigma */
 		"We have outlasted our gods. We know true freedom.",
 		"We do not suffer the enslavement of your passions, or your religions, or your creeds and your self conflict.",
@@ -356,7 +359,7 @@ static const char *haluMesg[] = {
 		"Do not, under any circumstances, open this door",
 		"WORDS IN THE HEART CANNOT BE TAKEN",
 		"Slab: Jus' say \"AarrghaarrghpleeassennononoUGH\"",
-		"Ahahahahaha! Ahahahaha! Aahahaha!\nBEWARE!!!!!\nYrs sincerely\nThe Opera Ghost",
+		"Ahahahahaha! Ahahahaha! Aahahaha! BEWARE!!!!! Yrs sincerely, The Opera Ghost",
 		"Bee There Orr Bee A Rectangular Thyng",
 		"We're certainly dwarves",
 		"There is no doubt being human is incredibly difficult and cannot be mastered in one lifetime.",
@@ -5062,6 +5065,8 @@ static const char *epitaphs[] = {
 	"Here lies the body of Jonathan Blake. Stepped on the gas instead of the brake.",
 	"He never killed a man, that did not need killing.",
 	"Go away!",
+	
+	"TANJ!",
 	
 	"Summer Rose - Thus Kindly I Scatter", /* RWBY */
 	
