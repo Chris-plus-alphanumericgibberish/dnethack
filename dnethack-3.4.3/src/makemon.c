@@ -6126,10 +6126,11 @@ register int otyp;
 		} else if (mtmp->data->mlet == S_DEMON) {
 			/* demons never get blessed objects */
 			if (otmp->blessed) curse(otmp);
-	    } else if(is_lminion(mtmp)) {
+	    } else if(is_lminion(mtmp) || is_nminion(mtmp) || is_cminion(mtmp)) {
 			/* lawful minions don't get cursed, bad, or rusting objects */
 			otmp->cursed = FALSE;
-			if(otmp->spe < 0) otmp->spe = 0;
+			otmp->blessed = TRUE;
+			if(otmp->spe < 0) otmp->spe *= -1;
 			otmp->oerodeproof = TRUE;
 	    } else if(is_mplayer(mtmp->data) && is_sword(otmp)) {
 			otmp->spe = (3 + rn2(4));
