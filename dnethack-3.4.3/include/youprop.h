@@ -257,7 +257,7 @@
 
 #define HStealth		u.uprops[STEALTH].intrinsic
 #define EStealth		u.uprops[STEALTH].extrinsic
-#define BStealth		(u.uprops[STEALTH].blocked || (uwep && uwep->otyp == SILVER_KHAKKHARA))
+#define BStealth		(u.uprops[STEALTH].blocked || (uwep && uwep->otyp == KHAKKHARA))
 #define Stealth			((HStealth || EStealth || Underwater || u.sealsActive&SEAL_SHIRO || \
 						 (flags.run != 0 && uwep && uwep->oartifact == ART_TOBIUME)) && !BStealth)
 
