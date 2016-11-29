@@ -430,6 +430,27 @@ register struct monst *mtmp;
 		case S_IMP:{
 		    int w1 = 0, w2 = 0;
 			switch (mm){
+			case PM_TENGU:
+				if((Role_if(PM_SAMURAI) && In_quest(&u.uz)) || !rn2(20)){
+					if(mtmp->female){
+						otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+						otmp = oname(otmp, artiname(ART_SOL_VALTIVA));
+						otmp->oerodeproof = TRUE;
+						otmp->blessed = FALSE;
+						otmp->cursed = FALSE;
+						(void) mpickobj(mtmp,otmp);
+						(void)mongets(mtmp, KNIFE);
+					} else {
+						(void)mongets(mtmp, KATANA);
+						(void)mongets(mtmp, SHORT_SWORD);
+						(void)mongets(mtmp, YUMI);
+						m_initthrow(mtmp, YA, 10);
+					}
+					(void)mongets(mtmp, BANDED_MAIL);
+					(void)mongets(mtmp, HELMET);
+					(void)mongets(mtmp, HIGH_BOOTS);
+				}
+			break;
 			case PM_LEGION_DEVIL_GRUNT:
 			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
 			      w2 = rn2(2) ? DAGGER : KNIFE;
