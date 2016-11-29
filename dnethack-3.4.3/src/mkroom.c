@@ -2406,7 +2406,7 @@ courtmon(kingnum)
 		case PM_ORC_OF_THE_AGES_OF_STARS:
 			i = rnd(100);
 			if(i>98)
-				return &mons[PM_DEEP_DRAGON];
+				return &mons[PM_DEEP_WYRM];
 			else if(i>96)
 				return &mons[PM_RED_DRAGON];
 			else if(i>94)
