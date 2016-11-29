@@ -1725,82 +1725,82 @@ OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 
 CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,15)
 CONTAINER:'`',"statue",(7,17),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,17)
 
 CONTAINER:'`',"statue",(6,19),uncursed,"Firre",1
-OBJECT:'[',"elven mithril-coat",contained,blessed,+3
-OBJECT:'[',"elven shield",contained,blessed,+3
-OBJECT:'[',"elven cloak",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+3
-OBJECT:'[',"elven helm",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
-OBJECT:')',"elven broadsword",contained,blessed,+3
+OBJECT:'[',"elven mithril-coat",contained,blessed,+0
+OBJECT:'[',"elven shield",contained,blessed,+0
+OBJECT:'[',"elven cloak",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"elven helm",contained,blessed,+0
+OBJECT:')',"elven spear",contained,blessed,+0
+OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,19)
 CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"bronze roundshield",contained,blessed,+3
-OBJECT:'[',"bronze boots",contained,blessed,+3
-OBJECT:'[',"bronze helm",contained,blessed,+3
-OBJECT:')',"two-handed sword",contained,blessed,+3
+OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze roundshield",contained,blessed,+0
+OBJECT:'[',"bronze boots",contained,blessed,+0
+OBJECT:'[',"bronze helm",contained,blessed,+0
+OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,19)
 CONTAINER:'`',"statue",(2,19),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,19)
 
 CONTAINER:'`',"statue",(6,13),uncursed,"Firre",1
-OBJECT:'[',"elven mithril-coat",contained,blessed,+3
-OBJECT:'[',"elven shield",contained,blessed,+3
-OBJECT:'[',"elven cloak",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+3
-OBJECT:'[',"elven helm",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
-OBJECT:')',"elven broadsword",contained,blessed,+3
+OBJECT:'[',"elven mithril-coat",contained,blessed,+0
+OBJECT:'[',"elven shield",contained,blessed,+0
+OBJECT:'[',"elven cloak",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"elven helm",contained,blessed,+0
+OBJECT:')',"elven spear",contained,blessed,+0
+OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,13)
 CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"bronze roundshield",contained,blessed,+3
-OBJECT:'[',"bronze boots",contained,blessed,+3
-OBJECT:'[',"bronze helm",contained,blessed,+3
-OBJECT:')',"two-handed sword",contained,blessed,+3
+OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze roundshield",contained,blessed,+0
+OBJECT:'[',"bronze boots",contained,blessed,+0
+OBJECT:'[',"bronze helm",contained,blessed,+0
+OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,13)
 CONTAINER:'`',"statue",(2,13),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,13)
 
 CONTAINER:'`',"statue",(1,15),uncursed,"Tulani",1
-OBJECT:'[',"elven toga",contained,blessed,+5
-OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+5
-OBJECT:'[',"high-elven helm",contained,blessed,+5
-OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
+OBJECT:'[',"elven toga",contained,blessed,+0
+OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"high-elven helm",contained,blessed,+0
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
@@ -1808,11 +1808,11 @@ OBJECT:random,random,contained
 OBJECT:random,random,contained
 TRAP:"statue", (1,15)
 CONTAINER:'`',"statue",(1,17),uncursed,"Tulani",1
-OBJECT:'[',"elven toga",contained,blessed,+5
-OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+5
-OBJECT:'[',"high-elven helm",contained,blessed,+5
-OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
+OBJECT:'[',"elven toga",contained,blessed,+0
+OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"high-elven helm",contained,blessed,+0
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
@@ -2132,82 +2132,82 @@ OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 
 CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,15)
 CONTAINER:'`',"statue",(7,17),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,17)
 
 CONTAINER:'`',"statue",(6,19),uncursed,"Firre",1
-OBJECT:'[',"elven mithril-coat",contained,blessed,+3
-OBJECT:'[',"elven shield",contained,blessed,+3
-OBJECT:'[',"elven cloak",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+3
-OBJECT:'[',"elven helm",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
-OBJECT:')',"elven broadsword",contained,blessed,+3
+OBJECT:'[',"elven mithril-coat",contained,blessed,+0
+OBJECT:'[',"elven shield",contained,blessed,+0
+OBJECT:'[',"elven cloak",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"elven helm",contained,blessed,+0
+OBJECT:')',"elven spear",contained,blessed,+0
+OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,19)
 CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"bronze roundshield",contained,blessed,+3
-OBJECT:'[',"bronze boots",contained,blessed,+3
-OBJECT:'[',"bronze helm",contained,blessed,+3
-OBJECT:')',"two-handed sword",contained,blessed,+3
+OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze roundshield",contained,blessed,+0
+OBJECT:'[',"bronze boots",contained,blessed,+0
+OBJECT:'[',"bronze helm",contained,blessed,+0
+OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,19)
 CONTAINER:'`',"statue",(2,19),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,19)
 
 CONTAINER:'`',"statue",(6,13),uncursed,"Firre",1
-OBJECT:'[',"elven mithril-coat",contained,blessed,+3
-OBJECT:'[',"elven shield",contained,blessed,+3
-OBJECT:'[',"elven cloak",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+3
-OBJECT:'[',"elven helm",contained,blessed,+3
-OBJECT:')',"elven spear",contained,blessed,+3
-OBJECT:')',"elven broadsword",contained,blessed,+3
+OBJECT:'[',"elven mithril-coat",contained,blessed,+0
+OBJECT:'[',"elven shield",contained,blessed,+0
+OBJECT:'[',"elven cloak",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"elven helm",contained,blessed,+0
+OBJECT:')',"elven spear",contained,blessed,+0
+OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,13)
 CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+3
-OBJECT:'[',"bronze roundshield",contained,blessed,+3
-OBJECT:'[',"bronze boots",contained,blessed,+3
-OBJECT:'[',"bronze helm",contained,blessed,+3
-OBJECT:')',"two-handed sword",contained,blessed,+3
+OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze roundshield",contained,blessed,+0
+OBJECT:'[',"bronze boots",contained,blessed,+0
+OBJECT:'[',"bronze helm",contained,blessed,+0
+OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,13)
 CONTAINER:'`',"statue",(2,13),uncursed,"Shiere",1
-OBJECT:'[',"crystal plate mail",contained,blessed,+6
-OBJECT:'[',"crystal shield",contained,blessed,+3
-OBJECT:'[',"crystal boots",contained,blessed,+3
-OBJECT:')',"crystal sword",contained,blessed,+3
+OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal shield",contained,blessed,+0
+OBJECT:'[',"crystal boots",contained,blessed,+0
+OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,13)
 
 CONTAINER:'`',"statue",(1,15),uncursed,"Tulani",1
-OBJECT:'[',"elven toga",contained,blessed,+5
-OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+5
-OBJECT:'[',"high-elven helm",contained,blessed,+5
-OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
+OBJECT:'[',"elven toga",contained,blessed,+0
+OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"high-elven helm",contained,blessed,+0
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
@@ -2215,11 +2215,11 @@ OBJECT:random,random,contained
 OBJECT:random,random,contained
 TRAP:"statue", (1,15)
 CONTAINER:'`',"statue",(1,17),uncursed,"Tulani",1
-OBJECT:'[',"elven toga",contained,blessed,+5
-OBJECT:'[',"cloak of magic resistance",contained,blessed,+3
-OBJECT:'[',"elven boots",contained,blessed,+5
-OBJECT:'[',"high-elven helm",contained,blessed,+5
-OBJECT:'[',"high-elven gauntlets",contained,blessed,+5
+OBJECT:'[',"elven toga",contained,blessed,+0
+OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
+OBJECT:'[',"elven boots",contained,blessed,+0
+OBJECT:'[',"high-elven helm",contained,blessed,+0
+OBJECT:'[',"high-elven gauntlets",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:'!',"full healing",contained,blessed,+0
 OBJECT:random,random,contained
