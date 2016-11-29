@@ -786,7 +786,7 @@ int spec;
 		tmp += pendamage(otmp, mon);
 	}
 	
-	if (Is_weapon || (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM)) {
+	if (Is_weapon || (otmp && (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM))) {
 		if(is_lightsaber(otmp)){
 			if(otmp == uwep && Race_if(PM_ORC)){
 				tmp += 3*max((u.ulevel+1)/3,otmp->spe);
