@@ -2874,15 +2874,7 @@ struct monst *owner;
 
 		if(obj->otyp == CAN_OF_GREASE && obj->spe > 0) {
 			continue;
-		} else if(obj->greased) {
-			if (force || !rn2(obj->blessed ? 4 : 2)){
-				obj->greased = 0;
-				pline("The layer of grease on %s dissolves.", the(xname(obj)));
-			}
-		} else if(Is_container(obj) && !Is_box(obj) &&
-			(obj->otyp != OILSKIN_SACK || (obj->cursed && !rn2(3)))) {
-			water_damage(obj->cobj, force, FALSE, FALSE, (struct monst *) 0);
-		} else if (!force && (Luck - luckpenalty + 5) > rn2(20)) {
+		} else if (!force && (20-(Luck - luckpenalty + 5)) < rn2(100)) {
 			/*  chance per item of sustaining damage:
 			 *	max luck (full moon):	 5%
 			 *	max luck (elsewhen):	10%
@@ -2892,6 +2884,14 @@ struct monst *owner;
 			 */
 			continue;
 		/* An oil skin cloak protects your body armor  */
+		} else if(obj->greased) {
+			if (force || !rn2(obj->blessed ? 4 : 2)){
+				obj->greased = 0;
+				pline("The layer of grease on %s dissolves.", the(xname(obj)));
+			}
+		} else if(Is_container(obj) && !Is_box(obj) &&
+			(obj->otyp != OILSKIN_SACK || (obj->cursed && !rn2(3)))) {
+			water_damage(obj->cobj, force, FALSE, lethe, (struct monst *) 0);
 		} else {
 		    /* The Lethe strips blessed and cursed status... */
 		    if (is_lethe) {
