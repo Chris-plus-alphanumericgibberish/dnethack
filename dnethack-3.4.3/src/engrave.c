@@ -5498,7 +5498,7 @@ int f1,f2;
 	if(f1 > f2){
 		int tmp = f1;
 		f1 = f2;
-		f2 = f1;
+		f2 = tmp;
 	}
 	if(f1 >= FIRST_HOUSE && f1 <= LAST_HOUSE){
 		return (f2 >= FIRST_TOWER && f2 <= LAST_TOWER) || (f2 == LOLTH_SYMBOL || f2 == PEN_A_SYMBOL);
