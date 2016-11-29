@@ -2902,7 +2902,7 @@ boolean was_swallowed;			/* digestion */
 					}
 				}
 				/* And a finger of death type attack on you */
-				if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
+				if (nonliving(youracedata) || is_demon(youracedata)) {
 					You("seem no deader than before.");
 				} else if ((Upolyd ? u.mh : u.uhp) <= 100 && !(u.sealsActive&SEAL_OSE)) {
 					if (Hallucination) {
@@ -3416,7 +3416,7 @@ register struct monst *mdef;
 	if (wasinside) {
 		if (is_animal(mdef->data))
 			You("%s through an opening in the new %s.",
-				locomotion(youmonst.data, "jump"),
+				locomotion(youracedata, "jump"),
 				xname(otmp));
 	}
 }
