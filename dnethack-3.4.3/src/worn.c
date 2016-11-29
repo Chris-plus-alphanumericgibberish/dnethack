@@ -8,6 +8,7 @@ STATIC_DCL void FDECL(update_mon_intrinsic, (struct monst *,struct obj *,int,BOO
 STATIC_DCL void FDECL(m_lose_armor, (struct monst *,struct obj *));
 STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P));
 STATIC_DCL int NDECL(def_beastmastery);
+STATIC_DCL int NDECL(def_mountedCombat);
 
 const static int ORANGE_RES[] = {SLEEP_RES,HALLUC_RES};
 const static int YELLOW_RES[] = {STONE_RES};
@@ -516,11 +517,12 @@ struct monst *mon;
 	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
 	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
 		if(mwep){
-			base += base*10;
+			base += AC_VALUE(base*10);
 		}
 	}
 	
 	if(mon->mtame) base -= rnd(def_beastmastery());
+	if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
 	
 	return base;
 }
@@ -553,8 +555,11 @@ struct monst *mon;
 		}
 	}
 	
-	if(mon->mtame) base -= rnd(def_beastmastery());
-	if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
+	if(mon->mtame){
+		base -= rnd(def_beastmastery());
+		if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
+		if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
+	}
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
@@ -605,8 +610,11 @@ struct monst *mon;
 		}
 	}
 	
-	if(mon->mtame) base -= def_beastmastery();
-	if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
+	if(mon->mtame){
+		base -= def_beastmastery();
+		if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
+		if(u.usteed && mon==u.usteed) base -= def_mountedCombat();
+	}
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
@@ -1309,6 +1317,20 @@ def_beastmastery()
 	}
 	if((uwep && uwep->oartifact == ART_CLARENT) || (uswapwep && uswapwep->oartifact == ART_CLARENT))
 		bm *= 2;
+	return bm;
+}
+
+STATIC_OVL int
+def_mountedCombat()
+{
+	int bm;
+	switch (P_SKILL(P_RIDING)) {
+		case P_ISRESTRICTED: bm =  0; break;
+		case P_UNSKILLED:    bm =  0; break;
+		case P_BASIC:        bm =  2; break;
+		case P_SKILLED:      bm =  5; break;
+		case P_EXPERT:       bm = 10; break;
+	}
 	return bm;
 }
 

@@ -692,6 +692,7 @@ moveloop()
 		    if (u.usteed && u.umoved) {
 			/* your speed doesn't augment steed's speed */
 			moveamt = mcalcmove(u.usteed);
+			moveamt += P_SKILL(P_RIDING)-1; /* -1 to +3 */
 			if(uclockwork){
 				if(u.ucspeed == HIGH_CLOCKSPEED){
 					/*You are still burning spring tension, even if it doesn't affect your speed!*/

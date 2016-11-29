@@ -30,6 +30,7 @@ STATIC_DCL void FDECL(noises,(struct monst *,struct attack *));
 STATIC_DCL void FDECL(missmm,(struct monst *,struct monst *,struct attack *));
 STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, BOOLEAN_P, int, struct attack *));
 STATIC_DCL int NDECL(beastmastery);
+STATIC_DCL int NDECL(mountedCombat);
 
 /* Needed for the special case of monsters wielding vorpal blades (rare).
  * If we use this a lot it should probably be a parameter to mdamagem()
@@ -274,6 +275,10 @@ mattackm(magr, mdef)
 		if(u.specialSealsActive&SEAL_COSMOS){
 			tmp += spiritDsize();
 			tchtmp += spiritDsize();
+		}
+		if(u.usteed && magr == u.usteed){
+			tmp += mountedCombat();
+			tchtmp += mountedCombat();
 		}
 	}
 	
@@ -2047,6 +2052,7 @@ physical:{
 	if(tmp && magr->mtame && !mdef->mtame){
 		tmp += beastmastery();
 		if(u.specialSealsActive&SEAL_COSMOS) tmp += spiritDsize();
+		if(u.usteed && magr == u.usteed) tmp += mountedCombat();
 	}
 	
 	if(attacktype_fordmg(mdef->data, AT_NONE, AD_STAR)){
@@ -2526,6 +2532,20 @@ beastmastery()
 	}
 	if((uwep && uwep->oartifact == ART_CLARENT) || (uswapwep && uswapwep->oartifact == ART_CLARENT))
 		bm *= 2;
+	return bm;
+}
+
+STATIC_OVL int
+mountedCombat()
+{
+	int bm;
+	switch (P_SKILL(P_RIDING)) {
+		case P_ISRESTRICTED: bm =  0; break;
+		case P_UNSKILLED:    bm =  0; break;
+		case P_BASIC:        bm =  2; break;
+		case P_SKILLED:      bm =  5; break;
+		case P_EXPERT:       bm = 10; break;
+	}
 	return bm;
 }
 
