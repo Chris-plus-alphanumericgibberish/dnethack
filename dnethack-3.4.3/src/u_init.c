@@ -790,6 +790,11 @@ static const struct def_skill Skill_DW[] = {
     { P_NONE, 0 }
 };
 
+static const struct def_skill Skill_G[] = {
+    { P_PICK_AXE, P_EXPERT }, { P_CROSSBOW, P_EXPERT },
+    { P_CLUB, P_EXPERT }, { P_NONE, 0 }
+};
+
 static const struct def_skill Skill_K[] = {
     { P_DAGGER, P_BASIC },		{ P_KNIFE, P_BASIC },
     { P_AXE, P_SKILLED },		{ P_PICK_AXE, P_BASIC },
@@ -2083,6 +2088,7 @@ u_init()
 	    if (!Role_if(PM_ARCHEOLOGIST)){
 			ini_inv(GnomishHat);
 		}
+		skill_add(Skill_G);
 		ini_inv(TallowCandles);
 		knows_object(GNOMISH_POINTY_HAT);
 	    knows_object(AKLYS);
