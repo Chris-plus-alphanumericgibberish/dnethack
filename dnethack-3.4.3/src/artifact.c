@@ -1049,7 +1049,7 @@ touch_artifact(obj,mon)
 		tmp.spfx &= SPFX_DBONUS;
 		badalign = !!spec_applies(&tmp, mon);
     }
-	if(badalign){
+	if(badalign && yours){
 		if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
 			badalign = FALSE;
 			// badclass = FALSE;
