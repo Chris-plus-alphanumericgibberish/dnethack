@@ -2250,6 +2250,55 @@ dosacrifice()
 			u.reconciled = REC_NONE;
 		    u.lastprayresult = PRAY_CONV;
 		    adjalign((int)(u.ualignbase[A_ORIGINAL] * (ALIGNLIM / 2)));
+			if(Race_if(PM_DROW)){
+				switch(u.ualignbase[A_CURRENT]){
+					case A_LAWFUL:
+						if(Role_if(PM_NOBLEMAN)){
+							if(flags.initgend){
+								u.uhouse = VER_TAS_SYMBOL;
+							} else {
+								u.uhouse = VER_TAS_SYMBOL;
+							}
+						} else {
+							if(flags.initgend){
+								u.uhouse = EILISTRAEE_SYMBOL;
+							} else {
+								u.uhouse = EDDER_SYMBOL;
+							}
+						}
+					break;
+					case A_NEUTRAL:
+						if(Role_if(PM_NOBLEMAN)){
+							if(flags.initgend){
+								u.uhouse = KIARANSALEE_SYMBOL;
+							} else {
+								u.uhouse = u.start_house; /*huh?*/
+							}
+						} else {
+							if(flags.initgend){
+								u.uhouse = KIARANSALEE_SYMBOL;
+							} else {
+								u.uhouse = u.start_house; /*huh?*/
+							}
+						}
+					break;
+					case A_CHAOTIC:
+						if(Role_if(PM_NOBLEMAN)){
+							if(flags.initgend){
+								u.uhouse = u.start_house; /*huh?*/
+							} else {
+								u.uhouse = GHAUNADAUR_SYMBOL;
+							}
+						} else {
+							if(flags.initgend){
+								u.uhouse = u.start_house; /*huh?*/
+							} else {
+								u.uhouse = u.start_house; /*Converted to direct Lolth worship*/
+							}
+						}
+					break;
+				}
+			}
 		} else {
 			if(altaralign == A_VOID){
 				consume_offering(otmp);

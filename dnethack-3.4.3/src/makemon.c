@@ -4500,7 +4500,7 @@ register int	mmflags;
 		}
 		if(ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER]){
 			otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
-			otmp->ovar1 = (long)u.uhouse;
+			otmp->ovar1 = (long)u.start_house;
 			otmp->oerodeproof = TRUE;
 			otmp->blessed = FALSE;
 			otmp->cursed = TRUE;
@@ -4570,10 +4570,7 @@ register int	mmflags;
 	mtmp->mtrapseen |= (1L << (STATUE_TRAP-1)); /* all monsters should avoid statue traps */
 
 	place_monster(mtmp, x, y);
-	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
-		(ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
-	) mtmp->mpeaceful = TRUE;
-	else mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : peace_minded(ptr);
+	mtmp->mpeaceful  = FALSE;
 	mtmp->mtraitor  = FALSE;
 	mtmp->mferal  = FALSE;
 	mtmp->mcrazed  = FALSE;
@@ -4590,7 +4587,7 @@ register int	mmflags;
 			if((ptr == &mons[urole.ldrnum] && ptr != &mons[PM_ECLAVDRA]) || 
 				(ptr == &mons[urole.guardnum] && ptr != &mons[PM_DROW_MATRON_MOTHER] && ptr != &mons[PM_HEDROW_MASTER_WIZARD])
 			){
-				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = u.uhouse;
+				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = u.start_house;
 				else curhouse = LOLTH_SYMBOL;
 			} else if(Is_lolth_level(&u.uz)){
 				curhouse = LOLTH_SYMBOL;
@@ -4601,7 +4598,7 @@ register int	mmflags;
 			} else if(ptr == &mons[PM_ECLAVDRA] || ptr == &mons[PM_AVATAR_OF_LOLTH] || is_yochlol(ptr)){
 				curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_DROW_MATRON_MOTHER]){
-				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.uhouse - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE)) : LOLTH_SYMBOL;
+				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.start_house - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE)) : LOLTH_SYMBOL;
 				else curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_SEYLL_AUZKOVYN] || ptr == &mons[PM_STJARNA_ALFR]){
 				curhouse = EILISTRAEE_SYMBOL;
@@ -4643,12 +4640,12 @@ register int	mmflags;
 				} else if(Role_if(PM_ANACHRONONAUT)){
 					curhouse = LAST_BASTION_SYMBOL;
 				} else if((Race_if(PM_DROW)) && (in_mklev || flags.stag || rn2(3))){
-					if(Is_qstart(&u.uz)) curhouse = u.uhouse;
+					if(Is_qstart(&u.uz)) curhouse = u.start_house;
 					else if(Role_if(PM_NOBLEMAN)){
-						if(flags.initgend) curhouse = u.uhouse;
-						else curhouse = (((u.uhouse - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE))+FIRST_HOUSE;
+						if(flags.initgend) curhouse = u.start_house;
+						else curhouse = (((u.start_house - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE))+FIRST_HOUSE;
 					} else if((&u.uz)->dlevel >= qlocate_level.dlevel){
-						curhouse = rn2(2) ? u.uhouse : flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
+						curhouse = rn2(2) ? u.start_house : flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
 					} else {
 						curhouse = flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
 					}
@@ -4660,6 +4657,10 @@ register int	mmflags;
 		}
 		mtmp->mfaction = curhouse;
 	}
+	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
+		(ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
+	) mtmp->mpeaceful = TRUE;
+	else mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : peace_minded(ptr);
 	
 	switch(ptr->mlet) {
 		case S_MIMIC:
@@ -4769,6 +4770,9 @@ register int	mmflags;
 				} else if (mndx == PM_ELVENKING || mndx == PM_ELVENQUEEN){
 					for(num = rnd(2); num >= 0; num--) makemon(&mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 					for(num = rn1(6,3); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				} else if (mndx == PM_CHIROPTERAN){
+					if(!rn2(3)) m_initlgrp(makemon(&mons[PM_WARBAT], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+					m_initlgrp(makemon(&mons[PM_BATTLE_BAT], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
 				}
 			}
 			}
@@ -6158,6 +6162,31 @@ register struct permonst *ptr;
 		mndx == PM_AVATAR_OF_LOLTH && 
 		strcmp(urole.cgod,"_Lolth") &&
 		u.ualign.record >= 20
+	) return TRUE;
+	
+	if(curhouse && 
+		(curhouse == u.uhouse || allied_faction(curhouse,u.uhouse))
+	) return TRUE;
+	
+	if(u.uhouse &&
+		u.uhouse == EILISTRAEE_SYMBOL
+		&& is_elf(ptr) && !is_drow(ptr)
+	) return TRUE;
+	
+	if(u.uhouse &&
+		(u.uhouse == XAXOX || u.uhouse == EDDER_SYMBOL)
+		&& ptr == &mons[PM_EDDERKOP]
+	) return TRUE;
+	
+	if(u.uhouse &&
+		u.uhouse == GHAUNADAUR_SYMBOL
+		&& (ptr->mlet == S_PUDDING || ptr->mlet == S_BLOB || ptr->mlet == S_JELLY)
+		&& mindless(ptr)
+	) return TRUE;
+	
+	if(u.uhouse &&
+		u.uhouse == GHAUNADAUR_SYMBOL
+		&& (ptr == &mons[PM_SHOGGOTH] || ptr == &mons[PM_PRIEST_OF_GHAUNADAUR] || ptr == &mons[PM_PRIESTESS_OF_GHAUNADAUR])
 	) return TRUE;
 	
 	if (ptr == &mons[urole.ldrnum] || ptr->msound == MS_GUARDIAN)

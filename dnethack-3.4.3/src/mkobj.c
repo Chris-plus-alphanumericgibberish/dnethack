@@ -976,7 +976,7 @@ boolean artif;
 		}
 		if(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT){
 			otmp->ohaluengr = TRUE;
-			if(Race_if(PM_DROW) && Is_qstart(&u.uz)) otmp->ovar1 = u.uhouse;
+			if(Race_if(PM_DROW) && Is_qstart(&u.uz)) otmp->ovar1 = u.start_house;
 			else if(!(rn2(10))) otmp->ovar1 = rn2(EDDER_SYMBOL+1-LOLTH_SYMBOL)+LOLTH_SYMBOL;
 			else if(!(rn2(4))) otmp->ovar1 = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
 			else otmp->ovar1 = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;

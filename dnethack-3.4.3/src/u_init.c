@@ -1457,6 +1457,7 @@ u_init()
 	u.divetimer = (ACURR(A_CON))/3;
 	
 	u.uhouse = 0;
+	u.start_house = 0;
 	
 	/*Randomize spirit order*/{
 		int i,j,tmp;
@@ -2036,6 +2037,7 @@ u_init()
 		else u.uhouse = !(Role_if(PM_EXILE) || (Role_if(PM_NOBLEMAN) && !flags.initgend) || Role_if(PM_CONVICT) || Role_if(PM_PIRATE)) ?
 				rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE :
 				rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
+		u.start_house = u.uhouse;
 		for(pobj = invent; pobj; pobj=pobj->nobj){
 			if(pobj->otyp == DROVEN_CHAIN_MAIL ||
 				pobj->otyp == CONSORT_S_SUIT ||

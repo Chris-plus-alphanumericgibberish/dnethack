@@ -222,7 +222,7 @@ do_present_ring(obj)
 			(is_elf(mtmp->data) || is_drow(mtmp->data) || mtmp->data == &mons[PM_EDDERKOP])
 		){
 			if(flags.stag && 
-				(mtmp->mfaction == u.uhouse || allied_faction(mtmp->mfaction,u.uhouse)) && 
+				(mtmp->mfaction == u.start_house || allied_faction(mtmp->mfaction,u.start_house)) && 
 				obj->ovar1 == EDDER_SYMBOL && 
 				!(mtmp->female)
 			){
@@ -230,7 +230,7 @@ do_present_ring(obj)
 				for(tm = fmon; tm; tm = tm->nmon){
 					if((is_drow(tm->data) && (obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction))) || 
 						((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
-						((tm->mfaction == u.uhouse || allied_faction(tm->mfaction,u.uhouse)) && 
+						((tm->mfaction == u.start_house || allied_faction(tm->mfaction,u.start_house)) && 
 							obj->ovar1 == EDDER_SYMBOL && !(tm->female))
 					){
 						if(is_drow(tm->data)) tm->mfaction = EDDER_SYMBOL;

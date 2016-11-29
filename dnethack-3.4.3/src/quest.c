@@ -558,8 +558,14 @@ turn_stag()
 		You("have a strong feeling that Lolth is angry...");
 		u.ugangr[Align2gangr(A_CHAOTIC)]+=20;
 		u.ugangr[Align2gangr(A_NEUTRAL)]+=20;
-		if(flags.initgend) pline("Eilistraee accepts your allegiance.");
-		else pline("The black web enfolds you.");
+		if(flags.initgend){
+			pline("Eilistraee accepts your allegiance.");
+			u.uhouse = EILISTRAEE_SYMBOL;
+		}
+		else {
+			pline("The black web enfolds you.");
+			u.uhouse = EDDER_SYMBOL;
+		}
 		if (uarmh && uarmh->otyp == HELM_OF_OPPOSITE_ALIGNMENT)
 		u.ualignbase[A_CURRENT] = A_LAWFUL;
 		else
