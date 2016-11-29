@@ -1014,11 +1014,6 @@ touch_artifact(obj,mon)
 			    (oart->race != NON_PM && !Race_if(oart->race)));
 			badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
 			   ((oart->alignment != u.ualign.type && obj->otyp != HELM_OF_OPPOSITE_ALIGNMENT) || u.ualign.record < 0);
-			if(!badalign && (u.ualign.record < 20 || flags.beginner) && (
-				oart == &artilist[ART_DRAGON_PLATE] ||
-				oart == &artilist[ART_TIE_DYE_SHIRT_OF_SHAMBHALA] ||
-				oart == &artilist[ART_CHROMATIC_DRAGON_SCALES]
-			)) badalign = TRUE;
 			if(badalign && !badclass && self_willed && oart->role == NON_PM 
 				&& oart->race == NON_PM
 			) badclass = TRUE;
