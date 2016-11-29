@@ -1722,13 +1722,13 @@ hitmu(mtmp, mattk)
 	    case AD_FIRE:
 		hitmsg(mtmp, mattk);
 		if (uncancelled) {
-		    pline("You're %s!", on_fire(youmonst.data, mattk));
+		    pline("You're %s!", on_fire(youracedata, mattk));
 			if (Fire_resistance) {
 				pline_The("fire doesn't feel hot!");
 				dmg = 0;
-			} else if (youmonst.data == &mons[PM_STRAW_GOLEM] ||
-		        youmonst.data == &mons[PM_PAPER_GOLEM] ||
-		        youmonst.data == &mons[PM_SPELL_GOLEM]) {
+			} else if (youracedata == &mons[PM_STRAW_GOLEM] ||
+		        youracedata == &mons[PM_PAPER_GOLEM] ||
+		        youracedata == &mons[PM_SPELL_GOLEM]) {
 			    You("burn up!");
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
@@ -1739,18 +1739,13 @@ hitmu(mtmp, mattk)
 			    /* KMH -- this is okay with unchanging */
 			    rehumanize();
 			    break;
-		    } else if (youmonst.data == &mons[PM_MIGO_WORKER]) {
+		    } else if (youracedata == &mons[PM_MIGO_WORKER]) {
 			    You("melt!");
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(SCROLL_CLASS, AD_FIRE);
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(POTION_CLASS, AD_FIRE);
-				if((int) mtmp->m_lev > rn2(25))
-				destroy_item(SPBOOK_CLASS, AD_FIRE);
 			    /* KMH -- this is okay with unchanging */
 			    rehumanize();
 			    break;
-		    } else {
+		    } 
+			if(!EFire_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(20))
@@ -1764,13 +1759,13 @@ hitmu(mtmp, mattk)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_EFIR:
 		hitmsg(mtmp, mattk);
-		pline("You're %s!", on_fire(youmonst.data, mattk));
+		pline("You're %s!", on_fire(youracedata, mattk));
 		if (Fire_resistance) {
 			pline_The("fire doesn't feel hot!");
 			dmg /= 2;
-		} else if (youmonst.data == &mons[PM_STRAW_GOLEM] ||
-			youmonst.data == &mons[PM_PAPER_GOLEM] ||
-			youmonst.data == &mons[PM_SPELL_GOLEM]) {
+		} else if (youracedata == &mons[PM_STRAW_GOLEM] ||
+			youracedata == &mons[PM_PAPER_GOLEM] ||
+			youracedata == &mons[PM_SPELL_GOLEM]) {
 			You("burn up!");
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(SCROLL_CLASS, AD_FIRE);
@@ -1781,18 +1776,13 @@ hitmu(mtmp, mattk)
 			/* KMH -- this is okay with unchanging */
 			rehumanize();
 			break;
-		}else if (youmonst.data == &mons[PM_MIGO_WORKER]) {
+		}else if (youracedata == &mons[PM_MIGO_WORKER]) {
 			You("melt!");
-			if((int) mtmp->m_lev > rn2(20))
-			destroy_item(SCROLL_CLASS, AD_FIRE);
-			if((int) mtmp->m_lev > rn2(20))
-			destroy_item(POTION_CLASS, AD_FIRE);
-			if((int) mtmp->m_lev > rn2(25))
-			destroy_item(SPBOOK_CLASS, AD_FIRE);
 			/* KMH -- this is okay with unchanging */
 			rehumanize();
 			break;
-		} else {
+		} 
+		if(!EFire_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(SCROLL_CLASS, AD_FIRE);
 			if((int) mtmp->m_lev > rn2(20))
@@ -1810,7 +1800,8 @@ hitmu(mtmp, mattk)
 		    if (Cold_resistance) {
 				pline_The("frost doesn't seem cold!");
 				dmg = 0;
-		    } else {
+		    } 
+			if(!ECold_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(POTION_CLASS, AD_COLD);
 			}
@@ -1823,7 +1814,8 @@ hitmu(mtmp, mattk)
 		if (Cold_resistance) {
 			pline_The("frost doesn't seem cold!");
 			dmg /= 2;
-		} else {
+		} 
+		if(!ECold_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(POTION_CLASS, AD_COLD);
 		}
@@ -1836,7 +1828,8 @@ hitmu(mtmp, mattk)
 		    if (Shock_resistance) {
 				pline_The("zap doesn't shock you!");
 				dmg = 0;
-		    } else {
+		    } 
+			if(!EShock_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(20))
@@ -1851,7 +1844,8 @@ hitmu(mtmp, mattk)
 		if (Shock_resistance) {
 			pline_The("zap doesn't shock you!");
 			dmg /= 2;
-		} else {
+		}
+		if(!EShock_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(WAND_CLASS, AD_ELEC);
 			if((int) mtmp->m_lev > rn2(20))
@@ -1870,45 +1864,51 @@ hitmu(mtmp, mattk)
 			else{
 				You("are jolted with energy!");
 				mdamageu(mtmp, dmg);
-				if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
-				if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
 				if(!Fire_resistance){
-					pline("You're %s!", on_fire(youmonst.data, mattk));
-					if (youmonst.data == &mons[PM_STRAW_GOLEM] ||
-						youmonst.data == &mons[PM_PAPER_GOLEM] ||
-						youmonst.data == &mons[PM_SPELL_GOLEM]) {
+					pline("You're %s!", on_fire(youracedata, mattk));
+					if (youracedata == &mons[PM_STRAW_GOLEM] ||
+						youracedata == &mons[PM_PAPER_GOLEM] ||
+						youracedata == &mons[PM_SPELL_GOLEM]) {
 						You("burn up!");
 						destroy_item(SCROLL_CLASS, AD_FIRE);
 						destroy_item(POTION_CLASS, AD_FIRE);
 						destroy_item(SPBOOK_CLASS, AD_FIRE);
 						/* KMH -- this is okay with unchanging */
 						rehumanize();
-					} else if (youmonst.data == &mons[PM_MIGO_WORKER]) {
+					} else if (youracedata == &mons[PM_MIGO_WORKER]) {
 						You("melt!");
 						/* KMH -- this is okay with unchanging */
 						rehumanize();
 						break;
 					}
+				}
+				if(!Stunned) make_stunned((long)dmg, TRUE);
+			}
+			if(!EShock_resistance){
+				if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
+				if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
+				if(!Shock_resistance && !EFire_resistance){
 					if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_FIRE);
 					if (!rn2(4)) (void) destroy_item(SCROLL_CLASS, AD_FIRE);
 					if (!rn2(10)) (void) destroy_item(SPBOOK_CLASS, AD_FIRE);
 				}
-				if(!Stunned) make_stunned((long)dmg, TRUE);
 			}
 			pline("%s reaches out with %s other %s!  A penumbra of shadows surrounds the %s!",
 				mon_nam(mtmp), mhis(mtmp), mbodypart(mtmp, ARM), mbodypart(mtmp, HAND));
-		    if(Cold_resistance) {
-				shieldeff(u.ux, u.uy);
-				You_feel("a mild chill.");
-				ugolemeffects(AD_COLD, dmg);
-		    }
-			else{
-			    You("are suddenly very cold!");
-			    mdamageu(mtmp, dmg);
-				if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
-			}
 			if (!Drain_resistance) {
 			    losexp("life force drain",TRUE,FALSE,FALSE);
+				if(Cold_resistance) {
+					shieldeff(u.ux, u.uy);
+					You_feel("a mild chill.");
+					ugolemeffects(AD_COLD, dmg);
+				}
+				else{
+					You("are suddenly very cold!");
+					mdamageu(mtmp, dmg);
+				}
+				if(!ECold_resistance) {
+					if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
+				}
 			}
 			dmg = 0;
 		} break;
@@ -2187,7 +2187,7 @@ dopois:
 		break;
 	    case AD_DRLI:
 			hitmsg(mtmp, mattk);
-			if ((uncancelled || mdat == &mons[PM_DEEP_DRAGON]) && !rn2(3) && !Drain_resistance) {
+			if (uncancelled && !rn2(3) && !Drain_resistance) {
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 				if(mdat == &mons[PM_METROID] || mdat == &mons[PM_ALPHA_METROID] || mdat == &mons[PM_GAMMA_METROID] 
 					|| mdat == &mons[PM_ZETA_METROID] || mdat == &mons[PM_OMEGA_METROID] 
@@ -2817,12 +2817,16 @@ dopois:
 	    case AD_SLIM:    
 		hitmsg(mtmp, mattk);
 		if (!uncancelled) break;
-		if (flaming(youmonst.data)) {
+		if (flaming(youracedata)
+			|| youracedata == &mons[PM_RED_DRAGON]
+			|| (uarm && (uarm->otyp == RED_DRAGON_SCALES || uarm->otyp == RED_DRAGON_SCALE_MAIL))
+			|| (uarms && uarms->otyp == RED_DRAGON_SCALE_SHIELD)
+		) {
 		    pline_The("slime burns away!");
 		    dmg = 0;
 		} else if (Unchanging ||
-				youmonst.data == &mons[PM_GREEN_SLIME] ||
-				youmonst.data == &mons[PM_FLUX_SLIME]) {
+				youracedata == &mons[PM_GREEN_SLIME] ||
+				youracedata == &mons[PM_FLUX_SLIME]) {
 		    You("are unaffected.");
 		    dmg = 0;
 		} else if (!Slimed) {
@@ -3051,8 +3055,10 @@ dopois:
 		    if (Shock_resistance) {
 				pline_The("zap doesn't shock you!");
 		    }
-			else{
+			else {
 				dmg += d(1,4);
+			}
+		    if (!EShock_resistance) {
 				if((int) mtmp->m_lev > rn2(30))
 					destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(30))
@@ -3385,18 +3391,19 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		break;
 		case AD_ELEC:
 		    if(!mtmp->mcan && rn2(2)) {
-			pline_The("air around you crackles with electricity.");
-			if (Shock_resistance) {
-				shieldeff(u.ux, u.uy);
-				You("seem unhurt.");
-				ugolemeffects(AD_ELEC,tmp);
-				tmp = 0;
-			} else {
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(WAND_CLASS, AD_ELEC);
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(RING_CLASS, AD_ELEC);
-			}
+				pline_The("air around you crackles with electricity.");
+				if (Shock_resistance) {
+					shieldeff(u.ux, u.uy);
+					You("seem unhurt.");
+					ugolemeffects(AD_ELEC,tmp);
+					tmp = 0;
+				} 
+				if(!EShock_resistance){
+					if((int) mtmp->m_lev > rn2(20))
+					destroy_item(WAND_CLASS, AD_ELEC);
+					if((int) mtmp->m_lev > rn2(20))
+					destroy_item(RING_CLASS, AD_ELEC);
+				}
 		    } else tmp = 0;
 		break;
 		case AD_EELC:
@@ -3405,7 +3412,8 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				shieldeff(u.ux, u.uy);
 				ugolemeffects(AD_EELC,tmp);
 				tmp /= 2;
-			} else {
+			}
+			if(!EShock_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(20))
@@ -3414,16 +3422,18 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		break;
 		case AD_COLD:
 		    if(!mtmp->mcan && rn2(2)) {
-			if (Cold_resistance) {
-				shieldeff(u.ux, u.uy);
-				You_feel("mildly chilly.");
-				ugolemeffects(AD_COLD,tmp);
-				tmp = 0;
-			} else {
-				You("are freezing to death!");
-				if((int) mtmp->m_lev > rn2(20))
-					destroy_item(POTION_CLASS, AD_COLD);
-			}
+				if (Cold_resistance) {
+					shieldeff(u.ux, u.uy);
+					You_feel("mildly chilly.");
+					ugolemeffects(AD_COLD,tmp);
+					tmp = 0;
+				} else {
+					You("are freezing to death!");
+				}
+				if (!ECold_resistance) {
+					if((int) mtmp->m_lev > rn2(20))
+						destroy_item(POTION_CLASS, AD_COLD);
+				}
 		    } else tmp = 0;
 		break;
 		case AD_ECLD:
@@ -3434,27 +3444,31 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				tmp /= 2;
 			} else {
 				You("are freezing to death!");
+			}
+			if (!ECold_resistance) {
 				if((int) mtmp->m_lev > rn2(20))
 					destroy_item(POTION_CLASS, AD_COLD);
 			}
 		break;
 		case AD_FIRE:
 		    if(!mtmp->mcan && rn2(2)) {
-			if (Fire_resistance) {
-				shieldeff(u.ux, u.uy);
-				You_feel("mildly hot.");
-				ugolemeffects(AD_FIRE,tmp);
-				tmp = 0;
-			} else {
-				You("are burning to a crisp!");
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(SCROLL_CLASS, AD_FIRE);
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(POTION_CLASS, AD_FIRE);
-				if((int) mtmp->m_lev > rn2(25))
-				destroy_item(SPBOOK_CLASS, AD_FIRE);
-			}
-			burn_away_slime();
+				if (Fire_resistance) {
+					shieldeff(u.ux, u.uy);
+					You_feel("mildly hot.");
+					ugolemeffects(AD_FIRE,tmp);
+					tmp = 0;
+				} else {
+					You("are burning to a crisp!");
+				}
+				if(!EFire_resistance){
+					if((int) mtmp->m_lev > rn2(20))
+					destroy_item(SCROLL_CLASS, AD_FIRE);
+					if((int) mtmp->m_lev > rn2(20))
+					destroy_item(POTION_CLASS, AD_FIRE);
+					if((int) mtmp->m_lev > rn2(25))
+					destroy_item(SPBOOK_CLASS, AD_FIRE);
+				}
+				burn_away_slime();
 		    } else tmp = 0;
 		break;
 		case AD_EFIR:
@@ -3465,6 +3479,8 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				tmp /= 2;
 			} else {
 				You("are burning to a crisp!");
+			}
+			if(!EFire_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(20))
@@ -3647,12 +3663,15 @@ boolean ufound;
 		break;
 		
 	    case AD_COLD:
+	    case AD_ECLD:
 			not_affected |= Cold_resistance;
 			goto common;
 	    case AD_FIRE:
+	    case AD_EFIR:
 			not_affected |= Fire_resistance;
 			goto common;
 	    case AD_ELEC:
+	    case AD_EELC:
 			not_affected |= Shock_resistance;
 common:
 
@@ -3663,66 +3682,32 @@ common:
 		    } else {
 		        if (flags.verbose) You("get blasted!");
 		    }
-			if(mattk->adtyp == AD_EFIR){
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(SCROLL_CLASS, AD_FIRE);
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(POTION_CLASS, AD_FIRE);
-				if((int) mtmp->m_lev > rn2(25))
-				destroy_item(SPBOOK_CLASS, AD_FIRE);
-			} else if(mattk->adtyp == AD_EELC){
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(WAND_CLASS, AD_ELEC);
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(RING_CLASS, AD_ELEC);
-			} else if(mattk->adtyp == AD_ECLD){
-				if((int) mtmp->m_lev > rn2(20))
-				destroy_item(POTION_CLASS, AD_COLD);
-			}
-		    if (mattk->adtyp == AD_FIRE) burn_away_slime();
 		    if (Half_physical_damage) tmp = (tmp+1) / 2;
 		    mdamageu(mtmp, tmp);
 		}
-		break;
-	    case AD_ECLD:
-			not_affected |= Cold_resistance;
-			goto ecommon;
-	    case AD_EFIR:
-			not_affected |= Fire_resistance;
-			goto ecommon;
-	    case AD_EELC:
-			not_affected |= Shock_resistance;
-ecommon:
-
-		if (ACURR(A_DEX) > rnd(20)) {
-			You("duck some of the blast.");
-			tmp = (tmp+1) / 2;
-		} else {
-			if (flags.verbose) You("get blasted!");
-		}
-		if(not_affected){
-			tmp /= 2;
-		} else {
-			if(mattk->adtyp == AD_EFIR){
+		if(mattk->adtyp == AD_FIRE || mattk->adtyp == AD_EFIR){
+			if(!EFire_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(POTION_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(25))
 				destroy_item(SPBOOK_CLASS, AD_FIRE);
-			} else if(mattk->adtyp == AD_EELC){
+			}
+		} else if(mattk->adtyp == AD_ELEC || mattk->adtyp == AD_EELC){
+			if(!EShock_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(RING_CLASS, AD_ELEC);
-			} else if(mattk->adtyp == AD_ECLD){
+			}
+		} else if(mattk->adtyp == AD_COLD || mattk->adtyp == AD_ECLD){
+			if(!ECold_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(POTION_CLASS, AD_COLD);
 			}
 		}
-		if (mattk->adtyp == AD_EFIR) burn_away_slime();
-		if (Half_physical_damage) tmp = (tmp+1) / 2;
-		mdamageu(mtmp, tmp);
+		if (mattk->adtyp == AD_FIRE || mattk->adtyp == AD_EFIR) burn_away_slime();
 		break;
 
 	    case AD_BLND:
@@ -4150,6 +4135,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				dmg = 0;
 			} else {
 				succeeded=1;
+			}
+			if(!(EFire_resistance || Reflecting)){
 				if ((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if ((int) mtmp->m_lev > rn2(20))
@@ -4176,7 +4163,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				pline_The("fire doesn't feel hot!");
 				dmg = 0;
 				succeeded=0;
-		    } else{
+		    }
+			if(!EFire_resistance){
 				if ((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if ((int) mtmp->m_lev > rn2(20))
@@ -4202,7 +4190,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				pline_The("frost doesn't feel cold!");
 				dmg = 0;
 				succeeded=0;
-		    } else {
+		    }
+			if(!ECold_resistance){
 				if ((int) mtmp->m_lev > rn2(20))
 					destroy_item(POTION_CLASS, AD_COLD);
 			}
@@ -4223,7 +4212,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				You("aren't shocked!");
 				dmg = 0;
 				succeeded=0;
-		    } else {
+		    }
+			if(!EShock_resistance){
 				if ((int) mtmp->m_lev > rn2(20))
 				destroy_item(RING_CLASS, AD_ELEC);
 				if ((int) mtmp->m_lev > rn2(20))

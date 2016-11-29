@@ -845,7 +845,7 @@ MONSTER: 'C', "drider", (73,09)
 MONSTER: 'D', "blue dragon", (73,11)
 MONSTER: 'D', "black dragon", (73,13)
 MONSTER: 'D', "white dragon", (73,15)
-MONSTER: 'D', "deep dragon", (73,17)
+MONSTER: 'D', "deep wyrm", (73,17)
 
 MONSTER: 'D', "red dragon", (73,19)
 

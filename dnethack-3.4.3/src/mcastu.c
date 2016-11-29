@@ -1082,12 +1082,12 @@ elec_spell:
 			shieldeff(u.ux, u.uy);
 			pline("But you resist the effects.");
 			dmg = 0;
-			if(!rn2(10)) destroy_item(WAND_CLASS, AD_ELEC);
 		}
-		else{
+		if(!EShock_resistance){
 			destroy_item(WAND_CLASS, AD_ELEC);
 			if(!rn2(10)) destroy_item(RING_CLASS, AD_ELEC);
 		}
+		
 		stop_occupation();
 		break;
 	    case AD_FIRE:
@@ -1097,10 +1097,8 @@ fire_spell:
 			shieldeff(u.ux, u.uy);
 			pline("But you resist the effects.");
 			dmg = 0;
-			if(!rn2(6)) destroy_item(POTION_CLASS, AD_FIRE);
-			if(!rn2(10)) destroy_item(SCROLL_CLASS, AD_FIRE);
 		}
-		else{
+		if(!EFire_resistance) {
 			destroy_item(POTION_CLASS, AD_FIRE);
 			if(!rn2(6)) destroy_item(SCROLL_CLASS, AD_FIRE);
 			if(!rn2(10)) destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -1115,9 +1113,8 @@ cold_spell:
 			shieldeff(u.ux, u.uy);
 			pline("But you resist the effects.");
 			dmg = 0;
-			if(!rn2(4)) destroy_item(POTION_CLASS, AD_COLD);
 		}
-		else destroy_item(POTION_CLASS, AD_COLD);
+		if(!ECold_resistance) destroy_item(POTION_CLASS, AD_COLD);
 		stop_occupation();
 		break;
 	    case AD_MAGM:
@@ -1372,7 +1369,8 @@ int spellnum;
 				shieldeff(u.ux, u.uy);
 				pline("It feels mildly uncomfortable.");
 				dmg = 0;
-			} else {
+			} 
+			if (!EAcid_resistance) {
 				destroy_item(POTION_CLASS, AD_FIRE);
 			}
 			erode_obj(uwep, TRUE, FALSE);
@@ -1380,7 +1378,7 @@ int spellnum;
 			erode_armor(&youmonst, TRUE);
 			water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
 			if (!resists_blnd(&youmonst) && rn2(2)) {
-				pline_The("acid gets into your %s!", eyecount(youmonst.data) == 1 ?
+				pline_The("acid gets into your %s!", eyecount(youracedata) == 1 ?
 						body_part(EYE) : makeplural(body_part(EYE)));
 				make_blinded((long)rnd(Acid_resistance ? 10 : 50),FALSE);
 				if (!Blind) Your1(vision_clears);
@@ -1431,6 +1429,8 @@ int spellnum;
 	    dmg = 0;
 	} else{
 	    dmg = d(8, 6);
+	}
+	if (!EFire_resistance) {
 		destroy_item(SCROLL_CLASS, AD_FIRE);
 		destroy_item(POTION_CLASS, AD_FIRE);
 		destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -1454,8 +1454,10 @@ int spellnum;
 		
 	if (Cold_resistance) {
 	    shieldeff(u.ux, u.uy);
-	} else{
+	} else {
 	    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
+	}
+	if (!ECold_resistance) {
 		destroy_item(POTION_CLASS, AD_COLD);
 	}
 	stop_occupation();
@@ -1475,6 +1477,8 @@ int spellnum;
 	    if (reflects) break;
 	} else {
 	    dmg = d(8, 6);
+	}
+	if (!(reflects || EShock_resistance)) {
 		destroy_item(WAND_CLASS, AD_ELEC);
 		destroy_item(RING_CLASS, AD_ELEC);
 	}

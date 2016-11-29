@@ -2818,6 +2818,14 @@ struct monst *owner;
 			ublindf
 			&& ublindf->otyp == R_LYEHIAN_FACEPLATE
 			&& (!ublindf->cursed || rn2(3))
+		   ) || (
+			uarm
+			&& (uarm->otyp == WHITE_DRAGON_SCALES || uarm->otyp == WHITE_DRAGON_SCALE_MAIL)
+			&& (!uarm->cursed || rn2(3))
+		   ) || (
+			uarms
+			&& uarms->otyp == WHITE_DRAGON_SCALE_SHIELD
+			&& (!uarm->cursed || rn2(3))
 		   ) || u.sealsActive&SEAL_ENKI
 		) {
 			if(uarmc && uarmc->otyp != OILSKIN_CLOAK && uarmc->greased){
@@ -2830,10 +2838,18 @@ struct monst *owner;
 		}
 	} else if(owner){ //Monster
 		struct obj *cloak = which_armor(owner, W_ARMC);
+		struct obj *armor = which_armor(owner, W_ARM);
+		struct obj *shield = which_armor(owner, W_ARMS);
 		// struct obj *blindfold = which_armor(owner, W_ARMC);
 		if((cloak
 			&& (cloak->otyp == OILSKIN_CLOAK || cloak->greased)
 			&& (!cloak->cursed || rn2(3))
+			) || (armor
+			&& (armor->otyp == WHITE_DRAGON_SCALES || armor->otyp == WHITE_DRAGON_SCALE_MAIL)
+			&& (!armor->cursed || rn2(3))
+			) || (shield
+			&& shield->otyp == WHITE_DRAGON_SCALE_SHIELD
+			&& (!shield->cursed || rn2(3))
 		   // ) || (
 			// ublindf
 			// && ublindf->otyp == R_LYEHIAN_FACEPLATE
@@ -4229,8 +4245,10 @@ boolean disarm;
 			    shieldeff(u.ux, u.uy);
 			    You("don't seem to be affected.");
 			    dmg = 0;
-			} else{
+			} else {
 			    dmg = d(4, 4);
+			}
+			if(!EShock_resistance){
 				destroy_item(RING_CLASS, AD_ELEC);
 				destroy_item(WAND_CLASS, AD_ELEC);
 			}
@@ -4513,9 +4531,11 @@ burn_stuff:
 	(void) Boots_off();
 	useup(obj);
     }
-    destroy_item(SCROLL_CLASS, AD_FIRE);
-    destroy_item(SPBOOK_CLASS, AD_FIRE);
-    destroy_item(POTION_CLASS, AD_FIRE);
+	if(!(Wwalking || EFire_resistance)){
+		destroy_item(SCROLL_CLASS, AD_FIRE);
+		destroy_item(SPBOOK_CLASS, AD_FIRE);
+		destroy_item(POTION_CLASS, AD_FIRE);
+	}
     return(FALSE);
 }
 

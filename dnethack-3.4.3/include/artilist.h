@@ -1204,6 +1204,13 @@ A("The Rogue Gear-spirits", CROSSBOW,
 	UNTRAP, A_NEUTRAL, PM_RANGER, PM_GNOME, 4000L, 
 	SPFX2_DIG,0,0),
 
+A("The Steel Scales of Kurtulmak",	GRAY_DRAGON_SCALES,/*causes spell penalties*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_REFLECT|SPFX_HPHDAM),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0, A_LAWFUL, NON_PM, PM_KOBOLD, 5000L,
+	0,0,0),
+
 A("Glitterstone", AMBER,
     (SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_EREGEN),
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
@@ -1212,7 +1219,7 @@ A("Glitterstone", AMBER,
 	0,SPFX3_LIGHT,0),
 
 A("Great Claws of Urdlen",		GAUNTLETS_OF_POWER,
-	(SPFX_RESTR),0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(10,0),	NO_DFNS,	NO_CARY, /*Needs encyc entry*/
 	QUAKE, A_CHAOTIC, NON_PM, NON_PM, 4000L, 

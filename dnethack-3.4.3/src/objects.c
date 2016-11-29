@@ -460,9 +460,7 @@ HELM("helm of drain resistance", "band", /*diadem of drain resistance*//*Needs t
    needed to create them */
 DRGN_ARMR("gray dragon scale mail",   1, ANTIMAGIC,  1200, 1, CLR_GRAY),
 DRGN_ARMR("silver dragon scale mail", 1, REFLECTING, 1200, 1, DRAGON_SILVER),
-DRGN_ARMR("mercurial dragon scale mail", 1, FAST, 1200, 1, CLR_GRAY),/*Needs tile*/
 DRGN_ARMR("shimmering dragon scale mail", 1, DISPLACED, 1200, 1, CLR_CYAN),
-DRGN_ARMR("deep dragon scale mail",   1, DRAIN_RES,  1200, 1, CLR_MAGENTA),
 DRGN_ARMR("red dragon scale mail",    1, FIRE_RES,    900, 1, CLR_RED),
 DRGN_ARMR("white dragon scale mail",  1, COLD_RES,    900, 1, CLR_WHITE),
 DRGN_ARMR("orange dragon scale mail", 1, FREE_ACTION,   900, 1, CLR_ORANGE),
@@ -476,9 +474,7 @@ DRGN_ARMR("yellow dragon scale mail", 1, ACID_RES,    900, 1, CLR_YELLOW),
    magical properties but are produced "naturally" */
 DRGN_ARMR("gray dragon scales",   0, ANTIMAGIC,  700, 7, CLR_GRAY),
 DRGN_ARMR("silver dragon scales", 0, REFLECTING, 700, 7, DRAGON_SILVER),
-DRGN_ARMR("mercurial dragon scales", 0, FAST,  700, 7, CLR_GRAY),/*Needs tile*/
 DRGN_ARMR("shimmering dragon scales", 0, DISPLACED,  700, 7, CLR_CYAN),
-DRGN_ARMR("deep dragon scales",   0, DRAIN_RES,  500, 7, CLR_MAGENTA),
 DRGN_ARMR("red dragon scales",    0, FIRE_RES,   500, 7, CLR_RED),
 DRGN_ARMR("white dragon scales",  0, COLD_RES,   500, 7, CLR_WHITE),
 DRGN_ARMR("orange dragon scales", 0, FREE_ACTION,  500, 7, CLR_ORANGE),
@@ -632,9 +628,7 @@ SHIELD("shield of reflection", "polished silver shield",
    needed to create them */
 DRGN_SHIELD("gray dragon scale shield", 1, ANTIMAGIC,  1200, 7, CLR_GRAY),
 DRGN_SHIELD("silver dragon scale shield", 1, REFLECTING, 1200, 7, DRAGON_SILVER),
-DRGN_SHIELD("mercurial dragon scale shield", 1, FAST, 1200, 7, CLR_GRAY),/*Needs tile*/
 DRGN_SHIELD("shimmering dragon scale shield", 1, DISPLACED, 1200, 7, CLR_CYAN),
-DRGN_SHIELD("deep dragon scale shield", 1, DRAIN_RES, 1200, 7, CLR_MAGENTA),
 DRGN_SHIELD("red dragon scale shield", 1, FIRE_RES,    900, 7, CLR_RED),
 DRGN_SHIELD("white dragon scale shield", 1, COLD_RES,    900, 7, CLR_WHITE),
 DRGN_SHIELD("orange dragon scale shield", 1, FREE_ACTION,   900, 7, CLR_ORANGE),

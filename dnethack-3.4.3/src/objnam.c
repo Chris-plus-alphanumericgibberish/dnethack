@@ -1124,12 +1124,8 @@ plus:
             Sprintf(eos(bp), " (gray)");
           if(SILVER_DRAGON_SCALE_MAIL == obj->otyp)
             Sprintf(eos(bp), " (silver)");
-          if(MERCURIAL_DRAGON_SCALE_MAIL == obj->otyp)
-            Sprintf(eos(bp), " (mercurial)");
           if(SHIMMERING_DRAGON_SCALE_MAIL == obj->otyp)
             Sprintf(eos(bp), " (shimmering)");
-          if(DEEP_DRAGON_SCALE_MAIL == obj->otyp)
-            Sprintf(eos(bp), " (deep)");
           if(RED_DRAGON_SCALE_MAIL == obj->otyp)
             Sprintf(eos(bp), " (red)");
           if(WHITE_DRAGON_SCALE_MAIL == obj->otyp)

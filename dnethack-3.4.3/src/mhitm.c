@@ -1968,13 +1968,23 @@ physical:{
 		break;
 	    case AD_SLIM:
 		if (cancelled) break;	/* physical damage only */
-		if (!rn2(4) && !flaming(mdef->data) &&
+		{
+		struct obj *armor = which_armor(mdef, W_ARM);
+		struct obj *shield = which_armor(mdef, W_ARMS);
+		if (!rn2(4) && !flaming(mdef->data)
+				&& mdef->data != &mons[PM_RED_DRAGON]
+				&& !(
+					(armor && (armor->otyp == RED_DRAGON_SCALES || armor->otyp == RED_DRAGON_SCALE_MAIL)
+					) || (shield && shield->otyp == RED_DRAGON_SCALE_SHIELD
+					)
+				) &&
 				mdef->data != &mons[PM_GREEN_SLIME] && mdef->data != &mons[PM_FLUX_SLIME] && 
 				!is_rider(mdef->data) && !resists_poly(magr->data)
 		) {
 		    (void) newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, vis);
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    tmp = 0;
+		}
 		}
 		break;
 	    case AD_STCK:

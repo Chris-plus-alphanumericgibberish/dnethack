@@ -1976,7 +1976,10 @@ find_ac()
 	int dexbonus = 0;
 	int uac = mons[u.umonnum].ac;
 
-	if(uarm) uac -= ARM_BONUS(uarm);
+	if(uarm){
+		if(uarm->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) uac -= ARM_BONUS(uarm)*2;
+		else uac -= ARM_BONUS(uarm);
+	}
 	if(uarmc){
 		if(uarmc->oartifact == ART_MANTLE_OF_HEAVEN || 
 			uarmc->oartifact == ART_VESTMENT_OF_HELL ||

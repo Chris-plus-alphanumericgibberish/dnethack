@@ -663,8 +663,8 @@ domonability(VOID_ARGS)
 	case MATTK_DSCALE:{
 		int res = dobreathe(Dragon_shield_to_pm(uarms));
 		if(res){
-			uarm->age = monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
-			uarms->age= monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
+			if(!uarm->oartifact) uarm->age = monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
+			uarms->age = monstermoves + (long)(rnz(100)*(Role_if(PM_CAVEMAN) ? .8 : 1));
 		}
 		return res;
 	}
@@ -1421,7 +1421,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	putstr(en_win, 0, "");
 
 	if (u.uevent.uhand_of_elbereth) {
-	    static const char * const hofe_titles[30] = {
+	    static const char * const hofe_titles[33] = {
 				/* Default */
 				"the Arm of the Law",		 /*01*/
 				"the Envoy of Balance",		 /*02*/
@@ -1462,8 +1462,12 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				"the High %s of Apollo",	 /*28*/
 				"the High %s of Latona",	 /*29*/
 				"the High %s of Diana",	 	 /*30*/
+				/* Gonome Ranger */
+				"the Great Slave-Vassal of Kurtulmak",	 /*31*/
+				"the Thane of Garl Glittergold",	 /*32*/
+				"the Claw of Urdlen",	 	 /*33*/
 				
-				/* uhand_of_elbereth max == 31 *AS IN, YOU'RE NOW OUT OF ROOM* */
+				/* uhand_of_elbereth max == 63 */
 	    };
 		
 	    if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");

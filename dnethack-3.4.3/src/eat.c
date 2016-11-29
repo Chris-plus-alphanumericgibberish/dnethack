@@ -1262,7 +1262,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 	    case PM_WRAITH:
 			if(!drained || !rn2(5)) pluslvl(FALSE);
 		break;
-	    case PM_DEEP_DRAGON:
+	    case PM_DEEP_WYRM:
 			if(!drained || !rn2(5)) pluslvl(FALSE);
 		break;
 	    case PM_HUMAN_WERERAT:
@@ -1371,16 +1371,6 @@ BOOLEAN_P tin, nobadeffects, drained;
 		    /* make gold symbol show up now */
 		    display_nhwindow(WIN_MAP, TRUE);
 		}
-		break;
-	    case PM_MERCURIAL_DRAGON:
-		    if (!(HFast & INTRINSIC)) {
-				if (!Fast)
-					You("speed up.");
-				else
-					Your("quickness feels more natural.");
-				HFast |= FROMOUTSIDE;
-			}
-			exercise(A_DEX, TRUE);
 		break;
 	    case PM_QUANTUM_MECHANIC:
 		if (HFast & INTRINSIC) {

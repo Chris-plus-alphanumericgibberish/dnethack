@@ -20,7 +20,7 @@ STATIC_DCL void NDECL(end_engulf);
 STATIC_DCL int FDECL(gulpum, (struct monst *,struct attack *));
 STATIC_DCL void FDECL(nohandglow, (struct monst *));
 STATIC_DCL boolean FDECL(shade_aware, (struct obj *));
-STATIC_DCL boolean FDECL(dragon_hit, (struct monst *, struct obj *, int, int *, boolean *, boolean *, boolean *));
+STATIC_DCL boolean FDECL(dragon_hit, (struct monst *, struct obj *, int, int *, boolean *, boolean *, boolean *)); /*Depricated*/
 
 extern boolean notonhead;	/* for long worms */
 /* The below might become a parameter instead if we use it a lot */
@@ -849,9 +849,9 @@ int thrown;
 		if(uright && uright->oartifact == ART_ANNULUS) tmp = (tmp+uright->spe)*2;
 		else if(uleft && uleft->oartifact == ART_ANNULUS) tmp = (tmp+uleft->spe)*2;
 		
-		if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
-			dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
-		}
+		// if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
+			// dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
+		// }
 		if(uarmg){
 			/* blessed gloves give bonuses when fighting 'bare-handed' */
 			if (uarmg->blessed && (is_undead(mdat) || is_demon(mdat))) tmp += rnd(4);
@@ -1335,9 +1335,9 @@ int thrown;
 					hittxt = TRUE;
 				}
 			}
-			if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
-				dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
-			}
+			// if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
+				// dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
+			// }
 		    if (obj->oartifact &&
 				artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
 				if(mon->mhp <= 0) /* artifact killed monster */
@@ -2915,7 +2915,16 @@ register struct attack *mattk;
 		break;
 	    case AD_SLIM:
 		if (negated) break;	/* physical damage only */
-		if (!rn2(4) && !flaming(mdef->data) &&
+		{
+		struct obj *armor = which_armor(mdef, W_ARM);
+		struct obj *shield = which_armor(mdef, W_ARMS);
+		if (!rn2(4) && !flaming(mdef->data)
+				&& mdef->data != &mons[PM_RED_DRAGON]
+				&& !(
+					(armor && (armor->otyp == RED_DRAGON_SCALES || armor->otyp == RED_DRAGON_SCALE_MAIL)
+					) || (shield && shield->otyp == RED_DRAGON_SCALE_SHIELD
+					)
+				) &&
 				mdef->data != &mons[PM_GREEN_SLIME] && mdef->data != &mons[PM_FLUX_SLIME] && 
 				!is_rider(mdef->data) && !resists_poly(mdef->data)
 		) {
@@ -4678,6 +4687,7 @@ struct obj *otmp;	/* source of flash */
 
 /*uhitm.c*/
 
+/*Depricated*/
 boolean
 dragon_hit(mon, otmp, type, dmgptr, needpoismsg, poiskilled, druggedmon)
 struct monst *mon;

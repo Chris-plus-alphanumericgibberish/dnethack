@@ -5311,14 +5311,8 @@ arti_invoke(obj)
                 case COMMAND_SILVER:
                   obj->otyp = SILVER_DRAGON_SCALE_MAIL;
                   break;
-                case COMMAND_MERCURIAL:
-                  obj->otyp = MERCURIAL_DRAGON_SCALE_MAIL;
-                  break;
                 case COMMAND_SHIMMERING:
                   obj->otyp = SHIMMERING_DRAGON_SCALE_MAIL;
-                  break;
-                case COMMAND_DEEP:
-                  obj->otyp = DEEP_DRAGON_SCALE_MAIL;
                   break;
                 case COMMAND_RED:
                   obj->otyp = RED_DRAGON_SCALE_MAIL;
@@ -6248,25 +6242,11 @@ struct obj *obj;
           's', 0, ATR_NONE, buf,
           MENU_UNSELECTED);
     }
-    if(mvitals[PM_MERCURIAL_DRAGON].seen || mvitals[PM_BABY_MERCURIAL_DRAGON].seen){
-      Sprintf(buf, "Mercurial");
-      any.a_int = COMMAND_SILVER;	/* must be non-zero */
-      add_menu(tmpwin, NO_GLYPH, &any,
-          'm', 0, ATR_NONE, buf,
-          MENU_UNSELECTED);
-    }
     if(mvitals[PM_SHIMMERING_DRAGON].seen || mvitals[PM_BABY_SHIMMERING_DRAGON].seen){
       Sprintf(buf, "Shimmering");
       any.a_int = COMMAND_SHIMMERING;	/* must be non-zero */
       add_menu(tmpwin, NO_GLYPH, &any,
           'S', 0, ATR_NONE, buf,
-          MENU_UNSELECTED);
-    }
-    if(mvitals[PM_DEEP_DRAGON].seen || mvitals[PM_BABY_DEEP_DRAGON].seen){
-      Sprintf(buf, "Deep");
-      any.a_int = COMMAND_DEEP;	/* must be non-zero */
-      add_menu(tmpwin, NO_GLYPH, &any,
-          'd', 0, ATR_NONE, buf,
           MENU_UNSELECTED);
     }
     if(mvitals[PM_RED_DRAGON].seen || mvitals[PM_BABY_RED_DRAGON].seen){

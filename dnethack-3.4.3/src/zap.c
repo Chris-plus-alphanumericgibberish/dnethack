@@ -2105,16 +2105,18 @@ boolean ordinary;
 		    makeknown(WAN_LIGHTNING);
 		case SPE_LIGHTNING_BOLT:
 		    if (!Shock_resistance) {
-			You("shock yourself!");
-			damage = d(12,6);
-			exercise(A_CON, FALSE);
-		    destroy_item(WAND_CLASS, AD_ELEC);
-		    destroy_item(RING_CLASS, AD_ELEC);
+				You("shock yourself!");
+				damage = d(12,6);
+				exercise(A_CON, FALSE);
 		    } else {
-			shieldeff(u.ux, u.uy);
-			You("zap yourself, but seem unharmed.");
-			ugolemeffects(AD_ELEC, d(12,6));
+				shieldeff(u.ux, u.uy);
+				You("zap yourself, but seem unharmed.");
+				ugolemeffects(AD_ELEC, d(12,6));
 		    }
+			if(!EShock_resistance){
+				destroy_item(WAND_CLASS, AD_ELEC);
+				destroy_item(RING_CLASS, AD_ELEC);
+			}
 		    if (!resists_blnd(&youmonst)) {
 			    You(are_blinded_by_the_flash);
 			    make_blinded((long)rnd(100),FALSE);
@@ -2130,16 +2132,18 @@ boolean ordinary;
 		    makeknown(WAN_FIRE);
 		case FIRE_HORN:
 		    if (Fire_resistance) {
-			shieldeff(u.ux, u.uy);
-			You_feel("rather warm.");
-			ugolemeffects(AD_FIRE, d(12,6));
+				shieldeff(u.ux, u.uy);
+				You_feel("rather warm.");
+				ugolemeffects(AD_FIRE, d(12,6));
 		    } else {
-			pline("You've set yourself afire!");
-			damage = d(12,6);
-		    destroy_item(SCROLL_CLASS, AD_FIRE);
-		    destroy_item(POTION_CLASS, AD_FIRE);
-		    destroy_item(SPBOOK_CLASS, AD_FIRE);
+				pline("You've set yourself afire!");
+				damage = d(12,6);
 		    }
+			if(!EFire_resistance){
+				destroy_item(SCROLL_CLASS, AD_FIRE);
+				destroy_item(POTION_CLASS, AD_FIRE);
+				destroy_item(SPBOOK_CLASS, AD_FIRE);
+			}
 		    burn_away_slime();
 		    (void) burnarmor(&youmonst);
 		    break;
@@ -2149,14 +2153,16 @@ boolean ordinary;
 		case SPE_CONE_OF_COLD:
 		case FROST_HORN:
 		    if (Cold_resistance) {
-			shieldeff(u.ux, u.uy);
-			You_feel("a little chill.");
-			ugolemeffects(AD_COLD, d(12,6));
+				shieldeff(u.ux, u.uy);
+				You_feel("a little chill.");
+				ugolemeffects(AD_COLD, d(12,6));
 		    } else {
-			You("imitate a popsicle!");
-			damage = d(12,6);
-		    destroy_item(POTION_CLASS, AD_COLD);
+				You("imitate a popsicle!");
+				damage = d(12,6);
 		    }
+			if(!ECold_resistance){
+				destroy_item(POTION_CLASS, AD_COLD);
+			}
 		    break;
 		case SPE_ACID_BLAST:
 		    You("explode an acid blast on top of yourself!");
@@ -3448,13 +3454,14 @@ xchar sx, sy;
 	    } else {
 			if(!flat) dam = d(nd,6);
 			else dam = flat;
-			if(!Reflecting){
-				if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
-				if (flags.drgn_brth || !rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
-				if (flags.drgn_brth || !rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
-				burnarmor(&youmonst);
-			} else dam = dam/2+1;
-	    }
+			if(Reflecting) dam = dam/2+1;
+		}
+		if(!EFire_resistance){
+			if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
+			if (flags.drgn_brth || !rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
+			if (flags.drgn_brth || !rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
+			burnarmor(&youmonst);
+		}
 	    burn_away_slime();
     break;
 	case ZT_COLD:
@@ -3465,11 +3472,12 @@ xchar sx, sy;
 	    } else {
 			if(!flat) dam = d(nd,6);
 			else dam = flat;
-			if(!Reflecting){
-				if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
-				if (flags.drgn_brth) destroy_item(POTION_CLASS, AD_COLD);
-			} else dam = dam/2+1;
+			if(Reflecting) dam = dam/2+1;
 	    }
+		if(!ECold_resistance){
+			if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
+			if (flags.drgn_brth) destroy_item(POTION_CLASS, AD_COLD);
+		}
     break;
 	case ZT_SLEEP:{
 		int time = flat ? flat : d(nd,25);
@@ -3564,11 +3572,12 @@ xchar sx, sy;
 			if(!flat) dam = d(nd,6);
 			else dam = flat;
 			exercise(A_CON, FALSE);
-			if(!Reflecting){
-				if (flags.drgn_brth || !rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
-				if (flags.drgn_brth || !rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
-			} else dam = dam/2+1;
+			if(Reflecting) dam = dam/2+1;
 	    }
+		if(!EShock_resistance){
+			if (flags.drgn_brth || !rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
+			if (flags.drgn_brth || !rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
+		}
 	    break;
 	case ZT_POISON_GAS:
 		if(abs(type) == ZT_SPELL(ZT_POISON_GAS)){
@@ -4438,7 +4447,7 @@ const char * const destroy_strings[] = {	/* also used in trap.c */
 	"catches fire and burns", "catch fire and burn", "burning scroll",
 	"catches fire and burns", "catch fire and burn", "burning book",
 	"turns to dust and vanishes", "turn to dust and vanish", "",
-	"breaks apart and explodes", "break apart and explode", "exploding wand",
+	"shoots a spray of sparks", "shoots sparks and arcing current", "discharging wand",
 	"boils vigorously", "boil vigorously", "boiling potion"
 };
 
@@ -4467,9 +4476,9 @@ register int osym, dmgtyp;
 	    switch(dmgtyp) {
 		case AD_COLD:
 		    if(osym == POTION_CLASS && obj->otyp != POT_OIL) {
-			quan = obj->quan;
-			dindx = 0;
-			dmg = rnd(4);
+				quan = obj->quan;
+				dindx = 0;
+				dmg = 4;
 		    } else skip++;
 		    break;
 		case AD_FIRE:
@@ -4489,7 +4498,7 @@ register int osym, dmgtyp;
 		    switch(osym) {
 			case POTION_CLASS:
 			    dindx = 1;
-			    dmg = rnd(6);
+			    dmg = 6;
 			    break;
 			case SCROLL_CLASS:
 			    dindx = 2;
@@ -4497,7 +4506,7 @@ register int osym, dmgtyp;
 			    break;
 			case SPBOOK_CLASS:
 			    dindx = 3;
-			    dmg = 1;
+			    dmg = 6;
 			    break;
 			default:
 			    skip++;
@@ -4520,7 +4529,7 @@ register int osym, dmgtyp;
 			    if (obj == current_wand) { skip++; break; }
 #endif
 			    dindx = 5;
-			    dmg = rnd(10);
+			    dmg = 6;
 			    break;
 			default:
 			    skip++;
@@ -4533,34 +4542,48 @@ register int osym, dmgtyp;
 	    }
 	    if(!skip) {
 		if (obj->in_use) --quan; /* one will be used up elsewhere */
-		for(i = cnt = 0L; i < quan; i++)
-		    if(!rn2(3)) cnt++;
-
-		if(!cnt) continue;
-		if(cnt == quan)	mult = "Your";
-		else	mult = (cnt == 1L) ? "One of your" : "Some of your";
-		pline("%s %s %s!", mult, xname(obj),
-			(cnt > 1L) ? destroy_strings[dindx*3 + 1]
-				  : destroy_strings[dindx*3]);
-		if(osym == POTION_CLASS && dmgtyp != AD_COLD) {
-		    if (!breathless(youmonst.data) || haseyes(youmonst.data))
-		    	potionbreathe(obj);
+		if(osym == WAND_CLASS){
+			for(i = cnt = 0L; i < obj->spe; i++)
+				if(!rn2(10)) cnt++;
+			
+			if(!cnt) continue;
+			pline("Your %s %s!", xname(obj),
+				(cnt > 1L) ? destroy_strings[dindx*3 + 1]
+					  : destroy_strings[dindx*3]);
+			obj->spe -= cnt;
+		} else {
+			for(i = cnt = 0L; i < quan; i++)
+				if(!rn2(10)) cnt++;
+			
+			if(!cnt) continue;
+			if(cnt == quan)	mult = "Your";
+			else	mult = (cnt == 1L) ? "One of your" : "Some of your";
+			pline("%s %s %s!", mult, xname(obj),
+				(cnt > 1L) ? destroy_strings[dindx*3 + 1]
+					  : destroy_strings[dindx*3]);
+			if(osym == POTION_CLASS && dmgtyp != AD_COLD) {
+				if (!breathless(youracedata) || haseyes(youracedata))
+					potionbreathe(obj);
+			}
+			if (obj->owornmask) {
+				if (obj->owornmask & W_RING) /* ring being worn */
+				Ring_gone(obj);
+				else
+				setnotworn(obj);
+			}
+			if (obj == current_wand) current_wand = 0;	/* destroyed */
+			for (i = 0; i < cnt; i++)
+				useup(obj);
 		}
-		if (obj->owornmask) {
-		    if (obj->owornmask & W_RING) /* ring being worn */
-			Ring_gone(obj);
-		    else
-			setnotworn(obj);
-		}
-		if (obj == current_wand) current_wand = 0;	/* destroyed */
-		for (i = 0; i < cnt; i++)
-		    useup(obj);
+		
 		if(dmg) {
 		    if(xresist)	You("aren't hurt!");
 		    else {
 			const char *how = destroy_strings[dindx * 3 + 2];
 			boolean one = (cnt == 1L);
-
+			
+			dmg = d(cnt,dmg);
+			
 			losehp(dmg, one ? how : (const char *)makeplural(how),
 			       one ? KILLED_BY_AN : KILLED_BY);
 			exercise(A_STR, FALSE);

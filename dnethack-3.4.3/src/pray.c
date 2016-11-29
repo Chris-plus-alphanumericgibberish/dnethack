@@ -782,6 +782,11 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(GOLDEN_ARROW, artiname(ART_SUNBEAM));
 		verbalize("I anoint thee...  High %s of Apollo!", flags.female ? "Priestess" : "Priest");
+	} else if(Race_if(PM_GNOME) && Role_if(PM_RANGER)) {
+		u.uevent.uhand_of_elbereth = 31;
+		in_hand = FALSE;
+		already_exists = exist_artifact(GRAY_DRAGON_SCALES, artiname(ART_STEEL_SCALES_OF_KURTULMAK));
+		verbalize("I claim thee...  Great Slave-Vassal of Kurtulmak!");
 	} else if(Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)){
 		u.uevent.uhand_of_elbereth = 1;
 		in_hand = FALSE;
@@ -862,6 +867,11 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(CLOAK_OF_INVISIBILITY, artiname(ART_VEIL_OF_LATONA));
 		verbalize("I anoint thee...  High %s of Latona!", flags.female ? "Priestess" : "Priest");
+	} else if(Race_if(PM_GNOME) && Role_if(PM_RANGER)) {
+		u.uevent.uhand_of_elbereth = 32;
+		in_hand = FALSE;
+		already_exists = exist_artifact(AMBER, artiname(ART_GLITTERSTONE));
+		verbalize("I dub thee...  Thane of Garl Glittergold!");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 5;
 		in_hand = FALSE;
@@ -930,6 +940,11 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(SILVER_ARROW, artiname(ART_MOONBEAM));
 		verbalize("I anoint thee...  High %s of Diana!", flags.female ? "Priestess" : "Priest");
+	} else if(Race_if(PM_GNOME) && Role_if(PM_RANGER)) {
+		u.uevent.uhand_of_elbereth = 33;
+		in_hand = FALSE;
+		already_exists = exist_artifact(GAUNTLETS_OF_POWER, artiname(ART_GREAT_CLAWS_OF_URDLEN));
+		verbalize("Thou art chosen to rend the Earth in My Name!");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 6;
 		in_hand = FALSE;
@@ -1156,6 +1171,39 @@ gcrownu()
 				dropy(obj);
 				discover_artifact(ART_SUNBEAM);
 				expert_weapon_skill(P_BOW);
+			}
+			u.ugifts++;
+		}
+	} else if(Race_if(PM_GNOME) && Role_if(PM_RANGER)){
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if(u.ualign.type == A_CHAOTIC){
+				obj = mksobj(GAUNTLETS_OF_POWER, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_GREAT_CLAWS_OF_URDLEN));
+				obj->spe = 1;
+				obj->objsize = MZ_SMALL;
+				at_your_feet("Clawed gauntlets");
+				dropy(obj);
+				discover_artifact(ART_GREAT_CLAWS_OF_URDLEN);
+				expert_weapon_skill(P_BARE_HANDED_COMBAT);
+				u.umartial = TRUE;
+			} else if(u.ualign.type == A_NEUTRAL){
+				obj = mksobj(AMBER, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_GLITTERSTONE));
+				at_your_feet("A glittering gemstone");
+				dropy(obj);
+				discover_artifact(ART_GLITTERSTONE);
+				expert_weapon_skill(P_ENCHANTMENT_SPELL);
+				expert_weapon_skill(P_HEALING_SPELL);
+				expert_weapon_skill(P_ESCAPE_SPELL);
+			} else if(u.ualign.type == A_LAWFUL){
+				obj = mksobj(GRAY_DRAGON_SCALES, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_STEEL_SCALES_OF_KURTULMAK));
+				at_your_feet("Steel scales");
+				dropy(obj);
+				discover_artifact(ART_STEEL_SCALES_OF_KURTULMAK);
+				expert_weapon_skill(P_RIDING);
 			}
 			u.ugifts++;
 		}
