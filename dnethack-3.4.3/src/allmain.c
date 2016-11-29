@@ -295,8 +295,8 @@ moveloop()
 {
 #if defined(MICRO) || defined(WIN32)
 	char ch;
-	int abort_lev, i, j;
 #endif
+	int abort_lev, i, j;
     struct monst *mtmp, *nxtmon;
 	struct obj *pobj;
     int moveamt = 0, wtcap = 0, change = 0;
