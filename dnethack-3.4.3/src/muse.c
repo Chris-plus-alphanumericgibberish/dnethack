@@ -2454,6 +2454,12 @@ const char *str;
 	    if (str)
 		pline(str, s_suffix(mon_nam(mon)), "armor");
 	    return TRUE;
+	} else if ((orefl = which_armor(mon, W_SADDLE)) &&
+				arti_reflects(orefl)) {
+	    if (str) {
+		pline(str, s_suffix(mon_nam(mon)), "saddle");
+	    }
+	    return TRUE;
 	} else if (mon->data == &mons[PM_SILVER_DRAGON] ||
 		mon->data == &mons[PM_CHROMATIC_DRAGON]) {
 	    /* Silver dragons only reflect when mature; babies do not */
