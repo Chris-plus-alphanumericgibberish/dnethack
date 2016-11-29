@@ -160,7 +160,7 @@ struct monst *mon;
 	    /* used to give light, now doesn't, or vice versa,
 	       or light's range has changed */
 	    if (emits_light(olddata))
-		del_light_source(LS_MONSTER, (genericptr_t)mon);
+		del_light_source(LS_MONSTER, (genericptr_t)mon, FALSE);
 	    if (emits_light(mon->data))
 		new_light_source(mon->mx, mon->my, emits_light(mon->data),
 				 LS_MONSTER, (genericptr_t)mon);
@@ -178,28 +178,28 @@ struct monst *mon;
 			for(ltnt = fmon; ltnt; ltnt = ltnt->nmon) if(ltnt->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
 				switch(rnd(4)){
 					case 1:
-						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt, FALSE);
 						set_mon_data(ltnt, &mons[PM_WATER_ELEMENTAL], 0);
 						newsym(ltnt->mx,ltnt->my);
 						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),
 								 LS_MONSTER, (genericptr_t)ltnt);
 					break;
 					case 2:
-						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt, FALSE);
 						set_mon_data(ltnt, &mons[PM_AIR_ELEMENTAL], 0);
 						newsym(ltnt->mx,ltnt->my);
 						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),
 								 LS_MONSTER, (genericptr_t)ltnt);
 					break;
 					case 3:
-						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt, FALSE);
 						set_mon_data(ltnt, &mons[PM_LIGHTNING_PARAELEMENTAL], 0);
 						newsym(ltnt->mx,ltnt->my);
 						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),
 								 LS_MONSTER, (genericptr_t)ltnt);
 					break;
 					case 4:
-						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt);
+						if (emits_light(ltnt->data)) del_light_source(LS_MONSTER, (genericptr_t)ltnt, FALSE);
 						set_mon_data(ltnt, &mons[PM_ICE_PARAELEMENTAL], 0);
 						newsym(ltnt->mx,ltnt->my);
 						if (emits_light(ltnt->data)) new_light_source(ltnt->mx, ltnt->my, emits_light(ltnt->data),

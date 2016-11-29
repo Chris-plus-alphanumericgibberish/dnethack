@@ -2296,13 +2296,8 @@ dealloc_obj(obj)
     /*
      * Free up any light sources attached to the object.
      *
-     * We may want to just call del_light_source() without any
-     * checks (requires a code change there).  Otherwise this
-     * list must track all objects that can have a light source
-     * attached to it (and also requires lamplit to be set).
      */
-    if (obj_sheds_light(obj))
-	del_light_source(LS_OBJECT, (genericptr_t) obj);
+	del_light_source(LS_OBJECT, (genericptr_t) obj, TRUE);
 
     if (obj == thrownobj) thrownobj = (struct obj*)0;
 

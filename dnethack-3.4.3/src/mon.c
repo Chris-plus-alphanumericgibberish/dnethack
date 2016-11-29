@@ -2473,7 +2473,7 @@ register struct monst *mtmp, *mtmp2;
 			 emits_light(mtmp2->data),
 			 LS_MONSTER, (genericptr_t)mtmp2);
 	/* here we rely on the fact that `mtmp' hasn't actually been deleted */
-	del_light_source(LS_MONSTER, (genericptr_t)mtmp);
+	del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
     }
     mtmp2->nmon = fmon;
     fmon = mtmp2;
@@ -2519,7 +2519,7 @@ struct permonst *mptr;	/* reflects mtmp->data _prior_ to mtmp's death */
 	relobj(mtmp, 0, FALSE);
 	remove_monster(mtmp->mx, mtmp->my);
 	if (emits_light(mptr))
-	    del_light_source(LS_MONSTER, (genericptr_t)mtmp);
+	    del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
 	newsym(mtmp->mx,mtmp->my);
 	unstuck(mtmp);
 	fill_pit(mtmp->mx, mtmp->my);
@@ -4382,7 +4382,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	    /* used to give light, now doesn't, or vice versa,
 	       or light's range has changed */
 	    if (emits_light(olddata))
-		del_light_source(LS_MONSTER, (genericptr_t)mtmp);
+		del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
 	    if (emits_light(mtmp->data))
 		new_light_source(mtmp->mx, mtmp->my, emits_light(mtmp->data),
 				 LS_MONSTER, (genericptr_t)mtmp);

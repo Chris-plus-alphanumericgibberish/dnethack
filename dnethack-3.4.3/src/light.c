@@ -87,9 +87,10 @@ new_light_source(x, y, range, type, id)
  * to an object at a time.
  */
 void
-del_light_source(type, id)
+del_light_source(type, id, silent)
     int type;
     genericptr_t id;
+	boolean silent;
 {
     light_source *curr, *prev;
     genericptr_t tmp_id;
@@ -119,7 +120,7 @@ del_light_source(type, id)
 	    return;
 	}
     }
-    impossible("del_light_source: not found type=%d, id=0x%lx", type, (long)id);
+    if(!silent) impossible("del_light_source: not found type=%d, id=0x%lx", type, (long)id);
 }
 
 /* Mark locations that are temporarily lit via mobile light sources. */
@@ -642,7 +643,7 @@ snuff_light_source(x, y)
 				 * dropped or thrown inside a monster, this won't matter anyway
 				 * because it will go out when dropped.)
 				 */
-				if (artifact_light(obj)) continue;
+				if (artifact_light(obj) || obj->otyp == POT_STARLIGHT || obj->otyp == CHUNK_OF_FOSSILE_DARK) continue;
 				end_burn(obj, obj->otyp != MAGIC_LAMP);
 			}
 		}
