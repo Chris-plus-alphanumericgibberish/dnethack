@@ -2382,9 +2382,11 @@ register struct monst *mtmp;
 				/* CM: Dwarves OUTSIDE the mines have booze. */
 				mongets(mtmp, POT_BOOZE);
 			}
- 			if (!rn2(3))
-			    (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
-		}else if(mm == PM_GNOLL) {
+ 			if (!rn2(3)){
+			    if(is_prince(ptr) || (is_lord(ptr) && !rn2(3))) (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
+				else (void)mongets(mtmp, CHAIN_MAIL);
+			}
+		} else if(mm == PM_GNOLL) {
 			switch(rnd(4)){
 			case 1:
 			(void)mongets(mtmp, FLAIL);
