@@ -6099,7 +6099,7 @@ register int otyp;
 	otmp = mksobj(otyp, TRUE, FALSE);
 	if (otmp) {
 		/*Size and shape it to owner*/
-		if(otmp->oclass == ARMOR_CLASS || otmp->oclass == WEAPON_CLASS)
+		if((otmp->oclass == ARMOR_CLASS || otmp->oclass == WEAPON_CLASS) && mtmp->data != &mons[PM_HOBBIT])
 			otmp->objsize = mtmp->data->msize;
 		if(otmp->oclass == ARMOR_CLASS && !Is_dragon_scales(otmp)){
 			if(is_suit(otmp)) otmp->bodytypeflag = (mtmp->data->mflagsb&MB_BODYTYPEMASK);
