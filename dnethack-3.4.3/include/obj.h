@@ -92,6 +92,7 @@ struct obj {
 #define odrained olocked	/* drained corpse */
 	Bitfield(obroken,1);	/* lock has been broken */
 #define ohaluengr obroken	/* engraving on ring isn't a ward */
+#define odebone obroken		/* corpse has been de-boned */
 	Bitfield(otrapped,1);	/* container is trapped */
 				/* or accidental tripped rolling boulder trap */
 
