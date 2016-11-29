@@ -1553,8 +1553,7 @@ final_level()
 		    mtmp->mtame = 10;
 		    /* make him strong enough vs. endgame foes */
 		    mtmp->m_lev = rn1(8,15);
-		    mtmp->mhp = mtmp->mhpmax =
-					d((int)mtmp->m_lev,10) + 30 + rnd(30);
+		    mtmp->mhp = mtmp->mhpmax = 8*mtmp->m_lev - rnd(7);
 		    if ((otmp = select_hwep(mtmp)) == 0) {
 			otmp = mksobj(SABER, FALSE, FALSE);
 			if (mpickobj(mtmp, otmp))
