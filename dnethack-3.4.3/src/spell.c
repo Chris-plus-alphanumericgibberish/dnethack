@@ -16,6 +16,7 @@ static NEARDATA int RoSbook;		/* Read spell or Study Wards?" */
 #define READ_SPELL 1
 #define STUDY_WARD 2
 #define incrnknow(spell)        spl_book[spell].sp_know = KEEN
+#define ndecrnknow(spell, knw)        spl_book[spell].sp_know = max(0, spl_book[spell].sp_know - (KEEN*knw)/100)
 
 #define spellev(spell)		spl_book[spell].sp_lev
 #define spellname(spell)	OBJ_NAME(objects[spellid(spell)])
@@ -3796,21 +3797,13 @@ throwgaze()
 }
 
 void
-losespells()
+losespells(howmuch)
+	int howmuch;
 {
-	boolean confused = (Confusion != 0);
-	int  n, nzap, i;
+	int  n;
 
-	book = 0;
-	for (n = 0; n < MAXSPELL && spellid(n) != NO_SPELL; n++)
-		continue;
-	if (n) {
-		nzap = rnd(n) + confused ? 1 : 0;
-		if (nzap > n) nzap = n;
-		for (i = n - nzap; i < n; i++) {
-		    spellid(i) = NO_SPELL;
-		    exercise(A_WIS, FALSE);	/* ouch! */
-		}
+	for (n = 0; n < MAXSPELL && spellid(n) != NO_SPELL; n++){
+		ndecrnknow(n, howmuch);
 	}
 }
 

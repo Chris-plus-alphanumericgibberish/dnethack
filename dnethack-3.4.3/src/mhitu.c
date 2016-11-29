@@ -2018,16 +2018,14 @@ dopois:
 		
 		/* adjattrib gives dunce cap message when appropriate */
 		//(void) adjattrib(A_INT, -rnd(2), FALSE);
-		//forget_levels(25);	/* lose memory of 25% of levels */
-		//forget_objects(25);	/* lose memory of 25% of objects */
+		// forget(25);	/* lose 25% of memory per point lost*/
 		//exercise(A_WIS, FALSE);
 		if(u.sealsActive&SEAL_HUGINN_MUNINN){
 			unbind(SEAL_HUGINN_MUNINN,TRUE);
 		} else {
 			(void) adjattrib(A_INT, -dmg, FALSE);
 			while(dmg--){
-				forget_levels(10);	/* lose memory of 10% of levels per point lost*/
-				forget_objects(10);	/* lose memory of 10% of objects per point lost*/
+				forget(10);	/* lose 10% of memory per point lost*/
 				exercise(A_WIS, FALSE);
 			}
 		}
@@ -2312,7 +2310,7 @@ dopois:
 					!Is_medusa_level(&u.uz) &&
 					!Is_waterlevel(&u.uz);
 					
-					water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
+					water_damage(invent, FALSE, FALSE, level.flags.lethe, &youmonst);
 					
 					if(u.divetimer > 0){
 						pline("%s pulls you into the %s!", Monnam(mtmp), moat ? "moat" : "pool of water");
@@ -3080,8 +3078,7 @@ dopois:
 			while( ABASE(A_WIS) > ATTRMIN(A_WIS) && wdmg > 0){
 				wdmg--;
 				(void) adjattrib(A_WIS, -1, TRUE);
-				forget_levels(10);	/* lose memory of 10% of levels per point lost*/
-				forget_objects(10);	/* lose memory of 10% of objects per point lost*/
+				forget(10);
 				exercise(A_WIS, FALSE);
 			}
 			if(AMAX(A_WIS) > ATTRMIN(A_WIS) && 
@@ -3504,8 +3501,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				unbind(SEAL_HUGINN_MUNINN,TRUE);
 			} else {
 				(void) adjattrib(A_INT, -tmp, FALSE);
-				forget_levels(25);	/* lose memory of 25% of levels*/
-				forget_objects(25);	/* lose memory of 25% of objects*/
+				forget(25);
 				water_damage(invent, FALSE, FALSE, TRUE, &youmonst);
 
 				exercise(A_WIS, FALSE);
@@ -3927,8 +3923,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					if(u.sealsActive&SEAL_HUGINN_MUNINN){
 						unbind(SEAL_HUGINN_MUNINN,TRUE);
 					} else {
-						forget_levels(13);
-						forget_objects(13);
+						forget(13);
 					}
 					succeeded=1;
 				}
@@ -3940,8 +3935,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 						&& !is_blind(mtmp) && canseemon(mtmp)) {
 				You("feel your life force whither before the gaze of %s!", mon_nam(mtmp));
 			    losexp("life force drain",TRUE,FALSE,FALSE);
-//				forget_levels(10);
-//				forget_objects(10);
+//				forget(10);
 				succeeded=1;
 			}
 		break;
@@ -4439,8 +4433,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					while( !(ABASE(A_WIS) <= ATTRMIN(A_WIS)) && dmg > 0){
 						dmg--;
 						(void) adjattrib(A_WIS, -1, TRUE);
-						forget_levels(10);	/* lose memory of 10% of levels per point lost*/
-						forget_objects(10);	/* lose memory of 10% of objects per point lost*/
+						forget(10);	/* lose 10% of memory per point lost*/
 						exercise(A_WIS, FALSE);
 						if(mtmp->data ==  &mons[PM_GREAT_CTHULHU] 
 							&& AMAX(A_WIS) > ATTRMIN(A_WIS))		AMAX(A_WIS) -= 1; //permanently drain wisdom
@@ -5846,8 +5839,7 @@ register struct monst *mon;
 				} else {
 					(void) adjattrib(A_INT, -3, TRUE);
 					(void) adjattrib(A_WIS, -3, TRUE);
-					forget_levels(30);
-					forget_objects(30);
+					forget(30);
 					exercise(A_WIS, FALSE);
 					exercise(A_WIS, FALSE);
 					exercise(A_WIS, FALSE);
@@ -6599,8 +6591,7 @@ register struct monst *mon;
 			unbind(SEAL_HUGINN_MUNINN,TRUE);
 		} else {
 			if(AMAX(A_WIS) > ABASE(A_WIS)) AMAX(A_WIS) = (int)((AMAX(A_WIS) - ABASE(A_WIS))/2 + 1); //permanently drain wisdom
-			forget_levels(25);	/* lose memory of 25% of levels */
-			forget_objects(25);	/* lose memory of 25% of objects */
+			forget(25);	/* lose 25% of memory */
 		}
 	} else {
 		You("hang back from the %s form beneath the shroud. It poses enticingly.", fem ? "voluptuous feminine" : "muscular masculine");
@@ -6807,8 +6798,7 @@ register struct monst *mon;
 				    You("%s.", chg ? "are freaked out" : "seem unaffected");
 				}
 				(void) adjattrib(A_INT, -1, FALSE);
-				forget_levels(5);
-				forget_objects(5);
+				forget(5);
 				exercise(A_WIS, FALSE);
 				exercise(A_WIS, FALSE);
 				exercise(A_INT, FALSE);
@@ -7158,8 +7148,7 @@ int dmg;
 					(void) adjattrib(A_INT, -i, 1);
 					while(i-- > 0){
 						if(i%2) losexp("brain damage",FALSE,TRUE,FALSE);
-						forget_levels(10);	/* lose memory of 10% of levels per point lost*/
-						forget_objects(10);	/* lose memory of 10% of objects per point lost*/
+						forget(10);	/* lose 10% of memory per point lost*/
 						exercise(A_WIS, FALSE);
 					}
 				}

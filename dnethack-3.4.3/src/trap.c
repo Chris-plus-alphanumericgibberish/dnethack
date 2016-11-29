@@ -2797,19 +2797,19 @@ xchar x, y;
 
 /* returns TRUE if obj is destroyed */
 boolean
-water_damage(obj, force, here, forcelethe, owner)
+water_damage(obj, force, here, lethe, owner)
 struct obj *obj;
-boolean force, here, forcelethe;
+boolean force, here, lethe;
 struct monst *owner;
 {
 	/* Dips in the Lethe are a very poor idea Lethe patch*/
-//	int luckpenalty = level.flags.lethe? 7 : 0;
-	int luckpenalty = 0;
+	int luckpenalty = lethe ? 7 : 0;
+	// int luckpenalty = 0;
 	struct obj *otmp;
 	struct obj *obj_original = obj;
 	boolean obj_destroyed = FALSE;
-//	int is_lethe = level.flags.lethe || forcelethe;
-	int is_lethe = 0;
+//	int is_lethe = level.flags.lethe || lethe;
+	int is_lethe = lethe;
 	if(owner == &youmonst){
 		if((uarmc
 			&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
@@ -2944,40 +2944,40 @@ struct monst *owner;
 				obj->odiluted++;
 			break;
 		    case GEM_CLASS:
-			if (is_lethe && (obj->otyp == LUCKSTONE
-					|| obj->otyp == LOADSTONE
-					|| obj->otyp == TOUCHSTONE))
-			    obj->otyp = FLINT;
+			// if (is_lethe && (obj->otyp == LUCKSTONE
+					// || obj->otyp == LOADSTONE
+					// || obj->otyp == TOUCHSTONE))
+			    // obj->otyp = FLINT;
 			break;
 		    case TOOL_CLASS:
-			if (is_lethe) {
-			    switch (obj->otyp) {
-			    case MAGIC_LAMP:
-				obj->otyp = OIL_LAMP;
-				break;
-			    case MAGIC_WHISTLE:
-				obj->otyp = TIN_WHISTLE;
-				break;	
-			    case MAGIC_FLUTE:
-				obj->otyp = WOODEN_FLUTE;
-				obj->spe  = 0;
-				break;	
-			    case MAGIC_HARP:
-				obj->otyp = WOODEN_HARP;
-				obj->spe  = 0;
-				break;
-			    case FIRE_HORN:
-			    case FROST_HORN:
-			    case HORN_OF_PLENTY:
-				obj->otyp = TOOLED_HORN;
-				obj->spe  = 0;
-				break;
-			    case DRUM_OF_EARTHQUAKE:
-				obj->otyp = LEATHER_DRUM;
-				obj->spe  = 0;
-				break;
-			    }
-			}
+			// if (is_lethe) {
+			    // switch (obj->otyp) {
+			    // case MAGIC_LAMP:
+				// obj->otyp = OIL_LAMP;
+				// break;
+			    // case MAGIC_WHISTLE:
+				// obj->otyp = TIN_WHISTLE;
+				// break;	
+			    // case MAGIC_FLUTE:
+				// obj->otyp = WOODEN_FLUTE;
+				// obj->spe  = 0;
+				// break;	
+			    // case MAGIC_HARP:
+				// obj->otyp = WOODEN_HARP;
+				// obj->spe  = 0;
+				// break;
+			    // case FIRE_HORN:
+			    // case FROST_HORN:
+			    // case HORN_OF_PLENTY:
+				// obj->otyp = TOOLED_HORN;
+				// obj->spe  = 0;
+				// break;
+			    // case DRUM_OF_EARTHQUAKE:
+				// obj->otyp = LEATHER_DRUM;
+				// obj->spe  = 0;
+				// break;
+			    // }
+			// }
 
 			/* Drop through */
 			/* Weapons, armor and tools may be disenchanted... */
@@ -3012,9 +3012,9 @@ struct monst *owner;
 					 (obj->blessed && rnl(100) < 25)))
 				obj->oeroded++;
 			/* The Lethe may unfooproof the item... */
-			if (is_lethe
-					&& obj->oerodeproof && !rn2(5))
-			    obj->oerodeproof = FALSE;
+			// if (is_lethe
+					// && obj->oerodeproof && !rn2(5))
+			    // obj->oerodeproof = FALSE;
 		    }
 		}
 		obj_destroyed = FALSE;
@@ -3127,14 +3127,14 @@ drown()
 		You("sink like %s.",
 		Hallucination ? "the Titanic" : "a rock");
 
-	// if (level.flags.lethe) {
-	    // /* Bad idea */
-	    // You_feel("the sparkling waters of the Lethe sweep away your "
-			    // "cares!");
-	    // forget(25);
-	// }
+	if (level.flags.lethe) {
+	    /* Bad idea */
+	    You_feel("the sparkling waters of the Lethe sweep away your "
+			    "cares!");
+	    forget(10);
+	}
 
-	water_damage(invent, FALSE, FALSE, FALSE, &youmonst);
+	water_damage(invent, FALSE, FALSE, level.flags.lethe, &youmonst);
 
 	if (u.umonnum == PM_GREMLIN && rn2(3))
 	    (void)split_mon(&youmonst, (struct monst *)0);

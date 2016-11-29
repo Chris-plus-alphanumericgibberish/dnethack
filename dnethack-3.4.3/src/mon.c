@@ -818,7 +818,7 @@ register struct monst *mtmp;
     if (mtmp->data == &mons[PM_GREMLIN] && (inpool || infountain) && rn2(3)) {
 	if (split_mon(mtmp, (struct monst *)0))
 	    dryup(mtmp->mx, mtmp->my, FALSE);
-	if (inpool) water_damage(mtmp->minvent, FALSE, FALSE, FALSE, mtmp);
+	if (inpool) water_damage(mtmp->minvent, FALSE, FALSE, level.flags.lethe, mtmp);
 	return (0);
     } else if (mtmp->data == &mons[PM_IRON_GOLEM] && inpool && !rn2(5)) {
 	int dam = d(2,6);
@@ -830,7 +830,7 @@ register struct monst *mtmp;
 	    mondead(mtmp);
 	    if (mtmp->mhp < 1) return (1);
 	}
-	water_damage(mtmp->minvent, FALSE, FALSE, FALSE, mtmp);
+	water_damage(mtmp->minvent, FALSE, FALSE, level.flags.lethe, mtmp);
 	return (0);
     }
 
@@ -884,7 +884,7 @@ register struct monst *mtmp;
 	    mondead(mtmp);
 	    if (mtmp->mhp > 0) {
 		(void) rloc(mtmp, FALSE);
-		water_damage(mtmp->minvent, FALSE, FALSE, FALSE, mtmp);
+		water_damage(mtmp->minvent, FALSE, FALSE, level.flags.lethe, mtmp);
 		return 0;
 	    }
 	    return (1);
@@ -3888,8 +3888,7 @@ int  typ, fatal, opoistype;
 		if(u.sealsActive&SEAL_HUGINN_MUNINN){
 			unbind(SEAL_HUGINN_MUNINN,TRUE);
 		} else {
-			forget_levels(1);	/* lose memory of 1% of levels*/
-			forget_objects(1);	/* lose memory of 1% of objects*/
+			forget(1);	/* lose 1% of memory per point lost*/
 			forget_traps();		/* lose memory of all traps*/
 		}
 	}

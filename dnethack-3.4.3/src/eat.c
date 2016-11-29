@@ -3513,7 +3513,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				}
 			}
 			else if(otmp->opoisoned & OPOISON_AMNES){
-				forget((!otmp->blessed? ALL_SPELLS : 0) | ALL_MAP);
+				forget(otmp->cursed ? 25 : otmp->blessed ? 0 : 10);
 				if (Hallucination)
 					pline("Hakuna matata!");
 				else

@@ -1387,7 +1387,7 @@ boolean at_stairs, falling, portal;
 		movebubbles();
 
 	if (level_info[new_ledger].flags & FORGOTTEN) {
-	    forget_map(ALL_MAP);	/* forget the map */
+	    forget_map(100);	/* forget the map */
 	    forget_traps();		/* forget all traps too */
 	    familiar = TRUE;
 	    level_info[new_ledger].flags &= ~FORGOTTEN;

@@ -463,7 +463,7 @@ peffects(otmp)
 	case POT_AMNESIA:
 		pline(Hallucination? "This tastes like champagne!" :
 			"This liquid bubbles and fizzes as you drink it.");
-		forget((!otmp->blessed? ALL_SPELLS : 0) | ALL_MAP);
+		forget(otmp->cursed ? 25 : otmp->blessed ? 0 : 10);
 		if (Hallucination)
 		    pline("Hakuna matata!");
 		else

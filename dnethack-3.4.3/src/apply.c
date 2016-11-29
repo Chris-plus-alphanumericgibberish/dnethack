@@ -2891,7 +2891,7 @@ struct obj *hypo;
 				if (!Unchanging) polyself(FALSE);
 			break;
 			case POT_AMNESIA:
-				forget((!amp->blessed? ALL_SPELLS : 0) | ALL_MAP);
+				forget(amp->cursed ? 25 : amp->blessed ? 0 : 10);
 				if (Hallucination)
 					pline("Hakuna matata!");
 				else
