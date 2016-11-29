@@ -1016,11 +1016,12 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	if (!foundyou) {
 		if(is_aoe_spell(spellnum)){
 			dmd = 6;
-			dmn = ml/2;
+			dmn = ml/3;
 			if (mattk->damd) dmd = (int)(mattk->damd);
 			
 			if (mattk->damn) dmn+= (int)(mattk->damn);
-			else dmn += 1;
+			
+			if(dmn < 1) dmn = 1;
 			
 			dmg = d(dmn, dmd);
 	    } else{
@@ -1033,7 +1034,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		return(0);
 	    }
 	} else {
-		int dmd = 6, dmn = ml/2;
+		int dmd = 6, dmn = ml/3;
 		
 		if (dmn > 15) dmn = 15;
 		
@@ -2659,7 +2660,7 @@ castmm(mtmp, mdef, mattk)
 
 	{
 		dmd = 6;
-		dmn = ml/2;
+		dmn = ml/3;
 		
 		if(dmn > 15) dmn = 15;
 		
@@ -2875,11 +2876,12 @@ buzzmu(mtmp, mattk, ml)		/* monster uses spell (ranged) */
 	register struct attack  *mattk;
 	int ml;
 {
-	int dmn = (int)(ml/2);
+	int dmn = (int)(ml/3);
 	int type = mattk->adtyp;
 	
 	if(mattk->damn) dmn += mattk->damn;
-	else dmn += 1;
+	
+	if(dmn < 1) dmn = 1;
 	
 	if(type == AD_RBRE){
 		switch(rnd(3)){
@@ -2927,12 +2929,13 @@ buzzmm(magr, mdef, mattk, ml)		/* monster uses spell (ranged) */
 	struct attack  *mattk;
 	int ml;
 {
-	int dmn = (int)(ml/2);
+	int dmn = (int)(ml/3);
 	int type = mattk->adtyp;
     char buf[BUFSZ];
 	
 	if(mattk->damn) dmn += mattk->damn;
-	else dmn += 1;
+	
+	if(dmn < 1) dmn = 1;
 	
 	if(type == AD_RBRE){
 		switch(rnd(3)){
@@ -3069,7 +3072,7 @@ castum(mtmp, mattk)
  */
 	{
 		dmd = 6;
-		dmn = ml/2;
+		dmn = ml/3;
 		
 		if(dmn > 15) dmn = 15;
 		
@@ -3137,7 +3140,7 @@ cold_um:
 			shieldeff(mtmp->mx, mtmp->my);
 			pline_The("missiles bounce off!");
 			dmg = 0;
-		}// else dmg = d((int)ml/2 + 1,6);
+		}// else dmg = d((int)ml/3 + 1,6);
 		break;
 	    case AD_STAR:
 		pline("%s is hit by a shower of silver stars!", Monnam(mtmp));

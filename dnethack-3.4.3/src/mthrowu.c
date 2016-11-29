@@ -1733,8 +1733,8 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 		    if(canseemon(mtmp))
 			pline("%s breathes %s!", Monnam(mtmp),
 			      breathwep[typ-1]);
-		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/2),
-			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/2), (int)mattk->damd)*mult) : 0);
+		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/3),
+			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/3), (int)mattk->damd)*mult) : 0);
 			if(mtmp->mux != u.ux || mtmp->muy != u.uy){
 				//figures out you aren't where it thought you were
 				mtmp->mux = 0;
@@ -1833,8 +1833,8 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 			      breathwep[typ-1]);
 		    nomul(0, NULL);
 	            }
-		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/2),
-			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/2), (int)mattk->damd)*mult) : 0);
+		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/3),
+			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/3), (int)mattk->damd)*mult) : 0);
 		    /* breath runs out sometimes. Also, give monster some
 		     * cunning; don't breath if the player fell asleep.
 		     */
