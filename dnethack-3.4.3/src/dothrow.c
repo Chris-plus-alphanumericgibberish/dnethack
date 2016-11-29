@@ -102,7 +102,7 @@ int thrown;
 	}
 	if (((obj->oartifact == ART_MJOLLNIR ||
 			obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) && ACURR(A_STR) < STR19(25))
-	   || (is_boulder(obj) && !throws_rocks(youmonst.data) && !(u.sealsActive&SEAL_YMIR))) {
+	   || (is_boulder(obj) && !throws_rocks(youracedata) && !(u.sealsActive&SEAL_YMIR))) {
 		pline("It's too heavy.");
 		return(1);
 	}
@@ -578,7 +578,7 @@ dothrow()
 	 * and took 3 turns.  Now it means ``t(shoot at most 3 missiles)''.
 	 */
 
-	if (notake(youmonst.data)) {
+	if (notake(youracedata)) {
 	    You("are physically incapable of throwing anything.");
 	    return 0;
 	}
@@ -975,10 +975,10 @@ hurtle_step(arg, x, y)
 	    return FALSE;
 	}
 	if ((u.ux - x) && (u.uy - y) &&
-		bad_rock(youmonst.data,u.ux,y) && bad_rock(youmonst.data,x,u.uy)) {
+		bad_rock(youracedata,u.ux,y) && bad_rock(youracedata,x,u.uy)) {
 	    boolean too_much = (invent && (inv_weight() + weight_cap() > 600));
 	    /* Move at a diagonal. */
-	    if (bigmonst(youmonst.data) || too_much) {
+	    if (bigmonst(youracedata) || too_much) {
 		You("%sget forcefully wedged into a crevice.",
 			too_much ? "and all your belongings " : "");
 		losehp(rnd(2+*range), "wedging into a narrow crevice", KILLED_BY);
@@ -993,7 +993,7 @@ hurtle_step(arg, x, y)
 	return FALSE;
     }
     if ((u.ux - x) && (u.uy - y) &&
-	bad_rock(youmonst.data,u.ux,y) && bad_rock(youmonst.data,x,u.uy)) {
+	bad_rock(youracedata,u.ux,y) && bad_rock(youracedata,x,u.uy)) {
 	/* Move at a diagonal. */
 	if (In_sokoban(&u.uz)) {
 	    You("come to an abrupt halt!");
@@ -1242,7 +1242,7 @@ boolean hitsroof;
 	case EGG:
 		if (touch_petrifies(&mons[ocorpsenm]) &&
 		    !uarmh && !Stone_resistance &&
-		    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM)))
+		    !(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)))
 		goto petrify;
 	case CREAM_PIE:
 	case BLINDING_VENOM:
@@ -1272,11 +1272,11 @@ boolean hitsroof;
 	    dmg = (int) obj->owt / 100;
 	    if (dmg < 1) dmg = 1;
 	    else if (dmg > 6) dmg = 6;
-	    if (youmonst.data->mlet == S_SHADE &&
+	    if (youracedata->mlet == S_SHADE &&
 		    obj->obj_material != SILVER)
 		dmg = 0;
 	}
-	if(resist_attacks(youmonst.data))
+	if(resist_attacks(youracedata))
 		dmg = 0;
 	if (dmg > 1 && less_damage) dmg = 1;
 	if (dmg > 0) dmg += u.udaminc;
@@ -1292,7 +1292,7 @@ boolean hitsroof;
 		Your("%s does not protect you.", xname(uarmh));
 	} else if (obj->otyp == CORPSE && touch_petrifies(&mons[obj->corpsenm])) {
 	    if (!Stone_resistance &&
-		    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+		    !(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))) {
  petrify:
 		killer_format = KILLED_BY;
 		killer = "elementary physics";	/* "what goes up..." */
@@ -2469,13 +2469,13 @@ boolean from_invent;
 			if (obj->otyp == POT_OIL && obj->lamplit) {
 			    splatter_burning_oil(x,y);
 			} else if (distu(x,y) <= 2) {
-			    if (!breathless(youmonst.data) || haseyes(youmonst.data)) {
+			    if (!breathless(youracedata) || haseyes(youracedata)) {
 				if (obj->otyp != POT_WATER) {
-					if (!breathless(youmonst.data))
+					if (!breathless(youracedata))
 			    		     /* [what about "familiar odor" when known?] */
 					    You("smell a peculiar odor...");
 					else {
-					    int numeyes = eyecount(youmonst.data);
+					    int numeyes = eyecount(youracedata);
 					    Your("%s water%s.",
 						 (numeyes == 1) ? body_part(EYE) :
 							makeplural(body_part(EYE)),

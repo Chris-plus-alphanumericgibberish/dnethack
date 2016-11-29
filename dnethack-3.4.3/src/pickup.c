@@ -448,7 +448,7 @@ int what;		/* should be a long */
 		    if(!skipmessages) check_here(FALSE);
 		    return (0);
 		}
-		if (notake(youmonst.data)) {
+		if (notake(youracedata)) {
 		    if (!autopickup) You("are physically incapable of picking anything up.");
 		    else if(!skipmessages) check_here(FALSE);
 		    return (0);
@@ -1171,7 +1171,7 @@ boolean telekinesis;
 	return -1;
     }
     if (obj->otyp == LOADSTONE ||
-	    (is_boulder(obj) && (throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR))))
+	    (is_boulder(obj) && (throws_rocks(youracedata) || (u.sealsActive&SEAL_YMIR))))
 	return 1;		/* lift regardless of current situation */
 
     *cnt_p = carry_count(obj, container, *cnt_p, telekinesis, &old_wt, &new_wt);
@@ -1330,7 +1330,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 	} else if (obj->otyp == CORPSE) {
 	    if ( (touch_petrifies(&mons[obj->corpsenm])) && !uarmg
 				&& !Stone_resistance && !telekinesis) {
-		if (poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))
+		if (poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))
 		    display_nhwindow(WIN_MESSAGE, FALSE);
 		else {
 			char kbuf[BUFSZ];
@@ -1443,7 +1443,7 @@ encumber_msg()
 	case 2: You("rebalance your load.  Movement is difficult.");
 		break;
 	case 3: You("%s under your heavy load.  Movement is very hard.",
-		    stagger(youmonst.data, "stagger"));
+		    stagger(youracedata, "stagger"));
 		break;
 	default: You("%s move a handspan with this load!",
 		     newcap == 4 ? "can barely" : "can't even");
@@ -1459,7 +1459,7 @@ encumber_msg()
 	case 2: You("rebalance your load.  Movement is still difficult.");
 		break;
 	case 3: You("%s under your load.  Movement is still very hard.",
-		    stagger(youmonst.data, "stagger"));
+		    stagger(youracedata, "stagger"));
 		break;
 	}
 	flags.botl = 1;
@@ -1508,7 +1508,7 @@ int x, y;
 		You("cannot loot things that are deep in the %s.",
 		    is_lava(x, y) ? "lava" : "water");
 		return FALSE;
-	} else if (nolimbs(youmonst.data)) {
+	} else if (nolimbs(youracedata)) {
 		pline("Without limbs, you cannot loot anything.");
 		return FALSE;
 	} else if (!freehand()) {
@@ -1552,7 +1552,7 @@ doloot()	/* loot a container on the floor or loot saddle from mon. */
 	/* "Can't do that while carrying so much stuff." */
 	return 0;
     }
-    if (nohands(youmonst.data)) {
+    if (nohands(youracedata)) {
 	You("have no hands!");	/* not `body_part(HAND)' */
 	return 0;
     }
@@ -1740,7 +1740,7 @@ boolean *prev_loot;
 	if(mtmp && mtmp != u.usteed && mtmp->mtame){
 	if(otmp = pick_creatures_armor(mtmp, passed_info)){
 	long unwornmask;
-		if (nolimbs(youmonst.data)) {
+		if (nolimbs(youracedata)) {
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
 		    return (0);
 		}
@@ -1809,7 +1809,7 @@ dopetequip()
 	Strcpy(nambuf, See_invisible ? Monnam(mtmp) : mon_nam(mtmp));
 	
 	if(otmp = pick_armor_for_creature(mtmp)){
-		if (nolimbs(youmonst.data)) {
+		if (nolimbs(youracedata)) {
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
 		    return (0);
 		}
@@ -1950,7 +1950,7 @@ register struct obj *obj;
 	if (obj->otyp == CORPSE) {
 	    if ( (touch_petrifies(&mons[obj->corpsenm])) && !uarmg
 		 && !Stone_resistance) {
-		if (poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))
+		if (poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))
 		    display_nhwindow(WIN_MESSAGE, FALSE);
 		else {
 		    char kbuf[BUFSZ];
@@ -2121,7 +2121,7 @@ register struct obj *obj;
 	if (obj->otyp == CORPSE) {
 	    if ( (touch_petrifies(&mons[obj->corpsenm])) && !uarmg
 		 && !Stone_resistance) {
-		if (poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))
+		if (poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))
 		    display_nhwindow(WIN_MESSAGE, FALSE);
 		else {
 		    char kbuf[BUFSZ];
@@ -2526,7 +2526,7 @@ register int held;
 	    menu_on_request;
 
 	emptymsg[0] = '\0';
-	if (nohands(youmonst.data)) {
+	if (nohands(youracedata)) {
 		You("have no hands!");	/* not `body_part(HAND)' */
 		return 0;
 	} else if (!freehand()) {

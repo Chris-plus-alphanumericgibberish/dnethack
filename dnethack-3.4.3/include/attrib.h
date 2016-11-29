@@ -20,7 +20,7 @@
 #define ABON(x)		(u.abon.a[x])
 #define AEXE(x)		(u.aexe.a[x])
 #define ACURR(x)	(acurr(x))
-#define ACURRSTR	(acurrstr())
+#define ACURRSTR	(acurrstr(ACURR(A_STR)))
 /* should be: */
 /* #define ACURR(x) (ABON(x) + ATEMP(x) + (Upolyd  ? MBASE(x) : ABASE(x)) */
 #define MCURR(x)	(u.macurr.a[x])

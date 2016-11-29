@@ -921,7 +921,7 @@ genericptr_t p2;
     reg = (NhRegion *) p1;
     dam = (int) reg->arg;
     if (p2 == NULL) {		/* This means *YOU* Bozo! */
-	if (nonliving(youmonst.data) || Breathless)
+	if (nonliving(youracedata) || Breathless)
 	    return FALSE;
 	if (!Blind)
 	    make_blinded(1L, FALSE);

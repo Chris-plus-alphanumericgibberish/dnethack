@@ -157,7 +157,7 @@ change_sex()
 	/* succubi/incubi can change, but are handled below */
 	/* !already_polyd check necessary because is_male() and is_female()
            are true if the player is a priest/priestess */
-	if (!already_polyd || (!is_male(youmonst.data) && !is_female(youmonst.data) && !is_neuter(youmonst.data)))
+	if (!is_male(youracedata) && !is_female(youracedata) && !is_neuter(youracedata))
 	    flags.female = !flags.female;
 	if (already_polyd)	/* poly'd: also change saved sex */
 	    u.mfemale = !u.mfemale;
@@ -283,7 +283,7 @@ boolean forcecontrol;
 				uarm->otyp <= YELLOW_DRAGON_SCALES);
 	boolean leonine = (uarmc && uarmc->otyp == LEO_NEMAEUS_HIDE);
 	boolean iswere = (u.ulycn >= LOW_PM || is_were(youmonst.data));
-	boolean isvamp = (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)));
+	boolean isvamp = (is_vampire(youracedata));
 	boolean hasmask = (ublindf && ublindf->otyp==MASK && polyok(&mons[ublindf->corpsenm]));
 	boolean was_floating = (Levitation || Flying);
 
@@ -472,7 +472,7 @@ int	mntmp;
 	}
 	if (uarmc && (s = OBJ_DESCR(objects[uarmc->otyp])) != (char *)0 &&
 	   !strcmp(s, "opera cloak") &&
-	   maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+	   is_vampire(youracedata)) {
 		ABON(A_CHA) -= 1;
 		flags.botl = 1;
 	}
@@ -488,7 +488,7 @@ int	mntmp;
 
 	if (uarmc && (s = OBJ_DESCR(objects[uarmc->otyp])) != (char *)0 &&
 	   !strcmp(s, "opera cloak") &&
-	   maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+	   is_vampire(youracedata)) {
 		You("%s very impressive in your %s.", Blind ||
 				(Invis && !See_invisible) ? "feel" : "look",
 				OBJ_DESCR(objects[uarmc->otyp]));
@@ -701,7 +701,7 @@ break_armor()
 	}
 	if ((otmp = uarmc) != 0) {
 		if(abs(otmp->objsize - youracedata->msize) > 1
-				|| is_whirly(youracedata) || noncorporeal(youracedata)
+				|| !shirt_match(youracedata,otmp) || is_whirly(youracedata) || noncorporeal(youracedata)
 		){
 			if (donning(otmp)) cancel_don();
 			if(otmp->oartifact || otmp->objsize > youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)) {
@@ -743,7 +743,7 @@ break_armor()
 	    } else if (is_flimsy(otmp) && !donning(otmp) && has_horns(youracedata)) {
 			char hornbuf[BUFSZ], yourbuf[BUFSZ];
 			/* Future possiblities: This could damage/destroy helmet */
-			Sprintf(hornbuf, "horn%s", plur(num_horns(youmonst.data)));
+			Sprintf(hornbuf, "horn%s", plur(num_horns(youracedata)));
 			Your("%s %s through %s %s.", hornbuf, vtense(hornbuf, "pierce"),
 				 shk_your(yourbuf, otmp), xname(otmp));
 		}
@@ -791,7 +791,7 @@ int alone;
 	 * future it might not be so if there are monsters which cannot
 	 * wear gloves but can wield weapons
 	 */
-	if (!alone || cantwield(youmonst.data)) {
+	if (!alone || cantwield(youracedata)) {
 	    struct obj *wep = uwep;
 
 	    if (alone) You("find you must drop your weapon%s!",
@@ -822,7 +822,7 @@ rehumanize()
 		done(DIED);
 	}
 
-	if (emits_light(youmonst.data))
+	if (emits_light(youracedata))
 	    del_light_source(LS_MONSTER, (genericptr_t)&youmonst);
 	polyman("return to %s form!", urace.adj);
 
@@ -1082,7 +1082,7 @@ dosummon()
 
 	You("call upon your brethren for help!");
 	exercise(A_WIS, TRUE);
-	if (!were_summon(youmonst.data, TRUE, &placeholder, (char *)0))
+	if (!were_summon(youracedata, TRUE, &placeholder, (char *)0))
 		pline("But none arrive.");
 	return(1);
 }
@@ -1097,8 +1097,8 @@ dogaze()
 	uchar adtyp = 0;
 
 	for (i = 0; i < NATTK; i++) {
-	    if(youmonst.data->mattk[i].aatyp == AT_GAZE) {
-		adtyp = youmonst.data->mattk[i].adtyp;
+	    if(youracedata->mattk[i].aatyp == AT_GAZE) {
+		adtyp = youracedata->mattk[i].adtyp;
 		break;
 	    }
 	}
@@ -1218,7 +1218,7 @@ dogaze()
 int
 dohide()
 {
-	boolean ismimic = youmonst.data->mlet == S_MIMIC;
+	boolean ismimic = youracedata->mlet == S_MIMIC;
 
 	if (u.uundetected || (ismimic && youmonst.m_ap_type != M_AP_NOTHING)) {
 		You("are already hiding.");
@@ -1444,7 +1444,7 @@ int part;
 	    if (mptr->mlet == S_DOG || mptr->mlet == S_FELINE ||
 		    mptr->mlet == S_YETI)
 		return part == HAND ? "paw" : "pawed";
-		if(mon == &youmonst && maybe_polyd(youmonst.data == &mons[PM_HALF_DRAGON], Race_if(PM_HALF_DRAGON)))
+		if(mon == &youmonst && youracedata == &mons[PM_HALF_DRAGON])
 			return part == HAND ? "claw" : "clawed";
 		if(mon->data == &mons[PM_HALF_DRAGON])
 			return part == HAND ? "claw" : "clawed";
@@ -1515,7 +1515,7 @@ poly_gender()
 /* Returns gender of polymorphed player; 0/1=same meaning as flags.female,
  * 2=none.
  */
-	if (is_neuter(youmonst.data) || !humanoid(youmonst.data)) return 2;
+	if (is_neuter(youracedata) || !humanoid(youracedata)) return 2;
 	return flags.female;
 }
 

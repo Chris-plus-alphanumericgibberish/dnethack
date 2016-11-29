@@ -295,7 +295,7 @@ moveloop()
 {
 #if defined(MICRO) || defined(WIN32)
 	char ch;
-	int abort_lev;
+	int abort_lev, i, j;
 #endif
     struct monst *mtmp, *nxtmon;
 	struct obj *pobj;
@@ -378,6 +378,12 @@ moveloop()
 			 /*once-per-monster-moving things go here*/
 			/****************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////
+	if(echolocation(youracedata)){
+		for(i=1; i<COLNO; i++)
+			for(j=0; j<ROWNO; j++)
+				if(viz_array[j][i]&COULD_SEE)
+					echo_location(i, j);
+	}
 	/*If anything a monster did caused us to get moved out of water, surface*/
 	if(u.usubwater && !is_pool(u.ux, u.uy)){
 		u.usubwater = 0;
@@ -701,7 +707,7 @@ moveloop()
 #endif
 		    {
 			moveamt = youmonst.data->mmove;
-			if(Race_if(PM_HALF_DRAGON)) moveamt = (moveamt*2)/3;
+			if(!Upolyd && Race_if(PM_HALF_DRAGON)) moveamt = (moveamt*2)/3;
 			
 			if(u.sealsActive&SEAL_EURYNOME && IS_POOL(levl[u.ux][u.uy].typ)){
 				if (Very_fast) {	/* speed boots or potion */
@@ -814,7 +820,7 @@ moveloop()
 					case P_EXPERT:      moveamt = max(moveamt-3,1); break;
 				}
 			}
-			if(youmonst.data->mmove){
+			if(youracedata->mmove){
 				if(moveamt < 1) moveamt = 1;
 			} else {
 				if(moveamt < 0) moveamt = 0;
@@ -851,7 +857,7 @@ moveloop()
 		    /********************************/
 			/* Clouds on Lolth's level deal damage */
 			if(Is_lolth_level(&u.uz) && levl[u.ux][u.uy].typ == CLOUD){
-				if (!(nonliving(youmonst.data) || Breathless)){
+				if (!(nonliving(youracedata) || Breathless)){
 					if (!Blind)
 						make_blinded((long)rnd(4), FALSE);
 					if (!Poison_resistance) {
@@ -1242,6 +1248,12 @@ moveloop()
 		
 
 		
+		if(echolocation(youracedata)){
+			for(i=1; i<COLNO; i++)
+				for(j=0; j<ROWNO; j++)
+					if(viz_array[j][i]&COULD_SEE)
+						echo_location(i, j);
+		}
 		if(u.utrap && u.utraptype == TT_LAVA) {
 			if(!is_lava(u.ux,u.uy))
 			    u.utrap = 0;

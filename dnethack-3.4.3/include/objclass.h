@@ -29,15 +29,15 @@ struct objclass {
 #define oc_bulky	oc_big	/* for armor */
 	Bitfield(oc_tough,1);	/* hard gems/rings */
 
-	Bitfield(oc_dir,3);
+	Bitfield(oc_dir,4);
 #define NODIR		1	/* for wands/spells: non-directional */
 #define IMMEDIATE	2	/*		     directional */
 #define RAY		3	/*		     zap beams */
 
-#define PIERCE		1	/* for weapons & tools used as weapons */
-#define SLASH		2	/* (latter includes iron ball & chain) */
-#define EXPLOSION	4	/* (rockets,  grenades) */
-#define WHACK		0
+#define WHACK		1
+#define PIERCE		2	/* for weapons & tools used as weapons */
+#define SLASH		4	/* (latter includes iron ball & chain) */
+#define EXPLOSION	8	/* (rockets,  grenades) */
 
 	/*Bitfield(oc_subtyp,3);*/	/* Now too big for a bitfield... see below */
 

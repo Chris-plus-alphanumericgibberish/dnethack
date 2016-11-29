@@ -3313,7 +3313,7 @@ struct obj *obj;
 	    cc.x = rx; cc.y = ry;
 	    You("wrap your bullwhip around %s.", wrapped_what);
 	    if (proficient && rn2(proficient + 2)) {
-		if (!mtmp || enexto(&cc, rx, ry, youmonst.data)) {
+		if (!mtmp || enexto(&cc, rx, ry, youracedata)) {
 		    You("yank yourself out of the pit!");
 		    teleds(cc.x, cc.y, TRUE);
 		    u.utrap = 0;

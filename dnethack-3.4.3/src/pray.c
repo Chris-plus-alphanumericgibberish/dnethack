@@ -172,7 +172,7 @@ in_trouble()
 	for (i= -1; i<=1; i++) for(j= -1; j<=1; j++) {
 		if (!i && !j) continue;
 		if (!isok(u.ux+i, u.uy+j) || IS_ROCK(levl[u.ux+i][u.uy+j].typ)
-		    || (blocked_boulder(i,j) && !throws_rocks(youmonst.data) && !(u.sealsActive&SEAL_YMIR)))
+		    || (blocked_boulder(i,j) && !throws_rocks(youracedata) && !(u.sealsActive&SEAL_YMIR)))
 			count++;
 	}
 	if (count == 8 && !Passes_walls)
@@ -181,12 +181,12 @@ in_trouble()
 	if (stuck_ring(uleft, RIN_LEVITATION) ||
 		stuck_ring(uright, RIN_LEVITATION))
 		return(TROUBLE_CURSED_LEVITATION);
-	if (nohands(youmonst.data) || !freehand()) {
+	if (nohands(youracedata) || !freehand()) {
 	    /* for bag/box access [cf use_container()]...
 	       make sure it's a case that we know how to handle;
 	       otherwise "fix all troubles" would get stuck in a loop */
 	    if (welded(uwep)) return TROUBLE_UNUSEABLE_HANDS;
-	    if (Upolyd && nohands(youmonst.data) && (!Unchanging ||
+	    if (Upolyd && nohands(youracedata) && (!Unchanging ||
 		    ((otmp = unchanger()) != 0 && otmp->cursed)))
 		return TROUBLE_UNUSEABLE_HANDS;
 	}
@@ -211,7 +211,7 @@ in_trouble()
 	if (u.uhitinc < 0) return(TROUBLE_TOHIT_CURSED);
 	if (u.uacinc < 0) return(TROUBLE_AC_CURSED);
 	if (u.udaminc < 0) return(TROUBLE_DAMAGE_CURSED);
-	if (Blinded > 1 && haseyes(youmonst.data)) return(TROUBLE_BLIND);
+	if (Blinded > 1 && haseyes(youracedata)) return(TROUBLE_BLIND);
 	for(i=0; i<A_MAX; i++)
 	    if(ABASE(i) < AMAX(i)) return(TROUBLE_POISONED);
 	if(Wounded_legs
@@ -378,7 +378,7 @@ register int trouble;
 			otmp = uwep;
 			goto decurse;
 		    }
-		    if (Upolyd && nohands(youmonst.data)) {
+		    if (Upolyd && nohands(youracedata)) {
 			if (!Unchanging) {
 			    Your("shape becomes uncertain.");
 			    rehumanize();  /* "You return to {normal} form." */
@@ -387,7 +387,7 @@ register int trouble;
 			    goto decurse;
 			}
 		    }
-		    if (nohands(youmonst.data) || !freehand())
+		    if (nohands(youracedata) || !freehand())
 			impossible("fix_worst_trouble: couldn't cure hands.");
 		    break;
 	    case TROUBLE_CURSED_BLINDFOLD:
@@ -464,7 +464,7 @@ decurse:
 	    break;
 	    case TROUBLE_BLIND:
 		{
-		    int num_eyes = eyecount(youmonst.data);
+		    int num_eyes = eyecount(youracedata);
 		    const char *eye = body_part(EYE);
 
 		    Your("%s feel%s better.",
@@ -639,7 +639,7 @@ aligntyp resp_god;
 			    (ugod_is_angry() && resp_god == u.ualign.type)
 				? "hast strayed from the path" :
 						"art arrogant",
-			      youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
+			      youracedata->mlet == S_HUMAN ? "mortal" : "creature");
 			verbalize("Thou must relearn thy lessons!");
 			(void) adjattrib(A_WIS, -1, FALSE);
 			losexp((char *)0,TRUE,FALSE,TRUE);
@@ -663,7 +663,7 @@ aligntyp resp_god;
 				   (a_align(u.ux,u.uy) != resp_god)) ?
 				  "scorn":"call upon");
 			pline("\"Then die, %s!\"",
-			      youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
+			      youracedata->mlet == S_HUMAN ? "mortal" : "creature");
 			(void) summon_god_minion(align_gname_full(resp_god), resp_god, FALSE);
 			break;
 
@@ -1525,7 +1525,7 @@ pleased(g_align)
 			if (u.uevent.uheard_tune < 2) {
 				godvoice(g_align,(char *)0);
 				verbalize("Hark, %s!",
-				  youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
+				  youracedata->mlet == S_HUMAN ? "mortal" : "creature");
 				verbalize(
 				"To enter the castle, thou must play the right tune!");
 				You_hear("a divine music...");
@@ -1993,7 +1993,7 @@ dosacrifice()
 		}
 
 		if (your_race(ptr) && u.ualign.type != A_VOID) {
-			if (is_demon(youmonst.data)) {
+			if (is_demon(youracedata)) {
 				You("find the idea very satisfying.");
 				exercise(A_WIS, TRUE);
 			} else if (u.ualign.type != A_CHAOTIC) {
@@ -2506,7 +2506,7 @@ boolean praying;	/* false means no messages should be given */
     p_aligntyp = on_altar() ? a_align(u.ux,u.uy) : u.ualign.type;
     p_trouble = in_trouble();
 
-    if (is_demon(youmonst.data) && (p_aligntyp != A_CHAOTIC)) {
+    if (is_demon(youracedata) && (p_aligntyp != A_CHAOTIC)) {
 	if (praying)
 	    pline_The("very idea of praying to a %s god is repugnant to you.",
 		  p_aligntyp ? "lawful" : "neutral");
@@ -2535,7 +2535,7 @@ boolean praying;	/* false means no messages should be given */
 	    p_type = 3;
     }
 
-    if (is_undead(youmonst.data) && !Inhell &&
+    if (is_undead(youracedata) && !Inhell &&
 	(p_aligntyp == A_LAWFUL || (p_aligntyp == A_NEUTRAL && !rn2(10))))
 	p_type = -1;
     /* Note:  when !praying, the random factor for neutrals makes the
@@ -2700,7 +2700,7 @@ doturn()
 	}
 	
 	if ((u.ualign.type != A_CHAOTIC && !Race_if(PM_VAMPIRE) &&
-		    (is_demon(youmonst.data) || is_undead(youmonst.data))) ||
+		    (is_demon(youracedata) || is_undead(youracedata))) ||
 				u.ugangr[Align2gangr(u.ualign.type)] > 6 /* "Die, mortal!" */) {
 
 		pline("For some reason, %s seems to ignore you.", u_gname());

@@ -69,16 +69,6 @@ STATIC_DCL boolean FDECL(Mb_hit, (struct monst *magr,struct monst *mdef,
 STATIC_DCL boolean FDECL(voidPen_hit, (struct monst *magr,struct monst *mdef,
 				  struct obj *,int *,int,BOOLEAN_P,char *));
 
-/* The amount added to the victim's total hit points to insure that the
-   victim will be killed even after damage bonus/penalty adjustments.
-   Most such penalties are small, and 200 is plenty; the exception is
-   half physical damage.  3.3.1 and previous versions tried to use a very
-   large number to account for this case; now, we just compute the fatal
-   damage by adding it to 2 times the total hit points instead of 1 time.
-   Note: this will still break if they have more than about half the number
-   of hit points that will fit in a 15 bit integer. */
-#define FATAL_DAMAGE_MODIFIER 200
-
 #ifndef OVLB
 STATIC_DCL int spec_dbon_applies;
 STATIC_DCL int artidisco[NROFARTIFACTS];
@@ -171,19 +161,19 @@ hack_artifacts()
 			artilist[ART_HELM_OF_THE_DARK_LORD].alignment = alignmnt;
 		} else if(Race_if(PM_ELF)){
 			artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN|SPFX_INTEL;
-			artilist[ART_ROD_OF_LORDLY_MIGHT].role = 0;
+			artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
 			artilist[ART_ROD_OF_THE_ELVISH_LORDS].spfx &= ~(SPFX_NOGEN|SPFX_INTEL);
 		} else if(Race_if(PM_DROW)){
 			if(flags.initgend){ /* TRUE == female */
 				artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN|SPFX_INTEL;
-				artilist[ART_ROD_OF_LORDLY_MIGHT].role = 0;
+				artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
 				artilist[ART_SCEPTRE_OF_LOLTH].spfx &= ~(SPFX_NOGEN|SPFX_INTEL);
 			} else {
 				artilist[ART_ROD_OF_LORDLY_MIGHT].alignment = A_NEUTRAL;
 			}
 		} else if(Race_if(PM_DWARF) && urole.ldrnum == PM_DAIN_II_IRONFOOT){
 			artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN|SPFX_INTEL;
-			artilist[ART_ROD_OF_LORDLY_MIGHT].role = 0;
+			artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
 			artilist[ART_ARMOR_OF_KHAZAD_DUM].spfx &= ~(SPFX_NOGEN|SPFX_INTEL);
 		} else if(alignmnt == A_NEUTRAL) {
 			artilist[ART_CROWN_OF_THE_SAINT_KING].alignment = alignmnt;
@@ -1801,7 +1791,10 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			}
 			if (mdef->m_lev <= 0) {
 				mdef->m_lev = 0;
-			    *dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+				if(youattack) killed(mdef);
+				else monkilled(mdef, (const char *)0, AD_DRLI);
+				
+				if(mdef->mhp <= 0) return vis; //otherwise lifesaved
 			} else {
 			    int drain = rnd(8);
 			    *dmgptr += drain;
@@ -2285,7 +2278,11 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		  if (realizes_damage)
             pline("%s sunlight sears %s!", s_suffix(wepdesc), hittee);
   		otmp->dknown = TRUE;
-        *dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+		if(youattack) killed(mdef);
+		else if(youdefend) losehp((Upolyd ? u.mh : u.uhp) + 1, "bright light", KILLED_BY);
+		else monkilled(mdef, (const char *)0, AD_BLND);
+		
+		if(!youdefend && mdef->mhp <= 0) return TRUE; //otherwise lifesaved
         messaged = TRUE;
 	}
 	if ( (mdef->data->mlet == S_TROLL) && 
@@ -2328,64 +2325,110 @@ int dieroll; /* needed for Magicbane and vorpal blades */
            }
 	}
 	if(otmp->oartifact == ART_KUSANAGI_NO_TSURUGI){
-		if (is_whirly(mdef->data)){
+		if ((!youdefend && is_whirly(mdef->data)) || (youdefend && is_whirly(youracedata))){
 			wepdesc = "The winds";
 			if (youattack && u.uswallow && mdef == u.ustuck) {
 				pline("%s blow %s open!  It dissipates in the breeze.", wepdesc, mon_nam(mdef));
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 				messaged = TRUE;
+				killed(mdef);
+				
+				if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 			}
 			else if (!youdefend) {
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 				pline("%s blow %s apart!", wepdesc, mon_nam(mdef));
 				otmp->dknown = TRUE;
 				messaged = TRUE;
+				if(youattack) killed(mdef);
+				else monkilled(mdef, (const char *)0, AD_PHYS);
+				
+				if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
+			} else {
+				losehp((Upolyd ? u.mh : u.uhp) + 1, "gusting winds", KILLED_BY);
 			}
-		}else if(flaming(mdef->data) && youattack){
-				struct monst *mtmp = 0;
-				pline("The winds fan the flames into a roaring inferno!");
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+		} else if((!youdefend && flaming(mdef->data)) || (youdefend && flaming(youracedata))){
+			struct monst *mtmp = 0;
+			pline("The winds fan the flames into a roaring inferno!");
+			if(youattack) killed(mdef);
+			else if(youdefend) losehp((Upolyd ? u.mh : u.uhp) + 1, "roaring winds", KILLED_BY);
+			else monkilled(mdef, (const char *)0, AD_PHYS);
+			
+			if(!youdefend && mdef->mhp <= 0){ //otherwise lifesaved
 				otmp->dknown = TRUE;
-				mtmp = makemon(&mons[PM_FIRE_VORTEX], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-				if(mtmp){
-					initedog(mtmp);
-					mtmp->m_lev = u.ulevel / 2 + 1;
-					mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-					mtmp->mhp =  mtmp->mhpmax;
-					mtmp->mtame = 10;
-					mtmp->mpeaceful = 1;
+				if(youattack || magr->mtame){
+					mtmp = makemon(&mons[PM_FIRE_VORTEX], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+					if(mtmp){
+						initedog(mtmp);
+						mtmp->m_lev = u.ulevel / 2 + 1;
+						mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+						mtmp->mhp =  mtmp->mhpmax;
+						mtmp->mtame = 10;
+						mtmp->mpeaceful = 1;
+					}
+				} else {
+					mtmp = makemon(&mons[PM_FIRE_VORTEX], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+					if(mtmp){
+						mtmp->mpeaceful = magr->mpeaceful;
+					}
 				}
-				messaged = TRUE;
-		} else if(mdef->data == &mons[PM_EARTH_ELEMENTAL] && youattack){
-				struct monst *mtmp = 0;
-				pline("The winds blast the stone and sweep the fragments into a whirling dust storm!");
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+				return TRUE; 
+			}
+			messaged = TRUE;
+		} else if((!youdefend && (mdef->data == &mons[PM_EARTH_ELEMENTAL])) || (youdefend && (youracedata == &mons[PM_EARTH_ELEMENTAL]))){
+			struct monst *mtmp = 0;
+			pline("The winds blast the stone and sweep the fragments into a whirling dust storm!");
+			if(youattack) killed(mdef);
+			else if(youdefend) losehp((Upolyd ? u.mh : u.uhp) + 1, "blasting winds", KILLED_BY);
+			else monkilled(mdef, (const char *)0, AD_PHYS);
+			
+			if(!youdefend && mdef->mhp <= 0){ //otherwise lifesaved
 				otmp->dknown = TRUE;
-				mtmp = makemon(&mons[PM_DUST_VORTEX], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-				if(mtmp){
-					initedog(mtmp);
-					mtmp->m_lev = u.ulevel / 2 + 1;
-					mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-					mtmp->mhp =  mtmp->mhpmax;
-					mtmp->mtame = 10;
-					mtmp->mpeaceful = 1;
+				if(youattack || magr->mtame){
+					mtmp = makemon(&mons[PM_DUST_VORTEX], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+					if(mtmp){
+						initedog(mtmp);
+						mtmp->m_lev = u.ulevel / 2 + 1;
+						mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+						mtmp->mhp =  mtmp->mhpmax;
+						mtmp->mtame = 10;
+						mtmp->mpeaceful = 1;
+					}
+				} else {
+					mtmp = makemon(&mons[PM_DUST_VORTEX], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+					if(mtmp){
+						mtmp->mpeaceful = magr->mpeaceful;
+					}
 				}
-				messaged = TRUE;
-		} else if(mdef->data == &mons[PM_WATER_ELEMENTAL] && youattack){
-				struct monst *mtmp = 0;
-				pline("The winds whip the waters into a rolling fog!");
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+				return TRUE; 
+			}
+			messaged = TRUE;
+		} else if((!youdefend && (mdef->data == &mons[PM_WATER_ELEMENTAL])) || (youdefend && (youracedata == &mons[PM_WATER_ELEMENTAL]))){
+			struct monst *mtmp = 0;
+			pline("The winds whip the waters into a rolling fog!");
+			if(youattack) killed(mdef);
+			else if(youdefend) losehp((Upolyd ? u.mh : u.uhp) + 1, "whipping winds", KILLED_BY);
+			else monkilled(mdef, (const char *)0, AD_PHYS);
+			
+			if(!youdefend && mdef->mhp <= 0){ //otherwise lifesaved
 				otmp->dknown = TRUE;
-				mtmp = makemon(&mons[PM_FOG_CLOUD], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-				if(mtmp){
-					initedog(mtmp);
-					mtmp->m_lev = u.ulevel / 2 + 1;
-					mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
-					mtmp->mhp =  mtmp->mhpmax;
-					mtmp->mtame = 10;
-					mtmp->mpeaceful = 1;
+				if(youattack || magr->mtame){
+					mtmp = makemon(&mons[PM_FOG_CLOUD], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+					if(mtmp){
+						initedog(mtmp);
+						mtmp->m_lev = u.ulevel / 2 + 1;
+						mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+						mtmp->mhp =  mtmp->mhpmax;
+						mtmp->mtame = 10;
+						mtmp->mpeaceful = 1;
+					}
+				} else {
+					mtmp = makemon(&mons[PM_FOG_CLOUD], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+					if(mtmp){
+						mtmp->mpeaceful = magr->mpeaceful;
+					}
 				}
-				messaged = TRUE;
+				return TRUE; 
+			}
+			messaged = TRUE;
 		}
 	}
 	if(arti_steal(otmp)){
@@ -2534,7 +2577,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			exercise(A_STR, TRUE);
 			exercise(A_WIS, TRUE);
 			You("smash %s wide open!", mon_nam(mdef));
-			*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+			killed(mdef);
+			
+			if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 			messaged = TRUE;
 		}
 		else if (!youdefend) {
@@ -2543,14 +2588,17 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				exercise(A_STR, TRUE);
 				exercise(A_WIS, TRUE);
 			}
-			*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 			pline("%s smashes %s flat!", wepdesc, mon_nam(mdef));
 			otmp->dknown = TRUE;
+			if(youattack) killed(mdef);
+			else monkilled(mdef, (const char *)0, AD_PHYS);
+			
+			if(!youdefend && mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 			messaged = TRUE;
 		}
-		else{
-			*dmgptr = 2 * (Upolyd ? u.mh : u.uhp) + FATAL_DAMAGE_MODIFIER;
+		else {
 			pline("%s smashes you flat!", wepdesc);
+			losehp((Upolyd ? u.mh : u.uhp) + 1, "a vengeful hammer", KILLED_BY);
 			otmp->dknown = TRUE;
 			messaged = TRUE;
 		}
@@ -2567,7 +2615,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			/* not really beheading, but so close, why add another SPFX */
 			if (youattack && u.uswallow && mdef == u.ustuck) {
 				You("slice %s wide open!", mon_nam(mdef));
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+				killed(mdef);
+				
+				if(mdef->mhp <= 0) return TRUE;
 				messaged = TRUE;
 			} else if (!youdefend) {
 				/* allow normal cutworm() call to add extra damage */
@@ -2583,9 +2633,12 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 					*dmgptr *= 2;
 					messaged = TRUE;
 				} else {
-					*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 					pline("%s cuts %s in half!", wepdesc, mon_nam(mdef));
 					otmp->dknown = TRUE;
+					if(youattack) killed(mdef);
+					else monkilled(mdef, (const char *)0, AD_PHYS);
+					
+					if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 					messaged = TRUE;
 				}
 			} else {
@@ -2601,9 +2654,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 					 * value to the damage so that this reduction in
 					 * damage does not prevent death.
 					 */
-					*dmgptr = 2 * (Upolyd ? u.mh : u.uhp) + FATAL_DAMAGE_MODIFIER;
 					pline("%s cuts you in half!", wepdesc);
 					otmp->dknown = TRUE;
+					losehp((Upolyd ? u.mh : u.uhp) + 1, "a razor-sharp blade", KILLED_BY);
 					messaged = TRUE;
 				}
 			}
@@ -2612,7 +2665,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			/* not really beheading, but so close, why add another SPFX */
 			if (youattack && u.uswallow && mdef == u.ustuck) {
 				You("slice %s wide open!", mon_nam(mdef));
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+				killed(mdef);
+				
+				if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 				messaged = TRUE;
 			} else if (!youdefend) {
 				/* allow normal cutworm() call to add extra damage */
@@ -2634,20 +2689,29 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 							  s_suffix(mon_nam(mdef)),
 							  mbodypart(mdef,NECK));
 						pline("It blows apart in the wind.");
-						*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 						otmp->dknown = TRUE;
+						if(youattack) killed(mdef);
+						else monkilled(mdef, (const char *)0, AD_PHYS);
+						
+						if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 						messaged = TRUE;
 					} else {
-						*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 						pline(behead_msg[rn2(SIZE(behead_msg))],
 							  wepdesc, mon_nam(mdef));
 						otmp->dknown = TRUE;
+						if(youattack) killed(mdef);
+						else monkilled(mdef, (const char *)0, AD_PHYS);
+						
+						if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 						messaged = TRUE;
 					}
 				} else {
-					*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 					pline("%s cuts %s in half!", wepdesc, mon_nam(mdef));
 					otmp->dknown = TRUE;
+					if(youattack) killed(mdef);
+					else monkilled(mdef, (const char *)0, AD_PHYS);
+					
+					if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 					messaged = TRUE;
 				}
 			} else {
@@ -2657,41 +2721,35 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 							  magr ? Monnam(magr) : wepdesc);
 						*dmgptr *= 2;
 						messaged = TRUE;
-					}
-					if (noncorporeal(youracedata) || amorphous(youracedata)) {
+					} else if (noncorporeal(youracedata) || amorphous(youracedata)) {
 						pline("%s slices through your %s.",
 							  wepdesc, body_part(NECK));
 						pline("It blows apart in the wind.");
-						*dmgptr = 2 * (Upolyd ? u.mh : u.uhp)
-							  + FATAL_DAMAGE_MODIFIER;
 						pline(behead_msg[rn2(SIZE(behead_msg))],
 							  wepdesc, "you");
 						otmp->dknown = TRUE;
 						/* Should amulets fall off? */
+						losehp((Upolyd ? u.mh : u.uhp) + 1, "shearing winds", KILLED_BY);
+						
+						messaged = TRUE;
+					} else {
+						pline(behead_msg[rn2(SIZE(behead_msg))],
+							  wepdesc, "you");
+						losehp((Upolyd ? u.mh : u.uhp) + 1, "a razor-sharp blade", KILLED_BY);
+						otmp->dknown = TRUE;
+						/* Should amulets fall off? */
 						messaged = TRUE;
 					}
-					*dmgptr = 2 * (Upolyd ? u.mh : u.uhp)
-						  + FATAL_DAMAGE_MODIFIER;
-					pline(behead_msg[rn2(SIZE(behead_msg))],
-						  wepdesc, "you");
+				} else {
+					pline("%s cuts you in half!", wepdesc);
+					losehp((Upolyd ? u.mh : u.uhp) + 1, "a razor-sharp blade", KILLED_BY);
 					otmp->dknown = TRUE;
-					/* Should amulets fall off? */
 					messaged = TRUE;
 				}
-
-				/* Players with negative AC's take less damage instead
-				 * of just not getting hit.  We must add a large enough
-				 * value to the damage so that this reduction in
-				 * damage does not prevent death.
-				 */
-				*dmgptr = 2 * (Upolyd ? u.mh : u.uhp) + FATAL_DAMAGE_MODIFIER;
-				pline("%s cuts you in half!", wepdesc);
-				otmp->dknown = TRUE;
-				messaged = TRUE;
 			}
 		} else if ( otmp->oartifact == ART_LIFEHUNT_SCYTHE ){
 			wepdesc = "The neck-seeking scythe";
-			if(!youdefend){
+			if(youattack){
 				if (!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
 						(stationary(mdef->data) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT)) || 
 					  u.uswallow) && (
@@ -2709,14 +2767,16 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						*dmgptr = 0;
 						messaged = TRUE;
 					} else {
-						*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 						pline(behead_msg[rn2(SIZE(behead_msg))],
 							  wepdesc, mon_nam(mdef));
+						killed(mdef);
 						otmp->dknown = TRUE;
+						
+						if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 						messaged = TRUE;
 					}
 				}
-			} else {
+			} else if(youdefend) {
 				if (!(noncorporeal(youracedata) || amorphous(youracedata) || is_unalive(youracedata) || 
 						(stationary(youracedata) && (youracedata->mlet == S_FUNGUS || youracedata->mlet == S_PLANT))
 					 ) && (
@@ -2726,17 +2786,41 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						)
 					) && has_head(youracedata) && dieroll == 1
 				) {
-					*dmgptr = 2 * (Upolyd ? u.mh : u.uhp)
-						  + FATAL_DAMAGE_MODIFIER;
 					pline(behead_msg[rn2(SIZE(behead_msg))],
 						  wepdesc, "you");
+					losehp((Upolyd ? u.mh : u.uhp) + 1, "a neck-seeking scythe", KILLED_BY);
 					otmp->dknown = TRUE;
 					/* Should amulets fall off? */
 					messaged = TRUE;
 				}
+			} else {
+				if (!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
+						(stationary(mdef->data) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT))) && (
+						((mdef->mflee && mdef->data != &mons[PM_BANDERSNATCH]) || is_blind(mdef) || !mdef->mcanmove || !mdef->mnotlaugh || 
+							mdef->mstun || mdef->mconf || mdef->mtrapped || mdef->msleeping
+						)
+					) && has_head(mdef->data) && dieroll == 1
+				) {
+					if (notonhead) {
+						pline("Somehow, %s misses %s wildly.",
+							mon_nam(magr),
+							mon_nam(mdef)
+						);
+						*dmgptr = 0;
+						messaged = TRUE;
+					} else {
+						pline(behead_msg[rn2(SIZE(behead_msg))],
+							  wepdesc, mon_nam(mdef));
+						monkilled(mdef, (const char *)0, AD_PHYS);
+						otmp->dknown = TRUE;
+						
+						if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
+						messaged = TRUE;
+					}
+				}
 			}
 		} else if ( dieroll == 1  || 
-			(otmp->oartifact == ART_VORPAL_BLADE && mdef->data == &mons[PM_JABBERWOCK]) 
+			(otmp->oartifact == ART_VORPAL_BLADE && mdef->data == &mons[PM_JABBERWOCK])
 		){
 			if (youattack && u.uswallow && mdef == u.ustuck)
 				messaged = FALSE;
@@ -2757,10 +2841,13 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						  mbodypart(mdef,NECK));
 					messaged = TRUE;
 				} else {
-					*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 					pline(behead_msg[rn2(SIZE(behead_msg))],
 						  wepdesc, mon_nam(mdef));
 					otmp->dknown = TRUE;
+					if(youattack) killed(mdef);
+					else monkilled(mdef, (const char *)0, AD_PHYS);
+					
+					if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 					messaged = TRUE;
 				}
 			} else {
@@ -2774,11 +2861,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						  wepdesc, body_part(NECK));
 					messaged = TRUE;
 				} else {
-					*dmgptr = 2 * (Upolyd ? u.mh : u.uhp)
-						  + FATAL_DAMAGE_MODIFIER;
 					pline(behead_msg[rn2(SIZE(behead_msg))],
 						  wepdesc, "you");
 					otmp->dknown = TRUE;
+					losehp((Upolyd ? u.mh : u.uhp) + 1, wepdesc, KILLED_BY);
 					/* Should amulets fall off? */
 					messaged = TRUE;
 				}
@@ -2972,9 +3058,13 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	}
     if(otmp->oartifact == ART_TORCH_OF_ORIGINS && !resists_fire(mdef) && !rn2(10)){
-      pline("An ancient inferno flows from your %s.", xname(otmp));
+      pline("An ancient inferno flows from %s.", xname(otmp));
       /* TODO don't leave corpse */
-      *dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+	  if(youattack) killed(mdef);
+	  else if(youdefend) losehp((Upolyd ? u.mh : u.uhp) + 1, wepdesc, KILLED_BY);
+	  else monkilled(mdef, (const char *)0, AD_PHYS);
+	
+	  if(!youdefend && mdef->mhp <= 0) return TRUE; //otherwise lifesaved
       messaged = TRUE;
     }
 	if (!spec_dbon_applies) {
@@ -3028,7 +3118,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 					  mon_nam(mdef));
 			}
 			if (mdef->m_lev == 0) {
-				*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
+				if(youattack) killed(mdef);
+				else monkilled(mdef, (const char *)0, AD_PHYS);
+				
+				if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 			} else {
 				int drain = rnd(8);
 				*dmgptr += drain;

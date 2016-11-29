@@ -3359,6 +3359,18 @@ register struct	monst	*mtmp;
 				}
 			}
 		break;
+		case S_BAT:
+			if(mtmp->data == &mons[PM_CHIROPTERAN]){
+				chance = rnd(100);
+				if(chance >= 75) mongets(mtmp, STUDDED_LEATHER_ARMOR);
+				else mongets(mtmp, LEATHER_ARMOR);
+				mongets(mtmp, LEATHER_HELM);
+				chance = rnd(100);
+				if(chance >= 75) mongets(mtmp, SCYTHE);
+				else if(chance >= 50) mongets(mtmp, FAUCHARD);
+				else mongets(mtmp, QUARTERSTAFF);
+			}
+		break;
 		case S_LIZARD:
 			//Escaped drow pet
 			if(mtmp->data == &mons[PM_CAVE_LIZARD]){

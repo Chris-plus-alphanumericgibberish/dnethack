@@ -348,13 +348,13 @@ struct obj {
 #define uslinging()	(uwep && objects[uwep->otyp].oc_skill == P_SLING)
 #define is_bludgeon(otmp)	(otmp->oclass == SPBOOK_CLASS || \
 			otmp->oclass == WAND_CLASS || \
-			objects[otmp->otyp].oc_dir == WHACK) //Whack == 0
+			(objects[otmp->otyp].oc_dir & WHACK)) //Whack == 1
 #define is_stabbing(otmp)	(otmp->oclass != SPBOOK_CLASS && \
 			otmp->oclass != WAND_CLASS && \
-			objects[otmp->otyp].oc_dir | PIERCE) //Pierce == 1
+			(objects[otmp->otyp].oc_dir & PIERCE)) //Pierce == 2
 #define is_slashing(otmp)	(otmp->oclass != SPBOOK_CLASS && \
 			otmp->oclass != WAND_CLASS && \
-			objects[otmp->otyp].oc_dir | SLASH) //Slash == 2
+			(objects[otmp->otyp].oc_dir & SLASH)) //Slash == 4
 //#ifdef FIREARMS
 #define is_blaster(otmp) \
 			((otmp)->oclass == WEAPON_CLASS && \

@@ -354,7 +354,7 @@ boolean td;	/* td == TRUE : trap door or hole */
 	if (In_sokoban(&u.uz) && Can_fall_thru(&u.uz))
 	    ;	/* KMH -- You can't escape the Sokoban level traps */
 	else if(Levitation || u.ustuck || !Can_fall_thru(&u.uz)
-	   || Flying || is_clinger(youmonst.data)
+	   || Flying || is_clinger(youracedata)
 	   || (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP)
 	   || (Inhell && !u.uevent.invoked &&
 					newlevel == (dunlevs_in_dungeon(&u.uz) - 1))/*seal off sanctum and square level until the invocation is performed*/
@@ -362,7 +362,7 @@ boolean td;	/* td == TRUE : trap door or hole */
 		if (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP)            
 		pline("But thanks to your trusty whip ...");
 	    dont_fall = "don't fall in.";
-	} else if (youmonst.data->msize >= MZ_HUGE) {
+	} else if (youracedata->msize >= MZ_HUGE) {
 	    dont_fall = "don't fit through.";
 	} else if (!next_to_u()) {
 	    dont_fall = "are jerked back by your pet!";
@@ -518,7 +518,7 @@ int *fail_reason;
 	}
 	/* avoid hiding under nothing */
 	if (x == u.ux && y == u.uy &&
-		Upolyd && hides_under(youmonst.data) && !OBJ_AT(x, y))
+		hides_under(youracedata) && !OBJ_AT(x, y))
 	    u.uundetected = 0;
 
 	if (fail_reason) *fail_reason = AS_OK;
@@ -654,7 +654,7 @@ unsigned trflags;
 	    if(!Fumbling && ttype != MAGIC_PORTAL &&
 		ttype != ANTI_MAGIC && !forcebungle &&
 		(!rn2(5) ||
-	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)) ||
+	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youracedata)) ||
 		((ttype == HOLE || ttype == TRAPDOOR || ttype == PIT || ttype == SPIKED_PIT) && u.sealsActive&SEAL_SIMURGH)
 		)) {
 		You("escape %s %s.",
@@ -790,8 +790,8 @@ unsigned trflags;
 	    case BEAR_TRAP:
 		if(Levitation || Flying) break;
 		seetrap(trap);
-		if(amorphous(youmonst.data) || is_whirly(youmonst.data) ||
-						    unsolid(youmonst.data)) {
+		if(amorphous(youracedata) || is_whirly(youracedata) ||
+						    unsolid(youracedata)) {
 		    pline("%s bear trap closes harmlessly through you.",
 			    A_Your[trap->madeby_u]);
 		    break;
@@ -800,7 +800,7 @@ unsigned trflags;
 #ifdef STEED
 		   !u.usteed &&
 #endif
-		   youmonst.data->msize <= MZ_SMALL) {
+		   youracedata->msize < MZ_SMALL) {
 		    pline("%s bear trap closes harmlessly over you.",
 			    A_Your[trap->madeby_u]);
 		    break;
@@ -834,7 +834,7 @@ unsigned trflags;
 
 	    case SLP_GAS_TRAP:
 		seetrap(trap);
-		if(Sleep_resistance || breathless(youmonst.data)) {
+		if(Sleep_resistance || breathless(youracedata)) {
 		    You("are enveloped in a cloud of gas!");
 		    break;
 		}
@@ -924,7 +924,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		/* KMH -- You can't escape the Sokoban level traps */
 		if (!In_sokoban(&u.uz) && (Levitation || Flying)) break;
 		seetrap(trap);
-		if (!In_sokoban(&u.uz) && is_clinger(youmonst.data)) {
+		if (!In_sokoban(&u.uz) && is_clinger(youracedata)) {
 		    if(trap->tseen) {
 			You("see %s %spit below you.", a_your[trap->madeby_u],
 			    ttype == SPIKED_PIT ? "spiked " : "");
@@ -1025,9 +1025,9 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 
 	    case WEB: /* Our luckless player has stumbled into a web. */
 		seetrap(trap);
-		if (amorphous(youmonst.data) || is_whirly(youmonst.data) ||
-						    unsolid(youmonst.data)) {
-		    if (acidic(youmonst.data) || u.umonnum == PM_GELATINOUS_CUBE ||
+		if (amorphous(youracedata) || is_whirly(youracedata) ||
+						    unsolid(youracedata)) {
+		    if (acidic(youracedata) || u.umonnum == PM_GELATINOUS_CUBE ||
 			u.umonnum == PM_FIRE_ELEMENTAL) {
 			if (webmsgok)
 			    You("%s %s spider web!",
@@ -1043,7 +1043,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			    a_your[trap->madeby_u]);
 		    break;
 		}
-		if (webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK)) {
+		if (webmaker(youracedata) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK)) {
 		    if (webmsgok)
 		    	pline(trap->madeby_u ? "You take a walk on your web."
 					 : "There is a spider web here.");
@@ -1062,7 +1062,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 #endif
 			
 		    Sprintf(verbbuf, "%s", Levitation ? (const char *)"float" :
-		      		locomotion(youmonst.data, "stumble"));
+		      		locomotion(youracedata, "stumble"));
 		    You("%s into %s spider web!",
 			verbbuf, a_your[trap->madeby_u]);
 		}
@@ -1157,7 +1157,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 #endif
 		 Sprintf(verbbuf,"%s",
 		    Levitation ? (const char *)"float" :
-		    locomotion(youmonst.data, "step"));
+		    locomotion(youracedata, "step"));
 		You("%s onto a polymorph trap!", verbbuf);
 		if(Antimagic || Unchanging) {
 		    shieldeff(u.ux, u.uy);
@@ -2280,7 +2280,7 @@ instapetrify(str)
 const char *str;
 {
 	if (Stone_resistance) return;
-	if (poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))
+	if (poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))
 	    return;
 	You("turn to stone...");
 	killer_format = KILLED_BY;
@@ -2448,7 +2448,7 @@ long hmask, emask;     /* might cancel timeout */
 	/* check for falling into pool - added by GAN 10/20/86 */
 	if(!Flying) {
 		if (!u.uswallow && u.ustuck) {
-			if (sticks(youmonst.data))
+			if (sticks(youracedata))
 				You("aren't able to maintain your hold on %s.",
 					mon_nam(u.ustuck));
 			else
@@ -2590,7 +2590,7 @@ struct obj *box;	/* null for floor trap */
 	
 	burn_away_slime();
 
-	if (burnarmor(&youmonst) || (rn2(3) && !Fire_resistance)) {
+	if (burnarmor(&youmonst) || (rn2(3) && !EFire_resistance)) {
 	    destroy_item(SCROLL_CLASS, AD_FIRE);
 	    destroy_item(SPBOOK_CLASS, AD_FIRE);
 	    destroy_item(POTION_CLASS, AD_FIRE);
@@ -2644,7 +2644,7 @@ domagictrap()
 			break;
 	     case 15:	if (on_level(&u.uz, &qstart_level))
 			    You_feel("%slike the prodigal son.",
-			      (flags.female || (Upolyd && is_neuter(youmonst.data))) ?
+			      (flags.female || (is_neuter(youracedata))) ?
 				     "oddly " : "");
 			else
 			    You("suddenly yearn for %s.",
@@ -3185,7 +3185,7 @@ drown()
 		return(FALSE);
 	}
 	You("are drowning!");
-	if ((Teleportation || can_teleport(youmonst.data)) &&
+	if ((Teleportation || can_teleport(youracedata)) &&
 		    !u.usleep && (Teleport_control || rn2(3) < Luck+2)) {
 		You("attempt a teleport spell.");	/* utcsri!carroll */
 		if (!level.flags.noteleport) {
@@ -3208,7 +3208,7 @@ drown()
 	   due to combat is handled; note unmul() clears u.usleep */
 	if (u.usleep) unmul("Suddenly you wake up!");
 	/* can't crawl if unable to move (crawl_ok flag stays false) */
-	if (multi < 0 || (Upolyd && !youmonst.data->mmove)) goto crawl;
+	if (multi < 0 || (!youracedata->mmove)) goto crawl;
 	/* look around for a place to crawl to */
 	for (i = 0; i < 100; i++) {
 		x = rn1(3,u.ux - 1);
@@ -3344,10 +3344,10 @@ dountrap()	/* disarm a trap */
 	    pline("You're too strained to do that.");
 	    return 0;
 	}
-	if ((nohands(youmonst.data) && !(webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) || !youmonst.data->mmove) {
+	if ((nohands(youracedata) && !(webmaker(youracedata) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) || !youracedata->mmove) {
 	    pline("And just how do you expect to do that?");
 	    return 0;
-	} else if (u.ustuck && sticks(youmonst.data)) {
+	} else if (u.ustuck && sticks(youracedata)) {
 	    pline("You'll have to let go of %s first.", mon_nam(u.ustuck));
 	    return 0;
 	}
@@ -3369,7 +3369,7 @@ struct trap *ttmp;
 	int chance = 3;
 
 	/* Only spiders know how to deal with webs reliably */
-	if (ttmp->ttyp == WEB && !(webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK)))
+	if (ttmp->ttyp == WEB && !(webmaker(youracedata) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK)))
 	 	chance = 30;
 	if (Confusion || Hallucination) chance++;
 	if (Blind) chance++;
@@ -3456,10 +3456,10 @@ boolean force_failure;
 	}
 	/* duplicate tight-space checks from test_move */
 	if (u.dx && u.dy &&
-	    bad_rock(youmonst.data,u.ux,ttmp->ty) &&
-	    bad_rock(youmonst.data,ttmp->tx,u.uy)) {
+	    bad_rock(youracedata,u.ux,ttmp->ty) &&
+	    bad_rock(youracedata,ttmp->tx,u.uy)) {
 	    if ((invent && (inv_weight() + weight_cap() > 600)) ||
-		bigmonst(youmonst.data)) {
+		bigmonst(youracedata)) {
 		/* don't allow untrap if they can't get thru to it */
 		You("are unable to reach the %s!",
 		    defsyms[trap_to_defsym(ttype)].explanation);
@@ -3488,7 +3488,7 @@ boolean force_failure;
 			    if (mtmp->mtame) abuse_dog(mtmp);
 			    if ((mtmp->mhp -= rnd(4)) <= 0) killed(mtmp);
 			} else if (ttype == WEB) {
-			    if (!(webmaker(youmonst.data) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) {
+			    if (!(webmaker(youracedata) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) {
 				struct trap *ttmp2 = maketrap(u.ux, u.uy, WEB);
 				if (ttmp2) {
 				    pline_The("webbing sticks to you. You're caught too!");
@@ -3815,7 +3815,7 @@ struct trap *ttmp;
 		You("grab the trapped %s using your bare %s.",
 				mtmp->data->mname, makeplural(body_part(HAND)));
 
-		if (poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))
+		if (poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))
 			display_nhwindow(WIN_MESSAGE, FALSE);
 		else {
 			char kbuf[BUFSZ];
@@ -4276,10 +4276,10 @@ boolean disarm;
 				pline("What a groovy feeling!");
 			    else if (Blind)
 				You("%s and get dizzy...",
-				    stagger(youmonst.data, "stagger"));
+				    stagger(youracedata, "stagger"));
 			    else
 				You("%s and your vision blurs...",
-				    stagger(youmonst.data, "stagger"));
+				    stagger(youracedata, "stagger"));
 			}
 			make_stunned(HStun + rn1(7, 16),FALSE);
 			(void) make_hallucinated(HHallucination + rn1(5, 16),FALSE,0L);
@@ -4449,7 +4449,7 @@ lava_effects()
     boolean usurvive;
 
     burn_away_slime();
-    if (likes_lava(youmonst.data)) return FALSE;
+    if (likes_lava(youracedata)) return FALSE;
 
     if (!Fire_resistance) {
 	if(Wwalking) {

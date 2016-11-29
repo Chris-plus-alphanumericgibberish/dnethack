@@ -22,7 +22,11 @@
 // #define resists_drain(mon)	(((mon)->mintrinsics & MR_DRAIN) != 0)
 // #define resists_sickness(mon)	(((mon)->mintrinsics & MR_SICK) != 0)
 
-#define	resist_attacks(ptr)	((ptr) == &mons[PM_HUNGRY_DEAD] || (ptr) == &mons[PM_STINKING_CLOUD] || (ptr) == &mons[PM_MORTAI])
+#define	resist_attacks(ptr)	((((ptr)->mflagsg & MG_WRESIST) != 0L))
+#define	resist_blunt(ptr)	((((ptr)->mflagsg & MG_RBLUNT) != 0L))
+#define	resist_slash(ptr)	((((ptr)->mflagsg & MG_RSLASH) != 0L))
+#define	resist_pierce(ptr)	((((ptr)->mflagsg & MG_RPIERCE) != 0L))
+#define	resists_all(ptr)	((((ptr)->mflagsg & MG_RALL) == MG_RALL))
 
 #define resists_poly(ptr)	((ptr) == &mons[PM_OONA] || is_weeping(ptr) || is_yochlol(ptr))
 
@@ -183,7 +187,7 @@
 							 (ptr) == &mons[PM_ASCODEL] ||\
 							 (ptr) == &mons[PM_FAERINAAL] ||\
 							 (ptr) == &mons[PM_QUEEN_MAB] ||\
-							 (ptr) == &mons[PM_TULANI_QUEEN] ||\
+							 (ptr) == &mons[PM_QUEEN_OF_STARS] ||\
 							 (ptr) == &mons[PM_KETO] \
 							)
 #define is_eeladrin(ptr)	(\
@@ -230,6 +234,8 @@
 								)
 #define is_bat(ptr)		((ptr) == &mons[PM_BAT] || \
 				 (ptr) == &mons[PM_GIANT_BAT] || \
+				 (ptr) == &mons[PM_BATTLE_BAT] || \
+				 (ptr) == &mons[PM_WARBAT] || \
 				 (ptr) == &mons[PM_VAMPIRE_BAT])
 #define is_metroid(ptr) ((ptr)->mlet == S_TRAPPER && !((ptr) == &mons[PM_TRAPPER] || (ptr) == &mons[PM_LURKER_ABOVE]))
 #define is_social_insect(ptr) ((ptr)->mlet == S_ANT && (ptr)->maligntyp > 0)

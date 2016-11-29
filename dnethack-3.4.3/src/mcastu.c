@@ -1176,7 +1176,7 @@ int spellnum;
     switch (spellnum) {
     case DEATH_TOUCH:
 	pline("Oh no, %s's using the touch of death!", mtmp ? mhe(mtmp) : "something");
-	if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
+	if (nonliving(youracedata) || is_demon(youracedata)) {
 	    You("seem no deader than before.");
 		dmg = 0; //you don't take damage
 	} else if (ward_at(u.ux,u.uy) == CIRCLE_OF_ACHERON) {
@@ -1239,7 +1239,7 @@ int spellnum;
 			Glib += rn1(20, 9);
 			if(is_poisonable(uswapwep)) uswapwep->opoisoned = OPOISON_FILTH;
 	   }
-       if(haseyes(youmonst.data) && !Blindfolded && mtmp && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
+       if(haseyes(youracedata) && !Blindfolded && mtmp && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
            old = u.ucreamed;
            u.ucreamed += rn1(20, 9);
            Your("%s is coated in %sgunk!", body_part(FACE),
@@ -1295,7 +1295,7 @@ int spellnum;
 		if (malediction) /* give a warning to the player */
 		   verbalize(rn2(2) ? "I shall make a statue of thee!" :
 							  "I condemn thee to eternity unmoving!");
-        if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+        if (!(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))) {
            if(!Stone_resistance && !Free_action && (!rn2(10) || !have_lizard()) ){
 			You_feel("less limber.");
 			Stoned = 5;
@@ -1874,7 +1874,7 @@ summon_alien:
                }
         } else if (otmp && !welded(otmp) && otmp->otyp != LOADSTONE && (!Antimagic || !rn2(4))){
 			if(mtmp){
-				if(rn2(((int)mtmp->m_lev)) > (acurrstr())) {
+				if(rn2(((int)mtmp->m_lev)) > (ACURRSTR)) {
 					Your("%s knocked out of your %s!",
 						aobjnam(otmp,"are"), hands);
 					setuwep((struct obj *)0);
@@ -1882,7 +1882,7 @@ summon_alien:
 				}
 				else Your("%s for a moment.", aobjnam(otmp, "shudder"));
 			} else {
-				if(acurrstr() < rnd(25) ){
+				if(ACURRSTR < rnd(25) ){
 					Your("%s knocked out of your %s!",
 						aobjnam(otmp,"are"), hands);
 					setuwep((struct obj *)0);
@@ -2107,7 +2107,7 @@ ray:
     case BLIND_YOU:
 	/* note: resists_blnd() doesn't apply here */
 	if (!Blinded) {
-	    int num_eyes = eyecount(youmonst.data);
+	    int num_eyes = eyecount(youracedata);
 	    if (mtmp && dmgtype(mtmp->data, AD_CLRC))
 	    pline("Scales cover your %s!",
 		  (num_eyes == 1) ?
@@ -2533,9 +2533,9 @@ int spellnum;
            return TRUE;
        /* various conditions where webs won't be effective */
        if ((levl[u.ux][u.uy].typ <= IRONBARS || levl[u.ux][u.uy].typ > ICE ||
-               t_at(u.ux,u.uy) || amorphous(youmonst.data) ||
-               is_whirly(youmonst.data) || flaming(youmonst.data) ||
-               unsolid(youmonst.data) || (uwep && uwep->oartifact == ART_STING) ||
+               t_at(u.ux,u.uy) || amorphous(youracedata) ||
+               is_whirly(youracedata) || flaming(youracedata) ||
+               unsolid(youracedata) || (uwep && uwep->oartifact == ART_STING) ||
                ACURR(A_STR) >= 18) && spellnum == MAKE_WEB)
            return TRUE;
        /* don't summon spheres when one type is gone */

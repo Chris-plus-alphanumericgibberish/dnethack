@@ -575,7 +575,7 @@ struct obj * instr;
 		alev = 0;
 	}
 	// polymorphed into something that can't sing
-	if (is_silent(youmonst.data)) alev /= 2;
+	if (is_silent(youracedata)) alev /= 2;
 	
 	
 	/* Defense level */
@@ -1483,7 +1483,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 			}
 		    } else if (x == u.ux && y == u.uy) {
 			    if (Levitation || Flying ||
-						is_clinger(youmonst.data) || u.sealsActive&SEAL_SIMURGH) {
+						is_clinger(youracedata) || u.sealsActive&SEAL_SIMURGH) {
 				    pline("A chasm opens up under you!");
 				    You("don't fall in!");
 			    } else {
@@ -1711,7 +1711,7 @@ struct obj *instr;
 		return(0);
     }
 #ifdef BARD
-    if (nohands(youmonst.data)) {
+    if (nohands(youracedata)) {
 		You("have no hands!");
 		return 0;
     }
@@ -1739,7 +1739,7 @@ struct obj *instr;
 	    You("can't play properly while wearing a shield.");
 		return 0;
 	}
-    if (is_silent(youmonst.data)){
+    if (is_silent(youracedata)){
 	    pline("While in this form, you can't sing along your songs.");
 		return 0;
 	}

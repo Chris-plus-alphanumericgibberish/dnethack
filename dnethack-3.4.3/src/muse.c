@@ -1544,10 +1544,10 @@ struct monst *mtmp;
 		    if (!otmp2) goto xxx_noobj;  /* Shouldn't happen */
 		    otmp2->quan = confused ? rn1(5,2) : 1;
 		    otmp2->owt = weight(otmp2);
-		    if (!amorphous(youmonst.data) &&
+		    if (!amorphous(youracedata) &&
 			    !Passes_walls &&
-			    !noncorporeal(youmonst.data) &&
-			    !unsolid(youmonst.data)) {
+			    !noncorporeal(youracedata) &&
+			    !unsolid(youracedata)) {
 			You("are hit by %s!", doname(otmp2));
 			dmg = dmgval(otmp2, &youmonst, 0) * otmp2->quan;
 			if (uarmh) {
@@ -2520,7 +2520,7 @@ const char *fmt, *str;
 	    if (fmt && str)
 	    	pline(fmt, str, "boots");
 	    return TRUE;
-	} else if (youmonst.data == &mons[PM_SILVER_DRAGON]) {
+	} else if (youracedata == &mons[PM_SILVER_DRAGON]) {
 	    if (fmt && str)
 	    	pline(fmt, str, "scales");
 	    return TRUE;

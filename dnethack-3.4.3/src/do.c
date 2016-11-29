@@ -166,7 +166,7 @@ const char *verb;
 			}
 			mtmp->mtrapped = 0;
 		    } else {
-			if (!Passes_walls && !throws_rocks(youmonst.data) && !(u.sealsActive&SEAL_YMIR)) {
+			if (!Passes_walls && !throws_rocks(youracedata) && !(u.sealsActive&SEAL_YMIR)) {
 			    losehp(rnd(15), "squished under a heavy object",
 				   NO_KILLER_PREFIX);
 			    return FALSE;	/* player remains trapped */
@@ -850,7 +850,7 @@ dodown()
 	}
 
 	if (trap)
-	    You("%s %s.", locomotion(youmonst.data, "jump"),
+	    You("%s %s.", locomotion(youracedata, "jump"),
 		trap->ttyp == HOLE ? "down the hole" : "through the trap door");
 
 	if (trap && Is_stronghold(&u.uz)) {
@@ -924,7 +924,7 @@ doup()
 	if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && Is_qstart(&u.uz) && levl[u.ux][u.uy].ladder == LA_UP){
 		if(!u.uevent.qcompleted){
 			pline("This staircase is partially collapsed.  It will be a tight squeeze.");
-			if (bigmonst(youmonst.data) && !(u.sealsActive&SEAL_ANDREALPHUS) && !amorphous(youmonst.data)) {
+			if (bigmonst(youracedata) && !(u.sealsActive&SEAL_ANDREALPHUS) && !amorphous(youracedata)) {
 				Your("body is too large to fit through.");
 				return 1;
 			}
@@ -1370,7 +1370,7 @@ boolean at_stairs, falling, portal;
 	    coord cc;
 
 	    if (!rn2(2) &&
-		    enexto(&cc, u.ux, u.uy, youmonst.data) &&
+		    enexto(&cc, u.ux, u.uy, youracedata) &&
 		    distu(cc.x, cc.y) <= 2)
 		u_on_newpos(cc.x, cc.y);	/*[maybe give message here?]*/
 	    else

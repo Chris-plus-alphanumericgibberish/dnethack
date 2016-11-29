@@ -2425,23 +2425,23 @@ escape_tomb()
 #ifdef DEBUG
 	pline("escape_tomb");
 #endif
-	if ((Teleportation || can_teleport(youmonst.data)) &&
+	if ((Teleportation || can_teleport(youracedata)) &&
 	    (Teleport_control || rn2(3) < Luck+2)) {
 		You("attempt a teleport spell.");
 		(void) dotele();	/* calls unearth_you() */
 	} else if(u.uburied) { /* still buried after 'port attempt */
 		boolean good;
 
-		if(amorphous(youmonst.data) || Passes_walls ||
-		   noncorporeal(youmonst.data) || unsolid(youmonst.data) ||
-		   (tunnels(youmonst.data) && !needspick(youmonst.data))) {
+		if(amorphous(youracedata) || Passes_walls ||
+		   noncorporeal(youracedata) || unsolid(youracedata) ||
+		   (tunnels(youracedata) && !needspick(youracedata))) {
 
 		    You("%s up through the %s.",
-			(tunnels(youmonst.data) && !needspick(youmonst.data)) ?
-			 "try to tunnel" : (amorphous(youmonst.data)) ?
+			(tunnels(youracedata) && !needspick(youracedata)) ?
+			 "try to tunnel" : (amorphous(youracedata)) ?
 			 "ooze" : "phase", surface(u.ux, u.uy));
 
-		    if(tunnels(youmonst.data) && !needspick(youmonst.data))
+		    if(tunnels(youracedata) && !needspick(youracedata))
 			good = dighole(TRUE);
 		    else good = TRUE;
 		    if(good) unearth_you();

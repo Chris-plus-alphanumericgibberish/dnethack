@@ -132,7 +132,7 @@ E void FDECL(adjabil, (int,int));
 E int NDECL(newhp);
 E int FDECL(conplus, (int));
 E schar FDECL(acurr, (int));
-E schar NDECL(acurrstr);
+E schar FDECL(acurrstr, (int));
 E void FDECL(adjalign, (int));
 
 /* ### ball.c ### */
@@ -505,7 +505,7 @@ E void FDECL(impact_drop, (struct obj *,XCHAR_P,XCHAR_P,XCHAR_P));
 /* ### dothrow.c ### */
 
 E int FDECL(throw_obj, (struct obj *,int, int));
-E int FDECL(zap_raygun, (struct obj *,int,int));
+E int FDECL(zap_raygun, (struct obj *,int, int));
 E int NDECL(dothrow);
 E int NDECL(dofire);
 E void FDECL(hitfloor, (struct obj *));
@@ -2665,6 +2665,7 @@ E void FDECL(update_mon_intrinsics,
 E int FDECL(base_mac, (struct monst *));
 E int FDECL(find_mac, (struct monst *));
 E int FDECL(full_mac, (struct monst *));
+E int FDECL(full_marmorac, (struct monst *));
 E void FDECL(m_dowear, (struct monst *,BOOLEAN_P));
 E struct obj *FDECL(which_armor, (struct monst *,long));
 E void FDECL(mon_break_armor, (struct monst *,BOOLEAN_P));

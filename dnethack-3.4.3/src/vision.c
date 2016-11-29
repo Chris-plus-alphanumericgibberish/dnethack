@@ -853,9 +853,6 @@ not_in_sight:
 
 	} /* end for col . . */
     }	/* end for row . .  */
-	for(i=1; i<COLNO; i++)
-		for(j=0; j<ROWNO; j++)
-			if(viz_array[j][i]&COULD_SEE && echolocation(youracedata)) echo_location(i, j);
     colbump[u.ux] = colbump[u.ux+1] = 0;
 
 skip:

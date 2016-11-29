@@ -54,6 +54,8 @@ pet_type()
 		else 
 			return (rn2(3) ? PM_CAVE_SPIDER : PM_BABY_CAVE_LIZARD);
 	}
+	else if(Race_if(PM_CHIROPTERAN))
+		return PM_GIANT_BAT;
 	else if (urole.petnum != NON_PM && urole.petnum != PM_LITTLE_DOG && urole.petnum != PM_KITTEN && urole.petnum != PM_PONY)
 	    return (urole.petnum);
 	else if(Race_if(PM_HALF_DRAGON))
@@ -66,7 +68,7 @@ pet_type()
 		else
 			return (rn2(2) ? PM_PARROT : PM_MONKEY);
 	}
-	else if (preferred_pet == 'c')
+	else if (preferred_pet == 'c' || preferred_pet == 'f')
 	    return (PM_KITTEN);
 	else if (preferred_pet == 'd')
 	    return (PM_LITTLE_DOG);
@@ -967,7 +969,7 @@ struct obj *obj;
 	if (mtmp == u.ustuck) {
 	    if (u.uswallow)
 		expels(mtmp, mtmp->data, TRUE);
-	    else if (!(Upolyd && sticks(youmonst.data)))
+	    else if (!(sticks(youracedata)))
 		unstuck(mtmp);
 	}
 
@@ -1016,7 +1018,7 @@ struct obj *obj;
 	    /* monsters with conflicting structures cannot be tamed */
 	    mtmp->isshk || mtmp->isgd || mtmp->ispriest || mtmp->isminion ||
 	    is_covetous(mtmp->data) || is_human(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
-	    (is_demon(mtmp->data) && !is_demon(youmonst.data)) ||
+	    (is_demon(mtmp->data) && !is_demon(youracedata)) ||
 	    (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && obj->oclass != SPBOOK_CLASS && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
 
 	if (mtmp->m_id == quest_status.leader_m_id)
@@ -1128,7 +1130,7 @@ boolean was_dead;
 	if (edog->abuse >= 0 && edog->abuse < 10)
 	    if (!rn2(edog->abuse + 1)) mtmp->mpeaceful = 1;
 	if(!quietly && cansee(mtmp->mx, mtmp->my)) {
-	    if (haseyes(youmonst.data)) {
+	    if (haseyes(youracedata)) {
 		if (haseyes(mtmp->data))
 			pline("%s %s to look you in the %s.",
 				Monnam(mtmp),

@@ -270,7 +270,7 @@ register struct monst *mtmp;
 	    if (!Blind) pline("%s appears before you.", Amonnam(mtmp));
 	    newsym(mtmp->mx,mtmp->my);
 	}
-	if (youmonst.data->mlet == S_DEMON) {	/* Won't blackmail their own. */
+	if (youracedata->mlet == S_DEMON) {	/* Won't blackmail their own. */
 	    pline("%s says, \"Good hunting, %s.\"",
 		  Amonnam(mtmp), flags.female ? "Sister" : "Brother");
 	    if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);

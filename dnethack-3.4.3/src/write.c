@@ -87,7 +87,7 @@ register struct obj *pen;
 	const char *typeword;
 	int theward;
 	
-	if (nohands(youmonst.data)) {
+	if (nohands(youracedata)) {
 	    You("need hands to be able to write!");
 	    return 0;
 	} else if (Glib) {

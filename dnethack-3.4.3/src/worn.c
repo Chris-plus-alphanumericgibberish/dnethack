@@ -504,7 +504,7 @@ struct monst *mon;
 	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + AC_VALUE(base+8);
 	else if(mon->data == &mons[PM_ZAPHKIEL] && base < -8) base = -8 + AC_VALUE(base+8);
-	else if(mon->data == &mons[PM_TULANI_QUEEN] && base < -6) base = -6 + AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
@@ -627,6 +627,37 @@ struct monst *mon;
 	base -= armac;
 	/* since ARM_BONUS is positive, subtracting it increases AC */
 	return base;
+}
+
+int
+full_marmorac(mon)
+struct monst *mon;
+{
+	struct obj *obj;
+	int armac = 0;
+	long mwflags = mon->misc_worn_check;
+	
+	if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
+		armac += 15;
+	}
+	
+	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
+		if(uarm) armac += ARM_BONUS(uarm);
+		if(uarmf) armac += ARM_BONUS(uarmf);
+		if(uarmg) armac += ARM_BONUS(uarmg);
+		if(uarmu) armac += ARM_BONUS(uarmu);
+		if(uarms) armac += ARM_BONUS(uarms);
+		if(uarmh) armac += ARM_BONUS(uarmh);
+		if(uarmc) armac += ARM_BONUS(uarmc);
+		
+		if(armac < 0) armac *= -1;
+	}
+	else for (obj = mon->minvent; obj; obj = obj->nobj) {
+	    if (obj->owornmask & mwflags)
+		armac += ARM_BONUS(obj);
+	}
+
+	return 10 - armac;
 }
 
 /* weapons are handled separately; rings and eyewear aren't used by monsters */

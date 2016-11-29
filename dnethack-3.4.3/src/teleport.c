@@ -349,14 +349,14 @@ boolean allow_drag;
 	u.ux0 = u.ux;
 	u.uy0 = u.uy;
 
-	if (hides_under(youmonst.data))
+	if (hides_under(youracedata))
 		u.uundetected = OBJ_AT(nux, nuy);
-	else if (youmonst.data->mlet == S_EEL)
+	else if (youracedata->mlet == S_EEL)
 		u.uundetected = is_pool(nux, nuy);
 	else {
 		u.uundetected = 0;
 		/* mimics stop being unnoticed */
-		if (youmonst.data->mlet == S_MIMIC)
+		if (youracedata->mlet == S_MIMIC)
 		    youmonst.m_ap_type = M_AP_NOTHING;
 	}
 
@@ -574,14 +574,14 @@ dotele()
 		}
 		if (trap)
 			You("%s onto the teleportation trap.",
-			    locomotion(youmonst.data, "jump"));
+			    locomotion(youracedata, "jump"));
 	}
 	if (!trap) {
 	    boolean castit = FALSE;
 	    register int sp_no = 0, energy = 0;
 
 	    if (!Teleportation || (u.ulevel < (Role_if(PM_WIZARD) ? 8 : 12)
-					&& !can_teleport(youmonst.data))) {
+					&& !can_teleport(youracedata))) {
 		/* Try to use teleport away spell. */
 		if (objects[SPE_TELEPORT_AWAY].oc_name_known && !Confusion)
 		    for (sp_no = 0; sp_no < MAXSPELL; sp_no++)
@@ -746,7 +746,7 @@ level_tele()
 				goto random_levtport;
 			if (ynq("Go to Nowhere.  Are you sure?") != 'y') return;
 			You("%s in agony as your body begins to warp...",
-				is_silent(youmonst.data) ? "writhe" : "scream");
+				is_silent(youracedata) ? "writhe" : "scream");
 			display_nhwindow(WIN_MESSAGE, FALSE);
 			You("cease to exist.");
 			if (invent) Your("possessions land on the %s with a thud.",
@@ -1012,7 +1012,7 @@ struct trap *trap;
 {
 	You("%s onto a level teleport trap!",
 		      Levitation ? (const char *)"float" :
-				  locomotion(youmonst.data, "step"));
+				  locomotion(youracedata, "step"));
 	if (Antimagic) {
 	    shieldeff(u.ux, u.uy);
 	}

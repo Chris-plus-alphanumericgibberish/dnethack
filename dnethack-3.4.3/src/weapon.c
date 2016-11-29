@@ -838,9 +838,14 @@ int spec;
 	if (Is_weapon || otmp->oclass == GEM_CLASS ||
 		otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS) {
 	    int bonus = 0;
-
+		int resistmask = 0;
+		int weaponmask = 0;
+		static int warnedotyp = 0;
+		static struct permonst *warnedptr = 0;
+		
 	    if (otmp->blessed && (is_undead(ptr) || is_demon(ptr))){
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
+			else if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),4);
 			else bonus += rnd(4);
 		}
 	    if (is_axe(otmp) && is_wooden(ptr))
@@ -877,7 +882,47 @@ int spec;
 	       this bonus so that effectively it's added after the doubling */
 	    if (bonus > 1 && otmp->oartifact && spec_dbon(otmp, mon, 25) >= 25)
 		bonus = (bonus + 1) / 2;
-
+		
+		if(resists_all(ptr) || resist_attacks(ptr)){
+			tmp /= 4;
+			if(!flags.mon_moving && !youdefend && warnedptr != ptr){
+				pline("Weapons are inefective against %s", mon_nam(mon));
+				warnedptr = ptr;
+			}
+		} else {
+			if(is_bludgeon(otmp)){
+				weaponmask |= WHACK;
+			}
+			if(is_stabbing(otmp)){
+				weaponmask |= PIERCE;
+			}
+			if(is_slashing(otmp)){
+				weaponmask |= SLASH;
+			}
+			
+			if(resist_blunt(ptr)){
+				resistmask |= WHACK;
+			}
+			if(resist_pierce(ptr)){
+				resistmask |= PIERCE;
+			}
+			if(resist_slash(ptr)){
+				resistmask |= SLASH;
+			}
+			
+			if((weaponmask & ~(resistmask)) == 0L){
+				tmp /= 4;
+				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
+					pline("%s is inefective against %s", The(xname(otmp)), mon_nam(mon));
+					warnedotyp = otmp->otyp;
+					warnedptr = ptr;
+				}
+			} else {
+				warnedotyp = 0;
+				warnedptr = 0;
+			}
+		}
+		
 	    tmp += bonus;
 	}
 
@@ -938,8 +983,8 @@ struct monst *mon;
 	}
 	if(pen->ovar1&SEAL_FAFNIR){
 		if(youdef){
-			if(is_golem(youmonst.data)) dmg += d(2*dnum,4);
-			else if(nonliving(youmonst.data)) dmg += d(dnum,4);
+			if(is_golem(youracedata)) dmg += d(2*dnum,4);
+			else if(nonliving(youracedata)) dmg += d(dnum,4);
 		}
 		else {
 			if(is_golem(mon->data)) dmg += d(2*dnum,4);
@@ -947,11 +992,11 @@ struct monst *mon;
 		}
 	}
 	if(pen->ovar1&SEAL_IRIS){
-		if(youdef && !(nonliving(youmonst.data) || is_anhydrous(youmonst.data))) dmg += d(dnum,4);
+		if(youdef && !(nonliving(youracedata) || is_anhydrous(youracedata))) dmg += d(dnum,4);
 		else if(!youdef && !(nonliving(mon->data) || is_anhydrous(mon->data))) dmg += d(dnum,4);
 	}
 	if(pen->ovar1&SEAL_ENKI){
-		if(youdef && !(nonliving(youmonst.data) || amphibious(youmonst.data))) dmg += d(dnum,4);
+		if(youdef && !(nonliving(youracedata) || amphibious(youracedata))) dmg += d(dnum,4);
 		else if(!youdef && !(nonliving(mon->data) || amphibious(mon->data))) dmg += d(dnum,4);
 	}
 	if(pen->ovar1&SEAL_OSE){

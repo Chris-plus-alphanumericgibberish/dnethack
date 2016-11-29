@@ -6,7 +6,7 @@
 #include "eshk.h"
 
 #define is_bigfoot(x)	((x) == &mons[PM_SASQUATCH])
-#define martial()	(martial_bonus() || is_bigfoot(youmonst.data) || \
+#define martial()	(martial_bonus() || is_bigfoot(youracedata) || \
 		(uarmf && uarmf->otyp == KICKING_BOOTS))
 
 static NEARDATA struct rm *maploc;
@@ -522,7 +522,7 @@ xchar x, y;
 
 	    You("kick the %s with your bare %s.",
 		corpse_xname(kickobj, TRUE), makeplural(body_part(FOOT)));
-	    if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+	    if (!(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))) {
 			You("turn to stone...");
 			killer_format = KILLED_BY;
 			/* KMH -- otmp should be kickobj */
@@ -716,10 +716,10 @@ dokick()
 	boolean no_kick = FALSE;
 	char buf[BUFSZ];
 
-	if (nolimbs(youmonst.data) || slithy(youmonst.data)) {
+	if (nolimbs(youracedata) || slithy(youracedata)) {
 		You("have no legs to kick with.");
 		no_kick = TRUE;
-	} else if (verysmall(youmonst.data)) {
+	} else if (verysmall(youracedata)) {
 		You("are too small to do any kicking.");
 		no_kick = TRUE;
 #ifdef STEED
@@ -746,7 +746,7 @@ dokick()
 	} else if (near_capacity() > SLT_ENCUMBER) {
 		Your("load is too heavy to balance yourself for a kick.");
 		no_kick = TRUE;
-	} else if (youmonst.data->mlet == S_LIZARD) {
+	} else if (youracedata->mlet == S_LIZARD) {
 		Your("legs cannot kick effectively.");
 		no_kick = TRUE;
 	} else if (u.uinwater && !rn2(2)) {
@@ -844,7 +844,7 @@ dokick()
 		if((Weightless || Levitation) && flags.move) {
 		    int range;
 
-		    range = ((int)youmonst.data->cwt + (weight_cap() + inv_weight()));
+		    range = ((int)youracedata->cwt + (weight_cap() + inv_weight()));
 		    if (range < 1) range = 1; /* divide by zero avoidance */
 		    range = (3*(int)mdat->cwt) / range;
 

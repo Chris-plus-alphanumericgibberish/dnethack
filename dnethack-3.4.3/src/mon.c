@@ -1516,28 +1516,25 @@ int
 max_mon_load(mtmp)
 register struct monst *mtmp;
 {
-	register long maxload;
+	long maxload = MAX_CARR_CAP;
+	long carcap = 25L*(acurrstr((int)(mtmp->mstr)) + mtmp->mcon) + 50L;
 
-	/* Base monster carrying capacity is equal to human maximum
-	 * carrying capacity, or half human maximum if not strong.
-	 * (for a polymorphed player, the value used would be the
-	 * non-polymorphed carrying capacity instead of max/half max).
-	 * This is then modified by the ratio between the monster weights
-	 * and human weights.  Corpseless monsters are given a capacity
-	 * proportional to their size instead of weight.
-	 */
-	if (!mtmp->data->cwt)
-		maxload = (MAX_CARR_CAP * (long)mtmp->data->msize) / MZ_HUMAN;
-	else if (!strongmonst(mtmp->data)
-		|| (strongmonst(mtmp->data) && (mtmp->data->cwt > WT_HUMAN)))
-		maxload = (MAX_CARR_CAP * (long)mtmp->data->cwt) / WT_HUMAN;
-	else	maxload = MAX_CARR_CAP; /*strong monsters w/cwt <= WT_HUMAN*/
 
-	if (!strongmonst(mtmp->data)) maxload /= 2;
+	if (!mtmp->data->cwt){
+		maxload = (maxload * (long)mtmp->data->msize) / MZ_HUMAN;
+		carcap = (carcap * (long)mtmp->data->msize) / MZ_HUMAN;
+	} else if (!strongmonst(mtmp->data)
+		|| (strongmonst(mtmp->data) && (mtmp->data->cwt > WT_HUMAN))
+	){
+		maxload = (maxload * (long)mtmp->data->cwt) / WT_HUMAN;
+		carcap = (carcap * (long)mtmp->data->cwt) / WT_HUMAN;
+	}
 
-	if (maxload < 1) maxload = 1;
+	if (carcap > maxload) carcap = maxload;
 
-	return (int) maxload;
+	if (carcap < 1) carcap = 1;
+
+	return (int) carcap;
 }
 
 boolean
@@ -4411,7 +4408,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 				/* update swallow glyphs for new monster */
 				swallowed(0);
 			}
-		} else if (!sticks(mdat) && !sticks(youmonst.data))
+		} else if (!sticks(mdat) && !sticks(youracedata))
 			unstuck(mtmp);
 	}
 

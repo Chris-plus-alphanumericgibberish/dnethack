@@ -61,7 +61,7 @@ use_saddle(otmp)
 
 
 	/* Can you use it? */
-	if (nohands(youmonst.data)) {
+	if (nohands(youracedata)) {
 		You("have no hands!");	/* not `body_part(HAND)' */
 		return 0;
 	} else if (!freehand()) {
@@ -96,7 +96,7 @@ use_saddle(otmp)
 	    char kbuf[BUFSZ];
 
 	    You("touch %s.", mon_nam(mtmp));
- 	    if (!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+ 	    if (!(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))) {
 		Sprintf(kbuf, "attempting to saddle %s", an(mtmp->data->mname));
 		instapetrify(kbuf);
  	    }
@@ -176,8 +176,8 @@ boolean
 can_ride(mtmp)
 	struct monst *mtmp;
 {
-	return (mtmp->mtame && humanoid(youmonst.data) &&
-			!verysmall(youmonst.data) && !bigmonst(youmonst.data) &&
+	return (mtmp->mtame && humanoid(youracedata) &&
+			!verysmall(youracedata) && !bigmonst(youracedata) &&
 			(!Underwater || is_swimmer(mtmp->data)));
 }
 
@@ -244,8 +244,8 @@ mount_steed(mtmp, force)
 	    return (FALSE);
 	}
 
-	if (Upolyd && (!humanoid(youmonst.data) || verysmall(youmonst.data) ||
-			bigmonst(youmonst.data) || slithy(youmonst.data))) {
+	if (Upolyd && (!humanoid(youracedata) || verysmall(youracedata) ||
+			bigmonst(youracedata) || slithy(youracedata))) {
 	    You("won't fit on a saddle.");
 	    return (FALSE);
 	}
@@ -471,7 +471,7 @@ int forceit;
 			    (distance == min_distance && rn2(2))) {
 			if (i > 0 || (((t = t_at(x, y)) == 0 || !t->tseen) &&
 				      (!boulder_at(x, y) ||
-				       throws_rocks(youmonst.data) || (u.sealsActive&SEAL_YMIR)))) {
+				       throws_rocks(youracedata) || (u.sealsActive&SEAL_YMIR)))) {
 			    spot->x = x;
 			    spot->y = y;
 			    min_distance = distance;
@@ -484,7 +484,7 @@ int forceit;
 
     /* If we didn't find a good spot and forceit is on, try enexto(). */
     if (forceit && min_distance < 0 &&
-		!enexto(spot, u.ux, u.uy, youmonst.data))
+		!enexto(spot, u.ux, u.uy, youracedata))
 	return FALSE;
 
     return found;
@@ -669,7 +669,7 @@ int x, y;
     mon->mx = x, mon->my = y;
     level.monsters[x][y] = mon;
 //	pline("%d",u.umonster); O_o that was a strange series of bugs....
-//	if (opaque(mon->data) && (!mon->minvis || HSee_invisible || ESee_invisible || ((!Race_if(PM_INCANTIFIER) || Upolyd) && perceives(youmonst.data)) ))
+//	if (opaque(mon->data) && (!mon->minvis || HSee_invisible || ESee_invisible || ((!Race_if(PM_INCANTIFIER) || Upolyd) && perceives(youracedata)) ))
 	if (opaque(mon->data) && (!mon->minvis || (u.umonster && See_invisible)))
 		block_point(x,y);
 }

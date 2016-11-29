@@ -1073,6 +1073,7 @@ mdamagem(magr, mdef, mattk)
 	struct permonst *pa = magr->data, *pd = mdef->data;
 	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd);
 	boolean cancelled;
+	boolean phasearmor = FALSE;
 
 	if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
 
@@ -1997,9 +1998,18 @@ physical:{
 			struct trap *ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
 			if (ttmp2) mintrap(mdef);
 		}break;
-	    case AD_ENCH:
-		/* there's no msomearmor() function, so just do damage */
-	     /* if (cancelled) break; */
+	    case AD_ENCH:	/* KMH -- remove enchantment (disenchanter) */
+	    if (!cancelled){
+		    struct obj *obj = some_armor(mdef);
+
+		    if (drain_item(obj) && vis) {
+				pline("%s's %s less effective.", Monnam(mdef), aobjnam(obj, "seem"));
+		    }
+		}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
+		case AD_WET:
+			water_damage(mdef->minvent, FALSE, FALSE, FALSE, mdef);
 		break;
 		case AD_FRWK:{
 			int x, y, i;
@@ -2037,6 +2047,19 @@ physical:{
 	if(tmp && magr->mtame && !mdef->mtame){
 		tmp += beastmastery();
 		if(u.specialSealsActive&SEAL_COSMOS) tmp += spiritDsize();
+	}
+	
+	if(attacktype_fordmg(mdef->data, AT_NONE, AD_STAR)){
+		if(otmp && otmp == MON_WEP(magr) && !otmp->oartifact && otmp->spe <= 0) tmp = 0;
+		else if(!otmp || otmp != MON_WEP(magr)) tmp /= 2;
+	}
+	
+	if(tmp && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
+		int mac = full_marmorac(mdef);
+		if(mac < 0){
+			tmp += AC_VALUE(mac);
+			if(tmp < 1) tmp = 1;
+		}
 	}
 	
 	if((mdef->mhp -= tmp) < 1) {
@@ -2115,7 +2138,7 @@ slept_monst(mon)
 struct monst *mon;
 {
 	if ((mon->msleeping || !mon->mcanmove) && mon == u.ustuck &&
-		!sticks(youmonst.data) && !u.uswallow) {
+		!sticks(youracedata) && !u.uswallow) {
 	    pline("%s grip relaxes.", s_suffix(Monnam(mon)));
 	    unstuck(mon);
 	}
@@ -2290,6 +2313,23 @@ struct attack *mattk;
 			}
 			if(mdef->mtame) initedog(omon);
 		} break;
+	    case AD_STAR:
+			if((otmp && otmp == MON_WEP(magr)) || !hates_silver(magr->data)) {
+            	tmp = 0;
+            } else if (vis) pline("The dress of silver stars sears %s!", mon_nam(magr));
+			if(otmp){
+				if(!otmp->oartifact){
+					if(otmp->where == OBJ_MINVENT && otmp == MON_WEP(otmp->ocarry)){
+						if(otmp->spe > 0) (void) drain_item(otmp);
+						else{
+							setmnotwielded(otmp->ocarry,otmp);
+							MON_NOWEP(otmp->ocarry);
+							m_useup(otmp->ocarry, otmp);
+						}
+					}
+				}
+			}
+		break;
 	    case AD_HLBD:
 //		pline("hp: %d x: %d y: %d", (mon->mhp*100)/mon->mhpmax, mon->mx, mon->my);
 	    if(!mhit) break; //didn't draw blood, forget it.
@@ -2374,7 +2414,7 @@ struct attack *mattk;
 		    pline("%s is suddenly very cold!", Monnam(magr));
 		mdef->mhp += tmp / 2;
 		if (mdef->mhpmax < mdef->mhp) mdef->mhpmax = mdef->mhp;
-		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8) && !is_eladrin(mdef->data))
+		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8) && (mdef->data == &mons[PM_BROWN_MOLD] || mdef->data == &mons[PM_BLUE_JELLY]))
 		    (void)split_mon(mdef, magr);
 		break;
 	    case AD_STUN:

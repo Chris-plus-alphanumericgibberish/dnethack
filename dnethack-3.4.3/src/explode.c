@@ -566,7 +566,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 			/* gas spores */
 				flags.verbose && olet != SCROLL_CLASS)
 			You("are caught in the %s!", str);
-		if(hates_silver(youmonst.data) && silver){
+		if(hates_silver(youracedata) && silver){
 			You("are seared by the %s!", str);
 			damu += rnd(20);
 		}
@@ -776,7 +776,7 @@ struct obj *obj;			/* only scatter this obj        */
 
 				    if (multi) nomul(0, NULL);
 				    hitvalu = 8 + stmp->obj->spe;
-				    if (bigmonst(youmonst.data)) hitvalu++;
+				    if (bigmonst(youracedata)) hitvalu++;
 				    hitu = thitu(hitvalu,
 						 dmgval(stmp->obj, &youmonst, 0),
 						 stmp->obj, (char *)0, FALSE);

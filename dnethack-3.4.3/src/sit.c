@@ -99,7 +99,7 @@ dosit()
 	    /* must be WWalking */
 	    You(sit_message, "lava");
 	    burn_away_slime();
-	    if (likes_lava(youmonst.data)) {
+	    if (likes_lava(youracedata)) {
 		pline_The("lava feels warm.");
 		return 1;
 	    }
@@ -131,7 +131,7 @@ dosit()
 	} else if(IS_SINK(typ)) {
 
 	    You(sit_message, defsyms[S_sink].explanation);
-	    Your("%s gets wet.", humanoid(youmonst.data) ? "rump" : "underside");
+	    Your("%s gets wet.", humanoid(youracedata) ? "rump" : "underside");
 #endif
 	} else if(IS_ALTAR(typ)) {
 
@@ -319,7 +319,7 @@ dosit()
 					break;
 			}
 			} else {
-			if (is_prince(youmonst.data) || Role_if(PM_NOBLEMAN))
+			if (is_prince(youracedata) || Role_if(PM_NOBLEMAN))
 				You_feel("very comfortable here.");
 			else
 				You_feel("somehow out of place...");
@@ -333,7 +333,7 @@ dosit()
 			newsym(u.ux,u.uy);
 			}
 		}
-	} else if (lays_eggs(youmonst.data)) {
+	} else if (lays_eggs(youracedata)) {
 		struct obj *uegg;
 
 		if (!flags.female) {

@@ -466,7 +466,7 @@ doread()
 	} else if(scroll->otyp != SCR_BLANK_PAPER) {
 	  if(Blind)
 	    pline("As you %s the formula on it, the scroll disappears.",
-			is_silent(youmonst.data) ? "cogitate" : "pronounce");
+			is_silent(youracedata) ? "cogitate" : "pronounce");
 	  else
 	    pline("As you read the scroll, it disappears.");
 	  if(confused) {
@@ -474,7 +474,7 @@ doread()
 		pline("Being so trippy, you screw up...");
 	    else{
 			pline("Being confused, you mis%s the magic words...",
-				is_silent(youmonst.data) ? "understand" : "pronounce");
+				is_silent(youracedata) ? "understand" : "pronounce");
 			if(u.sealsActive&SEAL_PAIMON) unbind(SEAL_PAIMON,TRUE);
 		}
 	  }
@@ -1308,7 +1308,7 @@ struct obj	*sobj;
 	    break;
 	case SCR_CONFUSE_MONSTER:
 	case SPE_CONFUSE_MONSTER:
-		if(youmonst.data->mlet != S_HUMAN || sobj->cursed) {
+		if(youracedata->mlet != S_HUMAN || sobj->cursed) {
 			if(!HConfusion) You_feel("confused.");
 			make_confused(HConfusion + rnd(100),FALSE);
 		} else  if(confused) {
@@ -1807,10 +1807,10 @@ struct obj	*sobj;
 		    if (!otmp2) break;
 		    otmp2->quan = confused ? rn1(5,2) : 1;
 		    otmp2->owt = weight(otmp2);
-		    if (!amorphous(youmonst.data) &&
+		    if (!amorphous(youracedata) &&
 				!Passes_walls &&
-				!noncorporeal(youmonst.data) &&
-				!unsolid(youmonst.data)) {
+				!noncorporeal(youracedata) &&
+				!unsolid(youracedata)) {
 			You("are hit by %s!", doname(otmp2));
 			dmg = dmgval(otmp2, &youmonst, 0) * otmp2->quan;
 			if (uarmh && !sobj->cursed) {
@@ -2707,7 +2707,7 @@ register struct obj	*sobj;
 		uball->owt += 160 * (1 + sobj->cursed);
 		return;
 	}
-	if (amorphous(youmonst.data) || is_whirly(youmonst.data) || unsolid(youmonst.data)) {
+	if (amorphous(youracedata) || is_whirly(youracedata) || unsolid(youracedata)) {
 		pline("A ball and chain appears, then falls away.");
 		dropy(mkobj(BALL_CLASS, TRUE));
 		return;

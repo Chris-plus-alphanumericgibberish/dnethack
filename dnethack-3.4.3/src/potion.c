@@ -88,7 +88,7 @@ boolean talk;
 				You("wobble in the saddle.");
 			else
 #endif
-			You("%s...", stagger(youmonst.data, "stagger"));
+			You("%s...", stagger(youracedata, "stagger"));
 		}
 	}
 	if ((!xtime && old) || (xtime && !old)) flags.botl = TRUE;
@@ -188,11 +188,11 @@ boolean talk;
 	} else if (old && !xtime) {
 	    /* clearing temporary blindness without toggling blindness */
 	    if (talk) {
-		if (!haseyes(youmonst.data)) {
+		if (!haseyes(youracedata)) {
 		    strange_feeling((struct obj *)0, (char *)0);
 		} else if (Blindfolded) {
 		    Strcpy(buf, body_part(EYE));
-		    eyecnt = eyecount(youmonst.data);
+		    eyecnt = eyecount(youracedata);
 		    Your(eyemsg, (eyecnt == 1) ? buf : makeplural(buf),
 			 (eyecnt == 1) ? "itches" : "itch");
 		} else {	/* Eyes of the Overworld */
@@ -214,11 +214,11 @@ boolean talk;
 	} else if (!old && xtime) {
 	    /* setting temporary blindness without toggling blindness */
 	    if (talk) {
-		if (!haseyes(youmonst.data)) {
+		if (!haseyes(youracedata)) {
 		    strange_feeling((struct obj *)0, (char *)0);
 		} else if (Blindfolded) {
 		    Strcpy(buf, body_part(EYE));
-		    eyecnt = eyecount(youmonst.data);
+		    eyecnt = eyecount(youracedata);
 		    Your(eyemsg, (eyecnt == 1) ? buf : makeplural(buf),
 			 (eyecnt == 1) ? "twitches" : "twitch");
 		} else {	/* Eyes of the Overworld */
@@ -263,11 +263,11 @@ long mask;	/* nonzero if resistance status should change by mask */
 
 	    /* clearing temporary hallucination without toggling vision */
 	    if (!changed && !HHallucination && old && talk) {
-		if (!haseyes(youmonst.data)) {
+		if (!haseyes(youracedata)) {
 		    strange_feeling((struct obj *)0, (char *)0);
 		} else if (Blind) {
 		    char buf[BUFSZ];
-		    int eyecnt = eyecount(youmonst.data);
+		    int eyecnt = eyecount(youracedata);
 
 		    Strcpy(buf, body_part(EYE));
 		    Your(eyemsg, (eyecnt == 1) ? buf : makeplural(buf),
@@ -474,7 +474,7 @@ peffects(otmp)
 		    if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF)) {
 			You("forget your affinity to %s!",
 					makeplural(mons[u.ulycn].mname));
-			if (youmonst.data == &mons[u.ulycn])
+			if (youracedata == &mons[u.ulycn])
 			    you_unwere(FALSE);
 			u.ulycn = NON_PM;	/* cure lycanthropy */
 		    }
@@ -505,7 +505,7 @@ peffects(otmp)
 				break;
 			}
 			unkn++;
-			if(is_undead(youmonst.data) || is_demon(youmonst.data) ||
+			if(is_undead(youracedata) || is_demon(youracedata) ||
 					u.ualign.type == A_CHAOTIC) {
 				if(otmp->blessed) {
 				pline("This burns like acid!");
@@ -513,7 +513,7 @@ peffects(otmp)
 				if (u.ulycn >= LOW_PM) {
 					Your("affinity to %s disappears!",
 					 makeplural(mons[u.ulycn].mname));
-					if (youmonst.data == &mons[u.ulycn])
+					if (youracedata == &mons[u.ulycn])
 					you_unwere(FALSE);
 					u.ulycn = NON_PM;	/* cure lycanthropy */
 				}
@@ -563,7 +563,7 @@ peffects(otmp)
 				if (u.ulycn >= LOW_PM) {
 					Your("affinity to %s disappears!",
 					 makeplural(mons[u.ulycn].mname));
-					if (youmonst.data == &mons[u.ulycn])
+					if (youracedata == &mons[u.ulycn])
 					you_unwere(FALSE);
 					u.ulycn = NON_PM;	/* cure lycanthropy */
 				}
@@ -959,7 +959,7 @@ as_extra_healing:
 			boolean good_for_you = FALSE;
 
 			if (otmp->lamplit) {
-			    if (likes_fire(youmonst.data)) {
+			    if (likes_fire(youracedata)) {
 				pline("Ahh, a refreshing drink.");
 				healup(d(4 + 2 * bcsign(otmp), 8),
 					   !otmp->cursed ? 1 : 0, !!otmp->blessed, !otmp->cursed);
@@ -1017,7 +1017,7 @@ as_extra_healing:
 				the(xname(otmp)), (otmp->quan == 1L) ? "it" : "one");
 			if (yn_function(buf,ynchars,'n')=='n') return 0;
 		}
-		if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)) || carnivorous(youracedata)) {
+		if (is_vampire(youracedata) || carnivorous(youracedata)) {
 			pline("It smells like %s%s.", 
 					!type_is_pname(&mons[otmp->corpsenm]) ||
 					!(mons[otmp->corpsenm].geno & G_UNIQ) ||
@@ -1213,7 +1213,7 @@ boolean your_fault;
 		}
 		if (touch_petrifies(&mons[mnum])) {
 		    if (!Stone_resistance &&
-			!(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+			!(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))) {
 			if (!Stoned) Stoned = 5;
 			killer_format = KILLED_BY;
 			Sprintf(killer_buf, "%s blood", mons[mnum].mname);
@@ -1540,7 +1540,7 @@ boolean your_fault;
 
 	/* Note: potionbreathe() does its own docall() */
 	if ((distance==0 || ((distance < 3) && rn2(5))) &&
-	    (!breathless(youmonst.data) || haseyes(youmonst.data)))
+	    (!breathless(youracedata) || haseyes(youracedata)))
 		potionbreathe(obj);
 	else if (obj->dknown && !objects[obj->otyp].oc_name_known &&
 		   !objects[obj->otyp].oc_uname && cansee(mon->mx,mon->my))
@@ -1571,10 +1571,10 @@ register struct obj *obj;
 	case POT_RESTORE_ABILITY:
 	case POT_GAIN_ABILITY:
 		if(obj->cursed) {
-		    if (!breathless(youmonst.data))
+		    if (!breathless(youracedata))
 			pline("Ulch!  That potion smells terrible!");
-		    else if (haseyes(youmonst.data)) {
-			int numeyes = eyecount(youmonst.data);
+		    else if (haseyes(youracedata)) {
+			int numeyes = eyecount(youracedata);
 			Your("%s sting%s!",
 			     (numeyes == 1) ? body_part(EYE) : makeplural(body_part(EYE)),
 			     (numeyes == 1) ? "s" : "");
@@ -1705,7 +1705,7 @@ register struct obj *obj;
 		exercise(A_CON, FALSE);
 		break;
 	case POT_BLOOD:
-		if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+		if (is_vampire(youracedata)) {
 		    exercise(A_WIS, FALSE);
 		    You_feel("a sense of loss.");
 		} else
@@ -2473,7 +2473,7 @@ dodip()
 		) {
 			pline("BOOM!  They explode!");
 			exercise(A_STR, FALSE);
-			if (!breathless(youmonst.data) || haseyes(youmonst.data))
+			if (!breathless(youracedata) || haseyes(youracedata))
 				potionbreathe(obj);
 			useup(obj);
 			useup(potion);
@@ -2793,7 +2793,7 @@ dodip()
 		    pline("BOOM! %s explodes!", The(xname(singlegem)));
 			if(obj->otyp == DILITHIUM_CRYSTAL) tele();
 		    exercise(A_STR, FALSE);
-		    if (!breathless(youmonst.data) || haseyes(youmonst.data))
+		    if (!breathless(youracedata) || haseyes(youracedata))
 		      potionbreathe(singlepotion);
 		    useup(singlegem);
 		    useup(singlepotion);

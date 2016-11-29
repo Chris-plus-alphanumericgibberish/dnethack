@@ -153,7 +153,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 		Strcat(buf, "praying ");
 		
 	    if (u.ustuck == mtmp)
-		Strcat(buf, (Upolyd && sticks(youmonst.data)) ?
+		Strcat(buf, (sticks(youracedata)) ?
 			", being held" : ", holding you");
 	    if (mtmp->mleashed)
 		Strcat(buf, ", leashed to you");
@@ -279,7 +279,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 				if(u.specialSealsActive&SEAL_ACERERAK && is_undead((mtmp)->data)) ways_seen++;
 				if(uwep && ((uwep->ovar1 & WARD_THJOFASTAFUR) && 
 					((mtmp)->data->mlet == S_LEPRECHAUN || (mtmp)->data->mlet == S_NYMPH || is_thief((mtmp)->data)))) ways_seen++;
-				if(Upolyd && youmonst.data == &mons[PM_SHARK] && has_blood((mtmp)->data) &&
+				if(youracedata == &mons[PM_SHARK] && has_blood((mtmp)->data) &&
 						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mtmp)->mx, (mtmp)->my)) ways_seen++;
 				if(MATCH_WARN_OF_MON_STRICT(mtmp)){
 					Sprintf(wbuf, "warned of %s",
@@ -311,7 +311,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 					Strcat(monbuf, wbuf);
 					if (ways_seen-- > 1) Strcat(monbuf, ", ");
 					}
-					if(Upolyd && youmonst.data == &mons[PM_SHARK] && has_blood((mtmp)->data) &&
+					if(youracedata == &mons[PM_SHARK] && has_blood((mtmp)->data) &&
 						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mtmp)->mx, (mtmp)->my)){
 					Sprintf(wbuf, "smell blood in the water");
 					Strcat(monbuf, wbuf);

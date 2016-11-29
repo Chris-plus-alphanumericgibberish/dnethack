@@ -542,8 +542,8 @@ drinksink()
 			break;
 		case 4: do {
 				/* use Luck here instead of u.uluck */
-				if (!rn2(13) && ((Luck >= 0 && maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) ||
-				    (Luck <= 0 && !maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))))) {
+				if (!rn2(13) && ((Luck >= 0 && is_vampire(youracedata)) ||
+				    (Luck <= 0 && !is_vampire(youracedata)))) {
 					otmp = mksobj(POT_BLOOD,FALSE,FALSE);
 				} else {
 					otmp = mkobj(POTION_CLASS,FALSE);

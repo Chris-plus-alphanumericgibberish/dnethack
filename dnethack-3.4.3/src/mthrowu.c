@@ -615,7 +615,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			
 		    if (singleobj->oclass == GEM_CLASS &&
 			    singleobj->otyp <= LAST_GEM+9 /* 9 glass colors */
-			    && is_unicorn(youmonst.data)
+			    && is_unicorn(youracedata)
 			) {
 				if (singleobj->otyp > LAST_GEM) {
 					You("catch the %s.", xname(singleobj));
@@ -701,7 +701,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 					    hitv++;
 					if(singleobj->otyp == ELVEN_ARROW) dam++;
 				}
-			    if (bigmonst(youmonst.data)) hitv++;
+			    if (bigmonst(youracedata)) hitv++;
 			    hitv += 4 + mon->m_lev + singleobj->spe;
 			    if (dam < 1) dam = 1;
 				/*FIXME:  incomplete initialization, monsters can't use artifact ranged weapons*/
@@ -797,7 +797,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 						   something,
 						   body_part(FACE));
 				} else if(singleobj->otyp == BLINDING_VENOM) {
-					int num_eyes = eyecount(youmonst.data);
+					int num_eyes = eyecount(youracedata);
 					/* venom in the eyes */
 					if(!Blind) pline_The("venom blinds you.");
 					else Your("%s sting%s.",
@@ -808,7 +808,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 		    }
 		    if (hitu>0 && singleobj->otyp == EGG) {
 				if (!Stone_resistance
-					&& !(poly_when_stoned(youmonst.data) &&
+					&& !(poly_when_stoned(youracedata) &&
 					 polymon(PM_STONE_GOLEM))) {
 					Stoned = 5;
 					killer = (char *) 0;
@@ -1021,7 +1021,7 @@ struct monst *mtmp;
 		if (hitv < -4) hitv = (hitv+4)/2-4;
 		if (hitv < -8) hitv = (hitv+8)*2/3-8;
 		if (hitv < -12) hitv = (hitv+12)*3/4-12;
-	    if (bigmonst(youmonst.data)) hitv++;
+	    if (bigmonst(youracedata)) hitv++;
 	    hitv += 4 + mtmp->m_lev + otmp->spe;
 	    if (dam < 1) dam = 1;
 

@@ -466,7 +466,7 @@ nh_timeout()
 			killer = (u.uburied) ? "suffocation" : "strangulation";
 			done(DIED);
 		}
-	} else if((u.usubwater || is_3dwater(u.ux,u.uy)) && u.divetimer > 0 && !Breathless && !amphibious(youmonst.data)){
+	} else if((u.usubwater || is_3dwater(u.ux,u.uy)) && u.divetimer > 0 && !Breathless && !amphibious(youracedata)){
 		u.divetimer--;
 		if(u.divetimer==3) You("are running short on air.");
 		if(u.divetimer==1) You("are running out of air!");

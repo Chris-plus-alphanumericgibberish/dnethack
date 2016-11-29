@@ -446,7 +446,7 @@ dosounds()
 				}
 			}
 			if(!tmpm){ /*pointer is stale, but still nonzero*/
-				if(youmonst.data == &mons[PM_WOODCHUCK]){
+				if(youracedata == &mons[PM_WOODCHUCK]){
 					You("have an out of body experience."); //You are hallucinating if you got this message
 				}
 			}
@@ -720,10 +720,7 @@ asGuardian:
 	    {
 	    /* vampire messages are varied by tameness, peacefulness, and time of night */
 		boolean isnight = night();
-		boolean kindred = maybe_polyd(u.umonnum == PM_VAMPIRE ||
-				    u.umonnum == PM_VAMPIRE_LORD,
-				    /* DEFERRED u.umonnum == PM_VAMPIRE_MAGE, */
-				    Race_if(PM_VAMPIRE));
+		boolean kindred = is_vampire(youracedata);
 		boolean nightchild = (Upolyd && (u.umonnum == PM_WOLF ||
 				       u.umonnum == PM_WINTER_WOLF ||
 	    			       u.umonnum == PM_WINTER_WOLF_CUB));
@@ -768,11 +765,11 @@ asGuardian:
 	    		};
 			if (kindred)
 			    verbl_msg = "This is my hunting ground that you dare to prowl!";
-			else if (youmonst.data == &mons[PM_SILVER_DRAGON] ||
-				 youmonst.data == &mons[PM_BABY_SILVER_DRAGON]) {
+			else if (youracedata == &mons[PM_SILVER_DRAGON] ||
+				 youracedata == &mons[PM_BABY_SILVER_DRAGON]) {
 			    /* Silver dragons are silver in color, not made of silver */
 			    Sprintf(verbuf, "%s! Your silver sheen does not frighten me!",
-					youmonst.data == &mons[PM_SILVER_DRAGON] ?
+					youracedata == &mons[PM_SILVER_DRAGON] ?
 					"Fool" : "Young Fool");
 			    verbl_msg = verbuf; 
 			} else {
@@ -962,7 +959,7 @@ asGuardian:
 						}
 					}
 				}
-				if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
+				if (nonliving(youracedata) || is_demon(youracedata)) {
 					// You("seem no deader than before.");
 				} else if (!Antimagic && (!mtmp || rn2(mtmp->m_lev) > 12) && !(u.sealsActive&SEAL_OSE || resists_death(&youmonst))) {
 					if (Hallucination) {
@@ -1895,8 +1892,8 @@ dochat()
     register int tx,ty,bindresult;
     struct obj *otmp;
 	
-    if (is_silent(youmonst.data)) {
-		pline("As %s, you cannot speak.", an(youmonst.data->mname));
+    if (is_silent(youracedata)) {
+		pline("As %s, you cannot speak.", an(youracedata->mname));
 		return(0);
     }
     if (Strangled) {
@@ -3337,7 +3334,7 @@ int tx,ty;
 					pline_The("%s blood covers the %s!", urace.adj, surface(tx,ty));
 					change_luck(-2);
 					
-					if (is_demon(youmonst.data)) {
+					if (is_demon(youracedata)) {
 						You("find the idea of sealing a pact with the blood of your own race to be pleasing.");
 						exercise(A_WIS, TRUE);
 						adjalign(5);

@@ -209,7 +209,7 @@ register struct obj *sobj;
 	   adjust message if you have gold in your inventory */
 	if (sobj) {
 		char buf[BUFSZ];
-		if (youmonst.data == &mons[PM_GOLD_GOLEM]) {
+		if (youracedata == &mons[PM_GOLD_GOLEM] || youracedata == &mons[PM_TREASURY_GOLEM]) {
 			Sprintf(buf, "You feel like a million %s!",
 				currency(2L));
 		} else if (hidden_gold() ||

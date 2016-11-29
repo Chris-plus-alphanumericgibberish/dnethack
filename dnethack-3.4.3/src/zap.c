@@ -1862,8 +1862,8 @@ makecorpse:			if (mons[obj->corpsenm].geno &
 		    case GEM_CLASS:	/* rocks & gems */
 			obj = poly_obj(obj, MEATBALL);
 smell:
-			if (herbivorous(youmonst.data) &&
-			    (!carnivorous(youmonst.data) ||
+			if (herbivorous(youracedata) &&
+			    (!carnivorous(youracedata) ||
 			     Role_if(PM_MONK) || !u.uconduct.unvegetarian))
 			    Norep("You smell the odor of meat.");
 			else
@@ -2271,7 +2271,7 @@ boolean ordinary;
 		case SPE_FINGER_OF_DEATH:
 			//Shooting yourself with a death effect while inside a Circle of Acheron doesn't protect you, since the spell originates inside the ward.
 			if(u.sealsActive&SEAL_BUER) unbind(SEAL_BUER,TRUE);
-		    if (nonliving(youmonst.data) || is_demon(youmonst.data) || is_angel(youmonst.data)) {
+		    if (nonliving(youracedata) || is_demon(youracedata) || is_angel(youracedata)) {
 			pline((obj->otyp == WAN_DEATH) ?
 			  "The wand shoots an apparently harmless beam at you."
 			  : "You seem no deader than before.");
@@ -2291,7 +2291,7 @@ boolean ordinary;
 		    done(DIED);
 		    break;
 		case SPE_POISON_SPRAY:
-		    if (nonliving(youmonst.data) || Poison_resistance) {
+		    if (nonliving(youracedata) || Poison_resistance) {
 				You("shoot yourself with an apparently harmless spray of droplets.");
 				break;
 			}
@@ -2308,7 +2308,7 @@ boolean ordinary;
 		    makeknown(WAN_UNDEAD_TURNING);
 		case SPE_TURN_UNDEAD:
 		    (void) unturn_dead(&youmonst);
-		    if (is_undead(youmonst.data)) {
+		    if (is_undead(youracedata)) {
 			You_feel("frightened and %sstunned.",
 			     Stunned ? "even more " : "");
 			make_stunned(HStun + rnd(30), FALSE);
@@ -3827,7 +3827,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 							pline("%s disintegrates.", Monnam(mon));
 							pline("%s body reintegrates before your %s!",
 							  s_suffix(Monnam(mon)),
-							  (eyecount(youmonst.data) == 1) ?
+							  (eyecount(youracedata) == 1) ?
 								body_part(EYE) : makeplural(body_part(EYE)));
 							pline("%s resurrects!", Monnam(mon));
 						}

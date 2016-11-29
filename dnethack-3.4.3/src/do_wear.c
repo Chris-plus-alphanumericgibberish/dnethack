@@ -124,7 +124,7 @@ Boots_on()
 			incr_itimeout(&HFumbling, rnd(20));
 		break;
 	case FLYING_BOOTS:
-		if (!oldprop && !(is_flyer(youmonst.data) || (u.usteed && is_flyer(u.usteed->data))) && !HLevitation) {
+		if (!oldprop && !(is_flyer(youracedata) || (u.usteed && is_flyer(u.usteed->data))) && !HLevitation) {
 			makeknown(uarmf->otyp);
 			float_up();
 			spoteffects(FALSE);
@@ -156,7 +156,7 @@ Boots_off()
 		break;
 	case WATER_WALKING_BOOTS:
 		if (is_pool(u.ux,u.uy) && !Levitation && !Flying &&
-		    !is_clinger(youmonst.data) && !cancelled_don) {
+		    !is_clinger(youracedata) && !cancelled_don) {
 			makeknown(otyp);
 			/* make boots known in case you survive the drowning */
 			spoteffects(TRUE);
@@ -173,7 +173,7 @@ Boots_off()
 			HFumbling = EFumbling = 0;
 		break;
 	case FLYING_BOOTS:
-		if (!oldprop && !is_flyer(youmonst.data) && !(u.usteed && is_flyer(u.usteed->data)) && !Levitation && !cancelled_don) {
+		if (!oldprop && !is_flyer(youracedata) && !(u.usteed && is_flyer(u.usteed->data)) && !Levitation && !cancelled_don) {
 			(void) float_down(0L, 0L);
 			makeknown(otyp);
 		}
@@ -218,7 +218,7 @@ Cloak_on()
 		break;
 	case MUMMY_WRAPPING:
 		/* Note: it's already being worn, so we have to cheat here. */
-		if ((HInvis || EInvis || pm_invisible(youmonst.data)) && !Blind) {
+		if ((HInvis || EInvis || pm_invisible(youracedata)) && !Blind) {
 		    newsym(u.ux,u.uy);
 		    You("can %s!",
 			See_invisible ? "no longer see through yourself"
@@ -248,7 +248,7 @@ Cloak_on()
     const char* cloak_desc = OBJ_DESCR(objects[uarmc->otyp]);
     if (cloak_desc != (char *)0 &&
 	!strcmp(cloak_desc, "opera cloak") &&
-	maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+	is_vampire(youracedata)) {
 		You("%s very impressive in your %s.", Blind ||
 				(Invis && !See_invisible) ? "feel" : "look",
 				OBJ_DESCR(objects[uarmc->otyp]));
@@ -313,7 +313,7 @@ Cloak_off()
     if (cloak_desc != (char *)0 &&
 	!strcmp(cloak_desc, "opera cloak") &&
 	!cancelled_don &&
-	maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+	is_vampire(youracedata)) {
 		ABON(A_CHA) -= 1;
 		flags.botl = 1;
     }
@@ -812,7 +812,7 @@ Amulet_off()
 		    /* HMagical_breathing must be set off
 			before calling drown() */
 		    setworn((struct obj *)0, W_AMUL);
-		    if (!breathless(youmonst.data) && !amphibious(youmonst.data)
+		    if (!breathless(youracedata) && !amphibious(youracedata)
 						&& !Swimming) {
 			You("suddenly inhale an unhealthy amount of water!");
 		    	(void) drown();
@@ -897,7 +897,7 @@ register struct obj *obj;
 #endif
 
 		if (Invis && !oldprop && !HSee_invisible &&
-				!perceives(youmonst.data) && !Blind) {
+				!perceives(youracedata) && !Blind) {
 		    newsym(u.ux,u.uy);
 		    pline("Suddenly you are transparent, but there!");
 		    makeknown(RIN_SEE_INVISIBLE);
@@ -1730,7 +1730,7 @@ doputon()
 
 	if(uleft && (uright || (uarmg && uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER)) && uamul && ublindf) {
 		Your("%s%s are full, and you're already wearing an amulet and %s.",
-			humanoid(youmonst.data) ? "ring-" : "",
+			humanoid(youracedata) ? "ring-" : "",
 			makeplural(body_part(FINGER)),
 			ublindf->otyp==LENSES ? "some lenses" : (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE) ? "a mask" : "a blindfold");
 		return(0);
@@ -1752,13 +1752,13 @@ doputon()
 	if(otmp == uquiver)
 		setuqwep((struct obj *) 0);
 	if(otmp->oclass == RING_CLASS || otmp->otyp == MEAT_RING) {
-		if(nolimbs(youmonst.data)) {
+		if(nolimbs(youracedata)) {
 			You("cannot make the ring stick to your body.");
 			return(0);
 		}
 		if(uleft && (uright || (uarmg && uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER))){
 			There("are no more %s%s to fill.",
-				humanoid(youmonst.data) ? "ring-" : "",
+				humanoid(youracedata) ? "ring-" : "",
 				makeplural(body_part(FINGER)));
 			return(0);
 		}
@@ -1769,7 +1769,7 @@ doputon()
 			char answer;
 
 			Sprintf(qbuf, "Which %s%s, Right or Left?",
-				humanoid(youmonst.data) ? "ring-" : "",
+				humanoid(youracedata) ? "ring-" : "",
 				body_part(FINGER));
 			if(!(answer = yn_function(qbuf, "rl", '\0')))
 				return(0);
@@ -2137,7 +2137,7 @@ glibr()
 	leftfall = (uleft && !uleft->cursed &&
 		    (!uwep || !welded(uwep) || !bimanual(uwep,youracedata)));
 	rightfall = (uright && !uright->cursed && (!welded(uwep)));
-	if (!uarmg && (leftfall || rightfall) && !nolimbs(youmonst.data)) {
+	if (!uarmg && (leftfall || rightfall) && !nolimbs(youracedata)) {
 		/* changed so cursed rings don't fall off, GAN 10/30/86 */
 		Your("%s off your %s.",
 			(leftfall && rightfall) ? "rings slip" : "ring slips",
@@ -2242,7 +2242,7 @@ int otyp;
     if (ring && ring->otyp == otyp) {
 	/* reasons ring can't be removed match those checked by select_off();
 	   limbless case has extra checks because ordinarily it's temporary */
-	if (nolimbs(youmonst.data) &&
+	if (nolimbs(youracedata) &&
 		uamul && uamul->otyp == AMULET_OF_UNCHANGING && uamul->cursed)
 	    return uamul;
 	if (welded(uwep) && (ring == uright || bimanual(uwep,youracedata))) return uwep;
@@ -2275,7 +2275,7 @@ register struct obj *otmp;
 
 	/* special ring checks */
 	if (otmp == uright || otmp == uleft) {
-	    if (nolimbs(youmonst.data)) {
+	    if (nolimbs(youracedata)) {
 		pline_The("ring is stuck.");
 		return 0;
 	    }

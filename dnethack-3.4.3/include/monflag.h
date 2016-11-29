@@ -203,6 +203,14 @@
 #define MG_DEADLY		0x00004000L	/* Monster's corpse is deadly to taste */
 #define MG_TRACKER		0x00008000L	/* Monster can track players by sight or scent (guideline: predators with mv_scent or 'woodsy' inteligent beings) */
 #define MG_NOSPELLCOOLDOWN	0x00010000L	/* Monster can cast spells without depending on or increasing mspec_used */
+#define MG_RBLUNT	0x00020000L	/* Monster takes reduced damage from blunt weapons */
+#define MG_RSLASH	0x00040000L	/* Monster takes reduced damage from slashing weapons */
+#define MG_RPIERCE	0x00080000L	/* Monster takes reduced damage from piercing weapons */
+#define MG_VBLUNT	(MG_RSLASH|MG_RPIERCE)
+#define MG_VSLASH	(MG_RBLUNT|MG_RPIERCE)
+#define MG_VPIERCE	(MG_RSLASH|MG_RBLUNT)
+#define MG_RALL		(MG_RPIERCE|MG_RSLASH|MG_RBLUNT)	/* Monster takes reduced damage from weapons */
+#define MG_WRESIST	0x00100000L	/* Monster takes 1 damage from weapons */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */

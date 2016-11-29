@@ -257,7 +257,7 @@ dowield()
 
 	/* May we attempt this? */
 	multi = 0;
-	if (cantwield(youmonst.data)) {
+	if (cantwield(youracedata)) {
 		pline("Don't be ridiculous!");
 		return(0);
 	}
@@ -315,7 +315,7 @@ doswapweapon()
 
 	/* May we attempt this? */
 	multi = 0;
-	if (cantwield(youmonst.data)) {
+	if (cantwield(youracedata)) {
 		pline("Don't be ridiculous!");
 		return(0);
 	}
@@ -461,7 +461,7 @@ const char *verb;	/* "rub",&c */
 	}
 	return FALSE;
     }
-    if (cantwield(youmonst.data)) {
+    if (cantwield(youracedata)) {
 	You_cant("hold %s strongly enough.", more_than_1 ? "them" : "it");
 	return FALSE;
     }

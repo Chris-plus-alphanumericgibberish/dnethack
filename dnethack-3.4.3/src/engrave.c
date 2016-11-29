@@ -1830,7 +1830,7 @@ doengrave()
 	ebuf[0] = (char)0;
 	post_engr_text[0] = (char)0;
 	maxelen = BUFSZ - 1;
-	if (is_demon(youmonst.data) || youmonst.data->mlet == S_VAMPIRE)
+	if (is_demon(youracedata) || youracedata->mlet == S_VAMPIRE)
 	    type = ENGR_BLOOD;
 
 	/* Can the adventurer engrave at all? */
@@ -1858,7 +1858,7 @@ doengrave()
 		You_cant("write in thin air!");
 		return(0);
 	}
-	if (cantwield(youmonst.data)) {
+	if (cantwield(youracedata)) {
 		You_cant("even hold anything!");
 		return(0);
 	}
@@ -2635,7 +2635,7 @@ doward()
 	ebuf[0] = (char)0;
 	post_engr_text[0] = (char)0;
 	maxelen = BUFSZ - 1;
-	if (is_demon(youmonst.data) || youmonst.data->mlet == S_VAMPIRE)
+	if (is_demon(youracedata) || youracedata->mlet == S_VAMPIRE)
 	    type = ENGR_BLOOD;
 
 	/* Can the adventurer engrave at all? */
@@ -2667,7 +2667,7 @@ doward()
 		You_cant("draw in thin air!");
 		return(0);
 	}
-	if (cantwield(youmonst.data)) {
+	if (cantwield(youracedata)) {
 		You_cant("even hold anything!");
 		return(0);
 	}
@@ -3815,7 +3815,7 @@ doseal()
 	ebuf[0] = (char)0;
 	post_engr_text[0] = (char)0;
 	maxelen = BUFSZ - 1;
-	if (is_demon(youmonst.data) || youmonst.data->mlet == S_VAMPIRE)
+	if (is_demon(youracedata) || youracedata->mlet == S_VAMPIRE)
 	    type = ENGR_BLOOD;
 
 	/* Can the adventurer engrave at all? */
@@ -3847,7 +3847,7 @@ doseal()
 		You_cant("draw in thin air!");
 		return(0);
 	}
-	if (cantwield(youmonst.data)) {
+	if (cantwield(youracedata)) {
 		You_cant("even hold anything!");
 		return(0);
 	}

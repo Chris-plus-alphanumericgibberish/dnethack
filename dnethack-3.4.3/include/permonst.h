@@ -30,7 +30,28 @@ struct attack {
 /*	Weight of a human body
  */
 
+#define WT_TINY	 	 140
+#define WT_HOBBIT	 500
+#define WT_SMALL	 750
+#define WT_ELF		 800
+#define WT_DWARF	 900
 #define WT_HUMAN	1450
+#define WT_MEDIUM	1500
+#define WT_LARGE   	3000
+#define WT_HUGE		4500
+#define WT_DRAGON 	4500
+#define WT_GIGANTIC	9000
+
+#define CN_TINY		 100
+#define CN_GNOME	 100
+#define CN_HOBBIT	 200
+#define CN_SMALL	 200
+#define CN_DWARF	 300
+#define CN_HUMAN	 400
+#define CN_MEDIUM	 400
+#define CN_LARGE	 800
+#define CN_HUGE		1000
+#define CN_GIGANTIC	1500
 
 #ifndef ALIGN_H
 #include "align.h"
@@ -49,7 +70,7 @@ struct permonst {
 	unsigned short	geno;			/* creation/geno mask value */
 	struct	attack	mattk[NATTK];		/* attacks matrix */
 	unsigned short	cwt,			/* weight of corpse */
-			cnutrit;		/* its nutritional value */
+					cnutrit;		/* its nutritional value */
 	short		pxlth;			/* length of extension */
 	uchar		msound;			/* noise it makes (6 bits) */
 	uchar		msize;			/* physical size (3 bits) */

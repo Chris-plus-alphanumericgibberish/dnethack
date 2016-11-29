@@ -703,7 +703,7 @@ boolean fleemsg;
 	if (u.ustuck == mtmp) {
 	    if (u.uswallow)
 		expels(mtmp, mtmp->data, TRUE);
-	    else if (!sticks(youmonst.data)) {
+	    else if (!sticks(youracedata)) {
 		unstuck(mtmp);	/* monster lets go when fleeing */
 		You("get released!");
 	    }
@@ -1027,7 +1027,7 @@ register struct monst *mtmp;
 			pline("%s whispers at thin air.",
 			    cansee(mtmp->mux, mtmp->muy) ? Monnam(mtmp) : "It");
 
-			if (is_demon(youmonst.data)) {
+			if (is_demon(youracedata)) {
 			  /* "Good hunting, brother" */
 			    if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);
 			} else {
@@ -1370,7 +1370,7 @@ boolean
 itsstuck(mtmp)
 register struct monst *mtmp;
 {
-	if (sticks(youmonst.data) && mtmp==u.ustuck && !u.uswallow) {
+	if (sticks(youracedata) && mtmp==u.ustuck && !u.uswallow) {
 		pline("%s cannot escape from you!", Monnam(mtmp));
 		return(TRUE);
 	}
@@ -1565,7 +1565,7 @@ not_special:
 	) {
 	    boolean in_line = lined_up(mtmp) &&
 		(distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <=
-		    (throws_rocks(youmonst.data) ? 20 : ACURRSTR/2+1)
+		    (throws_rocks(youracedata) ? 20 : ACURRSTR/2+1)
 		);
 
 	    if (appr == 0 || !in_line) {

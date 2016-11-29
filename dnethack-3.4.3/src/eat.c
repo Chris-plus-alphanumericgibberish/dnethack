@@ -234,7 +234,7 @@ register struct obj *obj;
 	/* [ALI] (fully) drained food is not presented as an option,
 	 * but partly eaten food is (even though you can't drain it).
 	 */
-	if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)))
+	if (is_vampire(youracedata))
 		return (boolean)(obj->otyp == CORPSE &&
 		  has_blood(&mons[obj->corpsenm]) && (!obj->odrained ||
 		  obj->oeaten > drainlevel(obj)));
@@ -596,8 +596,7 @@ eatfood()		/* called each move during eating process */
 		do_reset_eat();
 		return(0);
 	}
-	if (maybe_polyd(is_vampire(youmonst.data), 
-			Race_if(PM_VAMPIRE)) != victual.piece->odrained) {
+	if (is_vampire(youracedata) != victual.piece->odrained) {
 	    /* Polymorphed while eating/draining */
 	    do_reset_eat();
 	    return(0);
@@ -726,7 +725,7 @@ BOOLEAN_P bld, nobadeffects;
 	    case PM_GREEN_SLIME:
 	    case PM_FLUX_SLIME:
 		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youracedata) &&
-			youmonst.data != &mons[PM_GREEN_SLIME]) {
+			youracedata != &mons[PM_GREEN_SLIME]) {
 		    You("don't feel very well.");
 		    Slimed = 10L;
 		    flags.botl = 1;
@@ -1862,8 +1861,7 @@ rottenfood(obj)
 struct obj *obj;
 {
 	pline("Blecch!  Rotten %s!",
-		maybe_polyd(is_vampire(youmonst.data),
-			Race_if(PM_VAMPIRE)) ? "blood" : foodword(obj));
+		is_vampire(youracedata) ? "blood" : foodword(obj));
 	if(!rn2(4)) {
 		if (Hallucination) You_feel("rather trippy.");
 		else You_feel("rather %s.", body_part(LIGHT_HEADED));
@@ -1935,7 +1933,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	 * Thus happens before the conduct checks intentionally - should it be after?
 	 * Blood is assumed to be meat and flesh.
 	 */
-	if (maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) {
+	if (is_vampire(youracedata)) {
 	    /* oeaten is set up by touchfood */
 	    if (otmp->odrained ? otmp->oeaten <= drainlevel(otmp) :
 	      otmp->oeaten < mons[otmp->corpsenm].cnutrit) {
@@ -2062,7 +2060,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 			if (otmp->odrained && otmp->oeaten < drainlevel(otmp))
 				otmp->oeaten = drainlevel(otmp);
 		}
-	} else if (maybe_polyd(!is_vampire(youmonst.data), !Race_if(PM_VAMPIRE))) {
+	} else if (!is_vampire(youracedata)) {
 		if(is_rat(&mons[mnum]) && Race_if(PM_DWARF)){
 			if(u.uconduct.ratseaten<SIZE(eatrat)) pline("%s", eatrat[u.uconduct.ratseaten++]);
 			else{
@@ -3553,8 +3551,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	/* [ALI] Hero polymorphed in the meantime.
 	 */
 	if (otmp == victual.piece &&
-	  maybe_polyd(is_vampire(youmonst.data), 
-	  Race_if(PM_VAMPIRE)) != otmp->odrained)
+	  is_vampire(youracedata) != otmp->odrained)
 	    victual.piece = (struct obj *)0;	/* Can't resume */
 
 	/* [ALI] Blood can coagulate during the interruption
@@ -3750,15 +3747,14 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 		if(u.uhs == HUNGRY) hungermod *= 2;
 		else if(u.uhs < HUNGRY) hungermod *=5;
 	}
-	if(maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE)))
+	if(is_vampire(youracedata))
 		hungermod *= (maybe_polyd(youmonst.data->mlevel, u.ulevel)/10 + 1);
 	
-	if ((carnivorous(youracedata) 
+	if ((carnivorous(youracedata)
 		|| herbivorous(youracedata)
 		|| magivorous(youracedata)
 		|| Race_if(PM_INCANTIFIER)
-		|| maybe_polyd(is_vampire(youracedata), 
-						Race_if(PM_VAMPIRE)))
+		|| is_vampire(youracedata))
 		&& !(moves % hungermod)
 		&& !( (Slow_digestion && !Race_if(PM_INCANTIFIER)) ||
 				(uclockwork) ))
@@ -3783,7 +3779,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	}
 	if (moves % 2) {	/* odd turns */
 	    /* Regeneration uses up food, unless due to an artifact */
-	    if ( (HRegeneration && !maybe_polyd(is_vampire(youmonst.data), Race_if(PM_VAMPIRE))) || ((ERegeneration & (~W_ART)) &&
+	    if ( (HRegeneration && !is_vampire(youracedata)) || ((ERegeneration & (~W_ART)) &&
 				(ERegeneration != W_WEP || !uwep->oartifact) &&
 				(ERegeneration != W_ARMS || !uarms->oartifact) 
 				))

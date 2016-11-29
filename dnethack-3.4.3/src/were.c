@@ -90,8 +90,8 @@ int pm;
 		case PM_COTERIE_OF_MOTES: return(PM_QUEEN_MAB);
 		case PM_KETO:			  return(PM_ANCIENT_TEMPEST);
 		case PM_ANCIENT_TEMPEST:  return(PM_KETO);
-		case PM_TULANI_QUEEN:	  return(PM_ETERNAL_LIGHT);
-		case PM_ETERNAL_LIGHT:	  return(PM_TULANI_QUEEN);
+		case PM_QUEEN_OF_STARS:	  return(PM_ETERNAL_LIGHT);
+		case PM_ETERNAL_LIGHT:	  return(PM_QUEEN_OF_STARS);
 		case PM_ALRUNES:		  return(PM_HATEFUL_WHISPERS);
 		case PM_HATEFUL_WHISPERS: return(PM_ALRUNES);
 		
