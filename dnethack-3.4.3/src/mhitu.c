@@ -2259,7 +2259,7 @@ dopois:
 			    (flags.moonphase == NEW_MOON && !have_lizard())) {
  do_stone:
 			    if (!Stoned && !Stone_resistance
-				    && !(poly_when_stoned(youmonst.data) &&
+				    && !(poly_when_stoned(youracedata) &&
 					polymon(PM_STONE_GOLEM))) {
 				Stoned = 5;
 				delayed_killer = mtmp->data->mname;

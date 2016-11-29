@@ -415,7 +415,7 @@ register struct monst *mtmp;
 	if (mtmp->mundetected)	  Strcat(info, ", concealed");
 	if (mtmp->minvis)	  Strcat(info, ", invisible");
 	if (mtmp == u.ustuck)	  Strcat(info,
-			(sticks(youmonst.data)) ? ", held by you" :
+			(sticks(youracedata)) ? ", held by you" :
 				u.uswallow ? (is_animal(u.ustuck->data) ?
 				", swallowed you" :
 				", engulfed you") :
@@ -464,7 +464,7 @@ ustatusline()
 	    Strcat(info, ", blind");
 	    if (u.ucreamed) {
 		if ((long)u.ucreamed < Blinded || Blindfolded
-						|| !haseyes(youmonst.data))
+						|| !haseyes(youracedata))
 		    Strcat(info, ", cover");
 		Strcat(info, "ed by sticky goop");
 	    }	/* note: "goop" == "glop"; variation is intentional */
@@ -487,7 +487,7 @@ ustatusline()
 	if (u.uundetected)	Strcat(info, ", concealed");
 	if (Invis)		Strcat(info, ", invisible");
 	if (u.ustuck) {
-	    if (sticks(youmonst.data))
+	    if (sticks(youracedata))
 		Strcat(info, ", holding ");
 	    else
 		Strcat(info, ", held by ");
