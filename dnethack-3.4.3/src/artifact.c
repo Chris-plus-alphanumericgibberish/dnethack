@@ -4,6 +4,8 @@
 
 #include "hack.h"
 #include "artifact.h"
+#include "emin.h"
+#include "epri.h"
 #ifdef OVLB
 #include "artilist.h"
 #else
@@ -968,7 +970,7 @@ touch_artifact(obj,mon)
     struct monst *mon;
 {
     register const struct artifact *oart = get_artifact(obj);
-    boolean badclass, badalign, self_willed, yours, forceEvade = FALSE;
+    boolean badclass=0, badalign=0, self_willed=0, yours, forceEvade = FALSE;
 
     if(!oart) return 1;
 
@@ -1026,14 +1028,34 @@ touch_artifact(obj,mon)
 	} else if (!is_covetous(mon->data) && !is_mplayer(mon->data)) {
 		if(oart->otyp != UNICORN_HORN){
 			badclass = self_willed &&
-				   oart->role != NON_PM && !(oart == &artilist[ART_EXCALIBUR]
-				   || oart == &artilist[ART_CLARENT]);
-			badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
-			   (oart->alignment != sgn(mon->data->maligntyp));
+				   ((oart->role != NON_PM && &mons[oart->role] != mon->data && 
+				   !(oart == &artilist[ART_EXCALIBUR] || oart == &artilist[ART_CLARENT]))
+				   ||
+				   (oart->race != NON_PM && ((mons[oart->race].mflagsa & mon->data->mflagsa) == 0)));
+			if(mon->isminion && (mon->data == &mons[PM_ALIGNED_PRIEST]
+				|| mon->data == &mons[PM_ANGEL])
+			){
+				badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
+				   (oart->alignment != sgn(EPRI(mon)->shralign));
+			} else if(mon->isminion){
+				badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
+				   (oart->alignment != sgn(EMIN(mon)->min_align));
+			} else {
+				badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
+				   (oart->alignment != sgn(mon->data->maligntyp));
+			}
 		}
 		else{/* Unicorn horns */
 			badclass = TRUE;
-			badalign = oart->alignment != A_NONE && (oart->alignment != sgn(mon->data->maligntyp));
+			if(mon->isminion && (mon->data == &mons[PM_ALIGNED_PRIEST]
+				|| mon->data == &mons[PM_ANGEL])
+			){
+				badalign = oart->alignment != A_NONE && (oart->alignment != sgn(EPRI(mon)->shralign));
+			} else if(mon->isminion){
+				badalign = oart->alignment != A_NONE && (oart->alignment != sgn(EMIN(mon)->min_align));
+			} else {
+				badalign = oart->alignment != A_NONE && (oart->alignment != sgn(mon->data->maligntyp));
+			}
 		}
     } else {    /* an M3_WANTSxxx monster or a fake player */
 		/* special monsters trying to take the Amulet, invocation tools or
