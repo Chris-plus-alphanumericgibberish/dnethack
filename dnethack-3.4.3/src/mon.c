@@ -1689,7 +1689,6 @@ mon_can_see_you(looker)
 {
 	boolean catsightdark = !(levl[looker->mx][looker->my].lit || (viz_array[looker->my][looker->mx]&TEMP_LIT1 && !(viz_array[looker->my][looker->mx]&TEMP_DRK1)));
 	
-	if(distmin(looker->mx,looker->my,u.ux,u.uy) <= 1 && !rn2(8)) return TRUE;
 	
 	if(looker->data == &mons[PM_DREADBLOSSOM_SWARM]){
 		if(youracedata == &mons[PM_DREADBLOSSOM_SWARM]) return FALSE;
@@ -1709,6 +1708,10 @@ mon_can_see_you(looker)
 		if(mon_can_see_you(keto)) return TRUE;
 		//may still be able to feel target adjacent
 	}
+	
+	if(Aggravate_monster) return TRUE;
+	
+	if(distmin(looker->mx,looker->my,u.ux,u.uy) <= 1 && !rn2(8)) return TRUE;
 	
 	if((darksight(looker->data) || (catsight(looker->data) && catsightdark)) && !is_blind(looker)){
 		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
