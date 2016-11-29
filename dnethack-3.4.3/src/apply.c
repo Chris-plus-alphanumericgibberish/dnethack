@@ -1843,7 +1843,7 @@ STATIC_OVL void
 use_tinning_kit(obj)
 register struct obj *obj;
 {
-	register struct obj *corpse, *can;
+	register struct obj *corpse, *can, *bld;
 
 	/* This takes only 1 move.  If this is to be changed to take many
 	 * moves, we've got to deal with decaying corpses...
@@ -1886,23 +1886,34 @@ register struct obj *obj;
 		return;
 	}
 	consume_obj_charge(obj, TRUE);
-	if((Race_if(PM_VAMPIRE) || Race_if(PM_INCANTIFIER) || 
-		Race_if(PM_CLOCKWORK_AUTOMATON)) 
-				&& mons[corpse->corpsenm].cnutrit 
-				&& !(mvitals[corpse->corpsenm].mvflags & G_NOCORPSE)
-				&& has_blood(&mons[corpse->corpsenm])
-		){
-		if ((can = mksobj(POT_BLOOD, FALSE, FALSE)) != 0) {
-			static const char you_buy_it[] = "You bottle it, you bought it!";
-			
+	if(!(Race_if(PM_VAMPIRE) || Race_if(PM_INCANTIFIER) || 
+			Race_if(PM_CLOCKWORK_AUTOMATON))
+		|| yn("This corpse does not have blood. Tin it?") == 'y'
+	){
+		if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
+			static const char you_buy_it[] = "You tin it, you bought it!";
+
 			can->corpsenm = corpse->corpsenm;
 			can->cursed = obj->cursed;
 			can->blessed = obj->blessed;
+			can->owt = weight(can);
 			can->known = 1;
+			can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
+			if(mons[corpse->corpsenm].cnutrit 
+				&& !(mvitals[corpse->corpsenm].mvflags & G_NOCORPSE)
+				&& has_blood(&mons[corpse->corpsenm])
+			){
+				if ((bld = mksobj(POT_BLOOD, FALSE, FALSE)) != 0) {
+					bld->corpsenm = corpse->corpsenm;
+					bld->cursed = obj->cursed;
+					bld->blessed = obj->blessed;
+					bld->known = 1;
+				}
+			}
 			if (carried(corpse)) {
-				if (corpse->unpaid)
-					verbalize(you_buy_it);
-				useup(corpse);
+			if (corpse->unpaid)
+				verbalize(you_buy_it);
+			useup(corpse);
 			} else {
 			if (costly_spot(corpse->ox, corpse->oy) && !corpse->no_charge)
 				verbalize(you_buy_it);
@@ -1910,34 +1921,9 @@ register struct obj *obj;
 			}
 			can = hold_another_object(can, "You make, but cannot pick up, %s.",
 						  doname(can), (const char *)0);
-		} else impossible("Bottling failed.");
-	} else{
-		if(!(Race_if(PM_VAMPIRE) || Race_if(PM_INCANTIFIER) || 
-				Race_if(PM_CLOCKWORK_AUTOMATON))
-			|| yn("This corpse does not have blood. Tin it?") == 'y'
-		){
-			if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
-				static const char you_buy_it[] = "You tin it, you bought it!";
-
-				can->corpsenm = corpse->corpsenm;
-				can->cursed = obj->cursed;
-				can->blessed = obj->blessed;
-				can->owt = weight(can);
-				can->known = 1;
-				can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
-				if (carried(corpse)) {
-				if (corpse->unpaid)
-					verbalize(you_buy_it);
-				useup(corpse);
-				} else {
-				if (costly_spot(corpse->ox, corpse->oy) && !corpse->no_charge)
-					verbalize(you_buy_it);
-				useupf(corpse, 1L);
-				}
-				can = hold_another_object(can, "You make, but cannot pick up, %s.",
-							  doname(can), (const char *)0);
-			} else impossible("Tinning failed.");
-		}
+			bld = hold_another_object(bld, "You make, but cannot pick up, %s.",
+						  doname(bld), (const char *)0);
+		} else impossible("Tinning failed.");
 	}
 }
 
