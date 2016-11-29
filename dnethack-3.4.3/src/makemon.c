@@ -1196,7 +1196,7 @@ register struct monst *mtmp;
 				} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && mm == PM_ELVENKING){ /* Give the elvenking in the quest a special setup */
 					otmp = mksobj(LIGHTSABER, TRUE, FALSE);
 					otmp->spe = 3;
-					otmp->ovar1 = !rn2(3) ? 2L : rn2(2) ? 21L : 22L;
+					otmp->ovar1 = !rn2(4) ? 2L : !rn2(3) ? 9L : rn2(2) ? 21L : 22L;
 					otmp->cobj->otyp = !rn2(3) ? EMERALD : rn2(2) ? GREEN_FLUORITE : JADE;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
@@ -2619,17 +2619,46 @@ register struct monst *mtmp;
 				otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 0;
 				otmp->blessed = FALSE;
 				otmp->cursed = 1;
+				otmp->objsize = mm==PM_MASTER_MIND_FLAYER ? MZ_LARGE : MZ_MEDIUM;
+				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
 				
 				otmp = mksobj(SCALE_MAIL, TRUE, FALSE);
 				otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 1;
 				otmp->blessed = FALSE;
 				otmp->cursed = TRUE;
+				otmp->objsize = mm==PM_MASTER_MIND_FLAYER ? MZ_LARGE : MZ_MEDIUM;
+				otmp->oerodeproof = TRUE;
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(LEATHER_HELM, TRUE, FALSE);
+				otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 1;
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				otmp->objsize = mm==PM_MASTER_MIND_FLAYER ? MZ_LARGE : MZ_MEDIUM;
+				otmp->oerodeproof = TRUE;
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(GLOVES, TRUE, FALSE);
+				otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 1;
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				otmp->objsize = mm==PM_MASTER_MIND_FLAYER ? MZ_LARGE : MZ_MEDIUM;
+				otmp->oerodeproof = TRUE;
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
+				otmp->spe = mm==PM_MASTER_MIND_FLAYER ? 4 : 1;
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				otmp->objsize = mm==PM_MASTER_MIND_FLAYER ? MZ_LARGE : MZ_MEDIUM;
+				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
 				
 				otmp = mksobj(OILSKIN_CLOAK, TRUE, FALSE);
 				otmp->blessed = FALSE;
 				otmp->cursed = TRUE;
+				otmp->objsize = mm==PM_MASTER_MIND_FLAYER ? MZ_LARGE : MZ_MEDIUM;
 				(void) mpickobj(mtmp, otmp);
 				
 				(void) mongets(mtmp, rnd_attack_wand(mtmp));
@@ -2648,6 +2677,7 @@ register struct monst *mtmp;
 					otmp = mksobj(DOUBLE_LIGHTSABER, TRUE, FALSE);
 					otmp->oerodeproof = 1;
 					otmp->spe = 4;
+					otmp->cobj->otyp = !rn2(3) ? RUBY : rn2(2) ? GREEN_FLUORITE : JADE+3/*Red glass*/;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					(void) mpickobj(mtmp, otmp);
@@ -2656,17 +2686,21 @@ register struct monst *mtmp;
 					otmp->spe = 4;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
+					otmp->objsize = MZ_LARGE;
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(HIGH_BOOTS, TRUE, FALSE);
 					otmp->spe = 4;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
+					otmp->objsize = MZ_LARGE;
 					(void) mpickobj(mtmp, otmp);
 				} else {
 					otmp = mksobj(LIGHTSABER, TRUE, FALSE);
 					otmp->oerodeproof = 1;
 					otmp->spe = 1;
+					otmp->ovar1 = !rn2(4) ? 6L : !rn2(3) ? 10L : rn2(2) ? 35L : 37L;
+					otmp->cobj->otyp = !rn2(3) ? RUBY : rn2(2) ? GREEN_FLUORITE : JADE+3/*Red glass*/;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					(void) mpickobj(mtmp, otmp);
@@ -2684,6 +2718,11 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				}
 			} else {
+				mongets(mtmp, QUARTERSTAFF);
+				mongets(mtmp, LEATHER_CLOAK);
+				mongets(mtmp, GLOVES);
+				mongets(mtmp, HIGH_BOOTS);
+				mongets(mtmp, LEATHER_HELM);
 				if(mm == PM_MASTER_MIND_FLAYER && !rn2(3)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
 				else if(mm == PM_MIND_FLAYER && !rn2(20)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
 			}
