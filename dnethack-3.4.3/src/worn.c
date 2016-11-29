@@ -551,7 +551,7 @@ struct monst *mon;
 	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
 	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
 		if(mwep){
-			base += base*10;
+			base += AC_VALUE(base*10);
 		}
 	}
 	
