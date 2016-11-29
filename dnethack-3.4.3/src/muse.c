@@ -1418,6 +1418,9 @@ struct monst *mtmp;
 			mtmp->mx, mtmp->my,
 			sgn(tbx), sgn(tby),0,0);
 		m_using = FALSE;
+		if(u.ux != mtmp->mux || u.uy != mtmp->muy){
+			mtmp->mux = mtmp->muy = 0;
+		}
 		return (mtmp->mhp <= 0) ? 1 : 2;
 	case MUSE_FIRE_HORN:
 	case MUSE_FROST_HORN:
@@ -1432,6 +1435,9 @@ struct monst *mtmp;
 			rn1(6,6), mtmp->mx, mtmp->my,
 			sgn(tbx), sgn(tby),0,0);
 		m_using = FALSE;
+		if(u.ux != mtmp->mux || u.uy != mtmp->muy){
+			mtmp->mux = mtmp->muy = 0;
+		}
 		return (mtmp->mhp <= 0) ? 1 : 2;
 	case MUSE_WAN_TELEPORTATION:
 	case MUSE_WAN_STRIKING:
@@ -1443,6 +1449,9 @@ struct monst *mtmp;
 		m_using = TRUE;
 		mbhit(mtmp,rn1(8,6),mbhitm,bhito,otmp);
 		m_using = FALSE;
+		if(u.ux != mtmp->mux || u.uy != mtmp->muy){
+			mtmp->mux = mtmp->muy = 0;
+		}
 		return 2;
 	case MUSE_SCR_EARTH:
 	    {
@@ -1637,6 +1646,9 @@ struct monst *mtmp;
 		m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
 			distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy), otmp,
 			TRUE);
+		if(u.ux != mtmp->mux || u.uy != mtmp->muy){
+			mtmp->mux = mtmp->muy = 0;
+		}
 		return 2;
 	case 0: return 0; /* i.e. an exploded wand */
 	default: impossible("%s wanted to perform action %d?", Monnam(mtmp),
