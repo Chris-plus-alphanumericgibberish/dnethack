@@ -3134,18 +3134,69 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 					  The(distant_name(otmp, xname)),
 					  mon_nam(mdef));
 			}
-			if (mdef->m_lev == 0) {
-				if(youattack) killed(mdef);
-				else monkilled(mdef, (const char *)0, AD_PHYS);
-				
-				if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
+			if(otmp->oartifact == ART_STORMBRINGER && dieroll <= 2){
+				*dmgptr += 8;
+				int leveldrain = *dmgptr/4;
+				if(!is_silent(mdef->data)) pline("%s cries out in pain and despair and terror.", Monnam(mdef));
+				if(*dmgptr > mdef->mhpmax-1){
+					if ((mdef->mhpmax-1)/2){
+						if(youattack) healup((mdef->mhpmax-1)/2, 0, FALSE, FALSE);
+						else {
+							magr->mhp += (mdef->mhpmax-1)/2;
+							if(magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+						}
+					}
+					mdef->mhpmax = 1;
+				} else {
+					if ((*dmgptr)/2){
+						if(youattack) healup((*dmgptr)/2, 0, FALSE, FALSE);
+						else {
+							magr->mhp += (*dmgptr)/2;
+							if(magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+						}
+					}
+					mdef->mhpmax -= *dmgptr;
+				}
+				if(mdef->m_lev < leveldrain){
+					mdef->m_lev = 0;
+					if(youattack) killed(mdef);
+					else monkilled(mdef, (const char *)0, AD_PHYS);
+					
+					if(youattack) healup(4, 0, FALSE, FALSE);
+					else {
+						magr->mhp += 4;
+						if(magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+					}
+					
+					if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
+				}
 			} else {
-				int drain = rnd(8);
-				*dmgptr += drain;
-				mdef->mhpmax -= drain;
-				mdef->m_lev--;
-				drain /= 2;
-				if (drain) healup(drain, 0, FALSE, FALSE);
+				if (mdef->m_lev == 0) {
+					if(youattack) killed(mdef);
+					else monkilled(mdef, (const char *)0, AD_PHYS);
+					
+					if(youattack) healup(4, 0, FALSE, FALSE);
+					else {
+						magr->mhp += 4;
+						if(magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+					}
+					
+					if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
+				} else {
+					int drain = rnd(8);
+					if(drain > mdef->mhpmax-1) drain = mdef->mhpmax-1;
+					*dmgptr += drain;
+					mdef->mhpmax -= drain;
+					mdef->m_lev--;
+					drain /= 2;
+					if (drain){
+						if(youattack) healup(drain, 0, FALSE, FALSE);
+						else {
+							magr->mhp += drain;
+							if(magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+						}
+					}
+				}
 			}
 			messaged = vis;
 		} else { /* youdefend */
@@ -3161,6 +3212,18 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			else
 				pline("%s drains your life!",
 					  The(distant_name(otmp, xname)));
+			if(otmp->oartifact == ART_STORMBRINGER && dieroll <= 2){
+				int drains = (*dmgptr)/4+1;
+				*dmgptr = 1; /*Scratch damage; main damage delt by losexp*/
+				for(drains; drains > 0; drains--){
+					losexp("life drainage",FALSE,FALSE,FALSE);
+					if (magr && magr->mhp < magr->mhpmax) {
+						magr->mhp += (oldhpmax - u.uhpmax)/2;
+						if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+					}
+					oldhpmax = u.uhpmax;
+				}
+			}
 			losexp("life drainage",TRUE,FALSE,FALSE);
 			if (magr && magr->mhp < magr->mhpmax) {
 				magr->mhp += (oldhpmax - u.uhpmax)/2;
