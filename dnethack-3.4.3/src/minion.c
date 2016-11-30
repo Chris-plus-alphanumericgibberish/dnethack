@@ -66,19 +66,10 @@ struct monst *mon;
 	    dtype = (is_lord(ptr) && !rn2(20)) ? clord() : cminion();
 	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
 	} else if (ptr == &mons[PM_ANGEL]) {
-	    /* non-lawful angels can also summon */
-	    if (!rn2(6)) {
-		switch (atyp) { /* see summon_minion */
-		case A_NEUTRAL:
-		    dtype = PM_AIR_ELEMENTAL + rn2(8);
-		    break;
-		case A_CHAOTIC:
-		case A_NONE:
-		    dtype = ndemon(atyp);
-		    break;
-		}
+	    if (rn2(6)) {
+			(void) summon_god_minion(align_gname_full(atyp), atyp, FALSE);
 	    } else {
-		dtype = PM_ANGEL;
+			dtype = PM_ANGEL;
 	    }
 	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
 	}
