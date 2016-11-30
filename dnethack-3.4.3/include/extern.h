@@ -2003,6 +2003,7 @@ E int FDECL(randrace, (int));
 E int FDECL(randgend, (int, int));
 E int FDECL(randalign, (int, int));
 E const int * FDECL(god_minions, (const char *));
+E int FDECL(god_faction, (const char *));
 E struct monst * FDECL(god_priest, (const char *, int, int, boolean));
 E int FDECL(str2role, (char *));
 E const struct Role *FDECL(pm2role, (int));

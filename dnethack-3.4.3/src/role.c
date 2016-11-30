@@ -1197,6 +1197,25 @@ god_minions(gptr)
 	return Cdemons;
 }
 
+int
+god_faction(gptr)
+	const char *gptr;
+{
+	if(gptr == DrowMaleLgodKnown || gptr == DrowMaleLgodUknwn) return EDDER_SYMBOL;
+	if(gptr == DrowMaleNgod) return MAGTHERE;
+	if(gptr == DrowMaleCgod) return LOLTH_SYMBOL;
+	
+	if(gptr == DrowNobMaleNgod) return MAGTHERE;
+	if(gptr == DrowNobMaleCgod) return GHAUNADAUR_SYMBOL;
+	
+	if(gptr == DrowFemaleLgod) return EILISTRAEE_SYMBOL;
+	if(gptr == DrowNobFemaleLgod) return VER_TAS_SYMBOL;
+	if(gptr == DrowFemaleNgod) return KIARANSALEE_SYMBOL;
+	if(gptr == DrowFemaleCgod) return LOLTH_SYMBOL;
+	
+	return 0;
+}
+
 struct monst *
 god_priest(gptr, sx, sy, sanctum)
 	int sx, sy;
