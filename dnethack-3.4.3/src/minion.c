@@ -53,16 +53,16 @@ struct monst *mon;
 		if(is_keter(mon->data)){
 			dtype = PM_MALKUTH_SEPHIRAH;
 			cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
-		} else {
+		} else if(In_endgame(&u.uz)){
 			dtype = (is_lord(ptr) && !rn2(20)) ? llord() :
 				 (is_lord(ptr) || (mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? lminion() : monsndx(ptr);
 			cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
 		}
-	} else if (is_nminion(mon)) {
+	} else if (is_nminion(mon) && In_endgame(&u.uz)) {
 	    dtype = (is_lord(ptr) && !rn2(20)) ? nlord() :
 		     (is_lord(ptr) || (mons[monsndx(ptr)].geno & G_UNIQ) || !rn2(6)) ? nminion() : monsndx(ptr);
 	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
-	} else if (is_cminion(mon)) {
+	} else if (is_cminion(mon) && In_endgame(&u.uz)) {
 	    dtype = (is_lord(ptr) && !rn2(20)) ? clord() : cminion();
 	    cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
 	} else if (ptr == &mons[PM_ANGEL]) {
