@@ -90,8 +90,10 @@ struct monst *mon;
 	while (cnt > 0) {
 	    mtmp = makemon(&mons[dtype], u.ux, u.uy, NO_MM_FLAGS);
 	    if (mtmp && (dtype == PM_ANGEL)) {
-		/* alignment should match the summoner */
-		EPRI(mtmp)->shralign = atyp;
+			/* alignment should match the summoner */
+			if(mon->isminion) mtmp->isminion = TRUE;
+			EPRI(mtmp)->shralign = atyp;
+			mtmp->mpeaceful = mon->mpeaceful;
 	    }
 	    cnt--;
 	}
