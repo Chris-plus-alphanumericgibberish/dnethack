@@ -628,7 +628,7 @@ A("The Tie-Dye Shirt of Shambhala",	T_SHIRT, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
-	ENLIGHTENING, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
+	ENLIGHTENING, A_NONE, NON_PM, NON_PM, 4500L, 
 	0,SPFX3_MANDALA,(WSFX_LIGHTEN|WSFX_WCATRIB|WSFX_PLUSSEV)),
 #endif
 A("The Grandmaster's Robe",	ROBE, /*double robe effect*/
