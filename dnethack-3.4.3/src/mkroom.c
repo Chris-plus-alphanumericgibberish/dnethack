@@ -2588,15 +2588,15 @@ courtmon(kingnum)
 			else if(i>30)
 				return &mons[PM_NAIAD];
 			else if(i>20)
-				return &mons[PM_COURE];
+				return &mons[PM_COURE_ELADRIN];
 			else if(i>18)
-				return &mons[PM_NOVIERE];
+				return &mons[PM_NOVIERE_ELADRIN];
 			else if(i>16)
-				return &mons[PM_BRALANI];
+				return &mons[PM_BRALANI_ELADRIN];
 			else if(i>13)
-				return &mons[PM_FIRRE];
+				return &mons[PM_FIRRE_ELADRIN];
 			else if(i>10)
-				return &mons[PM_SHIERE];
+				return &mons[PM_SHIERE_ELADRIN];
 			else if(i> 5)
 				return &mons[PM_DOPPELGANGER];
 			else if(i> 0)

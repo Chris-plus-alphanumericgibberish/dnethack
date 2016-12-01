@@ -554,6 +554,22 @@ moveloop()
 					mtmp->mpeacetime--;
 					if(!mtmp->mpeacetime) mtmp->mpeaceful = FALSE;
 				}
+				/* Possibly change hostility */
+				if(mtmp->data == &mons[PM_SURYA_DEVA]){
+					struct monst *blade;
+					for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+					if(blade){
+						if(mtmp->mtame && !blade->mtame){
+							if(blade == nxtmon) nxtmon = nxtmon->nmon;
+							tamedog(blade, (struct obj *) 0);
+						} else if(!mtmp->mtame && blade->mtame){
+							blade->mtame = 0;
+						}
+						if(mtmp->mpeaceful != blade->mpeaceful){
+							mtmp->mpeaceful == blade->mpeaceful;
+						}
+					}
+				}
 				if(mtmp->data == &mons[PM_ZUGGTMOY]) flags.spore_level=1;
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
 				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH] || mtmp->data == &mons[PM_LEGION]) flags.walky_level=1;

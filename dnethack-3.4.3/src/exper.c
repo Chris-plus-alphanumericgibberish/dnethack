@@ -82,7 +82,7 @@ experience(mtmp, nk)	/* return # of exp points for mtmp after nk killed */
 	register struct permonst *ptr = mtmp->data;
 	int	i, tmp, tmp2;
 	
-	if(mtmp->data == &mons[PM_LONG_SINUOUS_TENTACLE] || mtmp->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || mtmp->data == &mons[PM_WIDE_CLUBBED_TENTACLE]) return 0;
+	if(mtmp->data == &mons[PM_DANCING_BLADE] || mtmp->data == &mons[PM_LONG_SINUOUS_TENTACLE] || mtmp->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || mtmp->data == &mons[PM_WIDE_CLUBBED_TENTACLE]) return 0;
 	
 /*	Dungeon fern spores give no experience */
 	if(is_fern_spore(mtmp->data)) tmp = 0;
@@ -145,7 +145,7 @@ ptrexperience(ptr)	/* return # of exp points for mtmp after nk killed */
 {
 	int	i, tmp, tmp2;
 	
-	if(ptr == &mons[PM_LONG_SINUOUS_TENTACLE] || ptr == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || ptr == &mons[PM_WIDE_CLUBBED_TENTACLE]) return 0;
+	if(ptr == &mons[PM_DANCING_BLADE] || ptr == &mons[PM_LONG_SINUOUS_TENTACLE] || ptr == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || ptr == &mons[PM_WIDE_CLUBBED_TENTACLE]) return 0;
 	
 /*	Dungeon fern spores give no experience */
 	if(is_fern_spore(ptr)) tmp = 0;

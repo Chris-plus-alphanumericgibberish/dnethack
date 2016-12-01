@@ -649,6 +649,10 @@ struct monst *mon;
 		armac += 15;
 	}
 	
+	if(mon->data == &mons[PM_DANCING_BLADE]){
+		return -20;
+	}
+	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(uarm) armac += ARM_BONUS(uarm);
 		if(uarmf) armac += ARM_BONUS(uarmf);

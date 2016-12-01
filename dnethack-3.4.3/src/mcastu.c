@@ -429,6 +429,47 @@ unsigned int type;
        case PM_MOVANIC_DEVA:
 		return MASS_CURE_FAR;
 	   break;
+       case PM_GRAHA_DEVA:
+		switch(rn2(15)){
+			case 0:
+				return OPEN_WOUNDS;
+			break;
+				return LIGHTNING;
+			case 1:
+				return FIRE_PILLAR;
+			case 2:
+				return GEYSER;
+			case 3:
+				return ACID_RAIN;
+			case 4:
+				return ICE_STORM;
+			case 5:
+				return MASS_CURE_CLOSE;
+			case 6:
+				return MASS_CURE_FAR;
+			break;
+				return MAKE_VISIBLE;
+			case 7:
+				return BLIND_YOU;
+			case 8:
+				return CURSE_ITEMS;
+			case 9:
+				return INSECTS;
+			case 10:
+				return SUMMON_ANGEL;
+			case 11:
+				return AGGRAVATION;
+			case 12:
+				return PUNISH;
+			case 13:
+				return EARTHQUAKE;
+			case 14:
+				return VULNERABILITY;
+		}
+	   break;
+       case PM_SURYA_DEVA:
+           return (rn2(2) ? MASS_CURE_CLOSE : FIRE_PILLAR);
+	
        case PM_GRAND_MASTER:
        case PM_MASTER_KAEN:
           return (rn2(2) ? WEAKEN_YOU : EARTHQUAKE);

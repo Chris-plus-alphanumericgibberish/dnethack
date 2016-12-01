@@ -1879,6 +1879,18 @@ not_special:
 	    mtmp->mtrack[0].y = omy;
 	    /* Place a segment at the old position. */
 	    if (mtmp->wormno) worm_move(mtmp);
+		
+		if(mtmp->data == &mons[PM_SURYA_DEVA]){
+			struct monst *blade;
+			for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+			if(blade){
+				int bx = blade->mx, by = blade->my;
+				remove_monster(bx, by);
+				place_monster(blade, omx, omy);
+				newsym(omx,omy);
+				newsym(bx,by);
+			}
+		}
 	} else {
 	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp) && 
 			!(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))

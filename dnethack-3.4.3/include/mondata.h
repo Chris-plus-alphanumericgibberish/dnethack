@@ -175,13 +175,13 @@
 #define is_were(ptr)		(((ptr)->mflagsa & MA_WERE) != 0L)
 #define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
 #define is_heladrin(ptr)		(\
-							 (ptr) == &mons[PM_COURE] || \
-							 (ptr) == &mons[PM_NOVIERE] || \
-							 (ptr) == &mons[PM_BRALANI] || \
-							 (ptr) == &mons[PM_FIRRE] || \
-							 (ptr) == &mons[PM_SHIERE] || \
-							 (ptr) == &mons[PM_GHAELE] || \
-							 (ptr) == &mons[PM_TULANI] || \
+							 (ptr) == &mons[PM_COURE_ELADRIN] || \
+							 (ptr) == &mons[PM_NOVIERE_ELADRIN] || \
+							 (ptr) == &mons[PM_BRALANI_ELADRIN] || \
+							 (ptr) == &mons[PM_FIRRE_ELADRIN] || \
+							 (ptr) == &mons[PM_SHIERE_ELADRIN] || \
+							 (ptr) == &mons[PM_GHAELE_ELADRIN] || \
+							 (ptr) == &mons[PM_TULANI_ELADRIN] || \
 							 (ptr) == &mons[PM_ALRUNES] ||\
 							 (ptr) == &mons[PM_GWYNHARWYF] ||\
 							 (ptr) == &mons[PM_ASCODEL] ||\
@@ -409,12 +409,14 @@
 				  (ptr) == &mons[PM_FALLEN_ANGEL] || \
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
+				  (ptr) == &mons[PM_GRAHA_DEVA] ||\
 				  (ptr) == &mons[PM_DANCING_FLAME] ||\
 				  (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
 				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
 				 ((ptr) == &mons[PM_LIGHT_ARCHON]|| \
 				  (ptr) == &mons[PM_LUCIFER]) ? 7 : \
 				 ((ptr) == &mons[PM_EDDERKOP]) ? 8 : \
+				 ((ptr) == &mons[PM_SURYA_DEVA]) ? 9 : \
 				 0)
 #define Is_darklight_monster(ptr)	((ptr) == &mons[PM_EDDERKOP])
 /*	[note: the light ranges above were reduced to 1 for performance...] */

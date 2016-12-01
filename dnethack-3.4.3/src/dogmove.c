@@ -1207,6 +1207,17 @@ newdogpos:
 		/* insert a worm_move() if worms ever begin to eat things */
 		remove_monster(omx, omy);
 		place_monster(mtmp, nix, niy);
+		if(mtmp->data == &mons[PM_SURYA_DEVA]){
+			struct monst *blade;
+			for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+			if(blade){
+				int bx = blade->mx, by = blade->my;
+				remove_monster(bx, by);
+				place_monster(blade, omx, omy);
+				newsym(omx,omy);
+				newsym(bx,by);
+			}
+		}
 		if (cursemsg[chi] && (cansee(omx,omy) || cansee(nix,niy)))
 			pline("%s moves only reluctantly.", Monnam(mtmp));
 		for (j=MTSZ-1; j>0; j--) mtmp->mtrack[j] = mtmp->mtrack[j-1];

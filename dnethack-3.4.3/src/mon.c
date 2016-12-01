@@ -1571,6 +1571,18 @@ mon_can_see_mon(looker, lookie)
 		//may still be able to feel target adjacent
 	}
 	
+	if(looker->data == &mons[PM_DANCING_BLADE]){
+		struct monst *surya;
+		for(surya = fmon; surya; surya = surya->nmon) if(surya->m_id == looker->mvar1) break;
+		if(surya){
+			looker->mux = surya->mux;
+			looker->muy = surya->muy;
+			if(mon_can_see_mon(surya, lookie)) return TRUE;
+		}
+		return FALSE;
+		//can't feel target adjacent
+	}
+	
 	
 	if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1 && !rn2(8)) return TRUE;
 	if((darksight(looker->data) || (catsight(looker->data) && catsightdark)) && !is_blind(looker)){
@@ -1698,15 +1710,23 @@ mon_can_see_you(looker)
 	if(looker->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || looker->data == &mons[PM_LONG_SINUOUS_TENTACLE]){
 		struct monst *witw;
 		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_WATCHER_IN_THE_WATER]) break;
-		if(mon_can_see_you(witw)) return TRUE;
+		if(witw && mon_can_see_you(witw)) return TRUE;
 		//may still be able to feel target adjacent
 	}
 	
 	if(looker->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
 		struct monst *keto;
 		for(keto = fmon; keto; keto = keto->nmon) if(keto->data == &mons[PM_KETO]) break;
-		if(mon_can_see_you(keto)) return TRUE;
+		if(keto && mon_can_see_you(keto)) return TRUE;
 		//may still be able to feel target adjacent
+	}
+	
+	if(looker->data == &mons[PM_DANCING_BLADE]){
+		struct monst *surya;
+		for(surya = fmon; surya; surya = surya->nmon) if(surya->m_id == looker->mvar1) break;
+		if(surya && mon_can_see_you(surya)) return TRUE;
+		return FALSE;
+		//can't feel target adjacent
 	}
 	
 	if(Aggravate_monster) return TRUE;
@@ -1895,6 +1915,7 @@ mfndpos(mon, poss, info, flag)
 {
 	struct permonst *mdat = mon->data;
 	struct monst *witw = 0;
+	struct monst *madjacent = 0;
 	register xchar x,y,nx,ny;
 	register int cnt = 0;
 	register uchar ntyp;
@@ -1909,6 +1930,10 @@ mfndpos(mon, poss, info, flag)
 	
 	if(mdat == &mons[PM_WIDE_CLUBBED_TENTACLE]){
 		for(witw = fmon; witw; witw = witw->nmon) if(witw->data == &mons[PM_KETO]) break;
+	}
+	
+	if(mdat == &mons[PM_DANCING_BLADE]){
+		for(madjacent = fmon; madjacent; madjacent = madjacent->nmon) if(madjacent->m_id == mon->mvar1) break;
 	}
 	
 	x = mon->mx;
@@ -1995,6 +2020,9 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			onlineu(nx, ny) && (lined_up(mon) || !rn2(4))) continue;
 		if(witw && dist2(nx, ny, witw->mx, witw->my) > 32 && 
 			dist2(nx, ny, witw->mx, witw->my) >= dist2(mon->mx, mon->my, witw->mx, witw->my)) continue;
+		if(madjacent && distmin(nx, ny, madjacent->mx, madjacent->my) > 1 && 
+			dist2(nx, ny, madjacent->mx, madjacent->my) >= dist2(mon->mx, mon->my, madjacent->mx, madjacent->my) &&
+			!(m_at(nx, ny) && distmin(nx, ny, madjacent->mx, madjacent->my) <= 2)) continue;
 		if(mdat == &mons[PM_HOOLOOVOO] && 
 			IS_WALL(levl[mon->mx][mon->my].typ) &&
 			!IS_WALL(levl[nx][ny].typ)
@@ -2876,6 +2904,16 @@ boolean was_swallowed;			/* digestion */
 				makemon(rn2(2) ? &mons[PM_LEVIATHAN] : &mons[PM_LEVISTUS], mon->mx, mon->my, MM_ADJACENTOK);
 			} else if(mdat == &mons[PM_ANCIENT_OF_DEATH]){
 				if(!(u.sealsActive&SEAL_OSE)) explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_DARK);
+			} else if(mdat == &mons[PM_SURYA_DEVA]){
+				struct monst *mtmp, *mtmp2;
+				for (mtmp = fmon; mtmp; mtmp = mtmp2){
+					mtmp2 = mtmp->nmon;
+					if(mtmp->data == &mons[PM_DANCING_BLADE] && mtmp->mvar1 == mon->m_id){
+						if (DEADMONSTER(mtmp)) continue;
+						mtmp->mhp = -10;
+						monkilled(mtmp,"",AD_DRLI);
+					}
+				}
 			} else if(mdat->mattk[i].adtyp == AD_WTCH){
 				struct monst *mtmp, *mtmp2;
 				for (mtmp = fmon; mtmp; mtmp = mtmp2){
@@ -3965,6 +4003,17 @@ register struct monst *mtmp;
 		else adjalign(2);
 	} else
 		adjalign(-1);		/* attacking peaceful monsters is bad */
+	
+	if(mtmp->data == &mons[PM_DANCING_BLADE]){
+		struct monst *surya;
+		for(surya = fmon; surya; surya = surya->nmon) if(surya->m_id == mtmp->mvar1) break;
+		if(surya) setmangry(surya);
+	}
+	if(mtmp->data == &mons[PM_SURYA_DEVA]){
+		struct monst *blade;
+		for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+		if(blade) setmangry(blade);
+	}
 	if (couldsee(mtmp->mx, mtmp->my)) {
 		if (humanoid(mtmp->data) || mtmp->isshk || mtmp->isgd)
 		    pline("%s gets angry!", Monnam(mtmp));

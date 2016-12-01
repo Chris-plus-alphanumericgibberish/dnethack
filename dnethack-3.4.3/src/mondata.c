@@ -225,6 +225,7 @@ struct monst *mon;
 		mon->data == &mons[PM_LONG_SINUOUS_TENTACLE] ||
 		mon->data == &mons[PM_KETO] ||
 		mon->data == &mons[PM_WIDE_CLUBBED_TENTACLE] ||
+		mon->data == &mons[PM_DANCING_BLADE] ||
 		mon->data == &mons[PM_QUEEN_OF_STARS] ||
 		mon->data == &mons[PM_ETERNAL_LIGHT] ||
 		mon->data == &mons[PM_DARUTH_XAXOX]

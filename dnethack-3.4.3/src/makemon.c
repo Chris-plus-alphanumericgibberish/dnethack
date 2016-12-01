@@ -2140,6 +2140,61 @@ register struct monst *mtmp;
 			    otmp->oerodeproof = TRUE;
 			    otmp->spe = 7;
 			    (void) mpickobj(mtmp, otmp);
+			} else if(ptr == &mons[PM_GRAHA_DEVA]){
+				otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->obj_material = COPPER;
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 9;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(BRONZE_BOOTS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 1;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(BRONZE_GAUNTLETS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 1;
+			    (void) mpickobj(mtmp, otmp);
+			} else if(ptr == &mons[PM_SURYA_DEVA]){
+				struct monst *dancer;
+				dancer = makemon(&mons[PM_DANCING_BLADE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+				dancer->mvar1 = (long)mtmp->m_id;
+				dancer->mpeaceful = mtmp->mpeaceful;
+				
+			    otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->obj_material = GOLD;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 7;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->obj_material = GOLD;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 1;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(GAUNTLETS_OF_POWER, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->obj_material = GOLD;
+				otmp->objsize = MZ_LARGE;
+			    otmp->spe = 1;
+			    (void) mpickobj(mtmp, otmp);
+			    otmp = mksobj(AMULET_OF_REFLECTION, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->obj_material = GOLD;
+				otmp->objsize = MZ_LARGE;
+			    (void) mpickobj(mtmp, otmp);
 			} else if(ptr == &mons[PM_MAHADEVA]){
 				otmp = mksobj(SCIMITAR, FALSE, FALSE);
 			    bless(otmp);
@@ -2171,7 +2226,7 @@ register struct monst *mtmp;
 			    otmp->spe = 7;
 				otmp->objsize = MZ_LARGE;
 			    (void) mpickobj(mtmp, otmp);
-			} else if(ptr == &mons[PM_COURE]){
+			} else if(ptr == &mons[PM_COURE_ELADRIN]){
 				(void)mongets(mtmp, GLOVES);
 				(void)mongets(mtmp, LEATHER_JACKET);
 				(void)mongets(mtmp, LOW_BOOTS);
@@ -2193,14 +2248,14 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, MOON_AXE);
 					break;
 				}
-			} else if(ptr == &mons[PM_NOVIERE]){
+			} else if(ptr == &mons[PM_NOVIERE_ELADRIN]){
 				(void)mongets(mtmp, GLOVES);
 				(void)mongets(mtmp, LEATHER_JACKET);
 				(void)mongets(mtmp, LOW_BOOTS);
 				(void)mongets(mtmp, LEATHER_HELM);
 				(void)mongets(mtmp, ELVEN_SPEAR);
 				(void)mongets(mtmp, rn2(2) ? ELVEN_SICKLE : RAPIER);
-			} else if(ptr == &mons[PM_BRALANI]){
+			} else if(ptr == &mons[PM_BRALANI_ELADRIN]){
 				(void)mongets(mtmp, CHAIN_MAIL);
 				(void)mongets(mtmp, LEATHER_CLOAK);
 				(void)mongets(mtmp, HIGH_BOOTS);
@@ -2208,7 +2263,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, DWARVISH_SPEAR);
 				(void)mongets(mtmp, DWARVISH_SPEAR);
 				(void)mongets(mtmp, DWARVISH_SHORT_SWORD);
-			} else if(ptr == &mons[PM_FIRRE]){
+			} else if(ptr == &mons[PM_FIRRE_ELADRIN]){
 				(void)mongets(mtmp, ELVEN_MITHRIL_COAT);
 				(void)mongets(mtmp, ELVEN_SHIELD);
 				(void)mongets(mtmp, ELVEN_CLOAK);
@@ -2216,13 +2271,13 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, ELVEN_HELM);
 				(void)mongets(mtmp, ELVEN_SPEAR);
 				(void)mongets(mtmp, ELVEN_BROADSWORD);
-			} else if(ptr == &mons[PM_SHIERE]){
+			} else if(ptr == &mons[PM_SHIERE_ELADRIN]){
 				(void)mongets(mtmp, CRYSTAL_PLATE_MAIL);
 				(void)mongets(mtmp, CRYSTAL_SHIELD);
 				(void)mongets(mtmp, CRYSTAL_BOOTS);
 				(void)mongets(mtmp, CRYSTAL_SWORD);
 				(void)mongets(mtmp, WAN_STRIKING);
-			} else if(ptr == &mons[PM_GHAELE]){
+			} else if(ptr == &mons[PM_GHAELE_ELADRIN]){
 				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
 				(void)mongets(mtmp, BRONZE_ROUNDSHIELD);
 				(void)mongets(mtmp, BRONZE_BOOTS);
@@ -2231,7 +2286,7 @@ register struct monst *mtmp;
 				otmp = mksobj(LONG_SWORD, TRUE, FALSE);
 				otmp->obj_material = COPPER;
 			    (void) mpickobj(mtmp, otmp);
-			} else if(ptr == &mons[PM_TULANI]){
+			} else if(ptr == &mons[PM_TULANI_ELADRIN]){
 				(void)mongets(mtmp, CRYSTAL_PLATE_MAIL);
 				(void)mongets(mtmp, ELVEN_CLOAK);
 				(void)mongets(mtmp, CRYSTAL_BOOTS);
@@ -6200,6 +6255,7 @@ int type;
 		case PM_GROVE_GUARDIAN: return 60;
 		case PM_FLESH_GOLEM: return 40;
 		case PM_BRAIN_GOLEM: return 40;
+		case PM_DANCING_BLADE: return 49;
 		case PM_SPELL_GOLEM: return 20;
 //		case PM_SAURON_THE_IMPRISONED: return 45;
 		case PM_CLAY_GOLEM: return 50;

@@ -59,7 +59,7 @@ MONSTER:'T',"rock troll",(53,12)
 MONSTER:'H',"stone giant",(54,12)
 #
 MONSTER:'S',"pit viper",(70,05)
-MONSTER:'0',"monadic deva",(69,06)
+MONSTER:'0',"Monadic Deva",(69,06)
 MONSTER:'H',"stone giant",(69,08)
 MONSTER:''',"stone golem",(71,08)
 MONSTER:'0',"Mahadeva",(70,09)
@@ -91,7 +91,7 @@ MONSTER:''',"stone golem",(01,02)
 MONSTER:'E',"earth elemental",(02,02),hostile
 MONSTER:'T',"rock troll",(04,03)
 MONSTER:'T',"rock troll",(03,03)
-MONSTER:'0',"monadic deva",(03,04)
+MONSTER:'0',"Monadic Deva",(03,04)
 MONSTER:'E',"earth elemental",(04,05),hostile
 MONSTER:'S',"pit viper",(05,06)
 #
@@ -104,18 +104,18 @@ MONSTER:'E',"earth elemental",(22,06),hostile
 MONSTER:'E',"earth elemental",(23,06),hostile
 #
 MONSTER:'S',"pit viper",(14,08)
-MONSTER:'0',"monadic deva",(14,09)
+MONSTER:'0',"Monadic Deva",(14,09)
 MONSTER:'E',"earth elemental",(13,10),hostile
 MONSTER:'T',"rock troll",(12,11)
 MONSTER:'E',"earth elemental",(14,12),hostile
 MONSTER:'E',"earth elemental",(15,13),hostile
 MONSTER:'H',"stone giant",(17,13)
 MONSTER:''',"stone golem",(18,13)
-MONSTER:'A',"Bralani",(18,12)
+MONSTER:'A',"Bralani Eladrin",(18,12)
 MONSTER:'E',"earth elemental",(18,11),hostile
 MONSTER:'E',"earth elemental",(18,10),hostile
 #
-MONSTER:'A',"Bralani",(02,16)
+MONSTER:'A',"Bralani Eladrin",(02,16)
 MONSTER:'E',"earth elemental",(03,16),hostile
 MONSTER:'T',"rock troll",(02,17)
 MONSTER:'E',"earth elemental",(04,17),hostile
@@ -357,7 +357,7 @@ MONSTER:'H',"fire giant",random
 MONSTER:'{',"sunflower",random
 MONSTER:'c',"pyrolisk",random
 MONSTER:''',"stone golem",random
-MONSTER:'A',"Firre",random
+MONSTER:'A',"Firre Eladrin",random
 MONSTER:'E',"fire elemental",random,hostile
 #
 MONSTER:'E',"fire elemental",random,hostile
@@ -367,13 +367,13 @@ MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'s',"scorpion",random
 MONSTER:'H',"fire giant",random
 #
-MONSTER:'A',"Firre",random
+MONSTER:'A',"Firre Eladrin",random
 MONSTER:'v',"dust vortex",random
 MONSTER:'v',"fire vortex",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
-MONSTER:'A',"Firre",random
+MONSTER:'A',"Firre Eladrin",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:''',"stone golem",random
 MONSTER:'S',"pit viper",random
@@ -386,7 +386,7 @@ MONSTER:'H',"fire giant",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'v',"fire vortex",random
 MONSTER:'v',"fire vortex",random
-MONSTER:'0',"monadic deva",random
+MONSTER:'0',"Monadic Deva",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'S',"pit viper",random
 #
@@ -406,11 +406,11 @@ MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'d',"hell hound",random
 MONSTER:'H',"fire giant",random
-MONSTER:'A',"Tulani",random
+MONSTER:'0',"Surya Deva",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 #
-MONSTER:'A',"Firre",random
+MONSTER:'A',"Firre Eladrin",random
 MONSTER:':',"salamander",random,hostile
 MONSTER:'v',"steam vortex",random
 MONSTER:':',"salamander",random,hostile
@@ -519,13 +519,14 @@ MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 
-MONSTER:'A',"Noviere",random
-MONSTER:'A',"Noviere",random
-MONSTER:'A',"Noviere",random
-MONSTER:'A',"Noviere",random
-MONSTER:'A',"Noviere",random
-MONSTER:'A',"Noviere",random
-MONSTER:'A',"Noviere",random
+MONSTER:'A',"Tulani Eladrin",random
+MONSTER:'A',"Noviere Eladrin",random
+MONSTER:'A',"Noviere Eladrin",random
+MONSTER:'A',"Noviere Eladrin",random
+MONSTER:'A',"Noviere Eladrin",random
+MONSTER:'A',"Noviere Eladrin",random
+MONSTER:'A',"Noviere Eladrin",random
+MONSTER:'A',"Noviere Eladrin",random
 
 
 MAZE:"astral",' '
@@ -670,3 +671,6 @@ MONSTER:'V',random,random,hostile
 MONSTER:'D',random,random,hostile
 MONSTER:'D',random,random,hostile
 MONSTER:'D',random,random,hostile
+MONSTER:'0',"Astral Deva",random,hostile
+MONSTER:'0',"Astral Deva",random,hostile
+MONSTER:'0',"Astral Deva",random,hostile

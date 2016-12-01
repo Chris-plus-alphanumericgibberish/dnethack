@@ -531,9 +531,19 @@ lminion()
 int
 nlord()
 {
-	if (!(mvitals[PM_MAHADEVA].mvflags & G_GONE && !In_quest(&u.uz)))
-		return(PM_MAHADEVA);
-
+	switch(rnd(4)){
+	case 1:
+		if (!(mvitals[PM_MAHADEVA].mvflags & G_GONE && !In_quest(&u.uz)))
+			return(PM_MAHADEVA);
+	break;
+	case 2:
+	case 3:
+	case 4:
+		if (!(mvitals[PM_SURYA_DEVA].mvflags & G_GONE && !In_quest(&u.uz)))
+			return(PM_SURYA_DEVA);
+	break;
+	}
+	
 	return(nminion());	/* approximate */
 }
 
@@ -556,8 +566,8 @@ nminion()
 int
 clord()
 {
-	if (!(mvitals[PM_TULANI].mvflags & G_GONE && !In_quest(&u.uz)))
-		return(PM_TULANI);
+	if (!(mvitals[PM_TULANI_ELADRIN].mvflags & G_GONE && !In_quest(&u.uz)))
+		return(PM_TULANI_ELADRIN);
 
 	return(cminion());	/* approximate */
 }

@@ -798,56 +798,56 @@ MAP
 0----------------------------------------------------------------------------
 ENDMAP
 
-MONSTER: '@', "werejackal", (01,01)
+MONSTER: '\'', "retriever", (01,01)
 
 MONSTER: '@', "wererat", (03,01)
 MONSTER: '@', "werewolf", (05,01)
-MONSTER: 'P', "darkness given hunger", (07,01)
-MONSTER: 'b', "shoggoth", (09,01)
-MONSTER: 'd', "warg", (11,01)
-MONSTER: 'd', "anuban jackal", (13,01)
-MONSTER: 'e', "beholder", (15,01)
-MONSTER: 'g', "gremlin", (17,01)
-MONSTER: 'g', "gargoyle", (19,01)
-MONSTER: 'g', "winged gargoyle", (21,01)
-MONSTER: 'g', "nightgaunt", (23,01)
-MONSTER: 'h', "bugbear", (25,01)
-MONSTER: 'h', "gnoll", (27,01)
-MONSTER: 'i', "manes", (29,01)
-MONSTER: 'k', "kobold", (31,01)
-MONSTER: 'k', "large kobold", (33,01)
-MONSTER: 'k', "kobold lord", (35,01)
-MONSTER: 'k', "kobold shaman", (37,01)
-MONSTER: 'k', "winged kobold", (39,01)
-MONSTER: 'n', "naiad", (41,01)
-MONSTER: 'n', "swamp nymph", (43,01)
-MONSTER: 'n', "intoner", (45,01)
-MONSTER: 'o', "hill orc", (47,01)
-MONSTER: 'o', "Mordor orc", (49,01)
-MONSTER: 'o', "Uruk-hai", (51,01)
-MONSTER: 'o', "orc shaman", (53,01)
-MONSTER: 'o', "orc-captain", (55,01)
-MONSTER: 'o', "goblin", (57,01)
-MONSTER: 'o', "hobgoblin", (59,01)
-MONSTER: 'u', "black unicorn", (61,01)
-MONSTER: 'x', "bebelith", (63,01)
-MONSTER: 'A', "Noviere", (65,01)
-MONSTER: 'A', "Bralani", (67,01)
-MONSTER: 'A', "Shiere", (69,01)
-MONSTER: 'A', "lillend", (71,01)
+MONSTER: 'b', "shoggoth", (07,01)
+MONSTER: 'd', "warg", (09,01)
+MONSTER: 'd', "anuban jackal", (11,01)
+MONSTER: 'e', "beholder", (13,01)
+MONSTER: 'g', "gremlin", (15,01)
+MONSTER: 'g', "gargoyle", (17,01)
+MONSTER: 'g', "winged gargoyle", (19,01)
+MONSTER: 'h', "bugbear", (21,01)
+MONSTER: 'h', "gnoll", (23,01)
+MONSTER: 'i', "manes", (25,01)
+MONSTER: 'k', "kobold", (27,01)
+MONSTER: 'k', "large kobold", (29,01)
+MONSTER: 'k', "kobold lord", (31,01)
+MONSTER: 'k', "kobold shaman", (33,01)
+MONSTER: 'k', "winged kobold", (35,01)
+MONSTER: 'n', "naiad", (37,01)
+MONSTER: 'n', "swamp nymph", (39,01)
+MONSTER: 'n', "intoner", (41,01)
+MONSTER: 'o', "hill orc", (43,01)
+MONSTER: 'o', "Mordor orc", (45,01)
+MONSTER: 'o', "Uruk-hai", (47,01)
+MONSTER: 'o', "orc shaman", (49,01)
+MONSTER: 'o', "orc-captain", (51,01)
+MONSTER: 'o', "goblin", (53,01)
+MONSTER: 'o', "hobgoblin", (55,01)
+MONSTER: 'u', "black unicorn", (57,01)
+MONSTER: 'x', "bebelith", (59,01)
+MONSTER: 'A', "Coure Eladrin", (61,01)
+MONSTER: 'A', "Noviere Eladrin", (63,01)
+MONSTER: 'A', "Bralani Eladrin", (65,01)
+MONSTER: 'A', "Firre Eladrin", (67,01)
+MONSTER: 'A', "Shiere Eladrin", (69,01)
+MONSTER: 'A', "Ghaele Eladrin", (71,01)
 
-MONSTER: 'A', "Tulani", (73,01)
+MONSTER: 'A', "lillend", (73,01)
 
-MONSTER: 'A', "weeping angel", (73,03)
-MONSTER: 'B', "byakhee", (73,05)
+MONSTER: 'A', "Tulani Eladrin", (73,03)
+MONSTER: 'A', "weeping angel", (73,05)
 MONSTER: 'C', "forest centaur", (73,07)
 MONSTER: 'C', "drider", (73,09)
 MONSTER: 'D', "blue dragon", (73,11)
 MONSTER: 'D', "black dragon", (73,13)
 MONSTER: 'D', "white dragon", (73,15)
-MONSTER: 'D', "deep wyrm", (73,17)
+MONSTER: 'D', "red dragon", (73,17)
 
-MONSTER: 'D', "red dragon", (73,19)
+MONSTER: 'D', "deep wyrm", (73,19)
 
 MONSTER: 'G', "scrap titan", (71,19)
 MONSTER: 'H', "gnoll matriarch", (69,19)
@@ -865,36 +865,36 @@ MONSTER: 'O', "ogre mage", (47,19)
 MONSTER: 'O', "ogre lord", (45,19)
 MONSTER: 'O', "ogre king", (43,19)
 MONSTER: 'O', "siege ogre", (41,19)
-MONSTER: 'R', "disenchanter", (39,19)
-MONSTER: 'T', "troll", (37,19)
-MONSTER: 'T', "ice troll", (35,19)
-MONSTER: 'T', "rock troll", (33,19)
-MONSTER: 'T', "water troll", (31,19)
-MONSTER: 'T', "Olog-hai", (29,19)
-MONSTER: 'T', "wood troll", (27,19)
-MONSTER: 'V', "vampire", (25,19)
-MONSTER: 'V', "vampire lord", (23,19)
-MONSTER: 'Y', "gug", (21,19)
-MONSTER: '@', "Green-elf", (19,19)
-MONSTER: '@', "Grey-elf", (17,19)
-MONSTER: '@', "hedrow warrior", (15,19)
-MONSTER: '@', "elf-lord", (13,19)
-MONSTER: '@', "Elvenking", (11,19)
-MONSTER: '@', "drow matron", (09,19)
-MONSTER: '&', "water demon", (07,19)
-MONSTER: '&', "succubus", (05,19)
+MONSTER: 'P', "darkness given hunger", (39,19)
+MONSTER: 'R', "disenchanter", (37,19)
+MONSTER: 'T', "troll", (35,19)
+MONSTER: 'T', "ice troll", (33,19)
+MONSTER: 'T', "rock troll", (31,19)
+MONSTER: 'T', "water troll", (29,19)
+MONSTER: 'T', "Olog-hai", (27,19)
+MONSTER: 'T', "wood troll", (25,19)
+MONSTER: 'V', "vampire", (23,19)
+MONSTER: 'V', "vampire lord", (21,19)
+MONSTER: 'Y', "gug", (19,19)
+MONSTER: '@', "Green-elf", (17,19)
+MONSTER: '@', "Grey-elf", (15,19)
+MONSTER: '@', "hedrow warrior", (13,19)
+MONSTER: '@', "elf-lord", (11,19)
+MONSTER: '@', "Elvenking", (09,19)
+MONSTER: '@', "drow matron", (07,19)
+MONSTER: '&', "water demon", (05,19)
 MONSTER: '&', "incubus", (03,19)
 
 MONSTER: '@', "unearthly drow", (01,19)
 
-MONSTER: '&', "daughter of bedlam", (01,17)
-MONSTER: '&', "vrock", (01,15)
-MONSTER: '&', "hezrou", (01,13)
-MONSTER: '&', "nalfeshnee", (01,11)
-MONSTER: '&', "marilith", (01,09)
-MONSTER: '&', "balrog", (01,07)
-MONSTER: '&', "shayateen", (01,05)
-MONSTER: '\'', "retriever", (01,03)
+MONSTER: '&', "succubus", (01,17)
+MONSTER: '&', "daughter of bedlam", (01,15)
+MONSTER: '&', "vrock", (01,13)
+MONSTER: '&', "hezrou", (01,11)
+MONSTER: '&', "nalfeshnee", (01,09)
+MONSTER: '&', "marilith", (01,07)
+MONSTER: '&', "balrog", (01,05)
+MONSTER: '&', "shayateen", (01,03)
 
 #MONSTER: 'M', "kobold mummy", (65,19)
 #MONSTER: 'M', "gnome mummy", (63,19)
@@ -1724,7 +1724,7 @@ CONTAINER:'`',"statue",(03,16),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of
 OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 
-CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(7,15),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -1732,7 +1732,7 @@ OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,15)
-CONTAINER:'`',"statue",(7,17),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(7,17),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -1741,7 +1741,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,17)
 
-CONTAINER:'`',"statue",(6,19),uncursed,"Firre",1
+CONTAINER:'`',"statue",(6,19),uncursed,"Firre Eladrin",1
 OBJECT:'[',"elven mithril-coat",contained,blessed,+0
 OBJECT:'[',"elven shield",contained,blessed,+0
 OBJECT:'[',"elven cloak",contained,blessed,+0
@@ -1751,7 +1751,7 @@ OBJECT:')',"elven spear",contained,blessed,+0
 OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,19)
-CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele",1
+CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele Eladrin",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+0
 OBJECT:'[',"bronze roundshield",contained,blessed,+0
 OBJECT:'[',"bronze boots",contained,blessed,+0
@@ -1759,7 +1759,7 @@ OBJECT:'[',"bronze helm",contained,blessed,+0
 OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,19)
-CONTAINER:'`',"statue",(2,19),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(2,19),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -1768,7 +1768,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,19)
 
-CONTAINER:'`',"statue",(6,13),uncursed,"Firre",1
+CONTAINER:'`',"statue",(6,13),uncursed,"Firre Eladrin",1
 OBJECT:'[',"elven mithril-coat",contained,blessed,+0
 OBJECT:'[',"elven shield",contained,blessed,+0
 OBJECT:'[',"elven cloak",contained,blessed,+0
@@ -1778,7 +1778,7 @@ OBJECT:')',"elven spear",contained,blessed,+0
 OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,13)
-CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele",1
+CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele Eladrin",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+0
 OBJECT:'[',"bronze roundshield",contained,blessed,+0
 OBJECT:'[',"bronze boots",contained,blessed,+0
@@ -1786,7 +1786,7 @@ OBJECT:'[',"bronze helm",contained,blessed,+0
 OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,13)
-CONTAINER:'`',"statue",(2,13),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(2,13),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -1795,7 +1795,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,13)
 
-CONTAINER:'`',"statue",(1,15),uncursed,"Tulani",1
+CONTAINER:'`',"statue",(1,15),uncursed,"Tulani Eladrin",1
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0
@@ -1807,7 +1807,7 @@ OBJECT:random,random,contained
 OBJECT:random,random,contained
 OBJECT:random,random,contained
 TRAP:"statue", (1,15)
-CONTAINER:'`',"statue",(1,17),uncursed,"Tulani",1
+CONTAINER:'`',"statue",(1,17),uncursed,"Tulani Eladrin",1
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0
@@ -2131,7 +2131,7 @@ CONTAINER:'`',"statue",(03,16),uncursed,"djinni",1,"Qadeej, of the Wind Dukes of
 OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 
-CONTAINER:'`',"statue",(7,15),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(7,15),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -2139,7 +2139,7 @@ OBJECT:')',"crystal sword",contained,blessed,+0
 OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,15)
-CONTAINER:'`',"statue",(7,17),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(7,17),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -2148,7 +2148,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (7,17)
 
-CONTAINER:'`',"statue",(6,19),uncursed,"Firre",1
+CONTAINER:'`',"statue",(6,19),uncursed,"Firre Eladrin",1
 OBJECT:'[',"elven mithril-coat",contained,blessed,+0
 OBJECT:'[',"elven shield",contained,blessed,+0
 OBJECT:'[',"elven cloak",contained,blessed,+0
@@ -2158,7 +2158,7 @@ OBJECT:')',"elven spear",contained,blessed,+0
 OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,19)
-CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele",1
+CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele Eladrin",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+0
 OBJECT:'[',"bronze roundshield",contained,blessed,+0
 OBJECT:'[',"bronze boots",contained,blessed,+0
@@ -2166,7 +2166,7 @@ OBJECT:'[',"bronze helm",contained,blessed,+0
 OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,19)
-CONTAINER:'`',"statue",(2,19),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(2,19),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -2175,7 +2175,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,19)
 
-CONTAINER:'`',"statue",(6,13),uncursed,"Firre",1
+CONTAINER:'`',"statue",(6,13),uncursed,"Firre Eladrin",1
 OBJECT:'[',"elven mithril-coat",contained,blessed,+0
 OBJECT:'[',"elven shield",contained,blessed,+0
 OBJECT:'[',"elven cloak",contained,blessed,+0
@@ -2185,7 +2185,7 @@ OBJECT:')',"elven spear",contained,blessed,+0
 OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,13)
-CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele",1
+CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele Eladrin",1
 OBJECT:'[',"bronze plate mail",contained,blessed,+0
 OBJECT:'[',"bronze roundshield",contained,blessed,+0
 OBJECT:'[',"bronze boots",contained,blessed,+0
@@ -2193,7 +2193,7 @@ OBJECT:'[',"bronze helm",contained,blessed,+0
 OBJECT:')',"two-handed sword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (4,13)
-CONTAINER:'`',"statue",(2,13),uncursed,"Shiere",1
+CONTAINER:'`',"statue",(2,13),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
@@ -2202,7 +2202,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,13)
 
-CONTAINER:'`',"statue",(1,15),uncursed,"Tulani",1
+CONTAINER:'`',"statue",(1,15),uncursed,"Tulani Eladrin",1
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0
@@ -2214,7 +2214,7 @@ OBJECT:random,random,contained
 OBJECT:random,random,contained
 OBJECT:random,random,contained
 TRAP:"statue", (1,15)
-CONTAINER:'`',"statue",(1,17),uncursed,"Tulani",1
+CONTAINER:'`',"statue",(1,17),uncursed,"Tulani Eladrin",1
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0
