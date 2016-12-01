@@ -1083,7 +1083,13 @@ mdamagem(magr, mdef, mattk)
 	if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
 
 //ifdef BARD
-	tmp += magr->encouraged;
+	if(tmp > 0){
+		tmp += magr->encouraged;
+		if(tmp < 0) tmp = 0;
+	} else {
+		tmp -= magr->encouraged;
+		if(tmp > 0) tmp = 0;
+	}
 //endif
 
 	if (touch_petrifies(pd) && !resists_ston(magr) &&

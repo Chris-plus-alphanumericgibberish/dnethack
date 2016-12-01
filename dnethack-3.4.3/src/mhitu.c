@@ -3223,7 +3223,7 @@ dopois:
 	    mdamageu(mtmp, dmg);
 	}
 
-	if (dmg)
+	if (dmg > 0)
 	    res = passiveum(olduasmon, mtmp, mattk);
 	else
 	    res = 1;
@@ -4521,10 +4521,16 @@ register struct monst *mtmp;
 register int n;
 {
 	flags.botl = 1;
-	if(n > 0) mtmp->mhurtu = TRUE;
 //ifdef BARD
-	n += mtmp->encouraged;
+	if(n > 0){
+		n += mtmp->encouraged;
+		if(n < 0) n = 0;
+	} else {
+		n -= mtmp->encouraged;
+		if(n > 0) n = 0;
+	}
 //endif
+	if(n > 0) mtmp->mhurtu = TRUE;
 	if (Upolyd) {
 		u.mh -= n;
 		if (u.mh < 1) rehumanize();
