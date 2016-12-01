@@ -417,6 +417,7 @@ static const char *haluMesg[] = {
 	"Do what thou wilt shall be the whole of the Law", /* Aleister Crowley */
 	"Oh, 'great warrior...' Wars not make one great!", /*Star Wars*/
 		"I've got a bad feeling about this...",
+		"Do, or Do Not.  There is no Try.",
 		"Never tell me the odds!"
 };
 
