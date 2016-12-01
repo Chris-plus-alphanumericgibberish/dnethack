@@ -2271,6 +2271,17 @@ ray:
 				mon_adjust_speed(cmon, 1, (struct obj *)0);
 			}
 		}
+		if(mtmp->mtame && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			if(!Very_fast)
+				You("are suddenly moving %sfaster.",
+					Fast ? "" : "much ");
+			else {
+				Your("%s get new energy.",
+					makeplural(body_part(LEG)));
+			}
+			exercise(A_DEX, TRUE);
+			incr_itimeout(&HFast, rn1(10, 100));
+		}
 	    dmg = 0;
 	}break;
 	case MASS_CURE_CLOSE:{
@@ -2297,6 +2308,10 @@ ray:
 				if (canseemon(cmon))
 					pline("%s looks better.", Monnam(mtmp));
 			}
+		}
+		if(mtmp->mtame && ((Upolyd && u.mh<u.mhmax) || (!Upolyd && u.uhp < u.uhpmax)) && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			healup(d(n,8), 0, FALSE, FALSE);
+			You("feel better.");
 		}
 	    dmg = 0;
 	}break;
@@ -2331,6 +2346,10 @@ ray:
 					pline("%s looks better.", Monnam(mtmp));
 			}
 		}
+		if(mtmp->mtame && ((Upolyd && u.mh<u.mhmax) || (!Upolyd && u.uhp < u.uhpmax)) && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			healup(d(n,8), 0, FALSE, FALSE);
+			You("feel better.");
+		}
 	    dmg = 0;
 	}break;
 	case MON_PROTECTION:{
@@ -2362,6 +2381,23 @@ ray:
 				if (canseemon(cmon))
 					pline("A shimmering shield surrounds %s!", mon_nam(cmon));
 			}
+		}
+		if(mtmp->mtame && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			const char *hgolden = hcolor(NH_GOLDEN);
+			if (u.uspellprot)
+				pline_The("%s haze around you becomes more dense.",
+					  hgolden);
+			else
+				pline_The("%s around you begins to shimmer with %s haze.",
+					  (Underwater || Is_waterlevel(&u.uz)) ? "water" :
+					   u.uswallow ? mbodypart(u.ustuck, STOMACH) :
+					  IS_STWALL(levl[u.ux][u.uy].typ) ? "stone" : "air",
+					  an(hgolden));
+			u.uspellprot = max(rnd(n),u.uspellprot);
+			u.uspmtime = max(1,u.uspmtime);
+			if (!u.usptime)
+				u.usptime = u.uspmtime;
+			find_ac();
 		}
 	    dmg = 0;
 	}break;
@@ -3630,6 +3666,160 @@ int spellnum;
 		}
 		dmg = 0;
 	break;
+	case MASS_HASTE:{
+		int x, y, n;
+		struct monst *cmon;
+		if(yours){
+			x = (int) u.ux;
+			y = (int) u.uy;
+			n = u.ulevel/3+1;
+		} else {
+			x = (int) mattk->mx;
+			y = (int) mattk->my;
+			n = mattk->m_lev/3+1;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( !DEADMONSTER(cmon) &&
+				((mtmp && cmon->mpeaceful == mtmp->mpeaceful) ||
+				 (!mtmp && !cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
+			){
+				mon_adjust_speed(cmon, 1, (struct obj *)0);
+			}
+		}
+		if((yours || mattk->mtame) && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			if(!Very_fast)
+				You("are suddenly moving %sfaster.",
+					Fast ? "" : "much ");
+			else {
+				Your("%s get new energy.",
+					makeplural(body_part(LEG)));
+			}
+			exercise(A_DEX, TRUE);
+			incr_itimeout(&HFast, rn1(10, 100));
+		}
+	    dmg = 0;
+	}break;
+	case MASS_CURE_CLOSE:{
+		int x, y, n;
+		struct monst *cmon;
+		if(yours){
+			x = (int) u.ux;
+			y = (int) u.uy;
+			n = u.ulevel/3+1;
+		} else {
+			x = (int) mattk->mx;
+			y = (int) mattk->my;
+			n = mattk->m_lev/3+1;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( cmon->mhp < cmon->mhpmax && 
+				!DEADMONSTER(cmon) &&
+				((yours && cmon->mpeaceful) ||
+				 (!yours && mattk && cmon->mpeaceful == mattk->mpeaceful) ||
+				 (!mattk && cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
+			){
+				if((cmon->mhp += d(n,8)) > cmon->mhpmax)
+					cmon->mhp = cmon->mhpmax;
+				if (canseemon(cmon))
+					pline("%s looks better.", Monnam(mtmp));
+			}
+		}
+		if((yours || mattk->mtame) && ((Upolyd && u.mh<u.mhmax) || (!Upolyd && u.uhp < u.uhpmax)) && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			healup(d(n,8), 0, FALSE, FALSE);
+			You("feel better.");
+		}
+	    dmg = 0;
+	}break;
+	case MASS_CURE_FAR:{
+		int x, y, n;
+		struct monst *cmon;
+		if(yours){
+			x = (int) u.ux;
+			y = (int) u.uy;
+			n = u.ulevel/3+1;
+		} else {
+			if(mattk->mux == 0 && mattk->muy == 0){
+				x = (int) mattk->mx;
+				y = (int) mattk->my;
+			} else {
+				x = (int) mattk->mux;
+				y = (int) mattk->muy;
+			}
+			n = mattk->m_lev/3+1;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( cmon != mattk &&
+				cmon->mhp<cmon->mhpmax && 
+				!DEADMONSTER(cmon) &&
+				((yours && cmon->mpeaceful) ||
+				 (!yours && mattk && cmon->mpeaceful == mattk->mpeaceful) ||
+				 (!mattk && cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
+			){
+				if((cmon->mhp += d(n,8)) > cmon->mhpmax)
+					cmon->mhp = cmon->mhpmax;
+				if (canseemon(cmon))
+					pline("%s looks better.", Monnam(mtmp));
+			}
+		}
+		if(!yours && mattk->mtame && ((Upolyd && u.mh<u.mhmax) || (!Upolyd && u.uhp < u.uhpmax)) && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			healup(d(n,8), 0, FALSE, FALSE);
+			You("feel better.");
+		}
+	    dmg = 0;
+	}break;
+	case MON_PROTECTION:{
+		int x, y, n, prot;
+		struct monst *cmon;
+		if(yours){
+			x = (int) u.ux;
+			y = (int) u.uy;
+			n = u.ulevel/3+1;
+		} else {
+			if(mattk->mux == 0 && mattk->muy == 0){
+				x = (int) mattk->mx;
+				y = (int) mattk->my;
+			} else {
+				x = (int) mattk->mux;
+				y = (int) mattk->muy;
+			}
+			n = mattk->m_lev/3+1;
+		}
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if( cmon != mattk &&
+				!DEADMONSTER(cmon) &&
+				((yours && cmon->mpeaceful) ||
+				 (!yours && mattk && cmon->mpeaceful == mattk->mpeaceful) ||
+				 (!mattk && cmon->mpeaceful)) &&
+				dist2(x,y,cmon->mx,cmon->my) <= 3*3+1
+			){
+				prot = -1*rnd(n);
+				cmon->mstdy = max(prot, cmon->mstdy+prot);
+				if (canseemon(cmon))
+					pline("A shimmering shield surrounds %s!", mon_nam(cmon));
+			}
+		}
+		if(!yours && mattk->mtame && dist2(x,y,u.ux,u.uy) <= 3*3+1){
+			const char *hgolden = hcolor(NH_GOLDEN);
+			if (u.uspellprot)
+				pline_The("%s haze around you becomes more dense.",
+					  hgolden);
+			else
+				pline_The("%s around you begins to shimmer with %s haze.",
+					  (Underwater || Is_waterlevel(&u.uz)) ? "water" :
+					   u.uswallow ? mbodypart(u.ustuck, STOMACH) :
+					  IS_STWALL(levl[u.ux][u.uy].typ) ? "stone" : "air",
+					  an(hgolden));
+			u.uspellprot = max(rnd(n),u.uspellprot);
+			u.uspmtime = max(1,u.uspmtime);
+			if (!u.usptime)
+				u.usptime = u.uspmtime;
+			find_ac();
+		}
+	    dmg = 0;
+	}break;
     case PSI_BOLT:
 	default:
 uspsibolt:
