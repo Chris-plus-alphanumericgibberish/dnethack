@@ -3181,7 +3181,7 @@ cold_um:
 			shieldeff(mtmp->mx, mtmp->my);
 			pline_The("missiles bounce off!");
 			dmg = 0;
-		}// else dmg = d((int)ml/3 + 1,6);
+		}
 		break;
 	    case AD_STAR:
 		pline("%s is hit by a shower of silver stars!", Monnam(mtmp));
