@@ -15,7 +15,7 @@
    Incremented to 3.11 with the introduction Anachrononauts.
    Incremented to 3.12 with the introduction Magic chests, scrolls of antimagic, resistance, and consecration, YARevison to chaos quest, beter resistance-from-diet, and lightsaber forms.
 */
-#define VERSION_MINOR	12
+#define VERSION_MINOR	14
 /*
  * PATCHLEVEL is updated for each release.
  *
@@ -34,8 +34,9 @@
  * 3.13.beta: "The Great Reflagging".
  * 3.13.0: "The Great Reflagging", Monster equipment, Angel symbol split, PoWater revision, Demonweb, Naberius buff, Incant energy gain/loss/cap increase.
  * 3.13.1: implement monster sensoria. Purpose for STUN artifacts. Change guidelines for nopoly rules. Implement a few more angel lords, Alrunes.  Female Drow Anachrononauts, myrkalfar. Dark lights.
+ * 3.14.0: Begin edging toward WtW again.  Added Chiropteran and Yuki-ona player races.  Added two new Devas.  Revised Extrinsic resistances, DS and DSM.  Made high monster AC also give DR. Finished Gnome Ranger crowning gifts.  Buffed Riding skill.
  */
-#define PATCHLEVEL	1
+#define PATCHLEVEL	0
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
