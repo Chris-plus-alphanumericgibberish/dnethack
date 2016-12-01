@@ -167,11 +167,19 @@ struct monst *mon;
 	}
 	newsym(mon->mx,mon->my);
 	if(is_eeladrin(mon->data)){
+		struct obj *mw_tmp = MON_WEP(mon);
 		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
 			mon->misc_worn_check &= ~otmp->owornmask;
 			if (otmp->owornmask)
 				update_mon_intrinsics(mon, otmp, FALSE, FALSE);
 			otmp->owornmask = 0L;
+			if (otmp == mw_tmp){
+				if (!attacktype(mon->data, AT_WEAP)) {
+					setmnotwielded(mon, mw_tmp);
+					MON_NOWEP(mon);
+					mon->weapon_check = NO_WEAPON_WANTED;
+				}
+			}
 		}
 		if(mon->data == &mons[PM_ANCIENT_TEMPEST]){
 			struct monst *ltnt;
