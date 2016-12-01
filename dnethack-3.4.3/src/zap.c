@@ -4584,7 +4584,7 @@ register int osym, dmgtyp;
 			
 			dmg = d(cnt,dmg);
 			
-			losehp(dmg, one ? how : (const char *)makeplural(how),
+			losehp(dmg, (one && osym != WAND_CLASS) ? how : (const char *)makeplural(how),
 			       one ? KILLED_BY_AN : KILLED_BY);
 			exercise(A_STR, FALSE);
 		    }
