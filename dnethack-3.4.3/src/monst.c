@@ -2035,7 +2035,7 @@ then fill new spaces with our spawn!
 	SIZ(WT_MEDIUM, 0, 0, MS_SILENT, MZ_MEDIUM),
 	MR_ALL, 0,
 	MM_FLY /*MM*/, MT_MINDLESS|MT_NOTAKE /*MT*/,
-	0 /*MB*/, MG_NOPOLY /*MG*/,
+	MB_NOEYES|MB_NOLIMBS|MB_NOHEAD /*MB*/, MG_NOPOLY|MG_REGEN /*MG*/,
 	0 /*MA*/,  0 /*MV*/, CLR_BRIGHT_CYAN),
     MON("Mahadeva", S_NEU_ANGEL,//33 /*Needs tile*/
 	LVL(30, 18, -10, 90, 0), (G_PLANES|G_NOCORPSE|1),
