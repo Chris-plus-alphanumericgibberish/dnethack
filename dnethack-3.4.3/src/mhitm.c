@@ -460,6 +460,10 @@ meleeattack:
 			    }
 			}
 		    }
+			if(mattk->aatyp == AT_DEVA && !DEADMONSTER(mdef)){
+				int deva = 1;
+				while(!DEADMONSTER(mdef) && tmp > (dieroll = rnd(20+i+(deva++)*5))) res[i] = hitmm(magr, mdef, mattk);
+			}
 		} else
 		    missmm(magr, mdef, mattk);
 		break;
