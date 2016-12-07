@@ -2079,7 +2079,7 @@ printMons(){
 					colorstr = "white";
 				break;
 			}
-			Sprintf(pbuf,"[[%s|{{%s|%c}}]]", mons[i].mname, colorstr, def_monsyms[(int)mons[i].mlet]);
+			Sprintf(pbuf,"[[%s|{{%s|%c}}]]", mons[i].mname, colorstr, (int)mons[i].mlet == S_SHADE ? "|&nbsp;" :  def_monsyms[(int)mons[i].mlet]);
 			fprintf(rfile, pbuf);
 			if(((i+1)%40) == 0){
 				Sprintf(pbuf,"<br/>\n", mons[i].mname, colorstr, def_monsyms[(int)mons[i].mlet]);
