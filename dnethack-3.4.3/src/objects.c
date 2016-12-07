@@ -238,7 +238,7 @@ WEAPON("glaive", "single-edged polearm",
 WEAPON("lance", (char *)0,
 	1, 0, 0,  4,180, 10,  6,  8, 0, P,   P_LANCE, IRON, HI_METAL),
 WEAPON("force pike", "long gray spear",/*Needs tile*/
-	0, 0, 0,  0,180, 10,  6,  8, 2, P,   P_LANCE, PLASTIC, CLR_GRAY),
+	0, 0, 0,  0,180, 10,  6,  8, 2, P|S,   P_LANCE, PLASTIC, CLR_GRAY),
 WEAPON("elven lance", "runed lance", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0,  0,140, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
 WEAPON("droven lance", "obsidian lance", /*Needs encyc entry*//*Needs tile*/
