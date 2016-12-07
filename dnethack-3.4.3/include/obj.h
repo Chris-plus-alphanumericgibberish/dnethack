@@ -356,6 +356,9 @@ struct obj {
 #define is_slashing(otmp)	(otmp->oclass != SPBOOK_CLASS && \
 			otmp->oclass != WAND_CLASS && \
 			(objects[otmp->otyp].oc_dir & SLASH)) //Slash == 4
+#define is_blasting(otmp)	(otmp->oclass != SPBOOK_CLASS && \
+			otmp->oclass != WAND_CLASS && \
+			(objects[otmp->otyp].oc_dir & EXPLOSION))
 //#ifdef FIREARMS
 #define is_blaster(otmp) \
 			((otmp)->oclass == WEAPON_CLASS && \

@@ -899,6 +899,9 @@ int spec;
 			if(is_slashing(otmp)){
 				weaponmask |= SLASH;
 			}
+			if(is_blasting(otmp)){
+				weaponmask |= EXPLOSION;
+			}
 			
 			if(resist_blunt(ptr)){
 				resistmask |= WHACK;
