@@ -3958,6 +3958,7 @@ register struct monst *mtmp;
 		(
 		mtmp->data->msound == MS_JUBJUB || mtmp->data->msound == MS_DREAD || 
 		mtmp->data->msound == MS_SONG || mtmp->data->msound == MS_OONA ||
+		mtmp->data->msound == MS_INTONE || mtmp->data->msound == MS_FLOWER ||
 		mtmp->data->msound == MS_TRUMPET
 		)
 	) {

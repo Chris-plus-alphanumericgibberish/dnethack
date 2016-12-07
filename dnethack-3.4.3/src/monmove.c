@@ -959,6 +959,8 @@ register struct monst *mtmp;
 		(mdat->msound == MS_DREAD && !rn2(4)) ||
 		(mdat->msound == MS_OONA && (nearby || !rn2(6))) ||
 		(mdat->msound == MS_SONG && !rn2(6)) ||
+		(mdat->msound == MS_INTONE && !rn2(6)) ||
+		(mdat->msound == MS_FLOWER && !rn2(6)) ||
 		(mdat == &mons[PM_LAMASHTU] && !rn2(7))
 	) m_respond(mtmp);
 	if ((mdat == &mons[PM_MEDUSA] || mdat == &mons[PM_GREAT_CTHULHU]) && couldsee(mtmp->mx, mtmp->my))

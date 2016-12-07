@@ -5,6 +5,7 @@
 #ifndef MONFLAG_H
 #define MONFLAG_H
 
+//msound tokens
 #define MS_SILENT	0	/* makes no sound */
 #define MS_BARK		1	/* if full moon, may howl */
 #define MS_MEW		2	/* mews or hisses */
@@ -50,7 +51,8 @@
 #define MS_DREAD	41	/* song of the dread seraphim */
 #define MS_OONA		42	/* song of Oona */
 #define MS_SONG		43	/* other singers */
-#define MS_FLOWER	44	/* black flower's songs */
+#define MS_INTONE	44	/* regular songs plus black flower's songs */
+#define MS_FLOWER	45	/* black flower's songs */
 #define MS_TRUMPET	45	/* Archon's trumpet */
 
 

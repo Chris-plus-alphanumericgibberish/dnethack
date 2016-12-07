@@ -647,8 +647,9 @@ register struct monst *mtmp;
 	/* be sure to do this before talking; the monster might teleport away, in
 	 * which case we want to check its pre-teleport position
 	 */
-	if (!canspotmon(mtmp) && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) < 2 && ptr->msound != MS_SONG && ptr->msound != MS_OONA)
-		map_invisible(mtmp->mx, mtmp->my);
+	if (!canspotmon(mtmp) && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) < 2 && ptr->msound != MS_SONG && 
+		ptr->msound != MS_INTONE && ptr->msound != MS_FLOWER && ptr->msound != MS_OONA
+	) map_invisible(mtmp->mx, mtmp->my);
 	
 	if(mtmp->ispriest){
 		priest_talk(mtmp);
@@ -1104,7 +1105,10 @@ asGuardian:
 			}
 		}
 	}break;
-	case MS_SONG:{
+	case MS_SONG:
+	case MS_INTONE:
+	case MS_FLOWER:
+	{
 		struct monst *tmpm;
 		struct trap *ttmp;
 		int ix, iy, i;
