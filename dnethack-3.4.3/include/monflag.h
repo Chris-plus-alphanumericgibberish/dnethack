@@ -53,7 +53,7 @@
 #define MS_SONG		43	/* other singers */
 #define MS_INTONE	44	/* regular songs plus black flower's songs */
 #define MS_FLOWER	45	/* black flower's songs */
-#define MS_TRUMPET	45	/* Archon's trumpet */
+#define MS_TRUMPET	46	/* Archon's trumpet */
 
 
 #define MR_FIRE		0x001	/* 1 resists fire */
