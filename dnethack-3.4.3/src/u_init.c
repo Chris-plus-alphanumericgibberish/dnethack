@@ -2616,6 +2616,8 @@ register struct trobj *trop;
 				else if(is_helmet(obj)) obj->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
 				else if(is_shirt(obj)) obj->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
 			}
+			if(obj->otyp == BULLWHIP && Race_if(PM_DROW) && flags.initgend)
+				obj->obj_material = SILVER;
 			/* Don't start with +0 or negative rings */
 			if (objects[obj->otyp].oc_charged && obj->spe <= 0)
 				obj->spe = rne(3);

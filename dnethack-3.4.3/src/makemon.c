@@ -1024,6 +1024,12 @@ register struct monst *mtmp;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(BULLWHIP, TRUE, FALSE);
+					otmp->obj_material = SILVER;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->spe = 7;
+					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_STJARNA_ALFR){
 					otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
 					otmp->ohaluengr = TRUE;
@@ -1063,19 +1069,18 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, HIGH_BOOTS);
 					(void)mongets(mtmp, DROVEN_DAGGER);
 					if(!rn2(20)){
+						(void)mongets(mtmp, BULLWHIP);
 						(void)mongets(mtmp, KHAKKHARA);
 						(void)mongets(mtmp, DROVEN_DAGGER);
 						(void)mongets(mtmp, DROVEN_DAGGER);
 						(void)mongets(mtmp, DROVEN_DAGGER);
 					} else {
+						(void)mongets(mtmp, BULLWHIP);
 						(void)mongets(mtmp, DROVEN_SHORT_SWORD);
 						(void)mongets(mtmp, KITE_SHIELD);
 					}
 					(void)mongets(mtmp, DROVEN_CROSSBOW);
 					m_initthrow(mtmp, DROVEN_BOLT, 24);
-					if (rn2(3) || (in_mklev && Is_earthlevel(&u.uz)))
-						(void)mongets(mtmp, PICK_AXE);
-					if (!rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
 				}
 			} else if (is_elf(ptr) && ptr != &mons[PM_HALF_ELF_RANGER]) {
 				if(mm == PM_GALADRIEL){
@@ -3928,6 +3933,7 @@ register struct	monst	*mtmp;
 			case PM_AVATAR_OF_LOLTH:
 				otmp = mksobj(BULLWHIP, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_SCOURGE_OF_LOLTH));
+				otmp->obj_material = SILVER;
 				otmp->blessed = TRUE;
 				otmp->cursed = FALSE;
 				otmp->spe = 7;
@@ -6176,6 +6182,8 @@ register int otyp;
 		/*Size and shape it to owner*/
 		if((otmp->oclass == ARMOR_CLASS || otmp->oclass == WEAPON_CLASS) && mtmp->data != &mons[PM_HOBBIT])
 			otmp->objsize = mtmp->data->msize;
+		if(otmp->otyp == BULLWHIP && is_drow(mtmp->data) && mtmp->female)
+			otmp->obj_material = SILVER;
 		if(otmp->oclass == ARMOR_CLASS && !Is_dragon_scales(otmp)){
 			if(is_suit(otmp)) otmp->bodytypeflag = (mtmp->data->mflagsb&MB_BODYTYPEMASK);
 			else if(is_helmet(otmp)) otmp->bodytypeflag = (mtmp->data->mflagsb&MB_HEADMODIMASK);
