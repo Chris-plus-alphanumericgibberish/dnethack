@@ -304,7 +304,7 @@ WEAPON("flail", (char *)0,
 						/* +1 small, +1d4 large */
 /* misc */
 WEAPON("bullwhip", (char *)0,
-	1, 0, 0,  2, 20,  4,  2,  1, 0, 0,   P_WHIP, LEATHER, CLR_BROWN),
+	1, 0, 0,  2, 20,  4,  2,  1, 0, B,   P_WHIP, LEATHER, CLR_BROWN),
 
 /* Firearms */
 //ifdef FIREARMS
