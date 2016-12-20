@@ -268,7 +268,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define EXPL_GRAY	7
 #define EXPL_LIME	8
 #define EXPL_YELLOW	9
-#define EXPL_BBLUE	10
+#define EXPL_BLUE	10
 #define EXPL_MAGENTA	11
 #define EXPL_RED	12
 #define EXPL_CYAN	13
