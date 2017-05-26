@@ -2,11 +2,11 @@ dNetHack
 ========
 A variant of nethack 3.4.3
 
-In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash�em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, Bulwersator, Karl Garrison, probably others (wasn�t always good about documenting who�s code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past. The Chokhmah Sephirah is based on the Recoudut, an epic inevitable posted to some message board by someone, years ago, somewhere out there on the internet. That original source has long since vanished. The other Keter Sephiroth are based on the DnD inevitables.
+In addition to my original stuff, there is a whole mess of code that was appropriated from other nethack mods; Slash'em, L, Malcolm Ryan, James, Patric Muller, Pasi Kallinen, Nephi, Bulwersator, Karl Garrison, probably others (wasn't always good about documenting who's code I was stealing...). New tiles for windowed mode are based mostly on existing nethack tiles and tiles from SLASH'EM. The tile indicating giant turtles was adapted from Legend of Zelda, a Link to the Past. The Chokhmah Sephirah is based on the Recoudut, an epic inevitable posted to some message board by someone, years ago, somewhere out there on the internet. That original source has long since vanished. The other Keter Sephiroth are based on the DnD inevitables.
 
 Implemented YANI's from rec.games.roguelike.nethack and the nethack wiki, including several of Jonadab the Unsightly One's suggestions.
 
-dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re- organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi- level alignment �quest� branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight- up maze levels. Characters of any alignment may enter any alignment �quest.� To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
+dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re- organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi- level alignment 'quest' branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight- up maze levels. Characters of any alignment may enter any alignment 'quest.' To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
 
 Overall, dnethack is more difficult than vanilla nethack, as there are more ways to get into trouble as a late- game character, and several ways to go from ascension- ready character to tombstone in just a few rounds. The design goal is for all such threats to be counterable, so that the late game is more difficult and dangerous but not randomly lethal.
 
@@ -112,9 +112,9 @@ Tweaked armor
 
 - Dragon scale mail:
 
-- - - All dragon scale is heavier
+- - All dragon scale is heavier
 
-- - - All dragon scale mail other than silver and grey enhances your attacks as well as your defenses
+- - All dragon scale mail other than silver and grey enhances your attacks as well as your defenses
 
 - Dexterity contributes to AC.  Dex bonuses are not cumulative with body armor base AC, but penalties are.
 
@@ -154,13 +154,13 @@ __Changes to Existing Monsters__
 
 - Trappers changed color, to brown t
 
-- - - - there is a new monster identified by the dark green t
+- - Tere is a new monster identified by the dark green t.
 
 - Vampire bats are now gray. Ravens are still black.
 
-- Master liches are now orange, and arch- liches are bright magenta.
+- Master liches are now orange, and arch-liches are bright magenta.
 
-- - - - There is no plain magenta Lich.
+- - There is no plain magenta Lich.
 
 - Removed Keystone Kops
 
@@ -175,9 +175,9 @@ BANNED wishing for quest artifacts
 
 Only your quest Nemeses will deliberately steal your quest artifact, other monsters may steal the amulet and invocation items. The quest artifact may of course be randomly stolen by nymphs and the like.
 
-	- Makes QA a dependable source of extrinsics, deepening differences between classes.
+- Makes QA a dependable source of extrinsics, deepening differences between classes.
 	
-- Foo- Bane artifacts are better (don�t need to be enchanted to be effective), and can be wielded in the off- hand behind a second artifact.
+- Foo-Bane artifacts are better (don't need to be enchanted to be effective), and can be wielded in the off- hand behind a second artifact.
 
 
 (ha. ha.)
