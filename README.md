@@ -6,9 +6,9 @@ In addition to my original stuff, there is a whole mess of code that was appropr
 
 Implemented YANI's from rec.games.roguelike.nethack and the nethack wiki, including several of Jonadab the Unsightly One's suggestions.
 
-dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re- organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi- level alignment 'quest' branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight- up maze levels. Characters of any alignment may enter any alignment 'quest.' To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
+dNethack does three main things: it greatly increases the number of artifacts, implements new monsters, and re-organizes and expands the dungeon. A few changes have also been made to existing classes and items. Most new artifacts have custom effects and/or invocations. Most new monsters have code support beyond simply an entry in the monster list. Dungeon changes include: multi-level alignment 'quest' branches, additional side branches off the main dungeon, shortened gehennom, demon lairs randomly drawn from a small pool, fewer straight-up maze levels. Characters of any alignment may enter any alignment 'quest.' To complete the game, you must explore one quest thoroughly or multiple quests partially. Quests may be entered at any time, and start easy, although the difficulty quickly increases beyond what a beginning character can handle.
 
-Overall, dnethack is more difficult than vanilla nethack, as there are more ways to get into trouble as a late- game character, and several ways to go from ascension- ready character to tombstone in just a few rounds. The design goal is for all such threats to be counterable, so that the late game is more difficult and dangerous but not randomly lethal.
+Overall, dnethack is more difficult than vanilla nethack, as there are more ways to get into trouble as a late-game character, and several ways to go from ascension-ready character to tombstone in just a few rounds. The design goal is for all such threats to be counterable, so that the late game is more difficult and dangerous but not randomly lethal.
 
 
 (...Two major sources of inspiration: Dungeons and Dragons (DnD) and Cthulhu Mythos) 
@@ -49,7 +49,7 @@ __Player Character Changes__
 
 - - Convicts will find they have trouble keeping their luck up in the later stages of the game.
 
-- Knights can reach expert in polearms but only basic in two- weapon fighting.
+- Knights can reach expert in polearms but only basic in two-weapon fighting.
 
 - Monks recive extra AC if they aren't wearing body armor. Dependent on dexterity, wisdom, and level.
 
@@ -61,11 +61,11 @@ __Player Character Changes__
 
 - Priests and Knights can expend 30 energy to turn undead in 1 turn instead of 5 turns.
 
-- Samurai can reach skilled in polearms, and gain a +1 skill- level bonus when using naginatas (glaives)
+- Samurai can reach skilled in polearms, and gain a +1 skill-level bonus when using naginatas (glaives)
 
 - Samurai, Archeologist, and Knight special alignment penalties made harsher.
 
-- Tourist quest monsters revised to better reflect Ank- Morpork
+- Tourist quest monsters revised to better reflect Ank-Morpork
 
 - Valks can reach expert in spear but only skilled in longsword
 
@@ -91,9 +91,9 @@ __Player Character Changes__
 
 - Tweaked skills slightly
 
-- - Expert gives +5 to- hit and +3 damage (- 2 to hit and +2 damage for twoweapon fighting)
+- - Expert gives +5 to-hit and +3 damage (-2 to hit and +2 damage for twoweapon fighting)
 
-- - Expert riding gives +2 to- hit and +5 damage
+- - Expert riding gives +2 to-hit and +5 damage
 
 
 (...)
@@ -154,7 +154,7 @@ __Changes to Existing Monsters__
 
 - Trappers changed color, to brown t
 
-- - Tere is a new monster identified by the dark green t.
+- - There is a new monster identified by the dark green t.
 
 - Vampire bats are now gray. Ravens are still black.
 
@@ -177,7 +177,7 @@ Only your quest Nemeses will deliberately steal your quest artifact, other monst
 
 - Makes QA a dependable source of extrinsics, deepening differences between classes.
 	
-- Foo-Bane artifacts are better (don't need to be enchanted to be effective), and can be wielded in the off- hand behind a second artifact.
+- Foo-Bane artifacts are better (don't need to be enchanted to be effective), and can be wielded in the off-hand behind a second artifact.
 
 
 (ha. ha.)
@@ -188,7 +188,7 @@ Improved AI patch seems to sometimes cause monsters to switch back and forth bet
 
 SPFX_RAM: if the thrown target goes over a land mine and is killed, it gives an error message?
 
-Messed up some compile- time options. The game will not compile without TOURIST set, probably others.
+Messed up some compile-time options. The game will not compile without TOURIST set, probably others.
 
 Memmory draining attacks will attempt to remove the memmory of objects or levels that the character doesn't know. This seems to be harmless. As such I have commented out the error message.
 
