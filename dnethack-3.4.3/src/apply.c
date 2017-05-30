@@ -1843,7 +1843,7 @@ STATIC_OVL void
 use_tinning_kit(obj)
 register struct obj *obj;
 {
-	register struct obj *corpse, *can, *bld;
+	register struct obj *corpse, *can=0, *bld=0;
 
 	/* This takes only 1 move.  If this is to be changed to take many
 	 * moves, we've got to deal with decaying corpses...
@@ -1886,8 +1886,9 @@ register struct obj *obj;
 		return;
 	}
 	consume_obj_charge(obj, TRUE);
-	if(!(Race_if(PM_VAMPIRE) || Race_if(PM_INCANTIFIER) || 
-			Race_if(PM_CLOCKWORK_AUTOMATON))
+	if(has_blood(&mons[corpse->corpsenm])
+		|| !(Race_if(PM_VAMPIRE) || Race_if(PM_INCANTIFIER) || 
+			uclockwork)
 		|| yn("This corpse does not have blood. Tin it?") == 'y'
 	){
 		if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
@@ -1899,10 +1900,7 @@ register struct obj *obj;
 			can->owt = weight(can);
 			can->known = 1;
 			can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
-			if(mons[corpse->corpsenm].cnutrit 
-				&& !(mvitals[corpse->corpsenm].mvflags & G_NOCORPSE)
-				&& has_blood(&mons[corpse->corpsenm])
-			){
+			if(has_blood(&mons[corpse->corpsenm])){
 				if ((bld = mksobj(POT_BLOOD, FALSE, FALSE)) != 0) {
 					bld->corpsenm = corpse->corpsenm;
 					bld->cursed = obj->cursed;
@@ -1921,7 +1919,7 @@ register struct obj *obj;
 			}
 			can = hold_another_object(can, "You make, but cannot pick up, %s.",
 						  doname(can), (const char *)0);
-			bld = hold_another_object(bld, "You make, but cannot pick up, %s.",
+			if(bld) bld = hold_another_object(bld, "You make, but cannot pick up, %s.",
 						  doname(bld), (const char *)0);
 		} else impossible("Tinning failed.");
 	}
