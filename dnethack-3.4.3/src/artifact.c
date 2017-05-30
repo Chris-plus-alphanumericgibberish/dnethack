@@ -127,6 +127,16 @@ hack_artifacts()
 	    if ((art->role == Role_switch || Pantheon_if(art->role)) && art->alignment != A_NONE)
 			art->alignment = alignmnt;
 
+	if(Race_if(PM_HALF_DRAGON) && flags.initgend){
+		int i;
+		
+		artilist[ART_LIFEHUNT_SCYTHE].role = Role_switch;
+		
+		for(i = 0; i < ART_ROD_OF_SEVEN_PARTS; i++)
+			if(artilist[i].role == Role_switch)
+				artilist[i].role = NON_PM;
+	}
+
 	/* Excalibur can be used by any lawful character, not just knights */
 	if (!Role_if(PM_KNIGHT)){
  	    artilist[ART_EXCALIBUR].role = NON_PM;

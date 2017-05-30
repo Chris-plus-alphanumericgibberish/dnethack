@@ -789,6 +789,11 @@ static const struct def_skill Skill_DW[] = {
     { P_NONE, 0 }
 };
 
+static const struct def_skill Skill_HD_Female[] = {
+    { P_HARVEST, P_EXPERT },
+    { P_NONE, 0 }
+};
+
 static const struct def_skill Skill_G[] = {
     { P_PICK_AXE, P_EXPERT }, { P_CROSSBOW, P_EXPERT },
     { P_CLUB, P_EXPERT }, { P_NONE, 0 }
@@ -2129,6 +2134,9 @@ u_init()
 			u.uen = u.uenmax;
 		} else if(u.uenmax < 15) {
 			u.uen = u.uenmax = 15;
+		}
+		if(flags.initgend){
+			skill_add(Skill_HD_Female);
 		}
     break;
 	case PM_VAMPIRE:
