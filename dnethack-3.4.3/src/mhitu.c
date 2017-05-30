@@ -6563,8 +6563,8 @@ register struct monst *mon;
 			noit_Monnam(mon), fem ? "her" : "his");
 		if(rn2( (int)(ACURR(A_WIS)/2))){
 			boolean loopingDeath = TRUE;
-			struct obj *wore_amulet = uamul;
 			while(loopingDeath) {
+				boolean has_lifesaving = Lifesaved;
 				if (lifesaved){
 					pline("There is something horrible lurking in your memory... the mere thought of it is consuming your mind from within!");
 				}
@@ -6577,11 +6577,10 @@ register struct monst *mon;
 				done(DIED);
 				lifesaved++;
 				/* avoid looping on "die(y/n)?" */
-				if (lifesaved && (discover || wizard)) {
-					if (wore_amulet && !uamul) {
+				if (lifesaved && (discover || wizard || has_lifesaving)) {
+					if (has_lifesaving) {
 						/* used up AMULET_OF_LIFE_SAVING; still
 						   subject to dying from memory */
-						wore_amulet = 0;
 						if(rn2( (int)(ACURR(A_WIS)/2)) < 4) loopingDeath = FALSE;
 					} else {
 						/* explicitly chose not to die */
