@@ -1037,48 +1037,49 @@ moveloop()
 				wtcap = UNENCUMBERED;
 		    } else {
 				if (youracedata->mlet == S_EEL && !is_pool(u.ux,u.uy) && !Is_waterlevel(&u.uz)) {
-				if (u.mh > 1) {
-					u.mh--;
-					flags.botl = 1;
-				} else if (u.mh < 1)
-					rehumanize();
-				} else if (Upolyd && u.mh < u.mhmax) {
-				if (u.mh < 1)
-					rehumanize();
-				else if (Regeneration ||
-						(wtcap < MOD_ENCUMBER && !(moves%20))) {
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
+					if (u.mh > 1) {
+						u.mh--;
 						flags.botl = 1;
-						u.mh++;
-					}
-				}
-				} else if (u.uhp < u.uhpmax &&
-				 (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
-				if (u.ulevel > 9 && !(moves % 3) && 
-					!(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz))) {
-					int heal, Con = (int) ACURR(A_CON);
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)) {
-						if (Con < 12) {
-						heal = 1;
-						} else {
-						heal = rnd(Con-10);
-						if (heal > u.ulevel-9) heal = u.ulevel-9;
+					} else if (u.mh < 1)
+						rehumanize();
+				} else if (Upolyd) {
+					if(u.mh < u.mhmax){
+						if (u.mh < 1)
+							rehumanize();
+						if(Regeneration){
+							flags.botl = 1;
+							u.mh++;
 						}
-						flags.botl = 1;
-						u.uhp += heal;
-						if(u.uhp > u.uhpmax)
-						u.uhp = u.uhpmax;
+						if(!nonliving(youracedata) && !Race_if(PM_INCANTIFIER) && (wtcap < MOD_ENCUMBER || !u.umoved) && 
+							(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4))
+						){
+							flags.botl = 1;
+							//recover 1/30th hp per turn:
+							u.mh += u.ulevel/30;
+							//Now deal with any remainder
+							if(((moves)*(u.ulevel%30))/30 > ((moves-1)*(u.ulevel%30))/30) u.uhp += 1;
+						}
+						if(u.mh > u.mhmax) u.mh = u.mhmax;
 					}
-				} else if (Regeneration ||
-					 (u.ulevel <= 9 && 
-					 !(Race_if(PM_INCANTIFIER) || uclockwork || on_level(&valley_level, &u.uz)) &&
-					  !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
-					if(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4)){
+				} else if (u.uhp < u.uhpmax){
+					if(Regeneration){
 						flags.botl = 1;
 						u.uhp++;
 					}
+					if(!nonliving(youracedata) && !Race_if(PM_INCANTIFIER) && (wtcap < MOD_ENCUMBER || !u.umoved) && 
+						(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4))
+					){
+						int reglevel = u.ulevel + (((int) ACURR(A_CON)) - 10)/2;
+						if(reglevel < 1) reglevel = 1;
+						flags.botl = 1;
+						//recover 1/30th hp per turn:
+						u.uhp += reglevel/30;
+						//Now deal with any remainder
+						if(((moves)*(reglevel%30))/30 > ((moves-1)*(reglevel%30))/30) u.uhp += 1;
+					}
+					if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 				}
-				}
+				
 				if((uleft  && uleft->oartifact  == ART_RING_OF_HYGIENE_S_DISCIPLE)||
 				   (uright && uright->oartifact == ART_RING_OF_HYGIENE_S_DISCIPLE)
 				){
