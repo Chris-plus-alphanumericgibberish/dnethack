@@ -1141,13 +1141,19 @@ moveloop()
 			}
 		    }
 
-		    if ((u.uen < u.uenmax) && 
-			(wtcap < MOD_ENCUMBER && !Race_if(PM_INCANTIFIER) &&
-			  (!(moves%(((MAXULEV+5) - u.ulevel) *
-				    (Role_if(PM_WIZARD) ? 3 : 4) / 6))))) {
-				u.uen += rn1((int)(ACURR(A_WIS) + ACURR(A_INT)) / 10 + 1,1);
-				if (u.uen > u.uenmax)  u.uen = u.uenmax;
+		    if (u.uen < u.uenmax && 
+				wtcap < MOD_ENCUMBER && 
+				!Race_if(PM_INCANTIFIER)
+			) {
 				flags.botl = 1;
+				int reglevel = u.ulevel + (((int) ACURR(A_WIS)) - 10)/2;
+				if(reglevel < 1) reglevel = 1;
+				if(Role_if(PM_WIZARD)) reglevel += 10;
+				//recover 1/30th energy per turn:
+				u.uen += reglevel/30;
+				//Now deal with any remainder
+				if(((moves)*(reglevel%30))/30 > ((moves-1)*(reglevel%30))/30) u.uen += 1;
+				if (u.uen > u.uenmax)  u.uen = u.uenmax;
 		    }
 			if(Energy_regeneration && u.uen < u.uenmax){
 				u.uen++;
