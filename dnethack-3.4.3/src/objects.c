@@ -430,7 +430,7 @@ HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1, 50,   5, 7, 0, MINERAL, CLR_BLACK),
 HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
+		0, 1,  INFRAVISION,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
 HELM("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2,150, 300, 5, 1, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
