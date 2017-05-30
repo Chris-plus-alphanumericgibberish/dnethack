@@ -3367,7 +3367,7 @@ register struct	monst	*mtmp;
 					if(!rn2(4)){
 						mongets(mtmp, LEATHER_ARMOR);
 					}
-				} else if(mtmp->data == &mons[PM_KILLER_BEE]){
+				} else if(mtmp->data == &mons[PM_QUEEN_BEE]){
 					chance = rnd(10);
 					if(chance == 10) mongets(mtmp, PLATE_MAIL);
 					else if(chance >= 8) mongets(mtmp, SCALE_MAIL);
