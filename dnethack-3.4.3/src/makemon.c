@@ -3077,10 +3077,6 @@ register struct monst *mtmp;
 				otmp->obj_material = IRON;
 				(void) mpickobj(mtmp, otmp);
 			break;
-		    case PM_KARY__THE_FIEND_OF_FIRE:{
-				mongets(mtmp, LEATHER_ARMOR);
-				mongets(mtmp, SCIMITAR);
-			}break;
 		    case PM_MARILITH:{
 				chance = rnd(10);
 				if(chance >= 9) mongets(mtmp, PLATE_MAIL);
@@ -3858,6 +3854,11 @@ register struct	monst	*mtmp;
 	    	/* moved here from m_initweap() because these don't
 		   have AT_WEAP so m_initweap() is not called for them */
 			switch(monsndx(ptr)){
+///////////////////////////////
+		    case PM_KARY__THE_FIEND_OF_FIRE:
+				mongets(mtmp, LEATHER_ARMOR);
+				mongets(mtmp, SCIMITAR);
+			break;
 ///////////////////////////////
 			case PM_ALDINACH:
 				otmp = mksobj(MASK, FALSE, FALSE);
