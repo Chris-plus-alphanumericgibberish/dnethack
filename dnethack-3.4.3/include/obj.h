@@ -416,13 +416,17 @@ struct obj {
 #define is_twoweapable_artifact(otmp) ((otmp)->oartifact == ART_STING\
 				|| (otmp)->oartifact == ART_ORCRIST\
 				|| (otmp)->oartifact == ART_GRIMTOOTH\
+				|| (otmp)->oartifact == ART_CARNWENNAN\
 				|| (otmp)->oartifact == ART_CLAIDEAMH\
 				|| (otmp)->oartifact == ART_DRAGONLANCE\
 				|| (otmp)->oartifact == ART_DEMONBANE\
+				|| (otmp)->oartifact == ART_NODENSFORK\
+				|| (otmp)->oartifact == ART_GAIA_S_FATE\
 				|| (otmp)->oartifact == ART_WEREBANE\
 				|| (otmp)->oartifact == ART_GIANTSLAYER\
 				|| (otmp)->oartifact == ART_VAMPIRE_KILLER\
 				|| (otmp)->oartifact == ART_KINGSLAYER\
+				|| (otmp)->oartifact == ART_PEACE_KEEPER\
 				|| (otmp)->oartifact == ART_OGRESMASHER\
 				|| (otmp)->oartifact == ART_TROLLSBANE\
 				|| (otmp)->oartifact == ART_PEN_OF_THE_VOID\
