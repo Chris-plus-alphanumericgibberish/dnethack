@@ -1368,17 +1368,17 @@ asGuardian:
 								dmg = 0;
 								switch(u.oonaenergy){
 									case AD_FIRE:
-										if(resists_fire(tmpm)) dmg = d(mtmp->m_lev/2+10,4);
+										if(resists_fire(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
 										else break;
 										if(!resists_cold(tmpm)) dmg *= 1.5;
 									break;
 									case AD_COLD:
-										if(resists_cold(tmpm)) dmg = d(mtmp->m_lev/2+10,4);
+										if(resists_cold(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
 										else break;
 										if(!resists_fire(tmpm)) dmg *= 1.5;
 									break;
 									case AD_ELEC:
-										if(resists_elec(tmpm)) dmg = d(mtmp->m_lev/2+10,4);
+										if(resists_elec(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
 									break;
 								}
 								if(dmg) tmpm->mhp = max(tmpm->mhp - dmg,1);
@@ -1389,17 +1389,17 @@ asGuardian:
 						dmg = 0;
 						switch(u.oonaenergy){
 							case AD_FIRE:
-								if(Fire_resistance) dmg = d(mtmp->m_lev/2+10,4);
+								if(Fire_resistance) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
 								else break;
 								if(!Cold_resistance) dmg *= 1.5;
 							break;
 							case AD_COLD:
-								if(Cold_resistance) dmg = d(mtmp->m_lev/2+10,4);
+								if(Cold_resistance) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
 								else break;
 								if(!Fire_resistance) dmg *= 1.5;
 							break;
 							case AD_ELEC:
-								if(Shock_resistance) dmg = d(mtmp->m_lev/2+10,4);
+								if(Shock_resistance) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
 							break;
 						}
 						if(Half_spell_damage) dmg /= 2;

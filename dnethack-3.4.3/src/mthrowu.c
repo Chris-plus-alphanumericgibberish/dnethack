@@ -81,7 +81,9 @@ boolean burn;
 		return 0;
 	}
 	
-	if((bypassDR && (AC_VALUE(base_uac()+u.uspellprot) - u.uspellprot + tlev <= rnd(20))) || (!bypassDR && (AC_VALUE(u.uac+u.uspellprot)-u.uspellprot + tlev <= rnd(20)))) {
+	if((bypassDR && (AC_VALUE(base_uac()+u.uspellprot) - u.uspellprot + tlev <= rnd(20))) || 
+	   (!bypassDR && (AC_VALUE(u.uac+u.uspellprot)-u.uspellprot + tlev <= rnd(20)))
+	){
 		if(Blind || !flags.verbose) pline("It misses.");
 		else You("are almost hit by %s.", onm);
 		return(0);
@@ -684,7 +686,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 						break;
 					}
 				}
-			    hitu = thitu(4+mon->m_lev, 0, singleobj, (char *)0, FALSE);
+			    hitu = thitu(4+(mon->m_lev)/5+2, 0, singleobj, (char *)0, FALSE);
 			    if(hitu>0) break;
 			default:
 			    dam = dmgval(singleobj, &youmonst, 0);
@@ -702,7 +704,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 					if(singleobj->otyp == ELVEN_ARROW) dam++;
 				}
 			    if (bigmonst(youracedata)) hitv++;
-			    hitv += 4 + mon->m_lev + singleobj->spe;
+			    hitv += 4 + (mon->m_lev)/5+2 + singleobj->spe;
 			    if (dam < 1) dam = 1;
 				/*FIXME:  incomplete initialization, monsters can't use artifact ranged weapons*/
 //				if(/*hitu && */(singleobj->oartifact || ammo_and_launcher(singleobj, MON_WEP(mon))) ){
@@ -1022,7 +1024,7 @@ struct monst *mtmp;
 		if (hitv < -8) hitv = (hitv+8)*2/3-8;
 		if (hitv < -12) hitv = (hitv+12)*3/4-12;
 	    if (bigmonst(youracedata)) hitv++;
-	    hitv += 4 + mtmp->m_lev + otmp->spe;
+	    hitv += 4 + (mtmp->m_lev)/5+2 + otmp->spe;
 	    if (dam < 1) dam = 1;
 
 	    (void) thitu(hitv, dam, otmp, (char *)0,FALSE);
@@ -1504,6 +1506,7 @@ register struct attack *mattk;
 			    qvr->quan = 1;
 			    qvr->spe = 7;
 				rngmod = 1000; /* Fly until it strikes something */
+				bypassDR = 1;
 			break;
 			case AD_SLVR:
 				ammo_type = SILVER_ARROW;
@@ -1733,8 +1736,8 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 		    if(canseemon(mtmp))
 			pline("%s breathes %s!", Monnam(mtmp),
 			      breathwep[typ-1]);
-		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/3),
-			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/3), (int)mattk->damd)*mult) : 0);
+		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + min(MAX_BONUS_DICE, (mtmp->m_lev/3)),
+			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + min(MAX_BONUS_DICE, (mtmp->m_lev/3)), (int)mattk->damd)*mult) : 0);
 			if(mtmp->mux != u.ux || mtmp->muy != u.uy){
 				//figures out you aren't where it thought you were
 				mtmp->mux = 0;
@@ -1833,8 +1836,8 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 			      breathwep[typ-1]);
 		    nomul(0, NULL);
 	            }
-		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (mtmp->m_lev/3),
-			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (mtmp->m_lev/3), (int)mattk->damd)*mult) : 0);
+		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (min(MAX_BONUS_DICE, mtmp->m_lev/3)),
+			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (min(MAX_BONUS_DICE, mtmp->m_lev/3)), (int)mattk->damd)*mult) : 0);
 		    /* breath runs out sometimes. Also, give monster some
 		     * cunning; don't breath if the player fell asleep.
 		     */

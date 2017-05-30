@@ -15,6 +15,8 @@ struct spell {
 #define spellid(spell)		spl_book[spell].sp_id
 #define spellknow(spell)	spl_book[spell].sp_know
 
+#define MAX_BONUS_DICE	10
+
 /* Zap types, also used for explosions */
 #define ZT_MAGIC_MISSILE        (AD_MAGM-1)
 #define ZT_FIRE                 (AD_FIRE-1)

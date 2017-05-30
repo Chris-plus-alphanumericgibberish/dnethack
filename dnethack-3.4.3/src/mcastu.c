@@ -1057,7 +1057,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	if (!foundyou) {
 		if(is_aoe_spell(spellnum)){
 			dmd = 6;
-			dmn = ml/3;
+			dmn = min(MAX_BONUS_DICE, ml/3+1);
 			if (mattk->damd) dmd = (int)(mattk->damd);
 			
 			if (mattk->damn) dmn+= (int)(mattk->damn);
@@ -1075,7 +1075,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		return(0);
 	    }
 	} else {
-		int dmd = 6, dmn = ml/3;
+		int dmd = 6, dmn = min(MAX_BONUS_DICE, ml/3+1);
 		
 		if (dmn > 15) dmn = 15;
 		
@@ -1823,7 +1823,7 @@ summon_alien:
            if (weap == TRIDENT) weap = JAVELIN;
        }
        otmp = mksobj(weap, TRUE, FALSE);
-       otmp->quan = (long) rn1(mtmp ? (mtmp->m_lev/2 + 1) : (rn2(12) + 1), 4);
+       otmp->quan = (long) rn1(mtmp ? (min(MAX_BONUS_DICE, mtmp->m_lev/3 + 1)) : (rn2(12) + 1), 4);
 	   otmp->quan = min(otmp->quan, 16L);
        otmp->owt = weight(otmp);
        otmp->spe = 0;
@@ -1982,7 +1982,7 @@ summon_alien:
 		} else {
 			x = (int) mtmp->mux;
 			y = (int) mtmp->muy;
-			n = mtmp->m_lev/3+4;
+			n = min(MAX_BONUS_DICE, mtmp->m_lev/3+1)+3;
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon != mtmp &&
@@ -2142,7 +2142,7 @@ ray:
        if(canspotmon(mtmp))
            pline("%s zaps you with a %s!", Monnam(mtmp),
                      flash_types[10+zap-1]);
-       buzz(-(10+zap-1),(mtmp->m_lev/2)+1, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
+       buzz(-(10+zap-1),min(MAX_BONUS_DICE, (mtmp->m_lev/3)+1), mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
        dmg = 0;
 	   stop_occupation();
        break;
@@ -2245,7 +2245,7 @@ ray:
 	    if (canseemon(mtmp))
 		pline("%s looks better.", Monnam(mtmp));
 	    /* note: player healing does 6d4; this used to do 1d8; then it did 3d6 */
-	    if ((mtmp->mhp += min(d(mtmp->m_lev/3+1,8), 10)) > mtmp->mhpmax)
+	    if ((mtmp->mhp += d(min(MAX_BONUS_DICE, mtmp->m_lev/3+1),8)) > mtmp->mhpmax)
 			mtmp->mhp = mtmp->mhpmax;
 	}
 	dmg = 0;
@@ -2260,7 +2260,7 @@ ray:
 		} else {
 			x = (int) mtmp->mx;
 			y = (int) mtmp->my;
-			n = mtmp->m_lev/3+1;
+			n = min(MAX_BONUS_DICE, mtmp->m_lev/3+1);
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( !DEADMONSTER(cmon) &&
@@ -2294,7 +2294,7 @@ ray:
 		} else {
 			x = (int) mtmp->mx;
 			y = (int) mtmp->my;
-			n = mtmp->m_lev/3+1;
+			n = min(MAX_BONUS_DICE, mtmp->m_lev/3+1);
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon->mhp < cmon->mhpmax && 
@@ -2330,7 +2330,7 @@ ray:
 				x = (int) mtmp->mux;
 				y = (int) mtmp->muy;
 			}
-			n = mtmp->m_lev/3+1;
+			n = min(MAX_BONUS_DICE, mtmp->m_lev/3+1);
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon != mtmp &&
@@ -2367,7 +2367,7 @@ ray:
 				x = (int) mtmp->mux;
 				y = (int) mtmp->muy;
 			}
-			n = mtmp->m_lev/3+4;
+			n = min(MAX_BONUS_DICE, mtmp->m_lev/3+1)+3;
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon != mtmp &&
@@ -2737,7 +2737,7 @@ castmm(mtmp, mdef, mattk)
 
 	{
 		dmd = 6;
-		dmn = ml/3;
+		dmn = min(MAX_BONUS_DICE, ml/3+1);
 		
 		if(dmn > 15) dmn = 15;
 		
@@ -2953,7 +2953,7 @@ buzzmu(mtmp, mattk, ml)		/* monster uses spell (ranged) */
 	register struct attack  *mattk;
 	int ml;
 {
-	int dmn = (int)(ml/3);
+	int dmn = (int)(min(MAX_BONUS_DICE, ml/3+1));
 	int type = mattk->adtyp;
 	
 	if(mattk->damn) dmn += mattk->damn;
@@ -3006,7 +3006,7 @@ buzzmm(magr, mdef, mattk, ml)		/* monster uses spell (ranged) */
 	struct attack  *mattk;
 	int ml;
 {
-	int dmn = (int)(ml/3);
+	int dmn = (int)(min(MAX_BONUS_DICE, ml/3+1));
 	int type = mattk->adtyp;
     char buf[BUFSZ];
 	
@@ -3149,7 +3149,7 @@ castum(mtmp, mattk)
  */
 	{
 		dmd = 6;
-		dmn = ml/3;
+		dmn = min(MAX_BONUS_DICE, ml/3+1);
 		
 		if(dmn > 15) dmn = 15;
 		
@@ -3672,11 +3672,11 @@ int spellnum;
 		if(yours){
 			x = (int) u.ux;
 			y = (int) u.uy;
-			n = u.ulevel/3+1;
+			n = min(MAX_BONUS_DICE, u.ulevel/3+1);
 		} else {
 			x = (int) mattk->mx;
 			y = (int) mattk->my;
-			n = mattk->m_lev/3+1;
+			n = min(MAX_BONUS_DICE, mattk->m_lev/3+1);
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( !DEADMONSTER(cmon) &&
@@ -3706,11 +3706,11 @@ int spellnum;
 		if(yours){
 			x = (int) u.ux;
 			y = (int) u.uy;
-			n = u.ulevel/3+1;
+			n = min(MAX_BONUS_DICE, u.ulevel/3+1);
 		} else {
 			x = (int) mattk->mx;
 			y = (int) mattk->my;
-			n = mattk->m_lev/3+1;
+			n = min(MAX_BONUS_DICE, mattk->m_lev/3+1);
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon->mhp < cmon->mhpmax && 
@@ -3738,7 +3738,7 @@ int spellnum;
 		if(yours){
 			x = (int) u.ux;
 			y = (int) u.uy;
-			n = u.ulevel/3+1;
+			n = min(MAX_BONUS_DICE, u.ulevel/3+1);
 		} else {
 			if(mattk->mux == 0 && mattk->muy == 0){
 				x = (int) mattk->mx;
@@ -3747,7 +3747,7 @@ int spellnum;
 				x = (int) mattk->mux;
 				y = (int) mattk->muy;
 			}
-			n = mattk->m_lev/3+1;
+			n = min(MAX_BONUS_DICE, mattk->m_lev/3+1);
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon != mattk &&
@@ -3776,7 +3776,7 @@ int spellnum;
 		if(yours){
 			x = (int) u.ux;
 			y = (int) u.uy;
-			n = u.ulevel/3+1;
+			n = min(MAX_BONUS_DICE, u.ulevel/3+1);
 		} else {
 			if(mattk->mux == 0 && mattk->muy == 0){
 				x = (int) mattk->mx;
@@ -3785,7 +3785,7 @@ int spellnum;
 				x = (int) mattk->mux;
 				y = (int) mattk->muy;
 			}
-			n = mattk->m_lev/3+1;
+			n = min(MAX_BONUS_DICE, mattk->m_lev/3+1);
 		}
 		for(cmon = fmon; cmon; cmon = cmon->nmon){
 			if( cmon != mattk &&

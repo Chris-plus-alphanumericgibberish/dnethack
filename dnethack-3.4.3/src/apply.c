@@ -1004,7 +1004,7 @@ struct obj *obj;
 	} else if(!mtmp->mcan && !mtmp->minvis &&
 					mtmp->data == &mons[PM_FLOATING_EYE] && 
 					ward_at(mtmp->mx,mtmp->my) != HAMSA) {
-		int tmp = d((int)mtmp->m_lev, (int)mtmp->data->mattk[0].damd);
+		int tmp = d(min(MAX_BONUS_DICE, (int)mtmp->m_lev), (int)mtmp->data->mattk[0].damd);
 		if (!rn2(4)) tmp = 120;
 		if (vis)
 			pline("%s is frozen by its reflection.", Monnam(mtmp));

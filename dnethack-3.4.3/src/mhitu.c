@@ -549,8 +549,12 @@ mattacku(mtmp)
 /*	Work out the armor class differential	*/
 	tmp = AC_VALUE(u.uac+u.uspellprot) + 10 - u.uspellprot;		/* tmp ~= 0 - 20 */
 	tchtmp = AC_VALUE(base_uac()+u.uspellprot) + 10 - u.uspellprot;
-	tmp += mtmp->m_lev;
-	tchtmp += mtmp->m_lev;
+	tmp += mtmp->m_lev/3;
+	if(is_prince(mtmp->data)) tmp += 5;
+	if(is_lord(mtmp->data)) tmp += 2;
+	tchtmp += mtmp->m_lev/3;
+	if(is_prince(mtmp->data)) tchtmp += 5;
+	if(is_lord(mtmp->data)) tchtmp += 2;
 	tmp += u.ustdy;
 	tchtmp += u.ustdy;
 	oarmor = which_armor(mtmp, W_ARMG);
@@ -718,7 +722,7 @@ mattacku(mtmp)
 					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youracedata))) {
 			    if (foundyou) {
-				if(tmp > (j = rnd(20+i))) {
+				if(tmp > (j = rnd(20+i*2))) {
 				    if (mattk->aatyp != AT_KICK ||
 					    !(thick_skinned(youracedata) || u.sealsActive&SEAL_ECHIDNA))
 					sum[i] = hitmu(mtmp, mattk);
@@ -742,7 +746,7 @@ mattacku(mtmp)
 					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youracedata))) {
 			    if (foundyou) {
-				if(tchtmp > (j = rnd(20+i))) {
+				if(tchtmp > (j = rnd(20+i*2))) {
 				    if (mattk->aatyp != AT_KICK ||
 					    !(thick_skinned(youracedata) || u.sealsActive&SEAL_ECHIDNA))
 					sum[i] = hitmu(mtmp, mattk);
@@ -764,7 +768,7 @@ mattacku(mtmp)
 		case AT_SHDW:
 			if(!range2 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict)) {
 			    if (foundyou) {
-				if(tchtmp > (j = rnd(20+i))) {
+				if(tchtmp > (j = rnd(20+i*2))) {
 				    if (mattk->aatyp != AT_KICK ||
 					    !(thick_skinned(youracedata) || u.sealsActive&SEAL_ECHIDNA))
 					sum[i] = hitmu(mtmp, mattk);
@@ -821,7 +825,7 @@ mattacku(mtmp)
 		case AT_ENGL:
 			if (!range2) {
 			    if(foundyou) {
-				if((u.uswallow || tmp > (j = rnd(20+i))) && !(u.sealsActive&SEAL_AHAZU)) {
+				if((u.uswallow || tmp > (j = rnd(20+i*2))) && !(u.sealsActive&SEAL_AHAZU)) {
 				    /* Force swallowing monster to be
 				     * displayed even when player is
 				     * moving away */
@@ -848,7 +852,7 @@ mattacku(mtmp)
 		case AT_ILUR:
 			if (!range2) {
 			    if(foundyou) {
-				if(u.uswallow || tmp > (j = rnd(20+i))) {
+				if(u.uswallow || tmp > (j = rnd(20+i*2))) {
 				    /* Force swallowing monster to be
 				     * displayed even when player is
 				     * moving away */
@@ -940,7 +944,7 @@ mattacku(mtmp)
 					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youracedata)){
 					if (foundyou){
-						if(tmp > (j = rnd(20+i))) {
+						if(tmp > (j = rnd(20+i*2))) {
 							sum[i] = hitmu(mtmp, mattk);
 						} else
 							missmu(mtmp, (tmp == j), mattk);
@@ -992,19 +996,19 @@ mattacku(mtmp)
 						mswings(mtmp, otmp);
 					}
 					if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))){
-						if(tchtmp > (j = dieroll = rnd(20+i))){
+						if(tchtmp > (j = dieroll = rnd(20+i*2))){
 							sum[i] = hitmu(mtmp, mattk);
 							if(mattk->aatyp == AT_DEVA && sum[i]){
 								deva = 1;
-								while(tchtmp > (j = dieroll = rnd(20+i+(deva++)*5))) sum[i] = hitmu(mtmp, mattk);
+								while(tchtmp > (j = dieroll = rnd(20+i+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
 							}
 						} else missmu(mtmp, (tchtmp == j), mattk);
 					} else {
-						if(tmp > (j = dieroll = rnd(20+i))){
+						if(tmp > (j = dieroll = rnd(20+i*2))){
 							sum[i] = hitmu(mtmp, mattk);
 							if(mattk->aatyp == AT_DEVA && sum[i]){
 								deva = 1;
-								while(tmp > (j = dieroll = rnd(20+i+(deva++)*5))) sum[i] = hitmu(mtmp, mattk);
+								while(tmp > (j = dieroll = rnd(20+i+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
 							}
 						} else missmu(mtmp, (tmp == j), mattk);
 					}
@@ -1036,7 +1040,7 @@ mattacku(mtmp)
 						}
 						mswings(mtmp, otmp);
 					}
-					if(tmp > (j = dieroll = rnd(20+i)))
+					if(tmp > (j = dieroll = rnd(20+i*2)))
 						sum[i] = hitmu(mtmp, mattk);
 					else
 						missmu(mtmp, (tmp == j), mattk);

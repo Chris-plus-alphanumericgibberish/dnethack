@@ -3078,12 +3078,14 @@ register struct monst *mtmp;
 				(void) mpickobj(mtmp, otmp);
 			break;
 		    case PM_MARILITH:{
-				chance = rnd(10);
-				if(chance >= 9) mongets(mtmp, PLATE_MAIL);
-				else if(chance >= 6) mongets(mtmp, CHAIN_MAIL);
-				else if(chance >= 3) mongets(mtmp, STUDDED_LEATHER_ARMOR);
-				else mongets(mtmp, LEATHER_ARMOR);
-				mongets(mtmp, SCIMITAR);
+				if(Inhell){
+					chance = rnd(10);
+					if(chance >= 9) mongets(mtmp, PLATE_MAIL);
+					else if(chance >= 6) mongets(mtmp, CHAIN_MAIL);
+					else if(chance >= 3) mongets(mtmp, STUDDED_LEATHER_ARMOR);
+					else mongets(mtmp, LEATHER_ARMOR);
+					mongets(mtmp, SCIMITAR);
+				}
 			}break;
 		    case PM_PIT_FIEND:
 				otmp = mksobj(TRIDENT, FALSE, FALSE);

@@ -235,10 +235,14 @@ mattackm(magr, mdef)
 		) return(MM_MISS);
 	
     /* Calculate the armour class differential. */
-    tmp = find_mac(mdef) + magr->m_lev;
+    tmp = find_mac(mdef) + (magr->m_lev)/3;
 	tmp += mdef->mstdy;
-    tchtmp = base_mac(mdef) + magr->m_lev;
+	if(is_prince(magr->data)) tmp += 5;
+	if(is_lord(magr->data)) tmp += 2;
+    tchtmp = base_mac(mdef) + (magr->m_lev)/3;
 	tchtmp += mdef->mstdy;
+	if(is_prince(magr->data)) tchtmp += 5;
+	if(is_lord(magr->data)) tchtmp += 2;
 	oarmor = which_armor(magr, W_ARMG);
 	if(oarmor){
 		if(oarmor->otyp == GAUNTLETS_OF_POWER){
@@ -429,7 +433,7 @@ meleeattack:
 		    strike = 0;
 		    break;
 		}
-		dieroll = rnd(20 + i);
+		dieroll = rnd(20 + i*2);
 		if(mattk->aatyp == AT_TUCH || mattk->aatyp == AT_SHDW){
 			strike = (tchtmp > dieroll);
 		} else {
@@ -462,7 +466,7 @@ meleeattack:
 		    }
 			if(mattk->aatyp == AT_DEVA && !DEADMONSTER(mdef)){
 				int deva = 1;
-				while(!DEADMONSTER(mdef) && tmp > (dieroll = rnd(20+i+(deva++)*5))) res[i] = hitmm(magr, mdef, mattk);
+				while(!DEADMONSTER(mdef) && tmp > (dieroll = rnd(20+i+(deva++)*2))) res[i] = hitmm(magr, mdef, mattk);
 			}
 		} else
 		    missmm(magr, mdef, mattk);
