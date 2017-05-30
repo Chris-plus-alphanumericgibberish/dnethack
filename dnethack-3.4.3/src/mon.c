@@ -3155,7 +3155,7 @@ boolean was_swallowed;			/* digestion */
 					found = FALSE; //haven't found the child yet.
 //				    mtmp2 = mtmp->nmon;
 					mdat1 = mtmp->data;
-					if(mdat1==child[i]){
+					if(!DEADMONSTER(mtmp) && mdat1==child[i]){
 						set_mon_data(mtmp, growto[i], 0);
 						//Assumes Auton
 						mtmp->m_lev += 1;
