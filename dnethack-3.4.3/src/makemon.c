@@ -243,7 +243,7 @@ register struct monst *mtmp;
 	    struct obj *otmp = mksobj(SILVER_ARROW, TRUE, FALSE);
 	    otmp->blessed = FALSE;
 	    otmp->cursed = FALSE;
-		otmp->quan += 43;
+		otmp->quan += 18+rnd(8);
 		(void) mpickobj(mtmp,otmp);
 		switch(rnd(12)){
 			case 1:
