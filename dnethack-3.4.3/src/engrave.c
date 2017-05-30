@@ -5067,7 +5067,7 @@ static const char *epitaphs[] = {
 	"He never killed a man, that did not need killing.",
 	"Go away!",
 	
-	"TANJ!",
+	"TANJ!", /* Larry Niven */
 	
 	"Summer Rose - Thus Kindly I Scatter", /* RWBY */
 	
@@ -5075,7 +5075,11 @@ static const char *epitaphs[] = {
 	
 	"Of course, you realize, this means war.",
 	
-	"In death ground, fight.",
+	"In death ground, fight.", /* Sun Tzu */
+	
+	"Did you see him passing by?", /* Dark Souls 3 */
+	
+	"For every hero commemorated, a thousand martyrs die unmourned and unremembered." /*Warhammer 40k*/
 	
 	"FIQ:  One step from divinity.",
 		"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
