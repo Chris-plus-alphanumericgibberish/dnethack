@@ -2602,13 +2602,13 @@ boolean stoning;
 	obj->quan = save_quan;
     } else if (flags.soundok)
 	You_hear("%s.", (obj->otyp == POT_ACID) ? "drinking" : "chewing");
-    m_useup(mon, obj);
     if (((obj->otyp == POT_ACID) || acidic(&mons[obj->corpsenm])) &&
 		    !resists_acid(mon)) {
-	mon->mhp -= rnd(15);
-	pline("%s has a very bad case of stomach acid.",
-	    Monnam(mon));
+		mon->mhp -= rnd(15);
+		pline("%s has a very bad case of stomach acid.",
+			Monnam(mon));
     }
+    m_useup(mon, obj);
     if (mon->mhp <= 0) {
 	pline("%s dies!", Monnam(mon));
 	if (by_you) xkilled(mon, 0);
