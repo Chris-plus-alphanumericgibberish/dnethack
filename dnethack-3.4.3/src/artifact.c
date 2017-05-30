@@ -266,9 +266,10 @@ aligntyp alignment;	/* target alignment, or A_NONE */
 	/* gather eligible artifacts */
 	for (n = 0, a = artilist+1, m = 1; a->otyp; a++, m++)
 	    if ((!by_align ? artitypematch(a, otmp) :
-		    (a->alignment == alignment ||
-			(a->alignment == A_NONE && (u.ugifts > 0 || alignment == A_VOID )))) &&
-		(!(a->spfx & SPFX_NOGEN) || unique || (m==ART_PEN_OF_THE_VOID && Role_if(PM_EXILE))) && !artiexist[m]
+				(a->alignment == alignment ||
+				(a->alignment == A_NONE && (u.ugifts > 0 || alignment == A_VOID )))) &&
+			(!(a->spfx & SPFX_NOGEN) || unique || (m==ART_PEN_OF_THE_VOID && Role_if(PM_EXILE))) && 
+			!artiexist[m]
 		) {
 			if (by_align && (Role_if(a->role) || Pantheon_if(a->role))){
 				goto make_artif;	/* 'a' points to the desired one */
