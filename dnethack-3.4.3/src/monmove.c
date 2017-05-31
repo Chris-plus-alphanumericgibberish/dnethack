@@ -1084,7 +1084,8 @@ register struct monst *mtmp;
 			(IS_GRAVE(lev->typ)) ||
 			(lev->typ == DRAWBRIDGE_UP) ||
 			(IS_THRONE(lev->typ)) ||
-			(IS_ALTAR(lev->typ))
+			(IS_ALTAR(lev->typ)) ||
+			(Is_airlevel(&u.uz))
 		)){
 			typ = fillholetyp(mtmp->mx,mtmp->my);
 			if (canseemon(mtmp))
