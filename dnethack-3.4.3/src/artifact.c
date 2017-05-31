@@ -119,6 +119,8 @@ hack_artifacts()
 {
 	struct artifact *art;
 	int alignmnt = flags.stag ? u.ualign.type : aligns[flags.initalign].value;
+	
+	if(Role_if(PM_EXILE)) alignmnt = A_VOID; //hack_artifacts may be called before this is propperly set
 
 	int gcircletsa = find_gcirclet();
 	
@@ -130,11 +132,14 @@ hack_artifacts()
 	if(Race_if(PM_HALF_DRAGON) && flags.initgend){
 		int i;
 		
-		artilist[ART_LIFEHUNT_SCYTHE].role = Role_switch;
+
 		
 		for(i = 0; i < ART_ROD_OF_SEVEN_PARTS; i++)
 			if(artilist[i].role == Role_switch)
 				artilist[i].role = NON_PM;
+		
+		artilist[ART_LIFEHUNT_SCYTHE].role = Role_switch;
+		artilist[ART_LIFEHUNT_SCYTHE].alignment = alignmnt;
 	}
 
 	/* Excalibur can be used by any lawful character, not just knights */
