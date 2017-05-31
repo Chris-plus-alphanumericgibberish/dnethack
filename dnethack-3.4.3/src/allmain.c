@@ -1071,6 +1071,7 @@ moveloop()
 					){
 						int reglevel = u.ulevel + (((int) ACURR(A_CON)) - 10)/2;
 						if(reglevel < 1) reglevel = 1;
+						if(Role_if(PM_HEALER)) reglevel += 10;
 						flags.botl = 1;
 						//recover 1/30th hp per turn:
 						u.uhp += reglevel/30;
@@ -1149,6 +1150,10 @@ moveloop()
 				int reglevel = u.ulevel + (((int) ACURR(A_WIS)) - 10)/2;
 				if(reglevel < 1) reglevel = 1;
 				if(Role_if(PM_WIZARD)) reglevel += 10;
+				if(Role_if(PM_HEALER)) reglevel += 6;
+				if(Role_if(PM_PRIEST)) reglevel += 6;
+				if(Role_if(PM_VALKYRIE)) reglevel += 3;
+				if(Role_if(PM_MONK)) reglevel += 3;
 				//recover 1/30th energy per turn:
 				u.uen += reglevel/30;
 				//Now deal with any remainder
