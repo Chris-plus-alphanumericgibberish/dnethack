@@ -3112,27 +3112,30 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	if (otmp->oartifact == ART_LIFEHUNT_SCYTHE) {
 		if (youattack) {
 			int life = (*dmgptr)/2+1;
-			if(u.ustdy) *dmgptr += u.ustdy;
-			mdef->mstdy += life;
-			u.ustdy = max(u.ustdy, life/2+1);
-			life /= 2;
-			if (life) healup(life+1, 0, FALSE, FALSE);
+			if(mdef->mstdy > 0) life += mdef->mstdy;
+			
+			mdef->mstdy += (*dmgptr)/2+1;
+			u.ustdy += (*dmgptr)/4+1;
+			
+			healup(life, 0, FALSE, FALSE);
 		} else if (youdefend) {
 			int life = (*dmgptr)/2+1;
-			if(mdef->mstdy) *dmgptr += mdef->mstdy;
-			u.ustdy += life;
-			magr->mstdy = max(magr->mstdy, life/2+1);
-			life /= 2;
+			if(u.ustdy > 0) life += u.ustdy;
+			
+			u.ustdy += (*dmgptr)/2+1;
+			magr->mstdy += (*dmgptr)/4+1;
+			
 			if (magr && magr->mhp < magr->mhpmax) {
-				magr->mhp += life+1;
+				magr->mhp += life;
 				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
 			}
 		} else { /* m vs m */
 			int life = (*dmgptr)/2+1;
-			if(mdef->mstdy) *dmgptr += mdef->mstdy;
-			mdef->mstdy += life;
-			magr->mstdy = max(magr->mstdy, life/2+1);
-			life /= 2;
+			if(mdef->mstdy > 0) life += mdef->mstdy;
+			
+			mdef->mstdy += (*dmgptr)/2+1;
+			magr->mstdy += (*dmgptr)/4+1;
+			
 			if (magr && magr->mhp < magr->mhpmax) {
 				magr->mhp += life+1;
 				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;

@@ -1191,11 +1191,6 @@ int thrown;
 							(obj == uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
 							(Role_if(PM_CONVICT) && !Upolyd && obj == uwep && uwep->otyp == SPOON))
 				)) {
-					if(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data) && !is_unalive(mon->data)){
-						pline("The power of lifehunt seeks the neck of %s!",the(mon_nam(mon)));
-						mon->mstdy += u.ulevel;
-						u.ustdy = u.ulevel/2+1;
-					}
 					if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
 						You("snipe the flat-footed %s!", l_monnam(mon));
 					else if((mon->mux != u.ux || mon->muy != u.uy) && 
@@ -1714,7 +1709,16 @@ defaultvalue:
 			}
 	    }
 	}
-
+	
+	if(mon->mstdy){
+		tmp += mon->mstdy;
+		if(mon->mstdy > 0) mon->mstdy -= 1;
+		else mon->mstdy += 1;
+	}
+	if(mon->ustdym){
+		tmp += rnd(mon->ustdym);
+	}
+	
 	if(resist_attacks(mdat))
 		tmp = 0;
 	else {

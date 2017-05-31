@@ -394,6 +394,8 @@ register struct monst *mtmp;
 	else if(is_blind(mtmp)) Strcat(info, ", dazzled");
 	if (mtmp->mstun)	  Strcat(info, ", stunned");
 	if (mtmp->msleeping)	  Strcat(info, ", asleep");
+	if (mtmp->mstdy > 0)	  Sprintf(eos(info), ", weakened (%d)", mtmp->mstdy);
+	else if (mtmp->mstdy < 0)	  Sprintf(eos(info), ", protected (%d)", mtmp->mstdy);
 #if 0	/* unfortunately mfrozen covers temporary sleep and being busy
 	   (donning armor, for instance) as well as paralysis */
 	else if (mtmp->mfrozen)	  Strcat(info, ", paralyzed");
@@ -470,6 +472,7 @@ ustatusline()
 	    }	/* note: "goop" == "glop"; variation is intentional */
 	}
 	if (Stunned)		Strcat(info, ", stunned");
+	if (u.ustdy > 0)	  Sprintf(eos(info), ", weakened (%d)", u.ustdy);
 #ifdef STEED
 	if (!u.usteed)
 #endif
