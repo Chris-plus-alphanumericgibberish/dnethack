@@ -1928,7 +1928,6 @@ u_init()
 			}
 			ini_inv(DarkWand);
 		}
-		if(!rn2(5)) ini_inv(Magicmarker);
 		// if(!rn2(5)) ini_inv(Blindfold);
 		skill_init(Skill_W);
 		if(Race_if(PM_DROW) && flags.female) skill_add(Skill_DW);
