@@ -2118,7 +2118,7 @@ spiriteffects(power, atme)
 					boots = which_armor(mon, W_ARMF);
 					find_to_hit_rolls(mon, &tmp, &weptmp, &tchtmp);
 					if(tmp <= rnd(20)){
-						if(Wwalking){
+						if(boots && boots->otyp == WATER_WALKING_BOOTS){
 							pline("A sudden geyser from the abzu washes under %s's feet!", mon_nam(mon));
 							if(canseemon(mon)) makeknown(boots->otyp);
 						} else {
@@ -2127,7 +2127,7 @@ spiriteffects(power, atme)
 							water_damage(mon->minvent, FALSE, FALSE, FALSE, mon);
 						}
 					} else {
-						if(Wwalking){
+						if(boots && boots->otyp == WATER_WALKING_BOOTS){
 							pline("A sudden geyser from the abzu erupts under %s's feet!", mon_nam(mon));
 							if(mon->data->mmove >= 14){
 								pline("%s puts the added momentum to good use!", Monnam(mon));
