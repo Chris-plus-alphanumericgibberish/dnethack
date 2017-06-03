@@ -344,7 +344,8 @@ moveloop()
 
 	oldCon = ACURR(A_CON);
 	oldWisBon = ACURR(A_WIS)/4;
-	// printMons();
+//	printMons();
+//	printDPR();
     for(;;) {/////////////////////////MAIN LOOP/////////////////////////////////
     hpDiff = u.uhp;
 	get_nh_event();
@@ -1824,6 +1825,40 @@ get_realtime(void)
     return curtime;
 }
 #endif /* REALTIME_ON_BOTL || RECORD_REALTIME */
+
+STATIC_DCL
+void
+printDPR(){
+	FILE *rfile;
+	register int i, j, avdm, mdm;
+	char pbuf[BUFSZ];
+	struct permonst *ptr;
+	struct attack *attk;
+	rfile = fopen_datafile("MonDPR.tab", "w", SCOREPREFIX);
+	if (rfile) {
+		Sprintf(pbuf,"Name\taverage\tmax\n");
+		for(j=0;j<NUMMONS;j++){
+			ptr = &mons[j];
+			pbuf[0] = 0;
+			avdm = 0;
+			mdm = 0;
+			for(i = 0; i<6; i++){
+				attk = &ptr->mattk[i];
+				if(attk->aatyp == 0 &&
+					attk->adtyp == 0 &&
+					attk->damn == 0 &&
+					attk->damd == 0
+				) break;
+				else {
+					avdm += attk->damn * (attk->damd + 1)/2;
+					mdm += attk->damn * attk->damd;
+				}
+			}
+			Sprintf(pbuf,"%s\t%d\t%d\n", mons[j].mname, avdm, mdm);
+			fprintf(rfile, pbuf);
+		}
+	}
+}
 
 STATIC_DCL
 void
