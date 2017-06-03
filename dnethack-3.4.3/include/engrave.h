@@ -165,6 +165,7 @@ struct engr {
 
 #define LAST_DROW_SYM		EDDER_SYMBOL
 
+#define FOOTPRINT		43
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 

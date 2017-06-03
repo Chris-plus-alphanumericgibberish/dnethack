@@ -666,7 +666,10 @@ const char * haluWard[] =  {
 	"a crest of a lost house of Svartalfheim",
 
 	/* Eddergud holy symbol */
-	"an obsidian spiderweb",	
+	"an obsidian spiderweb",
+	
+	/* Footprint */
+	"a footprint",
 	
 	/* Not quite */
 	"a heptagenarian",
