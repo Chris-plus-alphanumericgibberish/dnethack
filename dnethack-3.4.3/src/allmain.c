@@ -417,10 +417,10 @@ moveloop()
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			if (!oldCon != ACURR(A_CON)) {
-				if(conplus(oldCon) > 0) u.uhpmax -= conplus(oldCon)*u.ulevel/2;
+				if(conplus(oldCon) > 0) u.uhpmax -= conplus(oldCon)*u.ulevel;
 				else u.uhpmax -= conplus(oldCon)*u.ulevel;
 				
-				if(conplus(ACURR(A_CON)) > 0) u.uhpmax += conplus(ACURR(A_CON))*u.ulevel/2;
+				if(conplus(ACURR(A_CON)) > 0) u.uhpmax += conplus(ACURR(A_CON))*u.ulevel;
 				else u.uhpmax += conplus(ACURR(A_CON))*u.ulevel;
 				
 				if(u.uhpmax < 1) u.uhpmax = 1;
