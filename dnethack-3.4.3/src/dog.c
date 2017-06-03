@@ -597,10 +597,10 @@ long nmv;		/* number of moves */
 		else mtmp->mhp += imv;
 	}
 	if(!nonliving(mtmp->data)){
-		imv /= 20;
-		if (mtmp->mhp + imv*(mtmp->m_lev) >= mtmp->mhpmax)
+		imv = imv*mtmp->m_lev/30;
+		if (mtmp->mhp + imv >= mtmp->mhpmax)
 			mtmp->mhp = mtmp->mhpmax;
-		else mtmp->mhp += imv*(mtmp->m_lev);
+		else mtmp->mhp += imv;
 	}
 }
 
