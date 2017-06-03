@@ -898,7 +898,7 @@ asGuardian:
 			mtmp->mspec_used = 7;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 				if(tmpm != mtmp && !DEADMONSTER(tmpm)){
-					if(tmpm->mpeaceful != mtmp->mpeaceful){
+					if(tmpm->mpeaceful != mtmp->mpeaceful && !resist(tmpm, 0, 0, FALSE)){
 						tmpm->mconf = 1;
 					}
 				}
