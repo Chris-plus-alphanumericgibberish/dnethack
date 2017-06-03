@@ -1130,17 +1130,17 @@ moveloop()
 			}
 		    /* moving around while encumbered is hard work */
 		    if (wtcap > MOD_ENCUMBER && u.umoved) {
-			if(!(wtcap < EXT_ENCUMBER ? moves%30 : moves%10)) {
-			    if (Upolyd && u.mh > 1) {
-				u.mh--;
-			    } else if (!Upolyd && u.uhp > 1) {
-				u.uhp--;
-			    } else {
-				You("pass out from exertion!");
-				exercise(A_CON, FALSE);
-				fall_asleep(-10, FALSE);
-			    }
-			}
+				if(!(wtcap < EXT_ENCUMBER ? moves%30 : moves%10)) {
+					if (Upolyd && u.mh > 1) {
+					u.mh--;
+					} else if (!Upolyd && u.uhp > 1) {
+					u.uhp--;
+					} else {
+					You("pass out from exertion!");
+					exercise(A_CON, FALSE);
+					fall_asleep(-10, FALSE);
+					}
+				}
 		    }
 
 		    if (u.uen < u.uenmax && 
