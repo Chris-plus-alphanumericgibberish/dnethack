@@ -1175,11 +1175,11 @@ WAND((char *)0,        "jeweled",   0, 150, 1, 0,         IRON,     HI_MINERAL),
 /* gems ... - includes stones and rocks but not boulders */
 #define GEM(name,desc,prob,wt,gval,nutr,mohs,glass,color) OBJECT( \
 	    OBJ(name,desc), \
-	    BITS(0,1,0,0,0,0,0,0,0,HARDGEM(mohs),0,-P_SLING,glass), 0, \
+	    BITS(0,1,0,0,0,0,0,0,0,HARDGEM(mohs),PIERCE,-P_SLING,glass), 0, \
 	    GEM_CLASS, prob, 0, 1, gval, 3, 3, 0, WP_GENERIC, nutr, color )
 #define ROCK(name,desc,kn,prob,wt,gval,sdam,ldam,hitbon,mgc,nutr,mohs,glass,color) OBJECT( \
 	    OBJ(name,desc), \
-	    BITS(kn,1,0,0,mgc,0,0,0,0,HARDGEM(mohs),0,-P_SLING,glass), 0, \
+	    BITS(kn,1,0,0,mgc,0,0,0,0,HARDGEM(mohs),WHACK,-P_SLING,glass), 0, \
 	    GEM_CLASS, prob, 0, wt, gval, sdam, ldam, hitbon, WP_GENERIC, nutr, color )
 GEM("magicite crystal","brilliant blue",1, 1, 9999, 15, 11, GEMSTONE, CLR_BRIGHT_BLUE),/*Needs tile*/
 GEM("dilithium crystal", "white",      2,  1, 4500, 15,  5, GEMSTONE, CLR_WHITE),
