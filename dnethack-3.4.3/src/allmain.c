@@ -1058,7 +1058,7 @@ moveloop()
 							//recover 1/30th hp per turn:
 							u.mh += u.ulevel/30;
 							//Now deal with any remainder
-							if(((moves)*(u.ulevel%30))/30 > ((moves-1)*(u.ulevel%30))/30) u.uhp += 1;
+							if(((moves)*(u.ulevel%30))/30 > ((moves-1)*(u.ulevel%30))/30) u.mh += 1;
 						}
 						if(u.mh > u.mhmax) u.mh = u.mhmax;
 					}
