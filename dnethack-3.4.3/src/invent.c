@@ -279,7 +279,13 @@ struct obj *obj;
 #endif
 	} else if (obj->oartifact) {
 		if (is_quest_artifact(obj)) {
-		    if (u.uhave.questart) impossible("already have quest artifact?");
+		    if (u.uhave.questart){
+				struct obj *otherquestart;
+				for(otherquestart = invent; otherquestart; otherquestart = otherquestart->nobj)
+					if(is_quest_artifact(otherquestart))
+						break;
+				if(!otherquestart) impossible("already have quest artifact?");
+			}
 		    u.uhave.questart = 1;
 		    artitouch();
 		}
@@ -555,9 +561,13 @@ struct obj *obj;
 		u.uhave.book = 0;
 	} else if (obj->oartifact) {
 		if (is_quest_artifact(obj)) {
+			struct obj *otherquestart;
 		    if (!u.uhave.questart)
-			impossible("don't have quest artifact?");
-		    u.uhave.questart = 0;
+				impossible("don't have quest artifact?");
+			for(otherquestart = invent; otherquestart; otherquestart = otherquestart->nobj)
+				if(is_quest_artifact(otherquestart))
+					break;
+			if(!otherquestart) u.uhave.questart = 0;
 		}
 		if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
 			u.ukinghill = FALSE;

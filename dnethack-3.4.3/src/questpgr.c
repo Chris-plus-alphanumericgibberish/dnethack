@@ -183,9 +183,9 @@ struct obj *otmp;
 {
 	return((boolean)(otmp->oartifact == urole.questarti || 
 		(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && (
-			  otmp->oartifact == ART_TENTACLE_ROD || 
-			 (otmp->oartifact == ART_SILVER_STARLIGHT && flags.initgend) || 
-			 (otmp->oartifact == ART_DARKWEAVER_S_CLOAK && !flags.initgend)
+			 (otmp->oartifact == ART_TENTACLE_ROD && flags.stag) || 
+			 (otmp->oartifact == ART_SILVER_STARLIGHT && flags.initgend && !flags.stag) || 
+			 (otmp->oartifact == ART_DARKWEAVER_S_CLOAK && !flags.initgend && !flags.stag)
 		))
 	));
 }
@@ -196,15 +196,15 @@ struct obj *otmp;
 {
 	return((boolean)(otmp->oartifact == urole.questarti || 
 		(Race_if(PM_DROW) && (Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) && 
-			(otmp->oartifact == ART_TENTACLE_ROD || 
-			 ((otmp->oartifact == ART_SILVER_STARLIGHT || 
-				otmp->oartifact == ART_CRESCENT_BLADE || 
-				otmp->oartifact == ART_WRATHFUL_SPIDER)
-				&& flags.initgend) || 
-			 ((otmp->oartifact == ART_DARKWEAVER_S_CLOAK || 
-				otmp->oartifact == ART_WEBWEAVER_S_CROOK ||
-				otmp->oartifact == ART_SPIDERSILK)
-				&& !flags.initgend)
+			(
+			 (otmp->oartifact == ART_TENTACLE_ROD && flags.stag) || 
+			 (otmp->oartifact == ART_CRESCENT_BLADE && flags.initgend && flags.stag) || 
+			 (otmp->oartifact == ART_SILVER_STARLIGHT && flags.initgend && !flags.stag) || 
+			 (otmp->oartifact == ART_WRATHFUL_SPIDER && flags.initgend && !flags.stag) || 
+			 
+			 (otmp->oartifact == ART_WEBWEAVER_S_CROOK && !flags.initgend && flags.stag) || 
+			 (otmp->oartifact == ART_DARKWEAVER_S_CLOAK && !flags.initgend && !flags.stag) || 
+			 (otmp->oartifact == ART_SPIDERSILK && !flags.initgend && !flags.stag)
 			)
 		) ||
 		(Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN)) && 
