@@ -173,7 +173,7 @@ A("Grimtooth",			ORCISH_DAGGER, /*Needs encyc entry*/
 	0,0,0),
 
 A("Carnwennan",			DAGGER, /*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_NOGEN|SPFX_CON_OR), SPFX_WARN,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR), SPFX_WARN,
 	0 /*Monster Symbol*/, 0 /*MM*/, MT_MAGIC /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_FEY /*MA*/, 0 /*MV*/,
 	PHYS(5,10),	NO_DFNS,		NO_CARY,
 	INVIS,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
@@ -729,7 +729,7 @@ A("Hellrider's Saddle",			SADDLE,
 /*//////////Law Quest Artifacts//////////*/
 
 A("The Rod of Seven Parts",	SPEAR, /*From D&D*/
-	(SPFX_CON_OR|SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DALIGN|SPFX_DEFN), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR|SPFX_INTEL|SPFX_DALIGN|SPFX_DEFN), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,20),	DRLI(0,0),	NO_CARY,
 	SEVENFOLD,	A_LAWFUL, NON_PM, NON_PM, 7777L, 
@@ -1133,7 +1133,7 @@ A("Durin's Axe",			AXE, /*Moria dwarf noble crowning */ /*Needs encyc entry*/
 	SPFX2_DIG|SPFX2_SILVERED,0,0),
 
 A("Glamdring",			ELVEN_BROADSWORD, /*Lonely Mountain dwarf noble first gift */
-	(SPFX_NOGEN|SPFX_WARN|SPFX_RESTR), 0, /* the old elves fought balrogs too. */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_WARN), 0, /* the old elves fought balrogs too. */
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, (MA_ORC|MA_DEMON) /*MA*/, 0 /*MV*/,
 	PHYS(10,10),	NO_DFNS,	NO_CARY, /*Needs encyc entry*/
 	0, A_LAWFUL, PM_KNIGHT, NON_PM, 2000L, 
