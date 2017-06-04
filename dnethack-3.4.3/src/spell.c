@@ -465,7 +465,7 @@ learn()
 			u.wardsknown |= book->ovar1;
 		}
 		else{
-			You("are already familar with this ward.");
+			You("are already familiar with this ward.");
 		}
 	 } else{
 		pline("The spellbook is warded with a thaumaturgical ward, good for spellbooks but not much else.");
@@ -611,7 +611,7 @@ struct obj *spellbook;
 		}
 		if((spellbook->ovar1) && RoSbook == STUDY_WARD){
 			if( (u.wardsknown & spellbook->ovar1) ){
-				You("are already familar with this ward.");
+				You("are already familiar with this ward.");
 				delay = 0;
 				return 0;
 			}
