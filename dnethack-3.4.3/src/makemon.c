@@ -4258,6 +4258,9 @@ register struct	monst	*mtmp;
 			}
 		break;
 		case S_GOLEM:
+			if(ptr == &mons[PM_SPELL_GOLEM] && u.uz.dnum == neutral_dnum){
+				(void) mongets(mtmp, MIRROR);
+			}
 			if(ptr == &mons[PM_CENTER_OF_ALL]){
 				struct obj *otmp = mksobj(BARDICHE, TRUE, FALSE);
 				otmp->blessed = TRUE;

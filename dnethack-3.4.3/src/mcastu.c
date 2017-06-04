@@ -962,8 +962,9 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 {
 	int	dmg, ml = mtmp->m_lev;
 	int ret;
-	int spellnum = 0;
+	int spellnum = 0, chance;
 	int dmd, dmn;
+	struct obj *mirror;
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	/* Three cases:
@@ -1032,11 +1033,31 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 
 	nomul(0, NULL);
-       /* increased to rn2(ml*20) to make kobold/orc shamans less helpless */
-       if(rn2(ml*20) < (mtmp->mconf ? 100 : 20)) {     /* fumbled attack */
-	    if (canseemon(mtmp) && flags.soundok)
-		pline_The("air crackles around %s.", mon_nam(mtmp));
-	    return(0);
+	/* increased spell success rate vs vanilla to make kobold/orc shamans less helpless */
+	if(mtmp->data == &mons[PM_SPELL_GOLEM]){
+		/* find mirror */
+		for (mirror = mtmp->minvent; mirror; mirror = mirror->nobj)
+			if (mirror->otyp == MIRROR && !mirror->cursed)
+				break;
+	}
+	
+	if(mtmp->data != &mons[PM_SPELL_GOLEM] || !mirror){
+		chance = 2;
+		if(mtmp->mconf) chance += 8;
+		if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
+			if(u.uz.dlevel == sum_of_all_level.dlevel) chance += 90;
+			else if(u.uz.dlevel == spire_level.dlevel-1) chance -= 50;
+			else if(u.uz.dlevel == spire_level.dlevel-2) chance -= 40;
+			else if(u.uz.dlevel == spire_level.dlevel-3) chance -= 30;
+			else if(u.uz.dlevel == spire_level.dlevel-4) chance -= 20;
+			else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10;
+		}
+		
+		if(u.uz.dlevel == spire_level.dlevel || rn2(ml*2) < chance) {	/* fumbled attack */
+			if (canseemon(mtmp) && flags.soundok)
+			pline_The("air crackles around %s.", mon_nam(mtmp));
+			return(0);
+		}
 	}
 	if (canspotmon(mtmp) || !is_undirected_spell(spellnum)) {
 	    pline("%s casts a spell%s!",
@@ -2677,8 +2698,9 @@ castmm(mtmp, mdef, mattk)
 {
 	int	dmg, ml = mtmp->m_lev;
 	int ret;
-	int spellnum = 0;
+	int spellnum = 0, chance;
 	int dmd, dmn;
+	struct obj *mirror;
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
@@ -2717,11 +2739,31 @@ castmm(mtmp, mdef, mattk)
 	    mtmp->mspec_used = 10 - mtmp->m_lev;
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
 	}
-
-	if(rn2(ml*20) < (mtmp->mconf ? 100 : 20)) {	/* fumbled attack */
-	    if (canseemon(mtmp) && flags.soundok)
-		pline_The("air crackles around %s.", mon_nam(mtmp));
-	    return(0);
+	
+	if(mtmp->data == &mons[PM_SPELL_GOLEM]){
+		/* find mirror */
+		for (mirror = mtmp->minvent; mirror; mirror = mirror->nobj)
+			if (mirror->otyp == MIRROR && !mirror->cursed)
+				break;
+	}
+	
+	if(mtmp->data != &mons[PM_SPELL_GOLEM] || !mirror){
+		chance = 2;
+		if(mtmp->mconf) chance += 8;
+		if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
+			if(u.uz.dlevel == sum_of_all_level.dlevel) chance += 90;
+			else if(u.uz.dlevel == spire_level.dlevel-1) chance -= 50;
+			else if(u.uz.dlevel == spire_level.dlevel-2) chance -= 40;
+			else if(u.uz.dlevel == spire_level.dlevel-3) chance -= 30;
+			else if(u.uz.dlevel == spire_level.dlevel-4) chance -= 20;
+			else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10;
+		}
+		
+		if(u.uz.dlevel == spire_level.dlevel || rn2(ml*2) < chance) {	/* fumbled attack */
+			if (canseemon(mtmp) && flags.soundok)
+			pline_The("air crackles around %s.", mon_nam(mtmp));
+			return(0);
+		}
 	}
 	if (cansee(mtmp->mx, mtmp->my) ||
 	    canseemon(mtmp) ||
