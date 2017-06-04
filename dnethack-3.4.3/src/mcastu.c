@@ -3254,7 +3254,7 @@ fire_um:
 	    case AD_COLD:
 cold_um:
 		pline("%s is covered in frost.", Monnam(mtmp));
-		if(resists_fire(mtmp)) {
+		if(resists_cold(mtmp)) {
 			shieldeff(mtmp->mx, mtmp->my);
 			pline("But %s resists the effects.",
 			    mhe(mtmp));
