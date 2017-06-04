@@ -2852,7 +2852,15 @@ spiriteffects(power, atme)
 					pline("%s is not solid enough to open a door in.",Monnam(mon));
 					shieldeff(mon->mx, mon->my);
 					return FALSE;
-				} else if (no_innards(mon->data)) {	/* match effect on player */
+				} else if (skeleton_innards(mon->data)) {
+					pline("Skeletons don't really do \"inside\" vs \"outside\".");
+					shieldeff(mon->mx, mon->my);
+					break;
+				} else if (removed_innards(mon->data)) {
+					pline("%s organs have already been removed!", HisHerIts(mon));
+					shieldeff(mon->mx, mon->my);
+					break;
+				} else if (no_innards(mon->data)) {
 					pline("The inside of %s is much like the outside.",mon_nam(mon));
 					shieldeff(mon->mx, mon->my);
 					break;

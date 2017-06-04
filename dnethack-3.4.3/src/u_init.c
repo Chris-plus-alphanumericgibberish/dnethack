@@ -2395,16 +2395,19 @@ u_init()
 	stumbler->mconveys = 0;
 	wanderer->mconveys = 0;
 	
-	if(!rn2(10)) u.shambin = 2;
-	else if(rn2(9) > 1) u.shambin = 1;
+	if(!rn2(10)) u.shambin = 3;
+	else if(!rn2(9)) u.shambin = 2;
+	else if(rn2(8) > 1) u.shambin = 1;
 	else u.shambin = 0;
 	
-	if(!rn2(10)) u.stumbin = 2;
-	else if(rn2(9) > 1) u.stumbin = 1;
+	if(!rn2(10)) u.stumbin = 3;
+	else if(!rn2(9)) u.stumbin = 2;
+	else if(rn2(8) > 1) u.stumbin = 1;
 	else u.stumbin = 0;
 	
-	if(!rn2(10)) u.wandein = 2;
-	else if(rn2(9) > 1) u.wandein = 1;
+	if(!rn2(10)) u.wandein = 3;
+	else if(!rn2(9)) u.wandein = 2;
+	else if(rn2(8) > 1) u.wandein = 1;
 	else u.wandein = 0;
 	
 	/*

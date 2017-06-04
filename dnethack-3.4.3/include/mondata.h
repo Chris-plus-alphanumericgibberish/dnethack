@@ -108,15 +108,31 @@
 				 (ptr)->mlet == S_KETER || \
 				 (ptr) == &mons[PM_AOA] || \
 				 (ptr) == &mons[PM_AOA_DROPLET])
+#define removed_innards(ptr)	(((ptr) == &mons[PM_HUNGRY_DEAD]) || \
+						 ((ptr) == &mons[PM_KOBOLD_MUMMY]) || \
+						 ((ptr) == &mons[PM_GNOME_MUMMY]) || \
+						 ((ptr) == &mons[PM_ORC_MUMMY]) || \
+						 ((ptr) == &mons[PM_DWARF_MUMMY]) || \
+						 ((ptr) == &mons[PM_ELF_MUMMY]) || \
+						 ((ptr) == &mons[PM_HUMAN_MUMMY]) || \
+						 ((ptr) == &mons[PM_HALF_DRAGON_MUMMY]) || \
+						 ((ptr) == &mons[PM_ETTIN_MUMMY]) || \
+						 ((ptr) == &mons[PM_CHIROPTERAN_MUMMY]) || \
+						 ((ptr) == &mons[PM_GIANT_MUMMY]) || \
+						 ((ptr) == &mons[PM_SHAMBLING_HORROR] && u.shambin == 3) || \
+						 ((ptr) == &mons[PM_STUMBLING_HORROR] && u.stumbin == 3) || \
+						 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 3) || \
+						 ((ptr) == &mons[PM_PHARAOH]) \
+						)
+#define skeleton_innards(ptr)	(((ptr) == &mons[PM_SKELETON]) || \
+						 ((ptr) == &mons[PM_SKELETAL_PIRATE]) \
+						)
 #define no_innards(ptr)	((ptr)->mlet == S_VORTEX || \
 						 (ptr)->mlet == S_LIGHT || \
 						 (ptr)->mlet == S_ELEMENTAL || \
 						 ((ptr) == &mons[PM_SHAMBLING_HORROR] && u.shambin == 2) || \
 						 ((ptr) == &mons[PM_STUMBLING_HORROR] && u.stumbin == 2) || \
 						 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 2) || \
-						 ((ptr) == &mons[PM_HUNGRY_DEAD]) || \
-						 ((ptr) == &mons[PM_SKELETON]) || \
-						 ((ptr) == &mons[PM_SKELETAL_PIRATE]) || \
 						 (ptr)->mlet == S_WRAITH || \
 						 (ptr)->mlet == S_GHOST || \
 						 (ptr)->mlet == S_SHADE || \
@@ -128,6 +144,7 @@
 								 (ptr)->mlet == S_TRAPPER || \
 								 (ptr)->mlet == S_FUNGUS || \
 								 (ptr)->mlet == S_PUDDING || \
+								 ((ptr) == &mons[PM_DROW_MUMMY]) || \
 								 ((ptr) == &mons[PM_SHAMBLING_HORROR] && u.shambin == 1) || \
 								 ((ptr) == &mons[PM_STUMBLING_HORROR] && u.stumbin == 1) || \
 								 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 1) || \
