@@ -3149,6 +3149,10 @@ castum(mtmp, mattk)
 		return 0;
 	    }
 	}
+	else if (!mtmp) {
+		You("have no spells to cast right now!");
+		return 0;
+	}
 
 	if (spellnum == AGGRAVATION && !mtmp)
 	{
