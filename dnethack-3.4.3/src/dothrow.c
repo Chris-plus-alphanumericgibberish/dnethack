@@ -1936,13 +1936,20 @@ int thrown;
 	    switch (uarmg->otyp) {
 	    case ORIHALCYON_GAUNTLETS:    /* metal */
 	    case GAUNTLETS_OF_POWER:    /* metal */
+		case IRON_GAUNTLETS:
+		case CRYSTAL_GAUNTLETS:
 		tmp -= 2;
 		break;
 	    case GAUNTLETS_OF_FUMBLING:
 		tmp -= 3;
 		break;
+		case BRONZE_GAUNTLETS:
+		case PLASTEEL_GAUNTLETS:
+		tmp -= 1;
+		break;
 	    case GLOVES:
 	    case GAUNTLETS_OF_DEXTERITY:
+		case HIGH_ELVEN_GAUNTLETS:
 		break;
 	    default:
 		impossible("Unknown type of gloves (%d)", uarmg->otyp);
