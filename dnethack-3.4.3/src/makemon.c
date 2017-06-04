@@ -3602,30 +3602,6 @@ register struct	monst	*mtmp;
 		if (ptr == &mons[PM_MINOTAUR]) {
 		    if (!rn2(3) || (in_mklev && Is_earthlevel(&u.uz)))
 			(void) mongets(mtmp, WAN_DIGGING);
-		} else if (is_giant(ptr)) {
-		    for (cnt = rn2((int)(mtmp->m_lev / 2)); cnt; cnt--) {
-			otmp = mksobj(rnd_class(DILITHIUM_CRYSTAL,LUCKSTONE-1),
-				      FALSE, FALSE);
-			otmp->quan = (long) rn1(2, 3);
-			otmp->owt = weight(otmp);
-			(void) mpickobj(mtmp, otmp);
-			if(ptr == &mons[PM_GIANT] || ptr == &mons[PM_STONE_GIANT] || ptr == &mons[PM_HILL_GIANT]){
-				if(!rn2(4)) mongets(mtmp, CLUB);
-			} else if(ptr == &mons[PM_FIRE_GIANT]){
-				mongets(mtmp, CLUB);
-				mongets(mtmp, LEATHER_ARMOR);
-			} else if(ptr == &mons[PM_FROST_GIANT]){
-				mongets(mtmp, BROADSWORD);
-				mongets(mtmp, HELMET);
-				mongets(mtmp, SCALE_MAIL);
-			} else if(ptr == &mons[PM_STORM_GIANT]){
-				mongets(mtmp, TWO_HANDED_SWORD);
-				mongets(mtmp, HELMET);
-				mongets(mtmp, CHAIN_MAIL);
-				mongets(mtmp, GLOVES);
-				mongets(mtmp, IRON_SHOES);
-			}
-		    }
 		} else if(monsndx(ptr) == PM_DEEPEST_ONE) {
 		 if(!on_level(&rlyeh_level,&u.uz)){
 		    switch (rn2(6)) {
@@ -3686,7 +3662,31 @@ register struct	monst	*mtmp;
 			otmp->cursed = FALSE;
 			(void) mpickobj(mtmp, otmp);
 		 }
-		}
+		} else if (is_giant(ptr)) {
+		    for (cnt = rn2((int)(mtmp->m_lev / 2)); cnt; cnt--) {
+			otmp = mksobj(rnd_class(DILITHIUM_CRYSTAL,LUCKSTONE-1),
+				      FALSE, FALSE);
+			otmp->quan = (long) rn1(2, 3);
+			otmp->owt = weight(otmp);
+			(void) mpickobj(mtmp, otmp);
+		    }
+			if(ptr == &mons[PM_GIANT] || ptr == &mons[PM_STONE_GIANT] || ptr == &mons[PM_HILL_GIANT]){
+				if(!rn2(4)) mongets(mtmp, CLUB);
+			} else if(ptr == &mons[PM_FIRE_GIANT]){
+				mongets(mtmp, CLUB);
+				mongets(mtmp, LEATHER_ARMOR);
+			} else if(ptr == &mons[PM_FROST_GIANT]){
+				mongets(mtmp, BROADSWORD);
+				mongets(mtmp, HELMET);
+				mongets(mtmp, SCALE_MAIL);
+			} else if(ptr == &mons[PM_STORM_GIANT]){
+				mongets(mtmp, TWO_HANDED_SWORD);
+				mongets(mtmp, HELMET);
+				mongets(mtmp, CHAIN_MAIL);
+				mongets(mtmp, GLOVES);
+				mongets(mtmp, IRON_SHOES);
+			}
+		} 
 		break;
 	    case S_NAGA:
 			if(ptr == &mons[PM_ANCIENT_NAGA]){
