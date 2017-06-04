@@ -1934,7 +1934,7 @@ register struct obj *wand;
 		wand->spe = 1;
 		wand->age = moves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
 	}
-	if(wand->spe < 0 || (wand->spe == 0 && (rn2(121) || wand->oartifact)))
+	if(wand->spe < 0 || (wand->spe == 0 && (wand->oartifact || rn2(121))))
 		return 0;
 	if(wand->spe == 0)
 		You("wrest one last charge from the worn-out wand.");
