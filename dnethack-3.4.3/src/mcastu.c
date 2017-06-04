@@ -3330,6 +3330,7 @@ int spellnum;
 	else if(spellnum == SUMMON_ANGEL) spellnum = CURE_SELF;
 	else if(spellnum == SUMMON_ALIEN) spellnum = CURE_SELF;
 	else if(spellnum == SUMMON_DEVIL) spellnum = CURE_SELF;
+	else if(spellnum == INSECTS) spellnum = CURE_SELF;
     switch (spellnum) {
     case DEATH_TOUCH:
 	if (!mtmp || mtmp->mhp < 1) {
