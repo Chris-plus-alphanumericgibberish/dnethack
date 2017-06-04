@@ -1827,7 +1827,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_SOW_DISCORD:
 			You("sow discord amongst your enemies.");
-			u.sowdisc = 5+dsize;
+			u.sowdisc = 1+rnd(dsize);
 		break;
 		case PWR_GIFT_OF_HEALING:{
 			struct monst *mon;

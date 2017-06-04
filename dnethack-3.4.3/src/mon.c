@@ -2210,7 +2210,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	
 	if(is_drow(ma) && is_drow(md) && (magr->mfaction == mdef->mfaction)) return 0L;
 	
-	if (u.sowdisc && !mdef->mtame)
+	if (u.sowdisc && !mdef->mtame && canseemon(magr) && canseemon(mdef))
 	    return ALLOW_M|ALLOW_TM;
 	/* supposedly purple worms are attracted to shrieking because they
 	   like to eat shriekers, so attack the latter when feasible */
