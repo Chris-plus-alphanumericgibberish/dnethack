@@ -2954,14 +2954,18 @@ uspell_would_be_useless(mdef, spellnum)
 struct monst *mdef;
 int spellnum;
 {
-	int wardAt = ward_at(mdef->mx, mdef->my);
-	
-	/*Don't cast at warded spaces*/
-	if(onscary(mdef->mx, mdef->my, &youmonst) && !is_undirected_spell(spellnum))
-		return TRUE;
-	
-	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
-		return TRUE;
+	/* do not check for wards on target if given no target */
+	if (mdef)
+	{
+		int wardAt = ward_at(mdef->mx, mdef->my);
+
+		/*Don't cast at warded spaces*/
+		if (onscary(mdef->mx, mdef->my, &youmonst) && !is_undirected_spell(spellnum))
+			return TRUE;
+
+		if (spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
+			return TRUE;
+	}
 	
 	/* PC drow can't be warded off this way */
 	
