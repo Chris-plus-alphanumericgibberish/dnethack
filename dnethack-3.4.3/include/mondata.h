@@ -522,8 +522,9 @@
 				   (ptr)->mlet != S_GOLEM && \
 				   (ptr)->mlet != S_KETER && \
 				   (ptr)->mlet != S_MIMIC && \
+				   (ptr) != &mons[PM_WEEPING_ANGEL] && \
 				   !is_clockwork(ptr) && \
-				   (!is_undead(ptr) || is_vampire(ptr)))
+				   (!nonliving(ptr) || is_vampire(ptr)))
 
 /* Keep track of ferns, fern sprouts, fern spores, and other plants */
 
