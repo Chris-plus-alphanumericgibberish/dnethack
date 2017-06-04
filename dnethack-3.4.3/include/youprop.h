@@ -105,7 +105,7 @@
 						(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && \
 						(mvitals[PM_LARGE_CAT].mvflags & G_GENOD || mvitals[PM_LARGE_CAT].died >= 120) \
 					) \
-				 ) || u.sealsActive&SEAL_IRIS)
+				 ) || u.sealsActive&SEAL_IRIS || resists_sickness(&youmonst))
 
 #define HStrangled		u.uprops[STRANGLED].intrinsic
 #define EStrangled		u.uprops[STRANGLED].extrinsic
