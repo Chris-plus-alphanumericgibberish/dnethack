@@ -1010,7 +1010,7 @@ as_extra_healing:
 	case POT_BLOOD:
 		unkn++;
 		if(your_race(&mons[otmp->corpsenm]) && !(Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || Race_if(PM_VAMPIRE)) 
-			&& (u.ualign.record >= rnd(u.ulevel) || (u.ualign.record == ALIGNLIM && u.ualign.sins <= u.ulevel))
+			&& (u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS)))
 		){
 			char buf[BUFSZ];
 			Sprintf(buf, "You feel a deep sense of kinship to %s!  Drink %s anyway?",

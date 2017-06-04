@@ -2734,7 +2734,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	if (check_capacity((char *)0)) return 0;
 	
 	if((otmp->otyp == CORPSE || (otmp->otyp == TIN && otmp->spe != 1)) && your_race(&mons[otmp->corpsenm])
-		&& !CANNIBAL_ALLOWED() && (u.ualign.record >= rnd(u.ulevel) || (u.ualign.record == ALIGNLIM && u.ualign.sins <= u.ulevel))
+		&& !CANNIBAL_ALLOWED() && (u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS)))
 	){
 		char buf[BUFSZ];
 		Sprintf(buf, "You feel a deep sense of kinship to %s!  Eat %s anyway?",
