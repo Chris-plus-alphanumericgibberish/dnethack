@@ -384,7 +384,7 @@ struct artifact {
 )
 
 #define is_nameable_artifact(a) (\
-			(a->spfx & (SPFX_NOGEN|SPFX_RESTR)) == 0\
+			(a->spfx & (SPFX_RESTR)) == 0\
 			|| (a == &artilist[ART_SNICKERSNEE] && Role_if(PM_TOURIST) && (u.ulevel > 18 || u.uevent.qcompleted) )\
 			|| (a == &artilist[ART_KUSANAGI_NO_TSURUGI] && Role_if(PM_SAMURAI) && u.ulevel >= 22 )\
 			|| (a == &artilist[ART_GRANDMASTER_S_ROBE] && P_SKILL(P_MARTIAL_ARTS) >= P_GRAND_MASTER && u.ulevel >= 30 )\
