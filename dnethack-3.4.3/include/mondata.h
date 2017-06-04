@@ -478,11 +478,11 @@
 				 (ptr) == &mons[PM_GREAT_CTHULHU] \
 				)
 
-#define nonliving(ptr)		(is_unalive(ptr) || is_undead(ptr) || \
+#define nonliving(ptr)	(is_unalive(ptr) || is_undead(ptr) || \
 				 (ptr) == &mons[PM_MANES] \
 				)
 
-#define is_unalive(ptr)		(on_level(&valley_level, &u.uz) || ((ptr->mflagsa & MA_UNLIVING)) )
+#define is_unalive(ptr)		(on_level(&valley_level, &u.uz) || (((ptr)->mflagsa & MA_UNLIVING)) )
 
 #define is_elemental(ptr)		( (ptr->mflagsa & MA_ELEMENTAL) )
 
