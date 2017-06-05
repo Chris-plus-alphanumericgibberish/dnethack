@@ -60,20 +60,20 @@ unsigned gpflags;
 	    if (is_3dwater(x,y) && !ignorewater) {
 			if (mtmp == &youmonst)
 				return !!(Amphibious);
-			else return (is_swimmer(mdat));
+			else return (is_swimmer(mdat) || breathless(mdat) || amphibious(mdat));
 	    } else if (is_pool(x,y) && !ignorewater) {
-		if (mtmp == &youmonst)
-			return !!(HLevitation || Flying || Wwalking ||
-					Swimming || Amphibious);
-		else	return (is_flyer(mdat) || is_swimmer(mdat) ||
-							is_clinger(mdat));
+			if (mtmp == &youmonst)
+				return !!(HLevitation || Flying || Wwalking ||
+						Swimming || Amphibious);
+			else	return (is_flyer(mdat) || breathless(mdat) || is_swimmer(mdat) ||
+								is_clinger(mdat) || amphibious(mdat));
 	    } else if (mdat->mlet == S_EEL && !ignorewater) {
-		return FALSE;
+			return FALSE;
 	    } else if (is_lava(x,y)) {
-		if (mtmp == &youmonst)
-		    return !!HLevitation;
-		else
-		    return (is_flyer(mdat) || likes_lava(mdat));
+			if (mtmp == &youmonst)
+				return !!HLevitation;
+			else
+				return (is_flyer(mdat) || likes_lava(mdat));
 	    }
 	    if (passes_walls(mdat) && may_passwall(x,y)) return TRUE;
 	}

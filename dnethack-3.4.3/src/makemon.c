@@ -146,8 +146,10 @@ register int x, y, n;
 			do {
 				mm.x = rn1(COLNO-3,2);
 				mm.y = rn2(ROWNO);
-			} while(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS) ||
+			} while(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS) &&
 				(tryct++ < 200 && ((tryct < 100 && couldsee(mm.x, mm.y)) || (tryct < 150 && cansee(mm.x, mm.y)) || distmin(mm.x,mm.y,u.ux,u.uy) < BOLT_LIM)));
+			if(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS))
+				return;
 		}
 		if (enexto(&mm, mm.x, mm.y, mtmp->data)) {
 		    mon = makemon(mtmp->data, mm.x, mm.y, NO_MM_FLAGS);
@@ -176,6 +178,8 @@ register int x, y, n;
 				mm.y = rn2(ROWNO);
 			} while(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS) ||
 				(tryct++ < 150 && ((tryct < 50 && couldsee(mm.x, mm.y)) || (tryct < 100 && cansee(mm.x, mm.y)) || distmin(mm.x,mm.y,u.ux,u.uy) < BOLT_LIM)));
+			if(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS))
+				return;
 		}
 		if (enexto(&mm, mm.x, mm.y, mtmp->data)) {
 		    mon = makemon(mtmp->data, mm.x, mm.y, NO_MM_FLAGS);
@@ -4495,8 +4499,8 @@ register int	mmflags;
 			}
 			fakemon.data = ptr;
 			gpflags = (mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
-		} while((!goodpos(x, y, &fakemon, gpflags) || (!in_mklev && cansee(x, y))) && tryct++ < 50);
-		if(tryct >= 50){
+		} while((!goodpos(x, y, &fakemon, gpflags) || (!in_mklev && cansee(x, y))) && tryct++ < 200);
+		if(tryct >= 200){
 			//That failed, return to the default way of handling things
 			ptr = (struct permonst *)0;
 			x = y = 0;
@@ -4514,8 +4518,11 @@ register int	mmflags;
 		do {
 			x = rn1(COLNO-3,2);
 			y = rn2(ROWNO);
-		} while(!goodpos(x, y, ptr ? &fakemon : (struct monst *)0, gpflags) ||
-			(!in_mklev && tryct++ < 150 && ((tryct < 50 && couldsee(x, y)) || ((tryct < 100 && cansee(x, y))) || distmin(x,y,u.ux,u.uy) < BOLT_LIM)));
+		} while(!goodpos(x, y, ptr ? &fakemon : (struct monst *)0, Is_waterlevel(&u.uz) ? gpflags|MM_IGNOREWATER : gpflags) &&
+			(tryct++ < 150 && ((tryct < 50 && couldsee(x, y)) || ((tryct < 100 && cansee(x, y))) || distmin(x,y,u.ux,u.uy) < BOLT_LIM)));
+		if(tryct >= 150){
+			return((struct monst *)0);
+		}
 		if(ptr && PM_ARCHEOLOGIST <= monsndx(ptr) && monsndx(ptr) <= PM_WIZARD && !(mmflags & MM_EDOG)){
 			return mk_mplayer(ptr, x, y, FALSE);
 		}
@@ -4595,7 +4602,11 @@ register int	mmflags;
 			    return((struct monst *) 0);	/* no more monsters! */
 			}
 			fakemon.data = ptr;	/* set up for goodpos */
-		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 50);
+		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 150);
+		if(tryct >= 150){
+			return((struct monst *) 0);	/* no more monsters! */
+		}
+		
 		mndx = monsndx(ptr);
 	}
 	if(allow_minvent) allow_minvent = !(mons[mndx].maligntyp < 0 && Is_illregrd(&u.uz));
