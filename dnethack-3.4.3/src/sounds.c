@@ -3493,7 +3493,8 @@ int tx,ty;
 		if(u.sealTimeout[NABERIUS-FIRST_SEAL] < moves){
 			//Spirit requires that his seal be drawn by an intelligent and wise person.
 			if(ACURR(A_INT) >= 14 &&
-				ACURR(A_WIS) >= 14
+				ACURR(A_WIS) >= 14 &&
+				(u.udrunken >= u.ulevel || Confusion)
 			){ 
 				You_hear("a snuffing noise.");
 				if(u.sealCounts < numSlots){
