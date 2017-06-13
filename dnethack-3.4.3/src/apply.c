@@ -4522,7 +4522,7 @@ resizeArmor()
 	}
 	// check that the armor is not dragon scales (which cannot be resized)
 	if (Is_dragon_scales(otmp)){
-		You("cannot resize the dragon scales!");
+		pline("Dragon scales cannot be resized.");
 		return(0);
 	}
 
@@ -4532,7 +4532,9 @@ resizeArmor()
 	if (is_suit(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
 	else if (is_helmet(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
 	else if (is_shirt(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
-
+	
+	fix_object(otmp);
+	
 	You("resize the armor to fit your current form.");
 	pline("The kit is used up.");
 	return(1);

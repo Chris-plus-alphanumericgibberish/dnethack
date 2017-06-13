@@ -930,4 +930,11 @@ dodiscovered()				/* free after Robert Viduya */
     return 0;
 }
 
+void
+fix_object(otmp)
+	struct obj *otmp;
+{
+	otmp->owt = weight(otmp);
+}
+
 /*o_init.c*/

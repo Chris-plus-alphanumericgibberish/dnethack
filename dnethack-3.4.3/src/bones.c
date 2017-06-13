@@ -115,6 +115,7 @@ boolean restore;
 			    otmp->otyp = BELL;
 				otmp->obj_material = COPPER;
 			    curse(otmp);
+				fix_object(otmp);
 			} else if (otmp->otyp == SPE_BOOK_OF_THE_DEAD) {
 			    otmp->otyp = SPE_BLANK_PAPER;
 			    curse(otmp);

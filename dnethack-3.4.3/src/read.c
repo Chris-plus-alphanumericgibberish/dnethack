@@ -1155,7 +1155,7 @@ struct obj	*sobj;
 					otmp->blessed = 1;
 				}
 				otmp->known = 1;
-				otmp->owt = weight(otmp);
+				fix_object(otmp);
 				setworn(otmp, W_ARMS);
 				break;
 			} else {

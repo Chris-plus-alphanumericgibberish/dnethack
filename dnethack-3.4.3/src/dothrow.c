@@ -706,6 +706,7 @@ dofire()
 		bolt->blessed = uwep->blessed;
 		bolt->cursed = uwep->cursed;
 		bolt->objsize = MZ_SMALL;
+		fix_object(bolt);
 		/*See below for shotlimit*/
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */

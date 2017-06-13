@@ -1183,6 +1183,7 @@ gcrownu()
 				obj = oname(obj, artiname(ART_GREAT_CLAWS_OF_URDLEN));
 				obj->spe = 1;
 				obj->objsize = MZ_SMALL;
+				fix_object(obj);
 				at_your_feet("Clawed gauntlets");
 				dropy(obj);
 				discover_artifact(ART_GREAT_CLAWS_OF_URDLEN);

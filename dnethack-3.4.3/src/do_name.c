@@ -629,6 +629,8 @@ const char *name;
 		else if(obj->oartifact == ART_SCOURGE_OF_LOLTH) obj->obj_material = SILVER;
 		else if(obj->oartifact >= ART_SWORD_OF_ERATHAOL && obj->oartifact <= ART_HAMMER_OF_BARQUIEL) obj->obj_material = SILVER;
 		
+		fix_object(obj);
+		
 	    /* can't dual-wield with artifact as secondary weapon */
 	    if (obj == uswapwep) untwoweapon();
 	    /* activate warning if you've just named your weapon "Sting" */
