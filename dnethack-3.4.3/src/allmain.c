@@ -1156,11 +1156,15 @@ moveloop()
 				if(Role_if(PM_PRIEST)) reglevel += 6;
 				if(Role_if(PM_VALKYRIE)) reglevel += 3;
 				if(Role_if(PM_MONK)) reglevel += 3;
+				if(u.uen < u.uenmax && (Role_if(PM_WIZARD)) && uarmh && uarmh->otyp == CORNUTHAUM){
+					reglevel += uarmh->spe;
+				}
 				//recover 1/30th energy per turn:
 				u.uen += reglevel/30;
 				//Now deal with any remainder
 				if(((moves)*(reglevel%30))/30 > ((moves-1)*(reglevel%30))/30) u.uen += 1;
 				if (u.uen > u.uenmax)  u.uen = u.uenmax;
+				flags.botl = 1;
 		    }
 			if(Energy_regeneration && u.uen < u.uenmax){
 				u.uen++;
@@ -1168,12 +1172,11 @@ moveloop()
 				flags.botl = 1;
 			}
 			if(u.specialSealsActive&SEAL_UNKNOWN_GOD && u.uen < u.uenmax){
-				u.uen+=min_ints(rnd(spiritDsize()),5);
-				if (u.uen > u.uenmax)  u.uen = u.uenmax;
-				flags.botl = 1;
-			}
-			if(u.uen < u.uenmax && (Role_if(PM_WIZARD) || Race_if(PM_INCANTIFIER)) && uarmh && uarmh->otyp == CORNUTHAUM && uarmh->spe > 0){
-				u.uen += rnd(uarmh->spe);
+				int dsize = spiritDsize(), reglevel = 5*dsize;
+				//recover 1/30th energy per turn:
+				u.uen += reglevel/30;
+				//Now deal with any remainder
+				if(((moves)*(reglevel%30))/30 > ((moves-1)*(reglevel%30))/30) u.uen += 1;
 				if (u.uen > u.uenmax)  u.uen = u.uenmax;
 				flags.botl = 1;
 			}
