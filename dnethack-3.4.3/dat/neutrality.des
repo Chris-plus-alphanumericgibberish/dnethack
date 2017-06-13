@@ -2971,9 +2971,9 @@ ENDMAP
 RANDOM_PLACES:(04,09),(04,10),(03,02),(03,17),(34,02),(44,17),(16,02),(16,17)
 
 # Non diggable walls
-#NON_DIGGABLE:(00,00,75,20)
+NON_DIGGABLE:(00,00,75,20)
 # Invisible barrier separating the left & right halves of the level
-#NON_PASSWALL:(48,00,49,19)
+NON_PASSWALL:(48,00,49,20)
 
 # Regions
 #
