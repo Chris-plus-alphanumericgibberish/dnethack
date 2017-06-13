@@ -627,15 +627,15 @@ static const struct def_skill Skill_A[] = {
 };
 
 static const struct def_skill Skill_Ana[] = {
-    { P_DAGGER, P_EXPERT },		{ P_KNIFE,  P_EXPERT },
+    { P_DAGGER, P_SKILLED },		{ P_KNIFE,  P_SKILLED },
     { P_SHORT_SWORD, P_EXPERT },{ P_LANCE,  P_EXPERT },
-    { P_SABER, P_EXPERT },		{ P_LONG_SWORD,  P_SKILLED },
-    { P_CLUB, P_SKILLED },		{ P_QUARTERSTAFF, P_SKILLED },
-	{ P_BROAD_SWORD, P_BASIC },
+    { P_SABER, P_EXPERT },		{ P_LONG_SWORD,  P_BASIC },
+    { P_CLUB, P_SKILLED },		{ P_QUARTERSTAFF, P_EXPERT },
+	{ P_BROAD_SWORD, P_EXPERT },
 //#ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
 //#endif
-    { P_DART, P_BASIC },		{ P_CROSSBOW, P_BASIC },
+    { P_DART, P_BASIC },		{ P_CROSSBOW, P_EXPERT },
     { P_WHIP, P_SKILLED },		 { P_BOOMERANG, P_SKILLED },
     { P_ATTACK_SPELL, P_SKILLED },	{ P_HEALING_SPELL, P_SKILLED },
     { P_DIVINATION_SPELL, P_SKILLED},	{ P_MATTER_SPELL, P_SKILLED},
