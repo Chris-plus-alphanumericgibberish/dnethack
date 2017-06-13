@@ -1187,15 +1187,13 @@ int thrown;
 							(Role_if(PM_ANACHRONONAUT) && Race_if(PM_MYRKALFR) && !Upolyd) ||
 							u.sealsActive&SEAL_ANDROMALIUS ||
 							(obj == uwep && uwep->oartifact == ART_SPINESEEKER) ||
-							(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data) && !is_unalive(mon->data)) ||
 							(obj == uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_ANDROMALIUS) ||
 							(Role_if(PM_CONVICT) && !Upolyd && obj == uwep && uwep->otyp == SPOON))
 				)) {
 					if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
 						You("snipe the flat-footed %s!", l_monnam(mon));
 					else if((mon->mux != u.ux || mon->muy != u.uy) && 
-						(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE&& !is_unalive(mon->data) && has_head(mon->data)) &&
-						((Role_if(PM_ROGUE) &&!Upolyd) || (u.sealsActive&SEAL_ANDROMALIUS))
+						(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && !is_unalive(mon->data) && has_head(mon->data))
 					){
 						//Lifehunt scythe triggers sneak attack, but you have to actually HAVE sneak attack
 						You("strike the flat-footed %s!", l_monnam(mon));
