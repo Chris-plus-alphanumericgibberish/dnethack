@@ -1302,7 +1302,7 @@ int spellnum;
 			Glib += rn1(20, 9);
 			if(is_poisonable(uswapwep)) uswapwep->opoisoned = OPOISON_FILTH;
 	   }
-       if(haseyes(youracedata) && !Blindfolded && mtmp && monsndx(mtmp->data) != PM_DEMOGORGON && rn2(3)) {
+       if(haseyes(youracedata) && !Blindfolded && !(mtmp && monsndx(mtmp->data) == PM_DEMOGORGON) && rn2(3)) {
            old = u.ucreamed;
            u.ucreamed += rn1(20, 9);
            Your("%s is coated in %sgunk!", body_part(FACE),
@@ -1310,14 +1310,14 @@ int spellnum;
            make_blinded(Blinded + (long)u.ucreamed - old, FALSE);
        }
        You("smell putrid! You gag and vomit.");
-       /* same effect as "This water gives you bad breath!" */
-       for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
-           if(!DEADMONSTER(mtmp2) && (mtmp2 != mtmp))
-           monflee(mtmp2, 0, FALSE, FALSE);
-		}
 		vomit();
-	   if(!Sick) make_sick((long)rn1(ACURR(A_CON), 20), /* Don't make the PC more sick */
-					(char *)0, TRUE, SICK_NONVOMITABLE);
+		/* same effect as "This water gives you bad breath!" */
+		for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
+			if(!DEADMONSTER(mtmp2) && (mtmp2 != mtmp))
+			monflee(mtmp2, 0, FALSE, FALSE);
+		}
+		if(!Sick) make_sick((long)rn1(ACURR(A_CON), 20), /* Don't make the PC more sick */
+								(char *)0, TRUE, SICK_NONVOMITABLE);
 		dmg = rnd(Half_physical_damage ? 5 : 10);
 		stop_occupation();
 	break;
