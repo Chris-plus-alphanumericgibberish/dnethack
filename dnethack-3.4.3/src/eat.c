@@ -4423,7 +4423,7 @@ void
 vomit()		/* A good idea from David Neves */
 {
 	make_sick(0L, (char *) 0, TRUE, SICK_VOMITABLE);
-	nomul(-2, "vomiting");
+	if (!Free_action) nomul(-2, "vomiting");
 }
 
 int
