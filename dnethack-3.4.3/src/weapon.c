@@ -881,10 +881,10 @@ int spec;
 
 	    /* if the weapon is going to get a double damage bonus, adjust
 	       this bonus so that effectively it's added after the doubling */
-	    if (bonus > 1 && otmp->oartifact && spec_dbon(otmp, mon, 25) >= 25)
+	    if (bonus > 1 && otmp->oartifact && spec_dbon(otmp, mon, 100) >= 100)
 		bonus = (bonus + 1) / 2;
 		
-		if(resists_all(ptr) || resist_attacks(ptr)){
+		if((resists_all(ptr) || resist_attacks(ptr)) && !(otmp->oartifact && spec_dbon(otmp, mon, 1))){
 			tmp /= 4;
 			if(!flags.mon_moving && !youdefend && warnedptr != ptr){
 				pline("Weapons are ineffective against %s", mon_nam(mon));
@@ -914,7 +914,7 @@ int spec;
 				resistmask |= SLASH;
 			}
 			
-			if((weaponmask & ~(resistmask)) == 0L){
+			if((weaponmask & ~(resistmask)) == 0L && !(otmp->oartifact && spec_dbon(otmp, mon, 1))){
 				tmp /= 4;
 				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
 					pline("%s is ineffective against %s", The(xname(otmp)), mon_nam(mon));
