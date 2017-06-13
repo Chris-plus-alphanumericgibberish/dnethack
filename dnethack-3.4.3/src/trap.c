@@ -3340,6 +3340,8 @@ dodeepswim()
 	}
 }
 
+static const char antimagic_killer[] = "antimagic";
+
 void
 drain_en(n)
 register int n;
@@ -3348,6 +3350,11 @@ register int n;
 	You_feel("your magical energy drain away!");
 	u.uen -= n;
 	if(u.uen < 0)  {
+		if(Race_if(PM_INCANTIFIER)){
+			killer_format = KILLED_BY;
+			killer = antimagic_killer;
+			done(DIED);
+		}
 		u.uenmax += u.uen;
 		if(u.uenmax < 0) u.uenmax = 0;
 		u.uen = 0;
