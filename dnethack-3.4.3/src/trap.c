@@ -974,7 +974,11 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			      predicament);
 		    } else
 #endif
-		    You("land %s!", predicament);
+			{
+				You("land %s!", predicament);
+				if (hates_iron(youracedata))
+					pline("The cold-iron sears your flesh!");
+			}
 		}
 		if (!Passes_walls)
 		    u.utrap = rn1(6,2);
@@ -983,8 +987,14 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		if (!steedintrap(trap, (struct obj *)0)) {
 #endif
 		if (ttype == SPIKED_PIT) {
-		    losehp(rnd(10),"fell into a pit of iron spikes",
-			NO_KILLER_PREFIX);
+			if (!hates_iron(youracedata)){
+				losehp(rnd(10), "fell into a pit of iron spikes",
+				NO_KILLER_PREFIX);
+			}
+			else{//half cold-iron damage
+				losehp((rnd(10) + rnd(u.ulevel*2)/2), "fell into a pit of cold-iron spikes",
+				NO_KILLER_PREFIX);
+			}
 		    if (!rn2(6))
 			poisoned("spikes", A_STR, "fall onto poison spikes", 8, 0);
 		} else
@@ -1308,9 +1318,13 @@ struct obj *otmp;
 			break;
 		case PIT:
 		case SPIKED_PIT:
+			if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
+				pline("The cold-iron sears %s!", 	//half cold-iron damage
+					Monnam(mtmp));
+			}
 			if (mtmp->mhp <= 0 ||
 				thitm(0, mtmp, (struct obj *)0,
-				      rnd((tt == PIT) ? 6 : 10), FALSE))
+				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev*2)/2 : 0, FALSE))
 			    trapkilled = TRUE;
 			steedhit = TRUE;
 			break;
@@ -2041,10 +2055,14 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 				pline("How pitiful.  Isn't that the pits?");
 			    seetrap(trap);
 			}
+			if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
+				pline("The cold-iron sears %s!",	//half cold-iron damage
+					Monnam(mtmp));
+			}
 			mselftouch(mtmp, "Falling, ", FALSE);
 			if (mtmp->mhp <= 0 ||
 				thitm(0, mtmp, (struct obj *)0,
-				      rnd((tt == PIT) ? 6 : 10), FALSE))
+				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev * 2)/2 : 0, FALSE))
 			    trapkilled = TRUE;
 			break;
 		case HOLE:
