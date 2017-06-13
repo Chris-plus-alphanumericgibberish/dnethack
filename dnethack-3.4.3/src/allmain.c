@@ -494,7 +494,7 @@ moveloop()
 					else pline("You are likely to be eaten by a grue.");
 				} else You_feel("increasingly panicked about being in the dark!");
 			}
-			if(u.sealsActive&SEAL_NABERIUS && (ACURR(A_WIS) < 14 || ACURR(A_INT) < 14)) unbind(SEAL_NABERIUS,TRUE);
+			if(u.sealsActive&SEAL_NABERIUS && u.udrunken < u.ulevel/3) unbind(SEAL_NABERIUS,TRUE);
 			if(u.specialSealsActive&SEAL_NUMINA && u.ulevel<30) unbind(SEAL_SPECIAL|SEAL_NUMINA,TRUE);
 			if(u.sealsActive&SEAL_SHIRO && uarmc && uarmc->otyp == MUMMY_WRAPPING){
 				struct obj *otmp = uarmc;
