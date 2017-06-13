@@ -945,8 +945,8 @@ unsigned int type;
 	break;
 	}
     if (type == AD_CLRC)
-        return choose_clerical_spell(rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
-    return choose_magic_spell(rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
+        return choose_clerical_spell(mtmp->m_id == 0 ? (rn2(u.ulevel) * 18 / 30) : rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
+    return choose_magic_spell(mtmp->m_id == 0 ? (rn2(u.ulevel) * 24 / 30) : rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
 }
 
 /* return values:
