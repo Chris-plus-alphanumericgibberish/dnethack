@@ -4858,7 +4858,7 @@ doapply()
 		use_candle(&obj);
 	break;
 	case BULLET_FABBER:
-	if(!Role_if(PM_ANACHRONONAUT)) pline("It seems inert.");
+	if(!(Role_if(PM_ANACHRONONAUT) || Role_if(PM_TOURIST))) pline("It seems inert.");
 	else {
 		static const char all_count[] = { ALLOW_COUNT, WEAPON_CLASS, GEM_CLASS, 0 };
 		struct obj *otmp = getobj(all_count, "feed to the fabber");

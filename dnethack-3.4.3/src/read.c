@@ -763,7 +763,7 @@ int curse_bless;
 			else obj->ovar1 = 80L + rn2(20);
 		break;
 	    case RAYGUN:
-			if(Role_if(PM_ANACHRONONAUT)){
+			if(Role_if(PM_ANACHRONONAUT) || Role_if(PM_TOURIST)){
 				if(is_blessed) obj->ovar1 = 160L;
 				else if(is_cursed) obj->ovar1 = 10L;
 				else obj->ovar1 = (8 + rn2(8))*10L;
