@@ -2067,7 +2067,7 @@ struct obj	*sobj;
 							SCROLL_CLASS, EXPL_NOXIOUS);
 	break;
 		}
-		long rturns = sobj->blessed ? 500L : sobj->cursed ? 5L : 250L;
+		long rturns = sobj->blessed ? 5000L : sobj->cursed ? 5L : 250L;
 		if( !(HFire_resistance) ) {
 			You(Hallucination ? "be chillin'." :
 			    "feel a momentary chill.");
