@@ -269,6 +269,7 @@ int spec;
 	        return 9999;
 	
 	dmod = otmp->objsize - MZ_MEDIUM;
+	if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit) dmod += 2;
 	ldie = max(2, objects[otyp].oc_wldam + dmod);
 	sdie = max(2, objects[otyp].oc_wsdam + dmod);
 	

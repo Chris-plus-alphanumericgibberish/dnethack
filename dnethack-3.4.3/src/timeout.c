@@ -1258,8 +1258,17 @@ long timeout;
 	}
 	need_newsym = FALSE;
 
-	/* obj->age is the age remaining at this point.  */
-	switch (obj->otyp) {
+	if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD){	
+	        if ((obj->where == OBJ_FLOOR) || 
+		    (obj->where == OBJ_MINVENT && 
+		    	(!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)) ||
+		    (obj->where == OBJ_INVENT &&
+		    	((!uwep || uwep != obj) &&
+		    	 (!u.twoweap || !uswapwep || obj != uswapwep))))
+	            lightsaber_deactivate(obj, FALSE);
+			if (obj && obj->age && obj->lamplit) /* might be deactivated */
+				begin_burn(obj, TRUE);
+	} else switch (obj->otyp) {
 	    case POT_OIL:
 		    /* this should only be called when we run out */
 		    if (canseeit) {
@@ -1683,10 +1692,14 @@ begin_burn(obj, already_lit)
 		obj->otyp != CHUNK_OF_FOSSILE_DARK && 
 		!artifact_light(obj) && 
 		!arti_light(obj) && 
+		obj->oartifact != ART_HOLY_MOONLIGHT_SWORD &&
 		obj->oartifact != ART_ATMA_WEAPON
 	) return;
 	
-	switch (obj->otyp) {
+	if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD){
+		turns = 1;
+		radius = 1;
+	} else switch (obj->otyp) {
 	    case MAGIC_LAMP:
 		obj->lamplit = 1;
 		do_timer = FALSE;

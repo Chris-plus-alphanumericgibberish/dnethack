@@ -668,6 +668,7 @@ obj_is_burning(obj)
 		 (	obj->otyp == MAGIC_LAMP
 		 || ignitable(obj)
 		 ||	is_lightsaber(obj)
+		 ||	obj->oartifact == ART_HOLY_MOONLIGHT_SWORD
 		 ||	artifact_light(obj)));
 }
 

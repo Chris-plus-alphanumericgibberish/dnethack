@@ -323,9 +323,14 @@ struct obj {
 #define bimanual(otmp,ptr)	(otmp && (otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 ptr != &mons[PM_THRONE_ARCHON] && \
-			 (objects[otmp->otyp].oc_bimanual ? \
+			 (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit ?\
+			  (objects[otmp->otyp].oc_bimanual ? \
+				((ptr)->msize - otmp->objsize - 2 <  2):\
+				((ptr)->msize - otmp->objsize - 2 < -1)) :\
+			  (objects[otmp->otyp].oc_bimanual ? \
 				((ptr)->msize - otmp->objsize <  2):\
 				((ptr)->msize - otmp->objsize < -1))\
+			 )\
 			)
 #define is_lightsaber(otmp) ((otmp)->otyp == LIGHTSABER || \
 							 (otmp)->otyp == BEAMSWORD || \

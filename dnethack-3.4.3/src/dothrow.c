@@ -735,6 +735,47 @@ dofire()
 		result = fire_blaster(uwep, shotlimit);
 		
 		return result;
+	} else if(uwep && uwep->oartifact == ART_HOLY_MOONLIGHT_SWORD && uwep->lamplit && u.uen > 25){
+		int dmg;
+		int range = (u.sealsActive&SEAL_NABERIUS) ? 6 : 3;
+		xchar lsx, lsy, sx, sy;
+		struct monst *mon;
+		sx = u.ux;
+		sy = u.uy;
+		if (!getdir((char *)0) || !(u.dx || u.dy)) return 0;
+		u.uen -= 25;
+		flags.forcefight = 1;
+		domove();
+		flags.forcefight = 0;
+		if(u.uswallow){
+			if(u.sealsActive&SEAL_NABERIUS) explode2(u.ux,u.uy,0/*Magical*/, (d(2,12)+2*uwep->spe)*1.5, WAND_CLASS, EXPL_CYAN);
+			else explode(u.ux,u.uy,0/*Magical*/, d(2,12)+2*uwep->spe, WAND_CLASS, EXPL_CYAN);
+		} else {
+			while(--range >= 0){
+				lsx = sx; sx += u.dx;
+				lsy = sy; sy += u.dy;
+				if(isok(sx,sy) && isok(lsx,lsy) && !IS_STWALL(levl[sx][sy].typ)) {
+					mon = m_at(sx, sy);
+					if(mon){
+						dmg = d(2,12)+2*uwep->spe;
+						if(u.sealsActive&SEAL_NABERIUS) explode2(sx, sy, 0/*Nagical*/, dmg*1.5, WAND_CLASS, EXPL_CYAN);
+						else explode(sx, sy, 0/*Nagical*/, dmg, WAND_CLASS, EXPL_CYAN);
+						break;//break loop
+					} else {
+						tmp_at(DISP_BEAM, cmap_to_glyph(S_digbeam));
+						tmp_at(sx, sy);
+						delay_output();
+						tmp_at(DISP_END, 0);
+					}
+				} else {
+					dmg = d(2,12)+2*uwep->spe;
+					if(u.sealsActive&SEAL_NABERIUS) explode2(lsx, lsy, 0/*Nagical*/, dmg*1.5, WAND_CLASS, EXPL_CYAN);
+					else explode(lsx, lsy, 0/*Nagical*/, dmg, WAND_CLASS, EXPL_CYAN);
+					break;//break loop
+				}
+			}
+			return 1;
+		}
 	} else if(u.twoweap && uswapwep && is_blaster(uswapwep) && !(uquiver && ammo_and_launcher(uquiver, uwep))){
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */

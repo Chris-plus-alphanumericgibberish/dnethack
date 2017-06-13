@@ -239,6 +239,10 @@ const char *verb;
 		if (cansee(x, y)) You("see %s deactivate.", an(xname(obj)));
 		lightsaber_deactivate(obj, TRUE);
 	}
+	if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD && obj->lamplit) {
+		if (cansee(x, y)) You("see %s go out.", an(xname(obj)));
+		end_burn(obj, TRUE);
+	}
 	return FALSE;
 }
 

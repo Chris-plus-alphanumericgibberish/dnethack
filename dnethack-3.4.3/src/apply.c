@@ -1390,7 +1390,7 @@ struct obj *obj;
 {
 	char buf[BUFSZ];
 
-	if(Underwater) {
+	if(Underwater && obj->oartifact != ART_HOLY_MOONLIGHT_SWORD) {
 		pline("This is not a diving lamp.");
 		return;
 	}
@@ -1416,7 +1416,8 @@ struct obj *obj;
 		return;
 	}
 	/* magic lamps with an spe == 0 (wished for) cannot be lit */
-	if ((!Is_candle(obj) && obj->age == 0 && !(is_lightsaber(obj) && obj->oartifact == ART_ATMA_WEAPON ))
+	if ((!Is_candle(obj) && obj->age == 0 && obj->oartifact != ART_HOLY_MOONLIGHT_SWORD &&
+			!(is_lightsaber(obj) && obj->oartifact == ART_ATMA_WEAPON ))
 			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)
 		) {
 		if (obj->otyp == BRASS_LANTERN || 
@@ -1438,7 +1439,7 @@ struct obj *obj;
 			obj->cursed = FALSE;
 		}
 	}
-	if (obj->cursed && !rn2(2)) {
+	if (obj->cursed && !rn2(2) && obj->oartifact != ART_HOLY_MOONLIGHT_SWORD) {
 		pline("%s for a moment, then %s.",
 		      Tobjnam(obj, "flicker"), otense(obj, "die"));
 	} else {
@@ -1447,11 +1448,22 @@ struct obj *obj;
 		    check_unpaid(obj);
 		    pline("%s lamp is now on.", Shk_Your(buf, obj));
 		} else if (is_lightsaber(obj)) {
-		    /* WAC -- lightsabers */
-		    /* you can see the color of the blade */
-		    
-		    if (!Blind) makeknown(obj->otyp);
 		    You("ignite %s.", yname(obj));
+		    unweapon = FALSE;
+		} else if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) {
+			int biman;
+			obj->lamplit = 1;
+			biman = bimanual(obj,youracedata);
+			obj->lamplit = 0;
+			if(biman && uarms){
+				You_cant("invoke %s while wearing a shield!", yname(obj));
+				return;
+			}
+		    You("invoke %s.", yname(obj));
+			if(biman && u.twoweap){
+				u.twoweap = 0;
+				You("find you must hold %s with both hands!", yname(obj)); 
+			}
 		    unweapon = FALSE;
 		} else {	/* candle(s) */
 		    pline("%s flame%s %s%s",
@@ -4708,6 +4720,7 @@ doapply()
 	else if(is_knife(obj) && !(obj->oartifact==ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_MARIONETTE)) return do_carve_obj(obj);
 	
 	if(obj->oartifact == ART_SILVER_STARLIGHT) do_play_instrument(obj);
+	if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) use_lamp(obj);
 	else switch(obj->otyp){
 	case BLINDFOLD:
 	case LENSES:

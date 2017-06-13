@@ -449,7 +449,9 @@ register struct obj *obj;
 		else if(obj->objsize == MZ_GIGANTIC) Strcat(buf, "gigantic ");
 	}
 	if(obj->obj_material != objects[obj->otyp].oc_material && !(obj->oartifact && obj->known) && !(is_lightsaber(obj) && obj->lamplit)){
-		switch(obj->obj_material){
+		if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD && obj->lamplit){
+			Strcat(buf, "pale moonlight ");
+		} else switch(obj->obj_material){
 			case LIQUID: /*Wut?*/
 				Strcat(buf, "liquid ");
 			break;
@@ -478,7 +480,7 @@ register struct obj *obj;
 				Strcat(buf, "bone ");
 			break;
 			case DRAGON_HIDE:
-				Strcat(buf, "dragon-scale ");
+				obj->oclass == WEAPON_CLASS ? Strcat(buf, "dragon-tooth ") : Strcat(buf, "dragon-scale ");
 			break;
 			case IRON:
 				if(obj->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) Strcat(buf, "steel ");
@@ -1089,6 +1091,8 @@ plus:
 			if (obj->altmode == WP_MODE_AUTO) Strcat(bp, " (auto)");
 			else if (obj->altmode == WP_MODE_BURST) Strcat(bp, " (burst)");
 			else if (obj->altmode == WP_MODE_SINGLE) Strcat(bp, " (single)");
+		} else if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD && obj->lamplit) {
+			Strcat(bp, " (lit)");
 		} else if (is_lightsaber(obj)) {
 		    if (obj->lamplit){
 				if(obj->altmode){
@@ -2596,7 +2600,7 @@ boolean from_user;
 		} else if(!strncmpi(bp, "snakeneck ", l=10)){
 			bodytype = MB_LONGNECK;
 		} else if (!strncmpi(bp, "blessed ", l=8) ||
-			   !strncmpi(bp, "holy ", l=5)) {
+			   (!strncmpi(bp, "holy ", l=5) && strncmpi(bp, "holy moonlight sword", l=20))) {
 			blessed = 1;
 		} else if (!strncmpi(bp, "cursed ", l=7) ||
 			   !strncmpi(bp, "unholy ", l=7)) {

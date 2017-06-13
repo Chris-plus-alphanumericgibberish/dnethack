@@ -520,7 +520,9 @@ struct obj *obj;
 {
     return (obj && obj->oartifact && (spec_ability2(obj, SPFX2_SILVERED) || 
 									  (obj->oartifact == ART_PEN_OF_THE_VOID &&
-									   obj->ovar1 & SEAL_EDEN)));
+									   obj->ovar1 & SEAL_EDEN) ||
+									  ((obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) && !obj->lamplit))
+			);
 }
 
 /* used so that callers don't need to known about SPFX_ codes */
@@ -584,7 +586,8 @@ struct obj *obj;
 {
     return (obj && (
 		(obj->oartifact && spec_ability2(obj, SPFX2_SHINING)) ||
-		(is_lightsaber(obj) && obj->lamplit)
+		(is_lightsaber(obj) && obj->lamplit) ||
+		((obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) && obj->lamplit)
 	));
 }
 
@@ -1176,6 +1179,8 @@ struct monst *mtmp;
 
 	if(weap == &artilist[ART_PEN_OF_THE_VOID]) return (mvitals[PM_ACERERAK].died > 0);
 	
+	if(weap == &artilist[ART_HOLY_MOONLIGHT_SWORD]) return !((mtmp == &youmonst) ? Antimagic : resists_magm(mtmp));
+	
 	if(!(weap->spfx & (SPFX_DBONUS | SPFX_ATTK)))
 	    return(weap->attk.adtyp == AD_PHYS);
 
@@ -1406,10 +1411,12 @@ int tmp;
 	}
 	
 	if (!weap || (weap->attk.adtyp == AD_PHYS && /* check for `NO_ATTK' */
-			weap->attk.damn == 0 && weap->attk.damd == 0) 
-			|| (weap->inv_prop == ICE_SHIKAI && u.SnSd3duration < monstermoves))
+			weap->attk.damn == 0 && weap->attk.damd == 0)
+			|| (weap->inv_prop == ICE_SHIKAI && u.SnSd3duration < monstermoves)){
 	    spec_dbon_applies = FALSE;
-	else{
+	} else if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && !otmp->lamplit){
+		spec_dbon_applies = FALSE;
+	} else {
 	    spec_dbon_applies = spec_applies(weap, mon);
 		// if(spec_dbon_applies) pline("dbon applies");
 	}
@@ -3108,6 +3115,24 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	    /* since damage bonus didn't apply, nothing more to do;  
 	       no further attacks have side-effects on inventory */
 	    return messaged;
+	}
+	if (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD) {
+		if (youattack && mdef->mattackedu) {
+			int life = (*dmgptr)*.3+1;
+			healup(life, 0, FALSE, FALSE);
+		} else if (youdefend) {
+			int life = (*dmgptr)*.3+1;
+			if (magr && magr->mhp < magr->mhpmax) {
+				magr->mhp += life;
+				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+			}
+		} else { /* m vs m */
+			int life = (*dmgptr)*.3+1;
+			if (magr && magr->mhp < magr->mhpmax) {
+				magr->mhp += life+1;
+				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
+			}
+		}
 	}
 	if (otmp->oartifact == ART_LIFEHUNT_SCYTHE) {
 		if (youattack) {

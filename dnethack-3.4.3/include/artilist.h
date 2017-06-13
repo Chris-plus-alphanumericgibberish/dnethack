@@ -430,12 +430,19 @@ A("Release from Care",			SCYTHE, /*Needs encyc entry*/
 	HEALING, A_NONE, NON_PM, NON_PM, 4000L, 
 	0,0,0),
 
-A("Lifehunt Scythe",			SCYTHE, /*Needs encyc entry*/
+A("The Lifehunt Scythe",			SCYTHE, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_DEFN|SPFX_BEHEAD),0, //Can only behead creatures that don't know where you are.
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(4,4),	DRLI(0,0),	COLD(0,0), //Actually only applies vs living or undead creatures
 	INVIS, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
 	SPFX2_STLTH|SPFX2_BLDTHRST,0,0),
+
+A("The Holy Moonlight Sword",		LONG_SWORD, /*Needs encyc entry*/
+	(SPFX_RESTR),0, //Becomes two sizes larger when lit, likely requiring two hands
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(12,0),	NO_DFNS,	NO_CARY, //Actually only applies vs non-magic resistance and while lit
+	ENLIGHTENING, A_NONE, NON_PM, NON_PM, 4000L, 
+	0,0,0), //Also silver when NOT lit, and shining when lit
 
 A("The Silence Glaive",		GLAIVE, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_DRLI),0,

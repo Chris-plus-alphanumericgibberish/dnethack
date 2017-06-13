@@ -215,8 +215,9 @@
 #define HClairvoyant		u.uprops[CLAIRVOYANT].intrinsic
 #define EClairvoyant		u.uprops[CLAIRVOYANT].extrinsic
 #define BClairvoyant		u.uprops[CLAIRVOYANT].blocked
-#define Clairvoyant		((HClairvoyant || EClairvoyant || u.sealsActive&SEAL_MOTHER) &&\
-				 !BClairvoyant)
+#define Clairvoyant		((HClairvoyant || EClairvoyant || u.sealsActive&SEAL_MOTHER || \
+							(uwep && uwep->oartifact == ART_HOLY_MOONLIGHT_SWORD && uwep->lamplit)\
+						) && !BClairvoyant)
 
 #define HInfravision		u.uprops[INFRAVISION].intrinsic
 #define EInfravision		u.uprops[INFRAVISION].extrinsic
