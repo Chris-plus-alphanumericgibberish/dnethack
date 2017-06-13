@@ -243,7 +243,15 @@ const char *
 lightsaber_colorText(otmp)
 struct obj *otmp;
 {
-	if(otmp->oartifact == ART_ANNULUS) return Hallucination ? hcolor(0) : "cerulean";
+	if(otmp->oartifact) switch(otmp->oartifact){
+		case ART_ANNULUS: return Hallucination ? hcolor(0) : "cerulean";
+		case ART_ARKENSTONE: return Hallucination ? hcolor(0) : "rainbow-glinting sparking white";
+		case ART_FLUORITE_OCTAHEDRON: return Hallucination ? hcolor(0) : "ghostly cerulean";
+		case ART_HEART_OF_AHRIMAN: return Hallucination ? hcolor(0) : "pulsing and shimmering ruby";
+		case ART_GLITTERSTONE: return Hallucination ? hcolor(0) : "glittering gold";
+		
+		default: return Hallucination ? hcolor(0) : LightsaberColor[((int)otmp->cobj->otyp) - MAGICITE_CRYSTAL].colorText;
+	}
 	return Hallucination ? hcolor(0) : LightsaberColor[((int)otmp->cobj->otyp) - MAGICITE_CRYSTAL].colorText;
 }
 

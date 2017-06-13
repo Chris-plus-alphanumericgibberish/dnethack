@@ -3307,6 +3307,8 @@ doinvoke()
     obj = getobj(invoke_types, "invoke");
     if (!obj) return 0;
     if (obj->oartifact && !touch_artifact(obj, &youmonst)) return 1;
+	if(is_lightsaber(obj) && obj->cobj && obj->oartifact == obj->cobj->oartifact)
+		obj = obj->cobj;
     return arti_invoke(obj);
 }
 
@@ -3316,6 +3318,8 @@ doparticularinvoke(obj)
 {
     if (!obj) return 0;
     if (obj->oartifact && !touch_artifact(obj, &youmonst)) return 1;
+	if(is_lightsaber(obj) && obj->cobj && obj->oartifact == obj->cobj->oartifact)
+		obj = obj->cobj;
     return arti_invoke(obj);
 }
 
@@ -7306,7 +7310,7 @@ arti_light(obj)
     struct obj *obj;
 {
 	const struct artifact *arti = get_artifact(obj);
-    return	(arti && 
+    return	(arti && !is_lightsaber(obj) &&
 				(arti->cspfx3 & SPFX3_LIGHT)
 			);
 }

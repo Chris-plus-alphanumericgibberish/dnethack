@@ -2475,12 +2475,18 @@ register struct obj *obj;
 	}
 	if(otmp){
 		current_container = obj;
+		if(obj->cobj){
+			if(obj->cobj->oartifact == obj->oartifact)
+				obj->oartifact = 0;
+			out_container(obj->cobj);
+		}
 		if(otmp->quan > 1)
 			otmp = splitobj(otmp, 1);
-		if(obj->cobj) 
-			out_container(obj->cobj);
-		if(!obj->cobj)
+		if(!obj->cobj){
 			in_container(otmp);
+			if(otmp->oartifact && !obj->oartifact)
+				obj->oartifact = otmp->oartifact;
+		}
 		return 1;
 	} else return 0;
 }

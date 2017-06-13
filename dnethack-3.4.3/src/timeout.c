@@ -1728,7 +1728,9 @@ begin_burn(obj, already_lit)
 				} else if(!Drain_resistance) obj->age++;
 			}
 			turns = 1;
-    	    radius = 1;
+			if(obj->cobj && obj->cobj->oartifact == obj->oartifact && arti_light(obj->cobj)) 
+				radius = (obj->cobj->blessed ? 3 : (obj->cobj->cursed ? 1 : 2));
+    	    else radius = 1;
 		break;
 
 	    case POT_OIL:
