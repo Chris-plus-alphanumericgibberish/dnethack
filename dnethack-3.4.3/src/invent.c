@@ -265,7 +265,7 @@ struct obj *obj;
 #ifdef RECORD_ACHIEVE
 		achieve.get_candelabrum = 1;
 #endif
-	} else if (obj->otyp == BELL_OF_OPENING) {
+	} else if (obj->otyp == BELL_OF_OPENING || obj->oartifact == ART_ANNULUS) {
 		if (u.uhave.bell) impossible("already have silver bell?");
 		u.uhave.bell = 1;
 #ifdef RECORD_ACHIEVE
@@ -553,7 +553,7 @@ struct obj *obj;
 	} else if (obj->otyp == CANDELABRUM_OF_INVOCATION) {
 		if (!u.uhave.menorah) impossible("don't have candelabrum?");
 		u.uhave.menorah = 0;
-	} else if (obj->otyp == BELL_OF_OPENING) {
+	} else if (obj->otyp == BELL_OF_OPENING || obj->oartifact == ART_ANNULUS) {
 		if (!u.uhave.bell) impossible("don't have silver bell?");
 		u.uhave.bell = 0;
 	} else if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
