@@ -568,7 +568,7 @@ moveloop()
 							blade->mtame = 0;
 						}
 						if(mtmp->mpeaceful != blade->mpeaceful){
-							mtmp->mpeaceful == blade->mpeaceful;
+							mtmp->mpeaceful = blade->mpeaceful;
 						}
 					}
 				}
