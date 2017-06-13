@@ -51,18 +51,6 @@ A("Excalibur",			LONG_SWORD,
 	PHYS(20,10),	DRLI(0,0),	NO_CARY,	//Excalibur is a very accurate weapon, a property that almost doesn't matter except for vs high level demons
 	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, //Excalibur does extra blessed damage to demons and undead, +3d7 instead of 1d4
 	0,0,0),
-/* Clarent patch (Greyknight): Note that Clarent's SPFX2_DIG gives it another +2 to hit against thick-skinned
-	monsters, as well as against wall-passers. Another special effect of Clarent
-	is that it can be pulled out of a wall it is stuck in (by #untrapping towards
-	it) if you are devoutly lawful. */
-	/*Clarent has been modified to make it the Knight crowning-gift*/
-A("Clarent",			LONG_SWORD, /*quote (sorta)*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, MB_THICK_HIDE /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	PHYS(10,20),	NO_DFNS,		NO_CARY,
-	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
-	SPFX2_DIG,0,0), 
-
 /*
  *	Stormbringer only has a 2 because it can drain a level,
  *	providing 8 more.
@@ -74,13 +62,6 @@ A("Stormbringer",		RUNESWORD,
 	DRLI(5,2),	DRLI(0,0),	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
 	SPFX2_BLDTHRST,0,0),
-A("Reaver",			SCIMITAR, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	PHYS(5,8),	NO_DFNS,	NO_CARY,
-	THEFT_TYPE, A_CHAOTIC, PM_PIRATE, NON_PM, 6000L,
-	SPFX2_STEAL, 0, 0 ),
-
 /*
  *	Two problems:  1) doesn't let trolls regenerate heads,
  *	2) doesn't give unusual message for 2-headed monsters (but
@@ -93,43 +74,6 @@ A("Vorpal Blade",		LONG_SWORD,
 	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, /*Vorpal Blade also uses exploading dice (roll again if maximum number is rolled)*/
 	0,0,0),							 /*According to an article on 1d4Chan, the average of an exploading die is roughly that of a die one size larger*/
 									 /*So vorpal sword is effectively 2d10+2/2d14+2*/
-A("The Bow of Skadi",	BOW, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	COLD(1,24),	NO_DFNS,	CARY(AD_COLD),
-	0, A_LAWFUL, PM_VALKYRIE, NON_PM, 4000L, /*Read to learn Cone of Cold (Skadi's Galdr) */
-	SPFX2_COLD2,0,0),
-A("The Crown of the Saint King",	HELMET, /*Actually gold circlet*/ /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	NO_ATTK,	NO_DFNS,	NO_CARY,
-	LEADERSHIP, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
-	0,0,WSFX_PLUSSEV),
-A("The Helm of the Dark Lord",	HELMET, /*Actually visored helmet*/ /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	NO_ATTK,	NO_DFNS,	NO_CARY,
-	LEADERSHIP, A_CHAOTIC, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
-	0,0,WSFX_PLUSSEV),
-A("Sunbeam",	GOLDEN_ARROW, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	PHYS(10,0),	NO_DFNS,	CARY(AD_DRLI),
-	0, A_LAWFUL, PM_RANGER, NON_PM, 1000L,
-	SPFX2_POISONED|SPFX2_BRIGHT,0,0),
-A("Moonbeam",	SILVER_ARROW, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	PHYS(10,0),	NO_DFNS,	CARY(AD_DRLI),
-	0, A_CHAOTIC, PM_RANGER, NON_PM, 1000L,
-	SPFX2_BRIGHT,0,0),
-A("Veil of Latona",	CLOAK_OF_INVISIBILITY, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN|SPFX_REFLECT), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	NO_ATTK,	DFNS(AD_MAGM),	CARY(AD_DRLI),
-	0, A_NEUTRAL, PM_RANGER, NON_PM, 1000L,
-	0,0,0),
-
 
 A("The Marauder's Map", SCR_MAGIC_MAPPING, /*Needs encyc entry*/
 	(SPFX_RESTR), 0, 
@@ -605,22 +549,6 @@ A("Fluorite Octahedron", BLUE_FLUORITE, /*Needs encyc entry*/
 	0, A_NONE, NON_PM, NON_PM, 4000L, 
 	0,0,0),
 
-/*//////////Artifact Books///////////*/
-A("The Book of Lost Names", SPE_SECRETS, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	NO_ATTK,	NO_DFNS,	NO_CARY,
-	SPIRITNAMES,	A_NONE, NON_PM, NON_PM, 5000L, 
-	0,SPFX3_NOCNT,0),
-
-A("The Book of Infinite Spells", SPE_SECRETS, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	NO_ATTK,	NO_DFNS,	NO_CARY,
-	INFINITESPELLS,	A_NONE, NON_PM, NON_PM, 5000L, 
-	0,SPFX3_NOCNT,0),
-
-
 /*//////////Artifact Armors//////////*/
 
 #ifdef TOURIST
@@ -894,7 +822,83 @@ A("The Silver Key", UNIVERSAL_KEY, /*from the works of HP Lovecraft*/
 	CREATE_PORTAL,	A_NEUTRAL, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_PCTRL,0),  /*polymorph control*/
 
+/*//////////Artifact Books///////////*/
+A("The Book of Lost Names", SPE_SECRETS, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	SPIRITNAMES,	A_NONE, NON_PM, NON_PM, 5000L, 
+	0,SPFX3_NOCNT,0),
 
+A("The Book of Infinite Spells", SPE_SECRETS, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	INFINITESPELLS,	A_NONE, NON_PM, NON_PM, 5000L, 
+	0,SPFX3_NOCNT,0),
+
+/*//////////Role-specific Crowning Artifacts//////////*/
+
+/* Clarent patch (Greyknight): Note that Clarent's SPFX2_DIG gives it another +2 to hit against thick-skinned
+	monsters, as well as against wall-passers. Another special effect of Clarent
+	is that it can be pulled out of a wall it is stuck in (by #untrapping towards
+	it) if you are devoutly lawful. */
+	/*Clarent has been modified to make it the Knight crowning-gift*/
+A("Clarent",			LONG_SWORD, /*quote (sorta)*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, MB_THICK_HIDE /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(10,20),	NO_DFNS,		NO_CARY,
+	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
+	SPFX2_DIG,0,0), 
+
+A("Reaver",			SCIMITAR, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(5,8),	NO_DFNS,	NO_CARY,
+	THEFT_TYPE, A_CHAOTIC, PM_PIRATE, NON_PM, 6000L,
+	SPFX2_STEAL, 0, 0 ),
+
+A("The Bow of Skadi",	BOW, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	COLD(1,24),	NO_DFNS,	CARY(AD_COLD),
+	0, A_LAWFUL, PM_VALKYRIE, NON_PM, 4000L, /*Read to learn Cone of Cold (Skadi's Galdr) */
+	SPFX2_COLD2,0,0),
+
+A("The Crown of the Saint King",	HELMET, /*Actually gold circlet*/ /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	LEADERSHIP, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
+	0,0,WSFX_PLUSSEV),
+
+A("The Helm of the Dark Lord",	HELMET, /*Actually visored helmet*/ /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	LEADERSHIP, A_CHAOTIC, PM_NOBLEMAN, NON_PM, 4000L, /*Also causes pets to always follow you when worn*/
+	0,0,WSFX_PLUSSEV),
+
+A("Sunbeam",	GOLDEN_ARROW, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(10,0),	NO_DFNS,	CARY(AD_DRLI),
+	0, A_LAWFUL, PM_RANGER, NON_PM, 1000L,
+	SPFX2_POISONED|SPFX2_BRIGHT,0,0),
+
+A("Moonbeam",	SILVER_ARROW, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(10,0),	NO_DFNS,	CARY(AD_DRLI),
+	0, A_CHAOTIC, PM_RANGER, NON_PM, 1000L,
+	SPFX2_BRIGHT,0,0),
+
+A("Veil of Latona",	CLOAK_OF_INVISIBILITY, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN|SPFX_REFLECT), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	DFNS(AD_MAGM),	CARY(AD_DRLI),
+	0, A_NEUTRAL, PM_RANGER, NON_PM, 1000L,
+	0,0,0),
 
 /*//////////Role-specific Quest Artifacts//////////*/
 /*
