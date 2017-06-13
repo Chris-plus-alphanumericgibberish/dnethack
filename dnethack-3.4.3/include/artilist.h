@@ -184,7 +184,7 @@ A("Giantslayer",		AXE,
 	0, A_NONE, NON_PM, NON_PM, 2000L, 	 /* also gets bonus damage, +1d4/+2d4, for d6+d4/3d4 total. */
 	0,0,0),
 
-A("Vampire Killer",			BULLWHIP,
+A("The Vampire Killer",			BULLWHIP,
 	(SPFX_RESTR|SPFX_CON_OR), 0, /* some standard castlevainia enemy types*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, (MA_UNDEAD|MA_DEMON|MA_WERE) /*MA*/, 0 /*MV*/,
 	PHYS(10,20),	DRLI(0,0),	NO_CARY,	/*is given extra damage in weapon.c, since whip damage is so low*/
@@ -315,7 +315,7 @@ A("Fire Brand",			LONG_SWORD,
 	0, A_NONE, NON_PM, NON_PM, 3000L, 
 	0,0,0),
 
-A("Golden Sword of Y'ha-Talla",			SCIMITAR,
+A("The Golden Sword of Y'ha-Talla",			SCIMITAR,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	DRST(5,0),	DRST(0,0),	NO_CARY,
@@ -454,7 +454,7 @@ A("The Silence Glaive",		GLAIVE, /*Needs encyc entry*/
 A("The Garnet Rod",		UNIVERSAL_KEY, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_EREGEN|SPFX_REGEN),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*also has a haste effect when wielded, but massively increases hunger*/
-	NO_ATTK,	NO_ATTK,	NO_CARY,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
 	PLUTO, A_NONE, NON_PM, NON_PM, 8000L, 
 	0,0,0),
 
