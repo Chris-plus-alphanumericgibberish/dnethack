@@ -16,6 +16,7 @@ STATIC_DCL void NDECL(do_positionbar);
 #endif
 
 STATIC_DCL void NDECL(printMons);
+STATIC_DCL void NDECL(printDPR);
 STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
 STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
 
