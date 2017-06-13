@@ -2085,6 +2085,9 @@ spiriteffects(power, atme)
 			   newlev.dnum == u.uz.dnum) {
 			You_feel("very disoriented for a moment.");
 			} else {
+			if(u.usteed && mon_has_amulet(u.usteed)){
+				dismount_steed(DISMOUNT_VANISHED);
+			}
 			if(!Blind) You("are surrounded by a shimmering sphere!");
 			else You_feel("weightless for a moment.");
 			u.uen -= 125;
