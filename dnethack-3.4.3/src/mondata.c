@@ -119,6 +119,8 @@ boolean
 resists_oona(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	switch(u.oonaenergy){
 		case AD_ELEC: return resists_elec(mon);
 		case AD_FIRE: return resists_fire(mon);
@@ -131,6 +133,8 @@ boolean
 resists_fire(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_FIRE) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance));
 }
 
@@ -138,6 +142,8 @@ boolean
 resists_cold(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_COLD) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
 }
 
@@ -145,6 +151,8 @@ boolean
 resists_sleep(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_SLEEP) != 0 || ((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
 }
 
@@ -152,6 +160,8 @@ boolean
 resists_disint(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_DISINT) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Disint_resistance));
 }
 
@@ -159,6 +169,8 @@ boolean
 resists_elec(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_ELEC) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Shock_resistance));
 }
 
@@ -166,6 +178,8 @@ boolean
 resists_poison(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_POISON) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
 }
 
@@ -173,6 +187,8 @@ boolean
 resists_acid(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_ACID) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Acid_resistance));
 }
 
@@ -180,6 +196,8 @@ boolean
 resists_ston(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_STONE) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Stone_resistance));
 }
 
@@ -187,6 +205,8 @@ boolean
 resists_drain(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_DRAIN) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
 }
 
@@ -194,6 +214,8 @@ boolean
 resists_sickness(mon)
 	struct monst *mon;
 {
+	if(!mon) return FALSE;
+	
 	return (((mon)->mintrinsics & MR_SICK) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sick_resistance));
 }
 
@@ -201,8 +223,12 @@ boolean
 resists_drli(mon)	/* returns TRUE if monster is drain-life resistant */
 struct monst *mon;
 {
-	struct permonst *ptr = mon->data;
-	struct obj *wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
+	struct permonst *ptr;
+	struct obj *wep;
+	
+	if(!mon) return FALSE;
+	ptr = mon->data;
+	wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
 
 	return (boolean)(is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
 			 ptr == &mons[PM_DEATH] ||
@@ -215,8 +241,11 @@ boolean
 resists_magm(mon)	/* TRUE if monster is magic-missile resistant */
 struct monst *mon;
 {
-	struct permonst *ptr = mon->data;
+	struct permonst *ptr;
 	struct obj *o;
+	
+	if(!mon) return FALSE;
+	ptr = mon->data;
 	
 	if(mon == u.usteed && u.sealsActive&SEAL_BERITH && Antimagic) return TRUE;
 	
@@ -252,8 +281,11 @@ boolean
 resists_death(mon)	/* TRUE if monster resists death magic */
 struct monst *mon;
 {
-	struct permonst *ptr = mon->data;
+	struct permonst *ptr;
 	struct obj *o;
+	
+	if(!mon) return FALSE;
+	ptr = mon->data;
 	
 	if(mon == u.usteed && u.sealsActive&SEAL_BERITH && u.sealsActive&SEAL_OSE) return TRUE;
 	
@@ -265,10 +297,13 @@ boolean
 resists_blnd(mon)
 struct monst *mon;
 {
-	struct permonst *ptr = mon->data;
+	struct permonst *ptr;
 	boolean is_you = (mon == &youmonst);
 	struct obj *o;
-
+	
+	if(!mon) return FALSE;
+	ptr = mon->data;
+	
 	if (is_you ? (NoLightBlind || u.usleep) :
 		(mon->mblinded || !mon->mcansee || !haseyes(ptr) ||
 		    /* BUG: temporary sleep sets mfrozen, but since
