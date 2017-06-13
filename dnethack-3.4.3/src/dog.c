@@ -548,7 +548,8 @@ long nmv;		/* number of moves */
 		In_quest(&u.uz) && 
 		((Is_qstart(&u.uz) && !flags.stag) || 
 		 (Is_nemesis(&u.uz) && flags.stag)) &&
-	 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend)
+	 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
+	 !(Role_if(PM_ANACHRONONAUT) && !(quest_status.leader_is_dead))
 	)) {
 	    int wilder = (imv + 75) / 150;
 #ifdef BARD
@@ -571,7 +572,8 @@ long nmv;		/* number of moves */
 		 In_quest(&u.uz) && 
 			((Is_qstart(&u.uz) && !flags.stag) || 
 			 (Is_nemesis(&u.uz) && flags.stag)) &&
-		 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN))
+		 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
+		 !(Role_if(PM_ANACHRONONAUT) && !(quest_status.leader_is_dead))
 	)) {
 	    struct edog *edog = EDOG(mtmp);
 
