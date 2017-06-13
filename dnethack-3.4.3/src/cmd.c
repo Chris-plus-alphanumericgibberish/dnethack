@@ -738,7 +738,8 @@ domonability(VOID_ARGS)
 			(IS_GRAVE(lev->typ)) ||
 			(lev->typ == DRAWBRIDGE_UP) ||
 			(IS_THRONE(lev->typ)) ||
-			(IS_ALTAR(lev->typ))
+			(IS_ALTAR(lev->typ)) ||
+			(Is_airlevel(&u.uz))
 		)){
 			typ = fillholetyp(u.ux,u.uy);
 			You("gyre and gimble into the %s.", surface(u.ux,u.uy));
