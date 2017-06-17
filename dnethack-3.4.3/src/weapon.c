@@ -2825,6 +2825,9 @@ const struct def_skill *class_skill;
 	if (Role_if(PM_BARD)) {
 	  OLD_P_SKILL(P_MUSICALIZE) = P_BASIC;
 	  OLD_P_SKILL(P_BARE_HANDED_COMBAT) = P_BASIC;
+	  OLD_P_SKILL(P_BEAST_MASTERY) = P_BASIC;
+	  OLD_P_SKILL(P_DART) = P_BASIC;
+	  OLD_P_SKILL(P_DAGGER) = P_BASIC;
 	}
 #endif
 
