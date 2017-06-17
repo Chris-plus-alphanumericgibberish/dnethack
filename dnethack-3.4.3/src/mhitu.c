@@ -549,10 +549,10 @@ mattacku(mtmp)
 /*	Work out the armor class differential	*/
 	tmp = AC_VALUE(u.uac+u.uspellprot) + 10 - u.uspellprot;		/* tmp ~= 0 - 20 */
 	tchtmp = AC_VALUE(base_uac()+u.uspellprot) + 10 - u.uspellprot;
-	tmp += mtmp->m_lev/3;
+	tmp += 2*mtmp->m_lev/3;
 	if(is_prince(mtmp->data)) tmp += 5;
 	if(is_lord(mtmp->data)) tmp += 2;
-	tchtmp += mtmp->m_lev/3;
+	tchtmp += 2*mtmp->m_lev/3;
 	if(is_prince(mtmp->data)) tchtmp += 5;
 	if(is_lord(mtmp->data)) tchtmp += 2;
 	tmp += u.ustdy;

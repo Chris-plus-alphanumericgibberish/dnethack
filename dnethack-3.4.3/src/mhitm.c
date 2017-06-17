@@ -235,11 +235,11 @@ mattackm(magr, mdef)
 		) return(MM_MISS);
 	
     /* Calculate the armour class differential. */
-    tmp = find_mac(mdef) + (magr->m_lev)/3;
+    tmp = find_mac(mdef) + 2*magr->m_lev/3;
 	tmp += mdef->mstdy;
 	if(is_prince(magr->data)) tmp += 5;
 	if(is_lord(magr->data)) tmp += 2;
-    tchtmp = base_mac(mdef) + (magr->m_lev)/3;
+    tchtmp = base_mac(mdef) + 2*magr->m_lev/3;
 	tchtmp += mdef->mstdy;
 	if(is_prince(magr->data)) tchtmp += 5;
 	if(is_lord(magr->data)) tchtmp += 2;
