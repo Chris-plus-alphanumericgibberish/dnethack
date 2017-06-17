@@ -1002,7 +1002,10 @@ register struct monst *mtmp;
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 	) (void) tactics(mtmp);
 	
-	if(mdat == &mons[PM_GREAT_CTHULHU] && !rn2(20)) (void) tactics(mtmp);
+	if(mdat == &mons[PM_GREAT_CTHULHU] && !rn2(20)){
+		(void) tactics(mtmp);
+		return 1;
+	}
 	
 	/* check distance and scariness of attacks */
 	distfleeck(mtmp,&inrange,&nearby,&scared);
