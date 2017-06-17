@@ -212,6 +212,7 @@ int otyp,oquan;
 #endif /* OVLB */
 #ifdef OVL2
 
+static const int ANGELTWOHANDERCUT = 4;
 static NEARDATA int angelwepsbase[] = {
 	SABER, LONG_SWORD, LONG_SWORD, SABER,
 	TWO_HANDED_SWORD, GLAIVE, LANCE,
@@ -2055,7 +2056,7 @@ register struct monst *mtmp;
 				otmp->obj_material = SILVER;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
-	
+				
 			    otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
 			    otmp->cursed = FALSE;
 			    otmp->oerodeproof = TRUE;
@@ -2108,25 +2109,41 @@ register struct monst *mtmp;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 	
-			    otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
-			    otmp->spe = 0;
-			    otmp->cursed = FALSE;
+				if(artnum < ANGELTWOHANDERCUT){
+					otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->objsize = MZ_LARGE;
+					otmp->obj_material = GLASS;
+					otmp->spe = 0;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				} else {
+					otmp = mksobj(AMULET_OF_REFLECTION, FALSE, FALSE);
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->objsize = MZ_LARGE;
+					otmp->obj_material = GLASS;
+					otmp->spe = 0;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
+				
+				otmp = mksobj(HELM_OF_BRILLIANCE, FALSE, FALSE);
+			    bless(otmp);
+			    otmp->oerodeproof = TRUE;
 				otmp->objsize = MZ_LARGE;
 				otmp->obj_material = GLASS;
+				otmp->spe = 3;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(CRYSTAL_HELM, FALSE, FALSE);
+				otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->objsize = MZ_LARGE;
-				fix_object(otmp);
-			    (void) mpickobj(mtmp, otmp);
-				
-				otmp = mksobj(CRYSTAL_GAUNTLETS, FALSE, FALSE);
-			    bless(otmp);
-			    otmp->oerodeproof = TRUE;
-				otmp->objsize = MZ_LARGE;
+				otmp->obj_material = GLASS;
+				otmp->spe = 0;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
@@ -2370,13 +2387,23 @@ register struct monst *mtmp;
 			    otmp->spe = max(otmp->spe, spe2);
 			    (void) mpickobj(mtmp, otmp);
 	
-			    otmp = mksobj(!rn2(4) || is_lord(ptr) ?
-					  SHIELD_OF_REFLECTION : KITE_SHIELD,
-					  FALSE, FALSE);
-			    otmp->spe = 0;
-			    otmp->cursed = FALSE;
-			    otmp->obj_material = SILVER;
-			    (void) mpickobj(mtmp, otmp);
+				if(artnum < ANGELTWOHANDERCUT){
+					otmp = mksobj(!rn2(4) || is_lord(ptr) ?
+						  SHIELD_OF_REFLECTION : KITE_SHIELD,
+						  FALSE, FALSE);
+					otmp->spe = 0;
+					otmp->cursed = FALSE;
+					otmp->obj_material = SILVER;
+					(void) mpickobj(mtmp, otmp);
+				} else if(is_lord(ptr) || !rn2(20)){
+					otmp = mksobj(AMULET_OF_REFLECTION, FALSE, FALSE);
+					otmp->cursed = FALSE;
+					otmp->oerodeproof = TRUE;
+					otmp->obj_material = SILVER;
+					otmp->spe = 0;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
 			}
 		}
 		break;
