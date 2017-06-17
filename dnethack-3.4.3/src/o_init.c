@@ -190,7 +190,7 @@ shuffle_all()
 			int j = last-1;
 
 			if (oclass == POTION_CLASS)
-			    j -= 3;  /* water, amnesia, and blood have fixed descriptions */
+			    j -= 4;  /* water, starlight, amnesia, and blood have fixed descriptions */
 			if (oclass == WAND_CLASS)
 			    first += 2;  /* light and darkness have fixed descriptions */
 			else if (oclass == AMULET_CLASS ||
