@@ -7999,7 +7999,7 @@ completed its secret preparations, you shall-
 vectoring on Last Bastion.  Picket line engaging targets*
 
 <<%p, report to ritual grounds at once.  We must complete
-the ritual before the courtyard in overrun>>
+the ritual before the courtyard is overrun>>
 
 %E
 %Cc - 00220
