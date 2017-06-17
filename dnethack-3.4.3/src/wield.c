@@ -119,7 +119,9 @@ register struct obj *obj;
 				!is_weptool(obj);
 	} else
 		unweapon = TRUE;	/* for "bare hands" message */
-	update_inventory();
+        if (!restoring) {
+            update_inventory();
+        }
 }
 
 STATIC_OVL int
