@@ -773,7 +773,7 @@ const struct Race races[] = {
 	{    3,     3,  3,  3,  3,  3 },
 	{   18,    20, 20, 18, 16, 18 },
 	/* Init   Lower  Higher */
-	{  1, 0,  1, 0,  0, 1 },	/* Hit points */
+	{  2, 0,  3, 0,  1, 0 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
 	NO_NIGHTVISION
 },
@@ -786,7 +786,7 @@ const struct Race races[] = {
 	{    3,     3,  3,  3,  3,  3 },
 	{   18,    20, 20, 18, 16, 18 },
 	/* Init   Lower  Higher */
-	{  1, 0,  1, 0,  0, 1 },	/* Hit points */
+	{  2, 0,  3, 0,  1, 0 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
 	NIGHTVISION3
 },
@@ -865,7 +865,7 @@ const struct Race races[] = {
 	{      3,      3,  3,  3,  3,  3 },
 	{     16,     18, 18, 20, 14, 20 },
 	/* Init   Lower  Higher */
-	{  0, 0,  0, 0,  0, 0 },	/* Hit points */
+	{  2, 0,  0, 2,  1, 0 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
 	NORMALNIGHTVIS
 },

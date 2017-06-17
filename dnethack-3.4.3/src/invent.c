@@ -30,6 +30,8 @@ STATIC_DCL void FDECL(menu_identify, (int));
 STATIC_DCL boolean FDECL(tool_in_use, (struct obj *));
 #endif /* OVLB */
 STATIC_DCL char FDECL(obj_to_let,(struct obj *));
+STATIC_PTR int FDECL(u_material_next_to_skin,(int));
+STATIC_PTR int FDECL(u_bcu_next_to_skin,(int));
 
 #ifdef OVLB
 
@@ -3232,6 +3234,99 @@ boolean as_if_seen;
 	}
 	return n;
 }
+
+int
+u_healing_penalty()
+{
+	int penalty = 0;
+	if(hates_silver(youracedata)){
+		penalty += (20*u_material_next_to_skin(SILVER))/2;
+	}
+	if(hates_iron(youracedata)){
+		penalty += (u.ulevel * u_material_next_to_skin(IRON))/2;
+	}
+	if(hates_unholy(youracedata)){
+		penalty += (9*u_bcu_next_to_skin(-1))/2;
+	}
+	if(is_demon(youracedata) || is_undead(youracedata)){
+		penalty += (4*u_bcu_next_to_skin(1))/2;
+	}
+	return penalty;
+}
+
+STATIC_OVL int
+u_material_next_to_skin(material)
+int material;
+{
+	int count = 0;
+	if(uwep && uwep->obj_material == material && !uarmg)
+		count++;
+	if(uarm && uarm->obj_material == material && !uarmu)
+		count++;
+	if(uarmu && uarmu->obj_material == material)
+		count++;
+	if(uarmc && uarmc->obj_material == material && !uarmu && !uarm)
+		count++;
+	if(uarmh && uarmh->obj_material == material)
+		count++;
+	if(uarms && uarms->obj_material == material && !uarmg)
+		count++;
+	if(uarmg && uarmg->obj_material == material)
+		count++;
+	if(uarmf && uarmf->obj_material == material)
+		count++;
+	if(uleft && uleft->obj_material == material)
+		count++;
+	if(uright && uright->obj_material == material)
+		count++;
+	if(uamul && uamul->obj_material == material && !uarmu && !uarm)
+		count++;
+	if(ublindf && ublindf->obj_material == material)
+		count++;
+	if(uchain && uchain->obj_material == material)
+		count++;
+	if(uswapwep && uswapwep->obj_material == material && u.twoweap && !uarmg)
+		count++;
+	return count;
+}
+
+STATIC_OVL int
+u_bcu_next_to_skin(bcu)
+int bcu;
+{
+	#define bcu(otmp) (otmp->cursed ? -1 : otmp->blessed ? 1 : 0)
+	int count = 0;
+	if(uwep && bcu(uwep) == bcu && !uarmg)
+		count++;
+	if(uarm && bcu(uarm) == bcu && !uarmu)
+		count++;
+	if(uarmu && bcu(uarmu) == bcu)
+		count++;
+	if(uarmc && bcu(uarmc) == bcu && !uarmu && !uarm)
+		count++;
+	if(uarmh && bcu(uarmh) == bcu)
+		count++;
+	if(uarms && bcu(uarms) == bcu && !uarmg)
+		count++;
+	if(uarmg && bcu(uarmg) == bcu)
+		count++;
+	if(uarmf && bcu(uarmf) == bcu)
+		count++;
+	if(uleft && bcu(uleft) == bcu)
+		count++;
+	if(uright && bcu(uright) == bcu)
+		count++;
+	if(uamul && bcu(uamul) == bcu && !uarmu && !uarm)
+		count++;
+	if(ublindf && bcu(ublindf) == bcu)
+		count++;
+	if(uchain && bcu(uchain) == bcu)
+		count++;
+	if(uswapwep && bcu(uswapwep) == bcu && u.twoweap && !uarmg)
+		count++;
+	return count;
+}
+
 
 #endif /* OVL1 */
 

@@ -305,7 +305,7 @@ moveloop()
 	int oldspiritAC=0;
 	int tx,ty;
 	int nmonsclose,nmonsnear,enkispeedlim;
-	static boolean oldBlind = 0, oldLightBlind = 0;
+	static boolean oldBlind = 0, oldLightBlind = 0, healing_penalty = 0;
 	static int oldCon, oldWisBon;
     int hpDiff;
 
@@ -380,26 +380,36 @@ moveloop()
 			 /*once-per-monster-moving things go here*/
 			/****************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////
-	if(echolocation(youracedata)){
-		for(i=1; i<COLNO; i++)
-			for(j=0; j<ROWNO; j++)
-				if(viz_array[j][i]&COULD_SEE)
-					echo_location(i, j);
-	}
-	/*If anything a monster did caused us to get moved out of water, surface*/
-	if(u.usubwater && !is_pool(u.ux, u.uy)){
-		u.usubwater = 0;
-		vision_full_recalc = 1;
-		vision_recalc(2);	/* unsee old position */
-		doredraw();
-	} else if(Is_waterlevel(&u.uz) && u.usubwater && !is_3dwater(u.ux, u.uy)){
-		You("pop out into an airbubble!");
-		u.usubwater = 0;
-	} else if(Is_waterlevel(&u.uz) && !u.usubwater && is_3dwater(u.ux, u.uy)){
-		Your("%s goes under water!", body_part(HEAD));
-		if(!Breathless) You("can't breath.");
-		u.usubwater = 1;
-	}
+			if(echolocation(youracedata)){
+				for(i=1; i<COLNO; i++)
+					for(j=0; j<ROWNO; j++)
+						if(viz_array[j][i]&COULD_SEE)
+							echo_location(i, j);
+			}
+			/*If anything a monster did caused us to get moved out of water, surface*/
+			if(u.usubwater && !is_pool(u.ux, u.uy)){
+				u.usubwater = 0;
+				vision_full_recalc = 1;
+				vision_recalc(2);	/* unsee old position */
+				doredraw();
+			} else if(Is_waterlevel(&u.uz) && u.usubwater && !is_3dwater(u.ux, u.uy)){
+				You("pop out into an airbubble!");
+				u.usubwater = 0;
+			} else if(Is_waterlevel(&u.uz) && !u.usubwater && is_3dwater(u.ux, u.uy)){
+				Your("%s goes under water!", body_part(HEAD));
+				if(!Breathless) You("can't breath.");
+				u.usubwater = 1;
+			}
+////////////////////////////////////////////////////////////////////////////////////////////////
+			if (healing_penalty != u_healing_penalty()) {
+				if (!Hallucination){
+					You_feel("%s.", (!healing_penalty) ? "itchy" : "relief");
+				} else {
+					You_feel("%s.", (!healing_penalty) ? (hates_silver(youracedata) ? "tarnished" :
+						hates_iron(youracedata) ? "magnetic" : "like you are failing Organic Chemistry") : "like you are no longer failing Organic Chemistry");
+				}
+				healing_penalty = u_healing_penalty();
+			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			if (!oldBlind ^ !Blind) {  /* one or the other but not both */
 				see_monsters();
@@ -1074,6 +1084,8 @@ moveloop()
 						int reglevel = u.ulevel + (((int) ACURR(A_CON)) - 10)/2;
 						if(reglevel < 1) reglevel = 1;
 						if(Role_if(PM_HEALER)) reglevel += 10;
+						reglevel -= u_healing_penalty();
+						if(reglevel < 1) reglevel = 1;
 						flags.botl = 1;
 						//recover 1/30th hp per turn:
 						u.uhp += reglevel/30;
@@ -1159,6 +1171,8 @@ moveloop()
 				if(u.uen < u.uenmax && (Role_if(PM_WIZARD)) && uarmh && uarmh->otyp == CORNUTHAUM){
 					reglevel += uarmh->spe;
 				}
+				reglevel -= u_healing_penalty();
+				if(reglevel < 1) reglevel = 1;
 				//recover 1/30th energy per turn:
 				u.uen += reglevel/30;
 				//Now deal with any remainder
@@ -1352,6 +1366,16 @@ moveloop()
 	    } else if (Warning || Warn_of_mon)
 	     	see_monsters();
 
+		if (healing_penalty != u_healing_penalty()) {
+			if (!Hallucination){
+				You_feel("%s.", (healing_penalty) ? "itchy" : "relief");
+			} else {
+				You_feel("%s.", (healing_penalty) ? (hates_silver(youracedata) ? "tarnished" :
+					hates_iron(youracedata) ? "magnetic" : "like you are failing Organic Chemistry") : "like you are no longer failing Organic Chemistry");
+			}
+			healing_penalty = u_healing_penalty();
+		}
+		
 		if (!oldBlind ^ !Blind) {  /* one or the other but not both */
 			see_monsters();
 			flags.botl = 1;

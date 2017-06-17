@@ -1764,6 +1764,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		you_have(buf);
 	}
 	if (Fumbling) enl_msg("You fumble", "", "d", "");
+	if(u_healing_penalty()) enl_msg("You heal", "", "ed", " slowly due to your equipment");
 	if (Wounded_legs
 #ifdef STEED
 	    && !u.usteed
@@ -2381,6 +2382,7 @@ int final;
 		Sprintf(buf, "slippery %s", makeplural(body_part(FINGER)));
 		dump(youhad, buf);
 	}
+	if(u_healing_penalty()) dump("  ", "You healed slowly as a result of your equipment");
 	if (Fumbling) dump("  ", "You fumbled");
 	if (Wounded_legs
 #ifdef STEED
@@ -2662,6 +2664,7 @@ resistances_enlightenment()
 		enl_msg("You resist", "", "ed", " hallucinations");
 */
 	/*** Troubles ***/
+	if(u_healing_penalty()) putstr(en_win, 0, "You feel itchy.");
 	if (Wounded_legs
 #ifdef STEED
 	    && !u.usteed
