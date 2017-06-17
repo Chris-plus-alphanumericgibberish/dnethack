@@ -873,7 +873,7 @@ int thrown;
 			}
 			if ((uarmg->cursed) &&
 				hates_unholy(mdat)){
-					tmp += rnd(20);
+					tmp += rnd(9);
 					unholymsg = TRUE;
 			}
 			if(uarmg->oartifact && 
@@ -939,7 +939,7 @@ int thrown;
 			) barehand_unholy_rings++;
 			
 			if ((barehand_unholy_rings) && hates_unholy(mdat)) {
-			    tmp += d(barehand_unholy_rings,20);
+			    tmp += d(barehand_unholy_rings,9);
 			    ironmsg = TRUE;
 			}
 			
@@ -1145,6 +1145,11 @@ int thrown;
 				else silvermsg = TRUE;
 				silverobj = TRUE;
 		    }
+			if (obj->cursed == TRUE && hates_unholy(mdat)) {
+				tmp += rnd(9);	//I think this is the right thing to do here.  I don't think it enters the main unholy section
+				unholymsg = TRUE;
+				unholyobj = TRUE;
+			}
 		    if (!thrown && obj == uwep && obj->otyp == BOOMERANG &&
 			    rnl(4) == 4-1 && obj->oartifact == 0) {
 			boolean more_than_1 = (obj->quan > 1L);
@@ -1680,6 +1685,11 @@ defaultvalue:
 						if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
 						else silvermsg = TRUE;
 						silverobj = TRUE;
+					}
+					if (obj && obj->cursed == TRUE && hates_unholy(mdat)) {
+						tmp += rnd(9);
+						unholymsg = TRUE;
+						unholyobj = TRUE;
 					}
 				}
 			}

@@ -871,8 +871,8 @@ int spec;
 	    if (otmp->cursed
 			&& hates_unholy(ptr)
 		){
-			if(otyp == KHAKKHARA) bonus += d(rnd(3),20);
-			else bonus += rnd(20);
+			if(otyp == KHAKKHARA) bonus += d(rnd(3),9);
+			else bonus += rnd(9);
 		}
 		
 		if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE

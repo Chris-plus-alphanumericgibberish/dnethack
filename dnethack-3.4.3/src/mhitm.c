@@ -318,7 +318,7 @@ mattackm(magr, mdef)
      *	and it shouldn't move again.
      */
     magr->mlstmv = monstermoves;
-
+	
     /* Now perform all attacks for the monster. */
     for (i = 0; i < NATTK; i++) {
         int tmphp = mdef->mhp;
@@ -1272,7 +1272,7 @@ physical:{
 				)
 					tmp += rnd(mdef->m_lev*2);
 				if(otmp && (otmp->cursed) && hates_unholy(pd))
-					tmp += rnd(20);
+					tmp += rnd(9);
 			} else {
 				tmp += dmgval(otmp, mdef, 0);
 				if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))) phasearmor = TRUE;

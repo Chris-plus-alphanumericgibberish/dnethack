@@ -72,7 +72,7 @@ register boolean clumsy;
 	}
 	if (uarmf && uarmf->cursed
 		&& hates_unholy(mdat)) {
-			dmg += rnd(20);
+			dmg += rnd(9);
 			unholymsg = TRUE; unholyobj = TRUE;
 	}
 	if (mon->data->mlet == S_SHADE && !blessed_foot_damage && !silverobj && !ironobj && !unholyobj) {

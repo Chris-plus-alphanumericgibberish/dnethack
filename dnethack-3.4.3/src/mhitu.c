@@ -1485,7 +1485,7 @@ hitmu(mtmp, mattk)
 				) dmg += rnd(u.ulevel*2);
 				if(uwep && (uwep->cursed) && 
 					hates_unholy(youracedata)
-				) dmg += rnd(20);
+				) dmg += rnd(9);
 			} else {
 				dmg += dmgval(uwep, &youmonst, 0);
 				if(uwep && ((is_lightsaber(uwep) && uwep->lamplit) || arti_shining(uwep))) phasearmor = TRUE;
@@ -1594,7 +1594,7 @@ hitmu(mtmp, mattk)
 				) dmg += rnd(u.ulevel*2);
 				if(otmp && (otmp->cursed) && 
 					hates_unholy(youracedata)
-				) dmg += rnd(20);
+				) dmg += rnd(9);
 			} else {
 				dmg += dmgval(otmp, &youmonst, 0);
 				if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))) phasearmor = TRUE;
