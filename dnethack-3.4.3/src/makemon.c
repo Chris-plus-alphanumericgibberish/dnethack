@@ -1164,7 +1164,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(VIBROBLADE, TRUE, FALSE);
-					otmp->spe = 0;
+					otmp->spe = rn1(3,3);
 					otmp->ovar1 = 50 + d(5,10);
 					otmp->recharged = rn1(3,3);
 					(void) mpickobj(mtmp, otmp);
@@ -1187,10 +1187,12 @@ register struct monst *mtmp;
 					otmp->recharged = 4;
 					(void) mpickobj(mtmp, otmp);
 					
-					otmp = mksobj(VIBROBLADE, TRUE, FALSE);
-					otmp->spe = 4;
-					otmp->ovar1 = 50 + d(5,10);
-					otmp->recharged = rn1(3,3);
+					otmp = mksobj(LIGHTSABER, TRUE, FALSE);
+					otmp->spe = 3;
+					otmp->ovar1 = !rn2(4) ? 38L : !rn2(3) ? 18L : rn2(2) ? 10L : 26L;
+					otmp->cobj->otyp = !rn2(4) ? MORGANITE : !rn2(3) ? RUBY : rn2(2) ? GARNET : JASPER;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(find_signet_ring(), TRUE, FALSE);
@@ -1205,6 +1207,9 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 					(void)mongets(mtmp, ELVEN_BOOTS);
 				} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && mm == PM_ELVENKING){ /* Give the elvenking in the quest a special setup */
+					mtmp->m_lev += 7;
+					mtmp->mhpmax = mtmp->mhp = d((int)mtmp->m_lev, 8);
+					
 					otmp = mksobj(LIGHTSABER, TRUE, FALSE);
 					otmp->spe = 3;
 					otmp->ovar1 = !rn2(4) ? 2L : !rn2(3) ? 9L : rn2(2) ? 21L : 22L;
@@ -1293,7 +1298,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(VIBROBLADE, TRUE, FALSE);
-					otmp->spe = 0;
+					otmp->spe = rn1(3,3);
 					otmp->ovar1 = 50 + d(5,10);
 					otmp->recharged = rn1(3,3);
 					(void) mpickobj(mtmp, otmp);

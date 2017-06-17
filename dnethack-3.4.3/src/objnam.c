@@ -125,7 +125,8 @@ STATIC_OVL char *SaberHilts[] = {
 /*35*/"Four lines of silver Qualith stand out from this basalt hilt.",
 /*36*/"This %s is decorated with subtle swirls.",
 /*37*/"This %s is decorated with non-euclidean curves and angles.", /*Given that a lightsaber handle is a curved surface....*/
-/*38*/"This %s is quite intricate in its design, covered in delicate runes and inlaid with black markings.",
+/*38*/"This %s is wrapped with silver spiderwebs.",
+/*39*/"This %s is quite intricate in its design, covered in delicate runes and inlaid with black markings.",
 };
 
 STATIC_OVL struct Jitem ObscureJapanese_items[] = {
