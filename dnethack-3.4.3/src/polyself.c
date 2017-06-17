@@ -728,7 +728,7 @@ break_armor()
 			} else {
 				Your("shirt rips to shreds!");
 				(void) Shirt_off();
-				useup(uarmu);
+				useup(otmp);
 			}
 		}
     }
