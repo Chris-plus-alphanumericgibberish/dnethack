@@ -2400,6 +2400,8 @@ struct attack *mattk;
 {
 	struct obj *otmp, *stealoid, **minvent_ptr;
 	long unwornmask;
+	int petrifies = FALSE;
+	char kbuf[BUFSZ];
 
 	if (!mdef->minvent) return;		/* nothing to take */
 
@@ -2446,18 +2448,25 @@ struct attack *mattk;
 		    pline("%s finishes taking off %s suit.",
 			  Monnam(mdef), mhis(mdef));
 	    }
+		
+		if(near_capacity() < calc_capacity(otmp->owt)){
+			You("steal %s %s and drop it to the %s.",
+				  s_suffix(mon_nam(mdef)), xname(otmp), surface(u.ux, u.uy));
+			if(otmp->otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm]) && !uarmg && !Stone_resistance){
+				Sprintf(kbuf, "stolen %s corpse", mons[otmp->corpsenm].mname);
+				petrifies = TRUE;
+			}
+			dropy(otmp);
+		} else {
 	    /* give the object to the character */
-	    otmp = hold_another_object(otmp, "You snatched but dropped %s.",
-				       doname(otmp), "You steal: ");
-	    if (otmp->where != OBJ_INVENT) continue;
-	    if (otmp->otyp == CORPSE &&
-		    touch_petrifies(&mons[otmp->corpsenm]) && !uarmg) {
-		char kbuf[BUFSZ];
-
-		Sprintf(kbuf, "stolen %s corpse", mons[otmp->corpsenm].mname);
-		instapetrify(kbuf);
-		break;		/* stop the theft even if hero survives */
-	    }
+			if(otmp->otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm]) && !uarmg && !Stone_resistance){
+				Sprintf(kbuf, "stolen %s corpse", mons[otmp->corpsenm].mname);
+				petrifies = TRUE;
+			}
+			otmp = hold_another_object(otmp, "You snatched but dropped %s.",
+						   doname(otmp), "You steal: ");
+		}
+	    // if (otmp->where != OBJ_INVENT) continue;
 	    /* more take-away handling, after theft message */
 	    if (unwornmask & W_WEP) {		/* stole wielded weapon */
 		possibly_unwield(mdef, FALSE);
@@ -2465,6 +2474,10 @@ struct attack *mattk;
 		mselftouch(mdef, (const char *)0, TRUE);
 		if (mdef->mhp <= 0)	/* it's now a statue */
 		    return;		/* can't continue stealing */
+	    }
+	    if (petrifies) {
+			instapetrify(kbuf);
+			break;		/* stop the theft even if hero survives */
 	    }
 
 	    if (!stealoid) break;	/* only taking one item */
