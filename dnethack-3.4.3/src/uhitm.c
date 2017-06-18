@@ -1147,6 +1147,11 @@ int thrown;
 				else silvermsg = TRUE;
 				silverobj = TRUE;
 		    }
+			if (obj->obj_material == IRON && hates_iron(mdat)) {
+				tmp += rnd(mon->m_lev * 2);	//I think this is the right thing to do here.  I don't think it enters the main iron section
+				ironmsg = TRUE;
+				ironobj = TRUE;
+			}
 			if (obj->cursed == TRUE && hates_unholy(mdat)) {
 				tmp += rnd(9);	//I think this is the right thing to do here.  I don't think it enters the main unholy section
 				unholymsg = TRUE;
@@ -1671,10 +1676,13 @@ defaultvalue:
 					if(tmp < 1) tmp = 1;
 					else tmp = rnd(tmp);
 					if(tmp > 6) tmp = 6;
-					if(obj->oartifact == ART_GLAMDRING && (is_orc(mdat) || is_demon(mdat))){
-						tmp += rnd(20); //I think this is the right thing to do here.  I don't think it enters the main silver section
-						lightmsg = TRUE;
-					}
+
+					/*
+					 * Paimon's spellbook-bashing damage
+					 */
+					if (obj->oclass == SPBOOK_CLASS && u.sealsActive&SEAL_PAIMON)
+						tmp = rnd(spiritDsize()) + objects[obj->otyp].oc_level;
+
 					/*
 					 * Things like silver wands can arrive here so
 					 * so we need another silver check.
@@ -1687,6 +1695,15 @@ defaultvalue:
 						if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
 						else silvermsg = TRUE;
 						silverobj = TRUE;
+					}
+					if(obj->oartifact == ART_GLAMDRING && (is_orc(mdat) || is_demon(mdat))){
+						tmp += rnd(20); //I think this is the right thing to do here.  I don't think it enters the main silver section
+						lightmsg = TRUE;
+					}
+					if (obj && obj->obj_material == IRON && hates_iron(mdat)) {
+						tmp += rnd(mon->m_lev * 2);
+						ironmsg = TRUE;
+						ironobj = TRUE;
 					}
 					if (obj && obj->cursed == TRUE && hates_unholy(mdat)) {
 						tmp += rnd(9);
