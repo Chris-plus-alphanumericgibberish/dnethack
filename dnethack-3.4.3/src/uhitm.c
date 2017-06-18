@@ -1124,8 +1124,8 @@ int thrown;
 		    if (mdat->mlet == S_SHADE && !(obj->obj_material == SILVER || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
 				tmp = 0;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
-		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 5) + obj->spe);
-		    else if(obj->oclass == SPBOOK_CLASS && u.sealsActive&SEAL_PAIMON) tmp = rnd(spiritDsize()) + objects[obj->otyp].oc_level;
+		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 4) + obj->spe);
+
 			else tmp = rnd(2);
 			
 		    // if (tmp && obj->oartifact &&
