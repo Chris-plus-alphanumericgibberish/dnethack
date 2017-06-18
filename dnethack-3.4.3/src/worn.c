@@ -104,6 +104,9 @@ long mask;
 			/* leave as "x = x <op> y", here and below, for broken
 			 * compilers */
 			p = objects[oobj->otyp].oc_oprop;
+			
+			if(p) u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
+			
 			if(oobj->otyp == ORANGE_DRAGON_SCALES || oobj->otyp == ORANGE_DRAGON_SCALE_MAIL || oobj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
 				for(p = 0; p < SIZE(ORANGE_RES); p++) u.uprops[ORANGE_RES[p]].extrinsic = u.uprops[ORANGE_RES[p]].extrinsic & ~wp->w_mask;
 			} else if(oobj->otyp == YELLOW_DRAGON_SCALES || oobj->otyp == YELLOW_DRAGON_SCALE_MAIL || oobj->otyp == YELLOW_DRAGON_SCALE_SHIELD){
@@ -130,7 +133,8 @@ long mask;
 				for(p = 0; p < SIZE(EREBOR_RES); p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic & ~wp->w_mask;
 			} else if(oobj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 				for(p = 0; p < SIZE(REV_PROPS); p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
-			} else u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
+			}
+			
 			if ((p = w_blocks(oobj,mask)) != 0)
 			    u.uprops[p].blocked &= ~wp->w_mask;
 			if (oobj->oartifact)
@@ -149,6 +153,9 @@ long mask;
 			if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 					    mask != W_WEP) {
 			    p = objects[obj->otyp].oc_oprop;
+				
+				if(p) u.uprops[p].extrinsic = u.uprops[p].extrinsic | wp->w_mask;
+				
 				if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
 					for(p = 0; p < SIZE(ORANGE_RES); p++) u.uprops[ORANGE_RES[p]].extrinsic = u.uprops[ORANGE_RES[p]].extrinsic | wp->w_mask;
 				} else if(obj->otyp == YELLOW_DRAGON_SCALES || obj->otyp == YELLOW_DRAGON_SCALE_MAIL || obj->otyp == YELLOW_DRAGON_SCALE_SHIELD){
@@ -175,7 +182,8 @@ long mask;
 					for(p = 0; p < SIZE(EREBOR_RES); p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic | wp->w_mask;
 				} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 					for(p = 0; p < SIZE(REV_PROPS); p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic | wp->w_mask;
-				} else u.uprops[p].extrinsic = u.uprops[p].extrinsic | wp->w_mask;
+				}
+				
 			    if ((p = w_blocks(obj, mask)) != 0)
 				u.uprops[p].blocked |= wp->w_mask;
 			}
@@ -185,8 +193,10 @@ long mask;
 		}
 	    }
 	}
-	if(!restoring) see_monsters(); //More objects than just artifacts grant warning now, and this is a convienient place to add a failsafe see_monsters check
-	update_inventory();
+	if(!restoring) {
+		see_monsters(); //More objects than just artifacts grant warning now, and this is a convienient place to add a failsafe see_monsters check
+		update_inventory();
+	}
 }
 
 /* called e.g. when obj is destroyed */
@@ -208,6 +218,9 @@ register struct obj *obj;
 	    if(obj == *(wp->w_obj)) {
 		*(wp->w_obj) = 0;
 		p = objects[obj->otyp].oc_oprop;
+		
+		if(p) u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
+		
 		if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
 			for(p = 0; p < SIZE(ORANGE_RES); p++) u.uprops[ORANGE_RES[p]].extrinsic = u.uprops[ORANGE_RES[p]].extrinsic & ~wp->w_mask;
 		} else if(obj->otyp == YELLOW_DRAGON_SCALES || obj->otyp == YELLOW_DRAGON_SCALE_MAIL || obj->otyp == YELLOW_DRAGON_SCALE_SHIELD){
@@ -234,7 +247,8 @@ register struct obj *obj;
 			for(p = 0; p < SIZE(EREBOR_RES); p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic & ~wp->w_mask;
 		} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 			for(p = 0; p < SIZE(REV_PROPS); p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
-		} else u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
+		}
+		
 		if(obj->oartifact == ART_GAUNTLETS_OF_THE_BERSERKER){
 //        adj_abon(uarmg, -uarmg->ovar1);
           uarmg->ovar1 = 0;
@@ -442,6 +456,8 @@ boolean on, silently;
     unseen = !canseemon(mon);
     if (!which) goto maybe_blocks;
 	
+	update_mon_intrinsic(mon, obj, which, on, silently);
+	
 	if(obj->otyp == ALCHEMY_SMOCK) update_mon_intrinsic(mon, obj, ACID_RES, on, silently);
 	
 	if(obj->otyp == ORANGE_DRAGON_SCALES || obj->otyp == ORANGE_DRAGON_SCALE_MAIL || obj->otyp == ORANGE_DRAGON_SCALE_SHIELD){
@@ -470,7 +486,7 @@ boolean on, silently;
 		for(which = 0; which < SIZE(EREBOR_RES); which++) update_mon_intrinsic(mon, obj, EREBOR_RES[which], on, silently);
 	} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 		for(which = 0; which < SIZE(REV_PROPS); which++) update_mon_intrinsic(mon, obj, REV_PROPS[which], on, silently);
-	} else update_mon_intrinsic(mon, obj, which, on, silently);
+	}
 
  maybe_blocks:
     /* obj->owornmask has been cleared by this point, so we can't use it.
