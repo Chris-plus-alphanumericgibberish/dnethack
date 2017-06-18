@@ -3424,6 +3424,8 @@ int spellnum;
 			if (!munstone(mtmp, yours))
 				minstapetrify(mtmp, yours);
 		   }
+		   else
+			goto uspsibolt;
         }
 		dmg = 0;
 	 stop_occupation();
