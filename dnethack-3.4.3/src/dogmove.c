@@ -119,6 +119,8 @@ boolean check_if_better;
 		   (!check_if_better ||
 		    would_prefer_hwep(mtmp, otmp) ||
 		    would_prefer_rwep(mtmp, otmp))) ||
+	    /* useful masks */
+	     (otmp->otyp == MASK && mtmp->data == &mons[PM_LILLEND]) ||
 	    /* better armor */
 	     (otmp->oclass == ARMOR_CLASS &&
 	      (!check_if_better || is_better_armor(mtmp, otmp))) ||
