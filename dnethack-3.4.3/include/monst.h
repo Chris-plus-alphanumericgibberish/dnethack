@@ -5,6 +5,8 @@
 #ifndef MONST_H
 #define MONST_H
 
+#include "prop.h"
+
 /* The weapon_check flag is used two ways:
  * 1) When calling mon_wield_item, is 2-6 depending on what is desired.
  * 2) Between calls to mon_wield_item, is 0 or 1 depending on whether or not
