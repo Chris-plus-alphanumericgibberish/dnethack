@@ -319,6 +319,10 @@ mattackm(magr, mdef)
      */
     magr->mlstmv = monstermoves;
 	
+	if(pa == &mons[PM_LILLEND] && rn2(2)){
+		pa = find_mask(magr);
+		if(!Blind && pa != &mons[PM_LILLEND]) pline("%s uses a %s mask!",Monnam(magr), pa->mname);
+	}
     /* Now perform all attacks for the monster. */
     for (i = 0; i < NATTK; i++) {
         int tmphp = mdef->mhp;
