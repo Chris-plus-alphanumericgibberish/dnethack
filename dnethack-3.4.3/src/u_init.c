@@ -2014,12 +2014,18 @@ u_init()
 		skill_add(Skill_Drow_Unarmed);
 		
 		if(Role_if(PM_NOBLEMAN)){
-			if(!flags.female) u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
-				u.ualign.type = A_NEUTRAL; /* Males are neutral */
+			if(!flags.female){
+				u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
+					u.ualign.type = A_NEUTRAL; /* Males are neutral */
+				flags.initalign = 1; // 1 == neutral
+			}
 		} else if(!Role_if(PM_EXILE) && !Role_if(PM_CONVICT)){
 			ini_inv(DrovenCloak);
-			if(!flags.female) u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
-				u.ualign.type = A_NEUTRAL; /* Males are neutral */
+			if(!flags.female){
+				u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
+					u.ualign.type = A_NEUTRAL; /* Males are neutral */
+				flags.initalign = 1; // 1 == neutral
+			}
 		}
 	    /* Drow can recognize all droven objects */
 	    knows_object(DROVEN_SHORT_SWORD);
