@@ -556,7 +556,7 @@ moveloop()
 				nxtmon = mtmp->nmon;
 				/* Possibly vanish */
 				if(mtmp->mvanishes>-1){
-					if(mtmp->mvanishes-- == 0){
+					if(--mtmp->mvanishes == 0){
 						monvanished(mtmp);
 						continue;
 					}
