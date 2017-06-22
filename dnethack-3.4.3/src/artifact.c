@@ -1433,6 +1433,7 @@ int tmp;
 			if(Confusion) multiplier++;
 			if(Sick) multiplier++;
 			if(Stoned) multiplier++;
+			if(Golded) multiplier++;
 			if(Strangled) multiplier++;
 			if(Vomiting) multiplier++;
 			if(Slimed) multiplier++;

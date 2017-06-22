@@ -2607,7 +2607,7 @@ int spellnum;
        /* drain energy when you have less than 5 */
        if(spellnum == DRAIN_ENERGY && u.uen < 5) return TRUE;
        /* don't cast acid rain if the player is petrifying */
-       if (spellnum == ACID_RAIN && Stoned) return TRUE;
+       if (spellnum == ACID_RAIN && (Stoned || Golded)) return TRUE;
        /* don't cast drain life if not in range */
        if (spellnum == DRAIN_LIFE &&  distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2) return TRUE;
        /* don't destroy weapon if not wielding anything */

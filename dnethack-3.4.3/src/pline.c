@@ -458,6 +458,7 @@ ustatusline()
 		}
 	}
 	if (Stoned)		Strcat(info, ", solidifying");
+	if (Golded)		Strcat(info, ", aurelifying");
 	if (Slimed)		Strcat(info, ", becoming slimy");
 	if (Strangled)		Strcat(info, ", being strangled");
 	if (Vomiting)		Strcat(info, ", nauseated"); /* !"nauseous" */

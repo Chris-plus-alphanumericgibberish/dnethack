@@ -242,6 +242,7 @@ newman()
 	else u.uhunger = rn1(500,500);
 	if (Sick) make_sick(0L, (char *) 0, FALSE, SICK_ALL);
 	Stoned = 0;
+	Golded = 0;
 	delayed_killer = 0;
 	if (u.uhp <= 0 || u.uhpmax <= 0) {
 		if (Polymorph_control) {
@@ -470,6 +471,13 @@ int	mntmp;
 		Stoned = 0;
 		delayed_killer = 0;
 	}
+	if (Golded && poly_when_golded(&mons[mntmp])) {
+		/* poly_when_golded already checked gold golem genocide */
+		You("turn to gold!");
+		mntmp = PM_GOLD_GOLEM;
+		Golded = 0;
+		delayed_killer = 0;
+	}
 	if (uarmc && (s = OBJ_DESCR(objects[uarmc->otyp])) != (char *)0 &&
 	   !strcmp(s, "opera cloak") &&
 	   is_vampire(youracedata)) {
@@ -500,6 +508,11 @@ int	mntmp;
 		Stoned = 0;
 		delayed_killer = 0;
 		You("no longer seem to be petrifying.");
+	}
+	if (Stone_resistance && Golded) { /* parnes@eniac.seas.upenn.edu */
+		Golded = 0;
+		delayed_killer = 0;
+		You("no longer seem to be turning to gold.");
 	}
 	if (Sick_resistance && Sick) {
 		make_sick(0L, (char *) 0, FALSE, SICK_ALL);
@@ -872,7 +885,7 @@ dobreathe(mdat)
 			type = flags.HDbreath;
 			if(type == AD_SLEE) multiplier = 4;
 		}
-		if(is_dragon(mdat)) flags.drgn_brth = 1;
+		if(is_true_dragon(mdat) || (Race_if(PM_HALF_DRAGON) && u.ulevel >= 14)) flags.drgn_brth = 1;
 	    buzz((int) (20 + type-1), (int)mattk->damn + (u.ulevel/2),
 			u.ux, u.uy, u.dx, u.dy,0, mattk->damd ? (d((int)mattk->damn + (u.ulevel/2), (int)mattk->damd)*multiplier) : 0);
 		flags.drgn_brth = 0;

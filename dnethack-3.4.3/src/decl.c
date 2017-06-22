@@ -126,6 +126,7 @@ NEARDATA coord inv_pos = { 0, 0 };
 
 NEARDATA boolean in_mklev = FALSE;
 NEARDATA boolean stoned = FALSE;	/* done to monsters hit by 'c' */
+NEARDATA boolean golded = FALSE;	/* done to monsters hit by mammon's breath */
 NEARDATA boolean unweapon = FALSE;
 NEARDATA boolean mrg_to_wielded = FALSE;
 			 /* weapon picked is merged with wielded one */

@@ -482,9 +482,13 @@ meleeattack:
 
 #ifdef TAME_RANGED_ATTACKS
 	    case AT_BREA:
-			if(is_dragon(magr->data) && !is_pseudodragon(magr->data)) flags.drgn_brth = 1;
+			if(is_true_dragon(magr->data) ||
+				(is_half_dragon(magr->data) && magr->m_lev >= 14)
+			) flags.drgn_brth = 1;
+			if(magr->data == &mons[PM_MAMMON]) flags.mamn_brth = 1;
 	        breamm(magr, mdef, mattk);
 			flags.drgn_brth = 0;
+			flags.mamn_brth = 0;
 		if (tmphp > mdef->mhp){
 			res[i] = MM_HIT;
 			if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;

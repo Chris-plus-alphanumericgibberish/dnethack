@@ -16,13 +16,14 @@ struct monst *mon;
 struct permonst *ptr;
 int flag;
 {
+	int i;
     mon->data = ptr;
     if (flag == -1) return;		/* "don't care" */
 
     if (flag == 1)
-		mon->mintrinsics |= (ptr->mresists & 0x03FF);
+		mon->mintrinsics[0] |= (ptr->mresists & 0x03FF);
     else
-		mon->mintrinsics = (ptr->mresists & 0x03FF);
+		mon->mintrinsics[0] = (ptr->mresists & 0x03FF);
 	if(is_half_dragon(ptr) && (mon->mvar1 == 0 || flag != 1)){
 		/*
 			Store half dragon breath type in mvar1
@@ -31,27 +32,27 @@ int flag;
 			switch(rnd(6)){
 				case 1:
 					mon->mvar1 = AD_COLD;
-					mon->mintrinsics |= MR_COLD;
+					mon->mintrinsics[(COLD_RES-1)/32] |= (1 << (COLD_RES-1)%32);
 				break;
 				case 2:
 					mon->mvar1 = AD_FIRE;
-					mon->mintrinsics |= MR_FIRE;
+					mon->mintrinsics[(FIRE_RES-1)/32] |= (1 << (FIRE_RES-1)%32);
 				break;
 				case 3:
 					mon->mvar1 = AD_SLEE;
-					mon->mintrinsics |= MR_SLEEP;
+					mon->mintrinsics[(SLEEP_RES-1)/32] |= (1 << (SLEEP_RES-1)%32);
 				break;
 				case 4:
 					mon->mvar1 = AD_ELEC;
-					mon->mintrinsics |= MR_ELEC;
+					mon->mintrinsics[(SHOCK_RES-1)/32] |= (1 << (SHOCK_RES-1)%32);
 				break;
 				case 5:
 					mon->mvar1 = AD_DRST;
-					mon->mintrinsics |= MR_POISON;
+					mon->mintrinsics[(POISON_RES-1)/32] |= (1 << (POISON_RES-1)%32);
 				break;
 				case 6:
 					mon->mvar1 = AD_ACID;
-					mon->mintrinsics |= MR_ACID;
+					mon->mintrinsics[(ACID_RES-1)/32] |= (1 << (ACID_RES-1)%32);
 				break;
 			}
 		}
@@ -116,6 +117,15 @@ poly_when_stoned(ptr)
 }
 
 boolean
+poly_when_golded(ptr)
+    struct permonst *ptr;
+{
+    return((boolean)(is_golem(ptr) && ptr != &mons[PM_GOLD_GOLEM] &&
+	    !(mvitals[PM_GOLD_GOLEM].mvflags & G_GENOD && !In_quest(&u.uz))));
+	    /* allow G_EXTINCT */
+}
+
+boolean
 resists_oona(mon)
 	struct monst *mon;
 {
@@ -135,7 +145,7 @@ resists_fire(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_FIRE) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance));
+	return (mon_resistance(mon, MR_FIRE) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance));
 }
 
 boolean
@@ -144,7 +154,7 @@ resists_cold(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_COLD) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
+	return (mon_resistance(mon, MR_COLD) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
 }
 
 boolean
@@ -153,7 +163,7 @@ resists_sleep(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_SLEEP) != 0 || ((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
+	return (mon_resistance(mon, MR_SLEEP) || ((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
 }
 
 boolean
@@ -162,7 +172,7 @@ resists_disint(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_DISINT) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Disint_resistance));
+	return (mon_resistance(mon, MR_DISINT) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Disint_resistance));
 }
 
 boolean
@@ -171,7 +181,7 @@ resists_elec(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_ELEC) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Shock_resistance));
+	return (mon_resistance(mon, MR_ELEC) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Shock_resistance));
 }
 
 boolean
@@ -180,7 +190,7 @@ resists_poison(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_POISON) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
+	return (mon_resistance(mon, MR_POISON) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
 }
 
 boolean
@@ -189,7 +199,7 @@ resists_acid(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_ACID) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Acid_resistance));
+	return (mon_resistance(mon, MR_ACID) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Acid_resistance));
 }
 
 boolean
@@ -198,7 +208,7 @@ resists_ston(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_STONE) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Stone_resistance));
+	return (mon_resistance(mon, MR_STONE) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Stone_resistance));
 }
 
 boolean
@@ -207,7 +217,7 @@ resists_drain(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_DRAIN) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
+	return (mon_resistance(mon, MR_DRAIN) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
 }
 
 boolean
@@ -216,7 +226,7 @@ resists_sickness(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (((mon)->mintrinsics & MR_SICK) != 0 || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sick_resistance));
+	return (mon_resistance(mon, MR_SICK) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sick_resistance));
 }
 
 boolean
@@ -232,7 +242,7 @@ struct monst *mon;
 
 	return (boolean)(is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
 			 ptr == &mons[PM_DEATH] ||
-			 mon->mintrinsics & MR_DRAIN ||
+			 mon_resistance(mon, MR_DRAIN) ||
 			 (wep && wep->oartifact && defends(AD_DRLI, wep))  || 
 			 (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
 }

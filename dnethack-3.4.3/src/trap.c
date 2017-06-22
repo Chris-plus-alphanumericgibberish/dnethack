@@ -2330,6 +2330,29 @@ boolean byplayer;
 }
 
 void
+minstagoldify(mon,byplayer)
+struct monst *mon;
+boolean byplayer;
+{
+	if (resists_ston(mon)) return;
+	if (poly_when_golded(mon->data)) {
+		mon_to_gold(mon);
+		return;
+	}
+
+	/* give a "<mon> is slowing down" message and also remove
+	   intrinsic speed (comparable to similar effect on the hero) */
+	mon_adjust_speed(mon, -3, (struct obj *)0);
+
+	if (cansee(mon->mx, mon->my))
+		pline("%s turns to gold.", Monnam(mon));
+	if (byplayer) {
+		golded = TRUE;
+		xkilled(mon,0);
+	} else mongolded(mon);
+}
+
+void
 selftouch(arg)
 const char *arg;
 {

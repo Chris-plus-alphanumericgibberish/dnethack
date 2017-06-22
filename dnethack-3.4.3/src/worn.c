@@ -377,10 +377,10 @@ boolean on, silently;
 	 case REFLECTING:
 	    break;
 	/* properties which have no effect for monsters */
-	 case CLAIRVOYANT:
-	 case STEALTH:
-	 case TELEPAT:
-	    break;
+	 // case CLAIRVOYANT:
+	 // case STEALTH:
+	 // case TELEPAT:
+	    // break;
 	/* properties which should have an effect but aren't implemented */
 	 case LEVITATION:
 	 case WWALKING:
@@ -392,11 +392,8 @@ boolean on, silently;
 	 case PROTECTION:
 	    break;
 	 default:
-	    if (which <= 10) {	/* 1 thru 10 correspond to MR_xxx mask values */
 		/* FIRE,COLD,SLEEP,DISINT,SHOCK,POISON,ACID,STONE */
-		mask = (uchar) (1 << (which - 1));
-		mon->mintrinsics |= (unsigned short) mask;
-	    }
+		mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
 	    break;
 	}
     } else {	    /* off */
@@ -412,31 +409,20 @@ boolean on, silently;
 	    in_mklev = save_in_mklev;
 	    break;
 	  }
-	 case FIRE_RES:
-	 case COLD_RES:
-	 case SLEEP_RES:
-	 case DISINT_RES:
-	 case SHOCK_RES:
-	 case POISON_RES:
-	 case ACID_RES:
-	 case STONE_RES:
-	 case DRAIN_RES:
-	 case SICK_RES:
-	    mask = (uchar) (1 << (which - 1));
+	 default:
 	    /* If the monster doesn't have this resistance intrinsically,
 	       check whether any other worn item confers it.  Note that
 	       we don't currently check for anything conferred via simply
 	       carrying an object. */
-	    if (!(mon->data->mresists & mask)) {
-		for (otmp = mon->minvent; otmp; otmp = otmp->nobj)
+		if(which <=10 && pm_resistance(mon->data, (uchar) (1 << (which - 1))))
+			break;
+		for (otmp = mon->minvent; otmp; otmp = otmp->nobj){
 		    if (otmp->owornmask &&
 			    (int) objects[otmp->otyp].oc_oprop == which)
 			break;
+		}
 		if (!otmp)
-		    mon->mintrinsics &= ~((unsigned short) mask);
-	    }
-	    break;
-	 default:
+			mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
 	    break;
 	}
     }

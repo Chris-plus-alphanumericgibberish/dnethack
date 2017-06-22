@@ -87,16 +87,17 @@
 #define DISSOLVED	 7
 #define CRUSHING	 8
 #define STONING		 9
-#define TURNED_SLIME	10
-#define OVERWOUND 	11
-#define WEEPING 	12
-#define DISINTEGRATED 13
-#define GENOCIDED	14
-#define PANICKED	15
-#define TRICKED		16
-#define QUIT		17
-#define ESCAPED		18
-#define ASCENDED	19
+#define GOLDING		 10
+#define TURNED_SLIME	11
+#define OVERWOUND 	12
+#define WEEPING 	13
+#define DISINTEGRATED 14
+#define GENOCIDED	15
+#define PANICKED	16
+#define TRICKED		17
+#define QUIT		18
+#define ESCAPED		19
+#define ASCENDED	20
 
 #include "align.h"
 #include "dungeon.h"

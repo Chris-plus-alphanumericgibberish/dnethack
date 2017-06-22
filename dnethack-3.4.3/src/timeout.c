@@ -6,6 +6,7 @@
 #include "lev.h"	/* for checking save modes */
 
 STATIC_DCL void NDECL(stoned_dialogue);
+STATIC_DCL void NDECL(golded_dialogue);
 #ifdef CONVICT
 STATIC_DCL void NDECL(phasing_dialogue);
 #endif /* CONVICT */
@@ -41,6 +42,30 @@ stoned_dialogue()
 		HFast = 0L;
 	if (i == 3L)
 		nomul(-3, "getting stoned");
+	exercise(A_DEX, FALSE);
+}
+
+static NEARDATA const char * const golded_texts[] = {
+	"You are slowing down.",		/* 5 */
+	"Your limbs are stiffening.",		/* 4 */
+	"Your limbs have turned to gold.",	/* 3 */
+	"You have turned to gold.",		/* 2 */
+	"You are a gold statue."			/* 1 */
+};
+
+STATIC_OVL void
+golded_dialogue()
+{
+	register long i = (Golded & TIMEOUT);
+
+	if (i > 0L && i <= SIZE(golded_texts)) {
+		pline1(golded_texts[SIZE(golded_texts) - i]);
+		nomul(0, NULL); /* fix for C343-74 */
+	}
+	if (i == 5L)
+		HFast = 0L;
+	if (i == 3L)
+		nomul(-3, "turning to gold");
 	exercise(A_DEX, FALSE);
 }
 
@@ -365,6 +390,7 @@ nh_timeout()
 #endif /* CONVICT */
 	if(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) return; /* things past this point could kill you */
 	if(Stoned) stoned_dialogue();
+	if(Golded) golded_dialogue();
 	if(Slimed) slime_dialogue();
 	if(Vomiting) vomiting_dialogue();
 	if(Strangled) choke_dialogue();
@@ -557,6 +583,19 @@ nh_timeout()
 				   "petrified by petrification" */
 				killer_format = NO_KILLER_PREFIX;
 				killer = "killed by petrification";
+			}
+			done(STONING);
+			break;
+		case GOLDED:
+			if (delayed_killer && !killer) {
+				killer = delayed_killer;
+				delayed_killer = 0;
+			}
+			if (!killer) {
+				/* leaving killer_format would make it
+				   "petrified by petrification" */
+				killer_format = NO_KILLER_PREFIX;
+				killer = "killed by turning to gold";
 			}
 			done(STONING);
 			break;

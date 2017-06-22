@@ -64,7 +64,8 @@ struct monst {
 
 	int mtame;		/* level of tameness, implies peaceful */
 	int mpeacetime;		/* level of peacefulness, implies peaceful, ignored if tame */
-	unsigned int mintrinsics;	/* low 10 correspond to mresists */
+	unsigned long int mintrinsics[LAST_PROP/32+1];
+	unsigned long int mextrinsics[LAST_PROP/32+1];
 	int mspec_used;		/* monster's special ability attack timeout */
 	int mstdy;		/* to record extra damage to be delt due to having been studied */
 	int ustdym;		/* to record extra damage to be delt by you due to having been studied by you*/

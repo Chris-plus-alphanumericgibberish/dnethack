@@ -71,7 +71,7 @@ extern void FDECL(nethack_exit,(int));
 static NEARDATA const char *deaths[] = {		/* the array of death */
 	"died", "betrayed", "choked", "poisoned", "starvation", "drowning", /*5*/
 	"burning", "dissolving under the heat and pressure",
-	"crushed", "turned to stone", "turned into slime",
+	"crushed", "turned to stone", "turned to gold", "turned into slime",
 	"exploded after being overwound", "turned into a weeping angel", "disintegrated",
 	"genocided",
 	"panic", "trickery",
@@ -81,7 +81,7 @@ static NEARDATA const char *deaths[] = {		/* the array of death */
 static NEARDATA const char *ends[] = {		/* "when you..." */
 	"died", "were betrayed", "choked", "were poisoned", "starved", "drowned",
 	"burned", "dissolved in the lava",
-	"were crushed", "turned to stone", "turned into slime",
+	"were crushed", "turned to stone", "turned to gold", "turned into slime",
 	"were overwound and exploded", "turned into a weeping angel", "were disintegrated",
 	"were genocided",
 	"panicked", "were tricked",
@@ -732,6 +732,8 @@ die:
 		u.ugrave_arise = (NON_PM - 2);	/* leave no corpse */
 	    else if (how == STONING)
 		u.ugrave_arise = (NON_PM - 1);	/* statue instead of corpse */
+	    else if (how == GOLDING)
+		u.ugrave_arise = (NON_PM - 3);	/* statue instead of corpse */
 	    else if (u.ugrave_arise == NON_PM &&
 		     !(mvitals[u.umonnum].mvflags & G_NOCORPSE)) {
 		int mnum = u.umonnum;

@@ -3325,6 +3325,26 @@ death_blast:
 			break;
 		    }
 		    type = -1; /* so they don't get saving throws */
+		} else if(flags.mamn_brth){
+		    struct obj *otmp2;
+
+		    if (resists_disint(mon)) {
+			sho_shieldeff = TRUE;
+		    } else if (mon->misc_worn_check & W_ARMS && (*ootmp = which_armor(mon, W_ARMS)) && (*ootmp)->obj_material != GOLD) {
+				/* destroy shield; victim survives */
+		    } else if (mon->misc_worn_check & W_ARMC && (*ootmp = which_armor(mon, W_ARMC)) && (*ootmp)->obj_material != GOLD) {
+				/* destroy cloak */
+		    } else if (mon->misc_worn_check & W_ARM && (*ootmp = which_armor(mon, W_ARM)) && (*ootmp)->obj_material != GOLD) {
+				/* destroy body armor */
+		    } else if (mon->misc_worn_check & W_ARMU && (*ootmp = which_armor(mon, W_ARMU)) && (*ootmp)->obj_material != GOLD) {
+				/* destroy underwear */
+		    } else {
+				/* no body armor, victim dies; destroy cloak
+				   and shirt now in case target gets life-saved */
+				*ootmp = (struct obj *) 0;
+		    }
+		    type = -1;	/* no saving throw wanted */
+		    break;	/* not ordinary damage */
 		} else {
 		    struct obj *otmp2;
 
@@ -3491,62 +3511,89 @@ xchar sx, sy;
 	}break;
 	case ZT_DEATH:
 	    if (abs(type) == ZT_BREATH(ZT_DEATH)) {
-			int i;
-			if (Disint_resistance) {
-				You("are not disintegrated.");
-				break;
-			} else if (uarms) {
-				/* destroy shield; other possessions are safe */
-				 for(i=d(1,4); i>0; i--){
-					if(uarms->spe > -1*objects[(uarms)->otyp].a_ac){
-						damage_item(uarms);
-						if(i==1) Your("%s damaged by the beam.", aobjnam(uarms, "seem"));
+			if(flags.mamn_brth){
+				int i;
+				if (uarms && uarms->obj_material != GOLD) {
+					set_material(uarms, GOLD);
+					break;
+				} else if (uarmc && uarmc->obj_material != GOLD) {
+					set_material(uarmc, GOLD);
+					break;
+				} else if (uarm && uarm->obj_material != GOLD) {
+					set_material(uarm, GOLD);
+					break;
+				} else if(uarmu && objects[uarmu->otyp].a_can > 0 && uarmu->obj_material != GOLD){
+					set_material(uarmu, GOLD);
+					break;
+				} else {
+					if (!Golded && !(Stone_resistance && youracedata != &mons[PM_STONE_GOLEM])
+						&& youracedata != &mons[PM_GOLD_GOLEM]
+						&& !(poly_when_golded(youracedata) &&
+						polymon(PM_GOLD_GOLEM))
+					) {
+						Golded = 9;
+						delayed_killer = "the breath of Mammon";
+						killer_format = KILLED_BY;
 					}
-					else {
-					 (void) destroy_arm(uarms);
-					 i = 0;
-					}
-				 }
-				break;
-			} else if (uarmc) {
-				/* destroy cloak */
-				 for(i=d(1,4); i>0; i--){
-					if(uarmc->spe > -1*objects[(uarmc)->otyp].a_ac){
-						damage_item(uarmc);
-						if(i==1) Your("%s damaged by the beam.", aobjnam(uarmc, "seem"));
-					}
-					else {
-					 (void) destroy_arm(uarmc);
-					 i = 0;
-					}
-				 }
-				break;
-			} else if (uarm) {
-				/* destroy suit */
-				 for(i=d(1,4); i>0; i--){
-					if(uarm->spe > -1*objects[(uarm)->otyp].a_ac){
-						damage_item(uarm);
-						if(i==1) Your("%s damaged by the beam.", aobjnam(uarm, "seem"));
-					}
-					else {
-					 (void) destroy_arm(uarm);
-					 i = 0;
-					}
-				 }
-				break;
-			} else if(uarmu && objects[uarmu->otyp].a_can > 0){
-				/* destroy underwear */
-				 for(i=d(1,4); i>0; i--){
-					if(uarmu->spe > -1*objects[(uarmu)->otyp].a_ac){
-						damage_item(uarmu);
-						if(i==1) Your("%s damaged by the beam.", aobjnam(uarmu, "seem"));
-					}
-					else {
-					 (void) destroy_arm(uarmu);
-					 i = 0;
-					}
-				 }
-				break;
+				}
+			} else {
+				int i;
+				if (Disint_resistance) {
+					You("are not disintegrated.");
+					break;
+				} else if (uarms) {
+					/* destroy shield; other possessions are safe */
+					 for(i=d(1,4); i>0; i--){
+						if(uarms->spe > -1*objects[(uarms)->otyp].a_ac){
+							damage_item(uarms);
+							if(i==1) Your("%s damaged by the beam.", aobjnam(uarms, "seem"));
+						}
+						else {
+						 (void) destroy_arm(uarms);
+						 i = 0;
+						}
+					 }
+					break;
+				} else if (uarmc) {
+					/* destroy cloak */
+					 for(i=d(1,4); i>0; i--){
+						if(uarmc->spe > -1*objects[(uarmc)->otyp].a_ac){
+							damage_item(uarmc);
+							if(i==1) Your("%s damaged by the beam.", aobjnam(uarmc, "seem"));
+						}
+						else {
+						 (void) destroy_arm(uarmc);
+						 i = 0;
+						}
+					 }
+					break;
+				} else if (uarm) {
+					/* destroy suit */
+					 for(i=d(1,4); i>0; i--){
+						if(uarm->spe > -1*objects[(uarm)->otyp].a_ac){
+							damage_item(uarm);
+							if(i==1) Your("%s damaged by the beam.", aobjnam(uarm, "seem"));
+						}
+						else {
+						 (void) destroy_arm(uarm);
+						 i = 0;
+						}
+					 }
+					break;
+				} else if(uarmu && objects[uarmu->otyp].a_can > 0){
+					/* destroy underwear */
+					 for(i=d(1,4); i>0; i--){
+						if(uarmu->spe > -1*objects[(uarmu)->otyp].a_ac){
+							damage_item(uarmu);
+							if(i==1) Your("%s damaged by the beam.", aobjnam(uarmu, "seem"));
+						}
+						else {
+						 (void) destroy_arm(uarmu);
+						 i = 0;
+						}
+					 }
+					break;
+				}
 			}
 	    } else if (resists_death(&youmonst) || u.sealsActive&SEAL_OSE) {
 		shieldeff(sx, sy);
@@ -3855,8 +3902,13 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					 ||mon->data == &mons[PM_ZETA_METROID]||mon->data == &mons[PM_OMEGA_METROID]
 					 ||mon->data == &mons[PM_METROID_QUEEN])
 					) range=0;//end while loop after this
-
-					if (tmp == MAGIC_COOKIE) { /* disintegration */
+					if(flags.mamn_brth && abs(type) == ZT_BREATH(ZT_DEATH)){
+						if(otmp){
+							set_material(otmp, GOLD);
+						} else {
+							minstagoldify(mon,FALSE);
+						}
+					} else if (tmp == MAGIC_COOKIE) { /* disintegration */
 						struct obj *otmp2, *m_amulet = mlifesaver(mon);
 
 						if (canseemon(mon)) {
@@ -3933,6 +3985,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			} else
 #endif
 			if (zap_hit((int) u.uac, 0) || ((flags.drgn_brth && abs(type) != ZT_BREATH(ZT_DEATH))
+				|| flags.mamn_brth
 				|| abs(type) == ZT_BREATH(ZT_SLEEP))
 			) {
 				range -= 2;
@@ -3997,7 +4050,8 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			if((abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING)) && (!ZAP_POS(lev->typ) || !isok(sx,sy) || !lev->typ)){
 				struct rm *room;
 				boolean shopdoor, shopwall;
-				if (!isok(sx,sy)){
+				if (!isok(sx,sy) || flags.mamn_brth){
+					if(closed_door(sx, sy)) pline_The("door glows then fades.");
 					pline("The wall glows then fades.");
 					break;
 				}

@@ -1001,6 +1001,7 @@ as_extra_healing:
 			exercise(A_CON, FALSE);
 		}
 		if (Stoned) fix_petrification();
+		if (Golded) fix_petrification();
 		unkn++; /* holy/unholy water can burn like acid too */
 		break;
 	case POT_POLYMORPH:

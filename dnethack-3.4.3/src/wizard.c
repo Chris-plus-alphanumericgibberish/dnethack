@@ -354,7 +354,25 @@ tactics(mtmp)
 					return(0);
 				}
 			}
-			mnexto(mtmp);
+			if((attacktype_fordmg(mtmp->data, AT_BREA, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_SPIT, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_ARRW, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_BEAM, AD_ANY) )
+				//do something about poss of cancellation
+			){
+				monline(mtmp);
+				if(!mon_can_see_you(mtmp)) mnexto(mtmp);
+			} else if((attacktype_fordmg(mtmp->data, AT_LRCH, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_LNCK, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY) )
+				//do something about poss of cancellation
+			){
+				mofflin(mtmp);
+				if(!mon_can_see_you(mtmp)) mnexto(mtmp);
+			} else {
+				mnexto(mtmp);
+			}
 		}
 		return(0);
 
@@ -381,7 +399,25 @@ tactics(mtmp)
 			} else if(mtmp->data == &mons[PM_GREAT_CTHULHU]){
 				pline("%s steps through strange angles.",Monnam(mtmp));
 			}
-			mnexto(mtmp);
+			if((attacktype_fordmg(mtmp->data, AT_BREA, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_SPIT, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_ARRW, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_BEAM, AD_ANY) )
+				//do something about poss of cancellation
+			){
+				monline(mtmp);
+				if(!mon_can_see_you(mtmp)) mnexto(mtmp);
+			} else if((attacktype_fordmg(mtmp->data, AT_LRCH, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_LNCK, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY) ||
+				attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY) )
+				//do something about poss of cancellation
+			){
+				mofflin(mtmp);
+				if(!mon_can_see_you(mtmp)) mnexto(mtmp);
+			} else {
+				mnexto(mtmp);
+			}
 		    return(0);
 		}
 		if(where == STRAT_GROUND) {

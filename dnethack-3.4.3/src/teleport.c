@@ -88,6 +88,140 @@ unsigned gpflags;
 	return TRUE;
 }
 
+    // int knix[8] = {2,  2,  1, -1, -2, -2,  1, -1};
+    // int kniy[8] = {1, -1,  2,  2,  1, -1, -2, -2};
+    // int camx[8] = {3,  3,  1, -1, -3, -3,  1, -1};
+    // int camy[8] = {1, -1,  3,  3,  1, -1, -3, -3};
+    // int zebx[8] = {3,  3,  2, -2, -3, -3,  2, -2};
+    // int zeby[8] = {2, -2,  3,  3,  2, -2, -3, -3};
+	
+boolean
+eofflin(cc, xx, yy, mdat)
+coord *cc;
+register xchar xx, yy;
+struct permonst *mdat;
+{
+#define TARGET_GOOD 15
+    coord good[TARGET_GOOD], *good_ptr;
+    int x, y, range, i;
+    int xmin, xmax, ymin, ymax;
+    struct monst fakemon;	/* dummy monster */
+
+    if (!mdat) {
+#ifdef DEBUG
+	pline("enexto() called with mdat==0");
+#endif
+	/* default to player's original monster type */
+	mdat = &mons[u.umonster];
+    }
+    fakemon.data = mdat;	/* set up for goodpos */
+    good_ptr = good;
+    range = 3;
+    /*
+     * Walk around the border of the square with center (xx,yy) and
+     * radius range.  Stop when we find at least one valid position.
+     */
+    do {
+	xmin = max(1, xx-range);
+	xmax = min(COLNO-1, xx+range);
+	ymin = max(0, yy-range);
+	ymax = min(ROWNO-1, yy+range);
+
+	for (x = xmin; x <= xmax; x++)
+	    if (goodpos(x, ymin, &fakemon, 0) && !linedup(u.ux,u.uy,x,ymin)) {
+		good_ptr->x = x;
+		good_ptr->y = ymin ;
+		/* beware of accessing beyond segment boundaries.. */
+		if (good_ptr++ == &good[TARGET_GOOD-1]) goto full;
+	    }
+	for (x = xmin; x <= xmax; x++)
+	    if (goodpos(x, ymax, &fakemon, 0) && !linedup(u.ux,u.uy,x,ymax)) {
+		good_ptr->x = x;
+		good_ptr->y = ymax ;
+		/* beware of accessing beyond segment boundaries.. */
+		if (good_ptr++ == &good[TARGET_GOOD-1]) goto full;
+	    }
+	for (y = ymin+1; y < ymax; y++)
+	    if (goodpos(xmin, y, &fakemon, 0) && !linedup(u.ux,u.uy,xmin,y)) {
+		good_ptr->x = xmin;
+		good_ptr-> y = y ;
+		/* beware of accessing beyond segment boundaries.. */
+		if (good_ptr++ == &good[TARGET_GOOD-1]) goto full;
+	    }
+	for (y = ymin+1; y < ymax; y++)
+	    if (goodpos(xmax, y, &fakemon, 0) && !linedup(u.ux,u.uy,xmax,y)) {
+		good_ptr->x = xmax;
+		good_ptr->y = y ;
+		/* beware of accessing beyond segment boundaries.. */
+		if (good_ptr++ == &good[TARGET_GOOD-1]) goto full;
+	    }
+	range++;
+
+	/* return if we've grown too big (nothing is valid) */
+	if (range > ROWNO && range > COLNO){
+		if(good_ptr == good) goto full;
+		else return FALSE;
+	}
+    } while (good_ptr < &good[TARGET_GOOD-1]);
+
+full:
+    i = rn2((int)(good_ptr - good));
+    cc->x = good[i].x;
+    cc->y = good[i].y;
+    return TRUE;
+}
+
+boolean
+eonline(cc, xx, yy, mdat)
+coord *cc;
+register xchar xx, yy;
+struct permonst *mdat;
+{
+    int x, y, subx=-1, suby=-1, i, j, offset = rn2(8);
+    int dx[8] = {0, 1,  0, -1, 1,  1, -1, -1};
+    int dy[8] = {1, 0, -1,  0, 1, -1, -1,  1};
+    struct monst fakemon;	/* dummy monster */
+
+    if (!mdat) {
+#ifdef DEBUG
+	pline("eonline() called with mdat==0");
+#endif
+	/* default to player's original monster type */
+	mdat = &mons[u.umonster];
+    }
+    fakemon.data = mdat;	/* set up for goodpos */
+	for(j = 0; j < 8; j++){
+		x = xx;
+		y = yy;
+		for(i = 1; i < BOLT_LIM; i++){
+			x += dx[(j+offset)%8];
+			y += dy[(j+offset)%8];
+			if(!isok(x,y) || !goodpos(x, y, &fakemon, 0) || IS_STWALL(levl[x][y].typ)){
+				i--;
+				x -= dx[(j+offset)%8];
+				y -= dy[(j+offset)%8];
+				if(i > BOLT_LIM/2){
+					cc->x = x;
+					cc->y = y;
+					return TRUE;
+				} else if(i > 1 && subx < 0){
+					//found a sub-optimal location
+					subx = x;
+					suby = y;
+				}
+				break;
+			}
+		}
+	}
+	if(subx != -1){
+		cc->x = subx;
+		cc->y = suby;
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
 /*
  * "entity next to"
  *

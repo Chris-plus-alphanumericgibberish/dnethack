@@ -5283,6 +5283,7 @@ unfixable_trouble_count(is_horn)
 	int unfixable_trbl = 0;
 
 	if (Stoned) unfixable_trbl++;
+	if (Golded) unfixable_trbl++;
 	if (Strangled) unfixable_trbl++;
 	if (Wounded_legs
 #ifdef STEED
