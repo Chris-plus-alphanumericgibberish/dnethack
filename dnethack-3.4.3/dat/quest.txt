@@ -919,7 +919,7 @@ knowledge we learn here to make the world a better place."
 You see %l smile sadly as you approaches him.
 
 "%pC, it has been a long time since you departed.  I hope you had made
-good use of your musical abilities in your voyages, since you was my most
+good use of your musical abilities in your voyages, since you were my most
 promising student.  But I did not called you to discuss that.
 
 "%HC are in desperate need of your help, and you are to 
@@ -967,7 +967,7 @@ and %o was taken.
 She always envied the power %o has over nature and all 
 living things. 
 
-"%pC, I am too old and weak to go after %o.  You was
+"%pC, I am too old and weak to go after %o.  You were
 always my most promising student; it is over your shoulders the responsibility
 of rescuing it.
 
