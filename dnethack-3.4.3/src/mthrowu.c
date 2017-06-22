@@ -1718,6 +1718,46 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 		if(typ == AD_SLEE) mult = 4;
 	}
 
+	if(typ == AD_RBRE){
+		if(mtmp->data == &mons[PM_CHROMATIC_DRAGON]){
+			switch(rnd(6)){
+				case 1:
+					typ = AD_FIRE;
+				break;
+				case 2:
+					typ = AD_COLD;
+				break;
+				case 3:
+					typ = AD_ELEC;
+				break;
+				case 4:
+					typ = AD_DRST;
+				break;
+				case 5:
+					typ = AD_DISN;
+				break;
+				case 6:
+					typ = AD_ACID;
+				break;
+			}
+		} else if(mtmp->data == &mons[PM_PLATINUM_DRAGON]){
+			switch(rnd(4)){
+				case 1:
+					typ = AD_FIRE;
+				break;
+				case 2:
+					typ = AD_DISN;
+				break;
+				case 3:
+					typ = AD_SLEE;
+				break;
+				case 4:
+					typ = AD_ELEC;
+				break;
+			}
+		} else typ = rnd(AD_ACID);
+	}
+	
 	if(lined_up(mtmp)) {
 
 	    if(mtmp->mcan) {
@@ -1807,7 +1847,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 					typ = AD_ELEC;
 				break;
 			}
-		} else rnd(AD_ACID);
+		} else typ = rnd(AD_ACID);
 	}
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
