@@ -2036,7 +2036,7 @@ register struct monst *mtmp;
 			    otmp->oerodeproof = TRUE;
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 			    bless(otmp);
 				otmp->obj_material = SILVER;
 			    (void) mpickobj(mtmp, otmp);
@@ -2092,7 +2092,7 @@ register struct monst *mtmp;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(BRONZE_BOOTS, FALSE, FALSE);
+				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->objsize = MZ_LARGE;
@@ -2199,7 +2199,7 @@ register struct monst *mtmp;
 			    otmp->spe = 7;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
-			    otmp = mksobj(BRONZE_BOOTS, FALSE, FALSE);
+			    otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->objsize = MZ_LARGE;
@@ -2336,7 +2336,7 @@ register struct monst *mtmp;
 			} else if(ptr == &mons[PM_GHAELE_ELADRIN]){
 				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
 				(void)mongets(mtmp, BRONZE_ROUNDSHIELD);
-				(void)mongets(mtmp, BRONZE_BOOTS);
+				(void)mongets(mtmp, ARMORED_BOOTS);
 				(void)mongets(mtmp, BRONZE_HELM);
 				(void)mongets(mtmp, LONG_SWORD);
 				otmp = mksobj(LONG_SWORD, TRUE, FALSE);
@@ -2859,7 +2859,7 @@ register struct monst *mtmp;
 			(void)mongets(mtmp, TWO_HANDED_SWORD);
 			(void)mongets(mtmp, BRONZE_PLATE_MAIL);
 			(void)mongets(mtmp, BRONZE_GAUNTLETS);
-			(void)mongets(mtmp, BRONZE_BOOTS);
+			(void)mongets(mtmp, ARMORED_BOOTS);
 		}
 		break;
 	    case S_KETER:

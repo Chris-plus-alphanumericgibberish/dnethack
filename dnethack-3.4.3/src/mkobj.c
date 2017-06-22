@@ -407,7 +407,10 @@ boolean artif;
 	else if(otyp == find_gcirclet()) otmp->obj_material = GOLD;
 	else if(otyp == SPEAR){if(!rn2(25)) otmp->obj_material = SILVER;}
 	else if(otyp == DAGGER){if(!rn2(12)) otmp->obj_material = SILVER;}
+	else if(otyp == ARMORED_BOOTS) otmp->obj_material = COPPER;
 	else otmp->obj_material = objects[otyp].oc_material;
+	
+	fix_object(otmp);
 	
 	if ((otmp->otyp >= ELVEN_SHIELD && otmp->otyp <= ORCISH_SHIELD) ||
 			otmp->otyp == SHIELD_OF_REFLECTION)

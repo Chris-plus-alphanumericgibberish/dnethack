@@ -2699,7 +2699,7 @@ boolean from_user;
 		} else if (!strncmpi(bp, "bronze ", l=7)
 			&& strncmpi(bp, "bronze helm", 11) && strncmpi(bp, "bronze plate mail", 17)
 			&& strncmpi(bp, "bronze roundshield", 18) && strncmpi(bp, "bronze gauntlets", 16)
-			&& strncmpi(bp, "bronze boots", 12) && strncmpi(bp, "bronze ring", 11)
+			&& strncmpi(bp, "bronze ring", 11)
 			&& strncmpi(bp, "bronze spellbook", 16)
 		) {
 			mat = COPPER;
