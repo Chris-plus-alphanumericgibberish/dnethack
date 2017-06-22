@@ -1568,6 +1568,7 @@ spiriteffects(power, atme)
 							break;//break loop
 						}
 					} else {
+						if(range < 4) range++;
 						dmg = d(range+1,dsize); //Damage decreases with range
 						if(u.sealsActive&SEAL_NABERIUS) explode2(lsx, lsy, 5/*Electrical*/, dmg*1.5, WAND_CLASS, EXPL_MAGICAL);
 						else explode(lsx, lsy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
