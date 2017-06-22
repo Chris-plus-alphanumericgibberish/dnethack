@@ -870,7 +870,7 @@ int thrown;
 			}
 			if ((uarmg->obj_material == IRON) &&
 				hates_iron(mdat)){
-					tmp += rnd(mon->m_lev*2);
+					tmp += rnd(mon->m_lev);
 					ironmsg = TRUE;
 			}
 			if ((uarmg->cursed) &&
@@ -926,7 +926,7 @@ int thrown;
 			) barehand_iron_rings++;
 			
 			if ((barehand_iron_rings) && hates_iron(mdat)) {
-			    tmp += d(barehand_iron_rings,mon->m_lev*2);
+			    tmp += d(barehand_iron_rings,mon->m_lev);
 			    ironmsg = TRUE;
 			}
 			
@@ -1148,7 +1148,7 @@ int thrown;
 				silverobj = TRUE;
 		    }
 			if (obj->obj_material == IRON && hates_iron(mdat)) {
-				tmp += rnd(mon->m_lev * 2);	//I think this is the right thing to do here.  I don't think it enters the main iron section
+				tmp += rnd(mon->m_lev);	//I think this is the right thing to do here.  I don't think it enters the main iron section
 				ironmsg = TRUE;
 				ironobj = TRUE;
 			}
@@ -1397,7 +1397,6 @@ int thrown;
 				hittxt = TRUE;
 			}
 			if(obj->oartifact == ART_GLAMDRING && (is_orc(mdat) || is_demon(mdat))){
-				tmp += rnd(20);
 				lightmsg = TRUE;
 			}
 		    if ((obj->obj_material == SILVER || arti_silvered(obj)  || 
@@ -1406,6 +1405,14 @@ int thrown;
 				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
 				else silvermsg = TRUE;
 				silverobj = TRUE;
+		    }
+		    if (obj->obj_material == IRON && hates_iron(mdat) && !(is_lightsaber(obj) && obj->lamplit)) {
+				ironmsg = TRUE;
+				ironobj = TRUE;
+		    }
+		    if (obj->cursed && hates_unholy(mdat)) {
+				unholymsg = TRUE;
+				unholyobj = TRUE;
 		    }
 #ifdef STEED
 		    if (u.usteed && !thrown && tmp > 0 &&
@@ -1701,7 +1708,7 @@ defaultvalue:
 						lightmsg = TRUE;
 					}
 					if (obj && obj->obj_material == IRON && hates_iron(mdat)) {
-						tmp += rnd(mon->m_lev * 2);
+						tmp += rnd(mon->m_lev);
 						ironmsg = TRUE;
 						ironobj = TRUE;
 					}
@@ -3163,7 +3170,7 @@ register struct attack *mattk;
 		case AD_SIMURGH:
 			if(hates_iron(mdef->data)){
 				Your("claws of cold iron sear %s.",mon_nam(mdef));
-				tmp+=rnd(mdef->m_lev*2);
+				tmp+=d(2, mdef->m_lev);
 			}
 			pline("Radiant feathers slice through %s.",mon_nam(mdef));
 			switch(rn2(15)){

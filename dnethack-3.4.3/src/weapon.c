@@ -865,8 +865,16 @@ int spec;
 			&& hates_iron(ptr)
 			&& !(is_lightsaber(otmp) && otmp->lamplit)
 		){
-			if(otyp == KHAKKHARA) bonus += d(rnd(3),mon->m_lev*2);
-			else bonus += rnd(mon->m_lev*2);
+			if(youdefend){
+				if(otyp == KHAKKHARA) bonus += d(rnd(3),u.ulevel);
+				else bonus += rnd(u.ulevel);
+			} else {
+				if(otyp == KHAKKHARA) bonus += d(rnd(3),mon->m_lev);
+				else bonus += rnd(mon->m_lev);
+			}
+		}
+	    if (otmp->oartifact == ART_GLAMDRING && (is_orc(ptr) || is_demon(ptr))){
+			bonus += rnd(20);
 		}
 	    if (otmp->cursed
 			&& hates_unholy(ptr)

@@ -991,8 +991,8 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 				losehp(rnd(10), "fell into a pit of iron spikes",
 				NO_KILLER_PREFIX);
 			}
-			else{//half cold-iron damage
-				losehp((rnd(10) + rnd(u.ulevel*2)/2), "fell into a pit of cold-iron spikes",
+			else{//cold-iron damage
+				losehp((rnd(10) + rnd(u.ulevel)), "fell into a pit of cold-iron spikes",
 				NO_KILLER_PREFIX);
 			}
 		    if (!rn2(6))
@@ -1324,7 +1324,7 @@ struct obj *otmp;
 			}
 			if (mtmp->mhp <= 0 ||
 				thitm(0, mtmp, (struct obj *)0,
-				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev*2)/2 : 0, FALSE))
+				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev) : 0, FALSE))
 			    trapkilled = TRUE;
 			steedhit = TRUE;
 			break;
@@ -2056,13 +2056,13 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    seetrap(trap);
 			}
 			if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
-				pline("The cold-iron sears %s!",	//half cold-iron damage
+				pline("The cold-iron sears %s!",
 					Monnam(mtmp));
 			}
 			mselftouch(mtmp, "Falling, ", FALSE);
 			if (mtmp->mhp <= 0 ||
 				thitm(0, mtmp, (struct obj *)0,
-				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev * 2)/2 : 0, FALSE))
+				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev) : 0, FALSE))
 			    trapkilled = TRUE;
 			break;
 		case HOLE:

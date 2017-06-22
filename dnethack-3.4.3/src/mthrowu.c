@@ -106,20 +106,17 @@ boolean burn;
 				!(is_lightsaber(obj) && obj->lamplit) &&
 				!(u.sealsActive&SEAL_EDEN)
 				&& hates_silver(youracedata)) {
-			// dam += rnd(20);
 			pline_The("silver sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
 		if (obj && (obj->obj_material == IRON) &&
 				!(is_lightsaber(obj) && obj->lamplit)
 				&& hates_iron(youracedata)) {
-			// dam += rnd(20);
 			pline_The("cold-iron sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
 		if (obj && (obj->obj_material == SILVER || arti_silvered(obj))
 				&& hates_unholy(youracedata)) {
-			// dam += rnd(20);
 			pline_The("curse sears your flesh!");
 			exercise(A_CON, FALSE);
 		}

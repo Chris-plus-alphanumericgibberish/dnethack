@@ -67,7 +67,7 @@ register boolean clumsy;
 	}
 	if (uarmf && (uarmf->obj_material == IRON)
 		&& hates_iron(mdat)) {
-			dmg += rnd(mon->m_lev*2);
+			dmg += rnd(mon->m_lev);
 			ironmsg = TRUE; ironobj = TRUE;
 	}
 	if (uarmf && uarmf->cursed

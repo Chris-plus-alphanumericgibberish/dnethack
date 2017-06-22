@@ -1278,7 +1278,7 @@ physical:{
 				if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
 					!(is_lightsaber(otmp) && otmp->lamplit)
 				)
-					tmp += rnd(mdef->m_lev*2);
+					tmp += rnd(mdef->m_lev);
 				if(otmp && (otmp->cursed) && hates_unholy(pd))
 					tmp += rnd(9);
 			} else {

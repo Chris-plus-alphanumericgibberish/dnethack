@@ -1486,7 +1486,7 @@ hitmu(mtmp, mattk)
 				if(uwep && (uwep->obj_material == IRON) && 
 					hates_iron(youracedata) &&
 					!(is_lightsaber(uwep) && uwep->lamplit)
-				) dmg += rnd(u.ulevel*2);
+				) dmg += rnd(u.ulevel);
 				if(uwep && (uwep->cursed) && 
 					hates_unholy(youracedata)
 				) dmg += rnd(9);
@@ -1595,7 +1595,7 @@ hitmu(mtmp, mattk)
 				if(otmp && (otmp->obj_material == IRON) && 
 					hates_iron(youracedata) &&
 					!(is_lightsaber(otmp) && otmp->lamplit)
-				) dmg += rnd(u.ulevel*2);
+				) dmg += rnd(u.ulevel);
 				if(otmp && (otmp->cursed) && 
 					hates_unholy(youracedata)
 				) dmg += rnd(9);
