@@ -3587,7 +3587,7 @@ typfnd:
 		otmp->sknown = 1;
 	}
 	
-	if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS){
+	if(otmp->oclass == WEAPON_CLASS || (otmp->oclass == ARMOR_CLASS && !Is_dragon_scales(otmp))){
 		otmp->objsize = objsize;
 	}
 	
@@ -3729,6 +3729,11 @@ typfnd:
 			otmp->otyp != POT_WATER)
 		otmp->odiluted = 1;
 
+	/* set material */
+	if(otmp->oclass == WEAPON_CLASS && !is_ammo(otmp) && mat && !otmp->oartifact){
+		otmp->obj_material = mat;
+	}
+	
 	if (name) {
 		const char *aname;
 		short objtyp;
@@ -3770,11 +3775,6 @@ typfnd:
 	    pline("For a moment, you feel %s in your %s, but it disappears!",
 		  something,
 		  makeplural(body_part(HAND)));
-	}
-	
-	/* set material */
-	if(otmp->oclass == WEAPON_CLASS && !is_ammo(otmp) && mat && !otmp->oartifact){
-		otmp->obj_material = mat;
 	}
 	
 	if (halfeaten && otmp->oclass == FOOD_CLASS) {

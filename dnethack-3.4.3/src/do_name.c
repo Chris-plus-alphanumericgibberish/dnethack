@@ -629,6 +629,11 @@ const char *name;
 		else if(obj->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_SCOURGE_OF_LOLTH) obj->obj_material = SILVER;
 		else if(obj->oartifact >= ART_SWORD_OF_ERATHAOL && obj->oartifact <= ART_HAMMER_OF_BARQUIEL) obj->obj_material = SILVER;
+		else if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default material
+		else obj->obj_material = objects[obj->otyp].oc_material;
+		
+		if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default body type
+		else obj->bodytypeflag = MB_HUMANOID;
 		
 		fix_object(obj);
 		
