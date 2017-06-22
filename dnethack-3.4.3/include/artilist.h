@@ -1997,7 +1997,7 @@ A("The Prismatic Dragon Plate", PLATE_MAIL,
 A("Footprints in the Labyrinth", STAR_SAPPHIRE,
 	(SPFX_NOGEN|SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	NO_ATTK,	NO_DFNS,	NO_CARY,	
+	PHYS(20,10),	NO_DFNS,	NO_CARY,	
 	ENLIGHTENING, A_NONE, NON_PM, PM_INCANTIFIER, 0L, 
 	SPFX2_SPELLUP,0,0),
 
