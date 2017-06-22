@@ -3671,7 +3671,7 @@ arti_invoke(obj)
 			else if(u.dz < 0 && (yn("This is a forbidden technique.  Do you wish to use it anyway?") == 'y')){
 				pline("Time Stop!");
 				youmonst.movement += NORMAL_SPEED*10;
-				Stoned = 5;
+				Stoned = 9;
 				delayed_killer = "termination of personal timeline.";
 				killer_format = KILLED_BY;
 			}
