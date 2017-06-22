@@ -6134,6 +6134,7 @@ struct monst *mtmp, *victim;
 	int oldtype, newtype, max_increase, cur_increase,
 	    lev_limit, hp_threshold;
 	struct permonst *ptr = mtmp->data;
+	struct monst *bardmon;
 
 	/* monster died after killing enemy but before calling this function */
 	/* currently possible if killing a gas spore */
@@ -6189,6 +6190,13 @@ struct monst *mtmp, *victim;
 			if(Role_if(PM_BARD) && mtmp->mtame && canseemon(mtmp)){
 				u.pethped = TRUE;
 			}
+			for(bardmon = fmon; bardmon; bardmon = bardmon->nmon){
+				if(bardmon->data == &mons[PM_LILLEND] 
+					&& bardmon != mtmp
+					&& ((bardmon->mtame > 0) == (mtmp->mtame > 0)) && bardmon->mpeaceful == mtmp->mpeaceful
+					&& mon_can_see_mon(bardmon,mtmp)
+				) grow_up(bardmon, mtmp);
+			}
 		} else {
 			max_increase = 0;
 			cur_increase = 0;
@@ -6207,7 +6215,7 @@ struct monst *mtmp, *victim;
 	if (mtmp->mhpmax <= hp_threshold)
 	    return ptr;		/* doesn't gain a level */
 
-	if (is_mplayer(ptr) || ptr == &mons[PM_BYAKHEE]) lev_limit = 30;	/* same as player */
+	if (is_mplayer(ptr) || ptr == &mons[PM_BYAKHEE] || ptr == &mons[PM_LILLEND]) lev_limit = 30;	/* same as player */
 	else if (lev_limit < 5) lev_limit = 5;	/* arbitrary */
 	else if (lev_limit > 49) lev_limit = (ptr->mlevel > 49 ? ptr->mlevel : 49);
 
