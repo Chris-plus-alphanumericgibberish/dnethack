@@ -1338,6 +1338,59 @@ register struct obj *otmp;
 #endif /* OVLB */
 #ifdef OVL0
 
+void
+set_material(obj, mat)
+struct obj *obj;
+int mat;
+{
+	struct monst *owner = 0;
+	long mask = 0;
+	
+	if(obj->where == OBJ_INVENT || obj->where == OBJ_MINVENT){
+		owner = obj->ocarry;
+		mask = obj->owornmask;
+	}
+	if(owner == &youmonst && mask){
+		setnotworn(obj);
+	} else if(owner && mask){
+		update_mon_intrinsics(owner, obj, FALSE, TRUE);
+	}
+	switch(obj->otyp){
+		case ARROW:
+			
+		break;
+		case GOLDEN_ARROW:
+			
+		break;
+		case SILVER_ARROW:
+			
+		break;
+		case BRONZE_PLATE_MAIL:
+			
+		break;
+		case PLATE_MAIL:
+			
+		break;
+	}
+	//Mammon specific handling
+	//Silver bell should resist
+	//Potions -> golden potion
+	//Spellbook -> golden spellbook
+	//Wand -> gold hexagonal, short, runed, long, curved, forked, spiked, or jeweled
+	//Ring -> gold ring
+	
+	obj->obj_material = mat;
+	fix_object(obj);
+	if(owner == &youmonst){
+		setworn(obj, W_ARM);
+	} else if(owner && mask){
+		owner->misc_worn_check |= mask;
+		obj->owornmask |= mask;
+		update_mon_intrinsics(owner, obj, TRUE, TRUE);
+	}
+}
+
+
 /*
  *  Calculate the weight of the given object.  This will recursively follow
  *  and calculate the weight of any containers.
@@ -1390,38 +1443,55 @@ register struct obj *obj;
 	}
 	
 	if(obj->obj_material != objects[obj->otyp].oc_material){
-#define Fe		8
-#define Ag		10
-#define Au		19
-#define Pt		21
-#define Mi		2
-		if(objects[obj->otyp].oc_material == SILVER){
-			if(obj->obj_material == GOLD) wt *= (Au/Ag);
-			else if(obj->obj_material == PLATINUM) wt *= (Pt/Ag);
-			else if(obj->obj_material == MITHRIL) wt = wt/(Ag/Mi) + 1;
-			else /*treat it as if it's steel*/ wt = wt/(Ag/Fe) + 1;
-		} else if(objects[obj->otyp].oc_material == GOLD){
-			if(obj->obj_material == SILVER) wt = wt/(Au/Ag) + 1;
-			else if(obj->obj_material == PLATINUM) wt *= (Pt/Au);
-			else if(obj->obj_material == MITHRIL) wt = wt/(Au/Mi) + 1;
-			else /*treat it as if it's steel*/ wt = wt/(Au/Fe) + 1;
-		} else if(objects[obj->otyp].oc_material == PLATINUM){
-			if(obj->obj_material == SILVER) wt = wt/(Pt/Ag) + 1;
-			else if(obj->obj_material == GOLD) wt = wt/(Pt/Au) + 1;
-			else if(obj->obj_material == MITHRIL) wt = wt/(Pt/Mi) + 1;
-			else /*treat it as if it's steel*/ wt = wt/(Pt/Fe) + 1;
-		} else if(objects[obj->otyp].oc_material == MITHRIL){
-			if(obj->obj_material == SILVER) wt *= (Ag/Mi);
-			else if(obj->obj_material == GOLD) wt *= (Au/Mi);
-			else if(obj->obj_material == PLATINUM) wt *= (Pt/Mi);
-			else /*treat it as if it's steel*/ wt *= (Fe/Mi);
-		} else { /*treat it as if it's steel*/
-			if(obj->obj_material == SILVER) wt *= (Ag/Fe);
-			else if(obj->obj_material == GOLD) wt *= (Au/Fe);
-			else if(obj->obj_material == PLATINUM) wt *= (Pt/Fe);
-			else if(obj->obj_material == MITHRIL) wt = wt/(Fe/Mi) + 1;
-			/*treat it as if it's still steel, leave it alone*/
-		}
+	static const double matDensityLookup[] = {
+//  LIQUID
+		1.0,
+//  WAX
+		0.9,
+//  VEGGY very aprox Alfalfa leaf?
+		0.33, 
+//  FLESH
+		1.1,
+//  PAPER
+		1.2,
+//  CLOTH cotton fibre
+		1.5,
+//  LEATHER
+		0.9,
+//  WOOD
+		0.5,
+//  BONE
+		1.7,
+//  DRAGON_HIDE
+		3.4,
+//  IRON
+		7.9,
+//  METAL		12	/* Sn, &c. */
+		7.7,
+//  COPPER		13	/* Cu - includes brass and bronze*/
+		8.9,
+//  SILVER		14	/* Ag */
+		10.5,
+//  GOLD		15	/* Au */
+		19.3,
+//  PLATINUM	16	/* Pt */
+		21.4,
+//  MITHRIL		17 alumninum
+		2.7,
+//  PLASTIC		18 High end estimate for density of old credit card plastic, http://dwb5.unl.edu/chem/smallscale/SmallScale-069.html
+		1.3,
+//  GLASS		19
+		2.4,
+//  GEMSTONE	20 Very rough aprox.
+		3.6,
+//  MINERAL		21 Very rough aprox.
+		2.7,
+//  OBSIDIAN_MT	22
+		2.6,
+//  SHADOWSTUFF	23
+		1,
+	};
+		wt = wt*matDensityLookup[obj->obj_material]/matDensityLookup[objects[obj->otyp].oc_material];
 	}
 	
 	if(obj->otyp == MOON_AXE){
