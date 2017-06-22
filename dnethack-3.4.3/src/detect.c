@@ -680,6 +680,8 @@ struct obj	*detector;	/* object doing the detecting */
 	if (DEADMONSTER(mtmp)) continue;
 	for (obj = mtmp->minvent; obj; obj = obj->nobj)
 		if (obj && obj->oartifact) {
+			obj->ox = mtmp->mx;		/* at monster location */
+			obj->oy = mtmp->my;
 			map_object(obj, 1);
 	break;
 		}
