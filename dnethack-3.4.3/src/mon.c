@@ -2152,7 +2152,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 						mwep->oartifact == ART_LIECLEAVER))))
 			) {
 			    if (!(flag & ALLOW_TRAPS)) {
-				if (mon->mtrapseen & (1L << (ttmp->ttyp - 1)))
+				if (mon->mtrapseen & (1L << (ttmp->ttyp - 1)) || mon_resistance(mon, SEARCHING))
 				    continue;
 			    }
 			    info[cnt] |= ALLOW_TRAPS;

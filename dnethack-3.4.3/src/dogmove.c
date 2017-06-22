@@ -1117,7 +1117,7 @@ register int after;	/* this is extra fast monster movement */
 			    /* 1/40 chance of stepping on it anyway, in case
 			     * it has to pass one to follow the player...
 			     */
-			    if (trap->tseen && rn2(40)) continue;
+			    if ((trap->tseen || mon_resistance(mtmp, SEARCHING)) && rn2(40)) continue;
 		    }
 		}
 
