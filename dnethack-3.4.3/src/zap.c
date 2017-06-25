@@ -3526,6 +3526,7 @@ xchar sx, sy;
 					set_material(uarmu, GOLD);
 					break;
 				} else {
+					struct obj *itemp, *inext;
 					if (!Golded && !(Stone_resistance && youracedata != &mons[PM_STONE_GOLEM])
 						&& youracedata != &mons[PM_GOLD_GOLEM]
 						&& !(poly_when_golded(youracedata) &&
@@ -3535,7 +3536,14 @@ xchar sx, sy;
 						delayed_killer = "the breath of Mammon";
 						killer_format = KILLED_BY;
 					}
+					for(itemp = invent; itemp; itemp = inext){
+						inext = itemp->nobj;
+						if(!rn2(10)) set_material(itemp, GOLD);
+					}
 				}
+				if(!flat) dam = d(nd,6);
+				else dam = flat;
+				break;
 			} else {
 				int i;
 				if (Disint_resistance) {
@@ -3906,6 +3914,11 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 						if(otmp){
 							set_material(otmp, GOLD);
 						} else {
+							struct obj *itemp, *inext;
+							for(itemp = mon->minvent; itemp; itemp = inext){
+								inext = itemp->nobj;
+								set_material(itemp, GOLD);
+							}
 							minstagoldify(mon,FALSE);
 						}
 					} else if (tmp == MAGIC_COOKIE) { /* disintegration */
