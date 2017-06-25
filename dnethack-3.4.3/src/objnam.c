@@ -3578,6 +3578,7 @@ typfnd:
 						mntmp <= PM_YELLOW_DRAGON)
 			    otmp->otyp = GRAY_DRAGON_SCALE_SHIELD +
 						    mntmp - PM_GRAY_DRAGON;
+				otmp->obj_material = objects[otmp->otyp].oc_material;
 			break;
 		}
 	}
