@@ -1730,7 +1730,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	if(mtmp->mux == 0 && mtmp->muy == 0) return 0;
 	
 	/* if new breath types are added, change AD_ACID to max type */
-	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp, mult = 1;
+	int typ = mattk->adtyp, mult = 1;
 	if(typ == AD_HDRG){
 		typ = mtmp->mvar1;
 		if(typ == AD_SLEE) mult = 4;
