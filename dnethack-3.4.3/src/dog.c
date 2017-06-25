@@ -139,7 +139,11 @@ boolean quietly;
 	    chance = rn2(10);	/* 0==tame, 1==peaceful, 2==hostile */
 	    if (chance > 2) chance = otmp->blessed ? 0 : !otmp->cursed ? 1 : 2;
 	    /* 0,1,2:  b=80%,10,10; nc=10%,80,10; c=10%,10,80 */
-	    if (chance > 0) {
+	    if (chance > 0 && 
+			!(Role_if(PM_BARD) && rnd(20) < ACURR(A_CHA) && 
+				!(is_animal(mtmp->data) || mindless(mtmp->data)))
+		) {
+
 		mtmp->mtame = 0;	/* not tame after all */
 		if (chance == 2) { /* hostile (cursed figurine) */
 		    if (!quietly)
