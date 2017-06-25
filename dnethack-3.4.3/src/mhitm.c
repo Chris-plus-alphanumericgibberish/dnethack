@@ -1324,6 +1324,8 @@ physical:{
 		    if (tmp >= mdef->mhp) tmp = mdef->mhp - 1;
 		} else {
 			if(oarm && tmp && oarm->otyp == GAUNTLETS_OF_POWER) tmp += 8;
+			if(resist_attacks(mdef->data))
+				tmp = 0;
 		}
 		if(pa == &mons[PM_BABY_METROID]){
 				magr->mhpmax += 1;
