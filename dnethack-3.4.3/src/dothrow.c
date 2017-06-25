@@ -2312,7 +2312,7 @@ int thrown;
 	    }
 
 	} else if ((otyp == EGG || otyp == CREAM_PIE ||
-		    otyp == BLINDING_VENOM || otyp == ACID_VENOM || otyp == BALL_OF_WEBBING) &&
+		    otyp == BLINDING_VENOM || otyp == ACID_VENOM) &&
 		(guaranteed_hit || ACURR(A_DEX) > rnd(25))) {
 	    (void) hmon(mon, obj, 1);
 	    return 1;	/* hmon used it up */
