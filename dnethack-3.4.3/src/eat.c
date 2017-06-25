@@ -210,7 +210,9 @@ register struct obj *obj;
 	if(Race_if(PM_INCANTIFIER)) return incantifier_edible(obj);
 	if(magivorous(youracedata)) return incantifier_edible(obj);
 	if(uclockwork) return uclockwork_edible(obj);
-	if(Role_if(PM_ANACHRONONAUT) && !(Upolyd || Race_if(PM_VAMPIRE))) return ((obj->otyp >= SLIME_MOLD && obj->otyp <= TIN)); /*Processed foods only*/
+	if(Role_if(PM_ANACHRONONAUT) && !(Upolyd || Race_if(PM_VAMPIRE))) 
+		return ((obj->otyp >= K_RATION && obj->otyp <= TIN) || (obj->otyp >= SLIME_MOLD && obj->otyp <= TIN && 
+			(obj->obj_material == VEGGY || obj->obj_material == FLESH))); /*Processed foods only*/
 	
 	if (metallivorous(youracedata) && is_metallic(obj) &&
 	    (youracedata != &mons[PM_RUST_MONSTER] || is_rustprone(obj)))
@@ -222,25 +224,28 @@ register struct obj *obj;
 		return TRUE;
 
 	/* a sheaf of straw is VEGGY, but only edible for herbivorous animals */
-	if ((obj->otyp == ROPE_OF_ENTANGLING || obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT) && herbivorous(youracedata))
-		return !carnivorous(youracedata);
+	if ((obj->otyp == ROPE_OF_ENTANGLING || obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT) 
+		&& herbivorous(youracedata)
+		&& (obj->obj_material == VEGGY || obj->obj_material == FLESH)
+	) return !carnivorous(youracedata);
+	
 	if (herbivorous(youracedata) && is_veggy(obj))
 		return TRUE;
 		
 	/* Ghouls only eat corpses */
 	if (u.umonnum == PM_GHOUL)
-	   	return (boolean)(obj->otyp == CORPSE);
+	   	return (boolean)(obj->otyp == CORPSE && obj->obj_material == FLESH);
 	/* Vampires drink the blood of meaty corpses */
 	/* [ALI] (fully) drained food is not presented as an option,
 	 * but partly eaten food is (even though you can't drain it).
 	 */
 	if (is_vampire(youracedata))
-		return (boolean)(obj->otyp == CORPSE &&
+		return (boolean)(obj->otyp == CORPSE && obj->obj_material == FLESH &&
 		  has_blood(&mons[obj->corpsenm]) && (!obj->odrained ||
 		  obj->oeaten > drainlevel(obj)));
 
      /* return((boolean)(!!index(comestibles, obj->oclass))); */
-	return (boolean)(obj->oclass == FOOD_CLASS);
+	return (boolean)(obj->oclass == FOOD_CLASS && (obj->obj_material == VEGGY || obj->obj_material == FLESH));
 }
 
 #endif /* OVL1 */
