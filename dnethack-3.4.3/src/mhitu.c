@@ -4,6 +4,7 @@
 
 #include "hack.h"
 #include "artifact.h"
+#include "monflag.h"
 #include "edog.h"
 
 STATIC_VAR NEARDATA struct obj *otmp;
@@ -3731,10 +3732,7 @@ common:
 		break;
 
 	    case AD_HALU:
-		not_affected |= NoLightBlind ||
-			(u.umonnum == PM_BLACK_LIGHT ||
-			 u.umonnum == PM_VIOLET_FUNGUS ||
-			 dmgtype(youracedata, AD_STUN));
+		not_affected |= NoLightBlind || hallucinogenic(youracedata);
 		if (!not_affected) {
 		    boolean chg;
 		    if (!Hallucination)
