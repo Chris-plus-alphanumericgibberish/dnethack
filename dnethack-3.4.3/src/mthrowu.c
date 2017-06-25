@@ -1870,7 +1870,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
-	if (distmin(mtmp->mx, mtmp->my, mdef->mx, mdef->my) < 3)
+	if (distmin(mtmp->mx, mtmp->my, mdef->mx, mdef->my) < 3 && mtmp->data != &mons[PM_ANCIENT_OF_ICE])
 	    return 0;  /* not at close range */
 
 	if(mlined_up(mtmp, mdef, TRUE)) {
