@@ -1592,7 +1592,7 @@ struct obj	*sobj;
 		if (confused) {
 		    You_feel("charged up!");
 		    if (u.uen < u.uenmax)
-			u.uen = u.uenmax;
+			u.uen = min(u.uen+400, u.uenmax);
 		    else
 			u.uen = (u.uenmax += d(5,4));
 		    flags.botl = 1;
