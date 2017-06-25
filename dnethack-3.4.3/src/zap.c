@@ -145,7 +145,7 @@ struct obj *otmp;
 			
 			hit(zap_type_text, mtmp, exclam(dmg));
 			(void) resist(mtmp, otmp->oclass, dmg, TELL);
-		} else miss(zap_type_text, mtmp);
+		} else if(!flags.mon_moving || cansee(mtmp->mx, mtmp->my)) miss(zap_type_text, mtmp);
 		makeknown(otyp);
 		break;
 	case WAN_SLOW_MONSTER:
@@ -3974,7 +3974,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				}
 				range -= 2;
 			} else {
-			miss(fltxt,mon);
+				if(type > 0 || cansee(mon->mx, mon->my)) miss(fltxt,mon);
 			}
 		} else if (sx == u.ux && sy == u.uy && range >= 0) {
 	    nomul(0, NULL);
