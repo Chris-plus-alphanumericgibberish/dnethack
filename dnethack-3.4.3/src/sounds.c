@@ -1368,17 +1368,17 @@ asGuardian:
 								dmg = 0;
 								switch(u.oonaenergy){
 									case AD_FIRE:
-										if(resists_fire(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
+										if(resists_fire(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3),4);
 										else break;
 										if(!resists_cold(tmpm)) dmg *= 1.5;
 									break;
 									case AD_COLD:
-										if(resists_cold(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
+										if(resists_cold(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3),4);
 										else break;
 										if(!resists_fire(tmpm)) dmg *= 1.5;
 									break;
 									case AD_ELEC:
-										if(resists_elec(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3)+10,4);
+										if(resists_elec(tmpm)) dmg = d(min(MAX_BONUS_DICE, mtmp->m_lev/3),4);
 									break;
 								}
 								if(dmg) tmpm->mhp = max(tmpm->mhp - dmg,1);
