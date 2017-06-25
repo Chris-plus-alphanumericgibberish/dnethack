@@ -381,8 +381,8 @@ doread()
 	    int erosion;
 		if(arti_mandala(scroll)){
 			if(uarmu && uarmu == scroll && uarm){
-				if( uarm->otyp == CRYSTAL_PLATE_MAIL){
-					You("look at your shirt through your crystal armor.");
+				if( uarm->obj_material == GLASS){
+					You("look at your shirt through your glass armor.");
 				}
 				else{
 					if (Blind) You_cant("see that.");
