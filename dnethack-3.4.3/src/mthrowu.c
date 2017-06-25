@@ -1505,6 +1505,17 @@ register struct attack *mattk;
 				rngmod = 1000; /* Fly until it strikes something */
 				bypassDR = 1;
 			break;
+		    case AD_SURY:
+				ammo_type = SILVER_ARROW;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+				// qvr->oartifact = ART_ARROW_OF_SLAYING;
+			    qvr->blessed = 1;
+			    qvr->cursed = 0;
+			    qvr->quan = 1;
+			    qvr->spe = 7 + 50; //Arrows of slaying actually just get +50 damage anyway :/
+				rngmod = 1000; /* Fly until it strikes something */
+				bypassDR = 1;
+			break;
 			case AD_SLVR:
 				ammo_type = SILVER_ARROW;
 			break;
@@ -1624,6 +1635,16 @@ register struct attack *mattk;
 			    qvr->cursed = 0;
 			    qvr->quan = 1;
 			    qvr->spe = 7;
+				rngmod = 1000; /* Fly until it strikes something */
+			break;
+		    case AD_SURY:
+				ammo_type = SILVER_ARROW;
+				qvr = mksobj(ammo_type, TRUE, FALSE);
+				// qvr->oartifact = ART_ARROW_OF_SLAYING;
+			    qvr->blessed = 1;
+			    qvr->cursed = 0;
+			    qvr->quan = 1;
+			    qvr->spe = 7 + 50;
 				rngmod = 1000; /* Fly until it strikes something */
 			break;
 			case AD_SLVR:

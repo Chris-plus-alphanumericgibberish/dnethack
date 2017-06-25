@@ -159,6 +159,7 @@
 #define AD_EACD		113	/* Elemental acid */
 #define AD_CNFT		114	/* War's conflict-inducing touch */
 #define AD_BLUD		115	/* Sword of Blood inflicts heavy damage on creatures with blood */
+#define AD_SURY		116	/* Surya Deva's arrow of slaying */
 
 //#define AD_AHAZU	116 /*  */
 //Amon is a headbutt (AT_BUTT/AD_PHYS)

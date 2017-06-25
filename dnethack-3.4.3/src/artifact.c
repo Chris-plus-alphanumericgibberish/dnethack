@@ -2658,6 +2658,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			 "%s beheads %s!",
 			 "%s decapitates %s!"
 		};
+		static const char * const heart_msg[2] = {
+			 "%s pierces %s heart!",
+			 "%s punctures %s heart!"
+		};
 	    if (otmp->oartifact == ART_TSURUGI_OF_MURAMASA && dieroll == 1) {
 			wepdesc = "The razor-sharp blade";
 			/* not really beheading, but so close, why add another SPFX */
@@ -2865,6 +2869,41 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
 						messaged = TRUE;
 					}
+				}
+			}
+		} else if ( dieroll <= 1 && otmp->oartifact == ART_ARROW_OF_SLAYING){
+			wepdesc = artilist[otmp->oartifact].name;
+			if (!youdefend) {
+				if (!has_blood(mdef->data) || !(mdef->data->mflagsb&MB_BODYTYPEMASK) || noncorporeal(mdef->data) || amorphous(mdef->data)) {
+					if (vis){
+						pline("%s pierces deeply into %s!",
+							  The(wepdesc), mon_nam(mdef));
+						*dmgptr *= 2;
+						messaged = TRUE;
+					}
+				} else {
+					pline(heart_msg[rn2(SIZE(heart_msg))],
+						  The(wepdesc), s_suffix(mon_nam(mdef)));
+					otmp->dknown = TRUE;
+					if(youattack) killed(mdef);
+					else monkilled(mdef, (const char *)0, AD_PHYS);
+					
+					if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
+					messaged = TRUE;
+				}
+			} else {
+				if (!has_blood(youracedata) || !(youracedata->mflagsb&MB_BODYTYPEMASK) || noncorporeal(youracedata) || amorphous(youracedata)) {
+					pline("%s pierces deeply into you!",
+						  The(wepdesc));
+					*dmgptr *= 2;
+					messaged = TRUE;
+				} else {
+					pline(heart_msg[rn2(SIZE(heart_msg))],
+						  The(wepdesc), "your");
+					otmp->dknown = TRUE;
+					losehp((Upolyd ? u.mh : u.uhp) + 1, wepdesc, KILLED_BY);
+					/* Should amulets fall off? */
+					messaged = TRUE;
 				}
 			}
 		} else if ( dieroll == 1  || 

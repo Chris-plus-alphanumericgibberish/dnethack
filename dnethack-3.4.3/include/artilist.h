@@ -1604,6 +1604,13 @@ A("The Hammer of Barquiel",			LUCERN_HAMMER, /*Needs encyc entry*/
 	0, A_LAWFUL, NON_PM, NON_PM, 7777L, 	/**/
 	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
 
+A("Arrow of Slaying",			SILVER_ARROW, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_BEHEAD),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(20,0),	NO_DFNS,	NO_CARY,	/**/
+	0, A_LAWFUL, NON_PM, NON_PM, 777L, 	/**/
+	SPFX2_BLIND|SPFX2_BRIGHT,SPFX3_NOCNT,0),
+
 /* mastery artifacts */
 
 /* Archeologist */
