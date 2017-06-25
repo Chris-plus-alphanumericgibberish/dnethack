@@ -2453,6 +2453,8 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	
 	// if(magr->mpeaceful && mdef->mpeaceful && (magr->mtame || mdef->mtame)) return 0L;
 	
+	if(magr->mtame && mdef->mtame) return 0L;
+	
 	if(!mon_can_see_mon(magr, mdef)) return 0L;
 	
 	if(ma == &mons[PM_DREADBLOSSOM_SWARM]){
