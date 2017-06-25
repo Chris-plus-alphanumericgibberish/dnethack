@@ -2478,7 +2478,7 @@ then fill new spaces with our spawn!
 	 * with infravision.  Red dragons are the exception.
 	 */
     MON("tiny pseudodragon", S_DRAGON,//3 /*Needs encyc entry*//*Needs tile*/
-	LVL(2, 9, 6, 0, -5), (G_GENO|G_NOGEN),
+	LVL(2, 15, 6, 0, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 1, 4),
 	  ATTK(AT_BREA, AD_HDRG, 1, 1), 
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -2487,7 +2487,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_LONGHEAD|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_DRAGON /*MA*/,  MV_CATSIGHT|MV_SCENT /*MV*/, CLR_BROWN),
     MON("pseudodragon", S_DRAGON,//3 /*Needs tile*/
-	LVL(4, 9, 4, 1, -5), (G_GENO|G_NOGEN),
+	LVL(4, 14, 4, 1, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 1, 6),
 	  ATTK(AT_BREA, AD_HDRG, 1, 2), 
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -2496,7 +2496,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_LONGHEAD|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_DRAGON /*MA*/,  MV_CATSIGHT|MV_SCENT /*MV*/, CLR_BROWN),
     MON("riding pseudodragon", S_DRAGON,//3 /*Needs tile*/
-	LVL(6, 9, 2, 2, -5), (G_GENO|G_NOGEN),
+	LVL(6, 12, 2, 2, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 2, 4),
 	  ATTK(AT_BREA, AD_HDRG, 1, 3), 
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -2505,7 +2505,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_LONGHEAD|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_DRAGON /*MA*/,  MV_CATSIGHT|MV_SCENT /*MV*/, CLR_BROWN),
     MON("large pseudodragon", S_DRAGON,//3 /*Needs tile*/
-	LVL(10, 9, 0, 4, -5), (G_GENO|G_NOGEN),
+	LVL(10, 15, 0, 4, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 2, 4),
 	  ATTK(AT_BREA, AD_HDRG, 1, 4), 
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -2514,7 +2514,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_LONGHEAD|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_DRAGON /*MA*/,  MV_CATSIGHT|MV_SCENT /*MV*/, CLR_BROWN),
     MON("winged pseudodragon", S_DRAGON,//3 /*Needs tile*/
-	LVL(14, 9, -2, 8, -5), (G_GENO|G_NOGEN),
+	LVL(14, 20, -2, 8, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 2, 6),
 	  ATTK(AT_CLAW, AD_PHYS, 1, 4),ATTK(AT_CLAW, AD_PHYS, 1, 4),
 	  ATTK(AT_BREA, AD_HDRG, 1, 6), 
@@ -2524,7 +2524,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_LONGHEAD|MB_WINGS|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_DRAGON /*MA*/,  MV_CATSIGHT|MV_SCENT /*MV*/, HI_ZAP),
     MON("huge pseudodragon", S_DRAGON,//3 /*Needs encyc entry*//*Needs tile*/
-	LVL(20, 9, -4, 16, -5), (G_GENO|G_NOGEN),
+	LVL(20, 15, -4, 16, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 2, 6),
 	  ATTK(AT_CLAW, AD_PHYS, 2, 4),ATTK(AT_CLAW, AD_PHYS, 2, 4),
 	  ATTK(AT_BREA, AD_HDRG, 1, 8),
@@ -2534,7 +2534,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_LONGHEAD|MB_WINGS|MB_STRONG|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_DRAGON /*MA*/,  MV_CATSIGHT|MV_SCENT /*MV*/, HI_ZAP),
     MON("gigantic pseudodragon", S_DRAGON,//3 /*Needs tile*/
-	LVL(30, 9, -6, 32, -5), (G_GENO|G_NOGEN),
+	LVL(30, 12, -6, 32, -5), (G_GENO|G_NOGEN),
 	A(ATTK(AT_BITE, AD_PHYS, 3, 6),
 	  ATTK(AT_CLAW, AD_PHYS, 3, 4),ATTK(AT_CLAW, AD_PHYS, 3, 4),
 	  ATTK(AT_BREA, AD_HDRG, 4, 8),
