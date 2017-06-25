@@ -151,13 +151,14 @@
 #define MB_POIS			0x00000800L	/* poisonous to eat */
 #define MB_CHILL		0x00001000L	/* cold to eat */
 #define MB_TOSTY		0x00002000L	/* hot to eat */
-#define MB_MALE			0x00004000L	/* always male */
-#define MB_FEMALE		0x00008000L	/* always female */
-#define MB_NEUTER		0x00010000L	/* neither male nor female */
-#define MB_STRONG		0x00020000L	/* strong (or big) monster */
-#define MB_WINGS		0x00040000L	/* has wings */
-#define MB_LONGHEAD		0x00080000L	/* has 'long' (animal) head */
-#define MB_LONGNECK		0x00100000L	/* has 'long' (snakelike) head and neck */
+#define MB_HALUC		0x00004000L	/* hallucinogenic */
+#define MB_MALE			0x00008000L	/* always male */
+#define MB_FEMALE		0x00010000L	/* always female */
+#define MB_NEUTER		0x00020000L	/* neither male nor female */
+#define MB_STRONG		0x00040000L	/* strong (or big) monster */
+#define MB_WINGS		0x00080000L	/* has wings */
+#define MB_LONGHEAD		0x00100000L	/* has 'long' (animal) head */
+#define MB_LONGNECK		0x00200000L	/* has 'long' (snakelike) head and neck */
 
 #define MB_SNAKELEG	(MB_HUMANOID|MB_SLITHY)
 #define MB_CENTAUR	(MB_HUMANOID|MB_ANIMAL)

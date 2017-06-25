@@ -1451,8 +1451,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 		register struct permonst *ptr = &mons[pm];
 		int i, count;
 
-		if (!nobadeffects && (dmgtype(ptr, AD_STUN) || dmgtype(ptr, AD_HALU) ||
-		    pm == PM_VIOLET_FUNGUS)) {
+		if (!nobadeffects && hallucinogenic(ptr)) {
 			pline ("Oh wow!  Great stuff!");
 			make_hallucinated(HHallucination + 200,FALSE,0L);
 		}

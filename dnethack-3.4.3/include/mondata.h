@@ -182,6 +182,7 @@
 #define poisonous(ptr)		(((ptr)->mflagsb & MB_POIS) != 0L)
 #define freezing(ptr)		(((ptr)->mflagsb & MB_CHILL) != 0L)
 #define burning(ptr)		(((ptr)->mflagsb & MB_TOSTY) != 0L)
+#define hallucinogenic(ptr)		(((ptr)->mflagsb & MB_HALUC) != 0L)
 #define carnivorous(ptr)	(((ptr)->mflagst & MT_CARNIVORE) != 0L)
 #define herbivorous(ptr)	(((ptr)->mflagst & MT_HERBIVORE) != 0L)
 #define metallivorous(ptr)	(((ptr)->mflagst & MT_METALLIVORE) != 0L)
