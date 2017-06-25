@@ -1554,8 +1554,8 @@ pleased(g_align)
 			if (Upolyd) u.mh = u.mhmax;
 			ABASE(A_STR) = AMAX(A_STR);
 			if(Race_if(PM_INCANTIFIER)){
-				if (u.uen < u.uenmax*.45) u.uen = u.uenmax*.45;
-				u.uhs = NOT_HUNGRY;
+				if (u.uen < u.uenmax*.45) u.uen += 400;
+				newuhs(TRUE);
 			} else {
 				if (u.uhunger < u.uhungermax*.45) u.uhunger = u.uhungermax*.45;
 				u.uhs = NOT_HUNGRY;

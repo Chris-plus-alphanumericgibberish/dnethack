@@ -263,11 +263,12 @@ void
 reset_uhunger()
 {
 	if(Race_if(PM_INCANTIFIER)){
-		u.uen = u.uenmax*.45;
+		u.uen = min(u.uen+400, u.uenmax*.45);
+		newuhs(TRUE);
 	} else {
 		u.uhunger = u.uhungermax*.45;
+		u.uhs = NOT_HUNGRY;
 	}
-	u.uhs = NOT_HUNGRY;
 }
 
 static const struct { const char *txt; int nut; } tintxts[] = {
@@ -1259,7 +1260,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 			if(Race_if(PM_INCANTIFIER)) u.uen += amnt*10;
 			else u.uen += amnt;
 			flags.botl = 1;
-			u.uen = u.uen + 10 > (u.uenmax - 40) ? u.uen + 10 : (u.uenmax - 40);
+			u.uen = u.uen + 400;
 		    u.uen += amnt;
 		    if (u.uen > u.uenmax) {
 				u.uenmax+=10;

@@ -1147,7 +1147,8 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    You("are caught in a magical explosion!");
 		    losehp(rnd(10), "magical explosion", KILLED_BY_AN);
 		    Your("body absorbs some of the magical energy!");
-		    u.uen = (u.uenmax += 2);
+		    u.uenmax += 2;
+			u.uen = min(u.uen+400, u.uenmax);
 		} else domagictrap();
 #ifdef STEED
 		(void) steedintrap(trap, (struct obj *)0);

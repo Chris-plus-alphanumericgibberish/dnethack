@@ -3459,7 +3459,8 @@ arti_invoke(obj)
 	  }
 	case ENERGY_BOOST: {
 	    int epboost = (u.uenmax + 1 - u.uen) / 2;
-	    if (epboost < u.uenmax*.1) epboost = u.uenmax - u.uen;
+	    if(epboost < u.uenmax*.1) epboost = u.uenmax - u.uen;
+		if(epboost > 400) epboost = 400;
 	    if(epboost) {
 			You_feel("re-energized.");
 			u.uen += epboost;
