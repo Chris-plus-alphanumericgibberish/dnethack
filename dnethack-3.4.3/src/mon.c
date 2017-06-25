@@ -955,6 +955,270 @@ mcalcdistress()
 	    if (minliquid(mtmp)) continue;
 	}
 
+	if(mtmp->data == &mons[PM_HEZROU]){
+		flags.cth_attk=TRUE;//state machine stuff.
+		create_gas_cloud(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, rnd(3), rnd(3)+1);
+		flags.cth_attk=FALSE;
+	}
+	
+	if(mtmp->data == &mons[PM_ANCIENT_OF_ICE] || (mtmp->data == &mons[PM_BAALPHEGOR] && mtmp->mhp < mtmp->mhpmax/2)){
+		struct monst *tmpm;
+		int targets = 0, damage = 0;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
+				&& tmpm->mpeaceful != mtmp->mpeaceful
+				&& tmpm->mtame != mtmp->mtame
+				&& !resists_fire(tmpm)
+				&& !DEADMONSTER(tmpm)
+			) targets++;
+		}
+		if(distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
+			&& !mtmp->mpeaceful
+			&& !mtmp->mtame
+			&& !Fire_resistance
+		) targets++;
+		targets = rnd(targets);
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
+				&& tmpm->mpeaceful != mtmp->mpeaceful
+				&& tmpm->mtame != mtmp->mtame
+				&& !resists_fire(tmpm)
+				&& !DEADMONSTER(tmpm)
+			) targets--;
+			if(!targets) break;
+		}
+		if(tmpm){
+			if(canseemon(tmpm) && canseemon(mtmp)){
+				pline("Heat shimmer dances in the air above %s.", mon_nam(tmpm));
+				pline("%s is covered in frost!", Monnam(tmpm));
+				if(resists_fire(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				pline("The shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
+			} else if(canseemon(tmpm)){
+				pline("Heat shimmer dances in the air above .", mon_nam(tmpm));
+				pline("%s is covered in frost!", Monnam(tmpm));
+				if(resists_fire(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+			} else if(canseemon(mtmp)){
+				pline("Heat shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
+			}
+			damage = d((mtmp->m_lev)/3, 8);
+			tmpm->mhp -= damage;
+			if(tmpm->mhp < 1){
+				if (canspotmon(tmpm))
+					pline("%s %s!", Monnam(tmpm),
+					nonliving(tmpm->data)
+					? "is destroyed" : "dies");
+				tmpm->mhp = 0;
+				grow_up(mtmp,tmpm);
+				mondied(tmpm);
+			}
+			mtmp->mhp += damage;
+			if(mtmp->mhp > mtmp->mhpmax){
+				mtmp->mhp = mtmp->mhpmax;
+				grow_up(mtmp,mtmp);
+			}
+			mtmp->mspec_used = 0;
+			mtmp->mcan = 0;
+		} else if(targets > 0
+			&& distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
+			&& !mtmp->mpeaceful
+			&& !mtmp->mtame
+			&& !Fire_resistance
+		){
+			pline("Heat shimmer dances in the air above you.");
+			pline("You are covered in frost!");
+			if(canseemon(mtmp)){
+				pline("The shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
+			}
+			damage = d((mtmp->m_lev)/3 + 8, 8);
+			losehp(damage, "heat drain", KILLED_BY);
+			mtmp->mhp += damage;
+			if(mtmp->mhp > mtmp->mhpmax){
+				mtmp->mhp = mtmp->mhpmax;
+				grow_up(mtmp,mtmp);
+			}
+			mtmp->mspec_used = 0;
+			mtmp->mcan = 0;
+			mtmp->mux = u.ux;
+			mtmp->muy = u.uy;
+		}
+		if(damage){
+			struct attack mattk;
+			mattk.aatyp = AT_BREA;
+			mattk.adtyp = AD_COLD;
+			mattk.damn = 8;
+			mattk.damd = 8;
+			
+			if(mon_can_see_you(mtmp)){
+				mtmp->mux = u.ux;
+				mtmp->muy = u.uy;
+			}
+			
+			if(!mtmp->mtame && lined_up(mtmp)){
+				flags.drgn_brth = 1;
+				breamu(mtmp, &mattk);
+				flags.drgn_brth = 0;
+			} else {
+				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= BOLT_LIM
+						&& tmpm->mpeaceful != mtmp->mpeaceful
+						&& tmpm->mtame != mtmp->mtame
+						&& !resists_cold(tmpm)
+						&& mlined_up(mtmp, tmpm, TRUE)
+						&& !DEADMONSTER(tmpm)
+					){
+						flags.drgn_brth = 1;
+						breamm(mtmp, tmpm, &mattk);
+						flags.drgn_brth = 0;
+						break;
+					};
+				}
+			}
+		}
+	}
+	
+	if(mtmp->data == &mons[PM_ANCIENT_OF_DEATH] || (mtmp->data == &mons[PM_BAALPHEGOR] && mtmp->mhp < mtmp->mhpmax/2)){
+		struct monst *tmpm;
+		int targets = 0, damage = 0;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
+				&& tmpm->mpeaceful != mtmp->mpeaceful
+				&& tmpm->mtame != mtmp->mtame
+				&& !nonliving(tmpm->data)
+				&& !DEADMONSTER(tmpm)
+			) targets++;
+		}
+		if(distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
+			&& !mtmp->mpeaceful
+			&& !mtmp->mtame
+			&& !nonliving(youracedata)
+		) targets++;
+		targets = rnd(targets);
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
+				&& tmpm->mpeaceful != mtmp->mpeaceful
+				&& tmpm->mtame != mtmp->mtame
+				&& !nonliving(tmpm->data)
+				&& !DEADMONSTER(tmpm)
+			) targets--;
+			if(!targets) break;
+		}
+		if(tmpm){
+			if(canseemon(tmpm) && canseemon(mtmp)){
+				pline("Motes of light dance in the air above %s.", mon_nam(tmpm));
+				pline("%s suddenly seems weaker!", Monnam(tmpm));
+				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				pline("The motes are drawn into the %s of %s.", mtmp->data == mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
+			} else if(canseemon(tmpm)){
+				pline("Motes of light dance in the air above %s.", mon_nam(tmpm));
+				pline("%s suddenly seems weaker!", Monnam(tmpm));
+				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+			} else if(canseemon(mtmp)){
+				pline("Motes of light are drawn into the %s of %s.", mtmp->data == mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
+			}
+			damage = d((mtmp->m_lev)/3, 4);
+			tmpm->mhp -= damage;
+			if(tmpm->mhp < 1){
+				if (canspotmon(tmpm))
+					pline("%s %s!", Monnam(tmpm),
+					nonliving(tmpm->data)
+					? "is destroyed" : "dies");
+				tmpm->mhp = 0;
+				grow_up(mtmp,tmpm);
+				mondied(tmpm);
+			}
+			mtmp->mhp += damage;
+			if(mtmp->mhp > mtmp->mhpmax){
+				mtmp->mhp = mtmp->mhpmax;
+				grow_up(mtmp,mtmp);
+			}
+			mtmp->mspec_used = 0;
+			mtmp->mcan = 0;
+		} else if(targets > 0
+			&& distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
+			&& !mtmp->mpeaceful
+			&& !mtmp->mtame
+			&& !nonliving(youracedata)
+		){
+			pline("Motes of light dance in the air above you.");
+			pline("You suddenly feel weaker!");
+			if(canseemon(mtmp)){
+				pline("The motes are drawn into the %s of %s.", mtmp->data == mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
+			}
+			damage = d((mtmp->m_lev)/3 + 8, 8);
+			losehp(damage, "life-force theft", KILLED_BY);
+			mtmp->mhp += damage;
+			if(mtmp->mhp > mtmp->mhpmax){
+				mtmp->mhp = mtmp->mhpmax;
+				grow_up(mtmp,mtmp);
+			}
+			mtmp->mspec_used = 0;
+			mtmp->mcan = 0;
+			mtmp->mux = u.ux;
+			mtmp->muy = u.uy;
+		}
+		if(damage){
+			if(!mtmp->mtame && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= BOLT_LIM
+				&& !(nonliving(youracedata) || is_demon(youracedata))
+				&& !(ward_at(u.ux,u.uy) == CIRCLE_OF_ACHERON)
+				&& !(u.sealsActive&SEAL_OSE || resists_death(&youmonst))
+			){
+				if(canseemon(mtmp)){
+					pline("%s breathes out dark vapors.", Monnam(mtmp));
+				}
+				if (Antimagic){
+					shieldeff(u.ux, u.uy);
+					Your("%s stops!  When it finally beats again, it is weak and thready", body_part(HEART));
+					losehp(d(8,8), "the ancient breath of death", KILLED_BY); //you still take damage
+				} else {
+					killer_format = KILLED_BY;
+					killer = "the ancient breath of death";
+					done(DIED);
+				}
+			} else {
+				struct monst *targ = 0;
+				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= BOLT_LIM
+						&& tmpm->mpeaceful != mtmp->mpeaceful
+						&& tmpm->mtame != mtmp->mtame
+						&& !(nonliving(tmpm->data) || is_demon(tmpm->data))
+						&& !(ward_at(tmpm->mx,tmpm->my) == CIRCLE_OF_ACHERON)
+						&& !(resists_death(tmpm))
+						&& !DEADMONSTER(tmpm)
+					){
+						if(!targ || (distmin(tmpm->mx, tmpm->my, mtmp->mx, mtmp->my) < distmin(targ->mx, targ->my, mtmp->mx, mtmp->my))){
+							targ = tmpm;
+						}
+					}
+				}
+				if(targ){
+					if(canseemon(mtmp)){
+						pline("%s breathes out dark vapors.", Monnam(mtmp));
+					}
+					if(resists_magm(targ)){
+						targ->mhp -= d(8,8);
+						if(targ->mhp < 1){
+							if (canspotmon(targ))
+								pline("%s %s!", Monnam(targ),
+								nonliving(targ->data)
+								? "is destroyed" : "dies");
+							targ->mhp = 0;
+							grow_up(mtmp,targ);
+							mondied(targ);
+						}
+					} else {
+						if (canspotmon(targ))
+							pline("%s %s!", Monnam(targ),
+							nonliving(targ->data)
+							? "is destroyed" : "dies");
+						targ->mhp = 0;
+						grow_up(mtmp,targ);
+						mondied(targ);
+					}
+				}
+			}
+		}
+	}
+	
 	/* regenerate hit points */
 	mon_regen(mtmp, FALSE);
 	

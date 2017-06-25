@@ -714,6 +714,24 @@ boolean fleemsg;
 		mtmp->mtrack[j].y = 0;
 	}
 
+	if(mtmp->data == &mons[PM_VROCK]){
+		struct monst *tmpm;
+		if(!(mtmp->mspec_used || mtmp->mcan)){
+			pline("%s screeches.", Monnam(mtmp), hisherits(mtmp));
+			mtmp->mspec_used = 10;
+			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+				if(tmpm != mtmp && !DEADMONSTER(tmpm)){
+					if(tmpm->mpeaceful != mtmp->mpeaceful && !resist(tmpm, 0, 0, FALSE)){
+						tmpm->mconf = 1;
+					}
+				}
+			}
+			if(!mtmp->mpeaceful){
+				make_stunned(HStun + 10, TRUE);
+			}
+		}
+	}
+	
 	if (!first || !mtmp->mflee) {
 	    /* don't lose untimed scare */
 	    if (!fleetime)
