@@ -472,6 +472,14 @@ int *fail_reason;
 	    if (fail_reason) *fail_reason = AS_NO_MON;
 	    return (struct monst *)0;
 	}
+	
+	if(Role_if(PM_BARD) && mon && cause == ANIMATE_SPELL && rnd(20) < ACURR(A_CHA) && 
+		!(is_animal(mon->data) || mindless(mon->data))
+	){
+		struct monst *newmon;
+		newmon = tamedog(mon, (struct obj *)0);
+		if(newmon) mon = newmon;
+	}
 
 	/* in case statue is wielded and hero zaps stone-to-flesh at self */
 	if (statue->owornmask) remove_worn_item(statue, TRUE);
