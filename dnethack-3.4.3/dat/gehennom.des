@@ -1183,10 +1183,10 @@ STAIR:(13,10),up
 STAIR:(73,10),down
 
 MONSTER:'&',"Dispater",(47,10)
-MONSTER:'&',"barbed devil",(03,13)
-MONSTER:'&',"barbed devil",(03,07)
-MONSTER:'&',"barbed devil",(23,13)
-MONSTER:'&',"barbed devil",(23,07)
+MONSTER:'&',"erinys",(03,13)
+MONSTER:'&',"erinys",(03,07)
+MONSTER:'&',"erinys",(23,13)
+MONSTER:'&',"erinys",(23,07)
 
 MAZEWALK:(04,05), south
 

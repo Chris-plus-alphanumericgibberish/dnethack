@@ -528,6 +528,13 @@ fixup_special()
     num_lregions = 0;
 }
 
+static const int angelnums[] = {PM_JUSTICE_ARCHON, PM_SWORD_ARCHON, PM_SHIELD_ARCHON, PM_TRUMPET_ARCHON, PM_WARDEN_ARCHON, PM_THRONE_ARCHON, PM_LIGHT_ARCHON, 
+						  PM_MOVANIC_DEVA, PM_MONADIC_DEVA, PM_ASTRAL_DEVA, PM_GRAHA_DEVA, PM_SURYA_DEVA, PM_MAHADEVA, 
+						  PM_LILLEND,
+						  PM_NOVIERE_ELADRIN, PM_BRALANI_ELADRIN, PM_SHIERE_ELADRIN, PM_GHAELE_ELADRIN, PM_TULANI_ELADRIN, 
+						  PM_DAUGHTER_OF_BEDLAM, PM_MARILITH,
+						  PM_ERINYS, PM_FALLEN_ANGEL, PM_ANCIENT_OF_ICE, PM_ANCIENT_OF_DEATH
+						 };
 void
 makemaz(s)
 register const char *s;
@@ -637,6 +644,28 @@ register const char *s;
 			for(x = 0; x<COLNO; x++){
 				for(y = 0; y<ROWNO; y++){
 					if(levl[x][y].typ == ROOM) maketrap(x,y,WEB);
+				}
+			}
+		}
+		if(Is_dis_level(&u.uz)){
+			for(x = 0; x<COLNO; x++){
+				for(y = 0; y<ROWNO; y++){
+					if(levl[x][y].typ == IRONBARS){
+						struct monst *angel;
+						angel = makemon(&mons[angelnums[rn2(SIZE(angelnums))]], x, y, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+						if(angel){
+							initedog(angel);
+							angel->m_lev = min(30, 3 * (int)(angel->data->mlevel / 2));
+							angel->mhpmax = (angel->m_lev * 8) - 4;
+							angel->mhp =  angel->mhpmax;
+							angel->female =  TRUE;
+							angel->mtame = 10;
+							angel->mpeaceful = 1;
+							angel->mcrazed = 1;
+						}
+						mkcorpstat(STATUE, angel, (struct permonst *)0, x, y, FALSE);
+						mongone(angel);
+					}
 				}
 			}
 		}
