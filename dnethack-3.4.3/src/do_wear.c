@@ -340,7 +340,7 @@ Helmet_on()
 	case BRONZE_HELM:
 	case LEATHER_HELM:
 	case HIGH_ELVEN_HELM:
-	case DWARVISH_IRON_HELM:
+	case DWARVISH_HELM:
 	case GNOMISH_POINTY_HAT:
 	case ORCISH_HELM:
 	case HELM_OF_TELEPATHY:
@@ -416,7 +416,7 @@ Helmet_off()
 	case BRONZE_HELM:
 	case LEATHER_HELM:
 	case HIGH_ELVEN_HELM:
-	case DWARVISH_IRON_HELM:
+	case DWARVISH_HELM:
 	case GNOMISH_POINTY_HAT:
 	case ORCISH_HELM:
 		if(uarmh->otyp == gcircletsa && !cancelled_don) adj_abon(uarmh, -uarmh->spe);
@@ -468,7 +468,7 @@ Gloves_on()
     switch(uarmg->otyp) {
 	case GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
-	case IRON_GAUNTLETS:
+	case GAUNTLETS:
 	case BRONZE_GAUNTLETS:
 	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:
@@ -501,7 +501,7 @@ Gloves_off()
     switch(uarmg->otyp) {
 	case GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
-	case IRON_GAUNTLETS:
+	case GAUNTLETS:
 	case BRONZE_GAUNTLETS:
 	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:

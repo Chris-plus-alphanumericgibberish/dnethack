@@ -2690,7 +2690,7 @@ boolean from_user;
 		} else if (!strncmpi(bp, "full ", l=5) && strncmpi(bp, "full healing", 12)) {
 			moonphase = FULL_MOON;
 		} else if (!strncmpi(bp, "iron ", l=5) && strncmpi(bp, "iron skull cap", 14)
-			&& strncmpi(bp, "iron gauntlets", 14) && strncmpi(bp, "iron shoes", 10)
+			&& strncmpi(bp, "iron shoes", 10)
 			&& strncmpi(bp, "iron ring", 9) && strncmpi(bp, "iron hook", 9) && strncmpi(bp, "iron wand", 9)
 			&& strncmpi(bp, "iron wand", 9) && strncmpi(bp, "iron bands", 10)
 			&& strncmpi(bp, "Iron Ball of Levitation", 23) && strncmpi(bp, "Iron Spoon of Liberation", 24)

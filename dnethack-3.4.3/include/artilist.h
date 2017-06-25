@@ -580,7 +580,7 @@ A("Beastmaster's Duster", LEATHER_JACKET, /*Needs encyc entry*/
 	PETMASTER, A_LAWFUL, NON_PM, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
-A("Mirrorbright",	BRONZE_ROUNDSHIELD,/*adapted from Slash'em*/
+A("Mirrorbright",	ROUNDSHIELD,/*adapted from Slash'em*/
 	(SPFX_RESTR|SPFX_HALRES|SPFX_REFLECT),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
@@ -1649,7 +1649,7 @@ A("The Force Pike of the Red Guard", FORCE_PIKE,
 /* Barbarian */
 /* TODO increase STR, DEX, CON by damage taken average */
 /* TODO gaining CON increases hp with max hp */
-A("The Gauntlets of the Berserker", IRON_GAUNTLETS,
+A("The Gauntlets of the Berserker", GAUNTLETS,
 	(SPFX_NOGEN|SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,

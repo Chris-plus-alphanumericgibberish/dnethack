@@ -1332,7 +1332,7 @@ struct obj *obj;
 	if (obj->lamplit) {
 	    if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
 		    obj->otyp == BRASS_LANTERN || obj->otyp == POT_OIL ||
-			obj->otyp == DWARVISH_IRON_HELM || obj->otyp == GNOMISH_POINTY_HAT) {
+			obj->otyp == DWARVISH_HELM || obj->otyp == GNOMISH_POINTY_HAT) {
 		(void) get_obj_location(obj, &x, &y, 0);
 		if (obj->where == OBJ_MINVENT ? cansee(x,y) : !Blind)
 		    pline("%s %s out!", Yname2(obj), otense(obj, "go"));
@@ -1364,7 +1364,7 @@ struct obj *obj;
 	    if (obj->otyp == CANDELABRUM_OF_INVOCATION && obj->cursed)
 		return FALSE;
 	    if ((obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
-		 obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_IRON_HELM ||
+		 obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_HELM ||
 		 obj->otyp == GNOMISH_POINTY_HAT) && 
 			obj->cursed && !rn2(2))
 		return FALSE;
@@ -1397,7 +1397,7 @@ struct obj *obj;
 	if(obj->lamplit) {
 		if(obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
 		   obj->otyp == BRASS_LANTERN ||
-		   obj->otyp == DWARVISH_IRON_HELM)
+		   obj->otyp == DWARVISH_HELM)
 		    pline("%s lamp is now off.", Shk_Your(buf, obj));
 		else if(is_lightsaber(obj)) {
 		    if (obj->otyp == DOUBLE_LIGHTSABER || obj->oartifact == ART_ANNULUS) {
@@ -1421,7 +1421,7 @@ struct obj *obj;
 			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)
 		) {
 		if (obj->otyp == BRASS_LANTERN || 
-			obj->otyp == DWARVISH_IRON_HELM || 
+			obj->otyp == DWARVISH_HELM || 
 			is_lightsaber(obj)
 		)
 			Your("%s has run out of power.", xname(obj));
@@ -1444,7 +1444,7 @@ struct obj *obj;
 		      Tobjnam(obj, "flicker"), otense(obj, "die"));
 	} else {
 		if(obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
-				obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_IRON_HELM) {
+				obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_HELM) {
 		    check_unpaid(obj);
 		    pline("%s lamp is now on.", Shk_Your(buf, obj));
 		} else if (is_lightsaber(obj)) {
@@ -1640,7 +1640,7 @@ dorub()
 	    } else if (rn2(2) && !Blind)
 		You("see a puff of smoke.");
 	    else pline1(nothing_happens);
-	} else if (obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_IRON_HELM) {
+	} else if (obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_HELM) {
 	    /* message from Adventure */
 	    pline("Rubbing the electric lamp is not particularly rewarding.");
 	    pline("Anyway, nothing exciting happens.");
@@ -4699,7 +4699,7 @@ doapply()
 		Strcpy(class_list, tools);
 	if (carrying(CREAM_PIE) || carrying(EUCALYPTUS_LEAF))
 		add_class(class_list, FOOD_CLASS);
-	if (carrying(DWARVISH_IRON_HELM) || carrying(GNOMISH_POINTY_HAT) 
+	if (carrying(DWARVISH_HELM) || carrying(GNOMISH_POINTY_HAT) 
 		|| carrying(DROVEN_CLOAK))
 		add_class(class_list, ARMOR_CLASS);
 
@@ -5035,7 +5035,7 @@ doapply()
  * From an idea posted to RGRN by "Dr Darth"
  * Code by Malcom Ryan
  */
-	case DWARVISH_IRON_HELM: 
+	case DWARVISH_HELM: 
 	case OIL_LAMP:
 	case MAGIC_LAMP:
 	case BRASS_LANTERN:

@@ -1079,7 +1079,7 @@ register const char *let,*word;
 		      otyp != CREAM_PIE && otyp != EUCALYPTUS_LEAF) ||
 		     /* MRKR: mining helmets */
 		     (otmp->oclass == ARMOR_CLASS &&
-		      otyp != DWARVISH_IRON_HELM &&
+		      otyp != DWARVISH_HELM &&
 		      otyp != DROVEN_CLOAK &&
 			  otyp != GNOMISH_POINTY_HAT) || 
 		     (otmp->oclass == GEM_CLASS && !is_graystone(otmp))))

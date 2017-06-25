@@ -404,9 +404,9 @@ HELM("sedge hat", "wide conical hat", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	3, 1,  3,   8, 9, 0, VEGGY, CLR_YELLOW),
 HELM("leather helm", "leather hat",
 		0, 0,  0,	5, 1,  3,   8, 9, 0, LEATHER, HI_LEATHER),
-HELM("orcish helm", "iron skull cap",
+HELM("orcish helm", "skull cap",
 		0, 0,  0,	5, 1, 30,  10, 9, 0, IRON, CLR_BLACK),
-HELM("dwarvish iron helm", "hard hat",
+HELM("dwarvish helm", "hard hat",
 		0, 0,  0,	5, 1, 40,  20, 8, 0, IRON, HI_METAL),
 HELM("gnomish pointy hat", "conical hat",
 		0, 0,  0,	0, 1, 10,  2, 10, 0, CLOTH, CLR_RED),
@@ -417,7 +417,7 @@ HELM("cornuthaum", "conical hat",
 					3, 1,  4,  80,10, 2, CLOTH, CLR_BLUE),
 HELM("dunce cap", "conical hat",
 		0, 1,  0,	3, 1,  4,   1, 10, 0, CLOTH, CLR_BLUE),
-HELM("war hat", "wide metal helm", /*Needs encyc entry*//*Needs tile*/
+HELM("war hat", "wide helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	2, 0, 100,  30, 8, 2, IRON, HI_METAL),
 HELM("flack helmet", "green bowel", /*Needs encyc entry*/
 		0, 0,  0,	0, 0, 10,   50, 8, 1, PLASTIC, CLR_GREEN),
@@ -565,7 +565,7 @@ ARMOR("ruffled shirt", (char *)0, /*Needs encyc entry*/
 /* victorian underwear, on the other hand, inflicts a penalty to AC but grants MC 3 */
 ARMOR("victorian underwear", "white dress",
 	0, 0, 1, 		  0,	 0, 5,	 5,   10, 10, 3, ARM_SHIRT, CLOTH, CLR_WHITE),
-ARMOR("jumpsuit", "silver clothes",/*Needs encyc entry*//*Needs tile*/
+ARMOR("jumpsuit", "silvery clothes",/*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, REFLECTING,	 0, 5,	 5, 1000, 10, 3, ARM_SUIT, PLASTIC, HI_SILVER),
 ARMOR("bodyglove", "tight black clothes", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, SICK_RES,	 0, 5,	 5, 1000, 10, 3, ARM_SHIRT, PLASTIC, CLR_BLACK),
@@ -612,8 +612,8 @@ SHIELD("orcish shield", "red-eyed shield",
 		0, 0, 0, 0,	     2, 0, 50,	7,  9, 0, IRON, CLR_RED),
 SHIELD("kite shield", (char *)0,
 		1, 0, 1, 0,	     6, 0,100, 10,  8, 1, IRON, HI_METAL),
-SHIELD("bronze roundshield", "round shield",
-		0, 0, 1, 0,	     1, 0,120,  7,  8, 1, COPPER, HI_COPPER),
+SHIELD("roundshield", "round shield",
+		0, 0, 1, 0,	     1, 0,120,  7,  8, 1, WOOD, HI_COPPER),
 SHIELD("dwarvish roundshield", "round shield",
 		0, 0, 0, 0,	     4, 0, 80, 10,  7, 1, IRON, HI_METAL),
 SHIELD("crystal shield", "glass shield", /*Needs encyc entry*//*Needs tile*/
@@ -643,12 +643,12 @@ DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, CLR_YELLOW),
  */
 GLOVES("crystal gauntlets", "glass gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 50, 400, 7, 0, GLASS, CLR_CYAN),
-GLOVES("iron gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   4, 2, 25, 400, 8, 0, IRON, HI_METAL),
+GLOVES("gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   4, 2, 25, 10, 8, 0, IRON, HI_METAL),
 GLOVES("bronze gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 1, 25, 400, 8, 0, COPPER, HI_COPPER),
+		0, 0,  0,	   0, 1, 25, 10, 8, 0, COPPER, HI_COPPER),
 GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 2,  5, 400, 8, 0, MITHRIL, HI_METAL),
+		0, 0,  0,	   0, 2,  5, 50, 8, 0, MITHRIL, HI_METAL),
 GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 15, 50,  8, 0, PLASTIC, CLR_WHITE),
 GLOVES("gloves", "old gloves",
@@ -658,7 +658,7 @@ GLOVES("gauntlets of fumbling", "padded gloves",
 GLOVES("gauntlets of power", "riding gloves",
 		0, 1,  0,	   7, 1, 30, 50,  9, 0, IRON, CLR_BROWN),
 GLOVES("orihalcyon gauntlets", "fighting gloves",/*Needs tile*/
-		0, 1,  ANTIMAGIC,  7, 1, 10, 50,  9, 0, METAL, CLR_BROWN),
+		0, 1,  ANTIMAGIC,  7, 1, 50, 50,  9, 0, METAL, CLR_BROWN),
 GLOVES("gauntlets of dexterity", "fencing gloves",
 		0, 1,  0,	   7, 1, 10, 50,  9, 0, LEATHER, HI_LEATHER),
 
@@ -668,7 +668,7 @@ BOOTS("low boots", "walking shoes",
 BOOTS("iron shoes", "hard shoes",
 		0, 0,  0,	   7, 2, 50, 16,  8, 0, IRON, HI_METAL),
 BOOTS("armored boots", "hard boots",
-		0, 0,  0,	   0, 1, 75, 16,  7, 1, METAL, HI_COPPER),
+		0, 0,  0,	   0, 1, 75, 16,  7, 1, IRON, HI_COPPER),
 BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 25, 32,  8, 1, PLASTIC, CLR_WHITE),
 BOOTS("high boots", "jackboots",
@@ -830,7 +830,7 @@ TOOL("wax candle", "candle",    0, 1, 0, 0,   5,  2,  20, WAX, CLR_WHITE),
 TOOL("brass lantern", (char *)0,1, 0, 0, 0,  25, 30,  12, COPPER, CLR_YELLOW),
 TOOL("oil lamp", "lamp",        0, 0, 0, 0,  40, 20,  10, COPPER, CLR_YELLOW),
 TOOL("magic lamp", "lamp",      0, 0, 1, 0,  15, 20,  50, COPPER, CLR_YELLOW),
-TOOL("shadowlander's torch", "black-wood torch",
+TOOL("shadowlander's torch", "black torch",
 								0, 0, 1, 0,  10, 20,  50, WOOD, CLR_BLACK),
 /* other tools */
 #ifdef TOURIST

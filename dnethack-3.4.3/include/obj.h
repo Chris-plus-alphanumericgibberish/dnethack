@@ -412,7 +412,7 @@ struct obj {
 				|| (otmp)->otyp == ORCISH_CLOAK\
 				|| (otmp)->otyp == URUK_HAI_SHIELD\
 				|| (otmp)->otyp == ORCISH_SHIELD)
-#define is_dwarvish_armor(otmp)	((otmp)->otyp == DWARVISH_IRON_HELM\
+#define is_dwarvish_armor(otmp)	((otmp)->otyp == DWARVISH_HELM\
 				|| (otmp)->otyp == DWARVISH_MITHRIL_COAT\
 				|| (otmp)->otyp == DWARVISH_CLOAK\
 				|| (otmp)->otyp == DWARVISH_ROUNDSHIELD)
@@ -534,7 +534,7 @@ struct obj {
 /* age field of this is relative age rather than absolute */
 #define age_is_relative(otmp)	((otmp)->otyp == BRASS_LANTERN\
 				|| (otmp)->otyp == OIL_LAMP\
-				|| (otmp)->otyp == DWARVISH_IRON_HELM\
+				|| (otmp)->otyp == DWARVISH_HELM\
 				|| (otmp)->otyp == LIGHTSABER\
 				|| (otmp)->otyp == BEAMSWORD\
 				|| (otmp)->otyp == DOUBLE_LIGHTSABER\
@@ -546,7 +546,7 @@ struct obj {
 /* object can be ignited */
 #define ignitable(otmp)	((otmp)->otyp == BRASS_LANTERN\
 				|| (otmp)->otyp == OIL_LAMP\
- 				|| (otmp)->otyp == DWARVISH_IRON_HELM\
+ 				|| (otmp)->otyp == DWARVISH_HELM\
  				|| (otmp)->otyp == GNOMISH_POINTY_HAT\
 				|| (otmp)->otyp == CANDELABRUM_OF_INVOCATION\
 				|| (otmp)->otyp == TALLOW_CANDLE\

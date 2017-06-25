@@ -544,7 +544,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DWARF,	KNIFE,				DAGGER	      		  },
     { PM_DWARF, SPEAR,				DWARVISH_SPEAR	      },
     { PM_DWARF, SHORT_SWORD,		DWARVISH_SHORT_SWORD  },
-    { PM_DWARF, HELMET,				DWARVISH_IRON_HELM    },
+    { PM_DWARF, HELMET,				DWARVISH_HELM    },
 	{ PM_DWARF, BUCKLER,			DWARVISH_ROUNDSHIELD  }, 
     { PM_DWARF, PICK_AXE,			DWARVISH_MATTOCK      },
     { PM_DWARF, TWO_HANDED_SWORD,	BATTLE_AXE    },
@@ -1928,7 +1928,6 @@ u_init()
 			}
 			ini_inv(DarkWand);
 		}
-		// if(!rn2(5)) ini_inv(Blindfold);
 		skill_init(Skill_W);
 		if(Race_if(PM_DROW) && flags.female) skill_add(Skill_DW);
 		break;
@@ -2074,7 +2073,7 @@ u_init()
 	    knows_object(DWARVISH_SPEAR);
 	    knows_object(DWARVISH_SHORT_SWORD);
 	    knows_object(DWARVISH_MATTOCK);
-	    knows_object(DWARVISH_IRON_HELM);
+	    knows_object(DWARVISH_HELM);
 	    knows_object(DWARVISH_MITHRIL_COAT);
 	    knows_object(DWARVISH_CLOAK);
 	    knows_object(DWARVISH_ROUNDSHIELD);
@@ -2103,7 +2102,7 @@ u_init()
 		ini_inv(TallowCandles);
 		knows_object(GNOMISH_POINTY_HAT);
 	    knows_object(AKLYS);
-	    knows_object(DWARVISH_IRON_HELM);
+	    knows_object(DWARVISH_HELM);
 	    knows_object(DWARVISH_MATTOCK);
 	    knows_object(DWARVISH_CLOAK);
     break;

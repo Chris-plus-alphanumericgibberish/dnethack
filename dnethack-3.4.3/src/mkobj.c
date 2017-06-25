@@ -408,6 +408,7 @@ boolean artif;
 	else if(otyp == SPEAR){if(!rn2(25)) otmp->obj_material = SILVER;}
 	else if(otyp == DAGGER){if(!rn2(12)) otmp->obj_material = SILVER;}
 	else if(otyp == ARMORED_BOOTS) otmp->obj_material = COPPER;
+	else if(otyp == ROUNDSHIELD) otmp->obj_material = COPPER;
 	else otmp->obj_material = objects[otyp].oc_material;
 	
 	fix_object(otmp);
@@ -968,7 +969,7 @@ boolean artif;
 
 		
 		/* MRKR: Mining helmets have lamps */
-		if (otmp->otyp == DWARVISH_IRON_HELM) {
+		if (otmp->otyp == DWARVISH_HELM) {
 		    otmp->age = (long) rn1(300,300);//Many fewer turns than brass lanterns, as there are so many.
 		    otmp->lamplit = 0;
 		}
@@ -1349,6 +1350,8 @@ int mat;
 	struct monst *owner = 0;
 	long mask = 0;
 	
+	if(mat == obj->obj_material) return; //Already done!
+	
 	if(obj->where == OBJ_INVENT || obj->where == OBJ_MINVENT){
 		owner = obj->ocarry;
 		mask = obj->owornmask;
@@ -1360,30 +1363,167 @@ int mat;
 	}
 	switch(obj->otyp){
 		case ARROW:
-			
+			if(mat == GOLD) obj->otyp = GOLDEN_ARROW;
+			else if(mat == SILVER) obj->otyp = SILVER_ARROW;
 		break;
 		case GOLDEN_ARROW:
-			
+			if(mat == SILVER) obj->otyp = SILVER_ARROW;
+			else obj->otyp = ARROW;
 		break;
 		case SILVER_ARROW:
-			
+			if(mat == GOLD) obj->otyp = GOLDEN_ARROW;
+			else obj->otyp = ARROW;
+		break;
+		case BULLET:
+			if(mat == SILVER) obj->otyp = SILVER_BULLET;
+		break;
+		case SILVER_BULLET:
+			obj->otyp = BULLET;
+		break;
+		case LEATHER_HELM:
+			if(mat == COPPER) obj->otyp = BRONZE_HELM;
+			else obj->otyp = HELMET;
+		break;
+		case BRONZE_HELM:
+			if(mat == LEATHER) obj->otyp = LEATHER_HELM;
+			else obj->otyp = HELMET;
+		break;
+		case HELMET:
+			if(mat == LEATHER) obj->otyp = LEATHER_HELM;
+			else if(mat == COPPER) obj->otyp = BRONZE_HELM;
+		break;
+		case DWARVISH_MITHRIL_COAT:
+			obj->otyp = CHAIN_MAIL;
+		break;
+		case ELVEN_MITHRIL_COAT:
+			obj->otyp = CHAIN_MAIL;
+		break;
+		case STUDDED_LEATHER_ARMOR:
+			obj->otyp = SCALE_MAIL;
+		break;
+		case LEATHER_ARMOR:
+			obj->otyp = PLATE_MAIL;
+		break;
+		// case LEATHER_CLOAK:
+			// obj->otyp = ;
+		// break;
+		// case ROUNDSHIELD:
+			// obj->otyp = ;
+		// break;
+		//Tin whistle, wood harp
+		case GAUNTLETS:
+			if(mat == COPPER) obj->otyp = BRONZE_GAUNTLETS;
+		break;
+		case BRONZE_GAUNTLETS:
+			obj->otyp = GAUNTLETS;
+		break;
+		case ORIHALCYON_GAUNTLETS:
+			if(mat == COPPER) obj->otyp = BRONZE_GAUNTLETS;
+			else obj->otyp = GAUNTLETS;
+		break;
+		case LOW_BOOTS:
+			if(mat == IRON) obj->otyp = IRON_SHOES;
+		break;
+		case IRON_SHOES:
+			obj->otyp = LOW_BOOTS;
 		break;
 		case BRONZE_PLATE_MAIL:
-			
+			obj->otyp = PLATE_MAIL;
 		break;
 		case PLATE_MAIL:
-			
+			if(mat == COPPER) obj->otyp = BRONZE_PLATE_MAIL;
+		break;
+		// case MASSIVE_STONE_CRATE:
+			// obj->otyp = ;
+		// break;
+		// case TALLOW_CANDLE:
+			// obj->otyp = ;
+		// break;
+		// case WAX_CANDLE:
+			// obj->otyp = ;
+		// break;
+		// case CRYSTAL_BALL:
+			// obj->otyp = ;
+		// break;
+		case ROCK:
+			if(mat == SILVER) obj->otyp = SILVER_SLINGSTONE;
+		break;
+		case SILVER_SLINGSTONE:
+			obj->otyp = ROCK;
+		break;
+		// case HEAVY_IRON_BALL:
+			// obj->otyp = ;
+		// break;
+		// case IRON_CHAIN:
+			// obj->otyp = ;
+		// break;
+		// case IRON_BANDS:
+			// obj->otyp = ;
+		// break;
+	}
+	switch(objects[obj->otyp].oc_class){
+		case POTION_CLASS:
+			switch(mat){
+				case GOLD:{
+					static int goldpotion = 0; 
+					if(!goldpotion) goldpotion = find_golden_potion();
+					if(goldpotion > -1){
+						obj->otyp = goldpotion;
+					}
+				}break;
+			}
+		break;
+		case SPBOOK_CLASS:
+			switch(mat){
+				case CLOTH:{
+					static int clothbook = 0; 
+					if(!clothbook) clothbook = find_cloth_book();
+					if(clothbook > -1){
+						obj->otyp = clothbook;
+					}
+				}break;
+				case LEATHER:{
+					static int leatherbook = 0; 
+					if(!leatherbook) leatherbook = find_leather_book();
+					if(leatherbook > -1){
+						obj->otyp = leatherbook;
+					}
+				}break;
+				case COPPER:{
+					static int bronzebook = 0; 
+					if(!bronzebook) bronzebook = find_bronze_book();
+					if(bronzebook > -1){
+						obj->otyp = bronzebook;
+					}
+				}break;
+				case SILVER:{
+					static int silverbook = 0; 
+					if(!silverbook) silverbook = find_silver_book();
+					if(silverbook > -1){
+						obj->otyp = silverbook;
+					}
+				}break;
+				case GOLD:{
+					static int goldbook = 0; 
+					if(!goldbook) goldbook = find_gold_book();
+					if(goldbook > -1){
+						obj->otyp = goldbook;
+					}
+				}break;
+			}
+		break;
+		case WAND_CLASS:
+			obj->otyp = matWand(obj->otyp, mat);
+			obj->obj_material = mat;
+		break;
+		default:
+			obj->obj_material = mat;
 		break;
 	}
-	//Mammon specific handling
 	//Silver bell should resist
-	//Potions -> golden potion
-	//Spellbook -> golden spellbook
-	//Wand -> gold hexagonal, short, runed, long, curved, forked, spiked, or jeweled
-	//Ring -> gold ring
 	
-	obj->obj_material = mat;
 	fix_object(obj);
+	
 	if(owner == &youmonst){
 		setworn(obj, W_ARM);
 	} else if(owner && mask){
@@ -2246,7 +2386,7 @@ maid_clean(mon, obj)
 		if(canseemon(mon)) pline("The maid sticks an ofuda to the offending object.");
 		obj->cursed = 0;
 	}
-	if(obj->otyp == DWARVISH_IRON_HELM || obj->otyp == OIL_LAMP || obj->otyp == BRASS_LANTERN){
+	if(obj->otyp == DWARVISH_HELM || obj->otyp == OIL_LAMP || obj->otyp == BRASS_LANTERN){
 		if(obj->age < 750){
 			obj->age += 750;
 			if(canseemon(mon)) pline("The maid adds some oil.");

@@ -339,7 +339,7 @@ struct artifact {
             exist_artifact(BULLWHIP, artilist[ART_TRUSTY_ADVENTURER_S_WHIP].name) ||\
             exist_artifact(SPE_BLANK_PAPER, artilist[ART_LOG_OF_THE_CURATOR].name) ||\
             exist_artifact(FORCE_PIKE, artilist[ART_FORCE_PIKE_OF_THE_RED_GUAR].name) ||\
-            exist_artifact(IRON_GAUNTLETS, artilist[ART_GAUNTLETS_OF_THE_BERSERKER].name) ||\
+            exist_artifact(GAUNTLETS, artilist[ART_GAUNTLETS_OF_THE_BERSERKER].name) ||\
             exist_artifact(SCR_REMOVE_CURSE, artilist[ART_DECLARATION_OF_THE_APOSTAT].name) ||\
             exist_artifact(LENSES, artilist[ART_SOUL_LENS].name) ||\
             exist_artifact(SCR_BLANK_PAPER, artilist[ART_SEAL_OF_THE_SPIRITS].name) ||\

@@ -971,6 +971,7 @@ register struct monst *mtmp;
 					otmp = mksobj(DAGGER, TRUE, FALSE);
 					otmp->obj_material = SILVER;
 					otmp->oerodeproof = TRUE;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					(void)mongets(mtmp, BUCKLER);
 					(void)mongets(mtmp, BULLWHIP);
@@ -1017,6 +1018,7 @@ register struct monst *mtmp;
 					otmp->quan = 6;
 					otmp->spe = 5;
 					otmp->owt = weight(otmp);
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(BUCKLER, TRUE, FALSE);
 					otmp->blessed = TRUE;
@@ -1035,6 +1037,7 @@ register struct monst *mtmp;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->spe = 7;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_STJARNA_ALFR){
 					otmp = mksobj(DROVEN_PLATE_MAIL, TRUE, FALSE);
@@ -1546,15 +1549,16 @@ register struct monst *mtmp;
 					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					
-					otmp = mksobj(IRON_GAUNTLETS, FALSE, FALSE);
+					otmp = mksobj(GAUNTLETS, FALSE, FALSE);
 					bless(otmp);
 					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
 					
-					otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+					otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 					otmp->obj_material = IRON;
 					bless(otmp);
 					otmp->spe = 0;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 				} else if (mm == PM_GRAND_MASTER){
 					otmp = mksobj(ROBE, FALSE, FALSE);
@@ -1709,6 +1713,7 @@ register struct monst *mtmp;
 					bless(otmp);
 					otmp->spe = 7;
 					otmp->obj_material = GOLD;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(GOLDEN_ARROW, FALSE, FALSE);
@@ -1726,29 +1731,34 @@ register struct monst *mtmp;
 					bless(otmp);
 					otmp->spe = 5;
 					otmp->obj_material = SILVER;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(LOW_BOOTS, FALSE, FALSE);
 					bless(otmp);
 					otmp->spe = 5;
 					otmp->obj_material = SILVER;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(MUMMY_WRAPPING, FALSE, FALSE);
 					bless(otmp);
 					otmp->spe = 5;
 					otmp->obj_material = GOLD;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(find_gcirclet() == HELM_OF_OPPOSITE_ALIGNMENT ? HELM_OF_BRILLIANCE : find_gcirclet(), FALSE, FALSE);
 					bless(otmp);
 					otmp->spe = 5;
 					otmp->obj_material = GOLD;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(AMULET_OF_LIFE_SAVING, FALSE, FALSE);
 					bless(otmp);
 					otmp->obj_material = GOLD;
+					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 				}
 // #ifdef CONVICT
@@ -1785,14 +1795,12 @@ register struct monst *mtmp;
 					(void) mongets(mtmp, MACE);
 					(void) mongets(mtmp, PLATE_MAIL);
 					(void) mongets(mtmp, KITE_SHIELD);
-					(void) mongets(mtmp, IRON_SHOES);
+					otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
+					otmp->obj_material = IRON;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
 				break;
 				case PM_HALF_ELF_RANGER:
-					otmp = mksobj(SILVER_ARROW, TRUE, FALSE);
-					otmp->blessed = FALSE;
-					otmp->cursed = FALSE;
-					otmp->quan += 10;
-					otmp->owt = weight(otmp);
 					(void) mongets(mtmp, ELVEN_SHORT_SWORD);
 					(void) mongets(mtmp, ELVEN_SHORT_SWORD);
 					(void) mongets(mtmp, ELVEN_MITHRIL_COAT);
@@ -1800,6 +1808,18 @@ register struct monst *mtmp;
 					(void) mongets(mtmp, ELVEN_CLOAK);
 					(void) mongets(mtmp, HIGH_BOOTS);
 					(void) mongets(mtmp, ELVEN_BOW);
+					otmp = mksobj(SILVER_ARROW, TRUE, FALSE);
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->quan += 10;
+					otmp->spe = 1;
+					otmp->owt = weight(otmp);
+					(void) mpickobj(mtmp,otmp);
+					otmp = mksobj(ARROW, TRUE, FALSE);
+					otmp->blessed = FALSE;
+					otmp->cursed = FALSE;
+					otmp->quan += 20;
+					otmp->owt = weight(otmp);
 					(void) mpickobj(mtmp,otmp);
 				break;
 				case PM_PEASANT:
@@ -1836,6 +1856,8 @@ register struct monst *mtmp;
 					if(chance > 99){
 						otmp = mksobj(DAGGER, TRUE, FALSE);
 						otmp->obj_material = SILVER;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
 					}
 					(void) mongets(mtmp, DAGGER);
 					(void) mongets(mtmp, DAGGER);
@@ -1961,15 +1983,16 @@ register struct monst *mtmp;
 			    otmp->oerodeproof = TRUE;
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(IRON_GAUNTLETS, FALSE, FALSE);
+				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->obj_material = IRON;
+				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
 				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
@@ -1995,15 +2018,16 @@ register struct monst *mtmp;
 			    otmp->oerodeproof = TRUE;
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(IRON_GAUNTLETS, FALSE, FALSE);
+				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->obj_material = IRON;
+				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
 				otmp = mksobj(LANCE, FALSE, FALSE);
@@ -2039,12 +2063,14 @@ register struct monst *mtmp;
 				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 			    bless(otmp);
 				otmp->obj_material = SILVER;
+				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
 				otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
 			    bless(otmp);
 				otmp->spe = 3;
 				otmp->obj_material = SILVER;
+				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
 			} else if(ptr == &mons[PM_THRONE_ARCHON]){
@@ -2226,7 +2252,7 @@ register struct monst *mtmp;
 			    otmp->spe = 7;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
-			    otmp = mksobj(HIGH_BOOTS, FALSE, FALSE);
+			    otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->obj_material = GOLD;
 				otmp->objsize = MZ_LARGE;
@@ -2335,7 +2361,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, WAN_STRIKING);
 			} else if(ptr == &mons[PM_GHAELE_ELADRIN]){
 				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
-				(void)mongets(mtmp, BRONZE_ROUNDSHIELD);
+				(void)mongets(mtmp, ROUNDSHIELD);
 				(void)mongets(mtmp, ARMORED_BOOTS);
 				(void)mongets(mtmp, BRONZE_HELM);
 				(void)mongets(mtmp, LONG_SWORD);
@@ -2492,14 +2518,14 @@ register struct monst *mtmp;
 			}
 			if (In_mines_quest(&u.uz) && !Is_minetown_level(&u.uz)) {
 			/* MRKR: Dwarves in dark mines have their lamps on. */
-			    otmp = mksobj(DWARVISH_IRON_HELM, TRUE, FALSE);
+			    otmp = mksobj(DWARVISH_HELM, TRUE, FALSE);
 			    (void) mpickobj(mtmp, otmp);
 				    if (!levl[mtmp->mx][mtmp->my].lit) {
 					begin_burn(otmp, FALSE);
 			    }	
 			}
 			else {
-			    (void)mongets(mtmp, DWARVISH_IRON_HELM);
+			    (void)mongets(mtmp, DWARVISH_HELM);
 				/* CM: Dwarves OUTSIDE the mines have booze. */
 				mongets(mtmp, POT_BOOZE);
 			}
@@ -2856,7 +2882,9 @@ register struct monst *mtmp;
 				else if(mm == PM_MIND_FLAYER && !rn2(20)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
 			}
 		} else if(mm == PM_GITHYANKI_PIRATE){
-			(void)mongets(mtmp, TWO_HANDED_SWORD);
+			otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
+			otmp->obj_material = SILVER;
+			(void) mpickobj(mtmp, otmp);
 			(void)mongets(mtmp, BRONZE_PLATE_MAIL);
 			(void)mongets(mtmp, BRONZE_GAUNTLETS);
 			(void)mongets(mtmp, ARMORED_BOOTS);
@@ -3103,8 +3131,10 @@ register struct monst *mtmp;
 					mongets(mtmp, HELMET);
 					mongets(mtmp, PLATE_MAIL);
 					mongets(mtmp, KITE_SHIELD);
-					mongets(mtmp, GLOVES);
-					mongets(mtmp, HIGH_BOOTS);
+					mongets(mtmp, GAUNTLETS);
+					otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
+					otmp->obj_material = IRON;
+					(void) mpickobj(mtmp, otmp);
 					mongets(mtmp, LONG_SWORD);
 					// mongets(mtmp, IRON_BANDS);
 				} else if(chance >= 6){
@@ -3166,8 +3196,14 @@ register struct monst *mtmp;
 			break;
 		    case PM_ANCIENT_OF_ICE:
 				otmp = mksobj(MACE, FALSE, FALSE);
+				otmp->obj_material = METAL;
+				fix_object(otmp);
 				otmp->spe = rnd(8);
 				(void) mpickobj(mtmp, otmp);
+				(void) mongets(mtmp, CRYSTAL_HELM);
+				(void) mongets(mtmp, CRYSTAL_PLATE_MAIL);
+				(void) mongets(mtmp, CRYSTAL_GAUNTLETS);
+				(void) mongets(mtmp, CRYSTAL_BOOTS);
 			break;
 		    case PM_ANCIENT_OF_DEATH:
 				otmp = mksobj(SCYTHE, FALSE, FALSE);
@@ -3910,7 +3946,7 @@ register struct	monst	*mtmp;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(IRON_GAUNTLETS, FALSE, FALSE);
+				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->objsize = MZ_LARGE;
@@ -3984,7 +4020,10 @@ register struct	monst	*mtmp;
 					(void) mongets(mtmp, HELMET);
 					(void) mongets(mtmp, PLATE_MAIL);
 					(void) mongets(mtmp, GAUNTLETS_OF_POWER);
-					(void) mongets(mtmp, HIGH_BOOTS);
+					otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
+					otmp->obj_material = IRON;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
 					(void) mongets(mtmp, LONG_SWORD);
 					(void) mongets(mtmp, KITE_SHIELD);
 				} else {
@@ -4013,6 +4052,7 @@ register struct	monst	*mtmp;
 				otmp->blessed = TRUE;
 				otmp->cursed = FALSE;
 				otmp->spe = 7;
+				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 				/*Plate Mail*/
 				otmp = mksobj(CRYSTAL_PLATE_MAIL, TRUE, FALSE);
@@ -4157,6 +4197,7 @@ register struct	monst	*mtmp;
 				otmp->cursed = TRUE;
 				otmp->spe = 6;
 				otmp->oerodeproof = TRUE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;

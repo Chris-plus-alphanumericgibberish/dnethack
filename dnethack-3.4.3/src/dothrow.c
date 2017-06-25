@@ -1978,7 +1978,7 @@ int thrown;
 	    switch (uarmg->otyp) {
 	    case ORIHALCYON_GAUNTLETS:    /* metal */
 	    case GAUNTLETS_OF_POWER:    /* metal */
-		case IRON_GAUNTLETS:
+		case GAUNTLETS:
 		case CRYSTAL_GAUNTLETS:
 		tmp -= 2;
 		break;

@@ -157,7 +157,7 @@ register boolean special;
 				STUDDED_LEATHER_ARMOR, RING_MAIL, FLAIL
 			};
 			static int hlmtyp[] = {
-				LEATHER_HELM, ORCISH_HELM, DWARVISH_IRON_HELM,
+				LEATHER_HELM, ORCISH_HELM, DWARVISH_HELM,
 				ELVEN_HELM, HELMET
 			};
 			weapon = weptyp[rn2(SIZE(weptyp))];
