@@ -1105,6 +1105,7 @@ E int FDECL(sleep_monst, (struct monst *,int,int));
 E void FDECL(slept_monst, (struct monst *));
 E long FDECL(attk_protection, (int));
 E int FDECL(thrwmm, (struct monst *, struct monst *));
+E int FDECL(gazemm, (struct monst *,struct monst *,struct attack *));
 
 /* ### mhitu.c ### */
 

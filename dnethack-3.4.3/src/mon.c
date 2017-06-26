@@ -4439,7 +4439,7 @@ register struct monst *mtmp;
 		register int i;
 		for(i = 0; i < NATTK; i++)
 			 if(mtmp->data->mattk[i].aatyp == AT_GAZE) {
-				 if(!mtmp->mtame) (void) gazemu(mtmp, &mtmp->data->mattk[i]);
+				 (void) gazemu(mtmp, &mtmp->data->mattk[i]);
 				 break;
 			 }
     } else if(mtmp->data == &mons[PM_GREAT_CTHULHU]) {

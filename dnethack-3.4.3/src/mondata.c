@@ -145,7 +145,7 @@ resists_fire(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_FIRE) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance));
+	return (species_resists_fire(mon) || mon_resistance(mon, MR_FIRE) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance));
 }
 
 boolean
@@ -154,7 +154,7 @@ resists_cold(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_COLD) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
+	return (species_resists_cold(mon) || mon_resistance(mon, MR_COLD) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
 }
 
 boolean
@@ -163,7 +163,7 @@ resists_sleep(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_SLEEP) || ((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
+	return (species_resists_sleep(mon) || mon_resistance(mon, MR_SLEEP) || ((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
 }
 
 boolean
@@ -172,7 +172,7 @@ resists_disint(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_DISINT) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Disint_resistance));
+	return (species_resists_disint(mon) || mon_resistance(mon, MR_DISINT) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Disint_resistance));
 }
 
 boolean
@@ -181,7 +181,7 @@ resists_elec(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_ELEC) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Shock_resistance));
+	return (species_resists_elec(mon) || mon_resistance(mon, MR_ELEC) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Shock_resistance));
 }
 
 boolean
@@ -190,7 +190,7 @@ resists_poison(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_POISON) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
+	return (species_resists_poison(mon) || mon_resistance(mon, MR_POISON) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
 }
 
 boolean
@@ -199,7 +199,7 @@ resists_acid(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_ACID) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Acid_resistance));
+	return (species_resists_acid(mon) || mon_resistance(mon, MR_ACID) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Acid_resistance));
 }
 
 boolean
@@ -208,7 +208,7 @@ resists_ston(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_STONE) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Stone_resistance));
+	return (species_resists_ston(mon) || mon_resistance(mon, MR_STONE) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Stone_resistance));
 }
 
 boolean
@@ -217,7 +217,7 @@ resists_drain(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_DRAIN) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
+	return (species_resists_drain(mon) || mon_resistance(mon, MR_DRAIN) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
 }
 
 boolean
@@ -226,7 +226,7 @@ resists_sickness(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (mon_resistance(mon, MR_SICK) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sick_resistance));
+	return (species_resists_sickness(mon) || mon_resistance(mon, MR_SICK) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sick_resistance));
 }
 
 boolean
@@ -241,6 +241,7 @@ struct monst *mon;
 	wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
 
 	return (boolean)(is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
+			 species_resists_drain(mon) || 
 			 ptr == &mons[PM_DEATH] ||
 			 mon_resistance(mon, MR_DRAIN) ||
 			 (wep && wep->oartifact && defends(AD_DRLI, wep))  || 

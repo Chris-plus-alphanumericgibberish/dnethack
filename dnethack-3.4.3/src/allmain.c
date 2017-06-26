@@ -1294,7 +1294,13 @@ moveloop()
 	    /******************************************/
 		if(u.ustdy > 0) u.ustdy -= 1;
 		
-
+		for (mtmp = fmon; mtmp; mtmp = nxtmon){
+			nxtmon = mtmp->nmon;
+			if ((mtmp->data == &mons[PM_MEDUSA] || mtmp->data == &mons[PM_GREAT_CTHULHU])
+				&& couldsee(mtmp->mx, mtmp->my)
+				&& ((rn2(3) >= magic_negation(mtmp)))
+			) m_respond(mtmp);
+		}
 		
 		if(echolocation(youracedata)){
 			for(i=1; i<COLNO; i++)

@@ -1031,10 +1031,10 @@ struct obj *obj;
 {
 	struct monst *mtmp2, *curmon, *weakdog = (struct monst *) 0;
 	int numdogs = 0;
-	/* The Wiz, Medusa and the quest nemeses aren't even made peaceful. */
-	if (mtmp->iswiz || mtmp->data == &mons[PM_MEDUSA]
-				|| (&mons[urole.neminum] == mtmp->data))
-		return((struct monst *)0);
+	/* The Wiz, Medusa and the quest nemeses aren't even made peaceful. || mtmp->data == &mons[PM_MEDUSA] */
+	if (is_untamable(mtmp->data) || mtmp->iswiz
+		|| (&mons[urole.neminum] == mtmp->data)
+	) return((struct monst *)0);
 
 	/* worst case, at least it'll be peaceful. */
 	if(!obj || !is_instrument(obj)){
@@ -1110,7 +1110,7 @@ struct obj *obj;
 	if (mtmp->mtame || (!mtmp->mcanmove && !mtmp->moccupation) ||
 	    /* monsters with conflicting structures cannot be tamed */
 	    mtmp->isshk || mtmp->isgd || mtmp->ispriest || mtmp->isminion ||
-	    is_covetous(mtmp->data) || is_human(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
+	    is_covetous(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
 	    (is_demon(mtmp->data) && !is_demon(youracedata)) ||
 	    (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && obj->oclass != SPBOOK_CLASS && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
 

@@ -817,6 +817,8 @@ dochug(mtmp)
 register struct monst *mtmp;
 {
 	register struct permonst *mdat;
+	struct monst *gazemon, *nxtmon;
+	char buf[BUFSZ];
 	register int tmp=0;
 	int inrange, nearby, scared;
 #ifdef GOLDOBJ
@@ -909,13 +911,6 @@ register struct monst *mtmp;
 	    return(0);	/* other frozen monsters can't do anything */
 	}
 
-	if (mdat == &mons[PM_GREAT_CTHULHU]){
-		if(couldsee(mtmp->mx, mtmp->my)) //Great Cthulu drives investigators mad when gazed upon.
-			m_respond(mtmp);
-		if(mtmp->movement > 0) //Great Cthulu moves only once every few turns.
-			return 0;
-	}
-	
 	/* there is a chance we will wake it */
 	if (mtmp->msleeping && !disturb(mtmp)) {
 		if (Hallucination) newsym(mtmp->mx,mtmp->my);
@@ -991,8 +986,27 @@ register struct monst *mtmp;
 		(mdat->msound == MS_FLOWER && !rn2(6)) ||
 		(mdat == &mons[PM_LAMASHTU] && !rn2(7))
 	) m_respond(mtmp);
-	if ((mdat == &mons[PM_MEDUSA] || mdat == &mons[PM_GREAT_CTHULHU]) && couldsee(mtmp->mx, mtmp->my))
-	    m_respond(mtmp);
+	
+	for (gazemon = fmon; gazemon; gazemon = nxtmon){
+		nxtmon = gazemon->nmon;
+		if (gazemon != mtmp
+			&& ((gazemon->data == &mons[PM_MEDUSA]&& ((rn2(3) >= magic_negation(gazemon)))) || gazemon->data == &mons[PM_GREAT_CTHULHU])
+			&& mon_can_see_mon(mtmp, gazemon)
+			&& clear_path(mtmp->mx, mtmp->my, gazemon->mx, gazemon->my)
+		){
+			int i;
+			if(canseemon(mtmp) && canseemon(gazemon)){
+				Sprintf(buf,"%s can see", Monnam(mtmp));
+				pline("%s %s...", buf, mon_nam(gazemon));
+			}
+			for(i = 0; i < NATTK; i++)
+				 if(gazemon->data->mattk[i].aatyp == AT_GAZE) {
+					 (void) gazemm(gazemon, mtmp, &gazemon->data->mattk[i]);
+					 break;
+				 }
+		}
+	}
+	
 	if (mtmp->mhp <= 0) return(1); /* m_respond gaze can kill medusa */
 
 	/* fleeing monsters might regain courage */
@@ -1022,7 +1036,7 @@ register struct monst *mtmp;
 	
 	if(mdat == &mons[PM_GREAT_CTHULHU] && !rn2(20)){
 		(void) tactics(mtmp);
-		return 1;
+		return 0;
 	}
 	
 	/* check distance and scariness of attacks */

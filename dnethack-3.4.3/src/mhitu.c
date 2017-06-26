@@ -801,7 +801,7 @@ mattacku(mtmp)
 			 * Weeping angels gaze during movemon().
 			 * Don't gaze more than once per round.
 			 */
-			if (mdat == &mons[PM_MEDUSA] || is_weeping(mdat) || u.ux != mtmp->mux || u.uy != mtmp->muy)
+			if (mdat == &mons[PM_MEDUSA] || mdat == &mons[PM_GREAT_CTHULHU] || is_weeping(mdat) || u.ux != mtmp->mux || u.uy != mtmp->muy)
 				break;
 			sum[i] = gazemu(mtmp, mattk);
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
@@ -1337,10 +1337,10 @@ struct monst *mon;
 		if(armpro < cpro) armpro = cpro;
 	}
 	armor = (mon == &youmonst) ? uarmh : which_armor(mon, W_ARMH);
-	if(mon == &youmonst && !uarmc && 
-		uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
+	if(mon == &youmonst && !uarmc && 
+		uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
 
 	/* armor types for shirt, gloves, shoes, and shield may not currently
 	   provide any magic cancellation but we should be complete */
