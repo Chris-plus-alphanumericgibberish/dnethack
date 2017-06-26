@@ -2171,6 +2171,7 @@ dopois:
 			/* if vampire biting (and also a pet) */
 			if (mattk->aatyp == AT_BITE &&
 				has_blood(youracedata) && !uclockwork
+				&& (mtmp->data != &mons[PM_VAMPIRE_BAT] || u.usleep)
 			) {
 			   Your("blood is being drained!");
 			   /* Get 1/20th of full corpse value

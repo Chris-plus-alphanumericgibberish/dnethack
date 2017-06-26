@@ -2783,7 +2783,9 @@ register struct attack *mattk;
 				healup(tmp, 0, FALSE, FALSE);
 			}
 		}
-		if (!negated && !rn2(3) && !resists_drli(mdef)) {
+		if (!negated && !rn2(3) && !resists_drli(mdef)
+			&& (youracedata != &mons[PM_VAMPIRE_BAT] || mdef->msleeping)
+		) {
 			int xtmp = d(2,6);
 			if (mdef->mhp < xtmp) xtmp = mdef->mhp;
 			/* Player vampires are smart enough not to feed while

@@ -1837,7 +1837,9 @@ physical:{
 			magr->mhp += tmp;
 			if (magr->mhpmax < magr->mhp) magr->mhpmax = magr->mhp;
 		}
-		if (!cancelled && rn2(2) && !resists_drli(mdef)) {
+		if (!cancelled && rn2(2) && !resists_drli(mdef)
+			&& (magr->data != &mons[PM_VAMPIRE_BAT] || mdef->msleeping)
+		) {
 			tmp = d(2,6);
 			if (vis)
 			    pline("%s suddenly seems weaker!", Monnam(mdef));
