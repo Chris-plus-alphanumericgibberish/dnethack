@@ -1374,9 +1374,9 @@ moveloop()
 
 		if (healing_penalty != u_healing_penalty()) {
 			if (!Hallucination){
-				You_feel("%s.", (healing_penalty) ? "itchy" : "relief");
+				You_feel("%s.", (u_healing_penalty()) ? "itchy" : "relief");
 			} else {
-				You_feel("%s.", (healing_penalty) ? (hates_silver(youracedata) ? "tarnished" :
+				You_feel("%s.", (u_healing_penalty()) ? (hates_silver(youracedata) ? "tarnished" :
 					hates_iron(youracedata) ? "magnetic" : "like you are failing Organic Chemistry") : "like you are no longer failing Organic Chemistry");
 			}
 			healing_penalty = u_healing_penalty();
