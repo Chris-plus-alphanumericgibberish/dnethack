@@ -2003,6 +2003,7 @@ physical:{
 			mdef->mhp = 0;
 		        monkilled(mdef, "", AD_DETH);
 			tmp = 0;
+			magr->mhp = magr->mhpmax;
 			break;
 		    } /* else FALLTHRU */
 		default: /* case 16: ... case 5: */
@@ -2010,7 +2011,8 @@ physical:{
 		        pline("%s looks weaker!", Monnam(mdef));
 		    mdef->mhpmax -= rn2(tmp / 2 + 1); /* mhp will then  */
 		                                      /* still be less than  */
-						      /* this value */
+											  /* this value */
+			magr->mhp = min(magr->mhp+tmp, magr->mhpmax);
 		    break;
 		case 4: case 3: case 2: case 1: case 0:
 		    if (resists_magm(mdef)) shieldeff(mdef->mx, mdef->my);
@@ -2021,28 +2023,39 @@ physical:{
 		}
 		break;
 	    case AD_PEST:
-		Strcpy(buf, mon_nam(mdef));
-	        if (vis)
-		    pline("%s reaches out, and %s looks rather ill.",
-		  	    Monnam(magr), buf);
-		if((mdef->mhpmax > 3) && !resist(mdef, 0, 0, NOTELL))
-			mdef->mhpmax /= 2;
-		if((mdef->mhp > 2) && !resist(mdef, 0, 0, NOTELL))
-			mdef->mhp /= 2;
-		if (mdef->mhp > mdef->mhpmax) mdef->mhp = mdef->mhpmax;
+			Strcpy(buf, mon_nam(mdef));
+			if (vis)
+				pline("%s reaches out, and %s looks rather ill.",
+					Monnam(magr), buf);
+			if((mdef->mhpmax > 3) && !resist(mdef, 0, 0, NOTELL)){
+				magr->mhp = min(magr->mhp+mdef->mhpmax/2, magr->mhpmax);
+				mdef->mhpmax /= 2;
+			}
+			if((mdef->mhp > 2) && !resist(mdef, 0, 0, NOTELL)){
+				magr->mhp = min(magr->mhp+mdef->mhp/2, magr->mhpmax);
+				mdef->mhp /= 2;
+			}
+			if (mdef->mhp > mdef->mhpmax){
+				magr->mhp = min(magr->mhp+(mdef->mhp - mdef->mhpmax), magr->mhpmax);
+				mdef->mhp = mdef->mhpmax;
+			}
 		break;
 	    case AD_FAMN:
 		Strcpy(buf, s_suffix(mon_nam(mdef)));
 	        if (vis)
 		    pline("%s reaches out, and %s body shrivels.",
 			    Monnam(magr), buf);
-		if (mdef->mtame && !mdef->isminion)
-		    EDOG(mdef)->hungrytime -= rn1(120, 120);
-		else
+		if (mdef->mtame && !mdef->isminion){
+			int hngr = rn1(120, 120);
+		    EDOG(mdef)->hungrytime -= hngr;
+			magr->mhp = min(magr->mhp+magr->m_lev*hngr/30, magr->mhpmax); //ie, normal healing rate for that amount of nutrition
+		} else
 		{
 		    tmp += rnd(10); /* lacks a food rating */
-		    if (tmp >= mdef->mhp && vis)
+		    if (tmp >= mdef->mhp && vis){
 		        pline("%s starves.", Monnam(mdef));
+				magr->mhp = magr->mhpmax;
+			} else magr->mhp = min(magr->mhp+tmp, magr->mhpmax);
 		}
 		/* plus the normal damage */
 		break;

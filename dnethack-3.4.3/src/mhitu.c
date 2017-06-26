@@ -2789,6 +2789,7 @@ dopois:
 		switch (rn2(20)) {
 		case 19: case 18: case 17:
 		    if (!Antimagic) {
+			mtmp->mhp = mtmp->mhpmax;
 			killer_format = KILLED_BY_AN;
 			killer = "touch of death";
 			done(DIED);
@@ -2798,6 +2799,7 @@ dopois:
 		default: /* case 16: ... case 5: */
 		    You_feel("your life force draining away...");
 		    permdmg = 1;	/* actual damage done below */
+			mtmp->mhp = min(mtmp->mhp+dmg,mtmp->mhpmax);
 		    break;
 		case 4: case 3: case 2: case 1: case 0:
 		    if (Antimagic) shieldeff(u.ux, u.uy);
@@ -2811,13 +2813,18 @@ dopois:
 		pline("%s reaches out, and you feel fever and chills.",
 			Monnam(mtmp));
 		(void) diseasemu(mdat); /* plus the normal damage */
+		if(!Sick_resistance) mtmp->mhp = min(mtmp->mhp+mtmp->mhpmax/Sick,mtmp->mhpmax);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_FAMN:
 		pline("%s reaches out, and your body shrivels.",
 			Monnam(mtmp));
 		exercise(A_CON, FALSE);
-		if (!is_fainted()) morehungry(rn1(40,40));
+		if (!is_fainted()){
+			int hungr = rn1(40,40);
+			morehungry(hungr);
+			mtmp->mhp = min(mtmp->mhp+mtmp->m_lev*hungr/30,mtmp->mhpmax); //ie, heal by the amount of HP it would heal by resting for that nutr worth of turns
+		}
 		/* plus the normal damage */
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
