@@ -1029,7 +1029,7 @@ mcalcdistress()
 			if(canseemon(mtmp)){
 				pline("The shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
 			}
-			damage = d((mtmp->m_lev)/3 + 8, 8);
+			damage = d((mtmp->m_lev)/3, 8);
 			losehp(damage, "heat drain", KILLED_BY);
 			mtmp->mhp += damage;
 			if(mtmp->mhp > mtmp->mhpmax){
@@ -1107,13 +1107,13 @@ mcalcdistress()
 				pline("Motes of light dance in the air above %s.", mon_nam(tmpm));
 				pline("%s suddenly seems weaker!", Monnam(tmpm));
 				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
-				pline("The motes are drawn into the %s of %s.", mtmp->data == mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
+				pline("The motes are drawn into the %s of %s.", mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
 			} else if(canseemon(tmpm)){
 				pline("Motes of light dance in the air above %s.", mon_nam(tmpm));
 				pline("%s suddenly seems weaker!", Monnam(tmpm));
 				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
 			} else if(canseemon(mtmp)){
-				pline("Motes of light are drawn into the %s of %s.", mtmp->data == mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
+				pline("Motes of light are drawn into the %s of %s.", mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
 			}
 			damage = d((mtmp->m_lev)/3, 4);
 			tmpm->mhp -= damage;
@@ -1142,9 +1142,9 @@ mcalcdistress()
 			pline("Motes of light dance in the air above you.");
 			pline("You suddenly feel weaker!");
 			if(canseemon(mtmp)){
-				pline("The motes are drawn into the %s of %s.", mtmp->data == mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
+				pline("The motes are drawn into the %s of %s.", mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
 			}
-			damage = d((mtmp->m_lev)/3 + 8, 8);
+			damage = d((mtmp->m_lev)/3, 4);
 			losehp(damage, "life-force theft", KILLED_BY);
 			mtmp->mhp += damage;
 			if(mtmp->mhp > mtmp->mhpmax){
@@ -1165,10 +1165,16 @@ mcalcdistress()
 				if(canseemon(mtmp)){
 					pline("%s breathes out dark vapors.", Monnam(mtmp));
 				}
-				if (Antimagic){
+				if(Hallucination){
+					You("have an out of body experience.");
+					losehp(8, "a bad trip", KILLED_BY); //you still take damage
+				} else if (Antimagic){
 					shieldeff(u.ux, u.uy);
-					Your("%s stops!  When it finally beats again, it is weak and thready", body_part(HEART));
-					losehp(d(8,8), "the ancient breath of death", KILLED_BY); //you still take damage
+					Your("%s flutters!", body_part(HEART));
+					losehp(d(4,4), "the ancient breath of death", KILLED_BY); //you still take damage
+				} else if(Upolyd ? (u.mh >= 100) : (u.uhp >= 100)){
+					Your("%s stops!  When it finally beats again, it is weak and thready.", body_part(HEART));
+					losehp(d(8,8), "the ancient breath of death", KILLED_BY); //Same as death's touch attack, sans special effects
 				} else {
 					killer_format = KILLED_BY;
 					killer = "the ancient breath of death";
@@ -1195,6 +1201,17 @@ mcalcdistress()
 						pline("%s breathes out dark vapors.", Monnam(mtmp));
 					}
 					if(resists_magm(targ)){
+						targ->mhp -= 8;
+						if(targ->mhp < 1){
+							if (canspotmon(targ))
+								pline("%s %s!", Monnam(targ),
+								nonliving(targ->data)
+								? "is destroyed" : "dies");
+							targ->mhp = 0;
+							grow_up(mtmp,targ);
+							mondied(targ);
+						}
+					} else if(targ->mhp >= 100){
 						targ->mhp -= d(8,8);
 						if(targ->mhp < 1){
 							if (canspotmon(targ))

@@ -1249,7 +1249,7 @@ int spellnum;
 	    if (Hallucination) {
 			You("have an out of body experience.");
 	    } else if(Upolyd ? (u.mh >= 100) : (u.uhp >= 100)){
-			Your("%s stops!  When it finally beats again, it is weak and thready", body_part(HEART));
+			Your("%s stops!  When it finally beats again, it is weak and thready.", body_part(HEART));
 			if(Upolyd) u.mh -= d(8,8);	//Same as death's touch attack, sans special effects
 			else u.uhp -= d(8,8);		//Not reduced by AC
 		} else {
