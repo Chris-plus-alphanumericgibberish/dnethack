@@ -2202,32 +2202,40 @@ spiriteffects(power, atme)
 				switch(uwep->otyp){
 					case BOW:
 						otmp = mksobj(ARROW, TRUE, FALSE);
+						otmp->objsize = uwep->objsize;
 					break;
 					case ELVEN_BOW:
 						otmp = mksobj(ELVEN_ARROW, TRUE, FALSE);
+						otmp->objsize = uwep->objsize;
 					break;
 					case ORCISH_BOW:
 						otmp = mksobj(ORCISH_ARROW, TRUE, FALSE);
+						otmp->objsize = uwep->objsize;
 					break;
 					case YUMI:
 						otmp = mksobj(YA, TRUE, FALSE);
+						otmp->objsize = uwep->objsize;
 					break;
 					case SLING:
 						otmp = mksobj(FLINT, TRUE, FALSE);
 					break;
 					case CROSSBOW:
 						otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+						otmp->objsize = uwep->objsize;
 					break;
 					case DROVEN_CROSSBOW:
 						otmp = mksobj(DROVEN_BOLT, TRUE, FALSE);
+						otmp->objsize = uwep->objsize;
 					break;
 					default:
 						if(!rn2(3)){
 							otmp = mksobj(FLINT, TRUE, FALSE);
 						} else if(!rn2(2)){
 							otmp = mksobj(ARROW, TRUE, FALSE);
+							otmp->objsize = uwep->objsize;
 						} else {
 							otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+							otmp->objsize = uwep->objsize;
 						}
 					break;
 				}
@@ -2236,10 +2244,13 @@ spiriteffects(power, atme)
 					otmp = mksobj(FLINT, TRUE, FALSE);
 				} else if(!rn2(2)){
 					otmp = mksobj(ARROW, TRUE, FALSE);
+					otmp->objsize = youracedata->msize;
 				} else {
 					otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
+					otmp->objsize = youracedata->msize;
 				}
 			}
+			fix_object(otmp);
 			otmp->blessed = 0;
 			otmp->cursed = 0;
 			otmp->bknown = 1;
