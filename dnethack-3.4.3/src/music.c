@@ -193,8 +193,8 @@ boolean domsg;
     if ((mtmp->mcanmove) && (!mtmp->msleeping) && (!Conflict)
 	&& (!mtmp->mconf) && (!mtmp->mflee) && (!mtmp->mcan)
 	&& (distu(mtmp->mx, mtmp->my) <= 25)) {
-	    /* lillendii sing */
-		if(mtmp->data == &mons[PM_LILLEND])
+	    /* bards sing */
+		if(is_bardmon(mtmp->data))
 			r = rnd(20) + mtmp->m_lev;
 	    /* nymphs and some elves sing along harps */
 	    else if ((instr_otyp == WOODEN_HARP)
@@ -232,6 +232,8 @@ boolean domsg;
 		if (canseemon(mtmp)) {
 			if (mtmp->data == &mons[PM_LILLEND])
 				pline("%s's lovely voice sings your song!", Monnam(mtmp));
+			else if (is_bardmon(mtmp->data))
+				pline("%s skillfully sings along with your song!", Monnam(mtmp));
 			else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
 				|| mtmp->data->mlet == S_VAMPIRE)
 				pline("%s's dreadful voice chants your song!", Monnam(mtmp));

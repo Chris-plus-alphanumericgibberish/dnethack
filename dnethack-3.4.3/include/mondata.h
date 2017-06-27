@@ -319,6 +319,7 @@
 							  || (ptr) == &mons[PM_RAZORVINE]\
 							)
 #define is_mercenary(ptr)	(((ptr)->mflagsg & MG_MERC) != 0L)
+#define is_bardmon(ptr)		((ptr) == &mons[PM_LILLEND] || (ptr) == &mons[PM_RHYMER] || (ptr) == &mons[PM_BARD])
 #define is_male(ptr)		(((ptr)->mflagsb & MB_MALE) != 0L)
 #define is_female(ptr)		(((ptr)->mflagsb & MB_FEMALE) != 0L)
 #define is_neuter(ptr)		(((ptr)->mflagsb & MB_NEUTER) != 0L)
