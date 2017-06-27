@@ -574,7 +574,8 @@ long nmv;		/* number of moves */
 		 (Is_nemesis(&u.uz) && flags.stag)) &&
 	 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
 	 !(Role_if(PM_ANACHRONONAUT) && !(quest_status.leader_is_dead))
-	)) {
+	) && !In_sokoban(&u.uz)
+	) {
 	    int wilder = (imv + 75) / 150;
 		if(mtmp->mwait && !EDOG(mtmp)->friend) wilder = max(0, wilder - 11);
 		if(P_SKILL(P_BEAST_MASTERY) > 1 && !EDOG(mtmp)->friend) wilder = max(0, wilder - (3*(P_SKILL(P_BEAST_MASTERY)-1) + 1));
@@ -600,7 +601,8 @@ long nmv;		/* number of moves */
 			 (Is_nemesis(&u.uz) && flags.stag)) &&
 		 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
 		 !(Role_if(PM_ANACHRONONAUT) && !(quest_status.leader_is_dead))
-	)) {
+	) && !In_sokoban(&u.uz)
+	) {
 	    struct edog *edog = EDOG(mtmp);
 
 	    if ((monstermoves > edog->hungrytime + 500 && mtmp->mhp < 3) ||
