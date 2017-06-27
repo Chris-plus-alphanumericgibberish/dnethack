@@ -573,7 +573,8 @@ long nmv;		/* number of moves */
 		((Is_qstart(&u.uz) && !flags.stag) || 
 		 (Is_nemesis(&u.uz) && flags.stag)) &&
 	 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
-	 !(Role_if(PM_ANACHRONONAUT) && !(quest_status.leader_is_dead))
+	 !(Role_if(PM_ANACHRONONAUT) && quest_status.leader_is_dead) &&
+	 !(Role_if(PM_EXILE))
 	) && !In_sokoban(&u.uz)
 	) {
 	    int wilder = (imv + 75) / 150;
@@ -600,7 +601,8 @@ long nmv;		/* number of moves */
 			((Is_qstart(&u.uz) && !flags.stag) || 
 			 (Is_nemesis(&u.uz) && flags.stag)) &&
 		 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
-		 !(Role_if(PM_ANACHRONONAUT) && !(quest_status.leader_is_dead))
+		 !(Role_if(PM_ANACHRONONAUT) && quest_status.leader_is_dead) &&
+		 !(Role_if(PM_EXILE))
 	) && !In_sokoban(&u.uz)
 	) {
 	    struct edog *edog = EDOG(mtmp);
