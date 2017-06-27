@@ -6232,9 +6232,8 @@ struct monst *mtmp, *victim;
 				u.pethped = TRUE;
 			}
 			for(bardmon = fmon; bardmon; bardmon = bardmon->nmon){
-				if(bardmon->data == &mons[PM_LILLEND] 
-					&& bardmon != mtmp
-					&& mtmp->data != &mons[PM_LILLEND] 
+				if(is_bardmon(bardmon->data) 
+					&& !is_bardmon(mtmp->data) 
 					&& ((bardmon->mtame > 0) == (mtmp->mtame > 0)) && bardmon->mpeaceful == mtmp->mpeaceful
 					&& mon_can_see_mon(bardmon,mtmp)
 				) grow_up(bardmon, mtmp);
