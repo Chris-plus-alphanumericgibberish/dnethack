@@ -74,13 +74,13 @@ struct monst {
 	
 	short mstr, mdex, mcon, mint, mwis, mcha; /* Monster ability scores */
 
-	Bitfield(mferal,1);	/* was once tame */
+	Bitfield(mferal,1);	/* was once tame */ /*1*/
 	
-	Bitfield(female,1);	/* is female */
-	Bitfield(minvis,1);	/* currently invisible */
-	Bitfield(invis_blkd,1); /* invisibility blocked */
-	Bitfield(perminvis,1);	/* intrinsic minvis value */
-	Bitfield(cham,4);	/* shape-changer */
+	Bitfield(female,1);	/* is female */ /*2*/
+	Bitfield(minvis,1);	/* currently invisible */ /*3*/
+	Bitfield(invis_blkd,1); /* invisibility blocked */ /*4*/
+	Bitfield(perminvis,1);	/* intrinsic minvis value */ /*5*/
+	Bitfield(cham,4);	/* shape-changer */ /*9*/
 /* note: lychanthropes are handled elsewhere */
 #define CHAM_ORDINARY		0	/* not a shapechanger */
 #define CHAM_CHAMELEON		1	/* animal */
@@ -88,63 +88,64 @@ struct monst {
 #define CHAM_SANDESTIN		3	/* demon */
 #define CHAM_DREAM			4	/* anything */
 #define CHAM_MAX_INDX		CHAM_DREAM
-	Bitfield(mundetected,1);	/* not seen in present hiding place */
+	Bitfield(mundetected,1);	/* not seen in present hiding place */ /*10*/
 				/* implies one of MT_CONCEAL or MT_HIDE,
 				 * but not mimic (that is, snake, spider,
 				 * trapper, piercer, eel)
 				 */
 
-	Bitfield(mcan,1);	/* has been cancelled */
-	Bitfield(mburied,1);	/* has been buried */
-	Bitfield(mspeed,2);	/* current speed */
-	Bitfield(permspeed,2);	/* intrinsic mspeed value */
-	Bitfield(mrevived,1);	/* has been revived from the dead */
-	Bitfield(mavenge,1);	/* did something to deserve retaliation */
+	Bitfield(mcan,1);	/* has been cancelled */ /*11*/
+	Bitfield(mburied,1);	/* has been buried */ /*12*/
+	Bitfield(mspeed,2);	/* current speed */ /*14*/
+	Bitfield(permspeed,2);	/* intrinsic mspeed value */ /*16*/
+	Bitfield(mrevived,1);	/* has been revived from the dead */ /*17*/
+	Bitfield(mavenge,1);	/* did something to deserve retaliation */ /*18*/
 	
-	Bitfield(mflee,1);	/* fleeing */
-	Bitfield(mfleetim,7);	/* timeout for mflee */
+	Bitfield(mflee,1);	/* fleeing */ /*19*/
+	Bitfield(mfleetim,7);	/* timeout for mflee */ /*26*/
 	
-	Bitfield(mcrazed,1);	/* monster is crazed */
+	Bitfield(mcrazed,1);	/* monster is crazed */ /*27*/
 	
-	Bitfield(mberserk,1);	/* monster is crazed */
+	Bitfield(mberserk,1);	/* monster is crazed */ /*28*/
 	
-	Bitfield(mcansee,1);	/* cansee 1, temp.blinded 0, blind 0 */
-	Bitfield(mblinded,7);	/* cansee 0, temp.blinded n, blind 0 */
+	Bitfield(mcansee,1);	/* cansee 1, temp.blinded 0, blind 0 */ /*29*/
+	Bitfield(mblinded,7);	/* cansee 0, temp.blinded n, blind 0 */ /*36*/
 
-	Bitfield(mcanhear,1);	/* cansee 1, temp.blinded 0, blind 0 */
-	Bitfield(mdeafened,7);	/* cansee 0, temp.blinded n, blind 0 */
+	Bitfield(mcanhear,1);	/* cansee 1, temp.blinded 0, blind 0 */ /*37*/
+	Bitfield(mdeafened,7);	/* cansee 0, temp.blinded n, blind 0 */ /*44*/
 
-	Bitfield(mcanmove,1);	/* paralysis, similar to mblinded */
-	Bitfield(mfrozen,7);
+	Bitfield(mcanmove,1);	/* paralysis, similar to mblinded */ /*45*/
+	Bitfield(mfrozen,7); /*52*/
 	
-	Bitfield(mnotlaugh,1);	/* collapsed from laughter, similar to mblinded */
-	Bitfield(mlaughing,7);
+	Bitfield(mnotlaugh,1);	/* collapsed from laughter, similar to mblinded */ /*53*/
+	Bitfield(mlaughing,7); /*60*/
 	
-	Bitfield(msleeping,1);	/* asleep until woken */
-	Bitfield(mstun,1);	/* stunned (off balance) */
-	Bitfield(mconf,1);	/* confused */
-	Bitfield(mpeaceful,1);	/* does not attack unprovoked */
-	Bitfield(mtrapped,1);	/* trapped in a pit, web or bear trap */
-	Bitfield(mleashed,1);	/* monster is on a leash */
-	Bitfield(mtraitor,1);	/* Former pet that turned traitor */
-	Bitfield(isshk,1);	/* is shopkeeper */
-	Bitfield(isminion,1);	/* is a minion */
+	Bitfield(msleeping,1);	/* asleep until woken */ /*61*/
+	Bitfield(mstun,1);	/* stunned (off balance) */ /*62*/
+	Bitfield(mconf,1);	/* confused */ /*63*/
+	Bitfield(mpeaceful,1);	/* does not attack unprovoked */ /*64*/
+	Bitfield(mtrapped,1);	/* trapped in a pit, web or bear trap */ /*65*/
+	Bitfield(mleashed,1);	/* monster is on a leash */ /*66*/
+	Bitfield(mtraitor,1);	/* Former pet that turned traitor */ /*67*/
+	Bitfield(isshk,1);	/* is shopkeeper */ /*68*/
+	Bitfield(isminion,1);	/* is a minion */ /*69*/
 	
-	Bitfield(isgd,1);	/* is guard */
-	Bitfield(ispriest,1);	/* is a priest */
-	Bitfield(iswiz,1);	/* is the Wizard of Yendor */
-	Bitfield(wormno,5);	/* at most 31 worms on any level */
+	Bitfield(isgd,1);	/* is guard */ /*70*/
+	Bitfield(ispriest,1);	/* is a priest */ /*71*/
+	Bitfield(iswiz,1);	/* is the Wizard of Yendor */ /*72*/
+	Bitfield(wormno,5);	/* at most 31 worms on any level */ /*77*/
 #define MAX_NUM_WORMS	32	/* should be 2^(wormno bitfield size) */
-	Bitfield(moccupation,1);/* linked to your occupation */
-	Bitfield(mclone,1);		/* is a clone of another monster (don't make death drop) */
-	Bitfield(uhurtm,1);		/* injured by you */
-	Bitfield(mhurtu,1);		/* has injured you */
-	Bitfield(mattackedu,1);	/* attacked you on it's last turn */
-	Bitfield(housealert,1);	/* won't accept house-based pacification */
-	Bitfield(mspiritual,1);	/* Created by spirit power, doesn't count towards pet limit */
-	Bitfield(artnum,2);		/* Created from an artifact. */
+	Bitfield(moccupation,1);/* linked to your occupation */ /*78*/
+	Bitfield(mclone,1);		/* is a clone of another monster (don't make death drop) */ /*79*/
+	Bitfield(uhurtm,1);		/* injured by you */ /*80*/
+	Bitfield(mhurtu,1);		/* has injured you */ /*81*/
+	Bitfield(mattackedu,1);	/* attacked you on it's last turn */ /*82*/
+	Bitfield(housealert,1);	/* won't accept house-based pacification */ /*83*/
+	Bitfield(mspiritual,1);	/* Created by spirit power, doesn't count towards pet limit */ /*84*/
+	Bitfield(artnum,2);		/* Created from an artifact. */ /*86*/
 #define ART_PYGMALION	1
 #define ART_GALATEA		2
+	Bitfield(notame,1);/* can't be tamed */ /*87*/
 	long mwait;/* if tame, won't follow between levels (turn last ordered to wait on) */
 	int encouraged;	/* affected by Encourage song */
 #define BASE_DOG_ENCOURAGED_MAX		7

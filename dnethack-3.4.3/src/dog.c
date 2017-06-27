@@ -1036,7 +1036,7 @@ struct obj *obj;
 	struct monst *mtmp2, *curmon, *weakdog = (struct monst *) 0;
 	int numdogs = 0;
 	/* The Wiz, Medusa and the quest nemeses aren't even made peaceful. || mtmp->data == &mons[PM_MEDUSA] */
-	if (is_untamable(mtmp->data) || mtmp->iswiz
+	if (is_untamable(mtmp->data) || mtmp->notame || mtmp->iswiz
 		|| (&mons[urole.neminum] == mtmp->data)
 	) return((struct monst *)0);
 
