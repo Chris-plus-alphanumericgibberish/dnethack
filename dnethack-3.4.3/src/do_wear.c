@@ -1993,7 +1993,8 @@ find_ac()
 	if(uarmh) uac -= ARM_BONUS(uarmh);
 	if(uarmf) uac -= ARM_BONUS(uarmf);
 	if(uarms){
-		uac -= ARM_BONUS(uarms);
+		if(uarms->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) uac -= ARM_BONUS(uarms)*2;
+		else uac -= ARM_BONUS(uarms);
 		uac -= (uarms->objsize - youracedata->msize);
 	}
 	if(uarmg) uac -= ARM_BONUS(uarmg);
