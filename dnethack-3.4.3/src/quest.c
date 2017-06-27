@@ -104,6 +104,22 @@ ok_to_quest()
 STATIC_OVL boolean
 not_capable()
 {
+	if(Role_if(PM_BARD)){
+		struct monst *petm;
+		int maxlev = 0;
+		int cumlev = 0;
+		for(petm = fmon; petm; petm = petm->nmon){
+			if(petm->mtame){
+				maxlev = max(maxlev, petm->m_lev);
+				cumlev += petm->m_lev/2;
+			}
+		}
+		cumlev += maxlev/2 + maxlev%2;
+		cumlev += u.ulevel/2;
+		
+		if(cumlev >= MIN_QUEST_LEVEL) return FALSE;
+	}
+	
 	if(Pantheon_if(PM_GNOME)) return((boolean)(u.ulevel < GNOMISH_MIN_QUEST_LEVEL));
 	else return((boolean)(u.ulevel < MIN_QUEST_LEVEL));
 }

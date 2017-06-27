@@ -132,7 +132,6 @@ MONSTER: 'B',random,random,hostile
 #
 
 MAZE: "Brd-loca",' '
-FLAGS: hardfloor
 GEOMETRY:center,center
 MAP
 0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
@@ -272,6 +271,7 @@ OBJECT:'`',"boulder",(53,03)
 OBJECT:'`',"boulder",(54,08)
 # Quest nemesis
 MONSTER:'n',"Aglaope",(38,10),asleep
+OBJECT:'[',"water walking boots",(38,10)
 # Monsters
 MONSTER:'s',random,(33,06),hostile
 MONSTER:'S',random,(33,08),hostile
@@ -295,6 +295,7 @@ MONSTER:'s',random,(43,14),hostile
 #
 
 MAZE: "Brd-fila" , ' '
+FLAGS: hardfloor
 INIT_MAP: '.' , 'T' , true , true , random , true
 NOMAP
 #
