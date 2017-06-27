@@ -568,7 +568,7 @@ long nmv;		/* number of moves */
 	else mtmp->mspec_used -= imv;
 
 	/* reduce tameness for every 150 moves you are separated */
-	if (mtmp->mtame && !(EDOG(mtmp)->loyal) && !(
+	if (mtmp->mtame && !mtmp->isminion && !(EDOG(mtmp)->loyal) && !(
 		In_quest(&u.uz) && 
 		((Is_qstart(&u.uz) && !flags.stag) || 
 		 (Is_nemesis(&u.uz) && flags.stag)) &&
@@ -576,6 +576,8 @@ long nmv;		/* number of moves */
 	 !(Role_if(PM_ANACHRONONAUT) && !(quest_status.leader_is_dead))
 	)) {
 	    int wilder = (imv + 75) / 150;
+		if(mtmp->mwait && !EDOG(mtmp)->friend) wilder = max(0, wilder - 11);
+		if(P_SKILL(P_BEAST_MASTERY) > 1 && !EDOG(mtmp)->friend) wilder = max(0, wilder - (3*(P_SKILL(P_BEAST_MASTERY)-1) + 1));
 #ifdef BARD
 	    /* monsters under influence of Friendship song go wilder faster */
 	    if (EDOG(mtmp)->friend)
