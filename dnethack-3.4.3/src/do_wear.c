@@ -2081,7 +2081,7 @@ find_ac()
 		uac -= (u.ulevel+2)/3;
 	} else if(Race_if(PM_HALF_DRAGON)) uac -= (u.ulevel)/3;
 	if(u.specialSealsActive&SEAL_COSMOS) uac -= spiritDsize();
-	if(u.sealsActive&SEAL_ECHIDNA) uac -= (ACURR(A_CON)-10)/2;
+	if(u.sealsActive&SEAL_ECHIDNA) uac -= max((ACURR(A_CON)-10)/2, 0);
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
 	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
