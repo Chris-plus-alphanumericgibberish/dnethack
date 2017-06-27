@@ -376,6 +376,8 @@ doread()
 	/* #nethack suggestions */
     "Lich Park",
     "I'd rather be pudding farming",
+	
+    "Great Cthulhu for President -- why settle for the lesser evil?",
 	    };
 	    char buf[BUFSZ];
 	    int erosion;
