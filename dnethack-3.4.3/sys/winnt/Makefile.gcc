@@ -536,9 +536,9 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/erebor.des \
 	 $(DAT)/moria.des \
 	 $(DAT)/drow.des \
-	 $(DAT)/drow\ noble.des \
+	 $(DAT)/drownoble.des \
 	 $(DAT)/hedrow.des \
-	 $(DAT)/hedrow\ noble.des \
+	 $(DAT)/hedrownoble.des \
 	 $(DAT)/elf.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
@@ -580,9 +580,9 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/erebor.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/moria.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/drow.des)
-	$(subst /,\,$(U)lev_comp $(DAT)/drow\ noble.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/drownoble.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/hedrow.des)
-	$(subst /,\,$(U)lev_comp $(DAT)/hedrow\ noble.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/hedrownoble.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/elf.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)
