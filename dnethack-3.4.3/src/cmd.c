@@ -29,12 +29,14 @@ extern int NDECL(wiz_debug_cmd);
 extern int NDECL(doapply); /**/
 extern int NDECL(dorub); /**/
 extern int NDECL(dojump); /**/
+extern int NDECL(docome); /**/
 extern int NDECL(doextlist); /**/
 extern int NDECL(dodrop); /**/
 extern int NDECL(doddrop); /**/
 extern int NDECL(dodown); /**/
 extern int NDECL(doup); /**/
 extern int NDECL(donull); /**/
+extern int NDECL(dowait); /**/
 extern int NDECL(dowipe); /**/
 extern int NDECL(do_mname); /**/
 extern int NDECL(ddocall); /**/
@@ -3801,6 +3803,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"adjust", "adjust inventory letters", doorganize, TRUE},
 	{"annotate", "name current level", donamelevel, TRUE},
 	{"chat", "talk to someone", dotalk, TRUE},	/* converse? */
+	{"come", "order pets to come", docome, TRUE},
 	{"conduct", "list which challenges you have adhered to", doconduct, TRUE},
 	{"dip", "dip an object into something", dodip, FALSE},
 	{"enhance", "advance or check weapons skills", enhance_weapon_skill,
@@ -3828,6 +3831,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"untrap", "untrap something", dountrap, FALSE},
 	{"version", "list compile time options for this version of NetHack",
 		doextversion, TRUE},
+	{"wait", "order pets to wait", dowait, FALSE},
 	{"wipe", "wipe off your face", dowipe, FALSE},
 	{"?", "get this list of extended commands", doextlist, TRUE},
 #if defined(WIZARD)

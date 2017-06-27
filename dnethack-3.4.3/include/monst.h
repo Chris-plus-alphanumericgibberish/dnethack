@@ -145,6 +145,7 @@ struct monst {
 	Bitfield(artnum,2);		/* Created from an artifact. */
 #define ART_PYGMALION	1
 #define ART_GALATEA		2
+	long mwait;/* if tame, won't follow between levels (turn last ordered to wait on) */
 	int encouraged;	/* affected by Encourage song */
 #define BASE_DOG_ENCOURAGED_MAX		7
 	

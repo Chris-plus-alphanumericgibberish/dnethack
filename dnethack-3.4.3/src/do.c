@@ -2251,6 +2251,56 @@ heal_legs()
 	(void)encumber_msg();
 }
 
+int
+dowait()
+{
+	struct monst *mtmp;
+	if (!getdir("Indicate pet that should wait, or '.' for all.")) return(0);
+	if(!(u.dx || u.dy)){
+		You("order all your pets to wait for your return.");
+		for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+			if(mtmp->mtame) mtmp->mwait = monstermoves;
+		}
+	}
+	else if(isok(u.ux+u.dx, u.uy+u.dy)) {
+		mtmp = m_at(u.ux+u.dx, u.uy+u.dy);
+		if(!mtmp){
+			pline("There is no target there.");
+			return 0;
+		}
+		if(mtmp->mtame){
+			mtmp->mwait = monstermoves;
+			You("order %s to wait for your return.", mon_nam(mtmp));
+		}
+	} else pline("There is no target there.");
+	return 0;
+}
+
+int
+docome()
+{
+	struct monst *mtmp;
+	if (!getdir("Indicate pet that should come with you, or '.' for all.")) return(0);
+	if(!(u.dx || u.dy)){
+		You("order all your pets to follow you.");
+		for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+			if(mtmp->mtame) mtmp->mwait = 0;
+		}
+	}
+	else if(isok(u.ux+u.dx, u.uy+u.dy)) {
+		mtmp = m_at(u.ux+u.dx, u.uy+u.dy);
+		if(!mtmp){
+			pline("There is no target there.");
+			return 0;
+		}
+		if(mtmp->mtame){
+			mtmp->mwait = 0;
+			You("order %s to follow you.", mon_nam(mtmp));
+		}
+	} else pline("There is no target there.");
+	return 0;
+}
+
 #endif /* OVLB */
 
 /*do.c*/

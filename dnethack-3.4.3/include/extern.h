@@ -372,6 +372,8 @@ E int NDECL(donull);
 E int NDECL(dowipe);
 E void FDECL(set_wounded_legs, (long,int));
 E void NDECL(heal_legs);
+E int NDECL(dowait);
+E int NDECL(docome);
 
 /* ### do_name.c ### */
 
