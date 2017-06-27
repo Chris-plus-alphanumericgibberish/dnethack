@@ -1440,7 +1440,7 @@ int thrown;
 			    /* Elves and Samurai do extra damage using
 			     * their bows&arrows; they're highly trained.
 			     */
-					if(u.sealsActive&SEAL_DANTALION) tmp += max(0,(ACURR(A_INT)-10)/2);
+					if(u.sealsActive&SEAL_DANTALION && tp_sensemon(mon)) tmp += max(0,(ACURR(A_INT)-10)/2);
 					
 				    if (Role_if(PM_SAMURAI) &&
 						obj->otyp == YA && uwep->otyp == YUMI)
