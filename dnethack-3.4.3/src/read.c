@@ -401,8 +401,8 @@ doread()
 				return 0;
 			}
 			if(uarmu && uarmu == scroll && uarm){
-				if( uarm->otyp == CRYSTAL_PLATE_MAIL){
-					You("look at your shirt through your crystal armor.");
+				if( uarm->obj_material == GLASS){
+					You("look at your shirt through your glass armor.");
 				}
 				else{
 					You_cant("read that through your %s.", aobjnam(uarm, (char *)0));
@@ -1210,7 +1210,7 @@ struct obj	*sobj;
 
 		/* KMH -- catch underflow */
 		s = sobj->cursed ? -otmp->spe : otmp->spe;
-		if (s > (special_armor ? (otmp->otyp == CRYSTAL_PLATE_MAIL ? 12 : 5) : 3) && rn2(s)) {
+		if (s > (special_armor ? 5 : 3) && rn2(s)) {
 		Your("%s violently %s%s%s for a while, then %s.",
 		     xname(otmp),
 		     otense(otmp, Blind ? "vibrate" : "glow"),
@@ -1228,9 +1228,8 @@ struct obj	*sobj;
 			break;
 		}
 		s = sobj->cursed ? -1 :
-		    otmp->spe >= (otmp->otyp == CRYSTAL_PLATE_MAIL ? 18 : 9) ? (rn2(otmp->spe) == 0) :
+		    otmp->spe >= 9 ? (rn2(otmp->spe) == 0) :
 		    sobj->blessed ? rnd(3-otmp->spe/3) : 1;
-		if(otmp->otyp == CRYSTAL_PLATE_MAIL) s *= 2;
 		if (s >= 0 && otmp->otyp >= GRAY_DRAGON_SCALES &&
 					otmp->otyp <= YELLOW_DRAGON_SCALES) {
 			/* dragon scales get turned into dragon scale mail */
@@ -1266,7 +1265,7 @@ struct obj	*sobj;
 			known = otmp->known;
 		}
 
-		if ((otmp->spe > (special_armor ? (otmp->otyp == CRYSTAL_PLATE_MAIL ? 12 : 5) : 3)) &&
+		if ((otmp->spe > (special_armor ? 5 : 3)) &&
 		    (special_armor || !rn2(7)))
 			Your("%s suddenly %s %s.",
 				xname(otmp), otense(otmp, "vibrate"),
