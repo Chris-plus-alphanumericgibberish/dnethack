@@ -705,8 +705,8 @@ int mode;
 	}
 	if (invent && (inv_weight() + weight_cap() > 600) && !(u.sealsActive&SEAL_ANDREALPHUS)
 		&& !(uarmc && (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased))
-		&& !(uarm && uarm->greased)
-		&& !(uarmu && uarmu->greased)
+		&& !(!uarmc && uarm && uarm->greased)
+		&& !(!uarmc && !uarm && uarmu && uarmu->greased)
 	) {
 	    if (mode == DO_MOVE)
 #ifdef CONVICT
