@@ -30,7 +30,7 @@
 #define	resist_pierce(ptr)	((((ptr)->mflagsg & MG_RPIERCE) != 0L))
 #define	resists_all(ptr)	((((ptr)->mflagsg & MG_RALL) == MG_RALL))
 
-#define resists_poly(ptr)	((ptr) == &mons[PM_OONA] || is_weeping(ptr) || is_yochlol(ptr))
+#define resists_poly(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
 
 #define is_blind(mon)		(!((mon)->mcansee) || (darksight((mon)->data) && (viz_array[(mon)->my][(mon)->mx]&TEMP_LIT1 || levl[(mon)->mx][(mon)->my].lit)))
 #define is_deaf(mon)		(!((mon)->mcanhear))
