@@ -482,8 +482,10 @@ boolean on, silently;
        against that and can get away with a blanket worn-mask value. */
     switch (w_blocks(obj,all_worn)) {
      case INVIS:
-	mon->invis_blkd = on ? 1 : 0;
-	mon->minvis = on ? 0 : mon->perminvis;
+	 if(mon->data != &mons[PM_HELLCAT]){
+		mon->invis_blkd = on ? 1 : 0;
+		mon->minvis = on ? 0 : mon->perminvis;
+	}
 	break;
      default:
 	break;
