@@ -36,6 +36,7 @@
 #endif
 
 STATIC_DCL void FDECL(awaken_monsters,(int));
+STATIC_DCL void FDECL(song_noise,(int));
 STATIC_DCL void FDECL(put_monsters_to_sleep,(int));
 STATIC_DCL void FDECL(charm_snakes,(int));
 STATIC_DCL void FDECL(calm_nymphs,(int));
@@ -701,6 +702,8 @@ play_song()
 	distance = ((P_SKILL(P_MUSICALIZE)) + (u.ulevel/10) + 1);
 	if(P_SKILL(P_MUSICALIZE) > P_BASIC) distance += P_SKILL(P_MUSICALIZE) - P_BASIC;
 	distance = distance*distance + 1;
+	
+	if(instr_otyp == LEATHER_DRUM) distance = distance*4/3;
 
 	///* songs only have effect after the 1st turn */
 	//if (song_delay <= songs[song_played].level+2) 
@@ -733,7 +736,7 @@ play_song()
 			cancel_song(distance);
 			break;
 		case SNG_RLLY:
-			rally_song(distance);
+			rally_song(distance*4);
 			break;
 		}
 
@@ -1105,6 +1108,43 @@ int distance;
 				if (distm < distance/3 &&
 					!resist(mtmp, TOOL_CLASS, 0, NOTELL))
 				monflee(mtmp, 0, FALSE, TRUE);
+			}
+		}
+	    }
+	    mtmp = mtmp->nmon;
+	}
+}
+
+/*
+ * Wake every monster in range...
+ */
+
+STATIC_OVL void
+song_noise(distance)
+int distance;
+{
+	register struct monst *mtmp = fmon;
+	register int distm;
+
+	while(mtmp) {
+	    if (!DEADMONSTER(mtmp) && !is_deaf(mtmp)) {
+		distm = distu(mtmp->mx, mtmp->my);
+		if (distm < distance) {
+		    mtmp->msleeping = 0;
+			if(mtmp->mux == 0 && mtmp->muy == 0){
+				mtmp->mux = u.ux;
+				mtmp->muy = u.uy;
+			}
+		    /* May scare or deafen some monsters */
+			if(sensitive_ears(mtmp->data)){
+				if (distm < distance/3 &&
+					!resist(mtmp, TOOL_CLASS, 0, NOTELL)
+				){
+					mtmp->mstun = 1;
+					mtmp->mconf = 1;
+					mtmp->mcanhear = 0;
+					mtmp->mdeafened = distance/3 - distm;
+				}
 			}
 		}
 	    }
@@ -1633,6 +1673,7 @@ struct obj *instr;
 	case WOODEN_FLUTE:		/* May charm snakes */
 	    do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 	    pline("%s.", Tobjnam(instr, do_spec ? "trill" : "toot"));
+		song_noise(u.ulevel * 3);
 	    if (do_spec) charm_snakes(u.ulevel * 3);
 	    exercise(A_DEX, TRUE);
 	    break;
@@ -1681,6 +1722,7 @@ struct obj *instr;
 	    do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 	    pline("%s %s.", The(xname(instr)),
 		  do_spec ? "produces a lilting melody" : "twangs");
+		song_noise(u.ulevel * 3);
 	    if (do_spec) calm_nymphs(u.ulevel * 3);
 	    exercise(A_DEX, TRUE);
 	    break;
@@ -1832,6 +1874,45 @@ struct obj *instr;
 		pline("%s the \"%s\" song!", Tobjnam(instr, "sing"), songs[song].name);
 	else
 		You("play the \"%s\" song...", songs[song].name);
+	if(song != SNG_SLEEP){
+		int distance;
+
+		distance = ((P_SKILL(P_MUSICALIZE)) + (u.ulevel/10) + 1);
+		if(P_SKILL(P_MUSICALIZE) > P_BASIC) distance += P_SKILL(P_MUSICALIZE) - P_BASIC;
+		if(song == SNG_RLLY) distance *= 2;
+		distance *= 1.5;
+		
+		switch(instr_otyp){
+			case WOODEN_HARP:
+				distance = distance*distance + 1;
+				distance /= 10;
+				
+				song_noise(distance);
+			break;
+			case WOODEN_FLUTE:
+				distance = distance*distance + 1;
+				distance /= 10;
+				
+				song_noise(distance);
+			break;
+			case TOOLED_HORN:
+				distance = distance*distance + 1;
+				
+				song_noise(distance);
+			break;
+			case BUGLE:
+				distance = distance*distance + 1;
+				
+				song_noise(distance);
+			break;
+			case LEATHER_DRUM:
+				distance = distance*distance + 1;
+				distance = distance*4/3;
+				
+				song_noise(distance);
+			break;
+		}
+	}
 	set_occupation(play_song, msgbuf, 0);
 	return 0;
 #endif	/* BARD */
