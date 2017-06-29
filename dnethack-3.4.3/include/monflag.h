@@ -99,13 +99,15 @@
 #define MM_FLEETFLEE	0x00008000L	/* Flees if adjacent if it thinks it can outrun you */
 
 //Monster Thoughts and behavior
-#define MT_CONCEAL		0x00000001L	/* hides under objects */
-#define MT_HIDE			0x00000002L	/* mimics, blends in with ceiling */
-#define MT_MINDLESS		0x00000004L	/* has no mind--golem, zombie, mold */
-#define MT_ANIMAL		0x00000008L	/* has animal mind */
-#define MT_CARNIVORE	0x00000010L	/* eats corpses */
-#define MT_HERBIVORE	0x00000020L	/* eats fruits */
-#define MT_HOSTILE		0x00000040L	/* always starts hostile */
+#define MT_WANTSAMUL	0x00000001L	/* would like to steal the amulet */
+#define MT_WANTSBELL	0x00000002L	/* wants the bell */
+#define MT_WANTSBOOK	0x00000004L	/* wants the book */
+#define MT_WANTSCAND	0x00000008L	/* wants the candelabrum */
+#define MT_WANTSARTI	0x00000010L	/* wants the quest artifact */
+#define MT_WAITFORU		0x00000020L	/* waits to see you or get attacked */
+#define MT_CLOSE		0x00000040L	/* lets you close unless attacked */
+//^MUST FIT WITHIN STRAT_GOAL: 0x000000ffL, see monst.h, wizard.c
+
 #define MT_PEACEFUL		0x00000080L	/* always starts peaceful */
 #define MT_DOMESTIC		0x00000100L	/* can be tamed by feeding */
 #define MT_WANDER		0x00000200L	/* wanders randomly */
@@ -115,13 +117,13 @@
 #define MT_JEWELS		0x00002000L	/* likes gems */
 #define MT_COLLECT		0x00004000L	/* picks up weapons and food */
 #define MT_MAGIC		0x00008000L	/* picks up magic items */
-#define MT_WANTSAMUL	0x00010000L	/* would like to steal the amulet */
-#define MT_WANTSBELL	0x00020000L	/* wants the bell */
-#define MT_WANTSBOOK	0x00040000L	/* wants the book */
-#define MT_WANTSCAND	0x00080000L	/* wants the candelabrum */
-#define MT_WANTSARTI	0x00100000L	/* wants the quest artifact */
-#define MT_WAITFORU		0x00200000L	/* waits to see you or get attacked */
-#define MT_CLOSE		0x00400000L	/* lets you close unless attacked */
+#define MT_CONCEAL		0x00010000L	/* hides under objects */
+#define MT_HIDE			0x00020000L	/* mimics, blends in with ceiling */
+#define MT_MINDLESS		0x00040000L	/* has no mind--golem, zombie, mold */
+#define MT_ANIMAL		0x00080000L	/* has animal mind */
+#define MT_CARNIVORE	0x00100000L	/* eats corpses */
+#define MT_HERBIVORE	0x00200000L	/* eats fruits */
+#define MT_HOSTILE		0x00400000L	/* always starts hostile */
 #define MT_TRAITOR		0x00800000L	/* slash'em tag. */
 #define MT_NOTAKE		0x01000000L	/* doesn't pick up items. */
 #define MT_METALLIVORE	0x02000000L	/* eats metal. */
