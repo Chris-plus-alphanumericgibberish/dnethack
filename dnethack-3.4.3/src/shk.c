@@ -4953,7 +4953,7 @@ shk_appraisal(slang, shkp)
 	}
 	else if (Hallucination)
 	{
-		You("hear %s say it'll \"knock 'em dead\"",
+		You_hear("%s say it'll \"knock 'em dead\"",
 			mon_nam(shkp));
 		return;
 	}

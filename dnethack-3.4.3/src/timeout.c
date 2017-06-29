@@ -1675,7 +1675,7 @@ lightsaber_deactivate (obj, timer_attached)
 			    break;
 		}
 	    } else {
-		You("hear a lightsaber deactivate.");
+		You_hear("a lightsaber deactivate.");
 	    }
 	}
 	// if (obj->otyp == DOUBLE_LIGHTSABER)

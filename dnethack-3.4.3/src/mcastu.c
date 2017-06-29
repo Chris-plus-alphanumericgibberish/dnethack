@@ -2139,7 +2139,7 @@ drainhp:
                      !See_invisible ? "disappears" : "becomes transparent");
            mon_set_minvis(mtmp);
           if (malediction && !canspotmon(mtmp))
-               You("hear %s fiendish laughter all around you.", s_suffix(mon_nam(mtmp)));
+               You_hear("%s fiendish laughter all around you.", s_suffix(mon_nam(mtmp)));
        } else
            impossible("no reason for monster to cast disappear spell?");
 	   dmg = 0;

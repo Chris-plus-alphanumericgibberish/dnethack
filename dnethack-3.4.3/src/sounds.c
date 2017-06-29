@@ -2968,7 +2968,7 @@ int tx,ty;
 					// u.sealTimeout[ECHIDNA-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
-				You("hear scales scraping against stone echo through a cave.");
+				You_hear("scales scraping against stone echo through a cave.");
 				// u.sealTimeout[ECHIDNA-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
@@ -3424,7 +3424,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					if(!Blind) pline("In fact, there are wires sticking up all around you.");
 					if(!Blind) pline("Shreaks and screems echo down from whence the wires come.");
-					else You("hear screaming!");
+					else You_hear("screaming!");
 					pline("You feel sharp pains in your elbowes and knees!");
 					if(!Blind) pline("It seems that you, are but a puppet.");
 					bindspirit(ep->ward_id);
@@ -4075,7 +4075,7 @@ int tx,ty;
 		//There is no binding period.
 		if(u.ulevel == 30 && Role_if(PM_EXILE)){
 			int skill;
-			You("hear a tumultuous babble of voices.");
+			You_hear("a tumultuous babble of voices.");
 			pline("So insistent are they that even the uninitiated can hear,");
 			pline("albeit only in the form of whispers.");
 			bindspirit(ep->ward_id);

@@ -579,7 +579,7 @@ use_stethoscope(obj)
 	}
 
 	if (!its_dead(rx, ry, &res, obj))
-	    You("hear nothing special.");	/* not You_hear()  */
+	    You_hear("nothing special.");	/* not You_hear()  */
 	return res;
 }
 
