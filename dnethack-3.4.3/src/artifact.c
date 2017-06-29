@@ -5658,10 +5658,12 @@ arti_invoke(obj)
 				   default: mtmp = makemon(mkclass(S_WRAITH,0), u.ux, u.uy, NO_MM_FLAGS);
 			   break;
 			  }
-			  if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
-				mtmp = mtmp2;
-			  mtmp->mtame = 30;
-			  summon_loop--;
+			  if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0){
+					mtmp = mtmp2;
+					mtmp->mtame = 30;
+					summon_loop--;
+					mtmp->mvanishes = 100;
+				} else mongone(mtmp);
 			} while (summon_loop);
 			/* Tsk,tsk.. */
 			adjalign(-3);
