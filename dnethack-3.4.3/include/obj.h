@@ -482,6 +482,7 @@ struct obj {
 #define Have_same_dragon_armor_and_shield	(Is_dragon_shield(uarms) && ((Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == Dragon_shield_to_pm(uarms)) ||\
 													 (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == Dragon_shield_to_pm(uarms)) ||\
 												(uarm->oartifact == ART_DRAGON_PLATE && (\
+													Dragon_shield_to_pm(uarms) == &mons[PM_SILVER_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_BLACK_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_BLUE_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_RED_DRAGON] ||\
@@ -490,6 +491,7 @@ struct obj {
 												)) ||\
 												(uarm->oartifact == ART_CHROMATIC_DRAGON_SCALES && (\
 													Dragon_shield_to_pm(uarms) == &mons[PM_BLACK_DRAGON] ||\
+													Dragon_shield_to_pm(uarms) == &mons[PM_RED_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_BLUE_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_WHITE_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_YELLOW_DRAGON] ||\
