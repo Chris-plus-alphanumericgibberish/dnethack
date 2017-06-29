@@ -23,37 +23,38 @@
 #define MS_JUBJUB	14	/* jubjub bird's fear inducing call */
 #define MS_ANIMAL	14	/* up to here are animal noises */ //note: checks are <=, so this should be == the last animal sound
 #define MS_SHRIEK	16	/* wakes up others */
-#define MS_BONES	17	/* rattles bones (skeleton) */
-#define MS_LAUGH	18	/* grins, smiles, giggles, and laughs */
-#define MS_MUMBLE	19	/* says something or other */
-#define MS_IMITATE	20	/* imitates others (leocrotta) */
+#define MS_SHOG		17	/* wakes up others, shoggoth style */
+#define MS_BONES	18	/* rattles bones (skeleton) */
+#define MS_LAUGH	19	/* grins, smiles, giggles, and laughs */
+#define MS_MUMBLE	20	/* says something or other */
+#define MS_IMITATE	21	/* imitates others (leocrotta) */
 #define MS_ORC		MS_GRUNT	/* intelligent brutes */
-#define MS_HUMANOID	21	/* generic traveling companion */
-#define MS_ARREST	22	/* "Stop in the name of the law!" (was Keystones) */
-#define MS_SOLDIER	23	/* army and watchmen expressions */
-#define MS_GUARD	24	/* "Please drop that gold and follow me." */
-#define MS_DJINNI	25	/* "Thank you for freeing me!" */
-#define MS_NURSE	26	/* "Take off your shirt, please." */
-#define MS_SEDUCE	27	/* "Hello, sailor." (Nymphs) */
-#define MS_VAMPIRE	28	/* vampiric seduction, Vlad's exclamations */
-#define MS_BRIBE	29	/* asks for money, or berates you */
-#define MS_CUSS		30	/* berates (demons) or intimidates (Wiz) */
-#define MS_RIDER	31	/* astral level special monsters */
-#define MS_LEADER	32	/* your class leader */
-#define MS_NEMESIS	33	/* your nemesis */
-#define MS_GUARDIAN	34	/* your leader's guards */
-#define MS_SELL		35	/* demand payment, complain about shoplifters */
-#define MS_ORACLE	36	/* do a consultation */
-#define MS_PRIEST	37	/* ask for contribution; do cleansing */
-#define MS_SPELL	38	/* spellcaster not matching any of the above */
-#define MS_WERE		39	/* lycanthrope in human form */
-#define MS_BOAST	40	/* giants */
-#define MS_DREAD	41	/* song of the dread seraphim */
-#define MS_OONA		42	/* song of Oona */
-#define MS_SONG		43	/* other singers */
-#define MS_INTONE	44	/* regular songs plus black flower's songs */
-#define MS_FLOWER	45	/* black flower's songs */
-#define MS_TRUMPET	46	/* Archon's trumpet */
+#define MS_HUMANOID	22	/* generic traveling companion */
+#define MS_ARREST	23	/* "Stop in the name of the law!" (was Keystones) */
+#define MS_SOLDIER	24	/* army and watchmen expressions */
+#define MS_GUARD	25	/* "Please drop that gold and follow me." */
+#define MS_DJINNI	26	/* "Thank you for freeing me!" */
+#define MS_NURSE	27	/* "Take off your shirt, please." */
+#define MS_SEDUCE	28	/* "Hello, sailor." (Nymphs) */
+#define MS_VAMPIRE	29	/* vampiric seduction, Vlad's exclamations */
+#define MS_BRIBE	30	/* asks for money, or berates you */
+#define MS_CUSS		31	/* berates (demons) or intimidates (Wiz) */
+#define MS_RIDER	32	/* astral level special monsters */
+#define MS_LEADER	33	/* your class leader */
+#define MS_NEMESIS	34	/* your nemesis */
+#define MS_GUARDIAN	35	/* your leader's guards */
+#define MS_SELL		36	/* demand payment, complain about shoplifters */
+#define MS_ORACLE	37	/* do a consultation */
+#define MS_PRIEST	38	/* ask for contribution; do cleansing */
+#define MS_SPELL	39	/* spellcaster not matching any of the above */
+#define MS_WERE		40	/* lycanthrope in human form */
+#define MS_BOAST	41	/* giants */
+#define MS_DREAD	42	/* song of the dread seraphim */
+#define MS_OONA		43	/* song of Oona */
+#define MS_SONG		44	/* other singers */
+#define MS_INTONE	45	/* regular songs plus black flower's songs */
+#define MS_FLOWER	46	/* black flower's songs */
+#define MS_TRUMPET	47	/* Archon's trumpet */
 
 
 #define MR_FIRE		0x001	/* 1 resists fire */

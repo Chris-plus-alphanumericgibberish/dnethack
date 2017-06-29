@@ -977,6 +977,7 @@ register struct monst *mtmp;
 	}
 	
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
+		(mdat->msound == MS_SHOG && !rn2(8)) ||
 		(mdat->msound == MS_JUBJUB && !rn2(10) && (!um_dist(mtmp->mx, mtmp->my, 3) || !rn2(10))) ||
 		(mdat->msound == MS_TRUMPET && !rn2(10) && !um_dist(mtmp->mx, mtmp->my, 3)) ||
 		(mdat->msound == MS_DREAD && !rn2(4)) ||

@@ -610,7 +610,7 @@ domonability(VOID_ARGS)
 			MENU_UNSELECTED);
 		atleastone = TRUE;
 	}
-	if(youracedata->msound == MS_SHRIEK){
+	if(youracedata->msound == MS_SHRIEK || youracedata->msound == MS_SHOG){ //player can't speak elder thing.
 		Sprintf(buf, "Shriek");
 		any.a_int = MATTK_SHRIEK;	/* must be non-zero */
 		incntlet = 'S';

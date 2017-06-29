@@ -634,7 +634,7 @@ int	mntmp;
 		pline(use_thec,monsterc,"use your horn");
 	    if (is_mind_flayer(youmonst.data))
 		pline(use_thec,monsterc,"emit a mental blast");
-	    if (youmonst.data->msound == MS_SHRIEK) /* worthless, actually */
+	    if (youmonst.data->msound == MS_SHRIEK || youmonst.data->msound == MS_SHOG) /* worthless, actually */
 		pline(use_thec,monsterc,"shriek");
 	    if (youmonst.data->msound == MS_JUBJUB)
 		pline(use_thec,monsterc,"scream");
