@@ -370,7 +370,7 @@ dodrink()
 #define POTION_OCCUPANT_CHANCE(n) (13 + 2*(n))	/* also in muse.c */
 
 	potion_descr = OBJ_DESCR(objects[otmp->otyp]);
-	if (potion_descr) {
+	if (potion_descr && !otmp->oartifact) {
 	    if (!strcmp(potion_descr, "milky") &&
 		    flags.ghost_count < MAXMONNO &&
 		    !rn2(POTION_OCCUPANT_CHANCE(flags.ghost_count))) {
