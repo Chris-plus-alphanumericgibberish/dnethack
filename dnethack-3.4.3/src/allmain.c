@@ -380,6 +380,20 @@ moveloop()
 			 /*once-per-monster-moving things go here*/
 			/****************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////
+			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+				if(mtmp->data == &mons[PM_HELLCAT]){
+					if(!isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
+						mtmp->minvis = TRUE;
+						mtmp->perminvis = TRUE;
+						newsym(mtmp->mx,mtmp->my);
+					} else if(isdark(mtmp->mx,mtmp->my) && mtmp->minvis){
+						mtmp->minvis = FALSE;
+						mtmp->perminvis = FALSE;
+						newsym(mtmp->mx,mtmp->my);
+					}
+				}
+			}
+////////////////////////////////////////////////////////////////////////////////////////////////
 			if(echolocation(youracedata)){
 				for(i=1; i<COLNO; i++)
 					for(j=0; j<ROWNO; j++)
@@ -1359,6 +1373,20 @@ moveloop()
 	/* once-per-player-input things go here */
 	/****************************************/
 	find_ac();
+////////////////////////////////////////////////////////////////////////////////////////////////
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+		if(mtmp->data == &mons[PM_HELLCAT]){
+			if(!isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
+				mtmp->minvis = TRUE;
+				mtmp->perminvis = TRUE;
+				newsym(mtmp->mx,mtmp->my);
+			} else if(isdark(mtmp->mx,mtmp->my) && mtmp->minvis){
+				mtmp->minvis = FALSE;
+				mtmp->perminvis = FALSE;
+				newsym(mtmp->mx,mtmp->my);
+			}
+		}
+	}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 	if(!flags.mv || Blind || oldBlind != (!!Blind)) {
 	    /* redo monsters if hallu or wearing a helm of telepathy */

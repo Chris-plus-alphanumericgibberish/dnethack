@@ -40,6 +40,9 @@ extern char *viz_rmax;			/* max could see indices */
 #define couldsee(x,y)	(viz_array[y][x] & COULD_SEE)
 #define templit(x,y)	(viz_array[y][x] & TEMP_LIT)
 
+#define isdark(x,y)	( (!levl[x][y].lit && !(viz_array[y][x] & TEMP_LIT1 && !(viz_array[y][x] & TEMP_DRK1))) ||\
+					   (levl[x][y].lit &&  (viz_array[y][x] & TEMP_DRK1 && !(viz_array[y][x] & TEMP_LIT1))))
+
 /*
  *  The following assume the monster is not blind.
  *

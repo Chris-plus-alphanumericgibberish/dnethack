@@ -362,8 +362,10 @@ boolean on, silently;
     if (on) {
 	switch (which) {
 	 case INVIS:
+	 if(mon->data != &mons[PM_HELLCAT]){
 	    mon->minvis = !mon->invis_blkd;
-	    break;
+	}
+	 break;
 	 case FAST:
 	  {
 	    boolean save_in_mklev = in_mklev;
