@@ -5201,9 +5201,11 @@ register int	mmflags;
 		case S_JABBERWOCK:
 		case S_NYMPH:
 			if (rn2(5) && !u.uhave.amulet 
-				&& mndx != PM_NIMUNE && mndx != PM_INTONER 
+				&& mndx != PM_NIMUNE && mndx != PM_INTONER && mndx != PM_AGLAOPE 
 				&& !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))
-			) mtmp->msleeping = 1;
+			){
+				mtmp->msleeping = 1;
+			}
 		break;
 		case S_ORC:
 			if (Race_if(PM_ELF)) mtmp->mpeaceful = FALSE;
