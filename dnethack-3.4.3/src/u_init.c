@@ -2173,6 +2173,8 @@ u_init()
 		init_attr(55);
 	} else if (Role_if(PM_VALKYRIE)){
 		init_attr(85);
+	} else if (Race_if(PM_ELF)){
+		init_attr(80);
 	} else init_attr(75);	/* init attribute values */
 	find_ac();				/* get initial ac value */
 	max_rank_sz();			/* set max str size for class ranks */
