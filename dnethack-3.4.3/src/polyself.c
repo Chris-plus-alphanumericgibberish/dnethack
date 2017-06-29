@@ -1271,6 +1271,8 @@ domindblast()
 			continue;
 		if(mtmp->mpeaceful)
 			continue;
+		if(mindless(mtmp->data))
+			continue;
 		u_sen = telepathic(mtmp->data) && is_blind(mtmp);
 		if (u_sen || (telepathic(mtmp->data) && rn2(2)) || !rn2(10)) {
 			You("lock in on %s %s.", s_suffix(mon_nam(mtmp)),
