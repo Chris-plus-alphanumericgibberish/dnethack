@@ -15,7 +15,7 @@
    Incremented to 3.11 with the introduction Anachrononauts.
    Incremented to 3.12 with the introduction Magic chests, scrolls of antimagic, resistance, and consecration, YARevison to chaos quest, beter resistance-from-diet, and lightsaber forms.
 */
-#define VERSION_MINOR	14
+#define VERSION_MINOR	15
 /*
  * PATCHLEVEL is updated for each release.
  *
