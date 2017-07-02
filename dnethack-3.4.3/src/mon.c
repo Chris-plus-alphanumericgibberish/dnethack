@@ -873,7 +873,12 @@ register struct monst *mtmp;
 	if (!is_clinger(mtmp->data)
 	    && !is_swimmer(mtmp->data) && !amphibious(mtmp->data)) {
 	    if (cansee(mtmp->mx,mtmp->my)) {
-		    pline("%s drowns.", Monnam(mtmp));
+		    if(mtmp->data == &mons[PM_ACID_PARAELEMENTAL]){
+				int tx = mtmp->mx, ty = mtmp->my, dn = mtmp->m_lev;
+				pline("%s explodes.", Monnam(mtmp));
+				mondead(mtmp);
+				explode(tx, ty, 7, d(dn, 10), MON_EXPLODE, EXPL_NOXIOUS);
+			} else pline("%s drowns.", Monnam(mtmp));
 	    }
 	    if (u.ustuck && u.uswallow && u.ustuck == mtmp) {
 	    /* This can happen after a purple worm plucks you off a
