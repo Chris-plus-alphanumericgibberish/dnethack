@@ -1555,17 +1555,17 @@ register struct obj *obj;
 		wt = 160;
 	}
 	else if(obj->oartifact == ART_WATER_CRYSTAL){
-		wt = 40;
+		wt = 120;
 	}
 	else if(obj->oartifact == ART_FIRE_CRYSTAL){
-		wt = 20;
+		wt = 40;
 	}
 	else if(obj->oartifact == ART_AIR_CRYSTAL){
-		wt = 20;
+		wt = 80;
 	}
 	else if(obj->oartifact == ART_BLACK_CRYSTAL){
-		wt = 60; //300 total
-	}
+		wt = 100;
+	} //500 total
 	else if(obj->oartifact == ART_DRAGON_PLATE || obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 		wt =  (int)(wt * 1.5); //225
 	} else if(obj->oartifact == ART_TREASURY_OF_PROTEUS){
