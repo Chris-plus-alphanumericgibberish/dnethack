@@ -708,6 +708,7 @@ struct you {
 	int ZangetsuSafe;
 	int voidChime;
 	short RoSPkills, RoSPflights;
+	long BoISspell;
 	/*Keter counters*/
 	int keter, chokhmah, binah, gevurah, hod, daat, netzach;
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
