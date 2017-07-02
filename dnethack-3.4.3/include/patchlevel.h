@@ -35,6 +35,7 @@
  * 3.13.0: "The Great Reflagging", Monster equipment, Angel symbol split, PoWater revision, Demonweb, Naberius buff, Incant energy gain/loss/cap increase.
  * 3.13.1: implement monster sensoria. Purpose for STUN artifacts. Change guidelines for nopoly rules. Implement a few more angel lords, Alrunes.  Female Drow Anachrononauts, myrkalfar. Dark lights.
  * 3.14.0: Begin edging toward WtW again.  Added Chiropteran and Yuki-ona player races.  Added two new Devas.  Revised Extrinsic resistances, DS and DSM.  Made high monster AC also give DR. Finished Gnome Ranger crowning gifts.  Buffed Riding skill.
+ * 3.15.0: Begin edging away from WtW again.  Added another round of pet improvements, including #wait and #come commands.
  */
 #define PATCHLEVEL	0
 /*
