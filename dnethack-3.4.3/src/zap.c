@@ -1280,6 +1280,7 @@ create_polymon(obj, okind)
 	    pm_index = PM_GOLD_GOLEM;
 	    material = "gold ";
 	    break;
+	case OBSIDIAN_MT:
 	case GLASS:
 	    pm_index = PM_GLASS_GOLEM;
 	    material = "glassy ";

@@ -112,7 +112,7 @@ int thrown;
 	}
 	
 	if(obj->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
-	if((obj->oclass == POTION_CLASS || obj->obj_material == GLASS) && u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH, TRUE);
+	if((obj->oclass == POTION_CLASS || obj->obj_material == GLASS || obj->obj_material == OBSIDIAN_MT) && u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH, TRUE);
 	if((obj->otyp == EGG) && u.sealsActive&SEAL_ECHIDNA) unbind(SEAL_ECHIDNA, TRUE);
 	
 	u_wipe_engr(2);
@@ -1734,7 +1734,7 @@ int thrown;
 			struct monst *msmon;
 			sx = bhitpos.x;
 			sy = bhitpos.y;
-			if(obj->obj_material == GLASS && u.specialSealsActive&SEAL_NUDZIARTH){
+			if((obj->obj_material == GLASS || obj->obj_material == OBSIDIAN_MT) && u.specialSealsActive&SEAL_NUDZIARTH){
 				if(obj->otyp == MIRROR){
 					if(u.spiritPColdowns[PWR_MIRROR_SHATTER] < monstermoves && !u.uswallow && uwep && uwep->otyp == MIRROR && !(uwep->oartifact)){
 						useup(uwep);
@@ -1776,7 +1776,7 @@ int thrown;
 						}
 						u.spiritPColdowns[PWR_MIRROR_SHATTER] = monstermoves + 25;
 					} else explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), TOOL_CLASS, HI_SILVER);
-				} else if(obj->oclass == WEAPON_CLASS && obj->otyp != CRYSTAL_SWORD) explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), WEAPON_CLASS, EXPL_DARK);
+				} else if(obj->obj_material == OBSIDIAN_MT) explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), WEAPON_CLASS, EXPL_DARK);
 			}
 		    tmp_at(DISP_FLASH, obj_to_glyph(obj));
 		    tmp_at(bhitpos.x, bhitpos.y);
@@ -2582,7 +2582,7 @@ breaktest(obj)
 struct obj *obj;
 {
 	if (obj_resists(obj, 0, 100)) return 0;
-	if (obj->obj_material == GLASS &&
+	if ((obj->obj_material == GLASS || obj->obj_material == OBSIDIAN_MT) &&
 		obj->oclass != GEM_CLASS)
 	    return 1;
 	switch (obj->oclass == POTION_CLASS ? POT_WATER : obj->otyp) {

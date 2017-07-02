@@ -108,8 +108,8 @@ PROJECTILE("ya", "bamboo arrow",
 		0, 15, 1, 4, 7, 7, 1, METAL, -P_BOW, HI_METAL),
 PROJECTILE("crossbow bolt", (char *)0,
 		1, 55, 1, 2, 4, 6, 0, IRON, -P_CROSSBOW, HI_METAL),
-PROJECTILE("droven bolt", "obsidian bolt", /*Needs encyc entry*/
-		0,  0, 1, 2, 9, 6, 2, GLASS, -P_CROSSBOW, CLR_BLACK),
+PROJECTILE("droven bolt", "bolt", /*Needs encyc entry*/
+		0,  0, 1, 2, 9, 6, 2, OBSIDIAN_MT, -P_CROSSBOW, CLR_BLACK),
 
 WEAPON("dart", (char *)0,
 	1, 1, 0, 58,  1,  2,  3,  2, 0, P,   -P_DART, IRON, HI_METAL),
@@ -127,8 +127,8 @@ WEAPON("spear", (char *)0,
 	1, 1, 0, 50, 25,  3,  6,  8, 0, P,   P_SPEAR, IRON, HI_METAL),
 WEAPON("elven spear", "runed spear",
 	0, 1, 0, 10,  2,  3,  7,  7, 2, P,   P_SPEAR, WOOD, HI_WOOD),
-WEAPON("droven spear", "long obsidian spear", /*Needs encyc entry*/
-	0, 1, 1,  0, 15,  3, 12, 12, 2, P,   P_SPEAR, GLASS, CLR_BLACK),
+WEAPON("droven spear", "long spear", /*Needs encyc entry*/
+	0, 1, 1,  0, 15,  3, 12, 12, 2, P,   P_SPEAR, OBSIDIAN_MT, CLR_BLACK),
 WEAPON("orcish spear", "crude spear",
 	0, 1, 0, 13, 25,  3,  5,  10, -1, P,   P_SPEAR, IRON, CLR_BLACK),
 WEAPON("dwarvish spear", "stout spear",
@@ -145,8 +145,8 @@ WEAPON("dagger", (char *)0,
 	1, 1, 0, 24, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
 WEAPON("elven dagger", "runed dagger",
 	0, 1, 0,  7,  1,  4,  5,  3, 4, P,   P_DAGGER, WOOD, HI_WOOD),
-WEAPON("droven dagger", "obsidian dagger", /*Needs encyc entry*/
-	0, 1, 0,  0,  5,  12,  8,  6, 4, P,   P_DAGGER, GLASS, CLR_BLACK),
+WEAPON("droven dagger", "dagger", /*Needs encyc entry*/
+	0, 1, 0,  0,  5,  12,  8,  6, 4, P,   P_DAGGER, OBSIDIAN_MT, CLR_BLACK),
 WEAPON("orcish dagger", "crude dagger",
 	0, 1, 0,  9, 10,  5,  3,  5, 1, P,   P_DAGGER, IRON, CLR_BLACK),
 WEAPON("athame", (char *)0,
@@ -181,8 +181,8 @@ WEAPON("vibroblade", "gray short sword", /*Needs encyc entry*//*Needs tile*/
 	1, 0, 0,  0, 20, 10,  6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, CLR_GRAY),
 WEAPON("elven short sword", "runed short sword",
 	0, 0, 0,  2,  2, 10,  7,  7, 2, P,   P_SHORT_SWORD, WOOD, HI_WOOD),
-WEAPON("droven short sword", "obsidian short sword", /*Needs encyc entry*/
-	0, 0, 0,  0, 15, 10,  9,  9, 2, P,   P_SHORT_SWORD, GLASS, CLR_BLACK),
+WEAPON("droven short sword", "short sword", /*Needs encyc entry*/
+	0, 0, 0,  0, 15, 10,  9,  9, 2, P,   P_SHORT_SWORD, OBSIDIAN_MT, CLR_BLACK),
 
 WEAPON("orcish short sword", "crude short sword",
 	0, 0, 0,  3, 30, 10,  5,  10, -1, P,   P_SHORT_SWORD, IRON, CLR_BLACK),
@@ -209,8 +209,8 @@ WEAPON("crystal sword", (char *)0, /*Needs encyc entry*//*Needs tile*/
 WEAPON("two-handed sword", (char *)0,
 	1, 0, 1, 22,150, 50, 12,  6, 0, S,   P_TWO_HANDED_SWORD, IRON, HI_METAL),
 						/* +2d6 large */
-WEAPON("droven greatsword", "obsidian two-handed sword", /*Needs encyc entry*//*Needs tile*/
-	0, 0, 1,  0,150, 50,  18, 30, 2, S,   P_TWO_HANDED_SWORD, GLASS, CLR_BLACK),
+WEAPON("droven greatsword", "two-handed sword", /*Needs encyc entry*//*Needs tile*/
+	0, 0, 1,  0,150, 50,  18, 30, 2, S,   P_TWO_HANDED_SWORD, OBSIDIAN_MT, CLR_BLACK),
 WEAPON("katana", "samurai sword",
 	0, 0, 0,  4, 40, 80, 10, 12, 1, S,   P_LONG_SWORD, IRON, HI_METAL),
 /* special swords set up for artifacts */
@@ -241,8 +241,8 @@ WEAPON("force pike", "long gray spear",/*Needs tile*/
 	0, 0, 0,  0,180, 10,  6,  8, 2, P|S,   P_LANCE, PLASTIC, CLR_GRAY),
 WEAPON("elven lance", "runed lance", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0,  0, 11, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
-WEAPON("droven lance", "obsidian lance", /*Needs encyc entry*//*Needs tile*/
-	0, 0, 1,  0,100, 10, 10, 10, 2, P,   P_LANCE, GLASS, CLR_BLACK),
+WEAPON("droven lance", "lance", /*Needs encyc entry*//*Needs tile*/
+	0, 0, 1,  0,100, 10, 10, 10, 2, P,   P_LANCE, OBSIDIAN_MT, CLR_BLACK),
 /* axe-type */
 WEAPON("halberd", "angled poleaxe",
 	0, 0, 1,  8,150, 10, 10,  6, 0, P|S, P_POLEARMS, IRON, HI_METAL),
@@ -1134,7 +1134,7 @@ OBJECT(OBJ("secrets", "ragged leather"), BITS(0,0,1,0,1,0,1,1,0,0,0,P_NONE,PAPER
 		OBJ(name,typ), BITS(0,0,1,0,mgc,1,0,0,0,0,dir,P_NONE,metal), 0, \
 		WAND_CLASS, prob, 0, 7, cost, 0, 0, 0, 0, 30, color )
 WAND("light",          "glass",    90, 100, 1, NODIR,     GLASS,    CLR_WHITE),/*Needs tile?*/
-WAND("darkness",       "obsidian", 10, 100, 1, NODIR,     GLASS,    CLR_BLACK),/*Needs tile*/
+WAND("darkness",       "obsidian", 10, 100, 1, NODIR,     OBSIDIAN_MT,    CLR_BLACK),/*Needs tile*/
 WAND("wishing",        "pine",      5, 500, 1, NODIR,     WOOD,     HI_WOOD),
 WAND("secret door detection", "balsa",
 				   50, 150, 1, NODIR,	  WOOD,     HI_WOOD),

@@ -2468,7 +2468,7 @@ static const char *foodwords[] = {
 	"meal", "liquid", "wax", "food", "meat",
 	"paper", "cloth", "leather", "wood", "bone", "scale",
 	"metal", "metal", "metal", "silver", "gold", "platinum", "mithril",
-	"plastic", "glass", "rich food", "stone"
+	"plastic", "glass", "rich food", "stone", "obsidian", "shadow"
 };
 
 STATIC_OVL const char *
