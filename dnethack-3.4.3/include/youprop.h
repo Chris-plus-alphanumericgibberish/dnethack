@@ -438,5 +438,7 @@
 
 #define Lifesaved		(u.uprops[LIFESAVED].extrinsic || u.sealsActive&SEAL_JACK)
 
+#define Necrospellboost	(u.uprops[NECROSPELLS].extrinsic)
+
 
 #endif /* YOUPROP_H */
