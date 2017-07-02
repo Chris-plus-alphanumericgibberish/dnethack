@@ -245,7 +245,7 @@ register struct obj *obj;
 		  obj->oeaten > drainlevel(obj)));
 
      /* return((boolean)(!!index(comestibles, obj->oclass))); */
-	return (boolean)(obj->oclass == FOOD_CLASS && (obj->obj_material == VEGGY || obj->obj_material == FLESH));
+	return (boolean)(obj->oclass == FOOD_CLASS && (obj->obj_material == VEGGY || obj->obj_material == FLESH || obj->otyp == TIN));
 }
 
 #endif /* OVL1 */
