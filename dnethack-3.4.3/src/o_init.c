@@ -906,7 +906,6 @@ int mat;
 	
 	for(i = WAN_WISHING; i <= WAN_LIGHTNING; i++){
 		ctyp = WAN_WISHING + (((otyp+i)-WAN_WISHING)%(WAN_LIGHTNING-WAN_WISHING));
-		pline("%s",obj_descr[ctyp].oc_name);
 		if(objects[ctyp].oc_material == mat)
 			return ctyp;
 		for(j = 0; j < 7; j++)

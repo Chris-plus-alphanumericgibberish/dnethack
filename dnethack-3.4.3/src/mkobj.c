@@ -1514,6 +1514,9 @@ int mat;
 		break;
 		case WAND_CLASS:
 			obj->otyp = matWand(obj->otyp, mat);
+			if(obj->otyp == WAN_WISHING)
+				obj->spe /= 5;
+			if(!(obj->recharged)) obj->recharged = 1;
 			obj->obj_material = mat;
 		break;
 		default:
