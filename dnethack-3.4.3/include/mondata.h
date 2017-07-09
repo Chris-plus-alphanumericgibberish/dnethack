@@ -339,7 +339,9 @@
 #define cantwield(ptr)		(nohands(ptr))
 #define could_twoweap(ptr)	((ptr)->mattk[1].aatyp == AT_WEAP)
 // define cantweararm(ptr)	(breakarm(ptr) || sliparm(ptr))
-#define arm_match(ptr,obj)	(Is_dragon_scales(obj) || (((ptr->mflagsb&MB_BODYTYPEMASK) != 0) && \
+#define arm_match(ptr,obj)	(Is_dragon_scales(obj) || \
+							(obj->otyp == ELVEN_TOGA && ((ptr->mflagsb&MB_HUMANOID) && (obj->bodytypeflag&MB_HUMANOID))) ||\
+							(((ptr->mflagsb&MB_BODYTYPEMASK) != 0) && \
 		((ptr->mflagsb&MB_BODYTYPEMASK) == (obj->bodytypeflag&MB_BODYTYPEMASK))))
 #define can_wear_gloves(ptr)	(!nohands(ptr))
 #define can_wear_amulet(ptr)	(has_head(ptr))
