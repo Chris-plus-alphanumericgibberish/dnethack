@@ -6,6 +6,7 @@
 #include "artifact.h"
 #include "emin.h"
 #include "epri.h"
+#include "edog.h"
 #ifdef OVLB
 #include "artilist.h"
 #else
@@ -48,11 +49,10 @@ static NEARDATA	int oozes[12] = {0, PM_ACID_BLOB, PM_QUIVERING_BLOB,
 					  PM_BROWN_PUDDING, PM_BLACK_PUDDING, PM_GREEN_SLIME,
 					  PM_AOA, PM_BROWN_MOLD, PM_RED_MOLD};
 
-static NEARDATA	int devils[16] = {0, PM_IMP, PM_LEMURE, PM_IMP,
-					  PM_LEMURE, PM_IMP, PM_LEMURE,
+static NEARDATA	int devils[13] = {0, PM_IMP, PM_LEMURE, 
 					  PM_LEGION_DEVIL_GRUNT, PM_LEGION_DEVIL_SOLDIER, PM_LEGION_DEVIL_SERGEANT, 
 					  PM_HORNED_DEVIL, PM_BARBED_DEVIL, PM_BONE_DEVIL,
-					  PM_ICE_DEVIL, PM_PIT_FIEND, PM_HORNED_DEVIL};
+					  PM_ICE_DEVIL, PM_PIT_FIEND, PM_ANCIENT_OF_ICE, PM_ANCIENT_OF_DEATH};
 
 static NEARDATA	int demons[16] = {0, PM_QUASIT, PM_MANES, PM_QUASIT,
 					  PM_MANES, PM_QUASIT, PM_MANES, 
@@ -6653,7 +6653,10 @@ read_necro(VOID_ARGS)
 					if(u.uen >= 10){
 						u.uen -= 10;
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
-						if(mtmp) initedog(mtmp);
+						if(mtmp){
+							initedog(mtmp);
+							EDOG(mtmp)->loyal = 1;
+						}
 					}
 				}
 			break;
@@ -6673,6 +6676,7 @@ read_necro(VOID_ARGS)
 						if(mtmp){
 							initedog(mtmp);
 							mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
+							mtmp->mhpmax = mtmp->mhp = mtmp->m_lev*8 - rnd(7);
 							if(u.ulevel < mtmp->m_lev){
 								mtmp->mtame = 0;
 								mtmp->mpeaceful = 0;
@@ -6680,7 +6684,6 @@ read_necro(VOID_ARGS)
 							}
 							mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
 							mtmp->mhp =  mtmp->mhpmax;
-							mtmp->mcrazed = 1;
 						}
 					}
 				}
@@ -6688,11 +6691,12 @@ read_necro(VOID_ARGS)
 			case SELECT_DEVIL:
 				if(u.uen >= 60){
 					u.uen -= 60;
-					mtmp = makemon(&mons[devils[d(1,15)]], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+					mtmp = makemon(&mons[devils[d(1,13)]], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 					if(mtmp){
 						initedog(mtmp);
 						mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
 						if(!rn2(9)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
+						mtmp->mhpmax = mtmp->mhp = mtmp->m_lev*8 - rnd(7);
 						if(u.ulevel < mtmp->m_lev && rn2(2)){
 							mtmp->mtame = 0;
 							mtmp->mpeaceful = 0;
@@ -6708,12 +6712,12 @@ read_necro(VOID_ARGS)
 					if(mtmp){
 						initedog(mtmp);
 						if(!rn2(6)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
+						mtmp->mhpmax = mtmp->mhp = mtmp->m_lev*8 - rnd(7);
 						if(u.ulevel < mtmp->m_lev || rn2(2)){
 							mtmp->mtame = 0;
 							mtmp->mpeaceful = 0;
 							mtmp->mtraitor = 1;
 						}
-						mtmp->mcrazed = 1;
 					}
 				}
 			break;
