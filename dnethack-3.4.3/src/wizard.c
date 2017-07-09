@@ -370,15 +370,13 @@ tactics(mtmp)
 				attacktype_fordmg(mtmp->data, AT_SPIT, AD_ANY) ||
 				attacktype_fordmg(mtmp->data, AT_ARRW, AD_ANY) ||
 				attacktype_fordmg(mtmp->data, AT_BEAM, AD_ANY) )
-				//do something about poss of cancellation
+				&& !mtmp->mcan && !mtmp->mspec_used
 			){
 				monline(mtmp);
 				if(!mon_can_see_you(mtmp)) mnexto(mtmp);
-			} else if((attacktype_fordmg(mtmp->data, AT_LRCH, AD_ANY) ||
-				attacktype_fordmg(mtmp->data, AT_LNCK, AD_ANY) ||
-				attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY) ||
+			} else if((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY) ||
 				attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY) )
-				//do something about poss of cancellation
+				&& !mtmp->mcan && !mtmp->mspec_used
 			){
 				mofflin(mtmp);
 				if(!mon_can_see_you(mtmp)) mnexto(mtmp);
