@@ -1053,7 +1053,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10;
 		}
 		
-		if(u.uz.dlevel == spire_level.dlevel || rn2(ml*2) < chance) {	/* fumbled attack */
+		if((u.uz.dnum == neutral_dnum && u.uz.dlevel == spire_level.dlevel) || rn2(ml*2) < chance) {	/* fumbled attack */
 			if (canseemon(mtmp) && flags.soundok)
 			pline_The("air crackles around %s.", mon_nam(mtmp));
 			return(0);
@@ -2759,7 +2759,7 @@ castmm(mtmp, mdef, mattk)
 			else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10;
 		}
 		
-		if(u.uz.dlevel == spire_level.dlevel || rn2(ml*2) < chance) {	/* fumbled attack */
+		if((u.uz.dnum == neutral_dnum && u.uz.dlevel == spire_level.dlevel) || rn2(ml*2) < chance) {	/* fumbled attack */
 			if (canseemon(mtmp) && flags.soundok)
 			pline_The("air crackles around %s.", mon_nam(mtmp));
 			return(0);
