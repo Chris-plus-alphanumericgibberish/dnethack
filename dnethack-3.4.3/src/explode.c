@@ -1055,7 +1055,7 @@ int dest;
 	    watch_dig((struct monst *)0, ox, oy, TRUE);
 	    if (*in_rooms(ox, oy, SHOPBASE)) shop_damage = TRUE;
 	}
-	digactualhole(ox, oy, BY_OBJECT, PIT, TRUE, TRUE);
+	digactualhole(ox, oy, BY_OBJECT, PIT, TRUE, FALSE);
     }
     free_explode_region(dig_area);
     for(i = 0; i < fiery_area->nlocations; i++) {
