@@ -966,7 +966,7 @@ boolean gone;
     int old_attrib, which;
 
     takeoff_mask &= ~mask;
-    if(!(u.uprops[objects[obj->otyp].oc_oprop].extrinsic & mask))
+    if(objects[obj->otyp].oc_oprop && !(u.uprops[objects[obj->otyp].oc_oprop].extrinsic & mask))
 	impossible("Strange... I didn't know you had that ring.");
     if(gone) setnotworn(obj);
     else setworn((struct obj *)0, obj->owornmask);
