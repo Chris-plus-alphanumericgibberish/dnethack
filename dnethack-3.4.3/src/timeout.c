@@ -1777,6 +1777,11 @@ begin_burn(obj, already_lit)
 		radius = 1;	/* very dim light */
 		break;
 
+	    case STICK_OF_DYNAMITE:
+		turns = obj->age;
+		radius = 1;     /* very dim light */
+		break;
+		
 		case GNOMISH_POINTY_HAT:
 			turns = obj->age;
 			radius = 2;
