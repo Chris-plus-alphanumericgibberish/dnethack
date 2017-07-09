@@ -4720,6 +4720,13 @@ int p_skill;
 		else if((u.sealsActive&SEAL_EURYNOME) || (u.sealsActive&SEAL_BUER)) maxskill = max(P_EXPERT,maxskill);
 	} else if(spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
 	else if(u.specialSealsActive&SEAL_NUMINA) maxskill = max(P_SKILLED,maxskill);
+	
+	if(p_skill >= FFORM_SHII_CHO && p_skill <= FFORM_JUYO){
+		if(uwep && is_lightsaber(uwep)) maxskill = min(maxskill, P_SKILL(weapon_type(uwep)));
+		else if(uswapwep && is_lightsaber(uswapwep)) maxskill = min(maxskill, P_SKILL(weapon_type(uswapwep)));
+		else maxskill = P_UNSKILLED;
+	}
+	
 	return maxskill;
 }
 
