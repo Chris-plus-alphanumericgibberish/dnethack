@@ -1125,6 +1125,8 @@ int thrown;
 				tmp = 0;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
 		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 4) + obj->spe);
+			
+		    else if((is_lightsaber(obj) && !obj->lamplit)) tmp = d(1,4) + obj->spe + weapon_dam_bonus(0); //martial arts aid
 
 			else tmp = rnd(2);
 			
