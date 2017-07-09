@@ -1386,8 +1386,8 @@ int part;
 		"light headed", "neck", "spine", "toe", "hair",
 		"blood", "lung", "nose", "stomach","heart","skin",
 		"flesh","beat","bones","creak","crack"},
-	*clockwork_parts[] = { "arm", "photoreceptor", "face", "finger",
-		"fingertip", "foot", "hand", "handed", "head", "leg",
+	*clockwork_parts[] = { "arm", "photoreceptor", "face", "grasping digit",
+		"digit-tip", "foot", "manipulator", "manipulatored", "head", "leg",
 		"addled", "neck", "chassis", "toe", "doll-hair",
 		"blood", "gear", "chemoreceptor", "keyhole","mainspring","metal skin",
 		"brass structure","tick","rods","creak","bend"},
@@ -1444,6 +1444,16 @@ int part;
 		"pelvic fin", "anal fin", "pectoral fin", "finned", "head", "peduncle",
 		"played out", "gills", "dorsal fin", "caudal fin",
 		"scales", "blood", "gill", "nostril", "stomach","heart","scales",
+		"flesh","beat","bones","creak","crack" },
+	*snakeleg_humanoid_parts[] = { "arm", "eye", "face", "finger",
+		"fingertip", "serpentine lower body", "hand", "handed", "head", "leg",
+		"light headed", "neck", "spine", "tail-tip", "scales",
+		"blood", "lung", "nose", "stomach","heart","scales",
+		"flesh","beat","bones","creak","crack" },
+	*centauroid_parts[] = { "arm", "eye", "face", "finger",
+		"fingertip", "hoof", "hand", "handed", "head", "front leg",
+		"light headed", "neck", "spine", "hoof-nail", "hair",
+		"blood", "lung", "nose", "stomach","heart","skin",
 		"flesh","beat","bones","creak","crack" };
 	/* claw attacks are overloaded in mons[]; most humanoids with
 	   such attacks should still reference hands rather than claws */
@@ -1479,10 +1489,6 @@ int part;
 	    return "tentacle";
 	if (mptr == &mons[PM_FLOATING_EYE] && part == EYE)
 	    return "cornea";
-	if (humanoid(mptr) &&
-		(part == ARM || part == FINGER || part == FINGERTIP ||
-		    part == HAND || part == HANDED))
-	    return uclockwork ? clockwork_parts[part] : humanoid_parts[part];
 	if (mptr == &mons[PM_RAVEN] || mptr == &mons[PM_CROW])
 	    return bird_parts[part];
 	if (mptr->mlet == S_CENTAUR || mptr->mlet == S_UNICORN ||
@@ -1494,11 +1500,7 @@ int part;
 				part == FINGERTIP || part == HAND) return "ray";
 		else return "beam";
 	}
-	if (mptr->mlet == S_EEL && mptr != &mons[PM_JELLYFISH])
-	    return fish_parts[part];
-	if (slithy(mptr) || (mptr->mlet == S_DRAGON && part == HAIR))
-	    return snake_parts[part];
-	if (mptr->mlet == S_EYE)
+	if (mptr->mlet == S_EYE && !is_auton(mptr))
 	    return sphere_parts[part];
 	if (mptr->mlet == S_JELLY || mptr->mlet == S_PUDDING ||
 		mptr->mlet == S_BLOB || mptr == &mons[PM_JELLYFISH])
@@ -1507,10 +1509,20 @@ int part;
 	    return vortex_parts[part];
 	if (mptr->mlet == S_FUNGUS)
 	    return fungus_parts[part];
-	if (humanoid(mptr))
-	    return uclockwork ? clockwork_parts[part] : humanoid_parts[part];
+	if (mptr->mlet == S_EEL && mptr != &mons[PM_JELLYFISH])
+	    return fish_parts[part];
 	if (mptr->mlet == S_ANT)
 		return insect_parts[part];
+	if (serpentine(mptr) || (mptr->mlet == S_DRAGON && part == HAIR))
+	    return snake_parts[part];
+	if (snakemanoid(mptr))
+	    return snakeleg_humanoid_parts[part];
+	if (centauroid(mptr))
+	    return centauroid_parts[part];
+	if (is_clockwork(mptr) || (mon == &youmonst && uclockwork))
+	    return clockwork_parts[part];
+	if (humanoid(mptr))
+	    return humanoid_parts[part];
 	return animal_parts[part];
 }
 
