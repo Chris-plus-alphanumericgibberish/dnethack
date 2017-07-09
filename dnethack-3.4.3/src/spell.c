@@ -4041,22 +4041,21 @@ int spell;
 
 	splcaster = urole.spelbase;
 	special = urole.spelheal;
-	if(!Role_if(PM_EXILE)){
-		if(Race_if(PM_INCANTIFIER)) statused = ACURR(A_INT);
-		else statused = ACURR(urole.spelstat);
+	
+	if(u.specialSealsActive&SEAL_NUMINA){
+		if(abs(u.wisSpirits - u.intSpirits) <= 1) statused = max(ACURR(A_WIS), ACURR(A_INT));
+	} else if(u.wisSpirits > u.intSpirits){
+		statused = ACURR(A_WIS);
+	} else if(u.wisSpirits < u.intSpirits){
+		statused = ACURR(A_INT);
+	} else if(u.wisSpirits || u.intSpirits){
+		statused = max(ACURR(A_WIS), ACURR(A_INT));
 	} else {
-		if(u.specialSealsActive&SEAL_NUMINA){
-			if(abs(u.wisSpirits - u.intSpirits) <= 1) statused = max(ACURR(A_WIS), ACURR(A_INT));
-		} else if(u.wisSpirits > u.intSpirits){
-			statused = ACURR(A_WIS);
-		} else if(u.wisSpirits < u.intSpirits){
-			statused = ACURR(A_INT);
-		} else if(u.wisSpirits || u.intSpirits){
-			statused = max(ACURR(A_WIS), ACURR(A_INT));
-		} else {
-			if(Race_if(PM_INCANTIFIER)) statused = ACURR(A_INT);
-			else statused = min(ACURR(A_WIS), ACURR(A_INT));
-		}
+		if(Race_if(PM_INCANTIFIER)) statused = ACURR(A_INT);
+		else if(Role_if(PM_EXILE)) statused = min(ACURR(A_WIS), ACURR(A_INT));
+		else if(Role_if(PM_BARD) && spell_skilltype(spellid(spell)) == P_ENCHANTMENT_SPELL)
+			statused = ACURR(A_CHA);
+		else statused = ACURR(urole.spelstat);
 	}
 
 	if (uarm && (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE) )
