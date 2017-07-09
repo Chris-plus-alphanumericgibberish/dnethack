@@ -4174,7 +4174,7 @@ struct permonst _mons2[] = {
 	MA_ELF|MA_UNDEAD|MA_DROW /*MA*/,  MV_DARKSIGHT /*MV*/, CLR_BLACK),
     MON("half-dragon zombie", S_ZOMBIE,// /*Needs tile*/
 	LVL(5, 4, 7, 0, -5), (G_GENO|G_SGROUP|G_NOCORPSE|1),
-	A(ATTK(AT_CLAW, AD_FIRE, 1, 6),
+	A(ATTK(AT_CLAW, AD_PHYS, 1, 6),
 	  ATTK(AT_BREA, AD_HDRG, 4, 6), NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_HUMAN, 175, 0, MS_SILENT, MZ_HUMAN),
 	MR_COLD|MR_SLEEP|MR_POISON, 0,
