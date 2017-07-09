@@ -318,7 +318,7 @@ mattackm(magr, mdef)
      */
     magr->mlstmv = monstermoves;
 	
-	if(pa == &mons[PM_LILLEND] && rn2(2)){
+	if(!(magr->mfaction == ZOMBIFIED || magr->mfaction == SKELIFIED) && pa == &mons[PM_LILLEND] && rn2(2)){
 		pa = find_mask(magr);
 		if(!Blind && pa != &mons[PM_LILLEND]) pline("%s uses a %s mask!",Monnam(magr), pa->mname);
 	}
@@ -330,6 +330,45 @@ mattackm(magr, mdef)
 	otmp = (struct obj *)0;
 	attk = 1;
 	
+		if(magr->mfaction == ZOMBIFIED || magr->mfaction == SKELIFIED || magr->mfaction == CRYSTALFIED){
+			if(mattk->aatyp == AT_SPIT 
+				|| mattk->aatyp == AT_BREA 
+				|| mattk->aatyp == AT_GAZE 
+				|| mattk->aatyp == AT_ARRW 
+				|| mattk->aatyp == AT_MMGC 
+				|| mattk->aatyp == AT_TNKR 
+				|| mattk->aatyp == AT_SHDW 
+				|| mattk->aatyp == AT_BEAM 
+				|| mattk->aatyp == AT_MAGC
+				|| (mattk->aatyp == AT_TENT && magr->mfaction == SKELIFIED)
+			){
+				if(i == 0){
+					mattk->aatyp = AT_CLAW;
+					mattk->adtyp = AD_PHYS;
+					mattk->damn = magr->m_lev/10+1;
+					mattk->damd = max(magr->data->msize*2, 4);
+				}
+				else if(i == NATTK-1 
+					&& magr->mfaction == CRYSTALFIED
+				){
+					mattk->aatyp = AT_TUCH;
+					mattk->adtyp = AD_ECLD;
+					mattk->damn = min(10,magr->m_lev/3);
+					mattk->damd = 8;
+				}
+				else continue;
+			}
+			else if(i == NATTK-1 
+				&& magr->mfaction == CRYSTALFIED
+				&& !mattk->aatyp && !mattk->adtyp && !mattk->damn && !mattk->damd
+			){
+				mattk->aatyp = AT_TUCH;
+				mattk->adtyp = AD_ECLD;
+				mattk->damn = min(10,magr->m_lev/3);
+				mattk->damd = 8;
+			}
+		}
+		
 	/*Plasteel helms cover the face and prevent bite attacks*/
 	if((magr->misc_worn_check & W_ARMH) && which_armor(magr, W_ARMH) &&
 		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM) && 
@@ -1974,7 +2013,7 @@ physical:{
 		    break;
 		}
 		if (vis) pline("%s brain is eaten!", s_suffix(Monnam(mdef)));
-		if (mindless(pd)) {
+		if (mindless_mon(mdef)) {
 		    if (vis) pline("%s doesn't notice.", Monnam(mdef));
 		    break;
 		}
@@ -1991,7 +2030,7 @@ physical:{
 	        if (vis)
 		    pline("%s reaches out with its deadly touch.",
 		          Monnam(magr));
-		if (is_undead(mdef->data)) {
+		if (is_undead_mon(mdef)) {
 		    /* Still does normal damage */
 	            if (vis)
 		        pline("%s looks no deader than before.", Monnam(mdef));
@@ -2155,30 +2194,35 @@ physical:{
 		}
 	}
 	
+	if((magr->mfaction == ZOMBIFIED || (magr->mfaction == SKELIFIED && !rn2(20))) && can_undead_mon(mdef)){
+		pline("%s zombified.", Monnam(mdef));
+		mdef->zombify = 1;
+	}
+	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (m_at(mdef->mx, mdef->my) == magr) {  /* see gulpmm() */
-		remove_monster(mdef->mx, mdef->my);
-		mdef->mhp = 1;	/* otherwise place_monster will complain */
-		place_monster(mdef, mdef->mx, mdef->my);
-		mdef->mhp = 0;
+			remove_monster(mdef->mx, mdef->my);
+			mdef->mhp = 1;	/* otherwise place_monster will complain */
+			place_monster(mdef, mdef->mx, mdef->my);
+			mdef->mhp = 0;
 	    }
 	    monkilled(mdef, "", (int)mattk->adtyp);
 	    if (mdef->mhp > 0) return 0; /* mdef lifesaved */
 
 	    if (mattk->adtyp == AD_DGST) {
-		/* various checks similar to dog_eat and meatobj.
-		 * after monkilled() to provide better message ordering */
-		if (mdef->cham != CHAM_ORDINARY && !resists_poly(magr->data)) {
-		    (void) newcham(magr, (struct permonst *)0, FALSE, TRUE);
-		} else if ((mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME]) && !resists_poly(magr->data)) {
-		    (void) newcham(magr, &mons[PM_GREEN_SLIME], FALSE, TRUE);
-		} else if (mdef->data == &mons[PM_WRAITH]) {
-		    (void) grow_up(magr, (struct monst *)0);
-		    /* don't grow up twice */
-		    return (MM_DEF_DIED | (magr->mhp > 0 ? 0 : MM_AGR_DIED));
-		} else if (mdef->data == &mons[PM_NURSE]) {
-		    magr->mhp = magr->mhpmax;
-		}
+			/* various checks similar to dog_eat and meatobj.
+			 * after monkilled() to provide better message ordering */
+			if (mdef->cham != CHAM_ORDINARY && !resists_poly(magr->data)) {
+				(void) newcham(magr, (struct permonst *)0, FALSE, TRUE);
+			} else if ((mdef->data == &mons[PM_GREEN_SLIME] || mdef->data == &mons[PM_FLUX_SLIME]) && !resists_poly(magr->data)) {
+				(void) newcham(magr, &mons[PM_GREEN_SLIME], FALSE, TRUE);
+			} else if (mdef->data == &mons[PM_WRAITH]) {
+				(void) grow_up(magr, (struct monst *)0);
+				/* don't grow up twice */
+				return (MM_DEF_DIED | (magr->mhp > 0 ? 0 : MM_AGR_DIED));
+			} else if (mdef->data == &mons[PM_NURSE]) {
+				magr->mhp = magr->mhpmax;
+			}
 	    }
 
 	    return (MM_DEF_DIED | (grow_up(magr,mdef) ? 0 : MM_AGR_DIED));

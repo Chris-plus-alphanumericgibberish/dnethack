@@ -601,19 +601,19 @@ struct obj * instr;
 	
 	/* Defense level */
 	dlev = (int)mtmp->m_lev*2;
-	if (nonliving(mtmp->data) && mindless(mtmp->data)) dlev = 100;
+	if (nonliving_mon(mtmp) && mindless_mon(mtmp)) dlev = 100;
 	dlev0 = dlev;
 
 	/* "peaceful" songs */
 	if (song == SNG_SLEEP || song == SNG_TAME || song == SNG_HASTE || song == SNG_HEAL) {
-		if (mindless(mtmp->data)) dlev += dlev0/10;
+		if (mindless_mon(mtmp)) dlev += dlev0/10;
 		if (is_animal(mtmp->data)) dlev -= dlev0/10; // music calm the beasts
 		if (is_domestic(mtmp->data)) dlev -= dlev0/10;
 		if (likes_magic(mtmp->data)) dlev += dlev0/5;
 		if (your_race(mtmp->data)) dlev -= dlev0/10;
 
 		// undead and demons don't care about 'peaceful' music
-		if (is_undead(mtmp->data) || is_demon(mtmp->data)) dlev += 50;
+		if (is_undead_mon(mtmp) || is_demon(mtmp->data)) dlev += 50;
 		if (always_hostile(mtmp->data)) dlev += dlev0/10;
 		if (race_peaceful(mtmp->data)) dlev -= dlev0/10;
 
@@ -654,7 +654,7 @@ struct obj * instr;
 		// the Lyre isn't so good to scare people or to sow confusion
 		if (instr->oartifact == ART_LYRE_OF_ORPHEUS) alev /= 2;
 		// undeads and demons like scary music
-		if (song == SNG_FEAR && is_undead(mtmp->data)) dlev -= dlev0/3;
+		if (song == SNG_FEAR && is_undead_mon(mtmp)) dlev -= dlev0/3;
 		if (song == SNG_FEAR && is_demon(mtmp->data)) dlev -= dlev0/5;
 		// monster is scared/confused easily if it can't see you
 		canseeu = m_canseeu(mtmp);
@@ -788,14 +788,14 @@ int distance;
 		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
 			mon_affected_by_song(mtmp) && r >= 0) {
 
-			if (is_undead(mtmp->data) || is_demon(mtmp->data)) {
+			if (is_undead_mon(mtmp) || is_demon(mtmp->data)) {
 				// small chance of side effect
 				r = r/songs[song_being_played()].turns;
 				// if (wizard) pline("[%i%% side effect]", r);
 			}
 	
 			/* fear song actually can pacify undead */
-			if (is_undead(mtmp->data)) {
+			if (is_undead_mon(mtmp)) {
 				if (rn2(100) < r) {
 					if (canseemon(mtmp))
 						pline((Hallucination ? "%s starts to coreograph a dance!" 
@@ -1533,9 +1533,9 @@ do_pit:		    chasm = maketrap(x,y,PIT);
                                    if(!cansee(x,y) || mon)
                                        pline("%s is %sed!",
                                                cansee(x,y) ? "It" : Monnam(mtmp),
-                                              nonliving(mtmp->data) ? "destroy" : "kill");
+                                              nonliving_mon(mtmp) ? "destroy" : "kill");
 				    else {
-                                       You("%s %s!", nonliving(mtmp->data) ? "destroy" :
+                                       You("%s %s!", nonliving_mon(mtmp) ? "destroy" :
                                            "kill", mtmp->mtame ?
 					    x_monnam(mtmp, ARTICLE_THE, "poor",
 				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE):

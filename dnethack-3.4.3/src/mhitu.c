@@ -697,6 +697,45 @@ mattacku(mtmp)
 	    if (u.uswallow && (mattk->aatyp != AT_ENGL && mattk->aatyp != AT_ILUR))
 			continue;
 		
+		if(mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
+			if(mattk->aatyp == AT_SPIT 
+				|| mattk->aatyp == AT_BREA 
+				|| mattk->aatyp == AT_GAZE 
+				|| mattk->aatyp == AT_ARRW 
+				|| mattk->aatyp == AT_MMGC 
+				|| mattk->aatyp == AT_TNKR 
+				|| mattk->aatyp == AT_SHDW 
+				|| mattk->aatyp == AT_BEAM 
+				|| mattk->aatyp == AT_MAGC
+				|| (mattk->aatyp == AT_TENT && mtmp->mfaction == SKELIFIED)
+			){
+				if(i == 0){
+					mattk->aatyp = AT_CLAW;
+					mattk->adtyp = AD_PHYS;
+					mattk->damn = mtmp->m_lev/10+1;
+					mattk->damd = max(mtmp->data->msize*2, 4);
+				}
+				else if(i == NATTK-1 
+					&& mtmp->mfaction == CRYSTALFIED
+				){
+					mattk->aatyp = AT_TUCH;
+					mattk->adtyp = AD_ECLD;
+					mattk->damn = min(10,mtmp->m_lev/3);
+					mattk->damd = 8;
+				}
+				else continue;
+			}
+			else if(i == NATTK-1 
+				&& mtmp->mfaction == CRYSTALFIED
+				&& !mattk->aatyp && !mattk->adtyp && !mattk->damn && !mattk->damd
+			){
+				mattk->aatyp = AT_TUCH;
+				mattk->adtyp = AD_ECLD;
+				mattk->damn = min(10,mtmp->m_lev/3);
+				mattk->damd = 8;
+			}
+		}
+		
 		/*Plasteel helms cover the face and prevent bite attacks*/
 		if(mtmp->misc_worn_check & W_ARMH){
 			oarmor = which_armor(mtmp, W_ARMH);
@@ -1420,7 +1459,7 @@ hitmu(mtmp, mattk)
 /*	First determine the base damage done */
 	if(mtmp->mflee && mdat == &mons[PM_BANDERSNATCH]) dmg = d((int)mattk->damn, 2*(int)mattk->damd);
 	else dmg = d((int)mattk->damn, (int)mattk->damd);
-	if(is_undead(mdat) && midnight())
+	if(is_undead_mon(mtmp) && midnight())
 		dmg += d((int)mattk->damn, (int)mattk->damd); /* extra damage */
 
 /*	Next a cancellation factor	*/
@@ -2184,7 +2223,7 @@ dopois:
 					if (mtmp->mhpmax < mtmp->mhp) mtmp->mhpmax = mtmp->mhp;
 				}
 			}
-			if (!mtmp->mcan && !rn2(3) && !Drain_resistance) {
+			if (!mtmp->mcan	&& (mtmp->data != &mons[PM_VAMPIRE_BAT] || u.usleep) && !rn2(3) && !Drain_resistance) {
 				if(!has_blood(youracedata) || uclockwork) pline("%s feeds on you life force!",Monnam(mtmp));
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 				if(mtmp->data == &mons[PM_BLOOD_BLOATER]){
@@ -3201,7 +3240,7 @@ dopois:
 	    if (Half_physical_damage
 					/* Mitre of Holiness */
 		|| (Role_if(PM_PRIEST) && uarmh && is_quest_artifact(uarmh) &&
-		    (is_undead(mtmp->data) || is_demon(mtmp->data))))
+		    (is_undead_mon(mtmp) || is_demon(mtmp->data))))
 		dmg = (dmg+1) / 2;
 
 	    if (permdmg) {	/* Death's life force drain */

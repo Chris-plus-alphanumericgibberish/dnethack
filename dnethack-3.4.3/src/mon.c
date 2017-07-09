@@ -910,6 +910,16 @@ mcalcmove(mon)
 struct monst *mon;
 {
     int mmove = mon->data->mmove;
+	
+	if(mon->mfaction == ZOMBIFIED && mmove > 6){
+		mmove = mmove/2;
+		if(mmove < 6) mmove = 6;
+	}
+	if(mon->mfaction == SKELIFIED && mmove > 6){
+		mmove = mmove*3/4;
+		if(mmove < 6) mmove = 6;
+	}
+	
 	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH])
 		mmove += u.chokhmah;
 	if(mon->data == &mons[PM_PYTHON] && 
@@ -939,6 +949,7 @@ struct monst *mon;
 	if(u.sealsActive&SEAL_CHUPOCLOPS && distmin(mon->mx, mon->my, u.ux, u.uy) <= u.ulevel/5+1){
 		mmove = max(mmove-(u.ulevel/10+1),1);
 	}
+	
     return mmove;
 }
 
@@ -1010,7 +1021,7 @@ mcalcdistress()
 			if(tmpm->mhp < 1){
 				if (canspotmon(tmpm))
 					pline("%s %s!", Monnam(tmpm),
-					nonliving(tmpm->data)
+					nonliving_mon(tmpm)
 					? "is destroyed" : "dies");
 				tmpm->mhp = 0;
 				grow_up(mtmp,tmpm);
@@ -1088,7 +1099,7 @@ mcalcdistress()
 			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
 				&& tmpm->mpeaceful != mtmp->mpeaceful
 				&& tmpm->mtame != mtmp->mtame
-				&& !nonliving(tmpm->data)
+				&& !nonliving_mon(tmpm)
 				&& !DEADMONSTER(tmpm)
 			) targets++;
 		}
@@ -1102,7 +1113,7 @@ mcalcdistress()
 			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
 				&& tmpm->mpeaceful != mtmp->mpeaceful
 				&& tmpm->mtame != mtmp->mtame
-				&& !nonliving(tmpm->data)
+				&& !nonliving_mon(tmpm)
 				&& !DEADMONSTER(tmpm)
 			) targets--;
 			if(!targets) break;
@@ -1125,7 +1136,7 @@ mcalcdistress()
 			if(tmpm->mhp < 1){
 				if (canspotmon(tmpm))
 					pline("%s %s!", Monnam(tmpm),
-					nonliving(tmpm->data)
+					nonliving_mon(tmpm)
 					? "is destroyed" : "dies");
 				tmpm->mhp = 0;
 				grow_up(mtmp,tmpm);
@@ -1191,7 +1202,7 @@ mcalcdistress()
 					if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= BOLT_LIM
 						&& tmpm->mpeaceful != mtmp->mpeaceful
 						&& tmpm->mtame != mtmp->mtame
-						&& !(nonliving(tmpm->data) || is_demon(tmpm->data))
+						&& !(nonliving_mon(tmpm) || is_demon(tmpm->data))
 						&& !(ward_at(tmpm->mx,tmpm->my) == CIRCLE_OF_ACHERON)
 						&& !(resists_death(tmpm))
 						&& !DEADMONSTER(tmpm)
@@ -1210,7 +1221,7 @@ mcalcdistress()
 						if(targ->mhp < 1){
 							if (canspotmon(targ))
 								pline("%s %s!", Monnam(targ),
-								nonliving(targ->data)
+								nonliving_mon(targ)
 								? "is destroyed" : "dies");
 							targ->mhp = 0;
 							grow_up(mtmp,targ);
@@ -1221,7 +1232,7 @@ mcalcdistress()
 						if(targ->mhp < 1){
 							if (canspotmon(targ))
 								pline("%s %s!", Monnam(targ),
-								nonliving(targ->data)
+								nonliving_mon(targ)
 								? "is destroyed" : "dies");
 							targ->mhp = 0;
 							grow_up(mtmp,targ);
@@ -1230,7 +1241,7 @@ mcalcdistress()
 					} else {
 						if (canspotmon(targ))
 							pline("%s %s!", Monnam(targ),
-							nonliving(targ->data)
+							nonliving_mon(targ)
 							? "is destroyed" : "dies");
 						targ->mhp = 0;
 						grow_up(mtmp,targ);
@@ -1961,7 +1972,7 @@ mon_can_see_mon(looker, lookie)
 	if(earthsense(looker->data) && !(is_flyer(lookie->data) || is_floater(lookie->data) || unsolid(lookie->data))){
 		return TRUE;
 	}
-	if(telepathic(looker->data) && !mindless(youracedata)){
+	if(telepathic(looker->data)){
 		return TRUE;
 	}
 	if(goodsmeller(looker->data) && distmin(lookie->mx, lookie->my, looker->mx, looker->my) <= 6){
@@ -2109,7 +2120,7 @@ mon_can_see_you(looker)
 	if(earthsense(looker->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
 		return TRUE;
 	}
-	if(telepathic(looker->data) && !mindless(youracedata)){
+	if(telepathic(looker->data)){
 		return TRUE;
 	}
 	if(goodsmeller(looker->data) && distmin(u.ux, u.uy, looker->mx, looker->my) <= 6){
@@ -2388,7 +2399,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			if(flag & NOTONL) continue;
 			info[cnt] |= NOTONL;
 		}
-		if (levl[nx][ny].typ == CLOUD && Is_lolth_level(&u.uz) && !(nonliving(mon->data) || breathless(mon->data) || resists_poison(mon))) {
+		if (levl[nx][ny].typ == CLOUD && Is_lolth_level(&u.uz) && !(nonliving_mon(mon) || breathless(mon->data) || resists_poison(mon))) {
 			if(!(flag & ALLOW_TRAPS)) continue;
 			info[cnt] |= ALLOW_TRAPS;
 		}
@@ -2529,7 +2540,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Role_if(PM_NOBLEMAN) && (ma == &mons[PM_KNIGHT] || ma == &mons[PM_MAID] || ma == &mons[PM_PEASANT]) && magr->mpeaceful && In_quest(&u.uz))
 		  || (Role_if(PM_KNIGHT) && ma == &mons[PM_KNIGHT] && magr->mpeaceful && In_quest(&u.uz))
 		  || (Race_if(PM_DROW) && is_drow(ma) && magr->mfaction == u.uhouse)
-		  || (Race_if(PM_GNOME) && (is_gnome(ma) && !is_undead(ma)) && magr->mpeaceful)
+		  || (Race_if(PM_GNOME) && (is_gnome(ma) && !is_undead_mon(magr)) && magr->mpeaceful)
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(md)))
 		&& !(Role_if(PM_EXILE))
@@ -2541,7 +2552,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		  || (Role_if(PM_NOBLEMAN) && (md == &mons[PM_KNIGHT] || md == &mons[PM_MAID] || md == &mons[PM_PEASANT]) && mdef->mpeaceful && In_quest(&u.uz))
 		  || (Role_if(PM_KNIGHT) && md == &mons[PM_KNIGHT] && mdef->mpeaceful && In_quest(&u.uz))
 		  || (Race_if(PM_DROW) && is_drow(md) && mdef->mfaction == u.uhouse)
-		  || (Race_if(PM_GNOME) && (is_gnome(md) && !is_undead(md)) && mdef->mpeaceful)
+		  || (Race_if(PM_GNOME) && (is_gnome(md) && !is_undead_mon(mdef)) && mdef->mpeaceful)
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(ma)))
 		&& !(Role_if(PM_EXILE))
@@ -2551,23 +2562,29 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	) return ALLOW_M|ALLOW_TM;
 
 	/* elves vs. orcs */
-	if(is_elf(ma) && (is_orc(md) || is_ogre(md) || is_undead(md)) && !is_undead(ma))
+	if(is_elf(ma) && (is_orc(md) || is_ogre(md) || is_undead_mon(mdef)) && !is_undead_mon(magr))
 		return ALLOW_M|ALLOW_TM;
 	/* and vice versa */
-	if(is_elf(md) && (is_orc(ma) || is_ogre(ma) || is_undead(ma)) && !is_undead(md))
+	if(is_elf(md) && (is_orc(ma) || is_ogre(ma) || is_undead_mon(magr)) && !is_undead_mon(mdef))
 		return ALLOW_M|ALLOW_TM;
 
 	/* dwarves vs. orcs */
-	if(is_dwarf(ma) && (is_orc(md) || is_ogre(md) || is_troll(md)) && !is_undead(ma))
+	if(is_dwarf(ma) && (is_orc(md) || is_ogre(md) || is_troll(md)) && !is_undead_mon(magr))
 		return ALLOW_M|ALLOW_TM;
 	/* and vice versa */
-	if(is_dwarf(md) && (is_orc(ma) || is_ogre(ma) || is_troll(ma)) && !is_undead(md))
+	if(is_dwarf(md) && (is_orc(ma) || is_ogre(ma) || is_troll(ma)) && !is_undead_mon(mdef))
 		return ALLOW_M|ALLOW_TM;
 
 	/* elves vs. drow */
 	if(is_elf(ma) && is_drow(md) && mdef->mfaction != EILISTRAEE_SYMBOL)
 		return ALLOW_M|ALLOW_TM;
 	if(is_elf(md) && is_drow(ma) && magr->mfaction != EILISTRAEE_SYMBOL)
+		return ALLOW_M|ALLOW_TM;
+
+	/* undead vs civs */
+	if(is_undead_mon(magr) && (!always_hostile(md) && !is_undead_mon(mdef) && !(is_animal(md) && !is_domestic(md)) && !mindless_mon(mdef)))
+		return ALLOW_M|ALLOW_TM;
+	if((!always_hostile(ma) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr)) && is_undead_mon(mdef))
 		return ALLOW_M|ALLOW_TM;
 
 	/* drow vs. other drow */
@@ -2627,10 +2644,10 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		return ALLOW_M|ALLOW_TM;
 
 	/* monadics vs. undead */
-	if(ma == &mons[PM_MONADIC_DEVA] && (is_undead(md)))
+	if(ma == &mons[PM_MONADIC_DEVA] && (is_undead_mon(mdef)))
 		return ALLOW_M|ALLOW_TM;
 	/* and vice versa */
-	if(md == &mons[PM_MONADIC_DEVA] && (is_undead(ma)))
+	if(md == &mons[PM_MONADIC_DEVA] && (is_undead_mon(magr)))
 		return ALLOW_M|ALLOW_TM;
 
 	/* woodchucks vs. The Oracle */
@@ -2852,7 +2869,7 @@ struct obj *
 mlifesaver(mon)
 struct monst *mon;
 {
-	if (!nonliving(mon->data)) {
+	if (!nonliving_mon(mon)) {
 	    struct obj *otmp = which_armor(mon, W_AMUL);
 
 	    if (otmp && otmp->otyp == AMULET_OF_LIFE_SAVING)
@@ -3223,7 +3240,7 @@ boolean was_swallowed;			/* digestion */
 				else pline("%s lets out a terrible shriek!", Monnam(mon));
 				for (mtmp = fmon; mtmp; mtmp = mtmp2){
 					mtmp2 = mtmp->nmon;
-					if(mtmp->data->geno & G_GENO && !nonliving(mon->data) && !is_demon(mon->data) && !is_keter(mon->data) && mtmp->mhp <= 100){
+					if(mtmp->data->geno & G_GENO && !nonliving_mon(mon) && !is_demon(mon->data) && !is_keter(mon->data) && mtmp->mhp <= 100){
 						if (DEADMONSTER(mtmp)) continue;
 						mtmp->mhp = -10;
 						monkilled(mtmp,"",AD_DRLI);
@@ -3950,7 +3967,7 @@ xkilled(mtmp, dest)
 	if(mtmp->data == &mons[PM_CROW] && u.sealsActive&SEAL_MALPHAS) unbind(SEAL_MALPHAS,TRUE);
 
 	if (dest & 1) {
-	    const char *verb = nonliving(mtmp->data) ? "destroy" : "kill";
+	    const char *verb = nonliving_mon(mtmp) ? "destroy" : "kill";
 
 	    if (!wasinside && !canspotmon(mtmp))
 		You("%s it!", verb);

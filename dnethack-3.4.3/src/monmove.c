@@ -301,7 +301,7 @@ struct monst *mtmp;
 			(mtmp->data->mlet == S_LIGHT && complete >= 4) ||
 			(mtmp->data->mlet == S_DRAGON && complete >= 4) ||
 			(mtmp->data->mlet == S_NAGA && complete >= 4) ||
-			(is_undead(mtmp->data) && complete >= 4) ||
+			(is_undead_mon(mtmp) && complete >= 4) ||
 			(mtmp->data->mlet == S_TRAPPER && complete >= 4  && /*This one means "is a metroid", which are being counted as energions for this*/
 				mtmp->data != &mons[PM_TRAPPER] &&
 				mtmp->data != &mons[PM_LURKER_ABOVE]) ||
@@ -440,7 +440,7 @@ struct monst *mtmp;
 			is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
 			mtmp->data == &mons[PM_MAANZECORIAN] ||
 			is_rider(mtmp->data)) return FALSE;
-	return mtmp->data == &mons[PM_CERBERUS] || is_undead(mtmp->data);
+	return mtmp->data == &mons[PM_CERBERUS] || is_undead_mon(mtmp);
 }
 
 boolean
@@ -489,7 +489,7 @@ struct monst *mtmp;
 		) return FALSE;
 	return( !(is_human(mtmp->data) || is_elf(mtmp->data) || is_dwarf(mtmp->data) ||
 		  is_gnome(mtmp->data) || is_orc(mtmp->data)) || 
-		  is_undead(mtmp->data) || is_were(mtmp->data));
+		  is_undead_mon(mtmp) || is_were(mtmp->data));
 	
 }
 boolean
@@ -505,7 +505,7 @@ struct monst *mtmp;
 		) return FALSE;
 	if((is_human(mtmp->data) || is_elf(mtmp->data) || is_dwarf(mtmp->data) ||
 		  is_gnome(mtmp->data) || is_orc(mtmp->data)) && 
-		  !is_undead(mtmp->data) && 
+		  !is_undead_mon(mtmp) && 
 		  !is_were(mtmp->data)){
 			mtmp->mcrazed = 1;
 			return !rn2(10);
@@ -610,7 +610,7 @@ boolean digest_meal;
 	}
 	/* Clouds on Lolth's level deal damage */
 	if(Is_lolth_level(&u.uz) && levl[mon->mx][mon->my].typ == CLOUD){
-		if (!(nonliving(mon->data) || breathless(mon->data))){
+		if (!(nonliving_mon(mon) || breathless(mon->data))){
 			if (haseyes(mon->data) && mon->mcansee){
 				mon->mblinded = 1;
 				mon->mcansee = 0;
@@ -636,7 +636,7 @@ boolean digest_meal;
 		}
 	}
 	if(mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
-	if(!nonliving(mon->data)){
+	if(!nonliving_mon(mon)){
 		if (mon->mhp < mon->mhpmax){
 			//recover 1/30th hp per turn:
 			mon->mhp += (mon->m_lev)/30;
@@ -991,7 +991,8 @@ register struct monst *mtmp;
 	for (gazemon = fmon; gazemon; gazemon = nxtmon){
 		nxtmon = gazemon->nmon;
 		if (gazemon != mtmp
-			&& ((gazemon->data == &mons[PM_MEDUSA]&& ((rn2(3) >= magic_negation(gazemon)))) || gazemon->data == &mons[PM_GREAT_CTHULHU])
+			&& ((gazemon->data == &mons[PM_MEDUSA] && !resists_ston(mtmp) && 
+				((rn2(3) >= magic_negation(gazemon)))) || gazemon->data == &mons[PM_GREAT_CTHULHU])
 			&& mon_can_see_mon(mtmp, gazemon)
 			&& clear_path(mtmp->mx, mtmp->my, gazemon->mx, gazemon->my)
 		){
@@ -1056,7 +1057,7 @@ register struct monst *mtmp;
 		&& (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
-		&& !(mindless(mtmp->data))
+		&& !(mindless_mon(mtmp))
 	){
 		if(cansee(mtmp->mx,mtmp->my)) pline("%s invokes the darkness.",Monnam(mtmp));
 	    do_clear_area(mtmp->mx,mtmp->my, 5, set_lit, (genericptr_t)0);
@@ -1193,7 +1194,7 @@ register struct monst *mtmp;
 			nmon = m2->nmon;
 			if (DEADMONSTER(m2)) continue;
 			if (m2->mpeaceful == mtmp->mpeaceful) continue;
-			if (mindless(m2->data)) continue;
+			if (mindless_mon(m2)) continue;
 			if (m2 == mtmp) continue;
 			if ((telepathic(m2->data) &&
 			    (rn2(2) || m2->mblinded)) || !rn2(10)) {
@@ -1628,7 +1629,7 @@ not_special:
 			/* look for gold or jewels nearby */
 			likegold = (likes_gold(ptr) && pctload < 95);
 			likegems = (likes_gems(ptr) && pctload < 85);
-			uses_items = (!mindless(ptr) && !is_animal(ptr)
+			uses_items = (!mindless_mon(mtmp) && !is_animal(ptr)
 				&& pctload < 75);
 			likeobjs = (likes_objs(ptr) && pctload < 75);
 			likemagic = (likes_magic(ptr) && pctload < 85);
@@ -1754,7 +1755,7 @@ not_special:
 	if (passes_bars(ptr) && !Is_illregrd(&u.uz) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
 	if (is_human(ptr) || ptr == &mons[PM_MINOTAUR]) flag |= ALLOW_SSM;
-	if (is_undead(ptr) && ptr->mlet != S_GHOST && ptr->mlet != S_SHADE) flag |= NOGARLIC;
+	if (is_undead_mon(mtmp) && ptr->mlet != S_GHOST && ptr->mlet != S_SHADE) flag |= NOGARLIC;
 	if (throws_rocks(ptr)) flag |= ALLOW_ROCK;
 	if (can_open) flag |= OPENDOOR;
 	if (can_unlock) flag |= UNLOCKDOOR;
@@ -2074,7 +2075,7 @@ postmov:
 		    /* look for gold or jewels nearby */
 		    likegold = (likes_gold(ptr) && pctload < 95);
 		    likegems = (likes_gems(ptr) && pctload < 85);
-		    uses_items = (!mindless(ptr) && !is_animal(ptr)
+		    uses_items = (!mindless_mon(mtmp) && !is_animal(ptr)
 				  && pctload < 75);
 		    likeobjs = (likes_objs(ptr) && pctload < 75);
 		    likemagic = (likes_magic(ptr) && pctload < 85);

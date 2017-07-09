@@ -720,7 +720,7 @@ boolean creation;
 	 * Give animals and mindless creatures a chance to wear their initial
 	 * equipment.
 	 */
-	if ((is_animal(mon->data) || mindless(mon->data)) && !creation)
+	if ((is_animal(mon->data) || mindless_mon(mon)) && !creation)
 		return;
 
 	m_dowear_type(mon, W_AMUL, creation, FALSE);

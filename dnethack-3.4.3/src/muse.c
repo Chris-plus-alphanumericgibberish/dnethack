@@ -260,7 +260,7 @@ struct monst *mtmp;
 	boolean immobile = (mtmp->data->mmove == 0);
 	int fraction;
 
-	if (is_animal(mtmp->data) || mindless(mtmp->data))
+	if (is_animal(mtmp->data) || mindless_mon(mtmp))
 		return FALSE;
 	if(dist2(x, y, mtmp->mux, mtmp->muy) > 25)
 		return FALSE;
@@ -916,7 +916,7 @@ struct monst *mtmp;
 	int difficulty = monstr[(monsndx(pm))];
 	int trycnt = 0;
 
-	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless_mon(mtmp)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
     try_again:
@@ -1020,7 +1020,7 @@ struct monst *mtmp;
 
 	m.offensive = (struct obj *)0;
 	m.has_offense = 0;
-	if (is_animal(mtmp->data) || mindless(mtmp->data) ||
+	if (is_animal(mtmp->data) || mindless_mon(mtmp) ||
 	    nohands(mtmp->data))
 		return FALSE;
 	if (target == &youmonst)
@@ -1665,7 +1665,7 @@ struct monst *mtmp;
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))], diesize;
 
-	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless_mon(mtmp)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	if (difficulty > 7 && !rn2(35)) return WAN_DEATH;
@@ -1704,7 +1704,7 @@ struct monst *mtmp;
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];
 
-	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless_mon(mtmp)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	if (difficulty > 7 && !rn2(35)) return rnd(20) > 10 ? WAN_DRAINING : WAN_DEATH;
@@ -1729,7 +1729,7 @@ struct monst *mtmp;
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];
 
-	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless_mon(mtmp)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	switch (rnd(6)) {
@@ -1751,7 +1751,7 @@ struct monst *mtmp;
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];
 
-	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless_mon(mtmp)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	switch (rnd(6)) {
@@ -1773,7 +1773,7 @@ struct monst *mtmp;
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];
 
-	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless_mon(mtmp)
 			|| pm->mlet == S_GHOST || pm->mlet == S_SHADE || pm->mlet == S_KETER
 		) return 0;
 	switch (rnd(16)) {
@@ -1828,7 +1828,7 @@ struct monst *mtmp;
 
 	m.misc = (struct obj *)0;
 	m.has_misc = 0;
-	if (is_animal(mdat) || mindless(mdat))
+	if (is_animal(mdat) || mindless_mon(mtmp))
 		return 0;
 	if (u.uswallow && stuck) return FALSE;
 
@@ -2301,7 +2301,7 @@ struct monst *mtmp;
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];
 
-	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless(mtmp->data)
+	if(is_animal(pm) || attacktype(pm, AT_EXPL) || mindless_mon(mtmp)
 			|| pm->mlet == S_GHOST
 			|| pm->mlet == S_SHADE
 			|| pm->mlet == S_KETER
@@ -2313,7 +2313,7 @@ struct monst *mtmp;
 	if (difficulty < 6 && !rn2(30))
 	    return rn2(6) ? POT_POLYMORPH : WAN_POLYMORPH;
 	
-	if (!rn2(40) && !nonliving(pm)) return AMULET_OF_LIFE_SAVING;
+	if (!rn2(40) && !nonliving_mon(mtmp)) return AMULET_OF_LIFE_SAVING;
 
 	if(difficulty > 6 && rn2(50) < difficulty) return rnd_utility_potion(mtmp);
 
@@ -2339,7 +2339,7 @@ struct obj *obj;
 	int typ = obj->otyp;
 
 	if (is_animal(mon->data) ||
-		mindless(mon->data) ||
+		mindless_mon(mon) ||
 		mon->data == &mons[PM_SHADE] ||
 		mon->data == &mons[PM_BROKEN_SHADOW] ||
 		mon->data == &mons[PM_GHOST])	/* don't loot bones piles */
@@ -2391,7 +2391,7 @@ struct obj *obj;
 	    break;
 	case AMULET_CLASS:
 	    if (typ == AMULET_OF_LIFE_SAVING)
-		return (boolean)(!nonliving(mon->data));
+		return (boolean)(!nonliving_mon(mon));
 	    if (typ == AMULET_OF_REFLECTION)
 		return TRUE;
 	    break;

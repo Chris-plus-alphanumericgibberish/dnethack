@@ -141,7 +141,7 @@ boolean quietly;
 	    /* 0,1,2:  b=80%,10,10; nc=10%,80,10; c=10%,10,80 */
 	    if (chance > 0 && 
 			!(Role_if(PM_BARD) && rnd(20) < ACURR(A_CHA) && 
-				!(is_animal(mtmp->data) || mindless(mtmp->data)))
+				!(is_animal(mtmp->data) || mindless_mon(mtmp)))
 		) {
 
 		mtmp->mtame = 0;	/* not tame after all */
@@ -628,7 +628,7 @@ long nmv;		/* number of moves */
 			mtmp->mhp = mtmp->mhpmax;
 		else mtmp->mhp += imv;
 	}
-	if(!nonliving(mtmp->data)){
+	if(!nonliving_mon(mtmp)){
 		imv = imv*mtmp->m_lev/30;
 		if (mtmp->mhp + imv >= mtmp->mhpmax)
 			mtmp->mhp = mtmp->mhpmax;
@@ -971,7 +971,7 @@ rock:
 			return (herbi ? CADAVER : MANFOOD);
 		    else return (carni ? CADAVER : MANFOOD);
 		case CLOVE_OF_GARLIC:
-		    return (is_undead(mon->data) ? TABU :
+		    return (is_undead_mon(mon) ? TABU :
 			    ((herbi || starving) ? ACCFOOD : MANFOOD));
 		case TIN:
 		    return (metallivorous(mon->data) ? ACCFOOD : MANFOOD);
@@ -1095,7 +1095,7 @@ struct obj *obj;
 		    pline("%s.", Tobjnam(obj, "stop"));
 
 		/* Don't stuff ourselves if we know better */
-		if (is_animal(mtmp->data) || mindless(mtmp->data))
+		if (is_animal(mtmp->data) || mindless_mon(mtmp))
 		{
 		/* dog_eat expects a floor object */
 		place_object(obj, mtmp->mx, mtmp->my);

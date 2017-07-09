@@ -4746,7 +4746,7 @@ register int	mmflags;
 	}
 	mtmp->mcon = d(3,6);
 	if(is_animal(mtmp->data)) mtmp->mint = 3;
-	else if(mindless(mtmp->data)) mtmp->mint = 0;
+	else if(mindless_mon(mtmp)) mtmp->mint = 0;
 	else if(is_magical(mtmp->data)) mtmp->mint = 13+rnd(5);
 	else mtmp->mint = d(3,6);
 	mtmp->mwis = d(3,6);
@@ -6276,7 +6276,7 @@ struct monst *mtmp, *victim;
 		if (sensemon(mtmp))
 		    pline("As %s grows up into %s, %s %s!", mon_nam(mtmp),
 			an(ptr->mname), mhe(mtmp),
-			nonliving(ptr) ? "expires" : "dies");
+			nonliving_mon(mtmp) ? "expires" : "dies");
 		set_mon_data(mtmp, ptr, -1);	/* keep mvitals[] accurate */
 		mondied(mtmp);
 		return (struct permonst *)0;

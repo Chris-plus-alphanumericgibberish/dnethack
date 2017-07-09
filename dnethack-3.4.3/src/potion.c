@@ -1315,7 +1315,7 @@ boolean your_fault;
 		}
 		break;
 	case POT_WATER:
-		if (is_undead(mon->data) || is_demon(mon->data) ||
+		if (is_undead_mon(mon) || is_demon(mon->data) ||
 			is_were(mon->data)) {
 		    if (obj->blessed) {
 			pline("%s %s in pain!", Monnam(mon),

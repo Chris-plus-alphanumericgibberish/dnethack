@@ -356,7 +356,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_PARAL;
 			}
 			if(otmp->opoisoned & OPOISON_AMNES){
-				if (!mindless(mtmp->data) && !rn2(10)){
+				if (!mindless_mon(mtmp) && !rn2(10)){
 					if (vis) pline("%s looks around as if awakening from a dream.",
 						   Monnam(mtmp));
 					mtmp->mtame = FALSE;
@@ -402,7 +402,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	    if (mtmp->mhp < 1) {
 		if (vis || verbose)
 		    pline("%s is %s!", Monnam(mtmp),
-			(nonliving(mtmp->data) || !canspotmon(mtmp))
+			(nonliving_mon(mtmp) || !canspotmon(mtmp))
 			? "destroyed" : "killed");
 		/* don't blame hero for unknown rolling boulder trap */
 		if (!flags.mon_moving &&

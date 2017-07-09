@@ -240,7 +240,7 @@ struct monst *mon;
 	ptr = mon->data;
 	wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
 
-	return (boolean)(is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
+	return (boolean)(is_undead_mon(mon) || is_demon(ptr) || is_were(ptr) ||
 			 species_resists_drain(mon) || 
 			 ptr == &mons[PM_DEATH] ||
 			 mon_resistance(mon, MR_DRAIN) ||
@@ -300,7 +300,7 @@ struct monst *mon;
 	
 	if(mon == u.usteed && u.sealsActive&SEAL_BERITH && u.sealsActive&SEAL_OSE) return TRUE;
 	
-	return nonliving(mon->data) || is_demon(mon->data) || is_angel(mon->data) || is_keter(mon->data);
+	return nonliving_mon(mon) || is_demon(mon->data) || is_angel(mon->data) || is_keter(mon->data);
 }
 
 /* TRUE iff monster is resistant to light-induced blindness */

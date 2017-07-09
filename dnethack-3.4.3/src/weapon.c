@@ -189,7 +189,7 @@ struct monst *mon;
 
 	/* Blessed weapons used against undead or demons */
 	if (Is_weapon && otmp->blessed &&
-	   (is_demon(ptr) || is_undead(ptr))){
+	   (is_demon(ptr) || is_undead_mon(mon))){
 		if(otmp->oartifact == ART_EXCALIBUR) tmp += 7; //Quite holy
 		else tmp += 2;
 	}
@@ -844,7 +844,7 @@ int spec;
 		static int warnedotyp = 0;
 		static struct permonst *warnedptr = 0;
 		
-	    if (otmp->blessed && (is_undead(ptr) || is_demon(ptr))){
+	    if (otmp->blessed && (is_undead_mon(mon) || is_demon(ptr))){
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
 			else if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),4);
 			else bonus += rnd(4);
@@ -892,7 +892,7 @@ int spec;
 	    if (bonus > 1 && otmp->oartifact && spec_dbon(otmp, mon, 100) >= 100)
 		bonus = (bonus + 1) / 2;
 		
-		if((resists_all(ptr) || resist_attacks(ptr)) && !(otmp->oartifact && spec_dbon(otmp, mon, 1))){
+		if((resists_all(ptr) || resist_attacks(ptr))){
 			tmp /= 4;
 			if(!flags.mon_moving && !youdefend && warnedptr != ptr){
 				pline("Weapons are ineffective against %s", mon_nam(mon));
@@ -912,17 +912,18 @@ int spec;
 				weaponmask |= EXPLOSION;
 			}
 			
-			if(resist_blunt(ptr)){
+			if(resist_blunt(ptr) || (!youdefend && (mon->mfaction == ZOMBIFIED))){
 				resistmask |= WHACK;
 			}
-			if(resist_pierce(ptr)){
+			if(resist_pierce(ptr) || (!youdefend && (mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
 				resistmask |= PIERCE;
 			}
-			if(resist_slash(ptr)){
+			if(resist_slash(ptr) || (!youdefend && (mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
 				resistmask |= SLASH;
 			}
 			
-			if((weaponmask & ~(resistmask)) == 0L && !(otmp->oartifact && spec_dbon(otmp, mon, 1))){
+			// if((weaponmask & ~(resistmask)) == 0L && !(otmp->oartifact && spec_dbon(otmp, mon, 1))){
+			if((weaponmask & ~(resistmask)) == 0L){
 				tmp /= 4;
 				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
 					pline("%s is ineffective against %s", The(xname(otmp)), mon_nam(mon));
@@ -930,8 +931,10 @@ int spec;
 					warnedptr = ptr;
 				}
 			} else {
-				warnedotyp = 0;
-				warnedptr = 0;
+				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
+					warnedotyp = 0;
+					warnedptr = 0;
+				}
 			}
 		}
 		
@@ -1000,20 +1003,20 @@ struct monst *mon;
 		}
 		else {
 			if(is_golem(mon->data)) dmg += d(2*dnum,4);
-			else if(nonliving(mon->data)) dmg += d(dnum,4);
+			else if(nonliving_mon(mon)) dmg += d(dnum,4);
 		}
 	}
 	if(pen->ovar1&SEAL_IRIS){
 		if(youdef && !(nonliving(youracedata) || is_anhydrous(youracedata))) dmg += d(dnum,4);
-		else if(!youdef && !(nonliving(mon->data) || is_anhydrous(mon->data))) dmg += d(dnum,4);
+		else if(!youdef && !(nonliving_mon(mon) || is_anhydrous(mon->data))) dmg += d(dnum,4);
 	}
 	if(pen->ovar1&SEAL_ENKI){
 		if(youdef && !(nonliving(youracedata) || amphibious(youracedata))) dmg += d(dnum,4);
-		else if(!youdef && !(nonliving(mon->data) || amphibious(mon->data))) dmg += d(dnum,4);
+		else if(!youdef && !(nonliving_mon(mon) || amphibious(mon->data))) dmg += d(dnum,4);
 	}
 	if(pen->ovar1&SEAL_OSE){
 		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,15);
-		else if(!youdef && !mindless(mon->data) && (telepathic(mon->data) || !rn2(5))) dmg += d(dnum,15);
+		else if(!youdef && !mindless_mon(mon) && (telepathic(mon->data) || !rn2(5))) dmg += d(dnum,15);
 	}
 	if(pen->ovar1&SEAL_NABERIUS){
 		if(youdef && (Upolyd ? u.mh < .25*u.mhmax : u.uhp < .25*u.uhpmax)) dmg += d(dnum,4);

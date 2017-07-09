@@ -108,7 +108,7 @@ boolean check_if_better;
 {
     boolean can_use =
             /* make sure this is an intelligent monster */
-            (mtmp && !is_animal(mtmp->data) && !mindless(mtmp->data) && 
+            (mtmp && !is_animal(mtmp->data) && !mindless_mon(mtmp) && 
 	      !nohands(mtmp->data) &&
 	     otmp &&
 	    /* food */
@@ -199,7 +199,7 @@ register struct monst *mon;
 
 	rwep = attacktype(mon->data, AT_WEAP) ? propellor : &zeroobj;
 
-	if (is_animal(mon->data) || mindless(mon->data)) {
+	if (is_animal(mon->data) || mindless_mon(mon)) {
 		intelligent = FALSE;
 		item1 = item2 = TRUE;
 	}
@@ -583,7 +583,7 @@ int udist;
 				Non-mindless pets can sense if you are hungry or starving, and will eat less.
 			*/
 		    if (edog->hungrytime < monstermoves + DOG_SATIATED || 
-				(!mindless(mtmp->data) && 
+				(!mindless_mon(mtmp) && 
 					((YouHunger < HUNGRY && edog->hungrytime < monstermoves + DOG_SATIATED/3) || 
 					(YouHunger < WEAK && edog->hungrytime < monstermoves))
 				)
@@ -718,7 +718,7 @@ int after, udist, whappr;
 			   (dog_has_minvent && rn2(edog->apport)))
 				appr = 1;
 		}
-		if(appr == 0 && u.sealsActive&SEAL_ECHIDNA && !mindless(mtmp->data) && (is_animal(mtmp->data) || slithy(mtmp->data) || nohands(mtmp->data))){
+		if(appr == 0 && u.sealsActive&SEAL_ECHIDNA && !mindless_mon(mtmp) && (is_animal(mtmp->data) || slithy(mtmp->data) || nohands(mtmp->data))){
 			appr = 1;
 		}
 		if(appr == 0 && Race_if(PM_DROW) && is_spider(mtmp->data)){
@@ -826,7 +826,7 @@ boolean ranged;
 		  || (Role_if(PM_NOBLEMAN) && (mtmp->data == &mons[PM_KNIGHT] || mtmp->data == &mons[PM_MAID] || mtmp->data == &mons[PM_PEASANT]) && mtmp->mpeaceful)
 		  || (Race_if(PM_DROW) && (mtmp->data == &mons[PM_GROMPH] || mtmp->data == &mons[PM_DANTRAG]) && mtmp->mpeaceful)
 		  || (Role_if(PM_KNIGHT) && (mtmp->data == &mons[PM_KNIGHT]) && mtmp->mpeaceful)
-		  || (Race_if(PM_GNOME) && (is_gnome(mtmp->data) && !is_undead(mtmp->data)) && mtmp->mpeaceful)
+		  || (Race_if(PM_GNOME) && (is_gnome(mtmp->data) && !is_undead_mon(mtmp)) && mtmp->mpeaceful)
 		  || always_peaceful(mtmp2->data)) &&
 		 mtmp2->mpeaceful && !Conflict) ||
 	   (!ranged && touch_petrifies(mtmp2->data) &&

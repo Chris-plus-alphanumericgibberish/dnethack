@@ -861,7 +861,7 @@ int thrown;
 		// }
 		if(uarmg){
 			/* blessed gloves give bonuses when fighting 'bare-handed' */
-			if (uarmg->blessed && (is_undead(mdat) || is_demon(mdat))) tmp += rnd(4);
+			if (uarmg->blessed && (is_undead_mon(mon) || is_demon(mdat))) tmp += rnd(4);
 			/* silver gloves give sliver bonus -CM */
 			if ((uarmg->obj_material == SILVER || arti_silvered(uarmg)) &&
 				hates_silver(mdat)){
@@ -1009,7 +1009,7 @@ int thrown;
 					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
 				}
 				if(uright->opoisoned & OPOISON_AMNES && !rn2(10)){
-					if(mindless(mon->data)) needsamnesiamsg = TRUE;
+					if(mindless_mon(mon)) needsamnesiamsg = TRUE;
 					else amnesiamon = TRUE;
 					
 					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
@@ -1059,7 +1059,7 @@ int thrown;
 					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
 				}
 				if(uleft->opoisoned & OPOISON_AMNES && !rn2(10)){
-					if(mindless(mon->data)) needsamnesiamsg = TRUE;
+					if(mindless_mon(mon)) needsamnesiamsg = TRUE;
 					else amnesiamon = TRUE;
 					
 					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
@@ -1612,7 +1612,7 @@ int thrown;
 #undef useup_eggs
 					  }
 					case CLOVE_OF_GARLIC:	/* no effect against demons */
-						if (is_undead(mdat)) {
+						if (is_undead_mon(mon)) {
 							monflee(mon, d(2, 4), FALSE, TRUE);
 						}
 						tmp = 1;
@@ -1900,7 +1900,7 @@ defaultvalue:
 			}
 		}
 		if(obj && obj->opoisoned & OPOISON_AMNES){
-			if(mindless(mon->data)) needsamnesiamsg = TRUE;
+			if(mindless_mon(mon)) needsamnesiamsg = TRUE;
 			else if(!rn2(10)) amnesiamon = TRUE;
 		}
 	    if (obj && !rn2(20) && obj->opoisoned) {
@@ -2920,7 +2920,7 @@ register struct attack *mattk;
 		    u.uconduct.unvegan++;
 		if (!vegetarian(mdef->data))
 		    violated_vegetarian();
-		if (mindless(mdef->data)) {
+		if (mindless_mon(mdef)) {
 		    pline("%s doesn't notice.", Monnam(mdef));
 		    break;
 		}
@@ -3221,7 +3221,7 @@ register struct attack *mattk;
 					else shieldeff(mdef->mx, mdef->my);
 				break;
 				case 10:
-					if(is_undead(mdef->data)) tmp+= rnd(spiritDsize());
+					if(is_undead_mon(mdef)) tmp+= rnd(spiritDsize());
 					else shieldeff(mdef->mx, mdef->my);
 				break;
 				case 11:

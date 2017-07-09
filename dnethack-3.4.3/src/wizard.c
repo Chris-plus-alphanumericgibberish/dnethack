@@ -975,7 +975,7 @@ aglaopesong(mtmp)
 				pline("%s sings a song of courage.", Monnam(mtmp));
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 					if(tmpm != mtmp && !DEADMONSTER(tmpm)){
-						if(!mindless(tmpm->data)){
+						if(!mindless_mon(tmpm)){
 							if ( mtmp->mpeaceful == tmpm->mpeaceful ) {
 								if (tmpm->encouraged < BASE_DOG_ENCOURAGED_MAX)
 									tmpm->encouraged = min_ints(BASE_DOG_ENCOURAGED_MAX, tmpm->encouraged + rnd(mtmp->m_lev/3+1));
@@ -1000,7 +1000,7 @@ aglaopesong(mtmp)
 				pline("%s sings a song of good health.", Monnam(mtmp));
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 					if(tmpm != mtmp && !DEADMONSTER(tmpm)){
-						if(!mindless(tmpm->data)){
+						if(!mindless_mon(tmpm)){
 							if ( mtmp->mpeaceful == tmpm->mpeaceful ) {
 								tmpm->mcan = 0;
 								tmpm->mspec_used = 0;
@@ -1033,7 +1033,7 @@ aglaopesong(mtmp)
 				pline("%s sings a song of haste.", Monnam(mtmp));
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 					if(tmpm != mtmp && !DEADMONSTER(tmpm)){
-						if(!mindless(tmpm->data) && tmpm->data->mmove){
+						if(!mindless_mon(tmpm) && tmpm->data->mmove){
 							if ( mtmp->mpeaceful == tmpm->mpeaceful ) {
 								tmpm->movement += 12;
 								tmpm->permspeed = MFAST;
@@ -1048,7 +1048,7 @@ aglaopesong(mtmp)
 				pline("%s sings a dirge.", Monnam(mtmp));
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 					if(tmpm != mtmp && !DEADMONSTER(tmpm)){
-						if(!mindless(tmpm->data)){
+						if(!mindless_mon(tmpm)){
 							if ( mtmp->mpeaceful != tmpm->mpeaceful && !resist(tmpm, 0, 0, FALSE) ) {
 								if (tmpm->encouraged > -1*BASE_DOG_ENCOURAGED_MAX)
 									tmpm->encouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, tmpm->encouraged - rnd(mtmp->m_lev/3+1));
@@ -1073,7 +1073,7 @@ aglaopesong(mtmp)
 				pline("%s sings a slow march.", Monnam(mtmp));
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 					if(tmpm != mtmp && !DEADMONSTER(tmpm)){
-						if(!mindless(tmpm->data) && tmpm->data->mmove){
+						if(!mindless_mon(tmpm) && tmpm->data->mmove){
 							if ( mtmp->mpeaceful != tmpm->mpeaceful && !resist(tmpm, 0, 0, FALSE) ) {
 								tmpm->movement -= 12;
 								tmpm->permspeed = MSLOW;

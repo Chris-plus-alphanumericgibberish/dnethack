@@ -5319,7 +5319,7 @@ arti_invoke(obj)
 			for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 				mtmp2 = mtmp->nmon;
 				/* The eye is never blind ... */
-				if (couldsee(mtmp->mx, mtmp->my) && !is_undead(mtmp->data)) {
+				if (couldsee(mtmp->mx, mtmp->my) && !is_undead_mon(mtmp)) {
 					pline("%s screams in agony!",Monnam(mtmp));
 					mtmp->mhp /= 4;
 					if (mtmp->mhp < 1) mtmp->mhp = 1;
@@ -5548,7 +5548,7 @@ arti_invoke(obj)
                 struct monst *mtmp;
                 if((u.dx || u.dy) && (mtmp = m_at(u.ux+u.dx,u.uy+u.dy))){
                   if(!resists_death(mtmp)){
-                    if(!(nonliving(mtmp->data) || is_demon(mtmp->data) || is_angel(mtmp->data))){
+                    if(!(nonliving_mon(mtmp) || is_demon(mtmp->data) || is_angel(mtmp->data))){
                       pline("%s withers under the touch of %s.", The(Monnam(mtmp)), The(xname(obj)));
                       xkilled(mtmp, 1);
                       obj->ovar1 = COMMAND_LIFE;

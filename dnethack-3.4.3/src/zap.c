@@ -171,7 +171,7 @@ struct obj *otmp;
 	case SPE_TURN_UNDEAD:
 		wake = FALSE;
 		if (unturn_dead(mtmp)) wake = TRUE;
-		if (is_undead(mtmp->data)) {
+		if (is_undead_mon(mtmp)) {
 			reveal_invis = TRUE;
 			wake = TRUE;
 			dmg = rnd(8);

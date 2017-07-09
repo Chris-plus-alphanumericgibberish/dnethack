@@ -2159,7 +2159,7 @@ int thrown;
 	    return(0);
 	}
 	else if (mon->mtame && mon->mcanmove &&
-			(!is_animal(mon->data)) && (!mindless(mon->data)) &&
+			(!is_animal(mon->data)) && (!mindless_mon(mon)) &&
 			!(launcher && ammo_and_launcher(obj, launcher))
 	) {
 		// if (could_use_item(mon, obj, TRUE)) {

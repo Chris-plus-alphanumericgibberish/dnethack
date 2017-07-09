@@ -2781,7 +2781,7 @@ doturn()
 	    if (!cansee(mtmp->mx,mtmp->my) ||
 		distu(mtmp->mx,mtmp->my) > range) continue;
 
-	    if (!mtmp->mpeaceful && (is_undead(mtmp->data) ||
+	    if (!mtmp->mpeaceful && (is_undead_mon(mtmp) ||
 		   (is_demon(mtmp->data) && (u.ulevel > (MAXULEV/2))))) {
 
 		    mtmp->msleeping = 0;

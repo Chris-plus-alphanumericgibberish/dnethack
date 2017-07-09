@@ -186,6 +186,10 @@ struct monst {
 	short mxlth;		/* length of following data */
 	int meating;		/* monster is eating timeout */
 	int mfaction;		/* faction to which monster belongs */
+#define	ZOMBIFIED	1	/* zombie 'faction' */
+#define	SKELIFIED	2	/* skeleton 'faction' */
+#define	CRYSTALFIED	3	/* crystal dead 'faction' */
+/*Note: first drow house is 8*/
 	int mvanishes;
 	//hatching situation
 	//AT_LAYEGG, PM_HATCHLING_NAME, x, d

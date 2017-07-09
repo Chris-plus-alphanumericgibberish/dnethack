@@ -3351,7 +3351,7 @@ int spellnum;
 	    pline("%s's using the touch of death!", buf);
 	}
 
-	if (nonliving(mtmp->data) || is_demon(mtmp->data)) {
+	if (nonliving_mon(mtmp) || is_demon(mtmp->data)) {
 	    if (yours || canseemon(mtmp))
 	        pline("%s seems no deader than before.", Monnam(mtmp));
 	} else if (!(resisted = (resists_magm(mtmp) || resists_death(mtmp) || resist(mtmp, 0, 0, FALSE))) ||

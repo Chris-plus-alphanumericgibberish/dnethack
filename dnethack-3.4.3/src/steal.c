@@ -658,7 +658,7 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 	rwep = attacktype(mtmp->data, AT_WEAP) ? propellor : &zeroobj;
 	
 
-	if (!is_pet || mindless(mtmp->data) || is_animal(mtmp->data))
+	if (!is_pet || mindless_mon(mtmp) || is_animal(mtmp->data))
 	{
 		intelligent = FALSE;
 		item1 = item2 = TRUE;

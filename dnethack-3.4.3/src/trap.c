@@ -474,7 +474,7 @@ int *fail_reason;
 	}
 	
 	if(Role_if(PM_BARD) && mon && cause == ANIMATE_SPELL && rnd(20) < ACURR(A_CHA) && 
-		!(is_animal(mon->data) || mindless(mon->data))
+		!(is_animal(mon->data) || mindless_mon(mon))
 	){
 		struct monst *newmon;
 		newmon = tamedog(mon, (struct obj *)0);
@@ -505,7 +505,7 @@ int *fail_reason;
 	if (mon->m_ap_type) seemimic(mon);
 	else mon->mundetected = FALSE;
 	if ((x == u.ux && y == u.uy) || cause == ANIMATE_SPELL) {
-	    const char *comes_to_life = nonliving(mon->data) ?
+	    const char *comes_to_life = nonliving_mon(mon) ?
 					"moves" : "comes to life"; 
 	    if (cause == ANIMATE_SPELL){
 	    	if(cansee(x,y)) pline("%s %s!", upstart(statuename),
@@ -1798,7 +1798,7 @@ register struct monst *mtmp;
 #endif
 	    if (!inescapable &&
 		    ((mtmp->mtrapseen & (1 << (tt-1))) != 0 ||
-			(tt == HOLE && !mindless(mtmp->data)))) {
+			(tt == HOLE && !mindless_mon(mtmp)))) {
 		/* it has been in such a trap - perhaps it escapes */
 		if(rn2(4)) return(0);
 	    } else {
@@ -3584,7 +3584,7 @@ struct monst *mtmp;
 	if (!ttmp->madeby_u) {
 	    if (rnl(100) < 80 && !mtmp->mpeaceful &&
 		    !mtmp->msleeping && !mtmp->mfrozen &&
-		    !mindless(mtmp->data) &&
+		    !mindless_mon(mtmp) &&
 		    mtmp->data->mlet != S_HUMAN) {
 		mtmp->mpeaceful = 1;
 		set_malign(mtmp);	/* reset alignment */
@@ -3821,7 +3821,7 @@ boolean stuff;
 	    pline("%s is %s for you to lift.", Monnam(mtmp),
 		  stuff ? "carrying too much" : "too heavy");
 	    if (!ttmp->madeby_u && !mtmp->mpeaceful && mtmp->mcanmove &&
-		    !mindless(mtmp->data) &&
+		    !mindless_mon(mtmp) &&
 		    mtmp->data->mlet != S_HUMAN && rnl(100) < 30) {
 		mtmp->mpeaceful = 1;
 		set_malign(mtmp);		/* reset alignment */

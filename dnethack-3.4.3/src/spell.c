@@ -340,7 +340,7 @@ raise_dead:
 	    mtmp2 = mtmp->nmon;		/* tamedog() changes chain */
 	    if (DEADMONSTER(mtmp)) continue;
 
-	    if (is_undead(mtmp->data) && cansee(mtmp->mx, mtmp->my)) {
+	    if (is_undead_mon(mtmp) && cansee(mtmp->mx, mtmp->my)) {
 		mtmp->mpeaceful = TRUE;
 		if(sgn(mtmp->data->maligntyp) == sgn(u.ualign.type)
 		   && distu(mtmp->mx, mtmp->my) < 4)
@@ -1286,7 +1286,7 @@ genericptr_t val;
 	    snuff_light_source(x, y);
 		newsym(x,y);
 		if(mon){
-			if(is_undead(mon->data) || resists_drain(mon) || is_demon(mon->data)){
+			if(is_undead_mon(mon) || resists_drain(mon) || is_demon(mon->data)){
 				shieldeff(mon->mx, mon->my);
 			} else {
 				setmangry(mon);
@@ -1296,7 +1296,7 @@ genericptr_t val;
 		}
 	} else {
 		if(mon){
-			if(is_undead(mon->data) || resists_drain(mon) || is_demon(mon->data)){
+			if(is_undead_mon(mon) || resists_drain(mon) || is_demon(mon->data)){
 				shieldeff(mon->mx, mon->my);
 			} else {
 				setmangry(mon);
@@ -1841,7 +1841,7 @@ spiriteffects(power, atme)
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
 				You("heal %s.", mon_nam(mon));
-				if (nonliving(mon->data)) {	/* match effect on player */
+				if (nonliving_mon(mon)){	/* match effect on player */
 					shieldeff(mon->mx, mon->my);
 				} else {
 					mon->mhp += d(5,dsize);
@@ -1895,7 +1895,7 @@ spiriteffects(power, atme)
 			} else if(isok(u.ux+u.dx, u.uy+u.dy)) {
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
-				if (nonliving(mon->data)) {	/* match effect on player */
+				if (nonliving_mon(mon)){	/* match effect on player */
 					shieldeff(mon->mx, mon->my);
 				} else {
 					pline("%s recovers.", Monnam(mon));
@@ -1994,7 +1994,7 @@ spiriteffects(power, atme)
 				mon = m_at(u.ux+u.dx, u.uy+u.dy);
 				if(!mon) break;
 				You("croon the sibilant lullaby of Echidna.");
-				if(rn2(u.ulevel) > mon->m_lev && !mindless(mon->data) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
+				if(rn2(u.ulevel) > mon->m_lev && !mindless_mon(mon) && (is_animal(mon->data) || slithy(mon->data) || nohands(mon->data))){
 					if (mon->isshk) make_happy_shk(mon, FALSE);
 					else (void) tamedog(mon, (struct obj *) 0);
 				} else {
@@ -2318,7 +2318,7 @@ spiriteffects(power, atme)
 				if(mon && is_golem(mon->data)){
 					mon->mhp = 0;
 					xkilled(mon, 1);
-				} else if(mon && nonliving(mon->data)){
+				} else if(mon && nonliving_mon(mon)){
 					mon->mhp -= d(rnd(5),dsize);
 					if(mon->mhp <= 0){
 						mon->mhp = 0;
@@ -2367,7 +2367,7 @@ spiriteffects(power, atme)
 				if(!mon){
 					pline("\"There's no one there, buddy!\"");
 					return 0;
-				} if(nonliving(mon->data) || is_anhydrous(mon->data)){
+				} if(nonliving_mon(mon) || is_anhydrous(mon->data)){
 					shieldeff(mon->mx, mon->my);
 					break;
 				}
@@ -2403,7 +2403,7 @@ spiriteffects(power, atme)
 					(is_animal(mtmp->data) || 
 					 mtmp->data->mlet == S_HUMAN  || 
 					 mtmp->data->mlet == S_HUMANOID ) 
-					 && !mindless(mtmp->data)
+					 && !mindless_mon(mtmp)
 					 && !resist(mtmp, '\0', 0, TELL)
 				) {
 					if(u.ulevel >= mtmp->m_lev+6 && !resist(mtmp, '\0', 0, NOTELL)){
@@ -2820,7 +2820,7 @@ spiriteffects(power, atme)
 				nmon = mon->nmon;
 				if (DEADMONSTER(mon)) continue;
 				if (mon->mpeaceful) continue;
-				if (mindless(mon->data)) continue;
+				if (mindless_mon(mon)) continue;
 				if (telepathic(mon->data) || !rn2(5)){
 					mon->mhp -= d(5,15);
 					if (mon->mhp <= 0) xkilled(mon, 1);
@@ -3136,7 +3136,7 @@ spiriteffects(power, atme)
 			You("let out a frightful moan.");
 			for(mon = fmon; mon; mon = mon->nmon){
 				if(!DEADMONSTER(mon) && dist2(u.ux,u.uy,mon->mx,mon->my)<=u.ulevel && 
-					!mindless(mon->data) && !resist(mon, '\0', 0, TELL)
+					!mindless_mon(mon) && !resist(mon, '\0', 0, TELL)
 				) {
 					if(u.ulevel >= mon->m_lev-5){
 						mon->mconf = 1;
@@ -3154,7 +3154,7 @@ spiriteffects(power, atme)
 			if(!getdir((char *)0) || (!u.dx && !u.dy)) return 0;
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
-			if(resists_drli(mon) || nonliving(mon->data) || mon->m_lev > u.ulevel){
+			if(resists_drli(mon) || nonliving_mon(mon) || mon->m_lev > u.ulevel){
 				pline("You can't swallow the soul of %s.", mon_nam(mon));
 				shieldeff(mon->mx, mon->my);
 			} else {
