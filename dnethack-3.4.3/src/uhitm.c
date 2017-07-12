@@ -1066,19 +1066,21 @@ int thrown;
 				}
 			}
 	    }
-		if(uclockwork && u.utemp >= BURNING_HOT && (!uarmg || is_metallic(uarmg)) && !resists_fire(mon)){
-			int heatdie = min(u.utemp, 20);
-			tmp += rnd(heatdie);
-			if(u.utemp >= MELTING){
+		if(uclockwork && !resists_fire(mon) && u.utemp){
+			if(u.utemp >= BURNING_HOT && (!uarmg || is_metallic(uarmg))){
+				int heatdie = min(u.utemp, 20);
 				tmp += rnd(heatdie);
-				if(u.utemp >= MELTED) tmp += rnd(heatdie);
-			}
-		} else {
-			int heatdie = min(u.utemp, 20);
-			tmp += rnd(heatdie)/2;
-			if(u.utemp >= MELTING){
+				if(u.utemp >= MELTING){
+					tmp += rnd(heatdie);
+					if(u.utemp >= MELTED) tmp += rnd(heatdie);
+				}
+			} else if(u.utemp >= HOT){
+				int heatdie = min(u.utemp, 20);
 				tmp += rnd(heatdie)/2;
-				if(u.utemp >= MELTED) tmp += rnd(heatdie)/2;
+				if(u.utemp >= MELTING){
+					tmp += rnd(heatdie)/2;
+					if(u.utemp >= MELTED) tmp += rnd(heatdie)/2;
+				}
 			}
 		}
 	} else {
