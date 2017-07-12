@@ -895,7 +895,7 @@ int spec;
 		if((resists_all(ptr) || resist_attacks(ptr))){
 			tmp /= 4;
 			if(!flags.mon_moving && !youdefend && warnedptr != ptr){
-				pline("Weapons are ineffective against %s", mon_nam(mon));
+				pline("Weapons are ineffective against %s.", mon_nam(mon));
 				warnedptr = ptr;
 			}
 		} else {
@@ -912,13 +912,13 @@ int spec;
 				weaponmask |= EXPLOSION;
 			}
 			
-			if(resist_blunt(ptr) || (!youdefend && (mon->mfaction == ZOMBIFIED))){
+			if(resist_blunt(ptr) || (!youdefend && mon && (mon->mfaction == ZOMBIFIED))){
 				resistmask |= WHACK;
 			}
-			if(resist_pierce(ptr) || (!youdefend && (mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
+			if(resist_pierce(ptr) || (!youdefend && mon && (mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
 				resistmask |= PIERCE;
 			}
-			if(resist_slash(ptr) || (!youdefend && (mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
+			if(resist_slash(ptr) || (!youdefend && mon && (mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
 				resistmask |= SLASH;
 			}
 			
@@ -926,7 +926,7 @@ int spec;
 			if((weaponmask & ~(resistmask)) == 0L){
 				tmp /= 4;
 				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
-					pline("%s is ineffective against %s", The(xname(otmp)), mon_nam(mon));
+					pline("%s is ineffective against %s.", The(xname(otmp)), mon_nam(mon));
 					warnedotyp = otmp->otyp;
 					warnedptr = ptr;
 				}
