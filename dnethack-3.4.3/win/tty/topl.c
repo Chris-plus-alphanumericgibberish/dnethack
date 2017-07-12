@@ -49,15 +49,15 @@ tty_doprev_message()
                 if (cw->maxcol == cw->maxrow) {
                     ttyDisplay->dismiss_more = C('p');	/* <ctrl/P> allowed at --More-- */
                     redotoplin(toplines);
-                    cw->maxcol--;
-                    if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
+                    if (cw->maxcol == 0) cw->maxcol = cw->rows-1;
+                    else cw->maxcol -= 1;
                     if (!cw->data[cw->maxcol])
                         cw->maxcol = cw->maxrow;
                 } else if (cw->maxcol == (cw->maxrow - 1)){
                     ttyDisplay->dismiss_more = C('p');	/* <ctrl/P> allowed at --More-- */
                     redotoplin(cw->data[cw->maxcol]);
-                    cw->maxcol--;
-                    if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
+                    if (cw->maxcol == 0) cw->maxcol = cw->rows-1;
+                    else cw->maxcol -= 1;
                     if (!cw->data[cw->maxcol])
                         cw->maxcol = cw->maxrow;
                 } else {
@@ -88,8 +88,8 @@ tty_doprev_message()
             if(cw->maxcol < 0) cw->maxcol = cw->rows-1;
             do {
                 putstr(prevmsg_win, 0, cw->data[cw->maxcol]);
-                cw->maxcol--;
-                if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
+				if (cw->maxcol == 0) cw->maxcol = cw->rows-1;
+				else cw->maxcol -= 1;
                 if (!cw->data[cw->maxcol])
                     cw->maxcol = cw->maxrow;
             } while (cw->maxcol != cw->maxrow);
@@ -107,8 +107,8 @@ tty_doprev_message()
                 redotoplin(toplines);
             else if (cw->data[cw->maxcol])
                 redotoplin(cw->data[cw->maxcol]);
-            cw->maxcol--;
-            if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
+			if (cw->maxcol == 0) cw->maxcol = cw->rows-1;
+			else cw->maxcol -= 1;
             if (!cw->data[cw->maxcol])
                 cw->maxcol = cw->maxrow;
         } while (morc == C('p'));
