@@ -1469,6 +1469,7 @@ int thrown;
 				setuwep(obj);
 				u.twoweap = twoweap;
 			}
+			return;
 		}
 //#ifdef FIREARMS
 	    /* [ALI]
