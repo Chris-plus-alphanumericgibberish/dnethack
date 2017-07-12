@@ -1010,6 +1010,7 @@ moveloop()
 						flags.cth_attk=TRUE;//state machine stuff.
 						create_gas_cloud(u.ux+rn2(3)-1, u.uy+rn2(3)-1, 1, rnd(6)); //Longer-lived smoke
 						flags.cth_attk=FALSE;
+						u.ustove--;
 					}
 				} else if(u.utemp) u.utemp--;
 				if(u.utemp > BURNING_HOT){
