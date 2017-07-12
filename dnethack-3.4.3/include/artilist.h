@@ -1404,9 +1404,9 @@ A("The Hand of Vecna",       SEVERED_HAND,
 A("Genocide", TWO_HANDED_SWORD, /*Needs encyc entry, somehow*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	FIRE(10,20),	NO_DFNS,	NO_CARY,
+	FIRE(9,9),	NO_DFNS,	NO_CARY,
 	0,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
-	SPFX2_FIRE|SPFX2_BLDTHRST,SPFX3_NOCNT,0),
+	SPFX2_BLDTHRST,SPFX3_NOCNT,0),
 
 A("The Rod of Dis", MACE, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
