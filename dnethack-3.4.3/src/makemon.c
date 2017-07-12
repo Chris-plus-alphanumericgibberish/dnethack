@@ -462,6 +462,7 @@ register struct monst *mtmp;
 			      w2 = rn2(2) ? DAGGER : KNIFE;
 				  (void)mongets(mtmp, CROSSBOW);
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 5);
+				  (void)mongets(mtmp, SCALE_MAIL);
 			break;
 			case PM_LEGION_DEVIL_SOLDIER:
 			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
@@ -469,6 +470,7 @@ register struct monst *mtmp;
 				  (void)mongets(mtmp, CROSSBOW);
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 10);
 				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
+				  (void)mongets(mtmp, SCALE_MAIL);
 			break;
 			case PM_LEGION_DEVIL_SERGEANT:
 			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
@@ -477,6 +479,7 @@ register struct monst *mtmp;
 				  m_initthrow(mtmp, CROSSBOW_BOLT, 20);
 				  (void)mongets(mtmp, rnd_attack_wand(mtmp));
 				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
+				  (void)mongets(mtmp, SCALE_MAIL);
 			break;
 			case PM_LEGION_DEVIL_CAPTAIN:
 			      w1 = !rn2(4) ? PARTISAN : !rn2(3) ? HALBERD : rn2(2) ? BILL_GUISARME : BEC_DE_CORBIN;
@@ -486,6 +489,7 @@ register struct monst *mtmp;
 				  (void)mongets(mtmp, rnd_attack_wand(mtmp));
 				  (void)mongets(mtmp, rnd_utility_wand(mtmp));
 				  (void)mongets(mtmp, rnd(WAN_LIGHTNING-WAN_CREATE_MONSTER)+WAN_CREATE_MONSTER);
+				  (void)mongets(mtmp, SCALE_MAIL);
 			break;
 			case PM_GLASYA:
 				otmp = mksobj(BULLWHIP, TRUE, FALSE);
@@ -494,6 +498,11 @@ register struct monst *mtmp;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
+				mongets(mtmp, find_gcirclet());
+				mongets(mtmp, GENTLEWOMAN_S_DRESS);
+				mongets(mtmp, CRYSTAL_BOOTS);
+				mongets(mtmp, CRYSTAL_GAUNTLETS);
+				// mongets(mtmp, RAZOR_WIRE);
 			break;
 			}
 		    if (w1) (void)mongets(mtmp, w1);
