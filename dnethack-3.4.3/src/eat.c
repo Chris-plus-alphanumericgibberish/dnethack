@@ -3942,7 +3942,7 @@ int perturn;
 		return 0;
 	}
 	
-	if(turns > 2000){
+	if(turns > 10){
 		pline("\"That sounds really boring.\"");
 		return 0;
 	}
@@ -3958,7 +3958,7 @@ int perturn;
 	Sprintf(qbuf, "That will be %ld %s. (Pay?)", price, currency(price));
 	if(yn(qbuf)=='y'){
 #ifndef GOLDOBJ
-		if (price >= u.ugold) {
+		if (price > u.ugold) {
 			You("don't have enough %s!", currency(price));
 			return 0;
 		} else {
@@ -3967,7 +3967,7 @@ int perturn;
 		u.ugold -= price;
 		mon->mgold += price;
 #else
-		if (price >= umoney) {
+		if (price > umoney) {
 			You("don't have enough %s!", currency(price));
 			return 0;
 		} else {
@@ -4019,7 +4019,7 @@ int flatrate;
 	Sprintf(qbuf, "That will be %ld %s. (Pay?)", price, currency(price));
 	if(yn(qbuf)=='y'){
 #ifndef GOLDOBJ
-		if (price >= u.ugold) {
+		if (price > u.ugold) {
 			You("don't have enough %s!", currency(price));
 			return 0;
 		} else {
@@ -4028,7 +4028,7 @@ int flatrate;
 		u.ugold -= price;
 		mon->mgold += price;
 #else
-		if (price >= umoney) {
+		if (price > umoney) {
 			You("don't have enough %s!", currency(price));
 			return 0;
 		} else {
