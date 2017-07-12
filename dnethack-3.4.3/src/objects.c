@@ -108,7 +108,7 @@ PROJECTILE("ya", "bamboo arrow",
 		0, 15, 1, 4, 7, 7, 1, METAL, -P_BOW, HI_METAL),
 PROJECTILE("crossbow bolt", (char *)0,
 		1, 55, 1, 2, 4, 6, 0, IRON, -P_CROSSBOW, HI_METAL),
-PROJECTILE("droven bolt", "bolt", /*Needs encyc entry*/
+PROJECTILE("droven bolt", "crossbow bolt", /*Needs encyc entry*/
 		0,  0, 1, 2, 9, 6, 2, OBSIDIAN_MT, -P_CROSSBOW, CLR_BLACK),
 
 WEAPON("dart", (char *)0,
@@ -419,7 +419,7 @@ HELM("dunce cap", "conical hat",
 		0, 1,  0,	3, 1,  4,   1, 10, 0, CLOTH, CLR_BLUE),
 HELM("war hat", "wide helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	2, 0, 100,  30, 8, 2, IRON, HI_METAL),
-HELM("flack helmet", "green bowel", /*Needs encyc entry*/
+HELM("flack helmet", "green bowl", /*Needs encyc entry*/
 		0, 0,  0,	0, 0, 10,   50, 8, 1, PLASTIC, CLR_GREEN),
 HELM("bronze helm", "helmet",
 		0, 0,  0,   0, 1, 30,  12, 9, 0, COPPER, HI_COPPER),
