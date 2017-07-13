@@ -2649,6 +2649,13 @@ struct obj *otmp;
 		if (yn_function(buf,ynchars,'n')=='n') return 1;
 		else return 2;
 	}
+	if (cadaver && polyfodder(otmp) && !Unchanging) {
+		/* polymorphous */
+		Sprintf(buf, "%s strangely variable! %s",
+			foodsmell, eat_it_anyway);
+		if (yn_function(buf,ynchars,'n')=='n') return 1;
+		else return 2;
+	}
 	if (cadaver && poisonous(&mons[mnum]) && !Poison_resistance) {
 		/* poisonous */
 		Sprintf(buf, "%s like %s might be poisonous! %s",
