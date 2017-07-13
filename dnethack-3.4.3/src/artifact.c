@@ -1299,6 +1299,136 @@ struct monst *mtmp;
 	return TRUE; //Made it through all checks above, so return true now
 }
 
+/* decide whether an artifact's narrow-targeted special attacks apply against mtmp */
+int
+narrow_spec_applies(otmp, mtmp)
+struct obj *otmp;
+struct monst *mtmp;
+{
+	register const struct artifact *weap = get_artifact(otmp);
+	struct permonst *ptr;
+	boolean yours;
+
+	if(otmp->oartifact == 0) return FALSE;
+	
+	if (weap->inv_prop == ICE_SHIKAI && u.SnSd3duration < monstermoves)
+	    return FALSE;
+	
+	if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit) return !((mtmp == &youmonst) ? Antimagic : resists_magm(mtmp));
+	
+	yours = (mtmp == &youmonst);
+	ptr = mtmp->data;
+	
+	if(weap == &artilist[ART_LIFEHUNT_SCYTHE]) return (!is_unalive(ptr));
+	
+	if(weap == &artilist[ART_GIANTSLAYER] && bigmonst(ptr)) return TRUE;
+	
+	if (weap->spfx & SPFX_ATTK) {
+		struct obj *defending_weapon = (yours ? uwep : MON_WEP(mtmp));
+
+		if (defending_weapon && defending_weapon->oartifact &&
+			defends((int)weap->attk.adtyp, defending_weapon))
+		return FALSE;
+		switch(weap->attk.adtyp) {
+		case AD_FIRE:
+			if((yours ? Fire_resistance : resists_fire(mtmp))) return FALSE;
+		break;
+		case AD_COLD:
+			if((yours ? Cold_resistance : resists_cold(mtmp))) return FALSE;
+		break;
+		case AD_ELEC:
+			if((yours ? Shock_resistance : resists_elec(mtmp))) return FALSE;
+		break;
+		case AD_ACID:
+			if((yours ? Acid_resistance : resists_acid(mtmp))) return FALSE;
+		break;
+		case AD_MAGM:
+		case AD_STUN:
+			if((yours ? Antimagic : (rn2(100) < ptr->mr || resists_magm(mtmp)))) return FALSE;
+		break;
+		case AD_DRST:
+			if((yours ? Poison_resistance : resists_poison(mtmp))) return FALSE;
+		break;
+		case AD_DRLI:
+			if((yours ? Drain_resistance : resists_drli(mtmp))) return FALSE;
+		break;
+		case AD_STON:
+			if((yours ? Stone_resistance : resists_ston(mtmp))) return FALSE;
+		break;
+		default:	impossible("Weird weapon special attack.");
+		}
+	}
+	
+	if(weap->spfx & SPFX_CON_OR){
+		if(weap->spfx & SPFX_ATTK) return TRUE; //Already passed resistance checks above
+		else if (weap->mtype != 0L && (weap->mtype == (unsigned long)ptr->mlet)) {
+			return TRUE;
+		} else if (weap->mflagsm != 0L && ((ptr->mflagsm & weap->mflagsm) != 0L)) {
+			return TRUE;
+		} else if (weap->mflagst != 0L && ((ptr->mflagst & weap->mflagst) != 0L)) {
+			return TRUE;
+		} else if (weap->mflagsb != 0L && ((ptr->mflagsb & weap->mflagsb) != 0L)) {
+			return TRUE;
+		} else if (weap->mflagsg != 0L && ((ptr->mflagsg & weap->mflagsg) != 0L)) {
+			return TRUE;
+		} else if (weap->mflagsv != 0L && ((ptr->mflagsv & weap->mflagsv) != 0L)) {
+			return TRUE;
+		} else if (weap->mflagsa != 0L && (
+				(ptr->mflagsa & weap->mflagsa) || 
+				(yours && 
+					((!Upolyd && (urace.selfmask & weap->mflagsa)) ||
+					((weap->mflagsa & MA_WERE) && u.ulycn >= LOW_PM))
+				) ||
+				(weap == &artilist[ART_STING] && webmaker(ptr)) 
+			)
+		) {
+			return TRUE;
+		} else if (weap->spfx & SPFX_DALIGN && (yours ? (u.ualign.type != weap->alignment) :
+				   (ptr->maligntyp == A_NONE ||
+					sgn(ptr->maligntyp) != weap->alignment))
+		) {
+			return TRUE;
+		}
+		
+		return FALSE; //Found no reason you SHOULD affect anything
+		
+	} else if(weap->spfx & SPFX_CON_AND){
+		if (weap->mtype != 0L && !(weap->mtype == (unsigned long)ptr->mlet)) {
+			return FALSE;
+		} else if (weap->mflagsm != 0L && !((ptr->mflagsm & weap->mflagsm) != 0L)) {
+			return FALSE;
+		} else if (weap->mflagst != 0L && !((ptr->mflagst & weap->mflagst) != 0L)) {
+			return FALSE;
+		} else if (weap->mflagsb != 0L && !((ptr->mflagsb & weap->mflagsb) != 0L)) {
+			return FALSE;
+		} else if (weap->mflagsg != 0L && !((ptr->mflagsg & weap->mflagsg) != 0L)) {
+			return FALSE;
+		} else if (weap->mflagsv != 0L && !((ptr->mflagsv & weap->mflagsv) != 0L)) {
+			return FALSE;
+		} else if (weap->mflagsa != 0L && !(
+				(ptr->mflagsa & weap->mflagsa) || 
+				(yours && 
+					((!Upolyd && (urace.selfmask & weap->mflagsa)) ||
+					((weap->mflagsa & MA_WERE) && u.ulycn >= LOW_PM))
+				) ||
+				(weap == &artilist[ART_STING] && webmaker(ptr)) 
+			)
+		) {
+			return FALSE;
+		} else if (weap->spfx & SPFX_DALIGN && !(yours ? (u.ualign.type != weap->alignment) :
+				   (ptr->maligntyp == A_NONE ||
+					sgn(ptr->maligntyp) != weap->alignment))
+		) {
+			return FALSE;
+		}
+		return TRUE; //Made it through all checks above, so return true now
+	}
+	
+	if(weap->spfx & SPFX_ATTK) return TRUE; //Made it through all checks above, so return true now
+	
+	return FALSE; //Nothing special
+}
+
 /* return the MM flags of monster that an artifact's special attacks apply against */
 long
 spec_mm(otmp)
