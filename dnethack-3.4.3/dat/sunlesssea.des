@@ -52,7 +52,7 @@ OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
 OBJECT[90%]:random,random,random
-OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'"',"amulet of magical breathing",random
 OBJECT:'"',random,random
 OBJECT[30%]:')',"saber", random
 OBJECT:'=',random,random
