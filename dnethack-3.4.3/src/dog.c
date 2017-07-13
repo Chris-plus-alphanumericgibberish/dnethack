@@ -959,6 +959,8 @@ rock:
 					    && obj->corpsenm != PM_LICHEN
 					    && obj->corpsenm != PM_BEHOLDER
 					    && mon->data->mlet != S_FUNGUS) ||
+			(mons[obj->corpsenm].mflagsa == mon->data->mflagsa && !(mindless_mon(mon) || is_animal(mon->data))) ||
+			(polyfodder(obj) && !resists_poly(mon->data) && (!(mindless_mon(mon) || is_animal(mon->data)) || goodsmeller(mon->data))) ||
 			(acidic(&mons[obj->corpsenm]) && !resists_acid(mon)) ||
 			(freezing(&mons[obj->corpsenm]) && !resists_cold(mon)) ||
 			(burning(&mons[obj->corpsenm]) && !resists_fire(mon)) ||
