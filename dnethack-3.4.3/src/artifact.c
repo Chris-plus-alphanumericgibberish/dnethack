@@ -3269,16 +3269,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		if (youattack && mdef->mattackedu) {
 			int life = (*dmgptr)*.3+1;
 			healup(life, 0, FALSE, FALSE);
-		} else if (youdefend) {
+		} else { /* m vs m or m vs u*/
 			int life = (*dmgptr)*.3+1;
 			if (magr && magr->mhp < magr->mhpmax) {
 				magr->mhp += life;
-				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
-			}
-		} else { /* m vs m */
-			int life = (*dmgptr)*.3+1;
-			if (magr && magr->mhp < magr->mhpmax) {
-				magr->mhp += life+1;
 				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
 			}
 		}
