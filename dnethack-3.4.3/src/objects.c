@@ -156,7 +156,7 @@ WEAPON("scalpel", (char *)0,
 WEAPON("knife", (char *)0,
 	1, 1, 0, 14,  5,  4,  3,  2, 2, P|S, P_KNIFE, IRON, HI_METAL),
 WEAPON("stiletto", (char *)0,
-	1, 1, 0,  4,  5,  4,  6,  2, 1, P|S, P_KNIFE, IRON, HI_METAL),
+	1, 1, 0,  4,  5,  4,  6,  2, 1, P, P_KNIFE, IRON, HI_METAL),
 WEAPON("worm tooth", (char *)0,
 	1, 0, 0,  0, 20,  2,  2,  2, 0, P,   P_KNIFE, 0, CLR_WHITE),
 WEAPON("crysknife", (char *)0,
@@ -203,9 +203,9 @@ WEAPON("elven broadsword", "runed broadsword",
 	0, 0, 0,  4,  4, 10,  6,  6, 2, S,   P_BROAD_SWORD, WOOD, HI_WOOD),
 						/* +d4 small, +2 large */
 WEAPON("long sword", (char *)0,
-	1, 0, 0, 46, 40, 15,  8, 12, 0, S,   P_LONG_SWORD, IRON, HI_METAL),
+	1, 0, 0, 46, 40, 15,  8, 12, 0, S|P,   P_LONG_SWORD, IRON, HI_METAL),
 WEAPON("crystal sword", (char *)0, /*Needs encyc entry*//*Needs tile*/
-	1, 0, 0, 2, 120,300,  8, 12, 0, S,   P_LONG_SWORD, GLASS, CLR_CYAN),
+	1, 0, 0, 2, 120,300,  8, 12, 0, S|P,   P_LONG_SWORD, GLASS, CLR_CYAN),
 WEAPON("two-handed sword", (char *)0,
 	1, 0, 1, 22,150, 50, 12,  6, 0, S,   P_TWO_HANDED_SWORD, IRON, HI_METAL),
 						/* +2d6 large */
@@ -283,7 +283,7 @@ WEAPON("elven mace", "runed mace", /*Needs encyc entry*/
 	0, 0, 0,  0,  2,  5,  7,  7, 2, B,   P_MACE, WOOD, HI_WOOD),
 						/* +1 small */
 WEAPON("morning star", (char *)0,
-	1, 0, 0, 12,120, 10,  4,  6, 0, B,   P_MORNING_STAR, IRON, HI_METAL),
+	1, 0, 0, 12,120, 10,  4,  6, 0, B|P,   P_MORNING_STAR, IRON, HI_METAL),
 						/* +d4 small, +1 large */
 WEAPON("war hammer", (char *)0,
 	1, 0, 0, 15, 50,  5,  4,  4, 0, B,   P_HAMMER, IRON, HI_METAL),
