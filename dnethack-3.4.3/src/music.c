@@ -443,7 +443,9 @@ int know_spell;
 	if (!know_spell)
 		return 0;
 	
-	if(instr->otyp == LEATHER_DRUM || instr->otyp == DRUM_OF_EARTHQUAKE)
+	if((instr->otyp == LEATHER_DRUM || instr->otyp == DRUM_OF_EARTHQUAKE) && song_id == SNG_FEAR)
+		chance = 100;
+	else if(instr->otyp == LEATHER_DRUM || instr->otyp == DRUM_OF_EARTHQUAKE)
 		chance = ( ACURR(A_STR) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
 		- (songs[song_id].level * (instr->blessed ? 15 : 20));
 	else chance = ( ACURR(A_DEX) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
