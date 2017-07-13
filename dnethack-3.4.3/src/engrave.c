@@ -5113,6 +5113,14 @@ static const char *epitaphs[] = {
 	
 	"I suddenly have a LOT of regrets.", /*Water Phoenix King is very quoteable...*/
 	
+	"You either die a hero, or you live long enough to see yourself become the villain.", /* Batman, the Dark Knight */
+	
+	"I'll just hit this thing a couple more times, it'll die.", /*jonadab*/
+		"I don't need to unburden myself, they're only soldiers, I've been killing soldiers, it'll be fine.",
+	
+	"Maybe if I press this key a bit harder I'll hit for more damage next time.", /*Grasshopper*/
+
+	
        	"Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
        	"Applaud, my friends, the comedy is finished.",
        	"At last... a nice long sleep.",
