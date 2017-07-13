@@ -3949,7 +3949,7 @@ int perturn;
 		return 0;
 	}
 	
-	if(turns > 10){
+	if(turns > 100){
 		pline("\"That sounds really boring.\"");
 		return 0;
 	}
