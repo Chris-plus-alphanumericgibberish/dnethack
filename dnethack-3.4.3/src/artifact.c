@@ -2151,56 +2151,56 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				nmon = tmpm->nmon;
 				if(DEADMONSTER(tmpm) || resists_fire(tmpm)) continue;
 				if((mdef->data->mflagsa & tmpm->data->mflagsa) != 0 || mdef->data == tmpm->data){
-					genoburn = d(1,9);
-					if(tmpm->mhp < genoburn+1){
+					genoburn = d(4,4);
+					if(tmpm->mhp < genoburn+4){
 						tmpm->mhp = 1;
 						if(youattack){
 							explode(tmpm->mx, tmpm->my,
 								1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-								d(1,9), 0,
+								d(4,4), 0,
 								EXPL_FIERY);
 						}
 						else{
 							explode(tmpm->mx, tmpm->my,
 								31, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-								d(1,9), 0,
+								d(4,4), 0,
 								EXPL_FIERY);
 						}
 					} else tmpm->mhp -= genoburn;
 				}
 			}
 			if(!DEADMONSTER(mdef) && !resists_fire(mdef)){
-				if(mdef->mhp < *dmgptr+1){
+				if(mdef->mhp < *dmgptr+4){
 					mdef->mhp = 1;
 					if(youattack){
 						explode(mdef->mx, mdef->my,
 							1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-							d(1,9), 0,
+							d(4,4), 0,
 							EXPL_FIERY);
 					}
 					else{
 						explode(mdef->mx, mdef->my,
 							31, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-							d(1,9), 0,
+							d(4,4), 0,
 							EXPL_FIERY);
 					}
-				} else mdef->mhp -= *dmgptr;
+				}
 			}
 			if((your_race(mdef->data) || mdef->data == youracedata) && !Fire_resistance){
-				genoburn = d(1,9);
-				if(Upolyd ? (u.mh < genoburn+1) : (u.uhp < genoburn+1)){
+				genoburn = d(4,4);
+				if(Upolyd ? (u.mh < genoburn+4) : (u.uhp < genoburn+4)){
 					if(Upolyd) u.mh = 1;
 					else u.uhp = 1;
 					if(youattack){
 						explode(u.ux, u.uy,
 							1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-							d(1,9), 0,
+							d(4,4), 0,
 							EXPL_FIERY);
 					}
 					else{
 						explode(u.ux, u.uy,
 							31, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-							d(1,9), 0,
+							d(4,4), 0,
 							EXPL_FIERY);
 					}
 				} else losehp(genoburn, "burning from within", KILLED_BY);
@@ -2210,39 +2210,39 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				nmon = tmpm->nmon;
 				if(DEADMONSTER(tmpm) || resists_fire(tmpm)) continue;
 				if(your_race(tmpm->data) || tmpm->data == youracedata){
-					genoburn = d(1,9);
-					if(tmpm->mhp < genoburn+1){
+					genoburn = d(4,4);
+					if(tmpm->mhp < genoburn+4){
 						tmpm->mhp = 1;
 						if(youattack){
 							explode(tmpm->mx, tmpm->my,
 								1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-								d(1,9), 0,
+								d(4,4), 0,
 								EXPL_FIERY);
 						}
 						else{
 							explode(tmpm->mx, tmpm->my,
 								31, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-								d(1,9), 0,
+								d(4,4), 0,
 								EXPL_FIERY);
 						}
 					} else tmpm->mhp -= genoburn;
 				}
 			}
 			if(!Fire_resistance){
-				genoburn = d(1,9);
-				if(Upolyd ? (u.mh < *dmgptr+genoburn+1) : (u.uhp < *dmgptr+genoburn+1)){
+				genoburn = d(4,4);
+				if(Upolyd ? (u.mh < *dmgptr+genoburn+4) : (u.uhp < *dmgptr+genoburn+4)){
 					if(Upolyd) u.mh = 1;
 					else u.uhp = 1;
 					if(youattack){
 						explode(u.ux, u.uy,
 							1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-							d(1,9), 0,
+							d(4,4), 0,
 							EXPL_FIERY);
 					}
 					else{
 						explode(u.ux, u.uy,
 							31, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-							d(1,9), 0,
+							d(4,4), 0,
 							EXPL_FIERY);
 					}
 				} else losehp(genoburn, "burning from within", KILLED_BY);
