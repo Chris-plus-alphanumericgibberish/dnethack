@@ -51,6 +51,21 @@ static struct trobj Anachrononaut_Hu[] = {
 	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj Anachrononaut_Dw[] = {
+	{ HEAVY_MACHINE_GUN, 5, WEAPON_CLASS, 1, 0 },
+	{ PISTOL, 1, WEAPON_CLASS, 1, 0 },
+	{ STICK_OF_DYNAMITE, 0, TOOL_CLASS, 15, 0 },
+	{ HIGH_ELVEN_PLATE, 0, ARMOR_CLASS, 1, 0 },
+	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
+	{ HIGH_ELVEN_HELM, 0, ARMOR_CLASS, 1, 0 },
+	{ HIGH_ELVEN_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
+	{ ELVEN_BOOTS, 0, ARMOR_CLASS, 1, 0 },
+	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, 0 },
+	{ BULLET, 3, WEAPON_CLASS, 500, 0 },
+	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
+	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 static struct trobj Anachrononaut_Inc[] = {
 	{ LIGHTSABER,  3, WEAPON_CLASS, 1, 0 },
 	{ ELVEN_TOGA, 1, ARMOR_CLASS, 1, 0 },
@@ -1621,6 +1636,7 @@ u_init()
 		} else if(Race_if(PM_ELF)) ini_inv(Anachrononaut_Elf);
 		else if(Race_if(PM_INCANTIFIER)) ini_inv(Anachrononaut_Inc);
 		else if(Race_if(PM_VAMPIRE)) ini_inv(Anachrononaut_Vam);
+		else if(Race_if(PM_DWARF)) ini_inv(Anachrononaut_Dw);
 		else ini_inv(Anachrononaut_Hu);
 		knows_object(FLINTLOCK);
 		knows_object(PISTOL);
@@ -1659,6 +1675,7 @@ u_init()
 		knows_object(BEAMSWORD);
 		knows_object(DOUBLE_LIGHTSABER);
 		skill_init(Skill_Ana);
+		if(Race_if(PM_DWARF)) u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] = u.ualign.type = A_CHAOTIC;
 		if(u.ualign.type == A_CHAOTIC) skill_add(Skill_Cha_Ana);
 		else skill_add(Skill_Neu_Ana);
 	break;
