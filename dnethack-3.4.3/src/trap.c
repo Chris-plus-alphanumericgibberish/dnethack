@@ -443,12 +443,12 @@ int *fail_reason;
 	     * [detected or guessed] location of a statue trap.  Normally the
 	     * uppermost statue is the one which would be activated.
 	     */
-	    if ((mptr->geno & G_UNIQ) && cause != ANIMATE_SPELL) {
+	    if (((mptr->geno & G_UNIQ) || is_unwishable(mptr)) && cause != ANIMATE_SPELL) {
 	        if (fail_reason) *fail_reason = AS_MON_IS_UNIQUE;
 	        return (struct monst *)0;
 	    }
 	    if (cause == ANIMATE_SPELL &&
-		((mptr->geno & G_UNIQ) || mptr->msound == MS_GUARDIAN)) {
+		((mptr->geno & G_UNIQ) || is_unwishable(mptr) || mptr->msound == MS_GUARDIAN)) {
 		/* Statues of quest guardians or unique monsters
 		 * will not stone-to-flesh as the real thing.
 		 */

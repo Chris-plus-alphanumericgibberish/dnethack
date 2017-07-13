@@ -218,6 +218,7 @@
 #define MG_RALL		(MG_RPIERCE|MG_RSLASH|MG_RBLUNT)	/* Monster takes reduced damage from weapons */
 #define MG_WRESIST	0x00100000L	/* Monster takes 1 damage from weapons */
 #define MG_NOTAME	0x00200000L	/* Monster can't be tamed (replaces S_HUMAN as the check) */
+#define MG_NOWISH	0x00400000L	/* Monster can't be wished for in figurine/statue form */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */

@@ -3538,12 +3538,8 @@ typfnd:
 			break;
 		case FIGURINE:
 			if (!(mons[mntmp].geno & G_UNIQ)
-			    && !is_human(&mons[mntmp])
-#ifdef MAIL
-			    && mntmp != PM_MAIL_DAEMON
-#endif
-							)
-				otmp->corpsenm = mntmp;
+			    && !is_unwishable(&mons[mntmp])
+			) otmp->corpsenm = mntmp;
 			break;
 		case EGG:
 			mntmp = can_be_hatched(mntmp);
