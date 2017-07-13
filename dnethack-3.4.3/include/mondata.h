@@ -162,9 +162,9 @@
 #define humanoid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID)
 #define animaloid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_ANIMAL)
 #define serpentine(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_SLITHY)
-#define centauroid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID|MB_ANIMAL)
-#define snakemanoid(ptr)	(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID|MB_SLITHY)
-#define leggedserpent(ptr)	(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_ANIMAL|MB_SLITHY)
+#define centauroid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == (MB_HUMANOID|MB_ANIMAL))
+#define snakemanoid(ptr)	(((ptr)->mflagsb & MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY))
+#define leggedserpent(ptr)	(((ptr)->mflagsb & MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY))
 
 #define is_animal(ptr)		(((ptr)->mflagst & MT_ANIMAL) != 0L)
 #define is_plant(ptr)		(((ptr)->mflagsa & MA_PLANT) != 0L)
