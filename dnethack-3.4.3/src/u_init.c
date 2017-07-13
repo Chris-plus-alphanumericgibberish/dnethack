@@ -90,8 +90,8 @@ static struct trobj Anachrononaut_Vam[] = {
 	{ CLOAK_OF_DISPLACEMENT, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS,  5, 0 },
-	{ BULLET, 0, TOOL_CLASS, 200, 0 },
-	{ SILVER_BULLET, 0, TOOL_CLASS, 50, 0 },
+	{ BULLET, 0, WEAPON_CLASS, 200, 0 },
+	{ SILVER_BULLET, 0, WEAPON_CLASS, 50, 0 },
 	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
 	{ FOOD_RATION, 0, TOOL_CLASS, 5, 0 },
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
@@ -120,8 +120,8 @@ static struct trobj Anachrononaut_Dro[] = {
 	{ CLOAK_OF_INVISIBILITY, 0, ARMOR_CLASS, 1, 0 },
 	{ ELVEN_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS,  5, 0 },
-	{ BULLET, 0, TOOL_CLASS, 60, 0 },
-	{ SILVER_BULLET, 0, TOOL_CLASS, 30, 0 },
+	{ BULLET, 0, WEAPON_CLASS, 60, 0 },
+	{ SILVER_BULLET, 0, WEAPON_CLASS, 30, 0 },
 	{ BULLET_FABBER, UNDEF_SPE, TOOL_CLASS, 1, 0 },
 	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -305,7 +305,7 @@ static struct trobj Pirate[] = {
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 	{ PICK_AXE, 0, TOOL_CLASS, 1, 0 },
 	{ OILSKIN_SACK, 0, TOOL_CLASS, 1, 0 },
-	{ BULLET,  0, TOOL_CLASS, 20, 0 },
+	{ BULLET,  0, WEAPON_CLASS, 20, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Priest[] = {
