@@ -4509,6 +4509,34 @@ STATIC_OVL int
 resizeArmor()
 {
 	struct obj *otmp;
+	struct permonst *ptr;
+	struct monst *mtmp;
+	int rx, ry;
+	
+    if (!getdir("Resize armor to fit what creature? (in what direction)")) {
+		/* decided not to */
+		return 0;
+	}
+
+#ifdef STEED
+    if (u.usteed && u.dz > 0) ptr = u.usteed->data;
+	else 
+#endif
+	if(u.dz){
+		pline("No creature there.");
+		return 0;
+	} else if (u.dx == 0 && u.dy == 0) {
+		ptr = youracedata;
+    } else {
+		rx = u.ux+u.dx; ry = u.uy+u.dy;
+		mtmp = m_at(rx, ry);
+		if(!mtmp){
+			pline("No creature there.");
+			return 0;
+		}
+		ptr = mtmp->data;
+	}
+	
 	
 	// attempt to find a piece of armor to resize
 	NEARDATA const char clothes[] = { ARMOR_CLASS, 0 };
@@ -4527,15 +4555,15 @@ resizeArmor()
 	}
 
 	// change size
-	otmp->objsize = youracedata->msize;
+	otmp->objsize = ptr->msize;
 	// change shape
-	if (is_suit(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
-	else if (is_helmet(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
-	else if (is_shirt(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
+	if (is_shirt(otmp) || otmp->otyp == ELVEN_TOGA) otmp->bodytypeflag = (ptr->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (ptr->mflagsb&MB_BODYTYPEMASK);
+	else if (is_suit(otmp)) otmp->bodytypeflag = (ptr->mflagsb&MB_BODYTYPEMASK);
+	else if (is_helmet(otmp)) otmp->bodytypeflag = (ptr->mflagsb&MB_HEADMODIMASK);
 	
 	fix_object(otmp);
 	
-	You("resize the armor to fit your current form.");
+	You("resize the armor to fit.");
 	pline("The kit is used up.");
 	return(1);
 }
