@@ -608,6 +608,7 @@ const char *name;
 		else if(obj->oartifact == ART_WEREBANE) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_VAMPIRE_KILLER) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) obj->obj_material = GOLD;
+		else if(obj->oartifact == ART_GRAYSWANDIR) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_MIRROR_BRAND) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_SUNSWORD) obj->obj_material = GOLD;
 		else if(obj->oartifact == ART_SODE_NO_SHIRAYUKI) obj->obj_material = SILVER;
