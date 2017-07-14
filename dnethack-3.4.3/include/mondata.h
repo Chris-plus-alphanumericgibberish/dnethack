@@ -155,8 +155,8 @@
 #define is_silent(ptr)		((ptr)->msound == MS_SILENT)
 #define unsolid(ptr)		(((ptr)->mflagsb & MB_UNSOLID) != 0L)
 #define mindless(ptr)		(((ptr)->mflagst & MT_MINDLESS) != 0L || on_level(&valley_level, &u.uz))
-#define mindless_mon(mon)		(((mon)->mfaction == ZOMBIFIED) || ((mon)->mfaction == SKELIFIED) || ((mon)->mfaction == CRYSTALFIED) || mindless((mon)->data))
-#define	can_undead_mon(mon)	(!nonliving((mon)->data) && !is_minion((mon)->data) && !is_demon((mon)->data) && !is_primordial((mon)->data))
+#define mindless_mon(mon)		(mon && (((mon)->mfaction == ZOMBIFIED) || ((mon)->mfaction == SKELIFIED) || ((mon)->mfaction == CRYSTALFIED) || mindless((mon)->data)))
+#define	can_undead_mon(mon)	(mon && !nonliving((mon)->data) && !is_minion((mon)->data) && !is_demon((mon)->data) && !is_primordial((mon)->data))
 
 #define slithy(ptr)			((ptr)->mflagsb & MB_SLITHY)
 #define humanoid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID)
@@ -194,7 +194,7 @@
 							 ptr == &mons[PM_MILITANT_CLERIC] ||\
 							 ptr == &mons[PM_HALF_ELF_RANGER])
 #define is_undead(ptr)		(((ptr)->mflagsa & MA_UNDEAD) != 0L)
-#define is_undead_mon(mon)	(is_undead((mon)->data) || (mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED)
+#define is_undead_mon(mon)	(mon && (is_undead((mon)->data) || (mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED))
 #define is_were(ptr)		(((ptr)->mflagsa & MA_WERE) != 0L)
 #define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
 #define is_heladrin(ptr)		(\
@@ -495,7 +495,7 @@
 				 (ptr) == &mons[PM_MANES] \
 				)
 
-#define nonliving_mon(mon)	(nonliving((mon)->data) || is_undead_mon(mon))
+#define nonliving_mon(mon)	(mon && (nonliving((mon)->data) || is_undead_mon(mon)))
 
 #define is_unalive(ptr)		(on_level(&valley_level, &u.uz) || (((ptr)->mflagsa & MA_UNLIVING)) )
 
