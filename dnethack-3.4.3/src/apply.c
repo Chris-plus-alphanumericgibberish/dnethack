@@ -1889,7 +1889,7 @@ register struct obj *obj;
 	    instapetrify(kbuf);
 	}
 	if (is_rider(&mons[corpse->corpsenm])) {
-		if(Is_astralevel(&u.ux)) verbalize("Yes...  But War does not preserve its enemies...");
+		if(Is_astralevel(&u.uz)) verbalize("Yes...  But War does not preserve its enemies...");
 		(void) revive_corpse(corpse, REVIVE_MONSTER);
 		return;
 	}
