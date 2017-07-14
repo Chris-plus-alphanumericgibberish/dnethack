@@ -1310,6 +1310,7 @@ struct monst *mtmp;
 	boolean yours;
 
 	if(otmp->oartifact == 0) return FALSE;
+	if(!mtmp) return FALSE;
 	
 	if (weap->inv_prop == ICE_SHIKAI && u.SnSd3duration < monstermoves)
 	    return FALSE;
