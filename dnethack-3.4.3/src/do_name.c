@@ -604,6 +604,8 @@ const char *name;
 		else obj->objsize = MZ_MEDIUM;
 		
 		if(obj->oartifact == ART_TROLLSBANE) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_DEMONBANE) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_WEREBANE) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_VAMPIRE_KILLER) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) obj->obj_material = GOLD;
 		else if(obj->oartifact == ART_MIRROR_BRAND) obj->obj_material = SILVER;
