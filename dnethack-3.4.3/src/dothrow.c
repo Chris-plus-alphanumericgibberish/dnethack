@@ -527,6 +527,7 @@ int shotlimit;
 	otmp->cursed = blaster->cursed;
 	otmp->spe = blaster->spe;
 	otmp->quan = m_shot.n;
+	otmp->oartifact = blaster->otyp == MASS_SHADOW_PISTOL ? blaster->cobj->oartifact : 0;
 	
 	if(!u.dx && !u.dy) range = 1;
 	else range = objects[(blaster->otyp)].oc_range;
