@@ -342,11 +342,11 @@ BULLET("silver bullet", "silver pellet",
 BULLET("shotgun shell", "red tube",
 	0,  0,   1,  10,12, 6, 0,  WP_SHELL,   P,   METAL, -P_FIREARM, CLR_RED),/*Needs tile*/
 BULLET("rocket", "firework",
-	0,  0,  20, 450,12,20, 0, WP_ROCKET, P|E, SILVER, -P_FIREARM, CLR_BLUE),/*Needs tile*/
+	0,  0,  20, 450,12,20, 0, WP_ROCKET, P, SILVER, -P_FIREARM, CLR_BLUE),/*Needs tile*/
 BULLET("frag grenade", "green spheriod",
-	0,  0,   5, 350, 2, 2, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_GREEN),/*Needs tile*/
+	0,  0,   5, 350, 2, 2, 0,  WP_GRENADE, B,   IRON, -P_FIREARM, CLR_GREEN),/*Needs tile*/
 BULLET("gas grenade", "lime spheriod",
-	0,  0,   2, 350, 2, 2, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_BRIGHT_GREEN),/*Needs tile*/
+	0,  0,   2, 350, 2, 2, 0,  WP_GRENADE, B,   IRON, -P_FIREARM, CLR_BRIGHT_GREEN),/*Needs tile*/
 BULLET("stick of dynamite", "red stick",
 	0,  0,  10, 150, 0, 0, 0,  WP_GENERIC,   B,   PLASTIC, P_NONE, CLR_RED),/*Needs tile*/
 
