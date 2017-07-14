@@ -1062,7 +1062,7 @@ register struct obj *obj;
 plus:
 		add_erosion_words(obj, prefix);
 		if(obj->known || Race_if(PM_INCANTIFIER)) {
-			Strcat(prefix, sitoa((obj->otyp == CRYSTAL_PLATE_MAIL || obj->otyp == CRYSTAL_SWORD) ? obj->spe*2 : obj->spe));
+			Strcat(prefix, sitoa(obj->spe));
 			Strcat(prefix, " ");
 		}
 		if(obj->known && obj->oartifact && 
