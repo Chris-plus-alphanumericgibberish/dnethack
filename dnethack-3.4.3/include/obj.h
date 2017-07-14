@@ -348,8 +348,10 @@ struct obj {
 //#else
 //#define is_unpoisonable_firearm_ammo(otmp)	0
 //#endif
-#define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
+#define is_poisonable(otmp)	((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) && \
+			!is_launcher(otmp) &&\
 			!is_unpoisonable_firearm_ammo(otmp) &&\
+			objects[otmp->otyp].oc_dir &&\
 			objects[otmp->otyp].oc_dir != WHACK)
 #define uslinging()	(uwep && objects[uwep->otyp].oc_skill == P_SLING)
 #define is_bludgeon(otmp)	(otmp->oclass == SPBOOK_CLASS || \
