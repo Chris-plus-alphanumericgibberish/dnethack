@@ -61,7 +61,7 @@ static struct trobj Anachrononaut_Dw[] = {
 	{ HIGH_ELVEN_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
 	{ ELVEN_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, 0 },
-	{ BULLET, 3, WEAPON_CLASS, 500, 0 },
+	{ BULLET, 3, WEAPON_CLASS, 100, 0 },
 	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
 	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
