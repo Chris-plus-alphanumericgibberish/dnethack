@@ -573,11 +573,25 @@ A("The Grandmaster's Robe",	ROBE, /*double robe effect*/
 	0, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,0,(WSFX_PLUSSEV)),
 
+A("The Cloak of the Unheld One",	OILSKIN_CLOAK, /*Needs encyc entry*/
+	(SPFX_RESTR|SPFX_INTEL),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	DFNS(AD_MAGM),	CARY(AD_SLEE),
+	TELEPORT_SHOES, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
+	0,0,(WSFX_PLUSSEV|WSFX_FREEACT)),
+
 A("Beastmaster's Duster", LEATHER_JACKET, /*Needs encyc entry*/
 	(SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	PETMASTER, A_LAWFUL, NON_PM, NON_PM, 9000L, 
+	0,0,WSFX_PLUSSEV),
+
+A("Soulmirror", HIGH_ELVEN_PLATE, /*Needs encyc entry*/
+	(SPFX_RESTR|SPFX_REFLECT),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	DRLI(0,0),	NO_CARY,
+	0, A_NEUTRAL, NON_PM, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
 A("Mirrorbright",	ROUNDSHIELD,/*adapted from Slash'em*/

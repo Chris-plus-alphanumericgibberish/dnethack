@@ -76,6 +76,7 @@
 										Shirts, Cloaks, and body armor.  See do_wear.c and hack.c */
 #define	WSFX_WCATRIB	0x0000002L	/* when worn above armor, increases Cha.  Under armor, increases Wis. */
 #define	WSFX_PLUSSEV	0x0000004L	/* Enchant to +7 max. */
+#define	WSFX_FREEACT	0x0000008L	/* Grant free action when worn. */
 
 ///////////////////
 //To be implemented
@@ -512,6 +513,7 @@ struct artifact {
 
 #define is_monk_safe_artifact(m) (\
 				(m) == ART_TIE_DYE_SHIRT_OF_SHAMBHALA ||\
+				(m) == ART_CLOAK_OF_THE_UNHELD_ONE ||\
 				(m) == ART_WHISPERFEET ||\
 				(m) == ART_WATER_FLOWERS ||\
 				(m) == ART_HAMMERFEET ||\

@@ -3824,15 +3824,56 @@ arti_invoke(obj)
 		artifact_detect(obj);
 	break;
 	case TELEPORT_SHOES:
-		if(obj == uarmf){
-			tele();//hungerless teleport
-		}else if(!obj->owornmask){
+		if(obj->owornmask){
+			if(level.flags.noteleport && obj->oartifact == ART_CLOAK_OF_THE_UNHELD_ONE){
+				if(!u.uhave.amulet){
+					if(Can_rise_up(u.ux, u.uy, &u.uz)){
+						int newlev = depth(&u.uz)-1;
+						d_level newlevel;
+						get_level(&newlevel, newlev);
+						if(on_level(&newlevel, &u.uz)) {
+	break;
+						}
+						goto_level(&newlevel, FALSE, FALSE, FALSE);
+					} else if(Can_fall_thru(&u.uz)){
+						int newlev = depth(&u.uz)+1;
+						d_level newlevel;
+						get_level(&newlevel, newlev);
+						if(on_level(&newlevel, &u.uz)) {
+	break;
+						}
+						goto_level(&newlevel, FALSE, FALSE, FALSE);
+					} else {
+						(void) safe_teleds(FALSE);
+					}
+				} else {
+					if(Can_fall_thru(&u.uz)){
+						int newlev = depth(&u.uz)+1;
+						d_level newlevel;
+						get_level(&newlevel, newlev);
+						if(on_level(&newlevel, &u.uz)) {
+	break;
+						}
+						goto_level(&newlevel, FALSE, FALSE, FALSE);
+					} else if(Can_rise_up(u.ux, u.uy, &u.uz)){
+						int newlev = depth(&u.uz)-1;
+						d_level newlevel;
+						get_level(&newlevel, newlev);
+						if(on_level(&newlevel, &u.uz)) {
+	break;
+						}
+						goto_level(&newlevel, FALSE, FALSE, FALSE);
+					} else {
+						(void) safe_teleds(FALSE);
+					}
+				}
+			}
+			else tele();//hungerless teleport
+		} else {
 			obj_extract_self(obj);
 			dropy(obj);
 			rloco(obj);
 			pline("%s teleports without you.",xname(obj));
-		}else{
-			pline("%s shakes for an instant.",xname(obj));
 		}
 	break;
 #ifdef CONVICT
@@ -3843,6 +3884,8 @@ arti_invoke(obj)
         } else {
             You_feel("one with the spirit world.");
         }
+		if(obj->oartifact == ART_CLOAK_OF_THE_UNHELD_ONE)
+			u.spiritPColdowns[PWR_PHASE_STEP] = moves + 25;
         incr_itimeout(&Phasing, (50 + rnd(100)));
         obj->age += Phasing; /* Time begins after phasing ends */
     break;
@@ -3851,7 +3894,7 @@ arti_invoke(obj)
 	case SATURN:
 		{
 			if ( !(uwep && uwep == obj) ) {
-				You_feel("that you should be wielding %s", the(xname(obj)));
+				You_feel("that you should be wielding %s.", the(xname(obj)));
 				obj->age = 0;
 				break;
 			}
