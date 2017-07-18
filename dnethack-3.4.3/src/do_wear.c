@@ -89,7 +89,13 @@ Boots_on()
 {
     long oldprop;
     if (!uarmf) return 0;
-    oldprop = (u.uprops[objects[uarmf->otyp].oc_oprop].extrinsic & ~WORN_BOOTS);
+ 	if(uarmf->otyp == STILETTOS) {
+		if(!Flying && !Levitation) pline("%s are stylish, but not very practical to fight in.", The(xname(uarmf)));
+		else pline("%s are stylish, and, since you don't have to walk, quite practical to fight in.", The(xname(uarmf)));
+		ABON(A_CHA) += 1 + uarmf->spe;
+		flags.botl = 1;
+	}
+   oldprop = (u.uprops[objects[uarmf->otyp].oc_oprop].extrinsic & ~WORN_BOOTS);
 
     switch(uarmf->otyp) {
 	case LOW_BOOTS:
@@ -100,6 +106,7 @@ Boots_on()
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
+	case STILETTOS:
 		break;
 	case WATER_WALKING_BOOTS:
 		if (u.uinwater) spoteffects(TRUE);
@@ -141,6 +148,11 @@ Boots_off()
     int otyp = uarmf->otyp;
     long oldprop = u.uprops[objects[otyp].oc_oprop].extrinsic & ~WORN_BOOTS;
 
+ 	if(uarmf->otyp == STILETTOS && !cancelled_don) {
+		ABON(A_CHA) -= 1 + uarmf->spe;
+		flags.botl = 1;
+	}
+	
     takeoff_mask &= ~W_ARMF;
 	/* For levitation, float_down() returns if Levitation, so we
 	 * must do a setworn() _before_ the levitation case.
@@ -186,6 +198,7 @@ Boots_off()
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
+	case STILETTOS:
 		break;
 	default: impossible(unknown_type, c_boots, otyp);
     }
@@ -1673,7 +1686,7 @@ dowear()
 
 	if (!canwearobj(otmp,&mask,TRUE)) return(0);
 
-	if (otmp->oartifact && !touch_artifact(otmp, &youmonst))
+	if (otmp->oartifact && !touch_artifact(otmp, &youmonst, FALSE))
 	    return 1;	/* costs a turn even though it didn't get worn */
 
 	if (otmp->otyp == HELM_OF_OPPOSITE_ALIGNMENT &&
@@ -1799,7 +1812,7 @@ doputon()
 	    You("cannot free your weapon hand to put on the ring.");
 			return(0);
 		}
-		if (otmp->oartifact && !touch_artifact(otmp, &youmonst))
+		if (otmp->oartifact && !touch_artifact(otmp, &youmonst, FALSE))
 		    return 1; /* costs a turn even though it didn't get worn */
 		setworn(otmp, mask);
 		Ring_on(otmp);
@@ -1808,7 +1821,7 @@ doputon()
 			already_wearing("an amulet");
 			return(0);
 		}
-		if (otmp->oartifact && !touch_artifact(otmp, &youmonst))
+		if (otmp->oartifact && !touch_artifact(otmp, &youmonst, FALSE))
 		    return 1;
 		setworn(otmp, W_AMUL);
 		if (otmp->otyp == AMULET_OF_CHANGE) {
@@ -1847,7 +1860,7 @@ doputon()
 			display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
 			return 0;
 		}
-		if (otmp->oartifact && !touch_artifact(otmp, &youmonst))
+		if (otmp->oartifact && !touch_artifact(otmp, &youmonst, FALSE))
 		    return 1;
 		Blindf_on(otmp);
 		return(1);
@@ -2914,19 +2927,6 @@ register schar delta;
 		(otmp->otyp == gcircletsa)
 	){
 		if (delta) ABON(A_CHA) += (delta);
-		flags.botl = 1;
-	}
-	if(((uarm && uarm == otmp) || (uarmu && uarmu == otmp)) &&
-		(otmp->otyp == NOBLE_S_DRESS || otmp->otyp == BLACK_DRESS || otmp->otyp == CONSORT_S_SUIT
-		 || otmp->otyp == VICTORIAN_UNDERWEAR || otmp->otyp == GENTLEMAN_S_SUIT)
-	){
-		if (delta){
-			if(otmp->otyp == GENTLEWOMAN_S_DRESS || 
-				otmp->otyp == GENTLEMAN_S_SUIT || 
-				otmp->otyp == VICTORIAN_UNDERWEAR
-			) ABON(A_CHA) += 2*(delta);
-			else ABON(A_CHA) += (delta);
-		}
 		flags.botl = 1;
 	}
 }

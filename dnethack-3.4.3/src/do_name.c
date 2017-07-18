@@ -639,6 +639,8 @@ const char *name;
 		if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default body type
 		else obj->bodytypeflag = MB_HUMANOID;
 		
+		if(obj->oartifact == ART_SCOURGE_OF_LOLTH) obj->ovar1 = 8;
+		
 		fix_object(obj);
 		
 	    /* can't dual-wield with artifact as secondary weapon */

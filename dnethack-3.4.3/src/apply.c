@@ -2932,7 +2932,7 @@ struct obj *hypo;
 			  Hallucination ? "normal" : "peculiar");
 		}
 	}
-	useup(amp);
+	amp->spe--;
 	return 1;
 }
 
@@ -4735,7 +4735,7 @@ doapply()
 	obj = getobj(class_list, "use or apply");
 	if(!obj) return 0;
 
-	if (obj->oartifact && !touch_artifact(obj, &youmonst))
+	if (obj->oartifact && !touch_artifact(obj, &youmonst, FALSE))
 	    return 1;	/* evading your grasp costs a turn; just be
 			   grateful that you don't drop it as well */
 

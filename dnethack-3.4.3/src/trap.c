@@ -3968,7 +3968,7 @@ boolean force;
 			case 'n': trap_skipped = TRUE;  continue;
 		    }
 
-		    if(touch_artifact(otmp, &youmonst) && u.ualign.type == A_LAWFUL && u.ualign.record >= 14) {
+		    if(touch_artifact(otmp, &youmonst, FALSE) && u.ualign.type == A_LAWFUL && u.ualign.record >= 14) {
 			pline("It slides out easily!");
 			(void) pick_obj(otmp);
 		    } else {

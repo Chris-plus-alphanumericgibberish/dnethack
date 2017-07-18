@@ -557,6 +557,17 @@ register struct obj *obj;
 			if(obj->opoisoned & OPOISON_BLIND) Strcat(buf, "stained ");
 			if(obj->opoisoned & OPOISON_PARAL) Strcat(buf, "envenomed ");
 			if(obj->opoisoned & OPOISON_AMNES) Strcat(buf, "lethe-rusted ");
+			if(obj->otyp == VIPERWHIP && obj->opoisonchrgs) Sprintf(eos(buf), "(%d coatings) ", (int)(obj->opoisonchrgs+1));
+		}
+		if(obj->otyp == VIPERWHIP && obj->ovar1){
+			switch(obj->ovar1){
+				case 1: Strcat(buf, "one-headed "); break;
+				case 2: Strcat(buf, "two-headed "); break;
+				case 3: Strcat(buf, "three-headed "); break;
+				case 4: Strcat(buf, "four-headed "); break;
+				case 5: Strcat(buf, "five-headed "); break;
+				case 8: Strcat(buf, "eight-headed "); break;
+			}
 		}
 		if((obj)->obj_material == WOOD && obj->otyp != MOON_AXE && obj->ovar1) Strcat(buf, "carved ");
 		if(obj->otyp == MOON_AXE && nn){
@@ -597,7 +608,6 @@ register struct obj *obj;
 			    }
 			    Strcat(buf, pactualn);
 			    Strcat(buf, " ");
-				// pline("(%d)", (int)(obj->ovar1));
 			} else if(un) {
 				Strcat(buf, "ampule called ");
 				Strcat(buf, un);
@@ -607,6 +617,7 @@ register struct obj *obj;
 				break;
 			}
 			Strcat(buf, "ampule");
+			Sprintf(eos(buf), " (%d doses)", (int)(obj->spe));
 			break;
 		} else if (!obj->dknown)
 			Strcat(buf, dn ? dn : actualn);
@@ -1060,6 +1071,16 @@ register struct obj *obj;
 			}
 		}
 plus:
+		if(obj->oclass == WEAPON_CLASS && obj_is_pname(obj) && is_poisonable(obj) && obj->opoisoned){
+			//kludge: poison words get skipped, so add them here :(
+			if(obj->opoisoned & OPOISON_BASIC) Strcat(prefix, "poisoned ");
+			if(obj->opoisoned & OPOISON_FILTH) Strcat(prefix, "filth-crusted ");
+			if(obj->opoisoned & OPOISON_SLEEP) Strcat(prefix, "drug-coated ");
+			if(obj->opoisoned & OPOISON_BLIND) Strcat(prefix, "stained ");
+			if(obj->opoisoned & OPOISON_PARAL) Strcat(prefix, "envenomed ");
+			if(obj->opoisoned & OPOISON_AMNES) Strcat(prefix, "lethe-rusted ");
+			if(obj->otyp == VIPERWHIP && obj->opoisonchrgs) Sprintf(eos(prefix), "(%d coatings) ", (int)(obj->opoisonchrgs+1));
+		}
 		add_erosion_words(obj, prefix);
 		if(obj->known || Race_if(PM_INCANTIFIER)) {
 			Strcat(prefix, sitoa(obj->spe));
@@ -1307,12 +1328,12 @@ ring:
 		} else {
 			const char *hand_s = body_part(HAND);
 
-			if (bimanual(obj,youracedata)) hand_s = makeplural(hand_s);
+			if (bimanual(obj,youracedata) || (u.twoweap && obj->otyp == STILETTOS)) hand_s = makeplural(hand_s);
 			Sprintf(eos(bp), " (weapon in %s)", hand_s);
 		}
 	}
 	if(obj->owornmask & W_SWAPWEP) {
-		if (u.twoweap)
+		if (u.twoweap && !(uwep && uwep->otyp == STILETTOS))
 			Sprintf(eos(bp), " (wielded in other %s)",
 				body_part(HAND));
 		else
@@ -3755,18 +3776,21 @@ typfnd:
 	
 	/* more wishing abuse: don't allow wishing for certain artifacts */
 	/* and make them pay; charge them for the wish anyway! */
-	if ((is_quest_artifact(otmp) || //redundant failsafe.  You can't wish for ANY quest artifacts
-	     (otmp->oartifact && rn2((int)(u.uconduct.wisharti)) > 1) || otmp->oartifact >= ART_ROD_OF_SEVEN_PARTS)
+	if ((is_quest_artifact(otmp) //redundant failsafe.  You can't wish for ANY quest artifacts
+	     || (otmp->oartifact && rn2((int)(u.uconduct.wisharti)) > 1) //Limit artifact wishes per game
+		 || otmp->oartifact >= ART_ROD_OF_SEVEN_PARTS //No wishing for quest artifacts, unique monster artifacts, etc.
+		 || touch_artifact(otmp, &youmonst, TRUE) //Auto-fail a wish for an artifact you wouldn't be able to touch (mercy rule)
 		 // (otmp->oartifact >= ART_ITLACHIAYAQUE && otmp->oartifact <= ART_EYE_OF_THE_AETHIOPICA) || //no wishing for quest artifacts
 		 // (otmp->oartifact >= ART_ROD_OF_SEVEN_PARTS && otmp->oartifact <= ART_SILVER_KEY) || //no wishing for alignment quest artifacts
 		 // (otmp->oartifact >= ART_SWORD_OF_ERATHAOL && otmp->oartifact <= ART_HAMMER_OF_BARQUIEL) || //no wishing for angel artifacts
 		 // (otmp->oartifact >= ART_GENOCIDE && otmp->oartifact <= ART_DOOMSCREAMER) || //no wishing for demon artifacts
-		 // (otmp->oartifact >= ART_STAFF_OF_THE_ARCHMAGI && otmp->oartifact <= ART_SNICKERSNEE))
+		 // (otmp->oartifact >= ART_STAFF_OF_THE_ARCHMAGI && otmp->oartifact <= ART_SNICKERSNEE)
 #ifdef WIZARD
-	    && !wizard
+	    ) && !wizard
 #endif
 	    ) {
 	    artifact_exists(otmp, ONAME(otmp), FALSE);
+		u.uconduct.wisharti--;
 	    obfree(otmp, (struct obj *) 0);
 	    otmp = &zeroobj;
 	    pline("For a moment, you feel %s in your %s, but it disappears!",

@@ -1285,7 +1285,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 	// }
 	if (obj == uchain) {    /* do not pick up attached chain */
 	    return 0;
-	} else if (obj->oartifact && !touch_artifact(obj,&youmonst)) {
+	} else if (obj->oartifact && !touch_artifact(obj, &youmonst, FALSE)) {
 	    return 0;
 #ifndef GOLDOBJ
 	} else if (obj->oclass == COIN_CLASS) {

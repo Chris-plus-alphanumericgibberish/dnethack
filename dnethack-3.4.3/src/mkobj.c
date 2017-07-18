@@ -404,12 +404,16 @@ boolean artif;
 	else if(otyp == CHAKRAM) otmp->obj_material = SILVER;
 	else if(otyp == GLOVES) otmp->obj_material = LEATHER;
 	else if(otyp == BAR) otmp->obj_material = IRON;
+	else if(otyp == VIPERWHIP) otmp->obj_material = SILVER;
 	else if(otyp == find_gcirclet()) otmp->obj_material = GOLD;
 	else if(otyp == SPEAR){if(!rn2(25)) otmp->obj_material = SILVER;}
 	else if(otyp == DAGGER){if(!rn2(12)) otmp->obj_material = SILVER;}
+	else if(otyp == STILETTOS){if(!rn2(12)) otmp->obj_material = SILVER;}
 	else if(otyp == ARMORED_BOOTS) otmp->obj_material = COPPER;
 	else if(otyp == ROUNDSHIELD) otmp->obj_material = COPPER;
 	else otmp->obj_material = objects[otyp].oc_material;
+	
+	if(otyp == VIPERWHIP) otmp->ovar1 = rn2(2) ? 1 : rn2(5) ? rnd(2) : rnd(5);
 	
 	fix_object(otmp);
 	
@@ -695,6 +699,7 @@ boolean artif;
 			}
 			// otmp->ovar1 = (long)(rn2(POT_POLYMORPH - POT_GAIN_ABILITY + 1) + POT_GAIN_ABILITY);
 			otmp->ovar1 = (long)(pick);
+			otmp->spe = rn1(6,6);
 		}break;
 		case HORN_OF_PLENTY:
 		case BAG_OF_TRICKS:	otmp->spe = rnd(20);

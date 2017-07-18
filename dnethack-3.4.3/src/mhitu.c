@@ -1454,7 +1454,7 @@ hitmu(mtmp, mattk)
 		newsym(mtmp->mx, mtmp->my);
 	    }
 	}
-	if(uarm && uarm->oartifact && !rn2(10)) touch_artifact(uarm, &youmonst);
+	if(uarm && uarm->oartifact && !rn2(10)) touch_artifact(uarm, &youmonst, FALSE);
 
 /*	First determine the base damage done */
 	if(mtmp->mflee && mdat == &mons[PM_BANDERSNATCH]) dmg = d((int)mattk->damn, 2*(int)mattk->damd);
@@ -1536,9 +1536,12 @@ hitmu(mtmp, mattk)
 			}
 			
 			if (uwep->opoisoned){
-				Sprintf(buf, "%s %s",
-					s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
-				poisoned(buf, A_CON, mdat->mname, 30, uwep->opoisoned);
+				int viperheads;
+				for(viperheads = ((uwep && uwep->otyp == VIPERWHIP) ? (1+uwep->ostriking) : 1); viperheads; viperheads--){
+					Sprintf(buf, "%s %s",
+						s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
+					poisoned(buf, A_CON, mdat->mname, 30, uwep->opoisoned);
+				}
 			}
 			
 			if (dmg <= 0) dmg = 1;
@@ -1671,9 +1674,12 @@ hitmu(mtmp, mattk)
 			}
 			
 			if (otmp->opoisoned){
-				Sprintf(buf, "%s %s",
-					s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
-				poisoned(buf, A_CON, mdat->mname, 30, otmp->opoisoned);
+				int viperheads;
+				for(viperheads = ((otmp && otmp->otyp == VIPERWHIP) ? (1+otmp->ostriking) : 1); viperheads; viperheads--){
+					Sprintf(buf, "%s %s",
+						s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
+					poisoned(buf, A_CON, mdat->mname, 30, otmp->opoisoned);
+				}
 			}
 			if (dmg <= 0) dmg = 1;
 			if (!(otmp->oartifact &&

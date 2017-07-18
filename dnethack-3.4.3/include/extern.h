@@ -89,7 +89,7 @@ E boolean FDECL(restrict_name, (struct obj *,const char *));
 E boolean FDECL(defends, (int,struct obj *));
 E boolean FDECL(protects, (int,struct obj *));
 E void FDECL(set_artifact_intrinsic, (struct obj *,BOOLEAN_P,long));
-E int FDECL(touch_artifact, (struct obj *,struct monst *));
+E int FDECL(touch_artifact, (struct obj *,struct monst *, boolean));
 E int FDECL(spec_abon, (struct obj *,struct monst *));
 E int FDECL(spec_dbon, (struct obj *,struct monst *,int));
 E int FDECL(narrow_spec_applies, (struct obj *,struct monst *));

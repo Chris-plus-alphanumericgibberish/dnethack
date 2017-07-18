@@ -181,10 +181,16 @@ struct monst *mon;
 	}
 
 /*	Put weapon specific "to hit" bonuses in below:		*/
-	tmp += objects[otmp->otyp].oc_hitbon;
-	//But DON'T double the to hit bonus from spe for double lightsabers in dual bladed mode. It gets harder to use, not easier.
+	if(otmp->otyp == VIPERWHIP){
+		otmp->ostriking = min(7,rn2(otmp->ovar1));
+		tmp += (1+otmp->ostriking) * objects[otmp->otyp].oc_hitbon;
+	} else {
+		tmp += objects[otmp->otyp].oc_hitbon;
+	}
+	
 	if (is_lightsaber(otmp) && otmp->altmode) tmp += objects[otmp->otyp].oc_hitbon;
-
+	//But DON'T double the to hit bonus from spe for double lightsabers in dual bladed mode. It gets harder to use, not easier.
+	
 /*	Put weapon vs. monster type "to hit" bonuses in below:	*/
 
 	/* Blessed weapons used against undead or demons */
@@ -275,6 +281,7 @@ int spec;
 	
 	if (bigmonst(ptr)) {
 		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,ldie,1);
+		else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp = exploding_d(1,ldie,0);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 															rnl(ldie)+1 : 
 															ldie - rnl(ldie);
@@ -285,7 +292,8 @@ int spec;
 	    else if (ldie) tmp = rnd(ldie);
 		
 		if(spec & SPEC_MARIONETTE){
-			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,ldie+2,1);
+			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(2,ldie+2,1);
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp = exploding_d(1,ldie,0);
 			else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 																rnl(ldie+2)+1 : 
 																ldie+2 - rnl(ldie+2);
@@ -522,13 +530,19 @@ int spec;
 		case BULLWHIP:
 			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += d(1,10+2*dmod);
 			else if(otmp->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) tmp = d(1,2) + rnd(4);
-			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(2,max(2,2+2*dmod),0);
+		break;
+		case VIPERWHIP:
+			if(otmp->ostriking > 0){
+				if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(otmp->ostriking,ldie,0);
+				else if(otmp->ovar1 > 1) tmp += d(otmp->ostriking, ldie);
+			}
 		break;
 		case RAPIER:
 			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(2,4+2*dmod); break;
 	    }
 	} else {
 		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,sdie,1);
+		else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp = exploding_d(1,sdie,0);
 		else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 															rnl(sdie)+1 : 
 															sdie - rnl(sdie);
@@ -539,7 +553,8 @@ int spec;
 	    else if (sdie) tmp = rnd(sdie);
 		
 		if(spec & SPEC_MARIONETTE){
-			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(1,sdie+2,1);
+			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(2,sdie+2,1);
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp = exploding_d(1,sdie,0);
 			else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
 																rnl(sdie+2)+1 : 
 																sdie+2 - rnl(sdie+2);
@@ -565,9 +580,15 @@ int spec;
 		case BULLWHIP:
 			if(otmp->oartifact == ART_VAMPIRE_KILLER) tmp += 10+2*dmod;
 			else if(otmp->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) tmp = d(1,2) + rnd(4);
-			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(4,4+2*dmod,0);
 		break;
 
+		case VIPERWHIP:
+			if(otmp->ostriking > 0){
+				if(otmp->oartifact == ART_SCOURGE_OF_LOLTH)  tmp += exploding_d(otmp->ostriking,sdie,0);
+				else if(otmp->ovar1 > 1) tmp += d(otmp->ostriking, sdie);
+			}
+		break;
+		
 		case LONG_SWORD:	
 			if(otmp->oartifact == ART_TOBIUME) tmp -= 2+dmod;
 		break;
@@ -847,6 +868,7 @@ int spec;
 	    if (otmp->blessed && (is_undead_mon(mon) || is_demon(ptr))){
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
 			else if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),4);
+			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,4);
 			else bonus += rnd(4);
 		}
 	    if (is_axe(otmp) && is_wooden(ptr))
@@ -857,6 +879,7 @@ int spec;
 			&& (!youdefend || !(u.sealsActive&SEAL_EDEN))
 		){
 			if(otyp == KHAKKHARA) bonus += d(rnd(3),20);
+			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,20);
 			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
 			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
 			else bonus += rnd(20);
@@ -867,9 +890,11 @@ int spec;
 		){
 			if(youdefend){
 				if(otyp == KHAKKHARA) bonus += d(rnd(3),u.ulevel);
+				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,mon->m_lev);
 				else bonus += rnd(u.ulevel);
 			} else {
 				if(otyp == KHAKKHARA) bonus += d(rnd(3),mon->m_lev);
+				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking,mon->m_lev);
 				else bonus += rnd(mon->m_lev);
 			}
 		}
@@ -880,6 +905,7 @@ int spec;
 			&& hates_unholy(ptr)
 		){
 			if(otyp == KHAKKHARA) bonus += d(rnd(3),9);
+			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking,9);
 			else bonus += rnd(9);
 		}
 		
@@ -1062,7 +1088,7 @@ int x;
 		    !((x == CORPSE || x == EGG) &&
 			!touch_petrifies(&mons[otmp->corpsenm])) &&
                     (!is_lightsaber(otmp) || otmp->age) &&
-		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
+		    (!otmp->oartifact || touch_artifact(otmp, mtmp, FALSE)))
 		{
 			if (!obest ||
 				// dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0)
@@ -1084,7 +1110,7 @@ struct monst *mtmp;
 
 	for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 	    if (is_boulder(otmp)  &&
-		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
+		    (!otmp->oartifact || touch_artifact(otmp, mtmp, FALSE)))
             {
 	        if (!obest ||
 		    dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0))
@@ -1461,7 +1487,7 @@ register struct monst *mtmp;
 	/* prefer artifacts to everything else */
 	for(otmp=mtmp->minvent; otmp; otmp = otmp->nobj) {
 		if (otmp->oclass == WEAPON_CLASS
-			&& otmp->oartifact && touch_artifact(otmp,mtmp)
+			&& otmp->oartifact && touch_artifact(otmp, mtmp, FALSE)
 			&& ((strong && !wearing_shield)
 			    || !bimanual(otmp,mtmp->data))
 			) return otmp;
@@ -2363,7 +2389,7 @@ struct obj *weapon;
 			case P_MASTER:			maxweight = 50; break;
 			case P_GRAND_MASTER:	maxweight = 60; break;
 		}
-		if (uswapwep && uswapwep->owt > maxweight && uswapwep->oartifact != ART_BLADE_DANCER_S_DAGGER) {
+		if (uswapwep && !(uwep && uwep->otyp == STILETTOS) && uswapwep->owt > maxweight && uswapwep->oartifact != ART_BLADE_DANCER_S_DAGGER) {
 			if(twowepwarn) pline("Your %s seem%s very unwieldy.",xname(uswapwep),uswapwep->quan == 1 ? "s" : "");
 			twowepwarn = FALSE;
 			bonus += -20;

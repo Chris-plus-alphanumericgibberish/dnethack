@@ -440,7 +440,7 @@ const char *drop_fmt, *drop_arg, *hold_msg;
 	    /* in case touching this object turns out to be fatal */
 	    place_object(obj, u.ux, u.uy);
 
-	    if (!touch_artifact(obj, &youmonst)) {
+	    if (!touch_artifact(obj, &youmonst, FALSE)) {
 		obj_extract_self(obj);	/* remove it from the floor */
 		dropy(obj);		/* now put it back again :-) */
 		return obj;
@@ -1020,7 +1020,7 @@ register const char *let,*word;
 		    ((otmp->oclass == TOOL_CLASS && !is_weptool(otmp)) ||
 			(otmp->oclass == CHAIN_CLASS && otmp->otyp != IRON_CHAIN)))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
-		|| (!strcmp(word, "inject") && !(otmp->otyp == HYPOSPRAY_AMPULE))
+		|| (!strcmp(word, "inject") && !(otmp->otyp == HYPOSPRAY_AMPULE && otmp->spe > 0))
 		|| (!strcmp(word, "wind with") && ((otmp->oclass == TOOL_CLASS &&
 		     otyp != SKELETON_KEY) ||
 			(otmp->oclass == CHAIN_CLASS)))

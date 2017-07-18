@@ -1295,12 +1295,14 @@ int spellnum;
 			uwep->greased = TRUE;
 			Glib += rn1(20, 9);
 			if(is_poisonable(uwep)) uwep->opoisoned = OPOISON_FILTH;
+			if(uwep->otyp == VIPERWHIP) uwep->opoisonchrgs = 0;
 	   }
 	   if(uswapwep && u.twoweap && !rn2(20)){
 			Your("%s is coated in gunk!", xname(uswapwep));
 			uswapwep->greased = TRUE;
 			Glib += rn1(20, 9);
 			if(is_poisonable(uswapwep)) uswapwep->opoisoned = OPOISON_FILTH;
+			if(uswapwep->otyp == VIPERWHIP) uswapwep->opoisonchrgs = 0;
 	   }
        if(haseyes(youracedata) && !Blindfolded && !(mtmp && monsndx(mtmp->data) == PM_DEMOGORGON) && rn2(3)) {
            old = u.ucreamed;
@@ -3387,6 +3389,7 @@ int spellnum;
 				if(canseemon(mtmp)) pline("%s %s is coated in gunk!", s_suffix(Monnam(mtmp)), xname(otmp));
 				if(is_poisonable(otmp)){
 					otmp->opoisoned = OPOISON_FILTH;
+					if(otmp->otyp == VIPERWHIP) otmp->opoisonchrgs = 0;
 				}
 				otmp->greased = TRUE;
 			}

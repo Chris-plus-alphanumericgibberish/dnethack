@@ -157,7 +157,7 @@ struct obj *wep;
 		    wep->otyp == BATTLE_AXE ? "axe" : "weapon");
 	else if (wep->otyp == ARM_BLASTER && uarmg && is_metal(uarmg))
 		You("cannot fit the bracer over such bulky, rigid gloves.");
-	else if (wep->oartifact && !touch_artifact(wep, &youmonst)) {
+	else if (wep->oartifact && !touch_artifact(wep, &youmonst, FALSE)) {
 	    res++;	/* takes a turn even though it doesn't get wielded */
 	} else {
 	    /* Weapon WILL be wielded after this point */
@@ -514,7 +514,7 @@ can_twoweapon()
 	} else if ((!uwep || !uswapwep) && !u.umartial)
 		Your("%s%s%s empty.", uwep ? "off " : uswapwep ? "main " : "",
 			body_part(HAND), (!uwep && !uswapwep) ? "s are" : " is");
-	else if (NOT_WEAPON(uwep) || NOT_WEAPON(uswapwep)) {
+	else if ((NOT_WEAPON(uwep) || NOT_WEAPON(uswapwep)) && !(uwep && uwep->otyp == STILETTOS)) {
 		otmp = NOT_WEAPON(uwep) ? uwep : uswapwep;
 		pline("%s %s.", Yname2(otmp),
 		    is_plural(otmp) ? "aren't weapons" : "isn't a weapon");

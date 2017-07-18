@@ -865,7 +865,7 @@ long wp_mask;
 			see_monsters();
 			specific = TRUE;
 	    } 
-	    if (spec_mb(otmp)) {
+	    if (spec_mb(otmp)){
 	    	if (on) {
 				EWarn_of_mon |= wp_mask;
 				flags.warntypeb |= spec_mb(otmp);
@@ -875,7 +875,7 @@ long wp_mask;
 			}
 			see_monsters();
 			specific = TRUE;
-	    } 
+	    }
 	    if (spec_mg(otmp)) {
 	    	if (on) {
 				EWarn_of_mon |= wp_mask;
@@ -987,9 +987,10 @@ long wp_mask;
  * fooled by such trappings.
  */
 int
-touch_artifact(obj,mon)
+touch_artifact(obj, mon, hypothetical)
     struct obj *obj;
     struct monst *mon;
+	boolean hypothetical;
 {
     register const struct artifact *oart = get_artifact(obj);
     boolean badclass=0, badalign=0, self_willed=0, yours, forceEvade = FALSE;
@@ -1001,7 +1002,7 @@ touch_artifact(obj,mon)
        will have to be extended to explicitly include quest artifacts */
     self_willed = ((oart->spfx & SPFX_INTEL) != 0);
     if (yours) {
-		if(Role_if(PM_EXILE)){
+		if(Role_if(PM_EXILE) && !hypothetical){
 			if(obj->oartifact == ART_ROD_OF_SEVEN_PARTS && !(u.specialSealsKnown&SEAL_MISKA)){
 				pline("There is a seal on the tip of the Rod! You can't see it, you know it's there, just the same.");
 				pline("You learn a new seal!");
@@ -1139,22 +1140,24 @@ touch_artifact(obj,mon)
 		char buf[BUFSZ];
 	
 		if (!yours) return 0;
-		You("are blasted by %s power!", s_suffix(the(xname(obj))));
-		dmg = d((Antimagic ? 2 : 4), (self_willed ? 10 : 4));
-		Sprintf(buf, "touching %s", oart->name);
-		losehp(dmg, buf, KILLED_BY);
-		exercise(A_WIS, FALSE);
+		if(!hypothetical){
+			You("are blasted by %s power!", s_suffix(the(xname(obj))));
+			dmg = d((Antimagic ? 2 : 4), (self_willed ? 10 : 4));
+			Sprintf(buf, "touching %s", oart->name);
+			losehp(dmg, buf, KILLED_BY);
+			exercise(A_WIS, FALSE);
+		}
     }
 
     /* can pick it up unless you're totally non-synch'd with the artifact */
     if ((badclass && badalign && self_willed) || forceEvade) {
-		if (yours) pline("%s your grasp!", Tobjnam(obj, "evade"));
+		if (yours && !hypothetical) pline("%s your grasp!", Tobjnam(obj, "evade"));
 		return 0;
     } //Clarent sticks itself into it's surroundings if dropped
 //	if (oart == &artilist[ART_CLARENT]  && (!yours || ) )
 #ifdef CONVICT
     /* This is a kludge, but I'm not sure where else to put it */
-    if (oart == &artilist[ART_IRON_BALL_OF_LEVITATION]) {
+    if (oart == &artilist[ART_IRON_BALL_OF_LEVITATION] && !hypothetical) {
 		if (Role_if(PM_CONVICT) && (!obj->oerodeproof)) {
 			obj->oerodeproof = TRUE;
 		}
@@ -1180,9 +1183,9 @@ struct monst *mtmp;
 	struct permonst *ptr;
 	boolean yours;
 
-	if(weap == &artilist[ART_PEN_OF_THE_VOID]) return (mvitals[PM_ACERERAK].died > 0);
+	if(weap->name == artilist[ART_PEN_OF_THE_VOID].name) return (mvitals[PM_ACERERAK].died > 0);
 	
-	if(weap == &artilist[ART_HOLY_MOONLIGHT_SWORD]) return !((mtmp == &youmonst) ? Antimagic : resists_magm(mtmp));
+	if(weap->name == artilist[ART_HOLY_MOONLIGHT_SWORD].name) return !((mtmp == &youmonst) ? Antimagic : resists_magm(mtmp));
 	
 	if(!(weap->spfx & (SPFX_DBONUS | SPFX_ATTK)))
 	    return(weap->attk.adtyp == AD_PHYS);
@@ -1190,11 +1193,12 @@ struct monst *mtmp;
 	if(!mtmp) return FALSE; //Invoked with a null monster while calculating hypothetical data (I think)
 
 	yours = (mtmp == &youmonst);
-	ptr = mtmp->data;
+	if(yours) ptr = youracedata;
+	else ptr = mtmp->data;
 	
-	if(weap == &artilist[ART_LIFEHUNT_SCYTHE]) return (!is_unalive(ptr));
+	if(weap->name == artilist[ART_LIFEHUNT_SCYTHE].name) return (!is_unalive(ptr));
 	
-	if(weap == &artilist[ART_GIANTSLAYER] && bigmonst(ptr)) return TRUE;
+	if(weap->name == artilist[ART_GIANTSLAYER].name && bigmonst(ptr)) return TRUE;
 	
 	if (weap->spfx & SPFX_ATTK) {
 		struct obj *defending_weapon = (yours ? uwep : MON_WEP(mtmp));
@@ -1246,16 +1250,16 @@ struct monst *mtmp;
 			return TRUE;
 		} else if (weap->mflagsv != 0L && ((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return TRUE;
-		} else if (weap->mflagsa != 0L && (
-				(ptr->mflagsa & weap->mflagsa) || 
+		} else if (weap->mflagsa != 0L){
+			if((weap->name == artilist[ART_SCOURGE_OF_LOLTH].name) && is_drow(ptr)); //skip
+			else if((weap->mflagsa & MA_UNDEAD) && is_undead_mon(mtmp)) return TRUE;
+			else if( (ptr->mflagsa & weap->mflagsa) || 
 				(yours && 
 					((!Upolyd && (urace.selfmask & weap->mflagsa)) ||
 					((weap->mflagsa & MA_WERE) && u.ulycn >= LOW_PM))
 				) ||
-				(weap == &artilist[ART_STING] && webmaker(ptr)) 
-			)
-		) {
-			return TRUE;
+				(weap->name == artilist[ART_STING].name && webmaker(ptr)) 
+			) return TRUE;
 		} else if (weap->spfx & SPFX_DALIGN && (yours ? (u.ualign.type != weap->alignment) :
 				   (ptr->maligntyp == A_NONE ||
 					sgn(ptr->maligntyp) != weap->alignment))
@@ -1278,16 +1282,17 @@ struct monst *mtmp;
 			return FALSE;
 		} else if (weap->mflagsv != 0L && !((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return FALSE;
-		} else if (weap->mflagsa != 0L && !(
+		} else if (weap->mflagsa != 0L) {
+			if(weap->name == artilist[ART_SCOURGE_OF_LOLTH].name && is_drow(ptr)) return FALSE;
+			else if((weap->mflagsa & MA_UNDEAD) && !is_undead_mon(mtmp)) return FALSE;
+			else if(!(
 				(ptr->mflagsa & weap->mflagsa) || 
 				(yours && 
 					((!Upolyd && (urace.selfmask & weap->mflagsa)) ||
 					((weap->mflagsa & MA_WERE) && u.ulycn >= LOW_PM))
 				) ||
-				(weap == &artilist[ART_STING] && webmaker(ptr)) 
-			)
-		) {
-			return FALSE;
+				(weap->name == artilist[ART_STING].name && webmaker(ptr)) 
+			)) return FALSE;
 		} else if (weap->spfx & SPFX_DALIGN && !(yours ? (u.ualign.type != weap->alignment) :
 				   (ptr->maligntyp == A_NONE ||
 					sgn(ptr->maligntyp) != weap->alignment))
@@ -1318,11 +1323,12 @@ struct monst *mtmp;
 	if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit) return !((mtmp == &youmonst) ? Antimagic : resists_magm(mtmp));
 	
 	yours = (mtmp == &youmonst);
-	ptr = mtmp->data;
+	if(yours) ptr = youracedata;
+	else ptr = mtmp->data;
 	
-	if(weap == &artilist[ART_LIFEHUNT_SCYTHE]) return (!is_unalive(ptr));
+	if(weap->name == artilist[ART_LIFEHUNT_SCYTHE].name) return (!is_unalive(ptr));
 	
-	if(weap == &artilist[ART_GIANTSLAYER] && bigmonst(ptr)) return TRUE;
+	if(weap->name == artilist[ART_GIANTSLAYER].name && bigmonst(ptr)) return TRUE;
 	
 	if (weap->spfx & SPFX_ATTK) {
 		struct obj *defending_weapon = (yours ? uwep : MON_WEP(mtmp));
@@ -1374,16 +1380,15 @@ struct monst *mtmp;
 			return TRUE;
 		} else if (weap->mflagsv != 0L && ((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return TRUE;
-		} else if (weap->mflagsa != 0L && (
-				(ptr->mflagsa & weap->mflagsa) || 
-				(yours && 
-					((!Upolyd && (urace.selfmask & weap->mflagsa)) ||
-					((weap->mflagsa & MA_WERE) && u.ulycn >= LOW_PM))
+		} else if (weap->mflagsa != 0L){
+			if(weap->name == artilist[ART_SCOURGE_OF_LOLTH].name && is_drow(ptr)); //skip
+			else if((weap->mflagsa & MA_UNDEAD) && is_undead_mon(mtmp)) return TRUE;
+			else if( (ptr->mflagsa & weap->mflagsa) || 
+				(yours &&
+					((weap->mflagsa & MA_WERE) && u.ulycn >= LOW_PM)
 				) ||
-				(weap == &artilist[ART_STING] && webmaker(ptr)) 
-			)
-		) {
-			return TRUE;
+				(weap->name == artilist[ART_STING].name && webmaker(ptr)) 
+			) return TRUE;
 		} else if (weap->spfx & SPFX_DALIGN && (yours ? (u.ualign.type != weap->alignment) :
 				   (ptr->maligntyp == A_NONE ||
 					sgn(ptr->maligntyp) != weap->alignment))
@@ -1406,16 +1411,17 @@ struct monst *mtmp;
 			return FALSE;
 		} else if (weap->mflagsv != 0L && !((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return FALSE;
-		} else if (weap->mflagsa != 0L && !(
+		} else if (weap->mflagsa != 0L) {
+			if(weap->name == artilist[ART_SCOURGE_OF_LOLTH].name && is_drow(ptr)) return FALSE;
+			else if((weap->mflagsa & MA_UNDEAD) && !is_undead_mon(mtmp)) return FALSE;
+			else if(!(
 				(ptr->mflagsa & weap->mflagsa) || 
 				(yours && 
 					((!Upolyd && (urace.selfmask & weap->mflagsa)) ||
 					((weap->mflagsa & MA_WERE) && u.ulycn >= LOW_PM))
 				) ||
-				(weap == &artilist[ART_STING] && webmaker(ptr)) 
-			)
-		) {
-			return FALSE;
+				(weap->name == artilist[ART_STING].name && webmaker(ptr)) 
+			)) return FALSE;
 		} else if (weap->spfx & SPFX_DALIGN && !(yours ? (u.ualign.type != weap->alignment) :
 				   (ptr->maligntyp == A_NONE ||
 					sgn(ptr->maligntyp) != weap->alignment))
@@ -3580,7 +3586,7 @@ doinvoke()
 
     obj = getobj(invoke_types, "invoke");
     if (!obj) return 0;
-    if (obj->oartifact && !touch_artifact(obj, &youmonst)) return 1;
+    if (obj->oartifact && !touch_artifact(obj, &youmonst, FALSE)) return 1;
 	if(is_lightsaber(obj) && obj->cobj && obj->oartifact == obj->cobj->oartifact)
 		obj = obj->cobj;
     return arti_invoke(obj);
@@ -3591,7 +3597,7 @@ doparticularinvoke(obj)
     register struct obj *obj;
 {
     if (!obj) return 0;
-    if (obj->oartifact && !touch_artifact(obj, &youmonst)) return 1;
+    if (obj->oartifact && !touch_artifact(obj, &youmonst, FALSE)) return 1;
 	if(is_lightsaber(obj) && obj->cobj && obj->oartifact == obj->cobj->oartifact)
 		obj = obj->cobj;
     return arti_invoke(obj);
@@ -3966,7 +3972,7 @@ arti_invoke(obj)
  	case PLUTO:
 		{
 			if ( !(uwep && uwep == obj) ) {
-				You_feel("that you should be wielding %s", the(xname(obj)));
+				You_feel("that you should be wielding %s.", the(xname(obj)));
 				obj->age = 0;
 				break;
 			}
@@ -3998,7 +4004,7 @@ arti_invoke(obj)
  	case SPEED_BANKAI:
 		{
 			if ( !(uwep && uwep == obj) ) {
-				You_feel("that you should be wielding %s", the(xname(obj)));
+				You_feel("that you should be wielding %s.", the(xname(obj)));
 				obj->age = 0;
 				break;
 			}
@@ -4084,7 +4090,7 @@ arti_invoke(obj)
 		{
 			char dancenumber = 0;
 			if ( !(uwep && uwep == obj) ) {
-				You_feel("that you should be wielding %s", the(xname(obj)));
+				You_feel("that you should be wielding %s.", the(xname(obj)));
 				break;
 			}
 			pline("What dance will you use (1/2/3)?");
@@ -4152,7 +4158,7 @@ arti_invoke(obj)
 		{
 			boolean toosoon = monstermoves < obj->age;
 			if ( !(uwep && uwep == obj) ) {
-				You_feel("that you should be wielding %s", the(xname(obj)));
+				You_feel("that you should be wielding %s.", the(xname(obj)));
 	break;
 			}
 			else {
@@ -4541,7 +4547,7 @@ arti_invoke(obj)
 				break;
 			}
 			if ( !(uwep && uwep == obj) ) {
-				You_feel("that you should be wielding %s", the(xname(obj)));
+				You_feel("that you should be wielding %s.", the(xname(obj)));
 				if( (d(1,20)-10) > 0 ){
 					obj->spe--;//lose charge for false invoke
 					exercise(A_WIS, FALSE);
@@ -5320,7 +5326,7 @@ arti_invoke(obj)
 					break;
 				}
 				if(lordlydictum >= COMMAND_LADDER) obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1)); 
-			} else You_feel("that you should be wielding %s", the(xname(obj)));;
+			} else You_feel("that you should be wielding %s.", the(xname(obj)));;
 		break;
 		case ANNUL:
 			if(uwep && uwep == obj){
@@ -5558,7 +5564,7 @@ arti_invoke(obj)
 				}
 				if(annulusFunc >= COMMAND_ANNUL) obj->ovar1 = monstermoves + (long)(rnz(1000)*(Role_if(PM_PRIEST) ? .8 : 1)); 
 				else if(annulusFunc >= COMMAND_BELL) obj->ovar1 = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1)); 
-			} else You_feel("that you should be wielding %s", the(xname(obj)));
+			} else You_feel("that you should be wielding %s.", the(xname(obj)));
 		break;
 		case VOID_CHIME:
 			if(quest_status.killed_nemesis){
@@ -5635,7 +5641,7 @@ arti_invoke(obj)
               if(mtmp->mhp <= 0)
                 xkilled(mtmp, 1);
             }
-          } else You_feel("that you should be wielding %s", the(xname(obj)));
+          } else You_feel("that you should be wielding %s.", the(xname(obj)));
         } break;
         case PROTECT: {
           if(uarmg && uarmg->oartifact == ART_GAUNTLETS_OF_THE_DIVINE_DI){

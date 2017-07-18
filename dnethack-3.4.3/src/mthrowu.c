@@ -290,7 +290,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 						damage = mtmp->mhp;
 					}
 				}
-				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_BASIC;
+				if(!rn2(20)){
+					if(otmp->otyp == VIPERWHIP && otmp->opoisonchrgs) otmp->opoisonchrgs--;
+					else otmp->opoisoned &= ~OPOISON_BASIC;
+				}
 			}
 			if(otmp->opoisoned & OPOISON_FILTH || otmp->oartifact == ART_SUNBEAM){
 				if (resists_sickness(mtmp)) {
@@ -304,7 +307,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 						damage = mtmp->mhp;
 					}
 				}
-				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_FILTH;
+				if(!rn2(20)){
+					if(otmp->otyp == VIPERWHIP && otmp->opoisonchrgs) otmp->opoisonchrgs--;
+					else otmp->opoisoned &= ~OPOISON_FILTH;
+				}
 			}
 			if(otmp->opoisoned & OPOISON_SLEEP || otmp->oartifact == ART_WEBWEAVER_S_CROOK || otmp->oartifact == ART_MOONBEAM){
 				if (resists_poison(mtmp) || resists_sleep(mtmp) || (otmp->oartifact != ART_MOONBEAM && rn2(10))){
@@ -316,7 +322,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 						slept_monst(mtmp);
 					}
 				}
-				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_SLEEP;
+				if(!rn2(20)){
+					if(otmp->otyp == VIPERWHIP && otmp->opoisonchrgs) otmp->opoisonchrgs--;
+					else otmp->opoisoned &= ~OPOISON_SLEEP;
+				}
 			}
 			if(otmp->opoisoned & OPOISON_BLIND || otmp->oartifact == ART_WEBWEAVER_S_CROOK){
 				if (resists_poison(mtmp)) {
@@ -336,7 +345,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 						}
 					}
 				}
-				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_BLIND;
+				if(!rn2(20)){
+					if(otmp->otyp == VIPERWHIP && otmp->opoisonchrgs) otmp->opoisonchrgs--;
+					else otmp->opoisoned &= ~OPOISON_BLIND;
+				}
 			}
 			if(otmp->opoisoned & OPOISON_PARAL || otmp->oartifact == ART_WEBWEAVER_S_CROOK){
 				if (resists_poison(mtmp)) {
@@ -353,7 +365,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 						}
 					}
 				}
-				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_PARAL;
+				if(!rn2(20)){
+					if(otmp->otyp == VIPERWHIP && otmp->opoisonchrgs) otmp->opoisonchrgs--;
+					else otmp->opoisoned &= ~OPOISON_PARAL;
+				}
 			}
 			if(otmp->opoisoned & OPOISON_AMNES){
 				if (!mindless_mon(mtmp) && !rn2(10)){
@@ -362,7 +377,10 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 					mtmp->mtame = FALSE;
 					mtmp->mpeaceful = TRUE;
 				}
-				if(!rn2(20)) otmp->opoisoned &= ~OPOISON_AMNES;
+				if(!rn2(20)){
+					if(otmp->otyp == VIPERWHIP && otmp->opoisonchrgs) otmp->opoisonchrgs--;
+					else otmp->opoisoned &= ~OPOISON_AMNES;
+				}
 			}
 	    }
 	    if ( (otmp->obj_material == SILVER || arti_silvered(otmp)) &&

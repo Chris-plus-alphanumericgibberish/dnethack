@@ -40,6 +40,11 @@ register boolean clumsy;
 	boolean ironmsg = FALSE, ironobj = FALSE;
 	boolean unholymsg = FALSE, unholyobj = FALSE;
 
+	if(uarmf && uarmf->otyp == STILETTOS){
+		dmg += rnd(bigmonst(mon->data) ? 2 : 6);
+		dmg += uarmf->spe;
+	}
+	
 	if (uarmf && uarmf->otyp == KICKING_BOOTS)
 	    dmg += 5;
 	
@@ -47,12 +52,8 @@ register boolean clumsy;
 	if (clumsy) dmg /= 2;
 
 	/* kicking a dragon or an elephant will not harm it */
-	if (thick_skinned(mon->data)) dmg = 0;
+	if (thick_skinned(mon->data) && !(uarmf && uarmf->otyp == STILETTOS)) dmg = 0;
 
-	/* attacking a shade is useless */
-	if (mon->data->mlet == S_SHADE)
-	    dmg = 0;
-	
 	if(resist_attacks(mon->data))
 		dmg = 0;
 
@@ -75,8 +76,11 @@ register boolean clumsy;
 			dmg += rnd(9);
 			unholymsg = TRUE; unholyobj = TRUE;
 	}
+	
+	/* attacking a shade may be useless */
 	if (mon->data->mlet == S_SHADE && !blessed_foot_damage && !silverobj && !ironobj && !unholyobj) {
 	    pline_The("%s.", kick_passes_thru);
+	    dmg = 0;
 	    /* doesn't exercise skill or abuse alignment or frighten pet,
 	       and shades have no passive counterattack */
 	    return;

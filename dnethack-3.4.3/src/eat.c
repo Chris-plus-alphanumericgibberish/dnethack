@@ -1501,7 +1501,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 	}
 
 	if (catch_lycanthropy && spec_ability2(uwep, SPFX2_NOWERE)) {
-	    if (!touch_artifact(uwep, &youmonst)) {
+	    if (!touch_artifact(uwep, &youmonst, FALSE)) {
 			dropx(uwep);
 			uwepgone();
 	    }

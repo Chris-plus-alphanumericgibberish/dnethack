@@ -534,7 +534,7 @@ moveloop()
 			///If the player no longer meets the kusanagi's requirements (ie, they lost the amulet)
 			///blast 'em and drop to the ground.
 			if (uwep && uwep->oartifact == ART_KUSANAGI_NO_TSURUGI){
-				if(!touch_artifact(uwep,&youmonst)){
+				if(!touch_artifact(uwep,&youmonst, FALSE)){
 					dropx(uwep);
 				}
 			}
@@ -751,6 +751,7 @@ moveloop()
 		    {
 			moveamt = youmonst.data->mmove;
 			if(!Upolyd && Race_if(PM_HALF_DRAGON)) moveamt = (moveamt*2)/3;
+			if(uarmf && uarmf->otyp == STILETTOS && !Flying && !Levitation) moveamt = (moveamt*5)/6;
 			
 			if(u.sealsActive&SEAL_EURYNOME && IS_POOL(levl[u.ux][u.uy].typ)){
 				if (Very_fast) {	/* speed boots or potion */

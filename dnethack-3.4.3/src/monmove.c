@@ -148,7 +148,7 @@ struct monst *mtmp;
 	return (boolean)(
 				((
 					sobj_at(SCR_SCARE_MONSTER, x, y)
-				 || (alignedfearobj && !touch_artifact(alignedfearobj,mtmp))
+				 || (alignedfearobj && !touch_artifact(alignedfearobj, mtmp, FALSE))
 				 ) && scaryItem(mtmp)
 				)
 			 || (u.umonnum == PM_GHOUL && x == mtmp->mux && y == mtmp->muy && mtmp->data == &mons[PM_GUG])
@@ -1696,7 +1696,7 @@ not_special:
 			!index(indigestion, otmp->oclass) &&
 			!(otmp->otyp == CORPSE &&
 			  touch_petrifies(&mons[otmp->corpsenm])))
-		      ) && touch_artifact(otmp,mtmp)) {
+		      ) && touch_artifact(otmp, mtmp, FALSE)) {
 				if(can_carry(mtmp,otmp) &&
 				 (throws_rocks(ptr) ||
 				  !boulder_at(xx,yy)) &&

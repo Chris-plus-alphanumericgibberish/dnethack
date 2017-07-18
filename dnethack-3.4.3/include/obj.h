@@ -97,6 +97,7 @@ struct obj {
 				/* or accidental tripped rolling boulder trap */
 
 	Bitfield(recharged,3);	/* number of times it's been recharged */
+#define ostriking orecharged	/* extra whip heads striking (imposes cap of +7) */
 	Bitfield(lamplit,1);	/* a light-source -- can be lit */
 #ifdef INVISIBLE_OBJECTS
 	Bitfield(oinvis,1);	/* invisible */
@@ -337,8 +338,7 @@ struct obj {
 							 (otmp)->otyp == DOUBLE_LIGHTSABER)
 #define is_multigen(otmp)	((otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
-			 objects[otmp->otyp].oc_skill <= -P_BOW) || \
-			 otmp->otyp == HYPOSPRAY_AMPULE)
+			 objects[otmp->otyp].oc_skill <= -P_BOW))
 // define is_poisonable(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 // objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
 			 // objects[otmp->otyp].oc_skill <= -P_BOW)

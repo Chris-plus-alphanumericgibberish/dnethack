@@ -700,7 +700,7 @@ struct attack *uattk;
 	    notonhead = (mon->mx != x || mon->my != y);
 	    malive = hmon(mon, uwep, 0);
 	    /* this assumes that Stormbringer was uwep not uswapwep */ 
-	    if (malive && u.twoweap && !override_confirmation &&
+	    if (malive && (u.twoweap && !(uwep && uwep->otyp == STILETTOS)) && !override_confirmation &&
 		    m_at(x, y) == mon)
 		malive = hmon(mon, uswapwep, 0);
 	    if (malive) {
@@ -1683,10 +1683,16 @@ int thrown;
 defaultvalue:
 					/* non-weapons can damage because of their weight */
 					/* (but not too much) */
-					tmp = obj->owt/100;
-					if(tmp < 1) tmp = 1;
-					else tmp = rnd(tmp);
-					if(tmp > 6) tmp = 6;
+					if(obj->otyp == STILETTOS){
+						tmp = rnd(bigmonst(mon->data) ? 2 : 6) + obj->spe + dbon(obj);
+						if(u.twoweap) tmp += rnd(bigmonst(mon->data) ? 2 : 6) + obj->spe;
+					}
+					else {
+						tmp = obj->owt/100;
+						if(tmp < 1) tmp = 1;
+						else tmp = rnd(tmp);
+						if(tmp > 6) tmp = 6;
+					}
 
 					/*
 					 * Paimon's spellbook-bashing damage
@@ -1839,6 +1845,7 @@ defaultvalue:
 		}
 	}
 	if (ispoisoned || (obj && (arti_poisoned(obj) || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM))) {
+		int viperheads;
 	    if Role_if(PM_SAMURAI) {
           if(!(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_NINJA)){
 			You("dishonorably use a poisoned weapon!");
@@ -1860,74 +1867,82 @@ defaultvalue:
 			adjalign(-2);//stiffer penalty
 			if(rn2(2)) u.hod++;
 	    }
-		if(obj && (obj->opoisoned & OPOISON_BASIC || arti_poisoned(obj))){
-			if (resists_poison(mon))
-				needpoismsg = TRUE;
-			else if (rn2(10))
-				tmp += rnd(6);
-			else poiskilled = TRUE;
-		}
-		if(obj && (obj->opoisoned & OPOISON_FILTH || obj->oartifact == ART_SUNBEAM)){
-			if (resists_sickness(mon))
-				needfilthmsg = TRUE;
-			else if (rn2(10))
-				tmp += rnd(12);
-			else filthkilled = TRUE;
-		}
-		if(obj && (obj->opoisoned & OPOISON_SLEEP || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM)){
-			if (resists_poison(mon) || resists_sleep(mon))
-				needdrugmsg = TRUE;
-			else if((obj->oartifact == ART_MOONBEAM || !rn2(5)) && 
-				sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
-		}
-		if(obj && (obj->opoisoned & OPOISON_BLIND || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
-			if (resists_poison(mon))
-				needpoismsg = TRUE;
-			else if (rn2(10))
-				tmp += rnd(3);
-			 else {
-				tmp += 3;
-				poisblindmon = TRUE;
+		for(viperheads = ((obj && obj->otyp == VIPERWHIP) ? (1+obj->ostriking) : 1); viperheads; viperheads--){
+			if(obj && (obj->opoisoned & OPOISON_BASIC || arti_poisoned(obj))){
+				if (resists_poison(mon))
+					needpoismsg = TRUE;
+				else if (rn2(10))
+					tmp += rnd(6);
+				else poiskilled = TRUE;
 			}
-		}
-		if(obj && (obj->opoisoned & OPOISON_PARAL || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
-			if (resists_poison(mon))
-				needpoismsg = TRUE;
-			else if (rn2(8))
-				tmp += rnd(6);
-			else {
-				tmp += 6;
-				if (mon->mcanmove) {
-					mon->mcanmove = 0;
-					mon->mfrozen = rnd(25);
+			if(obj && (obj->opoisoned & OPOISON_FILTH || obj->oartifact == ART_SUNBEAM)){
+				if (resists_sickness(mon))
+					needfilthmsg = TRUE;
+				else if (rn2(10))
+					tmp += rnd(12);
+				else filthkilled = TRUE;
+			}
+			if(obj && (obj->opoisoned & OPOISON_SLEEP || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM)){
+				if (resists_poison(mon) || resists_sleep(mon))
+					needdrugmsg = TRUE;
+				else if((obj->oartifact == ART_MOONBEAM || !rn2(5)) && 
+					sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
+			}
+			if(obj && (obj->opoisoned & OPOISON_BLIND || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
+				if (resists_poison(mon))
+					needpoismsg = TRUE;
+				else if (rn2(10))
+					tmp += rnd(3);
+				 else {
+					tmp += 3;
+					poisblindmon = TRUE;
+				}
+			}
+			if(obj && (obj->opoisoned & OPOISON_PARAL || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
+				if (resists_poison(mon))
+					needpoismsg = TRUE;
+				else if (rn2(8))
+					tmp += rnd(6);
+				else {
+					tmp += 6;
+					if (mon->mcanmove) {
+						mon->mcanmove = 0;
+						mon->mfrozen = rnd(25);
+					}
+				}
+			}
+			if(obj && obj->opoisoned & OPOISON_AMNES){
+				if(mindless_mon(mon)) needsamnesiamsg = TRUE;
+				else if(!rn2(10)) amnesiamon = TRUE;
+			}
+			
+			if (obj && !rn2(20) && obj->opoisoned) {
+				if(obj->quan > 1){
+					struct obj *unpoisd = splitobj(obj, 1L);
+					unpoisd->opoisoned = FALSE;
+					pline("The coating on your %s has worn off.", xname(unpoisd));
+					obj_extract_self(unpoisd);	/* free from inv */
+					/* shouldn't merge */
+					unpoisd = hold_another_object(unpoisd, "You drop %s!",
+								  doname(unpoisd), (const char *)0);
+				} else {
+					if(obj->otyp == VIPERWHIP && obj->opoisonchrgs){
+						obj->opoisonchrgs--;
+						pline("Poison from the internal reservoir coats the fangs of your %s", xname(obj));
+					} else {
+						obj->opoisoned = FALSE;
+						pline("The coating on your %s has worn off.", xname(obj));
+					}
 				}
 			}
 		}
-		if(obj && obj->opoisoned & OPOISON_AMNES){
-			if(mindless_mon(mon)) needsamnesiamsg = TRUE;
-			else if(!rn2(10)) amnesiamon = TRUE;
-		}
-	    if (obj && !rn2(20) && obj->opoisoned) {
-			if(obj->quan > 1){
-				struct obj *unpoisd = splitobj(obj, 1L);
-				unpoisd->opoisoned = FALSE;
-				pline("The coating on your %s has worn off.", xname(unpoisd));
-				obj_extract_self(unpoisd);	/* free from inv */
-				/* shouldn't merge */
-				unpoisd = hold_another_object(unpoisd, "You drop %s!",
-							  doname(unpoisd), (const char *)0);
-			} else {
-				obj->opoisoned = FALSE;
-				pline("The coating on your %s has worn off.", xname(obj));
-			}
-	    }
-	}
-	if(uclockwork && u.utemp >= BURNING_HOT && obj && is_metallic(obj) && !resists_fire(mon)){
-		int heatdie = min(u.utemp, 20);
-		tmp += rnd(heatdie)/2;
-		if(u.utemp >= MELTING){
+		if(uclockwork && u.utemp >= BURNING_HOT && obj && is_metallic(obj) && !resists_fire(mon)){
+			int heatdie = min(u.utemp, 20);
 			tmp += rnd(heatdie)/2;
-			if(u.utemp >= MELTED) tmp += rnd(heatdie)/2;
+			if(u.utemp >= MELTING){
+				tmp += rnd(heatdie)/2;
+				if(u.utemp >= MELTED) tmp += rnd(heatdie)/2;
+			}
 		}
 	}
 	if (tmp < 1) {
@@ -4884,7 +4899,7 @@ boolean *druggedmon;
 				}
 				if(!resists_disint(mon) && !rn2(60)){ //One third the rate of vorpal sword/black dragon plate
 					pline("Divine light shines from your %s!", aobjnam(otmp, (char *)0));
-					touch_artifact(otmp,&youmonst);
+					touch_artifact(otmp, &youmonst, FALSE);
 				    if ( (is_rider(mon->data) || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_DEMOGORGON])) {
 						*dmgptr *= 2; /* Reintegrating monster are instead heavily damaged */
 					}

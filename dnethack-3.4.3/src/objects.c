@@ -300,11 +300,14 @@ WEAPON("bar", (char *)0,
 WEAPON("aklys", "thonged club",
 	0, 0, 0,  8, 15,  4,  6,  3, 0, B,   P_CLUB, IRON, HI_METAL),
 WEAPON("flail", (char *)0,
-	1, 0, 0, 40, 15,  4,  6,  4, 0, B,   P_FLAIL, IRON, HI_METAL),
+	1, 0, 0, 35, 15,  4,  6,  4, 0, B,   P_FLAIL, IRON, HI_METAL),
 						/* +1 small, +1d4 large */
 /* misc */
 WEAPON("bullwhip", (char *)0,
-	1, 0, 0,  2, 20,  4,  2,  1, 0, B,   P_WHIP, LEATHER, CLR_BROWN),
+	1, 0, 0,  5, 20,  4,  2,  1, 0, B,   P_WHIP, LEATHER, CLR_BROWN),
+WEAPON("viperwhip", (char *)0,
+	1, 0, 0,  2,  3, 40,  4,  3, 2, P,   P_WHIP, LEATHER, CLR_BROWN),
+
 
 /* Firearms */
 //ifdef FIREARMS
@@ -341,12 +344,12 @@ BULLET("silver bullet", "silver pellet",
 	0,  0,   1,  15, 8, 6, 0, WP_BULLET,   P, SILVER, -P_FIREARM, HI_SILVER),/*Needs tile*/
 BULLET("shotgun shell", "red tube",
 	0,  0,   1,  10,12, 6, 0,  WP_SHELL,   P,   METAL, -P_FIREARM, CLR_RED),/*Needs tile*/
-BULLET("rocket", "firework",
-	0,  0,  20, 450,12,20, 0, WP_ROCKET, P, SILVER, -P_FIREARM, CLR_BLUE),/*Needs tile*/
 BULLET("frag grenade", "green spheriod",
 	0,  0,   5, 350, 2, 2, 0,  WP_GRENADE, B,   IRON, -P_FIREARM, CLR_GREEN),/*Needs tile*/
 BULLET("gas grenade", "lime spheriod",
 	0,  0,   2, 350, 2, 2, 0,  WP_GRENADE, B,   IRON, -P_FIREARM, CLR_BRIGHT_GREEN),/*Needs tile*/
+BULLET("rocket", "firework",
+	0,  0,  20, 450,12,20, 0, WP_ROCKET, P, SILVER, -P_FIREARM, CLR_BLUE),/*Needs tile*/
 BULLET("stick of dynamite", "red stick",
 	0,  0,  10, 150, 0, 0, 0,  WP_GENERIC,   B,   PLASTIC, P_NONE, CLR_RED),/*Needs tile*/
 
@@ -671,6 +674,8 @@ BOOTS("armored boots", "hard boots",
 		0, 0,  0,	   0, 1, 75, 16,  7, 1, IRON, HI_COPPER),
 BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 25, 32,  8, 1, PLASTIC, CLR_WHITE),
+BOOTS("stilettos", "high-heeled shoes", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   0, 1, 10, 60, 10, 0, IRON, HI_METAL),
 BOOTS("high boots", "jackboots",
 		0, 0,  0,	  15, 2, 20, 12,  8, 0, LEATHER, HI_LEATHER),
 BOOTS("crystal boots", "glass boots", /*Needs encyc entry*//*Needs tile*/
@@ -846,8 +851,8 @@ TOOL("sensor pack", "rigid box", /*Needs encyc entry*//*Needs tile*/
 								0, 0, 1, 1,   0, 15,2000, PLASTIC,CLR_WHITE),
 TOOL("hypospray", "hammer-shaped device", /*Needs encyc entry*//*Needs tile*/
 								0, 0, 1, 0,   0, 15, 500, PLASTIC,CLR_GRAY),
-TOOL("hypospray ampule", "little hard grey bottle", /*Needs encyc entry*//*Needs tile*/
-								0, 1, 1, 0,   0,  1,  50, PLASTIC,CLR_GRAY),
+TOOL("hypospray ampule", "hard grey bottle", /*Needs encyc entry*//*Needs tile*/
+								0, 0, 1, 0,   0,  1,  50, PLASTIC,CLR_GRAY),
 TOOL("mask", (char *)0,			1, 0, 0, 0,  10, 10,  80, LEATHER, CLR_WHITE),
 TOOLMASK("R'lyehian faceplate", "ebon pane", POISON_RES,/*Needs tile*/
 								0, 0, 1, 0,   0, 15, 200, GLASS, CLR_BLACK),

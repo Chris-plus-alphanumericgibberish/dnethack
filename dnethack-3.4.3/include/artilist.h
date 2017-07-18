@@ -1555,9 +1555,9 @@ A("The Sting of the Poison Queen", FLAIL, /*Needs encyc entry*/
 	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
 	SPFX2_POISONED,SPFX3_NOCNT,0),
 
-A("The Scourge of Lolth", BULLWHIP, /*Needs encyc entry*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+A("The Scourge of Lolth", VIPERWHIP, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_CON_OR|SPFX_RESTR|SPFX_INTEL), SPFX_WARN,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_ELF /*MA*/, 0 /*MV*/,
 	PHYS(1,0),	NO_DFNS,	NO_CARY,
 	0,	A_CHAOTIC, NON_PM, NON_PM, 6660L, 
 	0,SPFX3_NOCNT,0),
