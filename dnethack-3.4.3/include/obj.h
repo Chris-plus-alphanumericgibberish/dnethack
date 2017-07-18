@@ -97,7 +97,7 @@ struct obj {
 				/* or accidental tripped rolling boulder trap */
 
 	Bitfield(recharged,3);	/* number of times it's been recharged */
-#define ostriking orecharged	/* extra whip heads striking (imposes cap of +7) */
+#define ostriking recharged	/* extra whip heads striking (imposes cap of +7) */
 	Bitfield(lamplit,1);	/* a light-source -- can be lit */
 #ifdef INVISIBLE_OBJECTS
 	Bitfield(oinvis,1);	/* invisible */
