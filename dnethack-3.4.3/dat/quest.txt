@@ -320,7 +320,8 @@ You have an odd feeling this may be the last time you ever come here.
 "We're out of time."
 %E
 %Cp Ana 00008
-"Ever since the Rapture of Slime, the puppets of the Black Web have been appearing on the surface in great numbers."
+"Ever since the Rapture of Slime, the puppets of the Black Web have
+been appearing on the surface in great numbers."
 %E
 %Cp Ana 00009
 "You must speak with Sara before the Last Bastion falls!"
@@ -390,7 +391,7 @@ for your mission.
 "The great Enemy, the Grey Thought Entity called Ilsensine, comes to
 Yggdrasil from the Far Realms that lie beyond it.  She entered our
 world in the distant past, possibly even through the beginning.  For
-eons, she lay dormant as the seed of inspiration, burried in the 
+eons, she lay dormant as the seed of inspiration, buried in the 
 minds of the gods of Law.
 
 "In this age before ages, the mind flayers ruled the universe, having
@@ -575,7 +576,7 @@ universe."
 "The Annulus is the pinnacle of mortal technology, created
 by turning the power of the Bell of Opening upon itself,
 creating a door through the universe through which even
-the great Grey Though Entity Ilsensine may be ejected.
+the great Grey Thought Entity Ilsensine may be ejected.
 
 "You must not loose it or fail to take it with you to
 the Astral Plane, or all our struggles will have been
@@ -2231,7 +2232,7 @@ have little use for the followers of Eilistraee!"
 "It's been a long time since I've seen %lC so happy."
 %E
 %Cp Dro 00113
-"I you didn't have to kill many of those unfortunate driders."
+"I hope you didn't have to kill many of those unfortunate driders."
 %E
 %Cp Dro 00114
 "You have saved us and our goddess from the dark."
