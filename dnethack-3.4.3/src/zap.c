@@ -2502,9 +2502,10 @@ int gaze_cancel;
 		int invsize = 0, i=0, j=0;
 		//int canThese[gaze_cancel];
 		
-	    for (otmp = (youdefend ? invent : mdef->minvent);
-			    otmp; otmp = otmp->nobj) invsize++;
 		for(i=0;i<gaze_cancel;i++){//canThese[i]=rn2(invsize); would be better
+			invsize = 0;
+			for (otmp = (youdefend ? invent : mdef->minvent);
+					otmp; otmp = otmp->nobj) invsize++;
 			otmp = (youdefend ? invent : mdef->minvent);
 			for(j=rn2(invsize);j>=0;j--){
 				otmp=otmp->nobj;
