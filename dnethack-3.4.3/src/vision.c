@@ -586,7 +586,7 @@ vision_recalc(control)
 	int nv_range;
 	if(lowlightsight3(youracedata)) nv_range = 3;
 	else if(lowlightsight2(youracedata)) nv_range = 2;
-	else if(darksight(youracedata) && LightBlind) nv_range = 1;
+	else if(darksight(youracedata) && LightBlind) nv_range = 0;
 	else if(normalvision(youracedata)) nv_range = 1;
 	else nv_range = 0;
 		
@@ -667,7 +667,7 @@ vision_recalc(control)
 		}
 	}
 	
-	if (nv_range && u.xray_range <= nv_range) {
+	if (nv_range && u.xray_range < nv_range) {
 		ranges = circle_ptr(nv_range);
 
 		for (row = u.uy-nv_range; row <= u.uy+nv_range; row++) {
@@ -792,7 +792,7 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if ((!((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !LightBlind && !Is_waterlevel(&u.uz)) && 
+		    if ((!((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !Is_waterlevel(&u.uz)) && 
 					(flev->lit || 
 					next_array[row+dy][col+dx]&TEMP_LIT1))
 			   ||((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !Is_waterlevel(&u.uz))
