@@ -5093,6 +5093,8 @@ static const char *epitaphs[] = {
 	"Khor:  \"Wait, did that axe just fall off the edge of the world?\"",
 		"Khor:  Balancing dNethack, one sleeping potion to the face at a time.",
 	
+	"AmyBSoD: \"Phew, killed that elder priest.  He shredded my CoMR but at least he's de-\"",
+	
 	"Package contains: One posthumous worm feeder",
 	"Was that the hill I wanted to die on?",
 	
