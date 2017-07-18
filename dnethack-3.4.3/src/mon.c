@@ -209,6 +209,8 @@ STATIC_VAR int cham_to_pm[] = {
 #define KEEPTRAITS(mon)	((mon)->isshk || (mon)->mtame ||		\
 			 ((mon)->data->geno & G_UNIQ) ||		\
 			 is_reviver((mon)->data) ||			\
+			 ((mon)->mfaction == ZOMBIFIED) ||			\
+			 ((mon)->zombify) ||			\
 			 /* normally leader the will be unique, */	\
 			 /* but he might have been polymorphed  */	\
 			 (mon)->m_id == quest_status.leader_m_id ||	\
@@ -428,7 +430,6 @@ register struct monst *mtmp;
 	    case PM_ETTIN_ZOMBIE:
 		num = undead_to_corpse(mndx);
 		obj = mkcorpstat(CORPSE, mtmp, &mons[num], x, y, TRUE);
-		obj->age -= 100;		/* this is an *OLD* corpse */
 		break;
 	    case PM_ARSENAL:
 			num = d(3,6);
@@ -708,8 +709,11 @@ register struct monst *mtmp;
 		}
 		break;
 	}
+	if(obj && obj->otyp == CORPSE && is_undead_mon(mtmp)){
+		obj->age -= 100;		/* this is an *OLD* corpse */
+	}
 	/* All special cases should precede the G_NOCORPSE check */
-
+	
 	/* if polymorph or undead turning has killed this monster,
 	   prevent the same attack beam from hitting its corpse */
 	if (flags.bypasses) bypass_obj(obj);

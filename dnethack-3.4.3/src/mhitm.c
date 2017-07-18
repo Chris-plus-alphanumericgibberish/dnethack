@@ -2194,6 +2194,10 @@ physical:{
 		}
 	}
 	
+	if((magr->mfaction == ZOMBIFIED || (magr->mfaction == SKELIFIED && !rn2(20))) && can_undead_mon(mdef)){
+		mdef->zombify = 1;
+	}
+	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (m_at(mdef->mx, mdef->my) == magr) {  /* see gulpmm() */
 			remove_monster(mdef->mx, mdef->my);

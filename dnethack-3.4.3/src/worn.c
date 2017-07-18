@@ -537,6 +537,10 @@ struct monst *mon;
 		}
 	}
 	
+	if(mon->mfaction == ZOMBIFIED) base += 2;
+	if(mon->mfaction == SKELIFIED) base -= 2;
+	if(mon->mfaction == CRYSTALFIED) base -= 6;
+	
 	if(mon->mtame) base -= rnd(def_beastmastery());
 	if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
 	
@@ -574,6 +578,10 @@ struct monst *mon;
 			base -= rnd(20);
 		}
 	}
+	
+	if(mon->mfaction == ZOMBIFIED) base -= 2;
+	if(mon->mfaction == SKELIFIED) base -= 6;
+	if(mon->mfaction == CRYSTALFIED) base -= 16;
 	
 	if(mon->mtame){
 		base -= rnd(def_beastmastery());
@@ -629,6 +637,10 @@ struct monst *mon;
 			base -= 20;
 		}
 	}
+	
+	if(mon->mfaction == ZOMBIFIED) base -= 2;
+	if(mon->mfaction == SKELIFIED) base -= 6;
+	if(mon->mfaction == CRYSTALFIED) base -= 16;
 	
 	if(mon->mtame){
 		base -= def_beastmastery();

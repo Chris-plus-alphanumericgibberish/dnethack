@@ -368,7 +368,6 @@ E void FDECL(moldy_corpse, (genericptr_t, long));
 E void FDECL(slimy_corpse, (genericptr_t, long));
 E void FDECL(shady_corpse, (genericptr_t, long));
 E void FDECL(zombie_corpse, (genericptr_t, long));
-E int FDECL(zombify_PM, (int));
 E int NDECL(donull);
 E int NDECL(dowipe);
 E void FDECL(set_wounded_legs, (long,int));

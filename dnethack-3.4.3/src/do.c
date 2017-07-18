@@ -1675,6 +1675,10 @@ int different;
 	    mtmp->mhp = mtmp->mhpmax;
 	chewed = !different && (mtmp->mhp < mtmp->mhpmax);
 	if (chewed) cname = cname_buf;	/* include "bite-covered" prefix */
+	if(different==REVIVE_ZOMBIE){
+		mtmp->mfaction = ZOMBIFIED;
+		mtmp->zombify = 0;
+	}
 	switch (where) {
 	    case OBJ_INVENT:
 		if (is_uwep) {
@@ -2039,10 +2043,7 @@ long timeout;
 	int pmtype, oldtyp, oldquan;
 	struct obj *body = (struct obj *) arg;
 	
-	/* Turn the corpse into a slimy corpse if slimes are available */
-	oldtyp = body->corpsenm;
-	
-	pmtype = zombify_PM(oldtyp);
+	pmtype = body->corpsenm;
 	
 	/* [ALI] Molds don't grow in adverse conditions.  If it ever
 	 * becomes possible for molds to grow in containers we should
@@ -2054,10 +2055,10 @@ long timeout;
 	pmtype = -1;
 	
 	if (pmtype != -1) {
-	/* We don't want special case revivals */
-	if (cant_create(&pmtype, TRUE) || (body->oxlth &&
-				(body->oattached == OATTACHED_MONST)))
-		pmtype = -1; /* cantcreate might have changed it so change it back */
+		/* We don't want special case revivals */
+		if (cant_create(&pmtype, TRUE) || (body->oxlth && !(((struct monst *)body->oextra)->zombify) &&
+					(body->oattached == OATTACHED_MONST)))
+			pmtype = -1; /* cantcreate might have changed it so change it back */
 		else {
 			body->corpsenm = pmtype;
 
@@ -2077,7 +2078,6 @@ long timeout;
 		oldquan = body->quan;
 			if (revive_corpse(body, REVIVE_ZOMBIE)) {
 			if (oldquan != 1) {		/* Corpse still valid */
-			body->corpsenm = oldtyp;
 			if (body->where == OBJ_INVENT) {
 				useup(body);
 				oldquan--;
@@ -2095,33 +2095,10 @@ long timeout;
 	 * Revive_corpse handles genocides
 	 */
 	if (body) {
-		body->corpsenm = oldtyp; /* Fixup corpse after (attempted) revival */
 		body->owt = weight(body);
 		(void) start_timer(250L - (monstermoves-peek_at_iced_corpse_age(body)),
 			TIMER_OBJECT, ROT_CORPSE, arg);
 	}
-}
-
-int
-zombify_PM(oldPM)
-int oldPM;
-{
-	int pmtype;
-	if(is_kobold(&mons[oldPM])) return PM_KOBOLD_ZOMBIE;
-	else if(is_gnome(&mons[oldPM])) return PM_GNOME_ZOMBIE;
-	else if(is_orc(&mons[oldPM])) return PM_ORC_ZOMBIE;
-	else if(is_dwarf(&mons[oldPM])) return PM_DWARF_ZOMBIE;
-	else if(is_elf(&mons[oldPM])){
-		if(is_drow(&mons[oldPM])) return PM_DROW_ZOMBIE;
-		else return PM_ELF_ZOMBIE;
-	}
-	else if(is_human(&mons[oldPM])) return PM_HUMAN_ZOMBIE;
-	else if(is_ettin(&mons[oldPM])) return PM_ETTIN_ZOMBIE;
-	else if(is_giant(&mons[oldPM])) return PM_GIANT_ZOMBIE;
-	else if(is_pirate(&mons[oldPM])) return PM_SKELETAL_PIRATE;
-	else if(is_gnoll(&mons[oldPM])) return PM_GNOLL_GHOUL;
-	else if(humanoid(&mons[oldPM])) return PM_SKELETON;
-	else return PM_GHOUL;
 }
 
 int

@@ -33,6 +33,7 @@ STATIC_DCL void FDECL(m_initinv,(struct monst *));
 
 extern const int monstr[];
 int curhouse = 0;
+int undeadfaction = 0;
 
 #define m_initsgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 3)
 #define m_initlgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 10)
@@ -4594,6 +4595,7 @@ register int	mmflags;
 	boolean byyou = (x == u.ux && y == u.uy);
 	boolean allow_minvent = ((mmflags & NO_MINVENT) == 0);
 	boolean countbirth = ((mmflags & MM_NOCOUNTBIRTH) == 0 && !In_quest(&u.uz));
+	boolean randmonst = !ptr;
 	unsigned gpflags = (mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
 	boolean unsethouse = FALSE;
 	
@@ -4935,7 +4937,17 @@ register int	mmflags;
 			unsethouse = TRUE;
 		}
 		mtmp->mfaction = curhouse;
+	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp)){
+		if(!rn2(100)){
+			undeadfaction = ZOMBIFIED;
+			unsethouse = TRUE;
+			m_initlgrp(mtmp, mtmp->mx, mtmp->my);
+		}
 	}
+	if(undeadfaction){
+		mtmp->mfaction = undeadfaction;
+	}
+	
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
 		(ptr == &mons[PM_SPROW] || ptr == &mons[PM_DRIDER] || ptr == &mons[PM_CAVE_LIZARD] || ptr == &mons[PM_LARGE_CAVE_LIZARD])
 	) mtmp->mpeaceful = TRUE;
@@ -5478,6 +5490,7 @@ register int	mmflags;
 	if(unsethouse){
 		/*At this point, we have FINALLY created the inventory for the initial creature and all its associates, so the global should be unset now.*/
 		curhouse = 0;
+		undeadfaction = 0;
 	}
 	if ((ptr->mflagst & MT_WAITMASK) && !(mmflags & MM_NOWAIT) && !u.uevent.udemigod) {
 		if (ptr->mflagst & MT_WAITFORU)

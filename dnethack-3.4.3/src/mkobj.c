@@ -1116,6 +1116,7 @@ start_corpse_timeout(body)
 	short action;
 	long age;
 	int chance;
+	struct monst *attchmon = 0;
 
 #define TAINT_AGE (50L)		/* age when corpses go bad */
 #define TROLL_REVIVE_CHANCE 37	/* 1/37 chance for 50 turns ~ 75% chance */
@@ -1127,6 +1128,8 @@ start_corpse_timeout(body)
 
 	/* lizards, beholders, and lichen don't rot or revive */
 	if (body->corpsenm == PM_LIZARD || body->corpsenm == PM_LICHEN || body->corpsenm == PM_BEHOLDER || body->spe) return;
+	
+	if(body->oattached == OATTACHED_MONST) attchmon = (struct monst *)body->oextra;
 
 	action = ROT_CORPSE;		/* default action: rot away */
 	rot_adjust = in_mklev ? 25 : 10;	/* give some variation */
@@ -1151,6 +1154,14 @@ start_corpse_timeout(body)
 		for (when = 12L; when < 500L; when++)
 		    if (!rn2(3)) break;
 
+	} else if (attchmon && attchmon->mfaction == ZOMBIFIED && !body->norevive) {
+//		pline("setting up zombie revival for %s", xname(body));
+		for (age = 2; age <= TAINT_AGE; age++)
+		    if (!rn2(TROLL_REVIVE_CHANCE)) {	/* zombie revives */
+			action = REVIVE_MON;
+			when = age;
+			break;
+		    }
 	} else if (mons[body->corpsenm].mlet == S_TROLL && !body->norevive) {
 //		pline("setting up troll revival for %s", xname(body));
 		for (age = 2; age <= TAINT_AGE; age++)
@@ -1174,7 +1185,7 @@ start_corpse_timeout(body)
 		    }
 	}
 	
-	if (action == ROT_CORPSE && !acidic(&mons[body->corpsenm])) {
+	if (action == ROT_CORPSE && !acidic(&mons[body->corpsenm])){
 		/* Corpses get moldy
 		 */
 		chance = (Is_zuggtmoy_level(&u.uz) && flags.spore_level) ? FULL_MOLDY_CHANCE : 
@@ -1190,7 +1201,7 @@ start_corpse_timeout(body)
 	chance = (Is_juiblex_level(&u.uz) && flags.slime_level) ? FULL_MOLDY_CHANCE : 
 			 (Is_juiblex_level(&u.uz) || flags.slime_level) ? HALF_MOLDY_CHANCE : 
 			 0;
-	if(action == ROT_CORPSE && chance) {
+	if(action == ROT_CORPSE && chance){
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
 			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
 				action = SLIMY_CORPSE;
@@ -1199,9 +1210,10 @@ start_corpse_timeout(body)
 			}
 	}
 	chance = (flags.walky_level) ? FULL_MOLDY_CHANCE : 
+			 (attchmon && attchmon->zombify) ? TROLL_REVIVE_CHANCE : 
 			 (Is_night_level(&u.uz)) ? HALF_MOLDY_CHANCE : 
 			 0;
-	if(action == ROT_CORPSE && chance) {
+	if(action == ROT_CORPSE && chance){
 		for (age = TAINT_AGE + 1; age <= ROT_AGE; age++)
 			if (!rn2(chance)) {    /* "revives" as a random s_fungus */
 				action = ZOMBIE_CORPSE;
@@ -1824,18 +1836,18 @@ boolean init;
 	    /* use the corpse or statue produced by mksobj() as-is
 	       unless `ptr' is non-null */
 	    if (ptr) {
-		int old_corpsenm = otmp->corpsenm;
+			int old_corpsenm = otmp->corpsenm;
 
-		otmp->corpsenm = monsndx(ptr);
-		otmp->owt = weight(otmp);
-		// if (otmp->otyp == CORPSE &&
-			// (special_corpse(old_corpsenm) ||
-				// special_corpse(otmp->corpsenm))) {
-		//Between molding and all the special effects, would be best to just reset timers for everything.
-		if (otmp->otyp == CORPSE) {
-		    obj_stop_timers(otmp);
-		    start_corpse_timeout(otmp);
-		}
+			otmp->corpsenm = monsndx(ptr);
+			otmp->owt = weight(otmp);
+			// if (otmp->otyp == CORPSE &&
+				// (special_corpse(old_corpsenm) ||
+					// special_corpse(otmp->corpsenm))) {
+			//Between molding and all the special effects, would be best to just reset timers for everything.
+			if (otmp->otyp == CORPSE) {
+				obj_stop_timers(otmp);
+				start_corpse_timeout(otmp);
+			}
 	    }
 	}
 	return(otmp);

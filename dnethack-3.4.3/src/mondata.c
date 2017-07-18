@@ -154,7 +154,9 @@ resists_cold(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_cold(mon) || mon_resistance(mon, MR_COLD) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
+	return (species_resists_cold(mon) || mon_resistance(mon, MR_COLD) || 
+		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
 }
 
 boolean
@@ -163,7 +165,9 @@ resists_sleep(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_sleep(mon) || mon_resistance(mon, MR_SLEEP) || ((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
+	return (species_resists_sleep(mon) || mon_resistance(mon, MR_SLEEP) || 
+		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
 }
 
 boolean
@@ -190,7 +194,9 @@ resists_poison(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_poison(mon) || mon_resistance(mon, MR_POISON) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
+	return (species_resists_poison(mon) || mon_resistance(mon, MR_POISON) || 
+		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
 }
 
 boolean
