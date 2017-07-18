@@ -1744,7 +1744,7 @@ boolean *prev_loot;
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
 		    return (0);
 		}
-		if (otmp->cursed) {
+		if (otmp->cursed && otmp->owornmask) {
 		    You("can't. It seems to be stuck to %s.",
 			x_monnam(mtmp, ARTICLE_THE, (char *)0,
 				SUPPRESS_SADDLE, FALSE));
@@ -2102,7 +2102,7 @@ register struct obj *obj;
 		obj->owt = weight(obj);
 	}
 
-	if(obj->oartifact && !touch_artifact(obj,&youmonst)) return 0;
+	if(obj->oartifact && !touch_artifact(obj, &youmonst, FALSE)) return 0;
 	// if(obj->oartifact && obj->oartifact == ART_PEN_OF_THE_VOID && !Role_if(PM_EXILE)) u.sealsKnown |= obj->ovar1;
 	/*Handle the pen of the void here*/
 	if(obj && obj->oartifact == ART_PEN_OF_THE_VOID){
