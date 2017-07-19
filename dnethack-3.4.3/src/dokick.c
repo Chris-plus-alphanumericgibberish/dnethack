@@ -40,11 +40,6 @@ register boolean clumsy;
 	boolean ironmsg = FALSE, ironobj = FALSE;
 	boolean unholymsg = FALSE, unholyobj = FALSE;
 
-	if(uarmf && uarmf->otyp == STILETTOS){
-		dmg += rnd(bigmonst(mon->data) ? 2 : 6);
-		dmg += uarmf->spe;
-	}
-	
 	if (uarmf && uarmf->otyp == KICKING_BOOTS)
 	    dmg += 5;
 	
@@ -52,28 +47,26 @@ register boolean clumsy;
 	if (clumsy) dmg /= 2;
 
 	/* kicking a dragon or an elephant will not harm it */
-	if (thick_skinned(mon->data) && !(uarmf && uarmf->otyp == STILETTOS)) dmg = 0;
+	if (thick_skinned(mon->data) && !(uarmf && (uarmf->otyp == STILETTOS || uarmf->otyp == KICKING_BOOTS))) dmg = 0;
 
 	if(resist_attacks(mon->data))
 		dmg = 0;
 
 	if ((is_undead_mon(mon) || is_demon(mon->data)) && uarmf &&
-		uarmf->blessed)
+		uarmf->blessed){
 	    blessed_foot_damage = 1;
+	}
 
 	if (uarmf && (uarmf->obj_material == SILVER || arti_silvered(uarmf) )
 		&& hates_silver(mdat)) {
-			dmg += rnd(20);
 			silvermsg = TRUE; silverobj = TRUE;
 	}
 	if (uarmf && (uarmf->obj_material == IRON)
 		&& hates_iron(mdat)) {
-			dmg += rnd(mon->m_lev);
 			ironmsg = TRUE; ironobj = TRUE;
 	}
 	if (uarmf && uarmf->cursed
 		&& hates_unholy(mdat)) {
-			dmg += rnd(9);
 			unholymsg = TRUE; unholyobj = TRUE;
 	}
 	
@@ -117,7 +110,27 @@ register boolean clumsy;
 		/* a good kick exercises your dex */
 		exercise(A_DEX, TRUE);
 	}
+	
+	if(uarmf && (uarmf->otyp == STILETTOS)){
+		dmg += rnd(bigmonst(mon->data) ? 2 : 6);
+	}
+	
+	if(uarmf && (uarmf->otyp == KICKING_BOOTS)){
+		dmg += bigmonst(mon->data) ? rnd(6) : (rnd(6)+1);
+	}
+	
+	if (silverobj) {
+		dmg += rnd(20);
+	}
+	if (ironobj) {
+		dmg += rnd(mon->m_lev);
+	}
+	if (unholyobj) {
+		dmg += rnd(9);
+	}
+	
 	if (blessed_foot_damage) dmg += rnd(4);
+	
 	if (uarmf) dmg += uarmf->spe;
 	dmg += u.udaminc;	/* add ring(s) of increase damage */
 	if (dmg > 0)
