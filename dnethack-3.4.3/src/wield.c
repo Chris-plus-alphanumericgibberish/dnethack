@@ -773,15 +773,23 @@ register int amount;
 								&& uwep->oartifact != ART_PEN_OF_THE_VOID
 								&& uwep->oartifact != ART_ANNULUS
 	) {
-	    if (!Blind)
-	    Your("%s %s for a while and then %s.",
-		 aobjnam(uwep, "violently glow"), color,
-		 otense(uwep, "evaporate"));
-	    else
-		Your("%s.", aobjnam(uwep, "evaporate"));
+		if(uwep->oartifact){
+			if (!Blind)
+			Your("%s %s for a while and then %s.",
+			 aobjnam(uwep, "violently glow"), color,
+			 otense(uwep, "fade"));
+			uwep->spe = 0;
+		} else {
+			if (!Blind)
+			Your("%s %s for a while and then %s.",
+			 aobjnam(uwep, "violently glow"), color,
+			 otense(uwep, "evaporate"));
+			else
+			Your("%s.", aobjnam(uwep, "evaporate"));
 
-	    useupall(uwep);	/* let all of them disappear */
-	    return(1);
+			useupall(uwep);	/* let all of them disappear */
+		}
+		return(1);
 	}
 	if (!Blind) {
 	    xtime = (amount*amount == 1) ? "moment" : "while";
