@@ -587,7 +587,7 @@ A("Beastmaster's Duster", LEATHER_JACKET, /*Needs encyc entry*/
 	PETMASTER, A_LAWFUL, NON_PM, NON_PM, 9000L, 
 	0,0,WSFX_PLUSSEV),
 
-A("Soulmirror", HIGH_ELVEN_PLATE, /*Needs encyc entry*/
+A("Soulmirror", PLATE_MAIL, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_REFLECT),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	DRLI(0,0),	NO_CARY,
