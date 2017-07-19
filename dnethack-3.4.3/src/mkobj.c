@@ -1592,19 +1592,6 @@ register struct obj *obj;
 		wt =  50; /* Same as a crystal ball (ie, the Orb of Weight) */
 	}
 	
-	if(obj->objsize != MZ_MEDIUM){
-		int difsize = obj->objsize - MZ_MEDIUM;
-		if(difsize > 0){
-			difsize++;
-			if(obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS) wt = wt*difsize;
-			else wt = wt*difsize*difsize;
-		} else {
-			difsize = abs(difsize)+1;
-			if(obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS) wt = wt/(difsize) + 1;
-			else wt = wt/(difsize*difsize) + 1;
-		}
-	}
-	
 	if(obj->obj_material != objects[obj->otyp].oc_material){
 	static const double matDensityLookup[] = {
 //  LIQUID
@@ -1662,6 +1649,19 @@ register struct obj *obj;
 		else wt = wt/4;
 	}
 
+	if(obj->objsize != MZ_MEDIUM){
+		int difsize = obj->objsize - MZ_MEDIUM;
+		if(difsize > 0){
+			difsize++;
+			if(obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS) wt = wt*difsize;
+			else wt = wt*difsize*difsize;
+		} else {
+			difsize = abs(difsize)+1;
+			if(obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS) wt = wt/(difsize) + 1;
+			else wt = wt/(difsize*difsize) + 1;
+		}
+	}
+	
 	if (obj->otyp == BOX && obj->spe){ /* Schroedinger's Cat */
 		if(obj->spe == 1){
 			wt += mons[PM_HOUSECAT].cwt;
