@@ -197,6 +197,7 @@
 							 ptr == &mons[PM_HALF_ELF_RANGER])
 #define is_undead(ptr)		(((ptr)->mflagsa & MA_UNDEAD) != 0L)
 #define is_undead_mon(mon)	(mon && (is_undead((mon)->data) || (mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED))
+#define is_derived_undead_mon(mon)	(mon && ((mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED))
 #define is_were(ptr)		(((ptr)->mflagsa & MA_WERE) != 0L)
 #define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
 #define is_heladrin(ptr)		(\

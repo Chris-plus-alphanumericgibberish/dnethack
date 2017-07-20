@@ -2454,10 +2454,25 @@ tty_print_glyph(window, x, y, glyph)
 
     /* must be after color check; term_end_color may turn off inverse too */
     if (((special & MG_PET) && iflags.hilite_pet) ||
-	((special & MG_DETECT) && iflags.use_inverse)) {
-	term_start_attr(ATR_INVERSE);
-	reverse_on = TRUE;
+	((special & MG_DETECT))) {
+		if(iflags.use_inverse){
+			term_start_attr(ATR_INVERSE);
+			reverse_on = TRUE;
+		} else if (special & MG_PET) {
+			term_start_bgcolor(CLR_BLUE);
+		} else if (special & MG_DETECT) {
+			term_start_bgcolor(CLR_MAGENTA);
+	    }
     }
+
+#ifdef TEXTCOLOR
+    else if ((window == NHW_MAP) && !reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
+		if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs)
+		    term_start_bgcolor(CLR_RED);
+		else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles)
+		    term_start_bgcolor(CLR_BLUE);
+    }
+#endif
 
 #if defined(USE_TILES) && defined(MSDOS)
     if (iflags.grmode && iflags.tile_view)
