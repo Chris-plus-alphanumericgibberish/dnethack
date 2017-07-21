@@ -629,7 +629,7 @@ long nmv;		/* number of moves */
 		else mtmp->mhp += imv;
 	}
 	if(!nonliving_mon(mtmp)){
-		imv = imv*mtmp->m_lev/30;
+		imv = imv*(mtmp->m_lev + mtmp->mcon)/30;
 		if (mtmp->mhp + imv >= mtmp->mhpmax)
 			mtmp->mhp = mtmp->mhpmax;
 		else mtmp->mhp += imv;
