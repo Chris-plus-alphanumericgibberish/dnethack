@@ -3238,7 +3238,9 @@ boolean was_swallowed;			/* digestion */
 			} else if(mdat->mattk[i].adtyp == AD_MAND){
 				struct monst *mtmp, *mtmp2;
 				if(mon->mcan){
-					pline("%s croaks out a horse shriek.  It seems %s has a sore throat!", Monnam(mon), mon_nam(mon));
+					char buf[BUFSZ];
+					Sprintf(buf, "%s croaks out a horse shriek.", Monnam(mon)); //Monnam and mon_nam share a buffer and can't be used on the same line.
+					pline("%s  It seems %s has a sore throat!", buf, mon_nam(mon));
 					return FALSE;
 				}
 				else pline("%s lets out a terrible shriek!", Monnam(mon));
