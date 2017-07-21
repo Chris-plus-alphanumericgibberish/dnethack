@@ -431,15 +431,6 @@ unsigned *ospecial;
 #endif
 	    invis_color(offset);
 	    special |= MG_INVIS;
-    } else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
-	ch = monsyms[(int)mons[offset].mlet];
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS)
-	    color = NO_COLOR;	/* no need to check iflags.use_color */
-	else
-#endif
-	    pet_color(offset);
-	    special |= MG_PET;
     } else if ((offset = (glyph - GLYPH_ZOMBIE_OFF)) >= 0) {	/* a zombie */
 	ch = monsyms[(int)mons[offset].mlet];
 #ifdef ROGUE_COLOR
@@ -449,6 +440,15 @@ unsigned *ospecial;
 #endif
 	    zombie_color(offset);
 	    special |= MG_ZOMBIE;
+    } else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
+	ch = monsyms[(int)mons[offset].mlet];
+#ifdef ROGUE_COLOR
+	if (HAS_ROGUE_IBM_GRAPHICS)
+	    color = NO_COLOR;	/* no need to check iflags.use_color */
+	else
+#endif
+	    pet_color(offset);
+	    special |= MG_PET;
     } else {							/* a monster */
 	ch = monsyms[(int)mons[glyph].mlet];
 #ifdef ROGUE_COLOR
