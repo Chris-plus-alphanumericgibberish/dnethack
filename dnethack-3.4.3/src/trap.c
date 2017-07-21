@@ -2875,7 +2875,7 @@ struct monst *owner;
 		   ) || (
 			uarms
 			&& uarms->otyp == WHITE_DRAGON_SCALE_SHIELD
-			&& (!uarm->cursed || rn2(3))
+			&& (!uarms->cursed || rn2(3))
 		   ) || u.sealsActive&SEAL_ENKI
 		) {
 			if(uarmc && uarmc->otyp != OILSKIN_CLOAK && uarmc->greased){
