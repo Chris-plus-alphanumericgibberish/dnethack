@@ -37,6 +37,7 @@ int explcolors[] = {
 #define mon_color(n)  color = iflags.use_color ? mons[n].mcolor : NO_COLOR
 #define invis_color(n) color = NO_COLOR
 #define pet_color(n)  color = iflags.use_color ? mons[n].mcolor : NO_COLOR
+#define zombie_color(n)  color = iflags.use_color ? mons[n].mcolor : NO_COLOR
 #define warn_color(n) color = iflags.use_color ? def_warnsyms[n].color : NO_COLOR
 #define explode_color(n) color = iflags.use_color ? explcolors[n] : NO_COLOR
 # if defined(REINCARNATION) && defined(ASCIIGRAPH)
@@ -439,6 +440,15 @@ unsigned *ospecial;
 #endif
 	    pet_color(offset);
 	    special |= MG_PET;
+    } else if ((offset = (glyph - GLYPH_ZOMBIE_OFF)) >= 0) {	/* a zombie */
+	ch = monsyms[(int)mons[offset].mlet];
+#ifdef ROGUE_COLOR
+	if (HAS_ROGUE_IBM_GRAPHICS)
+	    color = NO_COLOR;	/* no need to check iflags.use_color */
+	else
+#endif
+	    zombie_color(offset);
+	    special |= MG_ZOMBIE;
     } else {							/* a monster */
 	ch = monsyms[(int)mons[glyph].mlet];
 #ifdef ROGUE_COLOR

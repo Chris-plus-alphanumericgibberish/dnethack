@@ -2460,6 +2460,8 @@ tty_print_glyph(window, x, y, glyph)
 			reverse_on = TRUE;
 		} else if (special & MG_PET) {
 			term_start_bgcolor(CLR_BLUE);
+		} else if (special & MG_ZOMBIE) {
+			term_start_bgcolor(CLR_GREEN);
 		} else if (special & MG_DETECT) {
 			term_start_bgcolor(CLR_MAGENTA);
 	    }

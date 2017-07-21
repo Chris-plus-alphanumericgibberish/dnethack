@@ -412,6 +412,7 @@
 #define glyph_is_monster(glyph)						\
 		(glyph_is_normal_monster(glyph)				\
 		|| glyph_is_pet(glyph)					\
+		|| glyph_is_zombie(glyph)					\
 		|| glyph_is_ridden_monster(glyph)			\
 		|| glyph_is_detected_monster(glyph))
 #define glyph_is_normal_monster(glyph)					\

@@ -1376,6 +1376,8 @@ show_glyph(x,y,glyph)
 	    text = "detected mon";	offset = glyph - GLYPH_DETECT_OFF;
 	} else if (glyph >= GLYPH_INVIS_OFF) {		/* invisible mon */
 	    text = "invisible mon";	offset = glyph - GLYPH_INVIS_OFF;
+	} else if (glyph >= GLYPH_ZOMBIE_OFF) {		/* a zombie */
+	    text = "zombie";		offset = glyph - GLYPH_ZOMBIE_OFF;
 	} else if (glyph >= GLYPH_PET_OFF) {		/* a pet */
 	    text = "pet";		offset = glyph - GLYPH_PET_OFF;
 	} else {					/* a monster */
