@@ -4966,7 +4966,7 @@ register int	mmflags;
 		}
 		mtmp->mfaction = curhouse;
 	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp)){
-		if(!rn2(100)){
+		if(!rn2(2)){
 			undeadfaction = ZOMBIFIED;
 			unsethouse = TRUE;
 			m_initlgrp(mtmp, mtmp->mx, mtmp->my);
