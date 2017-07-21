@@ -16,6 +16,8 @@ register struct monst *mon;
 		!(is_yochlol(mon->data) && mon->mhp < .5*mon->mhpmax)
 	) return;
 
+	if(mon->data == &mons[PM_NOVIERE_ELADRIN] && !is_pool(mon->mx, mon->my)) return;
+	
 	if (is_human(mon->data)) {
 	    if (!Protection_from_shape_changers &&
 		!rn2(night() ? (flags.moonphase == FULL_MOON ?  3 : 30)
