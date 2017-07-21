@@ -1011,12 +1011,12 @@ mcalcdistress()
 			if(canseemon(tmpm) && canseemon(mtmp)){
 				pline("Heat shimmer dances in the air above %s.", mon_nam(tmpm));
 				pline("%s is covered in frost!", Monnam(tmpm));
-				if(resists_fire(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				if(resists_cold(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
 				pline("The shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
 			} else if(canseemon(tmpm)){
 				pline("Heat shimmer dances in the air above %s.", mon_nam(tmpm));
 				pline("%s is covered in frost!", Monnam(tmpm));
-				if(resists_fire(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				if(resists_cold(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
 			} else if(canseemon(mtmp)){
 				pline("Heat shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
 			}
