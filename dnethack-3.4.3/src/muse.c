@@ -1811,6 +1811,7 @@ struct monst *mtmp;
 #define MUSE_POT_GAIN_ENERGY 11
 #define MUSE_SCR_AMNESIA 12
 #define MUSE_POT_AMNESIA 13
+#define MUSE_POT_GAIN_ABILITY 14
 
 boolean
 find_misc(mtmp)
@@ -1879,6 +1880,12 @@ struct monst *mtmp;
 			m.has_misc = MUSE_POT_GAIN_LEVEL;
 		}
 		nomore(MUSE_POT_GAIN_ENERGY);
+		if(!nomouth && obj->otyp == POT_GAIN_ABILITY && (!obj->cursed ||
+			    (!mtmp->isgd && !mtmp->isshk && !mtmp->ispriest))) {
+			m.misc = obj;
+			m.has_misc = MUSE_POT_GAIN_ABILITY;
+		}
+		nomore(MUSE_POT_GAIN_ABILITY);
 		if(!nomouth && (mtmp->mcan || (mtmp->mhp <= .5*(mtmp->mhpmax) && mtmp->mspec_used > 2)) && obj->otyp == POT_GAIN_ENERGY) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_GAIN_ENERGY;
@@ -2035,6 +2042,64 @@ skipmsg:
 		}
 		if (vismon) pline("%s seems more experienced.", Monnam(mtmp));
 		if (oseen) makeknown(POT_GAIN_LEVEL);
+		m_useup(mtmp, otmp);
+		if (!grow_up(mtmp,(struct monst *)0)) return 1;
+			/* grew into genocided monster */
+		return 2;
+	case MUSE_POT_GAIN_ABILITY:
+		mquaffmsg(mtmp, otmp);
+		if (otmp->cursed) {
+			switch(rnd(6)){
+				case 1:
+					if(mtmp->mstr > 3) mtmp->mstr--;
+				break;
+				case 2:
+					if(mtmp->mdex > 3) mtmp->mdex--;
+				break;
+				case 3:
+					if(mtmp->mcon > 3) mtmp->mcon--;
+				break;
+				case 4:
+					if(mtmp->mint > 3) mtmp->mint--;
+				break;
+				case 5:
+					if(mtmp->mwis > 3) mtmp->mwis--;
+				break;
+				case 6:
+					if(mtmp->mcha > 3) mtmp->mcha--;
+				break;
+			}
+			if (vismon) pline("%s seems more experienced.", Monnam(mtmp));
+			if (oseen) makeknown(POT_GAIN_ABILITY);
+		} else if(otmp->blessed){
+			if(mtmp->mstr < 25) mtmp->mstr++;
+			if(mtmp->mdex < 25) mtmp->mdex++;
+			if(mtmp->mcon < 25) mtmp->mcon++;
+			if(mtmp->mint < 25) mtmp->mint++;
+			if(mtmp->mwis < 25) mtmp->mwis++;
+			if(mtmp->mcha < 25) mtmp->mcha++;
+		} else {
+			switch(rnd(6)){
+				case 1:
+					if(mtmp->mstr < 25) mtmp->mstr++;
+				break;
+				case 2:
+					if(mtmp->mdex < 25) mtmp->mdex++;
+				break;
+				case 3:
+					if(mtmp->mcon < 25) mtmp->mcon++;
+				break;
+				case 4:
+					if(mtmp->mint < 25) mtmp->mint++;
+				break;
+				case 5:
+					if(mtmp->mwis < 25) mtmp->mwis++;
+				break;
+				case 6:
+					if(mtmp->mcha < 25) mtmp->mcha++;
+				break;
+			}
+		}
 		m_useup(mtmp, otmp);
 		if (!grow_up(mtmp,(struct monst *)0)) return 1;
 			/* grew into genocided monster */
