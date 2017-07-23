@@ -1436,6 +1436,7 @@ physical:{
 		break;
 /////////////////////////////////////////////////
 	    case AD_COLD:
+	    case AD_ECLD:
 		if (cancelled) {
 		    tmp = 0;
 		    break;
@@ -2563,6 +2564,7 @@ struct attack *mattk;
 		tmp = 0;
 		break;
 	    case AD_FIRE:
+	    case AD_EFIR:
 		if (resists_fire(magr)) {
 		    if (canseemon(magr)) {
 			pline("%s is mildly warmed.", Monnam(magr));
@@ -2575,6 +2577,7 @@ struct attack *mattk;
 		    pline("%s is suddenly very hot!", Monnam(magr));
 		break;
 	    case AD_ELEC:
+	    case AD_EELC:
 		if (resists_elec(magr)) {
 		    if (canseemon(magr)) {
 			pline("%s is mildly tingled.", Monnam(magr));
