@@ -646,6 +646,7 @@ illur_resurrect()
 	if (mtmp) {
 		mtmp->msleeping = mtmp->mtame = mtmp->mpeaceful = 0;
 		set_malign(mtmp);
+		pline("A voice booms out...");
 		verbalize("You thought to steal memories from ME, she of the Myriad Glimpses!?");
 	}
 
