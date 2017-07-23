@@ -1538,7 +1538,6 @@ hitmu(mtmp, mattk)
 			if (uwep->opoisoned){
 				int viperheads;
 				for(viperheads = ((uwep && uwep->otyp == VIPERWHIP) ? (1+uwep->ostriking) : 1); viperheads; viperheads--){
-					if(DEADMONSTER(mtmp)) break;
 					Sprintf(buf, "%s %s",
 						s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
 					poisoned(buf, A_CON, mdat->mname, 30, uwep->opoisoned);
@@ -1677,7 +1676,6 @@ hitmu(mtmp, mattk)
 			if (otmp->opoisoned){
 				int viperheads;
 				for(viperheads = ((otmp && otmp->otyp == VIPERWHIP) ? (1+otmp->ostriking) : 1); viperheads; viperheads--){
-					if(DEADMONSTER(mtmp)) break;
 					Sprintf(buf, "%s %s",
 						s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
 					poisoned(buf, A_CON, mdat->mname, 30, otmp->opoisoned);
