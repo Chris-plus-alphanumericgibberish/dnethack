@@ -578,11 +578,17 @@ void onPaint(HWND hWnd)
 						&special, i, j);
 				ch = (char)mgch;
 				if (((special & MG_PET) && iflags.hilite_pet) ||
+					(special & MG_ZOMBIE) ||
+					(special & MG_PEACE) ||
 				    ((special & MG_DETECT) && iflags.use_inverse)
 				) {
 					if(special & MG_PET){
 						back_brush = CreateSolidBrush(nhcolor_to_RGB(CLR_BLUE));
 						if(color == CLR_BLUE) OldFg = SetTextColor( hDC,  nhcolor_to_RGB(CLR_BLACK));
+						else OldFg = SetTextColor (hDC, nhcolor_to_RGB(color) );
+					} else if(special & MG_PEACE){
+						back_brush = CreateSolidBrush(nhcolor_to_RGB(CLR_BROWN));
+						if(color == CLR_BROWN) OldFg = SetTextColor( hDC,  nhcolor_to_RGB(CLR_BLACK));
 						else OldFg = SetTextColor (hDC, nhcolor_to_RGB(color) );
 					} else if(special & MG_ZOMBIE){
 						back_brush = CreateSolidBrush(nhcolor_to_RGB(CLR_GREEN));
@@ -825,6 +831,7 @@ void nhglyph2charcolor(short g, uchar* ch, int* color)
 #define mon_color(n)  *color = iflags.use_color ? mons[n].mcolor : NO_COLOR
 #define pet_color(n)  *color = iflags.use_color ? mons[n].mcolor : NO_COLOR
 #define zombie_color(n)  *color = iflags.use_color ? mons[n].mcolor : NO_COLOR
+#define peace_color(n)  *color = iflags.use_color ? mons[n].mcolor : NO_COLOR
 #define warn_color(n) *color = iflags.use_color ? def_warnsyms[n].color : NO_COLOR
 
 # else /* no text color */
@@ -835,6 +842,7 @@ void nhglyph2charcolor(short g, uchar* ch, int* color)
 #define mon_color(n)
 #define pet_color(c)
 #define zombie_color(c)
+#define peace_color(c)
 #define warn_color(c)
 	*color = CLR_WHITE;
 #endif
@@ -859,12 +867,15 @@ void nhglyph2charcolor(short g, uchar* ch, int* color)
 	} else if ((offset = (g - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
 		*ch = oc_syms[(int)objects[CORPSE].oc_class];
 		mon_color(offset);
-	} else if ((offset = (g - GLYPH_PET_OFF)) >= 0) {	/* a pet */
-		*ch = monsyms[(int)mons[offset].mlet];
-		pet_color(offset);
 	} else if ((offset = (g - GLYPH_ZOMBIE_OFF)) >= 0) {	/* a zombie */
 		*ch = monsyms[(int)mons[offset].mlet];
 		zombie_color(offset);
+	} else if ((offset = (g - GLYPH_PEACE_OFF)) >= 0) {	/* a peaceful monster */
+		*ch = monsyms[(int)mons[offset].mlet];
+		peace_color(offset);
+	} else if ((offset = (g - GLYPH_PET_OFF)) >= 0) {	/* a pet */
+		*ch = monsyms[(int)mons[offset].mlet];
+		pet_color(offset);
 	} else {							/* a monster */
 		*ch = monsyms[(int)mons[g].mlet];
 		mon_color(g);

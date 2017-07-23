@@ -319,6 +319,7 @@ init_tilemap()
 	for (i = 0; i < NUMMONS; i++) {
 		tilemap[GLYPH_MON_OFF+i] = tilenum;
 		tilemap[GLYPH_PET_OFF+i] = tilenum;
+		tilemap[GLYPH_PEACE_OFF+i] = tilenum;
 		tilemap[GLYPH_ZOMBIE_OFF+i] = tilenum;
 		tilemap[GLYPH_DETECT_OFF+i] = tilenum;
 		tilemap[GLYPH_RIDDEN_OFF+i] = tilenum;

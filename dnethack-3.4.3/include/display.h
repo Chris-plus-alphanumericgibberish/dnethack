@@ -310,7 +310,8 @@
 
 #define GLYPH_MON_OFF		0
 #define GLYPH_PET_OFF		(NUMMONS	+ GLYPH_MON_OFF)
-#define GLYPH_ZOMBIE_OFF	(NUMMONS	+ GLYPH_PET_OFF)
+#define GLYPH_PEACE_OFF		(NUMMONS	+ GLYPH_PET_OFF)
+#define GLYPH_ZOMBIE_OFF	(NUMMONS	+ GLYPH_PEACE_OFF)
 #define GLYPH_INVIS_OFF		(NUMMONS	+ GLYPH_ZOMBIE_OFF)
 #define GLYPH_DETECT_OFF	(1		+ GLYPH_INVIS_OFF)
 #define GLYPH_BODY_OFF		(NUMMONS	+ GLYPH_DETECT_OFF)
@@ -332,6 +333,7 @@
 #define detected_mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_DETECT_OFF)
 #define ridden_mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_RIDDEN_OFF)
 #define pet_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_PET_OFF)
+#define peace_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_PEACE_OFF)
 #define zombie_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_ZOMBIE_OFF)
 
 /* This has the unfortunate side effect of needing a global variable	*/
@@ -358,6 +360,7 @@
 #define detected_monnum_to_glyph(mnum)	((int) (mnum) + GLYPH_DETECT_OFF)
 #define ridden_monnum_to_glyph(mnum)	((int) (mnum) + GLYPH_RIDDEN_OFF)
 #define petnum_to_glyph(mnum)	((int) (mnum) + GLYPH_PET_OFF)
+#define peacenum_to_glyph(mnum)	((int) (mnum) + GLYPH_PEACE_OFF)
 #define zombienum_to_glyph(mnum)	((int) (mnum) + GLYPH_ZOMBIE_OFF)
 
 /* The hero's glyph when seen as a monster.
@@ -383,6 +386,7 @@
 #define glyph_to_mon(glyph)						\
 	(glyph_is_normal_monster(glyph) ? ((glyph)-GLYPH_MON_OFF) :	\
 	glyph_is_pet(glyph) ? ((glyph)-GLYPH_PET_OFF) :			\
+	glyph_is_peace(glyph) ? ((glyph)-GLYPH_PEACE_OFF) :			\
 	glyph_is_zombie(glyph) ? ((glyph)-GLYPH_ZOMBIE_OFF) :			\
 	glyph_is_detected_monster(glyph) ? ((glyph)-GLYPH_DETECT_OFF) :	\
 	glyph_is_ridden_monster(glyph) ? ((glyph)-GLYPH_RIDDEN_OFF) :	\
@@ -412,6 +416,7 @@
 #define glyph_is_monster(glyph)						\
 		(glyph_is_normal_monster(glyph)				\
 		|| glyph_is_pet(glyph)					\
+		|| glyph_is_peace(glyph)					\
 		|| glyph_is_zombie(glyph)					\
 		|| glyph_is_ridden_monster(glyph)			\
 		|| glyph_is_detected_monster(glyph))
@@ -419,6 +424,8 @@
     ((glyph) >= GLYPH_MON_OFF && (glyph) < (GLYPH_MON_OFF+NUMMONS))
 #define glyph_is_pet(glyph)						\
     ((glyph) >= GLYPH_PET_OFF && (glyph) < (GLYPH_PET_OFF+NUMMONS))
+#define glyph_is_peace(glyph)						\
+    ((glyph) >= GLYPH_PEACE_OFF && (glyph) < (GLYPH_PEACE_OFF+NUMMONS))
 #define glyph_is_zombie(glyph)						\
     ((glyph) >= GLYPH_ZOMBIE_OFF && (glyph) < (GLYPH_ZOMBIE_OFF+NUMMONS))
 #define glyph_is_body(glyph)						\

@@ -255,7 +255,10 @@ struct instance_flags {
  * Window capability support.
  */
 	boolean wc_color;		/* use color graphics                  */
-	boolean wc_hilite_pet;		/* hilight pets                        */
+	boolean wc_hilite_pet;		/* hilight pets (blue)                    */
+	boolean wc_hilite_peaceful;		/* hilight peaceful monsters (brown)   */
+	boolean wc_hilite_zombies;		/* hilight pets  (green)               */
+	boolean wc_zombie_z;		/* show zombies as Z of monster's color    */
 	boolean wc_ascii_map;		/* show map using traditional ascii    */
 	boolean wc_tiled_map;		/* show map using tiles                */
 	boolean wc_preload_tiles;	/* preload tiles into memory           */
@@ -330,6 +333,9 @@ struct instance_flags {
 #define use_color wc_color
 #endif
 #define hilite_pet wc_hilite_pet
+#define hilite_peaceful wc_hilite_peaceful
+#define hilite_zombies wc_hilite_zombies
+#define zombie_z wc_zombie_z
 #define use_inverse wc_inverse
 #ifdef MAC_GRAPHICS_ENV
 #define large_font obsolete
