@@ -437,6 +437,12 @@ display_monster(x, y, mon, sightflags, worm_tail)
 			petnum_to_glyph(PM_LONG_WORM_TAIL);
 	    else
 		num = pet_to_glyph(mon);
+	} else if (mon->mpeaceful && !Hallucination) {
+	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
+			peacenum_to_glyph(PM_HUNTING_HORROR_TAIL):
+			peacenum_to_glyph(PM_LONG_WORM_TAIL);
+	    else
+		num = peace_to_glyph(mon);
 	} else if (is_derived_undead_mon(mon) && !Hallucination) {
 	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
 			zombienum_to_glyph(PM_HUNTING_HORROR_TAIL):
