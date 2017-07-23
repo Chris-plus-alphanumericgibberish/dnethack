@@ -104,12 +104,12 @@ static struct Bool_Opt
 	{"hilite_pet",    &iflags.wc_hilite_pet, TRUE, SET_IN_GAME},	/*WC*/
 #ifdef WIN32CON
 	{"hilite_peaceful",    &iflags.wc_hilite_peaceful, FALSE, SET_IN_GAME},	/*WC*/
-	{"hilite_zombie",    &iflags.wc_hilite_zombie, FALSE, SET_IN_GAME},	/*WC*/
+	{"hilite_zombie",    &iflags.wc_hilite_zombies, FALSE, SET_IN_GAME},	/*WC*/
 	{"zombies_as_Z",    &iflags.wc_zombie_z, TRUE, SET_IN_GAME},	/*WC*/
 	{"use_inverse",   &iflags.wc_inverse, TRUE, SET_IN_GAME},		/*WC*/
 #else
 	{"hilite_peaceful",    &iflags.wc_hilite_peaceful, TRUE, SET_IN_GAME},	/*WC*/
-	{"hilite_zombie",    &iflags.wc_hilite_zombie, TRUE, SET_IN_GAME},	/*WC*/
+	{"hilite_zombie",    &iflags.wc_hilite_zombies, TRUE, SET_IN_GAME},	/*WC*/
 	{"zombies_as_Z",    &iflags.wc_zombie_z, FALSE, SET_IN_GAME},	/*WC*/
 	{"use_inverse",   &iflags.wc_inverse, FALSE, SET_IN_GAME},		/*WC*/
 #endif
