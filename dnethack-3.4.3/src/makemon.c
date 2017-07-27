@@ -4974,6 +4974,7 @@ register int	mmflags;
 	}
 	if(undeadfaction){
 		mtmp->mfaction = undeadfaction;
+		allow_minvent = !rn2(4);
 	}
 	
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
