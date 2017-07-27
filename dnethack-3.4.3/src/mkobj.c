@@ -778,7 +778,7 @@ boolean artif;
 		break;
 	case POTION_CLASS:
 		if(otmp->otyp == POT_BLOOD){
-			otmp->corpsenm = NON_PM;	/* empty (so far) */
+			otmp->corpsenm = PM_HUMAN;	/* default value */
 			for (tryct = 200; tryct > 0; --tryct) {
 				mndx = undead_to_corpse(rndmonnum());
 				if (mons[mndx].cnutrit &&
