@@ -4238,7 +4238,7 @@ boolean *shopdamage;
 	if(abstype == ZT_FIRE) {
 	    struct trap *t = t_at(x, y);
 
-	    if (t && t->ttyp == WEB && !Is_lolth_level(&u.uz)) {
+	    if (t && t->ttyp == WEB && !Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)) {
 		/* a burning web is too flimsy to notice if you can't see it */
 		if (cansee(x,y)) Norep("A web bursts into flames!");
 		(void) delfloortrap(t);

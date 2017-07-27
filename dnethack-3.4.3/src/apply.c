@@ -1461,8 +1461,8 @@ struct obj *obj;
 			}
 		    You("invoke %s.", yname(obj));
 			if(biman && u.twoweap){
-				u.twoweap = 0;
-				You("find you must hold %s with both hands!", yname(obj)); 
+				You("must now hold %s with both hands!", yname(obj)); 
+				untwoweapon();
 			}
 		    unweapon = FALSE;
 		} else {	/* candle(s) */

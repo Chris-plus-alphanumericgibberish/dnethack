@@ -724,7 +724,7 @@ dofire()
 		multi = 0;		/* reset; it's been used up */
 		if (u.twoweap) {
 			if (!can_twoweapon()) untwoweapon();
-			else if (is_blaster(uswapwep) || (uquiver && ammo_and_launcher(uquiver, uswapwep))){
+			else if (uswapwep && (is_blaster(uswapwep) || (uquiver && ammo_and_launcher(uquiver, uswapwep)))){
 				result = fire_blaster(uwep, shotlimit);
 				if((result == 1) && is_blaster(uswapwep))
 					result = fire_blaster(uswapwep, shotlimit);

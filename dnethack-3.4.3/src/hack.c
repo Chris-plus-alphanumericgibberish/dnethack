@@ -1324,7 +1324,7 @@ domove()
 									uwep->oartifact == ART_LIECLEAVER ? "Liecleaver cuts" : "Sting cuts");
 				if(is_lightsaber(uwep)) uwep->age -= 100;
 				if(trap->ttyp == WEB){
-					if(!Is_lolth_level(&u.uz)){
+					if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 						deltrap(trap);
 						newsym(u.ux,u.uy);
 					}
@@ -1626,7 +1626,7 @@ domove()
 	if(u.specialSealsActive&SEAL_BLACK_WEB && u.spiritPColdowns[PWR_WEAVE_BLACK_WEB] > moves+20){
 		static struct attack webattack[] = 
 		{
-			{AT_SHDW,AD_SHDW,4,6},
+			{AT_SHDW,AD_SHDW,4,8},
 			{0,0,0,0}
 		};
 		struct monst *mon;

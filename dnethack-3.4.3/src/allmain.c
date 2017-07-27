@@ -782,6 +782,10 @@ moveloop()
 					if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
 				}
 			}
+			
+			if(u.specialSealsActive&SEAL_BLACK_WEB && u.utrap && u.utraptype == TT_WEB)
+				moveamt += 8;
+			
 			if(u.sealsActive&SEAL_ENKI){
 				nmonsclose = nmonsnear = 0;
 				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){

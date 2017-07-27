@@ -2538,7 +2538,7 @@ spiriteffects(power, atme)
 						break;
 						case TT_WEB:
 						pline(pullmsg, "web");
-						if(!Is_lolth_level(&u.uz)){
+						if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 							pline_The("web is destroyed!");
 							deltrap(t_at(u.ux,u.uy));
 						}
@@ -3354,7 +3354,7 @@ spiriteffects(power, atme)
 		    pline("The poison shadow of the Black Web flows in your wake.");
 			static struct attack webattack[] = 
 			{
-				{AT_SHDW,AD_SHDW,4,6},
+				{AT_SHDW,AD_SHDW,4,8},
 				{0,0,0,0}
 			};
 			struct monst *mon;

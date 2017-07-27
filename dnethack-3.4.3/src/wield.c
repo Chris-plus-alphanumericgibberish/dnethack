@@ -302,7 +302,9 @@ dowield()
 	result = ready_weapon(wep);
 	if (flags.pushweapon && oldwep && uwep != oldwep)
 		setuswapwep(oldwep);
-	untwoweapon();
+	
+	if (u.twoweap && !can_twoweapon())
+		untwoweapon();
 
 	if(uwep && uwep->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
 	return (result);
@@ -407,7 +409,8 @@ dowieldquiver()
 		/* Check if it's the secondary weapon */
 		if (newquiver == uswapwep) {
 			setuswapwep((struct obj *) 0);
-			untwoweapon();
+			if (u.twoweap && !can_twoweapon())
+				untwoweapon();
 		}
 
 		/* Okay to put in quiver; print it */
@@ -484,8 +487,8 @@ const char *verb;	/* "rub",&c */
     }
     if (uwep != obj) return FALSE;	/* rewielded old object after dying */
     /* applying weapon or tool that gets wielded ends two-weapon combat */
-    if (u.twoweap)
-	untwoweapon();
+    if (u.twoweap && !can_twoweapon())
+		untwoweapon();
     if (obj->oclass != WEAPON_CLASS)
 	unweapon = TRUE;
     return TRUE;
@@ -511,7 +514,7 @@ can_twoweapon()
 		    pline("%s aren't able to use two weapons at once.",
 			  makeplural((flags.female && urole.name.f) ?
 				     urole.name.f : urole.name.m));
-	} else if ((!uwep || !uswapwep) && !u.umartial)
+	} else if ((!uwep || !uswapwep) && !u.umartial && !((u.specialSealsActive&SEAL_BLACK_WEB) && !uswapwep))
 		Your("%s%s%s empty.", uwep ? "off " : uswapwep ? "main " : "",
 			body_part(HAND), (!uwep && !uswapwep) ? "s are" : " is");
 	else if ((NOT_WEAPON(uwep) || NOT_WEAPON(uswapwep)) && !(uwep && uwep->otyp == STILETTOS)) {

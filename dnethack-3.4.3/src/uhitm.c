@@ -557,32 +557,83 @@ register struct monst *mtmp;
 	
 	check_caitiff(mtmp);
 	
-	if (Upolyd 
-		|| Race_if(PM_VAMPIRE) 
-		|| Race_if(PM_CHIROPTERAN) 
-		|| (!uwep && Race_if(PM_YUKI_ONNA))
-	){
-		keepattacking = hmonas(mtmp, youracedata, tmp, weptmp, tchtmp);
-		attacksmade = 1;
+	if((u.specialSealsActive&SEAL_BLACK_WEB) && u.spiritPColdowns[PWR_WEAVE_BLACK_WEB] > moves+20){
+		static struct attack webattack[] = 
+		{
+			{AT_SHDW,AD_SHDW,4,8},
+			{0,0,0,0}
+		};
+		if(u.spiritPColdowns[PWR_WEAVE_BLACK_WEB] > moves+20){
+			struct monst *mon;
+			int i, tmp, weptmp, tchtmp;
+			for(i=0; i<8;i++){
+				if(isok(u.ux+xdir[i],u.uy+ydir[i])){
+					mon = m_at(u.ux+xdir[i],u.uy+ydir[i]);
+					if(mon && !mon->mpeaceful && mon != mtmp){
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, webattack, 1);
+					}
+				}
+			}
+		}
+	}
+	
+	if((u.specialSealsActive&SEAL_BLACK_WEB) && ((u.twoweap && !uswapwep) || (!u.twoweap && !uwep))){
+		if(u.twoweap){
+			if(!uwep){
+				static struct attack webattack[] = 
+				{
+					{AT_SHDW,AD_SHDW,4,8},
+					{AT_SHDW,AD_SHDW,4,8},
+					{0,0,0,0}
+				};
+				hmonwith(mtmp, tmp, weptmp, tchtmp, webattack, 2);
+			} else {
+				static struct attack webattack[] = 
+				{
+					{AT_WEAP,AD_PHYS,0,0},
+					{AT_SHDW,AD_SHDW,4,8},
+					{0,0,0,0}
+				};
+				hmonwith(mtmp, tmp, weptmp, tchtmp, webattack, 2);
+			}
+		} else {
+			static struct attack webattack[] = 
+			{
+				{AT_SHDW,AD_SHDW,4,8},
+				{0,0,0,0}
+			};
+			hmonwith(mtmp, tmp, weptmp, tchtmp, webattack, 1);
+		}
 	} else {
-		keepattacking = hitum(mtmp, weptmp, youmonst.data->mattk);
-		attacksmade = 1;
-	}
-	if(uwep && uwep->oartifact == ART_QUICKSILVER){
-		if(keepattacking && u.ulevel > 10 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
-			keepattacking = hitum(mtmp, weptmp-10, youmonst.data->mattk);
-		if(keepattacking && u.ulevel > 20 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
-			keepattacking = hitum(mtmp, weptmp-20, youmonst.data->mattk);
-		if(keepattacking && u.ulevel ==30 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
-			keepattacking = hitum(mtmp, weptmp-30, youmonst.data->mattk);
-	}
-	if(Role_if(PM_BARBARIAN) && !Upolyd){
-		if(keepattacking && u.ulevel > 10 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
-			keepattacking = hitum(mtmp, weptmp-10, youmonst.data->mattk);
-		if(keepattacking && u.ulevel > 20 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
-			keepattacking = hitum(mtmp, weptmp-20, youmonst.data->mattk);
-		if(keepattacking && u.ulevel ==30 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
-			keepattacking = hitum(mtmp, weptmp-30, youmonst.data->mattk);
+
+		if (Upolyd 
+			|| Race_if(PM_VAMPIRE) 
+			|| Race_if(PM_CHIROPTERAN) 
+			|| (!uwep && Race_if(PM_YUKI_ONNA))
+		){
+			keepattacking = hmonas(mtmp, youracedata, tmp, weptmp, tchtmp);
+			attacksmade = 1;
+		} else {
+			keepattacking = hitum(mtmp, weptmp, youmonst.data->mattk);
+			attacksmade = 1;
+		}
+		if(uwep && uwep->oartifact == ART_QUICKSILVER){
+			if(keepattacking && u.ulevel > 10 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+				keepattacking = hitum(mtmp, weptmp-10, youmonst.data->mattk);
+			if(keepattacking && u.ulevel > 20 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+				keepattacking = hitum(mtmp, weptmp-20, youmonst.data->mattk);
+			if(keepattacking && u.ulevel ==30 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+				keepattacking = hitum(mtmp, weptmp-30, youmonst.data->mattk);
+		}
+		if(Role_if(PM_BARBARIAN) && !Upolyd){
+			if(keepattacking && u.ulevel >= 10 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+				keepattacking = hitum(mtmp, weptmp-10, youmonst.data->mattk);
+			if(keepattacking && u.ulevel >= 20 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+				keepattacking = hitum(mtmp, weptmp-20, youmonst.data->mattk);
+			if(keepattacking && u.ulevel == 30 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) ) 
+				keepattacking = hitum(mtmp, weptmp-30, youmonst.data->mattk);
+		}
 	}
 	if((u.sealsActive || u.specialSealsActive) && keepattacking && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp){
 		static int nspiritattacks;

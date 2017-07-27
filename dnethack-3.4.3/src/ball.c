@@ -660,7 +660,7 @@ xchar x, y;
 		break;
 	    case TT_WEB:
 		pline(pullmsg, "web");
-		if(!Is_lolth_level(&u.uz)){
+		if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 			pline_The("web is destroyed!");
 			deltrap(t_at(u.ux,u.uy));
 		}

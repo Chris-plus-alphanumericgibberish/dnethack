@@ -1946,6 +1946,8 @@ int base_uac()
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
 	if(u.edenshield > moves) uac -= 7;
+	if(u.specialSealsActive&SEAL_BLACK_WEB && u.utrap && u.utraptype == TT_WEB)
+		 uac -= 8;
 	if(Race_if(PM_ORC)){
 		uac -= (u.ulevel+1)/3;
 	}
@@ -2089,6 +2091,8 @@ find_ac()
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
 	if(u.edenshield > moves) uac -= 7;
+	if(u.specialSealsActive&SEAL_BLACK_WEB && u.utrap && u.utraptype == TT_WEB)
+		 uac -= 8;
 	if(Race_if(PM_ORC)){
 		uac -= (u.ulevel+1)/3;
 		uac -= (u.ulevel+2)/3;
@@ -2400,12 +2404,14 @@ do_takeoff()
 	  if(!cursed(uwep)) {
 	    setuwep((struct obj *) 0);
 	    You("are empty %s.", body_part(HANDED));
-	    u.twoweap = FALSE;
+		if(u.twoweap && !can_twoweapon())
+			untwoweapon();
 	  }
 	} else if (taking_off == W_SWAPWEP) {
-	  setuswapwep((struct obj *) 0);
-	  You("no longer have a second weapon readied.");
-	  u.twoweap = FALSE;
+		setuswapwep((struct obj *) 0);
+		You("no longer have a second weapon readied.");
+		if(u.twoweap && !can_twoweapon())
+			untwoweapon();
 	} else if (taking_off == W_QUIVER) {
 	  setuqwep((struct obj *) 0);
 	  You("no longer have ammunition readied.");

@@ -1051,7 +1051,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			    You("%s %s spider web!",
 				(u.umonnum == PM_FIRE_ELEMENTAL) ? "burn" : "dissolve",
 				a_your[trap->madeby_u]);
-			if(!Is_lolth_level(&u.uz)){
+			if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 				deltrap(trap);
 				newsym(u.ux,u.uy);
 			}
@@ -1127,7 +1127,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			u.utrap = 0;
 			if (webmsgok)
 			    You("tear through %s web!", a_your[trap->madeby_u]);
-			if(!Is_lolth_level(&u.uz)){
+			if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 				deltrap(trap);
 				newsym(u.ux,u.uy);	/* get rid of trap symbol */
 			}
@@ -2126,7 +2126,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 					  (mptr == &mons[PM_FIRE_ELEMENTAL]) ?
 					    "burns" : "dissolves",
 					  a_your[trap->madeby_u]);
-				if(!Is_lolth_level(&u.uz)){
+				if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 					deltrap(trap);
 					newsym(mtmp->mx, mtmp->my);
 				}
@@ -2147,7 +2147,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 					pline("%s slices through %s spider web.",
 						  Monnam(mtmp),
 						  a_your[trap->madeby_u]);
-					if(!Is_lolth_level(&u.uz)){
+					if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 						deltrap(trap);
 						newsym(mtmp->mx, mtmp->my);
 					}
@@ -2203,7 +2203,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    if (in_sight)
 				pline("%s tears through %s spider web!",
 				      Monnam(mtmp), a_your[trap->madeby_u]);
-				if(!Is_lolth_level(&u.uz)){
+				if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 					deltrap(trap);
 					newsym(mtmp->mx, mtmp->my);
 				}
@@ -3622,7 +3622,7 @@ struct trap *ttmp;
 		if (ttmp->ttyp == BEAR_TRAP) {
 			You("disarm %s bear trap.", the_your[ttmp->madeby_u]);
 			cnv_trap_obj(BEARTRAP, 1, ttmp);
-		} else if(!Is_lolth_level(&u.uz)) /* if (ttmp->ttyp == WEB) */ {
+		} else if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)) /* if (ttmp->ttyp == WEB) */ {
 			You("succeed in removing %s web.", the_your[ttmp->madeby_u]);
 			deltrap(ttmp);
 		}

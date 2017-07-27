@@ -1645,7 +1645,7 @@ struct obj *obj;
 				if(digtyp == 1){
 					Your("%s through in the web.",
 					aobjnam(obj, "burn"));
-					if(!Is_lolth_level(&u.uz)){
+					if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 						deltrap(trap);
 						newsym(rx, ry);
 					}
