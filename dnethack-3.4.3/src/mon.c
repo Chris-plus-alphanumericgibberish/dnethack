@@ -3509,14 +3509,15 @@ boolean was_swallowed;			/* digestion */
 		else if(mdat->mattk[i].adtyp == AD_SOUL){
 			struct monst *mtmp;
 			struct permonst *mdat1;
+			int hpgain = 0;
 			int lvlgain = 0;
 			int lvls = 0;
 			if((mdat==&mons[PM_DEEP_ONE])){
-				lvlgain = rn2(4) ? 0 : 1;
+				hpgain = 2;
 			} else if((mdat==&mons[PM_DEEPER_ONE])){
-				lvlgain = rn2(2);
+				hpgain = 4;
 			} else if((mdat==&mons[PM_DEEPEST_ONE])){
-				lvlgain = 1;
+				hpgain = 8;
 			} else { //arcadian avenger
 				lvlgain = 1;
 			}
@@ -3526,8 +3527,13 @@ boolean was_swallowed;			/* digestion */
 					if( mdat1==&mons[PM_DEEP_ONE] || 
 						mdat1==&mons[PM_DEEPER_ONE] || 
 						mdat1==&mons[PM_DEEPEST_ONE] ){
-							if(mtmp->mhp > 0){ 
-								for(lvls = lvlgain; lvls > 0; lvls--) grow_up(mtmp, 0);
+							if(mtmp->mhp > 0){
+								if(lvlgain) for(lvls = lvlgain; lvls > 0; lvls--) grow_up(mtmp, 0);
+								if(hpgain){
+									mtmp->mhpmax += hpgain-1;
+									mtmp->mhp += hpgain-1;
+									grow_up(mtmp, mtmp); //gain last HP and grow up if needed
+								}
 							}
 					}
 				}
@@ -3536,7 +3542,12 @@ boolean was_swallowed;			/* digestion */
 					mdat1 = mtmp->data;
 					if( mdat1==mdat ){
 						if(mtmp->mhp > 0){ 
-							for(lvls = lvlgain; lvls > 0; lvls--) grow_up(mtmp, 0);
+							if(lvlgain) for(lvls = lvlgain; lvls > 0; lvls--) grow_up(mtmp, 0);
+							if(hpgain){
+								mtmp->mhpmax += hpgain-1;
+								mtmp->mhp += hpgain-1;
+								grow_up(mtmp, mtmp); //gain last HP and grow up if needed
+							}
 						}
 					}
 				}
