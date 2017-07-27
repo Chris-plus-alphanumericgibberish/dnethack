@@ -2655,7 +2655,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	    if (realizes_damage)
 			pline_The("fiery %s %s %s%c", otmp->oartifact == ART_LIMB_OF_THE_BLACK_TREE ? "tree-branch" : 
 										  otmp->oartifact == ART_NIGHTHORN ? "horn" :
-										  "blade",
+										  otmp->oartifact == ART_FIRE_BRAND ? "blade" : 
+										  OBJ_DESCR(objects[otmp->otyp]) ? OBJ_DESCR(objects[otmp->otyp]) : OBJ_NAME(objects[otmp->otyp]),
 				!spec_dbon_applies ? "hits" :
 				(mdef->data == &mons[PM_WATER_ELEMENTAL] || mdef->data == &mons[PM_LETHE_ELEMENTAL]) ?
 				"vaporizes part of" : "burns",
@@ -2671,7 +2672,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			pline_The("ice-cold %s %s %s%c", otmp->oartifact == ART_LASH_OF_THE_COLD_WASTE ? "whip" : 
 											 otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO ? "staff" : 
 											 otmp->oartifact == ART_WRATHFUL_WIND ? "club" : 
-											 "blade",
+											 otmp->oartifact == ART_FROST_BRAND ? "blade" : 
+											 OBJ_DESCR(objects[otmp->otyp]) ? OBJ_DESCR(objects[otmp->otyp]) : OBJ_NAME(objects[otmp->otyp]),
 				!spec_dbon_applies ? "hits" : "freezes",
 				hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
@@ -2699,7 +2701,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			pline_The("%s hits%s %s%c", otmp->oartifact == ART_CARESS ? "lashing whip" : 
 										otmp->oartifact == ART_ARYFAERN_KERYM ? "crackling sword-shaped void" : 
 										otmp->oartifact == ART_RAMIEL ? "thundering polearm" : 
-										"massive hammer",
+										otmp->oartifact == ART_MJOLLNIR ? "massive hammer" :
+										OBJ_DESCR(objects[otmp->otyp]) ? OBJ_DESCR(objects[otmp->otyp]) : OBJ_NAME(objects[otmp->otyp]),
 			  !spec_dbon_applies ? "" : "!  Lightning strikes",
 			  hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
