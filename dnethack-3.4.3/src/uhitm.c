@@ -931,7 +931,7 @@ int thrown;
 			}
 			if(uarmg->oartifact && 
 			   artifact_hit(&youmonst, mon, uarmg, &tmp, rnd(20)) ){
-				if(mon->mhp <= 0) /* artifact killed monster */
+				if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 					return FALSE;
 				if (tmp == 0) return TRUE;
 				hittxt = TRUE;
@@ -1185,7 +1185,7 @@ int thrown;
 			
 		    // if (tmp && obj->oartifact &&
 				// artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
-				// if(mon->mhp <= 0) /* artifact killed monster */
+				// if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 				    // return FALSE;
 				// if (tmp == 0) return TRUE;
 				// hittxt = TRUE;
@@ -1408,7 +1408,7 @@ int thrown;
 			// }
 		    if (obj->oartifact &&
 				artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
-				if(mon->mhp <= 0) /* artifact killed monster */
+				if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 				    return FALSE;
 				if (tmp == 0) return TRUE;
 				hittxt = TRUE;
@@ -1506,21 +1506,21 @@ int thrown;
 							tmp++;
 					if(uwep->oartifact &&
 						artifact_hit(&youmonst, mon, uwep, &tmp, dieroll)){
-						if(mon->mhp <= 0) /* artifact killed monster */
+						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
 						if (tmp == 0) return TRUE; /* NOTE: ditto */
 						hittxt = TRUE;
 					}
 					if(obj->oartifact &&
 						artifact_hit(&youmonst, mon, obj, &tmp, dieroll)){
-						if(mon->mhp <= 0) /* artifact killed monster */
+						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
 						if (tmp == 0) return TRUE; /* NOTE: ditto */
 						hittxt = TRUE;
 					}
 					if(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER &&
 						artifact_hit(&youmonst, mon, uarmh, &tmp, dieroll)){
-						if(mon->mhp <= 0) /* artifact killed monster */
+						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
 						if (tmp == 0) return TRUE; /* NOTE: ditto */
 						hittxt = TRUE;
@@ -1783,7 +1783,7 @@ defaultvalue:
 			if(obj){/*may have broken*/
 				if (obj->oartifact &&
 					artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
-					if(mon->mhp <= 0) /* artifact killed monster */
+					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 						return FALSE;
 					if (tmp == 0) return TRUE;
 					hittxt = TRUE;

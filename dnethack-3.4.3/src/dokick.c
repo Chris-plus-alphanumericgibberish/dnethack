@@ -102,7 +102,7 @@ register boolean clumsy;
 			   uarmf->oartifact && 
 			   artifact_hit(&youmonst, mon, uarmf, &dmg, d(1,20)) 
 			  ){
-				if(mon->mhp <= 0) /* artifact killed monster */
+				if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 					return;
 				if (dmg == 0) return;
 			}

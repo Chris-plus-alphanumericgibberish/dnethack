@@ -1351,7 +1351,7 @@ physical:{
 			}
 			if (otmp && otmp->oartifact) {
 			    (void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
-			    if (mdef->mhp <= 0)
+			    if (mdef->mhp <= 0 || migrating_mons == mdef)
 				return (MM_DEF_DIED |
 					(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
 			}
