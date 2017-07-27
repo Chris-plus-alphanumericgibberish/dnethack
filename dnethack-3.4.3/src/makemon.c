@@ -5549,6 +5549,7 @@ int mndx;
 		: mndx == PM_ALPHA_METROID ? 45 : mndx == PM_GAMMA_METROID ? 48 : mndx == PM_ZETA_METROID ? 9 
 		: mndx == PM_OMEGA_METROID ? 12 : mndx == PM_METROID_QUEEN ? 3 : mndx == PM_ARGENTUM_GOLEM ? 8 
 		: mndx == PM_ALHOON ? 2 : mndx == PM_CENTER_OF_ALL ? 1 : mndx == PM_SOLDIER ? 250
+		: mndx == PM_ANCIENT_OF_ICE ? 8 : mndx == PM_ANCIENT_OF_DEATH ? 4
 		: mndx == PM_SOLDIER_ANT ? 250 : MAXMONNO); 
 }
 

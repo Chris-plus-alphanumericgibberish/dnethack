@@ -1296,6 +1296,7 @@ int randMeleeDamageTypes[] =
 						 AD_DRDX,
 						 AD_DRCO,
 						 AD_DRIN,
+						 AD_NPDC,
 						 AD_DISE,
 						 // AD_SSEX,
 						 AD_HALU,

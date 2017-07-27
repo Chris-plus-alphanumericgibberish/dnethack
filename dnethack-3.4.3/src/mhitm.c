@@ -1995,6 +1995,9 @@ physical:{
 		    }
 		}
 		break;
+		case AD_NPDC:
+			if(!cancelled) tmp += rnd(10);
+		break;
 	    case AD_DRIN:
 		if (notonhead || !has_head(pd)) {
 		    if (vis) pline("%s doesn't seem harmed.", Monnam(mdef));

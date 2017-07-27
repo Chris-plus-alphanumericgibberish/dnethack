@@ -2049,6 +2049,11 @@ dopois:
 			}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+		case AD_NPDC:
+			hitmsg(mtmp, mattk);
+			if(ACURR(A_CON) > 3 && uncancelled) (void) adjattrib(A_CON, -1, FALSE);
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////
 		case AD_DRIN:
 		if((mtmp->data == &mons[PM_MIGO_PHILOSOPHER] || mtmp->data == &mons[PM_MIGO_QUEEN])
 			&& rn2(100) >= 4){	return 0;

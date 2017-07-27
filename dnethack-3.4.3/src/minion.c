@@ -37,6 +37,12 @@ struct monst *mon;
 	if(ptr == &mons[PM_SHAKTARI]) {
 	    dtype = PM_MARILITH;
 		cnt = d(1,6);
+	} else if(ptr == &mons[PM_BAALPHEGOR] && rn2(4)) {
+	    dtype = rn2(4) ? PM_METAMORPHOSED_NUPPERIBO : PM_ANCIENT_NUPPERIBO;
+		cnt = d(4,4);
+	} else if(ptr == &mons[PM_ANCIENT_OF_ICE] || ptr == &mons[PM_ANCIENT_OF_DEATH]) {
+	    dtype = rn2(4) ? PM_METAMORPHOSED_NUPPERIBO : PM_ANCIENT_NUPPERIBO;
+		cnt = d(1,4);
 	} else if (is_dprince(ptr) || (ptr == &mons[PM_WIZARD_OF_YENDOR])) {
 	    dtype = (!rn2(20)) ? dprince(ptr, atyp) :
 				 (!rn2(4)) ? dlord(ptr, atyp) : ndemon(atyp);

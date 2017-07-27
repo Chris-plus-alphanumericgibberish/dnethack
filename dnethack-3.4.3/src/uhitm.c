@@ -2959,6 +2959,10 @@ register struct attack *mattk;
 			} else tmp += rn1(10,6);
 		    }
 		break;
+		case AD_NPDC:
+			// if(!cancelled) tmp += rnd(10);
+			tmp += rnd(10);
+		break;
 	    case AD_DRIN:
 		if (notonhead || !has_head(mdef->data)) {
 		    pline("%s doesn't seem harmed.", Monnam(mdef));
