@@ -5115,9 +5115,13 @@ static const char *epitaphs[] = {
 	
 	"Omnes una manet nox", /*One night awaits us all*/
 	
+	"I wake. I work. I sleep. I die." /*Alpha Centauri*/
+	
 	"I suddenly have a LOT of regrets.", /*Water Phoenix King is very quoteable...*/
 	
 	"You either die a hero, or you live long enough to see yourself become the villain.", /* Batman, the Dark Knight */
+	
+	"What can men do against such reckless hate?", /* the Lord of the Rings (Two Towers movie) */
 	
 	"I'll just hit this thing a couple more times, it'll die.", /*jonadab*/
 		"I don't need to unburden myself, they're only soldiers, I've been killing soldiers, it'll be fine.",
