@@ -70,6 +70,7 @@ STATIC_DCL boolean FDECL(Mb_hit, (struct monst *magr,struct monst *mdef,
 				  struct obj *,int *,int,BOOLEAN_P,char *,char *));
 STATIC_DCL boolean FDECL(voidPen_hit, (struct monst *magr,struct monst *mdef,
 				  struct obj *,int *,int,BOOLEAN_P,char *));
+STATIC_DCL boolean FDECL(narrow_voidPen_hit, (struct monst *mdef, struct obj *));
 
 #ifndef OVLB
 STATIC_DCL int spec_dbon_applies;
@@ -1330,6 +1331,10 @@ struct monst *mtmp;
 	
 	if(weap->name == artilist[ART_GIANTSLAYER].name && bigmonst(ptr)) return TRUE;
 	
+	if(weap->name == artilist[ART_PEN_OF_THE_VOID].name){
+		return narrow_voidPen_hit(mtmp, otmp);
+	}
+	
 	if (weap->spfx & SPFX_ATTK) {
 		struct obj *defending_weapon = (yours ? uwep : MON_WEP(mtmp));
 
@@ -1728,6 +1733,9 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	    if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
 	    if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
 	    if (youdefend && Slimed) burn_away_slime();
+		if(youdefend ? !Fire_resistance : !resists_fire(mdef)){
+			*dmgptr += d(dnum,4);
+		}
 	}
 	if (pen->ovar1&SEAL_BALAM) {
 	    if (vis){ 
@@ -1735,6 +1743,9 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			and = TRUE;
 		}
 	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+		if(youdefend ? !Cold_resistance : !resists_cold(mdef)){
+			*dmgptr += d(dnum,4);
+		}
 	}
 	if (pen->ovar1&SEAL_ASTAROTH) {
 	    if (vis){ 
@@ -1743,6 +1754,9 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		}
 	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
 	    if (!rn2(5)) (void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+		if(youdefend ? !Shock_resistance : !resists_elec(mdef)){
+			*dmgptr += d(dnum,4);
+		}
 	}
 	if(pen->ovar1&SEAL_BERITH && berithdamage > 0){
 		if(vis){
@@ -1757,13 +1771,59 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			else and ? Strcat(buf, " and dripping") : Sprintf(buf, "dripping");
 			and = TRUE;
 		}
-		/*water damage?*/
+		water_damage(youdefend ? invent : mdef->minvent, FALSE, FALSE, FALSE, mdef);
+		if(youdefend){
+			if(!((uarmc
+				&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
+				&& (!uarmc->cursed || rn2(3))
+			   ) || (
+				ublindf
+				&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+				&& (!ublindf->cursed || rn2(3))
+			   ) || (
+				uarm
+				&& (uarm->otyp == WHITE_DRAGON_SCALES || uarm->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!uarm->cursed || rn2(3))
+			   ) || (
+				uarms
+				&& uarms->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!uarms->cursed || rn2(3))
+			   ) || u.sealsActive&SEAL_ENKI)
+			) {
+				*dmgptr += d(dnum,4);
+			}
+		} else{ //Monster
+			struct obj *cloak = which_armor(mdef, W_ARMC);
+			struct obj *armor = which_armor(mdef, W_ARM);
+			struct obj *shield = which_armor(mdef, W_ARMS);
+			// struct obj *blindfold = which_armor(mdef, W_ARMC);
+			if(!((cloak
+				&& (cloak->otyp == OILSKIN_CLOAK || cloak->greased)
+				&& (!cloak->cursed || rn2(3))
+				) || (armor
+				&& (armor->otyp == WHITE_DRAGON_SCALES || armor->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!armor->cursed || rn2(3))
+				) || (shield
+				&& shield->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!shield->cursed || rn2(3))
+			   // ) || (
+				// ublindf
+				// && ublindf->otyp == R_LYEHIAN_FACEPLATE
+				// && (!ublindf->cursed || rn2(3))
+			   ))
+			) {
+				*dmgptr += d(dnum,4);
+			}
+		}
 	}
 	if (pen->ovar1&SEAL_IRIS) {
 	    if (vis){ 
 			if(pen->ovar1&SEAL_ENKI) and ? Strcat(buf, " yet thirsty") : Sprintf(buf, "thirsty");
 			else and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
 			and = TRUE;
+		}
+		if(youdefend ? !(nonliving(youracedata) || is_anhydrous(youracedata)) : !(nonliving_mon(mdef) || is_anhydrous(mdef->data))){
+			*dmgptr += d(dnum,4);
 		}
 	}
 	if (pen->ovar1&SEAL_ECHIDNA) {
@@ -1772,11 +1832,19 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			and = TRUE;
 		}
 	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+		if(youdefend ? !Acid_resistance : !resists_acid(mdef)){
+			*dmgptr += d(dnum,4);
+		}
 	}
 	
 	if(vis && (and || (pen->ovar1&SEAL_FAFNIR))){
 		pline("The %s%s blade hits %s.", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
 		and = TRUE;
+		if(youdefend ? is_golem(youracedata) : is_golem(mdef->data)){
+			*dmgptr += d(2*dnum,4);
+		} else if(youdefend ? nonliving(youracedata) : nonliving_mon(mdef)){
+			*dmgptr += d(dnum,4);
+		}
 	}
 	}
 	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
@@ -1806,10 +1874,13 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			else mintrap(mdef);
 		}
 	}
-	if(pen->ovar1&SEAL_DANTALION && dieroll < 3){
-	    *dmgptr += d(dnum,4);
-		if(youdefend) aggravate();
-	    else probe_monster(mdef);
+	if(pen->ovar1&SEAL_DANTALION){
+	    if(youdefend || !mindless_mon(mdef))
+			*dmgptr += d(dnum,4);
+		if(dieroll < 3){
+			if(youdefend) aggravate();
+			else probe_monster(mdef);
+		}
 	}
 	if(pen->ovar1&SEAL_SHIRO){
 		struct obj *otmp;
@@ -1829,7 +1900,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		}
 	}
 	if(pen->ovar1&SEAL_ORTHOS && dieroll < 3){
-	    *dmgptr += d(dnum,4);
+	    *dmgptr += d(2*dnum,8);
 		if(youdefend){
 			You("are addled by the gusting winds!");
 			make_stunned((HStun + 3), FALSE);
@@ -1987,6 +2058,121 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		and = TRUE;
 	}
 	return vis&&and;
+}
+
+/* called when someone is being hit by the pen of the void */
+STATIC_OVL boolean
+narrow_voidPen_hit(mdef, pen)
+struct monst *mdef;	/* defender */
+struct obj *pen;	/* Pen of the Void */
+{
+	boolean youdefend = mdef == &youmonst;
+	
+	
+	// if(pen->ovar1&SEAL_BERITH){
+		// //Requires knowing the attacker
+	// }
+	
+	if (pen->ovar1&SEAL_AMON) {
+		if(youdefend ? !Fire_resistance : !resists_fire(mdef)){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_BALAM) {
+		if(youdefend ? !Cold_resistance : !resists_cold(mdef)){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_ASTAROTH) {
+		if(youdefend ? !Shock_resistance : !resists_elec(mdef)){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_ENKI) {
+		if(youdefend){
+			if(!((uarmc
+				&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
+				&& (!uarmc->cursed || rn2(3))
+			   ) || (
+				ublindf
+				&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+				&& (!ublindf->cursed || rn2(3))
+			   ) || (
+				uarm
+				&& (uarm->otyp == WHITE_DRAGON_SCALES || uarm->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!uarm->cursed || rn2(3))
+			   ) || (
+				uarms
+				&& uarms->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!uarms->cursed || rn2(3))
+			   ) || u.sealsActive&SEAL_ENKI)
+			) {
+				return TRUE;
+			}
+		} else{ //Monster
+			struct obj *cloak = which_armor(mdef, W_ARMC);
+			struct obj *armor = which_armor(mdef, W_ARM);
+			struct obj *shield = which_armor(mdef, W_ARMS);
+			// struct obj *blindfold = which_armor(mdef, W_ARMC);
+			if(!((cloak
+				&& (cloak->otyp == OILSKIN_CLOAK || cloak->greased)
+				&& (!cloak->cursed || rn2(3))
+				) || (armor
+				&& (armor->otyp == WHITE_DRAGON_SCALES || armor->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!armor->cursed || rn2(3))
+				) || (shield
+				&& shield->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!shield->cursed || rn2(3))
+			   // ) || (
+				// ublindf
+				// && ublindf->otyp == R_LYEHIAN_FACEPLATE
+				// && (!ublindf->cursed || rn2(3))
+			   ))
+			) {
+				return TRUE;
+			}
+		}
+	}
+	if (pen->ovar1&SEAL_IRIS) {
+		if(youdefend ? !(nonliving(youracedata) || is_anhydrous(youracedata)) : !(nonliving_mon(mdef) || is_anhydrous(mdef->data))){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_ECHIDNA) {
+		if(youdefend ? !Acid_resistance : !resists_acid(mdef)){
+			return TRUE;
+		}
+	}
+	
+	if(pen->ovar1&SEAL_FAFNIR){
+		if(youdefend ? is_golem(youracedata) : is_golem(mdef->data)){
+			return TRUE;
+		} else if(youdefend ? nonliving(youracedata) : nonliving_mon(mdef)){
+			return TRUE;
+		}
+	}
+	
+	if(pen->ovar1&SEAL_DANTALION){
+	    if(youdefend || !mindless_mon(mdef))
+			return TRUE;
+	}
+	if(pen->ovar1&SEAL_SIMURGH){
+		if(youdefend && !Blind){
+			return TRUE;
+		}
+		else if(mdef->mcansee && haseyes(mdef->data)){
+			return TRUE;
+		}
+	}
+	if(pen->ovar1&SEAL_TENEBROUS){
+		if(youdefend && !Drain_resistance){
+			return TRUE;
+		}
+		else if(!youdefend && !resists_drli(mdef)){
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 STATIC_OVL boolean
