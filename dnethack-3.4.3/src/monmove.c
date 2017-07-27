@@ -1618,7 +1618,7 @@ not_special:
 		    (throws_rocks(youracedata) ? 20 : ACURRSTR/2+1)
 		);
 
-	    if (appr == 0 || !in_line) {
+	    if ((appr == 0 || !in_line) && !is_derived_undead_mon(mtmp)) {
 			/* Monsters in combat or fleeing won't pick stuff up, avoiding the
 			 * situation where you toss arrows at it and it has nothing
 			 * better to do than pick the arrows up.
