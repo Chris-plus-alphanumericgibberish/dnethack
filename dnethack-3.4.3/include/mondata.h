@@ -158,7 +158,7 @@
 #define mindless_mon(mon)		(mon && (((mon)->mfaction == ZOMBIFIED) || ((mon)->mfaction == SKELIFIED) || ((mon)->mfaction == CRYSTALFIED) || mindless((mon)->data)))
 #define	can_undead_mon(mon)	(mon && !nonliving_mon(mon) && !is_minion((mon)->data) && ((mon)->data->mlet != S_PUDDING) &&\
 								((mon)->data->mlet != S_JELLY) && ((mon)->data->mlet != S_BLOB) && !is_elemental((mon)->data) &&\
-								!is_plant((mon)->data) && !is_demon((mon)->data) && !is_primordial((mon)->data))
+								!is_plant((mon)->data) && !is_demon((mon)->data) && !is_primordial((mon)->data) && !(mvitals[monsndx((mon)->data)].mvflags&G_NOCORPSE))
 
 #define slithy(ptr)			((ptr)->mflagsb & MB_SLITHY)
 #define humanoid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID)
