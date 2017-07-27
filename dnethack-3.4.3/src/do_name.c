@@ -622,6 +622,7 @@ const char *name;
 		else if(obj->oartifact == ART_QUICKSILVER) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_SKY_RENDER) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_ROD_OF_SEVEN_PARTS) obj->obj_material = SILVER;
+		else if(obj->oartifact == ART_ANNULUS) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_SILVER_STARLIGHT) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_WEBWEAVER_S_CROOK) obj->obj_material = BONE;
