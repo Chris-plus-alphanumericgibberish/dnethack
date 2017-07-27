@@ -746,7 +746,7 @@ register struct monst *mtmp;
 					otmp->ovar1 = LOLTH_SYMBOL;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
-					otmp->spe = 6;
+					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					/*Dress*/
 					otmp = mksobj(BLACK_DRESS, TRUE, FALSE);
@@ -4098,7 +4098,7 @@ register struct	monst	*mtmp;
 				otmp->ovar1 = LOLTH_SYMBOL;
 				otmp->blessed = TRUE;
 				otmp->cursed = FALSE;
-				otmp->spe = 14;
+				otmp->spe = 7;
 				(void) mpickobj(mtmp, otmp);
 				/*Gauntlets*/
 				otmp = mksobj(ORIHALCYON_GAUNTLETS, TRUE, FALSE);
