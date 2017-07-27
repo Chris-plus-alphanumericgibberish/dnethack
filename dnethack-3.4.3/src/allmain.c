@@ -663,11 +663,17 @@ moveloop()
 				) if(rn2(2)) mtmp->mvar1 = ((int)mtmp->mvar1 + rn2(3)-1)%8;
 				if((mtmp->data == &mons[PM_JUGGERNAUT] || mtmp->data == &mons[PM_ID_JUGGERNAUT]) && !rn2(3)){
 					int mdx=0, mdy=0, i;
-					if(mtmp->mux - mtmp->mx < 0) mdx = -1;
-					else if(mtmp->mux - mtmp->mx > 0) mdx = +1;
-					if(mtmp->muy - mtmp->my < 0) mdy = -1;
-					else if(mtmp->muy - mtmp->my > 0) mdy = +1;
-					for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
+					if(mtmp->mux == 0 && mtmp->muy == 0){
+						i = rn2(8);
+						mdx = xdir[i];
+						mdy = ydir[i];
+					} else {
+						if(mtmp->mux - mtmp->mx < 0) mdx = -1;
+						else if(mtmp->mux - mtmp->mx > 0) mdx = +1;
+						if(mtmp->muy - mtmp->my < 0) mdy = -1;
+						else if(mtmp->muy - mtmp->my > 0) mdy = +1;
+						for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
+					}
 					if(mtmp->mvar1 != i){
 						if(sensemon(mtmp) || (canseemon(mtmp) && !mtmp->mundetected)){
 							pline("%s turns to a new heading.", Monnam(mtmp));
