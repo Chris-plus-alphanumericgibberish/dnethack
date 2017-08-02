@@ -1952,7 +1952,6 @@ int base_uac()
 		uac -= (u.ulevel+1)/3;
 	}
 	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
-	uac -= u.uspellprot;
 	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
 	if(Role_if(PM_MONK) && !uarm){
 		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
@@ -1981,6 +1980,8 @@ int base_uac()
 				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
 	}
 	uac -= dexbonus;
+	if(u.uspellprot > 0 && uac > 0) uac = 0;
+	uac -= u.uspellprot;
 	if (uac < -128) uac = -128;	/* u.uac is an schar */
 	return uac;
 }
@@ -2102,7 +2103,6 @@ find_ac()
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
 	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
-	uac -= u.uspellprot;
 	if(uclockwork) uac -= (u.clockworkUpgrades&ARMOR_PLATING) ? 10 : 3; /*armor bonus for automata*/
 	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
 	if(Role_if(PM_MONK) && !uarm){
@@ -2136,6 +2136,10 @@ find_ac()
 				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
 	}
 	uac -= dexbonus;
+	
+	if(u.uspellprot > 0 && uac > 0) uac = 0;
+	uac -= u.uspellprot;
+	
 	if (uac < -128) uac = -128;	/* u.uac is an schar */
 	if(uac != u.uac){
 		u.uac = uac;

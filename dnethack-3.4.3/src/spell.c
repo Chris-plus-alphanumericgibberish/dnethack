@@ -1147,8 +1147,10 @@ cast_protection()
 	 *     16-30   0    0,  5,  9, 11, 13, 14, 15
 	 *     16-30 -10    0,  5,  8,  9, 10
 	 */
-	gain = loglev - (int)u.uspellprot / (4 - min(3,(10 - natac)/10));
-
+	// gain = loglev - (int)u.uspellprot / (4 - min(3,(10 - natac)/10));
+	
+	gain = 2*loglev - u.uspellprot; //refill spellprot, don't stack it.
+	
 	if (gain > 0) {
 	    if (!Blind) {
 		const char *hgolden = hcolor(NH_GOLDEN);

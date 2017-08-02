@@ -1198,6 +1198,7 @@ moveloop()
 					reglevel += uarmh->spe;
 				}
 				reglevel -= u_healing_penalty();
+				if(u.uspellprot > 0) reglevel -= 10 + 2*u.uspellprot;
 				if(reglevel < 1) reglevel = 1;
 				//recover 1/30th energy per turn:
 				u.uen += reglevel/30;
