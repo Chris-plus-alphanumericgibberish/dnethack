@@ -879,7 +879,7 @@ struct monst *mdef;
 		    objects[(mwep->otyp)].oc_range, otmp,
 		    TRUE);
 		else m_throw(magr, magr->mx, magr->my, sgn(tbx), sgn(tby),
-		    distmin(magr->mx, magr->my, mdef->mux, mdef->muy), otmp,
+		    distmin(magr->mx, magr->my, mdef->mx, mdef->my), otmp,
 		    TRUE);
 	m_shot.n = m_shot.i = 0;
 	m_shot.o = STRANGE_OBJECT;
