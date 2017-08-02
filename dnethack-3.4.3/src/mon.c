@@ -3562,8 +3562,7 @@ boolean was_swallowed;			/* digestion */
 	if (LEVEL_SPECIFIC_NOCORPSE(mdat))
 		return FALSE;
 
-	if (bigmonst(mdat) || mdat == &mons[PM_LIZARD]
-		   || is_golem(mdat)
+	if (is_golem(mdat)
 		   || is_mplayer(mdat)
 		   || is_rider(mdat)
 		   || mdat == &mons[PM_SEYLL_AUZKOVYN]
@@ -3575,9 +3574,15 @@ boolean was_swallowed;			/* digestion */
 //		   || mdat == &mons[PM_PINK_UNICORN]
 		   )
 		return TRUE;
+	
+	if(In_hell(&u.uz) || u.uevent.udemigod || In_endgame(&u.uz))
+		return FALSE;
+	
+	if(bigmonst(mdat) || mdat == &mons[PM_LIZARD]) return TRUE;
+	
 	tmp = (int)(2 + ((int)(mdat->geno & G_FREQ)<2) + verysmall(mdat));
-	return u.sealsActive&SEAL_EVE ? !rn2(tmp)||!rn2(tmp) : 
-		  (uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_EVE) ?  !rn2(tmp)||!rn2(2*tmp - 1) :
+	return (u.sealsActive&SEAL_EVE) ? (!rn2(tmp)||!rn2(tmp)) : 
+		  (uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && uwep->ovar1&SEAL_EVE) ?  (!rn2(tmp)||!rn2(2*tmp - 1)) :
 		  !rn2(tmp);
 }
 
