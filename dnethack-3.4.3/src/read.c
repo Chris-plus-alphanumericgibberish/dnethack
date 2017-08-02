@@ -271,6 +271,7 @@ doread()
     "It's not the size of your sword, it's how #enhance'd you are with it.",
     "Madame Elvira's House O' Succubi Lifetime Customer",
     "Madame Elvira's House O' Succubi Employee of the Month",
+    "Rogues Do It From Behind", /*the original D&D joke now fits*/
     "Ludios Vault Guards Do It In Small, Dark Rooms",
     "Yendor Military Soldiers Do It In Large Groups",
     "Arcadian Ants Do It In Swarms",
