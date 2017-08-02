@@ -1488,8 +1488,6 @@ movemon()
 	
 	if (vision_full_recalc) vision_recalc(0);	/* vision! */
 
-	if (minliquid(mtmp)) continue;
-
 	if (is_hider(mtmp->data)) {
 	    /* unwatched mimics and piercers may hide again  [MRS] */
 	    if(restrap(mtmp))   continue;
@@ -1498,6 +1496,8 @@ movemon()
 		    continue;
 	    if(mtmp->mundetected) continue;
 	}
+
+	if (minliquid(mtmp)) continue;
 
 	/* continue if the monster died fighting */
 	if (!mtmp->iswiz && !is_blind(mtmp)) {
