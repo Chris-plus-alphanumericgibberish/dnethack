@@ -2845,7 +2845,7 @@ register struct attack *mattk;
 		break;
 	    case AD_VAMP:
 	    case AD_DRLI:
-		if(has_blood(mdef->data) && 
+		if(has_blood_mon(mdef) && 
 			youracedata == &mons[PM_BLOOD_BLOATER]
 		){
 			if(Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax){
@@ -2862,7 +2862,7 @@ register struct attack *mattk;
 			   biting if they might have trouble getting it down */
 			if (!Race_if(PM_INCANTIFIER) && is_vampire(youracedata)
 				&& u.uhunger <= 1420 &&
-			    mattk->aatyp == AT_BITE && has_blood(pd)) {
+			    mattk->aatyp == AT_BITE && has_blood_mon(mdef)) {
 				/* For the life of a creature is in the blood
 				   (Lev 17:11) */
 				if (flags.verbose)
@@ -2873,7 +2873,7 @@ register struct attack *mattk;
 				   effect */
 				lesshungry(xtmp * 6);
 			}
-			if(has_blood(mdef->data) && 
+			if(has_blood_mon(mdef) && 
 				youracedata == &mons[PM_BLOOD_BLOATER]
 			){
 				if(Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax){
@@ -2922,7 +2922,7 @@ register struct attack *mattk;
 			tmp += dtypbon(RAPIER);
 		break;
 	    case AD_BLUD:
-			if(has_blood(pd)) {
+			if(has_blood_mon(mdef) || (has_blood(pd) && mdef->mfaction == ZOMBIFIED)) {
             	tmp += mdef->m_lev;
             	pline("The blade of rotted blood tears through the veins of %s!", mon_nam(mdef));
             }
@@ -4441,29 +4441,8 @@ dobpois:
 	    if(!mhit) break; //didn't draw blood, forget it.
 		if(mon->data == &mons[PM_LEGION]){
 			int n = rnd(4);
-			for(n; n>0; n--) switch(rnd(7)){
-			case 1:
-				makemon(&mons[PM_LEGIONNAIRE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 2:
-				makemon(&mons[PM_GNOME_ZOMBIE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 3:
-				makemon(&mons[PM_ORC_ZOMBIE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 4:
-				makemon(&mons[PM_DWARF_ZOMBIE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 5:
-				makemon(&mons[PM_ELF_ZOMBIE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 6:
-				makemon(&mons[PM_HUMAN_ZOMBIE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 7:
-				makemon(&mons[PM_HALF_DRAGON_ZOMBIE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			}
+			for(n; n>0; n--) rn2(7) ? makemon(mkclass(S_ZOMBIE, G_NOHELL|G_HELL), mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT): 
+									  makemon(&mons[PM_LEGIONNAIRE], mon->mx, mon->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
 		} else {
 			if(mon->mhp > .75*mon->mhpmax) makemon(&mons[PM_LEMURE], mon->mx, mon->my, MM_ADJACENTOK);
 			else if(mon->mhp > .50*mon->mhpmax) makemon(&mons[PM_HORNED_DEVIL], mon->mx, mon->my, MM_ADJACENTOK);

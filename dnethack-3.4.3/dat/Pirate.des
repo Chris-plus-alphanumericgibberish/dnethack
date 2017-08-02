@@ -691,22 +691,22 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 # Random monsters.
 MONSTER:'.',"Blackbeard's Ghost",(36,08)
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 MONSTER:'W',"wraith",random

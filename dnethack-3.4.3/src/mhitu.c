@@ -403,6 +403,8 @@ mattacku(mtmp)
 		/* Might be attacking your image around the corner, or
 		 * invisible, or you might be blind....
 		 */
+	boolean derundspec = 0;
+		/*derived undead has used its special attack*/
 	if(!ranged) nomul(0, NULL);
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
@@ -708,31 +710,35 @@ mattacku(mtmp)
 				|| mattk->aatyp == AT_BEAM 
 				|| mattk->aatyp == AT_MAGC
 				|| (mattk->aatyp == AT_TENT && mtmp->mfaction == SKELIFIED)
+				|| (i == 0 && 
+					(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP) && 
+					mattk->adtyp == AD_PHYS && 
+					mattk->damn*mattk->damd/2 < (mtmp->m_lev/10+1)*max(mtmp->data->msize*2, 4)/2
+				   )
+				|| (!derundspec && mattk->aatyp == 0 && mattk->adtyp == 0 && mattk->damn == 0 && mattk->damd == 0)
+				|| (!derundspec && i == NATTK-1 && (mtmp->mfaction == CRYSTALFIED || mtmp->mfaction == SKELIFIED))
 			){
 				if(i == 0){
 					mattk->aatyp = AT_CLAW;
 					mattk->adtyp = AD_PHYS;
-					mattk->damn = mtmp->m_lev/10+1;
+					mattk->damn = mtmp->m_lev/10+1 + (mtmp->mfaction != ZOMBIFIED ? 1 : 0);
 					mattk->damd = max(mtmp->data->msize*2, 4);
 				}
-				else if(i == NATTK-1 
-					&& mtmp->mfaction == CRYSTALFIED
-				){
+				else if(!derundspec && mtmp->mfaction == SKELIFIED){
+					derundspec = TRUE;
+					mattk->aatyp = AT_TUCH;
+					mattk->adtyp = AD_SLOW;
+					mattk->damn = 1;
+					mattk->damd = max(mtmp->data->msize*2, 4);
+				}
+				else if(!derundspec && mtmp->mfaction == CRYSTALFIED){
+					derundspec = TRUE;
 					mattk->aatyp = AT_TUCH;
 					mattk->adtyp = AD_ECLD;
 					mattk->damn = min(10,mtmp->m_lev/3);
 					mattk->damd = 8;
 				}
 				else continue;
-			}
-			else if(i == NATTK-1 
-				&& mtmp->mfaction == CRYSTALFIED
-				&& !mattk->aatyp && !mattk->adtyp && !mattk->damn && !mattk->damd
-			){
-				mattk->aatyp = AT_TUCH;
-				mattk->adtyp = AD_ECLD;
-				mattk->damn = min(10,mtmp->m_lev/3);
-				mattk->damd = 8;
 			}
 		}
 		
@@ -1431,7 +1437,7 @@ hitmu(mtmp, mattk)
 	    map_invisible(mtmp->mx, mtmp->my);
 	
 	/* Nearby monsters may be awakened NOTE: no way to tell if a player that can't move is paralyized or engraving or something */
-	if(!is_silent(mtmp->data) || !(u.usleep)) wake_nearto(u.ux, u.uy, combatNoise(mtmp->data));
+	if(!is_silent_mon(mtmp) || !(u.usleep)) wake_nearto(u.ux, u.uy, combatNoise(mtmp->data));
 /*	If the monster is undetected & hits you, you should know where
  *	the attack came from.
  */

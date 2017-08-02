@@ -844,7 +844,7 @@ register xchar x, y;
 		    dist2(x,y,mtmp->mx,mtmp->my)) {
 		if (!um_dist(mtmp->mx, mtmp->my, 3)) {
 		    ;	/* still close enough */
-		} else if (otmp->cursed && !breathless(mtmp->data)) {
+		} else if (otmp->cursed && !breathless_mon(mtmp)) {
 		    if (um_dist(mtmp->mx, mtmp->my, 5) ||
 			    (mtmp->mhp -= rnd(2)) <= 0) {
 			long save_pacifism = u.uconduct.killer;
@@ -869,7 +869,7 @@ register xchar x, y;
 			m_unleash(mtmp, FALSE);
 		    } else {
 			You("pull on the leash.");
-			if (mtmp->data->msound != MS_SILENT)
+			if (!is_silent_mon(mtmp))
 			    switch (rn2(3)) {
 			    case 0:  growl(mtmp);   break;
 			    case 1:  yelp(mtmp);    break;
@@ -2622,7 +2622,7 @@ struct obj *hypo;
 			You("don't find a patient there.");
 			return 1;
 		}
-		if(!has_blood(mtarg->data)){
+		if(!has_blood_mon(mtarg)){
 			pline("It would seem that the patient has no circulatory system....");
 		} else switch(amp->ovar1){
 			case POT_HEALING:

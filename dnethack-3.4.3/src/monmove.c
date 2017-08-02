@@ -610,7 +610,7 @@ boolean digest_meal;
 	}
 	/* Clouds on Lolth's level deal damage */
 	if(Is_lolth_level(&u.uz) && levl[mon->mx][mon->my].typ == CLOUD){
-		if (!(nonliving_mon(mon) || breathless(mon->data))){
+		if (!(nonliving_mon(mon) || breathless_mon(mon))){
 			if (haseyes(mon->data) && mon->mcansee){
 				mon->mblinded = 1;
 				mon->mcansee = 0;
@@ -838,30 +838,8 @@ register struct monst *mtmp;
 		}
 	}
 	if(mdat == &mons[PM_LEGION]){
-		int n = rnd(4);
-		for(n; n>0; n--) switch(rnd(7)){
-		case 1:
-			makemon(&mons[PM_LEGIONNAIRE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-		break;
-		case 2:
-			makemon(&mons[PM_GNOME_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-		break;
-		case 3:
-			makemon(&mons[PM_ORC_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-		break;
-		case 4:
-			makemon(&mons[PM_DWARF_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-		break;
-		case 5:
-			makemon(&mons[PM_ELF_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-		break;
-		case 6:
-			makemon(&mons[PM_HUMAN_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-		break;
-		case 7:
-			makemon(&mons[PM_HALF_DRAGON_ZOMBIE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-		break;
-		}
+		rn2(7) ? makemon(mkclass(S_ZOMBIE, G_NOHELL|G_HELL), mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT): 
+				 makemon(&mons[PM_LEGIONNAIRE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
 	}
 	if (mtmp->mstrategy & STRAT_ARRIVE) {
 	    int res = m_arrival(mtmp);
@@ -1033,6 +1011,7 @@ register struct monst *mtmp;
 	/* may teleport, so do it before inrange is set */
 	if(is_covetous(mdat) && (mdat!=&mons[PM_DEMOGORGON] || !rn2(3)) 
 		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
+		&& mdat!=&mons[PM_LEGION] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
 	) (void) tactics(mtmp);
 	

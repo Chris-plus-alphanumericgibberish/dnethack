@@ -60,12 +60,12 @@ unsigned gpflags;
 	    if (is_3dwater(x,y) && !ignorewater) {
 			if (mtmp == &youmonst)
 				return !!(Amphibious);
-			else return (is_swimmer(mdat) || breathless(mdat) || amphibious(mdat));
+			else return (is_swimmer(mdat) || breathless_mon(mtmp) || amphibious(mdat));
 	    } else if (is_pool(x,y) && !ignorewater) {
 			if (mtmp == &youmonst)
 				return !!(HLevitation || Flying || Wwalking ||
 						Swimming || Amphibious);
-			else	return (is_flyer(mdat) || breathless(mdat) || is_swimmer(mdat) ||
+			else	return (is_flyer(mdat) || breathless_mon(mtmp) || is_swimmer(mdat) ||
 								is_clinger(mdat) || amphibious(mdat));
 	    } else if (mdat->mlet == S_EEL && !ignorewater) {
 			return FALSE;

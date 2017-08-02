@@ -2658,7 +2658,7 @@ spiriteffects(power, atme)
 			mon = m_at(u.ux+u.dx, u.uy+u.dy);
 			if(mon){
 				Your("forked tongue speaks with silvery grace.");
-				if((!always_hostile(mon->data) &&
+				if((!always_hostile_mon(mon) &&
 				!(mon->data->geno & G_UNIQ) &&
 				!mon->mtraitor) || !resist(mon, '\0', 0, NOTELL)
 				){

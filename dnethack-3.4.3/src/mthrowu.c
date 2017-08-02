@@ -1206,6 +1206,8 @@ struct monst *mtmp;
 						(distu(mtmp->mx,mtmp->my) <= BOLT_LIM*BOLT_LIM) &&
 						!resist(mtmp, RING_CLASS, 0, 0);
 
+	if(is_derived_undead_mon(mtmp)) return 0;
+	
     if (is_covetous(mtmp->data) && !mtmp->mtame)
     {
         /* find our mark and let him have it, if possible! */

@@ -640,7 +640,7 @@ turn_stag()
 			urole.neminum = PM_ECLAVDRA;
 			
 			urole.enemy1num = PM_DROW_MATRON;
-			urole.enemy2num = PM_DROW_ZOMBIE;
+			urole.enemy2num = PM_HEDROW_ZOMBIE;
 			urole.enemy1sym = S_DEMON;
 			urole.enemy2sym = S_ZOMBIE;
 		}

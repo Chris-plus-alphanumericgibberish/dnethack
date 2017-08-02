@@ -409,7 +409,7 @@ FLAGS: hardfloor
 ROOM: "ordinary" , random, random, random, random
 STAIR: random, up
 OBJECT: random,random,random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 MONSTER: 'W', "wraith", random
 
 ROOM: "morgue" , random, random, random, random
@@ -421,7 +421,7 @@ ROOM: "ordinary" , random, random, random, random
 OBJECT: random, random, random
 TRAP: random, random
 OBJECT: random,random,random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 MONSTER: 'W', "wraith", random
 
 ROOM: "morgue" , random, random, random, random
@@ -434,7 +434,7 @@ ROOM: "ordinary" , random, random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
 TRAP: random, random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 MONSTER: 'W', "wraith", random
 
 ROOM: "morgue" , random, random, random, random

@@ -1309,7 +1309,7 @@ struct obj *otmp;
 			steedhit = TRUE;
 			break;
 		case SLP_GAS_TRAP:
-		    if (!resists_sleep(mtmp) && !breathless(mptr) &&
+		    if (!resists_sleep(mtmp) && !breathless_mon(mtmp) &&
 				!mtmp->msleeping && mtmp->mcanmove) {
 			    mtmp->mcanmove = 0;
 			    mtmp->mfrozen = rnd(25);
@@ -1902,7 +1902,7 @@ register struct monst *mtmp;
 			break;
 
 		case SLP_GAS_TRAP:
-		    if (!resists_sleep(mtmp) && !breathless(mptr) &&
+		    if (!resists_sleep(mtmp) && !breathless_mon(mtmp) &&
 				!mtmp->msleeping && mtmp->mcanmove) {
 			    mtmp->mcanmove = 0;
 			    mtmp->mfrozen = rnd(25);

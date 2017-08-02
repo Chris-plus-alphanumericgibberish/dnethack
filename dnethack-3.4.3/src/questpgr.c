@@ -568,11 +568,8 @@ chaos_montype()
 {
 	if(on_level(&chaosf_level,&u.uz)){
 		int chance = d(1,100);
-		if(chance < 10){
+		if(chance < 40){
 			return mkclass(S_ZOMBIE, G_NOHELL);
-		}
-		else if(chance < 30){
-			return !(mvitals[PM_HUMAN_ZOMBIE].mvflags & G_GENOD) ? &mons[PM_HUMAN_ZOMBIE] : mkclass(S_ZOMBIE, G_NOHELL);
 		}
 		else if(chance < 50){
 			return !(mvitals[PM_HOBGOBLIN].mvflags & G_GENOD) ? &mons[PM_HOBGOBLIN] : mkclass(S_ORC, G_NOHELL);
@@ -660,7 +657,7 @@ chaos_montype()
 			return !(mvitals[PM_VAMPIRE].mvflags & G_GENOD) ? &mons[PM_VAMPIRE] : mkclass(S_VAMPIRE, G_NOHELL);
 		}
 		else{
-			return !(mvitals[PM_HUMAN_ZOMBIE].mvflags & G_GENOD) ? &mons[PM_HUMAN_ZOMBIE] : mkclass(S_ZOMBIE, G_NOHELL);
+			return mkclass(S_ZOMBIE, G_NOHELL);
 		}
 	}
 	else if(on_level(&chaosffh_level,&u.uz)){

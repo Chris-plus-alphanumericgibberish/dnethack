@@ -939,7 +939,7 @@ genericptr_t p2;
 
 	/* Non living, non breathing, and
 	   poison-resistant monsters are not concerned */
-	if (!nonliving(mtmp->data) && !breathless(mtmp->data) &&
+	if (!nonliving(mtmp->data) && !breathless_mon(mtmp) &&
 		!resists_poison(mtmp)) {
 	    if (cansee(mtmp->mx, mtmp->my))
 			pline("%s coughs!", Monnam(mtmp));

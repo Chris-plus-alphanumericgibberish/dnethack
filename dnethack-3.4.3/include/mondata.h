@@ -66,6 +66,7 @@
 #define is_swimmer(ptr)		(((ptr)->mflagsm & MM_SWIM) != 0L)
 #define is_suicidal(ptr)	(is_fern_spore(ptr) || ptr == &mons[PM_FREEZING_SPHERE] || ptr == &mons[PM_FLAMING_SPHERE] || ptr == &mons[PM_SHOCKING_SPHERE])
 #define breathless(ptr)		(((ptr)->mflagsm & MM_BREATHLESS) != 0L)
+#define breathless_mon(mon)		(breathless((mon)->data) || is_derived_undead_mon(mon))
 #define amphibious(ptr)		(((ptr)->mflagsm & (MM_AMPHIBIOUS | MM_BREATHLESS)) != 0L)
 #define passes_walls(ptr)	(((ptr)->mflagsm & MM_WALLWALK) != 0L)
 #define amorphous(ptr)		(((ptr)->mflagsm & MM_AMORPHOUS) != 0L)
@@ -153,12 +154,10 @@
 								 (ptr)->mlet == S_PLANT \
 								)
 #define is_silent(ptr)		((ptr)->msound == MS_SILENT)
+#define is_silent_mon(mon)	(is_silent((mon)->data) || (mon)->mfaction == ZOMBIFIED || (mon)->mfaction == CRYSTALFIED)
 #define unsolid(ptr)		(((ptr)->mflagsb & MB_UNSOLID) != 0L)
 #define mindless(ptr)		(((ptr)->mflagst & MT_MINDLESS) != 0L || on_level(&valley_level, &u.uz))
 #define mindless_mon(mon)		(mon && (((mon)->mfaction == ZOMBIFIED) || ((mon)->mfaction == SKELIFIED) || ((mon)->mfaction == CRYSTALFIED) || mindless((mon)->data)))
-#define	can_undead_mon(mon)	(mon && !nonliving_mon(mon) && !is_minion((mon)->data) && ((mon)->data->mlet != S_PUDDING) &&\
-								((mon)->data->mlet != S_JELLY) && ((mon)->data->mlet != S_BLOB) && !is_elemental((mon)->data) &&\
-								!is_plant((mon)->data) && !is_demon((mon)->data) && !is_primordial((mon)->data) && !(mvitals[monsndx((mon)->data)].mvflags&G_NOCORPSE))
 
 #define slithy(ptr)			((ptr)->mflagsb & MB_SLITHY)
 #define humanoid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID)
@@ -198,6 +197,9 @@
 #define is_undead(ptr)		(((ptr)->mflagsa & MA_UNDEAD) != 0L)
 #define is_undead_mon(mon)	(mon && (is_undead((mon)->data) || (mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED))
 #define is_derived_undead_mon(mon)	(mon && ((mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED))
+#define	can_undead_mon(mon)	(mon && !nonliving_mon(mon) && !is_minion((mon)->data) && ((mon)->data->mlet != S_PUDDING) &&\
+								((mon)->data->mlet != S_JELLY) && ((mon)->data->mlet != S_BLOB) && !is_elemental((mon)->data) &&\
+								!is_plant((mon)->data) && !is_demon((mon)->data) && !is_primordial((mon)->data) && !(mvitals[monsndx((mon)->data)].mvflags&G_NOCORPSE))
 #define is_were(ptr)		(((ptr)->mflagsa & MA_WERE) != 0L)
 #define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
 #define is_heladrin(ptr)		(\
@@ -333,6 +335,7 @@
 #define is_neuter(ptr)		(((ptr)->mflagsb & MB_NEUTER) != 0L)
 #define is_wanderer(ptr)	(((ptr)->mflagst & MT_WANDER) != 0L)
 #define always_hostile(ptr)	(((ptr)->mflagst & MT_HOSTILE) != 0L)
+#define always_hostile_mon(mon)	(always_hostile((mon)->data) || is_derived_undead_mon(mon))
 #define always_peaceful(ptr)	(((ptr)->mflagst & MT_PEACEFUL) != 0L)
 #define race_hostile(ptr)	(((ptr)->mflagsa & urace.hatemask) != 0L)
 #define race_peaceful(ptr)	(((ptr)->mflagsa & urace.lovemask) != 0L)
@@ -404,6 +407,7 @@
 
 #define infravision(ptr)	((ptr->mflagsv & MV_INFRAVISION))
 #define infravisible(ptr)	((ptr->mflagsg & MG_INFRAVISIBLE))
+#define infravisible_mon(mon)	(infravisible((mon)->data) && !is_derived_undead_mon(mon))
 #define bloodsense(ptr)		((ptr->mflagsv & MV_BLOODSENSE))
 #define lifesense(ptr)		((ptr->mflagsv & MV_LIFESENSE))
 #define earthsense(ptr)		((ptr->mflagsv & MV_EARTHSENSE))
@@ -543,6 +547,7 @@
 				   (ptr) != &mons[PM_WEEPING_ANGEL] && \
 				   !is_clockwork(ptr) && \
 				   (!nonliving(ptr) || is_vampire(ptr)))
+#define has_blood_mon(mon)	(has_blood((mon)->data) && !is_derived_undead_mon(mon))
 
 /* Keep track of ferns, fern sprouts, fern spores, and other plants */
 

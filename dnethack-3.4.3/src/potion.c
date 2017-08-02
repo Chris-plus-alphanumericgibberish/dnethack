@@ -1319,7 +1319,7 @@ boolean your_fault;
 			is_were(mon->data)) {
 		    if (obj->blessed) {
 			pline("%s %s in pain!", Monnam(mon),
-			      is_silent(mon->data) ? "writhes" : "shrieks");
+			      is_silent_mon(mon) ? "writhes" : "shrieks");
 			mon->mhp -= d(2,6);
 			//Slashem
 			if (mon->mhp < 1) {
@@ -1361,7 +1361,7 @@ boolean your_fault;
 	case POT_STARLIGHT:
 		if (hates_silver(mon->data)) {
 			pline("%s %s in pain!", Monnam(mon),
-			      is_silent(mon->data) ? "writhes" : "shrieks");
+			      is_silent_mon(mon) ? "writhes" : "shrieks");
 			mon->mhp -= d(3,20);
 			//Slashem
 			if (mon->mhp < 1) {
@@ -1476,7 +1476,7 @@ boolean your_fault;
 	case POT_ACID:
 		if (!resists_acid(mon) && !resist(mon, POTION_CLASS, 0, NOTELL)) {
 		    pline("%s %s in pain!", Monnam(mon),
-			  is_silent(mon->data) ? "writhes" : "shrieks");
+			  is_silent_mon(mon) ? "writhes" : "shrieks");
 		    mon->mhp -= d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8);
 		    if (mon->mhp < 1) {
 			if (your_fault)
@@ -1490,7 +1490,7 @@ boolean your_fault;
 		int mnum = obj->corpsenm;
 		if(acidic(&mons[mnum]) && !resists_acid(mon)){
 		    pline("%s %s in pain!", Monnam(mon),
-			  is_silent(mon->data) ? "writhes" : "shrieks");
+			  is_silent_mon(mon) ? "writhes" : "shrieks");
 		    mon->mhp -= d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8);
 		    if (mon->mhp < 1) {
 			if (your_fault)
@@ -1501,7 +1501,7 @@ boolean your_fault;
 		}
 		if(freezing(&mons[mnum]) && !resists_cold(mon)){
 		    pline("%s %s in pain!", Monnam(mon),
-			  is_silent(mon->data) ? "writhes" : "shrieks");
+			  is_silent_mon(mon) ? "writhes" : "shrieks");
 		    mon->mhp -= d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8);
 		    if (mon->mhp < 1) {
 			if (your_fault)
@@ -1512,7 +1512,7 @@ boolean your_fault;
 		}
 		if(burning(&mons[mnum]) && !resists_fire(mon)){
 		    pline("%s %s in pain!", Monnam(mon),
-			  is_silent(mon->data) ? "writhes" : "shrieks");
+			  is_silent_mon(mon) ? "writhes" : "shrieks");
 		    mon->mhp -= d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8);
 		    if (mon->mhp < 1) {
 			if (your_fault)

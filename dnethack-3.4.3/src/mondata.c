@@ -745,7 +745,7 @@ struct monst *mtmp;
 
 	/* stalking types follow, but won't when fleeing unless you hold
 	   the Amulet */
-	return (boolean)((mtmp->data->mflagst & MT_STALK) &&
+	return (boolean)(((mtmp->data->mflagst & MT_STALK) || is_derived_undead_mon(mtmp)) &&
 				(!mtmp->mflee || mtmp->data == &mons[PM_BANDERSNATCH] || u.uhave.amulet));
 }
 

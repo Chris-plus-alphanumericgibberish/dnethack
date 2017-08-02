@@ -1185,12 +1185,12 @@ MONSTER:'M',"elf mummy",(54,14)
 MONSTER:'M',"elf mummy",(54,09)
 MONSTER:'M',"elf mummy",(70,14)
 # Compound guards
-MONSTER:'Z',"giant zombie",(30,01)
-MONSTER:'Z',"giant zombie",(30,04)
-MONSTER:'Z',"giant zombie",(33,02)
-MONSTER:'Z',"giant zombie",(34,02)
-MONSTER:'Z',"giant zombie",(48,03)
-MONSTER:'Z',"giant zombie",(48,04)
+MONSTER:'Z',random,(30,01)
+MONSTER:'Z',random,(30,04)
+MONSTER:'Z',random,(33,02)
+MONSTER:'Z',random,(34,02)
+MONSTER:'Z',random,(48,03)
+MONSTER:'Z',random,(48,04)
 # Temple guard
 MONSTER:'Z',"skeleton",(56,09)
 # A surprise for those being nosy

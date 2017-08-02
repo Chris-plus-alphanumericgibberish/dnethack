@@ -634,7 +634,7 @@ moveloop()
 					mtmp->mcanmove = 1;
 				}
 				if(!mtmp->mnotlaugh){
-					if(!is_silent(mtmp->data)){
+					if(!is_silent_mon(mtmp)){
 						wake_nearto_noisy(mtmp->mx, mtmp->my, combatNoise(mtmp->data));
 						if(sensemon(mtmp) || (canseemon(mtmp) && !mtmp->mundetected)){
 							pline("%s is laughing hysterically.", Monnam(mtmp));

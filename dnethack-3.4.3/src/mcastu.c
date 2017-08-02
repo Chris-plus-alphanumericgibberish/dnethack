@@ -967,6 +967,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	struct obj *mirror;
 
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
+	if(is_derived_undead_mon(mtmp)) return 0;
 	/* Three cases:
 	 * -- monster is attacking you.  Search for a useful spell.
 	 * -- monster thinks it's attacking you.  Search for a useful spell,
@@ -4121,7 +4122,7 @@ uspsibolt:
 	}
 	break;
     }
-
+	
     if (dmg > 0 && mtmp->mhp > 0)
     {
         mtmp->mhp -= dmg;

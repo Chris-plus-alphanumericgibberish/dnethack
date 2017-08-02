@@ -616,7 +616,7 @@ struct obj * instr;
 
 		// undead and demons don't care about 'peaceful' music
 		if (is_undead_mon(mtmp) || is_demon(mtmp->data)) dlev += 50;
-		if (always_hostile(mtmp->data)) dlev += dlev0/10;
+		if (always_hostile_mon(mtmp)) dlev += dlev0/10;
 		if (race_peaceful(mtmp->data)) dlev -= dlev0/10;
 
 		// rats like music from flutes (The Pied Piper of Hamelin)
@@ -669,7 +669,7 @@ struct obj * instr;
 		if (u.uhp < u.uhpmax * 0.6) alev *= 2;
 		if (u.uhp < u.uhpmax * 0.3) alev *= 3;
 		/* hostile monsters are easily encouraged */
-		if (always_hostile(mtmp->data)) dlev -= dlev0/5;
+		if (always_hostile_mon(mtmp)) dlev -= dlev0/5;
 		if (race_hostile(mtmp->data)) dlev -= dlev0/5;
 		if (is_mercenary(mtmp->data)) dlev -= dlev0/5;
 	}
@@ -1566,7 +1566,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 						   switch(rn2(5)) {
 							   case 3:(void) makemon(&mons[PM_DROW_MUMMY], x, y, NO_MM_FLAGS);
 							   case 4:(void) makemon(&mons[PM_DROW_MUMMY],x, y, NO_MM_FLAGS);
-							   default:(void) makemon(&mons[PM_DROW_ZOMBIE],x, y, NO_MM_FLAGS);
+							   default:(void) makemon(&mons[PM_HEDROW_ZOMBIE],x, y, NO_MM_FLAGS);
 						   }
 					   } else if(flags.walky_level){
 						   switch(rn2(7)) {

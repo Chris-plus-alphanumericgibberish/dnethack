@@ -3306,7 +3306,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		} else if ( dieroll <= 1 && otmp->oartifact == ART_ARROW_OF_SLAYING){
 			wepdesc = artilist[otmp->oartifact].name;
 			if (!youdefend) {
-				if (!has_blood(mdef->data) || !(mdef->data->mflagsb&MB_BODYTYPEMASK) || noncorporeal(mdef->data) || amorphous(mdef->data)) {
+				if (!has_blood_mon(mdef) || !(mdef->data->mflagsb&MB_BODYTYPEMASK) || noncorporeal(mdef->data) || amorphous(mdef->data)) {
 					if (vis){
 						pline("%s pierces deeply into %s!",
 							  The(wepdesc), mon_nam(mdef));
@@ -3665,7 +3665,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			if(otmp->oartifact == ART_STORMBRINGER && dieroll <= 2){
 				*dmgptr += 8;
 				int leveldrain = *dmgptr/4;
-				if(!is_silent(mdef->data)) pline("%s cries out in pain and despair and terror.", Monnam(mdef));
+				if(!is_silent_mon(mdef)) pline("%s cries out in pain and despair and terror.", Monnam(mdef));
 				if(*dmgptr > mdef->mhpmax-1){
 					if ((mdef->mhpmax-1)/2){
 						if(youattack) healup((mdef->mhpmax-1)/2, 0, FALSE, FALSE);

@@ -107,28 +107,29 @@ undead_to_corpse(mndx)
 int mndx;
 {
 	switch (mndx) {
-	case PM_KOBOLD_ZOMBIE:
+	// case PM_KOBOLD_ZOMBIE:
 	case PM_KOBOLD_MUMMY:	mndx = PM_KOBOLD;  break;
-	case PM_DWARF_ZOMBIE:
+	// case PM_DWARF_ZOMBIE:
 	case PM_DWARF_MUMMY:	mndx = PM_DWARF;  break;
-	case PM_GNOME_ZOMBIE:
+	// case PM_GNOME_ZOMBIE:
 	case PM_GNOME_MUMMY:	mndx = PM_GNOME;  break;
-	case PM_ORC_ZOMBIE:
+	// case PM_ORC_ZOMBIE:
 	case PM_ORC_MUMMY:	mndx = PM_ORC;  break;
-	case PM_ELF_ZOMBIE:
+	// case PM_ELF_ZOMBIE:
 	case PM_ELF_MUMMY:	mndx = PM_ELF;  break;
 	case PM_VAMPIRE:
 	case PM_VAMPIRE_LORD:
 #if 0	/* DEFERRED */
 	case PM_VAMPIRE_MAGE:
 #endif
-	case PM_HUMAN_ZOMBIE:
+	// case PM_HUMAN_ZOMBIE:
+	case PM_ZOMBIE:
 	case PM_HUMAN_MUMMY:	mndx = PM_HUMAN;  break;
-	case PM_DROW_ZOMBIE:	mndx = PM_DROW;  break;
+	case PM_HEDROW_ZOMBIE:	mndx = PM_DROW;  break;
 	case PM_DROW_MUMMY:	mndx = PM_DROW_MATRON;  break;
-	case PM_GIANT_ZOMBIE:
+	// case PM_GIANT_ZOMBIE:
 	case PM_GIANT_MUMMY:	mndx = PM_GIANT;  break;
-	case PM_ETTIN_ZOMBIE:
+	// case PM_ETTIN_ZOMBIE:
 	case PM_ETTIN_MUMMY:	mndx = PM_ETTIN;  break;
 	default:  break;
 	}
@@ -418,16 +419,17 @@ register struct monst *mtmp;
 	    case PM_HALF_DRAGON_MUMMY:
 	    case PM_GIANT_MUMMY:
 	    case PM_ETTIN_MUMMY:
-	    case PM_KOBOLD_ZOMBIE:
-	    case PM_DWARF_ZOMBIE:
-	    case PM_GNOME_ZOMBIE:
-	    case PM_ORC_ZOMBIE:
-	    case PM_ELF_ZOMBIE:
-	    case PM_HUMAN_ZOMBIE:
-	    case PM_DROW_ZOMBIE:
-	    case PM_HALF_DRAGON_ZOMBIE:
-	    case PM_GIANT_ZOMBIE:
-	    case PM_ETTIN_ZOMBIE:
+	    // case PM_KOBOLD_ZOMBIE:
+	    // case PM_DWARF_ZOMBIE:
+	    // case PM_GNOME_ZOMBIE:
+	    // case PM_ORC_ZOMBIE:
+	    // case PM_ELF_ZOMBIE:
+	    // case PM_HUMAN_ZOMBIE:
+	    case PM_ZOMBIE:
+	    case PM_HEDROW_ZOMBIE:
+	    // case PM_HALF_DRAGON_ZOMBIE:
+	    // case PM_GIANT_ZOMBIE:
+	    // case PM_ETTIN_ZOMBIE:
 		num = undead_to_corpse(mndx);
 		obj = mkcorpstat(CORPSE, mtmp, &mons[num], x, y, TRUE);
 		break;
@@ -2243,7 +2245,7 @@ mfndpos(mon, poss, info, flag)
 
 	nodiag = (mdat == &mons[PM_GRID_BUG]) || (mdat == &mons[PM_BEBELITH]);
 	wantpool = mdat->mlet == S_EEL;
-	cubewaterok = (is_swimmer(mdat) || breathless(mdat) || amphibious(mdat));
+	cubewaterok = (is_swimmer(mdat) || breathless_mon(mon) || amphibious(mdat));
 	poolok = is_flyer(mdat) || is_clinger(mdat) ||
 		 (is_swimmer(mdat) && !wantpool);
 	lavaok = is_flyer(mdat) || is_clinger(mdat) || likes_lava(mdat);
@@ -2403,7 +2405,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			if(flag & NOTONL) continue;
 			info[cnt] |= NOTONL;
 		}
-		if (levl[nx][ny].typ == CLOUD && Is_lolth_level(&u.uz) && !(nonliving_mon(mon) || breathless(mon->data) || resists_poison(mon))) {
+		if (levl[nx][ny].typ == CLOUD && Is_lolth_level(&u.uz) && !(nonliving_mon(mon) || breathless_mon(mon) || resists_poison(mon))) {
 			if(!(flag & ALLOW_TRAPS)) continue;
 			info[cnt] |= ALLOW_TRAPS;
 		}
@@ -2586,9 +2588,9 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		return ALLOW_M|ALLOW_TM;
 
 	/* undead vs civs */
-	if(is_undead_mon(magr) && (!always_hostile(md) && !is_undead_mon(mdef) && !(is_animal(md) && !is_domestic(md)) && !mindless_mon(mdef)))
+	if(is_undead_mon(magr) && (!always_hostile_mon(mdef) && !is_undead_mon(mdef) && !(is_animal(md) && !is_domestic(md)) && !mindless_mon(mdef)))
 		return ALLOW_M|ALLOW_TM;
-	if((!always_hostile(ma) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr)) && is_undead_mon(mdef))
+	if((!always_hostile_mon(magr) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr)) && is_undead_mon(mdef))
 		return ALLOW_M|ALLOW_TM;
 
 	/* drow vs. other drow */
@@ -4066,6 +4068,7 @@ xkilled(mtmp, dest)
 					&& mdat->mlet != S_PLANT
 					&& !(mtmp->mvanishes >= 0)
 					&& !(mtmp->mclone)
+					&& !(is_derived_undead_mon(mtmp))
 					&& !(is_auton(mtmp->data))
 		) {
 			int typ;
@@ -4095,7 +4098,7 @@ xkilled(mtmp, dest)
 	if(redisp) newsym(x,y);
 cleanup:
 	/* punish bad behaviour */
-	if(is_human(mdat) && !(u.sealsActive&SEAL_MALPHAS) && (!always_hostile(mdat) && mtmp->malign <= 0) &&
+	if(is_human(mdat) && !(u.sealsActive&SEAL_MALPHAS) && (!always_hostile_mon(mtmp) && mtmp->malign <= 0) &&
 	   (mndx < PM_ARCHEOLOGIST || mndx > PM_WIZARD) &&
 	   u.ualign.type != A_CHAOTIC) {
 		HTelepat &= ~INTRINSIC;

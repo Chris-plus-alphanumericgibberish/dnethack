@@ -474,7 +474,7 @@ register struct monst *mtmp;
 {
 	const char *ret;
 
-	switch (mtmp->data->msound) {
+	switch (is_silent_mon(mtmp) ? MS_SILENT : mtmp->data->msound) {
 	case MS_MEW:
 	case MS_HISS:
 	    ret = "hiss";
@@ -615,7 +615,7 @@ register struct monst *mtmp;
 	return;
 
     /* presumably nearness and soundok checks have already been made */
-    if (!is_silent(mtmp->data) && mtmp->data->msound <= MS_ANIMAL)
+    if (!is_silent_mon(mtmp) && mtmp->data->msound <= MS_ANIMAL)
 	(void) domonnoise(mtmp);
     else if (mtmp->data->msound >= MS_HUMANOID) {
 	if (!canspotmon(mtmp))
@@ -636,7 +636,7 @@ register struct monst *mtmp;
 
     /* presumably nearness and sleep checks have already been made */
 	if (!flags.soundok) return(0);
-	if (is_silent(ptr)) return(0);
+	if (is_silent_mon(mtmp)) return(0);
 	
 	/* Make sure its your role's quest quardian; adjust if not */
 	if (ptr->msound == MS_GUARDIAN && ptr != &mons[urole.guardnum] && ptr != &mons[PM_CELEBORN]){
@@ -674,7 +674,7 @@ register struct monst *mtmp;
 			}
 		}
 	}
-	switch (ptr->msound) {
+	switch (mtmp->mfaction == SKELIFIED ? MS_BONES : is_silent_mon(mtmp) ? MS_SILENT : ptr->msound) {
 	case MS_ORACLE:
 	    return doconsult(mtmp);
 	case MS_PRIEST: /*Most (all?) things with this will have ispriest set*/
@@ -2025,7 +2025,7 @@ dochat()
 
     /* laughing monsters can't talk */
     if (!mtmp->mnotlaugh) {
-		if (!is_silent(mtmp->data)) pline("%s laughs hysterically", Monnam(mtmp));
+		if (!is_silent_mon(mtmp)) pline("%s laughs hysterically", Monnam(mtmp));
 		return(0);
     }
 	

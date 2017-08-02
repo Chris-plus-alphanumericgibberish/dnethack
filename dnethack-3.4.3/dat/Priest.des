@@ -87,18 +87,18 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 # Monsters on siege duty.
-MONSTER: 'Z',"human zombie",(37,01)
-MONSTER: 'Z',"human zombie",(37,18)
-MONSTER: 'Z',"human zombie",(03,03)
-MONSTER: 'Z',"human zombie",(65,04)
-MONSTER: 'Z',"human zombie",(12,11)
-MONSTER: 'Z',"human zombie",(60,12)
-MONSTER: 'Z',"human zombie",(14,08)
-MONSTER: 'Z',"human zombie",(55,00)
-MONSTER: 'Z',"human zombie",(18,18)
-MONSTER: 'Z',"human zombie",(59,10)
-MONSTER: 'Z',"human zombie",(13,09)
-MONSTER: 'Z',"human zombie",(01,17)
+MONSTER: 'Z',random,(37,01)
+MONSTER: 'Z',random,(37,18)
+MONSTER: 'Z',random,(03,03)
+MONSTER: 'Z',random,(65,04)
+MONSTER: 'Z',random,(12,11)
+MONSTER: 'Z',random,(60,12)
+MONSTER: 'Z',random,(14,08)
+MONSTER: 'Z',random,(55,00)
+MONSTER: 'Z',random,(18,18)
+MONSTER: 'Z',random,(59,10)
+MONSTER: 'Z',random,(13,09)
+MONSTER: 'Z',random,(01,17)
 
 #
 #	The "locate" level for the quest.
@@ -237,22 +237,22 @@ TRAP:random,random
 TRAP:random,random
 # Random monsters.
 MONSTER:'Z',"Legion",place[0]
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
-MONSTER:'Z',"human zombie",random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 MONSTER:'Z',random,random
 MONSTER:'W',"wraith",random
@@ -279,7 +279,7 @@ LEVEL: "Pri-fila"
 ROOM: "ordinary" , random, random, random, random
 STAIR: random, up
 OBJECT: random,random,random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 
 ROOM: "ordinary" , random, random, random, random
 OBJECT: random, random, random
@@ -289,7 +289,7 @@ ROOM: "ordinary" , random, random, random, random
 OBJECT: random, random, random
 TRAP: random, random
 OBJECT: random,random,random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 
 ROOM: "morgue" , random, random, random, random
 STAIR: random, down
@@ -313,7 +313,7 @@ LEVEL: "Pri-filb"
 ROOM: "ordinary" , random, random, random, random
 STAIR: random, up
 OBJECT: random,random,random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 MONSTER: 'W', "wraith", random
 
 ROOM: "morgue" , random, random, random, random
@@ -325,7 +325,7 @@ ROOM: "ordinary" , random, random, random, random
 OBJECT: random, random, random
 TRAP: random, random
 OBJECT: random,random,random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 MONSTER: 'W', "wraith", random
 
 ROOM: "morgue" , random, random, random, random
@@ -338,7 +338,7 @@ ROOM: "ordinary" , random, random, random, random
 OBJECT: random, random, random
 OBJECT: random, random, random
 TRAP: random, random
-MONSTER: 'Z', "human zombie", random
+MONSTER: 'Z', random, random
 MONSTER: 'W', "wraith", random
 
 ROOM: "morgue" , random, random, random, random

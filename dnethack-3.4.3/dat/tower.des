@@ -224,27 +224,27 @@ MONSTER:'@',"werewolf",(10,08), hostile
 
 MONSTER:'i',"legion devil grunt",(03,13), hostile
 
-MONSTER:'Z',"elf zombie",(05,15), hostile
-MONSTER:'Z',"elf zombie",(04,15), hostile
+MONSTER:'Z',random,(05,15), hostile
+MONSTER:'Z',random,(04,15), hostile
 MONSTER:'Z',"skeleton",(09,15), hostile
 MONSTER:'Z',"skeleton",(13,15), hostile
-MONSTER:'Z',"gnome zombie",(14,15), hostile
+MONSTER:'Z',random,(14,15), hostile
 
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
-MONSTER:'Z',"human zombie",random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile
+MONSTER:'Z',random,random, hostile

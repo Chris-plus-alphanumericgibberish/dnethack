@@ -217,6 +217,7 @@ mattackm(magr, mdef)
     struct attack   *mattk, alt_attk;
     struct permonst *pa, *pd;
 	struct obj *oarmor;
+	boolean derundspec = 0;
 	
     if (!magr || !mdef) return(MM_MISS);		/* mike@genat */
     if (!magr->mcanmove || magr->msleeping) return(MM_MISS);
@@ -330,45 +331,49 @@ mattackm(magr, mdef)
 	otmp = (struct obj *)0;
 	attk = 1;
 	
-		if(magr->mfaction == ZOMBIFIED || magr->mfaction == SKELIFIED || magr->mfaction == CRYSTALFIED){
-			if(mattk->aatyp == AT_SPIT 
-				|| mattk->aatyp == AT_BREA 
-				|| mattk->aatyp == AT_GAZE 
-				|| mattk->aatyp == AT_ARRW 
-				|| mattk->aatyp == AT_MMGC 
-				|| mattk->aatyp == AT_TNKR 
-				|| mattk->aatyp == AT_SHDW 
-				|| mattk->aatyp == AT_BEAM 
-				|| mattk->aatyp == AT_MAGC
-				|| (mattk->aatyp == AT_TENT && magr->mfaction == SKELIFIED)
-			){
-				if(i == 0){
-					mattk->aatyp = AT_CLAW;
-					mattk->adtyp = AD_PHYS;
-					mattk->damn = magr->m_lev/10+1;
-					mattk->damd = max(magr->data->msize*2, 4);
-				}
-				else if(i == NATTK-1 
-					&& magr->mfaction == CRYSTALFIED
-				){
-					mattk->aatyp = AT_TUCH;
-					mattk->adtyp = AD_ECLD;
-					mattk->damn = min(10,magr->m_lev/3);
-					mattk->damd = 8;
-				}
-				else continue;
+	if(magr->mfaction == ZOMBIFIED || magr->mfaction == SKELIFIED || magr->mfaction == CRYSTALFIED){
+		if(mattk->aatyp == AT_SPIT 
+			|| mattk->aatyp == AT_BREA 
+			|| mattk->aatyp == AT_GAZE 
+			|| mattk->aatyp == AT_ARRW 
+			|| mattk->aatyp == AT_MMGC 
+			|| mattk->aatyp == AT_TNKR 
+			|| mattk->aatyp == AT_SHDW 
+			|| mattk->aatyp == AT_BEAM 
+			|| mattk->aatyp == AT_MAGC
+			|| (mattk->aatyp == AT_TENT && magr->mfaction == SKELIFIED)
+			|| (i == 0 && 
+				(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP) && 
+				mattk->adtyp == AD_PHYS && 
+				mattk->damn*mattk->damd/2 < (magr->m_lev/10+1)*max(magr->data->msize*2, 4)/2
+			   )
+			|| (!derundspec && mattk->aatyp == 0 && mattk->adtyp == 0 && mattk->damn == 0 && mattk->damd == 0)
+			|| (!derundspec && i == NATTK-1 && (magr->mfaction == CRYSTALFIED || magr->mfaction == SKELIFIED))
+		){
+			if(i == 0){
+				mattk->aatyp = AT_CLAW;
+				mattk->adtyp = AD_PHYS;
+				mattk->damn = magr->m_lev/10+1 + (magr->mfaction != ZOMBIFIED ? 1 : 0);
+				mattk->damd = max(magr->data->msize*2, 4);
 			}
-			else if(i == NATTK-1 
-				&& magr->mfaction == CRYSTALFIED
-				&& !mattk->aatyp && !mattk->adtyp && !mattk->damn && !mattk->damd
-			){
+			else if(!derundspec && magr->mfaction == SKELIFIED){
+				derundspec = TRUE;
+				mattk->aatyp = AT_TUCH;
+				mattk->adtyp = AD_SLOW;
+				mattk->damn = 1;
+				mattk->damd = max(magr->data->msize*2, 4);
+			}
+			else if(!derundspec && magr->mfaction == CRYSTALFIED){
+				derundspec = TRUE;
 				mattk->aatyp = AT_TUCH;
 				mattk->adtyp = AD_ECLD;
 				mattk->damn = min(10,magr->m_lev/3);
 				mattk->damd = 8;
 			}
+			else continue;
 		}
-		
+	}
+	
 	/*Plasteel helms cover the face and prevent bite attacks*/
 	if((magr->misc_worn_check & W_ARMH) && which_armor(magr, W_ARMH) &&
 		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM) && 
@@ -884,7 +889,7 @@ hitmm(magr, mdef, mattk)
 	struct	attack *mattk;
 {
 	/* Nearby monsters may be awakened */
-	if(!is_silent(magr->data) || !helpless(mdef)) wake_nearto(mdef->mx, mdef->my, combatNoise(magr->data));
+	if(!is_silent_mon(magr) || !helpless(mdef)) wake_nearto(mdef->mx, mdef->my, combatNoise(magr->data));
 	
 	if(vis){
 		int compat;
@@ -1870,10 +1875,10 @@ physical:{
 	    case AD_DRLI:
 		if (!cancelled && magr->mtame && !magr->isminion &&
 			is_vampire(pa) && mattk->aatyp == AT_BITE &&
-			has_blood(pd)
+			has_blood_mon(mdef)
 		) EDOG(magr)->hungrytime += ((int)((mdef->data)->cnutrit / 20) + 1);
 		
-		if(has_blood(pd) && magr->data == &mons[PM_BLOOD_BLOATER]){
+		if(has_blood_mon(mdef) && magr->data == &mons[PM_BLOOD_BLOATER]){
 			magr->mhp += tmp;
 			if (magr->mhpmax < magr->mhp) magr->mhpmax = magr->mhp;
 		}
@@ -1968,7 +1973,7 @@ physical:{
             }
 		break;
 	    case AD_BLUD:
-			if(has_blood(pd)) {
+			if(has_blood_mon(mdef) || (has_blood(pd) && mdef->mfaction == ZOMBIFIED)) {
             	tmp += mdef->m_lev;
             	if (vis) pline("The blade of rotted blood tears through the veins of %s!", mon_nam(mdef));
             }
@@ -2476,29 +2481,8 @@ struct attack *mattk;
 		
 		if(mdef->data == &mons[PM_LEGION]){
 			int n = rnd(4);
-			for(n; n>0; n--) switch(rnd(7)){
-			case 1:
-				makemon(&mons[PM_LEGIONNAIRE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 2:
-				makemon(&mons[PM_GNOME_ZOMBIE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 3:
-				makemon(&mons[PM_ORC_ZOMBIE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 4:
-				makemon(&mons[PM_DWARF_ZOMBIE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 5:
-				makemon(&mons[PM_ELF_ZOMBIE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 6:
-				makemon(&mons[PM_HUMAN_ZOMBIE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			case 7:
-				makemon(&mons[PM_HALF_DRAGON_ZOMBIE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
-			break;
-			}
+			for(n; n>0; n--) rn2(7) ? makemon(mkclass(S_ZOMBIE, G_NOHELL|G_HELL), mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT): 
+									  makemon(&mons[PM_LEGIONNAIRE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
 		} else {
 			if(mdef->mhp > .75*mdef->mhpmax) makemon(&mons[PM_LEMURE], mdef->mx, mdef->my, MM_ADJACENTOK);
 			else if(mdef->mhp > .50*mdef->mhpmax) makemon(&mons[PM_HORNED_DEVIL], mdef->mx, mdef->my, MM_ADJACENTOK);

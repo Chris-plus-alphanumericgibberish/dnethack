@@ -342,9 +342,9 @@ mkvaultlolth()
 					makemon(&mons[PM_DROW_MUMMY], x+rnd(2), y+rnd(2), 0);
 				break;
 				case 2:
-					makemon(&mons[PM_DROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
-					if(rn2(4)) makemon(&mons[PM_DROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
-					if(!rn2(3)) makemon(&mons[PM_DROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
+					makemon(&mons[PM_HEDROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
+					if(rn2(4)) makemon(&mons[PM_HEDROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
+					if(!rn2(3)) makemon(&mons[PM_HEDROW_ZOMBIE], x+rnd(2), y+rnd(2), 0);
 				break;
 			}
 		}
