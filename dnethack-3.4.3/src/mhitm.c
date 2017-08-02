@@ -457,6 +457,15 @@ mattackm(magr, mdef)
 		    return MM_MISS;
 #endif /* TAME_RANGED_ATTACKS */
 		} goto meleeattack;
+		case AT_5SQR:
+		if (distmin(magr->mx,magr->my,mdef->mx,mdef->my) > 5)
+		{
+#ifdef TAME_RANGED_ATTACKS
+                    break; /* might have more ranged attacks */
+#else
+		    return MM_MISS;
+#endif /* TAME_RANGED_ATTACKS */
+		} goto meleeattack;
 		case AT_LRCH:
 		case AT_LNCK:
 		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 5)
@@ -481,7 +490,7 @@ meleeattack:
 		    break;
 		}
 		dieroll = rnd(20 + i*2);
-		if(mattk->aatyp == AT_TUCH || mattk->aatyp == AT_SHDW){
+		if(mattk->aatyp == AT_TUCH || mattk->aatyp == AT_5SQR || mattk->aatyp == AT_SHDW){
 			strike = (tchtmp > dieroll);
 		} else {
 			strike = (tmp > dieroll);
@@ -925,6 +934,7 @@ hitmm(magr, mdef, mattk)
 			case AT_BUTT:
 				Sprintf(buf,"%s butts", magr_name);
 				break;
+			case AT_5SQR:
 			case AT_TUCH:
 				if (is_weeping(magr->data)) {
 					Sprintf(buf,"%s is touching", magr_name);
@@ -2614,6 +2624,7 @@ int aatyp;
     case AT_CLAW:
     case AT_LRCH:
     case AT_TUCH:
+    case AT_5SQR:
     case AT_WEAP:
     case AT_DEVA:
 	w_mask = W_ARMG;	/* caller needs to check for weapon */

@@ -1007,6 +1007,8 @@ struct monst *mtmp;
 
 	struct monst *target = mfind_target(mtmp);
 	
+	if(tbx == 0 && tby == 0) return FALSE; //Target is not lined up.
+	
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	
 	if (target)

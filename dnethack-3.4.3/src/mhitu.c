@@ -85,6 +85,7 @@ register struct attack *mattk;
 		case AT_BUTT:
 			pline("%s butts!", Monnam(mtmp));
 			break;
+		case AT_5SQR:
 		case AT_TUCH:
 			if(mattk->adtyp == AD_SHDW) pline("%s slashes you with bladed shadows!", Monnam(mtmp));
 			else if(mattk->adtyp == AD_STAR) pline("%s slashes you with a starlight rapier!", Monnam(mtmp));
@@ -170,7 +171,7 @@ struct attack *mattk;
 	       it's better than "sting" when not a stinging attack... */
 	    return (!mwep || !mwep->opoisoned) ? "attack" : "weapon";
 	} else {
-	    return (mattk->aatyp == AT_TUCH) ? "contact" :
+	    return (mattk->aatyp == AT_TUCH || mattk->aatyp == AT_5SQR) ? "contact" :
 		   (mattk->aatyp == AT_GAZE) ? "gaze" :
 		   (mattk->aatyp == AT_ENGL) ? "vapor" :
 		   (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK) ? "bite" : "sting";
@@ -355,8 +356,8 @@ struct attack *alt_attk_buf;
        already hit, switch to a stun attack for the second */
     if (indx > 0 && prev_result[indx - 1] > 0 &&
 	    (attk->adtyp == AD_DISE ||
-		attk->adtyp == AD_PEST ||
-		attk->adtyp == AD_FAMN ||
+		// attk->adtyp == AD_PEST ||
+		// attk->adtyp == AD_FAMN ||
 		mptr == &mons[PM_ASTRAL_DEVA]) &&
 	    attk->adtyp == mptr->mattk[indx - 1].adtyp
 	) {
@@ -987,6 +988,7 @@ mattacku(mtmp)
 				if (foundyou) sum[i] = hitmu(mtmp, mattk);
 				else wildmiss(mtmp, mattk);
 			}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_LNCK:
 		case AT_LRCH:{
 			if(dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8 && couldsee(mtmp->mx, mtmp->my)){
@@ -1011,6 +1013,30 @@ mattacku(mtmp)
 				}
 			}
 		}break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AT_5SQR:
+			if(distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 5 && (!MON_WEP(mtmp) || mtmp->mconf || Conflict || 
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
+					!touch_petrifies(youracedata))) {
+			    if (foundyou) {
+				if(tchtmp > (j = rnd(20+i*2))) {
+				    if (mattk->aatyp != AT_KICK ||
+					    !(thick_skinned(youracedata) || u.sealsActive&SEAL_ECHIDNA))
+					sum[i] = hitmu(mtmp, mattk);
+				} else
+				    missmu(mtmp, (tchtmp == j), mattk);
+			    } else
+				wildmiss(mtmp, mattk);
+			}
+			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
+				mtmp->mvar2 = mtmp->mvar2+1;
+				if(!range2 && mtmp->mvar2>=2){
+					struct attack rend = {AT_HUGS, AD_SHRD, 3, 12};
+					sum[i] = hitmu(mtmp, &rend);
+					mtmp->mvar2=0;
+				}
+			}
+		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_WEAP:
 		case AT_DEVA:

@@ -1260,6 +1260,7 @@ int randSpecialAttackTypes[] =
 						 AT_ARRW, 
 						 AT_BREA, 
 						 AT_BEAM, 
+						 AT_5SQR, 
 						 AT_DEVA, 
 						 AT_MAGC };
 
@@ -2314,6 +2315,7 @@ u_init()
 			break;
 			case AT_BEAM:
 			case AT_DEVA:
+			case AT_5SQR:
 				attkptr->adtyp = randBeamDamageTypes[rn2(SIZE(randBeamDamageTypes))];
 			break;
 			default:
@@ -2369,6 +2371,7 @@ u_init()
 			break;
 			case AT_BEAM:
 			case AT_DEVA:
+			case AT_5SQR:
 				attkptr->adtyp = randBeamDamageTypes[rn2(SIZE(randBeamDamageTypes))];
 			break;
 			default:
@@ -2417,6 +2420,7 @@ u_init()
 				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
 			break;
 			case AT_BEAM:
+			case AT_5SQR:
 			case AT_DEVA:
 				attkptr->adtyp = randBeamDamageTypes[rn2(SIZE(randBeamDamageTypes))];
 			break;

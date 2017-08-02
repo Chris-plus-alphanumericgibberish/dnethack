@@ -1226,6 +1226,9 @@ toofar:
 	if ((
 	      attacktype(mtmp->data, AT_GAZE) ||
 	      attacktype(mtmp->data, AT_ARRW) ||
+	      attacktype(mtmp->data, AT_LNCK) ||
+	      attacktype(mtmp->data, AT_LRCH) ||
+	      attacktype(mtmp->data, AT_5SQR) ||
 	      (!mtmp->mspec_used && 
 			(attacktype(mtmp->data, AT_SPIT) ||
 			 attacktype(mtmp->data, AT_TNKR) ||
@@ -1248,14 +1251,6 @@ toofar:
 	     (attacktype(mtmp->data, AT_MAGC) &&
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         == AD_OONA))
-	      ) ||
-	     (attacktype(mtmp->data, AT_LNCK) &&
-	      (((attacktype_fordmg(mtmp->data, AT_LNCK, AD_ANY))->adtyp
-	         <= AD_SPC2))
-	      ) ||
-	     (attacktype(mtmp->data, AT_LRCH) &&
-	      (((attacktype_fordmg(mtmp->data, AT_LRCH, AD_ANY))->adtyp
-	         <= AD_SPC2))
 	      ) ||
 	     (attacktype(mtmp->data, AT_WEAP) &&
 	      (select_rwep(mtmp) != 0)) ||
