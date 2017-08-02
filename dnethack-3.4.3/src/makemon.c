@@ -3406,8 +3406,10 @@ register struct	monst	*mtmp;
 #endif /* CONVICT */
 			ptr != &mons[PM_WATCHMAN] &&
 			ptr != &mons[PM_WATCH_CAPTAIN]) {
-			if (!rn2(3)) (void) mongets(mtmp, K_RATION);
-			if (!rn2(2)) (void) mongets(mtmp, C_RATION);
+			if(!(level.flags.has_barracks || In_law(&u.uz) || in_mklev || undeadfaction)){
+				if (!rn2(3)) (void) mongets(mtmp, K_RATION);
+				if (!rn2(2)) (void) mongets(mtmp, C_RATION);
+			}
 			if (ptr != &mons[PM_SOLDIER] && !rn2(3))
 				(void) mongets(mtmp, BUGLE);
 		    } else
