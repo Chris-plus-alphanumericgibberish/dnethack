@@ -565,8 +565,9 @@ init_attr(np)
 
 	for(i = 0; i < A_MAX; i++) {
 	    ABASE(i) = AMAX(i) = urole.attrbase[i];
+		if(ABASE(i) > ATTRMAX(i)) ABASE(i) = AMAX(i) = ATTRMAX(i);
 	    ATEMP(i) = ATIME(i) = 0;
-	    np -= urole.attrbase[i];
+	    np -= ABASE(i);
 	}
 
 	tryct = 0;
