@@ -429,8 +429,8 @@ int *fail_reason;
 	if (statue->oxlth && statue->oattached == OATTACHED_MONST) {
 	    cc.x = x,  cc.y = y;
 	    mon = montraits(statue, &cc);
-	    if (mon && mon->mtame && !mon->isminion)
-		wary_dog(mon, TRUE);
+	    // if (mon && mon->mtame && !mon->isminion)
+		// wary_dog(mon, TRUE);
 	} else {
 	    /* statue of any golem hit with stone-to-flesh becomes flesh golem */
 	    if (is_golem(&mons[statue->corpsenm]) && cause == ANIMATE_SPELL)
