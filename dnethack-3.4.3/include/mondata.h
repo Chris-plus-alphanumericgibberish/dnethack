@@ -32,7 +32,9 @@
 
 #define resists_poly(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
 
-#define is_blind(mon)		(!((mon)->mcansee) || (darksight((mon)->data) && (viz_array[(mon)->my][(mon)->mx]&TEMP_LIT1 || levl[(mon)->mx][(mon)->my].lit)))
+#define is_blind(mon)		(!((mon)->mcansee) || (darksight((mon)->data) && !(\
+													(!levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))\
+													|| (levl[u.ux][u.uy].lit &&  (viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))))))
 #define is_deaf(mon)		(!((mon)->mcanhear))
 
 #define is_molochan(ptr)	((ptr)->maligntyp == A_NONE)
