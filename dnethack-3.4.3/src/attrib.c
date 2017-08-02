@@ -453,7 +453,7 @@ exerchk()
 	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
 	/*	Check out the periodic accumulations */
 	exerper();
-
+	
 #ifdef DEBUG
 	if(moves >= next_check)
 		pline("exerchk: ready to test. multi = %d.", multi);
@@ -473,14 +473,21 @@ exerchk()
 	     */
 	    for(i = 0; i < A_MAX; AEXE(i++) /= 2) {
 
-		if(ABASE(i) >= 18 || !AEXE(i)) continue;
+#ifdef DEBUG
+		pline("exerchk: testing %s (%d, max %d).",
+			(i == A_STR) ? "Str" : (i == A_WIS) ? "Wis" : 
+			(i == A_DEX) ? "Dex" : (i == A_INT) ? "Int" : 
+			(i == A_CON) ? "Con" : (i == A_CHA) ? "Cha" : 
+			"Err", AEXE(i), AMAX(i));
+#endif
+
+		if(ABASE(i) >= 18 || (!AEXE(i) && ABASE(i) >= AMAX(i))) continue;
 		if(i == A_CHA) continue;/* can't exercise cha */
 
 #ifdef DEBUG
-		pline("exerchk: testing %s (%d).",
-			(i == A_STR) ? "Str" : (i == A_WIS) ? "Wis" :
-			(i == A_DEX) ? "Dex" : (i == A_INT) ? "Int" : "Con", AEXE(i));
+		pline("passed");
 #endif
+
 		/*
 		 *	Law of diminishing returns (Part III):
 		 *
@@ -490,7 +497,7 @@ exerchk()
 		 //	[MRS 92/10/28 - Treat Wisdom specially for balance.]
 		// if(rn2(AVAL) > ((i != A_WIS) ? abs(AEXE(i)*2/3) : abs(AEXE(i))))
 		    // continue;
-		if(rn2(AVAL) > (abs(AEXE(i)*2/3)) )
+		if(!(ABASE(i) < AMAX(i) && !(i == A_STR && u.uhs >= 3) && AEXE(i) >= 0) && rn2(AVAL) > (abs(AEXE(i)*2/3)) )
 		    continue;
 		mod_val = sgn(AEXE(i));
 
