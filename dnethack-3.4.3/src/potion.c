@@ -1028,7 +1028,7 @@ as_extra_healing:
 				the(xname(otmp)), (otmp->quan == 1L) ? "it" : "one");
 			if (yn_function(buf,ynchars,'n')=='n') return 0;
 		}
-		if (is_vampire(youracedata) || carnivorous(youracedata)) {
+		if (is_vampire(youracedata) || (carnivorous(youracedata) && !herbivorous(youracedata))) {
 			pline("It smells like %s%s.", 
 					!type_is_pname(&mons[otmp->corpsenm]) ||
 					!(mons[otmp->corpsenm].geno & G_UNIQ) ||
