@@ -598,6 +598,9 @@ boolean artif;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 2);
 					break;
+		case SEISMIC_HAMMER:
+			otmp->ovar1 = 80L + rnd(20);
+		break;
 		case DOUBLE_LIGHTSABER:
 		case LIGHTSABER:
 		case BEAMSWORD:

@@ -548,7 +548,7 @@ struct obj *obj;
 //#ifdef FIREARMS
 	if (is_blaster(obj) && (obj->recharged < 4 || (obj->otyp != HAND_BLASTER && obj->otyp != ARM_BLASTER)))
 	    return TRUE;
-	if ((obj->otyp == FORCE_PIKE || obj->otyp == VIBROBLADE))
+	if ((obj->otyp == FORCE_PIKE || obj->otyp == VIBROBLADE || obj->otyp == SEISMIC_HAMMER))
 	    return TRUE;
 //#endif
 	if (is_weptool(obj))	/* specific check before general tools */
@@ -661,7 +661,7 @@ int curse_bless;
 
 	} else if (obj->oclass == TOOL_CLASS || is_blaster(obj)
 		   || obj->otyp == DWARVISH_HELM || obj->otyp == VIBROBLADE 
-		   || obj->otyp == FORCE_PIKE) {
+		   || obj->otyp == FORCE_PIKE || obj->otyp == SEISMIC_HAMMER) {
 	    int rechrg = (int)obj->recharged;
 
 	    if (objects[obj->otyp].oc_charged) {
@@ -761,6 +761,7 @@ int curse_bless;
 	    case CUTTING_LASER:
 	    case VIBROBLADE:
 	    case FORCE_PIKE:
+	    case SEISMIC_HAMMER:
 			if(is_blessed) obj->ovar1 = 100L;
 			else if(is_cursed) obj->ovar1 = 10L;
 			else obj->ovar1 = 80L + rn2(20);

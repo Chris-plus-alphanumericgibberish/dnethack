@@ -610,11 +610,11 @@ int mode;
 	    /* Eat the rock. */
 	    if (mode == DO_MOVE && still_chewing(x,y)) return FALSE;
 	} else if (flags.autodig && !flags.run && !flags.nopick &&
-		   ((uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) ||
+		   ((uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) ||
 			(uarmg && is_pick(uarmg)))) {
 	/* MRKR: Automatic digging when wielding the appropriate tool */
 	    if (mode == DO_MOVE){
-			if(uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) (void) use_pick_axe2(uwep);
+			if(uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) (void) use_pick_axe2(uwep);
 			else if(uarmg && is_pick(uarmg)) (void) use_pick_axe2(uarmg);
 		}
 	    return FALSE;

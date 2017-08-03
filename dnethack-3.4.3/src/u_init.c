@@ -54,13 +54,14 @@ static struct trobj Anachrononaut_Hu[] = {
 static struct trobj Anachrononaut_Dw[] = {
 	{ HEAVY_MACHINE_GUN, 5, WEAPON_CLASS, 1, 0 },
 	{ PISTOL, 1, WEAPON_CLASS, 1, 0 },
+	{ SEISMIC_HAMMER, 0, WEAPON_CLASS, 1, 0 },
 	{ STICK_OF_DYNAMITE, 0, TOOL_CLASS, 15, 0 },
 	{ HIGH_ELVEN_PLATE, 0, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_ELVEN_HELM, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_ELVEN_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
 	{ ELVEN_BOOTS, 0, ARMOR_CLASS, 1, 0 },
-	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, 0 },
+	{ AMULET_OF_NULLIFY_MAGIC, 0, AMULET_CLASS, 1, 0 },
 	{ BULLET, 3, WEAPON_CLASS, 100, 0 },
 	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
 	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
@@ -660,7 +661,7 @@ static const struct def_skill Skill_Ana[] = {
     { P_SHORT_SWORD, P_EXPERT },{ P_LANCE,  P_EXPERT },
     { P_SABER, P_EXPERT },		{ P_LONG_SWORD,  P_BASIC },
     { P_CLUB, P_SKILLED },		{ P_QUARTERSTAFF, P_EXPERT },
-	{ P_BROAD_SWORD, P_EXPERT },
+	{ P_BROAD_SWORD, P_EXPERT },{ P_HAMMER, P_BASIC },
 //#ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
 //#endif
@@ -1703,6 +1704,9 @@ u_init()
 		knows_object(HYPOSPRAY_AMPULE);
 		knows_object(POWER_PACK);
 		knows_object(PROTEIN_PILL);
+		knows_object(FORCE_PIKE);
+		knows_object(VIBROBLADE);
+		knows_object(SEISMIC_HAMMER);
 		knows_object(LIGHTSABER);
 		knows_object(BEAMSWORD);
 		knows_object(DOUBLE_LIGHTSABER);
@@ -2702,6 +2706,18 @@ register struct trobj *trop;
 				obj->ovar1 = 1;
 				fix_object(obj);
 			}
+			if(obj->otyp == HEAVY_MACHINE_GUN && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
+				obj->obj_material = MITHRIL;
+				fix_object(obj);
+			}
+			if(obj->otyp == PISTOL && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
+				obj->obj_material = MITHRIL;
+				fix_object(obj);
+			}
+			if(obj->otyp == SEISMIC_HAMMER && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
+				obj->obj_material = MITHRIL;
+				fix_object(obj);
+			}
 			/* Don't start with +0 or negative rings */
 			if (objects[obj->otyp].oc_charged && obj->spe <= 0)
 				obj->spe = rne(3);
@@ -2874,6 +2890,10 @@ register struct trobj *trop;
 		if (otyp == OIL_LAMP)
 			discover_object(POT_OIL, TRUE, FALSE);
 
+		if(obj->otyp == AMULET_OF_NULLIFY_MAGIC && Role_if(PM_ANACHRONONAUT) && !uamul){
+			setworn(obj, W_AMUL);
+		}
+		
 		if(obj->oclass == ARMOR_CLASS){
 			if (is_shield(obj) && !uarms) {
 				setworn(obj, W_ARMS);

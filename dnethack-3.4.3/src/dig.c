@@ -140,23 +140,24 @@ xchar x, y;
 {
 	boolean ispick = is_pick(otmp),
 		is_saber = is_lightsaber(otmp),
+		is_seismic = (otmp->otyp == SEISMIC_HAMMER && otmp->ovar1 > 0),
 		is_axe = is_axe(otmp);
 
 	return ((ispick||is_saber) && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
-		(ispick||is_saber) && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
-		(ispick||is_saber) && sobj_at(MASSIVE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
+		(ispick||is_saber||is_seismic) && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
+		(ispick||is_saber||is_seismic) && sobj_at(MASSIVE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
 		(closed_door(x, y) ||
 			levl[x][y].typ == SDOOR) ? DIGTYP_DOOR :
 		IS_TREES(levl[x][y].typ) ?
-			((ispick && !(is_axe || is_saber)) ? DIGTYP_UNDIGGABLE : DIGTYP_TREE) :
-		ispick && IS_ROCK(levl[x][y].typ) &&
+			((ispick && !(is_axe || is_saber || is_seismic)) ? DIGTYP_UNDIGGABLE : DIGTYP_TREE) :
+		(ispick || is_seismic) && IS_ROCK(levl[x][y].typ) &&
 			(!level.flags.arboreal || IS_WALL(levl[x][y].typ)) ?
 			DIGTYP_ROCK : 
 		is_saber && (levl[x][y].typ == DRAWBRIDGE_DOWN || is_drawbridge_wall(x, y) >= 0) ?
 			DIGTYP_BRIDGE : 
 		is_saber && IS_WALL(levl[x][y].typ) ?
 			DIGTYP_ROCK : 
-		is_saber && levl[x][y].typ == IRONBARS ? DIGTYP_BARS : 
+		(is_saber || is_seismic) && levl[x][y].typ == IRONBARS ? DIGTYP_BARS : 
 			DIGTYP_UNDIGGABLE);
 }
 
@@ -232,15 +233,16 @@ dig()
 {
 	register xchar dpx = digging.pos.x, dpy = digging.pos.y;
 	register struct rm *lev = &levl[dpx][dpy];
-	register boolean ispick = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) || (uarmg && is_pick(uarmg));
+	register boolean ispick = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) || (uarmg && is_pick(uarmg)) || (uwep->otyp == SEISMIC_HAMMER);
+	int bonus;
+	struct obj *digitem = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) ? uwep : 
+		(uwep && is_axe(uwep) && IS_TREES(lev->typ)) ? uwep :
+		(uarmg && is_pick(uarmg)) ? uarmg : uwep;
 	const char *verb =
 	    (!uwep || is_pick(uwep)) ? "dig into" :
 		    is_lightsaber(uwep) ? "cut through" :
+		    (uwep->otyp == SEISMIC_HAMMER) ? "smash through" :
 		    "chop through";
-	int bonus;
-	struct obj *digitem = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) ? uwep : 
-		(uwep && is_axe(uwep) && IS_TREES(lev->typ)) ? uwep :
-		(uarmg && is_pick(uarmg)) ? uarmg : uwep;
 	/* perhaps a nymph stole your pick-axe while you were busy digging */
 	/* or perhaps you teleported away */
 	/* WAC allow lightsabers */
@@ -319,6 +321,8 @@ dig()
 	    bonus *= 2;
 	if (is_lightsaber(digitem) && !IS_TREES(lev->typ))
 	    bonus -= 11; /* Melting a hole takes longer */
+	if ((digitem->otyp == SEISMIC_HAMMER) && digitem->ovar1-- > 0)
+	    bonus += 1000; /* Smashes through */
 
 	digging.effort += bonus;
 
@@ -1586,12 +1590,14 @@ struct obj *obj;
 	int dig_target, digtyp;
 	boolean ispick = is_pick(obj);
 	const char *verbing = ispick ? "digging" :
+		(obj->otyp == SEISMIC_HAMMER) ? "smashing" :
 		is_lightsaber(obj) ? "cutting" :
 		"chopping";
 
-	/* 0 = pick, 1 = lightsaber, 2 = axe */
-	digtyp = (is_pick(obj) ? 0 :
+	/* 0 = pick, 1 = lightsaber, 2 = axe, 3 = hammer */
+	digtyp = ((is_pick(obj)) ? 0 :
 		is_lightsaber(obj) ? 1 : 
+		(obj->otyp == SEISMIC_HAMMER) ? 3 : 
 		2);
 
 	if (u.uswallow && attack(u.ustuck)) {

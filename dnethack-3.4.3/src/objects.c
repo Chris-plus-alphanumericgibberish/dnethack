@@ -757,13 +757,14 @@ RING("protection from shape changers", PROT_FROM_SHAPE_CHANGERS, "black signet",
 AMULET("amulet of drain resistance","warped",   DRAIN_RES,   60),
 AMULET("amulet of ESP",           "circular",   TELEPAT,    130),
 AMULET("amulet of life saving",   "spherical",  LIFESAVED,   70),
-AMULET("amulet of strangulation", "oval",       STRANGLED,  120),
-AMULET("amulet of restful sleep", "triangular", SLEEPING,   120),
+AMULET("amulet of strangulation", "oval",       STRANGLED,  100),
+AMULET("amulet of restful sleep", "triangular", SLEEPING,   100),
 AMULET("amulet versus poison",    "pyramidal",  POISON_RES, 140),
-AMULET("amulet of change",        "square",     0,          125),
+AMULET("amulet of change",        "square",     0,          120),
 AMULET("amulet versus curses",    "convex",     0,           60),/*Needs tile*/
 						/* POLYMORPH */
 AMULET("amulet of unchanging",    "concave",    UNCHANGING,	 45),
+AMULET("amulet of nullify magic", "pentagonal",  NULLMAGIC,  45),/*Needs tile*/
 AMULET("amulet of reflection",    "hexagonal",  REFLECTING,  70),
 AMULET("amulet of magical breathing", "octagonal",      MAGICAL_BREATHING, 60),
 OBJECT(OBJ("cheap plastic imitation of the Amulet of Yendor",
@@ -901,7 +902,9 @@ TOOL("drum of earthquake", "drum",
 				0, 0, 1, 1,   2, 25,  25, LEATHER, HI_LEATHER),
 /* tools useful as weapons */
 WEPTOOL("pick-axe", (char *)0,
-	1, 0, 0, 0, 20, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
+	1, 0, 0, 0, 20, 80,   50,  6,  3, 0, PIERCE,  P_PICK_AXE, IRON, HI_METAL),
+WEPTOOL("seismic hammer", "dull metalic hammer",
+	0, 1, 1, 1,  0,150,  250, 12, 10,-5, WHACK,  P_HAMMER,  METAL, HI_METAL),
 /* 
  * Lightsabers get 3x dice when lit 
  */

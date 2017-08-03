@@ -357,6 +357,9 @@ int spec;
 		case FORCE_PIKE:
 			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, ldie)+ldie;
 		break;
+		case SEISMIC_HAMMER:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp = rnd(3*(ldie+otmp->spe));
+		break;
 		case LASER_BEAM:
 			tmp += d(2, ldie)+10;
 		break;
@@ -624,6 +627,9 @@ int spec;
 		break;
 		case FORCE_PIKE:
 			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, sdie)+sdie;
+		break;
+		case SEISMIC_HAMMER:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp = rnd(3*(sdie+otmp->spe));
 		break;
 		case LASER_BEAM:
 			tmp += d(2, sdie)+10;

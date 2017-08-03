@@ -817,7 +817,7 @@ dodown()
 			|| !Can_fall_thru(&u.uz) || !trap->tseen) {
 
 			if (flags.autodig && !flags.nopick &&
-				uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) {
+				uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) {
 				return use_pick_axe2(uwep);
 			} else if(uarmg && is_pick(uarmg)){
 				return use_pick_axe2(uarmg);
