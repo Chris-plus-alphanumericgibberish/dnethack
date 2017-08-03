@@ -1597,6 +1597,8 @@ register struct obj *obj;
 	
 	if(obj->obj_material != objects[obj->otyp].oc_material){
 	static const double matDensityLookup[] = {
+//	FENCEPOST
+		0.5,
 //  LIQUID
 		1.0,
 //  WAX
