@@ -4996,6 +4996,9 @@ register int	mmflags;
 		undeadfaction = ZOMBIFIED;
 		unsethouse = TRUE;
 		m_initlgrp(mtmp, mtmp->mx, mtmp->my);
+	} else if(!undeadfaction && (mtmp->data->geno&G_HELL) == 0 && Is_mephisto_level(&u.uz)){
+		undeadfaction = CRYSTALFIED;
+		unsethouse = TRUE;
 	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp)){
 		if(In_mines(&u.uz)){
 			if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && rn2(10) <= 5){

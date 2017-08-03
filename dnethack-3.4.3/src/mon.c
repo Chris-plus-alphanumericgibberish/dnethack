@@ -243,7 +243,12 @@ register struct monst *mtmp;
 		(void) mksobj_at(MIRROR, x, y, TRUE, FALSE);
 	}
 	
-	switch(mndx) {
+	if(mtmp->mfaction == CRYSTALFIED){
+		obj = mkcorpstat(STATUE, (struct monst *)0,
+			mdat, x, y, FALSE);
+		obj->obj_material = GLASS;
+		fix_object(obj);
+	} else switch(mndx) {
 	    case PM_LICH__THE_FIEND_OF_EARTH:
 			// if(mvitals[PM_GARLAND].died){
 				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
@@ -3561,6 +3566,12 @@ boolean was_swallowed;			/* digestion */
 	 */
 	if (LEVEL_SPECIFIC_NOCORPSE(mdat))
 		return FALSE;
+
+	if (mon->mfaction == SKELIFIED)
+		return FALSE;
+
+	if (mon->mfaction == CRYSTALFIED)
+		return TRUE;
 
 	if (is_golem(mdat)
 		   || is_mplayer(mdat)
