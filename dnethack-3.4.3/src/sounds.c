@@ -933,7 +933,7 @@ asGuardian:
 				mtmp->mstun = 0; mtmp->mconf = 0;
 				mtmp->mpeaceful = 0; mtmp->mtame = 0;
 				
-				u.ustdy = 54;
+				u.ustdy = mtmp->m_lev;
 				pline_msg = "ends its prayer.";
 			} else {
 				pline_msg = "prays, and the whispers fill the world.";
