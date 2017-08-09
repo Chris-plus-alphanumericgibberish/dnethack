@@ -538,8 +538,9 @@ meleeattack:
 
 #ifdef TAME_RANGED_ATTACKS
 	    case AT_BREA:
-			if(is_true_dragon(magr->data) ||
-				(is_half_dragon(magr->data) && magr->m_lev >= 14)
+			if(is_true_dragon(magr->data)
+				|| (is_half_dragon(magr->data) && magr->m_lev >= 14)
+				|| (magr->data == &mons[PM_CERBERUS])
 			) flags.drgn_brth = 1;
 			if(magr->data == &mons[PM_MAMMON]) flags.mamn_brth = 1;
 	        breamm(magr, mdef, mattk);

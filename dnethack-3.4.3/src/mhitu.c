@@ -926,8 +926,9 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_BREA:
 //			if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;
-			if(is_true_dragon(mdat) ||
-				(is_half_dragon(mdat) && mtmp->m_lev >= 14)
+			if(is_true_dragon(mdat)
+				|| (is_half_dragon(mdat) && mtmp->m_lev >= 14)
+				|| (mdat == &mons[PM_CERBERUS])
 			) flags.drgn_brth = 1;
 			if(mdat == &mons[PM_MAMMON]) flags.mamn_brth = 1;
 			if(range2) sum[i] = breamu(mtmp, mattk);
