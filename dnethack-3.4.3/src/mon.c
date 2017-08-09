@@ -3586,7 +3586,7 @@ boolean was_swallowed;			/* digestion */
 		   )
 		return TRUE;
 	
-	if(In_hell(&u.uz) || u.uevent.udemigod || In_endgame(&u.uz))
+	if(In_hell(&u.uz) || In_endgame(&u.uz)) //u.uevent.udemigod || 
 		return FALSE;
 	
 	if(bigmonst(mdat) || mdat == &mons[PM_LIZARD]) return TRUE;
