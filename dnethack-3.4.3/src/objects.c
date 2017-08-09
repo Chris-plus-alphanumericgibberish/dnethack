@@ -1189,6 +1189,10 @@ WAND((char *)0,        "jeweled",   0, 150, 1, 0,         IRON,     HI_MINERAL),
 	    OBJ(name,desc), \
 	    BITS(kn,1,0,0,mgc,0,0,0,0,HARDGEM(mohs),WHACK,-P_SLING,glass), 0, \
 	    GEM_CLASS, prob, 0, wt, gval, sdam, ldam, hitbon, WP_GENERIC, nutr, color )
+#define FLINT(name,desc,kn,prob,wt,gval,sdam,ldam,hitbon,mgc,nutr,mohs,glass,color) OBJECT( \
+	    OBJ(name,desc), \
+	    BITS(kn,1,0,0,mgc,0,0,0,0,HARDGEM(mohs),SLASH,-P_SLING,glass), 0, \
+	    GEM_CLASS, prob, 0, wt, gval, sdam, ldam, hitbon, WP_GENERIC, nutr, color )
 GEM("magicite crystal","brilliant blue",1, 1, 9999, 15, 11, GEMSTONE, CLR_BRIGHT_BLUE),/*Needs tile*/
 GEM("dilithium crystal", "white",      2,  1, 4500, 15,  5, GEMSTONE, CLR_WHITE),
 GEM("diamond", "white",                3,  1, 4000, 15, 10, GEMSTONE, CLR_WHITE),
@@ -1232,16 +1236,17 @@ GEM("worthless piece of violet glass", "violet", 77, 1, 0, 6, 5, GLASS, CLR_MAGE
  * "gray stones" in the o_ranges[] array in objnam.c
  * that is currently everything between luckstones and flint (inclusive).
  */
-ROCK("luckstone", "gray",	0, 10,  10, 60, 3, 3, 20, 1, 10, 7, MINERAL, CLR_GRAY),
+ROCK("luckstone", "gray",	0, 10,   1, 60, 6, 6, 20, 1, 10, 7, MINERAL, CLR_GRAY),
 ROCK("loadstone", "gray",	0, 10, 500,  1,30,30, -5, 1, 10, 6, MINERAL, CLR_GRAY),
-ROCK("touchstone", "gray",	0,  8,  10, 45, 3, 3,  0, 1, 10, 6, MINERAL, CLR_GRAY),
-ROCK("flint", "gray",		0, 10,  10,  1, 6, 6,  2, 0, 10, 7, MINERAL, CLR_GRAY),
+ROCK("touchstone", "gray",	0,  8,   1, 45, 6, 6,  0, 1, 10, 6, MINERAL, CLR_GRAY),
+FLINT("flint", "gray",		0, 10,   1,  1, 6, 6,  2, 0, 10, 7, MINERAL, CLR_GRAY),
 ROCK("chunk of unrefined mithril", "silvery metal", 
 							0,  0,   1, 10000,3,3, 3, 0, 0, 10, MITHRIL, HI_SILVER),/*Needs tile*/
 ROCK("chunk of fossile dark", "black",
-							0,  0, 25, 	500, 8, 8, 4, 1, 0, 1, MINERAL, CLR_BLACK),/*Needs tile*/
-ROCK("silver slingstone", "silver", 0, 0, 1, 10, 6, 6, 2, 0, 0, 5, SILVER, HI_SILVER),/*Needs tile*/
-ROCK("rock", (char *)0,		1,100,  10,  0, 3, 3, 0, 0, 10, 7, MINERAL, CLR_GRAY),
+							0,  0,  25, 	500, 8, 8, 4, 1, 0, 1, MINERAL, CLR_BLACK),/*Needs tile*/
+ROCK("silver slingstone", "silver", 
+							0,  0,   1, 10, 6, 6, 2, 0,  0, 5, SILVER, HI_SILVER),/*Needs tile*/
+ROCK("rock", (char *)0,		1,100,   1,  0, 6, 6, 0, 0, 10, 7, MINERAL, CLR_GRAY),
 #undef GEM
 #undef ROCK
 
