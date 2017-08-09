@@ -43,6 +43,7 @@ STATIC_DCL void NDECL(cast_protection);
 STATIC_DCL boolean FDECL(sightwedge, (int,int, int,int, int,int));
 STATIC_DCL void FDECL(spell_backfire, (int));
 STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
+STATIC_DCL int FDECL(spellhunger, (int));
 STATIC_DCL int FDECL(isqrt, (int));
 STATIC_DCL void FDECL(run_maintained_spell, (int));
 
@@ -738,15 +739,15 @@ run_maintained_spells()
 		/* Decrease power depending on spell level and proficiency.
 		   If an attempted cast fails 5 times in a row, unmaintain the spell. */
 		int chance = percent_success(spell_index);
-		int moves_modulo = 5;
-		while (moves_modulo) {
+		int tries = 5;
+		while (tries) {
 			if (rnd(100) > chance) {
-				moves_modulo--;
+				tries--;
 				continue;
 			}
 			break;
 		}
-		if (!moves_modulo) {
+		if (!tries) {
 			pline("You lose concentration and fail to maintain %s!",
 				  spellname(spell_index));
 			spell_unmaintain(spell);
@@ -756,16 +757,35 @@ run_maintained_spells()
 		int spell_level = objects[spell].oc_level;
 		if (u.uhave.amulet)
 			spell_level *= 2;
-		if (!(moves % moves_modulo)) {
+		spell_level += (spell_level*(5-tries))/2;
+		if (!(moves % 5)) {
 			if (u.uen < spell_level) {
-				pline("You lack the energy to maintain %s.",
+				You("lack the energy to maintain %s.",
 					  spellname(spell_index));
 				spell_unmaintain(spell);
 				continue;
 			}
+			if (spell != SPE_DETECT_FOOD && !(Race_if(PM_INCANTIFIER)) ) {
+				int basehungr = spellhunger(spell_level*5);
+				int hungr = basehungr/5;
+				hungr += ((((moves)/5)*(basehungr%5))/5 > (((moves-5)/5)*(basehungr%5))/5) ? 1 : 0;
+				/* don't put player (quite) into fainting from
+				 * casting a spell, particularly since they might
+				 * not even be hungry at the beginning; however,
+				 * this is low enough that they must eat before
+				 * casting anything else except detect food
+				 */
+				
+				if (hungr > YouHunger-3){
+					You("are too hungry to maintain %s.",
+						  spellname(spell_index));
+					spell_unmaintain(spell);
+					continue;
+				}
+				morehungry(hungr);
+			}
 			u.uen -= spell_level;
 		}
-
 		run_maintained_spell(spell);
 	}
 }
@@ -1243,6 +1263,44 @@ int skill;
 	}
 }
 
+STATIC_OVL int
+spellhunger(energy)
+int energy;
+{
+	int hungr = energy * 2;
+	int intell;
+
+	/* If hero is a wizard, their current intelligence
+	 * (bonuses + temporary + current)
+	 * affects hunger reduction in casting a spell.
+	 * 1. int = 17-18 no reduction
+	 * 2. int = 16    1/4 hungr
+	 * 3. int = 15    1/2 hungr
+	 * 4. int = 1-14  normal reduction
+	 * The reason for this is:
+	 * a) Intelligence affects the amount of exertion
+	 * in thinking.
+	 * b) Wizards have spent their life at magic and
+	 * understand quite well how to cast spells.
+	 */
+	intell = acurr(A_INT);
+	if (!Role_if(PM_WIZARD) && !(u.sealsActive&SEAL_PAIMON) ){
+		if(u.sealsActive&SEAL_PAIMON) intell -= 6;
+		else intell -= 10;
+	}
+	if(intell < 15);
+	else if(intell < 16) hungr /= 2;
+	else if(intell < 20) hungr /= 4;
+	else hungr = 0;
+	// switch (intell) {
+		// case 25: case 24: case 23: case 22:
+		// case 21: case 20: case 19: case 18:
+		// case 17: hungr = 0; break;
+		// case 16: hungr /= 4; break;
+		// case 15: hungr /= 2; break;
+	// }
+	return hungr;
+}
 int
 spell_skilltype(booktype)
 int booktype;
@@ -3647,37 +3705,7 @@ boolean atme;
 			return(0);
 		} else {
 			if (spellid(spell) != SPE_DETECT_FOOD && !(Race_if(PM_INCANTIFIER)) ) {
-				int hungr = energy * 2;
-
-				/* If hero is a wizard, their current intelligence
-				 * (bonuses + temporary + current)
-				 * affects hunger reduction in casting a spell.
-				 * 1. int = 17-18 no reduction
-				 * 2. int = 16    1/4 hungr
-				 * 3. int = 15    1/2 hungr
-				 * 4. int = 1-14  normal reduction
-				 * The reason for this is:
-				 * a) Intelligence affects the amount of exertion
-				 * in thinking.
-				 * b) Wizards have spent their life at magic and
-				 * understand quite well how to cast spells.
-				 */
-				intell = acurr(A_INT);
-				if (!Role_if(PM_WIZARD) && !(u.sealsActive&SEAL_PAIMON) ){
-					if(u.sealsActive&SEAL_PAIMON) intell -= 6;
-					else intell -= 10;
-				}
-				if(intell < 15);
-				else if(intell < 16) hungr /= 2;
-				else if(intell < 20) hungr /= 4;
-				else hungr = 0;
-				// switch (intell) {
-					// case 25: case 24: case 23: case 22:
-					// case 21: case 20: case 19: case 18:
-					// case 17: hungr = 0; break;
-					// case 16: hungr /= 4; break;
-					// case 15: hungr /= 2; break;
-				// }
+				int hungr = spellhunger(energy);
 				/* don't put player (quite) into fainting from
 				 * casting a spell, particularly since they might
 				 * not even be hungry at the beginning; however,
