@@ -505,6 +505,16 @@ unsigned int type;
        case PM_BARROW_WIGHT:
            return (!rn2(3) ? DARKNESS : (rn2(2) ? MAKE_WEB : SLEEP));
 
+       case PM_BAELNORN:
+			switch(rnd(6)){
+				case 1: return ACID_RAIN;
+				case 2: return CURSE_ITEMS;
+				case 3: return MASS_CURE_CLOSE;
+				case 4: return SLEEP;
+				case 5: return DARKNESS;
+				case 6: return CONFUSE_YOU;
+			}
+	   break;
        case PM_PRIEST_OF_GHAUNADAUR:
            if (rn2(2)) return FIRE_PILLAR;
 		   else if(rn2(2)) return MON_FIRAGA;
