@@ -1206,7 +1206,9 @@ struct monst *mtmp;
     boolean conflicted = Conflict && couldsee(mtmp->mx,mtmp->my) && 
 						(distu(mtmp->mx,mtmp->my) <= BOLT_LIM*BOLT_LIM) &&
 						!resist(mtmp, RING_CLASS, 0, 0);
-
+	
+	struct obj *mrwep = select_rwep(mtmp);
+	
 	if(is_derived_undead_mon(mtmp)) return 0;
 	
     if (is_covetous(mtmp->data) && !mtmp->mtame)
@@ -1240,6 +1242,10 @@ struct monst *mtmp;
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MMGC, AD_SPEL) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MMGC, AD_CLRC) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
+			|| (attacktype_fordmg(mtmp->data, AT_WEAP, AD_PHYS) && mrwep && (
+				(!is_pole(mrwep) && mlined_up(mtmp, mtmp2, FALSE)) ||
+				( is_pole(mrwep) && mlined_up(mtmp, mtmp2, FALSE) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 2 && (mtmp2->mx == mtmp->mx || mtmp2->my == mtmp->my))
+			   ))
 		)
 	){
 	    if(!(mtmp->data == &mons[PM_OONA] && resists_oona(mtmp2))) return mtmp2;
@@ -1277,6 +1283,10 @@ struct monst *mtmp;
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MMGC, AD_SPEL) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MMGC, AD_CLRC) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
+			|| (attacktype_fordmg(mtmp->data, AT_WEAP, AD_PHYS) && mrwep && (
+				(!is_pole(mrwep) && lined_up(mtmp)) ||
+				( is_pole(mrwep) && lined_up(mtmp) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2 && (mtmp->mux == mtmp->mx || mtmp->muy == mtmp->my))
+			   ))
 		)) {
         	if(!(mtmp->data == &mons[PM_OONA] && Oona_resistance)) return &youmonst;  /* kludge - attack the player first
 				      if possible */
@@ -1325,6 +1335,10 @@ struct monst *mtmp;
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MMGC, AD_SPEL) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MMGC, AD_CLRC) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
+			|| (attacktype_fordmg(mtmp->data, AT_WEAP, AD_PHYS) && mrwep && (
+				(!is_pole(mrwep) && lined_up(mtmp)) ||
+				( is_pole(mrwep) && lined_up(mtmp) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2 && (mtmp->mux == mtmp->mx || mtmp->muy == mtmp->my))
+			   ))
 		)) {
         	if(!(mtmp->data == &mons[PM_OONA] && Oona_resistance)) return &youmonst;  /* kludge - attack the player first
 				      if possible */
