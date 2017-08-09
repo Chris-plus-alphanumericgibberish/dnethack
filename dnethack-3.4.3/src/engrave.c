@@ -5127,6 +5127,8 @@ static const char *epitaphs[] = {
 		"I don't need to unburden myself, they're only soldiers, I've been killing soldiers, it'll be fine.",
 	
 	"Maybe if I press this key a bit harder I'll hit for more damage next time.", /*Grasshopper*/
+	
+	"...nor the battle to the strong", /*Bible*/
 
 	
        	"Alas fair Death, 'twas missed in life - some peace and quiet from my wife",
