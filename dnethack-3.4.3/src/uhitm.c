@@ -595,7 +595,9 @@ register struct monst *mtmp;
 					{AT_SHDW,AD_SHDW,4,8},
 					{0,0,0,0}
 				};
+				u.twoweap = 0; //Otherwise hits 3x, weapon-fist-shadow
 				hmonwith(mtmp, tmp, weptmp, tchtmp, webattack, 2);
+				u.twoweap = 1;
 			}
 		} else {
 			static struct attack webattack[] = 
