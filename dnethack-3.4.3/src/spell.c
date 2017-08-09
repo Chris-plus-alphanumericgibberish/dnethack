@@ -1308,7 +1308,6 @@ cast_protection()
 			P_SKILL(spell_skilltype(SPE_PROTECTION)) == P_EXPERT ? 30:
 			P_SKILL(spell_skilltype(SPE_PROTECTION)) == P_SKILLED ? 20: 
 			P_SKILL(spell_skilltype(SPE_PROTECTION)) == P_BASIC ? 15: 10;
-	    if (!u.usptime)
 		u.usptime = u.uspmtime;
 	    find_ac();
 	} else {
