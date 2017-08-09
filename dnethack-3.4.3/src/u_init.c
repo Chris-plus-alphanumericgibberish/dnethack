@@ -108,6 +108,7 @@ static struct trobj Anachrononaut_ShDro[] = {
 	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
 	{ SPE_FORCE_BOLT, 0, SPBOOK_CLASS, 1, 0 },
 	{ SPE_SLOW_MONSTER, 0, SPBOOK_CLASS, 1, 0 },
+	{ SPE_PROTECTION, 0, SPBOOK_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Anachrononaut_Dro[] = {
