@@ -530,16 +530,20 @@ register struct monst *mtmp;
 	if(unweapon) {
 	    unweapon = FALSE;
 	    if(flags.verbose) {
-		if(uwep){
-			if(uwep->oartifact == ART_LIECLEAVER) 
-				You("begin slashing monsters with your %s.", aobjnam(uwep, (char *)0));
-		    else You("begin bashing monsters with your %s.",
-				aobjnam(uwep, (char *)0));
-		} else if (!cantwield(youracedata))
-		    You("begin %sing monsters with your %s %s.",
-			Role_if(PM_MONK) ? "strik" : "bash",
-			uarmg ? "gloved" : "bare",	/* Del Lamb */
-			makeplural(body_part(HAND)));
+			if(uwep){
+				if(uwep->oartifact == ART_LIECLEAVER) 
+					You("begin slashing monsters with your %s.", aobjnam(uwep, (char *)0));
+				else You("begin bashing monsters with your %s.",
+					aobjnam(uwep, (char *)0));
+			} else if (!cantwield(youracedata)){
+				if(u.specialSealsActive&SEAL_BLACK_WEB)
+					You("begin slashing monsters with your shadow-blades.");
+				else
+					You("begin %sing monsters with your %s %s.",
+					Role_if(PM_MONK) ? "strik" : "bash",
+					uarmg ? "gloved" : "bare",	/* Del Lamb */
+					makeplural(body_part(HAND)));
+			}
 	    }
 	}
 	exercise(A_STR, TRUE);		/* you're exercising muscles */
