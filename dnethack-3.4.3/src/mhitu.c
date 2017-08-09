@@ -4985,7 +4985,8 @@ register struct monst *mon;
 			switch (rn2(5)) {
 			case 0: You_feel("raised to your full potential.");
 				exercise(A_CON, TRUE);
-				u.uen = (u.uenmax += rnd(5));
+				u.uenmax += rnd(10)+5;
+				u.uen = min(u.uen+400,u.uenmax);
 				break;
 			case 1: You_feel("good enough to do it again.");
 				(void) adjattrib(A_CON, 1, TRUE);
@@ -5503,7 +5504,8 @@ struct monst *mon;
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
-			u.uen = (u.uenmax += rnd(10)+5);
+			u.uenmax += rnd(10)+5;
+			u.uen = min(u.uen+400,u.uenmax);
 			exercise(A_CON, TRUE);
 			break;
 		case 1: You_feel("good enough to do it again.");
@@ -5530,7 +5532,8 @@ struct monst *mon;
 			u.uhp = u.uhpmax;
 			if (Upolyd) u.mh = u.mhmax;
 			exercise(A_STR, TRUE);
-			u.uen = (u.uenmax += rnd(5));
+			u.uenmax += rnd(10)+5;
+			u.uen = min(u.uen+400,u.uenmax);
 			flags.botl = 1;
 			break;
 		}
@@ -5743,7 +5746,8 @@ struct monst *mon;
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
-			u.uen = (u.uenmax += rnd(10)+5);
+			u.uenmax += rnd(10)+5;
+			u.uen = min(u.uenmax, u.uen+400);
 			exercise(A_CON, TRUE);
 			break;
 		case 1: You_feel("good enough to do it again.");
@@ -5770,7 +5774,8 @@ struct monst *mon;
 			u.uhp = u.uhpmax;
 			if (Upolyd) u.mh = u.mhmax;
 			exercise(A_STR, TRUE);
-			u.uen = (u.uenmax += rnd(5));
+			u.uenmax += rnd(10)+5;
+			u.uen = min(u.uen+400,u.uenmax);
 			flags.botl = 1;
 			break;
 		}
@@ -6948,7 +6953,8 @@ register struct monst *mon;
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
-			u.uen = (u.uenmax += rnd(5));
+			u.uenmax += rnd(10)+5;
+			u.uen = min(u.uen+400,u.uenmax);
 			break;
 		case 1: You_feel("good enough to do it again.");
 			(void) adjattrib(A_CON, 1, TRUE);
