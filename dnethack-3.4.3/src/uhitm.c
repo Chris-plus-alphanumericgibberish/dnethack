@@ -2934,7 +2934,7 @@ register struct attack *mattk;
             }
 		break;
 	    case AD_SHDW:
-			if(u.specialSealsActive&SEAL_BLACK_WEB) tmp = d(rnd(8),spiritDsize()+1);
+			// if(u.specialSealsActive&SEAL_BLACK_WEB) tmp = d(rnd(8),spiritDsize()+1);
 			// else tmp = d(rnd(8),rnd(5)+1);
 			tmp += dbon((struct obj *)0);
 	    case AD_DRST:
