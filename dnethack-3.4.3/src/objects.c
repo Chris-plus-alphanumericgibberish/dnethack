@@ -114,7 +114,7 @@ PROJECTILE("droven bolt", "crossbow bolt", /*Needs encyc entry*/
 WEAPON("dart", (char *)0,
 	1, 1, 0, 58,  1,  2,  3,  2, 0, P,   -P_DART, IRON, HI_METAL),
 WEAPON("shuriken", "throwing star",
-	0, 1, 0, 33,  1,  5,  8,  6, 2, P,   -P_SHURIKEN, IRON, HI_METAL),
+	0, 1, 0, 33,  1,  5,  8,  6, 2, P|S,   -P_SHURIKEN, IRON, HI_METAL),
 WEAPON("boomerang", (char *)0,
 	1, 1, 0, 13,  5, 20,  9,  9, 0, B,   -P_BOOMERANG, WOOD, HI_WOOD),
 WEAPON("chakram", "circular blade", /*Needs encyc entry*//*Needs tile*/
