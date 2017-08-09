@@ -4144,7 +4144,7 @@ struct permonst _mons2[] = {
  * Zombies
  */
     MON("zombie", S_ZOMBIE,//5/
-	LVL(4, 6, 8, 0, -3), (G_GENO|G_SGROUP|G_NOCORPSE|1),
+	LVL(4, 6, 8, 0, -3), (G_GENO|G_SGROUP|G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_CLAW, AD_PHYS, 1, 8),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_HUMAN, 200, 0, MS_SILENT, MZ_HUMAN),
