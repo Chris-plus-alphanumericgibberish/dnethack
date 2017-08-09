@@ -1981,7 +1981,7 @@ defaultvalue:
 				} else {
 					if(obj->otyp == VIPERWHIP && obj->opoisonchrgs){
 						obj->opoisonchrgs--;
-						pline("Poison from the internal reservoir coats the fangs of your %s", xname(obj));
+						pline("Poison from the internal reservoir coats the fangs of your %s.", xname(obj));
 					} else {
 						obj->opoisoned = FALSE;
 						pline("The coating on your %s has worn off.", xname(obj));
