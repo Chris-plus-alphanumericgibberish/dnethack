@@ -2872,6 +2872,9 @@ const struct def_skill *class_skill;
 	  OLD_P_SKILL(P_DAGGER) = P_BASIC;
 	}
 #endif
+	if (u.specialSealsActive&SEAL_BLACK_WEB) {
+	  OLD_P_SKILL(P_CROSSBOW) = P_BASIC;
+	}
 
 	/* walk through array to set skill maximums */
 	for (; class_skill->skill != P_NONE; class_skill++) {
