@@ -992,6 +992,7 @@ moveloop()
 		    if(Glib) glibr();
 		    nh_timeout();
 		    run_regions();
+		    run_maintained_spells();
 			
 			move_gliders();
 

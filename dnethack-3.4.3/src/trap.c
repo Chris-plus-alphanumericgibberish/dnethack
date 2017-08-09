@@ -2476,6 +2476,11 @@ long hmask, emask;     /* might cancel timeout */
 	HLevitation &= ~hmask;
 	ELevitation &= ~emask;
 	if(Levitation) return(0); /* maybe another ring/potion/boots */
+	
+    /* Unmaintain the levitation spell if applicable */
+    if (spell_maintained(SPE_LEVITATION))
+        spell_unmaintain(SPE_LEVITATION);
+
 	if(u.uswallow) {
 	    You("float down, but you are still %s.",
 		is_animal(u.ustuck->data) ? "swallowed" : "engulfed");

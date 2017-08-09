@@ -95,6 +95,7 @@ extern int NDECL(docast); /**/
 extern int NDECL(dovspell); /**/
 extern int NDECL(dotele); /**/
 extern int NDECL(dountrap); /**/
+extern int NDECL(dounmaintain); /**/
 extern int NDECL(doversion); /**/
 extern int NDECL(doextversion); /**/
 extern int NDECL(doswapweapon); /**/
@@ -1025,6 +1026,55 @@ dofightingform()
 		return 0;
 	} else {
 		u.fightingForm = selected[0].item.a_int;
+		return 0;
+	}
+}
+
+int
+dounmaintain()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	int spell;
+	menu_item *selected;
+	anything any;
+	
+	if(!(u.spells_maintained)){
+		pline("You aren't maintaining any spells.");
+		return 0;
+	}
+	
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+	
+	Sprintf(buf,	"Spells Maintained");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	for (spell = SPE_DIG; spell != SPE_BLANK_PAPER; spell++) {
+		if (!spell_maintained(spell))
+			continue;
+		
+		Sprintf(buf,	OBJ_NAME(objects[spell]));
+		any.a_int = spell;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	end_menu(tmpwin,	"Choose spell to stop maintaining:");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	
+	if(n <= 0){
+		return 0;
+	} else {
+		pline("You cease to maintain %s.",
+			  OBJ_NAME(objects[selected[0].item.a_int]));
+		spell_unmaintain(selected[0].item.a_int);
 		return 0;
 	}
 }
@@ -3829,6 +3879,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"turn", "turn undead", doturn, TRUE},
 	{"twoweapon", "toggle two-weapon combat", dotwoweapon, FALSE},
 	{"untrap", "untrap something", dountrap, FALSE},
+	{"unmaintain", "stop maintaining a spell", dounmaintain, TRUE},
 	{"version", "list compile time options for this version of NetHack",
 		doextversion, TRUE},
 	{"wait", "order pets to wait", dowait, FALSE},

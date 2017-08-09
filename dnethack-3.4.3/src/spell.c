@@ -44,6 +44,7 @@ STATIC_DCL boolean FDECL(sightwedge, (int,int, int,int, int,int));
 STATIC_DCL void FDECL(spell_backfire, (int));
 STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
 STATIC_DCL int FDECL(isqrt, (int));
+STATIC_DCL void FDECL(run_maintained_spell, (int));
 
 long FDECL(doreadstudy, (const char *));
 
@@ -681,6 +682,143 @@ struct obj *spellbook;
 	book = spellbook;
 	set_occupation(learn, "studying", 0);
 	return(1);
+}
+
+boolean
+spell_maintained(spell)
+int spell;
+{
+    spell = (spell - SPE_DIG);
+    return !!(u.spells_maintained & ((unsigned long long int)1 << spell));
+}
+
+void
+spell_maintain(spell)
+int spell;
+{
+    spell = (spell - SPE_DIG);
+    u.spells_maintained |= ((unsigned long long int)1 << spell);
+}
+
+void
+spell_unmaintain(spell)
+int spell;
+{
+    spell = (spell - SPE_DIG);
+    u.spells_maintained &= ~((unsigned long long int)1 << spell);
+}
+
+void
+run_maintained_spells()
+{
+    int spell;
+	int spell_index;
+	/* Check forgotten spells */
+	for (spell = SPE_DIG; spell != SPE_BLANK_PAPER; spell++) {
+		if (!spell_maintained(spell))
+			continue;
+	
+		for (spell_index = 0; spell_index < MAXSPELL; spell_index++)
+			if (spellid(spell_index) == spell)
+				break;
+
+		boolean knows_spell = FALSE; /* might not be true if amnesia removed it */
+		if (spell_index < MAXSPELL)
+			knows_spell = TRUE;
+
+		/* We can't use spellname() but need to use OBJ_NAME directly, because
+		   amnesia can delete any trace of spell index... */
+		if (!knows_spell || spellknow(spell_index) <= 0 || Confusion) {
+			pline("You can no longer maintain %s.",
+				  OBJ_NAME(objects[spell]));
+			spell_unmaintain(spell);
+			continue;
+		}
+
+		/* Decrease power depending on spell level and proficiency.
+		   If an attempted cast fails 5 times in a row, unmaintain the spell. */
+		int chance = percent_success(spell_index);
+		int moves_modulo = 5;
+		while (moves_modulo) {
+			if (rnd(100) > chance) {
+				moves_modulo--;
+				continue;
+			}
+			break;
+		}
+		if (!moves_modulo) {
+			pline("You lose concentration and fail to maintain %s!",
+				  spellname(spell_index));
+			spell_unmaintain(spell);
+			continue;
+		}
+
+		int spell_level = objects[spell].oc_level;
+		if (u.uhave.amulet)
+			spell_level *= 2;
+		if (!(moves % moves_modulo)) {
+			if (u.uen < spell_level) {
+				pline("You lack the energy to maintain %s.",
+					  spellname(spell_index));
+				spell_unmaintain(spell);
+				continue;
+			}
+			u.uen -= spell_level;
+		}
+
+		run_maintained_spell(spell);
+	}
+}
+
+STATIC_OVL void
+run_maintained_spell(spell)
+int spell;
+{
+    // /* Find the skill for the given spell type category */
+    // int skill = P_SKILL(spell_skilltype(spell));
+
+    int leviprop = LEVITATION;
+    // if (skill == P_EXPERT)
+        // leviprop = FLYING;
+
+    switch (spell) {
+    case SPE_HASTE_SELF:
+        if ((HFast&TIMEOUT) < 50)
+			incr_itimeout(&HFast, 50);
+		incr_itimeout(&HFast, 1);
+       break;
+    case SPE_DETECT_MONSTERS:
+        if ((HDetect_monsters&TIMEOUT) < 50)
+			incr_itimeout(&HDetect_monsters, 50);
+		incr_itimeout(&HDetect_monsters, 1);
+        break;
+    case SPE_LEVITATION:
+        if ((HLevitation&TIMEOUT) < 50)
+			incr_itimeout(&HLevitation, 50);
+		incr_itimeout(&HLevitation, 1);
+        break;
+    case SPE_INVISIBILITY:
+        if ((HInvis&TIMEOUT) < 50)
+			incr_itimeout(&HInvis, 50);
+		incr_itimeout(&HInvis, 1);
+        break;
+    case SPE_DETECT_UNSEEN:
+        if ((HSee_invisible&TIMEOUT) < 50)
+			incr_itimeout(&HSee_invisible, 50);
+		incr_itimeout(&HSee_invisible, 1);
+        break;
+    // case SPE_PHASE:
+        // if (property_timeout(mon, PASSES_WALLS) < 5)
+            // inc_timeout(mon, PASSES_WALLS, 20, TRUE);
+        // break;
+    case SPE_PROTECTION:
+		u.usptime++;
+        break;
+    default:
+        impossible("player maintaining an unmaintainable spell? (%d)", spell);
+        spell_unmaintain(spell);
+        break;
+    }
 }
 
 /* a spellbook has been destroyed or the character has changed levels;
@@ -3455,7 +3593,14 @@ boolean atme;
 	struct obj *pseudo;
 	coord cc;
 	
+
 	if(!spelltyp){
+		if (spell_maintained(spellid(spell))) {
+			spell_unmaintain(spellid(spell));
+			pline("Spell no longer maintained.");
+
+			return 0;
+		}
 		/*
 		 * Spell casting no longer affects knowledge of the spell. A
 		 * decrement of spell knowledge is done every turn.
@@ -3744,7 +3889,28 @@ boolean atme;
 		obfree(pseudo, (struct obj *)0);
 		return(0);
 	}
+	
+	switch(pseudo->otyp){
+    /* These spells can be toggled for whether or not to maintain it */
+    case SPE_HASTE_SELF:
+    case SPE_DETECT_MONSTERS:
+    case SPE_LEVITATION:
+    case SPE_INVISIBILITY:
+    case SPE_DETECT_UNSEEN:
+    // case SPE_PHASE:
+    case SPE_PROTECTION:
+        /* Detect monsters isn't useful to maintain on a lower level */
+        if (pseudo->otyp == SPE_DETECT_MONSTERS && role_skill < P_SKILLED)
+            break;
+        if (yn("Maintain the spell?") == 'y')
+			spell_maintain(pseudo->otyp);
+		else
+			spell_unmaintain(pseudo->otyp);
 
+	default:
+	break;
+	}
+	
 	/* gain skill for successful cast */
 	use_skill(skill, spellev(spell));
 	u.lastcast = monstermoves + spellev(spell);

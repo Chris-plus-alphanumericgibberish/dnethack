@@ -2217,6 +2217,10 @@ E boolean FDECL(load_special, (const char *));
 E int NDECL(learn);
 #endif
 E int FDECL(study_book, (struct obj *));
+E boolean FDECL(spell_maintained, (int));
+E void FDECL(spell_maintain, (int));
+E void FDECL(spell_unmaintain, (int));
+E void NDECL(run_maintained_spells);
 E void FDECL(book_disappears, (struct obj *));
 E void FDECL(book_substitution, (struct obj *,struct obj *));
 E void NDECL(age_spells);
