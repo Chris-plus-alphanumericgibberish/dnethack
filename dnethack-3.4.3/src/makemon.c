@@ -4984,12 +4984,10 @@ register int	mmflags;
 		if(zombiepm >=0 && &mons[zombiepm] == mtmp->data){
 			undeadfaction = ZOMBIFIED;
 			unsethouse = TRUE;
-			m_initlgrp(mtmp, mtmp->mx, mtmp->my);
 			zombiepm = -1;
 		} else {
 			undeadfaction = SKELIFIED;
 			unsethouse = TRUE;
-			m_initlgrp(mtmp, mtmp->mx, mtmp->my);
 			skeletpm = -1;
 		}
 	} else if(In_quest(&u.uz) && urole.neminum == PM_NECROMANCER && mtmp->data == &mons[PM_ELF]){
