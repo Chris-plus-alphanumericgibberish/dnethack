@@ -2,7 +2,7 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-/* NetHack 3.4.3, dNethack version 3.10.0 */
+/* NetHack 3.4.3, dNethack version 3.15.1 */
 #define VERSION_MAJOR	3
 /* Started at 3.4.3, for the nethack version. Incremented straight 
    to 3.6 with the advent of the Noble role, counting the initial
@@ -36,8 +36,9 @@
  * 3.13.1: implement monster sensoria. Purpose for STUN artifacts. Change guidelines for nopoly rules. Implement a few more angel lords, Alrunes.  Female Drow Anachrononauts, myrkalfar. Dark lights.
  * 3.14.0: Begin edging toward WtW again.  Added Chiropteran and Yuki-ona player races.  Added two new Devas.  Revised Extrinsic resistances, DS and DSM.  Made high monster AC also give DR. Finished Gnome Ranger crowning gifts.  Buffed Riding skill.
  * 3.15.0: Begin edging away from WtW again.  Added another round of pet improvements, including #wait and #come commands.
+ * 3.15.1: Added derived undead, spell maintainance, a couple of neutral artifacts.
  */
-#define PATCHLEVEL	0
+#define PATCHLEVEL	1
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
