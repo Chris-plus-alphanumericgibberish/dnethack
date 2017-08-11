@@ -175,38 +175,38 @@ CONTAINER:'(',"chest",(18,19)
 	OBJECT:'(',"hypospray",contained, uncursed, 0
 	OBJECT:'(',"hypospray",contained, uncursed, 0
 	OBJECT:'(',"hypospray",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
-	OBJECT:'(',"hypospray ampule",contained, uncursed, 0
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
+	OBJECT:'(',"hypospray ampule",contained
 CONTAINER:'(',"chest",(19,19)
 	OBJECT:'(',"bullet fabber",contained, uncursed, 0
 	OBJECT:'(',"bullet fabber",contained, uncursed, 0
