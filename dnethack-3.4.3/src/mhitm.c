@@ -351,24 +351,27 @@ mattackm(magr, mdef)
 			|| (!derundspec && i == NATTK-1 && (magr->mfaction == CRYSTALFIED || magr->mfaction == SKELIFIED))
 		){
 			if(i == 0){
-				mattk->aatyp = AT_CLAW;
-				mattk->adtyp = AD_PHYS;
-				mattk->damn = magr->m_lev/10+1 + (magr->mfaction != ZOMBIFIED ? 1 : 0);
-				mattk->damd = max(magr->data->msize*2, 4);
+				alt_attk.aatyp = AT_CLAW;
+				alt_attk.adtyp = AD_PHYS;
+				alt_attk.damn = magr->m_lev/10+1 + (magr->mfaction != ZOMBIFIED ? 1 : 0);
+				alt_attk.damd = max(magr->data->msize*2, 4);
+				mattk = &alt_attk;
 			}
 			else if(!derundspec && magr->mfaction == SKELIFIED){
 				derundspec = TRUE;
-				mattk->aatyp = AT_TUCH;
-				mattk->adtyp = AD_SLOW;
-				mattk->damn = 1;
-				mattk->damd = max(magr->data->msize*2, 4);
+				alt_attk.aatyp = AT_TUCH;
+				alt_attk.adtyp = AD_SLOW;
+				alt_attk.damn = 1;
+				alt_attk.damd = max(magr->data->msize*2, 4);
+				mattk = &alt_attk;
 			}
 			else if(!derundspec && magr->mfaction == CRYSTALFIED){
 				derundspec = TRUE;
-				mattk->aatyp = AT_TUCH;
-				mattk->adtyp = AD_ECLD;
-				mattk->damn = min(10,magr->m_lev/3);
-				mattk->damd = 8;
+				alt_attk.aatyp = AT_TUCH;
+				alt_attk.adtyp = AD_ECLD;
+				alt_attk.damn = min(10,magr->m_lev/3);
+				alt_attk.damd = 8;
+				mattk = &alt_attk;
 			}
 			else continue;
 		}
