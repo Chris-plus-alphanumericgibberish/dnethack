@@ -293,11 +293,11 @@ int spec;
 		
 		if(spec & SPEC_MARIONETTE){
 			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(2,ldie+2,1);
-			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp = exploding_d(1,ldie,0);
-			else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp += exploding_d(1,ldie,0);
+			else if(otmp->oartifact == ART_LUCK_BLADE) tmp += youdefend ? 
 																rnl(ldie+2)+1 : 
 																ldie+2 - rnl(ldie+2);
-			else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp = youdefend ? 
+			else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp += youdefend ? 
 																unlucky_exploding_d(otmp->quan,10,0) : 
 																lucky_exploding_d(otmp->quan,10,0);
 			else if (ldie) tmp += rnd(ldie+2);
@@ -557,11 +557,11 @@ int spec;
 		
 		if(spec & SPEC_MARIONETTE){
 			if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp += exploding_d(2,sdie+2,1);
-			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp = exploding_d(1,sdie,0);
-			else if(otmp->oartifact == ART_LUCK_BLADE) tmp = youdefend ? 
+			else if(otmp->oartifact == ART_SCOURGE_OF_LOLTH) tmp += exploding_d(1,sdie,0);
+			else if(otmp->oartifact == ART_LUCK_BLADE) tmp += youdefend ? 
 																rnl(sdie+2)+1 : 
 																sdie+2 - rnl(sdie+2);
-			else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp = youdefend ? 
+			else if(otmp->oartifact == ART_FLUORITE_OCTAHEDRON) tmp += youdefend ? 
 																unlucky_exploding_d(otmp->quan,10,0) : 
 																lucky_exploding_d(otmp->quan,10,0);
 			else if (sdie) tmp += rnd(sdie+2);
