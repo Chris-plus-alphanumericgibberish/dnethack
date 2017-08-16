@@ -810,10 +810,6 @@ int spec;
 	    }
 	}
 	
-	if(otmp->oartifact == ART_PEN_OF_THE_VOID){
-		tmp += pendamage(otmp, mon);
-	}
-	
 	if (Is_weapon || (otmp && (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM))) {
 		if(is_lightsaber(otmp)){
 			if(otmp == uwep && Race_if(PM_ORC)){
@@ -871,6 +867,10 @@ int spec;
 		static int warnedotyp = 0;
 		static struct permonst *warnedptr = 0;
 		
+		if(otmp->oartifact == ART_PEN_OF_THE_VOID){
+			tmp += pendamage(otmp, mon);
+		}
+	
 	    if (otmp->blessed && (is_undead_mon(mon) || is_demon(ptr))){
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
 			else if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),4);
