@@ -36,7 +36,6 @@ static const char *random_mesg[] = {
 	"are we cool yet?", /* SCP Foundation */
 	"I seem to be having tremendous difficulty with my lifestyle", /* Hitchhiker's Guide to the Galaxy */
 	"The flow of time itself is convoluted, with heroes centuries old phasing in and out.", /* Dark Souls */
-		"The world began without knowledge, and without knowledge will it end.", /* Dark Souls */
 #ifdef MAIL
 	"You've got mail!", /* AOL */
 #endif
@@ -263,6 +262,7 @@ static const char *haluMesg[] = {
 		"I'm sorry you could never forgive me.",
 	"Reach heaven through violence.",/*Kill 6 Billion Demons*/
 		"Kindly ignore my first three answers.",
+	"ALL POWER TO THE OLD FLESH!!!!!!! A HOWLING VOID UPON DETRACTORS!!!", /*Awful Hospital*/
 	"You are lost. You can never go home.", /* Gollum's Song */
 	"But now, we dance this grim fandango, and will for years until we rest.", /* Grim Fandango */
 	"Bad Wolf", /* Dr. Who */
@@ -5084,6 +5084,7 @@ static const char *epitaphs[] = {
 	"In death ground, fight.", /* Sun Tzu */
 	
 	"Did you see him passing by?", /* Dark Souls 3 */
+		"The world began without knowledge, and without knowledge will it end.", /* Dark Souls */
 		"Fear not the dark, my friend. And let the feast begin.",
 	
 	"For every hero commemorated, a thousand martyrs die unmourned and unremembered." /*Warhammer 40k*/
