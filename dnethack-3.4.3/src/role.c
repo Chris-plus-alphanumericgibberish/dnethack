@@ -771,7 +771,7 @@ const struct Race races[] = {
 	MA_ELF, 0, MA_ELF|MA_ORC,
 	/*  Str    Int Wis Dex Con Cha */
 	{    3,     3,  3,  3,  3,  3 },
-	{   18,    20, 20, 18, 16, 18 },
+	{   18,    20, 18, 20, 16, 20 },
 	/* Init   Lower  Higher */
 	{  2, 0,  3, 0,  1, 0 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
@@ -784,7 +784,7 @@ const struct Race races[] = {
 	MA_ELF, MA_ELF, MA_ORC,
 	/*  Str    Int Wis Dex Con Cha */
 	{    3,     3,  3,  3,  3,  3 },
-	{   18,    20, 20, 18, 16, 18 },
+	{   18,    20, 20, 20, 16, 18 },
 	/* Init   Lower  Higher */
 	{  2, 0,  3, 0,  1, 0 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
