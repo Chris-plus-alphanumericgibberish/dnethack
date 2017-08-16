@@ -924,7 +924,7 @@ int spec;
 	    if (bonus > 1 && otmp->oartifact && spec_dbon(otmp, mon, 100) >= 100)
 		bonus = (bonus + 1) / 2;
 		
-		if((resists_all(ptr) || resist_attacks(ptr)) && !narrow_spec_applies(otmp, mon)){
+		if((resists_all(ptr) && !narrow_spec_applies(otmp, mon)) || resist_attacks(ptr)){
 			tmp /= 4;
 			if(!flags.mon_moving && !youdefend && warnedptr != ptr){
 				pline("Weapons are ineffective against %s.", mon_nam(mon));
