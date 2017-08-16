@@ -834,10 +834,10 @@ int spec;
 	if (otmp->obj_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
-	if (ptr->mlet == S_SHADE && (
+	if (ptr->mlet == S_SHADE && !(
 		(is_lightsaber(otmp) && otmp->lamplit) || 
-		(hates_silver(ptr) && (otmp->obj_material != SILVER || arti_silvered(otmp))) || 
-		(hates_iron(ptr) && otmp->obj_material != IRON) || 
+		(hates_silver(ptr) && (otmp->obj_material == SILVER || arti_silvered(otmp))) || 
+		(hates_iron(ptr) && otmp->obj_material == IRON) || 
 		(hates_unholy(ptr) && otmp->cursed) || 
 		arti_shining(otmp)
 	)) tmp = 0;
