@@ -1623,8 +1623,8 @@ register int x,y;
 							sealNames[((int)ep->ward_id)-((int)FIRST_SEAL)],
 							word);
 						if(!Role_if(PM_EXILE) && ep->ward_id < QUEST_SPIRITS){
-							long wardhere = 1L << (((int)ep->ward_id)-((int)FIRST_SEAL)-1);
-							if( !(u.wardsknown & wardhere) && ep->ward_id < DONTLEARNWARD ){
+							long wardhere = 1L << (((int)ep->ward_id)-((int)FIRST_SEAL));
+							if( !(u.wardsknown & wardhere) ){
 								You("have learned a new seal!");
 								u.sealsKnown |= wardhere;
 							}
