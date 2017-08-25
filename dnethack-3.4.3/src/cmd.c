@@ -3867,6 +3867,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"name", "name an item or type of object", ddocall, TRUE},
 	{"offer", "offer a sacrifice to the gods", dosacrifice, FALSE},
 	{"overview", "show an overview of the dungeon", dooverview, TRUE},
+	{"power", "use an active spirit power", dospirit, TRUE},
 	{"pray", "pray to the gods for help", dopray, TRUE},
 	{"quit", "exit without saving current game", done2, TRUE},
 #ifdef STEED
