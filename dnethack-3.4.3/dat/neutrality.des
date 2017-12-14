@@ -222,15 +222,18 @@ NOMAP
 
 PORTAL:(00,00,35,20),(00,00,00,00),"gatetwn"
 PORTAL:(00,00,35,20),(00,00,00,00),"out2"
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
 
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
+MONSTER[10%]:'u', "gray unicorn", random
+
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
 
 MAZE: "out2",' '
 FLAGS: shortsighted,hardfloor
@@ -240,18 +243,21 @@ NOMAP
 
 PORTAL:(00,00,35,20),(00,00,00,00),"out1"
 PORTAL:(00,00,35,20),(00,00,00,00),"out3"
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
 
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
+MONSTER[10%]:'u', "gray unicorn", random
+
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
 
 MAZE: "out3",' '
 FLAGS: shortsighted,hardfloor
@@ -262,20 +268,22 @@ NOMAP
 PORTAL:(00,00,35,20),(00,00,00,00),"out2"
 PORTAL:(00,00,35,20),(00,00,00,00),"out4"
 
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
+MONSTER[10%]:'u', "gray unicorn", random
 
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
 
 MAZE: "out4",' '
 FLAGS: nommap,hardfloor, shortsighted
@@ -286,22 +294,24 @@ NOMAP
 PORTAL:(00,00,35,20),(00,00,00,00),"out3"
 PORTAL:(00,00,35,20),(00,00,00,00),"spire"
 
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
+MONSTER[10%]:'u', "gray unicorn", random
 
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
-MONSTER:'C', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
+MONSTER:'C', "plains centaur", random
 
 MAZE:"spire",' '
 FLAGS: nommap,hardfloor, shortsighted
@@ -310,13 +320,13 @@ INIT_MAP: '.' , 'T' , false, true , unlit , true
 
 NOMAP
 
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
 
 GEOMETRY:center,center
 MAP
@@ -327,48 +337,50 @@ ENDMAP
 
 PORTAL:(01,01,01,01),(00,00,00,00),"out4"
 
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
 
 GEOMETRY:right,center
-#0         1         2   	  3	      4	    5		  6	      7
+#0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
 0TTTT|-----------------------------|TTTT
-1TTT| - - - - - - - - - - - - - - - |TTT
+1TTT|-- - - - - - - - - - - - - - --|TTT
 2TT|---------------------------------|TT
 3TT|- - - - - - - - - - - - - - - - -|TT
 4T|-----------------------------------|T
-5T| - - - - - - - - - - - - - - - - - |T
+5T| - - - - - - ----------- - - - - - |T
 6T|-----------------------------------|T
-7|- - - - - - - - - - - - - - - - - - -|
+7|- - - - - - --------------- - - - - -|
 8|.------------------------------------|
-9-... - - - - - - - - - - - - - - - - .|
+9-... - - - - --------------- - - - - .|
 0.....-------------------------------..|
-1-... - - - - - - - - - - - - - - - - .|
+1-... - - - - --------------- - - - - .|
 2|.------------------------------------|
-3|- - - - - - - - - - - - - - - - - - -|
+3|- - - - - - --------------- - - - - -|
 4T|-----------------------------------|T
-5T| - - - - - - - - - - - - - - - - - |T
+5T| - - - - - - ----------- - - - - - |T
 6T|-----------------------------------|T
 7TT|- - - - - - - - - - - - - - - - -|TT
 8TT|---------------------------------|TT
-9TTT| - - - - - - - - - - - - - - - ||TT
+9TTT|-- - - - - - - - - - - - - - --||TT
 0TTTT|-----------------------------|TTTT
 ENDMAP
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
+
+NON_DIGGABLE:(00,00,38,20)
 
 STAIR:(37,10),down
 
@@ -384,22 +396,22 @@ INIT_MAP: '.' , ' ' , true, true , lit , true
 
 NOMAP
 
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
-MONSTER:'\'', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
 
 #STAIR:random,up
 #STAIR:random,down
