@@ -810,10 +810,10 @@ CONTAINER: '(', "chest"  , (18,18)
 OBJECT:'!',"full healing", contained, blessed, 0
 
 CONTAINER: '(', "chest"  , (51,03)
-OBJECT:'=',"protection", contained, blessed, +1
+OBJECT:'=',"protection", contained, blessed, +3
 
 CONTAINER: '(', "chest"  , (51,17)
-OBJECT:'[',"cloak of protection", contained, blessed, +1
+OBJECT:'[',"cloak of protection", contained, blessed, +3
 
 MONSTER:'&',"Kary, the Fiend of Fire", (58, 11)
 
