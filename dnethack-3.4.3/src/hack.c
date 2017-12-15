@@ -9,6 +9,7 @@ STATIC_DCL void NDECL(maybe_wail);
 #endif /*OVL1*/
 STATIC_DCL int NDECL(moverock);
 STATIC_DCL int FDECL(still_chewing,(XCHAR_P,XCHAR_P));
+STATIC_DCL int FDECL(invocation_distmin,(int, int));
 #ifdef SINKS
 STATIC_DCL void NDECL(dosinkfall);
 #endif
@@ -572,6 +573,16 @@ invocation_pos(x, y)
 xchar x, y;
 {
 	return((boolean)(Invocation_lev(&u.uz) && x == inv_pos.x && y == inv_pos.y));
+}
+
+STATIC_OVL int
+invocation_distmin(x, y)
+xchar x, y;
+{
+	if(Invocation_lev(&u.uz))
+		return distmin(x, y, inv_pos.x, inv_pos.y);
+	else
+		return 1000;
 }
 
 #endif /* OVL1 */
@@ -1682,9 +1693,22 @@ invocation_message()
 	    else Sprintf(buf, "under your %s", makeplural(body_part(FOOT)));
 
 	    You_feel("a strange vibration %s.", buf);
+		u.uevent.found_square = 1;
 	    if (otmp && otmp->spe == 7 && otmp->lamplit)
 		pline("%s %s!", The(xname(otmp)),
 		    Blind ? "throbs palpably" : "glows with a strange light");
+	} else if(!u.uevent.found_square && invocation_distmin(u.ux, u.uy) <= 2) {
+	    char buf[BUFSZ];
+	    nomul(0, NULL);		/* stop running or travelling */
+#ifdef STEED
+	    if (u.usteed) Sprintf(buf, "beneath %s", y_monnam(u.usteed));
+	    else
+#endif
+	    if (Levitation || Flying) Strcpy(buf, "beneath you");
+	    else Sprintf(buf, "under your %s", makeplural(body_part(FOOT)));
+
+	    if(invocation_distmin(u.ux, u.uy) == 2) You_feel("a slight vibration %s.", buf);
+	    else You_feel("a vibration %s.", buf);
 	}
 }
 

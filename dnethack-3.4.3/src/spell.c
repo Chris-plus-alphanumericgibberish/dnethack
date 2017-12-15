@@ -271,9 +271,10 @@ struct obj *book2;
 	    return;
 	}
 
-	if(!(u.uhave.bell || (uwep && uwep->oartifact == ART_SILVER_KEY) || (u.voidChime && (u.sealsActive&SEAL_OTIAX || Role_if(PM_ANACHRONONAUT)))) || !u.uhave.menorah) {
+	if(!(u.uhave.bell || (uwep && uwep->oartifact == ART_SILVER_KEY) || (u.voidChime && (u.sealsActive&SEAL_OTIAX)) || (moves - u.rangBell < 5)) || !u.uhave.menorah) {
 	    pline("A chill runs down your %s.", body_part(SPINE));
-	    if(!u.uhave.bell) You_hear("a faint chime...");
+	    if(!(u.uhave.bell || (uwep && uwep->oartifact == ART_SILVER_KEY) || (u.voidChime && (u.sealsActive&SEAL_OTIAX)) || (moves - u.rangBell < 5))) 
+				You_hear("a faint chime...");
 	    if(!u.uhave.menorah) pline("Vlad's doppelganger is amused.");
 	    return;
 	}
@@ -284,14 +285,17 @@ struct obj *book2;
 		if(!otmp->cursed) arti1_primed = TRUE;
 		else arti_cursed = TRUE;
 	    }
-	    if(!Role_if(PM_EXILE) && otmp->otyp == BELL_OF_OPENING &&
+	    if(otmp->otyp == BELL_OF_OPENING &&
 	       (moves - otmp->age) < 5L
 		) { /* you rang it recently */
 			if(!otmp->cursed) arti2_primed = TRUE;
 			else arti_cursed = TRUE;
 	    }
 	}
-	if(u.voidChime && (u.sealsActive&SEAL_OTIAX || Role_if(PM_ANACHRONONAUT))){
+	if(u.voidChime && u.sealsActive&SEAL_OTIAX){
+		arti2_primed = TRUE;
+	}
+	if(moves - u.rangBell < 5L){
 		arti2_primed = TRUE;
 	}
 	if(!arti2_primed && !arti_cursed && uwep && uwep->oartifact == ART_SILVER_KEY){

@@ -5593,7 +5593,7 @@ arti_invoke(obj)
 							mm.y = u.uy;
 							pline("Graves open around you...");
 							mkundead(&mm, FALSE, NO_MINVENT);
-							wake_nearby();
+							wake_nearby_noisy();
 
 						} else  if (invoking) {
 							pline("%s an unsettling shrill sound...",
@@ -5601,8 +5601,8 @@ arti_invoke(obj)
 #ifdef	AMIGA
 							amii_speaker( obj, "aefeaefeaefeaefeaefe", AMII_LOUDER_VOLUME );
 #endif
-							u.voidChime = 5;
-							wake_nearby();
+							u.rangBell = moves;
+							wake_nearby_noisy();
 						} else if (obj->blessed) {
 							int res = 0;
 

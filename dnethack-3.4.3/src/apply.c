@@ -1142,6 +1142,7 @@ boolean spiritseal;
 #ifdef	AMIGA
 		amii_speaker( obj, "aefeaefeaefeaefeaefe", AMII_LOUDER_VOLUME );
 #endif
+		if(spiritseal && !obj->cursed) u.rangBell = moves;
 		obj->age = moves;
 		learno = TRUE;
 		wakem = TRUE;

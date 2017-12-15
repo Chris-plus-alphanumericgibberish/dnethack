@@ -373,9 +373,14 @@ unsigned *ospecial;
 			if(artifact_door(x, y)){
 				color = CLR_MAGENTA;
 			}
+			if(u.uevent.found_square && invocation_pos(x, y) && !On_stairs(x, y)){
+				color = CLR_MAGENTA;
+				ch = '_';
+			}
 		}
 		if (color == NO_COLOR) cmap_color(offset);
-		} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
+	} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
+
 			if ((offset == BOULDER || offset == MASSIVE_STONE_CRATE) && iflags.bouldersym) ch = iflags.bouldersym;
 			else ch = oc_syms[(int)objects[offset].oc_class];
 #ifdef ROGUE_COLOR

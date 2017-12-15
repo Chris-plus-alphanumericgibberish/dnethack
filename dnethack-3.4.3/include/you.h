@@ -47,6 +47,7 @@ struct u_event {
 	Bitfield(uread_necronomicon,1);		/* have read the necronomicon */
 	Bitfield(knoweddergud,1);		/* know the identity of the black-web god */
 
+	Bitfield(found_square,1);		/* found the vibrating square */
 	Bitfield(invoked,1);		/* invoked Gate to the Sanctum level */
 	Bitfield(gehennom_entered,1);	/* entered Gehennom via Valley */
 	Bitfield(uhand_of_elbereth,6);	/* became Hand of Elbereth */
@@ -708,6 +709,7 @@ struct you {
 	long SnSd1, SnSd2, SnSd3, SnSd3duration;
 	int ZangetsuSafe;
 	int voidChime;
+	long rangBell; /*Turn last rang bell of opening on*/
 	short RoSPkills, RoSPflights;
 	long BoISspell;
 	/*Keter counters*/
