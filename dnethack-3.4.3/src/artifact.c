@@ -2415,7 +2415,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 
 	if(otmp->oartifact == ART_LIMITED_MOON && magr == &youmonst){
 		*dmgptr *= ((double)u.uen/u.uenmax);
-		// if(u.uen >= 10) u.uen -= 10;
+		if(u.uen >= ((int)(.3*u.uenmax + 3))) u.uen -= 3;
 	}
 	
 	if (otmp->oartifact == ART_ICONOCLAST && is_angel(mdef->data) ) *dmgptr += 9;
