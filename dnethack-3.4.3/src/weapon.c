@@ -199,7 +199,8 @@ struct monst *mon;
 	/* Blessed weapons used against undead or demons */
 	if (Is_weapon && otmp->blessed &&
 	   (is_demon(ptr) || is_undead_mon(mon))){
-		if(otmp->oartifact == ART_EXCALIBUR) tmp += 7; //Quite holy
+		if(otmp->oartifact == ART_EXCALIBUR)
+			tmp += 7; //Quite holy
 		else tmp += 2;
 	}
 	if (is_spear(otmp) &&
@@ -873,9 +874,18 @@ int spec;
 		if(otmp->oartifact == ART_PEN_OF_THE_VOID){
 			tmp += pendamage(otmp, mon);
 		}
-	
+		if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS 
+			&& !otmp->blessed && !otmp->cursed
+			&& (is_undead_mon(mon) || is_demon(ptr) || hates_unholy(ptr))
+		){
+			bonus += rnd(10);
+		}
 	    if (otmp->blessed && (is_undead_mon(mon) || is_demon(ptr))){
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
+			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
+				bonus += d(3,7); //Quite holy
+			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
+				bonus += rnd(20); //Divinity
 			else if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),4);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,4);
 			else bonus += rnd(4);
@@ -915,6 +925,10 @@ int spec;
 		){
 			if(otmp->oartifact == ART_STORMBRINGER) 
 				bonus += d(2,9); //Extra unholy (2d9 vs excal's 3d7)
+			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
+				bonus += d(3,9); //Quite unholy
+			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
+				bonus += rnd(20); //Tyrany
 			else if(otyp == KHAKKHARA) bonus += d(rnd(3),9);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking,9);
 			else bonus += rnd(9);
