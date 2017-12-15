@@ -3758,7 +3758,8 @@ boolean was_swallowed;			/* digestion */
 				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 					mdat1 = mtmp->data;
 					if(mdat1==&mons[PM_AXUS]){
-						makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY|MM_NOCOUNTBIRTH);
+						mtmp = makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY|MM_NOCOUNTBIRTH);
+						if(mtmp) mtmp->mclone = 1;
 						break; //break special for loop
 					}
 				}
@@ -3781,7 +3782,8 @@ boolean was_swallowed;			/* digestion */
 							for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 								mdat1 = mtmp->data;
 								if(mdat1==&mons[PM_AXUS]){
-									makemon(child[i], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY);
+									mtmp = makemon(child[i], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY);
+									if(mtmp) mtmp->mclone = 1;
 									break; //break special for loop
 								}
 							}
@@ -3794,7 +3796,8 @@ boolean was_swallowed;			/* digestion */
 						mdat1 = mtmp->data;
 						if(mdat1==&mons[PM_AXUS]){
 							chain = FALSE;
-							makemon(growto[i], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY);
+							mtmp = makemon(growto[i], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY);
+							if(mtmp) mtmp->mclone = 1;
 //							makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY);
 							break; //break special for loop
 						}
