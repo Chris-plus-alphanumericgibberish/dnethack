@@ -1232,7 +1232,7 @@ toofar:
 	}
 /*      Look for other monsters to fight (at a distance) */
 	if ((
-	      attacktype(mtmp->data, AT_GAZE) ||
+	      (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan) ||
 	      attacktype(mtmp->data, AT_ARRW) ||
 	      attacktype(mtmp->data, AT_LNCK) ||
 	      attacktype(mtmp->data, AT_LRCH) ||
@@ -1241,22 +1241,22 @@ toofar:
 			(attacktype(mtmp->data, AT_SPIT) ||
 			 attacktype(mtmp->data, AT_TNKR) ||
 			 attacktype(mtmp->data, AT_BEAM) ||
-			 attacktype(mtmp->data, AT_BREA)
+			 (attacktype(mtmp->data, AT_BREA) && !mtmp->mcan)
 			)
 		  )||
-	     (attacktype(mtmp->data, AT_MMGC) &&
+	     (attacktype(mtmp->data, AT_MMGC) && !mtmp->mcan &&
 			(((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp
 	         <= AD_SPC2))
 	      ) ||
-	     (attacktype(mtmp->data, AT_MAGC) &&
+	     (attacktype(mtmp->data, AT_MAGC) && !mtmp->mcan &&
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         <= AD_SPC2))
 	      ) ||
-	     (attacktype(mtmp->data, AT_MAGC) &&
+	     (attacktype(mtmp->data, AT_MAGC) && !mtmp->mcan &&
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         == AD_RBRE))
 	      ) ||
-	     (attacktype(mtmp->data, AT_MAGC) &&
+	     (attacktype(mtmp->data, AT_MAGC) && !mtmp->mcan &&
 	      (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp
 	         == AD_OONA))
 	      ) ||
@@ -1456,7 +1456,7 @@ register int after;
 	    else mtmp->meating--;
 	    return 3;			/* still eating */
 	}
-	if (hides_under(ptr) && OBJ_AT(mtmp->mx, mtmp->my) && rn2(10))
+	if (hides_under(ptr) && OBJ_AT(mtmp->mx, mtmp->my) && !mtmp->mtame && rn2(10))
 	    return 0;		/* do not leave hiding place */
 
 	set_apparxy(mtmp);
@@ -2171,7 +2171,7 @@ register struct monst *mtmp;
 	if(couldsee(mtmp->mx,mtmp->my) &&
 		distu(mtmp->mx,mtmp->my) <= 100 &&
 		(!Stealth || (mtmp->data == &mons[PM_ETTIN] && rn2(10))) &&
-		(Aggravate_monster || (sensitive_ears(mtmp->data) && !is_deaf(mtmp)) || (!rn2(7)))
+		(Aggravate_monster || ((sensitive_ears(mtmp->data) || !rn2(7)) && !is_deaf(mtmp)))
 	) {
 		notseen = FALSE;
 	}
