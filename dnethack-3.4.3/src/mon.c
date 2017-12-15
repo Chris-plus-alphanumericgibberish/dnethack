@@ -10,6 +10,7 @@
 #include "hack.h"
 #include "mfndpos.h"
 #include "edog.h"
+#include "artifact.h"
 #include <ctype.h>
 #include <stdlib.h>
 //include <math.h> //Incompatible with nethack!
@@ -984,8 +985,8 @@ struct monst *mon;
 	if(u.sealsActive&SEAL_CHUPOCLOPS && distmin(mon->mx, mon->my, u.ux, u.uy) <= u.ulevel/5+1){
 		mmove = max(mmove-(u.ulevel/10+1),1);
 	}
-	
-    return mmove;
+	if(In_fog_cloud(mon)) mmove = max(mmove/3, 1);
+	return mmove;
 }
 
 /* actions that happen once per ``turn'', regardless of each
@@ -2826,9 +2827,10 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(md)))
 		&& !(Role_if(PM_EXILE))
-		&& magr->mpeaceful==TRUE 
-		&& mdef->mpeaceful==FALSE
-	) return ALLOW_M|ALLOW_TM;
+	) {
+		if(magr->mpeaceful==TRUE && mdef->mpeaceful==FALSE) return ALLOW_M|ALLOW_TM;
+		if(magr->mpeaceful==TRUE && mdef->mtame==TRUE) return FALSE;
+	}
 	/* and vice versa */
 	if( (md->msound == MS_GUARDIAN 
 		  || (Role_if(PM_NOBLEMAN) && (md == &mons[PM_KNIGHT] || md == &mons[PM_MAID] || md == &mons[PM_PEASANT]) && mdef->mpeaceful && In_quest(&u.uz))
@@ -2838,10 +2840,10 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		)
 		&& !(Race_if(PM_DROW) && !(flags.stag || Role_if(PM_NOBLEMAN) || !is_drow(ma)))
 		&& !(Role_if(PM_EXILE))
-		&& mdef->mpeaceful==TRUE 
-		&& magr->mpeaceful==FALSE 
-		&& rn2(2)
-	) return ALLOW_M|ALLOW_TM;
+	){
+		if(mdef->mpeaceful==TRUE && magr->mpeaceful==FALSE && rn2(2)) return ALLOW_M|ALLOW_TM;
+		if(mdef->mpeaceful==TRUE && magr->mtame==TRUE) return FALSE;
+	}
 
 	/* elves vs. orcs */
 	if(is_elf(ma) && (is_orc(md) || is_ogre(md) || is_undead_mon(mdef)) && !is_undead_mon(magr))

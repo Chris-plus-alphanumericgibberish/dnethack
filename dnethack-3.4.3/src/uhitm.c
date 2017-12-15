@@ -1874,9 +1874,10 @@ defaultvalue:
 		tmp += rnd(mon->ustdym);
 	}
 	
-	if(resist_attacks(mdat))
+	if(resist_attacks(mdat)){
 		tmp = 0;
-	else {
+		valid_weapon_attack = 0;
+	} else {
 		int mac = full_marmorac(mon);
 		if(mac < 0){
 			tmp += AC_VALUE(mac);
@@ -3828,6 +3829,10 @@ register int tmp, weptmp, tchtmp;
 	    mattk = getmattk(mas, i, sum, &alt_attk);
 		wepused = FALSE;
 		
+		if (mas == &mons[PM_GRUE] && (i>=2) && !((!levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux] & TEMP_LIT1 && !(viz_array[u.uy][u.ux] & TEMP_DRK1)))
+			|| (levl[u.ux][u.uy].lit && (viz_array[u.uy][u.ux] & TEMP_DRK1 && !(viz_array[u.uy][u.ux] & TEMP_LIT1)))))
+			continue;
+		
 		/*Plasteel helms cover the face and prevent bite attacks*/
 		if(uarmh && 
 			(uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM) && 
@@ -4363,6 +4368,11 @@ uchar aatyp, adtyp;
 	    tmp = 0;
 	
 /*	These affect you even if they just died */
+
+	// Grue has no passive attacks while in the light
+	if (ptr == &mons[PM_GRUE] && !((!levl[mon->mx][mon->my].lit && !(viz_array[mon->my][mon->mx] & TEMP_LIT1 && !(viz_array[mon->my][mon->mx] & TEMP_DRK1)))
+		|| (levl[mon->mx][mon->my].lit && (viz_array[mon->my][mon->mx] & TEMP_DRK1 && !(viz_array[mon->my][mon->mx] & TEMP_LIT1)))))
+		return (malive | mhit);	
 
 	switch(ptr->mattk[i].adtyp) {
 		
