@@ -1744,6 +1744,10 @@ u_init()
 		if (Race_if(PM_DROW)) Bard[BARD_CLOAK].trotyp = DROVEN_CHAIN_MAIL;
 		Bard[BARD_BOOZE].trquan = rn1(2, 5);
 		ini_inv(Bard);
+		if(Race_if(PM_DROW)){
+			BlackTorches[0].trquan = 6;
+			ini_inv(BlackTorches);
+		}
 		if(Race_if(PM_CLOCKWORK_AUTOMATON)){
 			u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] = u.ualign.type = A_NEUTRAL; /* Troubadores can't be lawful, so lets bump CAs down to Neutral */
 		}
