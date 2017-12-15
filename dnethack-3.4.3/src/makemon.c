@@ -5026,6 +5026,23 @@ register int	mmflags;
 	) mtmp->mpeaceful = TRUE;
 	else mtmp->mpeaceful = (mmflags & MM_ANGRY) ? FALSE : (peace_minded(ptr) && !is_derived_undead_mon(mtmp));
 	
+	if(mndx == PM_CHAOS){
+		mtmp->mhpmax = 15*mtmp->mhpmax;
+		mtmp->mhp = mtmp->mhpmax;
+	} else if(mndx == PM_KARY__THE_FIEND_OF_FIRE){
+		mtmp->mhpmax = 10*mtmp->mhpmax;
+		mtmp->mhp = mtmp->mhpmax;
+	} else if(mndx == PM_LICH__THE_FIEND_OF_EARTH){
+		mtmp->mhpmax = 10*mtmp->mhpmax;
+		mtmp->mhp = mtmp->mhpmax;
+	} else if(mndx == PM_KRAKEN__THE_FIEND_OF_WATER){
+		mtmp->mhpmax = 10*mtmp->mhpmax;
+		mtmp->mhp = mtmp->mhpmax;
+	} else if(mndx == PM_TIAMAT__THE_FIEND_OF_WIND){
+		mtmp->mhpmax = 10*mtmp->mhpmax;
+		mtmp->mhp = mtmp->mhpmax;
+	}
+	
 	switch(ptr->mlet) {
 		case S_MIMIC:
 			set_mimic_sym(mtmp);
@@ -5396,10 +5413,6 @@ register int	mmflags;
 			}
 			else if(mndx == PM_ASMODEUS){
 				mtmp->mhpmax = 2*mtmp->mhpmax;
-				mtmp->mhp = mtmp->mhpmax;
-			}
-			else if(mndx == PM_CHAOS){
-				mtmp->mhpmax = 15*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
 			else if(mndx == PM_DEMOGORGON){
@@ -6475,6 +6488,10 @@ struct monst *mtmp, *victim;
 		) hp_threshold *= 3;
 	    else if (ptr == &mons[PM_RAZORVINE]) hp_threshold *= .5;
 		else if(ptr == &mons[PM_CHAOS]) hp_threshold *= 15;
+		else if(ptr == &mons[PM_KARY__THE_FIEND_OF_FIRE]) hp_threshold *= 10;
+		else if(ptr == &mons[PM_LICH__THE_FIEND_OF_EARTH]) hp_threshold *= 10;
+		else if(ptr == &mons[PM_KRAKEN__THE_FIEND_OF_WATER]) hp_threshold *= 10;
+		else if(ptr == &mons[PM_TIAMAT__THE_FIEND_OF_WIND]) hp_threshold *= 10;
 		else if(ptr == &mons[PM_CHOKHMAH_SEPHIRAH]) hp_threshold *= u.chokhmah;
 	    lev_limit = 3 * (int)ptr->mlevel / 2;	/* same as adj_lev() */
 	    /* If they can grow up, be sure the level is high enough for that */
