@@ -423,7 +423,8 @@ boolean phasing;
 #define ATTK_SIMURGH	5
 #define ATTK_MISKA_ARMS	6
 #define ATTK_MISKA_WOLF	7
-#define SPIRIT_NATTKS	(8+5+1)
+#define SPIRIT_NATTKS	(8+3+5+1)
+//+3 for up to three iris attacks, +1 for second wolf head
 /**/
 static struct attack spiritattack[] = 
 {
@@ -663,7 +664,14 @@ register struct monst *mtmp;
 		}
 		if(u.sealsActive&SEAL_AMON) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_AMON];
 		if(u.sealsActive&SEAL_CHUPOCLOPS) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_CHUPOCLOPS];
-		if(u.sealsActive&SEAL_IRIS) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+		if(u.sealsActive&SEAL_IRIS){
+			curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+			if(u.twoweap) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+			if(u.specialSealsActive&SEAL_MISKA && u.ulevel >= 26){
+				curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+				if(u.twoweap) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+			}
+		}
 		if(u.sealsActive&SEAL_NABERIUS) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_NABERIUS];
 		if(u.sealsActive&SEAL_OTIAX){
 			int tendrils,tmp2;
