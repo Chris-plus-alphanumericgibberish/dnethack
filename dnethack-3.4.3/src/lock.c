@@ -193,7 +193,7 @@ forcelock()	/* try to force a locked chest */
 		return((xlock.usedtime = 0));
 	    }
 	} else if(xlock.picktyp == 0)			/* blunt */
-	    wake_nearby();	/* due to hammering on the container */
+	    wake_nearby_noisy();	/* due to hammering on the container */
 
 	if(xlock.picktyp == 3) u.otiaxAttack = moves;
 	if(rn2(100) >= xlock.chance) return(1);		/* still busy */

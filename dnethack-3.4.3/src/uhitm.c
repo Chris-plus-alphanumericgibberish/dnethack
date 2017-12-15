@@ -2586,6 +2586,7 @@ struct attack *mattk;
 	}
 
 	while ((otmp = mdef->minvent) != 0) {
+		pline("need real check for no longer having stealing");
 	    /* take the object away from the monster */
 	    obj_extract_self(otmp);
 	    if ((unwornmask = otmp->owornmask) != 0L) {

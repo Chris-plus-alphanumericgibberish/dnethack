@@ -4217,6 +4217,124 @@ register struct monst *mdef;
 	}
 }
 
+/* drop a glass statue or rock and remove monster */
+void
+monglassed(mdef)
+register struct monst *mdef;
+{
+	struct obj *otmp, *obj, *oldminvent;
+	xchar x = mdef->mx, y = mdef->my;
+	boolean wasinside = FALSE;
+
+	/* we have to make the statue before calling mondead, to be able to
+	 * put inventory in it, and we have to check for lifesaving before
+	 * making the statue....
+	 */
+	lifesaved_monster(mdef);
+	if (mdef->mhp > 0) return;
+
+	mdef->mtrapped = 0;	/* (see m_detach) */
+
+	if ((int)mdef->data->msize > MZ_TINY ||
+		    !rn2(2 + ((int) (mdef->data->geno & G_FREQ) > 2))) {
+		oldminvent = 0;
+		/* some objects may end up outside the statue */
+		while ((obj = mdef->minvent) != 0) {
+		    obj_extract_self(obj);
+		    if (obj->owornmask)
+			update_mon_intrinsics(mdef, obj, FALSE, TRUE);
+		    obj_no_longer_held(obj);
+		    if (obj->owornmask & W_WEP)
+			setmnotwielded(mdef,obj);
+		    obj->owornmask = 0L;
+		    if (is_boulder(obj) ||
+#if 0				/* monsters don't carry statues */
+     (obj->otyp == STATUE && mons[obj->corpsenm].msize >= mdef->data->msize) ||
+#endif
+				obj_resists(obj, 0, 0)) {
+			if (flooreffects(obj, x, y, "fall")) continue;
+			place_object(obj, x, y);
+		    } else {
+			if (obj->lamplit) end_burn(obj, TRUE);
+			obj->nobj = oldminvent;
+			oldminvent = obj;
+		    }
+		}
+		/* defer statue creation until after inventory removal
+		   so that saved monster traits won't retain any stale
+		   item-conferred attributes */
+		otmp = mkcorpstat(STATUE, KEEPTRAITS(mdef) ? mdef : 0,
+				  mdef->data, x, y, FALSE);
+		set_material(otmp, GLASS);
+		if (mdef->mnamelth) otmp = oname(otmp, NAME(mdef));
+		while ((obj = oldminvent) != 0) {
+		    oldminvent = obj->nobj;
+		    (void) add_to_container(otmp, obj);
+		}
+#ifndef GOLDOBJ
+		if (mdef->mgold) {
+			struct obj *au;
+			au = mksobj(GOLD_PIECE, FALSE, FALSE);
+			au->quan = mdef->mgold;
+			au->owt = weight(au);
+			(void) add_to_container(otmp, au);
+			mdef->mgold = 0;
+		}
+#endif
+		/* Archeologists should not break unique statues */
+		if (mdef->data->geno & G_UNIQ)
+			otmp->spe = 1;
+		otmp->owt = weight(otmp);
+	} else {
+		oldminvent = 0;
+		/* some objects may end up outside the statue */
+		while ((obj = mdef->minvent) != 0) {
+		    obj_extract_self(obj);
+		    if (obj->owornmask)
+			update_mon_intrinsics(mdef, obj, FALSE, TRUE);
+		    obj_no_longer_held(obj);
+		    if (obj->owornmask & W_WEP)
+			setmnotwielded(mdef,obj);
+		    obj->owornmask = 0L;
+		    if (is_boulder(obj) ||
+#if 0				/* monsters don't carry statues */
+     (obj->otyp == STATUE && mons[obj->corpsenm].msize >= mdef->data->msize) ||
+#endif
+				obj_resists(obj, 0, 0)) {
+			if (flooreffects(obj, x, y, "fall")) continue;
+			place_object(obj, x, y);
+		    } else {
+			if (obj->lamplit) end_burn(obj, TRUE);
+			obj->nobj = oldminvent;
+			oldminvent = obj;
+		    }
+		}
+		while ((obj = oldminvent) != 0) {
+		    oldminvent = obj->nobj;
+			place_object(obj, x, y);
+			stackobj(obj);
+		}
+		otmp = mksobj_at(ROCK, x, y, TRUE, FALSE);
+		set_material(otmp, GLASS);
+		if (mdef->mnamelth) otmp = oname(otmp, NAME(mdef));
+	}
+	
+	stackobj(otmp);
+	/* mondead() already does this, but we must do it before the newsym */
+	if(glyph_is_invisible(levl[x][y].glyph))
+	    unmap_object(x, y);
+	if (cansee(x, y)) newsym(x,y);
+	/* We don't currently trap the hero in the statue in this case but we could */
+	if (u.uswallow && u.ustuck == mdef) wasinside = TRUE;
+	mondead(mdef);
+	if (wasinside) {
+		if (is_animal(mdef->data))
+			You("%s through an opening in the new %s.",
+				locomotion(youracedata, "jump"),
+				xname(otmp));
+	}
+}
+
 /* another monster has killed the monster mdef */
 void
 monkilled(mdef, fltxt, how)
@@ -4329,6 +4447,7 @@ xkilled(mtmp, dest)
 	/* dispose of monster and make cadaver */
 	if(stoned) monstone(mtmp);
 	else if(golded) mongolded(mtmp);
+	else if(glassed) monglassed(mtmp);
 	else mondead(mtmp);
 
 	if (mtmp->mhp > 0) { /* monster lifesaved */
@@ -4339,6 +4458,7 @@ xkilled(mtmp, dest)
 		 */
 		stoned = FALSE;
 		golded = FALSE;
+		glassed = FALSE;
 		if (!cansee(x,y)) pline("Maybe not...");
 		return;
 	}
@@ -4915,6 +5035,22 @@ wake_nearby()
 	}
 }
 
+/* Wake up nearby monsters, deafening those with sensitive ears. */
+void
+wake_nearby_noisy(){
+	register struct monst *mtmp;
+	wake_nearby();
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	    if (!DEADMONSTER(mtmp) && sensitive_ears(mtmp->data) && !is_deaf(mtmp) &&
+				 distu(mtmp->mx,mtmp->my) < (u.ulevel*20)/3){
+			mtmp->mstun = 1;
+			mtmp->mconf = 1;
+			mtmp->mcanhear = 0;
+			mtmp->mdeafened = (u.ulevel*20)/3 - distu(mtmp->mx,mtmp->my);
+		}
+	}
+}
+
 /* Wake up monsters near some particular location. */
 void
 wake_nearto(x, y, distance)
@@ -4935,7 +5071,7 @@ register int x, y, distance;
 	}
 }
 
-/* Wake up monsters near some particular location. */
+/* Wake up monsters near some particular location, deafening those with sensitive ears. */
 void
 wake_nearto_noisy(x, y, distance)
 register int x, y, distance;

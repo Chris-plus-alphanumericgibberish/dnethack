@@ -52,7 +52,8 @@ STATIC_DCL boolean FDECL(figurine_location_checks,
 STATIC_DCL boolean NDECL(uhave_graystone);
 STATIC_DCL void FDECL(add_class, (char *, CHAR_P));
 STATIC_DCL int FDECL(do_carve_obj, (struct obj *));
-STATIC_PTR int NDECL(pick_rune);
+STATIC_PTR int FDECL(pick_rune, (BOOLEAN_P));
+STATIC_DCL void FDECL(describe_rune, (int));
 STATIC_PTR char NDECL(pick_carvee);
 
 
@@ -162,7 +163,7 @@ do_present_ring(obj)
 					engrHere->halu_ward = obj->ohaluengr;
 					engrHere->complete_wards = engrHere->halu_ward ? 1 : get_num_wards_added(engrHere->ward_id,0);
 					engrHere->ward_type = obj->blessed ? BURN : obj->cursed ? DUST : ENGRAVE;
-					if( !(u.wardsknown & get_wardID(engrHere->ward_id)) ){
+					if( !(obj->ohaluengr) && !(u.wardsknown & get_wardID(engrHere->ward_id)) ){
 						You("have learned a new warding sign!");
 						u.wardsknown |= get_wardID(engrHere->ward_id);
 					}
@@ -592,7 +593,7 @@ struct obj *obj;
 	register struct monst *mtmp;
 
 	You(whistle_str, obj->cursed ? "shrill" : "high");
-	wake_nearby();
+	wake_nearby_noisy();
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 	    if (!DEADMONSTER(mtmp)) {
 			if (mtmp->mtame && !mtmp->isminion)
@@ -1180,7 +1181,7 @@ boolean spiritseal;
 	    makeknown(BELL_OF_OPENING);
 	    obj->known = 1;
 	}
-	if (wakem) wake_nearby();
+	if (wakem) wake_nearby_noisy();
 }
 
 STATIC_OVL void
@@ -2611,6 +2612,10 @@ struct obj *hypo;
 	struct obj *amp = getobj(tools, "inject");
 	int i, ii, nothing=0;
 	if(!amp) return 0;
+	if(amp->otyp != HYPOSPRAY_AMPULE){
+		You("can't inject that!");
+		return 0;
+	}
     if (!getdir((char *)0)) return 0;
 	if(u.dz < 0){
 		You("don't see a patient up there.");
@@ -2622,6 +2627,10 @@ struct obj *hypo;
 		struct monst *mtarg = m_at(u.ux+u.dx,u.uy+u.dy);
 		if(!mtarg){
 			You("don't find a patient there.");
+			return 1;
+		}
+		if(amp->spe <= 0){
+			pline("The ampule is empty!");
 			return 1;
 		}
 		if(!has_blood_mon(mtarg)){
@@ -4079,7 +4088,8 @@ struct obj *obj;
 }
 
 int
-pick_rune()
+pick_rune(describe)
+boolean describe;
 {
 	winid tmpwin;
 	int n, how;
@@ -4130,12 +4140,102 @@ pick_rune()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	end_menu(tmpwin, "Choose stave:");
+
+	if (!describe){
+		// Describe a glyph
+		Sprintf(buf, "Describe a glyph instead");
+		any.a_int = -1;					/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'?', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	else {
+		Sprintf(buf, "Carve a glyph instead");
+		any.a_int = -1;					/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'!', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+
+	end_menu(tmpwin, (describe) ? "Choose stave to describe:" : "Choose stave to carve:");
 
 	how = PICK_ONE;
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
-	return ( n > 0 ) ? selected[0].item.a_int : 0;
+
+	if (n > 0 && selected[0].item.a_int == -1){
+		return pick_rune(!describe);
+	}
+
+	if (n > 0 && describe){
+		describe_rune(selected[0].item.a_int);
+		return pick_rune(describe);
+	}
+	if (n > 0 && !describe){
+		return selected[0].item.a_int;
+	}
+
+	return 0;
+}
+
+
+void
+describe_rune(floorID)
+int floorID;
+{
+	winid datawin;
+	char name[80];
+	char turns[80];
+	char warded[80];
+	char reinforce[80];
+	char secondary[80];
+
+	switch (floorID){
+	case TOUSTEFNA:
+		strcpy(name, " Toustefna stave");
+		strcpy(turns, " 3 turns");
+		strcpy(warded, " d, f");
+		strcpy(secondary, " None.");
+		break;
+	case DREPRUN:
+		strcpy(name, " Dreprun stave");
+		strcpy(turns, " 4 turns");
+		strcpy(warded, " q, u, bats, birds");
+		strcpy(secondary, " None.");
+		break;
+	case VEIOISTAFUR:
+		strcpy(name, " Veioistafur stave");
+		strcpy(turns, " 5 turns");
+		strcpy(warded, " ;");
+		strcpy(secondary, " Bonus d20 damage vs ; when carved onto wielded weapon.");
+		break;
+	case THJOFASTAFUR:
+		strcpy(name, " Thjofastafur stave");
+		strcpy(turns, " 2 turns");
+		strcpy(warded, " n, l");
+		strcpy(secondary, " Grants detection of nymphs and leprechauns while wielded.");
+		break;
+	default:
+		impossible("No such stave to carve: %d", floorID);
+		return;
+	}
+
+	datawin = create_nhwindow(NHW_TEXT);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, name);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, " Turns to carve:");
+	putstr(datawin, 0, turns);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, " Warded creatures:");
+	putstr(datawin, 0, warded);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, " Secondary effects:");
+	putstr(datawin, 0, secondary);
+	putstr(datawin, 0, "");
+	display_nhwindow(datawin, FALSE);
+	destroy_nhwindow(datawin);
+	return;
 }
 
 char
@@ -4359,7 +4459,7 @@ struct obj **optr;
 		You("build a clockwork and %s.",
 			(u.dx||u.dy) ? "set it beside you" :
 			(Weightless || Is_waterlevel(&u.uz) ||
-			 is_pool(cc.x, cc.y)) ?
+			 is_pool(cc.x, cc.y, TRUE)) ?
 			"release it" :
 			(u.dz < 0 ?
 			"toss it into the air" :

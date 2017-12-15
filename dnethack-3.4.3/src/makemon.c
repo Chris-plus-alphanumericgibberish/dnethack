@@ -4995,6 +4995,9 @@ register int	mmflags;
 		undeadfaction = ZOMBIFIED;
 		unsethouse = TRUE;
 		m_initlgrp(mtmp, mtmp->mx, mtmp->my);
+	} else if(mtmp->data == &mons[PM_ECHO]){
+		undeadfaction = SKELIFIED;
+		unsethouse = TRUE;
 	} else if(!undeadfaction && (mtmp->data->geno&G_HELL) == 0 && Is_mephisto_level(&u.uz)){
 		undeadfaction = CRYSTALFIED;
 		unsethouse = TRUE;

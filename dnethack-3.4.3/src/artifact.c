@@ -122,7 +122,7 @@ hack_artifacts()
 	int alignmnt = flags.stag ? u.ualign.type : aligns[flags.initalign].value;
 	
 	if(Role_if(PM_EXILE)) alignmnt = A_VOID; //hack_artifacts may be called before this is propperly set
-	if(Race_if(PM_DROW) || Race_if(PM_MYRKALFR) && !Role_if(PM_EXILE) && !Role_if(PM_CONVICT) && !flags.female){
+	if((Race_if(PM_DROW) || Race_if(PM_MYRKALFR)) && !Role_if(PM_EXILE) && !Role_if(PM_CONVICT) && !flags.initgend){
 		alignmnt = A_NEUTRAL; /* Males are neutral */
 	}
 
@@ -181,21 +181,21 @@ hack_artifacts()
 			urole.questarti = ART_VESTMENT_OF_HELL;
 			artilist[ART_HELM_OF_THE_DARK_LORD].alignment = alignmnt;
 		} else if(Race_if(PM_ELF)){
-			artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN|SPFX_INTEL;
+			artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN;
 			artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
-			artilist[ART_ROD_OF_THE_ELVISH_LORDS].spfx &= ~(SPFX_NOGEN|SPFX_INTEL);
+			artilist[ART_ROD_OF_THE_ELVISH_LORDS].spfx &= ~(SPFX_NOGEN);
 		} else if(Race_if(PM_DROW)){
 			if(flags.initgend){ /* TRUE == female */
-				artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN|SPFX_INTEL;
+				artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN;
 				artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
-				artilist[ART_SCEPTRE_OF_LOLTH].spfx &= ~(SPFX_NOGEN|SPFX_INTEL);
+				artilist[ART_SCEPTRE_OF_LOLTH].spfx &= ~(SPFX_NOGEN);
 			} else {
 				artilist[ART_ROD_OF_LORDLY_MIGHT].alignment = A_NEUTRAL;
 			}
 		} else if(Race_if(PM_DWARF) && urole.ldrnum == PM_DAIN_II_IRONFOOT){
-			artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN|SPFX_INTEL;
+			artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN;
 			artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
-			artilist[ART_ARMOR_OF_KHAZAD_DUM].spfx &= ~(SPFX_NOGEN|SPFX_INTEL);
+			artilist[ART_ARMOR_OF_KHAZAD_DUM].spfx &= ~(SPFX_NOGEN);
 		} else if(alignmnt == A_NEUTRAL) {
 			artilist[ART_CROWN_OF_THE_SAINT_KING].alignment = alignmnt;
 		}
@@ -720,7 +720,7 @@ long wp_mask;
 	long *mask = 0;
 	register const struct artifact *oart = get_artifact(otmp);
 	uchar dtyp;
-	long spfx, spfx2, spfx3;
+	long spfx, spfx2, spfx3, wpfx;
 	long exist_warntypem = 0, exist_warntypet = 0, exist_warntypeb = 0, exist_warntypeg = 0, exist_warntypea = 0, exist_warntypev = 0;
 	long long exist_montype = 0;
 	boolean exist_nonspecwarn;
@@ -784,6 +784,7 @@ long wp_mask;
 	spfx = (wp_mask != W_ART) ? oart->spfx : oart->cspfx;
 	spfx2 = (wp_mask != W_ART) ? oart->spfx2 : 0;
 	spfx3 = (wp_mask != W_ART) ? 0 : oart->cspfx3;
+	wpfx = (wp_mask != W_ART) ? oart->wpfx : 0;
 	if(spfx && wp_mask == W_ART && !on) {
 	    /* don't change any spfx also conferred by other artifacts */
 	    register struct obj* obj;
@@ -970,6 +971,11 @@ long wp_mask;
 	if (spfx3 & SPFX3_PCTRL) {
 		if (on) EPolymorph_control |= wp_mask;
 		else EPolymorph_control &= ~wp_mask;
+	}
+	
+	if (wpfx & WSFX_FREEACT) {
+	    if (on) u.uprops[FREE_ACTION].extrinsic |= wp_mask;
+	    else u.uprops[FREE_ACTION].extrinsic &= ~wp_mask;
 	}
 
 	if(wp_mask == W_ART && !on && oart->inv_prop) {
@@ -3917,7 +3923,7 @@ arti_invoke(obj)
 		return 0;
 	    }
 	    b_effect = obj->blessed &&
-		((Role_switch == oart->role || !oart->role) && (Race_switch == oart->race || !oart->race));
+		((Role_switch == oart->role || oart->role == NON_PM) && (Race_switch == oart->race || oart->race == NON_PM));
 	    recharge(otmp, b_effect ? 1 : obj->cursed ? -1 : 0);
 	    update_inventory();
 	    break;
@@ -4434,7 +4440,7 @@ arti_invoke(obj)
            cc.x = u.ux;
            cc.y = u.uy;
            /* Cause trouble if cursed or player is wrong role */
-           if (obj->cursed || ((Role_switch == oart->role || !oart->role) && (Race_switch == oart->race || !oart->race))) {
+           if (obj->cursed || ((Role_switch == oart->role || oart->role == NON_PM) && (Race_switch == oart->race || oart->race == NON_PM))) {
               You("may summon a stinking cloud.");
                pline("Where do you want to center the cloud?");
                if (getpos(&cc, TRUE, "the desired position") < 0) {
@@ -5748,7 +5754,7 @@ arti_invoke(obj)
 						boolean b_effect;
 						
 						b_effect = obj->blessed &&
-							((Role_switch == oart->role || !oart->role) && (Race_switch == oart->race || !oart->race));
+							((Role_switch == oart->role || oart->role == NON_PM) && (Race_switch == oart->race || oart->race == NON_PM));
 						recharge(uwep, b_effect ? 1 : obj->cursed ? -1 : 0);
 						update_inventory();
 						break;
