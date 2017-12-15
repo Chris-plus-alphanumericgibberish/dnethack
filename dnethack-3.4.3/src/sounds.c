@@ -1196,7 +1196,7 @@ asGuardian:
 					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm) && tmpm->mpeaceful == tmpm->mpeaceful){
 							if(tmpm->mhp < tmpm->mhpmax){
-								for(i = (tmpm->mhpmax - tmpm->mhp); i > 0; i--) grow_up(tmpm, 0);
+								for(i = (tmpm->mhpmax - tmpm->mhp); i > 0; i--) grow_up(tmpm, tmpm);
 							}
 						}
 					}
