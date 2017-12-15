@@ -371,10 +371,7 @@ boolean
 obj_is_pname(obj)
 register struct obj *obj;
 {
-    return((boolean)(obj->dknown && obj->known && obj->onamelth &&
-		     /* Since there aren't any objects which are both
-		        artifacts and unique, the last check is redundant. */
-		     obj->oartifact && !objects[obj->otyp].oc_unique));
+    return((boolean)(obj->dknown && obj->known && obj->onamelth && obj->oartifact));
 }
 
 /* Give the name of an object seen at a distance.  Unlike xname/doname,
