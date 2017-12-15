@@ -201,6 +201,10 @@ struct monst *mon;
 	   (is_demon(ptr) || is_undead_mon(mon))){
 		if(otmp->oartifact == ART_EXCALIBUR)
 			tmp += 7; //Quite holy
+		else if(otmp->oartifact == ART_VAMPIRE_KILLER)
+			tmp += 7; //Quite holy
+		else if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && !otmp->lamplit)
+			tmp += rnd(20); //Quite holy
 		else tmp += 2;
 	}
 	if (is_spear(otmp) &&
@@ -884,6 +888,10 @@ int spec;
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
 			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
 				bonus += d(3,7); //Quite holy
+			else if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && !otmp->lamplit)
+				bonus += rnd(10) + otmp->spe; //Quite holy
+			else if(otmp->oartifact == ART_VAMPIRE_KILLER) 
+					bonus += 7; //Quite holy
 			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
 				bonus += rnd(20); //Divinity
 			else if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),4);
@@ -927,6 +935,8 @@ int spec;
 				bonus += d(2,9); //Extra unholy (2d9 vs excal's 3d7)
 			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
 				bonus += d(3,9); //Quite unholy
+			else if(otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) 
+				bonus += 8; //Extra unholy
 			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
 				bonus += rnd(20); //Tyrany
 			else if(otyp == KHAKKHARA) bonus += d(rnd(3),9);
