@@ -89,6 +89,7 @@ static const char *echidnaTitles[] = {
 
 static const char *alignmentThings[] = {
 	"Can a paladin kill baby orcs?",
+	"A paladin must kill baby orcs?",
 	"Must a paladin never stab a man in the back?",
 	"Must laws be upheld with no reason or logic?",
 	"Saying you love someone is always good?",
@@ -3623,7 +3624,7 @@ int tx,ty;
 				}
 			} else if(In_depths(&u.uz)){ 
 				if(u.sealCounts < numSlots){
-					pline("There is a %s sleeping in the center of the seal.",u.osegen);
+					pline("There is %s sleeping in the center of the seal.",an(u.osegen));
 					pline("You supose %s could be called comely,",u.osepro);
 					pline("though to be honest %s is about average among %s you have known.",u.osepro,makeplural(u.osegen));
 					if(!rn2(20)) pline("The %s's eyes open, and you have a long negotiation before achieving a good pact.", u.osegen);

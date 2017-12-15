@@ -2636,7 +2636,7 @@ spiriteffects(power, atme)
 			int range = BOLT_LIM + dsize;	/* 5 to 14 */
 			range *= range;
 			You("try to turn away or slay animals and humanoids.");
-			pline("A rainbow of unearthly colors dances behind your eyes!");
+			pline("A rainbow of unearthly colors dances before your eyes!");
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 				if (DEADMONSTER(mtmp)) continue;
 				if(cansee(mtmp->mx,mtmp->my) && distu(mtmp->mx,mtmp->my) <= range &&
