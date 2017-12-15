@@ -3860,9 +3860,6 @@ boolean was_swallowed;			/* digestion */
 	/* must duplicate this below check in xkilled() since it results in
 	 * creating no objects as well as no corpse
 	 */
-	if (LEVEL_SPECIFIC_NOCORPSE(mdat))
-		return FALSE;
-
 	if (mon->mfaction == SKELIFIED)
 		return FALSE;
 
@@ -3882,6 +3879,9 @@ boolean was_swallowed;			/* digestion */
 		   )
 		return TRUE;
 	
+	if (LEVEL_SPECIFIC_NOCORPSE(mdat))
+		return FALSE;
+
 	if(In_hell(&u.uz) || In_endgame(&u.uz)) //u.uevent.udemigod || 
 		return FALSE;
 	
