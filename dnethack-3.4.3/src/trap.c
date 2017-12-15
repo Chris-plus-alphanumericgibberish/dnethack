@@ -3200,7 +3200,7 @@ drown()
 	if(u.sealsActive&SEAL_OSE) unbind(SEAL_OSE,TRUE);
 	
 	/* happily wading in the same contiguous pool */
-	if (u.uinwater && is_pool(u.ux-u.dx,u.uy-u.dy) &&
+	if (u.uinwater && is_pool(u.ux-u.dx,u.uy-u.dy, FALSE) &&
 		!(!is_3dwater(u.ux-u.dx,u.uy-u.dy) && is_3dwater(u.ux,u.uy)) &&
 	    ((Swimming && (u.divetimer>0 || !u.usubwater)) || (Amphibious && u.usubwater))) {
 		/* water effects on objects every now and then */

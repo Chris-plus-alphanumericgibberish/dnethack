@@ -680,8 +680,8 @@ makelevel()
 		    makemaz(fillname);
 		    return;
 	    } else if(In_hell(&u.uz) ||
-		  (rn2(5) && u.uz.dnum == medusa_level.dnum
-			  && depth(&u.uz) > depth(&medusa_level))) {
+		  (rn2(5) && u.uz.dnum == challenge_level.dnum
+			  && depth(&u.uz) > depth(&challenge_level))) {
 		    makemaz("");
 		    return;
 	    }
@@ -778,7 +778,7 @@ makelevel()
 	/* Part two: special rooms */
 	/* Shops */
 	if (u_depth > 1 &&
-	    u_depth < depth(&medusa_level) &&
+	    u_depth < depth(&challenge_level) &&
 	    nroom >= room_threshold &&
 	    rn2(u_depth) < 3) mkroom(SHOPBASE);
 
@@ -1351,7 +1351,7 @@ register xchar x, y;
 	return((boolean)(t_at(x, y)
 		|| IS_FURNITURE(levl[x][y].typ)
 		|| is_lava(x,y)
-		|| (is_pool(x,y) && (!Is_waterlevel(&u.uz) || is_3dwater(x,y)))
+		|| (is_pool(x,y, FALSE) && (!Is_waterlevel(&u.uz) || is_3dwater(x,y)))
 		|| invocation_pos(x,y)
 		));
 }
@@ -1808,7 +1808,7 @@ xchar x, y;
 	if (! (u.uz.dnum == oracle_level.dnum	    /* in main dungeon */
 		&& !at_dgn_entrance("The Quest")    /* but not Quest's entry */
 		&& (u_depth = depth(&u.uz)) > 10    /* beneath 10 */
-		&& u_depth < depth(&medusa_level))) /* and above Medusa */
+		&& u_depth < depth(&challenge_level))) /* and above Medusa */
 	    return;
 
 	/* Adjust source to be current level and re-insert branch. */

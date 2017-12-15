@@ -569,7 +569,9 @@ register const char *s;
 
 //	pline("%s", protofile);
 //	pline("%d", levvar);
-	if(Is_hell1(&u.uz)){
+	if (Is_challenge_level(&u.uz)){
+		dungeon_topology.challenge_variant = levvar;
+	} else if(Is_hell1(&u.uz)){
 		dungeon_topology.hell1_variant = levvar;
 	} else if(Is_hell2(&u.uz)){
 		dungeon_topology.hell2_variant = levvar;

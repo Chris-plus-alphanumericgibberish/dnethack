@@ -1111,7 +1111,7 @@ register struct monst *mtmp;
 			(IS_DOOR(levl[mtmp->mx][mtmp->my].typ) && artifact_door(mtmp->mx, mtmp->my)) ||
 			(IS_ROCK(lev->typ) && lev->typ != SDOOR &&
 			(lev->wall_info & W_NONDIGGABLE) != 0) ||
-			(is_pool(mtmp->mx, mtmp->my) || is_lava(mtmp->mx, mtmp->my)) ||
+			(is_pool(mtmp->mx, mtmp->my, TRUE) || is_lava(mtmp->mx, mtmp->my)) ||
 			(lev->typ == DRAWBRIDGE_DOWN ||
 			   (is_drawbridge_wall(mtmp->mx, mtmp->my) >= 0)) ||
 			(boulder_at(mtmp->mx, mtmp->my)) ||
@@ -2103,7 +2103,7 @@ postmov:
 			(mtmp->mcanmove && mtmp->mnotlaugh && !mtmp->msleeping && rn2(5)))
 		    mtmp->mundetected = (ptr->mlet != S_EEL) ?
 			OBJ_AT(mtmp->mx, mtmp->my) :
-			(is_pool(mtmp->mx, mtmp->my) && !Is_waterlevel(&u.uz));
+			(is_pool(mtmp->mx, mtmp->my, FALSE) && !Is_waterlevel(&u.uz));
 		newsym(mtmp->mx, mtmp->my);
 	    }
 	    if (mtmp->isshk) {

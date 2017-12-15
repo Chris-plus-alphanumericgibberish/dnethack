@@ -1933,7 +1933,8 @@ printDPR(){
 	struct attack *attk;
 	rfile = fopen_datafile("MonDPR.tab", "w", SCOREPREFIX);
 	if (rfile) {
-		Sprintf(pbuf,"Name\taverage\tmax\n");
+		Sprintf(pbuf,"Name\taverage\tmax\tspeed\n");
+		fprintf(rfile, pbuf);
 		for(j=0;j<NUMMONS;j++){
 			ptr = &mons[j];
 			pbuf[0] = 0;
@@ -1951,7 +1952,7 @@ printDPR(){
 					mdm += attk->damn * attk->damd;
 				}
 			}
-			Sprintf(pbuf,"%s\t%d\t%d\n", mons[j].mname, avdm, mdm);
+			Sprintf(pbuf,"%s\t%d\t%d\t%d\n", mons[j].mname, avdm, mdm, mons[j].mmove);
 			fprintf(rfile, pbuf);
 		}
 	}
@@ -2223,7 +2224,7 @@ printMons(){
 					colorstr = "white";
 				break;
 			}
-			if((int)mons[i].mlet == S_SHADE) Sprintf(pbuf,"[[%s|{{%s|&nbsp}}]]", mons[i].mname, colorstr);
+			if((int)mons[i].mlet == S_SHADE) Sprintf(pbuf,"[[%s|{{%s|&nbsp;}}]]", mons[i].mname, colorstr);
 			else Sprintf(pbuf,"[[%s|{{%s|%c}}]]", mons[i].mname, colorstr, def_monsyms[(int)mons[i].mlet]);
 			fprintf(rfile, pbuf);
 			if(((i+1)%40) == 0){
@@ -2311,6 +2312,7 @@ printAttacks(buf, ptr)
 		"Shadow blades",	/*27*/
 		"Beam",	/*28*/
 		"Deva Arms"	/*29*/
+		"five-square-reach touch"	/*30*/
 	};
 	static char *damageKey[] = {
 		"physical",				/*0*/
@@ -2422,27 +2424,36 @@ printAttacks(buf, ptr)
 		"[[armor teleportation]]",/*106*/
 		"[[half-dragon breath]]",/*107*/
 		"[[silver rapier]]",	/*108*/
-		"[[ahazu abduction]]",	/*109*/
-		"[[stone choir]]",		/*110*/
-		"[[water vampire]]",	/*111*/
-		"[[bloody fangs]]",		/*112*/
-		"[[item freeing]]",		/*113*/
-		"[[rainbow feathers]]",	/*114*/
-		"[[Vorlon explosion]]",	/*115*/
-		"[[cold explosion]]",	/*116*/
-		"[[fire explosion]]",	/*117*/
-		"[[shock explosion]]",	/*118*/
-		"[[physical explosion]]",/*119*/
-		"[[Vorlon missile]]",	/*120*/
-		"[[Warmachine missile]]",/*121*/
-		"[[clerical spell]]",	/*122*/
-		"[[mage spell]]",		/*123*/
-		"[[random breath type]]",/*124*/
-		"[[random gaze type]]",	/*125*/
-		"[[random elemental gaze]]",/*126*/
-		"[[Amulet theft]]",		/*127*/
-		"[[Intrinsic theft]]",	/*128*/
-		"[[Quest Artifact theft]]"/*129*/
+		"elemental [[shock]]",	/*109*/
+		"elemental [[fire]]",	/*110*/
+		"elemental [[poison]]",	/*111*/
+		"elemental [[cold]]",	/*112*/
+		"elemental [[acid]]",	/*113*/
+		"conflict",				/*114*/
+		"blood blade",			/*115*/
+		"Surya Deva arrow",		/*116*/
+		"[[constitution]] drain",/*117*/
+		// "[[ahazu abduction]]",	/**/
+		"[[stone choir]]",		/*118*/
+		"[[water vampire]]",	/*119*/
+		"[[bloody fangs]]",		/*120*/
+		"[[item freeing]]",		/*121*/
+		"[[rainbow feathers]]",	/*122*/
+		"[[Vorlon explosion]]",	/*123*/
+		"[[cold explosion]]",	/*124*/
+		"[[fire explosion]]",	/*125*/
+		"[[shock explosion]]",	/*126*/
+		"[[physical explosion]]",/*127*/
+		"[[Vorlon missile]]",	/*128*/
+		"[[Warmachine missile]]",/*129*/
+		"[[clerical spell]]",	/*130*/
+		"[[mage spell]]",		/*131*/
+		"[[random breath type]]",/*132*/
+		"[[random gaze type]]",	/*133*/
+		"[[random elemental gaze]]",/*134*/
+		"[[Amulet theft]]",		/*135*/
+		"[[Intrinsic theft]]",	/*136*/
+		"[[Quest Artifact theft]]"/*137*/
 	};
 	for(i = 0; i<6; i++){
 		attk = &ptr->mattk[i];

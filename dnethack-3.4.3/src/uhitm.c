@@ -176,7 +176,7 @@ struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 	    if (!(Blind ? Blind_telepat : Unblind_telepat)) {
 		struct obj *obj;
 
-		if (Blind || (is_pool(mtmp->mx,mtmp->my) && !Underwater))
+		if (Blind || (is_pool(mtmp->mx,mtmp->my, FALSE) && !Underwater))
 		    pline("Wait!  There's a hidden monster there!");
 		else if ((obj = level.objects[mtmp->mx][mtmp->my]) != 0)
 		    pline("Wait!  There's %s hiding under %s!",
