@@ -68,7 +68,7 @@ extern NEARDATA struct door doors[DOORMAX];
 #define COCKNEST	13	/* cockatrice nest (Tom Proudfoot) */
 #define ANTHOLE		14	/* ants (Tom Proudfoot) */
 #define GARDEN		15	/* nymphs, trees and fountains */
-#define LIBRARY		16	/* nymphs, trees and fountains */
+#define LIBRARY		16	/* living lecturns, and mostly-blank spellbooks */
 #define ISLAND 		17 /* ringed by water, contains items */
 #define RIVER 		18 /* "room" is really a river running through the level*/
 #define POOLROOM	19	/*  */
