@@ -3672,8 +3672,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			if(otmp->oartifact == ART_STORMBRINGER && dieroll <= 2){
 				*dmgptr += 8;
 				int leveldrain = *dmgptr/4;
-				if(!is_silent_mon(mdef)) pline("%s cries out in pain and despair and terror.", Monnam(mdef));
 				if(*dmgptr > mdef->mhpmax-1){
+					if(!is_silent_mon(mdef)) pline("%s cries out in pain and despair and terror.", Monnam(mdef));
 					if ((mdef->mhpmax-1)/2){
 						if(youattack) healup((mdef->mhpmax-1)/2, 0, FALSE, FALSE);
 						else {
