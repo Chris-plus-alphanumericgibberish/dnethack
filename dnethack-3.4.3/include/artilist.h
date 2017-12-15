@@ -161,7 +161,7 @@ A("Dragonlance",			LANCE,
 A("Nodensfork",			TRIDENT,
 	(SPFX_RESTR|SPFX_CON_OR), SPFX_WARN,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_PRIMORDIAL|MA_ET /*MA*/, MV_TELEPATHIC|MV_RLYEHIAN /*MV*/,
-	PHYS(10,20),	NO_DFNS,	ELEC(0,0),				/* plus, reflection */
+	PHYS(10,20),	NO_DFNS,	ELEC(0,0),	
 	0, A_NONE, NON_PM, NON_PM, 5000L, 
 	SPFX2_SILVERED,0,0),
 
@@ -170,7 +170,7 @@ A("Gaia's Fate",			SICKLE,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 
 	MA_PLANT|MA_INSECTOID|MA_ARACHNID|MA_AVIAN|MA_REPTILIAN|MA_ANIMAL|MA_FEY|MA_ELF|MA_ELEMENTAL /*MA*/, 
 	0 /*MV*/,
-	PHYS(10,20),	NO_DFNS,	NO_CARY,				/* plus, reflection */
+	PHYS(10,20),	NO_DFNS,	NO_CARY,
 	0, A_NONE, NON_PM, NON_PM, 5000L, 
 	0,0,0),
 
