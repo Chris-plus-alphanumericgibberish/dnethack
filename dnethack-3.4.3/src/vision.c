@@ -754,14 +754,20 @@ vision_recalc(control)
 			)) ||
 			(lowlightsight2(youracedata) && (next_row[col] & COULD_SEE) && (
 				(lev->lit &&
-					!(next_row[col]&TEMP_DRK2 && !(next_row[col]&TEMP_LIT2)) &&
-					!(next_row[col]&TEMP_DRK3 && !(next_row[col]&TEMP_LIT1)) 
+					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT2)) &&
+					!(next_row[col]&TEMP_DRK2 && !(next_row[col]&TEMP_LIT1)) &&
+					!(next_row[col]&TEMP_DRK3)
 				) || 
-				(((next_row[col]&TEMP_LIT2) && !(next_row[col]&TEMP_DRK2)) || ((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK3)))
+				(
+					((next_row[col]&TEMP_LIT2) && !(next_row[col]&TEMP_DRK1)) ||
+					((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK2))
+				)
 			)) ||
 			(lowlightsight3(youracedata) && (next_row[col] & COULD_SEE) && (
 				(lev->lit &&
-					!(next_row[col]&TEMP_DRK3 && !(next_row[col]&TEMP_LIT3))
+					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT3)) &&
+					!(next_row[col]&TEMP_DRK2 && !(next_row[col]&TEMP_LIT2)) &&
+					!(next_row[col]&TEMP_DRK3 && !(next_row[col]&TEMP_LIT1))
 				) || 
 				(
 					((next_row[col]&TEMP_LIT3) && !(next_row[col]&TEMP_DRK1)) || 
@@ -793,8 +799,37 @@ vision_recalc(control)
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
 		    if ((!((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !Is_waterlevel(&u.uz)) && 
-					(flev->lit || 
-					next_array[row+dy][col+dx]&TEMP_LIT1))
+				((flev->lit &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK1 && !(next_array[row+dy][col+dx]&TEMP_LIT1)) &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK2) 
+				) || 
+				(
+					(next_array[row+dy][col+dx]&TEMP_LIT1) && !(next_array[row+dy][col+dx]&TEMP_DRK1)
+				)
+			)) ||
+			(lowlightsight2(youracedata) && (
+				(flev->lit &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK1 && !(next_array[row+dy][col+dx]&TEMP_LIT2)) &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK2 && !(next_array[row+dy][col+dx]&TEMP_LIT1)) &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK3)
+				) || 
+				(
+					((next_array[row+dy][col+dx]&TEMP_LIT2) && !(next_array[row+dy][col+dx]&TEMP_DRK1)) ||
+					((next_array[row+dy][col+dx]&TEMP_LIT1) && !(next_array[row+dy][col+dx]&TEMP_DRK2))
+				)
+			)) ||
+			(lowlightsight3(youracedata) && (
+				(flev->lit &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK1 && !(next_array[row+dy][col+dx]&TEMP_LIT3)) &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK2 && !(next_array[row+dy][col+dx]&TEMP_LIT2)) &&
+					!(next_array[row+dy][col+dx]&TEMP_DRK3 && !(next_array[row+dy][col+dx]&TEMP_LIT1))
+				) || 
+				(
+					((next_array[row+dy][col+dx]&TEMP_LIT3) && !(next_array[row+dy][col+dx]&TEMP_DRK1)) || 
+					((next_array[row+dy][col+dx]&TEMP_LIT2) && !(next_array[row+dy][col+dx]&TEMP_DRK2)) || 
+					((next_array[row+dy][col+dx]&TEMP_LIT1) && !(next_array[row+dy][col+dx]&TEMP_DRK3))
+				)
+			))
 			   ||((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !Is_waterlevel(&u.uz))
 			   || u.sealsActive&SEAL_AMON
 			   || extramission(youracedata)

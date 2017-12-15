@@ -180,7 +180,7 @@ magic_map_background(x, y, show)
     if (!cansee(x,y) && !lev->waslit) {
 	/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
 	if (lev->typ == ROOM && glyph == cmap_to_glyph(S_litroom))
-	    glyph = cmap_to_glyph(S_stone);
+	    glyph = cmap_to_glyph(S_drkroom);
 	else if (lev->typ == CORR && glyph == cmap_to_glyph(S_litcorr))
 	    glyph = cmap_to_glyph(S_corr);
     }
@@ -308,7 +308,7 @@ unmap_object(x, y)
 	/* turn remembered dark room squares dark */
 	if (!lev->waslit && lev->glyph == cmap_to_glyph(S_litroom) &&
 							    lev->typ == ROOM)
-	    lev->glyph = cmap_to_glyph(S_stone);
+	    lev->glyph = cmap_to_glyph(S_drkroom);
     } else
 	levl[x][y].glyph = cmap_to_glyph(S_stone);	/* default val */
 }
@@ -422,16 +422,7 @@ display_monster(x, y, mon, sightflags, worm_tail)
     if (!mon_mimic || sensed) {
 	int num;
 
-	/* [ALI] Only use detected glyphs when monster wouldn't be
-	 * visible by any other means.
-	 */
-	if (sightflags == DETECTED) {
-	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
-			detected_monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL)):
-			detected_monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
-	    else
-		num = detected_mon_to_glyph(mon);
-	} else if (mon->mtame && !Hallucination) {
+	if (mon->mtame && !Hallucination) {
 	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
 			petnum_to_glyph(PM_HUNTING_HORROR_TAIL):
 			petnum_to_glyph(PM_LONG_WORM_TAIL);
@@ -449,6 +440,15 @@ display_monster(x, y, mon, sightflags, worm_tail)
 			zombienum_to_glyph(PM_LONG_WORM_TAIL);
 	    else
 		num = zombie_to_glyph(mon);
+	/* [ALI] Only use detected glyphs when monster wouldn't be
+	 * visible by any other means.
+	 */
+	} else if (sightflags == DETECTED) {
+	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
+			detected_monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL)):
+			detected_monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
+	    else
+		num = detected_mon_to_glyph(mon);
 	} else {
 	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
 			monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL)):
@@ -577,15 +577,14 @@ feel_location(x, y)
 		if (lev->typ != ROOM && lev->seenv) {
 		    map_background(x, y, 1);
 		} else {
-		    lev->glyph = lev->waslit ? cmap_to_glyph(S_litroom) :
-					       cmap_to_glyph(S_stone);
+		    lev->glyph = (!lev->waslit) ? cmap_to_glyph(S_drkroom) : cmap_to_glyph(S_litroom);
 		    show_glyph(x,y,lev->glyph);
 		}
 	    } else if ((lev->glyph >= cmap_to_glyph(S_stone) &&
-			lev->glyph < cmap_to_glyph(S_litroom)) ||
+			lev->glyph < cmap_to_glyph(S_drkroom)) ||
 		       glyph_is_invisible(levl[x][y].glyph)) {
-		lev->glyph = lev->waslit ? cmap_to_glyph(S_litroom) :
-					   cmap_to_glyph(S_stone);
+		lev->glyph = (!cansee(x,y) && !lev->waslit) ? cmap_to_glyph(S_drkroom) :
+					   cmap_to_glyph(S_litroom);
 		show_glyph(x,y,lev->glyph);
 	    }
 	} else {
@@ -625,7 +624,7 @@ feel_location(x, y)
 	/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
 	if (lev->typ == ROOM &&
 		    lev->glyph == cmap_to_glyph(S_litroom) && !lev->waslit)
-	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_stone));
+	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_drkroom));
 	else if (lev->typ == CORR &&
 		    lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
 	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
@@ -686,7 +685,7 @@ echo_location(x, y)
 		/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
 		if (lev->typ == ROOM &&
 				lev->glyph == cmap_to_glyph(S_litroom) && !lev->waslit)
-			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_stone));
+			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_drkroom));
 		else if (lev->typ == CORR &&
 				lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
 			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
@@ -749,8 +748,8 @@ newsym(x,y)
 	 * Perhaps ALL areas should revert to their "unlit" look when
 	 * out of sight.
 	 */
-	lev->waslit = (darksight(youracedata) || catsight(youracedata)) ? 0 : (lev->lit!=0);	/* remember lit condition */
-
+	/* lev->waslit = (darksight(youracedata) || catsight(youracedata)) ? 0 : (lev->lit!=0);	*/ /* remember lit condition */
+	lev->waslit = 0; /* hack? */
 	if (reg != NULL && ACCESSIBLE(lev->typ)) {
 	    show_region(reg,x,y);
 	    return;
@@ -1534,7 +1533,9 @@ back_to_glyph(x,y)
 	case STONE:
 	    idx = level.flags.arboreal ? S_tree : S_stone;
 	    break;
-	case ROOM:		idx = S_litroom;	  break;
+	case ROOM:
+	    idx = (!cansee(x,y) && !ptr->waslit) ? S_drkroom : S_litroom;
+	    break;
 	case CORR:
 	    idx = (ptr->waslit || flags.lit_corridor) ? S_litcorr : S_corr;
 	    break;
@@ -1592,11 +1593,11 @@ back_to_glyph(x,y)
 	    case DB_MOAT:  idx = S_pool; break;
 	    case DB_LAVA:  idx = S_lava; break;
 	    case DB_ICE:   idx = S_ice;  break;
-	    case DB_FLOOR: idx = S_litroom; break;
+	    case DB_FLOOR: idx = (!cansee(x,y) && !ptr->waslit) ? S_drkroom : S_litroom; break;
 	    default:
 		impossible("Strange db-under: %d",
 			   ptr->drawbridgemask & DB_UNDER);
-		idx = S_litroom; /* something is better than nothing */
+		idx = (!cansee(x,y) && !ptr->waslit) ? S_drkroom : S_litroom; /* something is better than nothing */
 		break;
 	    }
 	    break;
@@ -1605,7 +1606,7 @@ back_to_glyph(x,y)
 	    break;
 	default:
 	    impossible("back_to_glyph:  unknown level type [ = %d ]",ptr->typ);
-	    idx = S_litroom;
+	    idx = (!cansee(x,y) && !ptr->waslit) ? S_drkroom : S_litroom;
 	    break;
     }
 

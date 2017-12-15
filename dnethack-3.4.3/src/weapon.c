@@ -39,6 +39,7 @@
 #define PN_SHIEN				(-24)
 #define PN_NIMAN				(-25)
 #define PN_JUYO					(-26)
+#define PN_WAND_DAMAGE			(-27)
 
 
 static void FDECL(mon_ignite_lightsaber, (struct obj *, struct monst *));
@@ -69,6 +70,7 @@ STATIC_VAR NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
 	PN_DIVINATION_SPELL, PN_ENCHANTMENT_SPELL,
 	PN_CLERIC_SPELL,     PN_ESCAPE_SPELL,
 	PN_MATTER_SPELL,
+	PN_WAND_DAMAGE,
 #ifdef BARD
 	PN_MUSICALIZE,
 #endif
@@ -112,6 +114,7 @@ STATIC_VAR NEARDATA const char * const odd_skill_names[] = {
     "form V: Shien",
     "form VI: Niman",
     "form VII: Juyo",
+    "wand damage",
 };
 /* indexed vis `is_martial() */
 STATIC_VAR NEARDATA const char * const barehands_or_martial[] = {
@@ -2189,6 +2192,21 @@ int skill;
     if (skill < P_NUM_SKILLS && OLD_P_MAX_SKILL(skill) < P_EXPERT) {
 		if(OLD_P_SKILL(skill) == P_ISRESTRICTED) OLD_P_SKILL(skill) = P_UNSKILLED;
 		OLD_P_MAX_SKILL(skill) = P_EXPERT;
+		P_ADVANCE(skill) = practice_needed_to_advance(OLD_P_SKILL(skill)-1);
+    }
+}
+
+/*
+ * Change from restricted to unrestricted, allowing P_GRAND_MASTER as max.  This
+ * function may be called with with P_NONE.  Used in pray.c.
+ */
+void
+gm_weapon_skill(skill)
+int skill;
+{
+    if (skill < P_NUM_SKILLS && OLD_P_MAX_SKILL(skill) < P_EXPERT) {
+		if(OLD_P_SKILL(skill) == P_ISRESTRICTED) OLD_P_SKILL(skill) = P_UNSKILLED;
+		OLD_P_MAX_SKILL(skill) = P_GRAND_MASTER;
 		P_ADVANCE(skill) = practice_needed_to_advance(OLD_P_SKILL(skill)-1);
     }
 }

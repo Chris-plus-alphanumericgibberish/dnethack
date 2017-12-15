@@ -1851,8 +1851,15 @@ hitmu(mtmp, mattk)
 		hitmsg(mtmp, mattk);
 		pline("You're %s!", on_fire(youracedata, mattk));
 		if (Fire_resistance) {
-			pline_The("fire doesn't feel hot!");
-			dmg /= 2;
+			pline_The("fire still feels hot!");
+			if(EFire_resistance)
+				dmg /= 2;
+			if(HFire_resistance)
+				dmg /= 2;
+			if((Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_FIRE) ||
+				 species_resists_fire(&youmonst) ||
+				 ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA || u.sealsActive&SEAL_FAFNIR
+			) dmg = 0; //Deeper link
 		} else if (youracedata == &mons[PM_STRAW_GOLEM] ||
 			youracedata == &mons[PM_PAPER_GOLEM] ||
 			youracedata == &mons[PM_SPELL_GOLEM]) {
@@ -1902,9 +1909,16 @@ hitmu(mtmp, mattk)
 		hitmsg(mtmp, mattk);
 		pline("You're covered in frost!");
 		if (Cold_resistance) {
-			pline_The("frost doesn't seem cold!");
-			dmg /= 2;
-		} 
+			pline_The("frost still seems cold!");
+			if(ECold_resistance)
+				dmg /= 2;
+			if(HCold_resistance)
+				dmg /= 2;
+			if((Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_COLD) ||
+				 species_resists_cold(&youmonst) ||
+				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON
+			) dmg = 0; //Deeper link
+		}
 		if(!ECold_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(POTION_CLASS, AD_COLD);
@@ -1933,7 +1947,14 @@ hitmu(mtmp, mattk)
 		You("get zapped!");
 		if (Shock_resistance) {
 			pline_The("zap doesn't shock you!");
-			dmg /= 2;
+			if(EShock_resistance)
+				dmg /= 2;
+			if(HShock_resistance)
+				dmg /= 2;
+			if((Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ELEC) ||
+				 species_resists_elec(&youmonst) ||
+				 ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || u.sealsActive&SEAL_ASTAROTH
+			) dmg = 0; //Deeper link
 		}
 		if(!EShock_resistance){
 			if((int) mtmp->m_lev > rn2(20))
@@ -3765,16 +3786,23 @@ boolean ufound;
 		break;
 		
 	    case AD_COLD:
-	    case AD_ECLD:
 			not_affected |= Cold_resistance;
 			goto common;
+	    case AD_ECLD:
+			not_affected |= (ECold_resistance && HCold_resistance);
+			goto common;
 	    case AD_FIRE:
-	    case AD_EFIR:
 			not_affected |= Fire_resistance;
 			goto common;
+	    case AD_EFIR:
+			not_affected |= (EFire_resistance && HFire_resistance);
+			goto common;
 	    case AD_ELEC:
-	    case AD_EELC:
 			not_affected |= Shock_resistance;
+			goto common;
+	    case AD_EELC:
+			not_affected |= (EShock_resistance && HShock_resistance);
+			goto common;
 common:
 
 		if (!not_affected) {
@@ -6649,6 +6677,8 @@ register struct monst *mon;
 	if (rn2(66) > 2*ACURR(A_WIS) - ACURR(A_INT) || helpless) {
 		int lifesaved = 0;
 		int wdmg = (int)(d(1,10)) + 1;
+		You("move to embrace %s, brushing aside the gossamer shroud hiding %s body from you.",
+			noit_Monnam(mon), fem ? "her" : "his");
 		palemayberem(uarmc, cloak_simple_name(uarmc), helpless);
 		if(!uarmc)
 			palemayberem(uarm, "suit", helpless);
@@ -6660,8 +6690,6 @@ register struct monst *mon;
 		if(!uarmc && !uarm)
 			palemayberem(uarmu, "shirt", helpless);
 	#endif
-		You("move to embrace %s, brushing aside the gossamer shroud hiding %s body from you.",
-			noit_Monnam(mon), fem ? "her" : "his");
 		if(rn2( (int)(ACURR(A_WIS)/2))){
 			boolean loopingDeath = TRUE;
 			while(loopingDeath) {

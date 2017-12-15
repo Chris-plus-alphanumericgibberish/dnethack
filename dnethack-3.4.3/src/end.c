@@ -71,7 +71,7 @@ extern void FDECL(nethack_exit,(int));
 static NEARDATA const char *deaths[] = {		/* the array of death */
 	"died", "betrayed", "choked", "poisoned", "starvation", "drowning", /*5*/
 	"burning", "dissolving under the heat and pressure",
-	"crushed", "turned to stone", "turned to gold", "turned into slime",
+	"crushed", "turned to stone", "turned to gold", "turned to glass", "turned into slime",
 	"exploded after being overwound", "turned into a weeping angel", "disintegrated",
 	"genocided",
 	"panic", "trickery",
@@ -81,7 +81,7 @@ static NEARDATA const char *deaths[] = {		/* the array of death */
 static NEARDATA const char *ends[] = {		/* "when you..." */
 	"died", "were betrayed", "choked", "were poisoned", "starved", "drowned",
 	"burned", "dissolved in the lava",
-	"were crushed", "turned to stone", "turned to gold", "turned into slime",
+	"were crushed", "turned to stone", "turned to gold", "turned to glass", "turned into slime",
 	"were overwound and exploded", "turned into a weeping angel", "were disintegrated",
 	"were genocided",
 	"panicked", "were tricked",
@@ -256,8 +256,12 @@ register struct monst *mtmp;
 		u.ugrave_arise = PM_GHOUL;
 	else if (mtmp->data == &mons[PM_DREADBLOSSOM_SWARM])
 		u.ugrave_arise = PM_DREADBLOSSOM_SWARM;
-	else if (mtmp->data == &mons[PM_DREAD_SERAPH])
+	else if (mtmp->data == &mons[PM_DREAD_SERAPH] || mtmp->mfaction == SKELIFIED)
 		u.ugrave_arise = PM_SKELETON;
+	else if (mtmp->data->mlet == S_ZOMBIE || mtmp->mfaction == ZOMBIFIED)
+		u.ugrave_arise = PM_ZOMBIE;
+	else if (mtmp->data == &mons[PM_BAALPHEGOR] || mtmp->mfaction == CRYSTALFIED)
+		u.ugrave_arise = PM_BAALPHEGOR;
 	if (u.ugrave_arise >= LOW_PM &&
 				(mvitals[u.ugrave_arise].mvflags & G_GENOD && !In_quest(&u.uz)))
 		u.ugrave_arise = NON_PM;
@@ -741,6 +745,8 @@ die:
 		u.ugrave_arise = (NON_PM - 1);	/* statue instead of corpse */
 	    else if (how == GOLDING)
 		u.ugrave_arise = (NON_PM - 3);	/* statue instead of corpse */
+	    else if (how == GLASSED)
+		u.ugrave_arise = (NON_PM - 4);	/* statue instead of corpse */
 	    else if (u.ugrave_arise == NON_PM &&
 		     !(mvitals[u.umonnum].mvflags & G_NOCORPSE)) {
 		int mnum = u.umonnum;

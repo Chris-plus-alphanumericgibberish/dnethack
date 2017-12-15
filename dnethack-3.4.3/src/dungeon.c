@@ -657,7 +657,7 @@ struct level_map {
 #ifdef REINCARNATION
 	{ "rogue",	&rogue_level },
 #endif
-	{ "medusa",	&medusa_level },
+	{ "chall",	&challenge_level },
 	/*Gehennom*/
 	{ "valley",	&valley_level },
 	
@@ -1457,6 +1457,13 @@ d_level	*lev;
 }
 
 boolean
+In_outlands(lev)	/* are you on the neutral quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == neutral_dnum));
+}
+
+boolean
 In_cha(lev)	/* are you on the chaotic quest? */
 d_level	*lev;
 {
@@ -1682,8 +1689,8 @@ const char *nam;
 	if ((dlev.dnum == u.uz.dnum ||
 		/* within same branch, or else main dungeon <-> gehennom */
 		(u.uz.dnum == valley_level.dnum &&
-			dlev.dnum == medusa_level.dnum) ||
-		(u.uz.dnum == medusa_level.dnum &&
+			dlev.dnum == challenge_level.dnum) ||
+		(u.uz.dnum == challenge_level.dnum &&
 			dlev.dnum == valley_level.dnum)) &&
 	    (	/* either wizard mode or else seen and not forgotten */
 #ifdef WIZARD

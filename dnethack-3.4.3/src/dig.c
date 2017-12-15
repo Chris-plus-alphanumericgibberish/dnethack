@@ -423,7 +423,7 @@ dig()
 			    if (!(lev->looted & TREE_LOOTED) && !rn2(5)){
 					if(!In_neu(&u.uz) &&
 						u.uz.dnum != chaos_dnum &&
-						!on_level(&medusa_level,&u.uz) &&
+						!Is_medusa_level(&u.uz) &&
 						!(In_quest(&u.uz) && (Role_if(PM_NOBLEMAN) ||
 						Race_if(PM_DROW) || 
 						(Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN) || Role_if(PM_WIZARD)))
@@ -1665,7 +1665,7 @@ struct obj *obj;
 				}
 			} else if (lev->typ == IRONBARS) {
 			    pline("Clang!");
-			    wake_nearby();
+			    wake_nearby_noisy();
 			} else if (IS_TREES(lev->typ))
 			    You("need an axe to cut down a tree.");
 			else if (IS_ROCK(lev->typ))

@@ -3283,7 +3283,7 @@ doward()
 
 	/* Prompt for engraving! */
 	if(!len){
-		ward = pick_ward();
+		ward = pick_ward(FALSE);
 		len = wardStrokes[ward][0];
 	}
 	if (ward == 0 || index(ebuf, '\033')) {
@@ -3514,7 +3514,8 @@ random_unknown_ward()
 }
 
 int
-pick_ward()
+pick_ward(describe)
+boolean describe;
 {
 	winid tmpwin;
 	int n, how;
@@ -3665,12 +3666,213 @@ pick_ward()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	end_menu(tmpwin,	"Choose ward:");
+	if (!describe){
+		// Describe a ward
+		Sprintf(buf, "Describe a ward instead");
+		any.a_int = -1;					/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'?', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	else {
+		Sprintf(buf, "Draw a ward instead");
+		any.a_int = -1;					/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'!', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+
+	end_menu(tmpwin,	(describe) ? "Choose ward to describe:" : "Choose ward to draw:");
 
 	how = PICK_ONE;
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
-	return ( n > 0 ) ? selected[0].item.a_int : 0;
+
+	if (n > 0 && selected[0].item.a_int == -1){
+		return pick_ward(!describe);
+	}
+
+	if (n > 0 && describe){
+		describe_ward(selected[0].item.a_int);
+		return pick_ward(describe);
+	}
+	if (n > 0 && !describe){
+		return selected[0].item.a_int;
+	}
+
+	return 0;
+}
+
+void
+describe_ward(floorID)
+int floorID;
+{
+	winid datawin;
+	char name[80] = "";
+	char strokes[80] = "";
+	char warded[80] = "";
+	char warded2[80] = "";
+	char warded3[80] = "";
+	char reinforce[80] = "";
+	char secondary[80] = "";
+	char secondary2[80] = "";
+
+	switch (floorID){
+	case HEPTAGRAM: 
+		strcpy(name, " Heptagram");
+		strcpy(strokes, " 21");
+		strcpy(warded, " All except: A, o, dwarfs, G, @");
+		strcpy(reinforce, " 7-fold");
+		strcpy(secondary, " None.");
+		break;
+	case GORGONEION:
+		strcpy(name, " Gorgoneion");
+		strcpy(strokes, " 60");
+		strcpy(warded, " All except: \' and A");
+		strcpy(reinforce, " 3-fold");
+		strcpy(secondary, " Has a 33% chance to scare for each reinforcement.");
+		break;
+	case CIRCLE_OF_ACHERON:
+		strcpy(name, " Circle of Acheron");
+		strcpy(strokes, " 2");
+		strcpy(warded, " All undead, Cerberus");
+		strcpy(reinforce, " 4-fold");
+		strcpy(secondary, " Protects against the `touch of death\' monster spell.");
+		break;
+	case PENTAGRAM:
+		strcpy(name, " Pentagram");
+		strcpy(strokes, " 10");
+		strcpy(warded, " i, E, K, &, hellhounds, gargoyles, sandestini");
+		strcpy(reinforce, " 7-fold");
+		strcpy(secondary, " None.");
+		break;
+	case HEXAGRAM:
+		strcpy(name, " Hexagram");
+		strcpy(strokes, " 12");
+		strcpy(warded, " i, A, K, Q, \', &, hellhounds, eye of doom, son of Typhon");
+		strcpy(reinforce, " 7-fold");
+		strcpy(secondary, " None.");
+		break;
+	case HAMSA:
+		strcpy(name, " Hamsa");
+		strcpy(strokes, " 10, but drawn in pairs after 2-fold reinforcement");
+		strcpy(warded, " floating eyes, beholders, autons");
+		strcpy(reinforce, " 6-fold");
+		strcpy(secondary, " Protects from all gaze attacks.");
+		strcpy(secondary2," Grants invisbility at maximum reinforcement.");
+		break;
+	case ELDER_SIGN:
+		strcpy(name, " Elder Sign");
+		strcpy(strokes, " 6, 12, 8, 8, 8, 8");
+		strcpy(warded, " 1-fold: b, j, m, p, w, l, P, U, ;, mind flayer");
+		strcpy(warded2,"         deep one, deeper one, byakhee, nightgaunt");
+		strcpy(warded3," 6-fold: deepest one, master mind flayer");
+		strcpy(reinforce, " 6-fold");
+		strcpy(secondary, " Wards against more monsters at maximum reinforcement.");
+		break;
+	case ELDER_ELEMENTAL_EYE:
+		strcpy(name, " Elder Elemental Eye");
+		strcpy(strokes, " 5");
+		strcpy(warded, " 1-fold: spheres, v, E, F, X");
+		strcpy(warded2," 4-fold: y, D, N, undead, metroids");
+		strcpy(warded3," 7-fold: A, K, i, &, autons");
+		strcpy(reinforce, " 7-fold");
+		strcpy(secondary, " Wards against more monsters as it is reinforced.");
+		break;
+	case SIGN_OF_THE_SCION_QUEEN:
+		strcpy(name, " Sign of the Scion Queen Mother");
+		strcpy(strokes, " 8");
+		strcpy(warded, " a, s, x, R");
+		strcpy(reinforce, " 7-fold");
+		strcpy(secondary, " None.");
+		break;
+	case CARTOUCHE_OF_THE_CAT_LORD:
+		strcpy(name, " Cartouche of the Cat Lord");
+		strcpy(strokes, " 7, 5, 6, 7, 5, 4, 7");
+		strcpy(warded, " birds, bats, r, s, S, ;, :");
+		strcpy(reinforce, " 7-fold");
+		strcpy(secondary, " Pacifies f. 4-fold grants drain resistance. 7-fold grants sickness resistance.");
+		strcpy(secondary2," Stops working when all domestic cats are genocided or extinct.");
+		break;
+	case WINGS_OF_GARUDA:
+		strcpy(name, " The Wings of Garuda");
+		strcpy(strokes, " 10");
+		strcpy(warded, " c, r, N, S, :, kraken");
+		strcpy(reinforce, " 7-fold");
+		strcpy(secondary, " Reinforcement in 7 chance to resist poison.");
+		break;
+	case SIGIL_OF_CTHUGHA:
+		strcpy(name, " The Sigil of Cthugha");
+		strcpy(strokes, " 1");
+		strcpy(warded, " None.");
+		strcpy(reinforce, " None.");
+		strcpy(secondary, " The player is immune to fire while standing upon it.");
+		break;
+	case BRAND_OF_ITHAQUA:
+		strcpy(name, " The Brand of Ithaqua");
+		strcpy(strokes, " 1");
+		strcpy(warded, " None.");
+		strcpy(reinforce, " None.");
+		strcpy(secondary, " The player is immune to cold while standing upon it.");
+		break;
+	case TRACERY_OF_KARAKAL:
+		strcpy(name, " The Tracery of Karakal");
+		strcpy(strokes, " 1");
+		strcpy(warded, " None.");
+		strcpy(reinforce, " None.");
+		strcpy(secondary, " The player is immune to electricity while standing upon it.");
+		break;
+	case YELLOW_SIGN:
+		strcpy(name, " The Yellow Sign");
+		strcpy(strokes, " 4");
+		strcpy(warded, " 10% chance to frighten: humans, gnomes, dwarfs, elves, orcs");
+		strcpy(reinforce, " None.");
+		strcpy(secondary, " Any human, gnome, dwarf, elf, or orc that sees this becomes crazed.");
+		break;
+	case ANDREALPHUS_TRANSIT:
+		strcpy(name, " Hypergeometric transit solution");
+		strcpy(strokes, " ?");
+		strcpy(warded, " None.");
+		strcpy(reinforce, " None.");
+		strcpy(secondary, " The player can teleport at will when standing upon it.");
+		break;
+	case ANDREALPHUS_STABILIZE:
+		strcpy(name, " Hypergeometric stabilization solution");
+		strcpy(strokes, " ?");
+		strcpy(warded, " None.");
+		strcpy(reinforce, " None.");
+		strcpy(secondary, " The player can control their teleports when standing upon it.");
+		break;
+	default:
+		impossible("No such ward to draw: %d", floorID);
+		return;
+	}
+	
+	datawin = create_nhwindow(NHW_TEXT);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, name);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, " Strokes to draw:");
+	putstr(datawin, 0, strokes);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, " Warded creatures:");
+	putstr(datawin, 0, warded);
+	if(warded2[0] != 0)
+		putstr(datawin, 0, warded2);
+	if (warded3[0] != 0)
+		putstr(datawin, 0, warded3);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, " Maximum reinforcement:");
+	putstr(datawin, 0, reinforce);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, " Secondary effects:");
+	putstr(datawin, 0, secondary);
+	if (secondary2[0] != 0)
+		putstr(datawin, 0, secondary2);
+	putstr(datawin, 0, "");
+	display_nhwindow(datawin, FALSE);
+	destroy_nhwindow(datawin);
+	return;
 }
 
 int

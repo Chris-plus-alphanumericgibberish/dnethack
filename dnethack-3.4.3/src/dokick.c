@@ -901,6 +901,7 @@ dokick()
 				 unless it also happens to be trapped */
 			(maploc->doormask & (D_LOCKED|D_TRAPPED)) == D_LOCKED ?
 			      "Your kick uncovers" : "You kick open");
+			wake_nearby_noisy();
 			exercise(A_DEX, TRUE);
 			if(maploc->doormask & D_TRAPPED) {
 			    maploc->doormask = D_NODOOR;
@@ -922,6 +923,7 @@ dokick()
 		    if(!Levitation && rn2(30) < avrg_attrib) {
 			pline("Crash!  You kick open a secret passage!");
 			exercise(A_DEX, TRUE);
+			wake_nearby_noisy();
 			maploc->typ = CORR;
 			if (Blind)
 			    feel_location(x,y);	/* we know it's gone */
@@ -944,6 +946,7 @@ dokick()
 			    pline("CRASH!  You destroy the throne.");
 			    newsym(x, y);
 			}
+			wake_nearby_noisy();
 			if(u.sealsActive&SEAL_DANTALION) unbind(SEAL_DANTALION,TRUE);
 			exercise(A_DEX, TRUE);
 			return(1);
@@ -996,7 +999,7 @@ dokick()
 		    goto ouch;
 		if(IS_TREE(maploc->typ)) {
 		    struct obj *treefruit;
-			if(u.uz.dnum == tower_dnum || on_level(&medusa_level,&u.uz)){
+			if(u.uz.dnum == tower_dnum || Is_medusa_level(&u.uz)){
 			    if (rn2(3)) {
 					if ( !rn2(3) && !(mvitals[PM_CROW].mvflags & G_GONE && !In_quest(&u.uz)) )
 					    You_hear("flapping wings."); /* a warning */
@@ -1426,6 +1429,7 @@ dumb:
 		    exercise(A_STR, TRUE);
 		    maploc->doormask = D_BROKEN;
 		}
+		wake_nearby_noisy();
 		if (Blind)
 		    feel_location(x,y);		/* we know we broke it */
 		else

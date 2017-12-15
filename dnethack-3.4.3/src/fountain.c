@@ -249,9 +249,15 @@ drinkfountain()
 
 		case 20: /* Foul water */
 
-			pline_The("water is foul!  You gag and vomit.");
-			morehungry(rn1(20, 11));
-			vomit();
+			if (!uclockwork){
+				pline_The("water is foul!  You gag and vomit.");
+				morehungry(rn1(20, 11));
+				vomit();
+	    		} 
+			else {
+				pline_The("water is foul! It offends your olfactory receptors.");
+			}
+			
 			break;
 
 		case 21: /* Poisonous */
@@ -583,9 +589,15 @@ drinksink()
 			more_experienced(1,0);
 			newexplevel();
 			break;
-		case 9: pline("Gaggg... this tastes like sewage!  You vomit.");
-			morehungry(rn1(30-ACURR(A_CON), 11));
-			vomit();
+		case 9: if (!uclockwork) {
+				pline("Gaggg... this tastes like sewage!  You vomit.");
+				morehungry(rn1(30-ACURR(A_CON), 11));
+				vomit();
+			}
+			else {
+				pline("Ugh, this tastes like sewage. Your gustatory receptors are offended.");
+			}
+			
 			break;
 		case 10: pline("This water contains toxic wastes!");
 			if (!Unchanging) {

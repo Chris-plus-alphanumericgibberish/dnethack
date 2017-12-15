@@ -360,7 +360,8 @@
 #define MON_POISON_GAS         MON_WARP+1
 #define MON_PROTECTION         MON_POISON_GAS+1
 //60
-#define VULNERABILITY          MON_PROTECTION+1
+#define SOLID_FOG          MON_PROTECTION+1
+#define VULNERABILITY          SOLID_FOG+1
 #define MASS_HASTE             VULNERABILITY+1
 
 #define MON_LASTSPELL          MASS_HASTE

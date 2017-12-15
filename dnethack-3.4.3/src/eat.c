@@ -1644,7 +1644,7 @@ opentin()		/* called during each move whilst opening a tin */
 					costly_tin((const char*)0);
 					goto use_me;
 				} else if(eatHow == SCRAP_MAW){
-					You("crunch up the tin can");
+					You("crunch up the tin can.");
 					if(!Upolyd){
 						u.uhp += 5;
 						if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
@@ -1744,7 +1744,7 @@ opentin()		/* called during each move whilst opening a tin */
 			} else if(u.clockworkUpgrades&SCRAP_MAW &&
 				yn("Feed it to your scrap maw?") == 'y'
 			){
-				You("crunch up the tin can");
+				You("crunch up the tin can.");
 				if(!Upolyd){
 					u.uhp += 5;
 					if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
@@ -1758,21 +1758,21 @@ opentin()		/* called during each move whilst opening a tin */
 			} else if(u.clockworkUpgrades&WOOD_STOVE && (r == DRIED_TIN || is_burnable(&mons[tin.tin->corpsenm]) )){
 				/* KMH, conduct */
 				pline("Sadly, the spinach is much too damp to burn.");
-				You("reluctantly discard the spinach");
+				You("reluctantly discard the spinach.");
 				tin.tin->dknown = tin.tin->known = TRUE;
 				costly_tin((const char*)0);
 				goto use_me;
 			} else {
 				You("have no way to eat%s.", 
 					u.clockworkUpgrades&(WOOD_STOVE|OIL_STOVE|MAGIC_FURNACE|HELLFIRE_FURNACE|SCRAP_MAW) ? " that" : "");
-				You("reluctantly discard the spinach");
+				You("reluctantly discard the spinach.");
 				tin.tin->dknown = tin.tin->known = TRUE;
 				costly_tin((const char*)0);
 				goto use_me;
 			}
         } else if(Race_if(PM_INCANTIFIER) || magivorous(youracedata) ){
 				pline("Sadly, you would not derive any nutrition from eating it.");
-				You("reluctantly discard the spinach");
+				You("reluctantly discard the spinach.");
 				costly_tin((const char*)0);
 				goto use_me;
 		}

@@ -176,6 +176,9 @@ int thrown;
 	    case PM_DROW:
 			if(obj->oartifact == ART_SICKLE_MOON) multishot++;
 		break;
+	    case PM_MYRKALFR:
+			if(obj->oartifact == ART_SICKLE_MOON) multishot++;
+		break;
 	    case PM_ORC:
 			if (obj->otyp == ORCISH_ARROW && launcher &&
 					launcher->otyp == ORCISH_BOW) multishot++;
@@ -739,7 +742,7 @@ dofire()
 		return result;
 	} else if(uwep && uwep->oartifact == ART_HOLY_MOONLIGHT_SWORD && uwep->lamplit && u.uen > 25){
 		int dmg;
-		int range = (u.sealsActive&SEAL_NABERIUS) ? 6 : 3;
+		int range = (Double_spell_size) ? 6 : 3;
 		xchar lsx, lsy, sx, sy;
 		struct monst *mon;
 		sx = u.ux;
@@ -750,7 +753,7 @@ dofire()
 		domove();
 		flags.forcefight = 0;
 		if(u.uswallow){
-			if(u.sealsActive&SEAL_NABERIUS) explode2(u.ux,u.uy,0/*Magical*/, (d(2,12)+2*uwep->spe)*1.5, WAND_CLASS, EXPL_CYAN);
+			if(Double_spell_size) explode2(u.ux,u.uy,0/*Magical*/, (d(2,12)+2*uwep->spe)*1.5, WAND_CLASS, EXPL_CYAN);
 			else explode(u.ux,u.uy,0/*Magical*/, d(2,12)+2*uwep->spe, WAND_CLASS, EXPL_CYAN);
 		} else {
 			while(--range >= 0){
@@ -760,18 +763,18 @@ dofire()
 					mon = m_at(sx, sy);
 					if(mon){
 						dmg = d(2,12)+2*uwep->spe;
-						if(u.sealsActive&SEAL_NABERIUS) explode2(sx, sy, 0/*Nagical*/, dmg*1.5, WAND_CLASS, EXPL_CYAN);
+						if(Double_spell_size) explode2(sx, sy, 0/*Nagical*/, dmg*1.5, WAND_CLASS, EXPL_CYAN);
 						else explode(sx, sy, 0/*Nagical*/, dmg, WAND_CLASS, EXPL_CYAN);
 						break;//break loop
 					} else {
 						tmp_at(DISP_BEAM, cmap_to_glyph(S_digbeam));
 						tmp_at(sx, sy);
-						delay_output();
+						if(cansee(sx, sy)) delay_output();
 						tmp_at(DISP_END, 0);
 					}
 				} else {
 					dmg = d(2,12)+2*uwep->spe;
-					if(u.sealsActive&SEAL_NABERIUS) explode2(lsx, lsy, 0/*Nagical*/, dmg*1.5, WAND_CLASS, EXPL_CYAN);
+					if(Double_spell_size) explode2(lsx, lsy, 0/*Nagical*/, dmg*1.5, WAND_CLASS, EXPL_CYAN);
 					else explode(lsx, lsy, 0/*Nagical*/, dmg, WAND_CLASS, EXPL_CYAN);
 					break;//break loop
 				}
@@ -1080,9 +1083,9 @@ hurtle_step(arg, x, y)
     	}
     }
     if (--*range < 0)		/* make sure our range never goes negative */
-	*range = 0;
+		*range = 0;
     if (*range != 0)
-	delay_output();
+		delay_output();
     return TRUE;
 }
 
@@ -1378,7 +1381,7 @@ int desty;
 	tmp_at(DISP_FLASH, obj_to_glyph(obj));
 	while(x != destx || y != desty) {
 	    tmp_at(x, y);
-	    delay_output();
+		if(cansee(x,y)) delay_output();
 	    x -= u.dx; y -= u.dy;
 	}
 	tmp_at(DISP_END, 0);
@@ -1782,7 +1785,7 @@ int thrown;
 			}
 		    tmp_at(DISP_FLASH, obj_to_glyph(obj));
 		    tmp_at(bhitpos.x, bhitpos.y);
-		    delay_output();
+		    if(cansee(bhitpos.x, bhitpos.y)) delay_output();
 		    tmp_at(DISP_END, 0);
 		    breakmsg(obj, cansee(bhitpos.x, bhitpos.y));
 		    breakobj(obj, bhitpos.x, bhitpos.y, TRUE, TRUE);

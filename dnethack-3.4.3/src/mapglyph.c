@@ -113,8 +113,8 @@ unsigned *ospecial;
 #endif
 	    zap_color((offset >> 2));
     } else if ((offset = (glyph - GLYPH_EXPLODE_OFF)) >= 0) {	/* explosion */
-	ch = showsyms[(offset % MAXEXPCHARS) + S_explode1];
-	explode_color(offset / MAXEXPCHARS);
+		ch = showsyms[(offset % MAXEXPCHARS) + S_explode1];
+		explode_color(offset / MAXEXPCHARS);
     } else if ((offset = (glyph - GLYPH_CMAP_OFF)) >= 0) {	/* cmap */
 	ch = showsyms[offset];
 #ifdef ROGUE_COLOR
@@ -165,7 +165,7 @@ unsigned *ospecial;
 						color = CLR_BLACK;
 					}
 					if(offset >= S_drkroom && offset <= S_dnladder){
-						color = CLR_BLACK;
+						color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
 					}
 				}
 			} else if(Is_sunsea(&u.uz)){
@@ -202,14 +202,14 @@ unsigned *ospecial;
 					color = CLR_RED;
 				}
 				if(offset >= S_drkroom && offset <= S_dnladder){
-					color = CLR_BLACK;
+					color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
 				}
 			} else if(In_cha(&u.uz)){
 				if(offset >= S_vwall && offset <= S_trwall){
 					color = CLR_BLACK;
 				}
 				if(offset >= S_drkroom && offset <= S_dnladder){
-					color = CLR_BLACK;
+					color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
 				}
 				if(Is_lich_level(&u.uz)){
 					if(offset >= S_vwall && offset <= S_trwall){
@@ -252,7 +252,7 @@ unsigned *ospecial;
 						color = CLR_BLACK;
 					}
 					else if(offset >= S_drkroom && offset <= S_dnladder){
-						color = CLR_BLACK;
+						color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
 					}
 				}
 			} else if(In_law(&u.uz)){
@@ -328,7 +328,7 @@ unsigned *ospecial;
 						if(offset >= S_vwall && offset <= S_hcdoor)
 							color = CLR_BLACK;
 						else if (offset == S_drkroom)
-							color = CLR_BROWN;
+							color = CLR_BLACK;
 						else if (offset == S_litroom)
 							color = CLR_BROWN;
 					}
@@ -339,12 +339,9 @@ unsigned *ospecial;
 					) color = CLR_BROWN;
 					else if(offset >= S_vwall && offset <= S_hcdoor)
 						color = CLR_GREEN;
-				} else if(Is_abyss3(&u.uz)){
-					if(offset >= S_vwall && offset <= S_hcdoor)
-						color = CLR_GREEN;
 				} else if(Is_hell3(&u.uz)){
-						if (offset == S_drkroom || offset == S_litroom)
-							color = CLR_ORANGE;
+						if (offset == S_drkroom) color = CLR_RED;
+						else if(offset == S_litroom) color = CLR_ORANGE;
 				}
 			}
 			if (offset >= S_vwall && offset <= S_hcdoor) {
@@ -358,9 +355,9 @@ unsigned *ospecial;
 					color = CLR_WHITE;
 			} else if (offset == S_drkroom || offset == S_litroom) {
 				if (*in_rooms(x,y,BEEHIVE))
-					color = CLR_YELLOW;
+					color = (offset == S_drkroom) ? CLR_BROWN : CLR_YELLOW;
 				else if(In_mines_quest(&u.uz) && !Is_nemesis(&u.uz)){
-					color = CLR_BROWN;
+					color = (offset == S_drkroom) ? CLR_BLACK : CLR_BROWN;
 				}
 			} else if (offset == S_altar) {
 				// if (Hallucination) color = rn2(CLR_MAX); Redraw cycle doesn't trigger unless something passes over square
@@ -478,7 +475,7 @@ unsigned *ospecial;
 		    iflags.showrace && !Upolyd)
 		color = HI_DOMESTIC;
 #endif
-	}
+		}
     }
 
 #ifdef TEXTCOLOR

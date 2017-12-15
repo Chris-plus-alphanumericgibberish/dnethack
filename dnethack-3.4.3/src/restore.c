@@ -902,7 +902,7 @@ boolean ghostly;
 	    /* Now get rid of all the temp fruits... */
 	    freefruitchn(oldfruit),  oldfruit = 0;
 
-	    if (lev > ledger_no(&medusa_level) &&
+	    if (lev > ledger_no(&challenge_level) &&
 			lev < ledger_no(&stronghold_level) && xdnstair == 0) {
 		coord cc;
 

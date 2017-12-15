@@ -1,0 +1,326 @@
+#	SCCS Id: @(#) Grue.des
+#	Copyright (c) 1989 by Jean-Christophe Collet
+#	Copyright (c) 1990, 1991 by M. Stephenson
+# NetHack may be freely redistributed.  See license for details.
+#
+# These are the Grue's levels :
+#
+
+MAZE:"chall-5",' '
+FLAGS: noteleport,shortsighted
+GEOMETRY:center,center
+#          1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0             ----      ---- ---- ---- -}}- -}}- ---- ---- ---- ----         
+1      --------  --------  -.-}}-.-  ---}}---}}-.-  ---  -.-  ---  ---       
+2      |                                 }}}}}}                      |       
+3      |                              {  }}}}}                       .       
+4    |-|    ---  -.---..-  -.-  --       }---} -.-} ---  ---  ---    |-|     
+5   |-      | .  |      .  | |  |.      }}. |} | | }. .  | |  | .      -|    
+6  |-       -.-  -----..-  -.-  --      }}-.-} | | }---  ---  -.-       -|   
+7 |-                   }             }}}} }}}} . |                       -|  
+8|-                   }             }}}} }}    . |                        -| 
+9|               -.-  ---}}--   -.-}}-.-}}-.-  | |  -.-  ---               | 
+0|               | |  | . }|--  | |}}| |}}| |  . |  | .  | .               | 
+1|               -.-  ---} -.-  -.-}}-.-}}---  ---  S#F  -.-               | 
+2|-                         }}   }}}}}}}}}     }}}  . |                   -| 
+3 |-                       }}} }}}}}}}}}}       }}  | .                  -|  
+4  |-       -.-  ---} ---  --- }---}}     ---  -.-  | |  -.----.-       -|   
+5   |-      | |  | .}}. |  | . }| .}}     . |  | .  | |  |      .      -|    
+6    |-|    | |  --- }---  -.- }---}      -.-  -.-  -.-  ---  ---    |-|     
+7      |    -.-               }}}}}}  {                    |  |      |       
+8      |           ----       }}}}}}                       |  |      |       
+9      ---}}---  --|  |--}}---}}---}}---  ---}}---}}---  ---  ---}}---       
+0        ---- ----      ---- -}}- -}}- ---- ---- ---- ----      ----         
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#          1         2         3         4         5         6         7
+
+# unlit light sources in the walls, waiting to be lit and/or looted
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"wax candle",(40,05)
+OBJECT:'(',"wax candle",(33,15)
+OBJECT:'(',"wax candle",(37,09)
+OBJECT:'(',"wax candle",(37,11)
+OBJECT:'*',"chunk of fossile dark",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[10%]:'*',"chunk of fossile dark",random
+
+GEOMETRY:center,center
+#          1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0             ----      ---- ---- ---- -}}- -}}- ---- ---- ---- ----         
+1      --------..--------..---}}---..---}}---}}---..---..---..---..---       
+2      |.................................}}}}}}......................|       
+3      |..............................{..}}}}}.......................|       
+4    |-|....---..--------..---..--.......}---}.---}.---..---..---....|-|     
+5   |-......| |..|      |..| |..||......}}| |}.| |.}| |..| |..| |......-|    
+6  |-.......---..--------..---..--......}}---}.| |.}---..---..---.......-|   
+7 |-...................}.............}}}}.}}}}.| |.......................-|  
+8|-...................}.............}}}}.}}....| |........................-| 
+9|...............---..---}}--...---}}---}}---..| |..---..---...............| 
+0|...............| |..| |.}|--..| |}}| |}}| |..| |..| |..| |...............| 
+1|...............---..---}.---..---}}---}}---..---..S#F..---...............| 
+2|-.........................}}...}}}}}}}}}.....}}}..| |...................-| 
+3 |-.......................}}}.}}}}}}}}}}.......}}..| |..................-|  
+4  |-.......---..---}.---..---.}---}}.....---..---..| |..--------.......-|   
+5   |-......| |..| |}}| |..| |.}| |}}.....| |..| |..| |..|      |......-|    
+6    |-|....| |..---.}---..---.}---}......---..---..---..---  ---....|-|     
+7      |....---...............}}}}}}..{....................|  |......|       
+8      |...........----.......}}}}}}.......................|  |......|       
+9      ---}}---..--|  |--}}---}}---}}---..---}}---}}---..---  ---}}---       
+0        ---- ----      ---- -}}- -}}- ---- ---- ---- ----      ----         
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#          1         2         3         4         5         6         7
+
+# Dungeon Description
+RANDOM_PLACES:(63,18),(64,19),(52,11),(72,09)
+REGION:(00,00,75,20),unlit,"ordinary"
+
+# Teleport: down to upstairs area,  up to downstairs area
+TELEPORT_REGION:(02,02,20,18),(0,0,0,0),down
+TELEPORT_REGION:(55,02,73,18),(0,0,0,0),up
+
+# Stairs
+STAIR:(08,10),up
+STAIR:(68,10),down
+
+# Warning
+ENGRAVING:(08,10), dust, "BEWARE OF GRUE"
+
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,20)
+
+# Objects
+OBJECT:'%',"egg",random,"dark worm",0
+OBJECT:'?',"light",random,blessed,0
+OBJECT:'?',"light",random,cursed,0
+OBJECT[50%]:'%',"egg",random,"dark worm",0
+OBJECT[50%]:'%',"egg",random,"dark worm",0
+OBJECT[50%]:'%',"egg",random,"dark worm",0
+OBJECT[90%]:'!',"healing",place[0],blessed,0
+OBJECT[50%]:'!',"extra healing",place[0],blessed,0
+OBJECT[75%]:'%',"egg",place[1],"deep wyrmling",0
+OBJECT:'%',"corpse",place[2],"Elvenqueen",0
+OBJECT:'/',"light",place[2]
+OBJECT:')',"elven broadsword",place[2],uncursed,1
+OBJECT:'[',"cloak of displacement",place[2]
+ENGRAVING:place[2], engrave, "Elbere-"
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+# Traps (to put out your lightsource)
+TRAP:random,random
+TRAP:"magic",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+
+# Monsters
+MONSTER:'U',"Grue",(68,10),asleep
+MONSTER:'w',"dark worm",(68,11)
+MONSTER:'w',"dark worm",(68,09)
+MONSTER:'w',"dark worm",(66,10)
+MONSTER:'w',"dark worm",(69,10)
+MONSTER:'w',"dark worm",(60,07)
+MONSTER:'w',"dark worm",(60,13)
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'P',"gray ooze",random
+MONSTER:'B',"vampire bat",random
+MONSTER:';',"giant eel",random
+MONSTER:';',"giant eel",random
+MONSTER:';',"piranha",random
+MONSTER:';',"piranha",random
+
+
+
+
+MAZE:"chall-6",' '
+FLAGS: noteleport,shortsighted
+
+GEOMETRY:center,center
+#          1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1                                |---.----|      |---|                       
+2                             |-.-        -.----.-   -----|                  
+3                            |-    }}}}}}                 ----.----|         
+4                           |-    }}}}}}}}                         -|        
+5     |-----|              |-      }}}}}}                           -|       
+6   |--     --|           |-    -             -.-----.-              |       
+7  |-         --|        |-    -|-         ---|       |-             |       
+8  |            -.------.-    -| |  --.----|           .            -|       
+9  |                        --|  |  |                  |-          -|        
+0  |                        |  |--  .     |--.--|   |-.-    -.--- -|         
+1  |-         --            -.--    |  |-.-     -||--     --|   | |          
+2   |-       -||-.-                 -||-         --     --|     | ---|       
+3    |--.- --     |-                 --                -|      |-    -|      
+4       | -|      |-                                 --|       |      |      
+5     |-- -.-----.-   -.--                         --|         |      |      
+6    |-               -| |-.-          --        .-|           |      |      
+7    |                 |    |-     -.--||- -   --|             |-    -|      
+8    |                 |     |--.--|     |-|---|                |----|       
+9    |-               -|                                                     
+0     |-----.-----.---|                                                      
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#          1         2         3         4         5         6         7
+
+# unlit light sources in the walls, waiting to be lit and/or looted
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'(',"tallow candle",random
+OBJECT:'*',"chunk of fossile dark",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[50%]:'(',"wax candle",random
+OBJECT[10%]:'*',"chunk of fossile dark",random
+
+GEOMETRY:center,center
+#          1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1                                |--------|      |---|                       
+2                             |---........--------...-----|                  
+3                            |-....}}}}}}.................---------|         
+4                           |-....}}}}}}}}.........................-|        
+5     |-----|              |-......}}}}}}...........................-|       
+6   |--.....--|           |-....-.............---------..............|       
+7  |-.........--|        |-....-|-.........---|       |-.............|       
+8  |............----------....-| |..-------|           |............-|       
+9  |........................--|  |..|                  |-..........-|        
+0  |........................|  |--..|     |-----|   |---....-----.-|         
+1  |-.........--............----....|  |---.....-||--.....--|   |.|          
+2   |-.......-||---.................-||-.........--.....--|     |.---|       
+3    |----.--     |-.................--................-|      |-....-|      
+4       |.-|      |-.................................--|       |......|      
+5     |--.---------...----.........................--|         |......|      
+6    |-...............-| |---..........--........--|           |......|      
+7    |.................|    |-.....----||-.-...--|             |-....-|      
+8    |.................|     |-----|     |-|---|                |----|       
+9    |-...............-|                                                     
+0     |---------------|                                                      
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#          1         2         3         4         5         6         7
+
+# Dungeon Description
+RANDOM_PLACES:(31,11),(45,11),(50,02)
+REGION:(00,00,75,20),unlit,"ordinary"
+
+# Teleport
+TELEPORT_REGION:(03,04,18,19),(0,0,0,0),down
+
+# Stairs
+STAIR:(13,18),up
+STAIR:(66,15),down
+
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,20)
+
+# Objects
+OBJECT:'%',"egg",random,"dark worm",0
+OBJECT:'?',"light",random,blessed,0
+OBJECT:'?',"light",random,cursed,0
+OBJECT[50%]:'%',"egg",random,"dark worm",0
+OBJECT[50%]:'%',"egg",random,"dark worm",0
+OBJECT:'!',"gain level",random
+OBJECT:'+',random,random
+OBJECT:')',"golden arrow",random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+# Warning
+ENGRAVING:(13,18), dust, "BEWARE OF GRUE"
+
+# An unlucky adventurer
+OBJECT:'%',"corpse",place[0],"Elvenking",0
+OBJECT:'/',"light",place[0]
+OBJECT:')',"elven broadsword",place[0],uncursed,4
+OBJECT:'[',"cloak of invisibility",place[0],cursed,-1
+ENGRAVING:place[0], engrave, "Elbere-"
+
+# Traps
+TRAP:random,random
+TRAP:random,random
+TRAP:"rust",random
+TRAP:"rust",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",random
+TRAP:"board",(64,11)
+
+# Monsters
+MONSTER:'U',"Grue",(66,15),asleep
+MONSTER:'w',"dark worm",(67,15)
+MONSTER:'w',"dark worm",(65,15)
+MONSTER:'w',"dark worm",(68,14)
+MONSTER:'w',"dark worm",(64,14)
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:'w',"dark worm",random
+MONSTER:';',"kraken",(36,04)
+MONSTER:'L',"lich",place[1]
+MONSTER:'W',"barrow wight",(41,15)
+MONSTER:'d',"warg",(48,04)
+MONSTER:'d',"warg",(49,04)
+MONSTER:'d',"warg",(50,04)
+MONSTER:'d',"warg",(51,04)

@@ -41,6 +41,8 @@ STATIC_DCL int FDECL(spell_hit_bonus, (int));
 /* WAC -- ZT_foo #defines moved to spell.h, since explode uses these types */
 
 #define is_hero_spell(type)	((type) >= 10 && (type) < 20)
+#define wand_damage_die(skill)	(((skill) > 1) ? (2*(skill) + 4) : 6)
+#define wandlevel(otyp)	(otyp == WAN_MAGIC_MISSILE ? 1 : otyp == WAN_SLEEP ? 1 : otyp == WAN_STRIKING ? 2 : otyp == WAN_FIRE ? 4 : otyp == WAN_COLD ? 4 : otyp == WAN_LIGHTNING ? 5 : otyp == WAN_DEATH ? 7 : 1)
 
 #ifndef OVLB
 STATIC_VAR const char are_blinded_by_the_flash[];
@@ -127,6 +129,7 @@ struct obj *otmp;
 
 	switch(otyp) {
 	case WAN_STRIKING:
+		use_skill(P_WAND_POWER, wandlevel(otyp));
 		zap_type_text = "wand";
 		/* fall through */
 	case SPE_FORCE_BOLT:
@@ -135,11 +138,12 @@ struct obj *otmp;
 			shieldeff(mtmp->mx, mtmp->my);
 			break;	/* skip makeknown */
 		} else if (u.uswallow || otyp == WAN_STRIKING || rnd(20) < 10 + find_mac(mtmp)) {
-			dmg = d(2,12);
+			if(otyp == WAN_STRIKING) dmg = d(wand_damage_die(P_SKILL(P_WAND_POWER))-4,12);
+			else dmg = d(wand_damage_die(P_SKILL(P_ATTACK_SPELL))-4,12);
 			if (!flags.mon_moving && otyp == SPE_FORCE_BOLT && (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM))
 				dmg += d((u.ulevel+1)/2, 12);
 			if(dbldam) dmg *= 2;
-			if(!flags.mon_moving && u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
+			if(!flags.mon_moving && Double_spell_size) dmg *= 1.5;
 			if (otyp == SPE_FORCE_BOLT)
 			    dmg += spell_damage_bonus();
 			
@@ -174,9 +178,10 @@ struct obj *otmp;
 		if (is_undead_mon(mtmp)) {
 			reveal_invis = TRUE;
 			wake = TRUE;
-			dmg = rnd(8);
+			if(otyp == WAN_UNDEAD_TURNING) dmg = d(wand_damage_die(P_SKILL(P_WAND_POWER)),8);
+			else dmg = rnd(8);
 			if(dbldam) dmg *= 2;
-			if(!flags.mon_moving && u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
+			if(!flags.mon_moving && Double_spell_size) dmg *= 1.5;
 			if (otyp == SPE_TURN_UNDEAD)
 				dmg += spell_damage_bonus();
 			flags.bypasses = TRUE;	/* for make_corpse() */
@@ -334,9 +339,10 @@ struct obj *otmp;
 	case SPE_DRAIN_LIFE:
 	case WAN_DRAINING:	/* KMH */
 		reveal_invis = TRUE;
-		dmg = rnd(8);
+		if(otyp == WAN_DRAINING) d((wand_damage_die(P_SKILL(P_WAND_POWER))-4)/2,8);
+		else dmg = rnd(8);
 		if(dbldam) dmg *= 2;
-		if(!flags.mon_moving && u.sealsActive&SEAL_NABERIUS) dmg *= 1.5;
+		if(!flags.mon_moving && Double_spell_size) dmg *= 1.5;
 		if (otyp == SPE_DRAIN_LIFE)
 			dmg += spell_damage_bonus();
 		if (resists_drli(mtmp)){
@@ -346,12 +352,13 @@ struct obj *otmp;
 				mtmp->mhp > 0) {
 		    mtmp->mhp -= dmg;
 		    mtmp->mhpmax -= dmg;
-		    if (mtmp->mhp <= 0 || mtmp->mhpmax <= 0 || mtmp->m_lev < 1)
-			xkilled(mtmp, 1);
+		    if (mtmp->mhp <= 0 || mtmp->mhpmax <= 0 || mtmp->m_lev < ((otyp == WAN_DRAINING) ? ((wand_damage_die(P_SKILL(P_WAND_POWER))-4)/2) : 1))
+				xkilled(mtmp, 1);
 		    else {
-			mtmp->m_lev--;
-			if (canseemon(mtmp))
-			    pline("%s suddenly seems weaker!", Monnam(mtmp));
+				if(otyp == WAN_DRAINING)  mtmp->m_lev -= (wand_damage_die(P_SKILL(P_WAND_POWER))-4)/2;
+				else mtmp->m_lev--;
+				if (canseemon(mtmp))
+					pline("%s suddenly seems weaker!", Monnam(mtmp));
 		    }
 		} else if(cansee(mtmp->mx,mtmp->my)) shieldeff(mtmp->mx, mtmp->my);
 		makeknown(otyp);
@@ -1666,6 +1673,35 @@ struct obj *obj, *otmp;
 		    res = 0;
 	} else
 	switch(otmp->otyp) {
+	case WAN_LIGHT:
+	case SCR_LIGHT:
+	case SPE_LIGHT:
+		if ((obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
+			obj->otyp == BRASS_LANTERN || obj->otyp == POT_OIL ||
+			obj->otyp == DWARVISH_HELM || obj->otyp == GNOMISH_POINTY_HAT ||
+			obj->otyp == TALLOW_CANDLE || obj->otyp == WAX_CANDLE) &&
+			!((!Is_candle(obj) && obj->age == 0) || (obj->otyp == MAGIC_LAMP && obj->spe == 0))
+			&& (!obj->cursed || rn2(2))
+			&& !obj->lamplit) {
+
+			// Assumes the player is the only cause of this effect for purposes of shk billing
+
+			if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
+				obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_HELM) {
+				check_unpaid(obj);
+			}
+			else {
+				if (obj->unpaid && costly_spot(obj->ox, obj->oy) &&
+					obj->age == 20L * (long)objects[obj->otyp].oc_cost) {
+					const char *ithem = obj->quan > 1L ? "them" : "it";
+					verbalize("You burn %s, you bought %s!", ithem, ithem);
+					bill_dummy_object(obj);
+				}
+			}
+			begin_burn(obj, FALSE);
+		}
+		res = 0;
+		break;
 	case WAN_POLYMORPH:
 	case SPE_POLYMORPH:
 		if (obj->otyp == WAN_POLYMORPH ||
@@ -2782,11 +2818,12 @@ register struct	obj	*obj;
 		buzz(otyp - SPE_MAGIC_MISSILE + 10,
 		     u.ulevel / 2 + 1,
 		     u.ux, u.uy, u.dx, u.dy,0,0);
-	    } else if (otyp >= WAN_MAGIC_MISSILE && otyp <= WAN_LIGHTNING)
+	    } else if (otyp >= WAN_MAGIC_MISSILE && otyp <= WAN_LIGHTNING){
+		use_skill(P_WAND_POWER, wandlevel(otyp));
 		buzz(otyp - WAN_MAGIC_MISSILE,
-		     (otyp == WAN_MAGIC_MISSILE) ? 2 : 6,
+		     wand_damage_die(P_SKILL(P_WAND_POWER))/((otyp == WAN_MAGIC_MISSILE) ? 2 : 1),
 		     u.ux, u.uy, u.dx, u.dy,0,0);
-	    else
+	    } else
 		impossible("weffects: unexpected spell or wand");
 	    disclose = TRUE;
 	}
@@ -3330,7 +3367,7 @@ death_blast:
 		} else if(flags.mamn_brth){
 		    struct obj *otmp2;
 
-		    if (resists_disint(mon)) {
+		    if (resists_ston(mon)) {
 			sho_shieldeff = TRUE;
 		    } else if (mon->misc_worn_check & W_ARMS && (*ootmp = which_armor(mon, W_ARMS)) && (*ootmp)->obj_material != GOLD) {
 				/* destroy shield; victim survives */
@@ -3822,7 +3859,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     }
     if(type < 0) newsym(u.ux,u.uy);
     if(!range) range = rn1(7,7);
-	if(!flags.mon_moving && u.sealsActive&SEAL_NABERIUS){
+	if(!flags.mon_moving && Double_spell_size){
 		range *= 2;
 		flat *= 1.5;
 		nd *= 1.5;
@@ -4444,23 +4481,26 @@ void
 fracture_rock(obj)	/* fractured by pick-axe or wand of striking */
 register struct obj *obj;		   /* no texts here! */
 {
+	int mat = obj->obj_material;
 	/* A little Sokoban guilt... */
 	if (obj->otyp == BOULDER && In_sokoban(&u.uz) && !flags.mon_moving)
 	    change_luck(-1); /*boulders only*/
 
 	obj->otyp = ROCK;
 	obj->quan = (long) rn1(60, 7);
-	obj->owt = weight(obj);
 	obj->oclass = GEM_CLASS;
 	obj->known = FALSE;
 	obj->onamelth = 0;		/* no names */
 	obj->oxlth = 0;			/* no extra data */
 	obj->oattached = OATTACHED_NOTHING;
+	obj->obj_material = MINERAL;
+	obj->owt = weight(obj);
+	set_material(obj, mat);
 	if (obj->where == OBJ_FLOOR) {
 		obj_extract_self(obj);		/* move rocks back on top */
 		place_object(obj, obj->ox, obj->oy);
 		if(!does_block(obj->ox,obj->oy,&levl[obj->ox][obj->oy]))
-	    		unblock_point(obj->ox,obj->oy);
+			unblock_point(obj->ox,obj->oy);
 		if(cansee(obj->ox,obj->oy))
 		    newsym(obj->ox,obj->oy);
 	}

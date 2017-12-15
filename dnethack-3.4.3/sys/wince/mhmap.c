@@ -584,19 +584,19 @@ void onPaint(HWND hWnd)
 						&special, i, j);
 				ch = (char)mgch;
 				if (((special & MG_PET) && iflags.hilite_pet) ||
-				    ((special & MG_DETECT) && iflags.use_inverse)) {
-					back_brush = CreateSolidBrush(nhcolor_to_RGB(CLR_GRAY));
+				    ((special & MG_DETECT) && iflags.use_inverse)
+				) {
+					if(special & MG_PET){
+						back_brush = CreateSolidBrush(nhcolor_to_RGB(CLR_BLUE));
+						if(color == CLR_BLUE) OldFg = SetTextColor( hDC,  nhcolor_to_RGB(CLR_BLACK));
+						else OldFg = SetTextColor (hDC, nhcolor_to_RGB(color) );
+					} else if(special & MG_DETECT){
+						back_brush = CreateSolidBrush(nhcolor_to_RGB(CLR_MAGENTA));
+						if(color == CLR_MAGENTA) OldFg = SetTextColor( hDC,  nhcolor_to_RGB(CLR_BLACK));
+						else OldFg = SetTextColor (hDC, nhcolor_to_RGB(color) );
+					}
 					FillRect (hDC, &glyph_rect, back_brush);
 					DeleteObject (back_brush);
-					switch (color)
-					{
-					case CLR_GRAY:
-					case CLR_WHITE:
-						OldFg = SetTextColor( hDC,  nhcolor_to_RGB(CLR_BLACK));
-						break;
-					default:
-						OldFg = SetTextColor (hDC, nhcolor_to_RGB(color) );
-					}
 				} else {
 					OldFg = SetTextColor (hDC, nhcolor_to_RGB(color) );
 				}
@@ -862,6 +862,12 @@ void nhglyph2charcolor(short g, uchar* ch, int* color)
 	} else if ((offset = (g - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
 		*ch = oc_syms[(int)objects[CORPSE].oc_class];
 		mon_color(offset);
+	} else if ((offset = (g - GLYPH_ZOMBIE_OFF)) >= 0) {	/* a zombie */
+		*ch = monsyms[(int)mons[offset].mlet];
+		pet_color(offset);
+	} else if ((offset = (g - GLYPH_PEACE_OFF)) >= 0) {	/* a peaceful monster */
+		*ch = monsyms[(int)mons[offset].mlet];
+		pet_color(offset);
 	} else if ((offset = (g - GLYPH_PET_OFF)) >= 0) {	/* a pet */
 		*ch = monsyms[(int)mons[offset].mlet];
 		pet_color(offset);

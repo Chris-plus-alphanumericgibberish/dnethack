@@ -53,7 +53,7 @@ unsigned material;
 
 	if (Has_contents(obj)) {
 	for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
-		if (obj->obj_material == material) return otmp;
+		if (otmp->obj_material == material) return otmp;
 		else if (Has_contents(otmp) && (temp = o_material(otmp, material)))
 		return temp;
 	}
@@ -603,7 +603,7 @@ struct obj	*detector;	/* object doing the detecting */
 					detector->oartifact) &&
 			detector->blessed);
 	int ct = 0;
-	register struct obj *obj;
+	register struct obj *obj, *otmp = (struct obj *)0;
 	register struct monst *mtmp;
 	int uw = u.uinwater;
 	int usw = u.usubwater;
@@ -621,14 +621,14 @@ struct obj	*detector;	/* object doing the detecting */
 	if (do_dknown) for(obj = invent; obj; obj = obj->nobj) if(obj->oartifact) do_dknown_of(obj);
 
 	for (obj = fobj; obj; obj = obj->nobj) {
-		if (obj && obj->oartifact) {
+		if (obj && o_artifact(obj)) {
 			if (obj->ox != u.ux || obj->oy != u.uy) ct++;
 			if (do_dknown) do_dknown_of(obj);
 		}
 	}
 
 	for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
-		if (obj && obj->oartifact) {
+		if (obj && o_artifact(obj)) {
 			if (obj->ox != u.ux || obj->oy != u.uy) ct++;
 			if (do_dknown) do_dknown_of(obj);
 		}
@@ -637,7 +637,7 @@ struct obj	*detector;	/* object doing the detecting */
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 	if (DEADMONSTER(mtmp)) continue;
 		for (obj = mtmp->minvent; obj; obj = obj->nobj) {
-			if (obj && obj->oartifact){
+			if (obj && o_artifact(obj)) {
 				ct++;
 				if (do_dknown) do_dknown_of(obj);
 			}
@@ -657,8 +657,8 @@ struct obj	*detector;	/* object doing the detecting */
  *	Map all buried objects first.
  */
 	for (obj = level.buriedobjlist; obj; obj = obj->nobj)
-		if (obj && obj->oartifact) {
-			map_object(obj, 1);
+		if (obj && (otmp = o_artifact(obj))) {
+			map_object(otmp, 1);
 		}
 	/*
 	 * If we are mapping all objects, map only the top object of a pile or
@@ -671,8 +671,8 @@ struct obj	*detector;	/* object doing the detecting */
 	for (x = 1; x < COLNO; x++)
 	for (y = 0; y < ROWNO; y++)
 		for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
-		if (obj && obj->oartifact) {
-			map_object(obj, 1);
+		if (obj && (otmp = o_artifact(obj))) {
+			map_object(otmp, 1);
 	break;
 		}
 	/* Objects in the monster's inventory override floor objects. */
@@ -1144,7 +1144,7 @@ static const struct {
 	d_level *where;
 } level_detects[] = {
   { "Delphi", &oracle_level },
-  { "Medusa's lair", &medusa_level },
+  { "a worthy opponent", &challenge_level },
   { "a castle", &stronghold_level },
   { "the Wizard of Yendor's tower", &wiz1_level },
 };

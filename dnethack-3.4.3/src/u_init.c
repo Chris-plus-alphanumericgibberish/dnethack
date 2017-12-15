@@ -652,6 +652,7 @@ static const struct def_skill Skill_A[] = {
 #ifdef STEED
     { P_RIDING, P_BASIC },
 #endif
+    { P_WAND_POWER, P_SKILLED },
     { P_TWO_WEAPON_COMBAT, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_EXPERT },
     { P_NONE, 0 }
@@ -775,6 +776,7 @@ static const struct def_skill Skill_H[] = {
     { P_SLING, P_SKILLED },		{ P_DART, P_EXPERT },
     { P_SHURIKEN, P_SKILLED },		{ P_UNICORN_HORN, P_EXPERT },
     { P_HEALING_SPELL, P_EXPERT },
+    { P_WAND_POWER, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_BASIC },
     { P_BEAST_MASTERY, P_EXPERT },
     { P_NONE, 0 }
@@ -1025,6 +1027,7 @@ static const struct def_skill Skill_Pir[] = {
 //#endif
 	{ P_ATTACK_SPELL, P_BASIC },{ P_DIVINATION_SPELL, P_BASIC },
 	{ P_ENCHANTMENT_SPELL, P_BASIC },{ P_ESCAPE_SPELL, P_SKILLED },
+    { P_WAND_POWER, P_SKILLED },
     { P_TWO_WEAPON_COMBAT, P_SKILLED },
     { P_BARE_HANDED_COMBAT, P_EXPERT },
     { P_NONE, 0 }
@@ -1042,6 +1045,7 @@ static const struct def_skill Skill_R[] = {
     { P_DART, P_EXPERT },		{ P_SHURIKEN, P_SKILLED },
     { P_DIVINATION_SPELL, P_SKILLED },	{ P_ESCAPE_SPELL, P_SKILLED },
     { P_MATTER_SPELL, P_SKILLED },
+    { P_WAND_POWER, P_EXPERT },
 #ifdef STEED
     { P_RIDING, P_BASIC },
 #endif
@@ -1065,6 +1069,7 @@ static const struct def_skill Skill_Ran[] = {
     { P_HEALING_SPELL, P_BASIC },
     { P_DIVINATION_SPELL, P_EXPERT },
     { P_ESCAPE_SPELL, P_BASIC },
+    { P_WAND_POWER, P_BASIC },
 #ifdef STEED
     { P_RIDING, P_BASIC },
 #endif
@@ -1114,6 +1119,7 @@ static const struct def_skill Skill_T[] = {
 	{ P_UNICORN_HORN, P_SKILLED },
     { P_DIVINATION_SPELL, P_SKILLED },	{ P_ENCHANTMENT_SPELL, P_BASIC },
     { P_ESCAPE_SPELL, P_SKILLED },
+    { P_WAND_POWER, P_SKILLED },
 #ifdef STEED
     { P_RIDING, P_BASIC },
 #endif
@@ -1139,6 +1145,7 @@ static const struct def_skill Skill_V[] = {
     { P_SLING, P_BASIC },			{ P_BOW, P_EXPERT },
     { P_ATTACK_SPELL, P_EXPERT },	{ P_ESCAPE_SPELL, P_BASIC },
 	{ P_DIVINATION_SPELL, P_SKILLED },
+    { P_WAND_POWER, P_BASIC },
 #ifdef STEED
     { P_RIDING, P_SKILLED },
 #endif
@@ -1162,6 +1169,7 @@ static const struct def_skill Skill_W[] = {
     { P_DIVINATION_SPELL, P_EXPERT },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
     { P_CLERIC_SPELL, P_SKILLED },	{ P_ESCAPE_SPELL, P_EXPERT },
     { P_MATTER_SPELL, P_EXPERT },
+    { P_WAND_POWER, P_SKILLED },
 #ifdef STEED
     { P_RIDING, P_BASIC },
 #endif

@@ -358,6 +358,16 @@ struct obj *corpse;
 		drop_upon_death((struct monst *)0, otmp);
 		if (!otmp) return;	/* couldn't make statue */
 		mtmp = (struct monst *)0;
+	} else if (u.ugrave_arise == (NON_PM - 4)) {
+		struct obj *otmp;
+
+		/* embed your possessions in your statue */
+		otmp = mk_named_object(STATUE, &mons[u.umonnum],
+				       u.ux, u.uy, plname);
+		set_material(otmp, GLASS);
+		drop_upon_death((struct monst *)0, otmp);
+		if (!otmp) return;	/* couldn't make statue */
+		mtmp = (struct monst *)0;
 	} else if (Race_if(PM_VAMPIRE)) {
 		/* don't let vampires rise as some other monsters */
 		drop_upon_death((struct monst *)0, (struct obj *)0);
@@ -378,17 +388,45 @@ struct obj *corpse;
 			(void) obj_attach_mid(corpse, mtmp->m_id); 
 	} else {
 		/* give your possessions to the monster you become */
-		in_mklev = TRUE;
-		mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
-		in_mklev = FALSE;
+		if(u.ugrave_arise == PM_ZOMBIE){
+			u.ugrave_arise = (u.mfemale && urace.femalenum != NON_PM) ? urace.femalenum : urace.malenum;
+			in_mklev = TRUE;
+			mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
+			in_mklev = FALSE;
+			if(mtmp)
+				mtmp->mfaction = ZOMBIFIED;
+		} else if(u.ugrave_arise == PM_SKELETON){
+			u.ugrave_arise = (u.mfemale && urace.femalenum != NON_PM) ? urace.femalenum : urace.malenum;
+			in_mklev = TRUE;
+			mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
+			in_mklev = FALSE;
+			if(mtmp)
+				mtmp->mfaction = SKELIFIED;
+		} else if(u.ugrave_arise == PM_BAALPHEGOR){
+			u.ugrave_arise = (u.mfemale && urace.femalenum != NON_PM) ? urace.femalenum : urace.malenum;
+			in_mklev = TRUE;
+			mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
+			in_mklev = FALSE;
+			if(mtmp)
+				mtmp->mfaction = CRYSTALFIED;
+		} else {
+			in_mklev = TRUE;
+			mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
+			in_mklev = FALSE;
+		}
 		if (!mtmp) {
 			drop_upon_death((struct monst *)0, (struct obj *)0);
 			return;
 		}
 		mtmp = christen_monst(mtmp, plname);
 		newsym(u.ux, u.uy);
-		Your("body rises from the dead as %s...",
-			an(mons[u.ugrave_arise].mname));
+		Your("body rises from the dead as %s%s...",
+			an(mons[u.ugrave_arise].mname),
+			mtmp->mfaction == ZOMBIFIED ? " zombie" :
+			mtmp->mfaction == SKELIFIED ? " skeleton" :
+			mtmp->mfaction == CRYSTALFIED ? " vitrean" :
+			""
+			);
 		display_nhwindow(WIN_MESSAGE, FALSE);
 		drop_upon_death(mtmp, (struct obj *)0);
 		m_dowear(mtmp, TRUE);

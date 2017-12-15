@@ -609,6 +609,13 @@ unsigned int type;
 			break;
 		}
 	break;
+	case PM_PLUMACH:
+		return SOLID_FOG;
+	break;
+	case PM_FERRUMACH:
+		if(rn2(4)) return ICE_STORM;
+		return SOLID_FOG;
+	break;
 	case PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK:
 		return SUMMON_DEVIL; 
 	case PM_LICH__THE_FIEND_OF_EARTH:
@@ -1322,14 +1329,14 @@ int spellnum;
                    (old ? "even more " : ""));
            make_blinded(Blinded + (long)u.ucreamed - old, FALSE);
        }
-       You("smell putrid! You gag and vomit.");
-		vomit();
+       You("smell putrid!%s", !uclockwork?" You gag and vomit.":"");
+		if (!uclockwork) vomit();
 		/* same effect as "This water gives you bad breath!" */
 		for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
 			if(!DEADMONSTER(mtmp2) && (mtmp2 != mtmp))
 			monflee(mtmp2, 0, FALSE, FALSE);
 		}
-		if(!Sick) make_sick((long)rn1(ACURR(A_CON), 20), /* Don't make the PC more sick */
+		if(!Sick && !uclockwork) make_sick((long)rn1(ACURR(A_CON), 20), /* Don't make the PC more sick */
 								(char *)0, TRUE, SICK_NONVOMITABLE);
 		dmg = rnd(Half_physical_damage ? 5 : 10);
 		stop_occupation();
@@ -1389,7 +1396,7 @@ int spellnum;
 	   stop_occupation();
      break;
      case PLAGUE:
-       if (!Sick_resistance) {
+       if (!Sick_resistance && !uclockwork) {
           You("are afflicted with disease!");
            make_sick(Sick ? Sick/3L + 1L : (long)rn1(ACURR(A_CON), 20),
                         (char *)0, TRUE, SICK_NONVOMITABLE);
@@ -1626,9 +1633,29 @@ int spellnum;
 		stop_occupation();
 	break;
 	case MON_POISON_GAS:
-		flags.cth_attk=TRUE;//state machine stuff.
-		create_gas_cloud(mtmp->mux, mtmp->muy, rnd(3), rnd(3)+1);
-		flags.cth_attk=FALSE;
+		if(!mtmp){
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_gas_cloud(u.ux, u.uy, rnd(3), rnd(3)+1);
+			flags.cth_attk=FALSE;
+		} else {
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_gas_cloud(mtmp->mux, mtmp->muy, rnd(3), rnd(3)+1);
+			flags.cth_attk=FALSE;
+		}
+		dmg = 0;
+		stop_occupation();
+	break;
+	case SOLID_FOG:
+		if(!mtmp){
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_fog_cloud(u.ux, u.uy, 3, 8);
+			flags.cth_attk=FALSE;
+		} else {
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_fog_cloud(mtmp->mux, mtmp->muy, 3, 8);
+			flags.cth_attk=FALSE;
+			if(mtmp->data == &mons[PM_PLUMACH]) mtmp->mcan = 1;
+		}
 		dmg = 0;
 		stop_occupation();
 	break;
@@ -1979,7 +2006,7 @@ summon_alien:
 		} else if ((smarm = some_armor(&youmonst)) == (struct obj *)0) {
 		   Your("skin itches.");
 		/* Quest nemesis maledictions */
-		} else {
+		} else if(objects[smarm->otyp].oc_oprop == DISINT_RES){
 			if(smarm->spe <= -1*objects[smarm->otyp].a_ac) destroy_arm(smarm);
 			else{
 				smarm->spe -= 1;
@@ -3439,7 +3466,7 @@ int spellnum;
 				minstapetrify(mtmp, yours);
 		   }
 		   else
-			goto uspsibolt;
+			pline("%s stiffens momentarily.", Monnam(mtmp));
         }
 		dmg = 0;
 	 stop_occupation();
@@ -3460,7 +3487,7 @@ int spellnum;
      case PLAGUE:
 	   if(!mtmp) break;
        if (!resists_sickness(mtmp)) {
-          pline("%s is afflicted with disease!", Monnam(mtmp));
+          	if(canseemon(mtmp)) pline("%s is afflicted with disease!", Monnam(mtmp));
 		  if(!rn2(10)){
 			if (yours) killed(mtmp);
 			else monkilled(mtmp, "", AD_SPEL);

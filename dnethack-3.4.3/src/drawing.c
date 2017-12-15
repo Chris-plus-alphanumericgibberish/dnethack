@@ -162,6 +162,7 @@ const char def_monsyms[MAXMCLASSES] = {
 	DEF_EEL,
 	DEF_LIZARD,
 	DEF_PLANT,
+	DEF_NEU_OUTSIDER,
 	DEF_WORM_TAIL,		/* 60 */
 	DEF_MIMIC_DEF,		/* 61 */
 };
@@ -195,7 +196,7 @@ const char * const monexplain[MAXMCLASSES] = {
 
     "human or elf",		"ghost",		"shade",	"golem",
     "major demon",		"sea monster",	"lizard",	"plant",
-    "long worm tail",		"mimic"
+    "neutral spiritual being",	"long worm tail",		"mimic"
 };
 
 const struct symdef def_warnsyms[WARNCOUNT] = {
@@ -233,12 +234,12 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'+', "closed door",	C(CLR_BROWN)},	/* hcdoor */
 	{'#', "iron bars",	C(HI_METAL)},	/* bars */
 	{'#', "tree",		C(CLR_GREEN)},	/* tree */
-	{'#', "dead tree",	C(CLR_BLACK)},	/* dead tree */
+	{'#', "dead tree",	C(CLR_BROWN)},	/* dead tree */
 	{'.', "floor of a dark room", C(CLR_BLACK)},	/* drkroom */
 	{'.', "floor of a room",C(CLR_GRAY)},	/* litroom */
 	{'#', "bright room",C(CLR_WHITE)},	/* brightrm */
 /*20*/	{'#', "corridor",	C(CLR_GRAY)},	/* dark corr */
-	{'#', "lit corridor",	C(CLR_GRAY)},	/* lit corr (see mapglyph.c) */
+	{'#', "lit corridor",	C(CLR_BLACK)},	/* lit corr (see mapglyph.c) */
 	{'<', "staircase up",	C(CLR_GRAY)},	/* upstair */
 	{'>', "staircase down",	C(CLR_GRAY)},	/* dnstair */
 	{'<', "ladder up",	C(CLR_BROWN)},	/* upladder */
@@ -247,9 +248,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'|', "grave",      C(CLR_GRAY)},   /* grave */
 	{'\\', "opulent throne",C(HI_GOLD)},	/* throne */
 #ifdef SINKS
-	{'#', "sink",		C(CLR_GRAY)},	/* sink */
+	{'#', "sink",		C(CLR_WHITE)},	/* sink */
 #else
-	{'#', "",		C(CLR_GRAY)},	/* sink */
+	{'#', "",		C(CLR_WHITE)},	/* sink */
 #endif
 /*30*/	{'{', "fountain",	C(CLR_BLUE)},	/* fountain */
 	{'}', "water",		C(CLR_BLUE)},	/* pool */
@@ -261,7 +262,8 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'#', "raised drawbridge",C(CLR_BROWN)},/* hcdbridge */
 	{' ', "air",		C(CLR_CYAN)},	/* open air */
 	{'#', "cloud",		C(CLR_GRAY)},	/* [part of] a cloud */
-/*40*/	{'}', "water",		C(CLR_BLUE)},	/* under water */
+/*40*/	{'#', "fog cloud",	C(HI_ZAP)},	/* [part of] a cloud */
+	{'}', "water",		C(CLR_BLUE)},	/* under water */
 	{'^', "arrow trap",	C(HI_METAL)},	/* trap */
 	{'^', "dart trap",	C(HI_METAL)},	/* trap */
 	{'^', "falling rock trap",C(CLR_GRAY)},	/* trap */

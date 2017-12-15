@@ -6,7 +6,7 @@
 # These are the Medusa's levels :
 #
 
-MAZE:"medusa-1",' '
+MAZE:"chall-1",' '
 FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 MAP
@@ -106,7 +106,7 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 
-MAZE:"medusa-2",' '
+MAZE:"chall-2",' '
 FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 MAP
@@ -216,7 +216,7 @@ MONSTER:random,random,random
 
 
 ##Medusa 3&4:  From the new medusa levels patch
-MAZE:"medusa-3",' '
+MAZE:"chall-3",' '
 FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 #
@@ -333,7 +333,7 @@ MONSTER:'B',"raven",random,hostile
 MONSTER:'B',"raven",random,hostile
 
 
-MAZE:"medusa-4",' '
+MAZE:"chall-4",' '
 FLAGS: noteleport,shortsighted
 GEOMETRY:center,center
 #

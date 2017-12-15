@@ -106,7 +106,10 @@ typedef struct branch {
 #define Is_firelevel(x)		(on_level(x, &fire_level))
 #define Is_airlevel(x)		(on_level(x, &air_level))
 
-#define Is_medusa_level(x)	(on_level(x, &medusa_level))
+#define Is_challenge_level(x)	(on_level(x, &challenge_level))
+#define Is_medusa_level(x)	(on_level(x, &challenge_level) && dungeon_topology.challenge_variant >= MEDUSA_LEVEL1 && dungeon_topology.challenge_variant <= MEDUSA_LEVEL4)
+#define Is_grue_level(x)	(on_level(x, &challenge_level) && dungeon_topology.challenge_variant >= GRUE_LEVEL1 && dungeon_topology.challenge_variant <= GRUE_LEVEL2)
+
 #define Is_oracle_level(x)	(on_level(x, &oracle_level))
 
 #define Is_path(x)		(on_level(x, &path1_level) || on_level(x, &path2_level) || on_level(x, &path3_level))

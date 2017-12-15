@@ -65,12 +65,13 @@
 #define P_CLERIC_SPELL      (P_LAST_WEAPON + 5)
 #define P_ESCAPE_SPELL      (P_LAST_WEAPON + 6)
 #define P_MATTER_SPELL      (P_LAST_WEAPON + 7)
+#define P_WAND_POWER		(P_LAST_WEAPON + 8)
 #define P_FIRST_SPELL		P_ATTACK_SPELL
 #ifdef BARD
-#define P_MUSICALIZE		(P_LAST_WEAPON + 8)	/* 'cast' spells as songs */
+#define P_MUSICALIZE		(P_LAST_WEAPON + 9)	/* 'cast' spells as songs */
 #define P_LAST_SPELL		P_MUSICALIZE
 #else
-#define P_LAST_SPELL		P_MATTER_SPELL
+#define P_LAST_SPELL		P_WAND_POWER
 #endif
 
 /* Other types of combat */

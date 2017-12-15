@@ -720,14 +720,14 @@ moveloop()
 					(void) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTOK);
 				} //TEAM ATTACKS
 				if(In_sokoban(&u.uz)){
-					if(u.uz.dlevel != 1 && u.uz.dlevel != 4) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTSTRICT);
+					if(u.uz.dlevel != 1 && u.uz.dlevel != 4) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTSTRICT|MM_ADJACENTOK);
 				} else if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)){
 					(void) makemon((struct permonst *)0, xdnstair, ydnstair, MM_ADJACENTOK);
 				}
 				else (void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 			}
 			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !Is_qstart(&u.uz) && !rn2(50)){
-				struct monst* mtmp = makemon(&mons[PM_SEMBLANCE], rn1(COLNO-3,2), rn1(ROWNO-3,2), MM_ADJACENTSTRICT);
+				struct monst* mtmp = makemon(&mons[PM_SEMBLANCE], rn1(COLNO-3,2), rn1(ROWNO-3,2), MM_ADJACENTSTRICT|MM_ADJACENTOK);
 				//"Where stray illuminations from the Far Realm leak onto another plane, matter stirs at the beckoning of inexplicable urges before burining to ash."
 				if(mtmp && canseemon(mtmp)) pline("The base matter of the world stirs at the beckoning of inexplicable urges, dancing with a semblance of life.");
 			}
@@ -898,6 +898,7 @@ moveloop()
 			default: break;
 		    }
 			
+		    if(In_fog_cloud(&youmonst)) moveamt = max(moveamt/3, 1);
 		    youmonst.movement += moveamt;
 			//floor how far into movement-debt you can fall.
 		    if (youmonst.movement < -2*NORMAL_SPEED) youmonst.movement = -2*NORMAL_SPEED;

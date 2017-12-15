@@ -2766,6 +2766,8 @@ resistances_enlightenment()
 		if(u.spirit[GPREM_SPIRIT]) numBound++;
 		if(u.spirit[ALIGN_SPIRIT]) numBound++;
 		if(u.spirit[OUTER_SPIRIT]) numBound++;
+		if(Role_if(PM_ANACHRONONAUT) && (u.specialSealsActive&SEAL_BLACK_WEB))
+			numBound++;
 		Sprintf(buf, "Your soul is bound to ");
 		for(i=0;i<QUEST_SPIRIT;i++){
 			if(u.spirit[i]) for(j=0;j<32;j++){

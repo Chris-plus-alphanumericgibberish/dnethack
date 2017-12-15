@@ -597,7 +597,7 @@ nh_timeout()
 				killer_format = NO_KILLER_PREFIX;
 				killer = "killed by turning to gold";
 			}
-			done(STONING);
+			done(GOLDING);
 			break;
 		case SLIMED:
 			if (delayed_killer && !killer) {

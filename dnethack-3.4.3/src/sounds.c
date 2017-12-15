@@ -674,7 +674,7 @@ register struct monst *mtmp;
 			}
 		}
 	}
-	switch (mtmp->mfaction == SKELIFIED ? MS_BONES : is_silent_mon(mtmp) ? MS_SILENT : ptr->msound) {
+	switch ((mtmp->mfaction == SKELIFIED && ptr != &mons[PM_ECHO]) ? MS_BONES : is_silent_mon(mtmp) ? MS_SILENT : ptr->msound) {
 	case MS_ORACLE:
 	    return doconsult(mtmp);
 	case MS_PRIEST: /*Most (all?) things with this will have ispriest set*/
@@ -4446,6 +4446,7 @@ bindspirit(seal_id)
 			if(u.sealTimeout[PAIMON-FIRST_SEAL] < moves){
 				u.sealsActive |= SEAL_PAIMON;
 				u.sealsUsed |= SEAL_PAIMON;
+				unrestrict_weapon_skill(P_WAND_POWER);
 				u.spirit[u.sealCounts] = SEAL_PAIMON;
 				set_spirit_powers(SEAL_PAIMON);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -4824,6 +4825,7 @@ int p_skill;
 	if(p_skill == P_CLERIC_SPELL) return u.sealsActive & SEAL_AMON? TRUE : FALSE;
 	if(p_skill == P_ESCAPE_SPELL) return u.sealsActive & SEAL_ANDREALPHUS? TRUE : FALSE;
 	if(p_skill == P_MATTER_SPELL) return u.sealsActive & SEAL_MARIONETTE? TRUE : FALSE;
+	if(p_skill == P_WAND_POWER) return u.sealsActive & SEAL_PAIMON? TRUE : FALSE;
 	if(p_skill == P_RIDING) return u.sealsActive & SEAL_BERITH? TRUE : FALSE;
 	if(p_skill == P_BARE_HANDED_COMBAT) return u.sealsActive & (SEAL_EURYNOME|SEAL_BUER)? TRUE : FALSE;
 	if(p_skill == P_BEAST_MASTERY) return u.sealsActive & SEAL_MALPHAS? TRUE : FALSE;

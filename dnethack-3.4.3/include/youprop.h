@@ -440,5 +440,6 @@
 
 #define Necrospellboost	(u.uprops[NECROSPELLS].extrinsic)
 
+#define Double_spell_size	(u.sealsActive&SEAL_NABERIUS)
 
 #endif /* YOUPROP_H */

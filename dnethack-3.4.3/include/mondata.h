@@ -447,6 +447,7 @@
 				  (ptr) == &mons[PM_HOOLOOVOO] || \
 				  (ptr) == &mons[PM_LIGHTNING_PARAELEMENTAL] || \
 				  (ptr) == &mons[PM_FALLEN_ANGEL] || \
+				  (ptr) == &mons[PM_DARK_WORM] || \
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
 				  (ptr) == &mons[PM_GRAHA_DEVA] ||\
@@ -458,7 +459,9 @@
 				 ((ptr) == &mons[PM_EDDERKOP]) ? 8 : \
 				 ((ptr) == &mons[PM_SURYA_DEVA]) ? 9 : \
 				 0)
-#define Is_darklight_monster(ptr)	((ptr) == &mons[PM_EDDERKOP])
+#define Is_darklight_monster(ptr)	((ptr) == &mons[PM_EDDERKOP] ||\
+					(ptr) == &mons[PM_DARK_WORM]\
+					)
 /*	[note: the light ranges above were reduced to 1 for performance...] */
 #define likes_lava(ptr)		(ptr == &mons[PM_FIRE_ELEMENTAL] || \
 				 ptr == &mons[PM_SALAMANDER])

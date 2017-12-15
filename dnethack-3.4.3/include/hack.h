@@ -125,7 +125,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 					(u.sealsActive&SEAL_ANDROMALIUS && is_thief((mon)->data)) || \
 					(u.sealsActive&SEAL_TENEBROUS && !nonliving_mon(mon)) || \
 					(Upolyd && youmonst.data == &mons[PM_SHARK] && has_blood((mon)->data) && \
-						(mon)->mhp < (mon)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mon)->mx, (mon)->my)) || \
+						(mon)->mhp < (mon)->mhpmax && is_pool(u.ux, u.uy, TRUE) && is_pool((mon)->mx, (mon)->my, TRUE)) || \
 					(u.specialSealsActive&SEAL_ACERERAK && is_undead_mon(mon)) || \
 					(uwep && uwep->oclass == WEAPON_CLASS && (uwep)->obj_material == WOOD && uwep->otyp != MOON_AXE &&\
 					 (uwep->ovar1 & WARD_THJOFASTAFUR) && ((mon)->data->mlet == S_LEPRECHAUN || (mon)->data->mlet == S_NYMPH || is_thief((mon)->data))) \

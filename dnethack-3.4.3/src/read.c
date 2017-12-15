@@ -1935,7 +1935,7 @@ struct obj	*sobj;
 		}
 		struct engr *engrHere = engr_at(u.ux,u.uy);
 		int wardNum;
-		if(!confused) wardNum = pick_ward();
+		if(!confused) wardNum = pick_ward(FALSE);
 		else wardNum = random_unknown_ward();
 //		pline("%d",wardNum);
 		known = TRUE;
@@ -2299,6 +2299,22 @@ genericptr_t val;
 	}
 }
 
+// lights/snuffs simple lightsources lying at the location, lighting assumes this is triggered by the player for shk purposes
+// this could also be added to set_lit, I suppose
+void
+ranged_set_lightsources(x,y,val)
+int x, y;
+genericptr_t val;
+{
+	if (val) {
+		struct obj *ispe = mksobj(SPE_LIGHT, TRUE, FALSE);
+		bhitpile(ispe, bhito, x, y);
+	}
+	else {
+		snuff_light_source(x, y);
+	}
+}
+
 void
 litroom(on,obj)
 register boolean on;
@@ -2306,7 +2322,7 @@ struct obj *obj;
 {
 	char is_lit;	/* value is irrelevant; we use its address
 			   as a `not null' flag for set_lit() */
-
+	boolean permanent_darkness = Is_grue_level(&u.uz);
 	/* first produce the text (provided you're not blind) */
 	if(!on) {
 		register struct obj *otmp;
@@ -2343,7 +2359,10 @@ struct obj *obj;
 					pline("%s glistens.", Monnam(u.ustuck));
 			return;
 		}
-		pline("A lit field surrounds you!");
+		if (!permanent_darkness)
+			pline("A lit field surrounds you!");
+		else
+			pline("A ripple of energy travels through the darkness.");
 	}
 
 do_it:
@@ -2374,7 +2393,7 @@ do_it:
 	} else
 #endif
 	    do_clear_area(u.ux,u.uy,
-		(obj && obj->oclass==SCROLL_CLASS && obj->blessed) ? 9 : 5,
+		((obj && obj->oclass==SCROLL_CLASS && obj->blessed) ? 9 : 5) * (permanent_darkness ? 3 : 2) / 2, permanent_darkness ? ranged_set_lightsources :
 		set_lit, (genericptr_t)(on ? &is_lit : (char *)0));
 
 	/*

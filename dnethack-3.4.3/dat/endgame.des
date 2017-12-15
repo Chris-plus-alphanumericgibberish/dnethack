@@ -59,10 +59,10 @@ MONSTER:'T',"rock troll",(53,12)
 MONSTER:'H',"stone giant",(54,12)
 #
 MONSTER:'S',"pit viper",(70,05)
-MONSTER:'0',"Monadic Deva",(69,06)
+MONSTER:'9',"Monadic Deva",(69,06)
 MONSTER:'H',"stone giant",(69,08)
 MONSTER:''',"stone golem",(71,08)
-MONSTER:'0',"Mahadeva",(70,09)
+MONSTER:'9',"Mahadeva",(70,09)
 MONSTER:'E',"earth elemental",(70,08),hostile
 #
 MONSTER:'E',"earth elemental",(60,03),hostile
@@ -91,7 +91,7 @@ MONSTER:''',"stone golem",(01,02)
 MONSTER:'E',"earth elemental",(02,02),hostile
 MONSTER:'T',"rock troll",(04,03)
 MONSTER:'T',"rock troll",(03,03)
-MONSTER:'0',"Monadic Deva",(03,04)
+MONSTER:'9',"Monadic Deva",(03,04)
 MONSTER:'E',"earth elemental",(04,05),hostile
 MONSTER:'S',"pit viper",(05,06)
 #
@@ -104,7 +104,7 @@ MONSTER:'E',"earth elemental",(22,06),hostile
 MONSTER:'E',"earth elemental",(23,06),hostile
 #
 MONSTER:'S',"pit viper",(14,08)
-MONSTER:'0',"Monadic Deva",(14,09)
+MONSTER:'9',"Monadic Deva",(14,09)
 MONSTER:'E',"earth elemental",(13,10),hostile
 MONSTER:'T',"rock troll",(12,11)
 MONSTER:'E',"earth elemental",(14,12),hostile
@@ -386,7 +386,7 @@ MONSTER:'H',"fire giant",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'v',"fire vortex",random
 MONSTER:'v',"fire vortex",random
-MONSTER:'0',"Monadic Deva",random
+MONSTER:'9',"Monadic Deva",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'S',"pit viper",random
 #
@@ -406,7 +406,7 @@ MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'d',"hell hound",random
 MONSTER:'H',"fire giant",random
-MONSTER:'0',"Surya Deva",random
+MONSTER:'9',"Surya Deva",random
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 #
@@ -671,6 +671,6 @@ MONSTER:'V',random,random,hostile
 MONSTER:'D',random,random,hostile
 MONSTER:'D',random,random,hostile
 MONSTER:'D',random,random,hostile
-MONSTER:'0',"Astral Deva",random,hostile
-MONSTER:'0',"Astral Deva",random,hostile
-MONSTER:'0',"Astral Deva",random,hostile
+MONSTER:'9',"Astral Deva",random,hostile
+MONSTER:'9',"Astral Deva",random,hostile
+MONSTER:'9',"Astral Deva",random,hostile

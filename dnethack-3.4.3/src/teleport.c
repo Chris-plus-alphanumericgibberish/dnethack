@@ -1043,7 +1043,7 @@ level_tele()
 	    /* [dlevel used to be set to 1, but it doesn't make sense to
 		teleport out of the dungeon and float or fly down to the
 		surface but then actually arrive back inside the dungeon] */
-	} else if (u.uz.dnum == medusa_level.dnum &&
+	} else if (u.uz.dnum == challenge_level.dnum &&
 	    newlev >= dungeons[u.uz.dnum].depth_start +
 						dunlevs_in_dungeon(&u.uz)) {
 #ifdef WIZARD

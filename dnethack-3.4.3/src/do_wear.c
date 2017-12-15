@@ -2026,7 +2026,7 @@ find_ac()
 	
 	if(uwep){
 		if(uwep->otyp == RAPIER || 
-			(uwep->otyp == LIGHTSABER && uwep->lamplit && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0)
+			(uwep->otyp == LIGHTSABER && uwep->lamplit && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0) //ovar1 being 0 means dueling hilt
 				) uac -= max(
 					min(
 					(ACURR(A_DEX)-13)/4,

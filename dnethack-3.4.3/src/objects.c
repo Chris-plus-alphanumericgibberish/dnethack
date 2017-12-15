@@ -118,7 +118,7 @@ WEAPON("shuriken", "throwing star",
 WEAPON("boomerang", (char *)0,
 	1, 1, 0, 13,  5, 20,  9,  9, 0, B,   -P_BOOMERANG, WOOD, HI_WOOD),
 WEAPON("chakram", "circular blade", /*Needs encyc entry*//*Needs tile*/
-	1, 1, 0,  6,  5, 20,  9,  9, 0, S,   -P_BOOMERANG, WOOD, HI_SILVER),
+	1, 1, 0,  6,  5, 20,  9,  9, 0, S,   -P_BOOMERANG, IRON, HI_SILVER),
 WEAPON("spike", (char *)0, /*Needs encyc entry*/
 	1, 1, 0,  0,  1,  2,  3,  2, 0, P,   -P_DART, BONE, CLR_WHITE),
 
@@ -509,10 +509,10 @@ ARMOR("crystal plate mail", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	10, 5, 250, 2000,  -6, 0, ARM_SUIT, GLASS, CLR_CYAN), /*Best armor, AC wise*/
 #ifdef TOURIST
 ARMOR("bronze plate mail", (char *)0, /*Needs encyc entry*/
-	1, 0, 1, 0,	20, 5, 225, 400,  3, 3, ARM_SUIT, COPPER, HI_COPPER),
+	1, 0, 1, 0,	20, 5, 225, 400,  2, 3, ARM_SUIT, COPPER, HI_COPPER),
 #else
 ARMOR("bronze plate mail", (char *)0,
-	1, 0, 1, 0,	35, 5, 225, 400,  3, 3, ARM_SUIT, COPPER, HI_COPPER),
+	1, 0, 1, 0,	35, 5, 225, 400,  2, 3, ARM_SUIT, COPPER, HI_COPPER),
 #endif
 ARMOR("plasteel armor", "hard white armor", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, 0,	 0, 5, 100,  500, 4, 3, ARM_SUIT, PLASTIC, CLR_WHITE),
@@ -1086,12 +1086,16 @@ SPELL("cone of cold",    "dog eared",   P_ATTACK_SPELL, 10,  7, 4, 1, RAY,      
 SPELL("sleep",           "mottled",     P_ENCHANTMENT_SPELL, 50,  1, 1, 1, RAY,  HI_PAPER),
 SPELL("finger of death", "stained",     P_ATTACK_SPELL,  5, 10, 7, 1, RAY,       HI_PAPER),
 SPELL("lightning bolt",  "storm-hued",  P_ATTACK_SPELL,  0,  8, 5, 1, RAY,       CLR_BLUE),
-SPELL("poison spray",  "snakeskin",  	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_GREEN),/*Needs tile*/
-SPELL("acid blast",  "acid green",  	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_BRIGHT_GREEN),/*Needs tile*/
+SPELL("poison spray",    "snakeskin",  	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_GREEN),/*Needs tile*/
+SPELL("acid blast",      "acid green", 	P_MATTER_SPELL,  0,  8, 4, 1, RAY,       CLR_BRIGHT_GREEN),/*Needs tile*/
 SPELL("light",           "cloth",       P_DIVINATION_SPELL, 45,  1, 1, 1, NODIR,     HI_CLOTH),
+SPELL("fire storm",		 "flame-red",   P_ATTACK_SPELL,  0,  8, 4, 1, NODIR,     CLR_RED),
+SPELL("frost storm",     "snow white",  P_ATTACK_SPELL,  0,  8, 4, 1, NODIR,     CLR_WHITE),
 SPELL("detect monsters", "leather",     P_DIVINATION_SPELL, 43,  1, 1, 1, NODIR,     HI_LEATHER),
 SPELL("healing",         "white",       P_HEALING_SPELL, 40,  2, 1, 1, IMMEDIATE, CLR_WHITE),
+SPELL("lightning storm", "ocean blue",  P_ATTACK_SPELL,  0,  8, 5, 1, NODIR,     CLR_BLUE),
 SPELL("knock",           "pink",        P_MATTER_SPELL, 35,  1, 1, 1, IMMEDIATE, CLR_BRIGHT_MAGENTA),
+SPELL("acid storm",      "lime green",  P_MATTER_SPELL,  0,  8, 4, 1, NODIR,     CLR_BRIGHT_GREEN),
 SPELL("force bolt",      "red",         P_ATTACK_SPELL, 35,  2, 1, 1, IMMEDIATE, CLR_RED),
 SPELL("confuse monster", "orange",      P_ENCHANTMENT_SPELL, 30,  2, 2, 1, IMMEDIATE, CLR_ORANGE),
 SPELL("cure blindness",  "yellow",      P_HEALING_SPELL, 25,  2, 2, 1, IMMEDIATE, CLR_YELLOW),

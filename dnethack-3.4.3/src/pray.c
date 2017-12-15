@@ -1009,7 +1009,7 @@ gcrownu()
 			if(u.ualign.type == A_CHAOTIC){
 				//unrestrict_weapon_skill();
 			} else if(u.ualign.type == A_NEUTRAL){
-				expert_weapon_skill(P_BARE_HANDED_COMBAT);
+				gm_weapon_skill(P_BARE_HANDED_COMBAT);
 				u.umartial = TRUE;
 			} else if(u.ualign.type == A_LAWFUL){
 				if(Role_if(PM_NOBLEMAN)) expert_weapon_skill(P_CROSSBOW);
@@ -1189,7 +1189,7 @@ gcrownu()
 				at_your_feet("Clawed gauntlets");
 				dropy(obj);
 				discover_artifact(ART_GREAT_CLAWS_OF_URDLEN);
-				expert_weapon_skill(P_BARE_HANDED_COMBAT);
+				gm_weapon_skill(P_BARE_HANDED_COMBAT);
 				u.umartial = TRUE;
 			} else if(u.ualign.type == A_NEUTRAL){
 				obj = mksobj(AMBER, FALSE, FALSE);
@@ -1243,7 +1243,7 @@ gcrownu()
 			discover_artifact(ART_ROBE_OF_THE_ARCHMAGI);
 		
 		if(u.ualign.type != A_CHAOTIC){
-			expert_weapon_skill(P_BARE_HANDED_COMBAT);
+			gm_weapon_skill(P_BARE_HANDED_COMBAT);
 			u.umartial = TRUE;
 		} else {
 			expert_weapon_skill(P_ATTACK_SPELL);

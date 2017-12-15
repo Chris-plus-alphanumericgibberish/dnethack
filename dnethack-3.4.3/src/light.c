@@ -153,13 +153,14 @@ do_light_sources(cs_rows)
 
 	/* minor optimization: don't bother with duplicate light sources */
 	/* at hero */
+	/* commented out because it causes weirdness when the player has both a lightsource and a darksource
 	if (ls->x == u.ux && ls->y == u.uy) {
 	    if (at_hero_range >= ls->range)
 		ls->flags &= ~LSF_SHOW;
 	    else
 		at_hero_range = ls->range;
 	}
-
+	*/
         /* Candle ranges need to be recomputed to allow altar
            effects */
 

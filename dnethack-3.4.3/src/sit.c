@@ -480,18 +480,27 @@ register struct monst *mtmp;
 	    You(mal_aura, "the magic-absorbing blade");
 	    return;
 	}
-	else if(u.ukinghill && rn2(20)){
+	if (MON_WEP(mtmp) &&
+	    (MON_WEP(mtmp)->oartifact == ART_TENTACLE_ROD) && rn2(20)) {
+	    You(mal_aura, "languid tentacles");
+	    return;
+	}
+	for(otmp = mtmp->minvent; otmp; otmp=otmp->nobj)
+		if(otmp->oartifact == ART_TREASURY_OF_PROTEUS)
+			break;
+	if(otmp && rn2(20)){
 	    You(mal_aura, "the cursed treasure chest");
-		otmp = 0;
-		for(otmp = invent; otmp; otmp=otmp->nobj)
-			if(otmp->oartifact == ART_TREASURY_OF_PROTEUS)
-				break;
-		if(!otmp) pline("Treasury not actually in inventory??");
-		else if(otmp->blessed)
+		if(otmp->blessed)
 			unbless(otmp);
 		else
 			curse(otmp);
-	    update_inventory();		
+		return;
+	}
+	for(otmp = mtmp->minvent; otmp; otmp=otmp->nobj)
+		if(otmp->oartifact == ART_HELPING_HAND)
+			break;
+	if(otmp && rn2(20)){
+	    You(mal_aura, "the helpful hand");
 		return;
 	}
 

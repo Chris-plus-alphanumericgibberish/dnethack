@@ -19,6 +19,8 @@ static int max_regions = 0;
 
 boolean FDECL(inside_gas_cloud, (genericptr,genericptr));
 boolean FDECL(expire_gas_cloud, (genericptr,genericptr));
+boolean FDECL(inside_fog_cloud, (genericptr,genericptr));
+boolean FDECL(expire_fog_cloud, (genericptr,genericptr));
 boolean FDECL(inside_rect, (NhRect *,int,int));
 boolean FDECL(inside_region, (NhRegion *,int,int));
 NhRegion *FDECL(create_region, (NhRect *,int));
@@ -49,7 +51,11 @@ static callback_proc callbacks[] = {
 #define INSIDE_GAS_CLOUD 0
     inside_gas_cloud,
 #define EXPIRE_GAS_CLOUD 1
-    expire_gas_cloud
+    expire_gas_cloud, 
+#define INSIDE_FOG_CLOUD 2
+    inside_fog_cloud,
+#define EXPIRE_FOG_CLOUD 3
+    expire_fog_cloud
 };
 
 /* Should be inlined. */
@@ -413,6 +419,36 @@ run_regions()
 }
 
 /*
+ * Check if monster is in fog cloud
+ */
+boolean
+In_fog_cloud(mon)
+	struct monst *mon;
+{
+	register int i, j, k;
+	int f_indx;
+	/* Process regions */
+	if(mon == &youmonst){
+		for (i = 0; i < n_regions; i++) {
+			/* Check if player is inside region */
+			f_indx = regions[i]->inside_f;
+			if (f_indx == INSIDE_FOG_CLOUD && hero_inside(regions[i]))
+			    return TRUE;
+		}
+	} else {
+		for (i = 0; i < n_regions; i++) {
+			/* Check if player is inside region */
+			f_indx = regions[i]->inside_f;
+			// if (f_indx == INSIDE_FOG_CLOUD && mon_in_region(regions[i], mon)){
+			if (f_indx == INSIDE_FOG_CLOUD && inside_region(regions[i], mon->mx, mon->my)){
+			    return TRUE;
+			}
+		}
+	}
+	return FALSE;
+}
+
+/*
  * check whether player enters/leaves one or more regions.
  */
 boolean
@@ -610,7 +646,7 @@ xchar x, y;
 
     for (i = 0; i < n_regions; i++)
 	if (inside_region(regions[i], x, y) && regions[i]->visible &&
-		regions[i]->ttl != 0)
+		regions[i]->ttl != 0 && !m_at(x, y))
 	    return regions[i];
     return (NhRegion *) 0;
 }
@@ -997,6 +1033,58 @@ int damage;
     cloud->arg = (genericptr_t) damage;
     cloud->visible = TRUE;
     cloud->glyph = cmap_to_glyph(S_cloud);
+    add_region(cloud);
+    return cloud;
+}
+
+boolean
+expire_fog_cloud(p1, p2)
+genericptr_t p1;
+genericptr_t p2;
+{
+    return TRUE;		/* OK, it's gone, you can free it! */
+}
+
+boolean
+inside_fog_cloud(p1, p2)
+genericptr_t p1;
+genericptr_t p2;
+{
+    return FALSE;		/* Monster is still alive */
+}
+
+NhRegion *
+create_fog_cloud(x, y, radius, damage)
+xchar x, y;
+int radius;
+int damage;
+{
+    NhRegion *cloud;
+    int i, nrect;
+    NhRect tmprect;
+
+    cloud = create_region((NhRect *) 0, 0);
+    nrect = radius;
+    tmprect.lx = x;
+    tmprect.hx = x;
+    tmprect.ly = y - (radius - 1);
+    tmprect.hy = y + (radius - 1);
+    for (i = 0; i < nrect; i++) {
+	add_rect_to_reg(cloud, &tmprect);
+	tmprect.lx--;
+	tmprect.hx++;
+	tmprect.ly++;
+	tmprect.hy--;
+    }
+    cloud->ttl = damage;
+    if (!in_mklev && !flags.mon_moving && !flags.cth_attk)
+		set_heros_fault(cloud);		/* assume player has created it */
+	else clear_heros_fault(cloud);
+    cloud->inside_f = INSIDE_FOG_CLOUD;
+    cloud->expire_f = EXPIRE_FOG_CLOUD;
+    cloud->arg = (genericptr_t) damage;
+    cloud->visible = TRUE;
+    cloud->glyph = cmap_to_glyph(S_fog);
     add_region(cloud);
     return cloud;
 }
