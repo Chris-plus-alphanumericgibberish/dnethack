@@ -1789,7 +1789,9 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		 (uarmc && uarmc->otyp == OILSKIN_CLOAK && !uarmc->cursed) ||
 		 (u.sealsActive&SEAL_ENKI)
 	) you_are("waterproof");
-
+	Sprintf(buf, "a drunkard score of %d", u.udrunken);
+	if(u.udrunken >= u.ulevel*3) Sprintf(eos(buf), ", the maximum for an adventurer of your level");
+	you_have(buf);
 	/*** Troubles ***/
 	if (final) {
 		if (Hallucination) you_are("hallucinating");
