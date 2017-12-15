@@ -841,7 +841,7 @@ int spec;
 		(is_lightsaber(otmp) && otmp->lamplit) || 
 		(hates_silver(ptr) && (otmp->obj_material == SILVER || arti_silvered(otmp))) || 
 		(hates_iron(ptr) && otmp->obj_material == IRON) || 
-		(hates_unholy(ptr) && otmp->cursed) || 
+		(hates_unholy(ptr) && is_unholy(otmp)) || 
 		arti_shining(otmp)
 	)) tmp = 0;
 
@@ -910,10 +910,12 @@ int spec;
 	    if (otmp->oartifact == ART_GLAMDRING && (is_orc(ptr) || is_demon(ptr))){
 			bonus += rnd(20);
 		}
-	    if (otmp->cursed
+	    if (is_unholy(otmp)
 			&& hates_unholy(ptr)
 		){
-			if(otyp == KHAKKHARA) bonus += d(rnd(3),9);
+			if(otmp->oartifact == ART_STORMBRINGER) 
+				bonus += d(2,9); //Extra unholy (2d9 vs excal's 3d7)
+			else if(otyp == KHAKKHARA) bonus += d(rnd(3),9);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking,9);
 			else bonus += rnd(9);
 		}
@@ -1207,7 +1209,7 @@ struct obj *otmp;
 		|| !hates_silver(mtmp->data))
 		&& (otmp->obj_material != IRON
 		|| !hates_iron(mtmp->data))
-		&& (otmp->cursed
+		&& (is_unholy(otmp)
 		|| !hates_unholy(mtmp->data))
 	){
         for (i = 0; i < SIZE(pwep); i++)

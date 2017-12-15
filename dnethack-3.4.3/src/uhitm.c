@@ -930,7 +930,7 @@ int thrown;
 					tmp += rnd(mon->m_lev);
 					ironmsg = TRUE;
 			}
-			if ((uarmg->cursed) &&
+			if (is_unholy(uarmg) &&
 				hates_unholy(mdat)){
 					tmp += rnd(9);
 					unholymsg = TRUE;
@@ -991,10 +991,10 @@ int thrown;
 			 * don't get both bonuses.
 			 */
 			if (uleft 
-				&& (uleft->cursed)
+				&& (is_unholy(uleft))
 			) barehand_unholy_rings++;
 			if (uright 
-				&& (uright->cursed)
+				&& (is_unholy(uright))
 			) barehand_unholy_rings++;
 			
 			if ((barehand_unholy_rings) && hates_unholy(mdat)) {
@@ -1247,7 +1247,7 @@ int thrown;
 				ironmsg = TRUE;
 				ironobj = TRUE;
 			}
-			if (obj->cursed == TRUE && hates_unholy(mdat)) {
+			if (is_unholy(obj) && hates_unholy(mdat)) {
 				tmp += rnd(9);	//I think this is the right thing to do here.  I don't think it enters the main unholy section
 				unholymsg = TRUE;
 				unholyobj = TRUE;
@@ -1505,7 +1505,7 @@ int thrown;
 				ironmsg = TRUE;
 				ironobj = TRUE;
 		    }
-		    if (obj->cursed && hates_unholy(mdat)) {
+		    if (is_unholy(obj) && hates_unholy(mdat)) {
 				unholymsg = TRUE;
 				unholyobj = TRUE;
 		    }
@@ -1813,7 +1813,7 @@ defaultvalue:
 						ironmsg = TRUE;
 						ironobj = TRUE;
 					}
-					if (obj && obj->cursed == TRUE && hates_unholy(mdat)) {
+					if (obj && is_unholy(obj) && hates_unholy(mdat)) {
 						tmp += rnd(9);
 						unholymsg = TRUE;
 						unholyobj = TRUE;

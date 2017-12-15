@@ -65,7 +65,7 @@ register boolean clumsy;
 		&& hates_iron(mdat)) {
 			ironmsg = TRUE; ironobj = TRUE;
 	}
-	if (uarmf && uarmf->cursed
+	if (uarmf && is_unholy(uarmf)
 		&& hates_unholy(mdat)) {
 			unholymsg = TRUE; unholyobj = TRUE;
 	}

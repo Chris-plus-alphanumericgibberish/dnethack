@@ -573,6 +573,8 @@ struct obj {
 				)
 #define is_chupodible(otmp) (your_race(&mons[otmp->corpsenm]))
 
+#define is_unholy(otmp)		((otmp)->oartifact == ART_STORMBRINGER || (otmp)->cursed)
+
 /* material */
 #define is_flimsy(otmp)		((otmp)->obj_material <= LEATHER)
 #define is_wood(otmp)		((otmp)->obj_material == WOOD)

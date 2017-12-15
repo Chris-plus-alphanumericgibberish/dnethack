@@ -54,6 +54,17 @@ A("Excalibur",			LONG_SWORD,
 /*
  *	Stormbringer only has a 2 because it can drain a level,
  *	providing 8 more.
+ *
+ *  Stormbringer now has a 10% chance to get +8 damage,
+ *  and then convert all damage to level drain damage (dmg/4)
+ *  
+ *  Stormbringer now always counts as cursed against curse hating
+ *  targets
+ *  
+ *  Stormbringer now gives its wielder great strength and vitality
+ *	(25 Str and Con)
+ *
+ *	Stormbringer cuts through any substance (ie, it counts as shining)
  */
 
 A("Stormbringer",		RUNESWORD,
@@ -61,7 +72,7 @@ A("Stormbringer",		RUNESWORD,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	DRLI(5,2),	DRLI(0,0),	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
-	SPFX2_BLDTHRST,0,0),
+	SPFX2_SHINING|SPFX2_BLDTHRST,0,0),
 /*
  *	Two problems:  1) doesn't let trolls regenerate heads,
  *	2) doesn't give unusual message for 2-headed monsters (but

@@ -3294,7 +3294,7 @@ STATIC_OVL int
 u_bcu_next_to_skin(bcu)
 int bcu;
 {
-	#define bcu(otmp) (otmp->cursed ? -1 : otmp->blessed ? 1 : 0)
+	#define bcu(otmp) (is_unholy(otmp) ? -1 : otmp->blessed ? 1 : 0)
 	int count = 0;
 	if(uwep && bcu(uwep) == bcu && !uarmg)
 		count++;

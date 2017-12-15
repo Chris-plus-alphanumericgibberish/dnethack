@@ -2258,7 +2258,7 @@ museamnesia:
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;
 		    } else if (where_to == 3 && hates_unholy(mtmp->data) &&
-			    obj->cursed) {
+			    is_unholy(obj)) {
 			/* this monster won't want to catch a cursed
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;

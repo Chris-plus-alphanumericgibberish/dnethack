@@ -115,7 +115,7 @@ boolean burn;
 			pline_The("cold-iron sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
-		if (obj && (obj->obj_material == SILVER || arti_silvered(obj))
+		if (obj && is_unholy(obj)
 				&& hates_unholy(youracedata)) {
 			pline_The("curse sears your flesh!");
 			exercise(A_CON, FALSE);
@@ -399,7 +399,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 					s_suffix(mon_nam(mtmp)));
 			else if (verbose) pline("Its flesh is seared!");
 	    }
-	    if ( (otmp->cursed) &&
+	    if ( is_unholy(otmp) &&
 		    hates_unholy(mtmp->data)
 		) {
 			if (vis) pline_The("curse sears %s flesh!",

@@ -1013,7 +1013,7 @@ rock:
 		obj->obj_material == IRON)
 		return(TABU);
 	    if (hates_unholy(mon->data) &&
-		obj->cursed)
+		is_unholy(obj))
 		return(TABU);
 	    if (herbi && (obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT))
 		return CADAVER;

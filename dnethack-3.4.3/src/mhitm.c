@@ -1325,7 +1325,7 @@ physical:{
 						!(is_lightsaber(otmp) && otmp->lamplit)) ||
 					(otmp->obj_material != IRON && hates_iron(pd) &&
 						!(is_lightsaber(otmp) && otmp->lamplit)) ||
-					(otmp->cursed && hates_unholy(pd))
+					(is_unholy(otmp) && hates_unholy(pd))
 				)) tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
@@ -1341,7 +1341,7 @@ physical:{
 					!(is_lightsaber(otmp) && otmp->lamplit)
 				)
 					tmp += rnd(mdef->m_lev);
-				if(otmp && (otmp->cursed) && hates_unholy(pd))
+				if(otmp && is_unholy(otmp) && hates_unholy(pd))
 					tmp += rnd(9);
 			} else {
 				tmp += dmgval(otmp, mdef, 0);
@@ -1361,7 +1361,7 @@ physical:{
 			) {
             	if (vis) pline("The cold-iron sears %s!", mon_nam(mdef));
             }
-            if(otmp && (otmp->cursed) && hates_unholy(pd)) {
+            if(otmp && is_unholy(otmp) && hates_unholy(pd)) {
             	if (vis) pline("The curse sears %s!", mon_nam(mdef));
             }
 			if(oarm && tmp && oarm->otyp == GAUNTLETS_OF_POWER){
