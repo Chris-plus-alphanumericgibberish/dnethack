@@ -3076,7 +3076,7 @@ int tx,ty;
 		if(u.sealTimeout[EURYNOME-FIRST_SEAL] < moves){
 			//Spirit requires that her seal be drawn before some water.
 			if(isok(tx+(tx-u.ux), ty+(ty-u.uy)) && 
-				IS_POOL(levl[tx+(tx-u.ux)][ty+(ty-u.uy)].typ)
+				IS_PUDDLE_OR_POOL(levl[tx+(tx-u.ux)][ty+(ty-u.uy)].typ)
 			){
 				if(!Blind)
 					You("see a figure dancing, far out upon the waters.");

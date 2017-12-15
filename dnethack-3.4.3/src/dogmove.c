@@ -353,7 +353,7 @@ boolean devour;
 	    newsym(x, y);
 	    newsym(mtmp->mx, mtmp->my);
 	}
-	if (is_pool(x, y) && !Underwater) {
+	if (is_pool(x, y, FALSE) && !Underwater) {
 	    /* Don't print obj */
 	    /* TODO: Reveal presence of sea monster (especially sharks) */
 	} else
@@ -1273,7 +1273,7 @@ could_reach_item(mon, nx, ny)
 struct monst *mon;
 xchar nx, ny;
 {
-    if ((!is_pool(nx,ny) || is_swimmer(mon->data)) &&
+    if ((!is_pool(nx,ny, FALSE) || is_swimmer(mon->data)) &&
 	(!is_lava(nx,ny) || likes_lava(mon->data)) &&
 	(!boulder_at(nx,ny) || throws_rocks(mon->data)))
     	return TRUE;

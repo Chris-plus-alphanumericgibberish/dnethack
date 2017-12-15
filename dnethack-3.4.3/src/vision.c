@@ -601,7 +601,7 @@ vision_recalc(control)
 
 	    for (row = u.uy-1; row <= u.uy+1; row++)
 		for (col = u.ux-1; col <= u.ux+1; col++) {
-		    if (!isok(col,row) || !is_pool(col,row)) continue;
+		    if (!isok(col,row) || !is_pool(col,row, TRUE)) continue;
 
 		    next_rmin[row] = min(next_rmin[row], col);
 		    next_rmax[row] = max(next_rmax[row], col);

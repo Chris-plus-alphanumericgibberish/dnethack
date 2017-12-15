@@ -283,6 +283,14 @@ register int x, y, typ;
 	    case ROLLING_BOULDER_TRAP:	/* boulder will roll towards trigger */
 		(void) mkroll_launch(ttmp, x, y, BOULDER, 1L);
 		break;
+	    case RUST_TRAP:
+		if (!rn2(4)) {
+		    del_engr_at(x, y);
+		    levl[x][y].typ = PUDDLE;
+		    water_damage(level.objects[x][y], FALSE, TRUE, level.flags.lethe, 0);
+		    newsym(x, y);
+		}
+		break;
 	    case HOLE:
 	    case PIT:
 	    case SPIKED_PIT:
@@ -312,6 +320,7 @@ register int x, y, typ;
 		break;
 	}
 	if (ttmp->ttyp == HOLE) ttmp->tseen = 1;  /* You can't hide a hole */
+	else if (ttmp->ttyp == MAGIC_PORTAL && In_neu(&u.uz)) ttmp->tseen = 1;  /* Just make portals known */
 	else ttmp->tseen = 0;
 	ttmp->once = 0;
 	ttmp->madeby_u = 0;
@@ -1675,7 +1684,7 @@ long ocount;
 		cc.x = x; cc.y = y;
 		/* Prevent boulder from being placed on water */
 		if (ttmp->ttyp == ROLLING_BOULDER_TRAP
-				&& is_pool(x+distance*dx,y+distance*dy))
+				&& is_pool(x+distance*dx,y+distance*dy, FALSE))
 			success = FALSE;
 		else success = isclearpath(&cc, distance, dx, dy);
 		if (ttmp->ttyp == ROLLING_BOULDER_TRAP) {
@@ -1991,6 +2000,26 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 		    }
 		case FIRE_TRAP:
  mfiretrap:
+			if (IS_PUDDLE(levl[mtmp->mx][mtmp->my].typ)) {
+			    if (in_sight)
+			        pline("A cascade of steamy bubbles erupts from the %s under %s!",
+				  surface(mtmp->mx,mtmp->my), mon_nam(mtmp));
+			    else if (see_it) You("see a cascade of steamy bubbles erupt from the %s!",
+				surface(mtmp->mx,mtmp->my));
+			    if(rn2(2)) {
+				if (in_sight) pline_The("water evaporates!");
+				levl[mtmp->mx][mtmp->my].typ = ROOM;
+			    }
+			    if (resists_fire(mtmp)) {
+				if (in_sight) {
+				    shieldeff(mtmp->mx,mtmp->my);
+				    pline("%s is uninjured.", Monnam(mtmp));
+				}
+			    } else if (thitm(0, mtmp, (struct obj *)0, rnd(3), FALSE))
+				trapkilled = TRUE;
+			    if (see_it) seetrap(trap);
+			    break;
+			}
 			if (in_sight)
 			    pline("A %s erupts from the %s under %s!",
 				  tower_of_flame,
@@ -2488,7 +2517,7 @@ long hmask, emask;     /* might cancel timeout */
 	}
 
 	if (Punished && !carried(uball) &&
-	    (is_pool(uball->ox, uball->oy) ||
+	    (is_pool(uball->ox, uball->oy, FALSE) ||
 	     ((trap = t_at(uball->ox, uball->oy)) &&
 	      ((trap->ttyp == PIT) || (trap->ttyp == SPIKED_PIT) ||
 	       (trap->ttyp == TRAPDOOR) || (trap->ttyp == HOLE))))) {
@@ -2519,7 +2548,7 @@ long hmask, emask;     /* might cancel timeout */
 		 * Use knowledge of the two routines as a hack -- this
 		 * should really be handled differently -dlc
 		 */
-		if(is_pool(u.ux,u.uy) && !Wwalking && !Swimming && !u.uinwater)
+		if(is_pool(u.ux,u.uy, FALSE) && !Wwalking && !Swimming && !u.uinwater)
 			no_msg = drown();
 
 		if(is_lava(u.ux,u.uy)) {
@@ -2542,7 +2571,7 @@ long hmask, emask;     /* might cancel timeout */
 		    boolean sokoban_trap = (In_sokoban(&u.uz) && trap);
 		    if (Hallucination)
 			pline("Bummer!  You've %s.",
-			      is_pool(u.ux,u.uy) ?
+			      is_pool(u.ux,u.uy, TRUE) ?
 			      "splashed down" : sokoban_trap ? "crashed" :
 			      "hit the ground");
 		    else {
@@ -2607,11 +2636,16 @@ struct obj *box;	/* null for floor trap */
  * to be done upon its contents.
  */
 
-	if ((box && !carried(box)) ? is_pool(box->ox, box->oy) : Underwater) {
+	if ((box && !carried(box)) ? (is_pool(box->ox, box->oy, FALSE)) :
+				     (Underwater || IS_PUDDLE(levl[u.ux][u.uy].typ))) {
 	    pline("A cascade of steamy bubbles erupts from %s!",
 		    the(box ? xname(box) : surface(u.ux,u.uy)));
 	    if (Fire_resistance) You("are uninjured.");
 	    else losehp(rnd(3), "boiling water", KILLED_BY);
+	    if (IS_PUDDLE(levl[u.ux][u.uy].typ) && rn2(2)) {
+			pline_The("water evaporates!");
+			levl[u.ux][u.uy].typ = ROOM;
+	    }
 	    return;
 	}
 	pline("A %s %s from %s!", tower_of_flame,
@@ -2978,7 +3012,9 @@ struct monst *owner;
 		    case POTION_CLASS:
 			if (obj->otyp == POT_ACID) {
 				/* damage player/monster? */
-				pline("A potion explodes!");
+				if (cansee(obj->ox,obj->oy) &&
+				  obj->where != OBJ_CONTAINED)
+				    pline("%s!", aobjnam(obj, "explode"));
 				delobj(obj);
 				obj_destroyed = (obj == obj_original);
 				continue;
@@ -3245,14 +3281,14 @@ drown()
 		You("attempt a teleport spell.");	/* utcsri!carroll */
 		if (!level.flags.noteleport) {
 			(void) dotele();
-			if(!is_pool(u.ux,u.uy))
+			if(!is_pool(u.ux,u.uy, FALSE))
 				return(TRUE);
 		} else pline_The("attempted teleport spell fails.");
 	}
 #ifdef STEED
 	if (u.usteed) {
 		dismount_steed(DISMOUNT_GENERIC);
-		if(!is_pool(u.ux,u.uy))
+		if(!is_pool(u.ux,u.uy, FALSE))
 			return(TRUE);
 	}
 #endif

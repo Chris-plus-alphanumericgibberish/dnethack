@@ -355,10 +355,17 @@ dodrink()
 #endif
 
 	/* Or are you surrounded by water? */
-	if (Underwater) {
-		if (yn("Drink the water around you?") == 'y') {
-		    pline("Do you know what lives in this water!");
-			return 1;
+	if (Underwater || IS_PUDDLE(levl[u.ux][u.uy].typ) ||
+			(is_pool(u.ux,u.uy, FALSE) && Wwalking)) {
+		char buf[BUFSZ], buf2[BUFSZ];
+
+		Sprintf(buf,"at your %s", makeplural(body_part(FOOT)));
+		Sprintf(buf2,"Drink the water %s?", 
+			(Underwater || (IS_PUDDLE(levl[u.ux][u.uy].typ) &&
+			verysmall(youmonst.data) && !Wwalking)) ? "around you"
+								: buf);
+		if (yn(buf2) == 'y') {
+		    pline("Do you know what lives in this water?!");
 		}
 	}
 
@@ -2301,7 +2308,7 @@ dodip()
 			dipfountain(obj);
 			return(1);
 		}
-	} else if (is_pool(u.ux,u.uy)) {
+	} else if (is_pool(u.ux,u.uy, TRUE)) {
 		tmp = waterbody_name(u.ux,u.uy);
 #ifdef PARANOID
 		Sprintf(qbuf, "Dip %s into the %s?", the(xname(obj)), tmp);

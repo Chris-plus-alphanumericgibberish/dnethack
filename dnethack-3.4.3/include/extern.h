@@ -222,7 +222,7 @@ E int NDECL(dotravel);
 
 /* ### dbridge.c ### */
 
-E boolean FDECL(is_pool, (int,int));
+E boolean FDECL(is_pool, (int,int, BOOLEAN_P));
 E boolean FDECL(is_3dwater, (int,int));
 E boolean FDECL(is_lava, (int,int));
 E boolean FDECL(is_ice, (int,int));
@@ -1988,6 +1988,7 @@ E void FDECL(split_rects, (NhRect *,NhRect *));
 E void NDECL(clear_regions);
 E void NDECL(run_regions);
 E boolean FDECL(In_fog_cloud, (struct monst *));
+E boolean FDECL(check_solid_fog_region, (XCHAR_P,XCHAR_P));
 E boolean FDECL(check_stinking_cloud_region, (XCHAR_P,XCHAR_P));
 E boolean FDECL(in_out_region, (XCHAR_P,XCHAR_P));
 E boolean FDECL(m_in_out_region, (struct monst *,XCHAR_P,XCHAR_P));

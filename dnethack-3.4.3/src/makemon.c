@@ -5279,7 +5279,7 @@ register int	mmflags;
 			}
 		break;
 		case S_EEL:
-			if (is_pool(x, y))
+			if (is_pool(x, y, FALSE))
 			    mtmp->mundetected = TRUE;
 			if(mndx == PM_WATCHER_IN_THE_WATER){ 
 				mtmp->mhpmax = 3*mtmp->mhpmax;

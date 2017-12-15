@@ -221,7 +221,7 @@ dig_check(madeby, verbose, x, y)
 	} else if (madeby == BY_OBJECT &&
 		    /* the block against existing traps is mainly to
 		       prevent broken wands from turning holes into pits */
-		    (ttmp || is_pool(x,y) || is_lava(x,y))) {
+		    (ttmp || is_pool(x,y, TRUE) || is_lava(x,y))) {
 	    /* digging by player handles pools separately */
 	    return FALSE;
 	}
@@ -974,7 +974,7 @@ boolean pit_only;
 	    (lev->wall_info & W_NONDIGGABLE) != 0)) {
 		pline_The("%s here is too hard to dig in.", surface(u.ux,u.uy));
 
-	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
+	} else if (is_pool(u.ux, u.uy, TRUE) || is_lava(u.ux, u.uy)) {
 		pline_The("%s sloshes furiously for a moment, then subsides.",
 			is_lava(u.ux, u.uy) ? "lava" : "water");
 		wake_nearby();	/* splashing */
@@ -1132,7 +1132,7 @@ boolean pit_only;
 		pline_The("%s here refuses to open.", surface(u.ux,u.uy));
 		
 		return FALSE;
-	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
+	} else if (is_pool(u.ux, u.uy, TRUE) || is_lava(u.ux, u.uy)) {
 		You("can't open a door into a liquid!");
 	} else if (lev->typ == DRAWBRIDGE_DOWN ||
 		   (is_drawbridge_wall(u.ux, u.uy) >= 0)) {
@@ -1387,7 +1387,7 @@ openrocktrap()
 		pline_The("%s here refuses to open.", ceiling(u.ux,u.uy));
 		
 		return FALSE;
-	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
+	} else if (is_pool(u.ux, u.uy, TRUE) || is_lava(u.ux, u.uy)) {
 		fakerocktrap();
 	    return TRUE;
 	} else if (lev->typ == DRAWBRIDGE_DOWN ||
@@ -1727,10 +1727,13 @@ struct obj *obj;
 		You("swing your %s through thin air.", aobjnam(obj, (char *)0));
 	} else if (!can_reach_floor()) {
 		You_cant("reach the %s.", surface(u.ux,u.uy));
-	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
+	} else if (is_pool(u.ux, u.uy, FALSE) || is_lava(u.ux, u.uy)) {
 		/* Monsters which swim also happen not to be able to dig */
 		You("cannot stay under%s long enough.",
-				is_pool(u.ux, u.uy) ? "water" : " the lava");
+				is_pool(u.ux, u.uy, TRUE) ? "water" : " the lava");
+	} else if (IS_PUDDLE(levl[u.ux][u.uy].typ)) {
+		Your("%s against the water's surface.", aobjnam(obj, "splash"));
+		wake_nearby();
 	} else if (digtyp == 2) {
 		Your("%s merely scratches the %s.",
 				aobjnam(obj, (char *)0), surface(u.ux,u.uy));
@@ -2267,7 +2270,7 @@ int y;
 			if(cansee(x, y))
 				pline_The("dust over the %s swirls in the wind.", surface(x,y));
 
-	} else if (is_pool(x, y) || is_lava(x, y)) {
+	} else if (is_pool(x, y, TRUE) || is_lava(x, y)) {
 		pline_The("%s sloshes furiously for a moment, then subsides.",
 			is_lava(x, y) ? "lava" : "water");
 		wake_nearby();	/* splashing */

@@ -24,6 +24,7 @@ STATIC_DCL void FDECL(mksink,(struct mkroom *));
 #endif
 STATIC_DCL void FDECL(mkaltar,(struct mkroom *));
 STATIC_DCL void FDECL(mkgrave,(struct mkroom *));
+STATIC_DCL void FDECL(mkpuddles,(struct mkroom *));
 STATIC_DCL void NDECL(makevtele);
 STATIC_DCL void NDECL(clear_level_structures);
 STATIC_DCL void NDECL(makelevel);
@@ -861,10 +862,22 @@ skip0:
 #ifdef REINCARNATION
 		if(Is_rogue_level(&u.uz)) goto skip_nonrogue;
 #endif
-		if(!rn2(10)) mkfount(0,croom);
+		/* greater chance of puddles if a water source is nearby */
+		x = 40;
+		if(!rn2(10)) {
+		    mkfount(0,croom);
+		    x -= 20;
+		}
 #ifdef SINKS
-		if(!rn2(60)) mksink(croom);
+		if(!rn2(60)) {
+		    mksink(croom);
+		    x -= 20;
+		}
+
+		if (x < 2) x = 2;
 #endif
+		if(!rn2(x)) mkpuddles(croom);
+
 		if(!rn2(60)) mkaltar(croom);
 		x = 80 - (depth(&u.uz) * 2);
 		if (x < 2) x = 2;
@@ -1355,7 +1368,7 @@ coord *tm;
 	coord m;
 
 	/* no traps in pools */
-	if (tm && is_pool(tm->x,tm->y)) return;
+	if (tm && is_pool(tm->x,tm->y, TRUE)) return;
 
 	if (num > 0 && num < TRAPNUM) {
 	    kind = num;
@@ -1551,6 +1564,44 @@ register struct mkroom *croom;
 	levl[m.x][m.y].altarmask = Align2amask( al );
 }
 
+/* make connected spots of shallow water (or pools) and add sea monsters */
+STATIC_OVL void
+mkpuddles(croom)
+register struct mkroom *croom;
+{
+	coord m;
+	register int tryct = 0;
+	register int puddles = 0; /* how many spaces have we altered? */
+	
+	do {
+	    if(++tryct > 200) return;
+	    if (!somexy(croom, &m))
+		return;
+	} while(occupied(m.x, m.y));
+	
+	do {
+	   if (levl[m.x][m.y].typ != PUDDLE && levl[m.x][m.y].typ != POOL) {
+		puddles++;
+	   	levl[m.x][m.y].typ = (depth(&u.uz) > 9 && !rn2(4) ?
+				      POOL : PUDDLE);
+	   } 
+	   if (puddles > 4 && depth(&u.uz) > 4) {
+		(void)makemon(levl[m.x][m.y].typ == POOL ? mkclass(S_EEL,0) :
+				&mons[PM_PIRANHA],m.x,m.y,NO_MM_FLAGS);
+		puddles -= 2; /* puddles created should always exceed piranhas */
+	   }
+	   tryct = 0;
+	   do {
+	       m.x += sgn(rn2(3)-1);
+	       m.y += sgn(rn2(3)-1);
+	   } while ((occupied(m.x, m.y) ||
+		m.x < croom->lx || m.x > croom->hx ||
+		m.y < croom->ly || m.y > croom->hy)
+			&& (++tryct <= 27));
+	} while(tryct <= 27);
+}
+
+ 
 static void
 mkgrave(croom)
 struct mkroom *croom;
@@ -1695,7 +1746,7 @@ int dist;
 
     switch(dist) {
     case 1: /* fire traps */
-	if (is_pool(x,y)) break;
+	if (is_pool(x,y, TRUE)) break;
 	lev->typ = ROOM;
 	ttmp = maketrap(x, y, FIRE_TRAP);
 	if (ttmp) ttmp->tseen = TRUE;

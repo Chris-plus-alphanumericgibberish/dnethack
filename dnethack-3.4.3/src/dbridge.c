@@ -34,14 +34,16 @@ STATIC_DCL void FDECL(do_entity, (struct entity *));
 #ifdef OVL0
 
 boolean
-is_pool(x,y)
+is_pool(x,y, including_puddles)
 int x,y;
+BOOLEAN_P including_puddles;
 {
     schar ltyp;
 
     if (!isok(x,y)) return FALSE;
     ltyp = levl[x][y].typ;
     if (ltyp == POOL || ltyp == MOAT || ltyp == WATER) return TRUE;
+	if(including_puddles && ltyp == PUDDLE) return TRUE;
     if (ltyp == DRAWBRIDGE_UP &&
 	(levl[x][y].drawbridgemask & DB_UNDER) == DB_MOAT) return TRUE;
     return FALSE;
@@ -377,7 +379,7 @@ int x, y;
 	if(is_3dwater(x, y))
         return (boolean) ((is_u(etmp) && Amphibious)
                           || is_swimmer(etmp->edata));
-	if (is_pool(x, y))
+	if (is_pool(x, y, FALSE))
 		return (boolean)((is_u(etmp) &&
 				(Wwalking || Amphibious || Swimming ||
 				Flying || Levitation)) ||
@@ -492,7 +494,7 @@ boolean chunks;
 	else if (is_floater(etmp->edata) ||
 		    (is_u(etmp) && Levitation))	 /* doesn't require mobility */
 		misses = 3;
-	else if (chunks && is_pool(etmp->ex, etmp->ey))
+	else if (chunks && is_pool(etmp->ex, etmp->ey, FALSE))
 		misses = 2;				    /* sitting ducks */
 	else
 		misses = 0;
@@ -722,7 +724,7 @@ struct entity *etmp;
 #ifdef D_DEBUG
 		pline("%s on drawbridge square", E_phrase(etmp, "are"));
 #endif
-		if (is_pool(etmp->ex, etmp->ey) && !e_inview)
+		if (is_pool(etmp->ex, etmp->ey, TRUE) && !e_inview)
 			if (flags.soundok)
 				You_hear("a splash.");
 		if (e_survives_at(etmp, etmp->ex, etmp->ey)) {
@@ -735,7 +737,7 @@ struct entity *etmp;
 #ifdef D_DEBUG
 		pline("%s cannot survive on the drawbridge square",Enam(etmp));
 #endif
-		if (is_pool(etmp->ex, etmp->ey) || is_lava(etmp->ex, etmp->ey))
+		if (is_pool(etmp->ex, etmp->ey, FALSE) || is_lava(etmp->ex, etmp->ey))
 		    if (e_inview && !is_u(etmp)) {
 			/* drown() will supply msgs if nec. */
 			boolean lava = is_lava(etmp->ex, etmp->ey);
@@ -752,7 +754,7 @@ struct entity *etmp;
 		killer_format = NO_KILLER_PREFIX;
 		killer = "fell from a drawbridge";
 		e_died(etmp, e_inview ? 3 : 2,      /* CRUSHING is arbitrary */
-		       (is_pool(etmp->ex, etmp->ey)) ? DROWNING :
+		       (is_pool(etmp->ex, etmp->ey, FALSE)) ? DROWNING :
 		       (is_lava(etmp->ex, etmp->ey)) ? BURNING :
 						       CRUSHING); /*no corpse*/
 		return;
@@ -940,7 +942,7 @@ int x,y;
 				pline("%s hit by a huge chunk of metal!",
 				      E_phrase(etmp1, "are"));
 			} else {
-			    if (flags.soundok && !is_u(etmp1) && !is_pool(x,y))
+			    if (flags.soundok && !is_u(etmp1) && !is_pool(x,y, FALSE))
 				You_hear("a crushing sound.");
 #ifdef D_DEBUG
 			    else

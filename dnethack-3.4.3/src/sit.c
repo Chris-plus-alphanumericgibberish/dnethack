@@ -58,7 +58,7 @@ dosit()
 	    else
 		You("are sitting on air.");
 	    return 0;
-	} else if (is_pool(u.ux, u.uy) && !Underwater) {  /* water walking */
+	} else if (is_pool(u.ux, u.uy, TRUE) && !Underwater) {  /* water walking */
 	    goto in_water;
 	}
 
@@ -120,7 +120,7 @@ dosit()
 		There("are no cushions floating nearby.");
 	    else
 		You("sit down on the muddy bottom.");
-	} else if(is_pool(u.ux, u.uy)) {
+	} else if(is_pool(u.ux, u.uy, TRUE)) {
  in_water:
 	    You("sit in the water.");
 	    if (!rn2(10) && uarm)

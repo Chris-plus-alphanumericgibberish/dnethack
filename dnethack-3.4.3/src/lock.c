@@ -382,7 +382,7 @@ pick_lock(pick) /* pick a lock with a given object */
 		pline("Doing that would probably melt your %s.",
 		      xname(pick));
 		return 0;
-	    } else if (is_pool(u.ux, u.uy) && !Underwater) {
+	    } else if (is_pool(u.ux, u.uy, FALSE) && !Underwater) {
 		pline_The("water has no lock.");
 		return 0;
 	    }

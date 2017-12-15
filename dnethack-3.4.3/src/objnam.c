@@ -3389,6 +3389,14 @@ srch:
 			newsym(u.ux, u.uy);
 			return &zeroobj;
 		}
+		if(!BSTRCMP(bp, p-13, "shallow water")) {
+			levl[u.ux][u.uy].typ = PUDDLE;
+			del_engr_at(u.ux, u.uy);
+			pline("Shallow water.");
+			water_damage(level.objects[u.ux][u.uy], FALSE, TRUE, level.flags.lethe, (struct monst *) 0);
+			newsym(u.ux, u.uy);
+			return &zeroobj;
+		}
 		if (!BSTRCMP(bp, p-4, "lava")) {  /* also matches "molten lava" */
 			levl[u.ux][u.uy].typ = LAVAPOOL;
 			del_engr_ward_at(u.ux, u.uy);

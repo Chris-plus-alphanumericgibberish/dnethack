@@ -445,7 +445,7 @@ struct monst *mtmp;
 		    /* digging wouldn't be effective; assume they know that */
 		    && !(levl[x][y].wall_info & W_NONDIGGABLE)
 		    && !(Is_botlevel(&u.uz) || In_endgame(&u.uz))
-		    && !(is_ice(x,y) || is_pool(x,y) || is_lava(x,y))
+		    && !(is_ice(x,y) || is_pool(x,y, TRUE) || is_lava(x,y))
 		    && !(mtmp->data == &mons[PM_VLAD_THE_IMPALER]
 			 && In_V_tower(&u.uz))) {
 			m.defensive = obj;
@@ -687,7 +687,7 @@ mon_tele:
 	case MUSE_WAN_CREATE_MONSTER:
 	    {	coord cc;
 		    /* pm: 0 => random, eel => aquatic, croc => amphibious */
-		struct permonst *pm = !is_pool(mtmp->mx, mtmp->my) ? 0 :
+		struct permonst *pm = !is_pool(mtmp->mx, mtmp->my, FALSE) ? 0 :
 			     &mons[u.uinwater ? PM_GIANT_EEL : PM_CROCODILE];
 		struct monst *mon;
 
@@ -709,7 +709,7 @@ mon_tele:
 		if (!rn2(73)) cnt += rnd(4);
 		if (mtmp->mconf || otmp->cursed) cnt += 12;
 		if (mtmp->mconf) pm = fish = &mons[PM_ACID_BLOB];
-		else if (is_pool(mtmp->mx, mtmp->my))
+		else if (is_pool(mtmp->mx, mtmp->my, FALSE))
 		    fish = &mons[u.uinwater ? PM_GIANT_EEL : PM_CROCODILE];
 		mreadmsg(mtmp, otmp);
 		while(cnt--) {

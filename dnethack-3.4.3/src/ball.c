@@ -561,10 +561,10 @@ drag:
 	    return FALSE;
 	}
 
-	if ((is_pool(uchain->ox, uchain->oy) &&
+	if ((is_pool(uchain->ox, uchain->oy, FALSE) &&
 			/* water not mere continuation of previous water */
 			(levl[uchain->ox][uchain->oy].typ == POOL ||
-			 !is_pool(uball->ox, uball->oy) ||
+			 !is_pool(uball->ox, uball->oy, FALSE) ||
 			 levl[uball->ox][uball->oy].typ == POOL))
 	    || ((t = t_at(uchain->ox, uchain->oy)) &&
 			(t->ttyp == PIT ||
@@ -708,7 +708,7 @@ xchar x, y;
 	u.ux0 = u.ux;
 	u.uy0 = u.uy;
 	if (!Levitation && !MON_AT(x, y) && !u.utrap &&
-			    (is_pool(x, y) ||
+			    (is_pool(x, y, FALSE) ||
 			     ((t = t_at(x, y)) &&
 			      (t->ttyp == PIT || t->ttyp == SPIKED_PIT ||
 			       t->ttyp == TRAPDOOR || t->ttyp == HOLE)))) {

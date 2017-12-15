@@ -214,7 +214,7 @@
  * "cover" any objects or traps that might be there.
  */
 #define covers_objects(xx,yy)						      \
-    ((is_pool(xx,yy) && !Underwater && !Is_waterlevel(&u.uz)) || (levl[xx][yy].typ == LAVAPOOL))
+    ((is_pool(xx,yy, FALSE) && !Underwater && !Is_waterlevel(&u.uz)) || (levl[xx][yy].typ == LAVAPOOL))
 
 #define covers_traps(xx,yy)	covers_objects(xx,yy)
 

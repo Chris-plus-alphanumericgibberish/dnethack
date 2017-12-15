@@ -280,7 +280,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 				if(uwep && ((uwep->ovar1 & WARD_THJOFASTAFUR) && 
 					((mtmp)->data->mlet == S_LEPRECHAUN || (mtmp)->data->mlet == S_NYMPH || is_thief((mtmp)->data)))) ways_seen++;
 				if(youracedata == &mons[PM_SHARK] && has_blood_mon(mtmp) &&
-						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mtmp)->mx, (mtmp)->my)) ways_seen++;
+						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy, TRUE) && is_pool((mtmp)->mx, (mtmp)->my, TRUE)) ways_seen++;
 				if(MATCH_WARN_OF_MON_STRICT(mtmp)){
 					Sprintf(wbuf, "warned of %s",
 						makeplural(mtmp->data->mname));
@@ -312,7 +312,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 					if (ways_seen-- > 1) Strcat(monbuf, ", ");
 					}
 					if(youracedata == &mons[PM_SHARK] && has_blood_mon(mtmp) &&
-						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy) && is_pool((mtmp)->mx, (mtmp)->my)){
+						(mtmp)->mhp < (mtmp)->mhpmax && is_pool(u.ux, u.uy, TRUE) && is_pool((mtmp)->mx, (mtmp)->my, TRUE)){
 					Sprintf(wbuf, "smell blood in the water");
 					Strcat(monbuf, wbuf);
 					if (ways_seen-- > 1) Strcat(monbuf, ", ");
@@ -364,7 +364,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 	    Strcat(buf, " embedded in a wall");
 	else if (closed_door(x,y))
 	    Strcat(buf, " embedded in a door");
-	else if (is_pool(x,y))
+	else if (is_pool(x,y, FALSE))
 	    Strcat(buf, " in water");
 	else if (is_lava(x,y))
 	    Strcat(buf, " in molten lava");	/* [can this ever happen?] */
@@ -1149,7 +1149,8 @@ do_look(quick)
 		/* avoid "an air", "a water", or "a floor of a room" */
 		int article = (i == S_drkroom || i == S_litroom) ? 2 :		/* 2=>"the" */
 			      !(strcmp(x_str, "air") == 0 ||	/* 1=>"an"  */
-				strcmp(x_str, "water") == 0);	/* 0=>(none)*/
+				strcmp(x_str, "shallow water") == 0 || /* 0=>(none)*/
+				strcmp(x_str, "water") == 0);
 
 		if (!found) {
 		    if (is_cmap_trap(i)) {

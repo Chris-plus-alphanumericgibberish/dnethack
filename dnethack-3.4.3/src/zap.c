@@ -2692,10 +2692,12 @@ struct obj *obj;	/* wand or spell */
 		*/
 		e = engr_at(u.ux, u.uy);
 		if (!(e && e->engr_type == ENGRAVE)) {
-		    if (is_pool(u.ux, u.uy) || is_ice(u.ux, u.uy))
+		    if (is_pool(u.ux, u.uy, FALSE) || is_ice(u.ux, u.uy))
 			pline1(nothing_happens);
-		    else
-			pline("Blood %ss %s your %s.",
+		    else if (IS_PUDDLE(levl[u.ux][u.uy].typ))
+			    pline("The water at your %s turns slightly %s.",
+				makeplural(body_part(FOOT)), hcolor(NH_RED));
+			else pline("Blood %ss %s your %s.",
 			      is_lava(u.ux, u.uy) ? "boil" : "pool",
 			      Levitation ? "beneath" : "at",
 			      makeplural(body_part(FOOT)));
@@ -3147,7 +3149,7 @@ boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may b
 		delay_output();
 		/* kicked objects fall in pools */
 		if((weapon == KICKED_WEAPON) &&
-		   (is_pool(bhitpos.x, bhitpos.y) ||
+		   (is_pool(bhitpos.x, bhitpos.y, TRUE) ||
 		   is_lava(bhitpos.x, bhitpos.y)))
 		    break;
 #ifdef SINKS
@@ -4231,25 +4233,28 @@ xchar x, y;
 	else {	/* lev->typ == ICE */
 #ifdef STUPID
 	    if (lev->icedpool == ICED_POOL) lev->typ = POOL;
+	    if (lev->icedpool == ICED_PUDDLE) lev->typ = PUDDLE;
 	    else lev->typ = MOAT;
 #else
-	    lev->typ = (lev->icedpool == ICED_POOL ? POOL : MOAT);
+	    lev->typ = (lev->icedpool == ICED_POOL ? POOL :
+			lev->icedpool == ICED_PUDDLE ? PUDDLE : MOAT);
 #endif
 	    lev->icedpool = 0;
 	}
 	obj_ice_effects(x, y, FALSE);
-	unearth_objs(x, y);
+	if (lev->typ != PUDDLE)
+		unearth_objs(x, y);
 	if (Underwater) vision_recalc(1);
 	newsym(x,y);
 	if (cansee(x,y)) Norep("The ice crackles and melts.");
-	if ((otmp = boulder_at(x, y)) != 0) {
+	if (lev->typ != PUDDLE && (otmp = boulder_at(x, y)) != 0) {
 	    if (cansee(x,y)) pline("%s settles...", An(xname(otmp)));
 	    do {
 		obj_extract_self(otmp);	/* boulder isn't being pushed */
 		if (!boulder_hits_pool(otmp, x, y, FALSE))
 		    impossible("melt_ice: no pool?");
 		/* try again if there's another boulder and pool didn't fill */
-	    } while (is_pool(x,y) && (otmp = boulder_at(x, y)) != 0);
+	    } while (is_pool(x,y, FALSE) && (otmp = boulder_at(x, y)) != 0);
 	    newsym(x,y);
 	}
 	if (x == u.ux && y == u.uy)
@@ -4283,9 +4288,9 @@ boolean *shopdamage;
 	    }
 	    if(is_ice(x, y)) {
 		melt_ice(x, y);
-	    } else if(is_pool(x,y)) {
+	    } else if(is_pool(x,y, TRUE)) {
 		const char *msgtxt = "You hear hissing gas.";
-		if(lev->typ != POOL) {	/* MOAT or DRAWBRIDGE_UP */
+		if(lev->typ != POOL || IS_PUDDLE(lev->typ)) {	/* MOAT or DRAWBRIDGE_UP */
 		    if (cansee(x,y)) msgtxt = "Some water evaporates.";
 		} else {
 		    register struct trap *ttmp;
@@ -4303,12 +4308,18 @@ boolean *shopdamage;
 			pline("Steam billows from the fountain.");
 		    rangemod -= 1;
 		    dryup(x, y, type > 0);
+	    } else if (IS_PUDDLE(lev->typ)) {
+		    rangemod -= 3;
+		    lev->typ = ROOM;
+		    if (cansee(x,y)) pline("The water evaporates.");
+		    else You_hear("hissing gas.");
 	    }
 	}
-	else if(abstype == ZT_COLD && (is_pool(x,y) || is_lava(x,y))) {
+	else if(abstype == ZT_COLD && (is_pool(x,y, TRUE) || is_lava(x,y))) {
 		boolean lava = is_lava(x,y);
 		boolean moat = (!lava && (lev->typ != POOL) &&
 				(lev->typ != WATER) &&
+				(lev->typ != PUDDLE) &&
 				!Is_medusa_level(&u.uz) &&
 				!Is_waterlevel(&u.uz));
 
@@ -4327,10 +4338,12 @@ boolean *shopdamage;
 		    } else {
 			if (!lava)
 			    lev->icedpool =
-				    (lev->typ == POOL ? ICED_POOL : ICED_MOAT);
+				    (lev->typ == POOL ? ICED_POOL :
+				     lev->typ == PUDDLE ? ICED_PUDDLE : ICED_MOAT);
 			lev->typ = (lava ? ROOM : ICE);
 		    }
-		    bury_objs(x,y);
+		    if (lev->icedpool != ICED_PUDDLE)
+				bury_objs(x,y);
 		    if(cansee(x,y)) {
 			if(moat)
 				Norep("The moat is bridged with ice!");

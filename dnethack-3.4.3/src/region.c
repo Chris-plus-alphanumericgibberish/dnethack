@@ -514,6 +514,21 @@ xchar x, y;
 	return FALSE;
 }
 
+boolean
+check_solid_fog_region(x, y)
+xchar x, y;
+{
+	int i;
+    for (i = 0; i < n_regions; i++) {
+		if (regions[i]->inside_f == INSIDE_FOG_CLOUD &&
+			inside_region(regions[i], x, y)
+		) {
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 /*
  * check wether a monster enters/leaves one or more region.
 */

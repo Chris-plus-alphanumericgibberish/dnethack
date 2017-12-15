@@ -210,7 +210,7 @@ struct monst *mon;
 
 	/* trident is highly effective against swimmers */
 	if (otmp->otyp == TRIDENT && is_swimmer(ptr)) {
-	   if (is_pool(mon->mx, mon->my)) tmp += 4;
+	   if (is_pool(mon->mx, mon->my, FALSE)) tmp += 4;
 	   else if (ptr->mlet == S_EEL || ptr->mlet == S_SNAKE) tmp += 2;
 	}
 

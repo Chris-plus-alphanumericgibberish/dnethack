@@ -22,6 +22,7 @@ STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
+STATIC_DCL void NDECL(mkpluvillage);
 STATIC_DCL void NDECL(mklolthsepulcher);
 STATIC_DCL void NDECL(mkmivaultlolth);
 STATIC_DCL void NDECL(mkvaultlolth);
@@ -35,10 +36,13 @@ STATIC_DCL void FDECL(mklibrary, (struct mkroom *));
 STATIC_DCL void FDECL(mkarmory, (struct mkroom *));
 STATIC_DCL void NDECL(mkisland);
 STATIC_DCL void NDECL(mkriver);
+STATIC_DCL void NDECL(mkneuriver);
 STATIC_DCL void FDECL(liquify, (xchar, xchar, boolean));
+STATIC_DCL void FDECL(neuliquify, (xchar, xchar, boolean));
 STATIC_DCL struct permonst * NDECL(morguemon);
 STATIC_DCL struct permonst * NDECL(antholemon);
 STATIC_DCL struct permonst * NDECL(squadmon);
+STATIC_DCL struct permonst * NDECL(neu_squadmon);
 STATIC_DCL void FDECL(save_room, (int,struct mkroom *));
 STATIC_DCL void FDECL(rest_room, (int,struct mkroom *));
 #endif /* OVLB */
@@ -1132,6 +1136,357 @@ mklolthdown()
 	}
 }
 
+STATIC_OVL
+void
+mkpluvillage()
+{
+	int x,y,tries=0, roomnumb;
+	int i,j, n,ni;
+	int nshacks, sizebig1, sizebig2, sizetot;
+	struct obj *otmp;
+	struct monst *mon;
+	boolean good=FALSE, okspot, accessible, throne = 0;
+	struct mkroom *croom;
+	while(!good && tries < 50){
+		nshacks = rnd(3) + rn2(3);
+		// nshacks = rnd(5);
+		if(rn2(2)){
+			sizebig1 = 1+rnd(3)+2;
+			sizebig2 = 2+rnd(3)+2;
+		} else {
+			sizebig1 = 2+rnd(3)+2;
+			sizebig2 = 1+rnd(3)+2;
+		}
+		sizetot = sizebig1 + nshacks*5 + sizebig2 + 1;
+		x = rn2(COLNO-sizetot)+1;
+		y = rn2(ROWNO-11);
+		tries++;
+		okspot = TRUE;
+		accessible = FALSE;
+		for(i=0;i<sizetot+1;i++)
+			for(j=0;j<12;j++){
+				if(!isok(x+i,y+j) || t_at(x+i, y+j) || !(levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == TREE))
+					okspot = FALSE;
+				if(isok(x+i,y+j) && levl[x+i][y+j].typ == ROOM)
+					accessible = TRUE;
+			}
+		if(okspot && accessible){
+			good = TRUE;
+			//Clear village green
+			for(i=sizebig1;i<(sizetot-sizebig2);i++) 
+				for(j=1;j<10;j++){
+					levl[x+i][y+j].typ = ROOM;
+					levl[x+i][y+j].lit = 1;
+				}
+			
+			//Make left-hand big building
+			roomnumb = nroom;
+			
+			levl[x+sizebig1-1][y+4+3].typ = BRCORNER;
+			levl[x+sizebig1-1][y+4+3].lit = 1;
+			levl[x][y+4+3].typ = BLCORNER;
+			levl[x][y+4+3].lit = 1;
+			for(i=1;i<sizebig1-1;i++){
+				levl[x+i][y+4+3].typ = HWALL;
+				levl[x+i][y+4+3].lit = 1;
+				levl[x+i][y+3].typ = HWALL;
+				levl[x+i][y+3].lit = 1;
+			}
+			for(i=1+3;i<4+3;i++){
+				levl[x+sizebig1-1][y+i].typ = VWALL;
+				levl[x+sizebig1-1][y+i].lit = 1;
+				levl[x][y+i].typ = VWALL;
+				levl[x][y+i].lit = 1;
+			}
+			levl[x+sizebig1-1][y+5].typ = DOOR;
+			levl[x+sizebig1-1][y+5].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+
+			levl[x+sizebig1-1][y+3].typ = TRCORNER;
+			levl[x+sizebig1-1][y+3].lit = 1;
+			levl[x][y+3].typ = TLCORNER;
+			levl[x][y+3].lit = 1;
+			
+			switch(rn2(7)){
+				case 0: //Random store
+					for(i=1;i<sizebig1-1;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = ROOM;
+							levl[x+i][y+j].lit = 1;
+						}
+					}
+					flood_fill_rm(x+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+1, y+4, x+sizebig1-2, y+6, TRUE, SHOPBASE + rn2(UNIQUESHOP - SHOPBASE), TRUE);
+				break;
+				case 1: //Temple
+					for(i=1;i<sizebig1-1;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = ROOM;
+							levl[x+i][y+j].lit = 1;
+						}
+					}
+					flood_fill_rm(x+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					levl[x+1][y+5].typ = ALTAR;
+					levl[x+1][y+5].altarmask = Align2amask( A_NEUTRAL );
+					add_room(x+1, y+4, x+sizebig1-2, y+6, TRUE, TEMPLE, TRUE);
+					priestini(&u.uz, &rooms[nroom - 1], x+1, y+5, FALSE);
+					levl[x+sizetot-2][y+5].altarmask |= AM_SHRINE;
+					level.flags.has_temple = 1;
+				break;
+				case 2: //Garrison
+					for(i=1;i<sizebig1-1;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = ROOM;
+							levl[x+i][y+j].lit = 1;
+						}
+					}
+					flood_fill_rm(x+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+1, y+4, x+sizebig1-2, y+6, TRUE, BARRACKS, TRUE);
+				break;
+				case 3: //Courtroom
+					for(i=1;i<sizebig1-1;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = ROOM;
+							levl[x+i][y+j].lit = 1;
+						}
+					}
+					flood_fill_rm(x+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					throne = 1;
+					add_room(x+1, y+4, x+sizebig1-2, y+6, TRUE, COURT, TRUE);
+				break;
+				case 4://Normal
+					for(i=1;i<sizebig1-1;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = CORR;
+							levl[x+i][y+j].lit = 1;
+							if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+j, 0);
+							if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
+						}
+					}
+					flood_fill_rm(x+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+1, y+4, x+sizebig1-2, y+6, TRUE, OROOM, TRUE);
+				break;
+				case 5: //Gold vault
+					for(i=1;i<sizebig1-1;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = CORR;
+							levl[x+i][y+j].lit = 1;
+							if(rn2(2)) makemon(&mons[PM_GOLD_GOLEM], x+i, y+j, 0);
+							mkgold((long) rn1((10+rnd(10)) * level_difficulty(),10), x+i, y+j);
+						}
+					}
+					flood_fill_rm(x+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+1, y+4, x+sizebig1-2, y+6, TRUE, OROOM, TRUE);
+				break;
+				case 6://Tool shed
+					for(i=1;i<sizebig1-1;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = CORR;
+							levl[x+i][y+j].lit = 1;
+							mkobj_at(TOOL_CLASS, x+i, y+j, FALSE);
+						}
+					}
+					flood_fill_rm(x+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+1, y+4, x+sizebig1-2, y+6, TRUE, OROOM, TRUE);
+				break;
+			}
+			add_door(x+sizebig1-1,y+5,&rooms[roomnumb]);
+			fill_room(&rooms[roomnumb], FALSE);
+			
+			//Make north and south shacks
+			for(n = 0; n<nshacks; n++){
+				ni = sizebig1 + 1 + n*5;
+				//make north shack
+				levl[x+ni+3][y+3].typ = BRCORNER;
+				levl[x+ni][y+3].typ = BLCORNER;
+				for(i=ni+1;i<ni+3;i++){
+					levl[x+i][y+3].typ = HWALL;
+					levl[x+i][y].typ = HWALL;
+				}
+				if(rn2(2)){
+					levl[x+ni+2][y+3].typ = DOOR;
+					levl[x+ni+2][y+3].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				} else {
+					levl[x+ni+1][y+3].typ = DOOR;
+					levl[x+ni+1][y+3].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				for(i=ni+1;i<ni+3;i++){
+					for(j=1;j<3;j++){
+						levl[x+i][y+j].typ = CORR;
+						levl[x+i][y+j].lit = 1;
+						if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+j, 0);
+						if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
+					}
+				}
+				for(i=1;i<3;i++){
+					levl[x+ni+3][y+i].typ = VWALL;
+					levl[x+ni][y+i].typ = VWALL;
+				}
+				levl[x+ni+3][y].typ = TRCORNER;
+				levl[x+ni][y].typ = TLCORNER;
+				
+				//make south shack
+				levl[x+ni+3][y+7+3].typ = BRCORNER;
+				levl[x+ni][y+7+3].typ = BLCORNER;
+				for(i=ni+1;i<ni+3;i++){
+					levl[x+i][y+7+3].typ = HWALL;
+					levl[x+i][y+7].typ = HWALL;
+				}
+				if(rn2(2)){
+					levl[x+ni+2][y+7].typ = DOOR;
+					levl[x+ni+2][y+7].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				} else {
+					levl[x+ni+1][y+7].typ = DOOR;
+					levl[x+ni+1][y+7].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				for(i=ni+1;i<ni+3;i++){
+					for(j=1;j<3;j++){
+						levl[x+i][y+7+j].typ = CORR;
+						levl[x+i][y+j].lit = 1;
+						if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+7+j, 0);
+						if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+7+j, FALSE);
+					}
+				}
+				for(i=1;i<3;i++){
+					levl[x+ni+3][y+7+i].typ = VWALL;
+					levl[x+ni][y+7+i].typ = VWALL;
+				}
+				levl[x+ni+3][y+7].typ = TRCORNER;
+				levl[x+ni][y+7].typ = TLCORNER;
+			}
+			
+			//Make right big building
+			roomnumb = nroom;
+			
+			levl[x+sizetot][y+4+3].typ = BRCORNER;
+			levl[x+sizetot][y+4+3].lit = 1;
+			levl[x+sizetot-sizebig2][y+4+3].typ = BLCORNER;
+			levl[x+sizetot-sizebig2][y+4+3].lit = 1;
+			for(i=sizetot-sizebig2+1;i<sizetot;i++){
+				levl[x+i][y+4+3].typ = HWALL;
+				levl[x+i][y+4+3].lit = 1;
+				levl[x+i][y+3].typ = HWALL;
+				levl[x+i][y+3].lit = 1;
+			}
+			for(i=1+3;i<4+3;i++){
+				levl[x+sizetot][y+i].typ = VWALL;
+				levl[x+sizetot][y+i].lit = 1;
+				levl[x+sizetot-sizebig2][y+i].typ = VWALL;
+				levl[x+sizetot-sizebig2][y+i].lit = 1;
+			}
+			
+			levl[x+sizetot-sizebig2][y+5].typ = DOOR;
+			levl[x+sizetot-sizebig2][y+5].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+			
+			levl[x+sizetot][y+3].typ = TRCORNER;
+			levl[x+sizetot][y+3].lit = 1;
+			levl[x+sizetot-sizebig2][y+3].typ = TLCORNER;
+			levl[x+sizetot-sizebig2][y+3].lit = 1;		
+			
+			// switch(rn2(6)){
+			switch(rn2(7)){
+				case 0: //Shop
+					for(i=sizetot-sizebig2+1;i<sizetot;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = ROOM;
+							levl[x+i][y+j].lit = 1;
+						}
+					}
+					flood_fill_rm(x+sizetot-1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+sizetot-sizebig2+1, y+4, x+sizetot-1, y+6, TRUE, SHOPBASE + rn2(UNIQUESHOP - SHOPBASE), TRUE);
+				break;
+				case 1: //Temple
+					for(i=sizetot-sizebig2+1;i<sizetot;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = ROOM;
+							levl[x+i][y+j].lit = 1;
+						}
+					}
+					flood_fill_rm(x+sizetot-sizebig2+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					levl[x+sizetot-2][y+5].typ = ALTAR;
+					levl[x+sizetot-2][y+5].altarmask = Align2amask( A_NEUTRAL );
+					add_room(x+sizetot-sizebig2+1, y+4, x+sizetot-1, y+6, TRUE, TEMPLE, TRUE);
+					priestini(&u.uz, &rooms[nroom - 1], x+sizetot-2, y+5, FALSE);
+					levl[x+sizetot-2][y+5].altarmask |= AM_SHRINE;
+					level.flags.has_temple = 1;
+				break;
+				case 2: //Garrison
+					for(i=sizetot-sizebig2+1;i<sizetot;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = ROOM;
+							levl[x+i][y+j].lit = 1;
+						}
+					}
+					flood_fill_rm(x+sizetot-sizebig2+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+sizetot-sizebig2+1, y+4, x+sizetot-1, y+6, TRUE, BARRACKS, TRUE);
+				break;
+				case 3: //Courtroom
+					if(!throne){
+						for(i=sizetot-sizebig2+1;i<sizetot;i++){
+							for(j=1+3;j<4+3;j++){
+								levl[x+i][y+j].typ = ROOM;
+								levl[x+i][y+j].lit = 1;
+							}
+						}
+						flood_fill_rm(x+sizetot-sizebig2+1, y+5,
+							  nroom+ROOMOFFSET, TRUE, TRUE);
+						add_room(x+sizetot-sizebig2+1, y+4, x+sizetot-1, y+6, TRUE, COURT, TRUE);
+				break;
+					}
+				case 4: //Normal
+					for(i=sizetot-sizebig2+1;i<sizetot;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = CORR;
+							levl[x+i][y+j].lit = 1;
+							if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+j, 0);
+							if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
+						}
+					}
+					flood_fill_rm(x+sizetot-sizebig2+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+sizetot-sizebig2+1, y+4, x+sizetot-1, y+6, TRUE, OROOM, TRUE);
+				break;
+				case 5: //Gold vault
+					for(i=sizetot-sizebig2+1;i<sizetot;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = CORR;
+							levl[x+i][y+j].lit = 1;
+							if(rn2(2)) makemon(&mons[PM_GOLD_GOLEM], x+i, y+j, 0);
+							mkgold((long) rn1((10+rnd(10)) * level_difficulty(),10), x+i, y+j);
+						}
+					}
+					flood_fill_rm(x+sizetot-sizebig2+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+sizetot-sizebig2+1, y+4, x+sizetot-1, y+6, TRUE, OROOM, TRUE);
+				break;
+				case 6: //Tool shed
+					for(i=sizetot-sizebig2+1;i<sizetot;i++){
+						for(j=1+3;j<4+3;j++){
+							levl[x+i][y+j].typ = CORR;
+							levl[x+i][y+j].lit = 1;
+							mkobj_at(TOOL_CLASS, x+i, y+j, FALSE);
+						}
+					}
+					flood_fill_rm(x+sizetot-sizebig2+1, y+5,
+						  nroom+ROOMOFFSET, TRUE, TRUE);
+					add_room(x+sizetot-sizebig2+1, y+4, x+sizetot-1, y+6, TRUE, OROOM, TRUE);
+				break;
+			}
+			add_door(x+sizetot-sizebig2,y+5,&rooms[roomnumb]);
+			fill_room(&rooms[roomnumb], FALSE);
+		}
+	}
+}
+
 void
 place_lolth_vaults()
 {
@@ -1172,6 +1527,19 @@ place_lolth_vaults()
 	//Vault
 	num = rnd(6);
 	for(i = 0; i < num; i++) mkvaultlolth();
+}
+
+void
+place_neutral_features()
+{
+	if(!rn2(10)){
+		mkneuriver();
+	}
+	if(!rn2(10)){
+		mkpluvillage();
+	// } else if(){
+		// mkferufort();
+	}
 }
 
 void
@@ -1425,7 +1793,18 @@ struct mkroom *sroom;
 		} while (occupied((xchar)tx, (xchar)ty) && --i > 0);
 		
 		levl[tx][ty].typ = THRONE;
-		if(rn2(4)){
+		if(In_outlands(&u.uz)){
+			ctype = PM_AURUMACH;
+			mon = 0;
+			if(!toostrong(ctype,maxmlev+5))
+				mon = makemon(&mons[ctype], tx, ty, NO_MM_FLAGS|MM_NOCOUNTBIRTH);
+			if(mon) {
+				mon->msleeping = 1;
+				if(ctype == PM_DROW_MATRON || ctype == PM_EMBRACED_DROWESS){
+					set_curhouse(mon->mfaction);
+				}
+			}
+		} else if(rn2(4)){
 			/* recalculae minlev to be stricter about weak throne monsters */
 			minmlev = zlevel * 2  / 3;
 			/* allow mildly out-of-depth lords */
@@ -1518,7 +1897,7 @@ struct mkroom *sroom;
 		if(!(Role_if(PM_NOBLEMAN) && In_quest(&u.uz) )){
 		mon = makemon(
 		    (type == COURT) ? courtmon(ctype) :
-		    (type == BARRACKS) ? squadmon() :
+		    (type == BARRACKS) ? (In_outlands(&u.uz) ? neu_squadmon() : squadmon()) :
 		    (type == MORGUE) ? morguemon() :
 		    (type == BEEHIVE) ?
 			(sx == tx && sy == ty ? &mons[PM_QUEEN_BEE] :
@@ -1918,14 +2297,21 @@ mkswamp()	/* Michiel Huisjes & Fred de Wilde */
 						sx, sy, NO_MM_FLAGS);
 			    eelct++;
 			}
-		    } else
-			if(!rn2(4))	/* swamps tend to be moldy */
-			    (void) makemon(mkclass(S_FUNGUS, Inhell ? G_HELL : G_NOHELL),
-						sx, sy, NO_MM_FLAGS);
-			else if(!rn2(6))
-			    if (!rn2(2)) /* swamp ferns like swamps */
-				(void) makemon(&mons[PM_SWAMP_FERN],
-						sx, sy, NO_MM_FLAGS);
+		    } else {
+				levl[sx][sy].typ = PUDDLE;
+				if(!rn2(4))	/* swamps tend to be moldy */
+					(void) makemon(&mons[!rn2(4) ? PM_GREEN_MOLD : 
+										 !rn2(3) ? PM_BROWN_MOLD: 
+										 !rn2(2) ? PM_YELLOW_MOLD:
+										PM_RED_MOLD],
+							sx, sy, NO_MM_FLAGS);
+				else if(!rn2(6)) /* swamp ferns like swamps */
+					(void) makemon(&mons[PM_SWAMP_FERN],
+							sx, sy, NO_MM_FLAGS);
+				else if(!rn2(6)) /* many phantom fungi */
+					(void) makemon(&mons[PM_PHANTOM_FUNGUS],
+							sx, sy, NO_MM_FLAGS);
+			}
 		}
 		level.flags.has_swamp = 1;
 	}
@@ -1984,6 +2370,59 @@ mkriver()	/* John Harris */
 	}
 }
 
+STATIC_OVL void
+mkneuriver()	/* John Harris */
+{
+	register int center, width, prog, fill, edge;
+	register int x, y;
+	level.flags.has_river = 1;
+	if (!rn2(4)) {      /* Horizontal river */
+		center = rn2(ROWNO-12)+6;
+		width = rn2(4)+4;
+		for (prog = 1; prog<COLNO; prog++) {
+			edge = TRUE;
+			for (fill=center-(width/2); fill<=center+(width/2) ; fill++) {
+				/* edge is true the first time through this loop and the last */
+				neuliquify(prog, fill, edge);
+				edge = (fill == (center+(width/2)-1));
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && width >4) {width--;}
+				else if (width <7) {width++;}
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && (center-width/2) >1) {center--;}
+				else if ((center+width/2) < ROWNO-1) {center++;}
+			}
+			/* Make sure river doesn't stray off map */
+			if (center < 4) {center = 4;}
+			if (center > (ROWNO-5)) {center = ROWNO-5;}
+		}
+	}
+	else {      /* Vertical river */
+		center = rn2(COLNO-14)+7;
+		width = rn2(4)+5;
+		for (prog = 0; prog<ROWNO; prog++) {
+			edge = TRUE;
+			for (fill=center-(width/2); fill<=center+(width/2) ; fill++) {
+				neuliquify(fill, prog, edge);
+				edge = (fill == (center+(width/2)-1));
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && width >5) {width--;}
+				else if (width <8) {width++;}
+			}
+			if (!rn2(3)) {
+				if (!rn2(2) && (center-width/2) >1) {center--;}
+				else if ((center+width/2) < ROWNO-1) {center++;}
+			}
+			/* Sanity checking */
+			if (center < 5) {center = 5;}
+			if (center > (COLNO-6)) {center = COLNO-6;}
+		}
+	}
+}
+
 /* This isn't currently used anywhere. It liquifies the whole level. */
 STATIC_OVL void
 mksea()	/* John Harris */
@@ -2016,6 +2455,43 @@ register boolean edge; /* Allows room walls to intrude slightly into river. */
 		Also, because they are fun to push into water.  Plunk! */
 	if (levl[x][y].typ == ROOM && !rn2(13))
 		(void) mksobj_at(BOULDER, x, y, TRUE, FALSE);
+	/* Sea monsters */
+	if (levl[x][y].typ == POOL){
+		if(!rn2(85-depth(&u.uz))) {
+			if (depth(&u.uz) > 19 && !rn2(3)) {monster = PM_ELECTRIC_EEL;}
+				else if (depth(&u.uz) > 15 && !rn2(3)) {monster = PM_GIANT_EEL;}
+				else if (depth(&u.uz) > 11 && !rn2(2)) {monster = PM_SHARK;}
+				else if (depth(&u.uz) > 7 && rn2(4)) {monster = PM_PIRANHA;}
+			(void) makemon(&mons[monster], x, y, NO_MM_FLAGS);
+		}
+		if(!rn2(140-depth(&u.uz))){
+			mkobj_at(RANDOM_CLASS, x, y, FALSE);
+		}
+		else if(!rn2(100-depth(&u.uz))){
+		  (void) mkgold((long) rn1(10 * level_difficulty(),10), x, y);
+		}
+	}
+	/* Underground rivers are relatively open spaces, so light them. */
+	levl[x][y].lit = 1;
+}
+
+STATIC_OVL void
+neuliquify(x, y, edge)
+register xchar x, y;
+register boolean edge; /* Allows room walls to intrude slightly into river. */
+{
+	register int typ = levl[x][y].typ;
+	register int monster = PM_JELLYFISH;
+	/* Don't liquify shop walls */
+	if (level.flags.has_shop && *in_rooms(x, y, SHOPBASE)) {return;}
+	if (typ!=TREE || (!edge && rn2(6))){
+		if(typ == TREE) levl[x][y].typ = POOL;
+		else levl[x][y].typ = PUDDLE;
+	}
+	// else if ((typ == SCORR || typ == CORR || IS_DOOR(typ)
+					// || typ == SDOOR) && !IS_WALL(typ)) {
+			// levl[x][y].typ = ROOM;
+	// }
 	/* Sea monsters */
 	if (levl[x][y].typ == POOL){
 		if(!rn2(85-depth(&u.uz))) {
@@ -2650,6 +3126,46 @@ courtmon(kingnum)
 				return &mons[PM_DROW_MUMMY];
 		break;
 		
+		case PM_AURUMACH:
+			i = rnd(100);
+			if(i>99)
+				return &mons[PM_ARGENACH];
+			else if(i>95)
+				return &mons[PM_ARGENTUM_GOLEM];
+			else if(i>90)
+				return &mons[PM_CUPRILACH];
+			else if(i>80)
+				return &mons[PM_FERRUMACH];
+			else if(i>60)
+				return &mons[PM_PLUMACH];
+			else if(i>50)
+				return &mons[PM_PLAINS_CENTAUR];
+			else if(i>45)
+				return &mons[PM_DRYAD];
+			else if(i>40)
+				return &mons[PM_STONE_GIANT];
+			else if(i>35)
+				return &mons[PM_HILL_GIANT];
+			else if(i>30)
+				return &mons[PM_FROST_GIANT];
+			else if(i>25)
+				return &mons[PM_STORM_GIANT];
+			else if(i>20)
+				return &mons[PM_QUANTUM_MECHANIC];
+			else if(i>15)
+				return &mons[PM_SERPENT_MAN_OF_YOTH];
+			else if(i>10)
+				return &mons[PM_DEEP_ONE];
+			else if(i>7)
+				return &mons[PM_DEEPER_ONE];
+			else if(i>5)
+				return &mons[PM_MIND_FLAYER];
+			else if(i>1)
+				return &mons[PM_HOOLOOVOO];
+			else
+				return &mons[PM_UVUUDAUM];
+		break;
+		
 		default:
 			i = rn2(60) + rn2(3*level_difficulty());
 			if (i > 100)		return(mkclass(S_DRAGON, Inhell ? G_HELL : G_NOHELL));
@@ -2745,6 +3261,8 @@ static struct {
     unsigned	prob;
 } squadprob[NSTYPES] = {
     {PM_SOLDIER, 80}, {PM_SERGEANT, 15}, {PM_LIEUTENANT, 4}, {PM_CAPTAIN, 1}
+}, neu_squadprob[NSTYPES] = {
+    {PM_FERRUMACH, 80}, {PM_IRON_GOLEM, 15}, {PM_ARGENTUM_GOLEM, 4}, {PM_ARGENACH, 1}
 };
 
 STATIC_OVL struct permonst *
@@ -2763,6 +3281,28 @@ squadmon()		/* return soldier types. */
 	    }
 	}
 	mndx = squadprob[rn2(NSTYPES)].pm;
+gotone:
+//	if (!(mvitals[mndx].mvflags & G_GONE && !In_quest(&u.uz))) return(&mons[mndx]);
+	if (!(mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz))) return(&mons[mndx]);//empty if genocided
+	else			    return((struct permonst *) 0);
+}
+
+STATIC_OVL struct permonst *
+neu_squadmon()		/* return soldier types. */
+{
+	int sel_prob, i, cpro, mndx;
+
+	sel_prob = rnd(80+level_difficulty());
+
+	cpro = 0;
+	for (i = 0; i < NSTYPES; i++) {
+	    cpro += neu_squadprob[i].prob;
+	    if (cpro > sel_prob) {
+		mndx = neu_squadprob[i].pm;
+		goto gotone;
+	    }
+	}
+	mndx = neu_squadprob[rn2(NSTYPES)].pm;
 gotone:
 //	if (!(mvitals[mndx].mvflags & G_GONE && !In_quest(&u.uz))) return(&mons[mndx]);
 	if (!(mvitals[mndx].mvflags & G_GENOD && !In_quest(&u.uz))) return(&mons[mndx]);//empty if genocided

@@ -61,7 +61,7 @@ unsigned gpflags;
 			if (mtmp == &youmonst)
 				return !!(Amphibious);
 			else return (is_swimmer(mdat) || breathless_mon(mtmp) || amphibious(mdat));
-	    } else if (is_pool(x,y) && !ignorewater) {
+	    } else if (is_pool(x,y, FALSE) && !ignorewater) {
 			if (mtmp == &youmonst)
 				return !!(HLevitation || Flying || Wwalking ||
 						Swimming || Amphibious);
@@ -78,7 +78,7 @@ unsigned gpflags;
 	    if (passes_walls(mdat) && may_passwall(x,y)) return TRUE;
 	}
 	if (!ACCESSIBLE(levl[x][y].typ)) {
-		if (!(is_pool(x,y) && ignorewater)) return FALSE;
+		if (!(is_pool(x,y, FALSE) && ignorewater)) return FALSE;
 	}
 
 	if (closed_door(x, y) && (!mdat || !amorphous(mdat)))
@@ -486,7 +486,7 @@ boolean allow_drag;
 	if (hides_under(youracedata))
 		u.uundetected = OBJ_AT(nux, nuy);
 	else if (youracedata->mlet == S_EEL)
-		u.uundetected = is_pool(nux, nuy);
+		u.uundetected = is_pool(nux, nuy, FALSE);
 	else {
 		u.uundetected = 0;
 		/* mimics stop being unnoticed */

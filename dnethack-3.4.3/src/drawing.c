@@ -263,6 +263,7 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{' ', "air",		C(CLR_CYAN)},	/* open air */
 	{'#', "cloud",		C(CLR_GRAY)},	/* [part of] a cloud */
 /*40*/	{'#', "fog cloud",	C(HI_ZAP)},	/* [part of] a cloud */
+	{'~', "shallow water",	C(CLR_BLUE)},	/* shallow water */
 	{'}', "water",		C(CLR_BLUE)},	/* under water */
 	{'^', "arrow trap",	C(HI_METAL)},	/* trap */
 	{'^', "dart trap",	C(HI_METAL)},	/* trap */
@@ -271,9 +272,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'^', "bear trap",	C(HI_METAL)},	/* trap */
 	{'^', "land mine",	C(CLR_RED)},	/* trap */
 	{'^', "rolling boulder trap",	C(CLR_GRAY)},	/* trap */
-	{'^', "sleeping gas trap",C(HI_ZAP)},	/* trap */
+/*50*/	{'^', "sleeping gas trap",C(HI_ZAP)},	/* trap */
 	{'^', "rust trap",	C(CLR_BLUE)},	/* trap */
-/*50*/	{'^', "fire trap",	C(CLR_ORANGE)},	/* trap */
+	{'^', "fire trap",	C(CLR_ORANGE)},	/* trap */
 	{'^', "pit",		C(CLR_BLACK)},	/* trap */
 	{'^', "spiked pit",	C(CLR_BLACK)},	/* trap */
 	{'^', "hole",	C(CLR_BROWN)},	/* trap */
@@ -281,9 +282,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'^', "teleportation trap", C(CLR_MAGENTA)},	/* trap */
 	{'^', "level teleporter", C(CLR_MAGENTA)},	/* trap */
 	{'^', "magic portal",	C(CLR_BRIGHT_MAGENTA)},	/* trap */
-	{'"', "web",		C(CLR_GRAY)},	/* web */
+/*60*/	{'"', "web",		C(CLR_GRAY)},	/* web */
 	{'^', "statue trap",	C(CLR_GRAY)},	/* trap */
-/*60*/	{'^', "magic trap",	C(HI_ZAP)},	/* trap */
+	{'^', "magic trap",	C(HI_ZAP)},	/* trap */
 	{'^', "anti-magic field", C(HI_ZAP)},	/* trap */
 	{'^', "polymorph trap",	C(CLR_BRIGHT_GREEN)},	/* trap */
 	{'|', "wall",		C(CLR_GRAY)},	/* vbeam */
@@ -291,9 +292,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'\\',"wall",		C(CLR_GRAY)},	/* lslant */
 	{'/', "wall",		C(CLR_GRAY)},	/* rslant */
 	{'*', "",		C(CLR_WHITE)},	/* dig beam */
-	{'!', "",		C(CLR_WHITE)},	/* camera flash beam */
+/*70*/	{'!', "",		C(CLR_WHITE)},	/* camera flash beam */
 	{')', "",		C(HI_WOOD)},	/* boomerang open left */
-/*70*/	{'(', "",		C(HI_WOOD)},	/* boomerang open right */
+	{'(', "",		C(HI_WOOD)},	/* boomerang open right */
 	{'0', "",		C(HI_ZAP)},	/* 4 magic shield symbols */
 	{'#', "",		C(HI_ZAP)},
 	{'@', "",		C(HI_ZAP)},
@@ -301,9 +302,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'/', "",		C(CLR_GREEN)},	/* swallow top left	*/
 	{'-', "",		C(CLR_GREEN)},	/* swallow top center	*/
 	{'\\', "",		C(CLR_GREEN)},	/* swallow top right	*/
-	{'|', "",		C(CLR_GREEN)},	/* swallow middle left	*/
+/*80*/	{'|', "",		C(CLR_GREEN)},	/* swallow middle left	*/
 	{'|', "",		C(CLR_GREEN)},	/* swallow middle right	*/
-/*80*/	{'\\', "",		C(CLR_GREEN)},	/* swallow bottom left	*/
+	{'\\', "",		C(CLR_GREEN)},	/* swallow bottom left	*/
 	{'-', "",		C(CLR_GREEN)},	/* swallow bottom center*/
 	{'/', "",		C(CLR_GREEN)},	/* swallow bottom right	*/
 	{'/', "",		C(CLR_ORANGE)},	/* explosion top left     */
@@ -311,9 +312,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'\\', "",		C(CLR_ORANGE)},	/* explosion top right    */
 	{'|', "",		C(CLR_ORANGE)},	/* explosion middle left  */
 	{' ', "",		C(CLR_ORANGE)},	/* explosion middle center*/
-	{'|', "",		C(CLR_ORANGE)},	/* explosion middle right */
+/*90*/	{'|', "",		C(CLR_ORANGE)},	/* explosion middle right */
 	{'\\', "",		C(CLR_ORANGE)},	/* explosion bottom left  */
-/*90*/	{'-', "",		C(CLR_ORANGE)},	/* explosion bottom center*/
+	{'-', "",		C(CLR_ORANGE)},	/* explosion bottom center*/
 	{'/', "",		C(CLR_ORANGE)},	/* explosion bottom right */
 /*
  *  Note: Additions to this array should be reflected in the
@@ -377,7 +378,9 @@ static uchar ibm_graphics[MAXPCHARS] = {
 	g_FILLER(S_hcdbridge),
 	g_FILLER(S_air),
 	g_FILLER(S_cloud),
-/*40*/	0xf7,	/* S_water:	meta-w, approx. equals */
+	g_FILLER(S_fog),
+	g_FILLER(S_puddle),
+	0xf7,	/* S_water:	meta-w, approx. equals */
 	g_FILLER(S_arrow_trap),
 	g_FILLER(S_dart_trap),
 	g_FILLER(S_falling_rock_trap),
@@ -479,7 +482,9 @@ static uchar dec_graphics[MAXPCHARS] = {
 	g_FILLER(S_hcdbridge),
 	g_FILLER(S_air),
 	g_FILLER(S_cloud),
-/*40*/	0xe0,	/* S_water:	meta-\, diamond */
+	g_FILLER(S_fog),
+	g_FILLER(S_puddle),
+	0xe0,	/* S_water:	meta-\, diamond */
 	g_FILLER(S_arrow_trap),
 	g_FILLER(S_dart_trap),
 	g_FILLER(S_falling_rock_trap),
@@ -579,7 +584,9 @@ static uchar mac_graphics[MAXPCHARS] = {
 	g_FILLER(S_hcdbridge),
 	g_FILLER(S_air),
 	g_FILLER(S_cloud),
-/*40*/	g_FILLER(S_water),
+	g_FILLER(S_fog),
+	g_FILLER(S_puddle),
+	g_FILLER(S_water),
 	g_FILLER(S_arrow_trap),
 	g_FILLER(S_dart_trap),
 	g_FILLER(S_falling_rock_trap),

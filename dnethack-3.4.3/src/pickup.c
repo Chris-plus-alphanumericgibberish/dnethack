@@ -411,7 +411,7 @@ int what;		/* should be a long */
 		struct trap *ttmp = t_at(u.ux, u.uy);
 		/* no auto-pick if no-pick move, nothing there, or in a pool */
 		if (autopickup && (flags.nopick || !OBJ_AT(u.ux, u.uy) ||
-			(is_pool(u.ux, u.uy) && !Underwater) || is_lava(u.ux, u.uy))) {
+			(is_pool(u.ux, u.uy, FALSE) && !Underwater) || is_lava(u.ux, u.uy))) {
 			read_engr_at(u.ux, u.uy);
 			return (0);
 		}
@@ -1503,7 +1503,7 @@ int x, y;
 #endif
 			You("cannot reach the %s.", surface(x, y));
 		return FALSE;
-	} else if (is_pool(x, y) || is_lava(x, y)) {
+	} else if (is_pool(x, y, FALSE) || is_lava(x, y)) {
 		/* at present, can't loot in water even when Underwater */
 		You("cannot loot things that are deep in the %s.",
 		    is_lava(x, y) ? "lava" : "water");

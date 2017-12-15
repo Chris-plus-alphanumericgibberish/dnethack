@@ -218,11 +218,12 @@ register int humidity;
 	if (humidity & DRY) {
 	    typ = levl[x][y].typ;
 	    if (typ == ROOM || typ == AIR ||
-		    typ == CLOUD || typ == ICE || typ == CORR)
+		    typ == CLOUD || typ == ICE ||
+			typ == CORR || typ == PUDDLE)
 		return TRUE;
 	}
 	if (humidity & WET) {
-	    if (is_pool(x,y) || is_lava(x,y))
+	    if (is_pool(x,y, FALSE) || is_lava(x,y))
 		return TRUE;
 	}
 	return FALSE;

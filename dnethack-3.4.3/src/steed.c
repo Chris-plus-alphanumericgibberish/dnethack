@@ -583,7 +583,7 @@ dismount_steed(reason)
 
 		/* The steed may drop into water/lava */
 		if (!is_flyer(mdat) && !is_floater(mdat) && !is_clinger(mdat)) {
-		    if (is_pool(u.ux, u.uy)) {
+		    if (is_pool(u.ux, u.uy, FALSE)) {
 			if (!Underwater)
 			    pline("%s falls into the %s!", Monnam(mtmp),
 							surface(u.ux, u.uy));

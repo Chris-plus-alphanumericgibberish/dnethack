@@ -1480,7 +1480,7 @@ hitmu(mtmp, mattk)
 		if ((obj = level.objects[mtmp->mx][mtmp->my]) != 0) {
 		    if (Blind && !obj->dknown)
 			what = something;
-		    else if (is_pool(mtmp->mx, mtmp->my) && !Underwater)
+		    else if (is_pool(mtmp->mx, mtmp->my, TRUE) && !Underwater)
 			what = "the water";
 		    else
 			what = doname(obj);
@@ -2419,7 +2419,7 @@ dopois:
 				else u.ustuck = mtmp;
 			}
 		    } else if(u.ustuck == mtmp) {
-				if (is_pool(mtmp->mx,mtmp->my) && !Swimming
+				if (is_pool(mtmp->mx,mtmp->my, FALSE) && !Swimming
 					&& !Breathless) {
 					boolean moat =
 					(levl[mtmp->mx][mtmp->my].typ != POOL) &&

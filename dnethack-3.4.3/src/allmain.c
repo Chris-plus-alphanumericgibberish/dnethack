@@ -401,7 +401,7 @@ moveloop()
 							echo_location(i, j);
 			}
 			/*If anything a monster did caused us to get moved out of water, surface*/
-			if(u.usubwater && !is_pool(u.ux, u.uy)){
+			if(u.usubwater && !is_pool(u.ux, u.uy, FALSE)){
 				u.usubwater = 0;
 				vision_full_recalc = 1;
 				vision_recalc(2);	/* unsee old position */
@@ -759,7 +759,7 @@ moveloop()
 			if(!Upolyd && Race_if(PM_HALF_DRAGON)) moveamt = (moveamt*2)/3;
 			if(uarmf && uarmf->otyp == STILETTOS && !Flying && !Levitation) moveamt = (moveamt*5)/6;
 			
-			if(u.sealsActive&SEAL_EURYNOME && IS_POOL(levl[u.ux][u.uy].typ)){
+			if(u.sealsActive&SEAL_EURYNOME && IS_PUDDLE_OR_POOL(levl[u.ux][u.uy].typ)){
 				if (Very_fast) {	/* speed boots or potion */
 					/* average movement is 1.78 times normal */
 					moveamt += 2*NORMAL_SPEED / 3;
@@ -1076,7 +1076,7 @@ moveloop()
 				/* for the moment at least, you're in tiptop shape */
 				wtcap = UNENCUMBERED;
 		    } else {
-				if (youracedata->mlet == S_EEL && !is_pool(u.ux,u.uy) && !Is_waterlevel(&u.uz)) {
+				if (youracedata->mlet == S_EEL && !is_pool(u.ux,u.uy, FALSE) && !Is_waterlevel(&u.uz)) {
 					if (u.mh > 1) {
 						u.mh--;
 						flags.botl = 1;
@@ -1475,7 +1475,7 @@ moveloop()
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////
 	/*If anything we did caused us to get moved out of water, surface*/
-	if(u.usubwater && !is_pool(u.ux, u.uy)){
+	if(u.usubwater && !is_pool(u.ux, u.uy, FALSE)){
 		u.usubwater = 0;
 		vision_full_recalc = 1;
 		vision_recalc(2);	/* unsee old position */

@@ -1221,7 +1221,7 @@ register int x, y;
 	    return "maw";
 	else if (IS_AIR(lev->typ) && Weightless)
 	    return "air";
-	else if (is_pool(x,y))
+	else if (is_pool(x,y, TRUE))
 	    return (Underwater && !Is_waterlevel(&u.uz)) ? "bottom" : "water";
 	else if (is_ice(x,y))
 	    return "ice";
@@ -1235,6 +1235,8 @@ register int x, y;
 	    return "headstone";
 	else if(IS_FOUNTAIN(levl[x][y].typ))
 	    return "fountain";
+	else if(IS_PUDDLE(levl[x][y].typ))
+	    return "muddy floor";
 	else if ((IS_ROOM(lev->typ) && !Is_earthlevel(&u.uz)) ||
 		 IS_WALL(lev->typ) || IS_DOOR(lev->typ) || lev->typ == SDOOR)
 	    return "floor";
@@ -1458,13 +1460,13 @@ register int x,y;
 	/* Sensing an engraving does not require sight,
 	 * nor does it necessarily imply comprehension (literacy).
 	 */
-	if(ep && ep->engr_txt[0] && (Underwater || !is_pool(x,y))) {
+	if(ep && ep->engr_txt[0] && (Underwater || !is_pool(x,y, FALSE))) {
 	    switch(ep->engr_type) {
 	    case DUST:
 		if(!Blind) {
 			sensed = 1;
 			pline("%s is written here in the %s.", Something,
-				is_ice(x,y) ? "frost" : "dust");
+				is_ice(x,y) ? "frost" : is_pool(x,y, TRUE) ? "mud" : "dust");
 		}
 		break;
 	    case ENGRAVE:
@@ -1857,10 +1859,10 @@ doengrave()
 	} else if (is_lava(u.ux, u.uy)) {
 		You_cant("write on the lava!");
 		return(0);
-	} /*else if (is_pool(u.ux,u.uy) || IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
+	} /*else if (is_pool(u.ux,u.uy, FALSE) || IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
 		You_cant("draw on the water!");
 		return(0);
-	}*/else if(is_pool(u.ux,u.uy) && !u.uinwater){
+	}*/else if(is_pool(u.ux,u.uy, FALSE) && !u.uinwater){
 		You_cant("draw on the water!");
 		return(0);
 	}
@@ -2666,10 +2668,10 @@ doward()
 	} else if (is_lava(u.ux, u.uy)) {
 		You_cant("draw on the lava!");
 		return(0);
-	} /*else if (is_pool(u.ux,u.uy) || IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
+	} /*else if (is_pool(u.ux,u.uy, FALSE) || IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
 		You_cant("draw on the water!");
 		return(0);
-	}*/else if(is_pool(u.ux,u.uy) && !u.uinwater){
+	}*/else if(is_pool(u.ux,u.uy, FALSE) && !u.uinwater){
 		You_cant("draw on the water!");
 		return(0);
 	}
@@ -4048,10 +4050,10 @@ doseal()
 	} else if (is_lava(u.ux, u.uy)) {
 		You_cant("draw on the lava!");
 		return(0);
-	} /*else if (is_pool(u.ux,u.uy) || IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
+	} /*else if (is_pool(u.ux,u.uy, FALSE) || IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
 		You_cant("draw on the water!");
 		return(0);
-	}*/else if(is_pool(u.ux,u.uy) && !u.uinwater){
+	}*/else if(is_pool(u.ux,u.uy, FALSE) && !u.uinwater){
 		You_cant("draw on the water!");
 		return(0);
 	}

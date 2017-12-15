@@ -4370,7 +4370,7 @@ floorfood(verb,corpsecheck)	/* get food from floor or pack */
 #ifdef STEED
 		(feeding && u.usteed) || /* can't eat off floor while riding */
 #endif
-		((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) &&
+		((is_pool(u.ux, u.uy, FALSE) || is_lava(u.ux, u.uy)) &&
 		    (Wwalking || is_clinger(youracedata) ||
 			(Flying && !Breathless))))
 	    goto skipfloor;

@@ -734,7 +734,7 @@ domonability(VOID_ARGS)
 			(IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy)) ||
 			(IS_ROCK(lev->typ) && lev->typ != SDOOR &&
 			(lev->wall_info & W_NONDIGGABLE) != 0) ||
-			(is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) ||
+			(is_pool(u.ux, u.uy, TRUE) || is_lava(u.ux, u.uy)) ||
 			(lev->typ == DRAWBRIDGE_DOWN ||
 			   (is_drawbridge_wall(u.ux, u.uy) >= 0)) ||
 			(boulder_at(u.ux, u.uy)) ||

@@ -718,7 +718,7 @@ struct permonst *
 neutral_montype()
 {
 	if(on_level(&sum_of_all_level,&u.uz)){
-		return mkclass(S_GOLEM, G_NOHELL|G_HELL);
+		return mkclass(S_NEU_OUTSIDER, G_NOHELL|G_HELL);
 	}
 	if(on_level(&rlyeh_level,&u.uz)){
 		int chance = d(1,100);

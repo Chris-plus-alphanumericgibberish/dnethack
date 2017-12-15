@@ -167,7 +167,7 @@ Boots_off()
 		}
 		break;
 	case WATER_WALKING_BOOTS:
-		if (is_pool(u.ux,u.uy) && !Levitation && !Flying &&
+		if (is_pool(u.ux,u.uy, TRUE) && !Levitation && !Flying &&
 		    !is_clinger(youracedata) && !cancelled_don) {
 			makeknown(otyp);
 			/* make boots known in case you survive the drowning */

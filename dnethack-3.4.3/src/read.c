@@ -1903,7 +1903,7 @@ struct obj	*sobj;
 		else{
 			engrHere->ward_id = sobj->ovar1;
 			if(sobj->cursed){
-				if(is_pool(u.ux, u.uy)){
+				if(is_pool(u.ux, u.uy, TRUE)){
 					pline("The lines of blood quickly disperse into the water.");
 	break;
 				}
