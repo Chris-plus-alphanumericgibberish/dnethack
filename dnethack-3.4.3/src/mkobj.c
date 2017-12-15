@@ -1296,6 +1296,16 @@ register struct obj *otmp;
 	   with cursed alternate weapon */
 	if (otmp == uswapwep && u.twoweap)
 	    drop_uswapwep();
+	if (otmp == uarm && otmp->otyp == STRAITJACKET){
+		struct obj *o;
+		reset_remarm();
+		if(u.twoweap && uswapwep) drop_uswapwep();
+		if(uwep){
+			o = uwep;
+			setuwep((struct obj *)0);
+			dropx(o);
+		}
+	}
 	/* some cursed items need immediate updating */
 	if (carried(otmp) && confers_luck(otmp))
 	    set_moreluck();

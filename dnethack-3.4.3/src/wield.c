@@ -263,6 +263,11 @@ dowield()
 		pline("Don't be ridiculous!");
 		return(0);
 	}
+	
+	if (!freehand()) {
+		You("have no free %s to wield anything!", body_part(HAND));
+		return(0);
+	}
 
 	/* Prompt for a new weapon */
 	if (!(wep = getobj(wield_objs, "wield")))

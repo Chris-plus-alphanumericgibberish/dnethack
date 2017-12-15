@@ -1552,8 +1552,8 @@ doloot()	/* loot a container on the floor or loot saddle from mon. */
 	/* "Can't do that while carrying so much stuff." */
 	return 0;
     }
-    if (nohands(youracedata)) {
-	You("have no hands!");	/* not `body_part(HAND)' */
+    if (nolimbs(youracedata)) {
+	You("have no limbs!");	/* not `body_part(HAND)' */
 	return 0;
     }
     cc.x = u.ux; cc.y = u.uy;
@@ -1814,6 +1814,9 @@ dopetequip()
 		if (nolimbs(youracedata)) {
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
 		    return (0);
+		}
+		if(!freehand()){
+			You("have no free %s to dress %s with!", body_part(HAND), mon_nam(mtmp));
 		}
 		if(otmp->oclass == AMULET_CLASS){
 			flag = W_AMUL;

@@ -90,6 +90,9 @@ register struct obj *pen;
 	if (nohands(youracedata)) {
 	    You("need hands to be able to write!");
 	    return 0;
+	} else if (!freehand()) {
+	    You("need a free %s to be able to write!", body_part(HAND));
+	    return 0;
 	} else if (Glib) {
 	    pline("%s from your %s.",
 		  Tobjnam(pen, "slip"), makeplural(body_part(FINGER)));

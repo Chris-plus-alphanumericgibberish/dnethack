@@ -124,7 +124,7 @@ picklock()	/* try to open/close a lock */
 	    }
 	}
 
-	if (xlock.usedtime++ >= 50 || nohands(youracedata)) {
+	if (xlock.usedtime++ >= 50 || nohands(youracedata) || !freehand()) {
 	    You("give up your attempt at %s.", lock_action());
 	    exercise(A_DEX, TRUE);	/* even if you don't succeed */
 	    return((xlock.usedtime = 0));
@@ -168,7 +168,9 @@ forcelock()	/* try to force a locked chest */
 	if((xlock.box->ox != u.ux) || (xlock.box->oy != u.uy))
 		return((xlock.usedtime = 0));		/* you or it moved */
 
-	if (xlock.usedtime++ >= 50 || (!uwep && xlock.picktyp != 3) || nohands(youracedata)) {
+	if (xlock.usedtime++ >= 50 || (!uwep && xlock.picktyp != 3) 
+		|| nohands(youracedata) || !freehand()
+	) {
 	    You("give up your attempt to force the lock.");
 	    if(xlock.usedtime >= 50)		/* you made the effort */
 	      exercise((xlock.picktyp) ? A_DEX : A_STR, TRUE);
@@ -267,7 +269,10 @@ forcedoor()      /* try to break/pry open a door */
 		return((xlock.usedtime = 0));
 	}
 	
-	if (xlock.usedtime++ >= 50 || (nohands(youracedata) && !(u.sealsActive&SEAL_OTIAX))) {
+	if (xlock.usedtime++ >= 50
+		|| ((nohands(youracedata) || !freehand()) 
+		&& !(u.sealsActive&SEAL_OTIAX))
+	) {
 	    You("give up your attempt at %s the door.",
 	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ? 
 	    		"prying open" : "breaking down"));
@@ -331,7 +336,7 @@ pick_lock(pick) /* pick a lock with a given object */
 	if (xlock.usedtime && picktyp == xlock.picktyp) {
 	    static char no_longer[] = "Unfortunately, you can no longer %s %s.";
 
-	    if (nohands(youracedata)) {
+	    if (nohands(youracedata) || !freehand()) {
 		const char *what = (picktyp == LOCK_PICK) ? "pick" : "key";
 #ifdef TOURIST
 		if (picktyp == CREDIT_CARD) what = "card";
@@ -354,6 +359,10 @@ pick_lock(pick) /* pick a lock with a given object */
 
 	if(nohands(youracedata)) {
 		You_cant("hold %s -- you have no hands!", doname(pick));
+		return(0);
+	}
+	if(!freehand()){
+		You_cant("hold %s -- you have no free hands!", doname(pick));
 		return(0);
 	}
 
@@ -771,6 +780,10 @@ int x, y;
 	    You_cant("open anything -- you have no hands!");
 	    return 0;
 	}
+	if(!freehand()){
+	    You_cant("open anything -- you have no free hands!");
+		return(0);
+	}
 
 	if (u.utrap && u.utraptype == TT_PIT) {
 	    You_cant("reach over the edge of the pit.");
@@ -879,6 +892,10 @@ doclose()		/* try to close a door */
 	if (nohands(youracedata)) {
 	    You_cant("close anything -- you have no hands!");
 	    return 0;
+	}
+	if(!freehand()){
+	    You_cant("close anything -- you have no free hands!");
+		return(0);
 	}
 
 	if (u.utrap && u.utraptype == TT_PIT) {

@@ -2949,6 +2949,8 @@ struct obj *otmp;
 
 	if (nohands(youracedata))
 	    what = "without hands";
+	else if(!freehand())
+	    what = "without free hands";
 	else if (Stunned)
 	    what = "while stunned";
 	else if (u.uswallow)
@@ -3091,9 +3093,7 @@ struct obj **optr;
     mtmp = m_at(rx, ry);
 	ttmp = t_at(rx, ry);
 
-	if (nohands(youracedata))
-	    what = "without hands";
-	else if (Stunned)
+	if (Stunned)
 	    what = "while stunned";
 	else if (u.uswallow)
 	    what = is_animal(u.ustuck->data) ? "while swallowed" :
@@ -3161,9 +3161,7 @@ struct obj *otmp;
 {
 	const char *what = (char *)0;
 
-	if (nohands(youracedata))
-	    what = "without hands";
-	else if (Stunned)
+	if (Stunned)
 	    what = "while stunned";
 	else if (u.uswallow)
 	    what = is_animal(u.ustuck->data) ? "while swallowed" :
@@ -3699,8 +3697,8 @@ do_break_wand(obj)
 
     is_fragile = (!strcmp(OBJ_DESCR(objects[obj->otyp]), "balsa"));
 
-    if (nohands(youracedata)) {
-	You_cant("break %s without hands!", the_wand);
+    if (nolimbs(youracedata)) {
+	You_cant("break %s without limbs!", the_wand);
 	return 0;
     } else if (obj->oartifact || ACURR(A_STR) < (is_fragile ? 5 : 10)) {
 	You("don't have the strength to break %s!", the_wand);

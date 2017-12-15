@@ -3442,7 +3442,7 @@ dountrap()	/* disarm a trap */
 	    pline("You're too strained to do that.");
 	    return 0;
 	}
-	if ((nohands(youracedata) && !(webmaker(youracedata) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) || !youracedata->mmove) {
+	if (((nohands(youracedata) || !freehand()) && !(webmaker(youracedata) || u.sealsActive&SEAL_CHUPOCLOPS || (uarm && uarm->oartifact==ART_SPIDERSILK))) || !youracedata->mmove) {
 	    pline("And just how do you expect to do that?");
 	    return 0;
 	} else if (u.ustuck && sticks(youracedata)) {

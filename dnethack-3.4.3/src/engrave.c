@@ -1753,8 +1753,9 @@ int x, y;
 int
 freehand()
 {
-	return(!uwep || !welded(uwep) ||
-	   (!bimanual(uwep,youracedata) && (!uarms || !uarms->cursed)));
+	return((!uarm || uarm->otyp != STRAITJACKET || !(uarm->cursed)) && 
+		(!uwep || !welded(uwep) ||
+	   (!bimanual(uwep,youracedata) && (!uarms || !uarms->cursed))));
 /*	if ((uwep && bimanual(uwep)) ||
 	    (uwep && uarms))
 		return(0);

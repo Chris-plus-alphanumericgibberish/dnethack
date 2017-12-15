@@ -1789,7 +1789,7 @@ struct obj *instr;
       	return(0);
     }
     */
-    if (welded(uwep)) {
+    if (welded(uwep) || !freehand()) {
 		You("need free hands to play music!");
 		return(0);
     }

@@ -1242,6 +1242,17 @@ dotakeoff()
 	register struct obj *otmp = (struct obj *)0;
 	int armorpieces = 0;
 
+	/* nohands checks for shields, gloves, etc... */
+	if (nohands(youracedata)) {
+		pline("Don't even bother.");
+		return(0);
+	}
+	
+	if(!freehand()){
+		You("have no free %s to undress yourself with!", body_part(HAND));
+		return(0);
+	}
+
 #define MOREARM(x) if (x) { armorpieces++; otmp = x; }
 	MOREARM(uarmh);
 	MOREARM(uarms);
@@ -1678,6 +1689,11 @@ dowear()
 	/* nohands checks for shields, gloves, etc... */
 	if (nohands(youracedata)) {
 		pline("Don't even bother.");
+		return(0);
+	}
+	
+	if(!freehand()){
+		You("have no free %s to dress yourself with!", body_part(HAND));
 		return(0);
 	}
 

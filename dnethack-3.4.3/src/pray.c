@@ -376,9 +376,13 @@ register int trouble;
 		    }
 		    goto decurse;
 	    case TROUBLE_UNUSEABLE_HANDS:
-		    if (welded(uwep)) {
-			otmp = uwep;
-			goto decurse;
+			if(uarm && uarm->otyp == STRAITJACKET && uarm->cursed){
+				otmp = uarm;
+				goto decurse;
+			}
+		    else if (welded(uwep)) {
+				otmp = uwep;
+				goto decurse;
 		    }
 		    if (Upolyd && nohands(youracedata)) {
 			if (!Unchanging) {
