@@ -645,6 +645,7 @@ const char *in_str;
 		{ "ki rin",		PM_KI_RIN },
 		{ "uruk hai",		PM_URUK_HAI },
 		{ "orc captain",	PM_ORC_CAPTAIN },
+		{ "uruk captain",	PM_URUK_CAPTAIN },
 		{ "woodland elf",	PM_WOODLAND_ELF },
 		{ "green elf",		PM_GREEN_ELF },
 		{ "grey elf",		PM_GREY_ELF },
@@ -766,7 +767,8 @@ static const short grownups[][2] = {
 	{PM_MIND_FLAYER, PM_MASTER_MIND_FLAYER},
 	{PM_DEEP_ONE, PM_DEEPER_ONE}, {PM_DEEPER_ONE, PM_DEEPEST_ONE},
 	{PM_ORC, PM_ORC_CAPTAIN}, {PM_HILL_ORC, PM_ORC_CAPTAIN},
-	{PM_MORDOR_ORC, PM_ORC_CAPTAIN}, {PM_URUK_HAI, PM_ORC_CAPTAIN},
+	{PM_MORDOR_ORC, PM_ORC_CAPTAIN}, 
+	{PM_URUK_HAI, PM_URUK_CAPTAIN},
 	{PM_SEWER_RAT, PM_GIANT_RAT},
 #ifdef CONVICT
 	{PM_GIANT_RAT, PM_ENORMOUS_RAT},

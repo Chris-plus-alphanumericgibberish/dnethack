@@ -2938,8 +2938,7 @@ register struct monst *mtmp;
 		break;
 	    case S_ORC:
 		if(rn2(2)) (void)mongets(mtmp, ORCISH_HELM);
-		switch (mm != PM_ORC_CAPTAIN ? mm :
-			rn2(2) ? PM_MORDOR_ORC : PM_URUK_HAI) {
+		switch (mm) {
 		    case PM_ORC_OF_THE_AGES_OF_STARS:
 				(void)mongets(mtmp, HIGH_ELVEN_WARSWORD);
 				(void)mongets(mtmp, ORCISH_SHIELD);
@@ -2960,6 +2959,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, GLOVES);
 				(void)mongets(mtmp, HIGH_BOOTS);
 			break;
+		    case PM_ORC_CAPTAIN:
 		    case PM_MORDOR_ORC:
 			if(!rn2(3)) (void)mongets(mtmp, SCIMITAR);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHIELD);
@@ -2975,13 +2975,14 @@ register struct monst *mtmp;
 			}
 //endif
 			break;
+		    case PM_URUK_CAPTAIN:
 		    case PM_URUK_HAI:
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_CLOAK);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHORT_SWORD);
 			if(!rn2(3)) (void)mongets(mtmp, IRON_SHOES);
 			if(!rn2(3)) (void)mongets(mtmp, URUK_HAI_SHIELD);
 //ifdef BARD
-			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50)){
+			if (mm == PM_URUK_CAPTAIN ? !rn2(10) : !rn2(50)){
 			    (void)mongets(mtmp, LEATHER_DRUM);
 				(void)mongets(mtmp, CROSSBOW);
 				m_initthrow(mtmp, CROSSBOW_BOLT, 12);
@@ -5308,7 +5309,10 @@ register int	mmflags;
 			}
 			if(!(mmflags & MM_EDOG)){
 			if (anymon && mndx == PM_ORC_CAPTAIN){
-				for(num = rn1(10,3); num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				for(num = rn1(10,3); num >= 0; num--) makemon(rn2(3) ? &mons[PM_HILL_ORC] : &mons[PM_MORDOR_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+			}
+			if (anymon && mndx == PM_URUK_CAPTAIN){
+				for(num = rn1(10,3); num >= 0; num--) makemon(&mons[PM_URUK_HAI], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 			if (anymon && mndx == PM_ORC_SHAMAN){
 				for(num = rnd(3); num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);

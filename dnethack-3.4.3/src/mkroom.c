@@ -1815,6 +1815,7 @@ struct mkroom *sroom;
 				PM_DWARF_QUEEN,
 				PM_KOBOLD_LORD,
 				PM_ORC_CAPTAIN,
+				PM_URUK_CAPTAIN,
 				PM_ORC_OF_THE_AGES_OF_STARS,
 				PM_GNOME_KING,
 				PM_GNOME_QUEEN,
@@ -2883,6 +2884,22 @@ courtmon(kingnum)
 				return &mons[PM_MANES];
 			else if(i> 0)
 				return &mons[PM_QUASIT];
+		break;
+		
+		case PM_URUK_CAPTAIN:
+			i = rnd(100);
+			if(i>95)
+				return &mons[PM_ORC_SHAMAN];
+			else if(i>60)
+				return &mons[PM_URUK_HAI];
+			else if(i>40)
+				return &mons[PM_HOBGOBLIN];
+			else if(i>10)
+				return &mons[PM_GOBLIN];
+			else if(i> 2)
+				return &mons[PM_LEMURE];
+			else if(i> 0)
+				return &mons[PM_IMP];
 		break;
 		
 		case PM_ORC_OF_THE_AGES_OF_STARS:
