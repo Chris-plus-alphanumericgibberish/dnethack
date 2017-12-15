@@ -3593,22 +3593,22 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	  if(!youdefend && mdef->mhp <= 0) return TRUE; //otherwise lifesaved
       messaged = TRUE;
     }
-	if (!spec_dbon_applies) {
-	    /* since damage bonus didn't apply, nothing more to do;  
-	       no further attacks have side-effects on inventory */
-	    return messaged;
-	}
 	if (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD) {
 		if (youattack && mdef->mattackedu) {
-			int life = (*dmgptr)*.3+1;
+			int life = otmp->lamplit ? ((*dmgptr)*.3+1) : ((*dmgptr)*.1+1);
 			healup(life, 0, FALSE, FALSE);
 		} else { /* m vs m or m vs u*/
-			int life = (*dmgptr)*.3+1;
 			if (magr && magr->mhp < magr->mhpmax) {
+				int life = otmp->lamplit ? ((*dmgptr)*.3+1) : ((*dmgptr)*.1+1);
 				magr->mhp += life;
 				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
 			}
 		}
+	}
+	if (!spec_dbon_applies) {
+	    /* since damage bonus didn't apply, nothing more to do;  
+	       no further attacks have side-effects on inventory */
+	    return messaged;
 	}
 	if (otmp->oartifact == ART_LIFEHUNT_SCYTHE) {
 		if (youattack) {
