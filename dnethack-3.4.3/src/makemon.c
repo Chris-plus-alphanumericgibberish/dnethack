@@ -5428,6 +5428,13 @@ register int	mmflags;
 				}
 			    mtmp->invis_blkd = TRUE;
 			}
+			if(mndx == PM_GRUE){
+				if(isdark(mtmp->mx,mtmp->my)){
+					mtmp->minvis = TRUE;
+					mtmp->perminvis = TRUE;
+				}
+			    mtmp->invis_blkd = TRUE;
+			}
 //			pline("%d\n",mtmp->mhpmax);
 		break;
 	}

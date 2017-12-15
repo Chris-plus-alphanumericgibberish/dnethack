@@ -331,6 +331,10 @@ mattackm(magr, mdef)
 	otmp = (struct obj *)0;
 	attk = 1;
 	
+	if (magr->data == &mons[PM_GRUE] && (i >= 2) && !((!levl[magr->mx][magr->my].lit && !(viz_array[magr->my][magr->mx] & TEMP_LIT1 && !(viz_array[magr->my][magr->mx] & TEMP_DRK1)))
+		|| (levl[magr->mx][magr->my].lit && (viz_array[magr->my][magr->mx] & TEMP_DRK1 && !(viz_array[magr->my][magr->mx] & TEMP_LIT1)))))
+		continue;
+	    
 	if(magr->mfaction == ZOMBIFIED || magr->mfaction == SKELIFIED || magr->mfaction == CRYSTALFIED){
 		if(mattk->aatyp == AT_SPIT 
 			|| mattk->aatyp == AT_BREA 
@@ -2384,6 +2388,10 @@ struct attack *mattk;
 	else
 	    tmp = 0;
 
+	if (mdef->data == &mons[PM_GRUE] && !((!levl[mdef->mx][mdef->my].lit && !(viz_array[mdef->my][mdef->mx] & TEMP_LIT1 && !(viz_array[mdef->my][mdef->mx] & TEMP_DRK1)))
+		|| (levl[mdef->mx][mdef->my].lit && (viz_array[mdef->my][mdef->mx] & TEMP_DRK1 && !(viz_array[mdef->my][mdef->mx] & TEMP_LIT1)))))
+		return (mdead | mhit);
+	
 	/* These affect the enemy even if defender killed */
 	switch(mddat->mattk[i].adtyp) {
 		case AD_BARB:

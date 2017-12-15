@@ -927,6 +927,14 @@ register struct monst *mtmp;
 			monflee(mtmp, 0, TRUE, TRUE);
 		}
 	}
+	if(mtmp->data == &mons[PM_GRUE]){
+		if(!mtmp->mflee && !isdark(mtmp->mx, mtmp->my)){
+			monflee(mtmp, 0, TRUE, TRUE);
+		} else if(mtmp->mflee && isdark(mtmp->mx, mtmp->my)){
+			mtmp->mflee = 0;
+			mtmp->mfleetim = 0;
+		}
+	}
 	
 	/* stunned monsters get un-stunned with larger probability */
 	if (mtmp->mstun && !rn2(10)) mtmp->mstun = 0;

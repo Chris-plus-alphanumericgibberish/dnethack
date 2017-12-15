@@ -391,6 +391,16 @@ moveloop()
 						mtmp->perminvis = FALSE;
 						newsym(mtmp->mx,mtmp->my);
 					}
+				} else if(mtmp->data == &mons[PM_GRUE]){
+					if(isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
+						mtmp->minvis = TRUE;
+						mtmp->perminvis = TRUE;
+						newsym(mtmp->mx,mtmp->my);
+					} else if(!isdark(mtmp->mx,mtmp->my) && mtmp->minvis){
+						mtmp->minvis = FALSE;
+						mtmp->perminvis = FALSE;
+						newsym(mtmp->mx,mtmp->my);
+					}
 				}
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1396,6 +1406,16 @@ moveloop()
 				mtmp->perminvis = TRUE;
 				newsym(mtmp->mx,mtmp->my);
 			} else if(isdark(mtmp->mx,mtmp->my) && mtmp->minvis){
+				mtmp->minvis = FALSE;
+				mtmp->perminvis = FALSE;
+				newsym(mtmp->mx,mtmp->my);
+			}
+		} else if(mtmp->data == &mons[PM_GRUE]){
+			if(isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
+				mtmp->minvis = TRUE;
+				mtmp->perminvis = TRUE;
+				newsym(mtmp->mx,mtmp->my);
+			} else if(!isdark(mtmp->mx,mtmp->my) && mtmp->minvis){
 				mtmp->minvis = FALSE;
 				mtmp->perminvis = FALSE;
 				newsym(mtmp->mx,mtmp->my);
