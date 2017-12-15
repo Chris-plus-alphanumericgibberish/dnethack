@@ -3839,7 +3839,8 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				shienuse = TRUE;
 			break;
 		}
-	}
+	} else if(uwep && uwep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS)
+			shienuse = TRUE;
     /* if its a Hero Spell then get its SPE_TYPE */
     spell_type = is_hero_spell(type) ? SPE_MAGIC_MISSILE + abstype : 0;
 
@@ -4051,6 +4052,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 							 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 							)
 						) ||
+						(uwep && uwep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS) ||
 						(uarm && (uarm->otyp == SILVER_DRAGON_SCALE_MAIL || uarm->otyp == SILVER_DRAGON_SCALES || uarm->otyp == JUMPSUIT)) ||
 						(uarms && (uarms->otyp == SILVER_DRAGON_SCALE_SHIELD)) ||
 						(uwep && uwep->oartifact == ART_DRAGONLANCE)

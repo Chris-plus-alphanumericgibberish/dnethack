@@ -3772,10 +3772,17 @@ boolean atme;
 		pseudo = mksobj(spellid(spell), FALSE, FALSE);
 		pseudo->blessed = pseudo->cursed = 0;
 		pseudo->quan = 20L;			/* do not let useup get it */
+		
+		if(uwep && uwep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS){
+			wake_nearto_noisy(u.ux, u.uy, energy*energy*2);
+		}
+		
 	} else {
 		pseudo = mksobj(spelltyp, FALSE, FALSE);
 		pseudo->blessed = pseudo->cursed = 0;
 		pseudo->quan = 20L;			/* do not let useup get it */
+		
+		//book-casting doesn't use the staff of twelve mirrors
 	}
 	/*
 	 * Find the skill the hero has in a spell type category.
@@ -3784,7 +3791,7 @@ boolean atme;
 	skill = spell_skilltype(pseudo->otyp);
 	role_skill = P_SKILL(skill);
 	if(Spellboost) role_skill++;
-
+	
 	switch(pseudo->otyp)  {
 	/*
 	 * At first spells act as expected.  As the hero increases in skill
@@ -4688,7 +4695,10 @@ int spell;
 		// && uwep && uwep->otyp == KHAKKHARA
 	// ) splcaster -= urole.spelarmr;
 	
-	if(uwep && (uwep->otyp == KHAKKHARA || uwep->oartifact == ART_TENTACLE_ROD || uwep->oartifact == ART_ARYFAERN_KERYM)) splcaster -= urole.spelarmr;
+	if(uwep){
+		if(uwep->oartifact == ART_TENTACLE_ROD || uwep->oartifact == ART_ARYFAERN_KERYM) splcaster -= urole.spelarmr;
+		else if(uwep->otyp == KHAKKHARA) splcaster -= uwep->oartifact ? 2*urole.spelarmr : urole.spelarmr;
+	}
 	
 	if(u.sealsActive&SEAL_PAIMON) splcaster -= urole.spelarmr;
 	

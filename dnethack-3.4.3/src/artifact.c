@@ -1583,7 +1583,7 @@ int tmp;
 			if(Fumbling) multiplier++;
 			if(Wounded_legs) multiplier++;
 			return damd ? d(multiplier, damd) : max(multiplier*tmp,multiplier);
-		} else if(otmp && otmp->oartifact == ART_LIMITED_MOON){
+		} else if(otmp && (otmp->oartifact == ART_LIMITED_MOON || otmp->oartifact == ART_STAFF_OF_TWELVE_MIRRORS)){
 			return 2*(damd ? d(is_lightsaber(otmp) ? 3 : 1, damd) : max(tmp,1));
 		} else return damd ? d(is_lightsaber(otmp) ? 3 : 1, damd) : max(tmp,1);
 	}
@@ -2430,6 +2430,13 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	realizes_damage = (youdefend || vis || 
 			   /* feel the effect even if not seen */
 			   (youattack && mdef == u.ustuck));
+	if(otmp->oartifact == ART_STAFF_OF_TWELVE_MIRRORS){
+		// static clashingmessage = FALSE;
+		if(youdefend) wake_nearto_noisy(u.ux, u.uy, (*dmgptr)*(*dmgptr)*2);
+		else wake_nearto_noisy(mdef->mx, mdef->my, (*dmgptr)*(*dmgptr)*2);
+		// if(youattack && !clashingmessage){
+		// }
+	}
 	if( (spec_ability2(otmp, SPFX2_RAM) && !rn2(4)) || 
 		(spec_ability2(otmp, SPFX2_RAM2) && (otmp->oartifact != ART_TOBIUME || *dmgptr+6 >= mdef->mhp))
 		){

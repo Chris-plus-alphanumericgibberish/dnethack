@@ -640,6 +640,18 @@ register struct monst *mtmp;
 			if(keepattacking && u.ulevel == 30 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) && (multi==0)) 
 				keepattacking = hitum(mtmp, weptmp-30, youmonst.data->mattk);
 		}
+		if(uwep && uwep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS){
+			if(keepattacking && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) && (multi==0)) 
+				keepattacking = hitum(mtmp, weptmp, youmonst.data->mattk);
+			if(Role_if(PM_BARBARIAN) && !Upolyd){
+				if(keepattacking && u.ulevel >= 10 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) && (multi==0)) 
+					keepattacking = hitum(mtmp, weptmp-10, youmonst.data->mattk);
+				if(keepattacking && u.ulevel >= 20 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) && (multi==0)) 
+					keepattacking = hitum(mtmp, weptmp-20, youmonst.data->mattk);
+				if(keepattacking && u.ulevel == 30 && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp && (!attacklimit || attacksmade++ < attacklimit) && (multi==0)) 
+					keepattacking = hitum(mtmp, weptmp-30, youmonst.data->mattk);
+			}
+		}
 	}
 	if((u.sealsActive || u.specialSealsActive) && keepattacking && !DEADMONSTER(mtmp) && m_at(x, y) == mtmp){
 		static int nspiritattacks;
