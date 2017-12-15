@@ -523,6 +523,7 @@ struct monst *mon;
 	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_STRANGE_CORPSE] && base < -5) base = -5 + AC_VALUE(base+5);
+	else if(mon->data == &mons[PM_ANCIENT_OF_DEATH] && base < -4) base = -4 + AC_VALUE(base+4);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
@@ -562,6 +563,7 @@ struct monst *mon;
 	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
 	else if(mon->data == &mons[PM_STRANGE_CORPSE] && base < -5) base = -5 + AC_VALUE(base+5);
+	else if(mon->data == &mons[PM_ANCIENT_OF_DEATH] && base < -4) base = -4 + AC_VALUE(base+4);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}

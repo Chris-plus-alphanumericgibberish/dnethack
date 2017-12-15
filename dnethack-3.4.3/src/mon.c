@@ -1012,7 +1012,7 @@ mcalcdistress()
 		flags.cth_attk=FALSE;
 	}
 	
-	if(mtmp->data == &mons[PM_ANCIENT_OF_ICE] || (mtmp->data == &mons[PM_BAALPHEGOR] && mtmp->mhp < mtmp->mhpmax/2)){
+	if(mtmp->data == &mons[PM_ANCIENT_OF_ICE]){
 		struct monst *tmpm;
 		int targets = 0, damage = 0;
 		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
@@ -1051,7 +1051,7 @@ mcalcdistress()
 			} else if(canseemon(mtmp)){
 				pline("Heat shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
 			}
-			damage = d((mtmp->m_lev)/3, 8);
+			damage = d(min(10, (mtmp->m_lev)/3), 8);
 			tmpm->mhp -= damage;
 			if(tmpm->mhp < 1){
 				if (canspotmon(tmpm))
@@ -1065,7 +1065,7 @@ mcalcdistress()
 			mtmp->mhp += damage;
 			if(mtmp->mhp > mtmp->mhpmax){
 				mtmp->mhp = mtmp->mhpmax;
-				grow_up(mtmp,mtmp);
+				// grow_up(mtmp,mtmp);
 			}
 			mtmp->mspec_used = 0;
 			mtmp->mcan = 0;
@@ -1080,12 +1080,12 @@ mcalcdistress()
 			if(canseemon(mtmp)){
 				pline("The shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
 			}
-			damage = d((mtmp->m_lev)/3, 8);
+			damage = d(min(10, (mtmp->m_lev)/3), 8);
 			losehp(damage, "heat drain", KILLED_BY);
 			mtmp->mhp += damage;
 			if(mtmp->mhp > mtmp->mhpmax){
 				mtmp->mhp = mtmp->mhpmax;
-				grow_up(mtmp,mtmp);
+				// grow_up(mtmp,mtmp);
 			}
 			mtmp->mspec_used = 0;
 			mtmp->mcan = 0;
@@ -1104,7 +1104,7 @@ mcalcdistress()
 				mtmp->muy = u.uy;
 			}
 			
-			if(!mtmp->mtame && lined_up(mtmp)){
+			if(!mtmp->mtame && !mtmp->mpeaceful && lined_up(mtmp)){
 				flags.drgn_brth = 1;
 				breamu(mtmp, &mattk);
 				flags.drgn_brth = 0;
@@ -1127,7 +1127,7 @@ mcalcdistress()
 		}
 	}
 	
-	if(mtmp->data == &mons[PM_ANCIENT_OF_DEATH] || (mtmp->data == &mons[PM_BAALPHEGOR] && mtmp->mhp < mtmp->mhpmax/2)){
+	if(mtmp->data == &mons[PM_ANCIENT_OF_DEATH]){
 		struct monst *tmpm;
 		int targets = 0, damage = 0;
 		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
@@ -1166,7 +1166,7 @@ mcalcdistress()
 			} else if(canseemon(mtmp)){
 				pline("Motes of light are drawn into the %s of %s.", mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
 			}
-			damage = d((mtmp->m_lev)/3, 4);
+			damage = d(min(10, (mtmp->m_lev)/3), 4);
 			tmpm->mhp -= damage;
 			if(tmpm->mhp < 1){
 				if (canspotmon(tmpm))
@@ -1180,7 +1180,7 @@ mcalcdistress()
 			mtmp->mhp += damage;
 			if(mtmp->mhp > mtmp->mhpmax){
 				mtmp->mhp = mtmp->mhpmax;
-				grow_up(mtmp,mtmp);
+				// grow_up(mtmp,mtmp);
 			}
 			mtmp->mspec_used = 0;
 			mtmp->mcan = 0;
@@ -1195,12 +1195,12 @@ mcalcdistress()
 			if(canseemon(mtmp)){
 				pline("The motes are drawn into the %s of %s.", mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
 			}
-			damage = d((mtmp->m_lev)/3, 4);
+			damage = d(min(10, (mtmp->m_lev)/3), 4);
 			losehp(damage, "life-force theft", KILLED_BY);
 			mtmp->mhp += damage;
 			if(mtmp->mhp > mtmp->mhpmax){
 				mtmp->mhp = mtmp->mhpmax;
-				grow_up(mtmp,mtmp);
+				// grow_up(mtmp,mtmp);
 			}
 			mtmp->mspec_used = 0;
 			mtmp->mcan = 0;
@@ -1208,7 +1208,7 @@ mcalcdistress()
 			mtmp->muy = u.uy;
 		}
 		if(damage){
-			if(!mtmp->mtame && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= BOLT_LIM
+			if(!mtmp->mtame && !mtmp->mpeaceful && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= BOLT_LIM
 				&& !(nonliving(youracedata) || is_demon(youracedata))
 				&& !(ward_at(u.ux,u.uy) == CIRCLE_OF_ACHERON)
 				&& !(u.sealsActive&SEAL_OSE || resists_death(&youmonst))
@@ -1223,7 +1223,7 @@ mcalcdistress()
 					shieldeff(u.ux, u.uy);
 					Your("%s flutters!", body_part(HEART));
 					losehp(d(4,4), "the ancient breath of death", KILLED_BY); //you still take damage
-				} else if(Upolyd ? (u.mh >= 100) : (u.uhp >= 100)){
+				} else if(maybe_polyd((u.mh >= 100), (u.uhp >= 100))){
 					Your("%s stops!  When it finally beats again, it is weak and thready.", body_part(HEART));
 					losehp(d(8,8), "the ancient breath of death", KILLED_BY); //Same as death's touch attack, sans special effects
 				} else {
@@ -1281,6 +1281,245 @@ mcalcdistress()
 						targ->mhp = 0;
 						grow_up(mtmp,targ);
 						mondied(targ);
+					}
+				}
+			}
+		}
+	}
+	
+	if(mtmp->data == &mons[PM_BAALPHEGOR] && mtmp->mhp < mtmp->mhpmax/2){
+		struct monst *tmpm;
+		int targets = 0, damage = 0;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
+				&& (tmpm->mpeaceful != mtmp->mpeaceful || mtmp->mhp < mtmp->mhpmax/4)
+				&& (tmpm->mtame != mtmp->mtame || mtmp->mhp < mtmp->mhpmax/4)
+				&& tmpm->mfaction != CRYSTALFIED
+				&& !is_demon(tmpm->data)
+				&& !DEADMONSTER(tmpm)
+			) targets++;
+		}
+		if(distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
+			&& !mtmp->mpeaceful
+			&& !mtmp->mtame
+			&& !is_demon(youracedata)
+		) targets++;
+		targets = rnd(targets);
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
+				&& (tmpm->mpeaceful != mtmp->mpeaceful || mtmp->mhp < mtmp->mhpmax/4)
+				&& (tmpm->mtame != mtmp->mtame || mtmp->mhp < mtmp->mhpmax/4)
+				&& tmpm->mfaction != CRYSTALFIED
+				&& !is_demon(tmpm->data)
+				&& !DEADMONSTER(tmpm)
+			) targets--;
+			if(!targets) break;
+		}
+		if(tmpm){
+			if(canseemon(tmpm) && canseemon(mtmp)){
+				pline("Some unseen virtue is drawn from %s.", mon_nam(tmpm));
+//				pline("%s suddenly seems weaker!", Monnam(tmpm));
+				pline("The virtue is sucked into the open mouth of %s.", mon_nam(mtmp));
+			} else if(canseemon(tmpm)){
+				pline("Some unseen virtue is drawn from %s.", mon_nam(tmpm));
+//				pline("%s suddenly seems weaker!", Monnam(tmpm));
+				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+			} else if(canseemon(mtmp)){
+				pline("Some unseen virtue is sucked into the open mouth of %s.", mon_nam(mtmp));
+			}
+			damage = d(min(10, (mtmp->m_lev)/3), 8);
+			if(resists_cold(mtmp)) damage /= 2;
+			if(damage >= tmpm->mhp){
+				grow_up(mtmp,tmpm);
+				if (canspotmon(tmpm))
+					pline("%s turns to glass!", Monnam(tmpm));
+				tmpm->mpeaceful = mtmp->mpeaceful;
+				if(tmpm->mtame && tmpm->mtame != mtmp->mtame)
+					tmpm->mtame = 0;
+				tmpm->mfaction = CRYSTALFIED;
+				mtmp->mhp += tmpm->mhp;
+			}
+			else{
+				tmpm->mhp -= damage;
+				mtmp->mhp += damage;
+			}
+			
+			if(mtmp->mhp > mtmp->mhpmax){
+				mtmp->mhp = mtmp->mhpmax;
+				// grow_up(mtmp,mtmp);
+			}
+			mtmp->mspec_used = 0;
+			mtmp->mcan = 0;
+		} else if(targets > 0
+			&& distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
+			&& !mtmp->mpeaceful
+			&& !mtmp->mtame
+			&& !is_demon(youracedata)
+		){
+			pline("Some unseen virtue is drawn from you.");
+			if(canseemon(mtmp)){
+				pline("The virtue is sucked into the open mouth of %s.", mon_nam(mtmp));
+			}
+			damage = d(min(10, (mtmp->m_lev)/3), 8);
+			if(Free_action) damage /= 2;
+			if((HCold_resistance && ECold_resistance)
+				|| (Cold_resistance && !(HCold_resistance || ECold_resistance))
+			) damage /= 2;
+			int temparise = u.ugrave_arise;
+			mtmp->mhp += maybe_polyd(u.mh, u.uhp);
+			u.ugrave_arise = PM_BAALPHEGOR;
+			mdamageu(mtmp, damage);
+			/*If the player surived the attack, restore the value of arise*/
+			u.ugrave_arise = temparise;
+			
+			if(mtmp->mhp > mtmp->mhpmax){
+				mtmp->mhp = mtmp->mhpmax;
+				// grow_up(mtmp,mtmp);
+			}
+			mtmp->mspec_used = 0;
+			mtmp->mcan = 0;
+			mtmp->mux = u.ux;
+			mtmp->muy = u.uy;
+		}
+		if(damage){
+			struct	obj	*otmp;
+			for(otmp = invent; otmp; otmp=otmp->nobj)
+				if(otmp->oartifact == ART_HELPING_HAND)
+					break;
+			if(!mtmp->mtame && !mtmp->mpeaceful && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= BOLT_LIM
+				&& !(uamul && (uamul->otyp == AMULET_VERSUS_CURSES))
+				&& !(uwep && (uwep->oartifact == ART_MAGICBANE) && rn2(20))
+				&& !(uwep && (uwep->oartifact == ART_TENTACLE_ROD) && rn2(20))
+				&& !(otmp && rn2(20))
+				&& !(u.ukinghill && rn2(20))
+			){
+				if(canseemon(mtmp)){
+					pline("%s breathes out motionless curses.", Monnam(mtmp));
+				}
+				if(
+					(!Free_action || HFast) &&
+					(!uarmh || uarmh->cursed) &&
+					(!uarmc || uarmc->cursed) &&
+					(!uarm || uarm->cursed) &&
+					(!uarmu || uarmu->cursed) &&
+					(!uarmg || uarmg->cursed) &&
+					(!uarmf || uarmf->cursed)
+				) {
+					if(Free_action){
+						HFast = 0L;
+						if (!Very_fast)
+							You_feel("yourself slowing down%s.",
+										Fast ? " a bit" : "");
+					} else done(GLASSED);
+				} else {
+					int nobj = 0, cnt, onum;
+					for (otmp = invent; otmp; otmp = otmp->nobj) {
+#ifdef GOLDOBJ
+						/* gold isn't subject to being cursed or blessed */
+						if (otmp->oclass == COIN_CLASS) continue;
+#endif
+						if(!otmp->cursed) nobj++;
+					}
+					if (nobj) {
+						for (cnt = 8; cnt > 0; cnt--)  {
+							onum = rnd(nobj);
+							for (otmp = invent; otmp; otmp = otmp->nobj) {
+#ifdef GOLDOBJ
+								/* gold isn't subject to being cursed or blessed */
+								if (otmp->oclass == COIN_CLASS) continue;
+#endif
+								if(!otmp->cursed) onum--;
+								if(!onum) break;
+							}
+							if (!otmp || otmp->cursed) continue;	/* next target */
+							if(otmp->oartifact && spec_ability(otmp, SPFX_INTEL) &&
+							   rn2(10) < 8) {
+								pline("%s!", Tobjnam(otmp, "resist"));
+								continue;
+							}
+
+							if(otmp->blessed)
+								unbless(otmp);
+							else
+								curse(otmp);
+							update_inventory();
+						}
+					}
+				}
+			} else {
+				struct monst *targ = 0;
+				struct obj *otmp;
+				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= BOLT_LIM
+						&& tmpm->mpeaceful != mtmp->mpeaceful
+						&& tmpm->mtame != mtmp->mtame
+						&& tmpm->mfaction != CRYSTALFIED
+						// && !(uamul && (uamul->otyp == AMULET_VERSUS_CURSES))
+						&& !(MON_WEP(tmpm) && (MON_WEP(tmpm)->oartifact == ART_MAGICBANE) && rn2(20))
+						&& !(MON_WEP(tmpm) && (MON_WEP(tmpm)->oartifact == ART_TENTACLE_ROD) && rn2(20))
+						&& !DEADMONSTER(tmpm)
+					){
+						for(otmp = tmpm->minvent; otmp; otmp=otmp->nobj)
+							if(otmp->oartifact == ART_TREASURY_OF_PROTEUS)
+								break;
+						if(otmp && rn2(20))
+							continue;
+						for(otmp = tmpm->minvent; otmp; otmp=otmp->nobj)
+							if(otmp->oartifact == ART_HELPING_HAND)
+								break;
+						if(otmp && rn2(20))
+							continue;
+						if(!targ || (distmin(tmpm->mx, tmpm->my, mtmp->mx, mtmp->my) < distmin(targ->mx, targ->my, mtmp->mx, mtmp->my))){
+							targ = tmpm;
+						}
+					}
+				}
+				if(targ){
+					if(canseemon(mtmp)){
+						pline("%s breathes out motionless curses.", Monnam(mtmp));
+					}
+					if(
+						!(targ->misc_worn_check & W_ARMH && (otmp = which_armor(targ, W_ARMH)) && !otmp->cursed) &&
+						!(targ->misc_worn_check & W_ARMC && (otmp = which_armor(targ, W_ARMC)) && !otmp->cursed) &&
+						!(targ->misc_worn_check & W_ARM && (otmp = which_armor(targ, W_ARM)) && !otmp->cursed) &&
+						!(targ->misc_worn_check & W_ARMU && (otmp = which_armor(targ, W_ARMU)) && !otmp->cursed) &&
+						!(targ->misc_worn_check & W_ARMG && (otmp = which_armor(targ, W_ARMG)) && !otmp->cursed) &&
+						!(targ->misc_worn_check & W_ARMF && (otmp = which_armor(targ, W_ARMF)) && !otmp->cursed)
+					) {
+						minstaglass(targ,FALSE);
+					} else {
+						int nobj = 0, cnt, onum;
+						for (otmp = targ->minvent; otmp; otmp = otmp->nobj) {
+#ifdef GOLDOBJ
+							/* gold isn't subject to being cursed or blessed */
+							if (otmp->oclass == COIN_CLASS) continue;
+#endif
+							if(!otmp->cursed) nobj++;
+						}
+						if (nobj) {
+							for (cnt = 8; cnt > 0; cnt--)  {
+								onum = rnd(nobj);
+								for (otmp = targ->minvent; otmp; otmp = otmp->nobj) {
+#ifdef GOLDOBJ
+									/* gold isn't subject to being cursed or blessed */
+									if (otmp->oclass == COIN_CLASS) continue;
+#endif
+									if(!otmp->cursed) onum--;
+									if(!onum) break;
+								}
+								if (!otmp || otmp->cursed) continue;	/* next target */
+								if(otmp->oartifact && spec_ability(otmp, SPFX_INTEL) &&
+								   rn2(10) < 8) {
+									continue;
+								}
+
+								if(otmp->blessed)
+									unbless(otmp);
+								else
+									curse(otmp);
+								// update_inventory();
+							}
+						}
 					}
 				}
 			}
