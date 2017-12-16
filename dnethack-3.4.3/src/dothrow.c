@@ -456,7 +456,7 @@ int shotlimit;
 		return(0);
 	}
 	
-	if(blaster->ovar1 <= 0){
+	if(blaster->ovar1 <= 0 || (blaster->otyp == MASS_SHADOW_PISTOL && !(blaster->cobj))){
 		if(blaster->otyp == RAYGUN) You("push the firing stud, but nothing happens.");
 		else pline("Nothing happens when you pull the trigger.");
 		return 1;
