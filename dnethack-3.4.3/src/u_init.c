@@ -1059,7 +1059,7 @@ static const struct def_skill Skill_Ran[] = {
     { P_AXE, P_SKILLED },	 { P_PICK_AXE, P_BASIC },
     { P_SHORT_SWORD, P_BASIC },	 { P_MORNING_STAR, P_BASIC },
     { P_FLAIL, P_SKILLED },	 { P_HAMMER, P_BASIC },
-    { P_QUARTERSTAFF, P_BASIC }, { P_POLEARMS, P_SKILLED },
+    { P_QUARTERSTAFF, P_EXPERT }, { P_POLEARMS, P_SKILLED },
 	{ P_HARVEST, P_SKILLED },
     { P_SPEAR, P_SKILLED },	 { P_JAVELIN, P_EXPERT },
     { P_TRIDENT, P_BASIC },	 { P_BOW, P_EXPERT },
