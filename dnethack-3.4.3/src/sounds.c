@@ -1996,6 +1996,38 @@ dochat()
 		else pline("....");
 	}
 	
+	if(mtmp && mtmp->data == &mons[PM_PRIEST_OF_AN_UNKNOWN_GOD]){
+	  if(uwep && uwep->oartifact && uwep->oartifact != ART_SILVER_KEY && uwep->oartifact != ART_ANNULUS
+		&& uwep->oartifact != ART_PEN_OF_THE_VOID && CountsAgainstGifts(uwep->oartifact)
+	  ){
+			struct obj *optr;
+			You_feel("%s tug gently on your %s.",mon_nam(mtmp), ONAME(uwep));
+			if(yn("Release it?")=='n'){
+				You("hold on tight.");
+			}
+			else{
+				You("let %s take your %s.",mon_nam(mtmp), ONAME(uwep));
+				pline_The(Hallucination ? "world pats you on the head." : "world quakes around you.  Perhaps it is the voice of a god?");
+				do_earthquake(u.ux, u.uy, 10, 2, FALSE, (struct monst *)0);
+				optr = uwep;
+				uwepgone();
+				if(optr->gifted != A_NONE && !Role_if(PM_EXILE)){
+					gods_angry(optr->gifted);
+					gods_upset(optr->gifted);
+				}
+				useup(optr);
+				u.regifted++;
+				mongone(mtmp);
+				if(Role_if(PM_EXILE) && u.regifted == 5){
+					pline("The image of an unknown and strange seal fills your mind!");
+					u.specialSealsKnown |= SEAL_UNKNOWN_GOD;
+				}
+				return 1;
+			}
+	  }
+	}
+	
+	
     if ( (!mtmp || mtmp->mundetected ||
 		mtmp->m_ap_type == M_AP_FURNITURE ||
 		mtmp->m_ap_type == M_AP_OBJECT) && levl[tx][ty].typ == IRONBARS
