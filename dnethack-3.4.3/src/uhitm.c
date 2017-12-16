@@ -1940,7 +1940,7 @@ defaultvalue:
 	    use_skill(wtype, 1);
 		if(!thrown && uwep && is_lightsaber(uwep) && litsaber(uwep) && P_SKILL(wtype) >= P_BASIC){
 			use_skill(FFORM_SHII_CHO,1);
-			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
+			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC || uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC){
 				if((u.fightingForm == FFORM_SHII_CHO || 
 					 (u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 					) &&

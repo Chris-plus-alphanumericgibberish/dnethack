@@ -3993,6 +3993,8 @@ boolean atme;
 	/* gain skill for successful cast */
 	use_skill(skill, spellev(spell));
 	u.lastcast = monstermoves + spellev(spell);
+	if(uwep && uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC && uwep->spe > 0)
+		u.lastcast += uwep->spe;
 
 	obfree(pseudo, (struct obj *)0);	/* now, get rid of it */
 	return(1);
