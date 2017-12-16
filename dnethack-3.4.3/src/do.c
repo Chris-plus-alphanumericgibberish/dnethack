@@ -1303,15 +1303,34 @@ boolean at_stairs, falling, portal;
 			){
 				boolean mainsaber = (uwep && is_lightsaber(uwep) && litsaber(uwep));
 				boolean secsaber = (uswapwep && is_lightsaber(uswapwep) && litsaber(uswapwep) && u.twoweap);
-				if(rnl(20) < ACURR(A_DEX)){
-					You("hurriedly deactivate your energy sword%s.", (mainsaber && secsaber) ? "s" : "");
+				if((mainsaber && uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC)
+					|| (secsaber && uswapwep->oartifact == ART_INFINITY_S_MIRRORED_ARC)
+				){
+					int lrole = rnl(20);
+					if(lrole+5 < ACURR(A_DEX)){
+						You("roll and dodge your tumbling energy sword%s.", (mainsaber && secsaber) ? "s" : "");
+					} else {
+						You("come into contact with your energy sword%s.", (mainsaber && secsaber && lrole >= ACURR(A_DEX)) ? "s" : "");
+						if(mainsaber && (uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC || lrole >= ACURR(A_DEX)))
+							losehp(dmgval(uwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
+						if(secsaber && (uswapwep->oartifact == ART_INFINITY_S_MIRRORED_ARC || lrole >= ACURR(A_DEX)))
+							losehp(dmgval(uswapwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
+					}
+					if(mainsaber && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC)
+						lightsaber_deactivate(uwep, TRUE);
+					if(secsaber && uswapwep->oartifact != ART_INFINITY_S_MIRRORED_ARC)
+						lightsaber_deactivate(uswapwep, TRUE);
 				} else {
-					You("come into contact with your energy sword%s.", (mainsaber && secsaber) ? "s" : "");
-					if(mainsaber) losehp(dmgval(uwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
-					if(secsaber) losehp(dmgval(uswapwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
+					if(rnl(20) < ACURR(A_DEX)){
+						You("hurriedly deactivate your energy sword%s.", (mainsaber && secsaber) ? "s" : "");
+					} else {
+						You("come into contact with your energy sword%s.", (mainsaber && secsaber) ? "s" : "");
+						if(mainsaber) losehp(dmgval(uwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
+						if(secsaber) losehp(dmgval(uswapwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
+					}
+					if(mainsaber) lightsaber_deactivate(uwep, TRUE);
+					if(secsaber) lightsaber_deactivate(uswapwep, TRUE);
 				}
-				if(mainsaber) lightsaber_deactivate(uwep, TRUE);
-				if(secsaber) lightsaber_deactivate(uswapwep, TRUE);
 			}
 #ifdef STEED
 		    /* falling off steed has its own losehp() call */
