@@ -2562,7 +2562,7 @@ const char *fmt, *str;
 	    if (fmt && str)
 	    	pline(fmt, str, "weapon");
 	    return TRUE;
-	} else if (uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) {
+	} else if (uwep && is_lightsaber(uwep) && litsaber(uwep) && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) {
 	    /* Due to wielded lightsaber */
 	    if (fmt && str)
 	    	pline(fmt, str, "lightsaber");

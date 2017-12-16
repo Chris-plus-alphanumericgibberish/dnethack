@@ -2233,7 +2233,7 @@ doengrave()
 
 	    case TOOL_CLASS:
 		if (is_lightsaber(otmp)) {
-			if (otmp->lamplit) type = BURN;
+			if (litsaber(otmp)) type = BURN;
 			else Your("%s is deactivated!", aobjnam(otmp,"are"));
 		} else if(otmp == ublindf) {
 		    pline(
@@ -2549,7 +2549,7 @@ doengrave()
 		break;
 	    case BURN:
 			multi = -(len/10);
-			if(is_lightsaber(otmp)){
+			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC){
 				maxelen = ((otmp->age/101) + 1)*10;
 				if (len > maxelen) {
 					multi = -(maxelen/10);
@@ -3034,7 +3034,7 @@ doward()
 
 	    case TOOL_CLASS:
 		if (is_lightsaber(otmp)) {
-			if (otmp->lamplit) type = BURN;
+			if (litsaber(otmp)) type = BURN;
 			else Your("%s is deactivated!", aobjnam(otmp,"are"));
 		} else if(otmp == ublindf) {
 		    pline(
@@ -3352,7 +3352,7 @@ doward()
 		break;
 	    case BURN:
 			multi = -(len/10);
-			if(is_lightsaber(otmp)){
+			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC){
 				maxelen = ((otmp->age/101) + 1)*10;
 				if (len > maxelen) {
 					multi = -(maxelen/10);
@@ -4416,7 +4416,7 @@ doseal()
 
 	    case TOOL_CLASS:
 		if (is_lightsaber(otmp)) {
-			if (otmp->lamplit) type = BURN;
+			if (litsaber(otmp)) type = BURN;
 			else Your("%s is deactivated!", aobjnam(otmp,"are"));
 		} else if(otmp == ublindf) {
 		    pline(
@@ -4680,7 +4680,7 @@ doseal()
 		break;
 	    case BURN:
 			multi = -(len/10);
-			if(is_lightsaber(otmp)){
+			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC){
 				maxelen = ((otmp->age/101) + 1)*10;
 				if (len > maxelen) {
 					multi = -(maxelen/10);

@@ -601,7 +601,7 @@ doforce()		/* try to force a chest with your weapon */
 	} else if (u.sealsActive&SEAL_OTIAX) {
 		;
 	} else if (uwep && is_lightsaber(uwep)) {
-	    if (!uwep->lamplit) {
+	    if (!litsaber(uwep)) {
 		Your("lightsaber is deactivated!");
 		return(0);
 	    }

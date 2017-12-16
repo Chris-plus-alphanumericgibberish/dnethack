@@ -233,9 +233,9 @@ dig()
 {
 	register xchar dpx = digging.pos.x, dpy = digging.pos.y;
 	register struct rm *lev = &levl[dpx][dpy];
-	register boolean ispick = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit))) || (uarmg && is_pick(uarmg)) || (uwep->otyp == SEISMIC_HAMMER);
+	register boolean ispick = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && litsaber(uwep))) || (uwep->otyp == SEISMIC_HAMMER)) || (uarmg && is_pick(uarmg));
 	int bonus;
-	struct obj *digitem = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) ? uwep : 
+	struct obj *digitem = (uwep && (is_pick(uwep) || (is_lightsaber(uwep) && litsaber(uwep)) || (uwep->otyp == SEISMIC_HAMMER))) ? uwep : 
 		(uwep && is_axe(uwep) && IS_TREES(lev->typ)) ? uwep :
 		(uarmg && is_pick(uarmg)) ? uarmg : uwep;
 	const char *verb =

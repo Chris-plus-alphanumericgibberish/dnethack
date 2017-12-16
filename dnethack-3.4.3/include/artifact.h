@@ -333,6 +333,7 @@ struct artifact {
 #define STEAL           (LAST_PROP+64)
 #define SUMMON_VAMP     (LAST_PROP+65)
 #define COLLECT_TAX     (LAST_PROP+66)
+#define ALTMODE         (LAST_PROP+67)
 
 #define MASTERY_ARTIFACT_LEVEL 20
 

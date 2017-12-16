@@ -1481,7 +1481,7 @@ boolean countem;
 	for(cobj = level.objects[x][y]; cobj; cobj = nobj) {
 		nobj = cobj->nexthere;
 		if(Is_container(cobj) || 
-			(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS) ||
+			(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS && cobj->oartifact != ART_INFINITY_S_MIRRORED_ARC) ||
 			(cobj->otyp == MASS_SHADOW_PISTOL)
 		) {
 			container_count++;
@@ -1596,7 +1596,7 @@ lootcont:
 		You("carefully open %s...", the(xname(cobj)));
 		timepassed |= use_container(cobj, 0);
 		if (multi < 0) return 1;		/* chest trap */
-	    } else if(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS){
+	    } else if(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS && cobj->oartifact != ART_INFINITY_S_MIRRORED_ARC){
 			Sprintf(qbuf, "There is %s here, open it?",an(xname(cobj)));
 			c = ynq(qbuf);
 			if (c == 'q') return (timepassed);

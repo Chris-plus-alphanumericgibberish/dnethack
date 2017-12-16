@@ -68,7 +68,7 @@ boolean burn;
 			    (obj && obj->quan > 1L) ? name : an(name);
 	is_acid = (obj && obj->otyp == ACID_VENOM);
 
-	if(uwep && is_lightsaber(uwep) && uwep->lamplit && P_SKILL(weapon_type(uwep)) >= P_BASIC){
+	if(uwep && is_lightsaber(uwep) && litsaber(uwep) && P_SKILL(weapon_type(uwep)) >= P_BASIC){
 		if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
 			if(u.fightingForm == FFORM_SHII_CHO || 
 				(u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm)))
@@ -103,14 +103,14 @@ boolean burn;
 		}
 
 		if (obj && (obj->obj_material == SILVER || arti_silvered(obj)) &&
-				!(is_lightsaber(obj) && obj->lamplit) &&
+				!(is_lightsaber(obj) && litsaber(obj)) &&
 				!(u.sealsActive&SEAL_EDEN)
 				&& hates_silver(youracedata)) {
 			pline_The("silver sears your flesh!");
 			exercise(A_CON, FALSE);
 		}
 		if (obj && (obj->obj_material == IRON) &&
-				!(is_lightsaber(obj) && obj->lamplit)
+				!(is_lightsaber(obj) && litsaber(obj))
 				&& hates_iron(youracedata)) {
 			pline_The("cold-iron sears your flesh!");
 			exercise(A_CON, FALSE);
@@ -384,7 +384,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 			}
 	    }
 	    if ( (otmp->obj_material == SILVER || arti_silvered(otmp)) &&
-			!(is_lightsaber(otmp) && otmp->lamplit) &&
+			!(is_lightsaber(otmp) && litsaber(otmp)) &&
 		    hates_silver(mtmp->data)
 		) {
 			if (vis) pline_The("silver sears %s flesh!",
@@ -392,7 +392,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 			else if (verbose) pline("Its flesh is seared!");
 	    }
 	    if ( (otmp->obj_material == IRON) &&
-			!(is_lightsaber(otmp) && otmp->lamplit) &&
+			!(is_lightsaber(otmp) && litsaber(otmp)) &&
 		    hates_iron(mtmp->data)
 		) {
 			if (vis) pline_The("cold-iron sears %s flesh!",
@@ -668,7 +668,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			case BLINDING_VENOM:
 				if(
 				  !(singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT || singleobj->oartifact) && 
-					uwep && is_lightsaber(uwep) && uwep->lamplit && 
+					uwep && is_lightsaber(uwep) && litsaber(uwep) && 
 						((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
 						 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 						)
@@ -728,7 +728,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 					//This is definitly a temporary setup.
 				if(
 				  !(singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT || singleobj->oartifact) && 
-					uwep && is_lightsaber(uwep) && uwep->lamplit && 
+					uwep && is_lightsaber(uwep) && litsaber(uwep) && 
 						((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
 						 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 						)
@@ -766,7 +766,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			if(hitu < 0){
 				boolean shienuse = FALSE;
 				if(
-					uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))
+					uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))
 				){
 					switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
 						case P_BASIC:
@@ -785,7 +785,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 					}
 				}
 
-				if(uwep && is_lightsaber(uwep) && uwep->lamplit && shienuse && getdir((char *)0) && (u.dx || u.dy)){
+				if(uwep && is_lightsaber(uwep) && litsaber(uwep) && shienuse && getdir((char *)0) && (u.dx || u.dy)){
 					dx = u.dx;
 					dy = u.dy;
 				} else {

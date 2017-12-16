@@ -333,13 +333,6 @@ A("The Golden Sword of Y'ha-Talla",			SCIMITAR,
 	LORDLY, A_NONE, NON_PM, NON_PM, 3000L, 
 	SPFX2_POISONED,0,0),
 
-A("The Staff of Twelve Mirrors",	KHAKKHARA,	
-	(SPFX_RESTR|SPFX_REFLECT|SPFX_DISPL), 0,
-	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	PHYS(5,6),	NO_DFNS,	NO_CARY,
-	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
-	SPFX2_SPELLUP,0,0),
-
 A("Mirror Brand",	LONG_SWORD,	
 	(SPFX_ATTK|SPFX_RESTR|SPFX_DALIGN|SPFX_CON_OR|SPFX_REFLECT), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
@@ -846,6 +839,20 @@ A("The Necronomicon", SPE_SECRETS, /*from the works of HP Lovecraft*/
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	NECRONOMICON,	A_NONE, NON_PM, NON_PM, 5000L, 
 	0,SPFX3_NOCNT,0),
+
+A("Infinity's Mirrored Arc",	DOUBLE_LIGHTSABER,	
+	(SPFX_RESTR|SPFX_REFLECT), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	ALTMODE,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
+	0,0,0),
+
+A("The Staff of Twelve Mirrors",	KHAKKHARA,	
+	(SPFX_RESTR|SPFX_REFLECT|SPFX_DISPL), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(5,6),	NO_DFNS,	NO_CARY,
+	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
+	SPFX2_SPELLUP,0,0),
 
 A("The Hand-Mirror of Cthylla", MIRROR, /*from the works of HP Lovecraft*/
 	(SPFX_NOGEN|SPFX_RESTR), (SPFX_SEARCH|SPFX_TCTRL),

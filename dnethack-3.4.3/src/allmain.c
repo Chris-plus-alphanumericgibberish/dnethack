@@ -877,7 +877,7 @@ moveloop()
 				if(u.slowclock < hungerup) morehungry(hungerup-u.slowclock);
 				else if(!(moves%(u.slowclock - hungerup + 1))) morehungry(1);
 			}
-			if(uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
+			if(uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:       moveamt = max(moveamt-6,1); break;
 					case P_SKILLED:     moveamt = max(moveamt-4,1); break;

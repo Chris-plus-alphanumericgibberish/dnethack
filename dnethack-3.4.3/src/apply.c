@@ -1393,6 +1393,10 @@ struct obj *obj;
 {
 	char buf[BUFSZ];
 
+	if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
+		You("can't find an %s switch", litsaber(obj) ? "off" : "on");
+		return;
+	}
 	if(Underwater && obj->oartifact != ART_HOLY_MOONLIGHT_SWORD) {
 		pline("This is not a diving lamp.");
 		return;

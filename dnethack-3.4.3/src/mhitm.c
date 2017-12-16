@@ -1312,7 +1312,7 @@ physical:{
 				/* houchou not thrown */
 				(otmp->oartifact == ART_HOUCHOU) ||
 			    /* lightsaber that isn't lit ;) */
-			    (is_lightsaber(otmp) && !otmp->lamplit) ||
+			    (is_lightsaber(otmp) && !litsaber(otmp)) ||
 			    /* WAC -- or using a pole at short range... */
 			    (is_pole(otmp) &&
 					otmp->otyp != AKLYS && 
@@ -1326,9 +1326,9 @@ physical:{
 			    /* then do only 1-2 points of damage */
 			    if (mdef->data->mlet == S_SHADE && !(
 					((otmp->obj_material != SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
-						!(is_lightsaber(otmp) && otmp->lamplit)) ||
+						!(is_lightsaber(otmp) && litsaber(otmp))) ||
 					(otmp->obj_material != IRON && hates_iron(pd) &&
-						!(is_lightsaber(otmp) && otmp->lamplit)) ||
+						!(is_lightsaber(otmp) && litsaber(otmp))) ||
 					(is_unholy(otmp) && hates_unholy(pd))
 				)) tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
@@ -1338,30 +1338,30 @@ physical:{
 				else tmp = rnd(2);
 				
 				if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
-					!(is_lightsaber(otmp) && otmp->lamplit)
+					!(is_lightsaber(otmp) && litsaber(otmp))
 				)
 					tmp += rnd(20);
 				if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
-					!(is_lightsaber(otmp) && otmp->lamplit)
+					!(is_lightsaber(otmp) && litsaber(otmp))
 				)
 					tmp += rnd(mdef->m_lev);
 				if(otmp && is_unholy(otmp) && hates_unholy(pd))
 					tmp += rnd(9);
 			} else {
 				tmp += dmgval(otmp, mdef, 0);
-				if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))) phasearmor = TRUE;
+				if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))) phasearmor = TRUE;
 			}
 			
 			if(resist_attacks(mdef->data))
 				tmp = 0;
             /* WAC Weres get seared */
             if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
-				!(is_lightsaber(otmp) && otmp->lamplit)
+				!(is_lightsaber(otmp) && litsaber(otmp))
 			) {
             	if (vis) pline("The silver sears %s!", mon_nam(mdef));
             }
             if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
-				!(is_lightsaber(otmp) && otmp->lamplit)
+				!(is_lightsaber(otmp) && litsaber(otmp))
 			) {
             	if (vis) pline("The cold-iron sears %s!", mon_nam(mdef));
             }

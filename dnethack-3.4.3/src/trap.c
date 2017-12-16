@@ -623,7 +623,7 @@ unsigned trflags;
 	nomul(0, NULL);
 
 	if(
-		uwep && is_lightsaber(uwep) && uwep->lamplit && 
+		uwep && is_lightsaber(uwep) && litsaber(uwep) && 
 			((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
 			 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 			)

@@ -236,7 +236,7 @@ const char *verb;
 				The(xname(obj)), otense(obj, "tumble"),
 				the_your[t->madeby_u]);
 	}
-	if (is_lightsaber(obj) && obj->lamplit) {
+	if (is_lightsaber(obj) && litsaber(obj)) {
 		if (cansee(x, y)) You("see %s deactivate.", an(xname(obj)));
 		lightsaber_deactivate(obj, TRUE);
 	}
@@ -818,7 +818,7 @@ dodown()
 			|| !Can_fall_thru(&u.uz) || !trap->tseen) {
 
 			if (flags.autodig && !flags.nopick &&
-				uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) {
+				uwep && (is_pick(uwep) || (is_lightsaber(uwep) && litsaber(uwep)) || (uwep->otyp == SEISMIC_HAMMER))) {
 				return use_pick_axe2(uwep);
 			} else if(uarmg && is_pick(uarmg)){
 				return use_pick_axe2(uarmg);
@@ -1298,11 +1298,11 @@ boolean at_stairs, falling, portal;
 					freeinv(uball);
 				}
 		    }
-			if(((uwep && is_lightsaber(uwep) && uwep->lamplit)) ||
-				(uswapwep && is_lightsaber(uswapwep) && uswapwep->lamplit && u.twoweap)
+			if(((uwep && is_lightsaber(uwep) && litsaber(uwep))) ||
+				(uswapwep && is_lightsaber(uswapwep) && litsaber(uswapwep) && u.twoweap)
 			){
-				boolean mainsaber = (uwep && is_lightsaber(uwep) && uwep->lamplit);
-				boolean secsaber = (uswapwep && is_lightsaber(uswapwep) && uswapwep->lamplit && u.twoweap);
+				boolean mainsaber = (uwep && is_lightsaber(uwep) && litsaber(uwep));
+				boolean secsaber = (uswapwep && is_lightsaber(uswapwep) && litsaber(uswapwep) && u.twoweap);
 				if(rnl(20) < ACURR(A_DEX)){
 					You("hurriedly deactivate your energy sword%s.", (mainsaber && secsaber) ? "s" : "");
 				} else {

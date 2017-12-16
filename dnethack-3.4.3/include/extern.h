@@ -988,6 +988,7 @@ E boolean NDECL(any_light_source);
 E void FDECL(snuff_light_source, (int, int));
 E boolean FDECL(obj_sheds_light, (struct obj *));
 E boolean FDECL(obj_is_burning, (struct obj *));
+E boolean FDECL(litsaber, (struct obj *));
 E void FDECL(obj_split_light_source, (struct obj *, struct obj *));
 E void FDECL(obj_merge_light_sources, (struct obj *,struct obj *));
 E int FDECL(candle_light_range, (struct obj *));

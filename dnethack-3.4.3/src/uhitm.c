@@ -301,8 +301,8 @@ find_to_hit_rolls(mtmp,ptmp,pweptmp,ptchtmp)
 		if(uwep->objsize - youracedata->msize > 0){
 			weptmp += -4*(uwep->objsize - youracedata->msize);
 		}
-		if(is_lightsaber(uwep) && uwep->lamplit){
-			if(u.fightingForm == FFORM_SHII_CHO && MON_WEP(mtmp) && is_lightsaber(MON_WEP(mtmp)) && MON_WEP(mtmp)->lamplit){
+		if(is_lightsaber(uwep) && litsaber(uwep)){
+			if(u.fightingForm == FFORM_SHII_CHO && MON_WEP(mtmp) && is_lightsaber(MON_WEP(mtmp)) && litsaber(MON_WEP(mtmp))){
 				weptmp -= 5;
 				// switch(min(P_SKILL(FFORM_SHII_CHO), P_SKILL(weapon_type(uwep)))){
 					// case P_ISRESTRICTED:weptmp -= 5; break;
@@ -1192,7 +1192,7 @@ int thrown;
 				obj->oartifact != ART_PEN_OF_THE_VOID
 			) ||
 		    /* lightsaber that isn't lit ;) */
-		    (is_lightsaber(obj) && !obj->lamplit) ||
+		    (is_lightsaber(obj) && !litsaber(obj)) ||
 		    /* houchou that isn't thrown */
 		    (!thrown && obj->oartifact == ART_HOUCHOU) ||
 		    /* or throw a missile without the proper bow... */
@@ -1208,7 +1208,7 @@ int thrown;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
 		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 4) + obj->spe);
 			
-		    else if((is_lightsaber(obj) && !obj->lamplit)) tmp = d(1,4) + obj->spe + weapon_dam_bonus(0); //martial arts aid
+		    else if((is_lightsaber(obj) && !litsaber(obj))) tmp = d(1,4) + obj->spe + weapon_dam_bonus(0); //martial arts aid
 
 			else tmp = rnd(2);
 			
@@ -1293,7 +1293,7 @@ int thrown;
 				tmp = dmgval(obj, mon, SPEC_MARIONETTE);
 			else tmp = dmgval(obj, mon, 0);
 			
-			if(obj && ((is_lightsaber(obj) && obj->lamplit) || arti_shining(obj))) phasearmor = TRUE;
+			if(obj && ((is_lightsaber(obj) && litsaber(obj)) || arti_shining(obj))) phasearmor = TRUE;
 		    
 			/* a minimal hit doesn't exercise proficiency */
 			valid_weapon_attack = (tmp > 1 || (obj && obj->otyp == SPOON && Role_if(PM_CONVICT)));
@@ -1343,7 +1343,7 @@ int thrown;
 					if(Role_if(PM_CONVICT) && !Upolyd && obj == uwep && uwep->otyp == SPOON) tmp += rnd(u.ulevel);
 					hittxt = TRUE;
 				}
-				if(obj == uwep && is_lightsaber(uwep) && uwep->lamplit){
+				if(obj == uwep && is_lightsaber(uwep) && litsaber(uwep)){
 					if (
 						(mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh ||
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) || stationary(mdat) ||
@@ -1516,12 +1516,12 @@ int thrown;
 			}
 		    if ((obj->obj_material == SILVER || arti_silvered(obj)  || 
 					(thrown && obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) )
-			   && hates_silver(mdat) && !(is_lightsaber(obj) && obj->lamplit)) {
+			   && hates_silver(mdat) && !(is_lightsaber(obj) && litsaber(obj))) {
 				if(obj->oartifact == ART_SUNSWORD) sunmsg = TRUE;
 				else silvermsg = TRUE;
 				silverobj = TRUE;
 		    }
-		    if (obj->obj_material == IRON && hates_iron(mdat) && !(is_lightsaber(obj) && obj->lamplit)) {
+		    if (obj->obj_material == IRON && hates_iron(mdat) && !(is_lightsaber(obj) && litsaber(obj))) {
 				ironmsg = TRUE;
 				ironobj = TRUE;
 		    }
@@ -1613,7 +1613,7 @@ int thrown;
 					case HEAVY_IRON_BALL:	/* 1d25 */
 					case IRON_CHAIN:		/* 1d4+1 */
 						tmp = dmgval(obj, mon, 0);
-						if(obj && ((is_lightsaber(obj) && obj->lamplit) || arti_shining(obj))) phasearmor = TRUE;
+						if(obj && ((is_lightsaber(obj) && litsaber(obj)) || arti_shining(obj))) phasearmor = TRUE;
 					break;
 					case MIRROR:
 						if (breaktest(obj)) {
@@ -1782,7 +1782,7 @@ int thrown;
 						} else {
 							Your("venom burns %s!", mon_nam(mon));
 							tmp = dmgval(obj, mon, 0);
-							if(obj && ((is_lightsaber(obj) && obj->lamplit) || arti_shining(obj))) phasearmor = TRUE;
+							if(obj && ((is_lightsaber(obj) && litsaber(obj)) || arti_shining(obj))) phasearmor = TRUE;
 						}
 						if (thrown) obfree(obj, (struct obj *)0);
 						else useup(obj);
@@ -1920,7 +1920,7 @@ defaultvalue:
 				for(;i>0;i--){
 					// pline("%d",i);
 					tmp += dmgval(obj, mon, 0);
-					if(obj && ((is_lightsaber(obj) && obj->lamplit) || arti_shining(obj))) phasearmor = TRUE;
+					if(obj && ((is_lightsaber(obj) && litsaber(obj)) || arti_shining(obj))) phasearmor = TRUE;
 					if(wep->oartifact == ART_LIECLEAVER) tmp += rnd(10);
 				}
 			}
@@ -1930,7 +1930,7 @@ defaultvalue:
 	    /* [this assumes that `!thrown' implies wielded...] */
 	    wtype = thrown ? weapon_type(wep) : uwep_skill_type();
 	    use_skill(wtype, 1);
-		if(!thrown && uwep && is_lightsaber(uwep) && uwep->lamplit && P_SKILL(wtype) >= P_BASIC){
+		if(!thrown && uwep && is_lightsaber(uwep) && litsaber(uwep) && P_SKILL(wtype) >= P_BASIC){
 			use_skill(FFORM_SHII_CHO,1);
 			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
 				if((u.fightingForm == FFORM_SHII_CHO || 

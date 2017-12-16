@@ -1998,7 +1998,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (Fast) you_are(Very_fast ? "very fast" : "fast");
 	if (Reflecting) you_have("reflection");
 	if (Reflecting && (
-			(uwep && is_lightsaber(uwep) && uwep->lamplit && 
+			(uwep && is_lightsaber(uwep) && litsaber(uwep) && 
 				((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
 				 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 				)

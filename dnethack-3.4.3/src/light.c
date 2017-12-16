@@ -668,9 +668,23 @@ obj_is_burning(obj)
     return (obj->lamplit &&
 		 (	obj->otyp == MAGIC_LAMP
 		 || ignitable(obj)
-		 ||	is_lightsaber(obj)
+		 ||	(is_lightsaber(obj) && obj->oartifact != ART_INFINITY_S_MIRRORED_ARC)
 		 ||	obj->oartifact == ART_HOLY_MOONLIGHT_SWORD
 		 ||	artifact_light(obj)));
+}
+
+boolean
+litsaber(obj)
+	struct obj *obj;
+{
+	if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
+		xchar x, y;
+		get_obj_location(obj, &x, &y, 0);
+		if(x == 0 && y == 0) return FALSE;
+		return !isdark(x, y);
+	} else {
+		return obj->lamplit;
+	}
 }
 
 /* copy the light source(s) attachted to src, and attach it/them to dest */

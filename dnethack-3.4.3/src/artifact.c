@@ -534,6 +534,19 @@ boolean
 arti_bright(obj)
 struct obj *obj;
 {
+	if(obj && obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
+		xchar x, y;
+		int dnm = 0;
+		get_obj_location(otmp, &x, &y, 0);
+		if(levl[x][y].lit && 
+			!(viz_array[y][x]&TEMP_LIT1 && 
+			 !(viz_array[y][x]&TEMP_DRK3)
+			)
+		) return TRUE;
+		if(viz_array[y][x]&TEMP_LIT1 && 
+			!(viz_array[y][x]&TEMP_DRK3)
+		) return !rn2(10);
+	}
     return (obj && obj->oartifact && (spec_ability2(obj, SPFX2_BRIGHT) || 
 									  (obj->oartifact == ART_PEN_OF_THE_VOID &&
 									   obj->ovar1 & SEAL_JACK)));
@@ -545,7 +558,7 @@ struct obj *obj;
 {
     return (obj && (
 		(obj->oartifact && spec_ability2(obj, SPFX2_SHATTER)) ||
-		(is_lightsaber(obj) && obj->lamplit)
+		(is_lightsaber(obj) && litsaber(obj))
 	));
 }
 
@@ -590,7 +603,7 @@ struct obj *obj;
 {
     return (obj && (
 		(obj->oartifact && spec_ability2(obj, SPFX2_SHINING)) ||
-		(is_lightsaber(obj) && obj->lamplit) ||
+		(is_lightsaber(obj) && litsaber(obj)) ||
 		((obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) && obj->lamplit)
 	));
 }
@@ -1590,8 +1603,8 @@ int tmp;
 			if(Wounded_legs) multiplier++;
 			return damd ? d(multiplier, damd) : max(multiplier*tmp,multiplier);
 		} else if(otmp && (otmp->oartifact == ART_LIMITED_MOON || otmp->oartifact == ART_STAFF_OF_TWELVE_MIRRORS)){
-			return 2*(damd ? d(is_lightsaber(otmp) ? 3 : 1, damd) : max(tmp,1));
-		} else return damd ? d(is_lightsaber(otmp) ? 3 : 1, damd) : max(tmp,1);
+			return 2*(damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd) : max(tmp,1));
+		} else return damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd) : max(tmp,1);
 	}
 	return 0;
 }
@@ -5333,6 +5346,16 @@ arti_invoke(obj)
 				pline("The endless pages of the book turn themselves. They settle on a section describing %s.",OBJ_NAME(objects[obj->ovar1]));
 			}
 		}break;
+		case ALTMODE:
+			if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
+				if(obj->altmode)
+					You("slide the tangled mirrored arcs around (and through?) each-other, closing off the second beam-path.");
+				else
+					You("slide the tangled mirrored arcs around (and through?) each-other, opening the second beam-path.");
+			}
+			obj->altmode = !obj->altmode;
+			obj->age = monstermoves;
+		break;
 		case LORDLY:
 			if(uwep && uwep == obj){
 				//struct obj *otmp;

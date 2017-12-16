@@ -1858,7 +1858,7 @@ summon_alien:
        int weap, i, tdmg = 0;
 	   int shienChance = 0, shienCount = 0;
        dmg = 0;
-		if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+		if(uwep && is_lightsaber(uwep) && litsaber(uwep)){
 			if(u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SHIEN), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:

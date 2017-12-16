@@ -621,11 +621,11 @@ int mode;
 	    /* Eat the rock. */
 	    if (mode == DO_MOVE && still_chewing(x,y)) return FALSE;
 	} else if (flags.autodig && !flags.run && !flags.nopick &&
-		   ((uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) ||
+		   ((uwep && (is_pick(uwep) || (is_lightsaber(uwep) && litsaber(uwep)) || (uwep->otyp == SEISMIC_HAMMER))) ||
 			(uarmg && is_pick(uarmg)))) {
 	/* MRKR: Automatic digging when wielding the appropriate tool */
 	    if (mode == DO_MOVE){
-			if(uwep && (is_pick(uwep) || (is_lightsaber(uwep) && uwep->lamplit) || (uwep->otyp == SEISMIC_HAMMER))) (void) use_pick_axe2(uwep);
+			if(uwep && (is_pick(uwep) || (is_lightsaber(uwep) && litsaber(uwep)) || (uwep->otyp == SEISMIC_HAMMER))) (void) use_pick_axe2(uwep);
 			else if(uarmg && is_pick(uarmg)) (void) use_pick_axe2(uarmg);
 		}
 	    return FALSE;
@@ -1192,7 +1192,7 @@ domove()
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
 		else if(attack(mtmp)){
-			if(uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
+			if(uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				coord cc;
 				if(!u.utrap && tt_findadjacent(&cc, mtmp) && (cc.x != u.ux || cc.y != u.uy)){
 					You("somersault to a new location!");
@@ -1271,11 +1271,11 @@ domove()
 					"crawl");
 				fill_pit(u.ux, u.uy);
 				vision_full_recalc = 1;	/* vision limits change */
-		    } else if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+		    } else if(uwep && is_lightsaber(uwep) && litsaber(uwep)){
 				trap = t_at(u.ux,u.uy);
 				u.utrap = 0;
 				pline("The energy blade burns handholds in the side of the pit!");
-				if(is_lightsaber(uwep)) uwep->age -= 200;
+				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC) uwep->age -= 200;
 				fill_pit(u.ux, u.uy);
 				vision_full_recalc = 1;	/* vision limits change */
 		    } else if (flags.verbose) {
@@ -1326,14 +1326,14 @@ domove()
 				u.utrap=0;
 		    } else if(uwep && 
 				(uwep->oartifact == ART_STING || uwep->oartifact == ART_LIECLEAVER || 
-					(is_lightsaber(uwep) && uwep->lamplit)
+					(is_lightsaber(uwep) && litsaber(uwep))
 				)
 			){
 				trap = t_at(u.ux,u.uy);
 				u.utrap = 0;
 				pline("%s through the web!", is_lightsaber(uwep) ? "The energy blade burns" : 
 									uwep->oartifact == ART_LIECLEAVER ? "Liecleaver cuts" : "Sting cuts");
-				if(is_lightsaber(uwep)) uwep->age -= 100;
+				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC) uwep->age -= 100;
 				if(trap->ttyp == WEB){
 					if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 						deltrap(trap);
@@ -1397,13 +1397,13 @@ domove()
 				u.utrap = 0;
 		    } else if(uwep && 
 				(uwep->oartifact == ART_STING || uwep->oartifact == ART_LIECLEAVER || 
-					(is_lightsaber(uwep) && uwep->lamplit)
+					(is_lightsaber(uwep) && litsaber(uwep))
 				)
 			){
 				trap = t_at(u.ux,u.uy);
 				u.utrap = 0;
 				pline("The energy blade burns through the bear trap!");
-				if(is_lightsaber(uwep)) uwep->age -= 100;
+				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC) uwep->age -= 100;
 				if(trap->ttyp == BEAR_TRAP){
 					deltrap(trap);
 					newsym(u.ux,u.uy);

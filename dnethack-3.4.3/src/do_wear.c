@@ -1910,7 +1910,7 @@ int base_uac()
 			if(!uarmc || !uarm) uac -= max( uwep->spe,0);
 			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
 		}
-		if(is_lightsaber(uwep) && uwep->lamplit){
+		if(is_lightsaber(uwep) && litsaber(uwep)){
 			if(u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
@@ -2056,7 +2056,7 @@ find_ac()
 			if(!uarmc || !uarm) uac -= max( uwep->spe,0);
 			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
 		}
-		if(is_lightsaber(uwep) && uwep->lamplit){
+		if(is_lightsaber(uwep) && litsaber(uwep)){
 			if(u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:

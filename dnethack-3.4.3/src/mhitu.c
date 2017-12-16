@@ -1079,7 +1079,7 @@ mattacku(mtmp)
 						}
 						mswings(mtmp, otmp);
 					}
-					if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))){
+					if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))){
 						if(tchtmp > (j = dieroll = rnd(20+i*2))){
 							sum[i] = hitmu(mtmp, mattk);
 							if(mattk->aatyp == AT_DEVA && sum[i]){
@@ -1182,7 +1182,7 @@ mattacku(mtmp)
 	    if(sum[i] == 2) return 1;		/* attacker dead */
 	    if(sum[i] == 3) break;  /* attacker teleported, no more attacks */
 		
-		if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+		if(uwep && is_lightsaber(uwep) && litsaber(uwep)){
 			if(u.fightingForm == FFORM_SHIEN && multi >= 0 && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1 && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SHIEN), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
@@ -1535,7 +1535,7 @@ hitmu(mtmp, mattk)
 					!(uwep->otyp == CHAKRAM)
 				) ||
 				/* lightsaber that isn't lit ;) */
-				(is_lightsaber(uwep) && !uwep->lamplit) ||
+				(is_lightsaber(uwep) && !litsaber(uwep)) ||
 				/* houchou not thrown */
 				(uwep->oartifact == ART_HOUCHOU) ||
 				/* WAC -- or using a pole at short range... */
@@ -1561,18 +1561,18 @@ hitmu(mtmp, mattk)
 				if(uwep && (uwep->obj_material == SILVER || arti_silvered(uwep)) && 
 					!(u.sealsActive&SEAL_EDEN) &&
 					hates_silver(youracedata) &&
-					!(is_lightsaber(uwep) && uwep->lamplit)
+					!(is_lightsaber(uwep) && litsaber(uwep))
 				) dmg += rnd(20);
 				if(uwep && (uwep->obj_material == IRON) && 
 					hates_iron(youracedata) &&
-					!(is_lightsaber(uwep) && uwep->lamplit)
+					!(is_lightsaber(uwep) && litsaber(uwep))
 				) dmg += rnd(u.ulevel);
 				if(uwep && is_unholy(uwep) && 
 					hates_unholy(youracedata)
 				) dmg += rnd(9);
 			} else {
 				dmg += dmgval(uwep, &youmonst, 0);
-				if(uwep && ((is_lightsaber(uwep) && uwep->lamplit) || arti_shining(uwep))) phasearmor = TRUE;
+				if(uwep && ((is_lightsaber(uwep) && litsaber(uwep)) || arti_shining(uwep))) phasearmor = TRUE;
 			}
 			
 			if (uwep->opoisoned){
@@ -1648,7 +1648,7 @@ hitmu(mtmp, mattk)
 					!(otmp->otyp == CHAKRAM)
 				) ||
 				/* lightsaber that isn't lit ;) */
-				(is_lightsaber(otmp) && !otmp->lamplit) ||
+				(is_lightsaber(otmp) && !litsaber(otmp)) ||
 				/* houchou not thrown */
 				(otmp->oartifact == ART_HOUCHOU) ||
 				/* WAC -- or using a pole at short range... */
@@ -1673,18 +1673,18 @@ hitmu(mtmp, mattk)
 				if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && 
 					!(u.sealsActive&SEAL_EDEN) &&
 					hates_silver(youracedata) &&
-					!(is_lightsaber(otmp) && otmp->lamplit)
+					!(is_lightsaber(otmp) && litsaber(otmp))
 				) dmg += rnd(20);
 				if(otmp && (otmp->obj_material == IRON) && 
 					hates_iron(youracedata) &&
-					!(is_lightsaber(otmp) && otmp->lamplit)
+					!(is_lightsaber(otmp) && litsaber(otmp))
 				) dmg += rnd(u.ulevel);
 				if(otmp && is_unholy(otmp) && 
 					hates_unholy(youracedata)
 				) dmg += rnd(9);
 			} else {
 				dmg += dmgval(otmp, &youmonst, 0);
-				if(otmp && ((is_lightsaber(otmp) && otmp->lamplit) || arti_shining(otmp))) phasearmor = TRUE;
+				if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))) phasearmor = TRUE;
 			}
 			
 			if(oarm && dmg && oarm->otyp == GAUNTLETS_OF_POWER){
@@ -1695,14 +1695,14 @@ hitmu(mtmp, mattk)
 			if (otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) &&
 				!(u.sealsActive&SEAL_EDEN) &&
 				hates_silver(youracedata) &&
-				!(is_lightsaber(otmp) && otmp->lamplit)
+				!(is_lightsaber(otmp) && litsaber(otmp))
 			) {
 			    pline("The silver sears your flesh!");
 			}
 			
 			if (otmp && (otmp->obj_material == IRON) &&
 				hates_iron(youracedata) &&
-				!(is_lightsaber(otmp) && otmp->lamplit)
+				!(is_lightsaber(otmp) && litsaber(otmp))
 			) {
 			    pline("The cold-iron sears your flesh!");
 			}
@@ -7866,7 +7866,7 @@ register struct attack *mattk;
 			if(DEADMONSTER(mtmp)) return 2;
 		}
 	}
-	if(uwep && is_lightsaber(uwep) && uwep->lamplit){
+	if(uwep && is_lightsaber(uwep) && litsaber(uwep)){
 		if(P_SKILL(weapon_type(uwep)) >= P_BASIC){
 			if(P_SKILL(FFORM_SHII_CHO) >= P_BASIC){
 				if(u.fightingForm == FFORM_SHII_CHO || 

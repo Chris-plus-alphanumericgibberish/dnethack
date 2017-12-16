@@ -543,7 +543,7 @@ struct obj *obj;
 	if (obj->oclass == RING_CLASS)
 	    return (boolean)(objects[obj->otyp].oc_charged &&
 			(obj->known || objects[obj->otyp].oc_uname));
-	if (is_lightsaber(obj))
+	if (is_lightsaber(obj) && obj->oartifact != ART_INFINITY_S_MIRRORED_ARC)
 	    return TRUE;
 //#ifdef FIREARMS
 	if (is_blaster(obj) && (obj->recharged < 4 || (obj->otyp != HAND_BLASTER && obj->otyp != ARM_BLASTER)))
