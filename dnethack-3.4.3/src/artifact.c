@@ -1038,6 +1038,18 @@ touch_artifact(obj, mon, hypothetical)
 				pline("With that realization comes knowledge of the seal's final form!");
 				u.specialSealsKnown |= SEAL_NUDZIARTH;
 			}
+			else if(obj->oartifact == ART_STAFF_OF_TWELVE_MIRRORS && !(u.specialSealsKnown&SEAL_NUDZIARTH)){
+				pline("The cracks on the mirrors' surfaces form part of a seal.");
+				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
+				pline("With that realization comes knowledge of the seal's final form!");
+				u.specialSealsKnown |= SEAL_NUDZIARTH;
+			}
+			else if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC && !(u.specialSealsKnown&SEAL_NUDZIARTH)){
+				pline("The cracks on the thin mirrored arcs form part of a seal.");
+				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
+				pline("With that realization comes knowledge of the seal's final form!");
+				u.specialSealsKnown |= SEAL_NUDZIARTH;
+			}
 		}
 		if(oart->otyp == UNICORN_HORN){
 			badclass = TRUE; //always get blasted by unicorn horns.  
