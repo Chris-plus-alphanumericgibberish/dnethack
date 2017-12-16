@@ -2129,7 +2129,7 @@ boolean amnesia;
 		used = TRUE;
 		break;
 	    case SCROLL_CLASS:
-		if (obj->otyp != SCR_BLANK_PAPER  && !obj->oartifact
+		if (obj->otyp != SCR_BLANK_PAPER  && !obj->oartifact && obj->otyp != SCR_GOLD_SCROLL_OF_LAW
 #ifdef MAIL
 		    && obj->otyp != SCR_MAIL
 #endif

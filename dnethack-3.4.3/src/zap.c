@@ -959,6 +959,7 @@ register struct obj *obj;
 	    switch (obj->oclass) {
 	      case SCROLL_CLASS:
 		costly_cancel(obj);
+		if (obj->otyp == SCR_GOLD_SCROLL_OF_LAW) break;	//no cancelling these
 		obj->otyp = SCR_BLANK_PAPER;
 		obj->spe = 0;
 		obj->ovar1 = 0;
@@ -1487,6 +1488,15 @@ poly_obj(obj, id)
 				(can_merge && otmp->quan > (long)rn2(1000))))
 	    otmp->quan = 1L;
 
+	if (id == STRANGE_OBJECT && obj->otyp == SCR_GOLD_SCROLL_OF_LAW)
+	{
+		/* turn gold scrolls of law into a handful of gold pieces */
+		otmp->otyp = GOLD_PIECE;
+		otmp->oclass = COIN_CLASS;
+		otmp->obj_material = GOLD;
+		otmp->quan = rnd(50 * obj->quan) + 50 * obj->quan;
+	}
+	
 	switch (otmp->oclass) {
 
 	case TOOL_CLASS:
