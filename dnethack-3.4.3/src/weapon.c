@@ -2357,6 +2357,13 @@ struct obj *obj;
 			type = P_LONG_SWORD;
 		else type = P_SHORT_SWORD;
 	}
+	else if(obj && obj->otyp == DOUBLE_LIGHTSABER && !obj->altmode){
+		if(P_SKILL(P_BROAD_SWORD) > P_SKILL(P_QUARTERSTAFF))
+			type = P_BROAD_SWORD;
+		else if(P_MAX_SKILL(P_BROAD_SWORD) > P_MAX_SKILL(P_QUARTERSTAFF))
+			type = P_BROAD_SWORD;
+		else type = P_QUARTERSTAFF;
+	}
 	else if(obj && obj->oartifact && obj->oartifact == ART_TORCH_OF_ORIGINS){
 		type = P_CLUB;
 	}
