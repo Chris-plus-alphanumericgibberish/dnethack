@@ -758,7 +758,9 @@ register char *enterstring;
 		      shtypes[rt - SHOPBASE].name);
 	} else if (eshkp->robbed) {
 	    pline("%s mutters imprecations against shoplifters.", shkname(shkp));
-	} else if (eshkp->pbanned || seenSeals) {
+	} else if (eshkp->pbanned) {
+	    verbalize("I'll never sell to you.");
+	} else if (seenSeals) {
 	    verbalize("I don't sell to your kind.");
 	} else {
 		verbalize("%s, %s!  Welcome%s to %s %s!",
@@ -1588,7 +1590,11 @@ proceed:
 			makeketer(&mm);
 		}
 	}
-	if(eshkp->pbanned || seenSeals){
+	if(eshkp->pbanned){
+		pline("I'll never sell to you!");
+		return(0);
+	}
+	if(seenSeals){
 		pline("I don't sell to your kind!");
 		return(0);
 	}
@@ -1808,7 +1814,11 @@ shk_other_services()
 			makeketer(&mm);
 		}
 	}
-	if(ESHK(shkp)->pbanned || seenSeals){
+	if(ESHK(shkp)->pbanned){
+		pline("\"I'll never do business for you.\"");
+		return;
+	}
+	if(seenSeals){
 		pline("\"I don't do business for your kind.\"");
 		return;
 	}

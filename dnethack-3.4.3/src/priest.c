@@ -584,8 +584,16 @@ register struct monst *priest;
 		}
 	}
 	
-	if(EPRI(priest)->pbanned || seenSeals){
+	if(EPRI(priest)->pbanned && seenSeals){
 		verbalize("Your kind are anathema.");
+		return;
+	}
+	if(EPRI(priest)->pbanned){
+		verbalize("You have been excommunicated.");
+		return;
+	}
+	if(seenSeals){
+		verbalize("I do not offer blessings to your kind.");
 		return;
 	}
 	
