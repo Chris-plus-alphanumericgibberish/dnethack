@@ -2098,6 +2098,8 @@ int croaked;	/* -1: escaped dungeon; 0: quit; 1: died */
 	    numsk++;
 	    resident = mtmp;
 	    taken = inherits(resident, numsk, croaked);
+	    ESHK(mtmp)->pbanned = FALSE; /* Un-ban for bones levels */
+	    ESHK(mtmp)->signspotted = 0; /* seen no signs */
 	}
 	for (mtmp = next_shkp(fmon, FALSE);
 		mtmp; mtmp = next_shkp(mtmp2, FALSE)) {
