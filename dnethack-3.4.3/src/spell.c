@@ -4700,7 +4700,10 @@ int spell;
 	// ) splcaster -= urole.spelarmr;
 	
 	if(uwep){
-		if(uwep->oartifact == ART_TENTACLE_ROD || uwep->oartifact == ART_ARYFAERN_KERYM) splcaster -= urole.spelarmr;
+		if(uwep->oartifact == ART_TENTACLE_ROD
+			|| uwep->oartifact == ART_ARYFAERN_KERYM
+			|| uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC
+		) splcaster -= urole.spelarmr;
 		else if(uwep->otyp == KHAKKHARA) splcaster -= uwep->oartifact ? 2*urole.spelarmr : urole.spelarmr;
 	}
 	

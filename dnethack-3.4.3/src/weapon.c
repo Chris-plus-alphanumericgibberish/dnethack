@@ -2499,7 +2499,11 @@ struct obj *weapon;
 	//Do to-hit bonuses for lightsaber forms here.  May do other fighting styles at some point.
 	if(weapon && is_lightsaber(weapon) && litsaber(weapon) && uwep == weapon){
 		if(u.fightingForm < FFORM_SHII_CHO || u.fightingForm > FFORM_JUYO) u.fightingForm = FFORM_SHII_CHO;
-		if(P_SKILL(u.fightingForm) < P_BASIC) u.fightingForm = FFORM_SHII_CHO;
+		if(P_SKILL(u.fightingForm) < P_BASIC){
+			if(weapon->oartifact == ART_INFINITY_S_MIRRORED_ARC)
+				u.fightingForm = FFORM_NIMAN;
+			else u.fightingForm = FFORM_SHII_CHO;
+		}
 		if(u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 			if(wep_type != P_SABER){
 				if(makashiwarn) pline("Your %s seem%s very unwieldy.",xname(uwep),uwep->quan == 1 ? "s" : "");
