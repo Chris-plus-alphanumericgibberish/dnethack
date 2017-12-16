@@ -1162,8 +1162,8 @@ plus:
 					int dnm = 0;
 					get_obj_location(obj, &x, &y, 0);
 					if(levl[x][y].lit && 
-						!(viz_array[y][x]&TEMP_LIT1 && 
-						 !(viz_array[y][x]&TEMP_DRK3)
+						!(viz_array[y][x]&TEMP_DRK3 && 
+						 !(viz_array[y][x]&TEMP_LIT1)
 						)
 					) dnm += 2;
 					if(viz_array[y][x]&TEMP_LIT1 && 

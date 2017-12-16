@@ -536,11 +536,10 @@ struct obj *obj;
 {
 	if(obj && obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
 		xchar x, y;
-		int dnm = 0;
 		get_obj_location(obj, &x, &y, 0);
 		if(levl[x][y].lit && 
-			!(viz_array[y][x]&TEMP_LIT1 && 
-			 !(viz_array[y][x]&TEMP_DRK3)
+			!(viz_array[y][x]&TEMP_DRK3 && 
+			 !(viz_array[y][x]&TEMP_LIT1)
 			)
 		) return TRUE;
 		if(viz_array[y][x]&TEMP_LIT1 && 
