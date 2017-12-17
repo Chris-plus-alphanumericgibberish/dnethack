@@ -1158,17 +1158,27 @@ int x;
 		    /* never select non-cockatrice corpses */
 		    !((x == CORPSE || x == EGG) &&
 			!touch_petrifies(&mons[otmp->corpsenm])) &&
-                    (!is_lightsaber(otmp) || otmp->age
-					 || otmp->oartifact == ART_INFINITY_S_MIRRORED_ARC
-					) &&
-		    (!otmp->oartifact || touch_artifact(otmp, mtmp, FALSE)))
-		{
+			/* never uncharged lightsabers */
+            (!is_lightsaber(otmp) || otmp->age
+			 || otmp->oartifact == ART_INFINITY_S_MIRRORED_ARC
+            ) &&
+			/* never untouchable artifacts */
+		    (!otmp->oartifact || touch_artifact(otmp, mtmp, FALSE)) &&
+			/* never too-large for available hands */
+			(!bimanual(otmp, mtmp->data) || ((mtmp->misc_worn_check & W_ARMS) == 0 && strongmonst(mtmp->data))) &&
+			/* never a hated weapon */
+			(!hates_silver(mtmp->data) || otmp->obj_material != SILVER) &&
+			(!hates_iron(mtmp->data) || otmp->obj_material != IRON) &&
+			(!hates_unholy(mtmp->data) || !is_unholy(otmp))
+		){
 			if (!obest ||
-				// dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0)
+				(dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0))
+				/*
 				(is_bludgeon(otmp) ? 
 					(otmp->spe - greatest_erosion(otmp) > obest->spe - greatest_erosion(obest)):
 					(otmp->spe > obest->spe)
 				)
+				*/
 			) obest = otmp;
 		}
 	}
@@ -1291,7 +1301,7 @@ struct obj *otmp;
         if ( wep &&
              wep->otyp == rwep[i] &&
            !(otmp->otyp == rwep[i] &&
-	     dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(wep, 0 /*zeromonst*/, 0)))
+	     (dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(wep, 0 /*zeromonst*/, 0))))
 	    return FALSE;
         if (otmp->otyp == rwep[i]) return TRUE;
     }
@@ -1328,22 +1338,10 @@ register struct monst *mtmp;
 	/* if (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 13 && couldsee(mtmp->mx, mtmp->my)) */
 	{
 	    for (i = 0; i < SIZE(pwep); i++) {
-		/* Only strong monsters can wield big (esp. long) weapons.
-		 * Big weapon is basically the same as bimanual.
-		 * All monsters can wield the remaining weapons.
-		 */
-		if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0)
-			|| !objects[pwep[i]].oc_bimanual || mtmp->data == &mons[PM_THRONE_ARCHON])
-		    && (objects[pwep[i]].oc_material != SILVER
-			|| !hates_silver(mtmp->data))
-		    && (objects[pwep[i]].oc_material != IRON
-			|| !hates_iron(mtmp->data))
-		) {
-		    if ((otmp = oselect(mtmp, pwep[i])) != 0) {
+		if ((otmp = oselect(mtmp, pwep[i])) != 0) {
 			propellor = otmp; /* force the monster to wield it */
 			return otmp;
-		    }
-		}
+			}
 	    }
 	}
 	//Check for charged arm blasters or hand blasters
@@ -1559,29 +1557,32 @@ register struct monst *mtmp;
 
 	/* prefer artifacts to everything else */
 	for(otmp=mtmp->minvent; otmp; otmp = otmp->nobj) {
-		if (otmp->oclass == WEAPON_CLASS
-			&& otmp->oartifact && touch_artifact(otmp, mtmp, FALSE)
-			&& ((strong && !wearing_shield)
-			    || !bimanual(otmp,mtmp->data))
+		if (/* valid weapon */
+			(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) &&
+			/* an artifact */
+			otmp->oartifact &&
+			/* never uncharged lightsabers */
+            (!is_lightsaber(otmp) || otmp->age
+			 || otmp->oartifact == ART_INFINITY_S_MIRRORED_ARC
+            ) &&
+			/* never untouchable artifacts */
+			(touch_artifact(otmp, mtmp, FALSE)) &&
+			/* never too-large for available hands */
+			(!bimanual(otmp, mtmp->data) || ((mtmp->misc_worn_check & W_ARMS) == 0 && strongmonst(mtmp->data))) &&
+			/* never a hated weapon */
+			(!hates_silver(mtmp->data) || otmp->obj_material != SILVER) &&
+			(!hates_iron(mtmp->data) || otmp->obj_material != IRON) &&
+			(!hates_unholy(mtmp->data) || !is_unholy(otmp))
 			) return otmp;
 	}
 
 	if(is_giant(mtmp->data))	/* giants just love to use clubs */
 	    Oselect(CLUB);
 
-	/* only strong monsters can wield big (esp. long) weapons */
-	/* big weapon is basically the same as bimanual */
-	/* all monsters can wield the remaining weapons */
 	for (i = 0; i < SIZE(hwep); i++) {
 	    if (hwep[i] == CORPSE && !(mtmp->misc_worn_check & W_ARMG))
 		continue;
-	    if (((strong && !wearing_shield)
-			|| !objects[hwep[i]].oc_bimanual || mtmp->data == &mons[PM_THRONE_ARCHON])
-		    && (objects[hwep[i]].oc_material != SILVER
-			|| !hates_silver(mtmp->data))
-		    && (objects[hwep[i]].oc_material != IRON
-			|| !hates_iron(mtmp->data))
-		) Oselect(hwep[i]);
+	    Oselect(hwep[i]);
 	}
 
 	/* failure */
@@ -1677,14 +1678,17 @@ register struct monst *mon;
 			    obj = m_carrying(mon, DWARVISH_MATTOCK);
 			break;
 		case NEED_AXE:
-			/* currently, only 2 types of axe */
-			obj = m_carrying(mon, BATTLE_AXE);
+			/* currently, only 3 types of axe */
+			obj = m_carrying(mon, MOON_AXE);
+			if (!obj)
+				obj = m_carrying(mon, BATTLE_AXE);
 			if (!obj || which_armor(mon, W_ARMS))
 			    obj = m_carrying(mon, AXE);
 			break;
 		case NEED_PICK_OR_AXE:
 			/* prefer pick for fewer switches on most levels */
 			obj = m_carrying(mon, DWARVISH_MATTOCK);
+			if (!obj) obj = m_carrying(mon, MOON_AXE);
 			if (!obj) obj = m_carrying(mon, BATTLE_AXE);
 			if (!obj || which_armor(mon, W_ARMS)) {
 			    obj = m_carrying(mon, PICK_AXE);

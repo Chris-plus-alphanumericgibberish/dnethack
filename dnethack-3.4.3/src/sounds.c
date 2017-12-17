@@ -4804,10 +4804,13 @@ int p_skill;
 	}
 	
 	if(p_skill == FFORM_NIMAN && curskill < P_BASIC){
-		if(uwep && uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC)
+		if(uwep && uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC){
 			curskill = P_BASIC;
-		else if(uswapwep && uswapwep->oartifact == ART_INFINITY_S_MIRRORED_ARC)
+			OLD_P_SKILL(FFORM_NIMAN) = P_BASIC;
+		} else if(uswapwep && uswapwep->oartifact == ART_INFINITY_S_MIRRORED_ARC) {
 			curskill = P_BASIC;
+			OLD_P_SKILL(FFORM_NIMAN) = P_BASIC;
+		}
 	}
 	
 	if(u.sealsActive&SEAL_NABERIUS && (curskill<P_BASIC || maxskill<P_BASIC)){
