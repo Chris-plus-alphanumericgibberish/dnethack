@@ -1216,17 +1216,18 @@ int thrown;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
 		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 4) + obj->spe);
 			
+		    else if((obj->oartifact == ART_INFINITY_S_MIRRORED_ARC && !litsaber(obj))) tmp = d(1,6) + obj->spe + weapon_dam_bonus(0); //martial arts aid
 		    else if((is_lightsaber(obj) && !litsaber(obj))) tmp = d(1,4) + obj->spe + weapon_dam_bonus(0); //martial arts aid
 
 			else tmp = rnd(2);
 			
 			if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS){
 				weaponmask |= PIERCE;
-			}
-			if(obj->oartifact == ART_LIECLEAVER){
+			} else if(obj->oartifact == ART_LIECLEAVER){
 				weaponmask |= SLASH;
-			}
-			else {
+			} else if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
+				weaponmask |= WHACK|SLASH;
+			} else {
 				weaponmask |= WHACK;
 			}
 			
