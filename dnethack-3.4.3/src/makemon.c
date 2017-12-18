@@ -1947,7 +1947,7 @@ register struct monst *mtmp;
 			}
 		break;}
 	    case S_NEU_OUTSIDER:{
-			if(ptr == &mons[PM_PLUMACH]){
+			if(ptr == &mons[PM_PLUMACH_RILMANI]){
 				otmp = mksobj(rn2(3) ? SICKLE : rn2(3) ? SCYTHE : SHORT_SWORD, FALSE, FALSE);
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
@@ -1963,7 +1963,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				}
 			}
-			if(ptr == &mons[PM_FERRUMACH]){
+			if(ptr == &mons[PM_FERRUMACH_RILMANI]){
 				otmp = mksobj(rn2(2) ? HALBERD : BATTLE_AXE, FALSE, FALSE);
 				otmp->cursed = 0;
 				otmp->blessed = 0;
@@ -1972,7 +1972,7 @@ register struct monst *mtmp;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 			}
-			if(ptr == &mons[PM_CUPRILACH]){
+			if(ptr == &mons[PM_CUPRILACH_RILMANI]){
 				otmp = mksobj(SHORT_SWORD, FALSE, FALSE);
 				otmp->cursed = 0;
 				otmp->blessed = 0;
@@ -1990,7 +1990,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				}
 			}
-			if(ptr == &mons[PM_ARGENACH]){
+			if(ptr == &mons[PM_ARGENACH_RILMANI]){
 				otmp = mksobj(rn2(3) ? BROADSWORD : rn2(3) ? BATTLE_AXE : HALBERD, FALSE, FALSE);
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
@@ -2008,7 +2008,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				}
 			}
-			if(ptr == &mons[PM_HYDRARGYRUMACH]){
+			if(ptr == &mons[PM_HYDRARGYRUMACH_RILMANI]){
 				otmp = mksobj(VOULGE, FALSE, FALSE);
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
@@ -2022,7 +2022,7 @@ register struct monst *mtmp;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 			}
-			if(ptr == &mons[PM_AURUMACH]){
+			if(ptr == &mons[PM_AURUMACH_RILMANI]){
 				otmp = mksobj(HALBERD, FALSE, FALSE);
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;

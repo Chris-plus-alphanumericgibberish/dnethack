@@ -1527,6 +1527,7 @@ E int FDECL(mbhitm, (struct monst *,struct obj *));
 #endif
 E int FDECL(use_offensive, (struct monst *));
 E int FDECL(rnd_offensive_item, (struct monst *));
+E boolean FDECL(is_attack_wand, (int));
 E int FDECL(rnd_attack_wand, (struct monst *));
 E int FDECL(rnd_attack_potion, (struct monst *));
 E int FDECL(rnd_utility_wand, (struct monst *));
@@ -1578,6 +1579,7 @@ E void NDECL(synch_cursor);
 /* ### o_init.c ### */
 
 E void NDECL(init_objects);
+E int NDECL(find_sawant);
 E int NDECL(find_gcirclet);
 E int NDECL(find_sring);
 E int NDECL(find_vhelm);

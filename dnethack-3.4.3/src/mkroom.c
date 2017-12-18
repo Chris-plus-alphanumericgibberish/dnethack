@@ -22,6 +22,7 @@ STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
+STATIC_DCL void NDECL(mkminorspire);
 STATIC_DCL void NDECL(mkpluhomestead);
 STATIC_DCL void NDECL(mkpluvillage);
 STATIC_DCL void NDECL(mklolthsepulcher);
@@ -1139,12 +1140,105 @@ mklolthdown()
 
 STATIC_OVL
 void
+mkminorspire()
+{
+	int x,y,ix, iy, tries=0;
+	int i,j, c;
+	boolean good=FALSE, okspot;
+	struct obj *otmp;
+	while(!good && tries < 50){
+		x = rn2(COLNO-6)+1;
+		y = rn2(ROWNO-5);
+		tries++;
+		okspot = TRUE;
+		for(i=0;i<3;i++)
+			for(j=0;j<3;j++){
+				if(!isok(x+i,y+j))
+					okspot = FALSE;
+			}
+		if(okspot){
+			good = TRUE;
+		} else continue;
+		
+		ix = x;
+		iy = y;
+		for(i=-10;i<=10;i++){
+			for(j=-10;j<=10;j++){
+				if(isok(ix+i,iy+j) && dist2(ix, iy, ix+i, iy+j)<96){
+					levl[ix+i][iy+j].typ = PUDDLE;
+					levl[ix+i][iy+j].lit = 1;
+				}
+			}
+		}
+		// for(c=rnd(8)+10; c > 0; c--){
+			// ix = x+rn2(21)-10;
+			// iy = y+rn2(21)-10;
+			// for(i=-4;i<=4;i++){
+				// for(j=-4;j<=4;j++){
+					// if(isok(ix+i,iy+j) && dist2(ix, iy, ix+i, iy+j)<16){
+						// levl[ix+i][iy+j].typ = PUDDLE;
+						// levl[ix+i][iy+j].lit = 1;
+					// }
+				// }
+			// }
+		// }
+		for(i=-1;i<=1;i++){
+			for(j=-1;j<=1;j++){
+				levl[x+i][y+j].typ = HWALL;
+				levl[x+i][y+j].lit = 1;
+			}
+		}
+		wallification(x-1, y-1, x+1, y+1);
+		levl[x][y].lit = 0;
+		
+		mksobj_at(ROBE, x, y, TRUE, FALSE);
+		switch(rn2(6)){
+			case 4:
+			    otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_MIRROR_BRAND));
+				if(!otmp->oartifact){
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+					mksobj_at(SHIELD_OF_REFLECTION, x, y, TRUE, FALSE);
+				}
+				place_object(otmp, x, y);
+			break;
+			case 3:
+			    otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_SOULMIRROR));
+				if(!otmp->oartifact){
+					otmp->obj_material = MITHRIL;
+					fix_object(otmp);
+					mksobj_at(AMULET_OF_REFLECTION, x, y, TRUE, FALSE);
+				}
+				place_object(otmp, x, y);
+			break;
+			case 2:
+			case 1:
+				if(find_sawant()){
+					otmp = mksobj(find_sawant(), FALSE, FALSE);
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+					place_object(otmp, x, y);
+					mksobj_at(SHIELD_OF_REFLECTION, x, y, TRUE, FALSE);
+					break;
+				}
+			default:
+				mksobj_at(KHAKKHARA, x, y, TRUE, FALSE);
+				mksobj_at(AMULET_OF_REFLECTION, x, y, TRUE, FALSE);
+			break;
+		}
+	}
+}
+
+STATIC_OVL
+void
 mkpluhomestead()
 {
 	int x,y,tries=0, roomnumb;
 	int i,j, pathto = 0;
 	boolean good=FALSE, okspot, accessible;
-	while(!good && tries < 50){
+	while(!good && tries < 500){
 		x = rn2(COLNO-6)+1;
 		y = rn2(ROWNO-5);
 		tries++;
@@ -1179,7 +1273,7 @@ mkpluhomestead()
 		}
 		i = rnd(3)+rn2(2);
 		for(i;i>0;i--){
-			makemon(&mons[PM_PLUMACH], x+rnd(3), y+rnd(3), MM_ADJACENTOK);
+			makemon(&mons[PM_PLUMACH_RILMANI], x+rnd(3), y+rnd(3), MM_ADJACENTOK);
 		}
 		
 		wallification(x, y, x+4, y+4);
@@ -1322,7 +1416,7 @@ mkpluvillage()
 						for(j=1+3;j<4+3;j++){
 							levl[x+i][y+j].typ = CORR;
 							levl[x+i][y+j].lit = 1;
-							if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+j, 0);
+							if(rn2(2)) makemon(&mons[PM_PLUMACH_RILMANI], x+i, y+j, 0);
 							if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
 						}
 					}
@@ -1380,7 +1474,7 @@ mkpluvillage()
 					for(j=1;j<3;j++){
 						levl[x+i][y+j].typ = CORR;
 						levl[x+i][y+j].lit = 1;
-						if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+j, 0);
+						if(rn2(2)) makemon(&mons[PM_PLUMACH_RILMANI], x+i, y+j, 0);
 						if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
 					}
 				}
@@ -1409,7 +1503,7 @@ mkpluvillage()
 					for(j=1;j<3;j++){
 						levl[x+i][y+7+j].typ = CORR;
 						levl[x+i][y+j].lit = 1;
-						if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+7+j, 0);
+						if(rn2(2)) makemon(&mons[PM_PLUMACH_RILMANI], x+i, y+7+j, 0);
 						if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+7+j, FALSE);
 					}
 				}
@@ -1507,7 +1601,7 @@ mkpluvillage()
 						for(j=1+3;j<4+3;j++){
 							levl[x+i][y+j].typ = CORR;
 							levl[x+i][y+j].lit = 1;
-							if(rn2(2)) makemon(&mons[PM_PLUMACH], x+i, y+j, 0);
+							if(rn2(2)) makemon(&mons[PM_PLUMACH_RILMANI], x+i, y+j, 0);
 							if(rn2(2)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
 						}
 					}
@@ -1595,6 +1689,11 @@ place_neutral_features()
 	if(!rn2(10)){
 		mkneuriver();
 	}
+	
+	if(!rn2(20)){
+		mkminorspire();
+	}
+	
 	if(!rn2(10)){
 		mkpluvillage();
 	// } else if(){
@@ -1860,7 +1959,7 @@ struct mkroom *sroom;
 		
 		levl[tx][ty].typ = THRONE;
 		if(In_outlands(&u.uz)){
-			ctype = PM_AURUMACH;
+			ctype = PM_AURUMACH_RILMANI;
 			mon = 0;
 			if(!toostrong(ctype,maxmlev+5))
 				mon = makemon(&mons[ctype], tx, ty, NO_MM_FLAGS|MM_NOCOUNTBIRTH);
@@ -3208,18 +3307,18 @@ courtmon(kingnum)
 				return &mons[PM_DROW_MUMMY];
 		break;
 		
-		case PM_AURUMACH:
+		case PM_AURUMACH_RILMANI:
 			i = rnd(100);
 			if(i>99)
-				return &mons[PM_ARGENACH];
+				return &mons[PM_ARGENACH_RILMANI];
 			else if(i>95)
 				return &mons[PM_ARGENTUM_GOLEM];
 			else if(i>90)
-				return &mons[PM_CUPRILACH];
+				return &mons[PM_CUPRILACH_RILMANI];
 			else if(i>80)
-				return &mons[PM_FERRUMACH];
+				return &mons[PM_FERRUMACH_RILMANI];
 			else if(i>60)
-				return &mons[PM_PLUMACH];
+				return &mons[PM_PLUMACH_RILMANI];
 			else if(i>50)
 				return &mons[PM_PLAINS_CENTAUR];
 			else if(i>45)
@@ -3344,7 +3443,7 @@ static struct {
 } squadprob[NSTYPES] = {
     {PM_SOLDIER, 80}, {PM_SERGEANT, 15}, {PM_LIEUTENANT, 4}, {PM_CAPTAIN, 1}
 }, neu_squadprob[NSTYPES] = {
-    {PM_FERRUMACH, 80}, {PM_IRON_GOLEM, 15}, {PM_ARGENTUM_GOLEM, 4}, {PM_ARGENACH, 1}
+    {PM_FERRUMACH_RILMANI, 80}, {PM_IRON_GOLEM, 15}, {PM_ARGENTUM_GOLEM, 4}, {PM_ARGENACH_RILMANI, 1}
 };
 
 STATIC_OVL struct permonst *

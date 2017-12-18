@@ -609,10 +609,10 @@ unsigned int type;
 			break;
 		}
 	break;
-	case PM_PLUMACH:
+	case PM_PLUMACH_RILMANI:
 		return SOLID_FOG;
 	break;
-	case PM_FERRUMACH:
+	case PM_FERRUMACH_RILMANI:
 		if(rn2(4)) return ICE_STORM;
 		return SOLID_FOG;
 	break;
@@ -1654,7 +1654,7 @@ int spellnum;
 			flags.cth_attk=TRUE;//state machine stuff.
 			create_fog_cloud(mtmp->mux, mtmp->muy, 3, 8);
 			flags.cth_attk=FALSE;
-			if(mtmp->data == &mons[PM_PLUMACH]) mtmp->mcan = 1;
+			if(mtmp->data == &mons[PM_PLUMACH_RILMANI]) mtmp->mcan = 1;
 		}
 		dmg = 0;
 		stop_occupation();

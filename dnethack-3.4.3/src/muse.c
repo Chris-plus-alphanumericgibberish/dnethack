@@ -1724,6 +1724,31 @@ struct monst *mtmp;
 	return 0;
 }
 
+boolean
+is_attack_wand(otyp)
+int otyp;
+{
+	switch (otyp) {
+		case WAN_STRIKING:
+		case WAN_DRAINING:
+		case WAN_DEATH:
+		case WAN_SLEEP:
+		case WAN_MAGIC_MISSILE:
+		case WAN_FIRE:
+		case WAN_COLD:
+		case WAN_LIGHTNING:
+		case WAN_CREATE_MONSTER:
+		case WAN_TELEPORTATION:
+		case WAN_SLOW_MONSTER:
+		case WAN_UNDEAD_TURNING:
+		case WAN_CANCELLATION:
+		case WAN_LOCKING:
+		
+		return TRUE;
+	}
+	return FALSE;
+}
+
 int
 rnd_utility_wand(mtmp)
 struct monst *mtmp;
