@@ -65,11 +65,11 @@ boolean pushing;
 	if (!otmp || !is_boulder(otmp))
 	    impossible("Not a boulder?");
 	else if (!Is_waterlevel(&u.uz) && (is_pool(rx,ry, FALSE) || is_lava(rx,ry))) {
-	    boolean lava = is_lava(rx,ry), fills_up;
+	    boolean lava = is_lava(rx,ry), cubewater = is_3dwater(rx, ry), fills_up;
 	    const char *what = waterbody_name(rx,ry);
 	    schar ltyp = levl[rx][ry].typ;
 	    int chance = rn2(10);		/* water: 90%; lava: 10% */
-	    fills_up = lava ? chance == 0 : chance != 0;
+	    fills_up = cubewater ? FALSE : lava ? chance == 0 : chance != 0;
 
 	    if (fills_up) {
 		struct trap *ttmp = t_at(rx, ry);
