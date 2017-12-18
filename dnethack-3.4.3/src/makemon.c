@@ -1946,6 +1946,108 @@ register struct monst *mtmp;
 			break;}
 			}
 		break;}
+	    case S_NEU_OUTSIDER:{
+			if(ptr == &mons[PM_PLUMACH]){
+				otmp = mksobj(rn2(3) ? SICKLE : rn2(3) ? SCYTHE : SHORT_SWORD, FALSE, FALSE);
+			    otmp->cursed = 0;
+			    otmp->blessed = 0;
+				otmp->obj_material = IRON;
+				fix_object(otmp);
+			    (void) mpickobj(mtmp, otmp);
+				if(otmp->otyp == SHORT_SWORD && !rn2(3)){
+					otmp = mksobj(KITE_SHIELD, FALSE, FALSE);
+					otmp->cursed = 0;
+					otmp->blessed = 0;
+					otmp->obj_material = METAL;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
+			}
+			if(ptr == &mons[PM_FERRUMACH]){
+				otmp = mksobj(rn2(2) ? HALBERD : BATTLE_AXE, FALSE, FALSE);
+				otmp->cursed = 0;
+				otmp->blessed = 0;
+				if(otmp->spe < 1) otmp->spe = 1;
+				otmp->obj_material = IRON;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+			}
+			if(ptr == &mons[PM_CUPRILACH]){
+				otmp = mksobj(SHORT_SWORD, FALSE, FALSE);
+				otmp->cursed = 0;
+				otmp->blessed = 0;
+				if(otmp->spe < 2) otmp->spe = 2;
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				if(!rn2(3)){
+					otmp = mksobj(BUCKLER, FALSE, FALSE);
+					otmp->cursed = 0;
+					otmp->blessed = 0;
+					if(otmp->spe < 2) otmp->spe = 2;
+					otmp->obj_material = COPPER;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
+			}
+			if(ptr == &mons[PM_ARGENACH]){
+				otmp = mksobj(rn2(3) ? BROADSWORD : rn2(3) ? BATTLE_AXE : HALBERD, FALSE, FALSE);
+			    otmp->cursed = 0;
+			    otmp->blessed = 0;
+				if(otmp->spe < 3) otmp->spe = 3;
+				otmp->obj_material = SILVER;
+				fix_object(otmp);
+			    (void) mpickobj(mtmp, otmp);
+				if(otmp->otyp == BROADSWORD){
+					otmp = mksobj(rn2(6) ? KITE_SHIELD : SHIELD_OF_REFLECTION, FALSE, FALSE);
+					otmp->cursed = 0;
+					otmp->blessed = 0;
+					if(otmp->spe < 3) otmp->spe = 3;
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
+			}
+			if(ptr == &mons[PM_HYDRARGYRUMACH]){
+				otmp = mksobj(VOULGE, FALSE, FALSE);
+			    otmp->cursed = 0;
+			    otmp->blessed = 0;
+				otmp->obj_material = METAL;
+				fix_object(otmp);
+			    (void) mpickobj(mtmp, otmp);
+				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+			    otmp->cursed = 0;
+			    otmp->blessed = 0;
+				otmp->obj_material = METAL;
+				fix_object(otmp);
+			    (void) mpickobj(mtmp, otmp);
+			}
+			if(ptr == &mons[PM_AURUMACH]){
+				otmp = mksobj(HALBERD, FALSE, FALSE);
+			    otmp->cursed = 0;
+			    otmp->blessed = 0;
+				if(otmp->spe < 4) otmp->spe = 4;
+				otmp->obj_material = GOLD;
+				fix_object(otmp);
+			    (void) mpickobj(mtmp, otmp);
+				otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
+			    otmp->cursed = 0;
+			    otmp->blessed = 0;
+				if(otmp->spe < 4) otmp->spe = 4;
+				otmp->obj_material = GOLD;
+				fix_object(otmp);
+			    (void) mpickobj(mtmp, otmp);
+				if(!rn2(3)){
+					otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
+					otmp->cursed = 0;
+					otmp->blessed = 0;
+					if(otmp->spe < 4) otmp->spe = 4;
+					otmp->obj_material = GOLD;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
+			}
+		break;}
 	    case S_LAW_ANGEL:
 	    case S_NEU_ANGEL:
 	    case S_CHA_ANGEL:

@@ -22,6 +22,7 @@ STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
+STATIC_DCL void NDECL(mkpluhomestead);
 STATIC_DCL void NDECL(mkpluvillage);
 STATIC_DCL void NDECL(mklolthsepulcher);
 STATIC_DCL void NDECL(mkmivaultlolth);
@@ -1138,6 +1139,65 @@ mklolthdown()
 
 STATIC_OVL
 void
+mkpluhomestead()
+{
+	int x,y,tries=0, roomnumb;
+	int i,j, pathto = 0;
+	boolean good=FALSE, okspot, accessible;
+	while(!good && tries < 50){
+		x = rn2(COLNO-6)+1;
+		y = rn2(ROWNO-5);
+		tries++;
+		okspot = TRUE;
+		accessible = FALSE;
+		for(i=0;i<5;i++)
+			for(j=0;j<5;j++){
+				if(!isok(x+i,y+j) || t_at(x+i, y+j) || !(levl[x+i][y+j].typ == TREE))
+					okspot = FALSE;
+			}
+		pathto = 0;
+		if(isok(x+2,y-1) && levl[x+2][y-1].typ == ROOM) pathto++;
+		if(isok(x+2,y+5) && levl[x+2][y+5].typ == ROOM) pathto++;
+		if(isok(x+5,y+2) && levl[x+5][y+2].typ == ROOM) pathto++;
+		if(isok(x-1,y+2) && levl[x-1][y+2].typ == ROOM) pathto++;
+		if(pathto) accessible = TRUE;
+		if(okspot && accessible){
+			good = TRUE;
+		} else continue;
+		
+		for(i=0;i<5;i++){
+			for(j=0;j<5;j++){
+				levl[x+i][y+j].typ = HWALL;
+				if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
+			}
+		}
+		for(i=1;i<4;i++){
+			for(j=1;j<4;j++){
+				levl[x+i][y+j].typ = CORR;
+				if(rn2(9)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
+			}
+		}
+		i = rnd(3)+rn2(2);
+		for(i;i>0;i--){
+			makemon(&mons[PM_PLUMACH], x+rnd(3), y+rnd(3), MM_ADJACENTOK);
+		}
+		
+		wallification(x, y, x+4, y+4);
+		
+		pathto = rn2(pathto);
+		if(isok(x+2,y-1) && levl[x+2][y-1].typ == ROOM && !(pathto--))
+			levl[x+2][y+0].typ = DOOR, levl[x+2][y+0].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x+2,y+5) && levl[x+2][y+5].typ == ROOM && !(pathto--))
+			levl[x+2][y+4].typ = DOOR, levl[x+2][y+4].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x+5,y+2) && levl[x+5][y+2].typ == ROOM && !(pathto--))
+			levl[x+4][y+2].typ = DOOR, levl[x+4][y+2].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x-1,y+2) && levl[x-1][y+2].typ == ROOM && !(pathto--))
+			levl[x+0][y+2].typ = DOOR, levl[x+0][y+2].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+	}
+}
+
+STATIC_OVL
+void
 mkpluvillage()
 {
 	int x,y,tries=0, roomnumb;
@@ -1540,6 +1600,12 @@ place_neutral_features()
 	// } else if(){
 		// mkferufort();
 	}
+	
+	if(!rn2(4)){
+		int n = rnd(4) + rn2(4);
+		for(n; n > 0; n--)
+			mkpluhomestead();
+	} 
 }
 
 void
@@ -2509,7 +2575,6 @@ register boolean edge; /* Allows room walls to intrude slightly into river. */
 		  (void) mkgold((long) rn1(10 * level_difficulty(),10), x, y);
 		}
 	}
-	/* Underground rivers are relatively open spaces, so light them. */
 	levl[x][y].lit = 1;
 }
 
