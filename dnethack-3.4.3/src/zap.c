@@ -3485,8 +3485,11 @@ death_blast:
 		break;
 	}
 	if (sho_shieldeff) shieldeff(mon->mx, mon->my);
-	if (is_hero_spell(type) && ((Role_if(PM_KNIGHT) && u.uhave.questart) || Spellboost))
-	    tmp *= 2;
+	if (is_hero_spell(type) && (
+		(Role_if(PM_KNIGHT) && u.uhave.questart) || 
+		(uwep && uwep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS) || 
+		Spellboost)
+	) tmp *= 2;
 	if (tmp > 0 && type >= 0 &&
 		resist(mon, type < ZT_SPELL(0) ? WAND_CLASS : '\0', 0, NOTELL))
 	    tmp /= 2;
