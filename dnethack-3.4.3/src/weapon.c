@@ -274,7 +274,8 @@ int spec;
 	struct permonst *ptr;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp)), youdefend = mon == &youmonst;
 	
-	if (!mon) ptr = &mons[NUMMONS];
+	// if (!mon) ptr = &mons[NUMMONS];
+	if (!mon) ptr = &mons[PM_HUMAN];
 	else ptr = youdefend ? youracedata : mon->data;
 
 	if (otyp == CREAM_PIE) return 0;
@@ -989,7 +990,7 @@ int spec;
 	    if (bonus > 1 && otmp->oartifact && spec_dbon(otmp, mon, 100) >= 100)
 		bonus = (bonus + 1) / 2;
 		
-		if((resists_all(ptr) && !narrow_spec_applies(otmp, mon)) || resist_attacks(ptr)){
+		if(mon && ((resists_all(ptr) && !narrow_spec_applies(otmp, mon))) || resist_attacks(ptr)){
 			tmp /= 4;
 			if(!flags.mon_moving && !youdefend && warnedptr != ptr){
 				pline("Weapons are ineffective against %s.", mon_nam(mon));
@@ -1019,7 +1020,7 @@ int spec;
 				resistmask |= SLASH;
 			}
 			
-			if((weaponmask & ~(resistmask)) == 0L && !narrow_spec_applies(otmp, mon)){
+			if(mon && (weaponmask & ~(resistmask)) == 0L && !narrow_spec_applies(otmp, mon)){
 				tmp /= 4;
 				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
 					pline("%s is ineffective against %s.", The(xname(otmp)), mon_nam(mon));
