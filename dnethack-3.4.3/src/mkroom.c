@@ -22,6 +22,7 @@ STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
+STATIC_DCL void NDECL(mkkamereltowers);
 STATIC_DCL void NDECL(mkminorspire);
 STATIC_DCL void NDECL(mkpluhomestead);
 STATIC_DCL void NDECL(mkpluvillage);
@@ -1140,6 +1141,240 @@ mklolthdown()
 
 STATIC_OVL
 void
+mkkamereltowers()
+{
+	int x=0,y=0,tx, ty, tries=0;
+	int i,j, c, edge;
+	boolean left = rn2(2), good=FALSE, okspot;
+	int slant = rn2(3);
+	struct obj *otmp;
+	if(left){
+		//Make shallow sea
+		edge = rn1(20, 20);
+		for(j = 0; j < ROWNO; j++){
+			for(i = 0; i < edge; i++){
+				if(isok(x+i,y+j)){
+					if(levl[x+i][y+j].typ!=TREE || edge - i > rn2(6)) levl[x+i][y+j].typ = PUDDLE;
+					levl[x+i][y+j].lit = 1;
+				}
+			}
+			if(rn2(4)) edge += rn2(3)-slant;
+		}
+		//Build central tower
+		while(!good && tries < 500){
+			x=4+rnd(3)+rn2(3);
+			y=6+rn2(10);
+			
+			tries++;
+			okspot = TRUE;
+			for(i=-3;i<=3;i++)
+				for(j=-3;j<=3;j++){
+					if(!isok(x+i,y+j) || levl[x+i][y+j].typ != PUDDLE)
+						okspot = FALSE;
+				}
+			if(okspot){
+				good = TRUE;
+			} else continue;
+			for(i=-3;i<=3;i++)
+				for(j=-3;j<=3;j++){
+					if(dist2(x+i,y+j,x,y)<=14){
+						levl[x+i][y+j].typ = HWALL;
+						levl[x+i][y+j].lit = 1;
+					}
+				}
+			for(i=-2;i<=2;i++)
+				for(j=-2;j<=2;j++){
+					if(dist2(x+i,y+j,x,y)<=5){
+						levl[x+i][y+j].typ = CORR;
+						levl[x+i][y+j].lit = 0;
+					}
+				}
+			for(i=-3;i<=3;i++)
+				for(j=-3;j<=3;j++){
+					if(levl[x+i][y+j].typ == HWALL){
+						otmp = mksobj(MIRROR, FALSE, FALSE);
+						otmp->objsize = MZ_GIGANTIC;
+						fix_object(otmp);
+						place_object(otmp, x+i, y+j);
+					}
+				}
+			wallification(x-3, y-3, x+3, y+3);
+			if(rn2(2)){
+				otmp = mksobj(DOUBLE_LIGHTSABER, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_INFINITY_S_MIRRORED_ARC));
+				otmp->spe = 0;
+				otmp->cursed = 0;
+				otmp->blessed = 0;
+				place_object(otmp, x, y);
+			} else {
+				otmp = mksobj(KHAKKHARA, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_STAFF_OF_TWELVE_MIRRORS));
+				otmp->spe = 0;
+				otmp->cursed = 0;
+				otmp->blessed = 0;
+				place_object(otmp, x, y);
+			}
+			//record central tower location
+			tx = x;
+			ty = y;
+		}
+	} else {
+		edge = COLNO - rn1(20, 20);
+		for(j = 0; j < ROWNO; j++){
+			for(i = COLNO; i > edge; i--){
+				if(isok(x+i,y+j)){
+					if(levl[x+i][y+j].typ!=TREE || i - edge > rn2(6)) levl[x+i][y+j].typ = PUDDLE;
+					levl[x+i][y+j].lit = 1;
+				}
+			}
+			if(rn2(4)) edge += rn2(3)-slant;
+		}
+		
+		//Build central tower
+		while(!good && tries < 500){
+			x=COLNO - (4+rnd(3)+rn2(3));
+			y=6+rn2(10);
+			
+			tries++;
+			okspot = TRUE;
+			for(i=-3;i<=3;i++)
+				for(j=-3;j<=3;j++){
+					if(!isok(x+i,y+j) || levl[x+i][y+j].typ != PUDDLE)
+						okspot = FALSE;
+				}
+			if(okspot){
+				good = TRUE;
+			} else continue;
+			for(i=-3;i<=3;i++)
+				for(j=-3;j<=3;j++){
+					if(dist2(x+i,y+j,x,y)<=14){
+						levl[x+i][y+j].typ = HWALL;
+						levl[x+i][y+j].lit = 1;
+					}
+				}
+			for(i=-2;i<=2;i++)
+				for(j=-2;j<=2;j++){
+					if(dist2(x+i,y+j,x,y)<=5){
+						levl[x+i][y+j].typ = CORR;
+						levl[x+i][y+j].lit = 0;
+					}
+				}
+			for(i=-3;i<=3;i++)
+				for(j=-3;j<=3;j++){
+					if(levl[x+i][y+j].typ == HWALL){
+						otmp = mksobj(MIRROR, FALSE, FALSE);
+						otmp->objsize = MZ_GIGANTIC;
+						fix_object(otmp);
+						place_object(otmp, x+i, y+j);
+					}
+				}
+			wallification(x-3, y-3, x+3, y+3);
+			if(rn2(2)){
+				otmp = mksobj(DOUBLE_LIGHTSABER, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_INFINITY_S_MIRRORED_ARC));
+				otmp->spe = 0;
+				otmp->cursed = 0;
+				otmp->blessed = 0;
+				place_object(otmp, x, y);
+			} else {
+				otmp = mksobj(KHAKKHARA, FALSE, FALSE);
+				otmp = oname(otmp, artiname(ART_STAFF_OF_TWELVE_MIRRORS));
+				otmp->spe = 0;
+				otmp->cursed = 0;
+				otmp->blessed = 0;
+				place_object(otmp, x, y);
+			}
+			//record central tower location
+			tx = x;
+			ty = y;
+		}
+	}
+	
+	//Build 3 square towers
+	c = 1 + rn2(3);
+	while(c > 0){
+		good = FALSE;
+		tries = 0;
+		while(!good && tries < 50){
+			x=tx+rn2(17)-8;
+			y=ty+rn2(17)-8;
+			
+			tries++;
+			okspot = TRUE;
+			for(i=-3;i<=3;i++)
+				for(j=-3;j<=3;j++){ //+/-3: walkable perimeter
+					if(!isok(x+i,y+j) || levl[x+i][y+j].typ != PUDDLE)
+						okspot = FALSE;
+				}
+			if(okspot){
+				good = TRUE;
+			} else continue;
+			for(i=-2;i<=2;i++)
+				for(j=-2;j<=2;j++){
+					levl[x+i][y+j].typ = HWALL;
+					levl[x+i][y+j].lit = 1;
+				}
+			for(i=-1;i<=1;i++)
+				for(j=-1;j<=1;j++){
+					levl[x+i][y+j].typ = CORR;
+					levl[x+i][y+j].lit = 0;
+				}
+			for(i=-2;i<=2;i++)
+				for(j=-2;j<=2;j++){
+					if(levl[x+i][y+j].typ == HWALL){
+						otmp = mksobj(MIRROR, FALSE, FALSE);
+						otmp->objsize = MZ_GIGANTIC;
+						fix_object(otmp);
+						place_object(otmp, x+i, y+j);
+					}
+				}
+			wallification(x-2, y-2, x+2, y+2);
+		}
+		c--;
+	}
+	//Build 1 square towers
+	c = rnd(3) + rn2(3);
+	while(c > 0){
+		good = FALSE;
+		tries = 0;
+		while(!good && tries < 50){
+			x=tx+rn2(21)-10;
+			y=ty+rn2(21)-10;
+			
+			tries++;
+			okspot = TRUE;
+			for(i=-2;i<=2;i++)
+				for(j=-2;j<=2;j++){ //+/-2: walkable perimeter
+					if(!isok(x+i,y+j) || levl[x+i][y+j].typ != PUDDLE)
+						okspot = FALSE;
+				}
+			if(okspot){
+				good = TRUE;
+			} else continue;
+			for(i=-1;i<=1;i++)
+				for(j=-1;j<=1;j++){
+					levl[x+i][y+j].typ = HWALL;
+					levl[x+i][y+j].lit = 1;
+				}
+			levl[x][y].typ = CORR;
+			levl[x][y].lit = 0;
+			for(i=-1;i<=1;i++)
+				for(j=-1;j<=1;j++){
+					if(levl[x+i][y+j].typ == HWALL){
+						otmp = mksobj(MIRROR, FALSE, FALSE);
+						otmp->objsize = MZ_GIGANTIC;
+						fix_object(otmp);
+						place_object(otmp, x+i, y+j);
+					}
+				}
+			wallification(x-1, y-1, x+1, y+1);
+		}
+		c--;
+	}
+}
+
+STATIC_OVL
+void
 mkminorspire()
 {
 	int x,y,ix, iy, tries=0;
@@ -1147,8 +1382,8 @@ mkminorspire()
 	boolean good=FALSE, okspot;
 	struct obj *otmp;
 	while(!good && tries < 50){
-		x = rn2(COLNO-6)+1;
-		y = rn2(ROWNO-5);
+		x = rn2(COLNO-6)+3;
+		y = rn2(ROWNO-5)+2;
 		tries++;
 		okspot = TRUE;
 		for(i=0;i<3;i++)
@@ -1164,8 +1399,9 @@ mkminorspire()
 		iy = y;
 		for(i=-10;i<=10;i++){
 			for(j=-10;j<=10;j++){
-				if(isok(ix+i,iy+j) && dist2(ix, iy, ix+i, iy+j)<96){
-					levl[ix+i][iy+j].typ = PUDDLE;
+				if(isok(ix+i,iy+j) && dist2(ix, iy, ix+i, iy+j)<105){
+					if(levl[ix+i][iy+j].typ == ROOM || (dist2(ix, iy, ix+i, iy+j)) < (rnd(8)*rnd(8)+36))
+						levl[ix+i][iy+j].typ = PUDDLE;
 					levl[ix+i][iy+j].lit = 1;
 				}
 			}
@@ -1212,6 +1448,19 @@ mkminorspire()
 					mksobj_at(AMULET_OF_REFLECTION, x, y, TRUE, FALSE);
 				}
 				place_object(otmp, x, y);
+				if(find_sawant()){
+					otmp = mksobj(find_sawant(), FALSE, FALSE);
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+					place_object(otmp, x, y);
+					
+					otmp = mksobj(BUCKLER, FALSE, FALSE);
+					otmp->obj_material = MITHRIL;
+					fix_object(otmp);
+					place_object(otmp, x, y);
+				} else {
+					mksobj_at(KHAKKHARA, x, y, TRUE, FALSE);
+				}
 			break;
 			case 2:
 			case 1:
@@ -1686,13 +1935,14 @@ place_lolth_vaults()
 void
 place_neutral_features()
 {
-	if(!rn2(10)){
+	if(!rn2(40)){
+		mkkamereltowers();
+	} else if(!rn2(20)){
+		mkminorspire();
+	} else if(!rn2(10)){
 		mkneuriver();
 	}
 	
-	if(!rn2(20)){
-		mkminorspire();
-	}
 	
 	if(!rn2(10)){
 		mkpluvillage();
