@@ -2279,7 +2279,9 @@ defaultvalue:
 		/* note: s_suffix returns a modifiable buffer */
 		if (!noncorporeal(mdat))
 		    whom = strcat(s_suffix(whom), " flesh");
-		pline(fmt, eden_silver ? "silver skin and " : "", whom);
+		if(canspotmon(mon)) 
+			pline(fmt, eden_silver ? "silver skin and " : "", whom);
+		else pline(fmt, whom);
 	}
 	if (ironmsg) {
 		const char *fmt;
@@ -2309,7 +2311,9 @@ defaultvalue:
 		/* note: s_suffix returns a modifiable buffer */
 		if (!noncorporeal(mdat))
 		    whom = strcat(s_suffix(whom), " flesh");
-		pline(fmt,"", whom);
+		if(canspotmon(mon)) 
+			pline(fmt, "", whom);
+		else pline(fmt, whom);
 	}
 	if (unholymsg) {
 		const char *fmt;
@@ -2338,7 +2342,9 @@ defaultvalue:
 		/* note: s_suffix returns a modifiable buffer */
 		if (!noncorporeal(mdat))
 		    whom = strcat(s_suffix(whom), " flesh");
-		pline(fmt, "", whom);
+		if(canspotmon(mon)) 
+			pline(fmt, "", whom);
+		else pline(fmt, whom);
 	}
 
 	if (sunmsg) {
