@@ -5253,6 +5253,8 @@ struct monst *mon;
 		break;
 	    case CHAM_CHAMELEON:
 		if (!rn2(3)) mndx = pick_animal();
+		else mndx = rndshape();//try to get an in-depth monster of any kind
+		break;
 	    case CHAM_DREAM:
 		if(rn2(2)) mndx = rndshape();//try to get an in-depth monster of any kind
 		else mndx = PM_DREAM_QUASIELEMENTAL;
