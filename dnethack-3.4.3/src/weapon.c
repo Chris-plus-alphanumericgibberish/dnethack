@@ -385,17 +385,22 @@ int spec;
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
-			tmp += d(2, ldie);
-			otmp->age -= 100;
-			if(otmp->oartifact == ART_ATMA_WEAPON &&
-				otmp == uwep &&
-				!Drain_resistance
-			){
-				otmp->age += 100;
-				tmp += rnd(u.ulevel);
-				tmp *= Upolyd ?
-						((float)u.mh)/u.mhmax  :
-						((float)u.uhp)/u.uhpmax;
+			if(otmp->oartifact == ART_ATMA_WEAPON){
+				if(otmp == uwep &&
+					!Drain_resistance
+				){
+					tmp += d(2, ldie);
+					tmp += rnd(u.ulevel);
+					tmp *= Upolyd ?
+							((float)u.mh)/u.mhmax  :
+							((float)u.uhp)/u.uhpmax;
+				} else {
+					tmp += d(1, ldie);
+					otmp->age -= 100;
+				}
+			} else {
+				tmp += d(2, ldie);
+				otmp->age -= 100;
 			}
 			if(otmp->altmode){ //Probably just the Annulus
 				tmp += d(3, 3+2*dmod);
@@ -863,10 +868,35 @@ int spec;
 	}
 	
 	if (Is_weapon || (otmp && (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM))) {
+		int multiplier;
+		if(is_lightsaber(otmp)) {
+			if(otmp->oartifact == ART_ATMA_WEAPON){
+				if(otmp == uwep &&
+					!Drain_resistance
+				){
+					multiplier = 3;
+				} else {
+					multiplier = 2;
+				}
+			} else if(otmp->oartifact == ART_INFINITY_S_MIRRORED_ARC){
+				xchar x, y;
+				get_obj_location(otmp, &x, &y, 0);
+				if(levl[x][y].lit && 
+					!(viz_array[y][x]&TEMP_DRK3 && 
+					 !(viz_array[y][x]&TEMP_LIT1)
+					)
+				) multiplier += 2;
+				if(viz_array[y][x]&TEMP_LIT1 && 
+					!(viz_array[y][x]&TEMP_DRK3)
+				) multiplier += 1;
+			} else {
+				multiplier = 3;
+			}
+		}
 		if(is_lightsaber(otmp)){
 			if(otmp == uwep && Race_if(PM_ORC)){
-				tmp += 3*max((u.ulevel+1)/3,otmp->spe);
-			} else tmp += 3*otmp->spe;
+				tmp += multiplier*max((u.ulevel+1)/3,otmp->spe);
+			} else tmp += multiplier*otmp->spe;
 		} else if(otmp->oartifact != ART_TENTACLE_ROD){
 			if(otmp == uwep && Race_if(PM_ORC)){
 				tmp += max((u.ulevel+1)/3,otmp->spe);
@@ -875,8 +905,8 @@ int spec;
 		
 		if (is_lightsaber(otmp) && otmp->altmode){
 			if(otmp == uwep && Race_if(PM_ORC)){
-				tmp += 3*max((u.ulevel+1)/3,otmp->spe);
-			} else tmp += 3*otmp->spe;
+				tmp += multiplier*max((u.ulevel+1)/3,otmp->spe);
+			} else tmp += multiplier*otmp->spe;
 		}
 		
 		/* negative enchantment mustn't produce negative damage */
