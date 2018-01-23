@@ -4680,6 +4680,7 @@ dobpois:
 				if(mndx <= PM_QUINON && mndx >= PM_MONOTON && mtmp->mpeaceful){
 					pline("%s gets angry...", Amonnam(mtmp));
 					mtmp->mpeaceful = 0;
+					mtmp->mtame = 0;
 				}
 			}
 		} break;
