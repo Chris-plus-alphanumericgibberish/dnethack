@@ -60,6 +60,25 @@ unsigned material;
 	return (struct obj *) 0;
 }
 
+/* Recursively search obj for an artifact and return 1st found */
+struct obj *
+o_artifact(obj)
+struct obj* obj;
+{
+	register struct obj* otmp;
+	struct obj *temp;
+
+	if (obj->oartifact) return obj;
+
+	if (Has_contents(obj)) {
+		for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
+		if (otmp->oartifact) return otmp;
+		else if (Has_contents(otmp) && (temp = o_artifact(otmp)))
+			return temp;
+	}
+	return (struct obj *) 0;
+}
+
 STATIC_OVL void
 do_dknown_of(obj)
 struct obj *obj;
