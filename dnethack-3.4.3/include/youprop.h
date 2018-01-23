@@ -34,9 +34,10 @@
 
 #define HCold_resistance	u.uprops[COLD_RES].intrinsic
 #define ECold_resistance	u.uprops[COLD_RES].extrinsic
-#define Cold_resistance		(HCold_resistance || ECold_resistance || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_COLD) ||\
+#define NCold_resistance		((Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_COLD) ||\
 				 species_resists_cold(&youmonst) || \
 				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON)
+#define Cold_resistance		(HCold_resistance || ECold_resistance || NCold_resistance)
 
 #define HSleep_resistance	u.uprops[SLEEP_RES].intrinsic
 #define ESleep_resistance	u.uprops[SLEEP_RES].extrinsic

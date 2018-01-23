@@ -1364,7 +1364,7 @@ mcalcdistress()
 			damage = d(min(10, (mtmp->m_lev)/3), 8);
 			if(Free_action) damage /= 2;
 			if((HCold_resistance && ECold_resistance)
-				|| (Cold_resistance && !(HCold_resistance || ECold_resistance))
+				|| (NCold_resistance)
 			) damage /= 2;
 			int temparise = u.ugrave_arise;
 			mtmp->mhp += maybe_polyd(u.mh, u.uhp);
