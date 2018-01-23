@@ -3467,9 +3467,9 @@ int tx,ty;
 				if(!Blind) You("notice metal wires sticking out of the ground within the seal.");
 				if(u.sealCounts < numSlots){
 					if(!Blind) pline("In fact, there are wires sticking up all around you.");
-					if(!Blind) pline("Shreaks and screems echo down from whence the wires come.");
+					if(!Blind) pline("Shrieks and screams echo down from whence the wires come.");
 					else You_hear("screaming!");
-					pline("You feel sharp pains in your elbowes and knees!");
+					pline("You feel sharp pains in your elbows and knees!");
 					if(!Blind) pline("It seems that you, are but a puppet.");
 					bindspirit(ep->ward_id);
 					u.sealTimeout[MARIONETTE-FIRST_SEAL] = moves + bindingPeriod;
