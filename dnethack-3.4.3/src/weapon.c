@@ -41,6 +41,10 @@
 #define PN_JUYO					(-26)
 #define PN_WAND_DAMAGE			(-27)
 
+#define holy_damage(mon)	((mon == &youmonst) ? \
+							hates_holy(youracedata) :\
+							hates_holy_mon(mon))
+
 
 static void FDECL(mon_ignite_lightsaber, (struct obj *, struct monst *));
 
@@ -198,7 +202,7 @@ struct monst *mon;
 
 	/* Blessed weapons used against undead or demons */
 	if (Is_weapon && otmp->blessed &&
-	   (is_demon(ptr) || is_undead_mon(mon))){
+	   (holy_damage(mon))){
 		if(otmp->oartifact == ART_EXCALIBUR)
 			tmp += 7; //Quite holy
 		else if(otmp->oartifact == ART_VAMPIRE_KILLER)
@@ -921,7 +925,7 @@ int spec;
 		){
 			bonus += rnd(10);
 		}
-	    if (otmp->blessed && (is_undead_mon(mon) || is_demon(ptr))){
+	    if (otmp->blessed && (holy_damage(mon))){
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
 			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
 				bonus += d(3,7); //Quite holy
@@ -1713,7 +1717,7 @@ register struct monst *mon;
 		 * can know it's cursed and needn't even bother trying.
 		 * Still....
 		 */
-		if (mw_tmp && mw_tmp->cursed && mw_tmp->otyp != CORPSE) {
+		if (mw_tmp && mw_tmp->cursed && !is_weldproof_mon(mon) && mw_tmp->otyp != CORPSE) {
 		    if (canseemon(mon)) {
 			char welded_buf[BUFSZ];
 			const char *mon_hand = mbodypart(mon, HAND);

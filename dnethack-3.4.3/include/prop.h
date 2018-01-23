@@ -78,7 +78,8 @@
 #define SPELLBOOST		DETECT_MONSTERS+1
 #define NECROSPELLS		SPELLBOOST+1
 #define CARCAP			NECROSPELLS+1
-#define NULLMAGIC		CARCAP+1
+#define WELDPROOF		CARCAP+1
+#define NULLMAGIC		WELDPROOF+1
 #define LAST_PROP		(NULLMAGIC)
 
 /*** Where the properties come from ***/

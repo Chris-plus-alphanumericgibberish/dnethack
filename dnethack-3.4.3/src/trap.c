@@ -3163,7 +3163,7 @@ boolean *lostsome;
 #ifdef TOURIST
 			  obj == uarmu ||
 #endif
-			  (obj->cursed && (obj == uarmh || obj == uarms)) ||
+			  (obj->cursed && !Weldproof && (obj == uarmh || obj == uarms)) ||
 			  welded(obj)))
 			otmp = obj;
 		    /* reached the mark and found some stuff to drop? */

@@ -1381,7 +1381,7 @@ cursed(otmp)
 register struct obj *otmp;
 {
 	/* Curses, like chickens, come home to roost. */
-	if((otmp == uwep) ? welded(otmp) : (int)otmp->cursed) {
+	if((otmp == uwep) ? welded(otmp) : ((int)otmp->cursed && !Weldproof)) {
 		You("can't.  %s cursed.",
 			(is_boots(otmp) || is_gloves(otmp) || otmp->quan > 1L)
 			? "They are" : "It is");
@@ -1813,7 +1813,7 @@ doputon()
 				break;
 			}
 		} while(!mask);
-		if (uarmg && uarmg->cursed) {
+		if (uarmg && uarmg->cursed && !Weldproof) {
 			uarmg->bknown = TRUE;
 		    You("cannot remove your gloves to put on the ring.");
 			return(0);
@@ -1871,7 +1871,7 @@ doputon()
 			You_cant("wear that!");
 			return(0);
 		}
-		if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM) && uarmh->cursed){
+		if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM) && uarmh->cursed && !Weldproof){
 			pline("The %s covers your whole face. You need to remove it first.", xname(uarmh));
 			display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
 			return 0;
@@ -2174,9 +2174,9 @@ glibr()
 	boolean leftfall, rightfall;
 	const char *otherwep = 0;
 
-	leftfall = (uleft && !uleft->cursed &&
+	leftfall = (uleft && !uleft->cursed && !Weldproof &&
 		    (!uwep || !welded(uwep) || !bimanual(uwep,youracedata)));
-	rightfall = (uright && !uright->cursed && (!welded(uwep)));
+	rightfall = (uright && !uright->cursed && !Weldproof && (!welded(uwep)));
 	if (!uarmg && (leftfall || rightfall) && !nolimbs(youracedata)) {
 		/* changed so cursed rings don't fall off, GAN 10/30/86 */
 		Your("%s off your %s.",
@@ -2283,11 +2283,11 @@ int otyp;
 	/* reasons ring can't be removed match those checked by select_off();
 	   limbless case has extra checks because ordinarily it's temporary */
 	if (nolimbs(youracedata) &&
-		uamul && uamul->otyp == AMULET_OF_UNCHANGING && uamul->cursed)
+		uamul && uamul->otyp == AMULET_OF_UNCHANGING && uamul->cursed && !Weldproof)
 	    return uamul;
 	if (welded(uwep) && (ring == uright || bimanual(uwep,youracedata))) return uwep;
-	if (uarmg && uarmg->cursed) return uarmg;
-	if (ring->cursed) return ring;
+	if (uarmg && uarmg->cursed && !Weldproof) return uarmg;
+	if (ring->cursed && !Weldproof) return ring;
     }
     /* either no ring or not right type or nothing prevents its removal */
     return (struct obj *)0;
@@ -2323,14 +2323,14 @@ register struct obj *otmp;
 	    if (welded(uwep) && (otmp == uright || bimanual(uwep,youracedata))) {
 		Sprintf(buf, "free a weapon %s", body_part(HAND));
 		why = uwep;
-	    } else if (uarmg && uarmg->cursed) {
-		Sprintf(buf, "take off your %s", c_gloves);
-		why = uarmg;
+	    } else if (uarmg && uarmg->cursed && !Weldproof) {
+			Sprintf(buf, "take off your %s", c_gloves);
+			why = uarmg;
 	    }
 	    if (why) {
-		You("cannot %s to remove the ring.", buf);
-		why->bknown = TRUE;
-		return 0;
+			You("cannot %s to remove the ring.", buf);
+			why->bknown = TRUE;
+			return 0;
 	    }
 	}
 	/* special glove checks */
@@ -2365,11 +2365,11 @@ register struct obj *otmp;
 #endif
 		) {
 	    why = 0;	/* the item which prevents disrobing */
-	    if (uarmc && uarmc->cursed) {
+	    if (uarmc && uarmc->cursed && !Weldproof) {
 		Sprintf(buf, "remove your %s", cloak_simple_name(uarmc));
 		why = uarmc;
 #ifdef TOURIST
-	    } else if (otmp == uarmu && uarm && uarm->cursed) {
+	    } else if (otmp == uarmu && uarm && uarm->cursed && !Weldproof) {
 		Sprintf(buf, "remove your %s", c_suit);
 		why = uarm;
 #endif

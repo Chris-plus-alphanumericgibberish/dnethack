@@ -3355,7 +3355,7 @@ struct obj *obj;
 
 	    You("wrap your bullwhip around %s %s.",
 		s_suffix(mon_nam(mtmp)), onambuf);
-	    if (gotit && otmp->cursed) {
+	    if (gotit && otmp->cursed && !is_weldproof_mon(mtmp)) {
 		pline("%s welded to %s %s%c",
 		      (otmp->quan == 1L) ? "It is" : "They are",
 		      mhis(mtmp), mon_hand,

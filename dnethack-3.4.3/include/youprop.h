@@ -229,6 +229,12 @@
 #define EDetect_monsters	u.uprops[DETECT_MONSTERS].extrinsic
 #define Detect_monsters		(HDetect_monsters || EDetect_monsters || u.specialSealsActive&SEAL_NUMINA)
 
+#define HWeldproof	u.uprops[WELDPROOF].intrinsic
+#define EWeldproof	u.uprops[WELDPROOF].extrinsic
+#define Weldproof	(HWeldproof || EWeldproof || \
+					 is_demon(youracedata) || is_undead(youracedata) || (u.ulycn >= LOW_PM) ||\
+					 (u.specialSealsActive&SEAL_ACERERAK)\
+					)
 
 /*** Appearance and behavior ***/
 #define Adornment		u.uprops[ADORNED].extrinsic
