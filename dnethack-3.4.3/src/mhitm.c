@@ -2200,6 +2200,10 @@ physical:{
 	    default:	tmp = 0;
 			break;
 	}
+	if(magr->mfaction == ZOMBIFIED){
+		tmp *= 2;
+	}
+	
    if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp=tmp/2; 
 	if(!tmp) return(MM_MISS);
 	

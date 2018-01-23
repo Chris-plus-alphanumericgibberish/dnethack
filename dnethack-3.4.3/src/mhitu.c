@@ -3283,6 +3283,10 @@ dopois:
 	}
 	if(u.uhp < 1) done_in_by(mtmp);
 
+	if(mtmp->mfaction == ZOMBIFIED){
+		dmg *= 2;
+	}
+	
 	if(dmg && u.ustdy){
 		dmg += u.ustdy;
 		u.ustdy -= 1;
