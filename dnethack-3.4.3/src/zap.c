@@ -3835,7 +3835,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     int spell_type;
 
 	if(
-		uwep && is_lightsaber(uwep) && uwep->lamplit && u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))
+		uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))
 	){
 		switch(min(P_SKILL(u.fightingForm), P_SKILL(weapon_type(uwep)))){
 			case P_BASIC:
@@ -4064,7 +4064,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				pline("%s hits you!", The(fltxt));
 				if (Reflecting && (
 						(!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || 
-						(uwep && is_lightsaber(uwep) && uwep->lamplit && 
+						(uwep && is_lightsaber(uwep) && litsaber(uwep) && 
 							((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
 							 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
 							)
@@ -4078,7 +4078,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 						(void) ureflects("But %s reflects from your %s!", "it");
 					} else
 					pline("For some reason you are not affected.");
-					if(uwep && is_lightsaber(uwep) && uwep->lamplit && shienuse && getdir((char *)0) && (u.dx || u.dy)){
+					if(uwep && is_lightsaber(uwep) && litsaber(uwep) && shienuse && getdir((char *)0) && (u.dx || u.dy)){
 						dx = u.dx;
 						dy = u.dy;
 						use_skill(FFORM_SHIEN,1);
