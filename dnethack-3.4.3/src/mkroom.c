@@ -1425,6 +1425,7 @@ mkminorspire()
 			}
 		}
 		wallification(x-1, y-1, x+1, y+1);
+		levl[x][y].wall_info |= W_NONDIGGABLE;
 		levl[x][y].lit = 0;
 		
 		mksobj_at(ROBE, x, y, TRUE, FALSE);
