@@ -178,7 +178,10 @@ struct monst *mon;
 	int	tmp = 0;
 	struct permonst *ptr = mon->data;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
-
+	
+	if(mon == &youmonst)
+		ptr = youracedata;
+	
 	if (Is_weapon || (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM)){
 		if(Race_if(PM_ORC) && otmp == uwep){
 			tmp += max((u.ulevel+2)/3, otmp->spe);
