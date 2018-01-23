@@ -1463,6 +1463,18 @@ int mat;
 		case PLATE_MAIL:
 			if(mat == COPPER) obj->otyp = BRONZE_PLATE_MAIL;
 		break;
+		case CRYSTAL_PLATE_MAIL:
+			if(mat == COPPER) obj->otyp = BRONZE_PLATE_MAIL;
+			else obj->otyp = PLATE_MAIL;
+			//BUT, turning plate mail to glass results in glass plate mail.  The magic is lost.
+		break;
+		// case CRYSTAL_HELM:
+			//????
+		// break;
+		case CRYSTAL_SWORD:
+			if(mat != OBSIDIAN_MT && mat != GLASS && mat != GEMSTONE) obj->otyp = LONG_SWORD;
+			//Reversing material transformation does not recover a crystal sword.  The magic is lost.
+		break;
 		// case MASSIVE_STONE_CRATE:
 			// obj->otyp = ;
 		// break;
