@@ -1291,21 +1291,21 @@ struct monst *mtmp;
         	if(!(mtmp->data == &mons[PM_OONA] && Oona_resistance)) return &youmonst;  /* kludge - attack the player first
 				      if possible */
 		}
-	if(gx != 0 || gy != 0){
-		for (dir = 0; dir < 8; dir++)
-			if (dirx[dir] == sgn(gx-mtmp->mx) &&
-				diry[dir] == sgn(gy-mtmp->my))
-					break;
+		if(gx != 0 || gy != 0){
+			for (dir = 0; dir < 8; dir++)
+				if (dirx[dir] == sgn(gx-mtmp->mx) &&
+					diry[dir] == sgn(gy-mtmp->my))
+						break;
 
-		if (dir == 8) {
-			tbx = tby = 0;
-			return 0;
+			if (dir == 8) {
+				tbx = tby = 0;
+				return 0;
+			}
+		} else {
+			dir = rn2(8);
 		}
-	} else {
-    	dir = rn2(8);
-	}
 
-	origdir = -1;
+		origdir = -1;
     } else {
     	dir = rn2(8);
 		origdir = -1;
