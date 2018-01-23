@@ -2479,6 +2479,7 @@ struct alt_spellings {
 	{ "armored dress", NOBLE_S_DRESS },
 	{ "armored black dress", NOBLE_S_DRESS },
 	{ "droven dress", NOBLE_S_DRESS },
+	{ "armored boots", ARMORED_BOOTS },
 	{ (const char *)0, 0 },
 };
 
@@ -3009,6 +3010,7 @@ boolean from_user;
 	if (strncmpi(bp, "wizard lock", 11)) /* not the "wizard" monster! */
 	if (strncmpi(bp, "ninja-to", 8)) /* not the "ninja" rank */
 	if (strncmpi(bp, "master key", 10)) /* not the "master" rank */
+	if (strncmpi(bp, "scroll of stinking cloud", 10)) /* not the "stinking cloud" monster */
 	if (strncmpi(bp, "rod of lordly might", 19)) /* not the "lord" rank */
 	if (strncmpi(bp, "magenta", 7)) /* not the "mage" rank */
 	if (strncmpi(bp, "chromatic dragon scales", 23)) /* not a "dragon" */
