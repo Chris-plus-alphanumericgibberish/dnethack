@@ -4840,7 +4840,7 @@ pick_seal()
 		}
 	}
 	if(Role_if(PM_EXILE) && quest_status.got_quest){
-		if((u.specialSealsActive&SEAL_DAHLVER_NAR) && u.sealTimeout[DAHLVER_NAR] > moves){
+		if((u.specialSealsActive&SEAL_DAHLVER_NAR) && u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[DAHLVER_NAR-FIRST_SEAL], 
 				u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] - moves
@@ -4867,7 +4867,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && quest_status.killed_nemesis){
-		if((u.specialSealsActive&SEAL_ACERERAK) && u.sealTimeout[ACERERAK] > moves){
+		if((u.specialSealsActive&SEAL_ACERERAK) && u.sealTimeout[ACERERAK-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[ACERERAK-FIRST_SEAL], 
 				u.sealTimeout[ACERERAK-FIRST_SEAL] - moves
@@ -4894,7 +4894,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_COSMOS){
-		if((u.specialSealsActive&SEAL_COSMOS) && u.sealTimeout[COSMOS] > moves){
+		if((u.specialSealsActive&SEAL_COSMOS) && u.sealTimeout[COSMOS-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[COSMOS-FIRST_SEAL], 
 				u.sealTimeout[COSMOS-FIRST_SEAL] - moves
@@ -4921,7 +4921,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_MISKA){
-		if((u.specialSealsActive&SEAL_MISKA) && u.sealTimeout[MISKA] > moves){
+		if((u.specialSealsActive&SEAL_MISKA) && u.sealTimeout[MISKA-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[MISKA-FIRST_SEAL], 
 				u.sealTimeout[MISKA-FIRST_SEAL] - moves
@@ -4948,7 +4948,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIARTH){
-		if((u.specialSealsActive&SEAL_NUDZIARTH) && u.sealTimeout[NUDZIARTH] > moves){
+		if((u.specialSealsActive&SEAL_NUDZIARTH) && u.sealTimeout[NUDZIARTH-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[NUDZIARTH-FIRST_SEAL], 
 				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
@@ -4975,7 +4975,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_ALIGNMENT_THING){
-		if((u.specialSealsActive&SEAL_ALIGNMENT_THING) && u.sealTimeout[ALIGNMENT_THING] > moves){
+		if((u.specialSealsActive&SEAL_ALIGNMENT_THING) && u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[ALIGNMENT_THING-FIRST_SEAL], 
 				u.sealTimeout[ALIGNMENT_THING-FIRST_SEAL] - moves
@@ -5002,7 +5002,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_UNKNOWN_GOD){
-		if((u.specialSealsActive&SEAL_UNKNOWN_GOD) && u.sealTimeout[UNKNOWN_GOD] > moves){
+		if((u.specialSealsActive&SEAL_UNKNOWN_GOD) && u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[UNKNOWN_GOD-FIRST_SEAL], 
 				u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] - moves
@@ -5029,7 +5029,7 @@ pick_seal()
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
 	if(u.specialSealsKnown&SEAL_BLACK_WEB){
-		if((u.specialSealsActive&SEAL_BLACK_WEB) && u.sealTimeout[BLACK_WEB] > moves){
+		if((u.specialSealsActive&SEAL_BLACK_WEB) && u.sealTimeout[BLACK_WEB-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
 				sealNames[BLACK_WEB-FIRST_SEAL], 
 				u.sealTimeout[BLACK_WEB-FIRST_SEAL] - moves
