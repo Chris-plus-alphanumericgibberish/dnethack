@@ -219,7 +219,7 @@ boolean forced;
 	
 	if(spir==SEAL_JACK && forced && !gnosis && u.ulevel == 1){
 		Your("life is saved!");
-		pline("Unfortunatly, your soul is torn to shreds.");
+		pline("Unfortunately, your soul is torn to shreds.");
 	}
 	if(forced && !gnosis){
 		if(spir == SEAL_ORTHOS && Hallucination) losexp("being eaten by a grue",TRUE,TRUE,TRUE);
@@ -233,7 +233,7 @@ boolean forced;
 		return;
 	}
 	
-	if(forced && u.voidChime) return; //void chime alows you to keep spirits bound even if you break their taboos.
+	if(forced && u.voidChime) return; //void chime allows you to keep spirits bound even if you break their taboos.
 	
 	if(spir == SEAL_ORTHOS && Hallucination) pline("Orthos has been eaten by a grue!");
 	
