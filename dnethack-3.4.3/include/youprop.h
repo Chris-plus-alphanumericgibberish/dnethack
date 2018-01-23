@@ -174,7 +174,7 @@
 
 #define HWounded_legs		u.uprops[WOUNDED_LEGS].intrinsic
 #define EWounded_legs		u.uprops[WOUNDED_LEGS].extrinsic
-#define Wounded_legs		((HWounded_legs || EWounded_legs) && !(u.specialSealsActive&SEAL_ACERERAK))
+#define Wounded_legs		((HWounded_legs || EWounded_legs))
 
 #define HSleeping		u.uprops[SLEEPING].intrinsic
 #define ESleeping		u.uprops[SLEEPING].extrinsic
