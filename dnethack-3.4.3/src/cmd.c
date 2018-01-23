@@ -93,6 +93,7 @@ extern int NDECL(dodeepswim); /**/
 extern int NDECL(dotalk); /**/
 extern int NDECL(docast); /**/
 extern int NDECL(dovspell); /**/
+extern int NDECL(reorder_spirit_powers); /**/
 extern int NDECL(dotele); /**/
 extern int NDECL(dountrap); /**/
 extern int NDECL(dounmaintain); /**/
@@ -3875,6 +3876,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"overview", "show an overview of the dungeon", dooverview, TRUE},
 	{"pray", "pray to the gods for help", dopray, TRUE},
 	{"quit", "exit without saving current game", done2, TRUE},
+	{"reorder", "reorder spirit powers", reorder_spirit_powers, TRUE},
 #ifdef STEED
 	{"ride", "ride (or stop riding) a monster", doride, FALSE},
 #endif

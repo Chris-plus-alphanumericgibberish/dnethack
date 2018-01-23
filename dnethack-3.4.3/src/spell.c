@@ -33,8 +33,8 @@ STATIC_DCL void FDECL(deadbook, (struct obj *));
 STATIC_PTR int NDECL(learn);
 STATIC_DCL boolean FDECL(getspell, (int *));
 STATIC_DCL boolean FDECL(getspirit, (int *));
-STATIC_DCL boolean FDECL(spiritLets, (char *));
-STATIC_DCL int FDECL(dospiritmenu, (const char *, int *));
+STATIC_DCL boolean FDECL(spiritLets, (char *, boolean));
+STATIC_DCL int FDECL(dospiritmenu, (const char *, int *, boolean));
 STATIC_DCL boolean FDECL(dospellmenu, (const char *,int,int *, boolean));
 STATIC_DCL void FDECL(describe_spell, (int));
 STATIC_DCL int FDECL(percent_success, (int));
@@ -944,7 +944,7 @@ getspirit(power_no)
 	    /* we know there is at least 1 known spell */
 		
 		//put characters into lets here
-		spiritLets(lets);
+		spiritLets(lets, TRUE);
 		
 	    for(;;)  {
 		Sprintf(qbuf, "Use which power? [%s ?]", lets);
@@ -961,7 +961,7 @@ getspirit(power_no)
 		    You("don't know that power.");
 		}
 	}
-	return dospiritmenu("Choose which power to use", power_no);
+	return dospiritmenu("Choose which power to use", power_no, TRUE);
 }
 
 static const long spiritPOwner[NUMBER_POWERS] = {
@@ -1037,7 +1037,7 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Open",
 	"Read Spell", "Book Telepathy",
 	"Unite the Earth and Sky", "Hook in the Sky", "Enlightenment",
-	"Damning Darkness", "Touch of the Void", "Echos of the Last Word",
+	"Damning Darkness", "Touch of the Void", "Echoes of the Last Word",
 	"Poison Gaze", "Gap Step",
 	"Moan",
 	"Swallow Soul",
@@ -1125,14 +1125,15 @@ pick_gnosis_seal()
 }
 
 STATIC_OVL boolean
-spiritLets(lets)
+spiritLets(lets, respect_timeout)
 	char *lets;
+	boolean respect_timeout;
 {
 	int i,s;
 	if(flags.timeoutOrder){
 		for(s=0; s<NUM_BIND_SPRITS; s++){
 			if(u.spirit[s]) for(i = 0; i<52; i++){
-				if(spiritPOwner[u.spiritPOrder[i]] == u.spirit[s] && u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves){
+				if(spiritPOwner[u.spiritPOrder[i]] == u.spirit[s] && (u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves || !respect_timeout)){
 					Sprintf(lets, "%c", i<26 ? 'a'+(char)i : 'A'+(char)(i-26));
 				}
 			}
@@ -1142,7 +1143,7 @@ spiritLets(lets)
 			if(((spiritPOwner[u.spiritPOrder[i]] & u.sealsActive &&
 				!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
 				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL) &&
-				u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves
+				(u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves || !respect_timeout)
 			){
 				Sprintf(lets, "%c", i<26 ? 'a'+(char)i : 'A'+(char)(i-26));
 			}
@@ -4105,9 +4106,10 @@ dovspell()
 }
 
 int
-dospiritmenu(prompt, power_no)
+dospiritmenu(prompt, power_no, respect_timeout)
 const char *prompt;
 int *power_no;
+boolean respect_timeout;
 {
 	winid tmpwin;
 	int n, how;
@@ -4137,7 +4139,7 @@ int *power_no;
 				add_menu(tmpwin, NO_GLYPH, &anyvoid, 0, 0, ATR_BOLD, sealNames[j], MENU_UNSELECTED);
 				for(i = 0; i<52; i++){
 					if(spiritPOwner[u.spiritPOrder[i]] == u.spirit[s]){
-						if(u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves){
+						if(u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves || !respect_timeout){
 							Sprintf1(buf, spiritPName[u.spiritPOrder[i]]);
 							any.a_int = u.spiritPOrder[i]+1;	/* must be non-zero */
 							add_menu(tmpwin, NO_GLYPH, &any,
@@ -4159,7 +4161,7 @@ int *power_no;
 				(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL && 
 				spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL))
 			){
-				if(u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves){
+				if(u.spiritPColdowns[u.spiritPOrder[i]] < monstermoves || !respect_timeout){
 					Sprintf1(buf, spiritPName[u.spiritPOrder[i]]);
 					any.a_int = u.spiritPOrder[i]+1;	/* must be non-zero */
 					add_menu(tmpwin, NO_GLYPH, &any,
@@ -4979,6 +4981,67 @@ set_spirit_powers(spirits_seal)
 			}
 			if(j==52) impossible("Could not find a free letter for power %d",i);
 		}
+	}
+}
+
+void
+reorder_spirit_powers()
+{
+	int power_indx = -1;
+	char swaplet;
+	if(!u.sealsActive && !u.specialSealsActive){
+		You("don't have any spirits bound.");
+		return;
+	}
+	if (flags.menu_style == MENU_TRADITIONAL) {
+		char ilet, lets[BUFSZ], qbuf[QBUFSZ];
+	    /* we know there is at least 1 known spell */
+		
+		//put characters into lets here
+		spiritLets(lets, FALSE);
+		
+		Sprintf(qbuf, "Use which power? [%s ?]", lets);
+		ilet = yn_function(qbuf, (char *)0, '\0');
+
+		if (index(quitchars, ilet))
+		    return;
+		
+		if(check_spirit_let(ilet)){
+			if(ilet >= 'a' && ilet <= 'z'){
+				power_indx = (int)ilet-'a';
+			} else if(swaplet >= 'A' && swaplet <= 'Z'){
+				power_indx = (int)ilet-'A'+26;
+			}
+		} else {
+			You("don't know that power.");
+			return;
+		}
+	} else {
+		int power_no;
+		if(dospiritmenu("Choose which power to reorder", &power_no, FALSE))
+			for(power_indx = 0; power_indx < 52; power_indx++){
+				if(power_no == u.spiritPOrder[power_indx])
+					break;
+			}
+	}
+	if(power_indx == -1) return;
+	pline("Move power to what letter? (a-z, A-Z)");
+	swaplet = readchar();
+	if(swaplet >= 'a' && swaplet <= 'z'){
+		int power = u.spiritPOrder[power_indx];
+		u.spiritPOrder[power_indx] = u.spiritPOrder[(int)swaplet-'a'];
+		u.spiritPOrder[(int)swaplet-'a'] = power;
+		pline("Power reordered.");
+		return;
+	} else if(swaplet >= 'A' && swaplet <= 'Z'){
+		int power = u.spiritPOrder[power_indx];
+		u.spiritPOrder[power_indx] = u.spiritPOrder[swaplet-'A'+26];
+		u.spiritPOrder[swaplet-'A'+26] = power;
+		pline("Power reordered.");
+		return;
+	} else {
+		pline("Invalid letter.");
+		return;
 	}
 }
 /*spell.c*/
