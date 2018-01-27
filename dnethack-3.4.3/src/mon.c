@@ -2991,7 +2991,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	else if (magr->data == &mons[PM_GITHYANKI_PIRATE] &&
 		u.ukinghill)
 	    return ALLOW_M|ALLOW_TM;
-	else if (mdef->data != &mons[PM_TINKER_GNOME] && 
+	else if (mdef->data != &mons[PM_TINKER_GNOME] && mdef->data != &mons[PM_HOOLOOVOO] && 
 			(magr->data == &mons[PM_CLOCKWORK_SOLDIER] || magr->data == &mons[PM_CLOCKWORK_DWARF] || 
 			 magr->data == &mons[PM_FABERGE_SPHERE] || magr->data == &mons[PM_FIREWORK_CART] || 
 			 magr->data == &mons[PM_JUGGERNAUT] || magr->data == &mons[PM_ID_JUGGERNAUT]))
