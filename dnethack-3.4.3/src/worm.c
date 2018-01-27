@@ -329,14 +329,12 @@ wormline(worm, x, y)
 		int wnum = worm->wormno;
 		struct wseg *seg, *nseg;
 
-		for (seg = wtails[wnum], nseg = seg->nseg; nseg; seg = seg->nseg, nseg = nseg->nseg)
+		for (seg = wtails[wnum], nseg = seg->nseg; nseg && nseg->nseg; seg = nseg, nseg = nseg->nseg)
 			;
 		if(seg == wtails[wnum])
 			return FALSE;
-		if (dtax == x - seg->wx && dtay == y - seg->wy){
-			pline("ping");
+		if (dtax == (worm->mx - seg->wx) && dtay == (worm->my - seg->wy))
 			return TRUE;
-		} else pline("pong");
 		return FALSE;
 }
 
