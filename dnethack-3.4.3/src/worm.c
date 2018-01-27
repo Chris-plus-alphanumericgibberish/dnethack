@@ -299,6 +299,7 @@ wormhitu(worm)
 {
     register int wnum = worm->wormno;
     register struct wseg *seg;
+	struct attack mattk = {AT_CLAW, AD_PHYS, 2, 4};
 
     if (!wnum) return; /* bullet proofing */
 
@@ -307,9 +308,36 @@ wormhitu(worm)
  *  within range for a tiny moment, but this needs a bit more looking at
  *  before we decide to do this.
  */
-    for (seg = wtails[wnum]; seg; seg = seg->nseg)
-	if (distu(seg->wx, seg->wy) < 3)
-	    (void) mattacku(worm);
+	seg = wtails[wnum];
+    for (seg = seg->nseg; seg && seg->nseg; seg = seg->nseg)
+		if (distu(seg->wx, seg->wy) < 3){
+			if(hitmu(worm,&mattk) > 1) //worm died or was teleported somehow
+				break;
+		}
+}
+
+/*  wormline()
+ *
+ *  Second-to-last segment of the worm is lined up with the given coordinates (lunging momentum should boost damage)
+ */
+boolean
+wormline(worm, x, y)
+    struct monst *worm;
+	int x, y;
+{
+		int dtax = x - worm->mx, dtay = y - worm->my;
+		int wnum = worm->wormno;
+		struct wseg *seg, *nseg;
+
+		for (seg = wtails[wnum], nseg = seg->nseg; nseg; seg = seg->nseg, nseg = nseg->nseg)
+			;
+		if(seg == wtails[wnum])
+			return FALSE;
+		if (dtax == x - seg->wx && dtay == y - seg->wy){
+			pline("ping");
+			return TRUE;
+		} else pline("pong");
+		return FALSE;
 }
 
 /*  cutoff()

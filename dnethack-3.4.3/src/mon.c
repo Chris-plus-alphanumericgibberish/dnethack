@@ -2568,7 +2568,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			   ((levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) ||
 			(levl[nx][ny].doormask & D_LOCKED && !(flag & UNLOCKDOOR))) &&
 			   !thrudoor) continue;
-	    if(nx != x && ny != y && (nodiag ||
+	    if(nx != x && ny != y && (nodiag || mdat == &mons[PM_LONG_WORM] ||
 #ifdef REINCARNATION
 	       ((IS_DOOR(nowtyp) &&
 		 ((levl[x][y].doormask & ~D_BROKEN) || Is_rogue_level(&u.uz))) ||

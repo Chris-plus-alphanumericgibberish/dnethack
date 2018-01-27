@@ -1346,6 +1346,8 @@ toofar:
 		    case 1:	/* monster moved */
 			/* Maybe it stepped on a trap and fell asleep... */
 			if (mtmp->msleeping || !(mtmp->mcanmove && mtmp->mnotlaugh)) return(0);
+			/* Long worms thrash around */
+			if(mtmp->wormno) wormhitu(mtmp);
 			if(!nearby &&
 			  (ranged_attk(mdat) || find_offensive(mtmp))){
 				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO] || mdat == &mons[PM_ARCADIAN_AVENGER]){
@@ -1372,8 +1374,6 @@ toofar:
 	    (Conflict && !resist(mtmp, RING_CLASS, 0, 0))) {
 	    if(inrange && !noattacks(mdat) && u.uhp > 0 && !scared && tmp != 3)
 			if(mattacku(mtmp)) return(1); /* monster died (e.g. exploded) */
-
-	    if(mtmp->wormno) wormhitu(mtmp);
 	}
 	/* special speeches for quest monsters */
 	if (!mtmp->msleeping && mtmp->mcanmove && mtmp->mnotlaugh && nearby)

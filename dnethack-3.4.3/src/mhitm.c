@@ -2203,6 +2203,10 @@ physical:{
 	if(magr->mfaction == ZOMBIFIED){
 		tmp *= 2;
 	}
+	if(magr->data == &mons[PM_LONG_WORM] && magr->wormno && mattk->aatyp == AT_BITE){
+		if(wormline(magr, mdef->mx, mdef->my))
+			tmp *= 2;
+	}
 	
    if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp=tmp/2; 
 	if(!tmp) return(MM_MISS);

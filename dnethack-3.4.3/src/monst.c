@@ -1729,7 +1729,7 @@ NEARDATA struct permonst mons[] = {
 	MB_LONGHEAD|MB_SLITHY|MB_NOLIMBS /*MB*/, MG_NASTY /*MG*/,
 	0 /*MA*/,  MV_EARTHSENSE /*MV*/, CLR_BLACK),
     MON("baby long worm", S_WORM,//5
-	LVL(4, 3, 5, 0, 0), G_GENO,
+	LVL(4, 8, 5, 0, 0), G_GENO,
 	A(ATTK(AT_BITE, AD_PHYS, 1, 6),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(600, 250, 0, MS_SILENT, MZ_SMALL), 0, 0,
@@ -1745,8 +1745,8 @@ NEARDATA struct permonst mons[] = {
 	MB_LONGHEAD|MB_SLITHY|MB_NOLIMBS /*MB*/, 0 /*MG*/,
 	0 /*MA*/,  MV_NORMAL /*MV*/, CLR_MAGENTA),
     MON("long worm", S_WORM,//9
-	LVL(8, 3, 5, 10, 0), (G_GENO|2),
-	A(ATTK(AT_BITE, AD_PHYS, 1, 4),
+	LVL(8, 16, 5, 10, 0), (G_GENO|2),
+	A(ATTK(AT_BITE, AD_PHYS, 10, 2), //10 long worm teeth
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_GIGANTIC, CN_GIGANTIC, 0, MS_SILENT, MZ_GIGANTIC), 0, 0,
 	0 /*MM*/, MT_HOSTILE|MT_ANIMAL|MT_CARNIVORE|MT_NOTAKE /*MT*/,
