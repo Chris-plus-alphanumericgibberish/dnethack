@@ -198,8 +198,8 @@
 							 ptr == &mons[PM_MILITANT_CLERIC] ||\
 							 ptr == &mons[PM_HALF_ELF_RANGER])
 #define is_undead(ptr)		(((ptr)->mflagsa & MA_UNDEAD) != 0L)
-#define is_undead_mon(mon)	(mon && (is_undead((mon)->data) || (mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED))
-#define is_derived_undead_mon(mon)	(mon && ((mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED))
+#define is_undead_mon(mon)	(mon && (is_undead((mon)->data) || (mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED || (mon)->mfaction == FRACTURED))
+#define is_derived_undead_mon(mon)	(mon && ((mon)->mfaction == ZOMBIFIED || (mon)->mfaction == SKELIFIED || (mon)->mfaction == CRYSTALFIED || (mon)->mfaction == FRACTURED))
 #define	can_undead_mon(mon)	(mon && !nonliving_mon(mon) && !is_minion((mon)->data) && ((mon)->data->mlet != S_PUDDING) &&\
 								((mon)->data->mlet != S_JELLY) && ((mon)->data->mlet != S_BLOB) && !is_elemental((mon)->data) &&\
 								!is_plant((mon)->data) && !is_demon((mon)->data) && !is_primordial((mon)->data) && !(mvitals[monsndx((mon)->data)].mvflags&G_NOCORPSE))
@@ -320,6 +320,11 @@
 								(ptr) == &mons[PM_QUATON] ||\
 								(ptr) == &mons[PM_QUINON] ||\
 								(ptr) == &mons[PM_AXUS]\
+							)
+#define is_kamerel(ptr)		(	(ptr) == &mons[PM_AMM_KAMEREL] ||\
+								(ptr) == &mons[PM_HUDOR_KAMEREL] ||\
+								(ptr) == &mons[PM_SHARAB_KAMEREL] ||\
+								(ptr) == &mons[PM_ARA_KAMEREL]\
 							)
 #define is_divider(ptr)		( (ptr) == &mons[PM_BLACK_PUDDING]\
 							  || (ptr) == &mons[PM_BROWN_PUDDING]\
