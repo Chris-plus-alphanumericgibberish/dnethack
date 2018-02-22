@@ -2247,7 +2247,7 @@ physical:{
 		tmp *= 2;
 	}
 	
-	if ( is_backstaber(magr->data) &&
+	if ( is_backstabber(magr->data) &&
 		!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
 			((stationary(mdef->data) || sessile(mdef->data)) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT))
 		 ) && (
