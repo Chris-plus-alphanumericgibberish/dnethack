@@ -7883,6 +7883,18 @@ register struct attack *mattk;
 		flags.forcefight = FALSE;
 		if(DEADMONSTER(mtmp)) return 2;
 	}
+	if(u.specialSealsActive&SEAL_BLACK_WEB && u.spiritPColdowns[PWR_WEAVE_BLACK_WEB] > moves+20){
+		static struct attack webattack[] = 
+		{
+			{AT_SHDW,AD_SHDW,4,8},
+			{0,0,0,0}
+		};
+		int i, tmp, weptmp, tchtmp;
+		find_to_hit_rolls(mtmp,&tmp,&weptmp,&tchtmp);
+		hmonwith(mtmp, tmp, weptmp, tchtmp, webattack, 1);
+		if(DEADMONSTER(mtmp)) return 2;
+	}
+	
 	if(u.sealsActive){
 		if(u.sealsActive&SEAL_ECHIDNA){
 			pline("%s is splashed by your acidic blood!", Monnam(mtmp));
