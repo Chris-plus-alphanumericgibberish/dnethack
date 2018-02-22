@@ -323,10 +323,19 @@ NOMAP
 MONSTER:'q', random, random
 MONSTER:'q', random, random
 MONSTER:'q', random, random
+
 MONSTER:'q', random, random
 MONSTER:'q', random, random
 MONSTER:'q', random, random
+
 MONSTER:'q', random, random
+MONSTER:'q', random, random
+MONSTER:'q', random, random
+
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
 
 GEOMETRY:center,center
 MAP
@@ -337,20 +346,25 @@ ENDMAP
 
 PORTAL:(01,01,01,01),(00,00,00,00),"out4"
 
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
+MONSTER:'\'', random, random
 
 GEOMETRY:right,center
 #0         1         2   	   3	     4	       5		 6	       7
@@ -360,9 +374,9 @@ MAP
 1TTT|-- - - - - - - - - - - - - - --|TTT
 2TT|---------------------------------|TT
 3TT|- - - - - - - - - - - - - - - - -|TT
-4T|-----------------------------------|T
+4T|--------------.-------.------------|T
 5T| - - - - - - ----------- - - - - - |T
-6T|-----------------------------------|T
+6T|------------.-----------.----------|T
 7|- - - - - - --------------- - - - - -|
 8|.------------------------------------|
 9-... - - - - --------------- - - - - .|
@@ -370,9 +384,9 @@ MAP
 1-... - - - - --------------- - - - - .|
 2|.------------------------------------|
 3|- - - - - - --------------- - - - - -|
-4T|-----------------------------------|T
+4T|------------.-----------.----------|T
 5T| - - - - - - ----------- - - - - - |T
-6T|-----------------------------------|T
+6T|--------------.-------.------------|T
 7TT|- - - - - - - - - - - - - - - - -|TT
 8TT|---------------------------------|TT
 9TTT|-- - - - - - - - - - - - - - --||TT
@@ -389,6 +403,11 @@ MAZEWALK:(04,10),east
 MONSTER:'\'',"clay golem",(01,08)
 MONSTER:'\'',"clay golem",(01,12)
 
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+
 MAZE:"sumall",' '
 FLAGS: nommap,hardfloor
 
@@ -396,22 +415,35 @@ INIT_MAP: '.' , ' ' , true, true , lit , true
 
 NOMAP
 
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
-MONSTER:'q', random, random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+MONSTER:'"', "Plumach Rilmani", random
+
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+MONSTER:'"', "Ferrumach Rilmani", random
+
+MONSTER:'"', "Cuprilach Rilmani", random
+MONSTER:'"', "Cuprilach Rilmani", random
+MONSTER:'"', "Cuprilach Rilmani", random
+MONSTER:'"', "Argenach Rilmani", random
 
 #STAIR:random,up
 #STAIR:random,down
@@ -419,29 +451,31 @@ MONSTER:'q', random, random
 GEOMETRY:center,center
 #0123456
 MAP
-0...-...
-1.-...-.
-2.......
-3-.....-
-4.......
-5.-...-.
-6...-...
+0--.....--
+1-...-...-
+2..-...-..
+3.........
+4.-.....-.
+5.........
+6..-...-..
+7-...-...-
+8--.....--
 ENDMAP
 #01234567890
 REGION:(00,00,06,06),lit,"ordinary"
 
-STAIR:  levregion(37,00,75,19), (0,0,6,6), up
-BRANCH:(03,03,03,03),(0,0,0,0)
+STAIR:  levregion(37,00,75,19), (0,0,8,8), up
+BRANCH:(04,04,04,04),(0,0,0,0)
 
 WALLIFY
-MONSTER:'\'',"argentum golem",(01,03)
-MONSTER:'\'',"argentum golem",(02,02)
-MONSTER:'\'',"argentum golem",(03,01)
+MONSTER:'\'',"argentum golem",(02,04)
+MONSTER:'\'',"argentum golem",(03,03)
 MONSTER:'\'',"argentum golem",(04,02)
 MONSTER:'\'',"argentum golem",(05,03)
-MONSTER:'\'',"argentum golem",(04,04)
+MONSTER:'\'',"argentum golem",(06,04)
+MONSTER:'\'',"argentum golem",(05,05)
+MONSTER:'\'',"argentum golem",(04,06)
 MONSTER:'\'',"argentum golem",(03,05)
-MONSTER:'\'',"argentum golem",(02,04)
 
 #GEOMETRY:center,center
 #0         1         2   	  3	      4	    5		  6	      7
