@@ -7841,6 +7841,13 @@ register struct attack *mattk;
       }
     }
 	
+	if(uwep && uwep->oartifact == ART_SANSARA_MIRROR && multi >= 0 && rn2(2)){
+		You("counterattack!");
+		flags.forcefight = TRUE;
+		attack(mtmp);
+		flags.forcefight = FALSE;
+		if(DEADMONSTER(mtmp)) return 2;
+	}
 	if(u.sealsActive){
 		if(u.sealsActive&SEAL_ECHIDNA){
 			pline("%s is splashed by your acidic blood!", Monnam(mtmp));

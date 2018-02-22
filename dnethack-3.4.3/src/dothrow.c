@@ -194,6 +194,11 @@ int thrown;
 	
 	if(!barage) multishot = rnd(multishot);
 	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barage
+	
+	if((uwep && uwep->oartifact == ART_SANSARA_MIRROR)
+		|| (uswapwep && uswapwep->oartifact == ART_SANSARA_MIRROR)
+	) multishot *= 2;
+	
 	if(ammo_and_launcher(obj, launcher) && launcher->oartifact){
 		if(launcher->oartifact == ART_WRATHFUL_SPIDER) multishot += rn2(8);
 		else if(launcher->oartifact == ART_ROGUE_GEAR_SPIRITS) multishot = 2;

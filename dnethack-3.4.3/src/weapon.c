@@ -383,6 +383,23 @@ int spec;
 		case HEAVY_BLASTER_BOLT:
 			tmp += d(2, ldie)+ldie;
 		break;
+		case MIRRORBLADE:{
+			int mirdam = 0;
+			if(youdefend){
+				if(uwep){
+					if(uwep->otyp == MIRRORBLADE){
+						mirdam = exploding_d(2, ldie, (uwep->spe+otmp->spe)/2);
+					} else mirdam = dmgval(uwep, &youmonst, 0);
+				}
+			} else {
+				if(mon && MON_WEP(mon)){
+					if(MON_WEP(mon)->otyp == MIRRORBLADE){
+						mirdam = exploding_d(2, ldie, (MON_WEP(mon)->spe+otmp->spe)/2);
+					} else mirdam = dmgval(MON_WEP(mon), &youmonst, 0);
+				}
+			}
+			if(mirdam > tmp) tmp = mirdam;
+		} break;
 		case LIGHTSABER:
 		case BEAMSWORD:
 			if(otmp->oartifact == ART_ATMA_WEAPON){
@@ -677,6 +694,23 @@ int spec;
 		case HEAVY_BLASTER_BOLT:
 			tmp += d(2, sdie)+sdie;
 		break;
+		case MIRRORBLADE:{
+			int mirdam = 0;
+			if(youdefend){
+				if(uwep){
+					if(uwep->otyp == MIRRORBLADE){
+						mirdam = exploding_d(2, sdie, (uwep->spe+otmp->spe)/2);
+					} else mirdam = dmgval(uwep, &youmonst, 0);
+				}
+			} else {
+				if(mon && MON_WEP(mon)){
+					if(MON_WEP(mon)->otyp == MIRRORBLADE){
+						mirdam = exploding_d(2, sdie, (MON_WEP(mon)->spe+otmp->spe)/2);
+					} else mirdam = dmgval(MON_WEP(mon), &youmonst, 0);
+				}
+			}
+			if(mirdam > tmp) tmp = mirdam;
+		} break;
 		case LIGHTSABER:
 		case BEAMSWORD:
 			tmp += d(2, sdie);
@@ -1494,6 +1528,7 @@ static const NEARDATA short hwep[] = {
 	  BEAMSWORD/*3d10*/,
 	  FORCE_PIKE,/*2d6+6/2d8+8*/
 	  LIGHTSABER/*3d8*/,
+	  MIRRORBLADE/*your weapon is probably pretty darn good*/,
 	  VIBROBLADE,/*2d6+3/2d8+4*/
 	  CRYSTAL_SWORD/*2d8/2d12*/,
 	  DROVEN_GREATSWORD/*1d18/1d30*/, 
