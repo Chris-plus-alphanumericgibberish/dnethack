@@ -2743,6 +2743,18 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		) etype = uUpgrades;
 		else etype = clockwork_eat_menu(TRUE,TRUE);
 	}
+	if (!is_edible(otmp)) {
+	    You("cannot eat that!");
+	    return 0;
+	} else if ((otmp->owornmask & (W_ARMOR|W_TOOL|W_AMUL
+#ifdef STEED
+			|W_SADDLE
+#endif
+			)) != 0) {
+	    /* let them eat rings */
+	    You_cant("eat %s you're wearing.", something);
+	    return 0;
+	}
 	
 	if (Strangled) {
 		pline("If you can't breathe air, how can you consume solids?");
@@ -2784,18 +2796,6 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	 * mails, players who polymorph back to human in the middle of their
 	 * metallic meal, etc....
 	 */
-	if (!is_edible(otmp)) {
-	    You("cannot eat that!");
-	    return 0;
-	} else if ((otmp->owornmask & (W_ARMOR|W_TOOL|W_AMUL
-#ifdef STEED
-			|W_SADDLE
-#endif
-			)) != 0) {
-	    /* let them eat rings */
-	    You_cant("eat %s you're wearing.", something);
-	    return 0;
-	}
 	if (is_metallic(otmp) &&
 	    u.umonnum == PM_RUST_MONSTER && otmp->oerodeproof) {
 	    	otmp->rknown = TRUE;

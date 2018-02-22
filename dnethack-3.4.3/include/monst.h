@@ -177,6 +177,7 @@ struct monst {
 	struct obj *minvent;
 
 	struct obj *mw;
+	struct obj *msw;
 	long misc_worn_check;
 	xchar weapon_check;
 	xchar combat_mode;
@@ -236,6 +237,8 @@ struct monst {
 
 #define MON_WEP(mon)	((mon)->mw)
 #define MON_NOWEP(mon)	((mon)->mw = (struct obj *)0)
+#define MON_SWEP(mon)	((mon)->msw)
+#define MON_NOSWEP(mon)	((mon)->msw = (struct obj *)0)
 
 #define DEADMONSTER(mon)	((mon)->mhp < 1)
 

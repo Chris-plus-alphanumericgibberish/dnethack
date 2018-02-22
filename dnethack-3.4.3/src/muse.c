@@ -1918,7 +1918,7 @@ struct monst *mtmp;
 			m.has_misc = MUSE_POT_GAIN_ENERGY;
 		}
 		nomore(MUSE_BULLWHIP);
-		if(obj->otyp == BULLWHIP && (MON_WEP(mtmp) == obj) &&
+		if(obj->otyp == BULLWHIP && (MON_WEP(mtmp) == obj || MON_SWEP(mtmp) == obj) &&
 		   distu(mtmp->mx,mtmp->my)==1 && uwep && !mtmp->mpeaceful) {
 			m.misc = obj;
 			m.has_misc = MUSE_BULLWHIP;

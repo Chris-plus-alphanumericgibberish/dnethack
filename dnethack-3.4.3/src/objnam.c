@@ -1384,7 +1384,7 @@ ring:
 		}
 	}
 	if(obj->owornmask & W_SWAPWEP) {
-		if (u.twoweap && !(uwep && uwep->otyp == STILETTOS))
+		if (mcarried(obj) || (u.twoweap && !(uwep && uwep->otyp == STILETTOS)))	// Monsters twoweaponing stilettos would give a bad message, but they can't even wield stilettos right now...
 			Sprintf(eos(bp), " (wielded in other %s)",
 				body_part(HAND));
 		else

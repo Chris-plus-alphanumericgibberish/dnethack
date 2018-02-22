@@ -3340,7 +3340,7 @@ struct obj *obj;
 	   pline("A monster is there that you couldn't see.");
 	   map_invisible(rx, ry);
 	}
-	otmp = MON_WEP(mtmp);	/* can be null */
+	otmp = rn2(3) ? MON_WEP(mtmp) : MON_SWEP(mtmp);	/* can be null */
 	if (otmp) {
 	    char onambuf[BUFSZ];
 	    const char *mon_hand;

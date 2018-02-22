@@ -2791,7 +2791,8 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	
 	if(magr->mberserk) return ALLOW_M|ALLOW_TM;
 	
-	if(touch_petrifies(md) && !resists_ston(magr)) return 0L;
+	if(touch_petrifies(md) && !resists_ston(magr) && distmin(magr->mx, magr->my, mdef->mx, mdef->my) < 2)
+		return 0L;
 	
 	if(md == &mons[PM_MANDRAKE]) return 0L;
 	
@@ -3209,7 +3210,7 @@ struct monst *mtmp;
 			pline("But wait...");
 			if (attacktype(mtmp->data, AT_EXPL)
 			    || attacktype(mtmp->data, AT_BOOM))
-				pline("%s reconstitutes!", Monnam(mtmp));
+				pline("%s reappears, looking much better!", Monnam(mtmp));
 			else
 				pline("%s flickers, then reappears looking much better!", Monnam(mtmp));
 		}

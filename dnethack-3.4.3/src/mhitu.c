@@ -148,7 +148,7 @@ mpoisons_subj(mtmp, mattk)
 struct monst *mtmp;
 struct attack *mattk;
 {
-	if (mattk->aatyp == AT_WEAP) {
+	if (mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP) {
 	    struct obj *mwep = (mtmp == &youmonst) ? uwep : MON_WEP(mtmp);
 	    /* "Foo's attack was poisoned." is pretty lame, but at least
 	       it's better than "sting" when not a stinging attack... */
@@ -338,7 +338,22 @@ struct attack *alt_attk_buf;
 			return attk;
 		} else subout = 0;
 	}
-	
+
+	/* twoweapon symmetry -- if the previous attack missed, do not make an offhand attack */
+	if (indx > 0 && prev_result[indx - 1] <= 0 && attk->aatyp == AT_XWEP)
+	{
+		subout = 1;
+		*alt_attk_buf = *attk;
+		attk = alt_attk_buf;
+		attk->aatyp = AT_NONE;
+		attk->adtyp = AD_PHYS;
+		attk->damn = 0;
+		attk->damd = 0;
+		return attk;
+	}
+	else
+		subout = 0;
+
 	if(subout){
 		*alt_attk_buf = *attk;
 		attk = alt_attk_buf;
@@ -714,7 +729,7 @@ mattacku(mtmp)
 				|| mattk->aatyp == AT_MAGC
 				|| (mattk->aatyp == AT_TENT && mtmp->mfaction == SKELIFIED)
 				|| (i == 0 && 
-					(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP) && 
+					(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP) && 
 					mattk->adtyp == AD_PHYS && 
 					mattk->damn*mattk->damd/2 < (mtmp->m_lev/10+1)*max(mtmp->data->msize*2, 4)/2
 				   )
@@ -1105,6 +1120,61 @@ mattacku(mtmp)
 								deva = 1;
 								while(tmp > (j = dieroll = rnd(20+i+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
 							}
+						} else missmu(mtmp, (tmp == j), mattk);
+					}
+					/* KMH -- Don't accumulate to-hit bonuses */
+					if (otmp){
+						tmp -= hittmp;
+						tchtmp -= hittmp;
+						if(otmp->objsize - mtmp->data->msize > 0){
+							tmp += 4*(otmp->objsize - mtmp->data->msize);
+							tchtmp += 2*(otmp->objsize - mtmp->data->msize);
+						}
+					}
+			    } else
+					wildmiss(mtmp, mattk);
+			}
+			break;
+		case AT_XWEP:
+			if (mtmp->misc_worn_check & W_ARMS) {
+				// Offhand attacks cannot be made while wearing a shield
+				break;
+			}
+			else if(range2) {
+				// Offhand ranged attacks disallowed. This is inconsistent for gun usage -- players can, monsters can't. Oh well.
+				break;
+			} else {
+			    int hittmp = 0;
+
+			    /* Rare but not impossible.  Normally the monster
+			     * wields when 2 spaces away, but it can be
+			     * teleported or whatever....
+			     */
+			    if (mtmp->weapon_check == NEED_WEAPON || !MON_SWEP(mtmp)) {
+					mtmp->weapon_check = NEED_HTH_WEAPON;
+					/* mon_wield_item resets weapon_check as
+					 * appropriate */
+					if (mon_wield_item(mtmp) != 0) break;
+			    }
+			    if (foundyou) {
+					otmp = MON_SWEP(mtmp);
+					if(otmp) {
+						hittmp = hitval(otmp, &youmonst);
+						tmp += hittmp;
+						tchtmp += hittmp;
+						if(otmp->objsize - mtmp->data->msize > 0){
+							tmp += -4*(otmp->objsize - mtmp->data->msize);
+							tchtmp += -2*(otmp->objsize - mtmp->data->msize);
+						}
+						mswings(mtmp, otmp);
+					}
+					if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))){
+						if(tchtmp > (j = dieroll = rnd(20+i*2))){
+							sum[i] = hitmu(mtmp, mattk);
+						} else missmu(mtmp, (tchtmp == j), mattk);
+					} else {
+						if(tmp > (j = dieroll = rnd(20+i*2))){
+							sum[i] = hitmu(mtmp, mattk);
 						} else missmu(mtmp, (tmp == j), mattk);
 					}
 					/* KMH -- Don't accumulate to-hit bonuses */
@@ -1641,7 +1711,7 @@ hitmu(mtmp, mattk)
 		    }
 			if(oarm && dmg && oarm->otyp == GAUNTLETS_OF_POWER) dmg += 16;
 		} else {			  /* hand to hand weapon */
-		    if(mattk->aatyp == AT_WEAP && otmp) {
+		    if((mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP) && otmp) {
 			if (otmp->otyp == CORPSE &&
 				touch_petrifies(&mons[otmp->corpsenm])) {
 			    dmg = 1;
@@ -3039,6 +3109,7 @@ dopois:
 					pline("%s's shrapnel hits your armor!", Monnam(mtmp));
 				break;
 				case AT_WEAP:
+				case AT_XWEP:
 					pline("%s's weapon strikes your armor!", Monnam(mtmp));
 				break;
 				default:

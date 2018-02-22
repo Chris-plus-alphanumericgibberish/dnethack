@@ -51,6 +51,20 @@ static struct trobj Anachrononaut_Hu[] = {
 	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj Anachrononaut_Hlf[] = {
+	{ AUTO_SHOTGUN,  0, WEAPON_CLASS, 1, 0 },
+	{ SHOTGUN_SHELL, 3, WEAPON_CLASS, 100, 0 },
+	{ SCALE_MAIL, 0, ARMOR_CLASS, 1, 0 },
+	{ BRONZE_HELM, 0, ARMOR_CLASS, 1, 0 },
+	{ GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
+	{ ARMORED_BOOTS, 0, ARMOR_CLASS, 1, 0 },
+	{ CLOAK_OF_PROTECTION, 0, ARMOR_CLASS, 1, 0 },
+	{ BULLET_FABBER, 0, TOOL_CLASS, 1, 0 },
+	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
+	{ POWER_PACK, 0, TOOL_CLASS, 5, 0 },
+	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 static struct trobj Anachrononaut_Dw[] = {
 	{ HEAVY_MACHINE_GUN, 5, WEAPON_CLASS, 1, 0 },
 	{ PISTOL, 1, WEAPON_CLASS, 1, 0 },
@@ -858,7 +872,7 @@ static const struct def_skill Skill_K[] = {
 static const struct def_skill Skill_Mon[] = {
     { P_QUARTERSTAFF, P_EXPERT },    { P_SPEAR, P_BASIC },
     { P_JAVELIN, P_BASIC },		{ P_SHURIKEN, P_EXPERT },	
-	{ P_HARVEST, P_EXPERT },	{ P_FLAIL, P_EXPERT },
+    { P_HARVEST, P_EXPERT },	{ P_FLAIL, P_EXPERT },
     { P_ATTACK_SPELL, P_BASIC },    { P_HEALING_SPELL, P_EXPERT },
     { P_DIVINATION_SPELL, P_BASIC },{ P_ENCHANTMENT_SPELL, P_BASIC },
     { P_CLERIC_SPELL, P_SKILLED },  { P_ESCAPE_SPELL, P_BASIC },
@@ -926,9 +940,9 @@ static const struct def_skill Skill_DNob[] = {
     { P_POLEARMS, P_BASIC },
     { P_SPEAR, P_EXPERT },		{ P_JAVELIN, P_BASIC },
     { P_TRIDENT, P_BASIC },		{ P_LANCE, P_SKILLED },
-	{ P_QUARTERSTAFF, P_EXPERT },
+    { P_QUARTERSTAFF, P_EXPERT },
     { P_BOW, P_BASIC },			{ P_CROSSBOW, P_SKILLED },
-	{ P_SLING, P_BASIC },
+    { P_SLING, P_BASIC },
     { P_ATTACK_SPELL, P_SKILLED },	{ P_CLERIC_SPELL, P_SKILLED },
     { P_ESCAPE_SPELL, P_SKILLED },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
 #ifdef STEED
@@ -947,7 +961,7 @@ static const struct def_skill Skill_DwaNob[] = {
     { P_SABER, P_SKILLED },		{ P_CLUB, P_SKILLED },
     { P_MACE, P_SKILLED },		{ P_MORNING_STAR, P_SKILLED },
     { P_FLAIL, P_BASIC },		{ P_HAMMER, P_EXPERT },
-	{ P_HARVEST, P_SKILLED },
+    { P_HARVEST, P_SKILLED },
     { P_QUARTERSTAFF, P_BASIC },	{ P_SPEAR, P_EXPERT },
     { P_TRIDENT, P_EXPERT },		{ P_BOW, P_SKILLED },
 #ifdef STEED
@@ -982,7 +996,7 @@ static const struct def_skill Skill_Dro_M_P[] = {
     { P_DAGGER, P_EXPERT },		{ P_KNIFE, P_EXPERT },
     { P_PICK_AXE, P_SKILLED },	{ P_SHORT_SWORD, P_EXPERT },
     { P_BROAD_SWORD, P_EXPERT },		{ P_LONG_SWORD, P_EXPERT },
-	{ P_TWO_HANDED_SWORD, P_SKILLED },
+    { P_TWO_HANDED_SWORD, P_SKILLED },
     { P_POLEARMS, P_SKILLED },		{ P_SPEAR, P_SKILLED },
     { P_JAVELIN, P_SKILLED },		{ P_TRIDENT, P_SKILLED },
     { P_LANCE, P_BASIC },		{ P_BOW, P_BASIC },
@@ -1014,19 +1028,19 @@ static const struct def_skill Skill_Dro_F_P[] = {
 static const struct def_skill Skill_Pir[] = {
     { P_DAGGER, P_EXPERT },		{ P_KNIFE,  P_EXPERT },
     { P_AXE, P_SKILLED },	    { P_SHORT_SWORD, P_BASIC },
-	{ P_BROAD_SWORD, P_EXPERT },{ P_LONG_SWORD, P_BASIC },
-	{ P_SCIMITAR, P_EXPERT },	{ P_SABER, P_EXPERT },
-	{ P_CLUB, P_BASIC },		{ P_MORNING_STAR, P_SKILLED },
+    { P_BROAD_SWORD, P_EXPERT },{ P_LONG_SWORD, P_BASIC },
+    { P_SCIMITAR, P_EXPERT },	{ P_SABER, P_EXPERT },
+    { P_CLUB, P_BASIC },		{ P_MORNING_STAR, P_SKILLED },
     { P_FLAIL, P_EXPERT },		{ P_SPEAR, P_BASIC },
-	{ P_JAVELIN, P_EXPERT },	{ P_TRIDENT, P_EXPERT },
+    { P_JAVELIN, P_EXPERT },	{ P_TRIDENT, P_EXPERT },
     { P_CROSSBOW, P_EXPERT },   { P_DART, P_SKILLED },
     { P_WHIP, P_SKILLED },   	{ P_UNICORN_HORN, P_BASIC },
 	{ P_PICK_AXE, P_SKILLED },
 //#ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
 //#endif
-	{ P_ATTACK_SPELL, P_BASIC },{ P_DIVINATION_SPELL, P_BASIC },
-	{ P_ENCHANTMENT_SPELL, P_BASIC },{ P_ESCAPE_SPELL, P_SKILLED },
+    { P_ATTACK_SPELL, P_BASIC },{ P_DIVINATION_SPELL, P_BASIC },
+    { P_ENCHANTMENT_SPELL, P_BASIC },{ P_ESCAPE_SPELL, P_SKILLED },
     { P_WAND_POWER, P_SKILLED },
     { P_TWO_WEAPON_COMBAT, P_SKILLED },
     { P_BARE_HANDED_COMBAT, P_EXPERT },
@@ -1060,7 +1074,7 @@ static const struct def_skill Skill_Ran[] = {
     { P_SHORT_SWORD, P_BASIC },	 { P_MORNING_STAR, P_BASIC },
     { P_FLAIL, P_SKILLED },	 { P_HAMMER, P_BASIC },
     { P_QUARTERSTAFF, P_EXPERT }, { P_POLEARMS, P_SKILLED },
-	{ P_HARVEST, P_SKILLED },
+    { P_HARVEST, P_SKILLED },
     { P_SPEAR, P_SKILLED },	 { P_JAVELIN, P_EXPERT },
     { P_TRIDENT, P_BASIC },	 { P_BOW, P_EXPERT },
     { P_SLING, P_EXPERT },	 { P_CROSSBOW, P_EXPERT },
@@ -1087,7 +1101,7 @@ static const struct def_skill Skill_S[] = {
     { P_POLEARMS, P_SKILLED },		{ P_SPEAR, P_BASIC },
     { P_JAVELIN, P_BASIC },		{ P_LANCE, P_SKILLED },
     { P_BOW, P_EXPERT },		{ P_SHURIKEN, P_EXPERT },
-	{ P_DART, P_EXPERT },
+    { P_DART, P_EXPERT },
     { P_ATTACK_SPELL, P_SKILLED },	{ P_CLERIC_SPELL, P_SKILLED },
 #ifdef STEED
     { P_RIDING, P_SKILLED },
@@ -1116,7 +1130,7 @@ static const struct def_skill Skill_T[] = {
     { P_CROSSBOW, P_BASIC },		{ P_DART, P_EXPERT },
     { P_SHURIKEN, P_BASIC },		{ P_BOOMERANG, P_EXPERT },
     { P_WHIP, P_BASIC },		{ P_HARVEST, P_SKILLED },
-	{ P_UNICORN_HORN, P_SKILLED },
+    { P_UNICORN_HORN, P_SKILLED },
     { P_DIVINATION_SPELL, P_SKILLED },	{ P_ENCHANTMENT_SPELL, P_BASIC },
     { P_ESCAPE_SPELL, P_SKILLED },
     { P_WAND_POWER, P_SKILLED },
@@ -1144,7 +1158,7 @@ static const struct def_skill Skill_V[] = {
     { P_TRIDENT, P_BASIC },			{ P_LANCE, P_SKILLED },
     { P_SLING, P_BASIC },			{ P_BOW, P_EXPERT },
     { P_ATTACK_SPELL, P_EXPERT },	{ P_ESCAPE_SPELL, P_BASIC },
-	{ P_DIVINATION_SPELL, P_SKILLED },
+    { P_DIVINATION_SPELL, P_SKILLED },
     { P_WAND_POWER, P_BASIC },
 #ifdef STEED
     { P_RIDING, P_SKILLED },
@@ -1164,7 +1178,7 @@ static const struct def_skill Skill_W[] = {
     { P_SPEAR, P_BASIC },		{ P_JAVELIN, P_BASIC },
     { P_TRIDENT, P_BASIC },		{ P_SLING, P_SKILLED },
     { P_DART, P_SKILLED },		{ P_SHURIKEN, P_BASIC },
-	{ P_CROSSBOW, P_SKILLED },
+    { P_CROSSBOW, P_SKILLED },
     { P_ATTACK_SPELL, P_EXPERT },	{ P_HEALING_SPELL, P_SKILLED },
     { P_DIVINATION_SPELL, P_EXPERT },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
     { P_CLERIC_SPELL, P_SKILLED },	{ P_ESCAPE_SPELL, P_EXPERT },
@@ -1259,8 +1273,7 @@ int randMeleeAttackTypes[] =
 						 AT_WHIP, 
 						 AT_LNCK, 
 						 AT_LRCH, 
-						 AT_WEAP, 
-						 AT_HODS };
+						 AT_WEAP };
 
 int randSpecialAttackTypes[] = 
 						{AT_SPIT, 
@@ -1679,6 +1692,7 @@ u_init()
 		else if(Race_if(PM_INCANTIFIER)) ini_inv(Anachrononaut_Inc);
 		else if(Race_if(PM_VAMPIRE)) ini_inv(Anachrononaut_Vam);
 		else if(Race_if(PM_DWARF)) ini_inv(Anachrononaut_Dw);
+		else if(Race_if(PM_HALF_DRAGON)) ini_inv(Anachrononaut_Hlf);
 		else ini_inv(Anachrononaut_Hu);
 		knows_object(FLINTLOCK);
 		knows_object(PISTOL);
@@ -2721,6 +2735,14 @@ register struct trobj *trop;
 			}
 			if(obj->otyp == HEAVY_MACHINE_GUN && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
 				obj->obj_material = MITHRIL;
+				fix_object(obj);
+			}
+			if(obj->otyp == SCALE_MAIL && Role_if(PM_ANACHRONONAUT)){
+				obj->obj_material = COPPER; // which is actually bronze nice one Chris
+				fix_object(obj);
+			}
+			if(obj->otyp == GAUNTLETS && Role_if(PM_ANACHRONONAUT)){
+				obj->obj_material = COPPER;
 				fix_object(obj);
 			}
 			if(obj->otyp == PISTOL && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){

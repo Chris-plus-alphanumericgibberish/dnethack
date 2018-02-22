@@ -457,7 +457,7 @@ extcmd_via_menu()	/* here after # - now show pick-list of possible commands */
 
 /* #monster command - use special monster ability while polymorphed */
 STATIC_PTR int
-domonability(VOID_ARGS)
+domonability()
 {
 	winid tmpwin;
 	int n, how;
@@ -1089,7 +1089,7 @@ dounmaintain()
 }
 
 STATIC_PTR int
-enter_explore_mode(VOID_ARGS)
+enter_explore_mode()
 {
 #ifdef PARANOID
 	char buf[BUFSZ];
@@ -1141,7 +1141,7 @@ dooverview_or_wiz_where()
 
 /* ^W command - wish for something */
 STATIC_PTR int
-wiz_wish(VOID_ARGS)	/* Unlimited wishes for debug mode by Paul Polderman */
+wiz_wish()	/* Unlimited wishes for debug mode by Paul Polderman */
 {
 	if (wizard) {
 	    boolean save_verbose = flags.verbose;
@@ -1157,7 +1157,7 @@ wiz_wish(VOID_ARGS)	/* Unlimited wishes for debug mode by Paul Polderman */
 
 /* ^I command - identify hero's inventory */
 STATIC_PTR int
-wiz_identify(VOID_ARGS)
+wiz_identify()
 {
 	if (wizard)	identify_pack(0);
 	else		pline("Unavailable command '^I'.");
@@ -1166,7 +1166,7 @@ wiz_identify(VOID_ARGS)
 
 /* ^F command - reveal the level map and any traps on it */
 STATIC_PTR int
-wiz_map(VOID_ARGS)
+wiz_map()
 {
 	if (wizard) {
 	    struct trap *t;
@@ -1188,7 +1188,7 @@ wiz_map(VOID_ARGS)
 
 /* ^G command - generate monster(s); a count prefix will be honored */
 STATIC_PTR int
-wiz_genesis(VOID_ARGS)
+wiz_genesis()
 {
 	if (wizard)	(void) create_particular();
 	else		pline("Unavailable command '^G'.");
@@ -1197,7 +1197,7 @@ wiz_genesis(VOID_ARGS)
 
 /* ^O command - display dungeon layout */
 STATIC_PTR int
-wiz_where(VOID_ARGS)
+wiz_where()
 {
 	if (wizard) (void) print_dungeon(FALSE, (schar *)0, (xchar *)0);
 	else	    pline("Unavailable command '^O'.");
@@ -1206,7 +1206,7 @@ wiz_where(VOID_ARGS)
 
 /* ^E command - detect unseen (secret doors, traps, hidden monsters) */
 STATIC_PTR int
-wiz_detect(VOID_ARGS)
+wiz_detect()
 {
 	if(wizard)  (void) findit();
 	else	    pline("Unavailable command '^E'.");
@@ -1215,7 +1215,7 @@ wiz_detect(VOID_ARGS)
 
 /* ^V command - level teleport */
 STATIC_PTR int
-wiz_level_tele(VOID_ARGS)
+wiz_level_tele()
 {
 	if (wizard)	level_tele();
 	else		pline("Unavailable command '^V'.");
@@ -1224,7 +1224,7 @@ wiz_level_tele(VOID_ARGS)
 
 /* #monpolycontrol command - choose new form for shapechangers, polymorphees */
 STATIC_PTR int
-wiz_mon_polycontrol(VOID_ARGS)
+wiz_mon_polycontrol()
 {
     iflags.mon_polycontrol = !iflags.mon_polycontrol;
     pline("Monster polymorph control is %s.",
@@ -1234,7 +1234,7 @@ wiz_mon_polycontrol(VOID_ARGS)
 
 /* #levelchange command - adjust hero's experience level */
 STATIC_PTR int
-wiz_level_change(VOID_ARGS)
+wiz_level_change()
 {
     char buf[BUFSZ];
     int newlevel;
@@ -1274,7 +1274,7 @@ wiz_level_change(VOID_ARGS)
 
 /* #panic command - test program's panic handling */
 STATIC_PTR int
-wiz_panic(VOID_ARGS)
+wiz_panic()
 {
 	if (yn("Do you want to call panic() and end your game?") == 'y')
 		panic("crash test.");
@@ -1283,7 +1283,7 @@ wiz_panic(VOID_ARGS)
 
 /* #polyself command - change hero's form */
 STATIC_PTR int
-wiz_polyself(VOID_ARGS)
+wiz_polyself()
 {
         polyself(TRUE);
         return 0;
@@ -1291,7 +1291,7 @@ wiz_polyself(VOID_ARGS)
 
 /* #seenv command */
 STATIC_PTR int
-wiz_show_seenv(VOID_ARGS)
+wiz_show_seenv()
 {
 	winid win;
 	int x, y, v, startx, stopx, curx;
@@ -1333,7 +1333,7 @@ wiz_show_seenv(VOID_ARGS)
 
 /* #vision command */
 STATIC_PTR int
-wiz_show_vision(VOID_ARGS)
+wiz_show_vision()
 {
 	winid win;
 	int x, y, v;
@@ -1370,7 +1370,7 @@ wiz_show_vision(VOID_ARGS)
 
 /* #wmode command */
 STATIC_PTR int
-wiz_show_wmodes(VOID_ARGS)
+wiz_show_wmodes()
 {
 	winid win;
 	int x,y;
@@ -3609,7 +3609,7 @@ doattributes(VOID_ARGS)
  * (shares enlightenment's tense handling)
  */
 STATIC_PTR int
-doconduct(VOID_ARGS)
+doconduct()
 {
 	show_conduct(0);
 	return 0;
@@ -3712,7 +3712,7 @@ int final;
 	    you_have_never("magically identified an item");
 	} else {
 	    Sprintf(buf, "magically identified %ld item%s",
-		    u.uconduct.IDs, plur(u.uconduct.shopID));
+		    u.uconduct.IDs, plur(u.uconduct.IDs));
 	    you_have_X(buf);
 	}
 	/* Pop up the window and wait for a key */
@@ -4872,7 +4872,7 @@ readchar()
 }
 
 int
-dotravel(VOID_ARGS)
+dotravel()
 {
 	/* Keyboard travel command */
 	static char cmd[2];

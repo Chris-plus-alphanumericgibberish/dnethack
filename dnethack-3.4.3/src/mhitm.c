@@ -348,7 +348,7 @@ mattackm(magr, mdef)
 			|| mattk->aatyp == AT_MAGC
 			|| (mattk->aatyp == AT_TENT && magr->mfaction == SKELIFIED)
 			|| (i == 0 && 
-				(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP) && 
+				(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP) && 
 				mattk->adtyp == AD_PHYS && 
 				mattk->damn*mattk->damd/2 < (magr->m_lev/10+1)*max(magr->data->msize*2, 4)/2
 			   )
@@ -525,7 +525,7 @@ meleeattack:
 		 * players, or under conflict or confusion. 
 		 */
 		if (!magr->mconf && !Conflict && otmp &&
-		    mattk->aatyp != AT_WEAP && mattk->aatyp != AT_DEVA && mattk->aatyp != AT_BEAM && 
+			mattk->aatyp != AT_WEAP && mattk->aatyp != AT_XWEP && mattk->aatyp != AT_DEVA && mattk->aatyp != AT_BEAM &&
 			mattk->adtyp != AD_STAR && mattk->adtyp != AD_BLUD && mattk->adtyp != AD_SHDW && 
 			touch_petrifies(mdef->data)
 		) {
@@ -1332,7 +1332,7 @@ physical:{
 		oarm = which_armor(magr, W_ARMG);
 		if (mattk->aatyp == AT_KICK && thick_skinned(pd)) {
 		    tmp = 0;
-		} else if(mattk->aatyp == AT_WEAP || mattk->aatyp == AT_DEVA) {
+		} else if(mattk->aatyp == AT_WEAP || mattk->aatyp == AT_DEVA || mattk->aatyp == AT_XWEP) {
 		    if(otmp) {
 			if (otmp->otyp == CORPSE &&
 				touch_petrifies(&mons[otmp->corpsenm]))
@@ -1487,7 +1487,7 @@ physical:{
 /////////////////////////////////////////////////
 		case AD_STDY:
 			if(canseemon(magr) && mattk->aatyp == AT_GAZE){
-				Sprintf(buf,"%s studies ", Monnam(magr));
+				Sprintf(buf,"%s studies", Monnam(magr));
 				pline("%s %s intently.", buf, mon_nam(mdef));
 			}
 			if (!magr->mcan && !is_blind(magr)) {
@@ -2715,6 +2715,7 @@ int aatyp;
     case AT_TUCH:
     case AT_5SQR:
     case AT_WEAP:
+	case AT_XWEP:
     case AT_DEVA:
 	w_mask = W_ARMG;	/* caller needs to check for weapon */
 	break;

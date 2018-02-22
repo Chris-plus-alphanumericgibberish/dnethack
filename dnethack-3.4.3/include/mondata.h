@@ -355,7 +355,7 @@
 #define can_breathe(ptr)	attacktype(ptr, AT_BREA)
 
 #define cantwield(ptr)		(nohands(ptr))
-#define could_twoweap(ptr)	((ptr)->mattk[1].aatyp == AT_WEAP)
+#define could_twoweap(ptr)	attacktype(ptr, AT_XWEP)
 // define cantweararm(ptr)	(breakarm(ptr) || sliparm(ptr))
 #define arm_match(ptr,obj)	(Is_dragon_scales(obj) || \
 							(obj->otyp == ELVEN_TOGA && ((ptr->mflagsb&MB_HUMANOID) && (obj->bodytypeflag&MB_HUMANOID))) ||\

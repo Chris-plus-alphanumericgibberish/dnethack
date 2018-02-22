@@ -2003,8 +2003,13 @@ register struct obj *obj;
 			if (!Blind) known = TRUE;
 		break;
 		case SPE_LIGHT:
-			litroom(!(obj->cursed),obj);
-			if(!(obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+			if(!Race_if(PM_DROW)){
+				litroom(!(obj->cursed),obj);
+				if(!(obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+			} else {
+				litroom((obj->cursed), obj);
+				if((obj->cursed) && u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE);
+			}
 			if (!Blind) known = TRUE;
 		break;
 		case WAN_DARKNESS:

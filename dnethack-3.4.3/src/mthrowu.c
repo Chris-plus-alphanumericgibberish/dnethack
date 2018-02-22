@@ -485,6 +485,10 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 		    setmnotwielded(mon,obj);
 		    MON_NOWEP(mon);
 	    }
+		if (MON_SWEP(mon) == obj) {
+			setmnotwielded(mon, obj);
+			MON_NOSWEP(mon);
+		}
 	    obj_extract_self(obj);
 	    singleobj = obj;
 	    obj = (struct obj *) 0;
