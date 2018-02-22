@@ -1744,7 +1744,7 @@ int thrown;
 			struct monst *msmon;
 			sx = bhitpos.x;
 			sy = bhitpos.y;
-			if((obj->obj_material == GLASS || obj->obj_material == OBSIDIAN_MT) && u.specialSealsActive&SEAL_NUDZIARTH){
+			if((obj->obj_material == GLASS || obj->obj_material == OBSIDIAN_MT) && u.specialSealsActive&SEAL_NUDZIRATH){
 				if(obj->otyp == MIRROR){
 					if(u.spiritPColdowns[PWR_MIRROR_SHATTER] < monstermoves && !u.uswallow && uwep && uwep->otyp == MIRROR && !(uwep->oartifact)){
 						useup(uwep);
@@ -2520,7 +2520,7 @@ boolean from_invent;
 	switch (obj->oclass == POTION_CLASS ? POT_WATER : obj->otyp) {
 		case MIRROR:
 			if (hero_caused){
-			    if((u.specialSealsActive&SEAL_NUDZIARTH)) change_luck(+2);
+			    if((u.specialSealsActive&SEAL_NUDZIRATH)) change_luck(+2);
 				else change_luck(-2);
 			}
 			break;

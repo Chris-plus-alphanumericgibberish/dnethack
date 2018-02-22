@@ -1638,7 +1638,7 @@ int thrown;
 					break;
 					case MIRROR:
 						if (breaktest(obj)) {
-							if(u.specialSealsActive&SEAL_NUDZIARTH){
+							if(u.specialSealsActive&SEAL_NUDZIRATH){
 								You("break %s mirror.  You feel a deep satisfaction!",
 									shk_your(yourbuf, obj));
 								change_luck(+2);

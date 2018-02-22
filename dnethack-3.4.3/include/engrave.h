@@ -94,7 +94,7 @@ struct engr {
 #define COUNCIL						(LAST_WARD+34)
 #define COSMOS						(LAST_WARD+35)
 #define MISKA						(LAST_WARD+36)
-#define NUDZIARTH					(LAST_WARD+37)
+#define NUDZIRATH					(LAST_WARD+37)
 #define ALIGNMENT_THING				(LAST_WARD+38)
 #define UNKNOWN_GOD					(LAST_WARD+39)
 #define BLACK_WEB					(LAST_WARD+40)

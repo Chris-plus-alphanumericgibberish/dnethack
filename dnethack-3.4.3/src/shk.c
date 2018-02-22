@@ -5664,7 +5664,7 @@ struct monst *mon;
 		// if(u.specialSealsActive&SEAL_COUNCIL) count++;
 		if(u.specialSealsActive&SEAL_COSMOS) count++;
 		if(u.specialSealsActive&SEAL_MISKA && !Invis) count++;
-		if(u.specialSealsActive&SEAL_NUDZIARTH) count++;
+		if(u.specialSealsActive&SEAL_NUDZIRATH) count++;
 		// if(u.sealsActive&SEAL_BLACK_WEB);
 		// if(u.specialSealsActive&SEAL_NUMINA);
 	}

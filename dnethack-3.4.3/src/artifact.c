@@ -1032,23 +1032,29 @@ touch_artifact(obj, mon, hypothetical)
 				pline("You learn a new seal!");
 				u.specialSealsKnown |= SEAL_COSMOS;
 			}
-			else if(obj->oartifact == ART_HAND_MIRROR_OF_CTHYLLA && !(u.specialSealsKnown&SEAL_NUDZIARTH)){
+			else if(obj->oartifact == ART_HAND_MIRROR_OF_CTHYLLA && !(u.specialSealsKnown&SEAL_NUDZIRATH)){
 				pline("The cracks on the mirror's surface form part of a seal.");
 				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
 				pline("With that realization comes knowledge of the seal's final form!");
-				u.specialSealsKnown |= SEAL_NUDZIARTH;
+				u.specialSealsKnown |= SEAL_NUDZIRATH;
 			}
-			else if(obj->oartifact == ART_STAFF_OF_TWELVE_MIRRORS && !(u.specialSealsKnown&SEAL_NUDZIARTH)){
+			else if(obj->oartifact == ART_STAFF_OF_TWELVE_MIRRORS && !(u.specialSealsKnown&SEAL_NUDZIRATH)){
 				pline("The cracks on the mirrors' surfaces form part of a seal.");
 				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
 				pline("With that realization comes knowledge of the seal's final form!");
-				u.specialSealsKnown |= SEAL_NUDZIARTH;
+				u.specialSealsKnown |= SEAL_NUDZIRATH;
 			}
-			else if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC && !(u.specialSealsKnown&SEAL_NUDZIARTH)){
+			else if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC && !(u.specialSealsKnown&SEAL_NUDZIRATH)){
 				pline("The cracks on the thin mirrored arcs form part of a seal.");
 				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
 				pline("With that realization comes knowledge of the seal's final form!");
-				u.specialSealsKnown |= SEAL_NUDZIARTH;
+				u.specialSealsKnown |= SEAL_NUDZIRATH;
+			}
+			else if(obj->oartifact == ART_SANSARA_MIRROR && !(u.specialSealsKnown&SEAL_NUDZIRATH)){
+				pline("The cracks on the gold-mirrored blade form part of a seal.");
+				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
+				pline("With that realization comes knowledge of the seal's final form!");
+				u.specialSealsKnown |= SEAL_NUDZIRATH;
 			}
 		}
 		if(oart->otyp == UNICORN_HORN){
@@ -1138,7 +1144,7 @@ touch_artifact(obj, mon, hypothetical)
 			badalign = FALSE;
 			// badclass = FALSE;
 		}
-		else if(oart->alignment == A_NEUTRAL && u.specialSealsActive&SEAL_NUDZIARTH){
+		else if(oart->alignment == A_NEUTRAL && u.specialSealsActive&SEAL_NUDZIRATH){
 			badalign = FALSE;
 			// badclass = FALSE;
 		}
@@ -2681,7 +2687,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			}
 		}
 	}
-	if(youattack && otmp->oartifact == ART_SHADOWLOCK && u.specialSealsActive&SEAL_NUDZIARTH && !rn2(4)){
+	if(youattack && otmp->oartifact == ART_SHADOWLOCK && u.specialSealsActive&SEAL_NUDZIRATH && !rn2(4)){
 		int dsize = spiritDsize();
 		explode(mdef->mx, mdef->my,8/*Phys*/, d(5,dsize), WEAPON_CLASS, EXPL_DARK); //Obsidian Glass
 		explode(u.ux, u.uy,8/*Phys*/, d(5,dsize), WEAPON_CLASS, EXPL_DARK); //Obsidian Glass

@@ -240,7 +240,7 @@ register struct monst *mtmp;
 		return (struct obj *)0;
 	}
 	
-	if(u.specialSealsActive&SEAL_NUDZIARTH && !rn2(4)){
+	if(u.specialSealsActive&SEAL_NUDZIRATH && !rn2(4)){
 		(void) mksobj_at(MIRROR, x, y, TRUE, FALSE);
 	}
 	

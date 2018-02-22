@@ -4005,9 +4005,9 @@ int tx,ty;
 			}
 		} else pline("You can't feel the spirit.");
 	}break;
-	case NUDZIARTH:{
+	case NUDZIRATH:{
 		struct obj *otmp;
-		if(u.sealTimeout[NUDZIARTH-FIRST_SEAL] < moves){
+		if(u.sealTimeout[NUDZIRATH-FIRST_SEAL] < moves){
 			if(Role_if(PM_EXILE)){
 				for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere) {
 					if(!otmp->oartifact){
@@ -4031,12 +4031,12 @@ int tx,ty;
 					pline("And you see shattered dreams.");
 					} else pline("You hear a mirror shatter.");
 					bindspirit(ep->ward_id);
-					u.sealTimeout[NUDZIARTH-FIRST_SEAL] = moves + bindingPeriod;
+					u.sealTimeout[NUDZIRATH-FIRST_SEAL] = moves + bindingPeriod;
 					useupf(otmp, 1L);
 					newsym(tx,ty);
 				} else {
 					You("are nearly deafened by the sound of mirrors breaking!");
-					// u.sealTimeout[NUDZIARTH-FIRST_SEAL] = moves + bindingPeriod/10;
+					// u.sealTimeout[NUDZIRATH-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}
 		} else pline("You can't feel the spirit.");
@@ -4605,8 +4605,8 @@ bindspirit(seal_id)
 				u.sealTimeout[MISKA-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
-		case NUDZIARTH:
-			if(u.sealTimeout[NUDZIARTH-FIRST_SEAL] < moves){
+		case NUDZIRATH:
+			if(u.sealTimeout[NUDZIRATH-FIRST_SEAL] < moves){
 				if(u.spirit[ALIGN_SPIRIT]){
 					//Eject current alignment quest spirit
 					int i;
@@ -4618,12 +4618,12 @@ bindspirit(seal_id)
 					}
 					unbind(u.spirit[ALIGN_SPIRIT],FALSE);
 				}
-				u.specialSealsActive |= SEAL_SPECIAL|SEAL_NUDZIARTH;
-				u.specialSealsUsed |= SEAL_NUDZIARTH;
-				set_spirit_powers(SEAL_SPECIAL|SEAL_NUDZIARTH);
-				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_NUDZIARTH;
+				u.specialSealsActive |= SEAL_SPECIAL|SEAL_NUDZIRATH;
+				u.specialSealsUsed |= SEAL_NUDZIRATH;
+				set_spirit_powers(SEAL_SPECIAL|SEAL_NUDZIRATH);
+				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_NUDZIRATH;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
-				u.sealTimeout[NUDZIARTH-FIRST_SEAL] = moves + bindingPeriod;
+				u.sealTimeout[NUDZIRATH-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
 		case ALIGNMENT_THING:

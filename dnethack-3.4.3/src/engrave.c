@@ -890,7 +890,7 @@ char * sealNames[] =  {
 	"the Council of Elements", /* 33 */
 	"Cosmos", /* 34 */
 	"Miska", /* 35 */
-	"Nudziarth", /* 36 */
+	"Nudzirath", /* 36 */
 	"the Alignment Thing", /* 37 */
 	"the Unknown God", /* 38 */
 	"the Eddergud", /* 38 */
@@ -4947,28 +4947,28 @@ pick_seal()
 			MENU_UNSELECTED);
 		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
 	}
-	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIARTH){
-		if((u.specialSealsActive&SEAL_NUDZIARTH) && u.sealTimeout[NUDZIARTH-FIRST_SEAL] > moves){
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_NUDZIRATH){
+		if((u.specialSealsActive&SEAL_NUDZIRATH) && u.sealTimeout[NUDZIRATH-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (active; timeout:%ld)",
-				sealNames[NUDZIARTH-FIRST_SEAL], 
-				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
+				sealNames[NUDZIRATH-FIRST_SEAL], 
+				u.sealTimeout[NUDZIRATH-FIRST_SEAL] - moves
 			);
-		} else if(u.specialSealsActive&SEAL_NUDZIARTH) {
+		} else if(u.specialSealsActive&SEAL_NUDZIRATH) {
 			Sprintf(buf,	"%s (active)", 
-				sealNames[NUDZIARTH-FIRST_SEAL] 
+				sealNames[NUDZIRATH-FIRST_SEAL] 
 			);
-		} else if(u.sealTimeout[NUDZIARTH-FIRST_SEAL] > moves){
+		} else if(u.sealTimeout[NUDZIRATH-FIRST_SEAL] > moves){
 			Sprintf(buf,	"%s (timeout:%ld)",
-				sealNames[NUDZIARTH-FIRST_SEAL], 
-				u.sealTimeout[NUDZIARTH-FIRST_SEAL] - moves
+				sealNames[NUDZIRATH-FIRST_SEAL], 
+				u.sealTimeout[NUDZIRATH-FIRST_SEAL] - moves
 			);
 		} else {
 			Sprintf(buf,	"%s%s", 
-				sealNames[NUDZIARTH-FIRST_SEAL], 
-				sealTitles[NUDZIARTH-FIRST_SEAL]
+				sealNames[NUDZIRATH-FIRST_SEAL], 
+				sealTitles[NUDZIRATH-FIRST_SEAL]
 			);
 		}
-		any.a_int = NUDZIARTH;	/* must be non-zero */
+		any.a_int = NUDZIRATH;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);

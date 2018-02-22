@@ -590,7 +590,7 @@ struct you {
 #define SEAL_COUNCIL				0x00000004L
 #define SEAL_COSMOS					0x00000008L
 #define SEAL_MISKA					0x00000010L
-#define SEAL_NUDZIARTH				0x00000020L
+#define SEAL_NUDZIRATH				0x00000020L
 #define SEAL_ALIGNMENT_THING		0x00000040L
 #define SEAL_UNKNOWN_GOD			0x00000080L
 #define SEAL_BLACK_WEB				0x00000100L
@@ -685,15 +685,16 @@ struct you {
 #define	PWR_EMBASSY_OF_ELEMENTS		58
 #define	PWR_SUMMON_MONSTER			59
 #define	PWR_MIRROR_SHATTER			60
-#define	PWR_FLOWING_FORMS			61
-#define	PWR_PHASE_STEP				62
-#define	PWR_BLACK_BOLT				63
-#define	PWR_WEAVE_BLACK_WEB			64
-#define	PWR_IDENTIFY_INVENTORY		65
-#define	PWR_CLAIRVOYANCE			66
-#define	PWR_FIND_PATH				67
-#define	PWR_GNOSIS_PREMONITION		68
-#define	NUMBER_POWERS				69
+#define	PWR_MIRROR_WALK				61
+#define	PWR_FLOWING_FORMS			62
+#define	PWR_PHASE_STEP				63
+#define	PWR_BLACK_BOLT				64
+#define	PWR_WEAVE_BLACK_WEB			65
+#define	PWR_IDENTIFY_INVENTORY		66
+#define	PWR_CLAIRVOYANCE			67
+#define	PWR_FIND_PATH				68
+#define	PWR_GNOSIS_PREMONITION		69
+#define	NUMBER_POWERS				70
 
 	int spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
 //	char spiritPLetters[NUMBER_POWERS];

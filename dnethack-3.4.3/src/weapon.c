@@ -1140,7 +1140,7 @@ struct monst *mon;
 	} else if(u.specialSealsActive&SEAL_MISKA){
 		if(mon->data->maligntyp == A_LAWFUL) dmg += d(2*dnum,4);
 		else if(mon->data->maligntyp == A_NEUTRAL) dmg += d(dnum,4);
-	} else if(u.specialSealsActive&SEAL_NUDZIARTH){
+	} else if(u.specialSealsActive&SEAL_NUDZIRATH){
 		if(mon->data->maligntyp != A_NEUTRAL) dmg += d(dnum,6);
 	} else if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
 		if(rn2(3)) dmg += d(rnd(2)*dnum,4);
