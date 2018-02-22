@@ -1362,13 +1362,21 @@ boolean silently;
 	if (uskin) {
 		struct obj *skin = (struct obj *)0;
 		if (!silently) Your("skin returns to its original form.");
-		if(uskin->otyp == LEO_NEMAEUS_HIDE) uarmc = uskin;
-		else uarm = uskin;
-		/* undo save/restore hack */
-		uskin->owornmask &= ~I_SPECIAL;
-		uskin = (struct obj *)0;
-		/* undo save/restore hack */
-		uarm->owornmask &= ~I_SPECIAL;
+		if(uskin->otyp == LEO_NEMAEUS_HIDE){
+			uarmc = uskin;
+			/* undo save/restore hack */
+			uskin->owornmask &= ~I_SPECIAL;
+			uskin = (struct obj *)0;
+			/* undo save/restore hack */
+			uarmc->owornmask &= ~I_SPECIAL;
+		} else {
+			uarm = uskin;
+			/* undo save/restore hack */
+			uskin->owornmask &= ~I_SPECIAL;
+			uskin = (struct obj *)0;
+			/* undo save/restore hack */
+			uarm->owornmask &= ~I_SPECIAL;
+		}
 	}
 }
 
