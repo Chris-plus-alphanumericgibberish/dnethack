@@ -3239,9 +3239,9 @@ doward()
 					oep->degraded_wards--;
 				}
 				else if(oep->partial_wards){
-					len -= (int) (increment*.75);
+					len -= (int) (increment*.5);
 					newWards--;
-					oep->degraded_wards--;
+					oep->partial_wards--;
 				}
 				else continue_loop = FALSE;
 			}
