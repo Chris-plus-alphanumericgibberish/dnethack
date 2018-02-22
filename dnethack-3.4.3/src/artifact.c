@@ -3280,7 +3280,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			wepdesc = "The neck-seeking scythe";
 			if(youattack){
 				if (!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
-						(stationary(mdef->data) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT)) || 
+						((stationary(mdef->data) || sessile(mdef->data)) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT)) || 
 					  u.uswallow) && (
 						((mdef->mflee && mdef->data != &mons[PM_BANDERSNATCH]) || is_blind(mdef) || !mdef->mcanmove || !mdef->mnotlaugh || 
 							mdef->mstun || mdef->mconf || mdef->mtrapped || mdef->msleeping || (mdef->mux == 0 && mdef->muy == 0) ||
@@ -3307,7 +3307,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				}
 			} else if(youdefend) {
 				if (!(noncorporeal(youracedata) || amorphous(youracedata) || is_unalive(youracedata) || 
-						(stationary(youracedata) && (youracedata->mlet == S_FUNGUS || youracedata->mlet == S_PLANT))
+						((stationary(youracedata) || sessile(youracedata)) && (youracedata->mlet == S_FUNGUS || youracedata->mlet == S_PLANT))
 					 ) && (
 						(Blind || multi < 0 ||
 							Stunned || Confusion || u.utrap || Sleeping ||
@@ -3324,7 +3324,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				}
 			} else {
 				if (!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
-						(stationary(mdef->data) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT))) && (
+						((stationary(mdef->data) || sessile(mdef->data)) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT))) && (
 						((mdef->mflee && mdef->data != &mons[PM_BANDERSNATCH]) || is_blind(mdef) || !mdef->mcanmove || !mdef->mnotlaugh || 
 							mdef->mstun || mdef->mconf || mdef->mtrapped || mdef->msleeping
 						)
