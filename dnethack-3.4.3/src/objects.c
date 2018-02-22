@@ -183,11 +183,13 @@ WEAPON("elven short sword", "runed short sword",
 	0, 0, 0,  2,  2, 10,  7,  7, 2, P,   P_SHORT_SWORD, WOOD, HI_WOOD),
 WEAPON("droven short sword", "short sword", /*Needs encyc entry*/
 	0, 0, 0,  0, 15, 10,  9,  9, 2, P,   P_SHORT_SWORD, OBSIDIAN_MT, CLR_BLACK),
-
 WEAPON("orcish short sword", "crude short sword",
 	0, 0, 0,  3, 30, 10,  5,  10, -1, P,   P_SHORT_SWORD, IRON, CLR_BLACK),
 WEAPON("dwarvish short sword", "broad short sword",
 	0, 0, 0,  2, 35, 10,  8,  7, 0, P,   P_SHORT_SWORD, IRON, HI_METAL),
+WEAPON("mirrorblade", "polished short sword",
+	1, 0, 0,  0, 40,100,  6,  8, 0, P,   P_SHORT_SWORD, SILVER, HI_SILVER),
+
 WEAPON("scimitar", "curved sword",
 	0, 0, 0, 14, 40, 15,  8,  8, 0, S,   P_SCIMITAR, IRON, HI_METAL),
 WEAPON("high-elven warsword", "runed curved sword",
