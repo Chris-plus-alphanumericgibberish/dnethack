@@ -362,8 +362,8 @@
 #define helm_match(ptr,obj)	(((ptr->mflagsb&MB_HEADMODIMASK) == (obj->bodytypeflag&MB_HEADMODIMASK)))
 /*Note: No-modifier helms are "normal"*/
 
-#define hates_holy_mon(mon)	(is_demon(mon->data) || is_undead_mon(mon))
-#define hates_holy(ptr)		(is_demon(ptr) || is_undead(ptr))
+#define hates_holy_mon(mon)	(is_demon((mon)->data) || is_undead_mon(mon) || (((mon)->data->mflagsg&MG_HATESHOLY) != 0))
+#define hates_holy(ptr)		(is_demon(ptr) || is_undead(ptr) || (((ptr)->mflagsg&MG_HATESHOLY) != 0))
 #define hates_unholy(ptr)	((ptr->mflagsg&MG_HATESUNHOLY) != 0)
 #define hates_silver(ptr)	((ptr->mflagsg&MG_HATESSILVER) != 0)
 #define hates_iron(ptr)		((ptr->mflagsg&MG_HATESIRON) != 0)

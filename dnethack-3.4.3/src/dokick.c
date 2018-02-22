@@ -52,7 +52,7 @@ register boolean clumsy;
 	if(resist_attacks(mon->data))
 		dmg = 0;
 
-	if ((is_undead_mon(mon) || is_demon(mon->data)) && uarmf &&
+	if ((hates_holy_mon(mon)) && uarmf &&
 		uarmf->blessed){
 	    blessed_foot_damage = 1;
 	}
