@@ -609,12 +609,51 @@ unsigned int type;
 			break;
 		}
 	break;
+	case PM_AMM_KAMEREL:
+	case PM_HUDOR_KAMEREL:
+	case PM_ARA_KAMEREL:
+		return OPEN_WOUNDS;
+	break;
+	case PM_SHARAB_KAMEREL:
+		return PSI_BOLT;
+	break;
 	case PM_PLUMACH_RILMANI:
 		return SOLID_FOG;
 	break;
 	case PM_FERRUMACH_RILMANI:
 		if(rn2(4)) return ICE_STORM;
 		return SOLID_FOG;
+	break;
+	case PM_CUPRILACH_RILMANI:
+		switch(rn2(6)){
+			case 0: return DRAIN_LIFE;
+			case 1: return ACID_BLAST;
+			case 2: return SOLID_FOG;
+			case 3: return DISAPPEAR;
+			case 4: return MON_POISON_GAS;
+			case 5: return MAKE_VISIBLE;
+		}
+	break;
+	case PM_ARGENACH_RILMANI:
+		if(rn2(4)) return SILVER_RAYS;
+		switch(rn2(4)){
+			case 0: return ICE_STORM;
+			case 1: return SOLID_FOG;
+			case 2: return DISAPPEAR;
+			case 3: return MAKE_VISIBLE;
+		}
+	break;
+	case PM_AURUMACH_RILMANI:
+		if(rn2(4)) return GOLDEN_WAVE;
+		switch(rn2(7)){
+			case 0: return ICE_STORM;
+			case 1: return ACID_RAIN;
+			case 2: return SOLID_FOG;
+			case 3: return DISAPPEAR;
+			case 4: return MON_POISON_GAS;
+			case 5: return MAKE_VISIBLE;
+			case 6: return PRISMATIC_SPRAY;
+		}
 	break;
 	case PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK:
 		return SUMMON_DEVIL; 
@@ -1052,23 +1091,23 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 
 	nomul(0, NULL);
 	/* increased spell success rate vs vanilla to make kobold/orc shamans less helpless */
-	if(mtmp->data == &mons[PM_SPELL_GOLEM]){
+	if(is_kamerel(mtmp->data)){
 		/* find mirror */
 		for (mirror = mtmp->minvent; mirror; mirror = mirror->nobj)
 			if (mirror->otyp == MIRROR && !mirror->cursed)
 				break;
 	}
 	
-	if(mtmp->data != &mons[PM_SPELL_GOLEM] || !mirror){
+	if(is_kamerel(mtmp->data) || !mirror){
 		chance = 2;
 		if(mtmp->mconf) chance += 8;
 		if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
-			if(u.uz.dlevel == sum_of_all_level.dlevel) chance += 90;
-			else if(u.uz.dlevel == spire_level.dlevel-1) chance -= 50;
-			else if(u.uz.dlevel == spire_level.dlevel-2) chance -= 40;
-			else if(u.uz.dlevel == spire_level.dlevel-3) chance -= 30;
-			else if(u.uz.dlevel == spire_level.dlevel-4) chance -= 20;
-			else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10;
+			if(u.uz.dlevel == sum_of_all_level.dlevel) chance -= 1;
+			else if(u.uz.dlevel == spire_level.dlevel-1) chance += 10;
+			else if(u.uz.dlevel == spire_level.dlevel-2) chance += 8;
+			else if(u.uz.dlevel == spire_level.dlevel-3) chance += 6;
+			else if(u.uz.dlevel == spire_level.dlevel-4) chance += 4;
+			else if(u.uz.dlevel == spire_level.dlevel-5) chance += 2;
 		}
 		
 		if((u.uz.dnum == neutral_dnum && u.uz.dlevel == spire_level.dlevel) || rn2(ml*2) < chance) {	/* fumbled attack */
@@ -1574,6 +1613,175 @@ int spellnum;
 	   stop_occupation();
        break;
     }
+	case SILVER_RAYS:{
+		int n = 0;
+		dmg = 0;
+		if(zap_hit(base_uac(), 0))
+			n++;
+		if(zap_hit(base_uac(), 0))
+			n++;
+		if(!n){
+			pline("Silver rays whiz past you!");
+			break;
+		}
+		if(hates_silver(youracedata)){
+			You("are seared by silver light!");
+			dmg = d(n*2,20);
+		} else if(!Fire_resistance && species_resists_cold(&youmonst)){
+			You("are burned by silver light!");
+			dmg = (d(n,20)*3+1)/2;
+			destroy_item(SCROLL_CLASS, AD_FIRE);
+			destroy_item(POTION_CLASS, AD_FIRE);
+			destroy_item(SPBOOK_CLASS, AD_FIRE);
+		} else if(!Cold_resistance && species_resists_fire(&youmonst)){
+			You("are frozen by silver light!");
+			dmg = (d(n,20)*3+1)/2;
+			destroy_item(POTION_CLASS, AD_COLD);
+		} else if(hates_unholy(youracedata)){
+			You("are seared by unholy light!");
+			dmg = d(n,20) + d(n,9);
+		} else if(hates_holy(youracedata)){
+			You("are seared by holy light!");
+			dmg = d(n,20) + d(n,7);
+		} else if(!Fire_resistance){
+			You("are burned by silver light!");
+			dmg = d(n,20);
+			destroy_item(SCROLL_CLASS, AD_FIRE);
+			destroy_item(POTION_CLASS, AD_FIRE);
+			destroy_item(SPBOOK_CLASS, AD_FIRE);
+		} else if(!Shock_resistance){
+			You("are shocked by silver light!");
+			dmg = d(n,20);
+			destroy_item(WAND_CLASS, AD_ELEC);
+			destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
+		} else if(!Cold_resistance){
+			You("are frozen by silver light!");
+			dmg = d(n,20);
+			destroy_item(POTION_CLASS, AD_COLD);
+		} else if(!Acid_resistance){
+			You("are burned by silver light!");
+			dmg = d(n,20);
+			destroy_item(POTION_CLASS, AD_FIRE);
+		} else {
+			You("are pierced by silver light!");
+			dmg = 0;
+			if(u.uac < 0){
+				dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
+				if(dmg < 1)
+					dmg = 1;
+				dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
+				if(dmg < 2)
+					dmg = 2;
+			} else dmg = d(n, 20);
+		}
+	}break;
+	case GOLDEN_WAVE:
+		dmg = 0;
+		if(!Fire_resistance && species_resists_cold(&youmonst)){
+			You("are burned by golden light!");
+			dmg = (d(2,12)*3+1)/2;
+			destroy_item(SCROLL_CLASS, AD_FIRE);
+			destroy_item(POTION_CLASS, AD_FIRE);
+			destroy_item(SPBOOK_CLASS, AD_FIRE);
+		} else if(!Cold_resistance && species_resists_fire(&youmonst)){
+			You("are frozen by golden light!");
+			dmg = (d(2,12)*3+1)/2;
+			destroy_item(POTION_CLASS, AD_COLD);
+		} else if(hates_silver(youracedata)){
+			You("are seared by golden light!");
+			dmg = d(2,12) + d(1,20);
+		} else if(hates_unholy(youracedata)){
+			You("are seared by unholy light!");
+			dmg = d(2,12) + d(1,9);
+		} else if(hates_holy(youracedata)){
+			You("are seared by holy light!");
+			dmg = d(2,12) + d(1,7);
+		} else if(!Fire_resistance){
+			You("are burned by golden light!");
+			dmg = d(2,12);
+			destroy_item(SCROLL_CLASS, AD_FIRE);
+			destroy_item(POTION_CLASS, AD_FIRE);
+			destroy_item(SPBOOK_CLASS, AD_FIRE);
+		} else if(!Shock_resistance){
+			You("are shocked by golden light!");
+			dmg = d(2,12);
+			destroy_item(WAND_CLASS, AD_ELEC);
+			destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
+		} else if(!Cold_resistance){
+			You("are frozen by golden light!");
+			dmg = d(2,12);
+			destroy_item(POTION_CLASS, AD_COLD);
+		} else if(!Acid_resistance){
+			You("are burned by golden light!");
+			dmg = d(2,12);
+			destroy_item(POTION_CLASS, AD_FIRE);
+		} else {
+			You("are slashed by golden light!");
+			dmg = 0;
+			if(u.uac < 0){
+				dmg += d(2,12) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
+				if(dmg < 1)
+					dmg = 1;
+				dmg += d(2,12) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
+				if(dmg < 2)
+					dmg = 2;
+			} else dmg = d(2, 12);
+		}
+	break;
+	case PRISMATIC_SPRAY:{
+		int dx = 0, dy = 0;
+		dmg /= 10;
+		if(dmg > 7) dmg = 7;
+		for(dmg; dmg; dmg--){
+			switch(rn2(7)){
+				case 0:
+					//Physical
+					explode2(mtmp->mux+dx, mtmp->muy+dy, 8, d(6,6), MON_EXPLODE, EXPL_RED); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 1:
+					//Fire
+					explode2(mtmp->mux+dx, mtmp->muy+dy, 1, d(6,6), MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 2:
+					//Poison
+					explode2(mtmp->mux+dx, mtmp->muy+dy, 6, d(6,6), MON_EXPLODE, EXPL_YELLOW); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 3:
+					//Acid
+					explode2(mtmp->mux+dx, mtmp->muy+dy, 7, d(6,6), MON_EXPLODE, EXPL_LIME); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 4:
+					//Cold
+					explode2(mtmp->mux+dx, mtmp->muy+dy, 2, d(6,6), MON_EXPLODE, EXPL_BBLUE); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 5:
+					//Electricity
+					explode2(mtmp->mux+dx, mtmp->muy+dy, 5, d(6,6), MON_EXPLODE, EXPL_MAGENTA); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 6:
+					//Disintegration
+					explode2(mtmp->mux+dx, mtmp->muy+dy, 4, d(6,6), MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+				break;
+			}
+				dx = rnd(3) - 2; 
+				dy = rnd(3) - 2;
+				if (!isok(mtmp->mux + dx, mtmp->muy + dy) ||
+					IS_STWALL(levl[mtmp->mux + dx][mtmp->muy + dy].typ)
+				) {
+					/* Spell is reflected back to center */
+					dx = 0;
+					dy = 0;
+				}
+		}
+		dmg = 0;
+		stop_occupation();
+	}break;
+	case ACID_BLAST:
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mux, mtmp->muy, 7, dmg, MON_EXPLODE, EXPL_NOXIOUS); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+		stop_occupation();
+	break;
 	case MON_FIRA:
 		if(dmg > 60) dmg = 60;
 		explode(mtmp->mux, mtmp->muy, 1, dmg, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
@@ -2780,23 +2988,23 @@ castmm(mtmp, mdef, mattk)
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
 	}
 	
-	if(mtmp->data == &mons[PM_SPELL_GOLEM]){
+	if(is_kamerel(mtmp->data)){
 		/* find mirror */
 		for (mirror = mtmp->minvent; mirror; mirror = mirror->nobj)
 			if (mirror->otyp == MIRROR && !mirror->cursed)
 				break;
 	}
 	
-	if(mtmp->data != &mons[PM_SPELL_GOLEM] || !mirror){
+	if(!is_kamerel(mtmp->data) || !mirror){
 		chance = 2;
 		if(mtmp->mconf) chance += 8;
 		if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
-			if(u.uz.dlevel == sum_of_all_level.dlevel) chance += 90;
-			else if(u.uz.dlevel == spire_level.dlevel-1) chance -= 50;
-			else if(u.uz.dlevel == spire_level.dlevel-2) chance -= 40;
-			else if(u.uz.dlevel == spire_level.dlevel-3) chance -= 30;
-			else if(u.uz.dlevel == spire_level.dlevel-4) chance -= 20;
-			else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10;
+			if(u.uz.dlevel == sum_of_all_level.dlevel) chance -= 1;
+			else if(u.uz.dlevel == spire_level.dlevel-1) chance += 10;
+			else if(u.uz.dlevel == spire_level.dlevel-2) chance += 8;
+			else if(u.uz.dlevel == spire_level.dlevel-3) chance += 6;
+			else if(u.uz.dlevel == spire_level.dlevel-4) chance += 4;
+			else if(u.uz.dlevel == spire_level.dlevel-5) chance += 2;
 		}
 		
 		if((u.uz.dnum == neutral_dnum && u.uz.dlevel == spire_level.dlevel) || rn2(ml*2) < chance) {	/* fumbled attack */
@@ -4000,6 +4208,326 @@ uspsibolt:
 	destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
 	break;
     }
+	case SILVER_RAYS:{
+		int n = 0;
+		dmg = 0;
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("silver rays spell with no mtmp");
+			return;
+		}
+		if(zap_hit(base_mac(mtmp), 0))
+			n++;
+		if(zap_hit(base_mac(mtmp), 0))
+			n++;
+		if(!n){
+			if (yours || canseemon(mtmp))
+				pline("Silver rays whiz past %s!",
+					  mon_nam(mtmp));
+			break;
+		}
+		if(hates_silver(mtmp->data)){
+			if (yours || canseemon(mtmp))
+				pline("%s is seared by silver light!",
+					  Monnam(mtmp));
+			dmg = d(n*2,20);
+		} else if(!resists_fire(mtmp) && species_resists_cold(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is burned by silver light!",
+					  Monnam(mtmp));
+			dmg = (d(n,20)*3+1)/2;
+			destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+		} else if(!resists_cold(mtmp) && species_resists_fire(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is frozen by silver light!",
+					  Monnam(mtmp));
+			dmg = (d(n,20)*3+1)/2;
+			destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
+		} else if(hates_unholy(mtmp->data)){
+			if (yours || canseemon(mtmp))
+				pline("%s is seared by unholy light!",
+					  Monnam(mtmp));
+			dmg = d(n,20) + d(n,9);
+		} else if(hates_holy_mon(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is seared by holy light!",
+					  Monnam(mtmp));
+			dmg = d(n,20) + d(n,7);
+		} else if(!resists_fire(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is burned by silver light!",
+					  Monnam(mtmp));
+			dmg = d(n,20);
+			destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+		} else if(!resists_elec(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is shocked by silver light!",
+					  Monnam(mtmp));
+			dmg = d(n,20);
+			destroy_mitem(mtmp, WAND_CLASS, AD_ELEC);
+			destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
+		} else if(!resists_cold(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is frozen by silver light!",
+					  Monnam(mtmp));
+			dmg = d(n,20);
+			destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
+		} else if(!resists_acid(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is burned by silver light!",
+					  Monnam(mtmp));
+			dmg = d(n,20);
+			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+		} else {
+			if (yours || canseemon(mtmp))
+				pline("%s is pierced by silver light!",
+					  Monnam(mtmp));
+			dmg = d(n, 20);
+		}
+	}break;
+	case GOLDEN_WAVE:
+		dmg = 0;
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("golden wave spell with no mtmp");
+			return;
+		}
+		if(!resists_fire(mtmp) && species_resists_cold(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is burned by golden light!",
+					  Monnam(mtmp));
+			dmg = (d(2,12)*3+1)/2;
+			destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+		} else if(!resists_cold(mtmp) && species_resists_fire(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is frozen by golden light!",
+					  Monnam(mtmp));
+			dmg = (d(2,12)*3+1)/2;
+			destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
+		} else if(hates_silver(mtmp->data)){
+			if (yours || canseemon(mtmp))
+				pline("%s is seared by golden light!",
+					  Monnam(mtmp));
+			dmg = d(2,12) + d(1,20);
+		} else if(hates_unholy(mtmp->data)){
+			if (yours || canseemon(mtmp))
+				pline("%s is seared by unholy light!",
+					  Monnam(mtmp));
+			dmg = d(2,12) + d(1,9);
+		} else if(hates_holy(mtmp->data)){
+			if (yours || canseemon(mtmp))
+				pline("%s is seared by holy light!",
+					  Monnam(mtmp));
+			dmg = d(2,12) + d(1,7);
+		} else if(!resists_fire(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is burned by golden light!",
+					  Monnam(mtmp));
+			dmg = d(2,12);
+			destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+		} else if(!resists_elec(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is shocked by golden light!",
+					  Monnam(mtmp));
+			dmg = d(2,12);
+			destroy_mitem(mtmp, WAND_CLASS, AD_ELEC);
+			destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
+		} else if(!resists_cold(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is frozen by golden light!",
+					  Monnam(mtmp));
+			dmg = d(2,12);
+			destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
+		} else if(!resists_acid(mtmp)){
+			if (yours || canseemon(mtmp))
+				pline("%s is burned by golden light!",
+					  Monnam(mtmp));
+			dmg = d(2,12);
+			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+		} else {
+			if (yours || canseemon(mtmp))
+				pline("%s is slashed by golden light!",
+					  Monnam(mtmp));
+			dmg = d(2, 12);
+		}
+	break;
+	case PRISMATIC_SPRAY:{
+		int dx = 0, dy = 0;
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("prismatic spray spell with no mtmp");
+			return;
+		}
+		dmg /= 10;
+		if(dmg > 7) dmg = 7;
+		for(dmg; dmg; dmg--){
+			switch(rn2(7)){
+				case 0:
+					//Physical
+					explode2(mtmp->mx+dx, mtmp->my+dy, 8, d(6,6), MON_EXPLODE, EXPL_RED); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 1:
+					//Fire
+					explode2(mtmp->mx+dx, mtmp->my+dy, 1, d(6,6), MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 2:
+					//Poison
+					explode2(mtmp->mx+dx, mtmp->my+dy, 6, d(6,6), MON_EXPLODE, EXPL_YELLOW); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 3:
+					//Acid
+					explode2(mtmp->mx+dx, mtmp->my+dy, 7, d(6,6), MON_EXPLODE, EXPL_LIME); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 4:
+					//Cold
+					explode2(mtmp->mx+dx, mtmp->my+dy, 2, d(6,6), MON_EXPLODE, EXPL_BBLUE); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 5:
+					//Electricity
+					explode2(mtmp->mx+dx, mtmp->my+dy, 5, d(6,6), MON_EXPLODE, EXPL_MAGENTA); //explode(x, y, type, dam, olet, expltype)
+				break;
+				case 6:
+					//Disintegration
+					explode2(mtmp->mx+dx, mtmp->my+dy, 4, d(6,6), MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+				break;
+			}
+				dx = rnd(3) - 2;
+				dy = rnd(3) - 2;
+				if (!isok(mtmp->mx + dx, mtmp->my + dy) ||
+					IS_STWALL(levl[mtmp->mx + dx][mtmp->my + dy].typ)
+				) {
+					/* Spell is reflected back to center */
+					dx = 0;
+					dy = 0;
+				}
+		}
+		dmg = 0;
+	}break;
+	case ACID_BLAST:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("acid blast spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx, mtmp->my, 7, dmg, MON_EXPLODE, EXPL_NOXIOUS); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_FIRA:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("fira spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx, mtmp->my, 1, dmg, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_FIRAGA:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("firaga spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_BLIZZARA:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("blizzara spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx, mtmp->my, 2, dmg, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_BLIZZAGA:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("blizzaga spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_THUNDARA:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("thundara spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx, mtmp->my, 5, dmg, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_THUNDAGA:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("thundaga spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL); //explode(x, y, type, dam, olet, expltype)
+		dmg = 0;
+	break;
+	case MON_FLARE:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("flare spell with no mtmp");
+			return;
+		}
+		if(dmg > 60) dmg = 60;
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FROSTY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FIERY); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_MUDDY); //explode(x, y, type, dam, olet, expltype)
+		explode2(mtmp->mx, mtmp->my, 8, dmg, MON_EXPLODE, EXPL_FROSTY);
+		dmg = 0;
+	break;
+	case MON_WARP:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("spacewarp spell with no mtmp");
+			return;
+		}
+		if(dmg > 100) dmg = 100;
+			if (yours || canseemon(mtmp))
+				pline("Space around %s warps into deadly blades!", mon_nam(mtmp));
+	break;
+	case MON_POISON_GAS:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("poison gas spell with no mtmp");
+			return;
+		}
+		if(!yours){
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_gas_cloud(mtmp->mx, mtmp->my, rnd(3), rnd(3)+1);
+			flags.cth_attk=FALSE;
+		} else {
+			create_gas_cloud(mtmp->mx, mtmp->my, rnd(3), rnd(3)+1);
+		}
+		dmg = 0;
+	break;
+	case SOLID_FOG:
+		if (!mtmp || mtmp->mhp < 1) {
+			impossible("solid fog spell with no mtmp");
+			return;
+		}
+		if(!yours){
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_fog_cloud(mtmp->mx, mtmp->my, 3, 8);
+			flags.cth_attk=FALSE;
+			if(mattk && mattk->data == &mons[PM_PLUMACH_RILMANI]) mattk->mcan = 1;
+		} else {
+			create_fog_cloud(mtmp->mx, mtmp->my, 3, 8);
+		}
+		dmg = 0;
+		stop_occupation();
+	break;
     case INSECTS:
 	if (!mtmp || mtmp->mhp < 1) {
 	    impossible("insect spell with no target");

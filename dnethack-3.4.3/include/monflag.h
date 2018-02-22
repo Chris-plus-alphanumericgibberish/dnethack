@@ -362,8 +362,13 @@
 #define MON_POISON_GAS         MON_WARP+1
 #define MON_PROTECTION         MON_POISON_GAS+1
 //60
-#define SOLID_FOG          MON_PROTECTION+1
-#define VULNERABILITY          SOLID_FOG+1
+#define SOLID_FOG      	       MON_PROTECTION+1
+#define ACID_BLAST       	   SOLID_FOG+1
+#define PRISMATIC_SPRAY        ACID_BLAST+1
+#define SILVER_RAYS            PRISMATIC_SPRAY+1
+#define GOLDEN_WAVE            SILVER_RAYS+1
+//65
+#define VULNERABILITY          GOLDEN_WAVE+1
 #define MASS_HASTE             VULNERABILITY+1
 
 #define MON_LASTSPELL          MASS_HASTE
