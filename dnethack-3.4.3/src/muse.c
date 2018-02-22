@@ -1035,7 +1035,7 @@ struct monst *mtmp;
 #endif
 	    && !uarm && !uarmh && !uarms && !uarmg && !uarmc && !uarmf)
 		return FALSE;
-        }
+	}
 
 	if (!ranged_stuff) return FALSE;
 #define nomore(x) if(m.has_offense==x) continue;
@@ -2587,7 +2587,7 @@ const char *fmt, *str;
 	    if (fmt && str)
 	    	pline(fmt, str, "weapon");
 	    return TRUE;
-	} else if (uwep && is_lightsaber(uwep) && litsaber(uwep) && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) {
+	} else if (uwep && is_lightsaber(uwep) && litsaber(uwep) && ((u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm))) || (u.fightingForm == FFORM_SHIEN) && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))) {
 	    /* Due to wielded lightsaber */
 	    if (fmt && str)
 	    	pline(fmt, str, "lightsaber");

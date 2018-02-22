@@ -491,7 +491,7 @@
 #define EReflecting		u.uprops[REFLECTING].extrinsic
 #define Reflecting		(EReflecting || \
 						 (u.sealsActive&SEAL_EDEN) || \
-						 (uwep && is_lightsaber(uwep) && uwep->lamplit && (u.fightingForm == FFORM_SORESU || u.fightingForm == FFORM_SHIEN)) || \
+						 (uwep && is_lightsaber(uwep) && uwep->lamplit && ((u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))) || (u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))))) || \
 				 (youracedata == &mons[PM_SILVER_DRAGON]))
 
 #define Free_action		(u.uprops[FREE_ACTION].extrinsic || u.sealsActive&SEAL_EURYNOME) /* [Tom] */
