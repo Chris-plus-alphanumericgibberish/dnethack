@@ -854,6 +854,13 @@ A("The Staff of Twelve Mirrors",	KHAKKHARA,
 	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
 	0,0,0),
 
+A("Sansara Mirror",	MIRRORBLADE,	
+	(SPFX_RESTR|SPFX_REFLECT|SPFX_HPHDAM), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(8,8),	NO_DFNS,	NO_CARY,
+	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
+	0,0,0),
+
 A("The Hand-Mirror of Cthylla", MIRROR, /*from the works of HP Lovecraft*/
 	(SPFX_NOGEN|SPFX_RESTR), (SPFX_SEARCH|SPFX_TCTRL),
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
