@@ -186,6 +186,36 @@
 
 
 /*** Vision and senses ***/
+#define HNormalvision		u.uprops[NORMALVISION].intrinsic
+#define ENormalvision		u.uprops[NORMALVISION].extrinsic
+#define Normalvision		(HNormalvision || ENormalvision || \
+				 normalvision(youracedata))
+
+#define HLowlightsight		u.uprops[LOWLIGHTSIGHT].intrinsic
+#define ELowlightsight		u.uprops[LOWLIGHTSIGHT].extrinsic
+#define Lowlightsight		(HLowlightsight || ELowlightsight || \
+				 lowlightsight2(youracedata))
+
+#define HElfsight		u.uprops[ELFSIGHT].intrinsic
+#define EElfsight		u.uprops[ELFSIGHT].extrinsic
+#define Elfsight		(HElfsight || EElfsight || \
+				 lowlightsight3(youracedata))
+
+#define HDarksight		u.uprops[DARKSIGHT].intrinsic
+#define EDarksight		u.uprops[DARKSIGHT].extrinsic
+#define Darksight		(HDarksight || EDarksight || \
+				 darksight(youracedata))
+
+#define HCatsight		u.uprops[CATSIGHT].intrinsic
+#define ECatsight		u.uprops[CATSIGHT].extrinsic
+#define Catsight		(HCatsight || ECatsight || \
+				 catsight(youracedata))
+
+#define HExtramission		u.uprops[EXTRAMISSION].intrinsic
+#define EExtramission		u.uprops[EXTRAMISSION].extrinsic
+#define Extramission		(HExtramission || EExtramission || \
+				 extramission(youracedata) || u.sealsActive&SEAL_AMON)
+
 #define HSee_invisible		u.uprops[SEE_INVIS].intrinsic
 #define ESee_invisible		u.uprops[SEE_INVIS].extrinsic
 #define See_invisible		(HSee_invisible || ESee_invisible || \
@@ -225,6 +255,31 @@
 #define EInfravision		u.uprops[INFRAVISION].extrinsic
 #define Infravision		(HInfravision || EInfravision || \
 				  infravision(youracedata) || u.sealsActive&SEAL_FAFNIR)
+
+#define HBloodsense		u.uprops[BLOODSENSE].intrinsic
+#define EBloodsense		u.uprops[BLOODSENSE].extrinsic
+#define Bloodsense		(HBloodsense || EBloodsense || \
+				  bloodsense(youracedata))
+
+#define HLifesense		u.uprops[LIFESENSE].intrinsic
+#define ELifesense		u.uprops[LIFESENSE].extrinsic
+#define Lifesense		(HLifesense || ELifesense || \
+				  lifesense(youracedata))
+
+#define HSenseall		u.uprops[SENSEALL].intrinsic
+#define ESenseall		u.uprops[SENSEALL].extrinsic
+#define Senseall		(HSenseall || ESenseall || \
+				  senseall(youracedata))
+
+#define HEarthsense		u.uprops[EARTHSENSE].intrinsic
+#define EEarthsense		u.uprops[EARTHSENSE].extrinsic
+#define Earthsense		(HEarthsense || EEarthsense || \
+				  earthsense(youracedata))
+
+#define HEcholocation		u.uprops[ECHOLOCATION].intrinsic
+#define EEcholocation		u.uprops[ECHOLOCATION].extrinsic
+#define Echolocation		(HEcholocation || EEcholocation || \
+				  echolocation(youracedata))
 
 #define HDetect_monsters	u.uprops[DETECT_MONSTERS].intrinsic
 #define EDetect_monsters	u.uprops[DETECT_MONSTERS].extrinsic

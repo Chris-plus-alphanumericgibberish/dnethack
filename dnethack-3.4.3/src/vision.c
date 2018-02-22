@@ -584,12 +584,12 @@ vision_recalc(control)
     else {
 	// int has_night_vision = u.nv_range || (Race_if(PM_DROW) && LightBlind && !Role_if(PM_ANACHRONONAUT));	/* hero has night vision */
 	int nv_range;
-	if(lowlightsight3(youracedata)) nv_range = 3;
-	else if(lowlightsight2(youracedata)) nv_range = 2;
-	else if(darksight(youracedata) && LightBlind) nv_range = 0;
-	else if(normalvision(youracedata)) nv_range = 1;
+	if(Elfsight) nv_range = 3;
+	else if(Lowlightsight) nv_range = 2;
+	else if(Darksight && LightBlind) nv_range = 0;
+	else if(Normalvision) nv_range = 1;
 	else nv_range = 0;
-		
+	
 
 	if (Underwater && !Is_waterlevel(&u.uz)) {
 	    /*
@@ -745,14 +745,14 @@ vision_recalc(control)
 	    else if (
 			((u.sealsActive&SEAL_AMON) && (next_row[col] & COULD_SEE)) ||
 			(Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)) ||
-			((normalvision(youracedata) || (catsight(youracedata) && !catsightdark)) && (next_row[col] & COULD_SEE) && (
+			((normalvision(youracedata) || (Catsight && !catsightdark)) && (next_row[col] & COULD_SEE) && (
 				(lev->lit &&
 					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT1)) &&
 					!(next_row[col]&TEMP_DRK2) 
 				) || 
 				((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK1))
 			)) ||
-			(lowlightsight2(youracedata) && (next_row[col] & COULD_SEE) && (
+			(Lowlightsight && (next_row[col] & COULD_SEE) && (
 				(lev->lit &&
 					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT2)) &&
 					!(next_row[col]&TEMP_DRK2 && !(next_row[col]&TEMP_LIT1)) &&
@@ -763,7 +763,7 @@ vision_recalc(control)
 					((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK2))
 				)
 			)) ||
-			(lowlightsight3(youracedata) && (next_row[col] & COULD_SEE) && (
+			(Elfsight && (next_row[col] & COULD_SEE) && (
 				(lev->lit &&
 					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT3)) &&
 					!(next_row[col]&TEMP_DRK2 && !(next_row[col]&TEMP_LIT2)) &&
@@ -775,7 +775,7 @@ vision_recalc(control)
 					((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK3))
 				)
 			)) ||
-			((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !LightBlind && (next_row[col] & COULD_SEE) && 
+			((Darksight || (Catsight && catsightdark)) && !LightBlind && (next_row[col] & COULD_SEE) && 
 			 ((lev->typ < CORR || lev->typ==STAIRS) || !(
 				(lev->lit &&
 					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT1)) &&
@@ -783,7 +783,7 @@ vision_recalc(control)
 				) || 
 				((next_row[col]&TEMP_LIT1) && !(next_row[col]&TEMP_DRK1))
 			))) ||
-			(extramission(youracedata) && (next_row[col] & COULD_SEE))
+			(Extramission && (next_row[col] & COULD_SEE))
 		) {
 		/*
 		 * We see this position because it is lit.
@@ -798,7 +798,7 @@ vision_recalc(control)
 		     */
 		    dx = u.ux - col;	dx = sign(dx);
 		    flev = &(levl[col+dx][row+dy]);
-		    if ((!((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !Is_waterlevel(&u.uz)) && 
+		    if ((!((Darksight || (Catsight && catsightdark)) && !Is_waterlevel(&u.uz)) && 
 				((flev->lit &&
 					!(next_array[row+dy][col+dx]&TEMP_DRK1 && !(next_array[row+dy][col+dx]&TEMP_LIT1)) &&
 					!(next_array[row+dy][col+dx]&TEMP_DRK2) 
@@ -807,7 +807,7 @@ vision_recalc(control)
 					(next_array[row+dy][col+dx]&TEMP_LIT1) && !(next_array[row+dy][col+dx]&TEMP_DRK1)
 				)
 			)) ||
-			(lowlightsight2(youracedata) && (
+			(Lowlightsight && (
 				(flev->lit &&
 					!(next_array[row+dy][col+dx]&TEMP_DRK1 && !(next_array[row+dy][col+dx]&TEMP_LIT2)) &&
 					!(next_array[row+dy][col+dx]&TEMP_DRK2 && !(next_array[row+dy][col+dx]&TEMP_LIT1)) &&
@@ -818,7 +818,7 @@ vision_recalc(control)
 					((next_array[row+dy][col+dx]&TEMP_LIT1) && !(next_array[row+dy][col+dx]&TEMP_DRK2))
 				)
 			)) ||
-			(lowlightsight3(youracedata) && (
+			(Elfsight && (
 				(flev->lit &&
 					!(next_array[row+dy][col+dx]&TEMP_DRK1 && !(next_array[row+dy][col+dx]&TEMP_LIT3)) &&
 					!(next_array[row+dy][col+dx]&TEMP_DRK2 && !(next_array[row+dy][col+dx]&TEMP_LIT2)) &&
@@ -830,9 +830,8 @@ vision_recalc(control)
 					((next_array[row+dy][col+dx]&TEMP_LIT1) && !(next_array[row+dy][col+dx]&TEMP_DRK3))
 				)
 			))
-			   ||((darksight(youracedata) || (catsight(youracedata) && catsightdark)) && !Is_waterlevel(&u.uz))
-			   || u.sealsActive&SEAL_AMON
-			   || extramission(youracedata)
+			   ||((Darksight || (Catsight && catsightdark)) && !Is_waterlevel(&u.uz))
+			   || Extramission
 			){
 				next_row[col] |= IN_SIGHT;	/* we see it */
 

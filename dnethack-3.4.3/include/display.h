@@ -87,7 +87,7 @@
  * invisible to bloodsense), because this is usually called from within
  * canseemon() or canspotmon() which already check that.
  */
-#define see_with_bloodsense(mon) (bloodsense(youracedata) && has_blood_mon(mon) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
+#define see_with_bloodsense(mon) (Bloodsense && has_blood_mon(mon) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
 
 /*
  * see_with_lifesense()
@@ -97,7 +97,7 @@
  * invisible to lifesense), because this is usually called from within
  * canseemon() or canspotmon() which already check that.
  */
-#define see_with_lifesense(mon) (lifesense(youracedata) && !nonliving((mon)->data) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
+#define see_with_lifesense(mon) (Lifesense && !nonliving((mon)->data) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
 
 /*
  * see_with_senseall()
@@ -107,7 +107,7 @@
  * invisible to senseall), because this is usually called from within
  * canseemon() or canspotmon() which already check that.
  */
-#define see_with_senseall(mon) (senseall(youracedata) && !nonliving((mon)->data) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
+#define see_with_senseall(mon) (Senseall && !nonliving((mon)->data) && (couldsee((mon)->mx, (mon)->my) || ominsense((mon)->data)))
 
 /*
  * see_with_earthsense()
@@ -115,7 +115,7 @@
  * This function is true if the player can see a monster using earthsense.
  * The caller must NOT check for invisibility.
  */
-#define see_with_earthsense(mon) (earthsense(youracedata) && !(is_flyer((mon)->data) || is_floater((mon)->data) || unsolid((mon)->data)))
+#define see_with_earthsense(mon) (Earthsense && !(is_flyer((mon)->data) || is_floater((mon)->data) || unsolid((mon)->data)))
 
 
 /*
