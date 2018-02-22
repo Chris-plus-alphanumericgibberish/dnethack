@@ -664,7 +664,10 @@ lightsaber_form_ldie:
 			}
 		break;
 		case RAPIER:
-			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(2,4+2*dmod); break;
+			if(otmp->oartifact == ART_SILVER_STARLIGHT 
+			&& !(noncorporeal(ptr) || amorphous(ptr) 
+				|| ((stationary(ptr) || sessile(ptr)) && (ptr->mlet == S_FUNGUS || ptr->mlet == S_PLANT))
+			)) tmp += d(2,4+2*dmod); break;
 	    }
 	} else {
 		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,sdie,1);
@@ -1033,7 +1036,10 @@ lightsaber_form_sdie:
 		case SCIMITAR:
 			if(otmp->oartifact == ART_REAVER) tmp += d(1,8+2*dmod); break;
 		case RAPIER:
-			if(otmp->oartifact == ART_SILVER_STARLIGHT && !(noncorporeal(ptr) || amorphous(ptr) || stationary(ptr))) tmp += d(1,6+2*dmod)+d(1,4+2*dmod); break;
+			if(otmp->oartifact == ART_SILVER_STARLIGHT 
+			&& !(noncorporeal(ptr) || amorphous(ptr) 
+				|| ((stationary(ptr) || sessile(ptr)) && (ptr->mlet == S_FUNGUS || ptr->mlet == S_PLANT))
+			)) tmp += d(1,6+2*dmod)+d(1,4+2*dmod); break;
 	    }
 	}
 	

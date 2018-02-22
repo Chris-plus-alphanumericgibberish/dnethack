@@ -528,6 +528,7 @@
 				 (ptr)->mlet == S_FUNGUS || \
 				 (ptr) == &mons[PM_OCHRE_JELLY])
 #define stationary(ptr)		((ptr)->mflagsm & MM_STATIONARY)
+#define sessile(ptr)		((ptr)->mmove == 0)
 
 /* Used for conduct with corpses, tins, and digestion attacks */
 /* G_NOCORPSE monsters might still be swallowed as a purple worm */

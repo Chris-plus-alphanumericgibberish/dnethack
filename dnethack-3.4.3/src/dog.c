@@ -118,6 +118,8 @@ boolean quietly;
 		    There("seems to be nothing available for a familiar.");
 		  break;
 		}
+		if(stationary(pm) || sessile(pm))
+			continue;
 	    }
 
 	    mtmp = makemon(pm, x, y, MM_EDOG|MM_IGNOREWATER);

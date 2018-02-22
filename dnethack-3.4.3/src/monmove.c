@@ -1436,7 +1436,7 @@ register int after;
 	int  omx = mtmp->mx, omy = mtmp->my;
 	struct obj *mw_tmp;
 
-	if (stationary(mtmp->data)) return(0);
+	if (stationary(mtmp->data) || sessile(mtmp->data)) return(0);
 	if(mtmp->mtrapped) {
 	    int i = mintrap(mtmp);
 	    if(i >= 2) { newsym(mtmp->mx,mtmp->my); return(2); }/* it died */

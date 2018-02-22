@@ -1333,7 +1333,7 @@ int thrown;
 			if (!valid_weapon_attack || mon == u.ustuck || u.twoweap) {
 			;	/* no special bonuses */
 			} else {
-				if (!(noncorporeal(mdat) || amorphous(mdat) || (stationary(mdat) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT)) || u.uswallow) && (
+				if (!(noncorporeal(mdat) || amorphous(mdat) || ((stationary(mdat) || sessile(mdat)) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT)) || u.uswallow) && (
 						((mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh || 
 							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
@@ -1379,7 +1379,7 @@ int thrown;
 				if(obj == uwep && is_lightsaber(uwep) && litsaber(uwep)){
 					if (
 						(mon->mflee && mon->data != &mons[PM_BANDERSNATCH]) || is_blind(mon) || !mon->mcanmove || !mon->mnotlaugh ||
-							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) || stationary(mdat) ||
+							mon->mstun || mon->mconf || mon->mtrapped || mon->msleeping || (mon->mux == 0 && mon->muy == 0) || stationary(mdat) || sessile(mdat) ||
 								((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) == 1)
 					) {
 						if(P_SKILL(weapon_type(uwep)) >= P_BASIC){
@@ -1390,7 +1390,7 @@ int thrown;
 							}
 						}
 						if(u.fightingForm == FFORM_JUYO && (!uarm || is_light_armor(uarm))){
-							if(stationary(mdat)) You("rain blows on the immobile %s!", mon_nam(mon));
+							if(stationary(mdat) || sessile(mdat)) You("rain blows on the immobile %s!", mon_nam(mon));
 							else if(mon->mflee || (mon->mux == 0 && mon->muy == 0) ||
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux) 
 								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy))
@@ -1943,7 +1943,7 @@ defaultvalue:
 		){
 			if((objects[wep->otyp].oc_skill == P_CROSSBOW ||
 				wep->otyp == SNIPER_RIFLE
-			  ) && !(noncorporeal(mdat) || amorphous(mdat) || stationary(mdat))
+			  ) && !(noncorporeal(mdat) || amorphous(mdat) || ((stationary(mdat) || sessile(mdat)) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT)))
 			){
 				int dambonus = weapon_dam_bonus(wep);
 				int i=max(P_SKILL(objects[wep->otyp].oc_skill)-2,0); //Expert = 2
