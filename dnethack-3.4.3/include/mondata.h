@@ -77,6 +77,7 @@
 #define needspick(ptr)		(((ptr)->mflagsm & MM_NEEDPICK) != 0L)
 #define hides_under(ptr)	(((ptr)->mflagst & MT_CONCEAL) != 0L)
 #define is_hider(ptr)		(((ptr)->mflagst & MT_HIDE) != 0L)
+#define is_backstaber(ptr)		(((ptr)->mflagsg & MG_BACKSTAB) != 0L)
 /*#define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L) when did this get duplicated???*/
 #define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L)
 #define goodsmeller(ptr)	(((ptr)->mflagsv & MV_SCENT) != 0L)

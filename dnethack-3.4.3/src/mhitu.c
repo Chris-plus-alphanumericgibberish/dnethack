@@ -3285,6 +3285,20 @@ dopois:
 		dmg *= 2;
 	}
 	
+	if(is_backstabber(mtmp->data) && (
+		u.ustuck || u.utrap || 
+		(!canseemon(mtmp) && !sensemon(mtmp)) || //Note: Handles blind
+		multi || Stunned || Confusion || Sleeping
+		) && !(
+			noncorporeal(youracedata) || amorphous(youracedata) || 
+			((stationary(youracedata) || sessile(youracedata)) && (youracedata->mlet == S_FUNGUS || youracedata->mlet == S_PLANT))
+		)
+	) {
+		if(mtmp->data == &mons[PM_CUPRILACH_RILMANI])
+			dmg += rnd((int)(mtmp->m_lev*1.5));
+		else dmg += rnd((int)(mtmp->m_lev));
+	}
+
 	if(mtmp->data == &mons[PM_LONG_WORM] && mtmp->wormno && mattk->aatyp == AT_BITE){
 		if(wormline(mtmp, u.ux, u.uy))
 			dmg *= 2;

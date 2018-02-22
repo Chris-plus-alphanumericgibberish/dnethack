@@ -2203,6 +2203,21 @@ physical:{
 	if(magr->mfaction == ZOMBIFIED){
 		tmp *= 2;
 	}
+	
+	if ( is_backstaber(magr->data) &&
+		!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
+			((stationary(mdef->data) || sessile(mdef->data)) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT))
+		 ) && (
+			(mdef->mflee && mdef->data != &mons[PM_BANDERSNATCH]) || is_blind(mdef) || !mdef->mcanmove || !mdef->mnotlaugh || 
+				mdef->mstun || mdef->mconf || mdef->mtrapped || mdef->msleeping
+		 )
+	){
+		if(magr->data == &mons[PM_CUPRILACH_RILMANI])
+			tmp += rnd((int)(magr->m_lev*1.5));
+		else tmp += rnd((int)(magr->m_lev));
+	}
+	
+	
 	if(magr->data == &mons[PM_LONG_WORM] && magr->wormno && mattk->aatyp == AT_BITE){
 		if(wormline(magr, mdef->mx, mdef->my))
 			tmp *= 2;
