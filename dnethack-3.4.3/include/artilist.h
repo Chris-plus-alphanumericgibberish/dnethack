@@ -1359,7 +1359,7 @@ A("The Tsurugi of Muramasa",	TSURUGI,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(2,0),	NO_DFNS,	NO_CARY,
 	0,		A_LAWFUL, PM_SAMURAI, NON_PM, 4500L, 
-	SPFX2_SHATTER|SPFX2_BLDTHRST,0,0),
+	SPFX2_SHATTER,0,0),
 
 #ifdef TOURIST
 A("The Platinum Yendorian Express Card", CREDIT_CARD,
