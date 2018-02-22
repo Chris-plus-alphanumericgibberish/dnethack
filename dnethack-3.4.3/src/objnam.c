@@ -2399,6 +2399,7 @@ struct alt_spellings {
 	{ "scroll of enchant armour", SCR_ENCHANT_ARMOR },
 	{ "scroll of destroy armour", SCR_DESTROY_ARMOR },
 	{ "leather armour", LEATHER_ARMOR },
+	{ "leather gloves", GLOVES },
 	{ "studded leather armour", STUDDED_LEATHER_ARMOR },
 	{ "iron ball", HEAVY_IRON_BALL },
 	{ "lantern", BRASS_LANTERN },
