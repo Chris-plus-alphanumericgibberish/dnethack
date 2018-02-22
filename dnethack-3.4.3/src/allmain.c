@@ -305,7 +305,8 @@ moveloop()
 	int oldspiritAC=0;
 	int tx,ty;
 	int nmonsclose,nmonsnear,enkispeedlim;
-	static boolean oldBlind = 0, oldLightBlind = 0, healing_penalty = 0;
+	static boolean oldBlind = 0, oldLightBlind = 0;
+	int healing_penalty = 0;
 	static int oldCon, oldWisBon;
     int hpDiff;
 
