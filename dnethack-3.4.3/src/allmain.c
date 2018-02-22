@@ -605,7 +605,8 @@ moveloop()
 				/* Possibly change hostility */
 				if(mtmp->data == &mons[PM_SURYA_DEVA]){
 					struct monst *blade;
-					for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+					for(blade = fmon; blade; blade = blade->nmon)
+						if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
 					if(blade){
 						if(mtmp->mtame && !blade->mtame){
 							if(blade == nxtmon) nxtmon = nxtmon->nmon;
