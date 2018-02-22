@@ -30,9 +30,6 @@ STATIC_DCL void FDECL(zhitu, (int,int,int,const char *,XCHAR_P,XCHAR_P));
 STATIC_DCL boolean FDECL(zap_steed, (struct obj *));
 #endif
 
-#ifdef OVLB
-STATIC_DCL int FDECL(zap_hit, (int,int));
-#endif
 #ifdef OVL0
 STATIC_DCL void FDECL(backfire, (struct obj *));
 STATIC_DCL int FDECL(spell_hit_bonus, (int));
@@ -1942,26 +1939,26 @@ bhitpile(obj,fhito,tx,ty)
     register struct obj *otmp, *next_obj;
 
     if (obj->otyp == SPE_FORCE_BOLT || obj->otyp == WAN_STRIKING) {
-	struct trap *t = t_at(tx, ty);
+		struct trap *t = t_at(tx, ty);
 
-	/* We can't settle for the default calling sequence of
-	   bhito(otmp) -> break_statue(otmp) -> activate_statue_trap(ox,oy)
-	   because that last call might end up operating on our `next_obj'
-	   (below), rather than on the current object, if it happens to
-	   encounter a statue which mustn't become animated. */
-	if (t && t->ttyp == STATUE_TRAP &&
-	    activate_statue_trap(t, tx, ty, TRUE) && obj->otyp == WAN_STRIKING)
-	    makeknown(obj->otyp);
+		/* We can't settle for the default calling sequence of
+		   bhito(otmp) -> break_statue(otmp) -> activate_statue_trap(ox,oy)
+		   because that last call might end up operating on our `next_obj'
+		   (below), rather than on the current object, if it happens to
+		   encounter a statue which mustn't become animated. */
+		if (t && t->ttyp == STATUE_TRAP &&
+			activate_statue_trap(t, tx, ty, TRUE) && obj->otyp == WAN_STRIKING)
+			makeknown(obj->otyp);
     }
 
     poly_zapped = -1;
     for(otmp = level.objects[tx][ty]; otmp; otmp = next_obj) {
-	/* Fix for polymorph bug, Tim Wright */
-	next_obj = otmp->nexthere;
-	hitanything += (*fhito)(otmp, obj);
+		/* Fix for polymorph bug, Tim Wright */
+		next_obj = otmp->nexthere;
+		hitanything += (*fhito)(otmp, obj);
     }
     if(poly_zapped >= 0)
-	create_polymon(level.objects[tx][ty], poly_zapped);
+		create_polymon(level.objects[tx][ty], poly_zapped);
 
     return hitanything;
 }
@@ -3789,7 +3786,7 @@ boolean u_caused;
 }
 
 /* will zap/spell/breath attack score a hit against armor class `ac'? */
-STATIC_OVL int
+int
 zap_hit(ac, type)
 int ac;
 int type;	/* either hero cast spell type or 0 */

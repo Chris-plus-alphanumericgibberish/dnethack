@@ -2734,6 +2734,7 @@ E int FDECL(dowrite, (struct obj *));
 
 /* ### zap.c ### */
 
+E int FDECL(zap_hit, (int,int));
 E int FDECL(bhitm, (struct monst *,struct obj *));
 E void FDECL(probe_monster, (struct monst *));
 E boolean FDECL(get_obj_location, (struct obj *,xchar *,xchar *,int));
