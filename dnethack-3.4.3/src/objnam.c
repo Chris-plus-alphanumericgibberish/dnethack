@@ -1173,6 +1173,8 @@ plus:
 						if(dnm > 1) Strcat(bp, " (two blades lit)");
 						else Strcat(bp, " (two blades flickering)");
 					} else if(dnm <= 1) Strcat(bp, " (flickering)");
+				} else if(obj->otyp == KAMEREL_VAJRA){
+					Strcat(bp, " (lit)");
 				} else {
 					if(obj->altmode){
 						if(obj->age > 1000) Strcat(bp, " (two blades lit)");
