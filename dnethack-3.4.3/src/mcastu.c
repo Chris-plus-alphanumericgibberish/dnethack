@@ -1669,9 +1669,11 @@ int spellnum;
 				dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
 				if(dmg < 1)
 					dmg = 1;
-				dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
-				if(dmg < 2)
-					dmg = 2;
+				if(n == 2){
+					dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
+					if(dmg < 2)
+						dmg = 2;
+				}
 			} else dmg = d(n, 20);
 		}
 	}break;
@@ -1722,9 +1724,6 @@ int spellnum;
 				dmg += d(2,12) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
 				if(dmg < 1)
 					dmg = 1;
-				dmg += d(2,12) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
-				if(dmg < 2)
-					dmg = 2;
 			} else dmg = d(2, 12);
 		}
 	break;
