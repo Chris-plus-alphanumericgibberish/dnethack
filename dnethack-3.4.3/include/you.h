@@ -707,6 +707,7 @@ struct you {
 	/* 	Variable that checks if the Wizard has increased the weight of the amulet */
 	boolean uleadamulet;
 	/*Ugly extra artifact variables workaround.  Spaghetti code alert!*/
+	int goldkamcount_tame; /*number of tame golden kamerel following you around*/
 	long SnSd1, SnSd2, SnSd3, SnSd3duration;
 	int ZangetsuSafe;
 	int voidChime;
