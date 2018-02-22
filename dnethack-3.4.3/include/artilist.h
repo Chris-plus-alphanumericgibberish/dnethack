@@ -446,7 +446,7 @@ A("The Lifehunt Scythe",			SCYTHE, /*Needs encyc entry*/
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(4,4),	DRLI(0,0),	COLD(0,0), //Actually only applies vs living or undead creatures
 	INVIS, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
-	SPFX2_STLTH|SPFX2_BLDTHRST,0,0),
+	SPFX2_STLTH,0,0),
 
 A("The Holy Moonlight Sword",		LONG_SWORD, /*Needs encyc entry*/
 	(SPFX_RESTR),0, //Becomes two sizes larger when lit, likely requiring two hands
