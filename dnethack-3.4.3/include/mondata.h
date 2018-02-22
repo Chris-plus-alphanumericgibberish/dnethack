@@ -73,6 +73,7 @@
 #define passes_walls(ptr)	(((ptr)->mflagsm & MM_WALLWALK) != 0L)
 #define amorphous(ptr)		(((ptr)->mflagsm & MM_AMORPHOUS) != 0L)
 #define noncorporeal(ptr)	((ptr)->mlet == S_GHOST || (ptr)->mlet == S_SHADE)
+#define insubstantial(ptr)	((ptr)->mlet == S_SHADE || (ptr) == &mons[PM_SHARAB_KAMEREL])
 #define tunnels(ptr)		(((ptr)->mflagsm & MM_TUNNEL) != 0L)
 #define needspick(ptr)		(((ptr)->mflagsm & MM_NEEDPICK) != 0L)
 #define hides_under(ptr)	(((ptr)->mflagst & MT_CONCEAL) != 0L)

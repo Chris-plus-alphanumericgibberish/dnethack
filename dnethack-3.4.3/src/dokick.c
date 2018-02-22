@@ -71,7 +71,7 @@ register boolean clumsy;
 	}
 	
 	/* attacking a shade may be useless */
-	if (mon->data->mlet == S_SHADE && !blessed_foot_damage && !silverobj && !ironobj && !unholyobj) {
+	if (insubstantial(mon->data) && !blessed_foot_damage && !silverobj && !ironobj && !unholyobj) {
 	    pline_The("%s.", kick_passes_thru);
 	    dmg = 0;
 	    /* doesn't exercise skill or abuse alignment or frighten pet,
@@ -229,6 +229,10 @@ register xchar x, y;
 	    struct attack *uattk;
 	    int sum;
 	    int tmp = find_roll_to_hit(mon, (uarmf && arti_shining(uarmf)) || u.sealsActive&SEAL_CHUPOCLOPS);
+		boolean silverobj = FALSE;
+		boolean ironobj = FALSE;
+		boolean unholyobj = FALSE;
+		boolean blessed_foot_damage = FALSE;
 		
 	    for (i = 0; i < NATTK; i++) {
 		/* first of two kicks might have provoked counterattack
@@ -239,8 +243,26 @@ register xchar x, y;
 		/* we only care about kicking attacks here */
 		if (uattk->aatyp != AT_KICK) continue;
 
-		if (mon->data->mlet == S_SHADE &&
-			(!uarmf || !uarmf->blessed)) {
+		if ((hates_holy_mon(mon)) && uarmf &&
+			uarmf->blessed){
+			blessed_foot_damage = TRUE;
+		}
+		if (uarmf && (uarmf->obj_material == SILVER || arti_silvered(uarmf) )
+			&& hates_silver(mon->data)) {
+				silverobj = TRUE;
+		}
+		if (uarmf && (uarmf->obj_material == IRON)
+			&& hates_iron(mon->data)) {
+				ironobj = TRUE;
+		}
+		if (uarmf && is_unholy(uarmf)
+			&& hates_unholy(mon->data)) {
+				unholyobj = TRUE;
+		}
+		
+		if (insubstantial(mon->data) &&
+			(blessed_foot_damage || unholyobj || silverobj ||ironobj)
+		) {
 		    /* doesn't matter whether it would have hit or missed,
 		       and shades have no passive counterattack */
 		    Your("%s %s.", kick_passes_thru, mon_nam(mon));

@@ -929,7 +929,7 @@ int thrown;
 	if(!helpless(mon)) wake_nearto(mon->mx, mon->my, Stealth ? combatNoise(youracedata)/2 : combatNoise(youracedata)); //Nearby monsters may be awakened
 	wakeup(mon, TRUE);
 	if(!obj) {	/* attack with bare hands */
-	    if (mdat->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS || u.sealsActive&SEAL_EDEN)) tmp = 0;
+	    if (insubstantial(mdat) && !(u.sealsActive&SEAL_CHUPOCLOPS || u.sealsActive&SEAL_EDEN)) tmp = 0;
 		else if (martial_bonus()){
 			if(uarmc && uarmc->oartifact == ART_GRANDMASTER_S_ROBE){
 				if(u.sealsActive&SEAL_EURYNOME) tmp = rn2(2) ? 
@@ -1225,8 +1225,15 @@ int thrown;
 			static int warnedotyp = 0;
 			static struct permonst *warnedptr = 0;
 		    /* then do only 1-2 points of damage */
-		    if (mdat->mlet == S_SHADE && !(obj->obj_material == SILVER || arti_silvered(obj) || u.sealsActive&SEAL_CHUPOCLOPS))
-				tmp = 0;
+		    if (insubstantial(mdat) && !(
+					 u.sealsActive&SEAL_CHUPOCLOPS
+					|| (obj->obj_material == SILVER && hates_silver(mdat))
+					|| (arti_silvered(obj) && hates_silver(mdat))
+					|| (obj->obj_material == IRON && hates_iron(mdat))
+					|| (is_unholy(obj) && hates_unholy(mdat))
+					|| (obj->blessed && hates_holy_mon(mon))
+				)
+			)tmp = 0;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
 		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 4) + obj->spe);
 			
@@ -1309,7 +1316,7 @@ int thrown;
 			useup(obj);
 			if (!more_than_1) obj = (struct obj *) 0;
 			hittxt = TRUE;
-			if (mdat->mlet != S_SHADE || u.sealsActive&SEAL_CHUPOCLOPS)
+			if (!insubstantial(mdat) || u.sealsActive&SEAL_CHUPOCLOPS)
 			    tmp++;
 		    }
 		} else {
@@ -1626,9 +1633,9 @@ int thrown;
 			hittxt = TRUE;
 			/* in case potion effect causes transformation */
 			mdat = mon->data;
-			tmp = (mdat->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS)) ? 0 : 1;
+			tmp = (insubstantial(mdat) && !(u.sealsActive&SEAL_CHUPOCLOPS)) ? 0 : 1;
 		} else {
-			if (mdat->mlet == S_SHADE && !shade_aware(obj) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
+			if (insubstantial(mdat) && !shade_aware(obj) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
 			    tmp = 0;
 			    Strcpy(unconventional, cxname(obj));
 			} else {
@@ -2087,7 +2094,7 @@ defaultvalue:
 	    /* make sure that negative damage adjustment can't result
 	       in inadvertently boosting the victim's hit points */
 	    tmp = 0;
-	    if (mdat->mlet == S_SHADE) {
+	    if (insubstantial(mdat)) {
 			if (!hittxt) {
 				const char *what = unconventional[0] ? unconventional : "attack";
 				Your("%s %s harmlessly through %s.",
@@ -2713,7 +2720,7 @@ register struct attack *mattk;
 		    if(uwep) tmp = 0;
 		} else if(mattk->aatyp == AT_KICK) {
 		    if(thick_skinned(mdef->data)) tmp = 0;
-		    if(mdef->data->mlet == S_SHADE) {
+		    if(insubstantial(mdef->data)) {
 			if (!(uarmf && uarmf->blessed)) {
 			    impossible("bad shade attack function flow?");
 			    if(!(u.sealsActive&SEAL_CHUPOCLOPS)) tmp = 0;
@@ -3969,7 +3976,7 @@ wisp_shdw_dhit:
 			    }
 			    wakeup(mon, TRUE);
 			    /* maybe this check should be in damageum()? */
-			    if (mon->data->mlet == S_SHADE &&
+			    if (insubstantial(mon->data) &&
 					!(mattk->aatyp == AT_KICK &&
 					    uarmf && uarmf->blessed) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
 				Your("attack passes harmlessly through %s.",
@@ -4011,7 +4018,7 @@ wisp_shdw_dhit:
 			 */
 			dhit = 1;
 			wakeup(mon, TRUE);
-			if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
+			if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
 			    Your("hug passes harmlessly through %s.",
 				mon_nam(mon));
 			else if (!sticks(mon->data) && !u.uswallow) {
@@ -4037,7 +4044,7 @@ wisp_shdw_dhit:
 		case AT_ENGL:
 			if((dhit = (tmp > rnd(20+i)))) {
 				wakeup(mon, TRUE);
-				if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
+				if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
 				    Your("attempt to surround %s is harmless.",
 					mon_nam(mon));
 				else {
@@ -4223,7 +4230,7 @@ wisp_shdw_dhit2:
 			}
 			wakeup(mon, TRUE);
 			/* maybe this check should be in damageum()? */
-			if (mon->data->mlet == S_SHADE &&
+			if (insubstantial(mon->data) &&
 				!(mattk->aatyp == AT_KICK &&
 					uarmf && uarmf->blessed) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
 			Your("attack passes harmlessly through %s.",
@@ -4263,7 +4270,7 @@ wisp_shdw_dhit2:
 		 */
 		dhit = 1;
 		wakeup(mon, TRUE);
-		if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
+		if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
 			Your("hug passes harmlessly through %s.",
 			mon_nam(mon));
 		else if (!sticks(mon->data) && !u.uswallow) {
@@ -4289,7 +4296,7 @@ wisp_shdw_dhit2:
 	case AT_ENGL:
 		if((dhit = (tmp > rnd(20+i)))) {
 			wakeup(mon, TRUE);
-			if (mon->data->mlet == S_SHADE && !(u.sealsActive&SEAL_CHUPOCLOPS))
+			if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
 				Your("attempt to surround %s is harmless.",
 				mon_nam(mon));
 			else {

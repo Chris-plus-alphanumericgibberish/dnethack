@@ -1092,7 +1092,7 @@ lightsaber_form_sdie:
 	if (otmp->obj_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
-	if (ptr->mlet == S_SHADE && !(
+	if (insubstantial(ptr) && !(
 		(is_lightsaber(otmp) && litsaber(otmp)) || 
 		(hates_silver(ptr) && (otmp->obj_material == SILVER || arti_silvered(otmp))) || 
 		(hates_iron(ptr) && otmp->obj_material == IRON) || 

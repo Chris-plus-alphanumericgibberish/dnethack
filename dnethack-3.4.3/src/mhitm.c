@@ -323,6 +323,7 @@ mattackm(magr, mdef)
 		pa = find_mask(magr);
 		if(!Blind && pa != &mons[PM_LILLEND]) pline("%s uses a %s mask!",Monnam(magr), pa->mname);
 	}
+	
     /* Now perform all attacks for the monster. */
     for (i = 0; i < NATTK; i++) {
         int tmphp = mdef->mhp;
@@ -1360,12 +1361,13 @@ physical:{
 					otmp->oartifact != ART_PEN_OF_THE_VOID
 			)) {
 			    /* then do only 1-2 points of damage */
-			    if (mdef->data->mlet == S_SHADE && !(
+			    if (insubstantial(mdef->data) && !(
 					((otmp->obj_material != SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
 						!(is_lightsaber(otmp) && litsaber(otmp))) ||
 					(otmp->obj_material != IRON && hates_iron(pd) &&
 						!(is_lightsaber(otmp) && litsaber(otmp))) ||
-					(is_unholy(otmp) && hates_unholy(pd))
+					(is_unholy(otmp) && hates_unholy(pd)) ||
+					(otmp->blessed && hates_holy(pd))
 				)) tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
