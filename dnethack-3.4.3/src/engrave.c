@@ -258,7 +258,7 @@ static const char *haluMesg[] = {
 		"The walled-up abomination seems friendly enough.",
 		"Kill you... Take your face...",
 		"The trees don't even change color anymore.",
-		"What happend to you? It wasn't me!",
+		"What happened to you? It wasn't me!",
 		"I'm sorry you could never forgive me.",
 	"Reach heaven through violence.",/*Kill 6 Billion Demons*/
 		"Kindly ignore my first three answers.",
@@ -367,6 +367,8 @@ static const char *haluMesg[] = {
 		"We're certainly dwarves",
 		"There is no doubt being human is incredibly difficult and cannot be mastered in one lifetime.",
 	"Now, here, you see, it takes all the running you can do, to keep in the same place.", /*Through the Looking-Glass */
+	"Three signs of the Return: the stranger in the door; the friendless wizard; the unmitigated Sun.", /* A Wizard Abroad */
+		"Three signs of the Monomachy: a smith without a forge; a saint without a cell; a day without a night.",
 	"NOT A Secret Base", /*Gunnerkrigg Court*/
 	"We have the option to definitely die, but I've decided against it.", /*Schlock Mercenary*/
 	"Short to long term memory impaired. Go to Robotics Building. Explain about Bowman's architecture. Write down everything.", /*Freefall*/
@@ -411,6 +413,7 @@ static const char *haluMesg[] = {
 		"What makes you happy? I wonder...what makes you happy...does it make...others happy, too?",
 		"Your true face... What kind of... face is it? I wonder... The face under the mask... Is that... your true face?",
 		"You've met with a terrible fate, haven't you?",
+	"So I really am just a failure!", /*Breath of the Wild*/
 	"Why are you sad?", /*Blood-C*/
 	"Only accurate information has practical application.", /* not sure where this originated, possibly Aron Ra?*/
 	"We will come for you again  When you are alone  In the dark  Without your sword", /*Jake Wyatt's Necropolis*/
@@ -708,7 +711,7 @@ const char * haluWard[] =  {
 	/* webcomics */
 	"a Court symbol",	"a Forest symbol",	"the sign of the Wandering Eye", /* Gunnerkrigg Court */
 	"a winged tower", /* Girl Genius */
-		"a stylised trilobite",
+		"a stylized trilobite",
 	"a setting (rising?) sun", /* Dresden Codak */
 	
 	/* anime and manga */
@@ -754,7 +757,7 @@ const char * haluWard[] =  {
 	"an infinity symbol crossed by a burning downwards arrow",
 	"a set of four nested triangles",
 	"a watchful eye blocking an upward arrow",
-	"a pitchfork stabbing the ground",
+	"a pitchfork thrust into the ground",
 	
 	/* Zodiac */
 	"an Aries sign",
@@ -836,7 +839,7 @@ const char * haluWard[] =  {
 	"an ichthus",	"a Cross", /* Christian*/
 	"a wheel with eight spokes", /* Budhism */
 	"a fish with legs",	"a fat fish",	"a fish with tentacles, legs, and wings",
-		/* ichthus parodies/derivitives: darwin, buddha, and Cthulhu. */
+		/* ichthus parodies/derivatives: darwin, buddha, and Cthulhu. */
 	"an Eye of Horus", /*...*/
 	"a device to make the happy man sad and the sad man happy", /*"This too shall pass"*/
 	"a set of seven concentric circles",
@@ -5283,6 +5286,8 @@ static const char *epitaphs[] = {
 	
 	"TANJ!", /* Larry Niven */
 	
+	"The sun of the desert consumes what it never can cheer.", /* HP Lovecraft */
+	
 	"Summer Rose - Thus Kindly I Scatter", /* RWBY */
 	
 	"Hold my beer and watch this!", /* Rango */
@@ -5301,7 +5306,7 @@ static const char *epitaphs[] = {
 		"FIQ:  Debugging dNethack, one iron ball to the face at a time.",
 		"FIQ, killed by a clockwork bug.",
 	
-	"Khor:  \"Wait, did that axe just fall off the edge of the world?\"",
+	"Khor:  \"Wait, did that ax just fall off the edge of the world?\"",
 		"Khor:  Balancing dNethack, one sleeping potion to the face at a time.",
 	
 	"AmyBSoD: \"Phew, killed that elder priest.  He shredded my CoMR but at least he's de-\"",
@@ -5318,6 +5323,8 @@ static const char *epitaphs[] = {
 	
 	"I never got a single answer to any of my biggest questions, and now I will never know.", /*Unicorn Jelly*/
 	
+	"To deafened ears we ask, unseen, Which is life and which the dream?", /*Dresden Codak*/
+	
 	"I beat you in the human race.", /*Fable*/
 	
 	"Nobody expects the Spanish Inquisition!", /*Monty Python*/
@@ -5326,11 +5333,12 @@ static const char *epitaphs[] = {
 	
 	"I wake. I work. I sleep. I die." /*Alpha Centauri*/
 	
-	"I suddenly have a LOT of regrets.", /*Water Phoenix King is very quoteable...*/
+	"I suddenly have a LOT of regrets.", /*Water Phoenix King is very quotable...*/
 	
 	"You either die a hero, or you live long enough to see yourself become the villain.", /* Batman, the Dark Knight */
 	
 	"What can men do against such reckless hate?", /* the Lord of the Rings (Two Towers movie) */
+		"They have passed, like rain on the mountain, like a wind in the meadow.",
 	
 	"I'll just hit this thing a couple more times, it'll die.", /*jonadab*/
 		"I don't need to unburden myself, they're only soldiers, I've been killing soldiers, it'll be fine.",
