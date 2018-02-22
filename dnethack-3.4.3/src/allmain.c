@@ -607,6 +607,10 @@ moveloop()
 						}
 					}
 				}
+				
+				/*Reset fracture flag*/
+				if(mtmp->zombify && is_kamerel(mtmp->data)) mtmp->zombify = 0;
+				
 				if(mtmp->data == &mons[PM_ARA_KAMEREL]) flags.goldka_level=1;
 				if(mtmp->data == &mons[PM_ZUGGTMOY]) flags.spore_level=1;
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;

@@ -380,6 +380,29 @@ mattackm(magr, mdef)
 			else continue;
 		}
 	}
+	if(magr->mfaction == FRACTURED){
+			if(!derundspec && 
+				mattk->aatyp == 0 && mattk->adtyp == 0 && mattk->damn == 0 && mattk->damd == 0
+			){
+				derundspec = TRUE;
+				alt_attk.aatyp = AT_CLAW;
+				alt_attk.adtyp = AD_GLSS;
+				alt_attk.damn = max(magr->m_lev/10+1, mattk->damn);
+				alt_attk.damd = max(magr->data->msize*2, max(mattk->damd, 4));
+				mattk = &alt_attk;
+			}
+			if(mattk->aatyp == AT_CLAW && 
+				(mattk->adtyp == AD_PHYS || mattk->adtyp == AD_SAMU || mattk->adtyp == AD_SQUE)
+			){
+				alt_attk.aatyp = AT_CLAW;
+				alt_attk.adtyp = AD_GLSS;
+				alt_attk.damn = mattk->damn;
+				alt_attk.damd = mattk->damd;
+				mattk = &alt_attk;
+			}
+			if(mattk->aatyp == AT_GAZE)
+				continue;
+	}
 	
 	/*Plasteel helms cover the face and prevent bite attacks*/
 	if((magr->misc_worn_check & W_ARMH) && which_armor(magr, W_ARMH) &&
@@ -389,31 +412,20 @@ mattackm(magr, mdef)
 	
 	switch (mattk->aatyp) {
 	    case AT_DEVA:
-	    case AT_WEAP:		/* weapon attacks */
-#ifdef TAME_RANGED_ATTACKS
-		if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2)
-		{
-		    thrwmm(magr, mdef);
-		    if (tmphp > mdef->mhp){
-				res[i] = MM_HIT;
-				if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
-		    } else res[i] = MM_MISS;
-		    if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
-		    if (magr->mhp < 1) res[i] = MM_AGR_DIED;
-		    break;
-		}
-#endif /*TAME_RANGED_ATTACKS*/
+	    case AT_WEAP:
+		case AT_XWEP: /* weapon attacks */
+#define MAINHAND (mattk->aatyp != AT_XWEP)
 
-		if (magr->weapon_check == NEED_WEAPON || !MON_WEP(magr)) {
-		    magr->weapon_check = NEED_HTH_WEAPON;
-		    if (mon_wield_item(magr) != 0) return 0;
+		if (!MAINHAND && magr->misc_worn_check & W_ARMS) {
+			// Offhand attacks cannot be made while wearing a shield
+			break;
 		}
 
 #ifdef TAME_RANGED_ATTACKS
-		if (!MON_WEP(magr) ||
-		    is_launcher(MON_WEP(magr))) {
-				/* implies no melee weapon found */
-			if(thrwmm(magr, mdef)){
+		if (MAINHAND) {
+			if (dist2(magr->mx,magr->my,mdef->mx,mdef->my) > 2)
+			{
+				thrwmm(magr, mdef);
 				if (tmphp > mdef->mhp){
 					res[i] = MM_HIT;
 					if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
@@ -423,10 +435,33 @@ mattackm(magr, mdef)
 				break;
 			}
 		}
+#endif /*TAME_RANGED_ATTACKS*/
+
+		if (magr->weapon_check == NEED_WEAPON || (MAINHAND ? (!MON_WEP(magr)) : (!MON_SWEP(magr)))) {
+		    magr->weapon_check = NEED_HTH_WEAPON;
+		    if (mon_wield_item(magr) != 0) return 0;
+		}
+
+#ifdef TAME_RANGED_ATTACKS
+		if (MAINHAND) {
+			if (!MON_WEP(magr) ||
+				is_launcher(MON_WEP(magr))) {
+					/* implies no melee weapon found */
+				if(thrwmm(magr, mdef)){
+					if (tmphp > mdef->mhp){
+						res[i] = MM_HIT;
+						if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
+					} else res[i] = MM_MISS;
+					if (mdef->mhp < 1) res[i] = MM_DEF_DIED;
+					if (magr->mhp < 1) res[i] = MM_AGR_DIED;
+					break;
+				}
+			}
+		}
 #endif
 		possibly_unwield(magr, FALSE);
-		otmp = MON_WEP(magr);
-
+		otmp = (MAINHAND ? MON_WEP(magr) : MON_SWEP(magr));
+#undef MAINHAND
 		if (otmp) {
 		    if (vis) mswingsm(magr, mdef, otmp);
 		    tmp += hitval(otmp, mdef);
@@ -1997,6 +2032,12 @@ physical:{
             	if (vis) pline("The rapier of silver light sears %s!", mon_nam(mdef));
             }
 		break;
+		case AD_GLSS:
+			if(hates_silver(pd)) {
+            	tmp += rnd(20);
+            	if (vis) pline("%s's fractured claws sear %s!", Monnam(magr), mon_nam(mdef));
+            }
+		break;
 	    case AD_BLUD:
 			if(has_blood_mon(mdef) || (has_blood(pd) && mdef->mfaction == ZOMBIFIED)) {
             	tmp += mdef->m_lev;
@@ -2252,6 +2293,10 @@ physical:{
 	}
 	
 	if((magr->mfaction == ZOMBIFIED || (magr->mfaction == SKELIFIED && !rn2(20))) && can_undead_mon(mdef)){
+		mdef->zombify = 1;
+	}
+	
+	if(magr->mfaction == FRACTURED && is_kamerel(mdef->data)){
 		mdef->zombify = 1;
 	}
 	

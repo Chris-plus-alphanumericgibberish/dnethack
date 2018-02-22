@@ -5103,6 +5103,17 @@ register int	mmflags;
 	} else if(!undeadfaction && (mtmp->data->geno&G_HELL) == 0 && Is_mephisto_level(&u.uz)){
 		undeadfaction = CRYSTALFIED;
 		unsethouse = TRUE;
+	} else if(is_kamerel(mtmp->data)){
+		if(level.flags.has_kamerel_towers && (mtmp->data != &mons[PM_ARA_KAMEREL] || rn2(2))){
+			undeadfaction = FRACTURED;
+			unsethouse = TRUE;
+		} else if(!level.flags.has_minor_spire && mtmp->data != &mons[PM_ARA_KAMEREL]
+			&& (mtmp->data != &mons[PM_HUDOR_KAMEREL] || rn2(2))
+			&& (mtmp->data != &mons[PM_SHARAB_KAMEREL] || !rn2(4))
+		){
+			undeadfaction = FRACTURED;
+			unsethouse = TRUE;
+		}
 	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp)){
 		if(In_mines(&u.uz)){
 			if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && rn2(10) <= 5){
@@ -5122,6 +5133,11 @@ register int	mmflags;
 	}
 	if(undeadfaction){
 		mtmp->mfaction = undeadfaction;
+		if(undeadfaction == FRACTURED){
+			mtmp->m_lev += 4;
+			mtmp->mhpmax = d(mtmp->m_lev, 8);
+			mtmp->mhp = mtmp->mhpmax;
+		}
 		newsym(mtmp->mx,mtmp->my);
 		allow_minvent = !rn2(4);
 	}

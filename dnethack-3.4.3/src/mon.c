@@ -3221,6 +3221,33 @@ struct monst *mtmp;
 		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
 		mtmp->mhp = mtmp->mhpmax;
 		return;
+	} else if(mtmp->mfaction == FRACTURED && !rn2(2)){
+		if (cansee(mtmp->mx, mtmp->my)) {
+			pline("But wait...");
+			pline("%s fractures further%s, but now looks uninjured!", !is_silent(mtmp->data) ? " with an unearthly scream" : "", Monnam(mtmp));
+		}
+		mtmp->mcanmove = 1;
+		mtmp->mfrozen = 0;
+		mtmp->mtame = 0;
+		mtmp->mpeaceful = 0;
+		mtmp->m_lev += 4;
+		mtmp->mhpmax = d(mtmp->m_lev, 8);
+		mtmp->mhp = mtmp->mhpmax;
+		return;
+	} else if(mtmp->zombify && is_kamerel(mtmp->data)){
+		if (cansee(mtmp->mx, mtmp->my)) {
+			pline("But wait...");
+			pline("%s fractures further%s, but now looks uninjured!", !is_silent(mtmp->data) ? " with an unearthly scream" : "", Monnam(mtmp));
+		}
+		mtmp->mfaction = FRACTURED;
+		mtmp->mcanmove = 1;
+		mtmp->mfrozen = 0;
+		mtmp->mtame = 0;
+		mtmp->mpeaceful = 0;
+		mtmp->m_lev += 4;
+		mtmp->mhpmax = d(mtmp->m_lev, 8);
+		mtmp->mhp = mtmp->mhpmax;
+		return;
 	}
 	mtmp->mhp = 0;
 }

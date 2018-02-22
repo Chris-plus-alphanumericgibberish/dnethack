@@ -523,6 +523,8 @@ struct levelflags {
 	
 	Bitfield(cave, 1);			/* level is a cave */
 	Bitfield(outside, 1);			/* level is outside */
+	Bitfield(has_minor_spire, 1);	/* has minor spire (spawns only normal kamerel) */
+	Bitfield(has_kamerel_towers, 1);		/* has kamerel tows (spawns normal kamerel) */
 };
 
 typedef struct
