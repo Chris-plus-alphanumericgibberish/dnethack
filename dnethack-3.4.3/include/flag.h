@@ -136,6 +136,8 @@ struct flag {
 	boolean walky_level;		/* the current level has a undead-raising monster */
 	boolean shade_level;		/* the current level has a shade-casting monster */
 	
+	boolean goldka_level;		/* the current level has a gold kamerel golem on it */
+	
 	/* KMH, role patch -- Variables used during startup.
 	 *
 	 * If the user wishes to select a role, race, gender, and/or alignment
