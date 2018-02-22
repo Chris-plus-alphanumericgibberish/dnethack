@@ -572,6 +572,7 @@ moveloop()
 		    mcalcdistress();	/* adjust monsters' trap, blind, etc */
 
 		    /* reallocate movement rations to monsters */
+			flags.goldka_level=0;
 			flags.spore_level=0;
 			flags.slime_level=0;
 			flags.walky_level=0;
@@ -606,6 +607,7 @@ moveloop()
 						}
 					}
 				}
+				if(mtmp->data == &mons[PM_ARA_KAMEREL]) flags.goldka_level=1;
 				if(mtmp->data == &mons[PM_ZUGGTMOY]) flags.spore_level=1;
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
 				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH] || mtmp->data == &mons[PM_LEGION]) flags.walky_level=1;
@@ -623,6 +625,48 @@ moveloop()
 						digXchasm(mtmp);
 					} else { //Do for y
 						digYchasm(mtmp);
+					}
+				}
+				
+				if(mtmp->data == &mons[PM_GOLD_GOLEM]){
+					int golds = u.goldkamcount_tame + level.flags.goldkamcount_peace + level.flags.goldkamcount_hostile;
+					if(golds > 0){
+						if(canseemon(mtmp)){
+							pline("%s blossoms into a swirl of mirrored arcs!", Monnam(mtmp));
+							You("see the image of %s reflected in the golden mirrors!", an(mons[PM_ARA_KAMEREL].mname));
+						}
+						set_mon_data(mtmp, &mons[PM_ARA_KAMEREL], 0);
+						mtmp->m_lev = 15;
+						mtmp->mhpmax = d(15, 8);
+						mtmp->mhp = mtmp->mhpmax;
+						if(mtmp->mnamelth) mtmp = christen_monst(mtmp, ""); //Now a different entity
+						mtmp->movement = 9;//Don't pause for a turn
+						golds = rnd(golds);
+						
+						golds -= u.goldkamcount_tame;
+						if(golds <= 0){
+							u.goldkamcount_tame--;
+							if(!mtmp->mtame)
+								mtmp = tamedog(mtmp, (struct obj *) 0);
+							newsym(mtmp->mx,mtmp->my);
+							if(!mtmp)
+								continue; //something went wrong, and now mtmp is no good
+							goto karemade;
+						}
+						golds -= level.flags.goldkamcount_peace;
+						if(golds <= 0){
+							level.flags.goldkamcount_peace--;
+							mtmp->mtame = 0;
+							mtmp->mpeaceful = 1;
+							newsym(mtmp->mx,mtmp->my);
+							goto karemade;
+						}
+						level.flags.goldkamcount_hostile--;
+						mtmp->mtame = 0;
+						mtmp->mpeaceful = 0;
+						newsym(mtmp->mx,mtmp->my);
+karemade:						
+						set_malign(mtmp);
 					}
 				}
 				

@@ -334,6 +334,7 @@ struct obj {
 			 )\
 			)
 #define is_lightsaber(otmp) ((otmp)->otyp == LIGHTSABER || \
+							 (otmp)->otyp == KAMEREL_VAJRA || \
 							 (otmp)->otyp == BEAMSWORD || \
 							 (otmp)->otyp == DOUBLE_LIGHTSABER)
 #define is_multigen(otmp)	((otmp->oclass == WEAPON_CLASS && \

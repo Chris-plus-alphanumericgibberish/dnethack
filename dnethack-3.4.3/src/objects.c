@@ -294,6 +294,8 @@ WEAPON("quarterstaff", "staff",
 	0, 0, 1, 10, 40,  5,  6,  6, 0, B,   P_QUARTERSTAFF, WOOD, HI_WOOD),
 WEAPON("khakkhara", "monk's staff", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1,  2, 120,  5,  6,  4, 0, B|P,   P_QUARTERSTAFF, METAL, HI_SILVER),
+WEAPON("kamerel vajra", "short mace", /*Needs encyc entry*/
+	0, 1, 0,  0,  10,800, 6, 6, 1, S|E, P_MACE, METAL, HI_GOLD),
 WEAPON("bar", (char *)0,
 	1, 1, 1, 0, 400,  10,  8,  6, -10, B,   P_QUARTERSTAFF, METAL, HI_METAL),
 /* two-piece */
@@ -911,11 +913,11 @@ WEPTOOL("seismic hammer", "dull metalic hammer",
  * Lightsabers get 3x dice when lit 
  */
 WEPTOOL("lightsaber", "sword hilt", /*Needs (better) encyc entry*/
-	0, 1, 1, 0,  0, 12, 500, 8,  8, -3, SLASH|E, P_SABER, SILVER, HI_SILVER),
+	0, 1, 1, 0,  0, 10, 500, 8,  8, -3, SLASH|E, P_SABER, METAL, HI_SILVER),
 WEPTOOL("beamsword",  "broadsword hilt", /*Needs encyc entry*/
-	0, 1, 1, 0,  0, 20, 500, 10,10, -3, SLASH|E, P_BROAD_SWORD, GOLD, HI_GOLD),
+	0, 1, 1, 0,  0, 20, 500, 10,10, -3, SLASH|E, P_BROAD_SWORD, METAL, HI_GOLD),
 WEPTOOL("double lightsaber",  "long grip", /*Needs encyc entry*//*Needs tile*/
-	0, 1, 1, 1,  0, 24,1000, 10,10, -6, SLASH|E, P_QUARTERSTAFF, PLATINUM, HI_METAL),
+	0, 1, 1, 1,  0, 30,1000, 10,10, -6, SLASH|E, P_QUARTERSTAFF, METAL, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
 	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
 /* 3.4.1: unicorn horn left classified as "magic" */

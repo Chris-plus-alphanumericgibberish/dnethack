@@ -411,6 +411,10 @@ boolean artif;
 	else if(otyp == STILETTOS){if(!rn2(12)) otmp->obj_material = SILVER;}
 	else if(otyp == ARMORED_BOOTS) otmp->obj_material = COPPER;
 	else if(otyp == ROUNDSHIELD) otmp->obj_material = COPPER;
+	else if(otyp == LIGHTSABER) otmp->obj_material = SILVER;
+	else if(otyp == BEAMSWORD) otmp->obj_material = GOLD;
+	else if(otyp == KAMEREL_VAJRA) otmp->obj_material = GOLD;
+	else if(otyp == DOUBLE_LIGHTSABER) otmp->obj_material = PLATINUM;
 	else otmp->obj_material = objects[otyp].oc_material;
 	
 	if(otyp == VIPERWHIP) otmp->ovar1 = rn2(2) ? 1 : rn2(5) ? rnd(2) : rnd(5);

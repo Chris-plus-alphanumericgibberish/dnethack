@@ -2549,7 +2549,7 @@ doengrave()
 		break;
 	    case BURN:
 			multi = -(len/10);
-			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC){
+			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC && otmp->otyp != KAMEREL_VAJRA){
 				maxelen = ((otmp->age/101) + 1)*10;
 				if (len > maxelen) {
 					multi = -(maxelen/10);
@@ -3352,7 +3352,7 @@ doward()
 		break;
 	    case BURN:
 			multi = -(len/10);
-			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC){
+			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC && otmp->otyp != KAMEREL_VAJRA){
 				maxelen = ((otmp->age/101) + 1)*10;
 				if (len > maxelen) {
 					multi = -(maxelen/10);
@@ -4680,7 +4680,7 @@ doseal()
 		break;
 	    case BURN:
 			multi = -(len/10);
-			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC){
+			if(is_lightsaber(otmp) && otmp->oartifact != ART_INFINITY_S_MIRRORED_ARC && otmp->otyp != KAMEREL_VAJRA){
 				maxelen = ((otmp->age/101) + 1)*10;
 				if (len > maxelen) {
 					multi = -(maxelen/10);

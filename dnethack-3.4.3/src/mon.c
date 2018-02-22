@@ -651,6 +651,11 @@ register struct monst *mtmp;
 			obj = mkgold((long)(200 - rnl(101)), x, y);
 			mtmp->mnamelth = 0;
 			break;
+	    case PM_ARA_KAMEREL:
+			/* Ara Kamerel are projecting their images into gold golems */
+			obj = mkgold((long)(200 - rnl(101)), x, y);
+			mtmp->mnamelth = 0;
+			break;
 		case PM_TREASURY_GOLEM:
 			num = d(2,4); 
 			while (num--)
@@ -3278,6 +3283,14 @@ register struct monst *mtmp;
 				mvitals[tmp].mvflags &= (~G_EXTINCT);
 				reset_rndmonst(tmp);
 			}
+	}
+	if(tmp == PM_ARA_KAMEREL && mtmp->mfaction != FRACTURED){
+		if(mtmp->mtame)
+			u.goldkamcount_tame++;
+		else if(mtmp->mpeaceful)
+			level.flags.goldkamcount_peace++;
+		else
+			level.flags.goldkamcount_hostile++;
 	}
 	/* if it's a (possibly polymorphed) quest leader, mark him as dead */
 	if (mtmp->m_id == quest_status.leader_m_id)

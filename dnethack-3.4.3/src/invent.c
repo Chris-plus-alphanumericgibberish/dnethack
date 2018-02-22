@@ -1032,7 +1032,7 @@ register const char *let,*word;
 		|| (!strcmp(word, "write with") &&
 		    ((otmp->oclass == TOOL_CLASS &&
 		     otyp != MAGIC_MARKER && otyp != TOWEL 
-			 && otyp != LIGHTSABER && otyp != BEAMSWORD && otyp != DOUBLE_LIGHTSABER 
+			 && otyp != LIGHTSABER && otyp != BEAMSWORD && otyp != DOUBLE_LIGHTSABER && otyp != KAMEREL_VAJRA 
 			 && !spec_ability3(otmp, SPFX3_ENGRV)) ||
 			(otmp->oclass == CHAIN_CLASS)))
 		|| (!strcmp(word, "tin") &&

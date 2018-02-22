@@ -1229,6 +1229,7 @@ int thrown;
 		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 4) + obj->spe);
 			
 		    else if((obj->oartifact == ART_INFINITY_S_MIRRORED_ARC && !litsaber(obj))) tmp = d(1,6) + obj->spe + weapon_dam_bonus(0); //martial arts aid
+		    else if((obj->otyp == KAMEREL_VAJRA && !litsaber(obj))) tmp = d(1,4) + (bigmonst(mdat) ? 0 : 1) + obj->spe + weapon_dam_bonus(0); //small mace
 		    else if((is_lightsaber(obj) && !litsaber(obj))) tmp = d(1,4) + obj->spe + weapon_dam_bonus(0); //martial arts aid
 
 			else tmp = rnd(2);
@@ -1239,6 +1240,8 @@ int thrown;
 				weaponmask |= SLASH;
 			} else if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
 				weaponmask |= WHACK|SLASH;
+			} else if(obj->otyp == KAMEREL_VAJRA){
+				weaponmask |= WHACK|PIERCE;
 			} else {
 				weaponmask |= WHACK;
 			}

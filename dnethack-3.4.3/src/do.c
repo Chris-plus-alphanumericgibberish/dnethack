@@ -236,7 +236,7 @@ const char *verb;
 				The(xname(obj)), otense(obj, "tumble"),
 				the_your[t->madeby_u]);
 	}
-	if (is_lightsaber(obj) && litsaber(obj)) {
+	if (is_lightsaber(obj) && litsaber(obj) && obj->oartifact != ART_INFINITY_S_MIRRORED_ARC && obj->otyp != KAMEREL_VAJRA) {
 		if (cansee(x, y)) You("see %s deactivate.", an(xname(obj)));
 		lightsaber_deactivate(obj, TRUE);
 	}
@@ -1302,23 +1302,25 @@ boolean at_stairs, falling, portal;
 				(uswapwep && is_lightsaber(uswapwep) && litsaber(uswapwep) && u.twoweap)
 			){
 				boolean mainsaber = (uwep && is_lightsaber(uwep) && litsaber(uwep));
+				boolean mainsaber_locked = (uwep && (uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC || uwep->otyp == KAMEREL_VAJRA));
 				boolean secsaber = (uswapwep && is_lightsaber(uswapwep) && litsaber(uswapwep) && u.twoweap);
-				if((mainsaber && uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC)
-					|| (secsaber && uswapwep->oartifact == ART_INFINITY_S_MIRRORED_ARC)
+				boolean secsaber_locked = (uswapwep && (uswapwep->oartifact == ART_INFINITY_S_MIRRORED_ARC || uswapwep->otyp == KAMEREL_VAJRA));
+				if((mainsaber &&  mainsaber_locked)
+					|| (secsaber && secsaber_locked)
 				){
 					int lrole = rnl(20);
 					if(lrole+5 < ACURR(A_DEX)){
 						You("roll and dodge your tumbling energy sword%s.", (mainsaber && secsaber) ? "s" : "");
 					} else {
-						You("come into contact with your energy sword%s.", (mainsaber && secsaber && lrole >= ACURR(A_DEX)) ? "s" : "");
-						if(mainsaber && (uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC || lrole >= ACURR(A_DEX)))
+						You("come into contact with your energy sword%s.", (mainsaber && secsaber && (lrole >= ACURR(A_DEX) || (mainsaber_locked && secsaber_locked))) ? "s" : "");
+						if(mainsaber && (mainsaber_locked || lrole >= ACURR(A_DEX)))
 							losehp(dmgval(uwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
-						if(secsaber && (uswapwep->oartifact == ART_INFINITY_S_MIRRORED_ARC || lrole >= ACURR(A_DEX)))
+						if(secsaber && (secsaber_locked || lrole >= ACURR(A_DEX)))
 							losehp(dmgval(uswapwep,&youmonst,0), "falling downstairs with a lit lightsaber", KILLED_BY);
 					}
-					if(mainsaber && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC)
+					if(mainsaber && !mainsaber_locked)
 						lightsaber_deactivate(uwep, TRUE);
-					if(secsaber && uswapwep->oartifact != ART_INFINITY_S_MIRRORED_ARC)
+					if(secsaber && !secsaber_locked)
 						lightsaber_deactivate(uswapwep, TRUE);
 				} else {
 					if(rnl(20) < ACURR(A_DEX)){

@@ -1275,7 +1275,7 @@ domove()
 				trap = t_at(u.ux,u.uy);
 				u.utrap = 0;
 				pline("The energy blade burns handholds in the side of the pit!");
-				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC) uwep->age -= 200;
+				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC && uwep->otyp != KAMEREL_VAJRA) uwep->age -= 200;
 				fill_pit(u.ux, u.uy);
 				vision_full_recalc = 1;	/* vision limits change */
 		    } else if (flags.verbose) {
@@ -1333,7 +1333,7 @@ domove()
 				u.utrap = 0;
 				pline("%s through the web!", is_lightsaber(uwep) ? "The energy blade burns" : 
 									uwep->oartifact == ART_LIECLEAVER ? "Liecleaver cuts" : "Sting cuts");
-				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC) uwep->age -= 100;
+				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC && uwep->otyp != KAMEREL_VAJRA) uwep->age -= 100;
 				if(trap->ttyp == WEB){
 					if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
 						deltrap(trap);
@@ -1403,7 +1403,7 @@ domove()
 				trap = t_at(u.ux,u.uy);
 				u.utrap = 0;
 				pline("The energy blade burns through the bear trap!");
-				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC) uwep->age -= 100;
+				if(is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC && uwep->otyp != KAMEREL_VAJRA) uwep->age -= 100;
 				if(trap->ttyp == BEAR_TRAP){
 					deltrap(trap);
 					newsym(u.ux,u.uy);

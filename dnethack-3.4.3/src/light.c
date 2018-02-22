@@ -668,7 +668,7 @@ obj_is_burning(obj)
     return (obj->lamplit &&
 		 (	obj->otyp == MAGIC_LAMP
 		 || ignitable(obj)
-		 ||	(is_lightsaber(obj) && obj->oartifact != ART_INFINITY_S_MIRRORED_ARC)
+		 ||	(is_lightsaber(obj) && obj->oartifact != ART_INFINITY_S_MIRRORED_ARC && obj->otyp != KAMEREL_VAJRA)
 		 ||	obj->oartifact == ART_HOLY_MOONLIGHT_SWORD
 		 ||	artifact_light(obj)));
 }
@@ -682,12 +682,16 @@ litsaber(obj)
 		get_obj_location(obj, &x, &y, 0);
 		if(x == 0 && y == 0) return FALSE;
 		return !isdark(x, y);
+	} else if(obj->otyp == KAMEREL_VAJRA){
+		if(u.goldkamcount_tame || level.flags.goldkamcount_peace || level.flags.goldkamcount_hostile || flags.goldka_level)
+			return TRUE;
+		else return FALSE;
 	} else {
 		return obj->lamplit;
 	}
 }
 
-/* copy the light source(s) attachted to src, and attach it/them to dest */
+/* copy the light source(s) attached to src, and attach it/them to dest */
 void
 obj_split_light_source(src, dest)
     struct obj *src, *dest;

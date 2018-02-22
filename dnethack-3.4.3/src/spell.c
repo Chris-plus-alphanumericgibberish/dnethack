@@ -2655,7 +2655,7 @@ spiriteffects(power, atme)
 			nomul(5,"recovering from the Horrid Rainbow");
 		}break;
 		case PWR_REFILL_LANTERN:
-			if(uwep && (uwep->otyp == OIL_LAMP || (is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC)) && !uwep->oartifact){
+			if(uwep && (uwep->otyp == OIL_LAMP || (is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC && uwep->otyp != KAMEREL_VAJRA)) && !uwep->oartifact){
 				int multiplier = is_lightsaber(uwep) ? 100 : 1;
 				uwep->age += d(5,dsize) * 10 * multiplier;
 				if(uwep->age > 1500*multiplier) uwep->age = 1500*multiplier;
@@ -2667,7 +2667,7 @@ spiriteffects(power, atme)
 			} else return 0;
 		break;
 		case PWR_HELLFIRE:
-			if(uwep && (uwep->otyp == OIL_LAMP || uwep->otyp == POT_OIL || (is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC)) && !uwep->oartifact && uwep->lamplit){
+			if(uwep && (uwep->otyp == OIL_LAMP || uwep->otyp == POT_OIL || (is_lightsaber(uwep) && uwep->oartifact != ART_INFINITY_S_MIRRORED_ARC && uwep->otyp != KAMEREL_VAJRA)) && !uwep->oartifact && uwep->lamplit){
 				if (throwspell()) {
 					if(uwep->age < 500) uwep->age = 0;
 					else uwep->age -= 500;

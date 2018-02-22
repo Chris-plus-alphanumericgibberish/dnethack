@@ -484,6 +484,8 @@ struct damage {
 struct levelflags {
 	uchar	nfountains;		/* number of fountains on level */
 	uchar	nsinks;			/* number of sinks on the level */
+	int		goldkamcount_hostile;	/* number of hostile gold kamerel 'above' level */
+	int		goldkamcount_peace;	/* number of peaceful gold kamerel 'above' level */
 	/* Several flags that give hints about what's on the level */
 	Bitfield(has_shop, 1);
 	Bitfield(has_vault, 1);
