@@ -2078,8 +2078,7 @@ long timeout;
 	
 	if (pmtype != -1) {
 		/* We don't want special case revivals */
-		if (cant_create(&pmtype, TRUE) || (body->oxlth && !(((struct monst *)body->oextra)->zombify) &&
-					(body->oattached == OATTACHED_MONST)))
+		if (cant_create(&pmtype, TRUE) || (body->oxlth && (body->oattached == OATTACHED_MONST) && !(((struct monst *)body->oextra)->zombify)))
 			pmtype = -1; /* cantcreate might have changed it so change it back */
 		else {
 			body->corpsenm = pmtype;
