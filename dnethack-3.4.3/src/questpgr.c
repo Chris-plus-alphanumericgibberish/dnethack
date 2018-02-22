@@ -7,6 +7,7 @@
 
 /*  quest-specific pager routines. */
 
+extern const int monstr[];
 #include "qtext.h"
 
 #define QTEXT_FILE	"quest.dat"
@@ -717,8 +718,51 @@ chaos_montype()
 struct permonst *
 neutral_montype()
 {
+	if(u.uz.dnum == neutral_dnum && u.uz.dlevel < sum_of_all_level.dlevel){
+		int chance = rn2(100);
+		int diff = (u.ulevel+level_difficulty())/2;
+		switch(rn2(5)){
+			case 0:
+				if(rn2(2)) &mons[PM_HORSE];
+				else return mkclass(S_QUADRUPED, G_NOHELL);
+			break;
+			case 1:
+				if(chance < 10 && !toostrong(PM_ARGENACH_RILMANI, diff))
+					return &mons[PM_ARGENACH_RILMANI];
+				if(chance < 30 && !toostrong(PM_CUPRILACH_RILMANI, diff))
+					return &mons[PM_CUPRILACH_RILMANI];
+				if(chance < 60 && !toostrong(PM_FERRUMACH_RILMANI, diff))
+					return &mons[PM_CUPRILACH_RILMANI];
+				return &mons[PM_PLUMACH_RILMANI];
+			break;
+			case 2:
+				if(chance < 5 && !toostrong(PM_ARA_KAMEREL, diff))
+					return &mons[PM_ARA_KAMEREL];
+				if(chance < 15 && !toostrong(PM_SHARAB_KAMEREL, diff))
+					return &mons[PM_SHARAB_KAMEREL];
+				return &mons[PM_AMM_KAMEREL];
+			break;
+			case 3:
+				if(rn2(4)) return (struct permonst *)0;
+				return &mons[PM_SHATTERED_ZIGGURAT_CULTIST];
+			break;
+			case 4:
+				return &mons[PM_PLAINS_CENTAUR];
+			break;
+		}
+	}
 	if(on_level(&sum_of_all_level,&u.uz)){
-		return mkclass(S_NEU_OUTSIDER, G_NOHELL|G_HELL);
+		int chance = rn2(100);
+		int diff = (u.ulevel+level_difficulty())/2;
+		if(chance < 5 && !toostrong(PM_AURUMACH_RILMANI, diff))
+			return &mons[PM_AURUMACH_RILMANI];
+		if(chance < 15 && !toostrong(PM_ARGENACH_RILMANI, diff))
+			return &mons[PM_ARGENACH_RILMANI];
+		if(chance < 35 && !toostrong(PM_CUPRILACH_RILMANI, diff))
+			return &mons[PM_CUPRILACH_RILMANI];
+		if(chance < 65 && !toostrong(PM_FERRUMACH_RILMANI, diff))
+			return &mons[PM_CUPRILACH_RILMANI];
+		return &mons[PM_PLUMACH_RILMANI];
 	}
 	if(on_level(&rlyeh_level,&u.uz)){
 		int chance = d(1,100);

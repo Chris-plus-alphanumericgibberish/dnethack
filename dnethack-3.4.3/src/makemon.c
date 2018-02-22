@@ -5921,9 +5921,13 @@ rndmonst()
 		//else continue to random generation
 	}
 	else if (In_neu(&u.uz) && 
-		(Is_rlyeh(&u.uz) ||  Is_sumall(&u.uz) || Is_gatetown(&u.uz))){
+		(
+			Is_rlyeh(&u.uz) ||  Is_sumall(&u.uz) || Is_gatetown(&u.uz) || 
+			(rn2(10) && (u.uz.dnum == neutral_dnum && u.uz.dlevel < sum_of_all_level.dlevel))
+		)
+	){
 	    if(!in_mklev) return neutral_montype();
-		else return (struct permonst *)0;/*NOTE: ugly method to stop monster generation durning level creation, since I can't find a better way*/
+		else return (struct permonst *)0;/*NOTE: ugly method to stop monster generation during level creation, since I can't find a better way*/
 	}
 	else if (In_cha(&u.uz)){
 	    return chaos_montype();
