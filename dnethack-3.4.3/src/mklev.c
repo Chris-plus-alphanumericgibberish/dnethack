@@ -588,6 +588,10 @@ clear_level_structures()
 
 	level.flags.nfountains = 0;
 	level.flags.nsinks = 0;
+	
+	level.flags.goldkamcount_hostile = 0;
+	level.flags.goldkamcount_peace = 0;
+	
 	level.flags.has_shop = 0;
 	level.flags.has_vault = 0;
 	level.flags.has_zoo = 0;
@@ -620,6 +624,8 @@ clear_level_structures()
 	
 	level.flags.cave = 0;
 	level.flags.outside = 0;
+	level.flags.has_minor_spire = 0;
+	level.flags.has_kamerel_towers = 0;
 
 	nroom = 0;
 	rooms[0].hx = -1;
