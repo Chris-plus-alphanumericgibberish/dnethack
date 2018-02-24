@@ -35,6 +35,7 @@ static struct trobj Archeologist[] = {
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ TOUCHSTONE, 0, GEM_CLASS, 1, 0 },
 	{ SACK, 0, TOOL_CLASS, 1, 0 },
+	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Anachrononaut_Hu[] = {
@@ -164,6 +165,7 @@ static struct trobj Barbarian[] = {
 	{ AXE, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ RING_MAIL, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ FOOD_RATION, 0, FOOD_CLASS, 1, 0 },
+	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 #ifdef BARD
@@ -210,6 +212,7 @@ static struct trobj Cave_man[] = {
 	{ FLINT, 0, GEM_CLASS, 15, UNDEF_BLESS },	/* quan is variable */
 	{ ROCK, 0, GEM_CLASS, 3, 0 },			/* yields 18..33 */
 	{ LEATHER_ARMOR, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 #ifdef CONVICT
@@ -276,6 +279,7 @@ static struct trobj Noble[] = {
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 10, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
+	{ SUNROD, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj DNoble[] = {
@@ -304,6 +308,7 @@ static struct trobj DwarfNoble[] = {
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 	{ TRIPE_RATION, 0, FOOD_CLASS, 3, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
+	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Pirate[] = {
@@ -359,6 +364,7 @@ static struct trobj Ranger[] = {
 	{ ARROW, 0, WEAPON_CLASS, 30, UNDEF_BLESS },
 	{ CLOAK_OF_DISPLACEMENT, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ CRAM_RATION, 0, FOOD_CLASS, 4, 0 },
+	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Rogue[] = {
@@ -369,6 +375,8 @@ static struct trobj Rogue[] = {
 	{ POT_SICKNESS, 0, POTION_CLASS, 1, 0 },
 	{ LOCK_PICK, 9, TOOL_CLASS, 1, 0 },
 	{ SACK, 0, TOOL_CLASS, 1, 0 },
+	{ TORCH, 0, TOOL_CLASS, 2, 0 },
+	{ SHADOWLANDER_S_TORCH, 0, TOOL_CLASS, 2, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Samurai[] = {
@@ -617,6 +625,8 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	GENTLEMAN_S_SUIT,			CONSORT_S_SUIT  },
     // { PM_DROW,	SCIMITAR,				DROVEN_SPEAR  },
     { PM_DROW,	APPLE,						TRIPE_RATION  },
+    { PM_DROW,	TORCH,						SHADOWLANDER_S_TORCH  },
+    { PM_DROW,	SUNROD,						SHADOWLANDER_S_TORCH  },
     { PM_HALF_DRAGON,	APPLE,		TRIPE_RATION  },
     { PM_HALF_DRAGON,	CARROT,		TRIPE_RATION  },
     { PM_INCANTIFIER,CLOAK_OF_MAGIC_RESISTANCE,		ROBE  },
