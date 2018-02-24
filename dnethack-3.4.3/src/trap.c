@@ -3527,7 +3527,7 @@ struct trap *ttmp;
 	int x = rn2(COLNO);
 	int y = rn2(ROWNO);
 	int tries = 0;
-	while(tries++ < 500000 && (!isok(x,y) || levl[x][y].typ != ROOM || t_at(x,y))){
+	while(tries++ < 500000 && (!isok(x,y) || levl[x][y].typ != ROOM)){
 		x = rn2(COLNO);
 		y = rn2(ROWNO);
 	}
