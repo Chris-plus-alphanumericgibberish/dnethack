@@ -591,8 +591,17 @@ boolean artif;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 5);
 					break;
+		case TORCH:
+					otmp->age = (long) rn1(500,1000);
+					otmp->lamplit = 0;
+					blessorcurse(otmp, 5);
+					break;
+		case SUNROD:
+					otmp->age = (long) rn1(500,1000);
+					otmp->lamplit = 0;
+					blessorcurse(otmp, 5);
+					break;
 		case SHADOWLANDER_S_TORCH:
-					otmp->spe = 1;
 					otmp->age = (long) rn1(500,1000);
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 5);

@@ -3546,7 +3546,9 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		u.uswldtim = (unsigned)((tim_tmp < 2) ? 2 : tim_tmp);
 		swallowed(1);
 		for (otmp2 = invent; otmp2; otmp2 = otmp2->nobj)
-		    (void) snuff_lit(otmp2);
+			if(!is_whirly(u.ustuck->data)
+			|| (otmp2->otyp != TORCH && otmp2->otyp != SHADOWLANDER_S_TORCH && otmp2->otyp != SUNROD))
+				(void) snuff_lit(otmp2);
 	}
 
 	if (mtmp != u.ustuck) return(0);

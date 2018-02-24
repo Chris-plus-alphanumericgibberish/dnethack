@@ -2715,59 +2715,66 @@ dodip()
 	if (potion->otyp == POT_OIL) {
 	    boolean wisx = FALSE;
 	    if (potion->lamplit) {	/* burning */
-		int omat = obj->obj_material;
-		/* the code here should be merged with fire_damage */
-		if (catch_lit(obj)) {
-		    /* catch_lit does all the work if true */
-		} else if (obj->oerodeproof || obj_resists(obj, 5, 95) ||
-			   !is_flammable(obj) || obj->oclass == FOOD_CLASS) {
-		    pline("%s %s to burn for a moment.",
-			  Yname2(obj), otense(obj, "seem"));
-		} else {
-		    if ((omat == PLASTIC || omat == PAPER) && !obj->oartifact)
-			obj->oeroded = MAX_ERODE;
-		    pline_The("burning oil %s %s.",
-			    obj->oeroded == MAX_ERODE ? "destroys" : "damages",
-			    yname(obj));
-		    if (obj->oeroded == MAX_ERODE) {
-			setnotworn(obj);
-			obj_extract_self(obj);
-			obfree(obj, (struct obj *)0);
-			obj = (struct obj *) 0;
-		    } else {
-			/* we know it's carried */
-			if (obj->unpaid) {
-			    /* create a dummy duplicate to put on bill */
-			    verbalize("You burnt it, you bought it!");
-			    bill_dummy_object(obj);
+			int omat = obj->obj_material;
+			/* the code here should be merged with fire_damage */
+			if (catch_lit(obj)) {
+				/* catch_lit does all the work if true */
+			} else if (obj->oerodeproof || obj_resists(obj, 5, 95) ||
+				   !is_flammable(obj) || obj->oclass == FOOD_CLASS) {
+				pline("%s %s to burn for a moment.",
+				  Yname2(obj), otense(obj, "seem"));
+			} else {
+				if ((omat == PLASTIC || omat == PAPER) && !obj->oartifact)
+				obj->oeroded = MAX_ERODE;
+				pline_The("burning oil %s %s.",
+					obj->oeroded == MAX_ERODE ? "destroys" : "damages",
+					yname(obj));
+				if (obj->oeroded == MAX_ERODE) {
+				setnotworn(obj);
+				obj_extract_self(obj);
+				obfree(obj, (struct obj *)0);
+				obj = (struct obj *) 0;
+				} else {
+				/* we know it's carried */
+				if (obj->unpaid) {
+					/* create a dummy duplicate to put on bill */
+					verbalize("You burnt it, you bought it!");
+					bill_dummy_object(obj);
+				}
+				obj->oeroded++;
+				}
 			}
-			obj->oeroded++;
-		    }
-		}
 	    } else if (potion->cursed) {
-		pline_The("potion spills and covers your %s with oil.",
-			  makeplural(body_part(FINGER)));
-		incr_itimeout(&Glib, d(2,10));
+			pline_The("potion spills and covers your %s with oil.",
+				  makeplural(body_part(FINGER)));
+			incr_itimeout(&Glib, d(2,10));
+	    } else if (obj->otyp == CLUB) {
+			You("make a torch from your club and the oil.");
+			obj->otyp = TORCH;
+			obj->oclass = TOOL_CLASS;
+			if(potion->dknown && !objects[potion->otyp].oc_name_known)
+				makeknown(potion->otyp);
+			goto poof;
 	    } else if (obj->oclass != WEAPON_CLASS && !is_weptool(obj)) {
-		/* the following cases apply only to weapons */
-		goto more_dips;
-	    /* Oil removes rust and corrosion, but doesn't unburn.
-	     * Arrows, etc are classed as metallic due to arrowhead
-	     * material, but dipping in oil shouldn't repair them.
-	     */
+			/* the following cases apply only to weapons */
+			goto more_dips;
+			/* Oil removes rust and corrosion, but doesn't unburn.
+			 * Arrows, etc are classed as metallic due to arrowhead
+			 * material, but dipping in oil shouldn't repair them.
+			 */
 	    } else if ((!is_rustprone(obj) && !is_corrodeable(obj)) ||
 			is_ammo(obj) || (!obj->oeroded && !obj->oeroded2)) {
-		/* uses up potion, doesn't set obj->greased */
-		pline("%s %s with an oily sheen.",
-		      Yname2(obj), otense(obj, "gleam"));
+			/* uses up potion, doesn't set obj->greased */
+			pline("%s %s with an oily sheen.",
+				  Yname2(obj), otense(obj, "gleam"));
 	    } else {
-		pline("%s %s less %s.",
-		      Yname2(obj), otense(obj, "are"),
-		      (obj->oeroded && obj->oeroded2) ? "corroded and rusty" :
-			obj->oeroded ? "rusty" : "corroded");
-		if (obj->oeroded > 0) obj->oeroded--;
-		if (obj->oeroded2 > 0) obj->oeroded2--;
-		wisx = TRUE;
+			pline("%s %s less %s.",
+				  Yname2(obj), otense(obj, "are"),
+				  (obj->oeroded && obj->oeroded2) ? "corroded and rusty" :
+				obj->oeroded ? "rusty" : "corroded");
+			if (obj->oeroded > 0) obj->oeroded--;
+			if (obj->oeroded2 > 0) obj->oeroded2--;
+			wisx = TRUE;
 	    }
 	    exercise(A_WIS, wisx);
 	    makeknown(potion->otyp);
@@ -2776,8 +2783,46 @@ dodip()
 	}
     more_dips:
 
+	if((obj->lamplit || potion->lamplit) 
+		&& (obj->otyp == TORCH || obj->otyp == SHADOWLANDER_S_TORCH)
+		&& (potion->otyp == POT_OIL)
+	) {
+		if(!obj->lamplit)
+			begin_burn(obj, FALSE);
+		useup(potion);
+		explode(u.ux, u.uy, 11, d(6,6), 0, EXPL_FIERY);
+		exercise(A_WIS, FALSE);
+		return 1;
+	} else if((obj->otyp == SUNROD)
+		&& (potion->otyp == POT_ACID)
+	) {
+		obj->age = max(obj->age-100, 1);
+		if(!obj->lamplit)
+			begin_burn(obj, FALSE);
+		else {
+			//May change radius, snuff and relight
+			end_burn(obj, TRUE);
+			begin_burn(obj, FALSE);
+		}
+		useup(potion);
+		if(!Shock_resistance){
+			losehp(d(3,6) + 3*obj->spe, "discharging sunrod", KILLED_BY_AN);
+		}
+		if(!EShock_resistance){
+			if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
+			if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
+		}
+		losehp(Acid_resistance ? rnd(5) : rnd(10),
+			   "alchemic blast", KILLED_BY_AN);
+		if (!resists_blnd(&youmonst)) {
+			You("are blinded by the flash!");
+			make_blinded((long)d(1,50),FALSE);
+			if (!Blind) Your1(vision_clears);
+		}
+		exercise(A_WIS, FALSE);
+		return 1;
 	/* Allow filling of MAGIC_LAMPs to prevent identification by player */
-	if ((obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP) &&
+	} else if ((obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP) &&
 	   (potion->otyp == POT_OIL)) {
 	    /* Turn off engine before fueling, turn off fuel too :-)  */
 	    if (obj->lamplit || potion->lamplit) {

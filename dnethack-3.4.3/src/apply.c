@@ -1244,10 +1244,16 @@ struct obj **optr;
 	const char *s = (obj->quan != 1) ? "candles" : "candle";
 	char qbuf[QBUFSZ];
 
-	if(u.uswallow) {
-		You(no_elbow_room);
-		return;
+	if (u.uswallow){
+		if(!is_whirly(u.ustuck->data)) {
+			You(no_elbow_room);
+			return;
+		} else if(!obj->lamplit){
+			You("%can't get the %s to light.  It's quite hopeless under these conditions.", s);
+			return;
+		}
 	}
+	
 	if(Underwater) {
 		pline("Sorry, fire and water don't mix.");
 		return;
@@ -1500,11 +1506,16 @@ light_cocktail(obj)
 //	    "potion";
 //#endif
 
-	if (u.uswallow) {
-	    You(no_elbow_room);
-	    return;
+	if (u.uswallow){
+		if(!is_whirly(u.ustuck->data)) {
+			You(no_elbow_room);
+			return;
+		} else if(!obj->lamplit){
+			You("%can't get the %s to light.  It's quite hopeless under these conditions.", objnam);
+			return;
+		}
 	}
-
+	
 	if(Underwater) {
 		You("can't light this underwater!");
 		return;
@@ -1569,11 +1580,21 @@ light_torch(obj)
 	char buf[BUFSZ];
 	const char *objnam = "torch";
 
-	if (u.uswallow) {
-	    You(no_elbow_room);
-	    return;
+	if (u.uswallow){
+		if(!is_whirly(u.ustuck->data)) {
+			You(no_elbow_room);
+			return;
+		} else if(!obj->lamplit && obj->otyp != SUNROD && rn2(4)){
+			You("can't quite get the %s to light!", objnam);
+			return;
+		}
 	}
-
+	
+	if(obj->lamplit && obj->otyp == SUNROD){
+		You("can't snuff the lit %s!", objnam);
+		return;
+	}
+	
 	if(Underwater) {
 		You("can't light this underwater!");
 		return;
@@ -1594,9 +1615,16 @@ light_torch(obj)
 	    There("is not enough oxygen to sustain a fire.");
 	    return;
 	}
-
-	You("light %s %s.%s", shk_your(buf, obj), objnam,
-	    Blind ? "" : "  It gives off dark shadows.");
+	if(obj->otyp == SHADOWLANDER_S_TORCH){
+		You("light %s %s.%s", shk_your(buf, obj), objnam,
+			Blind ? "" : "  It gives off dark shadows.");
+	} else if(obj->otyp == SUNROD){
+		You("light %s %s.%s", shk_your(buf, obj), objnam,
+			Blind ? "" : "  It gives off brilliant light.");
+	} else {
+		You("light %s %s.%s", shk_your(buf, obj), objnam,
+			Blind ? "" : "  It gives off bright flickering light.");
+	}
 	if (obj->unpaid && costly_spot(u.ux, u.uy)) {
 		verbalize("You burn it, you bought it!");
 	    bill_dummy_object(obj);
@@ -5179,6 +5207,12 @@ doapply()
 		obj = 0; //May have been dealocated, just get rid of it
 	break;
 	case SHADOWLANDER_S_TORCH:
+		light_torch(obj);
+	break;
+	case SUNROD:
+		light_torch(obj);
+	break;
+	case TORCH:
 		light_torch(obj);
 	break;
 #ifdef TOURIST
