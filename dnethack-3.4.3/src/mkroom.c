@@ -28,8 +28,8 @@ STATIC_DCL void NDECL(mkfishingvillage);
 STATIC_DCL void NDECL(mkpluhomestead);
 STATIC_DCL void FDECL(mkfishinghut, (boolean));
 STATIC_DCL void NDECL(mkpluvillage);
-STATIC_DCL void NDECL(mkferufort);
-STATIC_DCL void NDECL(mkferutower);
+STATIC_DCL void NDECL(mkferrufort);
+STATIC_DCL void NDECL(mkferrutower);
 STATIC_DCL void NDECL(mklolthsepulcher);
 STATIC_DCL void NDECL(mkmivaultlolth);
 STATIC_DCL void NDECL(mkvaultlolth);
@@ -2092,7 +2092,7 @@ mkpluvillage()
 
 STATIC_OVL
 void
-mkferufort()
+mkferrufort()
 {
 	int wallln = rn2(2) ? 4 : 3;
 	int x=0,y=0,tx, ty, tries=0;
@@ -2239,9 +2239,75 @@ mkferufort()
 
 STATIC_OVL
 void
-mkferutower()
+mkferrutower()
 {
-	
+	int x,y,tries=0, roomnumb = nroom;
+	int i,j;
+	boolean good=FALSE, okspot, accessible;
+	while(!good && tries < 500){
+		x = rn2(COLNO-6)+1;
+		y = rn2(ROWNO-5);
+		tries++;
+		okspot = TRUE;
+		accessible = FALSE;
+		for(i=0;i<9;i++)
+			for(j=0;j<9;j++){
+				if(!isok(x+i,y+j) || t_at(x+i, y+j) || !(levl[x+i][y+j].typ == TREE || levl[x+i][y+j].typ == ROOM))
+					okspot = FALSE;
+			}
+		if(!okspot)
+			continue;
+		
+		for(i=0;i<9;i++){
+			if(isok(x+i,y) && levl[x+i][y].typ == ROOM)
+				accessible = TRUE;
+			if(isok(x+i,y+8) && levl[x+i][y+8].typ == ROOM)
+				accessible = TRUE;
+			if(isok(x+8,y+i) && levl[x+8][y+i].typ == ROOM)
+				accessible = TRUE;
+			if(isok(x,y+i) && levl[x][y+i].typ == ROOM)
+				accessible = TRUE;
+		}
+		
+		if(okspot && accessible){
+			good = TRUE;
+		} else continue;
+		
+		for(i=0;i<9;i++){
+			for(j=0;j<9;j++){
+				levl[x+i][y+j].typ = ROOM;
+			}
+		}
+		for(i=1;i<8;i++){
+			for(j=1;j<8;j++){
+				levl[x+i][y+j].typ = HWALL;
+				if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
+			}
+		}
+		for(i=2;i<7;i++){
+			for(j=2;j<7;j++){
+				levl[x+i][y+j].typ = ROOM;
+			}
+		}
+		
+		wallification(x, y, x+8, y+8);
+		
+		if(rn2(2)){
+			i = rnd(5)+1;
+			j = rn2(2) ? 7 : 1;
+		} else {
+			i = rn2(2) ? 7 : 1;
+			j = rnd(5)+1;
+		}
+		levl[x+i][y+j].typ = DOOR;
+		levl[x+i][y+j].doormask = D_LOCKED;
+		
+		flood_fill_rm(x+4, y+4,
+			  nroom+ROOMOFFSET, TRUE, TRUE);
+		add_room(x+2, y+2, x+6, y+6, TRUE, BARRACKS, TRUE);
+		add_door(x+i,y+j,&rooms[roomnumb]);
+		fill_room(&rooms[roomnumb], FALSE);
+	}
 }
 
 void
@@ -2307,8 +2373,11 @@ place_neutral_features()
 	if(!rn2(10)){
 		mkpluvillage();
 	// } else if(){
-		// mkferufort();
+		// mkferrufort();
 	}
+	
+	if(!rn2(10))
+		mkferrutower();
 	
 	if(!rn2(4)){
 		int n = rnd(4) + rn2(4);
