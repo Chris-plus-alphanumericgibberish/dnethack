@@ -6998,7 +6998,7 @@ register int otyp;
 	register struct obj *otmp;
 	int spe;
 
-	if (mtmp->mfaction == undeadfaction && rn2(2))
+	if (undeadfaction && mtmp->mfaction == undeadfaction && rn2(2))
 		return 0;
 	if (!otyp) return 0;
 	otmp = mksobj(otyp, TRUE, FALSE);
