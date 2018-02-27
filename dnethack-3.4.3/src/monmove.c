@@ -1021,6 +1021,7 @@ register struct monst *mtmp;
 		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
 		&& mdat!=&mons[PM_LEGION] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
 		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+		&& !(mtmp->mpeaceful && !mtmp->mtame) /*Don't telespam the player if peaceful*/
 	) (void) tactics(mtmp);
 	
 	if(mdat == &mons[PM_GREAT_CTHULHU] && !rn2(20)){
