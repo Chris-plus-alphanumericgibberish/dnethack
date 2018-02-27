@@ -3032,9 +3032,17 @@ struct mkroom *sroom;
 					     sx, sy, TRUE, FALSE);
 			break;
 		    case BARRACKS:
-			if(!rn2(20))	/* the payroll and some loot */
-			    (void) mksobj_at((rn2(3)) ? BOX : CHEST,
+			if(!rn2(20)){
+				/* the payroll and some loot */
+				struct obj *chest, *gold;
+				gold = mksobj(GOLD_PIECE, TRUE, FALSE);
+				gold->quan = (long) rn1(9 * level_difficulty(), level_difficulty()); //1 - 10
+				gold->owt = weight(gold);
+			    chest = mksobj_at((rn2(3)) ? BOX : CHEST,
 					     sx, sy, TRUE, FALSE);
+				add_to_container(chest, gold);
+				chest->owt = weight(chest);
+			}
 			break;
 		    case COCKNEST:
 			if(!rn2(3)) {
@@ -3705,6 +3713,8 @@ mkisland() /* John Harris, modified from mktemple & mkshop,
 	y = (((sroom->hy - sroom->ly) / 2) + sroom->ly);
 	/* Make the treasure, add gold to it, bury & mark it */
 	otmp = mksobj_at(CHEST, x, y, TRUE, TRUE);
+	otmp->obj_material = IRON;
+	fix_object(otmp);
 	ogold = mkgold((long)rn1(u_depth * 100 + 200, 250), x, y);
 	remove_object(ogold);
 	(void) add_to_container(otmp, ogold);
