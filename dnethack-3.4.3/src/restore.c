@@ -303,6 +303,17 @@ boolean ghostly;
 				impossible("bad monster weapon restore");
 			}
 		}
+		if (mtmp->msw) {
+			struct obj *obj;
+
+			for(obj = mtmp->minvent; obj; obj = obj->nobj)
+				if (obj->owornmask & W_SWAPWEP) break;
+			if (obj) mtmp->msw = obj;
+			else {
+				MON_NOSWEP(mtmp);
+				impossible("bad monster swap weapon restore");
+			}
+		}
 
 		if (mtmp->isshk) restshk(mtmp, ghostly);
 		if (mtmp->ispriest) restpriest(mtmp, ghostly);
