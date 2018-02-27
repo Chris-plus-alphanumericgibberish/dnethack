@@ -1144,6 +1144,15 @@ mklolthdown()
 	}
 }
 
+static const int serpents[] = {PM_PYTHON, PM_COBRA, PM_PIT_VIPER, PM_PYTHON, PM_COBRA, PM_PIT_VIPER, PM_PYTHON, PM_COBRA, PM_PIT_VIPER, 
+	PM_LONG_WORM, PM_PURPLE_WORM,
+	PM_COUATL, PM_LILLEND,
+	PM_RED_NAGA, PM_BLACK_NAGA, PM_GOLDEN_NAGA, PM_GUARDIAN_NAGA, 
+	PM_GIANT_EEL, PM_ELECTRIC_EEL,
+	PM_SALAMANDER,
+	PM_MARILITH
+	};
+
 STATIC_OVL
 void
 mkkamereltowers()
@@ -1153,6 +1162,7 @@ mkkamereltowers()
 	boolean left = rn2(2), good=FALSE, okspot;
 	int slant = rn2(3);
 	struct obj *otmp;
+	struct monst *mtmp;
 	if(left){
 		//Make shallow sea
 		edge = rn1(20, 20);
@@ -1170,6 +1180,7 @@ mkkamereltowers()
 			}
 			if(rn2(4)) edge += rn2(3)-slant;
 		}
+		
 		//Build central tower
 		while(!good && tries < 500){
 			x=4+rnd(3)+rn2(3);
@@ -1185,6 +1196,10 @@ mkkamereltowers()
 			if(okspot){
 				good = TRUE;
 			} else continue;
+			
+			//Good to go.  Mark tower now
+			level.flags.has_kamerel_towers = 1;
+			
 			for(i=-3;i<=3;i++)
 				for(j=-3;j<=3;j++){
 					if(dist2(x+i,y+j,x,y)<=14){
@@ -1198,6 +1213,10 @@ mkkamereltowers()
 					if(dist2(x+i,y+j,x,y)<=5){
 						levl[x+i][y+j].typ = CORR;
 						levl[x+i][y+j].lit = 0;
+						if(i != 0 || j != 0){
+							mkcorpstat(STATUE, (struct monst *) 0, &mons[serpents[rn2(SIZE(serpents))]], x+i, y+j, FALSE);
+							mkcorpstat(STATUE, (struct monst *) 0, &mons[PM_AMM_KAMEREL], x+i, y+j, TRUE);
+						}
 					}
 				}
 			for(i=-3;i<=3;i++)
@@ -1268,6 +1287,10 @@ mkkamereltowers()
 			if(okspot){
 				good = TRUE;
 			} else continue;
+			
+			//Good to go.  Mark tower now
+			level.flags.has_kamerel_towers = 1;
+			
 			for(i=-3;i<=3;i++)
 				for(j=-3;j<=3;j++){
 					if(dist2(x+i,y+j,x,y)<=14){
@@ -1281,6 +1304,10 @@ mkkamereltowers()
 					if(dist2(x+i,y+j,x,y)<=5){
 						levl[x+i][y+j].typ = CORR;
 						levl[x+i][y+j].lit = 0;
+						if(i != 0 || j != 0){
+							mkcorpstat(STATUE, (struct monst *) 0, &mons[serpents[rn2(SIZE(serpents))]], x+i, y+j, FALSE);
+							mkcorpstat(STATUE, (struct monst *) 0, &mons[PM_AMM_KAMEREL], x+i, y+j, TRUE);
+						}
 					}
 				}
 			for(i=-3;i<=3;i++)
@@ -1350,6 +1377,10 @@ mkkamereltowers()
 				for(j=-1;j<=1;j++){
 					levl[x+i][y+j].typ = CORR;
 					levl[x+i][y+j].lit = 0;
+					if(i != 0 || j != 0){
+						mkcorpstat(STATUE, (struct monst *) 0, &mons[serpents[rn2(3)]], x+i, y+j, FALSE);
+						mkcorpstat(STATUE, (struct monst *) 0, &mons[PM_AMM_KAMEREL], x+i, y+j, TRUE);
+					}
 				}
 			for(i=-2;i<=2;i++)
 				for(j=-2;j<=2;j++){
@@ -1360,6 +1391,51 @@ mkkamereltowers()
 						place_object(otmp, x+i, y+j);
 					}
 				}
+			switch(rnd(7)){
+				case 1:
+				mtmp = makemon(&mons[PM_AMM_KAMEREL], x, y, MM_ADJACENTOK);
+				if (mtmp){
+					mtmp->m_lev += 4;
+					mtmp->mhpmax += 4*8;
+					mtmp->mhp = mtmp->mhpmax;
+					mtmp->mstrategy |= STRAT_WAITFORU;
+					otmp = mkobj(RANDOM_CLASS, TRUE);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mkobj(RANDOM_CLASS, TRUE);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mkobj(RANDOM_CLASS, TRUE);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mkobj(RANDOM_CLASS, TRUE);
+					(void) mpickobj(mtmp, otmp);
+				}
+				break;
+				case 2:
+					otmp = mksobj(!rn2(3) ? MIRRORBLADE : rn2(2) ? KHAKKHARA : KAMEREL_VAJRA, FALSE, FALSE);
+					otmp->spe = 1;
+					place_object(otmp, x, y);
+				break;
+				case 3:
+					mksobj_at(MIRROR, x, y, FALSE, FALSE);
+				break;
+				case 4:
+					//Nothing
+				break;
+				case 5:{
+					struct trap *ttmp = maketrap(x, y, SPIKED_PIT);
+					ttmp->tseen = 1;/*Tower floor has been destroyed*/
+				}break;
+				case 6:
+					levl[x][y].typ = HWALL;
+					otmp = mksobj(MIRROR, FALSE, FALSE);
+					otmp->objsize = MZ_GIGANTIC;
+					fix_object(otmp);
+					place_object(otmp, x, y);
+				break;
+				case 7:
+					mkobj_at(SPBOOK_CLASS, x, y, FALSE);
+				break;
+			}
+			
 			wallification(x-2, y-2, x+2, y+2);
 		}
 		c--;
@@ -1400,6 +1476,29 @@ mkkamereltowers()
 						place_object(otmp, x+i, y+j);
 					}
 				}
+			switch(rnd(5)){
+				case 1:
+					mtmp = makemon(&mons[PM_AMM_KAMEREL], x, y, MM_ADJACENTOK);
+					if (mtmp){
+						otmp = mkobj(RANDOM_CLASS, TRUE);
+						(void) mpickobj(mtmp, otmp);
+					}
+				break;
+				case 2:
+					mksobj_at(MIRRORBLADE, x, y, FALSE, FALSE);
+				break;
+				case 3:
+					mksobj_at(MIRROR, x, y, FALSE, FALSE);
+				break;
+				case 4:
+					//Nothing
+				break;
+				case 5:{
+					struct trap *ttmp = maketrap(x, y, SPIKED_PIT);
+					ttmp->tseen = 1;/*Tower floor has been destroyed*/
+				}break;
+			}
+			
 			wallification(x-1, y-1, x+1, y+1);
 		}
 		c--;
@@ -2245,26 +2344,27 @@ mkferrutower()
 	int x,y,tries=0, roomnumb = nroom;
 	int i,j;
 	boolean good=FALSE, okspot, accessible;
+	int size = 8;
 	while(!good && tries < 500){
-		x = rn2(COLNO-6)+1;
-		y = rn2(ROWNO-5);
+		x = rn2(COLNO-size)+1;
+		y = rn2(ROWNO-size);
 		tries++;
 		okspot = TRUE;
 		accessible = FALSE;
-		for(i=0;i<9;i++)
-			for(j=0;j<9;j++){
+		for(i=0;i<size;i++)
+			for(j=0;j<size;j++){
 				if(!isok(x+i,y+j) || t_at(x+i, y+j) || !(levl[x+i][y+j].typ == TREE || levl[x+i][y+j].typ == ROOM))
 					okspot = FALSE;
 			}
 		if(!okspot)
 			continue;
 		
-		for(i=0;i<9;i++){
+		for(i=0;i<size;i++){
 			if(isok(x+i,y) && levl[x+i][y].typ == ROOM)
 				accessible = TRUE;
-			if(isok(x+i,y+8) && levl[x+i][y+8].typ == ROOM)
+			if(isok(x+i,y+size-1) && levl[x+i][y+size-1].typ == ROOM)
 				accessible = TRUE;
-			if(isok(x+8,y+i) && levl[x+8][y+i].typ == ROOM)
+			if(isok(x+size-1,y+i) && levl[x+size-1][y+i].typ == ROOM)
 				accessible = TRUE;
 			if(isok(x,y+i) && levl[x][y+i].typ == ROOM)
 				accessible = TRUE;
@@ -2274,38 +2374,38 @@ mkferrutower()
 			good = TRUE;
 		} else continue;
 		
-		for(i=0;i<9;i++){
-			for(j=0;j<9;j++){
+		for(i=0;i<size;i++){
+			for(j=0;j<size;j++){
 				levl[x+i][y+j].typ = ROOM;
 			}
 		}
-		for(i=1;i<8;i++){
-			for(j=1;j<8;j++){
+		for(i=1;i<size-1;i++){
+			for(j=1;j<size-1;j++){
 				levl[x+i][y+j].typ = HWALL;
 				if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
 			}
 		}
-		for(i=2;i<7;i++){
-			for(j=2;j<7;j++){
+		for(i=2;i<size-2;i++){
+			for(j=2;j<size-2;j++){
 				levl[x+i][y+j].typ = ROOM;
 			}
 		}
 		
-		wallification(x, y, x+8, y+8);
+		wallification(x, y, x+size-1, y+size-1);
 		
 		if(rn2(2)){
-			i = rnd(5)+1;
-			j = rn2(2) ? 7 : 1;
+			i = rnd(size-4)+1;
+			j = rn2(2) ? size-2 : 1;
 		} else {
-			i = rn2(2) ? 7 : 1;
-			j = rnd(5)+1;
+			i = rn2(2) ? size-2 : 1;
+			j = rnd(size-4)+1;
 		}
 		levl[x+i][y+j].typ = DOOR;
 		levl[x+i][y+j].doormask = D_LOCKED;
 		
-		flood_fill_rm(x+4, y+4,
+		flood_fill_rm(x+size/2, y+size/2,
 			  nroom+ROOMOFFSET, TRUE, TRUE);
-		add_room(x+2, y+2, x+6, y+6, TRUE, BARRACKS, TRUE);
+		add_room(x+2, y+2, x+size-3, y+size-3, TRUE, BARRACKS, TRUE);
 		add_door(x+i,y+j,&rooms[roomnumb]);
 		fill_room(&rooms[roomnumb], FALSE);
 	}
