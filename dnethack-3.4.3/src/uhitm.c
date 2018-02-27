@@ -3921,6 +3921,7 @@ use_weapon:
 			}
 		break;
 		case AT_CLAW:
+		case AT_MARI: /*Note: Player mariliths can't use extra weapons at the moment */
 		case AT_LRCH: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
 			if (i==0 && uwep && !cantwield(mas)) goto use_weapon;
 #ifdef SEDUCE

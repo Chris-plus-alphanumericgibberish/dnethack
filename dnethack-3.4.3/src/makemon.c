@@ -3498,7 +3498,73 @@ register struct monst *mtmp;
 					else if(chance >= 6) mongets(mtmp, CHAIN_MAIL);
 					else if(chance >= 3) mongets(mtmp, STUDDED_LEATHER_ARMOR);
 					else mongets(mtmp, LEATHER_ARMOR);
-					mongets(mtmp, SCIMITAR);
+					
+					switch(rn2(3)){
+						case 0:
+							mongets(mtmp, TRIDENT);
+						break;
+						case 1:
+							mongets(mtmp, STILETTO);
+						break;
+						case 2:
+							mongets(mtmp, SICKLE);
+						break;
+						
+					}
+					switch(rn2(3)){
+						case 0:
+							mongets(mtmp, AXE);
+						break;
+						case 1:
+							mongets(mtmp, SHORT_SWORD);
+						break;
+						case 2:
+							mongets(mtmp, MACE);
+						break;
+						
+					}
+					switch(rn2(3)){
+						case 0:
+							mongets(mtmp, RAPIER);
+						break;
+						case 1:
+							mongets(mtmp, RUNESWORD);
+						break;
+						case 2:
+							mongets(mtmp, BROADSWORD);
+						break;
+						
+					}
+					switch(rn2(3)){
+						case 0:
+							mongets(mtmp, LONG_SWORD);
+						break;
+						case 1:
+							mongets(mtmp, KATANA);
+						break;
+						case 2:
+							mongets(mtmp, SABER);
+						break;
+						
+					}
+					switch(rn2(2)){
+						case 0:
+							mongets(mtmp, SCIMITAR);
+						break;
+						case 1:
+							mongets(mtmp, MORNING_STAR);
+						break;
+						
+					}
+					switch(rn2(2)){
+						case 0:
+							mongets(mtmp, WAR_HAMMER);
+						break;
+						case 1:
+							mongets(mtmp, FLAIL);
+						break;
+						
+					}
 				}
 			}break;
 		    case PM_PIT_FIEND:
@@ -4285,6 +4351,11 @@ register struct	monst	*mtmp;
 ///////////////////////////////
 		    case PM_KARY__THE_FIEND_OF_FIRE:
 				mongets(mtmp, LEATHER_ARMOR);
+				mongets(mtmp, LONG_SWORD);
+				mongets(mtmp, SCIMITAR);
+				mongets(mtmp, SCIMITAR);
+				mongets(mtmp, SCIMITAR);
+				mongets(mtmp, SCIMITAR);
 				mongets(mtmp, SCIMITAR);
 			break;
 ///////////////////////////////
