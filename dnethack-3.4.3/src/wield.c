@@ -199,6 +199,8 @@ struct obj *wep;
 		}
 		if(stealthy && wep->otyp == KHAKKHARA) (wep->oartifact == ART_ANNULUS) ? 
 			pline("The hollow silver rod chimes at the slightest touch.") : 
+			(wep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS) ? 
+			pline("The mirrored disks chime together.") :
 			pline("The silver rings chime together.");
 		else if(!stealthy && Stealth) pline("Now you can move stealthily.");
 
