@@ -2535,6 +2535,8 @@ printAttacks(buf, ptr)
 		if(!i){
 			Sprintf(buf, "%s %dd%d %s",
 				attk->aatyp == AT_WEAP ? "Weapon" :
+				attk->aatyp == AT_XWEP ? "Offhand Weapon" :
+				attk->aatyp == AT_MARI ? "Multiarm Weapon" :
 				attk->aatyp == AT_MAGC ? "Cast" :
 				attackKey[((int)attk->aatyp)],
 				attk->damn,
@@ -2544,6 +2546,8 @@ printAttacks(buf, ptr)
 		} else {
 			Sprintf(eos(buf), ", %s %dd%d %s",
 				attk->aatyp == AT_WEAP ? "Weapon" :
+				attk->aatyp == AT_XWEP ? "Offhand Weapon" :
+				attk->aatyp == AT_MARI ? "Multiarm Weapon" :
 				attk->aatyp == AT_MAGC ? "Cast" :
 				attackKey[((int)attk->aatyp)],
 				attk->damn,

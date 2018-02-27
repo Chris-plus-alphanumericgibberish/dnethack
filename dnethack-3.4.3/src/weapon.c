@@ -1432,14 +1432,15 @@ struct monst *mon;
 #endif /* OVLB */
 #ifdef OVL0
 
-STATIC_DCL struct obj *FDECL(oselect, (struct monst *,int));
+STATIC_DCL struct obj *FDECL(oselect, (struct monst *,int,int));
 STATIC_DCL struct obj *FDECL(oselectBoulder, (struct monst *));
-#define Oselect(x)	if ((otmp = oselect(mtmp, x)) != 0) return(otmp);
+#define Oselect(x, spot) if ((otmp = oselect(mtmp, x, spot)) != 0) return(otmp);
 
 STATIC_OVL struct obj *
-oselect(mtmp, x)
+oselect(mtmp, x, spot)
 struct monst *mtmp;
 int x;
+int spot;
 {
 	struct obj *otmp, *obest = 0;
 
@@ -1611,7 +1612,7 @@ register struct monst *mtmp;
 	char mlet = mtmp->data->mlet;
 	
 	propellor = &zeroobj;
-	Oselect(EGG); /* cockatrice egg */
+	Oselect(EGG, W_QUIVER); /* cockatrice egg */
 	if(throws_rocks(mtmp->data))	/* ...boulders for giants */
 	    oselectBoulder(mtmp);
 

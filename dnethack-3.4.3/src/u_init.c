@@ -1353,7 +1353,6 @@ int randMeleeDamageTypes[] =
 						 AD_UVUU,
 						 AD_ABDC,
 						 AD_TELE,
-						 AD_HODS,
 						 AD_CHRN,
 						 AD_LVLT,
 						 AD_WEEP };
@@ -1464,15 +1463,32 @@ int randMagicDamageTypes[] =
 						 AD_CLRC,
 						 AD_CLRC,
 						 AD_CLRC };
+int randCorpseWeights[] = 
+						{WT_TINY,
+						 WT_SMALL,
+						 WT_MEDIUM,
+						 WT_LARGE,
+						 WT_HUGE,
+						 0,
+						 0,
+						 WT_GIGANTIC };
+int randCorpseNut[] = 
+						{CN_TINY,
+						 CN_SMALL,
+						 CN_MEDIUM,
+						 CN_LARGE,
+						 CN_HUGE,
+						 0,
+						 0,
+						 CN_GIGANTIC };
 void
 u_init()
 {
 	register int i;
-	struct permonst *shambler = &mons[PM_SHAMBLING_HORROR], 
-					*stumbler = &mons[PM_STUMBLING_HORROR], 
-					*wanderer = &mons[PM_WANDERING_HORROR];
+	extern int monstr[];
+	struct permonst * horrors[] = { &mons[PM_SHAMBLING_HORROR], &mons[PM_STUMBLING_HORROR], &mons[PM_WANDERING_HORROR] };
 	struct attack* attkptr;
-	int shamattacks, stumattacks, wandattacks;
+	int horrorattacks;
 
 	flags.female = flags.initgend;
 	flags.beginner = 1;
@@ -2298,98 +2314,32 @@ u_init()
 		break;
 	}
 
-	/* what a horrible night to have a curse */
-	shambler->mlevel += rnd(9)-5;				/* shuffle level */
-	shambler->mmove = rn2(12)+7;				/* slow to very fast */
-	shambler->ac = rn2(21) + rn2(3) ? -10 : -20;/* any AC */
-	shambler->mr = rn2(11)*10;				/* varying amounts of MR */
-	shambler->maligntyp = rn2(21)-10;			/* any alignment */
-	
-	stumbler->mlevel += rnd(9)-5;				/* shuffle level */
-	stumbler->mmove = rn2(12)+7;				/* slow to very fast */
-	stumbler->ac = rn2(21) + rn2(3) ? -10 : -20;/* any AC */
-	stumbler->mr = rn2(11)*10;				/* varying amounts of MR */
-	stumbler->maligntyp = rn2(21)-10;			/* any alignment */
-	
-	wanderer->mlevel += rnd(9)-5;				/* shuffle level */
-	wanderer->mmove = rn2(12)+7;				/* slow to very fast */
-	wanderer->ac = rn2(21) + rn2(3) ? -10 : -20;/* any AC */
-	wanderer->mr = rn2(11)*10;				/* varying amounts of MR */
-	wanderer->maligntyp = rn2(21)-10;			/* any alignment */
-	
-	/* attacks...?  */
-	shamattacks = rnd(4);
-	for (i = 0; i < shamattacks; i++) {
-		attkptr = &shambler->mattk[i];
-		/* restrict it to certain types of attacks */
-		attkptr->aatyp = randMeleeAttackTypes[rn2(SIZE(randMeleeAttackTypes))];
-		attkptr->adtyp = randMeleeDamageTypes[rn2(SIZE(randMeleeDamageTypes))];
-		attkptr->damn = d(1,3);			/* we're almost sure to get this wrong first time */
-		attkptr->damd = rn2(4)*2+6;		/* either too high or too low */
-//		pline("shambling horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
-	}
-	shamattacks = shamattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
-	for(; i < shamattacks; i++){
-		attkptr = &shambler->mattk[i];
-		/* restrict it to certain types of attacks */
-		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
-		switch(attkptr->aatyp){
-			case AT_SPIT:
-				attkptr->adtyp = randSpitDamageTypes[rn2(SIZE(randSpitDamageTypes))];
-			break;
-			case AT_HUGS:
-				attkptr->adtyp = AD_PHYS;
-			break;
-			case AT_GAZE:
-				attkptr->adtyp = randGazeDamageTypes[rn2(SIZE(randGazeDamageTypes))];
-			break;
-			case AT_ENGL:
-				attkptr->adtyp = randEngulfDamageTypes[rn2(SIZE(randEngulfDamageTypes))];
-			break;
-			case AT_ARRW:
-				attkptr->adtyp = randArrowDamageTypes[rn2(SIZE(randArrowDamageTypes))];
-			break;
-			case AT_MAGC:
-				attkptr->adtyp = randMagicDamageTypes[rn2(SIZE(randMagicDamageTypes))];
-			break;
-			case AT_BREA:
-				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
-			break;
-			case AT_BEAM:
-			case AT_DEVA:
-			case AT_5SQR:
-				attkptr->adtyp = randBeamDamageTypes[rn2(SIZE(randBeamDamageTypes))];
-			break;
-			default:
-				attkptr->adtyp = AD_PHYS;
-			break;
-		}
-		if(attkptr->adtyp == AD_VBLD){
-			attkptr->damn = d(1,3);	
-			attkptr->damd = rn2(3)+1;
-		} else {
-			attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
-			attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
-		}
-	}
+		int j;
+	for (j = 0; j < SIZE(horrors); j++)
+	{
+		/* what a horrible night to have a curse */
+		horrors[j]->mlevel = 1;							/* low starting level so difficulty is based on other things*/
+		horrors[j]->mmove = rn2(7) * 2 + 6;				/* slow to very fast */
+		horrors[j]->ac = rn2(21) + (rn2(3) ? -10 : -20);/* any AC */
+		horrors[j]->mr = rn2(11) * 10;				/* varying amounts of MR */
+		horrors[j]->maligntyp = d(2, 9) - 10;			/* any alignment */
 
-	/* attacks...? */
-	stumattacks = rnd(4);
-	for (i = 0; i < stumattacks; i++) {
-		attkptr = &stumbler->mattk[i];
-		/* restrict it to certain types of attacks */
-		attkptr->aatyp = randMeleeAttackTypes[rn2(SIZE(randMeleeAttackTypes))];
-		attkptr->adtyp = randMeleeDamageTypes[rn2(SIZE(randMeleeDamageTypes))];
-		attkptr->damn = d(1,3);			/* we're almost sure to get this wrong first time */
-		attkptr->damd = rn2(4)*2+6;		/* either too high or too low */
-//		pline("stumbling horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
-	}
-	stumattacks = stumattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
-	for(; i < stumattacks; i++){
-		attkptr = &stumbler->mattk[i];
-		/* restrict it to certain types of attacks */
-		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
-		switch(attkptr->aatyp){
+		/* attacks...?  */
+		horrorattacks = rnd(4);
+		for (i = 0; i < horrorattacks; i++) {
+			attkptr = &horrors[j]->mattk[i];
+			/* restrict it to certain types of attacks */
+			attkptr->aatyp = randMeleeAttackTypes[rn2(SIZE(randMeleeAttackTypes))];
+			attkptr->adtyp = randMeleeDamageTypes[rn2(SIZE(randMeleeDamageTypes))];
+			attkptr->damn = d(1, 3);			/* we're almost sure to get this wrong first time */
+			attkptr->damd = rn2(4) * 2 + 6;		/* either too high or too low */
+		}
+		horrorattacks = horrorattacks + (rnd(9) / 3) - 1; //(0),(0),0,0,0,1,1,1,2
+		for (; i < horrorattacks; i++){
+			attkptr = &horrors[j]->mattk[i];
+			/* restrict it to certain types of attacks */
+			attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
+			switch (attkptr->aatyp){
 			case AT_SPIT:
 				attkptr->adtyp = randSpitDamageTypes[rn2(SIZE(randSpitDamageTypes))];
 			break;
@@ -2411,6 +2361,9 @@ u_init()
 			case AT_BREA:
 				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
 			break;
+			case AT_HODS:
+				attkptr->adtyp = AD_HODS;
+				break;
 			case AT_BEAM:
 			case AT_DEVA:
 			case AT_5SQR:
@@ -2419,223 +2372,144 @@ u_init()
 			default:
 				attkptr->adtyp = AD_PHYS;
 			break;
-		}
-		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
-		attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
-	}
-	/* attacks...? */
-	wandattacks = rnd(4);
-	for (i = 0; i < wandattacks; i++) {
-		attkptr = &wanderer->mattk[i];
-		/* restrict it to certain types of attacks */
-		attkptr->aatyp = randMeleeAttackTypes[rn2(SIZE(randMeleeAttackTypes))];
-		attkptr->adtyp = randMeleeDamageTypes[rn2(SIZE(randMeleeDamageTypes))];
-		attkptr->damn = d(1,3);			/* we're almost sure to get this wrong first time */
-		attkptr->damd = rn2(4)*2+6;		/* either too high or too low */
-//		pline("wandering horror attack %d: %d %d %d %d",i,attkptr->aatyp,attkptr->adtyp,attkptr->damn,attkptr->damd);
-	}
-	wandattacks = wandattacks + (rnd(9)/3)-1; //(0),(0),0,0,0,1,1,1,2
-	for(; i < wandattacks; i++){
-		attkptr = &wanderer->mattk[i];
-		/* restrict it to certain types of attacks */
-		attkptr->aatyp = randSpecialAttackTypes[rn2(SIZE(randSpecialAttackTypes))];
-		switch(attkptr->aatyp){
-			case AT_SPIT:
-				attkptr->adtyp = randSpitDamageTypes[rn2(SIZE(randSpitDamageTypes))];
-			break;
-			case AT_HUGS:
-				attkptr->adtyp = AD_PHYS;
-			break;
-			case AT_GAZE:
-				attkptr->adtyp = randGazeDamageTypes[rn2(SIZE(randGazeDamageTypes))];
-			break;
-			case AT_ENGL:
-				attkptr->adtyp = randEngulfDamageTypes[rn2(SIZE(randEngulfDamageTypes))];
-			break;
-			case AT_ARRW:
-				attkptr->adtyp = randArrowDamageTypes[rn2(SIZE(randArrowDamageTypes))];
-			break;
-			case AT_MAGC:
-				attkptr->adtyp = randMagicDamageTypes[rn2(SIZE(randMagicDamageTypes))];
-			break;
-			case AT_BREA:
-				attkptr->adtyp = randBreathDamageTypes[rn2(SIZE(randBreathDamageTypes))];
-			break;
-			case AT_BEAM:
-			case AT_5SQR:
-			case AT_DEVA:
-				attkptr->adtyp = randBeamDamageTypes[rn2(SIZE(randBeamDamageTypes))];
-			break;
+			}
+			switch (attkptr->adtyp){
+			case AD_VBLD:
+				attkptr->damn = d(1, 3);
+				attkptr->damd = rn2(3) + 1;
+				break;
+			case AD_LUCK:
+				attkptr->damn = 1;
+				attkptr->damd = 1;
+				break;
+			case AD_MIST:
+			case AD_DEAD:
+				attkptr->damn = 0;
+				attkptr->damd = 0;
+				break;
 			default:
-				attkptr->adtyp = AD_PHYS;
-			break;
+				attkptr->damn = d(3, 3);			/* we're almost sure to get this wrong first time */
+				attkptr->damd = rn2(3) * 2 + 8;		/* either too high or too low */
+			}
 		}
-		attkptr->damn = d(3,3);			/* we're almost sure to get this wrong first time */
-		attkptr->damd = rn2(3)*2+8;		/* either too high or too low */
-	}
-	shambler->msize = rn2(MZ_GIGANTIC+1);			/* any size */
-	shambler->cwt = 20;					/* fortunately moot as it's flagged NOCORPSE */
-	shambler->cnutrit = 20;					/* see above */
-	shambler->msound = rn2(MS_HUMANOID);			/* any but the specials */
-	shambler->mresists = 0;
+
 	
-	stumbler->msize = rn2(MZ_GIGANTIC+1);			/* any size */
-	stumbler->cwt = 20;					/* fortunately moot as it's flagged NOCORPSE */
-	stumbler->cnutrit = 20;					/* see above */
-	stumbler->msound = rn2(MS_HUMANOID);			/* any but the specials */
-	stumbler->mresists = 0;
-	
-	wanderer->msize = rn2(MZ_GIGANTIC+1);			/* any size */
-	wanderer->cwt = 20;					/* fortunately moot as it's flagged NOCORPSE */
-	wanderer->cnutrit = 20;					/* see above */
-	wanderer->msound = rn2(MS_HUMANOID);			/* any but the specials */
-	wanderer->mresists = 0;
-	
-	for (i = 0; i < rnd(6); i++) {
-		shambler->mresists |= (1 << rn2(10));		/* physical resistances... */
+		horrors[j]->msize = !rn2(6) ? MZ_GIGANTIC : rn2(MZ_HUGE + 1);			/* any size */
+		horrors[j]->cwt = randCorpseWeights[horrors[j]->msize];					/* probably moot as it's flagged NOCORPSE */
+		horrors[j]->cnutrit = randCorpseNut[horrors[j]->msize];					/* see above */
+		horrors[j]->msound = rn2(MS_HUMANOID);								/* any but the specials */
+		horrors[j]->mresists = 0;
+
+
+		for (i = 0; i < rnd(6); i++) {
+			horrors[j]->mresists |= (1 << rn2(10));		/* physical resistances... */
+		}
+		// for (i = 0; i < rnd(5); i++) {
+		// horrors[j]->mresists |= (0x100 << rn2(7));	/* 'different' resistances, even clumsy */
+		// }
+		horrors[j]->mconveys = 0;					/* flagged NOCORPSE */
+
+		/*
+		 * now time for the random flags.  this will likely produce
+		 * a number of complete trainwreck monsters at first, but
+		 * every so often something will dial up nasty stuff
+		 */
+		horrors[j]->mflagsm = 0;
+		horrors[j]->mflagst = 0;
+		horrors[j]->mflagsb = 0;
+		horrors[j]->mflagsg = 0;
+		horrors[j]->mflagsa = 0;
+		horrors[j]->mflagsv = 0;
+
+		for (i = 0; i < rnd(17); i++) {
+			horrors[j]->mflagsm |= (1 << rn2(33));		/* trainwreck this way :D */
+		}
+		for (i = 0; i < rnd(17); i++) {
+			horrors[j]->mflagst |= (1 << rn2(33));
+		}
+		for (i = 0; i < rnd(17); i++) {
+			horrors[j]->mflagsb |= (1 << rn2(33));
+		}
+		for (i = 0; i < rnd(17); i++) {
+			horrors[j]->mflagsg |= (1 << rn2(33));
+		}
+		for (i = 0; i < rnd(17); i++) {
+			horrors[j]->mflagsa |= (1 << rn2(33));
+		}
+		for (i = 0; i < rnd(17); i++) {
+			horrors[j]->mflagsv |= (1 << rn2(33));
+		}
+
+		// horrors[j]->mflagsb &= ~MB_UNSOLID;			/* no ghosts */
+		// horrors[j]->mflagsm &= ~MM_WALLWALK;			/* no wall-walkers */
+
+		horrors[j]->mflagsg |= MG_NOPOLY;		/* Don't let the player be one of these yet. */
+
+		horrors[j]->mflagst |= MT_HOSTILE;
+
+		horrors[j]->mflagsg &= ~MG_MERC;				/* no guards */
+		horrors[j]->mflagst &= ~MT_PEACEFUL;			/* no peacefuls */
+		horrors[j]->mflagsa &= ~MA_WERE;				/* no lycanthropes */
+		horrors[j]->mflagsg &= ~MG_PNAME;				/* not a proper name */
+
+		/* some cleanup to reduce the trainwreck*/
+		if (horrors[j]->mflagsm & MM_TUNNEL)
+			horrors[j]->mflagsm &= ~MM_NEEDPICK;
+		if (horrors[j]->mflagsm & MM_STATIONARY)
+			horrors[j]->mflagsm &= ~(MM_FLEETFLEE | MM_TUNNEL | MM_NEEDPICK | MM_NOTONL);
+		if (horrors[j]->mflagst & MT_NOTAKE)
+			horrors[j]->mflagst &= ~MT_MAID;
+		if (horrors[j]->mflagst & MT_MINDLESS)
+			horrors[j]->mflagst &= ~MT_ANIMAL;
+		if (horrors[j]->mflagst & MT_ANIMAL)
+			horrors[j]->mflagst &= ~MT_MINDLESS;
+		if (horrors[j]->mflagsb & MB_MALE)
+			horrors[j]->mflagsb &= ~(MB_FEMALE | MB_NEUTER);
+		if (horrors[j]->mflagsb & MB_FEMALE)
+			horrors[j]->mflagsb &= ~(MB_MALE | MB_NEUTER);
+		if (horrors[j]->mflagsb & MB_NEUTER)
+			horrors[j]->mflagsb &= ~(MB_MALE | MB_FEMALE);
+		if (horrors[j]->mflagsb & MB_NOHEAD)
+			horrors[j]->mflagsb &= ~(MB_LONGHEAD | MB_LONGNECK);
+		if (horrors[j]->mflagsv & MV_EXTRAMISSION)
+			horrors[j]->mflagsv &= ~(MV_LOWLIGHT3 | MV_LOWLIGHT2 | MV_NORMAL | MV_CATSIGHT | MV_DARKSIGHT);
+		if (horrors[j]->mflagsv & MV_CATSIGHT)
+			horrors[j]->mflagsv &= ~(MV_LOWLIGHT3 | MV_LOWLIGHT2 | MV_NORMAL |  MV_DARKSIGHT);
+		if (horrors[j]->mflagsv & MV_LOWLIGHT3)
+			horrors[j]->mflagsv &= ~(MV_LOWLIGHT2 | MV_NORMAL | MV_DARKSIGHT);
+		if (horrors[j]->mflagsv & MV_LOWLIGHT2)
+			horrors[j]->mflagsv &= ~(MV_NORMAL | MV_DARKSIGHT);
+		if (horrors[j]->mflagsv & MV_NORMAL)
+			horrors[j]->mflagsv &= ~(MV_DARKSIGHT);
+		if (!(attacktype(horrors[j], AT_MAGC) || attacktype(horrors[j], AT_MMGC)))
+			horrors[j]->mflagsg &= ~MG_NOSPELLCOOLDOWN;
+		if (horrors[j]->mflagsg & MG_PRINCE)
+			horrors[j]->mflagsg &= ~MG_LORD;
+
+		for (i = 0; i < 2; i++) /* adjust its level and difficulty upwards */
+		{
+			horrors[j]->mlevel = mstrength(horrors[j]);
+			monstr[monsndx(horrors[j])] = mstrength(horrors[j]);
+		}
+
+		if (horrors[j]->mlevel<11)	// redo if we get too weak a monster
+			j--;
 	}
-	for (i = 0; i < rnd(6); i++) {
-		stumbler->mresists |= (1 << rn2(10));		/* physical resistances... */
-	}
-	for (i = 0; i < rnd(6); i++) {
-		wanderer->mresists |= (1 << rn2(10));		/* physical resistances... */
-	}
-	// for (i = 0; i < rnd(5); i++) {
-		// shambler->mresists |= (0x100 << rn2(7));	/* 'different' resistances, even clumsy */
-	// }
-	shambler->mconveys = 0;					/* flagged NOCORPSE */
-	stumbler->mconveys = 0;
-	wanderer->mconveys = 0;
-	
-	if(!rn2(10)) u.shambin = 3;
-	else if(!rn2(9)) u.shambin = 2;
-	else if(rn2(8) > 1) u.shambin = 1;
+	// horror stuff that cannot be done in the loop easily
+	if (!rn2(10)) u.shambin = 3;
+	else if (!rn2(9)) u.shambin = 2;
+	else if (rn2(8) > 1) u.shambin = 1;
 	else u.shambin = 0;
-	
-	if(!rn2(10)) u.stumbin = 3;
-	else if(!rn2(9)) u.stumbin = 2;
-	else if(rn2(8) > 1) u.stumbin = 1;
+
+	if (!rn2(10)) u.stumbin = 3;
+	else if (!rn2(9)) u.stumbin = 2;
+	else if (rn2(8) > 1) u.stumbin = 1;
 	else u.stumbin = 0;
-	
-	if(!rn2(10)) u.wandein = 3;
-	else if(!rn2(9)) u.wandein = 2;
-	else if(rn2(8) > 1) u.wandein = 1;
+
+	if (!rn2(10)) u.wandein = 3;
+	else if (!rn2(9)) u.wandein = 2;
+	else if (rn2(8) > 1) u.wandein = 1;
 	else u.wandein = 0;
-	
-	/*
-	 * now time for the random flags.  this will likely produce
-	 * a number of complete trainwreck monsters at first, but
-	 * every so often something will dial up nasty stuff
-	 */
-	shambler->mflagsm = 0;
-	shambler->mflagst = 0;
-	shambler->mflagsb = 0;
-	shambler->mflagsg = 0;
-	shambler->mflagsa = 0;
-	shambler->mflagsv = 0;
-	
-	stumbler->mflagsm = 0;
-	stumbler->mflagst = 0;
-	stumbler->mflagsb = 0;
-	stumbler->mflagsg = 0;
-	stumbler->mflagsa = 0;
-	stumbler->mflagsv = 0;
-	
-	wanderer->mflagsm = 0;
-	wanderer->mflagst = 0;
-	wanderer->mflagsb = 0;
-	wanderer->mflagsg = 0;
-	wanderer->mflagsa = 0;
-	wanderer->mflagsv = 0;
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflagsm |= (1 << rn2(33));		/* trainwreck this way :D */
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflagsm |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflagsm |= (1 << rn2(33));
-	}
-	
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflagst |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflagst |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflagst |= (1 << rn2(33));
-	}
-	
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflagsb |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflagsb |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflagsb |= (1 << rn2(33));
-	}
-	
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflagsg |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflagsg |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflagsg |= (1 << rn2(33));
-	}
-	
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflagsa |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflagsa |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflagsa |= (1 << rn2(33));
-	}
-	
-	for (i = 0; i < rnd(17); i++) {
-		shambler->mflagsv |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		stumbler->mflagsv |= (1 << rn2(33));
-	}
-	for (i = 0; i < rnd(17); i++) {
-		wanderer->mflagsv |= (1 << rn2(33));
-	}
-	
-	// shambler->mflagsb &= ~MB_UNSOLID;			/* no ghosts */
-	// shambler->mflagsm &= ~MM_WALLWALK;			/* no wall-walkers */
-	// stumbler->mflagsb &= ~MB_UNSOLID;			/* no ghosts */
-	// stumbler->mflagsm &= ~MM_WALLWALK;			/* no wall-walkers */
-	// wanderer->mflagsb &= ~MB_UNSOLID;			/* no ghosts */
-	// wanderer->mflagsm &= ~MM_WALLWALK;			/* no wall-walkers */
-
-	shambler->mflagsg = MG_NOPOLY;		/* Don't let the player be one of these yet. */
-	stumbler->mflagsg = MG_NOPOLY;		/* Don't let the player be one of these yet. */
-	wanderer->mflagsg = MG_NOPOLY;		/* Don't let the player be one of these yet. */
-	
-	shambler->mflagst = MT_HOSTILE;
-	stumbler->mflagst = MT_HOSTILE;
-	wanderer->mflagst = MT_HOSTILE;
-
-	shambler->mflagsg &= ~MG_MERC;				/* no guards */
-	shambler->mflagst &= ~MT_PEACEFUL;			/* no peacefuls */
-	shambler->mflagsa &= ~MA_WERE;				/* no lycanthropes */
-	shambler->mflagsg &= ~MG_PNAME;				/* not a proper name */
-
-	stumbler->mflagsg &= ~MG_MERC;				/* no guards */
-	stumbler->mflagst &= ~MT_PEACEFUL;			/* no peacefuls */
-	stumbler->mflagsa &= ~MA_WERE;				/* no lycanthropes */
-	stumbler->mflagsg &= ~MG_PNAME;				/* not a proper name */
-
-	wanderer->mflagsg &= ~MG_MERC;				/* no guards */
-	wanderer->mflagst &= ~MT_PEACEFUL;			/* no peacefuls */
-	wanderer->mflagsa &= ~MA_WERE;				/* no lycanthropes */
-	wanderer->mflagsg &= ~MG_PNAME;				/* not a proper name */
 
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
 	dungeon_topology.alt_tower = !rn2(8);
