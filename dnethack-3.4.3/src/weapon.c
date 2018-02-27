@@ -2784,6 +2784,8 @@ struct obj *obj;
     if ((obj->otyp == HEAVY_IRON_BALL) && (Role_if(PM_CONVICT) || u.sealsActive&SEAL_AHAZU))
         return objects[obj->otyp].oc_skill;
 #endif /* CONVICT */
+    if ((obj->otyp == IRON_CHAIN) && (Role_if(PM_CONVICT) || u.sealsActive&SEAL_AHAZU))
+        return objects[obj->otyp].oc_skill;
 	if (obj->oclass != WEAPON_CLASS && obj->oclass != TOOL_CLASS &&
 	    obj->oclass != GEM_CLASS)
 		/* Not a weapon, weapon-tool, or ammo */
