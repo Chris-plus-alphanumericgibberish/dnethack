@@ -1449,7 +1449,7 @@ int x;
 		    !((x == CORPSE || x == EGG) &&
 			!touch_petrifies(&mons[otmp->corpsenm])) &&
 			/* never uncharged lightsabers */
-            (!is_lightsaber(otmp) || otmp->age || otmp->oartifact == ART_INFINITY_S_MIRRORED_ARC) &&
+            (!is_lightsaber(otmp) || otmp->age || otmp->oartifact == ART_INFINITY_S_MIRRORED_ARC || otmp->otyp == KAMEREL_VAJRA) &&
 			/* never offhand artifacts */
 			(!otmp->oartifact || spot != W_SWAPWEP) &&
 			/* never untouchable artifacts */
