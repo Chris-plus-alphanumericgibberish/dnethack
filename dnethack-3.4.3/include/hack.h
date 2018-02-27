@@ -359,6 +359,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 
 /* negative armor class is randomly weakened to prevent invulnerability */
 #define AC_VALUE(AC)	((AC) >= 0 ? (AC) : (u.sealsActive&SEAL_BALAM || u.fightingForm == FFORM_SORESU) ? min_ints(-rnd(-(AC)),-rnd(-(AC))) : -rnd(-(AC)) )
+#define MONSTER_AC_VALUE(AC)	((AC) >= 0 ? (AC) : -rnd(-(AC)) )
 
 #if defined(MICRO) && !defined(__DJGPP__)
 #define getuid() 1

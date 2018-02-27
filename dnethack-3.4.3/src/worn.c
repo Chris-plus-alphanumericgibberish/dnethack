@@ -516,14 +516,14 @@ struct monst *mon;
 {
 	int base = mon->data->ac, armac = 0;
 	
-	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
-	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + AC_VALUE(base+8);
-	else if(mon->data == &mons[PM_ZAPHKIEL] && base < -8) base = -8 + AC_VALUE(base+8);
-	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_STRANGE_CORPSE] && base < -5) base = -5 + AC_VALUE(base+5);
-	else if(mon->data == &mons[PM_ANCIENT_OF_DEATH] && base < -4) base = -4 + AC_VALUE(base+4);
+	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + MONSTER_AC_VALUE(base+9);
+	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + MONSTER_AC_VALUE(base+8);
+	else if(mon->data == &mons[PM_ZAPHKIEL] && base < -8) base = -8 + MONSTER_AC_VALUE(base+8);
+	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_STRANGE_CORPSE] && base < -5) base = -5 + MONSTER_AC_VALUE(base+5);
+	else if(mon->data == &mons[PM_ANCIENT_OF_DEATH] && base < -4) base = -4 + MONSTER_AC_VALUE(base+4);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}
@@ -556,14 +556,14 @@ struct monst *mon;
 	int base = mon->data->ac, armac = 0;
 	long mwflags = mon->misc_worn_check;
 	
-	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + AC_VALUE(base+9);
-	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + AC_VALUE(base+8);
-	else if(mon->data == &mons[PM_ZAPHKIEL] && base < -8) base = -8 + AC_VALUE(base+8);
-	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_STRANGE_CORPSE] && base < -5) base = -5 + AC_VALUE(base+5);
-	else if(mon->data == &mons[PM_ANCIENT_OF_DEATH] && base < -4) base = -4 + AC_VALUE(base+4);
+	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + MONSTER_AC_VALUE(base+9);
+	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + MONSTER_AC_VALUE(base+8);
+	else if(mon->data == &mons[PM_ZAPHKIEL] && base < -8) base = -8 + MONSTER_AC_VALUE(base+8);
+	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
+	else if(mon->data == &mons[PM_STRANGE_CORPSE] && base < -5) base = -5 + MONSTER_AC_VALUE(base+5);
+	else if(mon->data == &mons[PM_ANCIENT_OF_DEATH] && base < -4) base = -4 + MONSTER_AC_VALUE(base+4);
 	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
 	}

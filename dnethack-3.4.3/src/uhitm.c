@@ -1913,7 +1913,7 @@ defaultvalue:
 	} else {
 		int mac = full_marmorac(mon);
 		if(mac < 0){
-			tmp += AC_VALUE(mac);
+			tmp += MONSTER_AC_VALUE(mac);
 			if(tmp < 1) tmp = 1;
 		}
 	}
@@ -2200,7 +2200,7 @@ defaultvalue:
 	if(tmp && !phasearmor){
 		int mac = full_marmorac(mon);
 		if(mac < 0){
-			tmp += AC_VALUE(mac);
+			tmp += MONSTER_AC_VALUE(mac);
 			if(tmp < 1) tmp = 1;
 		}
 	}
@@ -3476,7 +3476,7 @@ register struct attack *mattk;
 	if(tmp && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
 		int mac = full_marmorac(mdef);
 		if(mac < 0){
-			tmp += AC_VALUE(mac);
+			tmp += MONSTER_AC_VALUE(mac);
 			if(tmp < 1) tmp = 1;
 		}
 	}
