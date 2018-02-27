@@ -250,6 +250,9 @@
 #define is_drow(ptr)		(((ptr)->mflagsa & MA_DROW) != 0L)
 #define is_dwarf(ptr)		(((ptr)->mflagsa & MA_DWARF) != 0L)
 #define is_gnome(ptr)		(((ptr)->mflagsa & MA_GNOME) != 0L)
+#define is_szcultist(ptr)		((ptr) == &mons[PM_SHATTERED_ZIGGURAT_CULTIST] \
+								|| (ptr) == &mons[PM_SHATTERED_ZIGGURAT_KNIGHT] \
+								|| (ptr) == &mons[PM_SHATTERED_ZIGGURAT_WIZARD])
 #define is_orc(ptr)		(((ptr)->mflagsa & MA_ORC) != 0L)
 #define is_ogre(ptr)		((ptr)->mlet == S_OGRE)
 #define is_troll(ptr)		((ptr)->mlet == S_TROLL)

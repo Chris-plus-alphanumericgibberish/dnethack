@@ -687,7 +687,7 @@ const char *DnDHumLgod = "Saint Cuthbert",
 		   *DnDHumCgod = "_Mask"; /* DnD human pantheon */
 
 //defined in pray.c
-extern const char *Moloch, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *AllInOne; /*defined in pray*/
+extern const char *Moloch, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *DreadFracture, *AllInOne; /*defined in pray*/
 /* The player's role, created at runtime from initial
  * choices.  This may be munged in role_init().
  */
@@ -1033,6 +1033,7 @@ const int MChaos[] = {PM_GOBLIN,PM_WATER_ELEMENTAL,PM_FIRE_ELEMENTAL,PM_EARTH_EL
 const int MChaosDeep[] = {PM_LICH,PM_MARILITH,PM_KRAKEN,PM_GREEN_DRAGON,NON_PM};
 const int Onone[] = {NON_PM};
 const int MBlackMother[] = {PM_DEMINYMPH,PM_SHOGGOTH,PM_DARK_YOUNG,NON_PM};
+const int MDreadFracture[] = {PM_FREEZING_SPHERE,PM_SHADE,PM_FALLEN_ANGEL,PM_ANCIENT_OF_ICE,PM_SHAYATEEN,PM_ANCIENT_OF_DEATH,NON_PM};
 const int MAllInOne[] = {PM_AOA_DROPLET,PM_HOOLOOVOO,PM_AOA,PM_UVUUDAUM,NON_PM};
 
 const int *
@@ -1191,6 +1192,7 @@ god_minions(gptr)
 	if(gptr == DeepChaos) return MChaosDeep;
 	if(gptr == Other) return Onone;
 	if(gptr == BlackMother) return MBlackMother;
+	if(gptr == DreadFracture) return MDreadFracture;
 	if(gptr == AllInOne) return MAllInOne;
 	
 	pline("ERROR RECOVERY:Minion list for %s not specified, using default", gptr);

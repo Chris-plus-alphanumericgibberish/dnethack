@@ -30,6 +30,7 @@ STATIC_DCL void FDECL(mkfishinghut, (boolean));
 STATIC_DCL void NDECL(mkpluvillage);
 STATIC_DCL void NDECL(mkferrufort);
 STATIC_DCL void NDECL(mkferrutower);
+STATIC_DCL void NDECL(mkinvertzigg);
 STATIC_DCL void NDECL(mklolthsepulcher);
 STATIC_DCL void NDECL(mkmivaultlolth);
 STATIC_DCL void NDECL(mkvaultlolth);
@@ -2310,6 +2311,144 @@ mkferrutower()
 	}
 }
 
+STATIC_OVL
+void
+mkinvertzigg()
+{
+	int x,y,tries=0, roomnumb = nroom;
+	int i,j;
+	boolean good=FALSE, okspot, accessible;
+	int size = 15;
+	struct obj *chest, *otmp;
+	while(!good && tries < 500){
+		x = rn2(COLNO-size)+1;
+		y = rn2(ROWNO-size);
+		tries++;
+		okspot = TRUE;
+		accessible = FALSE;
+		for(i=0;i<size;i++)
+			for(j=0;j<size;j++){
+				if(!isok(x+i,y+j) || t_at(x+i, y+j) || !(levl[x+i][y+j].typ == TREE || levl[x+i][y+j].typ == ROOM))
+					okspot = FALSE;
+			}
+		if(!okspot)
+			continue;
+		
+		for(i=0;i<size;i++){
+			if(isok(x+i,y) && levl[x+i][y].typ == ROOM)
+				accessible = TRUE;
+			if(isok(x+i,y+size-1) && levl[x+i][y+size-1].typ == ROOM)
+				accessible = TRUE;
+			if(isok(x+size-1,y+i) && levl[x+size-1][y+i].typ == ROOM)
+				accessible = TRUE;
+			if(isok(x,y+i) && levl[x][y+i].typ == ROOM)
+				accessible = TRUE;
+		}
+		
+		if(okspot && accessible){
+			good = TRUE;
+		} else continue;
+		
+		for(i=0;i<size;i++){
+			for(j=0;j<size;j++){
+				levl[x+i][y+j].typ = ROOM;
+				levl[x+i][y+j].lit = 1;
+			}
+		}
+		
+		for(i=1;i<size-1;i++){
+			for(j=1;j<size-1;j++){
+				levl[x+i][y+j].typ = HWALL;
+				if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
+			}
+		}
+		for(i=2;i<size-2;i++){
+			for(j=2;j<size-2;j++){
+				levl[x+i][y+j].typ = CORR;
+				levl[x+i][y+j].lit = 0;
+			}
+		}
+		
+		for(i=4;i<size-4;i++){
+			for(j=4;j<size-4;j++){
+				levl[x+i][y+j].typ = HWALL;
+				if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
+			}
+		}
+		for(i=5;i<size-5;i++){
+			for(j=5;j<size-5;j++){
+				levl[x+i][y+j].typ = CORR;
+			}
+		}
+		
+		wallification(x, y, x+size-1, y+size-1);
+		
+		if(rn2(2)){
+			i = rnd(size-4)+1;
+			j = rn2(2) ? size-2 : 1;
+		} else {
+			i = rn2(2) ? size-2 : 1;
+			j = rnd(size-4)+1;
+		}
+		levl[x+i][y+j].typ = DOOR;
+		levl[x+i][y+j].doormask = D_LOCKED;
+		
+		if(rn2(2)){
+			i = rnd(size-10)+4;
+			j = rn2(2) ? size-5 : 4;
+		} else {
+			i = rn2(2) ? size-5 : 4;
+			j = rnd(size-10)+4;
+		}
+		levl[x+i][y+j].typ = DOOR;
+		levl[x+i][y+j].doormask = D_LOCKED;
+		
+		if(rn2(3)){
+			chest = mksobj_at(CHEST, x+size/2, y+size/2, TRUE, TRUE);
+			chest->obj_material = IRON;
+			fix_object(chest);
+			if ((otmp = mksobj(TORCH, FALSE, FALSE)) != 0) {
+				otmp->quan = rnd(6);
+				otmp->owt = weight(otmp);
+				add_to_container(chest, otmp);
+			}
+			if ((otmp = mksobj(SHADOWLANDER_S_TORCH, FALSE, FALSE)) != 0) {
+				otmp->quan = rnd(6);
+				otmp->spe = rn2(3);
+				otmp->owt = weight(otmp);
+				add_to_container(chest, otmp);
+			}
+			/*Chance for beads of force*/
+			/*Chance for rod of force*/
+			/*Chance for wand of striking*/
+			if ((otmp = mksobj(WAN_STRIKING, TRUE, FALSE)) != 0) {
+				add_to_container(chest, otmp);
+			}
+			if ((otmp = mksobj(POT_WATER, FALSE, FALSE)) != 0) {
+				otmp->blessed = 0;
+				otmp->cursed = 1;
+				otmp->quan = rnd(3);
+				otmp->owt = weight(otmp);
+				add_to_container(chest, otmp);
+			}
+			bury_an_obj(chest);
+		} else {
+			levl[x+size/2][y+size/2].typ = ALTAR;
+			levl[x+size/2][y+size/2].altarmask = Align2amask( A_NONE );
+		}
+		if(!toostrong(PM_SHATTERED_ZIGGURAT_WIZARD, (level_difficulty() + u.ulevel) / 2 + 5)){
+			makemon(&mons[PM_SHATTERED_ZIGGURAT_WIZARD], x+size/2, y+size/2, MM_ADJACENTOK);
+			for(i = rnd(6)+rnd(4); i > 0; i--)
+				makemon(&mons[PM_SHATTERED_ZIGGURAT_KNIGHT], x+size/2, y+size/2, MM_ADJACENTOK);
+		} else {
+			for(i = rnd(4); i > 0; i--)
+				makemon(&mons[PM_SHATTERED_ZIGGURAT_KNIGHT], x+size/2, y+size/2, MM_ADJACENTOK);
+		}
+		for(i = rn1(6,6); i > 0; i--)
+			makemon(&mons[PM_SHATTERED_ZIGGURAT_CULTIST], x+size/2, y+size/2, MM_ADJACENTOK);
+	}
+}
+
 void
 place_lolth_vaults()
 {
@@ -2369,12 +2508,14 @@ place_neutral_features()
 		mkneuriver();
 	}
 	
-	
 	if(!rn2(10)){
 		mkpluvillage();
 	// } else if(){
 		// mkferrufort();
 	}
+	
+	if(!rn2(20))
+		mkinvertzigg();
 	
 	if(!rn2(10))
 		mkferrutower();

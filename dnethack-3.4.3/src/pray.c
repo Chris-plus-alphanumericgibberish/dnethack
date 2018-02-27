@@ -56,6 +56,7 @@ const char	*Demiurge = "Yaldabaoth";
 const char	*Sophia = "Pistis Sophia";
 const char	*Other = "an alien god";
 const char	*BlackMother = "the Black Mother";
+const char	*DreadFracture = "the Dread Fracture";
 const char	*AllInOne = "Yog-Sothoth";
 
 static const char *godvoices[] = {
@@ -3021,9 +3022,12 @@ aligntyp alignment;
 		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
 		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
 		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
-		else if(In_neu(&u.uz)){
+		else if(In_lost_cities(&u.uz)){
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
 			else gnam = BlackMother;
+		}
+		else if(In_outlands(&u.uz)){
+			gnam = DreadFracture;
 		}
 		else gnam = Moloch;
 	 break;
@@ -3070,7 +3074,8 @@ aligntyp alignment;
 		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
 		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
 		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
-		else if(In_neu(&u.uz)){
+		else if(In_outlands(&u.uz)) gnam = DreadFracture;
+		else if(In_lost_cities(&u.uz)){
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
 			else gnam = BlackMother;
 		}

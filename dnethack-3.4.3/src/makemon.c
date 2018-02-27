@@ -564,6 +564,37 @@ register struct monst *mtmp;
 				// otmp->quan = 3;
 				// (void) mpickobj(mtmp, otmp);
 			}
+			else if(ptr == &mons[PM_SHATTERED_ZIGGURAT_CULTIST]) {
+			    otmp = mksobj(TORCH, FALSE, FALSE);
+				otmp->age = (long) rn1(500,1000);
+			    (void) mpickobj(mtmp, otmp);
+				begin_burn(otmp, FALSE);
+				(void)mongets(mtmp, WHITE_FACELESS_ROBE);
+				(void)mongets(mtmp, LOW_BOOTS);
+			}
+			else if(ptr == &mons[PM_SHATTERED_ZIGGURAT_KNIGHT]) {
+			    otmp = mksobj(SHADOWLANDER_S_TORCH, FALSE, FALSE);
+			    (void) mpickobj(mtmp, otmp);
+				otmp->age = (long) rn1(500,1000);
+				begin_burn(otmp, FALSE);
+				(void)mongets(mtmp, HELMET);
+				(void)mongets(mtmp, BLACK_FACELESS_ROBE);
+				(void)mongets(mtmp, CHAIN_MAIL);
+				(void)mongets(mtmp, GLOVES);
+				(void)mongets(mtmp, HIGH_BOOTS);
+			}
+			else if(ptr == &mons[PM_SHATTERED_ZIGGURAT_WIZARD]) {
+			    otmp = mksobj(SHADOWLANDER_S_TORCH, FALSE, FALSE);
+				otmp->spe = rnd(3);
+				otmp->age = (long) rn1(1000,2000);
+			    (void) mpickobj(mtmp, otmp);
+				begin_burn(otmp, FALSE);
+				(void)mongets(mtmp, LEATHER_HELM);
+				(void)mongets(mtmp, SMOKY_VIOLET_FACELESS_ROBE);
+				(void)mongets(mtmp, LEATHER_ARMOR);
+				(void)mongets(mtmp, GLOVES);
+				(void)mongets(mtmp, HIGH_BOOTS);
+			}
 			else if(is_mercenary(ptr)) {
 				int w1 = 0, w2 = 0;
 				switch (mm) {
@@ -2832,7 +2863,7 @@ register struct monst *mtmp;
 			    (void) mpickobj(mtmp, otmp);
 				    if (!levl[mtmp->mx][mtmp->my].lit) {
 					begin_burn(otmp, FALSE);
-			    }	
+			    }
 			}
 			else {
 			    (void)mongets(mtmp, DWARVISH_HELM);
@@ -5378,7 +5409,7 @@ register int	mmflags;
 			mtmp->mhp = mtmp->mhpmax;
 		}
 		newsym(mtmp->mx,mtmp->my);
-		allow_minvent = !rn2(4);
+		allow_minvent = rn2(2);
 	}
 	
 	if(Race_if(PM_DROW) && in_mklev && Is_qstart(&u.uz) && 
@@ -6174,7 +6205,7 @@ rndmonst()
 	else if (In_neu(&u.uz) && 
 		(
 			Is_rlyeh(&u.uz) ||  Is_sumall(&u.uz) || Is_gatetown(&u.uz) || 
-			(rn2(10) && (u.uz.dnum == neutral_dnum && u.uz.dlevel < sum_of_all_level.dlevel))
+			(rn2(10) && (In_outlands(&u.uz)))
 		)
 	){
 	    if(!in_mklev) return neutral_montype();
@@ -6967,6 +6998,8 @@ register int otyp;
 	register struct obj *otmp;
 	int spe;
 
+	if (mtmp->mfaction == undeadfaction && rn2(2))
+		return 0;
 	if (!otyp) return 0;
 	otmp = mksobj(otyp, TRUE, FALSE);
 	if (otmp) {

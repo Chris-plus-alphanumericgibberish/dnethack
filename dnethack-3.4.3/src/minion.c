@@ -9,6 +9,9 @@
 
 extern const int monstr[];
 
+//defined in pray.c
+extern const char *Moloch, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *DreadFracture, *AllInOne; /*defined in pray*/
+
 void
 msummon(mon)		/* mon summons a monster */
 struct monst *mon;
@@ -191,6 +194,14 @@ boolean talk;
 				otmp->ovar1 = faction;
 			}
 		}
+	}
+	
+	if(gptr == DreadFracture && mon->mfaction != FRACTURED){
+		mon->mfaction = FRACTURED;
+		mon->m_lev += 4;
+		mon->mhpmax = d(mon->m_lev, 8);
+		mon->mhp = mon->mhpmax;
+		newsym(mon->mx,mon->my);
 	}
 	return mon;
 }

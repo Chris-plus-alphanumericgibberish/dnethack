@@ -1259,9 +1259,10 @@ long timeout;
 
 	/* timeout while away */
 	if (timeout != monstermoves && (obj->where != OBJ_MINVENT || (
-				(!is_dwarf(obj->ocarry->data) || obj->otyp != DWARVISH_HELM) &&
-				(!is_gnome(obj->ocarry->data) || obj->otyp != GNOMISH_POINTY_HAT)
-				))) {
+				(!is_dwarf(obj->ocarry->data) || obj->otyp != DWARVISH_HELM)
+				&& (!is_gnome(obj->ocarry->data) || obj->otyp != GNOMISH_POINTY_HAT)
+				&& (!is_szcultist(obj->ocarry->data) || !(obj->otyp == TORCH || obj->otyp == SHADOWLANDER_S_TORCH))
+	))) {
 	    long how_long = monstermoves - timeout;
 
 		if (how_long >= obj->age){
@@ -1603,6 +1604,11 @@ long timeout;
 		}
 		
 		if (obj && obj->age){
+			if(obj->where == OBJ_MINVENT &&
+				is_szcultist(obj->ocarry->data)
+			){
+				obj->age = (long) rn1(150,150);
+			}
 			end_burn(obj, FALSE);
 		    begin_burn(obj, FALSE);
 		}
@@ -1727,6 +1733,11 @@ long timeout;
 		}
 		
 		if (obj && obj->age){
+			if(obj->where == OBJ_MINVENT &&
+				is_szcultist(obj->ocarry->data)
+			){
+				obj->age = (long) rn1(150,150);
+			}
 			end_burn(obj, FALSE);
 		    begin_burn(obj, FALSE);
 		}
