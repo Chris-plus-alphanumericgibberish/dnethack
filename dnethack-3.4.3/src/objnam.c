@@ -2408,6 +2408,8 @@ struct alt_spellings {
 	{ "leather armour", LEATHER_ARMOR },
 	{ "leather gloves", GLOVES },
 	{ "studded leather armour", STUDDED_LEATHER_ARMOR },
+	{ "chain", IRON_CHAIN },
+	{ "iron chain", IRON_CHAIN },
 	{ "iron ball", HEAVY_IRON_BALL },
 	{ "lantern", BRASS_LANTERN },
 	{ "mattock", DWARVISH_MATTOCK },

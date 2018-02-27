@@ -1900,8 +1900,6 @@ boolean init;
 	    /* use the corpse or statue produced by mksobj() as-is
 	       unless `ptr' is non-null */
 	    if (ptr) {
-			int old_corpsenm = otmp->corpsenm;
-
 			otmp->corpsenm = monsndx(ptr);
 			otmp->owt = weight(otmp);
 			// if (otmp->otyp == CORPSE &&

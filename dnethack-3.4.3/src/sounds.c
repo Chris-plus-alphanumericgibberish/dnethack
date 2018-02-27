@@ -3424,7 +3424,7 @@ int tx,ty;
 				}
 				Your("sacrifice is accepted.");
 				if(!Blind){
-					pline("A murder of crows decends on the seal.");
+					pline("A murder of crows descends on the seal.");
 					pline("There is something else in the flock...");
 				} else You_hear("many wings.");
 				if(u.sealCounts < numSlots){
@@ -3511,7 +3511,7 @@ int tx,ty;
 					u.sealTimeout[MOTHER-FIRST_SEAL] = moves + bindingPeriod;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis && Role_if(PM_EXILE)))){
-					pline("You're pretty sure somthing is staring at your weapon....");
+					pline("You're pretty sure something is staring at your weapon....");
 					uwep->ovar1 |= SEAL_MOTHER;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_MOTHER;
@@ -3577,7 +3577,7 @@ int tx,ty;
 					// u.sealTimeout[NABERIUS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			} else{
-				You_hear("retoric and sage advice.");
+				You_hear("rhetoric and sage advice.");
 				// u.sealTimeout[NABERIUS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
 		} else pline("You can't feel the spirit.");
@@ -3622,7 +3622,7 @@ int tx,ty;
 				if(u.sealCounts < numSlots){
 					pline("The sea-bottom within the seal fades, as if it were silt settling out of muddy water.");
 					pline("A sleeping %s floats gently up out of the dark seas below the seal.",u.osegen);
-					pline("You supose %s could be called comely,",u.osepro);
+					pline("You suppose %s could be called comely,",u.osepro);
 					pline("though to be honest %s is about average among %s you have known.",u.osepro,makeplural(u.osegen));
 					if(!rn2(20)) pline("The %s's eyes open, and you have a long negotiation before achieving a good pact.", u.osegen);
 					else pline("You know that this is Ose, despite never having met.");
@@ -3657,7 +3657,7 @@ int tx,ty;
 			} else if(In_depths(&u.uz)){ 
 				if(u.sealCounts < numSlots){
 					pline("There is %s sleeping in the center of the seal.",an(u.osegen));
-					pline("You supose %s could be called comely,",u.osepro);
+					pline("You suppose %s could be called comely,",u.osepro);
 					pline("though to be honest %s is about average among %s you have known.",u.osepro,makeplural(u.osegen));
 					if(!rn2(20)) pline("The %s's eyes open, and you have a long negotiation before achieving a good pact.", u.osegen);
 					else pline("You know that this is Ose, despite never having met.");
@@ -4069,7 +4069,7 @@ int tx,ty;
 	case UNKNOWN_GOD:{
 		if(u.sealTimeout[UNKNOWN_GOD-FIRST_SEAL] < moves){
 			if(Role_if(PM_EXILE)){
-				pline("As you contemplate the seal, your mind fills with unprecidented emotions and indecipherable thoughts,");
+				pline("As you contemplate the seal, your mind fills with unprecedented emotions and indecipherable thoughts,");
 				pline("while the world warps and quakes around you.");
 				pline("The experience ends as quickly as it began.");
 				You("don't know what that was about, but it seems your contract was accepted.");

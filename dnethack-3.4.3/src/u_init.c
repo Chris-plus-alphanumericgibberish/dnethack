@@ -1295,7 +1295,8 @@ int randSpecialAttackTypes[] =
 						 AT_BEAM, 
 						 AT_5SQR, 
 						 AT_DEVA, 
-						 AT_MAGC };
+						 AT_MAGC, 
+						 AT_HODS };
 
 int randMeleeDamageTypes[] = 
 						{AD_PHYS, 

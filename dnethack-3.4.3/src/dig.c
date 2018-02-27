@@ -2239,7 +2239,7 @@ long timeout;	/* unused */
 		MON_NOWEP(obj->ocarry);
 	    }
 	}
-	// rot_organic(arg, timeout); //This is not for corpses, it is for burried containers.
+	// rot_organic(arg, timeout); //This is not for corpses, it is for buried containers.
 	obj_extract_self(obj);
 	obfree(obj, (struct obj *) 0);
 	
