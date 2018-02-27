@@ -732,8 +732,10 @@ int
 pronoun_gender(mtmp)
 register struct monst *mtmp;
 {
-	if (is_neuter(mtmp->data) || !canspotmon(mtmp)) return 2;
-	return (humanoid(mtmp->data) || (mtmp->data->geno & G_UNIQ) ||
+	if(is_neuter(mtmp->data) || !canspotmon(mtmp)) return 2;
+	if(mtmp->mfaction == SKELIFIED && !Role_if(PM_ARCHEOLOGIST))
+		return 2;
+	return (humanoid_torso(mtmp->data) || (mtmp->data->geno & G_UNIQ) ||
 		type_is_pname(mtmp->data)) ? (int)mtmp->female : 2;
 }
 

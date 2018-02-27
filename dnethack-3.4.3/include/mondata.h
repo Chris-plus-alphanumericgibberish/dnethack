@@ -164,6 +164,7 @@
 #define mindless_mon(mon)		(mon && (((mon)->mfaction == ZOMBIFIED) || ((mon)->mfaction == SKELIFIED) || ((mon)->mfaction == CRYSTALFIED) || mindless((mon)->data)))
 
 #define slithy(ptr)			((ptr)->mflagsb & MB_SLITHY)
+#define humanoid_torso(ptr)	(((ptr)->mflagsb & MB_HUMANOID) != 0)
 #define humanoid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID)
 #define animaloid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_ANIMAL)
 #define serpentine(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_SLITHY)
