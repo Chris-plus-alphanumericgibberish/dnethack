@@ -1213,7 +1213,9 @@ mattacku(mtmp)
 
 			    if (foundyou) {
 					for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj){
-						if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) 
+						if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+							|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])
+							)  && !otmp->oartifact
 							&& otmp != MON_WEP(mtmp) && otmp != MON_SWEP(mtmp)
 						) wcount++;
 					}
@@ -1223,7 +1225,9 @@ mattacku(mtmp)
 					if(MON_SWEP(mtmp))
 						wcount++;
 					for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj){
-						if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) 
+						if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+							|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])
+							)  && !otmp->oartifact
 							&& otmp != MON_WEP(mtmp) && otmp != MON_SWEP(mtmp)
 							&& --wcount <= 0
 						) break;
@@ -2926,7 +2930,7 @@ dopois:
 	    case AD_RUST:
 			hitmsg(mtmp, mattk);
 			if (mtmp->mcan) break;
-			if (u.umonnum == PM_IRON_GOLEM) {
+			if (u.umonnum == PM_IRON_GOLEM || u.umonnum == PM_CHAIN_GOLEM) {
 				You("rust!");
 			/* KMH -- this is okay with unchanging */
 				rehumanize();
@@ -3921,7 +3925,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 					if(perc > 0) forget(perc);
 				}
 			} else {
-				if (u.umonnum == PM_IRON_GOLEM) {
+				if (u.umonnum == PM_IRON_GOLEM || u.umonnum == PM_CHAIN_GOLEM) {
 					You("are laden with moisture and rust away!");
 				/* KMH -- this is okay with unchanging */
 					rehumanize();

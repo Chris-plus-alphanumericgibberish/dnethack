@@ -587,8 +587,15 @@ register struct monst *mtmp;
 			num = d(2,6);
 			while (num--){
 				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
-				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(KITE_SHIELD, x, y, TRUE, FALSE);
 				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
+			}
+			mtmp->mnamelth = 0;
+		break;
+	    case PM_CHAIN_GOLEM:
+			num = d(6,6);
+			while (num--){
+				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
 			}
 			mtmp->mnamelth = 0;
 		break;
@@ -846,7 +853,7 @@ register struct monst *mtmp;
 	    dryup(mtmp->mx, mtmp->my, FALSE);
 	if (inpool) water_damage(mtmp->minvent, FALSE, FALSE, level.flags.lethe, mtmp);
 	return (0);
-    } else if (mtmp->data == &mons[PM_IRON_GOLEM] && ((inpool && !rn2(5)) || inshallow)) {
+    } else if ((mtmp->data == &mons[PM_IRON_GOLEM] || mtmp->data == &mons[PM_CHAIN_GOLEM]) && ((inpool && !rn2(5)) || inshallow)) {
 	/* rusting requires oxygen and water, so it's faster for shallow water */
 	int dam = d(2,6);
 	if (cansee(mtmp->mx,mtmp->my))
@@ -2703,7 +2710,8 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 			struct obj *mwep;
 			mwep = MON_WEP(mon);
 			if ((ttmp->ttyp != RUST_TRAP
-					|| mdat == &mons[PM_IRON_GOLEM])
+					|| mdat == &mons[PM_IRON_GOLEM]
+					|| mdat == &mons[PM_CHAIN_GOLEM])
 				&& ((ttmp->ttyp != PIT
 				    && ttmp->ttyp != SPIKED_PIT
 				    && ttmp->ttyp != TRAPDOOR
@@ -5687,7 +5695,7 @@ int damtype, dam;
     if (mon->data == &mons[PM_FLESH_GOLEM]) {
 	if (damtype == AD_ELEC) heal = dam / 6;
 	else if (damtype == AD_FIRE || damtype == AD_COLD) slow = 1;
-    } else if (mon->data == &mons[PM_IRON_GOLEM] || mon->data == &mons[PM_ARGENTUM_GOLEM] || mon->data == &mons[PM_CENTER_OF_ALL]) {
+    } else if (mon->data == &mons[PM_IRON_GOLEM] || mon->data == &mons[PM_CHAIN_GOLEM] || mon->data == &mons[PM_ARGENTUM_GOLEM] || mon->data == &mons[PM_CENTER_OF_ALL]) {
 	if (damtype == AD_ELEC) slow = 1;
 	else if (damtype == AD_FIRE) heal = dam;
     } else {

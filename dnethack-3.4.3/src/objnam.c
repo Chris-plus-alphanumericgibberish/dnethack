@@ -753,6 +753,16 @@ register struct obj *obj;
 	    case COIN_CLASS:
 	    case CHAIN_CLASS:
 		Strcat(buf, actualn);
+		if(obj->owornmask & W_ARM)
+			Strcat(eos(buf), " (wrapped around chest)");
+		else if(obj->owornmask & W_ARMC)
+			Strcat(eos(buf), " (draped over shoulders)");
+		else if(obj->owornmask & W_ARMH)
+			Strcat(eos(buf), " (wrapped around head)");
+		else if(obj->owornmask & W_ARMG)
+			Strcat(eos(buf), " (wrapped around arms)");
+		else if(obj->owornmask & W_ARMF)
+			Strcat(eos(buf), " (wrapped around legs)");
 		break;
 	    case ROCK_CLASS:
 		if (typ == STATUE)

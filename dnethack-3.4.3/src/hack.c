@@ -1778,7 +1778,7 @@ stillinwater:;
 
 		if(u.umonnum == PM_GREMLIN)
 		    (void)split_mon(&youmonst, (struct monst *)0);
-		else if (u.umonnum == PM_IRON_GOLEM &&
+		else if ((u.umonnum == PM_IRON_GOLEM || u.umonnum == PM_CHAIN_GOLEM) &&
 			/* mud boots keep the feet dry */
 			(!uarmf || strncmp(OBJ_DESCR(objects[uarmf->otyp]), "mud ", 4))) {
 		    int dam = rnd(6);

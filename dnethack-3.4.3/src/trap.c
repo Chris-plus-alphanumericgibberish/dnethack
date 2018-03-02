@@ -864,7 +864,7 @@ unsigned trflags;
 
 	    case RUST_TRAP:
 		seetrap(trap);
-		if (u.umonnum == PM_IRON_GOLEM) {
+		if (u.umonnum == PM_IRON_GOLEM || u.umonnum == PM_CHAIN_GOLEM) {
 		    int dam = u.mhmax;
 
 		    pline("%s you!", A_gush_of_water_hits);
@@ -1978,7 +1978,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 #endif
 			    }
 			}
-			if (mptr == &mons[PM_IRON_GOLEM]) {
+			if (mptr == &mons[PM_IRON_GOLEM] || mptr == &mons[PM_CHAIN_GOLEM]) {
 				if (in_sight)
 				    pline("%s falls to pieces!", Monnam(mtmp));
 				else if(mtmp->mtame)
@@ -2216,6 +2216,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 				// case PM_VORPAL_JABBERWOCK:
 			    case PM_ARGENTUM_GOLEM:
 			    case PM_IRON_GOLEM:
+			    case PM_CHAIN_GOLEM:
 			    case PM_CENTER_OF_ALL:
 			    case PM_CHAOS:
 			    case PM_GREAT_CTHULHU:
@@ -3246,7 +3247,7 @@ drown()
 
 	if (u.umonnum == PM_GREMLIN && rn2(3))
 	    (void)split_mon(&youmonst, (struct monst *)0);
-	else if (u.umonnum == PM_IRON_GOLEM && !(u.sealsActive&SEAL_EDEN)) {
+	else if ((u.umonnum == PM_IRON_GOLEM || u.umonnum == PM_CHAIN_GOLEM) && !(u.sealsActive&SEAL_EDEN)) {
 	    You("rust!");
 	    i = d(2,6);
 	    if (u.mhmax > i) u.mhmax -= i;

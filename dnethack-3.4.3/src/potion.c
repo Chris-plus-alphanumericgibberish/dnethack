@@ -1363,10 +1363,10 @@ boolean your_fault;
 		    angermon = FALSE;
 		    (void)split_mon(mon, (struct monst *)0);
 		} else if(mon->data == &mons[PM_FLAMING_SPHERE] ||
-			mon->data == &mons[PM_IRON_GOLEM]) {
+			mon->data == &mons[PM_IRON_GOLEM] || mon->data == &mons[PM_CHAIN_GOLEM]) {
 		    if (canseemon(mon))
 			pline("%s %s.", Monnam(mon),
-				mon->data == &mons[PM_IRON_GOLEM] ?
+				(mon->data == &mons[PM_IRON_GOLEM] || mon->data == &mons[PM_CHAIN_GOLEM]) ?
 				"rusts" : "flickers");
 		    mon->mhp -= d(1,6);
 		    if (mon->mhp < 1) {
@@ -1395,10 +1395,10 @@ boolean your_fault;
 		    angermon = FALSE;
 		    (void)split_mon(mon, (struct monst *)0);
 		} else if(mon->data == &mons[PM_FLAMING_SPHERE] ||
-			mon->data == &mons[PM_IRON_GOLEM]) {
+			mon->data == &mons[PM_IRON_GOLEM] || mon->data == &mons[PM_CHAIN_GOLEM]) {
 		    if (canseemon(mon))
 			pline("%s %s.", Monnam(mon),
-				mon->data == &mons[PM_IRON_GOLEM] ?
+				(mon->data == &mons[PM_IRON_GOLEM] || mon->data == &mons[PM_CHAIN_GOLEM]) ?
 				"rusts" : "flickers");
 		    mon->mhp -= d(1,6);
 		    if (mon->mhp < 1) {
@@ -1418,8 +1418,9 @@ boolean your_fault;
 		    break;
 		case PM_FLAMING_SPHERE:
 		case PM_IRON_GOLEM:
+		case PM_CHAIN_GOLEM:
 		    if (canseemon(mon)) pline("%s %s.", Monnam(mon),
-			    monsndx(mon->data) == PM_IRON_GOLEM ?
+			    (monsndx(mon->data) == PM_IRON_GOLEM || monsndx(mon->data) == PM_CHAIN_GOLEM) ?
 			    "rusts" : "flickers");
 		    mon->mhp -= d(1,6);
 		    if (mon->mhp < 1)
@@ -1723,7 +1724,7 @@ register struct obj *obj;
 		else if(u.umonnum == PM_FLAMING_SPHERE) {
 		    You("flicker!");
 		    losehp(d(1,6),"potion of amnesia", KILLED_BY_AN);
-		} else if(u.umonnum == PM_IRON_GOLEM) {
+		} else if(u.umonnum == PM_IRON_GOLEM || u.umonnum == PM_CHAIN_GOLEM) {
 		    You("rust!");
 		    losehp(d(1,6),"potion of amnesia", KILLED_BY_AN);
 		}

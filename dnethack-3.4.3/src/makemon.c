@@ -4390,6 +4390,21 @@ register struct	monst	*mtmp;
 				mongets(mtmp, SCIMITAR);
 			break;
 ///////////////////////////////
+		    case PM_CATHEZAR:
+				mongets(mtmp, IRON_CHAIN);
+				mongets(mtmp, IRON_CHAIN);
+				mongets(mtmp, IRON_CHAIN);
+				mongets(mtmp, IRON_CHAIN);
+				
+				mongets(mtmp, IRON_CHAIN);
+				mongets(mtmp, IRON_CHAIN);
+				mongets(mtmp, IRON_CHAIN);
+				
+				mongets(mtmp, IRON_CHAIN);
+				mongets(mtmp, IRON_CHAIN);
+				mongets(mtmp, IRON_CHAIN);
+			break;
+///////////////////////////////
 			case PM_ALDINACH:
 				otmp = mksobj(MASK, FALSE, FALSE);
 				otmp->blessed = FALSE;
@@ -7095,6 +7110,7 @@ int type;
 		case PM_SPELL_GOLEM: return 20;
 //		case PM_SAURON_THE_IMPRISONED: return 45;
 		case PM_CLAY_GOLEM: return 50;
+		case PM_CHAIN_GOLEM: return 50;
 		case PM_TREASURY_GOLEM: return 60;
 		case PM_STONE_GOLEM: return 60;
 		case PM_GLASS_GOLEM: return 60;

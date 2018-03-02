@@ -1300,8 +1300,8 @@ OBJECT(OBJ("heavy iron ball", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,
 #endif /* CONVICT */
 		BALL_CLASS,  1000, 0,  480, 10, 25, 25, 0, 0,  200, HI_METAL),
 						/* +d4 when "very heavy" */
-OBJECT(OBJ("iron chain", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
-		CHAIN_CLASS, 1000, 0,  120,  0,  4,  4, 0, 0,  200, HI_METAL),
+OBJECT(OBJ("iron chain", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_FLAIL,IRON), 0,
+		CHAIN_CLASS, 1000, 0,  120,  0,  4,  4, 4, 0,  200, HI_METAL),
 OBJECT(OBJ("sheaf of hay", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,0,P_NONE,VEGGY), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS, 	0, 2, 	20,  0,  0,  0, 0, 0,  100, CLR_YELLOW),
 OBJECT(OBJ("clockwork component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,COPPER), 0, /*Needs encyc entry*//*Needs tile*/

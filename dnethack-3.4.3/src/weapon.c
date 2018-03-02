@@ -1458,7 +1458,8 @@ int spot;
 			/* never unsuitable for mainhand wielding */
 			(spot!=W_WEP || (!bimanual(otmp, mtmp->data) || ((mtmp->misc_worn_check & W_ARMS) == 0 && !MON_SWEP(mtmp) && strongmonst(mtmp->data)))) &&
 			/* never unsuitable for offhand wielding */
-			(spot!=W_SWAPWEP || (!(otmp->owornmask & (W_WEP)) && !otmp->cursed && !bimanual(otmp, mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0 && (otmp->owt <= (30 + (mtmp->m_lev/5)*5)))) &&
+			(spot!=W_SWAPWEP || (!(otmp->owornmask & (W_WEP)) && !otmp->cursed && !bimanual(otmp, mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0 && 
+				( (otmp->owt <= (30 + (mtmp->m_lev/5)*5)) || (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])))) &&
 			/* never a hated weapon */
 			(mtmp->misc_worn_check & W_ARMG || !hates_silver(mtmp->data) || otmp->obj_material != SILVER) &&
 			(mtmp->misc_worn_check & W_ARMG || !hates_iron(mtmp->data)   || otmp->obj_material != IRON) &&
@@ -1747,6 +1748,7 @@ static const NEARDATA short hwep[] = {
 	  FORCE_PIKE,/*2d6+6/2d8+8*/
 	  LIGHTSABER/*3d8*/,
 	  MIRRORBLADE/*your weapon is probably pretty darn good*/,
+	  HEAVY_IRON_BALL,/*1d25/1d25*/
 	  VIBROBLADE,/*2d6+3/2d8+4*/
 	  CRYSTAL_SWORD/*2d8/2d12*/,
 	  DROVEN_GREATSWORD/*1d18/1d30*/, 
@@ -1786,6 +1788,7 @@ static const NEARDATA short hwep[] = {
 	  BULLWHIP/*1d2/1d1*/, 
 	  QUARTERSTAFF/*1d6/1d6*/,
 	  JAVELIN/*1d6/1d6*/, 
+	  IRON_CHAIN/*1d6/1d6*/, 
 	  WAR_HAMMER/*1d4+1/1d4*/, 
 	  AKLYS/*1d6/1d3*/, 
 	  SUNROD/*1d6/1d3*/, 
@@ -1852,7 +1855,9 @@ register struct monst *mtmp;
 	/* prefer artifacts to everything else */
 	for(otmp=mtmp->minvent; otmp; otmp = otmp->nobj) {
 		if (/* valid weapon */
-			(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) &&
+			(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+			|| otmp->otyp == IRON_CHAIN || otmp->otyp == HEAVY_IRON_BALL
+			) &&
 			/* an artifact */
 			otmp->oartifact &&
 			/* never uncharged lightsabers */

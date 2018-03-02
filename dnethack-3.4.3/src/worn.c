@@ -792,9 +792,13 @@ boolean racialexception;
 		    if (!is_shirt(obj) || obj->objsize != mon->data->msize || !shirt_match(mon->data,obj)) continue;
 		    break;
 		case W_ARMC:
+			if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
+				break;
 		    if (!is_cloak(obj) || (abs(obj->objsize - mon->data->msize) > 1)) continue;
 		    break;
 		case W_ARMH:
+			if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
+				break;
 		    if (!is_helmet(obj) || ((!helm_match(mon->data,obj) || !has_head(mon->data) || obj->objsize != mon->data->msize) && !is_flimsy(obj))) continue;
 		    /* (flimsy exception matches polyself handling) */
 		    if (has_horns(mon->data) && !is_flimsy(obj)) continue;
@@ -803,12 +807,18 @@ boolean racialexception;
 		    if (cantwield(mon->data) || !is_shield(obj)) continue;
 		    break;
 		case W_ARMG:
+			if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
+				break;
 		    if (!is_gloves(obj) || obj->objsize != mon->data->msize || !can_wear_gloves(mon->data)) continue;
 		    break;
 		case W_ARMF:
+			// if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
+				// break;
 		    if (!is_boots(obj) || obj->objsize != mon->data->msize || !can_wear_boots(mon->data)) continue;
 		    break;
 		case W_ARM:
+			if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
+				break;
 		    if (!is_suit(obj) || (!Is_dragon_scales(obj) && (!arm_match(mon->data, obj) || (obj->objsize != mon->data->msize &&
 				!(is_elven_armor(obj) && abs(obj->objsize - mon->data->msize) <= 1))))
 			) continue;

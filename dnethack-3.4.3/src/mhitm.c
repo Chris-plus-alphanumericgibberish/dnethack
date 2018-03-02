@@ -473,8 +473,9 @@ mattackm(magr, mdef)
 		} else if(mattk->aatyp == AT_MARI){
 			int wcount = 0;
 			for(otmp = magr->minvent; otmp; otmp = otmp->nobj){
-				if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) 
-					&& !otmp->oartifact
+				if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+					|| (otmp->otyp == IRON_CHAIN && magr->data == &mons[PM_CATHEZAR])
+					) && !otmp->oartifact
 					&& otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)
 				) wcount++;
 			}
@@ -484,8 +485,9 @@ mattackm(magr, mdef)
 			if(MON_SWEP(magr))
 				wcount++;
 			for(otmp = magr->minvent; otmp; otmp = otmp->nobj){
-				if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) 
-					&& !otmp->oartifact
+				if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+					|| (otmp->otyp == IRON_CHAIN && magr->data == &mons[PM_CATHEZAR])
+					) && !otmp->oartifact
 					&& otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)
 					&& --wcount <= 0
 				) break;
@@ -1702,7 +1704,7 @@ physical:{
 		break;
 	    case AD_RUST:
 		if (magr->mcan) break;
-		if (pd == &mons[PM_IRON_GOLEM]) {
+		if (pd == &mons[PM_IRON_GOLEM] || pd == &mons[PM_CHAIN_GOLEM]) {
 			if (vis) pline("%s falls to pieces!", Monnam(mdef));
 			mondied(mdef);
 			if (mdef->mhp > 0) return 0;
