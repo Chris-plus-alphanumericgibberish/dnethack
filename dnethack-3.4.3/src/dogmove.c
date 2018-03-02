@@ -168,17 +168,6 @@ boolean check_if_better;
             return FALSE;  /* used charges or was cancelled? */
 	else
 	{
-	    // /* Check if you've got one.
-	       // If you DO, don't hoard it. */
-        // register struct obj *otmp2;
-	    // for(otmp2 = mtmp->minvent; otmp2; otmp2 = otmp2->nobj)
-	        // if (otmp2 != otmp && (otmp->otyp == otmp2->otyp ||
-	            // (otmp->otyp == FOOD_CLASS && otmp2->otyp == FOOD_CLASS))
-			// ) return FALSE;
-//         /* Check if the player has one. If you don't, don't hoard it. */
-//        for (otmp2 = invent; otmp2; otmp2 = otmp2->nobj)
-//			if (otmp->otyp == otmp2->otyp ||
-//	            (otmp->otyp == FOOD_CLASS && otmp2->otyp == FOOD_CLASS))
 		/*Hold all useful items.  The player can take with #loot if needed*/
 		return TRUE;
 	}

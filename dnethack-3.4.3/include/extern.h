@@ -1395,6 +1395,7 @@ E const char *FDECL(locomotion, (const struct permonst *,const char *));
 E const char *FDECL(stagger, (const struct permonst *,const char *));
 E const char *FDECL(on_fire, (struct permonst *,struct attack *));
 E const struct permonst *FDECL(raceptr, (struct monst *));
+E int FDECL(mstrength, (struct permonst *));
 
 /* ### monmove.c ### */
 

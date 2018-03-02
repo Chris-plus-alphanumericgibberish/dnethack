@@ -2726,6 +2726,8 @@ register struct attack *mattk;
 	register int	tmp = d((int)mattk->damn, (int)mattk->damd);
 	int armpro;
 	boolean negated, phasearmor = FALSE;
+	boolean weaponhit = (mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_DEVA);
+	struct attack alt_attk;
 
 	armpro = magic_negation(mdef);
 	/* since hero can't be cancelled, only defender's armor applies */
@@ -2739,7 +2741,7 @@ register struct attack *mattk;
 	    demonpet();
 	    return(0);
 	}
-	switch(mattk->adtyp) {
+	switch (weaponhit ? AD_PHYS : mattk->adtyp) {
 	    case AD_STUN:
 		if(!Blind)
 		    pline("%s %s for a moment.", Monnam(mdef),
@@ -2756,8 +2758,41 @@ register struct attack *mattk;
 	    case AD_HEAL:	    /* likewise */
 	    case AD_PHYS:
  physical:
-		if(mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP) {
+		if(weaponhit) {
 		    if(uwep) tmp = 0;
+			// tack on bonus elemental damage, if applicable
+			if (mattk->adtyp != AD_PHYS){
+				alt_attk.aatyp = AT_NONE;
+				alt_attk.adtyp = mattk->adtyp;
+				switch (alt_attk.adtyp)
+				{
+				case AD_FIRE:
+				case AD_COLD:
+				case AD_ELEC:
+				case AD_ACID:
+					alt_attk.damn = 4;
+					alt_attk.damd = 6;
+					break;
+				case AD_EFIR:
+				case AD_ECLD:
+				case AD_EELC:
+				case AD_EACD:
+					alt_attk.damn = 3;
+					alt_attk.damd = 7;
+					break;
+				case AD_STUN:
+					alt_attk.damn = 1;
+					alt_attk.damd = 4;
+					break;
+				default:
+					alt_attk.damn = 0;
+					alt_attk.damd = 0;
+					break;
+				}
+				damageum(mdef, &alt_attk);
+				if (DEADMONSTER(mdef))
+					return 2;
+			}
 		} else if(mattk->aatyp == AT_KICK) {
 		    if(thick_skinned(mdef->data)) tmp = 0;
 		    if(insubstantial(mdef->data)) {

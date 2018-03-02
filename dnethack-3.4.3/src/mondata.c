@@ -1000,6 +1000,72 @@ struct attack *mattk;
     return what;
 }
 
+/*  An outright copy of the function of the same name in makedefs.c
+since I have no clue how the heck to access it while it's in there
+*/
+int
+mstrength(ptr)
+struct permonst *ptr;
+{
+	int	i, tmp2, n, tmp = ptr->mlevel;
+
+	if (tmp > 49)		/* special fixed hp monster */
+		tmp = 2 * (tmp - 6) / 4;
+
+	/*	For creation in groups */
+	n = (!!(ptr->geno & G_SGROUP));
+	n += (!!(ptr->geno & G_LGROUP)) << 1;
+
+	/*	For ranged attacks */
+	if (ranged_attk(ptr)) n++;
+
+	/*	For higher ac values */
+	n += (ptr->ac < 4);
+	n += (ptr->ac < 0);
+	n += (ptr->ac < -5);
+	n += (ptr->ac < -10);
+	n += (ptr->ac < -20);
+
+	/*	For very fast monsters */
+	n += (ptr->mmove >= 18);
+
+	/*	For each attack and "special" attack */
+	for (i = 0; i < NATTK; i++) {
+
+		tmp2 = ptr->mattk[i].aatyp;
+		n += (tmp2 > 0);
+		n += (tmp2 == AT_MAGC || tmp2 == AT_MMGC ||
+			tmp2 == AT_TUCH || tmp2 == AT_SHDW || tmp2 == AT_TNKR);
+		n += (tmp2 == AT_WEAP && (ptr->mflagsb & MB_STRONG));
+	}
+
+	/*	For each "special" damage type */
+	for (i = 0; i < NATTK; i++) {
+
+		tmp2 = ptr->mattk[i].adtyp;
+		if ((tmp2 == AD_DRLI) || (tmp2 == AD_STON) || (tmp2 == AD_DRST)
+			|| (tmp2 == AD_DRDX) || (tmp2 == AD_DRCO) || (tmp2 == AD_WERE)
+			|| (tmp2 == AD_SHDW) || (tmp2 == AD_STAR) || (tmp2 == AD_BLUD))
+			n += 2;
+		else if (strcmp(ptr->mname, "grid bug")) n += (tmp2 != AD_PHYS);
+		n += ((int)(ptr->mattk[i].damd * ptr->mattk[i].damn) > 23);
+	}
+
+	/*	Leprechauns are special cases.  They have many hit dice so they
+	can hit and are hard to kill, but they don't really do much damage. */
+	if (!strcmp(ptr->mname, "leprechaun")) n -= 2;
+
+	/*	Hooloovoo spawn many dangerous enemies. */
+	if (!strcmp(ptr->mname, "hooloovoo")) n += 10;
+
+	/*	Finally, adjust the monster level  0 <= n <= 24 (approx.) */
+	if (n == 0) tmp--;
+	else if (n >= 6) tmp += (n / 2);
+	else tmp += (n / 3 + 1);
+
+	return((tmp >= 0) ? tmp : 0);
+}
+
 #endif /* OVLB */
 
 /*mondata.c*/
