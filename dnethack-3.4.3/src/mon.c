@@ -3236,7 +3236,10 @@ struct monst *mtmp;
 	} else if(mtmp->mfaction == FRACTURED && !rn2(2)){
 		if (cansee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
-			pline("%s fractures further%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
+			if(canseemon(mtmp))
+				pline("%s fractures further%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
+			else
+				You_hear("something crack%s!", !is_silent(mtmp->data) ? " with an unearthly scream" : "");
 		}
 		mtmp->mcanmove = 1;
 		mtmp->mfrozen = 0;
@@ -3249,7 +3252,10 @@ struct monst *mtmp;
 	} else if(mtmp->zombify && is_kamerel(mtmp->data)){
 		if (cansee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
-			pline("%s fractures%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
+			if(canseemon(mtmp))
+				pline("%s fractures further%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
+			else
+				You_hear("something crack%s!", !is_silent(mtmp->data) ? " with an unearthly scream" : "");
 		}
 		mtmp->mfaction = FRACTURED;
 		mtmp->mcanmove = 1;
