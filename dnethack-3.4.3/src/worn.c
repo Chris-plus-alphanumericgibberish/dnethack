@@ -531,9 +531,26 @@ struct monst *mon;
 		if(mon->mvar2 & 0x4L) base = -125; //Fully Quantum Locked
 		if(mon->mvar2 & 0x2L) base = -20; //Partial Quantum Lock
 	}
-	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
-	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
-		if(mwep){
+	else if(mon != &youmonst &&
+		(mon->data == &mons[PM_MARILITH] 
+		|| mon->data == &mons[PM_SHAKTARI]
+		|| mon->data == &mons[PM_CATHEZAR]
+	)){
+		int wcount = 0;
+		struct obj *otmp;
+		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
+			if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+				|| (otmp->otyp == IRON_CHAIN && mon->data == &mons[PM_CATHEZAR])
+				) && !otmp->oartifact
+				&& otmp != MON_WEP(mon) && otmp != MON_SWEP(mon)
+				&& ++wcount >= 4
+			) break;
+		}
+		if(MON_WEP(mon))
+			wcount++;
+		if(MON_SWEP(mon))
+			wcount++;
+		if(rn2(6) < wcount){
 			base -= rnd(20);
 		}
 	}
@@ -574,9 +591,26 @@ struct monst *mon;
 	else if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
 		base -= 15;
 	}
-	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
-	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
-		if(mwep){
+	else if(mon != &youmonst &&
+		(mon->data == &mons[PM_MARILITH] 
+		|| mon->data == &mons[PM_SHAKTARI]
+		|| mon->data == &mons[PM_CATHEZAR]
+	)){
+		int wcount = 0;
+		struct obj *otmp;
+		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
+			if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+				|| (otmp->otyp == IRON_CHAIN && mon->data == &mons[PM_CATHEZAR])
+				) && !otmp->oartifact
+				&& otmp != MON_WEP(mon) && otmp != MON_SWEP(mon)
+				&& ++wcount >= 4
+			) break;
+		}
+		if(MON_WEP(mon))
+			wcount++;
+		if(MON_SWEP(mon))
+			wcount++;
+		if(rn2(6) < wcount){
 			base -= rnd(20);
 		}
 	}
@@ -633,10 +667,20 @@ struct monst *mon;
 	else if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
 		base -= 15;
 	}
-	else if(mon->data == &mons[PM_MARILITH] || mon->data == &mons[PM_SHAKTARI]){
-	    struct obj *mwep = (mon == &youmonst) ? uwep : MON_WEP(mon);
-		if(mwep){
-			base -= 20;
+	else if(mon != &youmonst &&
+		(mon->data == &mons[PM_MARILITH] 
+		|| mon->data == &mons[PM_SHAKTARI]
+		|| mon->data == &mons[PM_CATHEZAR]
+	)){
+		int wcount = 0;
+		struct obj *otmp;
+		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
+			if(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
+				|| (otmp->otyp == IRON_CHAIN && mon->data == &mons[PM_CATHEZAR])
+			){
+				base -= 20;
+				break;
+			}
 		}
 	}
 	
