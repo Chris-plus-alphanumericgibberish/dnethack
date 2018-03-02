@@ -1852,7 +1852,11 @@ struct monst *mtmp;
 	boolean immobile = (mdat->mmove == 0);
 	boolean stuck = (mtmp == u.ustuck);
 	boolean nomouth = mdat==&mons[PM_NIGHTGAUNT] || ((mtmp->misc_worn_check & W_ARMH) && which_armor(mtmp, W_ARMH) &&
-			(((which_armor(mtmp, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mtmp, W_ARMH))->otyp) == CRYSTAL_HELM));
+			(((which_armor(mtmp, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mtmp, W_ARMH))->otyp) == CRYSTAL_HELM))
+			 || ((mtmp->misc_worn_check & W_ARMC) && which_armor(mtmp, W_ARMC)
+				&& (((which_armor(mtmp, W_ARMC))->otyp) == WHITE_FACELESS_ROBE
+					|| ((which_armor(mtmp, W_ARMC))->otyp) == BLACK_FACELESS_ROBE
+					|| ((which_armor(mtmp, W_ARMC))->otyp) == SMOKY_VIOLET_FACELESS_ROBE));
 
 	m.misc = (struct obj *)0;
 	m.has_misc = 0;

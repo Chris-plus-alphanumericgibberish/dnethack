@@ -337,6 +337,14 @@ dodrink()
 		display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
 		return 0;
 	}
+	if (uarmc && (uarmc->otyp == WHITE_FACELESS_ROBE
+		|| uarmc->otyp == BLACK_FACELESS_ROBE
+		|| uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE)
+	){
+		pline("The %s covers your whole face.", xname(uarmc));
+		display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
+		return 0;
+	}
 	/* Is there a fountain to drink from here? */
 	if (IS_FOUNTAIN(levl[u.ux][u.uy].typ) && !Levitation) {
 		if(yn("Drink from the fountain?") == 'y') {

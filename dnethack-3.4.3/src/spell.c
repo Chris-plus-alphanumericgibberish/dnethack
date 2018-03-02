@@ -4693,11 +4693,21 @@ int spell;
 		else statused = ACURR(urole.spelstat);
 	}
 
-	if (uarm && (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE) )
+	if (uarm && (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE) ){
 	    splcaster += (uarmc && uarmc->otyp == ROBE) ?
 			uarmc->oartifact ? 0 : urole.spelarmr/2 : urole.spelarmr;
-	else if (uarmc && uarmc->otyp == ROBE)
+	} else if (uarmc && uarmc->otyp == ROBE){
 		splcaster -= uarmc->oartifact ? 2*urole.spelarmr : urole.spelarmr;
+	}
+	
+	if(uarmc){
+		if(uarmc->otyp == WHITE_FACELESS_ROBE)
+			splcaster -= 1;
+		else if(uarmc->otyp == BLACK_FACELESS_ROBE)
+			splcaster -= 2;
+		else if(uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE)
+			splcaster -= 4;
+	}
 	
 	// if((spell_skilltype(spellid(spell)) == P_CLERIC_SPELL || Role_if(PM_PRIEST) || Role_if(PM_MONK)) 
 		// && uwep && uwep->otyp == KHAKKHARA

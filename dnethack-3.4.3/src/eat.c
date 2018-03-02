@@ -2766,6 +2766,15 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
 		return 0;
 	}
+	if (uarmc
+	&& (uarmc->otyp == WHITE_FACELESS_ROBE
+		|| uarmc->otyp == BLACK_FACELESS_ROBE
+		|| uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE
+	)){
+		pline("The %s covers your whole face.", xname(uarmc));
+		display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
+		return 0;
+	}
 	
 	if (!(otmp = floorfood("eat", 0))) return 0;
 	if (check_capacity((char *)0)) return 0;

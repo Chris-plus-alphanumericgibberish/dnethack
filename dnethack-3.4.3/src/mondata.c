@@ -424,10 +424,16 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 		static int vhelmsa = 0;
 		if (!vhelmsa) vhelmsa = find_vhelm();
 	    o = (mdef == &youmonst) ? invent : mdef->minvent;
-	    for ( ; o; o = o->nobj)
-		if ((o->owornmask & W_ARMH) &&
-			(o->otyp == vhelmsa || o->otyp == CRYSTAL_HELM)
-		) return FALSE;
+	    for ( ; o; o = o->nobj){
+			if ((o->owornmask & W_ARMH) &&
+				(o->otyp == vhelmsa || o->otyp == CRYSTAL_HELM || o->otyp == PLASTEEL_HELM)
+			) return FALSE;
+			if ((o->owornmask & W_ARMC) &&
+				(o->otyp == WHITE_FACELESS_ROBE
+				|| o->otyp == BLACK_FACELESS_ROBE
+				|| o->otyp == SMOKY_VIOLET_FACELESS_ROBE)
+			) return FALSE;
+		}
 	}
 	return TRUE;
 }

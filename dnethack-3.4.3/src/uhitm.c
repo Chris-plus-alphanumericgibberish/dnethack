@@ -3879,9 +3879,16 @@ register int tmp, weptmp, tchtmp;
 			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || 
 				(mattk->aatyp == AT_TENT && is_mind_flayer((&youmonst)->data)))
 		) continue;
+		if(uarmc && 
+			(uarmc->otyp == WHITE_FACELESS_ROBE
+			|| uarmc->otyp == BLACK_FACELESS_ROBE
+			|| uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE) && 
+			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || 
+				(mattk->aatyp == AT_TENT && is_mind_flayer((&youmonst)->data)))
+		) continue;
 		
 	    switch(mattk->aatyp) {
-		case AT_XWEP:	
+		case AT_XWEP:
 			/* general-case two-weaponing is covered in AT_WEAP */
 			/* special case: marilith? */
 			break;	

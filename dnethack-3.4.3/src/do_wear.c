@@ -228,6 +228,11 @@ Cloak_on()
 	case ROBE:
 	case LEATHER_CLOAK:
 	case LEO_NEMAEUS_HIDE:
+	case WHITE_FACELESS_ROBE:
+	case BLACK_FACELESS_ROBE:
+		break;
+	case SMOKY_VIOLET_FACELESS_ROBE:
+		adj_abon(uarmc, uarmc->spe);
 		break;
 	case MUMMY_WRAPPING:
 		/* Note: it's already being worn, so we have to cheat here. */
@@ -281,6 +286,8 @@ Cloak_off()
 	boolean checkweight = FALSE;
     long oldprop = u.uprops[objects[otyp].oc_oprop].extrinsic & ~WORN_CLOAK;
 	if(arti_lighten(uarmc)) checkweight = TRUE;
+	if(otyp == SMOKY_VIOLET_FACELESS_ROBE)
+		adj_abon(uarmc, -uarmc->spe);
     takeoff_mask &= ~W_ARMC;
 	/* For mummy wrapping, taking it off first resets `Invisible'. */
     setworn((struct obj *)0, W_ARMC);
@@ -297,6 +304,9 @@ Cloak_off()
 	case ROBE:
 	case LEATHER_CLOAK:
 	case LEO_NEMAEUS_HIDE:
+	case WHITE_FACELESS_ROBE:
+	case BLACK_FACELESS_ROBE:
+	case SMOKY_VIOLET_FACELESS_ROBE:
 		break;
 	case MUMMY_WRAPPING:
 		if (Invis && !Blind) {
@@ -2946,6 +2956,14 @@ register schar delta;
 			makeknown(uarmh->otyp);
 			ABON(A_INT) += (delta);
 			ABON(A_WIS) += (delta);
+		}
+		flags.botl = 1;
+	}
+	if (uarmc && uarmc == otmp && otmp->otyp == SMOKY_VIOLET_FACELESS_ROBE) {
+		if (delta) {
+			makeknown(uarmh->otyp);
+			ABON(A_CON) += (delta);
+			ABON(A_CHA) += (delta);
 		}
 		flags.botl = 1;
 	}

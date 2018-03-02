@@ -791,6 +791,18 @@ mattacku(mtmp)
 				)
 			) continue;
 		}
+		if(mtmp->misc_worn_check & W_ARMC){
+			oarmor = which_armor(mtmp, W_ARMC);
+			if(oarmor && 
+				(oarmor->otyp == WHITE_FACELESS_ROBE
+					|| oarmor->otyp == BLACK_FACELESS_ROBE
+					|| oarmor->otyp == SMOKY_VIOLET_FACELESS_ROBE) && 
+				(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || 
+					(mattk->aatyp == AT_ENGL && !u.uswallow) ||
+					(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
+				)
+			) continue;
+		}
 		
 		if(!mattk->aatyp && !mattk->adtyp && !mattk->damn && !mattk->damd) continue;
 		

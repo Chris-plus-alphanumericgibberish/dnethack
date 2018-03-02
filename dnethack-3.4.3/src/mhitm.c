@@ -410,6 +410,10 @@ mattackm(magr, mdef)
 		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM) && 
 		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
 	) continue;
+	if((magr->misc_worn_check & W_ARMC) && which_armor(magr, W_ARMC) &&
+		(((which_armor(magr, W_ARMC))->otyp) == WHITE_FACELESS_ROBE || ((which_armor(magr, W_ARMC))->otyp) == BLACK_FACELESS_ROBE || ((which_armor(magr, W_ARMC))->otyp) == SMOKY_VIOLET_FACELESS_ROBE) && 
+		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
+	) continue;
 	
 	switch (mattk->aatyp) {
 	    case AT_DEVA:
