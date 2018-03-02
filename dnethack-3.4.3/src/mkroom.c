@@ -1503,6 +1503,26 @@ mkkamereltowers()
 		}
 		c--;
 	}
+	//Place Fractured guards
+	c = rnd(4) + rn2(4);
+	while(c > 0){
+		good = FALSE;
+		tries = 0;
+		while(!good && tries < 50){
+			x=tx+rn2(25)-12;
+			y=ty+rn2(25)-12;
+			
+			tries++;
+			okspot = TRUE;
+			if(!isok(x,y) || levl[x][y].typ != PUDDLE || m_at(x,y) || t_at(x,y))
+				okspot = FALSE;
+			if(okspot){
+				good = TRUE;
+			} else continue;
+			mtmp = makemon(&mons[PM_HUDOR_KAMEREL], x, y, MM_ADJACENTOK);
+		}
+		c--;
+	}
 }
 
 STATIC_OVL
@@ -1614,6 +1634,45 @@ mkminorspire()
 				mksobj_at(KHAKKHARA, x, y, TRUE, FALSE);
 				mksobj_at(AMULET_OF_REFLECTION, x, y, TRUE, FALSE);
 			break;
+		}
+		//Place Kamerel survivors
+		c = rnd(4) + rn2(4);
+		while(c > 0){
+			good = FALSE;
+			tries = 0;
+			while(!good && tries < 50){
+				x=ix+rn2(25)-12;
+				y=iy+rn2(25)-12;
+				
+				tries++;
+				okspot = TRUE;
+				if(!isok(x,y) || levl[x][y].typ != PUDDLE || m_at(x,y) || t_at(x,y))
+					okspot = FALSE;
+				if(okspot){
+					good = TRUE;
+				} else continue;
+				makemon(&mons[PM_HUDOR_KAMEREL], x, y, MM_ADJACENTOK);
+			}
+			c--;
+		}
+		c = rnd(3) + rn2(3);
+		while(c > 0){
+			good = FALSE;
+			tries = 0;
+			while(!good && tries < 50){
+				x=ix+rn2(25)-12;
+				y=iy+rn2(25)-12;
+				
+				tries++;
+				okspot = TRUE;
+				if(!isok(x,y) || levl[x][y].typ != PUDDLE || m_at(x,y) || t_at(x,y))
+					okspot = FALSE;
+				if(okspot){
+					good = TRUE;
+				} else continue;
+				makemon(&mons[PM_SHARAB_KAMEREL], x, y, MM_ADJACENTOK);
+			}
+			c--;
 		}
 	}
 }
