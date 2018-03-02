@@ -942,15 +942,25 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		if (!In_sokoban(&u.uz) && (Levitation || Flying)) break;
 		seetrap(trap);
 		if (!In_sokoban(&u.uz) && is_clinger(youracedata)) {
-		    if(trap->tseen) {
-			You("see %s %spit below you.", a_your[trap->madeby_u],
-			    ttype == SPIKED_PIT ? "spiked " : "");
-		    } else {
-			pline("%s pit %sopens up under you!",
-			    A_Your[trap->madeby_u],
-			    ttype == SPIKED_PIT ? "full of spikes " : "");
-			You("don't fall in!");
-		    }
+			if(ttype == SPIKED_PIT && In_outlands(&u.uz)){
+				if(trap->tseen) {
+					You("see %s shard-filled pit below you.", a_your[trap->madeby_u]);
+				} else {
+					pline("%s pit full of mirror-shards opens up under you!",
+						A_Your[trap->madeby_u]);
+					You("don't fall in!");
+				}
+			} else {
+				if(trap->tseen) {
+					You("see %s %spit below you.", a_your[trap->madeby_u],
+						ttype == SPIKED_PIT ? "spiked " : "");
+				} else {
+					pline("%s pit %sopens up under you!",
+						A_Your[trap->madeby_u],
+						ttype == SPIKED_PIT ? "full of spikes " : "");
+					You("don't fall in!");
+				}
+			}
 		    break;
 		}
 		if (!In_sokoban(&u.uz)) {
@@ -981,20 +991,38 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			u.umonnum == PM_PIT_FIEND)
 		    pline("How pitiful.  Isn't that the pits?");
 		if (ttype == SPIKED_PIT) {
-		    const char *predicament = "on a set of sharp iron spikes";
+			if(In_outlands(&u.uz)){
+				const char *predicament = "on a set of sharp mirror-shards";
 #ifdef STEED
-		    if (u.usteed) {
-			pline("%s lands %s!",
-				upstart(x_monnam(u.usteed,
-					 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-					 "poor", SUPPRESS_SADDLE, FALSE)),
-			      predicament);
-		    } else
+				if (u.usteed) {
+				pline("%s lands %s!",
+					upstart(x_monnam(u.usteed,
+						 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
+						 "poor", SUPPRESS_SADDLE, FALSE)),
+					  predicament);
+				} else
 #endif
-			{
-				You("land %s!", predicament);
-				if (hates_iron(youracedata))
-					pline("The cold-iron sears your flesh!");
+				{
+					You("land %s!", predicament);
+					if (hates_silver(youracedata))
+						pline("The silver shards sear your flesh!");
+				}
+			} else {
+				const char *predicament = "on a set of sharp iron spikes";
+#ifdef STEED
+				if (u.usteed) {
+				pline("%s lands %s!",
+					upstart(x_monnam(u.usteed,
+						 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
+						 "poor", SUPPRESS_SADDLE, FALSE)),
+					  predicament);
+				} else
+#endif
+				{
+					You("land %s!", predicament);
+					if (hates_iron(youracedata))
+						pline("The cold-iron sears your flesh!");
+				}
 			}
 		}
 		if (!Passes_walls)
@@ -1004,16 +1032,28 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		if (!steedintrap(trap, (struct obj *)0)) {
 #endif
 		if (ttype == SPIKED_PIT) {
-			if (!hates_iron(youracedata)){
-				losehp(rnd(10), "fell into a pit of iron spikes",
-				NO_KILLER_PREFIX);
+			if(In_outlands(&u.uz)){
+				if (!hates_silver(youracedata)){
+					losehp(rnd(12), "fell into a pit of mirror-shards",
+					NO_KILLER_PREFIX);
+				}
+				else{//silver damage
+					losehp((rnd(12) + rnd(20)), "fell into a pit of silver mirror-shards",
+					NO_KILLER_PREFIX);
+				}
+				//Note: Never poisoned
+			} else {
+				if (!hates_iron(youracedata)){
+					losehp(rnd(10), "fell into a pit of iron spikes",
+					NO_KILLER_PREFIX);
+				}
+				else{//cold-iron damage
+					losehp((rnd(10) + rnd(u.ulevel)), "fell into a pit of cold-iron spikes",
+					NO_KILLER_PREFIX);
+				}
+				if (!rn2(6))
+				poisoned("spikes", A_STR, "fall onto poison spikes", 8, 0);
 			}
-			else{//cold-iron damage
-				losehp((rnd(10) + rnd(u.ulevel)), "fell into a pit of cold-iron spikes",
-				NO_KILLER_PREFIX);
-			}
-		    if (!rn2(6))
-			poisoned("spikes", A_STR, "fall onto poison spikes", 8, 0);
 		} else
 		    losehp(rnd(6),"fell into a pit", NO_KILLER_PREFIX);
 		if (Punished && !carried(uball)) {
@@ -1336,15 +1376,27 @@ struct obj *otmp;
 			break;
 		case PIT:
 		case SPIKED_PIT:
-			if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
-				pline("The cold-iron sears %s!", 	//half cold-iron damage
-					Monnam(mtmp));
+			if(In_outlands(&u.uz)){
+				if (in_sight && hates_silver(mtmp->data) && tt == SPIKED_PIT) {
+					pline("The silver mirror-shards sear %s!",
+						Monnam(mtmp));
+				}
+				if (mtmp->mhp <= 0 ||
+					thitm(0, mtmp, (struct obj *)0,
+						  rnd((tt == PIT) ? 6 : 12) + (tt == SPIKED_PIT && hates_silver(mtmp->data)) ? rnd(20) : 0, FALSE))
+					trapkilled = TRUE;
+				steedhit = TRUE;
+			} else {
+				if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
+					pline("The cold-iron sears %s!", 	//half cold-iron damage
+						Monnam(mtmp));
+				}
+				if (mtmp->mhp <= 0 ||
+					thitm(0, mtmp, (struct obj *)0,
+						  rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev) : 0, FALSE))
+					trapkilled = TRUE;
+				steedhit = TRUE;
 			}
-			if (mtmp->mhp <= 0 ||
-				thitm(0, mtmp, (struct obj *)0,
-				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev) : 0, FALSE))
-			    trapkilled = TRUE;
-			steedhit = TRUE;
 			break;
 		case POLY_TRAP: 
 		    if (!resists_magm(mtmp) && !resists_poly(mtmp->data)) {
@@ -1772,10 +1824,10 @@ register struct monst *mtmp;
 		if (boulder_at(mtmp->mx, mtmp->my) &&
 			(trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)) {
 		    if (!rn2(2)) {
-			mtmp->mtrapped = 0;
-			if (canseemon(mtmp))
-			    pline("%s pulls free...", Monnam(mtmp));
-			fill_pit(mtmp->mx, mtmp->my);
+				mtmp->mtrapped = 0;
+				if (canseemon(mtmp))
+					pline("%s pulls free...", Monnam(mtmp));
+				fill_pit(mtmp->mx, mtmp->my);
 		    }
 		} else {
 		    mtmp->mtrapped = 0;
@@ -1787,7 +1839,7 @@ register struct monst *mtmp;
 		    deltrap(trap);
 		    mtmp->meating = 5;
 		    mtmp->mtrapped = 0;
-		} else if (trap->ttyp == SPIKED_PIT) {
+		} else if (trap->ttyp == SPIKED_PIT && !In_outlands(&u.uz)) {
 		    if (canseemon(mtmp))
 			pline("%s munches on some spikes!", Monnam(mtmp));
 		    trap->ttyp = PIT;
@@ -2093,15 +2145,27 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 				pline("How pitiful.  Isn't that the pits?");
 			    seetrap(trap);
 			}
-			if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
-				pline("The cold-iron sears %s!",
-					Monnam(mtmp));
+			if(In_outlands(&u.uz)){
+				if (in_sight && hates_silver(mtmp->data) && tt == SPIKED_PIT) {
+					pline("The silver mirror-shards sear %s!",
+						Monnam(mtmp));
+				}
+				mselftouch(mtmp, "Falling, ", FALSE);
+				if (mtmp->mhp <= 0 ||
+					thitm(0, mtmp, (struct obj *)0,
+						  rnd((tt == PIT) ? 6 : 12) + (tt == SPIKED_PIT && hates_silver(mtmp->data)) ? rnd(20) : 0, FALSE))
+					trapkilled = TRUE;
+			} else {
+				if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
+					pline("The cold-iron sears %s!",
+						Monnam(mtmp));
+				}
+				mselftouch(mtmp, "Falling, ", FALSE);
+				if (mtmp->mhp <= 0 ||
+					thitm(0, mtmp, (struct obj *)0,
+						  rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev) : 0, FALSE))
+					trapkilled = TRUE;
 			}
-			mselftouch(mtmp, "Falling, ", FALSE);
-			if (mtmp->mhp <= 0 ||
-				thitm(0, mtmp, (struct obj *)0,
-				      rnd((tt == PIT) ? 6 : 10) + (tt == SPIKED_PIT && hates_iron(mtmp->data)) ? rnd(mtmp->m_lev) : 0, FALSE))
-			    trapkilled = TRUE;
 			break;
 		case HOLE:
 		case TRAPDOOR:
