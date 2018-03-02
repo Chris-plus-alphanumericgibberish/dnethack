@@ -71,7 +71,7 @@ register boolean clumsy;
 	}
 	
 	/* attacking a shade may be useless */
-	if (insubstantial(mon->data) && !blessed_foot_damage && !silverobj && !ironobj && !unholyobj) {
+	if (insubstantial(mon->data) && !insubstantial_aware(mon, uarmf, TRUE)) {
 	    pline_The("%s.", kick_passes_thru);
 	    dmg = 0;
 	    /* doesn't exercise skill or abuse alignment or frighten pet,
@@ -261,7 +261,7 @@ register xchar x, y;
 		}
 		
 		if (insubstantial(mon->data) &&
-			(blessed_foot_damage || unholyobj || silverobj ||ironobj)
+			!insubstantial_aware(mon, uarmf, TRUE)
 		) {
 		    /* doesn't matter whether it would have hit or missed,
 		       and shades have no passive counterattack */

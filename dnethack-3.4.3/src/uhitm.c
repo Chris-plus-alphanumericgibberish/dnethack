@@ -19,7 +19,6 @@ STATIC_DCL void FDECL(start_engulf, (struct monst *));
 STATIC_DCL void NDECL(end_engulf);
 STATIC_DCL int FDECL(gulpum, (struct monst *,struct attack *));
 STATIC_DCL void FDECL(nohandglow, (struct monst *));
-STATIC_DCL boolean FDECL(shade_aware, (struct obj *));
 STATIC_DCL boolean FDECL(dragon_hit, (struct monst *, struct obj *, int, int *, boolean *, boolean *, boolean *)); /*Depricated*/
 
 extern boolean notonhead;	/* for long worms */
@@ -929,7 +928,7 @@ int thrown;
 	if(!helpless(mon)) wake_nearto(mon->mx, mon->my, Stealth ? combatNoise(youracedata)/2 : combatNoise(youracedata)); //Nearby monsters may be awakened
 	wakeup(mon, TRUE);
 	if(!obj) {	/* attack with bare hands */
-	    if (insubstantial(mdat) && !(u.sealsActive&SEAL_CHUPOCLOPS || u.sealsActive&SEAL_EDEN)) tmp = 0;
+	    if (insubstantial(mdat) && !insubstantial_aware(mon, obj, FALSE)) tmp = 0;
 		else if (martial_bonus()){
 			if(uarmc && uarmc->oartifact == ART_GRANDMASTER_S_ROBE){
 				if(u.sealsActive&SEAL_EURYNOME) tmp = rn2(2) ? 
@@ -1225,15 +1224,8 @@ int thrown;
 			static int warnedotyp = 0;
 			static struct permonst *warnedptr = 0;
 		    /* then do only 1-2 points of damage */
-		    if (insubstantial(mdat) && !(
-					 u.sealsActive&SEAL_CHUPOCLOPS
-					|| (obj->obj_material == SILVER && hates_silver(mdat))
-					|| (arti_silvered(obj) && hates_silver(mdat))
-					|| (obj->obj_material == IRON && hates_iron(mdat))
-					|| (is_unholy(obj) && hates_unholy(mdat))
-					|| (obj->blessed && hates_holy_mon(mon))
-				)
-			)tmp = 0;
+		    if (insubstantial(mdat) && !insubstantial_aware(mon, obj, TRUE))
+				tmp = 0;
 		    else if(obj->oartifact == ART_LIECLEAVER) tmp = 2*(rnd(12) + rnd(10) + obj->spe);
 		    else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) tmp = 2*(rnd(bigmonst(mon->data) ? 2 : 4) + obj->spe);
 			
@@ -1312,12 +1304,12 @@ int thrown;
 			pline("As you hit %s, %s%s %s breaks into splinters.",
 			      mon_nam(mon), more_than_1 ? "one of " : "",
 			      shk_your(yourbuf, obj), xname(obj));
+			if (!insubstantial(mdat) || insubstantial_aware(mon, obj, TRUE))
+			    tmp++;
 			if (!more_than_1) uwepgone();	/* set unweapon */
 			useup(obj);
 			if (!more_than_1) obj = (struct obj *) 0;
 			hittxt = TRUE;
-			if (!insubstantial(mdat) || u.sealsActive&SEAL_CHUPOCLOPS)
-			    tmp++;
 		    }
 		} else {
 			if(u.sealsActive&SEAL_MARIONETTE && distmin(u.ux, u.uy, mon->mx, mon->my) > 1)
@@ -1633,9 +1625,9 @@ int thrown;
 			hittxt = TRUE;
 			/* in case potion effect causes transformation */
 			mdat = mon->data;
-			tmp = (insubstantial(mdat) && !(u.sealsActive&SEAL_CHUPOCLOPS)) ? 0 : 1;
+			tmp = (insubstantial(mdat) && !insubstantial_aware(mon, obj, TRUE)) ? 0 : 1;
 		} else {
-			if (insubstantial(mdat) && !shade_aware(obj) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
+			if (insubstantial(mdat) && !insubstantial_aware(mon, obj, TRUE)) {
 			    tmp = 0;
 			    Strcpy(unconventional, cxname(obj));
 			} else {
@@ -2451,27 +2443,75 @@ defaultvalue:
 	return((boolean)(destroyed ? FALSE : TRUE));
 }
 
-STATIC_OVL boolean
-shade_aware(obj)
+boolean
+insubstantial_aware(mon, obj, you)
+struct monst *mon;
 struct obj *obj;
+boolean you;
 {
-	if (!obj) return FALSE;
-	/*
-	 * The things in this list either
-	 * 1) affect shades.
-	 *  OR
-	 * 2) are dealt with properly by other routines
-	 *    when it comes to shades.
-	 */
-	if (is_boulder(obj) || obj->otyp == HEAVY_IRON_BALL
-	    || obj->otyp == IRON_CHAIN		/* dmgval handles those first three */
-	    || obj->otyp == MIRROR		/* silver in the reflective surface */
-	    || obj->otyp == CLOVE_OF_GARLIC	/* causes shades to flee */
-	    || obj->obj_material == SILVER 
-		|| (obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT) 
-		|| arti_silvered(obj) )
+	struct permonst *ptr = mon->data;
+	if(you && u.sealsActive&SEAL_CHUPOCLOPS)
+		return TRUE;
+	if (!obj){
+		if(you && u.sealsActive&SEAL_EDEN && hates_silver(ptr))
+			return TRUE;
+		return FALSE;
+	}
+	
+	if(is_lightsaber(obj) && litsaber(obj))
+		return TRUE;
+	if(hates_silver(ptr) && (obj->obj_material == SILVER || arti_silvered(obj)
+		|| obj->otyp == MIRROR
+		|| (obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT)
+	))
+		return TRUE;
+	if(hates_iron(ptr) && obj->obj_material == IRON)
+		return TRUE;
+	if(hates_unholy(ptr) && is_unholy(obj))
+		return TRUE;
+	if(hates_holy_mon(mon) && obj->blessed)
+		return TRUE;
+	if(arti_shining(obj))
+		return TRUE;
+	if (obj->otyp == CLOVE_OF_GARLIC)	/* causes shades to flee */
 		return TRUE;
 	return FALSE;
+}
+
+int
+insubstantial_damage(mon, obj, dmg, you)
+struct monst *mon;
+struct obj *obj;
+int dmg;
+boolean you;
+{
+	struct permonst *ptr = mon->data;
+	if(you && u.sealsActive&SEAL_CHUPOCLOPS)
+		return dmg;
+	if (!obj){
+		if(you && u.sealsActive&SEAL_EDEN && hates_silver(ptr))
+			return rnd(20);
+		return 0;
+	}
+	
+	if(is_lightsaber(obj) && litsaber(obj))
+		return dmg;
+	if(hates_silver(ptr) && (obj->obj_material == SILVER || arti_silvered(obj)
+		|| obj->otyp == MIRROR
+		|| (obj->otyp == SHURIKEN && uwep && uwep->oartifact == ART_SILVER_STARLIGHT)
+	))
+		return rnd(20);
+	if(hates_iron(ptr) && obj->obj_material == IRON)
+		return rnd(mon->m_lev);
+	if(hates_unholy(ptr) && is_unholy(obj))
+		return rnd(9);
+	if(hates_holy_mon(mon) && obj->blessed)
+		return rnd(4);
+	if(arti_shining(obj))
+		return dmg;
+	if (obj->otyp == CLOVE_OF_GARLIC)	/* causes shades to flee */
+		return rnd(2);
+	return 0;
 }
 
 /* check whether slippery clothing protects from hug or wrap attack */
@@ -2721,11 +2761,7 @@ register struct attack *mattk;
 		} else if(mattk->aatyp == AT_KICK) {
 		    if(thick_skinned(mdef->data)) tmp = 0;
 		    if(insubstantial(mdef->data)) {
-			if (!(uarmf && uarmf->blessed)) {
-			    impossible("bad shade attack function flow?");
-			    if(!(u.sealsActive&SEAL_CHUPOCLOPS)) tmp = 0;
-			} else
-			    tmp = rnd(4); /* bless damage */
+			    tmp = insubstantial_damage(mdef, uarmf, tmp, TRUE); /* bless damage */
 		    }
 		}
 		break;
@@ -3989,8 +4025,8 @@ wisp_shdw_dhit:
 			    wakeup(mon, TRUE);
 			    /* maybe this check should be in damageum()? */
 			    if (insubstantial(mon->data) &&
-					!(mattk->aatyp == AT_KICK &&
-					    uarmf && uarmf->blessed) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
+					!(mattk->aatyp == AT_KICK && insubstantial_aware(mon, uarmf, TRUE)) 
+						&& !(insubstantial_aware(mon, (struct obj *)0, TRUE))) {
 				Your("attack passes harmlessly through %s.",
 				    mon_nam(mon));
 				break;
@@ -4030,7 +4066,7 @@ wisp_shdw_dhit:
 			 */
 			dhit = 1;
 			wakeup(mon, TRUE);
-			if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
+			if (insubstantial(mon->data) && !insubstantial_aware(mon, (struct obj *)0, TRUE))
 			    Your("hug passes harmlessly through %s.",
 				mon_nam(mon));
 			else if (!sticks(mon->data) && !u.uswallow) {
@@ -4056,7 +4092,7 @@ wisp_shdw_dhit:
 		case AT_ENGL:
 			if((dhit = (tmp > rnd(20+i)))) {
 				wakeup(mon, TRUE);
-				if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
+				if (insubstantial(mon->data) && !insubstantial_aware(mon, (struct obj *)0, TRUE))
 				    Your("attempt to surround %s is harmless.",
 					mon_nam(mon));
 				else {
@@ -4247,8 +4283,8 @@ wisp_shdw_dhit2:
 			wakeup(mon, TRUE);
 			/* maybe this check should be in damageum()? */
 			if (insubstantial(mon->data) &&
-				!(mattk->aatyp == AT_KICK &&
-					uarmf && uarmf->blessed) && !(u.sealsActive&SEAL_CHUPOCLOPS)) {
+				!(mattk->aatyp == AT_KICK && insubstantial_aware(mon, uarmf, TRUE))
+				&& !insubstantial_aware(mon, (struct obj *)0, TRUE)) {
 			Your("attack passes harmlessly through %s.",
 				mon_nam(mon));
 			break;
@@ -4286,7 +4322,7 @@ wisp_shdw_dhit2:
 		 */
 		dhit = 1;
 		wakeup(mon, TRUE);
-		if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
+		if (insubstantial(mon->data) && !insubstantial_aware(mon, (struct obj *)0, TRUE))
 			Your("hug passes harmlessly through %s.",
 			mon_nam(mon));
 		else if (!sticks(mon->data) && !u.uswallow) {
@@ -4312,7 +4348,7 @@ wisp_shdw_dhit2:
 	case AT_ENGL:
 		if((dhit = (tmp > rnd(20+i)))) {
 			wakeup(mon, TRUE);
-			if (insubstantial(mon->data) && !(u.sealsActive&SEAL_CHUPOCLOPS))
+			if (insubstantial(mon->data) && !insubstantial_aware(mon, (struct obj *)0, TRUE))
 				Your("attempt to surround %s is harmless.",
 				mon_nam(mon));
 			else {

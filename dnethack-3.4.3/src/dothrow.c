@@ -1324,12 +1324,7 @@ boolean hitsroof;
 	    if (dmg < 1) dmg = 1;
 	    else if (dmg > 6) dmg = 6;
 	    if (insubstantial(youracedata) &&
-		    !(
-				(obj->obj_material == SILVER && hates_silver(youracedata))
-				|| (obj->obj_material == IRON && hates_iron(youracedata))
-				|| (obj->blessed && hates_holy(youracedata))
-				|| (obj->cursed && hates_unholy(youracedata))
-			)
+		    !insubstantial_aware(&youmonst, obj, FALSE)
 		) dmg = 0;
 	}
 	if(resist_attacks(youracedata))

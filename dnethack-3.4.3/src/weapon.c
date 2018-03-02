@@ -1098,13 +1098,6 @@ lightsaber_form_sdie:
 	if (otmp->obj_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
-	if (insubstantial(ptr) && !(
-		(is_lightsaber(otmp) && litsaber(otmp)) || 
-		(hates_silver(ptr) && (otmp->obj_material == SILVER || arti_silvered(otmp))) || 
-		(hates_iron(ptr) && otmp->obj_material == IRON) || 
-		(hates_unholy(ptr) && is_unholy(otmp)) || 
-		arti_shining(otmp)
-	)) tmp = 0;
 
 	/* "very heavy iron ball"; weight increase is in increments of 160 */
 	if (otyp == HEAVY_IRON_BALL && tmp > 0) {
@@ -1338,7 +1331,14 @@ lightsaber_form_sdie:
 		if(!is_bludgeon(otmp)) tmp -= greatest_erosion(otmp);
 		if (tmp < 1) tmp = 1;
 	}
-
+	
+	if (insubstantial(ptr)){
+		if(!insubstantial_aware(mon, otmp, otmp == uwep || otmp == uswapwep || otmp == uarmf))
+			tmp = 0;
+		else
+			tmp = insubstantial_damage(mon, otmp, tmp, otmp == uwep || otmp == uswapwep || otmp == uarmf);
+	}
+	
 	return(tmp);
 }
 

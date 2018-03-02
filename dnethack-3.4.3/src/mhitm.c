@@ -1404,14 +1404,7 @@ physical:{
 					otmp->oartifact != ART_PEN_OF_THE_VOID
 			)) {
 			    /* then do only 1-2 points of damage */
-			    if (insubstantial(mdef->data) && !(
-					((otmp->obj_material != SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
-						!(is_lightsaber(otmp) && litsaber(otmp))) ||
-					(otmp->obj_material != IRON && hates_iron(pd) &&
-						!(is_lightsaber(otmp) && litsaber(otmp))) ||
-					(is_unholy(otmp) && hates_unholy(pd)) ||
-					(otmp->blessed && hates_holy(pd))
-				)) tmp = 0;
+			    if (insubstantial(mdef->data) && !insubstantial_aware(mdef, otmp, FALSE)) tmp = 0;
 				else if(otmp->oartifact == ART_LIECLEAVER)
 					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
 				else if(otmp->oartifact == ART_ROGUE_GEAR_SPIRITS)

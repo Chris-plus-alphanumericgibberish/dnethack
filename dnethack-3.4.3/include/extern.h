@@ -2432,6 +2432,8 @@ E int FDECL(damageum, (struct monst *,struct attack *));
 E void FDECL(missum, (struct monst *,struct attack *));
 E int FDECL(passive, (struct monst *,BOOLEAN_P,int,UCHAR_P,UCHAR_P));
 E void FDECL(passive_obj, (struct monst *,struct obj *,struct attack *));
+E boolean FDECL(insubstantial_aware, (struct monst *, struct obj *, boolean));
+E int FDECL(insubstantial_damage, (struct monst *, struct obj *, int, boolean));
 E void FDECL(stumble_onto_mimic, (struct monst *));
 E int FDECL(flash_hits_mon, (struct monst *,struct obj *));
 E boolean FDECL(hmonas, (struct monst *,struct permonst *,int,int,int));
