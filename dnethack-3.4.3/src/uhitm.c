@@ -4172,6 +4172,9 @@ wisp_shdw_dhit:
 		case AT_GAZE:	/* all done using #monster command */
 			dhit = 0;
 			break;
+		case AT_WDGZ:	/* passive */
+			dhit = 0;
+			break;
 
 		default: /* Strange... */
 			impossible("strange attack of yours (%d)",
@@ -4426,6 +4429,9 @@ wisp_shdw_dhit2:
 	case AT_BEAM:
 	case AT_SPIT:
 	case AT_GAZE:	/* all done using #monster command */
+		dhit = 0;
+		break;
+	case AT_WDGZ:	/* passive */
 		dhit = 0;
 		break;
 

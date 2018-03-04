@@ -71,13 +71,8 @@ int atyp, dtyp;
     struct attack *a;
 
     for (a = &ptr->mattk[0]; a < &ptr->mattk[NATTK]; a++){
-		if (a->aatyp == atyp && ( 
-								  (dtyp == AD_ANY && atyp != AT_GAZE)
-								 /*Some gazes are passive, not attacks. 
-									It was leading monsters like weeping angels to try to stand off with their useless gazes*/
-								||(dtyp == AD_ANY && a->adtyp != AD_BLNK && a->adtyp != AD_WISD && a->adtyp != AD_STON )
-								|| a->adtyp == dtyp)
-		) return a;
+		if (a->aatyp == atyp && (dtyp == AD_ANY || a->adtyp == dtyp)) 
+			return a;
 	}
 
     return (struct attack *)0;
@@ -335,8 +330,10 @@ struct monst *mon;
 		    mon->msleeping))
 	    return TRUE;
 	/* yellow light, Archon; !dust vortex, !cobra, !raven */
-	if (dmgtype_fromattack(ptr, AD_BLND, AT_EXPL) ||
-		dmgtype_fromattack(ptr, AD_BLND, AT_GAZE))
+	if (dmgtype_fromattack(ptr, AD_BLND, AT_EXPL)
+		|| dmgtype_fromattack(ptr, AD_BLND, AT_GAZE)
+		|| dmgtype_fromattack(ptr, AD_BLND, AT_WDGZ)
+	)
 	    return TRUE;
 	o = is_you ? uwep : MON_WEP(mon);
 	if (o && o->oartifact && defends(AD_BLND, o))
@@ -368,7 +365,7 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 	    return FALSE;
 
 	switch(aatyp) {
-	case AT_EXPL: case AT_BOOM: case AT_GAZE: case AT_MAGC: case AT_MMGC:
+	case AT_EXPL: case AT_BOOM: case AT_GAZE: case AT_WDGZ: case AT_MAGC: case AT_MMGC:
 	case AT_BREA: /* assumed to be lightning */
 	    /* light-based attacks may be cancelled or resisted */
 	    if (magr && magr->mcan)

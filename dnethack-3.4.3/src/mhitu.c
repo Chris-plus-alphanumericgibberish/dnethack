@@ -173,6 +173,7 @@ struct attack *mattk;
 	} else {
 	    return (mattk->aatyp == AT_TUCH || mattk->aatyp == AT_5SQR) ? "contact" :
 		   (mattk->aatyp == AT_GAZE) ? "gaze" :
+		   (mattk->aatyp == AT_WDGZ) ? "gaze" :
 		   (mattk->aatyp == AT_ENGL) ? "vapor" :
 		   (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK) ? "bite" : 
 		   (mattk->aatyp == AT_NONE) ? "attack" :
@@ -890,13 +891,18 @@ mattacku(mtmp)
 				sum[i]= hitmu(mtmp, mattk);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-		case AT_GAZE:	/* can affect you either ranged or not */
+		case AT_WDGZ:	/* can affect you either ranged or not */
 			/* Medusa gaze already operated through m_respond in
 			 * 	dochug();
-			 * Weeping angels gaze during movemon().
+			 */
+			 continue;
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AT_GAZE:	/* can affect you either ranged or not */
+			/* Weeping angels gaze during movemon().
 			 * Don't gaze more than once per round.
 			 */
-			if (mdat == &mons[PM_MEDUSA] || mdat == &mons[PM_GREAT_CTHULHU] || is_weeping(mdat) || u.ux != mtmp->mux || u.uy != mtmp->muy)
+			if (is_weeping(mdat) || u.ux != mtmp->mux || u.uy != mtmp->muy)
 				break;
 			sum[i] = gazemu(mtmp, mattk);
 			if(mdat == &mons[PM_DEMOGORGON] && sum[i]){

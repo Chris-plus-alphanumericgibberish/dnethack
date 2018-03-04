@@ -22,7 +22,7 @@
 #define AT_BREA		12	/* breath - ranged */
 #define AT_EXPL		13	/* explodes - proximity */
 #define AT_BOOM		14	/* explodes when killed */
-#define AT_GAZE		15	/* gaze - ranged */
+#define AT_GAZE		15	/* gaze - ranged, active, like pyrolisk */
 #define AT_TENT		16	/* tentacles */
 #define AT_ARRW		17	/* fire silver arrows from internal reservour.  Other ammo created as needed. */
 #define AT_WHIP		18	/* Whips you */
@@ -38,6 +38,7 @@
 #define AT_BEAM		28	/* non-contact ranged beam attack */
 #define AT_DEVA		29	/* million-arm weapon attack */
 #define AT_5SQR		30	/* five square reach touch */
+#define AT_WDGZ		31	/* wide gaze - passive, like medusa */
 
 #define AT_WEAP		252	/* uses weapon */
 #define AT_XWEP		253	/* uses offhanded weapon */

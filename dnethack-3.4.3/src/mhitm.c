@@ -693,9 +693,14 @@ meleeattack:
 		}break;
 #endif /* TAME_RANGED_ATTACKS */
 
+	    case AT_WDGZ:
+			strike = 0;	/* will not wake up a sleeper */
+			res[i] = MM_MISS;
+			continue;
+		break;
 	    case AT_GAZE:
 		strike = 0;	/* will not wake up a sleeper */
-		if(magr->data == &mons[PM_MEDUSA] || is_weeping(magr->data) || magr->data == &mons[PM_GREAT_CTHULHU]){
+		if(is_weeping(magr->data)){
 			res[i] = MM_MISS;
 			break;
 		}
@@ -1819,6 +1824,9 @@ physical:{
 				pline("%s %s...", buf, mon_nam(mdef));
 				tmp = 0;
 			}
+			else if(mattk->aatyp == AT_WDGZ){
+				tmp = 0;
+			}
 		    if (vis) {
 			Strcpy(buf, Monnam(mdef));
 			pline("%s is put to sleep by %s.", buf, mon_nam(magr));
@@ -1835,6 +1843,9 @@ physical:{
 		if(canseemon(magr) && mattk->aatyp == AT_GAZE){
 			Sprintf(buf,"%s gazes at", Monnam(magr));
 			pline("%s %s...", buf, mon_nam(mdef));
+			tmp = 0;
+		}
+		else if(mattk->aatyp == AT_WDGZ){
 			tmp = 0;
 		}
 		if(!cancelled && mdef->mcanmove) {
@@ -1872,6 +1883,9 @@ physical:{
 			pline("%s %s...", buf, mon_nam(mdef));
 			tmp = 0;
 		}
+		else if(mattk->aatyp == AT_WDGZ){
+			tmp = 0;
+		}
 		if (!cancelled && mdef->mspeed != MSLOW) {
 		    unsigned int oldspeed = mdef->mspeed;
 
@@ -1894,6 +1908,9 @@ physical:{
 			pline("%s %s...", buf, mon_nam(mdef));
 			tmp = 0;
 		}
+		else if(mattk->aatyp == AT_WDGZ){
+			tmp = 0;
+		}
 		if (!magr->mcan && !mdef->mconf && !magr->mspec_used) {
 		    if (vis) pline("%s looks confused.", Monnam(mdef));
 		    mdef->mconf = 1;
@@ -1904,6 +1921,9 @@ physical:{
 		if(canseemon(magr) && mattk->aatyp == AT_GAZE){
 			Sprintf(buf,"%s gazes at", Monnam(magr));
 			pline("%s %s...", buf, mon_nam(mdef));
+			tmp = 0;
+		}
+		else if(mattk->aatyp == AT_WDGZ){
 			tmp = 0;
 		}
 		if (can_blnd(magr, mdef, mattk->aatyp, (struct obj*)0)) {
@@ -2773,6 +2793,7 @@ int aatyp;
     case AT_EXPL:
     case AT_BOOM:
     case AT_GAZE:
+    case AT_WDGZ:
     case AT_BREA:
     case AT_MAGC:
     case AT_MMGC:

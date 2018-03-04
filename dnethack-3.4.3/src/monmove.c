@@ -974,23 +974,25 @@ register struct monst *mtmp;
 		(mdat == &mons[PM_LAMASHTU] && !rn2(7))
 	) m_respond(mtmp);
 	
-	for (gazemon = fmon; gazemon; gazemon = nxtmon){
+	if(!mtmp->mblinded) for (gazemon = fmon; gazemon; gazemon = nxtmon){
 		nxtmon = gazemon->nmon;
 		if (gazemon != mtmp
-			&& ((gazemon->data == &mons[PM_MEDUSA] && !resists_ston(mtmp) && 
-				((rn2(3) >= magic_negation(gazemon)))) || gazemon->data == &mons[PM_GREAT_CTHULHU])
 			&& mon_can_see_mon(mtmp, gazemon)
 			&& clear_path(mtmp->mx, mtmp->my, gazemon->mx, gazemon->my)
 		){
 			int i;
-			if(canseemon(mtmp) && canseemon(gazemon)){
-				Sprintf(buf,"%s can see", Monnam(mtmp));
-				pline("%s %s...", buf, mon_nam(gazemon));
-			}
+			if(gazemon->data == &mons[PM_MEDUSA] && (resists_ston(mtmp) || 
+				((rn2(3) < magic_negation(gazemon))))
+			) continue;
+			
 			for(i = 0; i < NATTK; i++)
-				 if(gazemon->data->mattk[i].aatyp == AT_GAZE) {
-					 (void) gazemm(gazemon, mtmp, &gazemon->data->mattk[i]);
-					 break;
+				 if(gazemon->data->mattk[i].aatyp == AT_WDGZ) {
+					if(canseemon(mtmp) && canseemon(gazemon)){
+						Sprintf(buf,"%s can see", Monnam(mtmp));
+						pline("%s %s...", buf, mon_nam(gazemon));
+					}
+					(void) gazemm(gazemon, mtmp, &gazemon->data->mattk[i]);
+					break;
 				 }
 		}
 	}

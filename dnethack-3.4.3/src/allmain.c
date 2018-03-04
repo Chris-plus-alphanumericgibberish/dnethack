@@ -2367,7 +2367,7 @@ printAttacks(buf, ptr)
 		"Breath weapon",	/*12*/
 		"Suicidal explosion",	/*13*/
 		"Explode on death",	/*14*/
-		"Gaze attack",	/*15*/
+		"Single-target (active) gaze attack",	/*15*/
 		"Tentacle",	/*16*/
 		"Arrow",	/*17*/
 		"Whip",	/*18*/
@@ -2381,8 +2381,9 @@ printAttacks(buf, ptr)
 		"Tinker",	/*26*/
 		"Shadow blades",	/*27*/
 		"Beam",	/*28*/
-		"Deva Arms"	/*29*/
-		"five-square-reach touch"	/*30*/
+		"Deva Arms",	/*29*/
+		"five-square-reach touch",	/*30*/
+		"wide-angle (passive) gaze"	/*31*/
 	};
 	static char *damageKey[] = {
 		"physical",				/*0*/

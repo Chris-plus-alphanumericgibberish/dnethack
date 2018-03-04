@@ -4949,19 +4949,20 @@ void
 m_respond(mtmp)
 register struct monst *mtmp;
 {
+	register int i;
     if(mtmp->data->msound == MS_SHRIEK) {
-	if(flags.soundok) {
-	    pline("%s shrieks.", Monnam(mtmp));
-	    stop_occupation();
-	}
-	if (!rn2(10)) {
-	    if (!rn2(13))
-		(void) makemon(&mons[PM_PURPLE_WORM], 0, 0, NO_MM_FLAGS);
-	    else
-		(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
+		if(flags.soundok) {
+			pline("%s shrieks.", Monnam(mtmp));
+			stop_occupation();
+		}
+		if (!rn2(10)) {
+			if (!rn2(13))
+			(void) makemon(&mons[PM_PURPLE_WORM], 0, 0, NO_MM_FLAGS);
+			else
+			(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 
-	}
-	aggravate();
+		}
+		aggravate();
     } else if(!(mtmp->mspec_used) &&
 		(
 		mtmp->data->msound == MS_JUBJUB || mtmp->data->msound == MS_DREAD || 
@@ -4972,22 +4973,11 @@ register struct monst *mtmp;
 	) {
 		domonnoise(mtmp);
     }
-    if(mtmp->data == &mons[PM_MEDUSA]) {
-		register int i;
-		for(i = 0; i < NATTK; i++)
-			 if(mtmp->data->mattk[i].aatyp == AT_GAZE) {
-				 (void) gazemu(mtmp, &mtmp->data->mattk[i]);
-				 break;
-			 }
-    } else if(mtmp->data == &mons[PM_GREAT_CTHULHU]) {
-		register int i;
-		for(i = 0; i < NATTK; i++)
-			 if(mtmp->data->mattk[i].aatyp == AT_GAZE) {
+	for(i = 0; i < NATTK; i++)
+		 if(mtmp->data->mattk[i].aatyp == AT_WDGZ) {
 			 (void) gazemu(mtmp, &mtmp->data->mattk[i]);
-			 break;
-			 }
-    } else if(is_weeping(mtmp->data)) {
-		register int i;
+		 }
+    if(is_weeping(mtmp->data)) {
 		for(i = 0; i < NATTK; i++)
 			 if(mtmp->data->mattk[i].aatyp == AT_GAZE) {
 			 (void) gazemu(mtmp, &mtmp->data->mattk[i]);
