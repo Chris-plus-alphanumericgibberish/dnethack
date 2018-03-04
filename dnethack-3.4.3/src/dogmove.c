@@ -106,7 +106,10 @@ register struct monst *mtmp;
 register struct obj *otmp;
 boolean check_if_better;
 {
-    boolean can_use =
+    boolean can_use;
+    if(mindless_mon(mtmp) && otmp && otmp->where == OBJ_MINVENT)
+		can_use = TRUE;
+	else can_use =
             /* make sure this is an intelligent monster */
             (mtmp && !is_animal(mtmp->data) && !mindless_mon(mtmp) && 
 	      !nohands(mtmp->data) &&
@@ -158,6 +161,10 @@ boolean check_if_better;
     {
         /* arbitrary - greedy monsters keep any item you can use */
         if (likes_gold(mtmp->data)) return TRUE;
+		
+        /* mindless monsters hold onto anything they are already carrying */
+		if(mindless_mon(mtmp))
+			return TRUE;
 
         if (otmp->oclass == ARMOR_CLASS)
 	{
