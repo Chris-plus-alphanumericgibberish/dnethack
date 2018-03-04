@@ -703,19 +703,12 @@ static const struct def_skill Skill_Ana[] = {
     { P_NONE, 0 }
 };
 
-static const struct def_skill Skill_Neu_Ana[] = {
-    { FFORM_SHII_CHO, P_EXPERT },		{ FFORM_MAKASHI,  P_EXPERT },
-    { FFORM_SORESU, P_EXPERT },			{ FFORM_ATARU,  P_SKILLED },
-    { FFORM_DJEM_SO, P_EXPERT },		{ FFORM_SHIEN,  P_EXPERT },
-    { FFORM_NIMAN, P_EXPERT },			{ FFORM_JUYO,  P_BASIC },
-    { P_NONE, 0 }
-};
 
-static const struct def_skill Skill_Cha_Ana[] = {
+static const struct def_skill Skill_All_Ana[] = {
     { FFORM_SHII_CHO, P_EXPERT },		{ FFORM_MAKASHI,  P_EXPERT },
-    { FFORM_SORESU, P_SKILLED },		{ FFORM_ATARU,  P_EXPERT },
+    { FFORM_SORESU, P_EXPERT },			{ FFORM_ATARU,  P_EXPERT },
     { FFORM_DJEM_SO, P_EXPERT },		{ FFORM_SHIEN,  P_EXPERT },
-    { FFORM_NIMAN, P_BASIC },			{ FFORM_JUYO,  P_EXPERT },
+    { FFORM_NIMAN, P_EXPERT },			{ FFORM_JUYO,  P_EXPERT },
     { P_NONE, 0 }
 };
 
@@ -1762,8 +1755,7 @@ u_init()
 		knows_object(DOUBLE_LIGHTSABER);
 		skill_init(Skill_Ana);
 		if(Race_if(PM_DWARF)) u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] = u.ualign.type = A_CHAOTIC;
-		if(u.ualign.type == A_CHAOTIC) skill_add(Skill_Cha_Ana);
-		else skill_add(Skill_Neu_Ana);
+		skill_add(Skill_All_Ana);
 	break;
 	case PM_BARBARIAN:
 		if (rn2(100) >= 50) {	/* see above comment */
