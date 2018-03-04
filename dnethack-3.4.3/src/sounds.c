@@ -3076,7 +3076,7 @@ int tx,ty;
 				pline("and a figure rises within it.");
 				if(u.sealCounts < numSlots){
 					pline("I am Enki, god of the first city.");
-					pline("Bow to me, and I shall teach the arts of civilzation.");
+					pline("Bow to me, and I shall teach the arts of civilization.");
 					bindspirit(ep->ward_id);
 					u.sealTimeout[ENKI-FIRST_SEAL] = moves + bindingPeriod;
 				}
