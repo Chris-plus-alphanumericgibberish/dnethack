@@ -2556,6 +2556,10 @@ const char *str;
 		pline(str, s_suffix(mon_nam(mon)), "saddle");
 	    }
 	    return TRUE;
+	} else if(mon->mfaction == FRACTURED){
+		if(str) 
+		pline(str, s_suffix(mon_nam(mon)), "fractured surface");
+		return TRUE;
 	} else if (mon->data == &mons[PM_SILVER_DRAGON] ||
 		mon->data == &mons[PM_CHROMATIC_DRAGON]) {
 	    /* Silver dragons only reflect when mature; babies do not */
@@ -2570,6 +2574,22 @@ const char *str;
 	} else if(mon->data == &mons[PM_BAALPHEGOR] || mon->data == &mons[PM_HOD_SEPHIRAH]){
 		if(str) 
 		pline(str, s_suffix(mon_nam(mon)), "armor");
+		return TRUE;
+	} else if(mon->data == &mons[PM_AMM_KAMEREL]){
+		if(str) 
+		pline(str, s_suffix(mon_nam(mon)), "glassy skin");
+		return TRUE;
+	} else if(mon->data == &mons[PM_HUDOR_KAMEREL]){
+		if(str) 
+		pline(str, s_suffix(mon_nam(mon)), "watery skin");
+		return TRUE;
+	} else if(mon->data == &mons[PM_SHARAB_KAMEREL]){
+		if(str) 
+		pline(str, s_suffix(mon_nam(mon)), "shimmering aura");
+		return TRUE;
+	} else if(mon->data == &mons[PM_ARA_KAMEREL]){
+		if(str) 
+		pline(str, s_suffix(mon_nam(mon)), "gold mirrored arcs");
 		return TRUE;
 	}
 	return FALSE;

@@ -105,6 +105,9 @@ const char * const flash_types[] = {	/* also used in buzzmu(mcastu.c) */
 
 };
 
+static const int dirx[8] = {0, 1, 1,  1,  0, -1, -1, -1},
+				 diry[8] = {1, 1, 0, -1, -1, -1,  0,  1};
+
 /* Routines for IMMEDIATE wands and spells. */
 /* bhitm: monster mtmp was hit by the effect of wand or spell otmp */
 int
@@ -3925,12 +3928,18 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			if (zap_hit(find_mac(mon), spell_type) || (abs(type) >= 20 && abs(type) < 30)) {
 				if (mon_reflects(mon, (char *)0) && (abs(type) < 20 || abs(type) >= 30)) {
 					if(cansee(mon->mx,mon->my)) {
-					hit(fltxt, mon, exclam(0));
-					shieldeff(mon->mx, mon->my);
-					(void) mon_reflects(mon, "But it reflects from %s %s!");
+						hit(fltxt, mon, exclam(0));
+						shieldeff(mon->mx, mon->my);
+						(void) mon_reflects(mon, "But it reflects from %s %s!");
 					}
-					dx = -dx;
-					dy = -dy;
+					if(mon->mfaction != FRACTURED){
+						dx = -dx;
+						dy = -dy;
+					} else {
+						int i = rn2(8);
+						dx = dirx[i];
+						dy = diry[i];
+					}
 				} else {
 					boolean mon_could_move = mon->mcanmove;
 					int tmp = zhitm(mon, type, nd, flat, &otmp);

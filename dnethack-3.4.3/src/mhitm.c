@@ -1096,25 +1096,26 @@ gazemm(magr, mdef, mattk)
 	    if (canseemon(mdef))
 		(void) mon_reflects(mdef,
 				    "The gaze is reflected away by %s %s.");
-	    if (!is_blind(mdef)) {
-		if (mon_reflects(magr, (char *)0)) {
-		    if (canseemon(magr))
-			(void) mon_reflects(magr,
-					"The gaze is reflected away by %s %s.");
-		    return (MM_MISS);
-		}
-		if (mdef->minvis && !perceives(magr->data)) {
-		    if (canseemon(magr)) {
-			pline("%s doesn't seem to notice that %s gaze was reflected.",
-			      Monnam(magr), mhis(magr));
-		    }
-		    return (MM_MISS);
-		}
-		if (canseemon(magr))
-		    pline("%s is turned to stone!", Monnam(magr));
-		monstone(magr);
-		if (magr->mhp > 0) return (MM_MISS);
-		return (MM_AGR_DIED);
+//	    if (!is_blind(mdef)) {
+		if(mdef->mfaction != FRACTURED || !rn2(8)){
+			if (mon_reflects(magr, (char *)0)) {
+				if (canseemon(magr))
+				(void) mon_reflects(magr,
+						"The gaze is reflected away by %s %s.");
+				return (MM_MISS);
+			}
+			if (mdef->minvis && !perceives(magr->data)) {
+				if (canseemon(magr)) {
+				pline("%s doesn't seem to notice that %s gaze was reflected.",
+					  Monnam(magr), mhis(magr));
+				}
+				return (MM_MISS);
+			}
+			if (canseemon(magr))
+				pline("%s is turned to stone!", Monnam(magr));
+			monstone(magr);
+			if (magr->mhp > 0) return (MM_MISS);
+			return (MM_AGR_DIED);
 	    }
 	}
 

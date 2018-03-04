@@ -33,6 +33,9 @@ STATIC_OVL NEARDATA const char *breathwep[] = {
 				"strange breath #9"
 };
 
+static const int dirx[8] = {0, 1, 1,  1,  0, -1, -1, -1},
+				 diry[8] = {1, 1, 0, -1, -1, -1,  0,  1};
+
 int destroy_thrown = 0; /*state variable, if nonzero drop_throw always destroys object.  This is necessary 
 						 because the throw code doesn't report the identity of the thrown object, so it can only
 						 be destroyed in the throw code itself */
@@ -627,8 +630,14 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 		bhitpos.y += dy;
 		if ((mtmp = m_at(bhitpos.x, bhitpos.y)) != 0) {
 			if((singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT) && mon_reflects(mtmp, (char *)0)){
-				dx *= -1;
-				dy *= -1;
+				if(mtmp->mfaction != FRACTURED){
+					dx *= -1;
+					dy *= -1;
+				} else {
+					int i = rn2(8);
+					dx = dirx[i];
+					dy = diry[i];
+				}
 		    } else if (ohitmon(mon, mtmp, singleobj, range, verbose))
 				break;
 		} else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
@@ -1196,9 +1205,6 @@ struct monst *
 mfind_target(mtmp)
 struct monst *mtmp;
 {
-    int dirx[8] = {0, 1, 1,  1,  0, -1, -1, -1},
-        diry[8] = {1, 1, 0, -1, -1, -1,  0,  1};
-
     int dir, origdir = -1;
     int x, y, dx, dy;
 

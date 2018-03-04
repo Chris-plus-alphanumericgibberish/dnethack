@@ -998,10 +998,12 @@ struct obj *obj;
 					ward_at(mtmp->mx,mtmp->my) != HAMSA) {
 		if (mon_reflects(mtmp, "The gaze is reflected away by %s %s!"))
 			return 1;
-		if (vis)
-			pline("%s is turned to stone!", Monnam(mtmp));
-		stoned = TRUE;
-		killed(mtmp);
+		if(mtmp->mfaction != FRACTURED || !rn2(8)){
+			if (vis)
+				pline("%s is turned to stone!", Monnam(mtmp));
+			stoned = TRUE;
+			killed(mtmp);
+		}
 	} else if(!mtmp->mcan && !mtmp->minvis &&
 					mtmp->data == &mons[PM_FLOATING_EYE] && 
 					ward_at(mtmp->mx,mtmp->my) != HAMSA) {
