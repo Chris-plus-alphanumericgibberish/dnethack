@@ -583,6 +583,14 @@ register struct monst *mtmp;
 				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
 			}
 		break;
+	    case PM_DANCING_BLADE:
+			obj = mksobj_at(TWO_HANDED_SWORD, x, y, FALSE, FALSE);
+			obj->blessed = TRUE;
+			obj->cursed = FALSE;
+			obj->spe = 7;
+			obj->objsize = MZ_LARGE;
+			fix_object(obj);
+		break;
 	    case PM_IRON_GOLEM:
 			num = d(2,6);
 			while (num--){
@@ -2517,7 +2525,14 @@ mfndpos(mon, poss, info, flag)
 	}
 	
 	if(mdat == &mons[PM_DANCING_BLADE]){
-		for(madjacent = fmon; madjacent; madjacent = madjacent->nmon) if(madjacent->m_id == mon->mvar1) break;
+		for(madjacent = fmon; madjacent; madjacent = madjacent->nmon)
+			if(madjacent->data == &mons[PM_SURYA_DEVA] && madjacent->m_id == mon->mvar1)
+				break;
+	}
+	if(mdat == &mons[PM_SURYA_DEVA]){
+		for(madjacent = fmon; madjacent; madjacent = madjacent->nmon)
+			if(madjacent->data == &mons[PM_DANCING_BLADE] && madjacent->mvar1 == mon->m_id)
+				break;
 	}
 	
 	x = mon->mx;
@@ -3470,6 +3485,19 @@ boolean was_swallowed;			/* digestion */
 			}
 		}
 	}
+	
+	if(mdat == &mons[PM_SURYA_DEVA]){
+		struct monst *mtmp, *mtmp2;
+		for (mtmp = fmon; mtmp; mtmp = mtmp2){
+			mtmp2 = mtmp->nmon;
+			if(mtmp->data == &mons[PM_DANCING_BLADE] && mtmp->mvar1 == mon->m_id){
+				if (DEADMONSTER(mtmp)) continue;
+				mtmp->mhp = -10;
+				monkilled(mtmp,"",AD_DRLI);
+			}
+		}
+	}
+	
 	/* Gas spores always explode upon death */
 	for(i = 0; i < NATTK; i++) {
 		if(mdat->mattk[i].aatyp == AT_NONE &&  mdat->mattk[i].adtyp == AD_OONA){
@@ -3573,16 +3601,6 @@ boolean was_swallowed;			/* digestion */
 				makemon(rn2(2) ? &mons[PM_LEVIATHAN] : &mons[PM_LEVISTUS], mon->mx, mon->my, MM_ADJACENTOK);
 			} else if(mdat == &mons[PM_ANCIENT_OF_DEATH]){
 				if(!(u.sealsActive&SEAL_OSE)) explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_DARK);
-			} else if(mdat == &mons[PM_SURYA_DEVA]){
-				struct monst *mtmp, *mtmp2;
-				for (mtmp = fmon; mtmp; mtmp = mtmp2){
-					mtmp2 = mtmp->nmon;
-					if(mtmp->data == &mons[PM_DANCING_BLADE] && mtmp->mvar1 == mon->m_id){
-						if (DEADMONSTER(mtmp)) continue;
-						mtmp->mhp = -10;
-						monkilled(mtmp,"",AD_DRLI);
-					}
-				}
 			} else if(mdat->mattk[i].adtyp == AD_WTCH){
 				struct monst *mtmp, *mtmp2;
 				for (mtmp = fmon; mtmp; mtmp = mtmp2){

@@ -603,6 +603,8 @@ mattacku(mtmp)
 		tmp += 20;
 		tchtmp += 20;
 	}
+	if(mtmp->data == &mons[PM_DANCING_BLADE])
+		tmp += 7;
 	if(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		tmp += u.chokhmah;
 		tchtmp += u.chokhmah;
@@ -1787,6 +1789,8 @@ hitmu(mtmp, mattk)
 	    case AD_PHYS:{
 		struct obj *oarm;
 		oarm = which_armor(mtmp, W_ARMG);
+		if(mtmp->data == &mons[PM_DANCING_BLADE])
+			dmg += 7;
 		if (mattk->aatyp == AT_HUGS && !sticks(youracedata)) {
 		    if(!u.ustuck && rn2(2)) {
 			if (u_slip_free(mtmp, mattk)) {

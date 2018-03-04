@@ -262,6 +262,8 @@ mattackm(magr, mdef)
 		tmp += 20;
 		tchtmp += 20;
 	}
+	if(magr->data == &mons[PM_DANCING_BLADE])
+		tmp += 7;
     if (mdef->mconf || !mdef->mcanmove || mdef->msleeping) {
 		if(mdef->data != &mons[PM_GIANT_TURTLE] || !mdef->mflee){
 			tmp += 4;
@@ -1433,6 +1435,9 @@ physical:{
 				tmp += dmgval(otmp, mdef, 0);
 				if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))) phasearmor = TRUE;
 			}
+			
+			if(magr->data == &mons[PM_DANCING_BLADE])
+				tmp += 7;
 			
 			if(resist_attacks(mdef->data))
 				tmp = 0;
