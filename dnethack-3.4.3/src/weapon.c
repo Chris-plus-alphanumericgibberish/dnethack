@@ -344,7 +344,7 @@ int spec;
 			else tmp += rnd(6);
 		break;
 		
-		case CRYSTAL_SWORD:	tmp += d(1,12+2*dmod)+otmp->spe; break;
+		case CRYSTAL_SWORD:	tmp += d(1,12+2*dmod)+otmp->spe/3; break;
 		
 		case AXE:
 			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(2,4+2*dmod);
@@ -722,7 +722,7 @@ lightsaber_form_ldie:
 			if(otmp->oartifact == ART_TOBIUME) tmp -= 2+dmod;
 		break;
 		
-		case CRYSTAL_SWORD:	tmp += d(1,8+2*dmod)+otmp->spe; break;
+		case CRYSTAL_SWORD:	tmp += d(1,8+2*dmod)+otmp->spe/3; break;
 		
 		case AXE:
 			if(otmp->oartifact == ART_GIANTSLAYER) tmp += d(1,4+2*dmod);
