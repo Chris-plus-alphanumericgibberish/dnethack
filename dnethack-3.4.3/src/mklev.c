@@ -1030,7 +1030,7 @@ mineralize()
 		    }
 		}
 		if (depth(&u.uz) > 14 && rn2(1000) < darkprob) {
-			if ((otmp = mksobj(CHUNK_OF_FOSSILE_DARK, FALSE, FALSE)) != 0) {
+			if ((otmp = mksobj(CHUNK_OF_FOSSIL_DARK, FALSE, FALSE)) != 0) {
 				otmp->quan = 1L;
 				otmp->owt = weight(otmp);
 				otmp->ox = x,  otmp->oy = y;

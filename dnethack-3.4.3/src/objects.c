@@ -1267,7 +1267,7 @@ ROCK("touchstone", "gray",	0,  8,   1, 45, 6, 6,  0, 1, 10, 6, MINERAL, CLR_GRAY
 FLINT("flint", "gray",		0, 10,   1,  1, 6, 6,  2, 0, 10, 7, MINERAL, CLR_GRAY),
 ROCK("chunk of unrefined mithril", "silvery metal", 
 							0,  0,   1, 10000,3,3, 3, 0, 0, 10, MITHRIL, HI_SILVER),/*Needs tile*/
-ROCK("chunk of fossile dark", "black",
+ROCK("chunk of fossil dark", "black",
 							0,  0,  25, 	500, 8, 8, 4, 1, 0, 1, MINERAL, CLR_BLACK),/*Needs tile*/
 ROCK("silver slingstone", "silver", 
 							0,  0,   1, 10, 6, 6, 2, 0,  0, 5, SILVER, HI_SILVER),/*Needs tile*/

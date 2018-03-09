@@ -569,7 +569,7 @@ boolean artif;
 		else if (otmp->otyp == ROCK) otmp->quan = (long) rn1(6,6);
 		else if (otmp->otyp != LUCKSTONE && !rn2(6)) otmp->quan = 2L;
 		else otmp->quan = 1L;
-		if (otmp->otyp == CHUNK_OF_FOSSILE_DARK){
+		if (otmp->otyp == CHUNK_OF_FOSSIL_DARK){
 			place_object(otmp, u.ux, u.uy);  /* make it viable light source */
 			begin_burn(otmp, FALSE);
 			obj_extract_self(otmp);	 /* now release it for caller's use */

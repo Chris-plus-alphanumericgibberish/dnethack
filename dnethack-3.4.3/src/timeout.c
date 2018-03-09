@@ -1858,7 +1858,7 @@ begin_burn(obj, already_lit)
 	if (obj->age == 0 && 
 		obj->otyp != MAGIC_LAMP && 
 		obj->otyp != POT_STARLIGHT && 
-		obj->otyp != CHUNK_OF_FOSSILE_DARK && 
+		obj->otyp != CHUNK_OF_FOSSIL_DARK && 
 		!artifact_light(obj) && 
 		!arti_light(obj) && 
 		obj->oartifact != ART_HOLY_MOONLIGHT_SWORD &&
@@ -1878,7 +1878,7 @@ begin_burn(obj, already_lit)
 		do_timer = FALSE;
 		radius = 2;
 		break;
-	    case CHUNK_OF_FOSSILE_DARK:
+	    case CHUNK_OF_FOSSIL_DARK:
 		obj->lamplit = 1;
 		do_timer = FALSE;
 		radius = 2;
@@ -2044,7 +2044,7 @@ end_burn(obj, timer_attached)
 
 	if (obj->otyp == MAGIC_LAMP 
 		|| obj->otyp == POT_STARLIGHT
-		|| obj->otyp == CHUNK_OF_FOSSILE_DARK
+		|| obj->otyp == CHUNK_OF_FOSSIL_DARK
 		|| artifact_light(obj)
 	) timer_attached = FALSE;
 

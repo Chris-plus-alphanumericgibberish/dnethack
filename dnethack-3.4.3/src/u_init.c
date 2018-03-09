@@ -297,7 +297,7 @@ static struct trobj DNoble[] = {
 	{ ARROW, 0, WEAPON_CLASS, 30, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 10, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
-	{ CHUNK_OF_FOSSILE_DARK, 0, GEM_CLASS, 1, 0 },
+	{ CHUNK_OF_FOSSIL_DARK, 0, GEM_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj DwarfNoble[] = {
