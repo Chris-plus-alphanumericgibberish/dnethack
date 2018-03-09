@@ -572,9 +572,9 @@ register struct obj *obj;
 		else if (nn)
 			Strcat(buf, actualn);
 		else if (un)
-			Sprintf(buf,"amulet called %s", un);
+			Sprintf(eos(buf),"amulet called %s", un);
 		else
-			Sprintf(buf,"%s amulet", dn);
+			Sprintf(eos(buf),"%s amulet", dn);
 		break;
 	    case WEAPON_CLASS:
 		if (is_poisonable(obj) && obj->opoisoned){
@@ -687,11 +687,11 @@ register struct obj *obj;
 		}
 		/* depends on order of the dragon scales objects */
 		if (typ >= GRAY_DRAGON_SCALES && typ <= YELLOW_DRAGON_SCALES) {
-			Sprintf(buf, "set of %s", actualn);
+			Sprintf(eos(buf), "set of %s", actualn);
 			break;
 		}
 		if ((typ == VICTORIAN_UNDERWEAR && nn) || (typ == JUMPSUIT && !nn) || (typ == BODYGLOVE && !nn)) {
-			Sprintf(buf, "set of %s", actualn);
+			Sprintf(eos(buf), "set of %s", actualn);
 			break;
 		}
 		if(is_boots(obj) || is_gloves(obj)) Strcat(buf,"pair of ");
@@ -766,7 +766,7 @@ register struct obj *obj;
 		break;
 	    case ROCK_CLASS:
 		if (typ == STATUE)
-		    Sprintf(buf, "%s%s of %s%s",
+		    Sprintf(eos(buf), "%s%s of %s%s",
 			(Role_if(PM_ARCHEOLOGIST) && (obj->spe & STATUE_HISTORIC)) ? "historic " : "" ,
 			actualn,
 			type_is_pname(&mons[obj->corpsenm]) ? "" :
@@ -777,7 +777,7 @@ register struct obj *obj;
 		else Strcat(buf, actualn);
 		break;
 	    case BALL_CLASS:
-		Sprintf(buf, "%sheavy iron ball",
+		Sprintf(eos(buf), "%sheavy iron ball",
 			(obj->owt > ocl->oc_weight) ? "very " : "");
 		break;
 	    case POTION_CLASS:
@@ -828,11 +828,11 @@ register struct obj *obj;
 		if(!obj->dknown)
 			Strcat(buf, "wand");
 		else if(nn)
-			Sprintf(buf, "wand of %s", actualn);
+			Sprintf(eos(buf), "wand of %s", actualn);
 		else if(un)
-			Sprintf(buf, "wand called %s", un);
+			Sprintf(eos(buf), "wand called %s", un);
 		else
-			Sprintf(buf, "%s wand", dn);
+			Sprintf(eos(buf), "%s wand", dn);
 		break;
 	case SPBOOK_CLASS:
 		if (!obj->dknown) {
@@ -842,19 +842,19 @@ register struct obj *obj;
 			    Strcat(buf, "spellbook of ");
 			Strcat(buf, actualn);
 		} else if (un) {
-			Sprintf(buf, "spellbook called %s", un);
+			Sprintf(eos(buf), "spellbook called %s", un);
 		} else
-			Sprintf(buf, "%s spellbook", dn);
+			Sprintf(eos(buf), "%s spellbook", dn);
 		break;
 	case RING_CLASS:
 		if(!obj->dknown)
 			Strcat(buf, "ring");
 		else if(nn)
-			Sprintf(buf, "ring of %s", actualn);
+			Sprintf(eos(buf), "ring of %s", actualn);
 		else if(un)
-			Sprintf(buf, "ring called %s", un);
+			Sprintf(eos(buf), "ring called %s", un);
 		else
-			Sprintf(buf, "%s ring", dn);
+			Sprintf(eos(buf), "%s ring", dn);
 		break;
 	case GEM_CLASS:
 	    {
@@ -866,8 +866,8 @@ register struct obj *obj;
 		if (!obj->dknown) {
 		    Strcat(buf, rock);
 		} else if (!nn) {
-		    if (un) Sprintf(buf,"%s called %s", rock, un);
-		    else Sprintf(buf, "%s %s", dn, rock);
+		    if (un) Sprintf(eos(buf),"%s called %s", rock, un);
+		    else Sprintf(eos(buf), "%s %s", dn, rock);
 		} else {
 		    Strcat(buf, actualn);
 		    if (GemStone(typ)) Strcat(buf, " stone");
@@ -875,7 +875,7 @@ register struct obj *obj;
 		break;
 	    }
 	default:
-		Sprintf(buf,"glorkum %d %d %d", obj->oclass, typ, obj->spe);
+		Sprintf(eos(buf),"glorkum %d %d %d", obj->oclass, typ, obj->spe);
 	}
 	if (obj->quan != 1L) Strcpy(buf, makeplural(buf));
 
