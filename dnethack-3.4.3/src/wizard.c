@@ -921,7 +921,16 @@ const char * const random_Ixoth[] = {
 	"Thy strength waneth, sir.  The time of thy death draweth near.",
 	"Call upon thy precious god, sir.  It shall not avail thee."
 };
-
+const char * const random_szcult[] = {
+	"Derettash neeb evah sdog eth fo staruggiz eth!",
+	"Hgin si dne eth!",
+	"Dlrow eth fo esab eth ta Erutcarf a si ereth!",
+	"Uoy emusnoc llash Erutcarf eth!",
+	"Lla emusnoc llash Erutcarf eth!",
+	"Gnidne si Noitatnemal fo emit eth!",
+	"Snruter Tsol eth!",
+	"Nrober neeb sah Tsol eth!"
+};
 /* Insult or intimidate the player */
 void
 cuss(mtmp)
@@ -971,6 +980,8 @@ register struct monst	*mtmp;
 		else verbalize("%s", random_angeldiction[t]);
 	} else if(mtmp->data == &mons[PM_IXOTH]){
 		verbalize("%s", random_Ixoth[rn2(SIZE(random_Ixoth))]);
+	} else if(is_szcultist(mtmp->data)){
+		verbalize("%s", random_szcult[rn2(SIZE(random_szcult))]);
 	} else if(is_spider(mtmp->data)){
 		verbalize("%s", random_mirkwood[rn2(SIZE(random_mirkwood))]);
 	} else if(is_lminion(mtmp)) {
