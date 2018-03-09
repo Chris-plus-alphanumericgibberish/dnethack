@@ -621,6 +621,9 @@ register struct monst *mtmp;
 					  w2 = BOW;
 					  m_initthrow(mtmp, ARROW, 36);
 				  }
+				  else{
+					  w2 = SHORT_SWORD;
+				  }
 				  break;
 #ifdef CONVICT
 				case PM_PRISON_GUARD:
@@ -632,6 +635,12 @@ register struct monst *mtmp;
 					  w2 = BOW;
 					  if(w1 != SABER) m_initthrow(mtmp, !rn2(4) ? GOLDEN_ARROW : ARROW, 48);
 					  else m_initthrow(mtmp, ARROW, 48);
+				  }
+				  else {
+					  if (!rn2(5))
+						  w2 = LONG_SWORD;
+					  else
+						  w2 = SHORT_SWORD;
 				  }
 				  break;
 				default:
@@ -657,6 +666,7 @@ register struct monst *mtmp;
 					if (rn2(2)) (void)mongets(mtmp, DROVEN_HELM);
 					else if (!rn2(4)) (void)mongets(mtmp, HIGH_BOOTS);
 					if (rn2(2)) (void)mongets(mtmp, DROVEN_DAGGER);
+					if (could_twoweap(ptr)) (void)mongets(mtmp, DROVEN_SHORT_SWORD);
 					switch (rn2(3)) {
 					case 0:
 						if (!rn2(4)) (void)mongets(mtmp, BUCKLER);
@@ -1316,6 +1326,7 @@ register struct monst *mtmp;
 					switch (rn2(3)) {
 					case 0:
 						if (!rn2(4)) (void)mongets(mtmp, ELVEN_SHIELD);
+						else if (could_twoweap(ptr)) (void)mongets(mtmp, ELVEN_DAGGER);
 						if (rn2(3)) (void)mongets(mtmp, ELVEN_SHORT_SWORD);
 						(void)mongets(mtmp, ELVEN_BOW);
 						m_initthrow(mtmp, ELVEN_ARROW, 12);
@@ -1323,6 +1334,7 @@ register struct monst *mtmp;
 					case 1:
 						(void)mongets(mtmp, ELVEN_BROADSWORD);
 						if (rn2(2)) (void)mongets(mtmp, ELVEN_SHIELD);
+						else if (could_twoweap(ptr)) (void)mongets(mtmp, ELVEN_SHORT_SWORD);
 						break;
 					case 2:
 						if (rn2(2)) {
@@ -1979,10 +1991,12 @@ register struct monst *mtmp;
 		break;}
 	    case S_NEU_OUTSIDER:{
 			if(ptr == &mons[PM_PLUMACH_RILMANI]){
-				otmp = mksobj(rn2(3) ? SICKLE : rn2(3) ? SCYTHE : SHORT_SWORD, TRUE, FALSE);
+				if(!rn2(3)) otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+				else otmp = mksobj(rn2(3) ? SICKLE : rn2(3) ? SCYTHE : AXE, TRUE, FALSE);
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
-				otmp->obj_material = IRON;
+			    otmp->spe = -1;
+				otmp->obj_material = METAL;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				if(otmp->otyp == SHORT_SWORD && !rn2(3)){
@@ -2854,7 +2868,10 @@ register struct monst *mtmp;
 				if (!rn2(3)) (void)mongets(mtmp, DWARVISH_MATTOCK);
 				else {
 					(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
-					(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
+					if (!could_twoweap(ptr))
+						(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
+					else
+						mongets(mtmp, DWARVISH_SHORT_SWORD);
 				}
 			}
 			if (In_mines_quest(&u.uz) && !Is_minetown_level(&u.uz)) {
@@ -2878,6 +2895,7 @@ register struct monst *mtmp;
 			switch(rnd(4)){
 			case 1:
 			(void)mongets(mtmp, FLAIL);
+			if(rn2(2)) (void)mongets(mtmp, KNIFE);
 			break;
 			case 2:
 			(void)mongets(mtmp, BOW);
@@ -3015,37 +3033,41 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				break;
 			}
-		    switch (rn2(6)) {
+			chance = d(4, 2) / 3;
+			while (chance > 0){
+				switch (rn2(6)) {
 				case 0:
 					otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
 					otmp->oeroded = 3;
-					(void) mpickobj(mtmp, otmp);
+					(void)mpickobj(mtmp, otmp);
 				break;
 				case 1:
 					otmp = mksobj(SCIMITAR, TRUE, FALSE);
 					otmp->oeroded = 3;
-					(void) mpickobj(mtmp, otmp);
+					(void)mpickobj(mtmp, otmp);
 				break;
 				case 2:
 					otmp = mksobj(TRIDENT, TRUE, FALSE);
 					otmp->oeroded = 3;
-					(void) mpickobj(mtmp, otmp);
+					(void)mpickobj(mtmp, otmp);
 				break;
 				case 3:
 					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
 					otmp->oeroded = 3;
-					(void) mpickobj(mtmp, otmp);
+					(void)mpickobj(mtmp, otmp);
 				break;
 				case 4:
 					otmp = mksobj(DAGGER, TRUE, FALSE);
 					otmp->oeroded = 3;
-					(void) mpickobj(mtmp, otmp);
+					(void)mpickobj(mtmp, otmp);
 				break;
 				case 5:
 					otmp = mksobj(SPEAR, TRUE, FALSE);
 					otmp->oeroded = 3;
-					(void) mpickobj(mtmp, otmp);
+					(void)mpickobj(mtmp, otmp);
 				break;
+				}
+				chance--;
 			}
 		 }else{
 			otmp = mksobj(TRIDENT, TRUE, FALSE);
@@ -3245,7 +3267,7 @@ register struct monst *mtmp;
 		switch (mm) {
 		    case PM_ORC_OF_THE_AGES_OF_STARS:
 				(void)mongets(mtmp, HIGH_ELVEN_WARSWORD);
-				(void)mongets(mtmp, ORCISH_SHIELD);
+				(void)mongets(mtmp, HIGH_ELVEN_WARSWORD);
 				(void)mongets(mtmp, HIGH_ELVEN_HELM);
 				(void)mongets(mtmp, HIGH_ELVEN_PLATE);
 				(void)mongets(mtmp, ORCISH_CLOAK);
@@ -3255,8 +3277,11 @@ register struct monst *mtmp;
 			break;
 		    case PM_ANGBAND_ORC:
 				(void)mongets(mtmp, SCIMITAR);
+				if(rn2(2))
+					(void)mongets(mtmp, SCIMITAR);
+				else
+					(void)mongets(mtmp, ORCISH_SHIELD);
 				(void)mongets(mtmp, KNIFE);
-				(void)mongets(mtmp, ORCISH_SHIELD);
 				(void)mongets(mtmp, ORCISH_HELM);
 				(void)mongets(mtmp, ORCISH_CHAIN_MAIL);
 				(void)mongets(mtmp, ORCISH_CLOAK);
@@ -3267,6 +3292,8 @@ register struct monst *mtmp;
 		    case PM_MORDOR_ORC:
 			if(!rn2(3)) (void)mongets(mtmp, SCIMITAR);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHIELD);
+			else if (could_twoweap(ptr))
+						(void)mongets(mtmp, SCIMITAR);
 			if(!rn2(3)) (void)mongets(mtmp, KNIFE);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_CHAIN_MAIL);
 //ifdef BARD
@@ -3285,6 +3312,8 @@ register struct monst *mtmp;
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHORT_SWORD);
 			if(!rn2(3)) (void)mongets(mtmp, IRON_SHOES);
 			if(!rn2(3)) (void)mongets(mtmp, URUK_HAI_SHIELD);
+			else if (could_twoweap(ptr))
+						(void)mongets(mtmp, ORCISH_SHORT_SWORD);
 //ifdef BARD
 			if (mm == PM_URUK_CAPTAIN ? !rn2(10) : !rn2(50)){
 			    (void)mongets(mtmp, LEATHER_DRUM);
@@ -3347,6 +3376,7 @@ register struct monst *mtmp;
 			else if(chance >= 4) mongets(mtmp, ORCISH_CHAIN_MAIL);
 			(void)mongets(mtmp, DROVEN_CLOAK);
 			(void)mongets(mtmp, DROVEN_LANCE);
+			if(chance >= 5) (void)mongets(mtmp, DROVEN_SHORT_SWORD);
 			(void)mongets(mtmp, DROVEN_CROSSBOW);
 			m_initthrow(mtmp, DROVEN_BOLT, 20);
 		} else if(ptr == &mons[PM_PRIESTESS_OF_GHAUNADAUR]){
@@ -3492,6 +3522,7 @@ register struct monst *mtmp;
 					mongets(mtmp, GLOVES);
 					mongets(mtmp, HIGH_BOOTS);
 					mongets(mtmp, RAPIER);
+					mongets(mtmp, STILETTO);
 					mongets(mtmp, BOW);
 					m_initthrow(mtmp, ARROW, 20);
 					// mongets(mtmp, ROPE_OF_ENTANGLING);
@@ -3512,8 +3543,12 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, rn2(4) ? TRIDENT : WAR_HAMMER);
 			break;
 			case PM_ICE_DEVIL:
-				  if(!rn2(4)) (void)mongets(mtmp, TRIDENT);
-				  else (void)mongets(mtmp, GLAIVE);
+				if (!rn2(4)) {
+					(void)mongets(mtmp, TRIDENT);
+					if(!rn2(2))
+						(void)mongets(mtmp, SHORT_SWORD);
+				}
+				else (void)mongets(mtmp, GLAIVE);
 			break;
 			case PM_NALFESHNEE:
 				otmp = mksobj(KHAKKHARA, FALSE, FALSE);
@@ -3528,8 +3563,7 @@ register struct monst *mtmp;
 					if(chance >= 9) mongets(mtmp, PLATE_MAIL);
 					else if(chance >= 6) mongets(mtmp, CHAIN_MAIL);
 					else if(chance >= 3) mongets(mtmp, STUDDED_LEATHER_ARMOR);
-					else mongets(mtmp, LEATHER_ARMOR);
-					
+					else mongets(mtmp, LEATHER_ARMOR);					
 					switch(rn2(3)){
 						case 0:
 							mongets(mtmp, TRIDENT);
@@ -4135,12 +4169,24 @@ register struct	monst	*mtmp;
 					otmp->oerodeproof = 1;
 					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
-				break;
+				//Intentional fall-through for twoweaponing
 				case 2:
+					otmp = mksobj(SCIMITAR, TRUE, FALSE);
+					otmp->oerodeproof = 1;
+					otmp->spe = 3;
+					(void)mpickobj(mtmp, otmp);
+				break;
+				case 3:
 					otmp = mksobj(TRIDENT, TRUE, FALSE);
 					otmp->oerodeproof = 1;
 					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
+				//Intentional fall-through for twoweaponing
+				case 4:
+					otmp = mksobj(KNIFE, TRUE, FALSE);
+					otmp->oerodeproof = 1;
+					otmp->spe = 3;
+					(void)mpickobj(mtmp, otmp);
 				break;
 			}
 		 }else{
@@ -4209,6 +4255,7 @@ register struct	monst	*mtmp;
 		break;
 	    case S_NAGA:
 			if(ptr == &mons[PM_ANCIENT_NAGA]){
+				mongets(mtmp, LONG_SWORD);
 				mongets(mtmp, LONG_SWORD);
 				mongets(mtmp, BRONZE_PLATE_MAIL);
 				mongets(mtmp, HELMET);
@@ -7344,7 +7391,7 @@ register struct monst *mtmp;
 		else
 		    appear = S_vcdoor;
 
-		if(!mtmp->minvis || See_invisible)
+		if(!mtmp->minvis || See_invisible(mtmp->mx,mtmp->my))
 		    block_point(mx,my);	/* vision */
 	} else if (level.flags.is_maze_lev && rn2(2)) {
 		ap_type = M_AP_OBJECT;
@@ -7352,7 +7399,7 @@ register struct monst *mtmp;
 	} else if (roomno < 0) {
 		ap_type = M_AP_OBJECT;
 		appear = BOULDER;
-		if(!mtmp->minvis || See_invisible)
+		if(!mtmp->minvis || See_invisible(mtmp->mx,mtmp->my))
 		    block_point(mx,my);	/* vision */
 	} else if (rt == ZOO || rt == VAULT) {
 		ap_type = M_AP_OBJECT;
