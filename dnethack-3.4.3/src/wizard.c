@@ -882,6 +882,18 @@ const char * const random_apollyon[] = {
 	"You viper.  I shall sentence you to Gehennom!", /*10*/
 	"Cower, mortal.  I am the Jailer of Heaven!" /*11*/
 };
+const char * const random_angeldiction[] = {
+	"Weep, for %s has abandoned you!", /*0: Special handling needed (God name)*/
+	"Your unholy soul shall be %s!", /*1: Special handling needed (cleansed/purged)*/
+	"Tremble, mortal!", /*2*/
+	"Kneel.", /*3*/
+	"Bow before me!", /*4*/
+	"You viper!", /*5*/
+	"Cower, mortal!", /*6*/
+	"Repent, sinner!", /*7*/
+	"Kneel, or thou shalt be knelt!", /*8 (Wheel of Time reference?)*/
+	"Repent and thou shalt be saved."  /*9*/
+};
 const char * const random_mirkwood[] = {
 	"A sharp struggle, but worth it, I'll wager!", /*0*/
 	"What nasty thick skin you have!", /*1*/
@@ -947,6 +959,16 @@ register struct monst	*mtmp;
 		verbalize("%s", random_garlandism[rn2(SIZE(random_garlandism))]);
 	} else if(mtmp->data == &mons[PM_APOLLYON]){
 		verbalize("%s", random_apollyon[rn2(SIZE(random_apollyon))]);
+	} else if(is_angel(mtmp->data) && !(is_lminion(mtmp) && rn2(10))){
+		int t = rn2(SIZE(random_angeldiction));
+		if(t == 0) //Contains %s for god
+			verbalize(random_angeldiction[t], align_gname(u.ualign.type));
+		if(t == 1) //Contains %s for cleansed/purged
+			verbalize(random_angeldiction[t], 
+				(sgn(u.ualign.type) == sgn(mtmp->data->maligntyp) &&  u.ualign.type != A_VOID) ? 
+					"cleansed" : "purged"
+			);
+		else verbalize("%s", random_angeldiction[t]);
 	} else if(mtmp->data == &mons[PM_IXOTH]){
 		verbalize("%s", random_Ixoth[rn2(SIZE(random_Ixoth))]);
 	} else if(is_spider(mtmp->data)){
