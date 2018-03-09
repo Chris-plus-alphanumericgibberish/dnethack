@@ -543,6 +543,7 @@ struct monst *mon;
 				|| (otmp->otyp == IRON_CHAIN && mon->data == &mons[PM_CATHEZAR])
 				) && !otmp->oartifact
 				&& otmp != MON_WEP(mon) && otmp != MON_SWEP(mon)
+				&& !otmp->owornmask
 				&& ++wcount >= 4
 			) break;
 		}
@@ -603,6 +604,7 @@ struct monst *mon;
 				|| (otmp->otyp == IRON_CHAIN && mon->data == &mons[PM_CATHEZAR])
 				) && !otmp->oartifact
 				&& otmp != MON_WEP(mon) && otmp != MON_SWEP(mon)
+				&& !otmp->owornmask
 				&& ++wcount >= 4
 			) break;
 		}
@@ -676,7 +678,7 @@ struct monst *mon;
 		struct obj *otmp;
 		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
 			if(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
-				|| (otmp->otyp == IRON_CHAIN && mon->data == &mons[PM_CATHEZAR])
+				|| (otmp->otyp == IRON_CHAIN && !otmp->owornmask && mon->data == &mons[PM_CATHEZAR])
 			){
 				base -= 20;
 				break;

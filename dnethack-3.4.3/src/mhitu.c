@@ -1225,6 +1225,7 @@ mattacku(mtmp)
 							|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])
 							)  && !otmp->oartifact
 							&& otmp != MON_WEP(mtmp) && otmp != MON_SWEP(mtmp)
+							&& !otmp->owornmask
 						) wcount++;
 					}
 					wcount -= i;
@@ -1237,6 +1238,7 @@ mattacku(mtmp)
 							|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])
 							)  && !otmp->oartifact
 							&& otmp != MON_WEP(mtmp) && otmp != MON_SWEP(mtmp)
+							&& !otmp->owornmask
 							&& --wcount <= 0
 						) break;
 					}

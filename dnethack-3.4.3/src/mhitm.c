@@ -479,6 +479,7 @@ mattackm(magr, mdef)
 					|| (otmp->otyp == IRON_CHAIN && magr->data == &mons[PM_CATHEZAR])
 					) && !otmp->oartifact
 					&& otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)
+					&& !otmp->owornmask
 				) wcount++;
 			}
 			wcount -= i;
@@ -491,6 +492,7 @@ mattackm(magr, mdef)
 					|| (otmp->otyp == IRON_CHAIN && magr->data == &mons[PM_CATHEZAR])
 					) && !otmp->oartifact
 					&& otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)
+					&& !otmp->owornmask
 					&& --wcount <= 0
 				) break;
 			}
