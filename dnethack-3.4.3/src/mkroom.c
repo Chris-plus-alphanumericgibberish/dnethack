@@ -2249,6 +2249,91 @@ mkpluvillage()
 	}
 }
 
+#define INSIDE_CONNECTED	1
+#define LINKED_RIGHT		2
+#define LINKED_LEFT			4
+#define LINKED_ROOMED		8
+#define OUTSIDE_DOOR		16
+#define INSIDE_DOOR			32
+
+struct roomcon{
+	int status;
+	struct roomcon *left;
+	struct roomcon *right;
+};
+
+STATIC_OVL
+void
+connectRight(curroom)
+	struct roomcon *curroom;
+{
+	curroom->status |= LINKED_RIGHT;
+	curroom->right->status |= LINKED_LEFT;
+	if((curroom->right->status&INSIDE_CONNECTED) != 0){
+		curroom->status |= INSIDE_CONNECTED;
+		if(curroom->status&LINKED_LEFT){
+			curroom = curroom->left;
+			while((curroom->status&INSIDE_CONNECTED) == 0){
+				curroom->status |= INSIDE_CONNECTED;
+				if(!(curroom->status&LINKED_LEFT))
+					break;
+				else curroom = curroom->left;
+			}
+		}
+	}
+}
+
+STATIC_OVL
+void
+connectLeft(curroom)
+	struct roomcon *curroom;
+{
+	curroom->status |= LINKED_LEFT;
+	curroom->left->status |= LINKED_RIGHT;
+	if((curroom->left->status&INSIDE_CONNECTED) != 0){
+		curroom->status |= INSIDE_CONNECTED;
+		if(curroom->status&LINKED_RIGHT){
+			curroom = curroom->right;
+			while((curroom->status&INSIDE_CONNECTED) == 0){
+				curroom->status |= INSIDE_CONNECTED;
+				if(!(curroom->status&LINKED_RIGHT))
+					break;
+				else curroom = curroom->right;
+			}
+		}
+	}
+}
+
+STATIC_OVL
+void
+connectInner(inroom)
+	struct roomcon *inroom;
+{
+	struct roomcon *curroom = inroom;
+	curroom->status |= INSIDE_CONNECTED;
+	curroom->status |= INSIDE_DOOR;
+	if(curroom->status&LINKED_RIGHT){
+		curroom = curroom->right;
+		while((curroom->status&INSIDE_CONNECTED) == 0){
+			curroom->status |= INSIDE_CONNECTED;
+			if(!(curroom->status&LINKED_RIGHT))
+				break;
+			else curroom = curroom->right;
+		}
+	}
+	
+	curroom = inroom;
+	if(curroom->status&LINKED_LEFT){
+		curroom = curroom->left;
+		while((curroom->status&INSIDE_CONNECTED) == 0){
+			curroom->status |= INSIDE_CONNECTED;
+			if(!(curroom->status&LINKED_LEFT))
+				break;
+			else curroom = curroom->left;
+		}
+	}
+}
+
 STATIC_OVL
 void
 mkferrufort()
@@ -2260,19 +2345,17 @@ mkferrufort()
 	int allrange = wallrange+2;
 	boolean good=FALSE, okspot, accessible, throne = 0;
 	
-	struct roomcon{
-		int status;
-		struct roomcon *left;
-		struct roomcon *right;
-	} connect[wallln][wallln];
-	
-	// int connect[wallln][wallln];
-	
+	struct roomcon connect[wallln][wallln];
+		
 	for(i = 0; i < wallln; i++)
 		for(j = 0; j < wallln; j++){
 			connect[i][j].status = 0;
 			connect[i][j].left = 0;
 			connect[i][j].right = 0;
+		}
+	for(i = 1; i < wallln-1; i++)
+		for(j = 1; j < wallln-1; j++){
+			connect[i][j].status = ~0;
 		}
 	i = 0;
 	j = 0;
@@ -2285,24 +2368,24 @@ mkferrufort()
 		connect[i][j].right= &connect[i+1][j];
 	}
 	
-	connect[wallln][0].left = &connect[wallln-1][0];
-	connect[wallln][0].right= &connect[wallln][1];
+	connect[i][j].left = &connect[i-1][j];
+	connect[i][j].right= &connect[i][j+1];
 	
-	for(j=1; j < wallln; j++){
+	for(j=1; j < wallln-1; j++){
 		connect[i][j].left = &connect[i][j-1];
 		connect[i][j].right= &connect[i][j+1];
 	}
 	
-	connect[wallln][wallln].left = &connect[wallln][wallln-1];
-	connect[wallln][wallln].right= &connect[wallln-1][wallln];
+	connect[i][j].left = &connect[i][j-1];
+	connect[i][j].right= &connect[i-1][j];
 	
 	for(i=wallln - 1; i > 0; i--){
 		connect[i][j].left = &connect[i+1][j];
 		connect[i][j].right= &connect[i-1][j];
 	}
 	
-	connect[0][wallln].left = &connect[1][wallln];
-	connect[0][wallln].right= &connect[0][wallln-1];
+	connect[i][j].left = &connect[i+1][j];
+	connect[i][j].right= &connect[i][j-1];
 	
 	for(j=wallln - 1; j > 0; j--){
 		connect[i][j].left = &connect[i][j+1];
@@ -2361,7 +2444,7 @@ mkferrufort()
 				//generate x and y of *room*
 				int doorx = rn2(wallln);
 				int doory = rn2(2) ? (wallln-1) : 0;
-				connect[doorx][doory].status = 1;
+				connect[doorx][doory].status = OUTSIDE_DOOR;
 				
 				//generate true x and y
 				tx = x+1+doorx*4+1;
@@ -2374,7 +2457,7 @@ mkferrufort()
 			} else {
 				int doorx = rn2(2) ? (wallln-1) : 0;
 				int doory = rn2(wallln);
-				connect[doorx][doory].status = 1;
+				connect[doorx][doory].status = OUTSIDE_DOOR;
 				
 				//generate true x and y
 				if(doorx)
@@ -2391,6 +2474,173 @@ mkferrufort()
 				// if((doorx != 0 && doory != wallln-1) || (doory != 0 && doory != wallln-1) ){
 				// }
 			// }
+			{
+			int roomsleft;
+			int roomn;
+			int tries = 5000;
+			do{
+				roomsleft = 0;
+				for(i = 0; i < wallln; i++)
+					for(j = 0; j < wallln; j++){
+						if((connect[i][j].status&INSIDE_CONNECTED) == 0)
+							roomsleft++;
+					}
+				
+				if(!roomsleft)
+					break;
+				
+				roomn = rn2(roomsleft);
+				
+				for(i = 0; i < wallln; i++){
+					for(j = 0; j < wallln; j++){
+						if((connect[i][j].status&INSIDE_CONNECTED) == 0 && roomn-- <=0 )
+							goto nestbreak;
+					}
+				}
+nestbreak:
+				if((i == 0 || i == (wallln-1)) && (j == 0 || j == (wallln-1))){
+					if(rn2(2)){
+						connectRight(&(connect[i][j]));
+					} else {
+						connectLeft(&(connect[i][j]));
+					}
+				} else {
+					if(!rn2(3)){
+						connectInner(&(connect[i][j]));
+					} else if(rn2(2)){
+						connectRight(&(connect[i][j]));
+					} else {
+						connectLeft(&(connect[i][j]));
+					}
+				}
+			} while(roomsleft && tries-- > 0);
+			// curroom->status = 0
+			// curroom->left = 0;
+			// curroom->right = 0;
+			i = 0;
+			j = 0;
+			//down
+			if(connect[0][0].status&LINKED_LEFT){
+				//generate true x and y
+				tx = x+i*4+2;
+				ty = y+j*4+4;
+				levl[tx][ty].typ = DOOR;
+				levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+			}
+			
+			for(i=1; i < wallln - 1; i++){
+				//left
+				if(connect[i][j].status&LINKED_LEFT){
+					//generate true x and y
+					tx = x+i*4;
+					ty = y+j*4+2;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				//down
+				if(connect[i][j].status&INSIDE_DOOR){
+					//generate true x and y
+					tx = x+i*4+2;
+					ty = y+j*4+4;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+			}
+			
+			// i = max;
+			// j = 0;
+			//left
+			if(connect[i][j].status&LINKED_LEFT){
+				//generate true x and y
+				tx = x+i*4;
+				ty = y+j*4+2;
+				levl[tx][ty].typ = DOOR;
+				levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+			}
+			
+			for(j=1; j < wallln-1; j++){
+				//up
+				if(connect[i][j].status&LINKED_LEFT){
+					//generate true x and y
+					tx = x+i*4+2;
+					ty = y+j*4;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				//left
+				if(connect[i][j].status&INSIDE_DOOR){
+					//generate true x and y
+					tx = x+i*4;
+					ty = y+j*4+2;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+			}
+			
+			// i = max;
+			// j = max;
+			//up
+			if(connect[i][j].status&LINKED_LEFT){
+				//generate true x and y
+				tx = x+i*4+2;
+				ty = y+j*4;
+				levl[tx][ty].typ = DOOR;
+				levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+			}
+			
+			for(i=wallln - 2; i > 0; i--){
+				//right
+				if(connect[i][j].status&LINKED_LEFT){
+					//generate true x and y
+					tx = x+i*4+4;
+					ty = y+j*4+2;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				//up
+				if(connect[i][j].status&INSIDE_DOOR){
+					//generate true x and y
+					tx = x+i*4+2;
+					ty = y+j*4;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+			}
+			
+			// i = 0;
+			// j = max;
+			//right
+			if(connect[i][j].status&LINKED_LEFT){
+				//generate true x and y
+				tx = x+i*4+4;
+				ty = y+j*4+2;
+				levl[tx][ty].typ = DOOR;
+				levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+			}
+			
+			for(j=wallln - 2; j > 0; j--){
+				//down
+				if(connect[i][j].status&LINKED_LEFT){
+					//generate true x and y
+					tx = x+i*4+2;
+					ty = y+j*4+4;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+				//right
+				if(connect[i][j].status&INSIDE_DOOR){
+					//generate true x and y
+					tx = x+i*4+4;
+					ty = y+j*4+2;
+					levl[tx][ty].typ = DOOR;
+					levl[tx][ty].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+				}
+			}
+			
+			// i = 0;
+			// j = 0;
+			
+			}
 			break;
 		}
 	}
