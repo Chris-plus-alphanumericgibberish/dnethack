@@ -3942,7 +3942,7 @@ struct permonst _mons2[] = {
     MON("umber hulk", S_UMBER,//12
 	LVL(9, 6, 2, 25, 0), (G_GENO|2),
 	A(ATTK(AT_CLAW, AD_PHYS, 3, 4), ATTK(AT_CLAW, AD_PHYS, 3, 4),
-	  ATTK(AT_BITE, AD_PHYS, 2, 5), ATTK(AT_WDGZ, AD_CONF, 0, 0),
+	  ATTK(AT_BITE, AD_PHYS, 2, 5), ATTK(AT_GAZE, AD_CONF, 0, 0),
 	  NO_ATTK, NO_ATTK),
 	SIZ(2200, 500, 0, MS_SILENT, MZ_LARGE), 0, 0,
 	MM_TUNNEL /*MM*/, MT_CARNIVORE|MT_WANDER /*MT*/,
@@ -3951,8 +3951,7 @@ struct permonst _mons2[] = {
     MON("hooloovoo", S_UMBER,//12 /*Needs tile*/
 	LVL(9, 6, 2, 25, 0), (G_GENO|G_NOCORPSE|2),
 	A(ATTK(AT_TUCH, AD_TELE, 0, 0), ATTK(AT_TNKR, AD_TNKR, 0, 0),
-	  ATTK(AT_WDGZ, AD_BLND, 1, 4), NO_ATTK,
-	  NO_ATTK, NO_ATTK),
+	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(0, 0, 0, MS_HUMANOID, MZ_LARGE), 0, 0,
 	MM_WALLWALK /*MM*/, 0 /*MT*/,
 	MB_STRONG /*MB*/, MG_RALL|MG_INFRAVISIBLE /*MG*/,
