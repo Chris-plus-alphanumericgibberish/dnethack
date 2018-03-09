@@ -2033,9 +2033,6 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	} if (burning(&mons[mnum]) && !Fire_resistance) {
 		tp++;
 		You("feel your stomach boil!"); /* not body_part() */
-		morehungry(200);
-		nomovemsg = 0;
-		vomit();
 		losehp(rnd(20), "boiling hot corpse", KILLED_BY_AN);
 	} if (poisonous(&mons[mnum]) && rn2(5)) {
 		tp++;
