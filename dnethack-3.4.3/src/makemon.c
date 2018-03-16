@@ -570,6 +570,7 @@ register struct monst *mtmp;
 				otmp->spe = 0;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 
 				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
@@ -577,6 +578,7 @@ register struct monst *mtmp;
 				otmp->spe = 0;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 				
 				otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
@@ -584,6 +586,7 @@ register struct monst *mtmp;
 				otmp->spe = 0;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 				
 				otmp = mksobj(PONTIFF_S_CROWN, FALSE, FALSE);
@@ -591,6 +594,7 @@ register struct monst *mtmp;
 				otmp->spe = 0;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 
 				otmp = mksobj(SCYTHE, FALSE, FALSE);
@@ -598,6 +602,7 @@ register struct monst *mtmp;
 				otmp->spe = 0;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 				
 				otmp = mksobj(SCYTHE, FALSE, FALSE);
@@ -605,6 +610,7 @@ register struct monst *mtmp;
 				otmp->spe = 0;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 			}
 			else if(ptr == &mons[PM_SHATTERED_ZIGGURAT_CULTIST]) {
