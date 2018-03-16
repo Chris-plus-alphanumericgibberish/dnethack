@@ -255,7 +255,7 @@ void
 init_uhunger()
 {
 	if(Race_if(PM_INCANTIFIER)){
-		u.uenmax += 18000;
+		u.uenmax += 1800;
 		u.uen = u.uenmax*.45;
 	} else {
 		u.uhungermax = DEFAULT_HMAX;
@@ -2725,6 +2725,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	etype = 0;
 	char qbuf[QBUFSZ];
 	char c;
+	int incbalancevar = 5;
 	
 	boolean dont_start = FALSE;
 	
@@ -2855,7 +2856,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(500);
+					lesshungry(50*incbalancevar);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2872,7 +2873,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 				if (carried(otmp)) useup(otmp);
 				else useupf(otmp, 1L);
-				lesshungry(500);
+				lesshungry(50*incbalancevar);
 				flags.botl = 1;
 			break;
 			case AMULET_CLASS:
@@ -2886,7 +2887,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 				if (carried(otmp)) useup(otmp);
 				else useupf(otmp, 1L);
-				lesshungry(500);
+				lesshungry(50*incbalancevar);
 				flags.botl = 1;
 			break;
 			case ARMOR_CLASS:
@@ -2895,7 +2896,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(500);
+					lesshungry(50*incbalancevar);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2907,7 +2908,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(500);
+					lesshungry(50*incbalancevar);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
@@ -2921,7 +2922,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    otmp->otyp = SCR_BLANK_PAPER;
 	    	    otmp->spe = 0;
 	    	    otmp->ovar1 = 0;
-				lesshungry(500);
+				lesshungry(50*incbalancevar);
 				flags.botl = 1;
 			break;
 			case SPBOOK_CLASS:
@@ -2931,7 +2932,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				otmp->spestudied++;
 				costly_cancel(otmp);
 	    	    if(otmp->spestudied > MAX_SPELL_STUDY) otmp->otyp = SPE_BLANK_PAPER;
-				lesshungry(500);
+				lesshungry(50*incbalancevar);
 				flags.botl = 1;
 			break;
 			case WAND_CLASS:
@@ -2940,7 +2941,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    	    (void) drain_item(otmp);
 				if(curspe > otmp->spe){
 					You("drain the %s%s.", xname(otmp),otmp->spe!=0 ? "":" dry");
-					lesshungry(100);
+					lesshungry(10*incbalancevar);
 					flags.botl = 1;
 				} else {
 					pline("The %s resists your attempt to drain its magic.", xname(otmp));
