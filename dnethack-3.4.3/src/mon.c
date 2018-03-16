@@ -1415,7 +1415,7 @@ mcalcdistress()
 				&& !(u.ukinghill && rn2(20))
 			){
 				if(canseemon(mtmp)){
-					pline("%s breathes out motionless curses.", Monnam(mtmp));
+					pline("%s breathes out static curses.", Monnam(mtmp));
 				}
 				if(
 					(!Free_action || HFast) &&
@@ -1497,7 +1497,7 @@ mcalcdistress()
 				}
 				if(targ){
 					if(canseemon(mtmp)){
-						pline("%s breathes out motionless curses.", Monnam(mtmp));
+						pline("%s breathes out static curses.", Monnam(mtmp));
 					}
 					if(
 						!(targ->misc_worn_check & W_ARMH && (otmp = which_armor(targ, W_ARMH)) && !otmp->cursed) &&
