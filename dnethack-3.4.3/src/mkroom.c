@@ -2420,6 +2420,7 @@ mkferrufort()
 				for(j=0;j<allrange;j++){
 					if(i>0 && i+1 < allrange && j>0 && j+1<allrange){
 						levl[x+i][y+j].typ = HWALL;
+						levl[x+i][y+j].lit = 1;
 						if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
 					}
 					else
