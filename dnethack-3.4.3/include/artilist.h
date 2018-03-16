@@ -203,7 +203,7 @@ A("The Vampire Killer",			BULLWHIP,
 	SPFX2_NOWERE,0,0),									/* and raise enchantment to +3. */
 
 A("Kingslayer",		STILETTO,
-	(SPFX_RESTR|SPFX_CON_OR), SPFX_WARN, /* works against just about all the late game badies */
+	(SPFX_RESTR|SPFX_CON_OR), SPFX_WARN, /* works against just about all the late game baddies */
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, (MG_LORD|MG_PRINCE) /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(10,20),	NO_DFNS,	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, NON_PM, 2500L, 

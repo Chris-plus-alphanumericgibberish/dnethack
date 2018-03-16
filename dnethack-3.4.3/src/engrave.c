@@ -530,7 +530,7 @@ const char * wardText[][7] =  {
 		"a six-hieroglyph partial cartouche of the Cat Lord",
 		"a seven-hieroglyph partial cartouche of the Cat Lord", 
 		"a nine-hieroglyph completed cartouche of the Cat Lord"},
-	{"a rudamentary rendition of the wings of Garuda",
+	{"a rudimentary rendition of the wings of Garuda",
 		"a almost passable rendition of the wings of Garuda", 
 		"a passable rendition of the wings of Garuda",
 		"a somewhat detailed rendition of the wings of Garuda",
