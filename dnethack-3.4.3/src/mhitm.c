@@ -2415,6 +2415,10 @@ physical:{
 		mdef->zombify = 1;
 	}
 	
+	if((magr->data == &mons[PM_UNDEAD_KNIGHT] || magr->data == &mons[PM_DREAD_SERAPH]) && can_undead_mon(mdef)){
+		mdef->zombify = 1;
+	}
+	
 	if(magr->mfaction == FRACTURED && is_kamerel(mdef->data)){
 		mdef->zombify = 1;
 	}
