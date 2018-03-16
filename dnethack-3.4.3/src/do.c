@@ -1092,7 +1092,9 @@ boolean at_stairs, falling, portal;
 	/* Prevent the player from going past the first quest level unless
 	 * (s)he has been given the go-ahead by the leader.
 	 */
-	if (on_level(&u.uz, &qstart_level) && !newdungeon && !ok_to_quest() && !flags.stag) {
+	if ((on_level(&u.uz, &qstart_level) && !newdungeon && !ok_to_quest() && !flags.stag)
+	&& !(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend)
+	) {
 		pline("A mysterious force prevents you from descending.");
 		return;
 	}

@@ -514,6 +514,10 @@ can_twoweapon()
 		!(!Upolyd && uwep && uswapwep && 
 			((artilist[uwep->oartifact].inv_prop == DANCE_DAGGER && artilist[uswapwep->oartifact].inv_prop == SING_SPEAR) ||
 			 (artilist[uswapwep->oartifact].inv_prop == DANCE_DAGGER && artilist[uwep->oartifact].inv_prop == SING_SPEAR))
+		 ) && 
+		!(!Upolyd && uwep && uswapwep && 
+			((uwep->oartifact == ART_PROFANED_GREATSCYTHE && uswapwep->oartifact == ART_FRIEDE_S_SCYTHE) ||
+			 (uwep->oartifact == ART_LIFEHUNT_SCYTHE && uswapwep->oartifact == ART_FRIEDE_S_SCYTHE))
 		 )
 	) {
 		if (Upolyd)
@@ -529,10 +533,15 @@ can_twoweapon()
 		otmp = NOT_WEAPON(uwep) ? uwep : uswapwep;
 		pline("%s %s.", Yname2(otmp),
 		    is_plural(otmp) ? "aren't weapons" : "isn't a weapon");
-	} else if ((uwep && bimanual(uwep,youracedata) && !(u.umartial && !uswapwep)) || 
+	} else if ((
+		(uwep && bimanual(uwep,youracedata) && !(u.umartial && !uswapwep)) || 
 		(uswapwep && bimanual(uswapwep,youracedata) && !(u.umartial && !uwep)) || 
 		(uwep && is_launcher(uwep) && !is_firearm(uwep)) || 
 		(uswapwep && is_launcher(uswapwep) && !is_firearm(uswapwep))
+		) && 
+		!(uwep && uswapwep &&
+		  (uwep->oartifact == ART_PROFANED_GREATSCYTHE && uswapwep->oartifact == ART_FRIEDE_S_SCYTHE) ||
+		  (uwep->oartifact == ART_LIFEHUNT_SCYTHE && uswapwep->oartifact == ART_FRIEDE_S_SCYTHE))
 	) {
 		otmp = bimanual(uwep,youracedata) ? uwep : uswapwep;
 		pline("%s isn't one-handed.", Yname2(otmp));

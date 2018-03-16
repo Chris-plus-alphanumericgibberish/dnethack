@@ -276,6 +276,7 @@ struct monst *mon;
 		mon->data == &mons[PM_WIDE_CLUBBED_TENTACLE] ||
 		mon->data == &mons[PM_QUEEN_OF_STARS] ||
 		mon->data == &mons[PM_ETERNAL_LIGHT] ||
+		mon->data == &mons[PM_CROW_WINGED_HALF_DRAGON] ||
 		mon->data == &mons[PM_DARUTH_XAXOX]
 	) return TRUE;
 	
@@ -423,7 +424,7 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 	    o = (mdef == &youmonst) ? invent : mdef->minvent;
 	    for ( ; o; o = o->nobj){
 			if ((o->owornmask & W_ARMH) &&
-				(o->otyp == vhelmsa || o->otyp == CRYSTAL_HELM || o->otyp == PLASTEEL_HELM)
+				(o->otyp == vhelmsa || o->otyp == CRYSTAL_HELM || o->otyp == PLASTEEL_HELM || o->otyp == PONTIFF_S_CROWN)
 			) return FALSE;
 			if ((o->owornmask & W_ARMC) &&
 				(o->otyp == WHITE_FACELESS_ROBE

@@ -674,6 +674,10 @@ const char *GnomeLgod = "Kurtulmak",
 		   *GnomeNgod = "Garl Glittergold",
 		   *GnomeCgod = "Urdlen"; /* Gnomish */
 
+const char *HDFemLgod = "Gwyn, Lord of Sunlight",
+		   *HDFemNgod = "_Gwynevere, Princess of Sunlight",
+		   *HDFemCgod = "_Velka, Goddess of Sin"; /* Dark Souls */
+
 const char *OrcLgod = "Ilneval",
 		   *OrcNgod = "_Luthic",
 		   *OrcCgod = "Gruumsh"; /* Orcish */
@@ -2588,6 +2592,26 @@ role_init()
 		// urole.enemy2num = PM_MASTODON;
 		// urole.enemy1sym = S_QUADRUPED;
 		// urole.enemy2sym = S_LAW_ANGEL;
+	} else if (Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend) {
+		flags.racial_pantheon = PM_GNOME;
+		urole.filecode = "Hdf";
+		
+		urole.homebase = "the forlorn settlement";
+		urole.intermed = "the Cathedral of Velka";
+		urole.questarti = ART_FRIEDE_S_SCYTHE;
+		
+		urole.ldrnum = 0;//PM_CROW_WINGED_HALF_DRAGON;
+		urole.guardnum = PM_CORVIAN;
+		urole.neminum = PM_BASTARD_OF_THE_BOREAL_VALLEY;
+		
+		urole.lgod = HDFemLgod;
+		urole.ngod = HDFemNgod;
+		urole.cgod = HDFemCgod;
+		
+		urole.enemy1num = PM_ZOMBIE;
+		urole.enemy2num = PM_CORVIAN_KNIGHT;
+		urole.enemy1sym = S_ZOMBIE;
+		urole.enemy2sym = S_GOLEM;
 	} else if (!urole.lgod) {
 	    urole.lgod = roles[flags.pantheon].lgod;
 	    urole.ngod = roles[flags.pantheon].ngod;

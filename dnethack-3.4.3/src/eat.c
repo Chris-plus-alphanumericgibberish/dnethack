@@ -2746,7 +2746,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		return 0;
 	}
 
-	if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM)){
+	if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || uarmh->otyp == PONTIFF_S_CROWN)){
 		pline("The %s covers your whole face.", xname(uarmh));
 		display_nhwindow(WIN_MESSAGE, TRUE);    /* --More-- */
 		return 0;

@@ -3244,6 +3244,171 @@ When you reach the temple, sacrifice the Amulet to %d.
 "Thus will you fulfill your destiny."
 %E
 #
+#	Half-Dragon, Female
+#
+%Cc Hdf 00001
+Home away from home
+%E
+%Cp Hdf 00002
+Home away from home 2
+%E
+%Cp Hdf 00003
+Home away from home 3
+%E
+%Cp Hdf 00005
+"Pre"
+%E
+%Cp Hdf 00006
+"Pre"
+%E
+%Cp Hdf 00007
+"Pre"
+%E
+%Cp Hdf 00008
+"Pre"
+%E
+%Cp Hdf 00009
+"Pre"
+%E
+%Cp Hdf 00010
+"Post"
+%E
+%Cp Hdf 00011
+"Post"
+%E
+%Cp Hdf 00012
+"Post"
+%E
+%Cp Hdf 00013
+"Post"
+%E
+%Cp Hdf 00014
+"Post"
+%E
+%Cc Hdf 00015
+GAME STATE ERROR
+%E
+%Cp Hdf 00016
+GAME STATE ERROR
+%E
+%Cp Hdf 00017
+GAME STATE ERROR
+%E
+%Cc Hdf 00018
+GAME STATE ERROR
+%E
+%Cc Hdf 00019
+GAME STATE ERROR
+%E
+%Cc Hdf 00020
+GAME STATE ERROR
+%E
+%Cc Hdf 00021
+GAME STATE ERROR
+%E
+%Cp Hdf 00025
+GAME STATE ERROR
+%E
+%Cp Hdf 00026
+GAME STATE ERROR
+%E
+%Cp Hdf 00027
+GAME STATE ERROR
+%E
+%Cp Hdf 00028
+GAME STATE ERROR
+%E
+%Cp Hdf 00029
+GAME STATE ERROR
+%E
+%Cp Hdf 00030
+GAME STATE ERROR
+%E
+%Cp Hdf 00031
+GAME STATE ERROR
+%E
+%Cp Hdf 00032
+GAME STATE ERROR
+%E
+%Cp Hdf 00033
+GAME STATE ERROR
+%E
+%Cp Hdf 00034
+GAME STATE ERROR
+%E
+%Cc Hdf 00035
+Locate level 1
+%E
+%Cp Hdf 00036
+Locate level 2
+%E
+%Cc Hdf 00040
+Goal level 1
+%E
+%Cp Hdf 00041
+Goal level 2
+%E
+%Cc Hdf 00050
+"Nemesis"
+%E
+%Cp Hdf 00051
+"Nemesis"
+%E
+%Cp Hdf 00052
+"Nemesis"
+%E
+%Cp Hdf 00053
+"Nemesis retrieval"
+%E
+%Cp Hdf 00060
+"Nemesis"
+%E
+%Cp Hdf 00061
+"Nemesis"
+%E
+%Cp Hdf 00062
+"Nemesis"
+%E
+%Cp Hdf 00063
+"Nemesis"
+%E
+%Cp Hdf 00064
+"Nemesis"
+%E
+%Cp Hdf 00065
+"Nemesis"
+%E
+%Cp Hdf 00066
+"Nemesis"
+%E
+%Cp Hdf 00067
+"Nemesis"
+%E
+%Cp Hdf 00068
+"Nemesis"
+%E
+%Cp Hdf 00069
+"Nemesis"
+%E
+%Cc Hdf 00070
+Obtained Quest Artifact
+%E
+%Cc Hdf 00080
+Nemesis defeated
+%E
+%Cc Hdf 00081
+GAME STATE ERROR
+%E
+%Cc Hdf 00082
+GAME STATE ERROR
+%E
+%Cp Hdf 00090
+GAME STATE ERROR
+%E
+%Cc Hdf 00091
+GAME STATE ERROR
+%E
+#
 #	Healer
 #
 %Cc Hea 00001

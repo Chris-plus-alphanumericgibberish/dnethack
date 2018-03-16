@@ -409,7 +409,7 @@ mattackm(magr, mdef)
 	
 	/*Plasteel helms cover the face and prevent bite attacks*/
 	if((magr->misc_worn_check & W_ARMH) && which_armor(magr, W_ARMH) &&
-		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM) && 
+		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM || ((which_armor(magr, W_ARMH))->otyp) == PONTIFF_S_CROWN) && 
 		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
 	) continue;
 	if((magr->misc_worn_check & W_ARMC) && which_armor(magr, W_ARMC) &&
@@ -2177,8 +2177,8 @@ physical:{
 		    tmp = 0;
 		    break;
 		}
-		if ((mdef->misc_worn_check & W_ARMH) && which_armor(mdef, W_ARMH) && /*Armor going missing? sligh performance hit worth not crashing*/
-			(rn2(8) || ((which_armor(mdef, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mdef, W_ARMH))->otyp) == CRYSTAL_HELM )
+		if ((mdef->misc_worn_check & W_ARMH) && which_armor(mdef, W_ARMH) && /*Armor going missing? slight performance hit worth not crashing*/
+			(rn2(8) || ((which_armor(mdef, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(mdef, W_ARMH))->otyp) == CRYSTAL_HELM || ((which_armor(mdef, W_ARMH))->otyp) == PONTIFF_S_CROWN )
 		) {
 		    if (vis) {
 			Strcpy(buf, s_suffix(Monnam(mdef)));

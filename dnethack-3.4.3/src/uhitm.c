@@ -3946,7 +3946,7 @@ register int tmp, weptmp, tchtmp;
 		
 		/*Plasteel helms cover the face and prevent bite attacks*/
 		if(uarmh && 
-			(uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM) && 
+			(uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || uarmh->otyp == PONTIFF_S_CROWN) && 
 			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || 
 				(mattk->aatyp == AT_TENT && is_mind_flayer((&youmonst)->data)))
 		) continue;

@@ -1396,7 +1396,10 @@ ring:
 		} else {
 			const char *hand_s = body_part(HAND);
 
-			if (bimanual(obj,youracedata) || (u.twoweap && obj->otyp == STILETTOS)) hand_s = makeplural(hand_s);
+			if ((bimanual(obj,youracedata) 
+				&& !(u.twoweap && (obj->oartifact == ART_PROFANED_GREATSCYTHE || obj->oartifact == ART_LIFEHUNT_SCYTHE)))
+			|| (u.twoweap && obj->otyp == STILETTOS))
+				hand_s = makeplural(hand_s);
 			Sprintf(eos(bp), " (weapon in %s)", hand_s);
 		}
 	}

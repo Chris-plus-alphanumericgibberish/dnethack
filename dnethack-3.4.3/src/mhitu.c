@@ -787,7 +787,7 @@ mattacku(mtmp)
 		if(mtmp->misc_worn_check & W_ARMH){
 			oarmor = which_armor(mtmp, W_ARMH);
 			if(oarmor && 
-				(oarmor->otyp == PLASTEEL_HELM || oarmor->otyp == CRYSTAL_HELM) && 
+				(oarmor->otyp == PLASTEEL_HELM || oarmor->otyp == CRYSTAL_HELM || oarmor->otyp == PONTIFF_S_CROWN) && 
 				(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || 
 					(mattk->aatyp == AT_ENGL && !u.uswallow) ||
 					(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
@@ -2348,7 +2348,7 @@ dopois:
 		}
 		if (u_slip_free(mtmp,mattk)) break;
 
-		if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || rn2(8))) {
+		if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || uarmh->otyp == PONTIFF_S_CROWN || rn2(8))) {
 		    /* not body_part(HEAD) */
 		    Your("helmet blocks the attack to your head.");
 		    break;

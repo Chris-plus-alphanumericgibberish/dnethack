@@ -2505,7 +2505,9 @@ u_init()
 
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
 	dungeon_topology.alt_tower = !rn2(8);
-	switch(rnd(6)){
+	if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend){
+		flags.HDbreath = AD_COLD;
+	} else switch(rnd(6)){
 		case 1:
 			flags.HDbreath = AD_COLD;
 		break;

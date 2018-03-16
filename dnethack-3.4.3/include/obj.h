@@ -324,15 +324,18 @@ struct obj {
 #define bimanual(otmp,ptr)	(otmp && (otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 ptr != &mons[PM_THRONE_ARCHON] && \
+			 ptr != &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY] && \
 			 (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit ?\
 			  (objects[otmp->otyp].oc_bimanual ? \
 				((ptr)->msize - otmp->objsize - 2 <  2):\
 				((ptr)->msize - otmp->objsize - 2 < -1)) :\
-			  (objects[otmp->otyp].oc_bimanual ? \
-				((ptr)->msize - otmp->objsize <  2):\
-				((ptr)->msize - otmp->objsize < -1))\
-			 )\
-			)
+			  (otmp->oartifact == ART_FRIEDE_S_SCYTHE ? \
+				((ptr)->msize - otmp->objsize < -1) :\
+				  (objects[otmp->otyp].oc_bimanual ? \
+					((ptr)->msize - otmp->objsize <  2):\
+					((ptr)->msize - otmp->objsize < -1))\
+			   )\
+			))
 #define is_lightsaber(otmp) ((otmp)->otyp == LIGHTSABER || \
 							 (otmp)->otyp == KAMEREL_VAJRA || \
 							 (otmp)->otyp == BEAMSWORD || \
@@ -441,6 +444,8 @@ struct obj {
 				|| ((otmp)->oartifact == ART_CLARENT && uwep && uwep->oartifact==ART_EXCALIBUR)\
 				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_BLADE_SINGER_S_SPEAR)\
 				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_SODE_NO_SHIRAYUKI)\
+				|| ((otmp)->oartifact == ART_FRIEDE_S_SCYTHE && uwep && uwep->oartifact==ART_PROFANED_GREATSCYTHE)\
+				|| ((otmp)->oartifact == ART_FRIEDE_S_SCYTHE && uwep && uwep->oartifact==ART_LIFEHUNT_SCYTHE)\
 				|| ((otmp)->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE))\
 				|| ((otmp)->oartifact == ART_CLEAVER && Role_if(PM_BARBARIAN))\
 				|| ((otmp)->oartifact == ART_KIKU_ICHIMONJI && Role_if(PM_SAMURAI))\

@@ -1147,7 +1147,7 @@ start_corpse_timeout(body)
 #define ROT_AGE (250L)		/* age when corpses rot away */
 
 	/* lizards, beholders, and lichen don't rot or revive */
-	if (body->corpsenm == PM_LIZARD || body->corpsenm == PM_LICHEN || body->corpsenm == PM_BEHOLDER || body->spe) return;
+	if (body->corpsenm == PM_LIZARD || body->corpsenm == PM_LICHEN || body->corpsenm == PM_CROW_WINGED_HALF_DRAGON || body->corpsenm == PM_BEHOLDER || body->spe) return;
 	
 	if(body->oattached == OATTACHED_MONST) attchmon = (struct monst *)body->oextra;
 
@@ -1858,6 +1858,7 @@ int x, y;
 /* return TRUE if the corpse has special timing */
 #define special_corpse(num)  (((num) == PM_LIZARD)		\
 				|| ((num) == PM_LICHEN)		\
+				|| ((num) == PM_CROW_WINGED_HALF_DRAGON)		\
 				|| ((num) == PM_BEHOLDER)		\
 				|| (is_rider(&mons[num]))	\
 				|| (mons[num].mlet == S_TROLL))

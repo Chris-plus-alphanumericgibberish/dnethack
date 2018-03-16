@@ -585,6 +585,8 @@ const char *name;
 		if(obj->oartifact == ART_WAR_MASK_OF_DURIN) obj->corpsenm = PM_DWARF;
 		
 		if(obj->oartifact == ART_LIFEHUNT_SCYTHE) obj->objsize = MZ_LARGE;
+		else if(obj->oartifact == ART_PROFANED_GREATSCYTHE) obj->objsize = MZ_HUGE;
+		else if(obj->oartifact == ART_FRIEDE_S_SCYTHE) obj->objsize = MZ_SMALL;
 		else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) obj->objsize = MZ_SMALL;
 		else if(obj->oartifact == ART_FIELD_MARSHAL_S_BATON) obj->objsize = MZ_SMALL;
 		else if(obj->oartifact == ART_GENOCIDE) obj->objsize = MZ_LARGE;
@@ -616,6 +618,8 @@ const char *name;
 		else if(obj->oartifact == ART_SODE_NO_SHIRAYUKI) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_TOBIUME) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_LIFEHUNT_SCYTHE) obj->obj_material = DRAGON_HIDE;
+		else if(obj->oartifact == ART_PROFANED_GREATSCYTHE) obj->obj_material = MINERAL;
+		else if(obj->oartifact == ART_FRIEDE_S_SCYTHE) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_BLADE_SINGER_S_SPEAR) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_BLADE_DANCER_S_DAGGER) obj->obj_material = SILVER;

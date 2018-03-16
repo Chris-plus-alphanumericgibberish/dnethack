@@ -1236,6 +1236,8 @@ struct monst *mtmp;
 	else ptr = mtmp->data;
 	
 	if(weap->name == artilist[ART_LIFEHUNT_SCYTHE].name) return (!is_unalive(ptr));
+
+	if(weap->name == artilist[ART_PROFANED_GREATSCYTHE].name) return (!is_unalive(ptr));
 	
 	if(weap->name == artilist[ART_GIANTSLAYER].name && bigmonst(ptr)) return TRUE;
 	
@@ -1366,6 +1368,8 @@ struct monst *mtmp;
 	else ptr = mtmp->data;
 	
 	if(weap->name == artilist[ART_LIFEHUNT_SCYTHE].name) return (!is_unalive(ptr));
+	
+	if(weap->name == artilist[ART_PROFANED_GREATSCYTHE].name) return (!is_unalive(ptr));
 	
 	if(weap->name == artilist[ART_GIANTSLAYER].name && bigmonst(ptr)) return TRUE;
 	
@@ -2271,6 +2275,42 @@ char *type;			/* blade, staff, etc */
 		//Strongest vs magic sensitives and +7, also good vs magic resistants at +2
 		dnum = 3;
 		dsize = 10;
+	} else if(mb->oartifact == ART_FRIEDE_S_SCYTHE){
+		if(youdefend){
+			if(!Cold_resistance){
+				if(species_resists_fire(&youmonst)){
+					*dmgptr += 1.5 * (*dmgptr);
+				} else {
+					*dmgptr += *dmgptr;
+				}
+				if(u.ustdy >= 10){
+					u_slow_down();
+				}
+				if(u.ustdy >= 20){
+					*dmgptr += d(6,6);
+					u.ustdy -= 20;
+				}
+			}
+		} else {
+			if(!resists_cold(mdef)){
+				if(species_resists_fire(mdef)){
+					*dmgptr += 1.5 * (*dmgptr);
+				} else {
+					*dmgptr += *dmgptr;
+				}
+				if(mdef->mstdy >= 10){
+					if(mdef->mspeed != MSLOW)
+						pline("%s slows down!", Monnam(mdef));
+					mdef->mspeed = MSLOW;
+					mdef->permspeed = MSLOW;
+				}
+				if(mdef->mstdy >= 20){
+					*dmgptr += d(6,6);
+					mdef->mstdy -= 20;
+				}
+			}
+		}
+		return 0;
 	}
 	
 	
@@ -2474,6 +2514,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		else wake_nearto_noisy(mdef->mx, mdef->my, (*dmgptr)*(*dmgptr)*2);
 		// if(youattack && !clashingmessage){
 		// }
+	}
+	if(otmp->oartifact == ART_YORSHKA_S_SPEAR){
+		if(youdefend) u.uen = max(0,u.uen - 14);
+		else mdef->mspec_used = max(mdef->mspec_used+1,1);
 	}
 	if( (spec_ability2(otmp, SPFX2_RAM) && !rn2(4)) || 
 		(spec_ability2(otmp, SPFX2_RAM2) && (otmp->oartifact != ART_TOBIUME || *dmgptr+6 >= mdef->mhp))
@@ -2701,14 +2745,17 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			pline_The("fiery %s %s %s%c", otmp->oartifact == ART_LIMB_OF_THE_BLACK_TREE ? "tree-branch" : 
 										  otmp->oartifact == ART_NIGHTHORN ? "horn" :
 										  otmp->oartifact == ART_FIRE_BRAND ? "blade" : 
+										  otmp->oartifact == ART_PROFANED_GREATSCYTHE ? "greatscythe" : 
 										  OBJ_DESCR(objects[otmp->otyp]) ? OBJ_DESCR(objects[otmp->otyp]) : OBJ_NAME(objects[otmp->otyp]),
 				!spec_dbon_applies ? "hits" :
 				(mdef->data == &mons[PM_WATER_ELEMENTAL] || mdef->data == &mons[PM_LETHE_ELEMENTAL]) ?
 				"vaporizes part of" : "burns",
 				hittee, !spec_dbon_applies ? '.' : '!');
-	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
-	    if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
-	    if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+		if(otmp->oartifact != ART_PROFANED_GREATSCYTHE){
+			if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+			if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+			if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+		}
 	    if (youdefend && Slimed) burn_away_slime();
 	    messaged = realizes_damage;
 	}
@@ -3679,6 +3726,15 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				magr->mhp += life+1;
 				if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
 			}
+		}
+	}
+	if (otmp->oartifact == ART_PROFANED_GREATSCYTHE || otmp->oartifact == ART_FRIEDE_S_SCYTHE) {
+		if (youattack) {
+			mdef->mstdy += (*dmgptr)/4+1;
+		} else if (youdefend) {
+			u.ustdy += (*dmgptr)/4+1;
+		} else { /* m vs m */
+			mdef->mstdy += (*dmgptr)/4+1;
 		}
 	}
 	if (otmp->oartifact == ART_SHADOWLOCK) {

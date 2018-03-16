@@ -2169,7 +2169,8 @@ int thrown;
 	    return(0);
 	}
 	else if (mon->mtame && mon->mcanmove &&
-			(!is_animal(mon->data)) && (!mindless_mon(mon)) &&
+			(!is_animal(mon->data)) && 
+			(!mindless_mon(mon) || (mon->data == &mons[PM_CROW_WINGED_HALF_DRAGON] && obj->oartifact == ART_YORSHKA_S_SPEAR)) &&
 			!(launcher && ammo_and_launcher(obj, launcher))
 	) {
 		// if (could_use_item(mon, obj, TRUE)) {

@@ -440,6 +440,8 @@ HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
 		0, 1,  INFRAVISION,   0, 2, 25,  50, 7, 2, PLASTIC, CLR_WHITE),
 HELM("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2,150, 300, 5, 0, GLASS, CLR_CYAN),
+HELM("pontiff's crown", "filigreed faceless helm", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,   0, 2,150, 300, 5, 0, METAL, HI_GOLD),
 /* With shuffled appearances... */
 HELM("helmet", "plumed helmet", /* circlet */
 		0, 0,  0,      8, 1, 30,  10, 9, 0, IRON, CLR_RED),
