@@ -54,12 +54,12 @@ OBJECT:'(',"wax candle",(40,05)
 OBJECT:'(',"wax candle",(33,15)
 OBJECT:'(',"wax candle",(37,09)
 OBJECT:'(',"wax candle",(37,11)
-OBJECT:'*',"chunk of fossile dark",random
+OBJECT:'*',"chunk of fossil dark",random
 OBJECT[50%]:'(',"wax candle",random
 OBJECT[50%]:'(',"wax candle",random
 OBJECT[50%]:'(',"wax candle",random
 OBJECT[50%]:'(',"wax candle",random
-OBJECT[10%]:'*',"chunk of fossile dark",random
+OBJECT[10%]:'*',"chunk of fossil dark",random
 
 GEOMETRY:center,center
 #          1         2         3         4         5         6         7
@@ -215,12 +215,12 @@ OBJECT:'(',"tallow candle",random
 OBJECT:'(',"tallow candle",random
 OBJECT:'(',"tallow candle",random
 OBJECT:'(',"tallow candle",random
-OBJECT:'*',"chunk of fossile dark",random
+OBJECT:'*',"chunk of fossil dark",random
 OBJECT[50%]:'(',"wax candle",random
 OBJECT[50%]:'(',"wax candle",random
 OBJECT[50%]:'(',"wax candle",random
 OBJECT[50%]:'(',"wax candle",random
-OBJECT[10%]:'*',"chunk of fossile dark",random
+OBJECT[10%]:'*',"chunk of fossil dark",random
 
 GEOMETRY:center,center
 #          1         2         3         4         5         6         7

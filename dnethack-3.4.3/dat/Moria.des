@@ -539,9 +539,9 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7     
 
-OBJECT[20%]:'*',"chunk of fossile dark",random
-OBJECT[20%]:'*',"chunk of fossile dark",random
-OBJECT[20%]:'*',"chunk of fossile dark",random
+OBJECT[20%]:'*',"chunk of fossil dark",random
+OBJECT[20%]:'*',"chunk of fossil dark",random
+OBJECT[20%]:'*',"chunk of fossil dark",random
 
 GEOMETRY: center, center
 #0         1         2         3         4         5         6         7     
@@ -752,7 +752,7 @@ OBJECT[10%]:'*',"chunk of unrefined mithril",random
 OBJECT[10%]:'*',"chunk of unrefined mithril",random
 OBJECT[10%]:'*',"chunk of unrefined mithril",random
 
-OBJECT[20%]:'*',"chunk of fossile dark",random
+OBJECT[20%]:'*',"chunk of fossil dark",random
 
 GEOMETRY: center, center
 #0         1         2         3         4         5         6         7     
