@@ -2255,7 +2255,7 @@ char *type;			/* blade, staff, etc */
 	if(mb->oartifact == ART_MAGICBANE){
 		if (!spec_dbon_applies){
 			//Equal to a fireball, makes +2 MB good vs magic resistant creatures (avg damage same for +0,+1,+2), +7 MB least bad vs magic sensitives
-			dnum = 5;
+			dnum = 6;
 			dsize = 6;
 		}
 	} else if(mb->oartifact == ART_MIRROR_BRAND){
@@ -4743,12 +4743,12 @@ arti_invoke(obj)
 			n=rnd(4)+1;
 			explode(x, y,
 				8, //8 = AD_PHYS, explode uses nonstandard damage type flags...
-				d(5,6), 0,
+				d(6,6), 0,
 				EXPL_MUDDY);
 			while(n--) {
 				explode(x, y,
 					1, //1 = AD_FIRE, explode uses nonstandard damage type flags...
-					d(5,6), 0,
+					d(6,6), 0,
 					EXPL_FIERY);
 				
 				x = cc.x+rnd(3)-1; y = cc.y+rnd(3)-1;
@@ -5590,7 +5590,7 @@ arti_invoke(obj)
 						){
 							You("swing wildly.");
 						} else {
-							int dmg = d(5,6);
+							int dmg = d(6,6);
 							if (resists_poison(mtmp)){
 								shieldeff(mtmp->mx, mtmp->my);
 					break;
