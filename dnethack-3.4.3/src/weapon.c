@@ -1298,7 +1298,7 @@ lightsaber_form_sdie:
 			if(is_slashing(otmp)){
 				weaponmask |= SLASH;
 			}
-			if(is_blasting(otmp)){
+			if(is_blasting(otmp) || otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD){
 				weaponmask |= EXPLOSION;
 			}
 			

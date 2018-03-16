@@ -1805,7 +1805,8 @@ lightsaber_deactivate (obj, timer_attached)
 			    break;
 		}
 	    } else {
-		You_hear("a lightsaber deactivate.");
+			if(obj->oartifact != ART_HOLY_MOONLIGHT_SWORD)
+				You_hear("a lightsaber deactivate.");
 	    }
 	}
 	// if (obj->otyp == DOUBLE_LIGHTSABER)
