@@ -6971,7 +6971,7 @@ is a red right hand
 	MB_HUMANOID|MB_THICK_HIDE|MB_POIS|MB_STRONG /*MB*/, MG_VBLUNT /*MG*/,
 	MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, HI_METAL),
     MON("Great Cthulhu", S_DEMON,//51
-	LVL(100, 15, 0, 127, 0), (G_NOGEN|G_UNIQ), /*Great cthulhu only takes a step 1/4 turns */
+	LVL(100, 3, 0, 127, 0), (G_NOGEN|G_UNIQ),
 	A(ATTK(AT_CLAW, AD_PHYS, 100, 4), ATTK(AT_WDGZ, AD_WISD, 1, 10), /*You might survive one melee hit from cthulhu, but prob not two*/
 	  ATTK(AT_NONE, AD_POSN, 8, 8), NO_ATTK,
 	  NO_ATTK, NO_ATTK),
