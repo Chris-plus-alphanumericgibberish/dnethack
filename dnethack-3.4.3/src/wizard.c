@@ -501,9 +501,14 @@ clonewiz()
 int
 pick_nasty()
 {
+	int tries;
+	int mndx;
+	do{
+		mndx = nasties[rn2(SIZE(nasties))];
+	} while(mvitals[mndx].mvflags & G_GONE && tries++ < 500);
     /* To do?  Possibly should filter for appropriate forms when
        in the elemental planes or surrounded by water or lava. */
-    return nasties[rn2(SIZE(nasties))];
+    return mndx;
 }
 
 /* create some nasty monsters, aligned or neutral with the caster */
