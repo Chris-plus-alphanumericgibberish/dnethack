@@ -64,7 +64,7 @@ boolean hostile;
 {
 	/* Alternative spell lists: since the alternative lists contain spells that aren't
 		yet implemented for m vs m combat, non-hostile monsters always use the vanilla 
-		list. Alternate list slection is based on the monster's ID number, which is
+		list. Alternate list selection is based on the monster's ID number, which is
 		annotated as staying constant.
 	*/
 	if(!hostile || mid % 10 < 5){
@@ -542,6 +542,30 @@ unsigned int type;
 			case 1:
 			return AGGRAVATION;
 			break;
+		}
+	break;
+	case PM_WARRIOR_OF_SUNLIGHT:
+		switch (rn2(mtmp->m_lev-10)) {
+			default:/* 15 -> 19*/
+				return LIGHTNING;
+			case 14:
+			case 13:
+			case 12:
+			case 11:
+			case 10:
+				return MON_PROTECTION;
+			case 9:
+			case 8:
+			case 7:
+			case 6:
+			case 5:
+				return MASS_CURE_CLOSE;
+			case 4:
+			case 3:
+			case 2:
+			case 1:
+			case 0:
+				return CURE_SELF;
 		}
 	break;
 	case PM_ELF_LADY:

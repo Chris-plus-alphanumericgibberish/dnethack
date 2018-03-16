@@ -2595,6 +2595,7 @@ role_init()
 	} else if (Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend) {
 		flags.racial_pantheon = PM_GNOME;
 		urole.filecode = "Hdf";
+		urole.petnum = PM_UNDEAD_KNIGHT;
 		
 		urole.homebase = "the forlorn settlement";
 		urole.intermed = "the Cathedral of Velka";
