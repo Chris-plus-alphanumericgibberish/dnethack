@@ -412,6 +412,12 @@ moveloop()
 						mtmp->perminvis = FALSE;
 						newsym(mtmp->mx,mtmp->my);
 					}
+				} 
+				if (mtmp->minvis){
+					newsym(mtmp->mx, mtmp->my);
+				}
+				if (Blind && Bloodsense && has_blood_mon(mtmp)){
+					newsym(mtmp->mx, mtmp->my);
 				}
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1490,6 +1496,12 @@ karemade:
 				mtmp->perminvis = FALSE;
 				newsym(mtmp->mx,mtmp->my);
 			}
+		}
+		if (mtmp->minvis){
+			newsym(mtmp->mx, mtmp->my);
+		}
+		if (Blind && Bloodsense && has_blood_mon(mtmp)){
+			newsym(mtmp->mx, mtmp->my);
 		}
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////
