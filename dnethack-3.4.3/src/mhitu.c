@@ -185,11 +185,13 @@ struct attack *mattk;
 void
 u_slow_down()
 {
-	HFast = 0L;
-	if (!Fast)
-	    You("slow down.");
-	else	/* speed boots */
-	    Your("quickness feels less natural.");
+	if(HFast){
+		HFast = 0L;
+		if (!Fast)
+			You("slow down.");
+		else	/* speed boots */
+			Your("quickness feels less natural.");
+	}
 	exercise(A_DEX, FALSE);
 }
 
