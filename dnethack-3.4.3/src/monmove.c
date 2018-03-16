@@ -1268,7 +1268,7 @@ toofar:
 	      find_offensive(mtmp)) && 
 	    mtmp->mlstmv != monstermoves)
 	{
-	    register struct monst *mtmp2 = mfind_target(mtmp);
+	    register struct monst *mtmp2 = mfind_target(mtmp, FALSE);
 	    if (mtmp2 && 
 	        (mtmp2 != &youmonst || 
 				dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) > 2) &&

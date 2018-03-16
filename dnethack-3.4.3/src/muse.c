@@ -1005,7 +1005,7 @@ struct monst *mtmp;
 	boolean reflection_skip = FALSE; 
 	struct obj *helmet = which_armor(mtmp, W_ARMH);
 
-	struct monst *target = mfind_target(mtmp);
+	struct monst *target = mfind_target(mtmp, TRUE);
 	
 	if(tbx == 0 && tby == 0) return FALSE; //Target is not lined up.
 	

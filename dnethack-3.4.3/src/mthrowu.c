@@ -1202,8 +1202,9 @@ extern int monstr[];
 
 /* Find a target for a ranged attack. */
 struct monst *
-mfind_target(mtmp)
+mfind_target(mtmp, force_linedup)
 struct monst *mtmp;
+boolean force_linedup;
 {
     int dir, origdir = -1;
     int x, y, dx, dy;
@@ -1221,13 +1222,14 @@ struct monst *mtmp;
 	
 	if(is_derived_undead_mon(mtmp)) return 0;
 	
+	
     if (is_covetous(mtmp->data) && !mtmp->mtame)
     {
         /* find our mark and let him have it, if possible! */
         register int gx = STRAT_GOALX(mtmp->mstrategy),
                      gy = STRAT_GOALY(mtmp->mstrategy);
         mtmp2 = m_at(gx, gy);
-	if (mtmp2 && (
+	if (mtmp2 && (!force_linedup || mlined_up(mtmp, mtmp2, FALSE)) && (
 			   (attacktype(mtmp->data, AT_BREA) && !mtmp->mcan && mlined_up(mtmp, mtmp2, FALSE))
 			|| (attacktype(mtmp->data, AT_SPIT) && mlined_up(mtmp, mtmp2, FALSE))
 			|| (attacktype(mtmp->data, AT_TNKR) && mlined_up(mtmp, mtmp2, FALSE))
@@ -1317,10 +1319,26 @@ struct monst *mtmp;
 
 		origdir = -1;
     } else {
+		int i, j;
+		struct monst *tmpm;
     	dir = rn2(8);
 		origdir = -1;
 
-    	if (!mtmp->mpeaceful && !conflicted && (
+		//Don't make ranged attacks if in melee
+		for(i=-1;i<2;i++){
+			for(j=-1;j<2;j++){
+				if(!i && !j)
+					continue;
+				if(isok(mtmp->mx+i, mtmp->my+j)){
+					tmpm = m_at(mtmp->mx+i, mtmp->my+j);
+					if(tmpm && mm_aggression(mtmp, tmpm)){
+						return (struct monst *) 0;
+					}
+				}
+			}
+		}
+	
+    	if (!mtmp->mpeaceful && (!force_linedup || lined_up(mtmp)) && !conflicted && (
 			   (attacktype(mtmp->data, AT_BREA) && !mtmp->mcan && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_SPIT) && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_TNKR) && lined_up(mtmp))
@@ -1425,7 +1443,7 @@ struct monst *mtmp;
 	oldmret = mret;
     }
 	
-	if(!mret) for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon){
+	if(!mret && !force_linedup) for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon){
 		if(mtmp == mtmp2) continue;
     	if ((!!mtmp->mtame != !!mtmp2->mtame || conflicted || (mm_aggression(mtmp, mtmp2) & ALLOW_M)) &&
 			!mlined_up(mtmp, mtmp2, FALSE) && //Note: must be something we don't want to hit in the way.

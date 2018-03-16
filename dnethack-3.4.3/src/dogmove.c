@@ -806,6 +806,7 @@ register struct monst *mtmp2;
 boolean ranged;
 {
 	if(mtmp2->moccupation) return FALSE;
+	
     return !((!ranged &&
 #ifdef BARD
                 (int)mtmp2->m_lev >= (int)mtmp->m_lev+2 + (mtmp->encouraged)*2 &&
@@ -1028,7 +1029,7 @@ register int after;	/* this is extra fast monster movement */
 	      select_rwep(mtmp))) &&
 	    mtmp->mlstmv != monstermoves)
 	{
-	    struct monst *mon = mfind_target(mtmp);
+	    struct monst *mon = mfind_target(mtmp, FALSE);
 	    if (mon && (mon != &youmonst) &&
 	        acceptable_pet_target(mtmp, mon, TRUE))
 	    {
