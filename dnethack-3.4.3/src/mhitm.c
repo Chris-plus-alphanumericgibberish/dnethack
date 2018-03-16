@@ -1243,13 +1243,15 @@ mdamagem(magr, mdef, mattk)
 	struct obj *obj;
 	char buf[BUFSZ];
 	struct permonst *pa = magr->data, *pd = mdef->data;
-	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd);
+	int armpro, num, tmp;
 	boolean cancelled;
 	boolean phasearmor = FALSE;
 	boolean weaponhit = (mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_DEVA || mattk->aatyp == AT_MARI);
 	struct attack alt_attk;
-
-	if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
+	
+	if(weaponhit && mattk->adtyp != AD_PHYS) tmp = 0;
+	else if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
+	else  tmp = d((int)mattk->damn, (int)mattk->damd);
 
 //ifdef BARD
 	if(tmp > 0){
@@ -1473,7 +1475,21 @@ physical:{
 			// tack on bonus elemental damage, if applicable
 			if (mattk->adtyp != AD_PHYS){
 				alt_attk.aatyp = AT_NONE;
-				alt_attk.adtyp = mattk->adtyp;
+				if(mattk->adtyp == AD_OONA)
+					alt_attk.adtyp = u.oonaenergy;
+				else if(mattk->adtyp == AD_RBRE){
+					switch(rn2(3)){
+						case 0:
+							alt_attk.adtyp = AD_FIRE;
+						break;
+						case 1:
+							alt_attk.adtyp = AD_COLD;
+						break;
+						case 2:
+							alt_attk.adtyp = AD_ELEC;
+						break;
+					}
+				} else alt_attk.adtyp = mattk->adtyp;
 				switch (alt_attk.adtyp)
 				{
 				case AD_FIRE:

@@ -1677,7 +1677,8 @@ hitmu(mtmp, mattk)
 	if(uarm && uarm->oartifact && !rn2(10)) touch_artifact(uarm, &youmonst, FALSE);
 
 /*	First determine the base damage done */
-	if(mtmp->mflee && mdat == &mons[PM_BANDERSNATCH]) dmg = d((int)mattk->damn, 2*(int)mattk->damd);
+	if(weaponhit && mattk->adtyp != AD_PHYS) dmg = 0;
+	else if(mtmp->mflee && mdat == &mons[PM_BANDERSNATCH]) dmg = d((int)mattk->damn, 2*(int)mattk->damd);
 	else dmg = d((int)mattk->damn, (int)mattk->damd);
 	if(is_undead_mon(mtmp) && midnight())
 		dmg += d((int)mattk->damn, (int)mattk->damd); /* extra damage */
@@ -1934,7 +1935,21 @@ hitmu(mtmp, mattk)
 			// tack on bonus elemental damage, if applicable
 			if (mattk->adtyp != AD_PHYS){
 				alt_attk.aatyp = AT_NONE;
-				alt_attk.adtyp = mattk->adtyp;
+				if(mattk->adtyp == AD_OONA)
+					alt_attk.adtyp = u.oonaenergy;
+				else if(mattk->adtyp == AD_RBRE){
+					switch(rn2(3)){
+						case 0:
+							alt_attk.adtyp = AD_FIRE;
+						break;
+						case 1:
+							alt_attk.adtyp = AD_COLD;
+						break;
+						case 2:
+							alt_attk.adtyp = AD_ELEC;
+						break;
+					}
+				} else alt_attk.adtyp = mattk->adtyp;
 				switch (alt_attk.adtyp)
 				{
 				case AD_FIRE:

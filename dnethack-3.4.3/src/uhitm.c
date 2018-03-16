@@ -2723,7 +2723,7 @@ register struct monst *mdef;
 register struct attack *mattk;
 {
 	register struct permonst *pd = mdef->data;
-	register int	tmp = d((int)mattk->damn, (int)mattk->damd);
+	register int	tmp;
 	int armpro;
 	boolean negated, phasearmor = FALSE;
 	boolean weaponhit = (mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_DEVA);
@@ -2732,6 +2732,9 @@ register struct attack *mattk;
 	armpro = magic_negation(mdef);
 	/* since hero can't be cancelled, only defender's armor applies */
 	negated = !((rn2(3) >= armpro) || !rn2(50));
+	
+	if(weaponhit && mattk->adtyp != AD_PHYS) tmp = 0;
+	else tmp = d((int)mattk->damn, (int)mattk->damd);
 	
 	tmp += dbon((struct obj *)0);
 	
@@ -2763,7 +2766,21 @@ register struct attack *mattk;
 			// tack on bonus elemental damage, if applicable
 			if (mattk->adtyp != AD_PHYS){
 				alt_attk.aatyp = AT_NONE;
-				alt_attk.adtyp = mattk->adtyp;
+				if(mattk->adtyp == AD_OONA)
+					alt_attk.adtyp = u.oonaenergy;
+				else if(mattk->adtyp == AD_RBRE){
+					switch(rn2(3)){
+						case 0:
+							alt_attk.adtyp = AD_FIRE;
+						break;
+						case 1:
+							alt_attk.adtyp = AD_COLD;
+						break;
+						case 2:
+							alt_attk.adtyp = AD_ELEC;
+						break;
+					}
+				} else alt_attk.adtyp = mattk->adtyp;
 				switch (alt_attk.adtyp)
 				{
 				case AD_FIRE:
