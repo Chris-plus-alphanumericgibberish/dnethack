@@ -1512,7 +1512,7 @@ E int FDECL(firemm, (struct monst *,struct monst *,struct attack *));
 E int FDECL(spitmm, (struct monst *,struct monst *,struct attack *));
 E int FDECL(breamu, (struct monst *,struct attack *));
 E int FDECL(breamm, (struct monst *,struct monst *,struct attack *));
-E struct monst *FDECL(mfind_target, (struct monst *));
+E struct monst *FDECL(mfind_target, (struct monst *, boolean));
 E boolean FDECL(linedup, (XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P));
 E boolean FDECL(lined_up, (struct monst *));
 E boolean FDECL(mlined_up, (struct monst *,struct monst *,BOOLEAN_P));
