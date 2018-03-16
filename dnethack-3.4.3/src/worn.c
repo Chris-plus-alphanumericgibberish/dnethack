@@ -636,12 +636,24 @@ struct monst *mon;
 		if(uarmh) armac += ARM_BONUS(uarmh);
 		if(uarmc) armac += ARM_BONUS(uarmc);
 		
+		if(uarm && uarm->otyp == CRYSTAL_PLATE_MAIL) armac -= uarm->spe;
+		if(uarmh && uarmh->otyp == CRYSTAL_HELM) armac -= .5*uarmh->spe;
+		if(uarmg && uarmg->otyp == CRYSTAL_GAUNTLETS) armac -= .5*uarmg->spe;
+		if(uarms && uarms->otyp == CRYSTAL_SHIELD) armac -= .5*uarms->spe;
+		if(uarmf && uarmf->otyp == CRYSTAL_BOOTS) armac -= .5*uarmf->spe;
+		
 		if(armac < 0) armac *= -1;
 	}
 	else for (obj = mon->minvent; obj; obj = obj->nobj) {
 	    if (obj->owornmask & mwflags){
 			armac += ARM_BONUS(obj);
 			if(is_shield(obj)) armac += max(0, obj->objsize - mon->data->msize);
+			
+			if(obj->otyp == CRYSTAL_PLATE_MAIL) armac -= obj->spe;
+			if(obj->otyp == CRYSTAL_HELM) armac -= .5*obj->spe;
+			if(obj->otyp == CRYSTAL_GAUNTLETS) armac -= .5*obj->spe;
+			if(obj->otyp == CRYSTAL_SHIELD) armac -= .5*obj->spe;
+			if(obj->otyp == CRYSTAL_BOOTS) armac -= .5*obj->spe;
 		}
 	}
 	if(armac > 11) armac = rnd(armac-10) + 10; /* high armor ac values act like player ac values */
@@ -705,11 +717,23 @@ struct monst *mon;
 		if(uarmh) armac += ARM_BONUS(uarmh);
 		if(uarmc) armac += ARM_BONUS(uarmc);
 		
+		if(uarm && uarm->otyp == CRYSTAL_PLATE_MAIL) armac -= uarm->spe;
+		if(uarmh && uarmh->otyp == CRYSTAL_HELM) armac -= .5*uarmh->spe;
+		if(uarmg && uarmg->otyp == CRYSTAL_GAUNTLETS) armac -= .5*uarmg->spe;
+		if(uarms && uarms->otyp == CRYSTAL_SHIELD) armac -= .5*uarms->spe;
+		if(uarmf && uarmf->otyp == CRYSTAL_BOOTS) armac -= .5*uarmf->spe;
+		
 		if(armac < 0) armac *= -1;
 	}
 	else for (obj = mon->minvent; obj; obj = obj->nobj) {
 	    if (obj->owornmask & mwflags)
 		armac += ARM_BONUS(obj);
+		
+		if(obj->otyp == CRYSTAL_PLATE_MAIL) armac -= obj->spe;
+		if(obj->otyp == CRYSTAL_HELM) armac -= .5*obj->spe;
+		if(obj->otyp == CRYSTAL_GAUNTLETS) armac -= .5*obj->spe;
+		if(obj->otyp == CRYSTAL_SHIELD) armac -= .5*obj->spe;
+		if(obj->otyp == CRYSTAL_BOOTS) armac -= .5*obj->spe;
 	}
 
 	base -= armac;

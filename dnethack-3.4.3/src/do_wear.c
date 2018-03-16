@@ -2034,14 +2034,24 @@ find_ac()
 		) uac -= 2*ARM_BONUS(uarmc);
 		else uac -= ARM_BONUS(uarmc);
 	}
-	if(uarmh) uac -= ARM_BONUS(uarmh);
-	if(uarmf) uac -= ARM_BONUS(uarmf);
+	if(uarmh){ 
+		uac -= ARM_BONUS(uarmh);
+		if(uarmh->otyp == CRYSTAL_HELM) uac -= .5*uarmh->spe;
+	}
+	if(uarmf){
+		uac -= ARM_BONUS(uarmf);
+		if(uarmf->otyp == CRYSTAL_BOOTS) uac -= .5*uarmf->spe;
+	}
 	if(uarms){
 		if(uarms->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) uac -= ARM_BONUS(uarms)*2;
 		else uac -= ARM_BONUS(uarms);
 		uac -= (uarms->objsize - youracedata->msize);
+		if(uarms->otyp == CRYSTAL_SHIELD) uac -= .5*uarms->spe;
 	}
-	if(uarmg) uac -= ARM_BONUS(uarmg);
+	if(uarmg){
+		uac -= ARM_BONUS(uarmg);
+		if(uarmg->otyp == CRYSTAL_GAUNTLETS) uac -= .5*uarmg->spe;
+	}
 	if(uarmu) uac -= ARM_BONUS(uarmu);
 	
     static int cbootsd = 0;
