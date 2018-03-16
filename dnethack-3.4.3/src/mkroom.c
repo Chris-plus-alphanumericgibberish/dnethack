@@ -1802,6 +1802,12 @@ mkfishinghut(left)
 					otmp->owt = weight(otmp);
 					place_object(otmp, x+i, y+j);
 				}
+				if(!rn2(100)){
+					otmp = mksobj(find_gcirclet(), FALSE, FALSE);
+					otmp->obj_material = GOLD;
+					otmp->owt = weight(otmp);
+					place_object(otmp, x+i, y+j);
+				}
 			}
 		}
 		i = 1+rn2(3);
