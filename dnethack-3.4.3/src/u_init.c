@@ -311,6 +311,19 @@ static struct trobj DwarfNoble[] = {
 	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj HDNoble[] = {
+ 	{ SPEAR,  2, WEAPON_CLASS, 1, UNDEF_BLESS },
+ 	{ SICKLE, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
+	{ BUCKLER, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ LEATHER_ARMOR, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ GLOVES, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ APPLE, 0, FOOD_CLASS, 3, 0 },
+	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
+	{ TORCH, 0, TOOL_CLASS, 3, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 static struct trobj Pirate[] = {
 #define PIR_KNIVES	2
 #define PIR_SNACK 6
@@ -905,6 +918,25 @@ static const struct def_skill Skill_Nob[] = {
 #ifdef STEED
     { P_RIDING, P_SKILLED },
 #endif
+    { P_BARE_HANDED_COMBAT, P_SKILLED },
+    { P_BEAST_MASTERY, P_EXPERT },
+    { P_NONE, 0 }
+};
+
+static const struct def_skill Skill_HD_Female_Nob[] = {
+    { P_DAGGER, P_SKILLED },		{ P_KNIFE, P_BASIC },
+    { P_AXE, P_EXPERT },
+    { P_SHORT_SWORD, P_SKILLED },	{ P_BROAD_SWORD, P_SKILLED },
+    { P_LONG_SWORD, P_EXPERT },
+    { P_SCIMITAR, P_SKILLED },		{ P_SABER, P_SKILLED },
+    { P_CLUB, P_BASIC },		{ P_MACE, P_SKILLED },
+    { P_MORNING_STAR, P_BASIC },	{ P_FLAIL, P_BASIC },
+    { P_POLEARMS, P_BASIC },	{ P_HARVEST, P_EXPERT },
+    { P_SPEAR, P_EXPERT },		{ P_JAVELIN, P_BASIC },
+    { P_TRIDENT, P_BASIC },		{ P_LANCE, P_SKILLED },
+    { P_BOW, P_SKILLED },			{ P_CROSSBOW, P_BASIC },
+    { P_ATTACK_SPELL, P_SKILLED },	{ P_HEALING_SPELL, P_SKILLED },
+    { P_ESCAPE_SPELL, P_SKILLED },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
     { P_BARE_HANDED_COMBAT, P_SKILLED },
     { P_BEAST_MASTERY, P_EXPERT },
     { P_NONE, 0 }
@@ -1889,6 +1921,8 @@ u_init()
 			Noble[NOB_SHOES].trspe = 1;
 		}
 		if(Race_if(PM_DWARF)) ini_inv(DwarfNoble);
+		if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend) 
+			ini_inv(HDNoble);
 		else if(Race_if(PM_DROW) && flags.female){
 			DNoble[DNB_TWO_ARROWS].trquan = rn1(10, 50);
 			DNoble[DNB_ZERO_ARROWS].trquan = rn1(10, 30);
@@ -1903,6 +1937,8 @@ u_init()
 		// knows_class(ARMOR_CLASS);
 		if(Race_if(PM_DROW) && flags.female) skill_init(Skill_DNob);
 		else if(Race_if(PM_DWARF)) skill_init(Skill_DwaNob);
+		else if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend) 
+			skill_init(Skill_HD_Female_Nob);
 		else if(Race_if(PM_ELF)) skill_init(Skill_ENob);
 		else skill_init(Skill_Nob);
 	break;
