@@ -1135,6 +1135,10 @@ lightsaber_form_sdie:
 			bonus += rnd(10);
 		}
 	    if (otmp->blessed && mon && (holy_damage(mon))){
+			int dsize = 4;
+			if(otmp->obj_material == GOLD)
+				dsize = 20;
+			
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
 			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
 				bonus += d(3,7); //Quite holy
@@ -1144,9 +1148,10 @@ lightsaber_form_sdie:
 					bonus += 7; //Quite holy
 			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
 				bonus += rnd(20); //Divinity
-			else if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),4);
-			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,4);
-			else bonus += rnd(4);
+			
+			if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),dsize);
+			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,dsize);
+			else bonus += rnd(dsize);
 		}
 	    if (is_axe(otmp) && is_wooden(ptr))
 			bonus += rnd(4);
@@ -1181,17 +1186,21 @@ lightsaber_form_sdie:
 	    if (is_unholy(otmp)
 			&& hates_unholy(ptr)
 		){
+			int bdm = 1;
+			if(otmp->obj_material == GOLD)
+				bdm = 2;
+			
 			if(otmp->oartifact == ART_STORMBRINGER) 
-				bonus += d(2,9); //Extra unholy (2d9 vs excal's 3d7)
+				bonus += d(2*bdm,9); //Extra unholy (2d9 vs excal's 3d7)
 			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
-				bonus += d(3,9); //Quite unholy
+				bonus += d(3*bdm,9); //Quite unholy
 			else if(otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) 
-				bonus += 8; //Extra unholy
+				bonus += 8*bdm; //Extra unholy
 			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
-				bonus += rnd(20); //Tyranny
-			else if(otyp == KHAKKHARA) bonus += d(rnd(3),9);
-			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking,9);
-			else bonus += rnd(9);
+				bonus += d(bdm, 20); //Tyranny
+			else if(otyp == KHAKKHARA) bonus += d(rnd(3)*bdm,9);
+			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking*bdm,9);
+			else bonus += d(bdm, 9);
 		}
 		
 		if(youdefend){
