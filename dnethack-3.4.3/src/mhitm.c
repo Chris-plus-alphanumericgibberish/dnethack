@@ -610,9 +610,11 @@ meleeattack:
 			}
 		} else
 		    missmm(magr, mdef, mattk);
-		if(mattk->aatyp == AT_MARI && i == 5 && res[0] && res[1]){
-			struct attack rend = {AT_HUGS, AD_WRAP, magr->data == &mons[PM_SHAKTARI] ? 8 : 4, 6};
-			res[i] = hitmm(magr, mdef, &rend);
+		if(mattk->aatyp == AT_MARI && i == 5){
+			if(tmp > rnd(20 + i*2)){
+				struct attack rend = {AT_HUGS, AD_WRAP, magr->data == &mons[PM_SHAKTARI] ? 8 : 4, 6};
+				// res[i] = hitmm(magr, mdef, &rend);
+			}
 		}
 		break;
 
