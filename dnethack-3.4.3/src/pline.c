@@ -522,13 +522,13 @@ self_invis_message()
 	if(Role_if(PM_PIRATE)){
 	pline("%s %s.",
 	    Hallucination ? "Arr, Matey!  Ye" : "Avast!  All of a sudden, ye",
-	    See_invisible ? "can see right through yerself" :
+	    See_invisible(u.ux,u.uy) ? "can see right through yerself" :
 		"can't see yerself");
 	}
 	else{
 	pline("%s %s.",
 	    Hallucination ? "Far out, man!  You" : "Gee!  All of a sudden, you",
-	    See_invisible ? "can see right through yourself" :
+	    See_invisible(u.ux,u.uy) ? "can see right through yourself" :
 		"can't see yourself");
 	}
 }

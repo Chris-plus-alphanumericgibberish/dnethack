@@ -841,7 +841,7 @@ boolean racialexception;
 	if(is_whirly(mon->data) || noncorporeal(mon->data)) return;
 
 	/* Get a copy of monster's name before altering its visibility */
-	Strcpy(nambuf, See_invisible ? Monnam(mon) : mon_nam(mon));
+	Strcpy(nambuf, See_invisible(mon->mx,mon->my) ? Monnam(mon) : mon_nam(mon));
 
 	old = which_armor(mon, flag);
 	if (old && old->cursed) return;
@@ -945,7 +945,7 @@ outer_break:
 	update_mon_intrinsics(mon, best, TRUE, creation);
 	/* if couldn't see it but now can, or vice versa, */
 	if (!creation && (unseen ^ !canseemon(mon))) {
-		if (mon->minvis && !See_invisible) {
+		if (mon->minvis && !See_invisible(mon->mx,mon->my)) {
 			pline("Suddenly you cannot see %s.", nambuf);
 			makeknown(best->otyp);
 		} /* else if (!mon->minvis) pline("%s suddenly appears!", Amonnam(mon)); */

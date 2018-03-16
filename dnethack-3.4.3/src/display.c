@@ -152,7 +152,7 @@ vobj_at(x,y)
     register struct obj *obj = level.objects[x][y];
 
     while (obj) {
-	if (!obj->oinvis || See_invisible) return obj;
+	if (!obj->oinvis || See_invisible(obj->ox, obj->oy)) return obj;
 	obj = obj->nexthere;
     }
     return ((struct obj *) 0);
@@ -766,7 +766,7 @@ newsym(x,y)
 	    mon = m_at(x,y);
 	    worm_tail = is_worm_tail(mon);
 	    see_it = mon && (worm_tail
-		? (!mon->minvis || See_invisible)
+		? (!mon->minvis || See_invisible(mon->mx, mon->my))
 		: (mon_visible(mon)) || tp_sensemon(mon) || MATCH_WARN_OF_MON(mon) || sense_by_scent(mon));
 	    if (mon && (see_it || (!worm_tail && Detect_monsters))) {
 		if (mon->mtrapped) {
@@ -1218,13 +1218,13 @@ set_mimic_blocking()
 	   ((mon->m_ap_type == M_AP_FURNITURE &&
 	     (mon->mappearance == S_vcdoor || mon->mappearance == S_hcdoor)) ||
 	    (mon->m_ap_type == M_AP_OBJECT && mon->mappearance == BOULDER))) {
-	    if(See_invisible)
+	    if(See_invisible(mon->mx, mon->my))
 			block_point(mon->mx, mon->my);
 	    else
 			unblock_point(mon->mx, mon->my);
 	 }
 	 else if(mon->minvis && opaque(mon->data)){
-	    if(See_invisible)
+	    if(See_invisible(mon->mx, mon->my))
 			block_point(mon->mx, mon->my);
 	    else
 			unblock_point(mon->mx, mon->my);

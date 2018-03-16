@@ -97,7 +97,7 @@ int x,y;
 {
     if (level.monsters[x][y] &&
 	opaque(level.monsters[x][y]->data) &&
-	 (!level.monsters[x][y]->minvis || See_invisible))
+	 (!level.monsters[x][y]->minvis || See_invisible(x,y)))
 		unblock_point(x,y);
     level.monsters[x][y] = (struct monst *)0;
 }

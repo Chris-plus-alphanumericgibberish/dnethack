@@ -184,16 +184,16 @@ lookat(x, y, buf, monbuf, shapebuff)
 		if (useemon && mtmp->minvis)
 		    ways_seen++;
 		/* infravision */
-		if ((!mtmp->minvis || See_invisible) && see_with_infrared(mtmp))
+		if ((!mtmp->minvis || See_invisible(mtmp->mx,mtmp->my)) && see_with_infrared(mtmp))
 		    ways_seen++;
 		/* bloodsense */
-		if ((!mtmp->minvis || See_invisible) && see_with_bloodsense(mtmp))
+		if ((!mtmp->minvis || See_invisible(mtmp->mx, mtmp->my)) && see_with_bloodsense(mtmp))
 		    ways_seen++;
 		/* lifesense */
-		if ((!mtmp->minvis || See_invisible) && see_with_lifesense(mtmp))
+		if ((!mtmp->minvis || See_invisible(mtmp->mx, mtmp->my)) && see_with_lifesense(mtmp))
 		    ways_seen++;
 		/* senseall */
-		if ((!mtmp->minvis || See_invisible) && see_with_senseall(mtmp))
+		if ((!mtmp->minvis || See_invisible(mtmp->mx, mtmp->my)) && see_with_senseall(mtmp))
 		    ways_seen++;
 		/* earthsense */
 		if (see_with_earthsense(mtmp))
@@ -223,22 +223,22 @@ lookat(x, y, buf, monbuf, shapebuff)
 			Strcat(monbuf, "see invisible");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
 		    }
-		    if ((!mtmp->minvis || See_invisible) &&
+			if ((!mtmp->minvis || See_invisible(mtmp->mx, mtmp->my)) &&
 			    see_with_infrared(mtmp)) {
 			Strcat(monbuf, "infravision");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
 		    }
-		    if ((!mtmp->minvis || See_invisible) &&
+			if ((!mtmp->minvis || See_invisible(mtmp->mx, mtmp->my)) &&
 			    see_with_bloodsense(mtmp)) {
 			Strcat(monbuf, "bloodsense");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
 		    }
-		    if ((!mtmp->minvis || See_invisible) &&
+			if ((!mtmp->minvis || See_invisible(mtmp->mx, mtmp->my)) &&
 			    see_with_lifesense(mtmp)) {
 			Strcat(monbuf, "lifesense");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");
 			}
-		    if ((!mtmp->minvis || See_invisible) &&
+			if ((!mtmp->minvis || See_invisible(mtmp->mx, mtmp->my)) &&
 			    see_with_senseall(mtmp)) {
 			Strcat(monbuf, "omnisense");
 			if (ways_seen-- > 1) Strcat(monbuf, ", ");

@@ -5011,7 +5011,7 @@ struct attack *mattk;
 		genagr = gender(magr);
 	}
 	if(mdef == &youmonst) {
-		defperc = (See_invisible != 0);
+		defperc = (See_invisible(magr->mx,magr->my) != 0);
 		gendef = poly_gender();
 	} else {
 		defperc = perceives(mdef->data);

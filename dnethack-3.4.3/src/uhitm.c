@@ -5054,7 +5054,7 @@ struct monst *mtmp;
 
 	    /* cloned Wiz starts out mimicking some other monster and
 	       might make himself invisible before being revealed */
-	    if (mtmp->minvis && !See_invisible)
+	    if (mtmp->minvis && !See_invisible(mtmp->mx,mtmp->my))
 		what = generic;
 	    else
 		what = a_monnam(mtmp);

@@ -374,7 +374,7 @@ do_mname()
 			|| mtmp->mundetected
 			|| mtmp->m_ap_type == M_AP_FURNITURE
 			|| mtmp->m_ap_type == M_AP_OBJECT
-			|| (mtmp->minvis && !See_invisible)))) {
+			|| (mtmp->minvis && !See_invisible(mtmp->mx, mtmp->my))))) {
 		pline("I see no monster there.");
 		return(0);
 	}

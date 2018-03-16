@@ -2383,7 +2383,7 @@ drainhp:
        if (!mtmp->minvis && !mtmp->invis_blkd) {
            if (canseemon(mtmp))
                pline("%s suddenly %s!", Monnam(mtmp),
-                     !See_invisible ? "disappears" : "becomes transparent");
+                     !See_invisible(mtmp->mx,mtmp->my) ? "disappears" : "becomes transparent");
            mon_set_minvis(mtmp);
           if (malediction && !canspotmon(mtmp))
                You_hear("%s fiendish laughter all around you.", s_suffix(mon_nam(mtmp)));
@@ -2900,7 +2900,7 @@ int spellnum;
 	   same as when monsters drink potions of invisibility.  This doesn't
 	   really make a lot of sense, but lets the player avoid hitting
 	   peaceful monsters by mistake */
-	if (mtmp->mpeaceful && !See_invisible && spellnum == DISAPPEAR)
+	if (mtmp->mpeaceful && !See_invisible(u.ux, u.uy) && spellnum == DISAPPEAR)
 	    return TRUE;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)

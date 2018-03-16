@@ -1043,7 +1043,7 @@ struct obj *obj;
 		    pline("%s is frightened by its reflection.", Monnam(mtmp));
 		monflee(mtmp, d(2,4), FALSE, FALSE);
 	} else if (!Blind) {
-		if (mtmp->minvis && !See_invisible)
+		if (mtmp->minvis && !See_invisible(mtmp->mx, mtmp->my))
 		    ;
 		else if ((mtmp->minvis && !perceives(mtmp->data))
 			 || !haseyes(mtmp->data))

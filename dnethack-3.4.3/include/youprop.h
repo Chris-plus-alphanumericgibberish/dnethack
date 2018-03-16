@@ -218,8 +218,9 @@
 
 #define HSee_invisible		u.uprops[SEE_INVIS].intrinsic
 #define ESee_invisible		u.uprops[SEE_INVIS].extrinsic
-#define See_invisible		(HSee_invisible || ESee_invisible || \
+#define See_invisible_old	(HSee_invisible || ESee_invisible || \
 				 perceives(youracedata) || u.sealsActive&SEAL_NABERIUS)
+#define See_invisible(X,Y)	(ESee_invisible || (See_invisible_old && dist2(u.ux, u.uy, X, Y)<13))
 
 #define HTelepat		u.uprops[TELEPAT].intrinsic
 #define ETelepat		u.uprops[TELEPAT].extrinsic
@@ -311,7 +312,7 @@
 						  u.sealsActive&SEAL_SHIRO || \
 						  (flags.run != 0 && uwep && uwep->oartifact == ART_TOBIUME)\
 						  ) && !BInvis) || Underwater)
-#define Invisible		(Invis && !See_invisible && !Underwater)
+#define Invisible		(Invis && !See_invisible(u.ux,u.uy) && !Underwater)
 		/* Note: invisibility also hides inventory and steed */
 
 #define HDisplaced		u.uprops[DISPLACED].intrinsic

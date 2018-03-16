@@ -1275,7 +1275,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 	   to look at it yet; affects docall(SCR_SCARE_MONSTER). */
 	if (!Blind)
 #ifdef INVISIBLE_OBJECTS
-		if (!obj->oinvis || See_invisible)
+		if (!obj->oinvis || See_invisible(obj->ox,obj->oy))
 #endif
 		obj->dknown = 1;
 
@@ -1808,7 +1808,7 @@ dopetequip()
 	unseen = !canseemon(mtmp);
 
 	/* Get a copy of monster's name before altering its visibility */
-	Strcpy(nambuf, See_invisible ? Monnam(mtmp) : mon_nam(mtmp));
+	Strcpy(nambuf, See_invisible(mtmp->mx,mtmp->my) ? Monnam(mtmp) : mon_nam(mtmp));
 	
 	if(otmp = pick_armor_for_creature(mtmp)){
 		if (nolimbs(youracedata)) {
@@ -1846,7 +1846,7 @@ dopetequip()
 		update_mon_intrinsics(mtmp, otmp, TRUE, FALSE);
 		/* if couldn't see it but now can, or vice versa, */
 		if (unseen ^ !canseemon(mtmp)) {
-			if (mtmp->minvis && !See_invisible) {
+			if (mtmp->minvis && !See_invisible(mtmp->mx,mtmp->my)) {
 				pline("Suddenly you cannot see %s.", nambuf);
 				makeknown(otmp->otyp);
 			} /* else if (!mon->minvis) pline("%s suddenly appears!", Amonnam(mon)); */

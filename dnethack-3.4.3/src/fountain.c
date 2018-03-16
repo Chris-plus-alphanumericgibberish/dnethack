@@ -290,8 +290,7 @@ drinkfountain()
 			pline("This water's no good!");
 			morehungry(rn1(20, 11));
 			exercise(A_CON, FALSE);
-			for(obj = invent; obj ; obj = obj->nobj)
-				if (!rn2(5))	curse(obj);
+			rndcurse();
 			break;
 			}
 

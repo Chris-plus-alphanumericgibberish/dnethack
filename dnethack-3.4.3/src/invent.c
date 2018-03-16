@@ -2498,7 +2498,7 @@ boolean picked_some;
 	    if (dfeature) pline1(fbuf);
 	    read_engr_at(u.ux, u.uy); /* Eric Backus */
 #ifdef INVISIBLE_OBJECTS
-	    if (otmp->oinvis && !See_invisible) verb = "feel";
+		if (otmp->oinvis && !See_invisible(otmp->ox, otmp->oy)) verb = "feel";
 #endif
 	    You("%s here %s.", verb, Hallucination ? an(rndobjnam()) : doname(otmp));
 	    if (otmp->otyp == CORPSE) feel_cockatrice(otmp, FALSE);

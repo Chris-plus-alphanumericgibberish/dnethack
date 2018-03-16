@@ -2285,7 +2285,7 @@ struct obj *otmp;
 		    break;
 		  case RIN_INVISIBILITY:
 		    if (!oldprop && !EInvis && !BInvis && !Blind) {
-				if(See_invisible){
+				if(See_invisible(u.ux,u.uy)){
 					Your("body takes on a %s transparency...",
 						Hallucination ? "normal" : "strange");
 					makeknown(typ);

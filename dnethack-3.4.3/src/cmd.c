@@ -1864,7 +1864,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	}
 
 	/*** Vision and senses ***/
-	if (See_invisible) enl_msg(You_, "see", "saw", " invisible");
+	if (See_invisible(u.ux,u.uy)) enl_msg(You_, "see", "saw", " invisible");
 	if (Blind_telepat) you_are("telepathic");
 	if (Warning) you_are("warned");
 	if (Warn_of_mon && (flags.warntypem||flags.warntypet||flags.warntypeb||flags.warntypeg||flags.warntypea||flags.warntypev||flags.montype)) {
@@ -2485,7 +2485,7 @@ int final;
 	}
 
 	/*** Vision and senses ***/
-	if (See_invisible) dump("  ", "You saw invisible");
+	if (See_invisible(u.ux,u.uy)) dump("  ", "You saw invisible");
 	if (Blind_telepat) dump(youwere, "telepathic");
 	if (Warning) dump(youwere, "warned");
 	if (Warn_of_mon && flags.warntypea) {

@@ -239,7 +239,7 @@ Cloak_on()
 		if ((HInvis || EInvis || pm_invisible(youracedata)) && !Blind) {
 		    newsym(u.ux,u.uy);
 		    You("can %s!",
-			See_invisible ? "no longer see through yourself"
+			See_invisible(u.ux, u.uy) ? "no longer see through yourself"
 			: see_yourself);
 		}
 		break;
@@ -250,7 +250,7 @@ Cloak_on()
 		    makeknown(uarmc->otyp);
 		    newsym(u.ux,u.uy);
 		    pline("Suddenly you can%s yourself.",
-			See_invisible ? " see through" : "not see");
+			See_invisible(u.ux, u.uy) ? " see through" : "not see");
 		}
 		break;
 	case OILSKIN_CLOAK:
@@ -268,7 +268,7 @@ Cloak_on()
 	!strcmp(cloak_desc, "opera cloak") &&
 	is_vampire(youracedata)) {
 		You("%s very impressive in your %s.", Blind ||
-				(Invis && !See_invisible) ? "feel" : "look",
+				(Invis && !See_invisible(u.ux, u.uy)) ? "feel" : "look",
 				OBJ_DESCR(objects[uarmc->otyp]));
 		ABON(A_CHA) += 1;
 		flags.botl = 1;
@@ -312,7 +312,7 @@ Cloak_off()
 		if (Invis && !Blind) {
 		    newsym(u.ux,u.uy);
 		    You("can %s.",
-			See_invisible ? "see through yourself"
+			See_invisible(u.ux, u.uy) ? "see through yourself"
 			: "no longer see yourself");
 		}
 		break;
@@ -321,7 +321,7 @@ Cloak_off()
 		    makeknown(CLOAK_OF_INVISIBILITY);
 		    newsym(u.ux,u.uy);
 		    pline("Suddenly you can %s.",
-			See_invisible ? "no longer see through yourself"
+			See_invisible(u.ux, u.uy) ? "no longer see through yourself"
 			: see_yourself);
 		}
 		break;
@@ -631,7 +631,7 @@ Shirt_on()
 */
 	if(uarmu->otyp == RUFFLED_SHIRT) {
 		You("%s very dashing in your %s.", Blind ||
-				(Invis && !See_invisible) ? "feel" : "look",
+				(Invis && !See_invisible(u.ux, u.uy)) ? "feel" : "look",
 				OBJ_NAME(objects[uarmu->otyp]));
 		ABON(A_CHA) += 1;
 		flags.botl = 1;
@@ -702,14 +702,14 @@ Armor_on()
 	}
 	else if(uarm->otyp == ELVEN_TOGA){
 		You("%s very elegant in your %s.", Blind ||
-				(Invis && !See_invisible) ? "feel" : "look",
+				(Invis && !See_invisible(u.ux, u.uy)) ? "feel" : "look",
 				OBJ_NAME(objects[uarm->otyp]));
 		ABON(A_CHA) += 2;
 		flags.botl = 1;
 	}
 	else if(uarm->otyp == GENTLEWOMAN_S_DRESS || uarm->otyp == GENTLEMAN_S_SUIT){
 		You("%s very elegant in your %s.", Blind ||
-				(Invis && !See_invisible) ? "feel" : "look",
+				(Invis && !See_invisible(u.ux, u.uy)) ? "feel" : "look",
 				OBJ_NAME(objects[uarm->otyp]));
 		ABON(A_CHA) += 2*(1 + uarm->spe);
 		flags.botl = 1;
@@ -1028,7 +1028,7 @@ boolean gone;
 		break;
 	case RIN_SEE_INVISIBLE:
 		/* Make invisible monsters go away */
-		if (!See_invisible) {
+		if (!See_invisible(u.ux, u.uy)) {
 		    set_mimic_blocking(); /* do special mimic handling */
 		    see_monsters();
 #ifdef INVISIBLE_OBJECTS                
@@ -1046,7 +1046,7 @@ boolean gone;
 		if (!Invis && !BInvis && !Blind) {
 		    newsym(u.ux,u.uy);
 		    Your("body seems to unfade%s.",
-			 See_invisible ? " completely" : "..");
+			 See_invisible(u.ux, u.uy) ? " completely" : "..");
 		    makeknown(RIN_INVISIBILITY);
 		}
 		break;

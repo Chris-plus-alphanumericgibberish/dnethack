@@ -1661,7 +1661,7 @@ register struct obj *obj;
 		if (!Blind && !Invis) {
 		    kn++;
 		    pline("For an instant you %s!",
-			See_invisible ? "could see right through yourself"
+			See_invisible(u.ux,u.uy) ? "could see right through yourself"
 			: "couldn't see yourself");
 		}
 		break;
@@ -2569,7 +2569,7 @@ dodip()
 	if (potion->otyp == POT_INVISIBILITY && !obj->oinvis) {
 		obj->oinvis = TRUE;
 		if (!Blind) {
-		    if (!See_invisible) pline("Where did %s go?",
+		    if (!See_invisible(u.ux,u.uy)) pline("Where did %s go?",
 		    		the(xname(obj)));
 		    else You("notice a little haziness around %s.",
 		    		the(xname(obj)));
@@ -2578,7 +2578,7 @@ dodip()
 	} else if (potion->otyp == POT_SEE_INVISIBLE && obj->oinvis) {
 		obj->oinvis = FALSE;
 		if (!Blind) {
-		    if (!See_invisible) pline("So that's where %s went!",
+		    if (!See_invisible(u.ux,u.uy)) pline("So that's where %s went!",
 		    		the(xname(obj)));
 		    else pline_The("haziness around %s disappears.",
 		    		the(xname(obj)));

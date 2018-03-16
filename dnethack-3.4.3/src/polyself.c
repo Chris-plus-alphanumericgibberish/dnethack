@@ -498,7 +498,7 @@ int	mntmp;
 	   !strcmp(s, "opera cloak") &&
 	   is_vampire(youracedata)) {
 		You("%s very impressive in your %s.", Blind ||
-				(Invis && !See_invisible) ? "feel" : "look",
+				(Invis && !See_invisible(u.ux,u.uy)) ? "feel" : "look",
 				OBJ_DESCR(objects[uarmc->otyp]));
 		ABON(A_CHA) += 1;
 		flags.botl = 1;
@@ -1139,7 +1139,7 @@ dogaze()
 		looked++;
 		if (Invis && !perceives(mtmp->data))
 		    pline("%s seems not to notice your gaze.", Monnam(mtmp));
-		else if (mtmp->minvis && !See_invisible)
+		else if (mtmp->minvis && !See_invisible(mtmp->mx,mtmp->my))
 		    You_cant("see where to gaze at %s.", Monnam(mtmp));
 		else if (mtmp->m_ap_type == M_AP_FURNITURE
 			|| mtmp->m_ap_type == M_AP_OBJECT) {
