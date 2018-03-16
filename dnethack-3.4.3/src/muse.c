@@ -1871,7 +1871,11 @@ struct monst *mtmp;
 	if(dist2(x, y, mtmp->mux, mtmp->muy) > 36)
 		return FALSE;
 
-	if (!stuck && !immobile && !mtmp->cham && monstr[monsndx(mdat)] < 6) {
+	if (!stuck && !immobile && !mtmp->cham 
+	&& (monstr[monsndx(mdat)] + (mtmp->m_lev - mdat->mlevel)) < 6 
+	&& !resists_poly(mtmp->data)
+	&& !resists_magm(mtmp)
+	) {
 	  boolean ignore_boulders = (verysmall(mdat) ||
 				     throws_rocks(mdat) ||
 				     passes_walls(mdat));
@@ -2240,8 +2244,9 @@ museamnesia:
 		place_monster(mtmp, trapx, trapy);
 		if (mtmp->wormno) worm_move(mtmp);
 		newsym(trapx, trapy);
-
-		if(!resists_poly(mtmp->data)) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
+		
+		if(resists_magm(mtmp)) shieldeff(mtmp->mx, mtmp->my);
+		else if(!resists_poly(mtmp->data)) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 		return 2;
 	case MUSE_BULLWHIP:
 		/* attempt to disarm hero */
