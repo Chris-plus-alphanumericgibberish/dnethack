@@ -182,7 +182,7 @@
 #define can_teleport(ptr)	(((ptr)->mflagsm & MM_TPORT) != 0L)
 #define control_teleport(ptr)	(((ptr)->mflagsm & MM_TPORT_CNTRL) != 0L)
 #define telepathic(ptr)		(((ptr)->mflagsv & MV_TELEPATHIC) != 0L)
-#define is_armed(ptr)		attacktype(ptr, AT_WEAP)
+#define is_armed(ptr)		(attacktype(ptr, AT_WEAP) || attacktype(ptr, AT_XWEP) || attacktype(ptr, AT_MARI) || attacktype(ptr, AT_DEVA))
 #define crpsdanger(ptr)		(acidic(ptr) || poisonous(ptr) ||\
 							 freezing(ptr) || burning(ptr))
 #define acidic(ptr)			(((ptr)->mflagsb & MB_ACID) != 0L)

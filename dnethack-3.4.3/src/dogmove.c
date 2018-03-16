@@ -119,7 +119,7 @@ boolean check_if_better;
 	    /* chains for some */
 		 ((mtmp->data == &mons[PM_CATHEZAR]) && otmp->otyp == IRON_CHAIN) ||
 	    /* better weapons */
-	     (attacktype(mtmp->data, AT_WEAP) &&
+	     (is_armed(mtmp->data) &&
 	      (otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) && 
 		   (!check_if_better ||
 		    mtmp->data == &mons[PM_MARILITH] ||
