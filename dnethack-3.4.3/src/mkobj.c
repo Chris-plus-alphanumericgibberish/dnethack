@@ -406,9 +406,9 @@ boolean artif;
 	else if(otyp == BAR) otmp->obj_material = IRON;
 	else if(otyp == VIPERWHIP) otmp->obj_material = SILVER;
 	else if(otyp == find_gcirclet()) otmp->obj_material = GOLD;
-	else if(otyp == SPEAR){if(!rn2(25)) otmp->obj_material = SILVER;}
-	else if(otyp == DAGGER){if(!rn2(12)) otmp->obj_material = SILVER;}
-	else if(otyp == STILETTOS){if(!rn2(12)) otmp->obj_material = SILVER;}
+	else if(otyp == SPEAR && !rn2(25)) otmp->obj_material = SILVER;
+	else if(otyp == DAGGER && !rn2(12)) otmp->obj_material = SILVER;
+	else if(otyp == STILETTOS && !rn2(12)) otmp->obj_material = SILVER;
 	else if(otyp == ARMORED_BOOTS) otmp->obj_material = COPPER;
 	else if(otyp == ROUNDSHIELD) otmp->obj_material = COPPER;
 	else if(otyp == LIGHTSABER) otmp->obj_material = SILVER;
