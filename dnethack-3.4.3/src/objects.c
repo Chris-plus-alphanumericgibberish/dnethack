@@ -628,7 +628,7 @@ SHIELD("orcish shield", "red-eyed shield",
 SHIELD("kite shield", (char *)0,
 		1, 0, 1, 0,	     6, 0,100, 10,  8, 1, IRON, HI_METAL),
 SHIELD("roundshield", "round shield",
-		0, 0, 1, 0,	     1, 0,120,  7,  8, 1, WOOD, HI_COPPER),
+		0, 0, 1, 0,	     1, 0,120,  7,  8, 1, METAL, HI_COPPER),
 SHIELD("dwarvish roundshield", "round shield",
 		0, 0, 0, 0,	     4, 0, 80, 10,  7, 1, IRON, HI_METAL),
 SHIELD("crystal shield", "glass shield", /*Needs encyc entry*//*Needs tile*/
