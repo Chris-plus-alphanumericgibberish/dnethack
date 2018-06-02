@@ -2263,7 +2263,7 @@ E int NDECL(dovspell);
 E void FDECL(initialspell, (struct obj *));
 E void FDECL(initialward, (struct obj *));
 E void FDECL(set_spirit_powers, (long));
-E void NDECL(reorder_spirit_powers);
+E int NDECL(reorder_spirit_powers);
 
 /* ### steal.c ### */
 
