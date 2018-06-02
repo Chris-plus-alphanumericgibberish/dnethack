@@ -247,6 +247,7 @@
 							 (ptr) == &mons[PM_DEMONIC_BLACK_WIDOW])
 #define is_vampire(ptr)		(((ptr)->mflagsa & MA_VAMPIRE) != 0L)
 #define is_half_dragon(ptr)		attacktype_fordmg(ptr, AT_BREA, AD_HDRG)
+#define is_boreal_dragoon(ptr)		(attacktype_fordmg(ptr, AT_WEAP, AD_HDRG) || attacktype_fordmg(ptr, AT_XWEP, AD_HDRG))
 #define is_elf(ptr)			(((ptr)->mflagsa & MA_ELF) != 0L && !is_drow(ptr))
 #define is_drow(ptr)		(((ptr)->mflagsa & MA_DROW) != 0L)
 #define is_dwarf(ptr)		(((ptr)->mflagsa & MA_DWARF) != 0L)
