@@ -30,6 +30,9 @@ struct attack {
 /*	Weight of a human body
  */
 
+#define WT_BEE	 	 1
+#define WT_DIMINUTIVE 10
+#define WT_ANT	 	 WT_DIMINUTIVE
 #define WT_TINY	 	 140
 #define WT_HOBBIT	 500
 #define WT_SMALL	 750
@@ -42,6 +45,9 @@ struct attack {
 #define WT_DRAGON 	4500
 #define WT_GIGANTIC	9000
 
+#define CN_BEE		 5
+#define CN_DIMINUTIVE 10
+#define CN_ANT		 CN_DIMINUTIVE
 #define CN_TINY		 100
 #define CN_GNOME	 100
 #define CN_HOBBIT	 200
