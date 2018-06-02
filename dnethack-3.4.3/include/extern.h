@@ -250,6 +250,7 @@ E int FDECL(artifact_detect, (struct obj *));
 E int FDECL(book_detect, (boolean));
 E int FDECL(monster_detect, (struct obj *,int));
 E int FDECL(pet_detect_and_tame, (struct obj *));
+E int FDECL(pet_detect_and_heal, (struct obj *));
 E int FDECL(trap_detect, (struct obj *));
 E const char *FDECL(level_distance, (d_level *));
 E int FDECL(use_crystal_ball, (struct obj *));
@@ -1325,6 +1326,7 @@ E void FDECL(unstuck, (struct monst *));
 E void FDECL(killed, (struct monst *));
 E void FDECL(xkilled, (struct monst *,int));
 E void FDECL(mon_to_stone, (struct monst*));
+E void FDECL(mon_to_gold, (struct monst*));
 E void FDECL(mnexto, (struct monst *));
 E void FDECL(monline, (struct monst *));
 E void FDECL(mofflin, (struct monst *));
@@ -1359,6 +1361,7 @@ E struct attack *FDECL(attacktype_fordmg, (struct permonst *,int,int));
 E boolean FDECL(attacktype, (struct permonst *,int));
 E int FDECL(attackindex, (struct permonst *,int,int));
 E boolean FDECL(poly_when_stoned, (struct permonst *));
+E boolean FDECL(poly_when_golded, (struct permonst *));
 E boolean FDECL(resists_drli, (struct monst *));
 E boolean FDECL(resists_oona, (struct monst *));
 E boolean FDECL(resists_fire, (struct monst *));
@@ -2009,6 +2012,7 @@ E void FDECL(show_region, (NhRegion*, XCHAR_P, XCHAR_P));
 E void FDECL(save_regions, (int,int));
 E void FDECL(rest_regions, (int,BOOLEAN_P));
 E NhRegion* FDECL(create_gas_cloud, (XCHAR_P, XCHAR_P, int, int));
+E NhRegion* FDECL(create_fog_cloud, (XCHAR_P, XCHAR_P, int, int));
 
 /* ### restore.c ### */
 
@@ -2392,6 +2396,7 @@ E int FDECL(mintrap, (struct monst *));
 E void FDECL(rloc_trap, (struct trap *));
 E void FDECL(instapetrify, (const char *));
 E void FDECL(minstapetrify, (struct monst *,BOOLEAN_P));
+E void FDECL(minstaglass, (struct monst *,BOOLEAN_P));
 E void FDECL(selftouch, (const char *));
 E void FDECL(mselftouch, (struct monst *,const char *,BOOLEAN_P));
 E void NDECL(float_up);
@@ -2639,6 +2644,7 @@ E int FDECL(weapon_type, (struct obj *));
 E int NDECL(uwep_skill_type);
 E int FDECL(weapon_hit_bonus, (struct obj *));
 E int FDECL(weapon_dam_bonus, (struct obj *));
+E int FDECL(skill_dam_bonus, (int));
 E void FDECL(skill_init, (const struct def_skill *));
 E void FDECL(skill_add, (const struct def_skill *));
 
