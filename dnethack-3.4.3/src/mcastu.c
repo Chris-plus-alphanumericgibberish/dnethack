@@ -568,6 +568,24 @@ unsigned int type;
 				return CURE_SELF;
 		}
 	break;
+	case PM_HALF_STONE_DRAGON:
+		switch (rn2(mtmp->m_lev)) {
+			default:/* 10 -> 29*/
+				return LIGHTNING;
+			case 9:
+			case 8:
+			case 7:
+			case 6:
+			case 5:
+				return MASS_CURE_CLOSE;
+			case 4:
+			case 3:
+			case 2:
+			case 1:
+			case 0:
+				return CURE_SELF;
+		}
+	break;
 	case PM_ELF_LADY:
 	case PM_ELVENQUEEN:
 		switch (rnd(6)) {
@@ -1639,55 +1657,60 @@ int spellnum;
     }
 	case SILVER_RAYS:{
 		int n = 0;
+		char * rays;
 		dmg = 0;
-		if(zap_hit(base_uac(), 0))
+		if(zap_hit(&youmonst, 0, TRUE))
 			n++;
-		if(zap_hit(base_uac(), 0))
+		if(zap_hit(&youmonst, 0, TRUE))
 			n++;
 		if(!n){
 			pline("Silver rays whiz past you!");
 			break;
 		}
+		if (n == 1)
+			rays = "a ray";
+		if (n >= 2)
+			rays = "rays";
 		if(hates_silver(youracedata)){
-			You("are seared by silver light!");
+			You("are seared by %s of silver light!", rays);
 			dmg = d(n*2,20);
 		} else if(!Fire_resistance && species_resists_cold(&youmonst)){
-			You("are burned by silver light!");
+			You("are burned by %s of silver light!", rays);
 			dmg = (d(n,20)*3+1)/2;
 			destroy_item(SCROLL_CLASS, AD_FIRE);
 			destroy_item(POTION_CLASS, AD_FIRE);
 			destroy_item(SPBOOK_CLASS, AD_FIRE);
 		} else if(!Cold_resistance && species_resists_fire(&youmonst)){
-			You("are frozen by silver light!");
+			You("are frozen by %s of silver light!", rays);
 			dmg = (d(n,20)*3+1)/2;
 			destroy_item(POTION_CLASS, AD_COLD);
 		} else if(hates_unholy(youracedata)){
-			You("are seared by unholy light!");
+			You("are seared by %s of unholy light!", rays);
 			dmg = d(n,20) + d(n,9);
 		} else if(hates_holy(youracedata)){
-			You("are seared by holy light!");
+			You("are seared by %s of holy light!", rays);
 			dmg = d(n,20) + d(n,7);
 		} else if(!Fire_resistance){
-			You("are burned by silver light!");
+			You("are burned by %s of silver light!", rays);
 			dmg = d(n,20);
 			destroy_item(SCROLL_CLASS, AD_FIRE);
 			destroy_item(POTION_CLASS, AD_FIRE);
 			destroy_item(SPBOOK_CLASS, AD_FIRE);
 		} else if(!Shock_resistance){
-			You("are shocked by silver light!");
+			You("are shocked by %s of silver light!", rays);
 			dmg = d(n,20);
 			destroy_item(WAND_CLASS, AD_ELEC);
 			destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
 		} else if(!Cold_resistance){
-			You("are frozen by silver light!");
+			You("are frozen by %s of silver light!", rays);
 			dmg = d(n,20);
 			destroy_item(POTION_CLASS, AD_COLD);
 		} else if(!Acid_resistance){
-			You("are burned by silver light!");
+			You("are burned by %s of silver light!", rays);
 			dmg = d(n,20);
 			destroy_item(POTION_CLASS, AD_FIRE);
 		} else {
-			You("are pierced by silver light!");
+			You("are pierced by %s of silver light!", rays);
 			dmg = 0;
 			if(u.uac < 0){
 				dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
