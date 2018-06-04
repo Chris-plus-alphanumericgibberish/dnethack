@@ -1932,8 +1932,9 @@ u_init()
 			Noble[NOB_SHOES].trspe = 1;
 		}
 		if(Race_if(PM_DWARF)) ini_inv(DwarfNoble);
-		if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend) 
+		if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend){
 			ini_inv(HDNoble);
+		}
 		else if(Race_if(PM_DROW) && flags.female){
 			DNoble[DNB_TWO_ARROWS].trquan = rn1(10, 50);
 			DNoble[DNB_ZERO_ARROWS].trquan = rn1(10, 30);
