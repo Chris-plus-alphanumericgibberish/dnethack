@@ -2347,6 +2347,8 @@ physical:{
 				y = rn2(3)-1;
 				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(EXPL_MAX));		//-1 is unspecified source. 8 is physical
 			}
+			if(DEADMONSTER(magr))
+				return MM_AGR_DIED;
 			tmp=0;
 		} break;
 /*		case AD_VMSL:	//vorlon missile.  triple damage

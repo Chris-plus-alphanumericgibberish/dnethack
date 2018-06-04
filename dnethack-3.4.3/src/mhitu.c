@@ -3508,6 +3508,8 @@ dopois:
 				y = rn2(3)-1;
 				explode(mtmp->mx+x, mtmp->my+y, 8, dmg, -1, rn2(EXPL_MAX));		//-1 is unspecified source. 8 is physical
 			}
+			if(DEADMONSTER(mtmp))
+				return 2;
 			dmg=0;
 		} break;
 ///////////////////////////////////////////////////////////////////////////////////////////
