@@ -264,6 +264,7 @@ static const char *haluMesg[] = {
 		"Kindly ignore my first three answers.",
 	"ALL POWER TO THE OLD FLESH!!!!!!! A HOWLING VOID UPON DETRACTORS!!!", /*Awful Hospital*/
 	"You are lost. You can never go home.", /* Gollum's Song */
+	"I am weak. Make... me... ideal.", /* Caress of Phyrexia */
 	"But now, we dance this grim fandango, and will for years until we rest.", /* Grim Fandango */
 	"Bad Wolf", /* Dr. Who */
 	"It's only the end if you want it to be.", /*Batgirl*/
