@@ -2664,7 +2664,7 @@ register struct trobj *trop;
 				fix_object(obj);
 			}
 			if(obj->otyp == SCALE_MAIL && Role_if(PM_ANACHRONONAUT)){
-				obj->obj_material = COPPER; // which is actually bronze nice one Chris
+				obj->obj_material = COPPER;
 				fix_object(obj);
 			}
 			if(obj->otyp == GAUNTLETS && Role_if(PM_ANACHRONONAUT)){
