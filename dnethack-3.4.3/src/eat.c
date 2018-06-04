@@ -510,10 +510,10 @@ register struct obj *otmp;
 			}
 		}
 		else if(otmp->otyp == CANDY_BAR){
-			if(!rn2(100)){
+			if(!rn2(10)){
 				You("find this candy bar to be of rare quality!");
-			    otmp->oeaten = 10 * objects[otmp->otyp].oc_nutrition;
-				pluslvl(FALSE);/*first bite gives level up, also has a lot of nutriton*/
+			    // otmp->oeaten = 10 * objects[otmp->otyp].oc_nutrition;
+				pluslvl(FALSE);/*first bite gives level up, also has a lot of nutrition*/
 
 			    if(((!carried(otmp) && costly_spot(otmp->ox, otmp->oy) &&
 				 !otmp->no_charge)
