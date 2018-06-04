@@ -832,7 +832,7 @@ karemade:
 #endif
 		    {
 			moveamt = youmonst.data->mmove;
-			if(!Upolyd && Race_if(PM_HALF_DRAGON)) moveamt = (moveamt*2)/3;
+			if(!Upolyd && Race_if(PM_HALF_DRAGON) && !(Role_if(PM_NOBLEMAN) && flags.initgend)) moveamt = (moveamt*2)/3;
 			if(uarmf && uarmf->otyp == STILETTOS && !Flying && !Levitation) moveamt = (moveamt*5)/6;
 			
 			if(u.sealsActive&SEAL_EURYNOME && IS_PUDDLE_OR_POOL(levl[u.ux][u.uy].typ)){
