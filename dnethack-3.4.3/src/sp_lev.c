@@ -968,6 +968,33 @@ struct mkroom	*croom;
 	if (o->corpsenm == NON_PM - 1) otmp->corpsenm = rndmonnum();
 	else if (o->corpsenm != NON_PM) otmp->corpsenm = o->corpsenm;
 
+	if(otmp->corpsenm == PM_CROW_WINGED_HALF_DRAGON){
+		struct obj *tmpo;
+		
+		otmp->oeroded = 1;
+		
+		tmpo = mksobj_at(GAUNTLETS, x, y, FALSE, FALSE);
+		tmpo->obj_material = SILVER;
+		tmpo->objsize = MZ_LARGE;
+		fix_object(tmpo);
+		tmpo->spe = +5;
+		
+		tmpo = mksobj_at(HELMET, x, y, FALSE, FALSE);
+		tmpo->obj_material = SILVER;
+		tmpo->objsize = MZ_LARGE;
+		fix_object(tmpo);
+		tmpo->spe = +5;
+		
+		tmpo = mksobj_at(GENTLEWOMAN_S_DRESS, x, y, FALSE, FALSE);
+		tmpo->objsize = MZ_LARGE;
+		fix_object(tmpo);
+		tmpo->spe = +5;
+		
+		tmpo = mksobj_at(SPEAR, x, y, FALSE, FALSE);
+		tmpo = oname(tmpo, artiname(ART_YORSHKA_S_SPEAR));
+		tmpo->spe = +5;
+	}
+	
 	/* assume we wouldn't be given an egg corpsenm unless it was
 	   hatchable */
 	if (otmp->otyp == EGG && otmp->corpsenm != NON_PM) {
