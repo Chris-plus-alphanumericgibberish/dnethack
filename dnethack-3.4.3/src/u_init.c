@@ -1972,7 +1972,7 @@ u_init()
 			otmp = mksobj(CROSSBOW_BOLT, TRUE, FALSE);
 			otmp->quan = rn1(12, 16);
 			otmp->spe = otmp->cursed = otmp->blessed = 0;
-			otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+			otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 			addinv(otmp);
 			ini_inv(BlackTorches);
 		}
@@ -2237,12 +2237,12 @@ u_init()
 		otmp = mksobj(CLUB, TRUE, FALSE);
 		otmp->spe = otmp->cursed = otmp->blessed = 0;
 		if(Role_if(PM_EXILE)) otmp->dknown = otmp->rknown = otmp->sknown = 1;
-		else otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+		else otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 		addinv(otmp);
 		otmp = mksobj(KNIFE, TRUE, FALSE);
 		otmp->spe = otmp->cursed = otmp->blessed = 0;
 		if(Role_if(PM_EXILE)) otmp->dknown = otmp->rknown = otmp->sknown = 1;
-		else otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
+		else otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = otmp->sknown = 1;
 		addinv(otmp);
 		u.wardsknown |= WARD_TOUSTEFNA;
 		u.wardsknown |= WARD_DREPRUN;
