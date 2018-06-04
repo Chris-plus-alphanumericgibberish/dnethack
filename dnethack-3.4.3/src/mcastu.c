@@ -2845,6 +2845,7 @@ struct monst *mtmp;
 int spellnum;
 {
 	int wardAt = ward_at(mtmp->mux,mtmp->muy);
+	struct monst *tmpm;
     /* Some spells don't require the player to really be there and can be cast
      * by the monster when you're invisible, yet still shouldn't be cast when
      * the monster doesn't even think you're there.
@@ -2952,6 +2953,36 @@ int spellnum;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
 	    return TRUE;
+	if (mtmp->mhp == mtmp->mhpmax && spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR){
+		if(mtmp->mtame && (Upolyd ? (u.mh < u.mhmax) : (u.uhp < u.uhpmax)))
+			return FALSE;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if((mtmp->mtame == tmpm->mtame || mtmp->mpeaceful == tmpm->mpeaceful)
+			&& !mm_aggression(mtmp, tmpm)
+			&& tmpm->mhp < tmpm->mhpmax
+			) return FALSE;
+		}
+		return TRUE;
+	}
+	/* protection when no foes are nearby and not weakened */
+	if (spellnum == MON_PROTECTION){
+		if(mtmp->mhp < mtmp->mhpmax)
+			return FALSE;
+		if(!mtmp->mtame && !mtmp->mpeaceful)
+			return FALSE;
+		if(mtmp->mtame && (Upolyd ? (u.mh < u.mhmax) : (u.uhp < u.uhpmax)) && dist2(u.ux,u.uy,mtmp->mx,mtmp->my) <= 3*3+1)
+			return FALSE;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(mtmp->mtame == tmpm->mtame || mtmp->mpeaceful == tmpm->mpeaceful){
+				if( !mm_aggression(mtmp, tmpm)
+				&& tmpm->mhp < tmpm->mhpmax
+				&& dist2(u.ux,u.uy,mtmp->mx,mtmp->my) <= 3*3+1
+				) return FALSE;
+			} else if(mtmp->mtame != tmpm->mtame && mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) <= 5)
+				return FALSE;
+		}
+		return TRUE;
+	}
 	/* healing when stats are ok */
 	if (spellnum == RECOVER && !(mtmp->mcan || mtmp->mcrazed || 
 								!mtmp->mcansee || !mtmp->mcanmove || 
@@ -3190,6 +3221,7 @@ struct monst *mdef;
 int spellnum;
 {
 	int wardAt = ward_at(mdef->mx, mdef->my);
+	struct monst *tmpm;
 	
 	/*Don't cast at warded spaces*/
 	if(onscary(mdef->mx, mdef->my, mtmp) && !is_undirected_spell(spellnum))
@@ -3217,6 +3249,17 @@ int spellnum;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
 	    return TRUE;
+	if (mtmp->mhp == mtmp->mhpmax && spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR){
+		if(mtmp->mtame && (Upolyd ? (u.mh < u.mhmax) : (u.uhp < u.uhpmax)))
+			return FALSE;
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if((mtmp->mtame == tmpm->mtame || mtmp->mpeaceful == tmpm->mpeaceful)
+			&& !mm_aggression(mtmp, tmpm)
+			&& tmpm->mhp < tmpm->mhpmax
+			) return FALSE;
+		}
+		return TRUE;
+	}
 	/* healing when stats are ok */
 	if (spellnum == RECOVER && !(mtmp->mcan || mtmp->mcrazed || 
 								!mtmp->mcansee || !mtmp->mcanmove || 
@@ -3248,6 +3291,7 @@ uspell_would_be_useless(mdef, spellnum)
 struct monst *mdef;
 int spellnum;
 {
+	struct monst *tmpm;
 	/* do not check for wards on target if given no target */
 	if (mdef)
 	{
@@ -3275,6 +3319,14 @@ int spellnum;
 	/* healing when already healed */
 	if (u.mh == u.mhmax && spellnum == CURE_SELF)
 	    return TRUE;
+	if (u.mh == u.mhmax && spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR){
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(tmpm->mtame
+			&& tmpm->mhp < tmpm->mhpmax
+			) return FALSE;
+		}
+		return TRUE;
+	}
 #ifndef TAME_SUMMONING
         if (spellnum == SUMMON_MONS)
 	    return TRUE;
@@ -4256,14 +4308,15 @@ uspsibolt:
     }
 	case SILVER_RAYS:{
 		int n = 0;
+		char * rays;
 		dmg = 0;
 		if (!mtmp || mtmp->mhp < 1) {
 			impossible("silver rays spell with no mtmp");
 			return;
 		}
-		if(zap_hit(base_mac(mtmp), 0))
+		if(zap_hit(mtmp, 0, TRUE))
 			n++;
-		if(zap_hit(base_mac(mtmp), 0))
+		if(zap_hit(mtmp, 0, TRUE))
 			n++;
 		if(!n){
 			if (yours || canseemon(mtmp))
@@ -4271,66 +4324,70 @@ uspsibolt:
 					  mon_nam(mtmp));
 			break;
 		}
+		if (n == 1)
+			rays = "a ray";
+		if (n >= 2)
+			rays = "rays";
 		if(hates_silver(mtmp->data)){
 			if (yours || canseemon(mtmp))
-				pline("%s is seared by silver light!",
-					  Monnam(mtmp));
+				pline("%s is seared by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n*2,20);
 		} else if(!resists_fire(mtmp) && species_resists_cold(mtmp)){
 			if (yours || canseemon(mtmp))
-				pline("%s is burned by silver light!",
-					  Monnam(mtmp));
+				pline("%s is burned by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = (d(n,20)*3+1)/2;
 			destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
 			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
 			destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
 		} else if(!resists_cold(mtmp) && species_resists_fire(mtmp)){
 			if (yours || canseemon(mtmp))
-				pline("%s is frozen by silver light!",
-					  Monnam(mtmp));
+				pline("%s is frozen by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = (d(n,20)*3+1)/2;
 			destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
 		} else if(hates_unholy(mtmp->data)){
 			if (yours || canseemon(mtmp))
-				pline("%s is seared by unholy light!",
-					  Monnam(mtmp));
+				pline("%s is seared by %s of unholy light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n,20) + d(n,9);
 		} else if(hates_holy_mon(mtmp)){
 			if (yours || canseemon(mtmp))
-				pline("%s is seared by holy light!",
-					  Monnam(mtmp));
+				pline("%s is seared by %s of holy light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n,20) + d(n,7);
 		} else if(!resists_fire(mtmp)){
 			if (yours || canseemon(mtmp))
-				pline("%s is burned by silver light!",
-					  Monnam(mtmp));
+				pline("%s is burned by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n,20);
 			destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
 			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
 			destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
 		} else if(!resists_elec(mtmp)){
 			if (yours || canseemon(mtmp))
-				pline("%s is shocked by silver light!",
-					  Monnam(mtmp));
+				pline("%s is shocked by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n,20);
 			destroy_mitem(mtmp, WAND_CLASS, AD_ELEC);
 			destroy_mitem(mtmp, RING_CLASS, AD_ELEC);
 		} else if(!resists_cold(mtmp)){
 			if (yours || canseemon(mtmp))
-				pline("%s is frozen by silver light!",
-					  Monnam(mtmp));
+				pline("%s is frozen by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n,20);
 			destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
 		} else if(!resists_acid(mtmp)){
 			if (yours || canseemon(mtmp))
-				pline("%s is burned by silver light!",
-					  Monnam(mtmp));
+				pline("%s is burned by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n,20);
 			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
 		} else {
 			if (yours || canseemon(mtmp))
-				pline("%s is pierced by silver light!",
-					  Monnam(mtmp));
+				pline("%s is pierced by %s of silver light!",
+					  Monnam(mtmp), rays);
 			dmg = d(n, 20);
 		}
 	}break;
