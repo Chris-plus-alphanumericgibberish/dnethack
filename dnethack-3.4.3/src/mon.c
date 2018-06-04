@@ -213,6 +213,8 @@ STATIC_VAR int cham_to_pm[] = {
 			 is_reviver((mon)->data) ||			\
 			 ((mon)->mfaction == ZOMBIFIED) ||			\
 			 ((mon)->zombify) ||			\
+			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
+			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
 			 /* normally leader the will be unique, */	\
 			 /* but he might have been polymorphed  */	\
 			 (mon)->m_id == quest_status.leader_m_id ||	\
