@@ -176,7 +176,7 @@ does_block(x,y,lev)
 	if (is_boulder(obj)) return 1;
 
     /* Mimics mimicing a door or boulder block light. */
-    if ((mon = m_at(x,y)) && (!mon->minvis || See_invisible) &&
+    if ((mon = m_at(x,y)) && (!mon->minvis || See_invisible(x,y)) &&
 		(opaque(mon->data)  ||
 			((mon->m_ap_type == M_AP_FURNITURE &&
 			(mon->mappearance == S_hcdoor || mon->mappearance == S_vcdoor)) ||
