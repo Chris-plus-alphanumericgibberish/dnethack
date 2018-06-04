@@ -4717,6 +4717,7 @@ int spell;
 		if(uwep->oartifact == ART_TENTACLE_ROD
 			|| uwep->oartifact == ART_ARYFAERN_KERYM
 			|| uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC
+			|| uwep->oartifact == ART_PROFANED_GREATSCYTHE
 			|| uwep->oartifact == ART_GARNET_ROD
 		) splcaster -= urole.spelarmr;
 		else if(uwep->otyp == KHAKKHARA) splcaster -= uwep->oartifact ? 2*urole.spelarmr : urole.spelarmr;
