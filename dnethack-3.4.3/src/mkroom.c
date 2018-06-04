@@ -185,6 +185,7 @@ mkmivault()
 	int x,y,tries=0;
 	int i,j;
 	struct obj *otmp;
+	struct obj *otmp2;
 	struct monst *mon;
 	boolean good=FALSE,okspot;
 	while(!good && tries < 50){
@@ -223,6 +224,65 @@ mkmivault()
 			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
 			
 			mon = makemon(mivaultmon(), x+rnd(2)+1, y+rnd(2)+1, 0);
+			// lovecraft monsters
+			if (mon->data == &mons[PM_SHOGGOTH] || mon->data == &mons[PM_NIGHTGAUNT]
+					|| mon->data == &mons[PM_DARK_YOUNG] || mon->data == &mons[PM_HUNTING_HORROR] || mon->data == &mons[PM_HUNTING_HORROR_TAIL]){
+				otmp2 = mksobj(FIGURINE, TRUE, FALSE);
+				switch(rn2(4)){
+					case 0:					
+						otmp2->corpsenm = PM_DARK_YOUNG;
+					break;
+					case 1:
+						otmp2->corpsenm = PM_SHOGGOTH;
+						if(rn2(5)){
+							otmp2->corpsenm = PM_PRIEST_OF_GHAUNADAUR;
+						}
+					break;
+					case 2:
+						otmp2->corpsenm = PM_DARKNESS_GIVEN_HUNGER;
+					break;
+					case 3:
+						otmp2->corpsenm = PM_MASTER_MIND_FLAYER;
+					break;
+					case 4:
+						otmp2->corpsenm = PM_DEEPEST_ONE;
+					break;
+				}
+				bless(otmp2);
+				add_to_container(otmp, otmp2);
+			}
+			// clockworks
+			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_HOOLOOVOO] 
+					|| mon->data == &mons[PM_SCRAP_TITAN] || mon->data == &mons[PM_HELLFIRE_COLOSSUS]){
+				if (rn2(2)){
+					add_to_container(otmp, mksobj(SUBETHAIC_COMPONENT, TRUE, FALSE));
+				} else {
+					add_to_container(otmp, mksobj(SCRAP, TRUE, FALSE));
+				}
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+			}
+			// spellcasters
+			else if (mon->data == &mons[PM_TITAN] || mon->data == &mons[PM_EYE_OF_DOOM] 
+					|| mon->data == &mons[PM_PRIEST_OF_GHAUNADAUR] || mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+						|| mon->data == &mons[PM_SERPENT_MAN_OF_YOTH]){
+				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+			}
 			mon->mstrategy |= STRAT_WAITFORU;
 			mon->mpeaceful = FALSE;
 			set_malign(mon);
@@ -264,6 +324,7 @@ mkmivaultlolth()
 	int x,y,tries=0;
 	int i,j;
 	struct obj *otmp;
+	struct obj *otmp2;
 	struct monst *mon;
 	boolean good=FALSE,okspot;
 	while(!good && tries < 50){
@@ -301,6 +362,65 @@ mkmivaultlolth()
 			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
 			
 			mon = makemon(mivaultmon(), x+rnd(2), y+rnd(2), 0);
+			// lovecraft monsters
+			if (mon->data == &mons[PM_SHOGGOTH] || mon->data == &mons[PM_NIGHTGAUNT] 
+				|| mon->data == &mons[PM_DARK_YOUNG] || mon->data == &mons[PM_HUNTING_HORROR] || mon->data == &mons[PM_HUNTING_HORROR_TAIL]){
+				otmp2 = mksobj(FIGURINE, TRUE, FALSE);
+				switch(rn2(4)){
+					case 0:					
+						otmp2->corpsenm = PM_DARK_YOUNG;
+					break;
+					case 1:
+						otmp2->corpsenm = PM_SHOGGOTH;
+						if(rn2(5)){
+							otmp2->corpsenm = PM_PRIEST_OF_GHAUNADAUR;
+						}
+					break;
+					case 2:
+						otmp2->corpsenm = PM_DARKNESS_GIVEN_HUNGER;
+					break;
+					case 3:
+						otmp2->corpsenm = PM_MASTER_MIND_FLAYER;
+					break;
+					case 4:
+						otmp2->corpsenm = PM_DEEPEST_ONE;
+					break;
+				}
+				bless(otmp2);
+				add_to_container(otmp, otmp2);
+			}
+			// clockworks
+			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_HOOLOOVOO] 
+					|| mon->data == &mons[PM_SCRAP_TITAN] || mon->data == &mons[PM_HELLFIRE_COLOSSUS]){
+				if (rn2(2)){
+					add_to_container(otmp, mksobj(SUBETHAIC_COMPONENT, TRUE, FALSE));
+				} else {
+					add_to_container(otmp, mksobj(SCRAP, TRUE, FALSE));
+				}
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
+			}
+			// spellcasters
+			else if (mon->data == &mons[PM_TITAN] || mon->data == &mons[PM_EYE_OF_DOOM] 
+					|| mon->data == &mons[PM_PRIEST_OF_GHAUNADAUR] || mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+						|| mon->data == &mons[PM_SERPENT_MAN_OF_YOTH]){
+				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+				if (rn2(2)) add_to_container(otmp, mkobj(SCROLL_CLASS, FALSE));
+			}
 			mon->mstrategy |= STRAT_WAITFORU;
 			mon->mpeaceful = FALSE;
 			set_malign(mon);
