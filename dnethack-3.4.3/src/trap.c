@@ -3820,7 +3820,7 @@ static int webxprime = 0, webyprime = 0;
 
 void
 dowebgush(cx,cy,radius)
-	int cx,cy;
+	int cx,cy,radius;
 {
 	int madeweb = 0;
 	
