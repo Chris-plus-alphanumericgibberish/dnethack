@@ -2336,7 +2336,7 @@ struct obj *otmp;
 	
 	
 	// if (Upolyd || otmp == uswapwep) return(0);
-	if (otmp == uswapwep) return (str < 6) ? (-6+str) : 0;
+	if (uswapwep && otmp == uswapwep) return (str < 6) ? (-6+str) : 0;
 	
 	if (str < 6) bonus = -6+str;
 	else if (str < 16) bonus = 0;
@@ -2349,18 +2349,40 @@ struct obj *otmp;
 	else if (str < STR19(25)) bonus = 7;
 	else /*  str ==25*/bonus = 8;
 	
-	if(otmp && (bimanual(otmp,youracedata) ||
+	if(otmp){
+		if((bimanual(otmp,youracedata) ||
 		(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
-	)) bonus *= 2;
+		)) bonus *= 2;
 	
-	if(uwep && otmp==uwep && (otmp->otyp==RAPIER || (otmp->otyp == LIGHTSABER && otmp->oartifact != ART_ANNULUS && otmp->ovar1 == 0))){
-		int dex = ACURR(A_DEX);
+		if(otmp==uwep 
+		&& (otmp->otyp==RAPIER 
+			|| (otmp->otyp == LIGHTSABER && otmp->oartifact != ART_ANNULUS && otmp->ovar1 == 0)
+			|| otmp->oartifact == ART_LIFEHUNT_SCYTHE
+			|| otmp->oartifact == ART_FRIEDE_S_SCYTHE
+		)){
 		bonus/=2; /*Half strength bonus/penalty*/
 		
-		bonus += (dex-11)/2;
+			if(ACURR(A_DEX)) bonus += 8;
+			else bonus += (ACURR(A_DEX)-10)/2;
+		}
+		
+		if(otmp->oartifact == ART_YORSHKA_S_SPEAR){
+			if(ACURR(A_WIS)) bonus += 8;
+			else bonus += (ACURR(A_WIS)-10)/2;
+			if(ACURR(A_DEX)) bonus += 8;
+			else bonus += (ACURR(A_DEX)-10)/2;
+		}
+		
+		if(otmp->oartifact == ART_FRIEDE_S_SCYTHE){
+			if(ACURR(A_INT)) bonus += 8;
+			else bonus += (ACURR(A_INT)-10)/2;
+		}
 	}
 	
-	if(u.sealsActive&SEAL_DANTALION) bonus += max(0,(ACURR(A_INT)-10)/2);
+	if(u.sealsActive&SEAL_DANTALION){
+		if(ACURR(A_INT)) bonus += 8;
+		else bonus += max(0,(ACURR(A_INT)-10)/2);
+	}
 	return bonus;
 }
 
@@ -2810,25 +2832,36 @@ struct obj *obj;
 	    obj->oclass != GEM_CLASS)
 		/* Not a weapon, weapon-tool, or ammo */
 		return (P_NONE);
-	if(obj && obj->oartifact && obj->oartifact == ART_SUNSWORD){
+	if(obj){
+		if(obj->oartifact == ART_SUNSWORD){
 		if(P_SKILL(P_LONG_SWORD) > P_SKILL(P_SHORT_SWORD))
 			type = P_LONG_SWORD;
-		else type = P_SHORT_SWORD;
-	}
-	else if(obj && obj->otyp == DOUBLE_LIGHTSABER && !obj->altmode){
+			else if(P_MAX_SKILL(P_LONG_SWORD) > P_MAX_SKILL(P_SHORT_SWORD))
+				type = P_LONG_SWORD;
+			else type = P_SHORT_SWORD;
+		}
+		else if(obj->oartifact == ART_YORSHKA_S_SPEAR){
+			if(P_SKILL(P_HAMMER) > P_SKILL(P_SPEAR))
+				type = P_HAMMER;
+			else if(P_MAX_SKILL(P_HAMMER) > P_MAX_SKILL(P_SPEAR))
+				type = P_HAMMER;
+			else type = P_SPEAR;
+		}
+		else if(obj->otyp == DOUBLE_LIGHTSABER && !obj->altmode){
 		if(P_SKILL(P_BROAD_SWORD) > P_SKILL(P_QUARTERSTAFF))
 			type = P_BROAD_SWORD;
 		else if(P_MAX_SKILL(P_BROAD_SWORD) > P_MAX_SKILL(P_QUARTERSTAFF))
 			type = P_BROAD_SWORD;
 		else type = P_QUARTERSTAFF;
-	}
-	else if(obj && obj->oartifact && obj->oartifact == ART_TORCH_OF_ORIGINS){
-		type = P_CLUB;
-	}
-	else if(obj && obj->otyp >= LUCKSTONE && obj->otyp <= ROCK && obj->ovar1){
-		type = (int)obj->ovar1;
-	}
-	else type = objects[obj->otyp].oc_skill;
+		}
+		else if(obj->oartifact == ART_TORCH_OF_ORIGINS){
+			type = P_CLUB;
+		}
+		else if(obj->otyp >= LUCKSTONE && obj->otyp <= ROCK && obj->ovar1){
+			type = (int)obj->ovar1;
+		}
+		else type = objects[obj->otyp].oc_skill;
+	} else type = objects[obj->otyp].oc_skill;
 	return ((type < 0) ? -type : type);
 }
 
