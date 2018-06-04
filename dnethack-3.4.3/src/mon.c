@@ -4613,7 +4613,8 @@ xkilled(mtmp, dest)
 	if(redisp) newsym(x,y);
 cleanup:
 	/* punish bad behaviour */
-	if(is_human(mdat) && !(u.sealsActive&SEAL_MALPHAS) && (!always_hostile_mon(mtmp) && mtmp->malign <= 0) &&
+	if(is_human(mdat) && !is_derived_undead_mon(mtmp) && 
+	  !(u.sealsActive&SEAL_MALPHAS) && (!always_hostile_mon(mtmp) && mtmp->malign <= 0) &&
 	   (mndx < PM_ARCHEOLOGIST || mndx > PM_WIZARD) &&
 	   u.ualign.type != A_CHAOTIC) {
 		HTelepat &= ~INTRINSIC;
@@ -4626,6 +4627,7 @@ cleanup:
 	}
 	if((mtmp->mpeaceful && !rn2(2)) || mtmp->mtame)	change_luck(-1);
 	if (is_unicorn(mdat) &&
+	   !is_derived_undead_mon(mtmp) &&
 		sgn(u.ualign.type) == sgn(mdat->maligntyp) && 
 		u.ualign.type != A_VOID
 	) {
@@ -4640,7 +4642,7 @@ cleanup:
 	newexplevel();		/* will decide if you go up */
 
 	/* adjust alignment points */
-	if (mtmp->m_id == quest_status.leader_m_id) {
+	if (mtmp->m_id == quest_status.leader_m_id && !is_derived_undead_mon(mtmp)) {
 		if(flags.leader_backstab){ /* They attacked you! */
 			adjalign((int)(ALIGNLIM/4));
 			// pline("That was %sa bad idea...",
@@ -4654,12 +4656,12 @@ cleanup:
 	} else if (mdat->msound == MS_NEMESIS){	/* Real good! */
 	    adjalign((int)(ALIGNLIM/4));
 		u.hod = max(u.hod-10,0);
-	} else if (mdat->msound == MS_GUARDIAN && mdat != &mons[PM_THUG]) {	/* Bad *//*nobody cares if you kill thugs*/
+	} else if (mdat->msound == MS_GUARDIAN && mdat != &mons[PM_THUG] && !is_derived_undead_mon(mtmp)) {	/* Bad *//*nobody cares if you kill thugs*/
 	    adjalign(-(int)(ALIGNLIM/8));											/*what's a little murder amongst rogues?*/
 		u.hod += 10;
 	    if (!Hallucination) pline("That was probably a bad idea...");
 	    else pline("Whoopsie-daisy!");
-	}else if (mtmp->ispriest) {
+	}else if (mtmp->ispriest && !is_derived_undead_mon(mtmp)) {
 		adjalign((p_coaligned(mtmp)) ? -2 : 2);
 		/* cancel divine protection for killing your priest */
 		if (p_coaligned(mtmp)) u.ublessed = 0;
