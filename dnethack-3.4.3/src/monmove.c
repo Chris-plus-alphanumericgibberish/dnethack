@@ -717,7 +717,7 @@ boolean fleemsg;
 	if(mtmp->data == &mons[PM_VROCK]){
 		struct monst *tmpm;
 		if(!(mtmp->mspec_used || mtmp->mcan)){
-			pline("%s screeches.", Monnam(mtmp), hisherits(mtmp));
+			pline("%s screeches.", Monnam(mtmp));
 			mtmp->mspec_used = 10;
 			for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 				if(tmpm != mtmp && !DEADMONSTER(tmpm)){
