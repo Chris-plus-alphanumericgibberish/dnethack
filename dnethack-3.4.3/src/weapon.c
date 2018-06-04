@@ -3354,6 +3354,108 @@ struct obj *weapon;
 }
 
 /*
+ * Return damage bonus/penalty based on skill.
+ * Treat restricted weapons as unskilled.
+ */
+int
+skill_dam_bonus(type)
+int type;
+{
+    int bonus = 0;
+
+    /* use two weapon skill only if attacking with one of the wielded weapons */
+	
+    if (type == P_NONE) {
+		bonus = 0;
+    } else if (type <= P_LAST_WEAPON) {
+		switch (P_SKILL(type)) {
+			default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type));
+				 /* fall through */
+			case P_ISRESTRICTED:	bonus = -5; break;
+			case P_UNSKILLED:	bonus = -2; break;
+			case P_BASIC:	bonus =  0; break;
+			case P_SKILLED:	bonus =  2; break;
+			case P_EXPERT:	bonus =  5; break;
+		}
+	} else if (type == P_TWO_WEAPON_COMBAT) {
+		switch (P_SKILL(type)) {
+			default:
+			case P_ISRESTRICTED:
+			case P_UNSKILLED:	bonus = -5; break;
+			case P_BASIC:	bonus = -3; break;
+			case P_SKILLED:	bonus = -1; break;
+			case P_EXPERT:	bonus =  0; break;
+		}
+    } else if (type == P_BARE_HANDED_COMBAT) {
+		if(martial_bonus()){
+			switch(P_SKILL(type)){
+				default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type)); /* fall through */
+				case P_ISRESTRICTED:	bonus = -2; break;
+				case P_UNSKILLED:   	bonus = +1; break;
+				case P_BASIC:			bonus = +3; break;
+				case P_SKILLED:			bonus = +4; break;
+				case P_EXPERT:			bonus = +5; break;
+				case P_MASTER:			bonus = +7; break;
+				case P_GRAND_MASTER:	bonus = +9; break;
+			}
+		} else {
+			switch(P_SKILL(type)){
+				default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type)); /* fall through */
+				case P_ISRESTRICTED:	bonus = -4; break;
+				case P_UNSKILLED:   	bonus = -2; break;
+				case P_BASIC:			bonus =  0; break;
+				case P_SKILLED:			bonus = +1; break;
+				case P_EXPERT:			bonus = +2; break;
+				case P_MASTER:			bonus = +3; break;
+				case P_GRAND_MASTER:	bonus = +4; break;
+			}
+		}
+    }
+	
+	if(type == P_TWO_WEAPON_COMBAT){
+		int maxweight;
+		/* Sporkhack:
+		 * Heavy things are hard to use in your offhand unless you're
+		 * very good at what you're doing.
+		 *
+		 * No real need to restrict unskilled here since knives and such
+		 * are very hard to find and people who are restricted can't
+		 * #twoweapon even at unskilled...
+		 */
+		switch (P_SKILL(P_TWO_WEAPON_COMBAT)) {
+			default:
+			case P_ISRESTRICTED:
+			case P_UNSKILLED:	 maxweight = 10; break;	 /* not silver daggers */
+			case P_BASIC:		 maxweight = 20; break;	 /* daggers, crysknife, sickle, aklys, flail, bullwhip, unicorn horn */
+			case P_SKILLED:	 	 maxweight = 30; break;	 /* shortswords and spears (inc silver), mace, club, lightsaber, grappling hook */
+			case P_EXPERT:		 maxweight = 40; break;	 /* sabers and long swords, axe weighs 60, war hammer 50, pickaxe 80, beamsword */
+			case P_MASTER:		 maxweight = 50; break;	 /* war hammer */
+			case P_GRAND_MASTER: maxweight = 60; break;	 /* axe */
+		}
+		if (uswapwep && uswapwep->owt > maxweight && uswapwep->oartifact != ART_FRIEDE_S_SCYTHE) {
+			bonus += max(-20, -5 * (uswapwep->owt-maxweight)/maxweight);
+		}
+	}
+
+#ifdef STEED
+	/* KMH -- Riding gives some thrusting damage */
+	if (u.usteed && type != P_TWO_WEAPON_COMBAT) {
+		switch (P_SKILL(P_RIDING)) {
+		    case P_ISRESTRICTED:
+		    case P_UNSKILLED:   break;
+		    case P_BASIC:       break;
+		    case P_SKILLED:     bonus += 2; break;
+		    case P_EXPERT:      bonus += 5; break;
+		}
+	}
+#endif
+
+	if(type == P_AXE && Race_if(PM_DWARF) && ublindf && ublindf->oartifact == ART_WAR_MASK_OF_DURIN) bonus += 5;
+	
+	return bonus;
+}
+
+/*
  * Initialize weapon skill array for the game.  Start by setting all
  * skills to restricted, then set the skill for every weapon the
  * hero is holding, finally reading the given array that sets
