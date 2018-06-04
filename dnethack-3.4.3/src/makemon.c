@@ -612,8 +612,7 @@ register struct monst *mtmp;
 				otmp->cursed = FALSE;
 				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
-			}
-			else if(ptr == &mons[PM_SHATTERED_ZIGGURAT_CULTIST]) {
+			} else if(ptr == &mons[PM_SHATTERED_ZIGGURAT_CULTIST]) {
 			    otmp = mksobj(TORCH, FALSE, FALSE);
 				otmp->age = (long) rn1(500,1000);
 			    (void) mpickobj(mtmp, otmp);
