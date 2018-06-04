@@ -1073,7 +1073,8 @@ register const char *let,*word;
 		     (otmp->oclass == POTION_CLASS &&
 		     /* only applicable potion is oil, and it will only
 			be offered as a choice when already discovered */
-		     (otyp != POT_OIL || !otmp->dknown ||
+		     ((otyp != POT_OIL &&
+			 otyp != POT_WATER) || !otmp->dknown ||
 		      !objects[POT_OIL].oc_name_known)) ||
 		     (otmp->oclass == FOOD_CLASS &&
 		      otyp != CREAM_PIE && otyp != EUCALYPTUS_LEAF) ||
