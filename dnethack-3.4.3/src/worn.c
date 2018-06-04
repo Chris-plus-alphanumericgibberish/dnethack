@@ -17,6 +17,7 @@ const static int BLUE_RES[] = {FAST};
 const static int BLACK_RES[] = {DRAIN_RES};
 const static int WHITE_RES[] = {MAGICAL_BREATHING,SWIMMING};
 const static int GRAY_RES[] = {HALF_SPDAM};
+const static int SHIM_RES[] = {SEE_INVIS};
 
 const static int CHROMATIC_RES[] = {FIRE_RES, COLD_RES, DISINT_RES, DRAIN_RES, SHOCK_RES, POISON_RES, SICK_RES, ACID_RES, STONE_RES};
 const static int PLATINUM_RES[] = {FIRE_RES, COLD_RES, DISINT_RES, SHOCK_RES, SLEEP_RES, FREE_ACTION};
@@ -122,6 +123,8 @@ long mask;
 				for(p = 0; p < SIZE(WHITE_RES); p++) u.uprops[WHITE_RES[p]].extrinsic = u.uprops[WHITE_RES[p]].extrinsic & ~wp->w_mask;
 			} else if(oobj->otyp == GRAY_DRAGON_SCALES || oobj->otyp == GRAY_DRAGON_SCALE_MAIL || oobj->otyp == GRAY_DRAGON_SCALE_SHIELD){
 				for(p = 0; p < SIZE(GRAY_RES); p++) u.uprops[GRAY_RES[p]].extrinsic = u.uprops[GRAY_RES[p]].extrinsic & ~wp->w_mask;
+			} else if(oobj->otyp == SHIMMERING_DRAGON_SCALES || oobj->otyp == SHIMMERING_DRAGON_SCALE_MAIL || oobj->otyp == SHIMMERING_DRAGON_SCALE_SHIELD){
+				for(p = 0; p < SIZE(SHIM_RES); p++) u.uprops[SHIM_RES[p]].extrinsic = u.uprops[SHIM_RES[p]].extrinsic & ~wp->w_mask;
 			}
 			
 			if(oobj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
@@ -173,6 +176,8 @@ long mask;
 					for(p = 0; p < SIZE(WHITE_RES); p++) u.uprops[WHITE_RES[p]].extrinsic = u.uprops[WHITE_RES[p]].extrinsic | wp->w_mask;
 				} else if(obj->otyp == GRAY_DRAGON_SCALES || obj->otyp == GRAY_DRAGON_SCALE_MAIL || obj->otyp == GRAY_DRAGON_SCALE_SHIELD){
 					for(p = 0; p < SIZE(GRAY_RES); p++) u.uprops[GRAY_RES[p]].extrinsic = u.uprops[GRAY_RES[p]].extrinsic | wp->w_mask;
+				} else if(obj->otyp == SHIMMERING_DRAGON_SCALES || obj->otyp == SHIMMERING_DRAGON_SCALE_MAIL || obj->otyp == SHIMMERING_DRAGON_SCALE_SHIELD){
+					for(p = 0; p < SIZE(SHIM_RES); p++) u.uprops[SHIM_RES[p]].extrinsic = u.uprops[SHIM_RES[p]].extrinsic | wp->w_mask;
 				}
 				
 				if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
@@ -239,6 +244,8 @@ register struct obj *obj;
 			for(p = 0; p < SIZE(WHITE_RES); p++) u.uprops[WHITE_RES[p]].extrinsic = u.uprops[WHITE_RES[p]].extrinsic & ~wp->w_mask;
 		} else if(obj->otyp == GRAY_DRAGON_SCALES || obj->otyp == GRAY_DRAGON_SCALE_MAIL || obj->otyp == GRAY_DRAGON_SCALE_SHIELD){
 			for(p = 0; p < SIZE(GRAY_RES); p++) u.uprops[GRAY_RES[p]].extrinsic = u.uprops[GRAY_RES[p]].extrinsic & ~wp->w_mask;
+		} else if(obj->otyp == SHIMMERING_DRAGON_SCALES || obj->otyp == SHIMMERING_DRAGON_SCALE_MAIL || obj->otyp == SHIMMERING_DRAGON_SCALE_SHIELD){
+			for(p = 0; p < SIZE(SHIM_RES); p++) u.uprops[SHIM_RES[p]].extrinsic = u.uprops[SHIM_RES[p]].extrinsic & ~wp->w_mask;
 		}
 		
 		if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
@@ -469,6 +476,8 @@ boolean on, silently;
 		for(which = 0; which < SIZE(WHITE_RES); which++) update_mon_intrinsic(mon, obj, WHITE_RES[which], on, silently);
 	} else if(obj->otyp == GRAY_DRAGON_SCALES || obj->otyp == GRAY_DRAGON_SCALE_MAIL || obj->otyp == GRAY_DRAGON_SCALE_SHIELD){
 		for(which = 0; which < SIZE(GRAY_RES); which++) update_mon_intrinsic(mon, obj, GRAY_RES[which], on, silently);
+	} else if(obj->otyp == SHIMMERING_DRAGON_SCALES || obj->otyp == SHIMMERING_DRAGON_SCALE_MAIL || obj->otyp == SHIMMERING_DRAGON_SCALE_SHIELD){
+		for(which = 0; which < SIZE(SHIM_RES); which++) update_mon_intrinsic(mon, obj, SHIM_RES[which], on, silently);
 	}
 	
 	if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
