@@ -2421,7 +2421,10 @@ physical:{
 		mdef->zombify = 1;
 	}
 	
-	if((magr->data == &mons[PM_UNDEAD_KNIGHT] || magr->data == &mons[PM_DREAD_SERAPH]) && can_undead_mon(mdef)){
+	if((magr->data == &mons[PM_UNDEAD_KNIGHT]
+		|| magr->data == &mons[PM_WARRIOR_OF_SUNLIGHT]
+		|| magr->data == &mons[PM_DREAD_SERAPH]
+	) && can_undead_mon(mdef)){
 		mdef->zombify = 1;
 	}
 	

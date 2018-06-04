@@ -1174,7 +1174,10 @@ start_corpse_timeout(body)
 		for (when = 12L; when < 500L; when++)
 		    if (!rn2(3)) break;
 
-	} else if (attchmon && attchmon->mfaction == ZOMBIFIED && !body->norevive) {
+	} else if (attchmon && attchmon->mfaction == ZOMBIFIED
+	&& attchmon->data == &mons[PM_UNDEAD_KNIGHT] && attchmon->data == &mons[PM_WARRIOR_OF_SUNLIGHT] 
+	&& !body->norevive
+	) {
 //		pline("setting up zombie revival for %s", xname(body));
 		attchmon->mclone = 1;
 		for (age = 2; age <= TAINT_AGE; age++)
