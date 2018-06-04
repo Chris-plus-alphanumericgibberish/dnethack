@@ -1479,6 +1479,8 @@ physical:{
 				alt_attk.aatyp = AT_NONE;
 				if(mattk->adtyp == AD_OONA)
 					alt_attk.adtyp = u.oonaenergy;
+				else if(mattk->adtyp == AD_HDRG)
+					alt_attk.adtyp = magr->mvar1;
 				else if(mattk->adtyp == AD_RBRE){
 					switch(rn2(3)){
 						case 0:
@@ -1492,31 +1494,33 @@ physical:{
 						break;
 					}
 				} else alt_attk.adtyp = mattk->adtyp;
-				switch (alt_attk.adtyp)
-				{
-				case AD_FIRE:
-				case AD_COLD:
-				case AD_ELEC:
-				case AD_ACID:
-					alt_attk.damn = 4;
-					alt_attk.damd = 6;
-					break;
-				case AD_EFIR:
-				case AD_ECLD:
-				case AD_EELC:
-				case AD_EACD:
-					alt_attk.damn = 3;
-					alt_attk.damd = 7;
-					break;
-				case AD_STUN:
-					alt_attk.damn = 1;
-					alt_attk.damd = 4;
-					break;
-				default:
-					alt_attk.damn = 0;
-					alt_attk.damd = 0;
-					break;
-				}
+				alt_attk.damn = mattk->damn;
+				alt_attk.damd = mattk->damd;
+				// switch (alt_attk.adtyp)
+				// {
+				// case AD_FIRE:
+				// case AD_COLD:
+				// case AD_ELEC:
+				// case AD_ACID:
+					// alt_attk.damn = 4;
+					// alt_attk.damd = 6;
+					// break;
+				// case AD_EFIR:
+				// case AD_ECLD:
+				// case AD_EELC:
+				// case AD_EACD:
+					// alt_attk.damn = 3;
+					// alt_attk.damd = 7;
+					// break;
+				// case AD_STUN:
+					// alt_attk.damn = 1;
+					// alt_attk.damd = 4;
+					// break;
+				// default:
+					// alt_attk.damn = 0;
+					// alt_attk.damd = 0;
+					// break;
+				// }
 				mdamagem(magr, mdef, &alt_attk);
 				if (DEADMONSTER(mdef))
 					return (MM_DEF_DIED | (grow_up(magr, mdef) ? 0 : MM_AGR_DIED));
