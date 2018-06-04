@@ -577,6 +577,7 @@ static struct trobj Money[] = {
 /* race-based substitutions for initial inventory;
    the weaker cloak for elven rangers is intentional--they shoot better */
 static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
+    // Elf substitutions
     { PM_ELF,	ATHAME,					ELVEN_DAGGER	      },
     { PM_ELF,	DAGGER,					ELVEN_DAGGER	      },
     { PM_ELF,	KNIFE,					ELVEN_DAGGER	      },
@@ -595,6 +596,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ELF,	VICTORIAN_UNDERWEAR,	ELVEN_SHIELD  },
     { PM_ELF,	RUFFLED_SHIRT,			ELVEN_SHIELD  },
     { PM_ELF,	RAPIER,					ELVEN_SPEAR  },
+    // Orc substitutions
     { PM_ORC,	ATHAME,			ORCISH_DAGGER	      },
     { PM_ORC,	DAGGER,			ORCISH_DAGGER	      },
     { PM_ORC,	KNIFE,			ORCISH_DAGGER	      },
@@ -606,6 +608,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_ORC,	BUCKLER,		ORCISH_SHIELD	      },
     { PM_ORC,	RING_MAIL,		ORCISH_RING_MAIL      },
     { PM_ORC,	CHAIN_MAIL,		ORCISH_CHAIN_MAIL     },
+    // Dwarf substitutions
     { PM_DWARF,	KNIFE,				DAGGER	      		  },
     { PM_DWARF, SPEAR,				DWARVISH_SPEAR	      },
     { PM_DWARF, SHORT_SWORD,		DWARVISH_SHORT_SWORD  },
@@ -619,6 +622,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_GNOME, CLUB,			AKLYS    },
     { PM_GNOME, BOW,			CROSSBOW	      },
     { PM_GNOME, ARROW,			CROSSBOW_BOLT	      },
+    // Drow substitutions
     { PM_DROW,	CLOAK_OF_DISPLACEMENT,		DROVEN_PLATE_MAIL  },
     { PM_DROW,	CLOAK_OF_MAGIC_RESISTANCE,	DROVEN_CHAIN_MAIL  },
     { PM_DROW,	LEATHER_ARMOR,				DROVEN_CHAIN_MAIL  },
@@ -639,10 +643,12 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	APPLE,						TRIPE_RATION  },
     { PM_DROW,	TORCH,						SHADOWLANDER_S_TORCH  },
     { PM_DROW,	SUNROD,						SHADOWLANDER_S_TORCH  },
+    // Half-dragon substitutions
     { PM_HALF_DRAGON,	APPLE,		TRIPE_RATION  },
     { PM_HALF_DRAGON,	CARROT,		TRIPE_RATION  },
-    { PM_INCANTIFIER,CLOAK_OF_MAGIC_RESISTANCE,		ROBE  },
-    { PM_INCANTIFIER,CLOAK_OF_DISPLACEMENT,			ROBE  },
+    // Incantifier substitutions
+    { PM_INCANTIFIER, CLOAK_OF_MAGIC_RESISTANCE,		ROBE  },
+    { PM_INCANTIFIER, CLOAK_OF_DISPLACEMENT,			ROBE  },
     { PM_INCANTIFIER,	LEATHER_ARMOR,				ROBE  },
     { PM_INCANTIFIER,	LEATHER_JACKET,				ROBE  },
     { PM_INCANTIFIER,	RING_MAIL,					ROBE  },
@@ -654,6 +660,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_INCANTIFIER,	BANANA,						SCR_FOOD_DETECTION    	  },
     { PM_INCANTIFIER,	ORANGE,						SCR_FOOD_DETECTION    	  },
     { PM_INCANTIFIER,	POT_BOOZE,					SCR_FOOD_DETECTION   	  },
+    // Vampire substitutions
     { PM_VAMPIRE,	ATHAME,				DAGGER    	  },
     { PM_VAMPIRE,	FOOD_RATION,		POT_BLOOD    	  },
     { PM_VAMPIRE,	CRAM_RATION,		POT_BLOOD    	  },
@@ -662,6 +669,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_VAMPIRE,	BANANA,				POT_BLOOD    	  },
     { PM_VAMPIRE,	ORANGE,				POT_BLOOD    	  },
     { PM_VAMPIRE,	POT_BOOZE,			POT_BLOOD    	  },
+    // Clockwork automaton substitutions
     { PM_CLOCKWORK_AUTOMATON,	FOOD_RATION, 		POT_OIL },
     { PM_CLOCKWORK_AUTOMATON,	CRAM_RATION, 		POT_OIL },
     { PM_CLOCKWORK_AUTOMATON,	POT_FRUIT_JUICE,	POT_OIL	      },
@@ -669,6 +677,10 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_CLOCKWORK_AUTOMATON,	BANANA,				POT_OIL    	  },
     { PM_CLOCKWORK_AUTOMATON,	ORANGE,				POT_OIL    	  },
     { PM_CLOCKWORK_AUTOMATON,	POT_BOOZE,			POT_OIL    	  },
+    // Yuki-onna substitutions
+    { PM_YUKI_ONNA,           RING_MAIL,   STUDDED_LEATHER_ARMOR  },
+    { PM_YUKI_ONNA,           SPLINT_MAIL, STUDDED_LEATHER_ARMOR  },
+    { PM_YUKI_ONNA,           HELMET,                  SEDGE_HAT  },
     { NON_PM,	STRANGE_OBJECT,		STRANGE_OBJECT	      }
 };
 
