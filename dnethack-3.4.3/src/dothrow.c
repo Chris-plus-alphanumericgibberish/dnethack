@@ -246,8 +246,8 @@ int thrown;
 	if(obj->oartifact == ART_FLUORITE_OCTAHEDRON){
 		if(!ammo_and_launcher(obj,launcher)){
 			if(shotlimit && shotlimit < obj->quan) You("throw %d Fluorite %s.", shotlimit, shotlimit > 1 ? "Octahedra" : "Octahedron");
-			else if(obj->quan == 8) You("throw the Fluorite Octet.", obj->quan);
-			else You("throw %d Fluorite %s.", obj->quan, obj->quan > 1 ? "Octahedra" : "Octahedron");
+			else if(obj->quan == 8) You("throw the Fluorite Octet.");
+			else You("throw %ld Fluorite %s.", obj->quan, obj->quan > 1 ? "Octahedra" : "Octahedron");
 		} else if (multishot > 1 || shotlimit > 0) {
 			if(obj->quan > 1) You("shoot %d Fluorite %s.",
 			multishot,	/* (might be 1 if player gave shotlimit) */

@@ -984,7 +984,7 @@ dofightingform()
 			} else {
 				int nskill = P_SKILL(FFORM_NIMAN);
 				if(u.lastcast >= monstermoves && nskill >= P_BASIC){
-					Sprintf(buf,	"Niman (active; +%dd%d)", 
+					Sprintf(buf,	"Niman (active; +%dd%ld)", 
 						nskill == P_BASIC ? 3 : 
 						nskill == P_SKILLED ? 6 : 
 						nskill == P_EXPERT ? 9 : 0, 
