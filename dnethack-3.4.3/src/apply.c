@@ -1251,7 +1251,7 @@ struct obj **optr;
 			You(no_elbow_room);
 			return;
 		} else if(!obj->lamplit){
-			You("%can't get the %s to light.  It's quite hopeless under these conditions.", s);
+			You("can't get the %s to light.  It's quite hopeless under these conditions.", s);
 			return;
 		}
 	}
@@ -1513,7 +1513,7 @@ light_cocktail(obj)
 			You(no_elbow_room);
 			return;
 		} else if(!obj->lamplit){
-			You("%can't get the %s to light.  It's quite hopeless under these conditions.", objnam);
+			You("can't get the %s to light.  It's quite hopeless under these conditions.", objnam);
 			return;
 		}
 	}
