@@ -283,7 +283,7 @@ struct monst *mon;
 	mon->perminvis = 1;
 	if (!mon->invis_blkd) {
 	    mon->minvis = 1;
-	    if (opaque(mon->data))
+	    if (opaque(mon->data) && !See_invisible(mon->mx, mon->my))
 		unblock_point(mon->mx, mon->my);
 	    newsym(mon->mx, mon->my);		/* make it disappear */
 	    if (mon->wormno) see_wsegs(mon);	/* and any tail too */
