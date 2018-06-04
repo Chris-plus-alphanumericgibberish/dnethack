@@ -497,13 +497,13 @@ qt_montype()
 		}
 	} else {
 		int qpm;
-		if(Race_if(PM_DROW) && !flags.initgend && Role_if(PM_NOBLEMAN) && on_level(&u.uz, &qstart_level)) return (struct permonst *)-1;
+		if(Race_if(PM_DROW) && !flags.initgend && Role_if(PM_NOBLEMAN) && on_level(&u.uz, &qstart_level)) return &mons[PM_LONG_WORM_TAIL];
 		else if(Race_if(PM_DROW) && flags.initgend && Role_if(PM_NOBLEMAN) && Is_nemesis(&u.uz) && !rn2(4)) 
 			return !(mvitals[PM_MIND_FLAYER].mvflags & G_GENOD && !In_quest(&u.uz)) ? &mons[PM_MIND_FLAYER] : mkclass(S_UMBER, G_NOHELL);
 		else if(In_quest(&u.uz) && Race_if(PM_DWARF) && 
 			urole.neminum == PM_BOLG && Is_qlocate(&u.uz) && 
 			!((mvitals[PM_SMAUG].mvflags & G_GENOD && !In_quest(&u.uz)) || mvitals[PM_SMAUG].died > 0)
-		) return (struct permonst *)-1;
+		) return &mons[PM_LONG_WORM_TAIL];
 		
 		if(rn2(5)){
 		  if(Role_if(PM_EXILE)){
