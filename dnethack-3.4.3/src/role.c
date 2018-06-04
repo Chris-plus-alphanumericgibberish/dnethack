@@ -674,9 +674,9 @@ const char *GnomeLgod = "Kurtulmak",
 		   *GnomeNgod = "Garl Glittergold",
 		   *GnomeCgod = "Urdlen"; /* Gnomish */
 
-const char *HDFemLgod = "Gwyn, Lord of Sunlight",
-		   *HDFemNgod = "_Gwynevere, Princess of Sunlight",
-		   *HDFemCgod = "_Velka, Goddess of Sin"; /* Dark Souls */
+const char *Gwyngod = "Gwyn, Lord of Sunlight",
+		   *Gwyneveregoddess = "_Gwynevere, Princess of Sunlight",
+		   *Gwyndolingod = "Dark Sun Gwyndolin"; /* Dark Souls */
 
 const char *OrcLgod = "Ilneval",
 		   *OrcNgod = "_Luthic",
@@ -1033,6 +1033,10 @@ const int NHolashner[] = {PM_ROCK_MOLE,PM_MIND_FLAYER,PM_PURPLE_WORM,NON_PM};
 const int NGnome[] = {PM_ARCADIAN_AVENGER,PM_MOVANIC_DEVA,PM_MONADIC_DEVA,PM_ASTRAL_DEVA,PM_GRAHA_DEVA,PM_SURYA_DEVA,PM_MAHADEVA,NON_PM};
 const int CGnome[] = {PM_ROCK_MOLE,PM_LONG_WORM,PM_EARTH_ELEMENTAL,PM_PURPLE_WORM,NON_PM};
 
+const int GwynServants[] = {PM_UNDEAD_KNIGHT,PM_WARRIOR_OF_SUNLIGHT};
+const int GwynevereServants[] = {PM_UNDEAD_KNIGHT,PM_WARRIOR_OF_SUNLIGHT};
+const int GwyndolinServants[] = {PM_SNAKE, PM_PYTHON, PM_GARGOYLE,PM_WINGED_GARGOYLE};
+
 const int MChaos[] = {PM_GOBLIN,PM_WATER_ELEMENTAL,PM_FIRE_ELEMENTAL,PM_EARTH_ELEMENTAL,PM_AIR_ELEMENTAL,PM_MIND_FLAYER,PM_VAMPIRE,PM_PURPLE_WORM,NON_PM};
 const int MChaosDeep[] = {PM_LICH,PM_MARILITH,PM_KRAKEN,PM_GREEN_DRAGON,NON_PM};
 const int Onone[] = {NON_PM};
@@ -1191,6 +1195,10 @@ god_minions(gptr)
 	if(gptr == GnomeLgod) return Ldevils;
 	if(gptr == GnomeNgod) return NGnome;
 	if(gptr == GnomeCgod) return CGnome;
+	
+	if(gptr == Gwyngod) return GwynServants;
+	if(gptr == Gwyneveregoddess) return GwynevereServants;
+	if(gptr == Gwyndolingod) return GwyndolinServants;
 	
 	if(gptr == Chaos) return MChaos;
 	if(gptr == DeepChaos) return MChaosDeep;
@@ -2601,18 +2609,22 @@ role_init()
 		urole.intermed = "the Cathedral of Velka";
 		urole.questarti = ART_FRIEDE_S_SCYTHE;
 		
-		urole.ldrnum = 0;//PM_CROW_WINGED_HALF_DRAGON;
+		urole.ldrnum = NON_PM;//PM_CROW_WINGED_HALF_DRAGON;
 		urole.guardnum = PM_CORVIAN;
 		urole.neminum = PM_BASTARD_OF_THE_BOREAL_VALLEY;
 		
-		urole.lgod = HDFemLgod;
-		urole.ngod = HDFemNgod;
-		urole.cgod = HDFemCgod;
+		urole.lgod = Gwyngod;
+		urole.ngod = Gwyneveregoddess;
+		urole.cgod = Gwyndolingod;
 		
 		urole.enemy1num = PM_ZOMBIE;
 		urole.enemy2num = PM_CORVIAN_KNIGHT;
 		urole.enemy1sym = S_ZOMBIE;
 		urole.enemy2sym = S_GOLEM;
+		
+		urace.attrmax[A_STR] = STR19(20);
+		urace.attrmax[A_DEX] = 20;
+		urace.attrmax[A_CON] = 18;
 	} else if (!urole.lgod) {
 	    urole.lgod = roles[flags.pantheon].lgod;
 	    urole.ngod = roles[flags.pantheon].ngod;
