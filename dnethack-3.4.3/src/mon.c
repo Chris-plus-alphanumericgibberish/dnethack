@@ -2531,11 +2531,6 @@ mfndpos(mon, poss, info, flag)
 			if(madjacent->data == &mons[PM_SURYA_DEVA] && madjacent->m_id == mon->mvar1)
 				break;
 	}
-	if(mdat == &mons[PM_SURYA_DEVA]){
-		for(madjacent = fmon; madjacent; madjacent = madjacent->nmon)
-			if(madjacent->data == &mons[PM_DANCING_BLADE] && madjacent->mvar1 == mon->m_id)
-				break;
-	}
 	
 	x = mon->mx;
 	y = mon->my;
