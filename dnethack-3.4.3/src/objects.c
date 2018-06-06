@@ -295,9 +295,9 @@ WEAPON("club", (char *)0,
 WEAPON("quarterstaff", "staff",
 	0, 0, 1, 10, 40,  5,  6,  6, 0, B,   P_QUARTERSTAFF, WOOD, HI_WOOD),
 WEAPON("khakkhara", "monk's staff", /*Needs encyc entry*//*Needs tile*/
-	0, 1, 1,  2, 120,  50,  6,  4, 0, B|P,   P_QUARTERSTAFF, METAL, HI_SILVER),
+	0, 0, 1,  2, 120,  50,  6,  4, 0, B|P,   P_QUARTERSTAFF, METAL, HI_SILVER),
 WEAPON("kamerel vajra", "short mace", /*Needs encyc entry*/
-	0, 1, 0,  0,  10,800, 6, 6, 1, S|E, P_MACE, METAL, HI_GOLD),
+	0, 0, 0,  0,  10,800, 6, 6, 1, S|E, P_MACE, METAL, HI_GOLD),
 WEAPON("bar", (char *)0,
 	1, 0, 1, 0, 400,  10,  8,  6, -10, B,   P_QUARTERSTAFF, METAL, HI_METAL),
 /* two-piece */
