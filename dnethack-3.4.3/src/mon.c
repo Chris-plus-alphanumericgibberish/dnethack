@@ -3265,7 +3265,7 @@ struct monst *mtmp;
 		if (cansee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
 			if(canseemon(mtmp))
-				pline("%s fractures further%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
+				pline("%s fractures%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
 			else
 				You_hear("something crack%s!", !is_silent(mtmp->data) ? " with an unearthly scream" : "");
 		}
