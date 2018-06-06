@@ -2505,6 +2505,7 @@ struct alt_spellings {
 	{ "armored black dress", NOBLE_S_DRESS },
 	{ "droven dress", NOBLE_S_DRESS },
 	{ "armored boots", ARMORED_BOOTS },
+	{ "fossil dark", CHUNK_OF_FOSSIL_DARK },
 	{ (const char *)0, 0 },
 };
 
