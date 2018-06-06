@@ -2304,6 +2304,8 @@ register struct monst *mtmp;
 			}
 			if(ptr == &mons[PM_ARA_KAMEREL]){
 				otmp = mksobj(KAMEREL_VAJRA, FALSE, FALSE);
+				otmp->obj_material = GOLD;
+				fix_object(otmp);
 				otmp->spe = 1;
 				(void) mpickobj(mtmp, otmp);
 				otmp = mksobj(MIRROR, FALSE, FALSE);
