@@ -2160,7 +2160,7 @@ boolean amnesia;
 		break;
 	    case SPBOOK_CLASS:
 		if (obj->otyp != SPE_BLANK_PAPER) {
-			if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
+			if (obj->otyp == SPE_BOOK_OF_THE_DEAD || obj->oartifact) {
 	pline("%s suddenly heats up; steam rises and it remains dry.",
 				The(xname(obj)));
 			} else {
