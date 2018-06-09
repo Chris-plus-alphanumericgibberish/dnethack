@@ -3793,7 +3793,7 @@ boolean u_caused;
 	return cnt;
 }
 
-/* will zap/spell/breath attack score a hit against armor class `ac'? */
+/* will zap/spell/breath attack score a hit a creature */
 int
 zap_hit(defender, type, phase_armor)
 struct monst * defender;
