@@ -44,8 +44,12 @@ STATIC_OVL struct Jitem Pirate_items[];
 
 #else /* OVLB */
 
-/*"mirrored": Lightsabers reflect incident light.  A 'black' lightsaber
-blade would therefore actually look like a cylindrical mirror.*/
+/*
+"mirrored": Lightsabers reflect incident light.  A 'black' lightsaber
+blade would therefore actually look like a cylindrical mirror.
+"black": A lightsaber made with a piece of fossil dark absorbs all
+but the brightest light and casts darkness
+*/
 NEARDATA struct colorTextClr LightsaberColor[] = {
 	{"brilliant blue",CLR_BRIGHT_BLUE},	/*MAGICITE_CRYSTAL*/
 	{"twisting rainbow",CLR_WHITE},		/*DILITHIUM_CRYSTAL*/
@@ -83,7 +87,14 @@ NEARDATA struct colorTextClr LightsaberColor[] = {
 	{"red",CLR_RED},					/*yellow glass*/
 	{"red",CLR_RED},					/*black glass*/
 	{"red",CLR_RED},					/*green glass*/
-	{"red",CLR_RED}						/*violet glass*/
+	{"red",CLR_RED},					/*violet glass*/
+	{"",CLR_RED},						/*luckstone*/
+	{"",CLR_RED},						/*loadstone*/
+	{"",CLR_RED},						/*touchstone*/
+	{"",CLR_RED},						/*flint*/
+	{"",CLR_RED},						/*mithril*/
+	{"black",CLR_BLACK},				/*fossil dark*/
+	{"",CLR_RED}						/*silver slingstone*/
 };
 
 STATIC_OVL char *SaberHilts[] = {

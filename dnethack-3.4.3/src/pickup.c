@@ -2304,7 +2304,7 @@ pick_gemstone()
 	Sprintf(buf, "Gems");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for(otmp = invent; otmp; otmp = otmp->nobj){
-		if(otmp->oclass == GEM_CLASS && otmp->otyp < LUCKSTONE){
+		if(otmp->oclass == GEM_CLASS && (otmp->otyp < LUCKSTONE || otmp->otyp == CHUNK_OF_FOSSIL_DARK)){
 			Sprintf1(buf, doname(otmp));
 			any.a_char = otmp->invlet;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
