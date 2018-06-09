@@ -3942,6 +3942,9 @@ boolean was_swallowed;			/* digestion */
 	if (is_golem(mdat)
 		   || is_mplayer(mdat)
 		   || is_rider(mdat)
+		   || mdat == &mons[PM_UNDEAD_KNIGHT]
+		   || mdat == &mons[PM_WARRIOR_OF_SUNLIGHT]
+		   || mdat == &mons[PM_CROW_WINGED_HALF_DRAGON]
 		   || mdat == &mons[PM_SEYLL_AUZKOVYN]
 		   || mdat == &mons[PM_DARUTH_XAXOX]
 		   || mdat == &mons[PM_ORION]
