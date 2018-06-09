@@ -4337,7 +4337,7 @@ boolean *shopdamage;
 	    }
 	    if(is_ice(x, y)) {
 		melt_ice(x, y);
-	    } else if(is_pool(x,y, TRUE)) {
+	    } else if(is_pool(x,y, FALSE)) {
 		const char *msgtxt = "You hear hissing gas.";
 		if(lev->typ != POOL || IS_PUDDLE(lev->typ)) {	/* MOAT or DRAWBRIDGE_UP */
 		    if (cansee(x,y)) msgtxt = "Some water evaporates.";
