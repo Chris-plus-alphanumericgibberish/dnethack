@@ -841,21 +841,21 @@ A("The Necronomicon", SPE_SECRETS, /*from the works of HP Lovecraft*/
 	0,SPFX3_NOCNT,0),
 
 A("Infinity's Mirrored Arc",	DOUBLE_LIGHTSABER,	
-	(SPFX_RESTR|SPFX_REFLECT), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	ALTMODE,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
 	0,0,0),
 
 A("The Staff of Twelve Mirrors",	KHAKKHARA,	
-	(SPFX_RESTR|SPFX_REFLECT|SPFX_DISPL), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_DISPL), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(5,6),	NO_DFNS,	NO_CARY,
 	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
 	0,0,0),
 
 A("Sansara Mirror",	MIRRORBLADE,	
-	(SPFX_RESTR|SPFX_REFLECT|SPFX_HPHDAM), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_HPHDAM), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(8,8),	NO_DFNS,	NO_CARY,
 	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
@@ -1234,21 +1234,21 @@ A("The Cloak of the Consort",	DROVEN_CLOAK, /* Hedrow noble quest */
 	0,0,0),
 
 A("The Profaned Greatscythe",			SCYTHE, /*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_DEFN|SPFX_ATTK),0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_ATTK),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	FIRE(8,30),	NO_DFNS,	FIRE(0,0),
 	0, A_LAWFUL, PM_NOBLEMAN, 0, 4000L, 
 	0,0,0),
 
 A("Friede's Scythe",			SCYTHE, /*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_DEFN|SPFX_ATTK),0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_ATTK),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	STUN(6,6),	NO_DFNS,	CARY(AD_MAGM),//Cold-and-magic
 	0, A_LAWFUL, PM_NOBLEMAN, 0, 4000L, //Note: Has Str/2, Dex, and Int scaling for +20 (ouch) max
 	SPFX2_SHINING,0,0),
 
 A("Yorshka's Spear",			SPEAR, /*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_DEFN),0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,//Note: Has Str, Dex, and Wis scaling for +24 (ouch) max
 	0, A_LAWFUL, PM_NOBLEMAN, 0, 4000L,//Note: Drains energy/sets special ability cooldowns 
