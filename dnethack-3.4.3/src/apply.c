@@ -1463,11 +1463,13 @@ struct obj *obj;
 		    check_unpaid(obj);
 		    pline("%s lamp is now on.", Shk_Your(buf, obj));
 		} else if (is_lightsaber(obj)) {
+			obj->lamplit = 1; //Make yname print out the color of the lightsaber
 		    You("ignite %s.", yname(obj));
+			obj->lamplit = 0;
 		    unweapon = FALSE;
 		} else if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) {
 			int biman;
-			obj->lamplit = 1;
+			obj->lamplit = 1; //Check if the HMS will be two handed
 			biman = bimanual(obj,youracedata);
 			obj->lamplit = 0;
 			if(biman && uarms){

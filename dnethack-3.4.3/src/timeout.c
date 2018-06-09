@@ -1792,7 +1792,7 @@ lightsaber_deactivate (obj, timer_attached)
 	char whose[BUFSZ];
 
 	(void) Shk_Your(whose, obj);
-		
+	obj->lamplit = 0; //temp turn it off so that it prints the material instead of the color
 	if (get_obj_location(obj, &x, &y, 0)) {
 	    if (cansee(x, y)) {
 		switch (obj->where) {
@@ -1809,6 +1809,7 @@ lightsaber_deactivate (obj, timer_attached)
 				You_hear("a lightsaber deactivate.");
 	    }
 	}
+	obj->lamplit = 1; //turn back on for proper deactivation
 	// if (obj->otyp == DOUBLE_LIGHTSABER)
 	obj->altmode = FALSE;
 	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = TRUE;
