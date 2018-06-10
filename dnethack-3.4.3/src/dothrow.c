@@ -193,7 +193,7 @@ int thrown;
 	}
 	
 	if(!barage) multishot = rnd(multishot);
-	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barage
+	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barrage
 	
 	if((uwep && uwep->oartifact == ART_SANSARA_MIRROR)
 		|| (uswapwep && uswapwep->oartifact == ART_SANSARA_MIRROR)
@@ -483,7 +483,7 @@ int shotlimit;
 	}
 	
 	if(!barage) multishot = rnd(multishot);
-	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barage
+	else multishot += u.ulevel/10+1; //state variable, we are doing a spirit power barrage
 	
 	if (shotlimit > 0 && multishot > shotlimit) multishot = shotlimit;
 	
