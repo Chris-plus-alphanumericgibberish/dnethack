@@ -1140,7 +1140,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 				break;
 	}
 	
-	if(is_kamerel(mtmp->data) || !mirror){
+	if(!is_kamerel(mtmp->data) || !mirror){
 		chance = 2;
 		if(mtmp->mconf) chance += 8;
 		if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
