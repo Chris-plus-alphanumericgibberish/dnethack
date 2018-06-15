@@ -666,6 +666,16 @@ unsigned int type;
 		if(rn2(4)) return HAIL_FLURY;
 		return SOLID_FOG;
 	break;
+	case PM_STANNUMACH_RILMANI:
+		switch(rn2(6)){
+			case 0: return ICE_STORM;
+			case 1: return SOLID_FOG;
+			case 2: return DISAPPEAR;
+			case 3: return MAKE_VISIBLE;
+			case 4: return MASS_CURE_FAR;
+			case 5: return MON_PROTECTION;
+		}
+	break;
 	case PM_CUPRILACH_RILMANI:
 		switch(rn2(6)){
 			case 0: return DRAIN_LIFE;

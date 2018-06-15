@@ -4736,6 +4736,20 @@ courtmon(kingnum)
 				return &mons[PM_DROW_MUMMY];
 		break;
 		
+		case PM_STANNUMACH_RILMANI:
+			i = rnd(100);
+			if(i>95)
+				return &mons[PM_ARGENTUM_GOLEM];
+			else if(i>90)
+				return &mons[PM_CUPRILACH_RILMANI];
+			else if(i>70)
+				return &mons[PM_IRON_GOLEM];
+			else if(i>30)
+				return &mons[PM_FERRUMACH_RILMANI];
+			else
+				return &mons[PM_PLUMACH_RILMANI];
+		break;
+		
 		case PM_AURUMACH_RILMANI:
 			i = rnd(100);
 			if(i>99)

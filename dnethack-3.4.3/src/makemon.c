@@ -2065,6 +2065,15 @@ register struct monst *mtmp;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 			}
+			if(ptr == &mons[PM_STANNUMACH_RILMANI]){
+				otmp = mksobj(KHAKKHARA, TRUE, FALSE);
+				otmp->cursed = 0;
+				otmp->blessed = 0;
+				if(otmp->spe < 1) otmp->spe = 1;
+				otmp->obj_material = METAL;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+			}
 			if(ptr == &mons[PM_CUPRILACH_RILMANI]){
 				otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
 				otmp->cursed = 0;
