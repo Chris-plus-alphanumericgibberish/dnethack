@@ -300,7 +300,7 @@ mount_steed(mtmp, force)
 	    return (FALSE);
 	}
 	
-	if (!force && !Role_if(PM_KNIGHT) && !mtmp->isminion && !(--mtmp->mtame)) {
+	if (!force && !(Role_if(PM_KNIGHT) || Role_if(PM_NOBLEMAN)) && !mtmp->isminion && !(--mtmp->mtame)) {
 	    /* no longer tame */
 	    newsym(mtmp->mx, mtmp->my);
 	    pline("%s resists%s!", Monnam(mtmp),
