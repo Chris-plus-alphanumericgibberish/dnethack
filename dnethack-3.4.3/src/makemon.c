@@ -2039,7 +2039,7 @@ register struct monst *mtmp;
 		break;}
 	    case S_NEU_OUTSIDER:{
 			if(ptr == &mons[PM_PLUMACH_RILMANI]){
-				if(!rn2(3)) otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+				if(!rn2(3)) otmp = mksobj(MACE, TRUE, FALSE);
 				else otmp = mksobj(rn2(3) ? SICKLE : rn2(3) ? SCYTHE : AXE, TRUE, FALSE);
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
@@ -2047,7 +2047,7 @@ register struct monst *mtmp;
 				otmp->obj_material = METAL;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
-				if(otmp->otyp == SHORT_SWORD && !rn2(3)){
+				if(otmp->otyp == MACE && !rn2(3)){
 					otmp = mksobj(KITE_SHIELD, TRUE, FALSE);
 					otmp->cursed = 0;
 					otmp->blessed = 0;
