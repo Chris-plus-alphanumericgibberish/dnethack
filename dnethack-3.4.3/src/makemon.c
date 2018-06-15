@@ -5923,8 +5923,7 @@ register int	mmflags;
 		break;
 		case S_NEU_OUTSIDER:
 			if(mndx == PM_SHARAB_KAMEREL){
-			    mtmp->minvis = TRUE;
-			    mtmp->perminvis = TRUE;
+				set_mimic_sym(mtmp);
 			}
 			if(mndx == PM_HUDOR_KAMEREL){
 				if(is_pool(mtmp->mx,mtmp->my, TRUE)){
@@ -7465,6 +7464,9 @@ register struct monst *mtmp;
 	if (mtmp->data == &mons[PM_DARK_YOUNG]) {
 		ap_type = M_AP_FURNITURE;
 		appear = S_deadtree;
+	} else if (mtmp->data == &mons[PM_SHARAB_KAMEREL]) {
+		ap_type = M_AP_FURNITURE;
+		appear = S_puddle;
 	} else if (OBJ_AT(mx, my)) {
 		ap_type = M_AP_OBJECT;
 		appear = level.objects[mx][my]->otyp;
