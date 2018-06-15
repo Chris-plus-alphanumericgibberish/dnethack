@@ -2812,9 +2812,6 @@ struct obj *hypo;
 			break;
 			case POT_RESTORE_ABILITY:
 				if (amp->blessed && u.ulevel < u.ulevelmax) {
-					///* when multiple levels have been lost, drinking
-					//   multiple potions will only get half of them back */
-					// u.ulevelmax -= 1;
 					pluslvl(FALSE);
 				}
 				if(amp->cursed) {
