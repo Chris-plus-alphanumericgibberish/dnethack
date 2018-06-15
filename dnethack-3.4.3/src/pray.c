@@ -1017,7 +1017,10 @@ gcrownu()
 				gm_weapon_skill(P_BARE_HANDED_COMBAT);
 				u.umartial = TRUE;
 			} else if(u.ualign.type == A_LAWFUL){
-				if(Role_if(PM_NOBLEMAN)) expert_weapon_skill(P_CROSSBOW);
+				if(Role_if(PM_NOBLEMAN)){
+					expert_weapon_skill(P_CROSSBOW);
+					expert_weapon_skill(P_SCIMITAR);
+				}
 				else expert_weapon_skill(P_HARVEST);
 			}
 		} else { /*male*/
