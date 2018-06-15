@@ -1590,8 +1590,10 @@ E void NDECL(synch_cursor);
 
 E void NDECL(init_objects);
 E int NDECL(find_sawant);
+E int NDECL(find_iawant);
 E int NDECL(find_gcirclet);
 E int NDECL(find_sring);
+E int NDECL(find_iring);
 E int NDECL(find_vhelm);
 E int NDECL(find_skates);
 E int NDECL(find_cboots);

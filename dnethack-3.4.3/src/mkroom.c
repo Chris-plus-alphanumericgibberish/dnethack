@@ -2781,6 +2781,8 @@ mkferrutower()
 	int i,j;
 	boolean good=FALSE, okspot, accessible;
 	int size = 8;
+	if(!rn2(20))
+		size += rnd(4);
 	while(!good && tries < 500){
 		x = rn2(COLNO-size)+1;
 		y = rn2(ROWNO-size);
@@ -3468,7 +3470,63 @@ struct mkroom *sroom;
 					     sx, sy, TRUE, FALSE);
 			break;
 		    case BARRACKS:
-			if(!rn2(20)){
+			if(In_outlands(&u.uz)){
+				int i = 0;
+				struct obj *chest, *otmp;
+			    chest = mksobj_at((rn2(3)) ? BOX : CHEST,
+					     sx, sy, TRUE, FALSE);
+				chest->obj_material = IRON;
+				fix_object(chest);
+				for(i = rnd(4); i > 0; i--) switch(rnd(4)){
+					case 1:
+						if(find_iawant()){
+							otmp = mksobj(find_iawant(), FALSE, FALSE);
+							otmp->obj_material = IRON;
+							fix_object(otmp);
+							add_to_container(chest, otmp);
+						}
+					break;
+					case 2:
+						if(find_iring() > 0){
+							otmp = mksobj(find_iring(), FALSE, FALSE);
+							otmp->obj_material = IRON;
+							fix_object(otmp);
+							add_to_container(chest, otmp);
+						}
+					break;
+					case 3:
+						otmp = mksobj(UPGRADE_KIT, FALSE, FALSE);
+						otmp->obj_material = IRON;
+						fix_object(otmp);
+						add_to_container(chest, otmp);
+					break;
+					case 4:
+						switch(rn2(4)){
+							case 0:
+								otmp = mksobj(TIN_WHISTLE, FALSE, FALSE);
+								fix_object(otmp);
+							break;
+							case 1:
+								otmp = mksobj(MAGIC_WHISTLE, FALSE, FALSE);
+								otmp->obj_material = IRON;
+								fix_object(otmp);
+							break;
+							case 2:
+								otmp = mksobj(BELL, FALSE, FALSE);
+								otmp->obj_material = IRON;
+								fix_object(otmp);
+							break;
+							case 3:
+								otmp = mksobj(BUGLE, FALSE, FALSE);
+								otmp->obj_material = IRON;
+								fix_object(otmp);
+							break;
+						}
+						add_to_container(chest, otmp);
+					break;
+				}
+				chest->owt = weight(chest);
+			} else if(!rn2(20)){
 				/* the payroll and some loot */
 				struct obj *chest, *gold;
 				gold = mksobj(GOLD_PIECE, TRUE, FALSE);

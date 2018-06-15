@@ -320,6 +320,40 @@ find_sawant()
     return i;
 }
 
+/* find the object index for iron wand */
+int
+find_iawant()
+{
+    int i = -1;
+    int j;
+    register const char *s;
+	static char *candidateWands[] = {
+		"iron",
+		"hexagonal",
+		"short",
+		"runed",
+		"long",
+		"curved",
+		"forked",
+		"spiked"
+	};
+	int offset = rn2(SIZE(candidateWands));
+	
+	for(j = 0; j < SIZE(candidateWands); j++){
+		for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+			if ((s = OBJ_DESCR(objects[i])) != 0 && (
+				!strcmp(s, candidateWands[(j+offset)%SIZE(candidateWands)])
+				)
+			){
+				// if(is_attack_wand(i))
+				return i;
+				// else break;
+			}
+	}
+	i = 0;
+    return i;
+}
+
 /* find the object index for circlet */
 int
 find_gcirclet()
@@ -349,6 +383,22 @@ find_sring()
 		)) return i;
 
     impossible("silver ring not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
+/* find the object index for iron ring */
+int
+find_iring()
+{
+    register int i;
+    register const char *s;
+
+    for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "iron")
+		)) return i;
+
+    impossible("iron ring not found?");
     return -1;	/* not 0, or caller would try again each move */
 }
 
