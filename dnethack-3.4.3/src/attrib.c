@@ -854,7 +854,7 @@ newhp()
 	    }
 	}
 	
-	if(conplus(ACURR(A_CON)) > 0) hp += conplus(ACURR(A_CON)) + (1-(u.ulevel%2));
+	if(conplus(ACURR(A_CON)) > 0) hp += conplus(ACURR(A_CON));
 	else hp += conplus(ACURR(A_CON));
 	
 	return((hp <= 0) ? 1 : hp);
