@@ -2090,6 +2090,14 @@ register struct monst *mtmp;
 					otmp->obj_material = COPPER;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
+				} else if(rn2(2)){
+					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+					otmp->cursed = 0;
+					otmp->blessed = 0;
+					if(otmp->spe < 2) otmp->spe = 2;
+					otmp->obj_material = COPPER;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
 				}
 			}
 			if(ptr == &mons[PM_ARGENACH_RILMANI]){
