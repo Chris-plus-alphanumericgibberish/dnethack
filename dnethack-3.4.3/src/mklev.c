@@ -1615,7 +1615,7 @@ struct mkroom *croom;
 	coord m;
 	register int tryct = 0;
 	register struct obj *otmp;
-	boolean dobell = !rn2(10);
+	boolean dobell = !rn2(20);
 
 
 	if(croom->rtype != OROOM) return;
