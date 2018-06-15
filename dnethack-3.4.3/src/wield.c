@@ -311,7 +311,7 @@ dowield()
 	if (flags.pushweapon && oldwep && uwep != oldwep)
 		setuswapwep(oldwep);
 	
-	if (u.twoweap && !can_twoweapon())
+	if (u.twoweap && !test_twoweapon())
 		untwoweapon();
 
 	if(uwep && uwep->ostolen && u.sealsActive&SEAL_ANDROMALIUS) unbind(SEAL_ANDROMALIUS, TRUE);
@@ -356,7 +356,7 @@ doswapweapon()
 			You("have no secondary weapon readied.");
 	}
 
-	if (u.twoweap && !can_twoweapon())
+	if (u.twoweap && !test_twoweapon())
 		untwoweapon();
 
 	// return (result);
@@ -417,7 +417,7 @@ dowieldquiver()
 		/* Check if it's the secondary weapon */
 		if (newquiver == uswapwep) {
 			setuswapwep((struct obj *) 0);
-			if (u.twoweap && !can_twoweapon())
+			if (u.twoweap && !test_twoweapon())
 				untwoweapon();
 		}
 
@@ -495,19 +495,20 @@ const char *verb;	/* "rub",&c */
     }
     if (uwep != obj) return FALSE;	/* rewielded old object after dying */
     /* applying weapon or tool that gets wielded ends two-weapon combat */
-    if (u.twoweap && !can_twoweapon())
+    if (u.twoweap && !test_twoweapon())
 		untwoweapon();
     if (obj->oclass != WEAPON_CLASS)
 	unweapon = TRUE;
     return TRUE;
 }
 
+/*Contains those parts of can_twoweapon() that DON'T change the game state.  Can be called anywhere the code needs to know if the player is capable of wielding two weapons*/
+#define NOT_WEAPON(obj) (obj && !is_weptool(obj) && obj->oclass != WEAPON_CLASS)
 int
-can_twoweapon()
+test_twoweapon()
 {
 	struct obj *otmp;
 
-#define NOT_WEAPON(obj) (obj && !is_weptool(obj) && obj->oclass != WEAPON_CLASS)
 	if (!could_twoweap(youmonst.data) && 
 		!(!Upolyd && Role_if(PM_ANACHRONONAUT)) && 
 		!(u.specialSealsActive&SEAL_MISKA) && 
@@ -552,6 +553,19 @@ can_twoweapon()
 	else if (uswapwep && uswapwep->oartifact && !is_twoweapable_artifact(uswapwep))
 		pline("%s %s being held second to another weapon!",
 			Yname2(uswapwep), otense(uswapwep, "resist"));
+	else
+		return (TRUE);
+	return (FALSE);
+}
+
+/*Contains those parts of can_twoweapon() that CAN change the game state.  Should only be called when the player commits to wielding two weapons*/
+int
+starting_twoweapon()
+{
+	struct obj *otmp;
+
+	if (!test_twoweapon())
+		; //NoOp, test_twoweapon prints output :/
 	else if (!uarmg && !Stone_resistance && (uswapwep && uswapwep->otyp == CORPSE &&
 		    touch_petrifies(&mons[uswapwep->corpsenm]))) {
 		char kbuf[BUFSZ];
@@ -593,7 +607,7 @@ dotwoweapon()
 	}
 
 	/* May we use two weapons? */
-	if (can_twoweapon()) {
+	if (starting_twoweapon()) {
 		/* Success! */
 		You("begin two-weapon combat.");
 		u.twoweap = 1;

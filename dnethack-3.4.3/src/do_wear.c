@@ -2446,13 +2446,13 @@ do_takeoff()
 	  if(!cursed(uwep)) {
 	    setuwep((struct obj *) 0);
 	    You("are empty %s.", body_part(HANDED));
-		if(u.twoweap && !can_twoweapon())
+		if(u.twoweap && !test_twoweapon())
 			untwoweapon();
 	  }
 	} else if (taking_off == W_SWAPWEP) {
 		setuswapwep((struct obj *) 0);
 		You("no longer have a second weapon readied.");
-		if(u.twoweap && !can_twoweapon())
+		if(u.twoweap && !test_twoweapon())
 			untwoweapon();
 	} else if (taking_off == W_QUIVER) {
 	  setuqwep((struct obj *) 0);

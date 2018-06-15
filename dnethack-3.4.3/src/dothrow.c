@@ -731,7 +731,7 @@ dofire()
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
 		if (u.twoweap) {
-			if (!can_twoweapon()) untwoweapon();
+			if (!test_twoweapon()) untwoweapon();
 			else if (uswapwep && (is_blaster(uswapwep) || (uquiver && ammo_and_launcher(uquiver, uswapwep)))){
 				result = fire_blaster(uwep, shotlimit);
 				if((result == 1) && is_blaster(uswapwep))
@@ -789,7 +789,7 @@ dofire()
 	} else if(u.twoweap && uswapwep && is_blaster(uswapwep) && !(uquiver && ammo_and_launcher(uquiver, uwep))){
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
-		if (!can_twoweapon()) untwoweapon();
+		if (!test_twoweapon()) untwoweapon();
 		else {
 			result = fire_blaster(uswapwep, shotlimit);
 			return(result);
@@ -832,7 +832,7 @@ dofire()
 	multi = 0;		/* reset; it's been used up */
 
 	if (u.twoweap) {
-		if (!can_twoweapon()) untwoweapon();
+		if (!test_twoweapon()) untwoweapon();
 		else if (ammo_and_launcher(uquiver,uwep) 
 		    && ammo_and_launcher(uquiver, uswapwep)){
 			result = throw_obj(uquiver, shotlimit, THROW_UWEP);
