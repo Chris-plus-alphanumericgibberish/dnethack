@@ -296,78 +296,79 @@
 #define ACID_RAIN              GEYSER+1
 //10
 #define ICE_STORM              ACID_RAIN+1
-#define SUMMON_MONS            ICE_STORM+1
+#define HAIL_FLURY             ICE_STORM+1
+#define SUMMON_MONS            HAIL_FLURY+1
 #define SUMMON_DEVIL           SUMMON_MONS+1
 #define DEATH_TOUCH			   SUMMON_DEVIL+1
+//15
        /* healing spells */
 #define CURE_SELF              DEATH_TOUCH+1  /* healing */
-//15
 #define MASS_CURE_CLOSE        CURE_SELF+1  /* heal allies */
 #define MASS_CURE_FAR          MASS_CURE_CLOSE+1  /* heal allies */
 #define RECOVER                MASS_CURE_FAR+1  /* remove afflictions */
        /* divination spells */
 #define MAKE_VISIBLE           RECOVER+1
+//20
        /* (dis)enchantment spells */
 #define HASTE_SELF             MAKE_VISIBLE+1 /* haste self */
-//20
 #define STUN_YOU               HASTE_SELF+1
 #define CONFUSE_YOU            STUN_YOU+1
 #define PARALYZE               CONFUSE_YOU+1
 #define BLIND_YOU              PARALYZE+1
-#define SLEEP                  BLIND_YOU+1 /* sleep */
 //25
+#define SLEEP                  BLIND_YOU+1 /* sleep */
 #define DRAIN_ENERGY           SLEEP+1
 #define WEAKEN_STATS           DRAIN_ENERGY+1
 #define WEAKEN_YOU			   WEAKEN_STATS+1
 #define DESTRY_ARMR            WEAKEN_YOU+1
-#define DESTRY_WEPN            DESTRY_ARMR+1
 //30
+#define DESTRY_WEPN            DESTRY_ARMR+1
 #define EVIL_EYE			   DESTRY_WEPN+1
        /* clerical spells */
 #define CURSE_ITEMS            EVIL_EYE+1
 #define INSECTS                CURSE_ITEMS+1
 #define RAISE_DEAD             INSECTS+1
-#define SUMMON_ANGEL           RAISE_DEAD+1
 //35
+#define SUMMON_ANGEL           RAISE_DEAD+1
 #define SUMMON_ALIEN           SUMMON_ANGEL+1
 #define PLAGUE                 SUMMON_ALIEN+1
 #define PUNISH                 PLAGUE+1
 #define AGGRAVATION			   PUNISH+1
+//40
        /* escape spells */
 #define DISAPPEAR              AGGRAVATION+1 /* invisibility */
-//40
        /* matter spells */
 #define DARKNESS               DISAPPEAR+1
 #define SUMMON_SPHERE          DARKNESS+1 /* flame sphere */
 #define MAKE_WEB               SUMMON_SPHERE+1
 #define DROP_BOULDER           MAKE_WEB+1
-#define EARTHQUAKE             DROP_BOULDER+1
 //45
+#define EARTHQUAKE             DROP_BOULDER+1
 #define TURN_TO_STONE          EARTHQUAKE+1
        /* unique monster spells */
 #define NIGHTMARE              TURN_TO_STONE+1
 #define FILTH                  NIGHTMARE+1
 #define CLONE_WIZ              FILTH+1
-#define STRANGLE               CLONE_WIZ+1
 //50
+#define STRANGLE               CLONE_WIZ+1
 #define MON_FIRA               STRANGLE+1
 #define MON_FIRAGA             MON_FIRA+1
 #define MON_BLIZZARA           MON_FIRAGA+1
 #define MON_BLIZZAGA           MON_BLIZZARA+1
-#define MON_THUNDARA           MON_BLIZZAGA+1
 //55
+#define MON_THUNDARA           MON_BLIZZAGA+1
 #define MON_THUNDAGA           MON_THUNDARA+1
 #define MON_FLARE              MON_THUNDAGA+1
 #define MON_WARP               MON_FLARE+1
 #define MON_POISON_GAS         MON_WARP+1
-#define MON_PROTECTION         MON_POISON_GAS+1
 //60
+#define MON_PROTECTION         MON_POISON_GAS+1
 #define SOLID_FOG      	       MON_PROTECTION+1
 #define ACID_BLAST       	   SOLID_FOG+1
 #define PRISMATIC_SPRAY        ACID_BLAST+1
 #define SILVER_RAYS            PRISMATIC_SPRAY+1
-#define GOLDEN_WAVE            SILVER_RAYS+1
 //65
+#define GOLDEN_WAVE            SILVER_RAYS+1
 #define VULNERABILITY          GOLDEN_WAVE+1
 #define MASS_HASTE             VULNERABILITY+1
 

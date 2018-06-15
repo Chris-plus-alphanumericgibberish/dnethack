@@ -663,7 +663,7 @@ unsigned int type;
 		return SOLID_FOG;
 	break;
 	case PM_FERRUMACH_RILMANI:
-		if(rn2(4)) return ICE_STORM;
+		if(rn2(4)) return HAIL_FLURY;
 		return SOLID_FOG;
 	break;
 	case PM_CUPRILACH_RILMANI:
@@ -1628,6 +1628,33 @@ int spellnum;
 	}
 	stop_occupation();
 	break;
+    case HAIL_FLURY:{
+		int hfdmg;
+		pline("Hailstones pummel you from all sides!");
+		if(dmg > 60)
+			dmg = 60;
+		hfdmg = dmg;
+		dmg = hfdmg;
+		
+		if(u.uac < 0){
+			if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
+			else dmg -= rnd(-u.uac);
+		}
+		
+		if (dmg < 1) dmg = 1;
+		
+		if (Half_physical_damage) dmg = (dmg + 1) / 2;
+			
+		if (Cold_resistance) {
+			shieldeff(u.ux, u.uy);
+		} else {
+			dmg += Half_spell_damage ? (hfdmg+1)/2 : hfdmg;
+		}
+		if (!ECold_resistance) {
+			if(hfdmg > rnd(20)) destroy_item(POTION_CLASS, AD_COLD);
+		}
+		stop_occupation();
+	}break;
     case LIGHTNING:
     if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
        zap = AD_ELEC;
