@@ -333,7 +333,7 @@ register boolean special;
 		    shield = STRANGE_OBJECT;
 		break;
 		default:
-			pline("Recieved %d.",monsndx(ptr));
+			pline("Received %d.",monsndx(ptr));
 			impossible("bad mplayer monster");
 		    weapon = 0;
 		    break;
