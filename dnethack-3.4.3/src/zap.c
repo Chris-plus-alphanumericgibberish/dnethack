@@ -1387,6 +1387,18 @@ poly_obj(obj, id)
 			otmp = mksobj(rn2(2) ? SPE_BLANK_PAPER : SCR_BLANK_PAPER, FALSE, FALSE);
 		} else if(obj->otyp == POT_BLOOD){
 			otmp = mksobj(POT_BLOOD, FALSE, FALSE);
+		} else if(obj->otyp == POT_WATER){
+			if(!rn2(3)){
+				obj->blessed = 0;
+				obj->cursed = 1;
+			} else if(rn2(2)){
+				obj->cursed = 0;
+				obj->blessed = 1;
+			} else {
+				obj->blessed = 0;
+				obj->cursed = 0;
+			}
+			return obj;
 		} else if(obj->otyp == HYPOSPRAY_AMPULE){
 			otmp = mksobj(HYPOSPRAY_AMPULE, FALSE, FALSE);
 		} else {
