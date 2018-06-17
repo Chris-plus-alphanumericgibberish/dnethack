@@ -1223,14 +1223,18 @@ WAND((char *)0,        "jeweled",   0, 150, 1, 0,         IRON,     HI_MINERAL),
 GEM("magicite crystal","brilliant blue",1, 1, 9999, 15, 11, GEMSTONE, CLR_BRIGHT_BLUE),/*Needs tile*/
 GEM("dilithium crystal", "white",      2,  1, 4500, 15,  5, GEMSTONE, CLR_WHITE),
 GEM("diamond", "white",                3,  1, 4000, 15, 10, GEMSTONE, CLR_WHITE),
+//3
 GEM("star sapphire", "blue",           2,  1, 3750, 15,  9, GEMSTONE, CLR_BLUE),/*Needs tile*/
 GEM("ruby", "red",                     4,  1, 3500, 15,  9, GEMSTONE, CLR_RED),
 GEM("jacinth", "orange",               3,  1, 3250, 15,  9, GEMSTONE, CLR_ORANGE),
+//6
 GEM("sapphire", "blue",                4,  1, 3000, 15,  9, GEMSTONE, CLR_BLUE),
 GEM("black opal", "black",             3,  1, 2500, 15,  8, GEMSTONE, CLR_BLACK),
 GEM("emerald", "green",                3,  1, 2500, 15,  8, GEMSTONE, CLR_GREEN),
+//9
 GEM("turquoise", "green",              4,  1, 2000, 15,  6, GEMSTONE, CLR_GREEN),
 GEM("morganite", "pink",               4,  1, 2000, 15,  6, GEMSTONE, CLR_ORANGE),
+//11 Note: Only first 11 gems are affected by dungeon level
 GEM("citrine", "yellow",               4,  1, 1500, 15,  6, GEMSTONE, CLR_YELLOW),
 GEM("aquamarine", "green",             6,  1, 1500, 15,  8, GEMSTONE, CLR_GREEN),
 GEM("amber", "yellowish brown",        8,  1, 1000, 15,  2, GEMSTONE, CLR_BROWN),
