@@ -152,6 +152,15 @@ doread()
 				pline("\"Take me up\"");
 			}
 			return(1);
+		} else if(scroll->oartifact == ART_ITLACHIAYAQUE){
+			if (Blind) {
+				You_cant("see the mirror!");
+				return 0;
+			} else {
+				pline("You see the nearby terrain reflected in the smoky depths of the mirror.");
+				do_vicinity_map(u.ux,u.uy);
+			}
+			return(1);
 		} else if(scroll->oartifact == ART_GLAMDRING){
 			if (Blind) {
 				You_cant("see the blade!");

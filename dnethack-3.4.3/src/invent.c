@@ -1144,6 +1144,7 @@ register const char *let,*word;
 		if (otmp->oartifact && 
 			(otmp->oartifact == ART_EXCALIBUR || 
 			 otmp->oartifact == ART_GLAMDRING || 
+			 otmp->oartifact == ART_ITLACHIAYAQUE || 
 			 otmp->oartifact == ART_ROD_OF_SEVEN_PARTS ||
 			 otmp->oartifact == ART_BOW_OF_SKADI ||
 			 otmp->oartifact == ART_PEN_OF_THE_VOID
