@@ -651,6 +651,10 @@ const char *name;
 		else if(obj->otyp == find_gcirclet()) obj->obj_material = GOLD;
 		else if(obj->otyp == ARMORED_BOOTS) obj->obj_material = COPPER;
 		else if(obj->otyp == ROUNDSHIELD) obj->obj_material = COPPER;
+		else if(obj->otyp == LIGHTSABER) obj->obj_material = SILVER;
+		else if(obj->otyp == BEAMSWORD) obj->obj_material = GOLD;
+		else if(obj->otyp == KAMEREL_VAJRA) obj->obj_material = GOLD;
+		else if(obj->otyp == DOUBLE_LIGHTSABER) obj->obj_material = PLATINUM;
 		else if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default material
 		else obj->obj_material = objects[obj->otyp].oc_material;
 		
