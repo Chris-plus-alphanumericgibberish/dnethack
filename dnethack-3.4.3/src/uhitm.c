@@ -1265,9 +1265,7 @@ int thrown;
 					warnedptr = mdat;
 				}
 			} else {
-				if(warnedptr != mdat){
-					warnedptr = 0;
-				}
+				warnedptr = 0;
 			}
 			
 			if(tmp > 1){
@@ -2112,18 +2110,41 @@ defaultvalue:
 	    }
 	}
 
-	if (unarmed && !thrown && !obj && !Upolyd) {
+	if (unarmed && !thrown && !obj && !Upolyd && !(u.sealsActive&SEAL_EURYNOME)) {//Eurynome makes your attacks monster attacks!
+		int resistmask = 0;
+		int weaponmask = 0;
+		static int warnedotyp = 0;
 		static struct permonst *warnedptr = 0;
-		if((resist_blunt(mdat) || (mon->mfaction == ZOMBIFIED)) && !(uarmg && narrow_spec_applies(uarmg, mon))){
+		if(uarmg && (uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN || uarmg->oartifact == ART_SHIELD_OF_THE_RESOLUTE_HEA || uarmg->oartifact == ART_PREMIUM_HEART)){
+			//Digging claws, or heart-shaped bit
+			weaponmask |= PIERCE;
+		}
+		if(uarmg && (uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN || uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER)){
+			weaponmask |= SLASH;
+		} else if(!Upolyd && Race_if(PM_HALF_DRAGON)){
+			weaponmask |= SLASH;
+		}
+		//Can always whack someone
+		weaponmask |= WHACK;
+		
+		if(resist_blunt(mdat) || (mon->mfaction == ZOMBIFIED)){
+			resistmask |= WHACK;
+		}
+		if(resist_pierce(mdat) || (mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED)){
+			resistmask |= PIERCE;
+		}
+		if(resist_slash(mdat) || (mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED)){
+			resistmask |= SLASH;
+		}
+		
+		if((weaponmask & ~(resistmask)) == 0L && !(uarmg && narrow_spec_applies(uarmg, mon))){
 			tmp /= 4;
 			if(warnedptr != mdat){
 				Your("%s are ineffective against %s.", makeplural(body_part(HAND)), mon_nam(mon));
 				warnedptr = mdat;
 			}
 		} else {
-			if(warnedptr != mdat){
-				warnedptr = 0;
-			}
+			warnedptr = 0;
 		}
 	}
 	
