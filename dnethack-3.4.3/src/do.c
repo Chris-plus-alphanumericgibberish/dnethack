@@ -1218,6 +1218,7 @@ boolean at_stairs, falling, portal;
 		minit();	/* ZEROCOMP */
 		getlev(fd, hackpid, new_ledger, FALSE);
 		(void) close(fd);
+		oinit(); /* reassign level dependent obj probabilities (Pat Rankin)*/
 	}
 	/* do this prior to level-change pline messages */
 	vision_reset();		/* clear old level's line-of-sight */
