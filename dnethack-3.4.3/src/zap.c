@@ -39,6 +39,7 @@ STATIC_DCL int FDECL(spell_hit_bonus, (int));
 
 #define is_hero_spell(type)	((type) >= 10 && (type) < 20)
 #define wand_damage_die(skill)	(((skill) > 1) ? (2*(skill) + 4) : 6)
+#define fblt_damage_die(skill)	((skill)+1)
 #define wandlevel(otyp)	(otyp == WAN_MAGIC_MISSILE ? 1 : otyp == WAN_SLEEP ? 1 : otyp == WAN_STRIKING ? 2 : otyp == WAN_FIRE ? 4 : otyp == WAN_COLD ? 4 : otyp == WAN_LIGHTNING ? 5 : otyp == WAN_DEATH ? 7 : 1)
 
 #ifndef OVLB
@@ -137,9 +138,9 @@ struct obj *otmp;
 		if (resists_magm(mtmp)) {	/* match effect on player */
 			shieldeff(mtmp->mx, mtmp->my);
 			break;	/* skip makeknown */
-		} else if (u.uswallow || otyp == WAN_STRIKING || rnd(20) < 10 + find_mac(mtmp)) {
+		} else if (u.uswallow || otyp == WAN_STRIKING || rnd(20) < 10 + find_mac(mtmp) + 2*P_SKILL(P_ATTACK_SPELL)) {
 			if(otyp == WAN_STRIKING) dmg = d(wand_damage_die(P_SKILL(P_WAND_POWER))-4,12);
-			else dmg = d(wand_damage_die(P_SKILL(P_ATTACK_SPELL))-4,12);
+			else dmg = d(fblt_damage_die(P_SKILL(P_ATTACK_SPELL)),12);
 			if (!flags.mon_moving && otyp == SPE_FORCE_BOLT && (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM))
 				dmg += d((u.ulevel+1)/2, 12);
 			if(dbldam) dmg *= 2;
