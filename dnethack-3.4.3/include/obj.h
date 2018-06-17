@@ -184,7 +184,7 @@ struct obj {
 			/*Records special features for weapons. */
 			/* 	Records runes for wooden weapons */
 			/* 	Records moon phase for moon axes */
-			/* 	Records theft type for stealing artifacts (reaver (scimitar) and averice (shortsword) */
+			/* 	Records theft type for stealing artifacts (reaver (scimitar) and avarice (shortsword) */
 			/* 	Records remaining ammo for blasters and force pikes */
 			/* 	Records the hilt-type for lightsabers */
 			/* 	Records the ema of damage taken for gloves of the berserker */
