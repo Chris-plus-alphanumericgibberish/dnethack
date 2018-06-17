@@ -1414,6 +1414,7 @@ physical:{
 					otmp->otyp != AKLYS && 
 					otmp->otyp != FORCE_PIKE && 
 					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
+					otmp->oartifact != ART_SILENCE_GLAIVE && 
 					otmp->oartifact != ART_HEARTCLEAVER && 
 					otmp->oartifact != ART_SOL_VALTIVA && 
 					otmp->oartifact != ART_SHADOWLOCK && 

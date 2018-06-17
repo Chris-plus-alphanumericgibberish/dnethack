@@ -1207,6 +1207,7 @@ int thrown;
 				obj->otyp != AKLYS && 
 				obj->otyp != FORCE_PIKE && 
 				obj->oartifact != ART_WEBWEAVER_S_CROOK && 
+				obj->oartifact != ART_SILENCE_GLAIVE && 
 				obj->oartifact != ART_HEARTCLEAVER && 
 				obj->oartifact != ART_SOL_VALTIVA && 
 				obj->oartifact != ART_SHADOWLOCK && 

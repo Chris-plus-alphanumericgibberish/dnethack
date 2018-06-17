@@ -261,7 +261,10 @@ struct obj {
  *	#define is_multigen(otyp) (otyp <= SHURIKEN)
  *	#define is_poisonable(otyp) (otyp <= BEC_DE_CORBIN)
  */
-#define artitypematch(a, o) (( (a)->otyp ) == BEAMSWORD ? ((o)->otyp==BROADSWORD) : (a)->otyp == (o)->otyp)
+#define artitypematch(a, o) (( (a)->otyp ) == BEAMSWORD ? ((o)->otyp==BROADSWORD) : \
+							( (a)->otyp ) == UNIVERSAL_KEY ? ((o)->otyp==SKELETON_KEY) : \
+							( (a)->otyp ) == ROUNDSHIELD ? ((o)->otyp==DWARVISH_ROUNDSHIELD) : \
+							(a)->otyp == (o)->otyp)
 #define is_blade(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= P_DAGGER && \
 			 objects[otmp->otyp].oc_skill <= P_SABER)

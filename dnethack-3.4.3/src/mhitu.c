@@ -1726,6 +1726,7 @@ hitmu(mtmp, mattk)
 					uwep->otyp != AKLYS && 
 					uwep->otyp != FORCE_PIKE && 
 					uwep->oartifact != ART_WEBWEAVER_S_CROOK && 
+					uwep->oartifact != ART_SILENCE_GLAIVE && 
 					uwep->oartifact != ART_HEARTCLEAVER && 
 					uwep->oartifact != ART_SOL_VALTIVA && 
 					uwep->oartifact != ART_SHADOWLOCK && 
