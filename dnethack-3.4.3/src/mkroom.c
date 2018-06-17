@@ -1349,27 +1349,50 @@ mkkamereltowers()
 					}
 				}
 			wallification(x-3, y-3, x+3, y+3);
+			
+			tries = 0;
+			otmp = 0;
+			while(!otmp){
 			if(!rn2(3)){
 				otmp = mksobj(DOUBLE_LIGHTSABER, FALSE, FALSE);
 				otmp = oname(otmp, artiname(ART_INFINITY_S_MIRRORED_ARC));
-				otmp->spe = 0;
-				otmp->cursed = 0;
-				otmp->blessed = 0;
-				place_object(otmp, x, y);
-			} else if(rn2(2)){
-				otmp = mksobj(MIRRORBLADE, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_SANSARA_MIRROR));
-				otmp->spe = 0;
-				otmp->cursed = 0;
-				otmp->blessed = 0;
-				place_object(otmp, x, y);
-			} else {
-				otmp = mksobj(KHAKKHARA, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_STAFF_OF_TWELVE_MIRRORS));
-				otmp->spe = 0;
-				otmp->cursed = 0;
-				otmp->blessed = 0;
-				place_object(otmp, x, y);
+					if(otmp->oartifact){
+						otmp->spe = 1;
+						otmp->cursed = 0;
+						otmp->blessed = 0;
+						place_object(otmp, x, y);
+					} else {
+						obfree(otmp, (struct obj *)0);
+						otmp = 0;
+						continue;
+					}
+				} else if(rn2(2)){
+					otmp = mksobj(MIRRORBLADE, FALSE, FALSE);
+					otmp = oname(otmp, artiname(ART_SANSARA_MIRROR));
+					if(otmp->oartifact || tries++ > 10){
+						otmp->spe = 1;
+						otmp->cursed = 0;
+						otmp->blessed = 0;
+						place_object(otmp, x, y);
+					} else {
+						obfree(otmp, (struct obj *)0);
+						otmp = 0;
+						continue;
+					}
+				} else {
+					otmp = mksobj(KHAKKHARA, FALSE, FALSE);
+					otmp = oname(otmp, artiname(ART_STAFF_OF_TWELVE_MIRRORS));
+					if(otmp->oartifact || tries++ > 10){
+						otmp->spe = 1;
+						otmp->cursed = 0;
+						otmp->blessed = 0;
+						place_object(otmp, x, y);
+					} else {
+						obfree(otmp, (struct obj *)0);
+						otmp = 0;
+						continue;
+					}
+				}
 			}
 			//record central tower location
 			tx = x;
@@ -1440,27 +1463,49 @@ mkkamereltowers()
 					}
 				}
 			wallification(x-3, y-3, x+3, y+3);
-			if(!rn2(3)){
-				otmp = mksobj(DOUBLE_LIGHTSABER, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_INFINITY_S_MIRRORED_ARC));
-				otmp->spe = 0;
-				otmp->cursed = 0;
-				otmp->blessed = 0;
-				place_object(otmp, x, y);
-			} else if(rn2(2)){
-				otmp = mksobj(MIRRORBLADE, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_SANSARA_MIRROR));
-				otmp->spe = 0;
-				otmp->cursed = 0;
-				otmp->blessed = 0;
-				place_object(otmp, x, y);
-			} else {
-				otmp = mksobj(KHAKKHARA, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_STAFF_OF_TWELVE_MIRRORS));
-				otmp->spe = 0;
-				otmp->cursed = 0;
-				otmp->blessed = 0;
-				place_object(otmp, x, y);
+			tries = 0;
+			otmp = 0;
+			while(!otmp){
+				if(!rn2(3)){
+					otmp = mksobj(DOUBLE_LIGHTSABER, FALSE, FALSE);
+					otmp = oname(otmp, artiname(ART_INFINITY_S_MIRRORED_ARC));
+					if(otmp->oartifact){
+						otmp->spe = 1;
+						otmp->cursed = 0;
+						otmp->blessed = 0;
+						place_object(otmp, x, y);
+					} else {
+						obfree(otmp, (struct obj *)0);
+						otmp = 0;
+						continue;
+					}
+				} else if(rn2(2)){
+					otmp = mksobj(MIRRORBLADE, FALSE, FALSE);
+					otmp = oname(otmp, artiname(ART_SANSARA_MIRROR));
+					if(otmp->oartifact || tries++ > 10){
+						otmp->spe = 1;
+						otmp->cursed = 0;
+						otmp->blessed = 0;
+						place_object(otmp, x, y);
+					} else {
+						obfree(otmp, (struct obj *)0);
+						otmp = 0;
+						continue;
+					}
+				} else {
+					otmp = mksobj(KHAKKHARA, FALSE, FALSE);
+					otmp = oname(otmp, artiname(ART_STAFF_OF_TWELVE_MIRRORS));
+					if(otmp->oartifact || tries++ > 10){
+						otmp->spe = 1;
+						otmp->cursed = 0;
+						otmp->blessed = 0;
+						place_object(otmp, x, y);
+					} else {
+						obfree(otmp, (struct obj *)0);
+						otmp = 0;
+						continue;
+					}
+				}
 			}
 			//record central tower location
 			tx = x;
