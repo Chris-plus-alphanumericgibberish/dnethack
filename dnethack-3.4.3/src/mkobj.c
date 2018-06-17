@@ -574,6 +574,8 @@ boolean artif;
 			begin_burn(otmp, FALSE);
 			obj_extract_self(otmp);	 /* now release it for caller's use */
 		}
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		break;
 	case TOOL_CLASS:
 	    switch(otmp->otyp) {
@@ -779,6 +781,8 @@ boolean artif;
 			doMaskStats(otmp);
 		break;
 		}
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 10 : 40))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 	    break;
 	case AMULET_CLASS:
 		if (otmp->otyp == AMULET_OF_YENDOR) flags.made_amulet = TRUE;
@@ -787,6 +791,8 @@ boolean artif;
 		   otmp->otyp == AMULET_OF_RESTFUL_SLEEP)) {
 			curse(otmp);
 		} else	blessorcurse(otmp, 10);
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 	case VENOM_CLASS:
 	case CHAIN_CLASS:
 	case BALL_CLASS:
@@ -830,6 +836,8 @@ boolean artif;
 			else if(prob < 70) otmp->ovar1 = PENTAGRAM;
 			else otmp->ovar1 = HEXAGRAM;
 		}
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		break;
 	case SPBOOK_CLASS:
 		blessorcurse(otmp, 17);
@@ -957,6 +965,8 @@ boolean artif;
 				objects[otmp->otyp].oc_level, otmp->otyp);
 			return 0;
 		}
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 	break;
 	case ARMOR_CLASS:
 		if(rn2(10) && (otmp->otyp == FUMBLE_BOOTS ||
@@ -969,7 +979,7 @@ boolean artif;
 			otmp->blessed = rn2(2);
 			otmp->spe = rne(3);
 		} else	blessorcurse(otmp, 10);
-		if (artif && !rn2(40))
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 10 : 40))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		/* simulate lacquered armor for samurai */
 		if (Role_if(PM_SAMURAI) && otmp->otyp == SPLINT_MAIL &&
@@ -1013,6 +1023,8 @@ boolean artif;
 			(objects[otmp->otyp].oc_dir == NODIR) ? 11 : 4);
 		blessorcurse(otmp, 17);
 		otmp->recharged = 0; /* used to control recharging */
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		break;
 	case RING_CLASS:
 		if(isEngrRing(otmp->otyp) && !rn2(3) ){
@@ -1054,6 +1066,8 @@ boolean artif;
 			  otmp->otyp == RIN_HUNGER || !rn2(9))) {
 			curse(otmp);
 		}
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		break;
 	case ROCK_CLASS:
 		switch (otmp->otyp) {
@@ -1065,6 +1079,8 @@ boolean artif;
 			    (void) add_to_container(otmp,
 						    mkobj(SPBOOK_CLASS,FALSE));
 		}
+		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
+		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		break;
 	case COIN_CLASS:
 		break;	/* do nothing */
