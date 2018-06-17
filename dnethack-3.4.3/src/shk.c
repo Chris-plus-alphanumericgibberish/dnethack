@@ -3739,10 +3739,13 @@ register struct monst *shkp;
 	register struct eshk *eshkp = ESHK(shkp);
 	int z;
 	boolean uondoor = FALSE, satdoor, avoid = FALSE, badinv;
+	int tempbanned;
 
 	omx = shkp->mx;
 	omy = shkp->my;
 
+	tempbanned = ((countFarSigns(shkp) > 0) && (strcmp(shkname(shkp), "Izchak") != 0));
+	
 	if (inhishop(shkp))
 	    remove_damage(shkp, FALSE);
 
@@ -3821,7 +3824,7 @@ register struct monst *shkp;
 		    uondoor = (u.ux == eshkp->shd.x && u.uy == eshkp->shd.y);
 		    if(uondoor) {
 			badinv = (carrying(PICK_AXE) || carrying(DWARVISH_MATTOCK) ||
-            eshkp->pbanned ||
+            eshkp->pbanned || tempbanned ||
 				  (Fast && (sobj_at(PICK_AXE, u.ux, u.uy) ||
 				  sobj_at(DWARVISH_MATTOCK, u.ux, u.uy))));
 			if(satdoor && badinv)
