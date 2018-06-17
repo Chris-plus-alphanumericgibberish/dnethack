@@ -1209,7 +1209,7 @@ plus:
 						else Strcat(bp, " (flickering)");
 					}
 				}
-				if(obj->cobj || obj->oartifact == ART_ANNULUS || obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
+				if(obj->oartifact && obj->known){
 					Strcat(prefix, lightsaber_colorText(obj));
 					Strcat(prefix, " ");
 				}
