@@ -1760,6 +1760,7 @@ not_special:
 	if (doorbuster) flag |= BUSTDOOR;
 	{
 	    register int i, j, nx, ny, nearer;
+		int leader_target = FALSE;
 	    int jcnt, cnt;
 	    int ndist, nidist;
 	    register coord *mtrk;
@@ -1791,14 +1792,28 @@ not_special:
 			for(m2=fmon; m2; m2 = m2->nmon){
 				if(m2->m_id == quest_status.leader_m_id && Role_if(PM_ANACHRONONAUT) && !mtmp->mpeaceful && In_quest(&u.uz)){
 					/*make a beeline for the leader*/
-					distminbest = min(distminbest,distmin(mtmp->mx,mtmp->my,m2->mx,m2->my));
+					distminbest = min(distminbest,dist2(mtmp->mx,mtmp->my,m2->mx,m2->my));
+					leader_target = TRUE;
 					gx = m2->mx;
 					gy = m2->my;
 					appr = 1;
-				} else if(distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) < distminbest && mm_aggression(mtmp,m2)){
-					distminbest = distmin(mtmp->mx,mtmp->my,m2->mx,m2->my);
+					if(mon_can_see_mon(mtmp, m2)){
+						mtmp->mux = m2->mx;
+						mtmp->muy = m2->my;
+						appr = 1;
+						break;
+					}
+				} else if(dist2(mtmp->mx,mtmp->my,m2->mx,m2->my) < distminbest
+						&& mm_aggression(mtmp,m2)
+						&& clear_path(mtmp->mx, mtmp->my, m2->mx, m2->my)
+						&& mon_can_see_mon(mtmp, m2)
+				){
+					distminbest = dist2(mtmp->mx,mtmp->my,m2->mx,m2->my);
+					leader_target = FALSE;
 					gx = m2->mx;
 					gy = m2->my;
+					mtmp->mux = m2->mx;
+					mtmp->muy = m2->my;
 					if(MON_WEP(mtmp) && 
 						(is_launcher(MON_WEP(mtmp)) || is_firearm(MON_WEP(mtmp)) )
 					){
@@ -1807,6 +1822,63 @@ not_special:
 						else appr = 0;
 					} else {
 						appr = 1;
+					}
+				}
+			}
+		}
+		if(Role_if(PM_ANACHRONONAUT) && !mtmp->mpeaceful && In_quest(&u.uz) && Is_qstart(&u.uz)){
+			if(mtmp->mhp == mtmp->mhpmax && (
+				(mtmp->data == &mons[PM_DEEP_ONE] && !rn2(1000))
+				|| (mtmp->data == &mons[PM_DEEPER_ONE] && !rn2(500))
+				|| (mtmp->data == &mons[PM_DEEPEST_ONE] && !rn2(100))
+			)){
+				int i, j, count=0;
+				for(i = -1; i < 2; i++) for(j = -1; j < 2; j++){
+					if(isok(mtmp->mx+i, mtmp->my+j) && IS_WALL(levl[mtmp->mx+i][mtmp->my+j].typ)){
+						count++;
+					}
+				}
+				if(count){
+					count = rn2(count);
+					struct obj *breacher;
+					for(i = -1; i < 2; i++) for(j = -1; j < 2; j++){
+						if(isok(mtmp->mx+i, mtmp->my+j) && IS_WALL(levl[mtmp->mx+i][mtmp->my+j].typ)){
+							if(count-- == 0){
+								breacher = mksobj(STICK_OF_DYNAMITE, FALSE, FALSE);
+								breacher->quan = 1L;
+								breacher->cursed = 0;
+								breacher->blessed = 0;
+								breacher->age = rn1(10,10);
+								fix_object(breacher);
+								place_object(breacher, mtmp->mx+i, mtmp->my+j);
+								begin_burn(breacher, FALSE);
+								if(canseemon(mtmp))
+									pline("%s plants a breaching charge!", Monnam(mtmp));
+							}
+						}
+					}
+				}
+			} else if((mtmp->data == &mons[PM_DEEP_ONE] && !rn2(20))
+				|| (mtmp->data == &mons[PM_DEEPER_ONE] && !rn2(5))
+				|| (mtmp->data == &mons[PM_DEEPEST_ONE])
+			){
+				int i, j, count=0;
+				for(i = -1; i < 2; i++) for(j = -1; j < 2; j++){
+					if(isok(mtmp->mx+i, mtmp->my+j) && t_at(mtmp->mx+i, mtmp->my+j) && t_at(mtmp->mx+i, mtmp->my+j)->ttyp == PIT){
+						count++;
+					}
+				}
+				if(count){
+					count = rn2(count);
+					struct obj *breacher;
+					for(i = -1; i < 2; i++) for(j = -1; j < 2; j++){
+						if(isok(mtmp->mx+i, mtmp->my+j) && t_at(mtmp->mx+i, mtmp->my+j) && t_at(mtmp->mx+i, mtmp->my+j)->ttyp == PIT){
+							if(count-- == 0){
+								delfloortrap(t_at(mtmp->mx+i, mtmp->my+j));
+								if(canseemon(mtmp))
+									pline("%s fills in a trench!", Monnam(mtmp));
+							}
+						}
 					}
 				}
 			}
