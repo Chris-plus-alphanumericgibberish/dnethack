@@ -2895,10 +2895,12 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		return ALLOW_M|ALLOW_TM;
 
 	/* undead vs civs */
-	if(is_undead_mon(magr) && (!always_hostile_mon(mdef) && !is_undead_mon(mdef) && !(is_animal(md) && !is_domestic(md)) && !mindless_mon(mdef)))
-		return ALLOW_M|ALLOW_TM;
-	if((!always_hostile_mon(magr) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr)) && is_undead_mon(mdef))
-		return ALLOW_M|ALLOW_TM;
+	if(!(In_quest(&u.uz) || u.uz.dnum == temple_dnum || u.uz.dnum == tower_dnum || In_cha(&u.uz) || Is_rogue_level(&u.uz) || Inhell)){
+		if(is_undead_mon(magr) && (!always_hostile_mon(mdef) && !is_undead_mon(mdef) && !(is_animal(md) && !is_domestic(md)) && !mindless_mon(mdef)))
+			return ALLOW_M|ALLOW_TM;
+		if((!always_hostile_mon(magr) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr)) && is_undead_mon(mdef))
+			return ALLOW_M|ALLOW_TM;
+	}
 
 	/* drow vs. other drow */
 	/* Note that factions may be different than the displayed house name, 
