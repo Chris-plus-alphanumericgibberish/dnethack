@@ -2028,6 +2028,10 @@ summon_alien:
     {
 	int count;
 	if(!mtmp || u.summonMonster) goto psibolt;
+	
+	if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))
+		break;
+	
 	u.summonMonster = TRUE;
 	count = nasty(mtmp);	/* summon something nasty */
 	if (mtmp->iswiz)
@@ -2899,6 +2903,12 @@ int spellnum;
 	
 	if(spellnum == DEATH_TOUCH && (wardAt == CIRCLE_OF_ACHERON || wardAt == HEPTAGRAM || wardAt == HEXAGRAM))
 		return TRUE;
+	
+	//Nothing to come
+	if((Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)) 
+		&& (spellnum == SUMMON_MONS || spellnum == SUMMON_ALIEN || spellnum == SUMMON_ANGEL || spellnum == SUMMON_DEVIL)
+	) return TRUE;
+		
 	
 	if(is_drow(mtmp->data) && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))){
 		if(!Race_if(PM_DROW)){
@@ -3893,6 +3903,9 @@ int spellnum;
 	int count = 0;
         register struct monst *mpet;
 
+		if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))
+			break;
+		
         if (!rn2(10) && Inhell) {
 			if (yours) demonpet();
 			else msummon(mattk);
