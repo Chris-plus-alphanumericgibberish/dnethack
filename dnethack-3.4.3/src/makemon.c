@@ -2961,8 +2961,6 @@ register struct monst *mtmp;
 			}
 			(void)mongets(mtmp, FLACK_HELMET);
 			(void)mongets(mtmp, GLOVES);
-			(void)mongets(mtmp, HIGH_BOOTS);
-			(void)mongets(mtmp, LEATHER_CLOAK);
 		    switch (rn2(6)) {
 				case 0:
 					otmp = mksobj(ASSAULT_RIFLE, TRUE, FALSE);
