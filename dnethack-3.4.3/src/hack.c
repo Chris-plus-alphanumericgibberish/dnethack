@@ -2551,21 +2551,20 @@ weight_cap()
 		mdat = u.usteed->data;
 	}
 #endif
-	
-	if (!youracedata->cwt)
-		maxcap = (maxcap * (long)youracedata->msize) / MZ_HUMAN;
-	else if (!strongmonst(youracedata)
-		|| (strongmonst(youracedata) && (youracedata->cwt > WT_HUMAN)))
-		maxcap = (maxcap * (long)youracedata->cwt / WT_HUMAN);
+	if (!mdat->cwt)
+		maxcap = (maxcap * (long)mdat->msize) / MZ_HUMAN;
+	else if (!strongmonst(mdat)
+		|| (strongmonst(mdat) && (mdat->cwt > WT_HUMAN)))
+		maxcap = (maxcap * (long)mdat->cwt / WT_HUMAN);
 
 	/* consistent with can_carry() in mon.c */
-	if (youracedata->mlet == S_NYMPH)
+	if (mdat->mlet == S_NYMPH)
 		carrcap = maxcap;
-	else if (!youracedata->cwt)
-		carrcap = (carrcap * (long)youracedata->msize) / MZ_HUMAN;
-	else if (!strongmonst(youracedata)
-		|| (strongmonst(youracedata) && (youracedata->cwt > WT_HUMAN)))
-		carrcap = (carrcap * (long)youracedata->cwt / WT_HUMAN);
+	else if (!mdat->cwt)
+		carrcap = (carrcap * (long)mdat->msize) / MZ_HUMAN;
+	else if (!strongmonst(mdat)
+		|| (strongmonst(mdat) && (mdat->cwt > WT_HUMAN)))
+		carrcap = (carrcap * (long)mdat->cwt / WT_HUMAN);
 
 	if (Levitation || Weightless    /* pugh@cornell */
 	)
