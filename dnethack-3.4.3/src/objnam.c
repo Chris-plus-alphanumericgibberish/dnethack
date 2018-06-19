@@ -3613,6 +3613,7 @@ typfnd:
 			typ == BEAMSWORD ||
 			typ == DOUBLE_LIGHTSABER ||
 			typ == VIBROBLADE ||
+			typ == SEISMIC_HAMMER ||
 			typ == FORCE_PIKE ||
 			(typ >= PISTOL && typ <= RAYGUN) || 
 			(typ >= SHOTGUN_SHELL && typ <= LASER_BEAM) ||
