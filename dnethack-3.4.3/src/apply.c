@@ -4854,6 +4854,7 @@ doapply()
 {
 	struct obj *obj;
 	register int res = 1;
+	int wasmergable = FALSE;
 	char class_list[MAXOCLASSES+2];
 
 	if(check_capacity((char *)0)) return (0);
@@ -4872,6 +4873,8 @@ doapply()
 	obj = getobj(class_list, "use or apply");
 	if(!obj) return 0;
 
+	wasmergable = objects[obj->otyp].oc_merge; //Some functions leave a stale pointer here if they merge the item
+	
 	if (obj->oartifact && !touch_artifact(obj, &youmonst, FALSE))
 	    return 1;	/* evading your grasp costs a turn; just be
 			   grateful that you don't drop it as well */
@@ -5439,7 +5442,7 @@ doapply()
 		nomul(0, NULL);
 		return 0;
 	}
-	if (res && obj && obj->oartifact) arti_speak(obj);
+	if (res && !wasmergable && obj && obj->oartifact) arti_speak(obj);
 xit2:
 	nomul(0, NULL);
 	return res;
