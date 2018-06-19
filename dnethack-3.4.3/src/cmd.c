@@ -1170,10 +1170,19 @@ wiz_map()
 {
 	if (wizard) {
 	    struct trap *t;
+		int zx, zy;
 	    long save_Hconf = HConfusion,
 		 save_Hhallu = HHallucination;
 
 	    HConfusion = HHallucination = 0L;
+		for(zx = 0; zx < COLNO; zx++) for(zy = 0; zy < ROWNO; zy++)
+			if (glyph_is_trap(levl[zx][zy].glyph)) {
+				/* Zonk all memory of this location. */
+				levl[zx][zy].seenv = 0;
+				levl[zx][zy].waslit = 0;
+				levl[zx][zy].glyph = cmap_to_glyph(S_stone);
+				levl[zx][zy].styp = STONE;
+			}
 	    for (t = ftrap; t != 0; t = t->ntrap) {
 		t->tseen = 1;
 		map_trap(t, TRUE);
