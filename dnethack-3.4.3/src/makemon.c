@@ -2921,43 +2921,9 @@ register struct monst *mtmp;
 		      }
 		    if (!rn2(10)) (void)mongets(mtmp, ELVEN_MITHRIL_COAT);
 		    if (!rn2(10)) (void)mongets(mtmp, DWARVISH_CLOAK);
-		} else if (is_dwarf(ptr)) { //slightly rearanged code so more dwarves get helms -D_E
-		    if (rn2(7)) (void)mongets(mtmp, DWARVISH_CLOAK);
-		    if (rn2(7)) (void)mongets(mtmp, IRON_SHOES);
-			if (!rn2(4)) {
-				(void)mongets(mtmp, DWARVISH_SHORT_SWORD);
-			} else {
-				if(!rn2(3)) (void)mongets(mtmp, DWARVISH_SPEAR);
-				else (void)mongets(mtmp, DAGGER);
-			}
-			/* note: you can't use a mattock with a shield */
-			if(!Is_minetown_level(&u.uz)){
-				if (!rn2(3)) (void)mongets(mtmp, DWARVISH_MATTOCK);
-				else {
-					(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
-					if (!could_twoweap(ptr))
-						(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
-					else
-						mongets(mtmp, DWARVISH_SHORT_SWORD);
-				}
-			}
-			if (In_mines_quest(&u.uz) && !Is_minetown_level(&u.uz)) {
-			/* MRKR: Dwarves in dark mines have their lamps on. */
-			    otmp = mksobj(DWARVISH_HELM, TRUE, FALSE);
-			    (void) mpickobj(mtmp, otmp);
-				    if (!levl[mtmp->mx][mtmp->my].lit) {
-					begin_burn(otmp, FALSE);
-			    }
-			}
-			else {
-			    (void)mongets(mtmp, DWARVISH_HELM);
-				/* CM: Dwarves OUTSIDE the mines have booze. */
-				mongets(mtmp, POT_BOOZE);
-			}
- 			if (!rn2(3)){
-			    if(is_prince(ptr) || (is_lord(ptr) && !rn2(3))) (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
-				else (void)mongets(mtmp, CHAIN_MAIL);
-			}
+		} else if(mm == PM_CHANGED) {
+			if(!rn2(10)) (void)mongets(mtmp, HAND_BLASTER);
+			else (void)mongets(mtmp, STILETTO);
 		} else if(mm == PM_GNOLL) {
 			switch(rnd(4)){
 			case 1:
@@ -2980,9 +2946,6 @@ register struct monst *mtmp;
 			(void)mongets(mtmp, LEATHER_ARMOR);
 			if(!rn2(2))(void)mongets(mtmp, GLOVES);
 			if(!rn2(4))(void)mongets(mtmp, LEATHER_CLOAK);
-		} else if(mm == PM_CHANGED) {
-			if(!rn2(10)) (void)mongets(mtmp, HAND_BLASTER);
-			else (void)mongets(mtmp, STILETTO);
 		} else if(mm == PM_DEEP_ONE || mm == PM_DEEPER_ONE) {
 		 if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
 		    switch (rn2(3)) {
@@ -3318,6 +3281,43 @@ register struct monst *mtmp;
 			(void)mongets(mtmp, BRONZE_PLATE_MAIL);
 			(void)mongets(mtmp, BRONZE_GAUNTLETS);
 			(void)mongets(mtmp, ARMORED_BOOTS);
+		} else if (is_dwarf(ptr)) { //slightly rearanged code so more dwarves get helms -D_E
+		    if (rn2(7)) (void)mongets(mtmp, DWARVISH_CLOAK);
+		    if (rn2(7)) (void)mongets(mtmp, IRON_SHOES);
+			if (!rn2(4)) {
+				(void)mongets(mtmp, DWARVISH_SHORT_SWORD);
+			} else {
+				if(!rn2(3)) (void)mongets(mtmp, DWARVISH_SPEAR);
+				else (void)mongets(mtmp, DAGGER);
+			}
+			/* note: you can't use a mattock with a shield */
+			if(!Is_minetown_level(&u.uz)){
+				if (!rn2(3)) (void)mongets(mtmp, DWARVISH_MATTOCK);
+				else {
+					(void)mongets(mtmp, !rn2(3) ? PICK_AXE : AXE);
+					if (!could_twoweap(ptr))
+						(void)mongets(mtmp, DWARVISH_ROUNDSHIELD);
+					else
+						mongets(mtmp, DWARVISH_SHORT_SWORD);
+				}
+			}
+			if (In_mines_quest(&u.uz) && !Is_minetown_level(&u.uz)) {
+			/* MRKR: Dwarves in dark mines have their lamps on. */
+			    otmp = mksobj(DWARVISH_HELM, TRUE, FALSE);
+			    (void) mpickobj(mtmp, otmp);
+				    if (!levl[mtmp->mx][mtmp->my].lit) {
+					begin_burn(otmp, FALSE);
+			    }
+			}
+			else {
+			    (void)mongets(mtmp, DWARVISH_HELM);
+				/* CM: Dwarves OUTSIDE the mines have booze. */
+				mongets(mtmp, POT_BOOZE);
+			}
+ 			if (!rn2(3)){
+			    if(is_prince(ptr) || (is_lord(ptr) && !rn2(3))) (void)mongets(mtmp, DWARVISH_MITHRIL_COAT);
+				else (void)mongets(mtmp, CHAIN_MAIL);
+			}
 		}
 		break;
 	    case S_KETER:
