@@ -4279,6 +4279,9 @@ uspsibolt:
 	    impossible("psibolt spell with no mtmp");
 	    return;
 	}
+	
+	if(dmg > 50) dmg = 50;
+	
 	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    dmg = (dmg + 1) / 2;
@@ -4824,6 +4827,7 @@ uspsibolt:
 	    impossible("wound spell with no mtmp");
 	    return;
 	}
+	if( dmg > 60) dmg = 60;
 	if (resists_magm(mtmp) || resist(mtmp, 0, 0, FALSE)) { 
 	    shieldeff(mtmp->mx, mtmp->my);
 	    dmg = (dmg + 1) / 2;
