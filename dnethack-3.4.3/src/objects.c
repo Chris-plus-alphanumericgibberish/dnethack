@@ -883,7 +883,7 @@ TOOL("leash", (char *)0,        1, 0, 0, 0,  70, 12,  20, LEATHER, HI_LEATHER),
 TOOL("stethoscope", (char *)0,  1, 0, 0, 0,  25,  4,  75, IRON, HI_METAL),
 TOOL("tinning kit", (char *)0,  1, 0, 0, 1,  15,100,  30, IRON, HI_METAL),
 TOOL("bullet fabber", "white box with a yellow fiddly bit",/*Needs tile*/
-								0, 0, 1, 0,   0,100,  30, PLASTIC, CLR_WHITE),
+								0, 0, 1, 0,   0, 20,  30, PLASTIC, CLR_WHITE),
 TOOL("upgrade kit", (char *)0,  1, 0, 0, 0,  40,100,  30, COPPER, HI_COPPER),/*Needs encyc entry*//*Needs tile*/
 TOOL("power pack", "little white cube", /*Needs encyc entry*//*Needs tile*/
 								0, 1, 1, 0,   0,  1,  300, PLASTIC, CLR_WHITE),
@@ -938,7 +938,9 @@ WEPTOOL("beamsword",  "broadsword hilt", /*Needs encyc entry*/
 WEPTOOL("double lightsaber",  "long grip", /*Needs encyc entry*//*Needs tile*/
 	0, 1, 1, 1,  0, 30,1000, 10,10, -6, SLASH|E, P_QUARTERSTAFF, METAL, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
-	0, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
+	0, 0, 0, 0,  4,  30,  50,  2,  6, 0, WHACK,  P_FLAIL, IRON, HI_METAL),
+WEPTOOL("shepherd's crook", "bent staff",
+	0, 0, 0, 1,  1,  30,   5,  6,  4, 0, WHACK, P_QUARTERSTAFF, WOOD, HI_WOOD),
 /* 3.4.1: unicorn horn left classified as "magic" */
 WEPTOOL("unicorn horn", (char *)0,
 	1, 1, 0, 0,  0,  20, 100, 12, 12, 0, PIERCE, P_UNICORN_HORN, BONE, CLR_WHITE),
@@ -1002,7 +1004,18 @@ FOOD("clove of garlic",      7, 1,  1, 0, VEGGY,  40, CLR_WHITE),
 FOOD("slime mold",          75, 1,  5, 0, VEGGY, 250, HI_ORGANIC),
 
 /* people food */
-FOOD("lump of royal jelly",  0, 1,  2, 0, VEGGY, 200, CLR_YELLOW),
+FOOD("lump of royal jelly",	0, 1,  2, 0, VEGGY, 200, CLR_YELLOW),
+FOOD("lump of soldier's jelly",  
+							0, 1,  2, 0, VEGGY, 200, CLR_YELLOW),
+FOOD("lump of dancer's jelly",
+							0, 1,  2, 0, VEGGY, 200, CLR_YELLOW),
+FOOD("lump of philosopher's jelly",
+							0, 1,  2, 0, VEGGY, 200, CLR_YELLOW),
+FOOD("lump of priestess's jelly",
+							0, 1,  2, 0, VEGGY, 200, CLR_YELLOW),
+FOOD("lump of rhetor's jelly",
+							0,  1,  2, 0, VEGGY, 200, CLR_YELLOW),
+FOOD("honeycomb",			0,  4, 10, 0, VEGGY, 800, CLR_YELLOW),
 FOOD("cream pie",           25, 1, 10, 0, VEGGY, 100, CLR_WHITE),
 FOOD("candy bar",           13, 1,  2, 0, VEGGY, 100, CLR_BROWN),
 FOOD("fortune cookie",      55, 1,  1, 0, VEGGY,  40, CLR_YELLOW),
