@@ -178,7 +178,7 @@ WEAPON("moon axe", "two-handed axe", /*Needs encyc entry*//*Needs tile*/
 WEAPON("short sword", (char *)0,
 	1, 0, 0,  8, 30, 10,  6,  8, 0, P,   P_SHORT_SWORD, IRON, HI_METAL),
 WEAPON("vibroblade", "gray short sword", /*Needs encyc entry*//*Needs tile*/
-	1, 0, 0,  0, 20, 10,  6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, CLR_GRAY),
+	1, 0, 0,  0,  5, 10,  6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, CLR_GRAY),
 WEAPON("elven short sword", "runed short sword",
 	0, 0, 0,  2,  2, 10,  7,  7, 2, P,   P_SHORT_SWORD, WOOD, HI_WOOD),
 WEAPON("droven short sword", "short sword", /*Needs encyc entry*/
@@ -242,7 +242,7 @@ WEAPON("naginata", "samurai-sword polearm",
 WEAPON("lance", (char *)0,
 	1, 0, 0,  4,180, 10,  6,  8, 0, P,   P_LANCE, IRON, HI_METAL),
 WEAPON("force pike", "long gray spear",/*Needs tile*/
-	0, 0, 0,  0,180, 10,  6,  8, 2, P|S,   P_LANCE, PLASTIC, CLR_GRAY),
+	0, 0, 0,  0, 30, 10,  6,  8, 2, P|S,   P_LANCE, PLASTIC, CLR_GRAY),
 WEAPON("elven lance", "runed lance", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0,  0, 11, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
 WEAPON("droven lance", "lance", /*Needs encyc entry*//*Needs tile*/
@@ -338,12 +338,12 @@ GUN("gun", "unfamiliar gun",					0,  0, 0,  25,  250, 10,  3, -1, WP_BULLET, IRO
 GUN("long gun", "unfamiliar long gun",			0,  1, 0,  30,  150, 22, -1,  1, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
 GUN("heavy gun", "unfamiliar heavy gun",		0,  1, 0, 100, 2000, 20,  8, -4, WP_BULLET, IRON, P_FIREARM, HI_METAL),/*Needs tile*/
  /*Needs encyc entry*/
-GUN("hand blaster", "hard black handmirror",		0,  0, 0,  12, 1000, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BLACK), /*Needs tile*/
-GUN("arm blaster",  "hard white bracer", 	   		0,  0, 0,  45, 4500, 15,  6,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_WHITE), /*Needs tile*/
-GUN("mass-shadow pistol",  "rectangular device",	0,  0, 0,  25, 4500, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_GRAY), /*Needs tile*/
-GUN("cutting laser","hard tan lozenge",    			0,  0, 0,  10, 1000,  3, -1,  3,WP_BLASTER, PLASTIC, P_FIREARM, CLR_YELLOW), /*Needs tile*/
+GUN("hand blaster", "hard black handmirror",		0,  0, 0,   2, 1000, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BLACK), /*Needs tile*/
+GUN("arm blaster",  "hard white bracer", 	   		0,  0, 0,   8, 4500, 15,  6,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_WHITE), /*Needs tile*/
+GUN("mass-shadow pistol",  "rectangular device",	0,  0, 0,   4, 4500, 10,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_GRAY), /*Needs tile*/
+GUN("cutting laser","hard tan lozenge",    			0,  0, 0,   1, 1000,  3, -1,  3,WP_BLASTER, PLASTIC, P_FIREARM, CLR_YELLOW), /*Needs tile*/
 
-GUN("raygun", "hard handle ending in glassy disks",	0,  0, 0,  45, 3000, 15,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BRIGHT_CYAN), /*Needs tile*/
+GUN("raygun", "hard handle ending in glassy disks",	0,  0, 0,   8, 3000, 15,  1,  0,WP_BLASTER, PLASTIC, P_FIREARM, CLR_BRIGHT_CYAN), /*Needs tile*/
 BULLET("bullet", "pellet",
 	0,  0,   1,   5, 8, 6, 0, WP_BULLET,   P,   METAL, -P_FIREARM, HI_METAL),/*Needs tile*/
 BULLET("silver bullet", "silver pellet",
@@ -819,11 +819,11 @@ CONTAINER("massive stone crate", (char *)0,1, 0, 0,   0,6000,  8, MINERAL,HI_MIN
 CONTAINER("chest", (char *)0,           1, 0, 0,  30,600,  16, WOOD, HI_WOOD),
 CONTAINER("magic chest", "big chest with 10 keyholes",
 										0, 1, 0,  15,1001,7000, METAL, CLR_BRIGHT_MAGENTA),/*Needs tile*/
-CONTAINER("ice box", (char *)0,         1, 0, 0,   5,250,  42, PLASTIC, CLR_WHITE),
-CONTAINER("sack", "bag",                0, 0, 0,  20, 15,   2, CLOTH, HI_CLOTH),
-CONTAINER("oilskin sack", "bag",        0, 0, 0,  20, 15, 100, CLOTH, HI_CLOTH),
-CONTAINER("bag of holding", "bag",      0, 1, 0,  20, 15, 100, CLOTH, HI_CLOTH),
-CONTAINER("bag of tricks", "bag",       0, 1, 1,  20, 15, 100, CLOTH, HI_CLOTH),
+CONTAINER("ice box", (char *)0,         1, 0, 0,   5, 250,  42, PLASTIC, CLR_WHITE),
+CONTAINER("sack", "bag",                0, 0, 0,  20,  15,   2, CLOTH, HI_CLOTH),
+CONTAINER("oilskin sack", "bag",        0, 0, 0,  20,  15, 100, CLOTH, HI_CLOTH),
+CONTAINER("bag of holding", "bag",      0, 1, 0,  20,  15, 100, CLOTH, HI_CLOTH),
+CONTAINER("bag of tricks", "bag",       0, 1, 1,  20,  15, 100, CLOTH, HI_CLOTH),
 #define HOSTAGE(name,desc,kn,mgc,chg,prob,ntrtn,wt,cost,mat,color) \
 	OBJECT( OBJ(name,desc), \
 		BITS(kn,0,chg,1,mgc,chg,0,0,0,0,0,P_NONE,mat), \
