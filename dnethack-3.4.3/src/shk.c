@@ -2554,7 +2554,11 @@ register struct obj *unp_obj;	/* known to be unpaid */
 	    if ((bp = onbill(unp_obj, shkp, TRUE)) != 0) break;
 
 	/* onbill() gave no message if unexpected problem occurred */
-	if(!bp) impossible("unpaid_cost: object wasn't on any bill!");
+	if(!bp){
+		impossible("unpaid_cost: object wasn't on any bill!");
+		unp_obj->unpaid = 0;
+		unp_obj->ostolen = 1;
+	}
 
 	return bp ? unp_obj->quan * bp->price : 0L;
 }
@@ -3743,7 +3747,7 @@ register struct monst *shkp;
 
 	omx = shkp->mx;
 	omy = shkp->my;
-
+	
 	tempbanned = ((countFarSigns(shkp) > 0) && (strcmp(shkname(shkp), "Izchak") != 0));
 	
 	if (inhishop(shkp))
