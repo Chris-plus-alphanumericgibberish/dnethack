@@ -1263,9 +1263,18 @@ god_priest(gptr, sx, sy, sanctum)
 			return priest;
 		}
 		
-		if(gptr == ElfRangerLgod) 
-		if(gptr == ElfRangerNgod) 
-		if(gptr == ElfRangerCgod) 
+		if(gptr == ElfRangerLgod){
+			priest->female = FALSE;
+			return priest;
+		}
+		if(gptr == ElfRangerNgod){
+			priest->female = TRUE;
+			return priest;
+		}
+		if(gptr == ElfRangerCgod){
+			priest->female = FALSE;
+			return priest;
+		} 
 		
 		if(gptr == ElfPriestessLgod){
 			priest->female = TRUE;
