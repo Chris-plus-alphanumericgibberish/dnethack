@@ -895,7 +895,8 @@ int thrown;
 	boolean hittxt = FALSE, destroyed = FALSE, already_killed = FALSE;
 	boolean get_dmg_bonus = TRUE;
 	int ispoisoned = 0;
-	boolean needpoismsg = FALSE, needfilthmsg = FALSE, needdrugmsg = FALSE, needsamnesiamsg = FALSE, poiskilled = FALSE, 
+	boolean needpoismsg = FALSE, needfilthmsg = FALSE, needdrugmsg = FALSE, needsamnesiamsg = FALSE, 
+			needacidmsg = FALSE, poiskilled = FALSE, 
 			filthkilled = FALSE, druggedmon = FALSE, poisblindmon = FALSE, amnesiamon = FALSE;
 	boolean silvermsg = FALSE,  ironmsg = FALSE,  unholymsg = FALSE, sunmsg = FALSE,
 	silverobj = FALSE, ironobj = FALSE, unholyobj = FALSE, lightmsg = FALSE;
@@ -1079,7 +1080,7 @@ int thrown;
 					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
 				}
 				if(uright->opoisoned & OPOISON_SLEEP && !rn2(5)){
-					if (resists_poison(mon) || resists_sleep(mon))
+					if (resists_sleep(mon))
 						needdrugmsg = TRUE;
 					else if(sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
 					
@@ -1095,20 +1096,22 @@ int thrown;
 					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
 				}
 				if(uright->opoisoned & OPOISON_PARAL && !rn2(8)){
-					if (resists_poison(mon))
-						needpoismsg = TRUE;
-					 else {
 						if (mon->mcanmove) {
 							mon->mcanmove = 0;
 							mon->mfrozen = rnd(25);
 						}
-					}
 					
 					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
 				}
 				if(uright->opoisoned & OPOISON_AMNES && !rn2(10)){
 					if(mindless_mon(mon)) needsamnesiamsg = TRUE;
 					else amnesiamon = TRUE;
+					
+					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
+				}
+				if(uright->opoisoned & OPOISON_ACID){
+					if(resists_acid(mon)) needacidmsg = TRUE;
+					else tmp += rnd(10);
 					
 					if(uright->opoisonchrgs-- <= 0) uright->opoisoned = OPOISON_NONE;
 				}
@@ -1129,7 +1132,7 @@ int thrown;
 					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
 				}
 				if(uleft->opoisoned & OPOISON_SLEEP && !rn2(5)){
-					if (resists_poison(mon) || resists_sleep(mon))
+					if (resists_sleep(mon))
 						needdrugmsg = TRUE;
 					else if(sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
 					
@@ -1145,20 +1148,22 @@ int thrown;
 					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
 				}
 				if(uleft->opoisoned & OPOISON_PARAL && !rn2(8)){
-					if (resists_poison(mon))
-						needpoismsg = TRUE;
-					 else {
 						if (mon->mcanmove) {
 							mon->mcanmove = 0;
 							mon->mfrozen = rnd(25);
 						}
-					}
 					
 					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
 				}
 				if(uleft->opoisoned & OPOISON_AMNES && !rn2(10)){
 					if(mindless_mon(mon)) needsamnesiamsg = TRUE;
 					else amnesiamon = TRUE;
+					
+					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
+				}
+				if(uleft->opoisoned & OPOISON_ACID){
+					if(resists_acid(mon)) needacidmsg = TRUE;
+					else tmp += rnd(10);
 					
 					if(uleft->opoisonchrgs-- <= 0) uleft->opoisoned = OPOISON_NONE;
 				}
@@ -2048,9 +2053,7 @@ defaultvalue:
 				}
 			}
 			if(obj && (obj->opoisoned & OPOISON_PARAL || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
-				if (resists_poison(mon))
-					needpoismsg = TRUE;
-				else if (rn2(8))
+				if (rn2(8))
 					tmp += rnd(6);
 				else {
 					tmp += 6;
@@ -2063,6 +2066,11 @@ defaultvalue:
 			if(obj && obj->opoisoned & OPOISON_AMNES){
 				if(mindless_mon(mon)) needsamnesiamsg = TRUE;
 				else if(!rn2(10)) amnesiamon = TRUE;
+			}
+			if(obj && (obj->opoisoned & OPOISON_ACID)){
+				if (resists_acid(mon))
+					needacidmsg = TRUE;
+				else tmp += rnd(10);
 			}
 			
 			if (obj && !rn2(20) && obj->opoisoned) {
@@ -2428,6 +2436,8 @@ defaultvalue:
 		pline_The("drug doesn't seem to affect %s.", mon_nam(mon));
 	if (needsamnesiamsg)
 		pline_The("lethe-rust doesn't seem to affect %s.", mon_nam(mon));
+	if (needacidmsg)
+		pline_The("acid-coating doesn't seem to affect %s.", mon_nam(mon));
 	if (druggedmon){
 		pline("%s falls asleep.", Monnam(mon));
 		slept_monst(mon);

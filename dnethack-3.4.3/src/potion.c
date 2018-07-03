@@ -2586,11 +2586,43 @@ dodip()
 		goto poof;
 	}
 #endif
-
+	
+	if( (potion->otyp == POT_ACID || 
+			(potion->otyp == POT_BLOOD && acidic(&mons[potion->corpsenm]))) 
+		&& (!(obj->opoisoned & OPOISON_ACID) || obj->otyp == VIPERWHIP)
+	){
+		if(is_corrodeable(obj) && obj->oeroded2 < MAX_ERODE){
+			int poofit = 1;
+			if(obj->greased)
+				poofit = 0;
+			erode_obj(obj, TRUE, FALSE);
+			if(poofit)
+				goto poof;
+		} else if(is_poisonable(obj)){
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			if(obj->otyp != VIPERWHIP) obj->opoisoned = 0;
+			if(obj->otyp == VIPERWHIP) pline("%s is drawn up into %s.",
+				  buf, the(xname(obj)));
+			else pline("%s forms a coating on %s.",
+				  buf, the(xname(obj)));
+			if(obj->otyp == VIPERWHIP){
+				if(obj->opoisonchrgs && obj->opoisoned == OPOISON_ACID) obj->opoisonchrgs += 2;
+				else obj->opoisonchrgs = 1;
+			}
+			obj->opoisoned = OPOISON_ACID;
+			goto poof;
+		}
+	}
+	
 	if(is_poisonable(obj)) {
 	    if( (potion->otyp == POT_SICKNESS || 
 				(potion->otyp == POT_BLOOD && poisonous(&mons[potion->corpsenm]))) 
-			&& (!(obj->opoisoned & OPOISON_BASIC) || obj->otyp == VIPERWHIP)) {
+			&& (!(obj->opoisoned & OPOISON_BASIC) || obj->otyp == VIPERWHIP)
+		){
 			char buf[BUFSZ];
 			if (potion->quan > 1L)
 				Sprintf(buf, "One of %s", the(xname(potion)));
@@ -2716,6 +2748,20 @@ dodip()
 			pline("%s is drawn up into %s.",
 				  buf, the(xname(obj)));
 			obj->opoisoned = OPOISON_PARAL;
+			obj->opoisonchrgs = 30;
+			goto poof;
+	    } else if((potion->otyp == POT_ACID ||
+				(potion->otyp == POT_BLOOD && acidic(&mons[potion->corpsenm]))
+			) && (!obj->opoisoned || obj->opoisoned & OPOISON_ACID)) {
+			char buf[BUFSZ];
+			if (potion->quan > 1L)
+				Sprintf(buf, "One of %s", the(xname(potion)));
+			else
+				Strcpy(buf, The(xname(potion)));
+			obj->opoisoned = 0;
+			pline("%s is drawn up into %s.",
+				  buf, the(xname(obj)));
+			obj->opoisoned = OPOISON_ACID;
 			obj->opoisonchrgs = 30;
 			goto poof;
 	    }

@@ -2901,7 +2901,7 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		if((!always_hostile_mon(magr) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr)) && is_undead_mon(mdef))
 			return ALLOW_M|ALLOW_TM;
 	}
-
+	
 	/* drow vs. other drow */
 	/* Note that factions may be different than the displayed house name, 
 		as faction is set during generation and displayed house name goes by equipment! */
@@ -4868,43 +4868,42 @@ int  typ, fatal, opoistype;
 		if(Poison_resistance) {
 			if(!strcmp(string, "blast")) shieldeff(u.ux, u.uy);
 			pline_The("poison doesn't seem to affect you.");
-			return;
-		}
-		/* suppress killer prefix if it already has one */
-		if ((i = name_to_mon(pname)) >= LOW_PM && mons[i].geno & G_UNIQ) {
-			kprefix = KILLED_BY;
-			if (!type_is_pname(&mons[i])) pname = the(pname);
-		} else if (!strncmpi(pname, "the ", 4) ||
-			!strncmpi(pname, "an ", 3) ||
-			!strncmpi(pname, "a ", 2)) {
-			/*[ does this need a plural check too? ]*/
-			kprefix = KILLED_BY;
-		}
-		i = rn2(fatal + 20*thrown_weapon);
-		if(i == 0 && typ != A_CHA) {
-			if (adjattrib(A_CON, typ==A_CON ? -2 : -rn1(3,3), 1))
-				pline_The("poison was quite debilitating...");
-		} else if(i <= 5) {
-			/* Check that a stat change was made */
-			if (adjattrib(typ, thrown_weapon ? -1 : -rn1(3,3), 1))
-				pline("You%s!", poiseff[typ]);
 		} else {
-			i = thrown_weapon ? rnd(6) : rn1(10,6);
-			if(Half_physical_damage) i = (i+1) / 2;
-			losehp(i, pname, kprefix);
+			/* suppress killer prefix if it already has one */
+			if ((i = name_to_mon(pname)) >= LOW_PM && mons[i].geno & G_UNIQ) {
+				kprefix = KILLED_BY;
+				if (!type_is_pname(&mons[i])) pname = the(pname);
+			} else if (!strncmpi(pname, "the ", 4) ||
+				!strncmpi(pname, "an ", 3) ||
+				!strncmpi(pname, "a ", 2)) {
+				/*[ does this need a plural check too? ]*/
+				kprefix = KILLED_BY;
+			}
+			i = rn2(fatal + 20*thrown_weapon);
+			if(i == 0 && typ != A_CHA) {
+				if (adjattrib(A_CON, typ==A_CON ? -2 : -rn1(3,3), 1))
+					pline_The("poison was quite debilitating...");
+			} else if(i <= 5) {
+				/* Check that a stat change was made */
+				if (adjattrib(typ, thrown_weapon ? -1 : -rn1(3,3), 1))
+					pline("You%s!", poiseff[typ]);
+			} else {
+				i = thrown_weapon ? rnd(6) : rn1(10,6);
+				if(Half_physical_damage) i = (i+1) / 2;
+				losehp(i, pname, kprefix);
+			}
+			if(u.uhp < 1) {
+				killer_format = kprefix;
+				killer = pname;
+				/* "Poisoned by a poisoned ___" is redundant */
+				done(strstri(pname, "poison") ? DIED : POISONING);
+			}
+			(void) encumber_msg();
 		}
-		if(u.uhp < 1) {
-			killer_format = kprefix;
-			killer = pname;
-			/* "Poisoned by a poisoned ___" is redundant */
-			done(strstri(pname, "poison") ? DIED : POISONING);
-		}
-		(void) encumber_msg();
 	}
-	else if(opoistype & OPOISON_FILTH){
+	if(opoistype & OPOISON_FILTH){
 		if(Sick_resistance) {
 			pline_The("tainted filth doesn't seem to affect you.");
-			return;
 		} else {
 			long sick_time;
 
@@ -4915,19 +4914,17 @@ int  typ, fatal, opoistype;
 			make_sick(sick_time, string, TRUE, SICK_NONVOMITABLE);
 		}
 	}
-	else if(opoistype & OPOISON_SLEEP){
-		if(Poison_resistance || Sleep_resistance) {
+	if(opoistype & OPOISON_SLEEP){
+		if(Sleep_resistance) {
 			pline_The("drug doesn't seem to affect you.");
-			return;
 		} else if(!rn2(20*thrown_weapon)){
 			You("suddenly fall asleep!");
 			fall_asleep(-rn1(2, 6), TRUE);
 		}
 	}
-	else if(opoistype & OPOISON_BLIND){
+	if(opoistype & OPOISON_BLIND){
 		if(Poison_resistance) {
 			pline_The("poison doesn't seem to affect you.");
-			return;
 		} else if(!rn2(20*thrown_weapon)){
 			i = thrown_weapon ? 3 : 8;
 			if(Half_physical_damage) i = (i+1) / 2;
@@ -4940,10 +4937,9 @@ int  typ, fatal, opoistype;
 			losehp(i, pname, kprefix);
 		}
 	}
-	else if(opoistype & OPOISON_PARAL){
-		if(Poison_resistance || Free_action) {
+	if(opoistype & OPOISON_PARAL){
+		if(Free_action) {
 			pline_The("poison doesn't seem to affect you.");
-			return;
 		} else if(!rn2(20*thrown_weapon)){
 			i = thrown_weapon ? 6 : 16;
 			if(Half_physical_damage) i = (i+1) / 2;
@@ -4955,12 +4951,35 @@ int  typ, fatal, opoistype;
 			losehp(i, pname, kprefix);
 		}
 	}
-	else if(opoistype & OPOISON_AMNES){
+	if(opoistype & OPOISON_AMNES){
 		if(u.sealsActive&SEAL_HUGINN_MUNINN){
 			unbind(SEAL_HUGINN_MUNINN,TRUE);
 		} else {
 			forget(1);	/* lose 1% of memory per point lost*/
 			forget_traps();		/* lose memory of all traps*/
+		}
+	}
+	if(opoistype & OPOISON_ACID){
+		if(Poison_resistance) {
+			pline_The("acidic coating doesn't seem to affect you.");
+		} else {
+			/* suppress killer prefix if it already has one */
+			if ((i = name_to_mon(pname)) >= LOW_PM && mons[i].geno & G_UNIQ) {
+				kprefix = KILLED_BY;
+				if (!type_is_pname(&mons[i])) pname = the(pname);
+			} else if (!strncmpi(pname, "the ", 4) ||
+				!strncmpi(pname, "an ", 3) ||
+				!strncmpi(pname, "a ", 2)) {
+				/*[ does this need a plural check too? ]*/
+				kprefix = KILLED_BY;
+			}
+			i = thrown_weapon ? rnd(10) : rn1(10,10);
+			losehp(i, pname, kprefix);
+			if(u.uhp < 1) {
+				killer_format = kprefix;
+				killer = pname;
+				done(DIED);
+			}
 		}
 	}
 }

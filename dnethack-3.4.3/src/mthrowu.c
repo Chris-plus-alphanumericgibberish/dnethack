@@ -385,6 +385,18 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 					else otmp->opoisoned &= ~OPOISON_AMNES;
 				}
 			}
+			if(otmp->opoisoned & OPOISON_ACID){
+				if (resists_acid(mtmp)) {
+					if (vis) pline_The("acid coating doesn't seem to affect %s.",
+						   mon_nam(mtmp));
+				} else {
+					damage += rnd(10);
+				}
+				if(!rn2(20)){
+					if(otmp->otyp == VIPERWHIP && otmp->opoisonchrgs) otmp->opoisonchrgs--;
+					else otmp->opoisoned &= ~OPOISON_ACID;
+				}
+			}
 	    }
 	    if ( (otmp->obj_material == SILVER || arti_silvered(otmp)) &&
 			!(is_lightsaber(otmp) && litsaber(otmp)) &&

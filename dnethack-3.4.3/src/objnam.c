@@ -606,6 +606,7 @@ register struct obj *obj;
 			if(obj->opoisoned & OPOISON_BLIND) Strcat(buf, "stained ");
 			if(obj->opoisoned & OPOISON_PARAL) Strcat(buf, "envenomed ");
 			if(obj->opoisoned & OPOISON_AMNES) Strcat(buf, "lethe-rusted ");
+			if(obj->opoisoned & OPOISON_ACID)  Strcat(buf, "acid-coated ");
 			if(obj->otyp == VIPERWHIP && obj->opoisonchrgs) Sprintf(eos(buf), "(%d coatings) ", (int)(obj->opoisonchrgs+1));
 		}
 		if(obj->otyp == VIPERWHIP && obj->ovar1){
@@ -1027,6 +1028,10 @@ register struct obj *obj;
 	 * combining both into one function taking a parameter.
 	 */
 	/* must check opoisoned--someone can have a weirdly-named fruit */
+	if (!strncmp(bp, "acid-coated ", 12) && obj->opoisoned & OPOISON_ACID) {
+		bp += 12;
+		ispoisoned = OPOISON_ACID;
+	}
 	if (!strncmp(bp, "lethe-rusted ", 13) && obj->opoisoned & OPOISON_AMNES) {
 		bp += 13;
 		ispoisoned = OPOISON_AMNES;
@@ -1039,7 +1044,7 @@ register struct obj *obj;
 		bp += 8;
 		ispoisoned = OPOISON_BLIND;
 	}
-	if (!strncmp(bp, "drug-coated ", 12) && obj->opoisoned & OPOISON_BASIC) {
+	if (!strncmp(bp, "drug-coated ", 12) && obj->opoisoned & OPOISON_SLEEP) {
 		bp += 12;
 		ispoisoned = OPOISON_SLEEP;
 	}
@@ -1119,6 +1124,8 @@ register struct obj *obj;
 			Strcat(prefix, "drug-coated ");
 		if(ispoisoned & OPOISON_AMNES)
 			Strcat(prefix, "lethe-rusted ");
+		if(ispoisoned & OPOISON_ACID)
+			Strcat(prefix, "acid-coated ");
 		if(obj->otyp == MOON_AXE && obj->known && obj->oartifact){
 			switch(obj->ovar1){
 				case ECLIPSE_MOON:
@@ -1147,6 +1154,7 @@ plus:
 			if(obj->opoisoned & OPOISON_BLIND) Strcat(prefix, "stained ");
 			if(obj->opoisoned & OPOISON_PARAL) Strcat(prefix, "envenomed ");
 			if(obj->opoisoned & OPOISON_AMNES) Strcat(prefix, "lethe-rusted ");
+			if(obj->opoisoned & OPOISON_ACID) Strcat(prefix,  "acid-coated ");
 			if(obj->otyp == VIPERWHIP && obj->opoisonchrgs) Sprintf(eos(prefix), "(%d coatings) ", (int)(obj->opoisonchrgs+1));
 		}
 		add_erosion_words(obj, prefix);
@@ -1352,6 +1360,7 @@ ring:
 				if(obj->opoisoned & OPOISON_BLIND) Strcat(bp, ", eyebite injecting");
 				if(obj->opoisoned & OPOISON_PARAL) Strcat(bp, ", venom injecting");
 				if(obj->opoisoned & OPOISON_AMNES) Strcat(bp, ", lethe injecting");
+				if(obj->opoisoned & OPOISON_ACID) Strcat(bp,  ", acid injecting");
 			}
 		    Strcat(bp, ")");
 		} else if(isSignetRing(obj->otyp)){
@@ -1361,6 +1370,7 @@ ring:
 				if(obj->opoisoned & OPOISON_BLIND) Strcat(bp, " (eyebite injecting)");
 				if(obj->opoisoned & OPOISON_PARAL) Strcat(bp, " (venom injecting)");
 				if(obj->opoisoned & OPOISON_AMNES) Strcat(bp, " (lethe injecting)");
+				if(obj->opoisoned & OPOISON_ACID)  Strcat(bp, " (acid injecting)");
 		}
 		if((obj->known || Race_if(PM_INCANTIFIER)) && objects[obj->otyp].oc_charged) {
 			Strcat(prefix, sitoa((obj->otyp == CRYSTAL_PLATE_MAIL || obj->otyp == CRYSTAL_SWORD) ? obj->spe*2 : obj->spe));
@@ -2781,6 +2791,8 @@ boolean from_user;
 			ispoisoned=OPOISON_PARAL;
 		} else if(!strncmpi(bp, "lethe-rusted ",l=13)) {
 			ispoisoned=OPOISON_AMNES;
+		} else if(!strncmpi(bp, "acid-coated ",l=12)) {
+			ispoisoned=OPOISON_ACID;
 		} else if(!strncmpi(bp, "greased ",l=8)) {
 			isgreased=1;
 		} else if (!strncmpi(bp, "very ", l=5)) {

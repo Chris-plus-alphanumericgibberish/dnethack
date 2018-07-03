@@ -1400,88 +1400,91 @@ physical:{
 		    tmp = 0;
 		} else if(weaponhit) {
 		    if(otmp) {
-			if (otmp->otyp == CORPSE &&
-				touch_petrifies(&mons[otmp->corpsenm]))
-			    goto do_stone;
-			/* WAC -- Real weapon?
-			 * Could be stuck with a cursed bow/polearm it wielded
-			 */
-			if (/* if you strike with a bow... */
-			    is_launcher(otmp) ||
-			    /* or strike with a missile in your hand... */
-			    ((is_missile(otmp) || is_ammo(otmp)) &&
-					!(otmp->otyp == CHAKRAM)
-				) ||
-				/* houchou not thrown */
-				(otmp->oartifact == ART_HOUCHOU) ||
-			    /* lightsaber that isn't lit ;) */
-			    (is_lightsaber(otmp) && !litsaber(otmp)) ||
-			    /* WAC -- or using a pole at short range... */
-			    (is_pole(otmp) &&
-					otmp->otyp != AKLYS && 
-					otmp->otyp != FORCE_PIKE && 
-					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
-					otmp->oartifact != ART_SILENCE_GLAIVE && 
-					otmp->oartifact != ART_HEARTCLEAVER && 
-					otmp->oartifact != ART_SOL_VALTIVA && 
-					otmp->oartifact != ART_SHADOWLOCK && 
-					otmp->oartifact != ART_PEN_OF_THE_VOID
-			)) {
-			    /* then do only 1-2 points of damage */
-			    if (insubstantial(mdef->data) && !insubstantial_aware(mdef, otmp, FALSE)) tmp = 0;
-				else if(otmp->oartifact == ART_LIECLEAVER)
-					tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
-				else if(otmp->oartifact == ART_ROGUE_GEAR_SPIRITS)
-					tmp = 2*(rnd(bigmonst(mdef->data) ? 2 : 5) + otmp->spe);
-				else tmp = rnd(2);
+				if (otmp->otyp == CORPSE &&
+					touch_petrifies(&mons[otmp->corpsenm]))
+					goto do_stone;
+				/* WAC -- Real weapon?
+				 * Could be stuck with a cursed bow/polearm it wielded
+				 */
+				if (/* if you strike with a bow... */
+					is_launcher(otmp) ||
+					/* or strike with a missile in your hand... */
+					((is_missile(otmp) || is_ammo(otmp)) &&
+						!(otmp->otyp == CHAKRAM)
+					) ||
+					/* houchou not thrown */
+					(otmp->oartifact == ART_HOUCHOU) ||
+					/* lightsaber that isn't lit ;) */
+					(is_lightsaber(otmp) && !litsaber(otmp)) ||
+					/* WAC -- or using a pole at short range... */
+					(is_pole(otmp) &&
+						otmp->otyp != AKLYS && 
+						otmp->otyp != FORCE_PIKE && 
+						otmp->otyp != NAGINATA && 
+						otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
+						otmp->oartifact != ART_SILENCE_GLAIVE && 
+						otmp->oartifact != ART_HEARTCLEAVER && 
+						otmp->oartifact != ART_SOL_VALTIVA && 
+						otmp->oartifact != ART_SHADOWLOCK && 
+						otmp->oartifact != ART_PEN_OF_THE_VOID
+				)) {
+					/* then do only 1-2 points of damage */
+					if (insubstantial(mdef->data) && !insubstantial_aware(mdef, otmp, FALSE)) tmp = 0;
+					else if(otmp->oartifact == ART_LIECLEAVER)
+						tmp = 2*(rnd(12) + rnd(10) + otmp->spe);
+					else if(otmp->oartifact == ART_ROGUE_GEAR_SPIRITS)
+						tmp = 2*(rnd(bigmonst(mdef->data) ? 2 : 5) + otmp->spe);
+					else tmp = rnd(2);
+					
+					if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
+						!(is_lightsaber(otmp) && litsaber(otmp))
+					)
+						tmp += rnd(20);
+					if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
+						!(is_lightsaber(otmp) && litsaber(otmp))
+					)
+						tmp += rnd(mdef->m_lev);
+					if(otmp && is_unholy(otmp) && hates_unholy(pd))
+						tmp += rnd(9);
+				} else {
+					tmp += dmgval(otmp, mdef, 0);
+					if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))) phasearmor = TRUE;
+				}
 				
+				if(magr->data == &mons[PM_DANCING_BLADE])
+					tmp += 7;
+				
+				if(resist_attacks(mdef->data))
+					tmp = 0;
+				/* WAC Weres get seared */
 				if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
 					!(is_lightsaber(otmp) && litsaber(otmp))
-				)
-					tmp += rnd(20);
+				) {
+					if (vis) pline("The silver sears %s!", mon_nam(mdef));
+				}
 				if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
 					!(is_lightsaber(otmp) && litsaber(otmp))
-				)
-					tmp += rnd(mdef->m_lev);
-				if(otmp && is_unholy(otmp) && hates_unholy(pd))
-					tmp += rnd(9);
-			} else {
-				tmp += dmgval(otmp, mdef, 0);
-				if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))) phasearmor = TRUE;
+				) {
+					if (vis) pline("The cold-iron sears %s!", mon_nam(mdef));
+				}
+				if(otmp && is_unholy(otmp) && hates_unholy(pd)) {
+					if (vis) pline("The curse sears %s!", mon_nam(mdef));
+				}
+				if(oarm && tmp && oarm->otyp == GAUNTLETS_OF_POWER){
+					tmp += 8;
+					if(otmp && bimanual(otmp,magr->data)) tmp += 4;
+				}
+				if (otmp && otmp->oartifact) {
+					(void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
+					if (mdef->mhp <= 0 || migrating_mons == mdef)
+					return (MM_DEF_DIED |
+						(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
+				}
+				if (otmp && tmp)
+					mrustm(magr, mdef, otmp);
+		    } else if(magr->data == &mons[PM_FORMIAN_CRUSHER]){
+				tmp += d(3*((int)mattk->damn), (int)mattk->damd);
 			}
-			
-			if(magr->data == &mons[PM_DANCING_BLADE])
-				tmp += 7;
-			
-			if(resist_attacks(mdef->data))
-				tmp = 0;
-            /* WAC Weres get seared */
-            if(otmp && (otmp->obj_material == SILVER || arti_silvered(otmp)) && hates_silver(pd) &&
-				!(is_lightsaber(otmp) && litsaber(otmp))
-			) {
-            	if (vis) pline("The silver sears %s!", mon_nam(mdef));
-            }
-            if(otmp && (otmp->obj_material == IRON) && hates_iron(pd) &&
-				!(is_lightsaber(otmp) && litsaber(otmp))
-			) {
-            	if (vis) pline("The cold-iron sears %s!", mon_nam(mdef));
-            }
-            if(otmp && is_unholy(otmp) && hates_unholy(pd)) {
-            	if (vis) pline("The curse sears %s!", mon_nam(mdef));
-            }
-			if(oarm && tmp && oarm->otyp == GAUNTLETS_OF_POWER){
-				tmp += 8;
-				if(otmp && bimanual(otmp,magr->data)) tmp += 4;
-			}
-			if (otmp && otmp->oartifact) {
-			    (void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
-			    if (mdef->mhp <= 0 || migrating_mons == mdef)
-				return (MM_DEF_DIED |
-					(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
-			}
-			if (otmp && tmp)
-				mrustm(magr, mdef, otmp);
-		    }
 			// tack on bonus elemental damage, if applicable
 			if (mattk->adtyp != AD_PHYS){
 				alt_attk.aatyp = AT_NONE;

@@ -3570,7 +3570,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				} else
 					You("seem unaffected by the poison.");
 			}
-			else if(otmp->opoisoned & OPOISON_FILTH){
+			if(otmp->opoisoned & OPOISON_FILTH){
 				pline("Ulch - that was tainted with filth!");
 				if (Sick_resistance) {
 					pline("It doesn't seem at all sickening, though...");
@@ -3586,7 +3586,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					make_sick(sick_time, buf, TRUE, SICK_VOMITABLE);
 				}
 			}
-			else if(otmp->opoisoned & OPOISON_SLEEP){
+			if(otmp->opoisoned & OPOISON_SLEEP){
 				pline("Ecch - that must have been drugged!");
 				if(Poison_resistance || Sleep_resistance) {
 					You("suddenly fall asleep!");
@@ -3594,12 +3594,12 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 				} else
 					You("seem unaffected by the drugs.");
 			}
-			else if(otmp->opoisoned & OPOISON_BLIND){
+			if(otmp->opoisoned & OPOISON_BLIND){
 				pline("Ecch - that must have been poisoned!");
 				make_blinded(rn1(200, 250 - 125 * bcsign(otmp)),
 						 (boolean)!Blind);
 			}
-			else if(otmp->opoisoned & OPOISON_PARAL){
+			if(otmp->opoisoned & OPOISON_PARAL){
 				if (Free_action)
 					You("stiffen momentarily.");
 				else {
@@ -3617,7 +3617,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					exercise(A_DEX, FALSE);
 				}
 			}
-			else if(otmp->opoisoned & OPOISON_AMNES){
+			if(otmp->opoisoned & OPOISON_AMNES){
 				forget(otmp->cursed ? 25 : otmp->blessed ? 0 : 10);
 				if (Hallucination)
 					pline("Hakuna matata!");
@@ -3643,6 +3643,9 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 					newuhs(FALSE);
 				} else
 					exercise(A_WIS, FALSE);
+			} else if((otmp->opoisoned & OPOISON_ACID) && !Acid_resistance){
+				You("have a very bad case of stomach acid."); /* not body_part() */
+				losehp(rnd(15), "acidic corpse", KILLED_BY_AN);
 			}
 		} else if (!otmp->cursed)
 		pline("This %s is delicious!",
