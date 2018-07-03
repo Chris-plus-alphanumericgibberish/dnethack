@@ -5018,7 +5018,7 @@ struct permonst _mons2[] = {
 	 * all the soldiers are contiguous.
 	 */
     MON("watchman", S_HUMAN,//8
-	LVL(6, 10, 10, 0, -2), (G_SGROUP|G_NOGEN|G_GENO|1),
+	LVL(6, 10, 10, 0, -2), (G_SGROUP|G_NOGEN|G_GENO),
 	A(ATTK(AT_WEAP, AD_PHYS, 1, 8),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_HUMAN, 400, 0, MS_SOLDIER, MZ_HUMAN), 0, 0,
@@ -5026,7 +5026,7 @@ struct permonst _mons2[] = {
 	MB_HUMANOID|MB_STRONG /*MB*/, MG_NOWISH|MG_NOPOLY|MG_MERC|MG_INFRAVISIBLE /*MG*/,
 	MA_HUMAN /*MA*/,  MV_NORMAL /*MV*/, CLR_GRAY),
     MON("watch captain", S_HUMAN,//12
-	LVL(10, 10, 10, 15, -4), (G_NOGEN|G_GENO|1),
+	LVL(10, 10, 10, 15, -4), (G_NOGEN|G_GENO),
 	A(ATTK(AT_WEAP, AD_PHYS, 3, 4), ATTK(AT_XWEP, AD_PHYS, 3, 4),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_HUMAN, 400, 0, MS_SOLDIER, MZ_HUMAN), 0, 0,
