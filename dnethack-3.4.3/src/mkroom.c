@@ -1375,9 +1375,9 @@ mkkamereltowers()
 			tries = 0;
 			otmp = 0;
 			while(!otmp){
-			if(!rn2(3)){
-				otmp = mksobj(DOUBLE_LIGHTSABER, FALSE, FALSE);
-				otmp = oname(otmp, artiname(ART_INFINITY_S_MIRRORED_ARC));
+				if(!rn2(3)){
+					otmp = mksobj(DOUBLE_LIGHTSABER, FALSE, FALSE);
+					otmp = oname(otmp, artiname(ART_INFINITY_S_MIRRORED_ARC));
 					if(otmp->oartifact){
 						otmp->spe = 1;
 						otmp->cursed = 0;
@@ -1790,7 +1790,7 @@ mkminorspire()
 				if(!otmp->oartifact){
 					otmp->obj_material = MITHRIL;
 					fix_object(otmp);
-					mksobj_at(AMULET_OF_REFLECTION, x, y, TRUE, FALSE);
+					mksobj_at(AMULET_OF_REFLECTION, x, y, FALSE, FALSE);
 				}
 				place_object(otmp, x, y);
 				if(find_sawant()){
@@ -1804,7 +1804,7 @@ mkminorspire()
 					fix_object(otmp);
 					place_object(otmp, x, y);
 				} else {
-					mksobj_at(KHAKKHARA, x, y, TRUE, FALSE);
+					mksobj_at(KHAKKHARA, x, y, FALSE, FALSE);
 				}
 			break;
 			case 2:
@@ -1814,12 +1814,12 @@ mkminorspire()
 					otmp->obj_material = SILVER;
 					fix_object(otmp);
 					place_object(otmp, x, y);
-					mksobj_at(SHIELD_OF_REFLECTION, x, y, TRUE, FALSE);
+					mksobj_at(SHIELD_OF_REFLECTION, x, y, FALSE, FALSE);
 					break;
 				}
 			default:
-				mksobj_at(KHAKKHARA, x, y, TRUE, FALSE);
-				mksobj_at(AMULET_OF_REFLECTION, x, y, TRUE, FALSE);
+				mksobj_at(KHAKKHARA, x, y, FALSE, FALSE);
+				mksobj_at(AMULET_OF_REFLECTION, x, y, FALSE, FALSE);
 			break;
 		}
 		//Place Kamerel survivors
@@ -1990,7 +1990,7 @@ mkfishinghut(left)
 					place_object(otmp, x+i, y+j);
 				}
 				if(!rn2(100)){
-					otmp = mksobj(find_gcirclet(), FALSE, FALSE);
+					otmp = mksobj(find_gcirclet(), TRUE, FALSE);
 					otmp->obj_material = GOLD;
 					otmp->owt = weight(otmp);
 					place_object(otmp, x+i, y+j);
@@ -3112,12 +3112,12 @@ mkinvertzigg()
 			chest = mksobj_at(CHEST, x+size/2, y+size/2, TRUE, TRUE);
 			chest->obj_material = IRON;
 			fix_object(chest);
-			if ((otmp = mksobj(TORCH, FALSE, FALSE)) != 0) {
+			if ((otmp = mksobj(TORCH, TRUE, FALSE)) != 0) {
 				otmp->quan = rnd(6);
 				otmp->owt = weight(otmp);
 				add_to_container(chest, otmp);
 			}
-			if ((otmp = mksobj(SHADOWLANDER_S_TORCH, FALSE, FALSE)) != 0) {
+			if ((otmp = mksobj(SHADOWLANDER_S_TORCH, TRUE, FALSE)) != 0) {
 				otmp->quan = rnd(6);
 				otmp->spe = rn2(3);
 				otmp->owt = weight(otmp);
@@ -3532,7 +3532,7 @@ place_neutral_features()
 	} else if(!rn2(20)){
 		mkfishingvillage();
 	}
-	
+
 	if(!rn2(10)){
 		mkneuriver();
 	}
@@ -4761,6 +4761,7 @@ mkisland() /* John Harris, modified from mktemple & mkshop,
 	}
 
 	level.flags.has_island = 1;
+	sroom->rtype = ISLAND;
 
 	if (!rn2(3) && u_depth > 11) {ptype = LAVAPOOL;}
 	else {ptype = POOL;};
