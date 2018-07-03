@@ -1936,6 +1936,10 @@ hitmu(mtmp, mattk)
 				if(oarm && dmg && oarm->otyp == GAUNTLETS_OF_POWER) dmg += 8;
 				hitmsg(mtmp, mattk);
 			}
+			
+		    if(mtmp->data == &mons[PM_FORMIAN_CRUSHER] && weaponhit && !otmp)
+				dmg += d(3*((int)mattk->damn), (int)mattk->damd);
+			
 			// tack on bonus elemental damage, if applicable
 			if (mattk->adtyp != AD_PHYS){
 				alt_attk.aatyp = AT_NONE;

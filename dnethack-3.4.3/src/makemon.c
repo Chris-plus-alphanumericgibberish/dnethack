@@ -7116,6 +7116,7 @@ struct monst *mtmp, *victim;
 	if (is_mplayer(ptr) || ptr == &mons[PM_BYAKHEE] || ptr == &mons[PM_LILLEND] || ptr == &mons[PM_MAID]
 	|| ptr == &mons[PM_CROW_WINGED_HALF_DRAGON] || ptr == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY]
 	|| ptr == &mons[PM_UNDEAD_KNIGHT] || ptr == &mons[PM_WARRIOR_OF_SUNLIGHT]
+	|| ptr == &mons[PM_FORMIAN_CRUSHER]
 	) lev_limit = 30;	/* same as player */
 	else if (is_eladrin(ptr) && ptr->mlevel <= 20) lev_limit = 30;
 	else if (ptr == &mons[PM_ANCIENT_OF_ICE] || ptr == &mons[PM_ANCIENT_OF_DEATH]) lev_limit = 45;
