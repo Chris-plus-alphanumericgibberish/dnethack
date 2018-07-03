@@ -1945,7 +1945,7 @@ hitmu(mtmp, mattk)
 			    You("divide as %s hits you!",mon_nam(mtmp));
 			}
 			urustm(mtmp, otmp);
-		    } else if (mattk->aatyp != AT_TUCH || dmg != 0 ||
+		    } else if (mattk->aatyp != AT_TUCH && dmg != 0 &&
 				mtmp != u.ustuck
 			){
 				if(oarm && dmg && oarm->otyp == GAUNTLETS_OF_POWER) dmg += 8;
