@@ -621,7 +621,7 @@ register struct obj *obj;
 				case 8: Strcat(buf, "eight-headed "); break;
 			}
 		}
-		if((obj)->obj_material == WOOD && obj->otyp != MOON_AXE && obj->ovar1) Strcat(buf, "carved ");
+		if((obj)->obj_material == WOOD && obj->oward) Strcat(buf, "carved ");
 		if(obj->otyp == MOON_AXE && nn){
 			switch(obj->ovar1){
 				case ECLIPSE_MOON:
