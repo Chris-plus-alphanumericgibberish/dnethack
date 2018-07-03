@@ -1404,15 +1404,15 @@ poly_obj(obj, id)
 		} else if(obj->otyp == HYPOSPRAY_AMPULE){
 			otmp = mksobj(HYPOSPRAY_AMPULE, FALSE, FALSE);
 		} else {
-	    int try_limit = 3;
-	    /* Try up to 3 times to make the magic-or-not status of
-	       the new item be the same as it was for the old one. */
-	    otmp = (struct obj *)0;
-	    do {
-		if (otmp) delobj(otmp);
-		otmp = mkobj(obj->oclass, FALSE);
-	    } while (--try_limit > 0 &&
-		  objects[obj->otyp].oc_magic != objects[otmp->otyp].oc_magic);
+			int try_limit = 3;
+			/* Try up to 3 times to make the magic-or-not status of
+			   the new item be the same as it was for the old one. */
+			otmp = (struct obj *)0;
+			do {
+			if (otmp) delobj(otmp);
+			otmp = mkobj(obj->oclass, FALSE);
+			} while (--try_limit > 0 &&
+			  objects[obj->otyp].oc_magic != objects[otmp->otyp].oc_magic);
 		}
 	} else {
 	    /* literally replace obj with this new thing */
@@ -2854,17 +2854,16 @@ register struct	obj	*obj;
 	    /* neither immediate nor directionless */
 
 	    if (otyp == WAN_DIGGING || otyp == SPE_DIG)
-		zap_dig(-1,-1,-1);//-1-1-1 = "use defaults"
+			zap_dig(-1,-1,-1);//-1-1-1 = "use defaults"
 	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_ACID_BLAST){
-		if(u.sealsActive&SEAL_BUER && (otyp == SPE_FINGER_OF_DEATH || otyp == WAN_DEATH )) unbind(SEAL_BUER,TRUE);
-		buzz(otyp - SPE_MAGIC_MISSILE + 10,
-		     u.ulevel / 2 + 1,
-		     u.ux, u.uy, u.dx, u.dy,0,0);
+			buzz(otyp - SPE_MAGIC_MISSILE + 10,
+				 u.ulevel / 2 + 1,
+				 u.ux, u.uy, u.dx, u.dy,0,0);
 	    } else if (otyp >= WAN_MAGIC_MISSILE && otyp <= WAN_LIGHTNING){
-		use_skill(P_WAND_POWER, wandlevel(otyp));
-		buzz(otyp - WAN_MAGIC_MISSILE,
-		     wand_damage_die(P_SKILL(P_WAND_POWER))/((otyp == WAN_MAGIC_MISSILE) ? 2 : 1),
-		     u.ux, u.uy, u.dx, u.dy,0,0);
+			use_skill(P_WAND_POWER, wandlevel(otyp));
+			buzz(otyp - WAN_MAGIC_MISSILE,
+				 wand_damage_die(P_SKILL(P_WAND_POWER))/((otyp == WAN_MAGIC_MISSILE) ? 2 : 1),
+				 u.ux, u.uy, u.dx, u.dy,0,0);
 	    } else
 		impossible("weffects: unexpected spell or wand");
 	    disclose = TRUE;
