@@ -2110,6 +2110,7 @@ u_init()
 		else ini_inv(ExtraBook);
 		if(Role_if(PM_ANACHRONONAUT)){
 			u.umartial = TRUE;
+			HTelepat |= FROMOUTSIDE;
 			skill_add(Skill_Elf_Ana);
 		}
     break;
@@ -2134,6 +2135,7 @@ u_init()
 #endif
 		if(Role_if(PM_ANACHRONONAUT)){
 			u.umartial = TRUE;
+			HTelepat |= FROMOUTSIDE;
 			skill_add(Skill_Elf_Ana);
 		}
 	    /* Elves can recognize all elvish objects */
