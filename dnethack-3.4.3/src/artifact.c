@@ -1289,6 +1289,8 @@ struct monst *mtmp;
 			return TRUE;
 		} else if (weap->mflagsg != 0L && ((ptr->mflagsg & weap->mflagsg) != 0L)) {
 			return TRUE;
+			if(yours && Role_if(PM_NOBLEMAN) && ((weap->mflagsg & MG_PRINCE|MG_LORD) != 0))
+				return TRUE;
 		} else if (weap->mflagsv != 0L && ((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return TRUE;
 		} else if (weap->mflagsa != 0L){
@@ -1319,7 +1321,9 @@ struct monst *mtmp;
 			return FALSE;
 		} else if (weap->mflagsb != 0L && !((ptr->mflagsb & weap->mflagsb) != 0L)) {
 			return FALSE;
-		} else if (weap->mflagsg != 0L && !((ptr->mflagsg & weap->mflagsg) != 0L)) {
+		} else if (weap->mflagsg != 0L && !(((ptr->mflagsg & weap->mflagsg) != 0L)
+			|| (yours && Role_if(PM_NOBLEMAN) && ((weap->mflagsg & MG_PRINCE|MG_LORD) != 0)))
+		) {
 			return FALSE;
 		} else if (weap->mflagsv != 0L && !((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return FALSE;
@@ -1425,6 +1429,8 @@ struct monst *mtmp;
 			return TRUE;
 		} else if (weap->mflagsg != 0L && ((ptr->mflagsg & weap->mflagsg) != 0L)) {
 			return TRUE;
+			if(yours && Role_if(PM_NOBLEMAN) && ((weap->mflagsg & MG_PRINCE|MG_LORD) != 0))
+				return TRUE;
 		} else if (weap->mflagsv != 0L && ((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return TRUE;
 		} else if (weap->mflagsa != 0L){
@@ -1454,7 +1460,9 @@ struct monst *mtmp;
 			return FALSE;
 		} else if (weap->mflagsb != 0L && !((ptr->mflagsb & weap->mflagsb) != 0L)) {
 			return FALSE;
-		} else if (weap->mflagsg != 0L && !((ptr->mflagsg & weap->mflagsg) != 0L)) {
+		} else if (weap->mflagsg != 0L && !(((ptr->mflagsg & weap->mflagsg) != 0L)
+			|| (yours && Role_if(PM_NOBLEMAN) && ((weap->mflagsg & MG_PRINCE|MG_LORD) != 0)))
+		) {
 			return FALSE;
 		} else if (weap->mflagsv != 0L && !((ptr->mflagsv & weap->mflagsv) != 0L)) {
 			return FALSE;
