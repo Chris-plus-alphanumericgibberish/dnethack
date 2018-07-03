@@ -7259,8 +7259,10 @@ read_necro(VOID_ARGS)
 				if(u.uen > 30){
 					pm = &mons[PM_SHOGGOTH];
 					mtmp = makemon(pm, u.ux+d(1,5)-3, u.uy+d(1,5)-3, MM_ADJACENTOK);
-					mtmp->mcrazed = 1;
-					mtmp->msleeping = 1;
+					if(mtmp){
+						mtmp->mcrazed = 1;
+						mtmp->msleeping = 1;
+					}
 				}
 			break;
 			case SELECT_OOZE:
