@@ -8131,13 +8131,6 @@ register struct attack *mattk;
       }
     }
 	
-	if(uwep && uwep->oartifact == ART_SANSARA_MIRROR && multi >= 0 && rn2(2)){
-		You("counterattack!");
-		flags.forcefight = TRUE;
-		attack(mtmp);
-		flags.forcefight = FALSE;
-		if(DEADMONSTER(mtmp)) return 2;
-	}
 	if(u.specialSealsActive&SEAL_BLACK_WEB && u.spiritPColdowns[PWR_WEAVE_BLACK_WEB] > moves+20){
 		static struct attack webattack[] = 
 		{
@@ -8232,6 +8225,15 @@ register struct attack *mattk;
 				break;
 			}
 		}
+	}
+	if(uwep && uwep->oartifact == ART_SANSARA_MIRROR && multi >= 0 && rn2(2)){
+		You("counterattack!");
+		flags.forcefight = TRUE;
+		u.dy = sgn(mtmp->my - u.uy);
+		u.dx = sgn(mtmp->mx - u.ux);
+		attack(mtmp);
+		flags.forcefight = FALSE;
+		if(DEADMONSTER(mtmp)) return 2;
 	}
 	if( uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && 
 		uwep->ovar1&SEAL_EURYNOME && multi >= 0 && 
