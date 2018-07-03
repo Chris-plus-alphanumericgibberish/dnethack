@@ -499,8 +499,12 @@ int		class;		/* an object class, 0 for all */
 
 	if (!clear_stale_map(!class ? ALL_CLASSES : class, 0) && !ct) {
 	if (!ctu) {
-		if (detector)
-		strange_feeling(detector, "You feel a lack of something.");
+		if (detector){
+			if(detector->otyp != SENSOR_PACK)
+				pline("No objects detected.");
+			else
+				strange_feeling(detector, "You feel a lack of something.");
+		}
 		return 1;
 	}
 
@@ -856,10 +860,14 @@ int mclass;			/* monster class, 0 for all */
 	}
 
 	if (!mcnt) {
-	if (otmp)
-		strange_feeling(otmp, Hallucination ?
+	if (otmp){
+		if(otmp->otyp != SENSOR_PACK)
+			pline("No life-signs detected.");
+		else
+			strange_feeling(otmp, Hallucination ?
 				"You get the heebie jeebies." :
 				"You feel threatened.");
+	}
 	return 1;
 	} else {
 	boolean woken = FALSE;
