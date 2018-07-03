@@ -1509,44 +1509,44 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 		    mtmp = m_at(x,y);
 
 		    if ((otmp = boulder_at(x, y)) != 0) {
-			if (cansee(x, y))
-			   pline("KADOOM! The %s falls into a chasm%s!", xname(otmp),
-			      ((x == u.ux) && (y == u.uy)) ? " below you" : "");
-			if (mtmp)
-				mtmp->mtrapped = 0;
-			obj_extract_self(otmp);
-			(void) flooreffects(otmp, x, y, "");
-			break;
+				if (cansee(x, y))
+				   pline("KADOOM! The %s falls into a chasm%s!", xname(otmp),
+					  ((x == u.ux) && (y == u.uy)) ? " below you" : "");
+				if (mtmp)
+					mtmp->mtrapped = 0;
+				obj_extract_self(otmp);
+				(void) flooreffects(otmp, x, y, "");
+				break;
 		    }
 
 		    /* We have to check whether monsters or player
 		       falls in a chasm... */
 
 		    if (mtmp) {
-			if(!is_flyer(mtmp->data) && !is_clinger(mtmp->data)) {
-			    mtmp->mtrapped = 1;
-			    if(cansee(x,y))
-				pline("%s falls into a chasm!", Monnam(mtmp));
-			    else if (flags.soundok && humanoid(mtmp->data))
-				You_hear("a scream!");
-			    mselftouch(mtmp, "Falling, ", TRUE);
-			    if (mtmp->mhp > 0)
-				if ((mtmp->mhp -= rnd(6)) <= 0) {
-                                   if(!cansee(x,y) || mon)
-                                       pline("%s is %sed!",
-                                               cansee(x,y) ? "It" : Monnam(mtmp),
-                                              nonliving_mon(mtmp) ? "destroy" : "kill");
-				    else {
-                                       You("%s %s!", nonliving_mon(mtmp) ? "destroy" :
-                                           "kill", mtmp->mtame ?
-					    x_monnam(mtmp, ARTICLE_THE, "poor",
-				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE):
-					    mon_nam(mtmp));
-				    }
-                                   if (!mon) xkilled(mtmp,0);
-                                   else mondied(mtmp);
+				if(!is_flyer(mtmp->data) && !is_clinger(mtmp->data)) {
+					mtmp->mtrapped = 1;
+					if(cansee(x,y))
+					pline("%s falls into a chasm!", Monnam(mtmp));
+					else if (flags.soundok && humanoid(mtmp->data))
+					You_hear("a scream!");
+					mselftouch(mtmp, "Falling, ", TRUE);
+					if (mtmp->mhp > 0)
+					if ((mtmp->mhp -= rnd(6)) <= 0) {
+									   if(!cansee(x,y) || mon)
+										   pline("%s is %sed!",
+												   cansee(x,y) ? "It" : Monnam(mtmp),
+												  nonliving_mon(mtmp) ? "destroy" : "kill");
+						else {
+										   You("%s %s!", nonliving_mon(mtmp) ? "destroy" :
+											   "kill", mtmp->mtame ?
+							x_monnam(mtmp, ARTICLE_THE, "poor",
+					mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE):
+							mon_nam(mtmp));
+						}
+									   if (!mon) xkilled(mtmp,0);
+									   else mondied(mtmp);
+					}
 				}
-			}
 		    } else if (x == u.ux && y == u.uy) {
 			    if (Levitation || Flying ||
 						is_clinger(youracedata) || u.sealsActive&SEAL_SIMURGH) {
@@ -1560,36 +1560,36 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 					NO_KILLER_PREFIX);
 				    selftouch("Falling, you");
 			    }
-                   } else if ((mon || cursed) && !rn2(2)) {
-                       /* make some chthonic nasties */
-					   if(In_quest(&u.uz) && urole.neminum == PM_DARUTH_XAXOX){
-						   switch(rn2(5)) {
-							   case 3:(void) makemon(&mons[PM_DROW_MUMMY], x, y, NO_MM_FLAGS);
-							   case 4:(void) makemon(&mons[PM_DROW_MUMMY],x, y, NO_MM_FLAGS);
-							   default:(void) makemon(&mons[PM_HEDROW_ZOMBIE],x, y, NO_MM_FLAGS);
-						   }
-					   } else if(flags.walky_level){
-						   switch(rn2(7)) {
-							   case 1:(void) makemon(mkclass(S_MUMMY,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-							   case 2:(void) makemon(mkclass(S_VAMPIRE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-							   case 3:(void) makemon(mkclass(S_LICH,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-							   case 4:(void) makemon(mkclass(S_GHOST,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-							   case 5:(void) makemon(mkclass(S_SHADE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-							   case 6:(void) makemon(mkclass(S_WRAITH,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-							   default:(void) makemon(mkclass(S_ZOMBIE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-						   }
-					   } else {
-						   switch(rn2(In_hell(&u.uz) ? 7 : 5)) {
-							  case 2:(void) makemon(&mons[PM_ROCK_MOLE], x, y, NO_MM_FLAGS);
-							   case 3:(void) makemon(&mons[PM_EARTH_ELEMENTAL], x, y, NO_MM_FLAGS);
-							   case 4:(void) makemon(mkclass(S_XORN,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-							   case 5:(void) makemon(mkclass(S_DEMON, G_NOHELL|G_HELL), x, y, NO_MM_FLAGS);
-							  case 6:(void) makemon(&mons[PM_UMBER_HULK], x, y, NO_MM_FLAGS);
-							   default:(void) makemon(mkclass(S_ZOMBIE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
-						   }
-					   }
-                       mtmp = m_at(x,y);
-                       if (mtmp && canseemon(mtmp)) horrors++;
+			} else if (((!yours && mon) || cursed) && !rn2(2)) {
+			   /* make some chthonic nasties */
+			   if(In_quest(&u.uz) && urole.neminum == PM_DARUTH_XAXOX){
+				   switch(rn2(5)) {
+					   case 3:(void) makemon(&mons[PM_DROW_MUMMY], x, y, NO_MM_FLAGS);
+					   case 4:(void) makemon(&mons[PM_DROW_MUMMY],x, y, NO_MM_FLAGS);
+					   default:(void) makemon(&mons[PM_HEDROW_ZOMBIE],x, y, NO_MM_FLAGS);
+				   }
+			   } else if(flags.walky_level){
+				   switch(rn2(7)) {
+					   case 1:(void) makemon(mkclass(S_MUMMY,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+					   case 2:(void) makemon(mkclass(S_VAMPIRE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+					   case 3:(void) makemon(mkclass(S_LICH,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+					   case 4:(void) makemon(mkclass(S_GHOST,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+					   case 5:(void) makemon(mkclass(S_SHADE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+					   case 6:(void) makemon(mkclass(S_WRAITH,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+					   default:(void) makemon(mkclass(S_ZOMBIE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+				   }
+			   } else {
+				   switch(rn2(In_hell(&u.uz) ? 7 : 5)) {
+					  case 2:(void) makemon(&mons[PM_ROCK_MOLE], x, y, NO_MM_FLAGS);
+					   case 3:(void) makemon(&mons[PM_EARTH_ELEMENTAL], x, y, NO_MM_FLAGS);
+					   case 4:(void) makemon(mkclass(S_XORN,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+					   case 5:(void) makemon(mkclass(S_DEMON, G_NOHELL|G_HELL), x, y, NO_MM_FLAGS);
+					  case 6:(void) makemon(&mons[PM_UMBER_HULK], x, y, NO_MM_FLAGS);
+					   default:(void) makemon(mkclass(S_ZOMBIE,  Inhell ? G_HELL : G_NOHELL), x, y, NO_MM_FLAGS);
+				   }
+			   }
+			   mtmp = m_at(x,y);
+			   if (mtmp && canseemon(mtmp)) horrors++;
 		    } else newsym(x,y);
 		    break;
 		  case DOOR : /* Make the door collapse */
