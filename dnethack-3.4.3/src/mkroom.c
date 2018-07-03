@@ -3995,6 +3995,9 @@ struct mkroom *sroom;
 			if(!rn2(3))
 			    (void) mksobj_at(LUMP_OF_ROYAL_JELLY,
 					     sx, sy, TRUE, FALSE);
+			if(rn2(3))
+			    (void) mksobj_at(HONEYCOMB,
+					     sx, sy, TRUE, FALSE);
 			break;
 		    case BARRACKS:
 			if(In_outlands(&u.uz)){
