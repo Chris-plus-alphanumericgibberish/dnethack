@@ -657,6 +657,11 @@ boolean pets_only;	/* true for ascension or final escape */
 	int num_segs;
 	boolean stay_behind;
 	boolean all_pets = FALSE;
+	int pet_dist = P_SKILL(P_BEAST_MASTERY);
+	if(pet_dist < 1)
+		pet_dist = 1;
+	if(uwep && uwep->otyp == SHEPHERD_S_CROOK)
+		pet_dist++;
 	if(u.specialSealsActive&SEAL_COSMOS ||
 		(uarmh && uarmh->oartifact == ART_CROWN_OF_THE_SAINT_KING) ||
 		(uarmh && uarmh->oartifact == ART_HELM_OF_THE_DARK_LORD)
@@ -675,7 +680,7 @@ boolean pets_only;	/* true for ascension or final escape */
 	    if (((monnear(mtmp, u.ux, u.uy) && levl_follower(mtmp)) || 
 			(mtmp->mtame && (all_pets ||
 							// (u.sealsActive&SEAL_MALPHAS && mtmp->data == &mons[PM_CROW]) || //Allow distant crows to get left behind.
-							(P_SKILL(P_BEAST_MASTERY) > 1 && distmin(mtmp->mx, mtmp->my, u.ux, u.uy) <= P_SKILL(P_BEAST_MASTERY))
+							(distmin(mtmp->mx, mtmp->my, u.ux, u.uy) <= pet_dist)
 							)
 			) ||
 #ifdef STEED
