@@ -322,7 +322,7 @@ find_sawant()
 
 /* find the object index for iron wand */
 int
-find_iawant()
+find_riwant()
 {
     int i = -1;
     int j;
