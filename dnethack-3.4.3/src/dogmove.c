@@ -464,6 +464,11 @@ register struct edog *edog;
 		/* Pets don't get hungery on quest home */
 		edog->hungrytime = monstermoves + 1000;
 		/* but not too high; it might polymorph */
+		return(FALSE);
+	}
+	if(is_demon(mtmp->data) || is_minion(mtmp->data)){
+		if(monstermoves > edog->hungrytime + 750)
+			edog->hungrytime = monstermoves + 750;
 	}
     if (monstermoves > edog->hungrytime)
 	{
@@ -494,36 +499,35 @@ register struct edog *edog;
 	}
 	if (monstermoves > edog->hungrytime + 500) {
 		if (!edog->mhpmax_penalty) {
-		/* starving pets are limited in healing */
-		int newmhpmax = mtmp->mhpmax / 3;
-		mtmp->mconf = 1;
-		edog->mhpmax_penalty = mtmp->mhpmax - newmhpmax;
-		mtmp->mhpmax = newmhpmax;
-		if (mtmp->mhp > mtmp->mhpmax)
-		    mtmp->mhp = mtmp->mhpmax;
-		if (mtmp->mhp < 1) goto dog_died;
-		if (cansee(mtmp->mx, mtmp->my))
-		    pline("%s is confused from hunger.", Monnam(mtmp));
-		else if (couldsee(mtmp->mx, mtmp->my))
-		    beg(mtmp);
-		else
-		    You_feel("worried about %s.", y_monnam(mtmp));
-		stop_occupation();
+			/* starving pets are limited in healing */
+			int newmhpmax = mtmp->mhpmax / 3;
+			mtmp->mconf = 1;
+			edog->mhpmax_penalty = mtmp->mhpmax - newmhpmax;
+			mtmp->mhpmax = newmhpmax;
+			if (mtmp->mhp > mtmp->mhpmax)
+				mtmp->mhp = mtmp->mhpmax;
+			if (mtmp->mhp < 1) goto dog_died;
+			if (cansee(mtmp->mx, mtmp->my))
+				pline("%s is confused from hunger.", Monnam(mtmp));
+			else if (couldsee(mtmp->mx, mtmp->my))
+				beg(mtmp);
+			else
+				You_feel("worried about %s.", y_monnam(mtmp));
+			stop_occupation();
 	    } else if (monstermoves > edog->hungrytime + 750 || mtmp->mhp < 1) {
- dog_died:
-		if (mtmp->mleashed
+dog_died:
+			if (mtmp->mleashed
 #ifdef STEED
-		    && mtmp != u.usteed
+				&& mtmp != u.usteed
 #endif
-		    )
-		    Your("leash goes slack.");
-		else if (cansee(mtmp->mx, mtmp->my))
-		    pline("%s starves.", Monnam(mtmp));
-		else
-		    You_feel("%s for a moment.",
+		    ) Your("leash goes slack.");
+			else if (cansee(mtmp->mx, mtmp->my))
+				pline("%s starves.", Monnam(mtmp));
+			else
+				You_feel("%s for a moment.",
 			Hallucination ? "bummed" : "sad");
-		mondied(mtmp);
-		return(TRUE);
+			mondied(mtmp);
+			return(TRUE);
 	    }
 	}
 	return(FALSE);

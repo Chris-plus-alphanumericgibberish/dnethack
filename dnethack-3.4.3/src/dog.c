@@ -600,22 +600,26 @@ long nmv;		/* number of moves */
 	 * of dying the next time we call dog_move()
 	 */
 	if (mtmp->mtame && !mtmp->isminion &&
-		(carnivorous(mtmp->data) || herbivorous(mtmp->data)) && !(
-		 In_quest(&u.uz) && 
-			((Is_qstart(&u.uz) && !flags.stag) || 
-			 (Is_nemesis(&u.uz) && flags.stag)) &&
-		 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
-		 !(Role_if(PM_ANACHRONONAUT) && quest_status.leader_is_dead) &&
-		 !(Role_if(PM_EXILE))
-	) && !In_sokoban(&u.uz)
-	) {
+		(carnivorous(mtmp->data) || herbivorous(mtmp->data))
+	){
 	    struct edog *edog = EDOG(mtmp);
-
-	    if ((monstermoves > edog->hungrytime + 500 && mtmp->mhp < 3) ||
-		    (monstermoves > edog->hungrytime + 750)
-		){
-			mtmp->mtame = mtmp->mpeaceful = 0;		/* hostile! */
-			mtmp->mferal = 1;
+		if(!(In_quest(&u.uz) && 
+			 ((Is_qstart(&u.uz) && !flags.stag) || 
+				(Is_nemesis(&u.uz) && flags.stag)) &&
+			 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
+			 !(Role_if(PM_ANACHRONONAUT) && quest_status.leader_is_dead) &&
+			 !(Role_if(PM_EXILE))
+			) && !In_sokoban(&u.uz)
+		) {
+			if ((monstermoves > edog->hungrytime + 500 && mtmp->mhp < 3) ||
+				(monstermoves > edog->hungrytime + 750)
+			){
+				mtmp->mtame = mtmp->mpeaceful = 0;		/* hostile! */
+				mtmp->mferal = 1;
+			}
+		} else {
+			if(edog->hungrytime < monstermoves + 500)
+				edog->hungrytime = monstermoves + 500;
 		}
 	}
 
