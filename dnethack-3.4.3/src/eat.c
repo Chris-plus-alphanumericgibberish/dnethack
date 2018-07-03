@@ -3745,8 +3745,14 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		    otmp->otyp == FORTUNE_COOKIE || /* eggs */
 		    otmp->otyp == CREAM_PIE ||
 		    otmp->otyp == CANDY_BAR || /* milk */
-		    otmp->otyp == LUMP_OF_ROYAL_JELLY)
-		    u.uconduct.unvegan++;
+		    otmp->otyp == HONEYCOMB ||
+		    otmp->otyp == LUMP_OF_ROYAL_JELLY ||
+		    otmp->otyp == LUMP_OF_SOLDIER_S_JELLY ||
+		    otmp->otyp == LUMP_OF_DANCER_S_JELLY ||
+		    otmp->otyp == LUMP_OF_PHILOSOPHER_S_JELLY ||
+		    otmp->otyp == LUMP_OF_PRIESTESS_S_JELLY ||
+		    otmp->otyp == LUMP_OF_RHETOR_S_JELLY
+		) u.uconduct.unvegan++;
 		break;
 	    }
 
