@@ -120,7 +120,7 @@ WEAPON("boomerang", (char *)0,
 WEAPON("chakram", "circular blade", /*Needs encyc entry*//*Needs tile*/
 	1, 1, 0,  6,  5, 20,  9,  9, 0, S,   -P_BOOMERANG, IRON, HI_SILVER),
 WEAPON("spike", (char *)0, /*Needs encyc entry*/
-	1, 1, 0,  0,  1,  2,  3,  2, 0, P,   -P_DART, BONE, CLR_WHITE),
+	1, 1, 0,  0,  1,  2,  3,  1, 0, P,   -P_DART, WOOD, CLR_WHITE),
 
 /* spears */
 WEAPON("spear", (char *)0,
