@@ -274,10 +274,10 @@ mkmivault()
 				add_to_container(otmp, otmp2);
 			}
 			// clockworks
-			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_HOOLOOVOO] 
+			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_ID_JUGGERNAUT] 
 					|| mon->data == &mons[PM_SCRAP_TITAN] || mon->data == &mons[PM_HELLFIRE_COLOSSUS]){
 				if (rn2(2)){
-					add_to_container(otmp, mksobj(SUBETHAIC_COMPONENT, TRUE, FALSE));
+					add_to_container(otmp, mksobj(mon->data == &mons[PM_ID_JUGGERNAUT] ? SUBETHAIC_COMPONENT : HELLFIRE_COMPONENT, TRUE, FALSE));
 				} else {
 					add_to_container(otmp, mksobj(SCRAP, TRUE, FALSE));
 				}
@@ -412,10 +412,10 @@ mkmivaultlolth()
 				add_to_container(otmp, otmp2);
 			}
 			// clockworks
-			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_HOOLOOVOO] 
+			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_ID_JUGGERNAUT] 
 					|| mon->data == &mons[PM_SCRAP_TITAN] || mon->data == &mons[PM_HELLFIRE_COLOSSUS]){
 				if (rn2(2)){
-					add_to_container(otmp, mksobj(SUBETHAIC_COMPONENT, TRUE, FALSE));
+					add_to_container(otmp, mksobj(mon->data == &mons[PM_ID_JUGGERNAUT] ? SUBETHAIC_COMPONENT : HELLFIRE_COMPONENT, TRUE, FALSE));
 				} else {
 					add_to_container(otmp, mksobj(SCRAP, TRUE, FALSE));
 				}
