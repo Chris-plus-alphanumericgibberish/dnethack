@@ -236,7 +236,9 @@ WEAPON("spetum", "forked polearm",
 	0, 0, 1,  5, 50,  5,  6,  6, 0, P,   P_POLEARMS, IRON, HI_METAL),
 						/* +1 small, +d6 large */
 WEAPON("glaive", "single-edged polearm",
-	0, 0, 1,  8, 75,  6,  6, 10, 0, S,   P_POLEARMS, IRON, HI_METAL),
+	0, 0, 1,  7, 75,  6,  6, 10, 0, S,   P_POLEARMS, IRON, HI_METAL),
+WEAPON("naginata", "samurai-sword polearm",
+	0, 0, 1,  1, 75, 90,  8, 10, 1, S,   P_POLEARMS, IRON, HI_METAL),
 WEAPON("lance", (char *)0,
 	1, 0, 0,  4,180, 10,  6,  8, 0, P,   P_LANCE, IRON, HI_METAL),
 WEAPON("force pike", "long gray spear",/*Needs tile*/

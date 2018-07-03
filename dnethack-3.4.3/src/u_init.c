@@ -2040,7 +2040,7 @@ u_init()
 		u.umartial = TRUE;
 		Samurai[S_ARROWS].trquan = rn1(20, 26);
 		if(flags.female){
-			Samurai[S_WEAPON].trotyp = GLAIVE;
+			Samurai[S_WEAPON].trotyp = NAGINATA;
 			Samurai[S_SECOND].trotyp = KNIFE;
 		}
 		ini_inv(Samurai);

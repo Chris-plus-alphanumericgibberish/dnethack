@@ -1725,6 +1725,7 @@ hitmu(mtmp, mattk)
 				(is_pole(uwep) && 
 					uwep->otyp != AKLYS && 
 					uwep->otyp != FORCE_PIKE && 
+					uwep->otyp != NAGINATA && 
 					uwep->oartifact != ART_WEBWEAVER_S_CROOK && 
 					uwep->oartifact != ART_SILENCE_GLAIVE && 
 					uwep->oartifact != ART_HEARTCLEAVER && 

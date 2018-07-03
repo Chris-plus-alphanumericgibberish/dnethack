@@ -1993,7 +1993,7 @@ register struct monst *mtmp;
 					(void) mongets(mtmp, DAGGER);
 					chance = d(1,100);
 					if(Role_if(PM_SAMURAI))
-						if(chance > 95) (void)mongets(mtmp, GLAIVE);
+						if(chance > 95) (void)mongets(mtmp, NAGINATA);
 						else if(chance > 75) (void)mongets(mtmp, KATANA);
 						else if(chance > 50) (void)mongets(mtmp, BROADSWORD);
 						else (void)mongets(mtmp, STILETTO);
