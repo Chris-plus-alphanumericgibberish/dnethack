@@ -650,6 +650,8 @@ register const char *s;
 				}
 			}
 		}
+		if(In_law(&u.uz)){
+			place_law_features();
 		if(In_outlands(&u.uz) && Is_sumall(&u.uz)){
 			for(x = 2; x <= x_maze_max; x++)
 				for(y = 2; y <= y_maze_max; y++)

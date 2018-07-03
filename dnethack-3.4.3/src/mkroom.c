@@ -19,6 +19,7 @@ extern const int monstr[];
 
 #ifdef OVLB
 STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
+STATIC_DCL int FDECL(int_sqrt, (int));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
 STATIC_DCL boolean FDECL(issemispacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
@@ -32,6 +33,9 @@ STATIC_DCL void NDECL(mkpluvillage);
 STATIC_DCL void NDECL(mkferrufort);
 STATIC_DCL void NDECL(mkferrutower);
 STATIC_DCL void NDECL(mkinvertzigg);
+STATIC_DCL void FDECL(mkmch, (int));
+STATIC_DCL void FDECL(mkwrk, (int));
+STATIC_DCL void FDECL(mkcamp, (int));
 STATIC_DCL void NDECL(mklolthsepulcher);
 STATIC_DCL void NDECL(mkmivaultlolth);
 STATIC_DCL void NDECL(mkvaultlolth);
@@ -70,6 +74,13 @@ register struct mkroom *sroom;
 	register int area = (sroom->hx - sroom->lx + 1)
 			   * (sroom->hy - sroom->ly + 1);
 	return((boolean)( area > 20 ));
+}
+
+STATIC_OVL int
+int_sqrt(num)
+int num;
+{
+	return((boolean)( sqrt(num) ));
 }
 
 /* Returns true if room has both an X and Y size of at least five. */
@@ -2075,6 +2086,106 @@ mkpluhomestead()
 	}
 }
 
+#define VALAVI_CAMP		0
+#define FORMIAN_CAMP1	1
+#define FORMIAN_CAMP2	2
+#define THRIAE_CAMP		3
+
+STATIC_OVL
+void
+mkcamp(type)
+	int type;
+{
+	int x,y,tries=0, roomnumb;
+	int r = 4;
+	int i,j, pathto = 0;
+	boolean good=FALSE, okspot, accessible;
+	while(!good && tries < 500){
+		x = rn2(COLNO-2*r)+1+r;
+		y = rn2(ROWNO-2*r)+0+r;
+		tries++;
+		okspot = TRUE;
+		accessible = FALSE;
+		for(i=-1*(r-1);i<=(r-1);i++){
+			for(j=-1*(r-1);j<=(r-1);j++){
+				if(!isok(x+i,y+j) || t_at(x+i, y+j) || !(levl[x+i][y+j].typ == TREE || levl[x+i][y+j].typ == ROOM))
+					okspot = FALSE;
+				if(on_level(&u.uz, &arcadia1_level)){
+					if(
+						((y+j) == 11 && x+i >= 50) ||
+						((y+j) >= 11 && x+i == 50)
+					) okspot = FALSE;
+				} else if((y+j) == 11){
+					okspot = FALSE;
+				}
+			}
+		}
+		for(i=-1*r;i<=r;i++){
+			for(j=-1*r;j<=r;j++){
+				if(isok(x+i,y+j) && levl[x+i][y+j].typ == DOOR)
+					okspot = FALSE;
+			}
+		}
+		pathto = 0;
+		if(isok(x+r,y+0) && levl[x+r][y+0].typ == ROOM) pathto++;
+		if(isok(x-r,y+0) && levl[x-r][y+0].typ == ROOM) pathto++;
+		if(isok(x+0,y+r) && levl[x+0][y+r].typ == ROOM) pathto++;
+		if(isok(x+0,y-r) && levl[x+0][y-r].typ == ROOM) pathto++;
+		if(pathto) accessible = TRUE;
+		if(okspot && accessible){
+			good = TRUE;
+		} else continue;
+		
+		for(i=-1*(r-1);i<=(r-1);i++){
+			for(j=-1*(r-1);j<=(r-1);j++){
+				if(dist2(x+i, y+j, x, y) <= r*r+1){
+					levl[x+i][y+j].typ = HWALL;
+					if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
+					while(level.objects[x+i][y+j])
+						rloco(level.objects[x+i][y+j]);
+				}
+			}
+		}
+		
+		for(i=-1*(r-1);i<=(r-1);i++){
+			for(j=-1*(r-1);j<=(r-1);j++){
+				if(dist2(x+i, y+j, x, y) <= (r-2)*(r-2)+1){
+					levl[x+i][y+j].typ = ROOM;
+				}
+			}
+		}
+		
+		wallification(x-r, y-r, x+r, y+r);
+		
+		flood_fill_rm(x, y, nroom+ROOMOFFSET, TRUE, TRUE);
+		if(type == VALAVI_CAMP)
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, ARMORSHOP, TRUE);
+		else if(type == FORMIAN_CAMP1)
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, TOOLSHOP, TRUE);
+		else if(type == FORMIAN_CAMP2)
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, POTIONSHOP, TRUE);
+		else if(type == THRIAE_CAMP)
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, FOODSHOP, TRUE);
+		rooms[nroom - 1].irregular = TRUE;
+		
+		pathto = rn2(pathto);
+		if(isok(x+0,y-r) && levl[x+0][y-r].typ == ROOM && !(pathto--)){
+			levl[x+0][y-r+1].typ = DOOR, levl[x+0][y-r+1].doormask = D_CLOSED;
+			add_door(x+0,y-r+1,&rooms[nroom - 1]);
+		} else if(isok(x+0,y+r) && levl[x+0][y+r].typ == ROOM && !(pathto--)){
+			levl[x+0][y+r-1].typ = DOOR, levl[x+0][y+r-1].doormask = D_CLOSED;
+			add_door(x+0,y+r-1,&rooms[nroom - 1]);
+		} else if(isok(x+r,y+0) && levl[x+r][y+0].typ == ROOM && !(pathto--)){
+			levl[x+r-1][y+0].typ = DOOR, levl[x+r-1][y+0].doormask = D_CLOSED;
+			add_door(x+r-1,y+0,&rooms[nroom - 1]);
+		} else if(isok(x-r,y+0) && levl[x-r][y+0].typ == ROOM && !(pathto--)){
+			levl[x-r+1][y+0].typ = DOOR, levl[x-r+1][y+0].doormask = D_CLOSED;
+			add_door(x-r+1,y+0,&rooms[nroom - 1]);
+		}
+		fill_room(&rooms[nroom - 1], FALSE);
+	}
+}
+
 STATIC_OVL
 void
 mkpluvillage()
@@ -3043,6 +3154,330 @@ mkinvertzigg()
 	}
 }
 
+STATIC_OVL
+void
+mkmch(typ)
+int typ;
+{
+	int x, y, tries = 0, ncrew, good = FALSE;
+	struct obj *statue, *smallstatue, *otmp;
+	while(!good && tries < 500){
+		x = rn2(COLNO)+1;
+		y = rn2(ROWNO);
+		tries++;
+		if(isok(x,y) && levl[x][y].typ == typ)
+			good = TRUE;
+		else continue;
+		
+		statue = mksobj_at(STATUE, x, y, FALSE, FALSE);
+		if(statue){
+			statue->corpsenm = PM_COLOSSAL_CLOCKWORK_WAR_MACHINE;
+			otmp = mksobj(BRONZE_PLATE_MAIL, TRUE, FALSE);
+			if(otmp){
+				otmp->cursed = TRUE;
+				otmp->blessed = FALSE;
+				otmp->objsize = MZ_GIGANTIC;
+				otmp->spe = max_ints(otmp->spe,rnd(3)*rnd(3));
+				otmp->oeroded2 = rn2(3);
+				fix_object(otmp);
+				add_to_container(statue, otmp);
+			}
+			
+			for(tries = rn1(5,5); tries > 0; tries--){
+				otmp = mksobj(CLOCKWORK_COMPONENT, FALSE, FALSE);
+				if(otmp){
+					add_to_container(statue, otmp);
+				}
+			}
+			if(!rn2(4)){
+				for(tries = d(1,4); tries > 0; tries--){
+					otmp = mksobj(HELLFIRE_COMPONENT, FALSE, FALSE);
+					if(otmp){
+						add_to_container(statue, otmp);
+					}
+				}
+			}
+			if(!rn2(4)){
+				for(tries = d(1,4); tries > 0; tries--){
+					otmp = mksobj(SUBETHAIC_COMPONENT, FALSE, FALSE);
+					if(otmp){
+						add_to_container(statue, otmp);
+					}
+				}
+			}
+			otmp = mksobj(UPGRADE_KIT, FALSE, FALSE);
+			if(otmp){
+				add_to_container(statue, otmp);
+			}
+			if(!rn2(20)){
+				otmp = mksobj(WAN_FIRE, TRUE, FALSE);
+				if(otmp){
+					add_to_container(statue, otmp);
+				}
+				for(tries = d(2,4); tries > 0; tries--){
+					otmp = mksobj(POT_OIL, TRUE, FALSE);
+					if(otmp){
+						add_to_container(statue, otmp);
+					}
+				}
+			}
+			if(!rn2(20)){
+				otmp = mksobj(WAN_LIGHTNING, TRUE, FALSE);
+				if(otmp){
+					add_to_container(statue, otmp);
+				}
+				for(tries = d(2,4); tries > 0; tries--){
+					otmp = mksobj(POT_ACID, TRUE, FALSE);
+					if(otmp){
+						add_to_container(statue, otmp);
+					}
+				}
+			}
+			if(!rn2(20)){
+				otmp = mksobj(WAN_STRIKING, TRUE, FALSE);
+				if(otmp){
+					add_to_container(statue, otmp);
+				}
+			}
+			if(!rn2(50)){
+				otmp = mksobj(WAN_DEATH, TRUE, FALSE);
+				if(otmp){
+					add_to_container(statue, otmp);
+				}
+			}
+			
+			////////////////////
+			for(ncrew = rnd(8); ncrew > 0; ncrew--){
+				smallstatue = mksobj(STATUE, FALSE, FALSE);
+				if(smallstatue){
+					smallstatue->corpsenm = PM_CLOCKWORK_AUTOMATON;
+					otmp = mksobj(BRONZE_PLATE_MAIL, TRUE, FALSE);
+					if(otmp){
+						if(rn2(5)){
+							otmp->cursed = TRUE;
+							otmp->blessed = FALSE;
+							otmp->oeroded2 = rn2(3);
+						}
+						otmp->spe = max_ints(otmp->spe,rnd(3)+rnd(3));
+						fix_object(otmp);
+						add_to_container(smallstatue, otmp);
+					}
+					for(tries = rn1(2,2); tries > 0; tries--){
+						otmp = mksobj(CLOCKWORK_COMPONENT, FALSE, FALSE);
+						if(otmp){
+							add_to_container(smallstatue, otmp);
+						}
+					}
+					if(!rn2(4)){
+						for(tries = rnd(2); tries > 0; tries--){
+							otmp = mksobj(HELLFIRE_COMPONENT, FALSE, FALSE);
+							if(otmp){
+								add_to_container(smallstatue, otmp);
+							}
+						}
+					}
+					if(!rn2(4)){
+						for(tries = rnd(2); tries > 0; tries--){
+							otmp = mksobj(SUBETHAIC_COMPONENT, FALSE, FALSE);
+							if(otmp){
+								add_to_container(smallstatue, otmp);
+							}
+						}
+					}
+					////////////////////
+					add_to_container(statue, smallstatue);
+				}
+			}
+			////////////////////
+			otmp = mksobj(SPIKE, FALSE, FALSE);
+			if(otmp){
+				otmp->cursed = TRUE;
+				otmp->blessed = FALSE;
+				otmp->objsize = MZ_GIGANTIC;
+				otmp->spe = 5;
+				otmp->obj_material = BONE;
+				otmp->quan = rn1(5,5);
+				otmp->opoisoned = (OPOISON_PARAL|OPOISON_ACID);
+				fix_object(otmp);
+				add_to_container(statue, otmp);
+			}
+			////////////////////
+			statue->owt = weight(statue);
+		}
+	}
+}
+
+STATIC_OVL
+void
+mkwrk(typ)
+int typ;
+{
+	int x, y, tries = 0, good = FALSE;
+	struct obj *otmp;
+	while(!good && tries < 500){
+		x = rn2(COLNO)+1;
+		y = rn2(ROWNO);
+		tries++;
+		if(isok(x,y) && levl[x][y].typ == typ)
+			good = TRUE;
+		else continue;
+		
+		if(!rn2(10)){
+			//Six-armed clockwork
+			int nwep;
+			otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+			for(tries = rn1(3,3); tries > 0; tries--)
+				otmp = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+			otmp = mksobj_at(BRONZE_PLATE_MAIL, x, y, TRUE, FALSE);
+			nwep = rnd(6);
+			for(tries = 0; tries < nwep; tries++){
+				otmp = mksobj_at(SCIMITAR, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+			}
+			for(nwep; nwep < 6; nwep++){
+				otmp = mksobj_at(ROUNDSHIELD, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				otmp->objsize = MZ_SMALL;
+				fix_object(otmp);
+			}
+			if(rn2(2)){
+				otmp = mksobj_at(GAUNTLETS, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				otmp = mksobj_at(GAUNTLETS, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				otmp = mksobj_at(GAUNTLETS, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+			} else if(rn2(2)){
+				otmp = mksobj_at(GAUNTLETS_OF_POWER, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				otmp = mksobj_at(GAUNTLETS_OF_POWER, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				otmp = mksobj_at(GAUNTLETS_OF_POWER, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+			} else {
+				otmp = mksobj_at(ORIHALCYON_GAUNTLETS, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				otmp = mksobj_at(ORIHALCYON_GAUNTLETS, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				otmp = mksobj_at(ORIHALCYON_GAUNTLETS, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+			}
+		} else if(rn2(9)){
+			//Clockwork Horror
+			if(rn2(10)){		//9 out of 10
+				otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+				for(tries = rn1(3,3); tries > 0; tries--)
+					otmp = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+				otmp = mksobj_at(!rn2(3) ? STILETTO : !rn2(2) ? AXE : WAR_HAMMER, x, y, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				mksobj_at(WORTHLESS_PIECE_OF_WHITE_GLASS + rn2(WORTHLESS_PIECE_OF_VIOLET_GLAS - WORTHLESS_PIECE_OF_WHITE_GLASS + 1), x, y, TRUE, FALSE);
+			} else if(rn2(10)){	//9 out of 100
+				otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+				otmp->obj_material = SILVER;
+				fix_object(otmp);
+				for(tries = rn1(3,3); tries > 0; tries--){
+					otmp = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+				}
+				if(find_sawant()){
+					otmp = mksobj(find_sawant(), TRUE, FALSE);
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+					place_object(otmp, x, y);
+				} else {
+					otmp = mksobj_at(PISTOL, x, y, TRUE, FALSE);
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+					otmp = mksobj_at(BULLET, x, y, TRUE, FALSE);
+					otmp->obj_material = SILVER;
+					otmp->quan += rn1(20,20);
+					fix_object(otmp);
+				}
+				otmp = mksobj_at(VIBROBLADE, x, y, TRUE, FALSE);
+				otmp->obj_material = SILVER;
+				fix_object(otmp);
+				mksobj_at(AMBER + rn2(JADE - AMBER + 1), x, y, TRUE, FALSE);
+			} else if(rn2(10)){	//9 out of 1000
+				otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+				otmp->obj_material = GOLD;
+				fix_object(otmp);
+				for(tries = rn1(3,3); tries > 0; tries--){
+					otmp = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+					otmp->obj_material = GOLD;
+					fix_object(otmp);
+				}
+				if(find_gawant()){
+					otmp = mksobj(find_gawant(), TRUE, FALSE);
+					otmp->obj_material = GOLD;
+					fix_object(otmp);
+					place_object(otmp, x, y);
+				} else {
+					otmp = mksobj_at(ARM_BLASTER, x, y, TRUE, FALSE);
+					otmp->obj_material = GOLD;
+					fix_object(otmp);
+				}
+				otmp = mksobj_at(FORCE_PIKE, x, y, TRUE, FALSE);
+				otmp->obj_material = GOLD;
+				fix_object(otmp);
+				mksobj_at(RUBY + rn2(AQUAMARINE - RUBY + 1), x, y, TRUE, FALSE);
+			} else {			//1 out of 1000
+				otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+				otmp->obj_material = PLATINUM;
+				fix_object(otmp);
+				for(tries = rn1(3,3); tries > 0; tries--){
+					otmp = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+					otmp->obj_material = PLATINUM;
+					fix_object(otmp);
+				}
+				if(find_pawant()){
+					otmp = mksobj(find_pawant(), TRUE, FALSE);
+					otmp->obj_material = PLATINUM;
+					fix_object(otmp);
+					place_object(otmp, x, y);
+				} else {
+					otmp = mksobj_at(BFG, x, y, TRUE, FALSE);
+					otmp->obj_material = PLATINUM;
+					fix_object(otmp);
+				}
+				//Atma Weapon 1/20000
+				otmp = mksobj_at(BEAMSWORD, x, y, TRUE, TRUE);
+				otmp->obj_material = PLATINUM;
+				fix_object(otmp);
+				mksobj_at(MAGICITE_CRYSTAL + rn2(STAR_SAPPHIRE - MAGICITE_CRYSTAL + 1), x, y, TRUE, FALSE);
+			}
+		} else {
+			otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+			if(otmp){
+				otmp->obj_material = IRON;
+				otmp->oeroded2 = 2;
+				fix_object(otmp);
+			}
+			for(tries = rn1(2,2); tries > 0; tries--){
+				otmp = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
+				otmp->obj_material = IRON;
+				otmp->oeroded2 = 2;
+				fix_object(otmp);
+			}
+			for(tries = rn1(4,4); tries > 0; tries--){
+				otmp = mksobj_at(SCRAP, x, y, TRUE, FALSE);
+			}
+		}
+	}
+	//Unknown rusted scrap pile
+}
+
 void
 place_lolth_vaults()
 {
@@ -3119,6 +3554,40 @@ place_neutral_features()
 		for(n; n > 0; n--)
 			mkpluhomestead();
 	} 
+}
+
+void
+place_law_features()
+{
+	if(Is_path(&u.uz)){
+		if(!rn2(10)){
+		// if(1){
+			int n = 10-int_sqrt(rnd(99));
+			for(n; n > 0; n--)
+				mkmch(ROOM);
+		} else if(!rn2(10)){
+			int n = 10-int_sqrt(rnd(99));
+			for(n; n > 0; n--)
+				mkmch(STONE);
+		} else if(!rn2(4)){
+			int n = 5 - int_sqrt(rnd(24));
+			for(n; n > 0; n--)
+				mkwrk(ROOM);
+		} else {
+			int n = 5 - int_sqrt(rnd(24));
+			for(n; n > 0; n--)
+				mkwrk(STONE);
+		}
+	} else if(Is_arcadia_woods(&u.uz)){
+		if(!rn2(4))
+			mkcamp(VALAVI_CAMP);
+		if(!rn2(4))
+			mkcamp(FORMIAN_CAMP1);
+		if(!rn2(4))
+			mkcamp(FORMIAN_CAMP2);
+		if(!rn2(4))
+			mkcamp(THRIAE_CAMP);
+	}
 }
 
 void
@@ -3611,8 +4080,64 @@ struct mkroom *sroom;
 			}
 			break;
 		    case ANTHOLE:
-			if(!rn2(3))
-			    (void) mkobj_at(FOOD_CLASS, sx, sy, FALSE);
+			if(In_law(&u.uz)){
+				struct obj *otmp;
+				switch(rn2(5)){
+					case 0:
+						(void) mksobj_at(FOOD_RATION, sx, sy, TRUE, FALSE);
+					break;
+					case 1:
+						switch(rn2(6)){
+							case 0:
+								(void) mksobj_at(FORTUNE_COOKIE, sx, sy, TRUE, FALSE);
+							break;
+							case 1:
+								(void) mksobj_at(CANDY_BAR, sx, sy, TRUE, FALSE);
+							break;
+							case 2:
+								(void) mksobj_at(APPLE, sx, sy, TRUE, FALSE);
+							break;
+							case 3:
+								(void) mksobj_at(ORANGE, sx, sy, TRUE, FALSE);
+							break;
+							case 4:
+								(void) mksobj_at(PEAR, sx, sy, TRUE, FALSE);
+							break;
+							case 5:
+								(void) mksobj_at(CREAM_PIE, sx, sy, TRUE, FALSE);
+							break;
+						}
+					break;
+					case 2:
+						otmp = mksobj_at(SLIME_MOLD, sx, sy, TRUE, FALSE);
+						otmp->spe = fruitadd("loaf of baked bread");
+					break;
+					case 3:
+						otmp = mksobj_at(SLIME_MOLD, sx, sy, TRUE, FALSE);
+						otmp->spe = fruitadd("honey drop");
+					break;
+					case 4:
+						otmp = mksobj_at(TIN, sx, sy, TRUE, FALSE);
+						switch(rn2(4)){
+							case 0:
+								otmp->corpsenm = PM_LICHEN;
+							break;
+							case 1:
+								otmp->corpsenm = PM_DUNGEON_FERN_SPROUT;
+							break;
+							case 2:
+								otmp->corpsenm = PM_SUNFLOWER;
+							break;
+							case 3:
+								otmp->spe = 1;
+							break;
+						}
+					break;
+				}
+			} else {
+				if(!rn2(3))
+					(void) mkobj_at(FOOD_CLASS, sx, sy, FALSE);
+			}
 			break;
 		}
 	    }
@@ -3696,10 +4221,18 @@ antholemon()
 	int mtyp;
 
 	/* Same monsters within a level, different ones between levels */
-	switch ((level_difficulty() + ((long)u.ubirthday)) % 3) {
-	default:	mtyp = PM_GIANT_ANT; break;
-	case 0:		mtyp = PM_SOLDIER_ANT; break;
-	case 1:		mtyp = PM_FIRE_ANT; break;
+	if(!In_law(&u.uz)){
+		switch (rn2(3)) {
+		default:	mtyp = PM_GIANT_ANT; break;
+		case 0:		mtyp = PM_SOLDIER_ANT; break;
+		case 1:		mtyp = PM_FIRE_ANT; break;
+		}
+	} else {
+		switch ((level_difficulty() + ((long)u.ubirthday)) % 3) {
+		default:	mtyp = PM_GIANT_ANT; break;
+		case 0:		mtyp = PM_SOLDIER_ANT; break;
+		case 1:		mtyp = PM_FIRE_ANT; break;
+		}
 	}
 	return ((mvitals[mtyp].mvflags & G_GONE && !In_quest(&u.uz)) ?
 			(struct permonst *)0 : &mons[mtyp]);

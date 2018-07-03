@@ -1485,6 +1485,13 @@ d_level	*lev;
 	return((boolean)(lev->dnum == law_dnum));
 }
 
+boolean
+In_paths_of_law(lev)	/* In the paths of law region? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == law_dnum));
+}
+
 
 /*
  * Return the branch for the given dungeon.

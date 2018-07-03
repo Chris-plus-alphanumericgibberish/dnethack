@@ -763,12 +763,19 @@ register char *enterstring;
 	} else if (seenSeals) {
 	    verbalize("I don't sell to your kind.");
 	} else {
-		verbalize("%s, %s!  Welcome%s to %s %s!",
-			  Hello(shkp), plname,
-			  eshkp->visitct++ ? " again" : "",
-			  s_suffix(shkname(shkp)),
-			  shtypes[rt - SHOPBASE].name);
-		verbalize("Feel free to browse my wares, or chat with me about other services!");
+		if(In_law(&u.uz)){
+			verbalize("%s, %s!  Welcome%s to my outpost!",
+				  Hello(shkp), plname,
+				  eshkp->visitct++ ? " again" : "");
+			verbalize("Feel free to browse my wares, or chat with me about other services!");
+		} else {
+			verbalize("%s, %s!  Welcome%s to %s %s!",
+				  Hello(shkp), plname,
+				  eshkp->visitct++ ? " again" : "",
+				  s_suffix(shkname(shkp)),
+				  shtypes[rt - SHOPBASE].name);
+			verbalize("Feel free to browse my wares, or chat with me about other services!");
+		}
 	}
 	/* can't do anything about blocking if teleported in */
 	if (!inside_shop(u.ux, u.uy)) {

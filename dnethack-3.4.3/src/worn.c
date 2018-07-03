@@ -28,6 +28,9 @@ const static int REV_PROPS[] = {COLD_RES, REGENERATION, FIXED_ABIL, POISON_RES, 
 
 const static int FLY_PROPS[] = {DETECT_MONSTERS};
 
+const static int FIRE_PROP[] = {FIRE_RES};
+const static int COLD_PROP[] = {COLD_RES};
+
 const struct worn {
 	long w_mask;
 	struct obj **w_obj;
@@ -129,6 +132,13 @@ long mask;
 				for(p = 0; p < SIZE(SHIM_RES); p++) u.uprops[SHIM_RES[p]].extrinsic = u.uprops[SHIM_RES[p]].extrinsic & ~wp->w_mask;
 			}
 			
+			if(oobj->oproperties&OPROP_FIRE){
+				for(p = 0; p < SIZE(FIRE_PROP); p++) u.uprops[FIRE_PROP[p]].extrinsic = u.uprops[FIRE_PROP[p]].extrinsic & ~wp->w_mask;
+			}
+			if(oobj->oproperties&OPROP_COLD){
+				for(p = 0; p < SIZE(COLD_PROP); p++) u.uprops[COLD_PROP[p]].extrinsic = u.uprops[COLD_PROP[p]].extrinsic & ~wp->w_mask;
+			}
+			
 			if(oobj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 				for(p = 0; p < SIZE(CHROMATIC_RES); p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic & ~wp->w_mask;
 			} else if(oobj->oartifact == ART_DRAGON_PLATE){
@@ -182,6 +192,13 @@ long mask;
 					for(p = 0; p < SIZE(GRAY_RES); p++) u.uprops[GRAY_RES[p]].extrinsic = u.uprops[GRAY_RES[p]].extrinsic | wp->w_mask;
 				} else if(obj->otyp == SHIMMERING_DRAGON_SCALES || obj->otyp == SHIMMERING_DRAGON_SCALE_MAIL || obj->otyp == SHIMMERING_DRAGON_SCALE_SHIELD){
 					for(p = 0; p < SIZE(SHIM_RES); p++) u.uprops[SHIM_RES[p]].extrinsic = u.uprops[SHIM_RES[p]].extrinsic | wp->w_mask;
+				}
+				
+				if(obj->oproperties&OPROP_FIRE){
+					for(p = 0; p < SIZE(FIRE_PROP); p++) u.uprops[FIRE_PROP[p]].extrinsic = u.uprops[FIRE_PROP[p]].extrinsic | wp->w_mask;
+				}
+				if(obj->oproperties&OPROP_COLD){
+					for(p = 0; p < SIZE(COLD_PROP); p++) u.uprops[COLD_PROP[p]].extrinsic = u.uprops[COLD_PROP[p]].extrinsic | wp->w_mask;
 				}
 				
 				if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
@@ -252,6 +269,13 @@ register struct obj *obj;
 			for(p = 0; p < SIZE(GRAY_RES); p++) u.uprops[GRAY_RES[p]].extrinsic = u.uprops[GRAY_RES[p]].extrinsic & ~wp->w_mask;
 		} else if(obj->otyp == SHIMMERING_DRAGON_SCALES || obj->otyp == SHIMMERING_DRAGON_SCALE_MAIL || obj->otyp == SHIMMERING_DRAGON_SCALE_SHIELD){
 			for(p = 0; p < SIZE(SHIM_RES); p++) u.uprops[SHIM_RES[p]].extrinsic = u.uprops[SHIM_RES[p]].extrinsic & ~wp->w_mask;
+		}
+		
+		if(obj->oproperties&OPROP_FIRE){
+			for(p = 0; p < SIZE(FIRE_PROP); p++) u.uprops[FIRE_PROP[p]].extrinsic = u.uprops[FIRE_PROP[p]].extrinsic & ~wp->w_mask;
+		}
+		if(obj->oproperties&OPROP_COLD){
+			for(p = 0; p < SIZE(COLD_PROP); p++) u.uprops[COLD_PROP[p]].extrinsic = u.uprops[COLD_PROP[p]].extrinsic & ~wp->w_mask;
 		}
 		
 		if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
@@ -486,6 +510,13 @@ boolean on, silently;
 		for(which = 0; which < SIZE(GRAY_RES); which++) update_mon_intrinsic(mon, obj, GRAY_RES[which], on, silently);
 	} else if(obj->otyp == SHIMMERING_DRAGON_SCALES || obj->otyp == SHIMMERING_DRAGON_SCALE_MAIL || obj->otyp == SHIMMERING_DRAGON_SCALE_SHIELD){
 		for(which = 0; which < SIZE(SHIM_RES); which++) update_mon_intrinsic(mon, obj, SHIM_RES[which], on, silently);
+	}
+	
+	if(obj->oproperties&OPROP_FIRE){
+		for(which = 0; which < SIZE(FIRE_PROP); which++) update_mon_intrinsic(mon, obj, FIRE_PROP[which], on, silently);
+	}
+	if(obj->oproperties&OPROP_COLD){
+		for(which = 0; which < SIZE(COLD_PROP); which++) update_mon_intrinsic(mon, obj, COLD_PROP[which], on, silently);
 	}
 	
 	if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){

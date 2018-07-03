@@ -246,6 +246,53 @@ const struct shclass shtypes[] = {
 	{(char *)0, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
 };
 
+#define JELLY_SHOP 0
+#define ACID_SHOP 1
+#define PET_SHOP 2
+#define CERAMIC_SHOP 3
+const struct shclass special_shtypes[] = {
+	{"hive outpost", FOOD_CLASS, 0, D_SHOP, 
+	    {{12, -LUMP_OF_ROYAL_JELLY}, {12, -LUMP_OF_SOLDIER_S_JELLY}, 
+		 {12, -LUMP_OF_DANCER_S_JELLY},
+	     {12, -LUMP_OF_PHILOSOPHER_S_JELLY}, {12, -LUMP_OF_PRIESTESS_S_JELLY}, 
+		 {12, -LUMP_OF_RHETOR_S_JELLY}, 
+		 {14, -HONEYCOMB}, {14, -POT_GAIN_ABILITY}},
+	shkfoods},
+	{"nest outpost", POTION_CLASS, 10, D_SHOP,
+	    {{40, -POT_ACID}, {40, -POT_OIL}, 
+		 {20, -POT_BOOZE}},
+	shkliquors},
+	{"garrison outpost", TOOL_CLASS, 10, D_SHOP,
+	    {{95, -FIGURINE}, {5, -LEASH}},
+	shktools},
+	{"mound outpost", ARMOR_CLASS, 10, D_SHOP,
+	    {{40, ARMOR_CLASS}, {20, -SHEPHERD_S_CROOK}, 
+		 {20, -SLIME_MOLD}, {20, -FIGURINE}
+		},
+	shkarmors},
+	{(char *)0, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
+};
+
+const int valavi_armors[] = {
+	WAR_HAT,
+	HELMET,
+	HELM_OF_BRILLIANCE,
+	HELM_OF_OPPOSITE_ALIGNMENT,
+	HELM_OF_TELEPATHY,
+	HELM_OF_DRAIN_RESISTANCE,
+	PLATE_MAIL,
+	SPLINT_MAIL,
+	BANDED_MAIL,
+	KITE_SHIELD,
+	LEATHER_CLOAK,
+	LEATHER_ARMOR,
+	ROBE,
+	CLOAK_OF_PROTECTION,
+	CLOAK_OF_INVISIBILITY,
+	CLOAK_OF_MAGIC_RESISTANCE,
+	CLOAK_OF_DISPLACEMENT
+};
+
 #if 0
 /* validate shop probabilities; otherwise incorrect local changes could
    end up provoking infinite loops or wild subscripts fetching garbage */
@@ -286,6 +333,76 @@ int sx, sy;
 		mtmp->m_ap_type = M_AP_OBJECT;
 		mtmp->mappearance = STRANGE_OBJECT;
 	    }
+	} else if(In_law(&u.uz ) && (shp->symb == POTION_CLASS || shp->symb == FOOD_CLASS || shp->symb == TOOL_CLASS || shp->symb == ARMOR_CLASS)){
+		if(shp->symb == POTION_CLASS){
+			atype = get_special_shop_item(JELLY_SHOP);
+			if (atype < 0)
+				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
+			else
+				curobj = mkobj_at(atype, sx, sy, TRUE);
+			
+			if(curobj){
+				curobj->shopOwned = TRUE;
+			}
+		} else if(shp->symb == FOOD_CLASS){
+			atype = get_special_shop_item(ACID_SHOP);
+			if (atype < 0)
+				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
+			else
+				curobj = mkobj_at(atype, sx, sy, TRUE);
+			
+			if(curobj){
+				curobj->shopOwned = TRUE;
+			}
+		} else if(shp->symb == TOOL_CLASS){
+			atype = get_special_shop_item(PET_SHOP);
+			if (atype < 0)
+				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
+			else
+				curobj = mkobj_at(atype, sx, sy, TRUE);
+			
+			if(curobj){
+				curobj->shopOwned = TRUE;
+				if(curobj->otyp == FIGURINE){
+					curobj->corpsenm = rn2(100) < 70 ? PM_MYRMIDON_HOPLITE : 
+										rn2(30) < 20 ? PM_MYRMIDON_LOCHIAS :
+										rn2(10) < 7 ? PM_MYRMIDON_YPOLOCHAGOS : 
+										rn2(3) < 2 ? PM_MYRMIDON_LOCHAGOS :
+										PM_FORMIAN_CRUSHER;
+				}
+			}
+		} else if(shp->symb == ARMOR_CLASS){
+			atype = get_special_shop_item(CERAMIC_SHOP);
+			if (atype < 0){
+				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
+			} else {
+				if(atype != ARMOR_CLASS)
+					curobj = mkobj_at(atype, sx, sy, TRUE);
+				else {
+					curobj = mksobj_at(valavi_armors[rn2(SIZE(valavi_armors))], sx, sy, TRUE, TRUE);
+					if(curobj){
+						if(curobj->obj_material == IRON || curobj->obj_material == GOLD)
+							curobj->obj_material = MINERAL;
+						else if(curobj->obj_material == CLOTH)
+							curobj->oproperties = OPROP_WOOL;
+						
+						if(curobj->otyp == PLATE_MAIL)
+							curobj->oproperties = OPROP_WOOL;
+					}
+				}
+			}
+			
+			if(curobj){
+				curobj->shopOwned = TRUE;
+				if(curobj->otyp == SLIME_MOLD){
+					if(rn2(2)) curobj->spe = fruitadd("lump of wood");
+					else curobj->spe = fruitadd("mutton roast");
+				}
+				if(curobj->otyp == FIGURINE){
+					curobj->corpsenm = !rn2(3) ? PM_LAMB : rn2(2) ? PM_SHEEP : PM_DIRE_SHEEP; 
+				}
+			}
+		}
 	} else {
 	    atype = get_shop_item(shp - shtypes);
 	    if (atype < 0)
@@ -451,7 +568,20 @@ struct mkroom	*sroom;
 	if (shp->shknms == shkrings)
 	    (void) mongets(shk, TOUCHSTONE);
 	nameshk(shk, shp->shknms);
-
+	
+	if(In_outlands(&u.uz) && !Is_gatetown(&u.uz))
+		newcham(shk, &mons[PM_PLUMACH_RILMANI], FALSE, FALSE);
+	else if(In_law(&u.uz)){
+		if((shk_class_match(FOOD_CLASS, shk)) == SHK_MATCH)
+			newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
+		else if((shk_class_match(POTION_CLASS, shk)) == SHK_MATCH)
+			newcham(shk, &mons[PM_THRIAE], FALSE, FALSE);
+		else if((shk_class_match(TOOL_CLASS, shk)) == SHK_MATCH)
+			newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
+		else if((shk_class_match(ARMOR_CLASS, shk)) == SHK_MATCH)
+			newcham(shk, &mons[PM_VALAVI], FALSE, FALSE);
+	}
+	
 	return(sh);
 }
 
@@ -506,9 +636,11 @@ register struct mkroom *sroom;
     for(sx = sroom->lx; sx <= sroom->hx; sx++)
 	for(sy = sroom->ly; sy <= sroom->hy; sy++) {
 	    if(sroom->irregular) {
-		if (levl[sx][sy].edge || (int) levl[sx][sy].roomno != rmno ||
-		   distmin(sx, sy, doors[sh].x, doors[sh].y) <= 1)
-		    continue;
+			if (levl[sx][sy].edge || (int) levl[sx][sy].roomno != rmno ||
+			   distmin(sx, sy, doors[sh].x, doors[sh].y) <= 1
+			){
+				continue;
+			}
 	    } else if((sx == sroom->lx && doors[sh].x == sx-1) ||
 		      (sx == sroom->hx && doors[sh].x == sx+1) ||
 		      (sy == sroom->ly && doors[sh].y == sy-1) ||
@@ -579,10 +711,17 @@ struct obj *obj;
 	if(obj->ostolen || ESHK(shkp)->pbanned) return FALSE;
 
     if (shp->symb == RANDOM_CLASS) return TRUE;
-    else for (i = 0; i < SIZE(shtypes[0].iprobs) && shp->iprobs[i].iprob; i++)
+    else for (i = 0; i < SIZE(shtypes[0].iprobs) && shp->iprobs[i].iprob; i++){
 		if (shp->iprobs[i].itype < 0 ?
 			shp->iprobs[i].itype == - obj->otyp :
-			shp->iprobs[i].itype == obj->oclass) return TRUE;
+			shp->iprobs[i].itype == obj->oclass
+		) return TRUE;
+		
+		if(shp->iprobs[i].itype > 0 
+			&& shp->iprobs[i].itype == WEAPON_CLASS 
+			&& is_weptool(obj)
+		) return TRUE;
+	}
     /* not found */
     return FALSE;
 }
@@ -593,6 +732,21 @@ get_shop_item(type)
 int type;
 {
 	const struct shclass *shp = shtypes+type;
+	register int i,j;
+
+	/* select an appropriate object type at random */
+	for(j = rnd(100), i = 0; (j -= shp->iprobs[i].iprob) > 0; i++)
+		continue;
+
+	return shp->iprobs[i].itype;
+}
+
+/* positive value: class; negative value: specific object type */
+int
+get_special_shop_item(type)
+int type;
+{
+	const struct shclass *shp = &(special_shtypes[type]);
 	register int i,j;
 
 	/* select an appropriate object type at random */

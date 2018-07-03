@@ -475,7 +475,11 @@ register struct monst *mtmp;
 {
 	const char *ret;
 
-	switch (is_silent_mon(mtmp) ? MS_SILENT : mtmp->data->msound) {
+	switch (is_silent_mon(mtmp) ? MS_SILENT : 
+			mtmp->ispriest ? MS_PRIEST : 
+			mtmp->isshk ? MS_SELL : 
+			mtmp->data->msound
+	) {
 	case MS_MEW:
 	case MS_HISS:
 	    ret = "hiss";
@@ -684,7 +688,13 @@ register struct monst *mtmp;
 			}
 		}
 	}
-	switch ((mtmp->mfaction == SKELIFIED && ptr != &mons[PM_ECHO]) ? MS_BONES : is_silent_mon(mtmp) ? MS_SILENT : ptr->msound) {
+	switch (
+		(mtmp->mfaction == SKELIFIED && ptr != &mons[PM_ECHO]) ? MS_BONES : 
+		is_silent_mon(mtmp) ? MS_SILENT : 
+		mtmp->ispriest ? MS_PRIEST : 
+		mtmp->isshk ? MS_SELL : 
+		ptr->msound
+	) {
 	case MS_ORACLE:
 	    return doconsult(mtmp);
 	case MS_PRIEST: /*Most (all?) things with this will have ispriest set*/

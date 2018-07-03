@@ -273,7 +273,30 @@ unsigned *ospecial;
 							color = CLR_BROWN;
 						}
 						else if(offset >= S_drkroom && offset <= S_dnladder){
-							color = CLR_GREEN;
+							if(offset == S_litcorr || offset == S_corr)
+								;
+							else
+								color = CLR_GREEN;
+							
+						}
+						if (offset >= S_vwall && offset <= S_hcdoor) {
+							if (*in_rooms(x,y,POTIONSHOP))
+								color = CLR_YELLOW;
+							else if (*in_rooms(x,y,ARMORSHOP))
+								color = CLR_BROWN;
+							else if (*in_rooms(x,y,TOOLSHOP))
+								color = CLR_BROWN;
+							else if (*in_rooms(x,y,FOODSHOP))
+								color = CLR_BROWN;
+						} else if (offset == S_drkroom || offset == S_litroom) {
+							if (*in_rooms(x,y,POTIONSHOP))
+								color = (offset == S_drkroom) ? CLR_BROWN : CLR_YELLOW;
+							else if (*in_rooms(x,y,ARMORSHOP))
+								color = (offset == S_drkroom) ? CLR_BLACK : CLR_BROWN;
+							else if (*in_rooms(x,y,TOOLSHOP))
+								color = (offset == S_drkroom) ? CLR_BLACK : CLR_BROWN;
+							else if (*in_rooms(x,y,FOODSHOP))
+								color = (offset == S_drkroom) ? CLR_BLACK : CLR_BROWN;
 						}
 					}
 				}

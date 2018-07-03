@@ -513,7 +513,10 @@ register struct obj *obj;
 				Strcat(buf, "paper ");
 			break;
 			case CLOTH:
-				Strcat(buf, "cloth ");
+				if((obj->oproperties&OPROP_WOOL) == OPROP_WOOL)
+					Strcat(buf, "woolen ");
+				else
+					Strcat(buf, "cloth ");
 			break;
 			case LEATHER:
 				Strcat(buf, "leather ");
@@ -560,7 +563,7 @@ register struct obj *obj;
 				Strcat(buf, "gem ");
 			break;
 			case MINERAL:
-				Strcat(buf, "stone ");
+				obj->oclass == ARMOR_CLASS ? Strcat(buf, "ceramic ") : Strcat(buf, "stone ");
 			break;
 			case OBSIDIAN_MT:
 				Strcat(buf, "obsidian ");
@@ -569,6 +572,12 @@ register struct obj *obj;
 				Strcat(buf, "black ");
 			break;
 		}
+	}
+	if((obj->oproperties&OPROP_WOOL) == OPROP_WOOL && !(obj->obj_material != objects[obj->otyp].oc_material && obj->obj_material == CLOTH)){
+		if(obj->obj_material == CLOTH)
+			Strcat(buf, "woolen ");
+		else
+			Strcat(buf, "wool-lined ");
 	}
 	if(is_lightsaber(obj) && litsaber(obj)){
 		Strcat(buf, lightsaber_colorText(obj));

@@ -320,6 +320,176 @@ find_sawant()
     return i;
 }
 
+/* find the object index for gold attack wand */
+int
+find_gawant()
+{
+    static int i = -1;
+    register const char *s;
+	
+	if(i != -1) return i;
+	
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "gold")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "runed")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "long")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "forked")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "spiked")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "hexagonal")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "short")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "curved")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+	i = 0;
+    return i;
+}
+
+/* find the object index for platinum attack wand */
+int
+find_pawant()
+{
+    static int i = -1;
+    register const char *s;
+	
+	if(i != -1) return i;
+	
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "platinum")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "runed")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "long")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "forked")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "spiked")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "hexagonal")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "short")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+    for (i = WAN_LIGHT; i <= WAN_LIGHTNING; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "curved")
+			)
+		){
+			if(is_attack_wand(i))
+				return i;
+			else break;
+		}
+	i = 0;
+    return i;
+}
+
 /* find the object index for iron wand */
 int
 find_riwant()
