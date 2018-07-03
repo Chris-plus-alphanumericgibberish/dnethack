@@ -2553,6 +2553,79 @@ register struct obj *otmp;
 		}
 		if(!otmp->cursed) heal_legs();
 		break;
+	    case LUMP_OF_SOLDIER_S_JELLY:
+		/* This stuff seems to be VERY healthy! */
+		adjattrib(A_CON, 1, 0);
+		if (Upolyd) {
+		    u.mh += otmp->cursed ? -d(4,10) : d(4,10);
+		    if (u.mh > u.mhmax) {
+			u.mh = u.mhmax;
+		    } else if (u.mh <= 0) {
+			rehumanize();
+		    }
+		} else {
+		    u.uhp += otmp->cursed ? -d(4,10) : d(4,10);
+		    if (u.uhp > u.uhpmax) {
+			u.uhp = u.uhpmax;
+		    } else if (u.uhp <= 0) {
+			killer_format = KILLED_BY_AN;
+			killer = "rotten lump of soldier's jelly";
+			done(POISONING);
+		    }
+		}
+		if(!otmp->cursed) heal_legs();
+		break;
+	    case LUMP_OF_DANCER_S_JELLY:
+		/* This stuff seems to be VERY healthy! */
+		adjattrib(A_DEX, 1, 0);
+		if(!otmp->cursed){
+			if (!(HFast & INTRINSIC)) {
+				if (!Fast) You("speed up.");
+				else Your("quickness feels more natural.");
+				HFast |= FROMOUTSIDE;
+			}
+		} else {
+			if ((HFast & FROMOUTSIDE)) {
+				HFast &= ~FROMOUTSIDE;
+				if (!Fast) You("slow down.");
+				else Your("quickness feels less natural.");
+			}
+		}
+		if(!otmp->cursed) heal_legs();
+		break;
+	    case LUMP_OF_PHILOSOPHER_S_JELLY:
+		/* This stuff seems to be VERY healthy! */
+		adjattrib(A_INT, 1, 0);
+		if(!otmp->cursed){
+			if (HStun > 2)  make_stunned(2L,FALSE);
+			if (HConfusion > 2)  make_confused(2L,FALSE);
+		} else {
+			make_stunned(HStun + rnd(20),FALSE);
+			make_confused(HConfusion + d(10, 20),FALSE);
+		}
+		break;
+	    case LUMP_OF_PRIESTESS_S_JELLY:
+		/* This stuff seems to be VERY healthy! */
+		adjattrib(A_WIS, 1, 0);
+		if(!otmp->cursed){
+			if (HStun > 2)  make_stunned(2L,FALSE);
+			if (HConfusion > 2)  make_confused(2L,FALSE);
+		} else {
+			make_stunned(HStun + rnd(20),FALSE);
+			make_confused(HConfusion + d(10, 20),FALSE);
+		}
+		break;
+	    case LUMP_OF_RHETOR_S_JELLY:
+		/* This stuff seems to be VERY healthy! */
+		adjattrib(A_CHA, 1, 0);
+		if(!otmp->cursed){
+			if (HStun > 2)  make_stunned(2L,FALSE);
+			if (HConfusion > 2)  make_confused(2L,FALSE);
+		} else {
+			make_stunned(HStun + rnd(20),FALSE);
+			make_confused(HConfusion + d(10, 20),FALSE);
+		}
+		break;
 	    case EGG:
 		if (touch_petrifies(&mons[otmp->corpsenm])) {
 		    if (!Stone_resistance &&
