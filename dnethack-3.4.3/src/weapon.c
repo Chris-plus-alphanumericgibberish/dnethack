@@ -2358,17 +2358,17 @@ struct obj *otmp;
 	
 	if(otmp){
 		if((bimanual(otmp,youracedata) ||
-		(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
+			(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
 		)) bonus *= 2;
-	
+		
 		if(otmp==uwep 
 		&& (otmp->otyp==RAPIER 
 			|| (otmp->otyp == LIGHTSABER && otmp->oartifact != ART_ANNULUS && otmp->ovar1 == 0)
 			|| otmp->oartifact == ART_LIFEHUNT_SCYTHE
 			|| otmp->oartifact == ART_FRIEDE_S_SCYTHE
 		)){
-		bonus/=2; /*Half strength bonus/penalty*/
-		
+			bonus/=2; /*Half strength bonus/penalty*/
+			
 			if(ACURR(A_DEX)) bonus += 8;
 			else bonus += (ACURR(A_DEX)-10)/2;
 		}
@@ -2841,8 +2841,8 @@ struct obj *obj;
 		return (P_NONE);
 	if(obj){
 		if(obj->oartifact == ART_SUNSWORD){
-		if(P_SKILL(P_LONG_SWORD) > P_SKILL(P_SHORT_SWORD))
-			type = P_LONG_SWORD;
+			if(P_SKILL(P_LONG_SWORD) > P_SKILL(P_SHORT_SWORD))
+				type = P_LONG_SWORD;
 			else if(P_MAX_SKILL(P_LONG_SWORD) > P_MAX_SKILL(P_SHORT_SWORD))
 				type = P_LONG_SWORD;
 			else type = P_SHORT_SWORD;
@@ -2855,11 +2855,11 @@ struct obj *obj;
 			else type = P_SPEAR;
 		}
 		else if(obj->otyp == DOUBLE_LIGHTSABER && !obj->altmode){
-		if(P_SKILL(P_BROAD_SWORD) > P_SKILL(P_QUARTERSTAFF))
-			type = P_BROAD_SWORD;
-		else if(P_MAX_SKILL(P_BROAD_SWORD) > P_MAX_SKILL(P_QUARTERSTAFF))
-			type = P_BROAD_SWORD;
-		else type = P_QUARTERSTAFF;
+			if(P_SKILL(P_BROAD_SWORD) > P_SKILL(P_QUARTERSTAFF))
+				type = P_BROAD_SWORD;
+			else if(P_MAX_SKILL(P_BROAD_SWORD) > P_MAX_SKILL(P_QUARTERSTAFF))
+				type = P_BROAD_SWORD;
+			else type = P_QUARTERSTAFF;
 		}
 		else if(obj->oartifact == ART_TORCH_OF_ORIGINS){
 			type = P_CLUB;
