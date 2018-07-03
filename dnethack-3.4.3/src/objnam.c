@@ -753,6 +753,11 @@ register struct obj *obj;
 			break;
 		}
 
+		if (typ == EYEBALL && obj->known) {
+		    if (obj->corpsenm != NON_PM)
+				Sprintf(eos(buf), "%s ", mons[obj->corpsenm].mname);
+		}
+		
 		Strcat(buf, actualn);
 		if (typ == TIN && obj->known) {
 		    if(obj->spe > 0)

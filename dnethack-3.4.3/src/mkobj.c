@@ -537,6 +537,9 @@ boolean artif;
 		    }
 		}
 		break;
+	    case EYEBALL:
+			otmp->corpsenm = PM_HUMAN;
+		break;
 	    case TIN:
 		otmp->corpsenm = NON_PM;	/* empty (so far) */
 		if (!rn2(6))
