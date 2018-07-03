@@ -4742,13 +4742,20 @@ arti_invoke(obj)
 	break;
 	case FALLING_STARS:{
 		int starfall = rnd(u.ulevel/10+1), x, y, n;
+		int tries = 0;
 		coord cc;
 		verbalize("Even Stars Fall");
 		for (; starfall > 0; starfall--){
 			x = rn2(COLNO-2)+1;
 			y = rn2(ROWNO-2)+1;
+			if(!isok(x,y) || !ACCESSIBLE(levl[x][y].typ)){
+				if(tries++ < 1000){
+					starfall++;
+					continue;
+				}
+			}
 			cc.x=x;cc.y=y;
-			n=rnd(4)+1;
+			n=rnd(8)+1;
 			explode(x, y,
 				8, //8 = AD_PHYS, explode uses nonstandard damage type flags...
 				d(6,6), 0,
