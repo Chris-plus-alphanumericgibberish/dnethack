@@ -58,10 +58,14 @@ unsigned gpflags;
 
 	    mdat = mtmp->data;
 	    if (is_3dwater(x,y) && !ignorewater) {
+			if(mtmp == &youmonst && level.flags.lethe)
+				return FALSE;
 			if (mtmp == &youmonst)
 				return !!(Amphibious);
 			else return (is_swimmer(mdat) || breathless_mon(mtmp) || amphibious(mdat));
 	    } else if (is_pool(x,y, FALSE) && !ignorewater) {
+			if(mtmp == &youmonst && level.flags.lethe)
+				return FALSE;
 			if (mtmp == &youmonst)
 				return !!(HLevitation || Flying || Wwalking ||
 						Swimming || Amphibious);
