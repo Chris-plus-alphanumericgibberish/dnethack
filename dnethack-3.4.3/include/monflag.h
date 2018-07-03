@@ -18,10 +18,11 @@
 #define MS_GRUNT	9	/* grunts (or speaks own language) */
 #define MS_NEIGH	10	/* neighs, as an equine */
 #define MS_WAIL		11	/* wails, as a tortured soul */
-#define MS_GURGLE	12	/* gurgles, as liquid or through saliva */
-#define MS_BURBLE	13	/* burbles (jabberwock) */
-#define MS_JUBJUB	14	/* jubjub bird's fear inducing call */
-#define MS_ANIMAL	14	/* up to here are animal noises */ //note: checks are <=, so this should be == the last animal sound
+#define MS_SHEEP	12	/* wails, as a tortured soul */
+#define MS_GURGLE	13	/* gurgles, as liquid or through saliva */
+#define MS_BURBLE	14	/* burbles (jabberwock) */
+#define MS_JUBJUB	15	/* jubjub bird's fear inducing call */
+#define MS_ANIMAL	15	/* up to here are animal noises */ //note: checks are <=, so this should be == the last animal sound
 #define MS_SHRIEK	16	/* wakes up others */
 #define MS_SHOG		17	/* wakes up others, shoggoth style */
 #define MS_BONES	18	/* rattles bones (skeleton) */
