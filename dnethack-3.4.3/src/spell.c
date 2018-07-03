@@ -418,6 +418,7 @@ learn()
 				case 3:
 					pline("It's blank. You guess the author KEPT his secrets.");
 				    book->otyp = booktype = SPE_BLANK_PAPER;
+					book->ovar1 = 0;
 				break;
 				case 4:
 					pline("...these metallurgical techniques are 200 years out of date.");
