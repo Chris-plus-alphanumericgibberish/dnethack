@@ -152,19 +152,26 @@ struct obj {
 #define spestudied	corpsenm	/* # of times a spellbook has been studied */
 //define fromsink  corpsenm	/* a potion from a sink */
 #define opoisonchrgs corpsenm	/* number of poison doses left */
-	
-	int opoisoned; /* poisons smeared on the weapon*/
-#define OPOISON_NONE	 0
-#define OPOISON_BASIC	 1 /* Deadly Poison */
-#define OPOISON_FILTH	 2 /* Deadly Sickness */
-#define OPOISON_SLEEP	 4 /* Sleeping Poison */
-#define OPOISON_BLIND	 8 /* Blinding Poison */
-#define OPOISON_PARAL	16 /* Paralysis Poison */
-#define OPOISON_AMNES	32 /* Amnesia Poison */
-
 #ifdef RECORD_ACHIEVE
 #define record_achieve_special corpsenm
 #endif
+	
+	int opoisoned; /* poisons smeared on the weapon*/
+#define OPOISON_NONE	0x00
+#define OPOISON_BASIC	0x01 /* Deadly Poison */
+#define OPOISON_FILTH	0x02 /* Deadly Sickness */
+#define OPOISON_SLEEP	0x04 /* Sleeping Poison */
+#define OPOISON_BLIND	0x08 /* Blinding Poison */
+#define OPOISON_PARAL	0x10 /* Paralysis Poison */
+#define OPOISON_AMNES	0x20 /* Amnesia Poison */
+#define OPOISON_ACID	0x40 /* Acid coating */
+#define OPOISON_SILVER	0x80 /* Silver coating */
+
+	long	oproperties;/* special properties */
+#define OPROP_NONE		0x00
+#define OPROP_FIRE		0x01
+#define OPROP_COLD		0x02
+#define OPROP_WOOL		(OPROP_COLD|OPROP_FIRE)
 
 	unsigned oeaten;	/* nutrition left in food, if partly eaten */
 	long age;		/* creation date */
@@ -174,15 +181,17 @@ struct obj {
 	/* in order to prevent alignment problems oextra should
 	   be (or follow) a long int */
 	long owornmask;
-	long ovar1;		/* extra variable. Specifies: */
-			/*Records the contents of Books of Secrets*/
+	long oward;
 			/*Records the warding sign of spellbooks. */
 			/*Records the warding sign of scrolls of ward. */
 			/*Records the warding sign of rings. */
+			/*Records runes for wooden weapons */
+			
+	long ovar1;		/* extra variable. Specifies: */
+			/*Records the contents of Books of Secrets*/
 			/*Records the tatteredness level of droven cloaks. */
 			/*Records the cracked level of masks. */
 			/*Records special features for weapons. */
-			/* 	Records runes for wooden weapons */
 			/* 	Records moon phase for moon axes */
 			/* 	Records theft type for stealing artifacts (reaver (scimitar) and avarice (shortsword) */
 			/* 	Records remaining ammo for blasters and force pikes */
