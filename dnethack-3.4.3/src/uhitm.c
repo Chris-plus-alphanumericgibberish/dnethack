@@ -2039,7 +2039,7 @@ defaultvalue:
 				else filthkilled = TRUE;
 			}
 			if(obj && (obj->opoisoned & OPOISON_SLEEP || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM)){
-				if (resists_poison(mon) || resists_sleep(mon))
+				if (resists_sleep(mon))
 					needdrugmsg = TRUE;
 				else if((obj->oartifact == ART_MOONBEAM || !rn2(5)) && 
 					sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
