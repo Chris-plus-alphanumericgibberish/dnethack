@@ -967,7 +967,7 @@ struct mkroom	*croom;
 	/*	corpsenm is "empty" if -1, random if -2, otherwise specific */
 	if (o->corpsenm == NON_PM - 1) otmp->corpsenm = rndmonnum();
 	else if (o->corpsenm != NON_PM) otmp->corpsenm = o->corpsenm;
-
+	
 	if(otmp->corpsenm == PM_CROW_WINGED_HALF_DRAGON){
 		struct obj *tmpo;
 		
@@ -1539,6 +1539,7 @@ boolean prefilled;
 		case BEEHIVE:
 		case MORGUE:
 		case BARRACKS:
+		case ANTHOLE:
 		    fill_zoo(croom);
 		    break;
 	    }
