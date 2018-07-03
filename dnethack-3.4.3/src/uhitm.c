@@ -3620,6 +3620,12 @@ register struct attack *mattk;
 		}
 	}
 	
+	if(tmp > 1){
+		if(mattk->adtyp == AD_SHDW){
+			use_skill(P_BARE_HANDED_COMBAT,1);
+		}
+	}
+	
 	if((mdef->mhp -= tmp) < 1) {
 	    if (mdef->mtame && !cansee(mdef->mx,mdef->my)) {
 		You_feel("embarrassed for a moment.");
