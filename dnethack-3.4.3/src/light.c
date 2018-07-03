@@ -165,11 +165,11 @@ do_light_sources(cs_rows)
            effects */
 
 	if (ls->type == LS_OBJECT) {
-            struct obj *otmp = (struct obj *) ls->id;
-            if (Is_candle(otmp)) {
-		ls->range = candle_light_range(otmp);
-            }
-        }
+		struct obj *otmp = (struct obj *) ls->id;
+		if (Is_candle(otmp)) {
+			ls->range = candle_light_range(otmp);
+		}
+    }
 
 	if ((ls->flags & LSF_SHOW) && ls->range > 0) {
 		if((ls->type == LS_OBJECT && Is_darklight_source(((struct obj *)(ls->id)))) ||
