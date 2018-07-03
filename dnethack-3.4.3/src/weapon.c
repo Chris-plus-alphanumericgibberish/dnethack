@@ -852,17 +852,22 @@ lightsaber_form_ldie:
 		break;
 		case LIGHTSABER:
 		case BEAMSWORD:
-			tmp += d(2, sdie);
-			otmp->age -= 100;
-			if(otmp->oartifact == ART_ATMA_WEAPON &&
-				otmp == uwep &&
-				!Drain_resistance
-			){
-				otmp->age += 100;
-				tmp += rnd(u.ulevel);
-				tmp *= Upolyd ?
-						((float)u.mh)/u.mhmax  :
-						((float)u.uhp)/u.uhpmax;
+			if(otmp->oartifact == ART_ATMA_WEAPON){
+				if(otmp == uwep &&
+					!Drain_resistance
+				){
+					tmp += d(2, sdie);
+					tmp += rnd(u.ulevel);
+					tmp *= Upolyd ?
+							((float)u.mh)/u.mhmax  :
+							((float)u.uhp)/u.uhpmax;
+				} else {
+					tmp += d(1, sdie);
+					otmp->age -= 100;
+				}
+			} else {
+				tmp += d(2, sdie);
+				otmp->age -= 100;
 			}
 			if(otmp->altmode){ //Probably just the Annulus
 				tmp += d(3, 3+2*dmod);
