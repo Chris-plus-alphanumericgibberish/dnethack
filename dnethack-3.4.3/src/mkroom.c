@@ -20,6 +20,7 @@ extern const int monstr[];
 #ifdef OVLB
 STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL boolean FDECL(isspacious, (struct mkroom *));
+STATIC_DCL boolean FDECL(issemispacious, (struct mkroom *));
 STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
 STATIC_DCL void NDECL(mktemple);
 STATIC_DCL void NDECL(mkkamereltowers);
@@ -39,6 +40,7 @@ STATIC_DCL void NDECL(mklolthgarden);
 STATIC_DCL void NDECL(mklolthtroll);
 STATIC_DCL void NDECL(mklolthdown);
 STATIC_DCL void NDECL(mklolthup);
+STATIC_DCL void NDECL(mksgarden);
 STATIC_DCL void FDECL(mkgarden, (struct mkroom *));
 STATIC_DCL void FDECL(mklibrary, (struct mkroom *));
 STATIC_DCL void FDECL(mkarmory, (struct mkroom *));
@@ -77,6 +79,15 @@ register struct mkroom *sroom;
 {
 	return((boolean)( ((sroom->hx - sroom-> lx)+1) >= 5 &&
 		(((sroom->hy - sroom->ly)+1) >=5 ) ));
+}
+
+/* Returns true if room has both an X and Y size of at least four. */
+STATIC_OVL boolean
+issemispacious(sroom)
+register struct mkroom *sroom;
+{
+	return((boolean)( ((sroom->hx - sroom-> lx)+1) >= 4 &&
+		(((sroom->hy - sroom->ly)+1) >=4 ) ));
 }
 
 void
@@ -3132,8 +3143,10 @@ int	roomtype;
 	case COCKNEST:	mkzoo(COCKNEST); break;
 	case ANTHOLE:	mkzoo(ANTHOLE); break;
 	case ISLAND: mkisland(); break;
-	case RIVER: mkriver(); break;	default:	impossible("Tried to make a room of type %d.", roomtype);
+	case STATUEGRDN: mksgarden(); break;
+	case RIVER: mkriver(); break;
 	case POOLROOM:	mkpoolroom(); break;
+	default:	impossible("Tried to make a room of type %d.", roomtype);
     }
 }
 
@@ -4291,6 +4304,102 @@ mkisland() /* John Harris, modified from mktemple & mkshop,
 		}
 	}
 	level.flags.has_island = TRUE;
+}
+
+void
+mkpoolroom()
+{
+	struct mkroom *sroom;
+	int x, y;
+	int u_depth = depth(&u.uz);
+	for(sroom = &rooms[0]; ; sroom++){
+		if(sroom->hx < 0) return;  /* from mkshop: Signifies out of rooms? */
+		if(sroom - rooms >= nroom) {
+			pline("rooms not closed by -1?");
+			return;
+		}
+
+		if(sroom->rtype != OROOM || !isspacious(sroom))
+				continue;
+		else break;
+	}
+	
+	sroom->rtype = POOLROOM;
+	/* Place statues */
+	for(x = sroom->lx+1; x <= sroom->hx-1; x++) {
+		for(y = (sroom->ly)+1; y <= (sroom->hy)-1; y++) {
+			levl[x][y].typ = POOL;
+			levl[x][y].typ = POOL;
+			if (u_depth > 8) {
+				if (!rn2(16)) {
+					(void) makemon(rn2(2) ? &mons[PM_GIANT_EEL]
+						: &mons[PM_ELECTRIC_EEL], x, y, NO_MM_FLAGS);
+				}
+			}
+		}
+	}
+	
+}
+
+STATIC_OVL void
+mksgardenstatueat(x,y)
+	int x;
+	int y;
+{
+	struct trap *t;
+	struct obj *otmp;
+	t = t_at(x, y);
+	if(!t || t->ttyp == STATUE_TRAP){
+		otmp = mksobj_at(STATUE, x, y, TRUE, TRUE);
+		if(otmp){
+			if(t && t->ttyp != MAGIC_PORTAL)
+				deltrap(t);
+			if( (depth(&u.uz)- monstr[otmp->corpsenm]) < rn2(100)){
+				t = maketrap(x, y, MAGIC_TRAP);
+				if(t){
+					t->ttyp = STATUE_TRAP;
+				}
+			}
+		}
+	}
+
+}
+
+STATIC_OVL void
+mksgarden()
+{
+	register struct mkroom *sroom;
+	register int x, y;
+	for(sroom = &rooms[0]; ; sroom++){
+		if(sroom->hx < 0) return;  /* from mkshop: Signifies out of rooms? */
+		if(sroom - rooms >= nroom) {
+			pline("rooms not closed by -1?");
+			return;
+		}
+
+		if(sroom->rtype != OROOM || !issemispacious(sroom))
+				continue;
+		else break;
+	}
+	sroom->rtype = STATUEGRDN;
+	/* Place statues */
+	for(x = sroom->lx; x <= sroom->hx; x++) {
+		mksgardenstatueat(x, sroom->hy);
+		mksgardenstatueat(x, sroom->ly);
+	}
+	for(y = (sroom->ly)+1; y <= (sroom->hy)-1; y++) {
+		mksgardenstatueat(sroom->hx, y);
+		mksgardenstatueat(sroom->lx, y);
+	}
+	
+	for(x = sroom->lx+1; x <= sroom->hx-1; x++) {
+		mksobj_at(FIGURINE, x, sroom->hy-1, TRUE, TRUE);
+		mksobj_at(FIGURINE, x, sroom->ly+1, TRUE, TRUE);
+	}
+	for(y = (sroom->ly)+2; y <= (sroom->hy)-2; y++) {
+		mksobj_at(FIGURINE, sroom->hx-1, y, TRUE, TRUE);
+		mksobj_at(FIGURINE, sroom->lx+1, y, TRUE, TRUE);
+	}
 }
 
 STATIC_OVL void

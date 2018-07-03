@@ -69,30 +69,31 @@ extern NEARDATA struct door doors[DOORMAX];
 #define ANTHOLE		14	/* ants (Tom Proudfoot) */
 #define GARDEN		15	/* nymphs, trees and fountains */
 #define LIBRARY		16	/* living lecturns, and mostly-blank spellbooks */
-#define ISLAND 		17 /* ringed by water, contains items */
-#define RIVER 		18 /* "room" is really a river running through the level*/
-#define POOLROOM	19	/*  */
-#define SHOPBASE	20	/* everything above this is a shop */
-#define ARMORSHOP	21	/* specific shop defines for level compiler */
-#define SCROLLSHOP	22
-#define POTIONSHOP	23
-#define WEAPONSHOP 	24
-#define FOODSHOP  	25
-#define RINGSHOP	26
-#define WANDSHOP	27
-#define TOOLSHOP	28
-#define BOOKSHOP	29
-#define UNIQUESHOP	30	/* shops here & above not randomly gen'd. */
-#define CANDLESHOP	30
-#define MAXRTYPE	30	/* maximum valid room type */
+#define STATUEGRDN	17	/* statue garden.  Ring of statues and figurines */
+#define ISLAND 		18 /* ringed by water, contains items */
+#define RIVER 		19 /* "room" is really a river running through the level*/
+#define POOLROOM	20	/*  */
+#define SHOPBASE	21	/* everything above this is a shop */
+#define ARMORSHOP	SHOPBASE+1	/* specific shop defines for level compiler */
+#define SCROLLSHOP	SHOPBASE+2
+#define POTIONSHOP	SHOPBASE+3
+#define WEAPONSHOP 	SHOPBASE+4
+#define FOODSHOP  	SHOPBASE+5
+#define RINGSHOP	SHOPBASE+6
+#define WANDSHOP	SHOPBASE+7
+#define TOOLSHOP	SHOPBASE+8
+#define BOOKSHOP	SHOPBASE+9
+#define UNIQUESHOP	SHOPBASE+10	/* shops here & above not randomly gen'd. */
+#define CANDLESHOP	UNIQUESHOP
+#define MAXRTYPE	UNIQUESHOP	/* maximum valid room type */
 #ifdef BARD
-#define MUSICSHOP	30
+#define MUSICSHOP	SHOPBASE+10
 #undef UNIQUESHOP
 #undef CANDLESHOP
 #undef MAXRTYPE
-#define UNIQUESHOP	31
-#define CANDLESHOP	31
-#define MAXRTYPE	31
+#define UNIQUESHOP	SHOPBASE+11
+#define CANDLESHOP	UNIQUESHOP
+#define MAXRTYPE	UNIQUESHOP
 #endif
 /* NOTE: rtype is a char, so if go above 124 or so need to fix that*/
 

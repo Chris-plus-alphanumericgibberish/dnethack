@@ -790,22 +790,27 @@ makelevel()
 
 	/* Zoos */
 	if (u_depth > 4 && !rn2(8)) mkroom(COURT);
-	else if (u_depth > 5 && !rn2(10) &&
-	   !(mvitals[PM_LEPRECHAUN].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(LEPREHALL);
-	else if (u_depth > 6 && !rn2(9)) mkroom(ZOO);
-	else if (u_depth > 7 && !rn2(8)) mkroom(GARDEN);
-	else if (u_depth > 8 && !rn2(8)) mkroom(LIBRARY);
-	else if (u_depth > 9 && !rn2(7) &&
-	   !(mvitals[PM_KILLER_BEE].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(BEEHIVE);
-	else if (u_depth > 11 && !rn2(8)) mkroom(MORGUE);
-	else if (u_depth > 12 && !rn2(10)) mkroom(ANTHOLE);
-	else if (u_depth <= 14 && u_depth > 1 && !rn2(12) &&
-	   !(mvitals[PM_RUST_MONSTER].mvflags & G_GONE && !In_quest(&u.uz))){
-		mkroom(ARMORY);
-	} else if (u_depth > 14 && !rn2(6) &&
-	   !(mvitals[PM_SOLDIER].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(BARRACKS);
 	else if (u_depth > 16 && !rn2(10) &&
 	   !(mvitals[PM_COCKATRICE].mvflags & G_GONE && !In_quest(&u.uz))) mkroom(COCKNEST);
+	else if (u_depth > 15 && !rn2(10) && !In_quest(&u.uz)) mkroom(POOLROOM);
+	else if (u_depth > 14 && !rn2(6) &&
+	   !(mvitals[PM_SOLDIER].mvflags & G_GONE && !In_quest(&u.uz))
+	) mkroom(BARRACKS);
+	else if (u_depth <= 14 && u_depth > 1 && !rn2(12) &&
+	   !(mvitals[PM_RUST_MONSTER].mvflags & G_GONE && !In_quest(&u.uz))
+	) mkroom(ARMORY);
+	else if (u_depth > 12 && !rn2(10)) mkroom(ANTHOLE);
+	else if (u_depth > 11 && !rn2(8)) mkroom(MORGUE);
+	else if (u_depth > 9 && !rn2(7) &&
+	   !(mvitals[PM_KILLER_BEE].mvflags & G_GONE && !In_quest(&u.uz))
+	) mkroom(BEEHIVE);
+	else if (u_depth > 8 && !rn2(8)) mkroom(LIBRARY);
+	else if (u_depth > 7 && !rn2(8)) mkroom(GARDEN);
+	else if (u_depth > 6 && !rn2(9)) mkroom(ZOO);
+	else if (u_depth > 5 && !rn2(10) &&
+	   !(mvitals[PM_LEPRECHAUN].mvflags & G_GONE && !In_quest(&u.uz))
+	) mkroom(LEPREHALL);
+	else if (u_depth > 1 && !rn2(20)) mkroom(STATUEGRDN);
 
 	/* Terrain */
 	if (u_depth > 2 && !rn2(8)) mkroom(ISLAND);
@@ -1085,23 +1090,22 @@ wallwalk_right(x,y,fgtyp,fglit,bgtyp,chance)
     } while ((x != sx) || (y != sy));
 }
 
+///Old
+// void
+// mkpoolroom()
+// {
+    // struct mkroom *sroom;
+    // schar typ;
 
-void
-mkpoolroom()
-{
-    struct mkroom *sroom;
-    schar typ;
+    // if (!(sroom = pick_room(TRUE))) return;
 
-    if (!(sroom = pick_room(TRUE))) return;
+    // if (sroom->hx - sroom->lx < 3 || sroom->hy - sroom->ly < 3) return;
 
-    if (sroom->hx - sroom->lx < 3 || sroom->hy - sroom->ly < 3) return;
+    // sroom->rtype = POOLROOM;
+    // typ = !rn2(5) ? POOL : LAVAPOOL;
 
-    sroom->rtype = POOLROOM;
-    typ = !rn2(5) ? POOL : LAVAPOOL;
-
-    wallwalk_right(sroom->lx, sroom->ly, typ, sroom->rlit, ROOM, 96);
-}
-
+    // wallwalk_right(sroom->lx, sroom->ly, typ, sroom->rlit, ROOM, 96);
+// }
 
 void
 mklev()
