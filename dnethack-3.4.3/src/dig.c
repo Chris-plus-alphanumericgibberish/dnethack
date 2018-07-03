@@ -143,7 +143,7 @@ xchar x, y;
 		is_seismic = (otmp->otyp == SEISMIC_HAMMER && otmp->ovar1 > 0),
 		is_axe = is_axe(otmp);
 
-	return ((ispick||is_saber) && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
+	return ((ispick||is_saber||is_seismic) && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
 		(ispick||is_saber||is_seismic) && sobj_at(BOULDER, x, y) ? DIGTYP_BOULDER :
 		(ispick||is_saber||is_seismic) && sobj_at(MASSIVE_STONE_CRATE, x, y) ? DIGTYP_CRATE :
 		(closed_door(x, y) ||
@@ -418,7 +418,10 @@ dig()
 			if (IS_TREES(lev->typ)) {
 				int numsticks;
 				struct obj *staff;
-			    digtxt = "You cut down the tree.";
+				if(digitem->otyp == SEISMIC_HAMMER)
+					digtxt = "You splinter the tree.";
+				else
+					digtxt = "You cut down the tree.";
 			    lev->typ = ROOM;
 			    if (!(lev->looted & TREE_LOOTED) && !rn2(5)){
 					if(!In_neu(&u.uz) &&
@@ -440,7 +443,10 @@ dig()
 			} else if (lev->typ == IRONBARS) {
 				int numbars;
 				struct obj *bars;
-			    digtxt = "You cut through the bars.";
+				if(digitem->otyp == SEISMIC_HAMMER)
+					digtxt = "You shatter the bars.";
+				else
+					digtxt = "You cut through the bars.";
 			    lev->typ = ROOM;
 				for(numbars = d(2,4)-1; numbars > 0; numbars--){
 					bars = mksobj_at(BAR, dpx, dpy, FALSE, FALSE);
@@ -463,7 +469,10 @@ dig()
 						otmp->owt = weight(otmp);
 					}
 				}
-			    digtxt = "You succeed in cutting away some rock.";
+				if(digitem->otyp == SEISMIC_HAMMER)
+					digtxt = "You succeed in smashing some rock.";
+				else
+					digtxt = "You succeed in cutting away some rock.";
 			    lev->typ = CORR;
 			}
 		} else if(IS_WALL(lev->typ)) {
@@ -1593,12 +1602,15 @@ struct obj *obj;
 		(obj->otyp == SEISMIC_HAMMER) ? "smashing" :
 		is_lightsaber(obj) ? "cutting" :
 		"chopping";
-
+#define PICK_TYP	0
+#define SABER_TYP	1
+#define AXE_TYP		2
+#define HAMMER_TYP	3
 	/* 0 = pick, 1 = lightsaber, 2 = axe, 3 = hammer */
-	digtyp = ((is_pick(obj)) ? 0 :
-		is_lightsaber(obj) ? 1 : 
-		(obj->otyp == SEISMIC_HAMMER) ? 3 : 
-		2);
+	digtyp = ((is_pick(obj)) ? PICK_TYP :
+		is_lightsaber(obj) ? SABER_TYP : 
+		(obj->otyp == SEISMIC_HAMMER) ? HAMMER_TYP : 
+		AXE_TYP);
 
 	if (u.uswallow && attack(u.ustuck)) {
 		;  /* return(1) */
@@ -1606,10 +1618,10 @@ struct obj *obj;
 		pline("Turbulence torpedoes your %s attempts.", verbing);
 	} else if(u.dz < 0) {
 		if(Levitation)
-		    if (digtyp == 1)
-			pline_The("ceiling is too hard to cut through.");
+		    if (digtyp == SABER_TYP)
+				pline_The("ceiling is too hard to cut through.");
 		    else
-			You("don't have enough leverage.");
+				You("don't have enough leverage.");
 		else
 			You_cant("reach the %s.",ceiling(u.ux,u.uy));
 	} else if(!u.dx && !u.dy && !u.dz) {
@@ -1630,8 +1642,9 @@ struct obj *obj;
 		rx = u.ux + u.dx;
 		ry = u.uy + u.dy;
 		if(!isok(rx, ry)) {
-			if (digtyp == 1) pline("Your %s bounces off harmlessly.",
+			if (digtyp == SABER_TYP) pline("Your %s bounces off harmlessly.",
 				aobjnam(obj, (char *)0));
+			else if (digtyp == HAMMER_TYP) pline("Clunk!");
 			else pline("Clash!");
 			return(1);
 		}
@@ -1648,7 +1661,7 @@ struct obj *obj;
 					seetrap(trap);
 					There("is a spider web there!");
 			    }
-				if(digtyp == 1){
+				if(digtyp == SABER_TYP){
 					Your("%s through in the web.",
 					aobjnam(obj, "burn"));
 					if(!Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)){
@@ -1682,16 +1695,16 @@ struct obj *obj;
 			    You("swing your %s through thin air.",
 				aobjnam(obj, (char *)0));
 		} else {
-			static const char * const d_action[9][2] = {
-			    {"swinging","slicing the air"},
-			    {"digging","cutting through the wall"},
-			    {"chipping the statue","cutting the statue"},
-			    {"hitting the boulder","cutting through the boulder"},
-			    {"chipping the crate","cutting through the crate"},
-			    {"chopping at the door","burning through the door"},
-			    {"cutting the tree","razing the tree"},
-			    {"chopping at the bars","cutting through the bars"},
-			    {"chopping at the drawbridge","cutting through the drawbridge chains"}
+			static const char * const d_action[9][4] = {
+			    {"swinging",			"slicing the air",			"swinging",					"swinging"},
+			    {"digging",				"cutting through the wall",	"cutting",					"digging"},
+			    {"chipping the statue",	"cutting the statue",		"chipping the statue",		"smashing the statue"},
+			    {"hitting the boulder",	"cutting through the boulder","hitting the boulder",	"smashing the boulder"},
+			    {"chipping the crate",	"cutting through the crate","chipping the crate",		"smashing the crate"},
+			    {"hitting the door",	"burning through the door",	"chopping at the door",		"smashing the door"},
+			    {"hitting the tree",	"razing the tree",			"cutting down the tree",	"smashing the tree"},
+			    {"hitting the bars",	"cutting through the bars",	"chopping the bars",		"smashing the bars"},
+			    {"hitting the drawbridge","cutting through the drawbridge chains","chopping at the drawbridge","smashing the drawbridge"}
 			};
 			did_dig_msg = FALSE;
 			digging.quiet = FALSE;
@@ -1714,10 +1727,10 @@ struct obj *obj;
 			    assign_level(&digging.level, &u.uz);
 			    digging.effort = 0;
 			    if (!digging.quiet)
-				You("start %s.", d_action[dig_target][digtyp == 1]);
+				You("start %s.", d_action[dig_target][digtyp]);
 			} else {
 			    You("%s %s.", digging.chew ? "begin" : "continue",
-					d_action[dig_target][digtyp == 1]);
+					d_action[dig_target][digtyp]);
 			    digging.chew = FALSE;
 			}
 			set_occupation(dig, verbing, 0);
@@ -1734,7 +1747,7 @@ struct obj *obj;
 	} else if (IS_PUDDLE(levl[u.ux][u.uy].typ)) {
 		Your("%s against the water's surface.", aobjnam(obj, "splash"));
 		wake_nearby();
-	} else if (digtyp == 2) {
+	} else if (digtyp == AXE_TYP) {
 		Your("%s merely scratches the %s.",
 				aobjnam(obj, (char *)0), surface(u.ux,u.uy));
 		u_wipe_engr(3);
