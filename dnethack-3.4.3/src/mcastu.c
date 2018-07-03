@@ -1666,34 +1666,34 @@ int spellnum;
 		stop_occupation();
 	}break;
     case LIGHTNING:
-    if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
-       zap = AD_ELEC;
-       goto ray;
-    } else {
-	boolean reflects;
+		if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
+		   zap = AD_ELEC;
+		   goto ray;
+		} else {
+			boolean reflects;
 
-	pline("A bolt of lightning strikes down at you from above!");
-	reflects = ureflects("It bounces off your %s%s.", "");
-	if (reflects || Shock_resistance) {
-	    shieldeff(u.ux, u.uy);
-	    dmg = 0;
-	    if (reflects) break;
-	} else {
-	    dmg = d(8, 6);
-	}
-	if (!(reflects || EShock_resistance)) {
-		destroy_item(WAND_CLASS, AD_ELEC);
-		destroy_item(RING_CLASS, AD_ELEC);
-	}
-	if (Half_spell_damage) dmg = (dmg + 1) / 2;
-       if (!resists_blnd(&youmonst)) {
-           You("are blinded by the flash!");
-           make_blinded((long)rnd(100),FALSE);
-           if (!Blind) Your1(vision_clears);
-        }
-	   stop_occupation();
-       break;
-    }
+			pline("A bolt of lightning strikes down at you from above!");
+			reflects = ureflects("It bounces off your %s%s.", "");
+			if (reflects || Shock_resistance) {
+				shieldeff(u.ux, u.uy);
+				dmg = 0;
+				if (reflects) break;
+			} else {
+				dmg = d(8, 6);
+			}
+			if (!(reflects || EShock_resistance)) {
+				destroy_item(WAND_CLASS, AD_ELEC);
+				destroy_item(RING_CLASS, AD_ELEC);
+			}
+			if (Half_spell_damage) dmg = (dmg + 1) / 2;
+			if (!resists_blnd(&youmonst)) {
+			   You("are blinded by the flash!");
+			   make_blinded((long)rnd(100),FALSE);
+			   if (!Blind) Your1(vision_clears);
+			}
+			stop_occupation();
+			break;
+		}
 	case SILVER_RAYS:{
 		int n = 0;
 		char * rays;
@@ -3377,7 +3377,7 @@ int spellnum;
 		return TRUE;
 	}
 #ifndef TAME_SUMMONING
-        if (spellnum == SUMMON_MONS)
+	if (spellnum == SUMMON_MONS)
 	    return TRUE;
 #endif
     return FALSE;
@@ -3902,7 +3902,7 @@ int spellnum;
     {
 	int count = 0;
         register struct monst *mpet;
-
+		
 		if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))
 			break;
 		
