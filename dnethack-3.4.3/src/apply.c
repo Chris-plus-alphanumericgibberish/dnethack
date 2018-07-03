@@ -45,6 +45,7 @@ STATIC_DCL int FDECL(use_whip, (struct obj *));
 STATIC_DCL int FDECL(use_pole, (struct obj *));
 STATIC_DCL int FDECL(use_cream_pie, (struct obj *));
 STATIC_DCL int FDECL(use_grapple, (struct obj *));
+STATIC_DCL int FDECL(use_crook, (struct obj *));
 STATIC_DCL int FDECL(do_break_wand, (struct obj *));
 STATIC_DCL int FDECL(do_flip_coin, (struct obj *));
 STATIC_DCL boolean FDECL(figurine_location_checks,
@@ -3719,6 +3720,153 @@ use_grapple (obj)
 	return (1);
 }
 
+STATIC_OVL int
+use_crook (obj)
+	struct obj *obj;
+{
+	int res = 0, typ, max_range = 4, tohit;
+	coord cc;
+	struct monst *mtmp;
+	struct obj *otmp;
+
+	/* Are you allowed to use the crook? */
+	if (u.uswallow) {
+	    pline("%s", not_enough_room);
+	    return (0);
+	}
+	if (obj != uwep) {
+	    if (!wield_tool(obj, "hook")) return 0;
+	    else res = 1;
+	}
+     /* assert(obj == uwep); */
+
+	/* Prompt for a location */
+	pline("%s", where_to_hit);
+	cc.x = u.ux;
+	cc.y = u.uy;
+	if (getpos(&cc, TRUE, "the spot to hook") < 0)
+	    return 0;	/* user pressed ESC */
+
+	/* Calculate range */
+	typ = uwep_skill_type();
+	max_range = 8;
+	if (distu(cc.x, cc.y) > max_range) {
+	    pline("Too far!");
+	    return (res);
+	} else if (!cansee(cc.x, cc.y)) {
+	    You(cant_see_spot);
+	    return (res);
+	} else if (!couldsee(cc.x, cc.y)) { /* Eyes of the Overworld */
+	    You(cant_reach);
+	    return res;
+	}
+
+	/* What do you want to hit? */
+	{
+	    winid tmpwin = create_nhwindow(NHW_MENU);
+	    anything any;
+	    char buf[BUFSZ];
+	    menu_item *selected;
+
+	    any.a_void = 0;	/* set all bits to zero */
+	    any.a_int = 1;	/* use index+1 (cant use 0) as identifier */
+	    start_menu(tmpwin);
+			any.a_int++;
+			add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
+				"hit a monster", MENU_UNSELECTED);
+			
+			any.a_int++;
+			add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
+				"pull a monster", MENU_UNSELECTED);
+			
+			any.a_int++;
+			Sprintf(buf, "pull an object on the %s", surface(cc.x, cc.y));
+			add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
+				 buf, MENU_UNSELECTED);
+	    end_menu(tmpwin, "Aim for what?");
+	    if (select_menu(tmpwin, PICK_ONE, &selected) > 0)
+			tohit = selected[0].item.a_int - 1;
+		else return 0;
+	    free((genericptr_t)selected);
+	    destroy_nhwindow(tmpwin);
+	}
+
+	/* What did you hit? */
+	switch (tohit) {
+	case 0:	/* Trap */
+	    /* FIXME -- untrap needs to deal with non-adjacent traps */
+	    break;
+	case 1:	/*Hit Monster */
+	    if ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0) break;
+		(void) thitmonst(mtmp, uwep, 0);
+		return (1);
+	break;
+	case 2:	/*Hook Monster */
+	    if ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0) break;
+		if(mtmp->mpeaceful){
+			if (!bigmonst(mtmp->data) &&
+				enexto(&cc, u.ux, u.uy, (struct permonst *)0)
+			) {
+				You("pull in %s!", mon_nam(mtmp));
+				mtmp->mundetected = 0;
+				mtmp->movement = max(0, mtmp->movement - 12);
+				rloc_to(mtmp, cc.x, cc.y);
+				return (1);
+			} else {
+				You("pull yourself toward %s!", mon_nam(mtmp));
+				hurtle(sgn(mtmp->mx-u.ux), sgn(mtmp->my-u.uy), 1, FALSE);
+				spoteffects(TRUE);
+				return (1);
+			}
+		} else {
+			if (!bigmonst(mtmp->data) && !strongmonst(mtmp->data) && rn2(P_SKILL(typ)) &&
+				enexto(&cc, u.ux, u.uy, (struct permonst *)0)
+			) {
+				You("pull in %s!", mon_nam(mtmp));
+				mtmp->mundetected = 0;
+				mtmp->movement = max(0, mtmp->movement - 12);
+				rloc_to(mtmp, cc.x, cc.y);
+				return (1);
+			} else if ((!bigmonst(mtmp->data) && !strongmonst(mtmp->data)) ||
+				   rn2(P_SKILL(typ))
+			) {
+				(void) thitmonst(mtmp, uwep, 0);
+				return (1);
+			} else {
+				You("are yanked toward %s!", mon_nam(mtmp));
+				hurtle(sgn(mtmp->mx-u.ux), sgn(mtmp->my-u.uy), 1, FALSE);
+				spoteffects(TRUE);
+				return (1);
+			}
+		}
+	break;
+	case 3:	/* Object */
+	    if ((otmp = level.objects[cc.x][cc.y]) != 0) {
+			You("snag an object from the %s!", surface(cc.x, cc.y));
+			(void) pickup_object(otmp, 1L, FALSE);
+			/* If pickup fails, leave it alone */
+			newsym(cc.x, cc.y);
+			return (1);
+	    }
+	    break;
+	// case 3:	/* Surface */
+	    // if (IS_AIR(levl[cc.x][cc.y].typ) || is_pool(cc.x, cc.y, TRUE))
+			// pline_The("hook slices through the %s.", surface(cc.x, cc.y));
+	    // else {
+			// You("are yanked toward the %s!", surface(cc.x, cc.y));
+			// hurtle(sgn(cc.x-u.ux), sgn(cc.y-u.uy), 1, FALSE);
+			// spoteffects(TRUE);
+	    // }
+	    // return (1);
+	// break;
+	default:
+		pline("Invalid target for crook-hook");
+	break;
+	}
+	pline("%s", nothing_happens);
+	return (1);
+}
+
 
 #define BY_OBJECT	((struct monst *)0)
 
@@ -4914,6 +5062,9 @@ doapply()
 		break;
 	case GRAPPLING_HOOK:
 		res = use_grapple(obj);
+		break;
+	case SHEPHERD_S_CROOK:
+		res = use_crook(obj);
 		break;
 	case BOX:
 	case CHEST:
