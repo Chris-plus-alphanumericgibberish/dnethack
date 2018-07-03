@@ -2647,6 +2647,15 @@ inv_weight()
 			wt += 24*otmp->owt; /* Same as loadstone by default. Only affects fake amulets in open inventory */
 		otmp = otmp->nobj;
 	}
+	
+	if(u.usteed){
+		otmp = u.usteed->minvent;
+		while ((otmp = otmp->nobj) != 0){
+			if(otmp->oartifact) otmp->owt = weight(otmp);
+			wt += otmp->owt;
+		}
+	}
+	
 	wc = weight_cap();
 	return (wt - wc);
 }
