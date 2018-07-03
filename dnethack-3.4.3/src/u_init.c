@@ -160,8 +160,8 @@ static struct trobj Anachrononaut_Elf[] = {
 };
 static struct trobj Barbarian[] = {
 #define B_MAJOR	0	/* two-handed sword or battle-axe  */
-#define B_MINOR	1	/* matched with axe or short sword */
 	{ TWO_HANDED_SWORD, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define B_MINOR	1	/* matched with axe or short sword */
 	{ AXE, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ RING_MAIL, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ FOOD_RATION, 0, FOOD_CLASS, 1, 0 },
@@ -171,21 +171,21 @@ static struct trobj Barbarian[] = {
 #ifdef BARD
 static struct trobj Bard[] = {
 #define BARD_INSTR 0
-#define BARD_CLOAK 1
-#define BARD_BOOZE 4
-#define BARD_WHISTLE 5
 	{ WOODEN_HARP, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
+#define BARD_CLOAK 1
 	{ LEATHER_CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 3, 0 },
 	{ ORANGE, 0, FOOD_CLASS, 3, 0 },
+#define BARD_BOOZE 4
 	{ POT_BOOZE, 0, POTION_CLASS, 1, UNDEF_BLESS },
+#define BARD_WHISTLE 5
 	{ TIN_WHISTLE, 0, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ 0, 0, 0, 0, 0 }
 };
 #endif
 static struct trobj Binder[] = {
+	{ SHEPHERD_S_CROOK, 0, WEAPON_CLASS, 1, 0 },
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
-	{ VOULGE, 0, WEAPON_CLASS, 1, 0 },
 	{ SICKLE, 0, WEAPON_CLASS, 1, 0 },
 	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
 	{ FLINT, 0, GEM_CLASS, 1, 0 },
@@ -206,9 +206,9 @@ long sealKey[34] = {SEAL_AHAZU, SEAL_AMON, SEAL_ANDREALPHUS, SEAL_ANDROMALIUS, S
 				 SEAL_PAIMON, SEAL_SIMURGH, SEAL_TENEBROUS, SEAL_YMIR, SEAL_SPECIAL|SEAL_DAHLVER_NAR, SEAL_SPECIAL|SEAL_ACERERAK, SEAL_SPECIAL|SEAL_NUMINA
 				};
 static struct trobj Cave_man[] = {
-#define C_AMMO	2
 	{ CLUB, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ SLING, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define C_AMMO	2
 	{ FLINT, 0, GEM_CLASS, 15, UNDEF_BLESS },	/* quan is variable */
 	{ ROCK, 0, GEM_CLASS, 3, 0 },			/* yields 18..33 */
 	{ LEATHER_ARMOR, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
@@ -252,9 +252,9 @@ static struct trobj Knight[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Monk[] = {
-#define M_BOOK		2
 	{ GLOVES, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ ROBE, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+#define M_BOOK		2
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },
 	{ UNDEF_TYP, UNDEF_SPE, SCROLL_CLASS, 1, UNDEF_BLESS },
 	{ POT_HEALING, 0, POTION_CLASS, 3, UNDEF_BLESS },
@@ -324,22 +324,22 @@ static struct trobj HDNoble[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Pirate[] = {
-#define PIR_KNIVES	2
-#define PIR_SNACK 6
-#define PIR_JEWELRY 8
-#define PIR_TOOL 9
-#define PIR_BULLETS 10
 	{ SCIMITAR, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ FLINTLOCK, 0, WEAPON_CLASS, 1, 0 },
+#define PIR_KNIVES	2
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
+	{ CRAM_RATION, 0, FOOD_CLASS, 2, UNDEF_BLESS },
 	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ CRAM_RATION, 0, FOOD_CLASS, 2, UNDEF_BLESS },
+#define PIR_SNACK 6
 	{ BANANA, 0, FOOD_CLASS, 3, 0 },
 	{ POT_BOOZE, 0, POTION_CLASS, 3, UNDEF_BLESS },
+#define PIR_JEWELRY 8
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
+	{ GRAPPLING_HOOK, 0, TOOL_CLASS, 1, 0 },
 	{ PICK_AXE, 0, TOOL_CLASS, 1, 0 },
 	{ OILSKIN_SACK, 0, TOOL_CLASS, 1, 0 },
+#define PIR_BULLETS 10
 	{ BULLET,  0, WEAPON_CLASS, 20, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
@@ -367,12 +367,12 @@ static struct trobj DPriest[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Ranger[] = {
-#define RAN_BOW			1
-#define RAN_TWO_ARROWS	2
-#define RAN_ZERO_ARROWS	3
 	{ DAGGER, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define RAN_BOW			1
 	{ BOW, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define RAN_TWO_ARROWS	2
 	{ ARROW, 2, WEAPON_CLASS, 50, UNDEF_BLESS },
+#define RAN_ZERO_ARROWS	3
 	{ ARROW, 0, WEAPON_CLASS, 30, UNDEF_BLESS },
 	{ CLOAK_OF_DISPLACEMENT, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ CRAM_RATION, 0, FOOD_CLASS, 4, 0 },
@@ -380,8 +380,8 @@ static struct trobj Ranger[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Rogue[] = {
-#define R_DAGGERS	1
 	{ SHORT_SWORD, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define R_DAGGERS	1
 	{ DAGGER, 0, WEAPON_CLASS, 10, 0 },	/* quan is variable */
 	{ LEATHER_ARMOR, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ POT_SICKNESS, 0, POTION_CLASS, 1, 0 },
@@ -393,10 +393,10 @@ static struct trobj Rogue[] = {
 };
 static struct trobj Samurai[] = {
 #define S_WEAPON	0
-#define S_SECOND	1
-#define S_ARROWS	3
 	{ KATANA, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define S_SECOND	1
 	{ SHORT_SWORD, 0, WEAPON_CLASS, 1, UNDEF_BLESS }, /* wakizashi */
+#define S_ARROWS	3
 	{ YUMI, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ YA, 0, WEAPON_CLASS, 25, UNDEF_BLESS }, /* variable quan */
 	{ SPLINT_MAIL, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
@@ -428,14 +428,14 @@ static struct trobj Valkyrie[] = {
 };
 static struct trobj Wizard[] = {
 #define W_WEAPON	0
-#define W_MULTSTART	2
-#define W_MULTEND	6
 	{ QUARTERSTAFF, 1, WEAPON_CLASS, 1, 0 },
 	{ ATHAME, -1, WEAPON_CLASS, 1, 0 },
+#define W_MULTSTART	2
 	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, 0 },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 2, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, SCROLL_CLASS, 3, 0 },
 	{ SPE_FORCE_BOLT, 0, SPBOOK_CLASS, 1, 0 },
+#define W_MULTEND	6
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 0 },
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 0 },
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 0 },
@@ -1850,6 +1850,7 @@ u_init()
 		ini_inv(Binder);
 		skill_init(Skill_N);
 		knows_object(FLINT);
+		knows_object(SHEPHERD_S_CROOK);
 		if(Race_if(PM_INCANTIFIER)){
 			knows_object(SPE_HEALING);
 			knows_object(SPE_FORCE_BOLT);
@@ -1966,7 +1967,6 @@ u_init()
 		Pirate[PIR_SNACK].trquan += rn2(4);
 		Pirate[PIR_BULLETS].trquan += rn2(Pirate[PIR_BULLETS].trquan/2);
 		if(rn2(100)<50)	Pirate[PIR_JEWELRY].trotyp = RIN_ADORNMENT;
-		if(rn2(100)<50)	Pirate[PIR_TOOL].trotyp = GRAPPLING_HOOK;
 		ini_inv(Pirate);
 		if(Race_if(PM_DROW)){
 			struct obj *otmp;
