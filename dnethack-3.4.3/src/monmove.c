@@ -2353,7 +2353,7 @@ struct monst *mtmp;
 		    !(typ == CORPSE && verysmall(&mons[obj->corpsenm])) &&
 		    typ != FORTUNE_COOKIE && typ != CANDY_BAR &&
 		    typ != PANCAKE && typ != LEMBAS_WAFER &&
-		    typ != LUMP_OF_ROYAL_JELLY &&
+		    !(typ >= LUMP_OF_ROYAL_JELLY && typ <= HONEYCOMB) &&
 		    obj->oclass != AMULET_CLASS &&
 		    obj->oclass != RING_CLASS &&
 #ifdef WIZARD
