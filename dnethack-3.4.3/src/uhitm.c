@@ -796,9 +796,11 @@ struct attack *uattk;
 	    notonhead = (mon->mx != x || mon->my != y);
 	    malive = hmon(mon, uwep, 0);
 	    /* this assumes that Stormbringer was uwep not uswapwep */ 
-	    if (malive && (u.twoweap && !(uwep && uwep->otyp == STILETTOS)) && !override_confirmation &&
-		    m_at(x, y) == mon)
-		malive = hmon(mon, uswapwep, 0);
+	    if (malive && (u.twoweap && !(uwep && uwep->otyp == STILETTOS)) && !stormbringer_override &&
+		    m_at(x, y) == mon
+		) {
+			malive = hmon(mon, uswapwep, 0);
+		}
 	    if (malive) {
 		/* monster still alive */
 		if(((!rn2(25) && mon->mhp < mon->mhpmax/2) || mon->data == &mons[PM_QUIVERING_BLOB])

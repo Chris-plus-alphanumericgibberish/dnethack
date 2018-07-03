@@ -329,10 +329,14 @@ mattackm(magr, mdef)
     /* Now perform all attacks for the monster. */
     for (i = 0; i < NATTK; i++) {
         int tmphp = mdef->mhp;
+	
+	if(DEADMONSTER(mdef) || DEADMONSTER(magr))
+		break;
 	res[i] = MM_MISS;
 	mattk = getmattk(pa, i, res, &alt_attk);
 	otmp = (struct obj *)0;
 	attk = 1;
+	
 	
 	if (magr->data == &mons[PM_GRUE] && (i >= 2) && !((!levl[magr->mx][magr->my].lit && !(viz_array[magr->my][magr->mx] & TEMP_LIT1 && !(viz_array[magr->my][magr->mx] & TEMP_DRK1)))
 		|| (levl[magr->mx][magr->my].lit && (viz_array[magr->my][magr->mx] & TEMP_DRK1 && !(viz_array[magr->my][magr->mx] & TEMP_LIT1)))))

@@ -717,6 +717,9 @@ mattacku(mtmp)
 	}
 	for(i = 0; i < NATTK; i++) {
 
+		if(DEADMONSTER(mtmp))
+			break;
+		
 	    sum[i] = 0;
 	    mattk = getmattk(mdat, i, sum, &alt_attk);
 	    if (u.uswallow && (mattk->aatyp != AT_ENGL && mattk->aatyp != AT_ILUR))
@@ -1354,15 +1357,15 @@ mattacku(mtmp)
 	    if(flags.botl) bot();
 	/* give player a chance of waking up before dying -kaa */
 	    if(sum[i] == 1) {	    /* successful attack */
-		if (u.usleep && u.usleep < monstermoves && rn2(20) < ACURR(A_WIS)) {
-		    multi = -1;
-		    nomovemsg = "The combat suddenly awakens you.";
-		}
+			if (u.usleep && u.usleep < monstermoves && rn2(20) < ACURR(A_WIS)) {
+				multi = -1;
+				nomovemsg = "The combat suddenly awakens you.";
+			}
 	    }
 	    if(sum[i] == 2) return 1;		/* attacker dead */
 	    if(sum[i] == 3) break;  /* attacker teleported, no more attacks */
 		
-		if(uwep && is_lightsaber(uwep) && litsaber(uwep)){
+		if(uwep && is_lightsaber(uwep) && litsaber(uwep) && !DEADMONSTER(mtmp)){
 			if(u.fightingForm == FFORM_SHIEN && multi >= 0 && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) == 1 && (!uarm || is_light_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SHIEN), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
@@ -1370,6 +1373,8 @@ mattacku(mtmp)
 							You("counterattack!");
 							use_skill(FFORM_SHIEN,1);
 							flags.forcefight = TRUE;
+							u.dy = sgn(mtmp->my - u.uy);
+							u.dx = sgn(mtmp->mx - u.ux);
 							attack(mtmp);
 							flags.forcefight = FALSE;
 							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
@@ -1380,6 +1385,8 @@ mattacku(mtmp)
 							You("counterattack!");
 							use_skill(FFORM_SHIEN,1);
 							flags.forcefight = TRUE;
+							u.dy = sgn(mtmp->my - u.uy);
+							u.dx = sgn(mtmp->mx - u.ux);
 							attack(mtmp);
 							flags.forcefight = FALSE;
 							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
@@ -1390,6 +1397,8 @@ mattacku(mtmp)
 							You("counterattack!");
 							use_skill(FFORM_SHIEN,1);
 							flags.forcefight = TRUE;
+							u.dy = sgn(mtmp->my - u.uy);
+							u.dx = sgn(mtmp->mx - u.ux);
 							attack(mtmp);
 							flags.forcefight = FALSE;
 							if(DEADMONSTER(mtmp)) return 1;		/* attacker dead */
@@ -1404,6 +1413,8 @@ mattacku(mtmp)
 						if(rn2(100) < 10){
 							You("counterattack!");
 							flags.forcefight = TRUE;
+							u.dy = sgn(mtmp->my - u.uy);
+							u.dx = sgn(mtmp->mx - u.ux);
 							attack(mtmp);
 							flags.forcefight = FALSE;
 							use_skill(FFORM_SORESU,1);
@@ -1414,6 +1425,8 @@ mattacku(mtmp)
 						if(rn2(100) < 15){
 							You("counterattack!");
 							flags.forcefight = TRUE;
+							u.dy = sgn(mtmp->my - u.uy);
+							u.dx = sgn(mtmp->mx - u.ux);
 							attack(mtmp);
 							flags.forcefight = FALSE;
 							use_skill(FFORM_SORESU,1);
@@ -1424,6 +1437,8 @@ mattacku(mtmp)
 						if(rn2(100) < 25){
 							You("counterattack!");
 							flags.forcefight = TRUE;
+							u.dy = sgn(mtmp->my - u.uy);
+							u.dx = sgn(mtmp->mx - u.ux);
 							attack(mtmp);
 							flags.forcefight = FALSE;
 							use_skill(FFORM_SORESU,1);
@@ -7853,7 +7868,10 @@ register struct monst *mtmp;
 register struct attack *mattk;
 {
 	int i, tmp;
-
+	
+	if(DEADMONSTER(mtmp))
+		return 1;
+	
 	for (i = 0; ; i++) {
 	    if (i >= NATTK) return 1;
 	    if (olduasmon->mattk[i].aatyp == AT_NONE ||
@@ -8159,6 +8177,8 @@ register struct attack *mattk;
 		if(u.sealsActive&SEAL_EURYNOME && multi >= 0 && !rn2(5)){
 			You("counterattack!");
 			flags.forcefight = TRUE;
+			u.dy = sgn(mtmp->my - u.uy);
+			u.dx = sgn(mtmp->mx - u.ux);
 			attack(mtmp);
 			flags.forcefight = FALSE;
 			if(DEADMONSTER(mtmp)) return 2;
@@ -8179,6 +8199,8 @@ register struct attack *mattk;
 						You("counterattack!");
 						use_skill(FFORM_DJEM_SO,1);
 						flags.forcefight = TRUE;
+						u.dy = sgn(mtmp->my - u.uy);
+						u.dx = sgn(mtmp->mx - u.ux);
 						attack(mtmp);
 						flags.forcefight = FALSE;
 						if(DEADMONSTER(mtmp)) return 2;
@@ -8189,6 +8211,8 @@ register struct attack *mattk;
 						You("counterattack!");
 						use_skill(FFORM_DJEM_SO,1);
 						flags.forcefight = TRUE;
+						u.dy = sgn(mtmp->my - u.uy);
+						u.dx = sgn(mtmp->mx - u.ux);
 						attack(mtmp);
 						flags.forcefight = FALSE;
 						if(DEADMONSTER(mtmp)) return 2;
@@ -8199,6 +8223,8 @@ register struct attack *mattk;
 						You("counterattack!");
 						use_skill(FFORM_DJEM_SO,1);
 						flags.forcefight = TRUE;
+						u.dy = sgn(mtmp->my - u.uy);
+						u.dx = sgn(mtmp->mx - u.ux);
 						attack(mtmp);
 						flags.forcefight = FALSE;
 						if(DEADMONSTER(mtmp)) return 2;
@@ -8213,6 +8239,8 @@ register struct attack *mattk;
 	){
 		You("counterattack!");
 		flags.forcefight = TRUE;
+		u.dy = sgn(mtmp->my - u.uy);
+		u.dx = sgn(mtmp->mx - u.ux);
 		attack(mtmp);
 		flags.forcefight = FALSE;
 		if(DEADMONSTER(mtmp)) return 2;
