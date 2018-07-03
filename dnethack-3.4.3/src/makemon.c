@@ -2922,8 +2922,28 @@ register struct monst *mtmp;
 		    if (!rn2(10)) (void)mongets(mtmp, ELVEN_MITHRIL_COAT);
 		    if (!rn2(10)) (void)mongets(mtmp, DWARVISH_CLOAK);
 		} else if(mm == PM_CHANGED) {
-			if(!rn2(10)) (void)mongets(mtmp, HAND_BLASTER);
-			else (void)mongets(mtmp, STILETTO);
+			if(!rn2(10)){
+				otmp = mksobj(HAND_BLASTER, TRUE, FALSE);
+				otmp->obj_material = BONE;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+			} else if(!rn2(9)){
+				otmp = mksobj(PISTOL, TRUE, FALSE);
+				otmp->obj_material = BONE;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(BULLET, TRUE, FALSE);
+				otmp->obj_material = BONE;
+				otmp->quan += rn1(20,20);
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+			} else {
+				otmp = mksobj(STILETTO, TRUE, FALSE);
+				otmp->obj_material = BONE;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+			}
 		} else if(mm == PM_GNOLL) {
 			switch(rnd(4)){
 			case 1:
