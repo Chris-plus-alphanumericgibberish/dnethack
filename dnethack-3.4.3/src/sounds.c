@@ -484,6 +484,9 @@ register struct monst *mtmp;
 	case MS_GROWL:
 	    ret = "growl";
 	    break;
+	case MS_SHEEP:
+		ret = "snort";
+		break;
 	case MS_ROAR:
 	    ret = "roar";
 	    break;
@@ -550,6 +553,9 @@ register struct monst *mtmp;
 	case MS_MEW:
 	    yelp_verb = "yowl";
 	    break;
+	case MS_SHEEP:
+		yelp_verb = "bleat";
+		break;
 	case MS_BARK:
 	case MS_GROWL:
 	    yelp_verb = "yelp";
@@ -592,6 +598,9 @@ register struct monst *mtmp;
 	case MS_GROWL:
 	    whimper_verb = "whimper";
 	    break;
+	case MS_SHEEP:
+		whimper_verb = "bleat";
+		break;
 	case MS_BARK:
 	    whimper_verb = "whine";
 	    break;
@@ -830,6 +839,9 @@ asGuardian:
 		    pline_msg = "mews.";
 		break;
 	    } /* else FALLTHRU */
+	case MS_SHEEP:
+		pline_msg = "baaaas.";
+		break;
 	case MS_GROWL:
 	    pline_msg = mtmp->mpeaceful ? "snarls." : "growls!";
 	    break;
