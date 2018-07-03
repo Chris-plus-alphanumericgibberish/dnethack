@@ -278,7 +278,7 @@ found_ward:
 	new_obj = mksobj(i, FALSE, FALSE);
 	new_obj->bknown = (paper->bknown && pen->bknown);
 	if(i==SCR_WARD){
-		new_obj->ovar1 = theward;
+		new_obj->oward = theward;
 	}
 
 	/* shk imposes a flat rate per use, not based on actual charges used */

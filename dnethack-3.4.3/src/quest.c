@@ -730,7 +730,7 @@ turn_stag()
 		struct obj *otmp;
 		otmp = mksobj(find_signet_ring(), TRUE, FALSE);
 		otmp->ohaluengr = TRUE;
-		otmp->ovar1 = flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
+		otmp->oward = flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
 		pline("\"Take this, to identify you as one of ours!  You should take off any armor with another faction's crest, though.\"");
 		hold_another_object(otmp, "You drop %s!",
 							  doname(otmp), (const char *)0);	}

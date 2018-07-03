@@ -827,7 +827,7 @@ register struct obj *obj;
 		if(nn) {
 			Strcat(buf, " of ");
 			if(obj->otyp != SCR_WARD) Strcat(buf, actualn);
-			else Strcat(buf, wardDecode[obj->ovar1]);
+			else Strcat(buf, wardDecode[obj->oward]);
 		} else if(un) {
 			Strcat(buf, " called ");
 			Strcat(buf, un);
@@ -1328,7 +1328,7 @@ charges:
 	case RING_CLASS:
 		add_erosion_words(obj, prefix);
 ring:
-		if(obj->ovar1 && (isEngrRing(obj->otyp))) Strcat(prefix, "engraved ");
+		if(obj->oward && (isEngrRing(obj->otyp))) Strcat(prefix, "engraved ");
 		if(obj->owornmask & W_RINGR) Strcat(bp, " (on right ");
 		if(obj->owornmask & W_RINGL) Strcat(bp, " (on left ");
 		if(obj->owornmask & W_RING) {
@@ -3823,46 +3823,46 @@ typfnd:
 		
 	}
 	
-	if(otmp->oclass == RING_CLASS && isEngrRing((otmp)->otyp) && (wizard || (otmp->ovar1 && !(otmp->ohaluengr)))){
-		if(heptagram && wizard)			otmp->ovar1 = HEPTAGRAM;  /*can't be wished for*/
-		else if(gorgoneion && wizard)   otmp->ovar1 = GORGONEION;/*can't be wished for*/
-		else if(acheron)				otmp->ovar1 = CIRCLE_OF_ACHERON;
-		else if(pentagram)				otmp->ovar1 = PENTAGRAM; /*not found randomly, but can be wished for*/
-		else if(hexagram && wizard) 	otmp->ovar1 = HEXAGRAM;/*can't be wished for*/
-		else if(hamsa)					otmp->ovar1 = HAMSA;
-		else if(sign)					otmp->ovar1 = ELDER_SIGN;
-		else if(eye)					otmp->ovar1 = ELDER_ELEMENTAL_EYE;
-		else if(queen)					otmp->ovar1 = SIGN_OF_THE_SCION_QUEEN;
-		else if(cartouche)				otmp->ovar1 = CARTOUCHE_OF_THE_CAT_LORD;
-		else if(garuda)					otmp->ovar1 = WINGS_OF_GARUDA;
-		else if(toustefna && wizard)	otmp->ovar1 = TOUSTEFNA;/*can't be wished for*/
-		else if(dreprun && wizard)		otmp->ovar1 = DREPRUN;/*can't be wished for*/
-		else if(veioistafur && wizard)	otmp->ovar1 = VEIOISTAFUR;/*can't be wished for*/
-		else if(thjofastafur && wizard)	otmp->ovar1 = THJOFASTAFUR; /*can't be wished for*/
+	if(otmp->oclass == RING_CLASS && isEngrRing((otmp)->otyp) && (wizard || (otmp->oward && !(otmp->ohaluengr)))){
+		if(heptagram && wizard)			otmp->oward = HEPTAGRAM;  /*can't be wished for*/
+		else if(gorgoneion && wizard)   otmp->oward = GORGONEION;/*can't be wished for*/
+		else if(acheron)				otmp->oward = CIRCLE_OF_ACHERON;
+		else if(pentagram)				otmp->oward = PENTAGRAM; /*not found randomly, but can be wished for*/
+		else if(hexagram && wizard) 	otmp->oward = HEXAGRAM;/*can't be wished for*/
+		else if(hamsa)					otmp->oward = HAMSA;
+		else if(sign)					otmp->oward = ELDER_SIGN;
+		else if(eye)					otmp->oward = ELDER_ELEMENTAL_EYE;
+		else if(queen)					otmp->oward = SIGN_OF_THE_SCION_QUEEN;
+		else if(cartouche)				otmp->oward = CARTOUCHE_OF_THE_CAT_LORD;
+		else if(garuda)					otmp->oward = WINGS_OF_GARUDA;
+		else if(toustefna && wizard)	otmp->oward = TOUSTEFNA;/*can't be wished for*/
+		else if(dreprun && wizard)		otmp->oward = DREPRUN;/*can't be wished for*/
+		else if(veioistafur && wizard)	otmp->oward = VEIOISTAFUR;/*can't be wished for*/
+		else if(thjofastafur && wizard)	otmp->oward = THJOFASTAFUR; /*can't be wished for*/
 	}
 
 	
 	if(otmp->otyp == SCR_WARD){
 		/* Can wish for a scroll of any ward, including heptagram. You are spending a wish, after all.*/
-		if(heptagram) otmp->ovar1 = HEPTAGRAM;
-		else if(gorgoneion) otmp->ovar1 = GORGONEION;
-		else if(acheron) otmp->ovar1 = CIRCLE_OF_ACHERON;
-		else if(pentagram) otmp->ovar1 = PENTAGRAM;
-		else if(hexagram) otmp->ovar1 = HEXAGRAM;
-		else if(hamsa) otmp->ovar1 = HAMSA;
-		else if(sign) otmp->ovar1 = ELDER_SIGN;
-		else if(eye) otmp->ovar1 = ELDER_ELEMENTAL_EYE;
-		else if(queen) otmp->ovar1 = SIGN_OF_THE_SCION_QUEEN;
-		else if(cartouche) otmp->ovar1 = CARTOUCHE_OF_THE_CAT_LORD;
-		else if(garuda) otmp->ovar1 = WINGS_OF_GARUDA;
+		if(heptagram) otmp->oward = HEPTAGRAM;
+		else if(gorgoneion) otmp->oward = GORGONEION;
+		else if(acheron) otmp->oward = CIRCLE_OF_ACHERON;
+		else if(pentagram) otmp->oward = PENTAGRAM;
+		else if(hexagram) otmp->oward = HEXAGRAM;
+		else if(hamsa) otmp->oward = HAMSA;
+		else if(sign) otmp->oward = ELDER_SIGN;
+		else if(eye) otmp->oward = ELDER_ELEMENTAL_EYE;
+		else if(queen) otmp->oward = SIGN_OF_THE_SCION_QUEEN;
+		else if(cartouche) otmp->oward = CARTOUCHE_OF_THE_CAT_LORD;
+		else if(garuda) otmp->oward = WINGS_OF_GARUDA;
 	}
 	
 	/*You're spending a wish, you can get whatever stave you ask for*/
 	if(otmp->oclass == WEAPON_CLASS && objects[(otmp)->otyp].oc_material == WOOD){
-		if(toustefna) otmp->ovar1 = WARD_TOUSTEFNA; 
-		else if(dreprun) otmp->ovar1 = WARD_DREPRUN;
-		else if(veioistafur) otmp->ovar1 = WARD_VEIOISTAFUR;
-		else if(thjofastafur) otmp->ovar1 = WARD_THJOFASTAFUR;
+		if(toustefna) otmp->oward = WARD_TOUSTEFNA; 
+		else if(dreprun) otmp->oward = WARD_DREPRUN;
+		else if(veioistafur) otmp->oward = WARD_VEIOISTAFUR;
+		else if(thjofastafur) otmp->oward = WARD_THJOFASTAFUR;
 	}
 	/* set blessed/cursed -- setting the fields directly is safe
 	 * since weight() is called below and addinv() will take care

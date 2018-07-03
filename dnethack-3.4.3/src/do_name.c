@@ -926,7 +926,7 @@ boolean called;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
 					&& otmp->owornmask & mtmp->misc_worn_check){
-						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->oward));
 						name_at_start = FALSE;
 					}
 			}
@@ -990,7 +990,7 @@ boolean called;
 				for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 					if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
 						&& otmp->owornmask & mtmp->misc_worn_check){
-							Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+							Sprintf(eos(buf), "%s ", getDrowHouse(otmp->oward));
 							name_at_start = FALSE;
 						}
 				}
@@ -1058,7 +1058,7 @@ boolean called;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 				if ((otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT) 
 					&& otmp->owornmask & mtmp->misc_worn_check){
-						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->ovar1));
+						Sprintf(eos(buf), "%s ", getDrowHouse(otmp->oward));
 						name_at_start = FALSE;
 					}
 			}

@@ -228,7 +228,7 @@ struct monst *mon;
 
 	/* weapons with the veioistafur stave are highly effective against sea monsters */
 	if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE
-		&& (otmp->ovar1 & WARD_VEIOISTAFUR) && mon->data->mlet == S_EEL) tmp += 4;
+		&& (otmp->oward & WARD_VEIOISTAFUR) && mon->data->mlet == S_EEL) tmp += 4;
 	
 	/* Picks used against xorns and earth elementals */
 	if (is_pick(otmp) &&
@@ -1274,7 +1274,7 @@ lightsaber_form_sdie:
 		}
 		
 		if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE
-			&& (otmp->ovar1 & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);
+			&& (otmp->oward & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);
 		
 
 	    /* if the weapon is going to get a double damage bonus, adjust

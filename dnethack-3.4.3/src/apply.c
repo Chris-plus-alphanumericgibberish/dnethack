@@ -111,7 +111,7 @@ do_present_ring(obj)
 
 	if(!getdir((char *)0)) return 0;
 	
-	if(obj->ovar1 == 0 && !(obj->ohaluengr)){
+	if(obj->oward == 0 && !(obj->ohaluengr)){
 		exercise(A_WIS, FALSE);
 		return 0;
 	}
@@ -151,15 +151,15 @@ do_present_ring(obj)
 					make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); /* absense of text =  dust */
 					engrHere = engr_at(u.ux,u.uy); /*note: make_engr_at does not return the engraving it made, it returns void instead*/
 				}
-				if(obj->ohaluengr == engrHere->halu_ward && obj->ovar1 == engrHere->ward_id){
+				if(obj->ohaluengr == engrHere->halu_ward && obj->oward == engrHere->ward_id){
 					pline("the engraving tumbles off the ring to join it's fellows.");
 					engrHere->complete_wards += engrHere->halu_ward ? 0 : get_num_wards_added(engrHere->ward_id,engrHere->complete_wards);
 					obj->ohaluengr = FALSE;
-					obj->ovar1 = FALSE;
+					obj->oward = FALSE;
 				}
 				else{
 					pline("the engraving tumbles off the ring%s.", engrHere->ward_id ? "and covers the existing drawing" : "");
-					engrHere->ward_id = obj->ovar1;
+					engrHere->ward_id = obj->oward;
 					engrHere->halu_ward = obj->ohaluengr;
 					engrHere->complete_wards = engrHere->halu_ward ? 1 : get_num_wards_added(engrHere->ward_id,0);
 					engrHere->ward_type = obj->blessed ? BURN : obj->cursed ? DUST : ENGRAVE;
@@ -168,20 +168,20 @@ do_present_ring(obj)
 						u.wardsknown |= get_wardID(engrHere->ward_id);
 					}
 					obj->ohaluengr = FALSE;
-					obj->ovar1 = FALSE;
+					obj->oward = FALSE;
 				}
 			}
 		}
 	} else if (!u.dx && !u.dy) {
 		if(!(obj->ohaluengr)){
-			pline("A %s is engraved on the ring.",wardDecode[obj->ovar1]);
-			if( !(u.wardsknown & get_wardID(obj->ovar1)) ){
+			pline("A %s is engraved on the ring.",wardDecode[obj->oward]);
+			if( !(u.wardsknown & get_wardID(obj->oward)) ){
 				You("have learned a new warding sign!");
-				u.wardsknown |= get_wardID(obj->ovar1);
+				u.wardsknown |= get_wardID(obj->oward);
 			}
 		}
 		else{
-			pline("There is %s engraved on the ring.",fetchHaluWard((int)obj->ovar1));
+			pline("There is %s engraved on the ring.",fetchHaluWard((int)obj->oward));
 		}
 		return(1);
 	} else if (isok(u.ux+u.dx, u.uy+u.dy) && (mtmp = m_at(u.ux+u.dx, u.uy+u.dy)) != 0) {
@@ -190,90 +190,90 @@ do_present_ring(obj)
 			pline("But the ring's engraving is fogged over!");
 			return 1;
 		}
-		if(!(obj->ohaluengr) || obj->ovar1 == CERULEAN_SIGN){
+		if(!(obj->ohaluengr) || obj->oward == CERULEAN_SIGN){
 			if(
-				(obj->ovar1 == HEPTAGRAM && scaryHept(1, mtmp)) ||
-				(obj->ovar1 == GORGONEION && scaryGorg(1, mtmp)) ||
-				(obj->ovar1 == CIRCLE_OF_ACHERON && scaryCircle(1, mtmp)) ||
-				(obj->ovar1 == PENTAGRAM && scaryPent(1, mtmp)) ||
-				(obj->ovar1 == HEXAGRAM && scaryHex(1, mtmp)) ||
-				(obj->ovar1 == HAMSA && scaryHam(1, mtmp)) ||
-				( (obj->ovar1 == ELDER_SIGN || obj->ovar1 == CERULEAN_SIGN) && scarySign(1, mtmp)) ||
-				(obj->ovar1 == ELDER_ELEMENTAL_EYE && scaryEye(1, mtmp)) ||
-				(obj->ovar1 == SIGN_OF_THE_SCION_QUEEN && scaryQueen(1, mtmp)) ||
-				(obj->ovar1 == CARTOUCHE_OF_THE_CAT_LORD && scaryCat(1, mtmp)) ||
-				(obj->ovar1 == WINGS_OF_GARUDA && scaryWings(1, mtmp)) ||
-/*				(obj->ovar1 == SIGIL_OF_CTHUGHA && (1, mtmp)) ||
-				(obj->ovar1 == BRAND_OF_ITHAQUA && (1, mtmp)) ||
-				(obj->ovar1 == TRACERY_OF_KARAKAL && (1, mtmp)) || These wards curently don't have scaryX functions. */
-				(obj->ovar1 == YELLOW_SIGN && scaryYellow(1, mtmp)) ||
-				(obj->ovar1 == TOUSTEFNA && scaryTou(mtmp)) ||
-				(obj->ovar1 == DREPRUN && scaryDre(mtmp)) ||
-/*				(obj->ovar1 == OTTASTAFUR && (mtmp)) ||
-				(obj->ovar1 == KAUPALOKI && (mtmp)) || Unimplemented runes. */
-				(obj->ovar1 == VEIOISTAFUR && scaryVei(mtmp)) ||
-				(obj->ovar1 == THJOFASTAFUR && scaryThj(mtmp))
+				(obj->oward == HEPTAGRAM && scaryHept(1, mtmp)) ||
+				(obj->oward == GORGONEION && scaryGorg(1, mtmp)) ||
+				(obj->oward == CIRCLE_OF_ACHERON && scaryCircle(1, mtmp)) ||
+				(obj->oward == PENTAGRAM && scaryPent(1, mtmp)) ||
+				(obj->oward == HEXAGRAM && scaryHex(1, mtmp)) ||
+				(obj->oward == HAMSA && scaryHam(1, mtmp)) ||
+				( (obj->oward == ELDER_SIGN || obj->oward == CERULEAN_SIGN) && scarySign(1, mtmp)) ||
+				(obj->oward == ELDER_ELEMENTAL_EYE && scaryEye(1, mtmp)) ||
+				(obj->oward == SIGN_OF_THE_SCION_QUEEN && scaryQueen(1, mtmp)) ||
+				(obj->oward == CARTOUCHE_OF_THE_CAT_LORD && scaryCat(1, mtmp)) ||
+				(obj->oward == WINGS_OF_GARUDA && scaryWings(1, mtmp)) ||
+/*				(obj->oward == SIGIL_OF_CTHUGHA && (1, mtmp)) ||
+				(obj->oward == BRAND_OF_ITHAQUA && (1, mtmp)) ||
+				(obj->oward == TRACERY_OF_KARAKAL && (1, mtmp)) || These wards curently don't have scaryX functions. */
+				(obj->oward == YELLOW_SIGN && scaryYellow(1, mtmp)) ||
+				(obj->oward == TOUSTEFNA && scaryTou(mtmp)) ||
+				(obj->oward == DREPRUN && scaryDre(mtmp)) ||
+/*				(obj->oward == OTTASTAFUR && (mtmp)) ||
+				(obj->oward == KAUPALOKI && (mtmp)) || Unimplemented runes. */
+				(obj->oward == VEIOISTAFUR && scaryVei(mtmp)) ||
+				(obj->oward == THJOFASTAFUR && scaryThj(mtmp))
 			){
 				if (rn2(7))
 					monflee(mtmp, rnd(10), TRUE, TRUE);
 				else
 					monflee(mtmp, rnd(100), TRUE, TRUE);
 			}
-		} else if(obj->ohaluengr && obj->ovar1 >= FIRST_DROW_SYM && obj->ovar1 <= LAST_DROW_SYM && 
+		} else if(obj->ohaluengr && obj->oward >= FIRST_DROW_SYM && obj->oward <= LAST_DROW_SYM && 
 			(is_elf(mtmp->data) || is_drow(mtmp->data) || mtmp->data == &mons[PM_EDDERKOP])
 		){
 			if(flags.stag && 
 				(mtmp->mfaction == u.start_house || allied_faction(mtmp->mfaction,u.start_house)) && 
-				obj->ovar1 == EDDER_SYMBOL && 
+				obj->oward == EDDER_SYMBOL && 
 				!(mtmp->female)
 			){
 				verbalize("The revolution has begun!");
 				for(tm = fmon; tm; tm = tm->nmon){
-					if((is_drow(tm->data) && (obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction))) || 
-						((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
+					if((is_drow(tm->data) && (obj->oward == tm->mfaction || allied_faction(obj->oward, tm->mfaction))) || 
+						((obj->oward == EDDER_SYMBOL || obj->oward == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
 						((tm->mfaction == u.start_house || allied_faction(tm->mfaction,u.start_house)) && 
-							obj->ovar1 == EDDER_SYMBOL && !(tm->female))
+							obj->oward == EDDER_SYMBOL && !(tm->female))
 					){
 						if(is_drow(tm->data)) tm->mfaction = EDDER_SYMBOL;
 						tm->housealert = 1;
 						tm->mpeaceful = 1;
-					} else if(is_drow(tm->data) && !(obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction)) && mtmp->female){
+					} else if(is_drow(tm->data) && !(obj->oward == tm->mfaction || allied_faction(obj->oward, tm->mfaction)) && mtmp->female){
 						tm->housealert = 1;
 						tm->mpeaceful = 0;
 					}
 				}
-			} else if((obj->ovar1 == mtmp->mfaction || allied_faction(obj->ovar1, mtmp->mfaction)) || 
-				(obj->ovar1 == EILISTRAEE_SYMBOL && is_elf(mtmp->data)) || 
-				((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  mtmp->data == &mons[PM_EDDERKOP])
+			} else if((obj->oward == mtmp->mfaction || allied_faction(obj->oward, mtmp->mfaction)) || 
+				(obj->oward == EILISTRAEE_SYMBOL && is_elf(mtmp->data)) || 
+				((obj->oward == EDDER_SYMBOL || obj->oward == XAXOX) &&  mtmp->data == &mons[PM_EDDERKOP])
 			){
 				if(mtmp->housealert && !(mtmp->mpeaceful)){
 					verbalize("Die, spy!");
 					for(tm = fmon; tm; tm = tm->nmon){
-						if((is_drow(tm->data) && (obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction))) || 
-							((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
-							(obj->ovar1 == EILISTRAEE_SYMBOL && is_elf(tm->data))
+						if((is_drow(tm->data) && (obj->oward == tm->mfaction || allied_faction(obj->oward, tm->mfaction))) || 
+							((obj->oward == EDDER_SYMBOL || obj->oward == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
+							(obj->oward == EILISTRAEE_SYMBOL && is_elf(tm->data))
 						){
 							tm->housealert = 1;
 							tm->mpeaceful = 0;
 						}
 					}
 				} else if(flags.female){
-					if((obj->ovar1 == XAXOX && uarm && uarm->ovar1 && uarm->ovar1 == obj->ovar1) ||
-					   (obj->ovar1 == EDDER_SYMBOL && uarm && uarm->ovar1 && uarm->ovar1 == obj->ovar1) ||
-						!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1 ||
+					if((obj->oward == XAXOX && uarm && uarm->oward && uarm->oward == obj->oward) ||
+					   (obj->oward == EDDER_SYMBOL && uarm && uarm->oward && uarm->oward == obj->oward) ||
+						!(uarm) || !(uarm->oward) || uarm->oward == obj->oward ||
 						(
-						 uarm->ovar1 == LOLTH_SYMBOL && 
-						 obj->ovar1 != EILISTRAEE_SYMBOL &&   
-						 obj->ovar1 != XAXOX &&   
-						 obj->ovar1 != EDDER_SYMBOL
+						 uarm->oward == LOLTH_SYMBOL && 
+						 obj->oward != EILISTRAEE_SYMBOL &&   
+						 obj->oward != XAXOX &&   
+						 obj->oward != EDDER_SYMBOL
 						)
 					){
 						verbalize("She's one of ours!");
-						if(obj->ovar1 != XAXOX && obj->ovar1 != EDDER_SYMBOL) verbalize("Apologies, my lady!");
+						if(obj->oward != XAXOX && obj->oward != EDDER_SYMBOL) verbalize("Apologies, my lady!");
 						for(tm = fmon; tm; tm = tm->nmon){
-							if((is_drow(tm->data) && (obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction))) || 
-								((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
-								(obj->ovar1 == EILISTRAEE_SYMBOL && is_elf(tm->data))
+							if((is_drow(tm->data) && (obj->oward == tm->mfaction || allied_faction(obj->oward, tm->mfaction))) || 
+								((obj->oward == EDDER_SYMBOL || obj->oward == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
+								(obj->oward == EILISTRAEE_SYMBOL && is_elf(tm->data))
 							){
 								tm->housealert = 1;
 								tm->mpeaceful = 1;
@@ -282,9 +282,9 @@ do_present_ring(obj)
 					} else {
 						verbalize("Die, spy!");
 						for(tm = fmon; tm; tm = tm->nmon){
-							if((is_drow(tm->data) && (obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction))) || 
-								((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
-								(obj->ovar1 == EILISTRAEE_SYMBOL && is_elf(tm->data))
+							if((is_drow(tm->data) && (obj->oward == tm->mfaction || allied_faction(obj->oward, tm->mfaction))) || 
+								((obj->oward == EDDER_SYMBOL || obj->oward == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
+								(obj->oward == EILISTRAEE_SYMBOL && is_elf(tm->data))
 							){
 								tm->housealert = 1;
 								tm->mpeaceful = 0;
@@ -292,21 +292,21 @@ do_present_ring(obj)
 						}
 					}
 				} else {
-					if(((obj->ovar1 <= LAST_TOWER && obj->ovar1 >= FIRST_TOWER) && 
-						(!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1 || allied_faction(uarm->ovar1,obj->ovar1))) ||
-					   ((obj->ovar1 == EDDER_SYMBOL || 
-					     obj->ovar1 == XAXOX || 
-					     obj->ovar1 == GHAUNADAUR_SYMBOL || 
-					     obj->ovar1 == LAST_BASTION_SYMBOL || 
-						 obj->ovar1 == EILISTRAEE_SYMBOL) && (!(uarm) || !(uarm->ovar1) || uarm->ovar1 == obj->ovar1 || allied_faction(uarm->ovar1,obj->ovar1))) ||
-					   (uarm && uarm->ovar1 && uarm->ovar1 == obj->ovar1)
+					if(((obj->oward <= LAST_TOWER && obj->oward >= FIRST_TOWER) && 
+						(!(uarm) || !(uarm->oward) || uarm->oward == obj->oward || allied_faction(uarm->oward,obj->oward))) ||
+					   ((obj->oward == EDDER_SYMBOL || 
+					     obj->oward == XAXOX || 
+					     obj->oward == GHAUNADAUR_SYMBOL || 
+					     obj->oward == LAST_BASTION_SYMBOL || 
+						 obj->oward == EILISTRAEE_SYMBOL) && (!(uarm) || !(uarm->oward) || uarm->oward == obj->oward || allied_faction(uarm->oward,obj->oward))) ||
+					   (uarm && uarm->oward && uarm->oward == obj->oward)
 					){
 						verbalize("He's one of ours!");
 						verbalize("Move along, sir.");
 						for(tm = fmon; tm; tm = tm->nmon){
-							if((is_drow(tm->data) && (obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction))) || 
-								((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
-								(obj->ovar1 == EILISTRAEE_SYMBOL && is_elf(tm->data))
+							if((is_drow(tm->data) && (obj->oward == tm->mfaction || allied_faction(obj->oward, tm->mfaction))) || 
+								((obj->oward == EDDER_SYMBOL || obj->oward == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
+								(obj->oward == EILISTRAEE_SYMBOL && is_elf(tm->data))
 							){
 								tm->mpeaceful = 1;
 							}
@@ -314,9 +314,9 @@ do_present_ring(obj)
 					} else {
 						verbalize("Die, spy!");
 						for(tm = fmon; tm; tm = tm->nmon){
-							if((is_drow(tm->data) && (obj->ovar1 == tm->mfaction || allied_faction(obj->ovar1, tm->mfaction))) || 
-								((obj->ovar1 == EDDER_SYMBOL || obj->ovar1 == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
-								(obj->ovar1 == EILISTRAEE_SYMBOL && is_elf(tm->data))
+							if((is_drow(tm->data) && (obj->oward == tm->mfaction || allied_faction(obj->oward, tm->mfaction))) || 
+								((obj->oward == EDDER_SYMBOL || obj->oward == XAXOX) &&  tm->data == &mons[PM_EDDERKOP]) ||
+								(obj->oward == EILISTRAEE_SYMBOL && is_elf(tm->data))
 							){
 								tm->housealert = 1;
 								tm->mpeaceful = 0;
@@ -3683,7 +3683,7 @@ use_grapple (obj)
 		newsym(cc.x, cc.y);
 		return (1);
 	    }
-	    break;
+	break;
 	case 2:	/* Monster */
 	    if ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0) break;
 	    if (verysmall(mtmp->data) && !rn2(4) &&
@@ -4104,7 +4104,7 @@ struct obj *obj;
 		pline("The %s is too dull to cut into the %s.", xname(obj), xname(carvee));
 		return 0;
 	}
-	if(carvee->ovar1 != 0 ){
+	if(carvee->oward != 0 ){
 		You("chip off the existing rune.");
 		multi-=1;
 		if(carvee->oartifact) pline("The wood heals like the rune was never there.");
@@ -4117,8 +4117,8 @@ struct obj *obj;
 	}
 	multi -= carveTurns[rune-FIRST_RUNE];
 	nomovemsg = "You finish carving.";;
-	carvee->ovar1 = get_wardID(rune);
-	You("carve a %s into the %s.",wardDecode[decode_wardID(carvee->ovar1)],xname(carvee));
+	carvee->oward = get_wardID(rune);
+	You("carve a %s into the %s.",wardDecode[decode_wardID(carvee->oward)],xname(carvee));
     u.uconduct.wardless++;
 	see_monsters(); //Some magic staves grant detection, so recheck that now.
 	return 1;

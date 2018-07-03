@@ -467,10 +467,10 @@ learn()
 	    return(0);
 	}
 	if(RoSbook == STUDY_WARD){
-	 if((book->ovar1)){
-		pline("The spellbook is warded with a %s.", wardDecode[decode_wardID(book->ovar1)]);
-		if( !(u.wardsknown & book->ovar1) ){
-			u.wardsknown |= book->ovar1;
+	 if((book->oward)){
+		pline("The spellbook is warded with a %s.", wardDecode[decode_wardID(book->oward)]);
+		if( !(u.wardsknown & book->oward) ){
+			u.wardsknown |= book->oward;
 		}
 		else{
 			You("are already familiar with this ward.");
@@ -617,8 +617,9 @@ struct obj *spellbook;
 			delay = 0;
 			return 0;
 		}
-		if((spellbook->ovar1) && RoSbook == STUDY_WARD){
-			if( (u.wardsknown & spellbook->ovar1) ){
+		if((spellbook->oward) && RoSbook == STUDY_WARD){
+			if( (u.wardsknown & spellbook->oward) ){
+				pline("The spellbook is warded with a %s.", wardDecode[decode_wardID(book->oward)]);
 				You("are already familiar with this ward.");
 				delay = 0;
 				return 0;
@@ -4875,8 +4876,8 @@ struct obj *obj;
 	// WARD_ELDER_SIGN		0x0000080L
 	// WARD_EYE				0x0000100L
 	// WARD_CAT_LORD		0x0000400L
-	if(obj->ovar1 && !(u.wardsknown & obj->ovar1)){
-		u.wardsknown |= obj->ovar1;
+	if(obj->oward && !(u.wardsknown & obj->oward)){
+		u.wardsknown |= obj->oward;
 		return;
 	}
 	
@@ -4888,43 +4889,43 @@ struct obj *obj;
 		case 4:
 		case 5:
 			if(!(u.wardsknown & WARD_ACHERON)){
-				obj->ovar1 = WARD_ACHERON;
-				u.wardsknown |= obj->ovar1;
+				obj->oward = WARD_ACHERON;
+				u.wardsknown |= obj->oward;
 		break;
 			}
 		case 6:
 		case 7:
 		case 8:
 			if(!(u.wardsknown & WARD_QUEEN)){
-				obj->ovar1 = WARD_QUEEN;
-				u.wardsknown |= obj->ovar1;
+				obj->oward = WARD_QUEEN;
+				u.wardsknown |= obj->oward;
 		break;
 			}
 		case 9:
 		case 10:
 		case 11:
 			if(!(u.wardsknown & WARD_GARUDA)){
-				obj->ovar1 = WARD_GARUDA;
-				u.wardsknown |= obj->ovar1;
+				obj->oward = WARD_GARUDA;
+				u.wardsknown |= obj->oward;
 		break;
 			}
 		case 12:
 		case 13:
 			if(!(u.wardsknown & WARD_EYE)){
-				obj->ovar1 = WARD_EYE;
-				u.wardsknown |= obj->ovar1;
+				obj->oward = WARD_EYE;
+				u.wardsknown |= obj->oward;
 		break;
 			}
 		case 14:
 			if(!(u.wardsknown & WARD_CAT_LORD)){
-				obj->ovar1 = WARD_CAT_LORD;
-				u.wardsknown |= obj->ovar1;
+				obj->oward = WARD_CAT_LORD;
+				u.wardsknown |= obj->oward;
 		break;
 			}
 		case 15:
 			if(!(u.wardsknown & WARD_ELDER_SIGN)){
-				obj->ovar1 = WARD_ELDER_SIGN;
-				u.wardsknown |= obj->ovar1;
+				obj->oward = WARD_ELDER_SIGN;
+				u.wardsknown |= obj->oward;
 			}
 		break; /*Fall through to here*/
 	}

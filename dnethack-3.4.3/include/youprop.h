@@ -236,7 +236,7 @@
 #define HWarn_of_mon		u.uprops[WARN_OF_MON].intrinsic
 #define EWarn_of_mon		u.uprops[WARN_OF_MON].extrinsic
 #define Warn_of_mon		(HWarn_of_mon || EWarn_of_mon || (uwep && uwep->oclass == WEAPON_CLASS && (uwep)->obj_material == WOOD && (uwep)->otyp != MOON_AXE && \
-					(uwep->ovar1 & WARD_THJOFASTAFUR)) || u.sealsActive&SEAL_PAIMON || u.sealsActive&SEAL_ANDREALPHUS)
+					(uwep->oward & WARD_THJOFASTAFUR)) || u.sealsActive&SEAL_PAIMON || u.sealsActive&SEAL_ANDREALPHUS)
 
 #define HUndead_warning		u.uprops[WARN_UNDEAD].intrinsic
 #define Undead_warning		(HUndead_warning || u.specialSealsActive&SEAL_ACERERAK)

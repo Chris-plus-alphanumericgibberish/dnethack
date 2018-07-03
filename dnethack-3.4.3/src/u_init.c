@@ -2206,13 +2206,13 @@ u_init()
 				pobj->otyp == CONSORT_S_SUIT ||
 				pobj->otyp == DROVEN_PLATE_MAIL){
 					pobj->ohaluengr = TRUE;
-					pobj->ovar1 = !flags.female ? 
+					pobj->oward = !flags.female ? 
 						u.uhouse :
 						LOLTH_SYMBOL;
 			}
 			else if(isSignetRing(pobj->otyp)){
 				pobj->ohaluengr = TRUE;
-				pobj->ovar1 = u.uhouse;
+				pobj->oward = u.uhouse;
 				pobj->opoisoned = OPOISON_SLEEP;
 				pobj->opoisonchrgs = 30;
 			}
@@ -2817,9 +2817,9 @@ register struct trobj *trop;
 			) obj->oerodeproof = 1;
 			if (obj->opoisoned && u.ualign.type != A_CHAOTIC)
 			    obj->opoisoned = 0;
-			if (obj->ovar1){
-				if(obj->oclass == WEAPON_CLASS && (obj)->obj_material == WOOD) u.wardsknown |= obj->ovar1;
-				else if(obj->oclass == RING_CLASS && isEngrRing((obj)->otyp) && !(obj->ohaluengr)) u.wardsknown |= get_wardID(obj->ovar1);
+			if (obj->oward){
+				if(obj->oclass == WEAPON_CLASS && (obj)->obj_material == WOOD) u.wardsknown |= obj->oward;
+				else if(obj->oclass == RING_CLASS && isEngrRing((obj)->otyp) && !(obj->ohaluengr)) u.wardsknown |= get_wardID(obj->oward);
 			}
 			if (obj->oclass == WEAPON_CLASS ||
 				obj->oclass == TOOL_CLASS) {

@@ -129,7 +129,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 						(mon)->mhp < (mon)->mhpmax && is_pool(u.ux, u.uy, TRUE) && is_pool((mon)->mx, (mon)->my, TRUE)) || \
 					(u.specialSealsActive&SEAL_ACERERAK && is_undead_mon(mon)) || \
 					(uwep && uwep->oclass == WEAPON_CLASS && (uwep)->obj_material == WOOD && uwep->otyp != MOON_AXE &&\
-					 (uwep->ovar1 & WARD_THJOFASTAFUR) && ((mon)->data->mlet == S_LEPRECHAUN || (mon)->data->mlet == S_NYMPH || is_thief((mon)->data))) \
+					 (uwep->oward & WARD_THJOFASTAFUR) && ((mon)->data->mlet == S_LEPRECHAUN || (mon)->data->mlet == S_NYMPH || is_thief((mon)->data))) \
 				)
 #define MATCH_WARN_OF_MON_STRICT(mon)	( (Warn_of_mon && flags.warntypem && \
 						(flags.warntypem & (mon)->data->mflagsm)) || \

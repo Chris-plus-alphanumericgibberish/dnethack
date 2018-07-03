@@ -232,24 +232,24 @@ doread()
         You("study the pages of %s, but you already can recognize that.", xname(scroll));
       }
       return 1;
-	} else if(scroll->oclass == WEAPON_CLASS && (scroll)->obj_material == WOOD && scroll->otyp != MOON_AXE && scroll->ovar1 != 0){
-		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->ovar1)]);
-		if(! (u.wardsknown & scroll->ovar1) ){
+	} else if(scroll->oclass == WEAPON_CLASS && (scroll)->obj_material == WOOD && scroll->oward != 0){
+		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->oward)]);
+		if(! (u.wardsknown & scroll->oward) ){
 			You("have learned a new warding stave!");
-			u.wardsknown |= scroll->ovar1;
+			u.wardsknown |= scroll->oward;
 		}
 		return(1);
 	}
-	else if(scroll->oclass == RING_CLASS && (isEngrRing((scroll)->otyp)||isSignetRing((scroll)->otyp)) && scroll->ovar1){
+	else if(scroll->oclass == RING_CLASS && (isEngrRing((scroll)->otyp)||isSignetRing((scroll)->otyp)) && scroll->oward){
 		if(!(scroll->ohaluengr)){
-			pline("A %s is engraved on the ring.",wardDecode[scroll->ovar1]);
-			if( !(u.wardsknown & get_wardID(scroll->ovar1)) ){
+			pline("A %s is engraved on the ring.",wardDecode[scroll->oward]);
+			if( !(u.wardsknown & get_wardID(scroll->oward)) ){
 				You("have learned a new warding sign!");
-				u.wardsknown |= get_wardID(scroll->ovar1);
+				u.wardsknown |= get_wardID(scroll->oward);
 			}
 		}
 		else{
-			pline("There is %s engraved on the ring.",fetchHaluWard((int)scroll->ovar1));
+			pline("There is %s engraved on the ring.",fetchHaluWard((int)scroll->oward));
 		}
 		return(1);
 	}
@@ -265,13 +265,13 @@ doread()
 #ifdef TOURIST
 	} else if(scroll->oclass == ARMOR_CLASS
 		&& scroll->ohaluengr
-		&& scroll->ovar1
+		&& scroll->oward
 		&& (scroll->otyp == DROVEN_PLATE_MAIL
 			|| scroll->otyp == DROVEN_CHAIN_MAIL
 			|| scroll->otyp == CONSORT_S_SUIT
 		)
 	){
-		pline("There is %s engraved on the armor.",fetchHaluWard((int)scroll->ovar1));
+		pline("There is %s engraved on the armor.",fetchHaluWard((int)scroll->oward));
 		return(1);
 	}else if (scroll->otyp == T_SHIRT) {
 	    static const char *shirt_msgs[] = { /* Scott Bigham */
@@ -1895,7 +1895,7 @@ struct obj	*sobj;
 		pline("The %s shifts beneath you,%sengraving a %s ward.", 
 			surface(u.ux,u.uy),
 			engrHere ? " wiping away the existing engraving and " : " ",
-			wardDecode[sobj->ovar1]
+			wardDecode[sobj->oward]
 		);
 		known = TRUE;
 		del_engr_ward_at(u.ux,u.uy);
@@ -1910,7 +1910,7 @@ struct obj	*sobj;
 	break;
 		}
 		else{
-			engrHere->ward_id = sobj->ovar1;
+			engrHere->ward_id = sobj->oward;
 			if(sobj->cursed){
 				if(is_pool(u.ux, u.uy, TRUE)){
 					pline("The lines of blood quickly disperse into the water.");
@@ -1919,11 +1919,11 @@ struct obj	*sobj;
 				engrHere->ward_type = ENGR_BLOOD;
 			} else engrHere->ward_type = ENGRAVE;
 			engrHere->complete_wards = sobj->blessed ? 
-										wardMax[sobj->ovar1] : 
+										wardMax[sobj->oward] : 
 										get_num_wards_added(engrHere->ward_id,0);
-			if( !(u.wardsknown & get_wardID(sobj->ovar1)) ){
+			if( !(u.wardsknown & get_wardID(sobj->oward)) ){
 				You("have learned a new warding sign!");
-				u.wardsknown |= get_wardID(sobj->ovar1);
+				u.wardsknown |= get_wardID(sobj->oward);
 			}
 		}
 	break;}
