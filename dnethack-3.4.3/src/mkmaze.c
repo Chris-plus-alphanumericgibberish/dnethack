@@ -640,8 +640,9 @@ register const char *s;
 				}
 			}
 		}
-		if(In_outlands(&u.uz) && !(u.uz.dlevel == spire_level.dlevel || Is_gatetown(&u.uz) || Is_sumall(&u.uz))){
-			place_neutral_features();
+		if(In_outlands(&u.uz)){
+			if(!(u.uz.dlevel == spire_level.dlevel || Is_gatetown(&u.uz) || Is_sumall(&u.uz)))
+				place_neutral_features();
 			if(u.uz.dlevel < gatetown_level.dlevel + 4){
 				for(x = 0; x<COLNO; x++){
 					for(y = 0; y<ROWNO; y++){
@@ -649,14 +650,25 @@ register const char *s;
 					}
 				}
 			}
+			if(u.uz.dlevel == spire_level.dlevel){
+				for(x = 2; x <= x_maze_max; x++)
+					for(y = 2; y <= y_maze_max; y++){
+						if(m_at(x,y) && !ACCESSIBLE(levl[x][y].typ)) 
+							rloc(m_at(x,y), FALSE);
+					}
+			}
+			if(Is_sumall(&u.uz)){
+				for(x = 2; x <= x_maze_max; x++)
+					for(y = 2; y <= y_maze_max; y++){
+						if(levl[x][y].typ == STONE) levl[x][y].typ = HWALL;
+						if(levl[x][y].typ == ROOM) levl[x][y].lit = TRUE;
+						if(m_at(x,y)) rloc(m_at(x,y), FALSE);
+					}
+				wallification(1, 1, COLNO-1, ROWNO-1);
+			}
 		}
 		if(In_law(&u.uz)){
 			place_law_features();
-		if(In_outlands(&u.uz) && Is_sumall(&u.uz)){
-			for(x = 2; x <= x_maze_max; x++)
-				for(y = 2; y <= y_maze_max; y++)
-					if(levl[x][y].typ == STONE) levl[x][y].typ = HWALL;
-			wallification(1, 1, COLNO-1, ROWNO-1);
 		}
 		if(Is_lolth_level(&u.uz)){
 			int x, y;
