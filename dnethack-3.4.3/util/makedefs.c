@@ -1782,12 +1782,15 @@ do_objs()
 			break;
 		    case GEM_CLASS:
 			/* avoid trouble with stupid C preprocessors */
-			if(objects[i].oc_material == GLASS) {
-			    Fprintf(ofp,"/* #define\t%s\t%d */\n",
-							objnam, i);
-			    prefix = -1;
-			    break;
-			}
+			/* CMM: Removed 'cause I need to be able to reference these,
+				and the stupid C preprocessors should be good and obsolete by now.
+			*/
+			// if(objects[i].oc_material == GLASS) {
+			    // Fprintf(ofp,"/* #define\t%s\t%d */\n",
+							// objnam, i);
+			    // prefix = -1;
+			    // break;
+			// }
 		    default:
 			Fprintf(ofp,"#define\t");
 		}
