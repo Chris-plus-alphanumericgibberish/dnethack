@@ -62,21 +62,7 @@ STATIC_DCL struct obj *FDECL(make_corpse,(struct monst *));
 STATIC_DCL void FDECL(m_detach, (struct monst *, struct permonst *));
 STATIC_DCL void FDECL(lifesaved_monster, (struct monst *));
 
-STATIC_DCL double FDECL(pow, (double x, size_t n));
 STATIC_DCL double FDECL(atanGerald, (double x));
-
-STATIC_OVL double 
-pow(x, n)
-double x;
-size_t n;
-{
-	if (n == 0)
-		return 1;
-	else if (n % 2 == 0)
-		return pow(x * x, n >> 1);
-	else
-	return x * pow(x * x, n >> 1);
-}
 
 STATIC_OVL double 
 atanGerald(x)
