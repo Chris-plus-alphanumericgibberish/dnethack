@@ -7,13 +7,15 @@
 #define MKROOM_H
 #endif
 
+ //Note: math.h must be included before hack.h bc it contains a yn() macro that is incompatible with the one in hack
+#include <math.h>
+
 #include "hack.h"
 #include "mfndpos.h"
 #include "edog.h"
 #include "artifact.h"
 #include <ctype.h>
 #include <stdlib.h>
-//include <math.h> //Incompatible with nethack!
 
 
 STATIC_DCL boolean FDECL(restrap,(struct monst *));

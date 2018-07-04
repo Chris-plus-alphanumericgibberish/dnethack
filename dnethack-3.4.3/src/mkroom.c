@@ -13,6 +13,9 @@
  *	rest_rooms() -- restore rooms from file fd
  */
 
+ //Note: math.h must be included before hack.h bc it contains a yn() macro that is incompatible with the one in hack
+#include <math.h>
+
 #include "hack.h"
 
 extern const int monstr[];
