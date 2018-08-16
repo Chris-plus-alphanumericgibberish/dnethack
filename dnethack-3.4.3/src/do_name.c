@@ -612,6 +612,7 @@ const char *name;
 		else if(obj->oartifact == ART_VAMPIRE_KILLER) obj->obj_material = METAL;
 		else if(obj->oartifact == ART_SCEPTRE_OF_MIGHT) obj->obj_material = BONE;
 		else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) obj->obj_material = GOLD;
+		else if(obj->oartifact == ART_AEGIS) obj->obj_material = LEATHER;
 		else if(obj->oartifact == ART_GRAYSWANDIR) obj->obj_material = SILVER;
 		else if(obj->oartifact == ART_SANSARA_MIRROR) obj->obj_material = GOLD;
 		else if(obj->oartifact == ART_MIRROR_BRAND) obj->obj_material = SILVER;

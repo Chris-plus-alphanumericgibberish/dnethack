@@ -612,6 +612,13 @@ A("Mirrorbright",	ROUNDSHIELD,/*adapted from Slash'em*/
 	CONFLICT, A_CHAOTIC, NON_PM, NON_PM, 4000L, //needs message
 	0,0,WSFX_PLUSSEV),
 
+A("Aegis",	ROUNDSHIELD, /*Perseus's shield, needs encyc entry*/
+	(SPFX_RESTR|SPFX_REFLECT),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	AEGIS, A_LAWFUL, NON_PM, NON_PM, 4000L,
+	0,0,WSFX_PLUSSEV),
+
 A("The Shield of the All-Seeing", ORCISH_SHIELD, /*Needs encyc entry*/
 	(SPFX_RESTR|SPFX_SEEK|SPFX_SEARCH|SPFX_WARN), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_ELF /*MA*/, 0 /*MV*/,

@@ -334,6 +334,8 @@ struct artifact {
 #define SUMMON_VAMP     (LAST_PROP+65)
 #define COLLECT_TAX     (LAST_PROP+66)
 #define ALTMODE         (LAST_PROP+67)
+#define AEGIS           (LAST_PROP+68)
+
 
 #define MASTERY_ARTIFACT_LEVEL 20
 
