@@ -57,6 +57,11 @@ OBJECT:'"',random,random
 OBJECT[30%]:')',"saber", random
 OBJECT:'=',random,random
 OBJECT:'=',random,random
+
+# "That is old Father Time, who once was a King in Overland," said the Warden. 
+# "And now he has sunk down into the Deep Realm and lies dreaming of all the things 
+# that are done in the upper world. - The Silver Chair
+CONTAINER:'`',"statue",(66,06),"god",1,"Father Time"
 # the missing magic lamp!
 OBJECT:'(',"magic lamp",random
 
