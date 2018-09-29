@@ -666,7 +666,7 @@ moveloop()
 				if(mtmp->data == &mons[PM_GOLD_GOLEM]){
 					int golds = u.goldkamcount_tame + level.flags.goldkamcount_peace + level.flags.goldkamcount_hostile;
 					if(golds > 0){
-						if(canseemon(mtmp)){
+						if(canseemon_eyes(mtmp)){
 							pline("%s blossoms into a swirl of mirrored arcs!", Monnam(mtmp));
 							You("see the image of %s reflected in the golden mirrors!", an(mons[PM_ARA_KAMEREL].mname));
 						}
