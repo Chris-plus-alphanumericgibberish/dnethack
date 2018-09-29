@@ -836,6 +836,9 @@ asGuardian:
 		pline_msg = "growls.";
 	    }
 	    break;
+	case MS_SHEEP:
+		pline_msg = "baaaas.";
+		break;
 	case MS_MEW:
 	    if (mtmp->mtame) {
 		if (mtmp->mconf || mtmp->mflee || mtmp->mtrapped ||
@@ -849,9 +852,6 @@ asGuardian:
 		    pline_msg = "mews.";
 		break;
 	    } /* else FALLTHRU */
-	case MS_SHEEP:
-		pline_msg = "baaaas.";
-		break;
 	case MS_GROWL:
 	    pline_msg = mtmp->mpeaceful ? "snarls." : "growls!";
 	    break;
