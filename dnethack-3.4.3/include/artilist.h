@@ -960,6 +960,21 @@ A("Veil of Latona",	CLOAK_OF_INVISIBILITY, /*Needs encyc entry*/
 	0, A_NEUTRAL, PM_RANGER, NON_PM, 1000L,
 	0,0,0),
 
+A("Hermes's Sandals",	FLYING_BOOTS,
+	(SPFX_NOGEN|SPFX_RESTR),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0, A_NEUTRAL, NON_PM, NON_PM, 4000L,
+	0,0,WSFX_PLUSSEV),
+
+A("Poseidon's Trident",	TRIDENT,
+	(SPFX_NOGEN|SPFX_RESTR), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(3,0),	NO_DFNS,	NO_CARY,	
+	WATER, A_CHAOTIC, NON_PM, NON_PM, 1500L, 
+	0,0,0),
+
+
 /*//////////Role-specific Quest Artifacts//////////*/
 /*
 A("The Orb of Detection",	CRYSTAL_BALL,

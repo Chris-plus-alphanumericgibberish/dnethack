@@ -1655,6 +1655,7 @@ register struct obj *obj;
 	else if(obj->oartifact == ART_VAMPIRE_KILLER) wt = 2*objects[BULLWHIP].oc_weight;
 	else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) wt = 2*objects[SCIMITAR].oc_weight;
 	else if(obj->oartifact == ART_AEGIS) wt = objects[LEATHER_CLOAK].oc_weight;
+	else if(obj->oartifact == ART_HERMES_S_SANDALS) wt = objects[FLYING_BOOTS].oc_weight;
 	else if(obj->oartifact == ART_EARTH_CRYSTAL){
 		wt = 160;
 	}

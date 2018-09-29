@@ -766,6 +766,18 @@ register int type;
 	return((struct obj *) 0);
 }
 
+struct obj *
+carrying_art(artnum)
+register int artnum;
+{
+	register struct obj *otmp;
+
+	for(otmp = invent; otmp; otmp = otmp->nobj)
+		if(otmp->oartifact == artnum)
+			return(otmp);
+	return((struct obj *) 0);
+}
+
 const char *
 currency(amount)
 long amount;
@@ -1066,7 +1078,8 @@ register const char *let,*word;
 //endif
 		      !is_axe(otmp) && !is_pole(otmp) && otyp != BULLWHIP &&
 			  !is_knife(otmp) && otmp->oartifact != ART_SILVER_STARLIGHT &&
-			  otmp->oartifact != ART_HOLY_MOONLIGHT_SWORD) ||
+			  otmp->oartifact != ART_HOLY_MOONLIGHT_SWORD
+			 ) ||
 			 (otmp->oclass == CHAIN_CLASS && 
 				(otyp == IRON_CHAIN || otyp == SHEAF_OF_HAY)
 			 ) ||
@@ -1082,7 +1095,9 @@ register const char *let,*word;
 		     (otmp->oclass == ARMOR_CLASS &&
 		      otyp != DWARVISH_HELM &&
 		      otyp != DROVEN_CLOAK &&
-			  otyp != GNOMISH_POINTY_HAT) || 
+			  otyp != GNOMISH_POINTY_HAT &&
+			  otmp->oartifact != ART_AEGIS
+			  ) || 
 		     (otmp->oclass == GEM_CLASS && !is_graystone(otmp))))
 		|| (!strcmp(word, "invoke") &&
 		    (!otmp->oartifact && !objects[otyp].oc_unique &&

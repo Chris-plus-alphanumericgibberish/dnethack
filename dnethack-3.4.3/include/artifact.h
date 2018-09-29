@@ -335,6 +335,7 @@ struct artifact {
 #define COLLECT_TAX     (LAST_PROP+66)
 #define ALTMODE         (LAST_PROP+67)
 #define AEGIS           (LAST_PROP+68)
+#define WATER           (LAST_PROP+69)
 
 
 #define MASTERY_ARTIFACT_LEVEL 20

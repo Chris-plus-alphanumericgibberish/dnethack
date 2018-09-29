@@ -25,6 +25,7 @@ const static int KURTULMAK_RES[] = {FIRE_RES, FREE_ACTION};
 const static int EREBOR_RES[] = {FIRE_RES, COLD_RES};
 const static int DURIN_RES[] = {FIRE_RES, ACID_RES, POISON_RES};
 const static int REV_PROPS[] = {COLD_RES, REGENERATION, FIXED_ABIL, POISON_RES, SEE_INVIS};
+const static int HERMES_PROPS[] = {FAST};
 
 const static int FLY_PROPS[] = {DETECT_MONSTERS};
 
@@ -151,6 +152,8 @@ long mask;
 				for(p = 0; p < SIZE(EREBOR_RES); p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic & ~wp->w_mask;
 			} else if(oobj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 				for(p = 0; p < SIZE(REV_PROPS); p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
+			} else if(oobj->oartifact == ART_HERMES_S_SANDALS){
+				for(p = 0; p < SIZE(HERMES_PROPS); p++) u.uprops[HERMES_PROPS[p]].extrinsic = u.uprops[HERMES_PROPS[p]].extrinsic & ~wp->w_mask;
 			} else if(oobj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY){
 				for(p = 0; p < SIZE(FLY_PROPS); p++) u.uprops[FLY_PROPS[p]].extrinsic = u.uprops[FLY_PROPS[p]].extrinsic & ~wp->w_mask;
 			}
@@ -213,6 +216,8 @@ long mask;
 					for(p = 0; p < SIZE(EREBOR_RES); p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic | wp->w_mask;
 				} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 					for(p = 0; p < SIZE(REV_PROPS); p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic | wp->w_mask;
+				} else if(obj->oartifact == ART_HERMES_S_SANDALS){
+					for(p = 0; p < SIZE(HERMES_PROPS); p++) u.uprops[HERMES_PROPS[p]].extrinsic = u.uprops[HERMES_PROPS[p]].extrinsic | wp->w_mask;
 				} else if(obj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY){
 					for(p = 0; p < SIZE(FLY_PROPS); p++) u.uprops[FLY_PROPS[p]].extrinsic = u.uprops[FLY_PROPS[p]].extrinsic | wp->w_mask;
 				}
@@ -290,6 +295,8 @@ register struct obj *obj;
 			for(p = 0; p < SIZE(EREBOR_RES); p++) u.uprops[EREBOR_RES[p]].extrinsic = u.uprops[EREBOR_RES[p]].extrinsic & ~wp->w_mask;
 		} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 			for(p = 0; p < SIZE(REV_PROPS); p++) u.uprops[REV_PROPS[p]].extrinsic = u.uprops[REV_PROPS[p]].extrinsic & ~wp->w_mask;
+		} else if(obj->oartifact == ART_HERMES_S_SANDALS){
+			for(p = 0; p < SIZE(HERMES_PROPS); p++) u.uprops[HERMES_PROPS[p]].extrinsic = u.uprops[HERMES_PROPS[p]].extrinsic & ~wp->w_mask;
 		} else if(obj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY){
 			for(p = 0; p < SIZE(FLY_PROPS); p++) u.uprops[FLY_PROPS[p]].extrinsic = u.uprops[FLY_PROPS[p]].extrinsic & ~wp->w_mask;
 		}
@@ -531,6 +538,8 @@ boolean on, silently;
 		for(which = 0; which < SIZE(EREBOR_RES); which++) update_mon_intrinsic(mon, obj, EREBOR_RES[which], on, silently);
 	} else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER){
 		for(which = 0; which < SIZE(REV_PROPS); which++) update_mon_intrinsic(mon, obj, REV_PROPS[which], on, silently);
+	} else if(obj->oartifact == ART_HERMES_S_SANDALS){
+		for(which = 0; which < SIZE(HERMES_PROPS); which++) update_mon_intrinsic(mon, obj, HERMES_PROPS[which], on, silently);
 	} else if(obj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY){
 		for(which = 0; which < SIZE(FLY_PROPS); which++) update_mon_intrinsic(mon, obj, FLY_PROPS[which], on, silently);
 	}

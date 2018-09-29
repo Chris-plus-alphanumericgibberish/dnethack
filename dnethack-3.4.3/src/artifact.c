@@ -1633,7 +1633,11 @@ int tmp;
 			if(Fumbling) multiplier++;
 			if(Wounded_legs) multiplier++;
 			return damd ? d(multiplier, damd) : max(multiplier*tmp,multiplier);
-		} else if(otmp && (otmp->oartifact == ART_LIMITED_MOON || otmp->oartifact == ART_STAFF_OF_TWELVE_MIRRORS)){
+		} else if(otmp && 
+			(otmp->oartifact == ART_LIMITED_MOON
+			|| otmp->oartifact == ART_STAFF_OF_TWELVE_MIRRORS
+			|| otmp->oartifact == ART_POSEIDON_S_TRIDENT
+		)){
 			return 2*(damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd) : max(tmp,1));
 		} else return damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd) : max(tmp,1);
 	}
@@ -4301,20 +4305,25 @@ arti_invoke(obj)
 	break;
 	case AEGIS:
 		{
-			if (!obj->owornmask) {
-				You_feel("that you should be wearing %s.", the(xname(obj)));
+			if (mvitals[PM_MEDUSA].died < 1
+			&& mvitals[PM_GRUE].died < 1
+			&& mvitals[PM_ECHO].died < 1
+			&& mvitals[PM_SYNAISTHESIA].died < 1
+			) {
+				pline("It would seem that the Aegis is incomplete.");
 				obj->age = 0;
 				break;
 			}
 			if (!getdir((char *)0)) { //Oh, getdir must set the .d_ variables below.
-			    /* getdir cancelled, just do the nondirectional scroll */
+			    /* getdir canceled */
 				obj->age = 0;
 				break;
-			}
-			else if(u.dx || u.dy) {
-				if (isok(u.ux+u.dx, u.uy+u.dy) && (mtmp = m_at(u.ux+u.dx, u.uy+u.dy)) != 0) {
+			} else if(u.dx || u.dy) {
+				if (isok(u.ux+u.dx, u.uy+u.dy) && (mtmp = m_at(u.ux+u.dx, u.uy+u.dy)) != 0 && mtmp->mcansee && mon_can_see_you(mtmp)) {
 					boolean youattack = mtmp == &youmonst;
-					You("display the shield's engraving to %s.", mon_nam(mtmp));
+					if(obj->otyp == ROUNDSHIELD) You("display the shield's device to %s.", mon_nam(mtmp));
+					else if(obj->otyp == LEATHER_CLOAK) You("display the cloak's clasp to %s.", mon_nam(mtmp));
+					else You("display it to %s.", mon_nam(mtmp)); //Shouldn't be used
 					
 					if (!resists_ston(mtmp) && (rn2(100)>(mtmp->data->mr/2))){
 						minstapetrify(mtmp, youattack);
@@ -4324,9 +4333,7 @@ arti_invoke(obj)
 						if (!obj->cursed) mtmp->mcrazed = 1;
 					}
 				}
-			}
-			
-			else if(u.dz > 0){
+			} else if(u.dz > 0){
 				struct engr *engrHere = engr_at(u.ux,u.uy);
 				if(!engrHere){
 					make_engr_at(u.ux, u.uy,	"", (moves - multi), DUST); 
@@ -4335,8 +4342,46 @@ arti_invoke(obj)
 				engrHere->ward_type = BURN;
 				engrHere->ward_id = GORGONEION;
 				engrHere->complete_wards = obj->blessed ? 3 : (obj->cursed ? 1 : 2);
+			} else{
+				obj->age = 0;
 			}
-			else{
+		}
+	break;
+	case WATER:
+		{
+			if ( !(uwep && uwep == obj) ) {
+				You_feel("that you should be wielding %s.", the(xname(obj)));
+				obj->age = 0;
+				break;
+			}
+			if (!getdir((char *)0)) { //Oh, getdir must set the .d_ variables below.
+			    /* getdir canceled */
+				obj->age = 0;
+				break;
+			} else if(u.dx || u.dy) {
+				int x = u.ux+u.dx, y = u.uy+u.dy;
+				if (isok(x, y) && ACCESSIBLE(levl[x][y].typ)) {
+					You("strike the %s with %s, and water springs forth!", surface(u.ux, u.uy), xname(obj));
+					levl[x][y].typ = POOL;
+					newsym(x, y);
+					if(m_at(x,y))
+						minliquid(m_at(x,y));
+				} else {
+					pline("Not enough room to strike the ground!");
+					obj->age = 0;
+				}
+			} else if(u.dz > 0){
+				int x = u.ux+u.dx, y = u.uy+u.dy;
+				if (isok(x, y) && ACCESSIBLE(levl[x][y].typ)) {
+					You("strike the %s with %s, and water springs forth!", surface(u.ux, u.uy), xname(obj));
+					levl[x][y].typ = POOL;
+					newsym(x, y);
+					spoteffects(FALSE);
+				} else {
+					pline("Not enough room to strike the ground!");
+					obj->age = 0;
+				}
+			} else {
 				obj->age = 0;
 			}
 		}

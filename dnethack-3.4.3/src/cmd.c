@@ -1492,7 +1492,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	putstr(en_win, 0, "");
 
 	if (u.uevent.uhand_of_elbereth) {
-	    static const char * const hofe_titles[33] = {
+	    static const char * const hofe_titles[36] = {
 				/* Default */
 				"the Arm of the Law",		 /*01*/
 				"the Envoy of Balance",		 /*02*/
@@ -1537,18 +1537,22 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				"the Great Slave-Vassal of Kurtulmak",	 /*31*/
 				"the Thane of Garl Glittergold",	 /*32*/
 				"the Claw of Urdlen",	 	 /*33*/
+				/* Gonome Ranger */
+				"the Hand of Athena",		 /*34*/
+				"the Messenger of Hermes",	 /*35*/
+				"the Glory of Poseidon",	 /*36*/
 				
 				/* uhand_of_elbereth max == 63 */
 	    };
 		
 	    if(Role_if(PM_EXILE)) you_are("the Emissary of Elements");
 	    else if(Pantheon_if(PM_PIRATE) || Role_if(PM_PIRATE)) you_are("the Pirate King");
-	    else if((Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)) && u.uevent.uhand_of_elbereth == 1) you_are("the King of the Angles");
 	    else if((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend) you_are("the Daughter of Skadi");
 	    else if(Race_if(PM_DWARF) && (urole.ldrnum == PM_THORIN_II_OAKENSHIELD || urole.ldrnum == PM_DAIN_II_IRONFOOT)){
 			if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD) you_are("King under the Mountain");
 			else if(urole.ldrnum == PM_DAIN_II_IRONFOOT) you_are("Lord of Moria");
-	    } else if((Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)) && u.uevent.uhand_of_elbereth == 1){
+	    } else if((Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)) && u.uevent.uhand_of_elbereth == 1) you_are("the King of the Angles");
+	    else if((Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)) && u.uevent.uhand_of_elbereth == 1){
 			strcpy(buf, "Nasu no ");
 			strcat(buf, plname);
 			you_are(buf);

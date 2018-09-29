@@ -28,6 +28,7 @@ STATIC_DCL int FDECL(use_mirror, (struct obj *));
 STATIC_DCL void FDECL(use_candelabrum, (struct obj *));
 STATIC_DCL void FDECL(use_candle, (struct obj **));
 STATIC_DCL void FDECL(use_lamp, (struct obj *));
+STATIC_DCL int FDECL(swap_aegis, (struct obj *));
 STATIC_DCL void FDECL(light_cocktail, (struct obj *));
 STATIC_DCL void FDECL(light_torch, (struct obj *));
 STATIC_DCL void FDECL(use_tinning_kit, (struct obj *));
@@ -1394,6 +1395,27 @@ struct obj *obj;
 	    return TRUE;
 	}
 	return FALSE;
+}
+
+STATIC_OVL int
+swap_aegis(obj)
+struct obj *obj;
+{
+	if(obj->owornmask){
+		You("must take %s off to modify it.", the(xname(obj)));
+		return 0;
+	} else if(obj->otyp == LEATHER_CLOAK){
+		You("wrap %s up, making a serviceable shield.", the(xname(obj)));
+		obj->otyp = ROUNDSHIELD;
+		return 1;
+	} else if(obj->otyp == ROUNDSHIELD){
+		You("unwrap %s, making a cloak.", the(xname(obj)));
+		obj->otyp = LEATHER_CLOAK;
+		return 1;
+	} else {
+		pline("Aegis in unexpected state?");
+		return 0;
+	}
 }
 
 STATIC_OVL void
@@ -5014,7 +5036,7 @@ doapply()
 	if (carrying(CREAM_PIE) || carrying(EUCALYPTUS_LEAF))
 		add_class(class_list, FOOD_CLASS);
 	if (carrying(DWARVISH_HELM) || carrying(GNOMISH_POINTY_HAT) 
-		|| carrying(DROVEN_CLOAK))
+		|| carrying(DROVEN_CLOAK) || carrying_art(ART_AEGIS))
 		add_class(class_list, ARMOR_CLASS);
 
 
@@ -5037,8 +5059,9 @@ doapply()
 	    return do_present_ring(obj);
 	else if(is_knife(obj) && !(obj->oartifact==ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_MARIONETTE)) return do_carve_obj(obj);
 	
-	if(obj->oartifact == ART_SILVER_STARLIGHT) do_play_instrument(obj);
-	if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) use_lamp(obj);
+	if(obj->oartifact == ART_SILVER_STARLIGHT) res = do_play_instrument(obj);
+	else if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) use_lamp(obj);
+	else if(obj->oartifact == ART_AEGIS) res = swap_aegis(obj);
 	else switch(obj->otyp){
 	case BLINDFOLD:
 	case LENSES:
