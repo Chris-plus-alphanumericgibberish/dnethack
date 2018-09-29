@@ -1330,7 +1330,7 @@ int energy;
 	 * understand quite well how to cast spells.
 	 */
 	intell = acurr(A_INT);
-	if (!Role_if(PM_WIZARD) && !(u.sealsActive&SEAL_PAIMON) ){
+	if (!Role_if(PM_WIZARD)){
 		if(u.sealsActive&SEAL_PAIMON) intell -= 6;
 		else intell -= 10;
 	}
