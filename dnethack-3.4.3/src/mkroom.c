@@ -4898,7 +4898,7 @@ mksgardenstatueat(x,y)
 		if(otmp){
 			if(t && t->ttyp != MAGIC_PORTAL)
 				deltrap(t);
-			if( (depth(&u.uz)- monstr[otmp->corpsenm]) < rn2(100)){
+			if( (depth(&u.uz) - monstr[otmp->corpsenm]) >= rn2(100)){
 				t = maketrap(x, y, MAGIC_TRAP);
 				if(t){
 					t->ttyp = STATUE_TRAP;
