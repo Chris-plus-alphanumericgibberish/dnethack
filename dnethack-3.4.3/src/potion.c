@@ -1109,10 +1109,10 @@ healup(nhp, nxtra, curesick, cureblind)
 	if (nhp) {
 		if (Upolyd) {
 			u.mh += nhp;
-			if (u.mh > u.mhmax) u.mh = (u.mhmax += nxtra);
+			if (u.mh > u.mhmax) u.mh = (u.mhmax = max(u.mhmax, min(u.mhmax + nxtra, 40+u.ulevel*(10+conplus(ACURR(A_CON))))));
 		} else {
 			u.uhp += nhp;
-			if(u.uhp > u.uhpmax) u.uhp = (u.uhpmax += nxtra);
+			if(u.uhp > u.uhpmax) u.uhp = (u.uhpmax = max(u.uhpmax, min(u.uhpmax + nxtra, 40+u.ulevel*(10+conplus(ACURR(A_CON))))));
 		}
 	}
 	if(cureblind)	make_blinded(0L,TRUE);
