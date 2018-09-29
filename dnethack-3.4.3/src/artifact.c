@@ -2265,7 +2265,7 @@ char *type;			/* blade, staff, etc */
        INCREASE overall likelihood of the assorted special effects 
 	   this is Magic BANE, after all, it is stronger the less 
 	   magical it is */
-    if (!spec_dbon_applies) dieroll -= 2;
+    if (mb->oartifact == ART_MAGICBANE && !spec_dbon_applies) dieroll -= 2;
 
     /* might stun even when attempting a more severe effect, but
        in that case it will only happen if the other effect fails;
@@ -2275,7 +2275,7 @@ char *type;			/* blade, staff, etc */
 
 	if(mb->oartifact == ART_MAGICBANE){
 		if (!spec_dbon_applies){
-			//Equal to a fireball, makes +2 MB good vs magic resistant creatures (avg damage same for +0,+1,+2), +7 MB least bad vs magic sensitives
+			//Equal to a fireball, makes +0 MB good vs magic resistant creatures (avg damage is almost equal for +0,+1,+2), +7 MB least bad vs magic sensitives
 			dnum = 6;
 			dsize = 6;
 		}
@@ -2308,7 +2308,7 @@ char *type;			/* blade, staff, etc */
 					u_slow_down();
 				}
 				if(u.ustdy >= 20){
-					*dmgptr += d(6,6);
+					*dmgptr += d(12,6);
 					u.ustdy -= 20;
 				}
 			}
@@ -2326,7 +2326,7 @@ char *type;			/* blade, staff, etc */
 					mdef->permspeed = MSLOW;
 				}
 				if(mdef->mstdy >= 20){
-					*dmgptr += d(6,6);
+					*dmgptr += d(12,6);
 					mdef->mstdy -= 20;
 				}
 			}
