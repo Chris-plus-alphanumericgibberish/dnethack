@@ -323,7 +323,7 @@ register int otyp;
 	if (Role_if(PM_SAMURAI) && iflags.role_obj_names && Alternate_item_name(otyp,Japanese_items))
 		actualn = Alternate_item_name(otyp,Japanese_items);
 	if (Role_if(PM_SAMURAI) && iflags.obscure_role_obj_names && Alternate_item_name(otyp,ObscureJapanese_items))
-		actualn = Alternate_item_name(otyp,Japanese_items);
+		actualn = Alternate_item_name(otyp,ObscureJapanese_items);
 	if (Role_if(PM_PIRATE) && iflags.role_obj_names && Alternate_item_name(otyp,Pirate_items))
 		actualn = Alternate_item_name(otyp,Pirate_items);
 	switch(ocl->oc_class) {
@@ -470,6 +470,8 @@ register struct obj *obj;
 	buf = nextobuf() + PREFIX;	/* leave room for "17 -3 " */
 	if (Role_if(PM_SAMURAI) && iflags.role_obj_names && Alternate_item_name(typ,Japanese_items))
 		actualn = Alternate_item_name(typ,Japanese_items);
+	if (Role_if(PM_SAMURAI) && iflags.obscure_role_obj_names && Alternate_item_name(typ,ObscureJapanese_items))
+		actualn = Alternate_item_name(typ,ObscureJapanese_items);
 	if (Role_if(PM_PIRATE) && iflags.role_obj_names && Alternate_item_name(typ,Pirate_items))
 		actualn = Alternate_item_name(typ,Pirate_items);
 
@@ -3299,7 +3301,7 @@ srch:
 		i++;
 	}
 	if (actualn) {
-		struct Jitem *j[] = {Japanese_items,Pirate_items};
+		struct Jitem *j[] = {Japanese_items,ObscureJapanese_items,Pirate_items};
 		for(i=0;i<sizeof(j)/sizeof(j[0]);i++)
 		{
 		while(j[i]->item) {
