@@ -343,6 +343,7 @@ moveloop()
 
     u.uz0.dlevel = u.uz.dlevel;
     youmonst.movement = NORMAL_SPEED;	/* give the hero some movement points */
+	flags.move = FALSE; /* From nethack 3.6.2 */
 
 	oldCon = ACURR(A_CON);
 	oldWisBon = ACURR(A_WIS)/4;
@@ -371,6 +372,18 @@ moveloop()
 		} else {
 			youmonst.movement -= NORMAL_SPEED;
 		}
+		
+		  /**************************************************/
+		 /*monsters that respond to the player turn go here*/
+		/**************************************************/
+		for (mtmp = fmon; mtmp; mtmp = nxtmon){
+			nxtmon = mtmp->nmon;
+			if ((mtmp->data == &mons[PM_MEDUSA] || mtmp->data == &mons[PM_GREAT_CTHULHU])
+				&& couldsee(mtmp->mx, mtmp->my)
+				&& ((rn2(3) >= magic_negation(mtmp)))
+			) m_respond(mtmp);
+		}
+		
 	    do { /* hero can't move this turn loop */
 		wtcap = encumber_msg();
 
@@ -1402,14 +1415,6 @@ karemade:
 	    /******************************************/
 		if(u.ustdy > 0) u.ustdy -= 1;
 		
-		for (mtmp = fmon; mtmp; mtmp = nxtmon){
-			nxtmon = mtmp->nmon;
-			if ((mtmp->data == &mons[PM_MEDUSA] || mtmp->data == &mons[PM_GREAT_CTHULHU])
-				&& couldsee(mtmp->mx, mtmp->my)
-				&& ((rn2(3) >= magic_negation(mtmp)))
-			) m_respond(mtmp);
-		}
-		
 		if(Echolocation){
 			for(i=1; i<COLNO; i++)
 				for(j=0; j<ROWNO; j++)
@@ -1460,7 +1465,7 @@ karemade:
 			uarmg->ovar1 = next;
 			//if(diff) adj_abon(uarmg, diff);
 		}
-
+		didmove = FALSE;
 	} /* actual time passed */
 
 	/****************************************/

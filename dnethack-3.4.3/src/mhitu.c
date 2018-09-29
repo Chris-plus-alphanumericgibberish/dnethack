@@ -4377,41 +4377,55 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			}
 		break;
 	    case AD_STON:
-		if (mtmp->mcan || is_blind(mtmp)) {
+		if(mtmp->data == &mons[PM_MEDUSA]){
+			if(mtmp->mcan){
+				if (!canseemon(mtmp)) break;	/* silently */
+				pline("%s doesn't look all that ugly.", Monnam(mtmp));
+				break;
+			}
+			else if (Reflecting && couldsee(mtmp->mx, mtmp->my)) {
+				/* hero has line of sight to Medusa and she's not blind */
+				boolean useeit = canseemon(mtmp);
+
+				if (useeit)
+				(void) ureflects("%s image is reflected by your %s.",
+						 s_suffix(Monnam(mtmp)));
+				if (mon_reflects(mtmp, !useeit ? (char *)0 :
+						 "The image is reflected away by %s %s!"))
+				break;
+				if (!m_canseeu(mtmp) || is_blind(mtmp)) { /* probably you're invisible */
+					if (useeit)
+						pline(
+					  "%s doesn't seem to notice that %s image was reflected.",
+						  Monnam(mtmp), mhis(mtmp));
+					break;
+				}
+				if (useeit)
+					pline("%s is turned to stone!", Monnam(mtmp));
+				stoned = TRUE;
+				killed(mtmp);
+
+				if (mtmp->mhp > 0) break;
+				return 2;
+			}
+			if (canseemon_eyes(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
+				!Stone_resistance
+			) {
+				You("see %s.", mon_nam(mtmp));
+				stop_occupation();
+				if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
+				You("turn to stone...");
+				killer_format = KILLED_BY;
+				killer = "Poseidon's curse";
+				done(STONING);
+			}
+		}
+		else if (mtmp->mcan || is_blind(mtmp)) {
 		    if (!canseemon(mtmp)) break;	/* silently */
-		    pline("%s %s.", Monnam(mtmp),
-			  (mtmp->data == &mons[PM_MEDUSA] && mtmp->mcan) ?
-				"doesn't look all that ugly" :
-				"gazes ineffectually");
+		    pline("%s gazes ineffectually.", Monnam(mtmp));
 		    break;
 		}
-		if (Reflecting && couldsee(mtmp->mx, mtmp->my) &&
-			mtmp->data == &mons[PM_MEDUSA]) {
-		    /* hero has line of sight to Medusa and she's not blind */
-		    boolean useeit = canseemon(mtmp);
-
-		    if (useeit)
-			(void) ureflects("%s gaze is reflected by your %s.",
-					 s_suffix(Monnam(mtmp)));
-		    if (mon_reflects(mtmp, !useeit ? (char *)0 :
-				     "The gaze is reflected away by %s %s!"))
-			break;
-		    if (!m_canseeu(mtmp)) { /* probably you're invisible */
-			if (useeit)
-			    pline(
-		      "%s doesn't seem to notice that %s gaze was reflected.",
-				  Monnam(mtmp), mhis(mtmp));
-			break;
-		    }
-		    if (useeit)
-			pline("%s is turned to stone!", Monnam(mtmp));
-		    stoned = TRUE;
-		    killed(mtmp);
-
-		    if (mtmp->mhp > 0) break;
-		    return 2;
-		}
-		if(mtmp->data == &mons[PM_PALE_NIGHT]){
+		else if(mtmp->data == &mons[PM_PALE_NIGHT]){
 			if(canseemon(mtmp)) pline("%s parts her shroud!", Monnam(mtmp));
 			if (mtmp->mcan || Stone_resistance) {
 				if (!canseemon(mtmp)) break;	/* silently */
@@ -4449,24 +4463,29 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			}
 			return 0;
 		}
-		if (mtmp->data == &mons[PM_BEHOLDER] && canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
-		    !Stone_resistance) {
-		    You("meet %s gaze.", s_suffix(mon_nam(mtmp)));
-		    stop_occupation();
-		    if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
-			Stoned = 5;
-			delayed_killer = "a beholder's eye of petrification.";
-			killer_format = KILLED_BY;
-		}
-		else if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
-		    !Stone_resistance) {
-		    You("meet %s gaze.", s_suffix(mon_nam(mtmp)));
-		    stop_occupation();
-		    if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
-		    You("turn to stone...");
-		    killer_format = KILLED_BY;
-		    killer = mtmp->data->mname;
-		    done(STONING);
+		else if (mtmp->data == &mons[PM_BEHOLDER]){
+			if(canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
+				!Stone_resistance
+			) {
+				You("meet %s gaze.", s_suffix(mon_nam(mtmp)));
+				stop_occupation();
+				if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
+				Stoned = 5;
+				delayed_killer = "a beholder's eye of petrification.";
+				killer_format = KILLED_BY;
+			}
+		} else {
+			if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
+				!Stone_resistance
+			) {
+				You("meet %s gaze.", s_suffix(mon_nam(mtmp)));
+				stop_occupation();
+				if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
+				You("turn to stone...");
+				killer_format = KILLED_BY;
+				killer = mtmp->data->mname;
+				done(STONING);
+			}
 		}
 		break;
 	    case AD_CONF:

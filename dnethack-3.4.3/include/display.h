@@ -129,6 +129,17 @@
 	    (cansee(mon->mx, mon->my) || see_with_infrared(mon) || see_with_bloodsense(mon) || see_with_lifesense(mon) || see_with_senseall(mon))) \
 	&& mon_visible(mon)) || see_with_earthsense(mon))
 
+/*
+ * canseemon_eyes()
+ *
+ * Variant of canseemon that checks for only non-magical (can be Blinded) vision.
+ * Principally for use with Medusa, who's curse cares about you knowing what she
+ * "looks like" in a superficial sense.
+ */
+#define canseemon_eyes(mon) ((mon->wormno ? worm_known(mon) : \
+	    (cansee(mon->mx, mon->my) || see_with_infrared(mon))) \
+	&& mon_visible(mon))
+
 
 /*
  * canspotmon(mon)

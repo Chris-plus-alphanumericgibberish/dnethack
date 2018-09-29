@@ -1100,7 +1100,7 @@ gazemm(magr, mdef, mattk)
 		}
 	}
 
-	if (magr->mcan || is_blind(magr) ||
+	if (magr->mcan || 
 	    (magr->minvis && !perceives(mdef->data)) ||
 	    is_blind(mdef) || mdef->msleeping) {
 	    // if(vis && !is_weeping(magr->data)) pline("but nothing happens.");
@@ -1110,18 +1110,18 @@ gazemm(magr, mdef, mattk)
 	if (magr->data == &mons[PM_MEDUSA] && mon_reflects(mdef, (char *)0)) {
 	    if (canseemon(mdef))
 		(void) mon_reflects(mdef,
-				    "The gaze is reflected away by %s %s.");
+				    "The image is reflected away by %s %s.");
 //	    if (!is_blind(mdef)) {
 		if(mdef->mfaction != FRACTURED || !rn2(8)){
 			if (mon_reflects(magr, (char *)0)) {
 				if (canseemon(magr))
 				(void) mon_reflects(magr,
-						"The gaze is reflected away by %s %s.");
+						"The image is reflected away by %s %s.");
 				return (MM_MISS);
 			}
-			if (mdef->minvis && !perceives(magr->data)) {
+			if (mdef->minvis && (!perceives(magr->data) || is_blind(magr))) {
 				if (canseemon(magr)) {
-				pline("%s doesn't seem to notice that %s gaze was reflected.",
+				pline("%s doesn't seem to notice that %s image was reflected.",
 					  Monnam(magr), mhis(magr));
 				}
 				return (MM_MISS);
@@ -1132,6 +1132,10 @@ gazemm(magr, mdef, mattk)
 			if (magr->mhp > 0) return (MM_MISS);
 			return (MM_AGR_DIED);
 	    }
+	}
+	if (magr->data != &mons[PM_MEDUSA] && is_blind(magr)) {
+	    // if(vis && !is_weeping(magr->data)) pline("but nothing happens.");
+	    return(MM_MISS);
 	}
 
 	return(mdamagem(magr, mdef, mattk));
