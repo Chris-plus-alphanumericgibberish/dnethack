@@ -242,26 +242,35 @@ register struct monst *mtmp;
 		Strcat(buf, ", while helpless");
 	}
 	killer = buf;
-	if (mtmp->data->mlet == S_WRAITH)
-		u.ugrave_arise = PM_WRAITH;
-	else if (mtmp->data == &mons[PM_SHADE])
-		u.ugrave_arise = PM_SHADE;
-	else if (mtmp->data == &mons[PM_BROKEN_SHADOW])
-		u.ugrave_arise = PM_BROKEN_SHADOW;
-	else if (mtmp->data->mlet == S_MUMMY && urace.mummynum != NON_PM)
-		u.ugrave_arise = urace.mummynum;
-	else if (mtmp->data->mlet == S_VAMPIRE && Race_if(PM_HUMAN))
-		u.ugrave_arise = PM_VAMPIRE;
-	else if (mtmp->data == &mons[PM_GHOUL] || mtmp->data == &mons[PM_GNOLL_GHOUL])
-		u.ugrave_arise = PM_GHOUL;
-	else if (mtmp->data == &mons[PM_DREADBLOSSOM_SWARM])
-		u.ugrave_arise = PM_DREADBLOSSOM_SWARM;
-	else if (mtmp->data == &mons[PM_DREAD_SERAPH] || mtmp->mfaction == SKELIFIED)
-		u.ugrave_arise = PM_SKELETON;
-	else if (mtmp->data->mlet == S_ZOMBIE || mtmp->mfaction == ZOMBIFIED)
-		u.ugrave_arise = PM_ZOMBIE;
-	else if (mtmp->data == &mons[PM_BAALPHEGOR] || mtmp->mfaction == CRYSTALFIED)
-		u.ugrave_arise = PM_BAALPHEGOR;
+	if(!uclockwork && !nonliving(youracedata)){
+		if (mtmp->data->mlet == S_WRAITH)
+			u.ugrave_arise = PM_WRAITH;
+		else if (mtmp->data == &mons[PM_SHADE])
+			u.ugrave_arise = PM_SHADE;
+		else if (mtmp->data == &mons[PM_BROKEN_SHADOW])
+			u.ugrave_arise = PM_BROKEN_SHADOW;
+		else if (mtmp->data->mlet == S_MUMMY && urace.mummynum != NON_PM)
+			u.ugrave_arise = urace.mummynum;
+		else if (mtmp->data->mlet == S_VAMPIRE && Race_if(PM_HUMAN))
+			u.ugrave_arise = PM_VAMPIRE;
+		else if (mtmp->data == &mons[PM_GHOUL] || mtmp->data == &mons[PM_GNOLL_GHOUL])
+			u.ugrave_arise = PM_GHOUL;
+		else if (mtmp->data == &mons[PM_DREADBLOSSOM_SWARM])
+			u.ugrave_arise = PM_DREADBLOSSOM_SWARM;
+		else if (mtmp->data == &mons[PM_DREAD_SERAPH] || mtmp->mfaction == SKELIFIED)
+			u.ugrave_arise = PM_SKELETON;
+		else if (mtmp->data->mlet == S_ZOMBIE || mtmp->mfaction == ZOMBIFIED)
+			u.ugrave_arise = PM_ZOMBIE;
+		else if (mtmp->data == &mons[PM_BAALPHEGOR] || mtmp->mfaction == CRYSTALFIED)
+			u.ugrave_arise = PM_BAALPHEGOR;
+	} else {
+		if (mtmp->data == &mons[PM_BROKEN_SHADOW])
+			u.ugrave_arise = PM_BROKEN_SHADOW;
+		else if (mtmp->data == &mons[PM_DREADBLOSSOM_SWARM] && !uclockwork && !is_naturally_unalive(youracedata))
+			u.ugrave_arise = PM_DREADBLOSSOM_SWARM;
+		else if (mtmp->data == &mons[PM_BAALPHEGOR] || mtmp->mfaction == CRYSTALFIED)
+			u.ugrave_arise = PM_BAALPHEGOR;
+	}
 	if (u.ugrave_arise >= LOW_PM &&
 				(mvitals[u.ugrave_arise].mvflags & G_GENOD && !In_quest(&u.uz)))
 		u.ugrave_arise = NON_PM;
