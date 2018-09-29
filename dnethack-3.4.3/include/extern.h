@@ -926,6 +926,7 @@ E struct obj *FDECL(veioistafur_at, (int,int));
 E struct obj *FDECL(thjofastafur_at, (int,int));
 E struct obj *FDECL(aligned_sartprop3_at, (int,int,int));
 E struct obj *FDECL(carrying, (int));
+E struct obj *FDECL(carrying_art, (int));
 E boolean NDECL(have_lizard);
 E struct obj *FDECL(o_on, (unsigned int,struct obj *));
 E boolean FDECL(obj_here, (struct obj *,int,int));

@@ -620,7 +620,7 @@ A("Mirrorbright",	ROUNDSHIELD,/*adapted from Slash'em*/
 	0,0,WSFX_PLUSSEV),
 
 A("Aegis",	ROUNDSHIELD, /*Perseus's shield, needs encyc entry*/
-	(SPFX_RESTR|SPFX_REFLECT),0,
+	(SPFX_RESTR|SPFX_REFLECT|SPFX_HPHDAM),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	AEGIS, A_LAWFUL, NON_PM, NON_PM, 4000L,
