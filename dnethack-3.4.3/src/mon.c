@@ -210,6 +210,22 @@ STATIC_VAR int cham_to_pm[] = {
 			 (dmgtype((mon)->data, AD_SEDU) ||		\
 			  dmgtype((mon)->data, AD_SSEX)))
 
+			  
+const int humanoid_eyes[] = {
+	PM_HOBBIT,
+	PM_DWARF,
+	PM_ORC,
+	PM_GNOME,
+	PM_APE,
+	PM_HUMAN,
+	PM_ELF,
+	PM_MYRKALFR,
+	PM_HALF_DRAGON,
+	PM_SHEEP,
+	PM_HOUSECAT,
+	PM_DOG,
+	PM_HORSE
+};
 /* Creates a monster corpse, a "special" corpse, or nothing if it doesn't
  * leave corpses.  Monsters which leave "special" corpses should have
  * G_NOCORPSE set in order to prevent wishing for one, finding tins of one,
@@ -710,12 +726,21 @@ register struct monst *mtmp;
 			flags.cth_attk=TRUE;//state machine stuff.
 			create_gas_cloud(x, y, 4, rnd(3)+1);
 			flags.cth_attk=FALSE;
+			obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+			obj->corpsenm = humanoid_eyes[rn2(SIZE(humanoid_eyes))];
+			obj->quan = 2;
+			obj->owt = weight(obj);
 		goto default_1;
 		break;
 	    case PM_WARRIOR_CHANGED:
 			flags.cth_attk=TRUE;//state machine stuff.
 			create_gas_cloud(x, y, 5, rnd(3)+1);
 			flags.cth_attk=FALSE;
+			num = rn1(10,10);
+			while (num--){
+				obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+				obj->corpsenm = humanoid_eyes[rn2(SIZE(humanoid_eyes))];
+			}
 		goto default_1;
 		break;
 	    default_1:
