@@ -2648,9 +2648,10 @@ inv_weight()
 	
 	if(u.usteed){
 		otmp = u.usteed->minvent;
-		while ((otmp = otmp->nobj) != 0){
+		while (otmp){
 			if(otmp->oartifact) otmp->owt = weight(otmp);
 			wt += otmp->owt;
+			otmp = otmp->nobj;
 		}
 	}
 	
