@@ -1396,9 +1396,7 @@ domove()
 				You("phase through the bear trap.");
 				u.utrap = 0;
 		    } else if(uwep && 
-				(uwep->oartifact == ART_STING || uwep->oartifact == ART_LIECLEAVER || 
-					(is_lightsaber(uwep) && litsaber(uwep))
-				)
+				(is_lightsaber(uwep) && litsaber(uwep))
 			){
 				trap = t_at(u.ux,u.uy);
 				u.utrap = 0;
