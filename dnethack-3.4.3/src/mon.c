@@ -3397,7 +3397,11 @@ register struct monst *mtmp;
 	else if(mtmp->data == &mons[PM_DEMOGORGON]){
 		achieve.killed_demogorgon = 1;
 	}
-	else if (mtmp->data == &mons[PM_MEDUSA] || mtmp->data == &mons[PM_GRUE]) {
+	else if (mtmp->data == &mons[PM_MEDUSA]
+	|| mtmp->data == &mons[PM_GRUE]
+	|| mtmp->data == &mons[PM_ECHO]
+	|| mtmp->data == &mons[PM_SYNAISTHESIA]
+	) {
 		achieve.killed_challenge = 1;
 	}
 #endif
