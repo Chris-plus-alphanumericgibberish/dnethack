@@ -498,7 +498,7 @@ ustatusline()
 	    Strcat(info, mon_nam(u.ustuck));
 	}
 
-	pline("Status of %s (%s%s):  Level %d  HP %d(%d)  AC %d%s.",
+	pline("Status of %s (%s%s):  Level %d  HP %d(%d)  AC %d  DR %d%s.",
 		plname,
 		    (u.ualign.record >= 20) ? "piously " :
 		    (u.ualign.record > 13) ? "devoutly " :
@@ -513,6 +513,7 @@ ustatusline()
 		Upolyd ? u.mh : u.uhp,
 		Upolyd ? u.mhmax : u.uhpmax,
 		u.uac,
+		u.udr,
 		info);
 }
 

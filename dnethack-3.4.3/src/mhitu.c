@@ -611,10 +611,6 @@ mattacku(mtmp)
 		tmp += u.chokhmah;
 		tchtmp += u.chokhmah;
 	}
-	if(multi < 0){
-		tmp += 4;
-		tchtmp += 4;
-	}
 	if((Invis && !perceives(mdat)) || is_blind(mtmp)){
 		tmp -= 2;
 		tchtmp -= 2;
@@ -1789,14 +1785,14 @@ hitmu(mtmp, mattk)
 				artifact_hit(mtmp, &youmonst, uwep, &dmg,dieroll)))
 			     hitmsg(mtmp, mattk);
 			if (!dmg) break;
-			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac+u.uspellprot)-u.uspellprot) &&
+			if (u.mh > 1 && u.mh > (dmg-roll_udr()) &&
 				   uwep->obj_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
 			     * take the damage _before_ being cloned.
 			     */
-			    if (u.uac < 0) dmg += AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
+			    dmg -= roll_udr();
 			    if (dmg < 1) dmg = 1;
 			    if (dmg > 1) exercise(A_STR, FALSE);
 			    u.mh -= dmg;
@@ -1928,14 +1924,14 @@ hitmu(mtmp, mattk)
 				artifact_hit(mtmp, &youmonst, otmp, &dmg,dieroll)))
 			     hitmsg(mtmp, mattk);
 			if (!dmg) break;
-			if (u.mh > 1 && u.mh > ((u.uac>=0) ? dmg : dmg+AC_VALUE(u.uac+u.uspellprot)-u.uspellprot) &&
+			if (u.mh > 1 && u.mh > (dmg-roll_udr()) &&
 				   otmp->obj_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
 			     * take the damage _before_ being cloned.
 			     */
-			    if (u.uac < 0) dmg += AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
+			    dmg -= roll_udr();
 			    if (dmg < 1) dmg = 1;
 			    if (dmg > 1) exercise(A_STR, FALSE);
 			    u.mh -= dmg;
@@ -3571,7 +3567,7 @@ dopois:
 
 	if(mtmp->data == &mons[PM_LONG_WORM] && mtmp->wormno && mattk->aatyp == AT_BITE){
 		if(wormline(mtmp, u.ux, u.uy))
-			dmg *= 2;
+			dmg += d(2,4); //Add segment damage
 	}
 	
 	if(dmg && u.ustdy){
@@ -3588,14 +3584,12 @@ dopois:
  *	against hits.  The bladed shadows of the black web pierce your armor.
  */
 	if (dmg){
-		if(u.uac < 0) {
-			if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
-				dmg += AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
-				if (dmg < 1) dmg = 1;
-			} else if(base_uac() < 0){
-				dmg += AC_VALUE(base_uac()+u.uspellprot)-u.uspellprot;
-				if (dmg < 1) dmg = 1;
-			}
+		if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
+			dmg -= roll_udr();
+			if (dmg < 1) dmg = 1;
+		} else {
+			dmg -= base_udr();
+			if (dmg < 1) dmg = 1;
 		}
 	}
 	

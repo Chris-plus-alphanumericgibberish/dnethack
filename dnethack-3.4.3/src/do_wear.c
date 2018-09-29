@@ -1900,6 +1900,127 @@ doputon()
 
 #endif /* OVLB */
 
+int arm_total_bonus(otmp)
+struct obj * otmp;
+{
+	return arm_ac_bonus(otmp) + arm_dr_bonus(otmp);
+}
+
+int arm_ac_bonus(otmp)
+struct obj * otmp;
+{
+	int def = objects[otmp->otyp].a_ac;
+	
+	// reduce by erosion
+	def -= min((int)greatest_erosion(otmp), objects[otmp->otyp].a_ac);
+
+	// combat boots
+	static int cbootsd = 0;
+	if (!cbootsd) cbootsd = find_cboots();
+	if (otmp->otyp == cbootsd) def += 1;
+
+	// add enchantment
+	// crystal armor bonus enchantment
+	if (otmp->otyp == CRYSTAL_PLATE_MAIL)	def += otmp->spe;
+	else if (otmp->otyp == CRYSTAL_HELM)			def += otmp->spe;
+	else if (otmp->otyp == CRYSTAL_BOOTS)		def += otmp->spe;
+	else if (otmp->otyp == CRYSTAL_SHIELD)		def += 1.5*otmp->spe;
+	else if (otmp->otyp == CRYSTAL_GAUNTLETS)	def += otmp->spe;
+	else if (is_shield(otmp)) def += otmp->spe;
+	else def += (otmp->spe)/2;
+
+	// artifact bonus def
+	switch (otmp->oartifact)
+	{
+	case ART_STEEL_SCALES_OF_KURTULMAK:
+		def += objects[otmp->otyp].a_ac;
+		def += (otmp->spe+1)/2;
+		break;
+	case ART_MANTLE_OF_HEAVEN:
+	case ART_VESTMENT_OF_HELL:
+	case ART_WEB_OF_THE_CHOSEN:
+	case ART_CLOAK_OF_THE_CONSORT:
+		def *= 1.5;
+		break;
+	case ART_ARMOR_OF_EREBOR:
+		def += 5;
+		break;
+	case ART_ARMOR_OF_KHAZAD_DUM:
+		def += 4;
+		break;
+	case ART_CLAWS_OF_THE_REVENANCER:
+		def += 5;
+		break;
+	case ART_AEGIS:
+		def += 3;//3 total, Same as Cloak of protection
+		break;
+	}
+
+	return def;
+}
+
+int arm_dr_bonus(otmp)
+struct obj * otmp;
+{
+	int def = objects[otmp->otyp].a_dr;
+	
+	if(is_shield(otmp))
+		return 0;
+
+	// reduce by erosion
+	def -= min((int)greatest_erosion(otmp), objects[otmp->otyp].a_dr);
+
+	// padded gloves
+	static int pgloves = 0;
+	if (!pgloves) pgloves = find_pgloves();
+	if (otmp->otyp == pgloves) def += 1;
+	// gold circlet
+	static int girc = 0;
+	if (!girc) girc = find_gcirclet();
+	if (otmp->otyp == girc) def -= 1;
+	// visored helm
+	static int vhelm = 0;
+	if (!vhelm) vhelm = find_vhelm();
+	if (otmp->otyp == vhelm) def -= 1;
+
+	// add enchantment
+	// crystal armor bonus enchantment
+	if (otmp->otyp == CRYSTAL_PLATE_MAIL)	def += otmp->spe;
+	else if (otmp->otyp == CRYSTAL_HELM)			def += otmp->spe;
+	else if (otmp->otyp == CRYSTAL_BOOTS)		def += otmp->spe;
+	else if (otmp->otyp == CRYSTAL_GAUNTLETS)	def += otmp->spe;
+	else def += (otmp->spe+1)/2;
+
+	// artifact bonus def
+	switch (otmp->oartifact)
+	{
+	case ART_STEEL_SCALES_OF_KURTULMAK:
+		def += objects[otmp->otyp].a_dr;
+		def += (otmp->spe)/2;
+		break;
+	case ART_MANTLE_OF_HEAVEN:
+	case ART_VESTMENT_OF_HELL:
+	case ART_WEB_OF_THE_CHOSEN:
+	case ART_CLOAK_OF_THE_CONSORT:
+		def *= 1.5;
+		break;
+	case ART_ARMOR_OF_EREBOR:
+		def += 5;
+		break;
+	case ART_ARMOR_OF_KHAZAD_DUM:
+		def += 4;
+		break;
+	case ART_AEGIS:
+		def += 1;//3 total, Same as Cloak of protection
+		break;
+	// case ART_CLAWS_OF_THE_REVENANCER:
+		// def += 5;
+		// break;
+	}
+
+	return def;
+}
+
 #ifdef OVL0
 
 int base_uac()
@@ -1916,7 +2037,7 @@ int base_uac()
 					P_SKILL(weapon_type(uwep))-1
 					)
 				,0);
-		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max(uwep->spe,0);
+		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max((uwep->spe+1)/2,0);
 		if(uwep->oartifact == ART_TENSA_ZANGETSU){
 			uac -= max( (uwep->spe+1)/2,0);
 			if(!uarmc || !uarm) uac -= max( uwep->spe,0);
@@ -1970,42 +2091,46 @@ int base_uac()
 	}
 	if(uleft && uleft->otyp == RIN_PROTECTION) uac -= uleft->spe;
 	if(uright && uright->otyp == RIN_PROTECTION) uac -= uright->spe;
-	if (HProtection & INTRINSIC) uac -= u.ublessed;
+	if (HProtection & INTRINSIC) uac -= (u.ublessed+1)/2;
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
 	if(u.edenshield > moves) uac -= 7;
 	if(u.specialSealsActive&SEAL_BLACK_WEB && u.utrap && u.utraptype == TT_WEB)
 		 uac -= 8;
-	if(Race_if(PM_ORC)){
-		uac -= (u.ulevel+1)/3;
-	}
 	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
-	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
-	if(Role_if(PM_MONK) && !uarm){
-		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
-		dexbonus += max((int)( (ACURR(A_WIS)-1)/2 - 5 ),0) + (int)(u.ulevel/6 + 1);
-		if(Confusion && u.udrunken>u.ulevel) dexbonus += u.udrunken/9+1;
-	}
-	/*Corsets suck*/
-	if(uarmu && uarmu->otyp == VICTORIAN_UNDERWEAR){
-		uac += 2; //flat penalty. Something in the code "corrects" ac values >10, this is a kludge.
-		dexbonus = min(dexbonus-2,0);
-	}
-	
-	if(uarm && uarm->otyp == CONSORT_S_SUIT){
-		dexbonus = min(dexbonus,0);
-	}
-	
-	if(dexbonus > 0 && uarm){
-		if(is_medium_armor(uarm))
-				dexbonus = max(
-						(int)(dexbonus/2), 
-						(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
-							(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
-						)
-					);
-		else if(!is_light_armor(uarm))
-				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
+	if(multi < 0){
+		dexbonus = -5;
+	} else {
+		dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
+		if(Race_if(PM_ORC)){
+			dexbonus += (u.ulevel+1)/3;
+		}
+		if(Role_if(PM_MONK) && !uarm){
+			if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
+			dexbonus += max((int)( (ACURR(A_WIS)-1)/2 - 5 ),0) + (int)(u.ulevel/6 + 1);
+			if(Confusion && u.udrunken>u.ulevel) dexbonus += u.udrunken/9+1;
+		}
+		/*Corsets suck*/
+		if(uarmu && uarmu->otyp == VICTORIAN_UNDERWEAR){
+			uac += 2; //flat penalty. Something in the code "corrects" ac values >10, this is a kludge.
+			dexbonus = min(dexbonus-2,0);
+		}
+		
+		if(uarm && uarm->otyp == CONSORT_S_SUIT){
+			dexbonus = min(dexbonus,0);
+		}
+		
+		if(dexbonus > 0 && uarm){
+			if(is_medium_armor(uarm))
+					dexbonus = max(
+							(int)(dexbonus/2), 
+							(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
+								(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
+							)
+						);
+			else if(!is_light_armor(uarm))
+					dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
+		}
 	}
 	uac -= dexbonus;
 	if(u.uspellprot > 0 && uac > 0) uac = 0;
@@ -2017,176 +2142,161 @@ int base_uac()
 void
 find_ac()
 {
-	int dexbonus = 0;
-	int uac = mons[u.umonnum].ac;
-
-	if(uarm){
-		if(uarm->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) uac -= ARM_BONUS(uarm)*2;
-		else uac -= ARM_BONUS(uarm);
-		
-		if(uarm->otyp == CRYSTAL_PLATE_MAIL) uac -= uarm->spe;
-	}
-	if(uarmc){
-		if(uarmc->oartifact == ART_MANTLE_OF_HEAVEN || 
-			uarmc->oartifact == ART_VESTMENT_OF_HELL ||
-			uarmc->oartifact == ART_WEB_OF_THE_CHOSEN ||
-			uarmc->oartifact == ART_CLOAK_OF_THE_CONSORT
-		) uac -= 2*ARM_BONUS(uarmc);
-		else uac -= ARM_BONUS(uarmc);
-	}
-	if(uarmh){ 
-		uac -= ARM_BONUS(uarmh);
-		if(uarmh->otyp == CRYSTAL_HELM) uac -= .5*uarmh->spe;
-	}
-	if(uarmf){
-		uac -= ARM_BONUS(uarmf);
-		if(uarmf->otyp == CRYSTAL_BOOTS) uac -= .5*uarmf->spe;
-	}
-	if(uarms){
-		if(uarms->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) uac -= ARM_BONUS(uarms)*2;
-		else uac -= ARM_BONUS(uarms);
-		uac -= (uarms->objsize - youracedata->msize);
-		if(uarms->otyp == CRYSTAL_SHIELD) uac -= .5*uarms->spe;
-	}
-	if(uarmg){
-		uac -= ARM_BONUS(uarmg);
-		if(uarmg->otyp == CRYSTAL_GAUNTLETS) uac -= .5*uarmg->spe;
-	}
-	if(uarmu) uac -= ARM_BONUS(uarmu);
+	int uac;
 	
-    static int cbootsd = 0;
-    if (!cbootsd) cbootsd = find_cboots();
-    if (uarmf && uarmf->otyp == cbootsd) uac -= 1; /*max( (int)(uarmf->spe/2+1),(int)(uarmf->spe/-2+1));*/ /* adds half again the enchantment, and mitigates penalties from negative enchantment */
-																										  /* and mitigates penalties from negative enchantment */
-    static int pgloves = 0;
-    if (!pgloves) pgloves = find_pgloves();
-    if (uarmf && uarmf->otyp == pgloves) uac -= 1;
+	uac = base_uac();
+	if (uarm)	uac -= arm_ac_bonus(uarm);
+	if (uarmc)	uac -= arm_ac_bonus(uarmc);
+	if (uarmh)	uac -= arm_ac_bonus(uarmh);
+	if (uarmf)	uac -= arm_ac_bonus(uarmf);
+	if(uarms){
+		uac -= arm_ac_bonus(uarms);
+		uac -= (uarms->objsize - youracedata->msize);
+	}
+	if (uarmg)	uac -= arm_ac_bonus(uarmg);
+	if (uarmu)	uac -= arm_ac_bonus(uarmu);
 	
 	if(uwep){
-		if(uwep->otyp == RAPIER || 
-			(uwep->otyp == LIGHTSABER && litsaber(uwep) && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0) //ovar1 being 0 means dueling hilt
+		if((uwep->otyp == RAPIER && !arti_shining(uwep))
 				) uac -= max(
 					min(
 					(ACURR(A_DEX)-13)/4,
 					P_SKILL(weapon_type(uwep))-1
 					)
 				,0);
-		if(uwep->oartifact == ART_TOBIUME || uwep->oartifact == ART_MASAMUNE ||
-			uwep->oartifact == ART_LANCE_OF_LONGINUS) uac -= max(uwep->spe,0);
-		if(uwep->oartifact == ART_TENSA_ZANGETSU){
-			uac -= max( (uwep->spe+1)/2,0);
-			if(!uarmc || !uarm) uac -= max( uwep->spe,0);
-			if(!uarmc && !uarm) uac -= max( (uwep->spe+1)/2,0);
-		}
-		if(is_lightsaber(uwep) && litsaber(uwep)){
-			if(u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
-				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
-					case P_BASIC:
-						uac -=   (ACURR(A_DEX)+ACURR(A_INT))/5;
-					break;
-					case P_SKILLED:
-						uac -= 2*(ACURR(A_DEX)+ACURR(A_INT))/5;
-					break;
-					case P_EXPERT:
-						uac -= 3*(ACURR(A_DEX)+ACURR(A_INT))/5;
-					break;
-				}
-			} else if(u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
-				switch(min(P_SKILL(FFORM_ATARU), P_SKILL(weapon_type(uwep)))){
-					case P_BASIC:
-						uac += 20;
-					break;
-					case P_SKILLED:
-						uac += 10;
-					break;
-					case P_EXPERT:
-						uac += 5;
-					break;
-				}
-			} else if(u.fightingForm == FFORM_MAKASHI && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
-				int sx, sy, mcount = 0;
-				for(sx = u.ux-1; sx<=u.ux+1; sx++){
-					for(sy = u.uy-1; sy<=u.uy+1; sy++){
-						if(isok(sx,sy) && m_at(sx,sy)) mcount++;
-					}
-				}
-				switch(min(P_SKILL(FFORM_MAKASHI), P_SKILL(weapon_type(uwep)))){
-					case P_BASIC:
-						if(mcount) uac += (mcount-1) * 10;
-					break;
-					case P_SKILLED:
-						if(mcount) uac += (mcount-1) * 5;
-					break;
-					case P_EXPERT:
-						if(mcount) uac += (mcount-1) * 2;
-					break;
-				}
-			}
-		}
+		if(uwep->oartifact == ART_TOBIUME || uwep->oartifact == ART_MASAMUNE)
+			uac -= max(uwep->spe,0);
 	}
-	if(uleft && uleft->otyp == RIN_PROTECTION) uac -= uleft->spe;
-	if(uright && uright->otyp == RIN_PROTECTION) uac -= uright->spe;
-	if (HProtection & INTRINSIC) uac -= u.ublessed;
-	uac -= u.uacinc;
-	uac -= u.spiritAC;
-	if(u.edenshield > moves) uac -= 7;
-	if(u.specialSealsActive&SEAL_BLACK_WEB && u.utrap && u.utraptype == TT_WEB)
-		 uac -= 8;
-	if(Race_if(PM_ORC)){
-		uac -= (u.ulevel+1)/3;
-		uac -= (u.ulevel+2)/3;
-	} else if(Race_if(PM_HALF_DRAGON)) uac -= (u.ulevel)/3;
-	if(u.specialSealsActive&SEAL_COSMOS) uac -= spiritDsize();
+	if(Race_if(PM_HALF_DRAGON)) uac -= (u.ulevel+3)/6;
+	if(u.specialSealsActive&SEAL_COSMOS) uac -= (spiritDsize()/2);
 	if(u.sealsActive&SEAL_ECHIDNA) uac -= max((ACURR(A_CON)-10)/2, 0);
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
-	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
-	if(uclockwork) uac -= (u.clockworkUpgrades&ARMOR_PLATING) ? 10 : 3; /*armor bonus for automata*/
-	dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
-	if(Role_if(PM_MONK) && !uarm){
-		if(dexbonus < 0) dexbonus = (int)(dexbonus / 2);
-		dexbonus += max((int)( (ACURR(A_WIS)-1)/2 - 5 ),0) + (int)(u.ulevel/6 + 1);
-		if(Confusion && u.udrunken>u.ulevel) dexbonus += u.udrunken/9+1;
-	}
-	/*Corsets suck*/
-	if(uarmu && uarmu->otyp == VICTORIAN_UNDERWEAR){
-		uac += 2; //flat penalty. Something in the code "corrects" ac values >10, this is a kludge.
-		dexbonus = min(dexbonus-2,0);
-	}
-	
-	if(uarm){
-		if(uarm->oartifact == ART_ARMOR_OF_EREBOR) uac -= 10;
-		else if(uarm->oartifact == ART_ARMOR_OF_KHAZAD_DUM) uac -= 4;
-	}
-	if(uarmg && uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER){
-		uac -= 5;
-	}
-	
-	if(dexbonus > 0 && uarm){
-		if(is_medium_armor(uarm))
-				dexbonus = max(
-						(int)(dexbonus/2), 
-						(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
-							(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
-						)
-					);
-		else if(!is_light_armor(uarm))
-				dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
-	}
-	uac -= dexbonus;
-	
-	if(u.uspellprot > 0 && uac > 0) uac = 0;
-	uac -= u.uspellprot;
-	
+	if(uclockwork) uac -= (u.clockworkUpgrades&ARMOR_PLATING) ? 5 : 2; /*armor bonus for automata*/
 	if (uac < -128) uac = -128;	/* u.uac is an schar */
 	if(uac != u.uac){
 		u.uac = uac;
+		flags.botl = 1;
+	}
+	find_dr(); /*Also recalculate the DR*/
+}
+
+int base_udr()
+{
+	int udr = 0;
+
+	if(uwep){
+		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) udr += max((uwep->spe)/2,0);
+	}
+	if (HProtection & INTRINSIC) udr += (u.ublessed)/2;
+	if(u.edenshield > moves) udr += 7;
+	if(Race_if(PM_ORC)){
+		udr += u.ulevel/10;
+	}
+	
+	if(Race_if(PM_HALF_DRAGON)) udr += u.ulevel/6;
+	if(u.specialSealsActive&SEAL_COSMOS) udr += (spiritDsize()+1)/2;
+	if(u.sealsActive&SEAL_ECHIDNA) udr += max((ACURR(A_CON)-9)/4, 0);
+	if(uclockwork) udr += (u.clockworkUpgrades&ARMOR_PLATING) ? 5 : 1; /*armor bonus for automata*/
+	
+	if (udr > 127) udr = 127;	/* u.uac is an schar */
+	return udr;
+}
+
+void
+find_dr()
+{
+	int udr, armdr=0;
+	
+	udr = base_udr();
+	//Note: Actual use is that only one armorslot applies at a time.  Average them for display purposes only
+	if (uarmc)	udr += arm_dr_bonus(uarmc);
+	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		udr += max( 1 + (uwep->spe+1)/2,0);
+	}
+	
+	if (uarm)	armdr += arm_dr_bonus(uarm)*2;//Note: extends to two slots
+	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		udr += max( 1 + uwep->spe,0);
+	}
+	if (uarmh)	armdr += arm_dr_bonus(uarmh);
+	if (uarmf)	armdr += arm_dr_bonus(uarmf);
+	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		udr += max( 1 + (uwep->spe+1)/2,0);
+	}
+	if (uarmg)	armdr += arm_dr_bonus(uarmg);
+	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		udr += max( 1 + (uwep->spe+1)/2,0);
+	}
+	if (uarmu)	armdr += arm_dr_bonus(uarmu);
+	
+	armdr /= 5;
+	
+	udr += armdr;
+	
+	if (udr > 127) udr = 127;	/* u.uac is an schar */
+	if(udr != u.udr){
+		u.udr = udr;
 		flags.botl = 1;
 	}
 }
 
 #endif /* OVL0 */
 #ifdef OVLB
+
+int
+roll_udr()
+{
+	int udr;
+	
+	udr = base_udr();
+	
+	if (uarmc)	udr += arm_dr_bonus(uarmc);
+	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		udr += max( 1 + (uwep->spe+1)/2,0);
+	}
+	
+	
+	//Note: Bias this somehow?
+	switch(rn2(5)){
+		case 0:
+			//Note: upper body (shirt plus torso armor)
+			if (uarmu)	udr += arm_dr_bonus(uarmu);
+		case 1:
+			//Note: lower body (torso armor only)
+			if (uarm)	udr += arm_dr_bonus(uarm);
+			else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				udr += max( 1 + (uwep->spe+1)/2,0);
+			}
+		break;
+		case 2:
+			if (uarmh)	udr += arm_dr_bonus(uarmh);
+		break;
+		case 3:
+			if (uarmf)	udr += arm_dr_bonus(uarmf);
+			else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				udr += max( 1 + (uwep->spe+1)/2,0);
+			}
+		break;
+		case 4:
+			if (uarmg)	udr += arm_dr_bonus(uarmg);
+			else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				udr += max( 1 + (uwep->spe+1)/2,0);
+			}
+		break;
+	}
+	
+	
+	if (udr > 127) udr = 127;	/* u.uac is an schar */
+	
+	//diminishing returns after 10 points of DR.
+	if(udr > 11){
+		if(u.sealsActive&SEAL_BALAM)
+			udr = 10 + max_ints(rnd(udr-10), rnd(udr-10));
+		else udr = 10 + rnd(udr-10);
+	}
+	return udr;
+}
 
 void
 glibr()

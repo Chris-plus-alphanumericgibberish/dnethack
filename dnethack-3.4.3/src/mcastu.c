@@ -1303,11 +1303,8 @@ cold_spell:
 		dmg /= 2;
 		drain_en(dmg);
 		if(hates_silver(youracedata)) dmg += d(dmn,20);
+		dmg -= roll_udr();
 		if(Half_physical_damage) dmg /= 2;
-		if(u.uac < 0){
-			if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
-			else dmg -= rnd(-u.uac);
-		}
 		if(dmg < 1) dmg = 1;
 		stop_occupation();
 		break;
@@ -1619,9 +1616,8 @@ int spellnum;
 	pline("Chunks of ice pummel you from all sides!");
 	dmg = d(4, 8);
 	
-	if(u.uac < 0){
-		if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
-		else dmg -= rnd(-u.uac);
+	if(u.udr > 0){
+		dmg -= u.udr;//Use average: this is attacking with many chunks of ice all at once
 	}
 	
 	if (dmg < 1) dmg = 1;
@@ -1646,9 +1642,8 @@ int spellnum;
 		hfdmg = dmg;
 		dmg = hfdmg;
 		
-		if(u.uac < 0){
-			if(u.sealsActive&SEAL_BALAM) dmg -= min_ints(rnd(-u.uac),rnd(-u.uac));
-			else dmg -= rnd(-u.uac);
+		if(u.udr > 0){
+			dmg -= u.udr;//Use average: this is attacking with many chunks of ice all at once
 		}
 		
 		if (dmg < 1) dmg = 1;
@@ -1751,16 +1746,14 @@ int spellnum;
 		} else {
 			You("are pierced by %s of silver light!", rays);
 			dmg = 0;
-			if(u.uac < 0){
-				dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
-				if(dmg < 1)
-					dmg = 1;
-				if(n == 2){
-					dmg += rnd(20) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
-					if(dmg < 2)
-						dmg = 2;
-				}
-			} else dmg = d(n, 20);
+			dmg += rnd(20) - roll_udr();
+			if(dmg < 1)
+				dmg = 1;
+			if(n == 2){
+				dmg += rnd(20) - roll_udr();
+				if(dmg < 2)
+					dmg = 2;
+			}
 		}
 	}break;
 	case GOLDEN_WAVE:
@@ -1806,11 +1799,9 @@ int spellnum;
 		} else {
 			You("are slashed by golden light!");
 			dmg = 0;
-			if(u.uac < 0){
-				dmg += d(2,12) + AC_VALUE(u.uac+u.uspellprot)-u.uspellprot;
-				if(dmg < 1)
-					dmg = 1;
-			} else dmg = d(2, 12);
+			dmg += d(2,12) - roll_udr();
+			if(dmg < 1)
+				dmg = 1;
 		}
 	break;
 	case PRISMATIC_SPRAY:{
@@ -2192,10 +2183,8 @@ summon_alien:
 				shienCount++;
 				tdmg = 0;
 			} else tdmg = dmgval(otmp, &youmonst, 0);
-			if (tdmg && u.uac < 0) {
-				if(u.sealsActive&SEAL_BALAM) tdmg -= max_ints(rnd(-u.uac),rnd(-u.uac));
-				else tdmg -= rnd(-u.uac);
-				
+			if (tdmg){
+				tdmg -= roll_udr();
 				if (tdmg < 1) tdmg = 1;
 				
 			}

@@ -1205,8 +1205,6 @@ struct obj	*sobj;
 			otmp->otyp == CRYSTAL_SHIELD ||
 			otmp->otyp == CRYSTAL_GAUNTLETS ||
 			otmp->otyp == CRYSTAL_BOOTS ||
-			otmp->otyp == PLATE_MAIL || /*plate mails have finer manufacturing and can be more highly enchanted*/
-			otmp->otyp == BRONZE_PLATE_MAIL ||
 			otmp->otyp == CLOAK_OF_PROTECTION;//Cloaks of protection are specialized defensive items.
 		if (sobj->cursed)
 		    same_color =

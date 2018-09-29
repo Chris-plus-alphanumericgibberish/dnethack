@@ -590,37 +590,14 @@ struct monst *mon;
 		if(mon->mvar2 & 0x4L) base = -125; //Fully Quantum Locked
 		if(mon->mvar2 & 0x2L) base = -20; //Partial Quantum Lock
 	}
-	else if(mon != &youmonst &&
-		(mon->data == &mons[PM_MARILITH] 
-		|| mon->data == &mons[PM_SHAKTARI]
-		|| mon->data == &mons[PM_CATHEZAR]
-	)){
-		int wcount = 0;
-		struct obj *otmp;
-		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
-			if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
-				|| (otmp->otyp == IRON_CHAIN && mon->data == &mons[PM_CATHEZAR])
-				) && !otmp->oartifact
-				&& otmp != MON_WEP(mon) && otmp != MON_SWEP(mon)
-				&& !otmp->owornmask
-				&& ++wcount >= 4
-			) break;
-		}
-		if(MON_WEP(mon))
-			wcount++;
-		if(MON_SWEP(mon))
-			wcount++;
-		if(rn2(6) < wcount){
-			base -= rnd(20);
-		}
-	}
-	
 	if(mon->mfaction == ZOMBIFIED) base += 2;
 	if(mon->mfaction == SKELIFIED) base -= 2;
 	if(mon->mfaction == CRYSTALFIED) base -= 6;
 	
-	if(mon->mtame) base -= rnd(def_beastmastery());
-	if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
+	if(mon->mtame){
+		base -= rnd(def_beastmastery());
+		if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
+	}
 	
 	return base;
 }
@@ -630,28 +607,16 @@ find_mac(mon)
 struct monst *mon;
 {
 	struct obj *obj;
-	int base = mon->data->ac, armac = 0;
+	int base, armac = 0;
 	long mwflags = mon->misc_worn_check;
 	
-	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + MONSTER_AC_VALUE(base+9);
-	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_BAALPHEGOR] && base < -8) base = -8 + MONSTER_AC_VALUE(base+8);
-	else if(mon->data == &mons[PM_ZAPHKIEL] && base < -8) base = -8 + MONSTER_AC_VALUE(base+8);
-	else if(mon->data == &mons[PM_QUEEN_OF_STARS] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_ETERNAL_LIGHT] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
-	else if(mon->data == &mons[PM_STRANGE_CORPSE] && base < -5) base = -5 + MONSTER_AC_VALUE(base+5);
-	else if(mon->data == &mons[PM_ANCIENT_OF_DEATH] && base < -4) base = -4 + MONSTER_AC_VALUE(base+4);
-	else if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
-		base -= u.chokhmah;
-	}
-	else if(is_weeping(mon->data)){
-		if(mon->mvar2 & 0x4L) base = -125; //Fully Quantum Locked
-		if(mon->mvar2 & 0x2L) base = -20; //Partial Quantum Lock
-	}
-	else if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
+	base = base_mac(mon);
+	
+	if(mon->data == &mons[PM_GIANT_TURTLE] && mon->mflee){
 		base -= 15;
 	}
-	else if(mon != &youmonst &&
+	//Block attack with weapon
+	if(mon != &youmonst &&
 		(mon->data == &mons[PM_MARILITH] 
 		|| mon->data == &mons[PM_SHAKTARI]
 		|| mon->data == &mons[PM_CATHEZAR]
@@ -676,49 +641,34 @@ struct monst *mon;
 		}
 	}
 	
-	if(mon->mfaction == ZOMBIFIED) base -= 2;
-	if(mon->mfaction == SKELIFIED) base -= 6;
-	if(mon->mfaction == CRYSTALFIED) base -= 16;
+	if(mon->mfaction == ZOMBIFIED) base -= 4;
+	if(mon->mfaction == CRYSTALFIED) base -= 10;
 	
 	if(mon->mtame){
-		base -= rnd(def_beastmastery());
 		if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
-		if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
 	}
 	
+	//armor AC
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
-		if(uarm) armac += ARM_BONUS(uarm);
-		if(uarmf) armac += ARM_BONUS(uarmf);
-		if(uarmg) armac += ARM_BONUS(uarmg);
-		if(uarmu) armac += ARM_BONUS(uarmu);
-		if(uarms) armac += ARM_BONUS(uarms);
-		if(uarmh) armac += ARM_BONUS(uarmh);
-		if(uarmc) armac += ARM_BONUS(uarmc);
-		
-		if(uarm && uarm->otyp == CRYSTAL_PLATE_MAIL) armac -= uarm->spe;
-		if(uarmh && uarmh->otyp == CRYSTAL_HELM) armac -= .5*uarmh->spe;
-		if(uarmg && uarmg->otyp == CRYSTAL_GAUNTLETS) armac -= .5*uarmg->spe;
-		if(uarms && uarms->otyp == CRYSTAL_SHIELD) armac -= .5*uarms->spe;
-		if(uarmf && uarmf->otyp == CRYSTAL_BOOTS) armac -= .5*uarmf->spe;
-		
+		if(uarm) armac += arm_ac_bonus(uarm);
+		if(uarmf) armac += arm_ac_bonus(uarmf);
+		if(uarmg) armac += arm_ac_bonus(uarmg);
+		if(uarmu) armac += arm_ac_bonus(uarmu);
+		if(uarms) armac += arm_ac_bonus(uarms);
+		if(uarmh) armac += arm_ac_bonus(uarmh);
+		if(uarmc) armac += arm_ac_bonus(uarmc);
 		if(armac < 0) armac *= -1;
 	}
 	else for (obj = mon->minvent; obj; obj = obj->nobj) {
 	    if (obj->owornmask & mwflags){
-			armac += ARM_BONUS(obj);
+			armac += arm_ac_bonus(obj);
 			if(is_shield(obj)) armac += max(0, obj->objsize - mon->data->msize);
-			
-			if(obj->otyp == CRYSTAL_PLATE_MAIL) armac -= obj->spe;
-			if(obj->otyp == CRYSTAL_HELM) armac -= .5*obj->spe;
-			if(obj->otyp == CRYSTAL_GAUNTLETS) armac -= .5*obj->spe;
-			if(obj->otyp == CRYSTAL_SHIELD) armac -= .5*obj->spe;
-			if(obj->otyp == CRYSTAL_BOOTS) armac -= .5*obj->spe;
 		}
 	}
 	if(armac > 11) armac = rnd(armac-10) + 10; /* high armor ac values act like player ac values */
 
 	base -= armac;
-	/* since ARM_BONUS is positive, subtracting it increases AC */
+	/* since arm_ac_bonus is positive, subtracting it increases AC */
 	return base;
 }
 
@@ -768,35 +718,23 @@ struct monst *mon;
 	}
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
-		if(uarm) armac += ARM_BONUS(uarm);
-		if(uarmf) armac += ARM_BONUS(uarmf);
-		if(uarmg) armac += ARM_BONUS(uarmg);
-		if(uarmu) armac += ARM_BONUS(uarmu);
-		if(uarms) armac += ARM_BONUS(uarms);
-		if(uarmh) armac += ARM_BONUS(uarmh);
-		if(uarmc) armac += ARM_BONUS(uarmc);
-		
-		if(uarm && uarm->otyp == CRYSTAL_PLATE_MAIL) armac -= uarm->spe;
-		if(uarmh && uarmh->otyp == CRYSTAL_HELM) armac -= .5*uarmh->spe;
-		if(uarmg && uarmg->otyp == CRYSTAL_GAUNTLETS) armac -= .5*uarmg->spe;
-		if(uarms && uarms->otyp == CRYSTAL_SHIELD) armac -= .5*uarms->spe;
-		if(uarmf && uarmf->otyp == CRYSTAL_BOOTS) armac -= .5*uarmf->spe;
+		if(uarm) armac += arm_ac_bonus(uarm);
+		if(uarmf) armac += arm_ac_bonus(uarmf);
+		if(uarmg) armac += arm_ac_bonus(uarmg);
+		if(uarmu) armac += arm_ac_bonus(uarmu);
+		if(uarms) armac += arm_ac_bonus(uarms);
+		if(uarmh) armac += arm_ac_bonus(uarmh);
+		if(uarmc) armac += arm_ac_bonus(uarmc);
 		
 		if(armac < 0) armac *= -1;
 	}
 	else for (obj = mon->minvent; obj; obj = obj->nobj) {
 	    if (obj->owornmask & mwflags)
-		armac += ARM_BONUS(obj);
-		
-		if(obj->otyp == CRYSTAL_PLATE_MAIL) armac -= obj->spe;
-		if(obj->otyp == CRYSTAL_HELM) armac -= .5*obj->spe;
-		if(obj->otyp == CRYSTAL_GAUNTLETS) armac -= .5*obj->spe;
-		if(obj->otyp == CRYSTAL_SHIELD) armac -= .5*obj->spe;
-		if(obj->otyp == CRYSTAL_BOOTS) armac -= .5*obj->spe;
+		armac += arm_ac_bonus(obj);
 	}
 
 	base -= armac;
-	/* since ARM_BONUS is positive, subtracting it increases AC */
+	/* since arm_ac_bonus is positive, subtracting it increases AC */
 	return base;
 }
 
@@ -817,22 +755,147 @@ struct monst *mon;
 	}
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
-		if(uarm) armac += ARM_BONUS(uarm);
-		if(uarmf) armac += ARM_BONUS(uarmf);
-		if(uarmg) armac += ARM_BONUS(uarmg);
-		if(uarmu) armac += ARM_BONUS(uarmu);
-		if(uarms) armac += ARM_BONUS(uarms);
-		if(uarmh) armac += ARM_BONUS(uarmh);
-		if(uarmc) armac += ARM_BONUS(uarmc);
+		if(uarm) armac += arm_ac_bonus(uarm);
+		if(uarmf) armac += arm_ac_bonus(uarmf);
+		if(uarmg) armac += arm_ac_bonus(uarmg);
+		if(uarmu) armac += arm_ac_bonus(uarmu);
+		if(uarms) armac += arm_ac_bonus(uarms);
+		if(uarmh) armac += arm_ac_bonus(uarmh);
+		if(uarmc) armac += arm_ac_bonus(uarmc);
 		
 		if(armac < 0) armac *= -1;
 	}
 	else for (obj = mon->minvent; obj; obj = obj->nobj) {
 	    if (obj->owornmask & mwflags)
-		armac += ARM_BONUS(obj);
+		armac += arm_ac_bonus(obj);
 	}
 
 	return 10 - armac;
+}
+
+int 
+base_mdr(mon)
+struct monst *mon;
+{
+	int base = 0, armac = 0;
+	
+	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
+		base += u.chokhmah;
+	}
+	if(is_weeping(mon->data)){
+		if(mon->mvar2 & 0x4L) base = +125; //Fully Quantum Locked
+		if(mon->mvar2 & 0x2L) base = +5; //Partial Quantum Lock
+	}
+	if(mon->data == &mons[PM_SON_OF_TYPHON]){
+		base += 5;
+	}
+	if(mon->data == &mons[PM_CLOCKWORK_AUTOMATON]){
+		base += 1;
+	}
+	if(is_true_dragon(mon->data)){
+		base += 4;
+	}
+	if(mon->mfaction == ZOMBIFIED) base += 2;
+	if(mon->mfaction == CRYSTALFIED) base += 8;
+	
+	return base;
+}
+
+int
+roll_mdr(mon)
+struct monst *mon;
+{
+	struct obj *obj;
+	int base, armac = 0;
+	long mwflags = mon->misc_worn_check;
+	
+	base = base_mac(mon);
+	
+	if(mon->data == &mons[PM_GIANT_TURTLE]){
+		if(mon->mflee || rn2(2))
+			base += 5;
+	}
+	
+	if(mon->mtame){
+		if(u.specialSealsActive&SEAL_COSMOS) base += rnd(spiritDsize());
+	}
+	
+	//armor AC
+	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
+		if (uarmc)	armac += arm_dr_bonus(uarmc);
+		else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+			armac += max( 1 + (uwep->spe+1)/2,0);
+		}
+		
+		//Note: Bias this somehow?
+		switch(rn2(5)){
+			case 0:
+				//Note: upper body (shirt plus torso armor)
+				if (uarmu)	armac += arm_dr_bonus(uarmu);
+			case 1:
+				//Note: lower body (torso armor only)
+				if (uarm)	armac += arm_dr_bonus(uarm);
+				else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+					armac += max( 1 + (uwep->spe+1)/2,0);
+				}
+			break;
+			case 2:
+				if (uarmh)	armac += arm_dr_bonus(uarmh);
+			break;
+			case 3:
+				if (uarmf)	armac += arm_dr_bonus(uarmf);
+				else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+					armac += max( 1 + (uwep->spe+1)/2,0);
+				}
+			break;
+			case 4:
+				if (uarmg)	armac += arm_dr_bonus(uarmg);
+				else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+					armac += max( 1 + (uwep->spe+1)/2,0);
+				}
+			break;
+		}
+		if(armac < 0) armac *= -1;
+	} else {
+		if (which_armor(mon, W_ARMC))	armac += arm_dr_bonus(which_armor(mon, W_ARMC));
+		else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+			armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
+		}
+		
+		//Note: Bias this somehow?
+		switch(rn2(5)){
+			case 0:
+				//Note: upper body (shirt plus torso armor)
+				if (which_armor(mon, W_ARMU))	armac += arm_dr_bonus(which_armor(mon, W_ARMU));
+			case 1:
+				//Note: lower body (torso armor only)
+				if (which_armor(mon, W_ARM))	armac += arm_dr_bonus(which_armor(mon, W_ARM));
+				else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
+				}
+			break;
+			case 2:
+				if (which_armor(mon, W_ARMH))	armac += arm_dr_bonus(which_armor(mon, W_ARMH));
+			break;
+			case 3:
+				if (which_armor(mon, W_ARMF))	armac += arm_dr_bonus(which_armor(mon, W_ARMF));
+				else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
+				}
+			break;
+			case 4:
+				if (which_armor(mon, W_ARMG))	armac += arm_dr_bonus(which_armor(mon, W_ARMG));
+				else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
+				}
+			break;
+		}
+	}
+	if(armac > 6) armac = rnd(armac-5) + 5; /* high armor dr values act like player ac values */
+
+	base -= armac;
+	/* since arm_ac_bonus is positive, subtracting it increases AC */
+	return base;
 }
 
 /* weapons are handled separately; rings and eyewear aren't used by monsters */
@@ -954,13 +1017,13 @@ boolean racialexception;
 		    break;
 	    }
 	    if (obj->owornmask) continue;
-	    /* I'd like to define a VISIBLE_ARM_BONUS which doesn't assume the
+	    /* I'd like to define a VISIBLE_arm_ac_bonus which doesn't assume the
 	     * monster knows obj->spe, but if I did that, a monster would keep
 	     * switching forever between two -2 caps since when it took off one
 	     * it would forget spe and once again think the object is better
 	     * than what it already has.
 	     */
-	    if (best && (ARM_BONUS(best) + extra_pref(mon,best) >= ARM_BONUS(obj) + extra_pref(mon,obj)))
+	    if (best && (arm_total_bonus(best) + extra_pref(mon,best) >= arm_total_bonus(obj) + extra_pref(mon,obj)))
 		continue;
 	    best = obj;
 	}

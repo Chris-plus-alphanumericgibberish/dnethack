@@ -2413,7 +2413,7 @@ physical:{
 	
 	if(magr->data == &mons[PM_LONG_WORM] && magr->wormno && mattk->aatyp == AT_BITE){
 		if(wormline(magr, mdef->mx, mdef->my))
-			tmp *= 2;
+			tmp += d(2,4);//Adds segment damage
 	}
 	
    if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp=tmp/2; 

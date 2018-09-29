@@ -4586,10 +4586,8 @@ uchar aatyp, adtyp;
 	  case AD_BARB:
 		if(ptr == &mons[PM_RAZORVINE]) You("are hit by the springing vines!");
 		else You("are hit by %s barbs!", s_suffix(mon_nam(mon)));
-		if (tmp && u.uac < 0) {
-			if(u.sealsActive&SEAL_BALAM) tmp -= min_ints(rnd(-u.uac),rnd(-u.uac));
-			else tmp -= rnd(-u.uac);
-			
+		if (tmp) {
+			tmp -= roll_udr();
 			if (tmp < 1) tmp = 1;
 		}
 		mdamageu(mon, tmp);

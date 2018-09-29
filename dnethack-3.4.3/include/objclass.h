@@ -13,7 +13,7 @@ struct objclass {
 	char *	oc_uname;		/* called by user */
 	Bitfield(oc_name_known,1);
 	Bitfield(oc_merge,1);	/* merge otherwise equal objects */
-	Bitfield(oc_uses_known,1); /* obj->known affects full decription */
+	Bitfield(oc_uses_known,1); /* obj->known affects full description */
 				/* otherwise, obj->dknown and obj->bknown */
 				/* tell all, and obj->known should always */
 				/* be set for proper merging behavior */
@@ -110,7 +110,7 @@ struct objclass {
 #define oc_range	oc_wsdam	/* for strength independant ranged weapons */
 #define oc_rof		oc_wldam	/* rate of fire bonus for ranged weapons */
 	
-	schar	oc_oc1, oc_oc2;
+	schar	oc_oc1, oc_oc2, oc_oc3;
 #define oc_hitbon	oc_oc1		/* weapons: "to hit" bonus */
 #define w_ammotyp	oc_oc2		/* type of ammo taken by ranged weapon */
 #define WP_GENERIC	1
@@ -120,8 +120,9 @@ struct objclass {
 #define WP_GRENADE	16
 #define WP_BLASTER	32
 
-#define a_ac		oc_oc1	/* armor class, used in ARM_BONUS in do.c */
+#define a_ac		oc_oc1	/* armor class, used in arm_ac_bonus */
 #define a_can		oc_oc2		/* armor: used in mhitu.c */
+#define a_dr		oc_oc3		/* armor damage reduction, used in arm_dr_bonus */
 #define oc_level	oc_oc2		/* books: spell level */
 
 	unsigned short	oc_nutrition;	/* food value */

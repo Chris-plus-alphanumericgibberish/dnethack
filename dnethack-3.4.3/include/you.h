@@ -459,6 +459,7 @@ struct you {
 	int		ucarinc;		/* bonus carrying capacity */
 	schar	uacinc;			/* bonus AC (not spell/divine) */
 	schar	uac;
+	schar	udr;
 	uchar	uspellprot;		/* protection by SPE_PROTECTION */
 	uchar	udrunken;		/* drunkeness level (based on total number of potions of booze drunk) */
 	uchar	usptime;		/* #moves until uspellprot-- */
