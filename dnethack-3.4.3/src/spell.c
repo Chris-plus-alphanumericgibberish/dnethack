@@ -3588,8 +3588,10 @@ spiriteffects(power, atme)
 			set_destroy_thrown(1); //state variable referenced in drop_throw
 				m_throw(&youmonst, mon->mx + (-u.dx), mon->my + (-u.dy), u.dx, u.dy,
 					1, qvr,TRUE);
+				if(!DEADMONSTER(mon) && mon_can_see_you(mon)) // and mon_can_see_you(mon)?
+					setmangry(mon);
 				ttmp2 = maketrap(mon->mx, mon->my, WEB);
-				if (ttmp2) mintrap(mon);
+				if (ttmp2 && !DEADMONSTER(mon)) mintrap(mon);
 			set_destroy_thrown(0);  //state variable referenced in drop_throw
 			set_bypassDR(0);  //state variable referenced in drop_throw
 		}break;
@@ -3642,6 +3644,7 @@ spiriteffects(power, atme)
 		}break;
 		default:
 			pline("BANG! That's not going to kill TOO many people, is it...? (Unknown power %d.)", power);
+			//Note: Eddie Izzard joke
 		break;
 	}
 	u.spiritPColdowns[power] = monstermoves + 25;

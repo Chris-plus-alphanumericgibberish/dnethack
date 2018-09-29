@@ -3162,6 +3162,7 @@ void
 mkmch(typ)
 int typ;
 {
+	//Note: See SCP-2406 for the inspiration for this.
 	int x, y, tries = 0, ncrew, good = FALSE;
 	struct obj *statue, *smallstatue, *otmp;
 	while(!good && tries < 500){
