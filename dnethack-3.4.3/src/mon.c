@@ -5055,6 +5055,7 @@ register struct monst *mtmp;
 	if(!mtmp->mpeaceful) return;
 	if(mtmp->mtame) return;
 	mtmp->mpeaceful = 0;
+	newsym(mtmp->mx, mtmp->my);
 	if(mtmp->ispriest) {
 		if(p_coaligned(mtmp)) adjalign(-5); /* very bad */
 		else adjalign(2);
