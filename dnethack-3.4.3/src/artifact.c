@@ -162,6 +162,15 @@ hack_artifacts()
 	artilist[ART_CROWN_OF_THE_SAINT_KING].otyp = gcircletsa;
 	artilist[ART_HELM_OF_THE_DARK_LORD].otyp = find_vhelm();
 	
+	/* Remove Barbarian flag from the non-matching first gift */
+	if(Role_if(PM_BARBARIAN)){
+		if(u.role_variant == TWO_HANDED_SWORD){
+			artilist[ART_CLEAVER].role = NON_PM;
+		} else {
+			artilist[ART_ATLANTEAN_ROYAL_SWORD].role = NON_PM;
+		}
+	}
+	
 	/* Fix up the crown */
 	if(gcircletsa == HELMET){
 		obj_descr[HELMET].oc_name = "circlet";

@@ -513,6 +513,8 @@ struct you {
 	boolean twoweap;		/* KMH -- Using two-weapon combat */
 	int divetimer;			/* how long you can stay under water */
 
+	int role_variant;	/*Records what variant of your role you are.*/
+
 	long	wardsknown;	/* known wards */
 #define	WARD_ELBERETH		0x0000001L
 #define WARD_HEPTAGRAM		0x0000002L
