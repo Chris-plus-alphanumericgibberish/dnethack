@@ -557,6 +557,8 @@ nasty(mcast)
 				else /* makemon failed for some reason */
 					mtmp = makemon((struct permonst *)0,
 							bypos.x, bypos.y, NO_MM_FLAGS);
+				if(!mtmp) /* makemon still failed, abort */
+					return count;
 				mtmp->msleeping = mtmp->mpeaceful = mtmp->mtame = 0;
 				set_malign(mtmp);
 				count++;
