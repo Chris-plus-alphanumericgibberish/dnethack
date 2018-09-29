@@ -3288,6 +3288,7 @@ int typ;
 							}
 						}
 					}
+					smallstatue->owt = weight(smallstatue);
 					////////////////////
 					add_to_container(statue, smallstatue);
 				}
@@ -3462,6 +3463,7 @@ int typ;
 				mksobj_at(MAGICITE_CRYSTAL + rn2(STAR_SAPPHIRE - MAGICITE_CRYSTAL + 1), x, y, TRUE, FALSE);
 			}
 		} else {
+			//Unknown rusted scrap pile
 			otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
 			if(otmp){
 				otmp->obj_material = IRON;
@@ -3479,7 +3481,6 @@ int typ;
 			}
 		}
 	}
-	//Unknown rusted scrap pile
 }
 
 void

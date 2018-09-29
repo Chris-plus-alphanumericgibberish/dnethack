@@ -5450,7 +5450,7 @@ doapply()
 			if(Blind) pline("The effigy grows and turns to stone!");
 			else pline("The effigy becomes a weeping angel!");
 		} else {
-			u.wimage = 0; //Sub-critial images are removed anyway.
+			u.wimage = 0; //Sub-critical images are removed anyway.
 			if(Blind) pline("The effigy bursts into flames!");
 			else pline("The effigy burns with sickly flames!");
 		}
