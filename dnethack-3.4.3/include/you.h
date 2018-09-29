@@ -472,6 +472,7 @@ struct you {
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */
 	long lastprayed;
+	int regen_blocked;
 	uchar lastprayresult, reconciled;
 #define	PRAY_NONE	0
 #define	PRAY_GOOD	1

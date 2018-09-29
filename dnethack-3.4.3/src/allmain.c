@@ -1182,7 +1182,9 @@ karemade:
 							flags.botl = 1;
 							u.mh++;
 						}
-						if(!nonliving(youracedata) && !Race_if(PM_INCANTIFIER) && (wtcap < MOD_ENCUMBER || !u.umoved) && 
+						if(u.regen_blocked){
+							u.regen_blocked--;
+						} else if(!nonliving(youracedata) && !Race_if(PM_INCANTIFIER) && (wtcap < MOD_ENCUMBER || !u.umoved) && 
 							(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4))
 						){
 							flags.botl = 1;
@@ -1198,7 +1200,9 @@ karemade:
 						flags.botl = 1;
 						u.uhp++;
 					}
-					if(!nonliving(youracedata) && !Race_if(PM_INCANTIFIER) && (wtcap < MOD_ENCUMBER || !u.umoved) && 
+					if(u.regen_blocked){
+						u.regen_blocked--;
+					} else if(!nonliving(youracedata) && !Race_if(PM_INCANTIFIER) && (wtcap < MOD_ENCUMBER || !u.umoved) && 
 						(!uwep || uwep->oartifact != ART_ATMA_WEAPON || !uwep->lamplit || Drain_resistance || !rn2(4))
 					){
 						int reglevel = u.ulevel + (((int) ACURR(A_CON)) - 10)/2;
