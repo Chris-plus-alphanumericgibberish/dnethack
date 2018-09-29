@@ -53,6 +53,44 @@ append_str(buf, new_str)
     return 1;
 }
 
+static const char * const sizeStr[] = {
+	"fine",
+	"gnat-sized",
+	"diminutive",
+	"tiny",
+	"cat-sized",
+	"bigger-than-a-breadbox",
+	"small",
+	"human-sized",
+	"large",
+	"gigantic",
+	"colossal",
+	"cosmically-huge"
+};
+
+static const char * const headStr[] = {
+	"",
+	"",
+	"",
+	"",
+	"",
+	" snouted",
+	" flat-faced",
+	" short-necked",
+	" inverted-faced",
+	" long-necked"
+};
+
+static const char * const bodyStr[] = {
+	" animal",
+	" ophidian",
+	" squigglenoid",
+	" insectoid",
+	" humanoid",
+	" snake-legged humanoid",
+	" snake-backed animal",
+	" centauroid"
+};
 /*
  * Return the name of the glyph found at (x,y).
  * If not hallucinating and the glyph is a monster, also monster data.
@@ -322,24 +360,28 @@ lookat(x, y, buf, monbuf, shapebuff)
 			}
 		}
 	    }
-		if(mtmp->data->msize == MZ_TINY) Sprintf(shapebuff, "a tiny");
-		else if(mtmp->data->msize == MZ_SMALL) Sprintf(shapebuff, "a small");
-		else if(mtmp->data->msize == MZ_HUMAN) Sprintf(shapebuff, "a human-sized");
-		else if(mtmp->data->msize == MZ_LARGE) Sprintf(shapebuff, "a large");
-		else if(mtmp->data->msize == MZ_HUGE) Sprintf(shapebuff, "a huge");
-		else if(mtmp->data->msize == MZ_GIGANTIC) Sprintf(shapebuff, "a gigantic");
-		else Sprintf(shapebuff, "an odd-sized");
-		
-		if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGHEAD) Strcat(shapebuff, ", snouted");
-		else if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGNECK) Strcat(shapebuff, ", long-necked");
-		
-		if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_ANIMAL) Strcat(shapebuff, " animal");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_SLITHY) Strcat(shapebuff, " ophidian");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_HUMANOID) Strcat(shapebuff, " humanoid");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_ANIMAL)) Strcat(shapebuff, " centauroid");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY)) Strcat(shapebuff, " snake-legged humanoid");
-		else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY)) Strcat(shapebuff, " snake-backed animal");
-		else Strcat(shapebuff, " thing");
+		if(!Hallucination){
+			if(mtmp->data->msize == MZ_TINY) Sprintf(shapebuff, "a tiny");
+			else if(mtmp->data->msize == MZ_SMALL) Sprintf(shapebuff, "a small");
+			else if(mtmp->data->msize == MZ_HUMAN) Sprintf(shapebuff, "a human-sized");
+			else if(mtmp->data->msize == MZ_LARGE) Sprintf(shapebuff, "a large");
+			else if(mtmp->data->msize == MZ_HUGE) Sprintf(shapebuff, "a huge");
+			else if(mtmp->data->msize == MZ_GIGANTIC) Sprintf(shapebuff, "a gigantic");
+			else Sprintf(shapebuff, "an odd-sized");
+			
+			if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGHEAD) Strcat(shapebuff, " snouted");
+			else if((mtmp->data->mflagsb&MB_HEADMODIMASK) == MB_LONGNECK) Strcat(shapebuff, " long-necked");
+			
+			if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_ANIMAL) Strcat(shapebuff, " animal");
+			else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_SLITHY) Strcat(shapebuff, " ophidian");
+			else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == MB_HUMANOID) Strcat(shapebuff, " humanoid");
+			else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_ANIMAL)) Strcat(shapebuff, " centauroid");
+			else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY)) Strcat(shapebuff, " snake-legged humanoid");
+			else if((mtmp->data->mflagsb&MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY)) Strcat(shapebuff, " snake-backed animal");
+			else Strcat(shapebuff, " thing");
+		} else {
+			Sprintf(shapebuff, "%s%s%s", an(sizeStr[rn2(SIZE(sizeStr))]), headStr[rn2(SIZE(headStr))], bodyStr[rn2(SIZE(bodyStr))]);
+		}
 	}
     }
     else if (glyph_is_object(glyph)) {
