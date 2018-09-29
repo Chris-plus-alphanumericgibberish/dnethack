@@ -3453,6 +3453,21 @@ register struct monst *mtmp;
 			else if(!rn2(2)) (void)mongets(mtmp, CLUB);
 		}
 		break;
+	    case S_NYMPH:
+			if(ptr == &mons[PM_THRIAE]){
+				switch (rn2(6)) {
+				/* MAJOR fall through ... */
+				case 0: (void) mongets(mtmp, WAN_MAGIC_MISSILE);
+				case 1: (void) mongets(mtmp, POT_EXTRA_HEALING);
+				case 2: (void) mongets(mtmp, POT_HEALING);
+					break;
+				case 3: (void) mongets(mtmp, WAN_STRIKING);
+				case 4: (void) mongets(mtmp, POT_HEALING);
+				case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
+				}
+				(void)mongets(mtmp, (rn2(2) ? WOODEN_FLUTE : WOODEN_HARP));
+			}
+		break;
 	    case S_CENTAUR:
 		if(ptr == &mons[PM_DRIDER]){
 			chance = rnd(10);
@@ -3515,6 +3530,28 @@ register struct monst *mtmp;
 				mongets(mtmp, STUDDED_LEATHER_ARMOR);
 				mongets(mtmp, LEATHER_HELM);
 			} else mongets(mtmp, LEATHER_ARMOR);
+		}
+		if(ptr == &mons[PM_FORMIAN_TASKMASTER]){
+			switch (rn2(6)) {
+			/* MAJOR fall through ... */
+			case 0: (void) mongets(mtmp, WAN_MAGIC_MISSILE);
+			case 1: (void) mongets(mtmp, POT_EXTRA_HEALING);
+			case 2: (void) mongets(mtmp, POT_HEALING);
+				break;
+			case 3: (void) mongets(mtmp, WAN_STRIKING);
+			case 4: (void) mongets(mtmp, POT_HEALING);
+			case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
+			}
+			mongets(mtmp, BRONZE_PLATE_MAIL);
+			mongets(mtmp, BRONZE_GAUNTLETS);
+			otmp = mksobj(HELMET, TRUE, FALSE);
+			otmp->obj_material = COPPER;
+			fix_object(otmp);
+			(void) mpickobj(mtmp, otmp);
+			otmp = mksobj(LANCE, TRUE, FALSE);
+			otmp->obj_material = COPPER;
+			fix_object(otmp);
+			(void) mpickobj(mtmp, otmp);
 		}
 		break;
 	    case S_WRAITH:
@@ -3877,9 +3914,13 @@ register struct	monst	*mtmp;
 			case PM_PRISON_GUARD: mac = -2; break;
 #endif /* CONVICT */
 			case PM_SOLDIER: mac = 3; break;
+			case PM_MYRMIDON_HOPLITE: mac = 3; break;
 			case PM_SERGEANT: mac = 0; break;
+			case PM_MYRMIDON_LOCHIAS: mac = 0; break;
 			case PM_LIEUTENANT: mac = -2; break;
+			case PM_MYRMIDON_YPOLOCHAGOS: mac = 0; break;
 			case PM_CAPTAIN: mac = -3; break;
+			case PM_MYRMIDON_LOCHAGOS: mac = -3; break;
 			case PM_WATCHMAN: mac = 3; break;
 			case PM_WATCH_CAPTAIN: mac = -2; break;
 			default: impossible("odd mercenary %d?", monsndx(ptr));
@@ -3888,34 +3929,44 @@ register struct	monst	*mtmp;
 		    }
 
 		    if (mac < -1 && rn2(5))
-			mac += 7 + mongets(mtmp, PLATE_MAIL);
+			mac += objects[PLATE_MAIL].a_ac + mongets(mtmp, PLATE_MAIL);
 		    else if (mac < 3 && rn2(5))
-			mac += 6 + mongets(mtmp, (rn2(3)) ?
+			mac += objects[SPLINT_MAIL].a_ac + mongets(mtmp, (rn2(3)) ?
 					   SPLINT_MAIL : BANDED_MAIL);
 		    else if (rn2(5))
-			mac += 3 + mongets(mtmp, (rn2(3)) ?
+			mac += objects[RING_MAIL].a_ac + mongets(mtmp, (rn2(3)) ?
 					   RING_MAIL : STUDDED_LEATHER_ARMOR);
 		    else
-			mac += 2 + mongets(mtmp, LEATHER_ARMOR);
+			mac += objects[LEATHER_ARMOR].a_ac + mongets(mtmp, LEATHER_ARMOR);
 
 		    if (mac < 10 && rn2(3))
-			mac += 1 + mongets(mtmp, HELMET);
+			mac += objects[HELMET].a_ac + mongets(mtmp, HELMET);
 		    else if (mac < 10 && rn2(2))
-			mac += 1 + mongets(mtmp, LEATHER_HELM);
+			mac += objects[LEATHER_HELM].a_ac + mongets(mtmp, LEATHER_HELM);
 		    else if (mac < 10 && !rn2(10))
-			mac += 2 + mongets(mtmp, WAR_HAT);
+			mac += objects[WAR_HAT].a_ac + mongets(mtmp, WAR_HAT);
+			
 		    if (mac < 10 && rn2(3))
-			mac += 1 + mongets(mtmp, BUCKLER);
+			mac += objects[BUCKLER].a_ac + mongets(mtmp, BUCKLER);
 		    else if (mac < 10 && rn2(2))
-			mac += 2 + mongets(mtmp, KITE_SHIELD);
+			mac += objects[KITE_SHIELD].a_ac + mongets(mtmp, KITE_SHIELD);
+		    else if (mac < 10 && rn2(2))
+			mac += objects[ROUNDSHIELD].a_ac + mongets(mtmp, ROUNDSHIELD);
+		
 		    if (mac < 10 && rn2(3))
-			mac += 1 + mongets(mtmp, LOW_BOOTS);
+			mac += objects[LOW_BOOTS].a_ac + mongets(mtmp, LOW_BOOTS);
 		    else if (mac < 10 && rn2(2))
-			mac += 2 + mongets(mtmp, HIGH_BOOTS);
+			mac += objects[HIGH_BOOTS].a_ac + mongets(mtmp, HIGH_BOOTS);
+		    else if (mac < 10 && rn2(2))
+			mac += objects[ARMORED_BOOTS].a_ac + mongets(mtmp, ARMORED_BOOTS);
+		
 		    if (mac < 10 && rn2(3))
-			mac += 1 + mongets(mtmp, GLOVES);
+			mac += objects[GLOVES].a_ac + mongets(mtmp, GLOVES);
 		    else if (mac < 10 && rn2(2))
-			mac += 1 + mongets(mtmp, LEATHER_CLOAK);
+			mac += objects[GAUNTLETS].a_ac + mongets(mtmp, GAUNTLETS);
+		
+		    if (mac < 10 && rn2(2))
+			mac += objects[LEATHER_CLOAK].a_ac + mongets(mtmp, LEATHER_CLOAK);
 
 		    if(ptr != &mons[PM_GUARD] &&
 #ifdef CONVICT
@@ -4033,6 +4084,8 @@ register struct	monst	*mtmp;
 				} else if(mtmp->data == &mons[PM_KILLER_BEE]){
 					if(!rn2(4)){
 						mongets(mtmp, LEATHER_ARMOR);
+					} else if(!rn2(3)){
+						mongets(mtmp, BLACK_DRESS);
 					}
 				} else if(mtmp->data == &mons[PM_QUEEN_BEE]){
 					chance = rnd(10);
@@ -4042,6 +4095,32 @@ register struct	monst	*mtmp;
 					if(chance >= 8) mongets(mtmp, HELMET);
 				}
 			}
+			if(ptr == &mons[PM_VALAVI]){
+				switch (rnd(2)) {
+					case 1: (void) mongets(mtmp, POT_EXTRA_HEALING);
+					case 2: (void) mongets(mtmp, POT_HEALING);
+				}
+				if(rn2(3)){
+					mongets(mtmp, SHEPHERD_S_CROOK);
+					mongets(mtmp, KNIFE);
+					mongets(mtmp, KNIFE);
+				} else {
+					mongets(mtmp, SCIMITAR);
+					switch (rnd(3)) {
+						case 1:
+							(void) mongets(mtmp, ROUNDSHIELD);
+						break;
+						case 2:
+							(void) mongets(mtmp, BUCKLER);
+						break;
+						case 3:
+							(void) mongets(mtmp, SCIMITAR);
+						break;
+					}
+					mongets(mtmp, SCIMITAR);
+					mongets(mtmp, SCIMITAR);
+				}
+		    }
 		break;
 		case S_DOG:
 			//Escaped war-dog
