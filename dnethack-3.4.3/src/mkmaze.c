@@ -1084,26 +1084,28 @@ void
 movebubbles()
 {
 	static boolean up;
-	register struct bubble *b;
-	register int x, y, i, j;
+    struct bubble *b;
+    int x, y, i, j;
 	struct trap *btrap;
 	static const struct rm water_pos =
 		{ cmap_to_glyph(S_water), WATER, 0, 0, 0, 0, 0, 0, 0 };
 
 	/* set up the portal the first time bubbles are moved */
-	if (!wportal) set_wportal();
+    if (!wportal)
+        set_wportal();
 
 	vision_recalc(2);
 	/* keep attached ball&chain separate from bubble objects */
-	if (Punished) unplacebc();
+    if (Punished)
+        unplacebc();
 
 	/*
 	 * Pick up everything inside of a bubble then fill all bubble
 	 * locations.
 	 */
-
 	for (b = up ? bbubbles : ebubbles; b; b = up ? b->next : b->prev) {
-	    if (b->cons) panic("movebubbles: cons != null");
+        if (b->cons)
+	        panic("movebubbles: cons != null");
 	    for (i = 0, x = b->x; i < (int) b->bm[0]; i++, x++)
 		for (j = 0, y = b->y; j < (int) b->bm[1]; j++, y++)
 		    if (b->bm[j + 2] & (1 << i)) {
@@ -1115,8 +1117,9 @@ movebubbles()
 			/* pick up objects, monsters, hero, and traps */
 			if (OBJ_AT(x,y)) {
 			    struct obj *olist = (struct obj *) 0, *otmp;
-			    struct container *cons = (struct container *)
-				alloc(sizeof(struct container));
+                struct container *cons =
+                    (struct container *) alloc(
+                        sizeof(struct container));
 
 			    while ((otmp = level.objects[x][y]) != 0) {
 				remove_object(otmp);
@@ -1134,8 +1137,9 @@ movebubbles()
 			}
 			if (MON_AT(x,y)) {
 			    struct monst *mon = m_at(x,y);
-			    struct container *cons = (struct container *)
-				alloc(sizeof(struct container));
+                struct container *cons =
+                    (struct container *) alloc(
+                        sizeof(struct container));
 
 			    cons->x = x;
 			    cons->y = y;
@@ -1154,8 +1158,9 @@ movebubbles()
 			    mon->mx = mon->my = 0;
 			}
 			if (!u.uswallow && x == u.ux && y == u.uy) {
-			    struct container *cons = (struct container *)
-				alloc(sizeof(struct container));
+                struct container *cons =
+                    (struct container *) alloc(
+                        sizeof(struct container));
 
 			    cons->x = x;
 			    cons->y = y;
@@ -1166,8 +1171,9 @@ movebubbles()
 			    b->cons = cons;
 			}
 			if ((btrap = t_at(x,y)) != 0) {
-			    struct container *cons = (struct container *)
-				alloc(sizeof(struct container));
+                struct container *cons =
+                    (struct container *) alloc(
+                        sizeof(struct container));
 
 			    cons->x = x;
 			    cons->y = y;
@@ -1188,14 +1194,12 @@ movebubbles()
 	 * all the junk that changes owners when bubbles overlap
 	 * would eventually end up in the last bubble in the chain.
 	 */
-
 	up = !up;
 	for (b = up ? bbubbles : ebubbles; b; b = up ? b->next : b->prev) {
-		register int rx = rn2(3), ry = rn2(3);
+        int rx = rn2(3), ry = rn2(3);
 
 		mv_bubble(b,b->dx + 1 - (!b->dx ? rx : (rx ? 1 : 0)),
-			    b->dy + 1 - (!b->dy ? ry : (ry ? 1 : 0)),
-			    FALSE);
+                  b->dy + 1 - (!b->dy ? ry : (ry ? 1 : 0)), FALSE);
 	}
 
 	/* put attached ball&chain back */
@@ -1207,8 +1211,8 @@ movebubbles()
 void
 water_friction()
 {
-	register int x, y, dx, dy;
-	register boolean eff = FALSE;
+    int x, y, dx, dy;
+    boolean eff = FALSE;
 
 	if (Swimming && rn2(4))
 		return;		/* natural swimmers have advantage */
@@ -1243,7 +1247,7 @@ void
 save_waterlevel(fd, mode)
 int fd, mode;
 {
-	register struct bubble *b;
+    struct bubble *b;
 
 	if (!Is_waterlevel(&u.uz)) return;
 
@@ -1264,11 +1268,10 @@ int fd, mode;
 
 void
 restore_waterlevel(fd)
-register int fd;
+int fd;
 {
-	register struct bubble *b = (struct bubble *)0, *btmp;
-	register int i;
-	int n;
+    struct bubble *b = (struct bubble *) 0, *btmp;
+    int i, n;
 
 	if (!Is_waterlevel(&u.uz)) return;
 
@@ -1373,7 +1376,7 @@ setup_waterlevel()
 STATIC_OVL void
 unsetup_waterlevel()
 {
-	register struct bubble *b, *bb;
+    struct bubble *b, *bb;
 
 	/* free bubbles */
 
@@ -1386,7 +1389,7 @@ unsetup_waterlevel()
 
 STATIC_OVL void
 mk_bubble(x,y,n)
-register int x, y, n;
+int x, y, n;
 {
 	/*
 	 * These bit masks make visually pleasing bubbles on a normal aspect
@@ -1395,8 +1398,7 @@ register int x, y, n;
 	 * in situ, either.  The first two elements tell the dimensions of
 	 * the bubble's bounding box.
 	 */
-	static uchar
-		bm2[] = {2,1,0x3},
+    static uchar bm2[] = { 2, 1, 0x3 },
 		bm3[] = {3,2,0x7,0x7},
 		bm4[] = {4,3,0x6,0xf,0x6},
 		bm5[] = {5,3,0xe,0x1f,0xe},
@@ -1404,29 +1406,36 @@ register int x, y, n;
 		bm7[] = {7,4,0x3e,0x7f,0x7f,0x3e},
 		bm8[] = {8,4,0x7e,0xff,0xff,0x7e},
 		*bmask[] = {bm2,bm3,bm4,bm5,bm6,bm7,bm8};
+	struct bubble *b;
 
-	register struct bubble *b;
-
-	if (x >= bxmax || y >= bymax) return;
+    if (x >= bxmax || y >= bymax)
+        return;
 	if (n >= SIZE(bmask)) {
 		impossible("n too large (mk_bubble)");
 		n = SIZE(bmask) - 1;
 	}
+    if (bmask[n][1] > MAX_BMASK) {
+        panic("bmask size is larger than MAX_BMASK");
+    }
 	b = (struct bubble *)alloc(sizeof(struct bubble));
-	if ((x + (int) bmask[n][0] - 1) > bxmax) x = bxmax - bmask[n][0] + 1;
-	if ((y + (int) bmask[n][1] - 1) > bymax) y = bymax - bmask[n][1] + 1;
+    if ((x + (int) bmask[n][0] - 1) > bxmax)
+        x = bxmax - bmask[n][0] + 1;
+    if ((y + (int) bmask[n][1] - 1) > bymax)
+        y = bymax - bmask[n][1] + 1;
 	b->x = x;
 	b->y = y;
 	b->dx = 1 - rn2(3);
 	b->dy = 1 - rn2(3);
-	b->bm = bmask[n];
+    /* y dimension is the length of bitmap data - see bmask above */
+    (void) memcpy((genericptr_t) b->bm, (genericptr_t) bmask[n],
+                  (bmask[n][1] + 2) * sizeof(b->bm[0]));
 	b->cons = 0;
-	if (!bbubbles) bbubbles = b;
+    if (!bbubbles)
+        bbubbles = b;
 	if (ebubbles) {
 		ebubbles->next = b;
 		b->prev = ebubbles;
-	}
-	else
+    } else
 		b->prev = (struct bubble *)0;
 	b->next =  (struct bubble *)0;
 	ebubbles = b;
@@ -1443,11 +1452,11 @@ register int x, y, n;
  */
 STATIC_OVL void
 mv_bubble(b,dx,dy,ini)
-register struct bubble *b;
-register int dx, dy;
-register boolean ini;
+struct bubble *b;
+int dx, dy;
+boolean ini;
 {
-	register int x, y, i, j, colli = 0;
+    int x, y, i, j, colli = 0;
 	struct container *cons, *ctemp;
 
 	/* move bubble */
@@ -1461,10 +1470,14 @@ register boolean ini;
 	 * collision with level borders?
 	 *	1 = horizontal border, 2 = vertical, 3 = corner
 	 */
-	if (b->x <= bxmin) colli |= 2;
-	if (b->y <= bymin) colli |= 1;
-	if ((int) (b->x + b->bm[0] - 1) >= bxmax) colli |= 2;
-	if ((int) (b->y + b->bm[1] - 1) >= bymax) colli |= 1;
+    if (b->x <= bxmin)
+        colli |= 2;
+    if (b->y <= bymin)
+        colli |= 1;
+    if ((int) (b->x + b->bm[0] - 1) >= bxmax)
+        colli |= 2;
+    if ((int) (b->y + b->bm[1] - 1) >= bymax)
+        colli |= 1;
 
 	if (b->x < bxmin) {
 	    pline("bubble xmin: x = %d, xmin = %d", b->x, bxmin);
@@ -1475,21 +1488,25 @@ register boolean ini;
 	    b->y = bymin;
 	}
 	if ((int) (b->x + b->bm[0] - 1) > bxmax) {
-	    pline("bubble xmax: x = %d, xmax = %d",
-			b->x + b->bm[0] - 1, bxmax);
+        pline("bubble xmax: x = %d, xmax = %d", b->x + b->bm[0] - 1,
+              bxmax);
 	    b->x = bxmax - b->bm[0] + 1;
 	}
 	if ((int) (b->y + b->bm[1] - 1) > bymax) {
-	    pline("bubble ymax: y = %d, ymax = %d",
-			b->y + b->bm[1] - 1, bymax);
+        pline("bubble ymax: y = %d, ymax = %d", b->y + b->bm[1] - 1,
+              bymax);
 	    b->y = bymax - b->bm[1] + 1;
 	}
 
 	/* bounce if we're trying to move off the border */
-	if (b->x == bxmin && dx < 0) dx = -dx;
-	if (b->x + b->bm[0] - 1 == bxmax && dx > 0) dx = -dx;
-	if (b->y == bymin && dy < 0) dy = -dy;
-	if (b->y + b->bm[1] - 1 == bymax && dy > 0) dy = -dy;
+    if (b->x == bxmin && dx < 0)
+        dx = -dx;
+    if (b->x + b->bm[0] - 1 == bxmax && dx > 0)
+        dx = -dx;
+    if (b->y == bymin && dy < 0)
+        dy = -dy;
+    if (b->y + b->bm[1] - 1 == bymax && dy > 0)
+        dy = -dy;
 
 	b->x += dx;
 	b->y += dy;
@@ -1557,11 +1574,15 @@ register boolean ini;
 	b->cons = 0;
 
 	/* boing? */
-
 	switch (colli) {
-	    case 1: b->dy = -b->dy;	break;
-	    case 3: b->dy = -b->dy;	/* fall through */
-	    case 2: b->dx = -b->dx;	break;
+	    case 1:
+	        b->dy = -b->dy;
+	        break;
+	    case 3:
+	        b->dy = -b->dy; /* fall through */
+	    case 2:
+	        b->dx = -b->dx;
+	        break;
 	    default:
 		/* sometimes alter direction for fun anyway
 		   (higher probability for stationary bubbles) */
