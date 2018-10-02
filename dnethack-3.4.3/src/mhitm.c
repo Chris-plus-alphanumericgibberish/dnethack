@@ -2441,11 +2441,8 @@ physical:{
 	}
 	
 	if(tmp && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
-		int mac = full_marmorac(mdef);
-		if(mac < 0){
-			tmp += MONSTER_AC_VALUE(mac);
+		tmp -= roll_mdr(mdef);
 			if(tmp < 1) tmp = 1;
-		}
 	}
 	
 	if((magr->mfaction == ZOMBIFIED || (magr->mfaction == SKELIFIED && !rn2(20))) && can_undead_mon(mdef)){

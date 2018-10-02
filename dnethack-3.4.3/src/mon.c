@@ -2814,6 +2814,13 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		if(isdark(mdef->mx, mdef->my)) return ALLOW_M|ALLOW_TM;
 	}
 	
+	if((ma == &mons[PM_OONA] || ma == &mons[PM_OONA])
+		&& sgn(ma->maligntyp) == -1*sgn(md->maligntyp) //"Oona grudges on chaotics, but not on neutrals"
+		&& magr->mtame != mdef->mtame
+	){
+		return ALLOW_M|ALLOW_TM;
+	}
+	
 	
 	/* In the anachrononaut quest, all peaceful monsters are at threat from all hostile monsters.
 		The leader IS in serious danger */
@@ -5187,12 +5194,78 @@ register int x, y, distance;
 	wake_nearto(x,y,distance);
 	distance /= 3;
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-	    if (!DEADMONSTER(mtmp) && sensitive_ears(mtmp->data) && !is_deaf(mtmp) &&
-				 dist2(mtmp->mx, mtmp->my, x, y) < distance){
+	    if (!DEADMONSTER(mtmp)){
+			if(sensitive_ears(mtmp->data) && !is_deaf(mtmp) &&
+			 dist2(mtmp->mx, mtmp->my, x, y) < distance
+			){
 			mtmp->mstun = 1;
 			mtmp->mconf = 1;
 			mtmp->mcanhear = 0;
 			mtmp->mdeafened = distance - dist2(mtmp->mx, mtmp->my, x, y);
+			}
+			if(mtmp->data == &mons[PM_ECHO]){
+				struct monst *tmpm;
+				int targets = 0, damage = 0;
+				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(distmin(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= 4
+						&& tmpm->mpeaceful != mtmp->mpeaceful
+						&& tmpm->mtame != mtmp->mtame
+						&& !nonliving_mon(tmpm)
+						&& !resists_drain(tmpm)
+						&& !DEADMONSTER(tmpm)
+					) targets++;
+				}
+				if(dist2(u.ux,u.uy,mtmp->mx,mtmp->my) <= distance
+					&& !mtmp->mpeaceful
+					&& !mtmp->mtame
+					&& !nonliving(youracedata)
+				) targets++;
+				targets = rnd(targets);
+				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(dist2(tmpm->mx,tmpm->my,mtmp->mx,mtmp->my) <= distance
+						&& tmpm->mpeaceful != mtmp->mpeaceful
+						&& tmpm->mtame != mtmp->mtame
+						&& !nonliving_mon(tmpm)
+						&& !resists_drain(tmpm)
+						&& !DEADMONSTER(tmpm)
+					) targets--;
+					if(!targets) break;
+				}
+				if(tmpm){
+					if(canseemon(tmpm)){
+						pline("Powerful reverberations shake %s to %s soul!", mon_nam(tmpm), hisherits(tmpm));
+					}
+					tmpm->mconf = 1;
+					tmpm->mcanhear = 0;
+					tmpm->mdeafened = distance - dist2(tmpm->mx, tmpm->my, x, y);
+					damage = tmpm->m_lev/2+1;
+					if(damage > 0){
+						tmpm->mhp -= 8*damage;
+						tmpm->mhpmax -= 8*damage;
+						tmpm->m_lev -= damage;
+						if(tmpm->mhp < 1
+						|| tmpm->mhpmax < 1
+						|| tmpm->m_lev < 0
+						){
+							grow_up(mtmp,tmpm);
+							mondied(tmpm);
+						}
+					}
+				} else if(targets > 0
+					&& dist2(u.ux,u.uy,mtmp->mx,mtmp->my) <= distance
+					&& !mtmp->mpeaceful
+					&& !mtmp->mtame
+					&& !Drain_resistance
+					&& !nonliving(youracedata)
+				){
+					pline("Powerful reverberations shake you to your soul!");
+					damage = u.ulevel/2+1;
+					while(--damage)
+						losexp("soul echoes",FALSE,TRUE,TRUE);
+					losexp("soul echoes",TRUE,TRUE,TRUE);
+					losehp(8, "soul echoes", KILLED_BY); //might kill you before you hit level 0;
+				}
+			}
 		}
 	}
 }
