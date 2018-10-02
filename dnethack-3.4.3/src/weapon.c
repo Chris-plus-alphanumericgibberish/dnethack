@@ -1415,7 +1415,7 @@ struct monst *mon;
 	}
 	if(pen->ovar1&SEAL_ENKI){
 		if(youdef && !(nonliving(youracedata) || amphibious(youracedata))) dmg += d(dnum,4);
-		else if(!youdef && !(nonliving_mon(mon) || amphibious(mon->data))) dmg += d(dnum,4);
+		else if(!youdef && !(nonliving_mon(mon) || amphibious_mon(mon))) dmg += d(dnum,4);
 	}
 	if(pen->ovar1&SEAL_OSE){
 		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,15);

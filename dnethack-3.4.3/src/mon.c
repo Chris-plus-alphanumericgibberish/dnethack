@@ -934,7 +934,7 @@ register struct monst *mtmp;
 	 * be handled here.  Swimmers are able to protect their stuff...
 	 */
 	if (!is_clinger(mtmp->data)
-	    && !is_swimmer(mtmp->data) && !amphibious(mtmp->data)) {
+	    && !is_swimmer(mtmp->data) && !amphibious_mon(mtmp)) {
 	    if (cansee(mtmp->mx,mtmp->my)) {
 		    if(mtmp->data == &mons[PM_ACID_PARAELEMENTAL]){
 				int tx = mtmp->mx, ty = mtmp->my, dn = mtmp->m_lev;
@@ -2551,7 +2551,7 @@ mfndpos(mon, poss, info, flag)
 
 	nodiag = (mdat == &mons[PM_GRID_BUG]) || (mdat == &mons[PM_BEBELITH]);
 	wantpool = mdat->mlet == S_EEL;
-	cubewaterok = (is_swimmer(mdat) || breathless_mon(mon) || amphibious(mdat));
+	cubewaterok = (is_swimmer(mdat) || breathless_mon(mon) || amphibious_mon(mon));
 	poolok = is_flyer(mdat) || is_clinger(mdat) ||
 		 (is_swimmer(mdat) && !wantpool);
 	lavaok = is_flyer(mdat) || is_clinger(mdat) || likes_lava(mdat);

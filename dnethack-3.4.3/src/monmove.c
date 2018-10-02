@@ -618,9 +618,9 @@ boolean digest_meal;
 			if (!resists_poison(mon)) {
 				pline("%s coughs!", Monnam(mon));
 				mon->mhp -= (d(3,8) + ((Amphibious && !flaming(youracedata)) ? 0 : rnd(6)));
-			} else if (!(amphibious(mon->data) && !flaming(youracedata))){
+			} else if (!(amphibious_mon(mon) && !flaming(youracedata))){
 				/* NB: Amphibious includes Breathless */
-				if (!(amphibious(mon->data) && !flaming(youracedata))) mon->mhp -= rnd(6);
+				if (!(amphibious_mon(mon) && !flaming(youracedata))) mon->mhp -= rnd(6);
 			}
 			if(mon->mhp <= 0){
 				monkilled(mon, "gas cloud", AD_DRST);

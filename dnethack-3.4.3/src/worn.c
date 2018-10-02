@@ -913,6 +913,20 @@ struct monst *mon;
  * players to influence what gets worn.  Putting on a shirt underneath
  * already worn body armor is too obviously buggy...
  */
+
+int m_wearing_white_DSA(mon)
+struct monst *mon;
+{
+	struct obj *cur;
+	cur = which_armor(mon, W_ARM);
+	if(cur && (cur->otyp == WHITE_DRAGON_SCALES || cur->otyp == WHITE_DRAGON_SCALE_MAIL))
+		return TRUE;
+	cur = which_armor(mon, W_ARMS);
+	if(cur && (cur->otyp == WHITE_DRAGON_SCALE_SHIELD))
+		return TRUE;
+	return FALSE;
+}
+
 void
 m_dowear(mon, creation)
 register struct monst *mon;

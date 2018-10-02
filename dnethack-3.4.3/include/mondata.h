@@ -69,6 +69,7 @@
 #define is_suicidal(ptr)	(is_fern_spore(ptr) || ptr == &mons[PM_FREEZING_SPHERE] || ptr == &mons[PM_FLAMING_SPHERE] || ptr == &mons[PM_SHOCKING_SPHERE])
 #define breathless(ptr)		(((ptr)->mflagsm & MM_BREATHLESS) != 0L)
 #define breathless_mon(mon)		(breathless((mon)->data) || is_derived_undead_mon(mon))
+#define amphibious_mon(mon)		(m_wearing_white_DSA(mon) || amphibious((mon)->data))
 #define amphibious(ptr)		(((ptr)->mflagsm & (MM_AMPHIBIOUS | MM_BREATHLESS)) != 0L)
 #define passes_walls(ptr)	(((ptr)->mflagsm & MM_WALLWALK) != 0L)
 #define amorphous(ptr)		(((ptr)->mflagsm & MM_AMORPHOUS) != 0L)
