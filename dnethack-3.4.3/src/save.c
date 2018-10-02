@@ -32,7 +32,7 @@ STATIC_DCL void FDECL(savemonchn, (int,struct monst *,int));
 STATIC_DCL void FDECL(savetrapchn, (int,struct trap *,int));
 STATIC_DCL void FDECL(savegamestate, (int,int));
 #ifdef MFLOPPY
-STATIC_DCL void FDECL(savelev0, (int,XCHAR_P,int));
+STATIC_DCL void FDECL(savelev0, (int,int,int));
 STATIC_DCL boolean NDECL(swapout_oldest);
 STATIC_DCL void FDECL(copyfile, (char *,char *));
 #endif /* MFLOPPY */
@@ -114,7 +114,7 @@ dosave0()
 {
 	const char *fq_save;
 	register int fd, ofd;
-	xchar ltmp;
+	int ltmp;
 	d_level uz_save;
 	char whynot[BUFSZ];
 
@@ -228,7 +228,7 @@ dosave0()
 	u.usteed = (struct monst *)0;
 #endif
 
-	for(ltmp = (xchar)1; ltmp <= maxledgerno(); ltmp++) {
+	for(ltmp = (int)1; ltmp <= maxledgerno(); ltmp++) {
 		if (ltmp == ledger_no(&uz_save)) continue;
 		if (!(level_info[ltmp].flags & LFILE_EXISTS)) continue;
 #ifdef MICRO
@@ -242,8 +242,7 @@ dosave0()
 		}
 		mark_synch();
 #endif
-		ofd = open_levelfile((int)ltmp, whynot);
-//		pline("%d",(int)ltmp);
+		ofd = open_levelfile(ltmp, whynot);
 		if (ofd < 0) {
 		    HUP pline("%s", whynot);
 			abort();
@@ -425,7 +424,7 @@ savestateinlock()
 boolean
 savelev(fd, lev, mode)
 int fd;
-xchar lev;
+int lev;
 int mode;
 {
 	if (mode & COUNT_SAVE) {
@@ -459,7 +458,7 @@ void
 savelev(fd,lev,mode)
 #endif
 int fd;
-xchar lev;
+int lev;
 int mode;
 {
 #ifdef TOS

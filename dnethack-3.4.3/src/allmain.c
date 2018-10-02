@@ -455,6 +455,30 @@ moveloop()
 				u.usubwater = 1;
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
+			switch (((u_healing_penalty() - healing_penalty) > 0) - ((u_healing_penalty() - healing_penalty) < 0))
+			{
+			case 0:
+					break;
+			case 1:
+					if (!Hallucination) {
+						You_feel("%s.", (healing_penalty) ? "itchier" : "itchy");
+					}
+					else {
+						You_feel("%s.", (healing_penalty) ? "uglier" : "ugly");
+					}
+					healing_penalty = u_healing_penalty();
+					break;
+			case -1:
+					if (!Hallucination) {
+						You_feel("%s.", (u_healing_penalty()) ? "some relief" : "relieved");
+					}
+					else {
+						You_feel("%s.", (u_healing_penalty()) ? "pretty" : "beautiful");
+					}
+					healing_penalty = u_healing_penalty();
+					break;
+			}
+			/*
 			if (healing_penalty != u_healing_penalty()) {
 				if (!Hallucination){
 					You_feel("%s.", (!healing_penalty) ? "itchy" : "relief");
@@ -462,8 +486,10 @@ moveloop()
 					You_feel("%s.", (!healing_penalty) ? (hates_silver(youracedata) ? "tarnished" :
 						hates_iron(youracedata) ? "magnetic" : "like you are failing Organic Chemistry") : "like you are no longer failing Organic Chemistry");
 				}
-				healing_penalty = u_healing_penalty();
+				
+				
 			}
+			*/
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			if (!oldBlind ^ !Blind) {  /* one or the other but not both */
 				see_monsters();
@@ -1280,6 +1306,20 @@ karemade:
 				}
 		    }
 
+			if (u.uen > 0 || Race_if(PM_INCANTIFIER)){
+				//maintained spells accumulate an energy debt that must be paid over time
+				int reglevel = u.maintained_en_debt;
+				//pay 1/100th energy per turn:
+				u.uen -= reglevel / 100;
+				u.maintained_en_debt -= reglevel / 100;
+				//Now deal with any remainder
+				if ((reglevel > 0) && !(moves % (100/((reglevel % 100) + 1) + 2))) {
+					u.uen -= 1;
+					u.maintained_en_debt -= 1;
+				}
+				if (u.uen < 0 && !Race_if(PM_INCANTIFIER))  u.uen = 0;
+				flags.botl = 1;
+			}
 		    if (u.uen < u.uenmax && 
 				wtcap < MOD_ENCUMBER && 
 				!Race_if(PM_INCANTIFIER)
@@ -1529,14 +1569,28 @@ karemade:
 	    } else if (Warning || Warn_of_mon)
 	     	see_monsters();
 
-		if (healing_penalty != u_healing_penalty()) {
+		switch (((u_healing_penalty() - healing_penalty) > 0) - ((u_healing_penalty() - healing_penalty) < 0))
+		{
+		case 0:
+			break;
+		case 1:
 			if (!Hallucination){
-				You_feel("%s.", (u_healing_penalty()) ? "itchy" : "relief");
-			} else {
-				You_feel("%s.", (u_healing_penalty()) ? (hates_silver(youracedata) ? "tarnished" :
-					hates_iron(youracedata) ? "magnetic" : "like you are failing Organic Chemistry") : "like you are no longer failing Organic Chemistry");
+				You_feel("%s.", (healing_penalty) ? "itchier" : "itchy");
+			}
+			else {
+				You_feel("%s.", (healing_penalty) ? "uglier" : "ugly");
 			}
 			healing_penalty = u_healing_penalty();
+			break;
+		case -1:
+			if (!Hallucination) {
+				You_feel("%s.", (u_healing_penalty()) ? "some relief" : "relieved");
+			}
+			else {
+				You_feel("%s.", (u_healing_penalty()) ? "pretty" : "beautiful");
+			}
+			healing_penalty = u_healing_penalty();
+			break;
 		}
 		
 		if (!oldBlind ^ !Blind) {  /* one or the other but not both */

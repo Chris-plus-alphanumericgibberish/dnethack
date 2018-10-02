@@ -34,22 +34,22 @@ struct lchoice {
 	int idx;
 	schar lev[MAXLINFO];
 	schar playerlev[MAXLINFO];
-	xchar dgn[MAXLINFO];
+	int dgn[MAXLINFO];
 	char menuletter;
 };
 
 static void FDECL(Fread, (genericptr_t, int, int, dlb *));
-STATIC_DCL xchar FDECL(dname_to_dnum, (const char *));
+STATIC_DCL int FDECL(dname_to_dnum, (const char *));
 STATIC_DCL int FDECL(find_branch, (const char *, struct proto_dungeon *));
-STATIC_DCL xchar FDECL(parent_dnum, (const char *, struct proto_dungeon *));
-STATIC_DCL int FDECL(level_range, (XCHAR_P,int,int,int,struct proto_dungeon *,int *));
-STATIC_DCL xchar FDECL(parent_dlevel, (const char *, struct proto_dungeon *));
+STATIC_DCL int FDECL(parent_dnum, (const char *, struct proto_dungeon *));
+STATIC_DCL int FDECL(level_range, (int,int,int,int,struct proto_dungeon *,int *));
+STATIC_DCL int FDECL(parent_dlevel, (const char *, struct proto_dungeon *));
 STATIC_DCL int FDECL(correct_branch_type, (struct tmpbranch *));
 STATIC_DCL branch *FDECL(add_branch, (int, int, struct proto_dungeon *));
 STATIC_DCL void FDECL(add_level, (s_level *));
 STATIC_DCL void FDECL(init_level, (int,int,struct proto_dungeon *));
 STATIC_DCL int FDECL(possible_places, (int, boolean *, struct proto_dungeon *));
-STATIC_DCL xchar FDECL(pick_level, (boolean *, int));
+STATIC_DCL int FDECL(pick_level, (boolean *, int));
 STATIC_DCL boolean FDECL(place_level, (int, struct proto_dungeon *));
 #ifdef WIZARD
 STATIC_DCL const char *FDECL(br_string, (int));
@@ -236,18 +236,18 @@ Fread(ptr, size, nitems, stream)
 	}
 }
 
-STATIC_OVL xchar
+STATIC_OVL int
 dname_to_dnum(s)
 const char	*s;
 {
-	xchar	i;
+	int	i;
 
 	for (i = 0; i < n_dgns; i++)
 	    if (!strcmp(dungeons[i].dname, s)) return i;
 
 	panic("Couldn't resolve dungeon number for name \"%s\".", s);
 	/*NOT REACHED*/
-	return (xchar)0;
+	return (int)0;
 }
 
 s_level *
@@ -293,13 +293,13 @@ find_branch(s, pd)
  * Find the "parent" by searching the prototype branch list for the branch
  * listing, then figuring out to which dungeon it belongs.
  */
-STATIC_OVL xchar
+STATIC_OVL int
 parent_dnum(s, pd)
 const char	   *s;	/* dungeon name */
 struct proto_dungeon *pd;
 {
 	int	i;
-	xchar	pdnum;
+	int	pdnum;
 
 	i = find_branch(s, pd);
 	/*
@@ -312,7 +312,7 @@ struct proto_dungeon *pd;
 
 	panic("parent_dnum: couldn't resolve branch.");
 	/*NOT REACHED*/
-	return (xchar)0;
+	return (int)0;
 }
 
 /*
@@ -327,7 +327,7 @@ struct proto_dungeon *pd;
  */
 STATIC_OVL int
 level_range(dgn, base, rand, chain, pd, adjusted_base)
-	xchar	dgn;
+	int	dgn;
 	int	base, rand, chain;
 	struct proto_dungeon *pd;
 	int *adjusted_base;
@@ -360,7 +360,7 @@ level_range(dgn, base, rand, chain, pd, adjusted_base)
 	return 1;
 }
 
-STATIC_OVL xchar
+STATIC_OVL int
 parent_dlevel(s, pd)
 	const char	*s;
 	struct proto_dungeon *pd;
@@ -575,14 +575,14 @@ possible_places(idx, map, pd)
 }
 
 /* Pick the nth TRUE entry in the given boolean array. */
-STATIC_OVL xchar
+STATIC_OVL int
 pick_level(map, nth)
     boolean *map;	/* an array MAXLEVEL+1 in size */
     int nth;
 {
     int i;
     for (i = 1; i <= MAXLEVEL; i++)
-	if (map[i] && !nth--) return (xchar) i;
+	if (map[i] && !nth--) return (int) i;
     panic("pick_level:  ran out of valid levels");
     return 0;
 }
@@ -812,9 +812,9 @@ init_dungeons()		/* initialize the "dungeon" structs */
 	    dungeons[i].boneid = pd.tmpdungeon[i].boneschar;
 
 	    if(pd.tmpdungeon[i].lev.rand)
-		dungeons[i].num_dunlevs = (xchar)rn1(pd.tmpdungeon[i].lev.rand,
+		dungeons[i].num_dunlevs = (int)rn1(pd.tmpdungeon[i].lev.rand,
 						     pd.tmpdungeon[i].lev.base);
-	    else dungeons[i].num_dunlevs = (xchar)pd.tmpdungeon[i].lev.base;
+	    else dungeons[i].num_dunlevs = (int)pd.tmpdungeon[i].lev.base;
 
 	    if(!i) {
 		dungeons[i].ledger_start = 0;
@@ -996,21 +996,21 @@ init_dungeons()		/* initialize the "dungeon" structs */
 #endif
 }
 
-xchar
+int
 dunlev(lev)	/* return the level number for lev in *this* dungeon */
 d_level	*lev;
 {
 	return(lev->dlevel);
 }
 
-xchar
+int
 dunlevs_in_dungeon(lev)	/* return the lowest level number for *this* dungeon*/
 d_level	*lev;
 {
 	return(dungeons[lev->dnum].num_dunlevs);
 }
 
-xchar
+int
 deepest_lev_reached(noquest) /* return the lowest level explored in the game*/
 boolean noquest;
 {
@@ -1040,16 +1040,16 @@ boolean noquest;
 	    tmp.dnum = i;
 	    if(depth(&tmp) > ret) ret = depth(&tmp);
 	}
-	return((xchar) ret);
+	return((int) ret);
 }
 
 /* return a bookkeeping level number for purpose of comparisons and
  * save/restore */
-xchar
+int
 ledger_no(lev)
 d_level	*lev;
 {
-	return((xchar)(lev->dlevel + dungeons[lev->dnum].ledger_start));
+	return((int)(lev->dlevel + dungeons[lev->dnum].ledger_start));
 }
 
 /*
@@ -1062,17 +1062,17 @@ d_level	*lev;
  * not be confused with deepest_lev_reached() -- which returns the lowest
  * depth visited by the player.
  */
-xchar
+int
 maxledgerno()
 {
-    return (xchar) (dungeons[n_dgns-1].ledger_start +
+    return (int) (dungeons[n_dgns-1].ledger_start +
 				dungeons[n_dgns-1].num_dunlevs);
 }
 
 /* return the dungeon that this ledgerno exists in */
-xchar
+int
 ledger_to_dnum(ledgerno)
-xchar	ledgerno;
+int	ledgerno;
 {
 	register int i;
 
@@ -1080,19 +1080,19 @@ xchar	ledgerno;
 	for (i = 0; i < n_dgns; i++)
 	    if (dungeons[i].ledger_start < ledgerno &&
 		ledgerno <= dungeons[i].ledger_start + dungeons[i].num_dunlevs)
-		return (xchar)i;
+		return (int)i;
 
 	panic("level number out of range [ledger_to_dnum(%d)]", (int)ledgerno);
 	/*NOT REACHED*/
-	return (xchar)0;
+	return (int)0;
 }
 
 /* return the level of the dungeon this ledgerno exists in */
-xchar
+int
 ledger_to_dlev(ledgerno)
-xchar	ledgerno;
+int	ledgerno;
 {
-	return((xchar)(ledgerno - dungeons[ledger_to_dnum(ledgerno)].ledger_start));
+	return((int)(ledgerno - dungeons[ledger_to_dnum(ledgerno)].ledger_start));
 }
 
 #endif /* OVL1 */
@@ -1320,7 +1320,7 @@ d_level *newlevel;
 int levnum;
 {
 	branch *br;
-	xchar dgn = u.uz.dnum;
+	int dgn = u.uz.dnum;
 
 	if (levnum <= 0 && In_endgame(&u.uz)) {
 	    levnum = u.uz.dlevel;
@@ -1506,7 +1506,7 @@ dungeon_branch(s)
     const char *s;
 {
     branch *br;
-    xchar  dnum;
+    int  dnum;
 
     dnum = dname_to_dnum(s);
 
@@ -1652,23 +1652,24 @@ boolean
 Invocation_lev(lev)
 d_level *lev;
 {
-	return((boolean)(In_hell(lev) &&
-		lev->dlevel == (dungeons[lev->dnum].num_dunlevs - 1)));
+	return((boolean)(lev->dnum == sanctum_level.dnum && lev->dlevel == (sanctum_level.dlevel - 1)));
+	//return((boolean)(In_hell(lev) &&
+	//	lev->dlevel == (dungeons[lev->dnum].num_dunlevs - 1)));
 }
 
 /* use instead of depth() wherever a degree of difficulty is made
  * dependent on the location in the dungeon (eg. monster creation).
  */
-xchar
+int
 level_difficulty()
 {
 	if (In_endgame(&u.uz))
-		return((xchar)(depth(&sanctum_level) + u.ulevel/2));
+		return((int)(depth(&sanctum_level) + u.ulevel/2));
 	else
 		if (u.uhave.amulet)
 			return(deepest_lev_reached(FALSE));
 		else
-			return((xchar) depth(&u.uz));
+			return((int) depth(&u.uz));
 }
 
 /* Take one word and try to match it to a level.
@@ -1799,7 +1800,7 @@ schar
 print_dungeon(bymenu, rlev, rdgn)
 boolean bymenu;
 schar *rlev;
-xchar *rdgn;
+int *rdgn;
 {
     int     i, last_level, nlev;
     char    buf[BUFSZ];

@@ -55,6 +55,7 @@ static GtkWidget* goldLabel = NULL;
 static GtkWidget* hpLabel = NULL;
 static GtkWidget* powLabel = NULL;
 static GtkWidget* acLabel = NULL;
+static GtkWidget* drLabel = NULL;
 static GtkWidget* levlLabel = NULL;
 static GtkWidget* expLabel = NULL;
 static GtkWidget* timeLabel = NULL;
@@ -103,6 +104,7 @@ static int lastLevel;
 static int lastPOW;
 static int lastMPOW;
 static int lastAC;
+static int lastDR;
 static int lastExp;
 static aligntyp lastAlignment;  
 static unsigned lastHungr;
@@ -167,6 +169,7 @@ GtkWidget* ghack_init_status_window ()
     lastPOW = 9999;
     lastMPOW = 9999;
     lastAC = 9999;
+    lastDR = 9999;
     lastExp = 9999;
     lastAlignment = A_NEUTRAL;  /* start off guessing neutral */
     lastHungr = 9999;
@@ -657,18 +660,30 @@ void ghack_status_window_update_stats()
     lastMPOW = u.uenmax;
     gtk_label_set( GTK_LABEL( powLabel), buf);
     
-    sprintf(buf,"AC:%d", u.uac);
-    if (lastAC > u.uac && firstTime==FALSE) {
+    sprintf(buf,"AC:%d", (u.uac + u.ustdy));
+    if (lastAC > (u.uac + u.ustdy) && firstTime==FALSE) {
 	/* Ok, this changed so add it to the highlighing list */
 	ghack_highlight_widget( acLabel, normalStyle, greenStyle);
     }
-    else if (lastAC < u.uac && firstTime==FALSE) {
+    else if (lastAC < (u.uac + u.ustdy) && firstTime==FALSE) {
 	/* Ok, this changed so add it to the highlighing list */
 	ghack_highlight_widget( acLabel, normalStyle, redStyle);
     }
-    lastAC = u.uac;
+    lastAC = (u.uac + u.ustdy);
     gtk_label_set( GTK_LABEL( acLabel), buf);
     
+    
+    sprintf(buf,"DR:%d", (u.udr - u.ustdy));
+    if (lastDR > (u.udr - u.ustdy) && firstTime==FALSE) {
+	/* Ok, this changed so add it to the highlighing list */
+	ghack_highlight_widget( drLabel, normalStyle, greenStyle);
+    }
+    else if (lastDR < (u.udr - u.ustdy) && firstTime==FALSE) {
+	/* Ok, this changed so add it to the highlighing list */
+	ghack_highlight_widget( drLabel, normalStyle, redStyle);
+    }
+    lastDR = (u.udr - u.ustdy);
+    gtk_label_set( GTK_LABEL( drLabel), buf);
 #ifdef EXP_ON_BOTL
     if (flags.showexp) {
 	sprintf(buf,"Exp:%ld", u.uexp);

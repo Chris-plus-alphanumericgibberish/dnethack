@@ -466,6 +466,7 @@ struct you {
 	uchar	uspmtime;		/* #moves between uspellprot-- */
 	uchar	sowdisc;		/* sowing discord (spirit special attack) */
 	unsigned long long int spells_maintained;
+	int maintained_en_debt;
 	int	uhp,uhpmax,uhp_real,uhpmax_real;
 	int	uen,uenmax,uen_real,uenmax_real;		/* magical energy - M. Stephenson */
 	int ugangr[GA_NUM];			/* if the gods are angry at you */

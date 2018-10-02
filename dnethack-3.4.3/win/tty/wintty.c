@@ -2117,7 +2117,8 @@ tty_end_menu(window, prompt)
 	/* cut off any lines that are too long */
 	len = strlen(curr->str) + 2;	/* extra space at beg & end */
 	if (len > (int)ttyDisplay->cols) {
-	    curr->str[ttyDisplay->cols-2] = 0;
+		/* reduce the string by the amount len exceeds cols (authored by Tangles) */
+	    curr->str[strlen(curr->str) - (len - ttyDisplay->cols)] = 0;
 	    len = ttyDisplay->cols;
 	}
 	if (len > cw->cols) cw->cols = len;

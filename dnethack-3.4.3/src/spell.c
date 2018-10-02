@@ -15,6 +15,8 @@ static NEARDATA int RoSbook;		/* Read spell or Study Wards?" */
 #define KEEN 20000
 #define READ_SPELL 1
 #define STUDY_WARD 2
+#define MAINTAINED_SPELL_PW_MULTIPLIER 1
+#define MAINTAINED_SPELL_HUNGER_MULTIPLIER 1
 #define incrnknow(spell)        spl_book[spell].sp_know = KEEN
 #define ndecrnknow(spell, knw)        spl_book[spell].sp_know = max(0, spl_book[spell].sp_know - (KEEN*knw)/100)
 
@@ -46,7 +48,7 @@ STATIC_DCL void FDECL(spell_backfire, (int));
 STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
 STATIC_DCL int FDECL(spellhunger, (int));
 STATIC_DCL int FDECL(isqrt, (int));
-STATIC_DCL void FDECL(run_maintained_spell, (int));
+STATIC_DCL boolean FDECL(run_maintained_spell, (int));
 STATIC_DCL void NDECL(update_alternate_spells);
 
 long FDECL(doreadstudy, (const char *));
@@ -761,92 +763,98 @@ run_maintained_spells()
 			spell_unmaintain(spell);
 			continue;
 		}
-
+		/* catch reasons we can't cast the spell (pw, food) */
 		int spell_level = objects[spell].oc_level;
 		if (u.uhave.amulet)
 			spell_level *= 2;
-		spell_level += (spell_level*(5-tries))/2;
-		if (!(moves % 5)) {
-			if (u.uen < spell_level) {
-				You("lack the energy to maintain %s.",
-					  spellname(spell_index));
-				spell_unmaintain(spell);
-				continue;
-			}
-			if (spell != SPE_DETECT_FOOD && !(Race_if(PM_INCANTIFIER)) ) {
-				int basehungr = spellhunger(spell_level*5);
-				int hungr = basehungr/5;
-				hungr += ((((moves)/5)*(basehungr%5))/5 > (((moves-5)/5)*(basehungr%5))/5) ? 1 : 0;
-				/* don't put player (quite) into fainting from
-				 * casting a spell, particularly since they might
-				 * not even be hungry at the beginning; however,
-				 * this is low enough that they must eat before
-				 * casting anything else except detect food
-				 */
-				
-				if (hungr > YouHunger-3){
-					You("are too hungry to maintain %s.",
-						  spellname(spell_index));
-					spell_unmaintain(spell);
-					continue;
-				}
-				morehungry(hungr);
-			}
-			u.uen -= spell_level;
+		int hungr = spellhunger(spell_level * 5) * MAINTAINED_SPELL_HUNGER_MULTIPLIER;
+		if (u.uen < spell_level){
+			You("lack the energy to maintain %s.",
+				spellname(spell_index));
+			spell_unmaintain(spell);
+			continue;
 		}
-		run_maintained_spell(spell);
+		if (hungr > YouHunger - 3){
+			You("are too hungry to maintain %s.",
+				spellname(spell_index));
+			spell_unmaintain(spell);
+			continue;
+		}
+
+		/* cast the spell if it needs re-casting */
+		if (run_maintained_spell(spell)){			// reminder: this line re-casts the spell
+			/* first, power cost*/
+			spell_level += (spell_level*(5 - tries)) / 2;	//costs more if it has a higher failure rate
+
+			u.maintained_en_debt += spell_level * 5 * MAINTAINED_SPELL_PW_MULTIPLIER;
+
+			/* next, hunger cost */
+			if (spell != SPE_DETECT_FOOD && !(Race_if(PM_INCANTIFIER)))	// detect_food exception is moot, but consistent
+				morehungry(hungr);
+		}
 	}
 }
 
-STATIC_OVL void
+STATIC_OVL boolean
 run_maintained_spell(spell)
 int spell;
 {
     // /* Find the skill for the given spell type category */
     // int skill = P_SKILL(spell_skilltype(spell));
-
+	boolean cast = FALSE;
     int leviprop = LEVITATION;
     // if (skill == P_EXPERT)
         // leviprop = FLYING;
 
-    switch (spell) {
-    case SPE_HASTE_SELF:
-        if ((HFast&TIMEOUT) < 50)
-			incr_itimeout(&HFast, 50);
-		incr_itimeout(&HFast, 1);
-       break;
-    case SPE_DETECT_MONSTERS:
-        if ((HDetect_monsters&TIMEOUT) < 50)
-			incr_itimeout(&HDetect_monsters, 50);
-		incr_itimeout(&HDetect_monsters, 1);
+	switch (spell) {
+	case SPE_HASTE_SELF:
+		if ((HFast&TIMEOUT) < 10)
+		{
+			incr_itimeout(&HFast, rn1(10, 100));
+			cast = TRUE;
+		}
+		break;
+	case SPE_DETECT_MONSTERS:
+		if ((HDetect_monsters&TIMEOUT) < 10)
+		{
+			incr_itimeout(&HDetect_monsters, rn1(40, 21));
+			cast = TRUE;
+		}
+		break;
+	case SPE_LEVITATION:
+		if ((HLevitation&TIMEOUT) < 10)
+		{
+			incr_itimeout(&HLevitation, rn1(140, 10));
+			cast = TRUE;
+		}
+		break;
+	case SPE_INVISIBILITY:
+		if ((HInvis&TIMEOUT) < 10)
+		{
+			incr_itimeout(&HInvis, rn1(15, 31));
+			cast = TRUE;
+		}
+		break;
+	case SPE_DETECT_UNSEEN:
+		if ((HSee_invisible&TIMEOUT) < 10)
+		{
+			incr_itimeout(&HSee_invisible, rn1(10, 75));
+			cast = TRUE;
+		}
         break;
-    case SPE_LEVITATION:
-        if ((HLevitation&TIMEOUT) < 50)
-			incr_itimeout(&HLevitation, 50);
-		incr_itimeout(&HLevitation, 1);
-        break;
-    case SPE_INVISIBILITY:
-        if ((HInvis&TIMEOUT) < 50)
-			incr_itimeout(&HInvis, 50);
-		incr_itimeout(&HInvis, 1);
-        break;
-    case SPE_DETECT_UNSEEN:
-        if ((HSee_invisible&TIMEOUT) < 50)
-			incr_itimeout(&HSee_invisible, 50);
-		incr_itimeout(&HSee_invisible, 1);
-        break;
-    // case SPE_PHASE:
-        // if (property_timeout(mon, PASSES_WALLS) < 5)
-            // inc_timeout(mon, PASSES_WALLS, 20, TRUE);
-        // break;
     case SPE_PROTECTION:
 		u.usptime++;
+		if (!(moves % 15))
+		{
+			cast = TRUE;
+		}
         break;
     default:
         impossible("player maintaining an unmaintainable spell? (%d)", spell);
         spell_unmaintain(spell);
         break;
     }
+	return cast;
 }
 
 /* a spellbook has been destroyed or the character has changed levels;

@@ -183,7 +183,30 @@ struct flag {
  *
  */
 
+/* values for iflags.attack_mode */
+#define ATTACK_MODE_PACIFIST  'p'
+#define ATTACK_MODE_CHAT      'c'
+#define ATTACK_MODE_ASK       'a'
+#define ATTACK_MODE_FIGHT_ALL 'f'
+
+/* values for iflags.pokedex */
+#define POKEDEX_SHOW_STATS		1
+#define POKEDEX_SHOW_GENERATION 2
+#define POKEDEX_SHOW_WEIGHT		4
+#define POKEDEX_SHOW_RESISTS	8
+#define POKEDEX_SHOW_CONVEYS	16
+#define POKEDEX_SHOW_MM			32
+#define POKEDEX_SHOW_MT			64
+#define POKEDEX_SHOW_MB			128
+#define POKEDEX_SHOW_MG			256
+#define POKEDEX_SHOW_MA			512
+#define POKEDEX_SHOW_MV			1024
+#define POKEDEX_SHOW_ATTACKS	2048
+#define POKEDEX_SHOW_CRITICAL	4096
+#define POKEDEX_SHOW_DEFAULT	POKEDEX_SHOW_STATS | POKEDEX_SHOW_RESISTS | POKEDEX_SHOW_CONVEYS | POKEDEX_SHOW_MG | POKEDEX_SHOW_ATTACKS | POKEDEX_SHOW_CRITICAL
+
 struct instance_flags {
+	char attack_mode;         /* attack, refrain or ask to attack monsters */
 	boolean  cbreak;	/* in cbreak mode, rogue format */
 	boolean  DECgraphics;	/* use DEC VT-xxx extended character set */
 	boolean  echo;		/* 1 to echo characters */
@@ -197,6 +220,9 @@ struct instance_flags {
 	boolean  menu_requested; /* Flag for overloaded use of 'm' prefix
 				  * on some non-move commands */
 	uchar num_pad_mode;
+
+    int bones;
+
 	int	menu_headings;	/* ATR for menu headings */
 	int      purge_monsters;	/* # of dead monsters still on fmon list */
 	int *opt_booldup;	/* for duplication of boolean opts in config file */
@@ -253,6 +279,8 @@ struct instance_flags {
     boolean obscure_role_obj_names;
     boolean dnethack_start_text;
     boolean dnethack_dungeon_colors;
+
+	int pokedex;	/* default monster stats to show in the pokedex */
 /*
  * Window capability support.
  */
@@ -261,6 +289,7 @@ struct instance_flags {
 	boolean wc_hilite_peaceful;		/* hilight peaceful monsters (brown)   */
 	boolean wc_hilite_zombies;		/* hilight pets  (green)               */
 	boolean wc_zombie_z;		/* show zombies as Z of monster's color    */
+	boolean wc_hilite_detected;		/* hilight detected monsters (magenta)   */
 	boolean wc_ascii_map;		/* show map using traditional ascii    */
 	boolean wc_tiled_map;		/* show map using tiles                */
 	boolean wc_preload_tiles;	/* preload tiles into memory           */
@@ -338,6 +367,7 @@ struct instance_flags {
 #define hilite_peaceful wc_hilite_peaceful
 #define hilite_zombies wc_hilite_zombies
 #define zombie_z wc_zombie_z
+#define hilite_detected wc_hilite_detected
 #define use_inverse wc_inverse
 #ifdef MAC_GRAPHICS_ENV
 #define large_font obsolete

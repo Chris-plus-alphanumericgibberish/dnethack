@@ -1409,6 +1409,7 @@ struct obj *otmp;
 	    fakeshop[1] = '\0';
 	    Strcpy(u.ushops, fakeshop);
 	    /* sets obj->unpaid if necessary */
+		otmp->unpaid = 0;
 	    addtobill(otmp, TRUE, FALSE, FALSE);
 		if(otmp->shopOwned && !(otmp->unpaid)){ /* shop stock is outside shop */
 			if(otmp->sknown && !(otmp->ostolen) ) otmp->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
@@ -1416,8 +1417,9 @@ struct obj *otmp;
 		}
 	    Strcpy(u.ushops, saveushops);
 	    /* if you're outside the shop, make shk notice */
-	    if (!index(u.ushops, *fakeshop))
-		remote_burglary(otmp->ox, otmp->oy);
+	    if (!index(u.ushops, *fakeshop)){
+			remote_burglary(otmp->ox, otmp->oy);
+		}
 	}
 	if (otmp->no_charge)	/* only applies to objects outside invent */
 	    otmp->no_charge = 0;

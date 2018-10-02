@@ -908,7 +908,8 @@ asGuardian:
 					}
 				}
 			}
-			make_stunned(HStun + mtmp->mhp/10, TRUE);
+			if(!mtmp->mpeaceful)
+				make_stunned(HStun + mtmp->mhp/10, TRUE);
 		}
 	}break;
 	case MS_TRUMPET:{
@@ -1958,8 +1959,17 @@ dochat()
 	}
 
 #ifdef STEED
-    if (u.usteed && u.dz > 0)
-	return (domonnoise(u.usteed));
+    if (u.usteed && u.dz > 0){
+		/* sleeping mounts won't talk, except priests (who wake up) */
+		if ((!u.usteed->mcanmove || u.usteed->msleeping) && !u.usteed->ispriest) {
+			/* If it is unseen, the player can't tell the difference between
+			   not noticing him and just not existing, so skip the message. */
+			if (canspotmon(u.usteed))
+				pline("%s seems not to notice you.", Monnam(u.usteed));
+			return(0);
+		}
+		return (domonnoise(u.usteed));
+	}
 #endif
 	if (u.dz) {
 		struct engr *ep = get_head_engr();

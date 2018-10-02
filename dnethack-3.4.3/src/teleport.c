@@ -62,7 +62,7 @@ unsigned gpflags;
 				return FALSE;
 			if (mtmp == &youmonst)
 				return !!(Amphibious);
-			else return (is_swimmer(mdat) || breathless_mon(mtmp) || amphibious(mdat));
+			else return (is_swimmer(mdat) || breathless_mon(mtmp) || amphibious_mon(mtmp));
 	    } else if (is_pool(x,y, FALSE) && !ignorewater) {
 			if(mtmp == &youmonst && level.flags.lethe)
 				return FALSE;
@@ -70,7 +70,7 @@ unsigned gpflags;
 				return !!(HLevitation || Flying || Wwalking ||
 						Swimming || Amphibious);
 			else	return (is_flyer(mdat) || breathless_mon(mtmp) || is_swimmer(mdat) ||
-								is_clinger(mdat) || amphibious(mdat));
+								is_clinger(mdat) || amphibious_mon(mtmp));
 	    } else if (mdat->mlet == S_EEL && !ignorewater) {
 			return FALSE;
 	    } else if (is_lava(x,y)) {
@@ -849,10 +849,10 @@ level_tele()
 #ifdef WIZARD
 		if (wizard && !strcmp(buf,"?")) {
 		    schar destlev = 0;
-		    xchar destdnum = 0;
+		    int destdnum = 0;
 
 		    if ((newlev = (int)print_dungeon(TRUE, &destlev, &destdnum))) {
-			newlevel.dnum = destdnum;
+			newlevel.dnum = (xchar) destdnum;
 			newlevel.dlevel = destlev;
 			if (In_endgame(&newlevel) && !In_endgame(&u.uz)) {
 				Sprintf(buf,

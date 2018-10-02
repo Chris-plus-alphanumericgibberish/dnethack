@@ -3260,16 +3260,16 @@ u_healing_penalty()
 {
 	int penalty = 0;
 	if(hates_silver(youracedata)){
-		penalty += (20*u_material_next_to_skin(SILVER))/2;
+		penalty += (20*u_material_next_to_skin(SILVER)+1)/2;
 	}
 	if(hates_iron(youracedata)){
-		penalty += (u.ulevel * u_material_next_to_skin(IRON))/2;
+		penalty += (u.ulevel * u_material_next_to_skin(IRON)+1)/2;
 	}
 	if(hates_unholy(youracedata)){
-		penalty += (9*u_bcu_next_to_skin(-1))/2;
+		penalty += (9*u_bcu_next_to_skin(-1)+1)/2;
 	}
 	if(is_demon(youracedata) || is_undead(youracedata)){
-		penalty += (4*u_bcu_next_to_skin(1))/2;
+		penalty += (4*u_bcu_next_to_skin(1)+1)/2;
 	}
 	return penalty;
 }

@@ -476,7 +476,7 @@ fixup_special()
 				piled = 1;
 				if(y < croom->ly+disty*1/3 && x > croom->lx+distx*1/5 && x < croom->lx+distx*4/5) piled++;
 				if(y < croom->ly+disty*2/3 && x > croom->lx+distx*2/5 && x < croom->lx+distx*3/5) piled++;
-				for(piled; piled > 0; piled--){
+				for(; piled > 0; piled--){
 					if(rn2(2)) mkobj_at(WEAPON_CLASS, x, y, FALSE);
 					if(rn2(2)) mkobj_at(ARMOR_CLASS, x, y, FALSE);
 					if(rn2(6)) mkobj_at(RING_CLASS, x, y, FALSE);
