@@ -846,9 +846,8 @@ struct monst *mon;
 {
 	struct obj *obj;
 	int base, armac = 0;
-	long mwflags = mon->misc_worn_check;
 	
-	base = base_mac(mon);
+	base = base_mdr(mon);
 	
 	if(mon->data == &mons[PM_GIANT_TURTLE]){
 		if(mon->mflee || rn2(2))
@@ -930,9 +929,9 @@ struct monst *mon;
 			break;
 		}
 	}
-	if(armac > 6) armac = rnd(armac-5) + 5; /* high armor dr values act like player ac values */
+	if(armac > 11) armac = rnd(armac-10) + 10; /* high armor dr values act like player ac values */
 
-	base -= armac;
+	base += armac;
 	/* since arm_ac_bonus is positive, subtracting it increases AC */
 	return base;
 }
