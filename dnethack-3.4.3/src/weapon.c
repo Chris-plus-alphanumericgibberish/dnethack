@@ -1804,6 +1804,7 @@ static const NEARDATA short hwep[] = {
 	  ELVEN_SPEAR/*1d7/1d7*/, 
 	  SPEAR/*1d6/1d8*/,
 	  SHORT_SWORD/*1d6/1d8*/,
+	  RAPIER/*1d6/1d4*/, 
 	  AXE/*1d6/1d4*/, 
 	  ORCISH_SHORT_SWORD/*1d5/1d10*/, 
 	  ORCISH_SPEAR/*1d5/1d10*/, 
