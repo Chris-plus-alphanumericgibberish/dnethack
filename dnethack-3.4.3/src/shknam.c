@@ -369,6 +369,7 @@ int sx, sy;
 										rn2(10) < 7 ? PM_MYRMIDON_YPOLOCHAGOS : 
 										rn2(3) < 2 ? PM_MYRMIDON_LOCHAGOS :
 										PM_FORMIAN_CRUSHER;
+					bless(curobj);
 				}
 			}
 		} else if(shp->symb == ARMOR_CLASS){
@@ -400,6 +401,7 @@ int sx, sy;
 				}
 				if(curobj->otyp == FIGURINE){
 					curobj->corpsenm = !rn2(3) ? PM_LAMB : rn2(2) ? PM_SHEEP : PM_DIRE_SHEEP; 
+					bless(curobj);
 				}
 			}
 		}
