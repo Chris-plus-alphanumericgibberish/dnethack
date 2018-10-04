@@ -581,6 +581,24 @@ register struct obj *obj;
 		else
 			Strcat(buf, "wool-lined ");
 	}
+	if(obj->oproperties){
+		if(obj->oproperties&OPROP_FIREW)
+			Strcat(buf, "flaming ");
+		if(obj->oproperties&OPROP_COLDW)
+			Strcat(buf, "freezing ");
+		if(obj->oproperties&OPROP_ELECW)
+			Strcat(buf, "shocking ");
+		if(obj->oproperties&OPROP_ACIDW)
+			Strcat(buf, "sizzling ");
+		if(obj->oproperties&OPROP_MAGCW)
+			Strcat(buf, "sparkling ");
+		if(obj->oproperties&OPROP_ANARW)
+			Strcat(buf, "anarchic ");
+		if(obj->oproperties&OPROP_CONCW)
+			Strcat(buf, "concordant ");
+		if(obj->oproperties&OPROP_AXIOW)
+			Strcat(buf, "axiomatic ");
+	}
 	if(is_lightsaber(obj) && litsaber(obj)){
 		Strcat(buf, lightsaber_colorText(obj));
 		Strcat(buf, " ");
@@ -1158,6 +1176,24 @@ plus:
 			if(obj->opoisoned & OPOISON_AMNES) Strcat(prefix, "lethe-rusted ");
 			if(obj->opoisoned & OPOISON_ACID) Strcat(prefix,  "acid-coated ");
 			if(obj->otyp == VIPERWHIP && obj->opoisonchrgs) Sprintf(eos(prefix), "(%d coatings) ", (int)(obj->opoisonchrgs+1));
+		}
+		if(obj->oproperties){
+			if(obj->oproperties&OPROP_FIREW)
+				Strcat(prefix, "flaming ");
+			if(obj->oproperties&OPROP_COLDW)
+				Strcat(prefix, "freezing ");
+			if(obj->oproperties&OPROP_ELECW)
+				Strcat(prefix, "shocking ");
+			if(obj->oproperties&OPROP_ACIDW)
+				Strcat(prefix, "sizzling ");
+			if(obj->oproperties&OPROP_MAGCW)
+				Strcat(prefix, "sparkling ");
+			if(obj->oproperties&OPROP_ANARW)
+				Strcat(prefix, "anarchic ");
+			if(obj->oproperties&OPROP_CONCW)
+				Strcat(prefix, "concordant ");
+			if(obj->oproperties&OPROP_AXIOW)
+				Strcat(prefix, "axiomatic ");
 		}
 		add_erosion_words(obj, prefix);
 		if(obj->known || Race_if(PM_INCANTIFIER)) {

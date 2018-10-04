@@ -979,13 +979,23 @@ int thrown;
 					tmp += rnd(9);
 					unholymsg = TRUE;
 			}
-			if(uarmg->oartifact && 
-			   artifact_hit(&youmonst, mon, uarmg, &tmp, rnd(20)) ){
-				if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-					return FALSE;
-				if (tmp == 0) return TRUE;
-				hittxt = TRUE;
-			}
+			{ //artifact block
+				int basedamage = tmp;
+				int newdamage = tmp;
+				int dieroll = rnd(20);
+				if(uarmg->oartifact){
+					hittxt = artifact_hit(&youmonst, mon, uarmg, &newdamage, dieroll);
+					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+						return FALSE;
+					if (newdamage == 0) return TRUE;
+					tmp += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if(uarmg->oproperties){
+					(void)oproperty_hit(&youmonst, mon, uarmg, &newdamage, dieroll);
+					tmp += (newdamage - basedamage);
+				}
+			} //artifact block
 		}
 	    if (!uarmg || uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER) {
 			/* So do silver rings.  Note: rings are worn under gloves, so you
@@ -1510,19 +1520,29 @@ int thrown;
 			// if(uarm && uarm->otyp <= YELLOW_DRAGON_SCALES && uarm->otyp >= GRAY_DRAGON_SCALE_MAIL){
 				// dragon_hit(mon, uarm, uarm->otyp, &tmp, &needpoismsg, &poiskilled, &druggedmon);
 			// }
-		    if (obj->oartifact &&
-				artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
-				if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-				    return FALSE;
-				if (tmp == 0) return TRUE;
-				hittxt = TRUE;
-			}
+			{ //artifact block
+				int basedamage = tmp;
+				int newdamage = tmp;
+				if (obj->oartifact) {
+					hittxt = artifact_hit(&youmonst, mon, obj, &newdamage, dieroll);
+					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+						return FALSE;
+					if (newdamage == 0) return TRUE;
+					tmp += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if(obj->oproperties){
+					(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+					tmp += (newdamage - basedamage);
+				}
+			} //artifact block
+			pline("damage = %d", tmp);
 			if((monwep = MON_WEP(mon)) != 0 && monwep->oartifact != ART_GLAMDRING &&
 				(arti_disarm(obj) || (obj->otyp == RANSEUR && 
 										(wtype = uwep_skill_type()) != P_NONE && 
 										P_SKILL(wtype) >= P_BASIC && 
 										!rn2(20 - 5*P_SKILL(wtype))) /*Need to be separate from dieroll, */
-				)){														/*	since Ranseurs are bimanual!*/
+				)){													/*	since Ranseurs are bimanual!*/
 				if(monwep->quan > 1L){
 					monwep = splitobj(monwep, 1L);
 					obj_extract_self(monwep); //wornmask is cleared by splitobj
@@ -1608,27 +1628,51 @@ int thrown;
 				     obj->otyp == ELVEN_ARROW &&
 				     uwep->otyp == ELVEN_BOW)
 							tmp++;
-					if(uwep->oartifact &&
-						artifact_hit(&youmonst, mon, uwep, &tmp, dieroll)){
+					
+					{//Artifact block
+					int basedamage = tmp;
+					int newdamage = tmp;
+					if(uwep->oartifact){
+						hittxt = artifact_hit(&youmonst, mon, uwep, &newdamage, dieroll);
 						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
-						if (tmp == 0) return TRUE; /* NOTE: ditto */
-						hittxt = TRUE;
+						if (newdamage == 0) return TRUE; /* NOTE: ditto */
+						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
 					}
-					if(obj->oartifact &&
-						artifact_hit(&youmonst, mon, obj, &tmp, dieroll)){
+					if(uwep->oproperties){
+						(void)oproperty_hit(&youmonst, mon, uwep, &newdamage, dieroll);
+						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
+					}
+					if(obj->oartifact){
+						hittxt = artifact_hit(&youmonst, mon, obj, &newdamage, dieroll);
 						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
-						if (tmp == 0) return TRUE; /* NOTE: ditto */
-						hittxt = TRUE;
+						if (newdamage == 0) return TRUE; /* NOTE: ditto */
+						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
 					}
-					if(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER &&
-						artifact_hit(&youmonst, mon, uarmh, &tmp, dieroll)){
+					if(obj->oproperties){
+						(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
+					}
+					if(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER){
+						hittxt = artifact_hit(&youmonst, mon, uarmh, &newdamage, dieroll);
 						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
-						if (tmp == 0) return TRUE; /* NOTE: ditto */
-						hittxt = TRUE;
+						if (newdamage == 0) return TRUE; /* NOTE: ditto */
+						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
 					}
+					if(uarmh && uarmh->oartifact 
+					&& uarmh->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER && uarmh->oproperties
+					){
+						(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+						tmp += (newdamage - basedamage);
+					}
+					}//Artifact block
 				}
 			}
 		}
@@ -1885,12 +1929,19 @@ defaultvalue:
 				}
 			}
 			if(obj){/*may have broken*/
-				if (obj->oartifact &&
-					artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
+				int basedamage = tmp;
+				int newdamage = tmp;
+				if (obj->oartifact) {
+					hittxt = artifact_hit(&youmonst, mon, obj, &newdamage, dieroll);
 					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
 						return FALSE;
-					if (tmp == 0) return TRUE;
-					hittxt = TRUE;
+					if (newdamage == 0) return TRUE;
+					tmp += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if(obj->oproperties){
+					(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+					tmp += (newdamage - basedamage);
 				}
 				if(u.sealsActive&SEAL_PAIMON && mon && !DEADMONSTER(mon) && 
 					!resists_drli(mon) && obj->oclass == SPBOOK_CLASS && 

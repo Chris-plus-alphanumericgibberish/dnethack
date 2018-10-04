@@ -31,6 +31,9 @@ const static int FLY_PROPS[] = {DETECT_MONSTERS};
 
 const static int FIRE_PROP[] = {FIRE_RES};
 const static int COLD_PROP[] = {COLD_RES};
+const static int ELEC_PROP[] = {SHOCK_RES};
+const static int ACID_PROP[] = {ACID_RES};
+const static int MAGC_PROP[] = {ANTIMAGIC};
 
 const struct worn {
 	long w_mask;
@@ -139,6 +142,15 @@ long mask;
 			if(oobj->oproperties&OPROP_COLD){
 				for(p = 0; p < SIZE(COLD_PROP); p++) u.uprops[COLD_PROP[p]].extrinsic = u.uprops[COLD_PROP[p]].extrinsic & ~wp->w_mask;
 			}
+			if(oobj->oproperties&OPROP_ELEC){
+				for(p = 0; p < SIZE(ELEC_PROP); p++) u.uprops[ELEC_PROP[p]].extrinsic = u.uprops[ELEC_PROP[p]].extrinsic & ~wp->w_mask;
+			}
+			if(oobj->oproperties&OPROP_ACID){
+				for(p = 0; p < SIZE(ACID_PROP); p++) u.uprops[ACID_PROP[p]].extrinsic = u.uprops[ACID_PROP[p]].extrinsic & ~wp->w_mask;
+			}
+			if(oobj->oproperties&OPROP_MAGC){
+				for(p = 0; p < SIZE(MAGC_PROP); p++) u.uprops[MAGC_PROP[p]].extrinsic = u.uprops[MAGC_PROP[p]].extrinsic & ~wp->w_mask;
+			}
 			
 			if(oobj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
 				for(p = 0; p < SIZE(CHROMATIC_RES); p++) u.uprops[CHROMATIC_RES[p]].extrinsic = u.uprops[CHROMATIC_RES[p]].extrinsic & ~wp->w_mask;
@@ -202,6 +214,15 @@ long mask;
 				}
 				if(obj->oproperties&OPROP_COLD){
 					for(p = 0; p < SIZE(COLD_PROP); p++) u.uprops[COLD_PROP[p]].extrinsic = u.uprops[COLD_PROP[p]].extrinsic | wp->w_mask;
+				}
+				if(obj->oproperties&OPROP_ELEC){
+					for(p = 0; p < SIZE(ELEC_PROP); p++) u.uprops[ELEC_PROP[p]].extrinsic = u.uprops[ELEC_PROP[p]].extrinsic | wp->w_mask;
+				}
+				if(obj->oproperties&OPROP_ACID){
+					for(p = 0; p < SIZE(ACID_PROP); p++) u.uprops[ACID_PROP[p]].extrinsic = u.uprops[ACID_PROP[p]].extrinsic | wp->w_mask;
+				}
+				if(obj->oproperties&OPROP_MAGC){
+					for(p = 0; p < SIZE(MAGC_PROP); p++) u.uprops[MAGC_PROP[p]].extrinsic = u.uprops[MAGC_PROP[p]].extrinsic | wp->w_mask;
 				}
 				
 				if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
@@ -281,6 +302,15 @@ register struct obj *obj;
 		}
 		if(obj->oproperties&OPROP_COLD){
 			for(p = 0; p < SIZE(COLD_PROP); p++) u.uprops[COLD_PROP[p]].extrinsic = u.uprops[COLD_PROP[p]].extrinsic & ~wp->w_mask;
+		}
+		if(obj->oproperties&OPROP_ELEC){
+			for(p = 0; p < SIZE(ELEC_PROP); p++) u.uprops[ELEC_PROP[p]].extrinsic = u.uprops[ELEC_PROP[p]].extrinsic & ~wp->w_mask;
+		}
+		if(obj->oproperties&OPROP_ACID){
+			for(p = 0; p < SIZE(ACID_PROP); p++) u.uprops[ACID_PROP[p]].extrinsic = u.uprops[ACID_PROP[p]].extrinsic & ~wp->w_mask;
+		}
+		if(obj->oproperties&OPROP_MAGC){
+			for(p = 0; p < SIZE(MAGC_PROP); p++) u.uprops[MAGC_PROP[p]].extrinsic = u.uprops[MAGC_PROP[p]].extrinsic & ~wp->w_mask;
 		}
 		
 		if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){
@@ -524,6 +554,15 @@ boolean on, silently;
 	}
 	if(obj->oproperties&OPROP_COLD){
 		for(which = 0; which < SIZE(COLD_PROP); which++) update_mon_intrinsic(mon, obj, COLD_PROP[which], on, silently);
+	}
+	if(obj->oproperties&OPROP_ELEC){
+		for(which = 0; which < SIZE(ELEC_PROP); which++) update_mon_intrinsic(mon, obj, ELEC_PROP[which], on, silently);
+	}
+	if(obj->oproperties&OPROP_ACID){
+		for(which = 0; which < SIZE(ACID_PROP); which++) update_mon_intrinsic(mon, obj, ACID_PROP[which], on, silently);
+	}
+	if(obj->oproperties&OPROP_MAGC){
+		for(which = 0; which < SIZE(MAGC_PROP); which++) update_mon_intrinsic(mon, obj, MAGC_PROP[which], on, silently);
 	}
 	
 	if(obj->oartifact == ART_CHROMATIC_DRAGON_SCALES){

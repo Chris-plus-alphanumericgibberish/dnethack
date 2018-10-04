@@ -1482,11 +1482,21 @@ physical:{
 					tmp += 8;
 					if(otmp && bimanual(otmp,magr->data)) tmp += 4;
 				}
-				if (otmp && otmp->oartifact) {
-					(void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
-					if (mdef->mhp <= 0 || migrating_mons == mdef)
-					return (MM_DEF_DIED |
-						(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
+				if (otmp) {
+					int basedamage = tmp;
+					int newdamage = tmp;
+					if(otmp->oartifact){
+						(void)artifact_hit(magr,mdef, otmp, &newdamage, dieroll);
+						if (mdef->mhp <= 0 || migrating_mons == mdef)
+						return (MM_DEF_DIED |
+							(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
+						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
+					}
+					if(otmp->oproperties){
+						(void)oproperty_hit(magr,mdef, otmp, &newdamage, dieroll);
+						tmp += (newdamage - basedamage);
+					}
 				}
 				if (otmp && tmp)
 					mrustm(magr, mdef, otmp);
@@ -2442,7 +2452,7 @@ physical:{
 	
 	if(tmp && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
 		tmp -= roll_mdr(mdef);
-			if(tmp < 1) tmp = 1;
+		if(tmp < 1) tmp = 1;
 	}
 	
 	if((magr->mfaction == ZOMBIFIED || (magr->mfaction == SKELIFIED && !rn2(20))) && can_undead_mon(mdef)){

@@ -1781,9 +1781,21 @@ hitmu(mtmp, mattk)
 			}
 			
 			if (dmg <= 0) dmg = 1;
-			if (!(uwep->oartifact &&
-				artifact_hit(mtmp, &youmonst, uwep, &dmg,dieroll)))
-			     hitmsg(mtmp, mattk);
+			//Artifact damage block:
+			{
+				int basedamage = dmg;
+				int newdamage = dmg;
+				if(otmp->oproperties){
+					(void)oproperty_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
+				}
+				dmg += (newdamage - basedamage);
+				newdamage = basedamage;
+				if (!(uwep->oartifact &&
+					artifact_hit(mtmp, &youmonst, uwep, &newdamage,dieroll)))
+					 hitmsg(mtmp, mattk);
+				dmg += (newdamage - basedamage);
+			}
+			//End artifact damage block:
 			if (!dmg) break;
 			if (u.mh > 1 && u.mh > (dmg-roll_udr()) &&
 				   uwep->obj_material == IRON &&

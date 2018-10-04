@@ -96,6 +96,8 @@ E int FDECL(narrow_spec_applies, (struct obj *,struct monst *));
 E void FDECL(discover_artifact, (int));
 E boolean FDECL(undiscovered_artifact, (int));
 E int FDECL(disp_artifact_discoveries, (winid));
+E boolean FDECL(oproperty_hit, (struct monst *,struct monst *,
+				struct obj *,int *,int));
 E boolean FDECL(artifact_hit, (struct monst *,struct monst *,
 				struct obj *,int *,int));
 E int NDECL(doinvoke);

@@ -2801,7 +2801,45 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, HIGH_BOOTS);
 				(void)mongets(mtmp, SCIMITAR);
 			} else if(ptr == &mons[PM_OONA]){
-				//Nothing
+					//Note: Adjustments to how Oona's melee attacks were handled made her very weak without a weapon
+					otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+					otmp->spe = 3;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->oproperties = OPROP_AXIOW|OPROP_LESSW;
+					switch(u.oonaenergy){
+						case AD_COLD:
+							otmp->oproperties |= OPROP_ELECW; //superconducting?
+						break;
+						case AD_FIRE:
+							otmp->oproperties |= OPROP_COLDW;
+						break;
+						case AD_ELEC:
+							otmp->oproperties |= OPROP_FIREW;
+						break;
+					}
+					otmp->obj_material = METAL;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(STILETTO, FALSE, FALSE);
+					otmp->spe = 3;
+					otmp->blessed = TRUE;
+					otmp->cursed = FALSE;
+					otmp->oproperties = OPROP_AXIOW|OPROP_LESSW;
+					switch(u.oonaenergy){
+						case AD_COLD:
+							otmp->oproperties |= OPROP_ELECW; //superconducting?
+						break;
+						case AD_FIRE:
+							otmp->oproperties |= OPROP_COLDW;
+						break;
+						case AD_ELEC:
+							otmp->oproperties |= OPROP_FIREW;
+						break;
+					}
+					otmp->obj_material = METAL;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
 			} else if(ptr == &mons[PM_LILLEND]){
 				(void)mongets(mtmp, MASK);
 				(void)mongets(mtmp, MASK);

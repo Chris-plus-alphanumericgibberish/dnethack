@@ -1313,11 +1313,20 @@ boolean hitsroof;
     } else {		/* neither potion nor other breaking object */
 	boolean less_damage = uarmh && is_hard(uarmh), artimsg = FALSE;
 	int dmg = dmgval(obj, &youmonst, 0);
-
-	if (obj->oartifact)
-	    /* need a fake die roll here; rn1(18,2) avoids 1 and 20 */
-	    artimsg = artifact_hit((struct monst *)0, &youmonst,
-				   obj, &dmg, rn1(18,2));
+	int basedamage = dmg;
+	int newdamage = dmg;
+	int dieroll = rn1(18,2);  /* need a fake die roll here; rn1(18,2) avoids 1 and 20 */
+	
+	if (obj->oartifact){
+	    artimsg = artifact_hit((struct monst *)0, &youmonst, obj, &newdamage, dieroll);
+		dmg += (newdamage - basedamage);
+		newdamage = basedamage;
+	}
+	if(obj->oproperties){
+		(void)oproperty_hit((struct monst *)0, &youmonst, obj, &newdamage, dieroll);
+		dmg += (newdamage - basedamage);
+	}
+	
 
 	if (!dmg) {	/* probably wasn't a weapon; base damage on weight */
 	    dmg = (int) obj->owt / 100;
