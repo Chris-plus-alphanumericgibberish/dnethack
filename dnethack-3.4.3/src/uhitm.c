@@ -1972,9 +1972,6 @@ defaultvalue:
 	if(resist_attacks(mdat)){
 		tmp = 0;
 		valid_weapon_attack = 0;
-	} else {
-		tmp -= roll_mdr(mon);
-			if(tmp < 1) tmp = 1;
 	}
 	
 	/****** NOTE: perhaps obj is undefined!! (if !thrown && BOOMERANG)
@@ -2282,9 +2279,13 @@ defaultvalue:
 	/*Now apply damage*/
 	// pline("Damage: %d",tmp);
 	
-	if(tmp && !phasearmor){
-		tmp -= roll_mdr(mon);
-			if(tmp < 1) tmp = 1;
+	if(tmp){
+		if(phasearmor){
+			tmp -= base_mdr(mon);
+		} else {
+			tmp -= roll_mdr(mon);
+		}
+		if(tmp < 1) tmp = 1;
 	}
 	
 	if (!already_killed){
@@ -3657,9 +3658,13 @@ register struct attack *mattk;
 		// else if(!otmp || otmp != uwep) tmp /= 2;
 	// }
 	
-	if(tmp && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
-		tmp -= roll_mdr(mdef);
-			if(tmp < 1) tmp = 1;
+	if(tmp){
+		if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
+			tmp -= roll_mdr(mdef);
+		} else {
+			tmp -= base_mdr(mdef);
+		}
+		if(tmp < 1) tmp = 1;
 	}
 	
 	if(tmp > 1){
