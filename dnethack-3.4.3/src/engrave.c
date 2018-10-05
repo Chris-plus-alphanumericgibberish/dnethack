@@ -738,6 +738,7 @@ const char * haluWard[] =  {
 		"a circle surrounding a triangle of dots and another of triangles",
 	
 	"a silhouette of a bat", /* Batman */
+		"an 'S' in a diamond", /* Superman (fine, the House of El) */
 	
 	"a symbol of pain", /* DnD */
 	/* Planescape */
@@ -759,6 +760,7 @@ const char * haluWard[] =  {
 	"a set of four nested triangles",
 	"a watchful eye blocking an upward arrow",
 	"a pitchfork thrust into the ground",
+	
 	
 	/* Zodiac */
 	"an Aries sign",
@@ -785,7 +787,7 @@ const char * haluWard[] =  {
 	"a hand-mirror of Aphrodite",
 	"a shield and spear of Ares", /* alchemy/male/female */
 	
-	"a black moon lilith sign",
+	"a black moon Lilith sign",
 	
 	"a window", /* op-sys*/
 	"a no symbol",
