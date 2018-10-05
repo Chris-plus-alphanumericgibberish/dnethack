@@ -2748,7 +2748,7 @@ struct attack *mattk;
 		
 		if(mdef->data == &mons[PM_LEGION]){
 			int n = rnd(4);
-			for(n; n>0; n--) rn2(7) ? makemon(mkclass(S_ZOMBIE, G_NOHELL|G_HELL), mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT): 
+			for(; n>0; n--) rn2(7) ? makemon(mkclass(S_ZOMBIE, G_NOHELL|G_HELL), mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT): 
 									  makemon(&mons[PM_LEGIONNAIRE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
 		} else {
 			if(mdef->mhp > .75*mdef->mhpmax) makemon(&mons[PM_LEMURE], mdef->mx, mdef->my, MM_ADJACENTOK);
