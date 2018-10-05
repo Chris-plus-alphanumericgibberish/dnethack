@@ -2040,7 +2040,7 @@ register struct monst *mtmp;
 	    case S_NEU_OUTSIDER:{
 			if(ptr == &mons[PM_PLUMACH_RILMANI]){
 				if(!rn2(3)) otmp = mksobj(MACE, TRUE, FALSE);
-				else otmp = mksobj(rn2(3) ? SICKLE : rn2(3) ? SCYTHE : AXE, TRUE, FALSE);
+				else otmp = mksobj(rn2(3) ? AXE : rn2(3) ? SICKLE : SCYTHE, TRUE, FALSE);
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
 			    otmp->spe = -1;
