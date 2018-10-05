@@ -2071,7 +2071,7 @@ register struct obj *otmp;
 	if (objects[otyp].oc_oprop == FIRE_RES || otyp == WAN_FIRE)
 		return FALSE;
 
-	return((boolean)((omat <= WOOD && omat != LIQUID) || omat == PLASTIC));
+	return((boolean)((omat <= BONE && omat != LIQUID) || omat == PLASTIC));
 }
 
 boolean
