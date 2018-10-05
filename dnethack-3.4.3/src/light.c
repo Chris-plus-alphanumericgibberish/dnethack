@@ -574,14 +574,14 @@ write_ls(fd, ls)
 	    arg_save = ls->id;
 	    if (ls->type == LS_OBJECT) {
 		otmp = (struct obj *)ls->id;
-		ls->id = (genericptr_t)otmp->o_id;
+		ls->id = (genericptr_t)(intptr_t)otmp->o_id;
 #ifdef DEBUG
 		if (find_oid((unsigned)(intptr_t)ls->id) != otmp)
 		    panic("write_ls: can't find obj #%u!", (unsigned)(intptr_t)ls->id);
 #endif
 	    } else { /* ls->type == LS_MONSTER */
 		mtmp = (struct monst *)ls->id;
-		ls->id = (genericptr_t)mtmp->m_id;
+		ls->id = (genericptr_t)(intptr_t)(intptr_t)mtmp->m_id;
 #ifdef DEBUG
 		if (find_mid((unsigned)(intptr_t)ls->id, FM_EVERYWHERE) != mtmp)
 		    panic("write_ls: can't find mon #%u!", (unsigned)ls->id);
