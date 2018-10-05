@@ -1180,8 +1180,8 @@ dokick()
 					maploc->looted = 0; /* don't leave loose ends.. */
 					unblock_point(x,y);	/* vision */
 					if (!Blind) newsym(x,y);
-				    if (mtmp = makemon(&mons[PM_DRYAD],
-						       mm.x, mm.y, MM_ANGRY)
+				    if ((mtmp = makemon(&mons[PM_DRYAD],
+						       mm.x, mm.y, MM_ANGRY))
 					) made++;
 					if ( made )
 					    pline("You've woken the tree's spirit!");
