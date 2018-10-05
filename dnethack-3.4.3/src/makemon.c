@@ -7469,6 +7469,7 @@ register struct permonst *ptr;
 	
 	if(ual == A_VOID) return FALSE;
 	
+	//Law quest uniques
 	if (((mndx <= PM_QUINON && mndx >= PM_MONOTON) || mndx == PM_AXUS) && sgn(mal) == sgn(ual)){
 		if(!(u.uevent.uaxus_foe) && u.ualign.record >= 10){
 			return TRUE;
@@ -7476,9 +7477,11 @@ register struct permonst *ptr;
 	}
 	if (mndx==PM_APOLLYON && u.ualign.record >= 0 && sgn(mal) == sgn(ual)) return TRUE;
 	if (mndx==PM_OONA && u.ualign.record >= 20 && u.ualign.sins < 10 && sgn(mal) == sgn(ual)) return TRUE;
+	
+	//Always hostility, with exception for vampireness and law quest insects
 	if (always_hostile(ptr) && 
-		(u.uz.dnum != law_dnum || !is_social_insect(ptr)
-		|| (!on_level(&arcadia1_level,&u.uz) && !on_level(&arcadia2_level,&u.uz) && !on_level(&arcadia3_level,&u.uz) && !on_level(&arcward_level,&u.uz))
+		(u.uz.dnum != law_dnum || !(is_social_insect(ptr) || is_mercenary(ptr))
+		|| (!on_level(&arcadia1_level,&u.uz) && !on_level(&arcadia2_level,&u.uz) && !on_level(&arcadia3_level,&u.uz))
 		) && (!is_vampire(ptr) || !is_vampire(youracedata))
 		) return FALSE;
 
