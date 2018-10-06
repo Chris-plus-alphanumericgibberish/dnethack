@@ -948,12 +948,12 @@ genericptr_t p2;
     int damage;
 
     reg = (NhRegion *) p1;
-    damage = (int) reg->arg;
+    damage = (int)(intptr_t)reg->arg;
 
     /* If it was a thick cloud, it dissipates a little first */
     if (damage >= 5) {
 	damage /= 2;		/* It dissipates, let's do less damage */
-	reg->arg = (genericptr_t) damage;
+	reg->arg = (genericptr_t)(intptr_t)damage;
 	reg->ttl = 2;		/* Here's the trick : reset ttl */
 	return FALSE;		/* THEN return FALSE, means "still there" */
     }
@@ -970,7 +970,7 @@ genericptr_t p2;
     int dam;
 
     reg = (NhRegion *) p1;
-    dam = (int) reg->arg;
+    dam = (int)(intptr_t)reg->arg;
     if (p2 == NULL) {		/* This means *YOU* Bozo! */
 	if (nonliving(youracedata) || Breathless)
 	    return FALSE;
@@ -1045,7 +1045,7 @@ int damage;
 	else clear_heros_fault(cloud);
     cloud->inside_f = INSIDE_GAS_CLOUD;
     cloud->expire_f = EXPIRE_GAS_CLOUD;
-    cloud->arg = (genericptr_t) damage;
+    cloud->arg = (genericptr_t)(intptr_t)damage;
     cloud->visible = TRUE;
     cloud->glyph = cmap_to_glyph(S_cloud);
     add_region(cloud);
@@ -1097,7 +1097,7 @@ int damage;
 	else clear_heros_fault(cloud);
     cloud->inside_f = INSIDE_FOG_CLOUD;
     cloud->expire_f = EXPIRE_FOG_CLOUD;
-    cloud->arg = (genericptr_t) damage;
+    cloud->arg = (genericptr_t)(intptr_t)damage;
     cloud->visible = TRUE;
     cloud->glyph = cmap_to_glyph(S_fog);
     add_region(cloud);
