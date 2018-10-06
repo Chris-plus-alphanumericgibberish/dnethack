@@ -2542,7 +2542,7 @@ write_timer(fd, timer)
 	    else {
 		/* replace object pointer with id */
 		arg_save = timer->arg;
-		timer->arg = (genericptr_t)((struct obj *)timer->arg)->o_id;
+		timer->arg = (genericptr_t)(intptr_t)((struct obj *)timer->arg)->o_id;
 		timer->needs_fixup = 1;
 		bwrite(fd, (genericptr_t)timer, sizeof(timer_element));
 		timer->arg = arg_save;
@@ -2556,7 +2556,7 @@ write_timer(fd, timer)
 	    else {
 		/* replace monster pointer with id */
 		arg_save = timer->arg;
-		timer->arg = (genericptr_t)((struct monst *)timer->arg)->m_id;
+		timer->arg = (genericptr_t)(intptr_t)((struct monst *)timer->arg)->m_id;
 		timer->needs_fixup = 1;
 		bwrite(fd, (genericptr_t)timer, sizeof(timer_element));
 		timer->arg = arg_save;
@@ -2755,10 +2755,10 @@ relink_timers(ghostly)
 	if (curr->needs_fixup) {
 	    if (curr->kind == TIMER_OBJECT) {
 		if (ghostly) {
-		    if (!lookup_id_mapping((unsigned)curr->arg, &nid))
+		    if (!lookup_id_mapping((unsigned)(intptr_t)curr->arg, &nid))
 			panic("relink_timers 1");
 		} else
-		    nid = (unsigned) curr->arg;
+		    nid = (unsigned)(intptr_t)curr->arg;
 		curr->arg = (genericptr_t) find_oid(nid);
 		if (!curr->arg) panic("cant find o_id %d", nid);
 		curr->needs_fixup = 0;
