@@ -130,6 +130,7 @@ NEARDATA boolean golded = FALSE;	/* done to monsters hit by Mammon's breath */
 NEARDATA boolean glassed = FALSE;	/* done to monsters hit by Baalphegor's breath */
 NEARDATA boolean unweapon = FALSE;
 NEARDATA boolean mrg_to_wielded = FALSE;
+boolean mon_ranged_gazeonly = FALSE;
 			 /* weapon picked is merged with wielded one */
 NEARDATA struct obj *current_wand = 0;	/* wand currently zapped/applied */
 

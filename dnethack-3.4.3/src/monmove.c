@@ -1288,11 +1288,12 @@ toofar:
 			(mtmp2 != mtmp)
 		){
 	        int res;
+			mon_ranged_gazeonly = 1;//State variable
 			res = (mtmp2 == &youmonst) ? mattacku(mtmp)
 		                           : mattackm(mtmp, mtmp2);
 	        if (res & MM_AGR_DIED) return 1; /* Oops. */
 
-			if(!(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO] || mdat == &mons[PM_ARCADIAN_AVENGER])) 
+			if(!(mon_ranged_gazeonly))
 				return 0; /* that was our move for the round */
 	    }
 	}

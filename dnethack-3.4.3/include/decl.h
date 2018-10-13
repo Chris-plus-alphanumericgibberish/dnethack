@@ -390,6 +390,7 @@ E NEARDATA boolean golded;
 E NEARDATA boolean glassed;
 E NEARDATA boolean unweapon;
 E NEARDATA boolean mrg_to_wielded;
+E NEARDATA boolean mon_ranged_gazeonly;
 E NEARDATA struct obj *current_wand;
 
 E NEARDATA boolean in_steed_dismounting;
