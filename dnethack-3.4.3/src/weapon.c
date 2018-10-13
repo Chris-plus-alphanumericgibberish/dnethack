@@ -2382,19 +2382,22 @@ struct obj *otmp;
 		}
 		
 		if(otmp->oartifact == ART_YORSHKA_S_SPEAR){
-			if(ACURR(A_WIS)) bonus += 8;
+			if(ACURR(A_WIS) == 25) bonus += 8;
 			else bonus += (ACURR(A_WIS)-10)/2;
-			if(ACURR(A_DEX)) bonus += 8;
+			if(ACURR(A_DEX) == 25) bonus += 8;
 			else bonus += (ACURR(A_DEX)-10)/2;
 		}
 		
 		if(otmp->oartifact == ART_FRIEDE_S_SCYTHE){
-			if(ACURR(A_INT)) bonus += 8;
+			if(ACURR(A_INT) == 25) bonus += 8;
 			else bonus += (ACURR(A_INT)-10)/2;
 		}
 	}
 	
-	if(u.sealsActive&SEAL_DANTALION) bonus += max(0,(ACURR(A_INT)-10)/2);
+	if(u.sealsActive&SEAL_DANTALION){
+		if(ACURR(A_INT) == 25) bonus += 8;
+		else bonus += max(0,(ACURR(A_INT)-10)/2);
+	}
 	return bonus;
 }
 
