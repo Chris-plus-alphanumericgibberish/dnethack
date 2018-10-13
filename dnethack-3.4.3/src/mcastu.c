@@ -2532,7 +2532,7 @@ ray:
 	} else {
 	    boolean oldprop = !!Confusion;
 
-	    dmg = rnd(10) + mtmp ? rnd((int)mtmp->m_lev) : rnd(30);
+	    dmg = rnd(10) + (mtmp ? rnd((int)mtmp->m_lev) : rnd(30));
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	    make_confused(HConfusion + dmg, TRUE);
 	    if (Hallucination)
