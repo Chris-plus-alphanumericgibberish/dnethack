@@ -2991,7 +2991,7 @@ int spellnum;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
 	    return TRUE;
-	if (mtmp->mhp == mtmp->mhpmax && spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR){
+	if (mtmp->mhp == mtmp->mhpmax && (spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR)){
 		if(mtmp->mtame && (Upolyd ? (u.mh < u.mhmax) : (u.uhp < u.uhpmax)))
 			return FALSE;
 		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
@@ -3287,7 +3287,7 @@ int spellnum;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
 	    return TRUE;
-	if (mtmp->mhp == mtmp->mhpmax && spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR){
+	if (mtmp->mhp == mtmp->mhpmax && (spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR)){
 		if(mtmp->mtame && (Upolyd ? (u.mh < u.mhmax) : (u.uhp < u.uhpmax)))
 			return FALSE;
 		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
@@ -3357,7 +3357,7 @@ int spellnum;
 	/* healing when already healed */
 	if (u.mh == u.mhmax && spellnum == CURE_SELF)
 	    return TRUE;
-	if (u.mh == u.mhmax && spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR){
+	if (u.mh == u.mhmax && (spellnum == MASS_CURE_CLOSE || spellnum == MASS_CURE_FAR)){
 		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 			if(tmpm->mtame
 			&& tmpm->mhp < tmpm->mhpmax
@@ -3766,7 +3766,7 @@ int spellnum;
        long old;
 	   if(!mtmp) break;
        pline("A cascade of filth pours onto %s!", mon_nam(mtmp));
-       if (otmp = MON_WEP(mtmp)) {
+       if ((otmp = MON_WEP(mtmp))) {
 			if(!rn2(20)){
 				if(canseemon(mtmp)) pline("%s %s is coated in gunk!", s_suffix(Monnam(mtmp)), xname(otmp));
 				if(is_poisonable(otmp)){
@@ -4512,7 +4512,7 @@ uspsibolt:
 		}
 		dmg /= 10;
 		if(dmg > 7) dmg = 7;
-		for(dmg; dmg; dmg--){
+		for(; dmg; dmg--){
 			switch(rn2(7)){
 				case 0:
 					//Physical
