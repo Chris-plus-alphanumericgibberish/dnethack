@@ -1210,6 +1210,11 @@ lightsaber_form_sdie:
 			else bonus += d(bdm, 9);
 		}
 		
+		if(mon && mon->isminion){
+			if(otmp->oartifact == ART_LIFEHUNT_SCYTHE)
+				bonus += d(4,4) + otmp->spe; //Occult
+		}
+		
 		if(youdefend){
 			if(otmp->otyp == TORCH && otmp->lamplit){
 				if(!Fire_resistance){
