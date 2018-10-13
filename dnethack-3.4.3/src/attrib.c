@@ -86,6 +86,11 @@ const struct innate {
 		     {  30, &(HDrain_resistance), "above earthly concerns","not so above it all" },
 		     {   0, 0, 0, 0 } },
 
+	elnob_abil[] = { {	 7, &(HFast), "quick", "slow" },
+			{	15, &(HWarning), "sensitive", "" },
+		     {  20, &(HFire_resistance), "cool", "warmer" },
+		     {	 0, 0, 0, 0 } },
+
 	pir_abil[] = {	{1, &(HSwimming), "", ""  },
 			 {	7, &(HStealth), "stealthy", ""  },	/* with cat-like tread ... */
 		     {  11, &(HFast), "quick", "slow" },
@@ -726,6 +731,16 @@ int oldlevel, newlevel;
 	case PM_HEALER:         abil = hea_abil;	break;
 	case PM_KNIGHT:         abil = kni_abil;	break;
 	case PM_MONK:           abil = mon_abil;	break;
+	case PM_NOBLEMAN:
+		if(Race_switch == PM_HALF_DRAGON)
+			abil = kni_abil;
+		if(Race_switch == PM_DWARF)
+			abil = kni_abil;
+		if(Race_switch == PM_DROW && flags.initgend)
+			abil = pir_abil;
+		if(Race_switch == PM_ELF)
+			abil = elnob_abil;
+	break;
 	case PM_PIRATE:         abil = pir_abil;	break;
 	case PM_PRIEST:         abil = pri_abil;	break;
 	case PM_RANGER:         abil = ran_abil;	break;
