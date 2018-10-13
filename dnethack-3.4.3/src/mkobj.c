@@ -1185,6 +1185,7 @@ start_corpse_timeout(body)
 	if(is_migo(&mons[body->corpsenm])){
 		when = when/10 + 1;
 	}
+
 	if (is_rider(&mons[body->corpsenm])) {
 		/*
 		 * Riders always revive.  They have a 1/3 chance per turn
@@ -1195,9 +1196,19 @@ start_corpse_timeout(body)
 		for (when = 12L; when < 500L; when++)
 		    if (!rn2(3)) break;
 
-	} else if (attchmon && attchmon->mfaction == ZOMBIFIED
-	&& attchmon->data == &mons[PM_UNDEAD_KNIGHT] && attchmon->data == &mons[PM_WARRIOR_OF_SUNLIGHT] 
-	&& !body->norevive
+	} else if (attchmon && 
+		(body->corpsenm == PM_UNDEAD_KNIGHT
+		|| body->corpsenm == PM_WARRIOR_OF_SUNLIGHT
+		)
+		&& !body->norevive
+	) {
+//		pline("setting up undead revival for %s", xname(body));
+		attchmon->mclone = 1;
+		action = REVIVE_MON;
+		when = rn2(TAINT_AGE)+2;
+	} else if (attchmon
+	 && (attchmon->mfaction == ZOMBIFIED)
+	 && !body->norevive
 	) {
 //		pline("setting up zombie revival for %s", xname(body));
 		attchmon->mclone = 1;
