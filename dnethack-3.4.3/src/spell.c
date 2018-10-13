@@ -4722,18 +4722,91 @@ int spell;
 			splcaster -= 4;
 	}
 	
-	// if((spell_skilltype(spellid(spell)) == P_CLERIC_SPELL || Role_if(PM_PRIEST) || Role_if(PM_MONK)) 
-		// && uwep && uwep->otyp == KHAKKHARA
-	// ) splcaster -= urole.spelarmr;
-	
 	if(uwep){
+		int cast_bon;
+		// powerful channeling artifacts
 		if(uwep->oartifact == ART_TENTACLE_ROD
 			|| uwep->oartifact == ART_ARYFAERN_KERYM
 			|| uwep->oartifact == ART_INFINITY_S_MIRRORED_ARC
 			|| uwep->oartifact == ART_PROFANED_GREATSCYTHE
 			|| uwep->oartifact == ART_GARNET_ROD
 		) splcaster -= urole.spelarmr;
-		else if(uwep->otyp == KHAKKHARA) splcaster -= uwep->oartifact ? 2*urole.spelarmr : urole.spelarmr;
+
+		if (uwep->otyp == KHAKKHARA) {	// a priestly channeling tool
+			cast_bon = 0;
+			if(spell_skilltype(spellid(spell)) == P_CLERIC_SPELL
+			 || spell_skilltype(spellid(spell)) == P_HEALING_SPELL
+			 || Role_if(PM_PRIEST)
+			 || Role_if(PM_MONK)
+			) cast_bon += 2;
+			if (uwep->oartifact)
+				cast_bon *= 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
+		}
+
+		if (uwep->otyp == BELL || uwep->otyp == BELL_OF_OPENING) {	// a priestly channeling tool
+			cast_bon = 0;
+			if(spell_skilltype(spellid(spell)) == P_CLERIC_SPELL
+			 || spell_skilltype(spellid(spell)) == P_HEALING_SPELL
+			 || Role_if(PM_PRIEST)
+			) cast_bon += 2;
+			if (uwep->oartifact || objects[uwep->otyp].oc_unique)
+				cast_bon *= 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
+		}
+
+		if (uwep->otyp == SCALPEL) {	// a tool of healing
+			cast_bon = 0;
+			if(spell_skilltype(spellid(spell)) == P_HEALING_SPELL)
+			cast_bon += 2;
+			if (uwep->oartifact)
+				cast_bon *= 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
+		}
+
+		if (uwep->otyp == CRYSTAL_BALL) {	// a diviner's tool
+			cast_bon = 0;
+			if(spell_skilltype(spellid(spell)) == P_DIVINATION_SPELL)
+			cast_bon += 2;
+			if (uwep->oartifact)
+				cast_bon *= 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
+		}
+
+		if (uwep->otyp == QUARTERSTAFF) {	// a sorcerous channeling tool
+			cast_bon = 0;
+			if (spell_skilltype(spellid(spell)) == P_ATTACK_SPELL)
+				cast_bon += 2;
+			if (uwep->oartifact)
+				cast_bon *= 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
+		}
+
+		if (uwep->otyp == SHEPHERD_S_CROOK) {	// a tool for leading and manipulating things
+			cast_bon = 0;
+			if (spell_skilltype(spellid(spell)) == P_ENCHANTMENT_SPELL)
+				cast_bon += 2;
+			if (uwep->oartifact)
+				cast_bon *= 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
+		}
+
+		if (uwep->otyp == ATHAME) {	// a lesser sorecerous channeling tool
+			cast_bon = 0;
+			if (spell_skilltype(spellid(spell)) == P_ATTACK_SPELL || spell_skilltype(spellid(spell)) == P_ENCHANTMENT_SPELL)
+				cast_bon += 1;
+			if (uwep->oartifact && !(uwep->oartifact == ART_PEN_OF_THE_VOID && !mvitals[PM_ACERERAK].died > 0))
+				cast_bon *= 2;
+			splcaster -= cast_bon;
+		}
+		
+		if(Role_if(PM_WIZARD) && uwep->oclass == WAND_CLASS) {	// a tool of spellweaving
+			cast_bon = 1;
+			if (uwep->oartifact)
+				cast_bon *= 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
+		}
+	
 	}
 	
 	if(u.sealsActive&SEAL_PAIMON) splcaster -= urole.spelarmr;
